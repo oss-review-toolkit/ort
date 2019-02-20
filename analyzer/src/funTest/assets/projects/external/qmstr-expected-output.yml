@@ -1,6 +1,7 @@
 ---
 project:
   id: "GoDep::qmstr:0cd17d10b931c9108450ca5a68d4f85b6e4953ef"
+  purl: "pkg://GoDep//qmstr@0cd17d10b931c9108450ca5a68d4f85b6e4953ef"
   definition_file_path: "Gopkg.toml"
   declared_licenses: []
   declared_licenses_processed: {}
@@ -45,6 +46,7 @@ project:
 packages:
 - package:
     id: "GoDep::github.com/dgraph-io/dgo:939c270eac93a70e63162abd53f78dbc9e928ff6"
+    purl: "pkg://GoDep//github.com/dgraph-io/dgo@939c270eac93a70e63162abd53f78dbc9e928ff6"
     declared_licenses: []
     declared_licenses_processed: {}
     description: ""
@@ -70,6 +72,7 @@ packages:
   curations: []
 - package:
     id: "GoDep::github.com/gogo/protobuf:v0.5"
+    purl: "pkg://GoDep//github.com/gogo/protobuf@v0.5"
     declared_licenses: []
     declared_licenses_processed: {}
     description: ""
@@ -95,6 +98,7 @@ packages:
   curations: []
 - package:
     id: "GoDep::github.com/golang/protobuf:v1.0.0"
+    purl: "pkg://GoDep//github.com/golang/protobuf@v1.0.0"
     declared_licenses: []
     declared_licenses_processed: {}
     description: ""
@@ -120,6 +124,7 @@ packages:
   curations: []
 - package:
     id: "GoDep::github.com/inconshreveable/mousetrap:v1.0"
+    purl: "pkg://GoDep//github.com/inconshreveable/mousetrap@v1.0"
     declared_licenses: []
     declared_licenses_processed: {}
     description: ""
@@ -145,6 +150,7 @@ packages:
   curations: []
 - package:
     id: "GoDep::github.com/pkg/errors:v0.8.0"
+    purl: "pkg://GoDep//github.com/pkg/errors@v0.8.0"
     declared_licenses: []
     declared_licenses_processed: {}
     description: ""
@@ -170,6 +176,7 @@ packages:
   curations: []
 - package:
     id: "GoDep::github.com/spf13/cobra:v0.0.1"
+    purl: "pkg://GoDep//github.com/spf13/cobra@v0.0.1"
     declared_licenses: []
     declared_licenses_processed: {}
     description: ""
@@ -195,6 +202,7 @@ packages:
   curations: []
 - package:
     id: "GoDep::github.com/spf13/pflag:v1.0.0"
+    purl: "pkg://GoDep//github.com/spf13/pflag@v1.0.0"
     declared_licenses: []
     declared_licenses_processed: {}
     description: ""
@@ -220,6 +228,7 @@ packages:
   curations: []
 - package:
     id: "GoDep::golang.org/x/net:b417086c80e91bfa321ef761574721644b8b9f61"
+    purl: "pkg://GoDep//golang.org/x/net@b417086c80e91bfa321ef761574721644b8b9f61"
     declared_licenses: []
     declared_licenses_processed: {}
     description: ""
@@ -245,6 +254,7 @@ packages:
   curations: []
 - package:
     id: "GoDep::golang.org/x/text:e19ae1496984b1c655b8044a65c0300a3c878dd3"
+    purl: "pkg://GoDep//golang.org/x/text@e19ae1496984b1c655b8044a65c0300a3c878dd3"
     declared_licenses: []
     declared_licenses_processed: {}
     description: ""
@@ -270,6 +280,7 @@ packages:
   curations: []
 - package:
     id: "GoDep::google.golang.org/genproto:4eb30f4778eed4c258ba66527a0d4f9ec8a36c45"
+    purl: "pkg://GoDep//google.golang.org/genproto@4eb30f4778eed4c258ba66527a0d4f9ec8a36c45"
     declared_licenses: []
     declared_licenses_processed: {}
     description: ""
@@ -295,6 +306,7 @@ packages:
   curations: []
 - package:
     id: "GoDep::google.golang.org/grpc:v1.9.2"
+    purl: "pkg://GoDep//google.golang.org/grpc@v1.9.2"
     declared_licenses: []
     declared_licenses_processed: {}
     description: ""
@@ -320,6 +332,7 @@ packages:
   curations: []
 - package:
     id: "GoDep::gopkg.in/yaml.v2:d670f9405373e636a5a2765eea47fac0c9bc91a4"
+    purl: "pkg://GoDep//gopkg.in/yaml.v2@d670f9405373e636a5a2765eea47fac0c9bc91a4"
     declared_licenses: []
     declared_licenses_processed: {}
     description: ""

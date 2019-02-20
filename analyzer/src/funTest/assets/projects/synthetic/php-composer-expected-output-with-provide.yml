@@ -1,6 +1,7 @@
 ---
 project:
   id: "PhpComposer:ort:composer-test-project:0.1.0"
+  purl: "pkg://PhpComposer/ort/composer-test-project@0.1.0"
   definition_file_path: "analyzer/src/funTest/assets/projects/synthetic/php-composer/with-provide/composer.json"
   declared_licenses:
   - "Apache-2.0"
@@ -28,6 +29,7 @@ project:
 packages:
 - package:
     id: "PhpComposer:ort:child:1.0.0"
+    purl: "pkg://PhpComposer/ort/child@1.0.0"
     declared_licenses: []
     declared_licenses_processed: {}
     description: ""
@@ -53,6 +55,7 @@ packages:
   curations: []
 - package:
     id: "PhpComposer:ort:virtual2:1.0.0"
+    purl: "pkg://PhpComposer/ort/virtual2@1.0.0"
     declared_licenses: []
     declared_licenses_processed: {}
     description: ""

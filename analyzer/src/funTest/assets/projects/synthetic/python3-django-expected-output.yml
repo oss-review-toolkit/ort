@@ -1,6 +1,7 @@
 ---
 project:
   id: "PIP::python3-django:<REPLACE_REVISION>"
+  purl: "pkg://PIP//python3-django@<REPLACE_REVISION>"
   definition_file_path: "analyzer/src/funTest/assets/projects/synthetic/python3-django/requirements.txt"
   declared_licenses: []
   declared_licenses_processed: {}
@@ -24,6 +25,7 @@ project:
 packages:
 - package:
     id: "PyPI::Django:2.1.5"
+    purl: "pkg://PyPI//Django@2.1.5"
     declared_licenses:
     - "BSD"
     declared_licenses_processed:
@@ -52,6 +54,7 @@ packages:
   curations: []
 - package:
     id: "PyPI::pytz:2018.9"
+    purl: "pkg://PyPI//pytz@2018.9"
     declared_licenses:
     - "MIT"
     declared_licenses_processed:

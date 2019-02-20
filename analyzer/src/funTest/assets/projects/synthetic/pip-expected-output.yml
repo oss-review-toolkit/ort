@@ -1,6 +1,7 @@
 ---
 project:
   id: "PIP::Example-App-requirements:2.4.0"
+  purl: "pkg://PIP//Example-App-requirements@2.4.0"
   definition_file_path: "analyzer/src/funTest/assets/projects/synthetic/pip/requirements.txt"
   declared_licenses:
   - "MIT"
@@ -31,6 +32,7 @@ project:
 packages:
 - package:
     id: "PyPI::Flask:0.12.4"
+    purl: "pkg://PyPI//Flask@0.12.4"
     declared_licenses:
     - "BSD"
     declared_licenses_processed:
@@ -58,6 +60,7 @@ packages:
   curations: []
 - package:
     id: "PyPI::Jinja2:2.10"
+    purl: "pkg://PyPI//Jinja2@2.10"
     declared_licenses:
     - "BSD"
     declared_licenses_processed:
@@ -86,6 +89,7 @@ packages:
   curations: []
 - package:
     id: "PyPI::MarkupSafe:1.0"
+    purl: "pkg://PyPI//MarkupSafe@1.0"
     declared_licenses:
     - "BSD"
     declared_licenses_processed:
@@ -113,6 +117,7 @@ packages:
   curations: []
 - package:
     id: "PyPI::Werkzeug:0.14.1"
+    purl: "pkg://PyPI//Werkzeug@0.14.1"
     declared_licenses:
     - "BSD"
     declared_licenses_processed:
@@ -140,6 +145,7 @@ packages:
   curations: []
 - package:
     id: "PyPI::click:6.7"
+    purl: "pkg://PyPI//click@6.7"
     declared_licenses:
     - "BSD"
     declared_licenses_processed:
@@ -167,6 +173,7 @@ packages:
   curations: []
 - package:
     id: "PyPI::itsdangerous:0.24"
+    purl: "pkg://PyPI//itsdangerous@0.24"
     declared_licenses:
     - "BSD"
     declared_licenses_processed:

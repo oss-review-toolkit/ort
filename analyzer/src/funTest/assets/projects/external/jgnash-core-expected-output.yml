@@ -1,6 +1,7 @@
 ---
 project:
   id: "Maven:jgnash:jgnash-core:2.30.0"
+  purl: "pkg://Maven/jgnash/jgnash-core@2.30.0"
   definition_file_path: "jgnash-core/pom.xml"
   declared_licenses: []
   declared_licenses_processed: {}
@@ -68,6 +69,7 @@ project:
 packages:
 - package:
     id: "Maven:antlr:antlr:2.7.7"
+    purl: "pkg://Maven/antlr/antlr@2.7.7"
     declared_licenses:
     - "BSD License"
     declared_licenses_processed:
@@ -96,6 +98,7 @@ packages:
   curations: []
 - package:
     id: "Maven:com.fasterxml:classmate:1.3.0"
+    purl: "pkg://Maven/com.fasterxml/classmate@1.3.0"
     declared_licenses:
     - "The Apache Software License, Version 2.0"
     declared_licenses_processed:
@@ -124,6 +127,7 @@ packages:
   curations: []
 - package:
     id: "Maven:com.github.virtuald:curvesapi:1.03"
+    purl: "pkg://Maven/com.github.virtuald/curvesapi@1.03"
     declared_licenses:
     - "BSD License"
     declared_licenses_processed:
@@ -154,6 +158,7 @@ packages:
   curations: []
 - package:
     id: "Maven:com.h2database:h2:1.4.194"
+    purl: "pkg://Maven/com.h2database/h2@1.4.194"
     declared_licenses:
     - "MPL 2.0 or EPL 1.0"
     declared_licenses_processed:
@@ -181,6 +186,7 @@ packages:
   curations: []
 - package:
     id: "Maven:com.mchange:c3p0:0.9.5.2"
+    purl: "pkg://Maven/com.mchange/c3p0@0.9.5.2"
     declared_licenses:
     - "Eclipse Public License, Version 1.0"
     - "GNU Lesser General Public License, Version 2.1"
@@ -209,6 +215,7 @@ packages:
   curations: []
 - package:
     id: "Maven:com.mchange:mchange-commons-java:0.2.11"
+    purl: "pkg://Maven/com.mchange/mchange-commons-java@0.2.11"
     declared_licenses:
     - "Eclipse Public License, Version 1.0"
     - "GNU Lesser General Public License, Version 2.1"
@@ -237,6 +244,7 @@ packages:
   curations: []
 - package:
     id: "Maven:com.thoughtworks.xstream:xstream-hibernate:1.4.9"
+    purl: "pkg://Maven/com.thoughtworks.xstream/xstream-hibernate@1.4.9"
     declared_licenses:
     - "BSD style"
     declared_licenses_processed:
@@ -264,6 +272,7 @@ packages:
   curations: []
 - package:
     id: "Maven:com.thoughtworks.xstream:xstream:1.4.9"
+    purl: "pkg://Maven/com.thoughtworks.xstream/xstream@1.4.9"
     declared_licenses:
     - "BSD style"
     declared_licenses_processed:
@@ -292,6 +301,7 @@ packages:
   curations: []
 - package:
     id: "Maven:commons-codec:commons-codec:1.10"
+    purl: "pkg://Maven/commons-codec/commons-codec@1.10"
     declared_licenses:
     - "Apache License, Version 2.0"
     declared_licenses_processed:
@@ -322,6 +332,7 @@ packages:
   curations: []
 - package:
     id: "Maven:dom4j:dom4j:1.6.1"
+    purl: "pkg://Maven/dom4j/dom4j@1.6.1"
     declared_licenses: []
     declared_licenses_processed: {}
     description: "dom4j: the flexible XML framework for Java"
@@ -347,6 +358,7 @@ packages:
   curations: []
 - package:
     id: "Maven:io.netty:netty-buffer:4.1.9.Final"
+    purl: "pkg://Maven/io.netty/netty-buffer@4.1.9.Final"
     declared_licenses:
     - "Apache License, Version 2.0"
     declared_licenses_processed:
@@ -376,6 +388,7 @@ packages:
   curations: []
 - package:
     id: "Maven:io.netty:netty-codec:4.1.9.Final"
+    purl: "pkg://Maven/io.netty/netty-codec@4.1.9.Final"
     declared_licenses:
     - "Apache License, Version 2.0"
     declared_licenses_processed:
@@ -405,6 +418,7 @@ packages:
   curations: []
 - package:
     id: "Maven:io.netty:netty-common:4.1.9.Final"
+    purl: "pkg://Maven/io.netty/netty-common@4.1.9.Final"
     declared_licenses:
     - "Apache License, Version 2.0"
     declared_licenses_processed:
@@ -434,6 +448,7 @@ packages:
   curations: []
 - package:
     id: "Maven:io.netty:netty-resolver:4.1.9.Final"
+    purl: "pkg://Maven/io.netty/netty-resolver@4.1.9.Final"
     declared_licenses:
     - "Apache License, Version 2.0"
     declared_licenses_processed:
@@ -463,6 +478,7 @@ packages:
   curations: []
 - package:
     id: "Maven:io.netty:netty-transport:4.1.9.Final"
+    purl: "pkg://Maven/io.netty/netty-transport@4.1.9.Final"
     declared_licenses:
     - "Apache License, Version 2.0"
     declared_licenses_processed:
@@ -492,6 +508,7 @@ packages:
   curations: []
 - package:
     id: "Maven:junit:junit:4.12"
+    purl: "pkg://Maven/junit/junit@4.12"
     declared_licenses:
     - "Eclipse Public License 1.0"
     declared_licenses_processed:
@@ -520,6 +537,7 @@ packages:
   curations: []
 - package:
     id: "Maven:log4j:log4j:1.2.17"
+    purl: "pkg://Maven/log4j/log4j@1.2.17"
     declared_licenses:
     - "The Apache Software License, Version 2.0"
     declared_licenses_processed:
@@ -547,6 +565,7 @@ packages:
   curations: []
 - package:
     id: "Maven:net.sf.kxml:kxml2:2.3.0"
+    purl: "pkg://Maven/net.sf.kxml/kxml2@2.3.0"
     declared_licenses:
     - "BSD style"
     - "Public Domain"
@@ -577,6 +596,7 @@ packages:
   curations: []
 - package:
     id: "Maven:org.apache.commons:commons-lang3:3.3.2"
+    purl: "pkg://Maven/org.apache.commons/commons-lang3@3.3.2"
     declared_licenses:
     - "The Apache Software License, Version 2.0"
     declared_licenses_processed:
@@ -606,6 +626,7 @@ packages:
   curations: []
 - package:
     id: "Maven:org.apache.poi:poi-ooxml-schemas:3.14"
+    purl: "pkg://Maven/org.apache.poi/poi-ooxml-schemas@3.14"
     declared_licenses:
     - "The Apache Software License, Version 2.0"
     declared_licenses_processed:
@@ -633,6 +654,7 @@ packages:
   curations: []
 - package:
     id: "Maven:org.apache.poi:poi-ooxml:3.14"
+    purl: "pkg://Maven/org.apache.poi/poi-ooxml@3.14"
     declared_licenses:
     - "The Apache Software License, Version 2.0"
     declared_licenses_processed:
@@ -660,6 +682,7 @@ packages:
   curations: []
 - package:
     id: "Maven:org.apache.poi:poi:3.14"
+    purl: "pkg://Maven/org.apache.poi/poi@3.14"
     declared_licenses:
     - "The Apache Software License, Version 2.0"
     declared_licenses_processed:
@@ -687,6 +710,7 @@ packages:
   curations: []
 - package:
     id: "Maven:org.apache.xmlbeans:xmlbeans:2.6.0"
+    purl: "pkg://Maven/org.apache.xmlbeans/xmlbeans@2.6.0"
     declared_licenses:
     - "The Apache Software License, Version 2.0"
     declared_licenses_processed:
@@ -714,6 +738,7 @@ packages:
   curations: []
 - package:
     id: "Maven:org.hamcrest:hamcrest-all:1.3"
+    purl: "pkg://Maven/org.hamcrest/hamcrest-all@1.3"
     declared_licenses:
     - "New BSD License"
     declared_licenses_processed:
@@ -742,6 +767,7 @@ packages:
   curations: []
 - package:
     id: "Maven:org.hibernate.common:hibernate-commons-annotations:5.0.1.Final"
+    purl: "pkg://Maven/org.hibernate.common/hibernate-commons-annotations@5.0.1.Final"
     declared_licenses:
     - "GNU Lesser General Public License"
     declared_licenses_processed:
@@ -769,6 +795,7 @@ packages:
   curations: []
 - package:
     id: "Maven:org.hibernate.javax.persistence:hibernate-jpa-2.1-api:1.0.0.Final"
+    purl: "pkg://Maven/org.hibernate.javax.persistence/hibernate-jpa-2.1-api@1.0.0.Final"
     declared_licenses:
     - "Eclipse Distribution License (EDL), Version 1.0"
     - "Eclipse Public License (EPL), Version 1.0"
@@ -798,6 +825,7 @@ packages:
   curations: []
 - package:
     id: "Maven:org.hibernate:hibernate-c3p0:5.2.10.Final"
+    purl: "pkg://Maven/org.hibernate/hibernate-c3p0@5.2.10.Final"
     declared_licenses:
     - "GNU Lesser General Public License"
     declared_licenses_processed:
@@ -825,6 +853,7 @@ packages:
   curations: []
 - package:
     id: "Maven:org.hibernate:hibernate-core:5.2.10.Final"
+    purl: "pkg://Maven/org.hibernate/hibernate-core@5.2.10.Final"
     declared_licenses:
     - "GNU Lesser General Public License"
     declared_licenses_processed:
@@ -852,6 +881,7 @@ packages:
   curations: []
 - package:
     id: "Maven:org.hsqldb:hsqldb:2.4.0"
+    purl: "pkg://Maven/org.hsqldb/hsqldb@2.4.0"
     declared_licenses:
     - "HSQLDB License, a BSD open source license"
     declared_licenses_processed:
@@ -879,6 +909,7 @@ packages:
   curations: []
 - package:
     id: "Maven:org.javassist:javassist:3.20.0-GA"
+    purl: "pkg://Maven/org.javassist/javassist@3.20.0-GA"
     declared_licenses:
     - "Apache License 2.0"
     - "LGPL 2.1"
@@ -909,6 +940,7 @@ packages:
   curations: []
 - package:
     id: "Maven:org.jboss.logging:jboss-logging:3.3.0.Final"
+    purl: "pkg://Maven/org.jboss.logging/jboss-logging@3.3.0.Final"
     declared_licenses:
     - "Apache License, version 2.0"
     declared_licenses_processed:
@@ -936,6 +968,7 @@ packages:
   curations: []
 - package:
     id: "Maven:org.jboss.spec.javax.transaction:jboss-transaction-api_1.2_spec:1.0.1.Final"
+    purl: "pkg://Maven/org.jboss.spec.javax.transaction/jboss-transaction-api_1.2_spec@1.0.1.Final"
     declared_licenses:
     - "Common Development and Distribution License"
     - "GNU General Public License, Version 2 with the Classpath Exception"
@@ -964,6 +997,7 @@ packages:
   curations: []
 - package:
     id: "Maven:org.jboss:jandex:2.0.3.Final"
+    purl: "pkg://Maven/org.jboss/jandex@2.0.3.Final"
     declared_licenses:
     - "Apache License, Version 2.0"
     declared_licenses_processed:
@@ -991,6 +1025,7 @@ packages:
   curations: []
 - package:
     id: "Maven:org.slf4j:slf4j-api:1.7.21"
+    purl: "pkg://Maven/org.slf4j/slf4j-api@1.7.21"
     declared_licenses:
     - "MIT License"
     declared_licenses_processed:
@@ -1018,6 +1053,7 @@ packages:
   curations: []
 - package:
     id: "Maven:org.slf4j:slf4j-log4j12:1.7.21"
+    purl: "pkg://Maven/org.slf4j/slf4j-log4j12@1.7.21"
     declared_licenses:
     - "MIT License"
     declared_licenses_processed:

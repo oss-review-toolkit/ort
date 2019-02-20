@@ -25,6 +25,7 @@ analyzer:
   result:
     projects:
     - id: "SBT:com.pbassiner:common_2.12:0.1-SNAPSHOT"
+      purl: "pkg://SBT/com.pbassiner/common_2.12@0.1-SNAPSHOT"
       definition_file_path: "common/target/scala-2.12/common_2.12-0.1-SNAPSHOT.pom"
       declared_licenses: []
       declared_licenses_processed: {}
@@ -76,6 +77,7 @@ analyzer:
           - id: "Maven:org.scala-lang.modules:scala-xml_2.12:1.0.5"
           - id: "Maven:org.scalactic:scalactic_2.12:3.0.4"
     - id: "SBT:com.pbassiner:multi1_2.12:0.1-SNAPSHOT"
+      purl: "pkg://SBT/com.pbassiner/multi1_2.12@0.1-SNAPSHOT"
       definition_file_path: "multi1/target/scala-2.12/multi1_2.12-0.1-SNAPSHOT.pom"
       declared_licenses: []
       declared_licenses_processed: {}
@@ -135,6 +137,7 @@ analyzer:
           - id: "Maven:org.scala-lang.modules:scala-xml_2.12:1.0.5"
           - id: "Maven:org.scalactic:scalactic_2.12:3.0.4"
     - id: "SBT:com.pbassiner:multi2_2.12:0.1-SNAPSHOT"
+      purl: "pkg://SBT/com.pbassiner/multi2_2.12@0.1-SNAPSHOT"
       definition_file_path: "multi2/target/scala-2.12/multi2_2.12-0.1-SNAPSHOT.pom"
       declared_licenses: []
       declared_licenses_processed: {}
@@ -195,6 +198,7 @@ analyzer:
           - id: "Maven:org.scala-lang.modules:scala-xml_2.12:1.0.5"
           - id: "Maven:org.scalactic:scalactic_2.12:3.0.4"
     - id: "SBT:com.pbassiner:sbt-multi-project-example_2.12:0.1-SNAPSHOT"
+      purl: "pkg://SBT/com.pbassiner/sbt-multi-project-example_2.12@0.1-SNAPSHOT"
       definition_file_path: "target/scala-2.12/sbt-multi-project-example_2.12-0.1-SNAPSHOT.pom"
       declared_licenses: []
       declared_licenses_processed: {}
@@ -216,6 +220,7 @@ analyzer:
     packages:
     - package:
         id: "Maven:ch.qos.logback:logback-classic:1.2.3"
+        purl: "pkg://Maven/ch.qos.logback/logback-classic@1.2.3"
         declared_licenses:
         - "Eclipse Public License - v 1.0"
         - "GNU Lesser General Public License"
@@ -244,6 +249,7 @@ analyzer:
       curations: []
     - package:
         id: "Maven:ch.qos.logback:logback-core:1.2.3"
+        purl: "pkg://Maven/ch.qos.logback/logback-core@1.2.3"
         declared_licenses:
         - "Eclipse Public License - v 1.0"
         - "GNU Lesser General Public License"
@@ -272,6 +278,7 @@ analyzer:
       curations: []
     - package:
         id: "Maven:com.chuusai:shapeless_2.12:2.3.2"
+        purl: "pkg://Maven/com.chuusai/shapeless_2.12@2.3.2"
         declared_licenses:
         - "Apache 2"
         declared_licenses_processed:
@@ -299,6 +306,7 @@ analyzer:
       curations: []
     - package:
         id: "Maven:com.fasterxml.jackson.core:jackson-annotations:2.8.0"
+        purl: "pkg://Maven/com.fasterxml.jackson.core/jackson-annotations@2.8.0"
         declared_licenses:
         - "The Apache Software License, Version 2.0"
         declared_licenses_processed:
@@ -327,6 +335,7 @@ analyzer:
       curations: []
     - package:
         id: "Maven:com.fasterxml.jackson.core:jackson-core:2.8.9"
+        purl: "pkg://Maven/com.fasterxml.jackson.core/jackson-core@2.8.9"
         declared_licenses:
         - "The Apache Software License, Version 2.0"
         declared_licenses_processed:
@@ -354,6 +363,7 @@ analyzer:
       curations: []
     - package:
         id: "Maven:com.fasterxml.jackson.core:jackson-databind:2.8.9"
+        purl: "pkg://Maven/com.fasterxml.jackson.core/jackson-databind@2.8.9"
         declared_licenses:
         - "The Apache Software License, Version 2.0"
         declared_licenses_processed:
@@ -382,6 +392,7 @@ analyzer:
       curations: []
     - package:
         id: "Maven:com.github.julien-truffaut:monocle-core_2.12:1.4.0"
+        purl: "pkg://Maven/com.github.julien-truffaut/monocle-core_2.12@1.4.0"
         declared_licenses:
         - "MIT"
         declared_licenses_processed:
@@ -409,6 +420,7 @@ analyzer:
       curations: []
     - package:
         id: "Maven:com.github.julien-truffaut:monocle-macro_2.12:1.4.0"
+        purl: "pkg://Maven/com.github.julien-truffaut/monocle-macro_2.12@1.4.0"
         declared_licenses:
         - "MIT"
         declared_licenses_processed:
@@ -436,6 +448,7 @@ analyzer:
       curations: []
     - package:
         id: "Maven:com.github.pureconfig:pureconfig-macros_2.12:0.8.0"
+        purl: "pkg://Maven/com.github.pureconfig/pureconfig-macros_2.12@0.8.0"
         declared_licenses:
         - "Mozilla Public License, version 2.0"
         declared_licenses_processed:
@@ -463,6 +476,7 @@ analyzer:
       curations: []
     - package:
         id: "Maven:com.github.pureconfig:pureconfig_2.12:0.8.0"
+        purl: "pkg://Maven/com.github.pureconfig/pureconfig_2.12@0.8.0"
         declared_licenses:
         - "Mozilla Public License, version 2.0"
         declared_licenses_processed:
@@ -490,6 +504,7 @@ analyzer:
       curations: []
     - package:
         id: "Maven:com.typesafe.akka:akka-actor_2.12:2.5.6"
+        purl: "pkg://Maven/com.typesafe.akka/akka-actor_2.12@2.5.6"
         declared_licenses:
         - "Apache License, Version 2.0"
         declared_licenses_processed:
@@ -517,6 +532,7 @@ analyzer:
       curations: []
     - package:
         id: "Maven:com.typesafe.akka:akka-stream_2.12:2.5.6"
+        purl: "pkg://Maven/com.typesafe.akka/akka-stream_2.12@2.5.6"
         declared_licenses:
         - "Apache License, Version 2.0"
         declared_licenses_processed:
@@ -544,6 +560,7 @@ analyzer:
       curations: []
     - package:
         id: "Maven:com.typesafe.scala-logging:scala-logging_2.12:3.7.2"
+        purl: "pkg://Maven/com.typesafe.scala-logging/scala-logging_2.12@3.7.2"
         declared_licenses:
         - "Apache 2.0 License"
         declared_licenses_processed:
@@ -571,6 +588,7 @@ analyzer:
       curations: []
     - package:
         id: "Maven:com.typesafe:config:1.3.1"
+        purl: "pkg://Maven/com.typesafe/config@1.3.1"
         declared_licenses:
         - "Apache License, Version 2.0"
         declared_licenses_processed:
@@ -598,6 +616,7 @@ analyzer:
       curations: []
     - package:
         id: "Maven:com.typesafe:ssl-config-core_2.12:0.2.2"
+        purl: "pkg://Maven/com.typesafe/ssl-config-core_2.12@0.2.2"
         declared_licenses:
         - "Apache License, Version 2.0"
         declared_licenses_processed:
@@ -625,6 +644,7 @@ analyzer:
       curations: []
     - package:
         id: "Maven:net.logstash.logback:logstash-logback-encoder:4.11"
+        purl: "pkg://Maven/net.logstash.logback/logstash-logback-encoder@4.11"
         declared_licenses:
         - "Apache License, Version 2.0"
         - "MIT License"
@@ -654,6 +674,7 @@ analyzer:
       curations: []
     - package:
         id: "Maven:org.reactivestreams:reactive-streams:1.0.1"
+        purl: "pkg://Maven/org.reactivestreams/reactive-streams@1.0.1"
         declared_licenses:
         - "CC0"
         declared_licenses_processed:
@@ -681,6 +702,7 @@ analyzer:
       curations: []
     - package:
         id: "Maven:org.scala-lang.modules:scala-java8-compat_2.12:0.8.0"
+        purl: "pkg://Maven/org.scala-lang.modules/scala-java8-compat_2.12@0.8.0"
         declared_licenses:
         - "BSD 3-clause"
         declared_licenses_processed:
@@ -708,6 +730,7 @@ analyzer:
       curations: []
     - package:
         id: "Maven:org.scala-lang.modules:scala-parser-combinators_2.12:1.0.4"
+        purl: "pkg://Maven/org.scala-lang.modules/scala-parser-combinators_2.12@1.0.4"
         declared_licenses:
         - "BSD 3-clause"
         declared_licenses_processed:
@@ -735,6 +758,7 @@ analyzer:
       curations: []
     - package:
         id: "Maven:org.scala-lang.modules:scala-xml_2.12:1.0.5"
+        purl: "pkg://Maven/org.scala-lang.modules/scala-xml_2.12@1.0.5"
         declared_licenses:
         - "BSD 3-clause"
         declared_licenses_processed:
@@ -762,6 +786,7 @@ analyzer:
       curations: []
     - package:
         id: "Maven:org.scala-lang:scala-compiler:2.12.3"
+        purl: "pkg://Maven/org.scala-lang/scala-compiler@2.12.3"
         declared_licenses:
         - "BSD 3-Clause"
         declared_licenses_processed:
@@ -789,6 +814,7 @@ analyzer:
       curations: []
     - package:
         id: "Maven:org.scala-lang:scala-library:2.12.3"
+        purl: "pkg://Maven/org.scala-lang/scala-library@2.12.3"
         declared_licenses:
         - "BSD 3-Clause"
         declared_licenses_processed:
@@ -816,6 +842,7 @@ analyzer:
       curations: []
     - package:
         id: "Maven:org.scala-lang:scala-reflect:2.12.2"
+        purl: "pkg://Maven/org.scala-lang/scala-reflect@2.12.2"
         declared_licenses:
         - "BSD 3-Clause"
         declared_licenses_processed:
@@ -843,6 +870,7 @@ analyzer:
       curations: []
     - package:
         id: "Maven:org.scala-sbt:test-interface:1.0"
+        purl: "pkg://Maven/org.scala-sbt/test-interface@1.0"
         declared_licenses:
         - "BSD"
         declared_licenses_processed:
@@ -871,6 +899,7 @@ analyzer:
       curations: []
     - package:
         id: "Maven:org.scalacheck:scalacheck_2.12:1.13.5"
+        purl: "pkg://Maven/org.scalacheck/scalacheck_2.12@1.13.5"
         declared_licenses:
         - "BSD-style"
         declared_licenses_processed:
@@ -898,6 +927,7 @@ analyzer:
       curations: []
     - package:
         id: "Maven:org.scalactic:scalactic_2.12:3.0.4"
+        purl: "pkg://Maven/org.scalactic/scalactic_2.12@3.0.4"
         declared_licenses:
         - "the Apache License, ASL Version 2.0"
         declared_licenses_processed:
@@ -925,6 +955,7 @@ analyzer:
       curations: []
     - package:
         id: "Maven:org.scalatest:scalatest_2.12:3.0.4"
+        purl: "pkg://Maven/org.scalatest/scalatest_2.12@3.0.4"
         declared_licenses:
         - "the Apache License, ASL Version 2.0"
         declared_licenses_processed:
@@ -952,6 +983,7 @@ analyzer:
       curations: []
     - package:
         id: "Maven:org.scalaz:scalaz-core_2.12:7.2.8"
+        purl: "pkg://Maven/org.scalaz/scalaz-core_2.12@7.2.8"
         declared_licenses:
         - "BSD-style"
         declared_licenses_processed:
@@ -979,6 +1011,7 @@ analyzer:
       curations: []
     - package:
         id: "Maven:org.slf4j:jcl-over-slf4j:1.7.25"
+        purl: "pkg://Maven/org.slf4j/jcl-over-slf4j@1.7.25"
         declared_licenses:
         - "MIT License"
         declared_licenses_processed:
@@ -1006,6 +1039,7 @@ analyzer:
       curations: []
     - package:
         id: "Maven:org.slf4j:slf4j-api:1.7.25"
+        purl: "pkg://Maven/org.slf4j/slf4j-api@1.7.25"
         declared_licenses:
         - "MIT License"
         declared_licenses_processed:
@@ -1033,6 +1067,7 @@ analyzer:
       curations: []
     - package:
         id: "Maven:org.typelevel:macro-compat_2.12:1.1.1"
+        purl: "pkg://Maven/org.typelevel/macro-compat_2.12@1.1.1"
         declared_licenses:
         - "Apache 2"
         declared_licenses_processed:
