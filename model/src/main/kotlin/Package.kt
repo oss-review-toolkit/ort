@@ -19,6 +19,7 @@
 
 package com.here.ort.model
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.annotation.JsonInclude
 
 import com.here.ort.spdx.SpdxExpression
@@ -37,11 +38,17 @@ import java.util.SortedSet
  * dependency resolution process. For example, if multiple versions of the same package are used in a project, the build
  * system might decide to align on a single version of that package.
  */
+@JsonIgnoreProperties(value = ["purl"], allowGetters = true)
 data class Package(
         /**
          * The unique identifier of this package.
          */
         val id: Identifier,
+
+        /**
+         * An additional identifier in package URL syntax, see https://github.com/package-url/purl-spec.
+         */
+        val purl: String = id.toPurl(),
 
         /**
          * The list of licenses the authors have declared for this package. This does not necessarily correspond to the

@@ -205,13 +205,10 @@ abstract class PackageManager(
 
                     val relativePath = definitionFile.absoluteFile.relativeTo(analyzerRoot).invariantSeparatorsPath
 
+                    val id = Identifier.EMPTY.copy(type = managerName, name = relativePath)
                     val errorProject = Project.EMPTY.copy(
-                            id = Identifier(
-                                    type = managerName,
-                                    namespace = "",
-                                    name = relativePath,
-                                    version = ""
-                            ),
+                            id = id,
+                            purl = id.toPurl(),
                             definitionFilePath = VersionControlSystem.getPathInfo(definitionFile).path,
                             vcsProcessed = processProjectVcs(definitionFile.parentFile)
                     )

@@ -34,12 +34,17 @@ import java.util.SortedSet
  * meta-data like e.g. the [homepageUrl]. Most importantly, it defines the dependency scopes that refer to the actual
  * packages.
  */
-@JsonIgnoreProperties("aliases")
+@JsonIgnoreProperties(value = ["aliases", "purl"], allowGetters = true)
 data class Project(
         /**
          * The unique identifier of this project.
          */
         val id: Identifier,
+
+        /**
+         * An additional identifier in package URL syntax, see https://github.com/package-url/purl-spec.
+         */
+        val purl: String = id.toPurl(),
 
         /**
          * The path to the definition file of this project, relative to the root of the repository described in [vcs]
