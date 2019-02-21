@@ -97,10 +97,11 @@ object EvaluatorCommand : CommandWithHelp() {
             return if (evaluator.checkSyntax(script)) 0 else 2
         }
 
-        val evaluatorRun by lazy { evaluator.run(script) }
+        val absoluteOutputDir = outputDir?.absoluteFile?.normalize()
+        val outputFiles = mutableListOf<File>()
 
-        outputDir?.absoluteFile?.normalize()?.let { absoluteOutputDir ->
-            val outputFiles = outputFormats.distinct().map { format ->
+        if (absoluteOutputDir != null) {
+            outputFiles += outputFormats.distinct().map { format ->
                 File(absoluteOutputDir, "evaluation-result.${format.fileExtension}")
             }
 
@@ -109,7 +110,11 @@ object EvaluatorCommand : CommandWithHelp() {
                 log.error { "None of the output files $existingOutputFiles must exist yet." }
                 return 2
             }
+        }
 
+        val evaluatorRun by lazy { evaluator.run(script) }
+
+        if (absoluteOutputDir != null) {
             // Note: This overwrites any existing EvaluatorRun from the input file.
             val ortResultOutput = ortResultInput.copy(evaluator = evaluatorRun)
 
