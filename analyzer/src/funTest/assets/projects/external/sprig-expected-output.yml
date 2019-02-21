@@ -40,7 +40,7 @@ project:
 packages:
 - package:
     id: "GoDep::github.com/Masterminds/semver:v1.2.2"
-    purl: "pkg://GoDep//github.com/Masterminds/semver@v1.2.2"
+    purl: "pkg://GoDep//github.com%2FMasterminds%2Fsemver@v1.2.2"
     declared_licenses: []
     declared_licenses_processed: {}
     description: ""
@@ -66,7 +66,7 @@ packages:
   curations: []
 - package:
     id: "GoDep::github.com/aokoli/goutils:9c37978a95bd5c709a15883b6242714ea6709e64"
-    purl: "pkg://GoDep//github.com/aokoli/goutils@9c37978a95bd5c709a15883b6242714ea6709e64"
+    purl: "pkg://GoDep//github.com%2Faokoli%2Fgoutils@9c37978a95bd5c709a15883b6242714ea6709e64"
     declared_licenses: []
     declared_licenses_processed: {}
     description: ""
@@ -92,7 +92,7 @@ packages:
   curations: []
 - package:
     id: "GoDep::github.com/davecgh/go-spew:5215b55f46b2b919f50a1df0eaa5886afe4e3b3d"
-    purl: "pkg://GoDep//github.com/davecgh/go-spew@5215b55f46b2b919f50a1df0eaa5886afe4e3b3d"
+    purl: "pkg://GoDep//github.com%2Fdavecgh%2Fgo-spew@5215b55f46b2b919f50a1df0eaa5886afe4e3b3d"
     declared_licenses: []
     declared_licenses_processed: {}
     description: ""
@@ -118,7 +118,7 @@ packages:
   curations: []
 - package:
     id: "GoDep::github.com/huandu/xstrings:3959339b333561bf62a38b424fd41517c2c90f40"
-    purl: "pkg://GoDep//github.com/huandu/xstrings@3959339b333561bf62a38b424fd41517c2c90f40"
+    purl: "pkg://GoDep//github.com%2Fhuandu%2Fxstrings@3959339b333561bf62a38b424fd41517c2c90f40"
     declared_licenses: []
     declared_licenses_processed: {}
     description: ""
@@ -144,7 +144,7 @@ packages:
   curations: []
 - package:
     id: "GoDep::github.com/imdario/mergo:0.2.2"
-    purl: "pkg://GoDep//github.com/imdario/mergo@0.2.2"
+    purl: "pkg://GoDep//github.com%2Fimdario%2Fmergo@0.2.2"
     declared_licenses: []
     declared_licenses_processed: {}
     description: ""
@@ -170,7 +170,7 @@ packages:
   curations: []
 - package:
     id: "GoDep::github.com/pmezard/go-difflib:d8ed2627bdf02c080bf22230dbb337003b7aba2d"
-    purl: "pkg://GoDep//github.com/pmezard/go-difflib@d8ed2627bdf02c080bf22230dbb337003b7aba2d"
+    purl: "pkg://GoDep//github.com%2Fpmezard%2Fgo-difflib@d8ed2627bdf02c080bf22230dbb337003b7aba2d"
     declared_licenses: []
     declared_licenses_processed: {}
     description: ""
@@ -196,7 +196,7 @@ packages:
   curations: []
 - package:
     id: "GoDep::github.com/satori/go.uuid:v1.1.0"
-    purl: "pkg://GoDep//github.com/satori/go.uuid@v1.1.0"
+    purl: "pkg://GoDep//github.com%2Fsatori%2Fgo.uuid@v1.1.0"
     declared_licenses: []
     declared_licenses_processed: {}
     description: ""
@@ -222,7 +222,7 @@ packages:
   curations: []
 - package:
     id: "GoDep::github.com/stretchr/testify:e3a8ff8ce36581f87a15341206f205b1da467059"
-    purl: "pkg://GoDep//github.com/stretchr/testify@e3a8ff8ce36581f87a15341206f205b1da467059"
+    purl: "pkg://GoDep//github.com%2Fstretchr%2Ftestify@e3a8ff8ce36581f87a15341206f205b1da467059"
     declared_licenses: []
     declared_licenses_processed: {}
     description: ""
@@ -248,7 +248,7 @@ packages:
   curations: []
 - package:
     id: "GoDep::golang.org/x/crypto:d172538b2cfce0c13cee31e647d0367aa8cd2486"
-    purl: "pkg://GoDep//golang.org/x/crypto@d172538b2cfce0c13cee31e647d0367aa8cd2486"
+    purl: "pkg://GoDep//golang.org%2Fx%2Fcrypto@d172538b2cfce0c13cee31e647d0367aa8cd2486"
     declared_licenses: []
     declared_licenses_processed: {}
     description: ""

@@ -25,7 +25,7 @@ analyzer:
   result:
     projects:
     - id: "Bundler::grpc/Gemfile:"
-      purl: "pkg://Bundler//grpc/Gemfile@"
+      purl: "pkg://Bundler//grpc%2FGemfile@"
       definition_file_path: "Gemfile"
       declared_licenses: []
       declared_licenses_processed: {}
@@ -42,7 +42,7 @@ analyzer:
       homepage_url: ""
       scopes: []
     - id: "Bundler::grpc/examples/ruby/Gemfile:"
-      purl: "pkg://Bundler//grpc/examples/ruby/Gemfile@"
+      purl: "pkg://Bundler//grpc%2Fexamples%2Fruby%2FGemfile@"
       definition_file_path: "examples/ruby/Gemfile"
       declared_licenses: []
       declared_licenses_processed: {}
@@ -59,7 +59,7 @@ analyzer:
       homepage_url: ""
       scopes: []
     - id: "Bundler::grpc/test/distrib/ruby/Gemfile:"
-      purl: "pkg://Bundler//grpc/test/distrib/ruby/Gemfile@"
+      purl: "pkg://Bundler//grpc%2Ftest%2Fdistrib%2Fruby%2FGemfile@"
       definition_file_path: "test/distrib/ruby/Gemfile"
       declared_licenses: []
       declared_licenses_processed: {}
@@ -76,7 +76,7 @@ analyzer:
       homepage_url: ""
       scopes: []
     - id: "Bundler::grpc/third_party/protobuf/ruby/Gemfile:"
-      purl: "pkg://Bundler//grpc/third_party/protobuf/ruby/Gemfile@"
+      purl: "pkg://Bundler//grpc%2Fthird_party%2Fprotobuf%2Fruby%2FGemfile@"
       definition_file_path: "ruby/Gemfile"
       declared_licenses: []
       declared_licenses_processed: {}

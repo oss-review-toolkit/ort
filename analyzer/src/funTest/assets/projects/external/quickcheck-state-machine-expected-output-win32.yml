@@ -1805,7 +1805,7 @@ packages:
   curations: []
 - package:
     id: "Hackage:Data Structures:array:0.5.2.0"
-    purl: "pkg://Hackage/Data Structures/array@0.5.2.0"
+    purl: "pkg://Hackage/Data%20Structures/array@0.5.2.0"
     declared_licenses:
     - "BSD3"
     declared_licenses_processed:
@@ -1836,7 +1836,7 @@ packages:
   curations: []
 - package:
     id: "Hackage:Data Structures:containers:0.5.10.2"
-    purl: "pkg://Hackage/Data Structures/containers@0.5.10.2"
+    purl: "pkg://Hackage/Data%20Structures/containers@0.5.10.2"
     declared_licenses:
     - "BSD3"
     declared_licenses_processed:
@@ -1867,7 +1867,7 @@ packages:
   curations: []
 - package:
     id: "Hackage:Data, Parsing:binary:0.8.5.1"
-    purl: "pkg://Hackage/Data, Parsing/binary@0.8.5.1"
+    purl: "pkg://Hackage/Data%2C%20Parsing/binary@0.8.5.1"
     declared_licenses:
     - "BSD3"
     declared_licenses_processed:
@@ -1900,7 +1900,7 @@ packages:
   curations: []
 - package:
     id: "Hackage:Data, Text:text:1.2.2.2"
-    purl: "pkg://Hackage/Data, Text/text@1.2.2.2"
+    purl: "pkg://Hackage/Data%2C%20Text/text@1.2.2.2"
     declared_licenses:
     - "BSD2"
     declared_licenses_processed:
@@ -2140,7 +2140,7 @@ packages:
   curations: []
 - package:
     id: "Hackage:Numeric, Algebra:integer-gmp:1.0.1.0"
-    purl: "pkg://Hackage/Numeric, Algebra/integer-gmp@1.0.1.0"
+    purl: "pkg://Hackage/Numeric%2C%20Algebra/integer-gmp@1.0.1.0"
     declared_licenses:
     - "BSD3"
     declared_licenses_processed:
@@ -2248,7 +2248,7 @@ packages:
   curations: []
 - package:
     id: "Hackage:System, Graphics:Win32:2.5.4.1"
-    purl: "pkg://Hackage/System, Graphics/Win32@2.5.4.1"
+    purl: "pkg://Hackage/System%2C%20Graphics/Win32@2.5.4.1"
     declared_licenses:
     - "BSD3"
     declared_licenses_processed:
@@ -2401,7 +2401,7 @@ packages:
   curations: []
 - package:
     id: "Hackage:Template Haskell:template-haskell:2.12.0.0"
-    purl: "pkg://Hackage/Template Haskell/template-haskell@2.12.0.0"
+    purl: "pkg://Hackage/Template%20Haskell/template-haskell@2.12.0.0"
     declared_licenses:
     - "BSD3"
     declared_licenses_processed:
@@ -2564,7 +2564,7 @@ packages:
   curations: []
 - package:
     id: "Hackage:User Interfaces, Text:ansi-wl-pprint:0.6.8.2"
-    purl: "pkg://Hackage/User Interfaces, Text/ansi-wl-pprint@0.6.8.2"
+    purl: "pkg://Hackage/User%20Interfaces%2C%20Text/ansi-wl-pprint@0.6.8.2"
     declared_licenses:
     - "BSD3"
     declared_licenses_processed:
@@ -2595,7 +2595,7 @@ packages:
   curations: []
 - package:
     id: "Hackage:User Interfaces:ansi-terminal:0.7.1.1"
-    purl: "pkg://Hackage/User Interfaces/ansi-terminal@0.7.1.1"
+    purl: "pkg://Hackage/User%20Interfaces/ansi-terminal@0.7.1.1"
     declared_licenses:
     - "BSD3"
     declared_licenses_processed:
@@ -2625,7 +2625,7 @@ packages:
   curations: []
 - package:
     id: "Hackage:data, graphics:colour:2.3.4"
-    purl: "pkg://Hackage/data, graphics/colour@2.3.4"
+    purl: "pkg://Hackage/data%2C%20graphics/colour@2.3.4"
     declared_licenses:
     - "MIT"
     declared_licenses_processed:

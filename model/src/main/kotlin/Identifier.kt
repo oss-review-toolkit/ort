@@ -23,6 +23,7 @@ import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonValue
 
 import com.here.ort.utils.encodeOrUnknown
+import com.here.ort.utils.percentEncode
 
 /**
  * A unique identifier for a software package.
@@ -150,5 +151,5 @@ data class Identifier(
      */
     // TODO: This is a preliminary implementation as some open questions remain, see e.g.
     // https://github.com/package-url/purl-spec/issues/33.
-    fun toPurl() = "pkg://$type/$namespace/$name@$version"
+    fun toPurl() = "pkg://$type/${namespace.percentEncode()}/${name.percentEncode()}@${version.percentEncode()}"
 }
