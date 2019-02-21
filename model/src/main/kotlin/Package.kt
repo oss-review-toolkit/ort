@@ -142,6 +142,19 @@ data class Package(
     }
 
     /**
+     * Check if this package contains any erroneous data.
+     */
+    fun collectErrors() =
+            declaredLicensesProcessed.unmapped.map { unmappedLicense ->
+                OrtIssue(
+                        severity = Severity.ERROR,
+                        source = id.toCoordinates(),
+                        message = "The declared license '$unmappedLicense' could not be mapped to a valid license or " +
+                                "parsed as an SPDX expression."
+                )
+            }
+
+    /**
      * Create a [CuratedPackage] from this package with an empty list of applied curations.
      */
     fun toCuratedPackage() = CuratedPackage(this, emptyList())
