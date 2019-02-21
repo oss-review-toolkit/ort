@@ -58,5 +58,9 @@ class ExtensionsTest : WordSpec({
                 "public-domain".isLicenseRefTo("public-domain") shouldBe false
             }
         }
+
+        "return false if the namespace is not known" {
+            "LicenseRef-no-public-domain".isLicenseRefTo("public-domain") shouldBe false
+        }
     }
 })

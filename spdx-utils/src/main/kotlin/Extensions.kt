@@ -71,11 +71,21 @@ fun SpdxLicenseException.toExpression() = SpdxLicenseExceptionExpression(id)
 fun String.isLicenseRefTo(name: String, ignoreCase: Boolean = true): Boolean {
     if (name.isBlank()) return false
 
+    // Check that the string changes when removing the prefix, otherwise it did not contain the prefix.
     val withoutPrefix = removePrefix("LicenseRef-")
     if (withoutPrefix == this) return false
 
     if (!withoutPrefix.endsWith(name, ignoreCase)) return false
     val infix = withoutPrefix.dropLast(name.length)
 
-    return infix.indexOf('-') == infix.length - 1
+    // Any infix must not contain an inner "-", otherwise it might be a different license name.
+    if (infix.indexOf('-') != infix.length - 1) return false
+
+    return infix.isEmpty() || infix.dropLast(1).toLowerCase() in listOf(
+            "ort",
+            "askalono",
+            "boyterlc",
+            "licensee",
+            "scancode"
+    )
 }
