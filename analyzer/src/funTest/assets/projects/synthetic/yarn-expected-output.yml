@@ -1090,7 +1090,7 @@ packages:
   curations: []
 - package:
     id: "NPM:@types:node:6.0.79"
-    purl: "pkg://NPM/@types/node@6.0.79"
+    purl: "pkg://NPM/%40types/node@6.0.79"
     declared_licenses:
     - "MIT"
     declared_licenses_processed:
