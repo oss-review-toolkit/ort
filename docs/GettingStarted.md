@@ -259,18 +259,38 @@ The `scanner` writes a new ORT result file to `[scanner-output-path]/scan-result
 addition to the analyzer result from the input. This way belonging results are stored in the same place for traceability.
 If the input file already contained scan results they are replaced by the new scan results in the output.
 
-## 6. Generate a report
+## 6. Running the evaluator
 
-The `scan-result.yml` file can now be used as input for the reporter to generate human-readable reports. For example, to
-generate both a static HTML report and an Excel report use:
+The evaluator can apply a set of rules against the scan result created above. ORT provides a
+[sample rules file](../evaluator/src/main/resources/rules/no_gpl_declared.kts) on the classpath that can be used for
+testing the evaluator. The sample rule creates an error if any package contained in the result declares a GPL license.
+To run the sample rules use:
 
 ```bash
-cli/build/install/ort/bin/ort report -f StaticHtml,Excel -i [scanner-output-path]/scan-result.yml -o [reporter-output-path]
+cli/build/install/ort/bin/ort evaluate --rules-resource rules/no_gpl_declared.kts \
+    -i [scanner-output-path]/scan-result.yml -o [evaluator-output-path]/mime-types
+```
+
+Because neither mime-types nor any of its dependencies declares a GPL license this finishes without an error.
+
+It is possible to write your own evaluator rules as Kotlin script and pass it to the evaluator using `--rules-file`.
+Note that detailed documentation for writing custom rules is not yet available.
+
+## 7. Generate a report
+
+The `evaluation-result.yml` file can now be used as input for the reporter to generate human-readable reports. For
+example, to generate both a static HTML report and an Excel report use:
+
+```bash
+cli/build/install/ort/bin/ort report -f StaticHtml,Excel -i [evaluator-output-path]/evaluation-result.yml -o [reporter-output-path]
 Writing static HTML report to '[reporter-output-path]/scan-report.html'.
 Writing Excel report to '[reporter-output-path]/scan-report.xlsx'.
 ```
 
-## 7. Curating the metadata
+If you do not want to run the evaluator you can pass the scan result `[scanner-output-path/scan-result.yml` to the
+reporter instead.
+
+## 8. Curating the metadata
 
 In the example above everything went well because the VCS information provided by the packages was correct, but this is
 not always the case. Often the metadata of packages has no VCS information, points to outdated repositories, or the
