@@ -1,18 +1,14 @@
 language: java
 
-jdk:
-  - openjdk10
-
-os:
-  - linux
-  - osx
-
 matrix:
   include:
     - os: linux
       dist: xenial
+      jdk: openjdk10
+      env: ANDROID_SDK_ARCHIVE="sdk-tools-linux-4333796.zip"
     - os: osx
       osx_image: xcode10
+      env: ANDROID_SDK_ARCHIVE="sdk-tools-darwin-4333796.zip"
 
 before_cache:
   - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
@@ -42,24 +38,26 @@ before_install:
     fi
 
 install:
+  - npm install -g bower@1.8.8 npm@6.4.0 yarn@1.13.0 # Need to run this before brew to avoid "dyld: Library not loaded".
   - if [ "$TRAVIS_OS_NAME" = "linux" ]; then
       exit;
       sudo apt install -y cvs;
       eval "$(gimme)";
       curl https://raw.githubusercontent.com/golang/dep/7d5cd199ce454707f81c63b7ea4299151b8b981d/install.sh | sh;
-      npm install -g bower@1.8.8 npm@6.4.0 yarn@1.13.0;
       phpenv global 7.1.19;
       curl -Ls https://git.io/sbt > ~/bin/sbt;
       chmod a+x ~/bin/sbt;
-      curl https://storage.googleapis.com/git-repo-downloads/repo > ~/bin/repo;
-      chmod a+x ~/bin/repo;
-      wget -q https://dl.google.com/android/repository/sdk-tools-linux-4333796.zip;
-      unzip -q sdk-tools-linux-4333796.zip -d $ANDROID_HOME;
-      export SDKMANAGER_OPTS="--add-modules java.xml.bind";
-      yes | $ANDROID_HOME/tools/bin/sdkmanager --verbose "platform-tools";
     else
-      echo "Running on OS X.";
+      mkdir ~/bin;
+      brew install php71 sbt;
     fi
+  - curl https://storage.googleapis.com/git-repo-downloads/repo > ~/bin/repo
+  - chmod a+x ~/bin/repo
+  - curl -Os https://dl.google.com/android/repository/$ANDROID_SDK_ARCHIVE
+  - sudo unzip -q $ANDROID_SDK_ARCHIVE -d $ANDROID_HOME
+  - sudo chmod a+x $ANDROID_HOME/tools/bin/sdkmanager
+  - export SDKMANAGER_OPTS="--add-modules java.xml.bind"
+  - yes | $ANDROID_HOME/tools/bin/sdkmanager --verbose "platform-tools"
 
 script:
   - if [ "$TRAVIS_OS_NAME" = "linux" ]; then
