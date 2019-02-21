@@ -226,7 +226,7 @@ inline fun <K, V, W> Map<K, V>.zipWithDefault(other: Map<K, V>, default: V, oper
 /**
  * Return the string encoded for safe use as a file name or "unknown", if the string is empty.
  */
-fun String.encodeOrUnknown() = fileSystemEncode().takeUnless { it.isBlank() } ?: "unknown"
+fun String.encodeOrUnknown() = fileSystemEncode().takeUnless { it.isEmpty() } ?: "unknown"
 
 /**
  * Return the string encoded for safe use as a file name. Also limit the length to 255 characters which is the maximum
