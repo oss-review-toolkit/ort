@@ -233,11 +233,16 @@ fun String.encodeOrUnknown() = fileSystemEncode().takeUnless { it.isEmpty() } ?:
  * length in most modern filesystems: https://en.wikipedia.org/wiki/Comparison_of_file_systems#Limits
  */
 fun String.fileSystemEncode() =
-        java.net.URLEncoder.encode(this, "UTF-8")
+        urlEncode()
                 // URLEncoder does not encode "*" and ".", so do that manually.
                 .replace("*", "%2A")
                 .replace(Regex("(^\\.|\\.$)"), "%2E")
                 .take(255)
+
+/**
+ * Return the string URL encoded.
+ */
+fun String.urlEncode(): String = java.net.URLEncoder.encode(this, "UTF-8")
 
 /**
  * True if the string is a valid semantic version of the given [type], false otherwise.
