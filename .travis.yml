@@ -1,11 +1,18 @@
-dist: xenial
-
-sudo: required
-
 language: java
 
 jdk:
   - openjdk10
+
+os:
+  - linux
+  - osx
+
+matrix:
+  include:
+    - os: linux
+      dist: xenial
+    - os: osx
+      osx_image: xcode10
 
 before_cache:
   - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
@@ -29,23 +36,28 @@ env:
     - DEP_RELEASE_TAG="v0.4.1"
 
 before_install:
-  - sudo rm -f $JAVA_HOME/lib/security/cacerts
-  - sudo ln -s /etc/ssl/certs/java/cacerts $JAVA_HOME/lib/security/cacerts
+  - if [ "$TRAVIS_OS_NAME" = "linux" ]; then
+      sudo rm -f $JAVA_HOME/lib/security/cacerts;
+      sudo ln -s /etc/ssl/certs/java/cacerts $JAVA_HOME/lib/security/cacerts;
+    fi
 
 install:
-  - sudo apt install -y cvs
-  - eval "$(gimme)"
-  - curl https://raw.githubusercontent.com/golang/dep/7d5cd199ce454707f81c63b7ea4299151b8b981d/install.sh | sh
-  - npm install -g bower@1.8.8 npm@6.4.0 yarn@1.13.0
-  - phpenv global 7.1.19
-  - curl -Ls https://git.io/sbt > ~/bin/sbt
-  - chmod a+x ~/bin/sbt
-  - curl https://storage.googleapis.com/git-repo-downloads/repo > ~/bin/repo
-  - chmod a+x ~/bin/repo
-  - wget -q https://dl.google.com/android/repository/sdk-tools-linux-4333796.zip
-  - unzip -q sdk-tools-linux-4333796.zip -d $ANDROID_HOME
-  - export SDKMANAGER_OPTS="--add-modules java.xml.bind"
-  - yes | $ANDROID_HOME/tools/bin/sdkmanager --verbose "platform-tools"
+  - if [ "$TRAVIS_OS_NAME" = "linux" ]; then
+      sudo apt install -y cvs;
+      eval "$(gimme)";
+      curl https://raw.githubusercontent.com/golang/dep/7d5cd199ce454707f81c63b7ea4299151b8b981d/install.sh | sh;
+      npm install -g bower@1.8.8 npm@6.4.0 yarn@1.13.0;
+      phpenv global 7.1.19;
+      curl -Ls https://git.io/sbt > ~/bin/sbt;
+      chmod a+x ~/bin/sbt;
+      curl https://storage.googleapis.com/git-repo-downloads/repo > ~/bin/repo;
+      chmod a+x ~/bin/repo;
+      wget -q https://dl.google.com/android/repository/sdk-tools-linux-4333796.zip;
+      unzip -q sdk-tools-linux-4333796.zip -d $ANDROID_HOME;
+      export SDKMANAGER_OPTS="--add-modules java.xml.bind";
+      yes | $ANDROID_HOME/tools/bin/sdkmanager --verbose "platform-tools";
+    else
+    fi
 
 script:
   - set -o pipefail
