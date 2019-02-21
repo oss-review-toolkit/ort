@@ -48,6 +48,7 @@ install:
   - npm install -g bower@$BOWER_VERSION npm@$NPM_VERSION yarn@$YARN_VERSION # Need to run this before brew to avoid "dyld: Library not loaded".
   - |
     if [ "$TRAVIS_OS_NAME" = "linux" ]; then
+      exit;
       sudo apt install -y cvs;
       eval "$(gimme)";
       curl https://raw.githubusercontent.com/golang/dep/v$GO_DEP_VERSION/install.sh | sh;
@@ -70,6 +71,9 @@ install:
   - yes | $ANDROID_HOME/tools/bin/sdkmanager --verbose "platform-tools"
 
 script:
+  - if [ "$TRAVIS_OS_NAME" = "linux" ]; then
+      exit;
+    fi
   - set -o pipefail
   - if [ "$TRAVIS_EVENT_TYPE" = "cron" ]; then
       ./gradlew --no-daemon --stacktrace -Dkotlintest.tags.exclude=ScanCodeTag check jacocoReport | tee log.txt;
