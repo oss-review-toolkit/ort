@@ -24,6 +24,7 @@ import com.fasterxml.jackson.dataformat.yaml.YAMLFactory
 import com.fasterxml.jackson.module.kotlin.readValue
 
 import com.here.ort.spdx.SpdxExpression.Strictness
+import com.here.ort.spdx.SpdxLicense.*
 
 import io.kotlintest.assertSoftly
 import io.kotlintest.shouldBe
@@ -184,6 +185,60 @@ class SpdxExpressionTest : WordSpec() {
                     SpdxExpression.parse("Nunit") shouldBe SpdxLicenseIdExpression("Nunit")
                     SpdxExpression.parse("StandardML-NJ") shouldBe SpdxLicenseIdExpression("StandardML-NJ")
                     SpdxExpression.parse("wxWindows") shouldBe SpdxLicenseIdExpression("wxWindows")
+                }
+            }
+
+            "normalize deprecated licenses to non-deprecated ones" {
+                assertSoftly {
+                    SpdxExpression.parse("AGPL-1.0").normalize() shouldBe AGPL_1_0_ONLY.toExpression()
+                    SpdxExpression.parse("AGPL-1.0+").normalize() shouldBe
+                            SpdxLicenseIdExpression("AGPL-1.0-or-later", true)
+
+                    SpdxExpression.parse("AGPL-3.0").normalize() shouldBe AGPL_3_0_ONLY.toExpression()
+                    SpdxExpression.parse("AGPL-3.0+").normalize() shouldBe
+                            SpdxLicenseIdExpression("AGPL-3.0-or-later", true)
+
+                    SpdxExpression.parse("GFDL-1.1").normalize() shouldBe GFDL_1_1_ONLY.toExpression()
+                    SpdxExpression.parse("GFDL-1.1+").normalize() shouldBe
+                            SpdxLicenseIdExpression("GFDL-1.1-or-later", true)
+
+                    SpdxExpression.parse("GFDL-1.2").normalize() shouldBe GFDL_1_2_ONLY.toExpression()
+                    SpdxExpression.parse("GFDL-1.2+").normalize() shouldBe
+                            SpdxLicenseIdExpression("GFDL-1.2-or-later", true)
+
+                    SpdxExpression.parse("GFDL-1.3").normalize() shouldBe GFDL_1_3_ONLY.toExpression()
+                    SpdxExpression.parse("GFDL-1.3+").normalize() shouldBe
+                            SpdxLicenseIdExpression("GFDL-1.3-or-later", true)
+
+                    SpdxExpression.parse("GPL-1.0").normalize() shouldBe GPL_1_0_ONLY.toExpression()
+                    SpdxExpression.parse("GPL-1.0+").normalize() shouldBe
+                            SpdxLicenseIdExpression("GPL-1.0-or-later", true)
+
+                    SpdxExpression.parse("GPL-2.0").normalize() shouldBe GPL_2_0_ONLY.toExpression()
+                    SpdxExpression.parse("GPL-2.0+").normalize() shouldBe
+                            SpdxLicenseIdExpression("GPL-2.0-or-later", true)
+
+                    SpdxExpression.parse("GPL-3.0").normalize() shouldBe GPL_3_0_ONLY.toExpression()
+                    SpdxExpression.parse("GPL-3.0+").normalize() shouldBe
+                            SpdxLicenseIdExpression("GPL-3.0-or-later", true)
+
+                    SpdxExpression.parse("LGPL-2.0").normalize() shouldBe LGPL_2_0_ONLY.toExpression()
+                    SpdxExpression.parse("LGPL-2.0+").normalize() shouldBe
+                            SpdxLicenseIdExpression("LGPL-2.0-or-later", true)
+
+                    SpdxExpression.parse("LGPL-2.1").normalize() shouldBe LGPL_2_1_ONLY.toExpression()
+                    SpdxExpression.parse("LGPL-2.1+").normalize() shouldBe
+                            SpdxLicenseIdExpression("LGPL-2.1-or-later", true)
+
+                    SpdxExpression.parse("LGPL-3.0").normalize() shouldBe LGPL_3_0_ONLY.toExpression()
+                    SpdxExpression.parse("LGPL-3.0+").normalize() shouldBe
+                            SpdxLicenseIdExpression("LGPL-3.0-or-later", true)
+
+                    // These have no known successors, so just keep them.
+                    SpdxExpression.parse("eCos-2.0").normalize() shouldBe ECOS_2_0.toExpression()
+                    SpdxExpression.parse("Nunit").normalize() shouldBe NUNIT.toExpression()
+                    SpdxExpression.parse("StandardML-NJ").normalize() shouldBe STANDARDML_NJ.toExpression()
+                    SpdxExpression.parse("wxWindows").normalize() shouldBe WXWINDOWS.toExpression()
                 }
             }
         }
