@@ -43,6 +43,7 @@ before_install:
 
 install:
   - if [ "$TRAVIS_OS_NAME" = "linux" ]; then
+      exit;
       sudo apt install -y cvs;
       eval "$(gimme)";
       curl https://raw.githubusercontent.com/golang/dep/7d5cd199ce454707f81c63b7ea4299151b8b981d/install.sh | sh;
@@ -57,9 +58,13 @@ install:
       export SDKMANAGER_OPTS="--add-modules java.xml.bind";
       yes | $ANDROID_HOME/tools/bin/sdkmanager --verbose "platform-tools";
     else
+      echo "Running on OS X.";
     fi
 
 script:
+  - if [ "$TRAVIS_OS_NAME" = "linux" ]; then
+      exit;
+    fi
   - set -o pipefail
   - if [ "$TRAVIS_EVENT_TYPE" = "cron" ]; then
       ./gradlew --no-daemon --stacktrace :cli:dockerBuildImage;
