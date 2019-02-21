@@ -83,6 +83,13 @@ data class AnalyzerResult(
             }
         }
 
+        packages.forEach { curatedPackage ->
+            val errors = curatedPackage.pkg.collectErrors()
+            if (errors.isNotEmpty()) {
+                collectedErrors.getOrPut(curatedPackage.pkg.id) { mutableSetOf() } += errors
+            }
+        }
+
         return collectedErrors
     }
 

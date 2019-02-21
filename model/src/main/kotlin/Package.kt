@@ -142,6 +142,24 @@ data class Package(
     }
 
     /**
+     * Check if this package contains any erroneous data.
+     */
+    fun collectErrors(): List<OrtIssue> {
+        val issues = mutableListOf<OrtIssue>()
+
+        declaredLicensesProcessed.unmapped.forEach { unmappedLicense ->
+            issues += OrtIssue(
+                    severity = Severity.ERROR,
+                    source = id.toCoordinates(),
+                    message = "The declared license '$unmappedLicense' could not be mapped to a valid license or " +
+                            "parsed as an SPDX expression."
+            )
+        }
+
+        return issues
+    }
+
+    /**
      * Create a [CuratedPackage] from this package with an empty list of applied curations.
      */
     fun toCuratedPackage() = CuratedPackage(this, emptyList())

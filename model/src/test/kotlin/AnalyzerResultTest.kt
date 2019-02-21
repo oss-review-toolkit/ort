@@ -21,6 +21,10 @@ package com.here.ort.model
 
 import com.fasterxml.jackson.module.kotlin.readValue
 
+import com.here.ort.utils.DeclaredLicenseProcessor
+
+import io.kotlintest.matchers.haveSize
+import io.kotlintest.should
 import io.kotlintest.shouldBe
 import io.kotlintest.specs.WordSpec
 
@@ -85,6 +89,40 @@ class AnalyzerResultTest : WordSpec() {
                         project1.id to setOf(error3, error4),
                         project2.id to setOf(error4)
                 )
+            }
+
+            "contain declared license errors" {
+                val invalidProjectLicense = sortedSetOf("invalid project license")
+                val invalidPackageLicense = sortedSetOf("invalid package license")
+                val analyzerResult = AnalyzerResult(
+                        projects = sortedSetOf(project1.copy(
+                                declaredLicenses = invalidProjectLicense,
+                                declaredLicensesProcessed = DeclaredLicenseProcessor.process(invalidProjectLicense),
+                                scopes = sortedSetOf()
+                        )),
+                        packages = sortedSetOf(package1.copy(
+                                declaredLicenses = invalidPackageLicense,
+                                declaredLicensesProcessed = DeclaredLicenseProcessor.process(invalidPackageLicense)
+                        ).toCuratedPackage())
+                )
+
+                val errors = analyzerResult.collectErrors()
+
+                errors.getValue(project1.id).let { projectErrors ->
+                    projectErrors should haveSize(1)
+                    projectErrors.first().severity shouldBe Severity.ERROR
+                    projectErrors.first().source shouldBe project1.id.toCoordinates()
+                    projectErrors.first().message shouldBe "The declared license 'invalid project license' could not " +
+                            "be mapped to a valid license or parsed as an SPDX expression."
+                }
+
+                errors.getValue(package1.id).let { packageErrors ->
+                    packageErrors should haveSize(1)
+                    packageErrors.first().severity shouldBe Severity.ERROR
+                    packageErrors.first().source shouldBe package1.id.toCoordinates()
+                    packageErrors.first().message shouldBe "The declared license 'invalid package license' could not " +
+                            "be mapped to a valid license or parsed as an SPDX expression."
+                }
             }
         }
 
