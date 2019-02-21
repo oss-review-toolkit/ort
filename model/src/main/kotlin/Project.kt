@@ -168,8 +168,8 @@ data class Project(
     fun collectSubProjects() =
             scopes.fold(sortedSetOf<PackageReference>()) { refs, scope ->
                 refs.also {
-                    it += scope.collectDependencies().filter {
-                        ref -> ref.linkage in PackageLinkage.PROJECT_LINKAGE
+                    it += scope.collectDependencies().filter { ref ->
+                        ref.linkage in PackageLinkage.PROJECT_LINKAGE
                     }
                 }
             }
