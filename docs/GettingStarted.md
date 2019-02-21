@@ -124,23 +124,32 @@ repository:
   config: {}
 # The analyzer result.
 analyzer:
+  # The time when the analyzer was executed.
+  start_time: "2019-02-19T10:03:07.269Z"
+  end_time: "2019-02-19T10:03:19.932Z"
   # Information about the environment the analyzer was run in.
   environment:
+    ort_version: "331c32d"
     os: "Linux"
+    variables:
+      SHELL: "/bin/bash"
+      TERM: "xterm-256color"
+      JAVA_HOME: "/usr/lib/jvm/java-8-oracle"
     tool_versions: {}
   # Configuration options of the analyzer.
   config:
     ignore_tool_versions: false
     allow_dynamic_versions: true
-    remove_excludes_from_result: false
   # The result of the dependency analysis.
   result:
     # Metadata about all found projects, in this case only the mime-types package defined by the package.json file.
     projects:
-    - id: "NPM::mime-types:2.1.19"
+    - id: "NPM::mime-types:2.1.18"
       definition_file_path: "package.json"
       declared_licenses:
       - "MIT"
+      declared_licenses_processed:
+        spdx_expression: "MIT"
       vcs:
         type: ""
         url: "https://github.com/jshttp/mime-types.git"
@@ -149,26 +158,23 @@ analyzer:
       vcs_processed:
         type: "git"
         url: "https://github.com/jshttp/mime-types.git"
-        revision: "7c4ce23d7354fbf64c69d7b7be8413c4ba2add78"
+        revision: "076f7902e3a730970ea96cd0b9c09bb6110f1127"
         path: ""
       homepage_url: ""
-      # The dependency tress by scope.
+      # The dependency trees by scope.
       scopes:
       - name: "dependencies"
         dependencies:
-        - id: "NPM::mime-db:1.35.0"
-          dependencies: []
-          errors: []
+        - id: "NPM::mime-db:1.33.0"
       - name: "devDependencies"
         dependencies:
-        - id: "NPM::eslint-config-standard:11.0.0"
-          dependencies: []
-          errors: []
-        - id: "NPM::eslint-plugin-import:2.13.0"
+        - id: "NPM::eslint-config-standard:10.2.1"
+        - id: "NPM::eslint-plugin-import:2.8.0"
           dependencies:
+          - id: "NPM::builtin-modules:1.1.1"
           - id: "NPM::contains-path:0.1.0"
-            dependencies: []
-            errors: [] # If an error occured during the dependency analysis of this package it would be in this array.
+            # If an error occured during the dependency analysis of this package there would be an additional "errors"
+            # array.
 # ...
 # Detailed metadata about each package from the dependency trees.
     packages:
@@ -176,6 +182,8 @@ analyzer:
         id: "NPM::abbrev:1.0.9"
         declared_licenses:
         - "ISC"
+        declared_licenses_processed:
+          spdx_expression: "ISC"
         description: "Like ruby's abbrev module, but in js"
         homepage_url: "https://github.com/isaacs/abbrev-js#readme"
         binary_artifact:
