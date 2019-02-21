@@ -93,13 +93,15 @@ class GitRepo : GitBase() {
                 runRepoCommand(targetDir, "sync", "-c")
             }
 
+            log.debug { runRepoCommand(targetDir, "info").stdout }
+
             return getWorkingTree(targetDir)
         } catch (e: IOException) {
             throw DownloadException("Could not clone from ${pkg.vcsProcessed.url} using manifest '$manifestPath'.", e)
         }
     }
 
-    private fun runRepoCommand(targetDir: File, vararg args: String) {
+    private fun runRepoCommand(targetDir: File, vararg args: String): ProcessCapture {
         val patchedArgs = if (args.first() == "init") {
             if (OS.isWindows) {
                 // The current "stable" release of "repo" still does not support Windows officially, so get the latest
@@ -113,7 +115,7 @@ class GitRepo : GitBase() {
             args.toList()
         }
 
-        if (OS.isWindows) {
+        return if (OS.isWindows) {
             val repo = getPathFromEnvironment("repo") ?: throw IOException("'repo' not found in PATH.")
 
             // On Windows, the script itself is not executable, so we need to wrap the call by "python".
