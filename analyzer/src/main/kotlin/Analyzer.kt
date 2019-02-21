@@ -59,10 +59,14 @@ class Analyzer(private val config: AnalyzerConfiguration) {
                 ?: locateRepositoryConfigurationFile(absoluteProjectPath)
 
         val repositoryConfiguration = if (actualRepositoryConfigurationFile.isFile) {
+            log.info { "Using configuration file '${actualRepositoryConfigurationFile.absolutePath}'." }
+
             actualRepositoryConfigurationFile.readValue()
         } else {
             RepositoryConfiguration()
         }
+
+        log.debug { "Using the following configuration settings:\n$repositoryConfiguration" }
 
         // Map files by the package manager factory that manages them.
         val factoryFiles = if (packageManagers.size == 1 && absoluteProjectPath.isFile) {
