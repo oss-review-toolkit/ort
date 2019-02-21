@@ -49,7 +49,7 @@ install:
 
 script:
   - set -o pipefail
-  - if [ "$TRAVIS_EVENT_TYPE" == "cron" ]; then
+  - if [ "$TRAVIS_EVENT_TYPE" = "cron" ]; then
       ./gradlew --no-daemon --stacktrace :cli:dockerBuildImage;
       ./gradlew --no-daemon --stacktrace -Dkotlintest.tags.exclude=ScanCodeTag check jacocoReport | tee log.txt;
     else
@@ -61,6 +61,6 @@ script:
     fi
 
 after_success:
-  - if [ "$TRAVIS_EVENT_TYPE" == "cron" ]; then
+  - if [ "$TRAVIS_EVENT_TYPE" = "cron" ]; then
       bash <(curl -s https://codecov.io/bash) -X gcov -f '!*/src/*/assets/*'
     fi
