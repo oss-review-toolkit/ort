@@ -146,7 +146,10 @@ class NoticeReporter : Reporter() {
             buildString {
                 append(noticeReport.headers.joinToString(NOTICE_SEPARATOR))
 
-                noticeReport.findings.forEach { (license, copyrights) ->
+                noticeReport.findings.filterNot { (license, _) ->
+                    // Public domain licenses do not require attribution.
+                    license.isLicenseRefTo("public-domain") || license.isLicenseRefTo("public-domain-disclaimer")
+                }.forEach { (license, copyrights) ->
                     try {
                         val licenseText = getLicenseText(license, true)
 
@@ -161,13 +164,10 @@ class NoticeReporter : Reporter() {
 
                         append(licenseText)
                     } catch (e: IOException) {
-                        // Public domain licenses do not require attribution.
-                        if (!license.isLicenseRefTo("public-domain")) {
-                            // TODO: Consider introducing (resolvable) reporter errors to handle cases where we cannot
-                            // find license texts for non-public-domain licenses.
-                            log.warn {
-                                "No license text found for license '$license', it will be omitted from the report."
-                            }
+                        // TODO: Consider introducing (resolvable) reporter errors to handle cases where we cannot
+                        // find license texts.
+                        log.warn {
+                            "No license text found for license '$license', it will be omitted from the report."
                         }
                     }
                 }
