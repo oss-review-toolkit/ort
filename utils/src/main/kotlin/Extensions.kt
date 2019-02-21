@@ -233,11 +233,22 @@ fun String.encodeOrUnknown() = fileSystemEncode().takeUnless { it.isEmpty() } ?:
  * length in most modern filesystems: https://en.wikipedia.org/wiki/Comparison_of_file_systems#Limits
  */
 fun String.fileSystemEncode() =
-        java.net.URLEncoder.encode(this, "UTF-8")
-                // URLEncoder does not encode "*" and ".", so do that manually.
+        percentEncode()
+                // Percent-encoding does not necessarily encode some reserved characters that are invalid in some file
+                // systems, so map these afterwards.
                 .replace("*", "%2A")
                 .replace(Regex("(^\\.|\\.$)"), "%2E")
                 .take(255)
+
+/**
+ * Return the string percent-encoded as defined at https://en.wikipedia.org/wiki/Percent-encoding.
+ */
+fun String.percentEncode(): String =
+        java.net.URLEncoder.encode(this, "UTF-8")
+                // As "encode" above actually performs encoding for forms, not for query strings, spaces are encoded as
+                // "+" instead of "%20", so apply the proper mapping here afterwards ("+" in the original string is
+                // encoded as "%2B").
+                .replace("+", "%20")
 
 /**
  * True if the string is a valid semantic version of the given [type], false otherwise.
