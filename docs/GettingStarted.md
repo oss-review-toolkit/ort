@@ -48,7 +48,7 @@ cli/build/install/ort/bin/ort --help
 
 ## 3. Download the `mime-types` source code
 
-Before scanning `mime-types` its source code has to be downloaded. For reliable results we use version 2.1.19 (replace
+Before scanning `mime-types` its source code has to be downloaded. For reliable results we use version 2.1.18 (replace
 `[mime-types-path]` with the path you want to clone `mime-types` to):
 
 ```bash
@@ -249,7 +249,7 @@ Original was VcsInfo(type=git, url=git+https://github.com/jshttp/mime-db.git, re
 Running ScanCode version 2.9.2 on directory '[scanner-output-path]/downloads/NPM/unknown/mime-db/1.35.0'.
 Using processed VcsInfo(type=git, url=https://github.com/jshttp/mime-types.git, revision=7c4ce23d7354fbf64c69d7b7be8413c4ba2add78, resolvedRevision=null, path=).
 Original was VcsInfo(type=, url=https://github.com/jshttp/mime-types.git, revision=, resolvedRevision=null, path=).
-Running ScanCode version 2.9.2 on directory '[scanner-output-path]/downloads/NPM/unknown/mime-types/2.1.19'.
+Running ScanCode version 2.9.2 on directory '[scanner-output-path]/downloads/NPM/unknown/mime-types/2.1.18'.
 Writing scan result to '[scanner-output-path]/scan-result.yml'.
 ```
 
