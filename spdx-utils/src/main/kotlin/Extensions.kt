@@ -68,14 +68,25 @@ fun SpdxLicenseException.toExpression() = SpdxLicenseExceptionExpression(id)
  * Return whether this [String] is a LicenseRef to [name], by default [ignoring case][ignoreCase]. Any possible
  * (scanner-specific) namespaces are ignored.
  */
-fun String.isLicenseRefTo(name: String, ignoreCase: Boolean = true): Boolean {
-    if (name.isBlank()) return false
+fun String.isLicenseRefTo(
+        name: String,
+        ignoreCase: Boolean = true,
+        namespaces: List<String> = listOf("ORT", "Askalono", "BoyterLc", "Licensee", "scancode")
+): Boolean {
+    if (name.isBlank() || name.startsWith("-") || name.endsWith("-")) return false
 
+    // Check that the string changes when removing the prefix, otherwise it did not contain the prefix.
     val withoutPrefix = removePrefix("LicenseRef-")
     if (withoutPrefix == this) return false
 
+    // Check that the string contains the name as the suffix.
     if (!withoutPrefix.endsWith(name, ignoreCase)) return false
     val infix = withoutPrefix.dropLast(name.length)
+    if (infix.isEmpty()) return true
 
-    return infix.indexOf('-') == infix.length - 1
+    // Check that the string changes when removing the suffix, otherwise it did not contain the suffix.
+    val namespace = infix.removeSuffix("-")
+    if (namespace == infix) return false
+
+    return namespaces.any { it.equals(namespace, ignoreCase) }
 }

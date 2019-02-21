@@ -55,8 +55,17 @@ class ExtensionsTest : WordSpec({
             assertSoftly {
                 "LicenseRef".isLicenseRefTo("") shouldBe false
                 "LicenseRef-".isLicenseRefTo("") shouldBe false
+                "LicenseRef--".isLicenseRefTo("-") shouldBe false
+                "LicenseRef--foo".isLicenseRefTo("-foo") shouldBe false
+                "LicenseRef--foo".isLicenseRefTo("foo") shouldBe false
                 "public-domain".isLicenseRefTo("public-domain") shouldBe false
+                "".isLicenseRefTo("") shouldBe false
+                "-".isLicenseRefTo("public-domain") shouldBe false
             }
+        }
+
+        "return false if the namespace is not known" {
+            "LicenseRef-no-public-domain".isLicenseRefTo("public-domain") shouldBe false
         }
     }
 })
