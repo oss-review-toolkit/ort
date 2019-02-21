@@ -84,6 +84,21 @@ object EvaluatorCommand : CommandWithHelp() {
             "Either '--rules-file' or '--rules-resource' must be specified."
         }
 
+        val absoluteOutputDir = outputDir?.absoluteFile?.normalize()
+        val outputFiles = mutableListOf<File>()
+
+        if (absoluteOutputDir != null) {
+            outputFiles += outputFormats.distinct().map { format ->
+                File(absoluteOutputDir, "evaluation-result.${format.fileExtension}")
+            }
+
+            val existingOutputFiles = outputFiles.filter { it.exists() }
+            if (existingOutputFiles.isNotEmpty()) {
+                log.error { "None of the output files $existingOutputFiles must exist yet." }
+                return 2
+            }
+        }
+
         var ortResultInput = ortFile.readValue<OrtResult>()
         repositoryConfigurationFile?.let {
             ortResultInput = ortResultInput.replaceConfig(it.readValue())
@@ -99,17 +114,7 @@ object EvaluatorCommand : CommandWithHelp() {
 
         val evaluatorRun by lazy { evaluator.run(script) }
 
-        outputDir?.absoluteFile?.normalize()?.let { absoluteOutputDir ->
-            val outputFiles = outputFormats.distinct().map { format ->
-                File(absoluteOutputDir, "evaluation-result.${format.fileExtension}")
-            }
-
-            val existingOutputFiles = outputFiles.filter { it.exists() }
-            if (existingOutputFiles.isNotEmpty()) {
-                log.error { "None of the output files $existingOutputFiles must exist yet." }
-                return 2
-            }
-
+        if (absoluteOutputDir != null) {
             // Note: This overwrites any existing EvaluatorRun from the input file.
             val ortResultOutput = ortResultInput.copy(evaluator = evaluatorRun)
 
