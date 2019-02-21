@@ -114,6 +114,12 @@ object EvaluatorCommand : CommandWithHelp() {
 
         val evaluatorRun by lazy { evaluator.run(script) }
 
+        if (log.isErrorEnabled) {
+            evaluatorRun.errors.forEach { error ->
+                log.error(error.toString())
+            }
+        }
+
         if (absoluteOutputDir != null) {
             // Note: This overwrites any existing EvaluatorRun from the input file.
             val ortResultOutput = ortResultInput.copy(evaluator = evaluatorRun)
@@ -123,12 +129,6 @@ object EvaluatorCommand : CommandWithHelp() {
             outputFiles.forEach { file ->
                 println("Writing evaluation result to '${file.absolutePath}'.")
                 file.mapper().writerWithDefaultPrettyPrinter().writeValue(file, ortResultOutput)
-            }
-        }
-
-        if (log.isErrorEnabled) {
-            evaluatorRun.errors.forEach { error ->
-                log.error(error.toString())
             }
         }
 
