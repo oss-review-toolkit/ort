@@ -1,11 +1,27 @@
-dist: xenial
-
-sudo: required
-
 language: java
 
-jdk:
-  - openjdk10
+env:
+  global:
+    - ANDROID_HOME="/opt/android"
+    - ANDROID_SDK_VERSION="4333796"
+    - BOWER_VERSION="1.8.8"
+    - GIMME_GO_VERSION="1.10" # Used internally by Travis.
+    - GO_DEP_VERSION="0.5.4"
+    - NPM_VERSION="6.4.0"
+    - PHP_VERSION="7.1"
+    - RUST_VERSION="1.35.0"
+    - STACK_VERSION="2.1.3"
+    - YARN_VERSION="1.17.3"
+
+matrix:
+  include:
+    - os: linux
+      dist: xenial
+      jdk: openjdk10
+      env: ANDROID_SDK_ARCHIVE="sdk-tools-linux-$ANDROID_SDK_VERSION.zip"
+    - os: osx
+      osx_image: xcode10
+      env: ANDROID_SDK_ARCHIVE="sdk-tools-darwin-$ANDROID_SDK_VERSION.zip"
 
 before_cache:
   - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
@@ -22,38 +38,34 @@ cache:
     - $HOME/.ort/downloader/cache/http
     - $HOME/.ort/scanner/cache/http
 
-env:
-  global:
-    - ANDROID_HOME="/opt/android"
-    - ANDROID_SDK_VERSION="4333796"
-    - BOWER_VERSION="1.8.8"
-    - GIMME_GO_VERSION="1.10" # Used internally by Travis.
-    - GO_DEP_VERSION="0.5.1"
-    - NPM_VERSION="6.4.0"
-    - PHP_VERSION="7.1"
-    - RUST_VERSION="1.35.0"
-    - STACK_VERSION="2.1.3"
-    - YARN_VERSION="1.17.3"
-
 before_install:
-  - sudo rm -f $JAVA_HOME/lib/security/cacerts
-  - sudo ln -s /etc/ssl/certs/java/cacerts $JAVA_HOME/lib/security/cacerts
+  - if [ "$TRAVIS_OS_NAME" = "linux" ]; then
+      sudo rm -f $JAVA_HOME/lib/security/cacerts;
+      sudo ln -s /etc/ssl/certs/java/cacerts $JAVA_HOME/lib/security/cacerts;
+    fi
 
 install:
-  - sudo apt install -y cvs
-  - eval "$(gimme)"
-  - curl https://raw.githubusercontent.com/golang/dep/v$GO_DEP_VERSION/install.sh | sh
-  - npm install -g bower@$BOWER_VERSION npm@$NPM_VERSION yarn@$YARN_VERSION
-  - phpenv global $PHP_VERSION
-  - curl -Ls https://git.io/sbt > ~/bin/sbt
-  - chmod a+x ~/bin/sbt
+  - npm install -g bower@$BOWER_VERSION npm@$NPM_VERSION yarn@$YARN_VERSION # Need to run this before brew to avoid "dyld: Library not loaded".
+  - |
+    if [ "$TRAVIS_OS_NAME" = "linux" ]; then
+      sudo apt install -y cvs;
+      eval "$(gimme)";
+      curl https://raw.githubusercontent.com/golang/dep/v$GO_DEP_VERSION/install.sh | sh;
+      phpenv global $PHP_VERSION;
+      curl -Ls https://git.io/sbt > ~/bin/sbt;
+      chmod a+x ~/bin/sbt;
+    elif [ "$TRAVIS_OS_NAME" = "osx" ]; then
+      mkdir ~/bin;
+      brew install cvs dep@$GO_DEP_VERSION php${PHP_VERSION//./} sbt
+    fi
   - curl -sSL https://github.com/commercialhaskell/stack/raw/v$STACK_VERSION/etc/scripts/get-stack.sh | sh
   - curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --default-toolchain $RUST_VERSION
   - export PATH=$PATH:$HOME/.cargo/bin
   - curl https://storage.googleapis.com/git-repo-downloads/repo > ~/bin/repo
   - chmod a+x ~/bin/repo
-  - curl -Os https://dl.google.com/android/repository/sdk-tools-linux-$ANDROID_SDK_VERSION.zip
-  - unzip -q sdk-tools-linux-$ANDROID_SDK_VERSION.zip -d $ANDROID_HOME
+  - curl -Os https://dl.google.com/android/repository/$ANDROID_SDK_ARCHIVE
+  - sudo unzip -q $ANDROID_SDK_ARCHIVE -d $ANDROID_HOME
+  - sudo chmod a+x $ANDROID_HOME/tools/bin/sdkmanager
   - export SDKMANAGER_OPTS="--add-modules java.xml.bind"
   - yes | $ANDROID_HOME/tools/bin/sdkmanager --verbose "platform-tools"
 
