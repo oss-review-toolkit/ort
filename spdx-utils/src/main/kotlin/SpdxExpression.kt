@@ -221,7 +221,7 @@ data class SpdxLicenseIdExpression(
     override fun validate(strictness: Strictness) {
         val license = SpdxLicense.forId(id)
         when (strictness) {
-            Strictness.ALLOW_ANY -> id // Return something non-null.
+            Strictness.ALLOW_ANY -> Unit // Return something non-null.
             Strictness.ALLOW_DEPRECATED -> license
             Strictness.ALLOW_CURRENT -> license?.takeUnless { license.deprecated }
         } ?: throw SpdxException("'$id' is not a valid SPDX license id.")
