@@ -180,6 +180,7 @@ class SpdxExpressionTest : WordSpec() {
         "The expression parser" should {
             "work for deprecated license identifiers" {
                 assertSoftly {
+                    SpdxExpression.parse("eCos-2.0") shouldBe SpdxLicenseIdExpression("eCos-2.0")
                     SpdxExpression.parse("Nunit") shouldBe SpdxLicenseIdExpression("Nunit")
                     SpdxExpression.parse("StandardML-NJ") shouldBe SpdxLicenseIdExpression("StandardML-NJ")
                     SpdxExpression.parse("wxWindows") shouldBe SpdxLicenseIdExpression("wxWindows")
