@@ -25,7 +25,10 @@ import com.here.ort.spdx.SpdxLicense.*
  * A mapping from misspelled SPDX license IDs to valid SPDX IDs.
  */
 object SpdxLicenseAliasMapping {
-    val mapping = mapOf(
+    /**
+     * The map of misspelled SPDX license IDs associated with their valid SPDX IDs.
+     */
+    private val misspelled = mapOf(
             "AFLv2.1" to AFL_2_1,
             "ALv2" to APACHE_2_0,
             "APL2" to APACHE_2_0,
@@ -73,5 +76,36 @@ object SpdxLicenseAliasMapping {
             "zlib" to ZLIB
     )
 
-    fun map(license: String) = mapping[license] ?: SpdxLicense.forId(license)
+    /**
+     * The map of SPDX license IDs that use the deprecated "or later"-syntax associated with their current SPDX IDs.
+     */
+    private val deprecated = mapOf(
+            "AGPL-1.0" to AGPL_1_0_ONLY,
+            "AGPL-1.0+" to AGPL_1_0_OR_LATER,
+            "AGPL-3.0" to AGPL_3_0_ONLY,
+            "AGPL-3.0+" to AGPL_3_0_OR_LATER,
+            "GFDL-1.1" to GFDL_1_1_ONLY,
+            "GFDL-1.1+" to GFDL_1_1_OR_LATER,
+            "GFDL-1.2" to GFDL_1_2_ONLY,
+            "GFDL-1.2+" to GFDL_1_2_OR_LATER,
+            "GFDL-1.3" to GFDL_1_3_ONLY,
+            "GFDL-1.3+" to GFDL_1_3_OR_LATER,
+            "GPL-1.0" to GPL_1_0_ONLY,
+            "GPL-1.0+" to GPL_1_0_OR_LATER,
+            "GPL-2.0" to GPL_2_0_ONLY,
+            "GPL-2.0+" to GPL_2_0_OR_LATER,
+            "GPL-3.0" to GPL_3_0_ONLY,
+            "GPL-3.0+" to GPL_3_0_OR_LATER,
+            "LGPL-2.0" to LGPL_2_0_ONLY,
+            "LGPL-2.0+" to LGPL_2_0_OR_LATER,
+            "LGPL-2.1" to LGPL_2_1_ONLY,
+            "LGPL-2.1+" to LGPL_2_1_OR_LATER,
+            "LGPL-3.0" to LGPL_3_0_ONLY,
+            "LGPL-3.0+" to LGPL_3_0_OR_LATER
+    )
+
+    val mapping = misspelled + deprecated
+
+    fun map(license: String, mapDeprecated: Boolean = true) =
+            (if (mapDeprecated) mapping else misspelled)[license] ?: SpdxLicense.forId(license)
 }
