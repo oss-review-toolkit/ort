@@ -236,7 +236,9 @@ data class SpdxLicenseIdExpression(
     override fun toString() =
             buildString {
                 append(id)
-                if (orLaterVersion) append("+")
+                // While in the current SPDX standard the "or later version" semantic is part of the id string itself,
+                // it is a generic "+" operator for deprecated licenses.
+                if (orLaterVersion && !id.endsWith("-or-later")) append("+")
             }
 }
 

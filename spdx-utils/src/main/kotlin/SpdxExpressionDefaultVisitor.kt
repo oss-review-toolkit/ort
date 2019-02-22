@@ -78,8 +78,8 @@ class SpdxExpressionDefaultVisitor(private val strictness: Strictness) :
 
     override fun visitLicenseIdExpression(ctx: LicenseIdExpressionContext): SpdxExpression {
         return when (ctx.childCount) {
-            1 -> SpdxLicenseIdExpression(ctx.text)
-            2 -> SpdxLicenseIdExpression(ctx.text.dropLast(1), orLaterVersion = true)
+            1 -> SpdxLicenseIdExpression(ctx.text, ctx.text.endsWith("-or-later"))
+            2 -> SpdxLicenseIdExpression(ctx.text.dropLast(1) /* drop the trailing "+" */, true)
             else -> throw SpdxException("SpdxLicenseIdExpression has invalid amount of children: '${ctx.childCount}'")
         }.apply { validate(strictness) }
     }
