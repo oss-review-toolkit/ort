@@ -110,11 +110,11 @@ sealed class SpdxExpression {
     abstract fun spdxLicenses(): EnumSet<SpdxLicense>
 
     /**
-     * Normalize all license IDs using a mapping containing common misspellings of license IDs. The result of this
-     * function is not guaranteed to contain only valid IDs. Use [validate] to check the returned [SpdxExpression] for
-     * validity afterwards.
+     * Normalize all license IDs using a mapping containing common misspellings of license IDs. If [mapDeprecated] is
+     * `true` also deprecated IDs are mapped to they current counterparts. The result of this function is not guaranteed
+     * to contain only valid IDs. Use [validate] to check the returned [SpdxExpression] for validity afterwards.
      */
-    abstract fun normalize(): SpdxExpression
+    abstract fun normalize(mapDeprecated: Boolean = true): SpdxExpression
 
     /**
      * Validate this expression. [strictness] defines whether only the syntax is checked
@@ -147,7 +147,8 @@ data class SpdxCompoundExpression(
 
     override fun spdxLicenses() = left.spdxLicenses() + right.spdxLicenses()
 
-    override fun normalize() = SpdxCompoundExpression(left.normalize(), operator, right.normalize())
+    override fun normalize(mapDeprecated: Boolean) =
+            SpdxCompoundExpression(left.normalize(mapDeprecated), operator, right.normalize(mapDeprecated))
 
     override fun validate(strictness: Strictness) {
         left.validate(strictness)
@@ -190,7 +191,7 @@ data class SpdxLicenseExceptionExpression(
 
     override fun spdxLicenses() = enumSetOf<SpdxLicense>()
 
-    override fun normalize() = this
+    override fun normalize(mapDeprecated: Boolean) = this
 
     override fun validate(strictness: Strictness) {
         val licenseException = SpdxLicenseException.forId(id)
@@ -218,7 +219,8 @@ data class SpdxLicenseIdExpression(
 
     override fun spdxLicenses() = spdxLicense?.let { enumSetOf(it) } ?: enumSetOf()
 
-    override fun normalize() = SpdxLicenseAliasMapping.map(toString())?.toExpression() ?: this
+    override fun normalize(mapDeprecated: Boolean) =
+            SpdxLicenseAliasMapping.map(toString(), mapDeprecated)?.toExpression() ?: this
 
     override fun validate(strictness: Strictness) {
         when (strictness) {
@@ -253,7 +255,7 @@ data class SpdxLicenseReferenceExpression(
 
     override fun spdxLicenses() = enumSetOf<SpdxLicense>()
 
-    override fun normalize() = this
+    override fun normalize(mapDeprecated: Boolean) = this
 
     override fun validate(strictness: Strictness) {
         if (!(id.startsWith("LicenseRef-") ||
