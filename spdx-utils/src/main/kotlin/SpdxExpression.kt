@@ -236,7 +236,7 @@ data class SpdxLicenseIdExpression(
     override fun toString() =
             buildString {
                 append(id)
-                if (orLaterVersion) append("+")
+                if (orLaterVersion && !id.endsWith("-or-later")) append("+")
             }
 }
 

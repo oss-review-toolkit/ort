@@ -57,7 +57,8 @@ infix fun SpdxLicense.with(exception: SpdxLicenseException) =
 /**
  * Create an [SpdxLicenseIdExpression] from this [SpdxLicense].
  */
-fun SpdxLicense.toExpression() = SpdxLicenseIdExpression(id)
+fun SpdxLicense.toExpression() =
+        SpdxLicenseIdExpression(id, if (deprecated) id.endsWith("+") else id.endsWith("-or-later"))
 
 /**
  * Create an [SpdxLicenseExceptionExpression] from this [SpdxLicenseException].
