@@ -37,9 +37,7 @@ import com.here.ort.utils.stripCredentialsFromUrl
 import com.here.ort.utils.unpack
 
 import java.io.File
-import java.io.FileNotFoundException
 import java.io.IOException
-import java.net.MalformedURLException
 import java.net.URI
 import java.net.URL
 import java.time.Instant
@@ -374,6 +372,12 @@ class Downloader {
         val pomFilename = "${target.id.name}-${target.id.version}.pom"
         val pomUrl = target.binaryArtifact.url.replaceAfterLast('/', pomFilename)
 
+        if (pomUrl.isEmpty()) {
+            // TODO: Investigate why the binary artifact URL is actually empty and update the implementation according
+            // to root cause.
+            throw DownloadException("Binary artifact URL for '${target.id.toCoordinates()}' is empty.")
+        }
+
         log.info {
             "Trying to download POM artifact for '${target.id.toCoordinates()}' from $pomUrl..."
         }
@@ -391,12 +395,8 @@ class Downloader {
             )
 
             DownloadResult(startTime, outputDirectory, sourceArtifact = pomArtifact)
-        } catch (e: FileNotFoundException) {
-            throw DownloadException("Failed to download the Maven POM for '${target.id.toCoordinates()}'.")
-        } catch (e: MalformedURLException) {
-            // TODO: Investigate why the binary artifact URL is actually empty and update
-            // the implementation according to root cause.
-            throw DownloadException("Failed to download the Maven POM for '${target.id.toCoordinates()}'.")
+        } catch (e: IOException) {
+            throw DownloadException("Failed to download the Maven POM for '${target.id.toCoordinates()}'.", e)
         }
     }
 }
