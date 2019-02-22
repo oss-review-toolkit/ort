@@ -85,8 +85,6 @@ class GitRepo : GitBase() {
             }
             runRepoCommand(targetDir, "init", "-b", revision, "-u", pkg.vcsProcessed.url, "-m", manifestPath)
 
-            log.info { "Starting git-repo sync." }
-
             if (recursive) {
                 runRepoCommand(targetDir, "sync", "-c", "--fetch-submodules")
             } else {
