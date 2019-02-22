@@ -396,7 +396,7 @@ class Downloader {
 
             DownloadResult(startTime, outputDirectory, sourceArtifact = pomArtifact)
         } catch (e: IOException) {
-            throw DownloadException("Failed to download the Maven POM for '${target.id.toCoordinates()}'.", e)
+            throw DownloadException("Failed to download the Maven POM for '${target.id.toCoordinates()}': ${e.message}")
         }
     }
 }
