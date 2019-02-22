@@ -41,7 +41,7 @@ class SpdxExpressionParserTest : WordSpec() {
             "parse a license id with any later version correctly" {
                 val spdxExpression = SpdxExpression.parse("license+")
 
-                spdxExpression shouldBe SpdxLicenseIdExpression("license", anyLaterVersion = true)
+                spdxExpression shouldBe SpdxLicenseIdExpression("license", orLaterVersion = true)
             }
 
             "parse a document ref correctly" {
@@ -62,7 +62,7 @@ class SpdxExpressionParserTest : WordSpec() {
                 val spdxExpression = SpdxExpression.parse(expression)
 
                 spdxExpression shouldBe SpdxCompoundExpression(
-                        SpdxLicenseIdExpression("license1", anyLaterVersion = true),
+                        SpdxLicenseIdExpression("license1", orLaterVersion = true),
                         SpdxOperator.AND,
                         SpdxCompoundExpression(
                                 SpdxCompoundExpression(
@@ -72,7 +72,7 @@ class SpdxExpressionParserTest : WordSpec() {
                                 ),
                                 SpdxOperator.OR,
                                 SpdxCompoundExpression(
-                                        SpdxLicenseIdExpression("license3", anyLaterVersion = true),
+                                        SpdxLicenseIdExpression("license3", orLaterVersion = true),
                                         SpdxOperator.AND,
                                         SpdxCompoundExpression(
                                                 SpdxLicenseIdExpression("license4"),
@@ -88,7 +88,7 @@ class SpdxExpressionParserTest : WordSpec() {
                 val spdxExpression = SpdxExpression.parse("license+ WITH exception")
 
                 spdxExpression shouldBe SpdxCompoundExpression(
-                        SpdxLicenseIdExpression("license", anyLaterVersion = true),
+                        SpdxLicenseIdExpression("license", orLaterVersion = true),
                         SpdxOperator.WITH,
                         SpdxLicenseExceptionExpression("exception")
                 )
