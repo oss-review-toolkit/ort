@@ -57,7 +57,20 @@ infix fun SpdxLicense.with(exception: SpdxLicenseException) =
 /**
  * Create an [SpdxLicenseIdExpression] from this [SpdxLicense].
  */
-fun SpdxLicense.toExpression() = SpdxLicenseIdExpression(id)
+fun SpdxLicense.toExpression(): SpdxLicenseIdExpression {
+    var expressionId = id
+
+    // While in the current SPDX standard the "or later version" semantic is part of the id string itself, it is a
+    // generic "+" operator for deprecated licenses.
+    val orLaterVersion = if (deprecated) {
+        expressionId = id.removeSuffix("+")
+        id != expressionId
+    } else {
+        id.endsWith("-or-later")
+    }
+
+    return SpdxLicenseIdExpression(expressionId, orLaterVersion)
+}
 
 /**
  * Create an [SpdxLicenseExceptionExpression] from this [SpdxLicenseException].
