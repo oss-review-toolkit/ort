@@ -25,6 +25,7 @@ import com.fasterxml.jackson.module.kotlin.readValue
 
 import com.here.ort.spdx.SpdxExpression.Strictness
 import com.here.ort.spdx.SpdxLicense.*
+import com.here.ort.spdx.SpdxLicenseException.*
 
 import io.kotlintest.assertSoftly
 import io.kotlintest.shouldBe
@@ -239,6 +240,25 @@ class SpdxExpressionTest : WordSpec() {
                     SpdxExpression.parse("Nunit").normalize() shouldBe NUNIT.toExpression()
                     SpdxExpression.parse("StandardML-NJ").normalize() shouldBe STANDARDML_NJ.toExpression()
                     SpdxExpression.parse("wxWindows").normalize() shouldBe WXWINDOWS.toExpression()
+                }
+            }
+
+            "normalize deprecated license exceptions to non-deprecated ones" {
+                assertSoftly {
+                    SpdxExpression.parse("GPL-2.0-with-autoconf-exception").normalize() shouldBe
+                            (GPL_2_0_ONLY with AUTOCONF_EXCEPTION_2_0)
+                    SpdxExpression.parse("GPL-2.0-with-bison-exception").normalize() shouldBe
+                            (GPL_2_0_ONLY with BISON_EXCEPTION_2_2)
+                    SpdxExpression.parse("GPL-2.0-with-classpath-exception").normalize() shouldBe
+                            (GPL_2_0_ONLY with CLASSPATH_EXCEPTION_2_0)
+                    SpdxExpression.parse("GPL-2.0-with-font-exception").normalize() shouldBe
+                            (GPL_2_0_ONLY with FONT_EXCEPTION_2_0)
+                    SpdxExpression.parse("GPL-2.0-with-GCC-exception").normalize() shouldBe
+                            (GPL_2_0_ONLY with GCC_EXCEPTION_2_0)
+                    SpdxExpression.parse("GPL-3.0-with-autoconf-exception").normalize() shouldBe
+                            (GPL_3_0_ONLY with AUTOCONF_EXCEPTION_3_0)
+                    SpdxExpression.parse("GPL-3.0-with-GCC-exception").normalize() shouldBe
+                            (GPL_3_0_ONLY with GCC_EXCEPTION_3_1)
                 }
             }
         }
