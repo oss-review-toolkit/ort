@@ -212,14 +212,15 @@ data class SpdxLicenseIdExpression(
         val id: String,
         val anyLaterVersion: Boolean = false
 ) : SpdxExpression() {
+    private val license = SpdxLicense.forId(toString())
+
     override fun licenses() = listOf(toString())
 
-    override fun spdxLicenses() = SpdxLicense.forId(toString())?.let { enumSetOf(it) } ?: enumSetOf()
+    override fun spdxLicenses() = license?.let { enumSetOf(it) } ?: enumSetOf()
 
     override fun normalize() = SpdxLicenseAliasMapping.map(toString())?.toExpression() ?: this
 
     override fun validate(strictness: Strictness) {
-        val license = SpdxLicense.forId(toString())
         when (strictness) {
             Strictness.ALLOW_ANY -> Unit // Return something non-null.
             Strictness.ALLOW_DEPRECATED -> license
