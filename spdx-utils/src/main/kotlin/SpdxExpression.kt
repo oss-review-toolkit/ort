@@ -212,19 +212,19 @@ data class SpdxLicenseIdExpression(
         val id: String,
         val anyLaterVersion: Boolean = false
 ) : SpdxExpression() {
-    override fun licenses() = listOf(id)
+    override fun licenses() = listOf(toString())
 
-    override fun spdxLicenses() = SpdxLicense.forId(id)?.let { enumSetOf(it) } ?: enumSetOf()
+    override fun spdxLicenses() = SpdxLicense.forId(toString())?.let { enumSetOf(it) } ?: enumSetOf()
 
-    override fun normalize() = SpdxLicenseAliasMapping.map(id)?.toExpression() ?: this
+    override fun normalize() = SpdxLicenseAliasMapping.map(toString())?.toExpression() ?: this
 
     override fun validate(strictness: Strictness) {
-        val license = SpdxLicense.forId(id)
+        val license = SpdxLicense.forId(toString())
         when (strictness) {
             Strictness.ALLOW_ANY -> Unit // Return something non-null.
             Strictness.ALLOW_DEPRECATED -> license
             Strictness.ALLOW_CURRENT -> license?.takeUnless { license.deprecated }
-        } ?: throw SpdxException("'$id' is not a valid SPDX license id.")
+        } ?: throw SpdxException("'$this' is not a valid SPDX license id.")
     }
 
     /**
