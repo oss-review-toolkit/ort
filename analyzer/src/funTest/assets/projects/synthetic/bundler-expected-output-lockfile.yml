@@ -47,7 +47,7 @@ packages:
     - "GPL-2.0+"
     - "MIT"
     declared_licenses_processed:
-      spdx_expression: "Artistic-2.0 AND GPL-2.0+ AND MIT"
+      spdx_expression: "Artistic-2.0 AND GPL-2.0-or-later AND MIT"
     description: "Diff::LCS computes the difference between two Enumerable sequences\
       \ using the\nMcIlroy-Hunt longest common subsequence (LCS) algorithm. It includes\
       \ utilities\nto create a simple HTML diff output format and a standard diff-like\
