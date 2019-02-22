@@ -20,13 +20,14 @@
 package com.here.ort.spdx
 
 import com.here.ort.spdx.SpdxLicense.*
+import com.here.ort.spdx.SpdxLicenseException.*
 
 /**
- * A mapping from misspelled SPDX license IDs to valid SPDX IDs.
+ * A mapping from varied SPDX licenses to valid SPDX licenses.
  */
 object SpdxLicenseAliasMapping {
     /**
-     * The map of misspelled SPDX license IDs associated with their valid SPDX IDs.
+     * The map of misspelled SPDX licenses associated with their valid SPDX licenses.
      */
     private val misspelled = mapOf(
             "AFLv2.1" to AFL_2_1,
@@ -74,12 +75,12 @@ object SpdxLicenseAliasMapping {
             "ruby" to RUBY,
             "wtfpl" to WTFPL,
             "zlib" to ZLIB
-    )
+    ).mapValues { (_, v) -> v.toExpression() as SpdxExpression }
 
     /**
-     * The map of SPDX license IDs that use the deprecated "or later"-syntax associated with their current SPDX IDs.
+     * The map of deprecated SPDX licenses associated with their current SPDX licenses.
      */
-    private val deprecated = mapOf(
+    private val deprecatedLicenses = mapOf(
             "AGPL-1.0" to AGPL_1_0_ONLY,
             "AGPL-1.0+" to AGPL_1_0_OR_LATER,
             "AGPL-3.0" to AGPL_3_0_ONLY,
@@ -102,10 +103,23 @@ object SpdxLicenseAliasMapping {
             "LGPL-2.1+" to LGPL_2_1_OR_LATER,
             "LGPL-3.0" to LGPL_3_0_ONLY,
             "LGPL-3.0+" to LGPL_3_0_OR_LATER
-    )
+    ).mapValues { (_, v) -> v.toExpression() as SpdxExpression }
 
-    val mapping = misspelled + deprecated
+    /**
+     * The map of deprecated SPDX license exceptions associated with their current compound SPDX expressions.
+     */
+    private val deprecatedExceptions = mapOf(
+            "GPL-2.0-with-autoconf-exception" to (GPL_2_0_ONLY with AUTOCONF_EXCEPTION_2_0),
+            "GPL-2.0-with-bison-exception" to (GPL_2_0_ONLY with BISON_EXCEPTION_2_2),
+            "GPL-2.0-with-classpath-exception" to (GPL_2_0_ONLY with CLASSPATH_EXCEPTION_2_0),
+            "GPL-2.0-with-font-exception" to (GPL_2_0_ONLY with FONT_EXCEPTION_2_0),
+            "GPL-2.0-with-GCC-exception" to (GPL_2_0_ONLY with GCC_EXCEPTION_2_0),
+            "GPL-3.0-with-autoconf-exception" to (GPL_3_0_ONLY with AUTOCONF_EXCEPTION_3_0),
+            "GPL-3.0-with-GCC-exception" to (GPL_3_0_ONLY with GCC_EXCEPTION_3_1)
+    ).mapValues { (_, v) -> v as SpdxExpression }
+
+    val mapping = misspelled + deprecatedLicenses + deprecatedExceptions
 
     fun map(license: String, mapDeprecated: Boolean = true) =
-            (if (mapDeprecated) mapping else misspelled)[license] ?: SpdxLicense.forId(license)
+            (if (mapDeprecated) mapping else misspelled)[license] ?: SpdxLicense.forId(license)?.toExpression()
 }

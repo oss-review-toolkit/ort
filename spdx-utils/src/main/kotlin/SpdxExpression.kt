@@ -220,7 +220,7 @@ data class SpdxLicenseIdExpression(
     override fun spdxLicenses() = license?.let { enumSetOf(it) } ?: enumSetOf()
 
     override fun normalize(mapDeprecated: Boolean) =
-            SpdxLicenseAliasMapping.map(toString(), mapDeprecated)?.toExpression() ?: this
+            SpdxLicenseAliasMapping.map(toString(), mapDeprecated) ?: this
 
     override fun validate(strictness: Strictness) {
         when (strictness) {
