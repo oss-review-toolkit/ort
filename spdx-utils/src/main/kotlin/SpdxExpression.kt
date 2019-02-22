@@ -210,7 +210,7 @@ data class SpdxLicenseExceptionExpression(
  */
 data class SpdxLicenseIdExpression(
         val id: String,
-        val anyLaterVersion: Boolean = false
+        val orLaterVersion: Boolean = false
 ) : SpdxExpression() {
     private val license = SpdxLicense.forId(toString())
 
@@ -236,7 +236,7 @@ data class SpdxLicenseIdExpression(
     override fun toString() =
             buildString {
                 append(id)
-                if (anyLaterVersion) append("+")
+                if (orLaterVersion) append("+")
             }
 }
 
