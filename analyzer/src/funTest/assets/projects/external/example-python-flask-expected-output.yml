@@ -23,7 +23,7 @@ project:
       dependencies:
       - id: "PyPI::Jinja2:2.8.1"
         dependencies:
-        - id: "PyPI::MarkupSafe:1.1.0"
+        - id: "PyPI::MarkupSafe:1.1.1"
       - id: "PyPI::Werkzeug:0.14.1"
       - id: "PyPI::click:7.0"
       - id: "PyPI::itsdangerous:1.1.0"
@@ -87,21 +87,22 @@ packages:
       path: ""
   curations: []
 - package:
-    id: "PyPI::MarkupSafe:1.1.0"
-    purl: "pkg://PyPI//MarkupSafe@1.1.0"
+    id: "PyPI::MarkupSafe:1.1.1"
+    purl: "pkg://PyPI//MarkupSafe@1.1.1"
     declared_licenses:
     - "BSD"
+    - "BSD-3-Clause"
     declared_licenses_processed:
-      spdx_expression: "BSD-2-Clause"
+      spdx_expression: "BSD-2-Clause AND BSD-3-Clause"
     description: "Safely add untrusted strings to HTML/XML markup."
-    homepage_url: "https://www.palletsprojects.com/p/markupsafe/"
+    homepage_url: "https://palletsprojects.com/p/markupsafe/"
     binary_artifact:
-      url: "https://files.pythonhosted.org/packages/cd/52/927263d9cf66a12e05c5caef43ee203bd92355e9a321552d2b8c4aee5f1e/MarkupSafe-1.1.0-cp27-cp27m-macosx_10_6_intel.whl"
-      hash: "1036109e132252719b1dbe9594aef1ae"
+      url: "https://files.pythonhosted.org/packages/6d/d2/0ccd2c0e2cd93b35e765d9b3205cd6602e6b202b522fc7997531353715b3/MarkupSafe-1.1.1-cp27-cp27m-macosx_10_6_intel.whl"
+      hash: "c937b3654640ee5864f2917bf24a7ad2"
       hash_algorithm: "MD5"
     source_artifact:
-      url: "https://files.pythonhosted.org/packages/ac/7e/1b4c2e05809a4414ebce0892fe1e32c14ace86ca7d50c70f00979ca9b3a3/MarkupSafe-1.1.0.tar.gz"
-      hash: "49e3f3230cedb7ae34faf06913db83fc"
+      url: "https://files.pythonhosted.org/packages/b9/2e/64db92e53b86efccfaea71321f597fa2e1b2bd3853d8ce658568f7a13094/MarkupSafe-1.1.1.tar.gz"
+      hash: "43fd756864fe42063068e092e220c57b"
       hash_algorithm: "MD5"
     vcs:
       type: ""
