@@ -398,6 +398,8 @@ enum class SpdxLicense(
     HASKELLREPORT("HaskellReport"),
     /** Historical Permission Notice and Disclaimer */
     HPND("HPND"),
+    /** Historical Permission Notice and Disclaimer - sell variant */
+    HPND_SELL_VARIANT("HPND-sell-variant"),
     /** IBM PowerPC Initialization and Boot Software */
     IBM_PIBS("IBM-pibs"),
     /** ICU License */
@@ -809,5 +811,30 @@ enum class SpdxLicense(
     /**
      * The full license text as a string.
      */
-    val text by lazy { javaClass.getResource("/licenses/$id").readText() }
+    val text by lazy {
+        val baseId = if (deprecated) {
+            id.removeSuffix("+")
+        } else {
+            id.removeSuffix("-or-later")
+        }
+
+        buildString {
+            if (baseId != id) {
+                append(SpdxLicense::class.java.getResource("/licenses/$baseId-or-later").readText())
+
+                val isGpl = listOf("AGPL-", "GPL-", "LGPL-").any { baseId.startsWith(it) }
+                if (isGpl) {
+                    // Note: Do not use appendln() here as that would write out platform-native line endings, but we
+                    // want to normalize on Unix-style line endings for consistency.
+                    append("\n")
+
+                    // For GPL the "or later version" text is just an amendment that reads better as a prefix as then no
+                    // text follows the license's final "That's all there is to it!" sentence.
+                    append(SpdxLicense::class.java.getResource("/licenses/$baseId").readText())
+                }
+            } else {
+                append(SpdxLicense::class.java.getResource("/licenses/$id").readText())
+            }
+        }
+    }
 }
