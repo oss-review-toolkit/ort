@@ -33,6 +33,7 @@ before_install:
   - sudo ln -s /etc/ssl/certs/java/cacerts $JAVA_HOME/lib/security/cacerts
 
 install:
+  - ./gradlew --rerun-tasks :reporter:funTest --tests com.here.ort.reporter.reporters.NoticeReporterTest
   - sudo apt install -y cvs
   - eval "$(gimme)"
   - curl https://raw.githubusercontent.com/golang/dep/7d5cd199ce454707f81c63b7ea4299151b8b981d/install.sh | sh

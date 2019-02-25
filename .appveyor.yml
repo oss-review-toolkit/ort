@@ -21,6 +21,7 @@ cache:
 clone_depth: 50
 
 install:
+  - ./gradlew --rerun-tasks :reporter:funTest --tests com.here.ort.reporter.reporters.NoticeReporterTest
   - git submodule update --init --recursive
   - npm install -g bower@1.8.8 npm@6.4.0 yarn@1.13.0
   - pip install virtualenv==15.1.0
