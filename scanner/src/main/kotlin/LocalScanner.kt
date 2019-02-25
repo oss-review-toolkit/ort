@@ -58,6 +58,12 @@ import java.io.File
 import java.io.IOException
 import java.time.Instant
 
+import kotlinx.coroutines.ObsoleteCoroutinesApi
+import kotlinx.coroutines.async
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.newFixedThreadPoolContext
+import kotlinx.coroutines.withContext
+
 /**
  * Implementation of [Scanner] for scanners that operate locally. Packages passed to [scanPackages] are processed in
  * serial order. Scan results can be stored in a [ScanResultsStorage].
@@ -131,40 +137,104 @@ abstract class LocalScanner(name: String, config: ScannerConfiguration) : Scanne
      */
     fun getDetails() = ScannerDetails(scannerName, getVersion(), getConfiguration())
 
-    override fun scanPackages(packages: List<Package>, outputDirectory: File, downloadDirectory: File):
+    // `newFixedThreadPoolContext` is obsolete and will be replaced with a new API, see:
+    // https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines/new-fixed-thread-pool-context.html
+    @ObsoleteCoroutinesApi
+    override suspend fun scanPackages(packages: List<Package>, outputDirectory: File, downloadDirectory: File):
             Map<Package, List<ScanResult>> {
         val scannerDetails = getDetails()
 
-        return packages.withIndex().associate { (index, pkg) ->
-            val result = try {
-                log.info { "Starting scan of '${pkg.id.toCoordinates()}' (${index + 1}/${packages.size})." }
+        val cacheDispatcher = newFixedThreadPoolContext(5, "cache")
+        val scanDispatcher = newFixedThreadPoolContext(1, "scan")
 
-                scanPackage(scannerDetails, pkg, outputDirectory, downloadDirectory).map {
-                    // Remove the now unneeded reference to rawResult here to allow garbage collection to clean it up.
-                    it.copy(rawResult = null)
-                }
-            } catch (e: ScanException) {
-                e.showStackTrace()
+        try {
+            return coroutineScope {
+                packages.withIndex().map { (index, pkg) ->
+                    val packageIndex = "(${index + 1}/${packages.size})"
 
-                log.error { "Could not scan '${pkg.id.toCoordinates()}': ${e.collectMessagesAsString()}" }
+                    async {
+                        val result = try {
+                            log.info { "Queueing scan of '${pkg.id.toCoordinates()}' $packageIndex." }
 
-                val now = Instant.now()
-                listOf(ScanResult(
-                        provenance = Provenance(),
-                        scanner = scannerDetails,
-                        summary = ScanSummary(
-                                startTime = now,
-                                endTime = now,
-                                fileCount = 0,
-                                licenseFindings = sortedSetOf(),
-                                errors = listOf(OrtIssue(source = scannerName, message = e.collectMessagesAsString()))
-                        ),
-                        rawResult = EMPTY_JSON_NODE)
-                )
+                            val cacheResults = withContext(cacheDispatcher) {
+                                log.info {
+                                    "Reading cache results for ${pkg.id.toCoordinates()} in thread " +
+                                            "${Thread.currentThread().name} $packageIndex."
+                                }
+                                readFromCache(scannerDetails, pkg, outputDirectory)
+                            }
+
+                            if (cacheResults.isNotEmpty()) {
+                                log.info { "Using cached scan result(s) for ${pkg.id.toCoordinates()} $packageIndex." }
+                                cacheResults
+                            } else {
+                                withContext(scanDispatcher) {
+                                    log.info {
+                                        "Scanning package ${pkg.id.toCoordinates()} in thread " +
+                                                "${Thread.currentThread().name} $packageIndex."
+                                    }
+                                    scanPackage(scannerDetails, pkg, outputDirectory, downloadDirectory).also {
+                                        log.info { "Finished scanning ${pkg.id.toCoordinates()} $packageIndex." }
+                                    }
+                                }
+                            }.map {
+                                // Remove the now unneeded reference to rawResult here to allow garbage collection to
+                                // clean it up.
+                                it.copy(rawResult = null)
+                            }
+                        } catch (e: ScanException) {
+                            e.showStackTrace()
+
+                            log.error {
+                                "Could not scan '${pkg.id.toCoordinates()}' $packageIndex: " +
+                                        e.collectMessagesAsString()
+                            }
+
+                            val now = Instant.now()
+                            listOf(ScanResult(
+                                    provenance = Provenance(),
+                                    scanner = scannerDetails,
+                                    summary = ScanSummary(
+                                            startTime = now,
+                                            endTime = now,
+                                            fileCount = 0,
+                                            licenseFindings = sortedSetOf(),
+                                            errors = listOf(OrtIssue(
+                                                    source = scannerName,
+                                                    message = e.collectMessagesAsString()
+                                            ))
+                                    ),
+                                    rawResult = EMPTY_JSON_NODE)
+                            )
+                        }
+
+                        Pair(pkg, result)
+                    }
+                }.associate { it.await() }
             }
-
-            Pair(pkg, result)
+        } finally {
+            cacheDispatcher.close()
+            scanDispatcher.close()
         }
+    }
+
+    private fun getResultsFile(scannerDetails: ScannerDetails, pkg: Package, outputDirectory: File): File {
+        val scanResultsForPackageDirectory = File(outputDirectory, pkg.id.toPath()).apply { safeMkdirs() }
+        return File(scanResultsForPackageDirectory, "scan-results_${scannerDetails.name}.$resultFileExt")
+    }
+
+    private fun readFromCache(scannerDetails: ScannerDetails, pkg: Package, outputDirectory: File): List<ScanResult> {
+        val resultsFile = getResultsFile(scannerDetails, pkg, outputDirectory)
+
+        val storedResults = ScanResultsStorage.read(pkg, scannerDetails)
+
+        return if (storedResults.results.isNotEmpty()) {
+            // Some external tools rely on the raw results filer to be written to the scan results directory, so write
+            // the first stored result to resultsFile. This feature will be removed when the reporter tool becomes
+            // available.
+            resultsFile.mapper().writeValue(resultsFile, storedResults.results.first().rawResult)
+            storedResults.results
+        } else emptyList()
     }
 
     /**
@@ -177,19 +247,8 @@ abstract class LocalScanner(name: String, config: ScannerConfiguration) : Scanne
      * The return value is a list of [ScanResult]s. If a package could not be scanned, a [ScanException] is thrown.
      */
     private fun scanPackage(scannerDetails: ScannerDetails, pkg: Package, outputDirectory: File,
-                    downloadDirectory: File): List<ScanResult> {
-        val scanResultsForPackageDirectory = File(outputDirectory, pkg.id.toPath()).apply { safeMkdirs() }
-        val resultsFile = File(scanResultsForPackageDirectory, "scan-results_${scannerDetails.name}.$resultFileExt")
-
-        val storedResults = ScanResultsStorage.read(pkg, scannerDetails)
-
-        if (storedResults.results.isNotEmpty()) {
-            // Some external tools rely on the raw results filer to be written to the scan results directory, so write
-            // the first stored result to resultsFile. This feature will be removed when the reporter tool becomes
-            // available.
-            resultsFile.mapper().writeValue(resultsFile, storedResults.results.first().rawResult)
-            return storedResults.results
-        }
+                            downloadDirectory: File): List<ScanResult> {
+        val resultsFile = getResultsFile(scannerDetails, pkg, outputDirectory)
 
         val downloadResult = try {
             Downloader().download(pkg, downloadDirectory)
