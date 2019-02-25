@@ -140,7 +140,32 @@ def generateEnumClass(String taskName, String description, String jsonUrl, Strin
                 /**
                  * The full $description text as a string.
                  */
-                val text by lazy { javaClass.getResource("/$resourcePath/\$id").readText() }
+                val text by lazy {
+                    val baseId = if (deprecated) {
+                        id.removeSuffix("+")
+                    } else {
+                        id.removeSuffix("-or-later")
+                    }
+
+                    buildString {
+                        if (baseId != id) {
+                            append(javaClass.getResource("/licenses/\$baseId-or-later").readText())
+            
+                            val isGpl = listOf("AGPL-", "GPL-", "LGPL-").any { baseId.startsWith(it) }
+                            if (isGpl) {
+                                // Note: Do not use appendln() here as that would write out platform-native line endings, but we
+                                // want to normalize on Unix-style line endings for consistency.
+                                append("\\n")
+            
+                                // For GPL the "or later version" text is just an amendment that reads better as a prefix as then no
+                                // text follows the license's final "That's all there is to it!" sentence.
+                                append(javaClass.getResource("/licenses/\$baseId").readText())
+                            }
+                        } else {
+                            append(javaClass.getResource("/licenses/\$id").readText())
+                        }
+                    }
+                }
             }
             """.stripIndent())
 
