@@ -40,6 +40,8 @@ import java.io.File
 import java.time.Instant
 import java.util.ServiceLoader
 
+import kotlinx.coroutines.runBlocking
+
 const val TOOL_NAME = "scanner"
 const val HTTP_CACHE_PATH = "$TOOL_NAME/cache/http"
 
@@ -63,8 +65,11 @@ abstract class Scanner(val scannerName: String, protected val config: ScannerCon
      * contain multiple results for the same [Package] if the storage contains more than one result for the
      * specification of this scanner.
      */
-    protected abstract fun scanPackages(packages: List<Package>, outputDirectory: File, downloadDirectory: File):
-            Map<Package, List<ScanResult>>
+    protected abstract suspend fun scanPackages(
+            packages: List<Package>,
+            outputDirectory: File,
+            downloadDirectory: File
+    ): Map<Package, List<ScanResult>>
 
     /**
      * Return the scanner-specific SPDX idstring for the given [license].
@@ -128,7 +133,7 @@ abstract class Scanner(val scannerName: String, protected val config: ScannerCon
         }.toSortedSet()
 
         val packagesToScan = curatedPackages.map { it.pkg }
-        val results = scanPackages(packagesToScan, outputDirectory, downloadDirectory)
+        val results = runBlocking { scanPackages(packagesToScan, outputDirectory, downloadDirectory) }
         val resultContainers = results.map { (pkg, results) ->
             ScanResultContainer(pkg.id, results)
         }.toSortedSet()

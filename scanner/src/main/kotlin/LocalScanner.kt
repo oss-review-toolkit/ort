@@ -58,6 +58,12 @@ import java.io.File
 import java.io.IOException
 import java.time.Instant
 
+import kotlinx.coroutines.ObsoleteCoroutinesApi
+import kotlinx.coroutines.async
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.newFixedThreadPoolContext
+import kotlinx.coroutines.withContext
+
 /**
  * Implementation of [Scanner] for scanners that operate locally. Packages passed to [scanPackages] are processed in
  * serial order. Scan results can be stored in a [ScanResultsStorage].
@@ -131,49 +137,93 @@ abstract class LocalScanner(name: String, config: ScannerConfiguration) : Scanne
      */
     fun getDetails() = ScannerDetails(scannerName, getVersion(), getConfiguration())
 
-    override fun scanPackages(packages: List<Package>, outputDirectory: File, downloadDirectory: File):
+    // `newFixedThreadPoolContext` is obsolete and will be replaced with a new API. Keep using it until the new API is
+    // available, see:
+    // https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines/new-fixed-thread-pool-context.html
+    // https://github.com/Kotlin/kotlinx.coroutines/issues/261
+    @ObsoleteCoroutinesApi
+    override suspend fun scanPackages(packages: List<Package>, outputDirectory: File, downloadDirectory: File):
             Map<Package, List<ScanResult>> {
         val scannerDetails = getDetails()
 
-        return packages.withIndex().associate { (index, pkg) ->
-            val result = try {
-                log.info { "Starting scan of '${pkg.id.toCoordinates()}' (${index + 1}/${packages.size})." }
+        val storageDispatcher = newFixedThreadPoolContext(5, "storage")
+        val scanDispatcher = newFixedThreadPoolContext(1, "scan")
 
-                log.info { "Reading stored scan results for ${pkg.id.toCoordinates()}." }
+        try {
+            return coroutineScope {
+                packages.withIndex().map { (index, pkg) ->
+                    val packageIndex = "(${index + 1}/${packages.size})"
 
-                val storedResults = readFromStorage(scannerDetails, pkg, outputDirectory)
+                    async {
+                        val result = try {
+                            log.info { "Queueing scan of '${pkg.id.toCoordinates()}' $packageIndex." }
 
-                if (storedResults.isNotEmpty()) {
-                    log.info { "Using stored scan results for ${pkg.id.toCoordinates()}." }
+                            val storedResults = withContext(storageDispatcher) {
+                                log.info {
+                                    "Reading stored scan results for ${pkg.id.toCoordinates()} in thread " +
+                                            "${Thread.currentThread().name} $packageIndex."
+                                }
 
-                    storedResults
-                } else {
-                    log.info { "Scanning package ${pkg.id.toCoordinates()}."}
+                                readFromStorage(scannerDetails, pkg, outputDirectory)
+                            }
 
-                    // Remove the now unneeded reference to rawResult here to allow garbage collection to clean it up.
-                    listOf(scanPackage(scannerDetails, pkg, outputDirectory, downloadDirectory).copy(rawResult = null))
-                }
-            } catch (e: ScanException) {
-                e.showStackTrace()
+                            if (storedResults.isNotEmpty()) {
+                                log.info { "Using stored scan result(s) for ${pkg.id.toCoordinates()} $packageIndex." }
 
-                log.error { "Could not scan '${pkg.id.toCoordinates()}': ${e.collectMessagesAsString()}" }
+                                storedResults
+                            } else {
+                                withContext(scanDispatcher) {
+                                    log.info {
+                                        "Scanning package ${pkg.id.toCoordinates()} in thread " +
+                                                "${Thread.currentThread().name} $packageIndex."
+                                    }
 
-                val now = Instant.now()
-                listOf(ScanResult(
-                        provenance = Provenance(),
-                        scanner = scannerDetails,
-                        summary = ScanSummary(
-                                startTime = now,
-                                endTime = now,
-                                fileCount = 0,
-                                licenseFindings = sortedSetOf(),
-                                errors = listOf(OrtIssue(source = scannerName, message = e.collectMessagesAsString()))
-                        ),
-                        rawResult = EMPTY_JSON_NODE)
-                )
+                                    listOf(
+                                            scanPackage(scannerDetails, pkg, outputDirectory, downloadDirectory).also {
+                                                log.info {
+                                                    "Finished scanning ${pkg.id.toCoordinates()} $packageIndex."
+                                                }
+                                            }
+                                    )
+                                }
+                            }.map {
+                                // Remove the now unneeded reference to rawResult here to allow garbage collection to
+                                // clean it up.
+                                it.copy(rawResult = null)
+                            }
+                        } catch (e: ScanException) {
+                            e.showStackTrace()
+
+                            log.error {
+                                "Could not scan '${pkg.id.toCoordinates()}' $packageIndex: " +
+                                        e.collectMessagesAsString()
+                            }
+
+                            val now = Instant.now()
+                            listOf(ScanResult(
+                                    provenance = Provenance(),
+                                    scanner = scannerDetails,
+                                    summary = ScanSummary(
+                                            startTime = now,
+                                            endTime = now,
+                                            fileCount = 0,
+                                            licenseFindings = sortedSetOf(),
+                                            errors = listOf(OrtIssue(
+                                                    source = scannerName,
+                                                    message = e.collectMessagesAsString()
+                                            ))
+                                    ),
+                                    rawResult = EMPTY_JSON_NODE)
+                            )
+                        }
+
+                        Pair(pkg, result)
+                    }
+                }.associate { it.await() }
             }
-
-            Pair(pkg, result)
+        } finally {
+            storageDispatcher.close()
+            scanDispatcher.close()
         }
     }
 
