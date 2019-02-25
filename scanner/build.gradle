@@ -8,4 +8,6 @@ dependencies {
 
     implementation project(':downloader')
     implementation project(':utils')
+
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlinxCoroutinesVersion"
 }
