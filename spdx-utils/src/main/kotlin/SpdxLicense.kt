@@ -820,7 +820,7 @@ enum class SpdxLicense(
 
         buildString {
             if (baseId != id) {
-                append(javaClass.getResource("/licenses/$baseId-or-later").readText())
+                append(SpdxLicense::class.java.getResource("/licenses/$baseId-or-later").readText())
 
                 val isGpl = listOf("AGPL-", "GPL-", "LGPL-").any { baseId.startsWith(it) }
                 if (isGpl) {
@@ -830,10 +830,10 @@ enum class SpdxLicense(
 
                     // For GPL the "or later version" text is just an amendment that reads better as a prefix as then no
                     // text follows the license's final "That's all there is to it!" sentence.
-                    append(javaClass.getResource("/licenses/$baseId").readText())
+                    append(SpdxLicense::class.java.getResource("/licenses/$baseId").readText())
                 }
             } else {
-                append(javaClass.getResource("/licenses/$id").readText())
+                append(SpdxLicense::class.java.getResource("/licenses/$id").readText())
             }
         }
     }
