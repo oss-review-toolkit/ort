@@ -379,13 +379,58 @@ class StaticHtmlReporter : Reporter() {
         h2 { +"Index" }
 
         ul {
-            reportTableModel.evaluatorIssues?.let {
-                li { a("#policy-violation-summary") { +"Rule Violation Summary (${it.size} violations)" } }
+            reportTableModel.evaluatorIssues?.let { issues ->
+                var errorCount = 0
+                var warningCount = 0
+                var hintCount = 0
+
+                issues.forEach {
+                    when (it.severity) {
+                        Severity.ERROR -> ++errorCount
+                        Severity.WARNING -> ++warningCount
+                        Severity.HINT -> ++hintCount
+                    }
+                }
+
+                li {
+                    a("#policy-violation-summary") {
+                        +"Rule Violation Summary ($errorCount errors, $warningCount warnings, $hintCount hints)"
+                    }
+                }
             }
 
-            val numberOfIssues = reportTableModel.issueSummary.rows.count()
-            if (numberOfIssues > 0) {
-                li { a("#issue-summary") { +"Issue Summary ($numberOfIssues issues)" } }
+            var errorCount = 0
+            var warningCount = 0
+            var hintCount = 0
+
+            reportTableModel.issueSummary.rows.forEach { issueRow ->
+                issueRow.analyzerIssues.forEach { (_, issues) ->
+                    issues.forEach {
+                        when (it.severity) {
+                            Severity.ERROR -> ++errorCount
+                            Severity.WARNING -> ++warningCount
+                            Severity.HINT -> ++hintCount
+                        }
+                    }
+                }
+
+                issueRow.scanIssues.forEach { (_, issues) ->
+                    issues.forEach {
+                        when (it.severity) {
+                            Severity.ERROR -> ++errorCount
+                            Severity.WARNING -> ++warningCount
+                            Severity.HINT -> ++hintCount
+                        }
+                    }
+                }
+            }
+
+            if (errorCount > 0 || warningCount > 0 || hintCount > 0) {
+                li {
+                    a("#issue-summary") {
+                        +"Issue Summary ($errorCount errors, $warningCount warnings, $hintCount hints)"
+                    }
+                }
             }
 
             reportTableModel.projectDependencies.forEach { project, projectTable ->
