@@ -184,7 +184,15 @@ data class ReportTableModel(
 
     data class IssueTable(
             val rows: List<IssueRow>
-    )
+    ) {
+        val allIssues = rows.flatMap {
+            it.analyzerIssues.flatMap { (_, issues) -> issues } + it.scanIssues.flatMap { (_, issues) -> issues }
+        }.groupBy { it.severity }
+
+        val errorCount = allIssues[Severity.ERROR].orEmpty().count()
+        val warningCount = allIssues[Severity.WARNING].orEmpty().count()
+        val hintCount = allIssues[Severity.HINT].orEmpty().count()
+    }
 
     data class IssueRow(
             /**
