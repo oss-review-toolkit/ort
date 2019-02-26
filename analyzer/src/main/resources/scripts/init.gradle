@@ -157,7 +157,6 @@ class AbstractDependencyTreePlugin<T> implements Plugin<T> {
 
         @Override
         Object buildAll(String modelName, Project project) {
-
             List<String> errors = []
             List<String> warnings = []
 
