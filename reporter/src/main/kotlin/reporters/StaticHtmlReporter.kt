@@ -386,7 +386,7 @@ class StaticHtmlReporter : Reporter() {
                 val hintCount = issues[Severity.HINT].orEmpty().count()
 
                 li {
-                    a("#policy-violation-summary") {
+                    a("#rule-violation-summary") {
                         +"Rule Violation Summary ($errorCount errors, $warningCount warnings, $hintCount hints)"
                     }
                 }
@@ -424,7 +424,7 @@ class StaticHtmlReporter : Reporter() {
         val hintCount = issues[Severity.HINT].orEmpty().count()
 
         h2 {
-            id = "policy-violation-summary"
+            id = "rule-violation-summary"
             +"Rule Violation Summary ($errorCount errors, $warningCount warnings, $hintCount hints)"
         }
 
