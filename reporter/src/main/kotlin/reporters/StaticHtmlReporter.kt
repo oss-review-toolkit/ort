@@ -436,7 +436,7 @@ class StaticHtmlReporter : Reporter() {
                     tr {
                         th { +"#" }
                         th { +"Source" }
-                        th { +"Issue" }
+                        th { +"Violation" }
                     }
                 }
 
