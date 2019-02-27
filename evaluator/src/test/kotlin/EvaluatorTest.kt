@@ -32,7 +32,7 @@ import io.kotlintest.specs.WordSpec
 
 class EvaluatorTest : WordSpec() {
     init {
-        val ortResult = OrtResult(Repository(VcsInfo.EMPTY, VcsInfo.EMPTY, RepositoryConfiguration()))
+        val ortResult = OrtResult(Repository(VcsInfo.EMPTY, VcsInfo.EMPTY, emptyMap(), RepositoryConfiguration()))
 
         "checkSyntax" should {
             "succeed if the script can be compiled" {
