@@ -207,7 +207,13 @@ class ReportTableModelMapper(private val resolutionProvider: ResolutionProvider)
 
         val evaluatorIssues = ortResult.evaluator?.let {
             it.errors.map { it.toResolvableEvaluatorIssue() }
-        } ?: emptyList()
+        }?.sortedWith(compareBy(
+                { it.isResolved },
+                { it.source },
+                { it.severity },
+                { it.description },
+                { it.resolutionDescription }
+        )) ?: emptyList()
 
         return ReportTableModel(
                 ortResult.repository.vcsProcessed,
