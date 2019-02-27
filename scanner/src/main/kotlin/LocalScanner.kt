@@ -278,7 +278,7 @@ abstract class LocalScanner(name: String, config: ScannerConfiguration) : Scanne
         val scannerRun = ScannerRun(startTime, endTime, Environment(), config, scanRecord)
 
         val vcs = VersionControlSystem.getCloneInfo(inputPath)
-        val repository = Repository(vcs, vcs.normalize(), RepositoryConfiguration())
+        val repository = Repository(vcs, vcs.normalize(), emptyMap(), RepositoryConfiguration())
 
         return OrtResult(repository, scanner = scannerRun)
     }

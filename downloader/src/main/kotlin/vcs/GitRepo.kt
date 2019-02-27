@@ -58,6 +58,24 @@ class GitRepo : GitBase() {
                     return super.getInfo().copy(path = manifestFile.relativeTo(workingDir).invariantSeparatorsPath)
                 }
 
+                override fun getNested(): Map<String, VcsInfo> {
+                    val paths = runRepoCommand(workingDir, "list", "-p").stdout.lines().filter { it.isNotBlank() }
+                    val nested = mutableMapOf<String, VcsInfo>()
+
+                    paths.forEach { path ->
+                        // Add the nested Repo project.
+                        val workingTree = Git().getWorkingTree(getRootPath().resolve(path))
+                        nested[path] = workingTree.getInfo()
+
+                        // Add the Git submodules of the nested Repo project.
+                        workingTree.getNested().forEach { (submodulePath, vcsInfo) ->
+                            nested["$path/$submodulePath"] = vcsInfo
+                        }
+                    }
+
+                    return nested
+                }
+
                 // Return the directory in which "repo init" was run (that directory in not managed with Git).
                 override fun getRootPath() = workingDir.parentFile.parentFile
             }
