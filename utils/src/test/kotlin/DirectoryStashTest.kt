@@ -24,6 +24,7 @@ import io.kotlintest.TestResult
 import io.kotlintest.matchers.file.containNFiles
 import io.kotlintest.matchers.file.exist
 import io.kotlintest.should
+import io.kotlintest.shouldBe
 import io.kotlintest.shouldNot
 import io.kotlintest.specs.StringSpec
 
@@ -124,6 +125,16 @@ class DirectoryStashTest : StringSpec() {
 
         "given child and parent, un-stashing works" {
             stashDirectories(a1, a).use {}
+
+            sandboxDirShouldBeInOriginalState()
+        }
+
+        "stashing an initially non-existing directory deletes it when un-stashing" {
+            val nonExistingDir = File(sandboxDir, "initially-non-existing-directory")
+
+            stashDirectories(nonExistingDir).use {
+                nonExistingDir.mkdirs() shouldBe true
+            }
 
             sandboxDirShouldBeInOriginalState()
         }
