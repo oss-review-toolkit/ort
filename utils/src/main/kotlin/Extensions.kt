@@ -101,7 +101,8 @@ fun File.safeCopyRecursively(target: File, overwrite: Boolean = false) {
 }
 
 /**
- * Delete files recursively without following symbolic links (Unix) or junctions (Windows).
+ * Delete files recursively without following symbolic links (Unix) or junctions (Windows). If [force] is `true`, it is
+ * tried to make undeletable files writable before trying again to delete them.
  *
  * @throws IOException if the directory could not be deleted.
  */
