@@ -37,11 +37,13 @@ fun stashDirectories(vararg directories: File): Closeable = DirectoryStash(setOf
  * A Closable class which moves the given directories to temporary directories on initialization. On close, it deletes
  * any conflicting existing directories in the original location and then moves the original directories back.
  */
-private class DirectoryStash(directories: Set<File>) : Closeable {
-    private val stashedDirectories = Stack<Pair<File, File>>()
+private class DirectoryStash(private val directories: Set<File>) : Closeable {
+    private val stashedDirectories = mutableMapOf<File, File>()
 
     init {
         directories.forEach { originalDir ->
+            // We need to check this on each iteration instead of filtering beforehand to properly handle parent / child
+            // directories.
             if (originalDir.isDirectory) {
                 // Create a temporary directory to move directories as-is into.
                 val stashDir = createTempDir("ort", "stash", originalDir.parentFile)
@@ -55,24 +57,25 @@ private class DirectoryStash(directories: Set<File>) : Closeable {
 
                 Files.move(originalDir.toPath(), tempDir.toPath(), StandardCopyOption.ATOMIC_MOVE)
 
-                stashedDirectories.push(Pair(originalDir, tempDir))
+                stashedDirectories[originalDir] = tempDir
             }
         }
     }
 
     override fun close() {
-        while (!stashedDirectories.empty()) {
-            val (originalDir, tempDir) = stashedDirectories.pop()
-
+        // Restore directories in reverse order of stashing to properly handle parent / child directories.
+        directories.reversed().forEach { originalDir ->
             originalDir.safeDeleteRecursively()
 
-            log.info { "Moving back directory from '${tempDir.absolutePath}' to '${originalDir.absolutePath}'." }
+            stashedDirectories[originalDir]?.let { tempDir ->
+                log.info { "Moving back directory from '${tempDir.absolutePath}' to '${originalDir.absolutePath}'." }
 
-            Files.move(tempDir.toPath(), originalDir.toPath(), StandardCopyOption.ATOMIC_MOVE)
+                Files.move(tempDir.toPath(), originalDir.toPath(), StandardCopyOption.ATOMIC_MOVE)
 
-            // Delete the top-level temporary directory which should be empty now.
-            if (!tempDir.parentFile.delete()) {
-                throw IOException("Unable to delete the '${tempDir.parent}' directory.")
+                // Delete the top-level temporary directory which should be empty now.
+                if (!tempDir.parentFile.delete()) {
+                    throw IOException("Unable to delete the '${tempDir.parent}' directory.")
+                }
             }
         }
     }
