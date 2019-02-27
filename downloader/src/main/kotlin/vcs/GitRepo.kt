@@ -22,6 +22,7 @@ package com.here.ort.downloader.vcs
 import ch.frankel.slf4k.*
 
 import com.here.ort.downloader.DownloadException
+import com.here.ort.downloader.VersionControlSystem
 import com.here.ort.downloader.WorkingTree
 import com.here.ort.model.Package
 import com.here.ort.model.VcsInfo
@@ -56,6 +57,28 @@ class GitRepo : GitBase() {
                     val manifestLink = File(getRootPath(), ".repo/manifest.xml")
                     val manifestFile = manifestLink.realFile()
                     return super.getInfo().copy(path = manifestFile.relativeTo(workingDir).invariantSeparatorsPath)
+                }
+
+                override fun getNested(): Map<String, VcsInfo> {
+                    val paths = runRepoCommand(workingDir, "list", "-p").stdout.lines().filter {
+                        // Skip lines which belong to the upgrade message.
+                        it.isNotBlank() && !it.startsWith("...") && !it.startsWith(" ")
+                    }
+
+                    val nested = mutableMapOf<String, VcsInfo>()
+
+                    paths.forEach { path ->
+                        // Add the nested Repo project.
+                        val workingTree = VersionControlSystem.forDirectory(File(getRootPath(), path))
+                        nested[path] = workingTree?.getInfo() ?: VcsInfo.EMPTY
+
+                        // Add the Git submodules of the nested Repo project.
+                        workingTree?.getNested()?.forEach { (submodulePath, vcsInfo) ->
+                            nested["$path/$submodulePath"] = vcsInfo
+                        }
+                    }
+
+                    return nested
                 }
 
                 // Return the directory in which "repo init" was run (that directory in not managed with Git).

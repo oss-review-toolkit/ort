@@ -19,6 +19,8 @@
 
 package com.here.ort.model
 
+import com.fasterxml.jackson.annotation.JsonInclude
+
 import com.here.ort.model.config.RepositoryConfiguration
 
 /**
@@ -34,6 +36,13 @@ data class Repository(
          * The [VcsInfo] of the repository.
          */
         val vcsProcessed: VcsInfo,
+
+        /**
+         * A map of nested repositories, for example Git submodules or Git-Repo modules. The key is the path to the
+         * nested repository relative to the root of the main repository.
+         */
+        @JsonInclude(JsonInclude.Include.NON_EMPTY)
+        val nestedRepositories: Map<String, VcsInfo> = emptyMap(),
 
         /**
          * The configuration of the repository, parsed from the ".ort.yml" file.
