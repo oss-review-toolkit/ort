@@ -20,7 +20,9 @@
 package com.here.ort.downloader.vcs
 
 import com.here.ort.downloader.WorkingTree
+import com.here.ort.model.VcsInfo
 import com.here.ort.utils.ProcessCapture
+
 import java.io.File
 
 open class GitWorkingTree(workingDir: File, private val gitBase: GitBase) : WorkingTree(workingDir, gitBase.type) {
@@ -37,6 +39,18 @@ open class GitWorkingTree(workingDir: File, private val gitBase: GitBase) : Work
     override fun isShallow(): Boolean {
         val dotGitDir = gitBase.run(workingDir, "rev-parse", "--absolute-git-dir").stdout.trimEnd()
         return File(dotGitDir, "shallow").isFile
+    }
+
+    override fun getNested(): Map<String, VcsInfo> {
+        val root = getRootPath()
+
+        val paths = gitBase.run(root, "submodule", "--quiet", "foreach", "--recursive", "echo \$sm_path").stdout.lines()
+                .filter { it.isNotBlank() }
+
+        return paths.associateWith { path ->
+            val workingTree = Git().getWorkingTree(root.resolve(path))
+            workingTree.getInfo()
+        }
     }
 
     override fun getRemoteUrl() = gitBase.run(workingDir, "remote", "get-url", getFirstRemote()).stdout.trimEnd()

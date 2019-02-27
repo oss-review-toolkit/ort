@@ -37,6 +37,12 @@ abstract class WorkingTree(val workingDir: File, val vcsType: String) {
     open fun getInfo() = VcsInfo(vcsType, getRemoteUrl(), getRevision(), path = getPathToRoot(workingDir))
 
     /**
+     * Return the map of nested repositories, for example Git submodules or Git-Repo modules. The key is the path to the
+     * nested repository relative to the root of this working tree.
+     */
+    open fun getNested() = emptyMap<String, VcsInfo>()
+
+    /**
      * Return true if the [workingDir] is managed by this VCS, false otherwise.
      */
     abstract fun isValid(): Boolean

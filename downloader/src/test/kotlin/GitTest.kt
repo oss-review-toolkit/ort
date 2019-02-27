@@ -19,6 +19,7 @@
 
 package com.here.ort.downloader.vcs
 
+import com.here.ort.downloader.VersionControlSystem
 import com.here.ort.utils.getUserOrtDirectory
 import com.here.ort.utils.safeDeleteRecursively
 import com.here.ort.utils.unpack
@@ -70,6 +71,7 @@ class GitTest : StringSpec() {
 
             workingTree.vcsType shouldBe "Git"
             workingTree.isValid() shouldBe true
+            workingTree.getNested() shouldBe emptyMap()
             workingTree.getRemoteUrl() shouldBe "https://github.com/naiquevin/pipdeptree.git"
             workingTree.getRevision() shouldBe "6f70dd5508331b6cfcfe3c1b626d57d9836cfd7c"
             workingTree.getRootPath() shouldBe zipContentDir
@@ -109,6 +111,25 @@ class GitTest : StringSpec() {
 
             val workingTree = git.getWorkingTree(zipContentDir)
             workingTree.listRemoteTags().joinToString("\n") shouldBe expectedTags.joinToString("\n")
+        }
+
+        "Git correctly lists submodules" {
+            val expectedSubmodules = listOf(
+                    "analyzer/src/funTest/assets/projects/external/directories",
+                    "analyzer/src/funTest/assets/projects/external/example-python-flask",
+                    "analyzer/src/funTest/assets/projects/external/godep",
+                    "analyzer/src/funTest/assets/projects/external/jgnash",
+                    "analyzer/src/funTest/assets/projects/external/qmstr",
+                    "analyzer/src/funTest/assets/projects/external/quickcheck-state-machine",
+                    "analyzer/src/funTest/assets/projects/external/sbt-multi-project-example",
+                    "analyzer/src/funTest/assets/projects/external/spdx-tools-python",
+                    "analyzer/src/funTest/assets/projects/external/sprig"
+            ).associate { path ->
+                Pair(path, VersionControlSystem.getPathInfo(File("../$path")))
+            }
+
+            val workingTree = git.getWorkingTree(File(".."))
+            workingTree.getNested() shouldBe expectedSubmodules
         }
     }
 }
