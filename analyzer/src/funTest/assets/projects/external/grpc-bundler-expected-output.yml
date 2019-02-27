@@ -10,6 +10,67 @@ repository:
     url: "https://github.com/heremaps/oss-review-toolkit-test-data.git"
     revision: "918bd2e8a091bf63c97729f129a5429b2ffd70ed"
     path: "git-repo/manifest.xml"
+  nested_repositories:
+    grpc:
+      type: "Git"
+      url: "https://github.com/grpc/grpc"
+      revision: "5cf4b44fff8755edc9bdc46284d6cd270bc4a162"
+      path: ""
+    grpc/third_party/benchmark:
+      type: "Git"
+      url: "https://github.com/google/benchmark"
+      revision: "44c25c892a6229b20db7cd9dc05584ea865896de"
+      path: ""
+    grpc/third_party/boringssl:
+      type: "Git"
+      url: "https://github.com/google/boringssl.git"
+      revision: "be2ee342d3781ddb954f91f8a7e660c6f59e87e5"
+      path: ""
+    grpc/third_party/boringssl-with-bazel:
+      type: "Git"
+      url: "https://boringssl.googlesource.com/boringssl"
+      revision: "886e7d75368e3f4fab3f4d0d3584e4abfc557755"
+      path: ""
+    grpc/third_party/cares/cares:
+      type: "Git"
+      url: "https://github.com/c-ares/c-ares.git"
+      revision: "3be1924221e1326df520f8498d704a5c4c8d0cce"
+      path: ""
+    grpc/third_party/gflags:
+      type: "Git"
+      url: "https://github.com/gflags/gflags.git"
+      revision: "30dbc81fb5ffdc98ea9b14b1918bfe4e8779b26e"
+      path: ""
+    grpc/third_party/gflags/doc:
+      type: "Git"
+      url: "https://github.com/gflags/gflags.git"
+      revision: "971dd2a4fadac9cdab174c523c22df79efd63aa5"
+      path: ""
+    grpc/third_party/googletest:
+      type: "Git"
+      url: "https://github.com/google/googletest.git"
+      revision: "ec44c6c1675c25b9827aacd08c02433cccde7780"
+      path: ""
+    grpc/third_party/protobuf:
+      type: "Git"
+      url: "https://github.com/google/protobuf.git"
+      revision: "80a37e0782d2d702d52234b62dd4b9ec74fd2c95"
+      path: ""
+    grpc/third_party/protobuf/third_party/benchmark:
+      type: "Git"
+      url: "https://github.com/google/benchmark.git"
+      revision: "360e66c1c4777c99402cf8cd535aa510fee16573"
+      path: ""
+    grpc/third_party/zlib:
+      type: "Git"
+      url: "https://github.com/madler/zlib"
+      revision: "cacf7f1d4e3d44d871b605da3b647f07d718623f"
+      path: ""
+    spdx-tools:
+      type: "Git"
+      url: "https://github.com/spdx/tools"
+      revision: "c4193eeb4b89c7d6266f5647e4d81e9cf0a442a1"
+      path: ""
   config: {}
 analyzer:
   start_time: "1970-01-01T00:00:00Z"

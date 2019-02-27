@@ -21,6 +21,7 @@ package com.here.ort.analyzer.vcs
 
 import com.here.ort.analyzer.Analyzer
 import com.here.ort.analyzer.managers.Bundler
+import com.here.ort.downloader.VersionControlSystem
 import com.here.ort.downloader.vcs.GitRepo
 import com.here.ort.model.Package
 import com.here.ort.model.VcsInfo
@@ -30,8 +31,7 @@ import com.here.ort.utils.test.DEFAULT_ANALYZER_CONFIGURATION
 import com.here.ort.utils.test.patchActualResult
 import com.here.ort.utils.test.patchExpectedResult
 
-import io.kotlintest.TestCase
-import io.kotlintest.TestResult
+import io.kotlintest.Spec
 import io.kotlintest.shouldBe
 import io.kotlintest.specs.StringSpec
 
@@ -44,20 +44,21 @@ private const val REPO_MANIFEST = "git-repo/manifest.xml"
 class GitRepoTest : StringSpec() {
     private lateinit var outputDir: File
 
-    override fun beforeTest(testCase: TestCase) {
+    override fun beforeSpec(spec: Spec) {
         outputDir = createTempDir()
+
+        val vcs = VcsInfo("GitRepo", REPO_URL, REPO_REV, path = REPO_MANIFEST)
+        val pkg = Package.EMPTY.copy(vcsProcessed = vcs)
+
+        GitRepo().download(pkg, outputDir)
     }
 
-    override fun afterTest(testCase: TestCase, result: TestResult) {
+    override fun afterSpec(spec: Spec) {
         outputDir.safeDeleteRecursively(force = true)
     }
 
     init {
         "Analyzer correctly reports GitRepo VcsInfo for Bundler projects" {
-            val vcs = VcsInfo("GitRepo", REPO_URL, REPO_REV, path = REPO_MANIFEST)
-            val pkg = Package.EMPTY.copy(vcsProcessed = vcs)
-
-            GitRepo().download(pkg, outputDir)
             val ortResult = Analyzer(DEFAULT_ANALYZER_CONFIGURATION).analyze(outputDir, listOf(Bundler.Factory()))
             val actualResult = yamlMapper.writeValueAsString(ortResult)
             val expectedResult = patchExpectedResult(
@@ -66,6 +67,26 @@ class GitRepoTest : StringSpec() {
                     path = outputDir.invariantSeparatorsPath)
 
             patchActualResult(actualResult, patchStartAndEndTime = true) shouldBe expectedResult
+        }
+
+        "GitRepo correctly lists submodules" {
+            val expectedSubmodules = listOf(
+                    "grpc",
+                    "grpc/third_party/benchmark",
+                    "grpc/third_party/boringssl",
+                    "grpc/third_party/boringssl-with-bazel",
+                    "grpc/third_party/cares/cares",
+                    "grpc/third_party/gflags",
+                    "grpc/third_party/gflags/doc",
+                    "grpc/third_party/googletest",
+                    "grpc/third_party/protobuf",
+                    "grpc/third_party/protobuf/third_party/benchmark",
+                    "grpc/third_party/zlib",
+                    "spdx-tools"
+            ).associateWith { VersionControlSystem.getPathInfo(File(outputDir, it)) }
+
+            val workingTree = GitRepo().getWorkingTree(outputDir)
+            workingTree.getNested() shouldBe expectedSubmodules
         }
     }
 }

@@ -30,6 +30,7 @@ import com.here.ort.model.Environment
 import com.here.ort.model.OrtResult
 import com.here.ort.model.ProjectAnalyzerResult
 import com.here.ort.model.Repository
+import com.here.ort.model.VcsInfo
 import com.here.ort.model.config.AnalyzerConfiguration
 import com.here.ort.model.config.RepositoryConfiguration
 import com.here.ort.model.readValue
@@ -133,8 +134,13 @@ class Analyzer(private val config: AnalyzerConfiguration) {
             }
         }
 
-        val vcs = VersionControlSystem.getCloneInfo(absoluteProjectPath)
-        val repository = Repository(vcs, vcs.normalize(), repositoryConfiguration)
+        val workingTree = VersionControlSystem.forDirectory(absoluteProjectPath)
+        val vcs = workingTree?.getInfo() ?: VcsInfo.EMPTY
+        val nestedVcs = workingTree?.getNested()?.filter { (path, _) ->
+            // Only include nested VCS if they are part of the analyzed directory.
+            workingTree.getRootPath().resolve(path).startsWith(absoluteProjectPath)
+        }.orEmpty()
+        val repository = Repository(vcs, vcs.normalize(), nestedVcs, repositoryConfiguration)
 
         val endTime = Instant.now()
 
