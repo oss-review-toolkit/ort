@@ -27,8 +27,10 @@ import com.beust.jcommander.Parameters
 
 import com.here.ort.CommandWithHelp
 import com.here.ort.evaluator.Evaluator
+import com.here.ort.model.OrtIssue
 import com.here.ort.model.OrtResult
 import com.here.ort.model.OutputFormat
+import com.here.ort.model.Severity
 import com.here.ort.model.mapper
 import com.here.ort.model.readValue
 import com.here.ort.utils.PARAMETER_ORDER_MANDATORY
@@ -120,6 +122,8 @@ object EvaluatorCommand : CommandWithHelp() {
             }
         }
 
+        printSummary(evaluatorRun.errors)
+
         if (absoluteOutputDir != null) {
             // Note: This overwrites any existing EvaluatorRun from the input file.
             val ortResultOutput = ortResultInput.copy(evaluator = evaluatorRun)
@@ -133,5 +137,15 @@ object EvaluatorCommand : CommandWithHelp() {
         }
 
         return if (evaluatorRun.errors.isEmpty()) 0 else 2
+    }
+
+    private fun printSummary(errors: List<OrtIssue>) {
+        val counts = errors.groupingBy { it.severity }.eachCount()
+
+        val errorCount = counts[Severity.ERROR] ?: 0
+        val warningCount = counts[Severity.WARNING] ?: 0
+        val hintCount = counts[Severity.HINT] ?: 0
+
+        println("Found $errorCount errors, $warningCount warnings, $hintCount hints.")
     }
 }
