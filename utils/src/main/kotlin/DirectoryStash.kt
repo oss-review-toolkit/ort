@@ -26,7 +26,6 @@ import java.io.File
 import java.io.IOException
 import java.nio.file.Files
 import java.nio.file.StandardCopyOption
-import java.util.Stack
 
 /**
  * A convenience function that stashes directories using a [DirectoryStash] instance.
@@ -34,14 +33,17 @@ import java.util.Stack
 fun stashDirectories(vararg directories: File): Closeable = DirectoryStash(setOf(*directories))
 
 /**
- * A Closable class which moves the given directories to temporary directories on initialization. On close, it deletes
- * any conflicting existing directories in the original location and then moves the original directories back.
+ * A Closable class which temporarily moves away [directories] and moves them back on close. Any conflicting directory
+ * created at the location of an original directory is deleted before the original state is restored. If a specified
+ * directory did not exist on initialization, it will also not exist on close.
  */
 private class DirectoryStash(directories: Set<File>) : Closeable {
-    private val stashedDirectories = Stack<Pair<File, File>>()
+    private val stashedDirectories: Map<File, File?>
 
     init {
-        directories.forEach { originalDir ->
+        stashedDirectories = directories.associateWith { originalDir ->
+            // We need to check this on each iteration instead of filtering beforehand to properly handle parent / child
+            // directories.
             if (originalDir.isDirectory) {
                 // Create a temporary directory to move directories as-is into.
                 val stashDir = createTempDir("ort", "stash", originalDir.parentFile)
@@ -55,24 +57,27 @@ private class DirectoryStash(directories: Set<File>) : Closeable {
 
                 Files.move(originalDir.toPath(), tempDir.toPath(), StandardCopyOption.ATOMIC_MOVE)
 
-                stashedDirectories.push(Pair(originalDir, tempDir))
+                tempDir
+            } else {
+                null
             }
         }
     }
 
     override fun close() {
-        while (!stashedDirectories.empty()) {
-            val (originalDir, tempDir) = stashedDirectories.pop()
-
+        // Restore directories in reverse order of stashing to properly handle parent / child directories.
+        stashedDirectories.keys.reversed().forEach { originalDir ->
             originalDir.safeDeleteRecursively()
 
-            log.info { "Moving back directory from '${tempDir.absolutePath}' to '${originalDir.absolutePath}'." }
+            stashedDirectories[originalDir]?.let { tempDir ->
+                log.info { "Moving back directory from '${tempDir.absolutePath}' to '${originalDir.absolutePath}'." }
 
-            Files.move(tempDir.toPath(), originalDir.toPath(), StandardCopyOption.ATOMIC_MOVE)
+                Files.move(tempDir.toPath(), originalDir.toPath(), StandardCopyOption.ATOMIC_MOVE)
 
-            // Delete the top-level temporary directory which should be empty now.
-            if (!tempDir.parentFile.delete()) {
-                throw IOException("Unable to delete the '${tempDir.parent}' directory.")
+                // Delete the top-level temporary directory which should be empty now.
+                if (!tempDir.parentFile.delete()) {
+                    throw IOException("Unable to delete the '${tempDir.parent}' directory.")
+                }
             }
         }
     }
