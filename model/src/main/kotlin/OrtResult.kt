@@ -238,6 +238,25 @@ data class OrtResult(
     }
 
     /**
+     * Returns the path of the folder that contains the definition file of the [project], relative to the root VCS.
+     */
+    fun getCompleteDefinitionFilePath(project: Project): String {
+        val vcsPath = repository.getVcsPath(project.vcsProcessed)
+
+        requireNotNull(vcsPath) {
+            "The VCS ${project.vcs} is not contained in the repositories of this ORT result: $repository"
+        }
+
+        return buildString {
+            if (vcsPath.isNotBlank()) {
+                append(vcsPath)
+                append("/")
+            }
+            append(project.definitionFilePath)
+        }
+    }
+
+    /**
      * Return true if the project or package with the given identifier is excluded.
      */
     @Suppress("UNUSED") // This is intended to be mostly used via scripting.

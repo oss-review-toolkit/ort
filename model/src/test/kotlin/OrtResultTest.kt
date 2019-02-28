@@ -19,12 +19,18 @@
 
 package com.here.ort.model
 
+import com.here.ort.model.config.AnalyzerConfiguration
+import com.here.ort.model.config.RepositoryConfiguration
+
 import io.kotlintest.matchers.haveSize
+import io.kotlintest.matchers.match
 import io.kotlintest.should
 import io.kotlintest.shouldBe
+import io.kotlintest.shouldThrow
 import io.kotlintest.specs.WordSpec
 
 import java.io.File
+import java.lang.IllegalArgumentException
 
 class OrtResultTest : WordSpec({
     "collectDependencies" should {
@@ -60,6 +66,85 @@ class OrtResultTest : WordSpec({
             idsWithoutSubProjects should haveSize(8)
 
             actualIds shouldBe expectedIds
+        }
+    }
+
+    "getCompleteDefinitionFilePath" should {
+        "use the correct vcs" {
+            val vcs = VcsInfo(type = "Git", url = "https://example.com/git", revision = "")
+            val nestedVcs1 = VcsInfo(type = "Git", url = "https://example.com/git1", revision = "")
+            val nestedVcs2 = VcsInfo(type = "Git", url = "https://example.com/git2", revision = "")
+            val project1 = Project.EMPTY.copy(
+                    id = Identifier("Gradle:com.here:project1:1.0"),
+                    definitionFilePath = "project1/build.gradle",
+                    vcs = vcs,
+                    vcsProcessed = vcs.normalize()
+            )
+            val project2 = Project.EMPTY.copy(
+                    id = Identifier("Gradle:com.here:project1:1.0"),
+                    definitionFilePath = "project2/build.gradle",
+                    vcs = nestedVcs1,
+                    vcsProcessed = nestedVcs1.normalize()
+            )
+            val project3 = Project.EMPTY.copy(
+                    id = Identifier("Gradle:com.here:project1:1.0"),
+                    definitionFilePath = "project3/build.gradle",
+                    vcs = nestedVcs2,
+                    vcsProcessed = nestedVcs2.normalize()
+            )
+            val ortResult = OrtResult(
+                    Repository(
+                            vcs = vcs,
+                            vcsProcessed = vcs.normalize(),
+                            nestedRepositories = mapOf(
+                                    "path/1" to nestedVcs1,
+                                    "path/2" to nestedVcs2
+                            ),
+                            config = RepositoryConfiguration()
+                    ),
+                    AnalyzerRun(
+                            environment = Environment(),
+                            config = AnalyzerConfiguration(ignoreToolVersions = true, allowDynamicVersions = true),
+                            result = AnalyzerResult.EMPTY
+                    )
+            )
+
+            ortResult.getCompleteDefinitionFilePath(project1) shouldBe "project1/build.gradle"
+            ortResult.getCompleteDefinitionFilePath(project2) shouldBe "path/1/project2/build.gradle"
+            ortResult.getCompleteDefinitionFilePath(project3) shouldBe "path/2/project3/build.gradle"
+        }
+
+        "fail if no vcs matches" {
+            val vcs = VcsInfo(type = "Git", url = "https://example.com/git", revision = "")
+            val nestedVcs1 = VcsInfo(type = "Git", url = "https://example.com/git1", revision = "")
+            val nestedVcs2 = VcsInfo(type = "Git", url = "https://example.com/git2", revision = "")
+            val project = Project.EMPTY.copy(
+                    id = Identifier("Gradle:com.here:project1:1.0"),
+                    definitionFilePath = "build.gradle",
+                    vcs = nestedVcs2,
+                    vcsProcessed = nestedVcs2.normalize()
+            )
+            val ortResult = OrtResult(
+                    Repository(
+                            vcs = vcs,
+                            vcsProcessed = vcs.normalize(),
+                            nestedRepositories = mapOf(
+                                    "path/1" to nestedVcs1
+                            ),
+                            config = RepositoryConfiguration()
+                    ),
+                    AnalyzerRun(
+                            environment = Environment(),
+                            config = AnalyzerConfiguration(ignoreToolVersions = true, allowDynamicVersions = true),
+                            result = AnalyzerResult.EMPTY
+                    )
+            )
+
+            val e = shouldThrow<IllegalArgumentException> {
+                ortResult.getCompleteDefinitionFilePath(project) shouldBe "project1/build.gradle"
+            }
+
+            e.message should match("The VCS .* is not contained in the repositories of this ORT result: .*")
         }
     }
 })

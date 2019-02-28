@@ -81,6 +81,12 @@ data class ReportTableModel(
             val rows: List<DependencyRow>,
 
             /**
+             * The path to the directory containing the definition file of the project, relative to the root of the
+             * analyzed working tree.
+             */
+            val completeDefinitionFilePath: String,
+
+            /**
              * Information about if and why the project is excluded.
              */
             val exclude: ProjectExclude? = null
