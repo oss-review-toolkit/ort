@@ -243,7 +243,7 @@ class CopyrightStatementsProcessor {
     }
 
     private fun replaceYearRange(copyrightStatement: String, placeholder: String): Pair<String, Set<Int>> {
-        val yearRangeRegex = "(?=.*)\\b([\\d]{4})([ ]*[-][ ]*)([\\d]{4}|[\\d]{2}|[\\d]{1})\\b".toRegex()
+        val yearRangeRegex = "(?=.*)\\b([\\d]{4})([ ]*[-][ ]*)([\\d]{4}|[\\d]{2}|[\\d])\\b".toRegex()
 
         yearRangeRegex.findAll(copyrightStatement).forEach { matchResult ->
             val fromGroup = matchResult.groups[1]!!
