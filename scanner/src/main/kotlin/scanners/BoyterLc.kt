@@ -55,13 +55,15 @@ class BoyterLc(name: String, config: ScannerConfiguration) : LocalScanner(name, 
         override fun create(config: ScannerConfiguration) = BoyterLc(scannerName, config)
     }
 
+    companion object {
+        val CONFIGURATION_OPTIONS = listOf(
+                "--confidence", "0.95", // Cut-off value to only get most relevant matches.
+                "--format", "json"
+        )
+    }
+
     override val scannerVersion = "1.3.1"
     override val resultFileExt = "json"
-
-    val CONFIGURATION_OPTIONS = listOf(
-            "--confidence", "0.95", // Cut-off value to only get most relevant matches.
-            "--format", "json"
-    )
 
     override fun command(workingDir: File?) = if (OS.isWindows) "lc.exe" else "lc"
 

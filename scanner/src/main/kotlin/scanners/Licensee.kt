@@ -49,10 +49,12 @@ class Licensee(name: String, config: ScannerConfiguration) : LocalScanner(name, 
         override fun create(config: ScannerConfiguration) = Licensee(scannerName, config)
     }
 
+    companion object {
+        val CONFIGURATION_OPTIONS = listOf("--json")
+    }
+
     override val scannerVersion = "9.11.0"
     override val resultFileExt = "json"
-
-    val CONFIGURATION_OPTIONS = listOf("--json")
 
     override fun command(workingDir: File?) = if (OS.isWindows) "licensee.bat" else "licensee"
 
