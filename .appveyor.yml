@@ -62,7 +62,7 @@ artifacts:
 
 on_finish:
   - ps: |
-      $url = "https://ci.appveyor.com/api/testresults/junit/$($env:APPVEYOR_JOB_ID)"
+      $url = "https://ci.appveyor.com/api/testresults/junit/$env:APPVEYOR_JOB_ID"
       $pattern = '**\build\test-results\**\TEST-*.xml'
       foreach ($file in (Resolve-Path $pattern)) {
         (New-Object 'System.Net.WebClient').UploadFile($url, $file)
