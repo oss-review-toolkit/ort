@@ -229,7 +229,7 @@ class CopyrightStatementsProcessor {
     }
 
     private fun replaceAllYearRanges(copyrightStatement: String, placeholder: String): Pair<String, Set<Int>> {
-        var years = mutableSetOf<Int>()
+        val years = mutableSetOf<Int>()
         var currentStatement = copyrightStatement
 
         while (true) {
