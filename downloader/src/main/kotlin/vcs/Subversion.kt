@@ -173,7 +173,7 @@ class Subversion : VersionControlSystem(), CommandLineTool {
                           recursive: Boolean): WorkingTree {
         log.info { "Using $type version ${getVersion()}." }
 
-        val workingTree = try {
+        return try {
             // Create an empty working tree of the latest revision to allow sparse checkouts.
             run(targetDir, "checkout", pkg.vcsProcessed.url, "--depth", "empty", ".")
 
@@ -237,7 +237,5 @@ class Subversion : VersionControlSystem(), CommandLineTool {
         } catch (e: IOException) {
             throw DownloadException("$type failed to download from ${pkg.vcsProcessed.url}.", e)
         }
-
-        return workingTree
     }
 }
