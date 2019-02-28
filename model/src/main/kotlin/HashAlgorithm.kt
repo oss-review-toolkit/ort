@@ -23,7 +23,8 @@ import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonValue
 
 /**
- * An enum of supported hash algorithms.
+ * An enum of supported hash algorithms. Each algorithm has one or more [aliases] associated to it, where the first
+ * alias is the definite name.
  */
 enum class HashAlgorithm(private vararg val aliases: String) {
     /**
