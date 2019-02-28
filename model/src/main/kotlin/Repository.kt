@@ -48,4 +48,19 @@ data class Repository(
          * The configuration of the repository, parsed from the ".ort.yml" file.
          */
         val config: RepositoryConfiguration
-)
+) {
+    /**
+     * Return the path of [vcs] relative to [Repository.vcs], or null if [vcs] is neither [Repository.vcs] nor contained
+     * in [nestedRepositories].
+     */
+    fun getRelativePath(vcs: VcsInfo): String? {
+        fun VcsInfo.matches(other: VcsInfo) =
+                other.type == other.type && url == other.url && revision == other.revision
+
+        val normalizedVcs = vcs.normalize()
+
+        if (vcsProcessed.matches(normalizedVcs)) return ""
+
+        return nestedRepositories.entries.find { (_, nestedVcs) -> nestedVcs.matches(normalizedVcs) }?.key
+    }
+}
