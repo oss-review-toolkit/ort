@@ -266,7 +266,6 @@ class PIP(name: String, analyzerConfig: AnalyzerConfiguration, repoConfig: Repos
             else -> throw IllegalArgumentException("Unbale to determine a project name for '$definitionFile'.")
         }
         val projectVersion = setupVersion.takeIf { it.isNotEmpty() } ?: requirementsVersion
-        val projectHomepage = setupHomepage
 
         val packages = sortedSetOf<Package>()
         val installDependencies = sortedSetOf<PackageReference>()
@@ -387,8 +386,8 @@ class PIP(name: String, analyzerConfig: AnalyzerConfiguration, repoConfig: Repos
                 definitionFilePath = VersionControlSystem.getPathInfo(definitionFile).path,
                 declaredLicenses = declaredLicenses,
                 vcs = VcsInfo.EMPTY,
-                vcsProcessed = processProjectVcs(workingDir, homepageUrl = projectHomepage),
-                homepageUrl = projectHomepage,
+                vcsProcessed = processProjectVcs(workingDir, homepageUrl = setupHomepage),
+                homepageUrl = setupHomepage,
                 scopes = scopes
         )
 
