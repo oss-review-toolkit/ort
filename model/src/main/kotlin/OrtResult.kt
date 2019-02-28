@@ -238,6 +238,27 @@ data class OrtResult(
     }
 
     /**
+     * Returns the path of the folder that contains the definition file of the [project], relative to the analyzer root.
+     * If the project was checked out from a VCS the analyzer root is the root of the working tree, if the project was
+     * not checked out from a VCS the analyzer root is the input directory of the analyzer.
+     */
+    fun getDefinitionFilePathRelativeToAnalyzerRoot(project: Project): String {
+        val vcsPath = repository.getRelativePath(project.vcsProcessed)
+
+        requireNotNull(vcsPath) {
+            "The ${project.vcs} of project '${project.id.toCoordinates()}' cannot be found in $repository."
+        }
+
+        return buildString {
+            if (vcsPath.isNotEmpty()) {
+                append(vcsPath)
+                append("/")
+            }
+            append(project.definitionFilePath)
+        }
+    }
+
+    /**
      * Return true if the project or package with the given identifier is excluded.
      */
     @Suppress("UNUSED") // This is intended to be mostly used via scripting.

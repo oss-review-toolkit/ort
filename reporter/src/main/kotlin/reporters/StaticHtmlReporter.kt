@@ -574,7 +574,7 @@ class StaticHtmlReporter : Reporter() {
 
         h2 {
             id = project.id.toCoordinates()
-            +"${project.id.toCoordinates()} (${project.definitionFilePath})"
+            +"${project.id.toCoordinates()} (${table.fullDefinitionFilePath})"
         }
 
         table.exclude?.let { exclude ->

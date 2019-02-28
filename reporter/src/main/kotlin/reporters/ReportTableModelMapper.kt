@@ -170,7 +170,7 @@ class ReportTableModelMapper(private val resolutionProvider: ResolutionProvider)
                 }
             }
 
-            ProjectTable(tableRows, projectExclude)
+            ProjectTable(tableRows, ortResult.getDefinitionFilePathRelativeToAnalyzerRoot(project), projectExclude)
         }.toSortedMap()
 
         val issueSummaryTable = IssueTable(issueSummaryRows.values.toList().sortedBy { it.id })
