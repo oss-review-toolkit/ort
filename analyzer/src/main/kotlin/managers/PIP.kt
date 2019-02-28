@@ -143,10 +143,10 @@ class PIP(name: String, analyzerConfig: AnalyzerConfiguration, repoConfig: Repos
     }
 
     companion object {
-        private val INSTALL_OPTIONS = listOf(
+        private val INSTALL_OPTIONS = arrayOf(
                 "--no-warn-conflicts",
                 "--prefer-binary"
-        ).toTypedArray()
+        )
 
         // TODO: Need to replace this hard-coded list of domains with e.g. a command line option.
         private val TRUSTED_HOSTS = listOf(
