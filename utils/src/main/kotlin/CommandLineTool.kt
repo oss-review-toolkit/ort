@@ -35,7 +35,7 @@ interface CommandLineTool {
         /**
          * A convenience property to require any version.
          */
-        val ANY_VERSION = Requirement.buildNPM("*")
+        val ANY_VERSION: Requirement = Requirement.buildNPM("*")
     }
 
     /**
