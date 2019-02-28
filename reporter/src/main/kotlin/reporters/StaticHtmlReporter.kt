@@ -405,7 +405,7 @@ class StaticHtmlReporter : Reporter() {
             reportTableModel.projectDependencies.forEach { project, projectTable ->
                 li {
                     a("#${project.id.toCoordinates()}") {
-                        +"${project.id.toCoordinates()}"
+                        +project.id.toCoordinates()
 
                         projectTable.exclude?.let { exclude ->
                             +" "
@@ -535,11 +535,11 @@ class StaticHtmlReporter : Reporter() {
                     +rowIndex.toString()
                 }
             }
-            td { +"${row.id.toCoordinates()}" }
+            td { +row.id.toCoordinates() }
 
             td {
                 row.analyzerIssues.forEach { id, issues ->
-                    a("#${id.toCoordinates()}") { +"${id.toCoordinates()}" }
+                    a("#${id.toCoordinates()}") { +id.toCoordinates() }
 
                     ul {
                         issues.forEach { issue ->
@@ -554,7 +554,7 @@ class StaticHtmlReporter : Reporter() {
 
             td {
                 row.scanIssues.forEach { id, issues ->
-                    a("#${id.toCoordinates()}") { +"${id.toCoordinates()}" }
+                    a("#${id.toCoordinates()}") { +id.toCoordinates() }
 
                     ul {
                         issues.forEach { issue ->
@@ -573,7 +573,7 @@ class StaticHtmlReporter : Reporter() {
         val excludedClass = if (table.exclude != null) "ort-excluded" else ""
 
         h2 {
-            id = "${project.id.toCoordinates()}"
+            id = project.id.toCoordinates()
             +"${project.id.toCoordinates()} (${project.definitionFilePath})"
         }
 
@@ -654,7 +654,7 @@ class StaticHtmlReporter : Reporter() {
                     +rowIndex.toString()
                 }
             }
-            td { +"${row.id.toCoordinates()}" }
+            td { +row.id.toCoordinates() }
 
             td {
                 if (row.scopes.isNotEmpty()) {
