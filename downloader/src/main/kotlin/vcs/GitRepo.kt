@@ -119,25 +119,19 @@ class GitRepo : GitBase() {
 
     private fun runRepoCommand(targetDir: File, vararg args: String): ProcessCapture {
         val patchedArgs = if (args.first() == "init") {
-            if (OS.isWindows) {
-                // The current "stable" release of "repo" still does not support Windows officially, so get the latest
-                // code from the "master" branch instead.
-                listOf(args.first(), "--groups=all", "--no-clone-bundle", "--no-repo-verify", "--repo-branch=master") +
-                        args.drop(1)
-            } else {
-                listOf(args.first(), "--groups=all") + args.drop(1)
-            }
+            // Clone all projects instead of only those in the "default" group until we support specifying groups.
+            arrayOf(args.first(), "--groups=all") + args.drop(1)
         } else {
-            args.toList()
+            args
         }
 
         return if (OS.isWindows) {
             val repo = getPathFromEnvironment("repo") ?: throw IOException("'repo' not found in PATH.")
 
             // On Windows, the script itself is not executable, so we need to wrap the call by "python".
-            ProcessCapture(targetDir, "python", repo.absolutePath, *patchedArgs.toTypedArray()).requireSuccess()
+            ProcessCapture(targetDir, "python", repo.absolutePath, *patchedArgs).requireSuccess()
         } else {
-            ProcessCapture(targetDir, "repo", *patchedArgs.toTypedArray()).requireSuccess()
+            ProcessCapture(targetDir, "repo", *patchedArgs).requireSuccess()
         }
     }
 }
