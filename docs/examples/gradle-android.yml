@@ -3,7 +3,6 @@ excludes:
   - name: "test.*"
     reason: "TEST_TOOL_OF"
     comment: "These are dependencies used for testing. They are not distributed in the context of this project."
-  scopes:
   - name: ".*Test.*"
     reason: "TEST_TOOL_OF"
     comment: "These are dependencies used for testing. They are not distributed in the context of this project."

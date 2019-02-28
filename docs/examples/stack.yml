@@ -3,7 +3,6 @@ excludes:
   - name: "bench"
     reason: "TEST_TOOL_OF"
     comment: "These are dependencies only used for benchmarks. They are not distributed in the context of this product."
-  scopes:
   - name: "test"
     reason: "TEST_TOOL_OF"
     comment: "These are dependencies only used for testing. They are not distributed in the context of this product."
