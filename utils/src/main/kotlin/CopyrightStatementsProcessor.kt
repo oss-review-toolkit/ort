@@ -63,7 +63,7 @@ private fun Collection<Parts>.groupByPrefixAndOwner(): List<Parts> {
  */
 class CopyrightStatementsProcessor {
     companion object {
-        private val YEAR_PLACEHOLDER = "<ORT_YEAR_PLACEHOLDER_TRO>"
+        private const val YEAR_PLACEHOLDER = "<ORT_YEAR_PLACEHOLDER_TRO>"
         private val KNOWN_PREFIX_REGEX = listOf(
                 "^(\\(c\\))",
                 "^(\\(c\\) [C|c]opyright)",
