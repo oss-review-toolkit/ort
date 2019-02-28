@@ -211,8 +211,8 @@ fun JsonNode?.textValueOrEmpty(): String = this?.textValue()?.let { it } ?: ""
  * same key. Parameters passed to [operation] can be null if there is no entry for a key in one of the maps.
  */
 inline fun <K, V, W> Map<K, V>.zip(other: Map<K, V>, operation: (V?, V?) -> W): Map<K, W> =
-        (this.keys + other.keys).associate { key ->
-            Pair(key, operation(this[key], other[key]))
+        (this.keys + other.keys).associateWith { key ->
+            operation(this[key], other[key])
         }
 
 /**
@@ -220,8 +220,8 @@ inline fun <K, V, W> Map<K, V>.zip(other: Map<K, V>, operation: (V?, V?) -> W): 
  * same key. If there is no entry for a key in one of the maps, [default] is used.
  */
 inline fun <K, V, W> Map<K, V>.zipWithDefault(other: Map<K, V>, default: V, operation: (V, V) -> W): Map<K, W> =
-        (this.keys + other.keys).associate { key ->
-            Pair(key, operation(this[key] ?: default, other[key] ?: default))
+        (this.keys + other.keys).associateWith { key ->
+            operation(this[key] ?: default, other[key] ?: default)
         }
 
 /**
