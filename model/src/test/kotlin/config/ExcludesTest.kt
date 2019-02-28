@@ -248,8 +248,8 @@ class ExcludesTest : WordSpec() {
 
                 excludesByName.keys should haveSize(2)
                 excludesByName.keys should containAll(scope1.name, scope2.name)
-                excludesByName[scope1.name]!! should beEmpty()
-                excludesByName[scope2.name]!! should beEmpty()
+                excludesByName.getValue(scope1.name) should beEmpty()
+                excludesByName.getValue(scope2.name) should beEmpty()
             }
 
             "return the correct mapping of scope names to scope excludes" {
@@ -262,11 +262,11 @@ class ExcludesTest : WordSpec() {
 
                 excludesByName.keys should haveSize(2)
                 excludesByName.keys should containAll(scope1.name, scope2.name)
-                excludesByName[scope1.name]!!.let {
+                excludesByName.getValue(scope1.name).let {
                     it should haveSize(1)
                     it should contain(scopeExclude1)
                 }
-                excludesByName[scope2.name]!!.let {
+                excludesByName.getValue(scope2.name).let {
                     it should haveSize(1)
                     it should contain(scopeExclude2)
                 }
@@ -281,7 +281,7 @@ class ExcludesTest : WordSpec() {
 
                 excludesByName.keys should haveSize(1)
                 excludesByName.keys should contain(scope1.name)
-                excludesByName[scope1.name]!!.let {
+                excludesByName.getValue(scope1.name).let {
                     it should haveSize(1)
                     it should contain(scopeExclude1)
                 }
