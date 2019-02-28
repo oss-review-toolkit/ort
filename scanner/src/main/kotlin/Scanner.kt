@@ -25,6 +25,7 @@ import com.here.ort.downloader.Downloader
 import com.here.ort.model.Environment
 import com.here.ort.model.OrtResult
 import com.here.ort.model.Package
+import com.here.ort.model.Project
 import com.here.ort.model.ProjectScanScopes
 import com.here.ort.model.ScanRecord
 import com.here.ort.model.ScanResult

@@ -23,6 +23,7 @@ import ch.frankel.slf4k.*
 
 import com.here.ort.downloader.vcs.GitRepo
 import com.here.ort.model.Hash
+import com.here.ort.model.Identifier
 import com.here.ort.model.Package
 import com.here.ort.model.Project
 import com.here.ort.model.RemoteArtifact

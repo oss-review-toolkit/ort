@@ -33,7 +33,7 @@ import java.nio.file.StandardCopyOption
 fun stashDirectories(vararg directories: File): Closeable = DirectoryStash(setOf(*directories))
 
 /**
- * A Closable class which temporarily moves away [directories] and moves them back on close. Any conflicting directory
+ * A Closable class which temporarily moves away directories and moves them back on close. Any conflicting directory
  * created at the location of an original directory is deleted before the original state is restored. If a specified
  * directory did not exist on initialization, it will also not exist on close.
  */

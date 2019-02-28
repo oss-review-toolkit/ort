@@ -50,7 +50,8 @@ data class ScanResultContainer(
 }
 
 /**
- * Return all detected licenses for the container's package [id], or an empty set if the container is null.
+ * Return all detected licenses for the container's package [id][ScanResultContainer.id], or an empty set if the
+ * container is null.
  */
 fun ScanResultContainer?.getAllDetectedLicenses(): SortedSet<String> =
         sortedSetOf<String>().also { licenses ->
