@@ -80,7 +80,7 @@ def getLicenseHeader(int fromYear = 2017, int toYear = java.time.Year.now().valu
 }
 
 def licenseToEnumEntry(String id, Map<String, String> meta) {
-    def enumName = id.toUpperCase().replaceAll('[-\\.]', '_').replace('+', 'PLUS')
+    def enumName = id.toUpperCase().replaceAll('[-.]', '_').replace('+', 'PLUS')
     if (enumName[0].isNumber()) {
         enumName = "_$enumName"
     }
