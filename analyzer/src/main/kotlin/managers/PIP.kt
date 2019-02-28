@@ -142,16 +142,18 @@ class PIP(name: String, analyzerConfig: AnalyzerConfiguration, repoConfig: Repos
                 PIP(managerName, analyzerConfig, repoConfig)
     }
 
-    private val INSTALL_OPTIONS = listOf(
-            "--no-warn-conflicts",
-            "--prefer-binary"
-    ).toTypedArray()
+    companion object {
+        private val INSTALL_OPTIONS = listOf(
+                "--no-warn-conflicts",
+                "--prefer-binary"
+        ).toTypedArray()
 
-    // TODO: Need to replace this hard-coded list of domains with e.g. a command line option.
-    private val TRUSTED_HOSTS = listOf(
-            "pypi.org",
-            "pypi.python.org" // Legacy
-    ).flatMap { listOf("--trusted-host", it) }.toTypedArray()
+        // TODO: Need to replace this hard-coded list of domains with e.g. a command line option.
+        private val TRUSTED_HOSTS = listOf(
+                "pypi.org",
+                "pypi.python.org" // Legacy
+        ).flatMap { listOf("--trusted-host", it) }.toTypedArray()
+    }
 
     override fun command(workingDir: File?) = "pip"
 

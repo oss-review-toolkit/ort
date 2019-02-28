@@ -50,7 +50,9 @@ data class ScannerDetails(
         @JsonInclude(JsonInclude.Include.NON_EMPTY)
         val data: CustomData = emptyMap()
 ) {
-    private val MAJOR_MINOR = EnumSet.of(Semver.VersionDiff.MAJOR, Semver.VersionDiff.MINOR)
+    companion object {
+        private val MAJOR_MINOR = EnumSet.of(Semver.VersionDiff.MAJOR, Semver.VersionDiff.MINOR)
+    }
 
     /**
      * True if the [other] scanner has the same name and configuration, and the [Semver] version differs only in other
