@@ -70,7 +70,7 @@ abstract class Scanner(val scannerName: String, protected val config: ScannerCon
      * Return the scanner-specific SPDX idstring for the given [license].
      */
     fun getSpdxLicenseIdString(license: String) =
-            SpdxLicense.forId(license)?.let { it.id } ?: "LicenseRef-$scannerName-$license"
+            SpdxLicense.forId(license)?.id ?: "LicenseRef-$scannerName-$license"
 
     /**
      * Scan the [Project]s and [Package]s specified in [ortResultFile] and store the scan results in [outputDirectory].
