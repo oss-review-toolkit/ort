@@ -64,7 +64,7 @@ object RequirementsCommand : CommandWithHelp() {
                         log.debug { "$it is a $key." }
                         it.getDeclaredConstructor(String::class.java, AnalyzerConfiguration::class.java,
                                 RepositoryConfiguration::class.java).newInstance(
-                                    "", AnalyzerConfiguration(false, false),
+                                    "", AnalyzerConfiguration(ignoreToolVersions = false, allowDynamicVersions = false),
                                     RepositoryConfiguration())
                     }
 
