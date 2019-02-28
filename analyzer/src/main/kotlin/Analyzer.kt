@@ -98,7 +98,7 @@ class Analyzer(private val config: AnalyzerConfiguration) {
                 // No need to use curly-braces-syntax for logging here as the log level check is already done above.
                 log.info("${manager.managerName} projects found in:")
                 files.forEach { file ->
-                    log.info("\t${file.toRelativeString(absoluteProjectPath).takeIf { it.isNotEmpty() } ?: "." }")
+                    log.info("\t${file.toRelativeString(absoluteProjectPath).takeIf { it.isNotEmpty() } ?: "."}")
                 }
             }
         }
