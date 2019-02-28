@@ -243,9 +243,9 @@ abstract class VersionControlSystem {
     val type: String = javaClass.simpleName
 
     /**
-     * A list of lowercase names that clearly identify the VCS. For example ["svn", "subversion"] for Subversion.
+     * A list of alternative names for the VCS, for example "hg" for Mercurial.
      */
-    protected abstract val aliases: List<String>
+    protected open val aliases = emptyList<String>()
 
     /**
      * A list of symbolic names that point to the latest revision.
@@ -263,9 +263,9 @@ abstract class VersionControlSystem {
     abstract fun getWorkingTree(vcsDirectory: File): WorkingTree
 
     /**
-     * Return true if any of the [aliases] matches [vcsType]. Comparison is done case-insensitively.
+     * Return true if this VCS can handle the named [vcsType].
      */
-    fun isApplicableType(vcsType: String) = vcsType.toLowerCase() in aliases
+    fun isApplicableType(vcsType: String) = (aliases + type).any { it.equals(vcsType, true) }
 
     /**
      * Return true if this VCS can download from the provided URL. Should only return true when it's almost unambiguous,

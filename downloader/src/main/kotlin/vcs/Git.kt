@@ -40,8 +40,6 @@ import java.io.IOException
 const val GIT_HISTORY_DEPTH = 50
 
 class Git : GitBase() {
-    override val aliases = listOf("git")
-
     override fun isApplicableUrlInternal(vcsUrl: String) =
             ProcessCapture("git", "ls-remote", vcsUrl).isSuccess
 

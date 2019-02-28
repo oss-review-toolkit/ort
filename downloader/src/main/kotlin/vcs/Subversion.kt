@@ -93,7 +93,7 @@ data class SubversionPathEntry(
 class Subversion : VersionControlSystem(), CommandLineTool {
     private val versionRegex = Pattern.compile("svn, [Vv]ersion (?<version>[\\d.]+) \\(r\\d+\\)")
 
-    override val aliases = listOf("subversion", "svn")
+    override val aliases = listOf("svn")
     override val latestRevisionNames = listOf("HEAD")
 
     override fun command(workingDir: File?) = "svn"
