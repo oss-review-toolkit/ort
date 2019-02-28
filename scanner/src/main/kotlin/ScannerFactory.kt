@@ -21,6 +21,8 @@ package com.here.ort.scanner
 
 import com.here.ort.model.config.ScannerConfiguration
 
+import java.util.ServiceLoader
+
 /**
  * A common interface for use with [ServiceLoader] that all [AbstractScannerFactory] classes need to implement.
  */

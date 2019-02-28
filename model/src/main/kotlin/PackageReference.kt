@@ -43,7 +43,7 @@ data class PackageReference(
 
         /**
          * The type of linkage used for the referred package from its dependent package. As most of our supported
-         * [PackageManager]s / languages only support dynamic linking or at least default to it, also use that as the
+         * package managers / languages only support dynamic linking or at least default to it, also use that as the
          * default value here to not blow up our result files.
          */
         @JsonInclude(value = JsonInclude.Include.CUSTOM, valueFilter = PackageLinkageValueFilter::class)

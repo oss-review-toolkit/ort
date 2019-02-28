@@ -25,7 +25,7 @@ import com.fasterxml.jackson.module.kotlin.readValue
 import java.io.File
 
 /**
- * An enumeration of supported output file formats, their primary [fileExtension], and optional [aliases] (not including
+ * An enumeration of supported output file formats, their primary [fileExtension], and optional aliases (not including
  * the dot).
  */
 enum class OutputFormat(val mapper: ObjectMapper, val fileExtension: String, vararg aliases: String) {

@@ -24,6 +24,7 @@ import com.here.ort.model.config.RepositoryConfiguration
 
 import java.nio.file.FileSystems
 import java.nio.file.PathMatcher
+import java.util.ServiceLoader
 
 /**
  * A common interface for use with [ServiceLoader] that all [AbstractPackageManagerFactory] classes need to implement.
