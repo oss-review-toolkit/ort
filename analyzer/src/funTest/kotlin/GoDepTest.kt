@@ -66,7 +66,7 @@ class GoDepTest : WordSpec() {
 
             "invoke the dependency solver if no lockfile is present and allowDynamicVersions is set" {
                 val manifestFile = File(projectsDir, "synthetic/godep/no-lockfile/Gopkg.toml")
-                val config = AnalyzerConfiguration(false, true)
+                val config = AnalyzerConfiguration(ignoreToolVersions = false, allowDynamicVersions = true)
                 val result = createGoDep(config).resolveDependencies(USER_DIR, listOf(manifestFile))[manifestFile]
 
                 result shouldNotBe null
