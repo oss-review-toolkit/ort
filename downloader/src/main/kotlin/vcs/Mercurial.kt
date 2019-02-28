@@ -40,7 +40,7 @@ const val MERCURIAL_SPARSE_EXTENSION = "sparse = "
 class Mercurial : VersionControlSystem(), CommandLineTool {
     private val versionRegex = Pattern.compile("Mercurial .*\\([Vv]ersion (?<version>[\\d.]+)\\)")
 
-    override val aliases = listOf("mercurial", "hg")
+    override val aliases = listOf("hg")
     override val latestRevisionNames = listOf("tip")
 
     override fun command(workingDir: File?) = "hg"

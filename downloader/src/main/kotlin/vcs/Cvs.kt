@@ -43,7 +43,6 @@ typealias CvsFileRevisions = List<Pair<String, String>>
 class Cvs : VersionControlSystem(), CommandLineTool {
     private val versionRegex = Pattern.compile("Concurrent Versions System \\(CVS\\) (?<version>[\\d.]+).+")
 
-    override val aliases = listOf("cvs")
     override val latestRevisionNames = emptyList<String>()
 
     override fun command(workingDir: File?) = "cvs"
