@@ -33,7 +33,7 @@ import java.io.File
 import java.io.FileFilter
 
 private const val REPO_URL = "https://github.com/heremaps/oss-review-toolkit-test-data-git-repo"
-private const val REPO_REV = "f3e4aba383260627c8277cd1c2262bd27deeea2b"
+private const val REPO_REV = "f00ec4cbb670b49a156fd95d29e8fd148d931ba9"
 private const val REPO_MANIFEST = "manifest.xml"
 
 class GitRepoDownloadTest : StringSpec() {
@@ -53,28 +53,6 @@ class GitRepoDownloadTest : StringSpec() {
             val pkg = Package.EMPTY.copy(vcsProcessed = vcs)
             val workingTree = GitRepo().download(pkg, outputDir)
 
-            val grpcDir = File(outputDir, "grpc")
-            val expectedGrpcFiles = listOf(
-                    ".git",
-                    ".github",
-                    ".vscode",
-                    "bazel",
-                    "cmake",
-                    "doc",
-                    "etc",
-                    "examples",
-                    "include",
-                    "src",
-                    "summerofcode",
-                    "templates",
-                    "test",
-                    "third_party",
-                    "tools",
-                    "vsprojects"
-            )
-
-            val actualGrpcFiles = grpcDir.listFiles(FileFilter { it.isDirectory }).map { it.name }.sorted()
-
             val spdxDir = File(outputDir, "spdx-tools")
             val expectedSpdxFiles = listOf(
                     ".git",
@@ -88,14 +66,23 @@ class GitRepoDownloadTest : StringSpec() {
 
             val actualSpdxFiles = spdxDir.listFiles(FileFilter { it.isDirectory }).map { it.name }.sorted()
 
+            val submodulesDir = File(outputDir, "submodules")
+            val expectedSubmodulesFiles = listOf(
+                    ".git",
+                    "commons-text",
+                    "test-data-npm"
+            )
+
+            val actualSubmodulesFiles = submodulesDir.listFiles(FileFilter { it.isDirectory }).map { it.name }.sorted()
+
             workingTree.isValid() shouldBe true
             workingTree.getInfo() shouldBe vcs
 
             workingTree.getPathToRoot(File(outputDir, "grpc/README.md")) shouldBe "grpc/README.md"
             workingTree.getPathToRoot(File(outputDir, "spdx-tools/TODO")) shouldBe "spdx-tools/TODO"
 
-            actualGrpcFiles.joinToString("\n") shouldBe expectedGrpcFiles.joinToString("\n")
             actualSpdxFiles.joinToString("\n") shouldBe expectedSpdxFiles.joinToString("\n")
+            actualSubmodulesFiles.joinToString("\n") shouldBe expectedSubmodulesFiles.joinToString("\n")
         }
     }
 }

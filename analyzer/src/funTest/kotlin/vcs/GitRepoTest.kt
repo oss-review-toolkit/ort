@@ -20,7 +20,6 @@
 package com.here.ort.analyzer.vcs
 
 import com.here.ort.analyzer.Analyzer
-import com.here.ort.analyzer.managers.Bundler
 import com.here.ort.downloader.VersionControlSystem
 import com.here.ort.downloader.vcs.GitRepo
 import com.here.ort.model.Package
@@ -38,7 +37,7 @@ import io.kotlintest.specs.StringSpec
 import java.io.File
 
 private const val REPO_URL = "https://github.com/heremaps/oss-review-toolkit-test-data-git-repo"
-private const val REPO_REV = "f3e4aba383260627c8277cd1c2262bd27deeea2b"
+private const val REPO_REV = "f00ec4cbb670b49a156fd95d29e8fd148d931ba9"
 private const val REPO_MANIFEST = "manifest.xml"
 
 class GitRepoTest : StringSpec() {
@@ -58,11 +57,11 @@ class GitRepoTest : StringSpec() {
     }
 
     init {
-        "Analyzer correctly reports GitRepo VcsInfo for Bundler projects" {
-            val ortResult = Analyzer(DEFAULT_ANALYZER_CONFIGURATION).analyze(outputDir, listOf(Bundler.Factory()))
+        "Analyzer correctly reports VcsInfo for git-repo projects" {
+            val ortResult = Analyzer(DEFAULT_ANALYZER_CONFIGURATION).analyze(outputDir)
             val actualResult = yamlMapper.writeValueAsString(ortResult)
             val expectedResult = patchExpectedResult(
-                    File("src/funTest/assets/projects/external/grpc-bundler-expected-output.yml"),
+                    File("src/funTest/assets/projects/external/git-repo-expected-output.yml"),
                     revision = REPO_REV,
                     path = outputDir.invariantSeparatorsPath)
 
@@ -70,19 +69,14 @@ class GitRepoTest : StringSpec() {
         }
 
         "GitRepo correctly lists submodules" {
+            // TODO: The list below should also contain "submodules/test-data-npm/long.js", but it is not correctly
+            //       cloned by git-repo.
             val expectedSubmodules = listOf(
-                    "grpc",
-                    "grpc/third_party/benchmark",
-                    "grpc/third_party/boringssl",
-                    "grpc/third_party/boringssl-with-bazel",
-                    "grpc/third_party/cares/cares",
-                    "grpc/third_party/gflags",
-                    "grpc/third_party/gflags/doc",
-                    "grpc/third_party/googletest",
-                    "grpc/third_party/protobuf",
-                    "grpc/third_party/protobuf/third_party/benchmark",
-                    "grpc/third_party/zlib",
-                    "spdx-tools"
+                    "spdx-tools",
+                    "submodules",
+                    "submodules/commons-text",
+                    "submodules/test-data-npm",
+                    "submodules/test-data-npm/entities"
             ).associateWith { VersionControlSystem.getPathInfo(File(outputDir, it)) }
 
             val workingTree = GitRepo().getWorkingTree(outputDir)
