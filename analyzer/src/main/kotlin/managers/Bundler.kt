@@ -168,10 +168,10 @@ class Bundler(name: String, analyzerConfig: AnalyzerConfiguration, repoConfig: R
 
                 scopeDependencies += PackageReference(gemId, dependencies = transitiveDependencies.toSortedSet())
             }
-        } catch (e: Exception) {
+        } catch (e: IOException) {
             e.showStackTrace()
 
-            val errorMsg = "Failed to parse package (gem) $gemName: ${e.collectMessagesAsString()}"
+            val errorMsg = "Failed to parse spec for gem '$gemName': ${e.collectMessagesAsString()}"
             log.error { errorMsg }
 
             issues += OrtIssue(source = managerName, message = errorMsg)
@@ -220,32 +220,34 @@ class Bundler(name: String, analyzerConfig: AnalyzerConfiguration, repoConfig: R
     }
 
     private fun queryRubygems(name: String, version: String): GemSpec? {
-        return try {
-            // See http://guides.rubygems.org/rubygems-org-api-v2/.
-            val request = Request.Builder()
-                    .get()
-                    .url("https://rubygems.org/api/v2/rubygems/$name/versions/$version.json")
-                    .build()
+        // See http://guides.rubygems.org/rubygems-org-api-v2/.
+        val request = Request.Builder()
+                .get()
+                .url("https://rubygems.org/api/v2/rubygems/$name/versions/$version.json")
+                .build()
 
-            OkHttpClientHelper.execute(HTTP_CACHE_PATH, request).use { response ->
-                val body = response.body()?.string()?.trim()
+        OkHttpClientHelper.execute(HTTP_CACHE_PATH, request).use { response ->
+            when (val code = response.code()) {
+                HttpURLConnection.HTTP_OK -> {
+                    val body = response.body()?.string()?.trim()
+                    return if (body.isNullOrEmpty()) null else GemSpec.createFromJson(body)
+                }
 
-                if (response.code() != HttpURLConnection.HTTP_OK || body.isNullOrEmpty()) {
-                    log.warn { "Unable to retrieve rubygems.org meta-data for gem '$name'." }
-                    if (body != null) {
-                        log.warn { "The response was '$body' (code ${response.code()})." }
-                    }
+                HttpURLConnection.HTTP_NOT_FOUND -> {
+                    log.info { "Gem '$name' was not found on RubyGems." }
                     return null
                 }
 
-                return GemSpec.createFromJson(body)
+                OkHttpClientHelper.HTTP_TOO_MANY_REQUESTS -> {
+                    throw IOException("RubyGems reported too many requests, see " +
+                            "https://guides.rubygems.org/rubygems-org-api/#rate-limits.")
+                }
+
+                else -> {
+                    throw IOException("RubyGems reported unhandled HTTP code $code when requesting meta-data for " +
+                            "gem '$name'.")
+                }
             }
-        } catch (e: IOException) {
-            e.showStackTrace()
-
-            log.warn { "Unable to parse rubygems.org meta-data for gem '$name': ${e.message}" }
-
-            null
         }
     }
 }
