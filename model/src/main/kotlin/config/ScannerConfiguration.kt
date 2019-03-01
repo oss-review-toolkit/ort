@@ -31,6 +31,12 @@ import org.ossreviewtoolkit.utils.storage.FileStorage
 @JsonIgnoreProperties(ignoreUnknown = true)
 data class ScannerConfiguration(
     /**
+     * A flag to indicate whether packages that have a concluded license and authors set (to derive copyrights from)
+     * should be skipped in the scan in favor of only using the declared information.
+     */
+    val skipConcluded: Boolean = false,
+
+    /**
      * Configuration of a [FileArchiver] that archives certain scanned files in an external [FileStorage].
      */
     val archive: FileArchiverConfiguration? = null,
