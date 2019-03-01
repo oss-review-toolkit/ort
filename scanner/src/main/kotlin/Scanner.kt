@@ -117,7 +117,7 @@ abstract class Scanner(val scannerName: String, protected val config: ScannerCon
             }
         }.toSortedSet()
 
-        val packagesToScan = if (scopesToScan.isNotEmpty()) {
+        val curatedPackages = if (scopesToScan.isNotEmpty()) {
             consolidatedReferencePackages + analyzerResult.packages.filter { (pkg, _) ->
                 analyzerResult.projects.any { project ->
                     project.scopes.any { it.name in scopesToScan && pkg.id in it }
@@ -127,7 +127,12 @@ abstract class Scanner(val scannerName: String, protected val config: ScannerCon
             consolidatedReferencePackages + analyzerResult.packages
         }.toSortedSet()
 
-        val results = scanPackages(packagesToScan.map { it.pkg }, outputDirectory, downloadDirectory)
+        // As a concluded license trumps all, do not even bother to scan packages with a concluded license.
+        val packagesToScan = curatedPackages.mapNotNull { curatedPkg ->
+            curatedPkg.pkg.takeUnless { it.concludedLicense != null }
+        }
+
+        val results = scanPackages(packagesToScan, outputDirectory, downloadDirectory)
         val resultContainers = results.map { (pkg, results) ->
             ScanResultContainer(pkg.id, results)
         }.toSortedSet()
