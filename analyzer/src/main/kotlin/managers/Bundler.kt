@@ -262,7 +262,7 @@ data class GemSpec(
 ) {
     companion object Factory {
         fun createFromYaml(spec: String): GemSpec {
-            val yaml = yamlMapper.readTree(spec)!!
+            val yaml = yamlMapper.readTree(spec)
 
             val runtimeDependencies = yaml["dependencies"]?.asIterable()?.mapNotNull { dependency ->
                 dependency["name"]?.textValue()?.takeIf { dependency["type"]?.textValue() == ":runtime" }
@@ -282,7 +282,8 @@ data class GemSpec(
         }
 
         fun createFromJson(spec: String): GemSpec {
-            val json = jsonMapper.readTree(spec)!!
+            val json = jsonMapper.readTree(spec)
+
             val runtimeDependencies = json["dependencies"]?.get("runtime")?.mapNotNull { dependency ->
                 dependency["name"]?.textValue()
             }?.toSet()
