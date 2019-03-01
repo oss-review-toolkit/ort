@@ -137,7 +137,7 @@ class Bundler(name: String, analyzerConfig: AnalyzerConfiguration, repoConfig: R
             var gemSpec = getGemspec(gemName, workingDir)
             val gemId = Identifier(managerName, "", gemSpec.name, gemSpec.version)
 
-            // The project itself can be listed as a dependency if the project is a Gem (i.e. there is a .gemspec file
+            // The project itself can be listed as a dependency if the project is a gem (i.e. there is a .gemspec file
             // for it, and the Gemfile refers to it). In that case, skip querying Rubygems and adding Package and
             // PackageReference objects and continue with the projects dependencies.
             if (gemId == projectId) {
@@ -195,7 +195,7 @@ class Bundler(name: String, analyzerConfig: AnalyzerConfiguration, repoConfig: R
     private fun parseProject(workingDir: File): GemSpec {
         val gemspecFile = getGemspecFile(workingDir)
         return if (gemspecFile != null) {
-            // Project is a Gem
+            // Project is a gem.
             getGemspec(gemspecFile.name.substringBefore("."), workingDir)
         } else {
             GemSpec(workingDir.name, "", "", sortedSetOf(), "", emptySet(), VcsInfo.EMPTY, RemoteArtifact.EMPTY)
