@@ -126,7 +126,20 @@ abstract class Scanner(
             .filter { it.pkg.id !in projectPackageIds }
             .map { it.pkg }
 
-        val packagesToScan = projectPackages + packages
+        val allPackages = projectPackages + packages
+
+        val packagesToScan = if (scannerConfig.skipConcluded) {
+            // Remove all packages that have a concluded license and authors set.
+            allPackages.filterNot { it.concludedLicense != null && it.authors.isNotEmpty() }.also {
+                val concludedPackages = allPackages - it
+                if (concludedPackages.isNotEmpty()) {
+                    log.debug { "Not scanning the following packages with concluded licenses: $concludedPackages" }
+                }
+            }
+        } else {
+            allPackages
+        }
+
         val scanResults = runBlocking {
             scanPackages(packagesToScan, outputDirectory, downloadDirectory).mapKeys { it.key.id }
         }.toSortedMap()

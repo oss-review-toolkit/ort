@@ -204,6 +204,7 @@ scanner:
     variables: {}
     tool_versions: {}
   config:
+    skip_concluded: false
     archive: null
     create_missing_archives: false
     options: null
