@@ -37,6 +37,11 @@ object OkHttpClientHelper {
     private val clients = mutableMapOf<String, OkHttpClient>()
 
     /**
+     * A constant for the "too many requests" HTTP code as HttpURLConnection has none.
+     */
+    const val HTTP_TOO_MANY_REQUESTS = 429
+
+    /**
      * Guess the media type based on the file component of a string.
      */
     fun guessMediaType(name: String): MediaType? {
