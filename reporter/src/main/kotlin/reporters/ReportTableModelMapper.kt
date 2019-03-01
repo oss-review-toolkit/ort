@@ -209,8 +209,8 @@ class ReportTableModelMapper(private val resolutionProvider: ResolutionProvider)
             it.errors.map { it.toResolvableEvaluatorIssue() }
         }?.sortedWith(compareBy(
                 { it.isResolved },
-                { it.source },
                 { it.severity },
+                { it.source },
                 { it.description },
                 { it.resolutionDescription }
         )) ?: emptyList()
