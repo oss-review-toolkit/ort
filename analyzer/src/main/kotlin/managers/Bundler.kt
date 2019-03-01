@@ -90,7 +90,7 @@ class Bundler(name: String, analyzerConfig: AnalyzerConfiguration, repoConfig: R
         stashDirectories(File(workingDir, "vendor")).use {
             val scopes = mutableSetOf<Scope>()
             val packages = mutableSetOf<Package>()
-            val errors = mutableListOf<OrtIssue>()
+            val issues = mutableListOf<OrtIssue>()
 
             installDependencies(workingDir)
 
@@ -99,7 +99,7 @@ class Bundler(name: String, analyzerConfig: AnalyzerConfiguration, repoConfig: R
             val groupedDeps = getDependencyGroups(workingDir)
 
             for ((groupName, dependencyList) in groupedDeps) {
-                parseScope(workingDir, projectId, groupName, dependencyList, scopes, packages, errors)
+                parseScope(workingDir, projectId, groupName, dependencyList, scopes, packages, issues)
             }
 
             val project = Project(
@@ -112,25 +112,25 @@ class Bundler(name: String, analyzerConfig: AnalyzerConfiguration, repoConfig: R
                     scopes = scopes.toSortedSet()
             )
 
-            return ProjectAnalyzerResult(project, packages.map { it.toCuratedPackage() }.toSortedSet(), errors)
+            return ProjectAnalyzerResult(project, packages.map { it.toCuratedPackage() }.toSortedSet(), issues)
         }
     }
 
     private fun parseScope(workingDir: File, projectId: Identifier, groupName: String, dependencyList: List<String>,
-                           scopes: MutableSet<Scope>, packages: MutableSet<Package>, errors: MutableList<OrtIssue>) {
+                           scopes: MutableSet<Scope>, packages: MutableSet<Package>, issues: MutableList<OrtIssue>) {
         log.debug { "Parsing scope: $groupName\nscope top level deps list=$dependencyList" }
 
         val scopeDependencies = mutableSetOf<PackageReference>()
 
         dependencyList.forEach {
-            parseDependency(workingDir, projectId, it, packages, scopeDependencies, errors)
+            parseDependency(workingDir, projectId, it, packages, scopeDependencies, issues)
         }
 
         scopes += Scope(groupName, scopeDependencies.toSortedSet())
     }
 
     private fun parseDependency(workingDir: File, projectId: Identifier, gemName: String, packages: MutableSet<Package>,
-                                scopeDependencies: MutableSet<PackageReference>, errors: MutableList<OrtIssue>) {
+                                scopeDependencies: MutableSet<PackageReference>, issues: MutableList<OrtIssue>) {
         log.debug { "Parsing dependency '$gemName'." }
 
         try {
@@ -142,7 +142,7 @@ class Bundler(name: String, analyzerConfig: AnalyzerConfiguration, repoConfig: R
             // PackageReference objects and continue with the projects dependencies.
             if (gemId == projectId) {
                 gemSpec.runtimeDependencies.forEach {
-                    parseDependency(workingDir, projectId, it, packages, scopeDependencies, errors)
+                    parseDependency(workingDir, projectId, it, packages, scopeDependencies, issues)
                 }
             } else {
                 queryRubygems(gemId.name, gemId.version)?.apply {
@@ -163,7 +163,7 @@ class Bundler(name: String, analyzerConfig: AnalyzerConfiguration, repoConfig: R
                 val transitiveDependencies = mutableSetOf<PackageReference>()
 
                 gemSpec.runtimeDependencies.forEach {
-                    parseDependency(workingDir, projectId, it, packages, transitiveDependencies, errors)
+                    parseDependency(workingDir, projectId, it, packages, transitiveDependencies, issues)
                 }
 
                 scopeDependencies += PackageReference(gemId, dependencies = transitiveDependencies.toSortedSet())
@@ -174,7 +174,7 @@ class Bundler(name: String, analyzerConfig: AnalyzerConfiguration, repoConfig: R
             val errorMsg = "Failed to parse package (gem) $gemName: ${e.collectMessagesAsString()}"
             log.error { errorMsg }
 
-            errors += OrtIssue(source = managerName, message = errorMsg)
+            issues += OrtIssue(source = managerName, message = errorMsg)
         }
     }
 
