@@ -2,14 +2,14 @@
 repository:
   vcs:
     type: "GitRepo"
-    url: "https://github.com/heremaps/oss-review-toolkit-test-data"
-    revision: "918bd2e8a091bf63c97729f129a5429b2ffd70ed"
-    path: "git-repo/manifest.xml"
+    url: "https://github.com/heremaps/oss-review-toolkit-test-data-git-repo"
+    revision: "<REPLACE_REVISION>"
+    path: "manifest.xml"
   vcs_processed:
     type: "gitrepo"
-    url: "https://github.com/heremaps/oss-review-toolkit-test-data.git"
-    revision: "918bd2e8a091bf63c97729f129a5429b2ffd70ed"
-    path: "git-repo/manifest.xml"
+    url: "https://github.com/heremaps/oss-review-toolkit-test-data-git-repo.git"
+    revision: "<REPLACE_REVISION>"
+    path: "manifest.xml"
   nested_repositories:
     grpc:
       type: "Git"
@@ -153,8 +153,8 @@ analyzer:
         path: "ruby"
       homepage_url: ""
       scopes: []
-    - id: "Unmanaged:git-repo:manifest:<REPLACE_REVISION>"
-      purl: "pkg://Unmanaged/git-repo/manifest@<REPLACE_REVISION>"
+    - id: "Unmanaged:manifest.xml:manifest:<REPLACE_REVISION>"
+      purl: "pkg://Unmanaged/manifest.xml/manifest@<REPLACE_REVISION>"
       definition_file_path: ""
       declared_licenses: []
       declared_licenses_processed: {}
@@ -165,9 +165,9 @@ analyzer:
         path: ""
       vcs_processed:
         type: "GitRepo"
-        url: "https://github.com/heremaps/oss-review-toolkit-test-data"
-        revision: "918bd2e8a091bf63c97729f129a5429b2ffd70ed"
-        path: "git-repo/manifest.xml"
+        url: "https://github.com/heremaps/oss-review-toolkit-test-data-git-repo"
+        revision: "<REPLACE_REVISION>"
+        path: "manifest.xml"
       homepage_url: ""
       scopes: []
     packages: []
