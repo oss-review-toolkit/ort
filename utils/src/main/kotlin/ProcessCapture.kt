@@ -35,16 +35,24 @@ class ProcessCapture(vararg command: String, workingDir: File? = null, environme
     constructor(workingDir: File?, vararg command: String) : this(*command, workingDir = workingDir)
 
     companion object {
-        private const val MAX_LOG_LINES = 20
-        private const val MAX_LOG_LINES_MESSAGE = "(Above output is limited to $MAX_LOG_LINES lines.)"
+        private const val MAX_OUTPUT_LINES = 20
+        private const val MAX_OUTPUT_FOOTER =
+                "(Above output is limited to each $MAX_OUTPUT_LINES heading and tailing lines.)"
 
-        private fun logLinesLimited(prefix: String, lines: Sequence<String>, logLine: (String) -> Unit) {
-            val chunkIterator = lines.chunked(MAX_LOG_LINES).iterator()
-            chunkIterator.next().forEach { logLine("$prefix: $it") }
+        private fun limitOutputLines(message: String): String {
+            val lines = message.lines()
+            val lineCount = lines.count()
 
-            // This actually already evaluates the next element, but since that is also only a chunk, not the whole
-            // rest, we can live with that.
-            if (chunkIterator.hasNext()) { logLine(MAX_LOG_LINES_MESSAGE) }
+            return if (lineCount > MAX_OUTPUT_LINES * 2) {
+                val prefix = lines.take(MAX_OUTPUT_LINES)
+                val suffix = lines.takeLast(MAX_OUTPUT_LINES)
+                val skippedLineCount = lineCount - MAX_OUTPUT_LINES * 2
+
+                // Insert an ellipsis in the middle of a long message.
+                (prefix + "[...skipping $skippedLineCount lines...]" + suffix + MAX_OUTPUT_FOOTER).joinToString("\n")
+            } else {
+                message
+            }
         }
     }
 
@@ -102,17 +110,11 @@ class ProcessCapture(vararg command: String, workingDir: File? = null, environme
      */
     val errorMessage
         get(): String {
+            // Fall back to stdout for any error message if stderr is blank.
             var message = stderr.takeUnless { it.isBlank() } ?: stdout
 
-            // Insert ellipsis in the middle of a long error message.
-            val lines = message.lines()
-            if (lines.count() > MAX_LOG_LINES) {
-                val prefix = lines.take(MAX_LOG_LINES / 2)
-                val suffix = lines.takeLast(MAX_LOG_LINES / 2)
-                message = (prefix + "[...]" + suffix + MAX_LOG_LINES_MESSAGE).joinToString("\n")
-            }
-
-            return "Running '$commandLine' in '$usedWorkingDir' failed with exit code $exitValue:\n$message"
+            return "Running '$commandLine' in '$usedWorkingDir' failed with exit code $exitValue:\n" +
+                    limitOutputLines(message)
         }
 
     init {
@@ -126,15 +128,11 @@ class ProcessCapture(vararg command: String, workingDir: File? = null, environme
             // No need to use curly-braces-syntax for logging below as the log level check is already done above.
 
             if (stdoutFile.length() > 0L) {
-                stdoutFile.useLines { lines ->
-                    logLinesLimited("stdout", lines) { log.debug(it) }
-                }
+                limitOutputLines(stdout).lines().forEach { log.debug(it) }
             }
 
             if (stderrFile.length() > 0L) {
-                stderrFile.useLines { lines ->
-                    logLinesLimited("stderr", lines) { log.debug(it) }
-                }
+                limitOutputLines(stderr).lines().forEach { log.debug(it) }
             }
         }
     }
