@@ -89,6 +89,7 @@ class ScanCode(name: String, config: ScannerConfiguration) : LocalScanner(name, 
     }
 
     companion object {
+        private const val MIN_LICENSE_SCORE = 15
         private const val OUTPUT_FORMAT = "json-pp"
         private const val TIMEOUT = 300
 
@@ -98,6 +99,7 @@ class ScanCode(name: String, config: ScannerConfiguration) : LocalScanner(name, 
         private val DEFAULT_CONFIGURATION_OPTIONS = listOf(
                 "--copyright",
                 "--license",
+                "--license-score", MIN_LICENSE_SCORE.toString(),
                 "--ignore", "*$ORT_CONFIG_FILENAME",
                 "--info",
                 "--strip-root",
