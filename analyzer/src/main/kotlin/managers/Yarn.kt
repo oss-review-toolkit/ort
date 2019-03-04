@@ -41,6 +41,8 @@ class Yarn(name: String, analyzerConfig: AnalyzerConfiguration, repoConfig: Repo
                 Yarn(managerName, analyzerConfig, repoConfig)
     }
 
+    override val installParameters = arrayOf("--ignore-scripts", "--ignore-engines")
+
     override fun hasLockFile(projectDir: File) = PackageJsonUtils.hasYarnLockFile(projectDir)
 
     override fun command(workingDir: File?) = if (OS.isWindows) "yarn.cmd" else "yarn"

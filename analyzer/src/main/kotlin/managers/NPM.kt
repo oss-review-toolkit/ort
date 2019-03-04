@@ -117,6 +117,11 @@ open class NPM(name: String, analyzerConfig: AnalyzerConfiguration, repoConfig: 
                 NPM(managerName, analyzerConfig, repoConfig)
     }
 
+    /**
+     * Array of parameters passed to the install command when installing dependencies.
+     */
+    protected open val installParameters = arrayOf("--ignore-scripts")
+
     protected open fun hasLockFile(projectDir: File) = PackageJsonUtils.hasNpmLockFile(projectDir)
 
     override fun command(workingDir: File?) = if (OS.isWindows) "npm.cmd" else "npm"
@@ -491,7 +496,7 @@ open class NPM(name: String, analyzerConfig: AnalyzerConfiguration, repoConfig: 
         if (hasLockFile(workingDir) && this::class.java == NPM::class.java) {
             run(workingDir, "ci")
         } else {
-            run(workingDir, "install", "--ignore-scripts")
+            run(workingDir, "install", *installParameters)
         }
 
         // TODO: capture warnings from npm output, e.g. "Unsupported platform" which happens for fsevents on all
