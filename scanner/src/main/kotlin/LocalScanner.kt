@@ -139,9 +139,19 @@ abstract class LocalScanner(name: String, config: ScannerConfiguration) : Scanne
             val result = try {
                 log.info { "Starting scan of '${pkg.id.toCoordinates()}' (${index + 1}/${packages.size})." }
 
-                scanPackage(scannerDetails, pkg, outputDirectory, downloadDirectory).map {
+                log.info { "Reading stored scan results for ${pkg.id.toCoordinates()}." }
+
+                val storedResults = readFromStorage(scannerDetails, pkg, outputDirectory)
+
+                if (storedResults.isNotEmpty()) {
+                    log.info { "Using stored scan results for ${pkg.id.toCoordinates()}." }
+
+                    storedResults
+                } else {
+                    log.info { "Scanning package ${pkg.id.toCoordinates()}."}
+
                     // Remove the now unneeded reference to rawResult here to allow garbage collection to clean it up.
-                    it.copy(rawResult = null)
+                    listOf(scanPackage(scannerDetails, pkg, outputDirectory, downloadDirectory).copy(rawResult = null))
                 }
             } catch (e: ScanException) {
                 e.showStackTrace()
@@ -168,19 +178,20 @@ abstract class LocalScanner(name: String, config: ScannerConfiguration) : Scanne
     }
 
     /**
-     * Scan the provided [pkg] for license information and write the results to [outputDirectory] using the scanner's
-     * native file format. The results file name is derived from [pkg] and [scannerDetails].
-     *
-     * If a scan result is found in the storage, it is used without running the actual scan. If no stored scan result is
-     * found, the package's source code is downloaded to [downloadDirectory] and scanned afterwards.
-     *
-     * The return value is a list of [ScanResult]s. If a package could not be scanned, a [ScanException] is thrown.
+     * Return the result file inside [outputDirectory]. The name of the file is derived from [pkg] and
+     * [scannerDetails].
      */
-    private fun scanPackage(scannerDetails: ScannerDetails, pkg: Package, outputDirectory: File,
-                    downloadDirectory: File): List<ScanResult> {
+    private fun getResultsFile(scannerDetails: ScannerDetails, pkg: Package, outputDirectory: File): File {
         val scanResultsForPackageDirectory = File(outputDirectory, pkg.id.toPath()).apply { safeMkdirs() }
-        val resultsFile = File(scanResultsForPackageDirectory, "scan-results_${scannerDetails.name}.$resultFileExt")
+        return File(scanResultsForPackageDirectory, "scan-results_${scannerDetails.name}.$resultFileExt")
+    }
 
+    /**
+     * Return matching [ScanResult]s for this [Package][pkg] from the [ScanResultsStorage]. If no results are found an
+     * empty list is returned.
+     */
+    private fun readFromStorage(scannerDetails: ScannerDetails, pkg: Package, outputDirectory: File): List<ScanResult> {
+        val resultsFile = getResultsFile(scannerDetails, pkg, outputDirectory)
         val storedResults = ScanResultsStorage.read(pkg, scannerDetails)
 
         if (storedResults.results.isNotEmpty()) {
@@ -188,8 +199,22 @@ abstract class LocalScanner(name: String, config: ScannerConfiguration) : Scanne
             // the first stored result to resultsFile. This feature will be removed when the reporter tool becomes
             // available.
             resultsFile.mapper().writeValue(resultsFile, storedResults.results.first().rawResult)
-            return storedResults.results
         }
+
+        return storedResults.results
+    }
+
+    /**
+     * Scan the provided [pkg] for license information and write the results to [outputDirectory] using the scanner's
+     * native file format.
+     *
+     * The package's source code is downloaded to [downloadDirectory] and scanned afterwards.
+     *
+     * Return the [ScanResult], if the package could not be scanned a [ScanException] is thrown.
+     */
+    private fun scanPackage(scannerDetails: ScannerDetails, pkg: Package, outputDirectory: File,
+                    downloadDirectory: File): ScanResult {
+        val resultsFile = getResultsFile(scannerDetails, pkg, outputDirectory)
 
         val downloadResult = try {
             Downloader().download(pkg, downloadDirectory)
@@ -199,7 +224,7 @@ abstract class LocalScanner(name: String, config: ScannerConfiguration) : Scanne
             log.error { "Could not download '${pkg.id.toCoordinates()}': ${e.collectMessagesAsString()}" }
 
             val now = Instant.now()
-            val scanResult = ScanResult(
+            return ScanResult(
                     Provenance(),
                     scannerDetails,
                     ScanSummary(
@@ -211,7 +236,6 @@ abstract class LocalScanner(name: String, config: ScannerConfiguration) : Scanne
                     ),
                     EMPTY_JSON_NODE
             )
-            return listOf(scanResult)
         }
 
         log.info {
@@ -224,7 +248,7 @@ abstract class LocalScanner(name: String, config: ScannerConfiguration) : Scanne
 
         ScanResultsStorage.add(pkg.id, scanResult)
 
-        return listOf(scanResult)
+        return scanResult
     }
 
     /**
