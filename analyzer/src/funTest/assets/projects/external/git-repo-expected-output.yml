@@ -8332,12 +8332,12 @@ analyzer:
           type: "git"
           url: "https://github.com/DefinitelyTyped/DefinitelyTyped.git"
           revision: ""
-          path: ""
+          path: "types/node"
         vcs_processed:
           type: "git"
           url: "https://github.com/DefinitelyTyped/DefinitelyTyped.git"
           revision: ""
-          path: ""
+          path: "types/node"
       curations: []
     has_errors: false
 scanner: null

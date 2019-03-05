@@ -366,7 +366,8 @@ open class NPM(name: String, analyzerConfig: AnalyzerConfiguration, repoConfig: 
         return node["repository"]?.let { repo ->
             val type = repo["type"].textValueOrEmpty()
             val url = repo.textValue() ?: repo["url"].textValueOrEmpty()
-            VcsInfo(type, expandShortcutURL(url), head)
+            val path = repo["directory"].textValueOrEmpty()
+            VcsInfo(type, expandShortcutURL(url), head, null, path)
         } ?: VcsInfo("", "", head)
     }
 
