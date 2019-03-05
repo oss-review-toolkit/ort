@@ -219,7 +219,7 @@ class Bundler(name: String, analyzerConfig: AnalyzerConfiguration, repoConfig: R
         run(workingDir, "install", "--path", "vendor/bundle")
     }
 
-    private fun queryRubygems(name: String, version: String): GemSpec? {
+    private fun queryRubygems(name: String, version: String, retryCount: Int = 3): GemSpec? {
         // See http://guides.rubygems.org/rubygems-org-api-v2/.
         val request = Request.Builder()
                 .get()
@@ -244,6 +244,12 @@ class Bundler(name: String, analyzerConfig: AnalyzerConfiguration, repoConfig: R
                 }
 
                 else -> {
+                    if (retryCount > 0 && code == HttpURLConnection.HTTP_BAD_GATEWAY) {
+                        // We see a lot of despotic "bad gateway" responses that disappear when trying again.
+                        Thread.sleep(100)
+                        return queryRubygems(name, version, retryCount - 1)
+                    }
+
                     throw IOException("RubyGems reported unhandled HTTP code $code when requesting meta-data for " +
                             "gem '$name'.")
                 }
