@@ -31,6 +31,12 @@ import com.here.ort.model.Scope
  */
 data class Excludes(
         /**
+         * Path excludes.
+         */
+        @JsonInclude(JsonInclude.Include.NON_EMPTY)
+        val paths: List<PathExclude> = emptyList(),
+
+        /**
          * Project specific excludes.
          */
         @JsonInclude(JsonInclude.Include.NON_EMPTY)
