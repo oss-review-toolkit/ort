@@ -20,13 +20,18 @@
 package com.here.ort.model.config
 
 import com.here.ort.model.AnalyzerResult
+import com.here.ort.model.AnalyzerRun
+import com.here.ort.model.Environment
 import com.here.ort.model.Identifier
+import com.here.ort.model.OrtResult
 import com.here.ort.model.PackageReference
 import com.here.ort.model.Project
+import com.here.ort.model.Repository
 import com.here.ort.model.Scope
 
 import io.kotlintest.matchers.beEmpty
 import io.kotlintest.matchers.collections.contain
+import io.kotlintest.matchers.collections.containExactly
 import io.kotlintest.matchers.collections.containOnlyNulls
 import io.kotlintest.matchers.containAll
 import io.kotlintest.matchers.haveSize
@@ -50,6 +55,11 @@ class ExcludesTest : WordSpec() {
         val projectExclude2 = ProjectExclude("path2", ProjectExcludeReason.BUILD_TOOL_OF, "")
         val projectExclude3 = ProjectExclude("path3", ProjectExcludeReason.BUILD_TOOL_OF, "")
 
+        val pathExclude1 = PathExclude("path1", PathExcludeReason.BUILD_TOOL_OF, "")
+        val pathExclude2 = PathExclude("path2", PathExcludeReason.BUILD_TOOL_OF, "")
+        val pathExclude3 = PathExclude("**.ext", PathExcludeReason.BUILD_TOOL_OF, "")
+        val pathExclude4 = PathExclude("**/file.ext", PathExcludeReason.BUILD_TOOL_OF, "")
+
         val scope1 = Scope("scope1", sortedSetOf(PackageReference(id)))
         val scope2 = Scope("scope2", sortedSetOf(PackageReference(id)))
 
@@ -58,6 +68,30 @@ class ExcludesTest : WordSpec() {
 
         val projectExcludeWithScopes1 = ProjectExclude("path1", scopes = listOf(scopeExclude1))
         val projectExcludeWithScopes2 = ProjectExclude("path2", scopes = listOf(scopeExclude2))
+
+        "findPathExcludes" should {
+            "find the correct path excludes for a path" {
+                val excludes = Excludes(paths = listOf(pathExclude1, pathExclude2, pathExclude3, pathExclude4))
+
+                excludes.findPathExcludes("") should beEmpty()
+                excludes.findPathExcludes("path1") should containExactly(pathExclude1)
+                excludes.findPathExcludes("path2") should containExactly(pathExclude2)
+                excludes.findPathExcludes("test.ext") should containExactly(pathExclude3)
+                excludes.findPathExcludes("directory/test.ext") should containExactly(pathExclude3)
+                excludes.findPathExcludes("directory/file.ext") should containExactly(pathExclude3, pathExclude4)
+            }
+
+            "find the correct path excludes for a project" {
+                val excludes = Excludes(paths = listOf(pathExclude1, pathExclude2, pathExclude3, pathExclude4))
+
+                val analyzerResult = AnalyzerResult.EMPTY.copy(projects = sortedSetOf(project1, project2, project3))
+                val ortResult = ortResult(analyzerResult)
+
+                excludes.findPathExcludes(project1, ortResult) should containExactly(pathExclude1)
+                excludes.findPathExcludes(project2, ortResult) should containExactly(pathExclude2)
+                excludes.findPathExcludes(project3, ortResult) should beEmpty()
+            }
+        }
 
         "findProjectExclude" should {
             "return null if there is no matching project exclude" {
@@ -108,7 +142,7 @@ class ExcludesTest : WordSpec() {
 
         "isPackageExcluded" should {
             "return true if the package does not appear in the analyzer result" {
-                Excludes().isPackageExcluded(id, AnalyzerResult.EMPTY) shouldBe true
+                Excludes().isPackageExcluded(id, ortResult(AnalyzerResult.EMPTY)) shouldBe true
             }
 
             "return true if all occurrences of the package are excluded" {
@@ -124,7 +158,7 @@ class ExcludesTest : WordSpec() {
                         )
                 )
 
-                excludes.isPackageExcluded(id, analyzerResult) shouldBe true
+                excludes.isPackageExcluded(id, ortResult(analyzerResult)) shouldBe true
             }
 
             "return false if not all occurrences of the package are excluded" {
@@ -140,7 +174,7 @@ class ExcludesTest : WordSpec() {
                         )
                 )
 
-                excludes.isPackageExcluded(id, analyzerResult) shouldBe false
+                excludes.isPackageExcluded(id, ortResult(analyzerResult)) shouldBe false
             }
 
             "return false if no occurrences of the package are excluded" {
@@ -153,7 +187,30 @@ class ExcludesTest : WordSpec() {
                         )
                 )
 
-                excludes.isPackageExcluded(id, analyzerResult) shouldBe false
+                excludes.isPackageExcluded(id, ortResult(analyzerResult)) shouldBe false
+            }
+        }
+
+        "isPathExcluded" should {
+            "return true if any path exclude matches a file" {
+                val excludes = Excludes(paths = listOf(pathExclude1, pathExclude2))
+
+                excludes.isPathExcluded("path1") shouldBe true
+                excludes.isPathExcluded("path2") shouldBe true
+            }
+
+            "return false if no path exclude matches a file" {
+                val excludes = Excludes(paths = listOf(pathExclude1, pathExclude2))
+
+                excludes.isPathExcluded("") shouldBe false
+                excludes.isPathExcluded("path1/file") shouldBe false
+                excludes.isPathExcluded("path3") shouldBe false
+            }
+
+            "return false if no path exclude is defined" {
+                val excludes = Excludes()
+
+                excludes.isPathExcluded("path") shouldBe false
             }
         }
 
@@ -161,19 +218,25 @@ class ExcludesTest : WordSpec() {
             "return true if the project is completely excluded" {
                 val excludes = Excludes(projects = listOf(projectExclude1))
 
-                excludes.isProjectExcluded(project1) shouldBe true
+                excludes.isProjectExcluded(project1, ortResult(AnalyzerResult.EMPTY)) shouldBe true
+            }
+
+            "return true if the definition file of the project is excluded by a path exclude" {
+                val excludes = Excludes(paths = listOf(pathExclude1))
+
+                excludes.isProjectExcluded(project1, ortResult(AnalyzerResult.EMPTY)) shouldBe true
             }
 
             "return false if only scopes of the project are excluded" {
                 val excludes = Excludes(projects = listOf(projectExcludeWithScopes1))
 
-                excludes.isProjectExcluded(project1) shouldBe false
+                excludes.isProjectExcluded(project1, ortResult(AnalyzerResult.EMPTY)) shouldBe false
             }
 
             "return false if the project is not in the list of project excludes" {
                 val excludes = Excludes()
 
-                excludes.isProjectExcluded(project1) shouldBe false
+                excludes.isProjectExcluded(project1, ortResult(AnalyzerResult.EMPTY)) shouldBe false
             }
         }
 
@@ -288,4 +351,14 @@ class ExcludesTest : WordSpec() {
             }
         }
     }
+
+    private fun ortResult(analyzerResult: AnalyzerResult) =
+            OrtResult(
+                    repository = Repository.EMPTY,
+                    analyzer = AnalyzerRun(
+                            environment = Environment(),
+                            config = AnalyzerConfiguration(ignoreToolVersions = false, allowDynamicVersions = false),
+                            result = analyzerResult
+                    )
+            )
 }

@@ -21,8 +21,8 @@ package com.here.ort.model.config
 
 import com.fasterxml.jackson.annotation.JsonInclude
 
-import com.here.ort.model.AnalyzerResult
 import com.here.ort.model.Identifier
+import com.here.ort.model.OrtResult
 import com.here.ort.model.Project
 import com.here.ort.model.Scope
 
@@ -49,6 +49,17 @@ data class Excludes(
         val scopes: List<ScopeExclude> = emptyList()
 ) {
     /**
+     * Return the [PathExclude]s matching the provided [path].
+     */
+    fun findPathExcludes(path: String) = paths.filter { it.matches(path) }
+
+    /**
+     * Return the [PathExclude]s matching the [definitionFilePath][Project.definitionFilePath].
+     */
+    fun findPathExcludes(project: Project, ortResult: OrtResult) =
+            paths.filter { it.matches(ortResult.getDefinitionFilePathRelativeToAnalyzerRoot(project)) }
+
+    /**
      * Return the [ProjectExclude] for the provided [project], or null if there is none.
      */
     fun findProjectExclude(project: Project) = projects.find { it.matches(project.definitionFilePath) }
@@ -66,30 +77,35 @@ data class Excludes(
      * excluded. If the [id] references a [Project] it checks if the [Project] is excluded and if the [id] does not
      * appear as a dependency of another non-excluded [Project].
      */
-    fun isExcluded(id: Identifier, analyzerResult: AnalyzerResult) =
-            analyzerResult.projects.find { it.id == id }?.let {
+    fun isExcluded(id: Identifier, ortResult: OrtResult) =
+            ortResult.analyzer?.result?.projects?.find { it.id == id }?.let {
                 // An excluded project could still be included as a dependency of another non-excluded project.
-                isProjectExcluded(it) && isPackageExcluded(id, analyzerResult)
-            } ?: isPackageExcluded(id, analyzerResult)
+                isProjectExcluded(it, ortResult) && isPackageExcluded(id, ortResult)
+            } ?: isPackageExcluded(id, ortResult)
 
     /**
-     * True if all occurrences of the package identified by [id] in the [analyzerResult] are excluded by this [Excludes]
+     * True if all occurrences of the package identified by [id] in the [ortResult] are excluded by this [Excludes]
      * configuration.
      */
-    fun isPackageExcluded(id: Identifier, analyzerResult: AnalyzerResult) =
-            analyzerResult.projects.all { project ->
-                isProjectExcluded(project) || project.scopes.all { scope ->
+    fun isPackageExcluded(id: Identifier, ortResult: OrtResult) =
+            ortResult.analyzer?.result?.projects?.all { project ->
+                isProjectExcluded(project, ortResult) || project.scopes.all { scope ->
                     isScopeExcluded(scope, project) || !scope.contains(id)
                 }
-            }
+            } ?: true
+
+    /**
+     * True if any [path exclude][paths] matches [path].
+     */
+    fun isPathExcluded(path: String) = paths.any { it.matches(path) }
 
     /**
      * True if the [project] is excluded by this [Excludes] configuration.
      */
-    fun isProjectExcluded(project: Project) =
+    fun isProjectExcluded(project: Project, ortResult: OrtResult) =
             projects.any {
                 it.matches(project.definitionFilePath) && it.isWholeProjectExcluded
-            }
+            } || paths.any { it.matches(ortResult.getDefinitionFilePathRelativeToAnalyzerRoot(project)) }
 
     /**
      * True if the [scope] is excluded in [project] by this [Excludes] configuration.

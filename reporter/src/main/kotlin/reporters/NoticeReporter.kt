@@ -124,13 +124,12 @@ class NoticeReporter : Reporter() {
 
     private fun getLicenseFindings(ortResult: OrtResult): LicenseFindingsMap {
         val excludes = ortResult.repository.config.excludes
-        val analyzerResult = ortResult.analyzer!!.result
         val scanRecord = ortResult.scanner!!.results
 
         val licenseFindings = sortedMapOf<String, MutableSet<String>>()
 
         scanRecord.scanResults.forEach { container ->
-            if (excludes?.isExcluded(container.id, analyzerResult) != true) {
+            if (excludes?.isExcluded(container.id, ortResult) != true) {
                 container.results.forEach { result ->
                     result.summary.licenseFindingsMap.forEach { (license, copyrights) ->
                         licenseFindings.getOrPut(license) { mutableSetOf() } += copyrights.map { it.statement }
