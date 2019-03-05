@@ -49,6 +49,19 @@ data class Repository(
          */
         val config: RepositoryConfiguration
 ) {
+    companion object {
+        /**
+         * A constant for a [Repository] where all properties are empty strings.
+         */
+        @JvmField
+        val EMPTY = Repository(
+                vcs = VcsInfo.EMPTY,
+                vcsProcessed = VcsInfo.EMPTY,
+                nestedRepositories = emptyMap(),
+                config = RepositoryConfiguration()
+        )
+    }
+
     /**
      * Return the path of [vcs] relative to [Repository.vcs], or null if [vcs] is neither [Repository.vcs] nor contained
      * in [nestedRepositories].
