@@ -139,9 +139,22 @@ abstract class LocalScanner(name: String, config: ScannerConfiguration) : Scanne
             val result = try {
                 log.info { "Starting scan of '${pkg.id.toCoordinates()}' (${index + 1}/${packages.size})." }
 
-                scanPackage(scannerDetails, pkg, outputDirectory, downloadDirectory).map {
-                    // Remove the now unneeded reference to rawResult here to allow garbage collection to clean it up.
-                    it.copy(rawResult = null)
+                log.info { "Reading stored scan results for ${pkg.id.toCoordinates()}." }
+
+                val storedResults = readFromStorage(scannerDetails, pkg, outputDirectory)
+
+                if (storedResults.isNotEmpty()) {
+                    log.info { "Using stored scan results for ${pkg.id.toCoordinates()}." }
+
+                    storedResults
+                } else {
+                    log.info { "Scanning package ${pkg.id.toCoordinates()}."}
+
+                    scanPackage(scannerDetails, pkg, outputDirectory, downloadDirectory).map {
+                        // Remove the now unneeded reference to rawResult here to allow garbage collection to clean it
+                        // up.
+                        it.copy(rawResult = null)
+                    }
                 }
             } catch (e: ScanException) {
                 e.showStackTrace()
@@ -167,6 +180,26 @@ abstract class LocalScanner(name: String, config: ScannerConfiguration) : Scanne
         }
     }
 
+    private fun getResultsFile(scannerDetails: ScannerDetails, pkg: Package, outputDirectory: File): File {
+        val scanResultsForPackageDirectory = File(outputDirectory, pkg.id.toPath()).apply { safeMkdirs() }
+        return File(scanResultsForPackageDirectory, "scan-results_${scannerDetails.name}.$resultFileExt")
+    }
+
+    private fun readFromStorage(scannerDetails: ScannerDetails, pkg: Package, outputDirectory: File): List<ScanResult> {
+        val resultsFile = getResultsFile(scannerDetails, pkg, outputDirectory)
+
+        val storedResults = ScanResultsStorage.read(pkg, scannerDetails)
+
+        if (storedResults.results.isNotEmpty()) {
+            // Some external tools rely on the raw results filer to be written to the scan results directory, so write
+            // the first stored result to resultsFile. This feature will be removed when the reporter tool becomes
+            // available.
+            resultsFile.mapper().writeValue(resultsFile, storedResults.results.first().rawResult)
+        }
+
+        return storedResults.results
+    }
+
     /**
      * Scan the provided [pkg] for license information and write the results to [outputDirectory] using the scanner's
      * native file format. The results file name is derived from [pkg] and [scannerDetails].
@@ -178,18 +211,7 @@ abstract class LocalScanner(name: String, config: ScannerConfiguration) : Scanne
      */
     private fun scanPackage(scannerDetails: ScannerDetails, pkg: Package, outputDirectory: File,
                     downloadDirectory: File): List<ScanResult> {
-        val scanResultsForPackageDirectory = File(outputDirectory, pkg.id.toPath()).apply { safeMkdirs() }
-        val resultsFile = File(scanResultsForPackageDirectory, "scan-results_${scannerDetails.name}.$resultFileExt")
-
-        val storedResults = ScanResultsStorage.read(pkg, scannerDetails)
-
-        if (storedResults.results.isNotEmpty()) {
-            // Some external tools rely on the raw results filer to be written to the scan results directory, so write
-            // the first stored result to resultsFile. This feature will be removed when the reporter tool becomes
-            // available.
-            resultsFile.mapper().writeValue(resultsFile, storedResults.results.first().rawResult)
-            return storedResults.results
-        }
+        val resultsFile = getResultsFile(scannerDetails, pkg, outputDirectory)
 
         val downloadResult = try {
             Downloader().download(pkg, downloadDirectory)
