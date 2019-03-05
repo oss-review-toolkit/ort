@@ -71,7 +71,7 @@ data class OrtResult(
                 val excludes = repository.config.excludes.takeIf { omitExcluded }
 
                 analyzer?.result?.let { result ->
-                    result.packages.filter { excludes?.isPackageExcluded(it.pkg.id, result) != true }
+                    result.packages.filter { excludes?.isPackageExcluded(it.pkg.id, this) != true }
                             .associateTo(licenses) { it.pkg.id to it.pkg.concludedLicense }
                 }
             }
@@ -87,7 +87,7 @@ data class OrtResult(
 
                 analyzer?.result?.let { result ->
                     result.projects.forEach { project ->
-                        if (excludes?.isProjectExcluded(project) != true) {
+                        if (excludes?.isProjectExcluded(project, this) != true) {
                             project.declaredLicenses.forEach { license ->
                                 licenses.getOrPut(license) { sortedSetOf() } += project.id
                             }
@@ -95,7 +95,7 @@ data class OrtResult(
                     }
 
                     result.packages.forEach { (pkg, _) ->
-                        if (excludes?.isPackageExcluded(pkg.id, analyzer.result) != true) {
+                        if (excludes?.isPackageExcluded(pkg.id, this) != true) {
                             pkg.declaredLicenses.forEach { license ->
                                 licenses.getOrPut(license) { sortedSetOf() } += pkg.id
                             }
@@ -117,7 +117,7 @@ data class OrtResult(
 
                 scanner?.results?.scanResults?.forEach { result ->
                     // At this point we know that analyzer != null if excludes != null.
-                    if (excludes?.isPackageExcluded(result.id, analyzer!!.result) != true) {
+                    if (excludes?.isPackageExcluded(result.id, this) != true) {
                         result.getAllDetectedLicenses().forEach { license ->
                             licenses.getOrPut(license) { sortedSetOf() } += result.id
                         }
@@ -222,13 +222,13 @@ data class OrtResult(
 
         analyzer?.result?.apply {
             projects.filter {
-                it.id.isFromOrg(*names) && excludes?.isProjectExcluded(it) != true
+                it.id.isFromOrg(*names) && excludes?.isProjectExcluded(it, this@OrtResult) != true
             }.mapTo(vendorPackages) {
                 it.toPackage()
             }
 
             packages.filter { (pkg, _) ->
-                pkg.id.isFromOrg(*names) && excludes?.isPackageExcluded(pkg.id, analyzer.result) != true
+                pkg.id.isFromOrg(*names) && excludes?.isPackageExcluded(pkg.id, this@OrtResult) != true
             }.mapTo(vendorPackages) {
                 it.pkg
             }
@@ -263,7 +263,7 @@ data class OrtResult(
      */
     @Suppress("UNUSED") // This is intended to be mostly used via scripting.
     fun isExcluded(id: Identifier) =
-            analyzer?.result?.let { repository.config.excludes?.isExcluded(id, it) } == true
+            analyzer?.result?.let { repository.config.excludes?.isExcluded(id, this) } == true
 
     /**
      * Return a copy of this [OrtResult] with the [Repository.config] replaced by [config].
