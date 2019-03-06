@@ -45,7 +45,7 @@ abstract class VersionControlSystem {
         /**
          * The (prioritized) list of all available Version Control Systems in the classpath.
          */
-        val ALL by lazy { LOADER.iterator().asSequence().toList() }
+        val ALL by lazy { LOADER.iterator().asSequence().toList().sortedByDescending { it.priority } }
 
         /**
          * Return the applicable VCS for the given [vcsType], or null if none is applicable.
@@ -246,6 +246,11 @@ abstract class VersionControlSystem {
      * A list of alternative names for the VCS, for example "hg" for Mercurial.
      */
     protected open val aliases = emptyList<String>()
+
+    /**
+     * The priority in which this VCS should be probed. A higher value means a higher priority.
+     */
+    protected open val priority: Int = 0
 
     /**
      * A list of symbolic names that point to the latest revision.

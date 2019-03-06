@@ -41,6 +41,7 @@ class Mercurial : VersionControlSystem(), CommandLineTool {
     private val versionRegex = Pattern.compile("Mercurial .*\\([Vv]ersion (?<version>[\\d.]+)\\)")
 
     override val aliases = listOf("hg")
+    override val priority: Int = 20
     override val latestRevisionNames = listOf("tip")
 
     override fun command(workingDir: File?) = "hg"
