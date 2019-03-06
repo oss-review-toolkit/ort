@@ -37,6 +37,7 @@ import java.io.IOException
 
 class GitRepo : GitBase() {
     override val aliases = listOf("git-repo", "repo")
+    override val priority: Int = 50
 
     override fun getWorkingTree(vcsDirectory: File): WorkingTree {
         val repoRoot = vcsDirectory.searchUpwardsForSubdirectory(".repo")

@@ -94,6 +94,7 @@ class Subversion : VersionControlSystem(), CommandLineTool {
     private val versionRegex = Pattern.compile("svn, [Vv]ersion (?<version>[\\d.]+) \\(r\\d+\\)")
 
     override val aliases = listOf("svn")
+    override val priority: Int = 10
     override val latestRevisionNames = listOf("HEAD")
 
     override fun command(workingDir: File?) = "svn"
