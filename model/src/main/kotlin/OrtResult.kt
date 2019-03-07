@@ -238,9 +238,9 @@ data class OrtResult(
     }
 
     /**
-     * Returns the path of the folder that contains the definition file of the [project], relative to the analyzer root.
-     * If the project was checked out from a VCS the analyzer root is the root of the working tree, if the project was
-     * not checked out from a VCS the analyzer root is the input directory of the analyzer.
+     * Returns the path of the definition file of the [project], relative to the analyzer root. If the project was
+     * checked out from a VCS the analyzer root is the root of the working tree, if the project was not checked out from
+     * a VCS the analyzer root is the input directory of the analyzer.
      */
     fun getDefinitionFilePathRelativeToAnalyzerRoot(project: Project): String {
         val vcsPath = repository.getRelativePath(project.vcsProcessed)
