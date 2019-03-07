@@ -72,6 +72,14 @@ ul {
   filter: opacity(50%);
 }
 
+.ort-reason {
+    border-radius: 3px;
+    background: #EEE;
+    padding: 2px;
+    font-size: 12px;
+    display: inline;
+}
+
 table.ort-excluded tr.ort-excluded {
   filter: opacity(100%);
 }
@@ -156,14 +164,6 @@ table.ort-excluded tr.ort-excluded td li.ort-excluded {
   overflow: hidden;
   text-overflow: ellipsis;
   word-wrap: break-word;
-}
-
-.ort-report-table td li div.ort-reason {
-    border-radius: 3px;
-    background: #EEE;
-    padding: 2px;
-    font-size: 12px;
-    display: inline;
 }
 
 .ort-report-table td:last-child {
@@ -274,7 +274,8 @@ table.ort-excluded tr.ort-excluded td li.ort-excluded {
           <a href="#Gradle:com.here.ort.gradle.example:lib:1.0.0">Gradle:com.here.ort.gradle.example:lib:1.0.0</a>
         </li>
         <li>
-          <a href="#Gradle:com.here:nested-test-project:1.0.0">Gradle:com.here:nested-test-project:1.0.0</a>
+          <a href="#Gradle:com.here:nested-test-project:1.0.0">Gradle:com.here:nested-test-project:1.0.0 <div class="ort-reason">Excluded: EXAMPLE_OF - The project is an example.</div>
+          </a>
         </li>
       </ul>
       <h2 id="rule-violation-summary">Rule Violation Summary (1 errors, 1 warnings, 1 hints to resolve)</h2>
@@ -433,8 +434,13 @@ table.ort-excluded tr.ort-excluded td li.ort-excluded {
         </tbody>
       </table>
       <h2 id="Gradle:com.here:nested-test-project:1.0.0">Gradle:com.here:nested-test-project:1.0.0 (sub/module/project/build.gradle)</h2>
-      <h3 class="">VCS Information</h3>
-      <table class="ort-report-metadata ">
+      <h3>Project is Excluded</h3>
+      <p>The project is excluded for the following reason(s):</p>
+      <p>
+        <div class="ort-reason">EXAMPLE_OF - The project is an example.</div>
+      </p>
+      <h3 class="ort-excluded">VCS Information</h3>
+      <table class="ort-report-metadata ort-excluded">
         <tbody>
           <tr>
             <td>Type</td><td>git</td>
@@ -450,8 +456,8 @@ table.ort-excluded tr.ort-excluded td li.ort-excluded {
           </tr>
         </tbody>
       </table>
-      <h3 class="">Packages</h3>
-      <table class="ort-report-table ort-packages ">
+      <h3 class="ort-excluded">Packages</h3>
+      <table class="ort-report-table ort-packages ort-excluded">
         <thead>
           <tr>
             <th>#</th><th>Package</th><th>Scopes</th><th>Licenses</th><th>Analyzer Issues</th><th>Scanner Issues</th>

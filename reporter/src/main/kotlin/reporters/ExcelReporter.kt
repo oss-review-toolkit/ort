@@ -288,11 +288,11 @@ class ExcelReporter : Reporter() {
 
         val sheet = workbook.createSheet(sheetName)
 
-        val headerRows = createHeader(sheet, name, table.exclude, file, vcsInfo, extraColumns)
+        val headerRows = createHeader(sheet, name, table.projectExclude, file, vcsInfo, extraColumns)
         var currentRow = headerRows
 
         table.rows.forEach { row ->
-            val isExcluded = table.exclude != null
+            val isExcluded = table.isExcluded()
                     || (row.scopes.values.let { it.isNotEmpty() && it.all { it.isNotEmpty() } })
 
             val font = if (isExcluded) excludedFont else defaultFont
