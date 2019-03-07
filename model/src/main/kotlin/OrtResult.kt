@@ -21,6 +21,7 @@ package com.here.ort.model
 
 import com.fasterxml.jackson.annotation.JsonInclude
 
+import com.here.ort.model.config.PathExclude
 import com.here.ort.model.config.RepositoryConfiguration
 import com.here.ort.spdx.SpdxExpression
 import com.here.ort.utils.zipWithDefault
@@ -156,6 +157,47 @@ data class OrtResult(
         val scannerErrors = scanner?.results?.collectErrors() ?: emptyMap()
         return analyzerErrors.zipWithDefault(scannerErrors, emptySet()) { left, right -> left + right }
     }
+
+    /**
+     * Return a map of license findings for each project or package [Identifier]. The license findings for projects are
+     * mapped to a list of [PathExclude]s matching the locations where a license was found. This list is only populated
+     * if all file locations are excluded. The list is empty for all dependency packages, as path excludes are only
+     * applied to the projects.
+     *
+     * If [omitExcluded] is set to true, excluded projects / packages are omitted from the result.
+     */
+    fun collectLicenseFindings(omitExcluded: Boolean = false) =
+            sortedMapOf<Identifier, MutableMap<LicenseFinding, List<PathExclude>>>().also { findings ->
+                val excludes = repository.config.excludes
+
+                scanner?.results?.scanResults?.forEach { result ->
+                    val project = analyzer?.result?.projects?.find { it.id == result.id }
+
+                    if (!omitExcluded || excludes?.isPackageExcluded(result.id, this) != true) {
+                        result.results.flatMap { it.summary.licenseFindings }.forEach { finding ->
+                            val matchingExcludes = mutableSetOf<PathExclude>()
+                            val isExcluded = finding.locations.all { location ->
+                                excludes != null && excludes.paths.any { exclude ->
+                                    exclude.matches(location.path).also { matches ->
+                                        if (matches) matchingExcludes += exclude
+                                    }
+                                }
+                            }
+
+                            // TODO: Also filter copyrights excluded by path excludes.
+
+                            // Add the matching excludes only for projects and if all file locations where the license
+                            // was found are excluded.
+                            findings.getOrPut(result.id) { mutableMapOf() }[finding] =
+                                    if (project != null && isExcluded) {
+                                        matchingExcludes.toList()
+                                    } else {
+                                        emptyList()
+                                    }
+                        }
+                    }
+                }
+            }
 
     /**
      * Return the set of all project or package identifiers in the result, optionally [including those of sub-projects]
