@@ -98,6 +98,8 @@ class ReportTableModelMapper(private val resolutionProvider: ResolutionProvider)
                 exclude.takeIf { it.isWholeProjectExcluded }
             }
 
+            val pathExcludes = ortResult.repository.config.excludes?.findPathExcludes(project, ortResult).orEmpty()
+
             val allIds = sortedSetOf(project.id)
             project.collectDependencies().mapTo(allIds) { it.id }
 
@@ -170,7 +172,12 @@ class ReportTableModelMapper(private val resolutionProvider: ResolutionProvider)
                 }
             }
 
-            ProjectTable(tableRows, ortResult.getDefinitionFilePathRelativeToAnalyzerRoot(project), projectExclude)
+            ProjectTable(
+                    tableRows,
+                    ortResult.getDefinitionFilePathRelativeToAnalyzerRoot(project),
+                    projectExclude,
+                    pathExcludes
+            )
         }.toSortedMap()
 
         val issueSummaryTable = IssueTable(issueSummaryRows.values.toList().sortedBy { it.id })
