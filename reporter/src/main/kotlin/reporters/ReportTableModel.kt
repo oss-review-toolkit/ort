@@ -25,6 +25,7 @@ import com.here.ort.model.Project
 import com.here.ort.model.ScanResult
 import com.here.ort.model.Severity
 import com.here.ort.model.VcsInfo
+import com.here.ort.model.config.PathExclude
 import com.here.ort.model.config.ProjectExclude
 import com.here.ort.model.config.ScopeExclude
 import com.here.ort.spdx.SpdxExpression
@@ -87,10 +88,17 @@ data class ReportTableModel(
             val fullDefinitionFilePath: String,
 
             /**
-             * Information about if and why the project is excluded.
+             * Information about if and why the project is excluded by a [ProjectExclude].
              */
-            val exclude: ProjectExclude? = null
-    )
+            val projectExclude: ProjectExclude?,
+
+            /**
+             * Information about if and why the project is excluded by [PathExclude]s.
+             */
+            val pathExcludes: List<PathExclude>
+    ) {
+        fun isExcluded() = projectExclude != null || pathExcludes.isNotEmpty()
+    }
 
     data class DependencyRow(
             /**

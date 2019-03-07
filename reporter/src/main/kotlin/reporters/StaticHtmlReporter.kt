@@ -108,6 +108,14 @@ class StaticHtmlReporter : Reporter() {
           filter: opacity(50%);
         }
 
+        .ort-reason {
+            border-radius: 3px;
+            background: #EEE;
+            padding: 2px;
+            font-size: 12px;
+            display: inline;
+        }
+
         table.ort-excluded tr.ort-excluded {
           filter: opacity(100%);
         }
@@ -192,14 +200,6 @@ class StaticHtmlReporter : Reporter() {
           overflow: hidden;
           text-overflow: ellipsis;
           word-wrap: break-word;
-        }
-
-        .ort-report-table td li div.ort-reason {
-            border-radius: 3px;
-            background: #EEE;
-            padding: 2px;
-            font-size: 12px;
-            display: inline;
         }
 
         .ort-report-table td:last-child {
@@ -407,9 +407,15 @@ class StaticHtmlReporter : Reporter() {
                     a("#${project.id.toCoordinates()}") {
                         +project.id.toCoordinates()
 
-                        projectTable.exclude?.let { exclude ->
-                            +" "
-                            div("ort-reason") { +"Excluded: ${exclude.reason} - ${exclude.comment}" }
+                        if (projectTable.isExcluded()) {
+                            projectTable.projectExclude?.let { exclude ->
+                                +" "
+                                div("ort-reason") { +"Excluded: ${exclude.reason} - ${exclude.comment}" }
+                            }
+                            projectTable.pathExcludes.forEach { exclude ->
+                                +" "
+                                div("ort-reason") { +"Excluded: ${exclude.reason} - ${exclude.comment}" }
+                            }
                         }
                     }
                 }
@@ -570,19 +576,27 @@ class StaticHtmlReporter : Reporter() {
     }
 
     private fun DIV.projectTable(project: Project, table: ProjectTable) {
-        val excludedClass = if (table.exclude != null) "ort-excluded" else ""
+        val excludedClass = if (table.isExcluded()) "ort-excluded" else ""
 
         h2 {
             id = project.id.toCoordinates()
             +"${project.id.toCoordinates()} (${table.fullDefinitionFilePath})"
         }
 
-        table.exclude?.let { exclude ->
+        if (table.isExcluded()) {
             h3 { +"Project is Excluded" }
+            p { +"The project is excluded for the following reason(s):" }
+        }
+
+        table.projectExclude?.let { exclude ->
             p {
-                +"The project is excluded for the following reason:"
-                br
-                div("reason") { +"${exclude.reason} - ${exclude.comment}" }
+                div("ort-reason") { +"${exclude.reason} - ${exclude.comment}" }
+            }
+        }
+
+        table.pathExcludes.forEach { exclude ->
+            p {
+                div("ort-reason") { +"${exclude.reason} - ${exclude.comment}" }
             }
         }
 
