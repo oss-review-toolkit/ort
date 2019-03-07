@@ -704,7 +704,21 @@ class StaticHtmlReporter : Reporter() {
 
                 if (row.detectedLicenses.isNotEmpty()) {
                     em { +"Detected Licenses:" }
-                    dl { dd { +row.detectedLicenses.joinToString { if (it.contains(",")) "\"$it\"" else it } } }
+                    dl {
+                        dd {
+                            row.detectedLicenses.forEach { finding, excludes ->
+                                if (excludes.isEmpty()) {
+                                    div { +finding.license }
+                                } else {
+                                    div("ort-excluded") {
+                                        +"${finding.license} (Excluded: "
+                                        +excludes.joinToString { "${it.reason} - ${it.comment}" }
+                                        +")"
+                                    }
+                                }
+                            }
+                        }
+                    }
                 }
             }
 

@@ -23,7 +23,6 @@ import com.here.ort.model.Identifier
 import com.here.ort.model.OrtIssue
 import com.here.ort.model.OrtResult
 import com.here.ort.model.config.ScopeExclude
-import com.here.ort.model.getAllDetectedLicenses
 import com.here.ort.reporter.ResolutionProvider
 import com.here.ort.reporter.reporters.ReportTableModel.DependencyRow
 import com.here.ort.reporter.reporters.ReportTableModel.IssueRow
@@ -102,6 +101,7 @@ class ReportTableModelMapper(private val resolutionProvider: ResolutionProvider)
 
             val allIds = sortedSetOf(project.id)
             project.collectDependencies().mapTo(allIds) { it.id }
+            val licenseFindings = ortResult.collectLicenseFindings()
 
             val tableRows = allIds.map { id ->
                 val scanResult = scanRecord.scanResults.find { it.id == id }
@@ -114,7 +114,7 @@ class ReportTableModelMapper(private val resolutionProvider: ResolutionProvider)
 
                 val concludedLicense = ortResult.getConcludedLicensesForId(id)
                 val declaredLicenses = ortResult.getDeclaredLicensesForId(id)
-                val detectedLicenses = scanResult.getAllDetectedLicenses()
+                val detectedLicenses = licenseFindings[id]?.toSortedMap(compareBy { it.license }) ?: sortedMapOf()
 
                 val analyzerIssues = project.collectErrors(id).toMutableList()
                 analyzerResult.errors[id]?.let {
@@ -145,7 +145,7 @@ class ReportTableModelMapper(private val resolutionProvider: ResolutionProvider)
                             scopes = sortedMapOf(project.id to row.scopes),
                             concludedLicenses = row.concludedLicense?.let { setOf(it) } ?: emptySet(),
                             declaredLicenses = row.declaredLicenses,
-                            detectedLicenses = row.detectedLicenses,
+                            detectedLicenses = row.detectedLicenses.map { it.key.license }.toSortedSet(),
                             analyzerIssues = if (nonExcludedAnalyzerIssues.isNotEmpty())
                                 sortedMapOf(project.id to nonExcludedAnalyzerIssues) else sortedMapOf(),
                             scanIssues = if (nonExcludedScanIssues.isNotEmpty())
