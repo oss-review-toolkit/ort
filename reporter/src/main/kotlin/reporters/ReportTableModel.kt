@@ -20,6 +20,7 @@
 package com.here.ort.reporter.reporters
 
 import com.here.ort.model.Identifier
+import com.here.ort.model.LicenseFinding
 import com.here.ort.model.OrtResult
 import com.here.ort.model.Project
 import com.here.ort.model.ScanResult
@@ -124,7 +125,7 @@ data class ReportTableModel(
             /**
              * The detected licenses aggregated from all [ScanResult]s for this package.
              */
-            val detectedLicenses: SortedSet<String>,
+            val detectedLicenses: SortedMap<LicenseFinding, List<PathExclude>>,
 
             /**
              * All analyzer issues related to this package.

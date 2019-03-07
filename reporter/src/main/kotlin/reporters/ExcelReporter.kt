@@ -321,7 +321,7 @@ class ExcelReporter : Reporter() {
                 createCell(this, 0, row.id.toCoordinates(), font, cellStyle)
                 createCell(this, 1, scopesText, cellStyle)
                 createCell(this, 2, row.declaredLicenses.joinToString(" \n"), font, cellStyle)
-                createCell(this, 3, row.detectedLicenses.joinToString(" \n"), font, cellStyle)
+                createCell(this, 3, row.detectedLicenses.map { it.key.license }.joinToString(" \n"), font, cellStyle)
                 createCell(this, 4, row.analyzerIssues.joinToString(" \n") { it.description }, font, cellStyle)
                 createCell(this, 5, row.scanIssues.joinToString(" \n") { it.description }, font, cellStyle)
 
