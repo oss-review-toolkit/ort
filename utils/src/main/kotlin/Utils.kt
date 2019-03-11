@@ -151,7 +151,8 @@ fun getCommonFilePrefix(files: Collection<File>) =
         }.reduce { prefix, path ->
             prefix.commonPrefixWith(path)
         }.let {
-            File(it)
+            val commonPrefix = File(it)
+            if (commonPrefix.isDirectory) commonPrefix else commonPrefix.parentFile
         }
 
 /**
