@@ -143,9 +143,9 @@ fun filterVersionNames(version: String, names: List<String>, project: String? = 
 }
 
 /**
- * Return the longest prefix that is common to all [files].
+ * Return the longest parent directory that is common to all [files].
  */
-fun getCommonFilePrefix(files: Collection<File>) =
+fun getCommonFileParent(files: Collection<File>) =
         files.map {
             it.normalize().absolutePath
         }.reduce { prefix, path ->
