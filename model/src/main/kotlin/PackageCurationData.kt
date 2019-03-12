@@ -73,7 +73,7 @@ data class PackageCurationData(
          * VCS-related information.
          */
         @JsonInclude(JsonInclude.Include.NON_NULL)
-        val vcs: VcsInfo? = null,
+        val vcs: VcsInfoCuration? = null,
 
         /**
          * A plain-text comment about this curation. Should contain information about how and why the curation was
@@ -98,12 +98,13 @@ data class PackageCurationData(
      */
     fun apply(base: CuratedPackage): CuratedPackage {
         val curatedVcs = if (vcs != null) {
+            // Curation data for VCS information is handled specially so we can curate only individual properties.
             VcsInfo(
-                    type = vcs.type.takeUnless { it.isBlank() } ?: base.pkg.vcs.type,
-                    url = vcs.url.takeUnless { it.isBlank() } ?: base.pkg.vcs.url,
-                    revision = vcs.revision.takeUnless { it.isBlank() } ?: base.pkg.vcs.revision,
+                    type = vcs.type ?: base.pkg.vcs.type,
+                    url = vcs.url ?: base.pkg.vcs.url,
+                    revision = vcs.revision ?: base.pkg.vcs.revision,
                     resolvedRevision = vcs.resolvedRevision ?: base.pkg.vcs.resolvedRevision,
-                    path = vcs.path.takeUnless { it.isBlank() } ?: base.pkg.vcs.path
+                    path = vcs.path ?: base.pkg.vcs.path
             )
         } else {
             base.pkg.vcs
