@@ -273,9 +273,9 @@ open class NPM(name: String, analyzerConfig: AnalyzerConfiguration, repoConfig: 
                 }
             }
 
-            val vcsDownloadUrl = VersionControlSystem.splitUrl(expandShortcutURL(downloadUrl))
-            if (vcsDownloadUrl.url != downloadUrl) {
-                vcsFromPackage = vcsFromPackage.merge(vcsDownloadUrl)
+            val vcsFromDownloadUrl = VersionControlSystem.splitUrl(expandShortcutURL(downloadUrl))
+            if (vcsFromDownloadUrl.url != downloadUrl) {
+                vcsFromPackage = vcsFromPackage.merge(vcsFromDownloadUrl)
             }
 
             val module = Package(
