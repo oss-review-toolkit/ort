@@ -144,6 +144,45 @@ class PackageCurationTest : WordSpec({
             curatedPkg.curations.first().curation shouldBe curation.data
         }
 
+        "be able to empty VCS information" {
+            val pkg = Package(
+                    id = Identifier(
+                            type = "Maven",
+                            namespace = "org.hamcrest",
+                            name = "hamcrest-core",
+                            version = "1.3"
+                    ),
+                    declaredLicenses = sortedSetOf("license a", "license b"),
+                    description = "description",
+                    homepageUrl = "homepageUrl",
+                    binaryArtifact = RemoteArtifact.EMPTY,
+                    sourceArtifact = RemoteArtifact.EMPTY,
+                    vcs = VcsInfo(
+                            type = "git",
+                            url = "http://url.git",
+                            revision = "revision",
+                            path = "path"
+                    )
+            )
+
+            val curation = PackageCuration(
+                    id = pkg.id,
+                    data = PackageCurationData(
+                            vcs = VcsInfoCuration(
+                                    type = "",
+                                    url = "",
+                                    revision = "",
+                                    path = ""
+                            )
+                    )
+            )
+
+            val curatedPkg = curation.apply(pkg.toCuratedPackage())
+
+            curatedPkg.curations.size shouldBe 1
+            curatedPkg.pkg.vcs shouldBe VcsInfo.EMPTY
+        }
+
         "fail if identifiers do not match" {
             val pkg = Package(
                     id = Identifier(
