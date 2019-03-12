@@ -209,10 +209,12 @@ scanner:
           errors:
           - timestamp: "1970-01-01T00:00:00Z"
             source: "FileCounter"
-            message: "DownloadException: No source artifact URL provided for 'Gradle:com.here.ort.gradle.example:lib:1.0.0'.\n\
-              Caused by: DownloadException: No VCS URL provided for 'Gradle:com.here.ort.gradle.example:lib:1.0.0'.\
+            message: "DownloadException: Download failed for 'Gradle:com.here.ort.gradle.example:lib:1.0.0'.\n\
+              Suppressed: DownloadException: No VCS URL provided for 'Gradle:com.here.ort.gradle.example:lib:1.0.0'.\
               \ Please make sure the release POM file includes the SCM connection,\
-              \ see: https://docs.gradle.org/current/userguide/publishing_maven.html#example_customizing_the_pom_file"
+              \ see: https://docs.gradle.org/current/userguide/publishing_maven.html#example_customizing_the_pom_file,\
+              \ \nSuppressed: DownloadException: No source artifact URL provided for\
+              \ 'Gradle:com.here.ort.gradle.example:lib:1.0.0'."
             severity: "ERROR"
     - id: "Maven:junit:junit:4.12"
       results:
