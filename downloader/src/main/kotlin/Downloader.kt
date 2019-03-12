@@ -145,6 +145,8 @@ class Downloader {
         try {
             return downloadFromVcs(target, targetDir, allowMovingRevisions)
         } catch (e: DownloadException) {
+            log.debug { "VCS download failed for '${target.id.toCoordinates()}': ${e.message}" }
+
             val message = if (target.vcsProcessed.url.isBlank()) {
                 val hint = when (target.id.type) {
                     "Bundler" -> " Please define the \"source_code_uri\" in the \"metadata\" of the Gemspec, " +
@@ -168,12 +170,11 @@ class Downloader {
                 e.message
             }
 
-            log.debug { "VCS download failed for '${target.id.toCoordinates()}': ${message}" }
-            previousException = DownloadException(message, previousException)
-
             // Clean up any left-over files.
             targetDir.safeDeleteRecursively()
             targetDir.safeMkdirs()
+
+            previousException = DownloadException(message, previousException)
         }
 
         // Try downloading the source artifact.
