@@ -334,7 +334,9 @@ class Downloader {
             }
         }
 
-        if (!Hash(target.sourceArtifact.hashAlgorithm, target.sourceArtifact.hash).verify(sourceArchive)) {
+        if (target.sourceArtifact.hash.isEmpty()) {
+            log.warn { "Source artifact has no hash, skipping verification." }
+        } else if (!Hash(target.sourceArtifact.hashAlgorithm, target.sourceArtifact.hash).verify(sourceArchive)) {
             throw DownloadException("Source artifact does not match expected ${target.sourceArtifact.hashAlgorithm} " +
                     "hash '${target.sourceArtifact.hash}'.")
         }
