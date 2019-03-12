@@ -106,8 +106,8 @@ class DownloaderTest : StringSpec() {
                 Downloader().download(pkg, outputDir)
             }
 
-            exception.cause shouldNotBe null
-            exception.cause!!.message shouldBe "Source artifact does not match expected SHA-1 hash " +
+            exception.suppressed.size shouldBe 3
+            exception.suppressed.get(1)!!.message shouldBe "Source artifact does not match expected SHA-1 hash " +
                     "'0123456789abcdef0123456789abcdef01234567'."
         }
 

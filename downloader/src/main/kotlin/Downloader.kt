@@ -139,7 +139,7 @@ class Downloader {
             "The output directory '$targetDir' must not contain any files yet."
         }
 
-        var previousException: DownloadException? = null
+        val exception = DownloadException("Download failed for '${target.id.toCoordinates()}'.")
 
         // Try downloading from VCS.
         try {
@@ -174,7 +174,7 @@ class Downloader {
             targetDir.safeDeleteRecursively()
             targetDir.safeMkdirs()
 
-            previousException = DownloadException(message, previousException)
+            exception.addSuppressed(DownloadException(message, e))
         }
 
         // Try downloading the source artifact.
@@ -187,8 +187,7 @@ class Downloader {
             targetDir.safeDeleteRecursively()
             targetDir.safeMkdirs()
 
-            e.initCause(previousException)
-            previousException = e
+            exception.addSuppressed(e)
         }
 
         // Try downloading the Maven POM.
@@ -202,13 +201,11 @@ class Downloader {
                 targetDir.safeDeleteRecursively()
                 targetDir.safeMkdirs()
 
-                e.initCause(previousException)
-                previousException = e
+                exception.addSuppressed(e)
             }
         }
 
-        // By now we know there must have been a previous exception, otherwise we would have returned earlier.
-        throw previousException!!
+        throw exception
     }
 
     private fun downloadFromVcs(target: Package, outputDirectory: File, allowMovingRevisions: Boolean): DownloadResult {
