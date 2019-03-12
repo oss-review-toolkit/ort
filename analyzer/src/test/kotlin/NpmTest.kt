@@ -36,6 +36,8 @@ class NpmTest : WordSpec({
                             to "https://github.com/npm/npm.git",
                     "mochajs/mocha#4727d357ea"
                             to "https://github.com/mochajs/mocha.git#4727d357ea",
+                    "github:snyk/node-tap#540c9e00f52809cb7fbfd80463578bf9d08aad50"
+                            to "https://github.com/snyk/node-tap.git#540c9e00f52809cb7fbfd80463578bf9d08aad50",
                     "gist:11081aaa281"
                             to "https://gist.github.com/11081aaa281",
                     "bitbucket:example/repo"
