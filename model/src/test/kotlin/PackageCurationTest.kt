@@ -23,11 +23,11 @@ import com.here.ort.spdx.SpdxExpression
 
 import io.kotlintest.shouldBe
 import io.kotlintest.shouldThrow
-import io.kotlintest.specs.StringSpec
+import io.kotlintest.specs.WordSpec
 
-class PackageCurationTest : StringSpec() {
-    init {
-        "apply overwrites the correct values" {
+class PackageCurationTest : WordSpec({
+    "Applying a single curation" should {
+        "overwrite the correct values" {
             val pkg = Package(
                     id = Identifier(
                             type = "Maven",
@@ -88,7 +88,7 @@ class PackageCurationTest : StringSpec() {
             curatedPkg.curations.first().curation shouldBe curation.data
         }
 
-        "apply changes only curated fields" {
+        "change only curated fields" {
             val pkg = Package(
                     id = Identifier(
                             type = "Maven",
@@ -144,7 +144,7 @@ class PackageCurationTest : StringSpec() {
             curatedPkg.curations.first().curation shouldBe curation.data
         }
 
-        "applying curation fails when identifiers do not match" {
+        "fail if identifiers do not match" {
             val pkg = Package(
                     id = Identifier(
                             type = "Maven",
@@ -181,8 +181,10 @@ class PackageCurationTest : StringSpec() {
                 curation.apply(pkg.toCuratedPackage())
             }
         }
+    }
 
-        "applying multiple curations in a row adds curation results to the curated package" {
+    "Applying multiple curations" should {
+        "accumulate curation results to the curated package" {
             val id = Identifier("type", "namespace", "name", "version")
             val pkg = Package.EMPTY.copy(id = id)
             val curation1 = PackageCuration(id, PackageCurationData(description = "description 1"))
@@ -215,4 +217,4 @@ class PackageCurationTest : StringSpec() {
             result3.curations[2].curation shouldBe curation3.data
         }
     }
-}
+})
