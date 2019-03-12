@@ -380,23 +380,24 @@ class StaticHtmlReporter : Reporter() {
 
         ul {
             reportTableModel.evaluatorIssues?.let { ruleViolations ->
-                val issues = ruleViolations.groupBy { it.severity }
+                val issues = ruleViolations.filterNot { it.isResolved }.groupBy { it.severity }
                 val errorCount = issues[Severity.ERROR].orEmpty().count()
                 val warningCount = issues[Severity.WARNING].orEmpty().count()
                 val hintCount = issues[Severity.HINT].orEmpty().count()
 
                 li {
                     a("#rule-violation-summary") {
-                        +"Rule Violation Summary ($errorCount errors, $warningCount warnings, $hintCount hints)"
+                        +("Rule Violation Summary ($errorCount errors, $warningCount warnings, $hintCount hints to " +
+                                "resolve)")
                     }
                 }
             }
 
-            if (reportTableModel.issueSummary.allIssues.isNotEmpty()) {
+            if (reportTableModel.issueSummary.rows.isNotEmpty()) {
                 li {
                     a("#issue-summary") {
                         with(reportTableModel.issueSummary) {
-                            +"Issue Summary ($errorCount errors, $warningCount warnings, $hintCount hints)"
+                            +"Issue Summary ($errorCount errors, $warningCount warnings, $hintCount hints to resolve)"
                         }
                     }
                 }
@@ -418,14 +419,14 @@ class StaticHtmlReporter : Reporter() {
     }
 
     private fun DIV.evaluatorTable(ruleViolations: List<ResolvableIssue>) {
-        val issues = ruleViolations.groupBy { it.severity }
+        val issues = ruleViolations.filterNot { it.isResolved }.groupBy { it.severity }
         val errorCount = issues[Severity.ERROR].orEmpty().count()
         val warningCount = issues[Severity.WARNING].orEmpty().count()
         val hintCount = issues[Severity.HINT].orEmpty().count()
 
         h2 {
             id = "rule-violation-summary"
-            +"Rule Violation Summary ($errorCount errors, $warningCount warnings, $hintCount hints)"
+            +"Rule Violation Summary ($errorCount errors, $warningCount warnings, $hintCount hints to resolve)"
         }
 
         if (ruleViolations.isEmpty()) {
@@ -482,7 +483,7 @@ class StaticHtmlReporter : Reporter() {
         h2 {
             id = "issue-summary"
             with(issueSummary) {
-                +"Issue Summary ($errorCount errors, $warningCount warnings, $hintCount hints)"
+                +"Issue Summary ($errorCount errors, $warningCount warnings, $hintCount hints to resolve)"
             }
         }
 
