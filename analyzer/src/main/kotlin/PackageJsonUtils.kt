@@ -83,17 +83,16 @@ internal class PackageJsonUtils {
             }
         }
 
-        private fun isYarnWorkspaceRoot(definitionFile: File): Boolean {
-            return try {
-                definitionFile.readValue<ObjectNode>()["workspaces"] != null
-            } catch(e: JsonProcessingException) {
-                e.showStackTrace()
+        private fun isYarnWorkspaceRoot(definitionFile: File) =
+                try {
+                    definitionFile.readValue<ObjectNode>()["workspaces"] != null
+                } catch (e: JsonProcessingException) {
+                    e.showStackTrace()
 
-                log.error { "Could not parse '${definitionFile.invariantSeparatorsPath}': ${e.message}" }
+                    log.error { "Could not parse '${definitionFile.invariantSeparatorsPath}': ${e.message}" }
 
-                false
-            }
-        }
+                    false
+                }
 
         private fun getYarnWorkspaceSubmodules(definitionFiles: Set<File>): Set<File> {
             val result = mutableSetOf<File>()
