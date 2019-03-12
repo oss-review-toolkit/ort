@@ -125,6 +125,11 @@ data class VcsInfo(
      * [normalizeVcsUrl] to the [url].
      */
     fun normalize() = copy(type = type.toLowerCase(), url = normalizeVcsUrl(url))
+
+    /**
+     * Return a [VcsInfoCuration] with the properties from this [VcsInfo].
+     */
+    fun toCuration() = VcsInfoCuration(type, url, revision, resolvedRevision, path)
 }
 
 class VcsInfoDeserializer : StdDeserializer<VcsInfo>(VcsInfo::class.java) {

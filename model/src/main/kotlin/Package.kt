@@ -144,7 +144,7 @@ data class Package(
                 homepageUrl = homepageUrl.takeIf { it != other.homepageUrl },
                 binaryArtifact = binaryArtifact.takeIf { it != other.binaryArtifact },
                 sourceArtifact = sourceArtifact.takeIf { it != other.sourceArtifact },
-                vcs = vcs.takeIf { it != other.vcs }
+                vcs = vcs.takeIf { it != other.vcs }?.toCuration()
         )
     }
 
