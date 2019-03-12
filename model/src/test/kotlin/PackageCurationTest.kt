@@ -42,6 +42,7 @@ class PackageCurationTest : StringSpec() {
                     sourceArtifact = RemoteArtifact.EMPTY,
                     vcs = VcsInfo.EMPTY
             )
+
             val curation = PackageCuration(
                     id = pkg.id,
                     data = PackageCurationData(
@@ -59,7 +60,7 @@ class PackageCurationTest : StringSpec() {
                                     hash = "source.hash",
                                     hashAlgorithm = HashAlgorithm.UNKNOWN
                             ),
-                            vcs = VcsInfo(
+                            vcs = VcsInfoCuration(
                                     type = "git",
                                     url = "http://url.git",
                                     revision = "revision",
@@ -79,7 +80,7 @@ class PackageCurationTest : StringSpec() {
                 homepageUrl shouldBe curation.data.homepageUrl
                 binaryArtifact shouldBe curation.data.binaryArtifact
                 sourceArtifact shouldBe curation.data.sourceArtifact
-                vcs shouldBe curation.data.vcs
+                vcs.toCuration() shouldBe curation.data.vcs
             }
 
             curatedPkg.curations.size shouldBe 1
@@ -108,14 +109,13 @@ class PackageCurationTest : StringSpec() {
                             path = "path"
                     )
             )
+
             val curation = PackageCuration(
                     id = pkg.id,
                     data = PackageCurationData(
                             homepageUrl = "http://home.page",
-                            vcs = VcsInfo(
-                                    type = "",
-                                    url = "http://url.git",
-                                    revision = ""
+                            vcs = VcsInfoCuration(
+                                    url = "http://url.git"
                             )
                     )
             )
@@ -132,7 +132,7 @@ class PackageCurationTest : StringSpec() {
                 sourceArtifact shouldBe pkg.sourceArtifact
                 vcs shouldBe VcsInfo(
                         type = pkg.vcs.type,
-                        url = curation.data.vcs!!.url,
+                        url = curation.data.vcs!!.url!!,
                         revision = pkg.vcs.revision,
                         resolvedRevision = pkg.vcs.resolvedRevision,
                         path = pkg.vcs.path
@@ -159,6 +159,7 @@ class PackageCurationTest : StringSpec() {
                     sourceArtifact = RemoteArtifact.EMPTY,
                     vcs = VcsInfo.EMPTY
             )
+
             val curation = PackageCuration(
                     id = Identifier(
                             type = "",
@@ -168,7 +169,7 @@ class PackageCurationTest : StringSpec() {
                     ),
                     data = PackageCurationData(
                             homepageUrl = "http://home.page",
-                            vcs = VcsInfo(
+                            vcs = VcsInfoCuration(
                                     type = "",
                                     url = "http://url.git",
                                     revision = ""

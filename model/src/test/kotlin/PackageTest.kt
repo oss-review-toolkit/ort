@@ -72,7 +72,7 @@ class PackageTest : StringSpec() {
             diff.declaredLicenses shouldBe pkg.declaredLicenses
             diff.homepageUrl shouldBe pkg.homepageUrl
             diff.sourceArtifact shouldBe pkg.sourceArtifact
-            diff.vcs shouldBe pkg.vcs
+            diff.vcs shouldBe pkg.vcs.toCuration()
         }
 
         "diff result does not contain unchanged values" {
