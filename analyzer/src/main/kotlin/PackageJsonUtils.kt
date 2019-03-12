@@ -19,10 +19,15 @@
 
 package com.here.ort.analyzer
 
+import ch.frankel.slf4k.*
+
+import com.fasterxml.jackson.core.JsonProcessingException
 import com.fasterxml.jackson.databind.node.ArrayNode
 import com.fasterxml.jackson.databind.node.ObjectNode
 
 import com.here.ort.model.readValue
+import com.here.ort.utils.log
+import com.here.ort.utils.showStackTrace
 
 import java.io.File
 import java.nio.file.FileSystems
@@ -79,7 +84,15 @@ internal class PackageJsonUtils {
         }
 
         private fun isYarnWorkspaceRoot(definitionFile: File): Boolean {
-            return definitionFile.readValue<ObjectNode>()["workspaces"] != null
+            return try {
+                definitionFile.readValue<ObjectNode>()["workspaces"] != null
+            } catch(e: JsonProcessingException) {
+                e.showStackTrace()
+
+                log.error { "Could not parse ${definitionFile.invariantSeparatorsPath}: ${e.message}" }
+
+                false
+            }
         }
 
         private fun getYarnWorkspaceSubmodules(definitionFiles: Set<File>): Set<File> {
@@ -107,7 +120,16 @@ internal class PackageJsonUtils {
         }
 
         private fun getWorkspaceMatchers(definitionFile: File): List<PathMatcher> {
-            var workspaces = definitionFile.readValue<ObjectNode>()["workspaces"]
+            var workspaces = try {
+                definitionFile.readValue<ObjectNode>()["workspaces"]
+            } catch (e: JsonProcessingException) {
+                e.showStackTrace()
+
+                log.error { "Could not parse ${definitionFile.invariantSeparatorsPath}: ${e.message}" }
+
+                return emptyList()
+            }
+
             if (workspaces != null && workspaces !is ArrayNode) {
                 workspaces = workspaces["packages"]
             }
