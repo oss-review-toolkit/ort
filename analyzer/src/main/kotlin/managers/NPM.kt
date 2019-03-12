@@ -98,7 +98,7 @@ open class NPM(name: String, analyzerConfig: AnalyzerConfiguration, repoConfig: 
 
                 // See https://docs.npmjs.com/files/package.json#repository.
                 when (uri.scheme) {
-                    null -> "https://github.com/$path.git$revision"
+                    null, "github" -> "https://github.com/$path.git$revision"
                     "gist" -> "https://gist.github.com/$path$revision"
                     "bitbucket" -> "https://bitbucket.org/$path.git$revision"
                     "gitlab" -> "https://gitlab.com/$path.git$revision"
