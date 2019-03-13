@@ -95,7 +95,7 @@ class GitRepo : GitBase() {
     override fun download(pkg: Package, targetDir: File, allowMovingRevisions: Boolean,
                           recursive: Boolean): WorkingTree {
         val revision = pkg.vcsProcessed.revision.takeUnless { it.isBlank() } ?: "master"
-        val manifestPath = pkg.vcsProcessed.path.takeUnless { it.isBlank() } ?: "manifest.xml"
+        val manifestPath = pkg.vcsProcessed.path.takeUnless { it.isBlank() } ?: "default.xml"
 
         try {
             log.info {
