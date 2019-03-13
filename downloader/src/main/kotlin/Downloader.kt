@@ -317,20 +317,20 @@ class Downloader {
                     .url(target.sourceArtifact.url)
                     .build()
 
-            val response = try {
-                OkHttpClientHelper.execute(HTTP_CACHE_PATH, request)
+            try {
+                OkHttpClientHelper.execute(HTTP_CACHE_PATH, request).use { response ->
+                    val body = response.body()
+                    if (!response.isSuccessful || body == null) {
+                        throw DownloadException("Failed to download source artifact: $response")
+                    }
+
+                    createTempFile("ort", target.sourceArtifact.url.substringAfterLast("/")).also { tempFile ->
+                        Okio.buffer(Okio.sink(tempFile)).use { it.writeAll(body.source()) }
+                        tempFile.deleteOnExit()
+                    }
+                }
             } catch (e: IOException) {
                 throw DownloadException("Failed to download source artifact: ${e.collectMessages()}", e)
-            }
-
-            val body = response.body()
-            if (!response.isSuccessful || body == null) {
-                throw DownloadException("Failed to download source artifact: $response")
-            }
-
-            createTempFile("ort", target.sourceArtifact.url.substringAfterLast("/")).also { tempFile ->
-                Okio.buffer(Okio.sink(tempFile)).use { it.writeAll(body.source()) }
-                tempFile.deleteOnExit()
             }
         }
 
