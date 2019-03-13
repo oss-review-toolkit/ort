@@ -62,6 +62,14 @@ data class OrtResult(
         @JsonInclude(JsonInclude.Include.NON_EMPTY)
         val data: CustomData = emptyMap()
 ) {
+    companion object {
+        /**
+         * A constant for an [OrtResult] with an empty respository an all other properties `null`.
+         */
+        @JvmField
+        val EMPTY = OrtResult(Repository.EMPTY)
+    }
+
     /**
      * Return the concluded licenses for each package. If [omitExcluded] is set to true, excluded packages are omitted
      * from the result.
