@@ -31,7 +31,7 @@ In order to maintain a high software quality standard, we strongly prefer contri
   request's branch, it has several advantages:
 
   - Reviewers that go through (larger) pull requests commit by commit are always up-to-date with latest fixes, instead
-    of coming across a commit that addresses one of possibly also their remarks only at the end.
+    of coming across a commit that addresses their remarks only at the end.
   - It maintains a cleaner history without distracting commits like "Address review comments".
   - As a result, tools like [git-bisect](https://git-scm.com/docs/git-bisect) can operate in a more meaningful way.
   - Fixing up commits allows for making fixes to commit messages, which is not possible by only adding new commits.
