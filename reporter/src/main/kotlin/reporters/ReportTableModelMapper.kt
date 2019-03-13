@@ -83,6 +83,7 @@ class ReportTableModelMapper(private val resolutionProvider: ResolutionProvider)
         }
 
         val analyzerResult = ortResult.analyzer!!.result
+        val excludes = ortResult.repository.config.excludes
 
         requireNotNull(ortResult.scanner?.results) {
             "The provided ORT result does not contain any scan results."
@@ -91,13 +92,13 @@ class ReportTableModelMapper(private val resolutionProvider: ResolutionProvider)
         val scanRecord = ortResult.scanner!!.results
 
         val projectTables = analyzerResult.projects.associateWith { project ->
-            val projectExclude = ortResult.repository.config.excludes?.findProjectExclude(project)?.let { exclude ->
+            val projectExclude = excludes?.findProjectExclude(project)?.let { exclude ->
                 // Only add the project exclude to the model if the whole project is excluded. If only parts of the
                 // project are excluded this information will be stored in the rows of the affected dependencies.
                 exclude.takeIf { it.isWholeProjectExcluded }
             }
 
-            val pathExcludes = ortResult.repository.config.excludes?.findPathExcludes(project, ortResult).orEmpty()
+            val pathExcludes = excludes?.findPathExcludes(project, ortResult).orEmpty()
 
             val allIds = sortedSetOf(project.id)
             project.collectDependencies().mapTo(allIds) { it.id }
@@ -107,8 +108,7 @@ class ReportTableModelMapper(private val resolutionProvider: ResolutionProvider)
                 val scanResult = scanRecord.scanResults.find { it.id == id }
 
                 val scopes = project.scopes.filter { id in it }.let { scopes ->
-                    ortResult.repository.config.excludes
-                            ?.scopeExcludesByName(project, scopes)?.toSortedMap()
+                    excludes?.scopeExcludesByName(project, scopes)?.toSortedMap()
                             ?: scopes.associateTo(sortedMapOf()) { Pair(it.name, emptyList<ScopeExclude>()) }
                 }
 
@@ -183,7 +183,7 @@ class ReportTableModelMapper(private val resolutionProvider: ResolutionProvider)
         val issueSummaryTable = IssueTable(issueSummaryRows.values.toList().sortedBy { it.id })
 
         val projectExcludes = ortResult.analyzer?.result?.projects?.let { projects ->
-            ortResult.repository.config.excludes?.projectExcludesById(projects)
+            excludes?.projectExcludesById(projects)
         } ?: emptyMap()
 
         val summaryTable = SummaryTable(summaryRows.values.toList().sortedWith(compareBy({
