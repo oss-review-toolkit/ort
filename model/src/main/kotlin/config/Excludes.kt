@@ -62,15 +62,16 @@ data class Excludes(
     /**
      * Return the [ProjectExclude] for the provided [project], or null if there is none.
      */
-    fun findProjectExclude(project: Project) = projects.find { it.matches(project.definitionFilePath) }
+    fun findProjectExclude(project: Project, ortResult: OrtResult) =
+            projects.find { it.matches(ortResult.getDefinitionFilePathRelativeToAnalyzerRoot(project)) }
 
     /**
      * Return the [ScopeExclude]s for the provided [scope]. This includes global excludes from [scopes] as well as
      * [project] specific excludes from [projects].
      */
-    fun findScopeExcludes(scope: Scope, project: Project) =
+    fun findScopeExcludes(scope: Scope, project: Project, ortResult: OrtResult) =
             scopes.filter { it.matches(scope.name) } +
-                    (findProjectExclude(project)?.scopes?.filter { it.matches(scope.name) } ?: emptyList())
+                    (findProjectExclude(project, ortResult)?.scopes?.filter { it.matches(scope.name) } ?: emptyList())
 
     /**
      * Checks if all occurrences of an [id] are excluded. If the [id] references a package it checks if this package is
@@ -90,7 +91,7 @@ data class Excludes(
     fun isPackageExcluded(id: Identifier, ortResult: OrtResult) =
             ortResult.analyzer?.result?.projects?.all { project ->
                 isProjectExcluded(project, ortResult) || project.scopes.all { scope ->
-                    isScopeExcluded(scope, project) || !scope.contains(id)
+                    isScopeExcluded(scope, project, ortResult) || !scope.contains(id)
                 }
             } ?: false
 
@@ -103,26 +104,29 @@ data class Excludes(
      * True if the [project] is excluded by this [Excludes] configuration.
      */
     fun isProjectExcluded(project: Project, ortResult: OrtResult) =
-            projects.any { it.matches(project.definitionFilePath) && it.isWholeProjectExcluded }
-                    || paths.any { it.matches(ortResult.getDefinitionFilePathRelativeToAnalyzerRoot(project)) }
+            ortResult.getDefinitionFilePathRelativeToAnalyzerRoot(project).let { definitionFilePath ->
+                projects.any { it.matches(definitionFilePath) && it.isWholeProjectExcluded }
+                        || paths.any { it.matches(definitionFilePath) }
+            }
 
     /**
      * True if the [scope] is excluded in [project] by this [Excludes] configuration.
      */
-    fun isScopeExcluded(scope: Scope, project: Project) =
+    fun isScopeExcluded(scope: Scope, project: Project, ortResult: OrtResult) =
             scopes.any { it.matches(scope.name) }
-                    || findProjectExclude(project)?.scopes?.any { it.matches(scope.name) } ?: false
+                    || findProjectExclude(project, ortResult)?.scopes?.any { it.matches(scope.name) } ?: false
 
     /**
      * Map the project excludes by the identifiers of the provided [projects].
      */
-    fun projectExcludesById(projects: Set<Project>) = projects.associate { Pair(it.id, findProjectExclude(it)) }
+    fun projectExcludesById(projects: Set<Project>, ortResult: OrtResult) =
+            projects.associate { Pair(it.id, findProjectExclude(it, ortResult)) }
 
     /**
      * Map the scope excludes for [project] by the names of the provided [scopes].
      */
-    fun scopeExcludesByName(project: Project, scopes: Collection<Scope>) =
+    fun scopeExcludesByName(project: Project, scopes: Collection<Scope>, ortResult: OrtResult) =
             scopes.associate {
-                Pair(it.name, findScopeExcludes(it, project))
+                Pair(it.name, findScopeExcludes(it, project, ortResult))
             }
 }
