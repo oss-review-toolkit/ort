@@ -102,7 +102,10 @@ class GitRepo : GitBase() {
                 "Initializing git-repo from ${pkg.vcsProcessed.url} with revision '$revision' " +
                         "and manifest '$manifestPath'."
             }
-            runRepoCommand(targetDir, "init", "-b", revision, "-u", pkg.vcsProcessed.url, "-m", manifestPath)
+
+            // Clone all projects instead of only those in the "default" group until we support specifying groups.
+            runRepoCommand(targetDir, "init", "--groups=all", "-b", revision, "-u", pkg.vcsProcessed.url,
+                    "-m", manifestPath)
 
             if (recursive) {
                 runRepoCommand(targetDir, "sync", "-c", "--fetch-submodules")
@@ -118,21 +121,13 @@ class GitRepo : GitBase() {
         }
     }
 
-    private fun runRepoCommand(targetDir: File, vararg args: String): ProcessCapture {
-        val patchedArgs = if (args.first() == "init") {
-            // Clone all projects instead of only those in the "default" group until we support specifying groups.
-            arrayOf(args.first(), "--groups=all") + args.drop(1)
-        } else {
-            args
-        }
+    private fun runRepoCommand(targetDir: File, vararg args: String) =
+            if (OS.isWindows) {
+                val repo = getPathFromEnvironment("repo") ?: throw IOException("'repo' not found in PATH.")
 
-        return if (OS.isWindows) {
-            val repo = getPathFromEnvironment("repo") ?: throw IOException("'repo' not found in PATH.")
-
-            // On Windows, the script itself is not executable, so we need to wrap the call by "python".
-            ProcessCapture(targetDir, "python", repo.absolutePath, *patchedArgs).requireSuccess()
-        } else {
-            ProcessCapture(targetDir, "repo", *patchedArgs).requireSuccess()
-        }
-    }
+                // On Windows, the script itself is not executable, so we need to wrap the call by "python".
+                ProcessCapture(targetDir, "python", repo.absolutePath, *args).requireSuccess()
+            } else {
+                ProcessCapture(targetDir, "repo", *args).requireSuccess()
+            }
 }
