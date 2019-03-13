@@ -19,18 +19,21 @@
 
 package com.here.ort.reporter.reporters
 
+import bad.robot.excel.matchers.WorkbookMatcher.sameWorkbook
+
 import com.here.ort.model.OrtResult
 import com.here.ort.model.config.CopyrightGarbage
 import com.here.ort.model.readValue
 import com.here.ort.reporter.DefaultResolutionProvider
 import com.here.ort.utils.OS
-import com.here.ort.utils.unpackZip
 
-import io.kotlintest.assertSoftly
-import io.kotlintest.shouldBe
 import io.kotlintest.specs.WordSpec
 
 import java.io.File
+
+import org.apache.poi.ss.usermodel.WorkbookFactory
+
+import org.hamcrest.MatcherAssert.assertThat
 
 class ExcelReporterTest : WordSpec({
     val ortResult = File("../scanner/src/funTest/assets/file-counter-expected-output-for-analyzer-result.yml")
@@ -39,27 +42,14 @@ class ExcelReporterTest : WordSpec({
     "ExcelReporter" should {
         "successfully export to an Excel sheet".config(enabled = OS.isWindows) {
             val outputDir = createTempDir().apply { deleteOnExit() }
-
             val actualFile = outputDir.resolve("scan-report.xlsx")
+
             ExcelReporter().generateReport(ortResult, DefaultResolutionProvider(), CopyrightGarbage(),
                     actualFile.outputStream())
-            val actualXlsxUnpacked = createTempDir().apply { deleteOnExit() }
-            actualFile.unpackZip(actualXlsxUnpacked)
 
             val expectedFile = File("src/funTest/assets/file-counter-expected-scan-report.xlsx")
-            val expectedXlsxUnpacked = createTempDir().apply { deleteOnExit() }
-            expectedFile.unpackZip(expectedXlsxUnpacked)
 
-            val sharedStrings = "xl/sharedStrings.xml"
-            val sheet1 = "xl/worksheets/sheet1.xml"
-            val sheet2 = "xl/worksheets/sheet2.xml"
-
-            assertSoftly {
-                actualXlsxUnpacked.resolve(sharedStrings).readText() shouldBe
-                        expectedXlsxUnpacked.resolve(sharedStrings).readText()
-                actualXlsxUnpacked.resolve(sheet1).readText() shouldBe expectedXlsxUnpacked.resolve(sheet1).readText()
-                actualXlsxUnpacked.resolve(sheet2).readText() shouldBe expectedXlsxUnpacked.resolve(sheet2).readText()
-            }
+            assertThat(WorkbookFactory.create(actualFile), sameWorkbook(WorkbookFactory.create(expectedFile)))
         }
     }
 })
