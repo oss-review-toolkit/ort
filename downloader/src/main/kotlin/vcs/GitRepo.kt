@@ -107,11 +107,16 @@ class GitRepo : GitBase() {
             runRepoCommand(targetDir, "init", "--groups=all", "-b", revision, "-u", pkg.vcsProcessed.url,
                     "-m", manifestPath)
 
+            // Repo allows to checkout Git repositories to nested directories. If a manifest is badly configured, a
+            // nested Git checkout overwrites files in a directory of the upper-level Git repository. However, we still
+            // want to be able to download such projects, so specify "--force-sync" to work around that issue.
+            val syncArgs = mutableListOf("sync", "-c", "--force-sync")
+
             if (recursive) {
-                runRepoCommand(targetDir, "sync", "-c", "--fetch-submodules")
-            } else {
-                runRepoCommand(targetDir, "sync", "-c")
+                syncArgs += "--fetch-submodules"
             }
+
+            runRepoCommand(targetDir, *syncArgs.toTypedArray())
 
             log.debug { runRepoCommand(targetDir, "info").stdout }
 
