@@ -40,7 +40,7 @@ class ExcelReporterTest : WordSpec({
             .readValue<OrtResult>()
 
     "ExcelReporter" should {
-        "successfully export to an Excel sheet" {
+        "successfully export to an Excel sheet".config(enabled = false) {
             val outputStream = ByteArrayOutputStream()
             ExcelReporter().generateReport(ortResult, DefaultResolutionProvider(), CopyrightGarbage(), outputStream)
             val actualWorkbook = WorkbookFactory.create(outputStream.toByteArray().inputStream())
