@@ -19,7 +19,6 @@
 
 package com.here.ort.scanner.scanners
 
-import com.here.ort.model.AccessStatistics
 import com.here.ort.model.config.ScannerConfiguration
 import com.here.ort.model.yamlMapper
 import com.here.ort.scanner.ScanResultsStorage
@@ -47,7 +46,7 @@ class FileCounterTest : StringSpec() {
 
     override fun afterTest(testCase: TestCase, result: TestResult) {
         outputRootDir.safeDeleteRecursively(force = true)
-        ScanResultsStorage.stats = AccessStatistics()
+        ScanResultsStorage.stats.reset()
     }
 
     init {

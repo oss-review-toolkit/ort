@@ -42,7 +42,7 @@ interface ScanResultsStorage {
         }
             private set
 
-        var stats = AccessStatistics()
+        val stats = AccessStatistics()
 
         fun configure(config: ArtifactoryStorageConfiguration) {
             require(config.url.isNotBlank()) {
