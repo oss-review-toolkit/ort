@@ -28,6 +28,7 @@ import com.here.ort.reporter.DefaultResolutionProvider
 
 import io.kotlintest.specs.WordSpec
 
+import java.io.ByteArrayOutputStream
 import java.io.File
 
 import org.apache.poi.ss.usermodel.WorkbookFactory
@@ -40,15 +41,14 @@ class ExcelReporterTest : WordSpec({
 
     "ExcelReporter" should {
         "successfully export to an Excel sheet" {
-            val outputDir = createTempDir().apply { deleteOnExit() }
-            val actualFile = outputDir.resolve("scan-report.xlsx")
-
-            ExcelReporter().generateReport(ortResult, DefaultResolutionProvider(), CopyrightGarbage(),
-                    actualFile.outputStream())
+            val outputStream = ByteArrayOutputStream()
+            ExcelReporter().generateReport(ortResult, DefaultResolutionProvider(), CopyrightGarbage(), outputStream)
+            val actualWorkbook = WorkbookFactory.create(outputStream.toByteArray().inputStream())
 
             val expectedFile = File("src/funTest/assets/file-counter-expected-scan-report.xlsx")
+            val expectedWorkbook = WorkbookFactory.create(expectedFile)
 
-            assertThat(WorkbookFactory.create(actualFile), sameWorkbook(WorkbookFactory.create(expectedFile)))
+            assertThat(actualWorkbook, sameWorkbook(expectedWorkbook))
         }
     }
 })
