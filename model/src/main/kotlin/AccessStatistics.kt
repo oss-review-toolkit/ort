@@ -19,6 +19,8 @@
 
 package com.here.ort.model
 
+import java.util.concurrent.atomic.AtomicInteger
+
 /**
  * Statistics about reads and hits on a resource.
  */
@@ -26,18 +28,18 @@ data class AccessStatistics(
         /**
          * The number of read operations in the storage.
          */
-        var numReads: Int = 0,
+        var numReads: AtomicInteger = AtomicInteger(0),
 
         /**
          * The number of read operations that returned an entry from the storage.
          */
-        var numHits: Int = 0
+        var numHits: AtomicInteger = AtomicInteger(0)
 ) {
     /**
      * Reset statistics to their initial state.
      */
     fun reset() {
-        numReads = 0
-        numHits = 0
+        numReads.set(0)
+        numHits.set(0)
     }
 }

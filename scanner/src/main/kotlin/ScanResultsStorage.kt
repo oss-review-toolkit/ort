@@ -64,17 +64,17 @@ interface ScanResultsStorage {
 
         override fun read(id: Identifier) =
                 storage.read(id).also {
-                    ++stats.numReads
+                    stats.numReads.incrementAndGet()
                     if (it.results.isNotEmpty()) {
-                        ++stats.numHits
+                        stats.numHits.incrementAndGet()
                     }
                 }
 
         override fun read(pkg: Package, scannerDetails: ScannerDetails) =
                 storage.read(pkg, scannerDetails).also {
-                    ++stats.numReads
+                    stats.numReads.incrementAndGet()
                     if (it.results.isNotEmpty()) {
-                        ++stats.numHits
+                        stats.numHits.incrementAndGet()
                     }
                 }
 
