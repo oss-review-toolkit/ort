@@ -40,18 +40,11 @@ class FileCounterTest : StringSpec() {
     private lateinit var outputRootDir: File
     private lateinit var outputDir: File
 
-    override fun beforeTest(testCase: TestCase) {
-        outputRootDir = createTempDir()
-        outputDir = File(outputRootDir, "output")
-    }
-
-    override fun afterTest(testCase: TestCase, result: TestResult) {
-        outputRootDir.safeDeleteRecursively(force = true)
-        ScanResultsStorage.stats = AccessStatistics()
-    }
-
     init {
-        "Gradle project scan results for a given analyzer result are correct" {
+        "Gradle project scan results for a given analyzer result are correct".config(invocations = 3) {
+            outputRootDir = createTempDir()
+            outputDir = File(outputRootDir, "output")
+
             val analyzerResultFile = File(assetsDir, "analyzer-result.yml")
             val expectedResult = patchExpectedResult(
                     File(assetsDir, "file-counter-expected-output-for-analyzer-result.yml"))
@@ -61,6 +54,9 @@ class FileCounterTest : StringSpec() {
             val result = yamlMapper.writeValueAsString(ortResult)
 
             patchActualResult(result, patchDownloadTime = true, patchStartAndEndTime = true) shouldBe expectedResult
+
+            outputRootDir.safeDeleteRecursively(force = true)
+            ScanResultsStorage.stats = AccessStatistics()
         }
     }
 }
