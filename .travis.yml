@@ -42,7 +42,7 @@ install:
   - chmod a+x ~/bin/sbt
   - curl https://storage.googleapis.com/git-repo-downloads/repo > ~/bin/repo
   - chmod a+x ~/bin/repo
-  - wget -q https://dl.google.com/android/repository/sdk-tools-linux-4333796.zip
+  - curl -Os https://dl.google.com/android/repository/sdk-tools-linux-4333796.zip
   - unzip -q sdk-tools-linux-4333796.zip -d $ANDROID_HOME
   - export SDKMANAGER_OPTS="--add-modules java.xml.bind"
   - yes | $ANDROID_HOME/tools/bin/sdkmanager --verbose "platform-tools"
