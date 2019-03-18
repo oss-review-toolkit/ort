@@ -134,7 +134,7 @@ class ReportTableModelMapper(private val resolutionProvider: ResolutionProvider)
                         analyzerIssues = analyzerIssues.map { it.toResolvableIssue() },
                         scanIssues = scanIssues.map { it.toResolvableIssue() }
                 ).also { row ->
-                    val isRowExcluded = projectExclude != null
+                    val isRowExcluded = pathExcludes.isNotEmpty() || projectExclude != null
                             || (scopes.isNotEmpty() && scopes.all { it.value.isNotEmpty() })
 
                     val nonExcludedAnalyzerIssues = if (isRowExcluded) emptyList() else row.analyzerIssues
