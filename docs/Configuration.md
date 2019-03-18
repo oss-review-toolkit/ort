@@ -32,6 +32,31 @@ explanation consists of:
 
 The sections below contain links to the lists of available exclude reasons for each type of exclude.
 
+#### Excluding Paths
+
+Path excludes are used to mark a complete path as excluded. They are defined using a
+[glob pattern](https://docs.oracle.com/javase/tutorial/essential/io/fileOps.html#glob), a `reason` and a `comment`:
+
+```yaml
+excludes:
+  paths:
+  - pattern: "test-data/**"
+    reason: "TEST_TOOL_OF"
+    comment: "This folder contains examples which are not distributed."
+```
+
+The path exclude above has the following effects:
+
+* All projects found below the `test-data` directory are marked as excluded. This overlaps with
+  [project excludes](#excluding-projects), with the difference that project excludes can also be used to exclude
+  specific [dependency scopes](#excluding-scopes).
+* License findings in files below the `test-data` directory are marked as excluded. This can be used to ignore such
+  license findings when writing [evaluator rules](GettingStarted.md#6-running-the-evaluator) by checking if the are
+  excluded.
+
+For the available exclude reasons for paths, see
+[PathExcludeReason.kt](../model/src/main/kotlin/config/PathExcludeReason.kt).
+
 #### Excluding Projects
 
 ORT defines projects by searching for project definition files in the repositories. For example a Gradle project is
