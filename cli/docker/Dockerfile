@@ -32,7 +32,7 @@ FROM openjdk:11-jre-slim-sid
 ENV \
     # Package manager versions.
     BOWER_VERSION=1.8.8 \
-    BUNDLER_VERSION=1.17.3-2 \
+    BUNDLER_VERSION=1.17.3-3 \
     COMPOSER_VERSION=1.8.4-1 \
     GO_DEP_VERSION=0.5.0-1+B10 \
     HASKELL_STACK_VERSION=1.7.1-3 \
