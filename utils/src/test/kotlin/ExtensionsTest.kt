@@ -43,7 +43,7 @@ class ExtensionsTest : WordSpec({
         }
     }
 
-    "File.safeMkDirs()" should {
+    "File.safeMkDirs" should {
         "succeed if directory already exists" {
             val directory = createTempDir().apply { deleteOnExit() }
 
