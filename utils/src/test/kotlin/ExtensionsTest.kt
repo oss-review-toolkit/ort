@@ -34,6 +34,16 @@ class ExtensionsTest : WordSpec({
         }
     }
 
+    "File.expandTilde" should {
+        "only make the path absolute on Windows".config(enabled = OS.isWindows) {
+            File("~/Desktop").expandTilde() shouldBe File("~/Desktop").absoluteFile
+        }
+
+        "expand the path on Unix".config(enabled = !OS.isWindows) {
+            File("~/Desktop").expandTilde() shouldBe getUserHomeDirectory().resolve("Desktop")
+        }
+    }
+
     "File.searchUpwardsForSubdirectory" should {
         "find the root Git directory" {
             val gitRoot = File(".").searchUpwardsForSubdirectory(".git")

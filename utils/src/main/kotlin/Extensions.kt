@@ -51,6 +51,12 @@ import org.apache.commons.codec.digest.DigestUtils
 fun ByteArray.toHexString(): String = joinToString("") { String.format("%02x", it) }
 
 /**
+ * Return the absolute file with a leading "~" in a Unix path expanded to the current user's home directory.
+ */
+fun File.expandTilde(): File =
+        File(path.replace(Regex("^~/"), "${System.getProperty("user.home")}/")).absoluteFile
+
+/**
  * Return the hexadecimal digest of the given hash [algorithm] for this [File].
  */
 fun File.hash(algorithm: String = "SHA-1"): String = DigestUtils(algorithm).digestAsHex(this)
