@@ -30,7 +30,6 @@ import com.here.ort.model.RemoteArtifact
 import com.here.ort.model.VcsInfo
 import com.here.ort.utils.OkHttpClientHelper
 import com.here.ort.utils.collectMessages
-import com.here.ort.utils.hash
 import com.here.ort.utils.log
 import com.here.ort.utils.safeDeleteRecursively
 import com.here.ort.utils.safeMkdirs
@@ -40,7 +39,6 @@ import com.here.ort.utils.unpack
 import java.io.File
 import java.io.IOException
 import java.net.URI
-import java.net.URL
 import java.time.Instant
 import java.util.SortedSet
 
@@ -188,21 +186,6 @@ class Downloader {
             targetDir.safeMkdirs()
 
             exception.addSuppressed(e)
-        }
-
-        // Try downloading the Maven POM.
-        if (target.id.type == "Maven") {
-            try {
-                return downloadPomArtifact(target, targetDir)
-            } catch (e: DownloadException) {
-                log.debug { "POM artifact download failed for '${target.id.toCoordinates()}': ${e.message}" }
-
-                // Clean up any left-over files.
-                targetDir.safeDeleteRecursively()
-                targetDir.safeMkdirs()
-
-                exception.addSuppressed(e)
-            }
         }
 
         throw exception
@@ -362,37 +345,5 @@ class Downloader {
         }
 
         return DownloadResult(startTime, outputDirectory, sourceArtifact = target.sourceArtifact)
-    }
-
-    private fun downloadPomArtifact(target: Package, outputDirectory: File): DownloadResult {
-        val pomFilename = "${target.id.name}-${target.id.version}.pom"
-        val pomUrl = target.binaryArtifact.url.replaceAfterLast('/', pomFilename)
-
-        if (pomUrl.isEmpty()) {
-            // TODO: Investigate why the binary artifact URL is actually empty and update the implementation according
-            // to root cause.
-            throw DownloadException("Binary artifact URL for '${target.id.toCoordinates()}' is empty.")
-        }
-
-        log.info {
-            "Trying to download POM artifact for '${target.id.toCoordinates()}' from $pomUrl..."
-        }
-
-        return try {
-            val startTime = Instant.now()
-
-            val pomFile = File(outputDirectory, pomFilename)
-            pomFile.writeBytes(URL(pomUrl).readBytes())
-
-            val pomArtifact = RemoteArtifact(
-                    url = pomUrl,
-                    hash = pomFile.hash(target.binaryArtifact.hashAlgorithm.toString()),
-                    hashAlgorithm = target.binaryArtifact.hashAlgorithm
-            )
-
-            DownloadResult(startTime, outputDirectory, sourceArtifact = pomArtifact)
-        } catch (e: IOException) {
-            throw DownloadException("Failed to download the Maven POM for '${target.id.toCoordinates()}': ${e.message}")
-        }
     }
 }
