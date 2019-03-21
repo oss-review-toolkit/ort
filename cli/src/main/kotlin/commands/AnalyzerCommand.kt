@@ -36,6 +36,7 @@ import com.here.ort.model.config.AnalyzerConfiguration
 import com.here.ort.model.mapper
 import com.here.ort.utils.PARAMETER_ORDER_MANDATORY
 import com.here.ort.utils.PARAMETER_ORDER_OPTIONAL
+import com.here.ort.utils.expandTilde
 import com.here.ort.utils.log
 import com.here.ort.utils.safeMkdirs
 
@@ -105,7 +106,7 @@ object AnalyzerCommand : CommandWithHelp() {
     private var repositoryConfigurationFile: File? = null
 
     override fun runCommand(jc: JCommander): Int {
-        val absoluteOutputDir = outputDir.absoluteFile.normalize()
+        val absoluteOutputDir = outputDir.expandTilde().normalize()
 
         val outputFiles = outputFormats.distinct().map { format ->
             File(absoluteOutputDir, "analyzer-result.${format.fileExtension}")
@@ -117,13 +118,14 @@ object AnalyzerCommand : CommandWithHelp() {
             return 2
         }
 
-        require(packageCurationsFile?.isFile != false) {
-            "The package curations file '${packageCurationsFile!!.invariantSeparatorsPath}' could not be found."
+        val absolutePackageCurationsFile = packageCurationsFile?.expandTilde()
+        require(absolutePackageCurationsFile?.isFile != false) {
+            "The package curations file '$absolutePackageCurationsFile' could not be found."
         }
 
-        require(repositoryConfigurationFile?.isFile != false) {
-            "The repository configuration file '${repositoryConfigurationFile!!.invariantSeparatorsPath}' could " +
-                    "not be found."
+        val absoluteRepositoryConfigurationFile = repositoryConfigurationFile?.expandTilde()
+        require(absoluteRepositoryConfigurationFile?.isFile != false) {
+            "The repository configuration file '$absoluteRepositoryConfigurationFile' could not be found."
         }
 
         packageManagers = packageManagers.distinct()
@@ -131,13 +133,13 @@ object AnalyzerCommand : CommandWithHelp() {
         println("The following package managers are activated:")
         println("\t" + packageManagers.joinToString(", "))
 
-        val absoluteInputDir = inputDir.absoluteFile.normalize()
+        val absoluteInputDir = inputDir.expandTilde().normalize()
         println("Scanning project path:\n\t$absoluteInputDir")
 
         val config = AnalyzerConfiguration(ignoreToolVersions, allowDynamicVersions)
         val analyzer = Analyzer(config)
-        val ortResult = analyzer.analyze(absoluteInputDir, packageManagers, packageCurationsFile,
-                repositoryConfigurationFile)
+        val ortResult = analyzer.analyze(absoluteInputDir, packageManagers, absolutePackageCurationsFile,
+                absoluteRepositoryConfigurationFile)
 
         println("Found ${ortResult.analyzer?.result?.projects.orEmpty().size} project(s) in total.")
 
