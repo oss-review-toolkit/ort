@@ -39,6 +39,7 @@ import com.here.ort.utils.ARCHIVE_EXTENSIONS
 import com.here.ort.utils.PARAMETER_ORDER_MANDATORY
 import com.here.ort.utils.PARAMETER_ORDER_OPTIONAL
 import com.here.ort.utils.encodeOrUnknown
+import com.here.ort.utils.expandTilde
 import com.here.ort.utils.log
 import com.here.ort.utils.packZip
 import com.here.ort.utils.safeDeleteRecursively
@@ -134,15 +135,15 @@ object DownloaderCommand : CommandWithHelp() {
             )
         }
 
-        val packages = ortFile?.let {
-            require(it.isFile) {
-                "Provided path is not a file: ${it.absolutePath}"
+        val packages = ortFile?.expandTilde()?.let { absoluteOrtFile ->
+            require(absoluteOrtFile.isFile) {
+                "Provided path is not a file: $absoluteOrtFile"
             }
 
-            val analyzerResult = it.readValue<OrtResult>().analyzer?.result
+            val analyzerResult = absoluteOrtFile.readValue<OrtResult>().analyzer?.result
 
             requireNotNull(analyzerResult) {
-                "The provided ORT result file '${it.invariantSeparatorsPath}' does not contain an analyzer result."
+                "The provided ORT result file '$absoluteOrtFile' does not contain an analyzer result."
             }
 
             mutableListOf<Package>().apply {
@@ -186,11 +187,12 @@ object DownloaderCommand : CommandWithHelp() {
 
         packages.forEach { pkg ->
             try {
-                val result = Downloader().download(pkg, outputDir)
+                val absoluteOutputDir = outputDir.expandTilde()
+                val result = Downloader().download(pkg, absoluteOutputDir)
 
                 if (archive) {
                     val zipFile = File(
-                        outputDir,
+                        absoluteOutputDir,
                         "${pkg.id.type.encodeOrUnknown()}-${pkg.id.namespace.encodeOrUnknown()}-" +
                                 "${pkg.id.name.encodeOrUnknown()}-${pkg.id.version.encodeOrUnknown()}.zip"
                     )
@@ -210,8 +212,9 @@ object DownloaderCommand : CommandWithHelp() {
 
                         log.error { "Could not archive '${pkg.id.toCoordinates()}': ${e.message}" }
                     } finally {
-                        val relativePath = outputDir.toPath().relativize(result.downloadDirectory.toPath()).first()
-                        File(outputDir, relativePath.toString()).safeDeleteRecursively()
+                        val relativePath =
+                            absoluteOutputDir.toPath().relativize(result.downloadDirectory.toPath()).first()
+                        File(absoluteOutputDir, relativePath.toString()).safeDeleteRecursively()
                     }
                 }
             } catch (e: DownloadException) {
