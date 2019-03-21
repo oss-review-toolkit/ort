@@ -240,6 +240,10 @@ enum class SpdxLicense(
     CECILL_B("CECILL-B"),
     /** CeCILL-C Free Software License Agreement */
     CECILL_C("CECILL-C"),
+    /** CERN Open Hardware License v1.1 */
+    CERN_OHL_1_1("CERN-OHL-1.1"),
+    /** CERN Open Hardware Licence v1.2 */
+    CERN_OHL_1_2("CERN-OHL-1.2"),
     /** Clarified Artistic License */
     CLARTISTIC("ClArtistic"),
     /** CNRI Jython License */
@@ -718,6 +722,8 @@ enum class SpdxLicense(
     SUGARCRM_1_1_3("SugarCRM-1.1.3"),
     /** Scheme Widget Library (SWL) Software License Agreement */
     SWL("SWL"),
+    /** TAPR Open Hardware License v1.0 */
+    TAPR_OHL_1_0("TAPR-OHL-1.0"),
     /** TCL/TK License */
     TCL("TCL"),
     /** TCP Wrappers License */
