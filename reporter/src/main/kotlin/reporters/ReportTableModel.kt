@@ -38,167 +38,167 @@ import java.util.SortedSet
 fun Collection<ReportTableModel.ResolvableIssue>.containsUnresolved() = any { !it.isResolved }
 
 fun <K> Map<K, Collection<ReportTableModel.ResolvableIssue>>.containsUnresolved() =
-        any { it.value.containsUnresolved() }
+    any { it.value.containsUnresolved() }
 
 data class ReportTableModel(
-        /**
-         * The [VcsInfo] for the scanned project.
-         */
-        val vcsInfo: VcsInfo,
+    /**
+     * The [VcsInfo] for the scanned project.
+     */
+    val vcsInfo: VcsInfo,
 
-        /**
-         * A list containing all evaluator issues. `null` if no evaluator result is available.
-         */
-        val evaluatorIssues: List<ResolvableIssue>?,
+    /**
+     * A list containing all evaluator issues. `null` if no evaluator result is available.
+     */
+    val evaluatorIssues: List<ResolvableIssue>?,
 
-        /**
-         * A [IssueTable] containing all dependencies that caused issues.
-         */
-        val issueSummary: IssueTable,
+    /**
+     * A [IssueTable] containing all dependencies that caused issues.
+     */
+    val issueSummary: IssueTable,
 
-        /**
-         * A [SummaryTable] containing the dependencies of all [Project]s.
-         */
-        val summary: SummaryTable,
+    /**
+     * A [SummaryTable] containing the dependencies of all [Project]s.
+     */
+    val summary: SummaryTable,
 
-        /**
-         * The [ProjectTable]s containing the dependencies for each [Project].
-         */
-        val projectDependencies: SortedMap<Project, ProjectTable>,
+    /**
+     * The [ProjectTable]s containing the dependencies for each [Project].
+     */
+    val projectDependencies: SortedMap<Project, ProjectTable>,
 
-        /**
-         * Additional metadata read from the [OrtResult.data] field.
-         */
-        val metadata: Map<String, String>,
+    /**
+     * Additional metadata read from the [OrtResult.data] field.
+     */
+    val metadata: Map<String, String>,
 
-        /**
-         * Extra columns that shall be added to the results table by the implementing reporter.
-         */
-        val extraColumns: List<String>
+    /**
+     * Extra columns that shall be added to the results table by the implementing reporter.
+     */
+    val extraColumns: List<String>
 ) {
     data class ProjectTable(
-            /**
-             * The dependencies of this project.
-             */
-            val rows: List<DependencyRow>,
+        /**
+         * The dependencies of this project.
+         */
+        val rows: List<DependencyRow>,
 
-            /**
-             * The path to the directory containing the definition file of the project, relative to the analyzer root,
-             * see [OrtResult.getDefinitionFilePathRelativeToAnalyzerRoot].
-             */
-            val fullDefinitionFilePath: String,
+        /**
+         * The path to the directory containing the definition file of the project, relative to the analyzer root,
+         * see [OrtResult.getDefinitionFilePathRelativeToAnalyzerRoot].
+         */
+        val fullDefinitionFilePath: String,
 
-            /**
-             * Information about if and why the project is excluded by a [ProjectExclude].
-             */
-            val projectExclude: ProjectExclude?,
+        /**
+         * Information about if and why the project is excluded by a [ProjectExclude].
+         */
+        val projectExclude: ProjectExclude?,
 
-            /**
-             * Information about if and why the project is excluded by [PathExclude]s.
-             */
-            val pathExcludes: List<PathExclude>
+        /**
+         * Information about if and why the project is excluded by [PathExclude]s.
+         */
+        val pathExcludes: List<PathExclude>
     ) {
         fun isExcluded() = projectExclude != null || pathExcludes.isNotEmpty()
     }
 
     data class DependencyRow(
-            /**
-             * The identifier of the package.
-             */
-            val id: Identifier,
+        /**
+         * The identifier of the package.
+         */
+        val id: Identifier,
 
-            /**
-             * The scopes the package is used in.
-             */
-            val scopes: SortedMap<String, List<ScopeExclude>>,
+        /**
+         * The scopes the package is used in.
+         */
+        val scopes: SortedMap<String, List<ScopeExclude>>,
 
-            /**
-             * The concluded license of the package.
-             */
-            val concludedLicense: SpdxExpression?,
+        /**
+         * The concluded license of the package.
+         */
+        val concludedLicense: SpdxExpression?,
 
-            /**
-             * The licenses declared by the package.
-             */
-            val declaredLicenses: SortedSet<String>,
+        /**
+         * The licenses declared by the package.
+         */
+        val declaredLicenses: SortedSet<String>,
 
-            /**
-             * The detected licenses aggregated from all [ScanResult]s for this package.
-             */
-            val detectedLicenses: SortedMap<LicenseFinding, List<PathExclude>>,
+        /**
+         * The detected licenses aggregated from all [ScanResult]s for this package.
+         */
+        val detectedLicenses: SortedMap<LicenseFinding, List<PathExclude>>,
 
-            /**
-             * All analyzer issues related to this package.
-             */
-            val analyzerIssues: List<ResolvableIssue>,
+        /**
+         * All analyzer issues related to this package.
+         */
+        val analyzerIssues: List<ResolvableIssue>,
 
-            /**
-             * All scan issues related to this package.
-             */
-            val scanIssues: List<ResolvableIssue>
+        /**
+         * All scan issues related to this package.
+         */
+        val scanIssues: List<ResolvableIssue>
     )
 
     data class SummaryTable(
-            val rows: List<SummaryRow>,
-            val projectExcludes: Map<Identifier, ProjectExclude?>
+        val rows: List<SummaryRow>,
+        val projectExcludes: Map<Identifier, ProjectExclude?>
     )
 
     data class SummaryRow(
-            /**
-             * The identifier of the package.
-             */
-            val id: Identifier,
+        /**
+         * The identifier of the package.
+         */
+        val id: Identifier,
 
-            /**
-             * The scopes the package is used in, grouped by the [Identifier] of the [Project] they appear in.
-             */
-            val scopes: SortedMap<Identifier, SortedMap<String, List<ScopeExclude>>>,
+        /**
+         * The scopes the package is used in, grouped by the [Identifier] of the [Project] they appear in.
+         */
+        val scopes: SortedMap<Identifier, SortedMap<String, List<ScopeExclude>>>,
 
-            /**
-             * The concluded licenses of the package.
-             */
-            val concludedLicenses: Set<SpdxExpression>,
+        /**
+         * The concluded licenses of the package.
+         */
+        val concludedLicenses: Set<SpdxExpression>,
 
-            /**
-             * The licenses declared by the package.
-             */
-            val declaredLicenses: SortedSet<String>,
+        /**
+         * The licenses declared by the package.
+         */
+        val declaredLicenses: SortedSet<String>,
 
-            /**
-             * The detected licenses aggregated from all [ScanResult]s for this package.
-             */
-            val detectedLicenses: SortedSet<String>,
+        /**
+         * The detected licenses aggregated from all [ScanResult]s for this package.
+         */
+        val detectedLicenses: SortedSet<String>,
 
-            /**
-             * All analyzer issues related to this package, grouped by the [Identifier] of the [Project] they appear in.
-             */
-            val analyzerIssues: SortedMap<Identifier, List<ResolvableIssue>>,
+        /**
+         * All analyzer issues related to this package, grouped by the [Identifier] of the [Project] they appear in.
+         */
+        val analyzerIssues: SortedMap<Identifier, List<ResolvableIssue>>,
 
-            /**
-             * All scan issues related to this package, grouped by the [Identifier] of the [Project] they appear in.
-             */
-            val scanIssues: SortedMap<Identifier, List<ResolvableIssue>>
+        /**
+         * All scan issues related to this package, grouped by the [Identifier] of the [Project] they appear in.
+         */
+        val scanIssues: SortedMap<Identifier, List<ResolvableIssue>>
     ) {
         fun merge(other: SummaryRow): SummaryRow {
             fun <T> plus(left: List<T>, right: List<T>) = left + right
 
             return SummaryRow(
-                    id = id,
-                    scopes = scopes.zipWithDefault(other.scopes, sortedMapOf()) { left, right ->
-                        left.zipWithDefault(right, emptyList(), ::plus).toSortedMap()
-                    }.toSortedMap(),
-                    concludedLicenses = (concludedLicenses + other.concludedLicenses),
-                    declaredLicenses = (declaredLicenses + other.declaredLicenses).toSortedSet(),
-                    detectedLicenses = (detectedLicenses + other.detectedLicenses).toSortedSet(),
-                    analyzerIssues = analyzerIssues.zipWithDefault(other.analyzerIssues, emptyList(), ::plus)
-                            .toSortedMap(),
-                    scanIssues = scanIssues.zipWithDefault(other.scanIssues, emptyList(), ::plus).toSortedMap()
+                id = id,
+                scopes = scopes.zipWithDefault(other.scopes, sortedMapOf()) { left, right ->
+                    left.zipWithDefault(right, emptyList(), ::plus).toSortedMap()
+                }.toSortedMap(),
+                concludedLicenses = (concludedLicenses + other.concludedLicenses),
+                declaredLicenses = (declaredLicenses + other.declaredLicenses).toSortedSet(),
+                detectedLicenses = (detectedLicenses + other.detectedLicenses).toSortedSet(),
+                analyzerIssues = analyzerIssues.zipWithDefault(other.analyzerIssues, emptyList(), ::plus)
+                    .toSortedMap(),
+                scanIssues = scanIssues.zipWithDefault(other.scanIssues, emptyList(), ::plus).toSortedMap()
             )
         }
     }
 
     data class IssueTable(
-            val rows: List<IssueRow>
+        val rows: List<IssueRow>
     ) {
         val unresolvedIssues = rows.flatMap {
             it.analyzerIssues.flatMap { (_, issues) -> issues } + it.scanIssues.flatMap { (_, issues) -> issues }
@@ -210,38 +210,38 @@ data class ReportTableModel(
     }
 
     data class IssueRow(
-            /**
-             * The identifier of the package.
-             */
-            val id: Identifier,
+        /**
+         * The identifier of the package.
+         */
+        val id: Identifier,
 
-            /**
-             * All analyzer issues related to this package, grouped by the [Identifier] of the [Project] they appear in.
-             */
-            val analyzerIssues: SortedMap<Identifier, List<ResolvableIssue>>,
+        /**
+         * All analyzer issues related to this package, grouped by the [Identifier] of the [Project] they appear in.
+         */
+        val analyzerIssues: SortedMap<Identifier, List<ResolvableIssue>>,
 
-            /**
-             * All scan issues related to this package, grouped by the [Identifier] of the [Project] they appear in.
-             */
-            val scanIssues: SortedMap<Identifier, List<ResolvableIssue>>
+        /**
+         * All scan issues related to this package, grouped by the [Identifier] of the [Project] they appear in.
+         */
+        val scanIssues: SortedMap<Identifier, List<ResolvableIssue>>
     ) {
         fun merge(other: IssueRow): IssueRow {
             val plus = { left: List<ResolvableIssue>, right: List<ResolvableIssue> -> left + right }
 
             return IssueRow(
-                    id = id,
-                    analyzerIssues = analyzerIssues.zipWithDefault(other.analyzerIssues, emptyList(), plus)
-                            .toSortedMap(),
-                    scanIssues = scanIssues.zipWithDefault(other.scanIssues, emptyList(), plus).toSortedMap()
+                id = id,
+                analyzerIssues = analyzerIssues.zipWithDefault(other.analyzerIssues, emptyList(), plus)
+                    .toSortedMap(),
+                scanIssues = scanIssues.zipWithDefault(other.scanIssues, emptyList(), plus).toSortedMap()
             )
         }
     }
 
     data class ResolvableIssue(
-            val source: String,
-            val description: String,
-            val resolutionDescription: String,
-            val isResolved: Boolean,
-            val severity: Severity
+        val source: String,
+        val description: String,
+        val resolutionDescription: String,
+        val isResolved: Boolean,
+        val severity: Severity
     )
 }

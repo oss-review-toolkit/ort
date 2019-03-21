@@ -31,46 +31,48 @@ import java.io.File
 
 class VueJsIntegrationTest : AbstractIntegrationSpec() {
     override val pkg: Package = Package(
-            id = Identifier(
-                    type = "NPM",
-                    namespace = "",
-                    name = "Vue.js",
-                    version = ""
-            ),
-            declaredLicenses = sortedSetOf(),
-            description = "",
-            homepageUrl = "",
-            binaryArtifact = RemoteArtifact.EMPTY,
-            sourceArtifact = RemoteArtifact.EMPTY,
-            vcs = VcsInfo(
-                    type = "Git",
-                    url = "https://github.com/vuejs/vue.git",
-                    revision = "v2.5.11"
-            )
+        id = Identifier(
+            type = "NPM",
+            namespace = "",
+            name = "Vue.js",
+            version = ""
+        ),
+        declaredLicenses = sortedSetOf(),
+        description = "",
+        homepageUrl = "",
+        binaryArtifact = RemoteArtifact.EMPTY,
+        sourceArtifact = RemoteArtifact.EMPTY,
+        vcs = VcsInfo(
+            type = "Git",
+            url = "https://github.com/vuejs/vue.git",
+            revision = "v2.5.11"
+        )
     )
 
     override val expectedManagedFiles by lazy {
         val downloadDir = downloadResult.downloadDirectory
         mapOf(
-                NPM.Factory() as PackageManagerFactory to listOf(
-                        File(downloadDir, "package.json"),
-                        File(downloadDir, "packages/vue-server-renderer/package.json"),
-                        File(downloadDir, "packages/vue-template-compiler/package.json"),
-                        File(downloadDir, "packages/weex-template-compiler/package.json"),
-                        File(downloadDir, "packages/weex-vue-framework/package.json")
-                ),
-                Yarn.Factory() as PackageManagerFactory to listOf(
-                        File(downloadDir, "package.json"),
-                        File(downloadDir, "packages/vue-server-renderer/package.json"),
-                        File(downloadDir, "packages/vue-template-compiler/package.json"),
-                        File(downloadDir, "packages/weex-template-compiler/package.json"),
-                        File(downloadDir, "packages/weex-vue-framework/package.json")
-                )
+            NPM.Factory() as PackageManagerFactory to listOf(
+                File(downloadDir, "package.json"),
+                File(downloadDir, "packages/vue-server-renderer/package.json"),
+                File(downloadDir, "packages/vue-template-compiler/package.json"),
+                File(downloadDir, "packages/weex-template-compiler/package.json"),
+                File(downloadDir, "packages/weex-vue-framework/package.json")
+            ),
+            Yarn.Factory() as PackageManagerFactory to listOf(
+                File(downloadDir, "package.json"),
+                File(downloadDir, "packages/vue-server-renderer/package.json"),
+                File(downloadDir, "packages/vue-template-compiler/package.json"),
+                File(downloadDir, "packages/weex-template-compiler/package.json"),
+                File(downloadDir, "packages/weex-vue-framework/package.json")
+            )
         )
     }
 
     override val managedFilesForTest by lazy {
-        mapOf(NPM.Factory() as PackageManagerFactory to
-                listOf(File(downloadResult.downloadDirectory, "package.json")))
+        mapOf(
+            NPM.Factory() as PackageManagerFactory to
+                    listOf(File(downloadResult.downloadDirectory, "package.json"))
+        )
     }
 }

@@ -146,14 +146,14 @@ fun filterVersionNames(version: String, names: List<String>, project: String? = 
  * Return the longest parent directory that is common to all [files].
  */
 fun getCommonFileParent(files: Collection<File>) =
-        files.map {
-            it.normalize().absolutePath
-        }.reduce { prefix, path ->
-            prefix.commonPrefixWith(path)
-        }.let {
-            val commonPrefix = File(it)
-            if (commonPrefix.isDirectory) commonPrefix else commonPrefix.parentFile
-        }
+    files.map {
+        it.normalize().absolutePath
+    }.reduce { prefix, path ->
+        prefix.commonPrefixWith(path)
+    }.let {
+        val commonPrefix = File(it)
+        if (commonPrefix.isDirectory) commonPrefix else commonPrefix.parentFile
+    }
 
 /**
  * Return the full path to the given executable file if it is in the system's PATH environment, or null otherwise.

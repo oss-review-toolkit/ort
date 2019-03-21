@@ -42,13 +42,13 @@ class NoticeReporter : Reporter() {
     }
 
     data class NoticeReport(
-            val headers: List<String>,
-            val findings: LicenseFindingsMap,
-            val footers: List<String>
+        val headers: List<String>,
+        val findings: LicenseFindingsMap,
+        val footers: List<String>
     )
 
-    class PostProcessor(ortResult: OrtResult, noticeReport: NoticeReport, copyrightGarbage: CopyrightGarbage)
-        : ScriptRunner() {
+    class PostProcessor(ortResult: OrtResult, noticeReport: NoticeReport, copyrightGarbage: CopyrightGarbage) :
+        ScriptRunner() {
         override val preface = """
             import com.here.ort.model.*
             import com.here.ort.model.config.*
@@ -88,11 +88,11 @@ class NoticeReporter : Reporter() {
     override val defaultFilename = "NOTICE"
 
     override fun generateReport(
-            ortResult: OrtResult,
-            resolutionProvider: ResolutionProvider,
-            copyrightGarbage: CopyrightGarbage,
-            outputStream: OutputStream,
-            postProcessingScript: String?
+        ortResult: OrtResult,
+        resolutionProvider: ResolutionProvider,
+        copyrightGarbage: CopyrightGarbage,
+        outputStream: OutputStream,
+        postProcessingScript: String?
     ) {
         requireNotNull(ortResult.scanner) {
             "The provided ORT result file does not contain a scan result."
@@ -108,9 +108,9 @@ class NoticeReporter : Reporter() {
 
         val noticeReport = if (postProcessingScript != null) {
             PostProcessor(
-                    ortResult,
-                    NoticeReport(listOf(header), licenseFindings, emptyList()),
-                    copyrightGarbage
+                ortResult,
+                NoticeReport(listOf(header), licenseFindings, emptyList()),
+                copyrightGarbage
             ).run(postProcessingScript)
         } else {
             val processedFindings = licenseFindings.removeGarbage(copyrightGarbage).processStatements()
@@ -142,38 +142,38 @@ class NoticeReporter : Reporter() {
     }
 
     private fun generateNotices(noticeReport: NoticeReport) =
-            buildString {
-                append(noticeReport.headers.joinToString(NOTICE_SEPARATOR))
+        buildString {
+            append(noticeReport.headers.joinToString(NOTICE_SEPARATOR))
 
-                noticeReport.findings.filterNot { (license, _) ->
-                    // Public domain licenses do not require attribution.
-                    license.isLicenseRefTo("public-domain") || license.isLicenseRefTo("public-domain-disclaimer")
-                }.forEach { (license, copyrights) ->
-                    try {
-                        val licenseText = getLicenseText(license, true)
+            noticeReport.findings.filterNot { (license, _) ->
+                // Public domain licenses do not require attribution.
+                license.isLicenseRefTo("public-domain") || license.isLicenseRefTo("public-domain-disclaimer")
+            }.forEach { (license, copyrights) ->
+                try {
+                    val licenseText = getLicenseText(license, true)
 
-                        append(NOTICE_SEPARATOR)
+                    append(NOTICE_SEPARATOR)
 
-                        // Note: Do not use appendln() here as that would write out platform-native line endings, but we
-                        // want to normalize on Unix-style line endings for consistency.
-                        copyrights.forEach { copyright ->
-                            append("$copyright\n")
-                        }
-                        if (copyrights.isNotEmpty()) append("\n")
+                    // Note: Do not use appendln() here as that would write out platform-native line endings, but we
+                    // want to normalize on Unix-style line endings for consistency.
+                    copyrights.forEach { copyright ->
+                        append("$copyright\n")
+                    }
+                    if (copyrights.isNotEmpty()) append("\n")
 
-                        append(licenseText)
-                    } catch (e: IOException) {
-                        // TODO: Consider introducing (resolvable) reporter errors to handle cases where we cannot
-                        // find license texts.
-                        log.warn {
-                            "No license text found for license '$license', it will be omitted from the report."
-                        }
+                    append(licenseText)
+                } catch (e: IOException) {
+                    // TODO: Consider introducing (resolvable) reporter errors to handle cases where we cannot
+                    // find license texts.
+                    log.warn {
+                        "No license text found for license '$license', it will be omitted from the report."
                     }
                 }
-
-                noticeReport.footers.forEach { footer ->
-                    append(NOTICE_SEPARATOR)
-                    append(footer)
-                }
             }
+
+            noticeReport.footers.forEach { footer ->
+                append(NOTICE_SEPARATOR)
+                append(footer)
+            }
+        }
 }

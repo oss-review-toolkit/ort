@@ -25,26 +25,26 @@ import com.fasterxml.jackson.annotation.JsonInclude
  * Bundles information about a remote artifact.
  */
 data class RemoteArtifact(
-        /**
-         * The URL of the remote artifact.
-         */
-        val url: String,
+    /**
+     * The URL of the remote artifact.
+     */
+    val url: String,
 
-        /**
-         * The hash value of the remote artifact.
-         */
-        val hash: String,
+    /**
+     * The hash value of the remote artifact.
+     */
+    val hash: String,
 
-        /**
-         * The name of the algorithm used to calculate the [hash].
-         */
-        val hashAlgorithm: HashAlgorithm,
+    /**
+     * The name of the algorithm used to calculate the [hash].
+     */
+    val hashAlgorithm: HashAlgorithm,
 
-        /**
-         * A map that holds arbitrary data. Can be used by third-party tools to add custom data to the model.
-         */
-        @JsonInclude(JsonInclude.Include.NON_EMPTY)
-        val data: CustomData = emptyMap()
+    /**
+     * A map that holds arbitrary data. Can be used by third-party tools to add custom data to the model.
+     */
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    val data: CustomData = emptyMap()
 ) {
     companion object {
         /**
@@ -52,9 +52,9 @@ data class RemoteArtifact(
          */
         @JvmField
         val EMPTY = RemoteArtifact(
-                url = "",
-                hash = Hash.UNKNOWN.value,
-                hashAlgorithm = Hash.UNKNOWN.algorithm
+            url = "",
+            hash = Hash.UNKNOWN.value,
+            hashAlgorithm = Hash.UNKNOWN.algorithm
         )
     }
 }

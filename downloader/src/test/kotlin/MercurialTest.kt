@@ -79,7 +79,7 @@ class MercurialTest : StringSpec() {
 
         "Mercurial correctly lists remote branches".config(enabled = hg.isInPath()) {
             val expectedBranches = listOf(
-                    "default"
+                "default"
             )
 
             val workingTree = hg.getWorkingTree(zipContentDir)
@@ -88,9 +88,9 @@ class MercurialTest : StringSpec() {
 
         "Mercurial correctly lists remote tags".config(enabled = hg.isInPath()) {
             val expectedTags = listOf(
-                    "1.0",
-                    "1.0.1",
-                    "1.0.2"
+                "1.0",
+                "1.0.1",
+                "1.0.2"
             )
 
             val workingTree = hg.getWorkingTree(zipContentDir)

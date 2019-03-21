@@ -50,22 +50,22 @@ class DownloaderTest : StringSpec() {
     init {
         "Downloads and unpacks JAR source package".config(tags = setOf(ExpensiveTag)) {
             val pkg = Package(
-                    id = Identifier(
-                            type = "Maven",
-                            namespace = "junit",
-                            name = "junit",
-                            version = "4.12"
-                    ),
-                    declaredLicenses = sortedSetOf(),
-                    description = "",
-                    homepageUrl = "",
-                    binaryArtifact = RemoteArtifact.EMPTY,
-                    sourceArtifact = RemoteArtifact(
-                            url = "https://repo.maven.apache.org/maven2/junit/junit/4.12/junit-4.12-sources.jar",
-                            hash = "a6c32b40bf3d76eca54e3c601e5d1470c86fcdfa",
-                            hashAlgorithm = HashAlgorithm.SHA1
-                    ),
-                    vcs = VcsInfo.EMPTY
+                id = Identifier(
+                    type = "Maven",
+                    namespace = "junit",
+                    name = "junit",
+                    version = "4.12"
+                ),
+                declaredLicenses = sortedSetOf(),
+                description = "",
+                homepageUrl = "",
+                binaryArtifact = RemoteArtifact.EMPTY,
+                sourceArtifact = RemoteArtifact(
+                    url = "https://repo.maven.apache.org/maven2/junit/junit/4.12/junit-4.12-sources.jar",
+                    hash = "a6c32b40bf3d76eca54e3c601e5d1470c86fcdfa",
+                    hashAlgorithm = HashAlgorithm.SHA1
+                ),
+                vcs = VcsInfo.EMPTY
             )
 
             val downloadResult = Downloader().download(pkg, outputDir)
@@ -84,22 +84,22 @@ class DownloaderTest : StringSpec() {
 
         "Download of JAR source package fails when hash is incorrect".config(tags = setOf(ExpensiveTag)) {
             val pkg = Package(
-                    id = Identifier(
-                            type = "Maven",
-                            namespace = "junit",
-                            name = "junit",
-                            version = "4.12"
-                    ),
-                    declaredLicenses = sortedSetOf(),
-                    description = "",
-                    homepageUrl = "",
-                    binaryArtifact = RemoteArtifact.EMPTY,
-                    sourceArtifact = RemoteArtifact(
-                            url = "https://repo.maven.apache.org/maven2/junit/junit/4.12/junit-4.12-sources.jar",
-                            hash = "0123456789abcdef0123456789abcdef01234567",
-                            hashAlgorithm = HashAlgorithm.SHA1
-                    ),
-                    vcs = VcsInfo.EMPTY
+                id = Identifier(
+                    type = "Maven",
+                    namespace = "junit",
+                    name = "junit",
+                    version = "4.12"
+                ),
+                declaredLicenses = sortedSetOf(),
+                description = "",
+                homepageUrl = "",
+                binaryArtifact = RemoteArtifact.EMPTY,
+                sourceArtifact = RemoteArtifact(
+                    url = "https://repo.maven.apache.org/maven2/junit/junit/4.12/junit-4.12-sources.jar",
+                    hash = "0123456789abcdef0123456789abcdef01234567",
+                    hashAlgorithm = HashAlgorithm.SHA1
+                ),
+                vcs = VcsInfo.EMPTY
             )
 
             val exception = shouldThrow<DownloadException> {
@@ -117,26 +117,26 @@ class DownloaderTest : StringSpec() {
 
         "Falls back to downloading source package when download from VCS fails".config(tags = setOf(ExpensiveTag)) {
             val pkg = Package(
-                    id = Identifier(
-                            type = "Maven",
-                            namespace = "junit",
-                            name = "junit",
-                            version = "4.12"
-                    ),
-                    declaredLicenses = sortedSetOf(),
-                    description = "",
-                    homepageUrl = "",
-                    binaryArtifact = RemoteArtifact.EMPTY,
-                    sourceArtifact = RemoteArtifact(
-                            url = "https://repo.maven.apache.org/maven2/junit/junit/4.12/junit-4.12-sources.jar",
-                            hash = "a6c32b40bf3d76eca54e3c601e5d1470c86fcdfa",
-                            hashAlgorithm = HashAlgorithm.SHA1
-                    ),
-                    vcs = VcsInfo(
-                            type = "Git",
-                            url = "https://example.com/invalid-repo-url",
-                            revision = "8964880d9bac33f0a7f030a74c7c9299a8f117c8"
-                    )
+                id = Identifier(
+                    type = "Maven",
+                    namespace = "junit",
+                    name = "junit",
+                    version = "4.12"
+                ),
+                declaredLicenses = sortedSetOf(),
+                description = "",
+                homepageUrl = "",
+                binaryArtifact = RemoteArtifact.EMPTY,
+                sourceArtifact = RemoteArtifact(
+                    url = "https://repo.maven.apache.org/maven2/junit/junit/4.12/junit-4.12-sources.jar",
+                    hash = "a6c32b40bf3d76eca54e3c601e5d1470c86fcdfa",
+                    hashAlgorithm = HashAlgorithm.SHA1
+                ),
+                vcs = VcsInfo(
+                    type = "Git",
+                    url = "https://example.com/invalid-repo-url",
+                    revision = "8964880d9bac33f0a7f030a74c7c9299a8f117c8"
+                )
             )
 
             val downloadResult = Downloader().download(pkg, outputDir)
@@ -156,22 +156,22 @@ class DownloaderTest : StringSpec() {
         "Can download source artifact from SourceForce".config(tags = setOf(ExpensiveTag)) {
             val url = "https://master.dl.sourceforge.net/project/tyrex/tyrex/Tyrex%201.0.1/tyrex-1.0.1-src.tgz"
             val pkg = Package(
-                    id = Identifier(
-                            type = "Maven",
-                            namespace = "tyrex",
-                            name = "tyrex",
-                            version = "1.0.1"
-                    ),
-                    declaredLicenses = sortedSetOf(),
-                    description = "",
-                    homepageUrl = "",
-                    binaryArtifact = RemoteArtifact.EMPTY,
-                    sourceArtifact = RemoteArtifact(
-                            url = url,
-                            hash = "49fe486f44197c8e5106ed7487526f77b597308f",
-                            hashAlgorithm = HashAlgorithm.SHA1
-                    ),
-                    vcs = VcsInfo.EMPTY
+                id = Identifier(
+                    type = "Maven",
+                    namespace = "tyrex",
+                    name = "tyrex",
+                    version = "1.0.1"
+                ),
+                declaredLicenses = sortedSetOf(),
+                description = "",
+                homepageUrl = "",
+                binaryArtifact = RemoteArtifact.EMPTY,
+                sourceArtifact = RemoteArtifact(
+                    url = url,
+                    hash = "49fe486f44197c8e5106ed7487526f77b597308f",
+                    hashAlgorithm = HashAlgorithm.SHA1
+                ),
+                vcs = VcsInfo.EMPTY
             )
 
             val downloadResult = Downloader().download(pkg, outputDir)

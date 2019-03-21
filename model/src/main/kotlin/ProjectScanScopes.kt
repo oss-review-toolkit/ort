@@ -25,21 +25,21 @@ import java.util.SortedSet
  * Information about which scopes of the [Project] identified by [id] were scanned and ignored.
  */
 data class ProjectScanScopes(
-        /**
-         * The [Identifier] of the [Project].
-         */
-        val id: Identifier,
+    /**
+     * The [Identifier] of the [Project].
+     */
+    val id: Identifier,
 
-        /**
-         * The dependencies from these [Scope]s of the [Project] were scanned.
-         */
-        val scannedScopes: SortedSet<String>,
+    /**
+     * The dependencies from these [Scope]s of the [Project] were scanned.
+     */
+    val scannedScopes: SortedSet<String>,
 
-        /**
-         * The dependencies from these [Scope]s of the [Project] were not scanned, except if they are also a dependency
-         * of any of the [scannedScopes].
-         */
-        val ignoredScopes: SortedSet<String>
+    /**
+     * The dependencies from these [Scope]s of the [Project] were not scanned, except if they are also a dependency
+     * of any of the [scannedScopes].
+     */
+    val ignoredScopes: SortedSet<String>
 ) : Comparable<ProjectScanScopes> {
     /**
      * A comparison function to sort project scan results by their identifier.

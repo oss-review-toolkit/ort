@@ -37,23 +37,23 @@ class SpdxExpressionLexerTest : WordSpec() {
                 val tokens = getTokensByTypeForExpression(expression)
 
                 tokens shouldBe listOf(
-                        SpdxExpressionLexer.OPEN to "(",
-                        SpdxExpressionLexer.IDSTRING to "license-1",
-                        SpdxExpressionLexer.AND to "AND",
-                        SpdxExpressionLexer.OR to "OR",
-                        SpdxExpressionLexer.IDSTRING to "license.2",
-                        SpdxExpressionLexer.WITH to "WITH",
-                        SpdxExpressionLexer.IDSTRING to "0LiCeNsE-3",
-                        SpdxExpressionLexer.PLUS to "+",
-                        SpdxExpressionLexer.CLOSE to ")",
-                        SpdxExpressionLexer.AND to "and",
-                        SpdxExpressionLexer.OPEN to "(",
-                        SpdxExpressionLexer.OR to "or",
-                        SpdxExpressionLexer.WITH to "with",
-                        SpdxExpressionLexer.IDSTRING to "license-4",
-                        SpdxExpressionLexer.IDSTRING to "license-.5",
-                        SpdxExpressionLexer.OPEN to "(",
-                        SpdxExpressionLexer.OPEN to "("
+                    SpdxExpressionLexer.OPEN to "(",
+                    SpdxExpressionLexer.IDSTRING to "license-1",
+                    SpdxExpressionLexer.AND to "AND",
+                    SpdxExpressionLexer.OR to "OR",
+                    SpdxExpressionLexer.IDSTRING to "license.2",
+                    SpdxExpressionLexer.WITH to "WITH",
+                    SpdxExpressionLexer.IDSTRING to "0LiCeNsE-3",
+                    SpdxExpressionLexer.PLUS to "+",
+                    SpdxExpressionLexer.CLOSE to ")",
+                    SpdxExpressionLexer.AND to "and",
+                    SpdxExpressionLexer.OPEN to "(",
+                    SpdxExpressionLexer.OR to "or",
+                    SpdxExpressionLexer.WITH to "with",
+                    SpdxExpressionLexer.IDSTRING to "license-4",
+                    SpdxExpressionLexer.IDSTRING to "license-.5",
+                    SpdxExpressionLexer.OPEN to "(",
+                    SpdxExpressionLexer.OPEN to "("
                 )
             }
 
@@ -75,12 +75,12 @@ class SpdxExpressionLexerTest : WordSpec() {
         lexer.removeErrorListeners()
         lexer.addErrorListener(object : BaseErrorListener() {
             override fun syntaxError(
-                    recognizer: Recognizer<*, *>?,
-                    offendingSymbol: Any?,
-                    line: Int,
-                    charPositionInLine: Int,
-                    msg: String?,
-                    e: RecognitionException?
+                recognizer: Recognizer<*, *>?,
+                offendingSymbol: Any?,
+                line: Int,
+                charPositionInLine: Int,
+                msg: String?,
+                e: RecognitionException?
             ) {
                 throw SpdxException(msg)
             }

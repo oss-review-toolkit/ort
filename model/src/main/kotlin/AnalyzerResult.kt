@@ -34,30 +34,30 @@ import java.util.SortedSet
  */
 @JsonIgnoreProperties(value = ["has_errors"], allowGetters = true)
 data class AnalyzerResult(
-        /**
-         * Sorted set of the projects, as they appear in the individual analyzer results.
-         */
-        val projects: SortedSet<Project>,
+    /**
+     * Sorted set of the projects, as they appear in the individual analyzer results.
+     */
+    val projects: SortedSet<Project>,
 
-        /**
-         * The set of identified packages for all projects.
-         */
-        val packages: SortedSet<CuratedPackage>,
+    /**
+     * The set of identified packages for all projects.
+     */
+    val packages: SortedSet<CuratedPackage>,
 
-        /**
-         * The lists of errors that occurred within the analyzed projects themselves. Errors related to project
-         * dependencies are contained in the dependencies of the project's scopes.
-         */
-        // Do not serialize if empty to reduce the size of the result file. If there are no errors at all,
-        // [AnalyzerResult.hasErrors] already contains that information.
-        @JsonInclude(JsonInclude.Include.NON_EMPTY)
-        val errors: SortedMap<Identifier, List<OrtIssue>> = sortedMapOf(),
+    /**
+     * The lists of errors that occurred within the analyzed projects themselves. Errors related to project
+     * dependencies are contained in the dependencies of the project's scopes.
+     */
+    // Do not serialize if empty to reduce the size of the result file. If there are no errors at all,
+    // [AnalyzerResult.hasErrors] already contains that information.
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    val errors: SortedMap<Identifier, List<OrtIssue>> = sortedMapOf(),
 
-        /**
-         * A map that holds arbitrary data. Can be used by third-party tools to add custom data to the model.
-         */
-        @JsonInclude(JsonInclude.Include.NON_EMPTY)
-        val data: CustomData = emptyMap()
+    /**
+     * A map that holds arbitrary data. Can be used by third-party tools to add custom data to the model.
+     */
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    val data: CustomData = emptyMap()
 ) {
     companion object {
         /**
@@ -65,9 +65,9 @@ data class AnalyzerResult(
          */
         @JvmField
         val EMPTY = AnalyzerResult(
-                projects = sortedSetOf(),
-                packages = sortedSetOf(),
-                errors = sortedMapOf()
+            projects = sortedSetOf(),
+            packages = sortedSetOf(),
+            errors = sortedMapOf()
         )
     }
 
@@ -113,37 +113,37 @@ class AnalyzerResultBuilder {
     }
 
     fun addResult(projectAnalyzerResult: ProjectAnalyzerResult) =
-            also {
-                // TODO: It might be, e.g. in the case of PIP "requirements.txt" projects, that different projects with
-                // the same ID exist. We need to decide how to handle that case.
-                val existingProject = projects.find { it.id == projectAnalyzerResult.project.id }
+        also {
+            // TODO: It might be, e.g. in the case of PIP "requirements.txt" projects, that different projects with
+            // the same ID exist. We need to decide how to handle that case.
+            val existingProject = projects.find { it.id == projectAnalyzerResult.project.id }
 
-                if (existingProject != null) {
-                    val existingDefinitionFileUrl = existingProject.let {
-                        "${it.vcsProcessed.url}/${it.definitionFilePath}"
-                    }
-                    val incomingDefinitionFileUrl = projectAnalyzerResult.project.let {
-                        "${it.vcsProcessed.url}/${it.definitionFilePath}"
-                    }
+            if (existingProject != null) {
+                val existingDefinitionFileUrl = existingProject.let {
+                    "${it.vcsProcessed.url}/${it.definitionFilePath}"
+                }
+                val incomingDefinitionFileUrl = projectAnalyzerResult.project.let {
+                    "${it.vcsProcessed.url}/${it.definitionFilePath}"
+                }
 
-                    val error = OrtIssue(
-                            source = "analyzer",
-                            message = "Multiple projects with the same id '${existingProject.id.toCoordinates()}' " +
-                                    "found. Not adding the project defined in $incomingDefinitionFileUrl to the " +
-                                    "analyzer results as it duplicates the project defined in " +
-                                    "$existingDefinitionFileUrl."
-                    )
+                val error = OrtIssue(
+                    source = "analyzer",
+                    message = "Multiple projects with the same id '${existingProject.id.toCoordinates()}' " +
+                            "found. Not adding the project defined in $incomingDefinitionFileUrl to the " +
+                            "analyzer results as it duplicates the project defined in " +
+                            "$existingDefinitionFileUrl."
+                )
 
-                    log.error { error.message }
+                log.error { error.message }
 
-                    val projectErrors = errors.getOrDefault(existingProject.id, listOf())
-                    errors[existingProject.id] = projectErrors + error
-                } else {
-                    projects += projectAnalyzerResult.project
-                    packages += projectAnalyzerResult.packages
-                    if (projectAnalyzerResult.errors.isNotEmpty()) {
-                        errors[projectAnalyzerResult.project.id] = projectAnalyzerResult.errors
-                    }
+                val projectErrors = errors.getOrDefault(existingProject.id, listOf())
+                errors[existingProject.id] = projectErrors + error
+            } else {
+                projects += projectAnalyzerResult.project
+                packages += projectAnalyzerResult.packages
+                if (projectAnalyzerResult.errors.isNotEmpty()) {
+                    errors[projectAnalyzerResult.project.id] = projectAnalyzerResult.errors
                 }
             }
+        }
 }

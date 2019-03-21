@@ -84,25 +84,25 @@ class SpdxExpressionTest : WordSpec() {
                 val deserializedExpression = yamlMapper.readValue<SpdxExpression>(serializedExpression)
 
                 deserializedExpression shouldBe SpdxCompoundExpression(
-                        SpdxCompoundExpression(
-                                SpdxLicenseIdExpression("license1", true),
-                                SpdxOperator.AND,
-                                SpdxCompoundExpression(
-                                        SpdxCompoundExpression(
-                                                SpdxLicenseIdExpression("license2"),
-                                                SpdxOperator.WITH,
-                                                SpdxLicenseExceptionExpression("exception1")
-                                        ),
-                                        SpdxOperator.OR,
-                                        SpdxLicenseIdExpression("license3", true)
-                                )
-                        ),
+                    SpdxCompoundExpression(
+                        SpdxLicenseIdExpression("license1", true),
                         SpdxOperator.AND,
                         SpdxCompoundExpression(
-                                SpdxLicenseIdExpression("license4"),
+                            SpdxCompoundExpression(
+                                SpdxLicenseIdExpression("license2"),
                                 SpdxOperator.WITH,
-                                SpdxLicenseExceptionExpression("exception2")
+                                SpdxLicenseExceptionExpression("exception1")
+                            ),
+                            SpdxOperator.OR,
+                            SpdxLicenseIdExpression("license3", true)
                         )
+                    ),
+                    SpdxOperator.AND,
+                    SpdxCompoundExpression(
+                        SpdxLicenseIdExpression("license4"),
+                        SpdxOperator.WITH,
+                        SpdxLicenseExceptionExpression("exception2")
+                    )
                 )
             }
 

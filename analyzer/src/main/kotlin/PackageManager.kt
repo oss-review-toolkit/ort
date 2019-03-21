@@ -56,9 +56,9 @@ typealias ResolutionResult = MutableMap<File, ProjectAnalyzerResult>
  * @param repoConfig The configuration of the repository to use.
  */
 abstract class PackageManager(
-        val managerName: String,
-        protected val analyzerConfig: AnalyzerConfiguration,
-        protected val repoConfig: RepositoryConfiguration
+    val managerName: String,
+    protected val analyzerConfig: AnalyzerConfiguration,
+    protected val repoConfig: RepositoryConfiguration
 ) {
     companion object {
         private val LOADER = ServiceLoader.load(PackageManagerFactory::class.java)!!
@@ -69,15 +69,15 @@ abstract class PackageManager(
         val ALL by lazy { LOADER.iterator().asSequence().toList() }
 
         private val IGNORED_DIRECTORY_MATCHERS = listOf(
-                // Ignore intermediate build system directories.
-                ".gradle",
-                "node_modules",
-                // Ignore resources in a standard Maven / Gradle project layout.
-                "src/main/resources",
-                "src/test/resources",
-                // Ignore virtual environments in Python.
-                "lib/python2.*/dist-packages",
-                "lib/python3.*/site-packages"
+            // Ignore intermediate build system directories.
+            ".gradle",
+            "node_modules",
+            // Ignore resources in a standard Maven / Gradle project layout.
+            "src/main/resources",
+            "src/test/resources",
+            // Ignore virtual environments in Python.
+            "lib/python2.*/dist-packages",
+            "lib/python3.*/site-packages"
         ).map {
             FileSystems.getDefault().getPathMatcher("glob:**/$it")
         }
@@ -164,8 +164,10 @@ abstract class PackageManager(
          * @param vcsFromProject The project's [VcsInfo], if any.
          * @param homepageUrl The URL to the homepage of the [Project], if any.
          */
-        fun processProjectVcs(projectDir: File, vcsFromProject: VcsInfo = VcsInfo.EMPTY,
-                              homepageUrl: String = ""): VcsInfo {
+        fun processProjectVcs(
+            projectDir: File, vcsFromProject: VcsInfo = VcsInfo.EMPTY,
+            homepageUrl: String = ""
+        ): VcsInfo {
             val vcsFromWorkingTree = VersionControlSystem.getPathInfo(projectDir).normalize()
             return vcsFromWorkingTree.merge(processPackageVcs(vcsFromProject, homepageUrl))
         }
@@ -207,10 +209,10 @@ abstract class PackageManager(
 
                     val id = Identifier.EMPTY.copy(type = managerName, name = relativePath)
                     val errorProject = Project.EMPTY.copy(
-                            id = id,
-                            purl = id.toPurl(),
-                            definitionFilePath = VersionControlSystem.getPathInfo(definitionFile).path,
-                            vcsProcessed = processProjectVcs(definitionFile.parentFile)
+                        id = id,
+                        purl = id.toPurl(),
+                        definitionFilePath = VersionControlSystem.getPathInfo(definitionFile).path,
+                        vcsProcessed = processProjectVcs(definitionFile.parentFile)
                     )
 
                     val errors = listOf(OrtIssue(source = managerName, message = e.collectMessagesAsString()))

@@ -55,22 +55,22 @@ class GitRepoDownloadTest : StringSpec() {
 
             val spdxDir = File(outputDir, "spdx-tools")
             val expectedSpdxFiles = listOf(
-                    ".git",
-                    "Examples",
-                    "Test",
-                    "TestFiles",
-                    "doc",
-                    "resources",
-                    "src"
+                ".git",
+                "Examples",
+                "Test",
+                "TestFiles",
+                "doc",
+                "resources",
+                "src"
             )
 
             val actualSpdxFiles = spdxDir.listFiles(FileFilter { it.isDirectory }).map { it.name }.sorted()
 
             val submodulesDir = File(outputDir, "submodules")
             val expectedSubmodulesFiles = listOf(
-                    ".git",
-                    "commons-text",
-                    "test-data-npm"
+                ".git",
+                "commons-text",
+                "test-data-npm"
             )
 
             val actualSubmodulesFiles = submodulesDir.listFiles(FileFilter { it.isDirectory }).map { it.name }.sorted()

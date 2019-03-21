@@ -37,7 +37,7 @@ import org.hamcrest.MatcherAssert.assertThat
 
 class ExcelReporterTest : WordSpec({
     val ortResult = File("../scanner/src/funTest/assets/file-counter-expected-output-for-analyzer-result.yml")
-            .readValue<OrtResult>()
+        .readValue<OrtResult>()
 
     "ExcelReporter" should {
         "successfully export to an Excel sheet".config(enabled = false) {

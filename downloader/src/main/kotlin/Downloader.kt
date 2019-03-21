@@ -81,7 +81,7 @@ class Downloader {
                 // Find the original project which has the empty path, if any, or simply take the first project
                 // and clear the path unless it is a GitRepo project (where the path refers to the manifest).
                 val referencePackage = projectsWithSameVcs.find { it.vcsProcessed.path.isEmpty() }
-                        ?: projectsWithSameVcs.first()
+                    ?: projectsWithSameVcs.first()
 
                 val otherPackages = (projectsWithSameVcs - referencePackage).map { it.copy(vcsProcessed = sameVcs) }
 
@@ -103,11 +103,11 @@ class Downloader {
      * Either [sourceArtifact] or [vcsInfo] is set to a non-null value. The download was started at [dateTime].
      */
     data class DownloadResult(
-            val dateTime: Instant,
-            val downloadDirectory: File,
-            val sourceArtifact: RemoteArtifact? = null,
-            val vcsInfo: VcsInfo? = null,
-            val originalVcsInfo: VcsInfo? = null
+        val dateTime: Instant,
+        val downloadDirectory: File,
+        val sourceArtifact: RemoteArtifact? = null,
+        val vcsInfo: VcsInfo? = null,
+        val originalVcsInfo: VcsInfo? = null
     ) {
         init {
             require((sourceArtifact == null) != (vcsInfo == null)) {
@@ -258,14 +258,14 @@ class Downloader {
         log.info { "Finished downloading source code revision '$revision' to '${outputDirectory.absolutePath}'." }
 
         val vcsInfo = VcsInfo(
-                type = applicableVcs.type,
-                url = target.vcsProcessed.url,
-                revision = target.vcsProcessed.revision.takeIf { it.isNotBlank() } ?: revision,
-                resolvedRevision = revision,
-                path = target.vcsProcessed.path // TODO: Needs to check if the VCS used the sparse checkout.
+            type = applicableVcs.type,
+            url = target.vcsProcessed.url,
+            revision = target.vcsProcessed.revision.takeIf { it.isNotBlank() } ?: revision,
+            resolvedRevision = revision,
+            path = target.vcsProcessed.path // TODO: Needs to check if the VCS used the sparse checkout.
         )
         return DownloadResult(startTime, outputDirectory, vcsInfo = vcsInfo,
-                originalVcsInfo = target.vcsProcessed.takeIf { it != vcsInfo })
+            originalVcsInfo = target.vcsProcessed.takeIf { it != vcsInfo })
     }
 
     private fun downloadSourceArtifact(target: Package, outputDirectory: File): DownloadResult {
@@ -284,14 +284,14 @@ class Downloader {
             File(URI(target.sourceArtifact.url))
         } else {
             val request = Request.Builder()
-                    // Disable transparent gzip, otherwise we might end up writing a tar file to disk and expecting to
-                    // find a tar.gz file, thus failing to unpack the archive.
-                    // See https://github.com/square/okhttp/blob/parent-3.10.0/okhttp/src/main/java/okhttp3/internal/ \
-                    // http/BridgeInterceptor.java#L79
-                    .addHeader("Accept-Encoding", "identity")
-                    .get()
-                    .url(target.sourceArtifact.url)
-                    .build()
+                // Disable transparent gzip, otherwise we might end up writing a tar file to disk and expecting to
+                // find a tar.gz file, thus failing to unpack the archive.
+                // See https://github.com/square/okhttp/blob/parent-3.10.0/okhttp/src/main/java/okhttp3/internal/ \
+                // http/BridgeInterceptor.java#L79
+                .addHeader("Accept-Encoding", "identity")
+                .get()
+                .url(target.sourceArtifact.url)
+                .build()
 
             try {
                 OkHttpClientHelper.execute(HTTP_CACHE_PATH, request).use { response ->
@@ -313,8 +313,10 @@ class Downloader {
         if (target.sourceArtifact.hash.isEmpty()) {
             log.warn { "Source artifact has no hash, skipping verification." }
         } else if (!Hash(target.sourceArtifact.hashAlgorithm, target.sourceArtifact.hash).verify(sourceArchive)) {
-            throw DownloadException("Source artifact does not match expected ${target.sourceArtifact.hashAlgorithm} " +
-                    "hash '${target.sourceArtifact.hash}'.")
+            throw DownloadException(
+                "Source artifact does not match expected ${target.sourceArtifact.hashAlgorithm} " +
+                        "hash '${target.sourceArtifact.hash}'."
+            )
         }
 
         try {

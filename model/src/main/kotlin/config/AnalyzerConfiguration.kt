@@ -25,20 +25,20 @@ import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer
 
 data class AnalyzerConfiguration(
-        /**
-         * If set to true, ignore the versions of used command line tools. Note that this might lead to erroneous
-         * results if the tools have changed in usage or behavior. If set to false, check the versions to match the
-         * expected versions and fail the analysis on a mismatch.
-         */
-        val ignoreToolVersions: Boolean,
+    /**
+     * If set to true, ignore the versions of used command line tools. Note that this might lead to erroneous
+     * results if the tools have changed in usage or behavior. If set to false, check the versions to match the
+     * expected versions and fail the analysis on a mismatch.
+     */
+    val ignoreToolVersions: Boolean,
 
-        /**
-         * Enable the analysis of projects that use version ranges to declare their dependencies. If set to true,
-         * dependencies of exactly the same project might change with another scan done at a later time if any of the
-         * (transitive) dependencies are declared using version ranges and a new version of such a dependency was
-         * published in the meantime. If set to false, analysis of projects that use version ranges will fail.
-         */
-        val allowDynamicVersions: Boolean
+    /**
+     * Enable the analysis of projects that use version ranges to declare their dependencies. If set to true,
+     * dependencies of exactly the same project might change with another scan done at a later time if any of the
+     * (transitive) dependencies are declared using version ranges and a new version of such a dependency was
+     * published in the meantime. If set to false, analysis of projects that use version ranges will fail.
+     */
+    val allowDynamicVersions: Boolean
 )
 
 class AnalyzerConfigurationDeserializer : StdDeserializer<AnalyzerConfiguration>(AnalyzerConfiguration::class.java) {
@@ -49,8 +49,8 @@ class AnalyzerConfigurationDeserializer : StdDeserializer<AnalyzerConfiguration>
             AnalyzerConfiguration(false, node.booleanValue())
         } else {
             AnalyzerConfiguration(
-                    node.get("ignore_tool_versions").booleanValue(),
-                    node.get("allow_dynamic_versions").booleanValue()
+                node.get("ignore_tool_versions").booleanValue(),
+                node.get("allow_dynamic_versions").booleanValue()
             )
         }
     }

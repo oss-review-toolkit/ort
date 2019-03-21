@@ -49,15 +49,15 @@ const val HTTP_CACHE_PATH = "$TOOL_NAME/cache/http"
  */
 class Analyzer(private val config: AnalyzerConfiguration) {
     fun analyze(
-            absoluteProjectPath: File,
-            packageManagers: List<PackageManagerFactory> = PackageManager.ALL,
-            packageCurationsFile: File? = null,
-            repositoryConfigurationFile: File? = null
+        absoluteProjectPath: File,
+        packageManagers: List<PackageManagerFactory> = PackageManager.ALL,
+        packageCurationsFile: File? = null,
+        repositoryConfigurationFile: File? = null
     ): OrtResult {
         val startTime = Instant.now()
 
         val actualRepositoryConfigurationFile = repositoryConfigurationFile
-                ?: locateRepositoryConfigurationFile(absoluteProjectPath)
+            ?: locateRepositoryConfigurationFile(absoluteProjectPath)
 
         val repositoryConfiguration = if (actualRepositoryConfigurationFile.isFile) {
             log.info { "Using configuration file '${actualRepositoryConfigurationFile.absolutePath}'." }
@@ -113,18 +113,18 @@ class Analyzer(private val config: AnalyzerConfiguration) {
                 val provider = YamlFilePackageCurationProvider(it)
                 results.mapValues { entry ->
                     ProjectAnalyzerResult(
-                            project = entry.value.project,
-                            errors = entry.value.errors,
-                            packages = entry.value.packages.map { curatedPackage ->
-                                val curations = provider.getCurationsFor(curatedPackage.pkg.id)
-                                curations.fold(curatedPackage) { cur, packageCuration ->
-                                    log.debug {
-                                        "Applying curation '$packageCuration' to package " +
-                                                "'${curatedPackage.pkg.id.toCoordinates()}'."
-                                    }
-                                    packageCuration.apply(cur)
+                        project = entry.value.project,
+                        errors = entry.value.errors,
+                        packages = entry.value.packages.map { curatedPackage ->
+                            val curations = provider.getCurationsFor(curatedPackage.pkg.id)
+                            curations.fold(curatedPackage) { cur, packageCuration ->
+                                log.debug {
+                                    "Applying curation '$packageCuration' to package " +
+                                            "'${curatedPackage.pkg.id.toCoordinates()}'."
                                 }
-                            }.toSortedSet()
+                                packageCuration.apply(cur)
+                            }
+                        }.toSortedSet()
                     )
                 }
             } ?: results
@@ -150,10 +150,10 @@ class Analyzer(private val config: AnalyzerConfiguration) {
     }
 
     private fun locateRepositoryConfigurationFile(absoluteProjectPath: File) =
-            if (GitRepo().getWorkingTree(absoluteProjectPath).isValid()) {
-                val manifestFile = absoluteProjectPath.resolve(".repo/manifest.xml").realFile()
-                manifestFile.resolveSibling("${manifestFile.name}$ORT_CONFIG_FILENAME")
-            } else {
-                File(absoluteProjectPath, ORT_CONFIG_FILENAME)
-            }
+        if (GitRepo().getWorkingTree(absoluteProjectPath).isValid()) {
+            val manifestFile = absoluteProjectPath.resolve(".repo/manifest.xml").realFile()
+            manifestFile.resolveSibling("${manifestFile.name}$ORT_CONFIG_FILENAME")
+        } else {
+            File(absoluteProjectPath, ORT_CONFIG_FILENAME)
+        }
 }

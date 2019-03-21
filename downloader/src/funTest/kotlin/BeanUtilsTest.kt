@@ -48,24 +48,24 @@ class BeanUtilsTest : StringSpec() {
     init {
         "BeanUtils SVN tag should be correctly downloaded".config(enabled = Subversion().isInPath()) {
             val vcsFromCuration = VcsInfo(
-                    type = "svn",
-                    url = "http://svn.apache.org/repos/asf/commons/proper/beanutils",
-                    revision = ""
+                type = "svn",
+                url = "http://svn.apache.org/repos/asf/commons/proper/beanutils",
+                revision = ""
             )
 
             val pkg = Package(
-                    id = Identifier(
-                            type = "Maven",
-                            namespace = "commons-beanutils",
-                            name = "commons-beanutils-bean-collections",
-                            version = "1.8.3"
-                    ),
-                    declaredLicenses = sortedSetOf("The Apache Software License, Version 2.0"),
-                    description = "",
-                    homepageUrl = "http://commons.apache.org/beanutils/",
-                    binaryArtifact = RemoteArtifact.EMPTY,
-                    sourceArtifact = RemoteArtifact.EMPTY,
-                    vcs = vcsFromCuration
+                id = Identifier(
+                    type = "Maven",
+                    namespace = "commons-beanutils",
+                    name = "commons-beanutils-bean-collections",
+                    version = "1.8.3"
+                ),
+                declaredLicenses = sortedSetOf("The Apache Software License, Version 2.0"),
+                description = "",
+                homepageUrl = "http://commons.apache.org/beanutils/",
+                binaryArtifact = RemoteArtifact.EMPTY,
+                sourceArtifact = RemoteArtifact.EMPTY,
+                vcs = vcsFromCuration
             )
 
             val downloadResult = Downloader().download(pkg, outputDir)

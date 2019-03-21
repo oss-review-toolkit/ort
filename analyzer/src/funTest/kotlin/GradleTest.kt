@@ -61,9 +61,9 @@ class GradleTest : StringSpec() {
         "Root project dependencies are detected correctly" {
             val packageFile = File(projectDir, "build.gradle")
             val expectedResult = patchExpectedResult(
-                    File(projectDir.parentFile, "gradle-expected-output-root.yml"),
-                    url = normalizeVcsUrl(vcsUrl),
-                    revision = vcsRevision
+                File(projectDir.parentFile, "gradle-expected-output-root.yml"),
+                url = normalizeVcsUrl(vcsUrl),
+                revision = vcsRevision
             )
 
             val result = createGradle().resolveDependencies(USER_DIR, listOf(packageFile))[packageFile]
@@ -76,9 +76,9 @@ class GradleTest : StringSpec() {
         "Project dependencies are detected correctly" {
             val packageFile = File(projectDir, "app/build.gradle")
             val expectedResult = patchExpectedResult(
-                    File(projectDir.parentFile, "gradle-expected-output-app.yml"),
-                    url = normalizeVcsUrl(vcsUrl),
-                    revision = vcsRevision
+                File(projectDir.parentFile, "gradle-expected-output-app.yml"),
+                url = normalizeVcsUrl(vcsUrl),
+                revision = vcsRevision
             )
 
             val result = createGradle().resolveDependencies(USER_DIR, listOf(packageFile))[packageFile]
@@ -91,9 +91,9 @@ class GradleTest : StringSpec() {
         "External dependencies are detected correctly" {
             val packageFile = File(projectDir, "lib/build.gradle")
             val expectedResult = patchExpectedResult(
-                    File(projectDir.parentFile, "gradle-expected-output-lib.yml"),
-                    url = normalizeVcsUrl(vcsUrl),
-                    revision = vcsRevision
+                File(projectDir.parentFile, "gradle-expected-output-lib.yml"),
+                url = normalizeVcsUrl(vcsUrl),
+                revision = vcsRevision
             )
 
             val result = createGradle().resolveDependencies(USER_DIR, listOf(packageFile))[packageFile]
@@ -106,9 +106,9 @@ class GradleTest : StringSpec() {
         "Unresolved dependencies are detected correctly" {
             val packageFile = File(projectDir, "lib-without-repo/build.gradle")
             val expectedResult = patchExpectedResult(
-                    File(projectDir.parentFile, "gradle-expected-output-lib-without-repo.yml"),
-                    url = normalizeVcsUrl(vcsUrl),
-                    revision = vcsRevision
+                File(projectDir.parentFile, "gradle-expected-output-lib-without-repo.yml"),
+                url = normalizeVcsUrl(vcsUrl),
+                revision = vcsRevision
             )
 
             val result = createGradle().resolveDependencies(USER_DIR, listOf(packageFile))[packageFile]
@@ -121,9 +121,9 @@ class GradleTest : StringSpec() {
         "Fails nicely for Gradle version < 2.14".config(enabled = false) {
             val packageFile = File(projectDir.parentFile, "gradle-unsupported-version/build.gradle")
             val expectedResult = patchExpectedResult(
-                    File(projectDir.parentFile, "gradle-expected-output-unsupported-version.yml"),
-                    url = normalizeVcsUrl(vcsUrl),
-                    revision = vcsRevision
+                File(projectDir.parentFile, "gradle-expected-output-unsupported-version.yml"),
+                url = normalizeVcsUrl(vcsUrl),
+                revision = vcsRevision
             )
 
             val result = createGradle().resolveDependencies(USER_DIR, listOf(packageFile))[packageFile]
@@ -135,33 +135,33 @@ class GradleTest : StringSpec() {
         "Is compatible with Gradle >= 2.14".config(tags = setOf(ExpensiveTag), enabled = false) {
             // See https://blog.gradle.org/java-9-support-update.
             val gradleVersionsThatSupportJava9 = arrayOf(
-                    row("4.6", ""),
-                    row("4.5.1", "-3.4"),
-                    row("4.5", "-3.4"),
-                    row("4.4.1", "-3.4"),
-                    row("4.4", "-3.4"),
-                    row("4.3.1", "-3.4"),
-                    row("4.3", "-3.4"),
-                    row("4.2.1", "-3.4")
+                row("4.6", ""),
+                row("4.5.1", "-3.4"),
+                row("4.5", "-3.4"),
+                row("4.4.1", "-3.4"),
+                row("4.4", "-3.4"),
+                row("4.3.1", "-3.4"),
+                row("4.3", "-3.4"),
+                row("4.2.1", "-3.4")
             )
 
             val gradleVersionsThatDoNotSupportJava9 = arrayOf(
-                    row("4.2", "-3.4"),
-                    row("4.1", "-3.4"),
-                    row("4.0.2", "-3.4"),
-                    row("4.0.1", "-3.4"),
-                    row("4.0", "-3.4"),
-                    row("3.5.1", "-3.4"),
-                    row("3.5", "-3.4"),
-                    row("3.4.1", "-3.4"),
-                    row("3.4", "-3.4"),
-                    row("3.3", "-2.14"),
-                    row("3.2.1", "-2.14"),
-                    row("3.2", "-2.14"),
-                    row("3.1", "-2.14"),
-                    row("3.0", "-2.14"),
-                    row("2.14.1", "-2.14"),
-                    row("2.14", "-2.14")
+                row("4.2", "-3.4"),
+                row("4.1", "-3.4"),
+                row("4.0.2", "-3.4"),
+                row("4.0.1", "-3.4"),
+                row("4.0", "-3.4"),
+                row("3.5.1", "-3.4"),
+                row("3.5", "-3.4"),
+                row("3.4.1", "-3.4"),
+                row("3.4", "-3.4"),
+                row("3.3", "-2.14"),
+                row("3.2.1", "-2.14"),
+                row("3.2", "-2.14"),
+                row("3.1", "-2.14"),
+                row("3.0", "-2.14"),
+                row("2.14.1", "-2.14"),
+                row("2.14", "-2.14")
             )
 
             val gradleVersions = if (isJava9OrAbove) {
@@ -177,9 +177,9 @@ class GradleTest : StringSpec() {
 
                 val packageFile = File(projectDir, "app/build.gradle")
                 val expectedResult = patchExpectedResult(
-                        File(projectDir.parentFile, "gradle-expected-output-app$resultsFileSuffix.yml"),
-                        url = normalizeVcsUrl(vcsUrl),
-                        revision = vcsRevision
+                    File(projectDir.parentFile, "gradle-expected-output-app$resultsFileSuffix.yml"),
+                    url = normalizeVcsUrl(vcsUrl),
+                    revision = vcsRevision
                 )
 
                 val result = createGradle().resolveDependencies(USER_DIR, listOf(packageFile))[packageFile]
@@ -205,7 +205,7 @@ class GradleTest : StringSpec() {
         // When calling Windows batch files directly (without passing them to "cmd" as an argument), Windows requires
         // the absolute path to the batch file to be passed to the underlying ProcessBuilder for some reason.
         ProcessCapture(projectDir, File(command).absolutePath, "--no-daemon", "wrapper", "--gradle-version", version)
-                .requireSuccess()
+            .requireSuccess()
     }
 
     private fun createGradle() = Gradle("Gradle", DEFAULT_ANALYZER_CONFIGURATION, DEFAULT_REPOSITORY_CONFIGURATION)

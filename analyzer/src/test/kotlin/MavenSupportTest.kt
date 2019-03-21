@@ -38,10 +38,10 @@ class MavenSupportTest : WordSpec({
             }
 
             MavenSupport.parseVcsInfo(mavenProject) shouldBe VcsInfo(
-                    type = "git-repo",
-                    url = "ssh://host.com/project/foo",
-                    revision = "v1.2.3",
-                    path = "path/to/manifest.xml"
+                type = "git-repo",
+                url = "ssh://host.com/project/foo",
+                revision = "v1.2.3",
+                path = "path/to/manifest.xml"
             )
         }
     }

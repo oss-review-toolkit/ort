@@ -33,34 +33,34 @@ import java.util.SortedSet
  * analyzer and scanner will add their result to it.
  */
 data class OrtResult(
-        /**
-         * Information about the repository that was used as input.
-         */
-        val repository: Repository,
+    /**
+     * Information about the repository that was used as input.
+     */
+    val repository: Repository,
 
-        /**
-         * An [AnalyzerRun] containing details about the analyzer that was run using [repository] as input. Can be null
-         * if the [repository] was not yet analyzed.
-         */
-        val analyzer: AnalyzerRun? = null,
+    /**
+     * An [AnalyzerRun] containing details about the analyzer that was run using [repository] as input. Can be null
+     * if the [repository] was not yet analyzed.
+     */
+    val analyzer: AnalyzerRun? = null,
 
-        /**
-         * A [ScannerRun] containing details about the scanner that was run using the result from [analyzer] as input.
-         * Can be null if no scanner was run.
-         */
-        val scanner: ScannerRun? = null,
+    /**
+     * A [ScannerRun] containing details about the scanner that was run using the result from [analyzer] as input.
+     * Can be null if no scanner was run.
+     */
+    val scanner: ScannerRun? = null,
 
-        /**
-         * An [EvaluatorRun] containing details about the evaluation that was run using the result from [scanner] as
-         * input. Can be null if no evaluation was run.
-         */
-        val evaluator: EvaluatorRun? = null,
+    /**
+     * An [EvaluatorRun] containing details about the evaluation that was run using the result from [scanner] as
+     * input. Can be null if no evaluation was run.
+     */
+    val evaluator: EvaluatorRun? = null,
 
-        /**
-         * A map that holds arbitrary data. Can be used by third-party tools to add custom data to the model.
-         */
-        @JsonInclude(JsonInclude.Include.NON_EMPTY)
-        val data: CustomData = emptyMap()
+    /**
+     * A map that holds arbitrary data. Can be used by third-party tools to add custom data to the model.
+     */
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    val data: CustomData = emptyMap()
 ) {
     companion object {
         /**
@@ -76,14 +76,14 @@ data class OrtResult(
      */
     @Suppress("UNUSED") // This is intended to be mostly used via scripting.
     fun collectConcludedLicenses(omitExcluded: Boolean = false) =
-            sortedMapOf<Identifier, SpdxExpression?>().also { licenses ->
-                val excludes = repository.config.excludes.takeIf { omitExcluded }
+        sortedMapOf<Identifier, SpdxExpression?>().also { licenses ->
+            val excludes = repository.config.excludes.takeIf { omitExcluded }
 
-                analyzer?.result?.let { result ->
-                    result.packages.filter { excludes?.isPackageExcluded(it.pkg.id, this) != true }
-                            .associateTo(licenses) { it.pkg.id to it.pkg.concludedLicense }
-                }
+            analyzer?.result?.let { result ->
+                result.packages.filter { excludes?.isPackageExcluded(it.pkg.id, this) != true }
+                    .associateTo(licenses) { it.pkg.id to it.pkg.concludedLicense }
             }
+        }
 
     /**
      * Return the declared licenses associated to their project / package identifiers. If [omitExcluded] is set to true,
@@ -91,27 +91,27 @@ data class OrtResult(
      */
     @Suppress("UNUSED") // This is intended to be mostly used via scripting.
     fun collectDeclaredLicenses(omitExcluded: Boolean = false) =
-            sortedMapOf<String, SortedSet<Identifier>>().also { licenses ->
-                val excludes = repository.config.excludes.takeIf { omitExcluded }
+        sortedMapOf<String, SortedSet<Identifier>>().also { licenses ->
+            val excludes = repository.config.excludes.takeIf { omitExcluded }
 
-                analyzer?.result?.let { result ->
-                    result.projects.forEach { project ->
-                        if (excludes?.isProjectExcluded(project, this) != true) {
-                            project.declaredLicenses.forEach { license ->
-                                licenses.getOrPut(license) { sortedSetOf() } += project.id
-                            }
+            analyzer?.result?.let { result ->
+                result.projects.forEach { project ->
+                    if (excludes?.isProjectExcluded(project, this) != true) {
+                        project.declaredLicenses.forEach { license ->
+                            licenses.getOrPut(license) { sortedSetOf() } += project.id
                         }
                     }
+                }
 
-                    result.packages.forEach { (pkg, _) ->
-                        if (excludes?.isPackageExcluded(pkg.id, this) != true) {
-                            pkg.declaredLicenses.forEach { license ->
-                                licenses.getOrPut(license) { sortedSetOf() } += pkg.id
-                            }
+                result.packages.forEach { (pkg, _) ->
+                    if (excludes?.isPackageExcluded(pkg.id, this) != true) {
+                        pkg.declaredLicenses.forEach { license ->
+                            licenses.getOrPut(license) { sortedSetOf() } += pkg.id
                         }
                     }
                 }
             }
+        }
 
     /**
      * Return the detected licenses associated to their project / package identifiers. If [omitExcluded] is set to true,
@@ -119,20 +119,20 @@ data class OrtResult(
      */
     @Suppress("UNUSED") // This is intended to be mostly used via scripting.
     fun collectDetectedLicenses(omitExcluded: Boolean = false) =
-            sortedMapOf<String, SortedSet<Identifier>>().also { licenses ->
-                // Note that we require the analyzer result here to determine whether a package has been implicitly
-                // excluded via its project or scope.
-                val excludes = repository.config.excludes.takeIf { omitExcluded && analyzer != null }
+        sortedMapOf<String, SortedSet<Identifier>>().also { licenses ->
+            // Note that we require the analyzer result here to determine whether a package has been implicitly
+            // excluded via its project or scope.
+            val excludes = repository.config.excludes.takeIf { omitExcluded && analyzer != null }
 
-                scanner?.results?.scanResults?.forEach { result ->
-                    // At this point we know that analyzer != null if excludes != null.
-                    if (excludes?.isPackageExcluded(result.id, this) != true) {
-                        result.getAllDetectedLicenses().forEach { license ->
-                            licenses.getOrPut(license) { sortedSetOf() } += result.id
-                        }
+            scanner?.results?.scanResults?.forEach { result ->
+                // At this point we know that analyzer != null if excludes != null.
+                if (excludes?.isPackageExcluded(result.id, this) != true) {
+                    result.getAllDetectedLicenses().forEach { license ->
+                        licenses.getOrPut(license) { sortedSetOf() } += result.id
                     }
                 }
             }
+        }
 
     /**
      * Return the dependencies of the given [id] (which can refer to a [Project] or a [Package]), up to and including a
@@ -175,34 +175,34 @@ data class OrtResult(
      * If [omitExcluded] is set to true, excluded projects / packages are omitted from the result.
      */
     fun collectLicenseFindings(omitExcluded: Boolean = false) =
-            sortedMapOf<Identifier, MutableMap<LicenseFinding, List<PathExclude>>>().also { findings ->
-                val excludes = repository.config.excludes
+        sortedMapOf<Identifier, MutableMap<LicenseFinding, List<PathExclude>>>().also { findings ->
+            val excludes = repository.config.excludes
 
-                scanner?.results?.scanResults?.forEach { result ->
-                    val project = analyzer?.result?.projects?.find { it.id == result.id }
+            scanner?.results?.scanResults?.forEach { result ->
+                val project = analyzer?.result?.projects?.find { it.id == result.id }
 
-                    if (!omitExcluded || excludes?.isPackageExcluded(result.id, this) != true) {
-                        result.results.flatMap { it.summary.licenseFindings }.forEach { finding ->
-                            val matchingExcludes = mutableSetOf<PathExclude>()
+                if (!omitExcluded || excludes?.isPackageExcluded(result.id, this) != true) {
+                    result.results.flatMap { it.summary.licenseFindings }.forEach { finding ->
+                        val matchingExcludes = mutableSetOf<PathExclude>()
 
-                            // Only license findings of projects can be excluded by path excludes.
-                            val isExcluded = project != null && excludes != null && finding.locations.all { location ->
-                                excludes.paths.any { exclude ->
-                                    exclude.matches(location.path).also { matches ->
-                                        if (matches) matchingExcludes += exclude
-                                    }
+                        // Only license findings of projects can be excluded by path excludes.
+                        val isExcluded = project != null && excludes != null && finding.locations.all { location ->
+                            excludes.paths.any { exclude ->
+                                exclude.matches(location.path).also { matches ->
+                                    if (matches) matchingExcludes += exclude
                                 }
                             }
-
-                            // TODO: Also filter copyrights excluded by path excludes.
-
-                            findings.getOrPut(result.id) { mutableMapOf() }[finding] =
-                                    // Only add matching excludes if all license locations are excluded.
-                                    if (isExcluded) matchingExcludes.toList() else emptyList()
                         }
+
+                        // TODO: Also filter copyrights excluded by path excludes.
+
+                        findings.getOrPut(result.id) { mutableMapOf() }[finding] =
+                                // Only add matching excludes if all license locations are excluded.
+                            if (isExcluded) matchingExcludes.toList() else emptyList()
                     }
                 }
             }
+        }
 
     /**
      * Return the set of all project or package identifiers in the result, optionally [including those of sub-projects]
@@ -235,19 +235,19 @@ data class OrtResult(
      * Return the concluded license for the given package [id], or null if there is no concluded license.
      */
     fun getConcludedLicensesForId(id: Identifier) =
-            analyzer?.result?.run {
-                packages.find { it.pkg.id == id }?.pkg?.concludedLicense
-            }
+        analyzer?.result?.run {
+            packages.find { it.pkg.id == id }?.pkg?.concludedLicense
+        }
 
     /**
      * Return the declared licenses for the given [id] which may either refer to a project or to a package. If [id] is
      * not found an empty set is returned.
      */
     fun getDeclaredLicensesForId(id: Identifier) =
-            analyzer?.result?.run {
-                projects.find { it.id == id }?.declaredLicenses
-                        ?: packages.find { it.pkg.id == id }?.pkg?.declaredLicenses
-            } ?: sortedSetOf<String>()
+        analyzer?.result?.run {
+            projects.find { it.id == id }?.declaredLicenses
+                ?: packages.find { it.pkg.id == id }?.pkg?.declaredLicenses
+        } ?: sortedSetOf<String>()
 
     /**
      * Return all detected licenses for the given package [id]. As projects are implicitly converted to packages before
@@ -255,7 +255,7 @@ data class OrtResult(
      */
     @Suppress("UNUSED") // This is intended to be mostly used via scripting.
     fun getDetectedLicensesForId(id: Identifier) =
-            scanner?.results?.scanResults?.find { it.id == id }.getAllDetectedLicenses()
+        scanner?.results?.scanResults?.find { it.id == id }.getAllDetectedLicenses()
 
     /**
      * Return all projects and packages that are likely to belong to one of the organizations of the given [names]. If
@@ -290,7 +290,7 @@ data class OrtResult(
      * a VCS the analyzer root is the input directory of the analyzer.
      */
     fun getDefinitionFilePathRelativeToAnalyzerRoot(project: Project) =
-            getFilePathRelativeToAnalyzerRoot(project, project.definitionFilePath)
+        getFilePathRelativeToAnalyzerRoot(project, project.definitionFilePath)
 
     /**
      * Returns the path of a file contained in [project], relative to the analyzer root. If the project was checked out
@@ -318,7 +318,7 @@ data class OrtResult(
      */
     @Suppress("UNUSED") // This is intended to be mostly used via scripting.
     fun isExcluded(id: Identifier) =
-            analyzer?.result?.let { repository.config.excludes?.isExcluded(id, this) } == true
+        analyzer?.result?.let { repository.config.excludes?.isExcluded(id, this) } == true
 
     /**
      * Return a copy of this [OrtResult] with the [Repository.config] replaced by [config].

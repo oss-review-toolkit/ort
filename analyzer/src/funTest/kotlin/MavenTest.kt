@@ -71,9 +71,9 @@ class MavenTest : StringSpec() {
         "Root project dependencies are detected correctly" {
             val pomFile = File(projectDir, "pom.xml")
             val expectedResult = patchExpectedResult(
-                    File(projectDir.parentFile, "maven-expected-output-root.yml"),
-                    url = normalizeVcsUrl(vcsUrl),
-                    revision = vcsRevision
+                File(projectDir.parentFile, "maven-expected-output-root.yml"),
+                url = normalizeVcsUrl(vcsUrl),
+                revision = vcsRevision
             )
 
             val result = createMaven().resolveDependencies(USER_DIR, listOf(pomFile))[pomFile]
@@ -85,9 +85,9 @@ class MavenTest : StringSpec() {
             val pomFileApp = File(projectDir, "app/pom.xml")
             val pomFileLib = File(projectDir, "lib/pom.xml")
             val expectedResult = patchExpectedResult(
-                    File(projectDir.parentFile, "maven-expected-output-app.yml"),
-                    url = normalizeVcsUrl(vcsUrl),
-                    revision = vcsRevision
+                File(projectDir.parentFile, "maven-expected-output-app.yml"),
+                url = normalizeVcsUrl(vcsUrl),
+                revision = vcsRevision
             )
 
             // app depends on lib, so we also have to pass the pom.xml of lib to resolveDependencies so that it is
@@ -101,9 +101,9 @@ class MavenTest : StringSpec() {
         "External dependencies are detected correctly" {
             val pomFile = File(projectDir, "lib/pom.xml")
             val expectedResult = patchExpectedResult(
-                    File(projectDir.parentFile, "maven-expected-output-lib.yml"),
-                    url = normalizeVcsUrl(vcsUrl),
-                    revision = vcsRevision
+                File(projectDir.parentFile, "maven-expected-output-lib.yml"),
+                url = normalizeVcsUrl(vcsUrl),
+                revision = vcsRevision
             )
 
             val result = createMaven().resolveDependencies(USER_DIR, listOf(pomFile))[pomFile]
@@ -114,15 +114,15 @@ class MavenTest : StringSpec() {
         "Parent POM from Maven central can be resolved" {
             // Delete the parent POM from the local repository to make sure it has to be resolved from Maven central.
             getUserHomeDirectory()
-                    .resolve(".m2/repository/org/springframework/boot/spring-boot-starter-parent/1.5.3.RELEASE")
-                    .safeDeleteRecursively(force = true)
+                .resolve(".m2/repository/org/springframework/boot/spring-boot-starter-parent/1.5.3.RELEASE")
+                .safeDeleteRecursively(force = true)
 
             val projectDir = File("src/funTest/assets/projects/synthetic/maven-parent")
             val pomFile = File(projectDir, "pom.xml")
             val expectedResult = patchExpectedResult(
-                    File(projectDir.parentFile, "maven-parent-expected-output-root.yml"),
-                    url = normalizeVcsUrl(vcsUrl),
-                    revision = vcsRevision
+                File(projectDir.parentFile, "maven-parent-expected-output-root.yml"),
+                url = normalizeVcsUrl(vcsUrl),
+                revision = vcsRevision
             )
 
             val result = createMaven().resolveDependencies(USER_DIR, listOf(pomFile))[pomFile]

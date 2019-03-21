@@ -63,18 +63,18 @@ class UtilsTest : WordSpec({
 
         "find names separated by underscores" {
             val names = listOf(
-                    "A02",
-                    "A03",
-                    "A04",
-                    "DEV0_9_3",
-                    "DEV0_9_4",
-                    "DEV_0_9_7",
-                    "Exoffice",
-                    "PROD_1_0_1",
-                    "PROD_1_0_2",
-                    "PROD_1_0_3",
-                    "before_SourceForge",
-                    "before_debug_changes"
+                "A02",
+                "A03",
+                "A04",
+                "DEV0_9_3",
+                "DEV0_9_4",
+                "DEV_0_9_7",
+                "Exoffice",
+                "PROD_1_0_1",
+                "PROD_1_0_2",
+                "PROD_1_0_3",
+                "before_SourceForge",
+                "before_debug_changes"
             )
 
             filterVersionNames("1.0.3", names).joinToString("\n") shouldBe "PROD_1_0_3"
@@ -84,13 +84,13 @@ class UtilsTest : WordSpec({
 
         "find names separated by dots" {
             val names = listOf(
-                    "0.10.0",
-                    "0.10.1",
-                    "0.5.0",
-                    "0.6.0",
-                    "0.7.0",
-                    "0.8.0",
-                    "0.9.0"
+                "0.10.0",
+                "0.10.1",
+                "0.5.0",
+                "0.6.0",
+                "0.7.0",
+                "0.8.0",
+                "0.9.0"
             )
 
             filterVersionNames("0.10.0", names).joinToString("\n") shouldBe "0.10.0"
@@ -101,30 +101,30 @@ class UtilsTest : WordSpec({
 
         "find names with mixed separators" {
             val names = listOf(
-                    "docutils-0.10",
-                    "docutils-0.11",
-                    "docutils-0.12",
-                    "docutils-0.13.1",
-                    "docutils-0.14",
-                    "docutils-0.14.0a",
-                    "docutils-0.14a0",
-                    "docutils-0.14rc1",
-                    "docutils-0.14rc2",
-                    "docutils-0.3.7",
-                    "docutils-0.3.9",
-                    "docutils-0.4",
-                    "docutils-0.5",
-                    "docutils-0.6",
-                    "docutils-0.7",
-                    "docutils-0.8",
-                    "docutils-0.8.1",
-                    "docutils-0.9",
-                    "docutils-0.9.1",
-                    "initial",
-                    "merged_to_nesting",
-                    "prest-0.3.10",
-                    "prest-0.3.11",
-                    "start"
+                "docutils-0.10",
+                "docutils-0.11",
+                "docutils-0.12",
+                "docutils-0.13.1",
+                "docutils-0.14",
+                "docutils-0.14.0a",
+                "docutils-0.14a0",
+                "docutils-0.14rc1",
+                "docutils-0.14rc2",
+                "docutils-0.3.7",
+                "docutils-0.3.9",
+                "docutils-0.4",
+                "docutils-0.5",
+                "docutils-0.6",
+                "docutils-0.7",
+                "docutils-0.8",
+                "docutils-0.8.1",
+                "docutils-0.9",
+                "docutils-0.9.1",
+                "initial",
+                "merged_to_nesting",
+                "prest-0.3.10",
+                "prest-0.3.11",
+                "start"
             )
 
             filterVersionNames("0.3.9", names).joinToString("\n") shouldBe "docutils-0.3.9"
@@ -143,28 +143,28 @@ class UtilsTest : WordSpec({
 
         "find names with a 'v' prefix" {
             val names = listOf(
-                    "v6.2.0",
-                    "v6.2.1",
-                    "v6.2.2",
-                    "v6.20.0",
-                    "v6.20.1",
-                    "v6.20.2",
-                    "v6.20.3",
-                    "v6.21.0",
-                    "v6.21.1",
-                    "v6.22.0",
-                    "v6.22.1",
-                    "v6.22.2",
-                    "v6.23.0",
-                    "v6.23.1",
-                    "v6.24.0",
-                    "v6.24.1",
-                    "v6.25.0",
-                    "v6.26.0",
-                    "v7.0.0-beta.0",
-                    "v7.0.0-beta.1",
-                    "v7.0.0-beta.2",
-                    "v7.0.0-beta.3"
+                "v6.2.0",
+                "v6.2.1",
+                "v6.2.2",
+                "v6.20.0",
+                "v6.20.1",
+                "v6.20.2",
+                "v6.20.3",
+                "v6.21.0",
+                "v6.21.1",
+                "v6.22.0",
+                "v6.22.1",
+                "v6.22.2",
+                "v6.23.0",
+                "v6.23.1",
+                "v6.24.0",
+                "v6.24.1",
+                "v6.25.0",
+                "v6.26.0",
+                "v7.0.0-beta.0",
+                "v7.0.0-beta.1",
+                "v7.0.0-beta.2",
+                "v7.0.0-beta.3"
             )
 
             filterVersionNames("6.26.0", names).joinToString("\n") shouldBe "v6.26.0"
@@ -175,19 +175,19 @@ class UtilsTest : WordSpec({
 
         "find names with the project name as the prefix" {
             val names = listOf(
-                    "babel-plugin-transform-member-expression-literals@6.9.0",
-                    "babel-plugin-transform-simplify-comparison-operators@6.9.0",
-                    "babel-plugin-transform-property-literals@6.9.0"
+                "babel-plugin-transform-member-expression-literals@6.9.0",
+                "babel-plugin-transform-simplify-comparison-operators@6.9.0",
+                "babel-plugin-transform-property-literals@6.9.0"
             )
 
             filterVersionNames("6.9.0", names, "babel-plugin-transform-simplify-comparison-operators")
-                    .joinToString("\n") shouldBe "babel-plugin-transform-simplify-comparison-operators@6.9.0"
+                .joinToString("\n") shouldBe "babel-plugin-transform-simplify-comparison-operators@6.9.0"
         }
 
         "find names when others with trailing digits are present" {
             val names = listOf(
-                    "1.11.6", "1.11.60", "1.11.61", "1.11.62", "1.11.63", "1.11.64", "1.11.65", "1.11.66", "1.11.67",
-                    "1.11.68", "1.11.69"
+                "1.11.6", "1.11.60", "1.11.61", "1.11.62", "1.11.63", "1.11.64", "1.11.65", "1.11.66", "1.11.67",
+                "1.11.68", "1.11.69"
             )
 
             filterVersionNames("1.11.6", names).joinToString("\n") shouldBe "1.11.6"
@@ -244,12 +244,12 @@ class UtilsTest : WordSpec({
 
         "handle anonymous Git / HTTPS URL schemes" {
             val packages = mapOf(
-                    "git://github.com/cheeriojs/cheerio.git"
-                            to "https://github.com/cheeriojs/cheerio.git",
-                    "git+https://github.com/fb55/boolbase.git"
-                            to "https://github.com/fb55/boolbase.git",
-                    "https://www.github.com/DefinitelyTyped/DefinitelyTyped.git"
-                            to "https://github.com/DefinitelyTyped/DefinitelyTyped.git"
+                "git://github.com/cheeriojs/cheerio.git"
+                        to "https://github.com/cheeriojs/cheerio.git",
+                "git+https://github.com/fb55/boolbase.git"
+                        to "https://github.com/fb55/boolbase.git",
+                "https://www.github.com/DefinitelyTyped/DefinitelyTyped.git"
+                        to "https://github.com/DefinitelyTyped/DefinitelyTyped.git"
             )
 
             packages.forEach { actualUrl, expectedUrl ->
@@ -259,12 +259,12 @@ class UtilsTest : WordSpec({
 
         "handle authenticated SSH URL schemes" {
             val packages = mapOf(
-                    "git+ssh://git@github.com/logicalparadox/idris.git"
-                            to "ssh://git@github.com/logicalparadox/idris.git",
-                    "git@github.com:heremaps/oss-review-toolkit.git"
-                            to "ssh://git@github.com/heremaps/oss-review-toolkit.git",
-                    "ssh://user@gerrit.server.com:29418/parent/project"
-                            to "ssh://user@gerrit.server.com:29418/parent/project"
+                "git+ssh://git@github.com/logicalparadox/idris.git"
+                        to "ssh://git@github.com/logicalparadox/idris.git",
+                "git@github.com:heremaps/oss-review-toolkit.git"
+                        to "ssh://git@github.com/heremaps/oss-review-toolkit.git",
+                "ssh://user@gerrit.server.com:29418/parent/project"
+                        to "ssh://user@gerrit.server.com:29418/parent/project"
             )
 
             packages.forEach { actualUrl, expectedUrl ->
@@ -274,8 +274,8 @@ class UtilsTest : WordSpec({
 
         "add missing https:// for GitHub URLs" {
             val packages = mapOf(
-                    "github.com/leanovate/play-mockws"
-                            to "https://github.com/leanovate/play-mockws.git"
+                "github.com/leanovate/play-mockws"
+                        to "https://github.com/leanovate/play-mockws.git"
             )
 
             packages.forEach { actualUrl, expectedUrl ->
@@ -285,10 +285,10 @@ class UtilsTest : WordSpec({
 
         "add missing .git for GitHub URLs" {
             val packages = mapOf(
-                    "https://github.com/fb55/nth-check"
-                            to "https://github.com/fb55/nth-check.git",
-                    "git://github.com/isaacs/inherits"
-                            to "https://github.com/isaacs/inherits.git"
+                "https://github.com/fb55/nth-check"
+                        to "https://github.com/fb55/nth-check.git",
+                "git://github.com/isaacs/inherits"
+                        to "https://github.com/isaacs/inherits.git"
             )
 
             packages.forEach { actualUrl, expectedUrl ->
@@ -298,10 +298,10 @@ class UtilsTest : WordSpec({
 
         "add missing git@ for GitHub SSH URLs" {
             val packages = mapOf(
-                    "ssh://github.com/heremaps/here-aaa-java-sdk.git"
-                            to "ssh://git@github.com/heremaps/here-aaa-java-sdk.git",
-                    "ssh://github.com/heremaps/here-aaa-java-sdk"
-                            to "ssh://git@github.com/heremaps/here-aaa-java-sdk.git"
+                "ssh://github.com/heremaps/here-aaa-java-sdk.git"
+                        to "ssh://git@github.com/heremaps/here-aaa-java-sdk.git",
+                "ssh://github.com/heremaps/here-aaa-java-sdk"
+                        to "ssh://git@github.com/heremaps/here-aaa-java-sdk.git"
             )
 
             packages.forEach { actualUrl, expectedUrl ->
@@ -311,10 +311,10 @@ class UtilsTest : WordSpec({
 
         "handle a trailing slash correctly" {
             val packages = mapOf(
-                    "https://github.com/kilian/electron-to-chromium/"
-                            to "https://github.com/kilian/electron-to-chromium.git",
-                    "git://github.com/isaacs/inherits.git/"
-                            to "https://github.com/isaacs/inherits.git"
+                "https://github.com/kilian/electron-to-chromium/"
+                        to "https://github.com/kilian/electron-to-chromium.git",
+                "git://github.com/isaacs/inherits.git/"
+                        to "https://github.com/isaacs/inherits.git"
             )
 
             packages.forEach { actualUrl, expectedUrl ->
@@ -335,14 +335,14 @@ class UtilsTest : WordSpec({
             }
 
             val packages = mapOf(
-                    "relative/path/to/local/file"
-                            to "file://$userDir/relative/path/to/local/file",
-                    "relative/path/to/local/dir/"
-                            to "file://$userDir/relative/path/to/local/dir",
-                    "/absolute/path/to/local/file"
-                            to "file://${userRoot}absolute/path/to/local/file",
-                    "/absolute/path/to/local/dir/"
-                            to "file://${userRoot}absolute/path/to/local/dir"
+                "relative/path/to/local/file"
+                        to "file://$userDir/relative/path/to/local/file",
+                "relative/path/to/local/dir/"
+                        to "file://$userDir/relative/path/to/local/dir",
+                "/absolute/path/to/local/file"
+                        to "file://${userRoot}absolute/path/to/local/file",
+                "/absolute/path/to/local/dir/"
+                        to "file://${userRoot}absolute/path/to/local/dir"
             )
 
             packages.forEach { actualUrl, expectedUrl ->
@@ -352,10 +352,10 @@ class UtilsTest : WordSpec({
 
         "convert git to https for GitHub URLs" {
             val packages = mapOf(
-                    "git://github.com:ccavanaugh/jgnash.git"
-                            to "https://github.com/ccavanaugh/jgnash.git",
-                    "git://github.com/netty/netty.git/netty-buffer"
-                            to "https://github.com/netty/netty.git/netty-buffer"
+                "git://github.com:ccavanaugh/jgnash.git"
+                        to "https://github.com/ccavanaugh/jgnash.git",
+                "git://github.com/netty/netty.git/netty-buffer"
+                        to "https://github.com/netty/netty.git/netty-buffer"
             )
 
             packages.forEach { actualUrl, expectedUrl ->
@@ -365,8 +365,8 @@ class UtilsTest : WordSpec({
 
         "not strip svn+ prefix from Subversion URLs" {
             val packages = mapOf(
-                    "svn+ssh://svn.code.sf.net/p/stddecimal/code/trunk"
-                            to "svn+ssh://svn.code.sf.net/p/stddecimal/code/trunk"
+                "svn+ssh://svn.code.sf.net/p/stddecimal/code/trunk"
+                        to "svn+ssh://svn.code.sf.net/p/stddecimal/code/trunk"
             )
 
             packages.forEach { actualUrl, expectedUrl ->
@@ -376,10 +376,10 @@ class UtilsTest : WordSpec({
 
         "fixup crazy URLs" {
             val packages = mapOf(
-                    "git@github.com/cisco/node-jose.git"
-                            to "ssh://git@github.com/cisco/node-jose.git",
-                    "https://git@github.com:hacksparrow/node-easyimage.git"
-                            to "https://github.com/hacksparrow/node-easyimage.git"
+                "git@github.com/cisco/node-jose.git"
+                        to "ssh://git@github.com/cisco/node-jose.git",
+                "https://git@github.com:hacksparrow/node-easyimage.git"
+                        to "https://github.com/hacksparrow/node-easyimage.git"
             )
 
             packages.forEach { actualUrl, expectedUrl ->

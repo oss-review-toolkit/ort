@@ -300,11 +300,11 @@ class StaticHtmlReporter : Reporter() {
     override val defaultFilename = "scan-report.html"
 
     override fun generateReport(
-            ortResult: OrtResult,
-            resolutionProvider: ResolutionProvider,
-            copyrightGarbage: CopyrightGarbage,
-            outputStream: OutputStream,
-            postProcessingScript: String?
+        ortResult: OrtResult,
+        resolutionProvider: ResolutionProvider,
+        copyrightGarbage: CopyrightGarbage,
+        outputStream: OutputStream,
+        postProcessingScript: String?
     ) {
         val tabularScanRecord = ReportTableModelMapper(resolutionProvider).mapToReportTableModel(ortResult)
         val html = renderHtml(tabularScanRecord)
@@ -651,7 +651,7 @@ class StaticHtmlReporter : Reporter() {
     private fun TBODY.projectRow(projectId: String, rowIndex: Int, row: ReportTableModel.DependencyRow) {
         // Only mark the row as excluded if all scopes the dependency appears in are excluded.
         val rowExcludedClass =
-                if (row.scopes.isNotEmpty() && row.scopes.all { it.value.isNotEmpty() }) "ort-excluded" else ""
+            if (row.scopes.isNotEmpty() && row.scopes.all { it.value.isNotEmpty() }) "ort-excluded" else ""
 
         val cssClass = when {
             row.analyzerIssues.containsUnresolved() || row.scanIssues.containsUnresolved() -> "ort-error"

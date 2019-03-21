@@ -32,20 +32,20 @@ import kotlin.math.pow
  * Wrapper around [DiskLruCache] that adds a workaround for the 64 character key length limit.
  */
 class DiskCache(
-        /**
-         * The directory to store the cache data, must be exclusive to the cache.
-         */
-        directory: File,
+    /**
+     * The directory to store the cache data, must be exclusive to the cache.
+     */
+    directory: File,
 
-        /**
-         * The maximum size of the disk cache in bytes.
-         */
-        maxCacheSizeInBytes: Long,
+    /**
+     * The maximum size of the disk cache in bytes.
+     */
+    maxCacheSizeInBytes: Long,
 
-        /**
-         * Duration in seconds that cache entries are valid.
-         */
-        private val maxCacheEntryAgeInSeconds: Int
+    /**
+     * Duration in seconds that cache entries are valid.
+     */
+    private val maxCacheEntryAgeInSeconds: Int
 ) {
     companion object {
         const val INDEX_FULL_KEY = 0
@@ -105,7 +105,8 @@ class DiskCache(
         }
 
         throw IOException(
-                "Cannot generate key for '$this' because all possible keys starting with '$shortenedKey' are taken.")
+            "Cannot generate key for '$this' because all possible keys starting with '$shortenedKey' are taken."
+        )
     }
 
     fun read(key: String): String? {

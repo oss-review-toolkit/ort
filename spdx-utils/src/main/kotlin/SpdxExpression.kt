@@ -79,12 +79,12 @@ sealed class SpdxExpression {
 
             lexer.addErrorListener(object : BaseErrorListener() {
                 override fun syntaxError(
-                        recognizer: Recognizer<*, *>?,
-                        offendingSymbol: Any?,
-                        line: Int,
-                        charPositionInLine: Int,
-                        msg: String?,
-                        e: RecognitionException?
+                    recognizer: Recognizer<*, *>?,
+                    offendingSymbol: Any?,
+                    line: Int,
+                    charPositionInLine: Int,
+                    msg: String?,
+                    e: RecognitionException?
                 ) {
                     throw SpdxException(msg)
                 }
@@ -139,16 +139,16 @@ sealed class SpdxExpression {
  * An SPDX expression compound of two expressions with an operator.
  */
 data class SpdxCompoundExpression(
-        val left: SpdxExpression,
-        val operator: SpdxOperator,
-        val right: SpdxExpression
+    val left: SpdxExpression,
+    val operator: SpdxOperator,
+    val right: SpdxExpression
 ) : SpdxExpression() {
     override fun licenses() = left.licenses() + right.licenses()
 
     override fun spdxLicenses() = left.spdxLicenses() + right.spdxLicenses()
 
     override fun normalize(mapDeprecated: Boolean) =
-            SpdxCompoundExpression(left.normalize(mapDeprecated), operator, right.normalize(mapDeprecated))
+        SpdxCompoundExpression(left.normalize(mapDeprecated), operator, right.normalize(mapDeprecated))
 
     override fun validate(strictness: Strictness) {
         left.validate(strictness)
@@ -185,7 +185,7 @@ data class SpdxCompoundExpression(
  * https://spdx.org/spdx-specification-21-web-version#h.ruv3yl8g6czd.
  */
 data class SpdxLicenseExceptionExpression(
-        val id: String
+    val id: String
 ) : SpdxExpression() {
     override fun licenses() = emptyList<String>()
 
@@ -210,8 +210,8 @@ data class SpdxLicenseExceptionExpression(
  * https://spdx.org/spdx-specification-21-web-version#h.luq9dgcle9mo.
  */
 data class SpdxLicenseIdExpression(
-        val id: String,
-        val orLaterVersion: Boolean = false
+    val id: String,
+    val orLaterVersion: Boolean = false
 ) : SpdxExpression() {
     private val spdxLicense = SpdxLicense.forId(toString())
 
@@ -220,7 +220,7 @@ data class SpdxLicenseIdExpression(
     override fun spdxLicenses() = spdxLicense?.let { enumSetOf(it) } ?: enumSetOf()
 
     override fun normalize(mapDeprecated: Boolean) =
-            SpdxLicenseAliasMapping.map(toString(), mapDeprecated) ?: this
+        SpdxLicenseAliasMapping.map(toString(), mapDeprecated) ?: this
 
     override fun validate(strictness: Strictness) {
         when (strictness) {
@@ -236,12 +236,12 @@ data class SpdxLicenseIdExpression(
     infix fun with(other: SpdxLicenseExceptionExpression) = SpdxCompoundExpression(this, SpdxOperator.WITH, other)
 
     override fun toString() =
-            buildString {
-                append(id)
-                // While in the current SPDX standard the "or later version" semantic is part of the id string itself,
-                // it is a generic "+" operator for deprecated licenses.
-                if (orLaterVersion && !id.endsWith("-or-later")) append("+")
-            }
+        buildString {
+            append(id)
+            // While in the current SPDX standard the "or later version" semantic is part of the id string itself,
+            // it is a generic "+" operator for deprecated licenses.
+            if (orLaterVersion && !id.endsWith("-or-later")) append("+")
+        }
 }
 
 /**
@@ -249,7 +249,7 @@ data class SpdxLicenseIdExpression(
  * https://spdx.org/spdx-specification-21-web-version#h.jxpfx0ykyb60.
  */
 data class SpdxLicenseReferenceExpression(
-        val id: String
+    val id: String
 ) : SpdxExpression() {
     override fun licenses() = listOf(id)
 
@@ -259,7 +259,8 @@ data class SpdxLicenseReferenceExpression(
 
     override fun validate(strictness: Strictness) {
         if (!(id.startsWith("LicenseRef-") ||
-                (id.startsWith("DocumentRef-") && id.contains(":LicenseRef-")))) {
+                    (id.startsWith("DocumentRef-") && id.contains(":LicenseRef-")))
+        ) {
             throw SpdxException("'$id' is not an SPDX license reference.")
         }
     }
@@ -272,11 +273,11 @@ data class SpdxLicenseReferenceExpression(
  * see https://spdx.org/spdx-specification-21-web-version#h.jxpfx0ykyb60.
  */
 enum class SpdxOperator(
-        /**
-         * The priority of the operator. An operator with a larger priority value binds stronger than an operator with a
-         * lower priority value. Operators with the same priority bind left-associative.
-         */
-        val priority: Int
+    /**
+     * The priority of the operator. An operator with a larger priority value binds stronger than an operator with a
+     * lower priority value. Operators with the same priority bind left-associative.
+     */
+    val priority: Int
 ) {
     AND(1),
     OR(0),

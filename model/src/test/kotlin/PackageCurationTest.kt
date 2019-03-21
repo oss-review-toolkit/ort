@@ -29,45 +29,45 @@ class PackageCurationTest : WordSpec({
     "Applying a single curation" should {
         "overwrite the correct values" {
             val pkg = Package(
-                    id = Identifier(
-                            type = "Maven",
-                            namespace = "org.hamcrest",
-                            name = "hamcrest-core",
-                            version = "1.3"
-                    ),
-                    declaredLicenses = sortedSetOf(),
-                    description = "",
-                    homepageUrl = "",
-                    binaryArtifact = RemoteArtifact.EMPTY,
-                    sourceArtifact = RemoteArtifact.EMPTY,
-                    vcs = VcsInfo.EMPTY
+                id = Identifier(
+                    type = "Maven",
+                    namespace = "org.hamcrest",
+                    name = "hamcrest-core",
+                    version = "1.3"
+                ),
+                declaredLicenses = sortedSetOf(),
+                description = "",
+                homepageUrl = "",
+                binaryArtifact = RemoteArtifact.EMPTY,
+                sourceArtifact = RemoteArtifact.EMPTY,
+                vcs = VcsInfo.EMPTY
             )
 
             val curation = PackageCuration(
-                    id = pkg.id,
-                    data = PackageCurationData(
-                            declaredLicenses = sortedSetOf("license a", "license b"),
-                            concludedLicense = SpdxExpression.parse("license1 OR license2"),
-                            description = "description",
-                            homepageUrl = "http://home.page",
-                            binaryArtifact = RemoteArtifact(
-                                    url = "http://binary.artifact",
-                                    hash = "binary.hash",
-                                    hashAlgorithm = HashAlgorithm.UNKNOWN
-                            ),
-                            sourceArtifact = RemoteArtifact(
-                                    url = "http://source.artifact",
-                                    hash = "source.hash",
-                                    hashAlgorithm = HashAlgorithm.UNKNOWN
-                            ),
-                            vcs = VcsInfoCuration(
-                                    type = "git",
-                                    url = "http://url.git",
-                                    revision = "revision",
-                                    resolvedRevision = "resolvedRevision",
-                                    path = "path"
-                            )
+                id = pkg.id,
+                data = PackageCurationData(
+                    declaredLicenses = sortedSetOf("license a", "license b"),
+                    concludedLicense = SpdxExpression.parse("license1 OR license2"),
+                    description = "description",
+                    homepageUrl = "http://home.page",
+                    binaryArtifact = RemoteArtifact(
+                        url = "http://binary.artifact",
+                        hash = "binary.hash",
+                        hashAlgorithm = HashAlgorithm.UNKNOWN
+                    ),
+                    sourceArtifact = RemoteArtifact(
+                        url = "http://source.artifact",
+                        hash = "source.hash",
+                        hashAlgorithm = HashAlgorithm.UNKNOWN
+                    ),
+                    vcs = VcsInfoCuration(
+                        type = "git",
+                        url = "http://url.git",
+                        revision = "revision",
+                        resolvedRevision = "resolvedRevision",
+                        path = "path"
                     )
+                )
             )
 
             val curatedPkg = curation.apply(pkg.toCuratedPackage())
@@ -90,34 +90,34 @@ class PackageCurationTest : WordSpec({
 
         "change only curated fields" {
             val pkg = Package(
-                    id = Identifier(
-                            type = "Maven",
-                            namespace = "org.hamcrest",
-                            name = "hamcrest-core",
-                            version = "1.3"
-                    ),
-                    declaredLicenses = sortedSetOf("license a", "license b"),
-                    description = "description",
-                    homepageUrl = "homepageUrl",
-                    binaryArtifact = RemoteArtifact.EMPTY,
-                    sourceArtifact = RemoteArtifact.EMPTY,
-                    vcs = VcsInfo(
-                            type = "git",
-                            url = "http://url.git",
-                            revision = "revision",
-                            resolvedRevision = "resolvedRevision",
-                            path = "path"
-                    )
+                id = Identifier(
+                    type = "Maven",
+                    namespace = "org.hamcrest",
+                    name = "hamcrest-core",
+                    version = "1.3"
+                ),
+                declaredLicenses = sortedSetOf("license a", "license b"),
+                description = "description",
+                homepageUrl = "homepageUrl",
+                binaryArtifact = RemoteArtifact.EMPTY,
+                sourceArtifact = RemoteArtifact.EMPTY,
+                vcs = VcsInfo(
+                    type = "git",
+                    url = "http://url.git",
+                    revision = "revision",
+                    resolvedRevision = "resolvedRevision",
+                    path = "path"
+                )
             )
 
             val curation = PackageCuration(
-                    id = pkg.id,
-                    data = PackageCurationData(
-                            homepageUrl = "http://home.page",
-                            vcs = VcsInfoCuration(
-                                    url = "http://url.git"
-                            )
+                id = pkg.id,
+                data = PackageCurationData(
+                    homepageUrl = "http://home.page",
+                    vcs = VcsInfoCuration(
+                        url = "http://url.git"
                     )
+                )
             )
 
             val curatedPkg = curation.apply(pkg.toCuratedPackage())
@@ -131,11 +131,11 @@ class PackageCurationTest : WordSpec({
                 binaryArtifact shouldBe pkg.binaryArtifact
                 sourceArtifact shouldBe pkg.sourceArtifact
                 vcs shouldBe VcsInfo(
-                        type = pkg.vcs.type,
-                        url = curation.data.vcs!!.url!!,
-                        revision = pkg.vcs.revision,
-                        resolvedRevision = pkg.vcs.resolvedRevision,
-                        path = pkg.vcs.path
+                    type = pkg.vcs.type,
+                    url = curation.data.vcs!!.url!!,
+                    revision = pkg.vcs.revision,
+                    resolvedRevision = pkg.vcs.resolvedRevision,
+                    path = pkg.vcs.path
                 )
             }
 
@@ -146,35 +146,35 @@ class PackageCurationTest : WordSpec({
 
         "be able to empty VCS information" {
             val pkg = Package(
-                    id = Identifier(
-                            type = "Maven",
-                            namespace = "org.hamcrest",
-                            name = "hamcrest-core",
-                            version = "1.3"
-                    ),
-                    declaredLicenses = sortedSetOf("license a", "license b"),
-                    description = "description",
-                    homepageUrl = "homepageUrl",
-                    binaryArtifact = RemoteArtifact.EMPTY,
-                    sourceArtifact = RemoteArtifact.EMPTY,
-                    vcs = VcsInfo(
-                            type = "git",
-                            url = "http://url.git",
-                            revision = "revision",
-                            path = "path"
-                    )
+                id = Identifier(
+                    type = "Maven",
+                    namespace = "org.hamcrest",
+                    name = "hamcrest-core",
+                    version = "1.3"
+                ),
+                declaredLicenses = sortedSetOf("license a", "license b"),
+                description = "description",
+                homepageUrl = "homepageUrl",
+                binaryArtifact = RemoteArtifact.EMPTY,
+                sourceArtifact = RemoteArtifact.EMPTY,
+                vcs = VcsInfo(
+                    type = "git",
+                    url = "http://url.git",
+                    revision = "revision",
+                    path = "path"
+                )
             )
 
             val curation = PackageCuration(
-                    id = pkg.id,
-                    data = PackageCurationData(
-                            vcs = VcsInfoCuration(
-                                    type = "",
-                                    url = "",
-                                    revision = "",
-                                    path = ""
-                            )
+                id = pkg.id,
+                data = PackageCurationData(
+                    vcs = VcsInfoCuration(
+                        type = "",
+                        url = "",
+                        revision = "",
+                        path = ""
                     )
+                )
             )
 
             val curatedPkg = curation.apply(pkg.toCuratedPackage())
@@ -185,35 +185,35 @@ class PackageCurationTest : WordSpec({
 
         "fail if identifiers do not match" {
             val pkg = Package(
-                    id = Identifier(
-                            type = "Maven",
-                            namespace = "org.hamcrest",
-                            name = "hamcrest-core",
-                            version = "1.3"
-                    ),
-                    declaredLicenses = sortedSetOf(),
-                    description = "",
-                    homepageUrl = "",
-                    binaryArtifact = RemoteArtifact.EMPTY,
-                    sourceArtifact = RemoteArtifact.EMPTY,
-                    vcs = VcsInfo.EMPTY
+                id = Identifier(
+                    type = "Maven",
+                    namespace = "org.hamcrest",
+                    name = "hamcrest-core",
+                    version = "1.3"
+                ),
+                declaredLicenses = sortedSetOf(),
+                description = "",
+                homepageUrl = "",
+                binaryArtifact = RemoteArtifact.EMPTY,
+                sourceArtifact = RemoteArtifact.EMPTY,
+                vcs = VcsInfo.EMPTY
             )
 
             val curation = PackageCuration(
-                    id = Identifier(
-                            type = "",
-                            namespace = "",
-                            name = "",
-                            version = ""
-                    ),
-                    data = PackageCurationData(
-                            homepageUrl = "http://home.page",
-                            vcs = VcsInfoCuration(
-                                    type = "",
-                                    url = "http://url.git",
-                                    revision = ""
-                            )
+                id = Identifier(
+                    type = "",
+                    namespace = "",
+                    name = "",
+                    version = ""
+                ),
+                data = PackageCurationData(
+                    homepageUrl = "http://home.page",
+                    vcs = VcsInfoCuration(
+                        type = "",
+                        url = "http://url.git",
+                        revision = ""
                     )
+                )
             )
 
             shouldThrow<IllegalArgumentException> {

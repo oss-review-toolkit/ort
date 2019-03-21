@@ -44,9 +44,9 @@ class GradleLibraryTest : StringSpec() {
         "Root project dependencies are detected correctly" {
             val packageFile = File(projectDir, "build.gradle")
             val expectedResult = patchExpectedResult(
-                    File(projectDir.parentFile, "gradle-library-expected-output-root.yml"),
-                    url = normalizeVcsUrl(vcsUrl),
-                    revision = vcsRevision
+                File(projectDir.parentFile, "gradle-library-expected-output-root.yml"),
+                url = normalizeVcsUrl(vcsUrl),
+                revision = vcsRevision
             )
 
             val result = createGradle().resolveDependencies(USER_DIR, listOf(packageFile))[packageFile]
@@ -59,9 +59,9 @@ class GradleLibraryTest : StringSpec() {
         "Project dependencies are detected correctly" {
             val packageFile = File(projectDir, "app/build.gradle")
             val expectedResult = patchExpectedResult(
-                    File(projectDir.parentFile, "gradle-library-expected-output-app.yml"),
-                    url = normalizeVcsUrl(vcsUrl),
-                    revision = vcsRevision
+                File(projectDir.parentFile, "gradle-library-expected-output-app.yml"),
+                url = normalizeVcsUrl(vcsUrl),
+                revision = vcsRevision
             )
 
             val result = createGradle().resolveDependencies(USER_DIR, listOf(packageFile))[packageFile]
@@ -74,9 +74,9 @@ class GradleLibraryTest : StringSpec() {
         "External dependencies are detected correctly" {
             val packageFile = File(projectDir, "lib/build.gradle")
             val expectedResult = patchExpectedResult(
-                    File(projectDir.parentFile, "gradle-library-expected-output-lib.yml"),
-                    url = normalizeVcsUrl(vcsUrl),
-                    revision = vcsRevision
+                File(projectDir.parentFile, "gradle-library-expected-output-lib.yml"),
+                url = normalizeVcsUrl(vcsUrl),
+                revision = vcsRevision
             )
 
             val result = createGradle().resolveDependencies(USER_DIR, listOf(packageFile))[packageFile]

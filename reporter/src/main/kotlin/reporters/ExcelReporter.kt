@@ -84,11 +84,11 @@ class ExcelReporter : Reporter() {
     override val defaultFilename = "scan-report.xlsx"
 
     override fun generateReport(
-            ortResult: OrtResult,
-            resolutionProvider: ResolutionProvider,
-            copyrightGarbage: CopyrightGarbage,
-            outputStream: OutputStream,
-            postProcessingScript: String?
+        ortResult: OrtResult,
+        resolutionProvider: ResolutionProvider,
+        copyrightGarbage: CopyrightGarbage,
+        outputStream: OutputStream,
+        postProcessingScript: String?
     ) {
         val tabularScanRecord = ReportTableModelMapper(resolutionProvider).mapToReportTableModel(ortResult)
         val workbook = XSSFWorkbook()
@@ -150,11 +150,15 @@ class ExcelReporter : Reporter() {
             createMetadataSheet(workbook, tabularScanRecord.metadata)
         }
 
-        createSummarySheet(workbook, "Summary", "all", tabularScanRecord.summary, tabularScanRecord.vcsInfo,
-                tabularScanRecord.extraColumns)
+        createSummarySheet(
+            workbook, "Summary", "all", tabularScanRecord.summary, tabularScanRecord.vcsInfo,
+            tabularScanRecord.extraColumns
+        )
         tabularScanRecord.projectDependencies.forEach { project, table ->
-            createProjectSheet(workbook, project.id.toCoordinates(), project.definitionFilePath, table,
-                    project.vcsProcessed, tabularScanRecord.extraColumns)
+            createProjectSheet(
+                workbook, project.id.toCoordinates(), project.definitionFilePath, table,
+                project.vcsProcessed, tabularScanRecord.extraColumns
+            )
         }
 
         workbook.write(outputStream)
@@ -187,8 +191,10 @@ class ExcelReporter : Reporter() {
         repeat(2) { sheet.autoSizeColumn(it) }
     }
 
-    private fun createSummarySheet(workbook: XSSFWorkbook, name: String, file: String, table: SummaryTable,
-                                   vcsInfo: VcsInfo, extraColumns: List<String>) {
+    private fun createSummarySheet(
+        workbook: XSSFWorkbook, name: String, file: String, table: SummaryTable,
+        vcsInfo: VcsInfo, extraColumns: List<String>
+    ) {
         val sheetName = createUniqueSheetName(workbook, name)
 
         val sheet = workbook.createSheet(sheetName)
@@ -218,23 +224,29 @@ class ExcelReporter : Reporter() {
                 val projectExclude = table.projectExcludes[id]
 
                 if (projectExclude != null) {
-                    scopesText.append("${id.toCoordinates()} " +
-                            "(Excluded: ${projectExclude.reason} - ${projectExclude.comment})\n",
-                            excludedFont)
+                    scopesText.append(
+                        "${id.toCoordinates()} " +
+                                "(Excluded: ${projectExclude.reason} - ${projectExclude.comment})\n",
+                        excludedFont
+                    )
                 } else {
                     scopesText.append("${id.toCoordinates()}\n", font)
                 }
 
                 scopes.entries.sortedWith(compareBy({ it.value.isNotEmpty() }, { it.key }))
-                        .forEach { (scope, excludes) ->
-                            scopesText.append("  $scope\n",
-                                    if (projectExclude != null || excludes.isNotEmpty()) excludedFont else font)
+                    .forEach { (scope, excludes) ->
+                        scopesText.append(
+                            "  $scope\n",
+                            if (projectExclude != null || excludes.isNotEmpty()) excludedFont else font
+                        )
 
-                            excludes.forEach { exclude ->
-                                scopesText.append("    Excluded: ${exclude.reason} - ${exclude.comment}\n",
-                                        excludedFont)
-                            }
+                        excludes.forEach { exclude ->
+                            scopesText.append(
+                                "    Excluded: ${exclude.reason} - ${exclude.comment}\n",
+                                excludedFont
+                            )
                         }
+                    }
             }
 
             val scopesLines = row.scopes.size + row.scopes.toList().sumBy { it.second.size } +
@@ -272,8 +284,10 @@ class ExcelReporter : Reporter() {
                 createCell(this, 4, analyzerIssuesText, font, cellStyle)
                 createCell(this, 5, scanIssuesText, font, cellStyle)
 
-                val maxLines = listOf(scopesLines, row.declaredLicenses.size, row.detectedLicenses.size,
-                        analyzerIssuesLines, scanIssuesLines).max() ?: 1
+                val maxLines = listOf(
+                    scopesLines, row.declaredLicenses.size, row.detectedLicenses.size,
+                    analyzerIssuesLines, scanIssuesLines
+                ).max() ?: 1
                 heightInPoints = maxLines * getSheet().defaultRowHeightInPoints
             }
             ++currentRow
@@ -282,8 +296,10 @@ class ExcelReporter : Reporter() {
         sheet.finalize(headerRows, currentRow, defaultColumns + extraColumns.size)
     }
 
-    private fun createProjectSheet(workbook: XSSFWorkbook, name: String, file: String, table: ProjectTable,
-                                   vcsInfo: VcsInfo, extraColumns: List<String>) {
+    private fun createProjectSheet(
+        workbook: XSSFWorkbook, name: String, file: String, table: ProjectTable,
+        vcsInfo: VcsInfo, extraColumns: List<String>
+    ) {
         val sheetName = createUniqueSheetName(workbook, name)
 
         val sheet = workbook.createSheet(sheetName)
@@ -307,13 +323,13 @@ class ExcelReporter : Reporter() {
             val scopesText = XSSFRichTextString()
 
             row.scopes.entries.sortedWith(compareBy({ it.value.isNotEmpty() }, { it.key }))
-                    .forEach { (scope, excludes) ->
-                        scopesText.append("$scope\n", if (excludes.isNotEmpty()) excludedFont else font)
+                .forEach { (scope, excludes) ->
+                    scopesText.append("$scope\n", if (excludes.isNotEmpty()) excludedFont else font)
 
-                        excludes.forEach { exclude ->
-                            scopesText.append("  Excluded: ${exclude.reason} - ${exclude.comment}\n", excludedFont)
-                        }
+                    excludes.forEach { exclude ->
+                        scopesText.append("  Excluded: ${exclude.reason} - ${exclude.comment}\n", excludedFont)
                     }
+                }
 
             val scopesLines = row.scopes.size + row.scopes.flatMap { it.value }.size
 
@@ -325,8 +341,10 @@ class ExcelReporter : Reporter() {
                 createCell(this, 4, row.analyzerIssues.joinToString(" \n") { it.description }, font, cellStyle)
                 createCell(this, 5, row.scanIssues.joinToString(" \n") { it.description }, font, cellStyle)
 
-                val maxLines = listOf(scopesLines, row.declaredLicenses.size, row.detectedLicenses.size,
-                        row.analyzerIssues.size, row.scanIssues.size).max() ?: 1
+                val maxLines = listOf(
+                    scopesLines, row.declaredLicenses.size, row.detectedLicenses.size,
+                    row.analyzerIssues.size, row.scanIssues.size
+                ).max() ?: 1
                 heightInPoints = maxLines * getSheet().defaultRowHeightInPoints
             }
             ++currentRow
@@ -335,13 +353,15 @@ class ExcelReporter : Reporter() {
         sheet.finalize(headerRows, currentRow, defaultColumns + extraColumns.size)
     }
 
-    private fun createHeader(sheet: XSSFSheet, name: String, exclude: ProjectExclude?, file: String, vcsInfo: VcsInfo,
-                             extraColumns: List<String>): Int {
+    private fun createHeader(
+        sheet: XSSFSheet, name: String, exclude: ProjectExclude?, file: String, vcsInfo: VcsInfo,
+        extraColumns: List<String>
+    ): Int {
         val columns = defaultColumns + extraColumns.size
 
         sheet.createRow(0).apply {
             val text = exclude?.let { "$name - This project is excluded: ${exclude.reason} - ${exclude.comment}" }
-                    ?: name
+                ?: name
 
             CellUtil.createCell(this, 0, "Project:", headerStyle)
             CellUtil.createCell(this, 1, text, headerStyle)
@@ -415,7 +435,7 @@ class ExcelReporter : Reporter() {
     }
 
     private fun createCell(row: Row, column: Int, value: String, font: XSSFFont, cellStyle: CellStyle) =
-            createCell(row, column, XSSFRichTextString(value.limit()).apply { applyFont(font) }, cellStyle)
+        createCell(row, column, XSSFRichTextString(value.limit()).apply { applyFont(font) }, cellStyle)
 }
 
 // Use the same name as in XSSFWorkbook.MAX_SENSITIVE_SHEET_NAME_LEN, which is private.
@@ -423,7 +443,7 @@ private const val MAX_SENSITIVE_SHEET_NAME_LEN = 31
 
 internal fun createUniqueSheetName(workbook: XSSFWorkbook, name: String): String {
     fun isSheetNameTaken(workbook: XSSFWorkbook, name: String) =
-            name.toLowerCase() in Sequence { workbook.sheetIterator() }.map { it.sheetName.toLowerCase() }
+        name.toLowerCase() in Sequence { workbook.sheetIterator() }.map { it.sheetName.toLowerCase() }
 
     var uniqueName = WorkbookUtil.createSafeSheetName(name)
     var i = 0
@@ -460,9 +480,9 @@ private const val ELLIPSIS = "[...]"
 private const val MAX_EXCEL_CELL_CONTENT_LENGTH = 32767
 
 private fun RichTextString.limit(maxLength: Int = MAX_EXCEL_CELL_CONTENT_LENGTH) =
-        takeIf { it.string == null || it.length() <= maxLength }
-                // There is no easy way to get a substring of a RichTextString, so convert to plain text here.
-                ?: XSSFRichTextString("${string.take(maxLength - ELLIPSIS.length)}$ELLIPSIS")
+    takeIf { it.string == null || it.length() <= maxLength }
+    // There is no easy way to get a substring of a RichTextString, so convert to plain text here.
+        ?: XSSFRichTextString("${string.take(maxLength - ELLIPSIS.length)}$ELLIPSIS")
 
 private fun String.limit(maxLength: Int = MAX_EXCEL_CELL_CONTENT_LENGTH) =
-        takeIf { it.length <= maxLength } ?: "${take(maxLength - ELLIPSIS.length)}$ELLIPSIS"
+    takeIf { it.length <= maxLength } ?: "${take(maxLength - ELLIPSIS.length)}$ELLIPSIS"

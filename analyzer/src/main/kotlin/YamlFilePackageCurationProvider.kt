@@ -29,7 +29,7 @@ import java.io.File
  * A [PackageCurationProvider] that loads [PackageCuration]s from a single YAML file.
  */
 class YamlFilePackageCurationProvider(
-        curationFile: File
+    curationFile: File
 ) : PackageCurationProvider {
     internal val packageCurations: List<PackageCuration> by lazy {
         curationFile.readValue<List<PackageCuration>>()

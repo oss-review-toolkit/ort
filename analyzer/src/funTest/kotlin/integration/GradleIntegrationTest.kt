@@ -31,22 +31,22 @@ import java.io.File
 
 class GradleIntegrationTest : AbstractIntegrationSpec() {
     override val pkg: Package = Package(
-            id = Identifier(
-                    type = "Maven",
-                    namespace = "org.gradle",
-                    name = "Gradle",
-                    version = "4.4.0"
-            ),
-            declaredLicenses = sortedSetOf(),
-            description = "",
-            homepageUrl = "",
-            binaryArtifact = RemoteArtifact.EMPTY,
-            sourceArtifact = RemoteArtifact.EMPTY,
-            vcs = VcsInfo(
-                    type = "Git",
-                    url = "https://github.com/gradle/gradle.git",
-                    revision = "v4.4.0"
-            )
+        id = Identifier(
+            type = "Maven",
+            namespace = "org.gradle",
+            name = "Gradle",
+            version = "4.4.0"
+        ),
+        declaredLicenses = sortedSetOf(),
+        description = "",
+        homepageUrl = "",
+        binaryArtifact = RemoteArtifact.EMPTY,
+        sourceArtifact = RemoteArtifact.EMPTY,
+        vcs = VcsInfo(
+            type = "Git",
+            url = "https://github.com/gradle/gradle.git",
+            revision = "v4.4.0"
+        )
     )
 
     override val expectedManagedFiles by lazy {
@@ -68,13 +68,15 @@ class GradleIntegrationTest : AbstractIntegrationSpec() {
         val pomFiles = downloadResult.downloadDirectory.walkTopDown().filter { it.name == "pom.xml" }.toList()
 
         mapOf(
-                Gradle.Factory() as PackageManagerFactory to gradleFiles,
-                Maven.Factory() as PackageManagerFactory to pomFiles
+            Gradle.Factory() as PackageManagerFactory to gradleFiles,
+            Maven.Factory() as PackageManagerFactory to pomFiles
         )
     }
 
     override val managedFilesForTest by lazy {
-        mapOf(Gradle.Factory() as PackageManagerFactory to
-                listOf(File(downloadResult.downloadDirectory, "buildSrc/build.gradle")))
+        mapOf(
+            Gradle.Factory() as PackageManagerFactory to
+                    listOf(File(downloadResult.downloadDirectory, "buildSrc/build.gradle"))
+        )
     }
 }

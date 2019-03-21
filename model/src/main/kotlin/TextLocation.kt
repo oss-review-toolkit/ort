@@ -26,20 +26,20 @@ import com.here.ort.utils.constructTreeSetType
  * A [TextLocation] references text located in a file.
  */
 data class TextLocation(
-        /**
-         * The path of the file that contains the text.
-         */
-        val path: String,
+    /**
+     * The path of the file that contains the text.
+     */
+    val path: String,
 
-        /**
-         * The line the text is starting at.
-         */
-        val startLine: Int,
+    /**
+     * The line the text is starting at.
+     */
+    val startLine: Int,
 
-        /**
-         * The line the text is ending at.
-         */
-        val endLine: Int
+    /**
+     * The line the text is ending at.
+     */
+    val endLine: Int
 ) : Comparable<TextLocation> {
     companion object {
         private val COMPARATOR = compareBy<TextLocation>({ it.path }, { it.startLine }, { it.endLine })

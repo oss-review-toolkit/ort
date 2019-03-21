@@ -36,33 +36,33 @@ class PackageTest : StringSpec() {
 
         "diff result contains all changed values" {
             val pkg = Package(
-                    id = Identifier(
-                            type = "type",
-                            namespace = "namespace",
-                            name = "name",
-                            version = "version"
-                    ),
-                    declaredLicenses = sortedSetOf("declared license"),
-                    description = "description",
-                    homepageUrl = "homepageUrl",
-                    binaryArtifact = RemoteArtifact("url", "hash", HashAlgorithm.UNKNOWN),
-                    sourceArtifact = RemoteArtifact("url", "hash", HashAlgorithm.UNKNOWN),
-                    vcs = VcsInfo("type", "url", "revision")
+                id = Identifier(
+                    type = "type",
+                    namespace = "namespace",
+                    name = "name",
+                    version = "version"
+                ),
+                declaredLicenses = sortedSetOf("declared license"),
+                description = "description",
+                homepageUrl = "homepageUrl",
+                binaryArtifact = RemoteArtifact("url", "hash", HashAlgorithm.UNKNOWN),
+                sourceArtifact = RemoteArtifact("url", "hash", HashAlgorithm.UNKNOWN),
+                vcs = VcsInfo("type", "url", "revision")
             )
 
             val other = Package(
-                    id = Identifier(
-                            type = "type",
-                            namespace = "namespace",
-                            name = "name",
-                            version = "version"
-                    ),
-                    declaredLicenses = sortedSetOf("other declared license"),
-                    description = "other description",
-                    homepageUrl = "other homepageUrl",
-                    binaryArtifact = RemoteArtifact("other url", "other hash", HashAlgorithm.UNKNOWN),
-                    sourceArtifact = RemoteArtifact("other url", "other hash", HashAlgorithm.UNKNOWN),
-                    vcs = VcsInfo("other type", "other url", "other revision")
+                id = Identifier(
+                    type = "type",
+                    namespace = "namespace",
+                    name = "name",
+                    version = "version"
+                ),
+                declaredLicenses = sortedSetOf("other declared license"),
+                description = "other description",
+                homepageUrl = "other homepageUrl",
+                binaryArtifact = RemoteArtifact("other url", "other hash", HashAlgorithm.UNKNOWN),
+                sourceArtifact = RemoteArtifact("other url", "other hash", HashAlgorithm.UNKNOWN),
+                vcs = VcsInfo("other type", "other url", "other revision")
             )
 
             val diff = pkg.diff(other)
@@ -77,18 +77,18 @@ class PackageTest : StringSpec() {
 
         "diff result does not contain unchanged values" {
             val pkg = Package(
-                    id = Identifier(
-                            type = "type",
-                            namespace = "namespace",
-                            name = "name",
-                            version = "version"
-                    ),
-                    declaredLicenses = sortedSetOf("declared license"),
-                    description = "description",
-                    homepageUrl = "homepageUrl",
-                    binaryArtifact = RemoteArtifact("url", "hash", HashAlgorithm.UNKNOWN),
-                    sourceArtifact = RemoteArtifact("url", "hash", HashAlgorithm.UNKNOWN),
-                    vcs = VcsInfo("type", "url", "revision")
+                id = Identifier(
+                    type = "type",
+                    namespace = "namespace",
+                    name = "name",
+                    version = "version"
+                ),
+                declaredLicenses = sortedSetOf("declared license"),
+                description = "description",
+                homepageUrl = "homepageUrl",
+                binaryArtifact = RemoteArtifact("url", "hash", HashAlgorithm.UNKNOWN),
+                sourceArtifact = RemoteArtifact("url", "hash", HashAlgorithm.UNKNOWN),
+                vcs = VcsInfo("type", "url", "revision")
             )
 
             val diff = pkg.diff(pkg)

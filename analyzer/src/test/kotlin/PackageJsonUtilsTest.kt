@@ -37,19 +37,19 @@ import java.io.File
 class PackageJsonUtilsTest : WordSpec() {
     companion object {
         private fun createPackageJson(matchers: List<String>, flattenWorkspaceDefinition: Boolean) =
-                if (!matchers.isEmpty()) {
-                    val workspaces = matchers.joinToString(prefix = "[\"", separator = "\",\"", postfix = "\"]")
-                    if (flattenWorkspaceDefinition) {
-                        "{ \"workspaces\": $workspaces }"
-                    } else {
-                        "{ \"workspaces\": { \"packages\": $workspaces } }"
-                    }
+            if (!matchers.isEmpty()) {
+                val workspaces = matchers.joinToString(prefix = "[\"", separator = "\",\"", postfix = "\"]")
+                if (flattenWorkspaceDefinition) {
+                    "{ \"workspaces\": $workspaces }"
                 } else {
-                    "{}"
+                    "{ \"workspaces\": { \"packages\": $workspaces } }"
                 }
+            } else {
+                "{}"
+            }
 
         private fun mapDefinitionFiles(definitionFiles: Collection<File>) =
-                mapDefinitionFilesForNpm(definitionFiles) + mapDefinitionFilesForYarn(definitionFiles)
+            mapDefinitionFilesForNpm(definitionFiles) + mapDefinitionFilesForYarn(definitionFiles)
     }
 
     init {
@@ -164,8 +164,9 @@ class PackageJsonUtilsTest : WordSpec() {
         super.afterTest(testCase, result)
     }
 
-    private fun setupProject(path: String, matchers: List<String> = emptyList(), hasNpmLockFile: Boolean = false,
-                             hasYarnLockFile: Boolean = false, flattenWorkspaceDefinition: Boolean = true
+    private fun setupProject(
+        path: String, matchers: List<String> = emptyList(), hasNpmLockFile: Boolean = false,
+        hasYarnLockFile: Boolean = false, flattenWorkspaceDefinition: Boolean = true
     ) {
         val projectDir = tempDir.resolve(path)
 
@@ -181,9 +182,9 @@ class PackageJsonUtilsTest : WordSpec() {
     }
 
     private fun absolutePaths(vararg files: String) =
-            files.asList().map { file ->
-                tempDir.resolve(file)
-            }
+        files.asList().map { file ->
+            tempDir.resolve(file)
+        }
 
     private fun hasNpmLockFile(path: String) = PackageJsonUtils.hasNpmLockFile(tempDir.resolve(path))
 

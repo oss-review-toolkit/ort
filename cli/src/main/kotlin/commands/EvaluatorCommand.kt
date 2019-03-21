@@ -42,43 +42,57 @@ import java.io.File
 
 @Parameters(commandNames = ["evaluate"], commandDescription = "Evaluate rules on ORT result files.")
 object EvaluatorCommand : CommandWithHelp() {
-    @Parameter(description = "The ORT result file to read as input.",
-            names = ["--ort-file", "-i"],
-            required = true,
-            order = PARAMETER_ORDER_MANDATORY)
+    @Parameter(
+        description = "The ORT result file to read as input.",
+        names = ["--ort-file", "-i"],
+        required = true,
+        order = PARAMETER_ORDER_MANDATORY
+    )
     private lateinit var ortFile: File
 
-    @Parameter(description = "The name of a script file containing rules.",
-            names = ["--rules-file", "-r"],
-            order = PARAMETER_ORDER_OPTIONAL)
+    @Parameter(
+        description = "The name of a script file containing rules.",
+        names = ["--rules-file", "-r"],
+        order = PARAMETER_ORDER_OPTIONAL
+    )
     private var rulesFile: File? = null
 
-    @Parameter(description = "The name of a script resource on the classpath that contains rules.",
-            names = ["--rules-resource"],
-            order = PARAMETER_ORDER_OPTIONAL)
+    @Parameter(
+        description = "The name of a script resource on the classpath that contains rules.",
+        names = ["--rules-resource"],
+        order = PARAMETER_ORDER_OPTIONAL
+    )
     private var rulesResource: String? = null
 
-    @Parameter(description = "The directory to write the evaluation results as ORT result file(s) to, in the " +
-            "specified output format(s). If no output directory is specified, no output formats are written and " +
-            "only the exit code signals a success or failure.",
-            names = ["--output-dir", "-o"],
-            order = PARAMETER_ORDER_OPTIONAL)
+    @Parameter(
+        description = "The directory to write the evaluation results as ORT result file(s) to, in the " +
+                "specified output format(s). If no output directory is specified, no output formats are written and " +
+                "only the exit code signals a success or failure.",
+        names = ["--output-dir", "-o"],
+        order = PARAMETER_ORDER_OPTIONAL
+    )
     private var outputDir: File? = null
 
-    @Parameter(description = "The list of output formats to be used for the ORT result file(s).",
-            names = ["--output-formats", "-f"],
-            order = PARAMETER_ORDER_OPTIONAL)
+    @Parameter(
+        description = "The list of output formats to be used for the ORT result file(s).",
+        names = ["--output-formats", "-f"],
+        order = PARAMETER_ORDER_OPTIONAL
+    )
     private var outputFormats = listOf(OutputFormat.YAML)
 
-    @Parameter(description = "Do not evaluate the script but only check its syntax. No output is written in this case.",
-            names = ["--syntax-check"],
-            order = PARAMETER_ORDER_OPTIONAL)
+    @Parameter(
+        description = "Do not evaluate the script but only check its syntax. No output is written in this case.",
+        names = ["--syntax-check"],
+        order = PARAMETER_ORDER_OPTIONAL
+    )
     private var syntaxCheck = false
 
-    @Parameter(description = "A file containing the repository configuration. If set the .ort.yml " +
-            "overrides the repository configuration contained in the ort result from the input file.",
-            names = ["--repository-configuration-file"],
-            order = PARAMETER_ORDER_OPTIONAL)
+    @Parameter(
+        description = "A file containing the repository configuration. If set the .ort.yml " +
+                "overrides the repository configuration contained in the ort result from the input file.",
+        names = ["--repository-configuration-file"],
+        order = PARAMETER_ORDER_OPTIONAL
+    )
     private var repositoryConfigurationFile: File? = null
 
     override fun runCommand(jc: JCommander): Int {

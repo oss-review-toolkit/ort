@@ -103,25 +103,25 @@ class VcsInfoTest : StringSpec({
     "Merging VcsInfo" should {
         "ignore empty information" {
             val inputA = VcsInfo(
-                    type = "",
-                    url = "",
-                    revision = ""
+                type = "",
+                url = "",
+                revision = ""
             )
 
             val inputB = VcsInfo(
-                    type = "type",
-                    url = "url",
-                    revision = "revision",
-                    resolvedRevision = "resolvedRevision",
-                    path = "path"
+                type = "type",
+                url = "url",
+                revision = "revision",
+                resolvedRevision = "resolvedRevision",
+                path = "path"
             )
 
             val output = VcsInfo(
-                    type = "type",
-                    url = "url",
-                    revision = "revision",
-                    resolvedRevision = "resolvedRevision",
-                    path = "path"
+                type = "type",
+                url = "url",
+                revision = "revision",
+                resolvedRevision = "resolvedRevision",
+                path = "path"
             )
 
             inputA.merge(inputB) shouldBe output
@@ -129,23 +129,23 @@ class VcsInfoTest : StringSpec({
 
         "prefer more complete information for GitHub" {
             val inputA = VcsInfo(
-                    type = "Git",
-                    url = "https://github.com/babel/babel.git",
-                    revision = "master",
-                    path = "packages/babel-cli"
+                type = "Git",
+                url = "https://github.com/babel/babel.git",
+                revision = "master",
+                path = "packages/babel-cli"
             )
 
             val inputB = VcsInfo(
-                    type = "git",
-                    url = "https://github.com/babel/babel/tree/master/packages/babel-cli.git",
-                    revision = ""
+                type = "git",
+                url = "https://github.com/babel/babel/tree/master/packages/babel-cli.git",
+                revision = ""
             )
 
             val output = VcsInfo(
-                    type = "Git",
-                    url = "https://github.com/babel/babel.git",
-                    revision = "master",
-                    path = "packages/babel-cli"
+                type = "Git",
+                url = "https://github.com/babel/babel.git",
+                revision = "master",
+                path = "packages/babel-cli"
             )
 
             inputA.merge(inputB) shouldBe output
@@ -153,21 +153,21 @@ class VcsInfoTest : StringSpec({
 
         "prefer more complete information for GitLab" {
             val inputA = VcsInfo(
-                    type = "",
-                    url = "https://gitlab.com/rich-harris/rollup-plugin-buble.git",
-                    revision = ""
+                type = "",
+                url = "https://gitlab.com/rich-harris/rollup-plugin-buble.git",
+                revision = ""
             )
 
             val inputB = VcsInfo(
-                    type = "git",
-                    url = "git+https://gitlab.com/rich-harris/rollup-plugin-buble.git",
-                    revision = "9928a569351a80c2f7dc065f61085954daed5312"
+                type = "git",
+                url = "git+https://gitlab.com/rich-harris/rollup-plugin-buble.git",
+                revision = "9928a569351a80c2f7dc065f61085954daed5312"
             )
 
             val output = VcsInfo(
-                    type = "git",
-                    url = "https://gitlab.com/rich-harris/rollup-plugin-buble.git",
-                    revision = "9928a569351a80c2f7dc065f61085954daed5312"
+                type = "git",
+                url = "https://gitlab.com/rich-harris/rollup-plugin-buble.git",
+                revision = "9928a569351a80c2f7dc065f61085954daed5312"
             )
 
             inputA.merge(inputB) shouldBe output
@@ -175,21 +175,21 @@ class VcsInfoTest : StringSpec({
 
         "mix and match empty revision fields" {
             val inputA = VcsInfo(
-                    type = "Git",
-                    url = "https://github.com/chalk/ansi-regex.git",
-                    revision = ""
+                type = "Git",
+                url = "https://github.com/chalk/ansi-regex.git",
+                revision = ""
             )
 
             val inputB = VcsInfo(
-                    type = "git",
-                    url = "git+https://github.com/chalk/ansi-regex.git",
-                    revision = "7c908e7b4eb6cd82bfe1295e33fdf6d166c7ed85"
+                type = "git",
+                url = "git+https://github.com/chalk/ansi-regex.git",
+                revision = "7c908e7b4eb6cd82bfe1295e33fdf6d166c7ed85"
             )
 
             val output = VcsInfo(
-                    type = "Git",
-                    url = "https://github.com/chalk/ansi-regex.git",
-                    revision = "7c908e7b4eb6cd82bfe1295e33fdf6d166c7ed85"
+                type = "Git",
+                url = "https://github.com/chalk/ansi-regex.git",
+                revision = "7c908e7b4eb6cd82bfe1295e33fdf6d166c7ed85"
             )
 
             inputA.merge(inputB) shouldBe output
@@ -197,23 +197,23 @@ class VcsInfoTest : StringSpec({
 
         "mix and match empty revision and path fields" {
             val inputA = VcsInfo(
-                    type = "Git",
-                    url = "ssh://git@github.com/EsotericSoftware/kryo.git",
-                    revision = "",
-                    path = "kryo-shaded"
+                type = "Git",
+                url = "ssh://git@github.com/EsotericSoftware/kryo.git",
+                revision = "",
+                path = "kryo-shaded"
             )
 
             val inputB = VcsInfo(
-                    type = "git",
-                    url = "ssh://git@github.com/EsotericSoftware/kryo.git/kryo-shaded",
-                    revision = "3a2eb7b3f3f04652e2dc40764c963f2bc99a92f5"
+                type = "git",
+                url = "ssh://git@github.com/EsotericSoftware/kryo.git/kryo-shaded",
+                revision = "3a2eb7b3f3f04652e2dc40764c963f2bc99a92f5"
             )
 
             val output = VcsInfo(
-                    type = "Git",
-                    url = "ssh://git@github.com/EsotericSoftware/kryo.git",
-                    revision = "3a2eb7b3f3f04652e2dc40764c963f2bc99a92f5",
-                    path = "kryo-shaded"
+                type = "Git",
+                url = "ssh://git@github.com/EsotericSoftware/kryo.git",
+                revision = "3a2eb7b3f3f04652e2dc40764c963f2bc99a92f5",
+                path = "kryo-shaded"
             )
 
             inputA.merge(inputB) shouldBe output

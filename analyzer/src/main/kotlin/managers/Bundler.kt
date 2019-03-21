@@ -64,12 +64,12 @@ import okhttp3.Request
  * http://yehudakatz.com/2010/12/16/clarifying-the-roles-of-the-gemspec-and-gemfile/.
  */
 class Bundler(name: String, analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfiguration) :
-        PackageManager(name, analyzerConfig, repoConfig), CommandLineTool {
+    PackageManager(name, analyzerConfig, repoConfig), CommandLineTool {
     class Factory : AbstractPackageManagerFactory<Bundler>("Bundler") {
         override val globsForDefinitionFiles = listOf("Gemfile")
 
         override fun create(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfiguration) =
-                Bundler(managerName, analyzerConfig, repoConfig)
+            Bundler(managerName, analyzerConfig, repoConfig)
     }
 
     override fun command(workingDir: File?) = if (OS.isWindows) "bundle.bat" else "bundle"
@@ -77,12 +77,12 @@ class Bundler(name: String, analyzerConfig: AnalyzerConfiguration, repoConfig: R
     override fun getVersionRequirement(): Requirement = Requirement.buildIvy("[1.16,2.1[")
 
     override fun prepareResolution(definitionFiles: List<File>) =
-            // We do not actually depend on any features specific to a version of Bundler, but we still want to stick to
-            // fixed versions to be sure to get consistent results.
-            checkVersion(
-                    ignoreActualVersion = analyzerConfig.ignoreToolVersions,
-                    transform = { it.substringAfter("Bundler version ") }
-            )
+    // We do not actually depend on any features specific to a version of Bundler, but we still want to stick to
+    // fixed versions to be sure to get consistent results.
+        checkVersion(
+            ignoreActualVersion = analyzerConfig.ignoreToolVersions,
+            transform = { it.substringAfter("Bundler version ") }
+        )
 
     override fun resolveDependencies(definitionFile: File): ProjectAnalyzerResult? {
         val workingDir = definitionFile.parentFile
@@ -103,21 +103,23 @@ class Bundler(name: String, analyzerConfig: AnalyzerConfiguration, repoConfig: R
             }
 
             val project = Project(
-                    id = projectId,
-                    definitionFilePath = VersionControlSystem.getPathInfo(definitionFile).path,
-                    declaredLicenses = declaredLicenses.toSortedSet(),
-                    vcs = VcsInfo.EMPTY,
-                    vcsProcessed = processProjectVcs(workingDir, homepageUrl = homepageUrl),
-                    homepageUrl = homepageUrl,
-                    scopes = scopes.toSortedSet()
+                id = projectId,
+                definitionFilePath = VersionControlSystem.getPathInfo(definitionFile).path,
+                declaredLicenses = declaredLicenses.toSortedSet(),
+                vcs = VcsInfo.EMPTY,
+                vcsProcessed = processProjectVcs(workingDir, homepageUrl = homepageUrl),
+                homepageUrl = homepageUrl,
+                scopes = scopes.toSortedSet()
             )
 
             return ProjectAnalyzerResult(project, packages.map { it.toCuratedPackage() }.toSortedSet(), issues)
         }
     }
 
-    private fun parseScope(workingDir: File, projectId: Identifier, groupName: String, dependencyList: List<String>,
-                           scopes: MutableSet<Scope>, packages: MutableSet<Package>, issues: MutableList<OrtIssue>) {
+    private fun parseScope(
+        workingDir: File, projectId: Identifier, groupName: String, dependencyList: List<String>,
+        scopes: MutableSet<Scope>, packages: MutableSet<Package>, issues: MutableList<OrtIssue>
+    ) {
         log.debug { "Parsing scope: $groupName\nscope top level deps list=$dependencyList" }
 
         val scopeDependencies = mutableSetOf<PackageReference>()
@@ -129,8 +131,10 @@ class Bundler(name: String, analyzerConfig: AnalyzerConfiguration, repoConfig: R
         scopes += Scope(groupName, scopeDependencies.toSortedSet())
     }
 
-    private fun parseDependency(workingDir: File, projectId: Identifier, gemName: String, packages: MutableSet<Package>,
-                                scopeDependencies: MutableSet<PackageReference>, issues: MutableList<OrtIssue>) {
+    private fun parseDependency(
+        workingDir: File, projectId: Identifier, gemName: String, packages: MutableSet<Package>,
+        scopeDependencies: MutableSet<PackageReference>, issues: MutableList<OrtIssue>
+    ) {
         log.debug { "Parsing dependency '$gemName'." }
 
         try {
@@ -150,14 +154,14 @@ class Bundler(name: String, analyzerConfig: AnalyzerConfiguration, repoConfig: R
                 }
 
                 packages += Package(
-                        id = gemId,
-                        declaredLicenses = gemSpec.declaredLicenses,
-                        description = gemSpec.description,
-                        homepageUrl = gemSpec.homepageUrl,
-                        binaryArtifact = RemoteArtifact.EMPTY,
-                        sourceArtifact = gemSpec.artifact,
-                        vcs = gemSpec.vcs,
-                        vcsProcessed = processPackageVcs(gemSpec.vcs, gemSpec.homepageUrl)
+                    id = gemId,
+                    declaredLicenses = gemSpec.declaredLicenses,
+                    description = gemSpec.description,
+                    homepageUrl = gemSpec.homepageUrl,
+                    binaryArtifact = RemoteArtifact.EMPTY,
+                    sourceArtifact = gemSpec.artifact,
+                    vcs = gemSpec.vcs,
+                    vcsProcessed = processPackageVcs(gemSpec.vcs, gemSpec.homepageUrl)
                 )
 
                 val transitiveDependencies = mutableSetOf<PackageReference>()
@@ -209,7 +213,7 @@ class Bundler(name: String, analyzerConfig: AnalyzerConfiguration, repoConfig: R
     }
 
     private fun getGemspecFile(workingDir: File) =
-            workingDir.listFiles { _, name -> name.endsWith(".gemspec") }.firstOrNull()
+        workingDir.listFiles { _, name -> name.endsWith(".gemspec") }.firstOrNull()
 
     private fun installDependencies(workingDir: File) {
         require(analyzerConfig.allowDynamicVersions || File(workingDir, "Gemfile.lock").isFile) {
@@ -222,9 +226,9 @@ class Bundler(name: String, analyzerConfig: AnalyzerConfiguration, repoConfig: R
     private fun queryRubygems(name: String, version: String, retryCount: Int = 3): GemSpec? {
         // See http://guides.rubygems.org/rubygems-org-api-v2/.
         val request = Request.Builder()
-                .get()
-                .url("https://rubygems.org/api/v2/rubygems/$name/versions/$version.json")
-                .build()
+            .get()
+            .url("https://rubygems.org/api/v2/rubygems/$name/versions/$version.json")
+            .build()
 
         OkHttpClientHelper.execute(HTTP_CACHE_PATH, request).use { response ->
             when (val code = response.code()) {
@@ -239,8 +243,10 @@ class Bundler(name: String, analyzerConfig: AnalyzerConfiguration, repoConfig: R
                 }
 
                 OkHttpClientHelper.HTTP_TOO_MANY_REQUESTS -> {
-                    throw IOException("RubyGems reported too many requests, see " +
-                            "https://guides.rubygems.org/rubygems-org-api/#rate-limits.")
+                    throw IOException(
+                        "RubyGems reported too many requests, see " +
+                                "https://guides.rubygems.org/rubygems-org-api/#rate-limits."
+                    )
                 }
 
                 else -> {
@@ -250,8 +256,10 @@ class Bundler(name: String, analyzerConfig: AnalyzerConfiguration, repoConfig: R
                         return queryRubygems(name, version, retryCount - 1)
                     }
 
-                    throw IOException("RubyGems reported unhandled HTTP code $code when requesting meta-data for " +
-                            "gem '$name'.")
+                    throw IOException(
+                        "RubyGems reported unhandled HTTP code $code when requesting meta-data for " +
+                                "gem '$name'."
+                    )
                 }
             }
         }
@@ -259,14 +267,14 @@ class Bundler(name: String, analyzerConfig: AnalyzerConfiguration, repoConfig: R
 }
 
 data class GemSpec(
-        val name: String,
-        val version: String,
-        val homepageUrl: String,
-        val declaredLicenses: SortedSet<String>,
-        val description: String,
-        val runtimeDependencies: Set<String>,
-        val vcs: VcsInfo,
-        val artifact: RemoteArtifact
+    val name: String,
+    val version: String,
+    val homepageUrl: String,
+    val declaredLicenses: SortedSet<String>,
+    val description: String,
+    val runtimeDependencies: Set<String>,
+    val vcs: VcsInfo,
+    val artifact: RemoteArtifact
 ) {
     companion object Factory {
         fun createFromYaml(spec: String): GemSpec {
@@ -278,14 +286,14 @@ data class GemSpec(
 
             val homepage = yaml["homepage"].textValueOrEmpty()
             return GemSpec(
-                    yaml["name"].textValue(),
-                    yaml["version"]["version"].textValue(),
-                    homepage,
-                    yaml["licenses"]?.asIterable()?.map { it.textValue() }?.toSortedSet() ?: sortedSetOf(),
-                    yaml["description"].textValueOrEmpty(),
-                    runtimeDependencies ?: emptySet(),
-                    parseVcs(homepage),
-                    RemoteArtifact.EMPTY
+                yaml["name"].textValue(),
+                yaml["version"]["version"].textValue(),
+                homepage,
+                yaml["licenses"]?.asIterable()?.map { it.textValue() }?.toSortedSet() ?: sortedSetOf(),
+                yaml["description"].textValueOrEmpty(),
+                runtimeDependencies ?: emptySet(),
+                parseVcs(homepage),
+                RemoteArtifact.EMPTY
             )
         }
 
@@ -310,14 +318,14 @@ data class GemSpec(
             }
 
             return GemSpec(
-                    json["name"].textValue(),
-                    json["version"].textValue(),
-                    json["homepage_uri"].textValueOrEmpty(),
-                    json["licenses"]?.asIterable()?.map { it.textValue() }?.toSortedSet() ?: sortedSetOf(),
-                    json["description"].textValueOrEmpty(),
-                    runtimeDependencies ?: emptySet(),
-                    vcs,
-                    artifact
+                json["name"].textValue(),
+                json["version"].textValue(),
+                json["homepage_uri"].textValueOrEmpty(),
+                json["licenses"]?.asIterable()?.map { it.textValue() }?.toSortedSet() ?: sortedSetOf(),
+                json["description"].textValueOrEmpty(),
+                runtimeDependencies ?: emptySet(),
+                vcs,
+                artifact
             )
         }
 
@@ -326,12 +334,12 @@ data class GemSpec(
         // Gems tend to have GitHub URL set as homepage. Seems like it is the only way to get any VCS information out of
         // gemspec files.
         private fun parseVcs(homepageUrl: String): VcsInfo =
-                if (GITHUB_REGEX.matches(homepageUrl)) {
-                    log.debug { "$homepageUrl is a GitHub URL." }
-                    VcsInfo("git", "$homepageUrl.git", "", "")
-                } else {
-                    VcsInfo.EMPTY
-                }
+            if (GITHUB_REGEX.matches(homepageUrl)) {
+                log.debug { "$homepageUrl is a GitHub URL." }
+                VcsInfo("git", "$homepageUrl.git", "", "")
+            } else {
+                VcsInfo.EMPTY
+            }
     }
 
     fun merge(other: GemSpec): GemSpec {
@@ -340,12 +348,12 @@ data class GemSpec(
         }
 
         return GemSpec(name, version,
-                homepageUrl.takeUnless { it.isEmpty() } ?: other.homepageUrl,
-                declaredLicenses.takeUnless { it.isEmpty() } ?: other.declaredLicenses,
-                description.takeUnless { it.isEmpty() } ?: other.description,
-                runtimeDependencies.takeUnless { it.isEmpty() } ?: other.runtimeDependencies,
-                vcs.takeUnless { it == VcsInfo.EMPTY } ?: other.vcs,
-                artifact.takeUnless { it == RemoteArtifact.EMPTY } ?: other.artifact
+            homepageUrl.takeUnless { it.isEmpty() } ?: other.homepageUrl,
+            declaredLicenses.takeUnless { it.isEmpty() } ?: other.declaredLicenses,
+            description.takeUnless { it.isEmpty() } ?: other.description,
+            runtimeDependencies.takeUnless { it.isEmpty() } ?: other.runtimeDependencies,
+            vcs.takeUnless { it == VcsInfo.EMPTY } ?: other.vcs,
+            artifact.takeUnless { it == RemoteArtifact.EMPTY } ?: other.artifact
         )
     }
 }

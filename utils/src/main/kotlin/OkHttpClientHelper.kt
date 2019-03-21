@@ -64,9 +64,9 @@ object OkHttpClientHelper {
             val cache = Cache(cacheDirectory, maxCacheSizeInBytes)
             val specs = listOf(ConnectionSpec.MODERN_TLS, ConnectionSpec.COMPATIBLE_TLS, ConnectionSpec.CLEARTEXT)
             OkHttpClient.Builder()
-                    .cache(cache)
-                    .connectionSpecs(specs)
-                    .build()
+                .cache(cache)
+                .connectionSpecs(specs)
+                .build()
         }
 
         return client.newCall(request).execute()

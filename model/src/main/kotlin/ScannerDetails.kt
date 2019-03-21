@@ -29,26 +29,26 @@ import java.util.EnumSet
  * Details about the used source code scanner.
  */
 data class ScannerDetails(
-        /**
-         * The name of the scanner.
-         */
-        val name: String,
+    /**
+     * The name of the scanner.
+     */
+    val name: String,
 
-        /**
-         * The version of the scanner.
-         */
-        val version: String,
+    /**
+     * The version of the scanner.
+     */
+    val version: String,
 
-        /**
-         * The configuration of the scanner, could be command line arguments for example.
-         */
-        val configuration: String,
+    /**
+     * The configuration of the scanner, could be command line arguments for example.
+     */
+    val configuration: String,
 
-        /**
-         * A map that holds arbitrary data. Can be used by third-party tools to add custom data to the model.
-         */
-        @JsonInclude(JsonInclude.Include.NON_EMPTY)
-        val data: CustomData = emptyMap()
+    /**
+     * A map that holds arbitrary data. Can be used by third-party tools to add custom data to the model.
+     */
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    val data: CustomData = emptyMap()
 ) {
     companion object {
         private val MAJOR_MINOR = EnumSet.of(Semver.VersionDiff.MAJOR, Semver.VersionDiff.MINOR)
@@ -61,6 +61,6 @@ data class ScannerDetails(
      * the scanners.
      */
     fun isCompatible(other: ScannerDetails) =
-            name.equals(other.name, true) && configuration == other.configuration &&
-                    Semver(version, Semver.SemverType.LOOSE).diff(other.version) !in MAJOR_MINOR
+        name.equals(other.name, true) && configuration == other.configuration &&
+                Semver(version, Semver.SemverType.LOOSE).diff(other.version) !in MAJOR_MINOR
 }

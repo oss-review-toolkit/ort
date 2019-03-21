@@ -35,7 +35,7 @@ infix fun SpdxLicense.and(other: SpdxLicense) = this and other.toExpression()
  * Create an [SpdxExpression] by concatenating [this][SpdxLicense] and [other] using [SpdxOperator.AND].
  */
 infix fun SpdxLicense.and(other: SpdxExpression) =
-        SpdxCompoundExpression(toExpression(), SpdxOperator.AND, other)
+    SpdxCompoundExpression(toExpression(), SpdxOperator.AND, other)
 
 /**
  * Create an [SpdxExpression] by concatenating [this][SpdxLicense] and [other] using [SpdxOperator.OR].
@@ -46,13 +46,13 @@ infix fun SpdxLicense.or(other: SpdxLicense) = this or other.toExpression()
  * Create an [SpdxExpression] by concatenating [this][SpdxLicense] and [other] using [SpdxOperator.OR].
  */
 infix fun SpdxLicense.or(other: SpdxExpression) =
-        SpdxCompoundExpression(toExpression(), SpdxOperator.OR, other)
+    SpdxCompoundExpression(toExpression(), SpdxOperator.OR, other)
 
 /**
  * Create an [SpdxExpression] by concatenating [this][SpdxLicense] and [exception] using [SpdxOperator.WITH].
  */
 infix fun SpdxLicense.with(exception: SpdxLicenseException) =
-        SpdxCompoundExpression(toExpression(), SpdxOperator.WITH, exception.toExpression())
+    SpdxCompoundExpression(toExpression(), SpdxOperator.WITH, exception.toExpression())
 
 /**
  * Create an [SpdxLicenseIdExpression] from this [SpdxLicense].
@@ -82,9 +82,9 @@ fun SpdxLicenseException.toExpression() = SpdxLicenseExceptionExpression(id)
  * (scanner-specific) namespaces are ignored.
  */
 fun String.isLicenseRefTo(
-        name: String,
-        ignoreCase: Boolean = true,
-        namespaces: List<String> = listOf("ORT", "Askalono", "BoyterLc", "Licensee", "scancode")
+    name: String,
+    ignoreCase: Boolean = true,
+    namespaces: List<String> = listOf("ORT", "Askalono", "BoyterLc", "Licensee", "scancode")
 ): Boolean {
     if (name.isBlank() || name.startsWith("-") || name.endsWith("-")) return false
 

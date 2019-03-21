@@ -32,7 +32,7 @@ import java.io.File
 
 class WebAppReporterTest : WordSpec({
     val ortResult = File("../scanner/src/funTest/assets/file-counter-expected-output-for-analyzer-result.yml")
-            .readValue<OrtResult>()
+        .readValue<OrtResult>()
 
     "WebAppReporter" should {
         "successfully export to a web application" {

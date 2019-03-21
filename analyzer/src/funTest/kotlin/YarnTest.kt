@@ -63,11 +63,11 @@ class YarnTest : WordSpec() {
                 val result = createYarn().resolveDependencies(USER_DIR, listOf(packageFile))[packageFile]
                 val vcsPath = vcsDir.getPathToRoot(projectDir)
                 val expectedResult = patchExpectedResult(
-                        File(projectDir.parentFile, "yarn-expected-output.yml"),
-                        definitionFilePath = "$vcsPath/package.json",
-                        url = normalizeVcsUrl(vcsUrl),
-                        revision = vcsRevision,
-                        path = vcsPath
+                    File(projectDir.parentFile, "yarn-expected-output.yml"),
+                    definitionFilePath = "$vcsPath/package.json",
+                    url = normalizeVcsUrl(vcsUrl),
+                    revision = vcsRevision,
+                    path = vcsPath
                 )
 
                 yamlMapper.writeValueAsString(result) shouldBe expectedResult

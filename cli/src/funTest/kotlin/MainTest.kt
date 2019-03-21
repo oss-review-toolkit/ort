@@ -63,12 +63,14 @@ class MainTest : StringSpec() {
             System.setOut(PrintStream(streamOut))
 
             try {
-                val exitCode = Main.run(arrayOf(
+                val exitCode = Main.run(
+                    arrayOf(
                         "analyze",
                         "-m", "Gradle",
                         "-i", inputDir.path,
                         "-o", File(outputDir, "gradle").path
-                ))
+                    )
+                )
 
                 exitCode shouldBe 0
 
@@ -94,19 +96,21 @@ class MainTest : StringSpec() {
             System.setOut(PrintStream(streamOut))
 
             try {
-                val exitCode = Main.run(arrayOf(
+                val exitCode = Main.run(
+                    arrayOf(
                         "analyze",
                         "-m", "NPM",
                         "-i", inputDir.path,
                         "-o", File(outputDir, "package-lock").path
-                ))
+                    )
+                )
 
                 exitCode shouldBe 0
 
                 val lines = streamOut.toString().lineSequence().iterator()
                 while (lines.hasNext() && lines.next() != "The following package managers are activated:")
 
-                lines.hasNext() shouldBe true
+                    lines.hasNext() shouldBe true
                 lines.next() shouldBe "\tNPM"
             } finally {
                 // Restore standard output.
@@ -123,13 +127,15 @@ class MainTest : StringSpec() {
             System.setOut(PrintStream(streamOut))
 
             try {
-                val exitCode = Main.run(arrayOf(
+                val exitCode = Main.run(
+                    arrayOf(
                         "analyze",
                         "-m", "Gradle",
                         "-i", inputDir.path,
                         "-o", File(outputDir, "gradle").path,
                         "-f", "json,yaml,json"
-                ))
+                    )
+                )
 
                 exitCode shouldBe 0
 
@@ -146,18 +152,20 @@ class MainTest : StringSpec() {
             val analyzerOutputDir = File(outputDir, "merged-results")
 
             val expectedResult = patchExpectedResult(
-                    File(projectDir, "gradle-all-dependencies-expected-result.yml"),
-                    url = vcsUrl,
-                    revision = vcsRevision,
-                    urlProcessed = normalizeVcsUrl(vcsUrl)
+                File(projectDir, "gradle-all-dependencies-expected-result.yml"),
+                url = vcsUrl,
+                revision = vcsRevision,
+                urlProcessed = normalizeVcsUrl(vcsUrl)
             )
 
-            val exitCode = Main.run(arrayOf(
+            val exitCode = Main.run(
+                arrayOf(
                     "analyze",
                     "-m", "Gradle",
                     "-i", File(projectDir, "gradle").absolutePath,
                     "-o", analyzerOutputDir.path
-            ))
+                )
+            )
 
             exitCode shouldBe 0
 
@@ -170,22 +178,24 @@ class MainTest : StringSpec() {
             val analyzerOutputDir = File(outputDir, "curations")
 
             val expectedResult = patchExpectedResult(
-                    File(projectDir, "gradle-all-dependencies-expected-result-with-curations.yml"),
-                    url = vcsUrl,
-                    revision = vcsRevision,
-                    urlProcessed = normalizeVcsUrl(vcsUrl)
+                File(projectDir, "gradle-all-dependencies-expected-result-with-curations.yml"),
+                url = vcsUrl,
+                revision = vcsRevision,
+                urlProcessed = normalizeVcsUrl(vcsUrl)
             )
 
             // The command below should include the "--merge-results" option, but setting this option here would disable
             // the feature because JCommander just switches the value of boolean options, and the option was already set
             // to true by the test before. See: https://github.com/cbeust/jcommander/issues/378
-            val exitCode = Main.run(arrayOf(
+            val exitCode = Main.run(
+                arrayOf(
                     "analyze",
                     "-m", "Gradle",
                     "-i", File(projectDir, "gradle").absolutePath,
                     "-o", analyzerOutputDir.path,
                     "--package-curations-file", File(projectDir, "gradle/curations.yml").toString()
-            ))
+                )
+            )
 
             exitCode shouldBe 0
 

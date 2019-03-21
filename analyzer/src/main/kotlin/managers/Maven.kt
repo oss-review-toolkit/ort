@@ -56,25 +56,25 @@ import org.eclipse.aether.repository.WorkspaceRepository
  * The Maven package manager for Java, see https://maven.apache.org/.
  */
 class Maven(name: String, analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfiguration) :
-        PackageManager(name, analyzerConfig, repoConfig) {
+    PackageManager(name, analyzerConfig, repoConfig) {
     class Factory : AbstractPackageManagerFactory<Maven>("Maven") {
         override val globsForDefinitionFiles = listOf("pom.xml")
 
         override fun create(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfiguration) =
-                Maven(managerName, analyzerConfig, repoConfig)
+            Maven(managerName, analyzerConfig, repoConfig)
     }
 
     private inner class LocalProjectWorkspaceReader : WorkspaceReader {
         private val workspaceRepository = WorkspaceRepository()
 
         override fun findArtifact(artifact: Artifact) =
-                artifact.takeIf { it.extension == "pom" }?.let {
-                    localProjectBuildingResults[it.identifier()]?.pomFile?.absoluteFile
-                }
+            artifact.takeIf { it.extension == "pom" }?.let {
+                localProjectBuildingResults[it.identifier()]?.pomFile?.absoluteFile
+            }
 
         override fun findVersions(artifact: Artifact) =
-                // Avoid resolution of (SNAPSHOT) versions for local projects.
-                localProjectBuildingResults[artifact.identifier()]?.let { listOf(artifact.version) } ?: emptyList()
+        // Avoid resolution of (SNAPSHOT) versions for local projects.
+            localProjectBuildingResults[artifact.identifier()]?.let { listOf(artifact.version) } ?: emptyList()
 
         override fun getRepository() = workspaceRepository
     }
@@ -148,18 +148,18 @@ class Maven(name: String, analyzerConfig: AnalyzerConfiguration, repoConfig: Rep
         }
 
         val project = Project(
-                id = Identifier(
-                        type = managerName,
-                        namespace = mavenProject.groupId,
-                        name = mavenProject.artifactId,
-                        version = mavenProject.version
-                ),
-                definitionFilePath = VersionControlSystem.getPathInfo(definitionFile).path,
-                declaredLicenses = MavenSupport.parseLicenses(mavenProject),
-                vcs = vcsFromPackage,
-                vcsProcessed = processProjectVcs(projectDir, vcsFromPackage, mavenProject.url ?: ""),
-                homepageUrl = mavenProject.url ?: "",
-                scopes = scopes.values.toSortedSet()
+            id = Identifier(
+                type = managerName,
+                namespace = mavenProject.groupId,
+                name = mavenProject.artifactId,
+                version = mavenProject.version
+            ),
+            definitionFilePath = VersionControlSystem.getPathInfo(definitionFile).path,
+            declaredLicenses = MavenSupport.parseLicenses(mavenProject),
+            vcs = vcsFromPackage,
+            vcsProcessed = processProjectVcs(projectDir, vcsFromPackage, mavenProject.url ?: ""),
+            homepageUrl = mavenProject.url ?: "",
+            scopes = scopes.values.toSortedSet()
         )
 
         return ProjectAnalyzerResult(project, packages.values.map { it.toCuratedPackage() }.toSortedSet())
@@ -182,10 +182,10 @@ class Maven(name: String, analyzerConfig: AnalyzerConfiguration, repoConfig: Rep
 
             return if (localProjects.contains(identifier)) {
                 val id = Identifier(
-                        type = managerName,
-                        namespace = node.artifact.groupId,
-                        name = node.artifact.artifactId,
-                        version = node.artifact.version
+                    type = managerName,
+                    namespace = node.artifact.groupId,
+                    name = node.artifact.artifactId,
+                    version = node.artifact.version
                 )
 
                 log.info { "Dependency '${id.toCoordinates()}' refers to a local project." }
@@ -208,9 +208,9 @@ class Maven(name: String, analyzerConfig: AnalyzerConfiguration, repoConfig: Rep
             }
 
             return PackageReference(
-                    Identifier(managerName, node.artifact.groupId, node.artifact.artifactId, node.artifact.version),
-                    dependencies = sortedSetOf(),
-                    errors = listOf(OrtIssue(source = managerName, message = e.collectMessagesAsString()))
+                Identifier(managerName, node.artifact.groupId, node.artifact.artifactId, node.artifact.version),
+                dependencies = sortedSetOf(),
+                errors = listOf(OrtIssue(source = managerName, message = e.collectMessagesAsString()))
             )
         }
     }

@@ -55,14 +55,14 @@ class GitDownloadTest : StringSpec() {
         "Git can download a given revision".config(tags = setOf(ExpensiveTag)) {
             val pkg = Package.EMPTY.copy(vcsProcessed = VcsInfo("Git", REPO_URL, REPO_REV))
             val expectedFiles = listOf(
-                    ".git",
-                    ".gitignore",
-                    "CHANGELOG.md",
-                    "LICENSE",
-                    "README.md",
-                    "lib",
-                    "package.json",
-                    "specs"
+                ".git",
+                ".gitignore",
+                "CHANGELOG.md",
+                "LICENSE",
+                "README.md",
+                "lib",
+                "package.json",
+                "specs"
             )
 
             val workingTree = git.download(pkg, outputDir)
@@ -76,17 +76,17 @@ class GitDownloadTest : StringSpec() {
         "Git can download only a single path".config(tags = setOf(ExpensiveTag)) {
             val pkg = Package.EMPTY.copy(vcsProcessed = VcsInfo("Git", REPO_URL, REPO_REV, path = REPO_PATH))
             val expectedFiles = listOf(
-                    File("LICENSE"),
-                    File(REPO_PATH, "dep_graph.js"),
-                    File(REPO_PATH, "index.d.ts")
+                File("LICENSE"),
+                File(REPO_PATH, "dep_graph.js"),
+                File(REPO_PATH, "index.d.ts")
             )
 
             val workingTree = git.download(pkg, outputDir)
             val actualFiles = workingTree.workingDir.walkBottomUp()
-                    .onEnter { it.name != ".git" }
-                    .filter { it.isFile }
-                    .map { it.relativeTo(outputDir) }
-                    .sortedBy { it.path }
+                .onEnter { it.name != ".git" }
+                .filter { it.isFile }
+                .map { it.relativeTo(outputDir) }
+                .sortedBy { it.path }
 
             workingTree.isValid() shouldBe true
             workingTree.getRevision() shouldBe REPO_REV
@@ -95,8 +95,8 @@ class GitDownloadTest : StringSpec() {
 
         "Git can download based on a version".config(tags = setOf(ExpensiveTag)) {
             val pkg = Package.EMPTY.copy(
-                    id = Identifier("Test:::$REPO_VERSION"),
-                    vcsProcessed = VcsInfo("Git", REPO_URL, "")
+                id = Identifier("Test:::$REPO_VERSION"),
+                vcsProcessed = VcsInfo("Git", REPO_URL, "")
             )
 
             val workingTree = git.download(pkg, outputDir)
@@ -107,20 +107,20 @@ class GitDownloadTest : StringSpec() {
 
         "Git can download only a single path based on a version".config(tags = setOf(ExpensiveTag)) {
             val pkg = Package.EMPTY.copy(
-                    id = Identifier("Test:::$REPO_VERSION"),
-                    vcsProcessed = VcsInfo("Git", REPO_URL, "", path = REPO_PATH_FOR_VERSION)
+                id = Identifier("Test:::$REPO_VERSION"),
+                vcsProcessed = VcsInfo("Git", REPO_URL, "", path = REPO_PATH_FOR_VERSION)
             )
             val expectedFiles = listOf(
-                    File("LICENSE"),
-                    File(REPO_PATH_FOR_VERSION, "dep_graph_spec.js")
+                File("LICENSE"),
+                File(REPO_PATH_FOR_VERSION, "dep_graph_spec.js")
             )
 
             val workingTree = git.download(pkg, outputDir)
             val actualFiles = workingTree.workingDir.walkBottomUp()
-                    .onEnter { it.name != ".git" }
-                    .filter { it.isFile }
-                    .map { it.relativeTo(outputDir) }
-                    .sortedBy { it.path }
+                .onEnter { it.name != ".git" }
+                .filter { it.isFile }
+                .map { it.relativeTo(outputDir) }
+                .sortedBy { it.path }
 
             workingTree.isValid() shouldBe true
             workingTree.getRevision() shouldBe REPO_REV_FOR_VERSION

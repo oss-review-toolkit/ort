@@ -26,16 +26,16 @@ import com.fasterxml.jackson.annotation.JsonProperty
  * original metadata of the package was modified by applying [PackageCuration]s.
  */
 data class CuratedPackage(
-        /**
-         * The curated package after applying the [curations].
-         */
-        @JsonProperty("package")
-        val pkg: Package,
+    /**
+     * The curated package after applying the [curations].
+     */
+    @JsonProperty("package")
+    val pkg: Package,
 
-        /**
-         * The curations in the order they were applied.
-         */
-        val curations: List<PackageCurationResult>
+    /**
+     * The curations in the order they were applied.
+     */
+    val curations: List<PackageCurationResult>
 ) : Comparable<CuratedPackage> {
     /**
      * A comparison function to sort packages by their identifier.

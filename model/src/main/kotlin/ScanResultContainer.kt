@@ -27,21 +27,21 @@ import java.util.SortedSet
  * A container for [ScanResult]s for the package identified by [id].
  */
 data class ScanResultContainer(
-        /**
-         * The [Identifier] of the package these [results] belong to.
-         */
-        val id: Identifier,
+    /**
+     * The [Identifier] of the package these [results] belong to.
+     */
+    val id: Identifier,
 
-        /**
-         * The list of [ScanResult]s from potentially multiple scanners and / or with different package provenance.
-         */
-        val results: List<ScanResult>,
+    /**
+     * The list of [ScanResult]s from potentially multiple scanners and / or with different package provenance.
+     */
+    val results: List<ScanResult>,
 
-        /**
-         * A map that holds arbitrary data. Can be used by third-party tools to add custom data to the model.
-         */
-        @JsonInclude(JsonInclude.Include.NON_EMPTY)
-        val data: CustomData = emptyMap()
+    /**
+     * A map that holds arbitrary data. Can be used by third-party tools to add custom data to the model.
+     */
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    val data: CustomData = emptyMap()
 ) : Comparable<ScanResultContainer> {
     /**
      * A comparison function to sort scan result containers by their identifier.
@@ -54,10 +54,10 @@ data class ScanResultContainer(
  * container is null.
  */
 fun ScanResultContainer?.getAllDetectedLicenses(): SortedSet<String> =
-        sortedSetOf<String>().also { licenses ->
-            if (this != null) {
-                results.flatMapTo(licenses) {
-                    it.summary.licenses
-                }
+    sortedSetOf<String>().also { licenses ->
+        if (this != null) {
+            results.flatMapTo(licenses) {
+                it.summary.licenses
             }
         }
+    }

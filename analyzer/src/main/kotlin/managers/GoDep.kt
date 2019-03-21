@@ -56,20 +56,20 @@ import java.nio.file.Paths
  * A map of legacy package manager file names "dep" can import, and their respective lock file names, if any.
  */
 val GO_LEGACY_MANIFESTS = mapOf(
-        "glide.yaml" to "glide.lock", // https://github.com/Masterminds/glide
-        "Godeps.json" to ""           // https://github.com/tools/godep
+    "glide.yaml" to "glide.lock", // https://github.com/Masterminds/glide
+    "Godeps.json" to ""           // https://github.com/tools/godep
 )
 
 /**
  * The Dep package manager for Go, see https://golang.github.io/dep/.
  */
 class GoDep(name: String, analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfiguration) :
-        PackageManager(name, analyzerConfig, repoConfig), CommandLineTool {
+    PackageManager(name, analyzerConfig, repoConfig), CommandLineTool {
     class Factory : AbstractPackageManagerFactory<GoDep>("GoDep") {
         override val globsForDefinitionFiles = listOf("Gopkg.toml", *GO_LEGACY_MANIFESTS.keys.toTypedArray())
 
         override fun create(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfiguration) =
-                GoDep(managerName, analyzerConfig, repoConfig)
+            GoDep(managerName, analyzerConfig, repoConfig)
     }
 
     override fun command(workingDir: File?) = "dep"
@@ -109,14 +109,14 @@ class GoDep(name: String, analyzerConfig: AnalyzerConfiguration, repoConfig: Rep
             }
 
             val pkg = Package(
-                    id = Identifier(managerName, "", name, version),
-                    declaredLicenses = sortedSetOf(),
-                    description = "",
-                    homepageUrl = "",
-                    binaryArtifact = RemoteArtifact.EMPTY,
-                    sourceArtifact = RemoteArtifact.EMPTY,
-                    vcs = VcsInfo.EMPTY,
-                    vcsProcessed = vcsProcessed
+                id = Identifier(managerName, "", name, version),
+                declaredLicenses = sortedSetOf(),
+                description = "",
+                homepageUrl = "",
+                binaryArtifact = RemoteArtifact.EMPTY,
+                sourceArtifact = RemoteArtifact.EMPTY,
+                vcs = VcsInfo.EMPTY,
+                vcsProcessed = vcsProcessed
             )
 
             packages += pkg
@@ -130,26 +130,26 @@ class GoDep(name: String, analyzerConfig: AnalyzerConfiguration, repoConfig: Rep
         gopath.safeDeleteRecursively(force = true)
 
         return ProjectAnalyzerResult(
-                project = Project(
-                        id = Identifier(managerName, "", projectDir.name, projectVcs.revision),
-                        definitionFilePath = VersionControlSystem.getPathInfo(definitionFile).path,
-                        declaredLicenses = sortedSetOf(),
-                        vcs = VcsInfo.EMPTY,
-                        vcsProcessed = projectVcs,
-                        homepageUrl = "",
-                        scopes = sortedSetOf(scope)
-                ),
-                packages = packages.map { it.toCuratedPackage() }.toSortedSet()
+            project = Project(
+                id = Identifier(managerName, "", projectDir.name, projectVcs.revision),
+                definitionFilePath = VersionControlSystem.getPathInfo(definitionFile).path,
+                declaredLicenses = sortedSetOf(),
+                vcs = VcsInfo.EMPTY,
+                vcsProcessed = projectVcs,
+                homepageUrl = "",
+                scopes = sortedSetOf(scope)
+            ),
+            packages = packages.map { it.toCuratedPackage() }.toSortedSet()
         )
     }
 
     fun deduceImportPath(projectDir: File, vcs: VcsInfo, gopath: File): File =
-            if (vcs == VcsInfo.EMPTY) {
-                Paths.get(gopath.path, "src", projectDir.name)
-            } else {
-                val uri = URI(vcs.url)
-                Paths.get(gopath.path, "src", uri.host, uri.path)
-            }.toAbsolutePath().toFile()
+        if (vcs == VcsInfo.EMPTY) {
+            Paths.get(gopath.path, "src", projectDir.name)
+        } else {
+            val uri = URI(vcs.url)
+            Paths.get(gopath.path, "src", uri.host, uri.path)
+        }.toAbsolutePath().toFile()
 
     private fun resolveProjectRoot(definitionFile: File): File {
         val projectDir = when (definitionFile.name) {
@@ -163,9 +163,12 @@ class GoDep(name: String, analyzerConfig: AnalyzerConfiguration, repoConfig: Rep
 
     private fun importLegacyManifest(lockfileName: String, workingDir: File, gopath: File) {
         if (lockfileName.isNotEmpty() && !File(workingDir, lockfileName).isFile &&
-                !analyzerConfig.allowDynamicVersions) {
-            throw IllegalArgumentException("No lockfile found in ${workingDir.invariantSeparatorsPath}, dependency " +
-                    "versions are unstable.")
+            !analyzerConfig.allowDynamicVersions
+        ) {
+            throw IllegalArgumentException(
+                "No lockfile found in ${workingDir.invariantSeparatorsPath}, dependency " +
+                        "versions are unstable."
+            )
         }
 
         run("init", workingDir = workingDir, environment = mapOf("GOPATH" to gopath.realFile().path))
@@ -193,7 +196,8 @@ class GoDep(name: String, analyzerConfig: AnalyzerConfiguration, repoConfig: Rep
         if (!lockfile.isFile) {
             if (!analyzerConfig.allowDynamicVersions) {
                 throw IllegalArgumentException(
-                        "No lockfile found in ${workingDir.invariantSeparatorsPath}, dependency versions are unstable.")
+                    "No lockfile found in ${workingDir.invariantSeparatorsPath}, dependency versions are unstable."
+                )
             }
 
             log.debug { "Running 'dep ensure' to generate missing lockfile in $workingDir" }
@@ -236,9 +240,9 @@ class GoDep(name: String, analyzerConfig: AnalyzerConfiguration, repoConfig: Rep
             val msg = pc.stderr
 
             val errorMessagesToIgnore = listOf(
-                    "no Go files in",
-                    "no buildable Go source files in",
-                    "build constraints exclude all Go files in"
+                "no Go files in",
+                "no buildable Go source files in",
+                "build constraints exclude all Go files in"
             )
 
             if (!errorMessagesToIgnore.any { it in msg }) {

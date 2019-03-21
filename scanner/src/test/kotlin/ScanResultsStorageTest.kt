@@ -97,36 +97,36 @@ class ScanResultsStorageTest : WordSpec() {
         "patchScanCodeLicenseRefs" should {
             "correctly patch existing ScanCode LicenseRef findings" {
                 fun generateDummyLicenseFinding(license: String) =
-                        LicenseFinding(license, sortedSetOf<TextLocation>(), sortedSetOf<CopyrightFinding>())
+                    LicenseFinding(license, sortedSetOf<TextLocation>(), sortedSetOf<CopyrightFinding>())
 
                 val originalScanResult = ScanResult(
-                        Provenance(),
-                        ScannerDetails("ScanCode", "", ""),
-                        ScanSummary(
-                                Instant.EPOCH,
-                                Instant.EPOCH,
-                                0,
-                                sortedSetOf(
-                                        generateDummyLicenseFinding("LicenseRef-foo-bar"),
-                                        generateDummyLicenseFinding("LicenseRef-scancode-correct"),
-                                        generateDummyLicenseFinding("Apache-2.0")
-                                )
+                    Provenance(),
+                    ScannerDetails("ScanCode", "", ""),
+                    ScanSummary(
+                        Instant.EPOCH,
+                        Instant.EPOCH,
+                        0,
+                        sortedSetOf(
+                            generateDummyLicenseFinding("LicenseRef-foo-bar"),
+                            generateDummyLicenseFinding("LicenseRef-scancode-correct"),
+                            generateDummyLicenseFinding("Apache-2.0")
                         )
+                    )
                 )
 
                 val expectedScanResult = ScanResult(
-                        Provenance(),
-                        ScannerDetails("ScanCode", "", ""),
-                        ScanSummary(
-                                Instant.EPOCH,
-                                Instant.EPOCH,
-                                0,
-                                sortedSetOf(
-                                        generateDummyLicenseFinding("LicenseRef-scancode-foo-bar"),
-                                        generateDummyLicenseFinding("LicenseRef-scancode-correct"),
-                                        generateDummyLicenseFinding("Apache-2.0")
-                                )
+                    Provenance(),
+                    ScannerDetails("ScanCode", "", ""),
+                    ScanSummary(
+                        Instant.EPOCH,
+                        Instant.EPOCH,
+                        0,
+                        sortedSetOf(
+                            generateDummyLicenseFinding("LicenseRef-scancode-foo-bar"),
+                            generateDummyLicenseFinding("LicenseRef-scancode-correct"),
+                            generateDummyLicenseFinding("Apache-2.0")
                         )
+                    )
                 )
 
                 (ScanResultsStorage.storage as ArtifactoryStorage).apply {

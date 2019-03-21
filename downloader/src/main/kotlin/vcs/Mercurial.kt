@@ -47,59 +47,61 @@ class Mercurial : VersionControlSystem(), CommandLineTool {
     override fun command(workingDir: File?) = "hg"
 
     override fun getVersion() =
-            getVersion { output ->
-                versionRegex.matcher(output.lineSequence().first()).let {
-                    if (it.matches()) {
-                        it.group("version")
-                    } else {
-                        ""
-                    }
+        getVersion { output ->
+            versionRegex.matcher(output.lineSequence().first()).let {
+                if (it.matches()) {
+                    it.group("version")
+                } else {
+                    ""
                 }
             }
+        }
 
     override fun getWorkingTree(vcsDirectory: File) =
-            object : WorkingTree(vcsDirectory, type) {
-                override fun isValid(): Boolean {
-                    if (!workingDir.isDirectory) {
-                        return false
-                    }
-
-                    // Do not use runMercurialCommand() here as we do not require the command to succeed.
-                    val hgRootPath = ProcessCapture(workingDir, "hg", "root")
-                    return hgRootPath.isSuccess && workingDir.path.startsWith(hgRootPath.stdout.trimEnd())
+        object : WorkingTree(vcsDirectory, type) {
+            override fun isValid(): Boolean {
+                if (!workingDir.isDirectory) {
+                    return false
                 }
 
-                override fun isShallow() = false
-
-                override fun getRemoteUrl() = run(workingDir, "paths", "default").stdout.trimEnd()
-
-                override fun getRevision() = run(workingDir, "--debug", "id", "-i").stdout.trimEnd()
-
-                override fun getRootPath() = File(run(workingDir, "root").stdout.trimEnd())
-
-                override fun listRemoteBranches(): List<String> {
-                    val branches = run(workingDir, "branches").stdout.trimEnd()
-                    return branches.lines().map {
-                        it.split(' ').first()
-                    }.sorted()
-                }
-
-                override fun listRemoteTags(): List<String> {
-                    // Mercurial does not have the concept of global remote tags. Its "regular tags" are defined per
-                    // branch as part of the committed ".hgtags" file. See https://stackoverflow.com/a/2059189/1127485.
-                    run(workingDir, "pull", "-r", "default")
-                    val tags = run(workingDir, "cat", "-r", "default", ".hgtags").stdout.trimEnd()
-                    return tags.lines().map {
-                        it.split(' ').last()
-                    }.sorted()
-                }
+                // Do not use runMercurialCommand() here as we do not require the command to succeed.
+                val hgRootPath = ProcessCapture(workingDir, "hg", "root")
+                return hgRootPath.isSuccess && workingDir.path.startsWith(hgRootPath.stdout.trimEnd())
             }
 
-    override fun isApplicableUrlInternal(vcsUrl: String) =
-            ProcessCapture("hg", "identify", vcsUrl).isSuccess
+            override fun isShallow() = false
 
-    override fun download(pkg: Package, targetDir: File, allowMovingRevisions: Boolean,
-                          recursive: Boolean): WorkingTree {
+            override fun getRemoteUrl() = run(workingDir, "paths", "default").stdout.trimEnd()
+
+            override fun getRevision() = run(workingDir, "--debug", "id", "-i").stdout.trimEnd()
+
+            override fun getRootPath() = File(run(workingDir, "root").stdout.trimEnd())
+
+            override fun listRemoteBranches(): List<String> {
+                val branches = run(workingDir, "branches").stdout.trimEnd()
+                return branches.lines().map {
+                    it.split(' ').first()
+                }.sorted()
+            }
+
+            override fun listRemoteTags(): List<String> {
+                // Mercurial does not have the concept of global remote tags. Its "regular tags" are defined per
+                // branch as part of the committed ".hgtags" file. See https://stackoverflow.com/a/2059189/1127485.
+                run(workingDir, "pull", "-r", "default")
+                val tags = run(workingDir, "cat", "-r", "default", ".hgtags").stdout.trimEnd()
+                return tags.lines().map {
+                    it.split(' ').last()
+                }.sorted()
+            }
+        }
+
+    override fun isApplicableUrlInternal(vcsUrl: String) =
+        ProcessCapture("hg", "identify", vcsUrl).isSuccess
+
+    override fun download(
+        pkg: Package, targetDir: File, allowMovingRevisions: Boolean,
+        recursive: Boolean
+    ): WorkingTree {
         log.info { "Using $type version ${getVersion()}." }
 
         try {
@@ -113,17 +115,20 @@ class Mercurial : VersionControlSystem(), CommandLineTool {
             }
 
             run(targetDir, "init")
-            File(targetDir, ".hg/hgrc").writeText("""
+            File(targetDir, ".hg/hgrc").writeText(
+                """
                 [paths]
                 default = ${pkg.vcsProcessed.url}
                 [extensions]
 
-                """.trimIndent() + extensionsList.joinToString("\n"))
+                """.trimIndent() + extensionsList.joinToString("\n")
+            )
 
             if (MERCURIAL_SPARSE_EXTENSION in extensionsList) {
                 log.info { "Configuring Mercurial to do sparse checkout of path '${pkg.vcsProcessed.path}'." }
                 run(targetDir, "debugsparse", "-I", "${pkg.vcsProcessed.path}/**",
-                        *LICENSE_FILE_NAMES.flatMap { listOf("-I", it) }.toTypedArray())
+                    *LICENSE_FILE_NAMES.flatMap { listOf("-I", it) }.toTypedArray()
+                )
             }
 
             val workingTree = getWorkingTree(targetDir)
@@ -154,8 +159,10 @@ class Mercurial : VersionControlSystem(), CommandLineTool {
 
             pkg.vcsProcessed.path.let {
                 if (it.isNotEmpty() && !workingTree.workingDir.resolve(it).exists()) {
-                    throw DownloadException("The $type working directory at '${workingTree.workingDir}' does not " +
-                            "contain the requested path '$it'.")
+                    throw DownloadException(
+                        "The $type working directory at '${workingTree.workingDir}' does not " +
+                                "contain the requested path '$it'."
+                    )
                 }
             }
 

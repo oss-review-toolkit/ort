@@ -30,21 +30,21 @@ import org.apache.commons.codec.digest.DigestUtils
  * A list of globs that match typical license file names.
  */
 val LICENSE_FILE_NAMES = listOf(
-        "LICENSE*",
-        "LICENCE*",
-        "UNLICENSE",
-        "UNLICENCE",
-        "COPYING*",
-        "COPYRIGHT",
-        "PATENTS"
+    "LICENSE*",
+    "LICENCE*",
+    "UNLICENSE",
+    "UNLICENCE",
+    "COPYING*",
+    "COPYRIGHT",
+    "PATENTS"
 )
 
 /**
  * A list of globs that match file names which are not license files but typically trigger false-positives.
  */
 val NON_LICENSE_FILENAMES = listOf(
-        "HERE_NOTICE",
-        "META-INF/DEPENDENCIES"
+    "HERE_NOTICE",
+    "META-INF/DEPENDENCIES"
 )
 
 /**
@@ -54,9 +54,9 @@ val NON_LICENSE_FILENAMES = listOf(
  */
 @JvmName("calculatePackageVerificationCodeForStrings")
 fun calculatePackageVerificationCode(sha1sums: List<String>): String =
-        Hex.encodeHexString(sha1sums.sorted().fold(DigestUtils.getSha1Digest()) { digest, sha1sum ->
-            DigestUtils.updateDigest(digest, sha1sum)
-        }.digest())
+    Hex.encodeHexString(sha1sums.sorted().fold(DigestUtils.getSha1Digest()) { digest, sha1sum ->
+        DigestUtils.updateDigest(digest, sha1sum)
+    }.digest())
 
 /**
  * Calculate the [SPDX package verification code][1] for a list of files.
@@ -65,23 +65,23 @@ fun calculatePackageVerificationCode(sha1sums: List<String>): String =
  */
 @JvmName("calculatePackageVerificationCodeForFiles")
 fun calculatePackageVerificationCode(files: List<File>) =
-        calculatePackageVerificationCode(files.map { file ->
-            file.inputStream().use { DigestUtils.sha1Hex(it) }
-        })
+    calculatePackageVerificationCode(files.map { file ->
+        file.inputStream().use { DigestUtils.sha1Hex(it) }
+    })
 
 /**
  * A Kotlin-style convenience function to replace EnumSet.of() and EnumSet.noneOf().
  */
 inline fun <reified T : Enum<T>> enumSetOf(vararg elems: T): EnumSet<T> =
-        EnumSet.noneOf(T::class.java).apply { addAll(elems) }
+    EnumSet.noneOf(T::class.java).apply { addAll(elems) }
 
 /**
  * Retrieve the full text for the license with the provided SPDX [id], including "LicenseRefs". If [handleExceptions] is
  * enabled, the [id] may also refer to an exception instead of a license.
  */
 fun getLicenseText(id: String, handleExceptions: Boolean = false) =
-        if (id.startsWith("LicenseRef-")) {
-            object {}.javaClass.getResource("/licenserefs/$id")?.readText()
-        } else {
-            SpdxLicense.forId(id)?.text ?: SpdxLicenseException.forId(id)?.text?.takeIf { handleExceptions }
-        } ?: throw IOException("No license text found for id '$id'.")
+    if (id.startsWith("LicenseRef-")) {
+        object {}.javaClass.getResource("/licenserefs/$id")?.readText()
+    } else {
+        SpdxLicense.forId(id)?.text ?: SpdxLicenseException.forId(id)?.text?.takeIf { handleExceptions }
+    } ?: throw IOException("No license text found for id '$id'.")

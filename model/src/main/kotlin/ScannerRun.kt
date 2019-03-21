@@ -27,17 +27,17 @@ import java.time.Instant
  * The summary of a single run of the scanner.
  */
 data class ScannerRun(
-        /**
-         * The [Instant] the scanner was started. The default value exists only for backward compatibility.
-         */
-        val startTime: Instant = Instant.EPOCH,
+    /**
+     * The [Instant] the scanner was started. The default value exists only for backward compatibility.
+     */
+    val startTime: Instant = Instant.EPOCH,
 
-        /**
-         * The [Instant] the scanner has finished. The default value exists only for backward compatibility.
-         */
-        val endTime: Instant = Instant.EPOCH,
+    /**
+     * The [Instant] the scanner has finished. The default value exists only for backward compatibility.
+     */
+    val endTime: Instant = Instant.EPOCH,
 
-        val environment: Environment,
-        val config: ScannerConfiguration,
-        val results: ScanRecord
+    val environment: Environment,
+    val config: ScannerConfiguration,
+    val results: ScanRecord
 )

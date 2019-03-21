@@ -36,9 +36,9 @@ class OrtResultTest : WordSpec({
     "collectDependencies" should {
         "be able to get all direct dependencies of a package" {
             val expectedDependencies = listOf(
-                    "Maven:com.typesafe.akka:akka-actor_2.12:2.5.6",
-                    "Maven:com.typesafe:ssl-config-core_2.12:0.2.2",
-                    "Maven:org.reactivestreams:reactive-streams:1.0.1"
+                "Maven:com.typesafe.akka:akka-actor_2.12:2.5.6",
+                "Maven:com.typesafe:ssl-config-core_2.12:0.2.2",
+                "Maven:org.reactivestreams:reactive-streams:1.0.1"
             )
 
             val projectsDir = File("../analyzer/src/funTest/assets/projects")
@@ -75,38 +75,38 @@ class OrtResultTest : WordSpec({
             val nestedVcs1 = VcsInfo(type = "Git", url = "https://example.com/git1", revision = "")
             val nestedVcs2 = VcsInfo(type = "Git", url = "https://example.com/git2", revision = "")
             val project1 = Project.EMPTY.copy(
-                    id = Identifier("Gradle:com.here:project1:1.0"),
-                    definitionFilePath = "project1/build.gradle",
-                    vcs = vcs,
-                    vcsProcessed = vcs.normalize()
+                id = Identifier("Gradle:com.here:project1:1.0"),
+                definitionFilePath = "project1/build.gradle",
+                vcs = vcs,
+                vcsProcessed = vcs.normalize()
             )
             val project2 = Project.EMPTY.copy(
-                    id = Identifier("Gradle:com.here:project1:1.0"),
-                    definitionFilePath = "project2/build.gradle",
-                    vcs = nestedVcs1,
-                    vcsProcessed = nestedVcs1.normalize()
+                id = Identifier("Gradle:com.here:project1:1.0"),
+                definitionFilePath = "project2/build.gradle",
+                vcs = nestedVcs1,
+                vcsProcessed = nestedVcs1.normalize()
             )
             val project3 = Project.EMPTY.copy(
-                    id = Identifier("Gradle:com.here:project1:1.0"),
-                    definitionFilePath = "project3/build.gradle",
-                    vcs = nestedVcs2,
-                    vcsProcessed = nestedVcs2.normalize()
+                id = Identifier("Gradle:com.here:project1:1.0"),
+                definitionFilePath = "project3/build.gradle",
+                vcs = nestedVcs2,
+                vcsProcessed = nestedVcs2.normalize()
             )
             val ortResult = OrtResult(
-                    Repository(
-                            vcs = vcs,
-                            vcsProcessed = vcs.normalize(),
-                            nestedRepositories = mapOf(
-                                    "path/1" to nestedVcs1,
-                                    "path/2" to nestedVcs2
-                            ),
-                            config = RepositoryConfiguration()
+                Repository(
+                    vcs = vcs,
+                    vcsProcessed = vcs.normalize(),
+                    nestedRepositories = mapOf(
+                        "path/1" to nestedVcs1,
+                        "path/2" to nestedVcs2
                     ),
-                    AnalyzerRun(
-                            environment = Environment(),
-                            config = AnalyzerConfiguration(ignoreToolVersions = true, allowDynamicVersions = true),
-                            result = AnalyzerResult.EMPTY
-                    )
+                    config = RepositoryConfiguration()
+                ),
+                AnalyzerRun(
+                    environment = Environment(),
+                    config = AnalyzerConfiguration(ignoreToolVersions = true, allowDynamicVersions = true),
+                    result = AnalyzerResult.EMPTY
+                )
             )
 
             ortResult.getDefinitionFilePathRelativeToAnalyzerRoot(project1) shouldBe "project1/build.gradle"
@@ -119,25 +119,25 @@ class OrtResultTest : WordSpec({
             val nestedVcs1 = VcsInfo(type = "Git", url = "https://example.com/git1", revision = "")
             val nestedVcs2 = VcsInfo(type = "Git", url = "https://example.com/git2", revision = "")
             val project = Project.EMPTY.copy(
-                    id = Identifier("Gradle:com.here:project1:1.0"),
-                    definitionFilePath = "build.gradle",
-                    vcs = nestedVcs2,
-                    vcsProcessed = nestedVcs2.normalize()
+                id = Identifier("Gradle:com.here:project1:1.0"),
+                definitionFilePath = "build.gradle",
+                vcs = nestedVcs2,
+                vcsProcessed = nestedVcs2.normalize()
             )
             val ortResult = OrtResult(
-                    Repository(
-                            vcs = vcs,
-                            vcsProcessed = vcs.normalize(),
-                            nestedRepositories = mapOf(
-                                    "path/1" to nestedVcs1
-                            ),
-                            config = RepositoryConfiguration()
+                Repository(
+                    vcs = vcs,
+                    vcsProcessed = vcs.normalize(),
+                    nestedRepositories = mapOf(
+                        "path/1" to nestedVcs1
                     ),
-                    AnalyzerRun(
-                            environment = Environment(),
-                            config = AnalyzerConfiguration(ignoreToolVersions = true, allowDynamicVersions = true),
-                            result = AnalyzerResult.EMPTY
-                    )
+                    config = RepositoryConfiguration()
+                ),
+                AnalyzerRun(
+                    environment = Environment(),
+                    config = AnalyzerConfiguration(ignoreToolVersions = true, allowDynamicVersions = true),
+                    result = AnalyzerResult.EMPTY
+                )
             )
 
             val e = shouldThrow<IllegalArgumentException> {

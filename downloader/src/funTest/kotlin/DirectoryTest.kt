@@ -48,18 +48,18 @@ class DirectoryTest : StringSpec() {
     init {
         "Creates directories for Gradle submodules" {
             val pkg = Package(
-                    id = Identifier(
-                            type = "type",
-                            namespace = "namespace",
-                            name = "name",
-                            version = "version"
-                    ),
-                    declaredLicenses = sortedSetOf(),
-                    description = "",
-                    homepageUrl = "",
-                    binaryArtifact = RemoteArtifact.EMPTY,
-                    sourceArtifact = RemoteArtifact.EMPTY,
-                    vcs = VcsInfo("Git", "", "")
+                id = Identifier(
+                    type = "type",
+                    namespace = "namespace",
+                    name = "name",
+                    version = "version"
+                ),
+                declaredLicenses = sortedSetOf(),
+                description = "",
+                homepageUrl = "",
+                binaryArtifact = RemoteArtifact.EMPTY,
+                sourceArtifact = RemoteArtifact.EMPTY,
+                vcs = VcsInfo("Git", "", "")
             )
 
             // No download source specified, we expect exception in this case.

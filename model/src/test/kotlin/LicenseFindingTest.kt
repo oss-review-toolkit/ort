@@ -26,15 +26,15 @@ import io.kotlintest.specs.StringSpec
 
 class LicenseFindingTest : StringSpec({
     val licenseFinding = LicenseFinding(
-            "license",
-            sortedSetOf(
-                    TextLocation("path 1", 1, 2),
-                    TextLocation("path 2", 3, 4)
-            ),
-            sortedSetOf(
-                    CopyrightFinding("copyright 1", sortedSetOf()),
-                    CopyrightFinding("copyright 2", sortedSetOf())
-            )
+        "license",
+        sortedSetOf(
+            TextLocation("path 1", 1, 2),
+            TextLocation("path 2", 3, 4)
+        ),
+        sortedSetOf(
+            CopyrightFinding("copyright 1", sortedSetOf()),
+            CopyrightFinding("copyright 2", sortedSetOf())
+        )
     )
 
     "can be serialized and deserialized" {
@@ -88,12 +88,12 @@ class LicenseFindingTest : StringSpec({
         val deserializedLicenseFinding = yamlMapper.readValue<LicenseFinding>(yaml)
 
         deserializedLicenseFinding shouldBe LicenseFinding(
-                "license",
-                sortedSetOf(),
-                sortedSetOf(
-                        CopyrightFinding("copyright 1", sortedSetOf()),
-                        CopyrightFinding("copyright 2", sortedSetOf())
-                )
+            "license",
+            sortedSetOf(),
+            sortedSetOf(
+                CopyrightFinding("copyright 1", sortedSetOf()),
+                CopyrightFinding("copyright 2", sortedSetOf())
+            )
         )
     }
 })

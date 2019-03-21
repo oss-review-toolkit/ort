@@ -28,7 +28,7 @@ import com.here.ort.spdx.SpdxExpressionParser.LicenseReferenceExpressionContext
 import com.here.ort.spdx.SpdxExpressionParser.SimpleExpressionContext
 
 class SpdxExpressionDefaultVisitor(private val strictness: Strictness) :
-        SpdxExpressionBaseVisitor<SpdxExpression>() {
+    SpdxExpressionBaseVisitor<SpdxExpression>() {
     override fun visitLicenseExpression(ctx: LicenseExpressionContext): SpdxExpression {
         return when (ctx.childCount) {
             2 -> visit(ctx.getChild(0))
@@ -71,8 +71,10 @@ class SpdxExpressionDefaultVisitor(private val strictness: Strictness) :
     override fun visitLicenseExceptionExpression(ctx: LicenseExceptionExpressionContext): SpdxExpression {
         return when (ctx.childCount) {
             1 -> SpdxLicenseExceptionExpression(ctx.text)
-            else -> throw SpdxException("SpdxLicenseExceptionExpression has invalid amount of children: " +
-                    "'${ctx.childCount}'")
+            else -> throw SpdxException(
+                "SpdxLicenseExceptionExpression has invalid amount of children: " +
+                        "'${ctx.childCount}'"
+            )
         }.apply { validate(strictness) }
     }
 
@@ -87,8 +89,10 @@ class SpdxExpressionDefaultVisitor(private val strictness: Strictness) :
     override fun visitLicenseReferenceExpression(ctx: LicenseReferenceExpressionContext): SpdxExpression {
         return when (ctx.childCount) {
             1 -> SpdxLicenseReferenceExpression(ctx.text)
-            else -> throw SpdxException("SpdxLicenseReferenceExpression has invalid amount of children:" +
-                    "'${ctx.childCount}'")
+            else -> throw SpdxException(
+                "SpdxLicenseReferenceExpression has invalid amount of children:" +
+                        "'${ctx.childCount}'"
+            )
         }.apply { validate(strictness) }
     }
 }

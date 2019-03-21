@@ -63,9 +63,9 @@ class BabelTest : WordSpec() {
                 val packageFile = File(projectDir, "package.json")
 
                 val expectedResult = patchExpectedResult(
-                        File(projectDir.parentFile, "${projectDir.name}-expected-output.yml"),
-                        url = normalizeVcsUrl(vcsUrl),
-                        revision = vcsRevision
+                    File(projectDir.parentFile, "${projectDir.name}-expected-output.yml"),
+                    url = normalizeVcsUrl(vcsUrl),
+                    revision = vcsRevision
                 )
                 val actualResult = createNPM().resolveDependencies(USER_DIR, listOf(packageFile))[packageFile]
 

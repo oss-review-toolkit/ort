@@ -32,11 +32,11 @@ class WebAppReporter : Reporter() {
     override val defaultFilename = "scan-report-web-app.html"
 
     override fun generateReport(
-            ortResult: OrtResult,
-            resolutionProvider: ResolutionProvider,
-            copyrightGarbage: CopyrightGarbage,
-            outputStream: OutputStream,
-            postProcessingScript: String?
+        ortResult: OrtResult,
+        resolutionProvider: ResolutionProvider,
+        copyrightGarbage: CopyrightGarbage,
+        outputStream: OutputStream,
+        postProcessingScript: String?
     ) {
         val template = javaClass.classLoader.getResource("scan-report-template.html").readText()
         val resultJson = jsonMapper.writeValueAsString(ortResult)
@@ -45,8 +45,8 @@ class WebAppReporter : Reporter() {
         val resolutionsJson = jsonMapper.writeValueAsString(relevantResolutions)
 
         val result = template
-                .replace("id=\"ort-report-data\"><", "id=\"ort-report-data\">$resultJson<")
-                .replace("id=\"ort-report-resolution-data\"><", "id=\"ort-report-resolution-data\">$resolutionsJson<")
+            .replace("id=\"ort-report-data\"><", "id=\"ort-report-data\">$resultJson<")
+            .replace("id=\"ort-report-resolution-data\"><", "id=\"ort-report-resolution-data\">$resolutionsJson<")
 
         outputStream.bufferedWriter().use {
             it.write(result)

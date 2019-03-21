@@ -36,40 +36,40 @@ import kotlin.reflect.full.memberProperties
  * Bundles general Version Control System information.
  */
 data class VcsInfo(
-        /**
-         * The name of the VCS type, for example Git, GitRepo, Mercurial or Subversion.
-         */
-        val type: String,
+    /**
+     * The name of the VCS type, for example Git, GitRepo, Mercurial or Subversion.
+     */
+    val type: String,
 
-        /**
-         * The URL to the VCS repository.
-         */
-        val url: String,
+    /**
+     * The URL to the VCS repository.
+     */
+    val url: String,
 
-        /**
-         * The VCS-specific revision (tag, branch, SHA1) that the version of the package maps to.
-         */
-        val revision: String,
+    /**
+     * The VCS-specific revision (tag, branch, SHA1) that the version of the package maps to.
+     */
+    val revision: String,
 
-        /**
-         * The VCS-specific revision resolved during downloading from the VCS. In contrast to [revision] this must not
-         * contain symbolic names like branches or tags.
-         */
-        @JsonInclude(JsonInclude.Include.NON_NULL)
-        val resolvedRevision: String? = null,
+    /**
+     * The VCS-specific revision resolved during downloading from the VCS. In contrast to [revision] this must not
+     * contain symbolic names like branches or tags.
+     */
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    val resolvedRevision: String? = null,
 
-        /**
-         * The path inside the VCS to take into account, if any. The actual meaning depends on the VCS type. For
-         * example, for Git only this subdirectory of the repository should be cloned, or for Git Repo it is
-         * interpreted as the path to the manifest file.
-         */
-        val path: String = "",
+    /**
+     * The path inside the VCS to take into account, if any. The actual meaning depends on the VCS type. For
+     * example, for Git only this subdirectory of the repository should be cloned, or for Git Repo it is
+     * interpreted as the path to the manifest file.
+     */
+    val path: String = "",
 
-        /**
-         * A map that holds arbitrary data. Can be used by third-party tools to add custom data to the model.
-         */
-        @JsonInclude(JsonInclude.Include.NON_EMPTY)
-        val data: CustomData = emptyMap()
+    /**
+     * A map that holds arbitrary data. Can be used by third-party tools to add custom data to the model.
+     */
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    val data: CustomData = emptyMap()
 ) {
     companion object {
         /**
@@ -77,9 +77,9 @@ data class VcsInfo(
          */
         @JvmField
         val EMPTY = VcsInfo(
-                type = "",
-                url = "",
-                revision = ""
+            type = "",
+            url = "",
+            revision = ""
         )
     }
 
@@ -148,11 +148,11 @@ class VcsInfoDeserializer : StdDeserializer<VcsInfo>(VcsInfo::class.java) {
         }
 
         return VcsInfo(
-                node["type"].textValueOrEmpty(),
-                node["url"].textValueOrEmpty(),
-                node["revision"].textValueOrEmpty(),
-                (node["resolved_revision"] ?: node["resolvedRevision"])?.textValue(),
-                node["path"].textValueOrEmpty()
+            node["type"].textValueOrEmpty(),
+            node["url"].textValueOrEmpty(),
+            node["revision"].textValueOrEmpty(),
+            (node["resolved_revision"] ?: node["resolvedRevision"])?.textValue(),
+            node["path"].textValueOrEmpty()
         )
     }
 }

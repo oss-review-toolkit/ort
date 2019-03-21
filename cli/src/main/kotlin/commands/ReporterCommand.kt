@@ -42,8 +42,10 @@ import com.here.ort.utils.showStackTrace
 
 import java.io.File
 
-@Parameters(commandNames = ["report"],
-        commandDescription = "Present Analyzer and Scanner results in various formats.")
+@Parameters(
+    commandNames = ["report"],
+    commandDescription = "Present Analyzer and Scanner results in various formats."
+)
 object ReporterCommand : CommandWithHelp() {
     private class ReporterConverter : IStringConverter<Reporter> {
         companion object {
@@ -53,49 +55,63 @@ object ReporterCommand : CommandWithHelp() {
 
         override fun convert(name: String): Reporter {
             return REPORTERS[name.toUpperCase()]
-                    ?: throw ParameterException("Reporters must be contained in ${REPORTERS.keys}.")
+                ?: throw ParameterException("Reporters must be contained in ${REPORTERS.keys}.")
         }
     }
 
-    @Parameter(description = "The ORT result file to use. Must contain a scan result.",
-            names = ["--ort-file", "-i"],
-            required = true,
-            order = PARAMETER_ORDER_MANDATORY)
+    @Parameter(
+        description = "The ORT result file to use. Must contain a scan result.",
+        names = ["--ort-file", "-i"],
+        required = true,
+        order = PARAMETER_ORDER_MANDATORY
+    )
     private lateinit var ortFile: File
 
-    @Parameter(description = "The output directory to store the generated reports in.",
-            names = ["--output-dir", "-o"],
-            required = true,
-            order = PARAMETER_ORDER_MANDATORY)
+    @Parameter(
+        description = "The output directory to store the generated reports in.",
+        names = ["--output-dir", "-o"],
+        required = true,
+        order = PARAMETER_ORDER_MANDATORY
+    )
     @Suppress("LateinitUsage")
     private lateinit var outputDir: File
 
-    @Parameter(description = "The list of report formats that will be generated.",
-            names = ["--report-formats", "-f"],
-            converter = ReporterConverter::class,
-            required = true,
-            order = PARAMETER_ORDER_MANDATORY)
+    @Parameter(
+        description = "The list of report formats that will be generated.",
+        names = ["--report-formats", "-f"],
+        converter = ReporterConverter::class,
+        required = true,
+        order = PARAMETER_ORDER_MANDATORY
+    )
     private lateinit var reporters: List<Reporter>
 
-    @Parameter(description = "A file containing error resolutions.",
-            names = ["--resolutions-file"],
-            order = PARAMETER_ORDER_OPTIONAL)
+    @Parameter(
+        description = "A file containing error resolutions.",
+        names = ["--resolutions-file"],
+        order = PARAMETER_ORDER_OPTIONAL
+    )
     private var resolutionsFile: File? = null
 
-    @Parameter(description = "The path to a Kotlin script to post-process the notice report before writing it to disk.",
-            names = ["--post-processing-script"],
-            order = PARAMETER_ORDER_OPTIONAL)
+    @Parameter(
+        description = "The path to a Kotlin script to post-process the notice report before writing it to disk.",
+        names = ["--post-processing-script"],
+        order = PARAMETER_ORDER_OPTIONAL
+    )
     private var postProcessingScript: File? = null
 
-    @Parameter(description = "A file containing garbage copyright statements entries which are to be ignored.",
-            names = ["--copyright-garbage-file"],
-            order = PARAMETER_ORDER_OPTIONAL)
+    @Parameter(
+        description = "A file containing garbage copyright statements entries which are to be ignored.",
+        names = ["--copyright-garbage-file"],
+        order = PARAMETER_ORDER_OPTIONAL
+    )
     private var copyrightGarbageFile: File? = null
 
-    @Parameter(description = "A file containing the repository configuration. If set the .ort.yml " +
-            "overrides the repository configuration contained in the ort result from the input file.",
-            names = ["--repository-configuration-file"],
-            order = PARAMETER_ORDER_OPTIONAL)
+    @Parameter(
+        description = "A file containing the repository configuration. If set the .ort.yml " +
+                "overrides the repository configuration contained in the ort result from the input file.",
+        names = ["--repository-configuration-file"],
+        order = PARAMETER_ORDER_OPTIONAL
+    )
     private var repositoryConfigurationFile: File? = null
 
     override fun runCommand(jc: JCommander): Int {
@@ -129,11 +145,11 @@ object ReporterCommand : CommandWithHelp() {
         reports.forEach { reporter, file ->
             try {
                 reporter.generateReport(
-                        ortResult,
-                        resolutionProvider,
-                        copyrightGarbage,
-                        file.outputStream(),
-                        postProcessingScript?.readText()
+                    ortResult,
+                    resolutionProvider,
+                    copyrightGarbage,
+                    file.outputStream(),
+                    postProcessingScript?.readText()
                 )
 
                 println("Created '${reporter.reporterName}' report:\n\t$file")

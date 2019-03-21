@@ -146,7 +146,7 @@ fun File.safeDeleteRecursively(force: Boolean = false) {
         }
 
         override fun postVisitDirectory(dir: Path, exc: IOException?) =
-                FileVisitResult.CONTINUE.also { Files.delete(dir) }
+            FileVisitResult.CONTINUE.also { Files.delete(dir) }
     })
 
     if (exists()) {
@@ -217,18 +217,18 @@ fun JsonNode?.textValueOrEmpty(): String = this?.textValue()?.let { it } ?: ""
  * same key. Parameters passed to [operation] can be null if there is no entry for a key in one of the maps.
  */
 inline fun <K, V, W> Map<K, V>.zip(other: Map<K, V>, operation: (V?, V?) -> W): Map<K, W> =
-        (this.keys + other.keys).associateWith { key ->
-            operation(this[key], other[key])
-        }
+    (this.keys + other.keys).associateWith { key ->
+        operation(this[key], other[key])
+    }
 
 /**
  * Merge two maps by iterating over the combined key set of both maps and applying [operation] to the entries for the
  * same key. If there is no entry for a key in one of the maps, [default] is used.
  */
 inline fun <K, V, W> Map<K, V>.zipWithDefault(other: Map<K, V>, default: V, operation: (V, V) -> W): Map<K, W> =
-        (this.keys + other.keys).associateWith { key ->
-            operation(this[key] ?: default, other[key] ?: default)
-        }
+    (this.keys + other.keys).associateWith { key ->
+        operation(this[key] ?: default, other[key] ?: default)
+    }
 
 /**
  * Return the string encoded for safe use as a file name or "unknown", if the string is empty.
@@ -240,55 +240,55 @@ fun String.encodeOrUnknown() = fileSystemEncode().takeUnless { it.isEmpty() } ?:
  * length in most modern filesystems: https://en.wikipedia.org/wiki/Comparison_of_file_systems#Limits
  */
 fun String.fileSystemEncode() =
-        percentEncode()
-                // Percent-encoding does not necessarily encode some reserved characters that are invalid in some file
-                // systems, so map these afterwards.
-                .replace("*", "%2A")
-                .replace(Regex("(^\\.|\\.$)"), "%2E")
-                .take(255)
+    percentEncode()
+        // Percent-encoding does not necessarily encode some reserved characters that are invalid in some file
+        // systems, so map these afterwards.
+        .replace("*", "%2A")
+        .replace(Regex("(^\\.|\\.$)"), "%2E")
+        .take(255)
 
 /**
  * Return the string percent-encoded as defined at https://en.wikipedia.org/wiki/Percent-encoding.
  */
 fun String.percentEncode(): String =
-        java.net.URLEncoder.encode(this, "UTF-8")
-                // As "encode" above actually performs encoding for forms, not for query strings, spaces are encoded as
-                // "+" instead of "%20", so apply the proper mapping here afterwards ("+" in the original string is
-                // encoded as "%2B").
-                .replace("+", "%20")
+    java.net.URLEncoder.encode(this, "UTF-8")
+        // As "encode" above actually performs encoding for forms, not for query strings, spaces are encoded as
+        // "+" instead of "%20", so apply the proper mapping here afterwards ("+" in the original string is
+        // encoded as "%2B").
+        .replace("+", "%20")
 
 /**
  * True if the string is a valid semantic version of the given [type], false otherwise.
  */
 fun String.isSemanticVersion(type: Semver.SemverType = Semver.SemverType.STRICT) =
-        try {
-            Semver(this, type)
-            true
-        } catch (e: SemverException) {
-            false
-        }
+    try {
+        Semver(this, type)
+        true
+    } catch (e: SemverException) {
+        false
+    }
 
 /**
  * True if the string is a valid [URI], false otherwise.
  */
 fun String.isValidUri() =
-        try {
-            URI(this)
-            true
-        } catch (e: URISyntaxException) {
-            false
-        }
+    try {
+        URI(this)
+        true
+    } catch (e: URISyntaxException) {
+        false
+    }
 
 /**
  * True if the string is a valid [URL], false otherwise.
  */
 fun String.isValidUrl() =
-        try {
-            URL(this)
-            true
-        } catch (e: MalformedURLException) {
-            false
-        }
+    try {
+        URL(this)
+        true
+    } catch (e: MalformedURLException) {
+        false
+    }
 
 /**
  * A regular expression matching the non-linux line breaks "\r\n" and "\r".
@@ -305,13 +305,13 @@ fun String.normalizeLineBreaks() = replace(NON_LINUX_LINE_BREAKS, "\n")
  * not represent a URL or if it does not include a user name.
  */
 fun String.stripCredentialsFromUrl() =
-        try {
-            URI(this).let {
-                URI(it.scheme, null, it.host, it.port, it.path, it.query, it.fragment).toString()
-            }
-        } catch (e: URISyntaxException) {
-            this
+    try {
+        URI(this).let {
+            URI(it.scheme, null, it.host, it.port, it.path, it.query, it.fragment).toString()
         }
+    } catch (e: URISyntaxException) {
+        this
+    }
 
 /**
  * Recursively collect the messages of this [Throwable] and all its causes.
@@ -345,7 +345,7 @@ fun Throwable.showStackTrace() {
  * Function for constructing a [TreeSet] [CollectionType].
  */
 fun TypeFactory.constructTreeSetType(elementClass: Class<*>): CollectionType =
-        constructCollectionType(TreeSet::class.java, elementClass)
+    constructCollectionType(TreeSet::class.java, elementClass)
 
 /**
  * Check whether the URI has a fragment that looks like a VCS revision.

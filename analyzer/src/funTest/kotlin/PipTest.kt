@@ -63,10 +63,12 @@ class PipTest : WordSpec() {
                 val definitionFile = File(projectsDir, "synthetic/pip/requirements.txt")
                 val vcsPath = vcsDir.getPathToRoot(definitionFile.parentFile)
 
-                val expectedResult = patchExpectedResult(File(projectsDir, "synthetic/pip-expected-output.yml"),
-                        url = normalizeVcsUrl(vcsUrl),
-                        revision = vcsRevision,
-                        path = vcsPath)
+                val expectedResult = patchExpectedResult(
+                    File(projectsDir, "synthetic/pip-expected-output.yml"),
+                    url = normalizeVcsUrl(vcsUrl),
+                    revision = vcsRevision,
+                    path = vcsPath
+                )
 
                 val result = createPIP().resolveDependencies(USER_DIR, listOf(definitionFile))[definitionFile]
 
@@ -81,10 +83,12 @@ class PipTest : WordSpec() {
 
                 val result = createPIP().resolveDependencies(USER_DIR, listOf(definitionFile))[definitionFile]
                 val expectedResultFile = File(projectsDir, "synthetic/python3-django-expected-output.yml")
-                val expectedResult = patchExpectedResult(expectedResultFile,
-                        url = normalizeVcsUrl(vcsUrl),
-                        revision = vcsRevision,
-                        path = vcsPath)
+                val expectedResult = patchExpectedResult(
+                    expectedResultFile,
+                    url = normalizeVcsUrl(vcsUrl),
+                    revision = vcsRevision,
+                    path = vcsPath
+                )
 
                 yamlMapper.writeValueAsString(result) shouldBe expectedResult
             }

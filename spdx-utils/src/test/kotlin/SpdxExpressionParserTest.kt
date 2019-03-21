@@ -62,25 +62,25 @@ class SpdxExpressionParserTest : WordSpec() {
                 val spdxExpression = SpdxExpression.parse(expression)
 
                 spdxExpression shouldBe SpdxCompoundExpression(
-                        SpdxLicenseIdExpression("license1", orLaterVersion = true),
-                        SpdxOperator.AND,
+                    SpdxLicenseIdExpression("license1", orLaterVersion = true),
+                    SpdxOperator.AND,
+                    SpdxCompoundExpression(
                         SpdxCompoundExpression(
-                                SpdxCompoundExpression(
-                                        SpdxLicenseIdExpression("license2"),
-                                        SpdxOperator.WITH,
-                                        SpdxLicenseExceptionExpression("exception1")
-                                ),
-                                SpdxOperator.OR,
-                                SpdxCompoundExpression(
-                                        SpdxLicenseIdExpression("license3", orLaterVersion = true),
-                                        SpdxOperator.AND,
-                                        SpdxCompoundExpression(
-                                                SpdxLicenseIdExpression("license4"),
-                                                SpdxOperator.WITH,
-                                                SpdxLicenseExceptionExpression("exception2")
-                                        )
-                                )
+                            SpdxLicenseIdExpression("license2"),
+                            SpdxOperator.WITH,
+                            SpdxLicenseExceptionExpression("exception1")
+                        ),
+                        SpdxOperator.OR,
+                        SpdxCompoundExpression(
+                            SpdxLicenseIdExpression("license3", orLaterVersion = true),
+                            SpdxOperator.AND,
+                            SpdxCompoundExpression(
+                                SpdxLicenseIdExpression("license4"),
+                                SpdxOperator.WITH,
+                                SpdxLicenseExceptionExpression("exception2")
+                            )
                         )
+                    )
                 )
             }
 
@@ -88,9 +88,9 @@ class SpdxExpressionParserTest : WordSpec() {
                 val spdxExpression = SpdxExpression.parse("license+ WITH exception")
 
                 spdxExpression shouldBe SpdxCompoundExpression(
-                        SpdxLicenseIdExpression("license", orLaterVersion = true),
-                        SpdxOperator.WITH,
-                        SpdxLicenseExceptionExpression("exception")
+                    SpdxLicenseIdExpression("license", orLaterVersion = true),
+                    SpdxOperator.WITH,
+                    SpdxLicenseExceptionExpression("exception")
                 )
             }
 
@@ -98,13 +98,13 @@ class SpdxExpressionParserTest : WordSpec() {
                 val spdxExpression = SpdxExpression.parse("license1 AND license2 WITH exception")
 
                 spdxExpression shouldBe SpdxCompoundExpression(
-                        SpdxLicenseIdExpression("license1"),
-                        SpdxOperator.AND,
-                        SpdxCompoundExpression(
-                                SpdxLicenseIdExpression("license2"),
-                                SpdxOperator.WITH,
-                                SpdxLicenseExceptionExpression("exception")
-                        )
+                    SpdxLicenseIdExpression("license1"),
+                    SpdxOperator.AND,
+                    SpdxCompoundExpression(
+                        SpdxLicenseIdExpression("license2"),
+                        SpdxOperator.WITH,
+                        SpdxLicenseExceptionExpression("exception")
+                    )
                 )
             }
 
@@ -112,13 +112,13 @@ class SpdxExpressionParserTest : WordSpec() {
                 val spdxExpression = SpdxExpression.parse("license1 OR license2 AND license3")
 
                 spdxExpression shouldBe SpdxCompoundExpression(
-                        SpdxLicenseIdExpression("license1"),
-                        SpdxOperator.OR,
-                        SpdxCompoundExpression(
-                                SpdxLicenseIdExpression("license2"),
-                                SpdxOperator.AND,
-                                SpdxLicenseIdExpression("license3")
-                        )
+                    SpdxLicenseIdExpression("license1"),
+                    SpdxOperator.OR,
+                    SpdxCompoundExpression(
+                        SpdxLicenseIdExpression("license2"),
+                        SpdxOperator.AND,
+                        SpdxLicenseIdExpression("license3")
+                    )
                 )
             }
 
@@ -126,13 +126,13 @@ class SpdxExpressionParserTest : WordSpec() {
                 val spdxExpression = SpdxExpression.parse("license1 AND license2 AND license3")
 
                 spdxExpression shouldBe SpdxCompoundExpression(
-                        SpdxCompoundExpression(
-                                SpdxLicenseIdExpression("license1"),
-                                SpdxOperator.AND,
-                                SpdxLicenseIdExpression("license2")
-                        ),
+                    SpdxCompoundExpression(
+                        SpdxLicenseIdExpression("license1"),
                         SpdxOperator.AND,
-                        SpdxLicenseIdExpression("license3")
+                        SpdxLicenseIdExpression("license2")
+                    ),
+                    SpdxOperator.AND,
+                    SpdxLicenseIdExpression("license3")
                 )
             }
 
@@ -140,13 +140,13 @@ class SpdxExpressionParserTest : WordSpec() {
                 val spdxExpression = SpdxExpression.parse("license1 OR license2 OR license3")
 
                 spdxExpression shouldBe SpdxCompoundExpression(
-                        SpdxCompoundExpression(
-                                SpdxLicenseIdExpression("license1"),
-                                SpdxOperator.OR,
-                                SpdxLicenseIdExpression("license2")
-                        ),
+                    SpdxCompoundExpression(
+                        SpdxLicenseIdExpression("license1"),
                         SpdxOperator.OR,
-                        SpdxLicenseIdExpression("license3")
+                        SpdxLicenseIdExpression("license2")
+                    ),
+                    SpdxOperator.OR,
+                    SpdxLicenseIdExpression("license3")
                 )
             }
 
@@ -156,13 +156,13 @@ class SpdxExpressionParserTest : WordSpec() {
                 val spdxExpression = SpdxExpression.parse(expression)
 
                 spdxExpression shouldBe SpdxCompoundExpression(
-                        SpdxCompoundExpression(
-                                SpdxLicenseIdExpression("license1"),
-                                SpdxOperator.OR,
-                                SpdxLicenseIdExpression("license2")
-                        ),
-                        SpdxOperator.AND,
-                        SpdxLicenseIdExpression("license3")
+                    SpdxCompoundExpression(
+                        SpdxLicenseIdExpression("license1"),
+                        SpdxOperator.OR,
+                        SpdxLicenseIdExpression("license2")
+                    ),
+                    SpdxOperator.AND,
+                    SpdxLicenseIdExpression("license3")
                 )
             }
 

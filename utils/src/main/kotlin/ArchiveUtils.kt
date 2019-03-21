@@ -46,7 +46,8 @@ val ARCHIVE_EXTENSIONS = TAR_EXTENSIONS + ZIP_EXTENSIONS + SEVENZIP_EXTENSIONS
 fun File.unpack(targetDirectory: File) {
     val lowerName = name.toLowerCase()
     when {
-        UNCOMPRESSED_EXTENSIONS.any { lowerName.endsWith(it) } -> {}
+        UNCOMPRESSED_EXTENSIONS.any { lowerName.endsWith(it) } -> {
+        }
         TAR_EXTENSIONS.any { lowerName.endsWith(it) } -> unpackTar(targetDirectory)
         ZIP_EXTENSIONS.any { lowerName.endsWith(it) } -> unpackZip(targetDirectory)
         SEVENZIP_EXTENSIONS.any { lowerName.endsWith(it) } -> unpack7Zip(targetDirectory)

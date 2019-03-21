@@ -56,8 +56,8 @@ class CvsDownloadTest : StringSpec() {
         "CVS can download a given revision".config(enabled = cvs.isInPath(), tags = setOf(ExpensiveTag)) {
             val pkg = Package.EMPTY.copy(vcsProcessed = VcsInfo("CVS", REPO_URL, REPO_REV))
             val expectedFiles = listOf(
-                    "CVS",
-                    "xmlenc"
+                "CVS",
+                "xmlenc"
             )
 
             val workingTree = cvs.download(pkg, outputDir)
@@ -77,15 +77,15 @@ class CvsDownloadTest : StringSpec() {
         "CVS can download only a single path".config(enabled = cvs.isInPath(), tags = setOf(ExpensiveTag)) {
             val pkg = Package.EMPTY.copy(vcsProcessed = VcsInfo("CVS", REPO_URL, REPO_REV, path = REPO_PATH))
             val expectedFiles = listOf(
-                    File(REPO_PATH, "changes.xml")
+                File(REPO_PATH, "changes.xml")
             )
 
             val workingTree = cvs.download(pkg, outputDir)
             val actualFiles = workingTree.workingDir.walkBottomUp()
-                    .onEnter { it.name != "CVS" }
-                    .filter { it.isFile }
-                    .map { it.relativeTo(outputDir) }
-                    .sortedBy { it.path }
+                .onEnter { it.name != "CVS" }
+                .filter { it.isFile }
+                .map { it.relativeTo(outputDir) }
+                .sortedBy { it.path }
 
             workingTree.isValid() shouldBe true
             actualFiles.joinToString("\n") shouldBe expectedFiles.joinToString("\n")
@@ -93,8 +93,8 @@ class CvsDownloadTest : StringSpec() {
 
         "CVS can download based on a version".config(enabled = cvs.isInPath(), tags = setOf(ExpensiveTag)) {
             val pkg = Package.EMPTY.copy(
-                    id = Identifier("Test:::$REPO_VERSION"),
-                    vcsProcessed = VcsInfo("CVS", REPO_URL, "")
+                id = Identifier("Test:::$REPO_VERSION"),
+                vcsProcessed = VcsInfo("CVS", REPO_URL, "")
             )
 
             val workingTree = cvs.download(pkg, outputDir)
@@ -110,24 +110,24 @@ class CvsDownloadTest : StringSpec() {
         }
 
         "CVS can download only a single path based on a version"
-                .config(enabled = cvs.isInPath(), tags = setOf(ExpensiveTag)) {
-            val pkg = Package.EMPTY.copy(
+            .config(enabled = cvs.isInPath(), tags = setOf(ExpensiveTag)) {
+                val pkg = Package.EMPTY.copy(
                     id = Identifier("Test:::$REPO_VERSION"),
                     vcsProcessed = VcsInfo("CVS", REPO_URL, "", path = REPO_PATH_FOR_VERSION)
-            )
-            val expectedFiles = listOf(
+                )
+                val expectedFiles = listOf(
                     File(REPO_PATH_FOR_VERSION)
-            )
+                )
 
-            val workingTree = cvs.download(pkg, outputDir)
-            val actualFiles = workingTree.workingDir.walkBottomUp()
+                val workingTree = cvs.download(pkg, outputDir)
+                val actualFiles = workingTree.workingDir.walkBottomUp()
                     .onEnter { it.name != "CVS" }
                     .filter { it.isFile }
                     .map { it.relativeTo(outputDir) }
                     .sortedBy { it.path }
 
-            workingTree.isValid() shouldBe true
-            actualFiles.joinToString("\n") shouldBe expectedFiles.joinToString("\n")
-        }
+                workingTree.isValid() shouldBe true
+                actualFiles.joinToString("\n") shouldBe expectedFiles.joinToString("\n")
+            }
     }
 }

@@ -29,27 +29,27 @@ import java.util.SortedSet
  */
 @JsonIgnoreProperties("delivered", "distributed")
 data class Scope(
-        /**
-         * The respective package manager's native name for the scope, e.g. "compile", " provided" etc. for Maven, or
-         * "dependencies", "devDependencies" etc. for NPM.
-         */
-        val name: String,
+    /**
+     * The respective package manager's native name for the scope, e.g. "compile", " provided" etc. for Maven, or
+     * "dependencies", "devDependencies" etc. for NPM.
+     */
+    val name: String,
 
-        /**
-         * The set of references to packages in this scope. Note that only the first-order packages in this set
-         * actually belong to the scope of [name]. Transitive dependency packages usually belong to the scope that
-         * describes the packages required to compile the product. As an example, if this was the Maven "test" scope,
-         * all first-order items in [dependencies] would be packages required for testing the product. But transitive
-         * dependencies would not be test dependencies of the test dependencies, but compile dependencies of test
-         * dependencies.
-         */
-        val dependencies: SortedSet<PackageReference> = sortedSetOf(),
+    /**
+     * The set of references to packages in this scope. Note that only the first-order packages in this set
+     * actually belong to the scope of [name]. Transitive dependency packages usually belong to the scope that
+     * describes the packages required to compile the product. As an example, if this was the Maven "test" scope,
+     * all first-order items in [dependencies] would be packages required for testing the product. But transitive
+     * dependencies would not be test dependencies of the test dependencies, but compile dependencies of test
+     * dependencies.
+     */
+    val dependencies: SortedSet<PackageReference> = sortedSetOf(),
 
-        /**
-         * A map that holds arbitrary data. Can be used by third-party tools to add custom data to the model.
-         */
-        @JsonInclude(JsonInclude.Include.NON_EMPTY)
-        val data: CustomData = emptyMap()
+    /**
+     * A map that holds arbitrary data. Can be used by third-party tools to add custom data to the model.
+     */
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    val data: CustomData = emptyMap()
 ) : Comparable<Scope> {
     /**
      * Return the set of [PackageReference]s in this [Scope], up to and including a depth of [maxDepth] where counting
@@ -58,14 +58,14 @@ data class Scope(
      * are excluded, otherwise they are included.
      */
     fun collectDependencies(maxDepth: Int = -1, includeErroneous: Boolean = true) =
-            dependencies.fold(sortedSetOf<PackageReference>()) { refs, ref ->
-                refs.also {
-                    if (maxDepth != 0) {
-                        if (ref.errors.isEmpty() || includeErroneous) it += ref
-                        it += ref.collectDependencies(maxDepth - 1, includeErroneous)
-                    }
+        dependencies.fold(sortedSetOf<PackageReference>()) { refs, ref ->
+            refs.also {
+                if (maxDepth != 0) {
+                    if (ref.errors.isEmpty() || includeErroneous) it += ref
+                    it += ref.collectDependencies(maxDepth - 1, includeErroneous)
                 }
             }
+        }
 
     /**
      * A comparison function to sort scopes by their name.
@@ -81,5 +81,5 @@ data class Scope(
      * Return all references to [id] as a dependency in this scope.
      */
     fun findReferences(id: Identifier) =
-            dependencies.filter { it.id == id } + dependencies.flatMap { it.findReferences(id) }
+        dependencies.filter { it.id == id } + dependencies.flatMap { it.findReferences(id) }
 }

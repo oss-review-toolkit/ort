@@ -76,7 +76,7 @@ class Licensee(name: String, config: ScannerConfiguration) : LocalScanner(name, 
         return if (CI.isTravis) {
             ProcessCapture(gem, "install", "licensee", "-v", scannerVersion).requireSuccess()
             getPathFromEnvironment(command())?.parentFile
-                    ?: throw IOException("Install directory for licensee not found.")
+                ?: throw IOException("Install directory for licensee not found.")
         } else {
             ProcessCapture(gem, "install", "--user-install", "licensee", "-v", scannerVersion).requireSuccess()
 
@@ -101,11 +101,11 @@ class Licensee(name: String, config: ScannerConfiguration) : LocalScanner(name, 
         val startTime = Instant.now()
 
         val process = ProcessCapture(
-                parentPath,
-                scannerPath.absolutePath,
-                "detect",
-                *CONFIGURATION_OPTIONS.toTypedArray(),
-                relativePath
+            parentPath,
+            scannerPath.absolutePath,
+            "detect",
+            *CONFIGURATION_OPTIONS.toTypedArray(),
+            relativePath
         )
 
         val endTime = Instant.now()

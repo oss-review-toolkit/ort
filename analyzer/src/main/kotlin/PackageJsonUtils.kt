@@ -39,60 +39,60 @@ internal class PackageJsonUtils {
         private val YARN_LOCK_FILES = listOf("yarn.lock")
 
         private data class DefinitionFileInfo(
-                val definitionFile: File,
-                val hasYarnLockfile: Boolean = false,
-                val hasNpmLockfile: Boolean = false,
-                val isYarnWorkspaceRoot: Boolean = false,
-                val isYarnWorkspaceSubmodule: Boolean = false
+            val definitionFile: File,
+            val hasYarnLockfile: Boolean = false,
+            val hasNpmLockfile: Boolean = false,
+            val isYarnWorkspaceRoot: Boolean = false,
+            val isYarnWorkspaceSubmodule: Boolean = false
         )
 
         fun hasNpmLockFile(directory: File) =
-                NPM_LOCK_FILES.any { lockfile ->
-                    File(directory, lockfile).isFile
-                }
+            NPM_LOCK_FILES.any { lockfile ->
+                File(directory, lockfile).isFile
+            }
 
         fun hasYarnLockFile(directory: File) =
-                YARN_LOCK_FILES.any { lockfile ->
-                    File(directory, lockfile).isFile
-                }
+            YARN_LOCK_FILES.any { lockfile ->
+                File(directory, lockfile).isFile
+            }
 
         fun mapDefinitionFilesForNpm(definitionFiles: Collection<File>) =
-                getDefinitionFileInfo(definitionFiles.toSet()).filter { entry ->
-                    !isHandledByYarn(entry)
-                }.map { it.definitionFile }.toSet()
+            getDefinitionFileInfo(definitionFiles.toSet()).filter { entry ->
+                !isHandledByYarn(entry)
+            }.map { it.definitionFile }.toSet()
 
         fun mapDefinitionFilesForYarn(definitionFiles: Collection<File>) =
-                getDefinitionFileInfo(definitionFiles.toSet()).filter { entry ->
-                    isHandledByYarn(entry) && !entry.isYarnWorkspaceSubmodule
-                }.map { it.definitionFile }.toSet()
+            getDefinitionFileInfo(definitionFiles.toSet()).filter { entry ->
+                isHandledByYarn(entry) && !entry.isYarnWorkspaceSubmodule
+            }.map { it.definitionFile }.toSet()
 
         private fun isHandledByYarn(entry: DefinitionFileInfo) =
-                entry.isYarnWorkspaceRoot || entry.isYarnWorkspaceSubmodule || entry.hasYarnLockfile
+            entry.isYarnWorkspaceRoot || entry.isYarnWorkspaceSubmodule || entry.hasYarnLockfile
 
         private fun getDefinitionFileInfo(definitionFiles: Set<File>): Collection<DefinitionFileInfo> {
             val yarnWorkspaceSubmodules = getYarnWorkspaceSubmodules(definitionFiles)
 
             return definitionFiles.map { definitionFile ->
                 DefinitionFileInfo(
-                        definitionFile = definitionFile,
-                        isYarnWorkspaceRoot = isYarnWorkspaceRoot(definitionFile),
-                        hasYarnLockfile = hasYarnLockFile(definitionFile.parentFile),
-                        hasNpmLockfile = hasNpmLockFile(definitionFile.parentFile),
-                        isYarnWorkspaceSubmodule = yarnWorkspaceSubmodules.contains(definitionFile)
+                    definitionFile = definitionFile,
+                    isYarnWorkspaceRoot = isYarnWorkspaceRoot(definitionFile),
+                    hasYarnLockfile = hasYarnLockFile(definitionFile.parentFile),
+                    hasNpmLockfile = hasNpmLockFile(definitionFile.parentFile),
+                    isYarnWorkspaceSubmodule = yarnWorkspaceSubmodules.contains(definitionFile)
                 )
             }
         }
 
         private fun isYarnWorkspaceRoot(definitionFile: File) =
-                try {
-                    definitionFile.readValue<ObjectNode>()["workspaces"] != null
-                } catch (e: JsonProcessingException) {
-                    e.showStackTrace()
+            try {
+                definitionFile.readValue<ObjectNode>()["workspaces"] != null
+            } catch (e: JsonProcessingException) {
+                e.showStackTrace()
 
-                    log.error { "Could not parse '${definitionFile.invariantSeparatorsPath}': ${e.message}" }
+                log.error { "Could not parse '${definitionFile.invariantSeparatorsPath}': ${e.message}" }
 
-                    false
-                }
+                false
+            }
 
         private fun getYarnWorkspaceSubmodules(definitionFiles: Set<File>): Set<File> {
             val result = mutableSetOf<File>()

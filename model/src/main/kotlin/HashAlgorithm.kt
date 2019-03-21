@@ -64,9 +64,9 @@ enum class HashAlgorithm(private vararg val aliases: String) {
         @JsonCreator
         @JvmStatic
         fun fromString(alias: String) =
-                enumValues<HashAlgorithm>().find {
-                    alias.toUpperCase() in it.aliases
-                } ?: UNKNOWN
+            enumValues<HashAlgorithm>().find {
+                alias.toUpperCase() in it.aliases
+            } ?: UNKNOWN
 
         /**
          * Create a hash algorithm from a hash [value].

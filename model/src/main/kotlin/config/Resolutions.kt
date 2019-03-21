@@ -43,8 +43,8 @@ data class Resolutions(
      * Merge this [Resolutions] with [other] [Resolutions]. Duplicates are removed.
      */
     fun merge(other: Resolutions) =
-            Resolutions(
-                    errors = (errors + other.errors).distinct(),
-                    ruleViolations = (ruleViolations + other.ruleViolations).distinct()
-            )
+        Resolutions(
+            errors = (errors + other.errors).distinct(),
+            ruleViolations = (ruleViolations + other.ruleViolations).distinct()
+        )
 }

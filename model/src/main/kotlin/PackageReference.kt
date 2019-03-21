@@ -36,34 +36,34 @@ class PackageLinkageValueFilter {
 // Do not serialize default values to reduce the size of the result file.
 @JsonInclude(JsonInclude.Include.NON_DEFAULT)
 data class PackageReference(
-        /**
-         * The identifier of the package.
-         */
-        val id: Identifier,
+    /**
+     * The identifier of the package.
+     */
+    val id: Identifier,
 
-        /**
-         * The type of linkage used for the referred package from its dependent package. As most of our supported
-         * package managers / languages only support dynamic linking or at least default to it, also use that as the
-         * default value here to not blow up our result files.
-         */
-        @JsonInclude(value = JsonInclude.Include.CUSTOM, valueFilter = PackageLinkageValueFilter::class)
-        val linkage: PackageLinkage = PackageLinkage.DYNAMIC,
+    /**
+     * The type of linkage used for the referred package from its dependent package. As most of our supported
+     * package managers / languages only support dynamic linking or at least default to it, also use that as the
+     * default value here to not blow up our result files.
+     */
+    @JsonInclude(value = JsonInclude.Include.CUSTOM, valueFilter = PackageLinkageValueFilter::class)
+    val linkage: PackageLinkage = PackageLinkage.DYNAMIC,
 
-        /**
-         * The list of references to packages this package depends on. Note that this list depends on the scope in
-         * which this package reference is used.
-         */
-        val dependencies: SortedSet<PackageReference> = sortedSetOf(),
+    /**
+     * The list of references to packages this package depends on. Note that this list depends on the scope in
+     * which this package reference is used.
+     */
+    val dependencies: SortedSet<PackageReference> = sortedSetOf(),
 
-        /**
-         * A list of errors that occurred handling this [PackageReference].
-         */
-        val errors: List<OrtIssue> = emptyList(),
+    /**
+     * A list of errors that occurred handling this [PackageReference].
+     */
+    val errors: List<OrtIssue> = emptyList(),
 
-        /**
-         * A map that holds arbitrary data. Can be used by third-party tools to add custom data to the model.
-         */
-        val data: CustomData = emptyMap()
+    /**
+     * A map that holds arbitrary data. Can be used by third-party tools to add custom data to the model.
+     */
+    val data: CustomData = emptyMap()
 ) : Comparable<PackageReference> {
     /**
      * Return the set of [PackageReference]s this [PackageReference] transitively depends on, up to and including a
@@ -72,14 +72,14 @@ data class PackageReference(
      * (but not their dependencies without errors) are excluded, otherwise they are included.
      */
     fun collectDependencies(maxDepth: Int = -1, includeErroneous: Boolean = true): SortedSet<PackageReference> =
-            dependencies.fold(sortedSetOf<PackageReference>()) { refs, ref ->
-                refs.also {
-                    if (maxDepth != 0) {
-                        if (ref.errors.isEmpty() || includeErroneous) it += ref
-                        it += ref.collectDependencies(maxDepth - 1, includeErroneous)
-                    }
+        dependencies.fold(sortedSetOf<PackageReference>()) { refs, ref ->
+            refs.also {
+                if (maxDepth != 0) {
+                    if (ref.errors.isEmpty() || includeErroneous) it += ref
+                    it += ref.collectDependencies(maxDepth - 1, includeErroneous)
                 }
             }
+        }
 
     /**
      * A comparison function to sort package references by their identifier. This function ignores all other properties
@@ -96,7 +96,7 @@ data class PackageReference(
      * Return all references to [id] as a dependency.
      */
     fun findReferences(id: Identifier): List<PackageReference> =
-            dependencies.filter { it.id == id } + dependencies.flatMap { it.findReferences(id) }
+        dependencies.filter { it.id == id } + dependencies.flatMap { it.findReferences(id) }
 
     /**
      * Return whether this package reference or any of its dependencies has errors.

@@ -49,55 +49,71 @@ object ScannerCommand : CommandWithHelp() {
         override fun convert(scannerName: String): ScannerFactory {
             // TODO: Consider allowing to enable multiple scanners (and potentially running them in parallel).
             return Scanner.ALL.find { it.scannerName.equals(scannerName, true) }
-                    ?: throw ParameterException("Scanner '$scannerName' is not one of ${Scanner.ALL}.")
+                ?: throw ParameterException("Scanner '$scannerName' is not one of ${Scanner.ALL}.")
         }
     }
 
-    @Parameter(description = "An ORT result file with an analyzer result to use. Source code will be downloaded " +
-            "automatically if needed. This parameter and '--input-path' are mutually exclusive.",
-            names = ["--ort-file", "-a"],
-            order = PARAMETER_ORDER_OPTIONAL)
+    @Parameter(
+        description = "An ORT result file with an analyzer result to use. Source code will be downloaded " +
+                "automatically if needed. This parameter and '--input-path' are mutually exclusive.",
+        names = ["--ort-file", "-a"],
+        order = PARAMETER_ORDER_OPTIONAL
+    )
     private var ortFile: File? = null
 
-    @Parameter(description = "An input directory or file to scan. This parameter and '--ort-file' are mutually " +
-            "exclusive.",
-            names = ["--input-path", "-i"],
-            order = PARAMETER_ORDER_OPTIONAL)
+    @Parameter(
+        description = "An input directory or file to scan. This parameter and '--ort-file' are mutually " +
+                "exclusive.",
+        names = ["--input-path", "-i"],
+        order = PARAMETER_ORDER_OPTIONAL
+    )
     private var inputPath: File? = null
 
-    @Parameter(description = "The list of scopes whose packages shall be scanned. Works only with the '--ort-file' " +
-            "parameter. If empty, all scopes are scanned.",
-            names = ["--scopes"],
-            order = PARAMETER_ORDER_OPTIONAL)
+    @Parameter(
+        description = "The list of scopes whose packages shall be scanned. Works only with the '--ort-file' " +
+                "parameter. If empty, all scopes are scanned.",
+        names = ["--scopes"],
+        order = PARAMETER_ORDER_OPTIONAL
+    )
     private var scopesToScan = listOf<String>()
 
-    @Parameter(description = "The directory to write the scan results as ORT result file(s) to, in the specified " +
-            "output format(s).",
-            names = ["--output-dir", "-o"],
-            required = true,
-            order = PARAMETER_ORDER_MANDATORY)
+    @Parameter(
+        description = "The directory to write the scan results as ORT result file(s) to, in the specified " +
+                "output format(s).",
+        names = ["--output-dir", "-o"],
+        required = true,
+        order = PARAMETER_ORDER_MANDATORY
+    )
     @Suppress("LateinitUsage")
     private lateinit var outputDir: File
 
-    @Parameter(description = "The output directory for downloaded source code. Defaults to <output-dir>/downloads.",
-            names = ["--download-dir"],
-            order = PARAMETER_ORDER_OPTIONAL)
+    @Parameter(
+        description = "The output directory for downloaded source code. Defaults to <output-dir>/downloads.",
+        names = ["--download-dir"],
+        order = PARAMETER_ORDER_OPTIONAL
+    )
     private var downloadDir: File? = null
 
-    @Parameter(description = "The scanner to use.",
-            names = ["--scanner", "-s"],
-            converter = ScannerConverter::class,
-            order = PARAMETER_ORDER_OPTIONAL)
+    @Parameter(
+        description = "The scanner to use.",
+        names = ["--scanner", "-s"],
+        converter = ScannerConverter::class,
+        order = PARAMETER_ORDER_OPTIONAL
+    )
     private var scannerFactory: ScannerFactory = ScanCode.Factory()
 
-    @Parameter(description = "The path to a configuration file.",
-            names = ["--config", "-c"],
-            order = PARAMETER_ORDER_OPTIONAL)
+    @Parameter(
+        description = "The path to a configuration file.",
+        names = ["--config", "-c"],
+        order = PARAMETER_ORDER_OPTIONAL
+    )
     private var configFile: File? = null
 
-    @Parameter(description = "The list of output formats to be used for the ORT result file(s).",
-            names = ["--output-formats", "-f"],
-            order = PARAMETER_ORDER_OPTIONAL)
+    @Parameter(
+        description = "The list of output formats to be used for the ORT result file(s).",
+        names = ["--output-formats", "-f"],
+        order = PARAMETER_ORDER_OPTIONAL
+    )
     private var outputFormats = listOf(OutputFormat.YAML)
 
     override fun runCommand(jc: JCommander): Int {

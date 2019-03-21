@@ -24,15 +24,15 @@ package com.here.ort.spdx
  * 'generateSpdxLicenseExceptionEnum'.
  */
 enum class SpdxLicenseException(
-        /**
-         * The id of the license exception.
-         */
-        val id: String,
+    /**
+     * The id of the license exception.
+     */
+    val id: String,
 
-        /**
-         * Whether the [id] is deprecated or not.
-         */
-        val deprecated: Boolean = false
+    /**
+     * Whether the [id] is deprecated or not.
+     */
+    val deprecated: Boolean = false
 ) {
     /** Autoconf exception 2.0 */
     AUTOCONF_EXCEPTION_2_0("Autoconf-exception-2.0"),

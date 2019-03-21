@@ -53,9 +53,9 @@ enum class OutputFormat(val mapper: ObjectMapper, val fileExtension: String, var
  * @throws IllegalArgumentException If no matching OutputFormat for the [File.extension] can be found.
  */
 fun File.mapper() =
-        OutputFormat.values().find { extension in it.fileExtensions }?.mapper ?: throw IllegalArgumentException(
-                "No matching ObjectMapper found for file extension '$extension' of file '$absolutePath'."
-        )
+    OutputFormat.values().find { extension in it.fileExtensions }?.mapper ?: throw IllegalArgumentException(
+        "No matching ObjectMapper found for file extension '$extension' of file '$absolutePath'."
+    )
 
 /**
  * Use the Jackson mapper returned from [File.mapper] to read an object of type [T] from this file.

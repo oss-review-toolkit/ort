@@ -62,27 +62,27 @@ const val COMPOSER_LOCK_FILE = "composer.lock"
  * The Composer package manager for PHP, see https://getcomposer.org/.
  */
 class PhpComposer(name: String, analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfiguration) :
-        PackageManager(name, analyzerConfig, repoConfig), CommandLineTool {
+    PackageManager(name, analyzerConfig, repoConfig), CommandLineTool {
     class Factory : AbstractPackageManagerFactory<PhpComposer>("PhpComposer") {
         override val globsForDefinitionFiles = listOf("composer.json")
 
         override fun create(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfiguration) =
-                PhpComposer(managerName, analyzerConfig, repoConfig)
+            PhpComposer(managerName, analyzerConfig, repoConfig)
     }
 
     override fun command(workingDir: File?) =
-            if (workingDir?.resolve(COMPOSER_PHAR_BINARY)?.isFile == true) {
-                "php $COMPOSER_PHAR_BINARY"
+        if (workingDir?.resolve(COMPOSER_PHAR_BINARY)?.isFile == true) {
+            "php $COMPOSER_PHAR_BINARY"
+        } else {
+            if (OS.isWindows) {
+                "composer.bat"
             } else {
-                if (OS.isWindows) {
-                    "composer.bat"
-                } else {
-                    "composer"
-                }
+                "composer"
             }
+        }
 
     override fun run(workingDir: File?, vararg args: String) =
-            ProcessCapture(workingDir, *command(workingDir).split(" ").toTypedArray(), *args).requireSuccess()
+        ProcessCapture(workingDir, *command(workingDir).split(" ").toTypedArray(), *args).requireSuccess()
 
     override fun getVersionRequirement(): Requirement = Requirement.buildIvy("[1.5,)")
 
@@ -98,9 +98,9 @@ class PhpComposer(name: String, analyzerConfig: AnalyzerConfiguration, repoConfi
         // Composer version 1.5.1 2017-08-09 16:07:22
         // Composer version @package_branch_alias_version@ (1.0.0-beta2) 2016-03-27 16:00:34
         checkVersion(
-                "--no-ansi --version",
-                ignoreActualVersion = analyzerConfig.ignoreToolVersions,
-                transform = { it.split(" ").dropLast(2).last().removeSurrounding("(", ")") }
+            "--no-ansi --version",
+            ignoreActualVersion = analyzerConfig.ignoreToolVersions,
+            transform = { it.split(" ").dropLast(2).last().removeSurrounding("(", ")") }
         )
     }
 
@@ -129,8 +129,8 @@ class PhpComposer(name: String, analyzerConfig: AnalyzerConfiguration, repoConfi
                 val virtualPackages = parseVirtualPackageNames(packages, manifest, lockFile)
 
                 val scopes = sortedSetOf(
-                        parseScope("require", manifest, lockFile, packages, virtualPackages),
-                        parseScope("require-dev", manifest, lockFile, packages, virtualPackages)
+                    parseScope("require", manifest, lockFile, packages, virtualPackages),
+                    parseScope("require-dev", manifest, lockFile, packages, virtualPackages)
                 )
 
                 Pair(packages, scopes)
@@ -146,15 +146,19 @@ class PhpComposer(name: String, analyzerConfig: AnalyzerConfiguration, repoConfi
         }
     }
 
-    private fun parseScope(scopeName: String, manifest: JsonNode, lockFile: JsonNode, packages: Map<String, Package>,
-                           virtualPackages: Set<String>): Scope {
+    private fun parseScope(
+        scopeName: String, manifest: JsonNode, lockFile: JsonNode, packages: Map<String, Package>,
+        virtualPackages: Set<String>
+    ): Scope {
         val requiredPackages = manifest[scopeName]?.fieldNames() ?: listOf<String>().iterator()
         val dependencies = buildDependencyTree(requiredPackages, lockFile, packages, virtualPackages)
         return Scope(scopeName, dependencies)
     }
 
-    private fun buildDependencyTree(dependencies: Iterator<String>, lockFile: JsonNode, packages: Map<String, Package>,
-                                    virtualPackages: Set<String>): SortedSet<PackageReference> {
+    private fun buildDependencyTree(
+        dependencies: Iterator<String>, lockFile: JsonNode, packages: Map<String, Package>,
+        virtualPackages: Set<String>
+    ): SortedSet<PackageReference> {
         val packageReferences = mutableSetOf<PackageReference>()
 
         dependencies.forEach { packageName ->
@@ -164,21 +168,30 @@ class PhpComposer(name: String, analyzerConfig: AnalyzerConfiguration, repoConfi
             // supported composer plugin versions.
             // Virtual packages are also ignored, since otherwise we would mark them as missing.
             if (packageName != "php" && !packageName.startsWith("ext-") && packageName != "composer-plugin-api"
-                    && packageName !in virtualPackages) {
+                && packageName !in virtualPackages
+            ) {
                 val packageInfo = packages[packageName]
-                        ?: throw IOException("Could not find package info for $packageName")
+                    ?: throw IOException("Could not find package info for $packageName")
                 try {
                     val runtimeDependencies = getRuntimeDependencies(packageName, lockFile)
-                    val transitiveDependencies = buildDependencyTree(runtimeDependencies, lockFile, packages,
-                            virtualPackages)
+                    val transitiveDependencies = buildDependencyTree(
+                        runtimeDependencies, lockFile, packages,
+                        virtualPackages
+                    )
                     packageReferences += packageInfo.toReference(dependencies = transitiveDependencies)
                 } catch (e: Exception) {
                     e.showStackTrace()
 
                     log.error { "Could not resolve dependencies of '$packageName': ${e.collectMessagesAsString()}" }
 
-                    packageInfo.toReference(errors = listOf(OrtIssue(source = managerName,
-                            message = e.collectMessagesAsString())))
+                    packageInfo.toReference(
+                        errors = listOf(
+                            OrtIssue(
+                                source = managerName,
+                                message = e.collectMessagesAsString()
+                            )
+                        )
+                    )
                 }
             }
         }
@@ -192,18 +205,18 @@ class PhpComposer(name: String, analyzerConfig: AnalyzerConfiguration, repoConfi
         val rawName = json["name"]?.textValue() ?: definitionFile.parentFile.name
 
         return Project(
-                id = Identifier(
-                        type = managerName,
-                        namespace = rawName.substringBefore("/"),
-                        name = rawName.substringAfter("/"),
-                        version = json["version"].textValueOrEmpty()
-                ),
-                definitionFilePath = VersionControlSystem.getPathInfo(definitionFile).path,
-                declaredLicenses = parseDeclaredLicenses(json),
-                vcs = vcs,
-                vcsProcessed = processProjectVcs(definitionFile.parentFile, vcs, homepageUrl),
-                homepageUrl = homepageUrl,
-                scopes = scopes
+            id = Identifier(
+                type = managerName,
+                namespace = rawName.substringBefore("/"),
+                name = rawName.substringAfter("/"),
+                version = json["version"].textValueOrEmpty()
+            ),
+            definitionFilePath = VersionControlSystem.getPathInfo(definitionFile).path,
+            declaredLicenses = parseDeclaredLicenses(json),
+            vcs = vcs,
+            vcsProcessed = processProjectVcs(definitionFile.parentFile, vcs, homepageUrl),
+            homepageUrl = homepageUrl,
+            scopes = scopes
         )
     }
 
@@ -224,19 +237,19 @@ class PhpComposer(name: String, analyzerConfig: AnalyzerConfiguration, repoConfi
                 }
 
                 packages[rawName] = Package(
-                        id = Identifier(
-                                type = managerName,
-                                namespace = rawName.substringBefore("/"),
-                                name = rawName.substringAfter("/"),
-                                version = version
-                        ),
-                        declaredLicenses = parseDeclaredLicenses(pkgInfo),
-                        description = pkgInfo["description"].textValueOrEmpty(),
-                        homepageUrl = homepageUrl,
-                        binaryArtifact = RemoteArtifact.EMPTY,
-                        sourceArtifact = parseArtifact(pkgInfo),
-                        vcs = vcsFromPackage,
-                        vcsProcessed = processPackageVcs(vcsFromPackage, homepageUrl)
+                    id = Identifier(
+                        type = managerName,
+                        namespace = rawName.substringBefore("/"),
+                        name = rawName.substringAfter("/"),
+                        version = version
+                    ),
+                    declaredLicenses = parseDeclaredLicenses(pkgInfo),
+                    description = pkgInfo["description"].textValueOrEmpty(),
+                    homepageUrl = homepageUrl,
+                    binaryArtifact = RemoteArtifact.EMPTY,
+                    sourceArtifact = parseArtifact(pkgInfo),
+                    vcs = vcsFromPackage,
+                    vcsProcessed = processPackageVcs(vcsFromPackage, homepageUrl)
                 )
             }
         }
@@ -271,12 +284,12 @@ class PhpComposer(name: String, analyzerConfig: AnalyzerConfiguration, repoConfi
     }
 
     private fun parseVirtualNames(packageInfo: JsonNode) =
-            listOf("replace", "provide").flatMap {
-                packageInfo[it]?.fieldNames()?.asSequence()?.toSet() ?: emptySet()
-            }.toSet()
+        listOf("replace", "provide").flatMap {
+            packageInfo[it]?.fieldNames()?.asSequence()?.toSet() ?: emptySet()
+        }.toSet()
 
     private fun parseDeclaredLicenses(packageInfo: JsonNode) =
-            packageInfo["license"]?.mapNotNull { it?.textValue() }?.toSortedSet() ?: sortedSetOf<String>()
+        packageInfo["license"]?.mapNotNull { it?.textValue() }?.toSortedSet() ?: sortedSetOf<String>()
 
     private fun parseVcsInfo(packageInfo: JsonNode): VcsInfo {
         return packageInfo["source"]?.let {

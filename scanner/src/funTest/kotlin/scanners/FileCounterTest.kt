@@ -44,7 +44,8 @@ class FileCounterTest : StringSpec() {
 
             val analyzerResultFile = File(assetsDir, "analyzer-result.yml")
             val expectedResult = patchExpectedResult(
-                    File(assetsDir, "file-counter-expected-output-for-analyzer-result.yml"))
+                File(assetsDir, "file-counter-expected-output-for-analyzer-result.yml")
+            )
 
             val scanner = FileCounter("FileCounter", ScannerConfiguration())
             val ortResult = scanner.scanOrtResult(analyzerResultFile, outputDir, outputDir.resolve("downloads"))

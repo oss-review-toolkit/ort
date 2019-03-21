@@ -40,72 +40,72 @@ import java.util.SortedSet
  */
 @JsonIgnoreProperties(value = ["purl"], allowGetters = true)
 data class Package(
-        /**
-         * The unique identifier of this package.
-         */
-        val id: Identifier,
+    /**
+     * The unique identifier of this package.
+     */
+    val id: Identifier,
 
-        /**
-         * An additional identifier in package URL syntax, see https://github.com/package-url/purl-spec.
-         */
-        val purl: String = id.toPurl(),
+    /**
+     * An additional identifier in package URL syntax, see https://github.com/package-url/purl-spec.
+     */
+    val purl: String = id.toPurl(),
 
-        /**
-         * The list of licenses the authors have declared for this package. This does not necessarily correspond to the
-         * licenses as detected by a scanner. Both need to be taken into account for any conclusions.
-         */
-        val declaredLicenses: SortedSet<String>,
+    /**
+     * The list of licenses the authors have declared for this package. This does not necessarily correspond to the
+     * licenses as detected by a scanner. Both need to be taken into account for any conclusions.
+     */
+    val declaredLicenses: SortedSet<String>,
 
-        /**
-         * The declared licenses as [SpdxExpression]. If [declaredLicenses] contains multiple licenses they are
-         * concatenated with [SpdxOperator.AND].
-         */
-        val declaredLicensesProcessed: ProcessedDeclaredLicense = DeclaredLicenseProcessor.process(declaredLicenses),
+    /**
+     * The declared licenses as [SpdxExpression]. If [declaredLicenses] contains multiple licenses they are
+     * concatenated with [SpdxOperator.AND].
+     */
+    val declaredLicensesProcessed: ProcessedDeclaredLicense = DeclaredLicenseProcessor.process(declaredLicenses),
 
-        /**
-         * The concluded license as an [SpdxExpression]. It can be used to correct the license of a package in case the
-         * [declaredLicenses] found in the packages metadata or the licenses detected by a scanner do not match reality.
-         *
-         * ORT itself does not set this field, it needs to be set by the user using a [PackageCuration].
-         */
-        @JsonInclude(JsonInclude.Include.NON_NULL)
-        val concludedLicense: SpdxExpression? = null,
+    /**
+     * The concluded license as an [SpdxExpression]. It can be used to correct the license of a package in case the
+     * [declaredLicenses] found in the packages metadata or the licenses detected by a scanner do not match reality.
+     *
+     * ORT itself does not set this field, it needs to be set by the user using a [PackageCuration].
+     */
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    val concludedLicense: SpdxExpression? = null,
 
-        /**
-         * The description of the package, as provided by the package manager.
-         */
-        val description: String,
+    /**
+     * The description of the package, as provided by the package manager.
+     */
+    val description: String,
 
-        /**
-         * The homepage of the package.
-         */
-        val homepageUrl: String,
+    /**
+     * The homepage of the package.
+     */
+    val homepageUrl: String,
 
-        /**
-         * The remote artifact where the binary package can be downloaded.
-         */
-        val binaryArtifact: RemoteArtifact,
+    /**
+     * The remote artifact where the binary package can be downloaded.
+     */
+    val binaryArtifact: RemoteArtifact,
 
-        /**
-         * The remote artifact where the source package can be downloaded.
-         */
-        val sourceArtifact: RemoteArtifact,
+    /**
+     * The remote artifact where the source package can be downloaded.
+     */
+    val sourceArtifact: RemoteArtifact,
 
-        /**
-         * Original VCS-related information as defined in the [Package]'s meta-data.
-         */
-        val vcs: VcsInfo,
+    /**
+     * Original VCS-related information as defined in the [Package]'s meta-data.
+     */
+    val vcs: VcsInfo,
 
-        /**
-         * Processed VCS-related information about the [Package] that has e.g. common mistakes corrected.
-         */
-        val vcsProcessed: VcsInfo = vcs.normalize(),
+    /**
+     * Processed VCS-related information about the [Package] that has e.g. common mistakes corrected.
+     */
+    val vcsProcessed: VcsInfo = vcs.normalize(),
 
-        /**
-         * A map that holds arbitrary data. Can be used by third-party tools to add custom data to the model.
-         */
-        @JsonInclude(JsonInclude.Include.NON_EMPTY)
-        val data: CustomData = emptyMap()
+    /**
+     * A map that holds arbitrary data. Can be used by third-party tools to add custom data to the model.
+     */
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    val data: CustomData = emptyMap()
 ) : Comparable<Package> {
     companion object {
         /**
@@ -113,13 +113,13 @@ data class Package(
          */
         @JvmField
         val EMPTY = Package(
-                id = Identifier.EMPTY,
-                declaredLicenses = sortedSetOf(),
-                description = "",
-                homepageUrl = "",
-                binaryArtifact = RemoteArtifact.EMPTY,
-                sourceArtifact = RemoteArtifact.EMPTY,
-                vcs = VcsInfo.EMPTY
+            id = Identifier.EMPTY,
+            declaredLicenses = sortedSetOf(),
+            description = "",
+            homepageUrl = "",
+            binaryArtifact = RemoteArtifact.EMPTY,
+            sourceArtifact = RemoteArtifact.EMPTY,
+            vcs = VcsInfo.EMPTY
         )
     }
 
@@ -139,12 +139,12 @@ data class Package(
         }
 
         return PackageCurationData(
-                declaredLicenses = declaredLicenses.takeIf { it != other.declaredLicenses },
-                description = description.takeIf { it != other.description },
-                homepageUrl = homepageUrl.takeIf { it != other.homepageUrl },
-                binaryArtifact = binaryArtifact.takeIf { it != other.binaryArtifact },
-                sourceArtifact = sourceArtifact.takeIf { it != other.sourceArtifact },
-                vcs = vcs.takeIf { it != other.vcs }?.toCuration()
+            declaredLicenses = declaredLicenses.takeIf { it != other.declaredLicenses },
+            description = description.takeIf { it != other.description },
+            homepageUrl = homepageUrl.takeIf { it != other.homepageUrl },
+            binaryArtifact = binaryArtifact.takeIf { it != other.binaryArtifact },
+            sourceArtifact = sourceArtifact.takeIf { it != other.sourceArtifact },
+            vcs = vcs.takeIf { it != other.vcs }?.toCuration()
         )
     }
 
@@ -152,14 +152,14 @@ data class Package(
      * Check if this package contains any erroneous data.
      */
     fun collectErrors() =
-            declaredLicensesProcessed.unmapped.map { unmappedLicense ->
-                OrtIssue(
-                        severity = Severity.ERROR,
-                        source = id.toCoordinates(),
-                        message = "The declared license '$unmappedLicense' could not be mapped to a valid license or " +
-                                "parsed as an SPDX expression."
-                )
-            }
+        declaredLicensesProcessed.unmapped.map { unmappedLicense ->
+            OrtIssue(
+                severity = Severity.ERROR,
+                source = id.toCoordinates(),
+                message = "The declared license '$unmappedLicense' could not be mapped to a valid license or " +
+                        "parsed as an SPDX expression."
+            )
+        }
 
     /**
      * Create a [CuratedPackage] from this package with an empty list of applied curations.
@@ -170,9 +170,9 @@ data class Package(
      * Return a [PackageReference] to refer to this [Package] with optional [dependencies] and [errors].
      */
     fun toReference(
-            linkage: PackageLinkage? = null,
-            dependencies: SortedSet<PackageReference>? = null,
-            errors: List<OrtIssue>? = null
+        linkage: PackageLinkage? = null,
+        dependencies: SortedSet<PackageReference>? = null,
+        errors: List<OrtIssue>? = null
     ): PackageReference {
         var ref = PackageReference(id)
 

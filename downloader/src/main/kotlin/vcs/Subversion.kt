@@ -41,54 +41,60 @@ import java.io.IOException
 import java.util.regex.Pattern
 
 data class SubversionInfoRepository(
-        val root: String,
-        val uuid: String)
+    val root: String,
+    val uuid: String
+)
 
 data class SubversionInfoWorkingCopy(
-        @JsonProperty("wcroot-abspath")
-        val absolutePath: String,
-        val schedule: String,
-        val depth: String)
+    @JsonProperty("wcroot-abspath")
+    val absolutePath: String,
+    val schedule: String,
+    val depth: String
+)
 
 data class SubversionInfoCommit(
-        @JacksonXmlProperty(isAttribute = true)
-        val revision: String,
-        val author: String?,
-        val date: String)
+    @JacksonXmlProperty(isAttribute = true)
+    val revision: String,
+    val author: String?,
+    val date: String
+)
 
 data class SubversionInfoLock(
-        val created: String)
+    val created: String
+)
 
 @JsonRootName("entry")
 data class SubversionInfoEntry(
-        @JacksonXmlProperty(isAttribute = true)
-        val kind: String,
-        @JacksonXmlProperty(isAttribute = true)
-        val path: String,
-        @JacksonXmlProperty(isAttribute = true)
-        val revision: String,
-        val url: String,
-        @JsonProperty("relative-url")
-        val relativeUrl: String,
-        val repository: SubversionInfoRepository,
-        @JsonProperty("wc-info")
-        val workingCopy: SubversionInfoWorkingCopy,
-        val commit: SubversionInfoCommit)
+    @JacksonXmlProperty(isAttribute = true)
+    val kind: String,
+    @JacksonXmlProperty(isAttribute = true)
+    val path: String,
+    @JacksonXmlProperty(isAttribute = true)
+    val revision: String,
+    val url: String,
+    @JsonProperty("relative-url")
+    val relativeUrl: String,
+    val repository: SubversionInfoRepository,
+    @JsonProperty("wc-info")
+    val workingCopy: SubversionInfoWorkingCopy,
+    val commit: SubversionInfoCommit
+)
 
 @JsonRootName("entry")
 data class SubversionPathEntry(
-        @JacksonXmlProperty(isAttribute = true)
-        val kind: String,
-        @JacksonXmlProperty(isAttribute = true)
-        val path: String,
-        @JacksonXmlProperty(isAttribute = true)
-        val revision: String,
-        val url: String,
-        @JsonProperty("relative-url")
-        val relativeUrl: String,
-        val repository: SubversionInfoRepository,
-        val commit: SubversionInfoCommit,
-        val lock: SubversionInfoLock?)
+    @JacksonXmlProperty(isAttribute = true)
+    val kind: String,
+    @JacksonXmlProperty(isAttribute = true)
+    val path: String,
+    @JacksonXmlProperty(isAttribute = true)
+    val revision: String,
+    val url: String,
+    @JsonProperty("relative-url")
+    val relativeUrl: String,
+    val repository: SubversionInfoRepository,
+    val commit: SubversionInfoCommit,
+    val lock: SubversionInfoLock?
+)
 
 class Subversion : VersionControlSystem(), CommandLineTool {
     private val versionRegex = Pattern.compile("svn, [Vv]ersion (?<version>[\\d.]+) \\(r\\d+\\)")
@@ -100,78 +106,82 @@ class Subversion : VersionControlSystem(), CommandLineTool {
     override fun command(workingDir: File?) = "svn"
 
     override fun getVersion() =
-            getVersion { output ->
-                versionRegex.matcher(output.lineSequence().first()).let {
-                    if (it.matches()) {
-                        it.group("version")
-                    } else {
-                        ""
-                    }
+        getVersion { output ->
+            versionRegex.matcher(output.lineSequence().first()).let {
+                if (it.matches()) {
+                    it.group("version")
+                } else {
+                    ""
                 }
             }
+        }
 
     override fun getWorkingTree(vcsDirectory: File) =
-            object : WorkingTree(vcsDirectory, type) {
-                private val directoryNamespaces = listOf("branches", "tags", "trunk", "wiki")
-                private val svnInfoReader = xmlMapper.readerFor(SubversionInfoEntry::class.java)
-                        .with(DeserializationFeature.UNWRAP_ROOT_VALUE)
+        object : WorkingTree(vcsDirectory, type) {
+            private val directoryNamespaces = listOf("branches", "tags", "trunk", "wiki")
+            private val svnInfoReader = xmlMapper.readerFor(SubversionInfoEntry::class.java)
+                .with(DeserializationFeature.UNWRAP_ROOT_VALUE)
 
-                override fun isValid(): Boolean {
-                    if (!workingDir.isDirectory) {
-                        return false
-                    }
-
-                    return runSvnInfoCommand() != null
+            override fun isValid(): Boolean {
+                if (!workingDir.isDirectory) {
+                    return false
                 }
 
-                override fun isShallow() = false
+                return runSvnInfoCommand() != null
+            }
 
-                override fun getRemoteUrl() = runSvnInfoCommand()?.url ?: ""
+            override fun isShallow() = false
 
-                override fun getRevision() = runSvnInfoCommand()?.commit?.revision ?: ""
+            override fun getRemoteUrl() = runSvnInfoCommand()?.url ?: ""
 
-                override fun getRootPath() =
-                        runSvnInfoCommand()?.workingCopy?.absolutePath?.let { File(it) } ?: workingDir
+            override fun getRevision() = runSvnInfoCommand()?.commit?.revision ?: ""
 
-                private fun listRemoteRefs(namespace: String): List<String> {
-                    val remoteUrl = getRemoteUrl()
+            override fun getRootPath() =
+                runSvnInfoCommand()?.workingCopy?.absolutePath?.let { File(it) } ?: workingDir
 
-                    val projectRoot = if (directoryNamespaces.any { "/$it/" in remoteUrl }) {
-                        runSvnInfoCommand()?.repository?.root ?: ""
-                    } else {
-                        remoteUrl
-                    }
+            private fun listRemoteRefs(namespace: String): List<String> {
+                val remoteUrl = getRemoteUrl()
 
-                    return try {
-                        val svnPathInfo = run(workingDir, "info", "--xml", "--depth=immediates",
-                                "$projectRoot/$namespace")
-                        val pathEntries = xmlMapper.readValue<List<SubversionPathEntry>>(svnPathInfo.stdout)
-
-                        // As the "immediates" depth includes the parent namespace itself, too, drop it.
-                        pathEntries.drop(1).map { it.path }.sorted()
-                    } catch (e: IOException) {
-                        // We assume a single project directory layout above. If we fail, e.g. for a multi-project
-                        // layout whose directory names cannot be easily guessed from the project names, return an
-                        // empty list to give a later curation the chance to succeed.
-                        emptyList()
-                    }
+                val projectRoot = if (directoryNamespaces.any { "/$it/" in remoteUrl }) {
+                    runSvnInfoCommand()?.repository?.root ?: ""
+                } else {
+                    remoteUrl
                 }
 
-                override fun listRemoteBranches() = listRemoteRefs("branches")
+                return try {
+                    val svnPathInfo = run(
+                        workingDir, "info", "--xml", "--depth=immediates",
+                        "$projectRoot/$namespace"
+                    )
+                    val pathEntries = xmlMapper.readValue<List<SubversionPathEntry>>(svnPathInfo.stdout)
 
-                override fun listRemoteTags() = listRemoteRefs("tags")
-
-                private fun runSvnInfoCommand(): SubversionInfoEntry? {
-                    val info = ProcessCapture("svn", "info", "--xml", workingDir.absolutePath)
-                    return if (info.isSuccess) svnInfoReader.readValue(info.stdout) else null
+                    // As the "immediates" depth includes the parent namespace itself, too, drop it.
+                    pathEntries.drop(1).map { it.path }.sorted()
+                } catch (e: IOException) {
+                    // We assume a single project directory layout above. If we fail, e.g. for a multi-project
+                    // layout whose directory names cannot be easily guessed from the project names, return an
+                    // empty list to give a later curation the chance to succeed.
+                    emptyList()
                 }
             }
 
-    override fun isApplicableUrlInternal(vcsUrl: String) =
-            (vcsUrl.startsWith("svn+") || ProcessCapture("svn", "list", vcsUrl).isSuccess)
+            override fun listRemoteBranches() = listRemoteRefs("branches")
 
-    override fun download(pkg: Package, targetDir: File, allowMovingRevisions: Boolean,
-                          recursive: Boolean): WorkingTree {
+            override fun listRemoteTags() = listRemoteRefs("tags")
+
+            private fun runSvnInfoCommand(): SubversionInfoEntry? {
+                val info = ProcessCapture("svn", "info", "--xml", workingDir.absolutePath)
+                return if (info.isSuccess) svnInfoReader.readValue(info.stdout) else null
+            }
+        }
+
+    override fun isApplicableUrlInternal(vcsUrl: String) =
+        (vcsUrl.startsWith("svn+") || ProcessCapture("svn", "list", vcsUrl).isSuccess)
+
+    override fun download(
+        pkg: Package, targetDir: File, allowMovingRevisions: Boolean,
+        recursive: Boolean
+    ): WorkingTree {
         log.info { "Using $type version ${getVersion()}." }
 
         return try {
@@ -188,8 +198,10 @@ class Subversion : VersionControlSystem(), CommandLineTool {
                     workingTree
                 } else {
                     // Deepen only the given path.
-                    run(targetDir, "update", "-r", revision, "--depth", "infinity", "--parents",
-                            pkg.vcsProcessed.path)
+                    run(
+                        targetDir, "update", "-r", revision, "--depth", "infinity", "--parents",
+                        pkg.vcsProcessed.path
+                    )
 
                     // Only return that part of the working tree that has the right revision.
                     getWorkingTree(File(targetDir, pkg.vcsProcessed.path))

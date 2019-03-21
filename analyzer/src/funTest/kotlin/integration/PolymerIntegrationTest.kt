@@ -32,44 +32,44 @@ import java.io.File
 
 class PolymerIntegrationTest : AbstractIntegrationSpec() {
     override val pkg: Package = Package(
-            id = Identifier(
-                    type = "Bower",
-                    namespace = "",
-                    name = "polymer",
-                    version = "2.4.0"
-            ),
-            declaredLicenses = sortedSetOf(),
-            description = "",
-            homepageUrl = "",
-            binaryArtifact = RemoteArtifact.EMPTY,
-            sourceArtifact = RemoteArtifact.EMPTY,
-            vcs = VcsInfo(
-                    type = "Git",
-                    url = "https://github.com/Polymer/polymer.git",
-                    revision = "v2.4.0"
-            )
+        id = Identifier(
+            type = "Bower",
+            namespace = "",
+            name = "polymer",
+            version = "2.4.0"
+        ),
+        declaredLicenses = sortedSetOf(),
+        description = "",
+        homepageUrl = "",
+        binaryArtifact = RemoteArtifact.EMPTY,
+        sourceArtifact = RemoteArtifact.EMPTY,
+        vcs = VcsInfo(
+            type = "Git",
+            url = "https://github.com/Polymer/polymer.git",
+            revision = "v2.4.0"
+        )
     )
 
     private fun findDownloadedFiles(vararg filenames: String) =
-            downloadResult.downloadDirectory.walkTopDown().filter { it.name in filenames }.toList()
+        downloadResult.downloadDirectory.walkTopDown().filter { it.name in filenames }.toList()
 
     override val expectedManagedFiles by lazy {
         val bowerJsonFiles = findDownloadedFiles("bower.json")
         val packageJsonFiles = findDownloadedFiles("package.json")
 
         mapOf(
-                Bower.Factory() as PackageManagerFactory to bowerJsonFiles,
-                NPM.Factory() as PackageManagerFactory to packageJsonFiles,
-                Yarn.Factory() as PackageManagerFactory to packageJsonFiles
+            Bower.Factory() as PackageManagerFactory to bowerJsonFiles,
+            NPM.Factory() as PackageManagerFactory to packageJsonFiles,
+            Yarn.Factory() as PackageManagerFactory to packageJsonFiles
         )
     }
 
     override val managedFilesForTest by lazy {
         mapOf(
-                Bower.Factory() as PackageManagerFactory to
-                        listOf(File(downloadResult.downloadDirectory, "bower.json")),
-                NPM.Factory() as PackageManagerFactory to
-                        listOf(File(downloadResult.downloadDirectory, "package.json"))
+            Bower.Factory() as PackageManagerFactory to
+                    listOf(File(downloadResult.downloadDirectory, "bower.json")),
+            NPM.Factory() as PackageManagerFactory to
+                    listOf(File(downloadResult.downloadDirectory, "package.json"))
         )
     }
 }

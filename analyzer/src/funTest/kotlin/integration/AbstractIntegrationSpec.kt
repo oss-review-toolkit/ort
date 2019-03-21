@@ -117,7 +117,7 @@ abstract class AbstractIntegrationSpec : StringSpec() {
             managedFilesForTest.forEach { manager, files ->
                 println("Resolving $manager dependencies in $files.")
                 val results = manager.create(DEFAULT_ANALYZER_CONFIGURATION, DEFAULT_REPOSITORY_CONFIGURATION)
-                        .resolveDependencies(USER_DIR, files)
+                    .resolveDependencies(USER_DIR, files)
 
                 results.size shouldBe files.size
                 results.values.forEach { result ->
