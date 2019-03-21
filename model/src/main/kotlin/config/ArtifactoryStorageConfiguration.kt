@@ -22,9 +22,9 @@ package com.here.ort.model.config
 import com.fasterxml.jackson.annotation.JsonProperty
 
 data class ArtifactoryStorageConfiguration(
-        val url: String,
-        val repository: String,
+    val url: String,
+    val repository: String,
 
-        @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-        val apiToken: String = ""
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    val apiToken: String = ""
 )

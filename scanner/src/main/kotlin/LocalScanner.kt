@@ -91,8 +91,10 @@ abstract class LocalScanner(name: String, config: ScannerConfiguration) : Scanne
                 bootstrap().also {
                     val actualScannerVersion = getVersion(it)
                     if (actualScannerVersion != scannerVersion) {
-                        throw IOException("Bootstrapped scanner version $actualScannerVersion " +
-                                "does not match expected version $scannerVersion.")
+                        throw IOException(
+                            "Bootstrapped scanner version $actualScannerVersion " +
+                                    "does not match expected version $scannerVersion."
+                        )
                     }
                 }
             } else {
@@ -179,11 +181,11 @@ abstract class LocalScanner(name: String, config: ScannerConfiguration) : Scanne
                                     }
 
                                     listOf(
-                                            scanPackage(scannerDetails, pkg, outputDirectory, downloadDirectory).also {
-                                                log.info {
-                                                    "Finished scanning ${pkg.id.toCoordinates()} $packageIndex."
-                                                }
+                                        scanPackage(scannerDetails, pkg, outputDirectory, downloadDirectory).also {
+                                            log.info {
+                                                "Finished scanning ${pkg.id.toCoordinates()} $packageIndex."
                                             }
+                                        }
                                     )
                                 }
                             }.map {
@@ -200,20 +202,24 @@ abstract class LocalScanner(name: String, config: ScannerConfiguration) : Scanne
                             }
 
                             val now = Instant.now()
-                            listOf(ScanResult(
+                            listOf(
+                                ScanResult(
                                     provenance = Provenance(),
                                     scanner = scannerDetails,
                                     summary = ScanSummary(
-                                            startTime = now,
-                                            endTime = now,
-                                            fileCount = 0,
-                                            licenseFindings = sortedSetOf(),
-                                            errors = listOf(OrtIssue(
-                                                    source = scannerName,
-                                                    message = e.collectMessagesAsString()
-                                            ))
+                                        startTime = now,
+                                        endTime = now,
+                                        fileCount = 0,
+                                        licenseFindings = sortedSetOf(),
+                                        errors = listOf(
+                                            OrtIssue(
+                                                source = scannerName,
+                                                message = e.collectMessagesAsString()
+                                            )
+                                        )
                                     ),
-                                    rawResult = EMPTY_JSON_NODE)
+                                    rawResult = EMPTY_JSON_NODE
+                                )
                             )
                         }
 
@@ -262,8 +268,10 @@ abstract class LocalScanner(name: String, config: ScannerConfiguration) : Scanne
      *
      * Return the [ScanResult], if the package could not be scanned a [ScanException] is thrown.
      */
-    private fun scanPackage(scannerDetails: ScannerDetails, pkg: Package, outputDirectory: File,
-                    downloadDirectory: File): ScanResult {
+    private fun scanPackage(
+        scannerDetails: ScannerDetails, pkg: Package, outputDirectory: File,
+        downloadDirectory: File
+    ): ScanResult {
         val resultsFile = getResultsFile(scannerDetails, pkg, outputDirectory)
 
         val downloadResult = try {
@@ -275,16 +283,16 @@ abstract class LocalScanner(name: String, config: ScannerConfiguration) : Scanne
 
             val now = Instant.now()
             return ScanResult(
-                    Provenance(),
-                    scannerDetails,
-                    ScanSummary(
-                            startTime = now,
-                            endTime = now,
-                            fileCount = 0,
-                            licenseFindings = sortedSetOf(),
-                            errors = listOf(OrtIssue(source = scannerName, message = e.collectMessagesAsString()))
-                    ),
-                    EMPTY_JSON_NODE
+                Provenance(),
+                scannerDetails,
+                ScanSummary(
+                    startTime = now,
+                    endTime = now,
+                    fileCount = 0,
+                    licenseFindings = sortedSetOf(),
+                    errors = listOf(OrtIssue(source = scannerName, message = e.collectMessagesAsString()))
+                ),
+                EMPTY_JSON_NODE
             )
         }
 
@@ -292,8 +300,10 @@ abstract class LocalScanner(name: String, config: ScannerConfiguration) : Scanne
             "Running $scannerDetails on directory '${downloadResult.downloadDirectory.absolutePath}'."
         }
 
-        val provenance = Provenance(downloadResult.dateTime, downloadResult.sourceArtifact, downloadResult.vcsInfo,
-                downloadResult.originalVcsInfo)
+        val provenance = Provenance(
+            downloadResult.dateTime, downloadResult.sourceArtifact, downloadResult.vcsInfo,
+            downloadResult.originalVcsInfo
+        )
         val scanResult = scanPath(downloadResult.downloadDirectory, resultsFile).copy(provenance = provenance)
 
         ScanResultsStorage.add(pkg.id, scanResult)
@@ -322,8 +332,10 @@ abstract class LocalScanner(name: String, config: ScannerConfiguration) : Scanne
         log.info { "Scanning path '$absoluteInputPath' with $scannerDetails..." }
 
         val result = try {
-            val resultsFile = File(outputDirectory.apply { safeMkdirs() },
-                    "${inputPath.nameWithoutExtension}_${scannerDetails.name}.$resultFileExt")
+            val resultsFile = File(
+                outputDirectory.apply { safeMkdirs() },
+                "${inputPath.nameWithoutExtension}_${scannerDetails.name}.$resultFileExt"
+            )
             scanPath(inputPath, resultsFile).also {
                 log.info {
                     "Detected licenses for path '$absoluteInputPath': ${it.summary.licenses.joinToString()}"
@@ -335,14 +347,18 @@ abstract class LocalScanner(name: String, config: ScannerConfiguration) : Scanne
             log.error { "Could not scan path '$absoluteInputPath': ${e.message}" }
 
             val now = Instant.now()
-            val summary = ScanSummary(now, now, 0, sortedSetOf(),
-                    listOf(OrtIssue(source = scannerName, message = e.collectMessagesAsString())))
+            val summary = ScanSummary(
+                now, now, 0, sortedSetOf(),
+                listOf(OrtIssue(source = scannerName, message = e.collectMessagesAsString()))
+            )
             ScanResult(Provenance(), getDetails(), summary)
         }
 
         // There is no package id for arbitrary paths so create a fake one, ensuring that no ":" is contained.
-        val id = Identifier(OS.name.fileSystemEncode(), absoluteInputPath.parent.fileSystemEncode(),
-                inputPath.name.fileSystemEncode(), "")
+        val id = Identifier(
+            OS.name.fileSystemEncode(), absoluteInputPath.parent.fileSystemEncode(),
+            inputPath.name.fileSystemEncode(), ""
+        )
 
         val scanResultContainer = ScanResultContainer(id, listOf(result))
         val scanRecord = ScanRecord(sortedSetOf(), sortedSetOf(scanResultContainer), ScanResultsStorage.stats)

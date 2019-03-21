@@ -27,17 +27,17 @@ import java.time.Instant
  * To summary of a single run of the analyzer.
  */
 data class AnalyzerRun(
-        /**
-         * The [Instant] the analyzer was started. The default value exists only for backward compatibility.
-         */
-        val startTime: Instant = Instant.EPOCH,
+    /**
+     * The [Instant] the analyzer was started. The default value exists only for backward compatibility.
+     */
+    val startTime: Instant = Instant.EPOCH,
 
-        /**
-         * The [Instant] the analyzer has finished. The default value exists only for backward compatibility.
-         */
-        val endTime: Instant = Instant.EPOCH,
+    /**
+     * The [Instant] the analyzer has finished. The default value exists only for backward compatibility.
+     */
+    val endTime: Instant = Instant.EPOCH,
 
-        val environment: Environment,
-        val config: AnalyzerConfiguration,
-        val result: AnalyzerResult
+    val environment: Environment,
+    val config: AnalyzerConfiguration,
+    val result: AnalyzerResult
 )

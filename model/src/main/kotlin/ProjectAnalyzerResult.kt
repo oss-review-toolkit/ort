@@ -27,24 +27,24 @@ import java.util.SortedSet
  * A class that bundles all information generated during an analysis.
  */
 data class ProjectAnalyzerResult(
-        /**
-         * The project that was analyzed. The tree of dependencies is implicitly contained in the scopes in the form
-         * of package references.
-         */
-        val project: Project,
+    /**
+     * The project that was analyzed. The tree of dependencies is implicitly contained in the scopes in the form
+     * of package references.
+     */
+    val project: Project,
 
-        /**
-         * The set of identified packages used by the project.
-         */
-        val packages: SortedSet<CuratedPackage>,
+    /**
+     * The set of identified packages used by the project.
+     */
+    val packages: SortedSet<CuratedPackage>,
 
-        /**
-         * The list of errors that occurred during dependency resolution. Defaults to an empty list.
-         */
-        // Do not serialize if empty for consistency with the error properties in other classes, even if this class is
-        // not serialized as part of an [OrtResult].
-        @JsonInclude(JsonInclude.Include.NON_EMPTY)
-        val errors: List<OrtIssue> = emptyList()
+    /**
+     * The list of errors that occurred during dependency resolution. Defaults to an empty list.
+     */
+    // Do not serialize if empty for consistency with the error properties in other classes, even if this class is
+    // not serialized as part of an [OrtResult].
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    val errors: List<OrtIssue> = emptyList()
 ) {
     init {
         // Perform a sanity check to ensure we have no references to non-existing packages.

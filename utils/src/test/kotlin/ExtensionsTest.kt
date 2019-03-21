@@ -157,20 +157,20 @@ class ExtensionsTest : WordSpec({
 
         "correctly merge maps" {
             val map = mapOf(
-                    "1" to 1,
-                    "2" to 2,
-                    "3" to 3
+                "1" to 1,
+                "2" to 2,
+                "3" to 3
             )
             val other = mapOf(
-                    "3" to 3,
-                    "4" to 4
+                "3" to 3,
+                "4" to 4
             )
 
             val expectedResult = mapOf(
-                    "1" to 1,
-                    "2" to 2,
-                    "3" to 6,
-                    "4" to 4
+                "1" to 1,
+                "2" to 2,
+                "3" to 6,
+                "4" to 4
             )
 
             map.zip(other, operation) shouldBe expectedResult
@@ -194,20 +194,20 @@ class ExtensionsTest : WordSpec({
 
         "correctly merge maps" {
             val map = mapOf(
-                    "1" to 1,
-                    "2" to 2,
-                    "3" to 3
+                "1" to 1,
+                "2" to 2,
+                "3" to 3
             )
             val other = mapOf(
-                    "3" to 3,
-                    "4" to 4
+                "3" to 3,
+                "4" to 4
             )
 
             val expectedResult = mapOf(
-                    "1" to 2,
-                    "2" to 3,
-                    "3" to 6,
-                    "4" to 5
+                "1" to 2,
+                "2" to 3,
+                "3" to 6,
+                "4" to 5
             )
 
             map.zipWithDefault(other, 1, operation) shouldBe expectedResult

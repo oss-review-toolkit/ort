@@ -34,7 +34,7 @@ import javax.xml.transform.TransformerFactory
 
 class StaticHtmlReporterTest : WordSpec() {
     private val ortResult = File("src/funTest/assets/static-html-reporter-test-input.yml")
-            .readValue<OrtResult>()
+        .readValue<OrtResult>()
 
     init {
         "StaticHtmlReporter" should {
@@ -48,7 +48,7 @@ class StaticHtmlReporterTest : WordSpec() {
                 val actualReport = generateReport(ortResult)
 
                 val expectedReport = File("src/funTest/assets/static-html-reporter-test-expected-output.html")
-                        .readText()
+                    .readText()
 
                 actualReport shouldBe expectedReport
             }
@@ -56,12 +56,12 @@ class StaticHtmlReporterTest : WordSpec() {
     }
 
     private fun generateReport(ortResult: OrtResult) =
-            ByteArrayOutputStream().also { outputStream ->
-                StaticHtmlReporter().generateReport(
-                        ortResult,
-                        DefaultResolutionProvider(),
-                        CopyrightGarbage(),
-                        outputStream
-                )
-            }.toString("UTF-8")
+        ByteArrayOutputStream().also { outputStream ->
+            StaticHtmlReporter().generateReport(
+                ortResult,
+                DefaultResolutionProvider(),
+                CopyrightGarbage(),
+                outputStream
+            )
+        }.toString("UTF-8")
 }

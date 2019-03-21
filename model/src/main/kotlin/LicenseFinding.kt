@@ -40,34 +40,34 @@ import java.util.TreeSet
 typealias LicenseFindingsMap = SortedMap<String, MutableSet<String>>
 
 fun LicenseFindingsMap.processStatements() =
-        mapValues { (_, copyrights) ->
-            CopyrightStatementsProcessor().process(copyrights).toMutableSet()
-        }.toSortedMap()
+    mapValues { (_, copyrights) ->
+        CopyrightStatementsProcessor().process(copyrights).toMutableSet()
+    }.toSortedMap()
 
 fun LicenseFindingsMap.removeGarbage(copyrightGarbage: CopyrightGarbage) =
-        mapValues { (_, copyrights) ->
-            copyrights.filterNot {
-                it in copyrightGarbage.items
-            }.toMutableSet()
-        }.toSortedMap()
+    mapValues { (_, copyrights) ->
+        copyrights.filterNot {
+            it in copyrightGarbage.items
+        }.toMutableSet()
+    }.toSortedMap()
 
 /**
  * A class to store a [license] finding along with its belonging [copyrights] and the [locations] where the license was
  * found.
  */
 data class LicenseFinding(
-        val license: String,
-        val locations: SortedSet<TextLocation>,
-        val copyrights: SortedSet<CopyrightFinding>
+    val license: String,
+    val locations: SortedSet<TextLocation>,
+    val copyrights: SortedSet<CopyrightFinding>
 ) : Comparable<LicenseFinding> {
     override fun compareTo(other: LicenseFinding) =
-            compareValuesBy(
-                    this,
-                    other,
-                    compareBy(LicenseFinding::license)
-                            .thenBy(TextLocation.SORTED_SET_COMPARATOR, LicenseFinding::locations)
-                            .thenBy(CopyrightFinding.SORTED_SET_COMPARATOR, LicenseFinding::copyrights)
-            ) { it }
+        compareValuesBy(
+            this,
+            other,
+            compareBy(LicenseFinding::license)
+                .thenBy(TextLocation.SORTED_SET_COMPARATOR, LicenseFinding::locations)
+                .thenBy(CopyrightFinding.SORTED_SET_COMPARATOR, LicenseFinding::copyrights)
+        ) { it }
 }
 
 /**
@@ -82,8 +82,8 @@ class LicenseFindingDeserializer : StdDeserializer<LicenseFinding>(LicenseFindin
                 val license = jsonMapper.treeToValue<String>(node["license"])
 
                 val copyrights = jsonMapper.readValue<TreeSet<CopyrightFinding>>(
-                        jsonMapper.treeAsTokens(node["copyrights"]),
-                        CopyrightFinding.TREE_SET_TYPE
+                    jsonMapper.treeAsTokens(node["copyrights"]),
+                    CopyrightFinding.TREE_SET_TYPE
                 )
 
                 val locations = deserializeLocations(node)
@@ -94,10 +94,10 @@ class LicenseFindingDeserializer : StdDeserializer<LicenseFinding>(LicenseFindin
     }
 
     private fun deserializeLocations(node: JsonNode) =
-            node["locations"]?.let { locations ->
-                jsonMapper.readValue<TreeSet<TextLocation>>(
-                        jsonMapper.treeAsTokens(locations),
-                        TextLocation.TREE_SET_TYPE
-                )
-            } ?: sortedSetOf()
+        node["locations"]?.let { locations ->
+            jsonMapper.readValue<TreeSet<TextLocation>>(
+                jsonMapper.treeAsTokens(locations),
+                TextLocation.TREE_SET_TYPE
+            )
+        } ?: sortedSetOf()
 }

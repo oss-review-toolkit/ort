@@ -55,15 +55,15 @@ class MercurialDownloadTest : StringSpec() {
         "Mercurial can download a given revision".config(enabled = hg.isInPath(), tags = setOf(ExpensiveTag)) {
             val pkg = Package.EMPTY.copy(vcsProcessed = VcsInfo("Mercurial", REPO_URL, REPO_REV))
             val expectedFiles = listOf(
-                    ".hg",
-                    ".hgsub",
-                    ".hgsubstate",
-                    "Classes",
-                    "LICENCE.md",
-                    "MercurialPlugin.xcodeproj",
-                    "README.md",
-                    "Resources",
-                    "Script"
+                ".hg",
+                ".hgsub",
+                ".hgsubstate",
+                "Classes",
+                "LICENCE.md",
+                "MercurialPlugin.xcodeproj",
+                "README.md",
+                "Resources",
+                "Script"
             )
 
             val workingTree = hg.download(pkg, outputDir)
@@ -75,10 +75,12 @@ class MercurialDownloadTest : StringSpec() {
         }
 
         "Mercurial can download only a single path"
-                .config(enabled = hg.isInPath() && hg.isAtLeastVersion("4.3"),
-                        tags = setOf(ExpensiveTag)) {
-            val pkg = Package.EMPTY.copy(vcsProcessed = VcsInfo("Mercurial", REPO_URL, REPO_REV, path = REPO_PATH))
-            val expectedFiles = listOf(
+            .config(
+                enabled = hg.isInPath() && hg.isAtLeastVersion("4.3"),
+                tags = setOf(ExpensiveTag)
+            ) {
+                val pkg = Package.EMPTY.copy(vcsProcessed = VcsInfo("Mercurial", REPO_URL, REPO_REV, path = REPO_PATH))
+                val expectedFiles = listOf(
                     File(".hgsub"), // We always get these configuration files, if present.
                     File(".hgsubstate"),
                     File(REPO_PATH, "MercurialPlugin.h"),
@@ -90,24 +92,24 @@ class MercurialDownloadTest : StringSpec() {
                     File("Script", "install_bridge.sh"),
                     File("Script", "sniff.py"),
                     File("Script", "uninstall_bridge.sh")
-            )
+                )
 
-            val workingTree = hg.download(pkg, outputDir)
-            val actualFiles = workingTree.workingDir.walkBottomUp()
+                val workingTree = hg.download(pkg, outputDir)
+                val actualFiles = workingTree.workingDir.walkBottomUp()
                     .onEnter { it.name != ".hg" }
                     .filter { it.isFile }
                     .map { it.relativeTo(outputDir) }
                     .sortedBy { it.path }
 
-            workingTree.isValid() shouldBe true
-            workingTree.getRevision() shouldBe REPO_REV
-            actualFiles.joinToString("\n") shouldBe expectedFiles.joinToString("\n")
-        }
+                workingTree.isValid() shouldBe true
+                workingTree.getRevision() shouldBe REPO_REV
+                actualFiles.joinToString("\n") shouldBe expectedFiles.joinToString("\n")
+            }
 
         "Mercurial can download based on a version".config(enabled = hg.isInPath(), tags = setOf(ExpensiveTag)) {
             val pkg = Package.EMPTY.copy(
-                    id = Identifier("Test:::$REPO_VERSION"),
-                    vcsProcessed = VcsInfo("Mercurial", REPO_URL, "")
+                id = Identifier("Test:::$REPO_VERSION"),
+                vcsProcessed = VcsInfo("Mercurial", REPO_URL, "")
             )
 
             val workingTree = hg.download(pkg, outputDir)
@@ -117,13 +119,15 @@ class MercurialDownloadTest : StringSpec() {
         }
 
         "Mercurial can download only a single path based on a version"
-                .config(enabled = hg.isInPath() && hg.isAtLeastVersion("4.3"),
-                        tags = setOf(ExpensiveTag)) {
-            val pkg = Package.EMPTY.copy(
+            .config(
+                enabled = hg.isInPath() && hg.isAtLeastVersion("4.3"),
+                tags = setOf(ExpensiveTag)
+            ) {
+                val pkg = Package.EMPTY.copy(
                     id = Identifier("Test:::$REPO_VERSION"),
                     vcsProcessed = VcsInfo("Mercurial", REPO_URL, "", path = REPO_PATH_FOR_VERSION)
-            )
-            val expectedFiles = listOf(
+                )
+                val expectedFiles = listOf(
                     File(".hgsub"), // We always get these configuration files, if present.
                     File(".hgsubstate"),
                     File("LICENCE.md"),
@@ -136,18 +140,18 @@ class MercurialDownloadTest : StringSpec() {
                     File("Script", "install_bridge.sh"),
                     File("Script", "sniff.py"),
                     File("Script", "uninstall_bridge.sh")
-            )
+                )
 
-            val workingTree = hg.download(pkg, outputDir)
-            val actualFiles = workingTree.workingDir.walkBottomUp()
+                val workingTree = hg.download(pkg, outputDir)
+                val actualFiles = workingTree.workingDir.walkBottomUp()
                     .onEnter { it.name != ".hg" }
                     .filter { it.isFile }
                     .map { it.relativeTo(outputDir) }
                     .sortedBy { it.path }
 
-            workingTree.isValid() shouldBe true
-            workingTree.getRevision() shouldBe REPO_REV_FOR_VERSION
-            actualFiles.joinToString("\n") shouldBe expectedFiles.joinToString("\n")
-        }
+                workingTree.isValid() shouldBe true
+                workingTree.getRevision() shouldBe REPO_REV_FOR_VERSION
+                actualFiles.joinToString("\n") shouldBe expectedFiles.joinToString("\n")
+            }
     }
 }

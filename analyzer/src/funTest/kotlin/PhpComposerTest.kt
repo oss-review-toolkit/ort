@@ -49,10 +49,10 @@ class PhpComposerTest : StringSpec() {
 
             val result = createPhpComposer().resolveDependencies(USER_DIR, listOf(definitionFile))[definitionFile]
             val expectedResults = patchExpectedResult(
-                    File(projectsDir.parentFile, "php-composer-expected-output.yml"),
-                    url = normalizeVcsUrl(vcsUrl),
-                    revision = vcsRevision,
-                    path = vcsDir.getPathToRoot(definitionFile.parentFile)
+                File(projectsDir.parentFile, "php-composer-expected-output.yml"),
+                url = normalizeVcsUrl(vcsUrl),
+                revision = vcsRevision,
+                path = vcsDir.getPathToRoot(definitionFile.parentFile)
             )
 
             yamlMapper.writeValueAsString(result) shouldBe expectedResults
@@ -63,8 +63,10 @@ class PhpComposerTest : StringSpec() {
             val result = createPhpComposer().resolveDependencies(USER_DIR, listOf(definitionFile))[definitionFile]
 
             result shouldNotBe null
-            result!!.project.id shouldBe Identifier("PhpComposer::src/funTest/assets/projects/synthetic/" +
-                    "php-composer/no-lockfile/composer.json:")
+            result!!.project.id shouldBe Identifier(
+                "PhpComposer::src/funTest/assets/projects/synthetic/" +
+                        "php-composer/no-lockfile/composer.json:"
+            )
             result.project.definitionFilePath shouldBe
                     "analyzer/src/funTest/assets/projects/synthetic/php-composer/no-lockfile/composer.json"
             result.packages.size shouldBe 0
@@ -77,11 +79,11 @@ class PhpComposerTest : StringSpec() {
 
             val result = createPhpComposer().resolveDependencies(USER_DIR, listOf(definitionFile))[definitionFile]
             val expectedResults = patchExpectedResult(
-                    File(projectsDir.parentFile, "php-composer-expected-output-no-deps.yml"),
-                    definitionFilePath = VersionControlSystem.getPathInfo(definitionFile).path,
-                    url = normalizeVcsUrl(vcsUrl),
-                    revision = vcsRevision,
-                    path = vcsDir.getPathToRoot(definitionFile.parentFile)
+                File(projectsDir.parentFile, "php-composer-expected-output-no-deps.yml"),
+                definitionFilePath = VersionControlSystem.getPathInfo(definitionFile).path,
+                url = normalizeVcsUrl(vcsUrl),
+                revision = vcsRevision,
+                path = vcsDir.getPathToRoot(definitionFile.parentFile)
             )
 
             yamlMapper.writeValueAsString(result) shouldBe expectedResults
@@ -92,11 +94,11 @@ class PhpComposerTest : StringSpec() {
 
             val result = createPhpComposer().resolveDependencies(USER_DIR, listOf(definitionFile))[definitionFile]
             val expectedResults = patchExpectedResult(
-                    File(projectsDir.parentFile, "php-composer-expected-output-no-deps.yml"),
-                    definitionFilePath = VersionControlSystem.getPathInfo(definitionFile).path,
-                    url = normalizeVcsUrl(vcsUrl),
-                    revision = vcsRevision,
-                    path = vcsDir.getPathToRoot(definitionFile.parentFile)
+                File(projectsDir.parentFile, "php-composer-expected-output-no-deps.yml"),
+                definitionFilePath = VersionControlSystem.getPathInfo(definitionFile).path,
+                url = normalizeVcsUrl(vcsUrl),
+                revision = vcsRevision,
+                path = vcsDir.getPathToRoot(definitionFile.parentFile)
             )
 
             yamlMapper.writeValueAsString(result) shouldBe expectedResults
@@ -107,10 +109,10 @@ class PhpComposerTest : StringSpec() {
 
             val result = createPhpComposer().resolveDependencies(USER_DIR, listOf(definitionFile))[definitionFile]
             val expectedResults = patchExpectedResult(
-                    File(projectsDir.parentFile, "php-composer-expected-output-with-provide.yml"),
-                    url = normalizeVcsUrl(vcsUrl),
-                    revision = vcsRevision,
-                    path = vcsDir.getPathToRoot(definitionFile.parentFile)
+                File(projectsDir.parentFile, "php-composer-expected-output-with-provide.yml"),
+                url = normalizeVcsUrl(vcsUrl),
+                revision = vcsRevision,
+                path = vcsDir.getPathToRoot(definitionFile.parentFile)
             )
 
             yamlMapper.writeValueAsString(result) shouldBe expectedResults
@@ -121,10 +123,10 @@ class PhpComposerTest : StringSpec() {
 
             val result = createPhpComposer().resolveDependencies(USER_DIR, listOf(definitionFile))[definitionFile]
             val expectedResults = patchExpectedResult(
-                    File(projectsDir.parentFile, "php-composer-expected-output-with-replace.yml"),
-                    url = normalizeVcsUrl(vcsUrl),
-                    revision = vcsRevision,
-                    path = vcsDir.getPathToRoot(definitionFile.parentFile)
+                File(projectsDir.parentFile, "php-composer-expected-output-with-replace.yml"),
+                url = normalizeVcsUrl(vcsUrl),
+                revision = vcsRevision,
+                path = vcsDir.getPathToRoot(definitionFile.parentFile)
             )
 
             yamlMapper.writeValueAsString(result) shouldBe expectedResults
@@ -132,5 +134,5 @@ class PhpComposerTest : StringSpec() {
     }
 
     private fun createPhpComposer() =
-            PhpComposer("PhpComposer", DEFAULT_ANALYZER_CONFIGURATION, DEFAULT_REPOSITORY_CONFIGURATION)
+        PhpComposer("PhpComposer", DEFAULT_ANALYZER_CONFIGURATION, DEFAULT_REPOSITORY_CONFIGURATION)
 }

@@ -35,25 +35,25 @@ import java.time.Instant
  * An issue that occurred while executing ORT.
  */
 data class OrtIssue(
-        /**
-         * The timestamp of the issue.
-         */
-        val timestamp: Instant = Instant.now(),
+    /**
+     * The timestamp of the issue.
+     */
+    val timestamp: Instant = Instant.now(),
 
-        /**
-         * A description of the issue source, e.g. the tool that caused the issue.
-         */
-        val source: String,
+    /**
+     * A description of the issue source, e.g. the tool that caused the issue.
+     */
+    val source: String,
 
-        /**
-         * The issue's message.
-         */
-        val message: String,
+    /**
+     * The issue's message.
+     */
+    val message: String,
 
-        /**
-         * The issue's severity.
-         */
-        val severity: Severity = Severity.ERROR
+    /**
+     * The issue's severity.
+     */
+    val severity: Severity = Severity.ERROR
 ) {
     override fun toString(): String {
         val time = if (timestamp == Instant.EPOCH) "Unknown time" else timestamp.toString()
@@ -70,16 +70,16 @@ class OrtIssueDeserializer : StdDeserializer<OrtIssue>(OrtIssue::class.java) {
         } else {
             if (node.has("severity")) {
                 OrtIssue(
-                        timestamp = Instant.parse(node.get("timestamp").textValue()),
-                        source = node.get("source").textValue(),
-                        message = node.get("message").textValue(),
-                        severity = Severity.valueOf(node.get("severity").textValue())
+                    timestamp = Instant.parse(node.get("timestamp").textValue()),
+                    source = node.get("source").textValue(),
+                    message = node.get("message").textValue(),
+                    severity = Severity.valueOf(node.get("severity").textValue())
                 )
             } else {
                 OrtIssue(
-                        timestamp = Instant.parse(node.get("timestamp").textValue()),
-                        source = node.get("source").textValue(),
-                        message = node.get("message").textValue()
+                    timestamp = Instant.parse(node.get("timestamp").textValue()),
+                    source = node.get("source").textValue(),
+                    message = node.get("message").textValue()
                 )
             }
         }

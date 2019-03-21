@@ -41,39 +41,41 @@ class ReportTableModelMapper(private val resolutionProvider: ResolutionProvider)
     private fun OrtIssue.toResolvableIssue(): ResolvableIssue {
         val resolutions = resolutionProvider.getErrorResolutionsFor(this)
         return ResolvableIssue(
-                source = this@toResolvableIssue.source,
-                description = this@toResolvableIssue.toString(),
-                resolutionDescription = buildString {
-                    if (resolutions.isNotEmpty()) {
-                        append(resolutions.joinToString(
-                                prefix = "\nResolved by: ") { "${it.reason} - ${it.comment}" }
-                        )
-                    }
-                },
-                isResolved = resolutions.isNotEmpty(),
-                severity = severity
+            source = this@toResolvableIssue.source,
+            description = this@toResolvableIssue.toString(),
+            resolutionDescription = buildString {
+                if (resolutions.isNotEmpty()) {
+                    append(resolutions.joinToString(
+                        prefix = "\nResolved by: "
+                    ) { "${it.reason} - ${it.comment}" }
+                    )
+                }
+            },
+            isResolved = resolutions.isNotEmpty(),
+            severity = severity
         )
     }
 
     private fun OrtIssue.toResolvableEvaluatorIssue(): ResolvableIssue {
         val resolutions = resolutionProvider.getRuleViolationResolutionsFor(this)
         return ResolvableIssue(
-                source = this@toResolvableEvaluatorIssue.source,
-                description = this@toResolvableEvaluatorIssue.toString(),
-                resolutionDescription = buildString {
-                    if (resolutions.isNotEmpty()) {
-                        append(resolutions.joinToString(
-                                prefix = "\nResolved by: ") { "${it.reason} - ${it.comment}" }
-                        )
-                    }
-                },
-                isResolved = resolutions.isNotEmpty(),
-                severity = severity
+            source = this@toResolvableEvaluatorIssue.source,
+            description = this@toResolvableEvaluatorIssue.toString(),
+            resolutionDescription = buildString {
+                if (resolutions.isNotEmpty()) {
+                    append(resolutions.joinToString(
+                        prefix = "\nResolved by: "
+                    ) { "${it.reason} - ${it.comment}" }
+                    )
+                }
+            },
+            isResolved = resolutions.isNotEmpty(),
+            severity = severity
         )
     }
 
     fun mapToReportTableModel(
-            ortResult: OrtResult
+        ortResult: OrtResult
     ): ReportTableModel {
         val issueSummaryRows = mutableMapOf<Identifier, IssueRow>()
         val summaryRows = mutableMapOf<Identifier, SummaryRow>()
@@ -109,7 +111,7 @@ class ReportTableModelMapper(private val resolutionProvider: ResolutionProvider)
 
                 val scopes = project.scopes.filter { id in it }.let { scopes ->
                     excludes?.scopeExcludesByName(project, scopes, ortResult)?.toSortedMap()
-                            ?: scopes.associateTo(sortedMapOf()) { Pair(it.name, emptyList<ScopeExclude>()) }
+                        ?: scopes.associateTo(sortedMapOf()) { Pair(it.name, emptyList<ScopeExclude>()) }
                 }
 
                 val concludedLicense = ortResult.getConcludedLicensesForId(id)
@@ -126,13 +128,13 @@ class ReportTableModelMapper(private val resolutionProvider: ResolutionProvider)
                 }?.distinct() ?: emptyList()
 
                 DependencyRow(
-                        id = id,
-                        scopes = scopes,
-                        concludedLicense = concludedLicense,
-                        declaredLicenses = declaredLicenses,
-                        detectedLicenses = detectedLicenses,
-                        analyzerIssues = analyzerIssues.map { it.toResolvableIssue() },
-                        scanIssues = scanIssues.map { it.toResolvableIssue() }
+                    id = id,
+                    scopes = scopes,
+                    concludedLicense = concludedLicense,
+                    declaredLicenses = declaredLicenses,
+                    detectedLicenses = detectedLicenses,
+                    analyzerIssues = analyzerIssues.map { it.toResolvableIssue() },
+                    scanIssues = scanIssues.map { it.toResolvableIssue() }
                 ).also { row ->
                     val isRowExcluded = pathExcludes.isNotEmpty() || projectExclude != null
                             || (scopes.isNotEmpty() && scopes.all { it.value.isNotEmpty() })
@@ -141,15 +143,15 @@ class ReportTableModelMapper(private val resolutionProvider: ResolutionProvider)
                     val nonExcludedScanIssues = if (isRowExcluded) emptyList() else row.scanIssues
 
                     val summaryRow = SummaryRow(
-                            id = row.id,
-                            scopes = sortedMapOf(project.id to row.scopes),
-                            concludedLicenses = row.concludedLicense?.let { setOf(it) } ?: emptySet(),
-                            declaredLicenses = row.declaredLicenses,
-                            detectedLicenses = row.detectedLicenses.map { it.key.license }.toSortedSet(),
-                            analyzerIssues = if (nonExcludedAnalyzerIssues.isNotEmpty())
-                                sortedMapOf(project.id to nonExcludedAnalyzerIssues) else sortedMapOf(),
-                            scanIssues = if (nonExcludedScanIssues.isNotEmpty())
-                                sortedMapOf(project.id to nonExcludedScanIssues) else sortedMapOf()
+                        id = row.id,
+                        scopes = sortedMapOf(project.id to row.scopes),
+                        concludedLicenses = row.concludedLicense?.let { setOf(it) } ?: emptySet(),
+                        declaredLicenses = row.declaredLicenses,
+                        detectedLicenses = row.detectedLicenses.map { it.key.license }.toSortedSet(),
+                        analyzerIssues = if (nonExcludedAnalyzerIssues.isNotEmpty())
+                            sortedMapOf(project.id to nonExcludedAnalyzerIssues) else sortedMapOf(),
+                        scanIssues = if (nonExcludedScanIssues.isNotEmpty())
+                            sortedMapOf(project.id to nonExcludedScanIssues) else sortedMapOf()
                     )
 
                     summaryRows[row.id] = summaryRows[row.id]?.merge(summaryRow) ?: summaryRow
@@ -158,13 +160,14 @@ class ReportTableModelMapper(private val resolutionProvider: ResolutionProvider)
                     val unresolvedScanIssues = row.scanIssues.filterUnresolved()
 
                     if ((unresolvedAnalyzerIssues.isNotEmpty() || unresolvedScanIssues.isNotEmpty())
-                            && !isRowExcluded) {
+                        && !isRowExcluded
+                    ) {
                         val issueRow = IssueRow(
-                                id = row.id,
-                                analyzerIssues = if (unresolvedAnalyzerIssues.isNotEmpty())
-                                    sortedMapOf(project.id to unresolvedAnalyzerIssues) else sortedMapOf(),
-                                scanIssues = if (unresolvedScanIssues.isNotEmpty())
-                                    sortedMapOf(project.id to unresolvedScanIssues) else sortedMapOf()
+                            id = row.id,
+                            analyzerIssues = if (unresolvedAnalyzerIssues.isNotEmpty())
+                                sortedMapOf(project.id to unresolvedAnalyzerIssues) else sortedMapOf(),
+                            scanIssues = if (unresolvedScanIssues.isNotEmpty())
+                                sortedMapOf(project.id to unresolvedScanIssues) else sortedMapOf()
                         )
 
                         issueSummaryRows[row.id] = issueSummaryRows[issueRow.id]?.merge(issueRow) ?: issueRow
@@ -173,10 +176,10 @@ class ReportTableModelMapper(private val resolutionProvider: ResolutionProvider)
             }
 
             ProjectTable(
-                    tableRows,
-                    ortResult.getDefinitionFilePathRelativeToAnalyzerRoot(project),
-                    projectExclude,
-                    pathExcludes
+                tableRows,
+                ortResult.getDefinitionFilePathRelativeToAnalyzerRoot(project),
+                projectExclude,
+                pathExcludes
             )
         }.toSortedMap()
 
@@ -215,21 +218,21 @@ class ReportTableModelMapper(private val resolutionProvider: ResolutionProvider)
         val evaluatorIssues = ortResult.evaluator?.let {
             it.errors.map { it.toResolvableEvaluatorIssue() }
         }?.sortedWith(compareBy(
-                { it.isResolved },
-                { it.severity },
-                { it.source },
-                { it.description },
-                { it.resolutionDescription }
+            { it.isResolved },
+            { it.severity },
+            { it.source },
+            { it.description },
+            { it.resolutionDescription }
         )) ?: emptyList()
 
         return ReportTableModel(
-                ortResult.repository.vcsProcessed,
-                evaluatorIssues,
-                issueSummaryTable,
-                summaryTable,
-                projectTables,
-                metadata,
-                extraColumns
+            ortResult.repository.vcsProcessed,
+            evaluatorIssues,
+            issueSummaryTable,
+            summaryTable,
+            projectTables,
+            metadata,
+            extraColumns
         )
     }
 }

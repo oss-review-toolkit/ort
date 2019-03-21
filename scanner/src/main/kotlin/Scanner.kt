@@ -66,16 +66,16 @@ abstract class Scanner(val scannerName: String, protected val config: ScannerCon
      * specification of this scanner.
      */
     protected abstract suspend fun scanPackages(
-            packages: List<Package>,
-            outputDirectory: File,
-            downloadDirectory: File
+        packages: List<Package>,
+        outputDirectory: File,
+        downloadDirectory: File
     ): Map<Package, List<ScanResult>>
 
     /**
      * Return the scanner-specific SPDX idstring for the given [license].
      */
     fun getSpdxLicenseIdString(license: String) =
-            SpdxLicense.forId(license)?.id ?: "LicenseRef-$scannerName-$license"
+        SpdxLicense.forId(license)?.id ?: "LicenseRef-$scannerName-$license"
 
     /**
      * Scan the [Project]s and [Package]s specified in [ortResultFile] and store the scan results in [outputDirectory].
@@ -83,10 +83,10 @@ abstract class Scanner(val scannerName: String, protected val config: ScannerCon
      * [OrtResult].
      */
     fun scanOrtResult(
-            ortResultFile: File,
-            outputDirectory: File,
-            downloadDirectory: File,
-            scopesToScan: Set<String> = emptySet()
+        ortResultFile: File,
+        outputDirectory: File,
+        downloadDirectory: File,
+        scopesToScan: Set<String> = emptySet()
     ): OrtResult {
         require(ortResultFile.isFile) {
             "Provided path for the configuration does not refer to a file: ${ortResultFile.absolutePath}"

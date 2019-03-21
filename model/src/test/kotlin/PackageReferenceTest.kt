@@ -29,7 +29,7 @@ import io.kotlintest.specs.WordSpec
 class PackageReferenceTest : WordSpec() {
     companion object {
         fun pkgRefFromIdStr(id: String, vararg dependencies: PackageReference) =
-                PackageReference(Identifier(id), dependencies = dependencies.toSortedSet())
+            PackageReference(Identifier(id), dependencies = dependencies.toSortedSet())
     }
 
     private val node1_1_1 = pkgRefFromIdStr("::node1_1_1")
@@ -70,8 +70,8 @@ class PackageReferenceTest : WordSpec() {
                 val modifiedTree = root.traverse {
                     val name = "${it.id.name}_suffix"
                     it.copy(
-                            id = it.id.copy(name = name),
-                            errors = listOf(com.here.ort.model.OrtIssue(source = "test", message = "error $name"))
+                        id = it.id.copy(name = name),
+                        errors = listOf(com.here.ort.model.OrtIssue(source = "test", message = "error $name"))
                     )
                 }
 

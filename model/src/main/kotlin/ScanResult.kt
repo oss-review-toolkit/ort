@@ -27,32 +27,32 @@ import com.fasterxml.jackson.databind.JsonNode
  * The result of a single scan of a single package.
  */
 data class ScanResult(
-        /**
-         * Provenance information about the scanned source code.
-         */
-        val provenance: Provenance,
+    /**
+     * Provenance information about the scanned source code.
+     */
+    val provenance: Provenance,
 
-        /**
-         * Details about the used scanner.
-         */
-        val scanner: ScannerDetails,
+    /**
+     * Details about the used scanner.
+     */
+    val scanner: ScannerDetails,
 
-        /**
-         * A summary of the scan results.
-         */
-        val summary: ScanSummary,
+    /**
+     * A summary of the scan results.
+     */
+    val summary: ScanSummary,
 
-        /**
-         * The raw output of the scanner. Can be null if the raw result shall not be included. If the raw result is
-         * empty it must not be null but [EMPTY_JSON_NODE].
-         */
-        @JsonAlias("rawResult")
-        @JsonInclude(JsonInclude.Include.NON_NULL)
-        val rawResult: JsonNode? = null,
+    /**
+     * The raw output of the scanner. Can be null if the raw result shall not be included. If the raw result is
+     * empty it must not be null but [EMPTY_JSON_NODE].
+     */
+    @JsonAlias("rawResult")
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    val rawResult: JsonNode? = null,
 
-        /**
-         * A map that holds arbitrary data. Can be used by third-party tools to add custom data to the model.
-         */
-        @JsonInclude(JsonInclude.Include.NON_EMPTY)
-        val data: CustomData = emptyMap()
+    /**
+     * A map that holds arbitrary data. Can be used by third-party tools to add custom data to the model.
+     */
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    val data: CustomData = emptyMap()
 )

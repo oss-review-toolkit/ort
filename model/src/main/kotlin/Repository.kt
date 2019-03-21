@@ -27,27 +27,27 @@ import com.here.ort.model.config.RepositoryConfiguration
  * A description of the source code repository that was used as input for ORT.
  */
 data class Repository(
-        /**
-         * The [VcsInfo] of the repository.
-         */
-        val vcs: VcsInfo,
+    /**
+     * The [VcsInfo] of the repository.
+     */
+    val vcs: VcsInfo,
 
-        /**
-         * The [VcsInfo] of the repository.
-         */
-        val vcsProcessed: VcsInfo,
+    /**
+     * The [VcsInfo] of the repository.
+     */
+    val vcsProcessed: VcsInfo,
 
-        /**
-         * A map of nested repositories, for example Git submodules or Git-Repo modules. The key is the path to the
-         * nested repository relative to the root of the main repository.
-         */
-        @JsonInclude(JsonInclude.Include.NON_EMPTY)
-        val nestedRepositories: Map<String, VcsInfo> = emptyMap(),
+    /**
+     * A map of nested repositories, for example Git submodules or Git-Repo modules. The key is the path to the
+     * nested repository relative to the root of the main repository.
+     */
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    val nestedRepositories: Map<String, VcsInfo> = emptyMap(),
 
-        /**
-         * The configuration of the repository, parsed from the ".ort.yml" file.
-         */
-        val config: RepositoryConfiguration
+    /**
+     * The configuration of the repository, parsed from the ".ort.yml" file.
+     */
+    val config: RepositoryConfiguration
 ) {
     companion object {
         /**
@@ -55,10 +55,10 @@ data class Repository(
          */
         @JvmField
         val EMPTY = Repository(
-                vcs = VcsInfo.EMPTY,
-                vcsProcessed = VcsInfo.EMPTY,
-                nestedRepositories = emptyMap(),
-                config = RepositoryConfiguration()
+            vcs = VcsInfo.EMPTY,
+            vcsProcessed = VcsInfo.EMPTY,
+            nestedRepositories = emptyMap(),
+            config = RepositoryConfiguration()
         )
     }
 
@@ -68,7 +68,7 @@ data class Repository(
      */
     fun getRelativePath(vcs: VcsInfo): String? {
         fun VcsInfo.matches(other: VcsInfo) =
-                other.type == other.type && url == other.url && revision == other.revision
+            other.type == other.type && url == other.url && revision == other.revision
 
         val normalizedVcs = vcs.normalize()
 

@@ -49,31 +49,31 @@ class BabelTest : StringSpec() {
     init {
         "Babel packages should be correctly downloaded" {
             val vcsFromPackage = VcsInfo(
-                    type = "git",
-                    url = "https://github.com/babel/babel/tree/master/packages/babel-cli",
-                    revision = ""
+                type = "git",
+                url = "https://github.com/babel/babel/tree/master/packages/babel-cli",
+                revision = ""
             )
             val vcsFromUrl = VersionControlSystem.splitUrl(normalizeVcsUrl(vcsFromPackage.url))
             val vcsMerged = vcsFromUrl.merge(vcsFromPackage)
 
             val pkg = Package(
-                    id = Identifier(
-                            type = "NPM",
-                            namespace = "",
-                            name = "babel-cli",
-                            version = "6.26.0"
-                    ),
-                    declaredLicenses = sortedSetOf("MIT"),
-                    description = "Babel command line.",
-                    homepageUrl = "https://babeljs.io/",
-                    binaryArtifact = RemoteArtifact(
-                            url = "https://registry.npmjs.org/babel-cli/-/babel-cli-6.26.0.tgz",
-                            hash = "502ab54874d7db88ad00b887a06383ce03d002f1",
-                            hashAlgorithm = HashAlgorithm.SHA1
-                    ),
-                    sourceArtifact = RemoteArtifact.EMPTY,
-                    vcs = vcsFromPackage,
-                    vcsProcessed = vcsMerged
+                id = Identifier(
+                    type = "NPM",
+                    namespace = "",
+                    name = "babel-cli",
+                    version = "6.26.0"
+                ),
+                declaredLicenses = sortedSetOf("MIT"),
+                description = "Babel command line.",
+                homepageUrl = "https://babeljs.io/",
+                binaryArtifact = RemoteArtifact(
+                    url = "https://registry.npmjs.org/babel-cli/-/babel-cli-6.26.0.tgz",
+                    hash = "502ab54874d7db88ad00b887a06383ce03d002f1",
+                    hashAlgorithm = HashAlgorithm.SHA1
+                ),
+                sourceArtifact = RemoteArtifact.EMPTY,
+                vcs = vcsFromPackage,
+                vcsProcessed = vcsMerged
             )
 
             val downloadResult = Downloader().download(pkg, outputDir)

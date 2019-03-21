@@ -63,16 +63,18 @@ import org.gradle.tooling.GradleConnector
  * The Gradle package manager for Java, see https://gradle.org/.
  */
 class Gradle(name: String, analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfiguration) :
-        PackageManager(name, analyzerConfig, repoConfig) {
+    PackageManager(name, analyzerConfig, repoConfig) {
     class Factory : AbstractPackageManagerFactory<Gradle>("Gradle") {
         // Gradle prefers Groovy ".gradle" files over Kotlin ".gradle.kts" files, but "build" files have to come before
         // "settings" files as we should consider "settings" files only if the same directory does not also contain a
         // "build" file.
-        override val globsForDefinitionFiles = listOf("build.gradle", "build.gradle.kts",
-                "settings.gradle", "settings.gradle.kts")
+        override val globsForDefinitionFiles = listOf(
+            "build.gradle", "build.gradle.kts",
+            "settings.gradle", "settings.gradle.kts"
+        )
 
         override fun create(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfiguration) =
-                Gradle(managerName, analyzerConfig, repoConfig)
+            Gradle(managerName, analyzerConfig, repoConfig)
     }
 
     /**
@@ -83,8 +85,10 @@ class Gradle(name: String, analyzerConfig: AnalyzerConfiguration, repoConfig: Re
         private val gradleCacheRoot = getUserHomeDirectory().resolve(".gradle/caches/modules-2/files-2.1")
 
         override fun findArtifact(artifact: Artifact): File? {
-            val artifactRootDir = File(gradleCacheRoot,
-                    "${artifact.groupId}/${artifact.artifactId}/${artifact.version}")
+            val artifactRootDir = File(
+                gradleCacheRoot,
+                "${artifact.groupId}/${artifact.artifactId}/${artifact.version}"
+            )
 
             val artifactFile = artifactRootDir.walkTopDown().find {
                 val classifier = if (artifact.classifier.isNullOrBlank()) "" else "${artifact.classifier}-"
@@ -100,9 +104,9 @@ class Gradle(name: String, analyzerConfig: AnalyzerConfiguration, repoConfig: Re
         }
 
         override fun findVersions(artifact: Artifact) =
-                // Do not resolve versions of already locally available artifacts. This also ensures version resolution
-                // was done by Gradle.
-                if (findArtifact(artifact)?.isFile == true) listOf(artifact.version) else emptyList()
+        // Do not resolve versions of already locally available artifacts. This also ensures version resolution
+        // was done by Gradle.
+            if (findArtifact(artifact)?.isFile == true) listOf(artifact.version) else emptyList()
 
         override fun getRepository() = workspaceRepository
     }
@@ -111,18 +115,18 @@ class Gradle(name: String, analyzerConfig: AnalyzerConfiguration, repoConfig: Re
 
     override fun resolveDependencies(definitionFile: File): ProjectAnalyzerResult? {
         val gradleConnection = GradleConnector
-                .newConnector()
-                .forProjectDirectory(definitionFile.parentFile)
-                .connect()
+            .newConnector()
+            .forProjectDirectory(definitionFile.parentFile)
+            .connect()
 
         gradleConnection.use { connection ->
             val initScriptFile = File.createTempFile("init", ".gradle")
             initScriptFile.writeBytes(javaClass.getResource("/scripts/init.gradle").readBytes())
 
             val dependencyTreeModel = connection
-                    .model(DependencyTreeModel::class.java)
-                    .withArguments("--init-script", initScriptFile.absolutePath)
-                    .get()
+                .model(DependencyTreeModel::class.java)
+                .withArguments("--init-script", initScriptFile.absolutePath)
+                .get()
 
             if (!initScriptFile.delete()) {
                 log.warn { "Init script file '${initScriptFile.absolutePath}' could not be deleted." }
@@ -147,18 +151,18 @@ class Gradle(name: String, analyzerConfig: AnalyzerConfiguration, repoConfig: Re
             }
 
             val project = Project(
-                    id = Identifier(
-                            type = managerName,
-                            namespace = dependencyTreeModel.group,
-                            name = dependencyTreeModel.name,
-                            version = dependencyTreeModel.version
-                    ),
-                    definitionFilePath = VersionControlSystem.getPathInfo(definitionFile).path,
-                    declaredLicenses = sortedSetOf(),
-                    vcs = VcsInfo.EMPTY,
-                    vcsProcessed = processProjectVcs(definitionFile.parentFile),
-                    homepageUrl = "",
-                    scopes = scopes.toSortedSet()
+                id = Identifier(
+                    type = managerName,
+                    namespace = dependencyTreeModel.group,
+                    name = dependencyTreeModel.name,
+                    version = dependencyTreeModel.version
+                ),
+                definitionFilePath = VersionControlSystem.getPathInfo(definitionFile).path,
+                declaredLicenses = sortedSetOf(),
+                vcs = VcsInfo.EMPTY,
+                vcsProcessed = processProjectVcs(definitionFile.parentFile),
+                homepageUrl = "",
+                scopes = scopes.toSortedSet()
             )
 
             val issues = mutableListOf<OrtIssue>()
@@ -175,8 +179,10 @@ class Gradle(name: String, analyzerConfig: AnalyzerConfiguration, repoConfig: Re
         }
     }
 
-    private fun parseDependency(dependency: Dependency, packages: MutableMap<String, Package>,
-                                repositories: List<RemoteRepository>): PackageReference {
+    private fun parseDependency(
+        dependency: Dependency, packages: MutableMap<String, Package>,
+        repositories: List<RemoteRepository>
+    ): PackageReference {
         val issues = mutableListOf<OrtIssue>()
 
         dependency.error?.let { issues += OrtIssue(source = managerName, message = it, severity = Severity.ERROR) }
@@ -188,8 +194,10 @@ class Gradle(name: String, analyzerConfig: AnalyzerConfiguration, repoConfig: Re
 
             packages.getOrPut(identifier) {
                 try {
-                    val artifact = DefaultArtifact(dependency.groupId, dependency.artifactId, dependency.classifier,
-                            dependency.extension, dependency.version)
+                    val artifact = DefaultArtifact(
+                        dependency.groupId, dependency.artifactId, dependency.classifier,
+                        dependency.extension, dependency.version
+                    )
 
                     maven.parsePackage(artifact, repositories)
                 } catch (e: ProjectBuildingException) {
@@ -202,19 +210,19 @@ class Gradle(name: String, analyzerConfig: AnalyzerConfiguration, repoConfig: Re
                     issues += OrtIssue(source = managerName, message = e.collectMessagesAsString())
 
                     Package(
-                            id = Identifier(
-                                    type = "Maven",
-                                    namespace = dependency.groupId,
-                                    name = dependency.artifactId,
-                                    version = dependency.version
-                            ),
-                            declaredLicenses = sortedSetOf(),
-                            description = "",
-                            homepageUrl = "",
-                            binaryArtifact = RemoteArtifact.EMPTY,
-                            sourceArtifact = RemoteArtifact.EMPTY,
-                            vcs = VcsInfo.EMPTY,
-                            vcsProcessed = VcsInfo.EMPTY
+                        id = Identifier(
+                            type = "Maven",
+                            namespace = dependency.groupId,
+                            name = dependency.artifactId,
+                            version = dependency.version
+                        ),
+                        declaredLicenses = sortedSetOf(),
+                        description = "",
+                        homepageUrl = "",
+                        binaryArtifact = RemoteArtifact.EMPTY,
+                        sourceArtifact = RemoteArtifact.EMPTY,
+                        vcs = VcsInfo.EMPTY,
+                        vcsProcessed = VcsInfo.EMPTY
                     )
                 }
             }

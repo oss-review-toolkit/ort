@@ -32,19 +32,25 @@ class SpdxLicenseTest : StringSpec({
         val gpl10OrLater = SpdxLicense.forId("GPL-1.0+")
         gpl10OrLater shouldNotBe null
         val gpl10OrLaterText = gpl10OrLater!!.text.replace("\n", " ").trimEnd()
-        gpl10OrLaterText should startWith("This program is free software; you can redistribute it and/or modify it " +
-                "under the terms of the GNU General Public License")
+        gpl10OrLaterText should startWith(
+            "This program is free software; you can redistribute it and/or modify it " +
+                    "under the terms of the GNU General Public License"
+        )
         gpl10OrLaterText should include("; either version 1, or (at your option) any later version.")
         gpl10OrLaterText should endWith("That's all there is to it!")
 
         val gpl20OrLater = SpdxLicense.forId("GPL-2.0-or-later")
         gpl20OrLater shouldNotBe null
         val gpl20OrLaterText = gpl20OrLater!!.text.replace("\n", " ").trimEnd()
-        gpl20OrLaterText should startWith("This program is free software; you can redistribute it and/or modify it " +
-                "under the terms of the GNU General Public License")
+        gpl20OrLaterText should startWith(
+            "This program is free software; you can redistribute it and/or modify it " +
+                    "under the terms of the GNU General Public License"
+        )
         gpl20OrLaterText should include("; either version 2 of the License, or (at your option) any later version.")
-        gpl20OrLaterText should endWith("If this is what you want to do, use the GNU Lesser General Public License " +
-                "instead of this License.")
+        gpl20OrLaterText should endWith(
+            "If this is what you want to do, use the GNU Lesser General Public License " +
+                    "instead of this License."
+        )
     }
 
     "The text for 'or later' non-GPLs should be correct" {

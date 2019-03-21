@@ -29,14 +29,14 @@ class IdentifierTest : StringSpec() {
     init {
         "String representation is correct" {
             val mapping = mapOf(
-                    Identifier("manager", "namespace", "name", "version")
-                            to "manager:namespace:name:version",
-                    Identifier("", "", "", "")
-                            to ":::",
-                    Identifier("manager", "namespace", "name", "")
-                            to "manager:namespace:name:",
-                    Identifier("manager", "", "name", "version")
-                            to "manager::name:version"
+                Identifier("manager", "namespace", "name", "version")
+                        to "manager:namespace:name:version",
+                Identifier("", "", "", "")
+                        to ":::",
+                Identifier("manager", "namespace", "name", "")
+                        to "manager:namespace:name:",
+                Identifier("manager", "", "name", "version")
+                        to "manager::name:version"
             )
 
             mapping.forEach { identifier, stringRepresentation ->
@@ -46,14 +46,14 @@ class IdentifierTest : StringSpec() {
 
         "String representation is parsed correctly" {
             val mapping = mapOf(
-                    "manager:namespace:name:version"
-                            to Identifier("manager", "namespace", "name", "version"),
-                    ":::"
-                            to Identifier("", "", "", ""),
-                    "manager:namespace:name:"
-                            to Identifier("manager", "namespace", "name", ""),
-                    "manager::name:version"
-                            to Identifier("manager", "", "name", "version")
+                "manager:namespace:name:version"
+                        to Identifier("manager", "namespace", "name", "version"),
+                ":::"
+                        to Identifier("", "", "", ""),
+                "manager:namespace:name:"
+                        to Identifier("manager", "namespace", "name", ""),
+                "manager::name:version"
+                        to Identifier("manager", "", "name", "version")
             )
 
             mapping.forEach { stringRepresentation, identifier ->
@@ -63,26 +63,27 @@ class IdentifierTest : StringSpec() {
 
         "Identifiers match correctly" {
             val matching = mapOf(
-                    "maven:org.hamcrest:hamcrest-core:1.3"
-                            to "maven:org.hamcrest:hamcrest-core:1.3",
-                    "maven:org.hamcrest:hamcrest-core:1.3"
-                            to "maven:org.hamcrest:hamcrest-core:",
-                    "maven:org.hamcrest:hamcrest-core:1.3"
-                            to "maven:org.hamcrest::1.3",
-                    "maven:org.hamcrest:hamcrest-core:1.3"
-                            to "maven:org.hamcrest::")
+                "maven:org.hamcrest:hamcrest-core:1.3"
+                        to "maven:org.hamcrest:hamcrest-core:1.3",
+                "maven:org.hamcrest:hamcrest-core:1.3"
+                        to "maven:org.hamcrest:hamcrest-core:",
+                "maven:org.hamcrest:hamcrest-core:1.3"
+                        to "maven:org.hamcrest::1.3",
+                "maven:org.hamcrest:hamcrest-core:1.3"
+                        to "maven:org.hamcrest::"
+            )
 
             val nonMatching = mapOf(
-                    "maven:org.hamcrest:hamcrest-core:1.3"
-                            to "maven:org.hamcrest:hamcrest-core:1.2",
-                    "maven:org.hamcrest:hamcrest-core:1.3"
-                            to "maven:org.hamcrest:hamcrest-library:",
-                    "maven:org.hamcrest:hamcrest-core:"
-                            to "maven:org.hamcrest:hamcrest-library:",
-                    "maven:org.hamcrest::"
-                            to "maven:org.apache::",
-                    "maven:org.hamcrest::"
-                            to "gradle:org.hamcrest::"
+                "maven:org.hamcrest:hamcrest-core:1.3"
+                        to "maven:org.hamcrest:hamcrest-core:1.2",
+                "maven:org.hamcrest:hamcrest-core:1.3"
+                        to "maven:org.hamcrest:hamcrest-library:",
+                "maven:org.hamcrest:hamcrest-core:"
+                        to "maven:org.hamcrest:hamcrest-library:",
+                "maven:org.hamcrest::"
+                        to "maven:org.apache::",
+                "maven:org.hamcrest::"
+                        to "gradle:org.hamcrest::"
             )
 
             matching.forEach { id1, id2 ->

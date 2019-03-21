@@ -25,16 +25,16 @@ import com.fasterxml.jackson.annotation.JsonProperty
  * This class assigns a [PackageCurationData] object to a [Package] identified by the [id].
  */
 data class PackageCuration(
-        /**
-         * The identifier of the package.
-         */
-        val id: Identifier,
+    /**
+     * The identifier of the package.
+     */
+    val id: Identifier,
 
-        /**
-         * The curation data for the package.
-         */
-        @JsonProperty("curations")
-        val data: PackageCurationData
+    /**
+     * The curation data for the package.
+     */
+    @JsonProperty("curations")
+    val data: PackageCurationData
 ) {
     /**
      * Apply the curation [data] to the provided package.
@@ -43,8 +43,10 @@ data class PackageCuration(
      */
     fun apply(curatedPackage: CuratedPackage): CuratedPackage {
         if (!id.matches(curatedPackage.pkg.id)) {
-            throw IllegalArgumentException("Package curation identifier '${id.toCoordinates()}' does not match " +
-                    "package identifier '${curatedPackage.pkg.id.toCoordinates()}'.")
+            throw IllegalArgumentException(
+                "Package curation identifier '${id.toCoordinates()}' does not match " +
+                        "package identifier '${curatedPackage.pkg.id.toCoordinates()}'."
+            )
         }
 
         return data.apply(curatedPackage)

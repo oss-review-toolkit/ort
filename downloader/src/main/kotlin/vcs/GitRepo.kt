@@ -92,8 +92,10 @@ class GitRepo : GitBase() {
      *
      * @throws DownloadException In case the download failed.
      */
-    override fun download(pkg: Package, targetDir: File, allowMovingRevisions: Boolean,
-                          recursive: Boolean): WorkingTree {
+    override fun download(
+        pkg: Package, targetDir: File, allowMovingRevisions: Boolean,
+        recursive: Boolean
+    ): WorkingTree {
         val revision = pkg.vcsProcessed.revision.takeUnless { it.isBlank() } ?: "master"
         val manifestPath = pkg.vcsProcessed.path.takeUnless { it.isBlank() } ?: "default.xml"
 
@@ -104,8 +106,10 @@ class GitRepo : GitBase() {
             }
 
             // Clone all projects instead of only those in the "default" group until we support specifying groups.
-            runRepoCommand(targetDir, "init", "--groups=all", "-b", revision, "-u", pkg.vcsProcessed.url,
-                    "-m", manifestPath)
+            runRepoCommand(
+                targetDir, "init", "--groups=all", "-b", revision, "-u", pkg.vcsProcessed.url,
+                "-m", manifestPath
+            )
 
             // Repo allows to checkout Git repositories to nested directories. If a manifest is badly configured, a
             // nested Git checkout overwrites files in a directory of the upper-level Git repository. However, we still
@@ -127,12 +131,12 @@ class GitRepo : GitBase() {
     }
 
     private fun runRepoCommand(targetDir: File, vararg args: String) =
-            if (OS.isWindows) {
-                val repo = getPathFromEnvironment("repo") ?: throw IOException("'repo' not found in PATH.")
+        if (OS.isWindows) {
+            val repo = getPathFromEnvironment("repo") ?: throw IOException("'repo' not found in PATH.")
 
-                // On Windows, the script itself is not executable, so we need to wrap the call by "python".
-                ProcessCapture(targetDir, "python", repo.absolutePath, *args).requireSuccess()
-            } else {
-                ProcessCapture(targetDir, "repo", *args).requireSuccess()
-            }
+            // On Windows, the script itself is not executable, so we need to wrap the call by "python".
+            ProcessCapture(targetDir, "python", repo.absolutePath, *args).requireSuccess()
+        } else {
+            ProcessCapture(targetDir, "repo", *args).requireSuccess()
+        }
 }

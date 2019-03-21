@@ -48,125 +48,127 @@ class Cvs : VersionControlSystem(), CommandLineTool {
     override fun command(workingDir: File?) = "cvs"
 
     override fun getVersion() =
-            getVersion { output ->
-                versionRegex.matcher(output.lineSequence().first()).let {
-                    if (it.matches()) {
-                        it.group("version")
-                    } else {
-                        ""
-                    }
+        getVersion { output ->
+            versionRegex.matcher(output.lineSequence().first()).let {
+                if (it.matches()) {
+                    it.group("version")
+                } else {
+                    ""
                 }
             }
+        }
 
     override fun getWorkingTree(vcsDirectory: File) =
-            object : WorkingTree(vcsDirectory, type) {
-                private val cvsDirectory = File(workingDir, "CVS")
+        object : WorkingTree(vcsDirectory, type) {
+            private val cvsDirectory = File(workingDir, "CVS")
 
-                override fun isValid(): Boolean {
-                    if (!workingDir.isDirectory) {
-                        return false
-                    }
-
-                    return ProcessCapture(workingDir, "cvs", "status", "-l").isSuccess
+            override fun isValid(): Boolean {
+                if (!workingDir.isDirectory) {
+                    return false
                 }
 
-                override fun isShallow() = false
+                return ProcessCapture(workingDir, "cvs", "status", "-l").isSuccess
+            }
 
-                override fun getRemoteUrl() = File(cvsDirectory, "Root").useLines { it.first() }
+            override fun isShallow() = false
 
-                override fun getRevision() =
-                        // CVS does not have the concept of a global revision, but each file has its own revision. As
-                        // we just use the revision to uniquely identify the state of a working tree, simply create an
-                        // artificial single revision based on the revisions of all files.
-                        getFileRevisionsHash(getFileRevisions())
+            override fun getRemoteUrl() = File(cvsDirectory, "Root").useLines { it.first() }
 
-                private fun getFileRevisions(): CvsFileRevisions {
-                    val cvsLog = run(workingDir, "log", "-h")
+            override fun getRevision() =
+            // CVS does not have the concept of a global revision, but each file has its own revision. As
+            // we just use the revision to uniquely identify the state of a working tree, simply create an
+            // artificial single revision based on the revisions of all files.
+                getFileRevisionsHash(getFileRevisions())
 
-                    var currentWorkingFile = ""
-                    return cvsLog.stdout.lines().mapNotNull { line ->
-                        var value = line.removePrefix("Working file: ")
+            private fun getFileRevisions(): CvsFileRevisions {
+                val cvsLog = run(workingDir, "log", "-h")
+
+                var currentWorkingFile = ""
+                return cvsLog.stdout.lines().mapNotNull { line ->
+                    var value = line.removePrefix("Working file: ")
+                    if (value.length < line.length) {
+                        currentWorkingFile = value
+                    } else {
+                        value = line.removePrefix("head: ")
                         if (value.length < line.length) {
-                            currentWorkingFile = value
-                        } else {
-                            value = line.removePrefix("head: ")
-                            if (value.length < line.length) {
-                                if (currentWorkingFile.isNotBlank() && value.isNotBlank()) {
-                                    return@mapNotNull Pair(currentWorkingFile, value)
-                                }
+                            if (currentWorkingFile.isNotBlank() && value.isNotBlank()) {
+                                return@mapNotNull Pair(currentWorkingFile, value)
                             }
                         }
+                    }
 
-                        null
-                    }.sortedBy { it.first }
-                }
+                    null
+                }.sortedBy { it.first }
+            }
 
-                private fun getFileRevisionsHash(fileRevisions: CvsFileRevisions): String {
-                    val digest = fileRevisions.fold(DigestUtils.getSha1Digest()) { digest, (file, revision) ->
-                        DigestUtils.updateDigest(digest, file)
-                        DigestUtils.updateDigest(digest, revision)
-                    }.digest()
+            private fun getFileRevisionsHash(fileRevisions: CvsFileRevisions): String {
+                val digest = fileRevisions.fold(DigestUtils.getSha1Digest()) { digest, (file, revision) ->
+                    DigestUtils.updateDigest(digest, file)
+                    DigestUtils.updateDigest(digest, revision)
+                }.digest()
 
-                    return Hex.encodeHexString(digest)
-                }
+                return Hex.encodeHexString(digest)
+            }
 
-                override fun getRootPath(): File {
-                    val rootDir = workingDir.searchUpwardsForSubdirectory("CVS")
-                    return rootDir ?: workingDir
-                }
+            override fun getRootPath(): File {
+                val rootDir = workingDir.searchUpwardsForSubdirectory("CVS")
+                return rootDir ?: workingDir
+            }
 
-                private fun listSymbolicNames(): Map<String, String> {
-                    val cvsLog = run(workingDir, "log", "-h")
-                    var tagsSectionStarted = false
+            private fun listSymbolicNames(): Map<String, String> {
+                val cvsLog = run(workingDir, "log", "-h")
+                var tagsSectionStarted = false
 
-                    return cvsLog.stdout.lines().mapNotNull { line ->
-                        if (tagsSectionStarted) {
-                            if (line.startsWith('\t')) {
-                                line.split(':', limit = 2).let {
-                                    Pair(it.first().trim(), it.last().trim())
-                                }
-                            } else {
-                                tagsSectionStarted = false
-                                null
+                return cvsLog.stdout.lines().mapNotNull { line ->
+                    if (tagsSectionStarted) {
+                        if (line.startsWith('\t')) {
+                            line.split(':', limit = 2).let {
+                                Pair(it.first().trim(), it.last().trim())
                             }
                         } else {
-                            if (line == "symbolic names:") {
-                                tagsSectionStarted = true
-                            }
+                            tagsSectionStarted = false
                             null
                         }
-                    }.toMap().toSortedMap()
-                }
-
-                private fun isBranchVersion(version: String): Boolean {
-                    // See http://cvsgui.sourceforge.net/howto/cvsdoc/cvs_5.html#SEC59.
-                    val decimals = version.split('.')
-
-                    // "Externally, branch numbers consist of an odd number of dot-separated decimal
-                    // integers."
-                    return decimals.count() % 2 != 0 ||
-                            // "That is not the whole truth, however. For efficiency reasons CVS sometimes inserts
-                            // an extra 0 in the second rightmost position."
-                            decimals.dropLast(1).last() == "0"
-                }
-
-                override fun listRemoteBranches(): List<String> {
-                    return listSymbolicNames().mapNotNull { (name, version) ->
-                        if (isBranchVersion(version)) name else null
+                    } else {
+                        if (line == "symbolic names:") {
+                            tagsSectionStarted = true
+                        }
+                        null
                     }
-                }
+                }.toMap().toSortedMap()
+            }
 
-                override fun listRemoteTags(): List<String> {
-                    return listSymbolicNames().mapNotNull { (name, version) ->
-                        if (isBranchVersion(version)) null else name
-                    }
+            private fun isBranchVersion(version: String): Boolean {
+                // See http://cvsgui.sourceforge.net/howto/cvsdoc/cvs_5.html#SEC59.
+                val decimals = version.split('.')
+
+                // "Externally, branch numbers consist of an odd number of dot-separated decimal
+                // integers."
+                return decimals.count() % 2 != 0 ||
+                        // "That is not the whole truth, however. For efficiency reasons CVS sometimes inserts
+                        // an extra 0 in the second rightmost position."
+                        decimals.dropLast(1).last() == "0"
+            }
+
+            override fun listRemoteBranches(): List<String> {
+                return listSymbolicNames().mapNotNull { (name, version) ->
+                    if (isBranchVersion(version)) name else null
                 }
             }
+
+            override fun listRemoteTags(): List<String> {
+                return listSymbolicNames().mapNotNull { (name, version) ->
+                    if (isBranchVersion(version)) null else name
+                }
+            }
+        }
 
     override fun isApplicableUrlInternal(vcsUrl: String) = vcsUrl.matches(":(ext|pserver):[^@]+@.+".toRegex())
 
-    override fun download(pkg: Package, targetDir: File, allowMovingRevisions: Boolean,
-                          recursive: Boolean): WorkingTree {
+    override fun download(
+        pkg: Package, targetDir: File, allowMovingRevisions: Boolean,
+        recursive: Boolean
+    ): WorkingTree {
         log.info { "Using $type version ${getVersion()}." }
 
         try {
@@ -210,8 +212,10 @@ class Cvs : VersionControlSystem(), CommandLineTool {
 
             pkg.vcsProcessed.path.let {
                 if (it.isNotEmpty() && !workingTree.workingDir.resolve(it).exists()) {
-                    throw DownloadException("The $type working directory at '${workingTree.workingDir}' does not " +
-                            "contain the requested path '$it'.")
+                    throw DownloadException(
+                        "The $type working directory at '${workingTree.workingDir}' does not " +
+                                "contain the requested path '$it'."
+                    )
                 }
             }
 

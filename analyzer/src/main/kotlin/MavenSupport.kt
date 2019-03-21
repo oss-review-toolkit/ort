@@ -95,8 +95,10 @@ class MavenSupport(workspaceReader: WorkspaceReader) {
         val SCM_REGEX = Pattern.compile("scm:(?<type>[^:]+):(?<url>.+)")!!
 
         private val remoteArtifactCache =
-                DiskCache(File(getUserOrtDirectory(), "$TOOL_NAME/cache/remote_artifacts"),
-                        MAX_DISK_CACHE_SIZE_IN_BYTES, MAX_DISK_CACHE_ENTRY_AGE_SECONDS)
+            DiskCache(
+                File(getUserOrtDirectory(), "$TOOL_NAME/cache/remote_artifacts"),
+                MAX_DISK_CACHE_SIZE_IN_BYTES, MAX_DISK_CACHE_ENTRY_AGE_SECONDS
+            )
 
         private fun createContainer(): PlexusContainer {
             val configuration = DefaultContainerConfiguration().apply {
@@ -113,13 +115,13 @@ class MavenSupport(workspaceReader: WorkspaceReader) {
         }
 
         fun parseLicenses(mavenProject: MavenProject) =
-                mavenProject.licenses.mapNotNull {
-                    if (it.comments?.startsWith("SPDX-License-Identifier:") == true) {
-                        it.comments.removePrefix("SPDX-License-Identifier:")
-                    } else {
-                        it.name ?: it.url ?: it.comments
-                    }?.trim()
-                }.toSortedSet()
+            mavenProject.licenses.mapNotNull {
+                if (it.comments?.startsWith("SPDX-License-Identifier:") == true) {
+                    it.comments.removePrefix("SPDX-License-Identifier:")
+                } else {
+                    it.name ?: it.url ?: it.comments
+                }?.trim()
+            }.toSortedSet()
 
         private fun parseScm(scm: Scm?): VcsInfo {
             val connection = scm?.connection ?: ""
@@ -144,8 +146,10 @@ class MavenSupport(workspaceReader: WorkspaceReader) {
                         // http://maven.apache.org/scm/scms-overview.html, so come up with a convention to use the URL
                         // fragment for the path to the manifest inside the repository.
                         type == "git-repo" -> {
-                            VcsInfo(type = type, url = url.substringBefore('?'), revision = tag,
-                                    path = url.substringAfter('?'))
+                            VcsInfo(
+                                type = type, url = url.substringBefore('?'), revision = tag,
+                                path = url.substringAfter('?')
+                            )
                         }
 
                         type == "svn" -> {
@@ -231,17 +235,23 @@ class MavenSupport(workspaceReader: WorkspaceReader) {
     private fun createRepositorySystemSession(workspaceReader: WorkspaceReader): RepositorySystemSession {
         val mavenRepositorySystem = container.lookup(MavenRepositorySystem::class.java, "default")
         val aetherRepositorySystem = container.lookup(RepositorySystem::class.java, "default")
-        val repositorySystemSessionFactory = container.lookup(DefaultRepositorySystemSessionFactory::class.java,
-                "default")
+        val repositorySystemSessionFactory = container.lookup(
+            DefaultRepositorySystemSessionFactory::class.java,
+            "default"
+        )
 
         val repositorySystemSession = repositorySystemSessionFactory
-                .newRepositorySession(createMavenExecutionRequest())
+            .newRepositorySession(createMavenExecutionRequest())
 
-        val localRepository = mavenRepositorySystem.createLocalRepository(createMavenExecutionRequest(),
-                org.apache.maven.repository.RepositorySystem.defaultUserLocalRepository)
+        val localRepository = mavenRepositorySystem.createLocalRepository(
+            createMavenExecutionRequest(),
+            org.apache.maven.repository.RepositorySystem.defaultUserLocalRepository
+        )
 
-        val session = LegacyLocalRepositoryManager.overlay(localRepository, repositorySystemSession,
-                aetherRepositorySystem)
+        val session = LegacyLocalRepositoryManager.overlay(
+            localRepository, repositorySystemSession,
+            aetherRepositorySystem
+        )
 
         return DefaultRepositorySystemSession(session).setWorkspaceReader(workspaceReader)
     }
@@ -299,7 +309,7 @@ class MavenSupport(workspaceReader: WorkspaceReader) {
         // Create an artifact descriptor to get the list of repositories from the related POM file.
         val artifactDescriptorRequest = ArtifactDescriptorRequest(artifact, repositories, "project")
         val artifactDescriptorResult = repoSystem
-                .readArtifactDescriptor(repositorySystemSession, artifactDescriptorRequest)
+            .readArtifactDescriptor(repositorySystemSession, artifactDescriptorRequest)
         val allRepositories = (artifactDescriptorResult.repositories + repositories).distinct()
 
         // Filter out local repositories, as remote artifacts should never point to files on the local disk.
@@ -338,7 +348,7 @@ class MavenSupport(workspaceReader: WorkspaceReader) {
             val policy = remoteRepositoryManager.getPolicy(repositorySystemSession, repository, !snapshot, snapshot)
 
             val localPath = repositorySystemSession.localRepositoryManager
-                    .getPathForRemoteArtifact(artifact, repository, "project")
+                .getPathForRemoteArtifact(artifact, repository, "project")
             val downloadFile = File(repositorySystemSession.localRepositoryManager.repository.basedir, localPath)
 
             val artifactDownload = ArtifactDownload(artifact, "project", downloadFile, policy.checksumPolicy)
@@ -356,7 +366,7 @@ class MavenSupport(workspaceReader: WorkspaceReader) {
             try {
                 wrapMavenSession {
                     val repositoryConnector = repositoryConnectorProvider
-                            .newRepositoryConnector(repositorySystemSession, repository)
+                        .newRepositoryConnector(repositorySystemSession, repository)
                     repositoryConnector.get(listOf(artifactDownload), null)
                 }
             } catch (e: NoRepositoryConnectorException) {
@@ -428,8 +438,10 @@ class MavenSupport(workspaceReader: WorkspaceReader) {
      * @param sbtMode If enabled assume that the POM files referenced from the [localProjects] were generated by
      *                "sbt makePom" and are therefore located below a "target" subdirectory of the actual project.
      */
-    fun parsePackage(artifact: Artifact, repositories: List<RemoteRepository>,
-                     localProjects: Map<String, MavenProject> = emptyMap(), sbtMode: Boolean = false): Package {
+    fun parsePackage(
+        artifact: Artifact, repositories: List<RemoteRepository>,
+        localProjects: Map<String, MavenProject> = emptyMap(), sbtMode: Boolean = false
+    ): Package {
         val mavenRepositorySystem = container.lookup(MavenRepositorySystem::class.java, "default")
         val projectBuilder = container.lookup(ProjectBuilder::class.java, "default")
         val projectBuildingRequest = createProjectBuildingRequest(false)
@@ -447,7 +459,7 @@ class MavenSupport(workspaceReader: WorkspaceReader) {
             log.info { "'${artifact.identifier()}' refers to a local project." }
         } ?: artifact.let {
             val pomArtifact = mavenRepositorySystem
-                    .createArtifact(it.groupId, it.artifactId, it.version, "", "pom")
+                .createArtifact(it.groupId, it.artifactId, it.version, "", "pom")
 
             try {
                 wrapMavenSession {
@@ -507,19 +519,19 @@ class MavenSupport(workspaceReader: WorkspaceReader) {
         } ?: PackageManager.processPackageVcs(vcsFromPackage, homepageUrl)
 
         return Package(
-                id = Identifier(
-                        type = "Maven",
-                        namespace = mavenProject.groupId,
-                        name = mavenProject.artifactId,
-                        version = mavenProject.version
-                ),
-                declaredLicenses = parseLicenses(mavenProject),
-                description = mavenProject.description ?: "",
-                homepageUrl = homepageUrl,
-                binaryArtifact = binaryRemoteArtifact,
-                sourceArtifact = sourceRemoteArtifact,
-                vcs = vcsFromPackage,
-                vcsProcessed = vcsProcessed
+            id = Identifier(
+                type = "Maven",
+                namespace = mavenProject.groupId,
+                name = mavenProject.artifactId,
+                version = mavenProject.version
+            ),
+            declaredLicenses = parseLicenses(mavenProject),
+            description = mavenProject.description ?: "",
+            homepageUrl = homepageUrl,
+            binaryArtifact = binaryRemoteArtifact,
+            sourceArtifact = sourceRemoteArtifact,
+            vcs = vcsFromPackage,
+            vcsProcessed = vcsProcessed
         )
     }
 

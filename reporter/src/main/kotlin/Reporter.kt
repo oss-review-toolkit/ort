@@ -57,10 +57,10 @@ abstract class Reporter {
      * written to [outputStream].
      */
     abstract fun generateReport(
-            ortResult: OrtResult,
-            resolutionProvider: ResolutionProvider,
-            copyrightGarbage: CopyrightGarbage,
-            outputStream: OutputStream,
-            postProcessingScript: String? = null
+        ortResult: OrtResult,
+        resolutionProvider: ResolutionProvider,
+        copyrightGarbage: CopyrightGarbage,
+        outputStream: OutputStream,
+        postProcessingScript: String? = null
     )
 }

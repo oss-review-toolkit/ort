@@ -77,12 +77,12 @@ class SubversionTest : StringSpec() {
 
         "Subversion correctly lists remote branches".config(enabled = svn.isInPath()) {
             val expectedBranches = listOf(
-                    "address-rendering",
-                    "index-bug",
-                    "lossless-rst-writer",
-                    "nesting",
-                    "plugins",
-                    "subdocs"
+                "address-rendering",
+                "index-bug",
+                "lossless-rst-writer",
+                "nesting",
+                "plugins",
+                "subdocs"
             )
 
             val workingTree = svn.getWorkingTree(zipContentDir)
@@ -91,30 +91,30 @@ class SubversionTest : StringSpec() {
 
         "Subversion correctly lists remote tags".config(enabled = svn.isInPath()) {
             val expectedTags = listOf(
-                    "docutils-0.10",
-                    "docutils-0.11",
-                    "docutils-0.12",
-                    "docutils-0.13.1",
-                    "docutils-0.14",
-                    "docutils-0.14.0a",
-                    "docutils-0.14a0",
-                    "docutils-0.14rc1",
-                    "docutils-0.14rc2",
-                    "docutils-0.3.7",
-                    "docutils-0.3.9",
-                    "docutils-0.4",
-                    "docutils-0.5",
-                    "docutils-0.6",
-                    "docutils-0.7",
-                    "docutils-0.8",
-                    "docutils-0.8.1",
-                    "docutils-0.9",
-                    "docutils-0.9.1",
-                    "initial",
-                    "merged_to_nesting",
-                    "prest-0.3.10",
-                    "prest-0.3.11",
-                    "start"
+                "docutils-0.10",
+                "docutils-0.11",
+                "docutils-0.12",
+                "docutils-0.13.1",
+                "docutils-0.14",
+                "docutils-0.14.0a",
+                "docutils-0.14a0",
+                "docutils-0.14rc1",
+                "docutils-0.14rc2",
+                "docutils-0.3.7",
+                "docutils-0.3.9",
+                "docutils-0.4",
+                "docutils-0.5",
+                "docutils-0.6",
+                "docutils-0.7",
+                "docutils-0.8",
+                "docutils-0.8.1",
+                "docutils-0.9",
+                "docutils-0.9.1",
+                "initial",
+                "merged_to_nesting",
+                "prest-0.3.10",
+                "prest-0.3.11",
+                "start"
             )
 
             val workingTree = svn.getWorkingTree(zipContentDir)

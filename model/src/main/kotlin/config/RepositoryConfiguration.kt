@@ -27,16 +27,16 @@ import com.fasterxml.jackson.annotation.JsonInclude
  * tools.
  */
 data class RepositoryConfiguration(
-        /**
-         * Defines which parts of the repository will be excluded. Note that excluded parts will still be analyzed and
-         * scanned, but related errors will be marked as resolved in the reporter output.
-         */
-        @JsonInclude(JsonInclude.Include.NON_NULL)
-        val excludes: Excludes? = null,
+    /**
+     * Defines which parts of the repository will be excluded. Note that excluded parts will still be analyzed and
+     * scanned, but related errors will be marked as resolved in the reporter output.
+     */
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    val excludes: Excludes? = null,
 
-        /**
-         * Defines resolutions for issues with this repository.
-         */
-        @JsonInclude(JsonInclude.Include.NON_NULL)
-        val resolutions: Resolutions? = null
+    /**
+     * Defines resolutions for issues with this repository.
+     */
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    val resolutions: Resolutions? = null
 )

@@ -29,43 +29,43 @@ import java.time.Instant
  * value. If both are null this indicates that no provenance information is available.
  */
 data class Provenance(
-        /**
-         * The time when the source code was downloaded, or [Instant.EPOCH] if unknown (e.g. for source code that was
-         * downloaded separately from running ORT).
-         */
-        @JsonAlias("downloadTime")
-        val downloadTime: Instant = Instant.EPOCH,
+    /**
+     * The time when the source code was downloaded, or [Instant.EPOCH] if unknown (e.g. for source code that was
+     * downloaded separately from running ORT).
+     */
+    @JsonAlias("downloadTime")
+    val downloadTime: Instant = Instant.EPOCH,
 
-        /**
-         * The source artifact that was downloaded, or null.
-         */
-        @JsonAlias("sourceArtifact")
-        @JsonInclude(JsonInclude.Include.NON_NULL)
-        val sourceArtifact: RemoteArtifact? = null,
+    /**
+     * The source artifact that was downloaded, or null.
+     */
+    @JsonAlias("sourceArtifact")
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    val sourceArtifact: RemoteArtifact? = null,
 
-        /**
-         * The VCS repository that was downloaded, or null.
-         */
-        @JsonAlias("vcsInfo")
-        @JsonInclude(JsonInclude.Include.NON_NULL)
-        val vcsInfo: VcsInfo? = null,
+    /**
+     * The VCS repository that was downloaded, or null.
+     */
+    @JsonAlias("vcsInfo")
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    val vcsInfo: VcsInfo? = null,
 
-        /**
-         * The original [VcsInfo] that was used to download the source code. It can be different to [vcsInfo] if any
-         * automatic detection took place. For example if the original [VcsInfo] does not contain any revision and the
-         * revision was automatically detected by searching for a tag that matches the version of the package there
-         * would be no way to match the package to the [Provenance] without downloading the source code and searching
-         * for the tag again.
-         */
-        @JsonAlias("originalVcsInfo")
-        @JsonInclude(JsonInclude.Include.NON_NULL)
-        val originalVcsInfo: VcsInfo? = null,
+    /**
+     * The original [VcsInfo] that was used to download the source code. It can be different to [vcsInfo] if any
+     * automatic detection took place. For example if the original [VcsInfo] does not contain any revision and the
+     * revision was automatically detected by searching for a tag that matches the version of the package there
+     * would be no way to match the package to the [Provenance] without downloading the source code and searching
+     * for the tag again.
+     */
+    @JsonAlias("originalVcsInfo")
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    val originalVcsInfo: VcsInfo? = null,
 
-        /**
-         * A map that holds arbitrary data. Can be used by third-party tools to add custom data to the model.
-         */
-        @JsonInclude(JsonInclude.Include.NON_EMPTY)
-        val data: CustomData = emptyMap()
+    /**
+     * A map that holds arbitrary data. Can be used by third-party tools to add custom data to the model.
+     */
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    val data: CustomData = emptyMap()
 ) {
     init {
         require(sourceArtifact == null || vcsInfo == null) {

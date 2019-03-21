@@ -28,22 +28,22 @@ import com.here.ort.model.OrtIssue
  * as not being relevant or are acceptable / approved.
  */
 data class RuleViolationResolution(
-        /**
-         * A regular expression string to match the messages of rule violations to resolve. Will be converted to
-         * a [Regex] using
-         * [RegexOption.DOT_MATCHES_ALL].
-         */
-        val message: String,
+    /**
+     * A regular expression string to match the messages of rule violations to resolve. Will be converted to
+     * a [Regex] using
+     * [RegexOption.DOT_MATCHES_ALL].
+     */
+    val message: String,
 
-        /**
-         * The reason why the rule violation is resolved.
-         */
-        val reason: RuleViolationResolutionReason,
+    /**
+     * The reason why the rule violation is resolved.
+     */
+    val reason: RuleViolationResolutionReason,
 
-        /**
-         * A comment to further explain why the [reason] is applicable here.
-         */
-        val comment: String
+    /**
+     * A comment to further explain why the [reason] is applicable here.
+     */
+    val comment: String
 ) {
     @JsonIgnore
     private val regex = Regex(message, RegexOption.DOT_MATCHES_ALL)

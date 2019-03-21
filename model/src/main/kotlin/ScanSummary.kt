@@ -30,37 +30,37 @@ import java.util.SortedSet
  * A short summary of the scan results.
  */
 data class ScanSummary(
-        /**
-         * The time when the scan started.
-         */
-        @JsonAlias("startTime")
-        val startTime: Instant,
+    /**
+     * The time when the scan started.
+     */
+    @JsonAlias("startTime")
+    val startTime: Instant,
 
-        /**
-         * The time when the scan finished.
-         */
-        @JsonAlias("endTime")
-        val endTime: Instant,
+    /**
+     * The time when the scan finished.
+     */
+    @JsonAlias("endTime")
+    val endTime: Instant,
 
-        /**
-         * The number of scanned files.
-         */
-        @JsonAlias("fileCount")
-        val fileCount: Int,
+    /**
+     * The number of scanned files.
+     */
+    @JsonAlias("fileCount")
+    val fileCount: Int,
 
-        /**
-         * The licenses associated to their respective copyrights, if any.
-         */
-        @JsonAlias("licenses")
-        val licenseFindings: SortedSet<LicenseFinding>,
+    /**
+     * The licenses associated to their respective copyrights, if any.
+     */
+    @JsonAlias("licenses")
+    val licenseFindings: SortedSet<LicenseFinding>,
 
-        /**
-         * The list of errors that occurred during the scan.
-         */
-        // Do not serialize if empty to reduce the size of the result file. If there are no errors at all,
-        // [ScanRecord.hasErrors] already contains that information.
-        @JsonInclude(JsonInclude.Include.NON_EMPTY)
-        val errors: List<OrtIssue> = emptyList()
+    /**
+     * The list of errors that occurred during the scan.
+     */
+    // Do not serialize if empty to reduce the size of the result file. If there are no errors at all,
+    // [ScanRecord.hasErrors] already contains that information.
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    val errors: List<OrtIssue> = emptyList()
 ) {
     @get:JsonIgnore
     val licenseFindingsMap = sortedMapOf<String, SortedSet<CopyrightFinding>>().also {

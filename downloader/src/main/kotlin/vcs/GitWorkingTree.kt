@@ -44,7 +44,7 @@ open class GitWorkingTree(workingDir: File, private val gitBase: GitBase) : Work
     override fun getNested(): Map<String, VcsInfo> {
         val root = getRootPath()
         val paths = gitBase.run(root, "submodule", "--quiet", "foreach", "--recursive", "echo \$displaypath").stdout
-                .lines().filter { it.isNotBlank() }
+            .lines().filter { it.isNotBlank() }
 
         return paths.associateWith { GitWorkingTree(root.resolve(it), gitBase).getInfo() }
     }
@@ -54,11 +54,11 @@ open class GitWorkingTree(workingDir: File, private val gitBase: GitBase) : Work
     override fun getRevision() = gitBase.run(workingDir, "rev-parse", "HEAD").stdout.trimEnd()
 
     override fun getRootPath() =
-            File(gitBase.run(workingDir, "rev-parse", "--show-toplevel").stdout.trimEnd('\n', '/'))
+        File(gitBase.run(workingDir, "rev-parse", "--show-toplevel").stdout.trimEnd('\n', '/'))
 
     private fun listRemoteRefs(namespace: String): List<String> {
         val tags = gitBase.run(workingDir, "ls-remote", "--refs", getFirstRemote(), "refs/$namespace/*")
-                .stdout.trimEnd()
+            .stdout.trimEnd()
         return tags.lines().map {
             it.split('\t').last().removePrefix("refs/$namespace/")
         }

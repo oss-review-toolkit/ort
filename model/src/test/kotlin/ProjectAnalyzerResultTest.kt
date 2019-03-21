@@ -34,54 +34,54 @@ class ProjectAnalyzerResultTest : StringSpec({
         val error8 = OrtIssue(source = "source-8", message = "error-8")
 
         val result = ProjectAnalyzerResult(
-                project = Project(
-                        id = Identifier("type", "namespace", "name", "version"),
-                        definitionFilePath = "definitionFilePath",
-                        declaredLicenses = sortedSetOf(),
-                        vcs = VcsInfo.EMPTY,
-                        vcsProcessed = VcsInfo.EMPTY,
-                        homepageUrl = "",
-                        scopes = sortedSetOf(
-                                Scope(
-                                        name = "scope 1",
-                                        dependencies = sortedSetOf(
-                                                PackageReference(
-                                                        Identifier(
-                                                                type = "type1",
-                                                                namespace = "namespace1",
-                                                                name = "name1",
-                                                                version = "version1"
-                                                        ),
-                                                        dependencies = sortedSetOf(
-                                                                PackageReference(
-                                                                        Identifier(
-                                                                                type = "type2",
-                                                                                namespace = "namespace2",
-                                                                                name = "name2",
-                                                                                version = "version2"
-                                                                        ),
-                                                                        dependencies = sortedSetOf(),
-                                                                        errors = listOf(error1, error2)
-                                                                )
-                                                        ),
-                                                        errors = listOf(error3, error4)
-                                                ),
-                                                PackageReference(
-                                                        Identifier(
-                                                                type = "type3",
-                                                                namespace = "namespace3",
-                                                                name = "name3",
-                                                                version = "version3"
-                                                        ),
-                                                        dependencies = sortedSetOf(),
-                                                        errors = listOf(error5, error6)
-                                                )
-                                        )
-                                )
+            project = Project(
+                id = Identifier("type", "namespace", "name", "version"),
+                definitionFilePath = "definitionFilePath",
+                declaredLicenses = sortedSetOf(),
+                vcs = VcsInfo.EMPTY,
+                vcsProcessed = VcsInfo.EMPTY,
+                homepageUrl = "",
+                scopes = sortedSetOf(
+                    Scope(
+                        name = "scope 1",
+                        dependencies = sortedSetOf(
+                            PackageReference(
+                                Identifier(
+                                    type = "type1",
+                                    namespace = "namespace1",
+                                    name = "name1",
+                                    version = "version1"
+                                ),
+                                dependencies = sortedSetOf(
+                                    PackageReference(
+                                        Identifier(
+                                            type = "type2",
+                                            namespace = "namespace2",
+                                            name = "name2",
+                                            version = "version2"
+                                        ),
+                                        dependencies = sortedSetOf(),
+                                        errors = listOf(error1, error2)
+                                    )
+                                ),
+                                errors = listOf(error3, error4)
+                            ),
+                            PackageReference(
+                                Identifier(
+                                    type = "type3",
+                                    namespace = "namespace3",
+                                    name = "name3",
+                                    version = "version3"
+                                ),
+                                dependencies = sortedSetOf(),
+                                errors = listOf(error5, error6)
+                            )
                         )
-                ),
-                packages = sortedSetOf(),
-                errors = listOf(error7, error8)
+                    )
+                )
+            ),
+            packages = sortedSetOf(),
+            errors = listOf(error7, error8)
         )
 
         val errors = result.collectErrors()

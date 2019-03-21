@@ -77,7 +77,7 @@ class CvsTest : StringSpec() {
 
         "CVS correctly lists remote branches".config(enabled = cvs.isInPath() && false) {
             val expectedBranches = listOf(
-                    "Exoffice"
+                "Exoffice"
             )
 
             val workingTree = cvs.getWorkingTree(zipContentDir)
@@ -86,17 +86,17 @@ class CvsTest : StringSpec() {
 
         "CVS correctly lists remote tags".config(enabled = cvs.isInPath() && false) {
             val expectedTags = listOf(
-                    "A02",
-                    "A03",
-                    "A04",
-                    "DEV0_9_3",
-                    "DEV0_9_4",
-                    "DEV_0_9_7",
-                    "PROD_1_0_1",
-                    "PROD_1_0_2",
-                    "PROD_1_0_3",
-                    "before_SourceForge",
-                    "before_debug_changes"
+                "A02",
+                "A03",
+                "A04",
+                "DEV0_9_3",
+                "DEV0_9_4",
+                "DEV_0_9_7",
+                "PROD_1_0_1",
+                "PROD_1_0_2",
+                "PROD_1_0_3",
+                "before_SourceForge",
+                "before_debug_changes"
             )
 
             val workingTree = cvs.getWorkingTree(zipContentDir)

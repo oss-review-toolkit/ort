@@ -80,12 +80,12 @@ class GitTest : StringSpec() {
 
         "Git correctly lists remote branches" {
             val expectedBranches = listOf(
-                    "debug-test-failures",
-                    "drop-py2.6",
-                    "fixing-test-setups",
-                    "master",
-                    "release-0.10.1",
-                    "reverse-mode"
+                "debug-test-failures",
+                "drop-py2.6",
+                "fixing-test-setups",
+                "master",
+                "release-0.10.1",
+                "reverse-mode"
             )
 
             val workingTree = git.getWorkingTree(zipContentDir)
@@ -94,19 +94,19 @@ class GitTest : StringSpec() {
 
         "Git correctly lists remote tags" {
             val expectedTags = listOf(
-                    "0.10.0",
-                    "0.10.1",
-                    "0.11.0",
-                    "0.12.0",
-                    "0.12.1",
-                    "0.13.0",
-                    "0.13.1",
-                    "0.13.2",
-                    "0.5.0",
-                    "0.6.0",
-                    "0.7.0",
-                    "0.8.0",
-                    "0.9.0"
+                "0.10.0",
+                "0.10.1",
+                "0.11.0",
+                "0.12.0",
+                "0.12.1",
+                "0.13.0",
+                "0.13.1",
+                "0.13.2",
+                "0.5.0",
+                "0.6.0",
+                "0.7.0",
+                "0.8.0",
+                "0.9.0"
             )
 
             val workingTree = git.getWorkingTree(zipContentDir)
@@ -115,15 +115,15 @@ class GitTest : StringSpec() {
 
         "Git correctly lists submodules" {
             val expectedSubmodules = listOf(
-                    "analyzer/src/funTest/assets/projects/external/directories",
-                    "analyzer/src/funTest/assets/projects/external/example-python-flask",
-                    "analyzer/src/funTest/assets/projects/external/godep",
-                    "analyzer/src/funTest/assets/projects/external/jgnash",
-                    "analyzer/src/funTest/assets/projects/external/qmstr",
-                    "analyzer/src/funTest/assets/projects/external/quickcheck-state-machine",
-                    "analyzer/src/funTest/assets/projects/external/sbt-multi-project-example",
-                    "analyzer/src/funTest/assets/projects/external/spdx-tools-python",
-                    "analyzer/src/funTest/assets/projects/external/sprig"
+                "analyzer/src/funTest/assets/projects/external/directories",
+                "analyzer/src/funTest/assets/projects/external/example-python-flask",
+                "analyzer/src/funTest/assets/projects/external/godep",
+                "analyzer/src/funTest/assets/projects/external/jgnash",
+                "analyzer/src/funTest/assets/projects/external/qmstr",
+                "analyzer/src/funTest/assets/projects/external/quickcheck-state-machine",
+                "analyzer/src/funTest/assets/projects/external/sbt-multi-project-example",
+                "analyzer/src/funTest/assets/projects/external/spdx-tools-python",
+                "analyzer/src/funTest/assets/projects/external/sprig"
             ).associateWith { VersionControlSystem.getPathInfo(File("../$it")) }
 
             val workingTree = git.getWorkingTree(File(".."))

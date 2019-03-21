@@ -28,10 +28,12 @@ import com.here.ort.utils.PARAMETER_ORDER_HELP
  * A JCommander command that offers command line help.
  */
 abstract class CommandWithHelp {
-    @Parameter(description = "Display the command line help.",
-            names = ["--help", "-h"],
-            help = true,
-            order = PARAMETER_ORDER_HELP)
+    @Parameter(
+        description = "Display the command line help.",
+        names = ["--help", "-h"],
+        help = true,
+        order = PARAMETER_ORDER_HELP
+    )
     private var help = false
 
     /**

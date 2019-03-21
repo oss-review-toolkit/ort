@@ -37,12 +37,12 @@ class ScanResultContainerTest : WordSpec() {
     private val downloadTime2 = Instant.EPOCH + Duration.ofDays(2)
 
     private val provenance1 = Provenance(
-            downloadTime = downloadTime1,
-            sourceArtifact = RemoteArtifact("url", "hash", HashAlgorithm.UNKNOWN)
+        downloadTime = downloadTime1,
+        sourceArtifact = RemoteArtifact("url", "hash", HashAlgorithm.UNKNOWN)
     )
     private val provenance2 = Provenance(
-            downloadTime = downloadTime2,
-            vcsInfo = VcsInfo("type", "url", "revision", "resolvedRevision", "path")
+        downloadTime = downloadTime2,
+        vcsInfo = VcsInfo("type", "url", "revision", "resolvedRevision", "path")
     )
 
     private val scannerDetails1 = ScannerDetails("name 1", "version 1", "config 1")
@@ -59,55 +59,59 @@ class ScanResultContainerTest : WordSpec() {
     private val error22 = OrtIssue(source = "source-22", message = "error-22")
 
     private val scanSummary1 = ScanSummary(
-            scannerStartTime1,
-            scannerEndTime1,
-            1,
-            sortedSetOf(
-                    LicenseFinding(
-                            "license 1.1",
-                            sortedSetOf(TextLocation("path 1.1", 1, 1)),
-                            sortedSetOf(CopyrightFinding(
-                                    "copyright 1",
-                                    sortedSetOf(TextLocation("copyright path 1.1", 1, 1))
-                            ))
-                    ),
-                    LicenseFinding(
-                            "license 1.2",
-                            sortedSetOf(TextLocation("path 1.2", 1, 2)),
-                            sortedSetOf(CopyrightFinding(
-                                    "copyright 2",
-                                    sortedSetOf(TextLocation("copyright path 1.2", 1, 2))
-                            ))
+        scannerStartTime1,
+        scannerEndTime1,
+        1,
+        sortedSetOf(
+            LicenseFinding(
+                "license 1.1",
+                sortedSetOf(TextLocation("path 1.1", 1, 1)),
+                sortedSetOf(
+                    CopyrightFinding(
+                        "copyright 1",
+                        sortedSetOf(TextLocation("copyright path 1.1", 1, 1))
                     )
+                )
             ),
-            mutableListOf(error11, error12)
+            LicenseFinding(
+                "license 1.2",
+                sortedSetOf(TextLocation("path 1.2", 1, 2)),
+                sortedSetOf(
+                    CopyrightFinding(
+                        "copyright 2",
+                        sortedSetOf(TextLocation("copyright path 1.2", 1, 2))
+                    )
+                )
+            )
+        ),
+        mutableListOf(error11, error12)
     )
     private val scanSummary2 = ScanSummary(
-            scannerStartTime2,
-            scannerEndTime2,
-            2,
-            sortedSetOf(
-                    LicenseFinding(
-                            "license 2.1",
-                            sortedSetOf(),
-                            sortedSetOf(CopyrightFinding("copyright 3", sortedSetOf()))
-                    ),
-                    LicenseFinding(
-                            "license 2.2",
-                            sortedSetOf(),
-                            sortedSetOf(CopyrightFinding("copyright 4", sortedSetOf()))
-                    )
+        scannerStartTime2,
+        scannerEndTime2,
+        2,
+        sortedSetOf(
+            LicenseFinding(
+                "license 2.1",
+                sortedSetOf(),
+                sortedSetOf(CopyrightFinding("copyright 3", sortedSetOf()))
             ),
-            mutableListOf(error21, error22)
+            LicenseFinding(
+                "license 2.2",
+                sortedSetOf(),
+                sortedSetOf(CopyrightFinding("copyright 4", sortedSetOf()))
+            )
+        ),
+        mutableListOf(error21, error22)
     )
 
     private val rawResult1 = jsonMapper.readTree("\"key 1\": \"value 1\"")
     private val rawResult2 = jsonMapper.readTree("\"key 2\": \"value 2\"")
 
     private val scanResult1 =
-            ScanResult(provenance1, scannerDetails1, scanSummary1, rawResult1)
+        ScanResult(provenance1, scannerDetails1, scanSummary1, rawResult1)
     private val scanResult2 =
-            ScanResult(provenance2, scannerDetails2, scanSummary2, rawResult2)
+        ScanResult(provenance2, scannerDetails2, scanSummary2, rawResult2)
 
     private val scanResults = ScanResultContainer(id, listOf(scanResult1, scanResult2))
 
@@ -142,13 +146,13 @@ class ScanResultContainerTest : WordSpec() {
                 val scanResults = deprecatedScanResultsFile.readValue<ScanResultContainer>()
 
                 scanResults.results[0].summary.errors shouldBe listOf(
-                        OrtIssue(timestamp = Instant.EPOCH, source = "", message = "error-11"),
-                        OrtIssue(timestamp = Instant.EPOCH, source = "", message = "error-12")
+                    OrtIssue(timestamp = Instant.EPOCH, source = "", message = "error-11"),
+                    OrtIssue(timestamp = Instant.EPOCH, source = "", message = "error-12")
                 )
 
                 scanResults.results[1].summary.errors shouldBe listOf(
-                        OrtIssue(timestamp = Instant.EPOCH, source = "", message = "error-21"),
-                        OrtIssue(timestamp = Instant.EPOCH, source = "", message = "error-22")
+                    OrtIssue(timestamp = Instant.EPOCH, source = "", message = "error-21"),
+                    OrtIssue(timestamp = Instant.EPOCH, source = "", message = "error-22")
                 )
             }
         }

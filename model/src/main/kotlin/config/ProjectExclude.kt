@@ -30,36 +30,36 @@ import com.fasterxml.jackson.databind.ser.std.ToStringSerializer
  * a list of [scopes] to exclude only specific scopes.
  */
 data class ProjectExclude(
-        /**
-         * A regular expression to match the path of the project definition file, relative to the root of the
-         * repository.
-         */
-        @JsonSerialize(using = ToStringSerializer::class)
-        val path: Regex,
+    /**
+     * A regular expression to match the path of the project definition file, relative to the root of the
+     * repository.
+     */
+    @JsonSerialize(using = ToStringSerializer::class)
+    val path: Regex,
 
-        /**
-         * The reason why the project is excluded, out of a predefined choice.
-         */
-        @JsonInclude(JsonInclude.Include.NON_NULL)
-        val reason: ProjectExcludeReason? = null,
+    /**
+     * The reason why the project is excluded, out of a predefined choice.
+     */
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    val reason: ProjectExcludeReason? = null,
 
-        /**
-         * A comment to further explain why the [reason] is applicable here.
-         */
-        @JsonInclude(JsonInclude.Include.NON_NULL)
-        val comment: String? = null,
+    /**
+     * A comment to further explain why the [reason] is applicable here.
+     */
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    val comment: String? = null,
 
-        /**
-         * Scopes that will be excluded from this project.
-         */
-        @JsonInclude(JsonInclude.Include.NON_EMPTY)
-        val scopes: List<ScopeExclude> = emptyList()
+    /**
+     * Scopes that will be excluded from this project.
+     */
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    val scopes: List<ScopeExclude> = emptyList()
 ) {
     constructor(
-            path: String,
-            reason: ProjectExcludeReason? = null,
-            comment: String? = null,
-            scopes: List<ScopeExclude> = emptyList()
+        path: String,
+        reason: ProjectExcludeReason? = null,
+        comment: String? = null,
+        scopes: List<ScopeExclude> = emptyList()
     ) : this(Regex(path), reason, comment, scopes)
 
     /**

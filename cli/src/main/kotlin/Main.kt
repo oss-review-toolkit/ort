@@ -37,24 +37,32 @@ const val TOOL_NAME = "ort"
  * The main entry point of the application.
  */
 object Main : CommandWithHelp() {
-    @Parameter(description = "Enable info logging.",
-            names = ["--info"],
-            order = PARAMETER_ORDER_LOGGING)
+    @Parameter(
+        description = "Enable info logging.",
+        names = ["--info"],
+        order = PARAMETER_ORDER_LOGGING
+    )
     private var info = false
 
-    @Parameter(description = "Enable debug logging and keep any temporary files.",
-            names = ["--debug"],
-            order = PARAMETER_ORDER_LOGGING)
+    @Parameter(
+        description = "Enable debug logging and keep any temporary files.",
+        names = ["--debug"],
+        order = PARAMETER_ORDER_LOGGING
+    )
     private var debug = false
 
-    @Parameter(description = "Print out the stacktrace for all exceptions.",
-            names = ["--stacktrace"],
-            order = PARAMETER_ORDER_LOGGING)
+    @Parameter(
+        description = "Print out the stacktrace for all exceptions.",
+        names = ["--stacktrace"],
+        order = PARAMETER_ORDER_LOGGING
+    )
     private var stacktrace = false
 
-    @Parameter(description = "Show version information and exit.",
-            names = ["--version", "-v"],
-            order = PARAMETER_ORDER_OPTIONAL)
+    @Parameter(
+        description = "Show version information and exit.",
+        names = ["--version", "-v"],
+        order = PARAMETER_ORDER_OPTIONAL
+    )
     private var version = false
 
     /**

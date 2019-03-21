@@ -31,62 +31,62 @@ import java.util.SortedSet
  * VCS data) or incomplete.
  */
 data class PackageCurationData(
-        /**
-         * The list of licenses the authors have declared for this package. This does not necessarily correspond to the
-         * licenses as detected by a scanner. Both need to be taken into account for any conclusions.
-         */
-        @JsonInclude(JsonInclude.Include.NON_NULL)
-        val declaredLicenses: SortedSet<String>? = null,
+    /**
+     * The list of licenses the authors have declared for this package. This does not necessarily correspond to the
+     * licenses as detected by a scanner. Both need to be taken into account for any conclusions.
+     */
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    val declaredLicenses: SortedSet<String>? = null,
 
-        /**
-         * The concluded license as an [SpdxExpression]. It can be used to correct the license of a package in case the
-         * [declaredLicenses] found in the packages metadata or the licenses detected by a scanner do not match reality.
-         */
-        @JsonInclude(JsonInclude.Include.NON_NULL)
-        val concludedLicense: SpdxExpression? = null,
+    /**
+     * The concluded license as an [SpdxExpression]. It can be used to correct the license of a package in case the
+     * [declaredLicenses] found in the packages metadata or the licenses detected by a scanner do not match reality.
+     */
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    val concludedLicense: SpdxExpression? = null,
 
-        /**
-         * The description of the package, as provided by the package manager.
-         */
-        @JsonInclude(JsonInclude.Include.NON_NULL)
-        val description: String? = null,
+    /**
+     * The description of the package, as provided by the package manager.
+     */
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    val description: String? = null,
 
-        /**
-         * The homepage of the package.
-         */
-        @JsonInclude(JsonInclude.Include.NON_NULL)
-        val homepageUrl: String? = null,
+    /**
+     * The homepage of the package.
+     */
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    val homepageUrl: String? = null,
 
-        /**
-         * The remote artifact where the binary package can be downloaded.
-         */
-        @JsonInclude(JsonInclude.Include.NON_NULL)
-        val binaryArtifact: RemoteArtifact? = null,
+    /**
+     * The remote artifact where the binary package can be downloaded.
+     */
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    val binaryArtifact: RemoteArtifact? = null,
 
-        /**
-         * The remote artifact where the source package can be downloaded.
-         */
-        @JsonInclude(JsonInclude.Include.NON_NULL)
-        val sourceArtifact: RemoteArtifact? = null,
+    /**
+     * The remote artifact where the source package can be downloaded.
+     */
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    val sourceArtifact: RemoteArtifact? = null,
 
-        /**
-         * VCS-related information.
-         */
-        @JsonInclude(JsonInclude.Include.NON_NULL)
-        val vcs: VcsInfoCuration? = null,
+    /**
+     * VCS-related information.
+     */
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    val vcs: VcsInfoCuration? = null,
 
-        /**
-         * A plain-text comment about this curation. Should contain information about how and why the curation was
-         * created.
-         */
-        @JsonInclude(JsonInclude.Include.NON_NULL)
-        val comment: String? = null,
+    /**
+     * A plain-text comment about this curation. Should contain information about how and why the curation was
+     * created.
+     */
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    val comment: String? = null,
 
-        /**
-         * A map that holds arbitrary data. Can be used by third-party tools to add custom data to the model.
-         */
-        @JsonInclude(JsonInclude.Include.NON_EMPTY)
-        val data: CustomData = emptyMap()
+    /**
+     * A map that holds arbitrary data. Can be used by third-party tools to add custom data to the model.
+     */
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    val data: CustomData = emptyMap()
 ) {
     /**
      * Apply the curation data to the provided package, by overriding all values of the original package with non-null
@@ -100,11 +100,11 @@ data class PackageCurationData(
         val curatedVcs = if (vcs != null) {
             // Curation data for VCS information is handled specially so we can curate only individual properties.
             VcsInfo(
-                    type = vcs.type ?: base.pkg.vcs.type,
-                    url = vcs.url ?: base.pkg.vcs.url,
-                    revision = vcs.revision ?: base.pkg.vcs.revision,
-                    resolvedRevision = vcs.resolvedRevision ?: base.pkg.vcs.resolvedRevision,
-                    path = vcs.path ?: base.pkg.vcs.path
+                type = vcs.type ?: base.pkg.vcs.type,
+                url = vcs.url ?: base.pkg.vcs.url,
+                revision = vcs.revision ?: base.pkg.vcs.revision,
+                resolvedRevision = vcs.resolvedRevision ?: base.pkg.vcs.resolvedRevision,
+                path = vcs.path ?: base.pkg.vcs.path
             )
         } else {
             base.pkg.vcs
@@ -112,14 +112,14 @@ data class PackageCurationData(
 
         val curated = base.pkg.let { pkg ->
             Package(
-                    id = pkg.id,
-                    declaredLicenses = declaredLicenses ?: pkg.declaredLicenses,
-                    concludedLicense = concludedLicense ?: pkg.concludedLicense,
-                    description = description ?: pkg.description,
-                    homepageUrl = homepageUrl ?: pkg.homepageUrl,
-                    binaryArtifact = binaryArtifact ?: pkg.binaryArtifact,
-                    sourceArtifact = sourceArtifact ?: pkg.sourceArtifact,
-                    vcs = curatedVcs
+                id = pkg.id,
+                declaredLicenses = declaredLicenses ?: pkg.declaredLicenses,
+                concludedLicense = concludedLicense ?: pkg.concludedLicense,
+                description = description ?: pkg.description,
+                homepageUrl = homepageUrl ?: pkg.homepageUrl,
+                binaryArtifact = binaryArtifact ?: pkg.binaryArtifact,
+                sourceArtifact = sourceArtifact ?: pkg.sourceArtifact,
+                vcs = curatedVcs
             )
         }
 

@@ -48,69 +48,90 @@ import java.io.File
 
 @Parameters(commandNames = ["download"], commandDescription = "Fetch source code from a remote location.")
 object DownloaderCommand : CommandWithHelp() {
-    @Parameter(description = "An ORT result file with an analyzer result to use. Must not be used together with " +
-            "'--project-url'.",
-            names = ["--ort-file", "-a"],
-            order = PARAMETER_ORDER_OPTIONAL)
+    @Parameter(
+        description = "An ORT result file with an analyzer result to use. Must not be used together with " +
+                "'--project-url'.",
+        names = ["--ort-file", "-a"],
+        order = PARAMETER_ORDER_OPTIONAL
+    )
     private var ortFile: File? = null
 
-    @Parameter(description = "A VCS or archive URL of a project to download. Must not be used together with " +
-            "'--ort-file'.",
-            names = ["--project-url"],
-            order = PARAMETER_ORDER_OPTIONAL)
+    @Parameter(
+        description = "A VCS or archive URL of a project to download. Must not be used together with " +
+                "'--ort-file'.",
+        names = ["--project-url"],
+        order = PARAMETER_ORDER_OPTIONAL
+    )
     private var projectUrl: String? = null
 
-    @Parameter(description = "The speaking name of the project to download. For use together with '--project-url'. " +
-            "Will be ignored if '--ort-file' is also specified.",
-            names = ["--project-name"],
-            order = PARAMETER_ORDER_OPTIONAL)
+    @Parameter(
+        description = "The speaking name of the project to download. For use together with '--project-url'. " +
+                "Will be ignored if '--ort-file' is also specified.",
+        names = ["--project-name"],
+        order = PARAMETER_ORDER_OPTIONAL
+    )
     private var projectName: String? = null
 
-    @Parameter(description = "The VCS type if '--project-url' points to a VCS. Will be ignored if '--ort-file' is " +
-            "also specified.",
-            names = ["--vcs-type"],
-            order = PARAMETER_ORDER_OPTIONAL)
+    @Parameter(
+        description = "The VCS type if '--project-url' points to a VCS. Will be ignored if '--ort-file' is " +
+                "also specified.",
+        names = ["--vcs-type"],
+        order = PARAMETER_ORDER_OPTIONAL
+    )
     private var vcsType = ""
 
-    @Parameter(description = "The VCS revision if '--project-url' points to a VCS. Will be ignored if '--ort-file' " +
-            "is also specified.",
-            names = ["--vcs-revision"],
-            order = PARAMETER_ORDER_OPTIONAL)
+    @Parameter(
+        description = "The VCS revision if '--project-url' points to a VCS. Will be ignored if '--ort-file' " +
+                "is also specified.",
+        names = ["--vcs-revision"],
+        order = PARAMETER_ORDER_OPTIONAL
+    )
     private var vcsRevision = ""
 
-    @Parameter(description = "The VCS path if '--project-url' points to a VCS. Will be ignored if '--ort-file' is " +
-            "also specified.",
-            names = ["--vcs-path"],
-            order = PARAMETER_ORDER_OPTIONAL)
+    @Parameter(
+        description = "The VCS path if '--project-url' points to a VCS. Will be ignored if '--ort-file' is " +
+                "also specified.",
+        names = ["--vcs-path"],
+        order = PARAMETER_ORDER_OPTIONAL
+    )
     private var vcsPath = ""
 
-    @Parameter(description = "The output directory to download the source code to.",
-            names = ["--output-dir", "-o"],
-            required = true,
-            order = PARAMETER_ORDER_MANDATORY)
+    @Parameter(
+        description = "The output directory to download the source code to.",
+        names = ["--output-dir", "-o"],
+        required = true,
+        order = PARAMETER_ORDER_MANDATORY
+    )
     @Suppress("LateinitUsage")
     private lateinit var outputDir: File
 
-    @Parameter(description = "Archive the downloaded source code as ZIP files to the output directory.",
-            names = ["--archive"],
-            order = PARAMETER_ORDER_OPTIONAL)
+    @Parameter(
+        description = "Archive the downloaded source code as ZIP files to the output directory.",
+        names = ["--archive"],
+        order = PARAMETER_ORDER_OPTIONAL
+    )
     private var archive = false
 
-    @Parameter(description = "The type of data entities from the ORT file's analyzer result to download.",
-            names = ["--entities", "-e"],
-            order = PARAMETER_ORDER_OPTIONAL)
+    @Parameter(
+        description = "The type of data entities from the ORT file's analyzer result to download.",
+        names = ["--entities", "-e"],
+        order = PARAMETER_ORDER_OPTIONAL
+    )
     private var entities = enumValues<Downloader.DataEntity>().asList()
 
-    @Parameter(description = "Allow the download of moving revisions (like e.g. HEAD or master in Git). By default " +
-            "these revision are forbidden because they are not pointing to a stable revision of the source code.",
-            names = ["--allow-moving-revisions"],
-            order = PARAMETER_ORDER_OPTIONAL)
+    @Parameter(
+        description = "Allow the download of moving revisions (like e.g. HEAD or master in Git). By default " +
+                "these revision are forbidden because they are not pointing to a stable revision of the source code.",
+        names = ["--allow-moving-revisions"],
+        order = PARAMETER_ORDER_OPTIONAL
+    )
     private var allowMovingRevisions = false
 
     override fun runCommand(jc: JCommander): Int {
         if ((ortFile != null) == (projectUrl != null)) {
             throw IllegalArgumentException(
-                    "Either '--ort-file' or '--project-url' must be specified.")
+                "Either '--ort-file' or '--project-url' must be specified."
+            )
         }
 
         val packages = ortFile?.let {
@@ -146,12 +167,12 @@ object DownloaderCommand : CommandWithHelp() {
             val dummyId = Identifier("Downloader::$projectName:")
             val dummyPackage = if (ARCHIVE_EXTENSIONS.any { projectFile.name.endsWith(it) }) {
                 Package.EMPTY.copy(
-                        id = dummyId,
-                        sourceArtifact = RemoteArtifact(
-                                url = projectUrl!!,
-                                hash = Hash.UNKNOWN.value,
-                                hashAlgorithm = Hash.UNKNOWN.algorithm
-                        )
+                    id = dummyId,
+                    sourceArtifact = RemoteArtifact(
+                        url = projectUrl!!,
+                        hash = Hash.UNKNOWN.value,
+                        hashAlgorithm = Hash.UNKNOWN.algorithm
+                    )
                 )
             } else {
                 val vcs = VcsInfo(type = vcsType, url = projectUrl!!, revision = vcsRevision, path = vcsPath)
@@ -168,9 +189,11 @@ object DownloaderCommand : CommandWithHelp() {
                 val result = Downloader().download(pkg, outputDir)
 
                 if (archive) {
-                    val zipFile = File(outputDir,
-                            "${pkg.id.type.encodeOrUnknown()}-${pkg.id.namespace.encodeOrUnknown()}-" +
-                                    "${pkg.id.name.encodeOrUnknown()}-${pkg.id.version.encodeOrUnknown()}.zip")
+                    val zipFile = File(
+                        outputDir,
+                        "${pkg.id.type.encodeOrUnknown()}-${pkg.id.namespace.encodeOrUnknown()}-" +
+                                "${pkg.id.name.encodeOrUnknown()}-${pkg.id.version.encodeOrUnknown()}.zip"
+                    )
 
                     log.info {
                         "Archiving directory '${result.downloadDirectory.absolutePath}' to " +
@@ -178,8 +201,10 @@ object DownloaderCommand : CommandWithHelp() {
                     }
 
                     try {
-                        result.downloadDirectory.packZip(zipFile,
-                                "${pkg.id.name.encodeOrUnknown()}/${pkg.id.version.encodeOrUnknown()}/")
+                        result.downloadDirectory.packZip(
+                            zipFile,
+                            "${pkg.id.name.encodeOrUnknown()}/${pkg.id.version.encodeOrUnknown()}/"
+                        )
                     } catch (e: IllegalArgumentException) {
                         e.showStackTrace()
 

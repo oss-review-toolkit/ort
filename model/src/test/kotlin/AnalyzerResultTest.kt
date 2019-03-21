@@ -40,34 +40,38 @@ class AnalyzerResultTest : WordSpec() {
 
     private val pkgRef1 = package1.toReference(errors = listOf(error1))
     private val pkgRef2 = package2.toReference(
-            dependencies = sortedSetOf(package3.toReference(errors = listOf(error2)))
+        dependencies = sortedSetOf(package3.toReference(errors = listOf(error2)))
     )
 
     private val scope1 = Scope("scope-1", sortedSetOf(pkgRef1))
     private val scope2 = Scope("scope-2", sortedSetOf(pkgRef2))
 
     private val project1 = Project.EMPTY.copy(
-            id = Identifier("type-1", "namespace-1", "project-1", "version-1"),
-            scopes = sortedSetOf(scope1)
+        id = Identifier("type-1", "namespace-1", "project-1", "version-1"),
+        scopes = sortedSetOf(scope1)
     )
     private val project2 = Project.EMPTY.copy(
-            id = Identifier("type-2", "namespace-2", "project-2", "version-2"),
-            scopes = sortedSetOf(scope1, scope2)
+        id = Identifier("type-2", "namespace-2", "project-2", "version-2"),
+        scopes = sortedSetOf(scope1, scope2)
     )
 
-    private val analyzerResult1 = ProjectAnalyzerResult(project1, sortedSetOf(package1.toCuratedPackage()),
-            listOf(error3, error4))
-    private val analyzerResult2 = ProjectAnalyzerResult(project2,
-            sortedSetOf(package1.toCuratedPackage(), package2.toCuratedPackage(), package3.toCuratedPackage()),
-            listOf(error4))
+    private val analyzerResult1 = ProjectAnalyzerResult(
+        project1, sortedSetOf(package1.toCuratedPackage()),
+        listOf(error3, error4)
+    )
+    private val analyzerResult2 = ProjectAnalyzerResult(
+        project2,
+        sortedSetOf(package1.toCuratedPackage(), package2.toCuratedPackage(), package3.toCuratedPackage()),
+        listOf(error4)
+    )
 
     init {
         "AnalyzerResult" should {
             "be serialized and deserialized correctly" {
                 val mergedResults = AnalyzerResultBuilder()
-                        .addResult(analyzerResult1)
-                        .addResult(analyzerResult2)
-                        .build()
+                    .addResult(analyzerResult1)
+                    .addResult(analyzerResult2)
+                    .build()
 
                 val serializedMergedResults = yamlMapper.writeValueAsString(mergedResults)
                 val deserializedMergedResults = yamlMapper.readValue<AnalyzerResult>(serializedMergedResults)
@@ -79,15 +83,15 @@ class AnalyzerResultTest : WordSpec() {
         "collectErrors" should {
             "find all errors" {
                 val analyzerResult = AnalyzerResultBuilder()
-                        .addResult(analyzerResult1)
-                        .addResult(analyzerResult2)
-                        .build()
+                    .addResult(analyzerResult1)
+                    .addResult(analyzerResult2)
+                    .build()
 
                 analyzerResult.collectErrors() shouldBe mapOf(
-                        package1.id to setOf(error1),
-                        package3.id to setOf(error2),
-                        project1.id to setOf(error3, error4),
-                        project2.id to setOf(error4)
+                    package1.id to setOf(error1),
+                    package3.id to setOf(error2),
+                    project1.id to setOf(error3, error4),
+                    project2.id to setOf(error4)
                 )
             }
 
@@ -95,15 +99,19 @@ class AnalyzerResultTest : WordSpec() {
                 val invalidProjectLicense = sortedSetOf("invalid project license")
                 val invalidPackageLicense = sortedSetOf("invalid package license")
                 val analyzerResult = AnalyzerResult(
-                        projects = sortedSetOf(project1.copy(
-                                declaredLicenses = invalidProjectLicense,
-                                declaredLicensesProcessed = DeclaredLicenseProcessor.process(invalidProjectLicense),
-                                scopes = sortedSetOf()
-                        )),
-                        packages = sortedSetOf(package1.copy(
-                                declaredLicenses = invalidPackageLicense,
-                                declaredLicensesProcessed = DeclaredLicenseProcessor.process(invalidPackageLicense)
-                        ).toCuratedPackage())
+                    projects = sortedSetOf(
+                        project1.copy(
+                            declaredLicenses = invalidProjectLicense,
+                            declaredLicensesProcessed = DeclaredLicenseProcessor.process(invalidProjectLicense),
+                            scopes = sortedSetOf()
+                        )
+                    ),
+                    packages = sortedSetOf(
+                        package1.copy(
+                            declaredLicenses = invalidPackageLicense,
+                            declaredLicensesProcessed = DeclaredLicenseProcessor.process(invalidPackageLicense)
+                        ).toCuratedPackage()
+                    )
                 )
 
                 val errors = analyzerResult.collectErrors()
@@ -129,13 +137,15 @@ class AnalyzerResultTest : WordSpec() {
         "AnalyzerResultBuilder" should {
             "merge results from all files" {
                 val mergedResults = AnalyzerResultBuilder()
-                        .addResult(analyzerResult1)
-                        .addResult(analyzerResult2)
-                        .build()
+                    .addResult(analyzerResult1)
+                    .addResult(analyzerResult2)
+                    .build()
 
                 mergedResults.projects shouldBe sortedSetOf(project1, project2)
-                mergedResults.packages shouldBe sortedSetOf(package1.toCuratedPackage(), package2.toCuratedPackage(),
-                        package3.toCuratedPackage())
+                mergedResults.packages shouldBe sortedSetOf(
+                    package1.toCuratedPackage(), package2.toCuratedPackage(),
+                    package3.toCuratedPackage()
+                )
                 mergedResults.errors shouldBe
                         sortedMapOf(project1.id to analyzerResult1.errors, project2.id to analyzerResult2.errors)
             }

@@ -42,7 +42,7 @@ import java.util.Properties
  * The SBT package manager for Scala, see https://www.scala-sbt.org/.
  */
 class SBT(name: String, analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfiguration) :
-        PackageManager(name, analyzerConfig, repoConfig), CommandLineTool {
+    PackageManager(name, analyzerConfig, repoConfig), CommandLineTool {
     companion object {
         private val VERSION_REGEX = Regex("\\[info]\\s+(\\d+\\.\\d+\\.[^\\s]+)")
         private val PROJECT_REGEX = Regex("\\[info] \t [ *] (.+)")
@@ -66,16 +66,16 @@ class SBT(name: String, analyzerConfig: AnalyzerConfiguration, repoConfig: Repos
         override val globsForDefinitionFiles = listOf("build.sbt", "build.scala")
 
         override fun create(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfiguration) =
-                SBT(managerName, analyzerConfig, repoConfig)
+            SBT(managerName, analyzerConfig, repoConfig)
     }
 
     override fun command(workingDir: File?) = if (OS.isWindows) "sbt.bat" else "sbt"
 
     override fun getVersionRequirement(): Requirement =
-            // We need at least sbt version 0.13.0 to be able to use "makePom" instead of the deprecated hyphenated
-            // form "make-pom" and to support declaring Maven-style repositories, see
-            // http://www.scala-sbt.org/0.13/docs/Publishing.html#Modifying+the+generated+POM.
-            Requirement.buildIvy("[0.13.0,)")
+    // We need at least sbt version 0.13.0 to be able to use "makePom" instead of the deprecated hyphenated
+    // form "make-pom" and to support declaring Maven-style repositories, see
+    // http://www.scala-sbt.org/0.13/docs/Publishing.html#Modifying+the+generated+POM.
+        Requirement.buildIvy("[0.13.0,)")
 
     private fun extractLowestSbtVersion(stdout: String): String {
         val versions = stdout.lines().mapNotNull { line ->
@@ -107,9 +107,9 @@ class SBT(name: String, analyzerConfig: AnalyzerConfiguration, repoConfig: Repos
         }
 
         fun runSBT(vararg command: String) =
-                suppressInput {
-                    run(workingDir, BATCH_MODE, LOG_NO_FORMAT, *command)
-                }
+            suppressInput {
+                run(workingDir, BATCH_MODE, LOG_NO_FORMAT, *command)
+            }
 
         // Get the list of project names.
         val internalProjectNames = runSBT("projects").stdout.lines().mapNotNull {
@@ -154,10 +154,10 @@ class SBT(name: String, analyzerConfig: AnalyzerConfiguration, repoConfig: Repos
             // Note that "sbt sbtVersion" behaves differently when executed inside or outside an SBT project, see
             // https://stackoverflow.com/a/20337575/1127485.
             checkVersion(
-                    versionArguments = "$BATCH_MODE $LOG_NO_FORMAT sbtVersion",
-                    workingDir = workingDir,
-                    ignoreActualVersion = analyzerConfig.ignoreToolVersions,
-                    transform = this::extractLowestSbtVersion
+                versionArguments = "$BATCH_MODE $LOG_NO_FORMAT sbtVersion",
+                workingDir = workingDir,
+                ignoreActualVersion = analyzerConfig.ignoreToolVersions,
+                transform = this::extractLowestSbtVersion
             )
         } else {
             val versions = mutableListOf<Semver>()
@@ -172,19 +172,21 @@ class SBT(name: String, analyzerConfig: AnalyzerConfiguration, repoConfig: Repos
             val lowestSbtVersion = checkForSameSbtVersion(versions)
 
             if (!sbtVersionRequirement.isSatisfiedBy(lowestSbtVersion)) {
-                throw IOException("Unsupported $managerName version $lowestSbtVersion does not fulfill " +
-                        "$sbtVersionRequirement.")
+                throw IOException(
+                    "Unsupported $managerName version $lowestSbtVersion does not fulfill " +
+                            "$sbtVersionRequirement."
+                )
             }
         }
     }
 
     override fun resolveDependencies(analyzerRoot: File, definitionFiles: List<File>) =
-            // Simply pass on the list of POM files to Maven, ignoring the SBT build files here.
-            Maven(managerName, analyzerConfig, repoConfig)
-                    .enableSbtMode()
-                    .resolveDependencies(analyzerRoot, definitionFiles)
+    // Simply pass on the list of POM files to Maven, ignoring the SBT build files here.
+        Maven(managerName, analyzerConfig, repoConfig)
+            .enableSbtMode()
+            .resolveDependencies(analyzerRoot, definitionFiles)
 
     override fun resolveDependencies(definitionFile: File) =
-            // This is not implemented in favor over overriding [resolveDependencies].
-            throw NotImplementedError()
+    // This is not implemented in favor over overriding [resolveDependencies].
+        throw NotImplementedError()
 }

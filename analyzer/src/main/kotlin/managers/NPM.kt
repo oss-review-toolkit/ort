@@ -68,7 +68,7 @@ import okhttp3.Request
  * The Node package manager for JavaScript, see https://www.npmjs.com/.
  */
 open class NPM(name: String, analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfiguration) :
-        PackageManager(name, analyzerConfig, repoConfig), CommandLineTool {
+    PackageManager(name, analyzerConfig, repoConfig), CommandLineTool {
     companion object {
         /**
          * Expand NPM shortcuts for URLs to hosting sites to full URLs so that they can be used in a regular way.
@@ -114,7 +114,7 @@ open class NPM(name: String, analyzerConfig: AnalyzerConfiguration, repoConfig: 
         override val globsForDefinitionFiles = listOf("package.json")
 
         override fun create(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfiguration) =
-                NPM(managerName, analyzerConfig, repoConfig)
+            NPM(managerName, analyzerConfig, repoConfig)
     }
 
     /**
@@ -129,12 +129,12 @@ open class NPM(name: String, analyzerConfig: AnalyzerConfiguration, repoConfig: 
     override fun getVersionRequirement(): Requirement = Requirement.buildNPM("5.7.* - 6.4.*")
 
     override fun mapDefinitionFiles(definitionFiles: List<File>) =
-            PackageJsonUtils.mapDefinitionFilesForNpm(definitionFiles).toList()
+        PackageJsonUtils.mapDefinitionFilesForNpm(definitionFiles).toList()
 
     override fun prepareResolution(definitionFiles: List<File>) =
-            // We do not actually depend on any features specific to an NPM version, but we still want to stick to a
-            // fixed minor version to be sure to get consistent results.
-            checkVersion(ignoreActualVersion = analyzerConfig.ignoreToolVersions)
+    // We do not actually depend on any features specific to an NPM version, but we still want to stick to a
+    // fixed minor version to be sure to get consistent results.
+        checkVersion(ignoreActualVersion = analyzerConfig.ignoreToolVersions)
 
     override fun resolveDependencies(definitionFile: File): ProjectAnalyzerResult? {
         val workingDir = definitionFile.parentFile
@@ -159,8 +159,10 @@ open class NPM(name: String, analyzerConfig: AnalyzerConfiguration, repoConfig: 
 
             // TODO: add support for peerDependencies and bundledDependencies.
 
-            return parseProject(definitionFile, sortedSetOf(dependenciesScope, devDependenciesScope),
-                    packages.values.toSortedSet())
+            return parseProject(
+                definitionFile, sortedSetOf(dependenciesScope, devDependenciesScope),
+                packages.values.toSortedSet()
+            )
         }
     }
 
@@ -226,9 +228,9 @@ open class NPM(name: String, analyzerConfig: AnalyzerConfiguration, repoConfig: 
                 vcsFromPackage = vcsFromPackage.merge(vcsFromDirectory)
             } else {
                 val pkgRequest = Request.Builder()
-                        .get()
-                        .url("https://registry.npmjs.org/$encodedName")
-                        .build()
+                    .get()
+                    .url("https://registry.npmjs.org/$encodedName")
+                    .build()
 
                 OkHttpClientHelper.execute(HTTP_CACHE_PATH, pkgRequest).use { response ->
                     if (response.code() == HttpURLConnection.HTTP_OK) {
@@ -279,23 +281,23 @@ open class NPM(name: String, analyzerConfig: AnalyzerConfiguration, repoConfig: 
             }
 
             val module = Package(
-                    id = Identifier(
-                            type = "NPM",
-                            namespace = namespace,
-                            name = name,
-                            version = version
-                    ),
-                    declaredLicenses = declaredLicenses,
-                    description = description,
-                    homepageUrl = homepageUrl,
-                    binaryArtifact = RemoteArtifact.EMPTY,
-                    sourceArtifact = RemoteArtifact(
-                            url = downloadUrl,
-                            hash = hash.value,
-                            hashAlgorithm = hash.algorithm
-                    ),
-                    vcs = vcsFromPackage,
-                    vcsProcessed = processPackageVcs(vcsFromPackage, homepageUrl)
+                id = Identifier(
+                    type = "NPM",
+                    namespace = namespace,
+                    name = name,
+                    version = version
+                ),
+                declaredLicenses = declaredLicenses,
+                description = description,
+                homepageUrl = homepageUrl,
+                binaryArtifact = RemoteArtifact.EMPTY,
+                sourceArtifact = RemoteArtifact(
+                    url = downloadUrl,
+                    hash = hash.value,
+                    hashAlgorithm = hash.algorithm
+                ),
+                vcs = vcsFromPackage,
+                vcsProcessed = processPackageVcs(vcsFromPackage, homepageUrl)
             )
 
             require(module.id.name.isNotEmpty()) {
@@ -371,8 +373,10 @@ open class NPM(name: String, analyzerConfig: AnalyzerConfiguration, repoConfig: 
         } ?: VcsInfo("", "", head)
     }
 
-    private fun buildTree(rootModulesDir: File, startModulesDir: File, name: String, packages: Map<String, Package>,
-                          dependencyBranch: List<String> = listOf()): PackageReference? {
+    private fun buildTree(
+        rootModulesDir: File, startModulesDir: File, name: String, packages: Map<String, Package>,
+        dependencyBranch: List<String> = listOf()
+    ): PackageReference? {
         log.debug { "Building dependency tree for '$name' from directory '${startModulesDir.absolutePath}'." }
 
         val packageFile = startModulesDir.resolve(name).resolve("package.json")
@@ -401,12 +405,14 @@ open class NPM(name: String, analyzerConfig: AnalyzerConfiguration, repoConfig: 
 
             val newDependencyBranch = dependencyBranch + identifier
             dependencyNames.forEach { dependencyName ->
-                buildTree(rootModulesDir, packageFile.resolveSibling("node_modules"),
-                        dependencyName, packages, newDependencyBranch)?.let { dependencies += it }
+                buildTree(
+                    rootModulesDir, packageFile.resolveSibling("node_modules"),
+                    dependencyName, packages, newDependencyBranch
+                )?.let { dependencies += it }
             }
 
             val packageInfo = packages[identifier]
-                    ?: throw IOException("Could not find package info for $identifier")
+                ?: throw IOException("Could not find package info for $identifier")
             return packageInfo.toReference(dependencies = dependencies)
         } else if (rootModulesDir == startModulesDir) {
             log.warn {
@@ -466,18 +472,18 @@ open class NPM(name: String, analyzerConfig: AnalyzerConfiguration, repoConfig: 
         val vcsFromPackage = parseVcsInfo(json)
 
         val project = Project(
-                id = Identifier(
-                        type = managerName,
-                        namespace = namespace,
-                        name = name,
-                        version = version
-                ),
-                definitionFilePath = VersionControlSystem.getPathInfo(packageJson).path,
-                declaredLicenses = declaredLicenses,
-                vcs = vcsFromPackage,
-                vcsProcessed = processProjectVcs(projectDir, vcsFromPackage, homepageUrl),
-                homepageUrl = homepageUrl,
-                scopes = scopes
+            id = Identifier(
+                type = managerName,
+                namespace = namespace,
+                name = name,
+                version = version
+            ),
+            definitionFilePath = VersionControlSystem.getPathInfo(packageJson).path,
+            declaredLicenses = declaredLicenses,
+            vcs = vcsFromPackage,
+            vcsProcessed = processProjectVcs(projectDir, vcsFromPackage, homepageUrl),
+            homepageUrl = homepageUrl,
+            scopes = scopes
         )
 
         return ProjectAnalyzerResult(project, packages.map { it.toCuratedPackage() }.toSortedSet())
@@ -488,9 +494,11 @@ open class NPM(name: String, analyzerConfig: AnalyzerConfiguration, repoConfig: 
      */
     private fun installDependencies(workingDir: File) {
         if (!hasLockFile(workingDir) && !analyzerConfig.allowDynamicVersions) {
-            throw IllegalArgumentException("No lockfile found in '${workingDir.invariantSeparatorsPath}'. This " +
-                    "potentially results in unstable versions of dependencies. To allow this, enable support for " +
-                    "dynamic versions.")
+            throw IllegalArgumentException(
+                "No lockfile found in '${workingDir.invariantSeparatorsPath}'. This " +
+                        "potentially results in unstable versions of dependencies. To allow this, enable support for " +
+                        "dynamic versions."
+            )
         }
 
         // Install all NPM dependencies to enable NPM to list dependencies.

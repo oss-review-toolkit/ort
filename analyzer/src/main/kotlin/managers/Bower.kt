@@ -55,7 +55,7 @@ import java.util.Stack
  * The Bower package manager for JavaScript, see https://bower.io/.
  */
 class Bower(name: String, analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfiguration) :
-        PackageManager(name, analyzerConfig, repoConfig), CommandLineTool {
+    PackageManager(name, analyzerConfig, repoConfig), CommandLineTool {
     companion object {
         // We do not actually depend on any features specific to this Bower version, but we still want to
         // stick to fixed versions to be sure to get consistent results.
@@ -64,31 +64,31 @@ class Bower(name: String, analyzerConfig: AnalyzerConfiguration, repoConfig: Rep
         private const val SCOPE_NAME_DEV_DEPENDENCIES = "devDependencies"
 
         private fun extractPackageId(node: JsonNode) = Identifier(
-                type = "Bower",
-                namespace = "",
-                name = node["pkgMeta"]["name"].textValueOrEmpty(),
-                version = node["pkgMeta"]["version"].textValueOrEmpty()
+            type = "Bower",
+            namespace = "",
+            name = node["pkgMeta"]["name"].textValueOrEmpty(),
+            version = node["pkgMeta"]["version"].textValueOrEmpty()
         )
 
         private fun extractRepositoryType(node: JsonNode) =
-                node["pkgMeta"]["repository"]?.get("type")?.textValue()
+            node["pkgMeta"]["repository"]?.get("type")?.textValue()
                 ?: ""
 
         private fun extractRepositoryUrl(node: JsonNode) =
-                node["pkgMeta"]["repository"]?.get("url")?.textValue()
+            node["pkgMeta"]["repository"]?.get("url")?.textValue()
                 ?: node["pkgMeta"]["_source"]?.textValue()
                 ?: ""
 
         private fun extractRevision(node: JsonNode): String =
-                node["pkgMeta"]["_resolution"]?.get("commit")?.textValue()
+            node["pkgMeta"]["_resolution"]?.get("commit")?.textValue()
                 ?: node["pkgMeta"]["_resolution"]?.get("tag").textValueOrEmpty()
 
         private fun extractVcsInfo(node: JsonNode) =
-                VcsInfo(
-                        type = extractRepositoryType(node),
-                        url = extractRepositoryUrl(node),
-                        revision = extractRevision(node)
-                )
+            VcsInfo(
+                type = extractRepositoryType(node),
+                url = extractRepositoryUrl(node),
+                revision = extractRevision(node)
+            )
 
         private fun extractDeclaredLicenses(node: JsonNode): SortedSet<String> {
             return sortedSetOf<String>().apply {
@@ -102,19 +102,19 @@ class Bower(name: String, analyzerConfig: AnalyzerConfiguration, repoConfig: Rep
         private fun extractPackage(node: JsonNode): Package {
             val vcsInfo = extractVcsInfo(node)
             return Package(
-                    id = extractPackageId(node),
-                    declaredLicenses = extractDeclaredLicenses(node),
-                    description = node["pkgMeta"]["description"].textValueOrEmpty(),
-                    homepageUrl = node["pkgMeta"]["homepage"].textValueOrEmpty(),
-                    binaryArtifact = RemoteArtifact.EMPTY,
-                    sourceArtifact = RemoteArtifact.EMPTY, // TODO: implement me!
-                    vcs = vcsInfo,
-                    vcsProcessed = vcsInfo.normalize()
+                id = extractPackageId(node),
+                declaredLicenses = extractDeclaredLicenses(node),
+                description = node["pkgMeta"]["description"].textValueOrEmpty(),
+                homepageUrl = node["pkgMeta"]["homepage"].textValueOrEmpty(),
+                binaryArtifact = RemoteArtifact.EMPTY,
+                sourceArtifact = RemoteArtifact.EMPTY, // TODO: implement me!
+                vcs = vcsInfo,
+                vcsProcessed = vcsInfo.normalize()
             )
         }
 
         private fun getDependencyNodes(node: JsonNode): Sequence<JsonNode> =
-                node["dependencies"].fieldsOrEmpty().asSequence().map { it.value }
+            node["dependencies"].fieldsOrEmpty().asSequence().map { it.value }
 
         private fun extractPackages(node: JsonNode): Map<String, Package> {
             val result = mutableMapOf<String, Package>()
@@ -158,7 +158,8 @@ class Bower(name: String, analyzerConfig: AnalyzerConfiguration, repoConfig: Rep
 
                 val key = dependencyKeyOf(currentNode)
                 if (key != null && hasCompleteDependencies(node, SCOPE_NAME_DEPENDENCIES)
-                        && hasCompleteDependencies(node, SCOPE_NAME_DEV_DEPENDENCIES)) {
+                    && hasCompleteDependencies(node, SCOPE_NAME_DEV_DEPENDENCIES)
+                ) {
                     result[key] = currentNode
                 }
 
@@ -168,8 +169,10 @@ class Bower(name: String, analyzerConfig: AnalyzerConfiguration, repoConfig: Rep
             return result
         }
 
-        private fun extractDependencyTree(node: JsonNode, scopeName: String,
-                alternativeNodes: Map<String, JsonNode> = getNodesWithCompleteDependencies(node)):
+        private fun extractDependencyTree(
+            node: JsonNode, scopeName: String,
+            alternativeNodes: Map<String, JsonNode> = getNodesWithCompleteDependencies(node)
+        ):
                 SortedSet<PackageReference> {
             val result = mutableSetOf<PackageReference>()
 
@@ -188,8 +191,8 @@ class Bower(name: String, analyzerConfig: AnalyzerConfiguration, repoConfig: Rep
                 val childScope = SCOPE_NAME_DEPENDENCIES
                 val childDependencies = extractDependencyTree(childNode, childScope, alternativeNodes)
                 val packageReference = PackageReference(
-                        id = extractPackageId(childNode),
-                        dependencies = childDependencies
+                    id = extractPackageId(childNode),
+                    dependencies = childDependencies
                 )
                 result.add(packageReference)
             }
@@ -202,7 +205,7 @@ class Bower(name: String, analyzerConfig: AnalyzerConfiguration, repoConfig: Rep
         override val globsForDefinitionFiles = listOf("bower.json")
 
         override fun create(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfiguration) =
-                Bower(managerName, analyzerConfig, repoConfig)
+            Bower(managerName, analyzerConfig, repoConfig)
     }
 
     override fun command(workingDir: File?) = if (OS.isWindows) "bower.cmd" else "bower"
@@ -210,7 +213,7 @@ class Bower(name: String, analyzerConfig: AnalyzerConfiguration, repoConfig: Rep
     override fun getVersionRequirement(): Requirement = Requirement.buildStrict(REQUIRED_BOWER_VERSION)
 
     override fun prepareResolution(definitionFiles: List<File>) =
-            checkVersion(ignoreActualVersion = analyzerConfig.ignoreToolVersions)
+        checkVersion(ignoreActualVersion = analyzerConfig.ignoreToolVersions)
 
     override fun resolveDependencies(definitionFile: File): ProjectAnalyzerResult? {
         log.info { "Resolving dependencies for: '${definitionFile.absolutePath}'" }
@@ -223,28 +226,28 @@ class Bower(name: String, analyzerConfig: AnalyzerConfiguration, repoConfig: Rep
             val rootNode = jsonMapper.readTree(dependenciesJson)
             val packages = extractPackages(rootNode)
             val dependenciesScope = Scope(
-                    name = SCOPE_NAME_DEPENDENCIES,
-                    dependencies = extractDependencyTree(rootNode, SCOPE_NAME_DEPENDENCIES)
+                name = SCOPE_NAME_DEPENDENCIES,
+                dependencies = extractDependencyTree(rootNode, SCOPE_NAME_DEPENDENCIES)
             )
             val devDependenciesScope = Scope(
-                    name = SCOPE_NAME_DEV_DEPENDENCIES,
-                    dependencies = extractDependencyTree(rootNode, SCOPE_NAME_DEV_DEPENDENCIES)
+                name = SCOPE_NAME_DEV_DEPENDENCIES,
+                dependencies = extractDependencyTree(rootNode, SCOPE_NAME_DEV_DEPENDENCIES)
             )
 
             val projectPackage = extractPackage(rootNode)
             val project = Project(
-                    id = projectPackage.id,
-                    definitionFilePath = VersionControlSystem.getPathInfo(definitionFile).path,
-                    declaredLicenses = projectPackage.declaredLicenses,
-                    vcs = projectPackage.vcs,
-                    vcsProcessed = processProjectVcs(workingDir, projectPackage.vcs, projectPackage.homepageUrl),
-                    homepageUrl = projectPackage.homepageUrl,
-                    scopes = sortedSetOf(dependenciesScope, devDependenciesScope)
+                id = projectPackage.id,
+                definitionFilePath = VersionControlSystem.getPathInfo(definitionFile).path,
+                declaredLicenses = projectPackage.declaredLicenses,
+                vcs = projectPackage.vcs,
+                vcsProcessed = processProjectVcs(workingDir, projectPackage.vcs, projectPackage.homepageUrl),
+                homepageUrl = projectPackage.homepageUrl,
+                scopes = sortedSetOf(dependenciesScope, devDependenciesScope)
             )
 
             return ProjectAnalyzerResult(
-                    project = project,
-                    packages = packages.map { it.value.toCuratedPackage() }.toSortedSet()
+                project = project,
+                packages = packages.map { it.value.toCuratedPackage() }.toSortedSet()
             )
         }
     }

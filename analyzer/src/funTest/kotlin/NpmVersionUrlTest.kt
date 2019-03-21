@@ -62,11 +62,11 @@ class NpmVersionUrlTest : WordSpec() {
                 val result = createNPM(config).resolveDependencies(USER_DIR, listOf(packageFile))[packageFile]
                 val vcsPath = vcsDir.getPathToRoot(projectDir)
                 val expectedResult = patchExpectedResult(
-                        File(projectDir.parentFile, "npm-version-urls-expected-output.yml"),
-                        definitionFilePath = "$vcsPath/package.json",
-                        url = normalizeVcsUrl(vcsUrl),
-                        revision = vcsRevision,
-                        path = vcsPath
+                    File(projectDir.parentFile, "npm-version-urls-expected-output.yml"),
+                    definitionFilePath = "$vcsPath/package.json",
+                    url = normalizeVcsUrl(vcsUrl),
+                    revision = vcsRevision,
+                    path = vcsPath
                 )
 
                 yamlMapper.writeValueAsString(result) shouldBe expectedResult
@@ -75,5 +75,5 @@ class NpmVersionUrlTest : WordSpec() {
     }
 
     private fun createNPM(config: AnalyzerConfiguration = DEFAULT_ANALYZER_CONFIGURATION) =
-            NPM("NPM", config, DEFAULT_REPOSITORY_CONFIGURATION)
+        NPM("NPM", config, DEFAULT_REPOSITORY_CONFIGURATION)
 }

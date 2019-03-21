@@ -29,25 +29,25 @@ import com.here.ort.utils.percentEncode
  * A unique identifier for a software package.
  */
 data class Identifier(
-        /**
-         * The type of package, i.e. its packaging type, for example "Maven" or "NPM".
-         */
-        val type: String,
+    /**
+     * The type of package, i.e. its packaging type, for example "Maven" or "NPM".
+     */
+    val type: String,
 
-        /**
-         * The namespace of the package, for example the group for "Maven" or the scope for "NPM".
-         */
-        val namespace: String,
+    /**
+     * The namespace of the package, for example the group for "Maven" or the scope for "NPM".
+     */
+    val namespace: String,
 
-        /**
-         * The name of the package.
-         */
-        val name: String,
+    /**
+     * The name of the package.
+     */
+    val name: String,
 
-        /**
-         * The version of the package.
-         */
-        val version: String
+    /**
+     * The version of the package.
+     */
+    val version: String
 ) : Comparable<Identifier> {
     companion object {
         /**
@@ -55,18 +55,18 @@ data class Identifier(
          */
         @JvmField
         val EMPTY = Identifier(
-                type = "",
-                namespace = "",
-                name = "",
-                version = ""
+            type = "",
+            namespace = "",
+            name = "",
+            version = ""
         )
     }
 
     private constructor(components: List<String>) : this(
-            type = components.getOrElse(0) { "" },
-            namespace = components.getOrElse(1) { "" },
-            name = components.getOrElse(2) { "" },
-            version = components.getOrElse(3) { "" }
+        type = components.getOrElse(0) { "" },
+        namespace = components.getOrElse(1) { "" },
+        name = components.getOrElse(2) { "" },
+        version = components.getOrElse(3) { "" }
     )
 
     /**

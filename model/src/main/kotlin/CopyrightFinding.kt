@@ -32,8 +32,8 @@ import java.util.SortedSet
 import java.util.TreeSet
 
 data class CopyrightFinding(
-        val statement: String,
-        val locations: SortedSet<TextLocation>
+    val statement: String,
+    val locations: SortedSet<TextLocation>
 ) : Comparable<CopyrightFinding> {
     companion object {
         val SORTED_SET_COMPARATOR = SortedSetComparator<CopyrightFinding>()
@@ -41,12 +41,12 @@ data class CopyrightFinding(
     }
 
     override fun compareTo(other: CopyrightFinding) =
-            compareValuesBy(
-                    this,
-                    other,
-                    compareBy(CopyrightFinding::statement)
-                            .thenBy(TextLocation.SORTED_SET_COMPARATOR, CopyrightFinding::locations)
-            ) { it }
+        compareValuesBy(
+            this,
+            other,
+            compareBy(CopyrightFinding::statement)
+                .thenBy(TextLocation.SORTED_SET_COMPARATOR, CopyrightFinding::locations)
+        ) { it }
 }
 
 class CopyrightFindingDeserializer : StdDeserializer<CopyrightFinding>(CopyrightFinding::class.java) {
@@ -58,8 +58,8 @@ class CopyrightFindingDeserializer : StdDeserializer<CopyrightFinding>(Copyright
                 val statement = jsonMapper.treeToValue<String>(node["statement"])
 
                 val locations = jsonMapper.readValue<TreeSet<TextLocation>>(
-                        jsonMapper.treeAsTokens(node["locations"]),
-                        TextLocation.TREE_SET_TYPE
+                    jsonMapper.treeAsTokens(node["locations"]),
+                    TextLocation.TREE_SET_TYPE
                 )
 
                 CopyrightFinding(statement, locations)

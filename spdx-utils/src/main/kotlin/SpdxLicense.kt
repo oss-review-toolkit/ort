@@ -24,15 +24,15 @@ package com.here.ort.spdx
  * 'generateSpdxLicenseEnum'.
  */
 enum class SpdxLicense(
-        /**
-         * The id of the license.
-         */
-        val id: String,
+    /**
+     * The id of the license.
+     */
+    val id: String,
 
-        /**
-         * Whether the [id] is deprecated or not.
-         */
-        val deprecated: Boolean = false
+    /**
+     * Whether the [id] is deprecated or not.
+     */
+    val deprecated: Boolean = false
 ) {
     /** Attribution Assurance License */
     AAL("AAL"),

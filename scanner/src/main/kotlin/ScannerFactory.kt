@@ -42,7 +42,7 @@ interface ScannerFactory {
  * A generic factory class for a [Scanner].
  */
 abstract class AbstractScannerFactory<out T : Scanner>(
-        override val scannerName: String
+    override val scannerName: String
 ) : ScannerFactory {
     abstract override fun create(config: ScannerConfiguration): T
 

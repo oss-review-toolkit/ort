@@ -34,15 +34,15 @@ abstract class GitBase : VersionControlSystem(), CommandLineTool {
     override fun command(workingDir: File?) = "git"
 
     override fun getVersion() =
-            getVersion { output ->
-                versionRegex.matcher(output.lineSequence().first()).let {
-                    if (it.matches()) {
-                        it.group("version")
-                    } else {
-                        ""
-                    }
+        getVersion { output ->
+            versionRegex.matcher(output.lineSequence().first()).let {
+                if (it.matches()) {
+                    it.group("version")
+                } else {
+                    ""
                 }
             }
+        }
 
     override fun getWorkingTree(vcsDirectory: File): WorkingTree = GitWorkingTree(vcsDirectory, this)
 }

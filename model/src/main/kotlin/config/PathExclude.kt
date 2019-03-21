@@ -28,20 +28,20 @@ import java.nio.file.Paths
  * see the [official documentation][https://docs.oracle.com/javase/tutorial/essential/io/fileOps.html#glob].
  */
 data class PathExclude(
-        /**
-         * A glob to match the path of the project definition file, relative to the root of the repository.
-         */
-        val pattern: String,
+    /**
+     * A glob to match the path of the project definition file, relative to the root of the repository.
+     */
+    val pattern: String,
 
-        /**
-         * The reason why the project is excluded, out of a predefined choice.
-         */
-        val reason: PathExcludeReason,
+    /**
+     * The reason why the project is excluded, out of a predefined choice.
+     */
+    val reason: PathExcludeReason,
 
-        /**
-         * A comment to further explain why the [reason] is applicable here.
-         */
-        val comment: String
+    /**
+     * A comment to further explain why the [reason] is applicable here.
+     */
+    val comment: String
 ) {
     private val pathMatcher by lazy { FileSystems.getDefault().getPathMatcher("glob:$pattern") }
 

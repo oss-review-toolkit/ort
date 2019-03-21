@@ -32,18 +32,18 @@ class NpmTest : WordSpec({
 
         "properly handle NPM shortcut URLs" {
             val packages = mapOf(
-                    "npm/npm"
-                            to "https://github.com/npm/npm.git",
-                    "mochajs/mocha#4727d357ea"
-                            to "https://github.com/mochajs/mocha.git#4727d357ea",
-                    "github:snyk/node-tap#540c9e00f52809cb7fbfd80463578bf9d08aad50"
-                            to "https://github.com/snyk/node-tap.git#540c9e00f52809cb7fbfd80463578bf9d08aad50",
-                    "gist:11081aaa281"
-                            to "https://gist.github.com/11081aaa281",
-                    "bitbucket:example/repo"
-                            to "https://bitbucket.org/example/repo.git",
-                    "gitlab:another/repo"
-                            to "https://gitlab.com/another/repo.git"
+                "npm/npm"
+                        to "https://github.com/npm/npm.git",
+                "mochajs/mocha#4727d357ea"
+                        to "https://github.com/mochajs/mocha.git#4727d357ea",
+                "github:snyk/node-tap#540c9e00f52809cb7fbfd80463578bf9d08aad50"
+                        to "https://github.com/snyk/node-tap.git#540c9e00f52809cb7fbfd80463578bf9d08aad50",
+                "gist:11081aaa281"
+                        to "https://gist.github.com/11081aaa281",
+                "bitbucket:example/repo"
+                        to "https://bitbucket.org/example/repo.git",
+                "gitlab:another/repo"
+                        to "https://gitlab.com/another/repo.git"
             )
 
             packages.forEach { actualUrl, expectedUrl ->
@@ -53,12 +53,12 @@ class NpmTest : WordSpec({
 
         "not mess with crazy URLs" {
             val packages = mapOf(
-                    "git@github.com/cisco/node-jose.git"
-                            to "git@github.com/cisco/node-jose.git",
-                    "https://git@github.com:hacksparrow/node-easyimage.git"
-                            to "https://git@github.com:hacksparrow/node-easyimage.git",
-                    "github.com/improbable-eng/grpc-web"
-                            to "github.com/improbable-eng/grpc-web"
+                "git@github.com/cisco/node-jose.git"
+                        to "git@github.com/cisco/node-jose.git",
+                "https://git@github.com:hacksparrow/node-easyimage.git"
+                        to "https://git@github.com:hacksparrow/node-easyimage.git",
+                "github.com/improbable-eng/grpc-web"
+                        to "github.com/improbable-eng/grpc-web"
             )
 
             packages.forEach { actualUrl, expectedUrl ->

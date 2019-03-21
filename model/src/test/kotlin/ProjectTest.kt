@@ -31,15 +31,15 @@ class ProjectTest : WordSpec({
     "collectDependencies" should {
         "get all dependencies by default" {
             val expectedDependencies = listOf(
-                    "Maven:junit:junit:4.12",
-                    "Maven:org.apache.commons:commons-lang3:3.5",
-                    "Maven:org.apache.commons:commons-text:1.1",
-                    "Maven:org.apache.struts:struts2-assembly:2.5.14.1",
-                    "Maven:org.hamcrest:hamcrest-core:1.3"
+                "Maven:junit:junit:4.12",
+                "Maven:org.apache.commons:commons-lang3:3.5",
+                "Maven:org.apache.commons:commons-text:1.1",
+                "Maven:org.apache.struts:struts2-assembly:2.5.14.1",
+                "Maven:org.hamcrest:hamcrest-core:1.3"
             )
 
             val analyzerResultsFile =
-                    File("../analyzer/src/funTest/assets/projects/synthetic/gradle-expected-output-lib.yml")
+                File("../analyzer/src/funTest/assets/projects/synthetic/gradle-expected-output-lib.yml")
             val project = analyzerResultsFile.readValue<ProjectAnalyzerResult>().project
 
             project.collectDependencies().map { it.id.toCoordinates() } shouldBe expectedDependencies
@@ -47,7 +47,7 @@ class ProjectTest : WordSpec({
 
         "get no dependencies for a depth of 0" {
             val analyzerResultsFile =
-                    File("../analyzer/src/funTest/assets/projects/synthetic/gradle-expected-output-lib.yml")
+                File("../analyzer/src/funTest/assets/projects/synthetic/gradle-expected-output-lib.yml")
             val project = analyzerResultsFile.readValue<ProjectAnalyzerResult>().project
 
             project.collectDependencies(maxDepth = 0) should beEmpty()
@@ -55,13 +55,13 @@ class ProjectTest : WordSpec({
 
         "get only direct dependencies for a depth of 1" {
             val expectedDependencies = listOf(
-                    "Maven:junit:junit:4.12",
-                    "Maven:org.apache.commons:commons-text:1.1",
-                    "Maven:org.apache.struts:struts2-assembly:2.5.14.1"
+                "Maven:junit:junit:4.12",
+                "Maven:org.apache.commons:commons-text:1.1",
+                "Maven:org.apache.struts:struts2-assembly:2.5.14.1"
             )
 
             val analyzerResultsFile =
-                    File("../analyzer/src/funTest/assets/projects/synthetic/gradle-expected-output-lib.yml")
+                File("../analyzer/src/funTest/assets/projects/synthetic/gradle-expected-output-lib.yml")
             val project = analyzerResultsFile.readValue<ProjectAnalyzerResult>().project
 
             project.collectDependencies(maxDepth = 1).map { it.id.toCoordinates() } shouldBe expectedDependencies
@@ -70,27 +70,29 @@ class ProjectTest : WordSpec({
 
     "collectErrors" should {
         "find all errors" {
-            val analyzerResultsFile = File("../analyzer/src/funTest/assets/projects/synthetic/" +
-                    "gradle-expected-output-lib-without-repo.yml")
+            val analyzerResultsFile = File(
+                "../analyzer/src/funTest/assets/projects/synthetic/" +
+                        "gradle-expected-output-lib-without-repo.yml"
+            )
             val project = analyzerResultsFile.readValue<ProjectAnalyzerResult>().project
 
             project.collectErrors() shouldBe mapOf(
-                    Identifier("Unknown:org.apache.commons:commons-text:1.1") to setOf(
-                            OrtIssue(
-                                    Instant.EPOCH,
-                                    "Gradle",
-                                    "Unresolved: ModuleVersionNotFoundException: Cannot resolve external dependency " +
-                                            "org.apache.commons:commons-text:1.1 because no repositories are defined."
-                            )
-                    ),
-                    Identifier("Unknown:junit:junit:4.12") to setOf(
-                            OrtIssue(
-                                    Instant.EPOCH,
-                                    "Gradle",
-                                    "Unresolved: ModuleVersionNotFoundException: Cannot resolve external dependency " +
-                                            "junit:junit:4.12 because no repositories are defined."
-                            )
+                Identifier("Unknown:org.apache.commons:commons-text:1.1") to setOf(
+                    OrtIssue(
+                        Instant.EPOCH,
+                        "Gradle",
+                        "Unresolved: ModuleVersionNotFoundException: Cannot resolve external dependency " +
+                                "org.apache.commons:commons-text:1.1 because no repositories are defined."
                     )
+                ),
+                Identifier("Unknown:junit:junit:4.12") to setOf(
+                    OrtIssue(
+                        Instant.EPOCH,
+                        "Gradle",
+                        "Unresolved: ModuleVersionNotFoundException: Cannot resolve external dependency " +
+                                "junit:junit:4.12 because no repositories are defined."
+                    )
+                )
             )
         }
     }

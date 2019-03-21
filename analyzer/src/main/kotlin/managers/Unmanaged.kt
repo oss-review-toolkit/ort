@@ -38,12 +38,12 @@ import java.io.File
  * A fake [PackageManager] for projects that do not use any of the known package managers.
  */
 class Unmanaged(name: String, analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfiguration) :
-        PackageManager(name, analyzerConfig, repoConfig) {
+    PackageManager(name, analyzerConfig, repoConfig) {
     class Factory : AbstractPackageManagerFactory<Unmanaged>("Unmanaged") {
         override val globsForDefinitionFiles = emptyList<String>()
 
         override fun create(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfiguration) =
-                Unmanaged(managerName, analyzerConfig, repoConfig)
+            Unmanaged(managerName, analyzerConfig, repoConfig)
     }
 
     /**
@@ -67,10 +67,10 @@ class Unmanaged(name: String, analyzerConfig: AnalyzerConfiguration, repoConfig:
                 }
 
                 Identifier(
-                        type = managerName,
-                        namespace = "",
-                        name = projectDir.name,
-                        version = ""
+                    type = managerName,
+                    namespace = "",
+                    name = projectDir.name,
+                    version = ""
                 )
             }
 
@@ -78,32 +78,32 @@ class Unmanaged(name: String, analyzerConfig: AnalyzerConfiguration, repoConfig:
                 // For GitRepo looking at the URL and revision only is not enough, we also need to take the used
                 // manifest into account.
                 Identifier(
-                        type = managerName,
-                        namespace = vcsInfo.path.substringBeforeLast('/'),
-                        name = vcsInfo.path.substringAfterLast('/').removeSuffix(".xml"),
-                        version = vcsInfo.revision
+                    type = managerName,
+                    namespace = vcsInfo.path.substringBeforeLast('/'),
+                    name = vcsInfo.path.substringAfterLast('/').removeSuffix(".xml"),
+                    version = vcsInfo.revision
                 )
             }
 
             else -> {
                 // For all non-GitRepo VCSes derive the name from the VCS URL.
                 Identifier(
-                        type = managerName,
-                        namespace = "",
-                        name = vcsInfo.url.split('/').last().removeSuffix(".git"),
-                        version = vcsInfo.revision
+                    type = managerName,
+                    namespace = "",
+                    name = vcsInfo.url.split('/').last().removeSuffix(".git"),
+                    version = vcsInfo.revision
                 )
             }
         }
 
         val project = Project(
-                id = id,
-                definitionFilePath = "",
-                declaredLicenses = sortedSetOf(),
-                vcs = VcsInfo.EMPTY,
-                vcsProcessed = vcsInfo,
-                homepageUrl = "",
-                scopes = sortedSetOf()
+            id = id,
+            definitionFilePath = "",
+            declaredLicenses = sortedSetOf(),
+            vcs = VcsInfo.EMPTY,
+            vcsProcessed = vcsInfo,
+            homepageUrl = "",
+            scopes = sortedSetOf()
         )
 
         return ProjectAnalyzerResult(project, sortedSetOf())

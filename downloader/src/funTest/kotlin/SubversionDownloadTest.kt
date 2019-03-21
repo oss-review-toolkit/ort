@@ -57,11 +57,11 @@ class SubversionDownloadTest : StringSpec() {
         "Subversion can download a given revision".config(enabled = svn.isInPath(), tags = setOf(ExpensiveTag)) {
             val pkg = Package.EMPTY.copy(vcsProcessed = VcsInfo("Subversion", REPO_URL, REPO_REV))
             val expectedFiles = listOf(
-                    ".svn",
-                    "branches",
-                    "tags",
-                    "trunk",
-                    "wiki"
+                ".svn",
+                "branches",
+                "tags",
+                "trunk",
+                "wiki"
             )
 
             val workingTree = svn.download(pkg, outputDir)
@@ -73,9 +73,9 @@ class SubversionDownloadTest : StringSpec() {
         }
 
         "Subversion can download only a single path"
-                .config(enabled = svn.isInPath(), tags = setOf(ExpensiveTag)) {
-            val pkg = Package.EMPTY.copy(vcsProcessed = VcsInfo("Subversion", REPO_URL, REPO_REV, path = REPO_PATH))
-            val expectedFiles = listOf(
+            .config(enabled = svn.isInPath(), tags = setOf(ExpensiveTag)) {
+                val pkg = Package.EMPTY.copy(vcsProcessed = VcsInfo("Subversion", REPO_URL, REPO_REV, path = REPO_PATH))
+                val expectedFiles = listOf(
                     "SendMessage.sln",
                     "default.build",
                     "default.build.user.tmpl",
@@ -84,24 +84,24 @@ class SubversionDownloadTest : StringSpec() {
                     "tools",
                     "version.build.in",
                     "versioninfo.build"
-            )
+                )
 
-            val workingTree = svn.download(pkg, outputDir)
-            val actualFiles = workingTree.workingDir.list().sorted()
+                val workingTree = svn.download(pkg, outputDir)
+                val actualFiles = workingTree.workingDir.list().sorted()
 
-            workingTree.isValid() shouldBe true
-            workingTree.getRevision() shouldBe REPO_REV
-            actualFiles.joinToString("\n") shouldBe expectedFiles.joinToString("\n")
-        }
+                workingTree.isValid() shouldBe true
+                workingTree.getRevision() shouldBe REPO_REV
+                actualFiles.joinToString("\n") shouldBe expectedFiles.joinToString("\n")
+            }
 
         "Subversion can download a given tag".config(enabled = svn.isInPath(), tags = setOf(ExpensiveTag)) {
             val pkg = Package.EMPTY.copy(vcsProcessed = VcsInfo("Subversion", REPO_URL, "", path = REPO_TAG))
             val expectedFiles = listOf(
-                    "SendMessage.proj",
-                    "SendMessage.sln",
-                    "src",
-                    "version.proj",
-                    "web"
+                "SendMessage.proj",
+                "SendMessage.sln",
+                "src",
+                "version.proj",
+                "web"
             )
 
             val workingTree = svn.download(pkg, outputDir)
@@ -113,37 +113,37 @@ class SubversionDownloadTest : StringSpec() {
         }
 
         "Subversion can download based on a version"
-                .config(enabled = svn.isInPath(), tags = setOf(ExpensiveTag)) {
-            val pkg = Package.EMPTY.copy(
+            .config(enabled = svn.isInPath(), tags = setOf(ExpensiveTag)) {
+                val pkg = Package.EMPTY.copy(
                     id = Identifier("Test:::$REPO_VERSION"),
                     vcsProcessed = VcsInfo("Subversion", REPO_URL, "")
-            )
+                )
 
-            val workingTree = svn.download(pkg, outputDir)
+                val workingTree = svn.download(pkg, outputDir)
 
-            workingTree.isValid() shouldBe true
-            workingTree.getRevision() shouldBe REPO_REV_FOR_VERSION
-        }
+                workingTree.isValid() shouldBe true
+                workingTree.getRevision() shouldBe REPO_REV_FOR_VERSION
+            }
 
         "Subversion can download only a single path based on a version"
-                .config(enabled = svn.isInPath(), tags = setOf(ExpensiveTag)) {
-            val pkg = Package.EMPTY.copy(
+            .config(enabled = svn.isInPath(), tags = setOf(ExpensiveTag)) {
+                val pkg = Package.EMPTY.copy(
                     id = Identifier("Test:::$REPO_VERSION"),
                     vcsProcessed = VcsInfo("Subversion", REPO_URL, "", path = REPO_PATH_FOR_VERSION)
-            )
-            val expectedFiles = listOf(
+                )
+                val expectedFiles = listOf(
                     "SendMessage.ico",
                     "searchw.cur",
                     "searchw.ico",
                     "windowmessages.xml"
-            )
+                )
 
-            val workingTree = svn.download(pkg, outputDir)
-            val actualFiles = File(workingTree.workingDir, REPO_PATH_FOR_VERSION).list().sorted()
+                val workingTree = svn.download(pkg, outputDir)
+                val actualFiles = File(workingTree.workingDir, REPO_PATH_FOR_VERSION).list().sorted()
 
-            workingTree.isValid() shouldBe true
-            workingTree.getRevision() shouldBe REPO_REV_FOR_VERSION
-            actualFiles.joinToString("\n") shouldBe expectedFiles.joinToString("\n")
-        }
+                workingTree.isValid() shouldBe true
+                workingTree.getRevision() shouldBe REPO_REV_FOR_VERSION
+                actualFiles.joinToString("\n") shouldBe expectedFiles.joinToString("\n")
+            }
     }
 }

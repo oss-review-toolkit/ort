@@ -44,9 +44,11 @@ class EvaluatorTest : WordSpec() {
             }
 
             "fail if the script can not be compiled" {
-                val result = Evaluator(ortResult).checkSyntax("""
+                val result = Evaluator(ortResult).checkSyntax(
+                    """
                     broken script
-                    """.trimIndent())
+                    """.trimIndent()
+                )
 
                 result shouldBe false
             }
@@ -60,10 +62,12 @@ class EvaluatorTest : WordSpec() {
             }
 
             "contain rule errors in the result" {
-                val result = Evaluator(ortResult).run("""
+                val result = Evaluator(ortResult).run(
+                    """
                     evalErrors += OrtIssue(source = "source 1", message = "message 1")
                     evalErrors += OrtIssue(source = "source 2", message = "message 2")
-                    """.trimIndent())
+                    """.trimIndent()
+                )
 
                 result.errors should haveSize(2)
                 result.errors[0].let {

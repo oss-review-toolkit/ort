@@ -50,7 +50,7 @@ interface PackageManagerFactory {
  * A generic factory class for a [PackageManager].
  */
 abstract class AbstractPackageManagerFactory<out T : PackageManager>(
-        override val managerName: String
+    override val managerName: String
 ) : PackageManagerFactory {
     /**
      * The prioritized list of glob patterns of definition files supported by this package manager. Only all matches of

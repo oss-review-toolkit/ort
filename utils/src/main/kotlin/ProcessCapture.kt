@@ -37,7 +37,7 @@ class ProcessCapture(vararg command: String, workingDir: File? = null, environme
     companion object {
         private const val MAX_OUTPUT_LINES = 20
         private const val MAX_OUTPUT_FOOTER =
-                "(Above output is limited to each $MAX_OUTPUT_LINES heading and tailing lines.)"
+            "(Above output is limited to each $MAX_OUTPUT_LINES heading and tailing lines.)"
 
         private fun limitOutputLines(message: String): String {
             val lines = message.lines()
@@ -75,12 +75,12 @@ class ProcessCapture(vararg command: String, workingDir: File? = null, environme
         get() = stderrFile.readText()
 
     private val builder = ProcessBuilder(*command)
-            .directory(workingDir)
-            .redirectOutput(stdoutFile)
-            .redirectError(stderrFile)
-            .apply {
-                environment().putAll(environment)
-            }
+        .directory(workingDir)
+        .redirectOutput(stdoutFile)
+        .redirectError(stderrFile)
+        .apply {
+            environment().putAll(environment)
+        }
 
     val commandLine = command.joinToString(" ")
     val usedWorkingDir = builder.directory() ?: System.getProperty("user.dir")!!

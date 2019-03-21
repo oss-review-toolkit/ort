@@ -44,9 +44,9 @@ class GradleKotlinScriptTest : StringSpec() {
         "root project dependencies are detected correctly" {
             val packageFile = File(projectDir, "build.gradle.kts")
             val expectedResult = patchExpectedResult(
-                    File(projectDir.parentFile, "multi-kotlin-project-expected-output-root.yml"),
-                    url = normalizeVcsUrl(vcsUrl),
-                    revision = vcsRevision
+                File(projectDir.parentFile, "multi-kotlin-project-expected-output-root.yml"),
+                url = normalizeVcsUrl(vcsUrl),
+                revision = vcsRevision
             )
 
             val result = createGradle().resolveDependencies(USER_DIR, listOf(packageFile))[packageFile]
@@ -59,9 +59,9 @@ class GradleKotlinScriptTest : StringSpec() {
         "core project dependencies are detected correctly" {
             val packageFile = File(projectDir, "core/build.gradle.kts")
             val expectedResult = patchExpectedResult(
-                    File(projectDir.parentFile, "multi-kotlin-project-expected-output-core.yml"),
-                    url = normalizeVcsUrl(vcsUrl),
-                    revision = vcsRevision
+                File(projectDir.parentFile, "multi-kotlin-project-expected-output-core.yml"),
+                url = normalizeVcsUrl(vcsUrl),
+                revision = vcsRevision
             )
 
             val result = createGradle().resolveDependencies(USER_DIR, listOf(packageFile))[packageFile]
@@ -74,9 +74,9 @@ class GradleKotlinScriptTest : StringSpec() {
         "cli project dependencies are detected correctly" {
             val packageFile = File(projectDir, "cli/build.gradle.kts")
             val expectedResult = patchExpectedResult(
-                    File(projectDir.parentFile, "multi-kotlin-project-expected-output-cli.yml"),
-                    url = normalizeVcsUrl(vcsUrl),
-                    revision = vcsRevision
+                File(projectDir.parentFile, "multi-kotlin-project-expected-output-cli.yml"),
+                url = normalizeVcsUrl(vcsUrl),
+                revision = vcsRevision
             )
 
             val result = createGradle().resolveDependencies(USER_DIR, listOf(packageFile))[packageFile]

@@ -31,39 +31,44 @@ val DEFAULT_REPOSITORY_CONFIGURATION = RepositoryConfiguration()
 val USER_DIR = File(System.getProperty("user.dir"))
 
 private val ORT_VERSION_REGEX = Regex("(ort_version): \".*\"")
-private val ENV_VAR_REGEX = Regex("(variables):.*?^(\\s{4}\\w+):",
-        setOf(RegexOption.DOT_MATCHES_ALL, RegexOption.MULTILINE))
+private val ENV_VAR_REGEX = Regex(
+    "(variables):.*?^(\\s{4}\\w+):",
+    setOf(RegexOption.DOT_MATCHES_ALL, RegexOption.MULTILINE)
+)
 private val DOWNLOAD_TIME_REGEX = Regex("(download_time): \".*\"")
 private val START_AND_END_TIME_REGEX = Regex("((start|end)_time): \".*\"")
 private val TIMESTAMP_REGEX = Regex("(timestamp): \".*\"")
 
-fun patchExpectedResult(result: File, custom: Pair<String, String>? = null, definitionFilePath: String? = null,
-                        url: String? = null, revision: String? = null, path: String? = null,
-                        urlProcessed: String? = null): String {
+fun patchExpectedResult(
+    result: File, custom: Pair<String, String>? = null, definitionFilePath: String? = null,
+    url: String? = null, revision: String? = null, path: String? = null,
+    urlProcessed: String? = null
+): String {
     fun String.replaceIfNotNull(strings: Pair<String, String>?) =
-            if (strings != null) replace(strings.first, strings.second) else this
+        if (strings != null) replace(strings.first, strings.second) else this
+
     fun String.replaceIfNotNull(oldValue: String, newValue: String?) =
-            if (newValue != null) replace(oldValue, newValue) else this
+        if (newValue != null) replace(oldValue, newValue) else this
 
     return result.readText()
-            .replaceIfNotNull(custom)
-            .replaceIfNotNull("<REPLACE_OS>", System.getProperty("os.name"))
-            .replaceIfNotNull("<REPLACE_DEFINITION_FILE_PATH>", definitionFilePath)
-            .replaceIfNotNull("<REPLACE_URL>", url)
-            .replaceIfNotNull("<REPLACE_REVISION>", revision)
-            .replaceIfNotNull("<REPLACE_PATH>", path)
-            .replaceIfNotNull("<REPLACE_URL_PROCESSED>", urlProcessed)
+        .replaceIfNotNull(custom)
+        .replaceIfNotNull("<REPLACE_OS>", System.getProperty("os.name"))
+        .replaceIfNotNull("<REPLACE_DEFINITION_FILE_PATH>", definitionFilePath)
+        .replaceIfNotNull("<REPLACE_URL>", url)
+        .replaceIfNotNull("<REPLACE_REVISION>", revision)
+        .replaceIfNotNull("<REPLACE_PATH>", path)
+        .replaceIfNotNull("<REPLACE_URL_PROCESSED>", urlProcessed)
 }
 
 fun patchActualResult(result: String, patchDownloadTime: Boolean = false, patchStartAndEndTime: Boolean = false):
         String {
     fun String.replaceIf(condition: Boolean, regex: Regex, transform: (MatchResult) -> CharSequence) =
-            if (condition) replace(regex, transform) else this
+        if (condition) replace(regex, transform) else this
 
     return result
-            .replace(ORT_VERSION_REGEX) { "${it.groupValues[1]}: \"HEAD\"" }
-            .replace(ENV_VAR_REGEX) { "${it.groupValues[1]}: {}\n${it.groupValues[2]}:" }
-            .replace(TIMESTAMP_REGEX) { "${it.groupValues[1]}: \"${Instant.EPOCH}\"" }
-            .replaceIf(patchDownloadTime, DOWNLOAD_TIME_REGEX) { "${it.groupValues[1]}: \"${Instant.EPOCH}\"" }
-            .replaceIf(patchStartAndEndTime, START_AND_END_TIME_REGEX) { "${it.groupValues[1]}: \"${Instant.EPOCH}\"" }
+        .replace(ORT_VERSION_REGEX) { "${it.groupValues[1]}: \"HEAD\"" }
+        .replace(ENV_VAR_REGEX) { "${it.groupValues[1]}: {}\n${it.groupValues[2]}:" }
+        .replace(TIMESTAMP_REGEX) { "${it.groupValues[1]}: \"${Instant.EPOCH}\"" }
+        .replaceIf(patchDownloadTime, DOWNLOAD_TIME_REGEX) { "${it.groupValues[1]}: \"${Instant.EPOCH}\"" }
+        .replaceIf(patchStartAndEndTime, START_AND_END_TIME_REGEX) { "${it.groupValues[1]}: \"${Instant.EPOCH}\"" }
 }

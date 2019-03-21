@@ -43,10 +43,12 @@ class Git : GitBase() {
     override val priority: Int = 100
 
     override fun isApplicableUrlInternal(vcsUrl: String) =
-            ProcessCapture("git", "ls-remote", vcsUrl).isSuccess
+        ProcessCapture("git", "ls-remote", vcsUrl).isSuccess
 
-    override fun download(pkg: Package, targetDir: File, allowMovingRevisions: Boolean,
-                          recursive: Boolean): WorkingTree {
+    override fun download(
+        pkg: Package, targetDir: File, allowMovingRevisions: Boolean,
+        recursive: Boolean
+    ): WorkingTree {
         log.info { "Using $type version ${getVersion()}." }
 
         try {
@@ -57,8 +59,10 @@ class Git : GitBase() {
 
                 pkg.vcsProcessed.path.let {
                     if (it.isNotEmpty() && !workingTree.workingDir.resolve(it).exists()) {
-                        throw DownloadException("The $type working directory at '${workingTree.workingDir}' does not " +
-                                "contain the requested path '$it'.")
+                        throw DownloadException(
+                            "The $type working directory at '${workingTree.workingDir}' does not " +
+                                    "contain the requested path '$it'."
+                        )
                     }
                 }
             }
@@ -117,7 +121,7 @@ class Git : GitBase() {
         }
 
         val revision = revisionCandidates.firstOrNull()
-                ?: throw IOException("Unable to determine a revision to checkout.")
+            ?: throw IOException("Unable to determine a revision to checkout.")
 
         // To safe network bandwidth, first try to only fetch exactly the revision we want. Skip this optimization for
         // SSH URLs to GitHub as GitHub does not have "allowReachableSHA1InWant" (nor "allowAnySHA1InWant") enabled and

@@ -114,5 +114,5 @@ class GoDepTest : WordSpec() {
     }
 
     private fun createGoDep(config: AnalyzerConfiguration = DEFAULT_ANALYZER_CONFIGURATION) =
-            GoDep("GoDep", config, DEFAULT_REPOSITORY_CONFIGURATION)
+        GoDep("GoDep", config, DEFAULT_REPOSITORY_CONFIGURATION)
 }

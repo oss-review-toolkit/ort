@@ -57,8 +57,8 @@ class BoyterLc(name: String, config: ScannerConfiguration) : LocalScanner(name, 
 
     companion object {
         val CONFIGURATION_OPTIONS = listOf(
-                "--confidence", "0.95", // Cut-off value to only get most relevant matches.
-                "--format", "json"
+            "--confidence", "0.95", // Cut-off value to only get most relevant matches.
+            "--format", "json"
         )
     }
 
@@ -131,10 +131,10 @@ class BoyterLc(name: String, config: ScannerConfiguration) : LocalScanner(name, 
         val startTime = Instant.now()
 
         val process = ProcessCapture(
-                scannerPath.absolutePath,
-                *CONFIGURATION_OPTIONS.toTypedArray(),
-                "--output", resultsFile.absolutePath,
-                path.absolutePath
+            scannerPath.absolutePath,
+            *CONFIGURATION_OPTIONS.toTypedArray(),
+            "--output", resultsFile.absolutePath,
+            path.absolutePath
         )
 
         val endTime = Instant.now()

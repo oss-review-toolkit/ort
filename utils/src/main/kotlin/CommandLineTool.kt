@@ -58,20 +58,22 @@ interface CommandLineTool {
      * Run the command in the [workingDir] directory with arguments as specified by [args] and the given [environment].
      */
     fun run(vararg args: String, workingDir: File? = null, environment: Map<String, String> = emptyMap()) =
-            ProcessCapture(command(workingDir), *args, workingDir = workingDir, environment = environment)
-                    .requireSuccess()
+        ProcessCapture(command(workingDir), *args, workingDir = workingDir, environment = environment)
+            .requireSuccess()
 
     /**
      * Run the command in the [workingDir] directory with arguments as specified by [args].
      */
     fun run(workingDir: File?, vararg args: String) =
-            ProcessCapture(workingDir, command(workingDir), *args).requireSuccess()
+        ProcessCapture(workingDir, command(workingDir), *args).requireSuccess()
 
     /**
      * Get the version of the command by parsing its output.
      */
-    fun getVersion(versionArguments: String = "--version", workingDir: File? = null,
-                   transform: (String) -> String = { it }): String {
+    fun getVersion(
+        versionArguments: String = "--version", workingDir: File? = null,
+        transform: (String) -> String = { it }
+    ): String {
         val version = run(workingDir, *versionArguments.split(' ').toTypedArray())
 
         // Some tools actually report the version to stderr, so try that as a fallback.
@@ -88,10 +90,10 @@ interface CommandLineTool {
      * Run a [command] to check its version against the [required version][getVersionRequirement].
      */
     fun checkVersion(
-            versionArguments: String = "--version",
-            ignoreActualVersion: Boolean = false,
-            workingDir: File? = null,
-            transform: (String) -> String = { it }
+        versionArguments: String = "--version",
+        ignoreActualVersion: Boolean = false,
+        workingDir: File? = null,
+        transform: (String) -> String = { it }
     ) {
         val toolVersionOutput = getVersion(versionArguments, workingDir, transform)
         val actualVersion = Semver(toolVersionOutput, Semver.SemverType.LOOSE)

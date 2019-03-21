@@ -52,57 +52,73 @@ object AnalyzerCommand : CommandWithHelp() {
 
         override fun convert(name: String): PackageManagerFactory {
             return PACKAGE_MANAGERS[name.toUpperCase()]
-                    ?: throw ParameterException("Package managers must be contained in ${PACKAGE_MANAGERS.keys}.")
+                ?: throw ParameterException("Package managers must be contained in ${PACKAGE_MANAGERS.keys}.")
         }
     }
 
-    @Parameter(description = "The list of package managers to activate.",
-            names = ["--package-managers", "-m"],
-            converter = PackageManagerConverter::class,
-            order = PARAMETER_ORDER_OPTIONAL)
+    @Parameter(
+        description = "The list of package managers to activate.",
+        names = ["--package-managers", "-m"],
+        converter = PackageManagerConverter::class,
+        order = PARAMETER_ORDER_OPTIONAL
+    )
     private var packageManagers = PackageManager.ALL
 
-    @Parameter(description = "The project directory to analyze.",
-            names = ["--input-dir", "-i"],
-            required = true,
-            order = PARAMETER_ORDER_MANDATORY)
+    @Parameter(
+        description = "The project directory to analyze.",
+        names = ["--input-dir", "-i"],
+        required = true,
+        order = PARAMETER_ORDER_MANDATORY
+    )
     @Suppress("LateinitUsage")
     private lateinit var inputDir: File
 
-    @Parameter(description = "The directory to write the analyzer result as ORT result file(s) to, in the specified " +
-            "output format(s).",
-            names = ["--output-dir", "-o"],
-            required = true,
-            order = PARAMETER_ORDER_MANDATORY)
+    @Parameter(
+        description = "The directory to write the analyzer result as ORT result file(s) to, in the specified " +
+                "output format(s).",
+        names = ["--output-dir", "-o"],
+        required = true,
+        order = PARAMETER_ORDER_MANDATORY
+    )
     @Suppress("LateinitUsage")
     private lateinit var outputDir: File
 
-    @Parameter(description = "The list of output formats to be used for the ORT result file(s).",
-            names = ["--output-formats", "-f"],
-            order = PARAMETER_ORDER_OPTIONAL)
+    @Parameter(
+        description = "The list of output formats to be used for the ORT result file(s).",
+        names = ["--output-formats", "-f"],
+        order = PARAMETER_ORDER_OPTIONAL
+    )
     private var outputFormats = listOf(OutputFormat.YAML)
 
-    @Parameter(description = "Ignore versions of required tools. NOTE: This may lead to erroneous results.",
-            names = ["--ignore-tool-versions"],
-            order = PARAMETER_ORDER_OPTIONAL)
+    @Parameter(
+        description = "Ignore versions of required tools. NOTE: This may lead to erroneous results.",
+        names = ["--ignore-tool-versions"],
+        order = PARAMETER_ORDER_OPTIONAL
+    )
     private var ignoreToolVersions = false
 
-    @Parameter(description = "Allow dynamic versions of dependencies. This can result in unstable results when " +
-            "dependencies use version ranges. This option only affects package managers that support lock files, " +
-            "like NPM.",
-            names = ["--allow-dynamic-versions"],
-            order = PARAMETER_ORDER_OPTIONAL)
+    @Parameter(
+        description = "Allow dynamic versions of dependencies. This can result in unstable results when " +
+                "dependencies use version ranges. This option only affects package managers that support lock files, " +
+                "like NPM.",
+        names = ["--allow-dynamic-versions"],
+        order = PARAMETER_ORDER_OPTIONAL
+    )
     private var allowDynamicVersions = false
 
-    @Parameter(description = "A YAML file that contains package curation data.",
-            names = ["--package-curations-file"],
-            order = PARAMETER_ORDER_OPTIONAL)
+    @Parameter(
+        description = "A YAML file that contains package curation data.",
+        names = ["--package-curations-file"],
+        order = PARAMETER_ORDER_OPTIONAL
+    )
     private var packageCurationsFile: File? = null
 
-    @Parameter(description = "A file containing the repository configuration. If set the .ort.yml file from the " +
-            "repository will be ignored.",
-            names = ["--repository-configuration-file"],
-            order = PARAMETER_ORDER_OPTIONAL)
+    @Parameter(
+        description = "A file containing the repository configuration. If set the .ort.yml file from the " +
+                "repository will be ignored.",
+        names = ["--repository-configuration-file"],
+        order = PARAMETER_ORDER_OPTIONAL
+    )
     private var repositoryConfigurationFile: File? = null
 
     override fun runCommand(jc: JCommander): Int {
@@ -138,8 +154,10 @@ object AnalyzerCommand : CommandWithHelp() {
 
         val config = AnalyzerConfiguration(ignoreToolVersions, allowDynamicVersions)
         val analyzer = Analyzer(config)
-        val ortResult = analyzer.analyze(absoluteInputDir, packageManagers, absolutePackageCurationsFile,
-                absoluteRepositoryConfigurationFile)
+        val ortResult = analyzer.analyze(
+            absoluteInputDir, packageManagers, absolutePackageCurationsFile,
+            absoluteRepositoryConfigurationFile
+        )
 
         println("Found ${ortResult.analyzer?.result?.projects.orEmpty().size} project(s) in total.")
 

@@ -25,46 +25,46 @@ import com.here.ort.utils.OS
  * A description of the environment that ORT was executed in.
  */
 data class Environment(
-        /**
-         * The version of ORT used.
-         */
-        val ortVersion: String = ORT_VERSION,
+    /**
+     * The version of ORT used.
+     */
+    val ortVersion: String = ORT_VERSION,
 
-        /**
-         * Name of the operating system, defaults to [OS.name].
-          */
-        val os: String = OS.name,
+    /**
+     * Name of the operating system, defaults to [OS.name].
+     */
+    val os: String = OS.name,
 
-        /**
-         * Map of selected environment variables that might be relevant for debugging.
-         */
-        val variables: Map<String, String> = System.getenv().mapKeys { (key, _) -> key.toUpperCase() }.let { env ->
-            RELEVANT_VARIABLES.mapNotNull { key ->
-                env[key]?.let { value -> key to value }
-            }.toMap()
-        },
+    /**
+     * Map of selected environment variables that might be relevant for debugging.
+     */
+    val variables: Map<String, String> = System.getenv().mapKeys { (key, _) -> key.toUpperCase() }.let { env ->
+        RELEVANT_VARIABLES.mapNotNull { key ->
+            env[key]?.let { value -> key to value }
+        }.toMap()
+    },
 
-        /**
-         * Map of used tools and their installed versions, defaults to an empty map.
-         */
-        val toolVersions: Map<String, String> = emptyMap()
+    /**
+     * Map of used tools and their installed versions, defaults to an empty map.
+     */
+    val toolVersions: Map<String, String> = emptyMap()
 ) {
     companion object {
         val ORT_VERSION = this::class.java.getResource("/VERSION").readText()
 
         private val RELEVANT_VARIABLES = listOf(
-                // Windows variables.
-                "OS",
-                "COMSPEC",
-                // Unix variables.
-                "OSTYPE",
-                "HOSTTYPE",
-                "SHELL",
-                "TERM",
-                // General variables.
-                "JAVA_HOME",
-                "ANDROID_HOME",
-                "GOPATH"
+            // Windows variables.
+            "OS",
+            "COMSPEC",
+            // Unix variables.
+            "OSTYPE",
+            "HOSTTYPE",
+            "SHELL",
+            "TERM",
+            // General variables.
+            "JAVA_HOME",
+            "ANDROID_HOME",
+            "GOPATH"
         )
     }
 }

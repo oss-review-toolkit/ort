@@ -32,70 +32,72 @@ import java.io.File
 
 class DrupalIntegrationTest : AbstractIntegrationSpec() {
     override val pkg: Package = Package(
-            id = Identifier(
-                    type = "PhpComposer",
-                    namespace = "",
-                    name = "Drupal",
-                    version = ""
-            ),
-            declaredLicenses = sortedSetOf(),
-            description = "",
-            homepageUrl = "",
-            binaryArtifact = RemoteArtifact.EMPTY,
-            sourceArtifact = RemoteArtifact.EMPTY,
-            vcs = VcsInfo(
-                    "Git",
-                    "https://github.com/drupal/drupal.git",
-                    "4a765491d80d1bcb11e542ffafccf10aef05b853",
-                    ""
-            )
+        id = Identifier(
+            type = "PhpComposer",
+            namespace = "",
+            name = "Drupal",
+            version = ""
+        ),
+        declaredLicenses = sortedSetOf(),
+        description = "",
+        homepageUrl = "",
+        binaryArtifact = RemoteArtifact.EMPTY,
+        sourceArtifact = RemoteArtifact.EMPTY,
+        vcs = VcsInfo(
+            "Git",
+            "https://github.com/drupal/drupal.git",
+            "4a765491d80d1bcb11e542ffafccf10aef05b853",
+            ""
+        )
     )
 
     override val expectedManagedFiles by lazy {
         val downloadDir = downloadResult.downloadDirectory
 
         mapOf(
-                PhpComposer.Factory() as PackageManagerFactory to listOf(
-                        File(downloadDir, "core/modules/system/tests/fixtures/HtaccessTest/composer.json"),
-                        File(downloadDir, "core/lib/Drupal/Component/Uuid/composer.json"),
-                        File(downloadDir, "core/lib/Drupal/Component/Utility/composer.json"),
-                        File(downloadDir, "core/lib/Drupal/Component/Transliteration/composer.json"),
-                        File(downloadDir, "core/lib/Drupal/Component/Serialization/composer.json"),
-                        File(downloadDir, "core/lib/Drupal/Component/Render/composer.json"),
-                        File(downloadDir, "core/lib/Drupal/Component/ProxyBuilder/composer.json"),
-                        File(downloadDir, "core/lib/Drupal/Component/Plugin/composer.json"),
-                        File(downloadDir, "core/lib/Drupal/Component/PhpStorage/composer.json"),
-                        File(downloadDir, "core/lib/Drupal/Component/HttpFoundation/composer.json"),
-                        File(downloadDir, "core/lib/Drupal/Component/Graph/composer.json"),
-                        File(downloadDir, "core/lib/Drupal/Component/Gettext/composer.json"),
-                        File(downloadDir, "core/lib/Drupal/Component/FileSystem/composer.json"),
-                        File(downloadDir, "core/lib/Drupal/Component/FileCache/composer.json"),
-                        File(downloadDir, "core/lib/Drupal/Component/EventDispatcher/composer.json"),
-                        File(downloadDir, "core/lib/Drupal/Component/Discovery/composer.json"),
-                        File(downloadDir, "core/lib/Drupal/Component/Diff/composer.json"),
-                        File(downloadDir, "core/lib/Drupal/Component/DependencyInjection/composer.json"),
-                        File(downloadDir, "core/lib/Drupal/Component/Datetime/composer.json"),
-                        File(downloadDir, "core/lib/Drupal/Component/ClassFinder/composer.json"),
-                        File(downloadDir, "core/lib/Drupal/Component/Bridge/composer.json"),
-                        File(downloadDir, "core/lib/Drupal/Component/Assertion/composer.json"),
-                        File(downloadDir, "core/lib/Drupal/Component/Annotation/composer.json"),
-                        File(downloadDir, "core/composer.json"),
-                        File(downloadDir, "composer.json")
-                ),
-                NPM.Factory() as PackageManagerFactory to listOf(
-                        File(downloadDir, "core/package.json"),
-                        File(downloadDir, "core/assets/vendor/jquery.ui/package.json")
-                ),
-                Yarn.Factory() as PackageManagerFactory to listOf(
-                        File(downloadDir, "core/package.json"),
-                        File(downloadDir, "core/assets/vendor/jquery.ui/package.json")
-                )
+            PhpComposer.Factory() as PackageManagerFactory to listOf(
+                File(downloadDir, "core/modules/system/tests/fixtures/HtaccessTest/composer.json"),
+                File(downloadDir, "core/lib/Drupal/Component/Uuid/composer.json"),
+                File(downloadDir, "core/lib/Drupal/Component/Utility/composer.json"),
+                File(downloadDir, "core/lib/Drupal/Component/Transliteration/composer.json"),
+                File(downloadDir, "core/lib/Drupal/Component/Serialization/composer.json"),
+                File(downloadDir, "core/lib/Drupal/Component/Render/composer.json"),
+                File(downloadDir, "core/lib/Drupal/Component/ProxyBuilder/composer.json"),
+                File(downloadDir, "core/lib/Drupal/Component/Plugin/composer.json"),
+                File(downloadDir, "core/lib/Drupal/Component/PhpStorage/composer.json"),
+                File(downloadDir, "core/lib/Drupal/Component/HttpFoundation/composer.json"),
+                File(downloadDir, "core/lib/Drupal/Component/Graph/composer.json"),
+                File(downloadDir, "core/lib/Drupal/Component/Gettext/composer.json"),
+                File(downloadDir, "core/lib/Drupal/Component/FileSystem/composer.json"),
+                File(downloadDir, "core/lib/Drupal/Component/FileCache/composer.json"),
+                File(downloadDir, "core/lib/Drupal/Component/EventDispatcher/composer.json"),
+                File(downloadDir, "core/lib/Drupal/Component/Discovery/composer.json"),
+                File(downloadDir, "core/lib/Drupal/Component/Diff/composer.json"),
+                File(downloadDir, "core/lib/Drupal/Component/DependencyInjection/composer.json"),
+                File(downloadDir, "core/lib/Drupal/Component/Datetime/composer.json"),
+                File(downloadDir, "core/lib/Drupal/Component/ClassFinder/composer.json"),
+                File(downloadDir, "core/lib/Drupal/Component/Bridge/composer.json"),
+                File(downloadDir, "core/lib/Drupal/Component/Assertion/composer.json"),
+                File(downloadDir, "core/lib/Drupal/Component/Annotation/composer.json"),
+                File(downloadDir, "core/composer.json"),
+                File(downloadDir, "composer.json")
+            ),
+            NPM.Factory() as PackageManagerFactory to listOf(
+                File(downloadDir, "core/package.json"),
+                File(downloadDir, "core/assets/vendor/jquery.ui/package.json")
+            ),
+            Yarn.Factory() as PackageManagerFactory to listOf(
+                File(downloadDir, "core/package.json"),
+                File(downloadDir, "core/assets/vendor/jquery.ui/package.json")
+            )
         )
     }
 
     override val managedFilesForTest by lazy {
-        mapOf(PhpComposer.Factory() as PackageManagerFactory to
-                // Limit to definition files that come long with a lock file.
-                listOf(File(downloadResult.downloadDirectory, "composer.json")))
+        mapOf(
+            PhpComposer.Factory() as PackageManagerFactory to
+                    // Limit to definition files that come long with a lock file.
+                    listOf(File(downloadResult.downloadDirectory, "composer.json"))
+        )
     }
 }

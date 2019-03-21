@@ -50,12 +50,12 @@ class BundlerTest : WordSpec() {
 
                 try {
                     val actualResult = createBundler()
-                            .resolveDependencies(USER_DIR, listOf(definitionFile))[definitionFile]
+                        .resolveDependencies(USER_DIR, listOf(definitionFile))[definitionFile]
                     val expectedResult = patchExpectedResult(
-                            File(projectsDir.parentFile, "bundler-expected-output-lockfile.yml"),
-                            url = normalizeVcsUrl(vcsUrl),
-                            revision = vcsRevision,
-                            path = vcsDir.getPathToRoot(definitionFile.parentFile)
+                        File(projectsDir.parentFile, "bundler-expected-output-lockfile.yml"),
+                        url = normalizeVcsUrl(vcsUrl),
+                        revision = vcsRevision,
+                        path = vcsDir.getPathToRoot(definitionFile.parentFile)
                     )
 
                     yamlMapper.writeValueAsString(actualResult) shouldBe expectedResult
@@ -83,12 +83,12 @@ class BundlerTest : WordSpec() {
 
                 try {
                     val actualResult = createBundler()
-                            .resolveDependencies(USER_DIR, listOf(definitionFile))[definitionFile]
+                        .resolveDependencies(USER_DIR, listOf(definitionFile))[definitionFile]
                     val expectedResult = patchExpectedResult(
-                            File(projectsDir.parentFile, "bundler-expected-output-gemspec.yml"),
-                            url = normalizeVcsUrl(vcsUrl),
-                            revision = vcsRevision,
-                            path = vcsDir.getPathToRoot(definitionFile.parentFile)
+                        File(projectsDir.parentFile, "bundler-expected-output-gemspec.yml"),
+                        url = normalizeVcsUrl(vcsUrl),
+                        revision = vcsRevision,
+                        path = vcsDir.getPathToRoot(definitionFile.parentFile)
                     )
 
                     yamlMapper.writeValueAsString(actualResult) shouldBe expectedResult

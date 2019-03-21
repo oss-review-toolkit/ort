@@ -67,39 +67,39 @@ class VersionControlSystemTest : WordSpec({
     "splitUrl" should {
         "split paths from a URL to a Git repository" {
             val actual = VersionControlSystem.splitUrl(
-                    "https://git-wip-us.apache.org/repos/asf/zeppelin.git/zeppelin-interpreter"
+                "https://git-wip-us.apache.org/repos/asf/zeppelin.git/zeppelin-interpreter"
             )
             val expected = VcsInfo(
-                    type = "git",
-                    url = "https://git-wip-us.apache.org/repos/asf/zeppelin.git",
-                    revision = "",
-                    path = "zeppelin-interpreter"
+                type = "git",
+                url = "https://git-wip-us.apache.org/repos/asf/zeppelin.git",
+                revision = "",
+                path = "zeppelin-interpreter"
             )
             actual shouldBe expected
         }
 
         "split the revision from an NPM URL to a Git repository" {
             val actual = VersionControlSystem.splitUrl(
-                    "git+ssh://sub.domain.com:42/foo-bar#b3b5b3c60dcdc39347b23cf94ab8f577239b7df3"
+                "git+ssh://sub.domain.com:42/foo-bar#b3b5b3c60dcdc39347b23cf94ab8f577239b7df3"
             )
             val expected = VcsInfo(
-                    type = "git",
-                    url = "ssh://sub.domain.com:42/foo-bar",
-                    revision = "b3b5b3c60dcdc39347b23cf94ab8f577239b7df3",
-                    path = ""
+                type = "git",
+                url = "ssh://sub.domain.com:42/foo-bar",
+                revision = "b3b5b3c60dcdc39347b23cf94ab8f577239b7df3",
+                path = ""
             )
             actual shouldBe expected
         }
 
         "split the revision from a NPM URL to a GitHub repository" {
             val actual = VersionControlSystem.splitUrl(
-                    "https://github.com/mochajs/mocha.git#5bd33a0ba201d227159759e8ced86756595b0c54"
+                "https://github.com/mochajs/mocha.git#5bd33a0ba201d227159759e8ced86756595b0c54"
             )
             val expected = VcsInfo(
-                    type = "git",
-                    url = "https://github.com/mochajs/mocha.git",
-                    revision = "5bd33a0ba201d227159759e8ced86756595b0c54",
-                    path = ""
+                type = "git",
+                url = "https://github.com/mochajs/mocha.git",
+                revision = "5bd33a0ba201d227159759e8ced86756595b0c54",
+                path = ""
             )
             actual shouldBe expected
         }
@@ -108,38 +108,38 @@ class VersionControlSystemTest : WordSpec({
     "splitUrl for Bitbucket" should {
         "not modify URLs without a path".config(enabled = Mercurial().isInPath()) {
             val actual = VersionControlSystem.splitUrl(
-                    "https://bitbucket.org/paniq/masagin"
+                "https://bitbucket.org/paniq/masagin"
             )
             val expected = VcsInfo(
-                    type = "Mercurial",
-                    url = "https://bitbucket.org/paniq/masagin",
-                    revision = ""
+                type = "Mercurial",
+                url = "https://bitbucket.org/paniq/masagin",
+                revision = ""
             )
             actual shouldBe expected
         }
 
         "split tree URLs" {
             val actual = VersionControlSystem.splitUrl(
-                    "https://bitbucket.org/yevster/spdxtraxample/src/287aebc/src/java/com/yevster/example/?at=master"
+                "https://bitbucket.org/yevster/spdxtraxample/src/287aebc/src/java/com/yevster/example/?at=master"
             )
             val expected = VcsInfo(
-                    type = "Git",
-                    url = "https://bitbucket.org/yevster/spdxtraxample.git",
-                    revision = "287aebc",
-                    path = "src/java/com/yevster/example/"
+                type = "Git",
+                url = "https://bitbucket.org/yevster/spdxtraxample.git",
+                revision = "287aebc",
+                path = "src/java/com/yevster/example/"
             )
             actual shouldBe expected
         }
 
         "split blob URLs" {
             val actual = VersionControlSystem.splitUrl(
-                    "https://bitbucket.org/yevster/spdxtraxample/src/287aebc/README.md?at=master"
+                "https://bitbucket.org/yevster/spdxtraxample/src/287aebc/README.md?at=master"
             )
             val expected = VcsInfo(
-                    type = "Git",
-                    url = "https://bitbucket.org/yevster/spdxtraxample.git",
-                    revision = "287aebc",
-                    path = "README.md"
+                type = "Git",
+                url = "https://bitbucket.org/yevster/spdxtraxample.git",
+                revision = "287aebc",
+                path = "README.md"
             )
             actual shouldBe expected
         }
@@ -148,63 +148,63 @@ class VersionControlSystemTest : WordSpec({
     "splitUrl for GitHub" should {
         "not modify URLs without a path" {
             val actual = VersionControlSystem.splitUrl(
-                    "https://github.com/heremaps/oss-review-toolkit.git"
+                "https://github.com/heremaps/oss-review-toolkit.git"
             )
             val expected = VcsInfo(
-                    type = "git",
-                    url = "https://github.com/heremaps/oss-review-toolkit.git",
-                    revision = ""
+                type = "git",
+                url = "https://github.com/heremaps/oss-review-toolkit.git",
+                revision = ""
             )
             actual shouldBe expected
         }
 
         "not fail for a user called blob or a project called tree" {
             val actual = VersionControlSystem.splitUrl(
-                    "https://github.com/blob/tree.git"
+                "https://github.com/blob/tree.git"
             )
             val expected = VcsInfo(
-                    type = "git",
-                    url = "https://github.com/blob/tree.git",
-                    revision = ""
+                type = "git",
+                url = "https://github.com/blob/tree.git",
+                revision = ""
             )
             actual shouldBe expected
         }
 
         "split tree URLs" {
             val actual = VersionControlSystem.splitUrl(
-                    "https://github.com/babel/babel/tree/master/packages/babel-code-frame.git"
+                "https://github.com/babel/babel/tree/master/packages/babel-code-frame.git"
             )
             val expected = VcsInfo(
-                    type = "git",
-                    url = "https://github.com/babel/babel.git",
-                    revision = "master",
-                    path = "packages/babel-code-frame"
+                type = "git",
+                url = "https://github.com/babel/babel.git",
+                revision = "master",
+                path = "packages/babel-code-frame"
             )
             actual shouldBe expected
         }
 
         "split blob URLs" {
             val actual = VersionControlSystem.splitUrl(
-                    "https://github.com/crypto-browserify/crypto-browserify/blob/6aebafa/test/create-hmac.js"
+                "https://github.com/crypto-browserify/crypto-browserify/blob/6aebafa/test/create-hmac.js"
             )
             val expected = VcsInfo(
-                    type = "git",
-                    url = "https://github.com/crypto-browserify/crypto-browserify.git",
-                    revision = "6aebafa",
-                    path = "test/create-hmac.js"
+                type = "git",
+                url = "https://github.com/crypto-browserify/crypto-browserify.git",
+                revision = "6aebafa",
+                path = "test/create-hmac.js"
             )
             actual shouldBe expected
         }
 
         "split extra path components" {
             val actual = VersionControlSystem.splitUrl(
-                    "ssh://git@github.com/EsotericSoftware/kryo.git/kryo-shaded"
+                "ssh://git@github.com/EsotericSoftware/kryo.git/kryo-shaded"
             )
             val expected = VcsInfo(
-                    type = "git",
-                    url = "ssh://git@github.com/EsotericSoftware/kryo.git",
-                    revision = "",
-                    path = "kryo-shaded"
+                type = "git",
+                url = "ssh://git@github.com/EsotericSoftware/kryo.git",
+                revision = "",
+                path = "kryo-shaded"
             )
             actual shouldBe expected
         }
@@ -213,38 +213,38 @@ class VersionControlSystemTest : WordSpec({
     "splitUrl for GitLab" should {
         "not modify URLs without a path" {
             val actual = VersionControlSystem.splitUrl(
-                    "https://gitlab.com/rich-harris/rollup-plugin-buble.git"
+                "https://gitlab.com/rich-harris/rollup-plugin-buble.git"
             )
             val expected = VcsInfo(
-                    type = "git",
-                    url = "https://gitlab.com/rich-harris/rollup-plugin-buble.git",
-                    revision = ""
+                type = "git",
+                url = "https://gitlab.com/rich-harris/rollup-plugin-buble.git",
+                revision = ""
             )
             actual shouldBe expected
         }
 
         "split tree URLs" {
             val actual = VersionControlSystem.splitUrl(
-                    "https://gitlab.com/Rich-Harris/rollup-plugin-buble/tree/master/src"
+                "https://gitlab.com/Rich-Harris/rollup-plugin-buble/tree/master/src"
             )
             val expected = VcsInfo(
-                    type = "git",
-                    url = "https://gitlab.com/Rich-Harris/rollup-plugin-buble.git",
-                    revision = "master",
-                    path = "src"
+                type = "git",
+                url = "https://gitlab.com/Rich-Harris/rollup-plugin-buble.git",
+                revision = "master",
+                path = "src"
             )
             actual shouldBe expected
         }
 
         "split blob URLs" {
             val actual = VersionControlSystem.splitUrl(
-                    "https://gitlab.com/Rich-Harris/rollup-plugin-buble/blob/v0.15.0/README.md"
+                "https://gitlab.com/Rich-Harris/rollup-plugin-buble/blob/v0.15.0/README.md"
             )
             val expected = VcsInfo(
-                    type = "git",
-                    url = "https://gitlab.com/Rich-Harris/rollup-plugin-buble.git",
-                    revision = "v0.15.0",
-                    path = "README.md"
+                type = "git",
+                url = "https://gitlab.com/Rich-Harris/rollup-plugin-buble.git",
+                revision = "v0.15.0",
+                path = "README.md"
             )
             actual shouldBe expected
         }

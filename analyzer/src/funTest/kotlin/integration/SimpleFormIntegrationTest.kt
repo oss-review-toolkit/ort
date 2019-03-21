@@ -30,31 +30,31 @@ import java.io.File
 
 class SimpleFormIntegrationTest : AbstractIntegrationSpec() {
     override val pkg: Package = Package(
-            id = Identifier(
-                    type = "Bundler",
-                    namespace = "",
-                    name = "Simple Form",
-                    version = ""
-            ),
-            declaredLicenses = sortedSetOf("MIT"),
-            description = "",
-            homepageUrl = "",
-            binaryArtifact = RemoteArtifact.EMPTY,
-            sourceArtifact = RemoteArtifact.EMPTY,
-            vcs = VcsInfo(
-                    type = "Git",
-                    url = "https://github.com/plataformatec/simple_form.git",
-                    revision = "516e31ce8f3eb32c5bac9d2a4902fba0783363fb",
-                    path = ""
-            )
+        id = Identifier(
+            type = "Bundler",
+            namespace = "",
+            name = "Simple Form",
+            version = ""
+        ),
+        declaredLicenses = sortedSetOf("MIT"),
+        description = "",
+        homepageUrl = "",
+        binaryArtifact = RemoteArtifact.EMPTY,
+        sourceArtifact = RemoteArtifact.EMPTY,
+        vcs = VcsInfo(
+            type = "Git",
+            url = "https://github.com/plataformatec/simple_form.git",
+            revision = "516e31ce8f3eb32c5bac9d2a4902fba0783363fb",
+            path = ""
+        )
     )
 
     override val expectedManagedFiles by lazy {
         val downloadDir = downloadResult.downloadDirectory
         mapOf(
-                Bundler.Factory() as PackageManagerFactory to listOf(
-                        File(downloadDir, "Gemfile")
-                )
+            Bundler.Factory() as PackageManagerFactory to listOf(
+                File(downloadDir, "Gemfile")
+            )
         )
     }
 }

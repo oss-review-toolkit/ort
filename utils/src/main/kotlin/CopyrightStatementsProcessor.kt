@@ -20,10 +20,10 @@
 package com.here.ort.utils
 
 private data class Parts(
-        val prefix: String,
-        val years: Set<Int>,
-        val owner: String,
-        val originalStatements: List<String>
+    val prefix: String,
+    val years: Set<Int>,
+    val owner: String,
+    val originalStatements: List<String>
 )
 
 private val INVALID_OWNER_START_CHARS = charArrayOf(' ', ';', '.', ',', '-', '+', '~', '&')
@@ -40,10 +40,10 @@ private fun Collection<Parts>.groupByPrefixAndOwner(): List<Parts> {
         val key = "${part.prefix}:${part.owner.toNormalizedOwnerKey()}"
         map.merge(key, part) { existing, other ->
             Parts(
-                    prefix = existing.prefix,
-                    years = existing.years + other.years,
-                    owner = existing.owner,
-                    originalStatements = existing.originalStatements + other.originalStatements
+                prefix = existing.prefix,
+                years = existing.years + other.years,
+                owner = existing.owner,
+                originalStatements = existing.originalStatements + other.originalStatements
             )
         }
     }
@@ -65,26 +65,26 @@ class CopyrightStatementsProcessor {
     companion object {
         private const val YEAR_PLACEHOLDER = "<ORT_YEAR_PLACEHOLDER_TRO>"
         private val KNOWN_PREFIX_REGEX = listOf(
-                "^(\\(c\\))",
-                "^(\\(c\\) [C|c]opyright)",
-                "^(\\(c\\) [C|c]opyrighted)",
-                "^([C|c]opyright)",
-                "^([C|c]opyright \\(c\\))",
-                "^([C|c]opyright [O|o]wnership)",
-                "^([C|c]opyright')",
-                "^([C|c]opyright' \\(c\\))",
-                "^(COPYRIGHT)",
-                "^([C|c]opyrighted)",
-                "^([C|c]opyrighted \\(c\\))",
-                "^([P|p]ortions [C|c]opyright)",
-                "^([P|p]ortions \\(c\\))",
-                "^([P|p]ortions [C|c]opyright \\(c\\))"
+            "^(\\(c\\))",
+            "^(\\(c\\) [C|c]opyright)",
+            "^(\\(c\\) [C|c]opyrighted)",
+            "^([C|c]opyright)",
+            "^([C|c]opyright \\(c\\))",
+            "^([C|c]opyright [O|o]wnership)",
+            "^([C|c]opyright')",
+            "^([C|c]opyright' \\(c\\))",
+            "^(COPYRIGHT)",
+            "^([C|c]opyrighted)",
+            "^([C|c]opyrighted \\(c\\))",
+            "^([P|p]ortions [C|c]opyright)",
+            "^([P|p]ortions \\(c\\))",
+            "^([P|p]ortions [C|c]opyright \\(c\\))"
         ).map { it.toRegex() }
 
         private fun prettyPrintYears(years: Collection<Int>) =
-                getYearRanges(years).joinToString(separator = ", ") { (fromYear, toYear) ->
-                    if (fromYear == toYear) fromYear.toString() else "$fromYear-$toYear"
-                }
+            getYearRanges(years).joinToString(separator = ", ") { (fromYear, toYear) ->
+                if (fromYear == toYear) fromYear.toString() else "$fromYear-$toYear"
+            }
 
         private fun getYearRanges(years: Collection<Int>): List<Pair<Int, Int>> {
             fun divideAndConquer(years: IntArray, start: Int = 0, end: Int = years.size - 1): List<Pair<Int, Int>> {
@@ -104,8 +104,10 @@ class CopyrightStatementsProcessor {
         }
     }
 
-    data class Result(val processedStatements: LinkedHashMap<String, List<String>>,
-                      val unprocessedStatements: List<String>) {
+    data class Result(
+        val processedStatements: LinkedHashMap<String, List<String>>,
+        val unprocessedStatements: List<String>
+    ) {
         fun toMutableSet() = (unprocessedStatements + processedStatements.keys).toMutableSet()
     }
 
@@ -123,11 +125,11 @@ class CopyrightStatementsProcessor {
         }
 
         val mergedParts = processableStatements.groupByPrefixAndOwner().sortedWith(
-                compareBy(
-                        { it.owner },
-                        { prettyPrintYears(it.years) },
-                        { it.prefix }
-                )
+            compareBy(
+                { it.owner },
+                { prettyPrintYears(it.years) },
+                { it.prefix }
+            )
         )
 
         val processedStatements = linkedMapOf<String, List<String>>()
@@ -147,8 +149,8 @@ class CopyrightStatementsProcessor {
         }
 
         return Result(
-                unprocessedStatements = unprocessedStatements.toList().sorted(),
-                processedStatements = processedStatements
+            unprocessedStatements = unprocessedStatements.toList().sorted(),
+            processedStatements = processedStatements
         )
     }
 
@@ -158,13 +160,13 @@ class CopyrightStatementsProcessor {
 
         val yearsStripResult = stripYears(prefixStripResult.first)
         return Parts(
-                prefix = prefixStripResult.second,
-                years = yearsStripResult.second,
-                owner = yearsStripResult.first
-                        .trimStart(*INVALID_OWNER_START_CHARS)
-                        .removeDuplicateWhitespaces()
-                        .trim(),
-                originalStatements = listOf(copyrightStatement)
+            prefix = prefixStripResult.second,
+            years = yearsStripResult.second,
+            owner = yearsStripResult.first
+                .trimStart(*INVALID_OWNER_START_CHARS)
+                .removeDuplicateWhitespaces()
+                .trim(),
+            originalStatements = listOf(copyrightStatement)
         )
     }
 
@@ -176,15 +178,15 @@ class CopyrightStatementsProcessor {
         } ?: return Pair(first = copyrightStatement, second = "")
 
         return Pair(
-                first = copyrightStatement.removeRange(match.groups[1]!!.range),
-                second = match.groups[1]!!.value
+            first = copyrightStatement.removeRange(match.groups[1]!!.range),
+            second = match.groups[1]!!.value
         )
     }
 
     private fun stripYears(copyrightStatement: String): Pair<String, Set<Int>> =
-            replaceYears(copyrightStatement, YEAR_PLACEHOLDER).let {
-                it.copy(first = it.first.replace(YEAR_PLACEHOLDER, ""))
-            }
+        replaceYears(copyrightStatement, YEAR_PLACEHOLDER).let {
+            it.copy(first = it.first.replace(YEAR_PLACEHOLDER, ""))
+        }
 
     /**
      * This function removes all found years from the given string and replaces the first match
@@ -260,11 +262,11 @@ class CopyrightStatementsProcessor {
 
             if (fromYear <= toYear) {
                 return Pair(
-                        copyrightStatement
-                                .removeRange(toGroup.range)
-                                .removeRange(separatorGroup.range)
-                                .replaceRange(fromGroup.range, placeholder),
-                        (fromYear..toYear).toSet()
+                    copyrightStatement
+                        .removeRange(toGroup.range)
+                        .removeRange(separatorGroup.range)
+                        .replaceRange(fromGroup.range, placeholder),
+                    (fromYear..toYear).toSet()
                 )
             }
         }

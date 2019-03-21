@@ -96,12 +96,12 @@ class ScanCode(name: String, config: ScannerConfiguration) : LocalScanner(name, 
          * Configuration options that are relevant for [getConfiguration] because they change the result file.
          */
         private val DEFAULT_CONFIGURATION_OPTIONS = listOf(
-                "--copyright",
-                "--license",
-                "--ignore", "*$ORT_CONFIG_FILENAME",
-                "--info",
-                "--strip-root",
-                "--timeout", TIMEOUT.toString()
+            "--copyright",
+            "--license",
+            "--ignore", "*$ORT_CONFIG_FILENAME",
+            "--info",
+            "--strip-root",
+            "--timeout", TIMEOUT.toString()
         ) + NON_LICENSE_FILENAMES.flatMap { listOf("--ignore", it) }
 
         /**
@@ -109,7 +109,7 @@ class ScanCode(name: String, config: ScannerConfiguration) : LocalScanner(name, 
          * file.
          */
         private val DEFAULT_NON_CONFIGURATION_OPTIONS = listOf(
-                "--processes", Math.max(1, Runtime.getRuntime().availableProcessors() - 1).toString()
+            "--processes", Math.max(1, Runtime.getRuntime().availableProcessors() - 1).toString()
         )
 
         /**
@@ -131,14 +131,14 @@ class ScanCode(name: String, config: ScannerConfiguration) : LocalScanner(name, 
 
         // Note: The "(File: ...)" part in the patterns below is actually added by our own getResult() function.
         private val UNKNOWN_ERROR_REGEX = Pattern.compile(
-                "(ERROR: for scanner: (?<scanner>\\w+):\n)?" +
-                        "ERROR: Unknown error:\n.+\n(?<error>\\w+Error)(:|\n)(?<message>.*) \\(File: (?<file>.+)\\)",
-                Pattern.DOTALL
+            "(ERROR: for scanner: (?<scanner>\\w+):\n)?" +
+                    "ERROR: Unknown error:\n.+\n(?<error>\\w+Error)(:|\n)(?<message>.*) \\(File: (?<file>.+)\\)",
+            Pattern.DOTALL
         )
 
         private val TIMEOUT_ERROR_REGEX = Pattern.compile(
-                "(ERROR: for scanner: (?<scanner>\\w+):\n)?" +
-                        "ERROR: Processing interrupted: timeout after (?<timeout>\\d+) seconds. \\(File: (?<file>.+)\\)"
+            "(ERROR: for scanner: (?<scanner>\\w+):\n)?" +
+                    "ERROR: Processing interrupted: timeout after (?<timeout>\\d+) seconds. \\(File: (?<file>.+)\\)"
         )
     }
 
@@ -148,13 +148,13 @@ class ScanCode(name: String, config: ScannerConfiguration) : LocalScanner(name, 
     private val scanCodeConfiguration = config.scanner?.get("ScanCode") ?: emptyMap()
 
     private val configurationOptions = scanCodeConfiguration["commandLine"]?.split(" ")
-            ?: DEFAULT_CONFIGURATION_OPTIONS
+        ?: DEFAULT_CONFIGURATION_OPTIONS
     private val nonConfigurationOptions = scanCodeConfiguration["commandLineNonConfig"]?.split(" ")
-            ?: DEFAULT_NON_CONFIGURATION_OPTIONS
+        ?: DEFAULT_NON_CONFIGURATION_OPTIONS
     private val debugConfigurationOptions = scanCodeConfiguration["debugCommandLine"]?.split(" ")
-            ?: DEFAULT_DEBUG_CONFIGURATION_OPTIONS
+        ?: DEFAULT_DEBUG_CONFIGURATION_OPTIONS
     private val debugNonConfigurationOptions = scanCodeConfiguration["debugCommandLineNonConfig"]?.split(" ")
-            ?: DEFAULT_DEBUG_NON_CONFIGURATION_OPTIONS
+        ?: DEFAULT_DEBUG_NON_CONFIGURATION_OPTIONS
 
     val commandLineOptions by lazy {
         mutableListOf<String>().apply {
@@ -229,23 +229,23 @@ class ScanCode(name: String, config: ScannerConfiguration) : LocalScanner(name, 
     }
 
     override fun getConfiguration() =
-            configurationOptions.toMutableList().run {
-                add(OUTPUT_FORMAT_OPTION)
-                if (log.isEnabledFor(Level.DEBUG)) {
-                    addAll(debugConfigurationOptions)
-                }
-                joinToString(" ")
+        configurationOptions.toMutableList().run {
+            add(OUTPUT_FORMAT_OPTION)
+            if (log.isEnabledFor(Level.DEBUG)) {
+                addAll(debugConfigurationOptions)
             }
+            joinToString(" ")
+        }
 
     override fun scanPath(path: File, resultsFile: File): ScanResult {
         val startTime = Instant.now()
 
         val process = ProcessCapture(
-                scannerPath.absolutePath,
-                *commandLineOptions.toTypedArray(),
-                path.absolutePath,
-                OUTPUT_FORMAT_OPTION,
-                resultsFile.absolutePath
+            scannerPath.absolutePath,
+            *commandLineOptions.toTypedArray(),
+            path.absolutePath,
+            OUTPUT_FORMAT_OPTION,
+            resultsFile.absolutePath
         )
 
         val endTime = Instant.now()
@@ -409,10 +409,10 @@ class ScanCode(name: String, config: ScannerConfiguration) : LocalScanner(name, 
      * associating findings separated by blank lines but not skipping complete license statements.
      */
     internal fun getClosestCopyrightStatements(
-            path: String,
-            copyrights: JsonNode,
-            licenseStartLine: Int,
-            toleranceLines: Int = 5
+        path: String,
+        copyrights: JsonNode,
+        licenseStartLine: Int,
+        toleranceLines: Int = 5
     ): SortedSet<CopyrightFinding> {
         val closestCopyrights = copyrights.filter {
             (it["start_line"].intValue() - licenseStartLine).absoluteValue <= toleranceLines
@@ -432,10 +432,10 @@ class ScanCode(name: String, config: ScannerConfiguration) : LocalScanner(name, 
      * Associate copyright findings to license findings within a single file.
      */
     private fun associateFileFindings(
-            path: String,
-            licenses: JsonNode,
-            copyrights: JsonNode,
-            rootLicense: String = ""
+        path: String,
+        licenses: JsonNode,
+        copyrights: JsonNode,
+        rootLicense: String = ""
     ): SortedMap<String, MutableSet<CopyrightFinding>> {
         val copyrightsForLicenses = sortedMapOf<String, MutableSet<CopyrightFinding>>()
 
@@ -495,7 +495,7 @@ class ScanCode(name: String, config: ScannerConfiguration) : LocalScanner(name, 
                 val licenseEndLine = it["end_line"].intValue()
 
                 locationsForLicenses.getOrPut(licenseId) { sortedSetOf() } +=
-                        TextLocation(path, licenseStartLine, licenseEndLine)
+                    TextLocation(path, licenseStartLine, licenseEndLine)
             }
 
             val copyrights = file["copyrights"] ?: EMPTY_JSON_NODE
@@ -513,9 +513,9 @@ class ScanCode(name: String, config: ScannerConfiguration) : LocalScanner(name, 
 
         return (copyrightsForLicenses.keys + locationsForLicenses.keys).map { license ->
             LicenseFinding(
-                    license,
-                    locationsForLicenses[license] ?: sortedSetOf(),
-                    copyrightsForLicenses[license] ?: sortedSetOf()
+                license,
+                locationsForLicenses[license] ?: sortedSetOf(),
+                copyrightsForLicenses[license] ?: sortedSetOf()
             )
         }.toSortedSet()
     }

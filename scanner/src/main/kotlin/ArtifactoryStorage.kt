@@ -46,20 +46,20 @@ import okhttp3.RequestBody
 import okio.Okio
 
 class ArtifactoryStorage(
-        /**
-         * The URL of the Artifactory server, e.g. "https://example.com/artifactory".
-         */
-        private val url: String,
+    /**
+     * The URL of the Artifactory server, e.g. "https://example.com/artifactory".
+     */
+    private val url: String,
 
-        /**
-         * The name of the Artifactory repository to use for storing scan results.
-         */
-        private val repository: String,
+    /**
+     * The name of the Artifactory repository to use for storing scan results.
+     */
+    private val repository: String,
 
-        /**
-         * An Artifactory API token with read/write access to [repository].
-         */
-        private val apiToken: String
+    /**
+     * An Artifactory API token with read/write access to [repository].
+     */
+    private val apiToken: String
 ) : ScanResultsStorage {
     override fun read(id: Identifier): ScanResultContainer {
         val storagePath = storagePath(id)
@@ -67,11 +67,11 @@ class ArtifactoryStorage(
         log.info { "Trying to read scan results for '${id.toCoordinates()}' from Artifactory storage: $storagePath" }
 
         val request = Request.Builder()
-                .header("X-JFrog-Art-Api", apiToken)
-                .cacheControl(CacheControl.Builder().maxAge(0, TimeUnit.SECONDS).build())
-                .get()
-                .url("$url/$repository/$storagePath")
-                .build()
+            .header("X-JFrog-Art-Api", apiToken)
+            .cacheControl(CacheControl.Builder().maxAge(0, TimeUnit.SECONDS).build())
+            .get()
+            .url("$url/$repository/$storagePath")
+            .build()
 
         val tempFile = createTempFile("ort", "scan-results.yml")
 
@@ -143,25 +143,26 @@ class ArtifactoryStorage(
     }
 
     internal fun patchScanCodeLicenseRefs(scanResults: List<ScanResult>) =
-            scanResults.map { result ->
-                if (result.scanner.name == "ScanCode") {
-                    val findings = result.summary.licenseFindings.map { finding ->
-                        if (finding.license.startsWith("LicenseRef-") &&
-                                !finding.license.startsWith("LicenseRef-scancode-")) {
-                            val suffix = finding.license.removePrefix("LicenseRef-")
-                            val license = "LicenseRef-scancode-$suffix"
-                            log.info { "Patched license name '${finding.license}' to '$license'." }
-                            finding.copy(license = license)
-                        } else {
-                            finding
-                        }
+        scanResults.map { result ->
+            if (result.scanner.name == "ScanCode") {
+                val findings = result.summary.licenseFindings.map { finding ->
+                    if (finding.license.startsWith("LicenseRef-") &&
+                        !finding.license.startsWith("LicenseRef-scancode-")
+                    ) {
+                        val suffix = finding.license.removePrefix("LicenseRef-")
+                        val license = "LicenseRef-scancode-$suffix"
+                        log.info { "Patched license name '${finding.license}' to '$license'." }
+                        finding.copy(license = license)
+                    } else {
+                        finding
                     }
-
-                    result.copy(summary = result.summary.copy(licenseFindings = findings.toSortedSet()))
-                } else {
-                    result
                 }
+
+                result.copy(summary = result.summary.copy(licenseFindings = findings.toSortedSet()))
+            } else {
+                result
             }
+        }
 
     override fun add(id: Identifier, scanResult: ScanResult): Boolean {
         // Do not store empty scan results. It is likely that something went wrong when they were created, and if not,
@@ -200,10 +201,10 @@ class ArtifactoryStorage(
         log.info { "Writing scan results for '${id.toCoordinates()}' to Artifactory storage: $storagePath" }
 
         val request = Request.Builder()
-                .header("X-JFrog-Art-Api", apiToken)
-                .put(OkHttpClientHelper.createRequestBody(tempFile))
-                .url("$url/$repository/$storagePath")
-                .build()
+            .header("X-JFrog-Art-Api", apiToken)
+            .put(OkHttpClientHelper.createRequestBody(tempFile))
+            .url("$url/$repository/$storagePath")
+            .build()
 
         try {
             return OkHttpClientHelper.execute(HTTP_CACHE_PATH, request).use { response ->
@@ -240,10 +241,10 @@ class ArtifactoryStorage(
         val body = RequestBody.create(MediaType.parse("text/plain"), aqlQuery)
 
         val request = Request.Builder()
-                .header("X-JFrog-Art-Api", apiToken)
-                .post(body)
-                .url("$url/api/search/aql")
-                .build()
+            .header("X-JFrog-Art-Api", apiToken)
+            .post(body)
+            .url("$url/api/search/aql")
+            .build()
 
         OkHttpClientHelper.execute(HTTP_CACHE_PATH, request).use { response ->
             if (response.code() == HttpURLConnection.HTTP_OK) {

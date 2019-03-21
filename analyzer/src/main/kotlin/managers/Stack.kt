@@ -57,12 +57,12 @@ import okhttp3.Request
  * The Stack package manager for Haskell, see https://haskellstack.org/.
  */
 class Stack(name: String, analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfiguration) :
-        PackageManager(name, analyzerConfig, repoConfig), CommandLineTool {
+    PackageManager(name, analyzerConfig, repoConfig), CommandLineTool {
     class Factory : AbstractPackageManagerFactory<Stack>("Stack") {
         override val globsForDefinitionFiles = listOf("stack.yaml")
 
         override fun create(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfiguration) =
-                Stack(managerName, analyzerConfig, repoConfig)
+            Stack(managerName, analyzerConfig, repoConfig)
     }
 
     override fun command(workingDir: File?) = "stack"
@@ -141,44 +141,46 @@ class Stack(name: String, analyzerConfig: AnalyzerConfiguration, repoConfig: Rep
         buildDependencyTree(projectId.name, allPackages, benchChildren, benchVersions, benchDependencies)
 
         val scopes = sortedSetOf(
-                Scope("external", externalDependencies),
-                Scope("test", testDependencies),
-                Scope("bench", benchDependencies)
+            Scope("external", externalDependencies),
+            Scope("test", testDependencies),
+            Scope("bench", benchDependencies)
         )
 
         val project = Project(
-                id = projectId,
-                definitionFilePath = VersionControlSystem.getPathInfo(definitionFile).path,
-                declaredLicenses = projectPackage.declaredLicenses,
-                vcs = projectPackage.vcs,
-                vcsProcessed = processProjectVcs(workingDir, projectPackage.vcs, projectPackage.homepageUrl),
-                homepageUrl = projectPackage.homepageUrl,
-                scopes = scopes
+            id = projectId,
+            definitionFilePath = VersionControlSystem.getPathInfo(definitionFile).path,
+            declaredLicenses = projectPackage.declaredLicenses,
+            vcs = projectPackage.vcs,
+            vcsProcessed = processProjectVcs(workingDir, projectPackage.vcs, projectPackage.homepageUrl),
+            homepageUrl = projectPackage.homepageUrl,
+            scopes = scopes
         )
 
         return ProjectAnalyzerResult(project, allPackages.values.map { it.toCuratedPackage() }.toSortedSet())
     }
 
-    private fun buildDependencyTree(parentName: String, allPackages: MutableMap<Package, Package>,
-                                    childMap: Map<String, List<String>>, versionMap: Map<String, String>,
-                                    scopeDependencies: SortedSet<PackageReference>) {
+    private fun buildDependencyTree(
+        parentName: String, allPackages: MutableMap<Package, Package>,
+        childMap: Map<String, List<String>>, versionMap: Map<String, String>,
+        scopeDependencies: SortedSet<PackageReference>
+    ) {
         childMap[parentName]?.let { children ->
             children.forEach { childName ->
                 val pkgTemplate = Package(
-                        id = Identifier(
-                                // The runtime system ships with the Glasgow Haskell Compiler (GHC) and is not hosted
-                                // on Hackage.
-                                type = if (childName == "rts") "GHC" else "Hackage",
-                                namespace = "",
-                                name = childName,
-                                version = versionMap[childName] ?: ""
-                        ),
-                        declaredLicenses = sortedSetOf(),
-                        description = "",
-                        homepageUrl = "",
-                        binaryArtifact = RemoteArtifact.EMPTY,
-                        sourceArtifact = RemoteArtifact.EMPTY,
-                        vcs = VcsInfo.EMPTY
+                    id = Identifier(
+                        // The runtime system ships with the Glasgow Haskell Compiler (GHC) and is not hosted
+                        // on Hackage.
+                        type = if (childName == "rts") "GHC" else "Hackage",
+                        namespace = "",
+                        name = childName,
+                        version = versionMap[childName] ?: ""
+                    ),
+                    declaredLicenses = sortedSetOf(),
+                    description = "",
+                    homepageUrl = "",
+                    binaryArtifact = RemoteArtifact.EMPTY,
+                    sourceArtifact = RemoteArtifact.EMPTY,
+                    vcs = VcsInfo.EMPTY
                 )
 
                 val pkg = allPackages.getOrPut(pkgTemplate) {
@@ -201,13 +203,13 @@ class Stack(name: String, analyzerConfig: AnalyzerConfiguration, repoConfig: Rep
     }
 
     private fun getPackageUrl(name: String, version: String) =
-            "https://hackage.haskell.org/package/$name-$version"
+        "https://hackage.haskell.org/package/$name-$version"
 
     private fun downloadCabalFile(pkg: Package): String? {
         val pkgRequest = Request.Builder()
-                .get()
-                .url("${getPackageUrl(pkg.id.name, pkg.id.version)}/src/${pkg.id.name}.cabal")
-                .build()
+            .get()
+            .url("${getPackageUrl(pkg.id.name, pkg.id.version)}/src/${pkg.id.name}.cabal")
+            .build()
 
         return OkHttpClientHelper.execute(HTTP_CACHE_PATH, pkgRequest).use { response ->
             val body = response.body()?.string()?.trim()
@@ -227,7 +229,7 @@ class Stack(name: String, analyzerConfig: AnalyzerConfiguration, repoConfig: Rep
 
     private fun parseKeyValue(i: ListIterator<String>, keyPrefix: String = ""): Map<String, String> {
         fun getIndentation(line: String) =
-                line.takeWhile { it.isWhitespace() }.length
+            line.takeWhile { it.isWhitespace() }.length
 
         var indentation: Int? = null
         val map = mutableMapOf<String, String>()
@@ -315,35 +317,35 @@ class Stack(name: String, analyzerConfig: AnalyzerConfiguration, repoConfig: Rep
         val map = parseKeyValue(cabal.lines().listIterator())
 
         val id = Identifier(
-                type = "Hackage",
-                namespace = map["category"] ?: "",
-                name = map["name"] ?: "",
-                version = map["version"] ?: ""
+            type = "Hackage",
+            namespace = map["category"] ?: "",
+            name = map["name"] ?: "",
+            version = map["version"] ?: ""
         )
 
         val artifact = RemoteArtifact(
-                url = "${getPackageUrl(id.name, id.version)}/${id.name}-${id.version}.tar.gz",
-                hash = Hash.UNKNOWN.value,
-                hashAlgorithm = Hash.UNKNOWN.algorithm
+            url = "${getPackageUrl(id.name, id.version)}/${id.name}-${id.version}.tar.gz",
+            hash = Hash.UNKNOWN.value,
+            hashAlgorithm = Hash.UNKNOWN.algorithm
         )
 
         val vcs = VcsInfo(
-                type = map["source-repository-this-type"] ?: map["source-repository-head-type"] ?: "",
-                revision = map["source-repository-this-tag"] ?: "",
-                url = map["source-repository-this-location"] ?: map["source-repository-head-location"] ?: ""
+            type = map["source-repository-this-type"] ?: map["source-repository-head-type"] ?: "",
+            revision = map["source-repository-this-tag"] ?: "",
+            url = map["source-repository-this-location"] ?: map["source-repository-head-location"] ?: ""
         )
 
         val homepageUrl = map["homepage"] ?: ""
 
         return Package(
-                id = id,
-                declaredLicenses = map["license"]?.let { sortedSetOf(it) } ?: sortedSetOf(),
-                description = map["description"] ?: "",
-                homepageUrl = homepageUrl,
-                binaryArtifact = RemoteArtifact.EMPTY,
-                sourceArtifact = artifact,
-                vcs = vcs,
-                vcsProcessed = processPackageVcs(vcs, homepageUrl)
+            id = id,
+            declaredLicenses = map["license"]?.let { sortedSetOf(it) } ?: sortedSetOf(),
+            description = map["description"] ?: "",
+            homepageUrl = homepageUrl,
+            binaryArtifact = RemoteArtifact.EMPTY,
+            sourceArtifact = artifact,
+            vcs = vcs,
+            vcsProcessed = processPackageVcs(vcs, homepageUrl)
         )
     }
 }

@@ -61,9 +61,10 @@ class GitRepoTest : StringSpec() {
             val ortResult = Analyzer(DEFAULT_ANALYZER_CONFIGURATION).analyze(outputDir)
             val actualResult = yamlMapper.writeValueAsString(ortResult)
             val expectedResult = patchExpectedResult(
-                    File("src/funTest/assets/projects/external/git-repo-expected-output.yml"),
-                    revision = REPO_REV,
-                    path = outputDir.invariantSeparatorsPath)
+                File("src/funTest/assets/projects/external/git-repo-expected-output.yml"),
+                revision = REPO_REV,
+                path = outputDir.invariantSeparatorsPath
+            )
 
             patchActualResult(actualResult, patchStartAndEndTime = true) shouldBe expectedResult
         }
@@ -72,11 +73,11 @@ class GitRepoTest : StringSpec() {
             // TODO: The list below should also contain "submodules/test-data-npm/long.js", but it is not correctly
             //       cloned by git-repo.
             val expectedSubmodules = listOf(
-                    "spdx-tools",
-                    "submodules",
-                    "submodules/commons-text",
-                    "submodules/test-data-npm",
-                    "submodules/test-data-npm/entities"
+                "spdx-tools",
+                "submodules",
+                "submodules/commons-text",
+                "submodules/test-data-npm",
+                "submodules/test-data-npm/entities"
             ).associateWith { VersionControlSystem.getPathInfo(File(outputDir, it)) }
 
             val workingTree = GitRepo().getWorkingTree(outputDir)

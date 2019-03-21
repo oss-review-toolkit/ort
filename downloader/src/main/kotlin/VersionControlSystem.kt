@@ -63,17 +63,17 @@ abstract class VersionControlSystem {
          * Return the applicable VCS for the given [vcsUrl], or null if none is applicable.
          */
         fun forUrl(vcsUrl: String) =
-                if (vcsUrl in urlToVcsMap) {
-                    urlToVcsMap[vcsUrl]
-                } else {
-                    ALL.find {
-                        if (it is CommandLineTool) {
-                            it.isInPath() && it.isApplicableUrl(vcsUrl)
-                        } else {
-                            it.isApplicableUrl(vcsUrl)
-                        }
-                    }.also { urlToVcsMap[vcsUrl] = it }
-                }
+            if (vcsUrl in urlToVcsMap) {
+                urlToVcsMap[vcsUrl]
+            } else {
+                ALL.find {
+                    if (it is CommandLineTool) {
+                        it.isInPath() && it.isApplicableUrl(vcsUrl)
+                    } else {
+                        it.isApplicableUrl(vcsUrl)
+                    }
+                }.also { urlToVcsMap[vcsUrl] = it }
+            }
 
         /**
          * A map to cache the [WorkingTree], if any, for previously queried directories. This helps to speed up
@@ -278,7 +278,7 @@ abstract class VersionControlSystem {
      * "git" as this could also be part of the host or project names.
      */
     fun isApplicableUrl(vcsUrl: String) =
-            vcsUrl.isNotBlank() && !vcsUrl.endsWith(".html") && isApplicableUrlInternal(vcsUrl)
+        vcsUrl.isNotBlank() && !vcsUrl.endsWith(".html") && isApplicableUrlInternal(vcsUrl)
 
     protected abstract fun isApplicableUrlInternal(vcsUrl: String): Boolean
 
@@ -291,14 +291,16 @@ abstract class VersionControlSystem {
      *
      * @throws DownloadException In case the download failed.
      */
-    abstract fun download(pkg: Package, targetDir: File, allowMovingRevisions: Boolean = false,
-                          recursive: Boolean = true): WorkingTree
+    abstract fun download(
+        pkg: Package, targetDir: File, allowMovingRevisions: Boolean = false,
+        recursive: Boolean = true
+    ): WorkingTree
 
     /**
      * Check whether the given [revision] is likely to name a fixed revision that does not move.
      */
     fun isFixedRevision(workingTree: WorkingTree, revision: String) =
-            revision.isNotBlank() && revision !in latestRevisionNames && revision !in workingTree.listRemoteBranches()
+        revision.isNotBlank() && revision !in latestRevisionNames && revision !in workingTree.listRemoteBranches()
 
     /**
      * Check whether the VCS tool is at least of the specified [expectedVersion], e.g. to check for features.

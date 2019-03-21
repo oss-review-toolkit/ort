@@ -26,21 +26,21 @@ import com.fasterxml.jackson.databind.ser.std.ToStringSerializer
  * Defines a scope that should be excluded.
  */
 data class ScopeExclude(
-        /**
-         * A regular expression to match the names of scopes to exclude.
-         */
-        @JsonSerialize(using = ToStringSerializer::class)
-        val name: Regex,
+    /**
+     * A regular expression to match the names of scopes to exclude.
+     */
+    @JsonSerialize(using = ToStringSerializer::class)
+    val name: Regex,
 
-        /**
-         * The reason why the scope is excluded, out of a predefined choice.
-         */
-        val reason: ScopeExcludeReason,
+    /**
+     * The reason why the scope is excluded, out of a predefined choice.
+     */
+    val reason: ScopeExcludeReason,
 
-        /**
-         * A comment to further explain why the [reason] is applicable here.
-         */
-        val comment: String
+    /**
+     * A comment to further explain why the [reason] is applicable here.
+     */
+    val comment: String
 ) {
     constructor(name: String, reason: ScopeExcludeReason, comment: String) : this(Regex(name), reason, comment)
 

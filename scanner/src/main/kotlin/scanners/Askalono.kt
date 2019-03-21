@@ -120,8 +120,8 @@ class Askalono(name: String, config: ScannerConfiguration) : LocalScanner(name, 
         val startTime = Instant.now()
 
         val process = ProcessCapture(
-                scannerPath.absolutePath,
-                "crawl", path.absolutePath
+            scannerPath.absolutePath,
+            "crawl", path.absolutePath
         )
 
         val endTime = Instant.now()

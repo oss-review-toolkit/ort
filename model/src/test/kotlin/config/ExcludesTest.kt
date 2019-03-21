@@ -110,8 +110,8 @@ class ExcludesTest : WordSpec() {
         "findScopeExcludes" should {
             "return an empty list if there are no matching scope excludes" {
                 val excludes = Excludes(
-                        projects = listOf(projectExcludeWithScopes2),
-                        scopes = listOf(scopeExclude2)
+                    projects = listOf(projectExcludeWithScopes2),
+                    scopes = listOf(scopeExclude2)
                 )
 
                 excludes.findScopeExcludes(scope1, project1, OrtResult.EMPTY) should beEmpty()
@@ -119,7 +119,7 @@ class ExcludesTest : WordSpec() {
 
             "find the correct global scope excludes" {
                 val excludes = Excludes(
-                        scopes = listOf(scopeExclude1, scopeExclude2)
+                    scopes = listOf(scopeExclude1, scopeExclude2)
                 )
 
                 val scopeExcludes = excludes.findScopeExcludes(scope1, project1, OrtResult.EMPTY)
@@ -130,7 +130,7 @@ class ExcludesTest : WordSpec() {
 
             "find the correct project specific scope excludes" {
                 val excludes = Excludes(
-                        projects = listOf(projectExcludeWithScopes1, projectExcludeWithScopes2)
+                    projects = listOf(projectExcludeWithScopes1, projectExcludeWithScopes2)
                 )
 
                 val scopeExcludes = excludes.findScopeExcludes(scope1, project1, OrtResult.EMPTY)
@@ -147,15 +147,15 @@ class ExcludesTest : WordSpec() {
 
             "return true if all occurrences of the package are excluded" {
                 val excludes = Excludes(
-                        projects = listOf(projectExclude1),
-                        scopes = listOf(scopeExclude2)
+                    projects = listOf(projectExclude1),
+                    scopes = listOf(scopeExclude2)
                 )
 
                 val analyzerResult = AnalyzerResult.EMPTY.copy(
-                        projects = sortedSetOf(
-                                project1.copy(scopes = sortedSetOf(scope1)),
-                                project2.copy(scopes = sortedSetOf(scope2))
-                        )
+                    projects = sortedSetOf(
+                        project1.copy(scopes = sortedSetOf(scope1)),
+                        project2.copy(scopes = sortedSetOf(scope2))
+                    )
                 )
 
                 excludes.isPackageExcluded(id, createOrtResult(analyzerResult)) shouldBe true
@@ -163,15 +163,15 @@ class ExcludesTest : WordSpec() {
 
             "return false if not all occurrences of the package are excluded" {
                 val excludes = Excludes(
-                        projects = listOf(projectExclude1),
-                        scopes = listOf(scopeExclude2)
+                    projects = listOf(projectExclude1),
+                    scopes = listOf(scopeExclude2)
                 )
 
                 val analyzerResult = AnalyzerResult.EMPTY.copy(
-                        projects = sortedSetOf(
-                                project1.copy(scopes = sortedSetOf(scope1)),
-                                project2.copy(scopes = sortedSetOf(scope1, scope2))
-                        )
+                    projects = sortedSetOf(
+                        project1.copy(scopes = sortedSetOf(scope1)),
+                        project2.copy(scopes = sortedSetOf(scope1, scope2))
+                    )
                 )
 
                 excludes.isPackageExcluded(id, createOrtResult(analyzerResult)) shouldBe false
@@ -181,10 +181,10 @@ class ExcludesTest : WordSpec() {
                 val excludes = Excludes()
 
                 val analyzerResult = AnalyzerResult.EMPTY.copy(
-                        projects = sortedSetOf(
-                                project1.copy(scopes = sortedSetOf(scope1)),
-                                project2.copy(scopes = sortedSetOf(scope2))
-                        )
+                    projects = sortedSetOf(
+                        project1.copy(scopes = sortedSetOf(scope1)),
+                        project2.copy(scopes = sortedSetOf(scope2))
+                    )
                 )
 
                 excludes.isPackageExcluded(id, createOrtResult(analyzerResult)) shouldBe false
@@ -279,7 +279,7 @@ class ExcludesTest : WordSpec() {
 
             "return the correct mapping of ids to project excludes" {
                 val excludes = Excludes(
-                        projects = listOf(projectExclude1, projectExclude2, projectExclude3)
+                    projects = listOf(projectExclude1, projectExclude2, projectExclude3)
                 )
 
                 val excludesById = excludes.projectExcludesById(setOf(project1, project2, project3), OrtResult.EMPTY)
@@ -292,7 +292,7 @@ class ExcludesTest : WordSpec() {
 
             "only return mappings for requested projects" {
                 val excludes = Excludes(
-                        projects = listOf(projectExclude1, projectExclude2, projectExclude3)
+                    projects = listOf(projectExclude1, projectExclude2, projectExclude3)
                 )
 
                 val excludesById = excludes.projectExcludesById(setOf(project1, project2), OrtResult.EMPTY)
@@ -317,8 +317,8 @@ class ExcludesTest : WordSpec() {
 
             "return the correct mapping of scope names to scope excludes" {
                 val excludes = Excludes(
-                        projects = listOf(projectExcludeWithScopes1, projectExcludeWithScopes2, projectExclude3),
-                        scopes = listOf(scopeExclude2)
+                    projects = listOf(projectExcludeWithScopes1, projectExcludeWithScopes2, projectExclude3),
+                    scopes = listOf(scopeExclude2)
                 )
 
                 val excludesByName = excludes.scopeExcludesByName(project1, setOf(scope1, scope2), OrtResult.EMPTY)
@@ -337,7 +337,7 @@ class ExcludesTest : WordSpec() {
 
             "only return mappings for requested scopes" {
                 val excludes = Excludes(
-                        projects = listOf(projectExcludeWithScopes1, projectExcludeWithScopes2)
+                    projects = listOf(projectExcludeWithScopes1, projectExcludeWithScopes2)
                 )
 
                 val excludesByName = excludes.scopeExcludesByName(project1, listOf(scope1), OrtResult.EMPTY)
@@ -353,12 +353,12 @@ class ExcludesTest : WordSpec() {
     }
 
     private fun createOrtResult(analyzerResult: AnalyzerResult) =
-            OrtResult(
-                    repository = Repository.EMPTY,
-                    analyzer = AnalyzerRun(
-                            environment = Environment(),
-                            config = AnalyzerConfiguration(ignoreToolVersions = false, allowDynamicVersions = false),
-                            result = analyzerResult
-                    )
+        OrtResult(
+            repository = Repository.EMPTY,
+            analyzer = AnalyzerRun(
+                environment = Environment(),
+                config = AnalyzerConfiguration(ignoreToolVersions = false, allowDynamicVersions = false),
+                result = analyzerResult
             )
+        )
 }

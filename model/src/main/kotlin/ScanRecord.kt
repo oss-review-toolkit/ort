@@ -30,27 +30,27 @@ import java.util.SortedSet
  */
 @JsonIgnoreProperties(value = ["has_errors"], allowGetters = true)
 data class ScanRecord(
-        /**
-         * The scanned and ignored [Scope]s for each scanned [Project] by id.
-         */
-        val scannedScopes: SortedSet<ProjectScanScopes>,
+    /**
+     * The scanned and ignored [Scope]s for each scanned [Project] by id.
+     */
+    val scannedScopes: SortedSet<ProjectScanScopes>,
 
-        /**
-         * The [ScanResult]s for all [Package]s.
-         */
-        val scanResults: SortedSet<ScanResultContainer>,
+    /**
+     * The [ScanResult]s for all [Package]s.
+     */
+    val scanResults: SortedSet<ScanResultContainer>,
 
-        /**
-         * The [AccessStatistics] for the scan results storage.
-         */
-        @JsonAlias("cache_stats")
-        val storageStats: AccessStatistics,
+    /**
+     * The [AccessStatistics] for the scan results storage.
+     */
+    @JsonAlias("cache_stats")
+    val storageStats: AccessStatistics,
 
-        /**
-         * A map that holds arbitrary data. Can be used by third-party tools to add custom data to the model.
-         */
-        @JsonInclude(JsonInclude.Include.NON_EMPTY)
-        val data: CustomData = emptyMap()
+    /**
+     * A map that holds arbitrary data. Can be used by third-party tools to add custom data to the model.
+     */
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    val data: CustomData = emptyMap()
 ) {
     /**
      * Return a map of all de-duplicated errors associated by [Identifier].

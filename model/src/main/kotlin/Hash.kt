@@ -29,15 +29,15 @@ import java.util.Base64
  * A class that bundles a hash algorithm with its hash value.
  */
 data class Hash(
-        /**
-         * The algorithm used to calculate the hash value.
-         */
-        val algorithm: HashAlgorithm,
+    /**
+     * The algorithm used to calculate the hash value.
+     */
+    val algorithm: HashAlgorithm,
 
-        /**
-         * The value calculated using the hash algorithm.
-         */
-        val value: String
+    /**
+     * The value calculated using the hash algorithm.
+     */
+    val value: String
 ) {
     companion object {
         /**
@@ -54,8 +54,8 @@ data class Hash(
                 // Support Subresource Integrity (SRI) hashes, see
                 // https://w3c.github.io/webappsec-subresource-integrity/
                 Hash(
-                        algorithm = HashAlgorithm.fromString(splitValue.first()),
-                        value = Base64.getDecoder().decode(splitValue.last()).toHexString()
+                    algorithm = HashAlgorithm.fromString(splitValue.first()),
+                    value = Base64.getDecoder().decode(splitValue.last()).toHexString()
                 )
             } else {
                 Hash(HashAlgorithm.fromHash(value), value)

@@ -83,7 +83,7 @@ class NoticeReporterTest : WordSpec() {
 
             "return the input as-is for an empty post-processing script" {
                 val expectedText =
-                        File("src/funTest/assets/NPM-is-windows-1.0.2-expected-NOTICE_UNPROCESSED").readText()
+                    File("src/funTest/assets/NPM-is-windows-1.0.2-expected-NOTICE_UNPROCESSED").readText()
                 val ortResult = readOrtResult("src/funTest/assets/NPM-is-windows-1.0.2-scan-result.json")
 
                 val report = generateReport(ortResult, postProcessingScript = "")
@@ -126,17 +126,17 @@ class NoticeReporterTest : WordSpec() {
     }
 
     private fun generateReport(
-            ortResult: OrtResult,
-            copyrightGarbage: CopyrightGarbage = CopyrightGarbage(),
-            postProcessingScript: String? = null
+        ortResult: OrtResult,
+        copyrightGarbage: CopyrightGarbage = CopyrightGarbage(),
+        postProcessingScript: String? = null
     ) =
-            ByteArrayOutputStream().also { outputStream ->
-                NoticeReporter().generateReport(
-                        ortResult,
-                        DefaultResolutionProvider(),
-                        copyrightGarbage,
-                        outputStream,
-                        postProcessingScript
-                )
-            }.toString("UTF-8")
+        ByteArrayOutputStream().also { outputStream ->
+            NoticeReporter().generateReport(
+                ortResult,
+                DefaultResolutionProvider(),
+                copyrightGarbage,
+                outputStream,
+                postProcessingScript
+            )
+        }.toString("UTF-8")
 }

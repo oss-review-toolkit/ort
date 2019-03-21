@@ -25,15 +25,15 @@ import com.fasterxml.jackson.annotation.JsonAlias
  * The configuration model of the scanner.
  */
 data class ScannerConfiguration(
-        /**
-         * Configuration of the scan results Artifactory storage.
-         */
-        @JsonAlias("artifactory_cache")
-        val artifactoryStorage: ArtifactoryStorageConfiguration? = null,
+    /**
+     * Configuration of the scan results Artifactory storage.
+     */
+    @JsonAlias("artifactory_cache")
+    val artifactoryStorage: ArtifactoryStorageConfiguration? = null,
 
-        /**
-         * Scanner specific configuration options. The key needs to match the name of the scanner class, e.g. "ScanCode"
-         * for the ScanCode wrapper. See the documentation of the scanner for available options.
-         */
-        val scanner: Map<String, Map<String, String>>? = null
+    /**
+     * Scanner specific configuration options. The key needs to match the name of the scanner class, e.g. "ScanCode"
+     * for the ScanCode wrapper. See the documentation of the scanner for available options.
+     */
+    val scanner: Map<String, Map<String, String>>? = null
 )

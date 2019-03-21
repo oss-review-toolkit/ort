@@ -134,31 +134,31 @@ object PythonVersion : CommandLineTool {
  * https://caremad.io/posts/2013/07/setup-vs-requirement/.
  */
 class PIP(name: String, analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfiguration) :
-        PackageManager(name, analyzerConfig, repoConfig), CommandLineTool {
+    PackageManager(name, analyzerConfig, repoConfig), CommandLineTool {
     class Factory : AbstractPackageManagerFactory<PIP>("PIP") {
         override val globsForDefinitionFiles = listOf("requirements*.txt", "setup.py")
 
         override fun create(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfiguration) =
-                PIP(managerName, analyzerConfig, repoConfig)
+            PIP(managerName, analyzerConfig, repoConfig)
     }
 
     companion object {
         private val INSTALL_OPTIONS = arrayOf(
-                "--no-warn-conflicts",
-                "--prefer-binary"
+            "--no-warn-conflicts",
+            "--prefer-binary"
         )
 
         // TODO: Need to replace this hard-coded list of domains with e.g. a command line option.
         private val TRUSTED_HOSTS = listOf(
-                "pypi.org",
-                "pypi.python.org" // Legacy
+            "pypi.org",
+            "pypi.python.org" // Legacy
         ).flatMap { listOf("--trusted-host", it) }.toTypedArray()
     }
 
     override fun command(workingDir: File?) = "pip"
 
     private fun runPipInVirtualEnv(virtualEnvDir: File, workingDir: File, vararg commandArgs: String) =
-            runInVirtualEnv(virtualEnvDir, workingDir, command(workingDir), *TRUSTED_HOSTS, *commandArgs)
+        runInVirtualEnv(virtualEnvDir, workingDir, command(workingDir), *TRUSTED_HOSTS, *commandArgs)
 
     private fun runInVirtualEnv(virtualEnvDir: File, workingDir: File, commandName: String, vararg commandArgs: String):
             ProcessCapture {
@@ -182,7 +182,7 @@ class PIP(name: String, analyzerConfig: AnalyzerConfiguration, repoConfig: Repos
     }
 
     override fun prepareResolution(definitionFiles: List<File>) =
-            VirtualEnv.checkVersion(ignoreActualVersion = analyzerConfig.ignoreToolVersions)
+        VirtualEnv.checkVersion(ignoreActualVersion = analyzerConfig.ignoreToolVersions)
 
     override fun resolveDependencies(definitionFile: File): ProjectAnalyzerResult? {
         // For an overview, dependency resolution involves the following steps:
@@ -204,8 +204,10 @@ class PIP(name: String, analyzerConfig: AnalyzerConfiguration, repoConfig: Repos
         val pip = if (OS.isWindows) {
             // On Windows, in-place pip up- / downgrades require pip to be wrapped by "python -m", see
             // https://github.com/pypa/pip/issues/1299.
-            runInVirtualEnv(virtualEnvDir, workingDir, "python", "-m", command(workingDir),
-                    *TRUSTED_HOSTS, "install", pydepUrl)
+            runInVirtualEnv(
+                virtualEnvDir, workingDir, "python", "-m", command(workingDir),
+                *TRUSTED_HOSTS, "install", pydepUrl
+            )
         } else {
             runPipInVirtualEnv(virtualEnvDir, workingDir, "install", pydepUrl)
         }
@@ -217,8 +219,10 @@ class PIP(name: String, analyzerConfig: AnalyzerConfiguration, repoConfig: Repos
         val (setupName, setupVersion, setupHomepage) = if (File(workingDir, "setup.py").isFile) {
             val pydep = if (OS.isWindows) {
                 // On Windows, the script itself is not executable, so we need to wrap the call by "python".
-                runInVirtualEnv(virtualEnvDir, workingDir, "python",
-                        virtualEnvDir.path + "\\Scripts\\pydep-run.py", "info", ".")
+                runInVirtualEnv(
+                    virtualEnvDir, workingDir, "python",
+                    virtualEnvDir.path + "\\Scripts\\pydep-run.py", "info", "."
+                )
             } else {
                 runInVirtualEnv(virtualEnvDir, workingDir, "pydep-run.py", "info", ".")
             }
@@ -230,8 +234,10 @@ class PIP(name: String, analyzerConfig: AnalyzerConfiguration, repoConfig: Repos
             // So the best we can do is to map this the project's homepage URL.
             jsonMapper.readTree(pydep.stdout).let {
                 declaredLicenses = getDeclaredLicenses(it)
-                listOf(it["project_name"].textValue(), it["version"].textValueOrEmpty(),
-                        it["repo_url"].textValueOrEmpty())
+                listOf(
+                    it["project_name"].textValue(), it["version"].textValueOrEmpty(),
+                    it["repo_url"].textValueOrEmpty()
+                )
             }
         } else {
             listOf("", "", "")
@@ -297,9 +303,9 @@ class PIP(name: String, analyzerConfig: AnalyzerConfiguration, repoConfig: Repos
             packageTemplates.mapTo(packages) { pkg ->
                 // See https://wiki.python.org/moin/PyPIJSON.
                 val pkgRequest = Request.Builder()
-                        .get()
-                        .url("https://pypi.org/pypi/${pkg.id.name}/${pkg.id.version}/json")
-                        .build()
+                    .get()
+                    .url("https://pypi.org/pypi/${pkg.id.name}/${pkg.id.version}/json")
+                    .build()
 
                 OkHttpClientHelper.execute(HTTP_CACHE_PATH, pkgRequest).use { response ->
                     val body = response.body()?.string()?.trim()
@@ -336,22 +342,22 @@ class PIP(name: String, analyzerConfig: AnalyzerConfiguration, repoConfig: Repos
 
                         // Amend package information with more details.
                         Package(
-                                id = pkg.id,
-                                declaredLicenses = getDeclaredLicenses(pkgInfo),
-                                description = pkgDescription,
-                                homepageUrl = pkgHomepage,
-                                binaryArtifact = if (pkgReleases != null) {
-                                    getBinaryArtifact(pkg, pkgReleases)
-                                } else {
-                                    pkg.binaryArtifact
-                                },
-                                sourceArtifact = if (pkgReleases != null) {
-                                    getSourceArtifact(pkgReleases)
-                                } else {
-                                    pkg.sourceArtifact
-                                },
-                                vcs = pkg.vcs,
-                                vcsProcessed = processPackageVcs(pkg.vcs, pkgHomepage)
+                            id = pkg.id,
+                            declaredLicenses = getDeclaredLicenses(pkgInfo),
+                            description = pkgDescription,
+                            homepageUrl = pkgHomepage,
+                            binaryArtifact = if (pkgReleases != null) {
+                                getBinaryArtifact(pkg, pkgReleases)
+                            } else {
+                                pkg.binaryArtifact
+                            },
+                            sourceArtifact = if (pkgReleases != null) {
+                                getSourceArtifact(pkgReleases)
+                            } else {
+                                pkg.sourceArtifact
+                            },
+                            vcs = pkg.vcs,
+                            vcsProcessed = processPackageVcs(pkg.vcs, pkgHomepage)
                         )
                     } catch (e: NullPointerException) {
                         e.showStackTrace()
@@ -373,22 +379,22 @@ class PIP(name: String, analyzerConfig: AnalyzerConfiguration, repoConfig: Repos
 
         // TODO: Handle "extras" and "tests" dependencies.
         val scopes = sortedSetOf(
-                Scope("install", installDependencies)
+            Scope("install", installDependencies)
         )
 
         val project = Project(
-                id = Identifier(
-                        type = managerName,
-                        namespace = "",
-                        name = projectName,
-                        version = projectVersion
-                ),
-                definitionFilePath = VersionControlSystem.getPathInfo(definitionFile).path,
-                declaredLicenses = declaredLicenses,
-                vcs = VcsInfo.EMPTY,
-                vcsProcessed = processProjectVcs(workingDir, homepageUrl = setupHomepage),
-                homepageUrl = setupHomepage,
-                scopes = scopes
+            id = Identifier(
+                type = managerName,
+                namespace = "",
+                name = projectName,
+                version = projectVersion
+            ),
+            definitionFilePath = VersionControlSystem.getPathInfo(definitionFile).path,
+            declaredLicenses = declaredLicenses,
+            vcs = VcsInfo.EMPTY,
+            vcsProcessed = processProjectVcs(workingDir, homepageUrl = setupHomepage),
+            homepageUrl = setupHomepage,
+            scopes = scopes
         )
 
         // Remove the virtualenv by simply deleting the directory.
@@ -493,8 +499,10 @@ class PIP(name: String, analyzerConfig: AnalyzerConfiguration, repoConfig: Repos
         var pip = if (OS.isWindows) {
             // On Windows, in-place pip up- / downgrades require pip to be wrapped by "python -m", see
             // https://github.com/pypa/pip/issues/1299.
-            runInVirtualEnv(virtualEnvDir, workingDir, "python", "-m", command(workingDir),
-                    *TRUSTED_HOSTS, "install", "pip==$PIP_VERSION")
+            runInVirtualEnv(
+                virtualEnvDir, workingDir, "python", "-m", command(workingDir),
+                *TRUSTED_HOSTS, "install", "pip==$PIP_VERSION"
+            )
         } else {
             runPipInVirtualEnv(virtualEnvDir, workingDir, "install", "pip==$PIP_VERSION")
         }
@@ -517,8 +525,10 @@ class PIP(name: String, analyzerConfig: AnalyzerConfiguration, repoConfig: Repos
             runPipInVirtualEnv(virtualEnvDir, workingDir, "install", *INSTALL_OPTIONS, ".")
         } else {
             // In "setup.py"-speak, "requirements.txt" just contains required "install" dependencies.
-            runPipInVirtualEnv(virtualEnvDir, workingDir, "install", *INSTALL_OPTIONS, "-r",
-                    definitionFile.name)
+            runPipInVirtualEnv(
+                virtualEnvDir, workingDir, "install", *INSTALL_OPTIONS, "-r",
+                definitionFile.name
+            )
         }
 
         // TODO: Consider logging a warning instead of an error if the command is run on a file that likely belongs
@@ -532,25 +542,27 @@ class PIP(name: String, analyzerConfig: AnalyzerConfiguration, repoConfig: Repos
         return pip
     }
 
-    private fun parseDependencies(dependencies: Iterable<JsonNode>,
-                                  allPackages: SortedSet<Package>, installDependencies: SortedSet<PackageReference>) {
+    private fun parseDependencies(
+        dependencies: Iterable<JsonNode>,
+        allPackages: SortedSet<Package>, installDependencies: SortedSet<PackageReference>
+    ) {
         dependencies.forEach { dependency ->
             val name = dependency["package_name"].textValue()
             val version = dependency["installed_version"].textValue()
 
             val pkg = Package(
-                    id = Identifier(
-                            type = "PyPI",
-                            namespace = "",
-                            name = name,
-                            version = version
-                    ),
-                    declaredLicenses = sortedSetOf(),
-                    description = "",
-                    homepageUrl = "",
-                    binaryArtifact = RemoteArtifact.EMPTY,
-                    sourceArtifact = RemoteArtifact.EMPTY,
-                    vcs = VcsInfo.EMPTY
+                id = Identifier(
+                    type = "PyPI",
+                    namespace = "",
+                    name = name,
+                    version = version
+                ),
+                declaredLicenses = sortedSetOf(),
+                description = "",
+                homepageUrl = "",
+                binaryArtifact = RemoteArtifact.EMPTY,
+                sourceArtifact = RemoteArtifact.EMPTY,
+                vcs = VcsInfo.EMPTY
             )
             allPackages += pkg
 
