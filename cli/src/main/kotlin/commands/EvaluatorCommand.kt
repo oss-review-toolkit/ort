@@ -35,6 +35,7 @@ import com.here.ort.model.mapper
 import com.here.ort.model.readValue
 import com.here.ort.utils.PARAMETER_ORDER_MANDATORY
 import com.here.ort.utils.PARAMETER_ORDER_OPTIONAL
+import com.here.ort.utils.expandTilde
 import com.here.ort.utils.log
 import com.here.ort.utils.safeMkdirs
 
@@ -100,7 +101,7 @@ object EvaluatorCommand : CommandWithHelp() {
             "Either '--rules-file' or '--rules-resource' must be specified."
         }
 
-        val absoluteOutputDir = outputDir?.absoluteFile?.normalize()
+        val absoluteOutputDir = outputDir?.expandTilde()?.normalize()
         val outputFiles = mutableListOf<File>()
 
         if (absoluteOutputDir != null) {
@@ -115,12 +116,12 @@ object EvaluatorCommand : CommandWithHelp() {
             }
         }
 
-        var ortResultInput = ortFile.readValue<OrtResult>()
-        repositoryConfigurationFile?.let {
+        var ortResultInput = ortFile.expandTilde().readValue<OrtResult>()
+        repositoryConfigurationFile?.expandTilde()?.let {
             ortResultInput = ortResultInput.replaceConfig(it.readValue())
         }
 
-        val script = rulesFile?.readText() ?: javaClass.classLoader.getResource(rulesResource).readText()
+        val script = rulesFile?.expandTilde()?.readText() ?: javaClass.classLoader.getResource(rulesResource).readText()
 
         val evaluator = Evaluator(ortResultInput)
 
