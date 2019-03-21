@@ -259,7 +259,7 @@ task generateLicenseRefTextResources(dependsOn: importScanCodeLicenseTexts) {
             mkdirs()
         }
 
-        licensesDir.listFiles({ it.name.endsWith('.yml') && !it.name.endsWith('-exception.yml')} as FileFilter).each {
+        licensesDir.listFiles({ it.name.endsWith('.yml') && !it.name.endsWith('-exception.yml') } as FileFilter).each {
             def isSpdxLicense = it.readLines().any { it.startsWith('spdx_license_key: ') }
             if (!isSpdxLicense) {
                 // The base name of a ScanCode license YML file matches the ScanCode-internal license key.
