@@ -36,6 +36,7 @@ import com.here.ort.reporter.DefaultResolutionProvider
 import com.here.ort.reporter.Reporter
 import com.here.ort.utils.PARAMETER_ORDER_MANDATORY
 import com.here.ort.utils.PARAMETER_ORDER_OPTIONAL
+import com.here.ort.utils.expandTilde
 import com.here.ort.utils.log
 import com.here.ort.utils.safeMkdirs
 import com.here.ort.utils.showStackTrace
@@ -128,15 +129,15 @@ object ReporterCommand : CommandWithHelp() {
         }
 
         var ortResult = ortFile.readValue<OrtResult>()
-        repositoryConfigurationFile?.let {
+        repositoryConfigurationFile?.expandTilde()?.let {
             ortResult = ortResult.replaceConfig(it.readValue())
         }
 
         val resolutionProvider = DefaultResolutionProvider()
         ortResult.repository.config.resolutions?.let { resolutionProvider.add(it) }
-        resolutionsFile?.readValue<Resolutions>()?.let { resolutionProvider.add(it) }
+        resolutionsFile?.expandTilde()?.readValue<Resolutions>()?.let { resolutionProvider.add(it) }
 
-        val copyrightGarbage = copyrightGarbageFile?.readValue() ?: CopyrightGarbage()
+        val copyrightGarbage = copyrightGarbageFile?.expandTilde()?.readValue() ?: CopyrightGarbage()
 
         var exitCode = 0
 
@@ -149,7 +150,7 @@ object ReporterCommand : CommandWithHelp() {
                     resolutionProvider,
                     copyrightGarbage,
                     file.outputStream(),
-                    postProcessingScript?.readText()
+                    postProcessingScript?.expandTilde()?.readText()
                 )
 
                 println("Created '${reporter.reporterName}' report:\n\t$file")
