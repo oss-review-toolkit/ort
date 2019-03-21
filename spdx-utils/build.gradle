@@ -89,7 +89,7 @@ def licenseToEnumEntry(String id, Map<String, String> meta) {
 }
 
 def generateEnumClass(String taskName, String description, String jsonUrl, String className, String resourcePath,
-        Closure collectIds) {
+                      Boolean handleOrLater, Closure collectIds) {
     logger.quiet("Fetching $description list...")
 
     def jsonSlurper = new groovy.json.JsonSlurper()
@@ -136,7 +136,10 @@ def generateEnumClass(String taskName, String description, String jsonUrl, Strin
                      */
                     fun forId(id: String) = ${className}.values().find { it.id == id }
                 }
+                """.stripIndent(12))
 
+    if (handleOrLater) {
+        enumFile.append("""
                 /**
                  * The full $description text as a string.
                  */
@@ -149,7 +152,7 @@ def generateEnumClass(String taskName, String description, String jsonUrl, Strin
 
                     buildString {
                         if (baseId != id) {
-                            append(SpdxLicense::class.java.getResource("/licenses/\$baseId-or-later").readText())
+                            append(SpdxLicense::class.java.getResource("/$resourcePath/\$baseId-or-later").readText())
             
                             val isGpl = listOf("AGPL-", "GPL-", "LGPL-").any { baseId.startsWith(it) }
                             if (isGpl) {
@@ -159,15 +162,24 @@ def generateEnumClass(String taskName, String description, String jsonUrl, Strin
             
                                 // For GPL the "or later version" text is just an amendment that reads better as a prefix as then no
                                 // text follows the license's final "That's all there is to it!" sentence.
-                                append(SpdxLicense::class.java.getResource("/licenses/\$baseId").readText())
+                                append(SpdxLicense::class.java.getResource("/$resourcePath/\$baseId").readText())
                             }
                         } else {
-                            append(SpdxLicense::class.java.getResource("/licenses/\$id").readText())
+                            append(SpdxLicense::class.java.getResource("/$resourcePath/\$id").readText())
                         }
                     }
                 }
             }
             """.stripIndent())
+    } else {
+        enumFile.append("""
+                /**
+                 * The full $description text as a string.
+                 */
+                val text by lazy { javaClass.getResource("/$resourcePath/\$id").readText() }
+            }
+            """.stripIndent())
+    }
 
     logger.quiet("Generated SPDX $description enum file '$enumFile'.")
 
@@ -283,6 +295,7 @@ task generateSpdxLicenseEnum(dependsOn: importLicenseTexts) {
                 'https://raw.githubusercontent.com/spdx/license-list-data/master/json/licenses.json',
                 'SpdxLicense',
                 resourcePath,
+                true,
                 { json ->
                     json.licenses.collectEntries {
                         [it['licenseId'], [name: it['name'], deprecated: it['isDeprecatedLicenseId']]]
@@ -307,6 +320,7 @@ task generateSpdxLicenseExceptionEnum(dependsOn: importLicenseTexts) {
                 'https://raw.githubusercontent.com/spdx/license-list-data/master/json/exceptions.json',
                 'SpdxLicenseException',
                 resourcePath,
+                false,
                 { json ->
                     json.exceptions.collectEntries {
                         [it['licenseExceptionId'], [name: it['name'], deprecated: it['isDeprecatedLicenseId']]]
