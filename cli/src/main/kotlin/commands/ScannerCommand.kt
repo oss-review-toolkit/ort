@@ -39,6 +39,7 @@ import com.here.ort.scanner.ScannerFactory
 import com.here.ort.scanner.scanners.ScanCode
 import com.here.ort.utils.PARAMETER_ORDER_MANDATORY
 import com.here.ort.utils.PARAMETER_ORDER_OPTIONAL
+import com.here.ort.utils.expandTilde
 import com.here.ort.utils.log
 
 import java.io.File
@@ -121,7 +122,7 @@ object ScannerCommand : CommandWithHelp() {
             "Either '--ort-file' or '--input-path' must be specified."
         }
 
-        val absoluteOutputDir = outputDir.absoluteFile.normalize()
+        val absoluteOutputDir = outputDir.expandTilde().normalize()
         val absoluteNativeOutputDir = absoluteOutputDir.resolve("native-scan-results")
 
         val outputFiles = outputFormats.distinct().map { format ->
@@ -139,15 +140,14 @@ object ScannerCommand : CommandWithHelp() {
             return 2
         }
 
-        downloadDir?.let {
-            require(!it.exists()) {
-                "The download directory '${it.absolutePath}' must not exist yet."
-            }
+        val absoluteDownloadDir = downloadDir?.expandTilde()
+        require(absoluteDownloadDir?.exists() != true) {
+            "The download directory '$absoluteDownloadDir' must not exist yet."
         }
 
-        val config = configFile?.let {
+        val config = configFile?.expandTilde()?.let {
             require(it.isFile) {
-                "Provided configuration file is not a file: ${it.invariantSeparatorsPath}"
+                "The provided configuration file '$it' is not actually a file."
             }
 
             it.readValue<ScannerConfiguration>()
@@ -161,15 +161,17 @@ object ScannerCommand : CommandWithHelp() {
 
         println("Using scanner '$scanner'.")
 
-        val ortResult = ortFile?.let {
-            val absoluteDownloadDir = downloadDir?.absoluteFile ?: absoluteOutputDir.resolve("downloads")
-            scanner.scanOrtResult(it, absoluteNativeOutputDir, absoluteDownloadDir, scopesToScan.toSet())
+        val ortResult = ortFile?.expandTilde()?.let {
+            scanner.scanOrtResult(
+                it, absoluteNativeOutputDir,
+                absoluteDownloadDir ?: absoluteOutputDir.resolve("downloads"), scopesToScan.toSet()
+            )
         } ?: run {
             require(scanner is LocalScanner) {
                 "To scan local files the chosen scanner must be a local scanner."
             }
 
-            val absoluteInputPath = inputPath!!.absoluteFile.normalize()
+            val absoluteInputPath = inputPath!!.expandTilde().normalize()
             scanner.scanInputPath(absoluteInputPath, absoluteNativeOutputDir)
         }
 
