@@ -322,7 +322,7 @@ class HttpStorageTest : StringSpec() {
                 rawResultWithContent
             )
             val provenanceSourceArtifactNonMatching = provenanceWithSourceArtifact.copy(
-                sourceArtifact = sourceArtifact.copy(url = "url2")
+                sourceArtifact = sourceArtifact.copy(hash = "0123456789012345678901234567890123456789")
             )
             val scanResultSourceArtifactNonMatching = ScanResult(
                 provenanceSourceArtifactNonMatching, scannerDetails1,
