@@ -67,7 +67,13 @@ data class OrtResult(
          * A constant for an [OrtResult] with an empty repository an all other properties `null`.
          */
         @JvmField
-        val EMPTY = OrtResult(Repository.EMPTY)
+        val EMPTY = OrtResult(
+            repository = Repository.EMPTY,
+            analyzer = null,
+            scanner = null,
+            evaluator = null,
+            data = emptyMap()
+        )
     }
 
     /**

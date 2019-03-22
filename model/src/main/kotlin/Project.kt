@@ -97,11 +97,15 @@ data class Project(
         @JvmField
         val EMPTY = Project(
             id = Identifier.EMPTY,
+            purl = "",
             definitionFilePath = "",
             declaredLicenses = sortedSetOf(),
+            declaredLicensesProcessed = ProcessedDeclaredLicense.EMPTY,
             vcs = VcsInfo.EMPTY,
+            vcsProcessed = VcsInfo.EMPTY,
             homepageUrl = "",
-            scopes = sortedSetOf()
+            scopes = sortedSetOf(),
+            data = emptyMap()
         )
     }
 

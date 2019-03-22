@@ -67,7 +67,8 @@ data class AnalyzerResult(
         val EMPTY = AnalyzerResult(
             projects = sortedSetOf(),
             packages = sortedSetOf(),
-            errors = sortedMapOf()
+            errors = sortedMapOf(),
+            data = emptyMap()
         )
     }
 

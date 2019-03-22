@@ -114,12 +114,17 @@ data class Package(
         @JvmField
         val EMPTY = Package(
             id = Identifier.EMPTY,
+            purl = "",
             declaredLicenses = sortedSetOf(),
+            declaredLicensesProcessed = ProcessedDeclaredLicense.EMPTY,
+            concludedLicense = null,
             description = "",
             homepageUrl = "",
             binaryArtifact = RemoteArtifact.EMPTY,
             sourceArtifact = RemoteArtifact.EMPTY,
-            vcs = VcsInfo.EMPTY
+            vcs = VcsInfo.EMPTY,
+            vcsProcessed = VcsInfo.EMPTY,
+            data = emptyMap()
         )
     }
 

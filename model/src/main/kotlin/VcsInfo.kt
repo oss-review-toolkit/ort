@@ -79,7 +79,10 @@ data class VcsInfo(
         val EMPTY = VcsInfo(
             type = "",
             url = "",
-            revision = ""
+            revision = "",
+            resolvedRevision = null,
+            path = "",
+            data = emptyMap()
         )
     }
 
