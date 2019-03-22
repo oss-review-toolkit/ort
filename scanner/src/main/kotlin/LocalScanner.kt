@@ -40,7 +40,6 @@ import com.here.ort.model.ScanResultContainer
 import com.here.ort.model.ScanSummary
 import com.here.ort.model.ScannerDetails
 import com.here.ort.model.ScannerRun
-import com.here.ort.model.config.RepositoryConfiguration
 import com.here.ort.model.config.ScannerConfiguration
 import com.here.ort.model.mapper
 import com.here.ort.utils.CommandLineTool
@@ -364,12 +363,9 @@ abstract class LocalScanner(name: String, config: ScannerConfiguration) : Scanne
         val scanRecord = ScanRecord(sortedSetOf(), sortedSetOf(scanResultContainer), ScanResultsStorage.stats)
 
         val endTime = Instant.now()
-
         val scannerRun = ScannerRun(startTime, endTime, Environment(), config, scanRecord)
 
-        val vcs = VersionControlSystem.getCloneInfo(inputPath)
-        val repository = Repository(vcs, vcs.normalize(), emptyMap(), RepositoryConfiguration())
-
+        val repository = Repository(VersionControlSystem.getCloneInfo(inputPath))
         return OrtResult(repository, scanner = scannerRun)
     }
 

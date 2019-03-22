@@ -28,14 +28,15 @@ import com.here.ort.model.config.RepositoryConfiguration
  */
 data class Repository(
     /**
-     * The [VcsInfo] of the repository.
+     * Original VCS-related information from the working tree containing the analyzer root.
      */
     val vcs: VcsInfo,
 
     /**
-     * The [VcsInfo] of the repository.
+     * Processed VCS-related information from the working tree containing the analyzer root that has e.g. common
+     * mistakes corrected.
      */
-    val vcsProcessed: VcsInfo,
+    val vcsProcessed: VcsInfo = vcs.normalize(),
 
     /**
      * A map of nested repositories, for example Git submodules or Git-Repo modules. The key is the path to the
@@ -47,7 +48,7 @@ data class Repository(
     /**
      * The configuration of the repository, parsed from the ".ort.yml" file.
      */
-    val config: RepositoryConfiguration
+    val config: RepositoryConfiguration = RepositoryConfiguration()
 ) {
     companion object {
         /**
