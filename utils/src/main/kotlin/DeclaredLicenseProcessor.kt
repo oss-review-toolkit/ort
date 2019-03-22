@@ -68,4 +68,12 @@ data class ProcessedDeclaredLicense(
      */
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     val unmapped: List<String> = emptyList()
-)
+) {
+    companion object {
+        @JvmField
+        val EMPTY = ProcessedDeclaredLicense(
+            spdxExpression = null,
+            unmapped = emptyList()
+        )
+    }
+}
