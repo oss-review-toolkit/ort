@@ -107,10 +107,10 @@ class DownloaderTest : StringSpec() {
             }
 
             exception.suppressed.size shouldBe 2
-            exception.suppressed.get(0)!!.message shouldBe "No VCS URL provided for 'Maven:junit:junit:4.12'. " +
+            exception.suppressed[0]!!.message shouldBe "No VCS URL provided for 'Maven:junit:junit:4.12'. " +
                     "Please define the \"connection\" tag within the \"scm\" tag in the POM file," +
                     " see: http://maven.apache.org/pom.html#SCM"
-            exception.suppressed.get(1)!!.message shouldBe "Source artifact does not match expected SHA-1 hash " +
+            exception.suppressed[1]!!.message shouldBe "Source artifact does not match expected SHA-1 hash " +
                     "'0123456789abcdef0123456789abcdef01234567'."
         }
 
