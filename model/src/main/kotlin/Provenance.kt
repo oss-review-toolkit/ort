@@ -78,11 +78,19 @@ data class Provenance(
      * True if this [Provenance] refers to the same source code as [pkg], assuming that it belongs to the package id.
      */
     fun matches(pkg: Package): Boolean {
-        // TODO: Only comparing the hashes of the source artifacts might be sufficient.
+        // If the scanned source code came from a source artifact, it has to match the package's source artifact.
         if (sourceArtifact != null) {
-            // Note that pkg.sourceArtifact is non-nullable.
+            // If the (non-empty) hashes match, we do not need to compare the other properties like the URL. Only
+            // support this for a known algorithm whose hash we were able to verify as otherwise the hash could be fake.
+            if (sourceArtifact.hash.isNotEmpty() && sourceArtifact.hashAlgorithm != HashAlgorithm.UNKNOWN) {
+                return sourceArtifact.hash == pkg.sourceArtifact.hash
+            }
+
             return sourceArtifact.copy(data = emptyMap()) == pkg.sourceArtifact.copy(data = emptyMap())
         }
+
+        // By now it is clear the scanned source code did not come from a source artifact, so try to compare the VCS
+        // information instead.
 
         // If the VCS information does not have a resolved revision it means that there was an issue with downloading
         // the source code.
