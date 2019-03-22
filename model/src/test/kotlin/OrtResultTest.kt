@@ -20,7 +20,6 @@
 package com.here.ort.model
 
 import com.here.ort.model.config.AnalyzerConfiguration
-import com.here.ort.model.config.RepositoryConfiguration
 
 import io.kotlintest.matchers.haveSize
 import io.kotlintest.matchers.match
@@ -95,12 +94,10 @@ class OrtResultTest : WordSpec({
             val ortResult = OrtResult(
                 Repository(
                     vcs = vcs,
-                    vcsProcessed = vcs.normalize(),
                     nestedRepositories = mapOf(
                         "path/1" to nestedVcs1,
                         "path/2" to nestedVcs2
-                    ),
-                    config = RepositoryConfiguration()
+                    )
                 ),
                 AnalyzerRun(
                     environment = Environment(),
@@ -127,11 +124,9 @@ class OrtResultTest : WordSpec({
             val ortResult = OrtResult(
                 Repository(
                     vcs = vcs,
-                    vcsProcessed = vcs.normalize(),
                     nestedRepositories = mapOf(
                         "path/1" to nestedVcs1
-                    ),
-                    config = RepositoryConfiguration()
+                    )
                 ),
                 AnalyzerRun(
                     environment = Environment(),

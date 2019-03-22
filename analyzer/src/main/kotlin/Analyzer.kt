@@ -140,7 +140,7 @@ class Analyzer(private val config: AnalyzerConfiguration) {
             // Only include nested VCS if they are part of the analyzed directory.
             workingTree.getRootPath().resolve(path).startsWith(absoluteProjectPath)
         }.orEmpty()
-        val repository = Repository(vcs, vcs.normalize(), nestedVcs, repositoryConfiguration)
+        val repository = Repository(vcs = vcs, nestedRepositories = nestedVcs, config = repositoryConfiguration)
 
         val endTime = Instant.now()
 
