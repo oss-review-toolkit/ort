@@ -20,9 +20,6 @@
 package com.here.ort.evaluator
 
 import com.here.ort.model.OrtResult
-import com.here.ort.model.Repository
-import com.here.ort.model.VcsInfo
-import com.here.ort.model.config.RepositoryConfiguration
 
 import io.kotlintest.matchers.beEmpty
 import io.kotlintest.matchers.haveSize
@@ -32,19 +29,17 @@ import io.kotlintest.specs.WordSpec
 
 class EvaluatorTest : WordSpec() {
     init {
-        val ortResult = OrtResult(Repository(VcsInfo.EMPTY, VcsInfo.EMPTY, emptyMap(), RepositoryConfiguration()))
-
         "checkSyntax" should {
             "succeed if the script can be compiled" {
                 val script = javaClass.getResource("/rules/no_gpl_declared.kts").readText()
 
-                val result = Evaluator(ortResult).checkSyntax(script)
+                val result = Evaluator(OrtResult.EMPTY).checkSyntax(script)
 
                 result shouldBe true
             }
 
             "fail if the script can not be compiled" {
-                val result = Evaluator(ortResult).checkSyntax(
+                val result = Evaluator(OrtResult.EMPTY).checkSyntax(
                     """
                     broken script
                     """.trimIndent()
@@ -56,13 +51,13 @@ class EvaluatorTest : WordSpec() {
 
         "evaluate" should {
             "return no errors for an empty script" {
-                val result = Evaluator(ortResult).run("")
+                val result = Evaluator(OrtResult.EMPTY).run("")
 
                 result.errors should beEmpty()
             }
 
             "contain rule errors in the result" {
-                val result = Evaluator(ortResult).run(
+                val result = Evaluator(OrtResult.EMPTY).run(
                     """
                     evalErrors += OrtIssue(source = "source 1", message = "message 1")
                     evalErrors += OrtIssue(source = "source 2", message = "message 2")
