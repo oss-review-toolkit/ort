@@ -39,7 +39,6 @@ class ProjectAnalyzerResultTest : StringSpec({
                 definitionFilePath = "definitionFilePath",
                 declaredLicenses = sortedSetOf(),
                 vcs = VcsInfo.EMPTY,
-                vcsProcessed = VcsInfo.EMPTY,
                 homepageUrl = "",
                 scopes = sortedSetOf(
                     Scope(
