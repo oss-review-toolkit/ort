@@ -90,8 +90,11 @@ data class Provenance(
             return sourceArtifact.copy(data = emptyMap()) == pkg.sourceArtifact.copy(data = emptyMap())
         }
 
-        // If the VCS information does not have a resolved revision it means that there was an issue with downloading
-        // the source code.
+        // By now it is clear the scanned source code did not come from a source artifact, so try to compare the VCS
+        // information instead.
+
+        // If no VCS information is present either, or it does not have a resolved revision, there is no way of
+        // verifying matching provenance.
         if (vcsInfo?.resolvedRevision == null) {
             return false
         }
