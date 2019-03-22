@@ -63,7 +63,7 @@ data class PackageReference(
     /**
      * A map that holds arbitrary data. Can be used by third-party tools to add custom data to the model.
      */
-    val data: CustomData = emptyMap()
+    val data: CustomData = mutableMapOf()
 ) : Comparable<PackageReference> {
     /**
      * Return the set of [PackageReference]s this [PackageReference] transitively depends on, up to and including a

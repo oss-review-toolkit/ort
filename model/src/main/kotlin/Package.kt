@@ -105,7 +105,7 @@ data class Package(
      * A map that holds arbitrary data. Can be used by third-party tools to add custom data to the model.
      */
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    val data: CustomData = emptyMap()
+    val data: CustomData = mutableMapOf()
 ) : Comparable<Package> {
     companion object {
         /**

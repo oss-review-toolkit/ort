@@ -65,7 +65,7 @@ data class Provenance(
      * A map that holds arbitrary data. Can be used by third-party tools to add custom data to the model.
      */
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    val data: CustomData = emptyMap()
+    val data: CustomData = mutableMapOf()
 ) {
     init {
         require(sourceArtifact == null || vcsInfo == null) {
@@ -81,7 +81,7 @@ data class Provenance(
         // TODO: Only comparing the hashes of the source artifacts might be sufficient.
         if (sourceArtifact != null) {
             // Note that pkg.sourceArtifact is non-nullable.
-            return sourceArtifact.copy(data = emptyMap()) == pkg.sourceArtifact.copy(data = emptyMap())
+            return sourceArtifact == pkg.sourceArtifact
         }
 
         // If the VCS information does not have a resolved revision it means that there was an issue with downloading

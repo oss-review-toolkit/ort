@@ -48,7 +48,7 @@ data class ScannerDetails(
      * A map that holds arbitrary data. Can be used by third-party tools to add custom data to the model.
      */
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    val data: CustomData = emptyMap()
+    val data: CustomData = mutableMapOf()
 ) {
     companion object {
         private val MAJOR_MINOR = EnumSet.of(Semver.VersionDiff.MAJOR, Semver.VersionDiff.MINOR)

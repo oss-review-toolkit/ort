@@ -86,7 +86,7 @@ data class PackageCurationData(
      * A map that holds arbitrary data. Can be used by third-party tools to add custom data to the model.
      */
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    val data: CustomData = emptyMap()
+    val data: CustomData = mutableMapOf()
 ) {
     /**
      * Apply the curation data to the provided package, by overriding all values of the original package with non-null

@@ -49,7 +49,7 @@ data class Scope(
      * A map that holds arbitrary data. Can be used by third-party tools to add custom data to the model.
      */
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    val data: CustomData = emptyMap()
+    val data: CustomData = mutableMapOf()
 ) : Comparable<Scope> {
     /**
      * Return the set of [PackageReference]s in this [Scope], up to and including a depth of [maxDepth] where counting
