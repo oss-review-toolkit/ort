@@ -36,7 +36,6 @@ import com.here.ort.model.PackageLinkage
 import com.here.ort.model.PackageReference
 import com.here.ort.model.Project
 import com.here.ort.model.ProjectAnalyzerResult
-import com.here.ort.model.RemoteArtifact
 import com.here.ort.model.Scope
 import com.here.ort.model.Severity
 import com.here.ort.model.VcsInfo
@@ -209,20 +208,13 @@ class Gradle(name: String, analyzerConfig: AnalyzerConfiguration, repoConfig: Re
 
                     issues += OrtIssue(source = managerName, message = e.collectMessagesAsString())
 
-                    Package(
+                    Package.EMPTY.copy(
                         id = Identifier(
                             type = "Maven",
                             namespace = dependency.groupId,
                             name = dependency.artifactId,
                             version = dependency.version
-                        ),
-                        declaredLicenses = sortedSetOf(),
-                        description = "",
-                        homepageUrl = "",
-                        binaryArtifact = RemoteArtifact.EMPTY,
-                        sourceArtifact = RemoteArtifact.EMPTY,
-                        vcs = VcsInfo.EMPTY,
-                        vcsProcessed = VcsInfo.EMPTY
+                        )
                     )
                 }
             }
