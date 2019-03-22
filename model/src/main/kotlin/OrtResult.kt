@@ -64,7 +64,7 @@ data class OrtResult(
 ) {
     companion object {
         /**
-         * A constant for an [OrtResult] with an empty respository an all other properties `null`.
+         * A constant for an [OrtResult] with an empty repository an all other properties `null`.
          */
         @JvmField
         val EMPTY = OrtResult(Repository.EMPTY)
