@@ -54,7 +54,8 @@ data class RemoteArtifact(
         val EMPTY = RemoteArtifact(
             url = "",
             hash = Hash.UNKNOWN.value,
-            hashAlgorithm = Hash.UNKNOWN.algorithm
+            hashAlgorithm = Hash.UNKNOWN.algorithm,
+            data = emptyMap()
         )
     }
 }
