@@ -403,31 +403,31 @@ class PIP(name: String, analyzerConfig: AnalyzerConfiguration, repoConfig: Repos
         return ProjectAnalyzerResult(project, packages.map { it.toCuratedPackage() }.toSortedSet())
     }
 
-    private fun getBinaryArtifact(pkg: Package, pkgReleases: ArrayNode): RemoteArtifact {
+    private fun getBinaryArtifact(pkg: Package, releasesNode: ArrayNode): RemoteArtifact {
         // Prefer python wheels and fall back to the first entry (probably a sdist).
-        val pkgRelease = pkgReleases.asSequence().find {
+        val binaryArtifact = releasesNode.asSequence().find {
             it["packagetype"].textValue() == "bdist_wheel"
-        } ?: pkgReleases[0]
+        } ?: releasesNode[0]
 
-        val url = pkgRelease["url"]?.textValue() ?: pkg.binaryArtifact.url
-        val hash = pkgRelease["md5_digest"]?.textValue() ?: pkg.binaryArtifact.hash
+        val url = binaryArtifact["url"]?.textValue() ?: pkg.binaryArtifact.url
+        val hash = binaryArtifact["md5_digest"]?.textValue() ?: pkg.binaryArtifact.hash
 
-        return RemoteArtifact(url = url, hash = hash, hashAlgorithm = HashAlgorithm.fromHash(hash))
+        return RemoteArtifact(url, hash, HashAlgorithm.fromHash(hash))
     }
 
-    private fun getSourceArtifact(pkgReleases: ArrayNode): RemoteArtifact {
-        val pkgSources = pkgReleases.asSequence().filter {
+    private fun getSourceArtifact(releasesNode: ArrayNode): RemoteArtifact {
+        val sourceArtifacts = releasesNode.asSequence().filter {
             it["packagetype"].textValue() == "sdist"
         }
 
-        if (pkgSources.count() == 0) return RemoteArtifact.EMPTY
+        if (sourceArtifacts.count() == 0) return RemoteArtifact.EMPTY
 
-        val pkgSource = pkgSources.find {
+        val sourceArtifact = sourceArtifacts.find {
             it["filename"].textValue().endsWith(".tar.bz2")
-        } ?: pkgSources.elementAt(0)
+        } ?: sourceArtifacts.elementAt(0)
 
-        val url = pkgSource["url"]?.textValue() ?: return RemoteArtifact.EMPTY
-        val hash = pkgSource["md5_digest"]?.textValue() ?: return RemoteArtifact.EMPTY
+        val url = sourceArtifact["url"]?.textValue() ?: return RemoteArtifact.EMPTY
+        val hash = sourceArtifact["md5_digest"]?.textValue() ?: return RemoteArtifact.EMPTY
 
         return RemoteArtifact(url, hash, HashAlgorithm.fromHash(hash))
     }
