@@ -28,12 +28,12 @@ import java.nio.file.Paths
 
 class UtilsTest : WordSpec({
     "disjoint" should {
-        "return true for collections that have no common elememts" {
-            disjoint(setOf(1), setOf(2), setOf(3)) shouldBe true
+        "return an empty set for collections that have no common elements" {
+            disjoint(setOf(1), setOf(2), setOf(3)) shouldBe emptySet()
         }
 
-        "return false for collections that have common elememts" {
-            disjoint(setOf(1, 2), setOf(2, 3), setOf(3, 4)) shouldBe false
+        "return the set of common elements for collections that have common elements" {
+            disjoint(setOf(1, 2), setOf(2, 3), setOf(3, 4)) shouldBe setOf(2, 3)
         }
     }
 
