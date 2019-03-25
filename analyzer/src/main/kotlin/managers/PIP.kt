@@ -56,6 +56,7 @@ import com.vdurmont.semver4j.Requirement
 import java.io.File
 import java.io.IOException
 import java.lang.IllegalArgumentException
+import java.lang.NumberFormatException
 import java.net.HttpURLConnection
 import java.util.SortedSet
 
@@ -153,6 +154,18 @@ class PIP(name: String, analyzerConfig: AnalyzerConfiguration, repoConfig: Repos
             "pypi.org",
             "pypi.python.org" // Legacy
         ).flatMap { listOf("--trusted-host", it) }.toTypedArray()
+
+        /**
+         * Return a version string with leading zeros of components stripped.
+         */
+        fun stripLeadingZerosFromVersion(version: String) =
+            version.split(".").joinToString(".") {
+                try {
+                    it.toInt().toString()
+                } catch (e: NumberFormatException) {
+                    it
+                }
+            }
     }
 
     override fun command(workingDir: File?) = "pip"
@@ -338,7 +351,12 @@ class PIP(name: String, analyzerConfig: AnalyzerConfiguration, repoConfig: Repos
 
                         val pkgDescription = pkgInfo["summary"]?.textValue() ?: pkg.description
                         val pkgHomepage = pkgInfo["home_page"]?.textValue() ?: pkg.homepageUrl
-                        val pkgReleases = pkgData["releases"][pkg.id.version] as? ArrayNode
+
+                        val pkgVersion = pkgData["releases"].fieldNames().asSequence().find {
+                            stripLeadingZerosFromVersion(it) == pkg.id.version
+                        }
+
+                        val pkgArtifacts = pkgData["releases"][pkgVersion] as? ArrayNode
 
                         // Amend package information with more details.
                         Package(
@@ -346,13 +364,13 @@ class PIP(name: String, analyzerConfig: AnalyzerConfiguration, repoConfig: Repos
                             declaredLicenses = getDeclaredLicenses(pkgInfo),
                             description = pkgDescription,
                             homepageUrl = pkgHomepage,
-                            binaryArtifact = if (pkgReleases != null) {
-                                getBinaryArtifact(pkg, pkgReleases)
+                            binaryArtifact = if (pkgArtifacts != null) {
+                                getBinaryArtifact(pkg, pkgArtifacts)
                             } else {
                                 pkg.binaryArtifact
                             },
-                            sourceArtifact = if (pkgReleases != null) {
-                                getSourceArtifact(pkgReleases)
+                            sourceArtifact = if (pkgArtifacts != null) {
+                                getSourceArtifact(pkgArtifacts)
                             } else {
                                 pkg.sourceArtifact
                             },
