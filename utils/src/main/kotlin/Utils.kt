@@ -23,7 +23,6 @@ import java.io.File
 import java.net.URI
 import java.net.URISyntaxException
 import java.security.Permission
-import java.util.Collections
 
 @Suppress("UnsafeCast")
 val log = org.slf4j.LoggerFactory.getLogger({}.javaClass) as ch.qos.logback.classic.Logger
@@ -59,18 +58,21 @@ const val PARAMETER_ORDER_LOGGING = 2
 const val PARAMETER_ORDER_HELP = 100
 
 /**
- * Check whether the specified two or more collections have no elemets in common.
+ * Return the set of elements the specified two or more collections have in common, or an empty set if all collections
+ * are disjoint.
  */
-fun disjoint(c1: Collection<*>, c2: Collection<*>, vararg cN: Collection<*>): Boolean {
+fun <T> disjoint(c1: Collection<T>, c2: Collection<T>, vararg cN: Collection<T>): Set<T> {
     val c = listOf(c1, c2, *cN)
+
+    val commonElememts = mutableSetOf<T>()
 
     for (a in c.indices) {
         for (b in a + 1 until c.size) {
-            if (!Collections.disjoint(c[a], c[b])) return false
+            commonElememts += c[a].intersect(c[b])
         }
     }
 
-    return true
+    return commonElememts
 }
 
 /**
