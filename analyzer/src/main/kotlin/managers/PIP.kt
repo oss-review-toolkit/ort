@@ -269,7 +269,7 @@ class PIP(name: String, analyzerConfig: AnalyzerConfiguration, repoConfig: Repos
             Pair(true, false) -> setupName
             Pair(false, true) -> requirementsName
             Pair(true, true) -> "$setupName-requirements$requirementsSuffix"
-            else -> throw IllegalArgumentException("Unbale to determine a project name for '$definitionFile'.")
+            else -> throw IllegalArgumentException("Unable to determine a project name for '$definitionFile'.")
         }
         val projectVersion = setupVersion.takeIf { it.isNotEmpty() } ?: requirementsVersion
 
