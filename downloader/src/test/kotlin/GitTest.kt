@@ -20,6 +20,7 @@
 package com.here.ort.downloader.vcs
 
 import com.here.ort.downloader.VersionControlSystem
+import com.here.ort.utils.OS
 import com.here.ort.utils.getUserOrtDirectory
 import com.here.ort.utils.safeDeleteRecursively
 import com.here.ort.utils.unpack
@@ -64,6 +65,10 @@ class GitTest : StringSpec() {
             git.isApplicableUrl("https://bitbucket.org/yevster/spdxtraxample") shouldBe true
 
             git.isApplicableUrl("https://bitbucket.org/paniq/masagin") shouldBe false
+        }
+
+        "Git does not prompt for credentials for non-existing repositories".config(enabled = !OS.isWindows) {
+            git.isApplicableUrl("https://github.com/heremaps/foobar.git") shouldBe false
         }
 
         "Detected Git working tree information is correct" {
