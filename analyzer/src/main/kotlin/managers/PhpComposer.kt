@@ -179,7 +179,7 @@ class PhpComposer(name: String, analyzerConfig: AnalyzerConfiguration, repoConfi
                         virtualPackages
                     )
                     packageReferences += packageInfo.toReference(dependencies = transitiveDependencies)
-                } catch (e: Exception) {
+                } catch (e: IOException) {
                     e.showStackTrace()
 
                     log.error { "Could not resolve dependencies of '$packageName': ${e.collectMessagesAsString()}" }
