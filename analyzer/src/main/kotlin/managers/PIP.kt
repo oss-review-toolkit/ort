@@ -346,17 +346,17 @@ class PIP(name: String, analyzerConfig: AnalyzerConfiguration, repoConfig: Repos
                         return@use pkg
                     }
 
-                    try {
-                        val pkgInfo = pkgData["info"]
-
+                    pkgData["info"]?.let { pkgInfo ->
                         val pkgDescription = pkgInfo["summary"]?.textValue() ?: pkg.description
                         val pkgHomepage = pkgInfo["home_page"]?.textValue() ?: pkg.homepageUrl
 
-                        val pkgVersion = pkgData["releases"].fieldNames().asSequence().find {
-                            stripLeadingZerosFromVersion(it) == pkg.id.version
-                        }
+                        val pkgRelease = pkgData["releases"]?.let { pkgReleases ->
+                            val pkgVersion = pkgReleases.fieldNames().asSequence().find {
+                                stripLeadingZerosFromVersion(it) == pkg.id.version
+                            }
 
-                        val pkgReleases = pkgData["releases"][pkgVersion] as? ArrayNode
+                            pkgReleases[pkgVersion]
+                        } as? ArrayNode
 
                         // Amend package information with more details.
                         Package(
@@ -364,24 +364,22 @@ class PIP(name: String, analyzerConfig: AnalyzerConfiguration, repoConfig: Repos
                             declaredLicenses = getDeclaredLicenses(pkgInfo),
                             description = pkgDescription,
                             homepageUrl = pkgHomepage,
-                            binaryArtifact = if (pkgReleases != null) {
-                                getBinaryArtifact(pkg, pkgReleases)
+                            binaryArtifact = if (pkgRelease != null) {
+                                getBinaryArtifact(pkg, pkgRelease)
                             } else {
                                 pkg.binaryArtifact
                             },
-                            sourceArtifact = if (pkgReleases != null) {
-                                getSourceArtifact(pkgReleases)
+                            sourceArtifact = if (pkgRelease != null) {
+                                getSourceArtifact(pkgRelease)
                             } else {
                                 pkg.sourceArtifact
                             },
                             vcs = pkg.vcs,
                             vcsProcessed = processPackageVcs(pkg.vcs, pkgHomepage)
                         )
-                    } catch (e: NullPointerException) {
-                        e.showStackTrace()
-
+                    } ?: run {
                         log.warn {
-                            "Unable to parse PyPI meta-data for package '${pkg.id.toCoordinates()}': ${e.message}"
+                            "PyPI meta-data for package '${pkg.id.toCoordinates()}' does not provide any information."
                         }
 
                         // Fall back to returning the original package data.
