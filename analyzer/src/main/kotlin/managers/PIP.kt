@@ -421,11 +421,11 @@ class PIP(name: String, analyzerConfig: AnalyzerConfiguration, repoConfig: Repos
         return ProjectAnalyzerResult(project, packages.map { it.toCuratedPackage() }.toSortedSet())
     }
 
-    private fun getBinaryArtifact(pkg: Package, releasesNode: ArrayNode): RemoteArtifact {
+    private fun getBinaryArtifact(pkg: Package, releaseNode: ArrayNode): RemoteArtifact {
         // Prefer python wheels and fall back to the first entry (probably a sdist).
-        val binaryArtifact = releasesNode.asSequence().find {
+        val binaryArtifact = releaseNode.asSequence().find {
             it["packagetype"].textValue() == "bdist_wheel"
-        } ?: releasesNode[0]
+        } ?: releaseNode[0]
 
         val url = binaryArtifact["url"]?.textValue() ?: pkg.binaryArtifact.url
         val hash = binaryArtifact["md5_digest"]?.textValue() ?: pkg.binaryArtifact.hash
@@ -433,8 +433,8 @@ class PIP(name: String, analyzerConfig: AnalyzerConfiguration, repoConfig: Repos
         return RemoteArtifact(url, hash, HashAlgorithm.fromHash(hash))
     }
 
-    private fun getSourceArtifact(releasesNode: ArrayNode): RemoteArtifact {
-        val sourceArtifacts = releasesNode.asSequence().filter {
+    private fun getSourceArtifact(releaseNode: ArrayNode): RemoteArtifact {
+        val sourceArtifacts = releaseNode.asSequence().filter {
             it["packagetype"].textValue() == "sdist"
         }
 
