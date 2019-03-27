@@ -211,7 +211,7 @@ class ReportTableModelMapper(private val resolutionProvider: ResolutionProvider)
             it.entries.associateTo(metadata) { (key, value) -> key.toString() to value.toString() }
         }
 
-        val extraColumns = (scanRecord.data["excel_report_extra_columns"] as? List<*>)?.let { extraColumns ->
+        val extraColumns = (ortResult.data["excel_report_extra_columns"] as? List<*>)?.let { extraColumns ->
             extraColumns.map { it.toString() }
         }.orEmpty()
 
