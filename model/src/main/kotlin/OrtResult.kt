@@ -54,13 +54,7 @@ data class OrtResult(
      * An [EvaluatorRun] containing details about the evaluation that was run using the result from [scanner] as
      * input. Can be null if no evaluation was run.
      */
-    val evaluator: EvaluatorRun? = null,
-
-    /**
-     * A map that holds arbitrary data. Can be used by third-party tools to add custom data to the model.
-     */
-    @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    val data: CustomData = emptyMap()
+    val evaluator: EvaluatorRun? = null
 ) {
     companion object {
         /**
@@ -71,10 +65,15 @@ data class OrtResult(
             repository = Repository.EMPTY,
             analyzer = null,
             scanner = null,
-            evaluator = null,
-            data = emptyMap()
+            evaluator = null
         )
     }
+
+    /**
+     * A map that holds arbitrary data. Can be used by third-party tools to add custom data to the model.
+     */
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    val data: CustomData = mutableMapOf()
 
     /**
      * Return the concluded licenses for each package. If [omitExcluded] is set to true, excluded packages are omitted
