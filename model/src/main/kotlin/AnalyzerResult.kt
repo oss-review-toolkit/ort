@@ -51,13 +51,7 @@ data class AnalyzerResult(
     // Do not serialize if empty to reduce the size of the result file. If there are no errors at all,
     // [AnalyzerResult.hasErrors] already contains that information.
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    val errors: SortedMap<Identifier, List<OrtIssue>> = sortedMapOf(),
-
-    /**
-     * A map that holds arbitrary data. Can be used by third-party tools to add custom data to the model.
-     */
-    @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    val data: CustomData = emptyMap()
+    val errors: SortedMap<Identifier, List<OrtIssue>> = sortedMapOf()
 ) {
     companion object {
         /**
@@ -67,8 +61,7 @@ data class AnalyzerResult(
         val EMPTY = AnalyzerResult(
             projects = sortedSetOf(),
             packages = sortedSetOf(),
-            errors = sortedMapOf(),
-            data = emptyMap()
+            errors = sortedMapOf()
         )
     }
 
