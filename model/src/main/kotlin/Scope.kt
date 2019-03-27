@@ -20,7 +20,6 @@
 package com.here.ort.model
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
-import com.fasterxml.jackson.annotation.JsonInclude
 
 import java.util.SortedSet
 
@@ -43,13 +42,7 @@ data class Scope(
      * dependencies would not be test dependencies of the test dependencies, but compile dependencies of test
      * dependencies.
      */
-    val dependencies: SortedSet<PackageReference> = sortedSetOf(),
-
-    /**
-     * A map that holds arbitrary data. Can be used by third-party tools to add custom data to the model.
-     */
-    @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    val data: CustomData = emptyMap()
+    val dependencies: SortedSet<PackageReference> = sortedSetOf()
 ) : Comparable<Scope> {
     /**
      * Return the set of [PackageReference]s in this [Scope], up to and including a depth of [maxDepth] where counting

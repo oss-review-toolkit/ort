@@ -99,13 +99,7 @@ data class Package(
     /**
      * Processed VCS-related information about the [Package] that has e.g. common mistakes corrected.
      */
-    val vcsProcessed: VcsInfo = vcs.normalize(),
-
-    /**
-     * A map that holds arbitrary data. Can be used by third-party tools to add custom data to the model.
-     */
-    @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    val data: CustomData = emptyMap()
+    val vcsProcessed: VcsInfo = vcs.normalize()
 ) : Comparable<Package> {
     companion object {
         /**
@@ -123,8 +117,7 @@ data class Package(
             binaryArtifact = RemoteArtifact.EMPTY,
             sourceArtifact = RemoteArtifact.EMPTY,
             vcs = VcsInfo.EMPTY,
-            vcsProcessed = VcsInfo.EMPTY,
-            data = emptyMap()
+            vcsProcessed = VcsInfo.EMPTY
         )
     }
 

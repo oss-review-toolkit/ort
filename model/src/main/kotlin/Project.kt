@@ -20,7 +20,6 @@
 package com.here.ort.model
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
-import com.fasterxml.jackson.annotation.JsonInclude
 
 import com.here.ort.spdx.SpdxExpression
 import com.here.ort.spdx.SpdxOperator
@@ -82,13 +81,7 @@ data class Project(
     /**
      * The dependency scopes defined by this project.
      */
-    val scopes: SortedSet<Scope>,
-
-    /**
-     * A map that holds arbitrary data. Can be used by third-party tools to add custom data to the model.
-     */
-    @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    val data: CustomData = emptyMap()
+    val scopes: SortedSet<Scope>
 ) : Comparable<Project> {
     companion object {
         /**
@@ -104,8 +97,7 @@ data class Project(
             vcs = VcsInfo.EMPTY,
             vcsProcessed = VcsInfo.EMPTY,
             homepageUrl = "",
-            scopes = sortedSetOf(),
-            data = emptyMap()
+            scopes = sortedSetOf()
         )
     }
 

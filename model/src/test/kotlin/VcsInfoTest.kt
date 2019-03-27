@@ -85,8 +85,6 @@ class VcsInfoTest : StringSpec({
                 revision: "revision"
                 resolved_revision: "resolved_revision"
                 path: "path"
-                data:
-                  key: "value"
                 unknown: "unknown"
                 """.trimIndent()
 
@@ -96,7 +94,7 @@ class VcsInfoTest : StringSpec({
 
             exception.propertyName shouldBe "unknown"
             exception.knownPropertyIds should
-                    containAll<Any>("type", "url", "revision", "resolved_revision", "path", "data")
+                    containAll<Any>("type", "url", "revision", "resolved_revision", "path")
         }
     }
 
