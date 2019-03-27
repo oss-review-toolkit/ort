@@ -19,8 +19,6 @@
 
 package com.here.ort.model
 
-import com.fasterxml.jackson.annotation.JsonInclude
-
 /**
  * This class contains information about which values were changed when applying a curation.
  */
@@ -33,11 +31,5 @@ data class PackageCurationResult(
     /**
      * The curation that was applied.
      */
-    val curation: PackageCurationData,
-
-    /**
-     * A map that holds arbitrary data. Can be used by third-party tools to add custom data to the model.
-     */
-    @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    val data: CustomData = emptyMap()
+    val curation: PackageCurationData
 )

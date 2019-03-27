@@ -59,13 +59,7 @@ data class Provenance(
      */
     @JsonAlias("originalVcsInfo")
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    val originalVcsInfo: VcsInfo? = null,
-
-    /**
-     * A map that holds arbitrary data. Can be used by third-party tools to add custom data to the model.
-     */
-    @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    val data: CustomData = emptyMap()
+    val originalVcsInfo: VcsInfo? = null
 ) {
     init {
         require(sourceArtifact == null || vcsInfo == null) {
@@ -87,7 +81,7 @@ data class Provenance(
                         && sourceArtifact.hashAlgorithm == pkg.sourceArtifact.hashAlgorithm
             }
 
-            return sourceArtifact.copy(data = emptyMap()) == pkg.sourceArtifact.copy(data = emptyMap())
+            return sourceArtifact == pkg.sourceArtifact
         }
 
         // By now it is clear the scanned source code did not come from a source artifact, so try to compare the VCS

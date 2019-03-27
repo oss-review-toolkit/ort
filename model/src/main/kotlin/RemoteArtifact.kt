@@ -19,8 +19,6 @@
 
 package com.here.ort.model
 
-import com.fasterxml.jackson.annotation.JsonInclude
-
 /**
  * Bundles information about a remote artifact.
  */
@@ -38,13 +36,7 @@ data class RemoteArtifact(
     /**
      * The name of the algorithm used to calculate the [hash].
      */
-    val hashAlgorithm: HashAlgorithm,
-
-    /**
-     * A map that holds arbitrary data. Can be used by third-party tools to add custom data to the model.
-     */
-    @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    val data: CustomData = emptyMap()
+    val hashAlgorithm: HashAlgorithm
 ) {
     companion object {
         /**
@@ -54,8 +46,7 @@ data class RemoteArtifact(
         val EMPTY = RemoteArtifact(
             url = "",
             hash = Hash.UNKNOWN.value,
-            hashAlgorithm = Hash.UNKNOWN.algorithm,
-            data = emptyMap()
+            hashAlgorithm = Hash.UNKNOWN.algorithm
         )
     }
 }

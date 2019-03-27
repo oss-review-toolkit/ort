@@ -58,12 +58,7 @@ data class PackageReference(
     /**
      * A list of errors that occurred handling this [PackageReference].
      */
-    val errors: List<OrtIssue> = emptyList(),
-
-    /**
-     * A map that holds arbitrary data. Can be used by third-party tools to add custom data to the model.
-     */
-    val data: CustomData = emptyMap()
+    val errors: List<OrtIssue> = emptyList()
 ) : Comparable<PackageReference> {
     /**
      * Return the set of [PackageReference]s this [PackageReference] transitively depends on, up to and including a
