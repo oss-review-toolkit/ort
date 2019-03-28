@@ -54,11 +54,8 @@ test_script:
   - if "%APPVEYOR_SCHEDULED_BUILD%"=="True" (
       gradlew --stacktrace dokkaJar check
     ) else (
-      gradlew --scan --stacktrace -Dkotlintest.tags.exclude=ExpensiveTag dokkaJar check
+      gradlew --scan --stacktrace -Dkotlintest.tags.exclude=ExpensiveTag check
     )
-
-artifacts:
-  - path: '**\build\libs\*-dokka.jar'
 
 on_finish:
   - ps: |
