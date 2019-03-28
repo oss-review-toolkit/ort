@@ -23,6 +23,8 @@ import com.here.ort.model.OrtResult
 import com.here.ort.model.Project
 import com.here.ort.model.Severity
 import com.here.ort.model.config.CopyrightGarbage
+import com.here.ort.model.config.RepositoryConfiguration
+import com.here.ort.model.yamlMapper
 import com.here.ort.reporter.Reporter
 import com.here.ort.reporter.ResolutionProvider
 import com.here.ort.reporter.reporters.ReportTableModel.IssueTable
@@ -74,8 +76,21 @@ class StaticHtmlReporter : Reporter() {
                         +css
                     }
                 }
+                style {
+                    unsafe {
+                        +"\n"
+                        +"<![CDATA[${javaClass.getResource("/prismjs/prism.css").readText()}]]>"
+                    }
+                }
             }
             body {
+                script(type = ScriptType.textJavaScript) {
+                    unsafe {
+                        +"\n"
+                        +"<![CDATA[${javaClass.getResource("/prismjs/prism.js").readText()}]]>"
+                    }
+                }
+
                 div {
                     id = "report-container"
 
@@ -100,6 +115,8 @@ class StaticHtmlReporter : Reporter() {
                     reportTableModel.projectDependencies.forEach { project, table ->
                         projectTable(project, table)
                     }
+
+                    repositoryConfiguration(reportTableModel.config)
                 }
             }
         }
@@ -165,6 +182,12 @@ class StaticHtmlReporter : Reporter() {
                             }
                         }
                     }
+                }
+            }
+
+            li {
+                a("#repository-configuration") {
+                    +"Repository Configuration"
                 }
             }
         }
@@ -495,6 +518,20 @@ class StaticHtmlReporter : Reporter() {
             issue.description.lines().forEach {
                 if (first) first = false else br
                 +it
+            }
+        }
+    }
+
+    private fun DIV.repositoryConfiguration(config: RepositoryConfiguration) {
+        h2 {
+            id = "repository-configuration"
+            +"Repository Configuration"
+        }
+
+        pre {
+            code("language-yaml") {
+                +"\n"
+                +yamlMapper.writerWithDefaultPrettyPrinter().writeValueAsString(config)
             }
         }
     }
