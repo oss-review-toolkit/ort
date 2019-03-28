@@ -28,6 +28,7 @@ import com.here.ort.model.Severity
 import com.here.ort.model.VcsInfo
 import com.here.ort.model.config.PathExclude
 import com.here.ort.model.config.ProjectExclude
+import com.here.ort.model.config.RepositoryConfiguration
 import com.here.ort.model.config.ScopeExclude
 import com.here.ort.spdx.SpdxExpression
 import com.here.ort.utils.zipWithDefault
@@ -45,6 +46,11 @@ data class ReportTableModel(
      * The [VcsInfo] for the scanned project.
      */
     val vcsInfo: VcsInfo,
+
+    /**
+     * The [RepositoryConfiguration] of the scanned project.
+     */
+    val config: RepositoryConfiguration,
 
     /**
      * A list containing all evaluator issues. `null` if no evaluator result is available.

@@ -258,8 +258,11 @@ table.ort-excluded tr.ort-excluded td li.ort-excluded {
     }
 }
 </style>
+    <link href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/styles/default.min.css" rel="stylesheet">
+    <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/highlight.min.js"></script>
   </head>
   <body>
+    <script>hljs.initHighlightingOnLoad();</script>
     <div id="report-container">
       <div class="ort-report-label">Scan Report</div>
       <h2>Index</h2>
@@ -276,6 +279,9 @@ table.ort-excluded tr.ort-excluded td li.ort-excluded {
         <li>
           <a href="#Gradle:com.here:nested-test-project:1.0.0">Gradle:com.here:nested-test-project:1.0.0 <div class="ort-reason">Excluded: EXAMPLE_OF - The project is an example.</div>
           </a>
+        </li>
+        <li>
+          <a href="#repository-configuration">Repository Configuration</a>
         </li>
       </ul>
       <h2 id="rule-violation-summary">Rule Violation Summary (1 errors, 1 warnings, 1 hints to resolve)</h2>
@@ -482,6 +488,19 @@ table.ort-excluded tr.ort-excluded td li.ort-excluded {
           </tr>
         </tbody>
       </table>
+      <h2 id="repository-configuration">Repository Configuration</h2>
+      <pre>
+        <code class="yaml">---
+excludes:
+  paths:
+  - pattern: "sub/module/project/build.gradle"
+    reason: "EXAMPLE_OF"
+    comment: "The project is an example."
+  - pattern: "**.java"
+    reason: "EXAMPLE_OF"
+    comment: "These are example files."
+</code>
+      </pre>
     </div>
   </body>
 </html>

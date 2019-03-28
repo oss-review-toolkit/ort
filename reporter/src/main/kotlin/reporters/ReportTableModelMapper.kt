@@ -227,6 +227,7 @@ class ReportTableModelMapper(private val resolutionProvider: ResolutionProvider)
 
         return ReportTableModel(
             ortResult.repository.vcsProcessed,
+            ortResult.repository.config,
             evaluatorIssues,
             issueSummaryTable,
             summaryTable,
