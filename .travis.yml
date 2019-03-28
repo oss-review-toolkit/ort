@@ -30,7 +30,7 @@ env:
     - GIMME_GO_VERSION="1.10" # Used internally by Travis.
     - GO_DEP_VERSION="0.5.1"
     - NPM_VERSION="6.4.0"
-    - PHP_VERSION="7.1"
+    - PHP_VERSION="7.1.19"
     - YARN_VERSION="1.13.0"
 
 before_install:
