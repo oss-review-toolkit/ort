@@ -154,6 +154,10 @@ abstract class Scanner(val scannerName: String, protected val config: ScannerCon
         val scannerRun = ScannerRun(startTime, endTime, Environment(), config, scanRecord)
 
         // Note: This overwrites any existing ScannerRun from the input file.
-        return ortResult.copy(scanner = scannerRun)
+        return ortResult.copy(scanner = scannerRun).apply {
+            ortResult.data.forEach { key, value ->
+                data[key] = value
+            }
+        }
     }
 }

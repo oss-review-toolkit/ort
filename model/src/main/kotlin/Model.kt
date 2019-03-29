@@ -19,4 +19,4 @@
 
 package com.here.ort.model
 
-typealias CustomData = Map<String, Any>
+typealias CustomData = MutableMap<String, Any>
