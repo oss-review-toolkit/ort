@@ -141,7 +141,9 @@ object EvaluatorCommand : CommandWithHelp() {
 
         if (absoluteOutputDir != null) {
             // Note: This overwrites any existing EvaluatorRun from the input file.
-            val ortResultOutput = ortResultInput.copy(evaluator = evaluatorRun)
+            val ortResultOutput = ortResultInput.copy(evaluator = evaluatorRun).apply {
+                data += ortResultInput.data
+            }
 
             absoluteOutputDir.safeMkdirs()
 
