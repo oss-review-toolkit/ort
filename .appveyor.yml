@@ -10,7 +10,7 @@ environment:
   NPM_VERSION: 6.4.0
   PHP_VERSION: 7.2.0
   SBT_VERSION: 1.0.2
-  VIRTUALENV_VERSION: 15.1.0
+  VIRTUAL_ENV_VERSION: 15.1.0
   YARN_VERSION: 1.13.0
 
 cache:
@@ -33,7 +33,8 @@ install:
   - git submodule update --init --recursive
   - npm install -g npm@%NPM_VERSION%
   - npm install -g bower@%BOWER_VERSION% yarn@%YARN_VERSION%
-  - pip install virtualenv==%VIRTUALENV_VERSION%
+  - pip install virtualenv==%VIRTUAL_ENV_VERSION%
+  -
   - cinst sbt --version %SBT_VERSION% -y
   - cinst php --version %PHP_VERSION% -y
   - cinst composer --version %COMPOSER_VERSION% -y # The version refers to the installer, not to Composer.
