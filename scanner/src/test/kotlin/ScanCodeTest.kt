@@ -488,19 +488,33 @@ class ScanCodeTest : WordSpec({
             val finding = actualFindings.first()
             finding.license shouldBe "Apache-2.0"
 
+            val matchedLicenseText = """
+                Licensed under the Apache License, Version 2.0 (the "License").
+                 * You may not use this file except in compliance with the License.
+                 * A copy of the License is located at
+                 *
+                 *  http://aws.amazon.com/apache2.0
+                 *
+                 * or in the "license" file accompanying this file. This file is distributed
+                 * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
+                 * express or implied. See the License for the specific language governing
+                 * permissions and limitations under the License
+            """.trimIndent()
+
             // Only compare the first 10 elements because the result contains too many locations to list them all.
             finding.locations should haveSize(517)
+
             finding.locations.toList().subList(0, 10) shouldBe listOf(
-                TextLocation("com/amazonaws/AbortedException.java", 4, 13),
-                TextLocation("com/amazonaws/AmazonClientException.java", 4, 13),
-                TextLocation("com/amazonaws/AmazonServiceException.java", 4, 13),
-                TextLocation("com/amazonaws/AmazonWebServiceClient.java", 4, 13),
-                TextLocation("com/amazonaws/AmazonWebServiceRequest.java", 4, 13),
-                TextLocation("com/amazonaws/AmazonWebServiceResponse.java", 4, 13),
-                TextLocation("com/amazonaws/AmazonWebServiceResult.java", 4, 13),
-                TextLocation("com/amazonaws/ApacheHttpClientConfig.java", 4, 13),
-                TextLocation("com/amazonaws/ClientConfiguration.java", 4, 13),
-                TextLocation("com/amazonaws/ClientConfigurationFactory.java", 4, 13)
+                TextLocation("com/amazonaws/AbortedException.java", 4, 13, matchedLicenseText),
+                TextLocation("com/amazonaws/AmazonClientException.java", 4, 13, matchedLicenseText),
+                TextLocation("com/amazonaws/AmazonServiceException.java", 4, 13, matchedLicenseText),
+                TextLocation("com/amazonaws/AmazonWebServiceClient.java", 4, 13, matchedLicenseText),
+                TextLocation("com/amazonaws/AmazonWebServiceRequest.java", 4, 13, matchedLicenseText),
+                TextLocation("com/amazonaws/AmazonWebServiceResponse.java", 4, 13, matchedLicenseText),
+                TextLocation("com/amazonaws/AmazonWebServiceResult.java", 4, 13, matchedLicenseText),
+                TextLocation("com/amazonaws/ApacheHttpClientConfig.java", 4, 13, matchedLicenseText),
+                TextLocation("com/amazonaws/ClientConfiguration.java", 4, 13, matchedLicenseText),
+                TextLocation("com/amazonaws/ClientConfigurationFactory.java", 4, 13, matchedLicenseText)
             )
 
             finding.copyrights.map { it.statement } shouldBe listOf(

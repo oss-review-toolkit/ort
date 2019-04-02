@@ -39,7 +39,12 @@ data class TextLocation(
     /**
      * The line the text is ending at.
      */
-    val endLine: Int
+    val endLine: Int,
+
+    /**
+     * The text at the specified location. Can be null if the text is unknown.
+     */
+    val text: String? = null
 ) : Comparable<TextLocation> {
     companion object {
         private val COMPARATOR = compareBy<TextLocation>({ it.path }, { it.startLine }, { it.endLine })

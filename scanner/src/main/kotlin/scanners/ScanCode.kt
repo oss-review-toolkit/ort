@@ -48,6 +48,7 @@ import com.here.ort.utils.OS
 import com.here.ort.utils.OkHttpClientHelper
 import com.here.ort.utils.ProcessCapture
 import com.here.ort.utils.log
+import com.here.ort.utils.textValueOrEmpty
 import com.here.ort.utils.unpack
 
 import java.io.File
@@ -494,9 +495,10 @@ class ScanCode(name: String, config: ScannerConfiguration) : LocalScanner(name, 
                 val licenseId = getLicenseId(it)
                 val licenseStartLine = it["start_line"].intValue()
                 val licenseEndLine = it["end_line"].intValue()
+                val licenseText = it["matched_text"]?.textValue()
 
                 locationsForLicenses.getOrPut(licenseId) { sortedSetOf() } +=
-                    TextLocation(path, licenseStartLine, licenseEndLine)
+                    TextLocation(path, licenseStartLine, licenseEndLine, licenseText)
             }
 
             val copyrights = file["copyrights"] ?: EMPTY_JSON_NODE
