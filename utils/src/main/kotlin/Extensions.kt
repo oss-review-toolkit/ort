@@ -248,6 +248,11 @@ fun String.fileSystemEncode() =
         .take(255)
 
 /**
+ * Return the hexadecimal digest of the given hash [algorithm] for this [String].
+ */
+fun String.hash(algorithm: String = "SHA-1"): String = DigestUtils(algorithm).digestAsHex(this)
+
+/**
  * Return the string percent-encoded as defined at https://en.wikipedia.org/wiki/Percent-encoding.
  */
 fun String.percentEncode(): String =

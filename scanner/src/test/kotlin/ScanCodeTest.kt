@@ -504,6 +504,8 @@ class ScanCodeTest : WordSpec({
             // Only compare the first 10 elements because the result contains too many locations to list them all.
             finding.locations should haveSize(517)
 
+            finding.locations.first().hash shouldBe "2c09cda4e58230e057ae56e1bd8cc8d53c777822"
+
             finding.locations.toList().subList(0, 10) shouldBe listOf(
                 TextLocation("com/amazonaws/AbortedException.java", 4, 13, matchedLicenseText),
                 TextLocation("com/amazonaws/AmazonClientException.java", 4, 13, matchedLicenseText),

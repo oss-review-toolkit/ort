@@ -21,6 +21,7 @@ package com.here.ort.model
 
 import com.here.ort.utils.SortedSetComparator
 import com.here.ort.utils.constructTreeSetType
+import com.here.ort.utils.hash
 
 /**
  * A [TextLocation] references text located in a file.
@@ -51,6 +52,11 @@ data class TextLocation(
         val SORTED_SET_COMPARATOR = SortedSetComparator<TextLocation>()
         val TREE_SET_TYPE by lazy { jsonMapper.typeFactory.constructTreeSetType(TextLocation::class.java) }
     }
+
+    /**
+     * A hash built from [startLine], [endLine], and [text]. Can be used to reference this text location.
+     */
+    val hash = "$startLine.$endLine.$text".hash()
 
     override fun compareTo(other: TextLocation) = COMPARATOR.compare(this, other)
 }
