@@ -98,6 +98,7 @@ class ScanCode(name: String, config: ScannerConfiguration) : LocalScanner(name, 
         private val DEFAULT_CONFIGURATION_OPTIONS = listOf(
             "--copyright",
             "--license",
+            "--license-text",
             "--ignore", "*$ORT_CONFIG_FILENAME",
             "--info",
             "--strip-root",
