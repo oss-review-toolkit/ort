@@ -130,9 +130,9 @@ object PythonVersion : CommandLineTool {
 }
 
 /**
- * The PIP package manager for Python, see https://pip.pypa.io/. Also see
- * https://packaging.python.org/discussions/install-requires-vs-requirements/ and
- * https://caremad.io/posts/2013/07/setup-vs-requirement/.
+ * The [PIP](https://pip.pypa.io/) package manager for Python. Also see
+ * [install_requires vs requirements files](https://packaging.python.org/discussions/install-requires-vs-requirements/)
+ * and [setup.py vs. requirements.txt](https://caremad.io/posts/2013/07/setup-vs-requirement/).
  */
 class PIP(name: String, analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfiguration) :
     PackageManager(name, analyzerConfig, repoConfig), CommandLineTool {

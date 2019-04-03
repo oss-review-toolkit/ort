@@ -30,7 +30,7 @@ import com.vdurmont.semver4j.Requirement
 import java.io.File
 
 /**
- * The Yarn package manager for JavaScript, see https://www.yarnpkg.com/.
+ * The [Yarn](https://www.yarnpkg.com/) package manager for JavaScript.
  */
 class Yarn(name: String, analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfiguration) :
     NPM(name, analyzerConfig, repoConfig) {

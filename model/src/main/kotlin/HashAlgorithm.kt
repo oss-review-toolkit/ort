@@ -33,27 +33,27 @@ enum class HashAlgorithm(private vararg val aliases: String) {
     UNKNOWN("", "UNKNOWN"),
 
     /**
-     * The Message-Digest 5 hash algorithm, see https://en.wikipedia.org/wiki/MD5.
+     * The Message-Digest 5 hash algorithm, see [MD5](http://en.wikipedia.org/wiki/MD5).
      */
     MD5("MD5"),
 
     /**
-     * The Secure Hash Algorithm 1, see https://en.wikipedia.org/wiki/SHA-1.
+     * The Secure Hash Algorithm 1, see [SHA-1](https://en.wikipedia.org/wiki/SHA-1).
      */
     SHA1("SHA-1", "SHA1"),
 
     /**
-     * The Secure Hash Algorithm 2 with 256 bits, see https://en.wikipedia.org/wiki/SHA-256.
+     * The Secure Hash Algorithm 2 with 256 bits, see [SHA-256](https://en.wikipedia.org/wiki/SHA-256).
      */
     SHA256("SHA-256", "SHA256"),
 
     /**
-     * The Secure Hash Algorithm 2 with 384 bits, see https://en.wikipedia.org/wiki/SHA-384.
+     * The Secure Hash Algorithm 2 with 384 bits, see [SHA-384](https://en.wikipedia.org/wiki/SHA-384).
      */
     SHA384("SHA-384", "SHA384"),
 
     /**
-     * The Secure Hash Algorithm 2 with 512 bits, see https://en.wikipedia.org/wiki/SHA-512.
+     * The Secure Hash Algorithm 2 with 512 bits, see [SHA-512](https://en.wikipedia.org/wiki/SHA-512).
      */
     SHA512("SHA-512", "SHA512");
 

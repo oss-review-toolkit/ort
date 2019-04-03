@@ -237,7 +237,8 @@ fun String.encodeOrUnknown() = fileSystemEncode().takeUnless { it.isEmpty() } ?:
 
 /**
  * Return the string encoded for safe use as a file name. Also limit the length to 255 characters which is the maximum
- * length in most modern filesystems: https://en.wikipedia.org/wiki/Comparison_of_file_systems#Limits
+ * length in most modern filesystems, see
+ * [comparison of file system limits](https://en.wikipedia.org/wiki/Comparison_of_file_systems#Limits).
  */
 fun String.fileSystemEncode() =
     percentEncode()
@@ -248,7 +249,7 @@ fun String.fileSystemEncode() =
         .take(255)
 
 /**
- * Return the string percent-encoded as defined at https://en.wikipedia.org/wiki/Percent-encoding.
+ * Return the [percent-encoded](https://en.wikipedia.org/wiki/Percent-encoding) string.
  */
 fun String.percentEncode(): String =
     java.net.URLEncoder.encode(this, "UTF-8")

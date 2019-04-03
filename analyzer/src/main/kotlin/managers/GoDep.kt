@@ -61,7 +61,7 @@ val GO_LEGACY_MANIFESTS = mapOf(
 )
 
 /**
- * The Dep package manager for Go, see https://golang.github.io/dep/.
+ * The [Dep](https://golang.github.io/dep/) package manager for Go.
  */
 class GoDep(name: String, analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfiguration) :
     PackageManager(name, analyzerConfig, repoConfig), CommandLineTool {

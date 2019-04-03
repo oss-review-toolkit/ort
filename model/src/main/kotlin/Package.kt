@@ -46,7 +46,7 @@ data class Package(
     val id: Identifier,
 
     /**
-     * An additional identifier in package URL syntax, see https://github.com/package-url/purl-spec.
+     * An additional identifier in [package URL syntax](https://github.com/package-url/purl-spec).
      */
     val purl: String = id.toPurl(),
 

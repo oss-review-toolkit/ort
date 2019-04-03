@@ -39,7 +39,7 @@ import java.io.IOException
 import java.util.Properties
 
 /**
- * The SBT package manager for Scala, see https://www.scala-sbt.org/.
+ * The [SBT](https://www.scala-sbt.org/) package manager for Scala.
  */
 class SBT(name: String, analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfiguration) :
     PackageManager(name, analyzerConfig, repoConfig), CommandLineTool {
