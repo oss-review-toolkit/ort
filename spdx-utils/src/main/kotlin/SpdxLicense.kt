@@ -432,6 +432,8 @@ enum class SpdxLicense(
     ISC("ISC"),
     /** JasPer License */
     JASPER_2_0("JasPer-2.0"),
+    /** Japan Network Information Center License */
+    JPNIC("JPNIC"),
     /** JSON License */
     JSON("JSON"),
     /** Licence Art Libre 1.2 */
@@ -470,6 +472,8 @@ enum class SpdxLicense(
     LGPL_3_0_OR_LATER("LGPL-3.0-or-later"),
     /** libpng License */
     LIBPNG("Libpng"),
+    /** PNG Reference Library version 2 */
+    LIBPNG_2_0("libpng-2.0"),
     /** libtiff License */
     LIBTIFF("libtiff"),
     /** Licence Libre du Québec – Permissive version 1.1 */

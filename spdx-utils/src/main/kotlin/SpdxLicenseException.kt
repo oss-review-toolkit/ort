@@ -64,6 +64,8 @@ enum class SpdxLicenseException(
     GCC_EXCEPTION_3_1("GCC-exception-3.1"),
     /** GNU JavaMail exception */
     GNU_JAVAMAIL_EXCEPTION("gnu-javamail-exception"),
+    /** GPL Cooperation Commitment 1.0 */
+    GPL_CC_1_0("GPL-CC-1.0"),
     /** i2p GPL+Java Exception */
     I2P_GPL_JAVA_EXCEPTION("i2p-gpl-java-exception"),
     /** Libtool Exception */
