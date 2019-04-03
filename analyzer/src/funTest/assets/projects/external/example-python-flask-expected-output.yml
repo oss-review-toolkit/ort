@@ -24,7 +24,7 @@ project:
       - id: "PyPI::Jinja2:2.8.1"
         dependencies:
         - id: "PyPI::MarkupSafe:1.1.1"
-      - id: "PyPI::Werkzeug:0.15.1"
+      - id: "PyPI::Werkzeug:0.15.2"
       - id: "PyPI::click:7.0"
       - id: "PyPI::itsdangerous:1.1.0"
     - id: "PyPI::gunicorn:19.6.0"
@@ -116,8 +116,8 @@ packages:
       path: ""
   curations: []
 - package:
-    id: "PyPI::Werkzeug:0.15.1"
-    purl: "pkg://PyPI//Werkzeug@0.15.1"
+    id: "PyPI::Werkzeug:0.15.2"
+    purl: "pkg://PyPI//Werkzeug@0.15.2"
     declared_licenses:
     - "BSD"
     - "BSD-3-Clause"
@@ -126,12 +126,12 @@ packages:
     description: "The comprehensive WSGI web application library."
     homepage_url: "https://palletsprojects.com/p/werkzeug/"
     binary_artifact:
-      url: "https://files.pythonhosted.org/packages/24/4d/2fc4e872fbaaf44cc3fd5a9cd42fda7e57c031f08e28c9f35689e8b43198/Werkzeug-0.15.1-py2.py3-none-any.whl"
-      hash: "1174bb6ae981b5e0b4270b7d79f3323a"
+      url: "https://files.pythonhosted.org/packages/18/79/84f02539cc181cdbf5ff5a41b9f52cae870b6f632767e43ba6ac70132e92/Werkzeug-0.15.2-py2.py3-none-any.whl"
+      hash: "8bd56c066512c7ebcb08ced932618b2f"
       hash_algorithm: "MD5"
     source_artifact:
-      url: "https://files.pythonhosted.org/packages/72/60/f628e8920cbf54afa2a83b75b32a1e69b559b95514d1deb841823dd97830/Werkzeug-0.15.1.tar.gz"
-      hash: "f4ee1836588f348658265fc9e5d7d32e"
+      url: "https://files.pythonhosted.org/packages/f3/c8/fa7e1a0283267bee8efa10c665d8dca27e591face7e333c789c85671b3ab/Werkzeug-0.15.2.tar.gz"
+      hash: "7c02923f7d898844079f12e28e32e3f8"
       hash_algorithm: "MD5"
     vcs:
       type: ""
