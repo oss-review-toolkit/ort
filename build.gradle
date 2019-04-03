@@ -130,6 +130,24 @@ subprojects {
         input = files('src/main/kotlin', 'src/test/kotlin', 'src/funTest/kotlin')
     }
 
+    dokka {
+        externalDocumentationLink {
+            url = new URL('https://codehaus-plexus.github.io/plexus-containers/plexus-container-default/apidocs/')
+        }
+
+        externalDocumentationLink {
+            url = new URL('https://fasterxml.github.io/jackson-databind/javadoc/2.9/')
+        }
+
+        externalDocumentationLink {
+            url = new URL('http://jakewharton.github.io/DiskLruCache/')
+        }
+
+        externalDocumentationLink {
+            url = new URL('https://logback.qos.ch/apidocs/')
+        }
+    }
+
     task funTest(type: Test) {
         description = 'Runs the functional tests.'
         group = 'Verification'
