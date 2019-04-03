@@ -53,7 +53,7 @@ import org.eclipse.aether.repository.WorkspaceReader
 import org.eclipse.aether.repository.WorkspaceRepository
 
 /**
- * The Maven package manager for Java, see https://maven.apache.org/.
+ * The [Maven](https://maven.apache.org/) package manager for Java.
  */
 class Maven(name: String, analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfiguration) :
     PackageManager(name, analyzerConfig, repoConfig) {

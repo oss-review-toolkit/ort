@@ -60,8 +60,10 @@ import java.util.SortedSet
 import okhttp3.Request
 
 /**
- * The Bundler package manager for Ruby, see https://bundler.io/. Also see
- * http://yehudakatz.com/2010/12/16/clarifying-the-roles-of-the-gemspec-and-gemfile/.
+ * The [Bundler](https://bundler.io/) package manager for Ruby. Also see
+ * [Clarifying the Roles of the .gemspec and Gemfile][1].
+ *
+ * [1]: http://yehudakatz.com/2010/12/16/clarifying-the-roles-of-the-gemspec-and-gemfile/
  */
 class Bundler(name: String, analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfiguration) :
     PackageManager(name, analyzerConfig, repoConfig), CommandLineTool {

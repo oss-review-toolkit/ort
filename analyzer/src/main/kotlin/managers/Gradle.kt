@@ -59,7 +59,7 @@ import org.eclipse.aether.repository.WorkspaceRepository
 import org.gradle.tooling.GradleConnector
 
 /**
- * The Gradle package manager for Java, see https://gradle.org/.
+ * The [Gradle](https://gradle.org/) package manager for Java.
  */
 class Gradle(name: String, analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfiguration) :
     PackageManager(name, analyzerConfig, repoConfig) {

@@ -65,7 +65,7 @@ import java.util.SortedSet
 import okhttp3.Request
 
 /**
- * The Node package manager for JavaScript, see https://www.npmjs.com/.
+ * The [Node package manager](https://www.npmjs.com/) for JavaScript.
  */
 open class NPM(name: String, analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfiguration) :
     PackageManager(name, analyzerConfig, repoConfig), CommandLineTool {

@@ -59,7 +59,7 @@ const val COMPOSER_PHAR_BINARY = "composer.phar"
 const val COMPOSER_LOCK_FILE = "composer.lock"
 
 /**
- * The Composer package manager for PHP, see https://getcomposer.org/.
+ * The [Composer](https://getcomposer.org/) package manager for PHP.
  */
 class PhpComposer(name: String, analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfiguration) :
     PackageManager(name, analyzerConfig, repoConfig), CommandLineTool {

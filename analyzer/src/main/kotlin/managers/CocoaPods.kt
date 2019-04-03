@@ -28,7 +28,7 @@ import com.here.ort.model.config.RepositoryConfiguration
 import java.io.File
 
 /**
- * The CocoaPods package manager for Objective-C, see https://cocoapods.org/.
+ * The [CocoaPods](https://cocoapods.org/) package manager for Objective-C.
  */
 class CocoaPods(name: String, analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfiguration) :
     PackageManager(name, analyzerConfig, repoConfig) {

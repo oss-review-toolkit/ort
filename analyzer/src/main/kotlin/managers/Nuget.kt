@@ -41,7 +41,7 @@ import com.here.ort.model.config.RepositoryConfiguration
 import java.io.File
 
 /**
- * The Nuget package mangager for .NET, see https://www.nuget.org/
+ * The [Nuget](https://www.nuget.org/) package manager for .NET.
  */
 open class Nuget(name: String, analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfiguration) :
         PackageManager(name, analyzerConfig, repoConfig) {

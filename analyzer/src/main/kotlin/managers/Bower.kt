@@ -52,7 +52,7 @@ import java.util.SortedSet
 import java.util.Stack
 
 /**
- * The Bower package manager for JavaScript, see https://bower.io/.
+ * The [Bower](https://bower.io/) package manager for JavaScript.
  */
 class Bower(name: String, analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfiguration) :
     PackageManager(name, analyzerConfig, repoConfig), CommandLineTool {

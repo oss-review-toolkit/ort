@@ -54,7 +54,7 @@ import java.util.SortedSet
 import okhttp3.Request
 
 /**
- * The Stack package manager for Haskell, see https://haskellstack.org/.
+ * The [Stack](https://haskellstack.org/) package manager for Haskell.
  */
 class Stack(name: String, analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfiguration) :
     PackageManager(name, analyzerConfig, repoConfig), CommandLineTool {
