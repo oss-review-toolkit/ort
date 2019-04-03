@@ -28,8 +28,8 @@ class LicenseFindingTest : StringSpec({
     val licenseFinding = LicenseFinding(
         "license",
         sortedSetOf(
-            TextLocation("path 1", 1, 2),
-            TextLocation("path 2", 3, 4)
+            TextLocation.create("path 1", 1, 2, "text"),
+            TextLocation.create("path 2", 3, 4, "text")
         ),
         sortedSetOf(
             CopyrightFinding("copyright 1", sortedSetOf()),
@@ -54,9 +54,11 @@ class LicenseFindingTest : StringSpec({
             - path: "path 1"
               start_line: 1
               end_line: 2
+              hash: "5c50789ec1b1e020fc5fe0cf7d4f894f3ff049bd"
             - path: "path 2"
               start_line: 3
               end_line: 4
+              hash: "26990331ab8b0bed9f9d75e1f3f436b0f4556666"
             copyrights:
             - statement: "copyright 1"
               locations: []

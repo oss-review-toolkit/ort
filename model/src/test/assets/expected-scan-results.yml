@@ -21,23 +21,27 @@ results:
       - path: "path 1.1"
         start_line: 1
         end_line: 1
+        hash: "15a4ba0bf9f122c34e78cb64d37e9e181b51e8ca"
       copyrights:
       - statement: "copyright 1"
         locations:
         - path: "copyright path 1.1"
           start_line: 1
           end_line: 1
+          hash: "725f982f6cd8ed50b911ff9f65782c0e77191cbe"
     - license: "license 1.2"
       locations:
       - path: "path 1.2"
         start_line: 1
         end_line: 2
+        hash: "ba124ea8a21ca7f397a924897e72da8c4c2bc4ec"
       copyrights:
       - statement: "copyright 2"
         locations:
         - path: "copyright path 1.2"
           start_line: 1
           end_line: 2
+          hash: "a0b47fc1a819f2a6e598de88f5b59a7f53a907aa"
     errors:
     - timestamp: "1970-01-01T00:00:00Z"
       source: "source-11"

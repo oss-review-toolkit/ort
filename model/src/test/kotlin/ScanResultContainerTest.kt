@@ -65,21 +65,21 @@ class ScanResultContainerTest : WordSpec() {
         sortedSetOf(
             LicenseFinding(
                 "license 1.1",
-                sortedSetOf(TextLocation("path 1.1", 1, 1)),
+                sortedSetOf(TextLocation.create("path 1.1", 1, 1, "license 1.1")),
                 sortedSetOf(
                     CopyrightFinding(
                         "copyright 1",
-                        sortedSetOf(TextLocation("copyright path 1.1", 1, 1))
+                        sortedSetOf(TextLocation.create("copyright path 1.1", 1, 1))
                     )
                 )
             ),
             LicenseFinding(
                 "license 1.2",
-                sortedSetOf(TextLocation("path 1.2", 1, 2)),
+                sortedSetOf(TextLocation.create("path 1.2", 1, 2, "license 1.2")),
                 sortedSetOf(
                     CopyrightFinding(
                         "copyright 2",
-                        sortedSetOf(TextLocation("copyright path 1.2", 1, 2))
+                        sortedSetOf(TextLocation.create("copyright path 1.2", 1, 2))
                     )
                 )
             )

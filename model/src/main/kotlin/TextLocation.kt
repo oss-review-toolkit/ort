@@ -43,20 +43,21 @@ data class TextLocation(
     val endLine: Int,
 
     /**
-     * The text at the specified location. Can be null if the text is unknown.
+     * A hash value which can be used to reference this text location.
      */
-    val text: String? = null
+    val hash: String
 ) : Comparable<TextLocation> {
     companion object {
         private val COMPARATOR = compareBy<TextLocation>({ it.path }, { it.startLine }, { it.endLine })
         val SORTED_SET_COMPARATOR = SortedSetComparator<TextLocation>()
         val TREE_SET_TYPE by lazy { jsonMapper.typeFactory.constructTreeSetType(TextLocation::class.java) }
-    }
 
-    /**
-     * A hash built from [startLine], [endLine], and [text]. Can be used to reference this text location.
-     */
-    val hash = "$startLine.$endLine.$text".hash()
+        /**
+         * Create a [TextLocation]. The [hash] is the SHA-1 hash of the string "[startLine].[endLine].[text]".
+         */
+        fun create(path: String, startLine: Int, endLine: Int, text: String? = null) =
+            TextLocation(path, startLine, endLine, "$startLine.$endLine.$text".hash())
+    }
 
     override fun compareTo(other: TextLocation) = COMPARATOR.compare(this, other)
 }

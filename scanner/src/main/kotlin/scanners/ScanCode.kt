@@ -425,7 +425,7 @@ class ScanCode(name: String, config: ScannerConfiguration) : LocalScanner(name, 
             val startLine = it["start_line"].intValue()
             val endLine = it["end_line"].intValue()
             (it["statements"] ?: listOf(it["value"])).map { statements ->
-                CopyrightFinding(statements.asText(), sortedSetOf(TextLocation(path, startLine, endLine)))
+                CopyrightFinding(statements.asText(), sortedSetOf(TextLocation.create(path, startLine, endLine)))
             }
         }.toSortedSet()
     }
@@ -446,7 +446,7 @@ class ScanCode(name: String, config: ScannerConfiguration) : LocalScanner(name, 
             val startLine = it["start_line"].intValue()
             val endLine = it["end_line"].intValue()
             (it["statements"] ?: listOf(it["value"])).map { statements ->
-                CopyrightFinding(statements.asText(), sortedSetOf(TextLocation(path, startLine, endLine)))
+                CopyrightFinding(statements.asText(), sortedSetOf(TextLocation.create(path, startLine, endLine)))
             }
         }.toSortedSet()
 
@@ -498,7 +498,7 @@ class ScanCode(name: String, config: ScannerConfiguration) : LocalScanner(name, 
                 val licenseText = it["matched_text"]?.textValue()
 
                 locationsForLicenses.getOrPut(licenseId) { sortedSetOf() } +=
-                    TextLocation(path, licenseStartLine, licenseEndLine, licenseText)
+                    TextLocation.create(path, licenseStartLine, licenseEndLine, licenseText)
             }
 
             val copyrights = file["copyrights"] ?: EMPTY_JSON_NODE
