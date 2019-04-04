@@ -19,7 +19,6 @@
 
 package com.here.ort.spdx
 
-import io.kotlintest.assertSoftly
 import io.kotlintest.matchers.beEmpty
 import io.kotlintest.should
 import io.kotlintest.shouldBe
@@ -39,33 +38,6 @@ class ExtensionsTest : WordSpec({
             val sum = enumSetOf(DayOfWeek.MONDAY, DayOfWeek.TUESDAY) + enumSetOf(DayOfWeek.TUESDAY, DayOfWeek.WEDNESDAY)
 
             sum shouldBe enumSetOf(DayOfWeek.MONDAY, DayOfWeek.TUESDAY, DayOfWeek.WEDNESDAY)
-        }
-    }
-
-    "String.isLicenseRefTo" should {
-        "return true if the string is a LicenseRef" {
-            assertSoftly {
-                "LicenseRef-proprietary".isLicenseRefTo("proprietary") shouldBe true
-                "LicenseRef-scancode-public-domain".isLicenseRefTo("public-domain") shouldBe true
-                "LicenseRef-ScanCode-Public-Domain".isLicenseRefTo("public-domain") shouldBe true
-            }
-        }
-
-        "return false if the string is not a LicenseRef" {
-            assertSoftly {
-                "LicenseRef".isLicenseRefTo("") shouldBe false
-                "LicenseRef-".isLicenseRefTo("") shouldBe false
-                "LicenseRef--".isLicenseRefTo("-") shouldBe false
-                "LicenseRef--foo".isLicenseRefTo("-foo") shouldBe false
-                "LicenseRef--foo".isLicenseRefTo("foo") shouldBe false
-                "public-domain".isLicenseRefTo("public-domain") shouldBe false
-                "".isLicenseRefTo("") shouldBe false
-                "-".isLicenseRefTo("public-domain") shouldBe false
-            }
-        }
-
-        "return false if the namespace is not known" {
-            "LicenseRef-no-public-domain".isLicenseRefTo("public-domain") shouldBe false
         }
     }
 })
