@@ -43,7 +43,7 @@ import java.io.File
 /**
  * The [Nuget](https://www.nuget.org/) package manager for .NET.
  */
-open class Nuget(name: String, analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfiguration) :
+class Nuget(name: String, analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfiguration) :
     PackageManager(name, analyzerConfig, repoConfig) {
     companion object {
         fun mapPackageReferences(workingDir: File): Map<String, String> {

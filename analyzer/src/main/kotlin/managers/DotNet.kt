@@ -43,7 +43,7 @@ import java.io.File
 /**
  * Dotnet package manager
  */
-open class DotNet(name: String, analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfiguration) :
+class DotNet(name: String, analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfiguration) :
     PackageManager(name, analyzerConfig, repoConfig) {
     companion object {
         fun mapPackageReferences(workingDir: File): Map<String, String> {
