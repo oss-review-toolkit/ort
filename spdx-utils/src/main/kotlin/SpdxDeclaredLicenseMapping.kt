@@ -28,6 +28,9 @@ import com.here.ort.spdx.SpdxLicenseException.*
  * license names contain white space. See [SpdxLicenseAliasMapping] for a mapping of misspelled license IDs.
  */
 object SpdxDeclaredLicenseMapping {
+    /**
+     * The map of collected license strings associated with their corresponding SPDX expression.
+     */
     val mapping = mapOf(
         "(MIT-style) netCDF C library license" to NETCDF.toExpression(),
         "2-clause BSD license" to BSD_2_CLAUSE.toExpression(),
@@ -306,6 +309,9 @@ object SpdxDeclaredLicenseMapping {
         "the Apache License, ASL Version 2.0" to APACHE_2_0.toExpression()
     )
 
+    /**
+     * Return an SPDX LicenseRef string for the given [id] and optional [namespace].
+     */
     private fun licenseRef(id: String, namespace: String = "") =
         if (namespace.isEmpty()) {
             SpdxLicenseReferenceExpression("LicenseRef-$id")
@@ -313,5 +319,8 @@ object SpdxDeclaredLicenseMapping {
             SpdxLicenseReferenceExpression("LicenseRef-$namespace-$id")
         }
 
+    /**
+     * Return the [SpdxExpression] the [license] string maps to, or null if there is no corresponding expression.
+     */
     fun map(license: String) = mapping[license] ?: SpdxLicense.forId(license)?.toExpression()
 }
