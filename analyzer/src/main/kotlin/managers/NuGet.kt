@@ -41,9 +41,9 @@ import com.here.ort.model.config.RepositoryConfiguration
 import java.io.File
 
 /**
- * The [Nuget](https://www.nuget.org/) package manager for .NET.
+ * The [NuGet](https://www.nuget.org/) package manager for .NET.
  */
-class Nuget(name: String, analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfiguration) :
+class NuGet(name: String, analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfiguration) :
     PackageManager(name, analyzerConfig, repoConfig) {
     companion object {
         fun mapPackageReferences(workingDir: File): Map<String, String> {
@@ -74,11 +74,11 @@ class Nuget(name: String, analyzerConfig: AnalyzerConfiguration, repoConfig: Rep
         )
     }
 
-    class Factory : AbstractPackageManagerFactory<Nuget>("Nuget") {
+    class Factory : AbstractPackageManagerFactory<NuGet>("NuGet") {
         override val globsForDefinitionFiles = listOf("packages.config")
 
         override fun create(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfiguration) =
-            Nuget(managerName, analyzerConfig, repoConfig)
+            NuGet(managerName, analyzerConfig, repoConfig)
     }
 
     override fun resolveDependencies(definitionFile: File): ProjectAnalyzerResult? {
