@@ -25,6 +25,8 @@ import com.here.ort.model.OrtIssue
 import com.here.ort.model.PackageReference
 import com.here.ort.model.Scope
 
+import io.kotlintest.matchers.beEmpty
+import io.kotlintest.should
 import io.kotlintest.shouldBe
 import io.kotlintest.specs.StringSpec
 
@@ -51,10 +53,7 @@ class DotNetSupportTest : StringSpec() {
             )
 
             dotNetSupport.scope shouldBe resultScope
-
-            val resultErrors = listOf<OrtIssue>()
-
-            errorsToStringWithoutTimestamp(dotNetSupport.errors) shouldBe errorsToStringWithoutTimestamp(resultErrors)
+            dotNetSupport.errors should beEmpty()
         }
 
         "non-existing project gets registered as error and is not added to scope" {
