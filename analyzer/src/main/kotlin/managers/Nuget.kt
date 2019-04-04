@@ -44,7 +44,7 @@ import java.io.File
  * The [Nuget](https://www.nuget.org/) package manager for .NET.
  */
 open class Nuget(name: String, analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfiguration) :
-        PackageManager(name, analyzerConfig, repoConfig) {
+    PackageManager(name, analyzerConfig, repoConfig) {
     companion object {
         fun mapPackageReferences(workingDir: File): Map<String, String> {
             val map = mutableMapOf<String, String>()
@@ -60,24 +60,25 @@ open class Nuget(name: String, analyzerConfig: AnalyzerConfiguration, repoConfig
 
         @JsonIgnoreProperties(ignoreUnknown = true)
         data class Packages(
-                @JsonProperty(value = "package")
-                @JacksonXmlElementWrapper(useWrapping = false)
-                val packages: List<Package>?
+            @JsonProperty(value = "package")
+            @JacksonXmlElementWrapper(useWrapping = false)
+            val packages: List<Package>?
         )
 
         @JsonIgnoreProperties(ignoreUnknown = true)
         data class Package(
-                @JacksonXmlProperty(isAttribute = true)
-                val id: String,
-                @JacksonXmlProperty(isAttribute = true)
-                val version: String)
+            @JacksonXmlProperty(isAttribute = true)
+            val id: String,
+            @JacksonXmlProperty(isAttribute = true)
+            val version: String
+        )
     }
 
     class Factory : AbstractPackageManagerFactory<Nuget>("Nuget") {
         override val globsForDefinitionFiles = listOf("packages.config")
 
         override fun create(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfiguration) =
-                Nuget(managerName, analyzerConfig, repoConfig)
+            Nuget(managerName, analyzerConfig, repoConfig)
     }
 
     override fun resolveDependencies(definitionFile: File): ProjectAnalyzerResult? {
@@ -86,24 +87,24 @@ open class Nuget(name: String, analyzerConfig: AnalyzerConfiguration, repoConfig
         val vcsInfo = VersionControlSystem.getPathInfo(workingDir)
 
         val project = Project(
-                id = Identifier(
-                        type = "nuget",
-                        namespace = "",
-                        name = workingDir.name,
-                        version = ""
-                ),
-                definitionFilePath = VersionControlSystem.getPathInfo(definitionFile).path,
-                declaredLicenses = sortedSetOf(),
-                vcs = vcsInfo,
-                vcsProcessed = vcsInfo.normalize(),
-                homepageUrl = "",
-                scopes = sortedSetOf(nuget.scope)
+            id = Identifier(
+                type = "nuget",
+                namespace = "",
+                name = workingDir.name,
+                version = ""
+            ),
+            definitionFilePath = VersionControlSystem.getPathInfo(definitionFile).path,
+            declaredLicenses = sortedSetOf(),
+            vcs = vcsInfo,
+            vcsProcessed = vcsInfo.normalize(),
+            homepageUrl = "",
+            scopes = sortedSetOf(nuget.scope)
         )
 
         return ProjectAnalyzerResult(
-                project = project,
-                packages = nuget.packages.values.map { it.toCuratedPackage() }.toSortedSet(),
-                errors = nuget.errors
+            project = project,
+            packages = nuget.packages.values.map { it.toCuratedPackage() }.toSortedSet(),
+            errors = nuget.errors
         )
     }
 }

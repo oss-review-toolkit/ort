@@ -51,12 +51,16 @@ class DotNetTest : StringSpec() {
     init {
         "Project dependencies are detected correctly" {
             val vcsPath = vcsDir.getPathToRoot(projectDir)
-            val expectedResult = patchExpectedResult(File(projectDir.parentFile,
-                    "dotnet-expected-output.yml"),
-                    definitionFilePath = "$vcsPath/subProjectTest/test.csproj",
-                    path = "$vcsPath/subProjectTest",
-                    revision = vcsRevision,
-                    url = normalizeVcsUrl(vcsUrl))
+            val expectedResult = patchExpectedResult(
+                File(
+                    projectDir.parentFile,
+                    "dotnet-expected-output.yml"
+                ),
+                definitionFilePath = "$vcsPath/subProjectTest/test.csproj",
+                path = "$vcsPath/subProjectTest",
+                revision = vcsRevision,
+                url = normalizeVcsUrl(vcsUrl)
+            )
             val result = DotNet("DotNet", DEFAULT_ANALYZER_CONFIGURATION, DEFAULT_REPOSITORY_CONFIGURATION)
                 .resolveDependencies(USER_DIR, listOf(packageFile))[packageFile]
 
