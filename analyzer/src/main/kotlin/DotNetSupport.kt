@@ -42,43 +42,43 @@ import java.io.IOException
 import java.net.HttpURLConnection
 
 class DotNetSupport(
-        packageReferencesMap: Map<String, String>,
-        val workingDir: File
+    packageReferencesMap: Map<String, String>,
+    val workingDir: File
 ) {
     companion object {
         private const val SCOPE_NAME = "dependencies"
         private const val PROVIDER_NAME = "nuget"
 
         private fun extractRepositoryType(node: JsonNode) =
-                node["repository"]?.get("type")?.textValue()
-                        ?: ""
+            node["repository"]?.get("type")?.textValue()
+                ?: ""
 
         private fun extractRepositoryUrl(node: JsonNode) =
-                node["repository"]?.get("url")?.textValue()
-                        ?: node["projectURL"]?.textValue()
-                        ?: ""
+            node["repository"]?.get("url")?.textValue()
+                ?: node["projectURL"]?.textValue()
+                ?: ""
 
         private fun extractRepositoryRevision(node: JsonNode): String =
-                node["repository"]?.get("commit")?.textValue()
-                        ?: ""
+            node["repository"]?.get("commit")?.textValue()
+                ?: ""
 
         private fun extractRepositoryPath(node: JsonNode): String =
-                node["repository"]?.get("branch")?.textValue()
-                        ?: ""
+            node["repository"]?.get("branch")?.textValue()
+                ?: ""
 
         private fun extractVcsInfo(node: JsonNode) =
-                VcsInfo(
-                        type = extractRepositoryType(node),
-                        url = extractRepositoryUrl(node),
-                        revision = extractRepositoryRevision(node),
-                        path = extractRepositoryPath(node)
-                )
+            VcsInfo(
+                type = extractRepositoryType(node),
+                url = extractRepositoryUrl(node),
+                revision = extractRepositoryRevision(node),
+                path = extractRepositoryPath(node)
+            )
 
         private fun extractPackageId(node: JsonNode) = Identifier(
-                type = PROVIDER_NAME,
-                namespace = "",
-                name = node["id"]?.textValue() ?: "",
-                version = node["version"]?.textValue() ?: ""
+            type = PROVIDER_NAME,
+            namespace = "",
+            name = node["id"]?.textValue() ?: "",
+            version = node["version"]?.textValue() ?: ""
         )
 
 
@@ -92,18 +92,18 @@ class DotNetSupport(
         }
 
         private fun extractRemoteArtifact(node: JsonNode, nupkgUrl: String) = RemoteArtifact(
-                url = nupkgUrl,
-                hash = node["packageHash"]?.textValue() ?: "",
-                hashAlgorithm = HashAlgorithm.fromString(
-                        node["packageHashAlgorithm"]?.textValue() ?: ""
-                )
+            url = nupkgUrl,
+            hash = node["packageHash"]?.textValue() ?: "",
+            hashAlgorithm = HashAlgorithm.fromString(
+                node["packageHashAlgorithm"]?.textValue() ?: ""
+            )
         )
 
         private fun getCatalogURL(registrationNode: JsonNode): String =
-                registrationNode["catalogEntry"]?.textValue() ?: ""
+            registrationNode["catalogEntry"]?.textValue() ?: ""
 
         private fun getNuspecURL(registrationNode: JsonNode): String =
-                registrationNode["packageContent"]?.textValue() ?: ""
+            registrationNode["packageContent"]?.textValue() ?: ""
 
         private fun extractVersion(range: String): String {
             if (range.isEmpty()) return ""
@@ -142,15 +142,19 @@ class DotNetSupport(
 
     private fun getPackageReferenceJsonContent(packageReference: PackageReference): Pair<String, JsonNode> {
         if (packageReferencesAlreadyFound.containsKey(
-                        Pair(packageReference.id.name, packageReference.id.version)
-                )) {
+                Pair(packageReference.id.name, packageReference.id.version)
+            )
+        ) {
             return packageReferencesAlreadyFound[Pair(
-                    packageReference.id.name,
-                    packageReference.id.version)]!!
+                packageReference.id.name,
+                packageReference.id.version
+            )]!!
         }
         return try {
-            val informationUrl = getInformationURL(packageReference.id.name,
-                    packageReference.id.version) ?: throw Exception()
+            val informationUrl = getInformationURL(
+                packageReference.id.name,
+                packageReference.id.version
+            ) ?: throw Exception()
             Pair(informationUrl.first, jacksonObjectMapper().readTree(informationUrl.second.requestFromNugetAPI()))
         } catch (e: Exception) {
             Pair("", xmlMapper.readTree(""))
@@ -160,10 +164,12 @@ class DotNetSupport(
     private fun jsonNodeToPackage(packageContent: Pair<String, JsonNode>): Package {
         val jsonCatalogNode = packageContent.second
         val jsonNuspecNode = try {
-            xmlMapper.readTree(packageContent.first.replace(
+            xmlMapper.readTree(
+                packageContent.first.replace(
                     "${jsonCatalogNode["version"].textValueOrEmpty()}.nupkg",
                     "nuspec"
-            ).requestFromNugetAPI())
+                ).requestFromNugetAPI()
+            )
         } catch (e: Exception) {
             xmlMapper.readTree("")
         }
@@ -172,14 +178,14 @@ class DotNetSupport(
         val vcsInfo = extractVcsInfo(jsonNuspecNode["metadata"] ?: xmlMapper.readTree(""))
 
         return Package(
-                id = extractPackageId(jsonCatalogNode),
-                declaredLicenses = extractDeclaredLicenses(jsonCatalogNode),
-                description = jsonCatalogNode["description"]?.textValue() ?: "",
-                homepageUrl = jsonCatalogNode["projectUrl"]?.textValue() ?: "",
-                binaryArtifact = extractRemoteArtifact(jsonCatalogNode, packageContent.first),
-                sourceArtifact = RemoteArtifact.EMPTY,
-                vcs = vcsInfo,
-                vcsProcessed = vcsInfo.normalize()
+            id = extractPackageId(jsonCatalogNode),
+            declaredLicenses = extractDeclaredLicenses(jsonCatalogNode),
+            description = jsonCatalogNode["description"]?.textValue() ?: "",
+            homepageUrl = jsonCatalogNode["projectUrl"]?.textValue() ?: "",
+            binaryArtifact = extractRemoteArtifact(jsonCatalogNode, packageContent.first),
+            sourceArtifact = RemoteArtifact.EMPTY,
+            vcs = vcsInfo,
+            vcsProcessed = vcsInfo.normalize()
         )
     }
 
@@ -187,24 +193,27 @@ class DotNetSupport(
         val packageJsonNode = preparePackageReference(packageID, version)
 
         if (packageJsonNode == null) {
-            errors.add(OrtIssue(
+            errors.add(
+                OrtIssue(
                     source = "nuget-API does not provide package",
                     message = "$packageID:$version can not be found on Nugets RestAPI "
-            ))
+                )
+            )
             return null
         }
 
         val packageReference = PackageReference(
-                Identifier(
-                        type = PROVIDER_NAME,
-                        namespace = "",
-                        name = if (packageID == packageJsonNode["id"]?.textValue()) {
-                            packageID
-                        } else {
-                            packageJsonNode["id"]?.textValue() ?: ""
-                        },
-                        version = packageJsonNode["version"]?.textValue() ?: ""
-                ))
+            Identifier(
+                type = PROVIDER_NAME,
+                namespace = "",
+                name = if (packageID == packageJsonNode["id"]?.textValue()) {
+                    packageID
+                } else {
+                    packageJsonNode["id"]?.textValue() ?: ""
+                },
+                version = packageJsonNode["version"]?.textValue() ?: ""
+            )
+        )
 
         val dependenciesIterator = packageJsonNode["dependencyGroups"]?.elements()
 
@@ -214,12 +223,13 @@ class DotNetSupport(
             if (dependencyIterator != null) while (dependencyIterator.hasNext()) {
                 val node = dependencyIterator.next()
                 val nodeAsPair = Pair(
-                        node["id"].textValueOrEmpty(),
-                        extractVersion(node["range"].textValueOrEmpty()))
+                    node["id"].textValueOrEmpty(),
+                    extractVersion(node["range"].textValueOrEmpty())
+                )
                 if (!hasPackageReferenceAlready(nodeAsPair)) {
                     val subPackageRef = getPackageReferenceFromRestAPI(
-                            nodeAsPair.first,
-                            nodeAsPair.second
+                        nodeAsPair.first,
+                        nodeAsPair.second
                     )
                     if (subPackageRef != null) packageReference.dependencies += subPackageRef
                 }
@@ -233,14 +243,15 @@ class DotNetSupport(
         val (first, second) = getInformationURL(packageID, version) ?: return null
         val packageJsonNode = try {
             jacksonObjectMapper().readTree(
-                    second.requestFromNugetAPI())
-                    ?: throw Exception("No configuration URL could be fetched")
+                second.requestFromNugetAPI()
+            )
+                ?: throw Exception("No configuration URL could be fetched")
         } catch (e: Exception) {
             xmlMapper.readTree("")
         }
 
         packageReferencesAlreadyFound[Pair(first = packageID, second = version)] =
-                Pair(first, packageJsonNode)
+            Pair(first, packageJsonNode)
 
         return packageJsonNode
     }
@@ -261,7 +272,7 @@ class DotNetSupport(
         }
 
         val node = jacksonObjectMapper().readTree(
-                registrationInfo ?: ""
+            registrationInfo ?: ""
         )
 
         return if (node != null) {
@@ -275,11 +286,13 @@ class DotNetSupport(
         val node = getCreateSearchRestAPIURL(packageID)
 
         return getRightVersionUrl(node["data"]?.elements(), packageID, version)
-                ?: getFirstMatchingIdUrl(node["data"]?.elements(), packageID) ?: ""
+            ?: getFirstMatchingIdUrl(node["data"]?.elements(), packageID) ?: ""
     }
 
-    private fun getRightVersionUrl(dataIterator: Iterator<JsonNode>?,
-                                   packageID: String, version: String): String? {
+    private fun getRightVersionUrl(
+        dataIterator: Iterator<JsonNode>?,
+        packageID: String, version: String
+    ): String? {
         while (dataIterator != null && dataIterator.hasNext()) {
             val packageNode = dataIterator.next()
             if (packageNode["id"].textValueOrEmpty() == packageID) {
@@ -308,7 +321,8 @@ class DotNetSupport(
 
     private fun getCreateSearchRestAPIURL(packageID: String): JsonNode {
         return jacksonObjectMapper().readTree(
-                "https://api-v2v3search-0.nuget.org/query?q=\"$packageID\"&prerelease=false".requestFromNugetAPI())
+            "https://api-v2v3search-0.nuget.org/query?q=\"$packageID\"&prerelease=false".requestFromNugetAPI()
+        )
     }
 
     private fun String.requestFromNugetAPI(): String {

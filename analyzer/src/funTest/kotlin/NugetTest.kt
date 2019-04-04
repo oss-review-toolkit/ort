@@ -51,12 +51,16 @@ class NugetTest : StringSpec() {
     init {
         "Project dependencies are detected correctly" {
             val vcsPath = vcsDir.getPathToRoot(projectDir)
-            val expectedResult = patchExpectedResult(File(projectDir.parentFile,
-                    "nuget-expected-output.yml"),
-                    definitionFilePath = "$vcsPath/packages.config",
-                    path = vcsPath,
-                    revision = vcsRevision,
-                    url = normalizeVcsUrl(vcsUrl))
+            val expectedResult = patchExpectedResult(
+                File(
+                    projectDir.parentFile,
+                    "nuget-expected-output.yml"
+                ),
+                definitionFilePath = "$vcsPath/packages.config",
+                path = vcsPath,
+                revision = vcsRevision,
+                url = normalizeVcsUrl(vcsUrl)
+            )
             val result = Nuget("Nuget", DEFAULT_ANALYZER_CONFIGURATION, DEFAULT_REPOSITORY_CONFIGURATION)
                 .resolveDependencies(USER_DIR, listOf(packageFile))[packageFile]
 
