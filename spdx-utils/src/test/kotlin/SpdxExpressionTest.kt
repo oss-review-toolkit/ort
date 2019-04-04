@@ -189,6 +189,12 @@ class SpdxExpressionTest : WordSpec() {
                 }
             }
 
+            "normalize the case of SPDX licenses" {
+                SpdxLicense.values().forEach {
+                    SpdxExpression.parse(it.id.toLowerCase()).normalize() shouldBe it.toExpression()
+                }
+            }
+
             "normalize deprecated licenses to non-deprecated ones" {
                 assertSoftly {
                     SpdxExpression.parse("AGPL-1.0").normalize() shouldBe AGPL_1_0_ONLY.toExpression()
