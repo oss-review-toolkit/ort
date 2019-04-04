@@ -251,10 +251,10 @@ object SpdxDeclaredLicenseMapping {
         "New BSD License" to BSD_3_CLAUSE.toExpression(),
         "New BSD license" to BSD_3_CLAUSE.toExpression(),
         "Perl Artistic v2" to ARTISTIC_1_0_PERL.toExpression(),
-        "Public Domain" to licenseRef("scancode-public-domain-disclaimer"),
+        "Public Domain" to licenseRef("public-domain-disclaimer", "scancode"),
         "Public Domain, per Creative Commons CC0" to CC0_1_0.toExpression(),
         "Public domain (CC0-1.0)" to CC0_1_0.toExpression(),
-        "PublicDomain" to licenseRef("scancode-public-domain-disclaimer"),
+        "PublicDomain" to licenseRef("public-domain-disclaimer", "scancode"),
         "Python Software Foundation" to PYTHON_2_0.toExpression(),
         "Ruby's" to RUBY.toExpression(),
         "Sleepycat License" to SLEEPYCAT.toExpression(),
@@ -301,12 +301,17 @@ object SpdxDeclaredLicenseMapping {
         "https://raw.github.com/RDFLib/rdflib/master/LICENSE" to BSD_3_CLAUSE.toExpression(),
         "new BSD" to BSD_3_CLAUSE.toExpression(),
         "public domain, Python, 2-Clause BSD, GPL 3 (see COPYING.txt)"
-                to (((licenseRef("scancode-public-domain-disclaimer") and PYTHON_2_0.toExpression())
+                to (((licenseRef("public-domain-disclaimer", "scancode") and PYTHON_2_0.toExpression())
                 and BSD_2_CLAUSE.toExpression()) and GPL_3_0_ONLY.toExpression()),
         "the Apache License, ASL Version 2.0" to APACHE_2_0.toExpression()
     )
 
-    private fun licenseRef(id: String) = SpdxLicenseReferenceExpression("LicenseRef-$id")
+    private fun licenseRef(id: String, namespace: String = "") =
+        if (namespace.isEmpty()) {
+            SpdxLicenseReferenceExpression("LicenseRef-$id")
+        } else {
+            SpdxLicenseReferenceExpression("LicenseRef-$namespace-$id")
+        }
 
     fun map(license: String) = mapping[license] ?: SpdxLicense.forId(license)?.toExpression()
 }
