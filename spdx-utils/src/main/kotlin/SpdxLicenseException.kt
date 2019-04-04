@@ -107,7 +107,7 @@ enum class SpdxLicenseException(
         /**
          * Return the enum value for the given [id], or null if it is no SPDX license exception id.
          */
-        fun forId(id: String) = SpdxLicenseException.values().find { it.id == id }
+        fun forId(id: String) = SpdxLicenseException.values().find { it.id.equals(id, true) }
     }
 
     /**
