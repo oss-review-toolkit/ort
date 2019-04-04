@@ -50,7 +50,7 @@ class DotNetSupportTest : StringSpec() {
                 )
             )
 
-            dotNetSupport.scope.toString() shouldBe resultScope.toString()
+            dotNetSupport.scope shouldBe resultScope
 
             val resultErrors = listOf<OrtIssue>()
 
@@ -63,7 +63,7 @@ class DotNetSupportTest : StringSpec() {
             val dotNetSupport = DotNetSupport(mapOf(testPackage, testPackage2), projectDir)
             val resultScope = Scope("dependencies", sortedSetOf())
 
-            dotNetSupport.scope.toString() shouldBe resultScope.toString()
+            dotNetSupport.scope shouldBe resultScope
 
             val resultErrors = listOf(
                 OrtIssue(
@@ -114,7 +114,7 @@ class DotNetSupportTest : StringSpec() {
                 )
             )
 
-            dotNetSupport.scope.toString() shouldBe resultScope.toString()
+            dotNetSupport.scope shouldBe resultScope
         }
     }
 
