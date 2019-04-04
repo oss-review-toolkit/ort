@@ -29,7 +29,6 @@ import com.here.ort.model.removeGarbage
 import com.here.ort.reporter.Reporter
 import com.here.ort.reporter.ResolutionProvider
 import com.here.ort.spdx.getLicenseText
-import com.here.ort.spdx.isLicenseRefTo
 import com.here.ort.utils.ScriptRunner
 import com.here.ort.utils.log
 
@@ -145,10 +144,7 @@ class NoticeReporter : Reporter() {
         buildString {
             append(noticeReport.headers.joinToString(NOTICE_SEPARATOR))
 
-            noticeReport.findings.filterNot { (license, _) ->
-                // Public domain licenses do not require attribution.
-                license.isLicenseRefTo("public-domain") || license.isLicenseRefTo("public-domain-disclaimer")
-            }.forEach { (license, copyrights) ->
+            noticeReport.findings.forEach { (license, copyrights) ->
                 try {
                     val licenseText = getLicenseText(license, true)
 
