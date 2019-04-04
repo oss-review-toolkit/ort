@@ -24,7 +24,7 @@ import com.fasterxml.jackson.dataformat.xml.XmlMapper
 import com.fasterxml.jackson.module.kotlin.readValue
 import com.fasterxml.jackson.module.kotlin.registerKotlinModule
 
-import com.here.ort.analyzer.managers.Nuget
+import com.here.ort.analyzer.managers.NuGet
 import com.here.ort.downloader.VersionControlSystem
 import com.here.ort.model.yamlMapper
 import com.here.ort.utils.normalizeVcsUrl
@@ -41,7 +41,7 @@ import io.kotlintest.specs.StringSpec
 
 import java.io.File
 
-class NugetTest : StringSpec() {
+class NuGetTest : StringSpec() {
     private val projectDir = File("src/funTest/assets/projects/synthetic/nuget")
     private val vcsDir = VersionControlSystem.forDirectory(projectDir.absoluteFile)!!
     private val vcsUrl = vcsDir.getRemoteUrl()
@@ -61,7 +61,7 @@ class NugetTest : StringSpec() {
                 revision = vcsRevision,
                 url = normalizeVcsUrl(vcsUrl)
             )
-            val result = Nuget("Nuget", DEFAULT_ANALYZER_CONFIGURATION, DEFAULT_REPOSITORY_CONFIGURATION)
+            val result = NuGet("NuGet", DEFAULT_ANALYZER_CONFIGURATION, DEFAULT_REPOSITORY_CONFIGURATION)
                 .resolveDependencies(USER_DIR, listOf(packageFile))[packageFile]
 
             result shouldNotBe null
@@ -71,7 +71,7 @@ class NugetTest : StringSpec() {
 
         "Definition File is correctly mapped" {
             val mapper = XmlMapper().registerKotlinModule()
-            val result: Nuget.Companion.Packages = mapper.readValue(packageFile)
+            val result: NuGet.Companion.Packages = mapper.readValue(packageFile)
 
             result shouldNotBe null
             result.packages shouldNotBe null

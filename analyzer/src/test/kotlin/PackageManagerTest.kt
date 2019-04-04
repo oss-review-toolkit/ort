@@ -51,7 +51,7 @@ class PackageManagerTest : WordSpec({
             managedFilesByName["Gradle"] shouldBe listOf(File(projectDir, "build.gradle"))
             managedFilesByName["Maven"] shouldBe listOf(File(projectDir, "pom.xml"))
             managedFilesByName["NPM"] shouldBe listOf(File(projectDir, "package.json"))
-            managedFilesByName["Nuget"] shouldBe listOf(File(projectDir, "packages.config"))
+            managedFilesByName["NuGet"] shouldBe listOf(File(projectDir, "packages.config"))
             managedFilesByName["PhpComposer"] shouldBe listOf(File(projectDir, "composer.json"))
             managedFilesByName["PIP"] shouldBe listOf(File(projectDir, "setup.py"))
             managedFilesByName["SBT"] shouldBe listOf(File(projectDir, "build.sbt"))

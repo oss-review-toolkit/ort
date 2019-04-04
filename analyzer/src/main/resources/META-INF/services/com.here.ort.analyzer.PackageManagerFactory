@@ -5,7 +5,7 @@ com.here.ort.analyzer.managers.GoDep$Factory
 com.here.ort.analyzer.managers.Gradle$Factory
 com.here.ort.analyzer.managers.Maven$Factory
 com.here.ort.analyzer.managers.NPM$Factory
-com.here.ort.analyzer.managers.Nuget$Factory
+com.here.ort.analyzer.managers.NuGet$Factory
 com.here.ort.analyzer.managers.PhpComposer$Factory
 com.here.ort.analyzer.managers.PIP$Factory
 com.here.ort.analyzer.managers.SBT$Factory
