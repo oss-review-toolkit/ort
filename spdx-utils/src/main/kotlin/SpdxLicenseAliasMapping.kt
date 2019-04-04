@@ -23,13 +23,13 @@ import com.here.ort.spdx.SpdxLicense.*
 import com.here.ort.spdx.SpdxLicenseException.*
 
 /**
- * A mapping from varied SPDX licenses to valid SPDX licenses.
+ * A mapping from varied SPDX license names to valid SPDX expressions.
  */
 object SpdxLicenseAliasMapping {
     /**
-     * The map of misspelled SPDX licenses associated with their valid SPDX licenses.
+     * The map of custom license names associated with their corresponding SPDX expression.
      */
-    private val misspelled = mapOf(
+    private val customNames = mapOf(
         "AFLv2.1" to AFL_2_1,
         "ALv2" to APACHE_2_0,
         "APL2" to APACHE_2_0,
@@ -78,7 +78,7 @@ object SpdxLicenseAliasMapping {
     ).mapValues { (_, v) -> v.toExpression() }
 
     /**
-     * The map of deprecated SPDX licenses associated with their current SPDX licenses.
+     * The map of deprecated SPDX license names associated with their current SPDX expression.
      */
     private val deprecatedLicenses = mapOf(
         "AGPL-1.0" to AGPL_1_0_ONLY,
@@ -106,7 +106,7 @@ object SpdxLicenseAliasMapping {
     ).mapValues { (_, v) -> v.toExpression() }
 
     /**
-     * The map of deprecated SPDX license exceptions associated with their current compound SPDX expressions.
+     * The map of deprecated SPDX license exception names associated with their current compound SPDX expression.
      */
     private val deprecatedExceptions = mapOf(
         "GPL-2.0-with-autoconf-exception" to (GPL_2_0_ONLY with AUTOCONF_EXCEPTION_2_0),
@@ -118,8 +118,16 @@ object SpdxLicenseAliasMapping {
         "GPL-3.0-with-GCC-exception" to (GPL_3_0_ONLY with GCC_EXCEPTION_3_1)
     )
 
-    val mapping = misspelled + deprecatedLicenses + deprecatedExceptions
+    /**
+     * The map of varied SPDX license names associated with their corresponding SPDX expression.
+     */
+    val mapping = customNames + deprecatedLicenses + deprecatedExceptions
 
+    /**
+     * Return the [SpdxExpression] the [license] name maps to, or null if there is no corresponding expression. If
+     * [mapDeprecated] is true, license names marked as deprecated in the SPDX standard are mapped to their
+     * corresponding current expression, otherwise they are mapped to their corresponding deprecated expression.
+     */
     fun map(license: String, mapDeprecated: Boolean = true) =
-        (if (mapDeprecated) mapping else misspelled)[license] ?: SpdxLicense.forId(license)?.toExpression()
+        (if (mapDeprecated) mapping else customNames)[license] ?: SpdxLicense.forId(license)?.toExpression()
 }
