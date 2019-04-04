@@ -31,6 +31,7 @@ import io.kotlintest.shouldBe
 import io.kotlintest.specs.StringSpec
 
 import java.io.File
+import java.time.Instant
 
 class DotNetSupportTest : StringSpec() {
     private val projectDir = File("src/funTest/assets/projects/synthetic/dotnet")
@@ -61,22 +62,22 @@ class DotNetSupportTest : StringSpec() {
             val testPackage2 = Pair("tffrifj", "2.0.0")
             val dotNetSupport = DotNetSupport(mapOf(testPackage, testPackage2), projectDir)
             val resultScope = Scope("dependencies", sortedSetOf())
-
-            dotNetSupport.scope shouldBe resultScope
-
             val resultErrors = listOf(
                 OrtIssue(
+                    timestamp = Instant.EPOCH,
                     source = "nuget-API does not provide package",
                     message = "${testPackage.first}:${testPackage.second} can not be found on Nugets RestAPI "
                 ),
                 OrtIssue(
+                    timestamp = Instant.EPOCH,
                     source = "nuget-API does not provide package",
                     message = "${testPackage2.first}:${testPackage2.second} " +
                             "can not be found on Nugets RestAPI "
                 )
             )
 
-            errorsToStringWithoutTimestamp(dotNetSupport.errors) shouldBe errorsToStringWithoutTimestamp(resultErrors)
+            dotNetSupport.scope shouldBe resultScope
+            dotNetSupport.errors.map { it.copy(timestamp = Instant.EPOCH) } shouldBe resultErrors
         }
 
         "dependencies are detected correctly" {
@@ -115,14 +116,5 @@ class DotNetSupportTest : StringSpec() {
 
             dotNetSupport.scope shouldBe resultScope
         }
-    }
-
-    private fun errorsToStringWithoutTimestamp(errors: List<OrtIssue>): String {
-        var errorResult = ""
-        errors.forEach { issue: OrtIssue ->
-            if (errorResult != "") errorResult += ", "
-            errorResult += issue.toString().split("[ERROR]").last()
-        }
-        return "[$errorResult]"
     }
 }
