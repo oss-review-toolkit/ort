@@ -23,10 +23,7 @@ import io.kotlintest.shouldBe
 import io.kotlintest.shouldThrow
 import io.kotlintest.specs.WordSpec
 
-import org.antlr.v4.runtime.BaseErrorListener
 import org.antlr.v4.runtime.CharStreams
-import org.antlr.v4.runtime.RecognitionException
-import org.antlr.v4.runtime.Recognizer
 
 class SpdxExpressionLexerTest : WordSpec() {
     init {
@@ -72,19 +69,9 @@ class SpdxExpressionLexerTest : WordSpec() {
     private fun getTokensByTypeForExpression(expression: String): List<Pair<Int, String>> {
         val charStream = CharStreams.fromString(expression)
         val lexer = SpdxExpressionLexer(charStream)
+
         lexer.removeErrorListeners()
-        lexer.addErrorListener(object : BaseErrorListener() {
-            override fun syntaxError(
-                recognizer: Recognizer<*, *>?,
-                offendingSymbol: Any?,
-                line: Int,
-                charPositionInLine: Int,
-                msg: String?,
-                e: RecognitionException?
-            ) {
-                throw SpdxException(msg)
-            }
-        })
+        lexer.addErrorListener(SpdxErrorListener())
 
         return lexer.allTokens.map { it.type to it.text }
     }

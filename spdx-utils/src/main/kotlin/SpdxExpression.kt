@@ -25,11 +25,8 @@ import com.fasterxml.jackson.databind.ser.std.ToStringSerializer
 
 import java.util.EnumSet
 
-import org.antlr.v4.runtime.BaseErrorListener
 import org.antlr.v4.runtime.CharStreams
 import org.antlr.v4.runtime.CommonTokenStream
-import org.antlr.v4.runtime.RecognitionException
-import org.antlr.v4.runtime.Recognizer
 
 /**
  * An SPDX expression as defined by version 2.1 of the [SPDX specification, appendix IV][1].
@@ -78,18 +75,8 @@ sealed class SpdxExpression {
             val charStream = CharStreams.fromString(expression)
             val lexer = SpdxExpressionLexer(charStream)
 
-            lexer.addErrorListener(object : BaseErrorListener() {
-                override fun syntaxError(
-                    recognizer: Recognizer<*, *>?,
-                    offendingSymbol: Any?,
-                    line: Int,
-                    charPositionInLine: Int,
-                    msg: String?,
-                    e: RecognitionException?
-                ) {
-                    throw SpdxException(msg)
-                }
-            })
+            lexer.removeErrorListeners()
+            lexer.addErrorListener(SpdxErrorListener())
 
             val tokenStream = CommonTokenStream(lexer)
             val parser = SpdxExpressionParser(tokenStream)
