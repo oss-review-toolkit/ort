@@ -131,6 +131,8 @@ subprojects {
     }
 
     dokka {
+        jdkVersion = 8
+
         externalDocumentationLink {
             url = new URL('https://codehaus-plexus.github.io/plexus-containers/plexus-container-default/apidocs/')
         }
