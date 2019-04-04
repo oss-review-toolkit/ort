@@ -134,7 +134,7 @@ def generateEnumClass(String taskName, String description, String jsonUrl, Strin
                     /**
                      * Return the enum value for the given [id], or null if it is no SPDX $description id.
                      */
-                    fun forId(id: String) = ${className}.values().find { it.id == id }
+                    fun forId(id: String) = ${className}.values().find { it.id.equals(id, true) }
                 }
                 """.stripIndent(12))
 
