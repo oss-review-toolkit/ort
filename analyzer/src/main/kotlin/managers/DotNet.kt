@@ -41,7 +41,7 @@ import com.here.ort.model.config.RepositoryConfiguration
 import java.io.File
 
 /**
- * Dotnet package manager
+ * The [DotNet](https://docs.microsoft.com/en-us/dotnet/core/tools/) package manager for .NET.
  */
 class DotNet(name: String, analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfiguration) :
     PackageManager(name, analyzerConfig, repoConfig) {
