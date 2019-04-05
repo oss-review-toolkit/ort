@@ -35,6 +35,7 @@ import com.here.ort.downloader.VersionControlSystem
 import com.here.ort.model.Identifier
 import com.here.ort.model.Project
 import com.here.ort.model.ProjectAnalyzerResult
+import com.here.ort.model.VcsInfo
 import com.here.ort.model.config.AnalyzerConfiguration
 import com.here.ort.model.config.RepositoryConfiguration
 
@@ -90,7 +91,6 @@ class DotNet(name: String, analyzerConfig: AnalyzerConfiguration, repoConfig: Re
     override fun resolveDependencies(definitionFile: File): ProjectAnalyzerResult? {
         val workingDir = definitionFile.parentFile
         val dotnet = DotNetSupport(mapPackageReferences(definitionFile), workingDir)
-        val vcsInfo = VersionControlSystem.getPathInfo(workingDir)
 
         val project = Project(
             id = Identifier(
@@ -101,8 +101,8 @@ class DotNet(name: String, analyzerConfig: AnalyzerConfiguration, repoConfig: Re
             ),
             definitionFilePath = VersionControlSystem.getPathInfo(definitionFile).path,
             declaredLicenses = sortedSetOf(),
-            vcs = vcsInfo,
-            vcsProcessed = vcsInfo.normalize(),
+            vcs = VcsInfo.EMPTY,
+            vcsProcessed = processProjectVcs(workingDir),
             homepageUrl = "",
             scopes = sortedSetOf(dotnet.scope)
         )
