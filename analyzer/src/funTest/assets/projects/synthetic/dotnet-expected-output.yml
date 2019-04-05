@@ -6,10 +6,10 @@ project:
   declared_licenses: []
   declared_licenses_processed: {}
   vcs:
-    type: "Git"
-    url: "https://github.com/heremaps/oss-review-toolkit.git"
-    revision: "<REPLACE_REVISION>"
-    path: "<REPLACE_PATH>"
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
   vcs_processed:
     type: "git"
     url: "<REPLACE_URL>"
