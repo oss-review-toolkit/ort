@@ -56,10 +56,9 @@ class NuGetTest : StringSpec() {
                     projectDir.parentFile,
                     "nuget-expected-output.yml"
                 ),
-                definitionFilePath = "$vcsPath/packages.config",
-                path = vcsPath,
+                url = normalizeVcsUrl(vcsUrl),
                 revision = vcsRevision,
-                url = normalizeVcsUrl(vcsUrl)
+                path = vcsPath
             )
             val result = NuGet("NuGet", DEFAULT_ANALYZER_CONFIGURATION, DEFAULT_REPOSITORY_CONFIGURATION)
                 .resolveDependencies(USER_DIR, listOf(packageFile))[packageFile]

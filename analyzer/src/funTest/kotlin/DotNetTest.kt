@@ -56,10 +56,9 @@ class DotNetTest : StringSpec() {
                     projectDir.parentFile,
                     "dotnet-expected-output.yml"
                 ),
-                definitionFilePath = "$vcsPath/subProjectTest/test.csproj",
-                path = "$vcsPath/subProjectTest",
+                url = normalizeVcsUrl(vcsUrl),
                 revision = vcsRevision,
-                url = normalizeVcsUrl(vcsUrl)
+                path = "$vcsPath/subProjectTest"
             )
             val result = DotNet("DotNet", DEFAULT_ANALYZER_CONFIGURATION, DEFAULT_REPOSITORY_CONFIGURATION)
                 .resolveDependencies(USER_DIR, listOf(packageFile))[packageFile]
