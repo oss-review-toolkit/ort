@@ -32,8 +32,9 @@ val dockerBuildBaseImage by tasks.registering(DockerBuildImage::class) {
     tags.set(listOf("ort-base:latest"))
 }
 
-val dockerBuildImage by tasks
-dockerBuildImage.dependsOn(dockerBuildBaseImage)
+tasks.dockerBuildImage {
+    dependsOn(dockerBuildBaseImage)
+}
 
 repositories {
     jcenter()
