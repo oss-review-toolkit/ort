@@ -36,7 +36,7 @@ dependencies {
     implementation("org.apache.commons:commons-compress:$commonsCompressVersion")
     implementation("org.tukaani:xz:$xzVersion")
 
-    implementation("org.jetbrains.kotlin:kotlin-compiler-embeddable")
+    implementation("org.jetbrains.kotlin:kotlin-compiler")
     implementation("org.jetbrains.kotlin:kotlin-script-runtime")
     implementation("org.jetbrains.kotlin:kotlin-script-util")
 }
