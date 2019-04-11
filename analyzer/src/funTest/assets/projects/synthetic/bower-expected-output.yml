@@ -23,7 +23,7 @@ project:
     dependencies:
     - id: "Bower::polymer:2.4.0"
       dependencies:
-      - id: "Bower::shadycss:1.9.0"
+      - id: "Bower::shadycss:1.9.1"
       - id: "Bower::webcomponentsjs:1.3.3"
   - name: "devDependencies"
     dependencies:
@@ -86,8 +86,8 @@ packages:
       path: ""
   curations: []
 - package:
-    id: "Bower::shadycss:1.9.0"
-    purl: "pkg://Bower//shadycss@1.9.0"
+    id: "Bower::shadycss:1.9.1"
+    purl: "pkg://Bower//shadycss@1.9.1"
     declared_licenses: []
     declared_licenses_processed: {}
     description: ""
@@ -103,12 +103,12 @@ packages:
     vcs:
       type: ""
       url: "https://github.com/webcomponents/shadycss.git"
-      revision: "a2334b6610115b343500586b71db1c3b618031e3"
+      revision: "4665ae8da2b91198f7b4490d4285b3bb33d5ff06"
       path: ""
     vcs_processed:
       type: ""
       url: "https://github.com/webcomponents/shadycss.git"
-      revision: "a2334b6610115b343500586b71db1c3b618031e3"
+      revision: "4665ae8da2b91198f7b4490d4285b3bb33d5ff06"
       path: ""
   curations: []
 - package:
