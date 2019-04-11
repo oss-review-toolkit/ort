@@ -269,6 +269,13 @@ location of source artifacts. The structure of the curations file is:
     comment: "Revision found by comparing NPM packages with the sources from https://github.com/olov/ast-traverse."
     vcs:
       revision: "73f2b3c319af82fd8e490d40dd89a15951069b0d"
+
+- id: "NPM::ramda:[0.21.0,0.25.0]" # Ivy-style version matchers are supported.
+  curations:
+    comment: "The package is licensed under MIT per `LICENSE` and `dist/ramda.js`. The project logo is CC-BY-NC-SA-3.0 \
+      but it is not part of the distributed .tar.gz package, see the `README.md` which says: \
+      Ramda logo artwork © 2014 J. C. Phillipps. Licensed Creative Commons CC BY-NC-SA 3.0"
+    concluded_license: "MIT"
 ```
 
 To use the curations file pass it to the `--package-curations-file` option of the `analyzer`:
