@@ -23,6 +23,9 @@ import com.here.ort.model.Identifier
 import com.here.ort.model.PackageCuration
 import com.here.ort.model.readValue
 
+import com.vdurmont.semver4j.Semver
+import com.vdurmont.semver4j.SemverException
+
 import java.io.File
 
 /**
@@ -35,5 +38,21 @@ class YamlFilePackageCurationProvider(
         curationFile.readValue<List<PackageCuration>>()
     }
 
-    override fun getCurationsFor(identifier: Identifier) = packageCurations.filter { it.id.matches(identifier) }
+    override fun getCurationsFor(packageId: Identifier): List<PackageCuration> {
+        val packageVersion = try {
+            Semver(packageId.version, Semver.SemverType.IVY)
+        } catch (e: SemverException) {
+            null
+        }
+
+        return packageCurations.filter { (curationId, _) ->
+            val resolvedVersion = try {
+                if (packageVersion?.satisfies(curationId.version) == true) packageId.version else curationId.version
+            } catch (e: SemverException) {
+                curationId.version
+            }
+
+            curationId.copy(version = resolvedVersion).matches(packageId)
+        }
+    }
 }

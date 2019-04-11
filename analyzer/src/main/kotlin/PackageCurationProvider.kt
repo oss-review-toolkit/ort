@@ -27,7 +27,7 @@ import com.here.ort.model.PackageCuration
  */
 interface PackageCurationProvider {
     /**
-     * Get all available [PackageCuration]s for the provided [Identifier].
+     * Get all available [PackageCuration]s for the provided [packageId].
      */
-    fun getCurationsFor(identifier: Identifier): List<PackageCuration>
+    fun getCurationsFor(packageId: Identifier): List<PackageCuration>
 }

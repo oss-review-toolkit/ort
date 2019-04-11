@@ -37,18 +37,10 @@ data class PackageCuration(
     val data: PackageCurationData
 ) {
     /**
-     * Apply the curation [data] to the provided package.
+     * Apply the curation [data] to the provided package. The caller has to take care that [data] is actually applicable
+     * to the [curatedPackage].
      *
      * @see [PackageCurationData.apply]
      */
-    fun apply(curatedPackage: CuratedPackage): CuratedPackage {
-        if (!id.matches(curatedPackage.pkg.id)) {
-            throw IllegalArgumentException(
-                "Package curation identifier '${id.toCoordinates()}' does not match " +
-                        "package identifier '${curatedPackage.pkg.id.toCoordinates()}'."
-            )
-        }
-
-        return data.apply(curatedPackage)
-    }
+    fun apply(curatedPackage: CuratedPackage) = data.apply(curatedPackage)
 }
