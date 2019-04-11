@@ -252,20 +252,21 @@ location of source artifacts. The structure of the curations file is:
 
 # A few examples:
 
-# Repository moved to https://gitlab.ow2.org.
 - id: "Maven:asm:asm" # No version means the curation will be applied to all versions of the package.
   curations:
+    comment: "Repository moved to https://gitlab.ow2.org."
     vcs:
       type: "git"
       url: "https://gitlab.ow2.org/asm/asm.git"
 
-# Revisions found by comparing NPM packages with the sources from https://github.com/olov/ast-traverse.
 - id: "NPM::ast-traverse:0.1.0"
   curations:
+    comment: "Revision found by comparing NPM packages with the sources from https://github.com/olov/ast-traverse."
     vcs:
       revision: "f864d24ba07cde4b79f16999b1c99bfb240a441e"
 - id: "NPM::ast-traverse:0.1.1"
   curations:
+    comment: "Revision found by comparing NPM packages with the sources from https://github.com/olov/ast-traverse."
     vcs:
       revision: "73f2b3c319af82fd8e490d40dd89a15951069b0d"
 ```
