@@ -35,5 +35,5 @@ class YamlFilePackageCurationProvider(
         curationFile.readValue<List<PackageCuration>>()
     }
 
-    override fun getCurationsFor(identifier: Identifier) = packageCurations.filter { it.id.matches(identifier) }
+    override fun getCurationsFor(pkgId: Identifier) = packageCurations.filter { it.isApplicable(pkgId) }
 }

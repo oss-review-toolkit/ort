@@ -104,34 +104,6 @@ data class Identifier(
     }
 
     /**
-     * Return true if this matches the other identifier. To match, both identifiers need to have the same [type] and
-     * [namespace], and the [name] and [version] must be either equal or empty for at least one of them.
-     *
-     * Examples for matching identifiers:
-     * * "maven:org.hamcrest:hamcrest-core:1.3" <-> "maven:org.hamcrest:hamcrest-core:"
-     * * "maven:org.hamcrest:hamcrest-core:1.3" <-> "maven:org.hamcrest::1.3"
-     * * "maven:org.hamcrest:hamcrest-core:1.3" <-> "maven:org.hamcrest::"
-     *
-     * Examples for not matching identifiers:
-     * * "maven:org.hamcrest:hamcrest-core:1.3" <-> "maven:org.hamcrest:hamcrest-core:1.2"
-     * * "maven:org.hamcrest:hamcrest-core:" <-> "maven:org.hamcrest:hamcrest-library:"
-     */
-    fun matches(other: Identifier): Boolean {
-        if (!type.equals(other.type, true)) {
-            return false
-        }
-
-        if (namespace != other.namespace) {
-            return false
-        }
-
-        val nameMatches = name == other.name || name.isBlank() || other.name.isBlank()
-        val versionMatches = version == other.version || version.isBlank() || other.version.isBlank()
-
-        return nameMatches && versionMatches
-    }
-
-    /**
      * Create Maven-like coordinates based on the properties of the [Identifier].
      */
     // TODO: We probably want to already sanitize the individual properties, also in other classes, but Kotlin does not

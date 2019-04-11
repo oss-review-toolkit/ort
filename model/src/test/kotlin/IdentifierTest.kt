@@ -61,40 +61,6 @@ class IdentifierTest : StringSpec() {
             }
         }
 
-        "Identifiers match correctly" {
-            val matching = mapOf(
-                "maven:org.hamcrest:hamcrest-core:1.3"
-                        to "maven:org.hamcrest:hamcrest-core:1.3",
-                "maven:org.hamcrest:hamcrest-core:1.3"
-                        to "maven:org.hamcrest:hamcrest-core:",
-                "maven:org.hamcrest:hamcrest-core:1.3"
-                        to "maven:org.hamcrest::1.3",
-                "maven:org.hamcrest:hamcrest-core:1.3"
-                        to "maven:org.hamcrest::"
-            )
-
-            val nonMatching = mapOf(
-                "maven:org.hamcrest:hamcrest-core:1.3"
-                        to "maven:org.hamcrest:hamcrest-core:1.2",
-                "maven:org.hamcrest:hamcrest-core:1.3"
-                        to "maven:org.hamcrest:hamcrest-library:",
-                "maven:org.hamcrest:hamcrest-core:"
-                        to "maven:org.hamcrest:hamcrest-library:",
-                "maven:org.hamcrest::"
-                        to "maven:org.apache::",
-                "maven:org.hamcrest::"
-                        to "gradle:org.hamcrest::"
-            )
-
-            matching.forEach { id1, id2 ->
-                Identifier(id1).matches(Identifier(id2)) shouldBe true
-            }
-
-            nonMatching.forEach { id1, id2 ->
-                Identifier(id1).matches(Identifier(id2)) shouldBe false
-            }
-        }
-
         "Identifier is serialized to String" {
             val id = Identifier("type", "namespace", "name", "version")
 

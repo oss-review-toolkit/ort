@@ -37,3 +37,6 @@
 - id: "Maven:org.apache::"
   curations:
     homepage_url: "http://home.page"
+- id: "NPM::ramda:[0.21.0,0.25.0]"
+  curations:
+    concluded_license: "MIT"
