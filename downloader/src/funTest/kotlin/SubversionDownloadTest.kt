@@ -54,7 +54,7 @@ class SubversionDownloadTest : StringSpec() {
     }
 
     init {
-        "Subversion can download a given revision".config(enabled = svn.isInPath(), tags = setOf(ExpensiveTag)) {
+        "Subversion can download a given revision".config(tags = setOf(ExpensiveTag)) {
             val pkg = Package.EMPTY.copy(vcsProcessed = VcsInfo("Subversion", REPO_URL, REPO_REV))
             val expectedFiles = listOf(
                 ".svn",
@@ -73,7 +73,7 @@ class SubversionDownloadTest : StringSpec() {
         }
 
         "Subversion can download only a single path"
-            .config(enabled = svn.isInPath(), tags = setOf(ExpensiveTag)) {
+            .config(tags = setOf(ExpensiveTag)) {
                 val pkg = Package.EMPTY.copy(vcsProcessed = VcsInfo("Subversion", REPO_URL, REPO_REV, path = REPO_PATH))
                 val expectedFiles = listOf(
                     "SendMessage.sln",
@@ -94,7 +94,7 @@ class SubversionDownloadTest : StringSpec() {
                 actualFiles.joinToString("\n") shouldBe expectedFiles.joinToString("\n")
             }
 
-        "Subversion can download a given tag".config(enabled = svn.isInPath(), tags = setOf(ExpensiveTag)) {
+        "Subversion can download a given tag".config(tags = setOf(ExpensiveTag)) {
             val pkg = Package.EMPTY.copy(vcsProcessed = VcsInfo("Subversion", REPO_URL, "", path = REPO_TAG))
             val expectedFiles = listOf(
                 "SendMessage.proj",
@@ -113,7 +113,7 @@ class SubversionDownloadTest : StringSpec() {
         }
 
         "Subversion can download based on a version"
-            .config(enabled = svn.isInPath(), tags = setOf(ExpensiveTag)) {
+            .config(tags = setOf(ExpensiveTag)) {
                 val pkg = Package.EMPTY.copy(
                     id = Identifier("Test:::$REPO_VERSION"),
                     vcsProcessed = VcsInfo("Subversion", REPO_URL, "")
@@ -126,7 +126,7 @@ class SubversionDownloadTest : StringSpec() {
             }
 
         "Subversion can download only a single path based on a version"
-            .config(enabled = svn.isInPath(), tags = setOf(ExpensiveTag)) {
+            .config(tags = setOf(ExpensiveTag)) {
                 val pkg = Package.EMPTY.copy(
                     id = Identifier("Test:::$REPO_VERSION"),
                     vcsProcessed = VcsInfo("Subversion", REPO_URL, "", path = REPO_PATH_FOR_VERSION)

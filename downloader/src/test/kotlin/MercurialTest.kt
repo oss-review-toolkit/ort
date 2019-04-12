@@ -49,24 +49,24 @@ class MercurialTest : StringSpec() {
     }
 
     init {
-        "Detected Mercurial version is not empty".config(enabled = hg.isInPath()) {
+        "Detected Mercurial version is not empty" {
             val version = hg.getVersion()
             println("Mercurial version $version detected.")
             version shouldNotBe ""
         }
 
-        "Mercurial detects non-working-trees".config(enabled = hg.isInPath()) {
+        "Mercurial detects non-working-trees" {
             hg.getWorkingTree(getUserOrtDirectory()).isValid() shouldBe false
         }
 
-        "Mercurial correctly detects URLs to remote repositories".config(enabled = hg.isInPath()) {
+        "Mercurial correctly detects URLs to remote repositories" {
             hg.isApplicableUrl("https://bitbucket.org/paniq/masagin") shouldBe true
 
             // Bitbucket forwards to ".git" URLs for Git repositories, so we can omit the suffix.
             hg.isApplicableUrl("https://bitbucket.org/yevster/spdxtraxample") shouldBe false
         }
 
-        "Detected Mercurial working tree information is correct".config(enabled = hg.isInPath()) {
+        "Detected Mercurial working tree information is correct" {
             val workingTree = hg.getWorkingTree(zipContentDir)
 
             workingTree.vcsType shouldBe "Mercurial"
@@ -77,7 +77,7 @@ class MercurialTest : StringSpec() {
             workingTree.getPathToRoot(File(zipContentDir, "tests")) shouldBe "tests"
         }
 
-        "Mercurial correctly lists remote branches".config(enabled = hg.isInPath()) {
+        "Mercurial correctly lists remote branches" {
             val expectedBranches = listOf(
                 "default"
             )
@@ -86,7 +86,7 @@ class MercurialTest : StringSpec() {
             workingTree.listRemoteBranches().joinToString("\n") shouldBe expectedBranches.joinToString("\n")
         }
 
-        "Mercurial correctly lists remote tags".config(enabled = hg.isInPath()) {
+        "Mercurial correctly lists remote tags" {
             val expectedTags = listOf(
                 "1.0",
                 "1.0.1",
