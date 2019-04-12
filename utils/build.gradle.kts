@@ -37,6 +37,5 @@ dependencies {
     implementation("org.tukaani:xz:$xzVersion")
 
     implementation("org.jetbrains.kotlin:kotlin-compiler-embeddable")
-    implementation("org.jetbrains.kotlin:kotlin-script-runtime")
     implementation("org.jetbrains.kotlin:kotlin-script-util")
 }
