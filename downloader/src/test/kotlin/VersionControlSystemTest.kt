@@ -19,7 +19,6 @@
 
 package com.here.ort.downloader
 
-import com.here.ort.downloader.vcs.Mercurial
 import com.here.ort.model.VcsInfo
 
 import io.kotlintest.shouldBe
@@ -106,7 +105,7 @@ class VersionControlSystemTest : WordSpec({
     }
 
     "splitUrl for Bitbucket" should {
-        "not modify URLs without a path".config(enabled = Mercurial().isInPath()) {
+        "not modify URLs without a path" {
             val actual = VersionControlSystem.splitUrl(
                 "https://bitbucket.org/paniq/masagin"
             )

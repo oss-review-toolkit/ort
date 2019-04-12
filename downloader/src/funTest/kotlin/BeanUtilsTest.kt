@@ -19,7 +19,6 @@
 
 package com.here.ort.downloader
 
-import com.here.ort.downloader.vcs.Subversion
 import com.here.ort.model.Identifier
 import com.here.ort.model.Package
 import com.here.ort.model.RemoteArtifact
@@ -46,7 +45,7 @@ class BeanUtilsTest : StringSpec() {
     }
 
     init {
-        "BeanUtils SVN tag should be correctly downloaded".config(enabled = Subversion().isInPath()) {
+        "BeanUtils SVN tag should be correctly downloaded" {
             val vcsFromCuration = VcsInfo(
                 type = "svn",
                 url = "http://svn.apache.org/repos/asf/commons/proper/beanutils",

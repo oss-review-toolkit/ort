@@ -52,7 +52,7 @@ class MercurialDownloadTest : StringSpec() {
     }
 
     init {
-        "Mercurial can download a given revision".config(enabled = hg.isInPath(), tags = setOf(ExpensiveTag)) {
+        "Mercurial can download a given revision".config(tags = setOf(ExpensiveTag)) {
             val pkg = Package.EMPTY.copy(vcsProcessed = VcsInfo("Mercurial", REPO_URL, REPO_REV))
             val expectedFiles = listOf(
                 ".hg",
@@ -75,10 +75,7 @@ class MercurialDownloadTest : StringSpec() {
         }
 
         "Mercurial can download only a single path"
-            .config(
-                enabled = hg.isInPath() && hg.isAtLeastVersion("4.3"),
-                tags = setOf(ExpensiveTag)
-            ) {
+            .config(enabled = hg.isAtLeastVersion("4.3"), tags = setOf(ExpensiveTag)) {
                 val pkg = Package.EMPTY.copy(vcsProcessed = VcsInfo("Mercurial", REPO_URL, REPO_REV, path = REPO_PATH))
                 val expectedFiles = listOf(
                     File(".hgsub"), // We always get these configuration files, if present.
@@ -106,7 +103,7 @@ class MercurialDownloadTest : StringSpec() {
                 actualFiles.joinToString("\n") shouldBe expectedFiles.joinToString("\n")
             }
 
-        "Mercurial can download based on a version".config(enabled = hg.isInPath(), tags = setOf(ExpensiveTag)) {
+        "Mercurial can download based on a version".config(tags = setOf(ExpensiveTag)) {
             val pkg = Package.EMPTY.copy(
                 id = Identifier("Test:::$REPO_VERSION"),
                 vcsProcessed = VcsInfo("Mercurial", REPO_URL, "")
@@ -119,10 +116,7 @@ class MercurialDownloadTest : StringSpec() {
         }
 
         "Mercurial can download only a single path based on a version"
-            .config(
-                enabled = hg.isInPath() && hg.isAtLeastVersion("4.3"),
-                tags = setOf(ExpensiveTag)
-            ) {
+            .config(enabled = hg.isAtLeastVersion("4.3"), tags = setOf(ExpensiveTag)) {
                 val pkg = Package.EMPTY.copy(
                     id = Identifier("Test:::$REPO_VERSION"),
                     vcsProcessed = VcsInfo("Mercurial", REPO_URL, "", path = REPO_PATH_FOR_VERSION)

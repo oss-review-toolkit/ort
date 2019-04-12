@@ -49,22 +49,22 @@ class SubversionTest : StringSpec() {
     }
 
     init {
-        "Detected Subversion version is not empty".config(enabled = svn.isInPath()) {
+        "Detected Subversion version is not empty" {
             val version = svn.getVersion()
             println("Subversion version $version detected.")
             version shouldNotBe ""
         }
 
-        "Subversion detects non-working-trees".config(enabled = svn.isInPath()) {
+        "Subversion detects non-working-trees" {
             svn.getWorkingTree(getUserOrtDirectory()).isValid() shouldBe false
         }
 
-        "Subversion correctly detects URLs to remote repositories".config(enabled = svn.isInPath()) {
+        "Subversion correctly detects URLs to remote repositories" {
             svn.isApplicableUrl("http://svn.code.sf.net/p/grepwin/code/") shouldBe true
             svn.isApplicableUrl("https://bitbucket.org/facebook/lz4revlog") shouldBe false
         }
 
-        "Detected Subversion working tree information is correct".config(enabled = svn.isInPath()) {
+        "Detected Subversion working tree information is correct" {
             val workingTree = svn.getWorkingTree(zipContentDir)
 
             workingTree.vcsType shouldBe "Subversion"
@@ -75,7 +75,7 @@ class SubversionTest : StringSpec() {
             workingTree.getPathToRoot(File(zipContentDir, "docutils")) shouldBe "docutils"
         }
 
-        "Subversion correctly lists remote branches".config(enabled = svn.isInPath()) {
+        "Subversion correctly lists remote branches" {
             val expectedBranches = listOf(
                 "address-rendering",
                 "index-bug",
@@ -89,7 +89,7 @@ class SubversionTest : StringSpec() {
             workingTree.listRemoteBranches().joinToString("\n") shouldBe expectedBranches.joinToString("\n")
         }
 
-        "Subversion correctly lists remote tags".config(enabled = svn.isInPath()) {
+        "Subversion correctly lists remote tags" {
             val expectedTags = listOf(
                 "docutils-0.10",
                 "docutils-0.11",

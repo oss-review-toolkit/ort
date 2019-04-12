@@ -48,23 +48,23 @@ class CvsTest : StringSpec() {
     }
 
     init {
-        "Detected CVS version is not empty".config(enabled = cvs.isInPath()) {
+        "Detected CVS version is not empty" {
             val version = cvs.getVersion()
             println("CVS version $version detected.")
             version shouldNotBe ""
         }
 
-        "CVS detects non-working-trees".config(enabled = cvs.isInPath()) {
+        "CVS detects non-working-trees" {
             cvs.getWorkingTree(getUserOrtDirectory()).isValid() shouldBe false
         }
 
-        "CVS correctly detects URLs to remote repositories".config(enabled = cvs.isInPath() && false) {
+        "CVS correctly detects URLs to remote repositories".config(enabled = false) {
             cvs.isApplicableUrl(":pserver:anonymous@tyrex.cvs.sourceforge.net:/cvsroot/tyrex") shouldBe true
             cvs.isApplicableUrl(":ext:jrandom@cvs.foobar.com:/usr/local/cvs") shouldBe true
             cvs.isApplicableUrl("http://svn.code.sf.net/p/grepwin/code/") shouldBe false
         }
 
-        "Detected CVS working tree information is correct".config(enabled = cvs.isInPath() && false) {
+        "Detected CVS working tree information is correct".config(enabled = false) {
             val workingTree = cvs.getWorkingTree(zipContentDir)
 
             workingTree.vcsType shouldBe "Cvs"
@@ -75,7 +75,7 @@ class CvsTest : StringSpec() {
             workingTree.getPathToRoot(File(zipContentDir, "tomcat")) shouldBe "tomcat"
         }
 
-        "CVS correctly lists remote branches".config(enabled = cvs.isInPath() && false) {
+        "CVS correctly lists remote branches".config(enabled = false) {
             val expectedBranches = listOf(
                 "Exoffice"
             )
@@ -84,7 +84,7 @@ class CvsTest : StringSpec() {
             workingTree.listRemoteBranches().joinToString("\n") shouldBe expectedBranches.joinToString("\n")
         }
 
-        "CVS correctly lists remote tags".config(enabled = cvs.isInPath() && false) {
+        "CVS correctly lists remote tags".config(enabled = false) {
             val expectedTags = listOf(
                 "A02",
                 "A03",
