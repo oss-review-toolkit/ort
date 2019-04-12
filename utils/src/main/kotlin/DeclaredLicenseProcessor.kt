@@ -35,8 +35,7 @@ object DeclaredLicenseProcessor {
         val unmapped = mutableListOf<String>()
 
         declaredLicenses.forEach { declaredLicense ->
-            val processedLicense = process(declaredLicense)
-            if (processedLicense != null) processedLicenses += processedLicense else unmapped += declaredLicense
+            process(declaredLicense)?.let { processedLicenses += it } ?: run { unmapped += declaredLicense }
         }
 
         val spdxExpression = when {
