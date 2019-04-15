@@ -21,14 +21,16 @@ package com.here.ort.analyzer
 
 import com.here.ort.model.Identifier
 import com.here.ort.model.PackageCuration
+import com.here.ort.model.OutputFormat
 import com.here.ort.model.readValue
 
 import java.io.File
 
 /**
- * A [PackageCurationProvider] that loads [PackageCuration]s from a single YAML file.
+ * A [PackageCurationProvider] that loads [PackageCuration]s from a single file. Supports all file formats specified
+ * in [OutputFormat].
  */
-class YamlFilePackageCurationProvider(
+class FilePackageCurationProvider(
     curationFile: File
 ) : PackageCurationProvider {
     internal val packageCurations: List<PackageCuration> by lazy {
