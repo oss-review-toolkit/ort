@@ -110,7 +110,7 @@ class Analyzer(private val config: AnalyzerConfiguration) {
             val results = manager.resolveDependencies(absoluteProjectPath, files)
 
             val curatedResults = packageCurationsFile?.let {
-                val provider = YamlFilePackageCurationProvider(it)
+                val provider = FilePackageCurationProvider(it)
                 results.mapValues { entry ->
                     ProjectAnalyzerResult(
                         project = entry.value.project,

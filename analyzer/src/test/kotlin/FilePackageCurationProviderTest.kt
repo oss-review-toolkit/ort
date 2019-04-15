@@ -29,18 +29,18 @@ import io.kotlintest.specs.StringSpec
 
 import java.io.File
 
-class YamlFilePackageCurationProviderTest : StringSpec() {
+class FilePackageCurationProviderTest : StringSpec() {
     private val curationsFile = File("src/test/assets/package-curations.yml")
 
     init {
         "Provider can read YAML file" {
-            val provider = YamlFilePackageCurationProvider(curationsFile)
+            val provider = FilePackageCurationProvider(curationsFile)
 
             provider.packageCurations should haveSize(8)
         }
 
         "Provider returns only matching curations for a fixed version" {
-            val provider = YamlFilePackageCurationProvider(curationsFile)
+            val provider = FilePackageCurationProvider(curationsFile)
 
             val identifier = Identifier("maven", "org.hamcrest", "hamcrest-core", "1.3")
             val curations = provider.getCurationsFor(identifier)
@@ -55,7 +55,7 @@ class YamlFilePackageCurationProviderTest : StringSpec() {
         }
 
         "Provider returns only matching curations for a version range" {
-            val provider = YamlFilePackageCurationProvider(curationsFile)
+            val provider = FilePackageCurationProvider(curationsFile)
 
             val idMinVersion = Identifier("npm", "", "ramda", "0.21.0")
             val idMaxVersion = Identifier("npm", "", "ramda", "0.25.0")
