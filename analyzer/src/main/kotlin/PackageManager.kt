@@ -181,7 +181,7 @@ abstract class PackageManager(
     /**
      * Optional preparation step for dependency resolution, like checking for prerequisites.
      */
-    protected open fun prepareResolution(definitionFiles: List<File>) = Unit
+    protected open fun prepareResolution(definitionFiles: List<File>) {}
 
     /**
      * Return a tree of resolved dependencies (not necessarily declared dependencies, in case conflicts were resolved)
