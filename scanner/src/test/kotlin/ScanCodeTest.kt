@@ -142,7 +142,7 @@ class ScanCodeTest : WordSpec({
             val path = "test/3rdparty/jquery-1.9.1.js"
             val copyrights = result["files"].find {
                 it["path"].asText() == path
-            }!!.get("copyrights")
+            }!!.get("copyrights").toList()
 
             scanner.getClosestCopyrightStatements(path, copyrights, 5) shouldBe sortedSetOf(
                 CopyrightFinding(
@@ -164,7 +164,7 @@ class ScanCodeTest : WordSpec({
             val path = "test/3rdparty/mootools-1.4.5.js"
             val copyrights = result["files"].find {
                 it["path"].asText() == path
-            }!!.get("copyrights")
+            }!!.get("copyrights").toList()
 
             scanner.getClosestCopyrightStatements(path, copyrights, 28) shouldBe sortedSetOf(
                 CopyrightFinding(
