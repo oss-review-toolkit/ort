@@ -88,7 +88,7 @@ project:
                   - id: "NPM::object-visit:1.0.1"
                     dependencies:
                     - id: "NPM::isobject:3.0.1"
-                - id: "NPM::component-emitter:1.2.1"
+                - id: "NPM::component-emitter:1.3.0"
                 - id: "NPM::get-value:2.0.6"
                 - id: "NPM::has-value:1.0.0"
                   dependencies:
@@ -215,7 +215,7 @@ project:
                     - id: "NPM::kind-of:3.2.2"
                       dependencies:
                       - id: "NPM::is-buffer:1.1.6"
-              - id: "NPM::component-emitter:1.2.1"
+              - id: "NPM::component-emitter:1.3.0"
               - id: "NPM::define-property:1.0.0"
                 dependencies:
                 - id: "NPM::is-descriptor:1.0.2"
@@ -440,7 +440,7 @@ project:
           - id: "NPM::is-extendable:0.1.1"
         - id: "NPM::snapdragon:0.11.5"
           dependencies:
-          - id: "NPM::component-emitter:1.2.1"
+          - id: "NPM::component-emitter:1.3.0"
           - id: "NPM::debug:2.6.9"
             dependencies:
             - id: "NPM::ms:2.0.0"
@@ -1209,8 +1209,8 @@ packages:
       path: ""
   curations: []
 - package:
-    id: "NPM::component-emitter:1.2.1"
-    purl: "pkg://NPM//component-emitter@1.2.1"
+    id: "NPM::component-emitter:1.3.0"
+    purl: "pkg://NPM//component-emitter@1.3.0"
     declared_licenses:
     - "MIT"
     declared_licenses_processed:
@@ -1222,18 +1222,18 @@ packages:
       hash: ""
       hash_algorithm: ""
     source_artifact:
-      url: "https://registry.npmjs.org/component-emitter/-/component-emitter-1.2.1.tgz"
-      hash: "137918d6d78283f7df7a6b7c5a63e140e69425e6"
+      url: "https://registry.npmjs.org/component-emitter/-/component-emitter-1.3.0.tgz"
+      hash: "16e4070fba8ae29b679f2215853ee181ab2eabc0"
       hash_algorithm: "SHA-1"
     vcs:
       type: "git"
       url: "git+https://github.com/component/emitter.git"
-      revision: "187492ab8028c7221b589bdfd482b715149cd868"
+      revision: "6bd7817e8a444cb16e8abdf7dd2d7f04d5ca3dc8"
       path: ""
     vcs_processed:
       type: "git"
       url: "https://github.com/component/emitter.git"
-      revision: "187492ab8028c7221b589bdfd482b715149cd868"
+      revision: "6bd7817e8a444cb16e8abdf7dd2d7f04d5ca3dc8"
       path: ""
   curations: []
 - package:
