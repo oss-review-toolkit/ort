@@ -410,7 +410,7 @@ class ScanCode(name: String, config: ScannerConfiguration) : LocalScanner(name, 
      */
     internal fun getClosestCopyrightStatements(
         path: String,
-        copyrights: JsonNode,
+        copyrights: Collection<JsonNode>,
         licenseStartLine: Int,
         toleranceLines: Int = 5
     ): SortedSet<CopyrightFinding> {
@@ -433,8 +433,8 @@ class ScanCode(name: String, config: ScannerConfiguration) : LocalScanner(name, 
      */
     private fun associateFileFindings(
         path: String,
-        licenses: JsonNode,
-        copyrights: JsonNode,
+        licenses: Collection<JsonNode>,
+        copyrights: Collection<JsonNode>,
         rootLicense: String = ""
     ): SortedMap<String, MutableSet<CopyrightFinding>> {
         val copyrightsForLicenses = sortedMapOf<String, MutableSet<CopyrightFinding>>()
@@ -448,7 +448,7 @@ class ScanCode(name: String, config: ScannerConfiguration) : LocalScanner(name, 
             }
         }.toSortedSet()
 
-        when (licenses.size()) {
+        when (licenses.size) {
             0 -> {
                 // If there is no license finding but copyright findings, associate them with the root license, if any.
                 if (allCopyrightStatements.isNotEmpty() && rootLicense.isNotEmpty()) {
@@ -488,7 +488,7 @@ class ScanCode(name: String, config: ScannerConfiguration) : LocalScanner(name, 
         result["files"].forEach { file ->
             val path = file["path"].asText()
 
-            val licenses = file["licenses"] ?: EMPTY_JSON_NODE
+            val licenses = file["licenses"]?.toList().orEmpty()
             licenses.forEach {
                 val licenseId = getLicenseId(it)
                 val licenseStartLine = it["start_line"].intValue()
@@ -498,7 +498,7 @@ class ScanCode(name: String, config: ScannerConfiguration) : LocalScanner(name, 
                     TextLocation(path, licenseStartLine, licenseEndLine)
             }
 
-            val copyrights = file["copyrights"] ?: EMPTY_JSON_NODE
+            val copyrights = file["copyrights"]?.toList().orEmpty()
             val findings = associateFileFindings(path, licenses, copyrights, rootLicense)
             findings.forEach { license, copyrightsForLicense ->
                 copyrightsForLicenses.getOrPut(license) { sortedSetOf() }.let { copyrightFindings ->
