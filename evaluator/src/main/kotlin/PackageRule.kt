@@ -104,11 +104,7 @@ open class PackageRule(
         val licenses = licenseView.licenses(pkg, detectedLicenses.map { it.license })
 
         licenses.forEach { (license, licenseSource) ->
-            val findings = if (licenseSource == LicenseSource.DETECTED) {
-                ruleSet.ortResult.collectLicenseFindings()[pkg.id].orEmpty()
-            } else {
-                emptyMap()
-            }
+            val findings = ruleSet.licenseFindings[pkg.id].orEmpty()
 
             licenseRules += LicenseRule(name, license, licenseSource, findings).apply(block)
         }
