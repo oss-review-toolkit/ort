@@ -207,7 +207,7 @@ class ScanCode(name: String, config: ScannerConfiguration) : LocalScanner(name, 
         }
     }
 
-    override val scannerVersion = "2.9.7"
+    override val scannerVersion = "3.0.2"
     override val resultFileExt = "json"
 
     private val scanCodeConfiguration = config.scanner?.get("ScanCode") ?: emptyMap()
@@ -343,8 +343,20 @@ class ScanCode(name: String, config: ScannerConfiguration) : LocalScanner(name, 
             EMPTY_JSON_NODE
         }
 
+    private fun getFileCount(result: JsonNode): Int {
+        // Handling for ScanCode 2.9.8 and above.
+        result["headers"]?.forEach { header ->
+            header["extra_data"]?.get("files_count")?.let {
+                return it.intValue()
+            }
+        }
+
+        // Handling for ScanCode 2.9.7 and below.
+        return result["files_count"].intValue()
+    }
+
     override fun generateSummary(startTime: Instant, endTime: Instant, result: JsonNode): ScanSummary {
-        val fileCount = result["files_count"].intValue()
+        val fileCount = getFileCount(result)
         val findings = associateFindings(result)
         val errors = mutableListOf<OrtIssue>()
 
