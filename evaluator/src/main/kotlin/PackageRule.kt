@@ -105,7 +105,7 @@ open class PackageRule(
 
         licenses.forEach { (license, licenseSource) ->
             val findings = if (licenseSource == LicenseSource.DETECTED) {
-                ruleSet.ortResult.collectLicenseFindings()[pkg.id].orEmpty()
+                ruleSet.licenseFindings[pkg.id].orEmpty()
             } else {
                 emptyMap()
             }

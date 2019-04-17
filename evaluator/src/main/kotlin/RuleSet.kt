@@ -19,6 +19,8 @@
 
 package com.here.ort.evaluator
 
+import com.here.ort.model.Identifier
+import com.here.ort.model.LicenseFinding
 import com.here.ort.model.OrtIssue
 import com.here.ort.model.OrtResult
 import com.here.ort.model.Package
@@ -34,6 +36,11 @@ class RuleSet(val ortResult: OrtResult) {
      * The list of all issues created by the rules of this [RuleSet].
      */
     val issues = mutableSetOf<OrtIssue>()
+
+    /**
+     * The map of all [LicenseFinding]s and associated path excludes by [Identifier].
+     */
+    val licenseFindings = ortResult.collectLicenseFindings()
 
     /**
      * A DSL function to configure a [PackageRule]. The rule is applied to each [Package] and [Project] contained in
