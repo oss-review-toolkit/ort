@@ -488,11 +488,7 @@ class ScanCode(name: String, config: ScannerConfiguration) : LocalScanner(name, 
         result["files"].forEach { file ->
             val path = file["path"].asText()
 
-            val licenses = file["licenses"]?.filter {
-                // TODO: Remove this once we properly handle license expressions throughout the code base and rules.
-                it["is_exception"]?.booleanValue() != true
-            }.orEmpty()
-
+            val licenses = file["licenses"]?.toList().orEmpty()
             licenses.forEach {
                 val licenseId = getLicenseId(it)
                 val licenseStartLine = it["start_line"].intValue()
