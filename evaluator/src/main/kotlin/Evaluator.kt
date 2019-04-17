@@ -28,6 +28,7 @@ import java.time.Instant
 
 class Evaluator(ortResult: OrtResult) : ScriptRunner() {
     override val preface = """
+            import com.here.ort.evaluator.*
             import com.here.ort.model.*
             import com.here.ort.model.config.*
             import com.here.ort.spdx.*
