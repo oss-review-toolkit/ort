@@ -1,10 +1,7 @@
+import com.here.ort.gradle.*
+
 import org.ajoberstar.grgit.Grgit
 
-import org.gradle.plugins.ide.idea.model.IdeaModel
-import org.gradle.plugins.ide.idea.model.IdeaProject
-
-import org.jetbrains.gradle.ext.ProjectSettings
-import org.jetbrains.gradle.ext.TaskTriggersConfig
 import org.jetbrains.kotlin.gradle.dsl.KotlinCompile
 
 val jacksonVersion: String by project
@@ -52,17 +49,6 @@ val generateVersionResource by tasks.registering {
 tasks.withType(KotlinCompile::class) {
     dependsOn(generateVersionResource)
 }
-
-// The following extension functions add the missing Kotlin DSL syntactic sugar for configuring the idea-ext plugin.
-
-fun Project.idea(block: IdeaModel.() -> Unit) =
-    (this as ExtensionAware).extensions.configure("idea", block)
-
-fun IdeaProject.settings(block: ProjectSettings.() -> Unit) =
-    (this@settings as ExtensionAware).extensions.configure(block)
-
-fun ProjectSettings.taskTriggers(block: TaskTriggersConfig.() -> Unit) =
-    (this@taskTriggers as ExtensionAware).extensions.configure("taskTriggers", block)
 
 rootProject.idea {
     project {

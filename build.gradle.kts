@@ -1,17 +1,14 @@
 import com.github.benmanes.gradle.versions.updates.DependencyUpdatesTask
 
+import com.here.ort.gradle.*
+
 import io.gitlab.arturbosch.detekt.detekt
 
 import org.gradle.api.tasks.testing.logging.TestExceptionFormat
 import org.gradle.api.tasks.testing.logging.TestLogEvent
-import org.gradle.plugins.ide.idea.model.IdeaModel
-import org.gradle.plugins.ide.idea.model.IdeaProject
 
 import org.jetbrains.dokka.gradle.DokkaTask
-import org.jetbrains.gradle.ext.DefaultRunConfigurationContainer
 import org.jetbrains.gradle.ext.JUnit
-import org.jetbrains.gradle.ext.ProjectSettings
-import org.jetbrains.gradle.ext.RunConfiguration
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import org.jetbrains.kotlin.gradle.plugin.KotlinSourceSet
 
@@ -33,20 +30,6 @@ plugins {
     id("org.ajoberstar.grgit")
     id("org.jetbrains.gradle.plugin.idea-ext")
 }
-
-// The following extension functions add the missing Kotlin DSL syntactic sugar for configuring the idea-ext plugin.
-
-fun Project.idea(block: IdeaModel.() -> Unit) =
-    (this as ExtensionAware).extensions.configure("idea", block)
-
-fun IdeaProject.settings(block: ProjectSettings.() -> Unit) =
-    (this@settings as ExtensionAware).extensions.configure(block)
-
-fun ProjectSettings.runConfigurations(block: DefaultRunConfigurationContainer.() -> Unit) =
-    (this@runConfigurations as ExtensionAware).extensions.configure("runConfigurations", block)
-
-inline fun <reified T: RunConfiguration> DefaultRunConfigurationContainer.defaults(noinline block: T.() -> Unit) =
-    defaults(T::class.java, block)
 
 idea {
     project {
