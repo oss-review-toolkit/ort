@@ -142,7 +142,7 @@ class ScanCode(name: String, config: ScannerConfiguration) : LocalScanner(name, 
         )
     }
 
-    override val scannerVersion = "2.9.7"
+    override val scannerVersion = "3.0.2"
     override val resultFileExt = "json"
 
     private val scanCodeConfiguration = config.scanner?.get("ScanCode") ?: emptyMap()
@@ -283,8 +283,25 @@ class ScanCode(name: String, config: ScannerConfiguration) : LocalScanner(name, 
         }
     }
 
+    private fun getFileCount(result: JsonNode): Int {
+        result.get("headers")?.forEach { header ->
+            header.get("extra_data")?.get("files_count")?.let {
+                return it.intValue()
+            }
+        }
+
+        // Compute the value from scratch as fallback for backwards compatibility and to not
+        // depend on the presence of the header.
+        return result["files"]
+            .filter { it["type"].asText() == "file" } // skip directories
+            .map { it.get("path").asText() }
+            .distinct()
+            .size
+    }
+
     override fun generateSummary(startTime: Instant, endTime: Instant, result: JsonNode): ScanSummary {
-        val fileCount = result["files_count"].intValue()
+
+        var fileCount = getFileCount(result)
         val findings = associateFindings(result)
         val errors = mutableListOf<OrtIssue>()
 
