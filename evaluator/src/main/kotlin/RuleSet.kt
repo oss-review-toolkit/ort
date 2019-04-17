@@ -66,7 +66,13 @@ class RuleSet(val ortResult: OrtResult) {
             scope: Scope,
             project: Project
         ) {
-            val pkg = ortResult.analyzer?.result?.packages?.find { it.pkg.id == pkgRef.id }?.pkg!!
+            val pkg = ortResult.analyzer?.result?.let { analyzerResult ->
+                analyzerResult.packages.find { it.pkg.id == pkgRef.id }?.pkg
+                    ?: analyzerResult.projects.find { it.id == pkgRef.id }?.toPackage()
+            }
+
+            requireNotNull(pkg) { "Could not find package for package reference '${pkgRef.id.toCoordinates()}'." }
+
             val detectedLicenses = ortResult.collectLicenseFindings()[pkg.id].orEmpty().keys.toList()
 
             DependencyRule(this, name, pkg, detectedLicenses, pkgRef, ancestors, level, scope, project).apply {
