@@ -50,7 +50,7 @@ open class PackageRule(
     override fun errorSource() = "$name - ${pkg.id.toCoordinates()}"
 
     override fun runInternal() {
-        licenseRules.forEach { it.run() }
+        licenseRules.forEach { it.evaluate() }
     }
 
     /**

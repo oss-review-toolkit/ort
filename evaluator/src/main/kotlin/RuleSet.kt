@@ -48,7 +48,7 @@ class RuleSet(val ortResult: OrtResult) {
             val licenseFindings = ortResult.collectLicenseFindings()[pkg.id].orEmpty().keys.toList()
             PackageRule(this, name, pkg, licenseFindings).apply {
                 configure()
-                run()
+                evaluate()
             }
         }
     }
@@ -71,7 +71,7 @@ class RuleSet(val ortResult: OrtResult) {
 
             DependencyRule(this, name, pkg, detectedLicenses, pkgRef, ancestors, level, scope, project).apply {
                 configure()
-                run()
+                evaluate()
             }
 
             pkgRef.dependencies.forEach { dependency ->
