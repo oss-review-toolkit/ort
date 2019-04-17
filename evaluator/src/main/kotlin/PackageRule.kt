@@ -135,6 +135,18 @@ open class PackageRule(
          */
         val licenseFindings: Map<LicenseFinding, List<PathExclude>> = emptyMap()
     ) : Rule(ruleSet, name) {
+        /**
+         * A helper function to access [PackageRule.pkg] in extension functions for [LicenseRule], required because the
+         * properties of the outer class [PackageRule] cannot be accessed from an extension function.
+         */
+        fun pkg() = pkg
+
+        /**
+         * A helper function to access [PackageRule.detectedLicenses] in extension functions for [LicenseRule], required
+         * because the properties of the outer class [PackageRule] cannot be accessed from an extension function.
+         */
+        fun detectedLicenses() = detectedLicenses
+
         override val description = "\tEvaluating license rule '$name' for $licenseSource license '$license'."
 
         override fun errorSource() = "$name - $license ($licenseSource)"
