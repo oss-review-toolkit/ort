@@ -107,8 +107,8 @@ class GitRepo : GitBase() {
 
             // Clone all projects instead of only those in the "default" group until we support specifying groups.
             runRepoCommand(
-                targetDir, "init", "--groups=all", "-b", revision, "-u", pkg.vcsProcessed.url,
-                "-m", manifestPath
+                targetDir, "init", "--groups=all", "--no-repo-verify", "-b", revision,
+                "-u", pkg.vcsProcessed.url, "-m", manifestPath
             )
 
             // Repo allows to checkout Git repositories to nested directories. If a manifest is badly configured, a
