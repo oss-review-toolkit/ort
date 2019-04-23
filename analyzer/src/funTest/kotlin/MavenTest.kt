@@ -36,14 +36,14 @@ import io.kotlintest.specs.StringSpec
 import java.io.File
 
 class MavenTest : StringSpec() {
-    private val projectDir = File("src/funTest/assets/projects/synthetic/maven")
+    private val projectDir = File("src/funTest/assets/projects/synthetic/maven").absoluteFile
     private val vcsDir = VersionControlSystem.forDirectory(projectDir)!!
     private val vcsUrl = vcsDir.getRemoteUrl()
     private val vcsRevision = vcsDir.getRevision()
 
     init {
         "jgnash parent dependencies are detected correctly" {
-            val projectDir = File("src/funTest/assets/projects/external/jgnash")
+            val projectDir = File("src/funTest/assets/projects/external/jgnash").absoluteFile
             val pomFile = File(projectDir, "pom.xml")
             val expectedResult = File(projectDir.parentFile, "jgnash-expected-output.yml").readText()
 
@@ -53,7 +53,7 @@ class MavenTest : StringSpec() {
         }
 
         "jgnash-core dependencies are detected correctly" {
-            val projectDir = File("src/funTest/assets/projects/external/jgnash")
+            val projectDir = File("src/funTest/assets/projects/external/jgnash").absoluteFile
 
             val pomFileCore = File(projectDir, "jgnash-core/pom.xml")
             val pomFileResources = File(projectDir, "jgnash-resources/pom.xml")
@@ -117,7 +117,7 @@ class MavenTest : StringSpec() {
                 .resolve(".m2/repository/org/springframework/boot/spring-boot-starter-parent/1.5.3.RELEASE")
                 .safeDeleteRecursively(force = true)
 
-            val projectDir = File("src/funTest/assets/projects/synthetic/maven-parent")
+            val projectDir = File("src/funTest/assets/projects/synthetic/maven-parent").absoluteFile
             val pomFile = File(projectDir, "pom.xml")
             val expectedResult = patchExpectedResult(
                 File(projectDir.parentFile, "maven-parent-expected-output-root.yml"),

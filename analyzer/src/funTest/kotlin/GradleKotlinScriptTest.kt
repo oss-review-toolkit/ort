@@ -35,7 +35,7 @@ import io.kotlintest.specs.StringSpec
 import java.io.File
 
 class GradleKotlinScriptTest : StringSpec() {
-    private val projectDir = File("src/funTest/assets/projects/external/multi-kotlin-project")
+    private val projectDir = File("src/funTest/assets/projects/external/multi-kotlin-project").absoluteFile
     private val vcsDir = VersionControlSystem.forDirectory(projectDir)!!
     private val vcsUrl = vcsDir.getRemoteUrl()
     private val vcsRevision = vcsDir.getRevision()

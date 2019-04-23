@@ -38,7 +38,7 @@ import io.kotlintest.specs.WordSpec
 import java.io.File
 
 class NpmVersionUrlTest : WordSpec() {
-    private val projectDir = File("src/funTest/assets/projects/synthetic/npm-version-urls")
+    private val projectDir = File("src/funTest/assets/projects/synthetic/npm-version-urls").absoluteFile
     private val vcsDir = VersionControlSystem.forDirectory(projectDir)!!
     private val vcsUrl = vcsDir.getRemoteUrl()
     private val vcsRevision = vcsDir.getRevision()

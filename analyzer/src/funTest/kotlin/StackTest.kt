@@ -36,7 +36,7 @@ import io.kotlintest.specs.StringSpec
 import java.io.File
 
 class StackTest : StringSpec() {
-    private val projectsDir = File("src/funTest/assets/projects")
+    private val projectsDir = File("src/funTest/assets/projects").absoluteFile
 
     override fun beforeSpec(spec: Spec) {
         super.beforeSpec(spec)

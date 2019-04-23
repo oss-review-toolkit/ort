@@ -34,7 +34,7 @@ import java.io.File
 import java.time.Instant
 
 class DotNetSupportTest : StringSpec() {
-    private val projectDir = File("src/funTest/assets/projects/synthetic/dotnet")
+    private val projectDir = File("src/funTest/assets/projects/synthetic/dotnet").absoluteFile
 
     init {
         "non-existing version is mapped to most recent version" {

@@ -42,8 +42,8 @@ import com.fasterxml.jackson.module.kotlin.registerKotlinModule
 import java.io.File
 
 class DotNetTest : StringSpec() {
-    private val projectDir = File("src/funTest/assets/projects/synthetic/dotnet")
-    private val vcsDir = VersionControlSystem.forDirectory(projectDir.absoluteFile)!!
+    private val projectDir = File("src/funTest/assets/projects/synthetic/dotnet").absoluteFile
+    private val vcsDir = VersionControlSystem.forDirectory(projectDir)!!
     private val vcsUrl = vcsDir.getRemoteUrl()
     private val vcsRevision = vcsDir.getRevision()
     private val packageFile = File(projectDir, "subProjectTest/test.csproj")

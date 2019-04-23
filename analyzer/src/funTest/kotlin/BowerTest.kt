@@ -37,7 +37,7 @@ import io.kotlintest.specs.StringSpec
 import java.io.File
 
 class BowerTest : StringSpec() {
-    private val projectDir = File("src/funTest/assets/projects/synthetic/bower")
+    private val projectDir = File("src/funTest/assets/projects/synthetic/bower").absoluteFile
     private val vcsDir = VersionControlSystem.forDirectory(projectDir)!!
     private val vcsUrl = vcsDir.getRemoteUrl()
     private val vcsRevision = vcsDir.getRevision()
