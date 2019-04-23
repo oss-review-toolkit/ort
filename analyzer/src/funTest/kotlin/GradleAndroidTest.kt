@@ -36,7 +36,7 @@ import io.kotlintest.specs.StringSpec
 import java.io.File
 
 class GradleAndroidTest : StringSpec() {
-    private val projectDir = File("src/funTest/assets/projects/synthetic/gradle-android")
+    private val projectDir = File("src/funTest/assets/projects/synthetic/gradle-android").absoluteFile
     private val vcsDir = VersionControlSystem.forDirectory(projectDir)!!
     private val vcsUrl = vcsDir.getRemoteUrl()
     private val vcsRevision = vcsDir.getRevision()

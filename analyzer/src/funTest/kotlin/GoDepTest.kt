@@ -38,7 +38,7 @@ import io.kotlintest.specs.WordSpec
 import java.io.File
 
 class GoDepTest : WordSpec() {
-    private val projectsDir = File("src/funTest/assets/projects")
+    private val projectsDir = File("src/funTest/assets/projects").absoluteFile
 
     init {
         "GoDep" should {
@@ -92,7 +92,7 @@ class GoDepTest : WordSpec() {
             }
 
             "construct an import path from VCS info" {
-                val gopath = File("/tmp/gopath")
+                val gopath = File("/tmp/gopath").absoluteFile
                 val projectDir = File(projectsDir, "external/qmstr")
                 val vcs = VersionControlSystem.forDirectory(projectDir)!!.getInfo()
 
@@ -102,7 +102,7 @@ class GoDepTest : WordSpec() {
             }
 
             "construct an import path for directories that are not repositories" {
-                val gopath = File("/tmp/gopath")
+                val gopath = File("/tmp/gopath").absoluteFile
                 val projectDir = File(projectsDir, "synthetic/godep/no-lockfile")
                 val vcs = VcsInfo.EMPTY
 

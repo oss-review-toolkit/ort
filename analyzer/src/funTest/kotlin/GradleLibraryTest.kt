@@ -35,7 +35,7 @@ import io.kotlintest.specs.StringSpec
 import java.io.File
 
 class GradleLibraryTest : StringSpec() {
-    private val projectDir = File("src/funTest/assets/projects/synthetic/gradle-library")
+    private val projectDir = File("src/funTest/assets/projects/synthetic/gradle-library").absoluteFile
     private val vcsDir = VersionControlSystem.forDirectory(projectDir)!!
     private val vcsUrl = vcsDir.getRemoteUrl()
     private val vcsRevision = vcsDir.getRevision()

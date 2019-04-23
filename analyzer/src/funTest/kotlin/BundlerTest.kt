@@ -38,7 +38,7 @@ import io.kotlintest.specs.WordSpec
 import java.io.File
 
 class BundlerTest : WordSpec() {
-    private val projectsDir = File("src/funTest/assets/projects/synthetic/bundler")
+    private val projectsDir = File("src/funTest/assets/projects/synthetic/bundler").absoluteFile
     private val vcsDir = VersionControlSystem.forDirectory(projectsDir)!!
     private val vcsRevision = vcsDir.getRevision()
     private val vcsUrl = vcsDir.getRemoteUrl()

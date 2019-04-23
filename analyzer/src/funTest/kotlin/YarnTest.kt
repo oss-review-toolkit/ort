@@ -37,7 +37,7 @@ import io.kotlintest.specs.WordSpec
 import java.io.File
 
 class YarnTest : WordSpec() {
-    private val projectDir = File("src/funTest/assets/projects/synthetic/yarn")
+    private val projectDir = File("src/funTest/assets/projects/synthetic/yarn").absoluteFile
     private val vcsDir = VersionControlSystem.forDirectory(projectDir)!!
     private val vcsUrl = vcsDir.getRemoteUrl()
     private val vcsRevision = vcsDir.getRevision()

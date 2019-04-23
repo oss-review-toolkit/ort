@@ -45,7 +45,7 @@ import io.kotlintest.tables.table
 import java.io.File
 
 class GradleTest : StringSpec() {
-    private val projectDir = File("src/funTest/assets/projects/synthetic/gradle")
+    private val projectDir = File("src/funTest/assets/projects/synthetic/gradle").absoluteFile
     private val vcsDir = VersionControlSystem.forDirectory(projectDir)!!
     private val vcsUrl = vcsDir.getRemoteUrl()
     private val vcsRevision = vcsDir.getRevision()

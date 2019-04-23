@@ -34,7 +34,7 @@ import io.kotlintest.specs.WordSpec
 import java.io.File
 
 class PipTest : WordSpec() {
-    private val projectsDir = File("src/funTest/assets/projects")
+    private val projectsDir = File("src/funTest/assets/projects").absoluteFile
     private val vcsDir = VersionControlSystem.forDirectory(projectsDir)!!
     private val vcsUrl = vcsDir.getRemoteUrl()
     private val vcsRevision = vcsDir.getRevision()

@@ -38,7 +38,7 @@ import io.kotlintest.specs.StringSpec
 import java.io.File
 
 class PhpComposerTest : StringSpec() {
-    private val projectsDir = File("src/funTest/assets/projects/synthetic/php-composer")
+    private val projectsDir = File("src/funTest/assets/projects/synthetic/php-composer").absoluteFile
     private val vcsDir = VersionControlSystem.forDirectory(projectsDir)!!
     private val vcsRevision = vcsDir.getRevision()
     private val vcsUrl = vcsDir.getRemoteUrl()
