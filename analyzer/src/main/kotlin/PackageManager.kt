@@ -52,11 +52,13 @@ typealias ResolutionResult = MutableMap<File, ProjectAnalyzerResult>
  * A class representing a package manager that handles software dependencies.
  *
  * @param managerName The package manager's name.
+ * @param analyzerRoot The root directory of the analysis.
  * @param analyzerConfig The configuration of the analyzer to use.
  * @param repoConfig The configuration of the repository to use.
  */
 abstract class PackageManager(
     val managerName: String,
+    protected val analyzerRoot: File,
     protected val analyzerConfig: AnalyzerConfiguration,
     protected val repoConfig: RepositoryConfiguration
 ) {
@@ -187,7 +189,7 @@ abstract class PackageManager(
      * Return a tree of resolved dependencies (not necessarily declared dependencies, in case conflicts were resolved)
      * for all [definitionFiles] which were found by searching the [analyzerRoot] directory.
      */
-    open fun resolveDependencies(analyzerRoot: File, definitionFiles: List<File>): ResolutionResult {
+    open fun resolveDependencies(definitionFiles: List<File>): ResolutionResult {
         val result = mutableMapOf<File, ProjectAnalyzerResult>()
 
         prepareResolution(definitionFiles)

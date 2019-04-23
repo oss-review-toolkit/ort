@@ -67,8 +67,13 @@ import okhttp3.Request
 /**
  * The [Node package manager](https://www.npmjs.com/) for JavaScript.
  */
-open class NPM(name: String, analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfiguration) :
-    PackageManager(name, analyzerConfig, repoConfig), CommandLineTool {
+open class NPM(
+    name: String,
+    analyzerRoot: File,
+    analyzerConfig: AnalyzerConfiguration,
+    repoConfig: RepositoryConfiguration
+) :
+    PackageManager(name, analyzerRoot, analyzerConfig, repoConfig), CommandLineTool {
     companion object {
         /**
          * Expand NPM shortcuts for URLs to hosting sites to full URLs so that they can be used in a regular way.
@@ -113,8 +118,12 @@ open class NPM(name: String, analyzerConfig: AnalyzerConfiguration, repoConfig: 
     class Factory : AbstractPackageManagerFactory<NPM>("NPM") {
         override val globsForDefinitionFiles = listOf("package.json")
 
-        override fun create(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfiguration) =
-            NPM(managerName, analyzerConfig, repoConfig)
+        override fun create(
+            analyzerRoot: File,
+            analyzerConfig: AnalyzerConfiguration,
+            repoConfig: RepositoryConfiguration
+        ) =
+            NPM(managerName, analyzerRoot, analyzerConfig, repoConfig)
     }
 
     /**

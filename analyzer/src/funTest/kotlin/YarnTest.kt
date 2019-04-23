@@ -60,7 +60,7 @@ class YarnTest : WordSpec() {
         "yarn" should {
             "resolve dependencies correctly" {
                 val packageFile = File(projectDir, "package.json")
-                val result = createYarn().resolveDependencies(USER_DIR, listOf(packageFile))[packageFile]
+                val result = createYarn().resolveDependencies(listOf(packageFile))[packageFile]
                 val vcsPath = vcsDir.getPathToRoot(projectDir)
                 val expectedResult = patchExpectedResult(
                     File(projectDir.parentFile, "yarn-expected-output.yml"),
@@ -75,5 +75,6 @@ class YarnTest : WordSpec() {
         }
     }
 
-    private fun createYarn() = Yarn("Yarn", DEFAULT_ANALYZER_CONFIGURATION, DEFAULT_REPOSITORY_CONFIGURATION)
+    private fun createYarn() =
+        Yarn("Yarn", USER_DIR, DEFAULT_ANALYZER_CONFIGURATION, DEFAULT_REPOSITORY_CONFIGURATION)
 }

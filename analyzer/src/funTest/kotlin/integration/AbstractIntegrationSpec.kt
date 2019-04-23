@@ -116,8 +116,8 @@ abstract class AbstractIntegrationSpec : StringSpec() {
         "Analyzer creates one non-empty result per definition file".config(tags = setOf(ExpensiveTag)) {
             managedFilesForTest.forEach { manager, files ->
                 println("Resolving $manager dependencies in $files.")
-                val results = manager.create(DEFAULT_ANALYZER_CONFIGURATION, DEFAULT_REPOSITORY_CONFIGURATION)
-                    .resolveDependencies(USER_DIR, files)
+                val results = manager.create(USER_DIR, DEFAULT_ANALYZER_CONFIGURATION, DEFAULT_REPOSITORY_CONFIGURATION)
+                    .resolveDependencies(files)
 
                 results.size shouldBe files.size
                 results.values.forEach { result ->

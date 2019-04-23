@@ -44,8 +44,13 @@ import java.io.File
 /**
  * The [NuGet](https://www.nuget.org/) package manager for .NET.
  */
-class NuGet(name: String, analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfiguration) :
-    PackageManager(name, analyzerConfig, repoConfig) {
+class NuGet(
+    name: String,
+    analyzerRoot: File,
+    analyzerConfig: AnalyzerConfiguration,
+    repoConfig: RepositoryConfiguration
+) :
+    PackageManager(name, analyzerRoot, analyzerConfig, repoConfig) {
     companion object {
         fun mapPackageReferences(workingDir: File): Map<String, String> {
             val map = mutableMapOf<String, String>()
@@ -78,8 +83,12 @@ class NuGet(name: String, analyzerConfig: AnalyzerConfiguration, repoConfig: Rep
     class Factory : AbstractPackageManagerFactory<NuGet>("NuGet") {
         override val globsForDefinitionFiles = listOf("packages.config")
 
-        override fun create(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfiguration) =
-            NuGet(managerName, analyzerConfig, repoConfig)
+        override fun create(
+            analyzerRoot: File,
+            analyzerConfig: AnalyzerConfiguration,
+            repoConfig: RepositoryConfiguration
+        ) =
+            NuGet(managerName, analyzerRoot, analyzerConfig, repoConfig)
     }
 
     override fun resolveDependencies(definitionFile: File): ProjectAnalyzerResult? {

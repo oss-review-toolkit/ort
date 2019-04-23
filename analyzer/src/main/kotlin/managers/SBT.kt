@@ -41,8 +41,13 @@ import java.util.Properties
 /**
  * The [SBT](https://www.scala-sbt.org/) package manager for Scala.
  */
-class SBT(name: String, analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfiguration) :
-    PackageManager(name, analyzerConfig, repoConfig), CommandLineTool {
+class SBT(
+    name: String,
+    analyzerRoot: File,
+    analyzerConfig: AnalyzerConfiguration,
+    repoConfig: RepositoryConfiguration
+) :
+    PackageManager(name, analyzerRoot, analyzerConfig, repoConfig), CommandLineTool {
     companion object {
         private val VERSION_REGEX = Regex("\\[info]\\s+(\\d+\\.\\d+\\.[^\\s]+)")
         private val PROJECT_REGEX = Regex("\\[info] \t [ *] (.+)")
@@ -65,8 +70,12 @@ class SBT(name: String, analyzerConfig: AnalyzerConfiguration, repoConfig: Repos
     class Factory : AbstractPackageManagerFactory<SBT>("SBT") {
         override val globsForDefinitionFiles = listOf("build.sbt", "build.scala")
 
-        override fun create(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfiguration) =
-            SBT(managerName, analyzerConfig, repoConfig)
+        override fun create(
+            analyzerRoot: File,
+            analyzerConfig: AnalyzerConfiguration,
+            repoConfig: RepositoryConfiguration
+        ) =
+            SBT(managerName, analyzerRoot, analyzerConfig, repoConfig)
     }
 
     override fun command(workingDir: File?) = if (OS.isWindows) "sbt.bat" else "sbt"
@@ -180,11 +189,11 @@ class SBT(name: String, analyzerConfig: AnalyzerConfiguration, repoConfig: Repos
         }
     }
 
-    override fun resolveDependencies(analyzerRoot: File, definitionFiles: List<File>) =
+    override fun resolveDependencies(definitionFiles: List<File>) =
     // Simply pass on the list of POM files to Maven, ignoring the SBT build files here.
-        Maven(managerName, analyzerConfig, repoConfig)
+        Maven(managerName, analyzerRoot, analyzerConfig, repoConfig)
             .enableSbtMode()
-            .resolveDependencies(analyzerRoot, definitionFiles)
+            .resolveDependencies(definitionFiles)
 
     override fun resolveDependencies(definitionFile: File) =
     // This is not implemented in favor over overriding [resolveDependencies].

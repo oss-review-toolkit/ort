@@ -44,7 +44,7 @@ class GoDepTest : WordSpec() {
         "GoDep" should {
             "resolve dependencies from a lockfile correctly" {
                 val manifestFile = File(projectsDir, "external/qmstr/Gopkg.toml")
-                val result = createGoDep().resolveDependencies(USER_DIR, listOf(manifestFile))[manifestFile]
+                val result = createGoDep().resolveDependencies(listOf(manifestFile))[manifestFile]
                 val expectedResult = File(projectsDir, "external/qmstr-expected-output.yml").readText()
 
                 yamlMapper.writeValueAsString(result) shouldBe expectedResult
@@ -52,7 +52,7 @@ class GoDepTest : WordSpec() {
 
             "show error if no lockfile is present" {
                 val manifestFile = File(projectsDir, "synthetic/godep/no-lockfile/Gopkg.toml")
-                val result = createGoDep().resolveDependencies(USER_DIR, listOf(manifestFile))[manifestFile]
+                val result = createGoDep().resolveDependencies(listOf(manifestFile))[manifestFile]
 
                 result shouldNotBe null
                 result!!.project.id shouldBe
@@ -67,7 +67,7 @@ class GoDepTest : WordSpec() {
             "invoke the dependency solver if no lockfile is present and allowDynamicVersions is set" {
                 val manifestFile = File(projectsDir, "synthetic/godep/no-lockfile/Gopkg.toml")
                 val config = AnalyzerConfiguration(ignoreToolVersions = false, allowDynamicVersions = true)
-                val result = createGoDep(config).resolveDependencies(USER_DIR, listOf(manifestFile))[manifestFile]
+                val result = createGoDep(config).resolveDependencies(listOf(manifestFile))[manifestFile]
 
                 result shouldNotBe null
                 result!!.project shouldNotBe Project.EMPTY
@@ -77,7 +77,7 @@ class GoDepTest : WordSpec() {
 
             "import dependencies from Glide" {
                 val manifestFile = File(projectsDir, "external/sprig/glide.yaml")
-                val result = createGoDep().resolveDependencies(USER_DIR, listOf(manifestFile))[manifestFile]
+                val result = createGoDep().resolveDependencies(listOf(manifestFile))[manifestFile]
                 val expectedResult = File(projectsDir, "external/sprig-expected-output.yml").readText()
 
                 yamlMapper.writeValueAsString(result) shouldBe expectedResult
@@ -85,7 +85,7 @@ class GoDepTest : WordSpec() {
 
             "import dependencies from godeps" {
                 val manifestFile = File(projectsDir, "external/godep/Godeps/Godeps.json")
-                val result = createGoDep().resolveDependencies(USER_DIR, listOf(manifestFile))[manifestFile]
+                val result = createGoDep().resolveDependencies(listOf(manifestFile))[manifestFile]
                 val expectedResult = File(projectsDir, "external/godep-expected-output.yml").readText()
 
                 yamlMapper.writeValueAsString(result) shouldBe expectedResult
@@ -114,5 +114,5 @@ class GoDepTest : WordSpec() {
     }
 
     private fun createGoDep(config: AnalyzerConfiguration = DEFAULT_ANALYZER_CONFIGURATION) =
-        GoDep("GoDep", config, DEFAULT_REPOSITORY_CONFIGURATION)
+        GoDep("GoDep", USER_DIR, config, DEFAULT_REPOSITORY_CONFIGURATION)
 }

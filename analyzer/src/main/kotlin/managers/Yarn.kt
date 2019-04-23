@@ -32,13 +32,22 @@ import java.io.File
 /**
  * The [Yarn](https://www.yarnpkg.com/) package manager for JavaScript.
  */
-class Yarn(name: String, analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfiguration) :
-    NPM(name, analyzerConfig, repoConfig) {
+class Yarn(
+    name: String,
+    analyzerRoot: File,
+    analyzerConfig: AnalyzerConfiguration,
+    repoConfig: RepositoryConfiguration
+) :
+    NPM(name, analyzerRoot, analyzerConfig, repoConfig) {
     class Factory : AbstractPackageManagerFactory<Yarn>("Yarn") {
         override val globsForDefinitionFiles = listOf("package.json")
 
-        override fun create(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfiguration) =
-            Yarn(managerName, analyzerConfig, repoConfig)
+        override fun create(
+            analyzerRoot: File,
+            analyzerConfig: AnalyzerConfiguration,
+            repoConfig: RepositoryConfiguration
+        ) =
+            Yarn(managerName, analyzerRoot, analyzerConfig, repoConfig)
     }
 
     override val installParameters = arrayOf("--ignore-scripts", "--ignore-engines")
