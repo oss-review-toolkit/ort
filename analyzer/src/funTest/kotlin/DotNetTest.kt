@@ -60,7 +60,7 @@ class DotNetTest : StringSpec() {
                 revision = vcsRevision,
                 path = "$vcsPath/subProjectTest"
             )
-            val result = createDotNet().resolveDependencies(listOf(packageFile))[packageFile]
+            val result = createDotNet().resolveDependencies(packageFile)
 
             result shouldNotBe null
             result!!.errors should beEmpty()

@@ -50,7 +50,7 @@ class GradleAndroidTest : StringSpec() {
                 revision = vcsRevision
             )
 
-            val result = createGradle().resolveDependencies(listOf(packageFile))[packageFile]
+            val result = createGradle().resolveDependencies(packageFile)
 
             result shouldNotBe null
             result!!.errors shouldBe emptyList()
@@ -65,7 +65,7 @@ class GradleAndroidTest : StringSpec() {
                 revision = vcsRevision
             )
 
-            val result = createGradle().resolveDependencies(listOf(packageFile))[packageFile]
+            val result = createGradle().resolveDependencies(packageFile)
 
             result shouldNotBe null
             result!!.errors shouldBe emptyList()
@@ -80,7 +80,7 @@ class GradleAndroidTest : StringSpec() {
                 revision = vcsRevision
             )
 
-            val result = createGradle().resolveDependencies(listOf(packageFile))[packageFile]
+            val result = createGradle().resolveDependencies(packageFile)
 
             result shouldNotBe null
             result!!.errors shouldBe emptyList()

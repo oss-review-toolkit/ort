@@ -66,7 +66,7 @@ class GradleTest : StringSpec() {
                 revision = vcsRevision
             )
 
-            val result = createGradle().resolveDependencies(listOf(packageFile))[packageFile]
+            val result = createGradle().resolveDependencies(packageFile)
 
             result shouldNotBe null
             result!!.errors shouldBe emptyList()
@@ -81,7 +81,7 @@ class GradleTest : StringSpec() {
                 revision = vcsRevision
             )
 
-            val result = createGradle().resolveDependencies(listOf(packageFile))[packageFile]
+            val result = createGradle().resolveDependencies(packageFile)
 
             result shouldNotBe null
             result!!.errors shouldBe emptyList()
@@ -96,7 +96,7 @@ class GradleTest : StringSpec() {
                 revision = vcsRevision
             )
 
-            val result = createGradle().resolveDependencies(listOf(packageFile))[packageFile]
+            val result = createGradle().resolveDependencies(packageFile)
 
             result shouldNotBe null
             result!!.errors shouldBe emptyList()
@@ -111,7 +111,7 @@ class GradleTest : StringSpec() {
                 revision = vcsRevision
             )
 
-            val result = createGradle().resolveDependencies(listOf(packageFile))[packageFile]
+            val result = createGradle().resolveDependencies(packageFile)
 
             result shouldNotBe null
             result!!.errors shouldBe emptyList()
@@ -126,7 +126,7 @@ class GradleTest : StringSpec() {
                 revision = vcsRevision
             )
 
-            val result = createGradle().resolveDependencies(listOf(packageFile))[packageFile]
+            val result = createGradle().resolveDependencies(packageFile)
 
             result shouldNotBe null
             yamlMapper.writeValueAsString(result) shouldBe expectedResult
@@ -182,7 +182,7 @@ class GradleTest : StringSpec() {
                     revision = vcsRevision
                 )
 
-                val result = createGradle().resolveDependencies(listOf(packageFile))[packageFile]
+                val result = createGradle().resolveDependencies(packageFile)
 
                 result shouldNotBe null
                 result!!.errors shouldBe emptyList()

@@ -60,7 +60,7 @@ class NuGetTest : StringSpec() {
                 revision = vcsRevision,
                 path = vcsPath
             )
-            val result = createNuGet().resolveDependencies(listOf(packageFile))[packageFile]
+            val result = createNuGet().resolveDependencies(packageFile)
 
             result shouldNotBe null
             result!!.errors should beEmpty()

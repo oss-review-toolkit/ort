@@ -54,7 +54,7 @@ class BowerTest : StringSpec() {
                 url = normalizeVcsUrl(vcsUrl)
             )
 
-            val result = createBower().resolveDependencies(listOf(packageFile))[packageFile]
+            val result = createBower().resolveDependencies(packageFile)
 
             result shouldNotBe null
             result!!.errors should beEmpty()
