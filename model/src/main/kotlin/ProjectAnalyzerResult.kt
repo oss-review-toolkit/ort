@@ -82,7 +82,7 @@ data class ProjectAnalyzerResult(
                 this[project.id] = errors.toMutableList()
             }
 
-            collectedErrors.forEach { pkgId, errors ->
+            collectedErrors.forEach { (pkgId, errors) ->
                 if (errors.isNotEmpty()) {
                     this[pkgId] = errors.distinct()
                 }

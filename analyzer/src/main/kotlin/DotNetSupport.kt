@@ -122,7 +122,7 @@ class DotNetSupport(
     private val packageReferencesAlreadyFound = mutableMapOf<Pair<String, String>, Pair<String, JsonNode>>()
 
     init {
-        packageReferencesMap.forEach { name, version ->
+        packageReferencesMap.forEach { (name, version) ->
             val scopeDependency = getPackageReferenceFromRestAPI(name, version)
             if (scopeDependency != null) scope.dependencies += scopeDependency
         }

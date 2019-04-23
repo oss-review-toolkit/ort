@@ -143,7 +143,7 @@ object ReporterCommand : CommandWithHelp() {
 
         absoluteOutputDir.safeMkdirs()
 
-        reports.forEach { reporter, file ->
+        reports.forEach { (reporter, file) ->
             try {
                 reporter.generateReport(
                     ortResult,
