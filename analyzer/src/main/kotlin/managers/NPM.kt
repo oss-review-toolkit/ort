@@ -503,10 +503,10 @@ open class NPM(
      */
     private fun installDependencies(workingDir: File) {
         if (!hasLockFile(workingDir) && !analyzerConfig.allowDynamicVersions) {
+            val relativePathString = workingDir.relativeTo(analyzerRoot).invariantSeparatorsPath
             throw IllegalArgumentException(
-                "No lockfile found in '${workingDir.invariantSeparatorsPath}'. This " +
-                        "potentially results in unstable versions of dependencies. To allow this, enable support for " +
-                        "dynamic versions."
+                "No lockfile found in '$relativePathString'. This potentially results in unstable versions of " +
+                        "dependencies. To allow this, enable support for dynamic versions."
             )
         }
 
