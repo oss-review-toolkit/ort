@@ -81,9 +81,9 @@ class SBT(
     override fun command(workingDir: File?) = if (OS.isWindows) "sbt.bat" else "sbt"
 
     override fun getVersionRequirement(): Requirement =
-    // We need at least sbt version 0.13.0 to be able to use "makePom" instead of the deprecated hyphenated
-    // form "make-pom" and to support declaring Maven-style repositories, see
-    // http://www.scala-sbt.org/0.13/docs/Publishing.html#Modifying+the+generated+POM.
+        // We need at least sbt version 0.13.0 to be able to use "makePom" instead of the deprecated hyphenated
+        // form "make-pom" and to support declaring Maven-style repositories, see
+        // http://www.scala-sbt.org/0.13/docs/Publishing.html#Modifying+the+generated+POM.
         Requirement.buildIvy("[0.13.0,)")
 
     private fun extractLowestSbtVersion(stdout: String): String {
@@ -190,12 +190,12 @@ class SBT(
     }
 
     override fun resolveDependencies(definitionFiles: List<File>) =
-    // Simply pass on the list of POM files to Maven, ignoring the SBT build files here.
+        // Simply pass on the list of POM files to Maven, ignoring the SBT build files here.
         Maven(managerName, analyzerRoot, analyzerConfig, repoConfig)
             .enableSbtMode()
             .resolveDependencies(definitionFiles)
 
     override fun resolveDependencies(definitionFile: File) =
-    // This is not implemented in favor over overriding [resolveDependencies].
+        // This is not implemented in favor over overriding [resolveDependencies].
         throw NotImplementedError()
 }

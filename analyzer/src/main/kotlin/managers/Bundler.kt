@@ -88,8 +88,8 @@ class Bundler(
     override fun getVersionRequirement(): Requirement = Requirement.buildIvy("[1.16,2.1[")
 
     override fun prepareResolution(definitionFiles: List<File>) =
-    // We do not actually depend on any features specific to a version of Bundler, but we still want to stick to
-    // fixed versions to be sure to get consistent results.
+        // We do not actually depend on any features specific to a version of Bundler, but we still want to stick to
+        // fixed versions to be sure to get consistent results.
         checkVersion(
             ignoreActualVersion = analyzerConfig.ignoreToolVersions,
             transform = { it.substringAfter("Bundler version ") }
