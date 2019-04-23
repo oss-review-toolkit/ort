@@ -46,7 +46,7 @@ class NpmTest : WordSpec({
                         to "https://gitlab.com/another/repo.git"
             )
 
-            packages.forEach { actualUrl, expectedUrl ->
+            packages.forEach { (actualUrl, expectedUrl) ->
                 NPM.expandShortcutURL(actualUrl) shouldBe expectedUrl
             }
         }
@@ -61,7 +61,7 @@ class NpmTest : WordSpec({
                         to "github.com/improbable-eng/grpc-web"
             )
 
-            packages.forEach { actualUrl, expectedUrl ->
+            packages.forEach { (actualUrl, expectedUrl) ->
                 NPM.expandShortcutURL(actualUrl) shouldBe expectedUrl
             }
         }

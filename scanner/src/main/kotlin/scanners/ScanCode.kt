@@ -500,7 +500,7 @@ class ScanCode(name: String, config: ScannerConfiguration) : LocalScanner(name, 
 
             val copyrights = file["copyrights"]?.toList().orEmpty()
             val findings = associateFileFindings(path, licenses, copyrights, rootLicense)
-            findings.forEach { license, copyrightsForLicense ->
+            findings.forEach { (license, copyrightsForLicense) ->
                 copyrightsForLicenses.getOrPut(license) { sortedSetOf() }.let { copyrightFindings ->
                     copyrightsForLicense.forEach { copyrightFinding ->
                         copyrightFindings.find { it.statement == copyrightFinding.statement }?.let {

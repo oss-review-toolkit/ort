@@ -98,7 +98,7 @@ object RequirementsCommand : CommandWithHelp() {
             }
         }
 
-        allTools.forEach { category, tools ->
+        allTools.forEach { (category, tools) ->
             println("${category}s:")
             tools.forEach { tool ->
                 val message = if (tool.getVersionRequirement().toString() == CommandLineTool.ANY_VERSION.toString()) {

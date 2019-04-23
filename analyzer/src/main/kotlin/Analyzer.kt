@@ -94,7 +94,7 @@ class Analyzer(private val config: AnalyzerConfiguration) {
 
         if (log.isInfoEnabled) {
             // Log the summary of projects found per package manager.
-            managedFiles.forEach { manager, files ->
+            managedFiles.forEach { (manager, files) ->
                 // No need to use curly-braces-syntax for logging here as the log level check is already done above.
                 log.info("${manager.managerName} projects found in:")
                 files.forEach { file ->
@@ -106,7 +106,7 @@ class Analyzer(private val config: AnalyzerConfiguration) {
         val analyzerResultBuilder = AnalyzerResultBuilder()
 
         // Resolve dependencies per package manager.
-        managedFiles.forEach { manager, files ->
+        managedFiles.forEach { (manager, files) ->
             val results = manager.resolveDependencies(files)
 
             val curatedResults = packageCurationsFile?.let {
@@ -129,7 +129,7 @@ class Analyzer(private val config: AnalyzerConfiguration) {
                 }
             } ?: results
 
-            curatedResults.forEach { _, analyzerResult ->
+            curatedResults.forEach { (_, analyzerResult) ->
                 analyzerResultBuilder.addResult(analyzerResult)
             }
         }

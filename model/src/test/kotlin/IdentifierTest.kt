@@ -39,7 +39,7 @@ class IdentifierTest : StringSpec() {
                         to "manager::name:version"
             )
 
-            mapping.forEach { identifier, stringRepresentation ->
+            mapping.forEach { (identifier, stringRepresentation) ->
                 identifier.toCoordinates() shouldBe stringRepresentation
             }
         }
@@ -56,7 +56,7 @@ class IdentifierTest : StringSpec() {
                         to Identifier("manager", "", "name", "version")
             )
 
-            mapping.forEach { stringRepresentation, identifier ->
+            mapping.forEach { (stringRepresentation, identifier) ->
                 Identifier(stringRepresentation) shouldBe identifier
             }
         }

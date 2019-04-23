@@ -112,7 +112,7 @@ class StaticHtmlReporter : Reporter() {
                         issueTable(reportTableModel.issueSummary)
                     }
 
-                    reportTableModel.projectDependencies.forEach { project, table ->
+                    reportTableModel.projectDependencies.forEach { (project, table) ->
                         projectTable(project, table)
                     }
 
@@ -166,7 +166,7 @@ class StaticHtmlReporter : Reporter() {
                 }
             }
 
-            reportTableModel.projectDependencies.forEach { project, projectTable ->
+            reportTableModel.projectDependencies.forEach { (project, projectTable) ->
                 li {
                     a("#${project.id.toCoordinates()}") {
                         +project.id.toCoordinates()
@@ -314,7 +314,7 @@ class StaticHtmlReporter : Reporter() {
             td { +row.id.toCoordinates() }
 
             td {
-                row.analyzerIssues.forEach { id, issues ->
+                row.analyzerIssues.forEach { (id, issues) ->
                     a("#${id.toCoordinates()}") { +id.toCoordinates() }
 
                     ul {
@@ -329,7 +329,7 @@ class StaticHtmlReporter : Reporter() {
             }
 
             td {
-                row.scanIssues.forEach { id, issues ->
+                row.scanIssues.forEach { (id, issues) ->
                     a("#${id.toCoordinates()}") { +id.toCoordinates() }
 
                     ul {
@@ -475,7 +475,7 @@ class StaticHtmlReporter : Reporter() {
                     em { +"Detected Licenses:" }
                     dl {
                         dd {
-                            row.detectedLicenses.forEach { finding, excludes ->
+                            row.detectedLicenses.forEach { (finding, excludes) ->
                                 if (excludes.isEmpty()) {
                                     div { +finding.license }
                                 } else {

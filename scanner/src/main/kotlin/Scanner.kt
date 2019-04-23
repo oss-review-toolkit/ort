@@ -139,7 +139,7 @@ abstract class Scanner(val scannerName: String, protected val config: ScannerCon
         }.toSortedSet()
 
         // Add scan results from de-duplicated project packages to result.
-        consolidatedProjectPackageMap.forEach { referencePackage, deduplicatedPackages ->
+        consolidatedProjectPackageMap.forEach { (referencePackage, deduplicatedPackages) ->
             resultContainers.find { it.id == referencePackage.id }?.let { resultContainer ->
                 deduplicatedPackages.forEach {
                     resultContainers += resultContainer.copy(id = it.id)
