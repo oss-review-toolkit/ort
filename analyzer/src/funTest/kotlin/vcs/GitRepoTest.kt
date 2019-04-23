@@ -70,14 +70,13 @@ class GitRepoTest : StringSpec() {
         }
 
         "GitRepo correctly lists submodules" {
-            // TODO: The list below should also contain "submodules/test-data-npm/long.js", but it is not correctly
-            //       cloned by git-repo.
             val expectedSubmodules = listOf(
                 "spdx-tools",
                 "submodules",
                 "submodules/commons-text",
                 "submodules/test-data-npm",
-                "submodules/test-data-npm/entities"
+                "submodules/test-data-npm/entities",
+                "submodules/test-data-npm/long.js"
             ).associateWith { VersionControlSystem.getPathInfo(File(outputDir, it)) }
 
             val workingTree = GitRepo().getWorkingTree(outputDir)

@@ -38,7 +38,7 @@ import java.io.IOException
 /**
  * The branch of git-repo to use. This allows to override git-repo's default of using the "stable" branch.
  */
-const val GIT_REPO_BRANCH = "stable"
+const val GIT_REPO_BRANCH = "master"
 
 class GitRepo : GitBase() {
     override val aliases = listOf("git-repo", "repo")
