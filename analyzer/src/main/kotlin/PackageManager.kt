@@ -187,10 +187,17 @@ abstract class PackageManager(
 
     /**
      * Return a tree of resolved dependencies (not necessarily declared dependencies, in case conflicts were resolved)
-     * for all [definitionFiles] which were found by searching the [analyzerRoot] directory.
+     * for all [definitionFiles] which were found by searching the [analyzerRoot] directory. By convention, the
+     * [definitionFiles] must be absolute.
      */
     open fun resolveDependencies(definitionFiles: List<File>): ResolutionResult {
         val result = mutableMapOf<File, ProjectAnalyzerResult>()
+
+        definitionFiles.forEach { definitionFile ->
+            requireNotNull(definitionFile.relativeToOrNull(analyzerRoot)) {
+                "'$definitionFile' must be an absolute path below '$analyzerRoot'."
+            }
+        }
 
         prepareResolution(definitionFiles)
 
@@ -232,7 +239,7 @@ abstract class PackageManager(
     }
 
     /**
-     * Resolve dependencies for a single [definitionFile] and return a [ProjectAnalyzerResult].
+     * Resolve dependencies for a single absolute [definitionFile] and return a [ProjectAnalyzerResult].
      */
     abstract fun resolveDependencies(definitionFile: File): ProjectAnalyzerResult?
 }
