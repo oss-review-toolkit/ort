@@ -59,7 +59,7 @@ project:
               - id: "NPM::core-js:2.5.7"
               - id: "NPM::regenerator-runtime:0.11.1"
             - id: "NPM::esutils:2.0.2"
-            - id: "NPM::lodash:4.17.10"
+            - id: "NPM::lodash:4.17.11"
             - id: "NPM::to-fast-properties:1.0.3"
           - id: "NPM::detect-indent:4.0.0"
             dependencies:
@@ -69,7 +69,7 @@ project:
                 dependencies:
                 - id: "NPM::number-is-nan:1.0.1"
           - id: "NPM::jsesc:1.3.0"
-          - id: "NPM::lodash:4.17.10"
+          - id: "NPM::lodash:4.17.11"
           - id: "NPM::source-map:0.5.7"
           - id: "NPM::trim-right:1.0.1"
         - id: "NPM::babel-helpers:6.24.1"
@@ -118,7 +118,7 @@ project:
                   - id: "NPM::core-js:2.5.7"
                   - id: "NPM::regenerator-runtime:0.11.1"
                 - id: "NPM::esutils:2.0.2"
-                - id: "NPM::lodash:4.17.10"
+                - id: "NPM::lodash:4.17.11"
                 - id: "NPM::to-fast-properties:1.0.3"
               - id: "NPM::babylon:6.18.0"
               - id: "NPM::debug:2.6.9"
@@ -130,7 +130,7 @@ project:
                 - id: "NPM::loose-envify:1.4.0"
                   dependencies:
                   - id: "NPM::js-tokens:3.0.2"
-              - id: "NPM::lodash:4.17.10"
+              - id: "NPM::lodash:4.17.11"
             - id: "NPM::babel-types:6.26.0"
               dependencies:
               - id: "NPM::babel-runtime:6.26.0"
@@ -138,10 +138,10 @@ project:
                 - id: "NPM::core-js:2.5.7"
                 - id: "NPM::regenerator-runtime:0.11.1"
               - id: "NPM::esutils:2.0.2"
-              - id: "NPM::lodash:4.17.10"
+              - id: "NPM::lodash:4.17.11"
               - id: "NPM::to-fast-properties:1.0.3"
             - id: "NPM::babylon:6.18.0"
-            - id: "NPM::lodash:4.17.10"
+            - id: "NPM::lodash:4.17.11"
         - id: "NPM::babel-messages:6.23.0"
           dependencies:
           - id: "NPM::babel-runtime:6.26.0"
@@ -159,7 +159,7 @@ project:
             dependencies:
             - id: "NPM::os-homedir:1.0.2"
             - id: "NPM::os-tmpdir:1.0.2"
-          - id: "NPM::lodash:4.17.10"
+          - id: "NPM::lodash:4.17.11"
           - id: "NPM::mkdirp:0.5.1"
             dependencies:
             - id: "NPM::minimist:0.0.8"
@@ -210,7 +210,7 @@ project:
                 - id: "NPM::core-js:2.5.7"
                 - id: "NPM::regenerator-runtime:0.11.1"
               - id: "NPM::esutils:2.0.2"
-              - id: "NPM::lodash:4.17.10"
+              - id: "NPM::lodash:4.17.11"
               - id: "NPM::to-fast-properties:1.0.3"
             - id: "NPM::babylon:6.18.0"
             - id: "NPM::debug:2.6.9"
@@ -222,7 +222,7 @@ project:
               - id: "NPM::loose-envify:1.4.0"
                 dependencies:
                 - id: "NPM::js-tokens:3.0.2"
-            - id: "NPM::lodash:4.17.10"
+            - id: "NPM::lodash:4.17.11"
           - id: "NPM::babel-types:6.26.0"
             dependencies:
             - id: "NPM::babel-runtime:6.26.0"
@@ -230,10 +230,10 @@ project:
               - id: "NPM::core-js:2.5.7"
               - id: "NPM::regenerator-runtime:0.11.1"
             - id: "NPM::esutils:2.0.2"
-            - id: "NPM::lodash:4.17.10"
+            - id: "NPM::lodash:4.17.11"
             - id: "NPM::to-fast-properties:1.0.3"
           - id: "NPM::babylon:6.18.0"
-          - id: "NPM::lodash:4.17.10"
+          - id: "NPM::lodash:4.17.11"
         - id: "NPM::babel-traverse:6.26.0"
           dependencies:
           - id: "NPM::babel-code-frame:6.26.0"
@@ -268,7 +268,7 @@ project:
               - id: "NPM::core-js:2.5.7"
               - id: "NPM::regenerator-runtime:0.11.1"
             - id: "NPM::esutils:2.0.2"
-            - id: "NPM::lodash:4.17.10"
+            - id: "NPM::lodash:4.17.11"
             - id: "NPM::to-fast-properties:1.0.3"
           - id: "NPM::babylon:6.18.0"
           - id: "NPM::debug:2.6.9"
@@ -280,7 +280,7 @@ project:
             - id: "NPM::loose-envify:1.4.0"
               dependencies:
               - id: "NPM::js-tokens:3.0.2"
-          - id: "NPM::lodash:4.17.10"
+          - id: "NPM::lodash:4.17.11"
         - id: "NPM::babel-types:6.26.0"
           dependencies:
           - id: "NPM::babel-runtime:6.26.0"
@@ -288,7 +288,7 @@ project:
             - id: "NPM::core-js:2.5.7"
             - id: "NPM::regenerator-runtime:0.11.1"
           - id: "NPM::esutils:2.0.2"
-          - id: "NPM::lodash:4.17.10"
+          - id: "NPM::lodash:4.17.11"
           - id: "NPM::to-fast-properties:1.0.3"
         - id: "NPM::babylon:6.18.0"
         - id: "NPM::convert-source-map:1.5.1"
@@ -296,7 +296,7 @@ project:
           dependencies:
           - id: "NPM::ms:2.0.0"
         - id: "NPM::json5:0.5.1"
-        - id: "NPM::lodash:4.17.10"
+        - id: "NPM::lodash:4.17.11"
         - id: "NPM::minimatch:3.0.4"
           dependencies:
           - id: "NPM::brace-expansion:1.1.11"
@@ -353,7 +353,7 @@ project:
                 - id: "NPM::core-js:2.5.7"
                 - id: "NPM::regenerator-runtime:0.11.1"
               - id: "NPM::esutils:2.0.2"
-              - id: "NPM::lodash:4.17.10"
+              - id: "NPM::lodash:4.17.11"
               - id: "NPM::to-fast-properties:1.0.3"
             - id: "NPM::detect-indent:4.0.0"
               dependencies:
@@ -363,7 +363,7 @@ project:
                   dependencies:
                   - id: "NPM::number-is-nan:1.0.1"
             - id: "NPM::jsesc:1.3.0"
-            - id: "NPM::lodash:4.17.10"
+            - id: "NPM::lodash:4.17.11"
             - id: "NPM::source-map:0.5.7"
             - id: "NPM::trim-right:1.0.1"
           - id: "NPM::babel-helpers:6.24.1"
@@ -412,7 +412,7 @@ project:
                     - id: "NPM::core-js:2.5.7"
                     - id: "NPM::regenerator-runtime:0.11.1"
                   - id: "NPM::esutils:2.0.2"
-                  - id: "NPM::lodash:4.17.10"
+                  - id: "NPM::lodash:4.17.11"
                   - id: "NPM::to-fast-properties:1.0.3"
                 - id: "NPM::babylon:6.18.0"
                 - id: "NPM::debug:2.6.9"
@@ -424,7 +424,7 @@ project:
                   - id: "NPM::loose-envify:1.4.0"
                     dependencies:
                     - id: "NPM::js-tokens:3.0.2"
-                - id: "NPM::lodash:4.17.10"
+                - id: "NPM::lodash:4.17.11"
               - id: "NPM::babel-types:6.26.0"
                 dependencies:
                 - id: "NPM::babel-runtime:6.26.0"
@@ -432,10 +432,10 @@ project:
                   - id: "NPM::core-js:2.5.7"
                   - id: "NPM::regenerator-runtime:0.11.1"
                 - id: "NPM::esutils:2.0.2"
-                - id: "NPM::lodash:4.17.10"
+                - id: "NPM::lodash:4.17.11"
                 - id: "NPM::to-fast-properties:1.0.3"
               - id: "NPM::babylon:6.18.0"
-              - id: "NPM::lodash:4.17.10"
+              - id: "NPM::lodash:4.17.11"
           - id: "NPM::babel-messages:6.23.0"
             dependencies:
             - id: "NPM::babel-runtime:6.26.0"
@@ -486,7 +486,7 @@ project:
                   - id: "NPM::core-js:2.5.7"
                   - id: "NPM::regenerator-runtime:0.11.1"
                 - id: "NPM::esutils:2.0.2"
-                - id: "NPM::lodash:4.17.10"
+                - id: "NPM::lodash:4.17.11"
                 - id: "NPM::to-fast-properties:1.0.3"
               - id: "NPM::babylon:6.18.0"
               - id: "NPM::debug:2.6.9"
@@ -498,7 +498,7 @@ project:
                 - id: "NPM::loose-envify:1.4.0"
                   dependencies:
                   - id: "NPM::js-tokens:3.0.2"
-              - id: "NPM::lodash:4.17.10"
+              - id: "NPM::lodash:4.17.11"
             - id: "NPM::babel-types:6.26.0"
               dependencies:
               - id: "NPM::babel-runtime:6.26.0"
@@ -506,10 +506,10 @@ project:
                 - id: "NPM::core-js:2.5.7"
                 - id: "NPM::regenerator-runtime:0.11.1"
               - id: "NPM::esutils:2.0.2"
-              - id: "NPM::lodash:4.17.10"
+              - id: "NPM::lodash:4.17.11"
               - id: "NPM::to-fast-properties:1.0.3"
             - id: "NPM::babylon:6.18.0"
-            - id: "NPM::lodash:4.17.10"
+            - id: "NPM::lodash:4.17.11"
           - id: "NPM::babel-traverse:6.26.0"
             dependencies:
             - id: "NPM::babel-code-frame:6.26.0"
@@ -544,7 +544,7 @@ project:
                 - id: "NPM::core-js:2.5.7"
                 - id: "NPM::regenerator-runtime:0.11.1"
               - id: "NPM::esutils:2.0.2"
-              - id: "NPM::lodash:4.17.10"
+              - id: "NPM::lodash:4.17.11"
               - id: "NPM::to-fast-properties:1.0.3"
             - id: "NPM::babylon:6.18.0"
             - id: "NPM::debug:2.6.9"
@@ -556,7 +556,7 @@ project:
               - id: "NPM::loose-envify:1.4.0"
                 dependencies:
                 - id: "NPM::js-tokens:3.0.2"
-            - id: "NPM::lodash:4.17.10"
+            - id: "NPM::lodash:4.17.11"
           - id: "NPM::babel-types:6.26.0"
             dependencies:
             - id: "NPM::babel-runtime:6.26.0"
@@ -564,7 +564,7 @@ project:
               - id: "NPM::core-js:2.5.7"
               - id: "NPM::regenerator-runtime:0.11.1"
             - id: "NPM::esutils:2.0.2"
-            - id: "NPM::lodash:4.17.10"
+            - id: "NPM::lodash:4.17.11"
             - id: "NPM::to-fast-properties:1.0.3"
           - id: "NPM::babylon:6.18.0"
           - id: "NPM::convert-source-map:1.5.1"
@@ -572,7 +572,7 @@ project:
             dependencies:
             - id: "NPM::ms:2.0.0"
           - id: "NPM::json5:0.5.1"
-          - id: "NPM::lodash:4.17.10"
+          - id: "NPM::lodash:4.17.11"
           - id: "NPM::minimatch:3.0.4"
             dependencies:
             - id: "NPM::brace-expansion:1.1.11"
@@ -592,7 +592,7 @@ project:
           dependencies:
           - id: "NPM::os-homedir:1.0.2"
           - id: "NPM::os-tmpdir:1.0.2"
-        - id: "NPM::lodash:4.17.10"
+        - id: "NPM::lodash:4.17.11"
         - id: "NPM::mkdirp:0.5.1"
           dependencies:
           - id: "NPM::minimist:0.0.8"
@@ -748,7 +748,7 @@ project:
           dependencies:
           - id: "NPM::wrappy:1.0.2"
         - id: "NPM::path-is-absolute:1.0.1"
-      - id: "NPM::lodash:4.17.10"
+      - id: "NPM::lodash:4.17.11"
       - id: "NPM::output-file-sync:1.1.2"
         dependencies:
         - id: "NPM::graceful-fs:4.1.11"
@@ -2834,8 +2834,8 @@ packages:
       path: ""
   curations: []
 - package:
-    id: "NPM::lodash:4.17.10"
-    purl: "pkg://NPM//lodash@4.17.10"
+    id: "NPM::lodash:4.17.11"
+    purl: "pkg://NPM//lodash@4.17.11"
     declared_licenses:
     - "MIT"
     declared_licenses_processed:
@@ -2847,8 +2847,8 @@ packages:
       hash: ""
       hash_algorithm: ""
     source_artifact:
-      url: "https://registry.npmjs.org/lodash/-/lodash-4.17.10.tgz"
-      hash: "1b7793cf7259ea38fb3661d4d38b3260af8ae4e7"
+      url: "https://registry.npmjs.org/lodash/-/lodash-4.17.11.tgz"
+      hash: "b39ea6229ef607ecd89e2c8df12536891cac9b8d"
       hash_algorithm: "SHA-1"
     vcs:
       type: "git"
