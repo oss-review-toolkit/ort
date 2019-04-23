@@ -35,6 +35,11 @@ import com.here.ort.utils.searchUpwardsForSubdirectory
 import java.io.File
 import java.io.IOException
 
+/**
+ * The branch of git-repo to use. This allows to override git-repo's default of using the "stable" branch.
+ */
+const val GIT_REPO_BRANCH = "stable"
+
 class GitRepo : GitBase() {
     override val aliases = listOf("git-repo", "repo")
     override val priority: Int = 50
@@ -107,8 +112,12 @@ class GitRepo : GitBase() {
 
             // Clone all projects instead of only those in the "default" group until we support specifying groups.
             runRepoCommand(
-                targetDir, "init", "--groups=all", "--no-repo-verify", "-b", revision,
-                "-u", pkg.vcsProcessed.url, "-m", manifestPath
+                targetDir,
+                "init", "--groups=all", "--no-repo-verify",
+                "--no-clone-bundle", "--repo-branch=$GIT_REPO_BRANCH",
+                "-b", revision,
+                "-u", pkg.vcsProcessed.url,
+                "-m", manifestPath
             )
 
             // Repo allows to checkout Git repositories to nested directories. If a manifest is badly configured, a
