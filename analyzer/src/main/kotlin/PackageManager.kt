@@ -187,7 +187,8 @@ abstract class PackageManager(
 
     /**
      * Return a tree of resolved dependencies (not necessarily declared dependencies, in case conflicts were resolved)
-     * for all [definitionFiles] which were found by searching the [analyzerRoot] directory.
+     * for all [definitionFiles] which were found by searching the [analyzerRoot] directory. By convention, the
+     * [definitionFiles] must be absolute.
      */
     open fun resolveDependencies(definitionFiles: List<File>): ResolutionResult {
         val result = mutableMapOf<File, ProjectAnalyzerResult>()
@@ -195,6 +196,10 @@ abstract class PackageManager(
         prepareResolution(definitionFiles)
 
         definitionFiles.forEach { definitionFile ->
+            require(definitionFile.isAbsolute) {
+                "'$definitionFile' must be absolute."
+            }
+
             log.info { "Resolving $managerName dependencies for '$definitionFile'..." }
 
             val elapsed = measureTimeMillis {
@@ -232,7 +237,7 @@ abstract class PackageManager(
     }
 
     /**
-     * Resolve dependencies for a single [definitionFile] and return a [ProjectAnalyzerResult].
+     * Resolve dependencies for a single absolute [definitionFile] and return a [ProjectAnalyzerResult].
      */
     abstract fun resolveDependencies(definitionFile: File): ProjectAnalyzerResult?
 }
