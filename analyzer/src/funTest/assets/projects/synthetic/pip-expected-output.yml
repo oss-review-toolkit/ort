@@ -23,7 +23,7 @@ project:
     dependencies:
     - id: "PyPI::Flask:0.12.4"
       dependencies:
-      - id: "PyPI::Jinja2:2.10"
+      - id: "PyPI::Jinja2:2.10.1"
         dependencies:
         - id: "PyPI::MarkupSafe:1.0"
       - id: "PyPI::Werkzeug:0.14.1"
@@ -59,8 +59,8 @@ packages:
       path: ""
   curations: []
 - package:
-    id: "PyPI::Jinja2:2.10"
-    purl: "pkg://PyPI//Jinja2@2.10"
+    id: "PyPI::Jinja2:2.10.1"
+    purl: "pkg://PyPI//Jinja2@2.10.1"
     declared_licenses:
     - "BSD"
     declared_licenses_processed:
@@ -69,12 +69,12 @@ packages:
       \ in pure python."
     homepage_url: "http://jinja.pocoo.org/"
     binary_artifact:
-      url: "https://files.pythonhosted.org/packages/7f/ff/ae64bacdfc95f27a016a7bed8e8686763ba4d277a78ca76f32659220a731/Jinja2-2.10-py2.py3-none-any.whl"
-      hash: "cb679acd14423aef56dfff61d6a988f8"
+      url: "https://files.pythonhosted.org/packages/1d/e7/fd8b501e7a6dfe492a433deb7b9d833d39ca74916fa8bc63dd1a4947a671/Jinja2-2.10.1-py2.py3-none-any.whl"
+      hash: "93ca8152bf9ca03214158a49d542402f"
       hash_algorithm: "MD5"
     source_artifact:
-      url: "https://files.pythonhosted.org/packages/56/e6/332789f295cf22308386cf5bbd1f4e00ed11484299c5d7383378cf48ba47/Jinja2-2.10.tar.gz"
-      hash: "61ef1117f945486472850819b8d1eb3d"
+      url: "https://files.pythonhosted.org/packages/93/ea/d884a06f8c7f9b7afbc8138b762e80479fb17aedbbe2b06515a12de9378d/Jinja2-2.10.1.tar.gz"
+      hash: "0ae535be40fd215a8114a090c8b68e5a"
       hash_algorithm: "MD5"
     vcs:
       type: ""
