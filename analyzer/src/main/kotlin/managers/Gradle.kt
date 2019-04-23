@@ -61,8 +61,13 @@ import org.gradle.tooling.GradleConnector
 /**
  * The [Gradle](https://gradle.org/) package manager for Java.
  */
-class Gradle(name: String, analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfiguration) :
-    PackageManager(name, analyzerConfig, repoConfig) {
+class Gradle(
+    name: String,
+    analyzerRoot: File,
+    analyzerConfig: AnalyzerConfiguration,
+    repoConfig: RepositoryConfiguration
+) :
+    PackageManager(name, analyzerRoot, analyzerConfig, repoConfig) {
     class Factory : AbstractPackageManagerFactory<Gradle>("Gradle") {
         // Gradle prefers Groovy ".gradle" files over Kotlin ".gradle.kts" files, but "build" files have to come before
         // "settings" files as we should consider "settings" files only if the same directory does not also contain a
@@ -72,8 +77,12 @@ class Gradle(name: String, analyzerConfig: AnalyzerConfiguration, repoConfig: Re
             "settings.gradle", "settings.gradle.kts"
         )
 
-        override fun create(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfiguration) =
-            Gradle(managerName, analyzerConfig, repoConfig)
+        override fun create(
+            analyzerRoot: File,
+            analyzerConfig: AnalyzerConfiguration,
+            repoConfig: RepositoryConfiguration
+        ) =
+            Gradle(managerName, analyzerRoot, analyzerConfig, repoConfig)
     }
 
     /**

@@ -60,8 +60,7 @@ class NuGetTest : StringSpec() {
                 revision = vcsRevision,
                 path = vcsPath
             )
-            val result = NuGet("NuGet", DEFAULT_ANALYZER_CONFIGURATION, DEFAULT_REPOSITORY_CONFIGURATION)
-                .resolveDependencies(USER_DIR, listOf(packageFile))[packageFile]
+            val result = createNuGet().resolveDependencies(listOf(packageFile))[packageFile]
 
             result shouldNotBe null
             result!!.errors should beEmpty()
@@ -77,4 +76,7 @@ class NuGetTest : StringSpec() {
             result.packages?.size shouldBe 2
         }
     }
+
+    private fun createNuGet() =
+        NuGet("NuGet", USER_DIR, DEFAULT_ANALYZER_CONFIGURATION, DEFAULT_REPOSITORY_CONFIGURATION)
 }

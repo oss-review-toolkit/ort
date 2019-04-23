@@ -63,7 +63,7 @@ class NpmTest : WordSpec() {
                 val workingDir = File(projectsDir, "shrinkwrap")
                 val packageFile = File(workingDir, "package.json")
 
-                val result = createNPM().resolveDependencies(USER_DIR, listOf(packageFile))[packageFile]
+                val result = createNPM().resolveDependencies(listOf(packageFile))[packageFile]
                 val vcsPath = vcsDir.getPathToRoot(workingDir)
                 val expectedResult = patchExpectedResult(
                     File(projectsDir.parentFile, "npm-expected-output.yml"),
@@ -81,7 +81,7 @@ class NpmTest : WordSpec() {
                 val workingDir = File(projectsDir, "package-lock")
                 val packageFile = File(workingDir, "package.json")
 
-                val result = createNPM().resolveDependencies(USER_DIR, listOf(packageFile))[packageFile]
+                val result = createNPM().resolveDependencies(listOf(packageFile))[packageFile]
                 val vcsPath = vcsDir.getPathToRoot(workingDir)
                 val expectedResult = patchExpectedResult(
                     File(projectsDir.parentFile, "npm-expected-output.yml"),
@@ -99,7 +99,7 @@ class NpmTest : WordSpec() {
                 val workingDir = File(projectsDir, "no-lockfile")
                 val packageFile = File(workingDir, "package.json")
 
-                val result = createNPM().resolveDependencies(USER_DIR, listOf(packageFile))[packageFile]
+                val result = createNPM().resolveDependencies(listOf(packageFile))[packageFile]
                 val vcsPath = vcsDir.getPathToRoot(workingDir)
                 val expectedResult = patchExpectedResult(
                     File(projectsDir.parentFile, "npm-expected-output-no-lockfile.yml"),
@@ -117,7 +117,7 @@ class NpmTest : WordSpec() {
                 val workingDir = File(projectsDir, "node-modules")
                 val packageFile = File(workingDir, "package.json")
 
-                val result = createNPM().resolveDependencies(USER_DIR, listOf(packageFile))[packageFile]
+                val result = createNPM().resolveDependencies(listOf(packageFile))[packageFile]
                 val vcsPath = vcsDir.getPathToRoot(workingDir)
                 val expectedResult = patchExpectedResult(
                     File(projectsDir.parentFile, "npm-expected-output.yml"),
@@ -133,5 +133,6 @@ class NpmTest : WordSpec() {
         }
     }
 
-    private fun createNPM() = NPM("NPM", DEFAULT_ANALYZER_CONFIGURATION, DEFAULT_REPOSITORY_CONFIGURATION)
+    private fun createNPM() =
+        NPM("NPM", USER_DIR, DEFAULT_ANALYZER_CONFIGURATION, DEFAULT_REPOSITORY_CONFIGURATION)
 }

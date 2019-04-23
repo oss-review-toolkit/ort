@@ -22,6 +22,7 @@ package com.here.ort.analyzer
 import com.here.ort.model.config.AnalyzerConfiguration
 import com.here.ort.model.config.RepositoryConfiguration
 
+import java.io.File
 import java.nio.file.FileSystems
 import java.nio.file.PathMatcher
 import java.util.ServiceLoader
@@ -41,9 +42,14 @@ interface PackageManagerFactory {
     val matchersForDefinitionFiles: List<PathMatcher>
 
     /**
-     * Create a [PackageManager] using the specified [analyzerConfig] and [repoConfig].
+     * Create a [PackageManager] for analyzing the [analyzerRoot] directory using the specified [analyzerConfig] and
+     * [repoConfig].
      */
-    fun create(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfiguration): PackageManager
+    fun create(
+        analyzerRoot: File,
+        analyzerConfig: AnalyzerConfiguration,
+        repoConfig: RepositoryConfiguration
+    ): PackageManager
 }
 
 /**
@@ -64,7 +70,11 @@ abstract class AbstractPackageManagerFactory<out T : PackageManager>(
         }
     }
 
-    abstract override fun create(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfiguration): T
+    abstract override fun create(
+        analyzerRoot: File,
+        analyzerConfig: AnalyzerConfiguration,
+        repoConfig: RepositoryConfiguration
+    ): T
 
     /**
      * Return the package manager's name here to allow JCommander to display something meaningful when listing the

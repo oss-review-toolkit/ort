@@ -44,7 +44,7 @@ class PipTest : WordSpec() {
             "resolve setup.py dependencies correctly for spdx-tools-python" {
                 val definitionFile = File(projectsDir, "external/spdx-tools-python/setup.py")
 
-                val result = createPIP().resolveDependencies(USER_DIR, listOf(definitionFile))[definitionFile]
+                val result = createPIP().resolveDependencies(listOf(definitionFile))[definitionFile]
                 val expectedResult = File(projectsDir, "external/spdx-tools-python-expected-output.yml").readText()
 
                 yamlMapper.writeValueAsString(result) shouldBe expectedResult
@@ -53,7 +53,7 @@ class PipTest : WordSpec() {
             "resolve requirements.txt dependencies correctly for example-python-flask" {
                 val definitionFile = File(projectsDir, "external/example-python-flask/requirements.txt")
 
-                val result = createPIP().resolveDependencies(USER_DIR, listOf(definitionFile))[definitionFile]
+                val result = createPIP().resolveDependencies(listOf(definitionFile))[definitionFile]
                 val expectedResult = File(projectsDir, "external/example-python-flask-expected-output.yml").readText()
 
                 yamlMapper.writeValueAsString(result) shouldBe expectedResult
@@ -70,7 +70,7 @@ class PipTest : WordSpec() {
                     path = vcsPath
                 )
 
-                val result = createPIP().resolveDependencies(USER_DIR, listOf(definitionFile))[definitionFile]
+                val result = createPIP().resolveDependencies(listOf(definitionFile))[definitionFile]
 
                 yamlMapper.writeValueAsString(result) shouldBe expectedResult
             }
@@ -81,7 +81,7 @@ class PipTest : WordSpec() {
                 val definitionFile = File(projectsDir, "synthetic/python3-django/requirements.txt")
                 val vcsPath = vcsDir.getPathToRoot(definitionFile.parentFile)
 
-                val result = createPIP().resolveDependencies(USER_DIR, listOf(definitionFile))[definitionFile]
+                val result = createPIP().resolveDependencies(listOf(definitionFile))[definitionFile]
                 val expectedResultFile = File(projectsDir, "synthetic/python3-django-expected-output.yml")
                 val expectedResult = patchExpectedResult(
                     expectedResultFile,
@@ -95,5 +95,6 @@ class PipTest : WordSpec() {
         }
     }
 
-    private fun createPIP() = PIP("PIP", DEFAULT_ANALYZER_CONFIGURATION, DEFAULT_REPOSITORY_CONFIGURATION)
+    private fun createPIP() =
+        PIP("PIP", USER_DIR, DEFAULT_ANALYZER_CONFIGURATION, DEFAULT_REPOSITORY_CONFIGURATION)
 }

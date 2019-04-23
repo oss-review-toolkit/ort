@@ -67,12 +67,13 @@ class BabelTest : WordSpec() {
                     url = normalizeVcsUrl(vcsUrl),
                     revision = vcsRevision
                 )
-                val actualResult = createNPM().resolveDependencies(USER_DIR, listOf(packageFile))[packageFile]
+                val actualResult = createNPM().resolveDependencies(listOf(packageFile))[packageFile]
 
                 patchActualResult(yamlMapper.writeValueAsString(actualResult)) shouldBe expectedResult
             }
         }
     }
 
-    private fun createNPM() = NPM("NPM", DEFAULT_ANALYZER_CONFIGURATION, DEFAULT_REPOSITORY_CONFIGURATION)
+    private fun createNPM() =
+        NPM("NPM", USER_DIR, DEFAULT_ANALYZER_CONFIGURATION, DEFAULT_REPOSITORY_CONFIGURATION)
 }

@@ -54,7 +54,7 @@ class BowerTest : StringSpec() {
                 url = normalizeVcsUrl(vcsUrl)
             )
 
-            val result = createBower().resolveDependencies(USER_DIR, listOf(packageFile))[packageFile]
+            val result = createBower().resolveDependencies(listOf(packageFile))[packageFile]
 
             result shouldNotBe null
             result!!.errors should beEmpty()
@@ -62,5 +62,6 @@ class BowerTest : StringSpec() {
         }
     }
 
-    private fun createBower() = Bower("Bower", DEFAULT_ANALYZER_CONFIGURATION, DEFAULT_REPOSITORY_CONFIGURATION)
+    private fun createBower() =
+        Bower("Bower", USER_DIR, DEFAULT_ANALYZER_CONFIGURATION, DEFAULT_REPOSITORY_CONFIGURATION)
 }

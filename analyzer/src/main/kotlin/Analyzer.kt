@@ -87,7 +87,7 @@ class Analyzer(private val config: AnalyzerConfiguration) {
         }
 
         val managedFiles = factoryFiles.mapNotNull { (factory, files) ->
-            val manager = factory.create(config, repositoryConfiguration)
+            val manager = factory.create(absoluteProjectPath, config, repositoryConfiguration)
             val mappedFiles = manager.mapDefinitionFiles(files)
             Pair(manager, mappedFiles).takeIf { mappedFiles.isNotEmpty() }
         }.toMap()
@@ -107,7 +107,7 @@ class Analyzer(private val config: AnalyzerConfiguration) {
 
         // Resolve dependencies per package manager.
         managedFiles.forEach { manager, files ->
-            val results = manager.resolveDependencies(absoluteProjectPath, files)
+            val results = manager.resolveDependencies(files)
 
             val curatedResults = packageCurationsFile?.let {
                 val provider = FilePackageCurationProvider(it)

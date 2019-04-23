@@ -44,8 +44,13 @@ import java.io.File
 /**
  * The [DotNet](https://docs.microsoft.com/en-us/dotnet/core/tools/) package manager for .NET.
  */
-class DotNet(name: String, analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfiguration) :
-    PackageManager(name, analyzerConfig, repoConfig) {
+class DotNet(
+    name: String,
+    analyzerRoot: File,
+    analyzerConfig: AnalyzerConfiguration,
+    repoConfig: RepositoryConfiguration
+) :
+    PackageManager(name, analyzerRoot, analyzerConfig, repoConfig) {
     companion object {
         fun mapPackageReferences(workingDir: File): Map<String, String> {
             val map = mutableMapOf<String, String>()
@@ -84,8 +89,12 @@ class DotNet(name: String, analyzerConfig: AnalyzerConfiguration, repoConfig: Re
     class Factory : AbstractPackageManagerFactory<DotNet>("DotNet") {
         override val globsForDefinitionFiles = listOf("*.csproj")
 
-        override fun create(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfiguration) =
-            DotNet(managerName, analyzerConfig, repoConfig)
+        override fun create(
+            analyzerRoot: File,
+            analyzerConfig: AnalyzerConfiguration,
+            repoConfig: RepositoryConfiguration
+        ) =
+            DotNet(managerName, analyzerRoot, analyzerConfig, repoConfig)
     }
 
     override fun resolveDependencies(definitionFile: File): ProjectAnalyzerResult? {

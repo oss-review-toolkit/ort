@@ -60,8 +60,7 @@ class DotNetTest : StringSpec() {
                 revision = vcsRevision,
                 path = "$vcsPath/subProjectTest"
             )
-            val result = DotNet("DotNet", DEFAULT_ANALYZER_CONFIGURATION, DEFAULT_REPOSITORY_CONFIGURATION)
-                .resolveDependencies(USER_DIR, listOf(packageFile))[packageFile]
+            val result = createDotNet().resolveDependencies(listOf(packageFile))[packageFile]
 
             result shouldNotBe null
             result!!.errors should beEmpty()
@@ -77,4 +76,7 @@ class DotNetTest : StringSpec() {
             result[1].packageReference?.size shouldBe 2
         }
     }
+
+    private fun createDotNet() =
+        DotNet("DotNet", USER_DIR, DEFAULT_ANALYZER_CONFIGURATION, DEFAULT_REPOSITORY_CONFIGURATION)
 }

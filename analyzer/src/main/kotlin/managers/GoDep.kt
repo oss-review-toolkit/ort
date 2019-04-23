@@ -63,13 +63,22 @@ val GO_LEGACY_MANIFESTS = mapOf(
 /**
  * The [Dep](https://golang.github.io/dep/) package manager for Go.
  */
-class GoDep(name: String, analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfiguration) :
-    PackageManager(name, analyzerConfig, repoConfig), CommandLineTool {
+class GoDep(
+    name: String,
+    analyzerRoot: File,
+    analyzerConfig: AnalyzerConfiguration,
+    repoConfig: RepositoryConfiguration
+) :
+    PackageManager(name, analyzerRoot, analyzerConfig, repoConfig), CommandLineTool {
     class Factory : AbstractPackageManagerFactory<GoDep>("GoDep") {
         override val globsForDefinitionFiles = listOf("Gopkg.toml", *GO_LEGACY_MANIFESTS.keys.toTypedArray())
 
-        override fun create(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfiguration) =
-            GoDep(managerName, analyzerConfig, repoConfig)
+        override fun create(
+            analyzerRoot: File,
+            analyzerConfig: AnalyzerConfiguration,
+            repoConfig: RepositoryConfiguration
+        ) =
+            GoDep(managerName, analyzerRoot, analyzerConfig, repoConfig)
     }
 
     override fun command(workingDir: File?) = "dep"

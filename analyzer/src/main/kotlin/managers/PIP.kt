@@ -134,13 +134,22 @@ object PythonVersion : CommandLineTool {
  * [install_requires vs requirements files](https://packaging.python.org/discussions/install-requires-vs-requirements/)
  * and [setup.py vs. requirements.txt](https://caremad.io/posts/2013/07/setup-vs-requirement/).
  */
-class PIP(name: String, analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfiguration) :
-    PackageManager(name, analyzerConfig, repoConfig), CommandLineTool {
+class PIP(
+    name: String,
+    analyzerRoot: File,
+    analyzerConfig: AnalyzerConfiguration,
+    repoConfig: RepositoryConfiguration
+) :
+    PackageManager(name, analyzerRoot, analyzerConfig, repoConfig), CommandLineTool {
     class Factory : AbstractPackageManagerFactory<PIP>("PIP") {
         override val globsForDefinitionFiles = listOf("requirements*.txt", "setup.py")
 
-        override fun create(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfiguration) =
-            PIP(managerName, analyzerConfig, repoConfig)
+        override fun create(
+            analyzerRoot: File,
+            analyzerConfig: AnalyzerConfiguration,
+            repoConfig: RepositoryConfiguration
+        ) =
+            PIP(managerName, analyzerRoot, analyzerConfig, repoConfig)
     }
 
     companion object {

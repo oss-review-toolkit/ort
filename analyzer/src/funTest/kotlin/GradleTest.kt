@@ -66,7 +66,7 @@ class GradleTest : StringSpec() {
                 revision = vcsRevision
             )
 
-            val result = createGradle().resolveDependencies(USER_DIR, listOf(packageFile))[packageFile]
+            val result = createGradle().resolveDependencies(listOf(packageFile))[packageFile]
 
             result shouldNotBe null
             result!!.errors shouldBe emptyList()
@@ -81,7 +81,7 @@ class GradleTest : StringSpec() {
                 revision = vcsRevision
             )
 
-            val result = createGradle().resolveDependencies(USER_DIR, listOf(packageFile))[packageFile]
+            val result = createGradle().resolveDependencies(listOf(packageFile))[packageFile]
 
             result shouldNotBe null
             result!!.errors shouldBe emptyList()
@@ -96,7 +96,7 @@ class GradleTest : StringSpec() {
                 revision = vcsRevision
             )
 
-            val result = createGradle().resolveDependencies(USER_DIR, listOf(packageFile))[packageFile]
+            val result = createGradle().resolveDependencies(listOf(packageFile))[packageFile]
 
             result shouldNotBe null
             result!!.errors shouldBe emptyList()
@@ -111,7 +111,7 @@ class GradleTest : StringSpec() {
                 revision = vcsRevision
             )
 
-            val result = createGradle().resolveDependencies(USER_DIR, listOf(packageFile))[packageFile]
+            val result = createGradle().resolveDependencies(listOf(packageFile))[packageFile]
 
             result shouldNotBe null
             result!!.errors shouldBe emptyList()
@@ -126,7 +126,7 @@ class GradleTest : StringSpec() {
                 revision = vcsRevision
             )
 
-            val result = createGradle().resolveDependencies(USER_DIR, listOf(packageFile))[packageFile]
+            val result = createGradle().resolveDependencies(listOf(packageFile))[packageFile]
 
             result shouldNotBe null
             yamlMapper.writeValueAsString(result) shouldBe expectedResult
@@ -182,7 +182,7 @@ class GradleTest : StringSpec() {
                     revision = vcsRevision
                 )
 
-                val result = createGradle().resolveDependencies(USER_DIR, listOf(packageFile))[packageFile]
+                val result = createGradle().resolveDependencies(listOf(packageFile))[packageFile]
 
                 result shouldNotBe null
                 result!!.errors shouldBe emptyList()
@@ -208,5 +208,6 @@ class GradleTest : StringSpec() {
             .requireSuccess()
     }
 
-    private fun createGradle() = Gradle("Gradle", DEFAULT_ANALYZER_CONFIGURATION, DEFAULT_REPOSITORY_CONFIGURATION)
+    private fun createGradle() =
+        Gradle("Gradle", USER_DIR, DEFAULT_ANALYZER_CONFIGURATION, DEFAULT_REPOSITORY_CONFIGURATION)
 }

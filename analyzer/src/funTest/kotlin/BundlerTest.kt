@@ -49,8 +49,7 @@ class BundlerTest : WordSpec() {
                 val definitionFile = File(projectsDir, "lockfile/Gemfile")
 
                 try {
-                    val actualResult = createBundler()
-                        .resolveDependencies(USER_DIR, listOf(definitionFile))[definitionFile]
+                    val actualResult = createBundler().resolveDependencies(listOf(definitionFile))[definitionFile]
                     val expectedResult = patchExpectedResult(
                         File(projectsDir.parentFile, "bundler-expected-output-lockfile.yml"),
                         url = normalizeVcsUrl(vcsUrl),
@@ -66,7 +65,7 @@ class BundlerTest : WordSpec() {
 
             "show error if no lockfile is present" {
                 val definitionFile = File(projectsDir, "no-lockfile/Gemfile")
-                val actualResult = createBundler().resolveDependencies(USER_DIR, listOf(definitionFile))[definitionFile]
+                val actualResult = createBundler().resolveDependencies(listOf(definitionFile))[definitionFile]
 
                 actualResult shouldNotBe null
                 actualResult!!.project.id shouldBe
@@ -82,8 +81,7 @@ class BundlerTest : WordSpec() {
                 val definitionFile = File(projectsDir, "gemspec/Gemfile")
 
                 try {
-                    val actualResult = createBundler()
-                        .resolveDependencies(USER_DIR, listOf(definitionFile))[definitionFile]
+                    val actualResult = createBundler().resolveDependencies(listOf(definitionFile))[definitionFile]
                     val expectedResult = patchExpectedResult(
                         File(projectsDir.parentFile, "bundler-expected-output-gemspec.yml"),
                         url = normalizeVcsUrl(vcsUrl),
@@ -99,5 +97,6 @@ class BundlerTest : WordSpec() {
         }
     }
 
-    private fun createBundler() = Bundler("Bundler", DEFAULT_ANALYZER_CONFIGURATION, DEFAULT_REPOSITORY_CONFIGURATION)
+    private fun createBundler() =
+        Bundler("Bundler", USER_DIR, DEFAULT_ANALYZER_CONFIGURATION, DEFAULT_REPOSITORY_CONFIGURATION)
 }

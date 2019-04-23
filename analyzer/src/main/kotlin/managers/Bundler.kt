@@ -65,13 +65,22 @@ import okhttp3.Request
  *
  * [1]: http://yehudakatz.com/2010/12/16/clarifying-the-roles-of-the-gemspec-and-gemfile/
  */
-class Bundler(name: String, analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfiguration) :
-    PackageManager(name, analyzerConfig, repoConfig), CommandLineTool {
+class Bundler(
+    name: String,
+    analyzerRoot: File,
+    analyzerConfig: AnalyzerConfiguration,
+    repoConfig: RepositoryConfiguration
+) :
+    PackageManager(name, analyzerRoot, analyzerConfig, repoConfig), CommandLineTool {
     class Factory : AbstractPackageManagerFactory<Bundler>("Bundler") {
         override val globsForDefinitionFiles = listOf("Gemfile")
 
-        override fun create(analyzerConfig: AnalyzerConfiguration, repoConfig: RepositoryConfiguration) =
-            Bundler(managerName, analyzerConfig, repoConfig)
+        override fun create(
+            analyzerRoot: File,
+            analyzerConfig: AnalyzerConfiguration,
+            repoConfig: RepositoryConfiguration
+        ) =
+            Bundler(managerName, analyzerRoot, analyzerConfig, repoConfig)
     }
 
     override fun command(workingDir: File?) = if (OS.isWindows) "bundle.bat" else "bundle"
