@@ -50,5 +50,5 @@ fun ProjectSettings.taskTriggers(block: TaskTriggersConfig.() -> Unit) =
 fun ProjectSettings.runConfigurations(block: DefaultRunConfigurationContainer.() -> Unit) =
     (this@runConfigurations as ExtensionAware).extensions.configure("runConfigurations", block)
 
-inline fun <reified T: RunConfiguration> DefaultRunConfigurationContainer.defaults(noinline block: T.() -> Unit) =
+inline fun <reified T : RunConfiguration> DefaultRunConfigurationContainer.defaults(noinline block: T.() -> Unit) =
     defaults(T::class.java, block)

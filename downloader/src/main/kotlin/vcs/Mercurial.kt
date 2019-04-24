@@ -126,7 +126,8 @@ class Mercurial : VersionControlSystem(), CommandLineTool {
 
             if (MERCURIAL_SPARSE_EXTENSION in extensionsList) {
                 log.info { "Configuring Mercurial to do sparse checkout of path '${pkg.vcsProcessed.path}'." }
-                run(targetDir, "debugsparse", "-I", "${pkg.vcsProcessed.path}/**",
+                run(
+                    targetDir, "debugsparse", "-I", "${pkg.vcsProcessed.path}/**",
                     *LICENSE_FILE_NAMES.flatMap { listOf("-I", it) }.toTypedArray()
                 )
             }

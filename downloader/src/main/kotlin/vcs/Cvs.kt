@@ -75,9 +75,9 @@ class Cvs : VersionControlSystem(), CommandLineTool {
             override fun getRemoteUrl() = File(cvsDirectory, "Root").useLines { it.first() }
 
             override fun getRevision() =
-            // CVS does not have the concept of a global revision, but each file has its own revision. As
-            // we just use the revision to uniquely identify the state of a working tree, simply create an
-            // artificial single revision based on the revisions of all files.
+                // CVS does not have the concept of a global revision, but each file has its own revision. As
+                // we just use the revision to uniquely identify the state of a working tree, simply create an
+                // artificial single revision based on the revisions of all files.
                 getFileRevisionsHash(getFileRevisions())
 
             private fun getFileRevisions(): CvsFileRevisions {
