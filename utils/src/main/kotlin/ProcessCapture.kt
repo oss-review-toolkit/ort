@@ -41,7 +41,7 @@ class ProcessCapture(vararg command: String, workingDir: File? = null, environme
 
         private fun limitOutputLines(message: String): String {
             val lines = message.lines()
-            val lineCount = lines.count()
+            val lineCount = lines.size
 
             return if (lineCount > MAX_OUTPUT_LINES * 2) {
                 val prefix = lines.take(MAX_OUTPUT_LINES)

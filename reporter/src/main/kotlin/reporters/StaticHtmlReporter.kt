@@ -108,7 +108,7 @@ class StaticHtmlReporter : Reporter() {
                         evaluatorTable(it)
                     }
 
-                    if (reportTableModel.issueSummary.rows.count() > 0) {
+                    if (reportTableModel.issueSummary.rows.size > 0) {
                         issueTable(reportTableModel.issueSummary)
                     }
 
@@ -144,9 +144,9 @@ class StaticHtmlReporter : Reporter() {
         ul {
             reportTableModel.evaluatorIssues?.let { ruleViolations ->
                 val issues = ruleViolations.filterNot { it.isResolved }.groupBy { it.severity }
-                val errorCount = issues[Severity.ERROR].orEmpty().count()
-                val warningCount = issues[Severity.WARNING].orEmpty().count()
-                val hintCount = issues[Severity.HINT].orEmpty().count()
+                val errorCount = issues[Severity.ERROR].orEmpty().size
+                val warningCount = issues[Severity.WARNING].orEmpty().size
+                val hintCount = issues[Severity.HINT].orEmpty().size
 
                 li {
                     a("#rule-violation-summary") {
@@ -195,9 +195,9 @@ class StaticHtmlReporter : Reporter() {
 
     private fun DIV.evaluatorTable(ruleViolations: List<ResolvableIssue>) {
         val issues = ruleViolations.filterNot { it.isResolved }.groupBy { it.severity }
-        val errorCount = issues[Severity.ERROR].orEmpty().count()
-        val warningCount = issues[Severity.WARNING].orEmpty().count()
-        val hintCount = issues[Severity.HINT].orEmpty().count()
+        val errorCount = issues[Severity.ERROR].orEmpty().size
+        val warningCount = issues[Severity.WARNING].orEmpty().size
+        val hintCount = issues[Severity.HINT].orEmpty().size
 
         h2 {
             id = "rule-violation-summary"

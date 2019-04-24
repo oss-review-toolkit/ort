@@ -38,7 +38,7 @@ class RedirectionTest : WordSpec({
 
             // The last printed line has a newline, resulting in a trailing blank line.
             val stdoutLines = stdout.lines().dropLast(1)
-            stdoutLines.count() shouldBe numberOfLines
+            stdoutLines.size shouldBe numberOfLines
             stdoutLines.last() shouldBe "stdout: $numberOfLines"
         }
 
@@ -49,7 +49,7 @@ class RedirectionTest : WordSpec({
 
             // The last printed line has a newline, resulting in a trailing blank line.
             val stderrLines = stderr.lines().dropLast(1)
-            stderrLines.count() shouldBe numberOfLines
+            stderrLines.size shouldBe numberOfLines
             stderrLines.last() shouldBe "stderr: $numberOfLines"
         }
 
@@ -66,12 +66,12 @@ class RedirectionTest : WordSpec({
 
             // The last printed line has a newline, resulting in a trailing blank line.
             val stdoutLines = stdout.lines().dropLast(1)
-            stdoutLines.count() shouldBe numberOfLines
+            stdoutLines.size shouldBe numberOfLines
             stdoutLines.last() shouldBe "stdout: $numberOfLines"
 
             // The last printed line has a newline, resulting in a trailing blank line.
             val stderrLines = stderr.lines().dropLast(1)
-            stderrLines.count() shouldBe numberOfLines
+            stderrLines.size shouldBe numberOfLines
             stderrLines.last() shouldBe "stderr: $numberOfLines"
         }
 
@@ -89,7 +89,7 @@ class RedirectionTest : WordSpec({
 
             // The last printed line has a newline, resulting in a trailing blank line.
             val stdoutLines = stdout.lines().dropLast(1)
-            stdoutLines.count() shouldBe numberOfLines
+            stdoutLines.size shouldBe numberOfLines
             stdoutLines.last() shouldBe "stdout: $numberOfLines"
         }
     }
