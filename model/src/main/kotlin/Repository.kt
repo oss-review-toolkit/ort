@@ -75,6 +75,6 @@ data class Repository(
 
         if (vcsProcessed.matches(normalizedVcs)) return ""
 
-        return nestedRepositories.entries.find { (_, nestedVcs) -> nestedVcs.matches(normalizedVcs) }?.key
+        return nestedRepositories.entries.find { (_, nestedVcs) -> nestedVcs.normalize().matches(normalizedVcs) }?.key
     }
 }
