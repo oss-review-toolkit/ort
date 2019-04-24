@@ -176,9 +176,9 @@ class ExcelReporter : Reporter() {
         }
 
         metadata.forEach { (key, value) ->
-            sheet.createRow(++currentRow).apply {
-                CellUtil.createCell(this, 0, "$key:", defaultStyle)
-                CellUtil.createCell(this, 1, value, defaultStyle).apply {
+            sheet.createRow(++currentRow).let { row ->
+                CellUtil.createCell(row, 0, "$key:", defaultStyle)
+                CellUtil.createCell(row, 1, value, defaultStyle).apply {
                     if (value.isValidUri()) {
                         hyperlink = creationHelper.createHyperlink(HyperlinkType.URL).apply {
                             address = value
