@@ -71,7 +71,7 @@ class PackageReferenceTest : WordSpec() {
                     val name = "${it.id.name}_suffix"
                     it.copy(
                         id = it.id.copy(name = name),
-                        errors = listOf(com.here.ort.model.OrtIssue(source = "test", message = "error $name"))
+                        errors = listOf(OrtIssue(source = "test", message = "error $name"))
                     )
                 }
 

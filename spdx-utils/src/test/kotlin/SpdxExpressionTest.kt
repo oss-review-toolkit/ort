@@ -43,7 +43,7 @@ class SpdxExpressionTest : WordSpec() {
 
                 val spdxLicenses = spdxExpression.spdxLicenses()
 
-                spdxLicenses shouldBe enumSetOf(SpdxLicense.APACHE_2_0, SpdxLicense.BSD_3_CLAUSE, SpdxLicense.MIT)
+                spdxLicenses shouldBe enumSetOf(APACHE_2_0, BSD_3_CLAUSE, MIT)
             }
         }
 
