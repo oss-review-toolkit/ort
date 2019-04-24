@@ -37,7 +37,7 @@ import java.io.File
 class PackageJsonUtilsTest : WordSpec() {
     companion object {
         private fun createPackageJson(matchers: List<String>, flattenWorkspaceDefinition: Boolean) =
-            if (!matchers.isEmpty()) {
+            if (matchers.isNotEmpty()) {
                 val workspaces = matchers.joinToString(prefix = "[\"", separator = "\",\"", postfix = "\"]")
                 if (flattenWorkspaceDefinition) {
                     "{ \"workspaces\": $workspaces }"
