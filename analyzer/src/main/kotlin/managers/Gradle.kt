@@ -112,8 +112,8 @@ class Gradle(
         }
 
         override fun findVersions(artifact: Artifact) =
-        // Do not resolve versions of already locally available artifacts. This also ensures version resolution
-        // was done by Gradle.
+            // Do not resolve versions of already locally available artifacts. This also ensures version resolution
+            // was done by Gradle.
             if (findArtifact(artifact)?.isFile == true) listOf(artifact.version) else emptyList()
 
         override fun getRepository() = workspaceRepository
