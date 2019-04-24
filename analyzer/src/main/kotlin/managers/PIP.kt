@@ -93,15 +93,15 @@ object PythonVersion : CommandLineTool {
         try {
             // The helper script itself always has to be run with Python 3.
             val scriptCmd = if (OS.isWindows) {
-                run("-3", scriptFile.absolutePath, "-d", workingDir.absolutePath)
+                run("-3", scriptFile.path, "-d", workingDir.path)
             } else {
-                run(scriptFile.absolutePath, "-d", workingDir.absolutePath)
+                run(scriptFile.path, "-d", workingDir.path)
             }
 
             return scriptCmd.stdout.toInt()
         } finally {
             if (!scriptFile.delete()) {
-                log.warn { "Helper script file '${scriptFile.absolutePath}' could not be deleted." }
+                log.warn { "Helper script file '$scriptFile' could not be deleted." }
             }
         }
     }
@@ -117,14 +117,14 @@ object PythonVersion : CommandLineTool {
             scriptFile.writeBytes(javaClass.getResource("/scripts/python_interpreter.py").readBytes())
 
             try {
-                run("-$version", scriptFile.absolutePath).stdout
+                run("-$version", scriptFile.path).stdout
             } finally {
                 if (!scriptFile.delete()) {
-                    log.warn { "Helper script file '${scriptFile.absolutePath}' could not be deleted." }
+                    log.warn { "Helper script file '${scriptFile.path}' could not be deleted." }
                 }
             }
         } else {
-            getPathFromEnvironment("python$version")?.absolutePath ?: ""
+            getPathFromEnvironment("python$version")?.path ?: ""
         }
     }
 }

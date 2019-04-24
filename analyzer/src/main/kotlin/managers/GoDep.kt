@@ -158,7 +158,7 @@ class GoDep(
         } else {
             val uri = URI(vcs.url)
             Paths.get(gopath.path, "src", uri.host, uri.path)
-        }.toAbsolutePath().toFile()
+        }.toFile()
 
     private fun resolveProjectRoot(definitionFile: File): File {
         val projectDir = when (definitionFile.name) {
@@ -211,7 +211,7 @@ class GoDep(
 
             log.debug { "Running 'dep ensure' to generate missing lockfile in $workingDir" }
 
-            run("ensure", workingDir = workingDir, environment = mapOf("GOPATH" to gopath.absolutePath))
+            run("ensure", workingDir = workingDir, environment = mapOf("GOPATH" to gopath.path))
         }
 
         val entries = Toml().read(lockfile).toMap()["projects"]
@@ -240,7 +240,7 @@ class GoDep(
     }
 
     private fun resolveVcsInfo(importPath: String, revision: String, gopath: File): VcsInfo {
-        val pc = ProcessCapture("go", "get", "-d", importPath, environment = mapOf("GOPATH" to gopath.absolutePath))
+        val pc = ProcessCapture("go", "get", "-d", importPath, environment = mapOf("GOPATH" to gopath.path))
 
         // HACK Some failure modes from "go get" can be ignored:
         // 1. repositories that don't have .go files in the root directory

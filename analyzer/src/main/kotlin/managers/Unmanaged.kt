@@ -68,7 +68,7 @@ class Unmanaged(
             vcsInfo == VcsInfo.EMPTY -> {
                 // This seems to be an analysis of a local directory that is not under version control, i.e. that is not
                 // a VCS working tree. In this case we have no change to get a version.
-                val projectDir = definitionFile.absoluteFile
+                val projectDir = definitionFile
 
                 log.warn {
                     "Analysis of local directory '$projectDir' which is not under version control will produce" +

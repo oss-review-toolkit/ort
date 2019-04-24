@@ -179,12 +179,12 @@ open class NPM(
         val packages = mutableMapOf<String, Package>()
         val nodeModulesDir = File(rootDirectory, "node_modules")
 
-        log.info { "Searching for 'package.json' files in '${nodeModulesDir.absolutePath}'..." }
+        log.info { "Searching for 'package.json' files in '$nodeModulesDir'..." }
 
         nodeModulesDir.walkTopDown().filter {
             it.name == "package.json" && isValidNodeModulesDirectory(nodeModulesDir, nodeModulesDirForPackageJson(it))
         }.forEach {
-            val packageDir = it.absoluteFile.parentFile
+            val packageDir = it.parentFile
             val realPackageDir = packageDir.realFile()
             val isSymbolicPackageDir = packageDir != realPackageDir
 
@@ -365,7 +365,7 @@ open class NPM(
                     dependencies += dependency
                 }
             }
-        } ?: log.debug { "Could not find scope '$scope' in '${packageJson.absolutePath}'." }
+        } ?: log.debug { "Could not find scope '$scope' in '$packageJson'." }
 
         return dependencies
     }
@@ -386,12 +386,12 @@ open class NPM(
         rootModulesDir: File, startModulesDir: File, name: String, packages: Map<String, Package>,
         dependencyBranch: List<String> = listOf()
     ): PackageReference? {
-        log.debug { "Building dependency tree for '$name' from directory '${startModulesDir.absolutePath}'." }
+        log.debug { "Building dependency tree for '$name' from directory '$startModulesDir'." }
 
         val packageFile = startModulesDir.resolve(name).resolve("package.json")
 
         if (packageFile.isFile) {
-            log.debug { "Found package file for module '$name' at '${packageFile.absolutePath}'." }
+            log.debug { "Found package file for module '$name' at '$packageFile'." }
 
             val packageJson = jsonMapper.readTree(packageFile)
             val rawName = packageJson["name"].textValue()
@@ -425,8 +425,8 @@ open class NPM(
             return packageInfo.toReference(dependencies = dependencies)
         } else if (rootModulesDir == startModulesDir) {
             log.warn {
-                "Could not find package file for '$name' anywhere in '${rootModulesDir.absolutePath}'. This might be " +
-                        "fine if the module was not installed because it is specific to a different platform."
+                "Could not find package file for '$name' anywhere in '$rootModulesDir'. This might be fine if the " +
+                        "module was not installed because it is specific to a different platform."
             }
 
             val id = Identifier(managerName, "", name, "")
@@ -444,8 +444,7 @@ open class NPM(
             // E.g. when using Yarn workspaces, the dependencies of the projects are consolidated in a single top-level
             // "node_modules" directory for de-duplication, so go up.
             log.info {
-                "Could not find package file for '$name' in '${startModulesDir.absolutePath}', looking in " +
-                        "'${parentModulesDir.absolutePath}' instead."
+                "Could not find package file for '$name' in '$startModulesDir', looking in '$parentModulesDir' instead."
             }
 
             return buildTree(rootModulesDir, parentModulesDir, name, packages, dependencyBranch)
@@ -454,7 +453,7 @@ open class NPM(
 
     private fun parseProject(packageJson: File, scopes: SortedSet<Scope>, packages: SortedSet<Package>):
             ProjectAnalyzerResult {
-        log.debug { "Parsing project info from '${packageJson.absolutePath}'." }
+        log.debug { "Parsing project info from '$packageJson'." }
 
         val json = jsonMapper.readTree(packageJson)
 
