@@ -127,7 +127,7 @@ class StaticHtmlReporter : Reporter() {
     private fun DIV.metadataTable(metadata: Map<String, String>) {
         h2 { +"Metadata" }
         table("ort-report-metadata") {
-            tbody { metadata.forEach { key, value -> metadataRow(key, value) } }
+            tbody { metadata.forEach { (key, value) -> metadataRow(key, value) } }
         }
     }
 
