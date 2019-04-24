@@ -328,5 +328,6 @@ data class OrtResult(
     /**
      * Return a copy of this [OrtResult] with the [Repository.config] replaced by [config].
      */
-    fun replaceConfig(config: RepositoryConfiguration) = copy(repository = repository.copy(config = config))
+    fun replaceConfig(config: RepositoryConfiguration): OrtResult =
+        copy(repository = repository.copy(config = config)).also { it.data += data }
 }
