@@ -111,7 +111,7 @@ class ProcessCapture(vararg command: String, workingDir: File? = null, environme
     val errorMessage
         get(): String {
             // Fall back to stdout for any error message if stderr is blank.
-            var message = stderr.takeUnless { it.isBlank() } ?: stdout
+            val message = stderr.takeUnless { it.isBlank() } ?: stdout
 
             return "Running '$commandLine' in '$usedWorkingDir' failed with exit code $exitValue:\n" +
                     limitOutputLines(message)
