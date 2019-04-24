@@ -181,7 +181,7 @@ fun generateEnumClass(
         |        /**
         |         * Return the enum value for the given [id], or null if it is no SPDX $description id.
         |         */
-        |        fun forId(id: String) = $className.values().find { it.id.equals(id, true) }
+        |        fun forId(id: String) = values().find { it.id.equals(id, true) }
         |    }
 
 

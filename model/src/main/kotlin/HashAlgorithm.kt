@@ -72,7 +72,7 @@ enum class HashAlgorithm(private vararg val aliases: String) {
          * Create a hash algorithm from a hash [value].
          */
         fun fromHash(value: String): HashAlgorithm {
-            if (value.isBlank()) return HashAlgorithm.UNKNOWN
+            if (value.isBlank()) return UNKNOWN
 
             return when (value.length) {
                 128 -> SHA512

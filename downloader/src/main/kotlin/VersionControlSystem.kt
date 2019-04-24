@@ -118,7 +118,7 @@ abstract class VersionControlSystem {
         /**
          * Return all VCS information about a [workingDir]. This is a convenience wrapper around [WorkingTree.getInfo].
          */
-        fun getCloneInfo(workingDir: File) = VersionControlSystem.forDirectory(workingDir)?.getInfo() ?: VcsInfo.EMPTY
+        fun getCloneInfo(workingDir: File) = forDirectory(workingDir)?.getInfo() ?: VcsInfo.EMPTY
 
         /**
          * Return all VCS information about a specific [path]. If [path] points to a nested VCS (like an individual Git
@@ -126,7 +126,7 @@ abstract class VersionControlSystem {
          */
         fun getPathInfo(path: File): VcsInfo {
             val dir = path.takeIf { it.isDirectory } ?: path.parentFile
-            return VersionControlSystem.forDirectory(dir)?.let { workingTree ->
+            return forDirectory(dir)?.let { workingTree ->
                 // Always return the relative path to the (nested) VCS root.
                 workingTree.getInfo().copy(path = workingTree.getPathToRoot(path))
             } ?: VcsInfo.EMPTY
