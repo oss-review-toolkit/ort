@@ -50,7 +50,7 @@ data class Hash(
          */
         fun fromValue(value: String): Hash {
             val splitValue = value.split('-')
-            return if (splitValue.count() == 2) {
+            return if (splitValue.size == 2) {
                 // Support Subresource Integrity (SRI) hashes, see
                 // https://w3c.github.io/webappsec-subresource-integrity/
                 Hash(

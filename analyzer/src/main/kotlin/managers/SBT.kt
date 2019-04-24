@@ -104,7 +104,7 @@ class SBT(
     }
 
     override fun mapDefinitionFiles(definitionFiles: List<File>): List<File> {
-        val workingDir = if (definitionFiles.count() > 1) {
+        val workingDir = if (definitionFiles.size > 1) {
             // Some SBT projects do not have a build file in their root, but they still require "sbt" to be run from the
             // project's root directory. In order to determine the root directory, use the common prefix of all
             // definition file paths.
@@ -144,7 +144,7 @@ class SBT(
     }
 
     override fun prepareResolution(definitionFiles: List<File>) {
-        val workingDir = if (definitionFiles.count() > 1) {
+        val workingDir = if (definitionFiles.size > 1) {
             // Some SBT projects do not have a build file in their root, but they still require "sbt" to be run from the
             // project's root directory. In order to determine the root directory, use the common prefix of all
             // definition file paths.

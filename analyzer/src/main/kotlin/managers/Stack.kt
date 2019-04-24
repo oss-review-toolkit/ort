@@ -86,7 +86,7 @@ class Stack(
             cabalMatcher.matches(it.toPath())
         })
 
-        val cabalFile = when (cabalFiles.count()) {
+        val cabalFile = when (cabalFiles.size) {
             0 -> throw IOException("No *.cabal file found in '$workingDir'.")
             1 -> cabalFiles.first()
             else -> throw IOException("Multiple *.cabal files found in '$cabalFiles'.")
@@ -118,7 +118,7 @@ class Stack(
                 dependencies.getOrPut(parent) { mutableListOf() } += child
             }
 
-            log.debug { "Parsed ${dependencies.count()} dependency relations from graph." }
+            log.debug { "Parsed ${dependencies.size} dependency relations from graph." }
 
             return dependencies
         }
@@ -128,7 +128,7 @@ class Stack(
             return dependencies.lines().associate {
                 Pair(it.substringBefore(" "), it.substringAfter(" "))
             }.also {
-                log.debug { "Parsed ${it.count()} dependency versions from list." }
+                log.debug { "Parsed ${it.size} dependency versions from list." }
             }
         }
 
@@ -258,7 +258,7 @@ class Stack(
             }
 
             val keyValue = line.split(':', limit = 2).map { it.trim() }
-            when (keyValue.count()) {
+            when (keyValue.size) {
                 1 -> {
                     // Handle lines without a colon.
                     val nestedMap = parseKeyValue(i, keyPrefix + keyValue[0].replace(" ", "-") + "-")

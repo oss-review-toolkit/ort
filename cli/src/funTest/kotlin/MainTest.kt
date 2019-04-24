@@ -141,7 +141,7 @@ class MainTest : StringSpec() {
 
                 val lines = streamOut.toString().lines().filter { it.startsWith("Writing analyzer result to ") }
 
-                lines.count() shouldBe 2
+                lines.size shouldBe 2
             } finally {
                 // Restore standard output.
                 System.setOut(standardOut)

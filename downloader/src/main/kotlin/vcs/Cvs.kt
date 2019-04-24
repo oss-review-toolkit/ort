@@ -144,7 +144,7 @@ class Cvs : VersionControlSystem(), CommandLineTool {
 
                 // "Externally, branch numbers consist of an odd number of dot-separated decimal
                 // integers."
-                return decimals.count() % 2 != 0 ||
+                return decimals.size % 2 != 0 ||
                         // "That is not the whole truth, however. For efficiency reasons CVS sometimes inserts
                         // an extra 0 in the second rightmost position."
                         decimals.dropLast(1).last() == "0"
