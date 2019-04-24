@@ -126,7 +126,7 @@ class SBT(
         }
 
         if (internalProjectNames.isEmpty()) {
-            log.warn { "No SBT projects found inside the '${workingDir.absolutePath}' directory." }
+            log.warn { "No SBT projects found inside the '$workingDir' directory." }
         }
 
         // Generate the POM files. Note that a single run of makePom might create multiple POM files in case of
@@ -137,7 +137,7 @@ class SBT(
         }
 
         if (pomFiles.isEmpty()) {
-            log.warn { "No generated POM files found inside the '${workingDir.absolutePath}' directory." }
+            log.warn { "No generated POM files found inside the '$workingDir' directory." }
         }
 
         return pomFiles.distinct()

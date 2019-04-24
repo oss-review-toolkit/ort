@@ -125,7 +125,7 @@ class PhpComposer(
             val (packages, scopes) = if (hasDependencies) {
                 installDependencies(workingDir)
 
-                log.info { "Reading $COMPOSER_LOCK_FILE file in ${workingDir.absolutePath}..." }
+                log.info { "Reading $COMPOSER_LOCK_FILE file in $workingDir..." }
                 val lockFile = jsonMapper.readTree(File(workingDir, COMPOSER_LOCK_FILE))
                 val packages = parseInstalledPackages(lockFile)
 
@@ -147,7 +147,7 @@ class PhpComposer(
                 Pair(emptyMap(), sortedSetOf())
             }
 
-            log.info { "Reading ${definitionFile.name} file in ${workingDir.absolutePath}..." }
+            log.info { "Reading ${definitionFile.name} file in $workingDir..." }
 
             val project = parseProject(definitionFile, scopes)
 

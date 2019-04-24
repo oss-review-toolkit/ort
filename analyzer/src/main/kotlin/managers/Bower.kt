@@ -225,7 +225,7 @@ class Bower(
         checkVersion(ignoreActualVersion = analyzerConfig.ignoreToolVersions)
 
     override fun resolveDependencies(definitionFile: File): ProjectAnalyzerResult? {
-        log.info { "Resolving dependencies for: '${definitionFile.absolutePath}'" }
+        log.info { "Resolving dependencies for: '$definitionFile'" }
 
         val workingDir = definitionFile.parentFile
 

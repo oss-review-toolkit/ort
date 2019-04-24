@@ -133,11 +133,11 @@ class Gradle(
 
             val dependencyTreeModel = connection
                 .model(DependencyTreeModel::class.java)
-                .withArguments("--init-script", initScriptFile.absolutePath)
+                .withArguments("--init-script", initScriptFile.path)
                 .get()
 
             if (!initScriptFile.delete()) {
-                log.warn { "Init script file '${initScriptFile.absolutePath}' could not be deleted." }
+                log.warn { "Init script file '$initScriptFile' could not be deleted." }
             }
 
             val repositories = dependencyTreeModel.repositories.map {

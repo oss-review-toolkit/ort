@@ -198,11 +198,11 @@ class Bundler(
         scriptFile.writeBytes(javaClass.getResource("/scripts/bundler_dependencies.rb").readBytes())
 
         try {
-            val scriptCmd = run(workingDir, "exec", "ruby", scriptFile.absolutePath)
+            val scriptCmd = run(workingDir, "exec", "ruby", scriptFile.path)
             return jsonMapper.readValue(scriptCmd.stdout)
         } finally {
             if (!scriptFile.delete()) {
-                log.warn { "Helper script file '${scriptFile.absolutePath}' could not be deleted." }
+                log.warn { "Helper script file '$scriptFile' could not be deleted." }
             }
         }
     }
