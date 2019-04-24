@@ -306,7 +306,7 @@ data class OrtResult(
         val vcsPath = repository.getRelativePath(project.vcsProcessed)
 
         requireNotNull(vcsPath) {
-            "The ${project.vcs} of project '${project.id.toCoordinates()}' cannot be found in $repository."
+            "The ${project.vcsProcessed} of project '${project.id.toCoordinates()}' cannot be found in $repository."
         }
 
         return buildString {
