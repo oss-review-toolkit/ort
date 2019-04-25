@@ -115,7 +115,7 @@ class DotNetSupport(
         }
     }
 
-    val packages = mutableMapOf<String, Package>()
+    val packages = mutableListOf<Package>()
     val errors = mutableListOf<OrtIssue>()
     val scope = Scope(SCOPE_NAME, sortedSetOf())
 
@@ -132,7 +132,7 @@ class DotNetSupport(
             val pkg = packageReferenceToPackage(packageReference)
 
             if (pkg != Package.EMPTY) {
-                packages["${pkg.id.name}:${pkg.id.version}"] = pkg
+                packages += pkg
             }
         }
     }
