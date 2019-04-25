@@ -54,7 +54,7 @@ class NuGet(
         fun mapPackageReferences(definitionFile: File): Map<String, String> {
             val map = mutableMapOf<String, String>()
             val mapper = XmlMapper().registerKotlinModule()
-            val packagesConfig: PackagesConfig = mapper.readValue(definitionFile)
+            val packagesConfig = mapper.readValue<PackagesConfig>(definitionFile)
 
             packagesConfig.packages?.forEach {
                 map[it.id] = it.version

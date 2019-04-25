@@ -54,7 +54,7 @@ class DotNet(
         fun mapPackageReferences(definitionFile: File): Map<String, String> {
             val map = mutableMapOf<String, String>()
             val mapper = XmlMapper().registerKotlinModule()
-            val itemGroups: List<ItemGroup> = mapper.readValue(definitionFile)
+            val itemGroups = mapper.readValue<List<ItemGroup>>(definitionFile)
 
             itemGroups.forEach { itemGroup ->
                 itemGroup.packageReference?.forEach {
