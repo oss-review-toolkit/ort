@@ -74,30 +74,31 @@ class DotNetSupport(
                 path = extractRepositoryPath(node)
             )
 
-        private fun extractPackageId(node: JsonNode) = Identifier(
-            type = PROVIDER_NAME,
-            namespace = "",
-            name = node["id"]?.textValue() ?: "",
-            version = node["version"]?.textValue() ?: ""
-        )
-
-
-        private fun extractDeclaredLicenses(node: JsonNode) = sortedSetOf<String>().apply {
-            val license = node["license"]?.textValue() ?: node["licenseUrl"]?.textValue() ?: ""
-            // most nuget packages only provide a licenseUrl,
-            // which counts as declared license, will be changed when scanner runs
-            if (license.isNotEmpty()) {
-                add(license)
-            }
-        }
-
-        private fun extractRemoteArtifact(node: JsonNode, nupkgUrl: String) = RemoteArtifact(
-            url = nupkgUrl,
-            hash = node["packageHash"]?.textValue() ?: "",
-            hashAlgorithm = HashAlgorithm.fromString(
-                node["packageHashAlgorithm"]?.textValue() ?: ""
+        private fun extractPackageId(node: JsonNode) =
+            Identifier(
+                type = PROVIDER_NAME,
+                namespace = "",
+                name = node["id"]?.textValue() ?: "",
+                version = node["version"]?.textValue() ?: ""
             )
-        )
+
+        private fun extractDeclaredLicenses(node: JsonNode) =
+            sortedSetOf<String>().apply {
+                val license = node["license"]?.textValue() ?: node["licenseUrl"]?.textValue() ?: ""
+                // Most nuget packages only provide a "licenseUrl" which counts as a declared license.
+                if (license.isNotEmpty()) {
+                    add(license)
+                }
+            }
+
+        private fun extractRemoteArtifact(node: JsonNode, nupkgUrl: String) =
+            RemoteArtifact(
+                url = nupkgUrl,
+                hash = node["packageHash"]?.textValue() ?: "",
+                hashAlgorithm = HashAlgorithm.fromString(
+                    node["packageHashAlgorithm"]?.textValue() ?: ""
+                )
+            )
 
         private fun getCatalogURL(registrationNode: JsonNode): String =
             registrationNode["catalogEntry"]?.textValue() ?: ""
@@ -112,13 +113,13 @@ class DotNetSupport(
                 .replace(")", "")
             return rangeReplaces.split(",").elementAt(0)
         }
-
     }
 
     var packages = mutableMapOf<String, Package>()
     var errors = mutableListOf<OrtIssue>()
     var scope = Scope(SCOPE_NAME, sortedSetOf())
-    // consists of map key: id, version and pair map entry: nupkg url as string and catalogentry as jsonnode
+
+    // Maps an (id, version) pair to a (nupkg URL, catalog entry) pair.
     private val packageReferencesAlreadyFound = mutableMapOf<Pair<String, String>, Pair<String, JsonNode>>()
 
     init {
@@ -136,9 +137,8 @@ class DotNetSupport(
         }
     }
 
-    private fun packageReferenceToPackage(packageReference: PackageReference): Package {
-        return jsonNodeToPackage(getPackageReferenceJsonContent(packageReference))
-    }
+    private fun packageReferenceToPackage(packageReference: PackageReference) =
+        jsonNodeToPackage(getPackageReferenceJsonContent(packageReference))
 
     private fun getPackageReferenceJsonContent(packageReference: PackageReference): Pair<String, JsonNode> {
         if (packageReferencesAlreadyFound.containsKey(
@@ -256,9 +256,8 @@ class DotNetSupport(
         return packageJsonNode
     }
 
-    private fun hasPackageReferenceAlready(nodeAsPair: Pair<String, String>): Boolean {
-        return packageReferencesAlreadyFound.containsKey(nodeAsPair)
-    }
+    private fun hasPackageReferenceAlready(nodeAsPair: Pair<String, String>) =
+        packageReferencesAlreadyFound.containsKey(nodeAsPair)
 
     private fun getInformationURL(packageID: String, version: String): Pair<String, String>? {
         val registrationInfo: String? = try {
@@ -282,12 +281,12 @@ class DotNetSupport(
         }
     }
 
-    private fun getIdUrl(packageID: String, version: String): String {
-        val node = getCreateSearchRestAPIURL(packageID)
-
-        return getRightVersionUrl(node["data"]?.elements(), packageID, version)
-            ?: getFirstMatchingIdUrl(node["data"]?.elements(), packageID) ?: ""
-    }
+    private fun getIdUrl(packageID: String, version: String) =
+        getCreateSearchRestAPIURL(packageID).let { node ->
+            getRightVersionUrl(node["data"]?.elements(), packageID, version)
+                ?: getFirstMatchingIdUrl(node["data"]?.elements(), packageID)
+                ?: ""
+        }
 
     private fun getRightVersionUrl(
         dataIterator: Iterator<JsonNode>?,
@@ -297,10 +296,11 @@ class DotNetSupport(
             val packageNode = dataIterator.next()
             if (packageNode["id"].textValueOrEmpty() == packageID) {
                 packageNode["versions"].elements().forEach {
-                    if (it["version"].textValueOrEmpty() == version)
+                    if (it["version"].textValueOrEmpty() == version) {
                         return it["@id"].textValueOrEmpty()
-                    else if (!dataIterator.hasNext() && version == "latest")
+                    } else if (!dataIterator.hasNext() && version == "latest") {
                         return it["@id"].textValueOrEmpty()
+                    }
                 }
             }
         }
@@ -319,11 +319,10 @@ class DotNetSupport(
         return null
     }
 
-    private fun getCreateSearchRestAPIURL(packageID: String): JsonNode {
-        return jacksonObjectMapper().readTree(
+    private fun getCreateSearchRestAPIURL(packageID: String) =
+        jacksonObjectMapper().readTree(
             "https://api-v2v3search-0.nuget.org/query?q=\"$packageID\"&prerelease=false".requestFromNugetAPI()
         )
-    }
 
     private fun String.requestFromNugetAPI(): String {
         if (isNullOrEmpty()) {
