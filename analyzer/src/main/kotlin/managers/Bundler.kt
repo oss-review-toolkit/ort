@@ -70,8 +70,7 @@ class Bundler(
     analyzerRoot: File,
     analyzerConfig: AnalyzerConfiguration,
     repoConfig: RepositoryConfiguration
-) :
-    PackageManager(name, analyzerRoot, analyzerConfig, repoConfig), CommandLineTool {
+) : PackageManager(name, analyzerRoot, analyzerConfig, repoConfig), CommandLineTool {
     class Factory : AbstractPackageManagerFactory<Bundler>("Bundler") {
         override val globsForDefinitionFiles = listOf("Gemfile")
 

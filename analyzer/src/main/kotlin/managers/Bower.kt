@@ -59,8 +59,7 @@ class Bower(
     analyzerRoot: File,
     analyzerConfig: AnalyzerConfiguration,
     repoConfig: RepositoryConfiguration
-) :
-    PackageManager(name, analyzerRoot, analyzerConfig, repoConfig), CommandLineTool {
+) : PackageManager(name, analyzerRoot, analyzerConfig, repoConfig), CommandLineTool {
     companion object {
         // We do not actually depend on any features specific to this Bower version, but we still want to
         // stick to fixed versions to be sure to get consistent results.

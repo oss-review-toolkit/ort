@@ -37,8 +37,7 @@ class Yarn(
     analyzerRoot: File,
     analyzerConfig: AnalyzerConfiguration,
     repoConfig: RepositoryConfiguration
-) :
-    NPM(name, analyzerRoot, analyzerConfig, repoConfig) {
+) : NPM(name, analyzerRoot, analyzerConfig, repoConfig) {
     class Factory : AbstractPackageManagerFactory<Yarn>("Yarn") {
         override val globsForDefinitionFiles = listOf("package.json")
 

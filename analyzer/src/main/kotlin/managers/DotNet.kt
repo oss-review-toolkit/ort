@@ -49,8 +49,7 @@ class DotNet(
     analyzerRoot: File,
     analyzerConfig: AnalyzerConfiguration,
     repoConfig: RepositoryConfiguration
-) :
-    PackageManager(name, analyzerRoot, analyzerConfig, repoConfig) {
+) : PackageManager(name, analyzerRoot, analyzerConfig, repoConfig) {
     companion object {
         fun mapPackageReferences(workingDir: File): Map<String, String> {
             val map = mutableMapOf<String, String>()

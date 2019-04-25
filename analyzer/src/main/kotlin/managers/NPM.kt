@@ -72,8 +72,7 @@ open class NPM(
     analyzerRoot: File,
     analyzerConfig: AnalyzerConfiguration,
     repoConfig: RepositoryConfiguration
-) :
-    PackageManager(name, analyzerRoot, analyzerConfig, repoConfig), CommandLineTool {
+) : PackageManager(name, analyzerRoot, analyzerConfig, repoConfig), CommandLineTool {
     companion object {
         /**
          * Expand NPM shortcuts for URLs to hosting sites to full URLs so that they can be used in a regular way.

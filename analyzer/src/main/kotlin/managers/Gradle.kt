@@ -66,8 +66,7 @@ class Gradle(
     analyzerRoot: File,
     analyzerConfig: AnalyzerConfiguration,
     repoConfig: RepositoryConfiguration
-) :
-    PackageManager(name, analyzerRoot, analyzerConfig, repoConfig) {
+) : PackageManager(name, analyzerRoot, analyzerConfig, repoConfig) {
     class Factory : AbstractPackageManagerFactory<Gradle>("Gradle") {
         // Gradle prefers Groovy ".gradle" files over Kotlin ".gradle.kts" files, but "build" files have to come before
         // "settings" files as we should consider "settings" files only if the same directory does not also contain a
