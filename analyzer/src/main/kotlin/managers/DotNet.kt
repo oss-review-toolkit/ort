@@ -58,8 +58,8 @@ class DotNet(
 
             itemGroups.forEach { itemGroup ->
                 itemGroup.packageReference?.forEach {
-                    if (!it.Include.isNullOrEmpty()) {
-                        map[it.Include] = it.Version ?: " "
+                    if (!it.include.isNullOrEmpty()) {
+                        map[it.include] = it.version ?: " "
                     }
                 }
             }
@@ -76,12 +76,10 @@ class DotNet(
 
         @JsonIgnoreProperties(ignoreUnknown = true)
         data class PackageReference(
-            @JsonProperty(value = "Include")
-            @JacksonXmlProperty(isAttribute = true)
-            val Include: String?,
-            @JsonProperty(value = "Version")
-            @JacksonXmlProperty(isAttribute = true)
-            val Version: String?
+            @JacksonXmlProperty(isAttribute = true, localName = "Include")
+            val include: String?,
+            @JacksonXmlProperty(isAttribute = true, localName = "Version")
+            val version: String?
         )
     }
 
