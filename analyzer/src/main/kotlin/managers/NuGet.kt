@@ -22,11 +22,9 @@ package com.here.ort.analyzer.managers
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.annotation.JsonProperty
-import com.fasterxml.jackson.dataformat.xml.XmlMapper
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty
 import com.fasterxml.jackson.module.kotlin.readValue
-import com.fasterxml.jackson.module.kotlin.registerKotlinModule
 
 import com.here.ort.analyzer.AbstractPackageManagerFactory
 import com.here.ort.analyzer.DotNetSupport
@@ -54,8 +52,7 @@ class NuGet(
     companion object {
         fun mapPackageReferences(definitionFile: File): Map<String, String> {
             val map = mutableMapOf<String, String>()
-            val mapper = XmlMapper().registerKotlinModule()
-            val packagesConfig: PackagesConfig = mapper.readValue(definitionFile)
+            val packagesConfig = DotNetSupport.mapper.readValue<PackagesConfig>(definitionFile)
 
             packagesConfig.packages?.forEach {
                 map[it.id] = it.version

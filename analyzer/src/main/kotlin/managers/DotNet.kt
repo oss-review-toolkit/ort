@@ -22,11 +22,9 @@ package com.here.ort.analyzer.managers
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.annotation.JsonProperty
-import com.fasterxml.jackson.dataformat.xml.XmlMapper
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty
 import com.fasterxml.jackson.module.kotlin.readValue
-import com.fasterxml.jackson.module.kotlin.registerKotlinModule
 
 import com.here.ort.analyzer.AbstractPackageManagerFactory
 import com.here.ort.analyzer.DotNetSupport
@@ -54,8 +52,7 @@ class DotNet(
     companion object {
         fun mapPackageReferences(definitionFile: File): Map<String, String> {
             val map = mutableMapOf<String, String>()
-            val mapper = XmlMapper().registerKotlinModule()
-            val itemGroups: List<ItemGroup> = mapper.readValue(definitionFile)
+            val itemGroups = DotNetSupport.mapper.readValue<List<ItemGroup>>(definitionFile)
 
             itemGroups.forEach { itemGroup ->
                 itemGroup.packageReference?.forEach {

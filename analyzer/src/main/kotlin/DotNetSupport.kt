@@ -21,7 +21,9 @@
 package com.here.ort.analyzer
 
 import com.fasterxml.jackson.databind.JsonNode
+import com.fasterxml.jackson.dataformat.xml.XmlMapper
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
+import com.fasterxml.jackson.module.kotlin.registerKotlinModule
 
 import com.here.ort.model.HashAlgorithm
 import com.here.ort.model.Identifier
@@ -35,11 +37,11 @@ import com.here.ort.model.xmlMapper
 import com.here.ort.utils.OkHttpClientHelper
 import com.here.ort.utils.textValueOrEmpty
 
-import okhttp3.Request
-
 import java.io.File
 import java.io.IOException
 import java.net.HttpURLConnection
+
+import okhttp3.Request
 
 class DotNetSupport(
     packageReferencesMap: Map<String, String>,
@@ -113,6 +115,8 @@ class DotNetSupport(
                 .replace(")", "")
             return rangeReplaces.split(",").elementAt(0)
         }
+
+        val mapper = XmlMapper().registerKotlinModule()
     }
 
     val packages = mutableListOf<Package>()

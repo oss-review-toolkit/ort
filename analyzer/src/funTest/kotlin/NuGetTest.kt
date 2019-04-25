@@ -20,9 +20,7 @@
 
 package com.here.ort.analyzer
 
-import com.fasterxml.jackson.dataformat.xml.XmlMapper
 import com.fasterxml.jackson.module.kotlin.readValue
-import com.fasterxml.jackson.module.kotlin.registerKotlinModule
 
 import com.here.ort.analyzer.managers.NuGet
 import com.here.ort.downloader.VersionControlSystem
@@ -68,8 +66,7 @@ class NuGetTest : StringSpec() {
         }
 
         "Definition File is correctly mapped" {
-            val mapper = XmlMapper().registerKotlinModule()
-            val result: NuGet.Companion.Packages = mapper.readValue(packageFile)
+            val result = DotNetSupport.mapper.readValue<NuGet.Companion.PackagesConfig>(packageFile)
 
             result shouldNotBe null
             result.packages shouldNotBe null

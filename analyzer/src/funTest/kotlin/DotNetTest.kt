@@ -20,6 +20,8 @@
 
 package com.here.ort.analyzer
 
+import com.fasterxml.jackson.module.kotlin.readValue
+
 import com.here.ort.analyzer.managers.DotNet
 import com.here.ort.downloader.VersionControlSystem
 import com.here.ort.model.yamlMapper
@@ -34,10 +36,6 @@ import io.kotlintest.should
 import io.kotlintest.shouldBe
 import io.kotlintest.shouldNotBe
 import io.kotlintest.specs.StringSpec
-
-import com.fasterxml.jackson.dataformat.xml.XmlMapper
-import com.fasterxml.jackson.module.kotlin.readValue
-import com.fasterxml.jackson.module.kotlin.registerKotlinModule
 
 import java.io.File
 
@@ -68,8 +66,7 @@ class DotNetTest : StringSpec() {
         }
 
         "Definition File is correctly mapped" {
-            val mapper = XmlMapper().registerKotlinModule()
-            val result = mapper.readValue<List<DotNet.Companion.ItemGroup>>(packageFile)
+            val result = DotNetSupport.mapper.readValue<List<DotNet.Companion.ItemGroup>>(packageFile)
 
             result shouldNotBe null
             result.size shouldBe 4
