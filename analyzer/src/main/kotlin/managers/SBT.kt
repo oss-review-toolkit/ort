@@ -46,8 +46,7 @@ class SBT(
     analyzerRoot: File,
     analyzerConfig: AnalyzerConfiguration,
     repoConfig: RepositoryConfiguration
-) :
-    PackageManager(name, analyzerRoot, analyzerConfig, repoConfig), CommandLineTool {
+) : PackageManager(name, analyzerRoot, analyzerConfig, repoConfig), CommandLineTool {
     companion object {
         private val VERSION_REGEX = Regex("\\[info]\\s+(\\d+\\.\\d+\\.[^\\s]+)")
         private val PROJECT_REGEX = Regex("\\[info] \t [ *] (.+)")
