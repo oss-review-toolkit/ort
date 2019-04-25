@@ -24,8 +24,8 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.PropertyNamingStrategy
 import com.fasterxml.jackson.databind.SerializationFeature
 import com.fasterxml.jackson.databind.module.SimpleModule
-import com.fasterxml.jackson.dataformat.xml.XmlFactory
-import com.fasterxml.jackson.dataformat.yaml.YAMLFactory
+import com.fasterxml.jackson.dataformat.xml.XmlMapper
+import com.fasterxml.jackson.dataformat.yaml.YAMLMapper
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import com.fasterxml.jackson.module.kotlin.registerKotlinModule
 
@@ -59,7 +59,7 @@ private val mapperConfig: ObjectMapper.() -> Unit = {
 }
 
 val jsonMapper = ObjectMapper().apply(mapperConfig)
-val xmlMapper = ObjectMapper(XmlFactory()).apply(mapperConfig)
-val yamlMapper = ObjectMapper(YAMLFactory()).apply(mapperConfig)
+val xmlMapper = XmlMapper().apply(mapperConfig)
+val yamlMapper = YAMLMapper().apply(mapperConfig)
 
 val EMPTY_JSON_NODE: JsonNode = jsonMapper.readTree("{}")
