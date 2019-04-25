@@ -69,7 +69,7 @@ class NuGetTest : StringSpec() {
 
         "Definition File is correctly mapped" {
             val mapper = XmlMapper().registerKotlinModule()
-            val result: NuGet.Companion.Packages = mapper.readValue(packageFile)
+            val result: NuGet.Companion.PackagesConfig = mapper.readValue(packageFile)
 
             result shouldNotBe null
             result.packages shouldNotBe null

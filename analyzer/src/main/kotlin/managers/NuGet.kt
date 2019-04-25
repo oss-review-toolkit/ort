@@ -51,12 +51,12 @@ class NuGet(
     repoConfig: RepositoryConfiguration
 ) : PackageManager(name, analyzerRoot, analyzerConfig, repoConfig) {
     companion object {
-        fun mapPackageReferences(workingDir: File): Map<String, String> {
+        fun mapPackageReferences(definitionFile: File): Map<String, String> {
             val map = mutableMapOf<String, String>()
             val mapper = XmlMapper().registerKotlinModule()
-            val mappedFile: Packages = mapper.readValue(workingDir)
+            val packagesConfig: PackagesConfig = mapper.readValue(definitionFile)
 
-            mappedFile.packages?.forEach {
+            packagesConfig.packages?.forEach {
                 map[it.id] = it.version
             }
 
@@ -64,7 +64,7 @@ class NuGet(
         }
 
         @JsonIgnoreProperties(ignoreUnknown = true)
-        data class Packages(
+        data class PackagesConfig(
             @JsonProperty(value = "package")
             @JacksonXmlElementWrapper(useWrapping = false)
             val packages: List<Package>?
