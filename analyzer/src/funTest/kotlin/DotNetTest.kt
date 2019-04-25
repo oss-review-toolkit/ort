@@ -69,7 +69,7 @@ class DotNetTest : StringSpec() {
 
         "Definition File is correctly mapped" {
             val mapper = XmlMapper().registerKotlinModule()
-            val result = mapper.readValue<List<DotNet.Companion.ItemGroup>>(packageFile)
+            val result = mapper.readValue<List<DotNet.ItemGroup>>(packageFile)
 
             result shouldNotBe null
             result.size shouldBe 4

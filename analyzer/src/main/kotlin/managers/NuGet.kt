@@ -62,21 +62,6 @@ class NuGet(
 
             return map
         }
-
-        @JsonIgnoreProperties(ignoreUnknown = true)
-        data class PackagesConfig(
-            @JsonProperty(value = "package")
-            @JacksonXmlElementWrapper(useWrapping = false)
-            val packages: List<Package>?
-        )
-
-        @JsonIgnoreProperties(ignoreUnknown = true)
-        data class Package(
-            @JacksonXmlProperty(isAttribute = true)
-            val id: String,
-            @JacksonXmlProperty(isAttribute = true)
-            val version: String
-        )
     }
 
     class Factory : AbstractPackageManagerFactory<NuGet>("NuGet") {
@@ -89,6 +74,22 @@ class NuGet(
         ) =
             NuGet(managerName, analyzerRoot, analyzerConfig, repoConfig)
     }
+
+    // See https://docs.microsoft.com/en-us/nuget/reference/packages-config.
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    data class PackagesConfig(
+        @JsonProperty(value = "package")
+        @JacksonXmlElementWrapper(useWrapping = false)
+        val packages: List<Package>?
+    )
+
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    data class Package(
+        @JacksonXmlProperty(isAttribute = true)
+        val id: String,
+        @JacksonXmlProperty(isAttribute = true)
+        val version: String
+    )
 
     override fun resolveDependencies(definitionFile: File): ProjectAnalyzerResult? {
         val workingDir = definitionFile.parentFile
