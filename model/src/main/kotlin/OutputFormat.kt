@@ -44,6 +44,9 @@ enum class OutputFormat(val mapper: ObjectMapper, val fileExtension: String, var
      */
     YAML(yamlMapper, "yml", "yaml");
 
+    /**
+     * The list of file extensions used by this output format.
+     */
     val fileExtensions = listOf(fileExtension, *aliases)
 }
 
