@@ -115,9 +115,9 @@ class DotNetSupport(
         }
     }
 
-    var packages = mutableMapOf<String, Package>()
-    var errors = mutableListOf<OrtIssue>()
-    var scope = Scope(SCOPE_NAME, sortedSetOf())
+    val packages = mutableMapOf<String, Package>()
+    val errors = mutableListOf<OrtIssue>()
+    val scope = Scope(SCOPE_NAME, sortedSetOf())
 
     // Maps an (id, version) pair to a (nupkg URL, catalog entry) pair.
     private val packageReferencesAlreadyFound = mutableMapOf<Pair<String, String>, Pair<String, JsonNode>>()
