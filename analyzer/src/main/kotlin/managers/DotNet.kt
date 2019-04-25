@@ -51,12 +51,12 @@ class DotNet(
     repoConfig: RepositoryConfiguration
 ) : PackageManager(name, analyzerRoot, analyzerConfig, repoConfig) {
     companion object {
-        fun mapPackageReferences(workingDir: File): Map<String, String> {
+        fun mapPackageReferences(definitionFile: File): Map<String, String> {
             val map = mutableMapOf<String, String>()
             val mapper = XmlMapper().registerKotlinModule()
-            val mappedFile: List<ItemGroup> = mapper.readValue(workingDir)
+            val itemGroups: List<ItemGroup> = mapper.readValue(definitionFile)
 
-            mappedFile.forEach { itemGroup ->
+            itemGroups.forEach { itemGroup ->
                 itemGroup.packageReference?.forEach {
                     if (!it.Include.isNullOrEmpty()) {
                         map[it.Include] = it.Version ?: " "
