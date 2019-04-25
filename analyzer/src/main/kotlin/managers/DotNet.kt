@@ -117,7 +117,7 @@ class DotNet(
 
         return ProjectAnalyzerResult(
             project,
-            packages = dotnet.packages.values.map { it.toCuratedPackage() }.toSortedSet(),
+            packages = dotnet.packages.map { it.toCuratedPackage() }.toSortedSet(),
             errors = dotnet.errors
         )
     }
