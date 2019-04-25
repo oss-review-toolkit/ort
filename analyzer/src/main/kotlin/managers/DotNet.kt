@@ -39,6 +39,22 @@ import com.here.ort.model.config.RepositoryConfiguration
 
 import java.io.File
 
+// See https://docs.microsoft.com/en-us/nuget/consume-packages/package-references-in-project-files.
+@JsonIgnoreProperties(ignoreUnknown = true)
+data class ItemGroup(
+    @JsonProperty(value = "PackageReference")
+    @JacksonXmlElementWrapper(useWrapping = false)
+    val packageReference: List<PackageReference>?
+)
+
+@JsonIgnoreProperties(ignoreUnknown = true)
+data class PackageReference(
+    @JacksonXmlProperty(isAttribute = true, localName = "Include")
+    val include: String?,
+    @JacksonXmlProperty(isAttribute = true, localName = "Version")
+    val version: String?
+)
+
 /**
  * The [DotNet](https://docs.microsoft.com/en-us/dotnet/core/tools/) package manager for .NET.
  */
@@ -64,21 +80,6 @@ class DotNet(
 
             return map
         }
-
-        @JsonIgnoreProperties(ignoreUnknown = true)
-        data class ItemGroup(
-            @JsonProperty(value = "PackageReference")
-            @JacksonXmlElementWrapper(useWrapping = false)
-            val packageReference: List<PackageReference>?
-        )
-
-        @JsonIgnoreProperties(ignoreUnknown = true)
-        data class PackageReference(
-            @JacksonXmlProperty(isAttribute = true, localName = "Include")
-            val include: String?,
-            @JacksonXmlProperty(isAttribute = true, localName = "Version")
-            val version: String?
-        )
     }
 
     class Factory : AbstractPackageManagerFactory<DotNet>("DotNet") {

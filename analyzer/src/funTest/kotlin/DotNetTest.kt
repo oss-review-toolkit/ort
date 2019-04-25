@@ -23,6 +23,7 @@ package com.here.ort.analyzer
 import com.fasterxml.jackson.module.kotlin.readValue
 
 import com.here.ort.analyzer.managers.DotNet
+import com.here.ort.analyzer.managers.ItemGroup
 import com.here.ort.downloader.VersionControlSystem
 import com.here.ort.model.yamlMapper
 import com.here.ort.utils.normalizeVcsUrl
@@ -66,7 +67,7 @@ class DotNetTest : StringSpec() {
         }
 
         "Definition File is correctly mapped" {
-            val result = DotNetSupport.mapper.readValue<List<DotNet.Companion.ItemGroup>>(packageFile)
+            val result = DotNetSupport.mapper.readValue<List<ItemGroup>>(packageFile)
 
             result shouldNotBe null
             result.size shouldBe 4

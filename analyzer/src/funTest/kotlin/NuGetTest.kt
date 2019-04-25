@@ -23,6 +23,7 @@ package com.here.ort.analyzer
 import com.fasterxml.jackson.module.kotlin.readValue
 
 import com.here.ort.analyzer.managers.NuGet
+import com.here.ort.analyzer.managers.PackagesConfig
 import com.here.ort.downloader.VersionControlSystem
 import com.here.ort.model.yamlMapper
 import com.here.ort.utils.normalizeVcsUrl
@@ -66,7 +67,7 @@ class NuGetTest : StringSpec() {
         }
 
         "Definition File is correctly mapped" {
-            val result = DotNetSupport.mapper.readValue<NuGet.Companion.PackagesConfig>(packageFile)
+            val result = DotNetSupport.mapper.readValue<PackagesConfig>(packageFile)
 
             result shouldNotBe null
             result.packages shouldNotBe null

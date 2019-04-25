@@ -39,6 +39,22 @@ import com.here.ort.model.config.RepositoryConfiguration
 
 import java.io.File
 
+// See https://docs.microsoft.com/en-us/nuget/reference/packages-config.
+@JsonIgnoreProperties(ignoreUnknown = true)
+data class PackagesConfig(
+    @JsonProperty(value = "package")
+    @JacksonXmlElementWrapper(useWrapping = false)
+    val packages: List<Package>?
+)
+
+@JsonIgnoreProperties(ignoreUnknown = true)
+data class Package(
+    @JacksonXmlProperty(isAttribute = true)
+    val id: String,
+    @JacksonXmlProperty(isAttribute = true)
+    val version: String
+)
+
 /**
  * The [NuGet](https://www.nuget.org/) package manager for .NET.
  */
@@ -60,21 +76,6 @@ class NuGet(
 
             return map
         }
-
-        @JsonIgnoreProperties(ignoreUnknown = true)
-        data class PackagesConfig(
-            @JsonProperty(value = "package")
-            @JacksonXmlElementWrapper(useWrapping = false)
-            val packages: List<Package>?
-        )
-
-        @JsonIgnoreProperties(ignoreUnknown = true)
-        data class Package(
-            @JacksonXmlProperty(isAttribute = true)
-            val id: String,
-            @JacksonXmlProperty(isAttribute = true)
-            val version: String
-        )
     }
 
     class Factory : AbstractPackageManagerFactory<NuGet>("NuGet") {
