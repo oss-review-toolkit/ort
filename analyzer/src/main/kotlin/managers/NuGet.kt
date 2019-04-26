@@ -56,7 +56,7 @@ class NuGet(
             val mapper = XmlMapper().registerKotlinModule()
             val packagesConfig = mapper.readValue<PackagesConfig>(definitionFile)
 
-            packagesConfig.packages?.forEach {
+            packagesConfig.packages.forEach {
                 map[it.id] = it.version
             }
 
@@ -80,7 +80,7 @@ class NuGet(
     data class PackagesConfig(
         @JsonProperty(value = "package")
         @JacksonXmlElementWrapper(useWrapping = false)
-        val packages: List<Package>?
+        val packages: List<Package>
     )
 
     @JsonIgnoreProperties(ignoreUnknown = true)

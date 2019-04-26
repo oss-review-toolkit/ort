@@ -73,7 +73,7 @@ class NuGetTest : StringSpec() {
 
             result shouldNotBe null
             result.packages shouldNotBe null
-            result.packages?.size shouldBe 2
+            result.packages.size shouldBe 2
         }
     }
 
