@@ -59,7 +59,7 @@ class DotNet(
             itemGroups.forEach { itemGroup ->
                 itemGroup.packageReference?.forEach {
                     if (!it.include.isNullOrEmpty()) {
-                        map[it.include] = it.version ?: " "
+                        map[it.include] = it.version
                     }
                 }
             }
@@ -90,9 +90,9 @@ class DotNet(
     @JsonIgnoreProperties(ignoreUnknown = true)
     data class PackageReference(
         @JacksonXmlProperty(isAttribute = true, localName = "Include")
-        val include: String?,
+        val include: String,
         @JacksonXmlProperty(isAttribute = true, localName = "Version")
-        val version: String?
+        val version: String
     )
 
     override fun resolveDependencies(definitionFile: File): ProjectAnalyzerResult? {
