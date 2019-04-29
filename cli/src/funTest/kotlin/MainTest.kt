@@ -186,9 +186,6 @@ class MainTest : StringSpec() {
                 urlProcessed = normalizeVcsUrl(vcsUrl)
             )
 
-            // The command below should include the "--merge-results" option, but setting this option here would disable
-            // the feature because JCommander just switches the value of boolean options, and the option was already set
-            // to true by the test before. See: https://github.com/cbeust/jcommander/issues/378
             val exitCode = Main.run(
                 arrayOf(
                     "analyze",
