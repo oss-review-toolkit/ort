@@ -203,5 +203,27 @@ class MainTest : StringSpec() {
 
             patchActualResult(result, patchStartAndEndTime = true) shouldBe expectedResult
         }
+
+        "Requirements are listed correctly" {
+            // Redirect standard output to a stream.
+            val standardOut = System.out
+            val streamOut = ByteArrayOutputStream()
+            System.setOut(PrintStream(streamOut))
+
+            try {
+                val exitCode = Main.run(
+                    arrayOf(
+                        "requirements"
+                    )
+                )
+                val errorLogs = streamOut.toString().lines().find { it.contains(" ERROR - ") }
+
+                errorLogs shouldBe null
+                exitCode shouldBe 0
+            } finally {
+                // Restore standard output.
+                System.setOut(standardOut)
+            }
+        }
     }
 }
