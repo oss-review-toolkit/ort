@@ -34,6 +34,7 @@ import com.here.ort.scanner.Scanner
 import com.here.ort.utils.CommandLineTool
 import com.here.ort.utils.log
 
+import java.io.File
 import java.lang.reflect.Modifier
 
 import org.reflections.Reflections
@@ -65,10 +66,14 @@ object RequirementsCommand : CommandWithHelp() {
                         key = "PackageManager"
                         log.debug { "$it is a $key." }
                         it.getDeclaredConstructor(
-                            String::class.java, AnalyzerConfiguration::class.java,
+                            String::class.java,
+                            File::class.java,
+                            AnalyzerConfiguration::class.java,
                             RepositoryConfiguration::class.java
                         ).newInstance(
-                            "", AnalyzerConfiguration(ignoreToolVersions = false, allowDynamicVersions = false),
+                            "",
+                            File(""),
+                            AnalyzerConfiguration(ignoreToolVersions = false, allowDynamicVersions = false),
                             RepositoryConfiguration()
                         )
                     }
