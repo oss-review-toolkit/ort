@@ -200,16 +200,16 @@ class GradleTest : StringSpec() {
         println("Installing Gradle wrapper version $version.")
 
         val (gradle, wrapper) = if (OS.isWindows) {
-            Pair("gradle.bat", "gradlew.bat")
+            Pair("gradle.bat", projectDir.resolve("gradlew.bat"))
         } else {
-            Pair("gradle", "gradlew")
+            Pair("gradle", projectDir.resolve("gradlew"))
         }
 
-        val command = if (projectDir.resolve(wrapper).isFile) wrapper else gradle
+        val command = if (wrapper.isFile) wrapper.absolutePath else gradle
 
         // When calling Windows batch files directly (without passing them to "cmd" as an argument), Windows requires
         // the absolute path to the batch file to be passed to the underlying ProcessBuilder for some reason.
-        ProcessCapture(projectDir, File(command).absolutePath, "--no-daemon", "wrapper", "--gradle-version", version)
+        ProcessCapture(projectDir, command, "--no-daemon", "wrapper", "--gradle-version", version)
             .requireSuccess()
     }
 
