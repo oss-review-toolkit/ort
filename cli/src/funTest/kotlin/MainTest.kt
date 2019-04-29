@@ -57,102 +57,60 @@ class MainTest : StringSpec() {
         "Activating only Gradle works" {
             val inputDir = File(projectDir, "gradle")
 
-            // Redirect standard output to a stream.
-            val standardOut = System.out
-            val streamOut = ByteArrayOutputStream()
-            System.setOut(PrintStream(streamOut))
-
-            try {
-                val exitCode = Main.run(
-                    arrayOf(
-                        "analyze",
-                        "-m", "Gradle",
-                        "-i", inputDir.path,
-                        "-o", File(outputDir, "gradle").path
-                    )
-                )
-
-                exitCode shouldBe 0
-
-                val lines = streamOut.toString().lineSequence().iterator()
-                while (lines.hasNext()) {
-                    if (lines.next() == "The following package managers are activated:") break
-                }
-
-                lines.hasNext() shouldBe true
-                lines.next() shouldBe "\tGradle"
-            } finally {
-                // Restore standard output.
-                System.setOut(standardOut)
+            val runResult = runMain(
+                "analyze",
+                "-m", "Gradle",
+                "-i", inputDir.path,
+                "-o", File(outputDir, "gradle").path
+            )
+            val iterator = runResult.stdout.iterator()
+            while (iterator.hasNext()) {
+                if (iterator.next() == "The following package managers are activated:") break
             }
+
+
+            runResult.exitCode shouldBe 0
+            iterator.hasNext() shouldBe true
+            iterator.next() shouldBe "\tGradle"
         }
 
         "Activating only NPM works" {
             val inputDir = File(projectDir, "npm/package-lock")
 
-            // Redirect standard output to a stream.
-            val standardOut = System.out
-            val streamOut = ByteArrayOutputStream()
-            System.setOut(PrintStream(streamOut))
-
-            try {
-                val exitCode = Main.run(
-                    arrayOf(
-                        "analyze",
-                        "-m", "NPM",
-                        "-i", inputDir.path,
-                        "-o", File(outputDir, "package-lock").path
-                    )
-                )
-
-                exitCode shouldBe 0
-
-                val lines = streamOut.toString().lineSequence().iterator()
-                while (lines.hasNext()) {
-                    if (lines.next() == "The following package managers are activated:") break
-                }
-
-                lines.hasNext() shouldBe true
-                lines.next() shouldBe "\tNPM"
-            } finally {
-                // Restore standard output.
-                System.setOut(standardOut)
+            val runResult = runMain(
+                "analyze",
+                "-m", "NPM",
+                "-i", inputDir.path,
+                "-o", File(outputDir, "package-lock").path
+            )
+            val iterator = runResult.stdout.iterator()
+            while (iterator.hasNext()) {
+                if (iterator.next() == "The following package managers are activated:") break
             }
+
+            runResult.exitCode shouldBe 0
+            iterator.hasNext() shouldBe true
+            iterator.next() shouldBe "\tNPM"
         }
 
         "Output formats are deduplicated" {
             val inputDir = File(projectDir, "gradle")
 
-            // Redirect standard output to a stream.
-            val standardOut = System.out
-            val streamOut = ByteArrayOutputStream()
-            System.setOut(PrintStream(streamOut))
+            val runResult = runMain(
+                "analyze",
+                "-m", "Gradle",
+                "-i", inputDir.path,
+                "-o", File(outputDir, "gradle").path,
+                "-f", "json,yaml,json"
+            )
+            val lines = runResult.stdout.filter { it.startsWith("Writing analyzer result to ") }
 
-            try {
-                val exitCode = Main.run(
-                    arrayOf(
-                        "analyze",
-                        "-m", "Gradle",
-                        "-i", inputDir.path,
-                        "-o", File(outputDir, "gradle").path,
-                        "-f", "json,yaml,json"
-                    )
-                )
-
-                exitCode shouldBe 0
-
-                val lines = streamOut.toString().lines().filter { it.startsWith("Writing analyzer result to ") }
-
-                lines.size shouldBe 2
-            } finally {
-                // Restore standard output.
-                System.setOut(standardOut)
-            }
+            runResult.exitCode shouldBe 0
+            lines.count() shouldBe 2
         }
 
         "Analyzer creates correct output" {
             val analyzerOutputDir = File(outputDir, "merged-results")
-
             val expectedResult = patchExpectedResult(
                 File(projectDir, "gradle-all-dependencies-expected-result.yml"),
                 url = vcsUrl,
@@ -160,25 +118,20 @@ class MainTest : StringSpec() {
                 urlProcessed = normalizeVcsUrl(vcsUrl)
             )
 
-            val exitCode = Main.run(
-                arrayOf(
-                    "analyze",
-                    "-m", "Gradle",
-                    "-i", File(projectDir, "gradle").absolutePath,
-                    "-o", analyzerOutputDir.path
-                )
+            val runResult = runMain(
+                "analyze",
+                "-m", "Gradle",
+                "-i", File(projectDir, "gradle").absolutePath,
+                "-o", analyzerOutputDir.path
             )
+            val analyzerResult = File(analyzerOutputDir, "analyzer-result.yml").readText()
 
-            exitCode shouldBe 0
-
-            val result = File(analyzerOutputDir, "analyzer-result.yml").readText()
-
-            patchActualResult(result, patchStartAndEndTime = true) shouldBe expectedResult
+            runResult.exitCode shouldBe 0
+            patchActualResult(analyzerResult, patchStartAndEndTime = true) shouldBe expectedResult
         }
 
         "Package curation data file is applied correctly" {
             val analyzerOutputDir = File(outputDir, "curations")
-
             val expectedResult = patchExpectedResult(
                 File(projectDir, "gradle-all-dependencies-expected-result-with-curations.yml"),
                 url = vcsUrl,
@@ -186,43 +139,43 @@ class MainTest : StringSpec() {
                 urlProcessed = normalizeVcsUrl(vcsUrl)
             )
 
-            val exitCode = Main.run(
-                arrayOf(
-                    "analyze",
-                    "-m", "Gradle",
-                    "-i", File(projectDir, "gradle").absolutePath,
-                    "-o", analyzerOutputDir.path,
-                    "--package-curations-file", File(projectDir, "gradle/curations.yml").toString()
-                )
+            val runResult = runMain(
+                "analyze",
+                "-m", "Gradle",
+                "-i", File(projectDir, "gradle").absolutePath,
+                "-o", analyzerOutputDir.path,
+                "--package-curations-file", File(projectDir, "gradle/curations.yml").toString()
             )
+            val analyzerResult = File(analyzerOutputDir, "analyzer-result.yml").readText()
 
-            exitCode shouldBe 0
-
-            val result = File(analyzerOutputDir, "analyzer-result.yml").readText()
-
-            patchActualResult(result, patchStartAndEndTime = true) shouldBe expectedResult
+            runResult.exitCode shouldBe 0
+            patchActualResult(analyzerResult, patchStartAndEndTime = true) shouldBe expectedResult
         }
 
         "Requirements are listed correctly" {
-            // Redirect standard output to a stream.
-            val standardOut = System.out
-            val streamOut = ByteArrayOutputStream()
-            System.setOut(PrintStream(streamOut))
+            val runResult = runMain("requirements")
+            val errorLogs = runResult.stdout.find { it.contains(" ERROR - ") }
 
-            try {
-                val exitCode = Main.run(
-                    arrayOf(
-                        "requirements"
-                    )
-                )
-                val errorLogs = streamOut.toString().lines().find { it.contains(" ERROR - ") }
+            errorLogs shouldBe null
+            runResult.exitCode shouldBe 0
+        }
+    }
 
-                errorLogs shouldBe null
-                exitCode shouldBe 0
-            } finally {
-                // Restore standard output.
-                System.setOut(standardOut)
-            }
+    private data class Result(val stdout: Sequence<String>, val exitCode: Int)
+
+    private fun runMain(vararg args: String): Result {
+        // Redirect standard output to a stream.
+        val standardOut = System.out
+        val streamOut = ByteArrayOutputStream()
+
+        System.setOut(PrintStream(streamOut))
+
+        try {
+            val exitCode = Main.run(args.asList().toTypedArray())
+            return Result(streamOut.toString().lineSequence(), exitCode)
+        } finally {
+            // Restore standard output.
+            System.setOut(standardOut)
         }
     }
 }
