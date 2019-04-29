@@ -27,12 +27,17 @@ import org.gradle.api.internal.artifacts.repositories.DefaultMavenArtifactReposi
 import org.gradle.tooling.provider.model.ToolingModelBuilder
 import org.gradle.tooling.provider.model.ToolingModelBuilderRegistry
 
+String.metaClass.isAtLeastVersion = { Integer major, Integer minor ->
+    def digits = delegate.split('\\.')
+    digits[0].toInteger() > major || (digits[0].toInteger() == major && digits[1].toInteger() >= minor)
+}
+
 // Apply the DependencyTreePlugin defined below to register a custom model for the Tooling API. The plugin is required
 // to get an instance of ToolingModelBuilderRegistry by dependency injection.
 // See:
 // https://docs.gradle.org/current/userguide/init_scripts.html#sec:init_script_plugins
 // https://github.com/gradle/gradle/blob/176c18d/subprojects/docs/src/samples/toolingApi/customModel/plugin/src/main/java/org/gradle/sample/plugin/CustomPlugin.java
-if (AbstractDependencyTreePlugin.isCompatibleGradleVersion(gradle.gradleVersion)) {
+if (gradle.gradleVersion.isAtLeastVersion(2, 14)) {
     apply plugin: DependencyTreePlugin
 } else {
     apply plugin: LegacyDependencyTreePlugin
@@ -115,11 +120,6 @@ class LegacyDependencyTreePlugin extends AbstractDependencyTreePlugin<Project> {
 }
 
 class AbstractDependencyTreePlugin<T> implements Plugin<T> {
-    static boolean isCompatibleGradleVersion(String gradleVersion) {
-        def array = gradleVersion.split('\\.')
-        return array[0].toInteger() > 2 || (array[0].toInteger() == 2 && array[1].toInteger() >= 14)
-    }
-
     private final ToolingModelBuilderRegistry registry
 
     AbstractDependencyTreePlugin(ToolingModelBuilderRegistry registry) {
@@ -160,9 +160,10 @@ class AbstractDependencyTreePlugin<T> implements Plugin<T> {
             List<String> errors = []
             List<String> warnings = []
 
-            if (!isCompatibleGradleVersion(project.gradle.gradleVersion)) {
-                def error = ("This project uses the unsupported Gradle version ${project.gradle.gradleVersion}. " +
-                        'At least Gradle 2.14 is required.').toString()
+            def gradleVersion = project.gradle.gradleVersion
+            if (!gradleVersion.isAtLeastVersion(2, 14)) {
+                def error = ("This project uses the unsupported Gradle version $gradleVersion. At least Gradle 2.14 " +
+                        'is required.').toString()
                 return new DependencyTreeModelImpl(project.group.toString(), project.name, project.version.toString(),
                         [], [], [error], [])
             }
