@@ -32,15 +32,15 @@ String.metaClass.isAtLeastVersion = { Integer major, Integer minor ->
     digits[0].toInteger() > major || (digits[0].toInteger() == major && digits[1].toInteger() >= minor)
 }
 
-// Apply the DependencyTreePlugin defined below to register a custom model for the Tooling API. The plugin is required
-// to get an instance of ToolingModelBuilderRegistry by dependency injection.
-// See:
-// https://docs.gradle.org/current/userguide/init_scripts.html#sec:init_script_plugins
-// https://github.com/gradle/gradle/blob/176c18d/subprojects/docs/src/samples/toolingApi/customModel/plugin/src/main/java/org/gradle/sample/plugin/CustomPlugin.java
+// Apply one of the plugins defined below to register a custom model for the Tooling API. The plugin is required to get
+// an instance of ToolingModelBuilderRegistry by dependency injection. Prior to Gradle version 2.14 (see [1]), the
+// ToolingModelBuilderRegistry was project-scoped.
+//
+// [1] https://github.com/gradle/gradle/commit/e9e1b6029a056a5323311f7ee56b216cba6ede63
 if (gradle.gradleVersion.isAtLeastVersion(2, 14)) {
-    apply plugin: DependencyTreePlugin
+    apply plugin: DependencyTreeGradlePlugin
 } else {
-    apply plugin: LegacyDependencyTreePlugin
+    apply plugin: DependencyTreeProjectPlugin
 }
 
 // The following three interfaces have to match the interfaces defined in "analyzer/src/main/kotlin/GradleSupport.kt"
@@ -105,16 +105,16 @@ class DependencyImpl implements Dependency, Serializable {
     String localPath
 }
 
-class DependencyTreePlugin extends AbstractDependencyTreePlugin<Gradle> {
+class DependencyTreeGradlePlugin extends AbstractDependencyTreePlugin<Gradle> {
     @Inject
-    DependencyTreePlugin(ToolingModelBuilderRegistry registry) {
+    DependencyTreeGradlePlugin(ToolingModelBuilderRegistry registry) {
         super(registry)
     }
 }
 
-class LegacyDependencyTreePlugin extends AbstractDependencyTreePlugin<Project> {
+class DependencyTreeProjectPlugin extends AbstractDependencyTreePlugin<Project> {
     @Inject
-    LegacyDependencyTreePlugin(ToolingModelBuilderRegistry registry) {
+    DependencyTreeProjectPlugin(ToolingModelBuilderRegistry registry) {
         super(registry)
     }
 }
