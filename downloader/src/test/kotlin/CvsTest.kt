@@ -58,12 +58,13 @@ class CvsTest : StringSpec() {
             cvs.getWorkingTree(getUserOrtDirectory()).isValid() shouldBe false
         }
 
-        "CVS correctly detects URLs to remote repositories".config(enabled = false) {
+        "CVS correctly detects URLs to remote repositories" {
             cvs.isApplicableUrl(":pserver:anonymous@tyrex.cvs.sourceforge.net:/cvsroot/tyrex") shouldBe true
             cvs.isApplicableUrl(":ext:jrandom@cvs.foobar.com:/usr/local/cvs") shouldBe true
             cvs.isApplicableUrl("http://svn.code.sf.net/p/grepwin/code/") shouldBe false
         }
 
+        // Disabled as it causes "waiting for anoncvs_tyrex's lock in /cvsroot/tyrex/tyrex" for unknown reasons.
         "Detected CVS working tree information is correct".config(enabled = false) {
             val workingTree = cvs.getWorkingTree(zipContentDir)
 
@@ -75,6 +76,7 @@ class CvsTest : StringSpec() {
             workingTree.getPathToRoot(File(zipContentDir, "tomcat")) shouldBe "tomcat"
         }
 
+        // Disabled as it causes "waiting for anoncvs_tyrex's lock in /cvsroot/tyrex/tyrex" for unknown reasons.
         "CVS correctly lists remote branches".config(enabled = false) {
             val expectedBranches = listOf(
                 "Exoffice"
@@ -84,6 +86,7 @@ class CvsTest : StringSpec() {
             workingTree.listRemoteBranches().joinToString("\n") shouldBe expectedBranches.joinToString("\n")
         }
 
+        // Disabled as it causes "waiting for anoncvs_tyrex's lock in /cvsroot/tyrex/tyrex" for unknown reasons.
         "CVS correctly lists remote tags".config(enabled = false) {
             val expectedTags = listOf(
                 "A02",
