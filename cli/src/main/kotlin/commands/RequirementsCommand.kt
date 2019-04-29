@@ -41,6 +41,8 @@ import org.reflections.Reflections
 @Parameters(commandNames = ["requirements"], commandDescription = "List the required command line tools.")
 object RequirementsCommand : CommandWithHelp() {
     override fun runCommand(jc: JCommander): Int {
+        var exitCode = 0
+
         val reflections = Reflections("com.here.ort")
         val classes = reflections.getSubTypesOf(CommandLineTool::class.java)
 
@@ -95,6 +97,7 @@ object RequirementsCommand : CommandWithHelp() {
                 }
             } catch (e: Exception) {
                 log.error { "There was an error instanciating $it: $e." }
+                exitCode = 1
             }
         }
 
@@ -124,6 +127,6 @@ object RequirementsCommand : CommandWithHelp() {
         println("\tA '-' prefix means that the tool was not found in the PATH environment.")
         println("\tA '*' prefix means that some version of the tool was found in the PATH environment.")
 
-        return 0
+        return exitCode
     }
 }
