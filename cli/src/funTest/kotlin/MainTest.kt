@@ -108,9 +108,11 @@ class MainTest : StringSpec() {
                 exitCode shouldBe 0
 
                 val lines = streamOut.toString().lineSequence().iterator()
-                while (lines.hasNext() && lines.next() != "The following package managers are activated:")
+                while (lines.hasNext()) {
+                    if (lines.next() == "The following package managers are activated:") break
+                }
 
-                    lines.hasNext() shouldBe true
+                lines.hasNext() shouldBe true
                 lines.next() shouldBe "\tNPM"
             } finally {
                 // Restore standard output.
