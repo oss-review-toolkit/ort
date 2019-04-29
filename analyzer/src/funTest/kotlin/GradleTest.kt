@@ -118,6 +118,10 @@ class GradleTest : StringSpec() {
             patchActualResult(yamlMapper.writeValueAsString(result)) shouldBe expectedResult
         }
 
+        // Disabled because despite following the example at [1] Gradle says there is "No service of type
+        // ToolingModelBuilderRegistry available in GradleScopeServices".
+        //
+        // [1] https://github.com/gradle/gradle/blob/REL_2.13/subprojects/docs/src/samples/toolingApi/customModel/plugin/src/main/java/org/gradle/sample/plugin/CustomPlugin.java
         "Fails nicely for Gradle version < 2.14".config(enabled = false) {
             val packageFile = File(projectDir.parentFile, "gradle-unsupported-version/build.gradle")
             val expectedResult = patchExpectedResult(
@@ -132,6 +136,7 @@ class GradleTest : StringSpec() {
             yamlMapper.writeValueAsString(result) shouldBe expectedResult
         }
 
+        // Disabled as it causes hangs and memory issues.
         "Is compatible with Gradle >= 2.14".config(tags = setOf(ExpensiveTag), enabled = false) {
             // See https://blog.gradle.org/java-9-support-update.
             val gradleVersionsThatSupportJava9 = arrayOf(
