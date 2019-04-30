@@ -102,26 +102,24 @@ abstract class Rule(
      */
     abstract fun issueSource(): String
 
+    fun issue(severity: Severity, message: String) {
+        issues += OrtIssue(source = issueSource(), severity = severity, message = message)
+    }
+
     /**
      * Add a [hint][Severity.HINT] to the list of [issues].
      */
-    fun hint(message: String) {
-        issues += OrtIssue(source = issueSource(), severity = Severity.HINT, message = message)
-    }
+    fun hint(message: String) = issue(Severity.HINT, message)
 
     /**
      * Add a [warning][Severity.WARNING] to the list of [issues].
      */
-    fun warning(message: String) {
-        issues += OrtIssue(source = issueSource(), severity = Severity.WARNING, message = message)
-    }
+    fun warning(message: String) = issue(Severity.WARNING, message)
 
     /**
      * Add an [error][Severity.ERROR] to the list of [issues].
      */
-    fun error(message: String) {
-        issues += OrtIssue(source = issueSource(), severity = Severity.ERROR, message = message)
-    }
+    fun error(message: String) = issue(Severity.ERROR, message)
 
     /**
      * A DSL helper class, providing convenience functions for adding [RuleMatcher]s to this rule.
