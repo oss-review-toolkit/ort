@@ -52,8 +52,9 @@ class RuleSet(val ortResult: OrtResult) {
         }.orEmpty()
 
         packages.forEach { pkg ->
-            val licenseFindings = ortResult.collectLicenseFindings()[pkg.id].orEmpty().keys.toList()
-            PackageRule(this, name, pkg, licenseFindings).apply {
+            val detectedLicenses = licenseFindings[pkg.id].orEmpty().keys.toList()
+
+            PackageRule(this, name, pkg, detectedLicenses).apply {
                 configure()
                 evaluate()
             }
@@ -80,7 +81,7 @@ class RuleSet(val ortResult: OrtResult) {
 
             requireNotNull(pkg) { "Could not find package for package reference '${pkgRef.id.toCoordinates()}'." }
 
-            val detectedLicenses = ortResult.collectLicenseFindings()[pkg.id].orEmpty().keys.toList()
+            val detectedLicenses = licenseFindings[pkg.id].orEmpty().keys.toList()
 
             DependencyRule(this, name, pkg, detectedLicenses, pkgRef, ancestors, level, scope, project).apply {
                 configure()
