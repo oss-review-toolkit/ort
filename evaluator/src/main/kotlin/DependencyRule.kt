@@ -67,7 +67,7 @@ class DependencyRule(
         "Evaluating rule '$name' for dependency '${dependency.id.toCoordinates()}' " +
                 "(project=${project.id.toCoordinates()}, scope=${scope.name}, level=$level)."
 
-    override fun errorSource() =
+    override fun issueSource() =
         "$name - ${pkg.id.toCoordinates()} (dependency of ${project.id.toCoordinates()} in scope ${scope.name})"
 
     /**

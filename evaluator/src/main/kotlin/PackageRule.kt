@@ -47,7 +47,7 @@ open class PackageRule(
 
     override val description = "Evaluating rule '$name' for package '${pkg.id.toCoordinates()}'."
 
-    override fun errorSource() = "$name - ${pkg.id.toCoordinates()}"
+    override fun issueSource() = "$name - ${pkg.id.toCoordinates()}"
 
     override fun runInternal() {
         licenseRules.forEach { it.evaluate() }
@@ -149,7 +149,7 @@ open class PackageRule(
 
         override val description = "\tEvaluating license rule '$name' for $licenseSource license '$license'."
 
-        override fun errorSource() = "$name - $license ($licenseSource)"
+        override fun issueSource() = "$name - $license ($licenseSource)"
 
         /**
          * A [RuleMatcher] that checks if the [license] is a valid [SpdxLicense].

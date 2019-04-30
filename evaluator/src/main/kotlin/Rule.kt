@@ -100,27 +100,27 @@ abstract class Rule(
     /**
      * Return a string to be used as [source][OrtIssue.source] for issues generated in [hint], [warning], and [error].
      */
-    abstract fun errorSource(): String
+    abstract fun issueSource(): String
 
     /**
      * Add a [hint][Severity.HINT] to the list of [issues].
      */
     fun hint(message: String) {
-        issues += OrtIssue(source = errorSource(), severity = Severity.HINT, message = message)
+        issues += OrtIssue(source = issueSource(), severity = Severity.HINT, message = message)
     }
 
     /**
      * Add a [warning][Severity.WARNING] to the list of [issues].
      */
     fun warning(message: String) {
-        issues += OrtIssue(source = errorSource(), severity = Severity.WARNING, message = message)
+        issues += OrtIssue(source = issueSource(), severity = Severity.WARNING, message = message)
     }
 
     /**
      * Add an [error][Severity.ERROR] to the list of [issues].
      */
     fun error(message: String) {
-        issues += OrtIssue(source = errorSource(), severity = Severity.ERROR, message = message)
+        issues += OrtIssue(source = issueSource(), severity = Severity.ERROR, message = message)
     }
 
     /**
