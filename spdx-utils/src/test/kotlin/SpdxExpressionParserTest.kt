@@ -171,7 +171,7 @@ class SpdxExpressionParserTest : WordSpec() {
                     SpdxExpression.parse("license WITH exception+")
                 }
 
-                exception.message shouldBe "SpdxExpression has invalid amount of children: '3'"
+                exception.message shouldBe "SpdxLicenseExceptionExpression has invalid amount of children: '2'"
             }
 
             "fail if a compound expression is used before WITH" {

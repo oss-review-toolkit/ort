@@ -31,20 +31,20 @@ package com.here.ort.spdx;
  * Parser Rules
  */
 
-licenseReferenceExpression
-    :
-    LICENSEREFERENCE
-    ;
-
-licenseExceptionExpression
-    :
-    IDSTRING
-    ;
-
 licenseIdExpression
     :
     IDSTRING
     PLUS?
+    ;
+
+licenseExceptionExpression
+    :
+    LICENSE_EXCEPTION
+    ;
+
+licenseReferenceExpression
+    :
+    LICENSE_REFERENCE
     ;
 
 simpleExpression
@@ -83,7 +83,8 @@ OPEN  : '(' ;
 CLOSE : ')' ;
 PLUS  : '+' ;
 
-LICENSEREFERENCE : ('DocumentRef-' IDSTRING ':')? 'LicenseRef-' IDSTRING ;
-IDSTRING         : (ALPHA | DIGIT)(ALPHA | DIGIT | '-' | '.')* ;
+IDSTRING          : (ALPHA | DIGIT)(ALPHA | DIGIT | '-' | '.')* ;
+LICENSE_EXCEPTION : (IDSTRING '-exception' | IDSTRING '-exception-' IDSTRING) ;
+LICENSE_REFERENCE : ('DocumentRef-' IDSTRING ':')? 'LicenseRef-' IDSTRING ;
 
 WHITESPACE : ' ' -> skip ;
