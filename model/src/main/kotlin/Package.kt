@@ -162,7 +162,7 @@ data class Package(
     /**
      * Create a [CuratedPackage] from this package with an empty list of applied curations.
      */
-    fun toCuratedPackage() = CuratedPackage(this, emptyList())
+    fun toCuratedPackage() = CuratedPackage(this, emptyList(), this)
 
     /**
      * Return a [PackageReference] to refer to this [Package] with optional [dependencies] and [errors].

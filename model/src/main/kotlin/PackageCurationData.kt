@@ -117,6 +117,6 @@ data class PackageCurationData(
             )
         }
 
-        return CuratedPackage(curated, base.curations + PackageCurationResult(base.pkg.diff(curated), this))
+        return CuratedPackage(curated, base.curations + this, base.pkg)
     }
 }

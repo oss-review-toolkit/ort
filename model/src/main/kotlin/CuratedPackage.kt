@@ -35,7 +35,12 @@ data class CuratedPackage(
     /**
      * The curations in the order they were applied.
      */
-    val curations: List<PackageCurationResult>
+    val curations: List<PackageCurationData>,
+
+    /**
+     * The original package before applying the [curations].
+     */
+    val original: Package
 ) : Comparable<CuratedPackage> {
     /**
      * A comparison function to sort packages by their identifier.

@@ -84,8 +84,8 @@ class PackageCurationTest : WordSpec({
             }
 
             curatedPkg.curations.size shouldBe 1
-            curatedPkg.curations.first().base shouldBe pkg.diff(curatedPkg.pkg)
-            curatedPkg.curations.first().curation shouldBe curation.data
+            curatedPkg.curations.first() shouldBe pkg.diff(curatedPkg.pkg)
+            curatedPkg.curations.first() shouldBe curation.data
         }
 
         "change only curated fields" {
@@ -140,8 +140,8 @@ class PackageCurationTest : WordSpec({
             }
 
             curatedPkg.curations.size shouldBe 1
-            curatedPkg.curations.first().base shouldBe pkg.diff(curatedPkg.pkg)
-            curatedPkg.curations.first().curation shouldBe curation.data
+            curatedPkg.curations.first() shouldBe pkg.diff(curatedPkg.pkg)
+            curatedPkg.curations.first() shouldBe curation.data
         }
 
         "be able to empty VCS information" {
@@ -236,24 +236,24 @@ class PackageCurationTest : WordSpec({
 
             result1.pkg.description shouldBe "description 1"
             result1.curations.size shouldBe 1
-            result1.curations[0].base shouldBe PackageCurationData(description = "")
-            result1.curations[0].curation shouldBe curation1.data
+            result1.curations[0] shouldBe PackageCurationData(description = "")
+            result1.curations[0] shouldBe curation1.data
 
             result2.pkg.description shouldBe "description 2"
             result2.curations.size shouldBe 2
-            result2.curations[0].base shouldBe PackageCurationData(description = "")
-            result2.curations[0].curation shouldBe curation1.data
-            result2.curations[1].base shouldBe PackageCurationData(description = "description 1")
-            result2.curations[1].curation shouldBe curation2.data
+            result2.curations[0] shouldBe PackageCurationData(description = "")
+            result2.curations[0] shouldBe curation1.data
+            result2.curations[1] shouldBe PackageCurationData(description = "description 1")
+            result2.curations[1] shouldBe curation2.data
 
             result3.pkg.description shouldBe "description 3"
             result3.curations.size shouldBe 3
-            result3.curations[0].base shouldBe PackageCurationData(description = "")
-            result3.curations[0].curation shouldBe curation1.data
-            result3.curations[1].base shouldBe PackageCurationData(description = "description 1")
-            result3.curations[1].curation shouldBe curation2.data
-            result3.curations[2].base shouldBe PackageCurationData(description = "description 2")
-            result3.curations[2].curation shouldBe curation3.data
+            result3.curations[0] shouldBe PackageCurationData(description = "")
+            result3.curations[0] shouldBe curation1.data
+            result3.curations[1] shouldBe PackageCurationData(description = "description 1")
+            result3.curations[1] shouldBe curation2.data
+            result3.curations[2] shouldBe PackageCurationData(description = "description 2")
+            result3.curations[2] shouldBe curation3.data
         }
     }
 })
