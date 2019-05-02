@@ -83,8 +83,9 @@ object PythonVersion : CommandLineTool {
     override fun command(workingDir: File?) = if (OS.isWindows) "py" else "python3"
 
     /**
-     * Check all Python files in [workingDir] return with which version of Python they are compatible. If all files are
-     * compatible with Python 3, "3" is returned. If at least one file is incompatible with Python 3, "2" is returned.
+     * Check all Python files in [workingDir] and return which version of Python they are compatible with. If all files
+     * are compatible with Python 3, "3" is returned. If at least one file is incompatible with Python 3, "2" is
+     * returned.
      */
     fun getPythonVersion(workingDir: File): Int {
         val scriptFile = File.createTempFile("python_compatibility", ".py")
