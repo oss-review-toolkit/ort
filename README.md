@@ -33,14 +33,14 @@ interface (for scripted use).
 
 The toolkit is envisioned to consist of the following libraries:
 
-* *Analyzer* - determines dependencies of a software project even if multiple package managers are used. No changes to
-  the software project are required.
-* *Downloader* - fetches the source code based on the Analyzer's output.
-* *Scanner* - wraps existing copyright / license scanners to detect findings in local source code directories.
+* [Analyzer](#analyzer) - determines dependencies of a software project even if multiple package managers are used. No
+  changes to the software project are required.
+* [Downloader](#downloader) - fetches the source code based on the Analyzer's output.
+* [Scanner](#scanner) - wraps existing copyright / license scanners to detect findings in local source code directories.
 * *Evaluator* - evaluates results as OK or NOT OK against user-specified rules.
 * *Advisor* * - retrieves security advisories based on Analyzer results.
-* *Reporter* - presents results in various formats (incl. `NOTICE` files), making it easy to identify dependencies,
-  licenses, copyrights and policy violations.
+* [Reporter](#reporter) - presents results in various formats (incl. `NOTICE` files), making it easy to identify
+  dependencies, licenses, copyrights and policy violations.
 * *Documenter* * - generates the final outcome of the review process, e.g. annotated [SPDX](https://spdx.org/) files
   that can be included into your distribution.
 
@@ -101,6 +101,8 @@ Alternatively, you can also run the OSS Review Toolkit by building its Docker im
 
 ## Tools
 
+<a name="analyzer"></a>
+
 [![Analyzer](./logos/analyzer.png)](./analyzer/src/main/kotlin)
 
 The Analyzer determines the dependencies of software projects inside the specified input directory (`-i`). It does so by
@@ -112,7 +114,7 @@ JSON, see `-f`) format to a file named `analyzer-result.yml` to the specified ou
 exactly documents the status quo of all package-related meta-data. It can be further processed or manually edited before
 passing it to one of the other tools.
 
-&nbsp;
+<a name="downloader">&nbsp;</a>
 
 [![Downloader](./logos/downloader.png)](./downloader/src/main/kotlin)
 
@@ -120,7 +122,7 @@ Taking an ORT result file with an analyzer result as the input (`-a`), the Downl
 contained packages to the specified output directory (`-o`). The Downloader takes care of things like normalizing URLs
 and using the [appropriate VCS tool](./downloader/src/main/kotlin/vcs) to checkout source code from version control.
 
-&nbsp;
+<a name="scanner">&nbsp;</a>
 
 [![Scanner](./logos/scanner.png)](./scanner/src/main/kotlin)
 
@@ -139,7 +141,7 @@ artifactory_storage:
   apiToken: $ARTIFACTORY_API_KEY
 ```
 
-&nbsp;
+<a name="reporter">&nbsp;</a>
 
 [![Reporter](./logos/reporter.png)](./reporter/src/main/kotlin)
 
