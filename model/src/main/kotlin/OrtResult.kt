@@ -289,6 +289,11 @@ data class OrtResult(
         return vendorPackages
     }
 
+    @Suppress("UNUSED") // This is intended to be mostly used via scripting.
+    fun getUncuratedPackageById(id: Identifier): Package? =
+        analyzer?.result?.packages?.find { it.pkg.id == id }?.toUncuratedPackage() ?:
+        analyzer?.result?.projects?.find { it.id == id }?.toPackage()
+
     /**
      * Returns the path of the definition file of the [project], relative to the analyzer root. If the project was
      * checked out from a VCS the analyzer root is the root of the working tree, if the project was not checked out from
