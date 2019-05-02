@@ -108,7 +108,7 @@ open class PackageRule(
                 ruleSet.licenseFindings[pkg.id].orEmpty()
             } else {
                 emptyMap()
-            }
+            }.filter { (finding, _) -> finding.license == license }
 
             licenseRules += LicenseRule(name, license, licenseSource, findings).apply(block)
         }
