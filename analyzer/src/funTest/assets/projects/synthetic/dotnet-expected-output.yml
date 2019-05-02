@@ -23,7 +23,7 @@ project:
       dependencies:
       - id: "nuget::Antlr:3.4.1.9004"
       - id: "nuget::Newtonsoft.Json:5.0.4"
-    - id: "nuget::jQuery:3.3.1"
+    - id: "nuget::jQuery:3.4.0"
 packages:
 - package:
     id: "nuget::Antlr:3.4.1.9004"
@@ -113,8 +113,8 @@ packages:
       path: ""
   curations: []
 - package:
-    id: "nuget::jQuery:3.3.1"
-    purl: "pkg://nuget//jQuery@3.3.1"
+    id: "nuget::jQuery:3.4.0"
+    purl: "pkg://nuget//jQuery@3.4.0"
     declared_licenses:
     - "http://jquery.org/license"
     declared_licenses_processed:
@@ -128,8 +128,8 @@ packages:
       \ Packages project at http://nugetpackages.codeplex.com/"
     homepage_url: "http://jquery.com/"
     binary_artifact:
-      url: "https://api.nuget.org/v3-flatcontainer/jquery/3.3.1/jquery.3.3.1.nupkg"
-      hash: "Emsts1D6E2AgHVBm4cTD2dxoRyWVG+3zK1x8mYbf+k6aAArPTXHR2Ip++o1utlNbmYIzaPFnhGw3YDexp8PjlQ=="
+      url: "https://api.nuget.org/v3-flatcontainer/jquery/3.4.0/jquery.3.4.0.nupkg"
+      hash: "r2InEPl5GIxmpyLBzu5gx2KxKwi7tqe1lucm7QaRxSwBQOXyOrFv1v8G7uR5mP4S+oV3EsaAiEc8YpcB1oQv6g=="
       hash_algorithm: "SHA-512"
     source_artifact:
       url: ""
