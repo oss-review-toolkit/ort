@@ -41,4 +41,18 @@ data class CuratedPackage(
      * A comparison function to sort packages by their identifier.
      */
     override fun compareTo(other: CuratedPackage) = pkg.id.compareTo(other.pkg.id)
+
+    /**
+     * Returns a [CuratedPackage] representing the same package as this one but which does not have any curations
+     * applied.
+     */
+    fun toUncuratedPackage(): CuratedPackage {
+        var result = this
+
+        curations.reversed().forEach { curationResult ->
+            result = curationResult.base.apply(result)
+        }
+
+        return CuratedPackage(result.pkg, emptyList())
+    }
 }
