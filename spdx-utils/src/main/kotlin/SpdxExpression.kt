@@ -73,10 +73,10 @@ sealed class SpdxExpression {
          */
         fun parse(expression: String, strictness: Strictness): SpdxExpression {
             val charStream = CharStreams.fromString(expression)
-            val lexer = SpdxExpressionLexer(charStream)
-
-            lexer.removeErrorListeners()
-            lexer.addErrorListener(SpdxErrorListener())
+            val lexer = SpdxExpressionLexer(charStream).apply {
+                removeErrorListeners()
+                addErrorListener(SpdxErrorListener())
+            }
 
             val tokenStream = CommonTokenStream(lexer)
             val parser = SpdxExpressionParser(tokenStream)
