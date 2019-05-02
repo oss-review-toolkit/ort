@@ -23,7 +23,7 @@ import com.here.ort.analyzer.managers.Gradle
 import com.here.ort.downloader.VersionControlSystem
 import com.here.ort.downloader.vcs.Git
 import com.here.ort.model.yamlMapper
-import com.here.ort.utils.OS
+import com.here.ort.utils.Os
 import com.here.ort.utils.ProcessCapture
 import com.here.ort.utils.normalizeVcsUrl
 import com.here.ort.utils.test.DEFAULT_ANALYZER_CONFIGURATION
@@ -199,7 +199,7 @@ class GradleTest : StringSpec() {
     private fun installGradleWrapper(version: String) {
         println("Installing Gradle wrapper version $version.")
 
-        val (gradle, wrapper) = if (OS.isWindows) {
+        val (gradle, wrapper) = if (Os.isWindows) {
             Pair("gradle.bat", projectDir.resolve("gradlew.bat"))
         } else {
             Pair("gradle", projectDir.resolve("gradlew"))

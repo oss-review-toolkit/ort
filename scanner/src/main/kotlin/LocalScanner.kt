@@ -43,7 +43,7 @@ import com.here.ort.model.ScannerRun
 import com.here.ort.model.config.ScannerConfiguration
 import com.here.ort.model.mapper
 import com.here.ort.utils.CommandLineTool
-import com.here.ort.utils.OS
+import com.here.ort.utils.Os
 import com.here.ort.utils.collectMessagesAsString
 import com.here.ort.utils.fileSystemEncode
 import com.here.ort.utils.getPathFromEnvironment
@@ -355,7 +355,7 @@ abstract class LocalScanner(name: String, config: ScannerConfiguration) : Scanne
 
         // There is no package id for arbitrary paths so create a fake one, ensuring that no ":" is contained.
         val id = Identifier(
-            OS.name.fileSystemEncode(), absoluteInputPath.parent.fileSystemEncode(),
+            Os.name.fileSystemEncode(), absoluteInputPath.parent.fileSystemEncode(),
             inputPath.name.fileSystemEncode(), ""
         )
 

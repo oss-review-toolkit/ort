@@ -163,7 +163,7 @@ fun getCommonFileParent(files: Collection<File>) =
 fun getPathFromEnvironment(executable: String): File? {
     val paths = System.getenv("PATH")?.splitToSequence(File.pathSeparatorChar) ?: emptySequence()
 
-    val executables = if (OS.isWindows) {
+    val executables = if (Os.isWindows) {
         // Get the list of executable file extensions without the leading dot each.
         val pathExt = System.getenv("PATHEXT")?.let {
             it.split(File.pathSeparatorChar).map { ext -> ext.toLowerCase().removePrefix(".") }

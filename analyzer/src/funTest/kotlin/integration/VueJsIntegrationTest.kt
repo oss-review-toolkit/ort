@@ -20,7 +20,7 @@
 package com.here.ort.analyzer.integration
 
 import com.here.ort.analyzer.PackageManagerFactory
-import com.here.ort.analyzer.managers.NPM
+import com.here.ort.analyzer.managers.Npm
 import com.here.ort.analyzer.managers.Yarn
 import com.here.ort.model.Identifier
 import com.here.ort.model.Package
@@ -52,7 +52,7 @@ class VueJsIntegrationTest : AbstractIntegrationSpec() {
     override val expectedManagedFiles by lazy {
         val downloadDir = downloadResult.downloadDirectory
         mapOf(
-            NPM.Factory() as PackageManagerFactory to listOf(
+            Npm.Factory() as PackageManagerFactory to listOf(
                 File(downloadDir, "package.json"),
                 File(downloadDir, "packages/vue-server-renderer/package.json"),
                 File(downloadDir, "packages/vue-template-compiler/package.json"),
@@ -71,7 +71,7 @@ class VueJsIntegrationTest : AbstractIntegrationSpec() {
 
     override val managedFilesForTest by lazy {
         mapOf(
-            NPM.Factory() as PackageManagerFactory to
+            Npm.Factory() as PackageManagerFactory to
                     listOf(File(downloadResult.downloadDirectory, "package.json"))
         )
     }

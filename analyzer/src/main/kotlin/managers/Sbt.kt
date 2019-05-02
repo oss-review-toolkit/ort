@@ -26,7 +26,7 @@ import com.here.ort.analyzer.PackageManager
 import com.here.ort.model.config.AnalyzerConfiguration
 import com.here.ort.model.config.RepositoryConfiguration
 import com.here.ort.utils.CommandLineTool
-import com.here.ort.utils.OS
+import com.here.ort.utils.Os
 import com.here.ort.utils.getCommonFileParent
 import com.here.ort.utils.log
 import com.here.ort.utils.suppressInput
@@ -41,7 +41,7 @@ import java.util.Properties
 /**
  * The [SBT](https://www.scala-sbt.org/) package manager for Scala.
  */
-class SBT(
+class Sbt(
     name: String,
     analyzerRoot: File,
     analyzerConfig: AnalyzerConfiguration,
@@ -54,11 +54,11 @@ class SBT(
 
         // Batch mode (which suppresses interactive prompts) is only supported on non-Windows, see
         // https://github.com/sbt/sbt-launcher-package/blob/d251388/src/universal/bin/sbt#L86.
-        private val BATCH_MODE = if (!OS.isWindows) "-batch" else ""
+        private val BATCH_MODE = if (!Os.isWindows) "-batch" else ""
 
         // See https://github.com/sbt/sbt/issues/2695.
         private val LOG_NO_FORMAT = "-Dsbt.log.noformat=true".let {
-            if (OS.isWindows) {
+            if (Os.isWindows) {
                 "\"$it\""
             } else {
                 it
@@ -66,7 +66,7 @@ class SBT(
         }
     }
 
-    class Factory : AbstractPackageManagerFactory<SBT>("SBT") {
+    class Factory : AbstractPackageManagerFactory<Sbt>("SBT") {
         override val globsForDefinitionFiles = listOf("build.sbt", "build.scala")
 
         override fun create(
@@ -74,10 +74,10 @@ class SBT(
             analyzerConfig: AnalyzerConfiguration,
             repoConfig: RepositoryConfiguration
         ) =
-            SBT(managerName, analyzerRoot, analyzerConfig, repoConfig)
+            Sbt(managerName, analyzerRoot, analyzerConfig, repoConfig)
     }
 
-    override fun command(workingDir: File?) = if (OS.isWindows) "sbt.bat" else "sbt"
+    override fun command(workingDir: File?) = if (Os.isWindows) "sbt.bat" else "sbt"
 
     override fun getVersionRequirement(): Requirement =
         // We need at least sbt version 0.13.0 to be able to use "makePom" instead of the deprecated hyphenated

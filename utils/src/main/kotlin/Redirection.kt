@@ -55,7 +55,7 @@ fun redirectStdout(block: () -> Unit) = redirectOutput(System.out, System::setOu
 fun <T> suppressInput(block: () -> T): T {
     val originalInput = System.`in`
 
-    val nullDevice = FileInputStream(if (OS.isWindows) "NUL" else "/dev/null")
+    val nullDevice = FileInputStream(if (Os.isWindows) "NUL" else "/dev/null")
     System.setIn(nullDevice)
 
     return try {

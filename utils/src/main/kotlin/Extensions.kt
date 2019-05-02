@@ -86,7 +86,7 @@ fun File.safeCopyRecursively(target: File, overwrite: Boolean = false) {
     // FileVisitOption.FOLLOW_LINKS is not used, so symbolic links are not followed.
     Files.walkFileTree(sourcePath, object : SimpleFileVisitor<Path>() {
         override fun preVisitDirectory(dir: Path, attrs: BasicFileAttributes): FileVisitResult {
-            if ((!OS.isWindows && attrs.isSymbolicLink) || (OS.isWindows && attrs.isOther)) {
+            if ((!Os.isWindows && attrs.isSymbolicLink) || (Os.isWindows && attrs.isOther)) {
                 // Do not follow symbolic links or junctions.
                 return FileVisitResult.SKIP_SUBTREE
             }
@@ -121,7 +121,7 @@ fun File.safeDeleteRecursively(force: Boolean = false) {
     // FileVisitOption.FOLLOW_LINKS is not used, so symbolic links are not followed.
     Files.walkFileTree(toPath(), object : SimpleFileVisitor<Path>() {
         override fun preVisitDirectory(dir: Path, attrs: BasicFileAttributes): FileVisitResult {
-            if (OS.isWindows && attrs.isOther) {
+            if (Os.isWindows && attrs.isOther) {
                 // delete() actually works to delete only the junction and not the directory it points to.
                 dir.toFile().delete()
                 return FileVisitResult.SKIP_SUBTREE

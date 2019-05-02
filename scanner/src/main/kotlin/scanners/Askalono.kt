@@ -35,7 +35,7 @@ import com.here.ort.scanner.HTTP_CACHE_PATH
 import com.here.ort.scanner.LocalScanner
 import com.here.ort.scanner.ScanException
 import com.here.ort.utils.CommandLineTool
-import com.here.ort.utils.OS
+import com.here.ort.utils.Os
 import com.here.ort.utils.OkHttpClientHelper
 import com.here.ort.utils.ProcessCapture
 import com.here.ort.utils.log
@@ -59,9 +59,9 @@ class Askalono(name: String, config: ScannerConfiguration) : LocalScanner(name, 
 
     override fun command(workingDir: File?): String {
         val extension = when {
-            OS.isLinux -> "linux"
-            OS.isMac -> "osx"
-            OS.isWindows -> "exe"
+            Os.isLinux -> "linux"
+            Os.isMac -> "osx"
+            Os.isWindows -> "exe"
             else -> throw IllegalArgumentException("Unsupported operating system.")
         }
 
@@ -105,7 +105,7 @@ class Askalono(name: String, config: ScannerConfiguration) : LocalScanner(name, 
             val scannerFile = File(scannerDir, scannerExe)
             Okio.buffer(Okio.sink(scannerFile)).use { it.writeAll(body.source()) }
 
-            if (!OS.isWindows) {
+            if (!Os.isWindows) {
                 // Ensure the executable Unix mode bit to be set.
                 scannerFile.setExecutable(true)
             }

@@ -19,7 +19,7 @@
 
 package com.here.ort.analyzer
 
-import com.here.ort.analyzer.managers.PIP
+import com.here.ort.analyzer.managers.Pip
 import com.here.ort.downloader.VersionControlSystem
 import com.here.ort.model.yamlMapper
 import com.here.ort.utils.normalizeVcsUrl
@@ -96,5 +96,5 @@ class PipTest : WordSpec() {
     }
 
     private fun createPIP() =
-        PIP("PIP", USER_DIR, DEFAULT_ANALYZER_CONFIGURATION, DEFAULT_REPOSITORY_CONFIGURATION)
+        Pip("PIP", USER_DIR, DEFAULT_ANALYZER_CONFIGURATION, DEFAULT_REPOSITORY_CONFIGURATION)
 }

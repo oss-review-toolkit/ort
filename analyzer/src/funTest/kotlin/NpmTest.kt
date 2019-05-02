@@ -19,7 +19,7 @@
 
 package com.here.ort.analyzer
 
-import com.here.ort.analyzer.managers.NPM
+import com.here.ort.analyzer.managers.Npm
 import com.here.ort.downloader.VersionControlSystem
 import com.here.ort.model.yamlMapper
 import com.here.ort.utils.normalizeVcsUrl
@@ -134,5 +134,5 @@ class NpmTest : WordSpec() {
     }
 
     private fun createNPM() =
-        NPM("NPM", USER_DIR, DEFAULT_ANALYZER_CONFIGURATION, DEFAULT_REPOSITORY_CONFIGURATION)
+        Npm("NPM", USER_DIR, DEFAULT_ANALYZER_CONFIGURATION, DEFAULT_REPOSITORY_CONFIGURATION)
 }

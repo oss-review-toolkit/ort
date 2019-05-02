@@ -19,7 +19,7 @@
 
 package com.here.ort.analyzer
 
-import com.here.ort.analyzer.managers.SBT
+import com.here.ort.analyzer.managers.Sbt
 import com.here.ort.downloader.vcs.Git
 import com.here.ort.model.yamlMapper
 import com.here.ort.utils.test.DEFAULT_ANALYZER_CONFIGURATION
@@ -40,7 +40,7 @@ class SbtTest : StringSpec({
         // Clean any previously generated POM files / target directories.
         Git().run(projectDir, "clean", "-fd")
 
-        val ortResult = Analyzer(DEFAULT_ANALYZER_CONFIGURATION).analyze(projectDir, listOf(SBT.Factory()))
+        val ortResult = Analyzer(DEFAULT_ANALYZER_CONFIGURATION).analyze(projectDir, listOf(Sbt.Factory()))
 
         val actualResult = yamlMapper.writeValueAsString(ortResult)
         val expectedResult = patchExpectedResult(expectedOutputFile)
@@ -56,7 +56,7 @@ class SbtTest : StringSpec({
         // Clean any previously generated POM files / target directories.
         Git().run(projectDir, "clean", "-fd")
 
-        val ortResult = Analyzer(DEFAULT_ANALYZER_CONFIGURATION).analyze(projectDir, listOf(SBT.Factory()))
+        val ortResult = Analyzer(DEFAULT_ANALYZER_CONFIGURATION).analyze(projectDir, listOf(Sbt.Factory()))
 
         val actualResult = yamlMapper.writeValueAsString(ortResult)
         val expectedResult = patchExpectedResult(expectedOutputFile)

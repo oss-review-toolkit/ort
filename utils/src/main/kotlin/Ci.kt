@@ -20,13 +20,9 @@
 package com.here.ort.utils
 
 /**
- * Operating-System-specific utility functions.
+ * Continuous-Integration-specific utility functions.
  */
-object OS {
-    val name = System.getProperty("os.name") ?: ""
-    private val nameLowerCase = name.toLowerCase()
-
-    val isLinux = "linux" in nameLowerCase
-    val isMac = "mac" in nameLowerCase
-    val isWindows = "windows" in nameLowerCase
+object Ci {
+    val isAppVeyor = listOf("APPVEYOR", "CI").all { System.getenv(it)?.toBoolean() == true }
+    val isTravis = listOf("TRAVIS", "CI").all { System.getenv(it)?.toBoolean() == true }
 }

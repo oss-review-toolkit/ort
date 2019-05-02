@@ -85,7 +85,7 @@ fun File.unpackTar(targetDirectory: File) {
                 it.copyTo(output)
             }
 
-            if (!OS.isWindows) {
+            if (!Os.isWindows) {
                 // Note: In contrast to Java, Kotlin does not support octal literals, see
                 // https://kotlinlang.org/docs/reference/basic-types.html#literal-constants.
                 // The bit-triplets from left to right stand for user, groups, other, respectively.
@@ -119,7 +119,7 @@ fun File.unpackZip(targetDirectory: File) {
                 it.copyTo(output)
             }
 
-            if (!OS.isWindows) {
+            if (!Os.isWindows) {
                 // Note: In contrast to Java, Kotlin does not support octal literals, see
                 // https://kotlinlang.org/docs/reference/basic-types.html#literal-constants.
                 // The bit-triplets from left to right stand for user, groups, other, respectively.

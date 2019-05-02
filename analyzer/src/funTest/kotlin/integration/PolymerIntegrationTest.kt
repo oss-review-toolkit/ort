@@ -21,7 +21,7 @@ package com.here.ort.analyzer.integration
 
 import com.here.ort.analyzer.PackageManagerFactory
 import com.here.ort.analyzer.managers.Bower
-import com.here.ort.analyzer.managers.NPM
+import com.here.ort.analyzer.managers.Npm
 import com.here.ort.analyzer.managers.Yarn
 import com.here.ort.model.Identifier
 import com.here.ort.model.Package
@@ -59,7 +59,7 @@ class PolymerIntegrationTest : AbstractIntegrationSpec() {
 
         mapOf(
             Bower.Factory() as PackageManagerFactory to bowerJsonFiles,
-            NPM.Factory() as PackageManagerFactory to packageJsonFiles,
+            Npm.Factory() as PackageManagerFactory to packageJsonFiles,
             Yarn.Factory() as PackageManagerFactory to packageJsonFiles
         )
     }
@@ -68,7 +68,7 @@ class PolymerIntegrationTest : AbstractIntegrationSpec() {
         mapOf(
             Bower.Factory() as PackageManagerFactory to
                     listOf(File(downloadResult.downloadDirectory, "bower.json")),
-            NPM.Factory() as PackageManagerFactory to
+            Npm.Factory() as PackageManagerFactory to
                     listOf(File(downloadResult.downloadDirectory, "package.json"))
         )
     }

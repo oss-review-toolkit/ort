@@ -44,7 +44,7 @@ import com.here.ort.spdx.LICENSE_FILE_NAMES
 import com.here.ort.spdx.NON_LICENSE_FILENAMES
 import com.here.ort.utils.CommandLineTool
 import com.here.ort.utils.ORT_CONFIG_FILENAME
-import com.here.ort.utils.OS
+import com.here.ort.utils.Os
 import com.here.ort.utils.OkHttpClientHelper
 import com.here.ort.utils.ProcessCapture
 import com.here.ort.utils.log
@@ -168,7 +168,7 @@ class ScanCode(name: String, config: ScannerConfiguration) : LocalScanner(name, 
         }.toList()
     }
 
-    override fun command(workingDir: File?) = if (OS.isWindows) "scancode.bat" else "scancode"
+    override fun command(workingDir: File?) = if (Os.isWindows) "scancode.bat" else "scancode"
 
     override fun getVersion(dir: File): String {
         // Create a temporary tool to get its version from the installation in a specific directory.
@@ -188,7 +188,7 @@ class ScanCode(name: String, config: ScannerConfiguration) : LocalScanner(name, 
         val archive = when {
             // Use the .zip file despite it being slightly larger than the .tar.gz file here as the latter for some
             // reason does not complete to unpack on Windows.
-            OS.isWindows -> "v$scannerVersion.zip"
+            Os.isWindows -> "v$scannerVersion.zip"
             else -> "v$scannerVersion.tar.gz"
         }
 

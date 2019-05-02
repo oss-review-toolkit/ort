@@ -25,7 +25,7 @@ import com.here.ort.downloader.DownloadException
 import com.here.ort.downloader.WorkingTree
 import com.here.ort.model.Package
 import com.here.ort.model.VcsInfo
-import com.here.ort.utils.OS
+import com.here.ort.utils.Os
 import com.here.ort.utils.ProcessCapture
 import com.here.ort.utils.getPathFromEnvironment
 import com.here.ort.utils.log
@@ -140,7 +140,7 @@ class GitRepo : GitBase() {
     }
 
     private fun runRepoCommand(targetDir: File, vararg args: String) =
-        if (OS.isWindows) {
+        if (Os.isWindows) {
             val repo = getPathFromEnvironment("repo") ?: throw IOException("'repo' not found in PATH.")
 
             // On Windows, the script itself is not executable, so we need to wrap the call by "python".

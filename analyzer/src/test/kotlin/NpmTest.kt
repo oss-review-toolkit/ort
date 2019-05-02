@@ -19,7 +19,7 @@
 
 package com.here.ort.analyzer
 
-import com.here.ort.analyzer.managers.NPM
+import com.here.ort.analyzer.managers.Npm
 
 import io.kotlintest.shouldBe
 import io.kotlintest.specs.WordSpec
@@ -27,7 +27,7 @@ import io.kotlintest.specs.WordSpec
 class NpmTest : WordSpec({
     "expandShortcutURL" should {
         "do nothing for empty URLs" {
-            NPM.expandShortcutURL("") shouldBe ""
+            Npm.expandShortcutURL("") shouldBe ""
         }
 
         "properly handle NPM shortcut URLs" {
@@ -47,7 +47,7 @@ class NpmTest : WordSpec({
             )
 
             packages.forEach { (actualUrl, expectedUrl) ->
-                NPM.expandShortcutURL(actualUrl) shouldBe expectedUrl
+                Npm.expandShortcutURL(actualUrl) shouldBe expectedUrl
             }
         }
 
@@ -62,7 +62,7 @@ class NpmTest : WordSpec({
             )
 
             packages.forEach { (actualUrl, expectedUrl) ->
-                NPM.expandShortcutURL(actualUrl) shouldBe expectedUrl
+                Npm.expandShortcutURL(actualUrl) shouldBe expectedUrl
             }
         }
     }
