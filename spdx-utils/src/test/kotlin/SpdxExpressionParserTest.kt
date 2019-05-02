@@ -171,7 +171,7 @@ class SpdxExpressionParserTest : WordSpec() {
                     SpdxExpression.parse("license WITH exception+")
                 }
 
-                exception.message shouldBe "SpdxExpression has invalid amount of children: '3'"
+                exception.message shouldBe "extraneous input '+' expecting <EOF>"
             }
 
             "fail if a compound expression is used before WITH" {
@@ -179,7 +179,7 @@ class SpdxExpressionParserTest : WordSpec() {
                     SpdxExpression.parse("(license1 AND license2) WITH exception")
                 }
 
-                exception.message shouldBe "SpdxExpression has invalid amount of children: '3'"
+                exception.message shouldBe "mismatched input 'WITH' expecting {AND, OR, ')', '+'}"
             }
 
             "fail on an invalid symbol" {
@@ -195,7 +195,7 @@ class SpdxExpressionParserTest : WordSpec() {
                     SpdxExpression.parse("((")
                 }
 
-                exception.message shouldBe "Illegal operator '(' in expression '((<missing ')'>'."
+                exception.message shouldBe "mismatched input '<EOF>' expecting {'(', LICENSEREFERENCE, IDSTRING}"
             }
         }
     }

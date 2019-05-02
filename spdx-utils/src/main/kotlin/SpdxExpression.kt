@@ -79,7 +79,10 @@ sealed class SpdxExpression {
             }
 
             val tokenStream = CommonTokenStream(lexer)
-            val parser = SpdxExpressionParser(tokenStream)
+            val parser = SpdxExpressionParser(tokenStream).apply {
+                removeErrorListeners()
+                addErrorListener(SpdxErrorListener())
+            }
 
             return SpdxExpressionDefaultVisitor(strictness).visit(parser.licenseExpression())
         }
