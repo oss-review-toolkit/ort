@@ -27,41 +27,45 @@ class SpdxExpressionParserTest : WordSpec() {
     init {
         "SpdxExpressionParser" should {
             "parse a license id correctly" {
-                val spdxExpression = SpdxExpression.parse("spdx.license-id")
+                val actualExpression = SpdxExpression.parse("spdx.license-id")
+                val expectedExpression = SpdxLicenseIdExpression("spdx.license-id")
 
-                spdxExpression shouldBe SpdxLicenseIdExpression("spdx.license-id")
+                actualExpression shouldBe expectedExpression
             }
 
             "parse a license id starting with a digit correctly" {
-                val spdxExpression = SpdxExpression.parse("0license")
+                val actualExpression = SpdxExpression.parse("0license")
+                val expectedExpression = SpdxLicenseIdExpression("0license")
 
-                spdxExpression shouldBe SpdxLicenseIdExpression("0license")
+                actualExpression shouldBe expectedExpression
             }
 
             "parse a license id with any later version correctly" {
-                val spdxExpression = SpdxExpression.parse("license+")
+                val actualExpression = SpdxExpression.parse("license+")
+                val expectedExpression = SpdxLicenseIdExpression("license", orLaterVersion = true)
 
-                spdxExpression shouldBe SpdxLicenseIdExpression("license", orLaterVersion = true)
+                actualExpression shouldBe expectedExpression
             }
 
             "parse a document ref correctly" {
-                val spdxExpression = SpdxExpression.parse("DocumentRef-document:LicenseRef-license")
+                val actualExpression = SpdxExpression.parse("DocumentRef-document:LicenseRef-license")
+                val expectedExpression = SpdxLicenseReferenceExpression("DocumentRef-document:LicenseRef-license")
 
-                spdxExpression shouldBe SpdxLicenseReferenceExpression("DocumentRef-document:LicenseRef-license")
+                actualExpression shouldBe expectedExpression
             }
 
             "parse a license ref correctly" {
-                val spdxExpression = SpdxExpression.parse("LicenseRef-license")
+                val actualExpression = SpdxExpression.parse("LicenseRef-license")
+                val expectedExpression = SpdxLicenseReferenceExpression("LicenseRef-license")
 
-                spdxExpression shouldBe SpdxLicenseReferenceExpression("LicenseRef-license")
+                actualExpression shouldBe expectedExpression
             }
 
             "parse a complex expression correctly" {
-                val expression = "license1+ and ((license2 with exception1) OR license3+ AND license4 WITH exception2)"
-
-                val spdxExpression = SpdxExpression.parse(expression)
-
-                spdxExpression shouldBe SpdxCompoundExpression(
+                val actualExpression = SpdxExpression.parse(
+                    "license1+ and ((license2 with exception1) OR license3+ AND license4 WITH exception2)"
+                )
+                val expectedExpression = SpdxCompoundExpression(
                     SpdxLicenseIdExpression("license1", orLaterVersion = true),
                     SpdxOperator.AND,
                     SpdxCompoundExpression(
@@ -82,22 +86,24 @@ class SpdxExpressionParserTest : WordSpec() {
                         )
                     )
                 )
+
+                actualExpression shouldBe expectedExpression
             }
 
             "bind + stronger than WITH" {
-                val spdxExpression = SpdxExpression.parse("license+ WITH exception")
-
-                spdxExpression shouldBe SpdxCompoundExpression(
+                val actualExpression = SpdxExpression.parse("license+ WITH exception")
+                val expectedExpression = SpdxCompoundExpression(
                     SpdxLicenseIdExpression("license", orLaterVersion = true),
                     SpdxOperator.WITH,
                     SpdxLicenseExceptionExpression("exception")
                 )
+
+                actualExpression shouldBe expectedExpression
             }
 
             "bind WITH stronger than AND" {
-                val spdxExpression = SpdxExpression.parse("license1 AND license2 WITH exception")
-
-                spdxExpression shouldBe SpdxCompoundExpression(
+                val actualExpression = SpdxExpression.parse("license1 AND license2 WITH exception")
+                val expectedExpression = SpdxCompoundExpression(
                     SpdxLicenseIdExpression("license1"),
                     SpdxOperator.AND,
                     SpdxCompoundExpression(
@@ -106,12 +112,13 @@ class SpdxExpressionParserTest : WordSpec() {
                         SpdxLicenseExceptionExpression("exception")
                     )
                 )
+
+                actualExpression shouldBe expectedExpression
             }
 
             "bind AND stronger than OR" {
-                val spdxExpression = SpdxExpression.parse("license1 OR license2 AND license3")
-
-                spdxExpression shouldBe SpdxCompoundExpression(
+                val actualExpression = SpdxExpression.parse("license1 OR license2 AND license3")
+                val expectedExpression = SpdxCompoundExpression(
                     SpdxLicenseIdExpression("license1"),
                     SpdxOperator.OR,
                     SpdxCompoundExpression(
@@ -120,12 +127,13 @@ class SpdxExpressionParserTest : WordSpec() {
                         SpdxLicenseIdExpression("license3")
                     )
                 )
+
+                actualExpression shouldBe expectedExpression
             }
 
             "bind the and operator left associative" {
-                val spdxExpression = SpdxExpression.parse("license1 AND license2 AND license3")
-
-                spdxExpression shouldBe SpdxCompoundExpression(
+                val actualExpression = SpdxExpression.parse("license1 AND license2 AND license3")
+                val expectedExpression = SpdxCompoundExpression(
                     SpdxCompoundExpression(
                         SpdxLicenseIdExpression("license1"),
                         SpdxOperator.AND,
@@ -134,12 +142,13 @@ class SpdxExpressionParserTest : WordSpec() {
                     SpdxOperator.AND,
                     SpdxLicenseIdExpression("license3")
                 )
+
+                actualExpression shouldBe expectedExpression
             }
 
             "bind the or operator left associative" {
-                val spdxExpression = SpdxExpression.parse("license1 OR license2 OR license3")
-
-                spdxExpression shouldBe SpdxCompoundExpression(
+                val actualExpression = SpdxExpression.parse("license1 OR license2 OR license3")
+                val expectedExpression = SpdxCompoundExpression(
                     SpdxCompoundExpression(
                         SpdxLicenseIdExpression("license1"),
                         SpdxOperator.OR,
@@ -148,14 +157,13 @@ class SpdxExpressionParserTest : WordSpec() {
                     SpdxOperator.OR,
                     SpdxLicenseIdExpression("license3")
                 )
+
+                actualExpression shouldBe expectedExpression
             }
 
             "respect parentheses for binding strength of operators" {
-                val expression = "(license1 OR license2) AND license3"
-
-                val spdxExpression = SpdxExpression.parse(expression)
-
-                spdxExpression shouldBe SpdxCompoundExpression(
+                val actualExpression = SpdxExpression.parse("(license1 OR license2) AND license3")
+                val expectedExpression = SpdxCompoundExpression(
                     SpdxCompoundExpression(
                         SpdxLicenseIdExpression("license1"),
                         SpdxOperator.OR,
@@ -164,6 +172,8 @@ class SpdxExpressionParserTest : WordSpec() {
                     SpdxOperator.AND,
                     SpdxLicenseIdExpression("license3")
                 )
+
+                actualExpression shouldBe expectedExpression
             }
 
             "fail if + is used in an exception expression" {
