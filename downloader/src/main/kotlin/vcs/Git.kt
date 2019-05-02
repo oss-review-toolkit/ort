@@ -25,7 +25,7 @@ import com.here.ort.downloader.DownloadException
 import com.here.ort.downloader.WorkingTree
 import com.here.ort.model.Package
 import com.here.ort.spdx.LICENSE_FILE_NAMES
-import com.here.ort.utils.OS
+import com.here.ort.utils.Os
 import com.here.ort.utils.ProcessCapture
 import com.here.ort.utils.log
 import com.here.ort.utils.safeMkdirs
@@ -85,7 +85,7 @@ class Git : GitBase() {
             run(targetDir, "config", "protocol.version", "2")
         }
 
-        if (OS.isWindows) {
+        if (Os.isWindows) {
             run(targetDir, "config", "core.longpaths", "true")
         }
 

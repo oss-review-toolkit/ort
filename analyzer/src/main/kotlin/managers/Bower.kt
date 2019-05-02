@@ -38,7 +38,7 @@ import com.here.ort.model.config.AnalyzerConfiguration
 import com.here.ort.model.config.RepositoryConfiguration
 import com.here.ort.model.jsonMapper
 import com.here.ort.utils.CommandLineTool
-import com.here.ort.utils.OS
+import com.here.ort.utils.Os
 import com.here.ort.utils.fieldNamesOrEmpty
 import com.here.ort.utils.fieldsOrEmpty
 import com.here.ort.utils.log
@@ -216,7 +216,7 @@ class Bower(
             Bower(managerName, analyzerRoot, analyzerConfig, repoConfig)
     }
 
-    override fun command(workingDir: File?) = if (OS.isWindows) "bower.cmd" else "bower"
+    override fun command(workingDir: File?) = if (Os.isWindows) "bower.cmd" else "bower"
 
     override fun getVersionRequirement(): Requirement = Requirement.buildStrict(REQUIRED_BOWER_VERSION)
 

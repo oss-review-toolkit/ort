@@ -44,7 +44,7 @@ import com.here.ort.model.config.RepositoryConfiguration
 import com.here.ort.model.jsonMapper
 import com.here.ort.model.readValue
 import com.here.ort.utils.CommandLineTool
-import com.here.ort.utils.OS
+import com.here.ort.utils.Os
 import com.here.ort.utils.OkHttpClientHelper
 import com.here.ort.utils.hasFragmentRevision
 import com.here.ort.utils.log
@@ -67,7 +67,7 @@ import okhttp3.Request
 /**
  * The [Node package manager](https://www.npmjs.com/) for JavaScript.
  */
-open class NPM(
+open class Npm(
     name: String,
     analyzerRoot: File,
     analyzerConfig: AnalyzerConfiguration,
@@ -114,7 +114,7 @@ open class NPM(
         }
     }
 
-    class Factory : AbstractPackageManagerFactory<NPM>("NPM") {
+    class Factory : AbstractPackageManagerFactory<Npm>("NPM") {
         override val globsForDefinitionFiles = listOf("package.json")
 
         override fun create(
@@ -122,7 +122,7 @@ open class NPM(
             analyzerConfig: AnalyzerConfiguration,
             repoConfig: RepositoryConfiguration
         ) =
-            NPM(managerName, analyzerRoot, analyzerConfig, repoConfig)
+            Npm(managerName, analyzerRoot, analyzerConfig, repoConfig)
     }
 
     /**
@@ -132,7 +132,7 @@ open class NPM(
 
     protected open fun hasLockFile(projectDir: File) = PackageJsonUtils.hasNpmLockFile(projectDir)
 
-    override fun command(workingDir: File?) = if (OS.isWindows) "npm.cmd" else "npm"
+    override fun command(workingDir: File?) = if (Os.isWindows) "npm.cmd" else "npm"
 
     override fun getVersionRequirement(): Requirement = Requirement.buildNPM("5.7.* - 6.4.*")
 
@@ -509,7 +509,7 @@ open class NPM(
         }
 
         // Install all NPM dependencies to enable NPM to list dependencies.
-        if (hasLockFile(workingDir) && this::class.java == NPM::class.java) {
+        if (hasLockFile(workingDir) && this::class.java == Npm::class.java) {
             run(workingDir, "ci")
         } else {
             run(workingDir, "install", *installParameters)

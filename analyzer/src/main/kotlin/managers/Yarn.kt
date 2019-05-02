@@ -23,7 +23,7 @@ import com.here.ort.analyzer.AbstractPackageManagerFactory
 import com.here.ort.analyzer.PackageJsonUtils
 import com.here.ort.model.config.AnalyzerConfiguration
 import com.here.ort.model.config.RepositoryConfiguration
-import com.here.ort.utils.OS
+import com.here.ort.utils.Os
 
 import com.vdurmont.semver4j.Requirement
 
@@ -37,7 +37,7 @@ class Yarn(
     analyzerRoot: File,
     analyzerConfig: AnalyzerConfiguration,
     repoConfig: RepositoryConfiguration
-) : NPM(name, analyzerRoot, analyzerConfig, repoConfig) {
+) : Npm(name, analyzerRoot, analyzerConfig, repoConfig) {
     class Factory : AbstractPackageManagerFactory<Yarn>("Yarn") {
         override val globsForDefinitionFiles = listOf("package.json")
 
@@ -53,7 +53,7 @@ class Yarn(
 
     override fun hasLockFile(projectDir: File) = PackageJsonUtils.hasYarnLockFile(projectDir)
 
-    override fun command(workingDir: File?) = if (OS.isWindows) "yarn.cmd" else "yarn"
+    override fun command(workingDir: File?) = if (Os.isWindows) "yarn.cmd" else "yarn"
 
     override fun getVersionRequirement(): Requirement = Requirement.buildNPM("1.3.* - 1.13.*")
 

@@ -20,7 +20,7 @@
 package com.here.ort.analyzer.integration
 
 import com.here.ort.analyzer.PackageManagerFactory
-import com.here.ort.analyzer.managers.NPM
+import com.here.ort.analyzer.managers.Npm
 import com.here.ort.analyzer.managers.PhpComposer
 import com.here.ort.analyzer.managers.Yarn
 import com.here.ort.model.Identifier
@@ -82,7 +82,7 @@ class DrupalIntegrationTest : AbstractIntegrationSpec() {
                 File(downloadDir, "core/composer.json"),
                 File(downloadDir, "composer.json")
             ),
-            NPM.Factory() as PackageManagerFactory to listOf(
+            Npm.Factory() as PackageManagerFactory to listOf(
                 File(downloadDir, "core/package.json"),
                 File(downloadDir, "core/assets/vendor/jquery.ui/package.json")
             ),

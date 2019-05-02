@@ -35,11 +35,11 @@ class ExtensionsTest : WordSpec({
     }
 
     "File.expandTilde" should {
-        "only make the path absolute on Windows".config(enabled = OS.isWindows) {
+        "only make the path absolute on Windows".config(enabled = Os.isWindows) {
             File("~/Desktop").expandTilde() shouldBe File("~/Desktop").absoluteFile
         }
 
-        "expand the path on Unix".config(enabled = !OS.isWindows) {
+        "expand the path on Unix".config(enabled = !Os.isWindows) {
             File("~/Desktop").expandTilde() shouldBe getUserHomeDirectory().resolve("Desktop")
         }
     }

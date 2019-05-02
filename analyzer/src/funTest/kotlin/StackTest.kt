@@ -21,8 +21,8 @@ package com.here.ort.analyzer
 
 import com.here.ort.analyzer.managers.Stack
 import com.here.ort.model.yamlMapper
-import com.here.ort.utils.CI
-import com.here.ort.utils.OS
+import com.here.ort.utils.Ci
+import com.here.ort.utils.Os
 import com.here.ort.utils.ProcessCapture
 import com.here.ort.utils.getPathFromEnvironment
 import com.here.ort.utils.test.DEFAULT_ANALYZER_CONFIGURATION
@@ -44,12 +44,12 @@ class StackTest : StringSpec() {
         // Only install GHC, which takes along time, if we really are running this test until
         // https://github.com/commercialhaskell/stack/issues/4390 is resolved.
         if (getPathFromEnvironment("stack") == null) {
-            if (CI.isAppVeyor) {
+            if (Ci.isAppVeyor) {
                 ProcessCapture("cinst", "haskell-stack", "--version", "1.7.1", "-y").requireSuccess()
 
                 // This installs the whole GHC to an isolated location!
                 ProcessCapture("stack", "setup").requireSuccess()
-            } else if (CI.isTravis) {
+            } else if (Ci.isTravis) {
                 val getStack = ProcessCapture("curl", "-sSL", "https://get.haskellstack.org/").requireSuccess()
                 ProcessCapture("sh", getStack.stdoutFile.absolutePath).requireSuccess()
 
@@ -64,7 +64,7 @@ class StackTest : StringSpec() {
             val definitionFile = File(projectsDir, "external/quickcheck-state-machine/stack.yaml")
 
             val result = createStack().resolveDependencies(listOf(definitionFile))[definitionFile]
-            val expectedOutput = if (OS.isWindows) {
+            val expectedOutput = if (Os.isWindows) {
                 "external/quickcheck-state-machine-expected-output-win32.yml"
             } else {
                 "external/quickcheck-state-machine-expected-output.yml"
@@ -79,7 +79,7 @@ class StackTest : StringSpec() {
             val definitionFile = File(projectsDir, "external/quickcheck-state-machine/example/stack.yaml")
 
             val result = createStack().resolveDependencies(listOf(definitionFile))[definitionFile]
-            val expectedOutput = if (OS.isWindows) {
+            val expectedOutput = if (Os.isWindows) {
                 "external/quickcheck-state-machine-example-expected-output-win32.yml"
             } else {
                 "external/quickcheck-state-machine-example-expected-output.yml"

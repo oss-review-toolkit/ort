@@ -19,7 +19,7 @@
 
 package com.here.ort.model
 
-import com.here.ort.utils.OS
+import com.here.ort.utils.Os
 
 /**
  * A description of the environment that ORT was executed in.
@@ -33,7 +33,7 @@ data class Environment(
     /**
      * Name of the operating system, defaults to [OS.name].
      */
-    val os: String = OS.name,
+    val os: String = Os.name,
 
     /**
      * Map of selected environment variables that might be relevant for debugging.

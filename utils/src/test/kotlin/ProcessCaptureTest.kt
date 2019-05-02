@@ -25,7 +25,7 @@ import io.kotlintest.specs.StringSpec
 class ProcessCaptureTest : StringSpec({
     "Environment variables should be passed correctly" {
         val env = mapOf("PREFIX" to "This is some path: ", "SOME_PATH" to "/foo/bar")
-        val proc = if (OS.isWindows) {
+        val proc = if (Os.isWindows) {
             ProcessCapture("cmd.exe", "/c", "echo %PREFIX%%SOME_PATH%", environment = env)
         } else {
             ProcessCapture("sh", "-c", "echo \$PREFIX\$SOME_PATH", environment = env)

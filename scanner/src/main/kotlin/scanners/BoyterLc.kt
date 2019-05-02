@@ -35,7 +35,7 @@ import com.here.ort.scanner.HTTP_CACHE_PATH
 import com.here.ort.scanner.LocalScanner
 import com.here.ort.scanner.ScanException
 import com.here.ort.utils.CommandLineTool
-import com.here.ort.utils.OS
+import com.here.ort.utils.Os
 import com.here.ort.utils.OkHttpClientHelper
 import com.here.ort.utils.ProcessCapture
 import com.here.ort.utils.log
@@ -65,7 +65,7 @@ class BoyterLc(name: String, config: ScannerConfiguration) : LocalScanner(name, 
     override val scannerVersion = "1.3.1"
     override val resultFileExt = "json"
 
-    override fun command(workingDir: File?) = if (OS.isWindows) "lc.exe" else "lc"
+    override fun command(workingDir: File?) = if (Os.isWindows) "lc.exe" else "lc"
 
     override fun getVersion(dir: File): String {
         // Create a temporary tool to get its version from the installation in a specific directory.
@@ -82,9 +82,9 @@ class BoyterLc(name: String, config: ScannerConfiguration) : LocalScanner(name, 
 
     override fun bootstrap(): File {
         val platform = when {
-            OS.isLinux -> "x86_64-unknown-linux"
-            OS.isMac -> "x86_64-apple-darwin"
-            OS.isWindows -> "x86_64-pc-windows"
+            Os.isLinux -> "x86_64-unknown-linux"
+            Os.isMac -> "x86_64-apple-darwin"
+            Os.isWindows -> "x86_64-pc-windows"
             else -> throw IllegalArgumentException("Unsupported operating system.")
         }
 
@@ -116,7 +116,7 @@ class BoyterLc(name: String, config: ScannerConfiguration) : LocalScanner(name, 
                 log.warn { "Unable to delete temporary file '$scannerArchive'." }
             }
 
-            if (!OS.isWindows) {
+            if (!Os.isWindows) {
                 // The Linux version is distributed as a ZIP, but without having the Unix executable mode bits stored.
                 File(unpackDir, command()).setExecutable(true)
             }

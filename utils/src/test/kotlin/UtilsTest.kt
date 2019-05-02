@@ -214,7 +214,7 @@ class UtilsTest : WordSpec({
     }
 
     "getPathFromEnvironment" should {
-        "find system executables on Windows".config(enabled = OS.isWindows) {
+        "find system executables on Windows".config(enabled = Os.isWindows) {
             val winverPath = File(System.getenv("SYSTEMROOT"), "system32/winver.exe")
 
             getPathFromEnvironment("winver") shouldNotBe null
@@ -228,7 +228,7 @@ class UtilsTest : WordSpec({
             getPathFromEnvironment("nul") shouldBe null
         }
 
-        "find system executables on non-Windows".config(enabled = !OS.isWindows) {
+        "find system executables on non-Windows".config(enabled = !Os.isWindows) {
             getPathFromEnvironment("sh") shouldNotBe null
             getPathFromEnvironment("sh") shouldBe File("/bin/sh")
 

@@ -33,9 +33,9 @@ import com.here.ort.model.jsonMapper
 import com.here.ort.scanner.AbstractScannerFactory
 import com.here.ort.scanner.LocalScanner
 import com.here.ort.scanner.ScanException
-import com.here.ort.utils.CI
+import com.here.ort.utils.Ci
 import com.here.ort.utils.CommandLineTool
-import com.here.ort.utils.OS
+import com.here.ort.utils.Os
 import com.here.ort.utils.ProcessCapture
 import com.here.ort.utils.getPathFromEnvironment
 import com.here.ort.utils.log
@@ -56,7 +56,7 @@ class Licensee(name: String, config: ScannerConfiguration) : LocalScanner(name, 
     override val scannerVersion = "9.11.0"
     override val resultFileExt = "json"
 
-    override fun command(workingDir: File?) = if (OS.isWindows) "licensee.bat" else "licensee"
+    override fun command(workingDir: File?) = if (Os.isWindows) "licensee.bat" else "licensee"
 
     override fun getVersion(dir: File): String {
         // Create a temporary tool to get its version from the installation in a specific directory.
@@ -69,11 +69,11 @@ class Licensee(name: String, config: ScannerConfiguration) : LocalScanner(name, 
     }
 
     override fun bootstrap(): File {
-        val gem = if (OS.isWindows) "gem.cmd" else "gem"
+        val gem = if (Os.isWindows) "gem.cmd" else "gem"
 
         // Work around Travis CI not being able to handle gem user installs, see
         // https://github.com/travis-ci/travis-ci/issues/9412.
-        return if (CI.isTravis) {
+        return if (Ci.isTravis) {
             ProcessCapture(gem, "install", "licensee", "-v", scannerVersion).requireSuccess()
             getPathFromEnvironment(command())?.parentFile
                 ?: throw IOException("Install directory for licensee not found.")

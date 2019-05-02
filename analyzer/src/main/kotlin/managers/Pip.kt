@@ -42,7 +42,7 @@ import com.here.ort.model.config.AnalyzerConfiguration
 import com.here.ort.model.config.RepositoryConfiguration
 import com.here.ort.model.jsonMapper
 import com.here.ort.utils.CommandLineTool
-import com.here.ort.utils.OS
+import com.here.ort.utils.Os
 import com.here.ort.utils.OkHttpClientHelper
 import com.here.ort.utils.ProcessCapture
 import com.here.ort.utils.getPathFromEnvironment
@@ -80,7 +80,7 @@ object VirtualEnv : CommandLineTool {
 object PythonVersion : CommandLineTool {
     // To use a specific version of Python on Windows we can use the "py" command with argument "-2" or "-3", see
     // https://docs.python.org/3/installing/#work-with-multiple-versions-of-python-installed-in-parallel.
-    override fun command(workingDir: File?) = if (OS.isWindows) "py" else "python3"
+    override fun command(workingDir: File?) = if (Os.isWindows) "py" else "python3"
 
     /**
      * Check all Python files in [workingDir] and return which version of Python they are compatible with. If all files
@@ -93,7 +93,7 @@ object PythonVersion : CommandLineTool {
 
         try {
             // The helper script itself always has to be run with Python 3.
-            val scriptCmd = if (OS.isWindows) {
+            val scriptCmd = if (Os.isWindows) {
                 run("-3", scriptFile.path, "-d", workingDir.path)
             } else {
                 run(scriptFile.path, "-d", workingDir.path)
@@ -113,7 +113,7 @@ object PythonVersion : CommandLineTool {
      * called the same in those locations.
      */
     fun getPythonInterpreter(version: Int): String {
-        return if (OS.isWindows) {
+        return if (Os.isWindows) {
             val scriptFile = File.createTempFile("python_interpreter", ".py")
             scriptFile.writeBytes(javaClass.getResource("/scripts/python_interpreter.py").readBytes())
 
@@ -135,13 +135,13 @@ object PythonVersion : CommandLineTool {
  * [install_requires vs requirements files](https://packaging.python.org/discussions/install-requires-vs-requirements/)
  * and [setup.py vs. requirements.txt](https://caremad.io/posts/2013/07/setup-vs-requirement/).
  */
-class PIP(
+class Pip(
     name: String,
     analyzerRoot: File,
     analyzerConfig: AnalyzerConfiguration,
     repoConfig: RepositoryConfiguration
 ) : PackageManager(name, analyzerRoot, analyzerConfig, repoConfig), CommandLineTool {
-    class Factory : AbstractPackageManagerFactory<PIP>("PIP") {
+    class Factory : AbstractPackageManagerFactory<Pip>("PIP") {
         override val globsForDefinitionFiles = listOf("requirements*.txt", "setup.py")
 
         override fun create(
@@ -149,7 +149,7 @@ class PIP(
             analyzerConfig: AnalyzerConfiguration,
             repoConfig: RepositoryConfiguration
         ) =
-            PIP(managerName, analyzerRoot, analyzerConfig, repoConfig)
+            Pip(managerName, analyzerRoot, analyzerConfig, repoConfig)
     }
 
     companion object {
@@ -184,10 +184,10 @@ class PIP(
 
     private fun runInVirtualEnv(virtualEnvDir: File, workingDir: File, commandName: String, vararg commandArgs: String):
             ProcessCapture {
-        val binDir = if (OS.isWindows) "Scripts" else "bin"
+        val binDir = if (Os.isWindows) "Scripts" else "bin"
         var command = File(virtualEnvDir, binDir + File.separator + commandName)
 
-        if (OS.isWindows && command.extension.isEmpty()) {
+        if (Os.isWindows && command.extension.isEmpty()) {
             // On Windows specifying the extension is optional, so try them in order.
             val extensions = System.getenv("PATHEXT")?.splitToSequence(File.pathSeparatorChar) ?: emptySequence()
             val commandWin = extensions.map { File(command.path + it.toLowerCase()) }.find { it.isFile }
@@ -223,7 +223,7 @@ class PIP(
         // downgrades pip to version 7.1.2. Use it to get meta-information from about the project from setup.py. As
         // pydep is not on PyPI, install it from Git instead.
         val pydepUrl = "git+https://github.com/heremaps/pydep@$PYDEP_REVISION"
-        val pip = if (OS.isWindows) {
+        val pip = if (Os.isWindows) {
             // On Windows, in-place pip up- / downgrades require pip to be wrapped by "python -m", see
             // https://github.com/pypa/pip/issues/1299.
             runInVirtualEnv(
@@ -239,7 +239,7 @@ class PIP(
 
         // First try to get meta-data from "setup.py" in any case, even for "requirements.txt" projects.
         val (setupName, setupVersion, setupHomepage) = if (File(workingDir, "setup.py").isFile) {
-            val pydep = if (OS.isWindows) {
+            val pydep = if (Os.isWindows) {
                 // On Windows, the script itself is not executable, so we need to wrap the call by "python".
                 runInVirtualEnv(
                     virtualEnvDir, workingDir, "python",
@@ -521,7 +521,7 @@ class PIP(
 
     private fun installDependencies(workingDir: File, definitionFile: File, virtualEnvDir: File): ProcessCapture {
         // Ensure to have installed a version of pip that is know to work for us.
-        var pip = if (OS.isWindows) {
+        var pip = if (Os.isWindows) {
             // On Windows, in-place pip up- / downgrades require pip to be wrapped by "python -m", see
             // https://github.com/pypa/pip/issues/1299.
             runInVirtualEnv(

@@ -42,7 +42,7 @@ import com.here.ort.model.config.RepositoryConfiguration
 import com.here.ort.model.jsonMapper
 import com.here.ort.model.yamlMapper
 import com.here.ort.utils.CommandLineTool
-import com.here.ort.utils.OS
+import com.here.ort.utils.Os
 import com.here.ort.utils.OkHttpClientHelper
 import com.here.ort.utils.collectMessagesAsString
 import com.here.ort.utils.log
@@ -82,7 +82,7 @@ class Bundler(
             Bundler(managerName, analyzerRoot, analyzerConfig, repoConfig)
     }
 
-    override fun command(workingDir: File?) = if (OS.isWindows) "bundle.bat" else "bundle"
+    override fun command(workingDir: File?) = if (Os.isWindows) "bundle.bat" else "bundle"
 
     override fun getVersionRequirement(): Requirement = Requirement.buildIvy("[1.16,2.1[")
 
