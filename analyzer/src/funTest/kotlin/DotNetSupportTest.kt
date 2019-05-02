@@ -25,8 +25,6 @@ import com.here.ort.model.OrtIssue
 import com.here.ort.model.PackageReference
 import com.here.ort.model.Scope
 
-import io.kotlintest.matchers.beEmpty
-import io.kotlintest.should
 import io.kotlintest.shouldBe
 import io.kotlintest.specs.StringSpec
 
@@ -37,26 +35,6 @@ class DotNetSupportTest : StringSpec() {
     private val projectDir = File("src/funTest/assets/projects/synthetic/dotnet").absoluteFile
 
     init {
-        "non-existing version is mapped to most recent version" {
-            val testPackage = Pair("jQuery", "1.3.2")
-            val dotNetSupport = DotNetSupport(mapOf(testPackage), projectDir)
-            val resultScope = Scope(
-                "dependencies", sortedSetOf(
-                    PackageReference(
-                        Identifier(
-                            type = "nuget",
-                            namespace = "",
-                            name = "jQuery",
-                            version = "3.3.1"
-                        )
-                    )
-                )
-            )
-
-            dotNetSupport.scope shouldBe resultScope
-            dotNetSupport.errors should beEmpty()
-        }
-
         "non-existing project gets registered as error and is not added to scope" {
             val testPackage = Pair("trifj", "2.0.0")
             val testPackage2 = Pair("tffrifj", "2.0.0")
