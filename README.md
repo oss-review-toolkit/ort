@@ -37,7 +37,7 @@ The toolkit is envisioned to consist of the following libraries:
   changes to the software project are required.
 * [Downloader](#downloader) - fetches the source code based on the Analyzer's output.
 * [Scanner](#scanner) - wraps existing copyright / license scanners to detect findings in local source code directories.
-* *Evaluator* - evaluates results as OK or NOT OK against user-specified rules.
+* [Evaluator](#evaluator) - evaluates results as OK or NOT OK against user-specified rules.
 * *Advisor* * - retrieves security advisories based on Analyzer results.
 * [Reporter](#reporter) - presents results in various formats (incl. `NOTICE` files), making it easy to identify
   dependencies, licenses, copyrights and policy violations.
@@ -140,6 +140,15 @@ artifactory_storage:
   repository: "generic-repository-name"
   apiToken: $ARTIFACTORY_API_KEY
 ```
+
+<a name="evaluator">&nbsp;</a>
+
+[![Evaluator](./logos/evaluator.png)](./evaluator/src/main/kotlin)
+
+The evalutor is used to perform custom license policy checks on scan results. The rules to check against are implemented
+via scripting. Currently, Kotlin script with a dedicated DSL is used for that, but support for other scripting languages
+can be added as well. See [no_gpl_declared.kts](./evaluator/src/main/resources/rules/no_gpl_declared.kts) for a very
+simple example of a rule written in Kotlin script which verifies that no dependencies that declare the GPL are used.
 
 <a name="reporter">&nbsp;</a>
 
