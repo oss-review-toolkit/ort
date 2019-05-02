@@ -149,7 +149,7 @@ open class PackageRule(
 
         override val description = "\tEvaluating license rule '$name' for $licenseSource license '$license'."
 
-        override fun issueSource() = "$name - $license ($licenseSource)"
+        override fun issueSource() = "$name - ${pkg.id.toCoordinates()} - $license ($licenseSource)"
 
         /**
          * A [RuleMatcher] that checks if the [license] is a valid [SpdxLicense].
