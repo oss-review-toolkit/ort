@@ -501,7 +501,11 @@ class Pip(
         }
 
         virtualEnvDir = createVirtualEnv(workingDir, projectPythonVersion)
-        installDependencies(workingDir, definitionFile, virtualEnvDir).requireSuccess()
+        val install = installDependencies(workingDir, definitionFile, virtualEnvDir)
+        if (install.isError) {
+            // pip writes the real error message to stdout instead of stderr.
+            throw IOException(install.stdout)
+        }
 
         log.info {
             "Successfully installed dependencies for project '$definitionFile' using Python $projectPythonVersion."
