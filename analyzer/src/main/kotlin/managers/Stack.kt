@@ -181,7 +181,7 @@ class Stack(
                         type = if (childName == "rts") "GHC" else "Hackage",
                         namespace = "",
                         name = childName,
-                        version = versionMap[childName] ?: ""
+                        version = versionMap[childName].orEmpty()
                     ),
                     declaredLicenses = sortedSetOf(),
                     description = "",
@@ -326,9 +326,9 @@ class Stack(
 
         val id = Identifier(
             type = "Hackage",
-            namespace = map["category"] ?: "",
-            name = map["name"] ?: "",
-            version = map["version"] ?: ""
+            namespace = map["category"].orEmpty(),
+            name = map["name"].orEmpty(),
+            version = map["version"].orEmpty()
         )
 
         val artifact = RemoteArtifact(
@@ -338,17 +338,17 @@ class Stack(
         )
 
         val vcs = VcsInfo(
-            type = map["source-repository-this-type"] ?: map["source-repository-head-type"] ?: "",
-            revision = map["source-repository-this-tag"] ?: "",
-            url = map["source-repository-this-location"] ?: map["source-repository-head-location"] ?: ""
+            type = map["source-repository-this-type"] ?: map["source-repository-head-type"].orEmpty(),
+            revision = map["source-repository-this-tag"].orEmpty(),
+            url = map["source-repository-this-location"] ?: map["source-repository-head-location"].orEmpty()
         )
 
-        val homepageUrl = map["homepage"] ?: ""
+        val homepageUrl = map["homepage"].orEmpty()
 
         return Package(
             id = id,
             declaredLicenses = map["license"]?.let { sortedSetOf(it) } ?: sortedSetOf(),
-            description = map["description"] ?: "",
+            description = map["description"].orEmpty(),
             homepageUrl = homepageUrl,
             binaryArtifact = RemoteArtifact.EMPTY,
             sourceArtifact = artifact,

@@ -210,7 +210,7 @@ fun JsonNode?.fieldsOrEmpty(): Iterator<Map.Entry<String, JsonNode>> = this?.fie
  * Convenience function for [JsonNode] that returns an empty string if [JsonNode.textValue] is called on a null object,
  * or the text value is null.
  */
-fun JsonNode?.textValueOrEmpty(): String = this?.textValue()?.let { it } ?: ""
+fun JsonNode?.textValueOrEmpty(): String = this?.textValue()?.let { it }.orEmpty()
 
 /**
  * Merge two maps by iterating over the combined key set of both maps and applying [operation] to the entries for the

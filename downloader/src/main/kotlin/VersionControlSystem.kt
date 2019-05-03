@@ -172,7 +172,7 @@ abstract class VersionControlSystem {
                         }
                     }
 
-                    val type = forUrl(url)?.type ?: ""
+                    val type = forUrl(url)?.type.orEmpty()
                     if (type == "Git") {
                         url += ".git"
                     }
