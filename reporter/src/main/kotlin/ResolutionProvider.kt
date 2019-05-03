@@ -21,6 +21,7 @@ package com.here.ort.reporter
 
 import com.here.ort.model.OrtIssue
 import com.here.ort.model.OrtResult
+import com.here.ort.model.RuleViolation
 import com.here.ort.model.config.ErrorResolution
 import com.here.ort.model.config.Resolutions
 import com.here.ort.model.config.RuleViolationResolution
@@ -37,7 +38,7 @@ interface ResolutionProvider {
     /**
      * Get all rule violation resolutions that match [error].
      */
-    fun getRuleViolationResolutionsFor(issue: OrtIssue): List<RuleViolationResolution>
+    fun getRuleViolationResolutionsFor(violation: RuleViolation): List<RuleViolationResolution>
 
     /**
      * Get a [Resolutions] object that contains all resolutions which apply to errors contained in [ortResult].

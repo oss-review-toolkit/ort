@@ -20,8 +20,8 @@
 package com.here.ort.evaluator
 
 import com.here.ort.model.EvaluatorRun
-import com.here.ort.model.OrtIssue
 import com.here.ort.model.OrtResult
+import com.here.ort.model.RuleViolation
 import com.here.ort.utils.ScriptRunner
 
 import java.time.Instant
@@ -40,13 +40,13 @@ class Evaluator(ortResult: OrtResult) : ScriptRunner() {
             val ortResult = bindings["ortResult"] as OrtResult
 
             // Output:
-            val evalErrors = mutableListOf<OrtIssue>()
+            val ruleViolations = mutableListOf<RuleViolation>()
 
         """.trimIndent()
 
     override val postface = """
 
-            evalErrors
+            ruleViolations
         """.trimIndent()
 
     init {
@@ -57,10 +57,10 @@ class Evaluator(ortResult: OrtResult) : ScriptRunner() {
         val startTime = Instant.now()
 
         @Suppress("UNCHECKED_CAST")
-        val errors = super.run(script) as List<OrtIssue>
+        val violations = super.run(script) as List<RuleViolation>
 
         val endTime = Instant.now()
 
-        return EvaluatorRun(startTime, endTime, errors)
+        return EvaluatorRun(startTime, endTime, violations)
     }
 }
