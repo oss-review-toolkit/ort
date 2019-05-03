@@ -23,6 +23,7 @@ import com.here.ort.model.Identifier
 import com.here.ort.model.LicenseFinding
 import com.here.ort.model.OrtResult
 import com.here.ort.model.Project
+import com.here.ort.model.RuleViolation
 import com.here.ort.model.ScanResult
 import com.here.ort.model.Severity
 import com.here.ort.model.VcsInfo
@@ -55,7 +56,7 @@ data class ReportTableModel(
     /**
      * A list containing all evaluator issues. `null` if no evaluator result is available.
      */
-    val evaluatorIssues: List<ResolvableIssue>?,
+    val evaluatorIssues: List<ResolvableViolation>?,
 
     /**
      * A [IssueTable] containing all dependencies that caused issues.
@@ -249,5 +250,11 @@ data class ReportTableModel(
         val resolutionDescription: String,
         val isResolved: Boolean,
         val severity: Severity
+    )
+
+    data class ResolvableViolation(
+        val violation: RuleViolation,
+        val resolutionDescription: String,
+        val isResolved: Boolean
     )
 }

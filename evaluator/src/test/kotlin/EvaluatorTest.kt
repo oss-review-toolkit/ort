@@ -19,7 +19,10 @@
 
 package com.here.ort.evaluator
 
+import com.here.ort.model.Identifier
+import com.here.ort.model.LicenseSource
 import com.here.ort.model.OrtResult
+import com.here.ort.model.Severity
 
 import io.kotlintest.matchers.beEmpty
 import io.kotlintest.matchers.haveSize
@@ -53,25 +56,50 @@ class EvaluatorTest : WordSpec() {
             "return no errors for an empty script" {
                 val result = Evaluator(OrtResult.EMPTY).run("")
 
-                result.errors should beEmpty()
+                result.violations should beEmpty()
             }
 
             "contain rule errors in the result" {
                 val result = Evaluator(OrtResult.EMPTY).run(
                     """
-                    evalErrors += OrtIssue(source = "source 1", message = "message 1")
-                    evalErrors += OrtIssue(source = "source 2", message = "message 2")
+                    ruleViolations += RuleViolation(
+                        rule = "rule 1",
+                        pkg = Identifier("type:namespace:name:1.0"),
+                        license = "license 1",
+                        licenseSource = LicenseSource.DETECTED,
+                        severity = Severity.ERROR,
+                        message = "message 1"
+                    )
+
+                    ruleViolations += RuleViolation(
+                        rule = "rule 2",
+                        pkg = Identifier("type:namespace:name:2.0"),
+                        license = "license 2",
+                        licenseSource = LicenseSource.DECLARED,
+                        severity = Severity.WARNING,
+                        message = "message 2"
+                    )
                     """.trimIndent()
                 )
 
-                result.errors should haveSize(2)
-                result.errors[0].let {
-                    it.source shouldBe "source 1"
-                    it.message shouldBe "message 1"
+                result.violations should haveSize(2)
+
+                with(result.violations[0]) {
+                    rule shouldBe "rule 1"
+                    pkg shouldBe Identifier("type:namespace:name:1.0")
+                    license shouldBe "license 1"
+                    licenseSource shouldBe LicenseSource.DETECTED
+                    severity shouldBe Severity.ERROR
+                    message shouldBe "message 1"
                 }
-                result.errors[1].let {
-                    it.source shouldBe "source 2"
-                    it.message shouldBe "message 2"
+
+                with(result.violations[1]) {
+                    rule shouldBe "rule 2"
+                    pkg shouldBe Identifier("type:namespace:name:2.0")
+                    license shouldBe "license 2"
+                    licenseSource shouldBe LicenseSource.DECLARED
+                    severity shouldBe Severity.WARNING
+                    message shouldBe "message 2"
                 }
             }
         }

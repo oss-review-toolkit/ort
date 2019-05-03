@@ -31,7 +31,7 @@ class EvaluatorRunTest : StringSpec() {
         "EvaluatorRun without timestamps can be deserialized" {
             val yaml = """
                 ---
-                errors: []
+                violations: []
             """.trimIndent()
 
             val evaluatorRun = yamlMapper.readValue<EvaluatorRun>(yaml)
@@ -45,7 +45,7 @@ class EvaluatorRunTest : StringSpec() {
                 ---
                 start_time: "1970-01-01T00:00:10Z"
                 end_time: "1970-01-01T00:00:10Z"
-                errors: []
+                violations: []
             """.trimIndent()
 
             val evaluatorRun = yamlMapper.readValue<EvaluatorRun>(yaml)

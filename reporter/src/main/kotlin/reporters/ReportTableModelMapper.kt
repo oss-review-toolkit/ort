@@ -22,6 +22,7 @@ package com.here.ort.reporter.reporters
 import com.here.ort.model.Identifier
 import com.here.ort.model.OrtIssue
 import com.here.ort.model.OrtResult
+import com.here.ort.model.RuleViolation
 import com.here.ort.model.config.ScopeExclude
 import com.here.ort.reporter.ResolutionProvider
 import com.here.ort.reporter.reporters.ReportTableModel.DependencyRow
@@ -56,11 +57,10 @@ class ReportTableModelMapper(private val resolutionProvider: ResolutionProvider)
         )
     }
 
-    private fun OrtIssue.toResolvableEvaluatorIssue(): ResolvableIssue {
+    private fun RuleViolation.toResolvableEvaluatorIssue(): ReportTableModel.ResolvableViolation {
         val resolutions = resolutionProvider.getRuleViolationResolutionsFor(this)
-        return ResolvableIssue(
-            source = this@toResolvableEvaluatorIssue.source,
-            description = "${this@toResolvableEvaluatorIssue.severity}: ${this@toResolvableEvaluatorIssue.message}",
+        return ReportTableModel.ResolvableViolation(
+            violation = this,
             resolutionDescription = buildString {
                 if (resolutions.isNotEmpty()) {
                     append(resolutions.joinToString(
@@ -69,8 +69,7 @@ class ReportTableModelMapper(private val resolutionProvider: ResolutionProvider)
                     )
                 }
             },
-            isResolved = resolutions.isNotEmpty(),
-            severity = severity
+            isResolved = resolutions.isNotEmpty()
         )
     }
 
@@ -215,20 +214,22 @@ class ReportTableModelMapper(private val resolutionProvider: ResolutionProvider)
             extraColumns.map { it.toString() }
         }.orEmpty()
 
-        val evaluatorIssues = ortResult.evaluator?.let {
-            it.errors.map { it.toResolvableEvaluatorIssue() }
+        val ruleViolations = ortResult.evaluator?.let {
+            it.violations.map { it.toResolvableEvaluatorIssue() }
         }?.sortedWith(compareBy(
             { it.isResolved },
-            { it.severity },
-            { it.source },
-            { it.description },
+            { it.violation.severity },
+            { it.violation.rule },
+            { it.violation.pkg },
+            { it.violation.license },
+            { it.violation.message },
             { it.resolutionDescription }
         )) ?: emptyList()
 
         return ReportTableModel(
             ortResult.repository.vcsProcessed,
             ortResult.repository.config,
-            evaluatorIssues,
+            ruleViolations,
             issueSummaryTable,
             summaryTable,
             projectTables,
