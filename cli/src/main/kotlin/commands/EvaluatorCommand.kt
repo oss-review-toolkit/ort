@@ -27,9 +27,9 @@ import com.beust.jcommander.Parameters
 
 import com.here.ort.CommandWithHelp
 import com.here.ort.evaluator.Evaluator
-import com.here.ort.model.OrtIssue
 import com.here.ort.model.OrtResult
 import com.here.ort.model.OutputFormat
+import com.here.ort.model.RuleViolation
 import com.here.ort.model.Severity
 import com.here.ort.model.mapper
 import com.here.ort.model.readValue
@@ -132,12 +132,12 @@ object EvaluatorCommand : CommandWithHelp() {
         val evaluatorRun by lazy { evaluator.run(script) }
 
         if (log.isErrorEnabled) {
-            evaluatorRun.errors.forEach { error ->
-                log.error(error.toString())
+            evaluatorRun.violations.forEach { violation ->
+                log.error(violation.toString())
             }
         }
 
-        printSummary(evaluatorRun.errors)
+        printSummary(evaluatorRun.violations)
 
         if (absoluteOutputDir != null) {
             // Note: This overwrites any existing EvaluatorRun from the input file.
@@ -153,10 +153,10 @@ object EvaluatorCommand : CommandWithHelp() {
             }
         }
 
-        return if (evaluatorRun.errors.isEmpty()) 0 else 2
+        return if (evaluatorRun.violations.isEmpty()) 0 else 2
     }
 
-    private fun printSummary(errors: List<OrtIssue>) {
+    private fun printSummary(errors: List<RuleViolation>) {
         val counts = errors.groupingBy { it.severity }.eachCount()
 
         val errorCount = counts[Severity.ERROR] ?: 0

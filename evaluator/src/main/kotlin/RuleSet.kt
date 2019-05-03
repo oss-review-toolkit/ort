@@ -21,11 +21,11 @@ package com.here.ort.evaluator
 
 import com.here.ort.model.Identifier
 import com.here.ort.model.LicenseFinding
-import com.here.ort.model.OrtIssue
 import com.here.ort.model.OrtResult
 import com.here.ort.model.Package
 import com.here.ort.model.PackageReference
 import com.here.ort.model.Project
+import com.here.ort.model.RuleViolation
 import com.here.ort.model.Scope
 
 /**
@@ -35,7 +35,7 @@ class RuleSet(val ortResult: OrtResult) {
     /**
      * The list of all issues created by the rules of this [RuleSet].
      */
-    val issues = mutableSetOf<OrtIssue>()
+    val violations = mutableSetOf<RuleViolation>()
 
     /**
      * The map of all [LicenseFinding]s and associated path excludes by [Identifier].

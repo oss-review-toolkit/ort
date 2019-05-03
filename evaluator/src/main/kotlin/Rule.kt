@@ -21,7 +21,10 @@ package com.here.ort.evaluator
 
 import ch.frankel.slf4k.*
 
+import com.here.ort.model.Identifier
+import com.here.ort.model.LicenseSource
 import com.here.ort.model.OrtIssue
+import com.here.ort.model.RuleViolation
 import com.here.ort.model.Severity
 import com.here.ort.utils.log
 
@@ -50,7 +53,7 @@ abstract class Rule(
     /**
      * The list of all issues created by this rule.
      */
-    val issues = mutableListOf<OrtIssue>()
+    val violations = mutableListOf<RuleViolation>()
 
     /**
      * Return a human-readable description of this rule.
@@ -75,10 +78,12 @@ abstract class Rule(
         log.info { description }
 
         if (matches()) {
-            ruleSet.issues += issues
+            ruleSet.violations += violations
 
-            if (issues.isNotEmpty()) {
-                log.info { "\tFound issues:\n\t\t${issues.joinToString("\n\t\t") { "${it.severity}: ${it.message}" }}" }
+            if (violations.isNotEmpty()) {
+                log.info {
+                    "\tFound violations:\n\t\t${violations.joinToString("\n\t\t") { "${it.severity}: ${it.message}" }}"
+                }
             }
 
             runInternal()
@@ -102,24 +107,34 @@ abstract class Rule(
      */
     abstract fun issueSource(): String
 
-    fun issue(severity: Severity, message: String) {
-        issues += OrtIssue(source = issueSource(), severity = severity, message = message)
+    fun issue(severity: Severity, pkgId: Identifier, license: String?, licenseSource: LicenseSource?, message: String) {
+        violations += RuleViolation(
+            severity = severity,
+            rule = name,
+            pkg = pkgId,
+            license = license,
+            licenseSource = licenseSource,
+            message = message
+        )
     }
 
     /**
      * Add a [hint][Severity.HINT] to the list of [issues].
      */
-    fun hint(message: String) = issue(Severity.HINT, message)
+    fun hint(pkgId: Identifier, license: String?, licenseSource: LicenseSource?, message: String) =
+        issue(Severity.HINT, pkgId, license, licenseSource, message)
 
     /**
      * Add a [warning][Severity.WARNING] to the list of [issues].
      */
-    fun warning(message: String) = issue(Severity.WARNING, message)
+    fun warning(pkgId: Identifier, license: String?, licenseSource: LicenseSource?, message: String) =
+        issue(Severity.WARNING, pkgId, license, licenseSource, message)
 
     /**
      * Add an [error][Severity.ERROR] to the list of [issues].
      */
-    fun error(message: String) = issue(Severity.ERROR, message)
+    fun error(pkgId: Identifier, license: String?, licenseSource: LicenseSource?, message: String) =
+        issue(Severity.ERROR, pkgId, license, licenseSource, message)
 
     /**
      * A DSL helper class, providing convenience functions for adding [RuleMatcher]s to this rule.

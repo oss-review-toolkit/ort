@@ -35,5 +35,8 @@ data class EvaluatorRun(
      */
     val endTime: Instant = Instant.EPOCH,
 
-    val errors: List<OrtIssue>
+    /**
+     * The list of [RuleViolation]s found by the evaluator.
+     */
+    val violations: List<RuleViolation>
 )
