@@ -24,6 +24,7 @@ import com.here.ort.model.LicenseFinding
 import com.here.ort.model.LicenseSource
 import com.here.ort.model.Package
 import com.here.ort.model.Project
+import com.here.ort.model.Severity
 import com.here.ort.model.config.Excludes
 import com.here.ort.model.config.PathExclude
 import com.here.ort.spdx.SpdxLicense
@@ -126,6 +127,23 @@ open class PackageRule(
         }
     }
 
+    fun issue(severity: Severity, message: String) = issue(severity, pkg.id, null, null, message)
+
+    /**
+     * Add a [hint][Severity.HINT] to the list of [issues].
+     */
+    fun hint(message: String) = hint(pkg.id, null, null, message)
+
+    /**
+     * Add a [warning][Severity.WARNING] to the list of [issues].
+     */
+    fun warning(message: String) = warning(pkg.id, null, null, message)
+
+    /**
+     * Add an [error][Severity.ERROR] to the list of [issues].
+     */
+    fun error(message: String) = error(pkg.id, null, null, message)
+
     /**
      * A [Rule] to check a single license of the [package][pkg].
      */
@@ -186,5 +204,22 @@ open class PackageRule(
 
                 override fun matches() = SpdxLicense.forId(license) != null
             }
+
+        fun issue(severity: Severity, message: String) = issue(severity, pkg.id, license, licenseSource, message)
+
+        /**
+         * Add a [hint][Severity.HINT] to the list of [issues].
+         */
+        fun hint(message: String) = hint(pkg.id, license, licenseSource, message)
+
+        /**
+         * Add a [warning][Severity.WARNING] to the list of [issues].
+         */
+        fun warning(message: String) = warning(pkg.id, license, licenseSource, message)
+
+        /**
+         * Add an [error][Severity.ERROR] to the list of [issues].
+         */
+        fun error(message: String) = error(pkg.id, license, licenseSource, message)
     }
 }

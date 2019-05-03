@@ -156,7 +156,7 @@ class StaticHtmlReporter : Reporter() {
 
         ul {
             reportTableModel.evaluatorIssues?.let { ruleViolations ->
-                val issues = ruleViolations.filterNot { it.isResolved }.groupBy { it.severity }
+                val issues = ruleViolations.filterNot { it.isResolved }.groupBy { it.violation.severity }
                 val errorCount = issues[Severity.ERROR].orEmpty().size
                 val warningCount = issues[Severity.WARNING].orEmpty().size
                 val hintCount = issues[Severity.HINT].orEmpty().size
@@ -206,8 +206,8 @@ class StaticHtmlReporter : Reporter() {
         }
     }
 
-    private fun DIV.evaluatorTable(ruleViolations: List<ResolvableIssue>) {
-        val issues = ruleViolations.filterNot { it.isResolved }.groupBy { it.severity }
+    private fun DIV.evaluatorTable(ruleViolations: List<ReportTableModel.ResolvableViolation>) {
+        val issues = ruleViolations.filterNot { it.isResolved }.groupBy { it.violation.severity }
         val errorCount = issues[Severity.ERROR].orEmpty().size
         val warningCount = issues[Severity.WARNING].orEmpty().size
         val hintCount = issues[Severity.HINT].orEmpty().size
@@ -224,8 +224,10 @@ class StaticHtmlReporter : Reporter() {
                 thead {
                     tr {
                         th { +"#" }
-                        th { +"Source" }
-                        th { +"Violation" }
+                        th { +"Rule" }
+                        th { +"Package" }
+                        th { +"License" }
+                        th { +"Message" }
                     }
                 }
 
@@ -238,11 +240,11 @@ class StaticHtmlReporter : Reporter() {
         }
     }
 
-    private fun TBODY.evaluatorRow(rowIndex: Int, ruleViolation: ResolvableIssue) {
+    private fun TBODY.evaluatorRow(rowIndex: Int, ruleViolation: ReportTableModel.ResolvableViolation) {
         val cssClass = if (ruleViolation.isResolved) {
             "ort-resolved"
         } else {
-            when (ruleViolation.severity) {
+            when (ruleViolation.violation.severity) {
                 Severity.ERROR -> "ort-error"
                 Severity.WARNING -> "ort-warning"
                 Severity.HINT -> "ort-hint"
@@ -259,9 +261,17 @@ class StaticHtmlReporter : Reporter() {
                     +rowIndex.toString()
                 }
             }
-            td { +ruleViolation.source }
+            td { +ruleViolation.violation.rule }
+            td { +ruleViolation.violation.pkg.toCoordinates() }
             td {
-                p { +ruleViolation.description }
+                +if (ruleViolation.violation.license != null) {
+                    "${ruleViolation.violation.licenseSource}: ${ruleViolation.violation.license}"
+                } else {
+                    "-"
+                }
+            }
+            td {
+                p { +ruleViolation.violation.message }
                 p { +ruleViolation.resolutionDescription }
             }
         }

@@ -702,8 +702,8 @@ function* convertReportData() {
         repository: reportData.repository || {},
         violations: {
             resolved: addKeyToArrayItems([]),
-            open: (reportData.evaluator && reportData.evaluator.errors)
-                ? addKeyToArrayItems(reportData.evaluator.errors) : []
+            open: (reportData.evaluator && reportData.evaluator.violations)
+                ? addKeyToArrayItems(reportData.evaluator.violations) : []
         }
     };
 

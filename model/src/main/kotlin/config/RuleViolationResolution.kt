@@ -21,7 +21,7 @@ package com.here.ort.model.config
 
 import com.fasterxml.jackson.annotation.JsonIgnore
 
-import com.here.ort.model.OrtIssue
+import com.here.ort.model.RuleViolation
 
 /**
  * Defines the resolution of a rule violation. This can be used to silence rule violations that have been identified
@@ -51,5 +51,5 @@ data class RuleViolationResolution(
     /**
      * True if [message] matches the message of [error].
      */
-    fun matches(error: OrtIssue) = regex.matches(error.message)
+    fun matches(violation: RuleViolation) = regex.matches(violation.message)
 }
