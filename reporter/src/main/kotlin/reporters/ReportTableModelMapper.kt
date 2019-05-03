@@ -60,7 +60,7 @@ class ReportTableModelMapper(private val resolutionProvider: ResolutionProvider)
         val resolutions = resolutionProvider.getRuleViolationResolutionsFor(this)
         return ResolvableIssue(
             source = this@toResolvableEvaluatorIssue.source,
-            description = this@toResolvableEvaluatorIssue.toString(),
+            description = "${this@toResolvableEvaluatorIssue.severity}: ${this@toResolvableEvaluatorIssue.message}",
             resolutionDescription = buildString {
                 if (resolutions.isNotEmpty()) {
                     append(resolutions.joinToString(
