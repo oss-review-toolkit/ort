@@ -132,9 +132,9 @@ class Subversion : VersionControlSystem(), CommandLineTool {
 
             override fun isShallow() = false
 
-            override fun getRemoteUrl() = runSvnInfoCommand()?.url ?: ""
+            override fun getRemoteUrl() = runSvnInfoCommand()?.url.orEmpty()
 
-            override fun getRevision() = runSvnInfoCommand()?.commit?.revision ?: ""
+            override fun getRevision() = runSvnInfoCommand()?.commit?.revision.orEmpty()
 
             override fun getRootPath() =
                 runSvnInfoCommand()?.workingCopy?.absolutePath?.let { File(it) } ?: workingDir
@@ -143,7 +143,7 @@ class Subversion : VersionControlSystem(), CommandLineTool {
                 val remoteUrl = getRemoteUrl()
 
                 val projectRoot = if (directoryNamespaces.any { "/$it/" in remoteUrl }) {
-                    runSvnInfoCommand()?.repository?.root ?: ""
+                    runSvnInfoCommand()?.repository?.root.orEmpty()
                 } else {
                     remoteUrl
                 }

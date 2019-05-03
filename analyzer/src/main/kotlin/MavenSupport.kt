@@ -124,8 +124,8 @@ class MavenSupport(workspaceReader: WorkspaceReader) {
             }.toSortedSet()
 
         private fun parseScm(scm: Scm?): VcsInfo {
-            val connection = scm?.connection ?: ""
-            val tag = scm?.tag?.takeIf { it != "HEAD" } ?: ""
+            val connection = scm?.connection.orEmpty()
+            val tag = scm?.tag?.takeIf { it != "HEAD" }.orEmpty()
 
             if (connection.isEmpty()) return VcsInfo.EMPTY
 
@@ -512,7 +512,7 @@ class MavenSupport(workspaceReader: WorkspaceReader) {
             }
         }
 
-        val homepageUrl = mavenProject.url ?: ""
+        val homepageUrl = mavenProject.url.orEmpty()
 
         val vcsProcessed = localDirectory?.let {
             PackageManager.processProjectVcs(it, vcsFromPackage, homepageUrl)
@@ -526,7 +526,7 @@ class MavenSupport(workspaceReader: WorkspaceReader) {
                 version = mavenProject.version
             ),
             declaredLicenses = parseLicenses(mavenProject),
-            description = mavenProject.description ?: "",
+            description = mavenProject.description.orEmpty(),
             homepageUrl = homepageUrl,
             binaryArtifact = binaryRemoteArtifact,
             sourceArtifact = sourceRemoteArtifact,

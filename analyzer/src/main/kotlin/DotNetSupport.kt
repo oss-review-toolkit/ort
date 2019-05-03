@@ -50,21 +50,17 @@ class DotNetSupport(
         private const val PROVIDER_NAME = "nuget"
 
         private fun extractRepositoryType(node: JsonNode) =
-            node["repository"]?.get("type")?.textValue()
-                ?: ""
+            node["repository"]?.get("type").textValueOrEmpty()
 
         private fun extractRepositoryUrl(node: JsonNode) =
             node["repository"]?.get("url")?.textValue()
-                ?: node["projectURL"]?.textValue()
-                ?: ""
+                ?: node["projectURL"].textValueOrEmpty()
 
         private fun extractRepositoryRevision(node: JsonNode): String =
-            node["repository"]?.get("commit")?.textValue()
-                ?: ""
+            node["repository"]?.get("commit").textValueOrEmpty()
 
         private fun extractRepositoryPath(node: JsonNode): String =
-            node["repository"]?.get("branch")?.textValue()
-                ?: ""
+            node["repository"]?.get("branch").textValueOrEmpty()
 
         private fun extractVcsInfo(node: JsonNode) =
             VcsInfo(
@@ -78,13 +74,13 @@ class DotNetSupport(
             Identifier(
                 type = PROVIDER_NAME,
                 namespace = "",
-                name = node["id"]?.textValue() ?: "",
-                version = node["version"]?.textValue() ?: ""
+                name = node["id"].textValueOrEmpty(),
+                version = node["version"].textValueOrEmpty()
             )
 
         private fun extractDeclaredLicenses(node: JsonNode) =
             sortedSetOf<String>().apply {
-                val license = node["license"]?.textValue() ?: node["licenseUrl"]?.textValue() ?: ""
+                val license = node["license"]?.textValue() ?: node["licenseUrl"].textValueOrEmpty()
                 // Most nuget packages only provide a "licenseUrl" which counts as a declared license.
                 if (license.isNotEmpty()) {
                     add(license)
@@ -94,17 +90,17 @@ class DotNetSupport(
         private fun extractRemoteArtifact(node: JsonNode, nupkgUrl: String) =
             RemoteArtifact(
                 url = nupkgUrl,
-                hash = node["packageHash"]?.textValue() ?: "",
+                hash = node["packageHash"].textValueOrEmpty(),
                 hashAlgorithm = HashAlgorithm.fromString(
-                    node["packageHashAlgorithm"]?.textValue() ?: ""
+                    node["packageHashAlgorithm"].textValueOrEmpty()
                 )
             )
 
         private fun getCatalogURL(registrationNode: JsonNode): String =
-            registrationNode["catalogEntry"]?.textValue() ?: ""
+            registrationNode["catalogEntry"].textValueOrEmpty()
 
         private fun getNuspecURL(registrationNode: JsonNode): String =
-            registrationNode["packageContent"]?.textValue() ?: ""
+            registrationNode["packageContent"].textValueOrEmpty()
 
         private fun extractVersion(range: String): String {
             if (range.isEmpty()) return ""
@@ -180,8 +176,8 @@ class DotNetSupport(
         return Package(
             id = extractPackageId(jsonCatalogNode),
             declaredLicenses = extractDeclaredLicenses(jsonCatalogNode),
-            description = jsonCatalogNode["description"]?.textValue() ?: "",
-            homepageUrl = jsonCatalogNode["projectUrl"]?.textValue() ?: "",
+            description = jsonCatalogNode["description"].textValueOrEmpty(),
+            homepageUrl = jsonCatalogNode["projectUrl"].textValueOrEmpty(),
             binaryArtifact = extractRemoteArtifact(jsonCatalogNode, packageContent.first),
             sourceArtifact = RemoteArtifact.EMPTY,
             vcs = vcsInfo,
@@ -209,9 +205,9 @@ class DotNetSupport(
                 name = if (packageID == packageJsonNode["id"]?.textValue()) {
                     packageID
                 } else {
-                    packageJsonNode["id"]?.textValue() ?: ""
+                    packageJsonNode["id"].textValueOrEmpty()
                 },
-                version = packageJsonNode["version"]?.textValue() ?: ""
+                version = packageJsonNode["version"].textValueOrEmpty()
             )
         )
 
@@ -271,7 +267,7 @@ class DotNetSupport(
         }
 
         val node = jacksonObjectMapper().readTree(
-            registrationInfo ?: ""
+            registrationInfo.orEmpty()
         )
 
         return if (node != null) {
@@ -284,8 +280,7 @@ class DotNetSupport(
     private fun getIdUrl(packageID: String, version: String) =
         getCreateSearchRestAPIURL(packageID).let { node ->
             getRightVersionUrl(node["data"]?.elements(), packageID, version)
-                ?: getFirstMatchingIdUrl(node["data"]?.elements(), packageID)
-                ?: ""
+                ?: getFirstMatchingIdUrl(node["data"]?.elements(), packageID).orEmpty()
         }
 
     private fun getRightVersionUrl(

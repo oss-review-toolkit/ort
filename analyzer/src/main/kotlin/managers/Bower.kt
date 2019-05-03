@@ -75,13 +75,11 @@ class Bower(
         )
 
         private fun extractRepositoryType(node: JsonNode) =
-            node["pkgMeta"]["repository"]?.get("type")?.textValue()
-                ?: ""
+            node["pkgMeta"]["repository"]?.get("type").textValueOrEmpty()
 
         private fun extractRepositoryUrl(node: JsonNode) =
             node["pkgMeta"]["repository"]?.get("url")?.textValue()
-                ?: node["pkgMeta"]["_source"]?.textValue()
-                ?: ""
+                ?: node["pkgMeta"]["_source"].textValueOrEmpty()
 
         private fun extractRevision(node: JsonNode): String =
             node["pkgMeta"]["_resolution"]?.get("commit")?.textValue()

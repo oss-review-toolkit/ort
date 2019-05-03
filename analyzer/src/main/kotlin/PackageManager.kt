@@ -148,7 +148,7 @@ abstract class PackageManager(
                 it.isNotEmpty()
             } ?: normalizeVcsUrl(homepageUrl).takeIf {
                 VersionControlSystem.forUrl(it) != null
-            } ?: ""
+            }.orEmpty()
 
             val vcsFromUrl = VersionControlSystem.splitUrl(normalizedUrl)
 

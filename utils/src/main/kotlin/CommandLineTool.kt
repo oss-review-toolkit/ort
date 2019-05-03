@@ -83,7 +83,7 @@ interface CommandLineTool {
             it.isNotBlank()
         }
 
-        return versionString ?: ""
+        return versionString.orEmpty()
     }
 
     /**

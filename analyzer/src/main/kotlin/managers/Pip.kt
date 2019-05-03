@@ -125,7 +125,7 @@ object PythonVersion : CommandLineTool {
                 }
             }
         } else {
-            getPathFromEnvironment("python$version")?.path ?: ""
+            getPathFromEnvironment("python$version")?.path.orEmpty()
         }
     }
 }

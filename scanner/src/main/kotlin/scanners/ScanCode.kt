@@ -400,7 +400,7 @@ class ScanCode(name: String, config: ScannerConfiguration) : LocalScanner(name, 
             }
         } ?: return ""
 
-        return rootLicenseFile["licenses"].singleOrNull()?.let { getLicenseId(it) } ?: ""
+        return rootLicenseFile["licenses"].singleOrNull()?.let { getLicenseId(it) }.orEmpty()
     }
 
     /**
