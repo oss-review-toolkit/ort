@@ -142,7 +142,12 @@ class Downloader {
 
         // Try downloading from VCS.
         try {
-            return downloadFromVcs(target, targetDir, allowMovingRevisions)
+            // Cargo in general builds from source tarballs, so we prefer source artifacts to VCS.
+            if (target.id.type != "Cargo" || target.sourceArtifact == RemoteArtifact.EMPTY) {
+                return downloadFromVcs(target, targetDir, allowMovingRevisions)
+            } else {
+                log.info { "Skipping VCS download for Cargo package '${target.id.toCoordinates()}'." }
+            }
         } catch (e: DownloadException) {
             log.debug { "VCS download failed for '${target.id.toCoordinates()}': ${e.message}" }
 
@@ -301,7 +306,9 @@ class Downloader {
                         throw DownloadException("Failed to download source artifact: $response")
                     }
 
-                    createTempFile("ort", target.sourceArtifact.url.substringAfterLast("/")).also { tempFile ->
+                    // Use the filename from the request for the last redirect.
+                    val tempFileName = response.request.url.pathSegments.last()
+                    createTempFile("ort", tempFileName).also { tempFile ->
                         tempFile.sink().buffer().use { it.writeAll(body.source()) }
                         tempFile.deleteOnExit()
                     }

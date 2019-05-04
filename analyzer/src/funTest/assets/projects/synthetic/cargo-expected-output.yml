@@ -1,0 +1,95 @@
+---
+project:
+  id: "Cargo::lib:0.1.0"
+  purl: "pkg://Cargo//lib@0.1.0"
+  definition_file_path: "<REPLACE_DEFINITION_FILE_PATH>"
+  declared_licenses:
+  - "Apache-2.0"
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "Apache-2.0 AND MIT"
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "<REPLACE_URL>"
+    revision: "<REPLACE_REVISION>"
+    path: "<REPLACE_PATH>"
+  homepage_url: "https://example.org"
+  scopes:
+  - name: "dependencies"
+    dependencies:
+    - id: "Cargo::cfg-if:0.1.9"
+      linkage: "STATIC"
+  - name: "devDependencies"
+    dependencies:
+    - id: "Cargo::spin:0.5.0"
+      linkage: "STATIC"
+packages:
+- package:
+    id: "Cargo::cfg-if:0.1.9"
+    purl: "pkg://Cargo//cfg-if@0.1.9"
+    declared_licenses:
+    - "Apache-2.0"
+    - "MIT"
+    declared_licenses_processed:
+      spdx_expression: "Apache-2.0 AND MIT"
+    description: "A macro to ergonomically define an item depending on a large number\
+      \ of #[cfg]\nparameters. Structured like an if-else chain, the first matching\
+      \ branch is the\nitem that gets emitted.\n"
+    homepage_url: ""
+    binary_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    source_artifact:
+      url: "https://crates.io/api/v1/crates/cfg-if/0.1.9/download"
+      hash:
+        value: "b486ce3ccf7ffd79fdeb678eac06a9e6c09fc88d33836340becb8fffe87c5e33"
+        algorithm: "SHA-256"
+    vcs:
+      type: "Git"
+      url: "https://github.com/alexcrichton/cfg-if.git"
+      revision: ""
+      path: ""
+    vcs_processed:
+      type: "Git"
+      url: "https://github.com/alexcrichton/cfg-if.git"
+      revision: ""
+      path: ""
+  curations: []
+- package:
+    id: "Cargo::spin:0.5.0"
+    purl: "pkg://Cargo//spin@0.5.0"
+    declared_licenses:
+    - "MIT"
+    declared_licenses_processed:
+      spdx_expression: "MIT"
+    description: "Synchronization primitives based on spinning.\nThey may contain\
+      \ data, are usable without `std`,\nand static initializers are available.\n"
+    homepage_url: ""
+    binary_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    source_artifact:
+      url: "https://crates.io/api/v1/crates/spin/0.5.0/download"
+      hash:
+        value: "44363f6f51401c34e7be73db0db371c04705d35efbe9f7d6082e03a921a32c55"
+        algorithm: "SHA-256"
+    vcs:
+      type: "Git"
+      url: "https://github.com/mvdnes/spin-rs.git"
+      revision: ""
+      path: ""
+    vcs_processed:
+      type: "Git"
+      url: "https://github.com/mvdnes/spin-rs.git"
+      revision: ""
+      path: ""
+  curations: []

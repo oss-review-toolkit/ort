@@ -31,6 +31,7 @@ env:
     - GO_DEP_VERSION="0.5.1"
     - NPM_VERSION="6.4.0"
     - PHP_VERSION="7.1"
+    - RUST_VERSION="1.35.0"
     - STACK_VERSION="2.1.1"
     - YARN_VERSION="1.16.0"
 
@@ -47,6 +48,8 @@ install:
   - curl -Ls https://git.io/sbt > ~/bin/sbt
   - chmod a+x ~/bin/sbt
   - curl -sSL https://github.com/commercialhaskell/stack/raw/v$STACK_VERSION/etc/scripts/get-stack.sh | sh
+  - curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --default-toolchain $RUST_VERSION
+  - export PATH=$PATH:$HOME/.cargo/bin
   - curl https://storage.googleapis.com/git-repo-downloads/repo > ~/bin/repo
   - chmod a+x ~/bin/repo
   - curl -Os https://dl.google.com/android/repository/sdk-tools-linux-$ANDROID_SDK_VERSION.zip
