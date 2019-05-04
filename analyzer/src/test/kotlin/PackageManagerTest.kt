@@ -46,6 +46,7 @@ class PackageManagerTest : WordSpec({
 
             managedFilesByName["Bower"] shouldBe listOf(File(projectDir, "bower.json"))
             managedFilesByName["Bundler"] shouldBe listOf(File(projectDir, "Gemfile"))
+            managedFilesByName["Cargo"] shouldBe listOf(File(projectDir, "Cargo.toml"))
             managedFilesByName["DotNet"] shouldBe listOf(File(projectDir, "test.csproj"))
             managedFilesByName["GoDep"] shouldBe listOf(File(projectDir, "Gopkg.toml"))
             managedFilesByName["Gradle"] shouldBe listOf(File(projectDir, "build.gradle"))

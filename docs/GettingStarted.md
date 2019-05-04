@@ -82,7 +82,7 @@ first attempt of running the analyzer on the `mime-types` package it will fail w
 
 ```bash
 The following package managers are activated:
-        Gradle, Maven, SBT, NPM, Yarn, GoDep, PIP, Bundler, PhpComposer, Stack
+        Bower, Bundler, Cargo, DotNet, GoDep, Gradle, Maven, NPM, NuGet, PhpComposer, PIP, SBT, Stack, Yarn
 Analyzing project path:
         [mime-types-path]
 ERROR - Resolving dependencies for 'package.json' failed with: No lockfile found in '[mime-types-path]'. This potentially results in unstable versions of dependencies. To allow this, enable support for dynamic versions.

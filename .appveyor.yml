@@ -13,6 +13,7 @@ environment:
   STACK_VERSION: 2.1.1
   VIRTUAL_ENV_VERSION: 15.1.0
   YARN_VERSION: 1.16.0
+  RUST_VERSION: 1.35.0
 
 cache:
   - $(HOME)\.gradle\caches\build-cache-1
@@ -56,6 +57,10 @@ install:
   - ps: Start-FileDownload "https://dl.google.com/android/repository/sdk-tools-windows-$env:ANDROID_SDK_VERSION.zip"
   - 7z x sdk-tools-windows-%ANDROID_SDK_VERSION%.zip -o%ANDROID_HOME% > nul
   - yes | %ANDROID_HOME%\tools\bin\sdkmanager.bat platform-tools
+  # Install rust
+  - ps: Start-FileDownload https://win.rustup.rs/ -FileName rustup-init.exe
+  - rustup-init.exe -y --default-host=x86_64-pc-windows-msvc --default-toolchain=%RUST_VERSION%
+  - set PATH=%PATH%;C:\Users\appveyor\.cargo\bin
 
 # Do something useful here to override the default MSBuild (which would fail otherwise).
 build_script:

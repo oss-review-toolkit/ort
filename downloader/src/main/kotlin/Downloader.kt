@@ -141,7 +141,12 @@ class Downloader {
 
         // Try downloading from VCS.
         try {
-            return downloadFromVcs(target, targetDir, allowMovingRevisions)
+            // Cargo in general builds from source tarballs, so we prefer source artifacts to VCS.
+            if (target.id.type != "Cargo" || target.sourceArtifact == RemoteArtifact.EMPTY) {
+                return downloadFromVcs(target, targetDir, allowMovingRevisions)
+            } else {
+                log.info { "Skipping VCS download for Cargo package '${target.id.toCoordinates()}'." }
+            }
         } catch (e: DownloadException) {
             log.debug { "VCS download failed for '${target.id.toCoordinates()}': ${e.message}" }
 
@@ -335,6 +340,12 @@ class Downloader {
                         log.warn { "Unable to delete temporary directory '$gemDirectory'." }
                     }
                 }
+            } else if (target.id.type == "Cargo") {
+                // without following redirect Cargo's package do not have an extension
+                val tarFile = File(
+                    sourceArchive.parentFile, sourceArchive.nameWithoutExtension + ".tgz")
+                sourceArchive.renameTo(tarFile)
+                tarFile.unpack(outputDirectory)
             } else {
                 sourceArchive.unpack(outputDirectory)
             }

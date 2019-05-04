@@ -33,6 +33,7 @@ env:
     - PHP_VERSION="7.1"
     - STACK_VERSION="2.1.1"
     - YARN_VERSION="1.16.0"
+    - RUST_VERSION="1.35.0"
 
 before_install:
   - sudo rm -f $JAVA_HOME/lib/security/cacerts
@@ -53,6 +54,8 @@ install:
   - unzip -q sdk-tools-linux-$ANDROID_SDK_VERSION.zip -d $ANDROID_HOME
   - export SDKMANAGER_OPTS="--add-modules java.xml.bind"
   - yes | $ANDROID_HOME/tools/bin/sdkmanager --verbose "platform-tools"
+  - curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --default-toolchain $RUST_VERSION
+  - export PATH=$PATH:$HOME/.cargo/bin
 
 script:
   - set -o pipefail
