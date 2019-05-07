@@ -19,6 +19,7 @@
 
 package com.here.ort.evaluator
 
+import com.here.ort.model.LicenseSource
 import com.here.ort.model.Package
 
 /**
