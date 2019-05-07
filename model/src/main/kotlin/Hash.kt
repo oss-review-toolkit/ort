@@ -41,9 +41,20 @@ data class Hash(
 ) {
     companion object {
         /**
-         * A constant to specify an unknown hash.
+         * A constant to specify that no hash value (and thus also no hash algorithm) is provided.
          */
-        val UNKNOWN = Hash(HashAlgorithm.UNKNOWN, HashAlgorithm.UNKNOWN.toString())
+        val NONE = Hash(HashAlgorithm.NONE, HashAlgorithm.NONE.toString())
+
+
+        /**
+         * The set of algorithms that cannot be verified.
+         */
+        val UNVERIFIABLE = setOf(HashAlgorithm.NONE, HashAlgorithm.UNKNOWN)
+
+        /**
+         * The list of algorithms that can be verified.
+         */
+        val VERIFIABLE = enumValues<HashAlgorithm>().toSet() - UNVERIFIABLE
 
         /**
          * Create a hash from it a [value].
@@ -67,8 +78,8 @@ data class Hash(
      * Verify that the [file] matches this hash.
      */
     fun verify(file: File): Boolean {
-        require(algorithm != HashAlgorithm.UNKNOWN) {
-            "Cannot verify an unknown hash algorithm."
+        require(algorithm in VERIFIABLE) {
+            "Cannot verify algorithm '$algorithm'. Supported algorithms are $VERIFIABLE."
         }
 
         return file.hash(algorithm.toString()) == value

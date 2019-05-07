@@ -28,7 +28,6 @@ import com.beust.jcommander.Parameters
 import com.here.ort.CommandWithHelp
 import com.here.ort.downloader.DownloadException
 import com.here.ort.downloader.Downloader
-import com.here.ort.model.Hash
 import com.here.ort.model.Identifier
 import com.here.ort.model.OrtResult
 import com.here.ort.model.Package
@@ -167,14 +166,7 @@ object DownloaderCommand : CommandWithHelp() {
 
             val dummyId = Identifier("Downloader::$projectName:")
             val dummyPackage = if (ARCHIVE_EXTENSIONS.any { projectFile.name.endsWith(it) }) {
-                Package.EMPTY.copy(
-                    id = dummyId,
-                    sourceArtifact = RemoteArtifact(
-                        url = projectUrl!!,
-                        hash = Hash.UNKNOWN.value,
-                        hashAlgorithm = Hash.UNKNOWN.algorithm
-                    )
-                )
+                Package.EMPTY.copy(id = dummyId, sourceArtifact = RemoteArtifact.EMPTY.copy(url = projectUrl!!))
             } else {
                 val vcs = VcsInfo(type = vcsType, url = projectUrl!!, revision = vcsRevision, path = vcsPath)
                 Package.EMPTY.copy(id = dummyId, vcs = vcs, vcsProcessed = vcs.normalize())
