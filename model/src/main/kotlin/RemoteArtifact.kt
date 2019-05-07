@@ -45,8 +45,8 @@ data class RemoteArtifact(
         @JvmField
         val EMPTY = RemoteArtifact(
             url = "",
-            hash = Hash.UNKNOWN.value,
-            hashAlgorithm = Hash.UNKNOWN.algorithm
+            hash = Hash.NONE.value,
+            hashAlgorithm = Hash.NONE.algorithm
         )
     }
 }

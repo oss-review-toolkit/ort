@@ -76,7 +76,7 @@ data class Provenance(
         if (sourceArtifact != null) {
             // If the (non-empty) hashes match, we do not need to compare the other properties like the URL. Only
             // support this for a known algorithm whose hash we were able to verify as otherwise the hash could be fake.
-            if (sourceArtifact.hash.isNotEmpty() && sourceArtifact.hashAlgorithm != HashAlgorithm.UNKNOWN) {
+            if (sourceArtifact.hash.isNotBlank() && sourceArtifact.hashAlgorithm != HashAlgorithm.NONE) {
                 return sourceArtifact.hash == pkg.sourceArtifact.hash
                         && sourceArtifact.hashAlgorithm == pkg.sourceArtifact.hashAlgorithm
             }
