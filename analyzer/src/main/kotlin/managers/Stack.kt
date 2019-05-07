@@ -25,7 +25,6 @@ import com.here.ort.analyzer.AbstractPackageManagerFactory
 import com.here.ort.analyzer.HTTP_CACHE_PATH
 import com.here.ort.analyzer.PackageManager
 import com.here.ort.downloader.VersionControlSystem
-import com.here.ort.model.Hash
 import com.here.ort.model.Identifier
 import com.here.ort.model.Package
 import com.here.ort.model.PackageReference
@@ -331,10 +330,8 @@ class Stack(
             version = map["version"].orEmpty()
         )
 
-        val artifact = RemoteArtifact(
-            url = "${getPackageUrl(id.name, id.version)}/${id.name}-${id.version}.tar.gz",
-            hash = Hash.UNKNOWN.value,
-            hashAlgorithm = Hash.UNKNOWN.algorithm
+        val artifact = RemoteArtifact.EMPTY.copy(
+            url = "${getPackageUrl(id.name, id.version)}/${id.name}-${id.version}.tar.gz"
         )
 
         val vcs = VcsInfo(

@@ -28,9 +28,14 @@ import com.fasterxml.jackson.annotation.JsonValue
  */
 enum class HashAlgorithm(private vararg val aliases: String) {
     /**
+     * No hash algorithm.
+     */
+    NONE(""),
+
+    /**
      * An unknown hash algorithm.
      */
-    UNKNOWN("", "UNKNOWN"),
+    UNKNOWN("UNKNOWN"),
 
     /**
      * The Message-Digest 5 hash algorithm, see [MD5](http://en.wikipedia.org/wiki/MD5).
@@ -72,7 +77,7 @@ enum class HashAlgorithm(private vararg val aliases: String) {
          * Create a hash algorithm from a hash [value].
          */
         fun fromHash(value: String): HashAlgorithm {
-            if (value.isBlank()) return UNKNOWN
+            if (value.isBlank()) return NONE
 
             return when (value.length) {
                 128 -> SHA512

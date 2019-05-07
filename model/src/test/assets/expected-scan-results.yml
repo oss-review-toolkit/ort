@@ -6,7 +6,7 @@ results:
     source_artifact:
       url: "url"
       hash: "hash"
-      hash_algorithm: ""
+      hash_algorithm: "UNKNOWN"
   scanner:
     name: "name 1"
     version: "version 1"
