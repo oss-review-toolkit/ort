@@ -17,9 +17,7 @@
  * License-Filename: LICENSE
  */
 
-package com.here.ort.evaluator
-
-import com.here.ort.model.Package
+package com.here.ort.model
 
 /**
  * The source where a license originates from.
