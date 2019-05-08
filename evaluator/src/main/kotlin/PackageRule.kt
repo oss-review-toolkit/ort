@@ -163,6 +163,18 @@ open class PackageRule(
         override fun issueSource() = "$name - ${pkg.id.toCoordinates()} - $license ($licenseSource)"
 
         /**
+         * A [RuleMatcher] that checks if a [detected][LicenseSource.DETECTED] license is excluded. This is the case if
+         * all keys of [licenseFindings] are associated to at least one [PathExclude].
+         */
+        fun isExcluded() =
+            object : RuleMatcher {
+                override val description = "isExcluded($license)"
+
+                override fun matches() =
+                    licenseSource != LicenseSource.DETECTED || licenseFindings.values.all { it.isNotEmpty() }
+            }
+
+        /**
          * A [RuleMatcher] that checks if the [license] is a valid [SpdxLicense].
          */
         fun isSpdxLicense() =
