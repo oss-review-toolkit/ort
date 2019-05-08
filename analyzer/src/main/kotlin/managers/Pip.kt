@@ -482,29 +482,34 @@ class Pip(
         // Try to determine the Python version the project requires.
         var projectPythonVersion = PythonVersion.getPythonVersion(workingDir)
 
-        // Try to create a virtualenv specific to the detected Python version and install dependencies in there.
+        log.info { "Trying to install dependencies using Python $projectPythonVersion..." }
+
         var virtualEnvDir = createVirtualEnv(workingDir, projectPythonVersion)
+        var install = installDependencies(workingDir, definitionFile, virtualEnvDir)
 
-        if (installDependencies(workingDir, definitionFile, virtualEnvDir).isSuccess) {
-            log.info {
-                "Successfully installed dependencies for project '$definitionFile' using Python $projectPythonVersion."
-            }
-            return virtualEnvDir
-        }
-
-        // If there was a problem with creating the virtualenv, maybe the required Python version was detected
-        // incorrectly. So simply try again with the other version.
-        projectPythonVersion = when (projectPythonVersion) {
-            2 -> 3
-            3 -> 2
-            else -> throw IllegalArgumentException("Unsupported Python version $projectPythonVersion.")
-        }
-
-        virtualEnvDir = createVirtualEnv(workingDir, projectPythonVersion)
-        val install = installDependencies(workingDir, definitionFile, virtualEnvDir)
         if (install.isError) {
-            // pip writes the real error message to stdout instead of stderr.
-            throw IOException(install.stdout)
+            log.debug {
+                // pip writes the real error message to stdout instead of stderr.
+                "First try to install dependencies using Python $projectPythonVersion failed with:\n${install.stdout}"
+            }
+
+            // If there was a problem maybe the required Python version was detected incorrectly, so simply try again
+            // with the other version.
+            projectPythonVersion = when (projectPythonVersion) {
+                2 -> 3
+                3 -> 2
+                else -> throw IllegalArgumentException("Unsupported Python version $projectPythonVersion.")
+            }
+
+            log.info { "Falling back to trying to install dependencies using Python $projectPythonVersion..." }
+
+            virtualEnvDir = createVirtualEnv(workingDir, projectPythonVersion)
+            install = installDependencies(workingDir, definitionFile, virtualEnvDir)
+
+            if (install.isError) {
+                // pip writes the real error message to stdout instead of stderr.
+                throw IOException(install.stdout)
+            }
         }
 
         log.info {
@@ -548,7 +553,6 @@ class Pip(
         // TODO: Find a way to make installation of packages with native extensions work on Windows where often
         // the appropriate compiler is missing / not set up, e.g. by using pre-built packages from
         // http://www.lfd.uci.edu/~gohlke/pythonlibs/
-        log.info { "Installing dependencies for the '${workingDir.name}' project directory..." }
         pip = if (definitionFile.name == "setup.py") {
             // Note that this only installs required "install" dependencies, not "extras" or "tests" dependencies.
             runPipInVirtualEnv(virtualEnvDir, workingDir, "install", *INSTALL_OPTIONS, ".")
