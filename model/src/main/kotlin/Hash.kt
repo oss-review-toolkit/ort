@@ -45,7 +45,6 @@ data class Hash(
          */
         val NONE = Hash(HashAlgorithm.NONE, HashAlgorithm.NONE.toString())
 
-
         /**
          * The set of algorithms that cannot be verified.
          */
