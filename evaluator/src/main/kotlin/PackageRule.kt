@@ -22,6 +22,7 @@ package com.here.ort.evaluator
 import com.here.ort.model.Identifier
 import com.here.ort.model.LicenseFinding
 import com.here.ort.model.Package
+import com.here.ort.model.Project
 import com.here.ort.model.config.Excludes
 import com.here.ort.model.config.PathExclude
 import com.here.ort.spdx.SpdxLicense
@@ -85,6 +86,16 @@ open class PackageRule(
             override val description = "isFromOrg(${names.joinToString()})"
 
             override fun matches() = pkg.id.isFromOrg(*names)
+        }
+
+    /**
+     * A [RuleMatcher] that checks if the [package][pkg] was created from a [Project].
+     */
+    fun isProject() =
+        object : RuleMatcher {
+            override val description = "isProject()"
+
+            override fun matches() = ruleSet.ortResult.analyzer?.result?.projects?.find { it.id == pkg.id } != null
         }
 
     /**
