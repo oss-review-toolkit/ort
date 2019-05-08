@@ -17,7 +17,8 @@
  * License-Filename: LICENSE
  */
 
-import groovy.transform.Immutable
+import groovy.transform.ToString
+import groovy.transform.TupleConstructor
 
 import javax.inject.Inject
 
@@ -74,7 +75,8 @@ interface Dependency {
     String getLocalPath()
 }
 
-@Immutable
+@ToString(includeNames = true)
+@TupleConstructor
 class DependencyTreeModelImpl implements DependencyTreeModel, Serializable {
     String group
     String name
@@ -85,13 +87,15 @@ class DependencyTreeModelImpl implements DependencyTreeModel, Serializable {
     List<String> warnings
 }
 
-@Immutable
+@ToString(includeNames = true)
+@TupleConstructor
 class ConfigurationImpl implements Configuration, Serializable {
     String name
     List<Dependency> dependencies
 }
 
-@Immutable
+@ToString(includeNames = true)
+@TupleConstructor
 class DependencyImpl implements Dependency, Serializable {
     String groupId = ''
     String artifactId = ''
