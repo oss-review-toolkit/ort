@@ -279,9 +279,9 @@ class AbstractDependencyTreePlugin<T> implements Plugin<T> {
                             error, warning, pomFile, null)
                 } else if (id instanceof ProjectComponentIdentifier) {
                     def dependencyProject = project.rootProject.findProject(id.projectPath)
-                    return new DependencyImpl(dependencyProject.group.toString(), dependencyProject.name,
-                            dependencyProject.version.toString(), '', '', dependencies, null, null, null,
-                            dependencyProject.projectDir.absolutePath)
+                    return new DependencyImpl(groupId: dependencyProject.group.toString(),
+                            artifactId: dependencyProject.name, version: dependencyProject.version.toString(),
+                            dependencies: dependencies, localPath: dependencyProject.projectDir.absolutePath)
                 } else {
                     return dependencyFromDisplayName(id.displayName, dependencies,
                             "Unknown id type: ${id.getClass().simpleName}", null)
