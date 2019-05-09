@@ -53,12 +53,14 @@ packages:
     homepage_url: ""
     binary_artifact:
       url: ""
-      hash: ""
-      hash_algorithm: ""
+      hash:
+        value: ""
+        algorithm: ""
     source_artifact:
       url: ""
-      hash: ""
-      hash_algorithm: ""
+      hash:
+        value: ""
+        algorithm: ""
     vcs:
       type: ""
       url: ""
@@ -79,12 +81,14 @@ packages:
     homepage_url: ""
     binary_artifact:
       url: ""
-      hash: ""
-      hash_algorithm: ""
+      hash:
+        value: ""
+        algorithm: ""
     source_artifact:
       url: ""
-      hash: ""
-      hash_algorithm: ""
+      hash:
+        value: ""
+        algorithm: ""
     vcs:
       type: ""
       url: ""
@@ -105,12 +109,14 @@ packages:
     homepage_url: ""
     binary_artifact:
       url: ""
-      hash: ""
-      hash_algorithm: ""
+      hash:
+        value: ""
+        algorithm: ""
     source_artifact:
       url: ""
-      hash: ""
-      hash_algorithm: ""
+      hash:
+        value: ""
+        algorithm: ""
     vcs:
       type: ""
       url: ""
@@ -131,12 +137,14 @@ packages:
     homepage_url: ""
     binary_artifact:
       url: ""
-      hash: ""
-      hash_algorithm: ""
+      hash:
+        value: ""
+        algorithm: ""
     source_artifact:
       url: ""
-      hash: ""
-      hash_algorithm: ""
+      hash:
+        value: ""
+        algorithm: ""
     vcs:
       type: ""
       url: ""
@@ -157,12 +165,14 @@ packages:
     homepage_url: ""
     binary_artifact:
       url: ""
-      hash: ""
-      hash_algorithm: ""
+      hash:
+        value: ""
+        algorithm: ""
     source_artifact:
       url: ""
-      hash: ""
-      hash_algorithm: ""
+      hash:
+        value: ""
+        algorithm: ""
     vcs:
       type: ""
       url: ""
@@ -183,12 +193,14 @@ packages:
     homepage_url: ""
     binary_artifact:
       url: ""
-      hash: ""
-      hash_algorithm: ""
+      hash:
+        value: ""
+        algorithm: ""
     source_artifact:
       url: ""
-      hash: ""
-      hash_algorithm: ""
+      hash:
+        value: ""
+        algorithm: ""
     vcs:
       type: ""
       url: ""
@@ -209,12 +221,14 @@ packages:
     homepage_url: ""
     binary_artifact:
       url: ""
-      hash: ""
-      hash_algorithm: ""
+      hash:
+        value: ""
+        algorithm: ""
     source_artifact:
       url: ""
-      hash: ""
-      hash_algorithm: ""
+      hash:
+        value: ""
+        algorithm: ""
     vcs:
       type: ""
       url: ""
@@ -235,12 +249,14 @@ packages:
     homepage_url: ""
     binary_artifact:
       url: ""
-      hash: ""
-      hash_algorithm: ""
+      hash:
+        value: ""
+        algorithm: ""
     source_artifact:
       url: ""
-      hash: ""
-      hash_algorithm: ""
+      hash:
+        value: ""
+        algorithm: ""
     vcs:
       type: ""
       url: ""
@@ -261,12 +277,14 @@ packages:
     homepage_url: ""
     binary_artifact:
       url: ""
-      hash: ""
-      hash_algorithm: ""
+      hash:
+        value: ""
+        algorithm: ""
     source_artifact:
       url: ""
-      hash: ""
-      hash_algorithm: ""
+      hash:
+        value: ""
+        algorithm: ""
     vcs:
       type: ""
       url: ""
@@ -287,12 +305,14 @@ packages:
     homepage_url: ""
     binary_artifact:
       url: ""
-      hash: ""
-      hash_algorithm: ""
+      hash:
+        value: ""
+        algorithm: ""
     source_artifact:
       url: ""
-      hash: ""
-      hash_algorithm: ""
+      hash:
+        value: ""
+        algorithm: ""
     vcs:
       type: ""
       url: ""
@@ -313,12 +333,14 @@ packages:
     homepage_url: ""
     binary_artifact:
       url: ""
-      hash: ""
-      hash_algorithm: ""
+      hash:
+        value: ""
+        algorithm: ""
     source_artifact:
       url: ""
-      hash: ""
-      hash_algorithm: ""
+      hash:
+        value: ""
+        algorithm: ""
     vcs:
       type: ""
       url: ""
@@ -339,12 +361,14 @@ packages:
     homepage_url: ""
     binary_artifact:
       url: ""
-      hash: ""
-      hash_algorithm: ""
+      hash:
+        value: ""
+        algorithm: ""
     source_artifact:
       url: ""
-      hash: ""
-      hash_algorithm: ""
+      hash:
+        value: ""
+        algorithm: ""
     vcs:
       type: ""
       url: ""

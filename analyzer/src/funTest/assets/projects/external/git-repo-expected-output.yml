@@ -950,12 +950,14 @@ analyzer:
         homepage_url: "http://www.antlr.org/"
         binary_artifact:
           url: "https://repo.maven.apache.org/maven2/antlr/antlr/2.7.7/antlr-2.7.7.jar"
-          hash: "83cd2cd674a217ade95a4bb83a8a14f351f48bd0"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "83cd2cd674a217ade95a4bb83a8a14f351f48bd0"
+            algorithm: "SHA-1"
         source_artifact:
           url: ""
-          hash: ""
-          hash_algorithm: ""
+          hash:
+            value: ""
+            algorithm: ""
         vcs:
           type: ""
           url: ""
@@ -979,12 +981,14 @@ analyzer:
         homepage_url: "http://github.com/FasterXML/jackson"
         binary_artifact:
           url: "https://repo.maven.apache.org/maven2/com/fasterxml/jackson/core/jackson-annotations/2.9.0/jackson-annotations-2.9.0.jar"
-          hash: "07c10d545325e3a6e72e06381afe469fd40eb701"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "07c10d545325e3a6e72e06381afe469fd40eb701"
+            algorithm: "SHA-1"
         source_artifact:
           url: "https://repo.maven.apache.org/maven2/com/fasterxml/jackson/core/jackson-annotations/2.9.0/jackson-annotations-2.9.0-sources.jar"
-          hash: "a0ad4e203304ccab7e01266fa814115850edb8a9"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "a0ad4e203304ccab7e01266fa814115850edb8a9"
+            algorithm: "SHA-1"
         vcs:
           type: "git"
           url: "git@github.com:FasterXML/jackson-annotations.git"
@@ -1008,12 +1012,14 @@ analyzer:
         homepage_url: "https://github.com/FasterXML/jackson-core"
         binary_artifact:
           url: "https://repo.maven.apache.org/maven2/com/fasterxml/jackson/core/jackson-core/2.9.6/jackson-core-2.9.6.jar"
-          hash: "4e393793c37c77e042ccc7be5a914ae39251b365"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "4e393793c37c77e042ccc7be5a914ae39251b365"
+            algorithm: "SHA-1"
         source_artifact:
           url: "https://repo.maven.apache.org/maven2/com/fasterxml/jackson/core/jackson-core/2.9.6/jackson-core-2.9.6-sources.jar"
-          hash: "297b561cc2ca89e07bf4cb6445c08260b524aa4d"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "297b561cc2ca89e07bf4cb6445c08260b524aa4d"
+            algorithm: "SHA-1"
         vcs:
           type: "git"
           url: "git@github.com:FasterXML/jackson-core.git"
@@ -1037,12 +1043,14 @@ analyzer:
         homepage_url: "http://github.com/FasterXML/jackson"
         binary_artifact:
           url: "https://repo.maven.apache.org/maven2/com/fasterxml/jackson/core/jackson-databind/2.9.6/jackson-databind-2.9.6.jar"
-          hash: "cfa4f316351a91bfd95cb0644c6a2c95f52db1fc"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "cfa4f316351a91bfd95cb0644c6a2c95f52db1fc"
+            algorithm: "SHA-1"
         source_artifact:
           url: "https://repo.maven.apache.org/maven2/com/fasterxml/jackson/core/jackson-databind/2.9.6/jackson-databind-2.9.6-sources.jar"
-          hash: "dad3a9fbbedf8781dfd138539cd82638ebad5678"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "dad3a9fbbedf8781dfd138539cd82638ebad5678"
+            algorithm: "SHA-1"
         vcs:
           type: "git"
           url: "git@github.com:FasterXML/jackson-databind.git"
@@ -1065,12 +1073,14 @@ analyzer:
         homepage_url: "https://github.com/andrewoma/dexx"
         binary_artifact:
           url: "https://repo.maven.apache.org/maven2/com/github/andrewoma/dexx/collection/0.7/collection-0.7.jar"
-          hash: "264efc08bdcd22126bd429aaea9efaf5158b2b90"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "264efc08bdcd22126bd429aaea9efaf5158b2b90"
+            algorithm: "SHA-1"
         source_artifact:
           url: "https://repo.maven.apache.org/maven2/com/github/andrewoma/dexx/collection/0.7/collection-0.7-sources.jar"
-          hash: "2ae719e29cc8881a0e27714acf8ef56597c1fb1f"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "2ae719e29cc8881a0e27714acf8ef56597c1fb1f"
+            algorithm: "SHA-1"
         vcs:
           type: "git"
           url: "https://github.com/andrewoma/dexx.git"
@@ -1094,12 +1104,14 @@ analyzer:
         homepage_url: "https://cliftonlabs.github.io/json-simple/"
         binary_artifact:
           url: "https://repo.maven.apache.org/maven2/com/github/cliftonlabs/json-simple/2.3.1/json-simple-2.3.1.jar"
-          hash: "3c85e3c6bd74262da4ae008c657b8ec2e2e35c89"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "3c85e3c6bd74262da4ae008c657b8ec2e2e35c89"
+            algorithm: "SHA-1"
         source_artifact:
           url: "https://repo.maven.apache.org/maven2/com/github/cliftonlabs/json-simple/2.3.1/json-simple-2.3.1-sources.jar"
-          hash: "5b5b13c1b449042bd342c4ec4a103b34375a1494"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "5b5b13c1b449042bd342c4ec4a103b34375a1494"
+            algorithm: "SHA-1"
         vcs:
           type: "git"
           url: "https://github.com/cliftonlabs/json-simple.git"
@@ -1123,12 +1135,14 @@ analyzer:
         homepage_url: "http://github.com/jsonld-java/jsonld-java/jsonld-java/"
         binary_artifact:
           url: "https://repo.maven.apache.org/maven2/com/github/jsonld-java/jsonld-java/0.12.1/jsonld-java-0.12.1.jar"
-          hash: "a47686f733038125bd327147487dec96a2fb238e"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "a47686f733038125bd327147487dec96a2fb238e"
+            algorithm: "SHA-1"
         source_artifact:
           url: "https://repo.maven.apache.org/maven2/com/github/jsonld-java/jsonld-java/0.12.1/jsonld-java-0.12.1-sources.jar"
-          hash: "0db9097c3b633c55017cca9d5a2d6bc4e3af203c"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "0db9097c3b633c55017cca9d5a2d6bc4e3af203c"
+            algorithm: "SHA-1"
         vcs:
           type: "git"
           url: "git@github.com:jsonld-java/jsonld-java.git"
@@ -1151,12 +1165,14 @@ analyzer:
         homepage_url: "http://github.com/spullara/mustache.java"
         binary_artifact:
           url: "https://repo.maven.apache.org/maven2/com/github/spullara/mustache/java/compiler/0.7.9/compiler-0.7.9.jar"
-          hash: "ff7dba87e24f6074a84f31e2ab7c041e3e94e35b"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "ff7dba87e24f6074a84f31e2ab7c041e3e94e35b"
+            algorithm: "SHA-1"
         source_artifact:
           url: "https://repo.maven.apache.org/maven2/com/github/spullara/mustache/java/compiler/0.7.9/compiler-0.7.9-sources.jar"
-          hash: "1014c81c0c36ca20359e6094af3bf94ee2d6ea2e"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "1014c81c0c36ca20359e6094af3bf94ee2d6ea2e"
+            algorithm: "SHA-1"
         vcs:
           type: "git"
           url: "git://github.com/spullara/mustache.java.git"
@@ -1182,12 +1198,14 @@ analyzer:
         homepage_url: "https://github.com/virtuald/curvesapi"
         binary_artifact:
           url: "https://repo.maven.apache.org/maven2/com/github/virtuald/curvesapi/1.04/curvesapi-1.04.jar"
-          hash: "3386abf821719bc89c7685f9eaafaf4a842f0199"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "3386abf821719bc89c7685f9eaafaf4a842f0199"
+            algorithm: "SHA-1"
         source_artifact:
           url: "https://repo.maven.apache.org/maven2/com/github/virtuald/curvesapi/1.04/curvesapi-1.04-sources.jar"
-          hash: "5c01708d122c6a61e90716e931b58226d8261312"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "5c01708d122c6a61e90716e931b58226d8261312"
+            algorithm: "SHA-1"
         vcs:
           type: "git"
           url: "git://github.com/virtuald/curvesapi.git"
@@ -1210,12 +1228,14 @@ analyzer:
         homepage_url: "https://github.com/google/gson/gson"
         binary_artifact:
           url: "https://repo.maven.apache.org/maven2/com/google/code/gson/gson/2.8.0/gson-2.8.0.jar"
-          hash: "c4ba5371a29ac9b2ad6129b1d39ea38750043eff"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "c4ba5371a29ac9b2ad6129b1d39ea38750043eff"
+            algorithm: "SHA-1"
         source_artifact:
           url: "https://repo.maven.apache.org/maven2/com/google/code/gson/gson/2.8.0/gson-2.8.0-sources.jar"
-          hash: "baf95d8519fc1a11d388f8543cb40cd2bb9d66dc"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "baf95d8519fc1a11d388f8543cb40cd2bb9d66dc"
+            algorithm: "SHA-1"
         vcs:
           type: "git"
           url: "https://github.com/google/gson.git"
@@ -1241,12 +1261,14 @@ analyzer:
         homepage_url: "http://code.google.com/p/guava-libraries/guava"
         binary_artifact:
           url: "https://repo.maven.apache.org/maven2/com/google/guava/guava/16.0.1/guava-16.0.1.jar"
-          hash: "5fa98cd1a63c99a44dd8d3b77e4762b066a5d0c5"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "5fa98cd1a63c99a44dd8d3b77e4762b066a5d0c5"
+            algorithm: "SHA-1"
         source_artifact:
           url: "https://repo.maven.apache.org/maven2/com/google/guava/guava/16.0.1/guava-16.0.1-sources.jar"
-          hash: "2477d012cd5379f9696e0d9d3ccc62ad13a09ca4"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "2477d012cd5379f9696e0d9d3ccc62ad13a09ca4"
+            algorithm: "SHA-1"
         vcs:
           type: "git"
           url: "https://code.google.com/p/guava-libraries/"
@@ -1270,12 +1292,14 @@ analyzer:
         homepage_url: "http://commons.apache.org/proper/commons-cli/"
         binary_artifact:
           url: "https://repo.maven.apache.org/maven2/commons-cli/commons-cli/1.4/commons-cli-1.4.jar"
-          hash: "c51c00206bb913cd8612b24abd9fa98ae89719b1"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "c51c00206bb913cd8612b24abd9fa98ae89719b1"
+            algorithm: "SHA-1"
         source_artifact:
           url: "https://repo.maven.apache.org/maven2/commons-cli/commons-cli/1.4/commons-cli-1.4-sources.jar"
-          hash: "40dfd9fdef125e19136135e68d54af6d9b0cfbb8"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "40dfd9fdef125e19136135e68d54af6d9b0cfbb8"
+            algorithm: "SHA-1"
         vcs:
           type: "svn"
           url: "http://svn.apache.org/repos/asf/commons/proper/cli/trunk/"
@@ -1301,12 +1325,14 @@ analyzer:
         homepage_url: "http://commons.apache.org/proper/commons-codec/"
         binary_artifact:
           url: "https://repo.maven.apache.org/maven2/commons-codec/commons-codec/1.10/commons-codec-1.10.jar"
-          hash: "4b95f4897fa13f2cd904aee711aeafc0c5295cd8"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "4b95f4897fa13f2cd904aee711aeafc0c5295cd8"
+            algorithm: "SHA-1"
         source_artifact:
           url: "https://repo.maven.apache.org/maven2/commons-codec/commons-codec/1.10/commons-codec-1.10-sources.jar"
-          hash: "11fb3d88ae7e3b757d70237064210ceb954a5a04"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "11fb3d88ae7e3b757d70237064210ceb954a5a04"
+            algorithm: "SHA-1"
         vcs:
           type: "svn"
           url: "http://svn.apache.org/repos/asf/commons/proper/codec/trunk"
@@ -1331,12 +1357,14 @@ analyzer:
         homepage_url: "http://commons.apache.org/proper/commons-io/"
         binary_artifact:
           url: "https://repo.maven.apache.org/maven2/commons-io/commons-io/2.6/commons-io-2.6.jar"
-          hash: "815893df5f31da2ece4040fe0a12fd44b577afaf"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "815893df5f31da2ece4040fe0a12fd44b577afaf"
+            algorithm: "SHA-1"
         source_artifact:
           url: "https://repo.maven.apache.org/maven2/commons-io/commons-io/2.6/commons-io-2.6-sources.jar"
-          hash: "2566800dc841d9d2c5a0d34d807e45d4107dbbdf"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "2566800dc841d9d2c5a0d34d807e45d4107dbbdf"
+            algorithm: "SHA-1"
         vcs:
           type: "git"
           url: "http://git-wip-us.apache.org/repos/asf/commons-io.git"
@@ -1360,12 +1388,14 @@ analyzer:
         homepage_url: "http://junit.org"
         binary_artifact:
           url: "https://repo.maven.apache.org/maven2/junit/junit/4.12/junit-4.12.jar"
-          hash: "2973d150c0dc1fefe998f834810d68f278ea58ec"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "2973d150c0dc1fefe998f834810d68f278ea58ec"
+            algorithm: "SHA-1"
         source_artifact:
           url: "https://repo.maven.apache.org/maven2/junit/junit/4.12/junit-4.12-sources.jar"
-          hash: "a6c32b40bf3d76eca54e3c601e5d1470c86fcdfa"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "a6c32b40bf3d76eca54e3c601e5d1470c86fcdfa"
+            algorithm: "SHA-1"
         vcs:
           type: "git"
           url: "git://github.com/junit-team/junit.git"
@@ -1388,12 +1418,14 @@ analyzer:
         homepage_url: "http://opencsv.sf.net"
         binary_artifact:
           url: "https://repo.maven.apache.org/maven2/net/sf/opencsv/opencsv/2.3/opencsv-2.3.jar"
-          hash: "c23708cdb9e80a144db433e23344a788a1fd6599"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "c23708cdb9e80a144db433e23344a788a1fd6599"
+            algorithm: "SHA-1"
         source_artifact:
           url: "https://repo.maven.apache.org/maven2/net/sf/opencsv/opencsv/2.3/opencsv-2.3-sources.jar"
-          hash: "235993117036d44d126f76db9ea2202ee4884682"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "235993117036d44d126f76db9ea2202ee4884682"
+            algorithm: "SHA-1"
         vcs:
           type: "svn"
           url: "https://opencsv.svn.sourceforge.net/svnroot/opencsv/trunk"
@@ -1416,12 +1448,14 @@ analyzer:
         homepage_url: "http://saxon.sf.net"
         binary_artifact:
           url: "https://repo.maven.apache.org/maven2/net/sf/saxon/saxon-dom/8.7/saxon-dom-8.7.jar"
-          hash: "ca5abeba98e41eca830e6ddc74385a9538c0c908"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "ca5abeba98e41eca830e6ddc74385a9538c0c908"
+            algorithm: "SHA-1"
         source_artifact:
           url: ""
-          hash: ""
-          hash_algorithm: ""
+          hash:
+            value: ""
+            algorithm: ""
         vcs:
           type: ""
           url: ""
@@ -1444,12 +1478,14 @@ analyzer:
         homepage_url: "http://saxon.sf.net"
         binary_artifact:
           url: "https://repo.maven.apache.org/maven2/net/sf/saxon/saxon/8.7/saxon-8.7.jar"
-          hash: "68f963a06e2c384ab8d60aaa89ed0363928f6e84"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "68f963a06e2c384ab8d60aaa89ed0363928f6e84"
+            algorithm: "SHA-1"
         source_artifact:
           url: ""
-          hash: ""
-          hash_algorithm: ""
+          hash:
+            value: ""
+            algorithm: ""
         vcs:
           type: ""
           url: ""
@@ -1477,12 +1513,14 @@ analyzer:
         homepage_url: "http://about.validator.nu/htmlparser/"
         binary_artifact:
           url: "https://repo.maven.apache.org/maven2/nu/validator/htmlparser/htmlparser/1.4/htmlparser-1.4.jar"
-          hash: "70573d780fa08271499e201bbd86caa3c62f20e1"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "70573d780fa08271499e201bbd86caa3c62f20e1"
+            algorithm: "SHA-1"
         source_artifact:
           url: "https://repo.maven.apache.org/maven2/nu/validator/htmlparser/htmlparser/1.4/htmlparser-1.4-sources.jar"
-          hash: "7703abdb7fba3ed993330e5d3aac163268f69e15"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "7703abdb7fba3ed993330e5d3aac163268f69e15"
+            algorithm: "SHA-1"
         vcs:
           type: "hg"
           url: "http://hg.mozilla.org/projects/htmlparser/"
@@ -1515,12 +1553,14 @@ analyzer:
         homepage_url: "http://www.stringtemplate.org"
         binary_artifact:
           url: "https://repo.maven.apache.org/maven2/org/antlr/ST4/4.0.4/ST4-4.0.4.jar"
-          hash: "467a2aa12be6d0f0f68c70eecf6714ab733027ac"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "467a2aa12be6d0f0f68c70eecf6714ab733027ac"
+            algorithm: "SHA-1"
         source_artifact:
           url: "https://repo.maven.apache.org/maven2/org/antlr/ST4/4.0.4/ST4-4.0.4-sources.jar"
-          hash: "e13c7f5f536ad6cabfa5de628fcb93910531a293"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "e13c7f5f536ad6cabfa5de628fcb93910531a293"
+            algorithm: "SHA-1"
         vcs:
           type: ""
           url: ""
@@ -1542,12 +1582,14 @@ analyzer:
         homepage_url: "http://www.antlr.org"
         binary_artifact:
           url: "https://repo.maven.apache.org/maven2/org/antlr/antlr-runtime/3.4/antlr-runtime-3.4.jar"
-          hash: "8f011408269a8e42b8548687e137d8eeb56df4b4"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "8f011408269a8e42b8548687e137d8eeb56df4b4"
+            algorithm: "SHA-1"
         source_artifact:
           url: "https://repo.maven.apache.org/maven2/org/antlr/antlr-runtime/3.4/antlr-runtime-3.4-sources.jar"
-          hash: "57a73190ad97f56c0cb83a6a5b6c08d5d428319b"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "57a73190ad97f56c0cb83a6a5b6c08d5d428319b"
+            algorithm: "SHA-1"
         vcs:
           type: ""
           url: ""
@@ -1569,12 +1611,14 @@ analyzer:
         homepage_url: "http://antlr.org"
         binary_artifact:
           url: "https://repo.maven.apache.org/maven2/org/antlr/antlr/3.4/antlr-3.4.jar"
-          hash: "7797e70e3f5cb4229695f08ff50333266cf81125"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "7797e70e3f5cb4229695f08ff50333266cf81125"
+            algorithm: "SHA-1"
         source_artifact:
           url: "https://repo.maven.apache.org/maven2/org/antlr/antlr/3.4/antlr-3.4-sources.jar"
-          hash: "2e6a31f24631eb533d8170da9cac6849345f8fda"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "2e6a31f24631eb533d8170da9cac6849345f8fda"
+            algorithm: "SHA-1"
         vcs:
           type: "svn"
           url: "http://svn.sonatype.org/spice/tags/oss-parent-7"
@@ -1607,12 +1651,14 @@ analyzer:
         homepage_url: "http://www.stringtemplate.org"
         binary_artifact:
           url: "https://repo.maven.apache.org/maven2/org/antlr/stringtemplate/3.2.1/stringtemplate-3.2.1.jar"
-          hash: "59ec8083721eae215c6f3caee944c410d2be34de"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "59ec8083721eae215c6f3caee944c410d2be34de"
+            algorithm: "SHA-1"
         source_artifact:
           url: "https://repo.maven.apache.org/maven2/org/antlr/stringtemplate/3.2.1/stringtemplate-3.2.1-sources.jar"
-          hash: "105785687b0c85a7f70cddfdc3a391bcab121872"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "105785687b0c85a7f70cddfdc3a391bcab121872"
+            algorithm: "SHA-1"
         vcs:
           type: ""
           url: ""
@@ -1636,12 +1682,14 @@ analyzer:
         homepage_url: "http://commons.apache.org/proper/commons-collections/"
         binary_artifact:
           url: "https://repo.maven.apache.org/maven2/org/apache/commons/commons-collections4/4.1/commons-collections4-4.1.jar"
-          hash: "a4cf4688fe1c7e3a63aa636cc96d013af537768e"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "a4cf4688fe1c7e3a63aa636cc96d013af537768e"
+            algorithm: "SHA-1"
         source_artifact:
           url: "https://repo.maven.apache.org/maven2/org/apache/commons/commons-collections4/4.1/commons-collections4-4.1-sources.jar"
-          hash: "f305f3aa45a3b208c013ef92328f8f230329f20e"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "f305f3aa45a3b208c013ef92328f8f230329f20e"
+            algorithm: "SHA-1"
         vcs:
           type: "svn"
           url: "http://svn.apache.org/repos/asf/commons/proper/collections/trunk"
@@ -1667,12 +1715,14 @@ analyzer:
         homepage_url: "https://commons.apache.org/proper/commons-compress/"
         binary_artifact:
           url: "https://repo.maven.apache.org/maven2/org/apache/commons/commons-compress/1.17/commons-compress-1.17.jar"
-          hash: "474c20609032e7f815ef534cd8174d2e400d9a8d"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "474c20609032e7f815ef534cd8174d2e400d9a8d"
+            algorithm: "SHA-1"
         source_artifact:
           url: "https://repo.maven.apache.org/maven2/org/apache/commons/commons-compress/1.17/commons-compress-1.17-sources.jar"
-          hash: "9d064d7d42ee1d04ae07ad23025b4f9616652eed"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "9d064d7d42ee1d04ae07ad23025b4f9616652eed"
+            algorithm: "SHA-1"
         vcs:
           type: "git"
           url: "https://git-wip-us.apache.org/repos/asf/commons-compress.git"
@@ -1696,12 +1746,14 @@ analyzer:
         homepage_url: "http://commons.apache.org/proper/commons-csv/"
         binary_artifact:
           url: "https://repo.maven.apache.org/maven2/org/apache/commons/commons-csv/1.5/commons-csv-1.5.jar"
-          hash: "e10f140af5b82167640f254fa9d88e35ad74329c"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "e10f140af5b82167640f254fa9d88e35ad74329c"
+            algorithm: "SHA-1"
         source_artifact:
           url: "https://repo.maven.apache.org/maven2/org/apache/commons/commons-csv/1.5/commons-csv-1.5-sources.jar"
-          hash: "b76c277916ffef14d63279b896b6a82252ddeb79"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "b76c277916ffef14d63279b896b6a82252ddeb79"
+            algorithm: "SHA-1"
         vcs:
           type: "git"
           url: "http://git-wip-us.apache.org/repos/asf/commons-csv.git"
@@ -1726,12 +1778,14 @@ analyzer:
         homepage_url: "http://commons.apache.org/lang/"
         binary_artifact:
           url: "https://repo.maven.apache.org/maven2/org/apache/commons/commons-lang3/3.1/commons-lang3-3.1.jar"
-          hash: "905075e6c80f206bbe6cf1e809d2caa69f420c76"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "905075e6c80f206bbe6cf1e809d2caa69f420c76"
+            algorithm: "SHA-1"
         source_artifact:
           url: "https://repo.maven.apache.org/maven2/org/apache/commons/commons-lang3/3.1/commons-lang3-3.1-sources.jar"
-          hash: "8d30b90ae8bda4fbac8363161c8a9b5a99e23baf"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "8d30b90ae8bda4fbac8363161c8a9b5a99e23baf"
+            algorithm: "SHA-1"
         vcs:
           type: "svn"
           url: "http://svn.apache.org/repos/asf/commons/proper/lang/trunk"
@@ -1756,12 +1810,14 @@ analyzer:
         homepage_url: "http://commons.apache.org/proper/commons-lang/"
         binary_artifact:
           url: "https://repo.maven.apache.org/maven2/org/apache/commons/commons-lang3/3.8.1/commons-lang3-3.8.1.jar"
-          hash: "6505a72a097d9270f7a9e7bf42c4238283247755"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "6505a72a097d9270f7a9e7bf42c4238283247755"
+            algorithm: "SHA-1"
         source_artifact:
           url: "https://repo.maven.apache.org/maven2/org/apache/commons/commons-lang3/3.8.1/commons-lang3-3.8.1-sources.jar"
-          hash: "e9748d7783594da3735ad9724390a10e7cebc01d"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "e9748d7783594da3735ad9724390a10e7cebc01d"
+            algorithm: "SHA-1"
         vcs:
           type: "git"
           url: "http://git-wip-us.apache.org/repos/asf/commons-lang.git"
@@ -1784,12 +1840,14 @@ analyzer:
         homepage_url: "http://hc.apache.org/httpcomponents-client"
         binary_artifact:
           url: "https://repo.maven.apache.org/maven2/org/apache/httpcomponents/httpclient-cache/4.5.5/httpclient-cache-4.5.5.jar"
-          hash: "8115af15235c603db957db37f24e0faa168474f7"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "8115af15235c603db957db37f24e0faa168474f7"
+            algorithm: "SHA-1"
         source_artifact:
           url: "https://repo.maven.apache.org/maven2/org/apache/httpcomponents/httpclient-cache/4.5.5/httpclient-cache-4.5.5-sources.jar"
-          hash: "f619aff61d2307f2f01de79ca4ffb554f695d7c3"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "f619aff61d2307f2f01de79ca4ffb554f695d7c3"
+            algorithm: "SHA-1"
         vcs:
           type: "git"
           url: "https://git-wip-us.apache.org/repos/asf/httpcomponents-client.git"
@@ -1812,12 +1870,14 @@ analyzer:
         homepage_url: "http://hc.apache.org/httpcomponents-client"
         binary_artifact:
           url: "https://repo.maven.apache.org/maven2/org/apache/httpcomponents/httpclient/4.5.5/httpclient-4.5.5.jar"
-          hash: "1603dfd56ebcd583ccdf337b6c3984ac55d89e58"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "1603dfd56ebcd583ccdf337b6c3984ac55d89e58"
+            algorithm: "SHA-1"
         source_artifact:
           url: "https://repo.maven.apache.org/maven2/org/apache/httpcomponents/httpclient/4.5.5/httpclient-4.5.5-sources.jar"
-          hash: "9fd59f6f22326a4241f9524fdfd66a1f34824054"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "9fd59f6f22326a4241f9524fdfd66a1f34824054"
+            algorithm: "SHA-1"
         vcs:
           type: "git"
           url: "https://git-wip-us.apache.org/repos/asf/httpcomponents-client.git"
@@ -1840,12 +1900,14 @@ analyzer:
         homepage_url: "http://hc.apache.org/httpcomponents-core-ga"
         binary_artifact:
           url: "https://repo.maven.apache.org/maven2/org/apache/httpcomponents/httpcore/4.4.9/httpcore-4.4.9.jar"
-          hash: "a86ce739e5a7175b4b234c290a00a5fdb80957a0"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "a86ce739e5a7175b4b234c290a00a5fdb80957a0"
+            algorithm: "SHA-1"
         source_artifact:
           url: "https://repo.maven.apache.org/maven2/org/apache/httpcomponents/httpcore/4.4.9/httpcore-4.4.9-sources.jar"
-          hash: "5808b4637c385d939e901eee3dc5f1121fc73a3b"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "5808b4637c385d939e901eee3dc5f1121fc73a3b"
+            algorithm: "SHA-1"
         vcs:
           type: "git"
           url: "https://git-wip-us.apache.org/repos/asf/httpcomponents-core.git"
@@ -1869,12 +1931,14 @@ analyzer:
         homepage_url: "http://jena.apache.org/apache-jena-libs/"
         binary_artifact:
           url: "https://repo.maven.apache.org/maven2/org/apache/jena/apache-jena-libs/3.9.0/apache-jena-libs-3.9.0.pom"
-          hash: "91f9355a290f35e94c30d4cef30cc5328f1d68a5"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "91f9355a290f35e94c30d4cef30cc5328f1d68a5"
+            algorithm: "SHA-1"
         source_artifact:
           url: "https://repo.maven.apache.org/maven2/org/apache/jena/apache-jena-libs/3.9.0/apache-jena-libs-3.9.0.pom"
-          hash: "91f9355a290f35e94c30d4cef30cc5328f1d68a5"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "91f9355a290f35e94c30d4cef30cc5328f1d68a5"
+            algorithm: "SHA-1"
         vcs:
           type: "git"
           url: "https://git-wip-us.apache.org/repos/asf/jena.git"
@@ -1897,12 +1961,14 @@ analyzer:
         homepage_url: "http://jena.apache.org/jena-arq/"
         binary_artifact:
           url: "https://repo.maven.apache.org/maven2/org/apache/jena/jena-arq/3.9.0/jena-arq-3.9.0.jar"
-          hash: "b44ea2da8bdaf61e77272070f96ee2e29a70bfe3"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "b44ea2da8bdaf61e77272070f96ee2e29a70bfe3"
+            algorithm: "SHA-1"
         source_artifact:
           url: "https://repo.maven.apache.org/maven2/org/apache/jena/jena-arq/3.9.0/jena-arq-3.9.0-sources.jar"
-          hash: "51048d4801496588fab0a91ffd38b4c8d3f5d94c"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "51048d4801496588fab0a91ffd38b4c8d3f5d94c"
+            algorithm: "SHA-1"
         vcs:
           type: "git"
           url: "https://git-wip-us.apache.org/repos/asf/jena.git"
@@ -1926,12 +1992,14 @@ analyzer:
         homepage_url: "http://jena.apache.org/jena-base/"
         binary_artifact:
           url: "https://repo.maven.apache.org/maven2/org/apache/jena/jena-base/3.9.0/jena-base-3.9.0.jar"
-          hash: "9e4acf03fa31d4408ab6aafc492e8595de2fe731"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "9e4acf03fa31d4408ab6aafc492e8595de2fe731"
+            algorithm: "SHA-1"
         source_artifact:
           url: "https://repo.maven.apache.org/maven2/org/apache/jena/jena-base/3.9.0/jena-base-3.9.0-sources.jar"
-          hash: "cba2a11b8d1b4636f0836e5125c6b5b62cde121e"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "cba2a11b8d1b4636f0836e5125c6b5b62cde121e"
+            algorithm: "SHA-1"
         vcs:
           type: "git"
           url: "https://git-wip-us.apache.org/repos/asf/jena.git"
@@ -1956,12 +2024,14 @@ analyzer:
         homepage_url: "http://jena.apache.org/jena-core/"
         binary_artifact:
           url: "https://repo.maven.apache.org/maven2/org/apache/jena/jena-core/3.9.0/jena-core-3.9.0.jar"
-          hash: "2133974da091ea11638c47d9977bff6ee92e2877"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "2133974da091ea11638c47d9977bff6ee92e2877"
+            algorithm: "SHA-1"
         source_artifact:
           url: "https://repo.maven.apache.org/maven2/org/apache/jena/jena-core/3.9.0/jena-core-3.9.0-sources.jar"
-          hash: "dd16c18b53a009b49f0028d2bc0e137a5ff6bf96"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "dd16c18b53a009b49f0028d2bc0e137a5ff6bf96"
+            algorithm: "SHA-1"
         vcs:
           type: "git"
           url: "https://git-wip-us.apache.org/repos/asf/jena.git"
@@ -1990,12 +2060,14 @@ analyzer:
         homepage_url: "http://jena.apache.org/jena-dboe-base/"
         binary_artifact:
           url: "https://repo.maven.apache.org/maven2/org/apache/jena/jena-dboe-base/3.9.0/jena-dboe-base-3.9.0.jar"
-          hash: "5a7ba9babdcfb8e2fcfc8acb5a6be93c0e086548"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "5a7ba9babdcfb8e2fcfc8acb5a6be93c0e086548"
+            algorithm: "SHA-1"
         source_artifact:
           url: "https://repo.maven.apache.org/maven2/org/apache/jena/jena-dboe-base/3.9.0/jena-dboe-base-3.9.0-sources.jar"
-          hash: "1fb6ed0e206bf1bef38afdef2fae7cd6610039c0"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "1fb6ed0e206bf1bef38afdef2fae7cd6610039c0"
+            algorithm: "SHA-1"
         vcs:
           type: "git"
           url: "https://git-wip-us.apache.org/repos/asf/jena.git"
@@ -2024,12 +2096,14 @@ analyzer:
         homepage_url: "http://jena.apache.org/jena-dboe-index/"
         binary_artifact:
           url: "https://repo.maven.apache.org/maven2/org/apache/jena/jena-dboe-index/3.9.0/jena-dboe-index-3.9.0.jar"
-          hash: "4f9d134b1fc2caf43baad59e4decf3bb64d6dbdb"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "4f9d134b1fc2caf43baad59e4decf3bb64d6dbdb"
+            algorithm: "SHA-1"
         source_artifact:
           url: "https://repo.maven.apache.org/maven2/org/apache/jena/jena-dboe-index/3.9.0/jena-dboe-index-3.9.0-sources.jar"
-          hash: "b602643a7642887ba423fe99742e835f2751ea82"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "b602643a7642887ba423fe99742e835f2751ea82"
+            algorithm: "SHA-1"
         vcs:
           type: "git"
           url: "https://git-wip-us.apache.org/repos/asf/jena.git"
@@ -2058,12 +2132,14 @@ analyzer:
         homepage_url: "http://jena.apache.org/jena-dboe-trans-data/"
         binary_artifact:
           url: "https://repo.maven.apache.org/maven2/org/apache/jena/jena-dboe-trans-data/3.9.0/jena-dboe-trans-data-3.9.0.jar"
-          hash: "fb6e44296842cd7c1f374c9b6cf36a4a7babd8d8"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "fb6e44296842cd7c1f374c9b6cf36a4a7babd8d8"
+            algorithm: "SHA-1"
         source_artifact:
           url: "https://repo.maven.apache.org/maven2/org/apache/jena/jena-dboe-trans-data/3.9.0/jena-dboe-trans-data-3.9.0-sources.jar"
-          hash: "7dc38aa7173425e941f2a0f7ba740e1f705dfe81"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "7dc38aa7173425e941f2a0f7ba740e1f705dfe81"
+            algorithm: "SHA-1"
         vcs:
           type: "git"
           url: "https://git-wip-us.apache.org/repos/asf/jena.git"
@@ -2092,12 +2168,14 @@ analyzer:
         homepage_url: "http://jena.apache.org/jena-dboe-transaction/"
         binary_artifact:
           url: "https://repo.maven.apache.org/maven2/org/apache/jena/jena-dboe-transaction/3.9.0/jena-dboe-transaction-3.9.0.jar"
-          hash: "2ae13878df1bdb473b15ca40cee6dbbcaff777db"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "2ae13878df1bdb473b15ca40cee6dbbcaff777db"
+            algorithm: "SHA-1"
         source_artifact:
           url: "https://repo.maven.apache.org/maven2/org/apache/jena/jena-dboe-transaction/3.9.0/jena-dboe-transaction-3.9.0-sources.jar"
-          hash: "a382cf6d002eb576b062fa185b31a4998be95016"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "a382cf6d002eb576b062fa185b31a4998be95016"
+            algorithm: "SHA-1"
         vcs:
           type: "git"
           url: "https://git-wip-us.apache.org/repos/asf/jena.git"
@@ -2123,12 +2201,14 @@ analyzer:
         homepage_url: "http://jena.apache.org/jena-iri/"
         binary_artifact:
           url: "https://repo.maven.apache.org/maven2/org/apache/jena/jena-iri/3.9.0/jena-iri-3.9.0.jar"
-          hash: "721937f1d096bba145e9f92c1166489bf6848e56"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "721937f1d096bba145e9f92c1166489bf6848e56"
+            algorithm: "SHA-1"
         source_artifact:
           url: "https://repo.maven.apache.org/maven2/org/apache/jena/jena-iri/3.9.0/jena-iri-3.9.0-sources.jar"
-          hash: "3505cf1e1115017225e0c3bf0da94ca957864aa7"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "3505cf1e1115017225e0c3bf0da94ca957864aa7"
+            algorithm: "SHA-1"
         vcs:
           type: "git"
           url: "https://git-wip-us.apache.org/repos/asf/jena.git"
@@ -2151,12 +2231,14 @@ analyzer:
         homepage_url: "http://jena.apache.org/jena-rdfconnection/"
         binary_artifact:
           url: "https://repo.maven.apache.org/maven2/org/apache/jena/jena-rdfconnection/3.9.0/jena-rdfconnection-3.9.0.jar"
-          hash: "ecdafc24fb75d1dd73df4166672eda2931e5d491"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "ecdafc24fb75d1dd73df4166672eda2931e5d491"
+            algorithm: "SHA-1"
         source_artifact:
           url: "https://repo.maven.apache.org/maven2/org/apache/jena/jena-rdfconnection/3.9.0/jena-rdfconnection-3.9.0-sources.jar"
-          hash: "338fb223d2c84ec68b152f712f1bf069bf71b9ed"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "338fb223d2c84ec68b152f712f1bf069bf71b9ed"
+            algorithm: "SHA-1"
         vcs:
           type: "git"
           url: "https://git-wip-us.apache.org/repos/asf/jena.git"
@@ -2182,12 +2264,14 @@ analyzer:
         homepage_url: "http://jena.apache.org/jena-shaded-guava/"
         binary_artifact:
           url: "https://repo.maven.apache.org/maven2/org/apache/jena/jena-shaded-guava/3.9.0/jena-shaded-guava-3.9.0.jar"
-          hash: "612c6e587e07f280771e5e27a94778414e51bd52"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "612c6e587e07f280771e5e27a94778414e51bd52"
+            algorithm: "SHA-1"
         source_artifact:
           url: "https://repo.maven.apache.org/maven2/org/apache/jena/jena-shaded-guava/3.9.0/jena-shaded-guava-3.9.0-sources.jar"
-          hash: "701d64fb3c688ee88e3c201a38b8299ea360fb37"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "701d64fb3c688ee88e3c201a38b8299ea360fb37"
+            algorithm: "SHA-1"
         vcs:
           type: "git"
           url: "https://git-wip-us.apache.org/repos/asf/jena.git"
@@ -2216,12 +2300,14 @@ analyzer:
         homepage_url: "http://jena.apache.org/jena-tdb2/"
         binary_artifact:
           url: "https://repo.maven.apache.org/maven2/org/apache/jena/jena-tdb2/3.9.0/jena-tdb2-3.9.0.jar"
-          hash: "2dd3d5f89c6a3025e18e0b50d17a7509f001528d"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "2dd3d5f89c6a3025e18e0b50d17a7509f001528d"
+            algorithm: "SHA-1"
         source_artifact:
           url: "https://repo.maven.apache.org/maven2/org/apache/jena/jena-tdb2/3.9.0/jena-tdb2-3.9.0-sources.jar"
-          hash: "9aa945b5f64400870893b9399d93ac6a4942417e"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "9aa945b5f64400870893b9399d93ac6a4942417e"
+            algorithm: "SHA-1"
         vcs:
           type: "git"
           url: "https://git-wip-us.apache.org/repos/asf/jena.git"
@@ -2245,12 +2331,14 @@ analyzer:
         homepage_url: "http://jena.apache.org/jena-tdb/"
         binary_artifact:
           url: "https://repo.maven.apache.org/maven2/org/apache/jena/jena-tdb/3.9.0/jena-tdb-3.9.0.jar"
-          hash: "f2e40a4fa8a8ee02aaaec5c9a5f3dc7579e68227"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "f2e40a4fa8a8ee02aaaec5c9a5f3dc7579e68227"
+            algorithm: "SHA-1"
         source_artifact:
           url: "https://repo.maven.apache.org/maven2/org/apache/jena/jena-tdb/3.9.0/jena-tdb-3.9.0-sources.jar"
-          hash: "fe2889a11367d5538ca4e17204155a984ac8c101"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "fe2889a11367d5538ca4e17204155a984ac8c101"
+            algorithm: "SHA-1"
         vcs:
           type: "git"
           url: "https://git-wip-us.apache.org/repos/asf/jena.git"
@@ -2273,12 +2361,14 @@ analyzer:
         homepage_url: "https://logging.apache.org/log4j/2.x/log4j-api/"
         binary_artifact:
           url: "https://repo.maven.apache.org/maven2/org/apache/logging/log4j/log4j-api/2.10.0/log4j-api-2.10.0.jar"
-          hash: "fec5797a55b786184a537abd39c3fa1449d752d6"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "fec5797a55b786184a537abd39c3fa1449d752d6"
+            algorithm: "SHA-1"
         source_artifact:
           url: "https://repo.maven.apache.org/maven2/org/apache/logging/log4j/log4j-api/2.10.0/log4j-api-2.10.0-sources.jar"
-          hash: "fd42afa6acbfb3801accec744106ee28b9342567"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "fd42afa6acbfb3801accec744106ee28b9342567"
+            algorithm: "SHA-1"
         vcs:
           type: "git"
           url: "https://git-wip-us.apache.org/repos/asf/logging-log4j2.git"
@@ -2301,12 +2391,14 @@ analyzer:
         homepage_url: "https://logging.apache.org/log4j/2.x/log4j-core/"
         binary_artifact:
           url: "https://repo.maven.apache.org/maven2/org/apache/logging/log4j/log4j-core/2.10.0/log4j-core-2.10.0.jar"
-          hash: "c90b597163cd28ab6d9687edd53db601b6ea75a1"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "c90b597163cd28ab6d9687edd53db601b6ea75a1"
+            algorithm: "SHA-1"
         source_artifact:
           url: "https://repo.maven.apache.org/maven2/org/apache/logging/log4j/log4j-core/2.10.0/log4j-core-2.10.0-sources.jar"
-          hash: "a2041b29bc3e761fba750c0df933cd48f76f5b3a"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "a2041b29bc3e761fba750c0df933cd48f76f5b3a"
+            algorithm: "SHA-1"
         vcs:
           type: "git"
           url: "https://git-wip-us.apache.org/repos/asf/logging-log4j2.git"
@@ -2329,12 +2421,14 @@ analyzer:
         homepage_url: "https://logging.apache.org/log4j/2.x/log4j-slf4j-impl/"
         binary_artifact:
           url: "https://repo.maven.apache.org/maven2/org/apache/logging/log4j/log4j-slf4j-impl/2.10.0/log4j-slf4j-impl-2.10.0.jar"
-          hash: "8e4e0a30736175e31c7f714d95032c1734cfbdea"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "8e4e0a30736175e31c7f714d95032c1734cfbdea"
+            algorithm: "SHA-1"
         source_artifact:
           url: "https://repo.maven.apache.org/maven2/org/apache/logging/log4j/log4j-slf4j-impl/2.10.0/log4j-slf4j-impl-2.10.0-sources.jar"
-          hash: "51e9adc49fcb32d961c66170c9b4b092ee809d9c"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "51e9adc49fcb32d961c66170c9b4b092ee809d9c"
+            algorithm: "SHA-1"
         vcs:
           type: "git"
           url: "https://git-wip-us.apache.org/repos/asf/logging-log4j2.git"
@@ -2357,12 +2451,14 @@ analyzer:
         homepage_url: "http://poi.apache.org/"
         binary_artifact:
           url: "https://repo.maven.apache.org/maven2/org/apache/poi/poi-ooxml-schemas/3.15/poi-ooxml-schemas-3.15.jar"
-          hash: "de4a50ca39de48a19606b35644ecadb2f733c479"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "de4a50ca39de48a19606b35644ecadb2f733c479"
+            algorithm: "SHA-1"
         source_artifact:
           url: ""
-          hash: ""
-          hash_algorithm: ""
+          hash:
+            value: ""
+            algorithm: ""
         vcs:
           type: ""
           url: ""
@@ -2385,12 +2481,14 @@ analyzer:
         homepage_url: "http://poi.apache.org/"
         binary_artifact:
           url: "https://repo.maven.apache.org/maven2/org/apache/poi/poi-ooxml/3.15/poi-ooxml-3.15.jar"
-          hash: "e2800856735b07b8edd417aee07685470216a00f"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "e2800856735b07b8edd417aee07685470216a00f"
+            algorithm: "SHA-1"
         source_artifact:
           url: "https://repo.maven.apache.org/maven2/org/apache/poi/poi-ooxml/3.15/poi-ooxml-3.15-sources.jar"
-          hash: "b49e9cf942f8ba4492017a274c6c3480584909d8"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "b49e9cf942f8ba4492017a274c6c3480584909d8"
+            algorithm: "SHA-1"
         vcs:
           type: ""
           url: ""
@@ -2413,12 +2511,14 @@ analyzer:
         homepage_url: "http://poi.apache.org/"
         binary_artifact:
           url: "https://repo.maven.apache.org/maven2/org/apache/poi/poi/3.15/poi-3.15.jar"
-          hash: "965bba8899988008bb2341e300347de62aad5391"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "965bba8899988008bb2341e300347de62aad5391"
+            algorithm: "SHA-1"
         source_artifact:
           url: "https://repo.maven.apache.org/maven2/org/apache/poi/poi/3.15/poi-3.15-sources.jar"
-          hash: "bd552aa859b560a2ab85694f23771b6ef50698dd"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "bd552aa859b560a2ab85694f23771b6ef50698dd"
+            algorithm: "SHA-1"
         vcs:
           type: ""
           url: ""
@@ -2442,12 +2542,14 @@ analyzer:
         homepage_url: "http://thrift.apache.org"
         binary_artifact:
           url: "https://repo.maven.apache.org/maven2/org/apache/thrift/libthrift/0.10.0/libthrift-0.10.0.jar"
-          hash: "3201c5a6d85d3f030bae5a520abaaf81ef7df037"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "3201c5a6d85d3f030bae5a520abaaf81ef7df037"
+            algorithm: "SHA-1"
         source_artifact:
           url: "https://repo.maven.apache.org/maven2/org/apache/thrift/libthrift/0.10.0/libthrift-0.10.0-sources.jar"
-          hash: "e52aec15d774e90d2c9588571634c054e352b26b"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "e52aec15d774e90d2c9588571634c054e352b26b"
+            algorithm: "SHA-1"
         vcs:
           type: "git"
           url: "https://git-wip-us.apache.org/repos/asf/thrift.git"
@@ -2470,12 +2572,14 @@ analyzer:
         homepage_url: "http://xmlbeans.apache.org"
         binary_artifact:
           url: "https://repo.maven.apache.org/maven2/org/apache/xmlbeans/xmlbeans/2.6.0/xmlbeans-2.6.0.jar"
-          hash: "29e80d2dd51f9dcdef8f9ffaee0d4dc1c9bbfc87"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "29e80d2dd51f9dcdef8f9ffaee0d4dc1c9bbfc87"
+            algorithm: "SHA-1"
         source_artifact:
           url: ""
-          hash: ""
-          hash_algorithm: ""
+          hash:
+            value: ""
+            algorithm: ""
         vcs:
           type: "svn"
           url: "https://svn.apache.org/repos/asf/xmlbeans/"
@@ -2498,12 +2602,14 @@ analyzer:
         homepage_url: "https://github.com/apiguardian-team/apiguardian"
         binary_artifact:
           url: "https://repo.maven.apache.org/maven2/org/apiguardian/apiguardian-api/1.0.0/apiguardian-api-1.0.0.jar"
-          hash: "3ef5276905e36f4d8055fe3cb0bdcc7503ffc85d"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "3ef5276905e36f4d8055fe3cb0bdcc7503ffc85d"
+            algorithm: "SHA-1"
         source_artifact:
           url: "https://repo.maven.apache.org/maven2/org/apiguardian/apiguardian-api/1.0.0/apiguardian-api-1.0.0-sources.jar"
-          hash: "777508fa9f3e03cafb3c1fb2eba3dca317f4b1ee"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "777508fa9f3e03cafb3c1fb2eba3dca317f4b1ee"
+            algorithm: "SHA-1"
         vcs:
           type: "git"
           url: "git://github.com/apiguardian-team/apiguardian.git"
@@ -2526,12 +2632,14 @@ analyzer:
         homepage_url: "http://assertj.org/assertj-core"
         binary_artifact:
           url: "https://repo.maven.apache.org/maven2/org/assertj/assertj-core/3.11.1/assertj-core-3.11.1.jar"
-          hash: "fdac3217b804d6900fa3650f17b5cb48e620b140"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "fdac3217b804d6900fa3650f17b5cb48e620b140"
+            algorithm: "SHA-1"
         source_artifact:
           url: "https://repo.maven.apache.org/maven2/org/assertj/assertj-core/3.11.1/assertj-core-3.11.1-sources.jar"
-          hash: "55362d8f04018b1140c5a370057bf8cd4a63c3de"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "55362d8f04018b1140c5a370057bf8cd4a63c3de"
+            algorithm: "SHA-1"
         vcs:
           type: "git"
           url: "git@github.com:joel-costigliola/assertj-core.git"
@@ -2556,12 +2664,14 @@ analyzer:
         homepage_url: "https://github.com/hamcrest/JavaHamcrest/hamcrest-core"
         binary_artifact:
           url: "https://repo.maven.apache.org/maven2/org/hamcrest/hamcrest-core/1.3/hamcrest-core-1.3.jar"
-          hash: "42a25dc3219429f0e5d060061f71acb49bf010a0"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "42a25dc3219429f0e5d060061f71acb49bf010a0"
+            algorithm: "SHA-1"
         source_artifact:
           url: "https://repo.maven.apache.org/maven2/org/hamcrest/hamcrest-core/1.3/hamcrest-core-1.3-sources.jar"
-          hash: "1dc37250fbc78e23a65a67fbbaf71d2e9cbc3c0b"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "1dc37250fbc78e23a65a67fbbaf71d2e9cbc3c0b"
+            algorithm: "SHA-1"
         vcs:
           type: "git"
           url: "git@github.com:hamcrest/JavaHamcrest.git"
@@ -2584,12 +2694,14 @@ analyzer:
         homepage_url: "http://jsoup.org/"
         binary_artifact:
           url: "https://repo.maven.apache.org/maven2/org/jsoup/jsoup/1.7.2/jsoup-1.7.2.jar"
-          hash: "d7e275ba05aa380ca254f72d0c0ffebaedc3adcf"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "d7e275ba05aa380ca254f72d0c0ffebaedc3adcf"
+            algorithm: "SHA-1"
         source_artifact:
           url: "https://repo.maven.apache.org/maven2/org/jsoup/jsoup/1.7.2/jsoup-1.7.2-sources.jar"
-          hash: "833f425e7a40d7fc88922370a072965dda8ee216"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "833f425e7a40d7fc88922370a072965dda8ee216"
+            algorithm: "SHA-1"
         vcs:
           type: "git"
           url: "http://github.com/jhy/jsoup.git"
@@ -2612,12 +2724,14 @@ analyzer:
         homepage_url: "http://junit.org/junit5/"
         binary_artifact:
           url: "https://repo.maven.apache.org/maven2/org/junit/jupiter/junit-jupiter-api/5.3.1/junit-jupiter-api-5.3.1.jar"
-          hash: "a7e97eac2784395cb991403f9641b042ad972941"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "a7e97eac2784395cb991403f9641b042ad972941"
+            algorithm: "SHA-1"
         source_artifact:
           url: "https://repo.maven.apache.org/maven2/org/junit/jupiter/junit-jupiter-api/5.3.1/junit-jupiter-api-5.3.1-sources.jar"
-          hash: "b03f607c0822a283c972e37eaeacb00dc3a3c2e7"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "b03f607c0822a283c972e37eaeacb00dc3a3c2e7"
+            algorithm: "SHA-1"
         vcs:
           type: "git"
           url: "git://github.com/junit-team/junit5.git"
@@ -2640,12 +2754,14 @@ analyzer:
         homepage_url: "http://junit.org/junit5/"
         binary_artifact:
           url: "https://repo.maven.apache.org/maven2/org/junit/jupiter/junit-jupiter-engine/5.3.1/junit-jupiter-engine-5.3.1.jar"
-          hash: "e2676b1786c57a80eb98f5bebd51a3d05e228c40"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "e2676b1786c57a80eb98f5bebd51a3d05e228c40"
+            algorithm: "SHA-1"
         source_artifact:
           url: "https://repo.maven.apache.org/maven2/org/junit/jupiter/junit-jupiter-engine/5.3.1/junit-jupiter-engine-5.3.1-sources.jar"
-          hash: "c769957170b2240854d6da6c6706dcc2a281542f"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "c769957170b2240854d6da6c6706dcc2a281542f"
+            algorithm: "SHA-1"
         vcs:
           type: "git"
           url: "git://github.com/junit-team/junit5.git"
@@ -2668,12 +2784,14 @@ analyzer:
         homepage_url: "http://junit.org/junit5/"
         binary_artifact:
           url: "https://repo.maven.apache.org/maven2/org/junit/jupiter/junit-jupiter-params/5.3.1/junit-jupiter-params-5.3.1.jar"
-          hash: "9dfac3fbd6768974fc0c142304a3e90ba713b2a8"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "9dfac3fbd6768974fc0c142304a3e90ba713b2a8"
+            algorithm: "SHA-1"
         source_artifact:
           url: "https://repo.maven.apache.org/maven2/org/junit/jupiter/junit-jupiter-params/5.3.1/junit-jupiter-params-5.3.1-sources.jar"
-          hash: "bc4eb2ef307286fcd45551d4da397518c2e15394"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "bc4eb2ef307286fcd45551d4da397518c2e15394"
+            algorithm: "SHA-1"
         vcs:
           type: "git"
           url: "git://github.com/junit-team/junit5.git"
@@ -2696,12 +2814,14 @@ analyzer:
         homepage_url: "http://junit.org/junit5/"
         binary_artifact:
           url: "https://repo.maven.apache.org/maven2/org/junit/platform/junit-platform-commons/1.3.1/junit-platform-commons-1.3.1.jar"
-          hash: "67b7edddfac1935e6e6d9b58d7c7df6db59b1d39"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "67b7edddfac1935e6e6d9b58d7c7df6db59b1d39"
+            algorithm: "SHA-1"
         source_artifact:
           url: "https://repo.maven.apache.org/maven2/org/junit/platform/junit-platform-commons/1.3.1/junit-platform-commons-1.3.1-sources.jar"
-          hash: "297bb35bca3d229c5e6edbffd22de7b5ad4cf430"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "297bb35bca3d229c5e6edbffd22de7b5ad4cf430"
+            algorithm: "SHA-1"
         vcs:
           type: "git"
           url: "git://github.com/junit-team/junit5.git"
@@ -2724,12 +2844,14 @@ analyzer:
         homepage_url: "http://junit.org/junit5/"
         binary_artifact:
           url: "https://repo.maven.apache.org/maven2/org/junit/platform/junit-platform-engine/1.3.1/junit-platform-engine-1.3.1.jar"
-          hash: "3ee68a06bbdab157dd260e2095c356481d6cd172"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "3ee68a06bbdab157dd260e2095c356481d6cd172"
+            algorithm: "SHA-1"
         source_artifact:
           url: "https://repo.maven.apache.org/maven2/org/junit/platform/junit-platform-engine/1.3.1/junit-platform-engine-1.3.1-sources.jar"
-          hash: "effe038ffcf21f6988e78b12119ca456d7d144fd"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "effe038ffcf21f6988e78b12119ca456d7d144fd"
+            algorithm: "SHA-1"
         vcs:
           type: "git"
           url: "git://github.com/junit-team/junit5.git"
@@ -2752,12 +2874,14 @@ analyzer:
         homepage_url: "http://junit.org/junit5/"
         binary_artifact:
           url: "https://repo.maven.apache.org/maven2/org/junit/platform/junit-platform-launcher/1.3.1/junit-platform-launcher-1.3.1.jar"
-          hash: "8a07cb776e5aeb320b051183dc8ff142650ddb4e"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "8a07cb776e5aeb320b051183dc8ff142650ddb4e"
+            algorithm: "SHA-1"
         source_artifact:
           url: "https://repo.maven.apache.org/maven2/org/junit/platform/junit-platform-launcher/1.3.1/junit-platform-launcher-1.3.1-sources.jar"
-          hash: "e144c1c4935632fa730c8a2d0c0c879b824562df"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "e144c1c4935632fa730c8a2d0c0c879b824562df"
+            algorithm: "SHA-1"
         vcs:
           type: "git"
           url: "git://github.com/junit-team/junit5.git"
@@ -2780,12 +2904,14 @@ analyzer:
         homepage_url: "https://github.com/ota4j-team/opentest4j"
         binary_artifact:
           url: "https://repo.maven.apache.org/maven2/org/opentest4j/opentest4j/1.1.1/opentest4j-1.1.1.jar"
-          hash: "efd9f971e91074491ea55b19f67b13470cf4fcdd"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "efd9f971e91074491ea55b19f67b13470cf4fcdd"
+            algorithm: "SHA-1"
         source_artifact:
           url: "https://repo.maven.apache.org/maven2/org/opentest4j/opentest4j/1.1.1/opentest4j-1.1.1-sources.jar"
-          hash: "88a3a2cb15c413565462cea99f201b67bc6d2f10"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "88a3a2cb15c413565462cea99f201b67bc6d2f10"
+            algorithm: "SHA-1"
         vcs:
           type: "git"
           url: "git://github.com/ota4j-team/opentest4j.git"
@@ -2808,12 +2934,14 @@ analyzer:
         homepage_url: "http://www.slf4j.org"
         binary_artifact:
           url: "https://repo.maven.apache.org/maven2/org/slf4j/jcl-over-slf4j/1.7.25/jcl-over-slf4j-1.7.25.jar"
-          hash: "f8c32b13ff142a513eeb5b6330b1588dcb2c0461"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "f8c32b13ff142a513eeb5b6330b1588dcb2c0461"
+            algorithm: "SHA-1"
         source_artifact:
           url: "https://repo.maven.apache.org/maven2/org/slf4j/jcl-over-slf4j/1.7.25/jcl-over-slf4j-1.7.25-sources.jar"
-          hash: "ffd0827a7c67d5915b7dc611afbda56a1f247191"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "ffd0827a7c67d5915b7dc611afbda56a1f247191"
+            algorithm: "SHA-1"
         vcs:
           type: "git"
           url: "git@github.com:qos-ch/slf4j.git"
@@ -2836,12 +2964,14 @@ analyzer:
         homepage_url: "http://www.slf4j.org"
         binary_artifact:
           url: "https://repo.maven.apache.org/maven2/org/slf4j/slf4j-api/1.7.25/slf4j-api-1.7.25.jar"
-          hash: "da76ca59f6a57ee3102f8f9bd9cee742973efa8a"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "da76ca59f6a57ee3102f8f9bd9cee742973efa8a"
+            algorithm: "SHA-1"
         source_artifact:
           url: "https://repo.maven.apache.org/maven2/org/slf4j/slf4j-api/1.7.25/slf4j-api-1.7.25-sources.jar"
-          hash: "962153db4a9ea71b79d047dfd1b2a0d80d8f4739"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "962153db4a9ea71b79d047dfd1b2a0d80d8f4739"
+            algorithm: "SHA-1"
         vcs:
           type: "git"
           url: "git@github.com:qos-ch/slf4j.git"
@@ -2865,12 +2995,14 @@ analyzer:
         homepage_url: "http://stax.codehaus.org/"
         binary_artifact:
           url: "https://repo.maven.apache.org/maven2/stax/stax-api/1.0.1/stax-api-1.0.1.jar"
-          hash: "49c100caf72d658aca8e58bd74a4ba90fa2b0d70"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "49c100caf72d658aca8e58bd74a4ba90fa2b0d70"
+            algorithm: "SHA-1"
         source_artifact:
           url: ""
-          hash: ""
-          hash_algorithm: ""
+          hash:
+            value: ""
+            algorithm: ""
         vcs:
           type: ""
           url: ""
@@ -2893,12 +3025,14 @@ analyzer:
         homepage_url: "https://github.com/isaacs/abbrev-js#readme"
         binary_artifact:
           url: ""
-          hash: ""
-          hash_algorithm: ""
+          hash:
+            value: ""
+            algorithm: ""
         source_artifact:
           url: "https://registry.npmjs.org/abbrev/-/abbrev-1.0.9.tgz"
-          hash: "91b4792588a7738c25f35dd6f63752a2f8776135"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "91b4792588a7738c25f35dd6f63752a2f8776135"
+            algorithm: "SHA-1"
         vcs:
           type: "git"
           url: "git+ssh://git@github.com/isaacs/abbrev-js.git"
@@ -2921,12 +3055,14 @@ analyzer:
         homepage_url: "https://github.com/epoberezkin/ajv"
         binary_artifact:
           url: ""
-          hash: ""
-          hash_algorithm: ""
+          hash:
+            value: ""
+            algorithm: ""
         source_artifact:
           url: "https://registry.npmjs.org/ajv/-/ajv-5.5.2.tgz"
-          hash: "73b5eeca3fab653e3d3f9422b341ad42205dc965"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "73b5eeca3fab653e3d3f9422b341ad42205dc965"
+            algorithm: "SHA-1"
         vcs:
           type: "git"
           url: "git+https://github.com/epoberezkin/ajv.git"
@@ -2950,12 +3086,14 @@ analyzer:
         homepage_url: "http://github.com/jrburke/amdefine"
         binary_artifact:
           url: ""
-          hash: ""
-          hash_algorithm: ""
+          hash:
+            value: ""
+            algorithm: ""
         source_artifact:
           url: "https://registry.npmjs.org/amdefine/-/amdefine-1.0.1.tgz"
-          hash: "4a5282ac164729e93619bcfd3ad151f817ce91f5"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "4a5282ac164729e93619bcfd3ad151f817ce91f5"
+            algorithm: "SHA-1"
         vcs:
           type: "git"
           url: "git+https://github.com/jrburke/amdefine.git"
@@ -2979,12 +3117,14 @@ analyzer:
         homepage_url: "https://github.com/nodeca/argparse#readme"
         binary_artifact:
           url: ""
-          hash: ""
-          hash_algorithm: ""
+          hash:
+            value: ""
+            algorithm: ""
         source_artifact:
           url: "https://registry.npmjs.org/argparse/-/argparse-1.0.10.tgz"
-          hash: "bcd6791ea5ae09725e17e5ad988134cd40b3d911"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "bcd6791ea5ae09725e17e5ad988134cd40b3d911"
+            algorithm: "SHA-1"
         vcs:
           type: "git"
           url: "git+https://github.com/nodeca/argparse.git"
@@ -3007,12 +3147,14 @@ analyzer:
         homepage_url: "https://github.com/joyent/node-asn1#readme"
         binary_artifact:
           url: ""
-          hash: ""
-          hash_algorithm: ""
+          hash:
+            value: ""
+            algorithm: ""
         source_artifact:
           url: "https://registry.npmjs.org/asn1/-/asn1-0.2.4.tgz"
-          hash: "8d2475dfab553bb33e77b54e59e880bb8ce23136"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "8d2475dfab553bb33e77b54e59e880bb8ce23136"
+            algorithm: "SHA-1"
         vcs:
           type: "git"
           url: "git://github.com/joyent/node-asn1.git"
@@ -3035,12 +3177,14 @@ analyzer:
         homepage_url: "https://github.com/mcavage/node-assert-plus#readme"
         binary_artifact:
           url: ""
-          hash: ""
-          hash_algorithm: ""
+          hash:
+            value: ""
+            algorithm: ""
         source_artifact:
           url: "https://registry.npmjs.org/assert-plus/-/assert-plus-1.0.0.tgz"
-          hash: "f12e0f3c5d77b0b1cdd9146942e4e96c1e4dd525"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "f12e0f3c5d77b0b1cdd9146942e4e96c1e4dd525"
+            algorithm: "SHA-1"
         vcs:
           type: "git"
           url: "git+https://github.com/mcavage/node-assert-plus.git"
@@ -3064,12 +3208,14 @@ analyzer:
         homepage_url: "https://github.com/caolan/async#readme"
         binary_artifact:
           url: ""
-          hash: ""
-          hash_algorithm: ""
+          hash:
+            value: ""
+            algorithm: ""
         source_artifact:
           url: "https://registry.npmjs.org/async/-/async-1.0.0.tgz"
-          hash: "f8fc04ca3a13784ade9e1641af98578cfbd647a9"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "f8fc04ca3a13784ade9e1641af98578cfbd647a9"
+            algorithm: "SHA-1"
         vcs:
           type: "git"
           url: "git+https://github.com/caolan/async.git"
@@ -3093,12 +3239,14 @@ analyzer:
         homepage_url: "https://github.com/caolan/async#readme"
         binary_artifact:
           url: ""
-          hash: ""
-          hash_algorithm: ""
+          hash:
+            value: ""
+            algorithm: ""
         source_artifact:
           url: "https://registry.npmjs.org/async/-/async-1.5.2.tgz"
-          hash: "ec6a61ae56480c0c3cb241c95618e20892f9672a"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "ec6a61ae56480c0c3cb241c95618e20892f9672a"
+            algorithm: "SHA-1"
         vcs:
           type: "git"
           url: "git+https://github.com/caolan/async.git"
@@ -3122,12 +3270,14 @@ analyzer:
         homepage_url: "https://caolan.github.io/async/"
         binary_artifact:
           url: ""
-          hash: ""
-          hash_algorithm: ""
+          hash:
+            value: ""
+            algorithm: ""
         source_artifact:
           url: "https://registry.npmjs.org/async/-/async-2.6.1.tgz"
-          hash: "b245a23ca71930044ec53fa46aa00a3e87c6a610"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "b245a23ca71930044ec53fa46aa00a3e87c6a610"
+            algorithm: "SHA-1"
         vcs:
           type: "git"
           url: "git+https://github.com/caolan/async.git"
@@ -3150,12 +3300,14 @@ analyzer:
         homepage_url: "https://github.com/alexindigo/asynckit#readme"
         binary_artifact:
           url: ""
-          hash: ""
-          hash_algorithm: ""
+          hash:
+            value: ""
+            algorithm: ""
         source_artifact:
           url: "https://registry.npmjs.org/asynckit/-/asynckit-0.4.0.tgz"
-          hash: "c79ed97f7f34cb8f2ba1bc9790bcc366474b4b79"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "c79ed97f7f34cb8f2ba1bc9790bcc366474b4b79"
+            algorithm: "SHA-1"
         vcs:
           type: "git"
           url: "git+https://github.com/alexindigo/asynckit.git"
@@ -3179,12 +3331,14 @@ analyzer:
         homepage_url: "https://github.com/mikeal/aws-sign#readme"
         binary_artifact:
           url: ""
-          hash: ""
-          hash_algorithm: ""
+          hash:
+            value: ""
+            algorithm: ""
         source_artifact:
           url: "https://registry.npmjs.org/aws-sign2/-/aws-sign2-0.7.0.tgz"
-          hash: "b46e890934a9591f2d2f6f86d7e6a9f1b3fe76a8"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "b46e890934a9591f2d2f6f86d7e6a9f1b3fe76a8"
+            algorithm: "SHA-1"
         vcs:
           type: ""
           url: "git+https://github.com/mikeal/aws-sign.git"
@@ -3207,12 +3361,14 @@ analyzer:
         homepage_url: "https://github.com/mhart/aws4#readme"
         binary_artifact:
           url: ""
-          hash: ""
-          hash_algorithm: ""
+          hash:
+            value: ""
+            algorithm: ""
         source_artifact:
           url: "https://registry.npmjs.org/aws4/-/aws4-1.8.0.tgz"
-          hash: "f0e003d9ca9e7f59c7a508945d7b2ef9a04a542f"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "f0e003d9ca9e7f59c7a508945d7b2ef9a04a542f"
+            algorithm: "SHA-1"
         vcs:
           type: "git"
           url: "git+https://github.com/mhart/aws4.git"
@@ -3235,12 +3391,14 @@ analyzer:
         homepage_url: "https://github.com/juliangruber/balanced-match"
         binary_artifact:
           url: ""
-          hash: ""
-          hash_algorithm: ""
+          hash:
+            value: ""
+            algorithm: ""
         source_artifact:
           url: "https://registry.npmjs.org/balanced-match/-/balanced-match-1.0.0.tgz"
-          hash: "89b4d199ab2bee49de164ea02b89ce462d71b767"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "89b4d199ab2bee49de164ea02b89ce462d71b767"
+            algorithm: "SHA-1"
         vcs:
           type: "git"
           url: "git://github.com/juliangruber/balanced-match.git"
@@ -3263,12 +3421,14 @@ analyzer:
         homepage_url: "https://github.com/joyent/node-bcrypt-pbkdf#readme"
         binary_artifact:
           url: ""
-          hash: ""
-          hash_algorithm: ""
+          hash:
+            value: ""
+            algorithm: ""
         source_artifact:
           url: "https://registry.npmjs.org/bcrypt-pbkdf/-/bcrypt-pbkdf-1.0.2.tgz"
-          hash: "a4301d389b6a43f9b67ff3ca11a3f6637e360e9e"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "a4301d389b6a43f9b67ff3ca11a3f6637e360e9e"
+            algorithm: "SHA-1"
         vcs:
           type: "git"
           url: "git://github.com/joyent/node-bcrypt-pbkdf.git"
@@ -3291,12 +3451,14 @@ analyzer:
         homepage_url: "https://github.com/fb55/boolbase"
         binary_artifact:
           url: ""
-          hash: ""
-          hash_algorithm: ""
+          hash:
+            value: ""
+            algorithm: ""
         source_artifact:
           url: "https://registry.npmjs.org/boolbase/-/boolbase-1.0.0.tgz"
-          hash: "68dff5fbe60c51eb37725ea9e3ed310dcc1e776e"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "68dff5fbe60c51eb37725ea9e3ed310dcc1e776e"
+            algorithm: "SHA-1"
         vcs:
           type: "git"
           url: "https://github.com/fb55/boolbase"
@@ -3319,12 +3481,14 @@ analyzer:
         homepage_url: "https://github.com/juliangruber/brace-expansion"
         binary_artifact:
           url: ""
-          hash: ""
-          hash_algorithm: ""
+          hash:
+            value: ""
+            algorithm: ""
         source_artifact:
           url: "https://registry.npmjs.org/brace-expansion/-/brace-expansion-1.1.11.tgz"
-          hash: "3c7fcbf529d87226f3d2f52b966ff5271eb441dd"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "3c7fcbf529d87226f3d2f52b966ff5271eb441dd"
+            algorithm: "SHA-1"
         vcs:
           type: "git"
           url: "git://github.com/juliangruber/brace-expansion.git"
@@ -3347,12 +3511,14 @@ analyzer:
         homepage_url: "https://github.com/kumavis/browser-stdout#readme"
         binary_artifact:
           url: ""
-          hash: ""
-          hash_algorithm: ""
+          hash:
+            value: ""
+            algorithm: ""
         source_artifact:
           url: "https://registry.npmjs.org/browser-stdout/-/browser-stdout-1.3.1.tgz"
-          hash: "baa559ee14ced73452229bad7326467c61fabd60"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "baa559ee14ced73452229bad7326467c61fabd60"
+            algorithm: "SHA-1"
         vcs:
           type: "git"
           url: "git+ssh://git@github.com/kumavis/browser-stdout.git"
@@ -3376,12 +3542,14 @@ analyzer:
         homepage_url: "https://github.com/LinusU/buffer-from#readme"
         binary_artifact:
           url: ""
-          hash: ""
-          hash_algorithm: ""
+          hash:
+            value: ""
+            algorithm: ""
         source_artifact:
           url: "https://registry.npmjs.org/buffer-from/-/buffer-from-1.1.1.tgz"
-          hash: "32713bc028f75c02fdb710d7c7bcec1f2c6070ef"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "32713bc028f75c02fdb710d7c7bcec1f2c6070ef"
+            algorithm: "SHA-1"
         vcs:
           type: "git"
           url: "git+https://github.com/LinusU/buffer-from.git"
@@ -3405,12 +3573,14 @@ analyzer:
         homepage_url: "https://github.com/mikeal/caseless#readme"
         binary_artifact:
           url: ""
-          hash: ""
-          hash_algorithm: ""
+          hash:
+            value: ""
+            algorithm: ""
         source_artifact:
           url: "https://registry.npmjs.org/caseless/-/caseless-0.12.0.tgz"
-          hash: "1b681c21ff84033c826543090689420d187151dc"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "1b681c21ff84033c826543090689420d187151dc"
+            algorithm: "SHA-1"
         vcs:
           type: "git"
           url: "git+https://github.com/mikeal/caseless.git"
@@ -3434,12 +3604,14 @@ analyzer:
         homepage_url: "https://github.com/cheeriojs/cheerio#readme"
         binary_artifact:
           url: ""
-          hash: ""
-          hash_algorithm: ""
+          hash:
+            value: ""
+            algorithm: ""
         source_artifact:
           url: "https://registry.npmjs.org/cheerio/-/cheerio-1.0.0-rc.1.tgz"
-          hash: "2af37339eab713ef6b72cde98cefa672b87641fe"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "2af37339eab713ef6b72cde98cefa672b87641fe"
+            algorithm: "SHA-1"
         vcs:
           type: "git"
           url: "git://github.com/cheeriojs/cheerio.git"
@@ -3462,12 +3634,14 @@ analyzer:
         homepage_url: "http://github.com/node-js-libs/cli"
         binary_artifact:
           url: ""
-          hash: ""
-          hash_algorithm: ""
+          hash:
+            value: ""
+            algorithm: ""
         source_artifact:
           url: "https://registry.npmjs.org/cli/-/cli-1.0.1.tgz"
-          hash: "22817534f24bfa4950c34d532d48ecbc621b8c14"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "22817534f24bfa4950c34d532d48ecbc621b8c14"
+            algorithm: "SHA-1"
         vcs:
           type: "git"
           url: "git+ssh://git@github.com/node-js-libs/cli.git"
@@ -3490,12 +3664,14 @@ analyzer:
         homepage_url: "https://github.com/tj/co#readme"
         binary_artifact:
           url: ""
-          hash: ""
-          hash_algorithm: ""
+          hash:
+            value: ""
+            algorithm: ""
         source_artifact:
           url: "https://registry.npmjs.org/co/-/co-4.6.0.tgz"
-          hash: "6ea6bdf3d853ae54ccb8e47bfa0bf3f9031fb184"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "6ea6bdf3d853ae54ccb8e47bfa0bf3f9031fb184"
+            algorithm: "SHA-1"
         vcs:
           type: "git"
           url: "git+https://github.com/tj/co.git"
@@ -3518,12 +3694,14 @@ analyzer:
         homepage_url: "http://coffeescript.org"
         binary_artifact:
           url: ""
-          hash: ""
-          hash_algorithm: ""
+          hash:
+            value: ""
+            algorithm: ""
         source_artifact:
           url: "https://registry.npmjs.org/coffee-script/-/coffee-script-1.12.7.tgz"
-          hash: "c05dae0cb79591d05b3070a8433a98c9a89ccc53"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "c05dae0cb79591d05b3070a8433a98c9a89ccc53"
+            algorithm: "SHA-1"
         vcs:
           type: "git"
           url: "git://github.com/jashkenas/coffeescript.git"
@@ -3546,12 +3724,14 @@ analyzer:
         homepage_url: "https://github.com/Marak/colors.js"
         binary_artifact:
           url: ""
-          hash: ""
-          hash_algorithm: ""
+          hash:
+            value: ""
+            algorithm: ""
         source_artifact:
           url: "https://registry.npmjs.org/colors/-/colors-1.0.3.tgz"
-          hash: "0433f44d809680fdeb60ed260f1b0c262e82a40b"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "0433f44d809680fdeb60ed260f1b0c262e82a40b"
+            algorithm: "SHA-1"
         vcs:
           type: "git"
           url: "http://github.com/Marak/colors.js.git"
@@ -3574,12 +3754,14 @@ analyzer:
         homepage_url: "https://github.com/felixge/node-combined-stream"
         binary_artifact:
           url: ""
-          hash: ""
-          hash_algorithm: ""
+          hash:
+            value: ""
+            algorithm: ""
         source_artifact:
           url: "https://registry.npmjs.org/combined-stream/-/combined-stream-1.0.7.tgz"
-          hash: "2d1d24317afb8abe95d6d2c0b07b57813539d828"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "2d1d24317afb8abe95d6d2c0b07b57813539d828"
+            algorithm: "SHA-1"
         vcs:
           type: "git"
           url: "git://github.com/felixge/node-combined-stream.git"
@@ -3602,12 +3784,14 @@ analyzer:
         homepage_url: "https://github.com/tj/commander.js#readme"
         binary_artifact:
           url: ""
-          hash: ""
-          hash_algorithm: ""
+          hash:
+            value: ""
+            algorithm: ""
         source_artifact:
           url: "https://registry.npmjs.org/commander/-/commander-2.15.1.tgz"
-          hash: "df46e867d0fc2aec66a34662b406a9ccafff5b0f"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "df46e867d0fc2aec66a34662b406a9ccafff5b0f"
+            algorithm: "SHA-1"
         vcs:
           type: "git"
           url: "git+https://github.com/tj/commander.js.git"
@@ -3630,12 +3814,14 @@ analyzer:
         homepage_url: "https://github.com/tj/commander.js#readme"
         binary_artifact:
           url: ""
-          hash: ""
-          hash_algorithm: ""
+          hash:
+            value: ""
+            algorithm: ""
         source_artifact:
           url: "https://registry.npmjs.org/commander/-/commander-2.17.1.tgz"
-          hash: "bd77ab7de6de94205ceacc72f1716d29f20a77bf"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "bd77ab7de6de94205ceacc72f1716d29f20a77bf"
+            algorithm: "SHA-1"
         vcs:
           type: "git"
           url: "git+https://github.com/tj/commander.js.git"
@@ -3658,12 +3844,14 @@ analyzer:
         homepage_url: "https://github.com/substack/node-concat-map"
         binary_artifact:
           url: ""
-          hash: ""
-          hash_algorithm: ""
+          hash:
+            value: ""
+            algorithm: ""
         source_artifact:
           url: "https://registry.npmjs.org/concat-map/-/concat-map-0.0.1.tgz"
-          hash: "d8a96bd77fd68df7793a73036a3ba0d5405d477b"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "d8a96bd77fd68df7793a73036a3ba0d5405d477b"
+            algorithm: "SHA-1"
         vcs:
           type: "git"
           url: "git://github.com/substack/node-concat-map.git"
@@ -3687,12 +3875,14 @@ analyzer:
         homepage_url: "https://github.com/maxogden/concat-stream#readme"
         binary_artifact:
           url: ""
-          hash: ""
-          hash_algorithm: ""
+          hash:
+            value: ""
+            algorithm: ""
         source_artifact:
           url: "https://registry.npmjs.org/concat-stream/-/concat-stream-1.6.2.tgz"
-          hash: "904bdf194cd3122fc675c77fc4ac3d4ff0fd1a34"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "904bdf194cd3122fc675c77fc4ac3d4ff0fd1a34"
+            algorithm: "SHA-1"
         vcs:
           type: "git"
           url: "git+ssh://git@github.com/maxogden/concat-stream.git"
@@ -3715,12 +3905,14 @@ analyzer:
         homepage_url: "https://github.com/Raynos/console-browserify"
         binary_artifact:
           url: ""
-          hash: ""
-          hash_algorithm: ""
+          hash:
+            value: ""
+            algorithm: ""
         source_artifact:
           url: "https://registry.npmjs.org/console-browserify/-/console-browserify-1.1.0.tgz"
-          hash: "f0241c45730a9fc6323b206dbf38edc741d0bb10"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "f0241c45730a9fc6323b206dbf38edc741d0bb10"
+            algorithm: "SHA-1"
         vcs:
           type: "git"
           url: "git://github.com/Raynos/console-browserify.git"
@@ -3743,12 +3935,14 @@ analyzer:
         homepage_url: "https://github.com/isaacs/core-util-is#readme"
         binary_artifact:
           url: ""
-          hash: ""
-          hash_algorithm: ""
+          hash:
+            value: ""
+            algorithm: ""
         source_artifact:
           url: "https://registry.npmjs.org/core-util-is/-/core-util-is-1.0.2.tgz"
-          hash: "b5fd54220aa2bc5ab57aab7140c940754503c1a7"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "b5fd54220aa2bc5ab57aab7140c940754503c1a7"
+            algorithm: "SHA-1"
         vcs:
           type: "git"
           url: "git://github.com/isaacs/core-util-is.git"
@@ -3771,12 +3965,14 @@ analyzer:
         homepage_url: "https://github.com/nickmerwin/node-coveralls#readme"
         binary_artifact:
           url: ""
-          hash: ""
-          hash_algorithm: ""
+          hash:
+            value: ""
+            algorithm: ""
         source_artifact:
           url: "https://registry.npmjs.org/coveralls/-/coveralls-3.0.2.tgz"
-          hash: "f5a0bcd90ca4e64e088b710fa8dda640aea4884f"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "f5a0bcd90ca4e64e088b710fa8dda640aea4884f"
+            algorithm: "SHA-1"
         vcs:
           type: "git"
           url: "git://github.com/nickmerwin/node-coveralls.git"
@@ -3799,12 +3995,14 @@ analyzer:
         homepage_url: "https://github.com/groupon/cson-parser"
         binary_artifact:
           url: ""
-          hash: ""
-          hash_algorithm: ""
+          hash:
+            value: ""
+            algorithm: ""
         source_artifact:
           url: "https://registry.npmjs.org/cson-parser/-/cson-parser-1.3.5.tgz"
-          hash: "7ec675e039145533bf2a6a856073f1599d9c2d24"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "7ec675e039145533bf2a6a856073f1599d9c2d24"
+            algorithm: "SHA-1"
         vcs:
           type: "git"
           url: "git+ssh://git@github.com/groupon/cson-parser.git"
@@ -3828,12 +4026,14 @@ analyzer:
         homepage_url: "https://github.com/bevry/cson"
         binary_artifact:
           url: ""
-          hash: ""
-          hash_algorithm: ""
+          hash:
+            value: ""
+            algorithm: ""
         source_artifact:
           url: "https://registry.npmjs.org/cson/-/cson-4.1.0.tgz"
-          hash: "b1075344fa9d9fe5cf88d80f21d9366296b865c7"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "b1075344fa9d9fe5cf88d80f21d9366296b865c7"
+            algorithm: "SHA-1"
         vcs:
           type: "git"
           url: "git+https://github.com/bevry/cson.git"
@@ -3856,12 +4056,14 @@ analyzer:
         homepage_url: "https://github.com/fb55/css-select#readme"
         binary_artifact:
           url: ""
-          hash: ""
-          hash_algorithm: ""
+          hash:
+            value: ""
+            algorithm: ""
         source_artifact:
           url: "https://registry.npmjs.org/css-select/-/css-select-1.2.0.tgz"
-          hash: "2b3a110539c5355f1cd8d314623e870b121ec858"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "2b3a110539c5355f1cd8d314623e870b121ec858"
+            algorithm: "SHA-1"
         vcs:
           type: "git"
           url: "git://github.com/fb55/css-select.git"
@@ -3884,12 +4086,14 @@ analyzer:
         homepage_url: "https://github.com/fb55/css-what#readme"
         binary_artifact:
           url: ""
-          hash: ""
-          hash_algorithm: ""
+          hash:
+            value: ""
+            algorithm: ""
         source_artifact:
           url: "https://registry.npmjs.org/css-what/-/css-what-2.1.3.tgz"
-          hash: "a6d7604573365fe74686c3f311c56513d88285f2"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "a6d7604573365fe74686c3f311c56513d88285f2"
+            algorithm: "SHA-1"
         vcs:
           type: ""
           url: "git+https://github.com/fb55/css-what.git"
@@ -3910,12 +4114,14 @@ analyzer:
         homepage_url: "https://github.com/douglascrockford/JSON-js"
         binary_artifact:
           url: ""
-          hash: ""
-          hash_algorithm: ""
+          hash:
+            value: ""
+            algorithm: ""
         source_artifact:
           url: "https://registry.npmjs.org/cycle/-/cycle-1.0.3.tgz"
-          hash: "21e80b2be8580f98b468f379430662b046c34ad2"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "21e80b2be8580f98b468f379430662b046c34ad2"
+            algorithm: "SHA-1"
         vcs:
           type: "git"
           url: "http://github.com/dscape/cycle.git"
@@ -3938,12 +4144,14 @@ analyzer:
         homepage_url: "https://github.com/trentm/node-dashdash#readme"
         binary_artifact:
           url: ""
-          hash: ""
-          hash_algorithm: ""
+          hash:
+            value: ""
+            algorithm: ""
         source_artifact:
           url: "https://registry.npmjs.org/dashdash/-/dashdash-1.14.1.tgz"
-          hash: "853cfa0f7cbe2fed5de20326b8dd581035f6e2f0"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "853cfa0f7cbe2fed5de20326b8dd581035f6e2f0"
+            algorithm: "SHA-1"
         vcs:
           type: "git"
           url: "git://github.com/trentm/node-dashdash.git"
@@ -3966,12 +4174,14 @@ analyzer:
         homepage_url: "https://github.com/Colingo/date-now"
         binary_artifact:
           url: ""
-          hash: ""
-          hash_algorithm: ""
+          hash:
+            value: ""
+            algorithm: ""
         source_artifact:
           url: "https://registry.npmjs.org/date-now/-/date-now-0.1.4.tgz"
-          hash: "eaf439fd4d4848ad74e5cc7dbef200672b9e345b"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "eaf439fd4d4848ad74e5cc7dbef200672b9e345b"
+            algorithm: "SHA-1"
         vcs:
           type: "git"
           url: "git://github.com/Colingo/date-now.git"
@@ -3994,12 +4204,14 @@ analyzer:
         homepage_url: "https://github.com/visionmedia/debug#readme"
         binary_artifact:
           url: ""
-          hash: ""
-          hash_algorithm: ""
+          hash:
+            value: ""
+            algorithm: ""
         source_artifact:
           url: "https://registry.npmjs.org/debug/-/debug-2.6.9.tgz"
-          hash: "5d128515df134ff327e90a4c93f4e077a536341f"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "5d128515df134ff327e90a4c93f4e077a536341f"
+            algorithm: "SHA-1"
         vcs:
           type: "git"
           url: "git://github.com/visionmedia/debug.git"
@@ -4022,12 +4234,14 @@ analyzer:
         homepage_url: "https://github.com/visionmedia/debug#readme"
         binary_artifact:
           url: ""
-          hash: ""
-          hash_algorithm: ""
+          hash:
+            value: ""
+            algorithm: ""
         source_artifact:
           url: "https://registry.npmjs.org/debug/-/debug-3.1.0.tgz"
-          hash: "5bb5a0672628b64149566ba16819e61518c67261"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "5bb5a0672628b64149566ba16819e61518c67261"
+            algorithm: "SHA-1"
         vcs:
           type: "git"
           url: "git://github.com/visionmedia/debug.git"
@@ -4051,12 +4265,14 @@ analyzer:
         homepage_url: "https://github.com/thlorenz/deep-is"
         binary_artifact:
           url: ""
-          hash: ""
-          hash_algorithm: ""
+          hash:
+            value: ""
+            algorithm: ""
         source_artifact:
           url: "https://registry.npmjs.org/deep-is/-/deep-is-0.1.3.tgz"
-          hash: "b369d6fb5dbc13eecf524f91b070feedc357cf34"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "b369d6fb5dbc13eecf524f91b070feedc357cf34"
+            algorithm: "SHA-1"
         vcs:
           type: "git"
           url: "http://github.com/thlorenz/deep-is.git"
@@ -4079,12 +4295,14 @@ analyzer:
         homepage_url: "https://github.com/felixge/node-delayed-stream"
         binary_artifact:
           url: ""
-          hash: ""
-          hash_algorithm: ""
+          hash:
+            value: ""
+            algorithm: ""
         source_artifact:
           url: "https://registry.npmjs.org/delayed-stream/-/delayed-stream-1.0.0.tgz"
-          hash: "df3ae199acadfb7d440aaae0b29e2272b24ec619"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "df3ae199acadfb7d440aaae0b29e2272b24ec619"
+            algorithm: "SHA-1"
         vcs:
           type: "git"
           url: "git://github.com/felixge/node-delayed-stream.git"
@@ -4107,12 +4325,14 @@ analyzer:
         homepage_url: "https://github.com/kpdecker/jsdiff#readme"
         binary_artifact:
           url: ""
-          hash: ""
-          hash_algorithm: ""
+          hash:
+            value: ""
+            algorithm: ""
         source_artifact:
           url: "https://registry.npmjs.org/diff/-/diff-3.5.0.tgz"
-          hash: "800c0dd1e0a8bfbc95835c202ad220fe317e5a12"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "800c0dd1e0a8bfbc95835c202ad220fe317e5a12"
+            algorithm: "SHA-1"
         vcs:
           type: "git"
           url: "git://github.com/kpdecker/jsdiff.git"
@@ -4135,12 +4355,14 @@ analyzer:
         homepage_url: "https://github.com/cheeriojs/dom-renderer"
         binary_artifact:
           url: ""
-          hash: ""
-          hash_algorithm: ""
+          hash:
+            value: ""
+            algorithm: ""
         source_artifact:
           url: "https://registry.npmjs.org/dom-serializer/-/dom-serializer-0.1.0.tgz"
-          hash: "073c697546ce0780ce23be4a28e293e40bc30c82"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "073c697546ce0780ce23be4a28e293e40bc30c82"
+            algorithm: "SHA-1"
         vcs:
           type: "git"
           url: "git://github.com/cheeriojs/dom-renderer.git"
@@ -4163,12 +4385,14 @@ analyzer:
         homepage_url: "https://github.com/cheeriojs/dom-renderer#readme"
         binary_artifact:
           url: ""
-          hash: ""
-          hash_algorithm: ""
+          hash:
+            value: ""
+            algorithm: ""
         source_artifact:
           url: "https://registry.npmjs.org/dom-serializer/-/dom-serializer-0.1.1.tgz"
-          hash: "1ec4059e284babed36eec2941d4a970a189ce7c0"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "1ec4059e284babed36eec2941d4a970a189ce7c0"
+            algorithm: "SHA-1"
         vcs:
           type: "git"
           url: "git://github.com/cheeriojs/dom-renderer.git"
@@ -4189,12 +4413,14 @@ analyzer:
         homepage_url: "https://github.com/FB55/domelementtype"
         binary_artifact:
           url: ""
-          hash: ""
-          hash_algorithm: ""
+          hash:
+            value: ""
+            algorithm: ""
         source_artifact:
           url: "https://registry.npmjs.org/domelementtype/-/domelementtype-1.1.3.tgz"
-          hash: "bd28773e2642881aec51544924299c5cd822185b"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "bd28773e2642881aec51544924299c5cd822185b"
+            algorithm: "SHA-1"
         vcs:
           type: "git"
           url: "git://github.com/FB55/domelementtype.git"
@@ -4215,12 +4441,14 @@ analyzer:
         homepage_url: "https://github.com/FB55/domelementtype"
         binary_artifact:
           url: ""
-          hash: ""
-          hash_algorithm: ""
+          hash:
+            value: ""
+            algorithm: ""
         source_artifact:
           url: "https://registry.npmjs.org/domelementtype/-/domelementtype-1.3.0.tgz"
-          hash: "b17aed82e8ab59e52dd9c19b1756e0fc187204c2"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "b17aed82e8ab59e52dd9c19b1756e0fc187204c2"
+            algorithm: "SHA-1"
         vcs:
           type: "git"
           url: "git://github.com/FB55/domelementtype.git"
@@ -4243,12 +4471,14 @@ analyzer:
         homepage_url: "https://github.com/fb55/domelementtype#readme"
         binary_artifact:
           url: ""
-          hash: ""
-          hash_algorithm: ""
+          hash:
+            value: ""
+            algorithm: ""
         source_artifact:
           url: "https://registry.npmjs.org/domelementtype/-/domelementtype-1.3.1.tgz"
-          hash: "d048c44b37b0d10a7f2a3d5fee3f4333d790481f"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "d048c44b37b0d10a7f2a3d5fee3f4333d790481f"
+            algorithm: "SHA-1"
         vcs:
           type: "git"
           url: "git://github.com/fb55/domelementtype.git"
@@ -4269,12 +4499,14 @@ analyzer:
         homepage_url: "https://github.com/fb55/DomHandler"
         binary_artifact:
           url: ""
-          hash: ""
-          hash_algorithm: ""
+          hash:
+            value: ""
+            algorithm: ""
         source_artifact:
           url: "https://registry.npmjs.org/domhandler/-/domhandler-2.3.0.tgz"
-          hash: "2de59a0822d5027fabff6f032c2b25a2a8abe738"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "2de59a0822d5027fabff6f032c2b25a2a8abe738"
+            algorithm: "SHA-1"
         vcs:
           type: "git"
           url: "git://github.com/fb55/DomHandler.git"
@@ -4297,12 +4529,14 @@ analyzer:
         homepage_url: "https://github.com/fb55/DomHandler#readme"
         binary_artifact:
           url: ""
-          hash: ""
-          hash_algorithm: ""
+          hash:
+            value: ""
+            algorithm: ""
         source_artifact:
           url: "https://registry.npmjs.org/domhandler/-/domhandler-2.4.2.tgz"
-          hash: "8805097e933d65e85546f726d60f5eb88b44f803"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "8805097e933d65e85546f726d60f5eb88b44f803"
+            algorithm: "SHA-1"
         vcs:
           type: "git"
           url: "git://github.com/fb55/DomHandler.git"
@@ -4323,12 +4557,14 @@ analyzer:
         homepage_url: "https://github.com/FB55/domutils"
         binary_artifact:
           url: ""
-          hash: ""
-          hash_algorithm: ""
+          hash:
+            value: ""
+            algorithm: ""
         source_artifact:
           url: "https://registry.npmjs.org/domutils/-/domutils-1.5.1.tgz"
-          hash: "dcd8488a26f563d61079e48c9f7b7e32373682cf"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "dcd8488a26f563d61079e48c9f7b7e32373682cf"
+            algorithm: "SHA-1"
         vcs:
           type: "git"
           url: "git://github.com/FB55/domutils.git"
@@ -4353,12 +4589,14 @@ analyzer:
         homepage_url: "https://github.com/bevry/eachr"
         binary_artifact:
           url: ""
-          hash: ""
-          hash_algorithm: ""
+          hash:
+            value: ""
+            algorithm: ""
         source_artifact:
           url: "https://registry.npmjs.org/eachr/-/eachr-3.2.0.tgz"
-          hash: "2c35e43ea086516f7997cf80b7aa64d55a4a4484"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "2c35e43ea086516f7997cf80b7aa64d55a4a4484"
+            algorithm: "SHA-1"
         vcs:
           type: "git"
           url: "git+ssh://git@github.com/bevry/eachr.git"
@@ -4381,12 +4619,14 @@ analyzer:
         homepage_url: "https://github.com/quartzjer/ecc-jsbn"
         binary_artifact:
           url: ""
-          hash: ""
-          hash_algorithm: ""
+          hash:
+            value: ""
+            algorithm: ""
         source_artifact:
           url: "https://registry.npmjs.org/ecc-jsbn/-/ecc-jsbn-0.1.2.tgz"
-          hash: "3a83a904e54353287874c564b7549386849a98c9"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "3a83a904e54353287874c564b7549386849a98c9"
+            algorithm: "SHA-1"
         vcs:
           type: "git"
           url: "https://github.com/quartzjer/ecc-jsbn.git"
@@ -4410,12 +4650,14 @@ analyzer:
         homepage_url: "https://github.com/bevry/editions"
         binary_artifact:
           url: ""
-          hash: ""
-          hash_algorithm: ""
+          hash:
+            value: ""
+            algorithm: ""
         source_artifact:
           url: "https://registry.npmjs.org/editions/-/editions-1.3.4.tgz"
-          hash: "3662cb592347c3168eb8e498a0ff73271d67f50b"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "3662cb592347c3168eb8e498a0ff73271d67f50b"
+            algorithm: "SHA-1"
         vcs:
           type: "git"
           url: "git+https://github.com/bevry/editions.git"
@@ -4439,12 +4681,14 @@ analyzer:
         homepage_url: "https://github.com/bevry/editions"
         binary_artifact:
           url: ""
-          hash: ""
-          hash_algorithm: ""
+          hash:
+            value: ""
+            algorithm: ""
         source_artifact:
           url: "https://registry.npmjs.org/editions/-/editions-2.1.3.tgz"
-          hash: "727ccf3ec2c7b12dcc652c71000f16c4824d6f7d"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "727ccf3ec2c7b12dcc652c71000f16c4824d6f7d"
+            algorithm: "SHA-1"
         vcs:
           type: "git"
           url: "git+https://github.com/bevry/editions.git"
@@ -4467,12 +4711,14 @@ analyzer:
         homepage_url: "https://github.com/fb55/node-entities"
         binary_artifact:
           url: ""
-          hash: ""
-          hash_algorithm: ""
+          hash:
+            value: ""
+            algorithm: ""
         source_artifact:
           url: "https://registry.npmjs.org/entities/-/entities-1.0.0.tgz"
-          hash: "b2987aa3821347fcde642b24fdfc9e4fb712bf26"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "b2987aa3821347fcde642b24fdfc9e4fb712bf26"
+            algorithm: "SHA-1"
         vcs:
           type: "git"
           url: "git://github.com/fb55/node-entities.git"
@@ -4495,12 +4741,14 @@ analyzer:
         homepage_url: "https://github.com/fb55/node-entities"
         binary_artifact:
           url: ""
-          hash: ""
-          hash_algorithm: ""
+          hash:
+            value: ""
+            algorithm: ""
         source_artifact:
           url: "https://registry.npmjs.org/entities/-/entities-1.1.1.tgz"
-          hash: "6e5c2d0a5621b5dadaecef80b90edfb5cd7772f0"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "6e5c2d0a5621b5dadaecef80b90edfb5cd7772f0"
+            algorithm: "SHA-1"
         vcs:
           type: "git"
           url: "git://github.com/fb55/node-entities.git"
@@ -4523,12 +4771,14 @@ analyzer:
         homepage_url: "https://github.com/fb55/entities#readme"
         binary_artifact:
           url: ""
-          hash: ""
-          hash_algorithm: ""
+          hash:
+            value: ""
+            algorithm: ""
         source_artifact:
           url: "https://registry.npmjs.org/entities/-/entities-1.1.2.tgz"
-          hash: "bdfa735299664dfafd34529ed4f8522a275fea56"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "bdfa735299664dfafd34529ed4f8522a275fea56"
+            algorithm: "SHA-1"
         vcs:
           type: "git"
           url: "git://github.com/fb55/entities.git"
@@ -4552,12 +4802,14 @@ analyzer:
         homepage_url: "https://github.com/bevry/errlop"
         binary_artifact:
           url: ""
-          hash: ""
-          hash_algorithm: ""
+          hash:
+            value: ""
+            algorithm: ""
         source_artifact:
           url: "https://registry.npmjs.org/errlop/-/errlop-1.1.1.tgz"
-          hash: "d9ae4c76c3e64956c5d79e6e035d6343bfd62250"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "d9ae4c76c3e64956c5d79e6e035d6343bfd62250"
+            algorithm: "SHA-1"
         vcs:
           type: "git"
           url: "git+https://github.com/bevry/errlop.git"
@@ -4581,12 +4833,14 @@ analyzer:
         homepage_url: "https://github.com/stefanpenner/es6-promise#readme"
         binary_artifact:
           url: ""
-          hash: ""
-          hash_algorithm: ""
+          hash:
+            value: ""
+            algorithm: ""
         source_artifact:
           url: "https://registry.npmjs.org/es6-promise/-/es6-promise-4.2.5.tgz"
-          hash: "da6d0d5692efb461e082c14817fe2427d8f5d054"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "da6d0d5692efb461e082c14817fe2427d8f5d054"
+            algorithm: "SHA-1"
         vcs:
           type: "git"
           url: "git://github.com/stefanpenner/es6-promise.git"
@@ -4609,12 +4863,14 @@ analyzer:
         homepage_url: "https://github.com/sindresorhus/escape-string-regexp"
         binary_artifact:
           url: ""
-          hash: ""
-          hash_algorithm: ""
+          hash:
+            value: ""
+            algorithm: ""
         source_artifact:
           url: "https://registry.npmjs.org/escape-string-regexp/-/escape-string-regexp-1.0.5.tgz"
-          hash: "1b61c0562190a8dff6ae3bb2cf0200ca130b86d4"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "1b61c0562190a8dff6ae3bb2cf0200ca130b86d4"
+            algorithm: "SHA-1"
         vcs:
           type: "git"
           url: "https://github.com/sindresorhus/escape-string-regexp"
@@ -4637,12 +4893,14 @@ analyzer:
         homepage_url: "http://github.com/estools/escodegen"
         binary_artifact:
           url: ""
-          hash: ""
-          hash_algorithm: ""
+          hash:
+            value: ""
+            algorithm: ""
         source_artifact:
           url: "https://registry.npmjs.org/escodegen/-/escodegen-1.8.1.tgz"
-          hash: "5a5b53af4693110bebb0867aa3430dd3b70a1018"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "5a5b53af4693110bebb0867aa3430dd3b70a1018"
+            algorithm: "SHA-1"
         vcs:
           type: "git"
           url: "git+ssh://git@github.com/estools/escodegen.git"
@@ -4665,12 +4923,14 @@ analyzer:
         homepage_url: "http://esprima.org"
         binary_artifact:
           url: ""
-          hash: ""
-          hash_algorithm: ""
+          hash:
+            value: ""
+            algorithm: ""
         source_artifact:
           url: "https://registry.npmjs.org/esprima/-/esprima-2.7.3.tgz"
-          hash: "96e3b70d5779f6ad49cd032673d1c312767ba581"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "96e3b70d5779f6ad49cd032673d1c312767ba581"
+            algorithm: "SHA-1"
         vcs:
           type: "git"
           url: "git+https://github.com/jquery/esprima.git"
@@ -4693,12 +4953,14 @@ analyzer:
         homepage_url: "http://esprima.org"
         binary_artifact:
           url: ""
-          hash: ""
-          hash_algorithm: ""
+          hash:
+            value: ""
+            algorithm: ""
         source_artifact:
           url: "https://registry.npmjs.org/esprima/-/esprima-4.0.1.tgz"
-          hash: "13b04cdb3e6c5d19df91ab6987a8695619b0aa71"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "13b04cdb3e6c5d19df91ab6987a8695619b0aa71"
+            algorithm: "SHA-1"
         vcs:
           type: "git"
           url: "git+https://github.com/jquery/esprima.git"
@@ -4721,12 +4983,14 @@ analyzer:
         homepage_url: "https://github.com/estools/estraverse"
         binary_artifact:
           url: ""
-          hash: ""
-          hash_algorithm: ""
+          hash:
+            value: ""
+            algorithm: ""
         source_artifact:
           url: "https://registry.npmjs.org/estraverse/-/estraverse-1.9.3.tgz"
-          hash: "af67f2dc922582415950926091a4005d29c9bb44"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "af67f2dc922582415950926091a4005d29c9bb44"
+            algorithm: "SHA-1"
         vcs:
           type: "git"
           url: "http://github.com/estools/estraverse.git"
@@ -4749,12 +5013,14 @@ analyzer:
         homepage_url: "https://github.com/estools/esutils"
         binary_artifact:
           url: ""
-          hash: ""
-          hash_algorithm: ""
+          hash:
+            value: ""
+            algorithm: ""
         source_artifact:
           url: "https://registry.npmjs.org/esutils/-/esutils-2.0.2.tgz"
-          hash: "0abf4f1caa5bcb1f7a9d8acc6dea4faaa04bac9b"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "0abf4f1caa5bcb1f7a9d8acc6dea4faaa04bac9b"
+            algorithm: "SHA-1"
         vcs:
           type: "git"
           url: "http://github.com/estools/esutils.git"
@@ -4778,12 +5044,14 @@ analyzer:
         homepage_url: "https://github.com/cowboy/node-exit"
         binary_artifact:
           url: ""
-          hash: ""
-          hash_algorithm: ""
+          hash:
+            value: ""
+            algorithm: ""
         source_artifact:
           url: "https://registry.npmjs.org/exit/-/exit-0.1.2.tgz"
-          hash: "0632638f8d877cc82107d30a0fff1a17cba1cd0c"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "0632638f8d877cc82107d30a0fff1a17cba1cd0c"
+            algorithm: "SHA-1"
         vcs:
           type: "git"
           url: "git://github.com/cowboy/node-exit.git"
@@ -4806,12 +5074,14 @@ analyzer:
         homepage_url: "https://github.com/justmoon/node-extend#readme"
         binary_artifact:
           url: ""
-          hash: ""
-          hash_algorithm: ""
+          hash:
+            value: ""
+            algorithm: ""
         source_artifact:
           url: "https://registry.npmjs.org/extend/-/extend-3.0.2.tgz"
-          hash: "f8b1136b4071fbd8eb140aff858b1019ec2915fa"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "f8b1136b4071fbd8eb140aff858b1019ec2915fa"
+            algorithm: "SHA-1"
         vcs:
           type: "git"
           url: "git+https://github.com/justmoon/node-extend.git"
@@ -4835,12 +5105,14 @@ analyzer:
         homepage_url: "https://github.com/bevry/extract-opts"
         binary_artifact:
           url: ""
-          hash: ""
-          hash_algorithm: ""
+          hash:
+            value: ""
+            algorithm: ""
         source_artifact:
           url: "https://registry.npmjs.org/extract-opts/-/extract-opts-3.3.1.tgz"
-          hash: "5abbedc98c0d5202e3278727f9192d7e086c6be1"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "5abbedc98c0d5202e3278727f9192d7e086c6be1"
+            algorithm: "SHA-1"
         vcs:
           type: "git"
           url: "git+ssh://git@github.com/bevry/extract-opts.git"
@@ -4863,12 +5135,14 @@ analyzer:
         homepage_url: "https://github.com/maxogden/extract-zip#readme"
         binary_artifact:
           url: ""
-          hash: ""
-          hash_algorithm: ""
+          hash:
+            value: ""
+            algorithm: ""
         source_artifact:
           url: "https://registry.npmjs.org/extract-zip/-/extract-zip-1.6.7.tgz"
-          hash: "a840b4b8af6403264c8db57f4f1a74333ef81fe9"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "a840b4b8af6403264c8db57f4f1a74333ef81fe9"
+            algorithm: "SHA-1"
         vcs:
           type: "git"
           url: "git+https://github.com/maxogden/extract-zip.git"
@@ -4891,12 +5165,14 @@ analyzer:
         homepage_url: "https://github.com/davepacheco/node-extsprintf"
         binary_artifact:
           url: ""
-          hash: ""
-          hash_algorithm: ""
+          hash:
+            value: ""
+            algorithm: ""
         source_artifact:
           url: "https://registry.npmjs.org/extsprintf/-/extsprintf-1.3.0.tgz"
-          hash: "96918440e3041a7a414f8c52e3c574eb3c3e1e05"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "96918440e3041a7a414f8c52e3c574eb3c3e1e05"
+            algorithm: "SHA-1"
         vcs:
           type: "git"
           url: "git://github.com/davepacheco/node-extsprintf.git"
@@ -4917,12 +5193,14 @@ analyzer:
         homepage_url: ""
         binary_artifact:
           url: ""
-          hash: ""
-          hash_algorithm: ""
+          hash:
+            value: ""
+            algorithm: ""
         source_artifact:
           url: "https://registry.npmjs.org/eyes/-/eyes-0.1.8.tgz"
-          hash: "62cf120234c683785d902348a800ef3e0cc20bc0"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "62cf120234c683785d902348a800ef3e0cc20bc0"
+            algorithm: "SHA-1"
         vcs:
           type: ""
           url: ""
@@ -4945,12 +5223,14 @@ analyzer:
         homepage_url: "https://github.com/epoberezkin/fast-deep-equal#readme"
         binary_artifact:
           url: ""
-          hash: ""
-          hash_algorithm: ""
+          hash:
+            value: ""
+            algorithm: ""
         source_artifact:
           url: "https://registry.npmjs.org/fast-deep-equal/-/fast-deep-equal-1.1.0.tgz"
-          hash: "c053477817c86b51daa853c81e059b733d023614"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "c053477817c86b51daa853c81e059b733d023614"
+            algorithm: "SHA-1"
         vcs:
           type: "git"
           url: "git+https://github.com/epoberezkin/fast-deep-equal.git"
@@ -4974,12 +5254,14 @@ analyzer:
         homepage_url: "https://github.com/epoberezkin/fast-json-stable-stringify"
         binary_artifact:
           url: ""
-          hash: ""
-          hash_algorithm: ""
+          hash:
+            value: ""
+            algorithm: ""
         source_artifact:
           url: "https://registry.npmjs.org/fast-json-stable-stringify/-/fast-json-stable-stringify-2.0.0.tgz"
-          hash: "d5142c0caee6b1189f87d3a76111064f86c8bbf2"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "d5142c0caee6b1189f87d3a76111064f86c8bbf2"
+            algorithm: "SHA-1"
         vcs:
           type: "git"
           url: "git://github.com/epoberezkin/fast-json-stable-stringify.git"
@@ -5003,12 +5285,14 @@ analyzer:
         homepage_url: "https://github.com/hiddentao/fast-levenshtein#readme"
         binary_artifact:
           url: ""
-          hash: ""
-          hash_algorithm: ""
+          hash:
+            value: ""
+            algorithm: ""
         source_artifact:
           url: "https://registry.npmjs.org/fast-levenshtein/-/fast-levenshtein-2.0.6.tgz"
-          hash: "3d8a5c66883a16a30ca8643e851f19baa7797917"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "3d8a5c66883a16a30ca8643e851f19baa7797917"
+            algorithm: "SHA-1"
         vcs:
           type: "git"
           url: "git+https://github.com/hiddentao/fast-levenshtein.git"
@@ -5032,12 +5316,14 @@ analyzer:
         homepage_url: ""
         binary_artifact:
           url: ""
-          hash: ""
-          hash_algorithm: ""
+          hash:
+            value: ""
+            algorithm: ""
         source_artifact:
           url: "https://registry.npmjs.org/fd-slicer/-/fd-slicer-1.0.1.tgz"
-          hash: "8b5bcbd9ec327c5041bf9ab023fd6750f1177e65"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "8b5bcbd9ec327c5041bf9ab023fd6750f1177e65"
+            algorithm: "SHA-1"
         vcs:
           type: "git"
           url: "git://github.com/andrewrk/node-fd-slicer.git"
@@ -5061,12 +5347,14 @@ analyzer:
         homepage_url: "https://github.com/mikeal/forever-agent"
         binary_artifact:
           url: ""
-          hash: ""
-          hash_algorithm: ""
+          hash:
+            value: ""
+            algorithm: ""
         source_artifact:
           url: "https://registry.npmjs.org/forever-agent/-/forever-agent-0.6.1.tgz"
-          hash: "fbc71f0c41adeb37f96c577ad1ed42d8fdacca91"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "fbc71f0c41adeb37f96c577ad1ed42d8fdacca91"
+            algorithm: "SHA-1"
         vcs:
           type: ""
           url: "https://github.com/mikeal/forever-agent"
@@ -5090,12 +5378,14 @@ analyzer:
         homepage_url: "https://github.com/form-data/form-data#readme"
         binary_artifact:
           url: ""
-          hash: ""
-          hash_algorithm: ""
+          hash:
+            value: ""
+            algorithm: ""
         source_artifact:
           url: "https://registry.npmjs.org/form-data/-/form-data-2.3.3.tgz"
-          hash: "dcce52c05f644f298c6a7ab936bd724ceffbf3a6"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "dcce52c05f644f298c6a7ab936bd724ceffbf3a6"
+            algorithm: "SHA-1"
         vcs:
           type: "git"
           url: "git://github.com/form-data/form-data.git"
@@ -5119,12 +5409,14 @@ analyzer:
         homepage_url: "https://github.com/jprichardson/node-fs-extra"
         binary_artifact:
           url: ""
-          hash: ""
-          hash_algorithm: ""
+          hash:
+            value: ""
+            algorithm: ""
         source_artifact:
           url: "https://registry.npmjs.org/fs-extra/-/fs-extra-1.0.0.tgz"
-          hash: "cd3ce5f7e7cb6145883fcae3191e9877f8587950"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "cd3ce5f7e7cb6145883fcae3191e9877f8587950"
+            algorithm: "SHA-1"
         vcs:
           type: "git"
           url: "git+https://github.com/jprichardson/node-fs-extra.git"
@@ -5148,12 +5440,14 @@ analyzer:
         homepage_url: "https://github.com/isaacs/fs.realpath#readme"
         binary_artifact:
           url: ""
-          hash: ""
-          hash_algorithm: ""
+          hash:
+            value: ""
+            algorithm: ""
         source_artifact:
           url: "https://registry.npmjs.org/fs.realpath/-/fs.realpath-1.0.0.tgz"
-          hash: "1504ad2523158caa40db4a2787cb01411994ea4f"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "1504ad2523158caa40db4a2787cb01411994ea4f"
+            algorithm: "SHA-1"
         vcs:
           type: "git"
           url: "git+https://github.com/isaacs/fs.realpath.git"
@@ -5176,12 +5470,14 @@ analyzer:
         homepage_url: "https://github.com/arekinath/node-getpass#readme"
         binary_artifact:
           url: ""
-          hash: ""
-          hash_algorithm: ""
+          hash:
+            value: ""
+            algorithm: ""
         source_artifact:
           url: "https://registry.npmjs.org/getpass/-/getpass-0.1.7.tgz"
-          hash: "5eff8e3e684d569ae4cb2b1282604e8ba62149fa"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "5eff8e3e684d569ae4cb2b1282604e8ba62149fa"
+            algorithm: "SHA-1"
         vcs:
           type: "git"
           url: "git+https://github.com/arekinath/node-getpass.git"
@@ -5204,12 +5500,14 @@ analyzer:
         homepage_url: "https://github.com/isaacs/node-glob#readme"
         binary_artifact:
           url: ""
-          hash: ""
-          hash_algorithm: ""
+          hash:
+            value: ""
+            algorithm: ""
         source_artifact:
           url: "https://registry.npmjs.org/glob/-/glob-5.0.15.tgz"
-          hash: "1bc936b9e02f4a603fcc222ecf7633d30b8b93b1"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "1bc936b9e02f4a603fcc222ecf7633d30b8b93b1"
+            algorithm: "SHA-1"
         vcs:
           type: "git"
           url: "git://github.com/isaacs/node-glob.git"
@@ -5232,12 +5530,14 @@ analyzer:
         homepage_url: "https://github.com/isaacs/node-glob#readme"
         binary_artifact:
           url: ""
-          hash: ""
-          hash_algorithm: ""
+          hash:
+            value: ""
+            algorithm: ""
         source_artifact:
           url: "https://registry.npmjs.org/glob/-/glob-7.1.2.tgz"
-          hash: "c19c9df9a028702d678612384a6552404c636d15"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "c19c9df9a028702d678612384a6552404c636d15"
+            algorithm: "SHA-1"
         vcs:
           type: "git"
           url: "git://github.com/isaacs/node-glob.git"
@@ -5260,12 +5560,14 @@ analyzer:
         homepage_url: "https://github.com/isaacs/node-glob#readme"
         binary_artifact:
           url: ""
-          hash: ""
-          hash_algorithm: ""
+          hash:
+            value: ""
+            algorithm: ""
         source_artifact:
           url: "https://registry.npmjs.org/glob/-/glob-7.1.3.tgz"
-          hash: "3960832d3f1574108342dafd3a67b332c0969df1"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "3960832d3f1574108342dafd3a67b332c0969df1"
+            algorithm: "SHA-1"
         vcs:
           type: "git"
           url: "git://github.com/isaacs/node-glob.git"
@@ -5288,12 +5590,14 @@ analyzer:
         homepage_url: "https://github.com/isaacs/node-graceful-fs#readme"
         binary_artifact:
           url: ""
-          hash: ""
-          hash_algorithm: ""
+          hash:
+            value: ""
+            algorithm: ""
         source_artifact:
           url: "https://registry.npmjs.org/graceful-fs/-/graceful-fs-4.1.11.tgz"
-          hash: "0e8bdfe4d1ddb8854d64e04ea7c00e2a026e5658"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "0e8bdfe4d1ddb8854d64e04ea7c00e2a026e5658"
+            algorithm: "SHA-1"
         vcs:
           type: "git"
           url: "git+https://github.com/isaacs/node-graceful-fs.git"
@@ -5316,12 +5620,14 @@ analyzer:
         homepage_url: "https://github.com/isaacs/node-graceful-fs#readme"
         binary_artifact:
           url: ""
-          hash: ""
-          hash_algorithm: ""
+          hash:
+            value: ""
+            algorithm: ""
         source_artifact:
           url: "https://registry.npmjs.org/graceful-fs/-/graceful-fs-4.1.15.tgz"
-          hash: "ffb703e1066e8a0eeaa4c8b80ba9253eeefbfb00"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "ffb703e1066e8a0eeaa4c8b80ba9253eeefbfb00"
+            algorithm: "SHA-1"
         vcs:
           type: "git"
           url: "git+https://github.com/isaacs/node-graceful-fs.git"
@@ -5344,12 +5650,14 @@ analyzer:
         homepage_url: "https://github.com/tj/node-growl#readme"
         binary_artifact:
           url: ""
-          hash: ""
-          hash_algorithm: ""
+          hash:
+            value: ""
+            algorithm: ""
         source_artifact:
           url: "https://registry.npmjs.org/growl/-/growl-1.10.5.tgz"
-          hash: "f2735dc2283674fa67478b10181059355c369e5e"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "f2735dc2283674fa67478b10181059355c369e5e"
+            algorithm: "SHA-1"
         vcs:
           type: "git"
           url: "git://github.com/tj/node-growl.git"
@@ -5373,12 +5681,14 @@ analyzer:
         homepage_url: "http://www.handlebarsjs.com/"
         binary_artifact:
           url: ""
-          hash: ""
-          hash_algorithm: ""
+          hash:
+            value: ""
+            algorithm: ""
         source_artifact:
           url: "https://registry.npmjs.org/handlebars/-/handlebars-4.0.12.tgz"
-          hash: "2c15c8a96d46da5e266700518ba8cb8d919d5bc5"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "2c15c8a96d46da5e266700518ba8cb8d919d5bc5"
+            algorithm: "SHA-1"
         vcs:
           type: "git"
           url: "git+https://github.com/wycats/handlebars.js.git"
@@ -5401,12 +5711,14 @@ analyzer:
         homepage_url: "https://github.com/ahmadnassri/har-schema"
         binary_artifact:
           url: ""
-          hash: ""
-          hash_algorithm: ""
+          hash:
+            value: ""
+            algorithm: ""
         source_artifact:
           url: "https://registry.npmjs.org/har-schema/-/har-schema-2.0.0.tgz"
-          hash: "a94c2224ebcac04782a0d9035521f24735b7ec92"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "a94c2224ebcac04782a0d9035521f24735b7ec92"
+            algorithm: "SHA-1"
         vcs:
           type: "git"
           url: "git+https://github.com/ahmadnassri/har-schema.git"
@@ -5429,12 +5741,14 @@ analyzer:
         homepage_url: "https://github.com/ahmadnassri/har-validator"
         binary_artifact:
           url: ""
-          hash: ""
-          hash_algorithm: ""
+          hash:
+            value: ""
+            algorithm: ""
         source_artifact:
           url: "https://registry.npmjs.org/har-validator/-/har-validator-5.1.0.tgz"
-          hash: "44657f5688a22cfd4b72486e81b3a3fb11742c29"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "44657f5688a22cfd4b72486e81b3a3fb11742c29"
+            algorithm: "SHA-1"
         vcs:
           type: "git"
           url: "git+https://github.com/ahmadnassri/har-validator.git"
@@ -5457,12 +5771,14 @@ analyzer:
         homepage_url: "https://github.com/sindresorhus/has-flag#readme"
         binary_artifact:
           url: ""
-          hash: ""
-          hash_algorithm: ""
+          hash:
+            value: ""
+            algorithm: ""
         source_artifact:
           url: "https://registry.npmjs.org/has-flag/-/has-flag-1.0.0.tgz"
-          hash: "9d9e793165ce017a00f00418c43f942a7b1d11fa"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "9d9e793165ce017a00f00418c43f942a7b1d11fa"
+            algorithm: "SHA-1"
         vcs:
           type: "git"
           url: "git+https://github.com/sindresorhus/has-flag.git"
@@ -5485,12 +5801,14 @@ analyzer:
         homepage_url: "https://github.com/sindresorhus/has-flag#readme"
         binary_artifact:
           url: ""
-          hash: ""
-          hash_algorithm: ""
+          hash:
+            value: ""
+            algorithm: ""
         source_artifact:
           url: "https://registry.npmjs.org/has-flag/-/has-flag-3.0.0.tgz"
-          hash: "b5d454dc2199ae225699f3467e5a07f3b955bafd"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "b5d454dc2199ae225699f3467e5a07f3b955bafd"
+            algorithm: "SHA-1"
         vcs:
           type: "git"
           url: "git+https://github.com/sindresorhus/has-flag.git"
@@ -5513,12 +5831,14 @@ analyzer:
         homepage_url: "https://github.com/sindresorhus/hasha"
         binary_artifact:
           url: ""
-          hash: ""
-          hash_algorithm: ""
+          hash:
+            value: ""
+            algorithm: ""
         source_artifact:
           url: "https://registry.npmjs.org/hasha/-/hasha-2.2.0.tgz"
-          hash: "78d7cbfc1e6d66303fe79837365984517b2f6ee1"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "78d7cbfc1e6d66303fe79837365984517b2f6ee1"
+            algorithm: "SHA-1"
         vcs:
           type: "git"
           url: "https://github.com/sindresorhus/hasha"
@@ -5541,12 +5861,14 @@ analyzer:
         homepage_url: "https://mths.be/he"
         binary_artifact:
           url: ""
-          hash: ""
-          hash_algorithm: ""
+          hash:
+            value: ""
+            algorithm: ""
         source_artifact:
           url: "https://registry.npmjs.org/he/-/he-1.1.1.tgz"
-          hash: "93410fd21b009735151f8868c2f271f3427e23fd"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "93410fd21b009735151f8868c2f271f3427e23fd"
+            algorithm: "SHA-1"
         vcs:
           type: "git"
           url: "git+https://github.com/mathiasbynens/he.git"
@@ -5569,12 +5891,14 @@ analyzer:
         homepage_url: "https://github.com/fb55/htmlparser2#readme"
         binary_artifact:
           url: ""
-          hash: ""
-          hash_algorithm: ""
+          hash:
+            value: ""
+            algorithm: ""
         source_artifact:
           url: "https://registry.npmjs.org/htmlparser2/-/htmlparser2-3.10.1.tgz"
-          hash: "bd679dc3f59897b6a34bb10749c855bb53a9392f"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "bd679dc3f59897b6a34bb10749c855bb53a9392f"
+            algorithm: "SHA-1"
         vcs:
           type: "git"
           url: "git://github.com/fb55/htmlparser2.git"
@@ -5597,12 +5921,14 @@ analyzer:
         homepage_url: "https://github.com/fb55/htmlparser2#readme"
         binary_artifact:
           url: ""
-          hash: ""
-          hash_algorithm: ""
+          hash:
+            value: ""
+            algorithm: ""
         source_artifact:
           url: "https://registry.npmjs.org/htmlparser2/-/htmlparser2-3.8.3.tgz"
-          hash: "996c28b191516a8be86501a7d79757e5c70c1068"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "996c28b191516a8be86501a7d79757e5c70c1068"
+            algorithm: "SHA-1"
         vcs:
           type: "git"
           url: "git://github.com/fb55/htmlparser2.git"
@@ -5625,12 +5951,14 @@ analyzer:
         homepage_url: "https://github.com/joyent/node-http-signature/"
         binary_artifact:
           url: ""
-          hash: ""
-          hash_algorithm: ""
+          hash:
+            value: ""
+            algorithm: ""
         source_artifact:
           url: "https://registry.npmjs.org/http-signature/-/http-signature-1.2.0.tgz"
-          hash: "9aecd925114772f3d95b65a60abb8f7c18fbace1"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "9aecd925114772f3d95b65a60abb8f7c18fbace1"
+            algorithm: "SHA-1"
         vcs:
           type: "git"
           url: "git://github.com/joyent/node-http-signature.git"
@@ -5653,12 +5981,14 @@ analyzer:
         homepage_url: "https://github.com/isaacs/inflight"
         binary_artifact:
           url: ""
-          hash: ""
-          hash_algorithm: ""
+          hash:
+            value: ""
+            algorithm: ""
         source_artifact:
           url: "https://registry.npmjs.org/inflight/-/inflight-1.0.6.tgz"
-          hash: "49bd6331d7d02d0c09bc910a1075ba8165b56df9"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "49bd6331d7d02d0c09bc910a1075ba8165b56df9"
+            algorithm: "SHA-1"
         vcs:
           type: "git"
           url: "git+https://github.com/npm/inflight.git"
@@ -5682,12 +6012,14 @@ analyzer:
         homepage_url: "https://github.com/isaacs/inherits#readme"
         binary_artifact:
           url: ""
-          hash: ""
-          hash_algorithm: ""
+          hash:
+            value: ""
+            algorithm: ""
         source_artifact:
           url: "https://registry.npmjs.org/inherits/-/inherits-2.0.3.tgz"
-          hash: "633c2c83e3da42a502f52466022480f4208261de"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "633c2c83e3da42a502f52466022480f4208261de"
+            algorithm: "SHA-1"
         vcs:
           type: "git"
           url: "git://github.com/isaacs/inherits.git"
@@ -5710,12 +6042,14 @@ analyzer:
         homepage_url: "https://github.com/sindresorhus/is-stream#readme"
         binary_artifact:
           url: ""
-          hash: ""
-          hash_algorithm: ""
+          hash:
+            value: ""
+            algorithm: ""
         source_artifact:
           url: "https://registry.npmjs.org/is-stream/-/is-stream-1.1.0.tgz"
-          hash: "12d4a3dd4e68e0b79ceb8dbc84173ae80d91ca44"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "12d4a3dd4e68e0b79ceb8dbc84173ae80d91ca44"
+            algorithm: "SHA-1"
         vcs:
           type: "git"
           url: "git+https://github.com/sindresorhus/is-stream.git"
@@ -5738,12 +6072,14 @@ analyzer:
         homepage_url: "https://github.com/hughsk/is-typedarray"
         binary_artifact:
           url: ""
-          hash: ""
-          hash_algorithm: ""
+          hash:
+            value: ""
+            algorithm: ""
         source_artifact:
           url: "https://registry.npmjs.org/is-typedarray/-/is-typedarray-1.0.0.tgz"
-          hash: "e479c80858df0c1b11ddda6940f96011fcda4a9a"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "e479c80858df0c1b11ddda6940f96011fcda4a9a"
+            algorithm: "SHA-1"
         vcs:
           type: "git"
           url: "git://github.com/hughsk/is-typedarray.git"
@@ -5766,12 +6102,14 @@ analyzer:
         homepage_url: "https://github.com/juliangruber/isarray"
         binary_artifact:
           url: ""
-          hash: ""
-          hash_algorithm: ""
+          hash:
+            value: ""
+            algorithm: ""
         source_artifact:
           url: "https://registry.npmjs.org/isarray/-/isarray-0.0.1.tgz"
-          hash: "8a18acfca9a8f4177e09abfc6038939b05d1eedf"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "8a18acfca9a8f4177e09abfc6038939b05d1eedf"
+            algorithm: "SHA-1"
         vcs:
           type: "git"
           url: "git://github.com/juliangruber/isarray.git"
@@ -5794,12 +6132,14 @@ analyzer:
         homepage_url: "https://github.com/juliangruber/isarray"
         binary_artifact:
           url: ""
-          hash: ""
-          hash_algorithm: ""
+          hash:
+            value: ""
+            algorithm: ""
         source_artifact:
           url: "https://registry.npmjs.org/isarray/-/isarray-1.0.0.tgz"
-          hash: "bb935d48582cba168c06834957a54a3e07124f11"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "bb935d48582cba168c06834957a54a3e07124f11"
+            algorithm: "SHA-1"
         vcs:
           type: "git"
           url: "git://github.com/juliangruber/isarray.git"
@@ -5822,12 +6162,14 @@ analyzer:
         homepage_url: "https://github.com/isaacs/isexe#readme"
         binary_artifact:
           url: ""
-          hash: ""
-          hash_algorithm: ""
+          hash:
+            value: ""
+            algorithm: ""
         source_artifact:
           url: "https://registry.npmjs.org/isexe/-/isexe-2.0.0.tgz"
-          hash: "e8fbf374dc556ff8947a10dcb0572d633f2cfa10"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "e8fbf374dc556ff8947a10dcb0572d633f2cfa10"
+            algorithm: "SHA-1"
         vcs:
           type: "git"
           url: "git+https://github.com/isaacs/isexe.git"
@@ -5850,12 +6192,14 @@ analyzer:
         homepage_url: "https://github.com/rvagg/isstream"
         binary_artifact:
           url: ""
-          hash: ""
-          hash_algorithm: ""
+          hash:
+            value: ""
+            algorithm: ""
         source_artifact:
           url: "https://registry.npmjs.org/isstream/-/isstream-0.1.2.tgz"
-          hash: "47e63f7af55afa6f92e1500e690eb8b8529c099a"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "47e63f7af55afa6f92e1500e690eb8b8529c099a"
+            algorithm: "SHA-1"
         vcs:
           type: "git"
           url: "https://github.com/rvagg/isstream.git"
@@ -5881,12 +6225,14 @@ analyzer:
         homepage_url: "https://github.com/gotwarlost/istanbul#readme"
         binary_artifact:
           url: ""
-          hash: ""
-          hash_algorithm: ""
+          hash:
+            value: ""
+            algorithm: ""
         source_artifact:
           url: "https://registry.npmjs.org/istanbul/-/istanbul-0.4.5.tgz"
-          hash: "65c7d73d4c4da84d4f3ac310b918fb0b8033733b"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "65c7d73d4c4da84d4f3ac310b918fb0b8033733b"
+            algorithm: "SHA-1"
         vcs:
           type: "git"
           url: "git://github.com/gotwarlost/istanbul.git"
@@ -5909,12 +6255,14 @@ analyzer:
         homepage_url: "https://github.com/nodeca/js-yaml"
         binary_artifact:
           url: ""
-          hash: ""
-          hash_algorithm: ""
+          hash:
+            value: ""
+            algorithm: ""
         source_artifact:
           url: "https://registry.npmjs.org/js-yaml/-/js-yaml-3.12.0.tgz"
-          hash: "eaed656ec8344f10f527c6bfa1b6e2244de167d1"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "eaed656ec8344f10f527c6bfa1b6e2244de167d1"
+            algorithm: "SHA-1"
         vcs:
           type: "git"
           url: "git+https://github.com/nodeca/js-yaml.git"
@@ -5939,12 +6287,14 @@ analyzer:
         homepage_url: "https://github.com/andyperlitch/jsbn#readme"
         binary_artifact:
           url: ""
-          hash: ""
-          hash_algorithm: ""
+          hash:
+            value: ""
+            algorithm: ""
         source_artifact:
           url: "https://registry.npmjs.org/jsbn/-/jsbn-0.1.1.tgz"
-          hash: "a5e654c2e5a2deb5f201d96cefbca80c0ef2f513"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "a5e654c2e5a2deb5f201d96cefbca80c0ef2f513"
+            algorithm: "SHA-1"
         vcs:
           type: "git"
           url: "git+https://github.com/andyperlitch/jsbn.git"
@@ -5967,12 +6317,14 @@ analyzer:
         homepage_url: "http://jshint.com/"
         binary_artifact:
           url: ""
-          hash: ""
-          hash_algorithm: ""
+          hash:
+            value: ""
+            algorithm: ""
         source_artifact:
           url: "https://registry.npmjs.org/jshint/-/jshint-2.9.6.tgz"
-          hash: "19b34e578095a34928fe006135a6cb70137b9c08"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "19b34e578095a34928fe006135a6cb70137b9c08"
+            algorithm: "SHA-1"
         vcs:
           type: "git"
           url: "git+https://github.com/jshint/jshint.git"
@@ -5995,12 +6347,14 @@ analyzer:
         homepage_url: "https://github.com/epoberezkin/json-schema-traverse#readme"
         binary_artifact:
           url: ""
-          hash: ""
-          hash_algorithm: ""
+          hash:
+            value: ""
+            algorithm: ""
         source_artifact:
           url: "https://registry.npmjs.org/json-schema-traverse/-/json-schema-traverse-0.3.1.tgz"
-          hash: "349a6d44c53a51de89b40805c5d5e59b417d3340"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "349a6d44c53a51de89b40805c5d5e59b417d3340"
+            algorithm: "SHA-1"
         vcs:
           type: "git"
           url: "git+https://github.com/epoberezkin/json-schema-traverse.git"
@@ -6024,12 +6378,14 @@ analyzer:
         homepage_url: "https://github.com/kriszyp/json-schema#readme"
         binary_artifact:
           url: ""
-          hash: ""
-          hash_algorithm: ""
+          hash:
+            value: ""
+            algorithm: ""
         source_artifact:
           url: "https://registry.npmjs.org/json-schema/-/json-schema-0.2.3.tgz"
-          hash: "b480c892e59a2f05954ce727bd3f2a4e882f9e13"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "b480c892e59a2f05954ce727bd3f2a4e882f9e13"
+            algorithm: "SHA-1"
         vcs:
           type: "git"
           url: "git+ssh://git@github.com/kriszyp/json-schema.git"
@@ -6052,12 +6408,14 @@ analyzer:
         homepage_url: "https://github.com/isaacs/json-stringify-safe"
         binary_artifact:
           url: ""
-          hash: ""
-          hash_algorithm: ""
+          hash:
+            value: ""
+            algorithm: ""
         source_artifact:
           url: "https://registry.npmjs.org/json-stringify-safe/-/json-stringify-safe-5.0.1.tgz"
-          hash: "1296a2d58fd45f19a0f6ce01d65701e2c735b6eb"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "1296a2d58fd45f19a0f6ce01d65701e2c735b6eb"
+            algorithm: "SHA-1"
         vcs:
           type: "git"
           url: "git://github.com/isaacs/json-stringify-safe.git"
@@ -6080,12 +6438,14 @@ analyzer:
         homepage_url: "https://github.com/jprichardson/node-jsonfile#readme"
         binary_artifact:
           url: ""
-          hash: ""
-          hash_algorithm: ""
+          hash:
+            value: ""
+            algorithm: ""
         source_artifact:
           url: "https://registry.npmjs.org/jsonfile/-/jsonfile-2.4.0.tgz"
-          hash: "3736a2b428b87bbda0cc83b53fa3d633a35c2ae8"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "3736a2b428b87bbda0cc83b53fa3d633a35c2ae8"
+            algorithm: "SHA-1"
         vcs:
           type: "git"
           url: "git+ssh://git@github.com/jprichardson/node-jsonfile.git"
@@ -6108,12 +6468,14 @@ analyzer:
         homepage_url: "https://github.com/joyent/node-jsprim#readme"
         binary_artifact:
           url: ""
-          hash: ""
-          hash_algorithm: ""
+          hash:
+            value: ""
+            algorithm: ""
         source_artifact:
           url: "https://registry.npmjs.org/jsprim/-/jsprim-1.4.1.tgz"
-          hash: "313e66bc1e5cc06e438bc1b7499c2e5c56acb6a2"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "313e66bc1e5cc06e438bc1b7499c2e5c56acb6a2"
+            algorithm: "SHA-1"
         vcs:
           type: "git"
           url: "git://github.com/joyent/node-jsprim.git"
@@ -6136,12 +6498,14 @@ analyzer:
         homepage_url: "https://github.com/Medium/kew"
         binary_artifact:
           url: ""
-          hash: ""
-          hash_algorithm: ""
+          hash:
+            value: ""
+            algorithm: ""
         source_artifact:
           url: "https://registry.npmjs.org/kew/-/kew-0.7.0.tgz"
-          hash: "79d93d2d33363d6fdd2970b335d9141ad591d79b"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "79d93d2d33363d6fdd2970b335d9141ad591d79b"
+            algorithm: "SHA-1"
         vcs:
           type: "git"
           url: "git+https://github.com/Medium/kew.git"
@@ -6164,12 +6528,14 @@ analyzer:
         homepage_url: "https://github.com/jprichardson/node-klaw#readme"
         binary_artifact:
           url: ""
-          hash: ""
-          hash_algorithm: ""
+          hash:
+            value: ""
+            algorithm: ""
         source_artifact:
           url: "https://registry.npmjs.org/klaw/-/klaw-1.3.1.tgz"
-          hash: "4088433b46b3b1ba259d78785d8e96f73ba02439"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "4088433b46b3b1ba259d78785d8e96f73ba02439"
+            algorithm: "SHA-1"
         vcs:
           type: "git"
           url: "git+https://github.com/jprichardson/node-klaw.git"
@@ -6192,12 +6558,14 @@ analyzer:
         homepage_url: "https://github.com/davglass/lcov-parse#readme"
         binary_artifact:
           url: ""
-          hash: ""
-          hash_algorithm: ""
+          hash:
+            value: ""
+            algorithm: ""
         source_artifact:
           url: "https://registry.npmjs.org/lcov-parse/-/lcov-parse-0.0.10.tgz"
-          hash: "1b0b8ff9ac9c7889250582b70b71315d9da6d9a3"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "1b0b8ff9ac9c7889250582b70b71315d9da6d9a3"
+            algorithm: "SHA-1"
         vcs:
           type: "git"
           url: "git+ssh://git@github.com/davglass/lcov-parse.git"
@@ -6221,12 +6589,14 @@ analyzer:
         homepage_url: "https://github.com/gkz/levn"
         binary_artifact:
           url: ""
-          hash: ""
-          hash_algorithm: ""
+          hash:
+            value: ""
+            algorithm: ""
         source_artifact:
           url: "https://registry.npmjs.org/levn/-/levn-0.3.0.tgz"
-          hash: "3b09924edf9f083c0490fdd4c0bc4421e04764ee"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "3b09924edf9f083c0490fdd4c0bc4421e04764ee"
+            algorithm: "SHA-1"
         vcs:
           type: "git"
           url: "git://github.com/gkz/levn.git"
@@ -6249,12 +6619,14 @@ analyzer:
         homepage_url: "https://lodash.com/"
         binary_artifact:
           url: ""
-          hash: ""
-          hash_algorithm: ""
+          hash:
+            value: ""
+            algorithm: ""
         source_artifact:
           url: "https://registry.npmjs.org/lodash/-/lodash-4.17.11.tgz"
-          hash: "b39ea6229ef607ecd89e2c8df12536891cac9b8d"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "b39ea6229ef607ecd89e2c8df12536891cac9b8d"
+            algorithm: "SHA-1"
         vcs:
           type: "git"
           url: "git+https://github.com/lodash/lodash.git"
@@ -6277,12 +6649,14 @@ analyzer:
         homepage_url: "https://github.com/cainus/logdriver"
         binary_artifact:
           url: ""
-          hash: ""
-          hash_algorithm: ""
+          hash:
+            value: ""
+            algorithm: ""
         source_artifact:
           url: "https://registry.npmjs.org/log-driver/-/log-driver-1.2.7.tgz"
-          hash: "63b95021f0702fedfa2c9bb0a24e7797d71871d8"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "63b95021f0702fedfa2c9bb0a24e7797d71871d8"
+            algorithm: "SHA-1"
         vcs:
           type: "git"
           url: "git://github.com/cainus/logdriver.git"
@@ -6305,12 +6679,14 @@ analyzer:
         homepage_url: "https://github.com/jshttp/mime-db#readme"
         binary_artifact:
           url: ""
-          hash: ""
-          hash_algorithm: ""
+          hash:
+            value: ""
+            algorithm: ""
         source_artifact:
           url: "https://registry.npmjs.org/mime-db/-/mime-db-1.37.0.tgz"
-          hash: "0b6a0ce6fdbe9576e25f1f2d2fde8830dc0ad0d8"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "0b6a0ce6fdbe9576e25f1f2d2fde8830dc0ad0d8"
+            algorithm: "SHA-1"
         vcs:
           type: "git"
           url: "git+https://github.com/jshttp/mime-db.git"
@@ -6333,12 +6709,14 @@ analyzer:
         homepage_url: "https://github.com/jshttp/mime-types#readme"
         binary_artifact:
           url: ""
-          hash: ""
-          hash_algorithm: ""
+          hash:
+            value: ""
+            algorithm: ""
         source_artifact:
           url: "https://registry.npmjs.org/mime-types/-/mime-types-2.1.21.tgz"
-          hash: "28995aa1ecb770742fe6ae7e58f9181c744b3f96"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "28995aa1ecb770742fe6ae7e58f9181c744b3f96"
+            algorithm: "SHA-1"
         vcs:
           type: "git"
           url: "git+https://github.com/jshttp/mime-types.git"
@@ -6361,12 +6739,14 @@ analyzer:
         homepage_url: "https://github.com/isaacs/minimatch#readme"
         binary_artifact:
           url: ""
-          hash: ""
-          hash_algorithm: ""
+          hash:
+            value: ""
+            algorithm: ""
         source_artifact:
           url: "https://registry.npmjs.org/minimatch/-/minimatch-3.0.4.tgz"
-          hash: "5166e286457f03306064be5497e8dbb0c3d32083"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "5166e286457f03306064be5497e8dbb0c3d32083"
+            algorithm: "SHA-1"
         vcs:
           type: "git"
           url: "git://github.com/isaacs/minimatch.git"
@@ -6389,12 +6769,14 @@ analyzer:
         homepage_url: "https://github.com/substack/minimist"
         binary_artifact:
           url: ""
-          hash: ""
-          hash_algorithm: ""
+          hash:
+            value: ""
+            algorithm: ""
         source_artifact:
           url: "https://registry.npmjs.org/minimist/-/minimist-0.0.10.tgz"
-          hash: "de3f98543dbf96082be48ad1a0c7cda836301dcf"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "de3f98543dbf96082be48ad1a0c7cda836301dcf"
+            algorithm: "SHA-1"
         vcs:
           type: "git"
           url: "git://github.com/substack/minimist.git"
@@ -6417,12 +6799,14 @@ analyzer:
         homepage_url: "https://github.com/substack/minimist"
         binary_artifact:
           url: ""
-          hash: ""
-          hash_algorithm: ""
+          hash:
+            value: ""
+            algorithm: ""
         source_artifact:
           url: "https://registry.npmjs.org/minimist/-/minimist-0.0.8.tgz"
-          hash: "857fcabfc3397d2625b8228262e86aa7a011b05d"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "857fcabfc3397d2625b8228262e86aa7a011b05d"
+            algorithm: "SHA-1"
         vcs:
           type: "git"
           url: "git://github.com/substack/minimist.git"
@@ -6445,12 +6829,14 @@ analyzer:
         homepage_url: "https://github.com/substack/minimist"
         binary_artifact:
           url: ""
-          hash: ""
-          hash_algorithm: ""
+          hash:
+            value: ""
+            algorithm: ""
         source_artifact:
           url: "https://registry.npmjs.org/minimist/-/minimist-1.2.0.tgz"
-          hash: "a35008b20f41383eec1fb914f4cd5df79a264284"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "a35008b20f41383eec1fb914f4cd5df79a264284"
+            algorithm: "SHA-1"
         vcs:
           type: "git"
           url: "git://github.com/substack/minimist.git"
@@ -6473,12 +6859,14 @@ analyzer:
         homepage_url: "https://github.com/substack/node-mkdirp#readme"
         binary_artifact:
           url: ""
-          hash: ""
-          hash_algorithm: ""
+          hash:
+            value: ""
+            algorithm: ""
         source_artifact:
           url: "https://registry.npmjs.org/mkdirp/-/mkdirp-0.5.1.tgz"
-          hash: "30057438eac6cf7f8c4767f38648d6697d75c903"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "30057438eac6cf7f8c4767f38648d6697d75c903"
+            algorithm: "SHA-1"
         vcs:
           type: "git"
           url: "git+https://github.com/substack/node-mkdirp.git"
@@ -6501,12 +6889,14 @@ analyzer:
         homepage_url: "https://github.com/StevenLooman/mocha-lcov-reporter#readme"
         binary_artifact:
           url: ""
-          hash: ""
-          hash_algorithm: ""
+          hash:
+            value: ""
+            algorithm: ""
         source_artifact:
           url: "https://registry.npmjs.org/mocha-lcov-reporter/-/mocha-lcov-reporter-1.3.0.tgz"
-          hash: "469bdef4f8afc9a116056f079df6182d0afb0384"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "469bdef4f8afc9a116056f079df6182d0afb0384"
+            algorithm: "SHA-1"
         vcs:
           type: "git"
           url: "git://github.com/StevenLooman/mocha-lcov-reporter.git"
@@ -6529,12 +6919,14 @@ analyzer:
         homepage_url: "https://mochajs.org"
         binary_artifact:
           url: ""
-          hash: ""
-          hash_algorithm: ""
+          hash:
+            value: ""
+            algorithm: ""
         source_artifact:
           url: "https://registry.npmjs.org/mocha/-/mocha-5.2.0.tgz"
-          hash: "6d8ae508f59167f940f2b5b3c4a612ae50c90ae6"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "6d8ae508f59167f940f2b5b3c4a612ae50c90ae6"
+            algorithm: "SHA-1"
         vcs:
           type: "git"
           url: "git+https://github.com/mochajs/mocha.git"
@@ -6557,12 +6949,14 @@ analyzer:
         homepage_url: "https://github.com/zeit/ms#readme"
         binary_artifact:
           url: ""
-          hash: ""
-          hash_algorithm: ""
+          hash:
+            value: ""
+            algorithm: ""
         source_artifact:
           url: "https://registry.npmjs.org/ms/-/ms-2.0.0.tgz"
-          hash: "5608aeadfc00be6c2901df5f9861788de0d597c8"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "5608aeadfc00be6c2901df5f9861788de0d597c8"
+            algorithm: "SHA-1"
         vcs:
           type: "git"
           url: "git+https://github.com/zeit/ms.git"
@@ -6586,12 +6980,14 @@ analyzer:
         homepage_url: "https://github.com/npm/nopt#readme"
         binary_artifact:
           url: ""
-          hash: ""
-          hash_algorithm: ""
+          hash:
+            value: ""
+            algorithm: ""
         source_artifact:
           url: "https://registry.npmjs.org/nopt/-/nopt-3.0.6.tgz"
-          hash: "c6465dbf08abcd4db359317f79ac68a646b28ff9"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "c6465dbf08abcd4db359317f79ac68a646b28ff9"
+            algorithm: "SHA-1"
         vcs:
           type: "git"
           url: "git+https://github.com/npm/nopt.git"
@@ -6614,12 +7010,14 @@ analyzer:
         homepage_url: "https://github.com/fb55/nth-check"
         binary_artifact:
           url: ""
-          hash: ""
-          hash_algorithm: ""
+          hash:
+            value: ""
+            algorithm: ""
         source_artifact:
           url: "https://registry.npmjs.org/nth-check/-/nth-check-1.0.2.tgz"
-          hash: "b2bd295c37e3dd58a3bf0700376663ba4d9cf05c"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "b2bd295c37e3dd58a3bf0700376663ba4d9cf05c"
+            algorithm: "SHA-1"
         vcs:
           type: "git"
           url: "git+https://github.com/fb55/nth-check.git"
@@ -6643,12 +7041,14 @@ analyzer:
         homepage_url: "https://github.com/mikeal/oauth-sign#readme"
         binary_artifact:
           url: ""
-          hash: ""
-          hash_algorithm: ""
+          hash:
+            value: ""
+            algorithm: ""
         source_artifact:
           url: "https://registry.npmjs.org/oauth-sign/-/oauth-sign-0.9.0.tgz"
-          hash: "47a7b016baa68b5fa0ecf3dee08a85c679ac6455"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "47a7b016baa68b5fa0ecf3dee08a85c679ac6455"
+            algorithm: "SHA-1"
         vcs:
           type: ""
           url: "git+https://github.com/mikeal/oauth-sign.git"
@@ -6671,12 +7071,14 @@ analyzer:
         homepage_url: "https://github.com/isaacs/once#readme"
         binary_artifact:
           url: ""
-          hash: ""
-          hash_algorithm: ""
+          hash:
+            value: ""
+            algorithm: ""
         source_artifact:
           url: "https://registry.npmjs.org/once/-/once-1.4.0.tgz"
-          hash: "583b1aa775961d4b113ac17d9c50baef9dd76bd1"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "583b1aa775961d4b113ac17d9c50baef9dd76bd1"
+            algorithm: "SHA-1"
         vcs:
           type: "git"
           url: "git://github.com/isaacs/once.git"
@@ -6700,12 +7102,14 @@ analyzer:
         homepage_url: "https://github.com/substack/node-optimist"
         binary_artifact:
           url: ""
-          hash: ""
-          hash_algorithm: ""
+          hash:
+            value: ""
+            algorithm: ""
         source_artifact:
           url: "https://registry.npmjs.org/optimist/-/optimist-0.6.1.tgz"
-          hash: "da3ea74686fa21a19a111c326e90eb15a0196686"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "da3ea74686fa21a19a111c326e90eb15a0196686"
+            algorithm: "SHA-1"
         vcs:
           type: "git"
           url: "http://github.com/substack/node-optimist.git"
@@ -6728,12 +7132,14 @@ analyzer:
         homepage_url: "https://github.com/gkz/optionator"
         binary_artifact:
           url: ""
-          hash: ""
-          hash_algorithm: ""
+          hash:
+            value: ""
+            algorithm: ""
         source_artifact:
           url: "https://registry.npmjs.org/optionator/-/optionator-0.8.2.tgz"
-          hash: "364c5e409d3f4d6301d6c0b4c05bba50180aeb64"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "364c5e409d3f4d6301d6c0b4c05bba50180aeb64"
+            algorithm: "SHA-1"
         vcs:
           type: "git"
           url: "git://github.com/gkz/optionator.git"
@@ -6757,12 +7163,14 @@ analyzer:
         homepage_url: "https://github.com/inikulin/parse5"
         binary_artifact:
           url: ""
-          hash: ""
-          hash_algorithm: ""
+          hash:
+            value: ""
+            algorithm: ""
         source_artifact:
           url: "https://registry.npmjs.org/parse5/-/parse5-3.0.3.tgz"
-          hash: "042f792ffdd36851551cf4e9e066b3874ab45b5c"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "042f792ffdd36851551cf4e9e066b3874ab45b5c"
+            algorithm: "SHA-1"
         vcs:
           type: "git"
           url: "git://github.com/inikulin/parse5.git"
@@ -6785,12 +7193,14 @@ analyzer:
         homepage_url: "https://github.com/sindresorhus/path-is-absolute#readme"
         binary_artifact:
           url: ""
-          hash: ""
-          hash_algorithm: ""
+          hash:
+            value: ""
+            algorithm: ""
         source_artifact:
           url: "https://registry.npmjs.org/path-is-absolute/-/path-is-absolute-1.0.1.tgz"
-          hash: "174b9268735534ffbc7ace6bf53a5a9e1b5c5f5f"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "174b9268735534ffbc7ace6bf53a5a9e1b5c5f5f"
+            algorithm: "SHA-1"
         vcs:
           type: "git"
           url: "git+https://github.com/sindresorhus/path-is-absolute.git"
@@ -6813,12 +7223,14 @@ analyzer:
         homepage_url: ""
         binary_artifact:
           url: ""
-          hash: ""
-          hash_algorithm: ""
+          hash:
+            value: ""
+            algorithm: ""
         source_artifact:
           url: "https://registry.npmjs.org/pend/-/pend-1.2.0.tgz"
-          hash: "7a57eb550a6783f9115331fcf4663d5c8e007a50"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "7a57eb550a6783f9115331fcf4663d5c8e007a50"
+            algorithm: "SHA-1"
         vcs:
           type: "git"
           url: "git://github.com/andrewrk/node-pend.git"
@@ -6841,12 +7253,14 @@ analyzer:
         homepage_url: "https://github.com/braveg1rl/performance-now"
         binary_artifact:
           url: ""
-          hash: ""
-          hash_algorithm: ""
+          hash:
+            value: ""
+            algorithm: ""
         source_artifact:
           url: "https://registry.npmjs.org/performance-now/-/performance-now-2.1.0.tgz"
-          hash: "6309f4e0e5fa913ec1c69307ae364b4b377c9e7b"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "6309f4e0e5fa913ec1c69307ae364b4b377c9e7b"
+            algorithm: "SHA-1"
         vcs:
           type: "git"
           url: "git://github.com/braveg1rl/performance-now.git"
@@ -6869,12 +7283,14 @@ analyzer:
         homepage_url: "https://github.com/amir20/phantomjs-node"
         binary_artifact:
           url: ""
-          hash: ""
-          hash_algorithm: ""
+          hash:
+            value: ""
+            algorithm: ""
         source_artifact:
           url: "https://registry.npmjs.org/phantom/-/phantom-4.0.12.tgz"
-          hash: "78d18cf3f2a76fea4909f6160fcabf2742d7dbf0"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "78d18cf3f2a76fea4909f6160fcabf2742d7dbf0"
+            algorithm: "SHA-1"
         vcs:
           type: "git"
           url: "git://github.com/amir20/phantomjs-node.git"
@@ -6897,12 +7313,14 @@ analyzer:
         homepage_url: "https://github.com/Medium/phantomjs"
         binary_artifact:
           url: ""
-          hash: ""
-          hash_algorithm: ""
+          hash:
+            value: ""
+            algorithm: ""
         source_artifact:
           url: "https://registry.npmjs.org/phantomjs-prebuilt/-/phantomjs-prebuilt-2.1.16.tgz"
-          hash: "efd212a4a3966d3647684ea8ba788549be2aefef"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "efd212a4a3966d3647684ea8ba788549be2aefef"
+            algorithm: "SHA-1"
         vcs:
           type: "git"
           url: "git://github.com/Medium/phantomjs.git"
@@ -6925,12 +7343,14 @@ analyzer:
         homepage_url: "https://github.com/floatdrop/pinkie-promise"
         binary_artifact:
           url: ""
-          hash: ""
-          hash_algorithm: ""
+          hash:
+            value: ""
+            algorithm: ""
         source_artifact:
           url: "https://registry.npmjs.org/pinkie-promise/-/pinkie-promise-2.0.1.tgz"
-          hash: "2135d6dfa7a358c069ac9b178776288228450ffa"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "2135d6dfa7a358c069ac9b178776288228450ffa"
+            algorithm: "SHA-1"
         vcs:
           type: "git"
           url: "https://github.com/floatdrop/pinkie-promise"
@@ -6953,12 +7373,14 @@ analyzer:
         homepage_url: ""
         binary_artifact:
           url: ""
-          hash: ""
-          hash_algorithm: ""
+          hash:
+            value: ""
+            algorithm: ""
         source_artifact:
           url: "https://registry.npmjs.org/pinkie/-/pinkie-2.0.4.tgz"
-          hash: "72556b80cfa0d48a974e80e77248e80ed4f7f870"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "72556b80cfa0d48a974e80e77248e80ed4f7f870"
+            algorithm: "SHA-1"
         vcs:
           type: ""
           url: "https://github.com/floatdrop/pinkie.git"
@@ -6983,12 +7405,14 @@ analyzer:
         homepage_url: "http://preludels.com"
         binary_artifact:
           url: ""
-          hash: ""
-          hash_algorithm: ""
+          hash:
+            value: ""
+            algorithm: ""
         source_artifact:
           url: "https://registry.npmjs.org/prelude-ls/-/prelude-ls-1.1.2.tgz"
-          hash: "21932a549f5e52ffd9a827f570e04be62a97da54"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "21932a549f5e52ffd9a827f570e04be62a97da54"
+            algorithm: "SHA-1"
         vcs:
           type: "git"
           url: "git://github.com/gkz/prelude-ls.git"
@@ -7011,12 +7435,14 @@ analyzer:
         homepage_url: "https://github.com/calvinmetcalf/process-nextick-args"
         binary_artifact:
           url: ""
-          hash: ""
-          hash_algorithm: ""
+          hash:
+            value: ""
+            algorithm: ""
         source_artifact:
           url: "https://registry.npmjs.org/process-nextick-args/-/process-nextick-args-2.0.0.tgz"
-          hash: "a37d732f4271b4ab1ad070d35508e8290788ffaa"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "a37d732f4271b4ab1ad070d35508e8290788ffaa"
+            algorithm: "SHA-1"
         vcs:
           type: "git"
           url: "git+https://github.com/calvinmetcalf/process-nextick-args.git"
@@ -7037,12 +7463,14 @@ analyzer:
         homepage_url: "https://github.com/visionmedia/node-progress"
         binary_artifact:
           url: ""
-          hash: ""
-          hash_algorithm: ""
+          hash:
+            value: ""
+            algorithm: ""
         source_artifact:
           url: "https://registry.npmjs.org/progress/-/progress-1.1.8.tgz"
-          hash: "e260c78f6161cdd9b0e56cc3e0a85de17c7a57be"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "e260c78f6161cdd9b0e56cc3e0a85de17c7a57be"
+            algorithm: "SHA-1"
         vcs:
           type: "git"
           url: "git://github.com/visionmedia/node-progress"
@@ -7065,12 +7493,14 @@ analyzer:
         homepage_url: "https://github.com/wrangr/psl#readme"
         binary_artifact:
           url: ""
-          hash: ""
-          hash_algorithm: ""
+          hash:
+            value: ""
+            algorithm: ""
         source_artifact:
           url: "https://registry.npmjs.org/psl/-/psl-1.1.29.tgz"
-          hash: "60f580d360170bb722a797cc704411e6da850c67"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "60f580d360170bb722a797cc704411e6da850c67"
+            algorithm: "SHA-1"
         vcs:
           type: "git"
           url: "git+ssh://git@github.com/wrangr/psl.git"
@@ -7094,12 +7524,14 @@ analyzer:
         homepage_url: "https://mths.be/punycode"
         binary_artifact:
           url: ""
-          hash: ""
-          hash_algorithm: ""
+          hash:
+            value: ""
+            algorithm: ""
         source_artifact:
           url: "https://registry.npmjs.org/punycode/-/punycode-1.4.1.tgz"
-          hash: "c0d5a63b2718800ad8e1eb0fa5269c84dd41845e"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "c0d5a63b2718800ad8e1eb0fa5269c84dd41845e"
+            algorithm: "SHA-1"
         vcs:
           type: "git"
           url: "git+https://github.com/bestiejs/punycode.js.git"
@@ -7123,12 +7555,14 @@ analyzer:
         homepage_url: "https://github.com/ljharb/qs"
         binary_artifact:
           url: ""
-          hash: ""
-          hash_algorithm: ""
+          hash:
+            value: ""
+            algorithm: ""
         source_artifact:
           url: "https://registry.npmjs.org/qs/-/qs-6.5.2.tgz"
-          hash: "cb3ae806e8740444584ef154ce8ee98d403f3e36"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "cb3ae806e8740444584ef154ce8ee98d403f3e36"
+            algorithm: "SHA-1"
         vcs:
           type: "git"
           url: "git+https://github.com/ljharb/qs.git"
@@ -7152,12 +7586,14 @@ analyzer:
         homepage_url: ""
         binary_artifact:
           url: ""
-          hash: ""
-          hash_algorithm: ""
+          hash:
+            value: ""
+            algorithm: ""
         source_artifact:
           url: "https://registry.npmjs.org/readable-stream/-/readable-stream-1.1.14.tgz"
-          hash: "7cf4c54ef648e3813084c636dd2079e166c081d9"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "7cf4c54ef648e3813084c636dd2079e166c081d9"
+            algorithm: "SHA-1"
         vcs:
           type: "git"
           url: "git://github.com/isaacs/readable-stream"
@@ -7180,12 +7616,14 @@ analyzer:
         homepage_url: "https://github.com/nodejs/readable-stream#readme"
         binary_artifact:
           url: ""
-          hash: ""
-          hash_algorithm: ""
+          hash:
+            value: ""
+            algorithm: ""
         source_artifact:
           url: "https://registry.npmjs.org/readable-stream/-/readable-stream-2.3.6.tgz"
-          hash: "b11c27d88b8ff1fbe070643cf94b0c79ae1b0aaf"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "b11c27d88b8ff1fbe070643cf94b0c79ae1b0aaf"
+            algorithm: "SHA-1"
         vcs:
           type: "git"
           url: "git://github.com/nodejs/readable-stream.git"
@@ -7208,12 +7646,14 @@ analyzer:
         homepage_url: "https://github.com/nodejs/readable-stream#readme"
         binary_artifact:
           url: ""
-          hash: ""
-          hash_algorithm: ""
+          hash:
+            value: ""
+            algorithm: ""
         source_artifact:
           url: "https://registry.npmjs.org/readable-stream/-/readable-stream-3.2.0.tgz"
-          hash: "de17f229864c120a9f56945756e4f32c4045245d"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "de17f229864c120a9f56945756e4f32c4045245d"
+            algorithm: "SHA-1"
         vcs:
           type: "git"
           url: "git://github.com/nodejs/readable-stream.git"
@@ -7238,12 +7678,14 @@ analyzer:
         homepage_url: "https://github.com/IndigoUnited/node-request-progress"
         binary_artifact:
           url: ""
-          hash: ""
-          hash_algorithm: ""
+          hash:
+            value: ""
+            algorithm: ""
         source_artifact:
           url: "https://registry.npmjs.org/request-progress/-/request-progress-2.0.1.tgz"
-          hash: "5d36bb57961c673aa5b788dbc8141fdf23b44e08"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "5d36bb57961c673aa5b788dbc8141fdf23b44e08"
+            algorithm: "SHA-1"
         vcs:
           type: "git"
           url: "git://github.com/IndigoUnited/node-request-progress"
@@ -7266,12 +7708,14 @@ analyzer:
         homepage_url: "https://github.com/request/request#readme"
         binary_artifact:
           url: ""
-          hash: ""
-          hash_algorithm: ""
+          hash:
+            value: ""
+            algorithm: ""
         source_artifact:
           url: "https://registry.npmjs.org/request/-/request-2.88.0.tgz"
-          hash: "9c2fca4f7d35b592efe57c7f0a55e81052124fef"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "9c2fca4f7d35b592efe57c7f0a55e81052124fef"
+            algorithm: "SHA-1"
         vcs:
           type: "git"
           url: "git+https://github.com/request/request.git"
@@ -7294,12 +7738,14 @@ analyzer:
         homepage_url: "https://github.com/bevry/requirefresh"
         binary_artifact:
           url: ""
-          hash: ""
-          hash_algorithm: ""
+          hash:
+            value: ""
+            algorithm: ""
         source_artifact:
           url: "https://registry.npmjs.org/requirefresh/-/requirefresh-2.2.0.tgz"
-          hash: "68298ae66af9da3d6843375adf8351dd29d73789"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "68298ae66af9da3d6843375adf8351dd29d73789"
+            algorithm: "SHA-1"
         vcs:
           type: "git"
           url: "git+https://github.com/bevry/requirefresh.git"
@@ -7323,12 +7769,14 @@ analyzer:
         homepage_url: "https://github.com/substack/node-resolve#readme"
         binary_artifact:
           url: ""
-          hash: ""
-          hash_algorithm: ""
+          hash:
+            value: ""
+            algorithm: ""
         source_artifact:
           url: "https://registry.npmjs.org/resolve/-/resolve-1.1.7.tgz"
-          hash: "203114d82ad2c5ed9e8e0411b3932875e889e97b"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "203114d82ad2c5ed9e8e0411b3932875e889e97b"
+            algorithm: "SHA-1"
         vcs:
           type: "git"
           url: "git://github.com/substack/node-resolve.git"
@@ -7351,12 +7799,14 @@ analyzer:
         homepage_url: "https://github.com/feross/safe-buffer"
         binary_artifact:
           url: ""
-          hash: ""
-          hash_algorithm: ""
+          hash:
+            value: ""
+            algorithm: ""
         source_artifact:
           url: "https://registry.npmjs.org/safe-buffer/-/safe-buffer-5.1.2.tgz"
-          hash: "991ec69d296e0313747d59bdfd2b745c35f8828d"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "991ec69d296e0313747d59bdfd2b745c35f8828d"
+            algorithm: "SHA-1"
         vcs:
           type: "git"
           url: "git://github.com/feross/safe-buffer.git"
@@ -7380,12 +7830,14 @@ analyzer:
         homepage_url: "https://github.com/bevry/safefs"
         binary_artifact:
           url: ""
-          hash: ""
-          hash_algorithm: ""
+          hash:
+            value: ""
+            algorithm: ""
         source_artifact:
           url: "https://registry.npmjs.org/safefs/-/safefs-4.1.0.tgz"
-          hash: "f82aeb4bdd7ae51f653eb20f6728b3058c8d6445"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "f82aeb4bdd7ae51f653eb20f6728b3058c8d6445"
+            algorithm: "SHA-1"
         vcs:
           type: "git"
           url: "git+ssh://git@github.com/bevry/safefs.git"
@@ -7408,12 +7860,14 @@ analyzer:
         homepage_url: "https://github.com/ChALkeR/safer-buffer#readme"
         binary_artifact:
           url: ""
-          hash: ""
-          hash_algorithm: ""
+          hash:
+            value: ""
+            algorithm: ""
         source_artifact:
           url: "https://registry.npmjs.org/safer-buffer/-/safer-buffer-2.1.2.tgz"
-          hash: "44fa161b0187b9549dd84bb91802f9bd8385cd6a"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "44fa161b0187b9549dd84bb91802f9bd8385cd6a"
+            algorithm: "SHA-1"
         vcs:
           type: "git"
           url: "git+https://github.com/ChALkeR/safer-buffer.git"
@@ -7436,12 +7890,14 @@ analyzer:
         homepage_url: "https://github.com/npm/node-semver#readme"
         binary_artifact:
           url: ""
-          hash: ""
-          hash_algorithm: ""
+          hash:
+            value: ""
+            algorithm: ""
         source_artifact:
           url: "https://registry.npmjs.org/semver/-/semver-5.6.0.tgz"
-          hash: "7e74256fbaa49c75aa7c7a205cc22799cac80004"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "7e74256fbaa49c75aa7c7a205cc22799cac80004"
+            algorithm: "SHA-1"
         vcs:
           type: "git"
           url: "git+https://github.com/npm/node-semver.git"
@@ -7464,12 +7920,14 @@ analyzer:
         homepage_url: "http://github.com/arturadib/shelljs"
         binary_artifact:
           url: ""
-          hash: ""
-          hash_algorithm: ""
+          hash:
+            value: ""
+            algorithm: ""
         source_artifact:
           url: "https://registry.npmjs.org/shelljs/-/shelljs-0.3.0.tgz"
-          hash: "3596e6307a781544f591f37da618360f31db57b1"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "3596e6307a781544f591f37da618360f31db57b1"
+            algorithm: "SHA-1"
         vcs:
           type: "git"
           url: "git://github.com/arturadib/shelljs.git"
@@ -7492,12 +7950,14 @@ analyzer:
         homepage_url: "https://github.com/mozilla/source-map"
         binary_artifact:
           url: ""
-          hash: ""
-          hash_algorithm: ""
+          hash:
+            value: ""
+            algorithm: ""
         source_artifact:
           url: "https://registry.npmjs.org/source-map/-/source-map-0.2.0.tgz"
-          hash: "dab73fbcfc2ba819b4de03bd6f6eaa48164b3f9d"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "dab73fbcfc2ba819b4de03bd6f6eaa48164b3f9d"
+            algorithm: "SHA-1"
         vcs:
           type: "git"
           url: "http://github.com/mozilla/source-map.git"
@@ -7520,12 +7980,14 @@ analyzer:
         homepage_url: "https://github.com/mozilla/source-map"
         binary_artifact:
           url: ""
-          hash: ""
-          hash_algorithm: ""
+          hash:
+            value: ""
+            algorithm: ""
         source_artifact:
           url: "https://registry.npmjs.org/source-map/-/source-map-0.6.1.tgz"
-          hash: "74722af32e9614e9c287a8d0bbde48b5e2f1a263"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "74722af32e9614e9c287a8d0bbde48b5e2f1a263"
+            algorithm: "SHA-1"
         vcs:
           type: "git"
           url: "git+ssh://git@github.com/mozilla/source-map.git"
@@ -7548,12 +8010,14 @@ analyzer:
         homepage_url: "http://github.com/dominictarr/split"
         binary_artifact:
           url: ""
-          hash: ""
-          hash_algorithm: ""
+          hash:
+            value: ""
+            algorithm: ""
         source_artifact:
           url: "https://registry.npmjs.org/split/-/split-1.0.1.tgz"
-          hash: "605bd9be303aa59fb35f9229fbea0ddec9ea07d9"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "605bd9be303aa59fb35f9229fbea0ddec9ea07d9"
+            algorithm: "SHA-1"
         vcs:
           type: "git"
           url: "git://github.com/dominictarr/split.git"
@@ -7576,12 +8040,14 @@ analyzer:
         homepage_url: "https://github.com/alexei/sprintf.js#readme"
         binary_artifact:
           url: ""
-          hash: ""
-          hash_algorithm: ""
+          hash:
+            value: ""
+            algorithm: ""
         source_artifact:
           url: "https://registry.npmjs.org/sprintf-js/-/sprintf-js-1.0.3.tgz"
-          hash: "04e6926f662895354f3dd015203633b857297e2c"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "04e6926f662895354f3dd015203633b857297e2c"
+            algorithm: "SHA-1"
         vcs:
           type: "git"
           url: "git+https://github.com/alexei/sprintf.js.git"
@@ -7604,12 +8070,14 @@ analyzer:
         homepage_url: "https://github.com/arekinath/node-sshpk#readme"
         binary_artifact:
           url: ""
-          hash: ""
-          hash_algorithm: ""
+          hash:
+            value: ""
+            algorithm: ""
         source_artifact:
           url: "https://registry.npmjs.org/sshpk/-/sshpk-1.15.1.tgz"
-          hash: "b79a089a732e346c6e0714830f36285cd38191a2"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "b79a089a732e346c6e0714830f36285cd38191a2"
+            algorithm: "SHA-1"
         vcs:
           type: "git"
           url: "git+https://github.com/joyent/node-sshpk.git"
@@ -7632,12 +8100,14 @@ analyzer:
         homepage_url: "https://github.com/felixge/node-stack-trace"
         binary_artifact:
           url: ""
-          hash: ""
-          hash_algorithm: ""
+          hash:
+            value: ""
+            algorithm: ""
         source_artifact:
           url: "https://registry.npmjs.org/stack-trace/-/stack-trace-0.0.10.tgz"
-          hash: "547c70b347e8d32b4e108ea1a2a159e5fdde19c0"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "547c70b347e8d32b4e108ea1a2a159e5fdde19c0"
+            algorithm: "SHA-1"
         vcs:
           type: "git"
           url: "git://github.com/felixge/node-stack-trace.git"
@@ -7660,12 +8130,14 @@ analyzer:
         homepage_url: "https://github.com/rvagg/string_decoder"
         binary_artifact:
           url: ""
-          hash: ""
-          hash_algorithm: ""
+          hash:
+            value: ""
+            algorithm: ""
         source_artifact:
           url: "https://registry.npmjs.org/string_decoder/-/string_decoder-0.10.31.tgz"
-          hash: "62e203bc41766c6c28c9fc84301dab1c5310fa94"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "62e203bc41766c6c28c9fc84301dab1c5310fa94"
+            algorithm: "SHA-1"
         vcs:
           type: "git"
           url: "git://github.com/rvagg/string_decoder.git"
@@ -7688,12 +8160,14 @@ analyzer:
         homepage_url: "https://github.com/nodejs/string_decoder"
         binary_artifact:
           url: ""
-          hash: ""
-          hash_algorithm: ""
+          hash:
+            value: ""
+            algorithm: ""
         source_artifact:
           url: "https://registry.npmjs.org/string_decoder/-/string_decoder-1.1.1.tgz"
-          hash: "9cf1611ba62685d7030ae9e4ba34149c3af03fc8"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "9cf1611ba62685d7030ae9e4ba34149c3af03fc8"
+            algorithm: "SHA-1"
         vcs:
           type: "git"
           url: "git://github.com/nodejs/string_decoder.git"
@@ -7716,12 +8190,14 @@ analyzer:
         homepage_url: "https://github.com/nodejs/string_decoder"
         binary_artifact:
           url: ""
-          hash: ""
-          hash_algorithm: ""
+          hash:
+            value: ""
+            algorithm: ""
         source_artifact:
           url: "https://registry.npmjs.org/string_decoder/-/string_decoder-1.2.0.tgz"
-          hash: "fe86e738b19544afe70469243b2a1ee9240eae8d"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "fe86e738b19544afe70469243b2a1ee9240eae8d"
+            algorithm: "SHA-1"
         vcs:
           type: "git"
           url: "git://github.com/nodejs/string_decoder.git"
@@ -7745,12 +8221,14 @@ analyzer:
         homepage_url: "https://github.com/sindresorhus/strip-json-comments"
         binary_artifact:
           url: ""
-          hash: ""
-          hash_algorithm: ""
+          hash:
+            value: ""
+            algorithm: ""
         source_artifact:
           url: "https://registry.npmjs.org/strip-json-comments/-/strip-json-comments-1.0.4.tgz"
-          hash: "1e15fbcac97d3ee99bf2d73b4c656b082bbafb91"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "1e15fbcac97d3ee99bf2d73b4c656b082bbafb91"
+            algorithm: "SHA-1"
         vcs:
           type: "git"
           url: "https://github.com/sindresorhus/strip-json-comments"
@@ -7773,12 +8251,14 @@ analyzer:
         homepage_url: "https://github.com/chalk/supports-color#readme"
         binary_artifact:
           url: ""
-          hash: ""
-          hash_algorithm: ""
+          hash:
+            value: ""
+            algorithm: ""
         source_artifact:
           url: "https://registry.npmjs.org/supports-color/-/supports-color-3.2.3.tgz"
-          hash: "65ac0504b3954171d8a64946b2ae3cbb8a5f54f6"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "65ac0504b3954171d8a64946b2ae3cbb8a5f54f6"
+            algorithm: "SHA-1"
         vcs:
           type: "git"
           url: "git+https://github.com/chalk/supports-color.git"
@@ -7801,12 +8281,14 @@ analyzer:
         homepage_url: "https://github.com/chalk/supports-color#readme"
         binary_artifact:
           url: ""
-          hash: ""
-          hash_algorithm: ""
+          hash:
+            value: ""
+            algorithm: ""
         source_artifact:
           url: "https://registry.npmjs.org/supports-color/-/supports-color-5.4.0.tgz"
-          hash: "1c6b337402c2137605efe19f10fec390f6faab54"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "1c6b337402c2137605efe19f10fec390f6faab54"
+            algorithm: "SHA-1"
         vcs:
           type: "git"
           url: "git+https://github.com/chalk/supports-color.git"
@@ -7829,12 +8311,14 @@ analyzer:
         homepage_url: "https://github.com/component/throttle"
         binary_artifact:
           url: ""
-          hash: ""
-          hash_algorithm: ""
+          hash:
+            value: ""
+            algorithm: ""
         source_artifact:
           url: "https://registry.npmjs.org/throttleit/-/throttleit-1.0.0.tgz"
-          hash: "9e785836daf46743145a5984b6268d828528ac6c"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "9e785836daf46743145a5984b6268d828528ac6c"
+            algorithm: "SHA-1"
         vcs:
           type: "git"
           url: "git://github.com/component/throttle.git"
@@ -7857,12 +8341,14 @@ analyzer:
         homepage_url: "https://github.com/dominictarr/through"
         binary_artifact:
           url: ""
-          hash: ""
-          hash_algorithm: ""
+          hash:
+            value: ""
+            algorithm: ""
         source_artifact:
           url: "https://registry.npmjs.org/through/-/through-2.3.8.tgz"
-          hash: "0dd4c9ffaabc357960b1b724115d7e0e86a2e1f5"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "0dd4c9ffaabc357960b1b724115d7e0e86a2e1f5"
+            algorithm: "SHA-1"
         vcs:
           type: "git"
           url: "git+https://github.com/dominictarr/through.git"
@@ -7885,12 +8371,14 @@ analyzer:
         homepage_url: "https://github.com/salesforce/tough-cookie"
         binary_artifact:
           url: ""
-          hash: ""
-          hash_algorithm: ""
+          hash:
+            value: ""
+            algorithm: ""
         source_artifact:
           url: "https://registry.npmjs.org/tough-cookie/-/tough-cookie-2.4.3.tgz"
-          hash: "53f36da3f47783b0925afa06ff9f3b165280f781"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "53f36da3f47783b0925afa06ff9f3b165280f781"
+            algorithm: "SHA-1"
         vcs:
           type: "git"
           url: "git://github.com/salesforce/tough-cookie.git"
@@ -7914,12 +8402,14 @@ analyzer:
         homepage_url: "https://github.com/mikeal/tunnel-agent#readme"
         binary_artifact:
           url: ""
-          hash: ""
-          hash_algorithm: ""
+          hash:
+            value: ""
+            algorithm: ""
         source_artifact:
           url: "https://registry.npmjs.org/tunnel-agent/-/tunnel-agent-0.6.0.tgz"
-          hash: "27a5dea06b36b04a0a9966774b290868f0fc40fd"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "27a5dea06b36b04a0a9966774b290868f0fc40fd"
+            algorithm: "SHA-1"
         vcs:
           type: ""
           url: "git+https://github.com/mikeal/tunnel-agent.git"
@@ -7942,12 +8432,14 @@ analyzer:
         homepage_url: "https://tweetnacl.js.org"
         binary_artifact:
           url: ""
-          hash: ""
-          hash_algorithm: ""
+          hash:
+            value: ""
+            algorithm: ""
         source_artifact:
           url: "https://registry.npmjs.org/tweetnacl/-/tweetnacl-0.14.5.tgz"
-          hash: "5ae68177f192d4456269d108afa93ff8743f4f64"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "5ae68177f192d4456269d108afa93ff8743f4f64"
+            algorithm: "SHA-1"
         vcs:
           type: "git"
           url: "git+https://github.com/dchest/tweetnacl-js.git"
@@ -7971,12 +8463,14 @@ analyzer:
         homepage_url: "https://github.com/gkz/type-check"
         binary_artifact:
           url: ""
-          hash: ""
-          hash_algorithm: ""
+          hash:
+            value: ""
+            algorithm: ""
         source_artifact:
           url: "https://registry.npmjs.org/type-check/-/type-check-0.3.2.tgz"
-          hash: "5884cab512cf1d355e3fb784f30804b2b520db72"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "5884cab512cf1d355e3fb784f30804b2b520db72"
+            algorithm: "SHA-1"
         vcs:
           type: "git"
           url: "git://github.com/gkz/type-check.git"
@@ -8000,12 +8494,14 @@ analyzer:
         homepage_url: "https://github.com/bevry/typechecker"
         binary_artifact:
           url: ""
-          hash: ""
-          hash_algorithm: ""
+          hash:
+            value: ""
+            algorithm: ""
         source_artifact:
           url: "https://registry.npmjs.org/typechecker/-/typechecker-4.7.0.tgz"
-          hash: "5249f427358f45b7250c4924fd4d01ed9ba435e9"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "5249f427358f45b7250c4924fd4d01ed9ba435e9"
+            algorithm: "SHA-1"
         vcs:
           type: "git"
           url: "git+https://github.com/bevry/typechecker.git"
@@ -8028,12 +8524,14 @@ analyzer:
         homepage_url: "https://github.com/substack/typedarray"
         binary_artifact:
           url: ""
-          hash: ""
-          hash_algorithm: ""
+          hash:
+            value: ""
+            algorithm: ""
         source_artifact:
           url: "https://registry.npmjs.org/typedarray/-/typedarray-0.0.6.tgz"
-          hash: "867ac74e3864187b1d3d47d996a78ec5c8830777"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "867ac74e3864187b1d3d47d996a78ec5c8830777"
+            algorithm: "SHA-1"
         vcs:
           type: "git"
           url: "git://github.com/substack/typedarray.git"
@@ -8056,12 +8554,14 @@ analyzer:
         homepage_url: "https://github.com/mishoo/UglifyJS2#readme"
         binary_artifact:
           url: ""
-          hash: ""
-          hash_algorithm: ""
+          hash:
+            value: ""
+            algorithm: ""
         source_artifact:
           url: "https://registry.npmjs.org/uglify-js/-/uglify-js-3.4.9.tgz"
-          hash: "af02f180c1207d76432e473ed24a28f4a782bae3"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "af02f180c1207d76432e473ed24a28f4a782bae3"
+            algorithm: "SHA-1"
         vcs:
           type: "git"
           url: "git+https://github.com/mishoo/UglifyJS2.git"
@@ -8086,12 +8586,14 @@ analyzer:
         homepage_url: "https://github.com/mathiasbynens/unicode-5.2.0"
         binary_artifact:
           url: ""
-          hash: ""
-          hash_algorithm: ""
+          hash:
+            value: ""
+            algorithm: ""
         source_artifact:
           url: "https://registry.npmjs.org/unicode-5.2.0/-/unicode-5.2.0-0.7.5.tgz"
-          hash: "e0df129431a28a95263d8c480fb5e9ab2b0973f0"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "e0df129431a28a95263d8c480fb5e9ab2b0973f0"
+            algorithm: "SHA-1"
         vcs:
           type: "git"
           url: "git+https://github.com/mathiasbynens/unicode-5.2.0.git"
@@ -8114,12 +8616,14 @@ analyzer:
         homepage_url: "https://github.com/TooTallNate/util-deprecate"
         binary_artifact:
           url: ""
-          hash: ""
-          hash_algorithm: ""
+          hash:
+            value: ""
+            algorithm: ""
         source_artifact:
           url: "https://registry.npmjs.org/util-deprecate/-/util-deprecate-1.0.2.tgz"
-          hash: "450d4dc9fa70de732762fbd2d4a28981419a0ccf"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "450d4dc9fa70de732762fbd2d4a28981419a0ccf"
+            algorithm: "SHA-1"
         vcs:
           type: "git"
           url: "git://github.com/TooTallNate/util-deprecate.git"
@@ -8142,12 +8646,14 @@ analyzer:
         homepage_url: "https://github.com/kelektiv/node-uuid#readme"
         binary_artifact:
           url: ""
-          hash: ""
-          hash_algorithm: ""
+          hash:
+            value: ""
+            algorithm: ""
         source_artifact:
           url: "https://registry.npmjs.org/uuid/-/uuid-3.3.2.tgz"
-          hash: "1b4af4955eb3077c501c23872fc6513811587131"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "1b4af4955eb3077c501c23872fc6513811587131"
+            algorithm: "SHA-1"
         vcs:
           type: "git"
           url: "git+https://github.com/kelektiv/node-uuid.git"
@@ -8170,12 +8676,14 @@ analyzer:
         homepage_url: "https://github.com/davepacheco/node-verror"
         binary_artifact:
           url: ""
-          hash: ""
-          hash_algorithm: ""
+          hash:
+            value: ""
+            algorithm: ""
         source_artifact:
           url: "https://registry.npmjs.org/verror/-/verror-1.10.0.tgz"
-          hash: "3a105ca17053af55d6e270c1f8288682e18da400"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "3a105ca17053af55d6e270c1f8288682e18da400"
+            algorithm: "SHA-1"
         vcs:
           type: "git"
           url: "git://github.com/davepacheco/node-verror.git"
@@ -8199,12 +8707,14 @@ analyzer:
         homepage_url: "https://github.com/isaacs/node-which#readme"
         binary_artifact:
           url: ""
-          hash: ""
-          hash_algorithm: ""
+          hash:
+            value: ""
+            algorithm: ""
         source_artifact:
           url: "https://registry.npmjs.org/which/-/which-1.3.1.tgz"
-          hash: "a45043d54f5805316da8d62f9f50918d3da70b0a"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "a45043d54f5805316da8d62f9f50918d3da70b0a"
+            algorithm: "SHA-1"
         vcs:
           type: "git"
           url: "git://github.com/isaacs/node-which.git"
@@ -8227,12 +8737,14 @@ analyzer:
         homepage_url: "https://github.com/winstonjs/winston#readme"
         binary_artifact:
           url: ""
-          hash: ""
-          hash_algorithm: ""
+          hash:
+            value: ""
+            algorithm: ""
         source_artifact:
           url: "https://registry.npmjs.org/winston/-/winston-2.4.4.tgz"
-          hash: "a01e4d1d0a103cf4eada6fc1f886b3110d71c34b"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "a01e4d1d0a103cf4eada6fc1f886b3110d71c34b"
+            algorithm: "SHA-1"
         vcs:
           type: "git"
           url: "git+https://github.com/winstonjs/winston.git"
@@ -8255,12 +8767,14 @@ analyzer:
         homepage_url: "https://github.com/substack/node-wordwrap#readme"
         binary_artifact:
           url: ""
-          hash: ""
-          hash_algorithm: ""
+          hash:
+            value: ""
+            algorithm: ""
         source_artifact:
           url: "https://registry.npmjs.org/wordwrap/-/wordwrap-0.0.3.tgz"
-          hash: "a3d5da6cd5c0bc0008d37234bbaf1bed63059107"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "a3d5da6cd5c0bc0008d37234bbaf1bed63059107"
+            algorithm: "SHA-1"
         vcs:
           type: "git"
           url: "git://github.com/substack/node-wordwrap.git"
@@ -8283,12 +8797,14 @@ analyzer:
         homepage_url: "https://github.com/substack/node-wordwrap#readme"
         binary_artifact:
           url: ""
-          hash: ""
-          hash_algorithm: ""
+          hash:
+            value: ""
+            algorithm: ""
         source_artifact:
           url: "https://registry.npmjs.org/wordwrap/-/wordwrap-1.0.0.tgz"
-          hash: "27584810891456a4171c8d0226441ade90cbcaeb"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "27584810891456a4171c8d0226441ade90cbcaeb"
+            algorithm: "SHA-1"
         vcs:
           type: "git"
           url: "git://github.com/substack/node-wordwrap.git"
@@ -8311,12 +8827,14 @@ analyzer:
         homepage_url: "https://github.com/npm/wrappy"
         binary_artifact:
           url: ""
-          hash: ""
-          hash_algorithm: ""
+          hash:
+            value: ""
+            algorithm: ""
         source_artifact:
           url: "https://registry.npmjs.org/wrappy/-/wrappy-1.0.2.tgz"
-          hash: "b5243d8f3ec1aa35f1364605bc0d1036e30ab69f"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "b5243d8f3ec1aa35f1364605bc0d1036e30ab69f"
+            algorithm: "SHA-1"
         vcs:
           type: "git"
           url: "git+https://github.com/npm/wrappy.git"
@@ -8339,12 +8857,14 @@ analyzer:
         homepage_url: "https://github.com/thejoshwolfe/yauzl"
         binary_artifact:
           url: ""
-          hash: ""
-          hash_algorithm: ""
+          hash:
+            value: ""
+            algorithm: ""
         source_artifact:
           url: "https://registry.npmjs.org/yauzl/-/yauzl-2.4.1.tgz"
-          hash: "9528f442dab1b2284e58b4379bb194e22e0c4005"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "9528f442dab1b2284e58b4379bb194e22e0c4005"
+            algorithm: "SHA-1"
         vcs:
           type: "git"
           url: "git+https://github.com/thejoshwolfe/yauzl.git"
@@ -8367,12 +8887,14 @@ analyzer:
         homepage_url: ""
         binary_artifact:
           url: ""
-          hash: ""
-          hash_algorithm: ""
+          hash:
+            value: ""
+            algorithm: ""
         source_artifact:
           url: "https://registry.npmjs.org/@types/node/-/node-11.9.6.tgz"
-          hash: "c632bbcc780a1349673a6e2e9b9dfa8c369d3c74"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "c632bbcc780a1349673a6e2e9b9dfa8c369d3c74"
+            algorithm: "SHA-1"
         vcs:
           type: "git"
           url: "https://github.com/DefinitelyTyped/DefinitelyTyped.git"

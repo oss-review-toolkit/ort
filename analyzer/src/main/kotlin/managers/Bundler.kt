@@ -27,7 +27,7 @@ import com.here.ort.analyzer.AbstractPackageManagerFactory
 import com.here.ort.analyzer.HTTP_CACHE_PATH
 import com.here.ort.analyzer.PackageManager
 import com.here.ort.downloader.VersionControlSystem
-import com.here.ort.model.HashAlgorithm
+import com.here.ort.model.Hash
 import com.here.ort.model.Identifier
 import com.here.ort.model.OrtIssue
 import com.here.ort.model.Package
@@ -322,7 +322,7 @@ data class GemSpec(
 
             val artifact = if (json.hasNonNull("gem_uri") && json.hasNonNull("sha")) {
                 val sha = json["sha"].textValue()
-                RemoteArtifact(json["gem_uri"].textValue(), sha, HashAlgorithm.fromHash(sha))
+                RemoteArtifact(json["gem_uri"].textValue(), Hash.create(sha))
             } else {
                 RemoteArtifact.EMPTY
             }

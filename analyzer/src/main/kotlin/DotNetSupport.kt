@@ -91,9 +91,8 @@ class DotNetSupport(
             val encodedHash = node["packageHash"].textValueOrEmpty()
             val hashAlgorithm = node["packageHashAlgorithm"].textValueOrEmpty()
             val sri = hashAlgorithm.replace("-", "") + "-" + encodedHash
-            val hash = Hash.fromValue(sri)
 
-            return RemoteArtifact(nupkgUrl, hash.value, hash.algorithm)
+            return RemoteArtifact(nupkgUrl, Hash.create(sri))
         }
 
         private fun getCatalogURL(registrationNode: JsonNode): String =

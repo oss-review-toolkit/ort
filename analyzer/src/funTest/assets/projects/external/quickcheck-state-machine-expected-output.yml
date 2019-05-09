@@ -1069,12 +1069,14 @@ packages:
     homepage_url: ""
     binary_artifact:
       url: ""
-      hash: ""
-      hash_algorithm: ""
+      hash:
+        value: ""
+        algorithm: ""
     source_artifact:
       url: ""
-      hash: ""
-      hash_algorithm: ""
+      hash:
+        value: ""
+        algorithm: ""
     vcs:
       type: ""
       url: ""
@@ -1102,12 +1104,14 @@ packages:
     homepage_url: "http://github.com/ekmett/transformers-compat/"
     binary_artifact:
       url: ""
-      hash: ""
-      hash_algorithm: ""
+      hash:
+        value: ""
+        algorithm: ""
     source_artifact:
       url: "https://hackage.haskell.org/package/transformers-compat-0.5.1.4/transformers-compat-0.5.1.4.tar.gz"
-      hash: ""
-      hash_algorithm: ""
+      hash:
+        value: ""
+        algorithm: ""
     vcs:
       type: "git"
       url: "git://github.com/ekmett/transformers-compat.git"
@@ -1138,12 +1142,14 @@ packages:
     homepage_url: "https://github.com/simonmar/async"
     binary_artifact:
       url: ""
-      hash: ""
-      hash_algorithm: ""
+      hash:
+        value: ""
+        algorithm: ""
     source_artifact:
       url: "https://hackage.haskell.org/package/async-2.1.1.1/async-2.1.1.1.tar.gz"
-      hash: ""
-      hash_algorithm: ""
+      hash:
+        value: ""
+        algorithm: ""
     vcs:
       type: "git"
       url: "https://github.com/simonmar/async.git"
@@ -1167,12 +1173,14 @@ packages:
     homepage_url: "https://github.com/maoe/lifted-async"
     binary_artifact:
       url: ""
-      hash: ""
-      hash_algorithm: ""
+      hash:
+        value: ""
+        algorithm: ""
     source_artifact:
       url: "https://hackage.haskell.org/package/lifted-async-0.9.3.3/lifted-async-0.9.3.3.tar.gz"
-      hash: ""
-      hash_algorithm: ""
+      hash:
+        value: ""
+        algorithm: ""
     vcs:
       type: "git"
       url: "https://github.com/maoe/lifted-async.git"
@@ -1200,12 +1208,14 @@ packages:
     homepage_url: "https://wiki.haskell.org/Software_transactional_memory"
     binary_artifact:
       url: ""
-      hash: ""
-      hash_algorithm: ""
+      hash:
+        value: ""
+        algorithm: ""
     source_artifact:
       url: "https://hackage.haskell.org/package/stm-2.4.5.0/stm-2.4.5.0.tar.gz"
-      hash: ""
-      hash_algorithm: ""
+      hash:
+        value: ""
+        algorithm: ""
     vcs:
       type: "git"
       url: "https://github.com/haskell/stm.git"
@@ -1230,12 +1240,14 @@ packages:
     homepage_url: "http://github.com/ekmett/constraints/"
     binary_artifact:
       url: ""
-      hash: ""
-      hash_algorithm: ""
+      hash:
+        value: ""
+        algorithm: ""
     source_artifact:
       url: "https://hackage.haskell.org/package/constraints-0.9.1/constraints-0.9.1.tar.gz"
-      hash: ""
-      hash_algorithm: ""
+      hash:
+        value: ""
+        algorithm: ""
     vcs:
       type: "git"
       url: "git://github.com/ekmett/constraints.git"
@@ -1266,12 +1278,14 @@ packages:
     homepage_url: ""
     binary_artifact:
       url: ""
-      hash: ""
-      hash_algorithm: ""
+      hash:
+        value: ""
+        algorithm: ""
     source_artifact:
       url: "https://hackage.haskell.org/package/deepseq-1.4.3.0/deepseq-1.4.3.0.tar.gz"
-      hash: ""
-      hash_algorithm: ""
+      hash:
+        value: ""
+        algorithm: ""
     vcs:
       type: "git"
       url: "https://github.com/haskell/deepseq.git"
@@ -1299,12 +1313,14 @@ packages:
     homepage_url: "https://github.com/basvandijk/lifted-base"
     binary_artifact:
       url: ""
-      hash: ""
-      hash_algorithm: ""
+      hash:
+        value: ""
+        algorithm: ""
     source_artifact:
       url: "https://hackage.haskell.org/package/lifted-base-0.2.3.11/lifted-base-0.2.3.11.tar.gz"
-      hash: ""
-      hash_algorithm: ""
+      hash:
+        value: ""
+        algorithm: ""
     vcs:
       type: "git"
       url: "https://github.com/basvandijk/lifted-base.git"
@@ -1337,12 +1353,14 @@ packages:
     homepage_url: "https://github.com/basvandijk/monad-control"
     binary_artifact:
       url: ""
-      hash: ""
-      hash_algorithm: ""
+      hash:
+        value: ""
+        algorithm: ""
     source_artifact:
       url: "https://hackage.haskell.org/package/monad-control-1.0.2.2/monad-control-1.0.2.2.tar.gz"
-      hash: ""
-      hash_algorithm: ""
+      hash:
+        value: ""
+        algorithm: ""
     vcs:
       type: "git"
       url: "git://github.com/basvandijk/monad-control.git"
@@ -1368,12 +1386,14 @@ packages:
     homepage_url: "http://github.com/ekmett/mtl"
     binary_artifact:
       url: ""
-      hash: ""
-      hash_algorithm: ""
+      hash:
+        value: ""
+        algorithm: ""
     source_artifact:
       url: "https://hackage.haskell.org/package/mtl-2.2.1/mtl-2.2.1.tar.gz"
-      hash: ""
-      hash_algorithm: ""
+      hash:
+        value: ""
+        algorithm: ""
     vcs:
       type: "git"
       url: "git://github.com/ekmett/mtl.git"
@@ -1397,12 +1417,14 @@ packages:
     homepage_url: "https://github.com/mvv/transformers-base"
     binary_artifact:
       url: ""
-      hash: ""
-      hash_algorithm: ""
+      hash:
+        value: ""
+        algorithm: ""
     source_artifact:
       url: "https://hackage.haskell.org/package/transformers-base-0.4.4/transformers-base-0.4.4.tar.gz"
-      hash: ""
-      hash_algorithm: ""
+      hash:
+        value: ""
+        algorithm: ""
     vcs:
       type: "git"
       url: "https://github.com/mvv/transformers-base.git"
@@ -1437,12 +1459,14 @@ packages:
     homepage_url: ""
     binary_artifact:
       url: ""
-      hash: ""
-      hash_algorithm: ""
+      hash:
+        value: ""
+        algorithm: ""
     source_artifact:
       url: "https://hackage.haskell.org/package/transformers-0.5.2.0/transformers-0.5.2.0.tar.gz"
-      hash: ""
-      hash_algorithm: ""
+      hash:
+        value: ""
+        algorithm: ""
     vcs:
       type: "darcs"
       url: "http://hub.darcs.net/ross/transformers"
@@ -1468,12 +1492,14 @@ packages:
     homepage_url: ""
     binary_artifact:
       url: ""
-      hash: ""
-      hash_algorithm: ""
+      hash:
+        value: ""
+        algorithm: ""
     source_artifact:
       url: "https://hackage.haskell.org/package/array-0.5.2.0/array-0.5.2.0.tar.gz"
-      hash: ""
-      hash_algorithm: ""
+      hash:
+        value: ""
+        algorithm: ""
     vcs:
       type: "git"
       url: "http://git.haskell.org/packages/array.git"
@@ -1499,12 +1525,14 @@ packages:
     homepage_url: ""
     binary_artifact:
       url: ""
-      hash: ""
-      hash_algorithm: ""
+      hash:
+        value: ""
+        algorithm: ""
     source_artifact:
       url: "https://hackage.haskell.org/package/containers-0.5.10.2/containers-0.5.10.2.tar.gz"
-      hash: ""
-      hash_algorithm: ""
+      hash:
+        value: ""
+        algorithm: ""
     vcs:
       type: "git"
       url: "http://github.com/haskell/containers.git"
@@ -1532,12 +1560,14 @@ packages:
     homepage_url: "https://github.com/kolmodin/binary"
     binary_artifact:
       url: ""
-      hash: ""
-      hash_algorithm: ""
+      hash:
+        value: ""
+        algorithm: ""
     source_artifact:
       url: "https://hackage.haskell.org/package/binary-0.8.5.1/binary-0.8.5.1.tar.gz"
-      hash: ""
-      hash_algorithm: ""
+      hash:
+        value: ""
+        algorithm: ""
     vcs:
       type: "git"
       url: "git://github.com/kolmodin/binary.git"
@@ -1573,12 +1603,14 @@ packages:
     homepage_url: "https://github.com/bos/text"
     binary_artifact:
       url: ""
-      hash: ""
-      hash_algorithm: ""
+      hash:
+        value: ""
+        algorithm: ""
     source_artifact:
       url: "https://hackage.haskell.org/package/text-1.2.2.2/text-1.2.2.2.tar.gz"
-      hash: ""
-      hash_algorithm: ""
+      hash:
+        value: ""
+        algorithm: ""
     vcs:
       type: "mercurial"
       url: "https://bitbucket.org/bos/text"
@@ -1622,12 +1654,14 @@ packages:
     homepage_url: "https://github.com/haskell/bytestring"
     binary_artifact:
       url: ""
-      hash: ""
-      hash_algorithm: ""
+      hash:
+        value: ""
+        algorithm: ""
     source_artifact:
       url: "https://hackage.haskell.org/package/bytestring-0.10.8.2/bytestring-0.10.8.2.tar.gz"
-      hash: ""
-      hash_algorithm: ""
+      hash:
+        value: ""
+        algorithm: ""
     vcs:
       type: "git"
       url: "https://github.com/haskell/bytestring"
@@ -1653,12 +1687,14 @@ packages:
     homepage_url: "http://github.com/tibbe/hashable"
     binary_artifact:
       url: ""
-      hash: ""
-      hash_algorithm: ""
+      hash:
+        value: ""
+        algorithm: ""
     source_artifact:
       url: "https://hackage.haskell.org/package/hashable-1.2.6.1/hashable-1.2.6.1.tar.gz"
-      hash: ""
-      hash_algorithm: ""
+      hash:
+        value: ""
+        algorithm: ""
     vcs:
       type: "git"
       url: "https://github.com/tibbe/hashable.git"
@@ -1681,12 +1717,14 @@ packages:
     homepage_url: "https://github.com/haskell/primitive"
     binary_artifact:
       url: ""
-      hash: ""
-      hash_algorithm: ""
+      hash:
+        value: ""
+        algorithm: ""
     source_artifact:
       url: "https://hackage.haskell.org/package/primitive-0.6.3.0/primitive-0.6.3.0.tar.gz"
-      hash: ""
-      hash_algorithm: ""
+      hash:
+        value: ""
+        algorithm: ""
     vcs:
       type: "git"
       url: "https://github.com/haskell/primitive"
@@ -1712,12 +1750,14 @@ packages:
     homepage_url: "https://github.com/glguy/th-abstraction"
     binary_artifact:
       url: ""
-      hash: ""
-      hash_algorithm: ""
+      hash:
+        value: ""
+        algorithm: ""
     source_artifact:
       url: "https://hackage.haskell.org/package/th-abstraction-0.2.6.0/th-abstraction-0.2.6.0.tar.gz"
-      hash: ""
-      hash_algorithm: ""
+      hash:
+        value: ""
+        algorithm: ""
     vcs:
       type: "git"
       url: "https://github.com/glguy/th-abstraction.git"
@@ -1743,12 +1783,14 @@ packages:
     homepage_url: ""
     binary_artifact:
       url: ""
-      hash: ""
-      hash_algorithm: ""
+      hash:
+        value: ""
+        algorithm: ""
     source_artifact:
       url: "https://hackage.haskell.org/package/ghc-boot-th-8.2.2/ghc-boot-th-8.2.2.tar.gz"
-      hash: ""
-      hash_algorithm: ""
+      hash:
+        value: ""
+        algorithm: ""
     vcs:
       type: "git"
       url: "http://git.haskell.org/ghc.git"
@@ -1772,12 +1814,14 @@ packages:
     homepage_url: ""
     binary_artifact:
       url: ""
-      hash: ""
-      hash_algorithm: ""
+      hash:
+        value: ""
+        algorithm: ""
     source_artifact:
       url: "https://hackage.haskell.org/package/ghc-prim-0.5.1.1/ghc-prim-0.5.1.1.tar.gz"
-      hash: ""
-      hash_algorithm: ""
+      hash:
+        value: ""
+        algorithm: ""
     vcs:
       type: "git"
       url: "http://git.haskell.org/ghc.git"
@@ -1804,12 +1848,14 @@ packages:
     homepage_url: ""
     binary_artifact:
       url: ""
-      hash: ""
-      hash_algorithm: ""
+      hash:
+        value: ""
+        algorithm: ""
     source_artifact:
       url: "https://hackage.haskell.org/package/integer-gmp-1.0.1.0/integer-gmp-1.0.1.0.tar.gz"
-      hash: ""
-      hash_algorithm: ""
+      hash:
+        value: ""
+        algorithm: ""
     vcs:
       type: ""
       url: ""
@@ -1834,12 +1880,14 @@ packages:
     homepage_url: ""
     binary_artifact:
       url: ""
-      hash: ""
-      hash_algorithm: ""
+      hash:
+        value: ""
+        algorithm: ""
     source_artifact:
       url: "https://hackage.haskell.org/package/base-4.10.1.0/base-4.10.1.0.tar.gz"
-      hash: ""
-      hash_algorithm: ""
+      hash:
+        value: ""
+        algorithm: ""
     vcs:
       type: "git"
       url: "http://git.haskell.org/ghc.git"
@@ -1880,12 +1928,14 @@ packages:
     homepage_url: ""
     binary_artifact:
       url: ""
-      hash: ""
-      hash_algorithm: ""
+      hash:
+        value: ""
+        algorithm: ""
     source_artifact:
       url: "https://hackage.haskell.org/package/tf-random-0.5/tf-random-0.5.tar.gz"
-      hash: ""
-      hash_algorithm: ""
+      hash:
+        value: ""
+        algorithm: ""
     vcs:
       type: "darcs"
       url: "http://hub.darcs.net/michal.palka/tf-random"
@@ -1909,12 +1959,14 @@ packages:
     homepage_url: ""
     binary_artifact:
       url: ""
-      hash: ""
-      hash_algorithm: ""
+      hash:
+        value: ""
+        algorithm: ""
     source_artifact:
       url: "https://hackage.haskell.org/package/random-1.1/random-1.1.tar.gz"
-      hash: ""
-      hash_algorithm: ""
+      hash:
+        value: ""
+        algorithm: ""
     vcs:
       type: "git"
       url: "http://git.haskell.org/packages/random.git"
@@ -1939,12 +1991,14 @@ packages:
     homepage_url: ""
     binary_artifact:
       url: ""
-      hash: ""
-      hash_algorithm: ""
+      hash:
+        value: ""
+        algorithm: ""
     source_artifact:
       url: "https://hackage.haskell.org/package/template-haskell-2.12.0.0/template-haskell-2.12.0.0.tar.gz"
-      hash: ""
-      hash_algorithm: ""
+      hash:
+        value: ""
+        algorithm: ""
     vcs:
       type: "git"
       url: "http://git.haskell.org/ghc.git"
@@ -1977,12 +2031,14 @@ packages:
     homepage_url: "https://github.com/nick8325/quickcheck"
     binary_artifact:
       url: ""
-      hash: ""
-      hash_algorithm: ""
+      hash:
+        value: ""
+        algorithm: ""
     source_artifact:
       url: "https://hackage.haskell.org/package/QuickCheck-2.10.1/QuickCheck-2.10.1.tar.gz"
-      hash: ""
-      hash_algorithm: ""
+      hash:
+        value: ""
+        algorithm: ""
     vcs:
       type: "git"
       url: "https://github.com/nick8325/quickcheck"
@@ -2012,12 +2068,14 @@ packages:
     homepage_url: "http://www.github.com/nick8325/quickcheck-with-counterexamples"
     binary_artifact:
       url: ""
-      hash: ""
-      hash_algorithm: ""
+      hash:
+        value: ""
+        algorithm: ""
     source_artifact:
       url: "https://hackage.haskell.org/package/quickcheck-with-counterexamples-1.0/quickcheck-with-counterexamples-1.0.tar.gz"
-      hash: ""
-      hash_algorithm: ""
+      hash:
+        value: ""
+        algorithm: ""
     vcs:
       type: "git"
       url: "https://github.com/nick8325/quickcheck-with-counterexamples"
@@ -2044,12 +2102,14 @@ packages:
     homepage_url: "http://github.com/haskell/pretty"
     binary_artifact:
       url: ""
-      hash: ""
-      hash_algorithm: ""
+      hash:
+        value: ""
+        algorithm: ""
     source_artifact:
       url: "https://hackage.haskell.org/package/pretty-1.1.3.3/pretty-1.1.3.3.tar.gz"
-      hash: ""
-      hash_algorithm: ""
+      hash:
+        value: ""
+        algorithm: ""
     vcs:
       type: "git"
       url: "http://github.com/haskell/pretty.git"
@@ -2072,12 +2132,14 @@ packages:
     homepage_url: "https://github.com/haskell/time"
     binary_artifact:
       url: ""
-      hash: ""
-      hash_algorithm: ""
+      hash:
+        value: ""
+        algorithm: ""
     source_artifact:
       url: "https://hackage.haskell.org/package/time-1.8.0.2/time-1.8.0.2.tar.gz"
-      hash: ""
-      hash_algorithm: ""
+      hash:
+        value: ""
+        algorithm: ""
     vcs:
       type: "git"
       url: "https://github.com/haskell/time"
@@ -2103,12 +2165,14 @@ packages:
     homepage_url: "http://github.com/ekmett/ansi-wl-pprint"
     binary_artifact:
       url: ""
-      hash: ""
-      hash_algorithm: ""
+      hash:
+        value: ""
+        algorithm: ""
     source_artifact:
       url: "https://hackage.haskell.org/package/ansi-wl-pprint-0.6.8.2/ansi-wl-pprint-0.6.8.2.tar.gz"
-      hash: ""
-      hash_algorithm: ""
+      hash:
+        value: ""
+        algorithm: ""
     vcs:
       type: "git"
       url: "https://github.com/ekmett/ansi-wl-pprint.git"
@@ -2133,12 +2197,14 @@ packages:
     homepage_url: "https://github.com/feuerbach/ansi-terminal"
     binary_artifact:
       url: ""
-      hash: ""
-      hash_algorithm: ""
+      hash:
+        value: ""
+        algorithm: ""
     source_artifact:
       url: "https://hackage.haskell.org/package/ansi-terminal-0.7.1.1/ansi-terminal-0.7.1.1.tar.gz"
-      hash: ""
-      hash_algorithm: ""
+      hash:
+        value: ""
+        algorithm: ""
     vcs:
       type: "git"
       url: "git://github.com/feuerbach/ansi-terminal.git"
@@ -2163,12 +2229,14 @@ packages:
     homepage_url: "http://www.haskell.org/haskellwiki/Colour"
     binary_artifact:
       url: ""
-      hash: ""
-      hash_algorithm: ""
+      hash:
+        value: ""
+        algorithm: ""
     source_artifact:
       url: "https://hackage.haskell.org/package/colour-2.3.4/colour-2.3.4.tar.gz"
-      hash: ""
-      hash_algorithm: ""
+      hash:
+        value: ""
+        algorithm: ""
     vcs:
       type: ""
       url: ""

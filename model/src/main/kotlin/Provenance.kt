@@ -74,12 +74,9 @@ data class Provenance(
     fun matches(pkg: Package): Boolean {
         // If the scanned source code came from a source artifact, it has to match the package's source artifact.
         if (sourceArtifact != null) {
-            // If the (non-blank) hash values match, we do not need to compare the other properties like the URL. Only
-            // support this for known algorithms which we are able to verify as otherwise the hash could be fake.
-            if (sourceArtifact.hash.isNotBlank() && sourceArtifact.hashAlgorithm in Hash.VERIFIABLE) {
-                return sourceArtifact.hash == pkg.sourceArtifact.hash
-                        && sourceArtifact.hashAlgorithm == pkg.sourceArtifact.hashAlgorithm
-            }
+            // If the hash values match, we do not need to compare the other properties like the URL. Only support this
+            // for algorithms for which we can actualy calculate the value as otherwise the hash could be fake.
+            if (sourceArtifact.hash.canCalculate) return sourceArtifact.hash == pkg.sourceArtifact.hash
 
             return sourceArtifact == pkg.sourceArtifact
         }
