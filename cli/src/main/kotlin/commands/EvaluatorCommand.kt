@@ -27,12 +27,8 @@ import com.beust.jcommander.Parameters
 
 import com.here.ort.CommandWithHelp
 import com.here.ort.evaluator.Evaluator
-import com.here.ort.model.OrtResult
-import com.here.ort.model.OutputFormat
-import com.here.ort.model.RuleViolation
-import com.here.ort.model.Severity
-import com.here.ort.model.mapper
-import com.here.ort.model.readValue
+import com.here.ort.model.*
+
 import com.here.ort.utils.PARAMETER_ORDER_MANDATORY
 import com.here.ort.utils.PARAMETER_ORDER_OPTIONAL
 import com.here.ort.utils.expandTilde
@@ -96,6 +92,15 @@ object EvaluatorCommand : CommandWithHelp() {
     )
     private var repositoryConfigurationFile: File? = null
 
+
+    @Parameter(
+        description = "A file containing the curations. If set the curations " +
+                "override the curations in the ort result from the input file.",
+        names = ["--curations-file"],
+        order = PARAMETER_ORDER_OPTIONAL
+    )
+    private var curationsFile: File? = null
+
     override fun runCommand(jc: JCommander): Int {
         require((rulesFile == null) != (rulesResource == null)) {
             "Either '--rules-file' or '--rules-resource' must be specified."
@@ -119,6 +124,11 @@ object EvaluatorCommand : CommandWithHelp() {
         var ortResultInput = ortFile.expandTilde().readValue<OrtResult>()
         repositoryConfigurationFile?.expandTilde()?.let {
             ortResultInput = ortResultInput.replaceConfig(it.readValue())
+        }
+
+        curationsFile?.expandTilde()?.let {
+            val curations = it.readValue<List<PackageCuration>>()
+            ortResultInput = ortResultInput.replaceCurations(curations)
         }
 
         val script = rulesFile?.expandTilde()?.readText() ?: javaClass.classLoader.getResource(rulesResource).readText()
@@ -166,3 +176,5 @@ object EvaluatorCommand : CommandWithHelp() {
         println("Found $errorCount errors, $warningCount warnings, $hintCount hints.")
     }
 }
+
+

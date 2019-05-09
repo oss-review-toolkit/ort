@@ -365,4 +365,27 @@ data class OrtResult(
      */
     fun replaceConfig(config: RepositoryConfiguration): OrtResult =
         copy(repository = repository.copy(config = config)).also { it.data += data }
+
+    fun replaceCurations(curations: List<PackageCuration>): OrtResult {
+        val curatedPackages: Set<CuratedPackage> = analyzer?.result?.packages ?: emptySet()
+
+        val overriddenPackages = curatedPackages.map { curatedPackage ->
+            val curationsForPackage = curations.filter { it.isApplicable(curatedPackage.pkg.id) }
+
+            curationsForPackage.fold(curatedPackage) { cur, packageCuration ->
+                packageCuration.apply(cur)
+            }
+        }.toSortedSet()
+
+        val result = copy(
+            analyzer = analyzer?.copy(
+                result = analyzer.result.copy(
+                    packages = overriddenPackages
+                )
+            )
+        )
+        result.data.putAll(data)
+
+        return result
+    }
 }

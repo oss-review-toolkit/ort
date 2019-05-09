@@ -7,6 +7,7 @@ ort_result_url_file="$orts_dir/target-url.txt"
 
 ort="$HOME/devel/oss-review-toolkit/cli/build/install/ort/bin/ort"
 configuration="$HOME/devel/configuration"
+c_curations_file="$configuration/curations.yml"
 c_garbage_file="$configuration/copyright-garbage.yml"
 c_notice_script="$configuration/notice-post-processor.kts"
 c_rules_file="$configuration/rules.kts"
@@ -63,7 +64,7 @@ function generate_notice {
 function generate_report {
   echo "generate html report..."
   rm -rf $temp_dir
-  $ort evaluate -i $ort_result_file -o $temp_dir -f JSON --rules-file $c_rules_file --repository-configuration-file $config_file
+  $ort evaluate -i $ort_result_file -o $temp_dir -f JSON --rules-file $c_rules_file --repository-configuration-file $config_file --curations-file $c_curations_file
   $ort report -f STATICHTML -i $temp_dir/evaluation-result.json -o $temp_dir/report --copyright-garbage-file $c_garbage_file \
      --post-processing-script $c_notice_script --repository-configuration-file $config_file --resolutions-file $c_resolutions_file
   mv "$temp_dir/report/scan-report.html" "./$html_report_file"
