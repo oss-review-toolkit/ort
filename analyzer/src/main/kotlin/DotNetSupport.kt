@@ -23,7 +23,7 @@ package com.here.ort.analyzer
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 
-import com.here.ort.model.HashAlgorithm
+import com.here.ort.model.Hash
 import com.here.ort.model.Identifier
 import com.here.ort.model.OrtIssue
 import com.here.ort.model.Package
@@ -87,14 +87,14 @@ class DotNetSupport(
                 }
             }
 
-        private fun extractRemoteArtifact(node: JsonNode, nupkgUrl: String) =
-            RemoteArtifact(
-                url = nupkgUrl,
-                hash = node["packageHash"].textValueOrEmpty(),
-                hashAlgorithm = HashAlgorithm.fromString(
-                    node["packageHashAlgorithm"].textValueOrEmpty()
-                )
-            )
+        private fun extractRemoteArtifact(node: JsonNode, nupkgUrl: String): RemoteArtifact {
+            val encodedHash = node["packageHash"].textValueOrEmpty()
+            val hashAlgorithm = node["packageHashAlgorithm"].textValueOrEmpty()
+            val sri = hashAlgorithm.replace("-", "") + "-" + encodedHash
+            val hash = Hash.fromValue(sri)
+
+            return RemoteArtifact(nupkgUrl, hash.value, hash.algorithm)
+        }
 
         private fun getCatalogURL(registrationNode: JsonNode): String =
             registrationNode["catalogEntry"].textValueOrEmpty()
