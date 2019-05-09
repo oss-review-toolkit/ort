@@ -19,6 +19,7 @@
 
 package com.here.ort.reporter.reporters
 
+import com.here.ort.model.Environment
 import com.here.ort.model.OrtResult
 import com.here.ort.model.Project
 import com.here.ort.model.Severity
@@ -34,6 +35,7 @@ import com.here.ort.utils.isValidUrl
 import com.here.ort.utils.normalizeLineBreaks
 
 import java.io.OutputStream
+import java.time.Instant
 
 import javax.xml.parsers.DocumentBuilderFactory
 
@@ -96,6 +98,17 @@ class StaticHtmlReporter : Reporter() {
 
                     div("ort-report-label") {
                         +"Scan Report"
+                    }
+
+                    div {
+                        +"Created by "
+                        strong { +"ORT" }
+                        +", the "
+                        a {
+                            href = "http://oss-review-toolkit.org/"
+                            +"OSS Review Toolkit"
+                        }
+                        +", version ${Environment().ortVersion} on ${Instant.now()}."
                     }
 
                     if (reportTableModel.metadata.isNotEmpty()) {
