@@ -75,8 +75,16 @@ class RuleSet(val ortResult: OrtResult) {
             ancestors: List<PackageReference>,
             level: Int,
             scope: Scope,
-            project: Project
+            project: Project,
+            visitedPackages: MutableSet<PackageReference>
         ) {
+            if (visitedPackages.contains(pkgRef)) {
+                log.debug { "Skipping rule $name for already visited dependency ${pkgRef.id.toCoordinates()}." }
+                return
+            }
+
+            visitedPackages += pkgRef
+
             val curatedPackage = ortResult.analyzer?.result?.let { analyzerResult ->
                 analyzerResult.packages.find { it.pkg.id == pkgRef.id }
                     ?: analyzerResult.projects.find { it.id == pkgRef.id }?.toPackage()?.toCuratedPackage()
@@ -105,14 +113,15 @@ class RuleSet(val ortResult: OrtResult) {
             }
 
             pkgRef.dependencies.forEach { dependency ->
-                traverse(dependency, listOf(pkgRef) + ancestors, level + 1, scope, project)
+                traverse(dependency, listOf(pkgRef) + ancestors, level + 1, scope, project, visitedPackages)
             }
         }
 
         ortResult.analyzer?.result?.projects?.forEach { project ->
             project.scopes.forEach { scope ->
+                val visitedPackages = mutableSetOf<PackageReference>()
                 scope.dependencies.forEach { pkgRef ->
-                    traverse(pkgRef, emptyList(), 0, scope, project)
+                    traverse(pkgRef, emptyList(), 0, scope, project, visitedPackages)
                 }
             }
         }
