@@ -51,13 +51,13 @@ class RuleSet(val ortResult: OrtResult) {
      */
     fun packageRule(name: String, configure: PackageRule.() -> Unit) {
         val packages = ortResult.analyzer?.result?.let { analyzerResult ->
-            analyzerResult.projects.map { it.toPackage() } + analyzerResult.packages.map { it.pkg }
+            analyzerResult.projects.map { it.toPackage().toCuratedPackage() } + analyzerResult.packages
         }.orEmpty()
 
         packages.forEach { pkg ->
-            val detectedLicenses = licenseFindings[pkg.id].orEmpty().keys.toList()
+            val detectedLicenses = licenseFindings[pkg.pkg.id].orEmpty().keys.toList()
 
-            PackageRule(this, name, pkg, detectedLicenses).apply {
+            PackageRule(this, name, pkg.pkg, pkg.curations, detectedLicenses).apply {
                 configure()
                 evaluate()
             }
@@ -78,16 +78,27 @@ class RuleSet(val ortResult: OrtResult) {
             project: Project
         ) {
             val pkg = ortResult.analyzer?.result?.let { analyzerResult ->
-                analyzerResult.packages.find { it.pkg.id == pkgRef.id }?.pkg
-                    ?: analyzerResult.projects.find { it.id == pkgRef.id }?.toPackage()
+                analyzerResult.packages.find { it.pkg.id == pkgRef.id }
+                    ?: analyzerResult.projects.find { it.id == pkgRef.id }?.toPackage()?.toCuratedPackage()
             }
 
             if (pkg == null) {
                 log.warn { "Could not find package for dependency ${pkgRef.id.toCoordinates()}, skipping rule $name." }
             } else {
-                val detectedLicenses = licenseFindings[pkg.id].orEmpty().keys.toList()
+                val detectedLicenses = licenseFindings[pkg.pkg.id].orEmpty().keys.toList()
 
-                DependencyRule(this, name, pkg, detectedLicenses, pkgRef, ancestors, level, scope, project).apply {
+                DependencyRule(
+                    this,
+                    name,
+                    pkg.pkg,
+                    pkg.curations,
+                    detectedLicenses,
+                    pkgRef,
+                    ancestors,
+                    level,
+                    scope,
+                    project
+                ).apply {
                     configure()
                     evaluate()
                 }

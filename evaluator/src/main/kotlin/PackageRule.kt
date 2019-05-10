@@ -23,6 +23,7 @@ import com.here.ort.model.Identifier
 import com.here.ort.model.LicenseFinding
 import com.here.ort.model.LicenseSource
 import com.here.ort.model.Package
+import com.here.ort.model.PackageCurationResult
 import com.here.ort.model.Project
 import com.here.ort.model.Severity
 import com.here.ort.model.config.Excludes
@@ -40,6 +41,11 @@ open class PackageRule(
      * The [Package] to check.
      */
     val pkg: Package,
+
+    /**
+     * The list of curations applied to the [package][pkg].
+     */
+    val curations: List<PackageCurationResult>,
 
     /**
      * The detected licenses for the [Package].

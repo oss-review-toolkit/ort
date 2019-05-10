@@ -22,6 +22,7 @@ package com.here.ort.evaluator
 import com.here.ort.model.Identifier
 import com.here.ort.model.LicenseFinding
 import com.here.ort.model.Package
+import com.here.ort.model.PackageCurationResult
 import com.here.ort.model.PackageLinkage
 import com.here.ort.model.PackageReference
 import com.here.ort.model.Project
@@ -35,6 +36,7 @@ class DependencyRule(
     ruleSet: RuleSet,
     name: String,
     pkg: Package,
+    curations: List<PackageCurationResult>,
     detectedLicenses: List<LicenseFinding>,
 
     /**
@@ -62,7 +64,7 @@ class DependencyRule(
      * The [Project] that contains the [dependency].
      */
     val project: Project
-) : PackageRule(ruleSet, name, pkg, detectedLicenses) {
+) : PackageRule(ruleSet, name, pkg, curations, detectedLicenses) {
     override val description =
         "Evaluating rule '$name' for dependency '${dependency.id.toCoordinates()}' " +
                 "(project=${project.id.toCoordinates()}, scope=${scope.name}, level=$level)."
