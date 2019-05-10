@@ -19,6 +19,8 @@
 
 package com.here.ort.evaluator
 
+import ch.frankel.slf4k.*
+
 import com.here.ort.model.Identifier
 import com.here.ort.model.LicenseFinding
 import com.here.ort.model.OrtResult
@@ -27,6 +29,7 @@ import com.here.ort.model.PackageReference
 import com.here.ort.model.Project
 import com.here.ort.model.RuleViolation
 import com.here.ort.model.Scope
+import com.here.ort.utils.log
 
 /**
  * A set of evaluator [Rule]s, using an [ortResult] as input.
@@ -79,13 +82,15 @@ class RuleSet(val ortResult: OrtResult) {
                     ?: analyzerResult.projects.find { it.id == pkgRef.id }?.toPackage()
             }
 
-            requireNotNull(pkg) { "Could not find package for package reference '${pkgRef.id.toCoordinates()}'." }
+            if (pkg == null) {
+                log.warn { "Could not find package for dependency ${pkgRef.id.toCoordinates()}, skipping rule $name." }
+            } else {
+                val detectedLicenses = licenseFindings[pkg.id].orEmpty().keys.toList()
 
-            val detectedLicenses = licenseFindings[pkg.id].orEmpty().keys.toList()
-
-            DependencyRule(this, name, pkg, detectedLicenses, pkgRef, ancestors, level, scope, project).apply {
-                configure()
-                evaluate()
+                DependencyRule(this, name, pkg, detectedLicenses, pkgRef, ancestors, level, scope, project).apply {
+                    configure()
+                    evaluate()
+                }
             }
 
             pkgRef.dependencies.forEach { dependency ->
