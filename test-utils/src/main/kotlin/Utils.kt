@@ -31,6 +31,7 @@ val DEFAULT_REPOSITORY_CONFIGURATION = RepositoryConfiguration()
 val USER_DIR = File(System.getProperty("user.dir"))
 
 private val ORT_VERSION_REGEX = Regex("(ort_version): \".*\"")
+private val JAVA_VERSION_REGEX = Regex("(java_version): \".*\"")
 private val ENV_VAR_REGEX = Regex(
     "(variables):.*?^(\\s{4}\\w+):",
     setOf(RegexOption.DOT_MATCHES_ALL, RegexOption.MULTILINE)
@@ -52,6 +53,7 @@ fun patchExpectedResult(
 
     return result.readText()
         .replaceIfNotNull(custom)
+        .replaceIfNotNull("<REPLACE_JAVA>", System.getProperty("java.version"))
         .replaceIfNotNull("<REPLACE_OS>", System.getProperty("os.name"))
         .replaceIfNotNull("<REPLACE_DEFINITION_FILE_PATH>", definitionFilePath)
         .replaceIfNotNull("<REPLACE_URL>", url)
@@ -67,6 +69,7 @@ fun patchActualResult(result: String, patchDownloadTime: Boolean = false, patchS
 
     return result
         .replace(ORT_VERSION_REGEX) { "${it.groupValues[1]}: \"HEAD\"" }
+        .replace(JAVA_VERSION_REGEX) { "${it.groupValues[1]}: \"${System.getProperty("java.version")}\"" }
         .replace(ENV_VAR_REGEX) { "${it.groupValues[1]}: {}\n${it.groupValues[2]}:" }
         .replace(TIMESTAMP_REGEX) { "${it.groupValues[1]}: \"${Instant.EPOCH}\"" }
         .replaceIf(patchDownloadTime, DOWNLOAD_TIME_REGEX) { "${it.groupValues[1]}: \"${Instant.EPOCH}\"" }
