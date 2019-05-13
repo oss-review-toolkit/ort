@@ -124,7 +124,7 @@ object Main : CommandWithHelp() {
         """
             ________ _____________________
             \_____  \\______   \__    ___/ the OSS Review Toolkit, version ${env.ortVersion}.
-             /   |   \|       _/ |    |    Running$command on ${env.os} $with
+             /   |   \|       _/ |    |    Running$command on Java ${env.javaVersion} and ${env.os} $with
             /    |    \    |   \ |    |    ${variables.getOrElse(variableIndex++) { "" }}
             \_______  /____|_  / |____|    ${variables.getOrElse(variableIndex++) { "" }}
                     \/       \/

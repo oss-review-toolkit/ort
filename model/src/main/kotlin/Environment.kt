@@ -31,6 +31,11 @@ data class Environment(
     val ortVersion: String = ORT_VERSION,
 
     /**
+     * The version of Java used.
+     */
+    val javaVersion: String = System.getProperty("java.version"),
+
+    /**
      * Name of the operating system, defaults to [OS.name].
      */
     val os: String = Os.name,
