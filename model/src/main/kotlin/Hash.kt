@@ -19,6 +19,12 @@
 
 package com.here.ort.model
 
+import com.fasterxml.jackson.annotation.JsonIgnore
+import com.fasterxml.jackson.core.JsonParser
+import com.fasterxml.jackson.databind.DeserializationContext
+import com.fasterxml.jackson.databind.JsonNode
+import com.fasterxml.jackson.databind.deser.std.StdDeserializer
+
 import com.here.ort.utils.hash
 import com.here.ort.utils.toHexString
 
@@ -30,57 +36,81 @@ import java.util.Base64
  */
 data class Hash(
     /**
-     * The algorithm used to calculate the hash value.
-     */
-    val algorithm: HashAlgorithm,
-
-    /**
      * The value calculated using the hash algorithm.
      */
-    val value: String
+    val value: String,
+
+    /**
+     * The algorithm used to calculate the hash value.
+     */
+    val algorithm: HashAlgorithm
 ) {
     companion object {
         /**
          * A constant to specify that no hash value (and thus also no hash algorithm) is provided.
          */
-        val NONE = Hash(HashAlgorithm.NONE, HashAlgorithm.NONE.toString())
-
-        /**
-         * The set of algorithms that cannot be verified.
-         */
-        val UNVERIFIABLE = setOf(HashAlgorithm.NONE, HashAlgorithm.UNKNOWN)
-
-        /**
-         * The list of algorithms that can be verified.
-         */
-        val VERIFIABLE = enumValues<HashAlgorithm>().toSet() - UNVERIFIABLE
+        val NONE = Hash(HashAlgorithm.NONE.toString(), HashAlgorithm.NONE)
 
         /**
          * Create a hash from it a [value].
          */
-        fun fromValue(value: String): Hash {
+        fun create(value: String): Hash {
             val splitValue = value.split('-')
             return if (splitValue.size == 2) {
                 // Support Subresource Integrity (SRI) hashes, see
                 // https://w3c.github.io/webappsec-subresource-integrity/
                 Hash(
-                    algorithm = HashAlgorithm.fromString(splitValue.first()),
-                    value = Base64.getDecoder().decode(splitValue.last()).toHexString()
+                    value = Base64.getDecoder().decode(splitValue.last()).toHexString(),
+                    algorithm = HashAlgorithm.fromString(splitValue.first())
                 )
             } else {
-                Hash(HashAlgorithm.fromHash(value), value)
+                Hash(value, HashAlgorithm.create(value))
             }
         }
+
+        /**
+         * Create a hash from the given [value] and [algorithm]. This is mostly used for deserialization to verify the
+         * algorithm matches the one determined by the value.
+         */
+        fun create(value: String, algorithm: String) =
+            create(value).also { hash ->
+                require(hash.algorithm == HashAlgorithm.fromString(algorithm)) {
+                    "'$value' is not a $algorithm hash."
+                }
+            }
     }
+
+    /**
+     * Whether values can be calculated for this algorithm.
+     */
+    @JsonIgnore
+    val canVerify = algorithm in HashAlgorithm.VERIFIABLE
 
     /**
      * Verify that the [file] matches this hash.
      */
     fun verify(file: File): Boolean {
-        require(algorithm in VERIFIABLE) {
-            "Cannot verify algorithm '$algorithm'. Supported algorithms are $VERIFIABLE."
+        require(canVerify) {
+            "Cannot verify algorithm '$algorithm'. Supported algorithms are ${HashAlgorithm.VERIFIABLE}."
         }
 
         return file.hash(algorithm.toString()) == value
+    }
+}
+
+class HashDeserializer : StdDeserializer<Hash>(Hash::class.java) {
+    override fun deserialize(p: JsonParser, ctxt: DeserializationContext): Hash {
+        val node = p.codec.readTree<JsonNode>(p)
+        return if (node.isTextual) {
+            val hashValue = node.textValue()
+            if (p.nextFieldName() == "hash_algorithm") {
+                val hashAlgorithm = p.nextTextValue()
+                Hash.create(hashValue, hashAlgorithm)
+            } else {
+                Hash.create(hashValue)
+            }
+        } else {
+            Hash.create(node["value"].textValue(), node["algorithm"].textValue())
+        }
     }
 }

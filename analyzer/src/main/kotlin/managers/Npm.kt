@@ -220,7 +220,7 @@ open class Npm(
 
             val identifier = "$rawName@$version"
 
-            var hash = Hash.fromValue(json["_integrity"].textValueOrEmpty())
+            var hash = Hash.create(json["_integrity"].textValueOrEmpty())
 
             // Download package info from registry.npmjs.org.
             // TODO: check if unpkg.com can be used as a fallback in case npmjs.org is down.
@@ -268,7 +268,7 @@ open class Npm(
                                         }
                                     }
 
-                                    hash = Hash.fromValue(dist["shasum"].textValueOrEmpty())
+                                    hash = Hash.create(dist["shasum"].textValueOrEmpty())
                                 }
 
                                 vcsFromPackage = parseVcsInfo(versionInfo)
@@ -301,8 +301,7 @@ open class Npm(
                 binaryArtifact = RemoteArtifact.EMPTY,
                 sourceArtifact = RemoteArtifact(
                     url = downloadUrl,
-                    hash = hash.value,
-                    hashAlgorithm = hash.algorithm
+                    hash = hash
                 ),
                 vcs = vcsFromPackage,
                 vcsProcessed = processPackageVcs(vcsFromPackage, homepageUrl)

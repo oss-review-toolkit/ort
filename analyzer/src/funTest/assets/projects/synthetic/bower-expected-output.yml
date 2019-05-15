@@ -40,12 +40,14 @@ packages:
     homepage_url: "https://github.com/jquery/jquery-dist"
     binary_artifact:
       url: ""
-      hash: ""
-      hash_algorithm: ""
+      hash:
+        value: ""
+        algorithm: ""
     source_artifact:
       url: ""
-      hash: ""
-      hash_algorithm: ""
+      hash:
+        value: ""
+        algorithm: ""
     vcs:
       type: ""
       url: "https://github.com/jquery/jquery-dist.git"
@@ -68,12 +70,14 @@ packages:
     homepage_url: "https://github.com/Polymer/polymer"
     binary_artifact:
       url: ""
-      hash: ""
-      hash_algorithm: ""
+      hash:
+        value: ""
+        algorithm: ""
     source_artifact:
       url: ""
-      hash: ""
-      hash_algorithm: ""
+      hash:
+        value: ""
+        algorithm: ""
     vcs:
       type: "git"
       url: "https://github.com/Polymer/polymer.git"
@@ -94,12 +98,14 @@ packages:
     homepage_url: "https://github.com/webcomponents/shadycss"
     binary_artifact:
       url: ""
-      hash: ""
-      hash_algorithm: ""
+      hash:
+        value: ""
+        algorithm: ""
     source_artifact:
       url: ""
-      hash: ""
-      hash_algorithm: ""
+      hash:
+        value: ""
+        algorithm: ""
     vcs:
       type: ""
       url: "https://github.com/webcomponents/shadycss.git"
@@ -122,12 +128,14 @@ packages:
     homepage_url: "http://webcomponents.org"
     binary_artifact:
       url: ""
-      hash: ""
-      hash_algorithm: ""
+      hash:
+        value: ""
+        algorithm: ""
     source_artifact:
       url: ""
-      hash: ""
-      hash_algorithm: ""
+      hash:
+        value: ""
+        algorithm: ""
     vcs:
       type: "git"
       url: "https://github.com/webcomponents/webcomponentsjs.git"

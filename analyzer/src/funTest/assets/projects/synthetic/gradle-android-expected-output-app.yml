@@ -467,12 +467,14 @@ packages:
     homepage_url: "https://github.com/square/okhttp/okhttp"
     binary_artifact:
       url: ""
-      hash: ""
-      hash_algorithm: ""
+      hash:
+        value: ""
+        algorithm: ""
     source_artifact:
       url: "https://repo.maven.apache.org/maven2/com/squareup/okhttp3/okhttp/3.10.0/okhttp-3.10.0-sources.jar"
-      hash: "0e99b7b608968f16b07104b93e62cb90701174d0"
-      hash_algorithm: "SHA-1"
+      hash:
+        value: "0e99b7b608968f16b07104b93e62cb90701174d0"
+        algorithm: "SHA-1"
     vcs:
       type: "git"
       url: "https://github.com/square/okhttp.git"
@@ -495,12 +497,14 @@ packages:
     homepage_url: "https://github.com/square/okio/okio"
     binary_artifact:
       url: ""
-      hash: ""
-      hash_algorithm: ""
+      hash:
+        value: ""
+        algorithm: ""
     source_artifact:
       url: "https://repo.maven.apache.org/maven2/com/squareup/okio/okio/1.14.0/okio-1.14.0-sources.jar"
-      hash: "e7c96b4fe5651490d8f3c022042940d743a3bdd9"
-      hash_algorithm: "SHA-1"
+      hash:
+        value: "e7c96b4fe5651490d8f3c022042940d743a3bdd9"
+        algorithm: "SHA-1"
     vcs:
       type: "git"
       url: "https://github.com/square/okio.git"
@@ -524,12 +528,14 @@ packages:
     homepage_url: "http://junit.org"
     binary_artifact:
       url: ""
-      hash: ""
-      hash_algorithm: ""
+      hash:
+        value: ""
+        algorithm: ""
     source_artifact:
       url: "https://repo.maven.apache.org/maven2/junit/junit/4.12/junit-4.12-sources.jar"
-      hash: "a6c32b40bf3d76eca54e3c601e5d1470c86fcdfa"
-      hash_algorithm: "SHA-1"
+      hash:
+        value: "a6c32b40bf3d76eca54e3c601e5d1470c86fcdfa"
+        algorithm: "SHA-1"
     vcs:
       type: "git"
       url: "git://github.com/junit-team/junit.git"
@@ -555,12 +561,14 @@ packages:
     homepage_url: "https://commons.apache.org/proper/commons-compress/"
     binary_artifact:
       url: ""
-      hash: ""
-      hash_algorithm: ""
+      hash:
+        value: ""
+        algorithm: ""
     source_artifact:
       url: "https://repo.maven.apache.org/maven2/org/apache/commons/commons-compress/1.17/commons-compress-1.17-sources.jar"
-      hash: "9d064d7d42ee1d04ae07ad23025b4f9616652eed"
-      hash_algorithm: "SHA-1"
+      hash:
+        value: "9d064d7d42ee1d04ae07ad23025b4f9616652eed"
+        algorithm: "SHA-1"
     vcs:
       type: "git"
       url: "https://git-wip-us.apache.org/repos/asf/commons-compress.git"
@@ -585,12 +593,14 @@ packages:
     homepage_url: "http://commons.apache.org/proper/commons-lang/"
     binary_artifact:
       url: ""
-      hash: ""
-      hash_algorithm: ""
+      hash:
+        value: ""
+        algorithm: ""
     source_artifact:
       url: "https://repo.maven.apache.org/maven2/org/apache/commons/commons-lang3/3.7/commons-lang3-3.7-sources.jar"
-      hash: "e7e36219edde1c66c93495a75490d8f526c377cb"
-      hash_algorithm: "SHA-1"
+      hash:
+        value: "e7e36219edde1c66c93495a75490d8f526c377cb"
+        algorithm: "SHA-1"
     vcs:
       type: "git"
       url: "http://git-wip-us.apache.org/repos/asf/commons-lang.git"
@@ -614,12 +624,14 @@ packages:
     homepage_url: "http://commons.apache.org/proper/commons-text/"
     binary_artifact:
       url: ""
-      hash: ""
-      hash_algorithm: ""
+      hash:
+        value: ""
+        algorithm: ""
     source_artifact:
       url: "https://repo.maven.apache.org/maven2/org/apache/commons/commons-text/1.2/commons-text-1.2-sources.jar"
-      hash: "679282ee0f6f2b236f58a7a1dc8395861ad9fd97"
-      hash_algorithm: "SHA-1"
+      hash:
+        value: "679282ee0f6f2b236f58a7a1dc8395861ad9fd97"
+        algorithm: "SHA-1"
     vcs:
       type: "git"
       url: "http://git-wip-us.apache.org/repos/asf/commons-text.git"
@@ -643,12 +655,14 @@ packages:
     homepage_url: "http://commons.apache.org/proper/commons-text/"
     binary_artifact:
       url: ""
-      hash: ""
-      hash_algorithm: ""
+      hash:
+        value: ""
+        algorithm: ""
     source_artifact:
       url: "https://repo.maven.apache.org/maven2/org/apache/commons/commons-text/1.3/commons-text-1.3-sources.jar"
-      hash: "9c51853f855aca4ea31785f30385e980a58eaf4b"
-      hash_algorithm: "SHA-1"
+      hash:
+        value: "9c51853f855aca4ea31785f30385e980a58eaf4b"
+        algorithm: "SHA-1"
     vcs:
       type: "git"
       url: "http://git-wip-us.apache.org/repos/asf/commons-text.git"
@@ -673,12 +687,14 @@ packages:
     homepage_url: "https://github.com/hamcrest/JavaHamcrest/hamcrest-core"
     binary_artifact:
       url: ""
-      hash: ""
-      hash_algorithm: ""
+      hash:
+        value: ""
+        algorithm: ""
     source_artifact:
       url: "https://repo.maven.apache.org/maven2/org/hamcrest/hamcrest-core/1.3/hamcrest-core-1.3-sources.jar"
-      hash: "1dc37250fbc78e23a65a67fbbaf71d2e9cbc3c0b"
-      hash_algorithm: "SHA-1"
+      hash:
+        value: "1dc37250fbc78e23a65a67fbbaf71d2e9cbc3c0b"
+        algorithm: "SHA-1"
     vcs:
       type: "git"
       url: "git@github.com:hamcrest/JavaHamcrest.git"

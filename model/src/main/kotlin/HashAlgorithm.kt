@@ -26,16 +26,16 @@ import com.fasterxml.jackson.annotation.JsonValue
  * An enum of supported hash algorithms. Each algorithm has one or more [aliases] associated to it, where the first
  * alias is the definite name.
  */
-enum class HashAlgorithm(private vararg val aliases: String) {
+enum class HashAlgorithm(private vararg val aliases: String, val verifiable: Boolean = true) {
     /**
      * No hash algorithm.
      */
-    NONE(""),
+    NONE("", verifiable = false),
 
     /**
      * An unknown hash algorithm.
      */
-    UNKNOWN("UNKNOWN"),
+    UNKNOWN("UNKNOWN", verifiable = false),
 
     /**
      * The Message-Digest 5 hash algorithm, see [MD5](http://en.wikipedia.org/wiki/MD5).
@@ -64,6 +64,11 @@ enum class HashAlgorithm(private vararg val aliases: String) {
 
     companion object {
         /**
+         * The list of algorithms that can be verified.
+         */
+        val VERIFIABLE = enumValues<HashAlgorithm>().filter { it.verifiable }
+
+        /**
          * Create a hash algorithm from one of its [alias] names.
          */
         @JsonCreator
@@ -76,7 +81,7 @@ enum class HashAlgorithm(private vararg val aliases: String) {
         /**
          * Create a hash algorithm from a hash [value].
          */
-        fun fromHash(value: String): HashAlgorithm {
+        fun create(value: String): HashAlgorithm {
             if (value.isBlank()) return NONE
 
             return when (value.length) {

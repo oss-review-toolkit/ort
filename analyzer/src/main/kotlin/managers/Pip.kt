@@ -29,7 +29,7 @@ import com.here.ort.analyzer.HTTP_CACHE_PATH
 import com.here.ort.analyzer.PackageManager
 import com.here.ort.downloader.VersionControlSystem
 import com.here.ort.model.EMPTY_JSON_NODE
-import com.here.ort.model.HashAlgorithm
+import com.here.ort.model.Hash
 import com.here.ort.model.Identifier
 import com.here.ort.model.Package
 import com.here.ort.model.PackageReference
@@ -435,9 +435,9 @@ class Pip(
         } ?: releaseNode[0]
 
         val url = binaryArtifact["url"]?.textValue() ?: pkg.binaryArtifact.url
-        val hash = binaryArtifact["md5_digest"]?.textValue() ?: pkg.binaryArtifact.hash
+        val hash = binaryArtifact["md5_digest"]?.textValue()?.let { Hash.create(it) } ?: pkg.binaryArtifact.hash
 
-        return RemoteArtifact(url, hash, HashAlgorithm.fromHash(hash))
+        return RemoteArtifact(url, hash)
     }
 
     private fun getSourceArtifact(releaseNode: ArrayNode): RemoteArtifact {
@@ -454,7 +454,7 @@ class Pip(
         val url = sourceArtifact["url"]?.textValue() ?: return RemoteArtifact.EMPTY
         val hash = sourceArtifact["md5_digest"]?.textValue() ?: return RemoteArtifact.EMPTY
 
-        return RemoteArtifact(url, hash, HashAlgorithm.fromHash(hash))
+        return RemoteArtifact(url, Hash.create(hash))
     }
 
     private fun getDeclaredLicenses(pkgInfo: JsonNode): SortedSet<String> {

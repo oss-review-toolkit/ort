@@ -38,7 +38,7 @@ class ScanResultContainerTest : WordSpec() {
 
     private val provenance1 = Provenance(
         downloadTime = downloadTime1,
-        sourceArtifact = RemoteArtifact("url", "hash", HashAlgorithm.UNKNOWN)
+        sourceArtifact = RemoteArtifact("url", Hash.create("hash"))
     )
     private val provenance2 = Provenance(
         downloadTime = downloadTime2,

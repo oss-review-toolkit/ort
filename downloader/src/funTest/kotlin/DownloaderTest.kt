@@ -19,7 +19,7 @@
 
 package com.here.ort.downloader
 
-import com.here.ort.model.HashAlgorithm
+import com.here.ort.model.Hash
 import com.here.ort.model.Identifier
 import com.here.ort.model.Package
 import com.here.ort.model.RemoteArtifact
@@ -62,8 +62,7 @@ class DownloaderTest : StringSpec() {
                 binaryArtifact = RemoteArtifact.EMPTY,
                 sourceArtifact = RemoteArtifact(
                     url = "https://repo.maven.apache.org/maven2/junit/junit/4.12/junit-4.12-sources.jar",
-                    hash = "a6c32b40bf3d76eca54e3c601e5d1470c86fcdfa",
-                    hashAlgorithm = HashAlgorithm.SHA1
+                    hash = Hash.create("a6c32b40bf3d76eca54e3c601e5d1470c86fcdfa")
                 ),
                 vcs = VcsInfo.EMPTY
             )
@@ -73,7 +72,6 @@ class DownloaderTest : StringSpec() {
             downloadResult.sourceArtifact shouldNotBe null
             downloadResult.sourceArtifact!!.url shouldBe pkg.sourceArtifact.url
             downloadResult.sourceArtifact!!.hash shouldBe pkg.sourceArtifact.hash
-            downloadResult.sourceArtifact!!.hashAlgorithm shouldBe pkg.sourceArtifact.hashAlgorithm
 
             val licenseFile = File(downloadResult.downloadDirectory, "LICENSE-junit.txt")
             licenseFile.isFile shouldBe true
@@ -96,8 +94,7 @@ class DownloaderTest : StringSpec() {
                 binaryArtifact = RemoteArtifact.EMPTY,
                 sourceArtifact = RemoteArtifact(
                     url = "https://repo.maven.apache.org/maven2/junit/junit/4.12/junit-4.12-sources.jar",
-                    hash = "0123456789abcdef0123456789abcdef01234567",
-                    hashAlgorithm = HashAlgorithm.SHA1
+                    hash = Hash.create("0123456789abcdef0123456789abcdef01234567")
                 ),
                 vcs = VcsInfo.EMPTY
             )
@@ -128,8 +125,7 @@ class DownloaderTest : StringSpec() {
                 binaryArtifact = RemoteArtifact.EMPTY,
                 sourceArtifact = RemoteArtifact(
                     url = "https://repo.maven.apache.org/maven2/junit/junit/4.12/junit-4.12-sources.jar",
-                    hash = "a6c32b40bf3d76eca54e3c601e5d1470c86fcdfa",
-                    hashAlgorithm = HashAlgorithm.SHA1
+                    hash = Hash.create("a6c32b40bf3d76eca54e3c601e5d1470c86fcdfa")
                 ),
                 vcs = VcsInfo(
                     type = "Git",
@@ -143,7 +139,6 @@ class DownloaderTest : StringSpec() {
             downloadResult.sourceArtifact shouldNotBe null
             downloadResult.sourceArtifact!!.url shouldBe pkg.sourceArtifact.url
             downloadResult.sourceArtifact!!.hash shouldBe pkg.sourceArtifact.hash
-            downloadResult.sourceArtifact!!.hashAlgorithm shouldBe pkg.sourceArtifact.hashAlgorithm
 
             val licenseFile = File(downloadResult.downloadDirectory, "LICENSE-junit.txt")
             licenseFile.isFile shouldBe true
@@ -167,8 +162,7 @@ class DownloaderTest : StringSpec() {
                 binaryArtifact = RemoteArtifact.EMPTY,
                 sourceArtifact = RemoteArtifact(
                     url = url,
-                    hash = "49fe486f44197c8e5106ed7487526f77b597308f",
-                    hashAlgorithm = HashAlgorithm.SHA1
+                    hash = Hash.create("49fe486f44197c8e5106ed7487526f77b597308f")
                 ),
                 vcs = VcsInfo.EMPTY
             )
@@ -178,7 +172,6 @@ class DownloaderTest : StringSpec() {
             downloadResult.sourceArtifact shouldNotBe null
             downloadResult.sourceArtifact!!.url shouldBe pkg.sourceArtifact.url
             downloadResult.sourceArtifact!!.hash shouldBe pkg.sourceArtifact.hash
-            downloadResult.sourceArtifact!!.hashAlgorithm shouldBe pkg.sourceArtifact.hashAlgorithm
 
             val tyrexDir = File(downloadResult.downloadDirectory, "tyrex-1.0.1")
 

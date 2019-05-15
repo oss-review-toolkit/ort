@@ -23,7 +23,7 @@ import ch.frankel.slf4k.*
 
 import com.fasterxml.jackson.module.kotlin.readValue
 
-import com.here.ort.model.HashAlgorithm
+import com.here.ort.model.Hash
 import com.here.ort.model.Identifier
 import com.here.ort.model.Package
 import com.here.ort.model.RemoteArtifact
@@ -408,7 +408,7 @@ class MavenSupport(workspaceReader: WorkspaceReader) {
                 }
 
                 val downloadUrl = "${repository.url.trimEnd('/')}/$remoteLocation"
-                return RemoteArtifact(downloadUrl, actualChecksum, HashAlgorithm.fromString(checksum.algorithm)).also {
+                return RemoteArtifact(downloadUrl, Hash.create(actualChecksum, checksum.algorithm)).also {
                     log.debug { "Writing remote artifact for '$artifact' to disk cache." }
                     remoteArtifactCache.write(artifact.toString(), yamlMapper.writeValueAsString(it))
                 }

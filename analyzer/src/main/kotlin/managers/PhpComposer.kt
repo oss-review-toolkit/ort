@@ -27,7 +27,7 @@ import com.fasterxml.jackson.databind.node.ObjectNode
 import com.here.ort.analyzer.AbstractPackageManagerFactory
 import com.here.ort.analyzer.PackageManager
 import com.here.ort.downloader.VersionControlSystem
-import com.here.ort.model.HashAlgorithm
+import com.here.ort.model.Hash
 import com.here.ort.model.Identifier
 import com.here.ort.model.OrtIssue
 import com.here.ort.model.Package
@@ -308,7 +308,7 @@ class PhpComposer(
     private fun parseArtifact(packageInfo: JsonNode): RemoteArtifact {
         return packageInfo["dist"]?.let {
             val shasum = it["shasum"].textValueOrEmpty()
-            RemoteArtifact(it["url"].textValueOrEmpty(), shasum, HashAlgorithm.fromHash(shasum))
+            RemoteArtifact(it["url"].textValueOrEmpty(), Hash.create(shasum))
         } ?: RemoteArtifact.EMPTY
     }
 
