@@ -41,12 +41,14 @@ packages:
     homepage_url: "http://github.com/pallets/flask/"
     binary_artifact:
       url: "https://files.pythonhosted.org/packages/2e/48/f1936dadac2326b3d73f2fe0a964a87d16be16eb9d7fc56f09c1bea3d17c/Flask-0.12.4-py2.py3-none-any.whl"
-      hash: "3b498df2add69ee16b228e8bdd581bce"
-      hash_algorithm: "MD5"
+      hash:
+        value: "3b498df2add69ee16b228e8bdd581bce"
+        algorithm: "MD5"
     source_artifact:
       url: "https://files.pythonhosted.org/packages/1b/72/ffc594a6832337ace475f939e61c34a44cbb150cde9589f98c482b407dd8/Flask-0.12.4.tar.gz"
-      hash: "f885afe6dd25e8d48d5ba23f2857687e"
-      hash_algorithm: "MD5"
+      hash:
+        value: "f885afe6dd25e8d48d5ba23f2857687e"
+        algorithm: "MD5"
     vcs:
       type: ""
       url: ""
@@ -70,12 +72,14 @@ packages:
     homepage_url: "http://jinja.pocoo.org/"
     binary_artifact:
       url: "https://files.pythonhosted.org/packages/1d/e7/fd8b501e7a6dfe492a433deb7b9d833d39ca74916fa8bc63dd1a4947a671/Jinja2-2.10.1-py2.py3-none-any.whl"
-      hash: "93ca8152bf9ca03214158a49d542402f"
-      hash_algorithm: "MD5"
+      hash:
+        value: "93ca8152bf9ca03214158a49d542402f"
+        algorithm: "MD5"
     source_artifact:
       url: "https://files.pythonhosted.org/packages/93/ea/d884a06f8c7f9b7afbc8138b762e80479fb17aedbbe2b06515a12de9378d/Jinja2-2.10.1.tar.gz"
-      hash: "0ae535be40fd215a8114a090c8b68e5a"
-      hash_algorithm: "MD5"
+      hash:
+        value: "0ae535be40fd215a8114a090c8b68e5a"
+        algorithm: "MD5"
     vcs:
       type: ""
       url: ""
@@ -98,12 +102,14 @@ packages:
     homepage_url: "http://github.com/pallets/markupsafe"
     binary_artifact:
       url: "https://files.pythonhosted.org/packages/4d/de/32d741db316d8fdb7680822dd37001ef7a448255de9699ab4bfcbdf4172b/MarkupSafe-1.0.tar.gz"
-      hash: "2fcedc9284d50e577b5192e8e3578355"
-      hash_algorithm: "MD5"
+      hash:
+        value: "2fcedc9284d50e577b5192e8e3578355"
+        algorithm: "MD5"
     source_artifact:
       url: "https://files.pythonhosted.org/packages/4d/de/32d741db316d8fdb7680822dd37001ef7a448255de9699ab4bfcbdf4172b/MarkupSafe-1.0.tar.gz"
-      hash: "2fcedc9284d50e577b5192e8e3578355"
-      hash_algorithm: "MD5"
+      hash:
+        value: "2fcedc9284d50e577b5192e8e3578355"
+        algorithm: "MD5"
     vcs:
       type: ""
       url: ""
@@ -126,12 +132,14 @@ packages:
     homepage_url: "https://www.palletsprojects.org/p/werkzeug/"
     binary_artifact:
       url: "https://files.pythonhosted.org/packages/20/c4/12e3e56473e52375aa29c4764e70d1b8f3efa6682bef8d0aae04fe335243/Werkzeug-0.14.1-py2.py3-none-any.whl"
-      hash: "11f469d64429cc75f995cf6be5662133"
-      hash_algorithm: "MD5"
+      hash:
+        value: "11f469d64429cc75f995cf6be5662133"
+        algorithm: "MD5"
     source_artifact:
       url: "https://files.pythonhosted.org/packages/9f/08/a3bb1c045ec602dc680906fc0261c267bed6b3bb4609430aff92c3888ec8/Werkzeug-0.14.1.tar.gz"
-      hash: "6d20b5be2d245be4ac7706cc390d130c"
-      hash_algorithm: "MD5"
+      hash:
+        value: "6d20b5be2d245be4ac7706cc390d130c"
+        algorithm: "MD5"
     vcs:
       type: ""
       url: ""
@@ -154,12 +162,14 @@ packages:
     homepage_url: "http://github.com/mitsuhiko/click"
     binary_artifact:
       url: "https://files.pythonhosted.org/packages/34/c1/8806f99713ddb993c5366c362b2f908f18269f8d792aff1abfd700775a77/click-6.7-py2.py3-none-any.whl"
-      hash: "5e7a4e296b3212da2ff11017675d7a4d"
-      hash_algorithm: "MD5"
+      hash:
+        value: "5e7a4e296b3212da2ff11017675d7a4d"
+        algorithm: "MD5"
     source_artifact:
       url: "https://files.pythonhosted.org/packages/95/d9/c3336b6b5711c3ab9d1d3a80f1a3e2afeb9d8c02a7166462f6cc96570897/click-6.7.tar.gz"
-      hash: "fc4cc00c4863833230d3af92af48abd4"
-      hash_algorithm: "MD5"
+      hash:
+        value: "fc4cc00c4863833230d3af92af48abd4"
+        algorithm: "MD5"
     vcs:
       type: ""
       url: ""
@@ -183,12 +193,14 @@ packages:
     homepage_url: "http://github.com/mitsuhiko/itsdangerous"
     binary_artifact:
       url: "https://files.pythonhosted.org/packages/dc/b4/a60bcdba945c00f6d608d8975131ab3f25b22f2bcfe1dab221165194b2d4/itsdangerous-0.24.tar.gz"
-      hash: "a3d55aa79369aef5345c036a8a26307f"
-      hash_algorithm: "MD5"
+      hash:
+        value: "a3d55aa79369aef5345c036a8a26307f"
+        algorithm: "MD5"
     source_artifact:
       url: "https://files.pythonhosted.org/packages/dc/b4/a60bcdba945c00f6d608d8975131ab3f25b22f2bcfe1dab221165194b2d4/itsdangerous-0.24.tar.gz"
-      hash: "a3d55aa79369aef5345c036a8a26307f"
-      hash_algorithm: "MD5"
+      hash:
+        value: "a3d55aa79369aef5345c036a8a26307f"
+        algorithm: "MD5"
     vcs:
       type: ""
       url: ""

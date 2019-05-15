@@ -29,14 +29,9 @@ data class RemoteArtifact(
     val url: String,
 
     /**
-     * The hash value of the remote artifact.
+     * The hash of the remote artifact.
      */
-    val hash: String,
-
-    /**
-     * The name of the algorithm used to calculate the [hash].
-     */
-    val hashAlgorithm: HashAlgorithm
+    val hash: Hash
 ) {
     companion object {
         /**
@@ -45,8 +40,7 @@ data class RemoteArtifact(
         @JvmField
         val EMPTY = RemoteArtifact(
             url = "",
-            hash = Hash.NONE.value,
-            hashAlgorithm = Hash.NONE.algorithm
+            hash = Hash.NONE
         )
     }
 }

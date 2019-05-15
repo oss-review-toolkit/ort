@@ -22,7 +22,6 @@ package com.here.ort.downloader
 import ch.frankel.slf4k.*
 
 import com.here.ort.downloader.vcs.GitRepo
-import com.here.ort.model.Hash
 import com.here.ort.model.Identifier
 import com.here.ort.model.Package
 import com.here.ort.model.Project
@@ -310,12 +309,13 @@ class Downloader {
             }
         }
 
-        if (target.sourceArtifact.hash.isEmpty()) {
-            log.warn { "Source artifact has no hash, skipping verification." }
-        } else if (!Hash(target.sourceArtifact.hashAlgorithm, target.sourceArtifact.hash).verify(sourceArchive)) {
+        if (!target.sourceArtifact.hash.canVerify) {
+            log.warn {
+                "Cannot verify source artifact hash ${target.sourceArtifact.hash}, skipping verification."
+            }
+        } else if (!target.sourceArtifact.hash.verify(sourceArchive)) {
             throw DownloadException(
-                "Source artifact does not match expected ${target.sourceArtifact.hashAlgorithm} " +
-                        "hash '${target.sourceArtifact.hash}'."
+                "Source artifact does not match expected hash value ${target.sourceArtifact.hash.value}."
             )
         }
 

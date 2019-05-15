@@ -35,12 +35,14 @@ packages:
     homepage_url: "https://www.djangoproject.com/"
     binary_artifact:
       url: "https://files.pythonhosted.org/packages/a9/e4/fb8f473fe8ee659859cb712e25222243bbd55ece7c319301eeb60ccddc46/Django-2.1.8-py3-none-any.whl"
-      hash: "22ad9bd7cba46295a3d88473e37418d9"
-      hash_algorithm: "MD5"
+      hash:
+        value: "22ad9bd7cba46295a3d88473e37418d9"
+        algorithm: "MD5"
     source_artifact:
       url: "https://files.pythonhosted.org/packages/78/a0/c82585ddba004f99d19eeee277bc1b9e3b5e55d883e60ed713c0a4c9e3e8/Django-2.1.8.tar.gz"
-      hash: "e4492251be65fda35c6bc0c6ea03fd1a"
-      hash_algorithm: "MD5"
+      hash:
+        value: "e4492251be65fda35c6bc0c6ea03fd1a"
+        algorithm: "MD5"
     vcs:
       type: ""
       url: ""
@@ -63,12 +65,14 @@ packages:
     homepage_url: "http://pythonhosted.org/pytz"
     binary_artifact:
       url: "https://files.pythonhosted.org/packages/3d/73/fe30c2daaaa0713420d0382b16fbb761409f532c56bdcc514bf7b6262bb6/pytz-2019.1-py2.py3-none-any.whl"
-      hash: "9494cbd701404080e83cbb316e692891"
-      hash_algorithm: "MD5"
+      hash:
+        value: "9494cbd701404080e83cbb316e692891"
+        algorithm: "MD5"
     source_artifact:
       url: "https://files.pythonhosted.org/packages/df/d5/3e3ff673e8f3096921b3f1b79ce04b832e0100b4741573154b72b756a681/pytz-2019.1.tar.gz"
-      hash: "8b2860a161bfb0a6165798b1a2d8c40c"
-      hash_algorithm: "MD5"
+      hash:
+        value: "8b2860a161bfb0a6165798b1a2d8c40c"
+        algorithm: "MD5"
     vcs:
       type: ""
       url: ""

@@ -52,13 +52,11 @@ class PackageCurationTest : WordSpec({
                     homepageUrl = "http://home.page",
                     binaryArtifact = RemoteArtifact(
                         url = "http://binary.artifact",
-                        hash = "binary.hash",
-                        hashAlgorithm = HashAlgorithm.UNKNOWN
+                        hash = Hash.create("binary.hash")
                     ),
                     sourceArtifact = RemoteArtifact(
                         url = "http://source.artifact",
-                        hash = "source.hash",
-                        hashAlgorithm = HashAlgorithm.UNKNOWN
+                        hash = Hash.create("source.hash")
                     ),
                     vcs = VcsInfoCuration(
                         type = "git",

@@ -776,12 +776,14 @@ packages:
     homepage_url: "https://github.com/chalk/ansi-regex#readme"
     binary_artifact:
       url: ""
-      hash: ""
-      hash_algorithm: ""
+      hash:
+        value: ""
+        algorithm: ""
     source_artifact:
       url: "https://registry.npmjs.org/ansi-regex/-/ansi-regex-2.1.1.tgz"
-      hash: "c3b33ab5ee360d86e0e628f0468ae7ef27d654df"
-      hash_algorithm: "SHA-1"
+      hash:
+        value: "c3b33ab5ee360d86e0e628f0468ae7ef27d654df"
+        algorithm: "SHA-1"
     vcs:
       type: "git"
       url: "git+https://github.com/chalk/ansi-regex.git"
@@ -804,12 +806,14 @@ packages:
     homepage_url: "https://github.com/chalk/ansi-styles#readme"
     binary_artifact:
       url: ""
-      hash: ""
-      hash_algorithm: ""
+      hash:
+        value: ""
+        algorithm: ""
     source_artifact:
       url: "https://registry.npmjs.org/ansi-styles/-/ansi-styles-2.2.1.tgz"
-      hash: "b432dd3358b634cf75e1e4664368240533c1ddbe"
-      hash_algorithm: "SHA-1"
+      hash:
+        value: "b432dd3358b634cf75e1e4664368240533c1ddbe"
+        algorithm: "SHA-1"
     vcs:
       type: "git"
       url: "git+https://github.com/chalk/ansi-styles.git"
@@ -833,12 +837,14 @@ packages:
     homepage_url: "https://github.com/es128/anymatch"
     binary_artifact:
       url: ""
-      hash: ""
-      hash_algorithm: ""
+      hash:
+        value: ""
+        algorithm: ""
     source_artifact:
       url: "https://registry.npmjs.org/anymatch/-/anymatch-1.3.2.tgz"
-      hash: "553dcb8f91e3c889845dfdba34c77721b90b9d7a"
-      hash_algorithm: "SHA-1"
+      hash:
+        value: "553dcb8f91e3c889845dfdba34c77721b90b9d7a"
+        algorithm: "SHA-1"
     vcs:
       type: "git"
       url: "git+https://github.com/es128/anymatch.git"
@@ -862,12 +868,14 @@ packages:
     homepage_url: "https://github.com/jonschlinkert/arr-diff"
     binary_artifact:
       url: ""
-      hash: ""
-      hash_algorithm: ""
+      hash:
+        value: ""
+        algorithm: ""
     source_artifact:
       url: "https://registry.npmjs.org/arr-diff/-/arr-diff-2.0.0.tgz"
-      hash: "8f3b827f955a8bd669697e4a4256ac3ceae356cf"
-      hash_algorithm: "SHA-1"
+      hash:
+        value: "8f3b827f955a8bd669697e4a4256ac3ceae356cf"
+        algorithm: "SHA-1"
     vcs:
       type: "git"
       url: "git+https://github.com/jonschlinkert/arr-diff.git"
@@ -890,12 +898,14 @@ packages:
     homepage_url: "https://github.com/jonschlinkert/arr-flatten"
     binary_artifact:
       url: ""
-      hash: ""
-      hash_algorithm: ""
+      hash:
+        value: ""
+        algorithm: ""
     source_artifact:
       url: "https://registry.npmjs.org/arr-flatten/-/arr-flatten-1.1.0.tgz"
-      hash: "36048bbff4e7b47e136644316c99669ea5ae91f1"
-      hash_algorithm: "SHA-1"
+      hash:
+        value: "36048bbff4e7b47e136644316c99669ea5ae91f1"
+        algorithm: "SHA-1"
     vcs:
       type: "git"
       url: "git+https://github.com/jonschlinkert/arr-flatten.git"
@@ -918,12 +928,14 @@ packages:
     homepage_url: "https://github.com/jonschlinkert/array-unique"
     binary_artifact:
       url: ""
-      hash: ""
-      hash_algorithm: ""
+      hash:
+        value: ""
+        algorithm: ""
     source_artifact:
       url: "https://registry.npmjs.org/array-unique/-/array-unique-0.2.1.tgz"
-      hash: "a1d97ccafcbc2625cc70fadceb36a50c58b01a53"
-      hash_algorithm: "SHA-1"
+      hash:
+        value: "a1d97ccafcbc2625cc70fadceb36a50c58b01a53"
+        algorithm: "SHA-1"
     vcs:
       type: "git"
       url: "git://github.com/jonschlinkert/array-unique.git"
@@ -947,12 +959,14 @@ packages:
     homepage_url: "https://github.com/paulmillr/async-each/"
     binary_artifact:
       url: ""
-      hash: ""
-      hash_algorithm: ""
+      hash:
+        value: ""
+        algorithm: ""
     source_artifact:
       url: "https://registry.npmjs.org/async-each/-/async-each-1.0.1.tgz"
-      hash: "19d386a1d9edc6e7c1c85d388aedbcc56d33602d"
-      hash_algorithm: "SHA-1"
+      hash:
+        value: "19d386a1d9edc6e7c1c85d388aedbcc56d33602d"
+        algorithm: "SHA-1"
     vcs:
       type: "git"
       url: "git://github.com/paulmillr/async-each.git"
@@ -975,12 +989,14 @@ packages:
     homepage_url: "https://babeljs.io/"
     binary_artifact:
       url: ""
-      hash: ""
-      hash_algorithm: ""
+      hash:
+        value: ""
+        algorithm: ""
     source_artifact:
       url: "https://registry.npmjs.org/babel-cli/-/babel-cli-6.26.0.tgz"
-      hash: "502ab54874d7db88ad00b887a06383ce03d002f1"
-      hash_algorithm: "SHA-1"
+      hash:
+        value: "502ab54874d7db88ad00b887a06383ce03d002f1"
+        algorithm: "SHA-1"
     vcs:
       type: "git"
       url: "https://github.com/babel/babel/tree/master/packages/babel-cli"
@@ -1003,12 +1019,14 @@ packages:
     homepage_url: "https://babeljs.io/"
     binary_artifact:
       url: ""
-      hash: ""
-      hash_algorithm: ""
+      hash:
+        value: ""
+        algorithm: ""
     source_artifact:
       url: "https://registry.npmjs.org/babel-code-frame/-/babel-code-frame-6.26.0.tgz"
-      hash: "63fd43f7dc1e3bb7ce35947db8fe369a3f58c74b"
-      hash_algorithm: "SHA-1"
+      hash:
+        value: "63fd43f7dc1e3bb7ce35947db8fe369a3f58c74b"
+        algorithm: "SHA-1"
     vcs:
       type: "git"
       url: "https://github.com/babel/babel/tree/master/packages/babel-code-frame"
@@ -1031,12 +1049,14 @@ packages:
     homepage_url: "https://babeljs.io/"
     binary_artifact:
       url: ""
-      hash: ""
-      hash_algorithm: ""
+      hash:
+        value: ""
+        algorithm: ""
     source_artifact:
       url: "https://registry.npmjs.org/babel-core/-/babel-core-6.26.3.tgz"
-      hash: "b2e2f09e342d0f0c88e2f02e067794125e75c207"
-      hash_algorithm: "SHA-1"
+      hash:
+        value: "b2e2f09e342d0f0c88e2f02e067794125e75c207"
+        algorithm: "SHA-1"
     vcs:
       type: "git"
       url: "https://github.com/babel/babel/tree/master/packages/babel-core"
@@ -1059,12 +1079,14 @@ packages:
     homepage_url: "https://babeljs.io/"
     binary_artifact:
       url: ""
-      hash: ""
-      hash_algorithm: ""
+      hash:
+        value: ""
+        algorithm: ""
     source_artifact:
       url: "https://registry.npmjs.org/babel-generator/-/babel-generator-6.26.1.tgz"
-      hash: "1844408d3b8f0d35a404ea7ac180f087a601bd90"
-      hash_algorithm: "SHA-1"
+      hash:
+        value: "1844408d3b8f0d35a404ea7ac180f087a601bd90"
+        algorithm: "SHA-1"
     vcs:
       type: "git"
       url: "https://github.com/babel/babel/tree/master/packages/babel-generator"
@@ -1087,12 +1109,14 @@ packages:
     homepage_url: "https://babeljs.io/"
     binary_artifact:
       url: ""
-      hash: ""
-      hash_algorithm: ""
+      hash:
+        value: ""
+        algorithm: ""
     source_artifact:
       url: "https://registry.npmjs.org/babel-helpers/-/babel-helpers-6.24.1.tgz"
-      hash: "3471de9caec388e5c850e597e58a26ddf37602b2"
-      hash_algorithm: "SHA-1"
+      hash:
+        value: "3471de9caec388e5c850e597e58a26ddf37602b2"
+        algorithm: "SHA-1"
     vcs:
       type: "git"
       url: "https://github.com/babel/babel/tree/master/packages/babel-helpers"
@@ -1115,12 +1139,14 @@ packages:
     homepage_url: "https://babeljs.io/"
     binary_artifact:
       url: ""
-      hash: ""
-      hash_algorithm: ""
+      hash:
+        value: ""
+        algorithm: ""
     source_artifact:
       url: "https://registry.npmjs.org/babel-messages/-/babel-messages-6.23.0.tgz"
-      hash: "f3cdf4703858035b2a2951c6ec5edf6c62f2630e"
-      hash_algorithm: "SHA-1"
+      hash:
+        value: "f3cdf4703858035b2a2951c6ec5edf6c62f2630e"
+        algorithm: "SHA-1"
     vcs:
       type: "git"
       url: "https://github.com/babel/babel/tree/master/packages/babel-messages"
@@ -1143,12 +1169,14 @@ packages:
     homepage_url: "https://babeljs.io/"
     binary_artifact:
       url: ""
-      hash: ""
-      hash_algorithm: ""
+      hash:
+        value: ""
+        algorithm: ""
     source_artifact:
       url: "https://registry.npmjs.org/babel-polyfill/-/babel-polyfill-6.26.0.tgz"
-      hash: "379937abc67d7895970adc621f284cd966cf2153"
-      hash_algorithm: "SHA-1"
+      hash:
+        value: "379937abc67d7895970adc621f284cd966cf2153"
+        algorithm: "SHA-1"
     vcs:
       type: "git"
       url: "https://github.com/babel/babel/tree/master/packages/babel-polyfill"
@@ -1171,12 +1199,14 @@ packages:
     homepage_url: ""
     binary_artifact:
       url: ""
-      hash: ""
-      hash_algorithm: ""
+      hash:
+        value: ""
+        algorithm: ""
     source_artifact:
       url: "https://registry.npmjs.org/babel-register/-/babel-register-6.26.0.tgz"
-      hash: "6ed021173e2fcb486d7acb45c6009a856f647071"
-      hash_algorithm: "SHA-1"
+      hash:
+        value: "6ed021173e2fcb486d7acb45c6009a856f647071"
+        algorithm: "SHA-1"
     vcs:
       type: "git"
       url: "https://github.com/babel/babel/tree/master/packages/babel-register"
@@ -1199,12 +1229,14 @@ packages:
     homepage_url: ""
     binary_artifact:
       url: ""
-      hash: ""
-      hash_algorithm: ""
+      hash:
+        value: ""
+        algorithm: ""
     source_artifact:
       url: "https://registry.npmjs.org/babel-runtime/-/babel-runtime-6.26.0.tgz"
-      hash: "965c7058668e82b55d7bfe04ff2337bc8b5647fe"
-      hash_algorithm: "SHA-1"
+      hash:
+        value: "965c7058668e82b55d7bfe04ff2337bc8b5647fe"
+        algorithm: "SHA-1"
     vcs:
       type: "git"
       url: "https://github.com/babel/babel/tree/master/packages/babel-runtime"
@@ -1227,12 +1259,14 @@ packages:
     homepage_url: "https://babeljs.io/"
     binary_artifact:
       url: ""
-      hash: ""
-      hash_algorithm: ""
+      hash:
+        value: ""
+        algorithm: ""
     source_artifact:
       url: "https://registry.npmjs.org/babel-template/-/babel-template-6.26.0.tgz"
-      hash: "de03e2d16396b069f46dd9fff8521fb1a0e35e02"
-      hash_algorithm: "SHA-1"
+      hash:
+        value: "de03e2d16396b069f46dd9fff8521fb1a0e35e02"
+        algorithm: "SHA-1"
     vcs:
       type: "git"
       url: "https://github.com/babel/babel/tree/master/packages/babel-template"
@@ -1256,12 +1290,14 @@ packages:
     homepage_url: "https://babeljs.io/"
     binary_artifact:
       url: ""
-      hash: ""
-      hash_algorithm: ""
+      hash:
+        value: ""
+        algorithm: ""
     source_artifact:
       url: "https://registry.npmjs.org/babel-traverse/-/babel-traverse-6.26.0.tgz"
-      hash: "46a9cbd7edcc62c8e5c064e2d2d8d0f4035766ee"
-      hash_algorithm: "SHA-1"
+      hash:
+        value: "46a9cbd7edcc62c8e5c064e2d2d8d0f4035766ee"
+        algorithm: "SHA-1"
     vcs:
       type: "git"
       url: "https://github.com/babel/babel/tree/master/packages/babel-traverse"
@@ -1284,12 +1320,14 @@ packages:
     homepage_url: "https://babeljs.io/"
     binary_artifact:
       url: ""
-      hash: ""
-      hash_algorithm: ""
+      hash:
+        value: ""
+        algorithm: ""
     source_artifact:
       url: "https://registry.npmjs.org/babel-types/-/babel-types-6.26.0.tgz"
-      hash: "a3b073f94ab49eb6fa55cd65227a334380632497"
-      hash_algorithm: "SHA-1"
+      hash:
+        value: "a3b073f94ab49eb6fa55cd65227a334380632497"
+        algorithm: "SHA-1"
     vcs:
       type: "git"
       url: "https://github.com/babel/babel/tree/master/packages/babel-types"
@@ -1312,12 +1350,14 @@ packages:
     homepage_url: "https://babeljs.io/"
     binary_artifact:
       url: ""
-      hash: ""
-      hash_algorithm: ""
+      hash:
+        value: ""
+        algorithm: ""
     source_artifact:
       url: "https://registry.npmjs.org/babylon/-/babylon-6.18.0.tgz"
-      hash: "af2f3b88fa6f5c1e4c634d1a0f8eac4f55b395e3"
-      hash_algorithm: "SHA-1"
+      hash:
+        value: "af2f3b88fa6f5c1e4c634d1a0f8eac4f55b395e3"
+        algorithm: "SHA-1"
     vcs:
       type: "git"
       url: "git+https://github.com/babel/babylon.git"
@@ -1340,12 +1380,14 @@ packages:
     homepage_url: "https://github.com/juliangruber/balanced-match"
     binary_artifact:
       url: ""
-      hash: ""
-      hash_algorithm: ""
+      hash:
+        value: ""
+        algorithm: ""
     source_artifact:
       url: "https://registry.npmjs.org/balanced-match/-/balanced-match-1.0.0.tgz"
-      hash: "89b4d199ab2bee49de164ea02b89ce462d71b767"
-      hash_algorithm: "SHA-1"
+      hash:
+        value: "89b4d199ab2bee49de164ea02b89ce462d71b767"
+        algorithm: "SHA-1"
     vcs:
       type: "git"
       url: "git://github.com/juliangruber/balanced-match.git"
@@ -1368,12 +1410,14 @@ packages:
     homepage_url: "https://github.com/sindresorhus/binary-extensions#readme"
     binary_artifact:
       url: ""
-      hash: ""
-      hash_algorithm: ""
+      hash:
+        value: ""
+        algorithm: ""
     source_artifact:
       url: "https://registry.npmjs.org/binary-extensions/-/binary-extensions-1.11.0.tgz"
-      hash: "46aa1751fb6a2f93ee5e689bb1087d4b14c6c205"
-      hash_algorithm: "SHA-1"
+      hash:
+        value: "46aa1751fb6a2f93ee5e689bb1087d4b14c6c205"
+        algorithm: "SHA-1"
     vcs:
       type: "git"
       url: "git+https://github.com/sindresorhus/binary-extensions.git"
@@ -1396,12 +1440,14 @@ packages:
     homepage_url: "https://github.com/juliangruber/brace-expansion"
     binary_artifact:
       url: ""
-      hash: ""
-      hash_algorithm: ""
+      hash:
+        value: ""
+        algorithm: ""
     source_artifact:
       url: "https://registry.npmjs.org/brace-expansion/-/brace-expansion-1.1.11.tgz"
-      hash: "3c7fcbf529d87226f3d2f52b966ff5271eb441dd"
-      hash_algorithm: "SHA-1"
+      hash:
+        value: "3c7fcbf529d87226f3d2f52b966ff5271eb441dd"
+        algorithm: "SHA-1"
     vcs:
       type: "git"
       url: "git://github.com/juliangruber/brace-expansion.git"
@@ -1425,12 +1471,14 @@ packages:
     homepage_url: "https://github.com/jonschlinkert/braces"
     binary_artifact:
       url: ""
-      hash: ""
-      hash_algorithm: ""
+      hash:
+        value: ""
+        algorithm: ""
     source_artifact:
       url: "https://registry.npmjs.org/braces/-/braces-1.8.5.tgz"
-      hash: "ba77962e12dff969d6b76711e914b737857bf6a7"
-      hash_algorithm: "SHA-1"
+      hash:
+        value: "ba77962e12dff969d6b76711e914b737857bf6a7"
+        algorithm: "SHA-1"
     vcs:
       type: "git"
       url: "git+https://github.com/jonschlinkert/braces.git"
@@ -1453,12 +1501,14 @@ packages:
     homepage_url: "https://github.com/chalk/chalk#readme"
     binary_artifact:
       url: ""
-      hash: ""
-      hash_algorithm: ""
+      hash:
+        value: ""
+        algorithm: ""
     source_artifact:
       url: "https://registry.npmjs.org/chalk/-/chalk-1.1.3.tgz"
-      hash: "a8115c55e4a702fe4d150abd3872822a7e09fc98"
-      hash_algorithm: "SHA-1"
+      hash:
+        value: "a8115c55e4a702fe4d150abd3872822a7e09fc98"
+        algorithm: "SHA-1"
     vcs:
       type: "git"
       url: "git+https://github.com/chalk/chalk.git"
@@ -1481,12 +1531,14 @@ packages:
     homepage_url: "https://github.com/paulmillr/chokidar"
     binary_artifact:
       url: ""
-      hash: ""
-      hash_algorithm: ""
+      hash:
+        value: ""
+        algorithm: ""
     source_artifact:
       url: "https://registry.npmjs.org/chokidar/-/chokidar-1.7.0.tgz"
-      hash: "798e689778151c8076b4b360e5edd28cda2bb468"
-      hash_algorithm: "SHA-1"
+      hash:
+        value: "798e689778151c8076b4b360e5edd28cda2bb468"
+        algorithm: "SHA-1"
     vcs:
       type: "git"
       url: "git+https://github.com/paulmillr/chokidar.git"
@@ -1509,12 +1561,14 @@ packages:
     homepage_url: "https://github.com/tj/commander.js#readme"
     binary_artifact:
       url: ""
-      hash: ""
-      hash_algorithm: ""
+      hash:
+        value: ""
+        algorithm: ""
     source_artifact:
       url: "https://registry.npmjs.org/commander/-/commander-2.17.1.tgz"
-      hash: "bd77ab7de6de94205ceacc72f1716d29f20a77bf"
-      hash_algorithm: "SHA-1"
+      hash:
+        value: "bd77ab7de6de94205ceacc72f1716d29f20a77bf"
+        algorithm: "SHA-1"
     vcs:
       type: "git"
       url: "git+https://github.com/tj/commander.js.git"
@@ -1537,12 +1591,14 @@ packages:
     homepage_url: "https://github.com/substack/node-concat-map"
     binary_artifact:
       url: ""
-      hash: ""
-      hash_algorithm: ""
+      hash:
+        value: ""
+        algorithm: ""
     source_artifact:
       url: "https://registry.npmjs.org/concat-map/-/concat-map-0.0.1.tgz"
-      hash: "d8a96bd77fd68df7793a73036a3ba0d5405d477b"
-      hash_algorithm: "SHA-1"
+      hash:
+        value: "d8a96bd77fd68df7793a73036a3ba0d5405d477b"
+        algorithm: "SHA-1"
     vcs:
       type: "git"
       url: "git://github.com/substack/node-concat-map.git"
@@ -1566,12 +1622,14 @@ packages:
     homepage_url: "https://github.com/thlorenz/convert-source-map"
     binary_artifact:
       url: ""
-      hash: ""
-      hash_algorithm: ""
+      hash:
+        value: ""
+        algorithm: ""
     source_artifact:
       url: "https://registry.npmjs.org/convert-source-map/-/convert-source-map-1.5.1.tgz"
-      hash: "b8278097b9bc229365de5c62cf5fcaed8b5599e5"
-      hash_algorithm: "SHA-1"
+      hash:
+        value: "b8278097b9bc229365de5c62cf5fcaed8b5599e5"
+        algorithm: "SHA-1"
     vcs:
       type: "git"
       url: "git://github.com/thlorenz/convert-source-map.git"
@@ -1594,12 +1652,14 @@ packages:
     homepage_url: "https://github.com/zloirock/core-js#readme"
     binary_artifact:
       url: ""
-      hash: ""
-      hash_algorithm: ""
+      hash:
+        value: ""
+        algorithm: ""
     source_artifact:
       url: "https://registry.npmjs.org/core-js/-/core-js-2.5.7.tgz"
-      hash: "f972608ff0cead68b841a16a932d0b183791814e"
-      hash_algorithm: "SHA-1"
+      hash:
+        value: "f972608ff0cead68b841a16a932d0b183791814e"
+        algorithm: "SHA-1"
     vcs:
       type: "git"
       url: "git+https://github.com/zloirock/core-js.git"
@@ -1622,12 +1682,14 @@ packages:
     homepage_url: "https://github.com/isaacs/core-util-is#readme"
     binary_artifact:
       url: ""
-      hash: ""
-      hash_algorithm: ""
+      hash:
+        value: ""
+        algorithm: ""
     source_artifact:
       url: "https://registry.npmjs.org/core-util-is/-/core-util-is-1.0.2.tgz"
-      hash: "b5fd54220aa2bc5ab57aab7140c940754503c1a7"
-      hash_algorithm: "SHA-1"
+      hash:
+        value: "b5fd54220aa2bc5ab57aab7140c940754503c1a7"
+        algorithm: "SHA-1"
     vcs:
       type: "git"
       url: "git://github.com/isaacs/core-util-is.git"
@@ -1650,12 +1712,14 @@ packages:
     homepage_url: "https://github.com/visionmedia/debug#readme"
     binary_artifact:
       url: ""
-      hash: ""
-      hash_algorithm: ""
+      hash:
+        value: ""
+        algorithm: ""
     source_artifact:
       url: "https://registry.npmjs.org/debug/-/debug-2.6.9.tgz"
-      hash: "5d128515df134ff327e90a4c93f4e077a536341f"
-      hash_algorithm: "SHA-1"
+      hash:
+        value: "5d128515df134ff327e90a4c93f4e077a536341f"
+        algorithm: "SHA-1"
     vcs:
       type: "git"
       url: "git://github.com/visionmedia/debug.git"
@@ -1678,12 +1742,14 @@ packages:
     homepage_url: "https://github.com/sindresorhus/detect-indent"
     binary_artifact:
       url: ""
-      hash: ""
-      hash_algorithm: ""
+      hash:
+        value: ""
+        algorithm: ""
     source_artifact:
       url: "https://registry.npmjs.org/detect-indent/-/detect-indent-4.0.0.tgz"
-      hash: "f76d064352cdf43a1cb6ce619c4ee3a9475de208"
-      hash_algorithm: "SHA-1"
+      hash:
+        value: "f76d064352cdf43a1cb6ce619c4ee3a9475de208"
+        algorithm: "SHA-1"
     vcs:
       type: "git"
       url: "https://github.com/sindresorhus/detect-indent"
@@ -1706,12 +1772,14 @@ packages:
     homepage_url: "https://github.com/sindresorhus/escape-string-regexp"
     binary_artifact:
       url: ""
-      hash: ""
-      hash_algorithm: ""
+      hash:
+        value: ""
+        algorithm: ""
     source_artifact:
       url: "https://registry.npmjs.org/escape-string-regexp/-/escape-string-regexp-1.0.5.tgz"
-      hash: "1b61c0562190a8dff6ae3bb2cf0200ca130b86d4"
-      hash_algorithm: "SHA-1"
+      hash:
+        value: "1b61c0562190a8dff6ae3bb2cf0200ca130b86d4"
+        algorithm: "SHA-1"
     vcs:
       type: "git"
       url: "https://github.com/sindresorhus/escape-string-regexp"
@@ -1734,12 +1802,14 @@ packages:
     homepage_url: "https://github.com/estools/esutils"
     binary_artifact:
       url: ""
-      hash: ""
-      hash_algorithm: ""
+      hash:
+        value: ""
+        algorithm: ""
     source_artifact:
       url: "https://registry.npmjs.org/esutils/-/esutils-2.0.2.tgz"
-      hash: "0abf4f1caa5bcb1f7a9d8acc6dea4faaa04bac9b"
-      hash_algorithm: "SHA-1"
+      hash:
+        value: "0abf4f1caa5bcb1f7a9d8acc6dea4faaa04bac9b"
+        algorithm: "SHA-1"
     vcs:
       type: "git"
       url: "http://github.com/estools/esutils.git"
@@ -1762,12 +1832,14 @@ packages:
     homepage_url: "https://github.com/jonschlinkert/expand-brackets"
     binary_artifact:
       url: ""
-      hash: ""
-      hash_algorithm: ""
+      hash:
+        value: ""
+        algorithm: ""
     source_artifact:
       url: "https://registry.npmjs.org/expand-brackets/-/expand-brackets-0.1.5.tgz"
-      hash: "df07284e342a807cd733ac5af72411e581d1177b"
-      hash_algorithm: "SHA-1"
+      hash:
+        value: "df07284e342a807cd733ac5af72411e581d1177b"
+        algorithm: "SHA-1"
     vcs:
       type: "git"
       url: "git+https://github.com/jonschlinkert/expand-brackets.git"
@@ -1791,12 +1863,14 @@ packages:
     homepage_url: "https://github.com/jonschlinkert/expand-range"
     binary_artifact:
       url: ""
-      hash: ""
-      hash_algorithm: ""
+      hash:
+        value: ""
+        algorithm: ""
     source_artifact:
       url: "https://registry.npmjs.org/expand-range/-/expand-range-1.8.2.tgz"
-      hash: "a299effd335fe2721ebae8e257ec79644fc85337"
-      hash_algorithm: "SHA-1"
+      hash:
+        value: "a299effd335fe2721ebae8e257ec79644fc85337"
+        algorithm: "SHA-1"
     vcs:
       type: "git"
       url: "git+https://github.com/jonschlinkert/expand-range.git"
@@ -1820,12 +1894,14 @@ packages:
     homepage_url: "https://github.com/jonschlinkert/extglob"
     binary_artifact:
       url: ""
-      hash: ""
-      hash_algorithm: ""
+      hash:
+        value: ""
+        algorithm: ""
     source_artifact:
       url: "https://registry.npmjs.org/extglob/-/extglob-0.3.2.tgz"
-      hash: "2e18ff3d2f49ab2765cec9023f011daa8d8349a1"
-      hash_algorithm: "SHA-1"
+      hash:
+        value: "2e18ff3d2f49ab2765cec9023f011daa8d8349a1"
+        algorithm: "SHA-1"
     vcs:
       type: "git"
       url: "git://github.com/jonschlinkert/extglob.git"
@@ -1848,12 +1924,14 @@ packages:
     homepage_url: "https://github.com/regexhq/filename-regex"
     binary_artifact:
       url: ""
-      hash: ""
-      hash_algorithm: ""
+      hash:
+        value: ""
+        algorithm: ""
     source_artifact:
       url: "https://registry.npmjs.org/filename-regex/-/filename-regex-2.0.1.tgz"
-      hash: "c1c4b9bee3e09725ddb106b75c1e301fe2f18b26"
-      hash_algorithm: "SHA-1"
+      hash:
+        value: "c1c4b9bee3e09725ddb106b75c1e301fe2f18b26"
+        algorithm: "SHA-1"
     vcs:
       type: "git"
       url: "git+https://github.com/regexhq/filename-regex.git"
@@ -1877,12 +1955,14 @@ packages:
     homepage_url: "https://github.com/jonschlinkert/fill-range"
     binary_artifact:
       url: ""
-      hash: ""
-      hash_algorithm: ""
+      hash:
+        value: ""
+        algorithm: ""
     source_artifact:
       url: "https://registry.npmjs.org/fill-range/-/fill-range-2.2.4.tgz"
-      hash: "eb1e773abb056dcd8df2bfdf6af59b8b3a936565"
-      hash_algorithm: "SHA-1"
+      hash:
+        value: "eb1e773abb056dcd8df2bfdf6af59b8b3a936565"
+        algorithm: "SHA-1"
     vcs:
       type: "git"
       url: "git+https://github.com/jonschlinkert/fill-range.git"
@@ -1907,12 +1987,14 @@ packages:
     homepage_url: "https://github.com/jonschlinkert/for-in"
     binary_artifact:
       url: ""
-      hash: ""
-      hash_algorithm: ""
+      hash:
+        value: ""
+        algorithm: ""
     source_artifact:
       url: "https://registry.npmjs.org/for-in/-/for-in-1.0.2.tgz"
-      hash: "81068d295a8142ec0ac726c6e2200c30fb6d5e80"
-      hash_algorithm: "SHA-1"
+      hash:
+        value: "81068d295a8142ec0ac726c6e2200c30fb6d5e80"
+        algorithm: "SHA-1"
     vcs:
       type: "git"
       url: "git+https://github.com/jonschlinkert/for-in.git"
@@ -1937,12 +2019,14 @@ packages:
     homepage_url: "https://github.com/jonschlinkert/for-own"
     binary_artifact:
       url: ""
-      hash: ""
-      hash_algorithm: ""
+      hash:
+        value: ""
+        algorithm: ""
     source_artifact:
       url: "https://registry.npmjs.org/for-own/-/for-own-0.1.5.tgz"
-      hash: "5265c681a4f294dabbf17c9509b6763aa84510ce"
-      hash_algorithm: "SHA-1"
+      hash:
+        value: "5265c681a4f294dabbf17c9509b6763aa84510ce"
+        algorithm: "SHA-1"
     vcs:
       type: "git"
       url: "git+https://github.com/jonschlinkert/for-own.git"
@@ -1965,12 +2049,14 @@ packages:
     homepage_url: "https://github.com/fs-utils/fs-readdir-recursive#readme"
     binary_artifact:
       url: ""
-      hash: ""
-      hash_algorithm: ""
+      hash:
+        value: ""
+        algorithm: ""
     source_artifact:
       url: "https://registry.npmjs.org/fs-readdir-recursive/-/fs-readdir-recursive-1.1.0.tgz"
-      hash: "e32fc030a2ccee44a6b5371308da54be0b397d27"
-      hash_algorithm: "SHA-1"
+      hash:
+        value: "e32fc030a2ccee44a6b5371308da54be0b397d27"
+        algorithm: "SHA-1"
     vcs:
       type: "git"
       url: "git+https://github.com/fs-utils/fs-readdir-recursive.git"
@@ -1994,12 +2080,14 @@ packages:
     homepage_url: "https://github.com/isaacs/fs.realpath#readme"
     binary_artifact:
       url: ""
-      hash: ""
-      hash_algorithm: ""
+      hash:
+        value: ""
+        algorithm: ""
     source_artifact:
       url: "https://registry.npmjs.org/fs.realpath/-/fs.realpath-1.0.0.tgz"
-      hash: "1504ad2523158caa40db4a2787cb01411994ea4f"
-      hash_algorithm: "SHA-1"
+      hash:
+        value: "1504ad2523158caa40db4a2787cb01411994ea4f"
+        algorithm: "SHA-1"
     vcs:
       type: "git"
       url: "git+https://github.com/isaacs/fs.realpath.git"
@@ -2022,12 +2110,14 @@ packages:
     homepage_url: "https://github.com/jonschlinkert/glob-base"
     binary_artifact:
       url: ""
-      hash: ""
-      hash_algorithm: ""
+      hash:
+        value: ""
+        algorithm: ""
     source_artifact:
       url: "https://registry.npmjs.org/glob-base/-/glob-base-0.3.0.tgz"
-      hash: "dbb164f6221b1c0b1ccf82aea328b497df0ea3c4"
-      hash_algorithm: "SHA-1"
+      hash:
+        value: "dbb164f6221b1c0b1ccf82aea328b497df0ea3c4"
+        algorithm: "SHA-1"
     vcs:
       type: "git"
       url: "git://github.com/jonschlinkert/glob-base.git"
@@ -2050,12 +2140,14 @@ packages:
     homepage_url: "https://github.com/es128/glob-parent"
     binary_artifact:
       url: ""
-      hash: ""
-      hash_algorithm: ""
+      hash:
+        value: ""
+        algorithm: ""
     source_artifact:
       url: "https://registry.npmjs.org/glob-parent/-/glob-parent-2.0.0.tgz"
-      hash: "81383d72db054fcccf5336daa902f182f6edbb28"
-      hash_algorithm: "SHA-1"
+      hash:
+        value: "81383d72db054fcccf5336daa902f182f6edbb28"
+        algorithm: "SHA-1"
     vcs:
       type: "git"
       url: "git+https://github.com/es128/glob-parent.git"
@@ -2078,12 +2170,14 @@ packages:
     homepage_url: "https://github.com/isaacs/node-glob#readme"
     binary_artifact:
       url: ""
-      hash: ""
-      hash_algorithm: ""
+      hash:
+        value: ""
+        algorithm: ""
     source_artifact:
       url: "https://registry.npmjs.org/glob/-/glob-7.1.2.tgz"
-      hash: "c19c9df9a028702d678612384a6552404c636d15"
-      hash_algorithm: "SHA-1"
+      hash:
+        value: "c19c9df9a028702d678612384a6552404c636d15"
+        algorithm: "SHA-1"
     vcs:
       type: "git"
       url: "git://github.com/isaacs/node-glob.git"
@@ -2106,12 +2200,14 @@ packages:
     homepage_url: "https://github.com/sindresorhus/globals#readme"
     binary_artifact:
       url: ""
-      hash: ""
-      hash_algorithm: ""
+      hash:
+        value: ""
+        algorithm: ""
     source_artifact:
       url: "https://registry.npmjs.org/globals/-/globals-9.18.0.tgz"
-      hash: "aa3896b3e69b487f17e31ed2143d69a8e30c2d8a"
-      hash_algorithm: "SHA-1"
+      hash:
+        value: "aa3896b3e69b487f17e31ed2143d69a8e30c2d8a"
+        algorithm: "SHA-1"
     vcs:
       type: "git"
       url: "git+https://github.com/sindresorhus/globals.git"
@@ -2134,12 +2230,14 @@ packages:
     homepage_url: "https://github.com/isaacs/node-graceful-fs#readme"
     binary_artifact:
       url: ""
-      hash: ""
-      hash_algorithm: ""
+      hash:
+        value: ""
+        algorithm: ""
     source_artifact:
       url: "https://registry.npmjs.org/graceful-fs/-/graceful-fs-4.1.11.tgz"
-      hash: "0e8bdfe4d1ddb8854d64e04ea7c00e2a026e5658"
-      hash_algorithm: "SHA-1"
+      hash:
+        value: "0e8bdfe4d1ddb8854d64e04ea7c00e2a026e5658"
+        algorithm: "SHA-1"
     vcs:
       type: "git"
       url: "git+https://github.com/isaacs/node-graceful-fs.git"
@@ -2162,12 +2260,14 @@ packages:
     homepage_url: "https://github.com/sindresorhus/has-ansi"
     binary_artifact:
       url: ""
-      hash: ""
-      hash_algorithm: ""
+      hash:
+        value: ""
+        algorithm: ""
     source_artifact:
       url: "https://registry.npmjs.org/has-ansi/-/has-ansi-2.0.0.tgz"
-      hash: "34f5049ce1ecdf2b0649af3ef24e45ed35416d91"
-      hash_algorithm: "SHA-1"
+      hash:
+        value: "34f5049ce1ecdf2b0649af3ef24e45ed35416d91"
+        algorithm: "SHA-1"
     vcs:
       type: "git"
       url: "https://github.com/sindresorhus/has-ansi"
@@ -2190,12 +2290,14 @@ packages:
     homepage_url: "https://github.com/sindresorhus/home-or-tmp"
     binary_artifact:
       url: ""
-      hash: ""
-      hash_algorithm: ""
+      hash:
+        value: ""
+        algorithm: ""
     source_artifact:
       url: "https://registry.npmjs.org/home-or-tmp/-/home-or-tmp-2.0.0.tgz"
-      hash: "e36c3f2d2cae7d746a857e38d18d5f32a7882db8"
-      hash_algorithm: "SHA-1"
+      hash:
+        value: "e36c3f2d2cae7d746a857e38d18d5f32a7882db8"
+        algorithm: "SHA-1"
     vcs:
       type: "git"
       url: "https://github.com/sindresorhus/home-or-tmp"
@@ -2218,12 +2320,14 @@ packages:
     homepage_url: "https://github.com/isaacs/inflight"
     binary_artifact:
       url: ""
-      hash: ""
-      hash_algorithm: ""
+      hash:
+        value: ""
+        algorithm: ""
     source_artifact:
       url: "https://registry.npmjs.org/inflight/-/inflight-1.0.6.tgz"
-      hash: "49bd6331d7d02d0c09bc910a1075ba8165b56df9"
-      hash_algorithm: "SHA-1"
+      hash:
+        value: "49bd6331d7d02d0c09bc910a1075ba8165b56df9"
+        algorithm: "SHA-1"
     vcs:
       type: "git"
       url: "git+https://github.com/npm/inflight.git"
@@ -2247,12 +2351,14 @@ packages:
     homepage_url: "https://github.com/isaacs/inherits#readme"
     binary_artifact:
       url: ""
-      hash: ""
-      hash_algorithm: ""
+      hash:
+        value: ""
+        algorithm: ""
     source_artifact:
       url: "https://registry.npmjs.org/inherits/-/inherits-2.0.3.tgz"
-      hash: "633c2c83e3da42a502f52466022480f4208261de"
-      hash_algorithm: "SHA-1"
+      hash:
+        value: "633c2c83e3da42a502f52466022480f4208261de"
+        algorithm: "SHA-1"
     vcs:
       type: "git"
       url: "git://github.com/isaacs/inherits.git"
@@ -2275,12 +2381,14 @@ packages:
     homepage_url: "https://github.com/zertosh/invariant#readme"
     binary_artifact:
       url: ""
-      hash: ""
-      hash_algorithm: ""
+      hash:
+        value: ""
+        algorithm: ""
     source_artifact:
       url: "https://registry.npmjs.org/invariant/-/invariant-2.2.4.tgz"
-      hash: "610f3c92c9359ce1db616e538008d23ff35158e6"
-      hash_algorithm: "SHA-1"
+      hash:
+        value: "610f3c92c9359ce1db616e538008d23ff35158e6"
+        algorithm: "SHA-1"
     vcs:
       type: "git"
       url: "git+https://github.com/zertosh/invariant.git"
@@ -2303,12 +2411,14 @@ packages:
     homepage_url: "https://github.com/sindresorhus/is-binary-path"
     binary_artifact:
       url: ""
-      hash: ""
-      hash_algorithm: ""
+      hash:
+        value: ""
+        algorithm: ""
     source_artifact:
       url: "https://registry.npmjs.org/is-binary-path/-/is-binary-path-1.0.1.tgz"
-      hash: "75f16642b480f187a711c814161fd3a4a7655898"
-      hash_algorithm: "SHA-1"
+      hash:
+        value: "75f16642b480f187a711c814161fd3a4a7655898"
+        algorithm: "SHA-1"
     vcs:
       type: "git"
       url: "https://github.com/sindresorhus/is-binary-path"
@@ -2331,12 +2441,14 @@ packages:
     homepage_url: "https://github.com/feross/is-buffer#readme"
     binary_artifact:
       url: ""
-      hash: ""
-      hash_algorithm: ""
+      hash:
+        value: ""
+        algorithm: ""
     source_artifact:
       url: "https://registry.npmjs.org/is-buffer/-/is-buffer-1.1.6.tgz"
-      hash: "efaa2ea9daa0d7ab2ea13a97b2b8ad51fefbe8be"
-      hash_algorithm: "SHA-1"
+      hash:
+        value: "efaa2ea9daa0d7ab2ea13a97b2b8ad51fefbe8be"
+        algorithm: "SHA-1"
     vcs:
       type: "git"
       url: "git://github.com/feross/is-buffer.git"
@@ -2360,12 +2472,14 @@ packages:
     homepage_url: "https://github.com/jonschlinkert/is-dotfile"
     binary_artifact:
       url: ""
-      hash: ""
-      hash_algorithm: ""
+      hash:
+        value: ""
+        algorithm: ""
     source_artifact:
       url: "https://registry.npmjs.org/is-dotfile/-/is-dotfile-1.0.3.tgz"
-      hash: "a6a2f32ffd2dfb04f5ca25ecd0f6b83cf798a1e1"
-      hash_algorithm: "SHA-1"
+      hash:
+        value: "a6a2f32ffd2dfb04f5ca25ecd0f6b83cf798a1e1"
+        algorithm: "SHA-1"
     vcs:
       type: "git"
       url: "git+https://github.com/jonschlinkert/is-dotfile.git"
@@ -2389,12 +2503,14 @@ packages:
     homepage_url: "https://github.com/jonschlinkert/is-equal-shallow"
     binary_artifact:
       url: ""
-      hash: ""
-      hash_algorithm: ""
+      hash:
+        value: ""
+        algorithm: ""
     source_artifact:
       url: "https://registry.npmjs.org/is-equal-shallow/-/is-equal-shallow-0.1.3.tgz"
-      hash: "2238098fc221de0bcfa5d9eac4c45d638aa1c534"
-      hash_algorithm: "SHA-1"
+      hash:
+        value: "2238098fc221de0bcfa5d9eac4c45d638aa1c534"
+        algorithm: "SHA-1"
     vcs:
       type: "git"
       url: "git://github.com/jonschlinkert/is-equal-shallow.git"
@@ -2419,12 +2535,14 @@ packages:
     homepage_url: "https://github.com/jonschlinkert/is-extendable"
     binary_artifact:
       url: ""
-      hash: ""
-      hash_algorithm: ""
+      hash:
+        value: ""
+        algorithm: ""
     source_artifact:
       url: "https://registry.npmjs.org/is-extendable/-/is-extendable-0.1.1.tgz"
-      hash: "62b110e289a471418e3ec36a617d472e301dfc89"
-      hash_algorithm: "SHA-1"
+      hash:
+        value: "62b110e289a471418e3ec36a617d472e301dfc89"
+        algorithm: "SHA-1"
     vcs:
       type: "git"
       url: "git+https://github.com/jonschlinkert/is-extendable.git"
@@ -2447,12 +2565,14 @@ packages:
     homepage_url: "https://github.com/jonschlinkert/is-extglob"
     binary_artifact:
       url: ""
-      hash: ""
-      hash_algorithm: ""
+      hash:
+        value: ""
+        algorithm: ""
     source_artifact:
       url: "https://registry.npmjs.org/is-extglob/-/is-extglob-1.0.0.tgz"
-      hash: "ac468177c4943405a092fc8f29760c6ffc6206c0"
-      hash_algorithm: "SHA-1"
+      hash:
+        value: "ac468177c4943405a092fc8f29760c6ffc6206c0"
+        algorithm: "SHA-1"
     vcs:
       type: "git"
       url: "https://github.com/jonschlinkert/is-extglob"
@@ -2475,12 +2595,14 @@ packages:
     homepage_url: "https://github.com/sindresorhus/is-finite#readme"
     binary_artifact:
       url: ""
-      hash: ""
-      hash_algorithm: ""
+      hash:
+        value: ""
+        algorithm: ""
     source_artifact:
       url: "https://registry.npmjs.org/is-finite/-/is-finite-1.0.2.tgz"
-      hash: "cc6677695602be550ef11e8b4aa6305342b6d0aa"
-      hash_algorithm: "SHA-1"
+      hash:
+        value: "cc6677695602be550ef11e8b4aa6305342b6d0aa"
+        algorithm: "SHA-1"
     vcs:
       type: "git"
       url: "git+https://github.com/sindresorhus/is-finite.git"
@@ -2506,12 +2628,14 @@ packages:
     homepage_url: "https://github.com/jonschlinkert/is-glob"
     binary_artifact:
       url: ""
-      hash: ""
-      hash_algorithm: ""
+      hash:
+        value: ""
+        algorithm: ""
     source_artifact:
       url: "https://registry.npmjs.org/is-glob/-/is-glob-2.0.1.tgz"
-      hash: "d096f926a3ded5600f3fdfd91198cb0888c2d863"
-      hash_algorithm: "SHA-1"
+      hash:
+        value: "d096f926a3ded5600f3fdfd91198cb0888c2d863"
+        algorithm: "SHA-1"
     vcs:
       type: "git"
       url: "git+https://github.com/jonschlinkert/is-glob.git"
@@ -2534,12 +2658,14 @@ packages:
     homepage_url: "https://github.com/jonschlinkert/is-number"
     binary_artifact:
       url: ""
-      hash: ""
-      hash_algorithm: ""
+      hash:
+        value: ""
+        algorithm: ""
     source_artifact:
       url: "https://registry.npmjs.org/is-number/-/is-number-2.1.0.tgz"
-      hash: "01fcbbb393463a548f2f466cce16dece49db908f"
-      hash_algorithm: "SHA-1"
+      hash:
+        value: "01fcbbb393463a548f2f466cce16dece49db908f"
+        algorithm: "SHA-1"
     vcs:
       type: "git"
       url: "git+https://github.com/jonschlinkert/is-number.git"
@@ -2562,12 +2688,14 @@ packages:
     homepage_url: "https://github.com/jonschlinkert/is-number"
     binary_artifact:
       url: ""
-      hash: ""
-      hash_algorithm: ""
+      hash:
+        value: ""
+        algorithm: ""
     source_artifact:
       url: "https://registry.npmjs.org/is-number/-/is-number-4.0.0.tgz"
-      hash: "0026e37f5454d73e356dfe6564699867c6a7f0ff"
-      hash_algorithm: "SHA-1"
+      hash:
+        value: "0026e37f5454d73e356dfe6564699867c6a7f0ff"
+        algorithm: "SHA-1"
     vcs:
       type: "git"
       url: "git+https://github.com/jonschlinkert/is-number.git"
@@ -2591,12 +2719,14 @@ packages:
     homepage_url: "https://github.com/jonschlinkert/is-posix-bracket"
     binary_artifact:
       url: ""
-      hash: ""
-      hash_algorithm: ""
+      hash:
+        value: ""
+        algorithm: ""
     source_artifact:
       url: "https://registry.npmjs.org/is-posix-bracket/-/is-posix-bracket-0.1.1.tgz"
-      hash: "3334dc79774368e92f016e6fbc0a88f5cd6e6bc4"
-      hash_algorithm: "SHA-1"
+      hash:
+        value: "3334dc79774368e92f016e6fbc0a88f5cd6e6bc4"
+        algorithm: "SHA-1"
     vcs:
       type: "git"
       url: "git+https://github.com/jonschlinkert/is-posix-bracket.git"
@@ -2619,12 +2749,14 @@ packages:
     homepage_url: "https://github.com/jonschlinkert/is-primitive"
     binary_artifact:
       url: ""
-      hash: ""
-      hash_algorithm: ""
+      hash:
+        value: ""
+        algorithm: ""
     source_artifact:
       url: "https://registry.npmjs.org/is-primitive/-/is-primitive-2.0.0.tgz"
-      hash: "207bab91638499c07b2adf240a41a87210034575"
-      hash_algorithm: "SHA-1"
+      hash:
+        value: "207bab91638499c07b2adf240a41a87210034575"
+        algorithm: "SHA-1"
     vcs:
       type: "git"
       url: "git://github.com/jonschlinkert/is-primitive.git"
@@ -2647,12 +2779,14 @@ packages:
     homepage_url: "https://github.com/juliangruber/isarray"
     binary_artifact:
       url: ""
-      hash: ""
-      hash_algorithm: ""
+      hash:
+        value: ""
+        algorithm: ""
     source_artifact:
       url: "https://registry.npmjs.org/isarray/-/isarray-1.0.0.tgz"
-      hash: "bb935d48582cba168c06834957a54a3e07124f11"
-      hash_algorithm: "SHA-1"
+      hash:
+        value: "bb935d48582cba168c06834957a54a3e07124f11"
+        algorithm: "SHA-1"
     vcs:
       type: "git"
       url: "git://github.com/juliangruber/isarray.git"
@@ -2675,12 +2809,14 @@ packages:
     homepage_url: "https://github.com/jonschlinkert/isobject"
     binary_artifact:
       url: ""
-      hash: ""
-      hash_algorithm: ""
+      hash:
+        value: ""
+        algorithm: ""
     source_artifact:
       url: "https://registry.npmjs.org/isobject/-/isobject-2.1.0.tgz"
-      hash: "f065561096a3f1da2ef46272f815c840d87e0c89"
-      hash_algorithm: "SHA-1"
+      hash:
+        value: "f065561096a3f1da2ef46272f815c840d87e0c89"
+        algorithm: "SHA-1"
     vcs:
       type: "git"
       url: "git+https://github.com/jonschlinkert/isobject.git"
@@ -2703,12 +2839,14 @@ packages:
     homepage_url: "https://github.com/lydell/js-tokens#readme"
     binary_artifact:
       url: ""
-      hash: ""
-      hash_algorithm: ""
+      hash:
+        value: ""
+        algorithm: ""
     source_artifact:
       url: "https://registry.npmjs.org/js-tokens/-/js-tokens-3.0.2.tgz"
-      hash: "9866df395102130e38f7f996bceb65443209c25b"
-      hash_algorithm: "SHA-1"
+      hash:
+        value: "9866df395102130e38f7f996bceb65443209c25b"
+        algorithm: "SHA-1"
     vcs:
       type: "git"
       url: "git+https://github.com/lydell/js-tokens.git"
@@ -2732,12 +2870,14 @@ packages:
     homepage_url: "https://mths.be/jsesc"
     binary_artifact:
       url: ""
-      hash: ""
-      hash_algorithm: ""
+      hash:
+        value: ""
+        algorithm: ""
     source_artifact:
       url: "https://registry.npmjs.org/jsesc/-/jsesc-1.3.0.tgz"
-      hash: "46c3fec8c1892b12b0833db9bc7622176dbab34b"
-      hash_algorithm: "SHA-1"
+      hash:
+        value: "46c3fec8c1892b12b0833db9bc7622176dbab34b"
+        algorithm: "SHA-1"
     vcs:
       type: "git"
       url: "git+https://github.com/mathiasbynens/jsesc.git"
@@ -2760,12 +2900,14 @@ packages:
     homepage_url: "http://json5.org/"
     binary_artifact:
       url: ""
-      hash: ""
-      hash_algorithm: ""
+      hash:
+        value: ""
+        algorithm: ""
     source_artifact:
       url: "https://registry.npmjs.org/json5/-/json5-0.5.1.tgz"
-      hash: "1eade7acc012034ad84e2396767ead9fa5495821"
-      hash_algorithm: "SHA-1"
+      hash:
+        value: "1eade7acc012034ad84e2396767ead9fa5495821"
+        algorithm: "SHA-1"
     vcs:
       type: "git"
       url: "git+https://github.com/aseemk/json5.git"
@@ -2788,12 +2930,14 @@ packages:
     homepage_url: "https://github.com/jonschlinkert/kind-of"
     binary_artifact:
       url: ""
-      hash: ""
-      hash_algorithm: ""
+      hash:
+        value: ""
+        algorithm: ""
     source_artifact:
       url: "https://registry.npmjs.org/kind-of/-/kind-of-3.2.2.tgz"
-      hash: "31ea21a734bab9bbb0f32466d893aea51e4a3c64"
-      hash_algorithm: "SHA-1"
+      hash:
+        value: "31ea21a734bab9bbb0f32466d893aea51e4a3c64"
+        algorithm: "SHA-1"
     vcs:
       type: "git"
       url: "git+https://github.com/jonschlinkert/kind-of.git"
@@ -2816,12 +2960,14 @@ packages:
     homepage_url: "https://github.com/jonschlinkert/kind-of"
     binary_artifact:
       url: ""
-      hash: ""
-      hash_algorithm: ""
+      hash:
+        value: ""
+        algorithm: ""
     source_artifact:
       url: "https://registry.npmjs.org/kind-of/-/kind-of-6.0.2.tgz"
-      hash: "01146b36a6218e64e58f3a8d66de5d7fc6f6d051"
-      hash_algorithm: "SHA-1"
+      hash:
+        value: "01146b36a6218e64e58f3a8d66de5d7fc6f6d051"
+        algorithm: "SHA-1"
     vcs:
       type: "git"
       url: "git+https://github.com/jonschlinkert/kind-of.git"
@@ -2844,12 +2990,14 @@ packages:
     homepage_url: "https://lodash.com/"
     binary_artifact:
       url: ""
-      hash: ""
-      hash_algorithm: ""
+      hash:
+        value: ""
+        algorithm: ""
     source_artifact:
       url: "https://registry.npmjs.org/lodash/-/lodash-4.17.11.tgz"
-      hash: "b39ea6229ef607ecd89e2c8df12536891cac9b8d"
-      hash_algorithm: "SHA-1"
+      hash:
+        value: "b39ea6229ef607ecd89e2c8df12536891cac9b8d"
+        algorithm: "SHA-1"
     vcs:
       type: "git"
       url: "git+https://github.com/lodash/lodash.git"
@@ -2873,12 +3021,14 @@ packages:
     homepage_url: "https://github.com/zertosh/loose-envify"
     binary_artifact:
       url: ""
-      hash: ""
-      hash_algorithm: ""
+      hash:
+        value: ""
+        algorithm: ""
     source_artifact:
       url: "https://registry.npmjs.org/loose-envify/-/loose-envify-1.4.0.tgz"
-      hash: "71ee51fa7be4caec1a63839f7e682d8132d30caf"
-      hash_algorithm: "SHA-1"
+      hash:
+        value: "71ee51fa7be4caec1a63839f7e682d8132d30caf"
+        algorithm: "SHA-1"
     vcs:
       type: "git"
       url: "git://github.com/zertosh/loose-envify.git"
@@ -2902,12 +3052,14 @@ packages:
     homepage_url: "https://github.com/michaelrhodes/math-random"
     binary_artifact:
       url: ""
-      hash: ""
-      hash_algorithm: ""
+      hash:
+        value: ""
+        algorithm: ""
     source_artifact:
       url: "https://registry.npmjs.org/math-random/-/math-random-1.0.1.tgz"
-      hash: "8b3aac588b8a66e4975e3cdea67f7bb329601fac"
-      hash_algorithm: "SHA-1"
+      hash:
+        value: "8b3aac588b8a66e4975e3cdea67f7bb329601fac"
+        algorithm: "SHA-1"
     vcs:
       type: "git"
       url: "git@github.com:michaelrhodes/math-random"
@@ -2931,12 +3083,14 @@ packages:
     homepage_url: "https://github.com/jonschlinkert/micromatch"
     binary_artifact:
       url: ""
-      hash: ""
-      hash_algorithm: ""
+      hash:
+        value: ""
+        algorithm: ""
     source_artifact:
       url: "https://registry.npmjs.org/micromatch/-/micromatch-2.3.11.tgz"
-      hash: "86677c97d1720b363431d04d0d15293bd38c1565"
-      hash_algorithm: "SHA-1"
+      hash:
+        value: "86677c97d1720b363431d04d0d15293bd38c1565"
+        algorithm: "SHA-1"
     vcs:
       type: "git"
       url: "git+https://github.com/jonschlinkert/micromatch.git"
@@ -2959,12 +3113,14 @@ packages:
     homepage_url: "https://github.com/isaacs/minimatch#readme"
     binary_artifact:
       url: ""
-      hash: ""
-      hash_algorithm: ""
+      hash:
+        value: ""
+        algorithm: ""
     source_artifact:
       url: "https://registry.npmjs.org/minimatch/-/minimatch-3.0.4.tgz"
-      hash: "5166e286457f03306064be5497e8dbb0c3d32083"
-      hash_algorithm: "SHA-1"
+      hash:
+        value: "5166e286457f03306064be5497e8dbb0c3d32083"
+        algorithm: "SHA-1"
     vcs:
       type: "git"
       url: "git://github.com/isaacs/minimatch.git"
@@ -2987,12 +3143,14 @@ packages:
     homepage_url: "https://github.com/substack/minimist"
     binary_artifact:
       url: ""
-      hash: ""
-      hash_algorithm: ""
+      hash:
+        value: ""
+        algorithm: ""
     source_artifact:
       url: "https://registry.npmjs.org/minimist/-/minimist-0.0.8.tgz"
-      hash: "857fcabfc3397d2625b8228262e86aa7a011b05d"
-      hash_algorithm: "SHA-1"
+      hash:
+        value: "857fcabfc3397d2625b8228262e86aa7a011b05d"
+        algorithm: "SHA-1"
     vcs:
       type: "git"
       url: "git://github.com/substack/minimist.git"
@@ -3015,12 +3173,14 @@ packages:
     homepage_url: "https://github.com/substack/node-mkdirp#readme"
     binary_artifact:
       url: ""
-      hash: ""
-      hash_algorithm: ""
+      hash:
+        value: ""
+        algorithm: ""
     source_artifact:
       url: "https://registry.npmjs.org/mkdirp/-/mkdirp-0.5.1.tgz"
-      hash: "30057438eac6cf7f8c4767f38648d6697d75c903"
-      hash_algorithm: "SHA-1"
+      hash:
+        value: "30057438eac6cf7f8c4767f38648d6697d75c903"
+        algorithm: "SHA-1"
     vcs:
       type: "git"
       url: "git+https://github.com/substack/node-mkdirp.git"
@@ -3043,12 +3203,14 @@ packages:
     homepage_url: "https://github.com/zeit/ms#readme"
     binary_artifact:
       url: ""
-      hash: ""
-      hash_algorithm: ""
+      hash:
+        value: ""
+        algorithm: ""
     source_artifact:
       url: "https://registry.npmjs.org/ms/-/ms-2.0.0.tgz"
-      hash: "5608aeadfc00be6c2901df5f9861788de0d597c8"
-      hash_algorithm: "SHA-1"
+      hash:
+        value: "5608aeadfc00be6c2901df5f9861788de0d597c8"
+        algorithm: "SHA-1"
     vcs:
       type: "git"
       url: "git+https://github.com/zeit/ms.git"
@@ -3073,12 +3235,14 @@ packages:
     homepage_url: "https://github.com/jonschlinkert/normalize-path"
     binary_artifact:
       url: ""
-      hash: ""
-      hash_algorithm: ""
+      hash:
+        value: ""
+        algorithm: ""
     source_artifact:
       url: "https://registry.npmjs.org/normalize-path/-/normalize-path-2.1.1.tgz"
-      hash: "1ab28b556e198363a8c1a6f7e6fa20137fe6aed9"
-      hash_algorithm: "SHA-1"
+      hash:
+        value: "1ab28b556e198363a8c1a6f7e6fa20137fe6aed9"
+        algorithm: "SHA-1"
     vcs:
       type: "git"
       url: "git+https://github.com/jonschlinkert/normalize-path.git"
@@ -3101,12 +3265,14 @@ packages:
     homepage_url: "https://github.com/sindresorhus/number-is-nan#readme"
     binary_artifact:
       url: ""
-      hash: ""
-      hash_algorithm: ""
+      hash:
+        value: ""
+        algorithm: ""
     source_artifact:
       url: "https://registry.npmjs.org/number-is-nan/-/number-is-nan-1.0.1.tgz"
-      hash: "097b602b53422a522c1afb8790318336941a011d"
-      hash_algorithm: "SHA-1"
+      hash:
+        value: "097b602b53422a522c1afb8790318336941a011d"
+        algorithm: "SHA-1"
     vcs:
       type: "git"
       url: "git+https://github.com/sindresorhus/number-is-nan.git"
@@ -3129,12 +3295,14 @@ packages:
     homepage_url: "https://github.com/sindresorhus/object-assign#readme"
     binary_artifact:
       url: ""
-      hash: ""
-      hash_algorithm: ""
+      hash:
+        value: ""
+        algorithm: ""
     source_artifact:
       url: "https://registry.npmjs.org/object-assign/-/object-assign-4.1.1.tgz"
-      hash: "2109adc7965887cfc05cbbd442cac8bfbb360863"
-      hash_algorithm: "SHA-1"
+      hash:
+        value: "2109adc7965887cfc05cbbd442cac8bfbb360863"
+        algorithm: "SHA-1"
     vcs:
       type: "git"
       url: "git+https://github.com/sindresorhus/object-assign.git"
@@ -3158,12 +3326,14 @@ packages:
     homepage_url: "https://github.com/jonschlinkert/object.omit"
     binary_artifact:
       url: ""
-      hash: ""
-      hash_algorithm: ""
+      hash:
+        value: ""
+        algorithm: ""
     source_artifact:
       url: "https://registry.npmjs.org/object.omit/-/object.omit-2.0.1.tgz"
-      hash: "1a9c744829f39dbb858c76ca3579ae2a54ebd1fa"
-      hash_algorithm: "SHA-1"
+      hash:
+        value: "1a9c744829f39dbb858c76ca3579ae2a54ebd1fa"
+        algorithm: "SHA-1"
     vcs:
       type: "git"
       url: "git+https://github.com/jonschlinkert/object.omit.git"
@@ -3186,12 +3356,14 @@ packages:
     homepage_url: "https://github.com/isaacs/once#readme"
     binary_artifact:
       url: ""
-      hash: ""
-      hash_algorithm: ""
+      hash:
+        value: ""
+        algorithm: ""
     source_artifact:
       url: "https://registry.npmjs.org/once/-/once-1.4.0.tgz"
-      hash: "583b1aa775961d4b113ac17d9c50baef9dd76bd1"
-      hash_algorithm: "SHA-1"
+      hash:
+        value: "583b1aa775961d4b113ac17d9c50baef9dd76bd1"
+        algorithm: "SHA-1"
     vcs:
       type: "git"
       url: "git://github.com/isaacs/once.git"
@@ -3214,12 +3386,14 @@ packages:
     homepage_url: "https://github.com/sindresorhus/os-homedir#readme"
     binary_artifact:
       url: ""
-      hash: ""
-      hash_algorithm: ""
+      hash:
+        value: ""
+        algorithm: ""
     source_artifact:
       url: "https://registry.npmjs.org/os-homedir/-/os-homedir-1.0.2.tgz"
-      hash: "ffbc4988336e0e833de0c168c7ef152121aa7fb3"
-      hash_algorithm: "SHA-1"
+      hash:
+        value: "ffbc4988336e0e833de0c168c7ef152121aa7fb3"
+        algorithm: "SHA-1"
     vcs:
       type: "git"
       url: "git+https://github.com/sindresorhus/os-homedir.git"
@@ -3242,12 +3416,14 @@ packages:
     homepage_url: "https://github.com/sindresorhus/os-tmpdir#readme"
     binary_artifact:
       url: ""
-      hash: ""
-      hash_algorithm: ""
+      hash:
+        value: ""
+        algorithm: ""
     source_artifact:
       url: "https://registry.npmjs.org/os-tmpdir/-/os-tmpdir-1.0.2.tgz"
-      hash: "bbe67406c79aa85c5cfec766fe5734555dfa1274"
-      hash_algorithm: "SHA-1"
+      hash:
+        value: "bbe67406c79aa85c5cfec766fe5734555dfa1274"
+        algorithm: "SHA-1"
     vcs:
       type: "git"
       url: "git+https://github.com/sindresorhus/os-tmpdir.git"
@@ -3271,12 +3447,14 @@ packages:
     homepage_url: "https://github.com/shinnn/output-file-sync#readme"
     binary_artifact:
       url: ""
-      hash: ""
-      hash_algorithm: ""
+      hash:
+        value: ""
+        algorithm: ""
     source_artifact:
       url: "https://registry.npmjs.org/output-file-sync/-/output-file-sync-1.1.2.tgz"
-      hash: "d0a33eefe61a205facb90092e826598d5245ce76"
-      hash_algorithm: "SHA-1"
+      hash:
+        value: "d0a33eefe61a205facb90092e826598d5245ce76"
+        algorithm: "SHA-1"
     vcs:
       type: "git"
       url: "git+https://github.com/shinnn/output-file-sync.git"
@@ -3299,12 +3477,14 @@ packages:
     homepage_url: "https://github.com/jonschlinkert/parse-glob"
     binary_artifact:
       url: ""
-      hash: ""
-      hash_algorithm: ""
+      hash:
+        value: ""
+        algorithm: ""
     source_artifact:
       url: "https://registry.npmjs.org/parse-glob/-/parse-glob-3.0.4.tgz"
-      hash: "b2c376cfb11f35513badd173ef0bb6e3a388391c"
-      hash_algorithm: "SHA-1"
+      hash:
+        value: "b2c376cfb11f35513badd173ef0bb6e3a388391c"
+        algorithm: "SHA-1"
     vcs:
       type: "git"
       url: "git+https://github.com/jonschlinkert/parse-glob.git"
@@ -3327,12 +3507,14 @@ packages:
     homepage_url: "https://github.com/sindresorhus/path-is-absolute#readme"
     binary_artifact:
       url: ""
-      hash: ""
-      hash_algorithm: ""
+      hash:
+        value: ""
+        algorithm: ""
     source_artifact:
       url: "https://registry.npmjs.org/path-is-absolute/-/path-is-absolute-1.0.1.tgz"
-      hash: "174b9268735534ffbc7ace6bf53a5a9e1b5c5f5f"
-      hash_algorithm: "SHA-1"
+      hash:
+        value: "174b9268735534ffbc7ace6bf53a5a9e1b5c5f5f"
+        algorithm: "SHA-1"
     vcs:
       type: "git"
       url: "git+https://github.com/sindresorhus/path-is-absolute.git"
@@ -3356,12 +3538,14 @@ packages:
     homepage_url: "https://github.com/jonschlinkert/preserve"
     binary_artifact:
       url: ""
-      hash: ""
-      hash_algorithm: ""
+      hash:
+        value: ""
+        algorithm: ""
     source_artifact:
       url: "https://registry.npmjs.org/preserve/-/preserve-0.2.0.tgz"
-      hash: "815ed1f6ebc65926f865b310c0713bcb3315ce4b"
-      hash_algorithm: "SHA-1"
+      hash:
+        value: "815ed1f6ebc65926f865b310c0713bcb3315ce4b"
+        algorithm: "SHA-1"
     vcs:
       type: "git"
       url: "git://github.com/jonschlinkert/preserve.git"
@@ -3385,12 +3569,14 @@ packages:
     homepage_url: "http://github.com/benjamn/private"
     binary_artifact:
       url: ""
-      hash: ""
-      hash_algorithm: ""
+      hash:
+        value: ""
+        algorithm: ""
     source_artifact:
       url: "https://registry.npmjs.org/private/-/private-0.1.8.tgz"
-      hash: "2381edb3689f7a53d653190060fcf822d2f368ff"
-      hash_algorithm: "SHA-1"
+      hash:
+        value: "2381edb3689f7a53d653190060fcf822d2f368ff"
+        algorithm: "SHA-1"
     vcs:
       type: "git"
       url: "git://github.com/benjamn/private.git"
@@ -3413,12 +3599,14 @@ packages:
     homepage_url: "https://github.com/calvinmetcalf/process-nextick-args"
     binary_artifact:
       url: ""
-      hash: ""
-      hash_algorithm: ""
+      hash:
+        value: ""
+        algorithm: ""
     source_artifact:
       url: "https://registry.npmjs.org/process-nextick-args/-/process-nextick-args-2.0.0.tgz"
-      hash: "a37d732f4271b4ab1ad070d35508e8290788ffaa"
-      hash_algorithm: "SHA-1"
+      hash:
+        value: "a37d732f4271b4ab1ad070d35508e8290788ffaa"
+        algorithm: "SHA-1"
     vcs:
       type: "git"
       url: "git+https://github.com/calvinmetcalf/process-nextick-args.git"
@@ -3442,12 +3630,14 @@ packages:
     homepage_url: "https://github.com/jonschlinkert/randomatic"
     binary_artifact:
       url: ""
-      hash: ""
-      hash_algorithm: ""
+      hash:
+        value: ""
+        algorithm: ""
     source_artifact:
       url: "https://registry.npmjs.org/randomatic/-/randomatic-3.1.0.tgz"
-      hash: "36f2ca708e9e567f5ed2ec01949026d50aa10116"
-      hash_algorithm: "SHA-1"
+      hash:
+        value: "36f2ca708e9e567f5ed2ec01949026d50aa10116"
+        algorithm: "SHA-1"
     vcs:
       type: "git"
       url: "git+https://github.com/jonschlinkert/randomatic.git"
@@ -3470,12 +3660,14 @@ packages:
     homepage_url: "https://github.com/nodejs/readable-stream#readme"
     binary_artifact:
       url: ""
-      hash: ""
-      hash_algorithm: ""
+      hash:
+        value: ""
+        algorithm: ""
     source_artifact:
       url: "https://registry.npmjs.org/readable-stream/-/readable-stream-2.3.6.tgz"
-      hash: "b11c27d88b8ff1fbe070643cf94b0c79ae1b0aaf"
-      hash_algorithm: "SHA-1"
+      hash:
+        value: "b11c27d88b8ff1fbe070643cf94b0c79ae1b0aaf"
+        algorithm: "SHA-1"
     vcs:
       type: "git"
       url: "git://github.com/nodejs/readable-stream.git"
@@ -3498,12 +3690,14 @@ packages:
     homepage_url: "https://github.com/thlorenz/readdirp"
     binary_artifact:
       url: ""
-      hash: ""
-      hash_algorithm: ""
+      hash:
+        value: ""
+        algorithm: ""
     source_artifact:
       url: "https://registry.npmjs.org/readdirp/-/readdirp-2.1.0.tgz"
-      hash: "4ed0ad060df3073300c48440373f72d1cc642d78"
-      hash_algorithm: "SHA-1"
+      hash:
+        value: "4ed0ad060df3073300c48440373f72d1cc642d78"
+        algorithm: "SHA-1"
     vcs:
       type: "git"
       url: "git://github.com/thlorenz/readdirp.git"
@@ -3526,12 +3720,14 @@ packages:
     homepage_url: ""
     binary_artifact:
       url: ""
-      hash: ""
-      hash_algorithm: ""
+      hash:
+        value: ""
+        algorithm: ""
     source_artifact:
       url: "https://registry.npmjs.org/regenerator-runtime/-/regenerator-runtime-0.10.5.tgz"
-      hash: "336c3efc1220adcedda2c9fab67b5a7955a33658"
-      hash_algorithm: "SHA-1"
+      hash:
+        value: "336c3efc1220adcedda2c9fab67b5a7955a33658"
+        algorithm: "SHA-1"
     vcs:
       type: "git"
       url: "https://github.com/facebook/regenerator/tree/master/packages/regenerator-runtime"
@@ -3554,12 +3750,14 @@ packages:
     homepage_url: ""
     binary_artifact:
       url: ""
-      hash: ""
-      hash_algorithm: ""
+      hash:
+        value: ""
+        algorithm: ""
     source_artifact:
       url: "https://registry.npmjs.org/regenerator-runtime/-/regenerator-runtime-0.11.1.tgz"
-      hash: "be05ad7f9bf7d22e056f9726cee5017fbf19e2e9"
-      hash_algorithm: "SHA-1"
+      hash:
+        value: "be05ad7f9bf7d22e056f9726cee5017fbf19e2e9"
+        algorithm: "SHA-1"
     vcs:
       type: "git"
       url: "https://github.com/facebook/regenerator/tree/master/packages/regenerator-runtime"
@@ -3584,12 +3782,14 @@ packages:
     homepage_url: "https://github.com/jonschlinkert/regex-cache"
     binary_artifact:
       url: ""
-      hash: ""
-      hash_algorithm: ""
+      hash:
+        value: ""
+        algorithm: ""
     source_artifact:
       url: "https://registry.npmjs.org/regex-cache/-/regex-cache-0.4.4.tgz"
-      hash: "75bdc58a2a1496cec48a12835bc54c8d562336dd"
-      hash_algorithm: "SHA-1"
+      hash:
+        value: "75bdc58a2a1496cec48a12835bc54c8d562336dd"
+        algorithm: "SHA-1"
     vcs:
       type: "git"
       url: "git+https://github.com/jonschlinkert/regex-cache.git"
@@ -3612,12 +3812,14 @@ packages:
     homepage_url: "https://github.com/darsain/remove-trailing-separator#readme"
     binary_artifact:
       url: ""
-      hash: ""
-      hash_algorithm: ""
+      hash:
+        value: ""
+        algorithm: ""
     source_artifact:
       url: "https://registry.npmjs.org/remove-trailing-separator/-/remove-trailing-separator-1.1.0.tgz"
-      hash: "c24bce2a283adad5bc3f58e0d48249b92379d8ef"
-      hash_algorithm: "SHA-1"
+      hash:
+        value: "c24bce2a283adad5bc3f58e0d48249b92379d8ef"
+        algorithm: "SHA-1"
     vcs:
       type: "git"
       url: "git+https://github.com/darsain/remove-trailing-separator.git"
@@ -3640,12 +3842,14 @@ packages:
     homepage_url: "https://github.com/jonschlinkert/repeat-element"
     binary_artifact:
       url: ""
-      hash: ""
-      hash_algorithm: ""
+      hash:
+        value: ""
+        algorithm: ""
     source_artifact:
       url: "https://registry.npmjs.org/repeat-element/-/repeat-element-1.1.2.tgz"
-      hash: "ef089a178d1483baae4d93eb98b4f9e4e11d990a"
-      hash_algorithm: "SHA-1"
+      hash:
+        value: "ef089a178d1483baae4d93eb98b4f9e4e11d990a"
+        algorithm: "SHA-1"
     vcs:
       type: "git"
       url: "git://github.com/jonschlinkert/repeat-element.git"
@@ -3669,12 +3873,14 @@ packages:
     homepage_url: "https://github.com/jonschlinkert/repeat-string"
     binary_artifact:
       url: ""
-      hash: ""
-      hash_algorithm: ""
+      hash:
+        value: ""
+        algorithm: ""
     source_artifact:
       url: "https://registry.npmjs.org/repeat-string/-/repeat-string-1.6.1.tgz"
-      hash: "8dcae470e1c88abc2d600fff4a776286da75e637"
-      hash_algorithm: "SHA-1"
+      hash:
+        value: "8dcae470e1c88abc2d600fff4a776286da75e637"
+        algorithm: "SHA-1"
     vcs:
       type: "git"
       url: "git+https://github.com/jonschlinkert/repeat-string.git"
@@ -3697,12 +3903,14 @@ packages:
     homepage_url: "https://github.com/sindresorhus/repeating#readme"
     binary_artifact:
       url: ""
-      hash: ""
-      hash_algorithm: ""
+      hash:
+        value: ""
+        algorithm: ""
     source_artifact:
       url: "https://registry.npmjs.org/repeating/-/repeating-2.0.1.tgz"
-      hash: "5214c53a926d3552707527fbab415dbc08d06dda"
-      hash_algorithm: "SHA-1"
+      hash:
+        value: "5214c53a926d3552707527fbab415dbc08d06dda"
+        algorithm: "SHA-1"
     vcs:
       type: "git"
       url: "git+https://github.com/sindresorhus/repeating.git"
@@ -3725,12 +3933,14 @@ packages:
     homepage_url: "https://github.com/feross/safe-buffer"
     binary_artifact:
       url: ""
-      hash: ""
-      hash_algorithm: ""
+      hash:
+        value: ""
+        algorithm: ""
     source_artifact:
       url: "https://registry.npmjs.org/safe-buffer/-/safe-buffer-5.1.2.tgz"
-      hash: "991ec69d296e0313747d59bdfd2b745c35f8828d"
-      hash_algorithm: "SHA-1"
+      hash:
+        value: "991ec69d296e0313747d59bdfd2b745c35f8828d"
+        algorithm: "SHA-1"
     vcs:
       type: "git"
       url: "git://github.com/feross/safe-buffer.git"
@@ -3753,12 +3963,14 @@ packages:
     homepage_url: "https://github.com/sindresorhus/set-immediate-shim"
     binary_artifact:
       url: ""
-      hash: ""
-      hash_algorithm: ""
+      hash:
+        value: ""
+        algorithm: ""
     source_artifact:
       url: "https://registry.npmjs.org/set-immediate-shim/-/set-immediate-shim-1.0.1.tgz"
-      hash: "4b2b1b27eb808a9f8dcc481a58e5e56f599f3f61"
-      hash_algorithm: "SHA-1"
+      hash:
+        value: "4b2b1b27eb808a9f8dcc481a58e5e56f599f3f61"
+        algorithm: "SHA-1"
     vcs:
       type: "git"
       url: "https://github.com/sindresorhus/set-immediate-shim"
@@ -3781,12 +3993,14 @@ packages:
     homepage_url: "https://github.com/sindresorhus/slash"
     binary_artifact:
       url: ""
-      hash: ""
-      hash_algorithm: ""
+      hash:
+        value: ""
+        algorithm: ""
     source_artifact:
       url: "https://registry.npmjs.org/slash/-/slash-1.0.0.tgz"
-      hash: "c41f2f6c39fc16d1cd17ad4b5d896114ae470d55"
-      hash_algorithm: "SHA-1"
+      hash:
+        value: "c41f2f6c39fc16d1cd17ad4b5d896114ae470d55"
+        algorithm: "SHA-1"
     vcs:
       type: "git"
       url: "git://github.com/sindresorhus/slash"
@@ -3809,12 +4023,14 @@ packages:
     homepage_url: "https://github.com/evanw/node-source-map-support#readme"
     binary_artifact:
       url: ""
-      hash: ""
-      hash_algorithm: ""
+      hash:
+        value: ""
+        algorithm: ""
     source_artifact:
       url: "https://registry.npmjs.org/source-map-support/-/source-map-support-0.4.18.tgz"
-      hash: "0286a6de8be42641338594e97ccea75f0a2c585f"
-      hash_algorithm: "SHA-1"
+      hash:
+        value: "0286a6de8be42641338594e97ccea75f0a2c585f"
+        algorithm: "SHA-1"
     vcs:
       type: "git"
       url: "git+https://github.com/evanw/node-source-map-support.git"
@@ -3837,12 +4053,14 @@ packages:
     homepage_url: "https://github.com/mozilla/source-map"
     binary_artifact:
       url: ""
-      hash: ""
-      hash_algorithm: ""
+      hash:
+        value: ""
+        algorithm: ""
     source_artifact:
       url: "https://registry.npmjs.org/source-map/-/source-map-0.5.7.tgz"
-      hash: "8a039d2d1021d22d1ea14c80d8ea468ba2ef3fcc"
-      hash_algorithm: "SHA-1"
+      hash:
+        value: "8a039d2d1021d22d1ea14c80d8ea468ba2ef3fcc"
+        algorithm: "SHA-1"
     vcs:
       type: "git"
       url: "git+ssh://git@github.com/mozilla/source-map.git"
@@ -3865,12 +4083,14 @@ packages:
     homepage_url: "https://github.com/nodejs/string_decoder"
     binary_artifact:
       url: ""
-      hash: ""
-      hash_algorithm: ""
+      hash:
+        value: ""
+        algorithm: ""
     source_artifact:
       url: "https://registry.npmjs.org/string_decoder/-/string_decoder-1.1.1.tgz"
-      hash: "9cf1611ba62685d7030ae9e4ba34149c3af03fc8"
-      hash_algorithm: "SHA-1"
+      hash:
+        value: "9cf1611ba62685d7030ae9e4ba34149c3af03fc8"
+        algorithm: "SHA-1"
     vcs:
       type: "git"
       url: "git://github.com/nodejs/string_decoder.git"
@@ -3893,12 +4113,14 @@ packages:
     homepage_url: "https://github.com/chalk/strip-ansi"
     binary_artifact:
       url: ""
-      hash: ""
-      hash_algorithm: ""
+      hash:
+        value: ""
+        algorithm: ""
     source_artifact:
       url: "https://registry.npmjs.org/strip-ansi/-/strip-ansi-3.0.1.tgz"
-      hash: "6a385fb8853d952d5ff05d0e8aaf94278dc63dcf"
-      hash_algorithm: "SHA-1"
+      hash:
+        value: "6a385fb8853d952d5ff05d0e8aaf94278dc63dcf"
+        algorithm: "SHA-1"
     vcs:
       type: "git"
       url: "https://github.com/chalk/strip-ansi"
@@ -3921,12 +4143,14 @@ packages:
     homepage_url: "https://github.com/chalk/supports-color"
     binary_artifact:
       url: ""
-      hash: ""
-      hash_algorithm: ""
+      hash:
+        value: ""
+        algorithm: ""
     source_artifact:
       url: "https://registry.npmjs.org/supports-color/-/supports-color-2.0.0.tgz"
-      hash: "535d045ce6b6363fa40117084629995e9df324c7"
-      hash_algorithm: "SHA-1"
+      hash:
+        value: "535d045ce6b6363fa40117084629995e9df324c7"
+        algorithm: "SHA-1"
     vcs:
       type: "git"
       url: "https://github.com/chalk/supports-color"
@@ -3949,12 +4173,14 @@ packages:
     homepage_url: "https://github.com/sindresorhus/to-fast-properties#readme"
     binary_artifact:
       url: ""
-      hash: ""
-      hash_algorithm: ""
+      hash:
+        value: ""
+        algorithm: ""
     source_artifact:
       url: "https://registry.npmjs.org/to-fast-properties/-/to-fast-properties-1.0.3.tgz"
-      hash: "b83571fa4d8c25b82e231b06e3a3055de4ca1a47"
-      hash_algorithm: "SHA-1"
+      hash:
+        value: "b83571fa4d8c25b82e231b06e3a3055de4ca1a47"
+        algorithm: "SHA-1"
     vcs:
       type: "git"
       url: "git+https://github.com/sindresorhus/to-fast-properties.git"
@@ -3977,12 +4203,14 @@ packages:
     homepage_url: "https://github.com/sindresorhus/trim-right"
     binary_artifact:
       url: ""
-      hash: ""
-      hash_algorithm: ""
+      hash:
+        value: ""
+        algorithm: ""
     source_artifact:
       url: "https://registry.npmjs.org/trim-right/-/trim-right-1.0.1.tgz"
-      hash: "cb2e1203067e0c8de1f614094b9fe45704ea6003"
-      hash_algorithm: "SHA-1"
+      hash:
+        value: "cb2e1203067e0c8de1f614094b9fe45704ea6003"
+        algorithm: "SHA-1"
     vcs:
       type: "git"
       url: "https://github.com/sindresorhus/trim-right"
@@ -4005,12 +4233,14 @@ packages:
     homepage_url: "https://github.com/sindresorhus/user-home"
     binary_artifact:
       url: ""
-      hash: ""
-      hash_algorithm: ""
+      hash:
+        value: ""
+        algorithm: ""
     source_artifact:
       url: "https://registry.npmjs.org/user-home/-/user-home-1.1.1.tgz"
-      hash: "2b5be23a32b63a7c9deb8d0f28d485724a3df190"
-      hash_algorithm: "SHA-1"
+      hash:
+        value: "2b5be23a32b63a7c9deb8d0f28d485724a3df190"
+        algorithm: "SHA-1"
     vcs:
       type: "git"
       url: "https://github.com/sindresorhus/user-home"
@@ -4033,12 +4263,14 @@ packages:
     homepage_url: "https://github.com/TooTallNate/util-deprecate"
     binary_artifact:
       url: ""
-      hash: ""
-      hash_algorithm: ""
+      hash:
+        value: ""
+        algorithm: ""
     source_artifact:
       url: "https://registry.npmjs.org/util-deprecate/-/util-deprecate-1.0.2.tgz"
-      hash: "450d4dc9fa70de732762fbd2d4a28981419a0ccf"
-      hash_algorithm: "SHA-1"
+      hash:
+        value: "450d4dc9fa70de732762fbd2d4a28981419a0ccf"
+        algorithm: "SHA-1"
     vcs:
       type: "git"
       url: "git://github.com/TooTallNate/util-deprecate.git"
@@ -4061,12 +4293,14 @@ packages:
     homepage_url: "https://github.com/tkellen/node-v8flags"
     binary_artifact:
       url: ""
-      hash: ""
-      hash_algorithm: ""
+      hash:
+        value: ""
+        algorithm: ""
     source_artifact:
       url: "https://registry.npmjs.org/v8flags/-/v8flags-2.1.1.tgz"
-      hash: "aab1a1fa30d45f88dd321148875ac02c0b55e5b4"
-      hash_algorithm: "SHA-1"
+      hash:
+        value: "aab1a1fa30d45f88dd321148875ac02c0b55e5b4"
+        algorithm: "SHA-1"
     vcs:
       type: "git"
       url: "git://github.com/tkellen/node-v8flags.git"
@@ -4089,12 +4323,14 @@ packages:
     homepage_url: "https://github.com/npm/wrappy"
     binary_artifact:
       url: ""
-      hash: ""
-      hash_algorithm: ""
+      hash:
+        value: ""
+        algorithm: ""
     source_artifact:
       url: "https://registry.npmjs.org/wrappy/-/wrappy-1.0.2.tgz"
-      hash: "b5243d8f3ec1aa35f1364605bc0d1036e30ab69f"
-      hash_algorithm: "SHA-1"
+      hash:
+        value: "b5243d8f3ec1aa35f1364605bc0d1036e30ab69f"
+        algorithm: "SHA-1"
     vcs:
       type: "git"
       url: "git+https://github.com/npm/wrappy.git"

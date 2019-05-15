@@ -20,7 +20,7 @@
 package com.here.ort.scanner
 
 import com.here.ort.model.EMPTY_JSON_NODE
-import com.here.ort.model.HashAlgorithm
+import com.here.ort.model.Hash
 import com.here.ort.model.Identifier
 import com.here.ort.model.LicenseFinding
 import com.here.ort.model.OrtIssue
@@ -81,11 +81,7 @@ class HttpStorageTest : StringSpec() {
 
     private val id = Identifier("type", "namespace", "name", "version")
 
-    private val sourceArtifact = RemoteArtifact(
-        "url",
-        "0123456789abcdef0123456789abcdef01234567",
-        HashAlgorithm.SHA1
-    )
+    private val sourceArtifact = RemoteArtifact("url", Hash.create("0123456789abcdef0123456789abcdef01234567"))
 
     private val vcs = VcsInfo("type", "url", "revision", "resolvedRevision", "path")
     private val vcsWithoutRevision = VcsInfo("type", "url", "", "")
@@ -322,7 +318,7 @@ class HttpStorageTest : StringSpec() {
                 rawResultWithContent
             )
             val provenanceSourceArtifactNonMatching = provenanceWithSourceArtifact.copy(
-                sourceArtifact = sourceArtifact.copy(hash = "0123456789012345678901234567890123456789")
+                sourceArtifact = sourceArtifact.copy(hash = Hash.create("0123456789012345678901234567890123456789"))
             )
             val scanResultSourceArtifactNonMatching = ScanResult(
                 provenanceSourceArtifactNonMatching, scannerDetails1,
