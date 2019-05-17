@@ -89,4 +89,9 @@ data class ProjectAnalyzerResult(
             }
         }
     }
+
+    fun collectPackagesByScope(scopeName: String): List<CuratedPackage> {
+        val scope = project.scopes.find { it.name == scopeName } ?: return emptyList()
+        return packages.filter { it.pkg.id in scope }
+    }
 }
