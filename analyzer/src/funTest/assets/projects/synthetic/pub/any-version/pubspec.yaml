@@ -1,0 +1,18 @@
+name: version_any
+description: A Sample project that is using dependencies without fixed versions
+version: 0.1.0
+author: Marlon Hille <marlon.hille@here.com>
+homepage: https://github.com/heremaps/
+
+dependencies:
+  # common dart lib using "any" version
+  protobuf: any
+  # common dart lib using range based version
+  async: ">=1.10.0 <3.0.0"
+
+dev_dependencies:
+  # dart unit tests
+  test: any
+
+environment:
+  sdk: ">=2.0.0-dev.47.0 <3.0.0"

@@ -34,3 +34,6 @@
 	path = analyzer/src/funTest/assets/projects/external/sbt-multi-project-example
 	url = https://github.com/pbassiner/sbt-multi-project-example.git
 	ignore = untracked
+[submodule "http"]
+	path = analyzer/src/funTest/assets/projects/external/http
+	url = https://github.com/dart-lang/http.git

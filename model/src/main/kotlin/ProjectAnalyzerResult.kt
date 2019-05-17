@@ -89,4 +89,27 @@ data class ProjectAnalyzerResult(
             }
         }
     }
+
+    fun collectPackages(filterByScopeName: String): List<CuratedPackage> {
+        val collectedPackages = mutableListOf<CuratedPackage>()
+
+        fun addPackage(pkgReference: PackageReference) {
+            packages.forEach{ item ->
+                if(item.pkg.id == pkgReference.id) {
+                    collectedPackages.add(item)
+                }
+            }
+            pkgReference.dependencies.forEach { addPackage(it) }
+        }
+
+        for (scope in project.scopes) {
+            if(scope.name == filterByScopeName) {
+                for (dependency in scope.dependencies) {
+                    addPackage(dependency)
+                }
+            }
+        }
+
+        return collectedPackages.distinct();
+    }
 }
