@@ -1,0 +1,30 @@
+name: project_with_flutter
+description: A sample Flutter plugin to test resolution of native flutter dependencies
+version: 0.1.0
+author: Marlon Hille <marlon.hille@here.com>
+homepage: https://github.com/heremaps/
+
+dependencies:
+  # flutter sdk, should be ignored by the scan
+  flutter:
+    sdk: flutter
+  # this is a flutter plugin with iOS and Android dependencies
+  flutter_facebook_login: "^2.0.1"
+  # this flutter plugin also contains native iOS and Android dependencies
+  flutter_crashlytics: "^1.0.0"
+
+dev_dependencies:
+  # flutter sdk, should be ignored by the scan
+  flutter_test:
+    sdk: flutter
+  # dart unit tests
+  test: any
+
+flutter:
+  plugin:
+    androidPackage: com.here.flutter.smaple
+    pluginClass: HERESamplePlugin
+
+environment:
+  sdk: ">=2.0.0-dev.47.0 <3.0.0"
+  flutter: ">=0.11.9 <2.0.0"

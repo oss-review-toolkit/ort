@@ -9,6 +9,7 @@ com.here.ort.analyzer.managers.Npm$Factory
 com.here.ort.analyzer.managers.NuGet$Factory
 com.here.ort.analyzer.managers.PhpComposer$Factory
 com.here.ort.analyzer.managers.Pip$Factory
+com.here.ort.analyzer.managers.Pub$Factory
 com.here.ort.analyzer.managers.Sbt$Factory
 com.here.ort.analyzer.managers.Stack$Factory
 com.here.ort.analyzer.managers.Yarn$Factory
