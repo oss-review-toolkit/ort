@@ -19,7 +19,7 @@ copyrights_file="copyrights.txt"
 copyrights_processed_file="copyrights-processed.txt"
 copyrights_debug_file="copyrights-debug.txt"
 html_report_file="report.html"
-evaluator_result_file="evaluator-result.json"
+evaluator_result_file="$temp_dir/evaluation-result.json"
 new_garbage_file="new-copyright-garbage.txt"
 licenses_file="licenses.txt"
 
@@ -65,7 +65,7 @@ function generate_report {
   echo "generate html report..."
   rm -rf $temp_dir
   $ort evaluate -i $ort_result_file -o $temp_dir -f JSON --rules-file $c_rules_file --repository-configuration-file $config_file --curations-file $c_curations_file
-  $ort report -f STATICHTML -i $temp_dir/evaluation-result.json -o $temp_dir/report --copyright-garbage-file $c_garbage_file \
+  $ort report -f STATICHTML -i $evaluator_result_file -o $temp_dir/report --copyright-garbage-file $c_garbage_file \
      --post-processing-script $c_notice_script --repository-configuration-file $config_file --resolutions-file $c_resolutions_file
   mv "$temp_dir/report/scan-report.html" "./$html_report_file"
 }
@@ -78,7 +78,7 @@ function generate_config {
 
 function generate_copyrights {
   echo "generate copyrights..."
-  $ort extract-copyrights -i $ort_result_file -o $copyrights_file 
+  $ort extract-copyrights -i $ort_result_file -o $copyrights_file
   $ort process-copyrights -i $copyrights_file -o $copyrights_processed_file -g $c_garbage_file
   $ort process-copyrights -i $copyrights_file -o $copyrights_debug_file -g $c_garbage_file --debug
   touch $new_garbage_file
@@ -88,19 +88,19 @@ function list_licenses {
   echo "list licenses..."
 
   if [ $# -eq 1 ]; then
-     $ort list-licenses -i $ort_result_file -o $licenses_file --repository-configuration-file $config_file -s $1
+     $ort list-licenses -i $evaluator_result_file -o $licenses_file --repository-configuration-file $config_file -s $1
   else
-     $ort list-licenses -i $ort_result_file -o $licenses_file --repository-configuration-file $config_file
+     $ort list-licenses -i $evaluator_result_file -o $licenses_file --repository-configuration-file $config_file
   fi
 }
 
-if [ $# -lt 1 ]; then 
+if [ $# -lt 1 ]; then
   usage
 fi
 
 command="$1"
 if [ "$command" = "init" ]; then
-  if [ $# -eq 2 ]; then 
+  if [ $# -eq 2 ]; then
      init "$2"
   else
      echo "usage: orts init SCAN_RESULT"
@@ -128,8 +128,6 @@ elif [ "$command" = "licenses" ]; then
      list_licenses
   fi
 else
-  echo "unknown command: '$command'" 
+  echo "unknown command: '$command'"
   usage
 fi
-	
-

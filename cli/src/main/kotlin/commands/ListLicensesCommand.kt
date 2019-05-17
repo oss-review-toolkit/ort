@@ -27,6 +27,7 @@ import com.here.ort.model.*
 import com.here.ort.utils.PARAMETER_ORDER_MANDATORY
 import com.here.ort.utils.PARAMETER_ORDER_OPTIONAL
 import com.here.ort.utils.expandTilde
+import com.sun.org.apache.xpath.internal.operations.Bool
 import java.io.File
 
 @Parameters(commandNames = ["list-licenses"], commandDescription = "List licenses.")
@@ -60,6 +61,13 @@ object ListLicensesCommand : CommandWithHelp() {
     )
     private var scanDir: File? = null
 
+    @Parameter(description = "Omit excluded.",
+        names = ["--omit-exclude"],
+        required = false,
+        order = PARAMETER_ORDER_OPTIONAL
+    )
+    private var omitExcluded: Boolean = true
+
     fun OrtResult.getPackages() : Set<com.here.ort.model.Package> {
         val projectPackages = analyzer!!.result.projects.map { it.toPackage() }
         val dependencyPackages = analyzer!!.result.packages.map { it.pkg }
@@ -76,6 +84,8 @@ object ListLicensesCommand : CommandWithHelp() {
             val excludes = ortResult.repository.config.excludes!!.findPathExcludes(path)
             return excludes.isNotEmpty()
         }
+
+        val violatingLicenses = ortResult.evaluator!!.violations.filter { it.severity == Severity.ERROR }.mapNotNull { it.license }
 
         val provenanceFindings = mutableMapOf<Provenance, MutableMap<String, MutableSet<TextLocation>>>()
         ortResult.scanner!!.results.scanResults.forEach { container ->
@@ -98,7 +108,7 @@ object ListLicensesCommand : CommandWithHelp() {
         }
 
         val result = buildString {
-            packageFindings.toSortedMap( compareBy { it.toCoordinates() } ).keys.forEach { id ->
+            packageFindings.filter { it.key.toCoordinates().startsWith("Unmanaged") }.toSortedMap( compareBy { it.toCoordinates() } ).keys.forEach { id ->
                 appendln("################################################################################")
                 appendln("#")
                 appendln("# ${id.toCoordinates()}")
@@ -107,38 +117,52 @@ object ListLicensesCommand : CommandWithHelp() {
                 appendln("")
                 val licenses = packageFindings[id]!!
                 licenses.keys.sorted().forEach { license ->
-                    val distinctFindings = getDistinctFindings(licenses[license]!!)
-                    appendln("  $license:")
+                    val relevantFindings = licenses[license]!!.filter { !(omitExcluded && isExcluded(it.path)) && violatingLicenses.contains(license) }
+
+                    val distinctFindings = getDistinctFindings(relevantFindings)
+
                     if (distinctFindings != null) {
-                        distinctFindings.keys.forEachIndexed { groupIndex, text ->
-                            distinctFindings[text]!!.forEach { finding ->
-                                val group = if (text == "N/A") "E" else groupIndex.toString()
-                                if (!isExcluded(finding.path)) {
-                                    appendln("    [$group] ${finding.path}: ${finding.startLine}-${finding.endLine}")
-                                } else {
-                                    appendln("    [$group] (e) ${finding.path}: ${finding.startLine}-${finding.endLine} ")
+                        if (distinctFindings.isNotEmpty()) {
+                            appendln("  $license:")
+
+                            distinctFindings.keys.forEachIndexed { groupIndex, text ->
+                                distinctFindings[text]!!.forEach { finding ->
+                                    val group = if (text == "N/A") "E" else groupIndex.toString()
+                                    if (!isExcluded(finding.path)) {
+                                        appendln("    [$group] ${finding.path}: ${finding.startLine}-${finding.endLine}")
+                                    } else {
+                                        appendln("    [$group] (e) ${finding.path}: ${finding.startLine}-${finding.endLine} ")
+                                    }
                                 }
                             }
-                        }
-                        distinctFindings.keys.forEachIndexed { groupIndex, text ->
-                            if (text != "N/A") {
-                                appendln("    group [$groupIndex]: ")
-                                appendln()
-                                appendln(text.lines().joinToString( prefix = "    ", separator = "\n    "))
-                                appendln()
+                            distinctFindings.keys.forEachIndexed { groupIndex, text ->
+                                if (text != "N/A") {
+                                    appendln("    group [$groupIndex]: ")
+                                    appendln()
+                                    appendln(text.lines().joinToString(prefix = "    ", separator = "\n    "))
+                                    appendln()
+                                }
                             }
+
+                            appendln()
                         }
                     }
                     else {
-                        licenses[license]!!.forEach { finding ->
-                            if (!isExcluded(finding.path)) {
-                                appendln("    ${finding.path}: ${finding.startLine}-${finding.endLine}")
-                            } else {
-                                appendln("    (e) ${finding.path}: ${finding.startLine}-${finding.endLine}")
+                        if (relevantFindings.isNotEmpty()) {
+                            appendln("  $license:")
+
+                            relevantFindings.forEach { finding ->
+                                if (!isExcluded(finding.path)) {
+                                    appendln("    ${finding.path}: ${finding.startLine}-${finding.endLine}")
+                                } else {
+                                    appendln("    (e) ${finding.path}: ${finding.startLine}-${finding.endLine}")
+                                }
                             }
+
+                            appendln()
                         }
                     }
-                    appendln()
+
                 }
             }
         }
@@ -147,7 +171,7 @@ object ListLicensesCommand : CommandWithHelp() {
         return 0
     }
 
-    private fun getDistinctFindings(textLocations: Set<TextLocation>): Map<String, Set<TextLocation>>? {
+    private fun getDistinctFindings(textLocations: Collection<TextLocation>): Map<String, Set<TextLocation>>? {
         val result = mutableMapOf<String, MutableSet<TextLocation>>()
         textLocations.forEach { textLocation ->
             val text = try { getText(textLocation) } catch (e: Throwable) { "N/A" }
