@@ -40,7 +40,7 @@ before_install:
   - sudo ln -s /etc/ssl/certs/java/cacerts $JAVA_HOME/lib/security/cacerts
 
 install:
-  - sudo apt install -y cvs
+  - sudo apt install -y cvs lib32stdc++6
   - eval "$(gimme)"
   - curl https://raw.githubusercontent.com/golang/dep/v$GO_DEP_VERSION/install.sh | sh
   - npm install -g bower@$BOWER_VERSION npm@$NPM_VERSION yarn@$YARN_VERSION
@@ -56,6 +56,10 @@ install:
   - unzip -q sdk-tools-linux-$ANDROID_SDK_VERSION.zip -d $ANDROID_HOME
   - export SDKMANAGER_OPTS="--add-modules java.xml.bind"
   - yes | $ANDROID_HOME/tools/bin/sdkmanager --verbose "platform-tools"
+  - git clone --depth 1 https://github.com/flutter/flutter.git ../flutter
+  - export PATH="$PATH":`pwd`/../flutter/bin:`pwd`/../flutter/bin/cache/dart-sdk/bin
+  - flutter config --no-analytics
+  - flutter doctor
 
 script:
   - set -o pipefail
