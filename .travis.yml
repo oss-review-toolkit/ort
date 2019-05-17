@@ -27,6 +27,8 @@ env:
     - ANDROID_HOME="/opt/android"
     - ANDROID_SDK_VERSION="4333796"
     - BOWER_VERSION="1.8.8"
+    - FLUTTER_HOME="/opt/flutter"
+    - FLUTTER_VERSION="v1.7.8+hotfix.3-stable"
     - GIMME_GO_VERSION="1.10" # Used internally by Travis.
     - GO_DEP_VERSION="0.5.1"
     - NPM_VERSION="6.4.0"
@@ -35,12 +37,20 @@ env:
     - STACK_VERSION="2.1.1"
     - YARN_VERSION="1.17.3"
 
+addons:
+  apt:
+    # Flutter depends on /usr/lib/x86_64-linux-gnu/libstdc++.so.6 version GLIBCXX_3.4.18
+    sources:
+      - ubuntu-toolchain-r-test # if we don't specify this, the libstdc++6 we get is the wrong version
+    packages:
+      - cvs
+      - lib32stdc++6
+
 before_install:
   - sudo rm -f $JAVA_HOME/lib/security/cacerts
   - sudo ln -s /etc/ssl/certs/java/cacerts $JAVA_HOME/lib/security/cacerts
 
 install:
-  - sudo apt install -y cvs
   - eval "$(gimme)"
   - curl https://raw.githubusercontent.com/golang/dep/v$GO_DEP_VERSION/install.sh | sh
   - npm install -g bower@$BOWER_VERSION npm@$NPM_VERSION yarn@$YARN_VERSION
@@ -56,6 +66,11 @@ install:
   - unzip -q sdk-tools-linux-$ANDROID_SDK_VERSION.zip -d $ANDROID_HOME
   - export SDKMANAGER_OPTS="--add-modules java.xml.bind"
   - yes | $ANDROID_HOME/tools/bin/sdkmanager --verbose "platform-tools"
+  - curl -Os https://storage.googleapis.com/flutter_infra/releases/stable/linux/flutter_linux_$FLUTTER_VERSION.tar.xz
+  - tar xf flutter_linux_$FLUTTER_VERSION.tar.xz -C $(dirname $FLUTTER_HOME)
+  - export PATH="$PATH:$FLUTTER_HOME/bin:$FLUTTER_HOME/bin/cache/dart-sdk/bin"
+  - flutter config --no-analytics
+  - flutter doctor
 
 script:
   - set -o pipefail
