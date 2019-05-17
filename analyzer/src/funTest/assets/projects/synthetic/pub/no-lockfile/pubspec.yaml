@@ -1,0 +1,25 @@
+name: here_maps_plugin
+description: A Flutter plugin for integrating HERE Mobile SDK in iOS and Android applications.
+version: 0.8.0
+author: Marlon Hille <marlon.hille@here.com>
+homepage: https://github.com/heremaps/
+
+dependencies:
+  flutter:
+    sdk: flutter
+  protobuf: any
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+  test: any
+
+flutter:
+  plugin:
+    androidPackage: com.here.flutter.map
+    pluginClass: HEREMapsPlugin
+
+environment:
+  sdk: ">=2.0.0-dev.47.0 <3.0.0"
+  flutter: ">=0.11.9 <2.0.0"
