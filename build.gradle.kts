@@ -121,7 +121,6 @@ subprojects {
             "testImplementation"(project(":test-utils"))
 
             "funTestImplementation"(sourceSets["main"].output)
-            "funTestImplementation"(sourceSets["test"].output)
         }
 
         configurations["funTestImplementation"].extendsFrom(configurations["testImplementation"])
