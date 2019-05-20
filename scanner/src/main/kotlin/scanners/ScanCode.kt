@@ -269,10 +269,6 @@ class ScanCode(name: String, config: ScannerConfiguration) : LocalScanner(name, 
                 throw ScanException(errorMessage)
             }
         }
-
-        // TODO: convert json output to spdx
-        // TODO: convert json output to html
-        // TODO: Add results of license scan to YAML model
     }
 
     override fun getResult(resultsFile: File): JsonNode {
