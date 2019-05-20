@@ -367,10 +367,10 @@ class ScanCode(name: String, config: ScannerConfiguration) : LocalScanner(name, 
      * Get the SPDX license id (or a fallback) for a license finding.
      */
     private fun getLicenseId(license: JsonNode): String {
-        var name = license["spdx_license_key"].asText()
+        var name = license["spdx_license_key"].textValue()
 
         if (name.isEmpty()) {
-            val key = license["key"].asText()
+            val key = license["key"].textValue()
             name = if (key == "unknown") {
                 "NOASSERTION"
             } else {
@@ -392,7 +392,7 @@ class ScanCode(name: String, config: ScannerConfiguration) : LocalScanner(name, 
         }
 
         val rootLicenseFile = result["files"].singleOrNull { file ->
-            val path = file["path"].asText()
+            val path = file["path"].textValue()
             try {
                 matchersForLicenseFiles.any { it.matches(Paths.get(path)) }
             } catch (e: InvalidPathException) {
@@ -423,7 +423,7 @@ class ScanCode(name: String, config: ScannerConfiguration) : LocalScanner(name, 
             val startLine = it["start_line"].intValue()
             val endLine = it["end_line"].intValue()
             (it["statements"] ?: listOf(it["value"])).map { statements ->
-                CopyrightFinding(statements.asText(), sortedSetOf(TextLocation(path, startLine, endLine)))
+                CopyrightFinding(statements.textValue(), sortedSetOf(TextLocation(path, startLine, endLine)))
             }
         }.toSortedSet()
     }
@@ -444,7 +444,7 @@ class ScanCode(name: String, config: ScannerConfiguration) : LocalScanner(name, 
             val startLine = it["start_line"].intValue()
             val endLine = it["end_line"].intValue()
             (it["statements"] ?: listOf(it["value"])).map { statements ->
-                CopyrightFinding(statements.asText(), sortedSetOf(TextLocation(path, startLine, endLine)))
+                CopyrightFinding(statements.textValue(), sortedSetOf(TextLocation(path, startLine, endLine)))
             }
         }.toSortedSet()
 
@@ -486,7 +486,7 @@ class ScanCode(name: String, config: ScannerConfiguration) : LocalScanner(name, 
         val rootLicense = getRootLicense(result)
 
         result["files"].forEach { file ->
-            val path = file["path"].asText()
+            val path = file["path"].textValue()
 
             val licenses = file["licenses"]?.toList().orEmpty()
             licenses.forEach {
