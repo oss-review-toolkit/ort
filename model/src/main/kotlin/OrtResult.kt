@@ -193,9 +193,8 @@ data class OrtResult(
                         // Only license findings of projects can be excluded by path excludes.
                         val isExcluded = project != null && excludes != null && finding.locations.all { location ->
                             excludes.paths.any { exclude ->
-                                exclude.matches(location.path).also { matches ->
-                                    if (matches) matchingExcludes += exclude
-                                }
+                                exclude.matches(getFilePathRelativeToAnalyzerRoot(project, location.path))
+                                    .also { matches -> if (matches) matchingExcludes += exclude }
                             }
                         }
 
