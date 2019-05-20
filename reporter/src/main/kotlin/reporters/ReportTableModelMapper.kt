@@ -91,6 +91,7 @@ class ReportTableModelMapper(private val resolutionProvider: ResolutionProvider)
         }
 
         val scanRecord = ortResult.scanner!!.results
+        val licenseFindings = ortResult.collectLicenseFindings()
 
         val projectTables = analyzerResult.projects.associateWith { project ->
             val projectExclude = excludes?.findProjectExclude(project, ortResult)?.let { exclude ->
@@ -103,7 +104,6 @@ class ReportTableModelMapper(private val resolutionProvider: ResolutionProvider)
 
             val allIds = sortedSetOf(project.id)
             project.collectDependencies().mapTo(allIds) { it.id }
-            val licenseFindings = ortResult.collectLicenseFindings()
 
             val tableRows = allIds.map { id ->
                 val scanResult = scanRecord.scanResults.find { it.id == id }
