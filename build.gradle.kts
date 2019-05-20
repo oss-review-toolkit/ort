@@ -124,7 +124,6 @@ subprojects {
         }
 
         configurations["funTestImplementation"].extendsFrom(configurations["testImplementation"])
-        configurations["funTestRuntime"].extendsFrom(configurations["testRuntime"])
     }
 
     configurations.all {
