@@ -129,7 +129,7 @@ class ScanCode(name: String, config: ScannerConfiguration) : LocalScanner(name, 
             "--output-$OUTPUT_FORMAT"
         }
 
-        // Note: The "(File: ...)" part in the patterns below is actually added by our own getResult() function.
+        // Note: The "(File: ...)" part in the patterns below is actually added by our own getRawResult() function.
         private val UNKNOWN_ERROR_REGEX = Pattern.compile(
             "(ERROR: for scanner: (?<scanner>\\w+):\n)?" +
                     "ERROR: Unknown error:\n.+\n(?<error>\\w+Error)(:|\n)(?<message>.*) \\(File: (?<file>.+)\\)",
@@ -254,7 +254,7 @@ class ScanCode(name: String, config: ScannerConfiguration) : LocalScanner(name, 
             log.debug { process.stderr }
         }
 
-        val result = getResult(resultsFile)
+        val result = getRawResult(resultsFile)
         val summary = generateSummary(startTime, endTime, result)
 
         val errors = summary.errors.toMutableList()
@@ -271,7 +271,7 @@ class ScanCode(name: String, config: ScannerConfiguration) : LocalScanner(name, 
         }
     }
 
-    override fun getResult(resultsFile: File): JsonNode {
+    override fun getRawResult(resultsFile: File): JsonNode {
         return if (resultsFile.isFile && resultsFile.length() > 0L) {
             jsonMapper.readTree(resultsFile)
         } else {

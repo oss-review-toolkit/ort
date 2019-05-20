@@ -41,7 +41,7 @@ class ScanCodeTest : WordSpec({
     "mapTimeoutErrors()" should {
         "return true for scan results with only timeout errors" {
             val resultFile = File("src/test/assets/esprima-2.7.3_scancode-2.2.1.post277.4d68f9377.json")
-            val result = scanner.getResult(resultFile)
+            val result = scanner.getRawResult(resultFile)
             val summary = scanner.generateSummary(Instant.now(), Instant.now(), result)
             val errors = summary.errors.toMutableList()
 
@@ -77,7 +77,7 @@ class ScanCodeTest : WordSpec({
 
         "return false for scan results without errors" {
             val resultFile = File("src/test/assets/esprima-2.7.3_scancode-2.2.1.json")
-            val result = scanner.getResult(resultFile)
+            val result = scanner.getRawResult(resultFile)
             val summary = scanner.generateSummary(Instant.now(), Instant.now(), result)
 
             scanner.mapTimeoutErrors(summary.errors.toMutableList()) shouldBe false
@@ -87,7 +87,7 @@ class ScanCodeTest : WordSpec({
     "mapUnknownErrors()" should {
         "return true for scan results with only memory errors" {
             val resultFile = File("src/test/assets/very-long-json-lines_scancode-2.2.1.post277.4d68f9377.json")
-            val result = scanner.getResult(resultFile)
+            val result = scanner.getRawResult(resultFile)
             val summary = scanner.generateSummary(Instant.now(), Instant.now(), result)
             val errors = summary.errors.toMutableList()
 
@@ -99,7 +99,7 @@ class ScanCodeTest : WordSpec({
 
         "return false for scan results with other unknown errors" {
             val resultFile = File("src/test/assets/kotlin-annotation-processing-gradle-1.2.21_scancode.json")
-            val result = scanner.getResult(resultFile)
+            val result = scanner.getRawResult(resultFile)
             val summary = scanner.generateSummary(Instant.now(), Instant.now(), result)
             val errors = summary.errors.toMutableList()
 
@@ -112,7 +112,7 @@ class ScanCodeTest : WordSpec({
 
         "return false for scan results without errors" {
             val resultFile = File("src/test/assets/esprima-2.7.3_scancode-2.2.1.json")
-            val result = scanner.getResult(resultFile)
+            val result = scanner.getRawResult(resultFile)
             val summary = scanner.generateSummary(Instant.now(), Instant.now(), result)
 
             scanner.mapUnknownErrors(summary.errors.toMutableList()) shouldBe false
@@ -204,7 +204,7 @@ class ScanCodeTest : WordSpec({
 
         "properly associate licenses to locations and copyrights" {
             val resultFile = File("src/test/assets/esprima-2.7.3_scancode-2.2.1.json")
-            val result = scanner.getResult(resultFile)
+            val result = scanner.getRawResult(resultFile)
 
             val expectedFindingBsd2 = LicenseFinding(
                 "BSD-2-Clause",
@@ -479,7 +479,7 @@ class ScanCodeTest : WordSpec({
 
         "properly associate licenses to locations and copyrights for the new output format" {
             val resultFile = File("src/test/assets/aws-java-sdk-core-1.11.160_scancode-2.9.7.json")
-            val result = scanner.getResult(resultFile)
+            val result = scanner.getRawResult(resultFile)
 
             val actualFindings = scanner.associateFindings(result)
 

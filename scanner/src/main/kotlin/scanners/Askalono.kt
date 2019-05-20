@@ -133,7 +133,7 @@ class Askalono(name: String, config: ScannerConfiguration) : LocalScanner(name, 
         with(process) {
             if (isSuccess) {
                 stdoutFile.copyTo(resultsFile)
-                val result = getResult(resultsFile)
+                val result = getRawResult(resultsFile)
                 val summary = generateSummary(startTime, endTime, result)
                 return ScanResult(Provenance(), getDetails(), summary, result)
             } else {
@@ -142,7 +142,7 @@ class Askalono(name: String, config: ScannerConfiguration) : LocalScanner(name, 
         }
     }
 
-    override fun getResult(resultsFile: File): JsonNode {
+    override fun getRawResult(resultsFile: File): JsonNode {
         if (!resultsFile.isFile || resultsFile.length() == 0L) return EMPTY_JSON_NODE
 
         val yamlNodes = resultsFile.readLines().chunked(3) { (path, license, score) ->
