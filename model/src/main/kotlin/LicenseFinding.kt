@@ -28,28 +28,40 @@ import com.fasterxml.jackson.module.kotlin.treeToValue
 import com.here.ort.model.config.CopyrightGarbage
 import com.here.ort.utils.CopyrightStatementsNormalizer
 
-import java.util.SortedMap
 import java.util.SortedSet
 import java.util.TreeSet
 
+typealias LicenseFindings = List<LicenseFinding>
+
 /**
- * A map that associates licenses with their belonging copyrights. This is provided mostly for convenience as creating
- * a similar collection based on the [LicenseFinding] class is a bit cumbersome due to its required layout to support
- * legacy serialized formats.
+ * Remove all copyright findings whose statements are classified as garbage in [copyrightGarbage].
  */
-typealias LicenseFindingsMap = SortedMap<String, MutableSet<String>>
+fun LicenseFindings.removeCopyrightGarbage(copyrightGarbage: CopyrightGarbage) =
+    map { finding ->
+        finding.copy(copyrights = finding.copyrights.filterNot { it.statement in copyrightGarbage.items }.toSortedSet())
+    }
 
-fun LicenseFindingsMap.processStatements() =
-    mapValues { (_, copyrights) ->
-        CopyrightStatementsNormalizer().normalize(copyrights).toMutableSet()
-    }.toSortedMap()
+/**
+ * Merge all findings which have the same license.
+ */
+fun LicenseFindings.mergeByLicense() =
+    groupBy { it.license }.values.map { findings ->
+        findings.reduce { left, right ->
+            val locations = (left.locations + right.locations).toSortedSet()
+            val copyrights = (left.copyrights + right.copyrights).mergeByStatement().toSortedSet()
+            LicenseFinding(left.license, locations, copyrights)
+        }
+    }
 
-fun LicenseFindingsMap.removeGarbage(copyrightGarbage: CopyrightGarbage) =
-    mapValues { (_, copyrights) ->
-        copyrights.filterNot {
-            it in copyrightGarbage.items
-        }.toMutableSet()
-    }.toSortedMap()
+/**
+ * Merge all copyright findings which have the same statement.
+ */
+fun Collection<CopyrightFinding>.mergeByStatement() =
+    groupBy { it.statement }.values.map { findings ->
+        findings.reduce { left, right ->
+            CopyrightFinding(left.statement, (left.locations + right.locations).toSortedSet())
+        }
+    }
 
 /**
  * A class to store a [license] finding along with its belonging [copyrights] and the [locations] where the license was
@@ -68,6 +80,14 @@ data class LicenseFinding(
                 .thenBy(TextLocation.SORTED_SET_COMPARATOR, LicenseFinding::locations)
                 .thenBy(CopyrightFinding.SORTED_SET_COMPARATOR, LicenseFinding::copyrights)
         ) { it }
+
+    /**
+     * Normalize all copyright findings using [CopyrightStatementsNormalizer.process].
+     */
+    fun normalizeCopyrightStatements(): Set<String> {
+        val statements = copyrights.map { it.statement }
+        return CopyrightStatementsNormalizer().normalize(statements).toMutableSet()
+    }
 }
 
 /**

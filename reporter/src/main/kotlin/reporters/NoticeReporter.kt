@@ -21,11 +21,12 @@ package com.here.ort.reporter.reporters
 
 import ch.frankel.slf4k.*
 
-import com.here.ort.model.LicenseFindingsMap
+import com.here.ort.model.Identifier
+import com.here.ort.model.LicenseFindings
 import com.here.ort.model.OrtResult
 import com.here.ort.model.config.CopyrightGarbage
-import com.here.ort.model.processStatements
-import com.here.ort.model.removeGarbage
+import com.here.ort.model.mergeByLicense
+import com.here.ort.model.removeCopyrightGarbage
 import com.here.ort.reporter.Reporter
 import com.here.ort.reporter.ResolutionProvider
 import com.here.ort.spdx.getLicenseText
@@ -42,7 +43,7 @@ class NoticeReporter : Reporter() {
 
     data class NoticeReport(
         val headers: List<String>,
-        val findings: LicenseFindingsMap,
+        val findings: Map<Identifier, LicenseFindings>,
         val footers: List<String>
     )
 
@@ -97,7 +98,15 @@ class NoticeReporter : Reporter() {
             "The provided ORT result file does not contain a scan result."
         }
 
-        val licenseFindings = getLicenseFindings(ortResult)
+        val licenseFindings = ortResult.collectLicenseFindings(omitExcluded = true)
+            .mapValues { map ->
+                map.value
+                    .filter { it.value.isEmpty() }
+                    .keys
+                    .toList()
+                    .mergeByLicense()
+                    .sortedBy { it.license }
+            }
 
         val header = if (licenseFindings.isEmpty()) {
             "This project neither contains or depends on any third-party software components.\n"
@@ -112,7 +121,7 @@ class NoticeReporter : Reporter() {
                 copyrightGarbage
             ).run(postProcessingScript)
         } else {
-            val processedFindings = licenseFindings.removeGarbage(copyrightGarbage).processStatements()
+            val processedFindings = licenseFindings.mapValues { it.value.removeCopyrightGarbage(copyrightGarbage) }
             NoticeReport(listOf(header), processedFindings, emptyList())
         }
 
@@ -121,32 +130,14 @@ class NoticeReporter : Reporter() {
         }
     }
 
-    private fun getLicenseFindings(ortResult: OrtResult): LicenseFindingsMap {
-        val excludes = ortResult.repository.config.excludes
-        val scanRecord = ortResult.scanner!!.results
-
-        val licenseFindings = sortedMapOf<String, MutableSet<String>>()
-
-        scanRecord.scanResults.forEach { container ->
-            if (excludes?.isExcluded(container.id, ortResult) != true) {
-                container.results.forEach { result ->
-                    result.summary.licenseFindingsMap.forEach { (license, copyrights) ->
-                        licenseFindings.getOrPut(license) { mutableSetOf() } += copyrights.map { it.statement }
-                    }
-                }
-            }
-        }
-
-        return licenseFindings
-    }
-
     private fun generateNotices(noticeReport: NoticeReport) =
         buildString {
             append(noticeReport.headers.joinToString(NOTICE_SEPARATOR))
 
-            noticeReport.findings.forEach { (license, copyrights) ->
+            noticeReport.findings.flatMap { it.value }.mergeByLicense().sortedBy { it.license }.forEach { finding ->
                 try {
-                    val licenseText = getLicenseText(license, true)
+                    val licenseText = getLicenseText(finding.license, true)
+                    val copyrights = finding.normalizeCopyrightStatements()
 
                     append(NOTICE_SEPARATOR)
 
@@ -162,7 +153,7 @@ class NoticeReporter : Reporter() {
                     // TODO: Consider introducing (resolvable) reporter errors to handle cases where we cannot
                     // find license texts.
                     log.warn {
-                        "No license text found for license '$license', it will be omitted from the report."
+                        "No license text found for license '${finding.license}', it will be omitted from the report."
                     }
                 }
             }

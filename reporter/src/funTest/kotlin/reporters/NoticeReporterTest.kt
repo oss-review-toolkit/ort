@@ -72,7 +72,9 @@ class NoticeReporterTest : WordSpec() {
 
                 val postProcessingScript = """
                     headers = listOf("Header 1\n", "Header 2\n")
-                    findings = noticeReport.findings.filter { (_, copyrights) -> copyrights.isEmpty() }.toSortedMap()
+                    findings = findings.mapValues { (_, values) ->
+                        values.filter { it.copyrights.isEmpty() }
+                    }
                     footers = listOf("Footer 1\n", "Footer 2\n")
                 """.trimIndent()
 
@@ -83,7 +85,7 @@ class NoticeReporterTest : WordSpec() {
 
             "return the input as-is for an empty post-processing script" {
                 val expectedText =
-                    File("src/funTest/assets/NPM-is-windows-1.0.2-expected-NOTICE_UNPROCESSED").readText()
+                    File("src/funTest/assets/NPM-is-windows-1.0.2-expected-NOTICE").readText()
                 val ortResult = readOrtResult("src/funTest/assets/NPM-is-windows-1.0.2-scan-result.json")
 
                 val report = generateReport(ortResult, postProcessingScript = "")
