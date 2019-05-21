@@ -315,7 +315,8 @@ class Downloader {
             }
         } else if (!target.sourceArtifact.hash.verify(sourceArchive)) {
             throw DownloadException(
-                "Source artifact does not match expected hash value ${target.sourceArtifact.hash.value}."
+                "Source artifact does not match expected ${target.sourceArtifact.hash.algorithm} hash " +
+                        "'${target.sourceArtifact.hash.value}'."
             )
         }
 
