@@ -435,10 +435,11 @@ class ScanCode(name: String, config: ScannerConfiguration) : LocalScanner(name, 
     ): SortedMap<String, MutableSet<CopyrightFinding>> {
         val copyrightsForLicenses = sortedMapOf<String, MutableSet<CopyrightFinding>>()
 
-        // While ScanCode 2.9.2 was still using "statements", version 2.9.7 is using "value".
         val allCopyrightStatements = copyrights.flatMap {
             val startLine = it["start_line"].intValue()
             val endLine = it["end_line"].intValue()
+
+            // While ScanCode 2.9.2 was still using "statements", version 2.9.7 is using "value".
             (it["statements"] ?: listOf(it["value"])).map { statements ->
                 CopyrightFinding(statements.textValue(), sortedSetOf(TextLocation(path, startLine, endLine)))
             }
