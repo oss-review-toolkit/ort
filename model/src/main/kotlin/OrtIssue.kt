@@ -24,6 +24,8 @@ import com.fasterxml.jackson.core.JsonParser
 import com.fasterxml.jackson.databind.DeserializationContext
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.SerializerProvider
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize
+import com.fasterxml.jackson.databind.annotation.JsonSerialize
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer
 import com.fasterxml.jackson.databind.ser.std.StdSerializer
 
@@ -34,6 +36,8 @@ import java.time.Instant
 /**
  * An issue that occurred while executing ORT.
  */
+@JsonDeserialize(using = OrtIssueDeserializer::class)
+@JsonSerialize(using = OrtIssueSerializer::class)
 data class OrtIssue(
     /**
      * The timestamp of the issue.

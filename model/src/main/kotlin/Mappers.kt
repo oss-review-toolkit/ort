@@ -29,20 +29,6 @@ import com.fasterxml.jackson.dataformat.yaml.YAMLMapper
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import com.fasterxml.jackson.module.kotlin.registerKotlinModule
 
-import com.here.ort.model.config.AnalyzerConfiguration
-import com.here.ort.model.config.AnalyzerConfigurationDeserializer
-
-private val ortModelModule = SimpleModule("OrtModelModule").apply {
-    addDeserializer(AnalyzerConfiguration::class.java, AnalyzerConfigurationDeserializer())
-    addDeserializer(CopyrightFinding::class.java, CopyrightFindingDeserializer())
-    addDeserializer(Hash::class.java, HashDeserializer())
-    addDeserializer(LicenseFinding::class.java, LicenseFindingDeserializer())
-    addDeserializer(OrtIssue::class.java, OrtIssueDeserializer())
-    addDeserializer(VcsInfo::class.java, VcsInfoDeserializer())
-
-    addSerializer(OrtIssue::class.java, OrtIssueSerializer())
-}
-
 val PROPERTY_NAMING_STRATEGY = PropertyNamingStrategy.SNAKE_CASE as PropertyNamingStrategy.PropertyNamingStrategyBase
 
 /**
@@ -54,7 +40,7 @@ private val mapperConfig: ObjectMapper.() -> Unit = {
     registerModule(JavaTimeModule())
     disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
 
-    registerModule(ortModelModule)
+    registerModule(SimpleModule("OrtModelModule"))
 
     propertyNamingStrategy = PROPERTY_NAMING_STRATEGY
 }

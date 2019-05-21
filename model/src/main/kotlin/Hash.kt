@@ -23,6 +23,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.core.JsonParser
 import com.fasterxml.jackson.databind.DeserializationContext
 import com.fasterxml.jackson.databind.JsonNode
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer
 
 import com.here.ort.utils.hash
@@ -34,6 +35,7 @@ import java.util.Base64
 /**
  * A class that bundles a hash algorithm with its hash value.
  */
+@JsonDeserialize(using = HashDeserializer::class)
 data class Hash(
     /**
      * The value calculated using the hash algorithm.
