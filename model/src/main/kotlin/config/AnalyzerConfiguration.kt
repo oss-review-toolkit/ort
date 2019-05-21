@@ -22,8 +22,10 @@ package com.here.ort.model.config
 import com.fasterxml.jackson.core.JsonParser
 import com.fasterxml.jackson.databind.DeserializationContext
 import com.fasterxml.jackson.databind.JsonNode
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer
 
+@JsonDeserialize(using = AnalyzerConfigurationDeserializer::class)
 data class AnalyzerConfiguration(
     /**
      * If set to true, ignore the versions of used command line tools. Note that this might lead to erroneous

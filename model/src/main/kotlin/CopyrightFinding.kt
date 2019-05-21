@@ -22,6 +22,7 @@ package com.here.ort.model
 import com.fasterxml.jackson.core.JsonParser
 import com.fasterxml.jackson.databind.DeserializationContext
 import com.fasterxml.jackson.databind.JsonNode
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer
 import com.fasterxml.jackson.module.kotlin.treeToValue
 
@@ -31,6 +32,7 @@ import com.here.ort.utils.constructTreeSetType
 import java.util.SortedSet
 import java.util.TreeSet
 
+@JsonDeserialize(using = CopyrightFindingDeserializer::class)
 data class CopyrightFinding(
     val statement: String,
     val locations: SortedSet<TextLocation>
