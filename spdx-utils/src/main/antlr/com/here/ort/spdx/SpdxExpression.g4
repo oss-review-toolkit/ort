@@ -33,7 +33,7 @@ package com.here.ort.spdx;
 
 licenseReferenceExpression
     :
-    REFERENCE
+    DOCUMENTREFERENCE | LICENSEREFERENCE
     ;
 
 licenseExceptionExpression
@@ -83,8 +83,8 @@ OPEN  : '(' ;
 CLOSE : ')' ;
 PLUS  : '+' ;
 
-REFERENCE        : ('DocumentRef-' IDSTRING ':')? LICENSEREFERENCE ;
-LICENSEREFERENCE : 'LicenseRef-' IDSTRING ;
-IDSTRING         : (ALPHA | DIGIT)(ALPHA | DIGIT | '-' | '.')* ;
+DOCUMENTREFERENCE : 'DocumentRef-' IDSTRING ':' LICENSEREFERENCE ;
+LICENSEREFERENCE  : 'LicenseRef-' IDSTRING ;
+IDSTRING          : (ALPHA | DIGIT)(ALPHA | DIGIT | '-' | '.')* ;
 
 WHITESPACE : ' ' -> skip ;
