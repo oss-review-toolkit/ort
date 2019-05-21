@@ -22,6 +22,7 @@ package com.here.ort.model
 import com.fasterxml.jackson.core.JsonParser
 import com.fasterxml.jackson.databind.DeserializationContext
 import com.fasterxml.jackson.databind.JsonNode
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer
 import com.fasterxml.jackson.module.kotlin.treeToValue
 
@@ -55,6 +56,7 @@ fun LicenseFindingsMap.removeGarbage(copyrightGarbage: CopyrightGarbage) =
  * A class to store a [license] finding along with its belonging [copyrights] and the [locations] where the license was
  * found.
  */
+@JsonDeserialize(using = LicenseFindingDeserializer::class)
 data class LicenseFinding(
     val license: String,
     val locations: SortedSet<TextLocation>,
