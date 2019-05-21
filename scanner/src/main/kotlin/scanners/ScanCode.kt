@@ -140,6 +140,71 @@ class ScanCode(name: String, config: ScannerConfiguration) : LocalScanner(name, 
             "(ERROR: for scanner: (?<scanner>\\w+):\n)?" +
                     "ERROR: Processing interrupted: timeout after (?<timeout>\\d+) seconds. \\(File: (?<file>.+)\\)"
         )
+
+        /**
+         * Map messages about unknown errors to a more compact form. Return true if solely memory errors occurred,
+         * return false otherwise.
+         */
+        internal fun mapUnknownErrors(errors: MutableList<OrtIssue>): Boolean {
+            if (errors.isEmpty()) {
+                return false
+            }
+
+            var onlyMemoryErrors = true
+
+            val mappedErrors = errors.map { fullError ->
+                UNKNOWN_ERROR_REGEX.matcher(fullError.message).let { matcher ->
+                    if (matcher.matches()) {
+                        val file = matcher.group("file")
+                        val error = matcher.group("error")
+                        if (error == "MemoryError") {
+                            fullError.copy(message = "ERROR: MemoryError while scanning file '$file'.")
+                        } else {
+                            onlyMemoryErrors = false
+                            val message = matcher.group("message").trim()
+                            fullError.copy(message = "ERROR: $error while scanning file '$file' ($message).")
+                        }
+                    } else {
+                        onlyMemoryErrors = false
+                        fullError
+                    }
+                }
+            }
+
+            errors.clear()
+            errors += mappedErrors.distinctBy { it.message }
+
+            return onlyMemoryErrors
+        }
+
+        /**
+         * Map messages about timeout errors to a more compact form. Return true if solely timeout errors occurred,
+         * return false otherwise.
+         */
+        internal fun mapTimeoutErrors(errors: MutableList<OrtIssue>): Boolean {
+            if (errors.isEmpty()) {
+                return false
+            }
+
+            var onlyTimeoutErrors = true
+
+            val mappedErrors = errors.map { fullError ->
+                TIMEOUT_ERROR_REGEX.matcher(fullError.message).let { matcher ->
+                    if (matcher.matches() && matcher.group("timeout") == TIMEOUT.toString()) {
+                        val file = matcher.group("file")
+                        fullError.copy(message = "ERROR: Timeout after $TIMEOUT seconds while scanning file '$file'.")
+                    } else {
+                        onlyTimeoutErrors = false
+                        fullError
+                    }
+                }
+            }
+
+            errors.clear()
+            errors += mappedErrors.distinctBy { it.message }
+
+            return onlyTimeoutErrors
+        }
     }
 
     override val scannerVersion = "2.9.7"
@@ -292,71 +357,6 @@ class ScanCode(name: String, config: ScannerConfiguration) : LocalScanner(name, 
         }
 
         return ScanSummary(startTime, endTime, fileCount, findings, errors)
-    }
-
-    /**
-     * Map messages about unknown errors to a more compact form. Return true if solely memory errors occurred, return
-     * false otherwise.
-     */
-    internal fun mapUnknownErrors(errors: MutableList<OrtIssue>): Boolean {
-        if (errors.isEmpty()) {
-            return false
-        }
-
-        var onlyMemoryErrors = true
-
-        val mappedErrors = errors.map { fullError ->
-            UNKNOWN_ERROR_REGEX.matcher(fullError.message).let { matcher ->
-                if (matcher.matches()) {
-                    val file = matcher.group("file")
-                    val error = matcher.group("error")
-                    if (error == "MemoryError") {
-                        fullError.copy(message = "ERROR: MemoryError while scanning file '$file'.")
-                    } else {
-                        onlyMemoryErrors = false
-                        val message = matcher.group("message").trim()
-                        fullError.copy(message = "ERROR: $error while scanning file '$file' ($message).")
-                    }
-                } else {
-                    onlyMemoryErrors = false
-                    fullError
-                }
-            }
-        }
-
-        errors.clear()
-        errors += mappedErrors.distinctBy { it.message }
-
-        return onlyMemoryErrors
-    }
-
-    /**
-     * Map messages about timeout errors to a more compact form. Return true if solely timeout errors occurred, return
-     * false otherwise.
-     */
-    internal fun mapTimeoutErrors(errors: MutableList<OrtIssue>): Boolean {
-        if (errors.isEmpty()) {
-            return false
-        }
-
-        var onlyTimeoutErrors = true
-
-        val mappedErrors = errors.map { fullError ->
-            TIMEOUT_ERROR_REGEX.matcher(fullError.message).let { matcher ->
-                if (matcher.matches() && matcher.group("timeout") == TIMEOUT.toString()) {
-                    val file = matcher.group("file")
-                    fullError.copy(message = "ERROR: Timeout after $TIMEOUT seconds while scanning file '$file'.")
-                } else {
-                    onlyTimeoutErrors = false
-                    fullError
-                }
-            }
-        }
-
-        errors.clear()
-        errors += mappedErrors.distinctBy { it.message }
-
-        return onlyTimeoutErrors
     }
 
     /**

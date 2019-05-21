@@ -45,7 +45,7 @@ class ScanCodeTest : WordSpec({
             val summary = scanner.generateSummary(Instant.now(), Instant.now(), result)
             val errors = summary.errors.toMutableList()
 
-            scanner.mapTimeoutErrors(errors) shouldBe true
+            ScanCode.mapTimeoutErrors(errors) shouldBe true
             errors.joinToString("\n") { it.message } shouldBe listOf(
                 "ERROR: Timeout after 300 seconds while scanning file " +
                         "'test/3rdparty/syntax/angular-1.2.5.tokens'.",
@@ -80,7 +80,7 @@ class ScanCodeTest : WordSpec({
             val result = scanner.getRawResult(resultFile)
             val summary = scanner.generateSummary(Instant.now(), Instant.now(), result)
 
-            scanner.mapTimeoutErrors(summary.errors.toMutableList()) shouldBe false
+            ScanCode.mapTimeoutErrors(summary.errors.toMutableList()) shouldBe false
         }
     }
 
@@ -91,7 +91,7 @@ class ScanCodeTest : WordSpec({
             val summary = scanner.generateSummary(Instant.now(), Instant.now(), result)
             val errors = summary.errors.toMutableList()
 
-            scanner.mapUnknownErrors(errors) shouldBe true
+            ScanCode.mapUnknownErrors(errors) shouldBe true
             errors.joinToString("\n") { it.message } shouldBe listOf(
                 "ERROR: MemoryError while scanning file 'data.json'."
             ).joinToString("\n")
@@ -103,7 +103,7 @@ class ScanCodeTest : WordSpec({
             val summary = scanner.generateSummary(Instant.now(), Instant.now(), result)
             val errors = summary.errors.toMutableList()
 
-            scanner.mapUnknownErrors(errors) shouldBe false
+            ScanCode.mapUnknownErrors(errors) shouldBe false
             errors.joinToString("\n") { it.message } shouldBe listOf(
                 "ERROR: AttributeError while scanning file 'compiler/testData/cli/js-dce/withSourceMap.js.map' " +
                         "('NoneType' object has no attribute 'splitlines')."
@@ -115,7 +115,7 @@ class ScanCodeTest : WordSpec({
             val result = scanner.getRawResult(resultFile)
             val summary = scanner.generateSummary(Instant.now(), Instant.now(), result)
 
-            scanner.mapUnknownErrors(summary.errors.toMutableList()) shouldBe false
+            ScanCode.mapUnknownErrors(summary.errors.toMutableList()) shouldBe false
         }
     }
 
