@@ -54,14 +54,14 @@ private fun Collection<Parts>.groupByPrefixAndOwner(): List<Parts> {
 /**
  * A copyright statement consists in most cases of three parts: a copyright prefix, years and the owner. For legal
  * reasons the prefix part must not be modified at all while adjusting some special characters in the owner part is
- * acceptable. Entries can be merged by year as well. The main idea of the algorithm is to process only entries with
+ * acceptable. Entries can be merged by year as well. The main idea of the algorithm is to normalize only entries with
  * a known copyright prefix. This allows stripping the prefix and processing the remaining string separately and thus
  * guarantees that the prefix part is not modified at all.
  *
  * Future improvement ideas:
  *   -URLs could be treated similar to years, e.g. entries which differ only in terms of URLs and year can be merged.
  */
-class CopyrightStatementsProcessor {
+class CopyrightStatementsNormalizer {
     companion object {
         private const val YEAR_PLACEHOLDER = "<ORT_YEAR_PLACEHOLDER_TRO>"
         private val KNOWN_PREFIX_REGEX = listOf(
@@ -111,7 +111,7 @@ class CopyrightStatementsProcessor {
         fun toMutableSet() = (unprocessedStatements + processedStatements.keys).toMutableSet()
     }
 
-    fun process(copyrightStatments: Collection<String>): Result {
+    fun normalize(copyrightStatments: Collection<String>): Result {
         val unprocessedStatements = mutableListOf<String>()
         val processableStatements = mutableListOf<Parts>()
 

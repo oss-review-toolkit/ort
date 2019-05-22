@@ -26,7 +26,7 @@ import com.fasterxml.jackson.databind.deser.std.StdDeserializer
 import com.fasterxml.jackson.module.kotlin.treeToValue
 
 import com.here.ort.model.config.CopyrightGarbage
-import com.here.ort.utils.CopyrightStatementsProcessor
+import com.here.ort.utils.CopyrightStatementsNormalizer
 
 import java.util.SortedMap
 import java.util.SortedSet
@@ -41,7 +41,7 @@ typealias LicenseFindingsMap = SortedMap<String, MutableSet<String>>
 
 fun LicenseFindingsMap.processStatements() =
     mapValues { (_, copyrights) ->
-        CopyrightStatementsProcessor().process(copyrights).toMutableSet()
+        CopyrightStatementsNormalizer().normalize(copyrights).toMutableSet()
     }.toSortedMap()
 
 fun LicenseFindingsMap.removeGarbage(copyrightGarbage: CopyrightGarbage) =

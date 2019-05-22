@@ -26,15 +26,15 @@ import io.kotlintest.specs.WordSpec
 
 import java.io.File
 
-class CopyrightStatementsProcessorTest : WordSpec() {
-    private val processor = CopyrightStatementsProcessor()
+class CopyrightStatementsNormalizerTest : WordSpec() {
+    private val processor = CopyrightStatementsNormalizer()
 
     init {
-        "process" should {
+        "normalize" should {
             "return a result with items merged by owner and prefix, sorted by owner and year" {
                 val input = File("src/test/assets/copyright-statements.txt").readLines()
 
-                val result = yamlMapper.writeValueAsString(processor.process(input))
+                val result = yamlMapper.writeValueAsString(processor.normalize(input))
 
                 val expectedResult = File("src/test/assets/copyright-statements-expected-output.yml").readText()
                 result shouldBe expectedResult
