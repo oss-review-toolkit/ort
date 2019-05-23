@@ -157,7 +157,7 @@ packages:
       spdx_expression: "MIT"
     description: "A pure ruby implementation of the RFC 7519 OAuth JSON Web Token\
       \ (JWT) standard."
-    homepage_url: "http://github.com/jwt/ruby-jwt"
+    homepage_url: "https://github.com/jwt/ruby-jwt"
     binary_artifact:
       url: ""
       hash:
