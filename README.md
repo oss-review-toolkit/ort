@@ -106,8 +106,8 @@ Alternatively, you can also run the OSS Review Toolkit by building its Docker im
 [![Analyzer](./logos/analyzer.png)](./analyzer/src/main/kotlin)
 
 The Analyzer determines the dependencies of software projects inside the specified input directory (`-i`). It does so by
-querying whatever [supported package manager](./analyzer/src/main/kotlin/managers) is found. No modifications to your
-existing project source code, or especially to the build system, are necessary for that to work. The tree of transitive
+querying whatever [supported package manager](#supported-package-managers) is found. No modifications to your existing
+project source code, or especially to the build system, are necessary for that to work. The tree of transitive
 dependencies per project is written out as part of an
 [OrtResult](https://github.com/heremaps/oss-review-toolkit/blob/master/model/src/main/kotlin/OrtResult.kt) in YAML (or
 JSON, see `-f`) format to a file named `analyzer-result.yml` to the specified output directory (`-o`). The output file
