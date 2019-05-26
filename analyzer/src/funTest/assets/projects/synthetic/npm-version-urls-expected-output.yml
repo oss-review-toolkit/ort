@@ -540,7 +540,7 @@ project:
         - id: "NPM::clone-buffer:1.0.0"
         - id: "NPM::clone-stats:1.0.0"
         - id: "NPM::clone:2.1.2"
-        - id: "NPM::cloneable-readable:1.1.2"
+        - id: "NPM::cloneable-readable:1.1.3"
           dependencies:
           - id: "NPM::inherits:2.0.3"
           - id: "NPM::process-nextick-args:2.0.0"
@@ -1160,8 +1160,8 @@ packages:
       path: ""
   curations: []
 - package:
-    id: "NPM::cloneable-readable:1.1.2"
-    purl: "pkg://NPM//cloneable-readable@1.1.2"
+    id: "NPM::cloneable-readable:1.1.3"
+    purl: "pkg://NPM//cloneable-readable@1.1.3"
     declared_licenses:
     - "MIT"
     declared_licenses_processed:
@@ -1174,19 +1174,19 @@ packages:
         value: ""
         algorithm: ""
     source_artifact:
-      url: "https://registry.npmjs.org/cloneable-readable/-/cloneable-readable-1.1.2.tgz"
+      url: "https://registry.npmjs.org/cloneable-readable/-/cloneable-readable-1.1.3.tgz"
       hash:
-        value: "d591dee4a8f8bc15da43ce97dceeba13d43e2a65"
+        value: "120a00cb053bfb63a222e709f9683ea2e11d8cec"
         algorithm: "SHA-1"
     vcs:
       type: "git"
       url: "git+https://github.com/mcollina/cloneable-readable.git"
-      revision: "5890475314bfb2def062fd6d158c62cfec20ebdf"
+      revision: "88e32675c5816bccda34983ff8fd1d9cd1f027fa"
       path: ""
     vcs_processed:
       type: "git"
       url: "https://github.com/mcollina/cloneable-readable.git"
-      revision: "5890475314bfb2def062fd6d158c62cfec20ebdf"
+      revision: "88e32675c5816bccda34983ff8fd1d9cd1f027fa"
       path: ""
   curations: []
 - package:
