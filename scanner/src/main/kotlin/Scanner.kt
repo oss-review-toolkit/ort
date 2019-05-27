@@ -37,6 +37,7 @@ import com.here.ort.spdx.SpdxLicense
 import com.here.ort.utils.log
 
 import java.io.File
+import java.lang.IllegalArgumentException
 import java.time.Instant
 import java.util.ServiceLoader
 
@@ -141,9 +142,18 @@ abstract class Scanner(val scannerName: String, protected val config: ScannerCon
         // Add scan results from de-duplicated project packages to result.
         consolidatedProjectPackageMap.forEach { (referencePackage, deduplicatedPackages) ->
             resultContainers.find { it.id == referencePackage.id }?.let { resultContainer ->
-                deduplicatedPackages.forEach {
-                    resultContainers += resultContainer.copy(id = it.id)
+                deduplicatedPackages.forEach { deduplicatedPackage ->
+                    analyzerResult.projects.find { it.id == deduplicatedPackage.id }?.let { project ->
+                        resultContainers += filterProjectScanResults(project, resultContainer)
+                    } ?: throw IllegalArgumentException(
+                        "Could not find project '${deduplicatedPackage.id.toCoordinates()}'."
+                    )
                 }
+
+                analyzerResult.projects.find { it.id == referencePackage.id }?.let { project ->
+                    resultContainers.remove(resultContainer)
+                    resultContainers += filterProjectScanResults(project, resultContainer)
+                } ?: throw IllegalArgumentException("Could not find project '${referencePackage.id.toCoordinates()}'.")
             }
         }
 
@@ -157,5 +167,23 @@ abstract class Scanner(val scannerName: String, protected val config: ScannerCon
         return ortResult.copy(scanner = scannerRun).apply {
             data += ortResult.data
         }
+    }
+
+    /**
+     * Filter the scan results in the [resultContainer] for only license findings that are in the same subdirectory as
+     * the [project]s definition file.
+     */
+    private fun filterProjectScanResults(project: Project, resultContainer: ScanResultContainer): ScanResultContainer {
+        val pathInRepository = project.definitionFilePath.substringBeforeLast("/")
+        val filteredResults = resultContainer.results.map { result ->
+            if (result.provenance.sourceArtifact != null || pathInRepository.isEmpty()) {
+                // Do not filter the result if a source artifact was scanned or the definition file is in the root
+                // directory of the repository.
+                result
+            } else {
+                result.filterPath(pathInRepository)
+            }
+        }
+        return ScanResultContainer(project.id, filteredResults)
     }
 }
