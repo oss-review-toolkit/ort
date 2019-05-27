@@ -6,7 +6,7 @@ val reflectionsVersion: String by project
 
 plugins {
     // Apply core plugins.
-    id("application")
+    application
 
     // Apply third-party plugins.
     id("com.bmuschko.docker-java-application")

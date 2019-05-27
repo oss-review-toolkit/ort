@@ -17,8 +17,8 @@ val jacksonVersion: String by project
 
 plugins {
     // Apply core plugins.
-    id("antlr")
-    id("java-library")
+    antlr
+    `java-library`
 
     // Apply third-party plugins.
     id("at.bxm.svntools")

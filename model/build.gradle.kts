@@ -9,7 +9,7 @@ val semverVersion: String by project
 
 plugins {
     // Apply core plugins.
-    id("java-library")
+    `java-library`
 }
 
 dependencies {
