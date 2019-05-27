@@ -7,7 +7,7 @@ val toml4jVersion: String by project
 
 plugins {
     // Apply core plugins.
-    id("java-library")
+    `java-library`
 }
 
 repositories {

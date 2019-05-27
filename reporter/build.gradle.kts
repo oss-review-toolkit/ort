@@ -7,7 +7,7 @@ val xalanVersion: String by project
 
 plugins {
     // Apply core plugins.
-    id("java-library")
+    `java-library`
 }
 
 val generatedResourcesDir = file("$buildDir/generated-resources/main")
