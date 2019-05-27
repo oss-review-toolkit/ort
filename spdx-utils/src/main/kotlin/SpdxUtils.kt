@@ -21,6 +21,7 @@ package com.here.ort.spdx
 
 import java.io.File
 import java.io.IOException
+import java.nio.file.FileSystems
 import java.util.EnumSet
 
 import org.apache.commons.codec.binary.Hex
@@ -38,6 +39,8 @@ val LICENSE_FILE_NAMES = listOf(
     "COPYRIGHT",
     "PATENTS"
 )
+
+val LICENSE_FILE_MATCHERS = LICENSE_FILE_NAMES.map { FileSystems.getDefault().getPathMatcher("glob:$it") }
 
 /**
  * A list of globs that match file names which are not license files but typically trigger false-positives.
