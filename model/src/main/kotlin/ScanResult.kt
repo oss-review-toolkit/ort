@@ -23,9 +23,9 @@ import com.fasterxml.jackson.annotation.JsonAlias
 import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.databind.JsonNode
 
+import com.here.ort.spdx.LICENSE_FILE_MATCHERS
 import com.here.ort.spdx.LICENSE_FILE_NAMES
 
-import java.nio.file.FileSystems
 import java.nio.file.Paths
 import java.util.SortedSet
 
@@ -61,15 +61,11 @@ data class ScanResult(
      * for [provenance]. Findings in files which are listed in [LICENSE_FILE_NAMES] are also kept.
      */
     fun filterPath(path: String): ScanResult {
-        val matchersForLicenseFiles = LICENSE_FILE_NAMES.map {
-            FileSystems.getDefault().getPathMatcher("glob:$it")
-        }
-
         val pathToMatch = Paths.get(path)
 
         fun SortedSet<TextLocation>.filterPath() =
             filterTo(sortedSetOf()) { location ->
-                location.path.startsWith("$path/") || matchersForLicenseFiles.any { matcher ->
+                location.path.startsWith("$path/") || LICENSE_FILE_MATCHERS.any { matcher ->
                     matcher.matches(pathToMatch)
                 }
             }

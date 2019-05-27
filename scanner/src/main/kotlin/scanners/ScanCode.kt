@@ -40,7 +40,7 @@ import com.here.ort.scanner.HTTP_CACHE_PATH
 import com.here.ort.scanner.LocalScanner
 import com.here.ort.scanner.ScanException
 import com.here.ort.scanner.ScanResultsStorage
-import com.here.ort.spdx.LICENSE_FILE_NAMES
+import com.here.ort.spdx.LICENSE_FILE_MATCHERS
 import com.here.ort.spdx.NON_LICENSE_FILENAMES
 import com.here.ort.utils.CommandLineTool
 import com.here.ort.utils.ORT_CONFIG_FILENAME
@@ -53,7 +53,6 @@ import com.here.ort.utils.unpack
 import java.io.File
 import java.io.IOException
 import java.net.HttpURLConnection
-import java.nio.file.FileSystems
 import java.nio.file.InvalidPathException
 import java.nio.file.Paths
 import java.time.Instant
@@ -383,14 +382,10 @@ class ScanCode(name: String, config: ScannerConfiguration) : LocalScanner(name, 
      * Get the license found in one of the commonly named license files, if any, or an empty string otherwise.
      */
     internal fun getRootLicense(result: JsonNode): String {
-        val matchersForLicenseFiles = LICENSE_FILE_NAMES.map {
-            FileSystems.getDefault().getPathMatcher("glob:$it")
-        }
-
         val rootLicenseFile = result["files"].singleOrNull { file ->
             val path = file["path"].textValue()
             try {
-                matchersForLicenseFiles.any { it.matches(Paths.get(path)) }
+                LICENSE_FILE_MATCHERS.any { it.matches(Paths.get(path)) }
             } catch (e: InvalidPathException) {
                 false
             }
