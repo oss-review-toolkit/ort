@@ -20,6 +20,7 @@
 package com.here.ort.utils
 
 import java.io.File
+import java.io.InputStream
 import java.io.IOException
 import java.nio.file.FileVisitResult
 import java.nio.file.Files
@@ -37,39 +38,62 @@ import org.apache.commons.compress.compressors.bzip2.BZip2CompressorInputStream
 import org.apache.commons.compress.compressors.gzip.GzipCompressorInputStream
 
 private val UNCOMPRESSED_EXTENSIONS = listOf(".pom")
-private val TAR_EXTENSIONS = listOf(".gem", ".tar", ".tar.gz", ".tgz", ".tar.bz2", ".tbz2")
+private val TAR_EXTENSIONS = listOf(".gem", ".tar")
+private val TAR_BZIP2_EXTENSIONS = listOf(".tar.bz2", ".tbz2")
+private val TAR_GZIP_EXTENSIONS = listOf(".tar.gz", ".tgz")
 private val ZIP_EXTENSIONS = listOf(".aar", ".egg", ".jar", ".war", ".whl", ".zip")
 private val SEVENZIP_EXTENSIONS = listOf(".7z")
 
-val ARCHIVE_EXTENSIONS = TAR_EXTENSIONS + ZIP_EXTENSIONS + SEVENZIP_EXTENSIONS
+val ARCHIVE_EXTENSIONS = TAR_EXTENSIONS + TAR_BZIP2_EXTENSIONS + TAR_GZIP_EXTENSIONS + ZIP_EXTENSIONS +
+        SEVENZIP_EXTENSIONS
 
+/**
+ * Unpack the [File] to [targetDirectory].
+ */
 fun File.unpack(targetDirectory: File) {
     val lowerName = name.toLowerCase()
-    when {
-        UNCOMPRESSED_EXTENSIONS.any { lowerName.endsWith(it) } -> {
-        }
-        TAR_EXTENSIONS.any { lowerName.endsWith(it) } -> unpackTar(targetDirectory)
-        ZIP_EXTENSIONS.any { lowerName.endsWith(it) } -> unpackZip(targetDirectory)
-        SEVENZIP_EXTENSIONS.any { lowerName.endsWith(it) } -> unpack7Zip(targetDirectory)
-        else -> throw IOException("Unknown archive type for file '$absolutePath'.")
+    if (SEVENZIP_EXTENSIONS.any { lowerName.endsWith(it) }) {
+        unpack7Zip(targetDirectory)
+    } else {
+        inputStream().unpack(name, targetDirectory)
     }
 }
 
 /**
- * Unpack the file assuming that it is a tape archive (tar). This implementation ignores empty directories and symbolic
- * links.
- *
- * @param targetDirectory The target directory to store the unpacked content of this archive.
+ * Unpack the [InputStream] to [targetDirectory]. The compression scheme is guessed from the [fileName].
  */
-fun File.unpackTar(targetDirectory: File) {
-    val inputStream = when (extension.toLowerCase()) {
-        "gz", "tgz" -> GzipCompressorInputStream(inputStream())
-        "bz2", "tbz2" -> BZip2CompressorInputStream(inputStream())
-        "gem", "tar" -> inputStream()
-        else -> throw IOException("Unknown compression scheme for tar file '$absolutePath'.")
-    }
+fun InputStream.unpack(fileName: String, targetDirectory: File) {
+    val lowerName = fileName.toLowerCase()
+    when {
+        UNCOMPRESSED_EXTENSIONS.any { lowerName.endsWith(it) } -> {
+            // Just copy the stream to the target file.
+            use { File(targetDirectory, fileName).writeBytes(it.readBytes()) }
+        }
 
-    TarArchiveInputStream(inputStream).use {
+        TAR_BZIP2_EXTENSIONS.any { lowerName.endsWith(it) } -> {
+            BZip2CompressorInputStream(this).unpackTar(targetDirectory)
+        }
+
+        TAR_GZIP_EXTENSIONS.any { lowerName.endsWith(it) } -> {
+            GzipCompressorInputStream(this).unpackTar(targetDirectory)
+        }
+
+        TAR_EXTENSIONS.any { lowerName.endsWith(it) } -> unpackTar(targetDirectory)
+
+        ZIP_EXTENSIONS.any { lowerName.endsWith(it) } -> unpackZip(targetDirectory)
+
+        else -> {
+            throw IOException("Unable to guess compression scheme from file name '$fileName'.")
+        }
+    }
+}
+
+/**
+ * Unpack the [InputStream] to [targetDirectory] assuming that it is a tape archive (TAR). This implementation ignores
+ * empty directories and symbolic links.
+ */
+fun InputStream.unpackTar(targetDirectory: File) {
+    TarArchiveInputStream(this).use {
         while (true) {
             val entry = it.nextTarEntry ?: break
 
@@ -98,12 +122,11 @@ fun File.unpackTar(targetDirectory: File) {
 }
 
 /**
- * Unpack the file assuming that it is a zip file. This implementation ignores empty directories and symbolic links.
- *
- * @param targetDirectory The target directory to store the unpacked content of this archive.
+ * Unpack the [InputStream] to [targetDirectory] assuming that it is a ZIP file. This implementation ignores empty
+ * directories and symbolic links.
  */
-fun File.unpackZip(targetDirectory: File) {
-    ZipArchiveInputStream(inputStream()).use {
+fun InputStream.unpackZip(targetDirectory: File) {
+    ZipArchiveInputStream(this).use {
         while (true) {
             val entry = it.nextZipEntry ?: break
 
@@ -131,6 +154,9 @@ fun File.unpackZip(targetDirectory: File) {
     }
 }
 
+/**
+ * Unpack the [File] assuming it is a 7-Zip archive. This implementation ignores empty directories and symbolic links.
+ */
 fun File.unpack7Zip(targetDirectory: File) {
     SevenZFile(this).use {
         while (true) {
@@ -154,16 +180,13 @@ fun File.unpack7Zip(targetDirectory: File) {
 }
 
 /**
- * Pack the file into a zip file. If it is a directory its content is recursively added to the zip file. The compression
- * level used is [Deflater.BEST_COMPRESSION]. Only regular files are added, for example symbolic links or directories
- * are skipped.
- *
- * @param targetFile The target zip file, must not exist.
- * @param prefix A prefix to add to the file names in the zip file.
+ * Pack the file into a ZIP [targetFile] using [Deflater.BEST_COMPRESSION]. If the file is a directory its content is
+ * recursively added to the archive. Only regular files are added, e.g. symbolic links or directories are skipped. If
+ * a [prefix] is specified, it is added to the file names in the ZIP file.
  */
 fun File.packZip(targetFile: File, prefix: String = "") {
     require(!targetFile.exists()) {
-        "The target zip file '${targetFile.absolutePath}' must not exist."
+        "The target ZIP file '${targetFile.absolutePath}' must not exist."
     }
 
     ZipArchiveOutputStream(targetFile).use { output ->
