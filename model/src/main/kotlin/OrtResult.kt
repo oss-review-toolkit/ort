@@ -79,16 +79,24 @@ data class OrtResult(
 
     @JsonIgnore
     private val excludedProjects: Set<Identifier> =
-        getProjects()
-            .filter { project ->
-                val projectExclude = getExcludes().findProjectExclude(project, this)
-                val pathExcludes = getExcludes().findPathExcludes(project, this)
-                val isExcluded = projectExclude != null || pathExcludes.isNotEmpty()
-                isExcluded
-            }
-            .map { it.id }
-            .toSet()
+        run {
+            println("Determining excluded projects...")
 
+            val result = getProjects()
+                .filter { project ->
+                    val projectExclude = getExcludes().findProjectExclude(project, this)
+                    val pathExcludes = getExcludes().findPathExcludes(project, this)
+                    val isExcluded = projectExclude != null || pathExcludes.isNotEmpty()
+                    isExcluded
+                }
+                .map { it.id }
+                .toSet()
+
+            println("Done.")
+
+            result
+        }
+    
     /**
      * Return the concluded licenses for each package. If [omitExcluded] is set to true, excluded packages are omitted
      * from the result.

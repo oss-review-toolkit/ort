@@ -6,12 +6,15 @@ ort_result_file="$orts_dir/ort-result.json"
 ort_result_url_file="$orts_dir/target-url.txt"
 
 ort="$HOME/devel/oss-review-toolkit/cli/build/install/ort/bin/ort"
-configuration="$HOME/devel/configuration"
-c_curations_file="$configuration/curations.yml"
-c_garbage_file="$configuration/copyright-garbage.yml"
-c_notice_script="$configuration/notice-post-processor.kts"
-c_rules_file="$configuration/rules.kts"
-c_resolutions_file="$configuration/resolutions.yml"
+configuration_dir="$HOME/devel/configuration"
+c_curations_file="$configuration_dir/curations.yml"
+c_garbage_file="$configuration_dir/copyright-garbage.yml"
+c_notice_script="$configuration_dir/notice-post-processor.kts"
+c_rules_file="$configuration_dir/rules.kts"
+c_resolutions_file="$configuration_dir/resolutions.yml"
+
+oss_support_dir="$HOME/devel/oss-support"
+sc_repo_configs_file="$oss_support_dir/repo-configs.yml"
 
 notice_file="NOTICE"
 config_file="ort.yml"
@@ -22,6 +25,7 @@ html_report_file="report.html"
 evaluator_result_file="$temp_dir/evaluation-result.json"
 new_garbage_file="new-copyright-garbage.txt"
 licenses_file="licenses.txt"
+repo_configs_file="repo-configs.yml"
 
 function usage {
   echo "usage:"
@@ -36,7 +40,7 @@ function init {
   clean
   rm -rf $orts_dir
   mkdir -p $orts_dir
-  wget -O $ort_result_file $1
+  curl $1 > $ort_result_file
   echo "$1" > $ort_result_url_file
   touch $new_garbage_file
   touch $config_file
@@ -73,7 +77,11 @@ function generate_report {
 
 function generate_config {
   echo "generate config..."
-  $ort generate-config -i $ort_result_file -o "ort.yml" --resolutions-file $c_resolutions_file
+  if [ $# -eq 1 ]; then
+    $ort generate-config -i $ort_result_file -o "ort.yml" --resolutions-file $c_resolutions_file --repository-configurations-file $sc_repo_configs_file --scan-dir $1
+  else
+    $ort generate-config -i $ort_result_file -o "ort.yml" --resolutions-file $c_resolutions_file
+  fi
 }
 
 function generate_copyrights {
@@ -92,6 +100,16 @@ function list_licenses {
   else
      $ort list-licenses -i $evaluator_result_file -o $licenses_file --repository-configuration-file $config_file
   fi
+}
+
+function repo_configs {
+  echo "extract repository configurations"
+  $ort extract-repository-configurations -i $ort_result_file -o $repo_configs_file
+}
+
+function merge_repo_configs {
+  echo "extract repository configurations"
+  $ort merge-repository-configurations -i $repo_configs_file -o $sc_repo_configs_file
 }
 
 if [ $# -lt 1 ]; then
@@ -114,7 +132,11 @@ elif [ "$command" = "notice" ]; then
 elif [ "$command" = "report" ]; then
   generate_report
 elif [ "$command" = "config" ]; then
-  generate_config
+  if [ $# -eq 2 ]; then
+     generate_config "$2"
+  else
+     generate_config
+  fi
 elif [ "$command" = "copyrights" ]; then
   generate_copyrights
 elif [ "$command" = "target" ]; then
@@ -127,6 +149,10 @@ elif [ "$command" = "licenses" ]; then
   else
      list_licenses
   fi
+elif [ "$command" = "repo-configs" ]; then
+  repo_configs
+elif [ "$command" = "merge-repo-configs" ]; then
+  merge_repo_configs
 else
   echo "unknown command: '$command'"
   usage

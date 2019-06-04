@@ -23,6 +23,8 @@ import com.beust.jcommander.JCommander
 import com.beust.jcommander.Parameter
 import com.beust.jcommander.Parameters
 import com.here.ort.CommandWithHelp
+import com.here.ort.analyzer.Analyzer
+import com.here.ort.analyzer.PackageManager
 import com.here.ort.model.OrtIssue
 import com.here.ort.model.OrtResult
 import com.here.ort.model.config.*
@@ -31,6 +33,8 @@ import com.here.ort.model.yamlMapper
 import com.here.ort.reporter.DefaultResolutionProvider
 import com.here.ort.utils.PARAMETER_ORDER_MANDATORY
 import com.here.ort.utils.PARAMETER_ORDER_OPTIONAL
+import com.here.ort.utils.normalizeVcsUrl
+import jdk.nashorn.internal.runtime.URIUtils
 import java.io.File
 
 @Parameters(commandNames = ["generate-config"], commandDescription = "Generates an ort.yml file.")
@@ -51,6 +55,16 @@ object GenerateConfigurationCommand : CommandWithHelp() {
             names = ["--resolutions-file"],
             order = PARAMETER_ORDER_OPTIONAL)
     private var resolutionsFile: File? = null
+
+    @Parameter(description = "The directory containing the sources for the input ort result.",
+        names = ["--scan-dir"],
+        order = PARAMETER_ORDER_OPTIONAL)
+    private var scanDir: File? = null
+
+    @Parameter(description = "Repository configurations file.",
+        names = ["--repository-configurations-file"],
+        order = PARAMETER_ORDER_OPTIONAL)
+    private var repositoryConfigurationsFile: File? = null
 
     private val resolutionProvider = DefaultResolutionProvider()
 
@@ -79,6 +93,14 @@ object GenerateConfigurationCommand : CommandWithHelp() {
         )
 
     private fun generatePathExcludes(ortResult: OrtResult): List<PathExclude> {
+        val pathExcludeFromDatabase = generatePathExcludesFromDatabase(scanDir?.absoluteFile, repositoryConfigurationsFile)
+        val pathExcludesForDefinitionFiles = generatePathExcludesFromDatabase(ortResult)
+            .filterNot { pathExcludeFromDatabase.any { p -> p.matches(it.pattern) } }
+        return (pathExcludeFromDatabase + pathExcludesForDefinitionFiles)
+            .sortedBy { it.pattern }
+    }
+
+    private fun generatePathExcludesFromDatabase(ortResult: OrtResult): List<PathExclude> {
         val result = mutableListOf<PathExclude>()
 
         ortResult.analyzer!!.result.projects.forEach { project ->
@@ -261,4 +283,91 @@ object GenerateConfigurationCommand : CommandWithHelp() {
     }
 
     private fun OrtIssue.isResolved() = resolutionProvider.getErrorResolutionsFor(this).isNotEmpty()
+
+    private fun generatePathExcludesFromDatabase(scanDir: File?, repositoryConfigurationsFile: File?)
+            : List<PathExclude> {
+        val result = mutableListOf<PathExclude>()
+
+        if (scanDir == null || !scanDir.isDirectory
+            || repositoryConfigurationsFile == null || !repositoryConfigurationsFile.isFile) {
+            return result
+        }
+        println("Generating path excludes from database.")
+
+        val gitRepositoryPaths = findGitRepositoryPaths(scanDir)
+        println("Found ${gitRepositoryPaths.size} git repositories.")
+
+        val repoConfigs = repositoryConfigurationsFile
+            .readValue<RepositoryConfigurations>()
+            .configurations
+
+        println("global repo configs: ${repoConfigs.size}")
+
+        val allFiles = findAllFiles(scanDir)
+
+        gitRepositoryPaths.forEach { vcsUrl, paths ->
+            println("vcs: $vcsUrl, paths: $paths")
+            println("cc: ${repoConfigs.containsKey(vcsUrl)}")
+            println("normalizeVcsUrl: ${stripUserInfo(vcsUrl)}")
+            repoConfigs[vcsUrl]?.let { config ->
+                println(vcsUrl)
+                config.excludes?.paths?.forEach { pathExclude ->
+                    paths.forEach { path ->
+                        val generatedPathExclude = pathExclude.copy(
+                            pattern = path + '/' + pathExclude.pattern
+                        )
+                        println(generatedPathExclude.pattern)
+
+                        if (allFiles.any { generatedPathExclude.matches(it) } ) {
+                            result.add(generatedPathExclude)
+                        }
+                    }
+                }
+            }
+        }
+
+        return result
+    }
+
+    private fun stripUserInfo(url: String): String {
+        return url.replace("viernau@", "")
+    }
+
+    private fun findAllFiles(dir: File): List<String> {
+        val result = mutableListOf<String>()
+
+        dir.walk().forEach { file ->
+            if (!file.isDirectory) {
+                result.add(file.relativeTo(dir).path)
+            }
+        }
+
+        return result
+    }
+
+    private fun findGitRepositoryPaths(dir: File): Map<String, Set<String>> {
+        if (!dir.isDirectory) {
+            return emptyMap()
+        }
+
+        val analyzer = Analyzer(AnalyzerConfiguration(true, true))
+        val ortResult = analyzer.analyze(
+            absoluteProjectPath = dir,
+            packageManagers = emptyList(),
+            packageCurationsFile = null,
+            repositoryConfigurationFile = null
+        )
+
+        val result = mutableMapOf<String, MutableSet<String>>()
+
+        ortResult.repository.nestedRepositories.forEach { path, vcs ->
+            if (vcs.type.equals("git", true)) {
+                result
+                    .getOrPut(stripUserInfo(vcs.url)) { mutableSetOf() }
+                    .add(path)
+            }
+        }
+
+        return result
+    }
 }
