@@ -45,8 +45,10 @@ import com.here.ort.utils.collectMessagesAsString
 import com.here.ort.utils.getUserHomeDirectory
 import com.here.ort.utils.log
 import com.here.ort.utils.showStackTrace
+import com.here.ort.utils.temporaryProperties
 
 import java.io.File
+import java.util.Properties
 
 import org.apache.maven.project.ProjectBuildingException
 
@@ -121,68 +123,90 @@ class Gradle(
     private val maven = MavenSupport(GradleCacheReader())
 
     override fun resolveDependencies(definitionFile: File): ProjectAnalyzerResult? {
+        val gradleSystemProperties = mutableListOf<Pair<String, String>>()
+
+        // Usually, the Gradle wrapper handles applying system properties from Gradle properties. But as we directly use
+        // the tooling API, we need to manually load Gradle properties and apply any system properties. Limit the lookup
+        // to the current user's Gradle properties file for now.
+        val gradlePropertiesFile = getUserHomeDirectory().resolve(".gradle/gradle.properties")
+        if (gradlePropertiesFile.isFile) {
+            gradlePropertiesFile.inputStream().use {
+                Properties().apply { load(it) }.mapNotNullTo(gradleSystemProperties) { (key, value) ->
+                    val systemPropKey = (key as String).removePrefix("systemProp.")
+                    (systemPropKey to (value as String)).takeIf { systemPropKey != key }
+                }
+            }
+        }
+
         val gradleConnection = GradleConnector
             .newConnector()
             .forProjectDirectory(definitionFile.parentFile)
             .connect()
 
-        gradleConnection.use { connection ->
-            val initScriptFile = File.createTempFile("init", ".gradle")
-            initScriptFile.writeBytes(javaClass.getResource("/scripts/init.gradle").readBytes())
+        return temporaryProperties(*gradleSystemProperties.toTypedArray()) {
+            gradleConnection.use { connection ->
+                val initScriptFile = File.createTempFile("init", ".gradle")
+                initScriptFile.writeBytes(javaClass.getResource("/scripts/init.gradle").readBytes())
 
-            val dependencyTreeModel = connection
-                .model(DependencyTreeModel::class.java)
-                .withArguments("--init-script", initScriptFile.path)
-                .get()
+                val dependencyTreeModel = connection
+                    .model(DependencyTreeModel::class.java)
+                    .withArguments("--init-script", initScriptFile.path)
+                    .get()
 
-            if (!initScriptFile.delete()) {
-                log.warn { "Init script file '$initScriptFile' could not be deleted." }
-            }
-
-            val repositories = dependencyTreeModel.repositories.map {
-                // TODO: Also handle authentication and snapshot policy.
-                RemoteRepository.Builder(it, "default", it).build()
-            }
-
-            log.debug {
-                "The Gradle project '${dependencyTreeModel.name}' uses the following Maven repositories: $repositories"
-            }
-
-            val packages = mutableMapOf<String, Package>()
-            val scopes = dependencyTreeModel.configurations.map { configuration ->
-                val dependencies = configuration.dependencies.map { dependency ->
-                    parseDependency(dependency, packages, repositories)
+                if (!initScriptFile.delete()) {
+                    log.warn { "Init script file '$initScriptFile' could not be deleted." }
                 }
 
-                Scope(configuration.name, dependencies.toSortedSet())
+                val repositories = dependencyTreeModel.repositories.map {
+                    // TODO: Also handle authentication and snapshot policy.
+                    RemoteRepository.Builder(it, "default", it).build()
+                }
+
+                log.debug {
+                    val projectName = dependencyTreeModel.name
+                    "The Gradle project '$projectName' uses the following Maven repositories: $repositories"
+                }
+
+                val packages = mutableMapOf<String, Package>()
+                val scopes = dependencyTreeModel.configurations.map { configuration ->
+                    val dependencies = configuration.dependencies.map { dependency ->
+                        parseDependency(dependency, packages, repositories)
+                    }
+
+                    Scope(configuration.name, dependencies.toSortedSet())
+                }
+
+                val project = Project(
+                    id = Identifier(
+                        type = managerName,
+                        namespace = dependencyTreeModel.group,
+                        name = dependencyTreeModel.name,
+                        version = dependencyTreeModel.version
+                    ),
+                    definitionFilePath = VersionControlSystem.getPathInfo(definitionFile).path,
+                    declaredLicenses = sortedSetOf(),
+                    vcs = VcsInfo.EMPTY,
+                    vcsProcessed = processProjectVcs(definitionFile.parentFile),
+                    homepageUrl = "",
+                    scopes = scopes.toSortedSet()
+                )
+
+                val issues = mutableListOf<OrtIssue>()
+
+                dependencyTreeModel.errors.mapTo(issues) {
+                    OrtIssue(source = managerName, message = it, severity = Severity.ERROR)
+                }
+
+                dependencyTreeModel.warnings.mapTo(issues) {
+                    OrtIssue(source = managerName, message = it, severity = Severity.WARNING)
+                }
+
+                ProjectAnalyzerResult(
+                    project,
+                    packages.values.map { it.toCuratedPackage() }.toSortedSet(),
+                    issues
+                )
             }
-
-            val project = Project(
-                id = Identifier(
-                    type = managerName,
-                    namespace = dependencyTreeModel.group,
-                    name = dependencyTreeModel.name,
-                    version = dependencyTreeModel.version
-                ),
-                definitionFilePath = VersionControlSystem.getPathInfo(definitionFile).path,
-                declaredLicenses = sortedSetOf(),
-                vcs = VcsInfo.EMPTY,
-                vcsProcessed = processProjectVcs(definitionFile.parentFile),
-                homepageUrl = "",
-                scopes = scopes.toSortedSet()
-            )
-
-            val issues = mutableListOf<OrtIssue>()
-
-            dependencyTreeModel.errors.mapTo(issues) {
-                OrtIssue(source = managerName, message = it, severity = Severity.ERROR)
-            }
-
-            dependencyTreeModel.warnings.mapTo(issues) {
-                OrtIssue(source = managerName, message = it, severity = Severity.WARNING)
-            }
-
-            return ProjectAnalyzerResult(project, packages.values.map { it.toCuratedPackage() }.toSortedSet(), issues)
         }
     }
 
