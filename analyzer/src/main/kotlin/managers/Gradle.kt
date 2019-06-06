@@ -47,6 +47,7 @@ import com.here.ort.utils.log
 import com.here.ort.utils.showStackTrace
 
 import java.io.File
+import java.util.Properties
 
 import org.apache.maven.project.ProjectBuildingException
 
@@ -121,6 +122,23 @@ class Gradle(
     private val maven = MavenSupport(GradleCacheReader())
 
     override fun resolveDependencies(definitionFile: File): ProjectAnalyzerResult? {
+        // Usually, the Gradle wrapper handles applying system properties from Gradle properties. But as we directly use
+        // the tooling API, we need to manually load Gradle properties and apply any system properties. Limit the lookup
+        // to the current user's Gradle properties file for now.
+        val gradleProperties = getUserHomeDirectory().resolve(".gradle/gradle.properties")
+        if (gradleProperties.isFile) {
+            val systemProperties = gradleProperties.inputStream().use {
+                Properties().apply { load(it) }.filter { (key, _) ->
+                    (key as String).startsWith("systemProp.")
+                }
+            }
+
+            // Apply Gradle properties as system properties, but with the "systemProp." prefix removed.
+            systemProperties.forEach { (key, value) ->
+                System.setProperty((key as String).removePrefix("systemProp."), value as String)
+            }
+        }
+
         val gradleConnection = GradleConnector
             .newConnector()
             .forProjectDirectory(definitionFile.parentFile)
