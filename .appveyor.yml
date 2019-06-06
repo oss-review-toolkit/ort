@@ -11,7 +11,7 @@ environment:
   PHP_VERSION: 7.2.0
   SBT_VERSION: 1.0.2
   VIRTUAL_ENV_VERSION: 15.1.0
-  YARN_VERSION: 1.13.0
+  YARN_VERSION: 1.16.0
 
 cache:
   - $(HOME)\.gradle\caches\build-cache-1
