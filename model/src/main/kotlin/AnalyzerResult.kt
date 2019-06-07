@@ -102,9 +102,7 @@ class AnalyzerResultBuilder {
     private val packages = sortedSetOf<CuratedPackage>()
     private val errors = sortedMapOf<Identifier, List<OrtIssue>>()
 
-    fun build(): AnalyzerResult {
-        return AnalyzerResult(projects, packages, errors)
-    }
+    fun build() = AnalyzerResult(projects, packages, errors)
 
     fun addResult(projectAnalyzerResult: ProjectAnalyzerResult) =
         also {

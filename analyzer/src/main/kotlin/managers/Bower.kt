@@ -93,17 +93,16 @@ class Bower(
                 revision = extractRevision(node)
             )
 
-        private fun extractDeclaredLicenses(node: JsonNode): SortedSet<String> {
-            return sortedSetOf<String>().apply {
+        private fun extractDeclaredLicenses(node: JsonNode): SortedSet<String> =
+            sortedSetOf<String>().apply {
                 val license = node["pkgMeta"]["license"].textValueOrEmpty()
                 if (license.isNotEmpty()) {
                     add(license)
                 }
             }
-        }
 
-        private fun extractPackage(node: JsonNode): Package {
-            return Package(
+        private fun extractPackage(node: JsonNode) =
+            Package(
                 id = extractPackageId(node),
                 declaredLicenses = extractDeclaredLicenses(node),
                 description = node["pkgMeta"]["description"].textValueOrEmpty(),
@@ -112,7 +111,6 @@ class Bower(
                 sourceArtifact = RemoteArtifact.EMPTY, // TODO: implement me!
                 vcs = extractVcsInfo(node)
             )
-        }
 
         private fun getDependencyNodes(node: JsonNode): Sequence<JsonNode> =
             node["dependencies"].fieldsOrEmpty().asSequence().map { it.value }
@@ -257,11 +255,7 @@ class Bower(
         }
     }
 
-    private fun installDependencies(workingDir: File) {
-        run(workingDir, "install")
-    }
+    private fun installDependencies(workingDir: File) = run(workingDir, "install")
 
-    private fun listDependencies(workingDir: File): String {
-        return run(workingDir, "list", "--json").stdout
-    }
+    private fun listDependencies(workingDir: File) = run(workingDir, "list", "--json").stdout
 }
