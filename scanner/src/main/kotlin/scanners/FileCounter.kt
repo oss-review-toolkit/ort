@@ -68,13 +68,12 @@ class FileCounter(name: String, config: ScannerConfiguration) : LocalScanner(nam
         return ScanResult(Provenance(), getDetails(), summary, result)
     }
 
-    override fun getRawResult(resultsFile: File): JsonNode {
-        return if (resultsFile.isFile && resultsFile.length() > 0L) {
+    override fun getRawResult(resultsFile: File) =
+        if (resultsFile.isFile && resultsFile.length() > 0L) {
             jsonMapper.readTree(resultsFile)
         } else {
             EMPTY_JSON_NODE
         }
-    }
 
     override fun generateSummary(startTime: Instant, endTime: Instant, result: JsonNode): ScanSummary {
         val fileCount = result["file_count"].intValue()

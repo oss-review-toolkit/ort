@@ -90,8 +90,8 @@ data class Identifier(
     /**
      * Return whether this [Identifier] is likely to belong any of the organizations mentioned in [names].
      */
-    fun isFromOrg(vararg names: String): Boolean {
-        return names.any { name ->
+    fun isFromOrg(vararg names: String) =
+        names.any { name ->
             val lowerName = name.toLowerCase()
             val vendorNamespace = when (type) {
                 "NPM" -> "@$lowerName"
@@ -101,7 +101,6 @@ data class Identifier(
 
             vendorNamespace.isNotEmpty() && namespace.matches(vendorNamespace.toRegex())
         }
-    }
 
     /**
      * Create Maven-like coordinates based on the properties of the [Identifier].

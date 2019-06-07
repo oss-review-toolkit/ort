@@ -112,8 +112,8 @@ object PythonVersion : CommandLineTool {
      * different Python versions can by installed in arbitrary locations, and the Python executable is even usually
      * called the same in those locations.
      */
-    fun getPythonInterpreter(version: Int): String {
-        return if (Os.isWindows) {
+    fun getPythonInterpreter(version: Int) =
+        if (Os.isWindows) {
             val scriptFile = File.createTempFile("python_interpreter", ".py")
             scriptFile.writeBytes(javaClass.getResource("/scripts/python_interpreter.py").readBytes())
 
@@ -127,7 +127,6 @@ object PythonVersion : CommandLineTool {
         } else {
             getPathFromEnvironment("python$version")?.path.orEmpty()
         }
-    }
 }
 
 /**

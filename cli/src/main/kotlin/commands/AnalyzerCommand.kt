@@ -50,10 +50,9 @@ object AnalyzerCommand : CommandWithHelp() {
             val PACKAGE_MANAGERS = PackageManager.ALL.associateBy { it.managerName.toUpperCase() }
         }
 
-        override fun convert(name: String): PackageManagerFactory {
-            return PACKAGE_MANAGERS[name.toUpperCase()]
+        override fun convert(name: String) =
+            PACKAGE_MANAGERS[name.toUpperCase()]
                 ?: throw ParameterException("Package managers must be contained in ${PACKAGE_MANAGERS.keys}.")
-        }
     }
 
     @Parameter(

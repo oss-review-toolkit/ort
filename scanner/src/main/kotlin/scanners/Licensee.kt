@@ -126,13 +126,12 @@ class Licensee(name: String, config: ScannerConfiguration) : LocalScanner(name, 
         }
     }
 
-    override fun getRawResult(resultsFile: File): JsonNode {
-        return if (resultsFile.isFile && resultsFile.length() > 0L) {
+    override fun getRawResult(resultsFile: File) =
+        if (resultsFile.isFile && resultsFile.length() > 0L) {
             jsonMapper.readTree(resultsFile)
         } else {
             EMPTY_JSON_NODE
         }
-    }
 
     override fun generateSummary(startTime: Instant, endTime: Instant, result: JsonNode): ScanSummary {
         val matchedFiles = result["matched_files"]
