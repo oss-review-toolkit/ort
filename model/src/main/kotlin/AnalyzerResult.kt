@@ -130,7 +130,7 @@ class AnalyzerResultBuilder {
 
                 log.error { error.message }
 
-                val projectErrors = errors.getOrDefault(existingProject.id, listOf())
+                val projectErrors = errors.getOrDefault(existingProject.id, emptyList())
                 errors[existingProject.id] = projectErrors + error
             } else {
                 projects += projectAnalyzerResult.project

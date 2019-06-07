@@ -216,7 +216,7 @@ class GoDep(
         val entries = Toml().read(lockfile).toMap()["projects"]
         if (entries == null) {
             log.warn { "${lockfile.name} is missing any [[projects]] entries" }
-            return listOf()
+            return emptyList()
         }
 
         val projects = mutableListOf<Map<String, String>>()
