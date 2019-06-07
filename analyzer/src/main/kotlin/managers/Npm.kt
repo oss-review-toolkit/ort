@@ -382,7 +382,7 @@ open class Npm(
 
     private fun buildTree(
         rootModulesDir: File, startModulesDir: File, name: String, packages: Map<String, Package>,
-        dependencyBranch: List<String> = listOf()
+        dependencyBranch: List<String> = emptyList()
     ): PackageReference? {
         log.debug { "Building dependency tree for '$name' from directory '$startModulesDir'." }
 
