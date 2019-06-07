@@ -61,12 +61,10 @@ data class ScanResult(
      * for [provenance]. Findings in files which are listed in [LICENSE_FILE_NAMES] are also kept.
      */
     fun filterPath(path: String): ScanResult {
-        val pathToMatch = Paths.get(path)
-
         fun SortedSet<TextLocation>.filterPath() =
             filterTo(sortedSetOf()) { location ->
                 location.path.startsWith("$path/") || LICENSE_FILE_MATCHERS.any { matcher ->
-                    matcher.matches(pathToMatch)
+                    matcher.matches(Paths.get(location.path))
                 }
             }
 
