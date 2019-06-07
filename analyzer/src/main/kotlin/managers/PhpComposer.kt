@@ -170,8 +170,11 @@ class PhpComposer(
     }
 
     private fun buildDependencyTree(
-        dependencies: Sequence<String>, lockFile: JsonNode, packages: Map<String, Package>,
-        virtualPackages: Set<String>
+        dependencies: Sequence<String>,
+        lockFile: JsonNode,
+        packages: Map<String, Package>,
+        virtualPackages: Set<String>,
+        dependencyBranch: List<String> = emptyList()
     ): SortedSet<PackageReference> {
         val packageReferences = mutableSetOf<PackageReference>()
 
@@ -183,11 +186,19 @@ class PhpComposer(
             val packageInfo = packages[packageName]
                 ?: throw IOException("Could not find package info for $packageName")
 
+            if (packageName in dependencyBranch) {
+                log.debug {
+                    "Not adding circular dependency '$packageName' to the tree, it is already on this branch of the " +
+                            "dependency tree: ${dependencyBranch.joinToString(" -> ")}."
+                }
+
+                return@forEach
+            }
+
             try {
                 val runtimeDependencies = getRuntimeDependencies(packageName, lockFile)
                 val transitiveDependencies = buildDependencyTree(
-                    runtimeDependencies, lockFile, packages,
-                    virtualPackages
+                    runtimeDependencies, lockFile, packages, virtualPackages, dependencyBranch + packageName
                 )
                 packageReferences += packageInfo.toReference(dependencies = transitiveDependencies)
             } catch (e: IOException) {
