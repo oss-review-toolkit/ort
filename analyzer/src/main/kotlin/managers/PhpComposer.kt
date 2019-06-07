@@ -44,6 +44,7 @@ import com.here.ort.utils.CommandLineTool
 import com.here.ort.utils.Os
 import com.here.ort.utils.ProcessCapture
 import com.here.ort.utils.collectMessagesAsString
+import com.here.ort.utils.fieldNamesOrEmpty
 import com.here.ort.utils.log
 import com.here.ort.utils.showStackTrace
 import com.here.ort.utils.stashDirectories
@@ -57,6 +58,11 @@ import java.util.SortedSet
 
 const val COMPOSER_PHAR_BINARY = "composer.phar"
 const val COMPOSER_LOCK_FILE = "composer.lock"
+
+private val EXCLUDED_PACKAGES = setOf(
+    "php", // Exclude the PHP runtime itself.
+    "composer-plugin-api" // Exclude the package to specify the supported composer plugin versions.
+)
 
 /**
  * The [Composer](https://getcomposer.org/) package manager for PHP.
@@ -158,51 +164,48 @@ class PhpComposer(
         scopeName: String, manifest: JsonNode, lockFile: JsonNode, packages: Map<String, Package>,
         virtualPackages: Set<String>
     ): Scope {
-        val requiredPackages = manifest[scopeName]?.fieldNames() ?: listOf<String>().iterator()
+        val requiredPackages = manifest[scopeName].fieldNamesOrEmpty().asSequence()
         val dependencies = buildDependencyTree(requiredPackages, lockFile, packages, virtualPackages)
         return Scope(scopeName, dependencies)
     }
 
     private fun buildDependencyTree(
-        dependencies: Iterator<String>, lockFile: JsonNode, packages: Map<String, Package>,
+        dependencies: Sequence<String>, lockFile: JsonNode, packages: Map<String, Package>,
         virtualPackages: Set<String>
     ): SortedSet<PackageReference> {
         val packageReferences = mutableSetOf<PackageReference>()
 
-        dependencies.forEach { packageName ->
-            // Composer allows declaring the required PHP version including any extensions, such as "ext-curl". Language
-            // implementations are not included in the results from other analyzer modules, so we want to skip them here
-            // as well. The special package "composer-plugin-api" is also excluded since it's only used to specify the
-            // supported composer plugin versions.
-            // Virtual packages are also ignored, since otherwise we would mark them as missing.
-            if (packageName != "php" && !packageName.startsWith("ext-") && packageName != "composer-plugin-api"
-                && packageName !in virtualPackages
-            ) {
-                val packageInfo = packages[packageName]
-                    ?: throw IOException("Could not find package info for $packageName")
-                try {
-                    val runtimeDependencies = getRuntimeDependencies(packageName, lockFile)
-                    val transitiveDependencies = buildDependencyTree(
-                        runtimeDependencies, lockFile, packages,
-                        virtualPackages
-                    )
-                    packageReferences += packageInfo.toReference(dependencies = transitiveDependencies)
-                } catch (e: IOException) {
-                    e.showStackTrace()
+        dependencies.filterNot { packageName ->
+            packageName in EXCLUDED_PACKAGES
+                    || packageName.startsWith("ext-") // Exclude extensions to PHP itself.
+                    || packageName in virtualPackages // Exclude virtual packages as they have no meta-data.
+        }.forEach { packageName ->
+            val packageInfo = packages[packageName]
+                ?: throw IOException("Could not find package info for $packageName")
 
-                    log.error { "Could not resolve dependencies of '$packageName': ${e.collectMessagesAsString()}" }
+            try {
+                val runtimeDependencies = getRuntimeDependencies(packageName, lockFile)
+                val transitiveDependencies = buildDependencyTree(
+                    runtimeDependencies, lockFile, packages,
+                    virtualPackages
+                )
+                packageReferences += packageInfo.toReference(dependencies = transitiveDependencies)
+            } catch (e: IOException) {
+                e.showStackTrace()
 
-                    packageInfo.toReference(
-                        errors = listOf(
-                            OrtIssue(
-                                source = managerName,
-                                message = e.collectMessagesAsString()
-                            )
+                log.error { "Could not resolve dependencies of '$packageName': ${e.collectMessagesAsString()}" }
+
+                packageInfo.toReference(
+                    errors = listOf(
+                        OrtIssue(
+                            source = managerName,
+                            message = e.collectMessagesAsString()
                         )
                     )
-                }
+                )
             }
         }
+
         return packageReferences.toSortedSet()
     }
 
@@ -312,19 +315,19 @@ class PhpComposer(
         } ?: RemoteArtifact.EMPTY
     }
 
-    private fun getRuntimeDependencies(packageName: String, lockFile: JsonNode): Iterator<String> {
+    private fun getRuntimeDependencies(packageName: String, lockFile: JsonNode): Sequence<String> {
         listOf("packages", "packages-dev").forEach {
             lockFile[it]?.forEach { packageInfo ->
                 if (packageInfo["name"].textValueOrEmpty() == packageName) {
                     val requiredPackages = packageInfo["require"]
                     if (requiredPackages != null && requiredPackages.isObject) {
-                        return (requiredPackages as ObjectNode).fieldNames()
+                        return (requiredPackages as ObjectNode).fieldNames().asSequence()
                     }
                 }
             }
         }
 
-        return emptyList<String>().iterator()
+        return emptySequence()
     }
 
     private fun installDependencies(workingDir: File) {
