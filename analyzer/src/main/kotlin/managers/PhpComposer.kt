@@ -312,18 +312,16 @@ class PhpComposer(
     private fun parseDeclaredLicenses(packageInfo: JsonNode) =
         packageInfo["license"]?.mapNotNull { it?.textValue() }?.toSortedSet() ?: sortedSetOf<String>()
 
-    private fun parseVcsInfo(packageInfo: JsonNode): VcsInfo {
-        return packageInfo["source"]?.let {
+    private fun parseVcsInfo(packageInfo: JsonNode) =
+        packageInfo["source"]?.let {
             VcsInfo(it["type"].textValueOrEmpty(), it["url"].textValueOrEmpty(), it["reference"].textValueOrEmpty())
         } ?: VcsInfo.EMPTY
-    }
 
-    private fun parseArtifact(packageInfo: JsonNode): RemoteArtifact {
-        return packageInfo["dist"]?.let {
+    private fun parseArtifact(packageInfo: JsonNode) =
+        packageInfo["dist"]?.let {
             val shasum = it["shasum"].textValueOrEmpty()
             RemoteArtifact(it["url"].textValueOrEmpty(), Hash.create(shasum))
         } ?: RemoteArtifact.EMPTY
-    }
 
     private fun getRuntimeDependencies(packageName: String, lockFile: JsonNode): Sequence<String> {
         listOf("packages", "packages-dev").forEach {

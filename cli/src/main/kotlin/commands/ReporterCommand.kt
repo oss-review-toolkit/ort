@@ -54,10 +54,9 @@ object ReporterCommand : CommandWithHelp() {
             val REPORTERS = Reporter.ALL.associateBy { it.reporterName.toUpperCase() }
         }
 
-        override fun convert(name: String): Reporter {
-            return REPORTERS[name.toUpperCase()]
+        override fun convert(name: String): Reporter =
+            REPORTERS[name.toUpperCase()]
                 ?: throw ParameterException("Reporters must be contained in ${REPORTERS.keys}.")
-        }
     }
 
     @Parameter(

@@ -150,17 +150,15 @@ class Cvs : VersionControlSystem(), CommandLineTool {
                         decimals.dropLast(1).last() == "0"
             }
 
-            override fun listRemoteBranches(): List<String> {
-                return listSymbolicNames().mapNotNull { (name, version) ->
+            override fun listRemoteBranches() =
+                listSymbolicNames().mapNotNull { (name, version) ->
                     if (isBranchVersion(version)) name else null
                 }
-            }
 
-            override fun listRemoteTags(): List<String> {
-                return listSymbolicNames().mapNotNull { (name, version) ->
+            override fun listRemoteTags() =
+                listSymbolicNames().mapNotNull { (name, version) ->
                     if (isBranchVersion(version)) null else name
                 }
-            }
         }
 
     override fun isApplicableUrlInternal(vcsUrl: String) = vcsUrl.matches(":(ext|pserver):[^@]+@.+".toRegex())
