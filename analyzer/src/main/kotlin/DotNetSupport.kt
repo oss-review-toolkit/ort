@@ -155,12 +155,13 @@ class DotNetSupport(
                     "nuspec"
                 ).requestFromNugetAPI()
             )
-        } catch (e: Exception) {
-            xmlMapper.readTree("")
+        } catch (e: IOException) {
+            EMPTY_JSON_NODE
         }
+
         if (jsonCatalogNode["id"]?.textValue() == null) return Package.EMPTY
 
-        val vcsInfo = extractVcsInfo(jsonNuspecNode["metadata"] ?: xmlMapper.readTree(""))
+        val vcsInfo = extractVcsInfo(jsonNuspecNode["metadata"] ?: EMPTY_JSON_NODE)
 
         return Package(
             id = extractPackageId(jsonCatalogNode),
