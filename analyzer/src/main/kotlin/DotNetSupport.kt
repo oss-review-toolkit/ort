@@ -255,7 +255,7 @@ class DotNetSupport(
         packageReferencesAlreadyFound.containsKey(nodeAsPair)
 
     private fun getInformationURL(packageID: String, version: String): Pair<String, String>? {
-        val registrationInfo: String? = try {
+        val registrationInfo = try {
             "https://api.nuget.org/v3/registration3/$packageID/$version.json".requestFromNugetAPI()
         } catch (e: IOException) {
             try {
@@ -265,9 +265,7 @@ class DotNetSupport(
             }
         }
 
-        val node = jacksonObjectMapper().readTree(
-            registrationInfo.orEmpty()
-        )
+        val node = jacksonObjectMapper().readTree(registrationInfo)
 
         return if (node != null) {
             Pair(getNuspecURL(node), getCatalogURL(node))
