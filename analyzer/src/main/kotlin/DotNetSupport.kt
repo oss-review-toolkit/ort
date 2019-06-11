@@ -23,6 +23,7 @@ package com.here.ort.analyzer
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 
+import com.here.ort.model.EMPTY_JSON_NODE
 import com.here.ort.model.Hash
 import com.here.ort.model.Identifier
 import com.here.ort.model.OrtIssue
@@ -225,17 +226,9 @@ class DotNetSupport(
 
     private fun preparePackageReference(packageID: String, version: String): JsonNode? {
         val (first, second) = getInformationURL(packageID, version) ?: return null
-        val packageJsonNode = try {
-            jacksonObjectMapper().readTree(
-                second.requestFromNugetAPI()
-            )
-                ?: throw Exception("No configuration URL could be fetched")
-        } catch (e: Exception) {
-            xmlMapper.readTree("")
-        }
+        val packageJsonNode = jacksonObjectMapper().readTree(second.requestFromNugetAPI()) ?: EMPTY_JSON_NODE
 
-        packageReferencesAlreadyFound[Pair(first = packageID, second = version)] =
-            Pair(first, packageJsonNode)
+        packageReferencesAlreadyFound[Pair(packageID, version)] = Pair(first, packageJsonNode)
 
         return packageJsonNode
     }
