@@ -136,24 +136,13 @@ class DotNetSupport(
         jsonNodeToPackage(getPackageReferenceJsonContent(packageReference))
 
     private fun getPackageReferenceJsonContent(packageReference: PackageReference): Pair<String, JsonNode> {
-        if (packageReferencesAlreadyFound.containsKey(
-                Pair(packageReference.id.name, packageReference.id.version)
-            )
-        ) {
-            return packageReferencesAlreadyFound[Pair(
-                packageReference.id.name,
-                packageReference.id.version
-            )]!!
+        packageReferencesAlreadyFound[Pair(packageReference.id.name, packageReference.id.version)]?.let {
+            return it
         }
-        return try {
-            val informationUrl = getInformationURL(
-                packageReference.id.name,
-                packageReference.id.version
-            ) ?: throw Exception()
+
+        return getInformationURL(packageReference.id.name, packageReference.id.version)?.let { informationUrl ->
             Pair(informationUrl.first, jacksonObjectMapper().readTree(informationUrl.second.requestFromNugetAPI()))
-        } catch (e: Exception) {
-            Pair("", xmlMapper.readTree(""))
-        }
+        } ?: Pair("", EMPTY_JSON_NODE)
     }
 
     private fun jsonNodeToPackage(packageContent: Pair<String, JsonNode>): Package {
