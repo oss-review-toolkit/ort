@@ -159,7 +159,7 @@ object ScannerCommand : CommandWithHelp() {
 
         val scanner = scannerFactory.create(config)
 
-        println("Using scanner '$scanner'.")
+        println("Using scanner '${scanner.scannerName}'.")
 
         val ortResult = ortFile?.expandTilde()?.let {
             scanner.scanOrtResult(
