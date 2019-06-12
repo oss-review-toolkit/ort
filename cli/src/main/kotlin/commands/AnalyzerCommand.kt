@@ -150,7 +150,7 @@ object AnalyzerCommand : CommandWithHelp() {
         println("\t" + packageManagers.joinToString(", "))
 
         val absoluteInputDir = inputDir.expandTilde().normalize()
-        println("Scanning project path:\n\t$absoluteInputDir")
+        println("Analyzing project path:\n\t$absoluteInputDir")
 
         val config = AnalyzerConfiguration(ignoreToolVersions, allowDynamicVersions)
         val analyzer = Analyzer(config)

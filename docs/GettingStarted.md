@@ -83,7 +83,7 @@ first attempt of running the analyzer on the `mime-types` package it will fail w
 ```bash
 The following package managers are activated:
         Gradle, Maven, SBT, NPM, Yarn, GoDep, PIP, Bundler, PhpComposer, Stack
-Scanning project path:
+Analyzing project path:
         [mime-types-path]
 ERROR - Resolving dependencies for 'package.json' failed with: No lockfile found in '[mime-types-path]'. This potentially results in unstable versions of dependencies. To allow this, enable support for dynamic versions.
 Writing analyzer result to '[analyzer-output-path]/analyzer-result.yml'.
@@ -97,7 +97,7 @@ analyzer. To override this check use the `--allow-dynamic-versions` option:
 $ cli/build/install/ort/bin/ort analyze -i [mime-types-path] -o [analyzer-output-path] --allow-dynamic-versions
 The following package managers are activated:
         Gradle, Maven, SBT, NPM, Yarn, GoDep, PIP, Bundler, PhpComposer, Stack
-Scanning project path:
+Analyzing project path:
         [mime-types-path]
 Writing analyzer result to '[analyzer-output-path]/analyzer-result.yml'.
 ```
