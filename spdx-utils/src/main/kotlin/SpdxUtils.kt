@@ -31,14 +31,14 @@ import org.apache.commons.codec.digest.DigestUtils
  * A list of globs that match typical license file names.
  */
 val LICENSE_FILE_NAMES = listOf(
-    "LICENSE*",
-    "LICENCE*",
-    "UNLICENSE",
-    "UNLICENCE",
-    "COPYING*",
-    "COPYRIGHT",
-    "PATENTS"
-)
+    "license*",
+    "licence*",
+    "unlicense",
+    "unlicence",
+    "copying*",
+    "copyright",
+    "patents"
+).flatMap { listOf(it, it.toUpperCase(), it.capitalize()) }
 
 val LICENSE_FILE_MATCHERS = LICENSE_FILE_NAMES.map { FileSystems.getDefault().getPathMatcher("glob:$it") }
 
