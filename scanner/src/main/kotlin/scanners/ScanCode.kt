@@ -385,13 +385,14 @@ class ScanCode(name: String, config: ScannerConfiguration) : LocalScanner(name, 
         val rootLicenseFile = result["files"].singleOrNull { file ->
             val path = file["path"].textValue()
             try {
-                LICENSE_FILE_MATCHERS.any { it.matches(Paths.get(path)) }
+                file["licenses"]?.singleOrNull() != null
+                        && LICENSE_FILE_MATCHERS.any { it.matches(Paths.get(path)) }
             } catch (e: InvalidPathException) {
                 false
             }
         } ?: return ""
 
-        return rootLicenseFile["licenses"].singleOrNull()?.let { getLicenseId(it) }.orEmpty()
+        return getLicenseId(rootLicenseFile["licenses"].single())
     }
 
     /**
