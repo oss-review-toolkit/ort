@@ -174,6 +174,9 @@ abstract class Scanner(val scannerName: String, protected val config: ScannerCon
      * the [project]s definition file.
      */
     private fun filterProjectScanResults(project: Project, resultContainer: ScanResultContainer): ScanResultContainer {
+        // Do not filter the results if the definition file is in the root of the repository.
+        if (!project.definitionFilePath.contains("/")) return resultContainer
+
         val pathInRepository = project.definitionFilePath.substringBeforeLast("/")
         val filteredResults = resultContainer.results.map { result ->
             if (result.provenance.sourceArtifact != null || pathInRepository.isEmpty()) {
