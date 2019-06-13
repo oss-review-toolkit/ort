@@ -14,7 +14,7 @@ repository:
     spdx-tools:
       type: "Git"
       url: "https://github.com/spdx/tools"
-      revision: "c4193eeb4b89c7d6266f5647e4d81e9cf0a442a1"
+      revision: "e179fae47590eccedc46186ea0ce20cbade5fda7"
       path: ""
     submodules:
       type: "Git"
@@ -129,7 +129,7 @@ analyzer:
       vcs_processed:
         type: "git"
         url: "https://github.com/spdx/tools.git"
-        revision: "c4193eeb4b89c7d6266f5647e4d81e9cf0a442a1"
+        revision: "e179fae47590eccedc46186ea0ce20cbade5fda7"
         path: ""
       homepage_url: "http://spdx.org/tools"
       scopes:
