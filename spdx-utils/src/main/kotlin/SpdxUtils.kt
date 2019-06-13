@@ -32,12 +32,19 @@ import org.apache.commons.codec.digest.DigestUtils
  */
 val LICENSE_FILE_NAMES = listOf(
     "LICENSE*",
+    "license*",
     "LICENCE*",
+    "licence*",
     "UNLICENSE",
+    "unlicense",
     "UNLICENCE",
+    "unlicence",
     "COPYING*",
+    "copying*",
     "COPYRIGHT",
-    "PATENTS"
+    "copyright",
+    "PATENTS",
+    "patents"
 )
 
 val LICENSE_FILE_MATCHERS = LICENSE_FILE_NAMES.map { FileSystems.getDefault().getPathMatcher("glob:$it") }
