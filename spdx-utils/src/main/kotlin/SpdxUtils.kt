@@ -37,7 +37,8 @@ val LICENSE_FILE_NAMES = listOf(
     "unlicence",
     "copying*",
     "copyright",
-    "patents"
+    "patents",
+    "readme*"
 ).flatMap { listOf(it, it.toUpperCase(), it.capitalize()) }
 
 val LICENSE_FILE_MATCHERS = LICENSE_FILE_NAMES.map { FileSystems.getDefault().getPathMatcher("glob:$it") }
