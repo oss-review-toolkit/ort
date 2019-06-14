@@ -19,6 +19,7 @@
 
 package com.here.ort.model
 
+import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonInclude
 import com.here.ort.model.config.Excludes
 
@@ -75,6 +76,18 @@ data class OrtResult(
      */
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     val data: CustomData = mutableMapOf()
+
+    @JsonIgnore
+    private val excludedProjects: Set<Identifier> =
+        getProjects()
+            .filter { project ->
+                val projectExclude = getExcludes().findProjectExclude(project, this)
+                val pathExcludes = getExcludes().findPathExcludes(project, this)
+                val isExcluded = projectExclude != null || pathExcludes.isNotEmpty()
+                isExcluded
+            }
+            .map { it.id }
+            .toSet()
 
     /**
      * Return the concluded licenses for each package. If [omitExcluded] is set to true, excluded packages are omitted
@@ -344,12 +357,8 @@ data class OrtResult(
     /**
      * True if the [project] is excluded by this [Excludes] configuration.
      */
-    fun isProjectExcluded(project: Project) =
-        getDefinitionFilePathRelativeToAnalyzerRoot(project).let { definitionFilePath ->
-            val excludes = getExcludes()
-            excludes.projects.any { it.matches(definitionFilePath) && it.isWholeProjectExcluded }
-                    || excludes.paths.any { it.matches(definitionFilePath) }
-        }
+    fun isProjectExcluded(project: Project): Boolean
+            = excludedProjects.contains(project.id)
 
     /**
      * Return a copy of this [OrtResult] with the [Repository.config] replaced by [config].
