@@ -76,6 +76,20 @@ data class OrtResult(
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     val data: CustomData = mutableMapOf()
 
+    private val excludedProjects: Set<Identifier> by lazy {
+        getProjects()
+            .filter { project ->
+                val projectExcludes = getExcludes()
+                    .findProjectExcludes(project, this)
+                    .filter { it.isWholeProjectExcluded }
+                val pathExcludes = getExcludes().findPathExcludes(project, this)
+                val isExcluded = projectExcludes.isNotEmpty() || pathExcludes.isNotEmpty()
+                isExcluded
+            }
+            .map { it.id }
+            .toSet()
+    }
+
     /**
      * Return the concluded licenses for each package. If [omitExcluded] is set to true, excluded packages are omitted
      * from the result.
@@ -326,12 +340,8 @@ data class OrtResult(
     /**
      * True if the [project] is excluded by this [Excludes] configuration.
      */
-    fun isProjectExcluded(project: Project): Boolean =
-        getDefinitionFilePathRelativeToAnalyzerRoot(project).let { definitionFilePath ->
-            val excludes = getExcludes()
-            excludes.projects.any { it.matches(definitionFilePath) && it.isWholeProjectExcluded }
-                    || excludes.paths.any { it.matches(definitionFilePath) }
-        }
+    fun isProjectExcluded(project: Project): Boolean
+            = excludedProjects.contains(project.id)
 
     /**
      * Return a copy of this [OrtResult] with the [Repository.config] replaced by [config].
