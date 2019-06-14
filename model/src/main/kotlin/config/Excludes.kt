@@ -60,18 +60,26 @@ data class Excludes(
         paths.filter { it.matches(ortResult.getDefinitionFilePathRelativeToAnalyzerRoot(project)) }
 
     /**
-     * Return the [ProjectExclude] for the provided [project], or null if there is none.
+     * Return all [ProjectExclude]s for the provided [project].
      */
-    fun findProjectExclude(project: Project, ortResult: OrtResult) =
-        projects.find { it.matches(ortResult.getDefinitionFilePathRelativeToAnalyzerRoot(project)) }
+    fun findProjectExcludes(project: Project, ortResult: OrtResult): List<ProjectExclude> {
+        val projectPath = ortResult.getDefinitionFilePathRelativeToAnalyzerRoot(project)
+        return projects.filter { it.matches(projectPath) }
+    }
 
     /**
      * Return the [ScopeExclude]s for the provided [scope]. This includes global excludes from [scopes] as well as
      * [project] specific excludes from [projects].
      */
-    fun findScopeExcludes(scope: Scope, project: Project, ortResult: OrtResult) =
-        scopes.filter { it.matches(scope.name) } +
-                (findProjectExclude(project, ortResult)?.scopes?.filter { it.matches(scope.name) } ?: emptyList())
+    fun findScopeExcludes(scope: Scope, project: Project, ortResult: OrtResult): List<ScopeExclude> {
+        val globalScopeExcludes = scopes.filter { it.matches(scope.name) }
+        val projectScopeExcludes = findProjectExcludes(project, ortResult)
+            .map { it.scopes }
+            .flatten()
+            .filter { it.matches(scope.name) }
+
+        return globalScopeExcludes + projectScopeExcludes
+    }
 
     /**
      * Checks if all occurrences of an [id] are excluded. If the [id] references a package it checks if this package is
@@ -113,14 +121,13 @@ data class Excludes(
      * True if the [scope] is excluded in [project] by this [Excludes] configuration.
      */
     fun isScopeExcluded(scope: Scope, project: Project, ortResult: OrtResult) =
-        scopes.any { it.matches(scope.name) }
-                || findProjectExclude(project, ortResult)?.scopes?.any { it.matches(scope.name) } ?: false
+        findScopeExcludes(scope, project, ortResult).isNotEmpty()
 
     /**
      * Map the project excludes by the identifiers of the provided [projects].
      */
     fun projectExcludesById(projects: Set<Project>, ortResult: OrtResult) =
-        projects.associate { Pair(it.id, findProjectExclude(it, ortResult)) }
+        projects.associate { Pair(it.id, findProjectExcludes(it, ortResult).singleOrNull()) }
 
     /**
      * Map the scope excludes for [project] by the names of the provided [scopes].

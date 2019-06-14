@@ -32,6 +32,7 @@ import com.here.ort.model.Scope
 import io.kotlintest.matchers.beEmpty
 import io.kotlintest.matchers.collections.contain
 import io.kotlintest.matchers.collections.containExactly
+import io.kotlintest.matchers.collections.containExactlyInAnyOrder
 import io.kotlintest.matchers.collections.containOnlyNulls
 import io.kotlintest.matchers.containAll
 import io.kotlintest.matchers.haveSize
@@ -54,6 +55,8 @@ class ExcludesTest : WordSpec() {
         val projectExclude1 = ProjectExclude("path1", ProjectExcludeReason.BUILD_TOOL_OF, "")
         val projectExclude2 = ProjectExclude("path2", ProjectExcludeReason.BUILD_TOOL_OF, "")
         val projectExclude3 = ProjectExclude("path3", ProjectExcludeReason.BUILD_TOOL_OF, "")
+        val projectExclude4 = ProjectExclude(".*", ProjectExcludeReason.BUILD_TOOL_OF, "")
+
 
         val pathExclude1 = PathExclude("path1", PathExcludeReason.BUILD_TOOL_OF, "")
         val pathExclude2 = PathExclude("path2", PathExcludeReason.BUILD_TOOL_OF, "")
@@ -93,17 +96,18 @@ class ExcludesTest : WordSpec() {
             }
         }
 
-        "findProjectExclude" should {
-            "return null if there is no matching project exclude" {
+        "findProjectExcludes" should {
+            "return empty list there is no matching project exclude" {
                 val excludes = Excludes(projects = listOf(projectExclude1, projectExclude3))
 
-                excludes.findProjectExclude(project2, OrtResult.EMPTY) shouldBe null
+                excludes.findProjectExcludes(project2, OrtResult.EMPTY) should beEmpty()
             }
 
-            "find the correct project exclude" {
-                val excludes = Excludes(projects = listOf(projectExclude1, projectExclude2, projectExclude3))
+            "find the correct project excludes" {
+                val excludes = Excludes(projects = listOf(projectExclude1, projectExclude2, projectExclude4))
 
-                excludes.findProjectExclude(project2, OrtResult.EMPTY) shouldBe projectExclude2
+                excludes.findProjectExcludes(project2, OrtResult.EMPTY) should
+                        containExactlyInAnyOrder(projectExclude2, projectExclude4)
             }
         }
 
