@@ -83,9 +83,7 @@ data class OrtResult(
     @Suppress("UNUSED") // This is intended to be mostly used via scripting.
     fun collectConcludedLicenses(omitExcluded: Boolean = false) =
         sortedMapOf<Identifier, SpdxExpression?>().also { licenses ->
-            val excludes = getExcludes()
-
-            getPackages().filter { !omitExcluded || !excludes.isPackageExcluded(it.pkg.id, this) }
+            getPackages().filter { !omitExcluded || !isPackageExcluded(it.pkg.id) }
                 .associateTo(licenses) { it.pkg.id to it.pkg.concludedLicense }
         }
 
@@ -96,10 +94,9 @@ data class OrtResult(
     @Suppress("UNUSED") // This is intended to be mostly used via scripting.
     fun collectDeclaredLicenses(omitExcluded: Boolean = false) =
         sortedMapOf<String, SortedSet<Identifier>>().also { licenses ->
-            val excludes = getExcludes()
 
             getProjects().forEach { project ->
-                if (!omitExcluded || !excludes.isProjectExcluded(project, this)) {
+                if (!omitExcluded || !isProjectExcluded(project)) {
                     project.declaredLicenses.forEach { license ->
                         licenses.getOrPut(license) { sortedSetOf() } += project.id
                     }
@@ -107,7 +104,7 @@ data class OrtResult(
             }
 
             getPackages().forEach { (pkg, _) ->
-                if (!omitExcluded || !excludes.isPackageExcluded(pkg.id, this)) {
+                if (!omitExcluded || !isPackageExcluded(pkg.id)) {
                     pkg.declaredLicenses.forEach { license ->
                         licenses.getOrPut(license) { sortedSetOf() } += pkg.id
                     }
@@ -124,10 +121,8 @@ data class OrtResult(
         sortedMapOf<String, SortedSet<Identifier>>().also { licenses ->
             // Note that we require the analyzer result here to determine whether a package has been implicitly
             // excluded via its project or scope.
-            val excludes = getExcludes()
-
             scanner?.results?.scanResults?.forEach { result ->
-                if (!omitExcluded || !excludes.isPackageExcluded(result.id, this)) {
+                if (!omitExcluded || !isPackageExcluded(result.id)) {
                     result.getAllDetectedLicenses().forEach { license ->
                         licenses.getOrPut(license) { sortedSetOf() } += result.id
                     }
@@ -180,7 +175,7 @@ data class OrtResult(
             scanner?.results?.scanResults?.forEach { result ->
                 val project = getProjects().find { it.id == result.id }
 
-                if (!omitExcluded || !excludes.isPackageExcluded(result.id, this)) {
+                if (!omitExcluded || !isPackageExcluded(result.id)) {
                     result.results.flatMap { it.summary.licenseFindings }.forEach { finding ->
                         val matchingExcludes = mutableSetOf<PathExclude>()
 
@@ -256,16 +251,15 @@ data class OrtResult(
     @Suppress("UNUSED") // This is intended to be mostly used via scripting.
     fun getOrgPackages(vararg names: String, omitExcluded: Boolean = false): SortedSet<Package> {
         val vendorPackages = sortedSetOf<Package>()
-        val excludes = getExcludes()
 
         getProjects().filter {
-            it.id.isFromOrg(*names) && (!omitExcluded || !excludes.isProjectExcluded(it, this@OrtResult))
+            it.id.isFromOrg(*names) && (!omitExcluded || !isProjectExcluded(it))
         }.mapTo(vendorPackages) {
             it.toPackage()
         }
 
         getPackages().filter { (pkg, _) ->
-            pkg.id.isFromOrg(*names) && (!omitExcluded || !excludes.isPackageExcluded(pkg.id, this@OrtResult))
+            pkg.id.isFromOrg(*names) && (!omitExcluded || !isPackageExcluded(pkg.id))
         }.mapTo(vendorPackages) {
             it.pkg
         }
@@ -311,7 +305,32 @@ data class OrtResult(
      * Return true if the project or package with the given identifier is excluded.
      */
     @Suppress("UNUSED") // This is intended to be mostly used via scripting.
-    fun isExcluded(id: Identifier): Boolean = getExcludes().isExcluded(id, this)
+    fun isExcluded(id: Identifier): Boolean =
+        getProjects().find { it.id == id }?.let {
+            // An excluded project could still be included as a dependency of another non-excluded project.
+            isProjectExcluded(it) && isPackageExcluded(id)
+        } ?: isPackageExcluded(id)
+
+
+    /**
+     * Return true if all occurrences of the package identified by the given [id] are excluded.
+     */
+    fun isPackageExcluded(id: Identifier): Boolean =
+        getProjects().all { project ->
+            isProjectExcluded(project) || project.scopes.all { scope ->
+                getExcludes().isScopeExcluded(scope, project, this) || !scope.contains(id)
+            }
+        }
+
+    /**
+     * True if the given [project] is excluded.
+     */
+    fun isProjectExcluded(project: Project): Boolean =
+        getDefinitionFilePathRelativeToAnalyzerRoot(project).let { definitionFilePath ->
+            val excludes = getExcludes()
+            excludes.projects.any { it.matches(definitionFilePath) && it.isWholeProjectExcluded }
+                    || excludes.paths.any { it.matches(definitionFilePath) }
+        }
 
     /**
      * Return a copy of this [OrtResult] with the [Repository.config] replaced by [config].
