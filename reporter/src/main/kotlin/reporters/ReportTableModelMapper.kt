@@ -23,6 +23,7 @@ import com.here.ort.model.Identifier
 import com.here.ort.model.OrtIssue
 import com.here.ort.model.OrtResult
 import com.here.ort.model.RuleViolation
+import com.here.ort.model.config.Excludes
 import com.here.ort.model.config.ScopeExclude
 import com.here.ort.reporter.ResolutionProvider
 import com.here.ort.reporter.reporters.ReportTableModel.DependencyRow
@@ -84,7 +85,7 @@ class ReportTableModelMapper(private val resolutionProvider: ResolutionProvider)
         }
 
         val analyzerResult = ortResult.analyzer!!.result
-        val excludes = ortResult.repository.config.excludes
+        val excludes = ortResult.repository.config.excludes ?: Excludes()
 
         requireNotNull(ortResult.scanner?.results) {
             "The provided ORT result does not contain any scan results."
@@ -94,13 +95,13 @@ class ReportTableModelMapper(private val resolutionProvider: ResolutionProvider)
         val licenseFindings = ortResult.collectLicenseFindings()
 
         val projectTables = analyzerResult.projects.associateWith { project ->
-            val projectExclude = excludes?.findProjectExclude(project, ortResult)?.let { exclude ->
+            val projectExclude = excludes.findProjectExclude(project, ortResult)?.let { exclude ->
                 // Only add the project exclude to the model if the whole project is excluded. If only parts of the
                 // project are excluded this information will be stored in the rows of the affected dependencies.
                 exclude.takeIf { it.isWholeProjectExcluded }
             }
 
-            val pathExcludes = excludes?.findPathExcludes(project, ortResult).orEmpty()
+            val pathExcludes = excludes.findPathExcludes(project, ortResult)
 
             val allIds = sortedSetOf(project.id)
             project.collectDependencies().mapTo(allIds) { it.id }
@@ -109,7 +110,7 @@ class ReportTableModelMapper(private val resolutionProvider: ResolutionProvider)
                 val scanResult = scanRecord.scanResults.find { it.id == id }
 
                 val scopes = project.scopes.filter { id in it }.let { scopes ->
-                    excludes?.scopeExcludesByName(project, scopes, ortResult)?.toSortedMap()
+                    excludes.scopeExcludesByName(project, scopes, ortResult).toSortedMap()
                         ?: scopes.associateTo(sortedMapOf()) { Pair(it.name, emptyList<ScopeExclude>()) }
                 }
 
@@ -185,7 +186,7 @@ class ReportTableModelMapper(private val resolutionProvider: ResolutionProvider)
         val issueSummaryTable = IssueTable(issueSummaryRows.values.toList().sortedBy { it.id })
 
         val projectExcludes = ortResult.analyzer?.result?.projects?.let { projects ->
-            excludes?.projectExcludesById(projects, ortResult)
+            excludes.projectExcludesById(projects, ortResult)
         } ?: emptyMap()
 
         val summaryTable = SummaryTable(summaryRows.values.toList().sortedWith(compareBy({
