@@ -95,11 +95,11 @@ class ReportTableModelMapper(private val resolutionProvider: ResolutionProvider)
         val licenseFindings = ortResult.collectLicenseFindings()
 
         val projectTables = analyzerResult.projects.associateWith { project ->
-            val projectExclude = excludes.findProjectExclude(project, ortResult)?.let { exclude ->
-                // Only add the project exclude to the model if the whole project is excluded. If only parts of the
-                // project are excluded this information will be stored in the rows of the affected dependencies.
-                exclude.takeIf { it.isWholeProjectExcluded }
-            }
+            // Only add the project exclude to the model if the whole project is excluded. If only parts of the
+            // project are excluded this information will be stored in the rows of the affected dependencies.
+            val projectExclude = excludes.findProjectExcludes(project, ortResult)
+                .filter { it.isWholeProjectExcluded }
+                .singleOrNull()
 
             val pathExcludes = excludes.findPathExcludes(project, ortResult)
 
