@@ -50,7 +50,8 @@ class StackTest : StringSpec() {
                 // This installs the whole GHC to an isolated location!
                 ProcessCapture("stack", "setup").requireSuccess()
             } else if (Ci.isTravis) {
-                val getStack = ProcessCapture("curl", "-sSL", "https://get.haskellstack.org/").requireSuccess()
+                val getStack = ProcessCapture("curl", "-sSL",
+                    "https://github.com/commercialhaskell/stack/raw/v1.7.1/etc/scripts/get-stack.sh").requireSuccess()
                 ProcessCapture("sh", getStack.stdoutFile.absolutePath).requireSuccess()
 
                 // This installs the whole GHC to an isolated location!
