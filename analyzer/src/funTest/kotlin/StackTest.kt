@@ -45,13 +45,13 @@ class StackTest : StringSpec() {
         // https://github.com/commercialhaskell/stack/issues/4390 is resolved.
         if (getPathFromEnvironment("stack") == null) {
             if (Ci.isAppVeyor) {
-                ProcessCapture("cinst", "haskell-stack", "--version", "1.7.1", "-y").requireSuccess()
+                ProcessCapture("cinst", "haskell-stack", "--version", "1.9.3", "-y").requireSuccess()
 
                 // This installs the whole GHC to an isolated location!
                 ProcessCapture("stack", "setup").requireSuccess()
             } else if (Ci.isTravis) {
                 val getStack = ProcessCapture("curl", "-sSL",
-                    "https://github.com/commercialhaskell/stack/raw/v1.7.1/etc/scripts/get-stack.sh").requireSuccess()
+                    "https://github.com/commercialhaskell/stack/raw/v1.9.3/etc/scripts/get-stack.sh").requireSuccess()
                 ProcessCapture("sh", getStack.stdoutFile.absolutePath).requireSuccess()
 
                 // This installs the whole GHC to an isolated location!
