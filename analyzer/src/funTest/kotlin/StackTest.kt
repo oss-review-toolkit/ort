@@ -75,7 +75,8 @@ class StackTest : StringSpec() {
             actualResult shouldBe expectedResult
         }
 
-        "Dependencies should be resolved correctly for quickcheck-state-machine-example" {
+        // Disabled as Haskel-Stack runs into an IOException when this test is run from command line.
+        "Dependencies should be resolved correctly for quickcheck-state-machine-example".config(enabled = false) {
             val definitionFile = File(projectsDir, "external/quickcheck-state-machine/example/stack.yaml")
 
             val result = createStack().resolveDependencies(listOf(definitionFile))[definitionFile]
