@@ -382,6 +382,9 @@ class ScanCode(name: String, config: ScannerConfiguration) : LocalScanner(name, 
      * Get the license found in one of the commonly named license files, if any, or an empty string otherwise.
      */
     internal fun getRootLicense(result: JsonNode): String {
+        // TODO: This function should return a list of all licenses found in all license files instead of only a single
+        //       license.
+
         val rootLicenseFile = result["files"].singleOrNull { file ->
             val path = file["path"].textValue()
             try {
