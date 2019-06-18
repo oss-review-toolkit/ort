@@ -195,6 +195,7 @@ scanner:
   config:
     artifactory_storage: null
     local_file_storage: null
+    postgres_storage: null
     scanner: null
   results:
     scanned_scopes:

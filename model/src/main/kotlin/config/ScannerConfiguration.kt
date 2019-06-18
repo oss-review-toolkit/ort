@@ -37,6 +37,11 @@ data class ScannerConfiguration(
     val localFileStorage: LocalFileStorageConfiguration? = null,
 
     /**
+     * Configuration of the PostgreSQL scan results storage.
+     */
+    val postgresStorage: PostgresStorageConfiguration? = null,
+
+    /**
      * Scanner specific configuration options. The key needs to match the name of the scanner class, e.g. "ScanCode"
      * for the ScanCode wrapper. See the documentation of the scanner for available options.
      */

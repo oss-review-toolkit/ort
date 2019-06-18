@@ -38,7 +38,7 @@ class PostgresStorageTest : AbstractStorageTest() {
 
     override fun isolationMode() = IsolationMode.InstancePerTest
 
-    override fun createStorage() = PostgresStorage(postgres.postgresDatabase.connection).also { it.init() }
+    override fun createStorage() = PostgresStorage(postgres.postgresDatabase.connection, "public").also { it.init() }
 
     init {
         "Embedded postgres works" {
