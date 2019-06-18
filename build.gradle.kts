@@ -45,16 +45,9 @@ idea {
     }
 }
 
-if (hasProperty("buildScan")) {
-    // Note: Kotlin DSL cannot directly access extensions that are created by conditionally applied plugins, thus do the
-    // lookup by name / via reflection.
-    extensions.configure("buildScan") {
-        val setTermsOfServiceUrl = javaClass.getMethod("setTermsOfServiceUrl", String::class.java)
-        setTermsOfServiceUrl.invoke(this, "https://gradle.com/terms-of-service")
-
-        val setTermsOfServiceAgree = javaClass.getMethod("setTermsOfServiceAgree", String::class.java)
-        setTermsOfServiceAgree.invoke(this, "yes")
-    }
+extensions.findByName("buildScan")?.withGroovyBuilder {
+    setProperty("termsOfServiceUrl", "https://gradle.com/terms-of-service")
+    setProperty("termsOfServiceAgree", "yes")
 }
 
 tasks.named<DependencyUpdatesTask>("dependencyUpdates") {
