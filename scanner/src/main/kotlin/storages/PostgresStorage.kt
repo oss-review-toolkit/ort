@@ -35,9 +35,8 @@ import com.vdurmont.semver4j.Semver
 import java.io.IOException
 import java.sql.Connection
 
-class PostgresStorage(private val connection: Connection) : ScanResultsStorage() {
-    private val schema = "public"
-    private val table = "scan_results"
+class PostgresStorage(private val connection: Connection, private val schema: String) : ScanResultsStorage() {
+    private val table = "scan_results" // TODO: make configurable
 
     /**
      * Initialize the database.

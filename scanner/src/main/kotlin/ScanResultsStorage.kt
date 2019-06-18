@@ -28,8 +28,12 @@ import com.here.ort.model.ScanResultContainer
 import com.here.ort.model.ScannerDetails
 import com.here.ort.model.config.ArtifactoryStorageConfiguration
 import com.here.ort.model.config.LocalFileStorageConfiguration
+import com.here.ort.model.config.PostgresStorageConfiguration
 import com.here.ort.scanner.storages.*
 import com.here.ort.utils.log
+
+import java.sql.DriverManager
+import java.util.Properties
 
 /**
  * The abstract class that storage backends for scan results need to implement.
@@ -72,6 +76,35 @@ abstract class ScanResultsStorage {
             storage = ArtifactoryStorage(config.url, config.repository, config.apiToken)
 
             log.info { "Using Artifactory storage at ${config.url}." }
+        }
+
+        /**
+         * Configure a [PostgresStorage] as the current storage backend.
+         */
+        fun configure(config: PostgresStorageConfiguration) {
+            require(config.url.isNotBlank()) {
+                "URL for PostgreSQL storage is missing."
+            }
+
+            require(config.schema.isNotBlank()) {
+                "Database for PostgreSQL storage is missing."
+            }
+
+            require(config.username.isNotBlank()) {
+                "Username for PostgreSQL storage is missing."
+            }
+
+            require(config.password.isNotBlank()) {
+                "Password for PostgreSQL storage is missing."
+            }
+
+            val properties = Properties()
+            properties["user"] = config.username
+            properties["password"] = config.password
+
+            val connection = DriverManager.getConnection(config.url, properties)
+
+            storage = PostgresStorage(connection, config.schema).also { it.init() }
         }
     }
 

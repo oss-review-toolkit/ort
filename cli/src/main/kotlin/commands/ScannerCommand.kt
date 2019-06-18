@@ -133,21 +133,19 @@ object ScannerCommand : CommandWithHelp() {
         ScanResultsStorage.storage = localFileStorage
 
         // Allow to override the default scan results storage.
-        config.artifactoryStorage?.let {
-            require(config.localFileStorage == null) {
-                "Only one scan results storage may be configured."
-            }
-
-            ScanResultsStorage.configure(it)
+        require(
+            listOf(
+                config.artifactoryStorage,
+                config.localFileStorage,
+                config.postgresStorage
+            ).count { it != null } <= 1
+        ) {
+            "Only one scan results storage may be configured."
         }
 
-        config.localFileStorage?.let {
-            require(config.artifactoryStorage == null) {
-                "Only one scan results storage may be configured."
-            }
-
-            ScanResultsStorage.configure(it)
-        }
+        config.artifactoryStorage?.let { ScanResultsStorage.configure(it) }
+        config.localFileStorage?.let { ScanResultsStorage.configure(it) }
+        config.postgresStorage?.let { ScanResultsStorage.configure(it) }
 
         val scanner = scannerFactory.create(config)
 
