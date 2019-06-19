@@ -284,7 +284,7 @@ fun normalizeVcsUrl(vcsUrl: String): String {
  * Temporarily set the specified system [properties] while executing [block]. Afterwards, previously set properties have
  * their original values restored and previously unset properties are cleared.
  */
-fun temporaryProperties(vararg properties: Pair<String, String?>, block: () -> Unit) {
+fun <R> temporaryProperties(vararg properties: Pair<String, String?>, block: () -> R): R {
     val originalProperties = mutableListOf<Pair<String, String?>>()
 
     properties.forEach { (key, value) ->
@@ -292,7 +292,7 @@ fun temporaryProperties(vararg properties: Pair<String, String?>, block: () -> U
         value?.also { System.setProperty(key, it) } ?: System.clearProperty(key)
     }
 
-    try {
+    return try {
         block()
     } finally {
         originalProperties.forEach { (key, value) ->
