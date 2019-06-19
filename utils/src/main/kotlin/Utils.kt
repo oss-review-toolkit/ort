@@ -296,7 +296,7 @@ fun temporaryProperties(vararg properties: Pair<String, String>, block: () -> Un
         block()
     } finally {
         originalProperties.forEach { (key, value) ->
-            value?.let { System.setProperty(key, it) } ?: System.clearProperty(key)
+            value?.also { System.setProperty(key, it) } ?: System.clearProperty(key)
         }
     }
 }
