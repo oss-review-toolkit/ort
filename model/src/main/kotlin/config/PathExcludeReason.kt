@@ -52,6 +52,12 @@ enum class PathExcludeReason {
     OPTIONAL_COMPONENT_OF,
 
     /**
+     * The path only contains packages or sources for packages that have to be provided by the user of distributed build
+     * artifacts.
+     */
+    PROVIDED_BY,
+
+    /**
      * The path only contains tools used for testing source code which are not included in distributed build
      * artifacts.
      */
