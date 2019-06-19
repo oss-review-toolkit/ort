@@ -24,35 +24,35 @@ package com.here.ort.model.config
  */
 enum class PathExcludeReason {
     /**
-     * The project only contains tools used for building source code which are not included in distributed build
+     * The path only contains tools used for building source code which are not included in distributed build
      * artifacts.
      */
     BUILD_TOOL_OF,
 
     /**
-     * The project only contains data files such as fonts or images which are not included in distributed build
+     * The path only contains data files such as fonts or images which are not included in distributed build
      * artifacts.
      */
     DATA_FILE_OF,
 
     /**
-     * The project only contains documentation which is not included in distributed build artifacts.
+     * The path only contains documentation which is not included in distributed build artifacts.
      */
     DOCUMENTATION_OF,
 
     /**
-     * The project only contains source code examples which are not included in distributed build artifacts.
+     * The path only contains source code examples which are not included in distributed build artifacts.
      */
     EXAMPLE_OF,
 
     /**
-     * The project only contains optional components for the code that is built which are not included in distributed
+     * The path only contains optional components for the code that is built which are not included in distributed
      * build artifacts.
      */
     OPTIONAL_COMPONENT_OF,
 
     /**
-     * The project only contains tools used for testing source code which are not included in distributed build
+     * The path only contains tools used for testing source code which are not included in distributed build
      * artifacts.
      */
     TEST_TOOL_OF
