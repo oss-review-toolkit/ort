@@ -55,9 +55,10 @@ object OkHttpClientHelper {
     fun createRequestBody(source: File): RequestBody = RequestBody.create(guessMediaType(source.name), source)
 
     /**
-     * Execute a request using the client for the specified cache directory.
+     * Execute a [request] using the client for the specified [cache directory][cachePath]. The client can optionally
+     * be further configured via the [block].
      */
-    fun execute(cachePath: String, request: Request): Response {
+    fun execute(cachePath: String, request: Request, block: OkHttpClient.Builder.() -> Unit = {}): Response {
         val client = clients.getOrPut(cachePath) {
             val cacheDirectory = File(getUserOrtDirectory(), cachePath)
             val maxCacheSizeInBytes = 1024L * 1024L * 1024L
@@ -66,6 +67,7 @@ object OkHttpClientHelper {
             OkHttpClient.Builder()
                 .cache(cache)
                 .connectionSpecs(specs)
+                .apply(block)
                 .build()
         }
 
