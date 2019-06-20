@@ -103,7 +103,6 @@ class Bower(
         }
 
         private fun extractPackage(node: JsonNode): Package {
-            val vcsInfo = extractVcsInfo(node)
             return Package(
                 id = extractPackageId(node),
                 declaredLicenses = extractDeclaredLicenses(node),
@@ -111,8 +110,7 @@ class Bower(
                 homepageUrl = node["pkgMeta"]["homepage"].textValueOrEmpty(),
                 binaryArtifact = RemoteArtifact.EMPTY,
                 sourceArtifact = RemoteArtifact.EMPTY, // TODO: implement me!
-                vcs = vcsInfo,
-                vcsProcessed = vcsInfo.normalize()
+                vcs = extractVcsInfo(node)
             )
         }
 
@@ -159,11 +157,12 @@ class Bower(
             while (!stack.empty()) {
                 val currentNode = stack.pop()
 
-                val key = dependencyKeyOf(currentNode)
-                if (key != null && hasCompleteDependencies(node, SCOPE_NAME_DEPENDENCIES)
-                    && hasCompleteDependencies(node, SCOPE_NAME_DEV_DEPENDENCIES)
-                ) {
-                    result[key] = currentNode
+                dependencyKeyOf(currentNode)?.let { key ->
+                    if (hasCompleteDependencies(node, SCOPE_NAME_DEPENDENCIES) &&
+                        hasCompleteDependencies(node, SCOPE_NAME_DEV_DEPENDENCIES)
+                    ) {
+                        result[key] = currentNode
+                    }
                 }
 
                 stack.addAll(getDependencyNodes(currentNode))
