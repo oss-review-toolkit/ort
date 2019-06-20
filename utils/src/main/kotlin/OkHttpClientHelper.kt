@@ -44,7 +44,7 @@ object OkHttpClientHelper {
     /**
      * Guess the media type based on the file component of a string.
      */
-    fun guessMediaType(name: String): MediaType? {
+    private fun guessMediaType(name: String): MediaType? {
         val contentType = URLConnection.guessContentTypeFromName(name) ?: "application/octet-stream"
         return MediaType.parse(contentType)
     }
