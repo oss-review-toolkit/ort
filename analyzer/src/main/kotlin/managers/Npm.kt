@@ -46,6 +46,7 @@ import com.here.ort.model.readValue
 import com.here.ort.utils.CommandLineTool
 import com.here.ort.utils.Os
 import com.here.ort.utils.OkHttpClientHelper
+import com.here.ort.utils.getUserHomeDirectory
 import com.here.ort.utils.hasFragmentRevision
 import com.here.ort.utils.log
 import com.here.ort.utils.realFile
@@ -57,11 +58,15 @@ import com.vdurmont.semver4j.Requirement
 import java.io.File
 import java.io.IOException
 import java.net.HttpURLConnection
+import java.net.InetSocketAddress
+import java.net.Proxy
 import java.net.URI
 import java.net.URISyntaxException
 import java.net.URLEncoder
 import java.util.SortedSet
 
+import okhttp3.Credentials
+import okhttp3.OkHttpClient
 import okhttp3.Request
 
 /**
@@ -74,6 +79,8 @@ open class Npm(
     repoConfig: RepositoryConfiguration
 ) : PackageManager(name, analyzerRoot, analyzerConfig, repoConfig), CommandLineTool {
     companion object {
+        private val HTTP_REGEX = Regex("^https?://.+$")
+
         /**
          * Expand NPM shortcuts for URLs to hosting sites to full URLs so that they can be used in a regular way.
          *
@@ -174,6 +181,34 @@ open class Npm(
         }
     }
 
+    private val applyProxySettingsFromNpmrc: OkHttpClient.Builder.() -> Unit = {
+        val npmrcFile = getUserHomeDirectory().resolve(".npmrc")
+        if (npmrcFile.isFile) {
+            npmrcFile.forEachLine { line ->
+                val (key, value) = line.split('=', limit = 2).map { it.trim() }
+
+                val proxyUrl = value.takeIf { it.matches(HTTP_REGEX) } ?: when (key) {
+                    "proxy" -> "http://$value"
+                    "https-proxy" -> "https://$value"
+                    else -> ""
+                }
+
+                if (proxyUrl.isNotEmpty()) {
+                    val url = URI(proxyUrl)
+                    proxy(Proxy(Proxy.Type.HTTP, InetSocketAddress(url.host, url.port)))
+                    proxyAuthenticator { _, response ->
+                        val user = url.userInfo.substringBefore(':')
+                        val password = url.userInfo.substringAfter(':')
+                        val credential = Credentials.basic(user, password)
+                        response.request().newBuilder()
+                            .header("Proxy-Authorization", credential)
+                            .build()
+                    }
+                }
+            }
+        }
+    }
+
     private fun parseInstalledModules(rootDirectory: File): Map<String, Package> {
         val packages = mutableMapOf<String, Package>()
         val nodeModulesDir = File(rootDirectory, "node_modules")
@@ -240,7 +275,7 @@ open class Npm(
                     .url("https://registry.npmjs.org/$encodedName")
                     .build()
 
-                OkHttpClientHelper.execute(HTTP_CACHE_PATH, pkgRequest).use { response ->
+                OkHttpClientHelper.execute(HTTP_CACHE_PATH, pkgRequest, applyProxySettingsFromNpmrc).use { response ->
                     if (response.code() == HttpURLConnection.HTTP_OK) {
                         log.debug {
                             if (response.cacheResponse() != null) {
