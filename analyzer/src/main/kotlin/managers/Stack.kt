@@ -68,8 +68,7 @@ class Stack(
             analyzerRoot: File,
             analyzerConfig: AnalyzerConfiguration,
             repoConfig: RepositoryConfiguration
-        ) =
-            Stack(managerName, analyzerRoot, analyzerConfig, repoConfig)
+        ) = Stack(managerName, analyzerRoot, analyzerConfig, repoConfig)
     }
 
     override fun command(workingDir: File?) = "stack"

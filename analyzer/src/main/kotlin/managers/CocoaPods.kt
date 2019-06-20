@@ -43,8 +43,7 @@ class CocoaPods(
             analyzerRoot: File,
             analyzerConfig: AnalyzerConfiguration,
             repoConfig: RepositoryConfiguration
-        ) =
-            CocoaPods(managerName, analyzerRoot, analyzerConfig, repoConfig)
+        ) = CocoaPods(managerName, analyzerRoot, analyzerConfig, repoConfig)
     }
 
     override fun resolveDependencies(definitionFile: File): ProjectAnalyzerResult? {

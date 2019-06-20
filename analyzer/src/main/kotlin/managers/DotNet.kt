@@ -75,8 +75,7 @@ class DotNet(
             analyzerRoot: File,
             analyzerConfig: AnalyzerConfiguration,
             repoConfig: RepositoryConfiguration
-        ) =
-            DotNet(managerName, analyzerRoot, analyzerConfig, repoConfig)
+        ) = DotNet(managerName, analyzerRoot, analyzerConfig, repoConfig)
     }
 
     // See https://docs.microsoft.com/en-us/nuget/consume-packages/package-references-in-project-files.

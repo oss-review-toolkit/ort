@@ -121,8 +121,7 @@ open class Npm(
             analyzerRoot: File,
             analyzerConfig: AnalyzerConfiguration,
             repoConfig: RepositoryConfiguration
-        ) =
-            Npm(managerName, analyzerRoot, analyzerConfig, repoConfig)
+        ) = Npm(managerName, analyzerRoot, analyzerConfig, repoConfig)
     }
 
     /**

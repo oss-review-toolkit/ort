@@ -148,8 +148,7 @@ class Pip(
             analyzerRoot: File,
             analyzerConfig: AnalyzerConfiguration,
             repoConfig: RepositoryConfiguration
-        ) =
-            Pip(managerName, analyzerRoot, analyzerConfig, repoConfig)
+        ) = Pip(managerName, analyzerRoot, analyzerConfig, repoConfig)
     }
 
     companion object {

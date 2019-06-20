@@ -73,8 +73,7 @@ class Sbt(
             analyzerRoot: File,
             analyzerConfig: AnalyzerConfiguration,
             repoConfig: RepositoryConfiguration
-        ) =
-            Sbt(managerName, analyzerRoot, analyzerConfig, repoConfig)
+        ) = Sbt(managerName, analyzerRoot, analyzerConfig, repoConfig)
     }
 
     override fun command(workingDir: File?) = if (Os.isWindows) "sbt.bat" else "sbt"
