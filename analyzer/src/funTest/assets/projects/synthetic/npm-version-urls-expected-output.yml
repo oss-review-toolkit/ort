@@ -408,9 +408,9 @@ project:
         - id: "NPM::readable-stream:2.3.6"
           dependencies:
           - id: "NPM::core-util-is:1.0.2"
-          - id: "NPM::inherits:2.0.3"
+          - id: "NPM::inherits:2.0.4"
           - id: "NPM::isarray:1.0.0"
-          - id: "NPM::process-nextick-args:2.0.0"
+          - id: "NPM::process-nextick-args:2.0.1"
           - id: "NPM::safe-buffer:5.1.2"
           - id: "NPM::string_decoder:1.1.1"
             dependencies:
@@ -542,14 +542,14 @@ project:
         - id: "NPM::clone:2.1.2"
         - id: "NPM::cloneable-readable:1.1.3"
           dependencies:
-          - id: "NPM::inherits:2.0.3"
-          - id: "NPM::process-nextick-args:2.0.0"
+          - id: "NPM::inherits:2.0.4"
+          - id: "NPM::process-nextick-args:2.0.1"
           - id: "NPM::readable-stream:2.3.6"
             dependencies:
             - id: "NPM::core-util-is:1.0.2"
-            - id: "NPM::inherits:2.0.3"
+            - id: "NPM::inherits:2.0.4"
             - id: "NPM::isarray:1.0.0"
-            - id: "NPM::process-nextick-args:2.0.0"
+            - id: "NPM::process-nextick-args:2.0.1"
             - id: "NPM::safe-buffer:5.1.2"
             - id: "NPM::string_decoder:1.1.1"
               dependencies:
@@ -581,7 +581,7 @@ project:
             dependencies:
             - id: "NPM::wrappy:1.0.2"
           - id: "NPM::wrappy:1.0.2"
-        - id: "NPM::inherits:2.0.3"
+        - id: "NPM::inherits:2.0.4"
         - id: "NPM::minimatch:3.0.4"
           dependencies:
           - id: "NPM::brace-expansion:1.1.11"
@@ -2256,8 +2256,8 @@ packages:
       path: ""
   curations: []
 - package:
-    id: "NPM::inherits:2.0.3"
-    purl: "pkg://NPM//inherits@2.0.3"
+    id: "NPM::inherits:2.0.4"
+    purl: "pkg://NPM//inherits@2.0.4"
     declared_licenses:
     - "ISC"
     declared_licenses_processed:
@@ -2271,19 +2271,19 @@ packages:
         value: ""
         algorithm: ""
     source_artifact:
-      url: "https://registry.npmjs.org/inherits/-/inherits-2.0.3.tgz"
+      url: "https://registry.npmjs.org/inherits/-/inherits-2.0.4.tgz"
       hash:
-        value: "633c2c83e3da42a502f52466022480f4208261de"
+        value: "0fa2c64f932917c3433a0ded55363aae37416b7c"
         algorithm: "SHA-1"
     vcs:
       type: "git"
       url: "git://github.com/isaacs/inherits.git"
-      revision: "e05d0fb27c61a3ec687214f0476386b765364d5f"
+      revision: "9a2c29400c6d491e0b7beefe0c32efa3b462545d"
       path: ""
     vcs_processed:
       type: "git"
       url: "https://github.com/isaacs/inherits.git"
-      revision: "e05d0fb27c61a3ec687214f0476386b765364d5f"
+      revision: "9a2c29400c6d491e0b7beefe0c32efa3b462545d"
       path: ""
   curations: []
 - package:
@@ -3562,8 +3562,8 @@ packages:
       path: ""
   curations: []
 - package:
-    id: "NPM::process-nextick-args:2.0.0"
-    purl: "pkg://NPM//process-nextick-args@2.0.0"
+    id: "NPM::process-nextick-args:2.0.1"
+    purl: "pkg://NPM//process-nextick-args@2.0.1"
     declared_licenses:
     - "MIT"
     declared_licenses_processed:
@@ -3576,19 +3576,19 @@ packages:
         value: ""
         algorithm: ""
     source_artifact:
-      url: "https://registry.npmjs.org/process-nextick-args/-/process-nextick-args-2.0.0.tgz"
+      url: "https://registry.npmjs.org/process-nextick-args/-/process-nextick-args-2.0.1.tgz"
       hash:
-        value: "a37d732f4271b4ab1ad070d35508e8290788ffaa"
+        value: "7820d9b16120cc55ca9ae7792680ae7dba6d7fe2"
         algorithm: "SHA-1"
     vcs:
       type: "git"
       url: "git+https://github.com/calvinmetcalf/process-nextick-args.git"
-      revision: "8407900951af3e7651fca50f127f0e4ddc01ad55"
+      revision: "b96d59913025441b00c4fd40e6894ddfa8e1c398"
       path: ""
     vcs_processed:
       type: "git"
       url: "https://github.com/calvinmetcalf/process-nextick-args.git"
-      revision: "8407900951af3e7651fca50f127f0e4ddc01ad55"
+      revision: "b96d59913025441b00c4fd40e6894ddfa8e1c398"
       path: ""
   curations: []
 - package:
