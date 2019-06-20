@@ -71,8 +71,7 @@ class NuGet(
             analyzerRoot: File,
             analyzerConfig: AnalyzerConfiguration,
             repoConfig: RepositoryConfiguration
-        ) =
-            NuGet(managerName, analyzerRoot, analyzerConfig, repoConfig)
+        ) = NuGet(managerName, analyzerRoot, analyzerConfig, repoConfig)
     }
 
     // See https://docs.microsoft.com/en-us/nuget/reference/packages-config.

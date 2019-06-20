@@ -45,8 +45,7 @@ class Yarn(
             analyzerRoot: File,
             analyzerConfig: AnalyzerConfiguration,
             repoConfig: RepositoryConfiguration
-        ) =
-            Yarn(managerName, analyzerRoot, analyzerConfig, repoConfig)
+        ) = Yarn(managerName, analyzerRoot, analyzerConfig, repoConfig)
     }
 
     override val installParameters = arrayOf("--ignore-scripts", "--ignore-engines")

@@ -78,8 +78,7 @@ class Bundler(
             analyzerRoot: File,
             analyzerConfig: AnalyzerConfiguration,
             repoConfig: RepositoryConfiguration
-        ) =
-            Bundler(managerName, analyzerRoot, analyzerConfig, repoConfig)
+        ) = Bundler(managerName, analyzerRoot, analyzerConfig, repoConfig)
     }
 
     override fun command(workingDir: File?) = if (Os.isWindows) "bundle.bat" else "bundle"

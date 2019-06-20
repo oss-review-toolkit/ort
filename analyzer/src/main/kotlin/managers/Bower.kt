@@ -67,12 +67,13 @@ class Bower(
         private const val SCOPE_NAME_DEPENDENCIES = "dependencies"
         private const val SCOPE_NAME_DEV_DEPENDENCIES = "devDependencies"
 
-        private fun extractPackageId(node: JsonNode) = Identifier(
-            type = "Bower",
-            namespace = "",
-            name = node["pkgMeta"]["name"].textValueOrEmpty(),
-            version = node["pkgMeta"]["version"].textValueOrEmpty()
-        )
+        private fun extractPackageId(node: JsonNode) =
+            Identifier(
+                type = "Bower",
+                namespace = "",
+                name = node["pkgMeta"]["name"].textValueOrEmpty(),
+                version = node["pkgMeta"]["version"].textValueOrEmpty()
+            )
 
         private fun extractRepositoryType(node: JsonNode) =
             node["pkgMeta"]["repository"]?.get("type").textValueOrEmpty()
@@ -172,10 +173,10 @@ class Bower(
         }
 
         private fun extractDependencyTree(
-            node: JsonNode, scopeName: String,
+            node: JsonNode,
+            scopeName: String,
             alternativeNodes: Map<String, JsonNode> = getNodesWithCompleteDependencies(node)
-        ):
-                SortedSet<PackageReference> {
+        ): SortedSet<PackageReference> {
             val result = mutableSetOf<PackageReference>()
 
             if (!hasCompleteDependencies(node, scopeName)) {
@@ -210,8 +211,7 @@ class Bower(
             analyzerRoot: File,
             analyzerConfig: AnalyzerConfiguration,
             repoConfig: RepositoryConfiguration
-        ) =
-            Bower(managerName, analyzerRoot, analyzerConfig, repoConfig)
+        ) = Bower(managerName, analyzerRoot, analyzerConfig, repoConfig)
     }
 
     override fun command(workingDir: File?) = if (Os.isWindows) "bower.cmd" else "bower"

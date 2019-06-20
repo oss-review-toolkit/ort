@@ -80,8 +80,7 @@ class PhpComposer(
             analyzerRoot: File,
             analyzerConfig: AnalyzerConfiguration,
             repoConfig: RepositoryConfiguration
-        ) =
-            PhpComposer(managerName, analyzerRoot, analyzerConfig, repoConfig)
+        ) = PhpComposer(managerName, analyzerRoot, analyzerConfig, repoConfig)
     }
 
     override fun command(workingDir: File?) =
