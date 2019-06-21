@@ -97,6 +97,7 @@ class MercurialDownloadTest : StringSpec() {
                     .filter { it.isFile }
                     .map { it.relativeTo(outputDir) }
                     .sortedBy { it.path }
+                    .toList()
 
                 workingTree.isValid() shouldBe true
                 workingTree.getRevision() shouldBe REPO_REV
@@ -142,6 +143,7 @@ class MercurialDownloadTest : StringSpec() {
                     .filter { it.isFile }
                     .map { it.relativeTo(outputDir) }
                     .sortedBy { it.path }
+                    .toList()
 
                 workingTree.isValid() shouldBe true
                 workingTree.getRevision() shouldBe REPO_REV_FOR_VERSION
