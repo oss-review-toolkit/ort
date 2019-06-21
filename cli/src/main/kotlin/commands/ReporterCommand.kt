@@ -116,7 +116,7 @@ object ReporterCommand : CommandWithHelp() {
     private var repositoryConfigurationFile: File? = null
 
     override fun runCommand(jc: JCommander): Int {
-        val absoluteOutputDir = outputDir.absoluteFile.normalize()
+        val absoluteOutputDir = outputDir.expandTilde().normalize()
 
         val reports = reporters.associateWith { reporter ->
             File(absoluteOutputDir, reporter.defaultFilename)
@@ -128,7 +128,7 @@ object ReporterCommand : CommandWithHelp() {
             return 2
         }
 
-        var ortResult = ortFile.readValue<OrtResult>()
+        var ortResult = ortFile.expandTilde().readValue<OrtResult>()
         repositoryConfigurationFile?.expandTilde()?.let {
             ortResult = ortResult.replaceConfig(it.readValue())
         }
