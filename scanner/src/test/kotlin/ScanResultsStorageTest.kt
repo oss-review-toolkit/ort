@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2017-2019 HERE Europe B.V.
+ * Copyright (C) 2019 Bosch Software Innovations GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,6 +28,7 @@ import com.here.ort.model.ScanSummary
 import com.here.ort.model.ScannerDetails
 import com.here.ort.model.TextLocation
 import com.here.ort.model.config.ArtifactoryStorageConfiguration
+import com.here.ort.scanner.storages.ArtifactoryStorage
 
 import io.kotlintest.shouldBe
 import io.kotlintest.shouldNotBe
