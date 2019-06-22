@@ -35,13 +35,28 @@ import com.here.ort.utils.log
 
 import java.util.SortedSet
 
+/**
+ * The interface that storage backends for scan results need to implement.
+ */
 interface ScanResultsStorage {
+    /**
+     * A companion object that wraps the real storage to use with access statistics.
+     */
     companion object : ScanResultsStorage {
+        /**
+         * The scan result storage in use. Needs to be set via the corresponding configure function.
+         */
         var storage: ScanResultsStorage = NoStorage()
             private set
 
+        /**
+         * The access statistics for the scan result storage wrapper.
+         */
         val stats = AccessStatistics()
 
+        /**
+         * Configure an [ArtifactoryStorage] as the current storage backend.
+         */
         fun configure(config: ArtifactoryStorageConfiguration) {
             require(config.url.isNotBlank()) {
                 "URL for Artifactory storage is missing."
