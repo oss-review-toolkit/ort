@@ -154,6 +154,18 @@ object ScannerCommand : CommandWithHelp() {
         } ?: ScannerConfiguration()
 
         config.artifactoryStorage?.let {
+            require(config.localFileStorage == null) {
+                "Only one scan results storage may be configured."
+            }
+
+            ScanResultsStorage.configure(it)
+        }
+
+        config.localFileStorage?.let {
+            require(config.artifactoryStorage == null) {
+                "Only one scan results storage may be configured."
+            }
+
             ScanResultsStorage.configure(it)
         }
 
