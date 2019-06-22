@@ -29,7 +29,9 @@ import com.here.ort.model.ScanResult
 import com.here.ort.model.ScanResultContainer
 import com.here.ort.model.ScannerDetails
 import com.here.ort.model.config.ArtifactoryStorageConfiguration
+import com.here.ort.model.config.LocalFileStorageConfiguration
 import com.here.ort.scanner.storages.ArtifactoryStorage
+import com.here.ort.scanner.storages.LocalFileStorage
 import com.here.ort.scanner.storages.NoStorage
 import com.here.ort.utils.log
 
@@ -53,6 +55,15 @@ interface ScanResultsStorage {
          * The access statistics for the scan result storage wrapper.
          */
         val stats = AccessStatistics()
+
+        /**
+         * Configure a [LocalFileStorage] as the current storage backend.
+         */
+        fun configure(config: LocalFileStorageConfiguration) {
+            storage = LocalFileStorage(config.directory)
+
+            log.info { "Using local file storage at ${config.directory}." }
+        }
 
         /**
          * Configure an [ArtifactoryStorage] as the current storage backend.
