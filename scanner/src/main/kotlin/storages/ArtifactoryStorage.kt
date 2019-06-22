@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2017-2019 HERE Europe B.V.
+ * Copyright (C) 2019 Bosch Software Innovations GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,7 +18,7 @@
  * License-Filename: LICENSE
  */
 
-package com.here.ort.scanner
+package com.here.ort.scanner.storages
 
 import ch.frankel.slf4k.*
 
@@ -29,6 +30,8 @@ import com.here.ort.model.ScannerDetails
 import com.here.ort.model.jsonMapper
 import com.here.ort.model.readValue
 import com.here.ort.model.yamlMapper
+import com.here.ort.scanner.HTTP_CACHE_PATH
+import com.here.ort.scanner.ScanResultsStorage
 import com.here.ort.utils.OkHttpClientHelper
 import com.here.ort.utils.log
 import com.here.ort.utils.showStackTrace

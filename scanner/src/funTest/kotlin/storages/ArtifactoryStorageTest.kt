@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2017-2019 HERE Europe B.V.
+ * Copyright (C) 2019 Bosch Software Innovations GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,7 +18,7 @@
  * License-Filename: LICENSE
  */
 
-package com.here.ort.scanner
+package com.here.ort.scanner.storages
 
 import com.here.ort.model.EMPTY_JSON_NODE
 import com.here.ort.model.Hash
@@ -52,7 +53,7 @@ import java.time.Instant
 
 import kotlin.random.Random
 
-class HttpStorageTest : StringSpec() {
+class ArtifactoryStorageTest : StringSpec() {
     private val loopback = InetAddress.getLoopbackAddress()
     private val port = Random.nextInt(1024, 49152) // See https://en.wikipedia.org/wiki/Registered_port.
 
