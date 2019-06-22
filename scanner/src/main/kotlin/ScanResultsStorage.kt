@@ -30,18 +30,14 @@ import com.here.ort.model.ScanResultContainer
 import com.here.ort.model.ScannerDetails
 import com.here.ort.model.config.ArtifactoryStorageConfiguration
 import com.here.ort.scanner.storages.ArtifactoryStorage
+import com.here.ort.scanner.storages.NoStorage
 import com.here.ort.utils.log
 
 import java.util.SortedSet
 
 interface ScanResultsStorage {
     companion object : ScanResultsStorage {
-        var storage = object : ScanResultsStorage {
-            override fun read(id: Identifier) = ScanResultContainer(id, emptyList())
-            override fun read(pkg: Package, scannerDetails: ScannerDetails) = ScanResultContainer(pkg.id, emptyList())
-            override fun add(id: Identifier, scanResult: ScanResult) = false
-            override fun listPackages() = sortedSetOf<Identifier>()
-        }
+        var storage: ScanResultsStorage = NoStorage()
             private set
 
         val stats = AccessStatistics()
