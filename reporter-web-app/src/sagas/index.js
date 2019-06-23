@@ -18,37 +18,36 @@
  */
 
 import { all, put, takeEvery } from 'redux-saga/effects';
-import convertReportData from './convertReportData';
+import processOrtResultData from './processOrtResultData';
 
-export function* loadReportData() {
-    yield put({ type: 'APP::SHOW_LOADING' });
-    yield put({ type: 'APP::LOADING_REPORT_START' });
+export function* loadOrtResultData() {
+    yield put({ type: 'APP::SHOW_LOAD_VIEW' });
+    yield put({ type: 'APP::LOADING_ORT_RESULT_DATA_START' });
 
     // Parse JSON report data embedded in HTML page
-    const reportDataNode = document.querySelector('script[id="ort-report-data"]');
-    const reportDataText = reportDataNode ? reportDataNode.textContent : undefined;
+    const ortResultDataNode = document.querySelector('script[id="ort-report-data"]');
+    const ortResultDataTxt = ortResultDataNode ? ortResultDataNode.textContent : undefined;
 
-    if (!reportDataText || reportDataText.trim().length === 0) {
+    if (!ortResultDataTxt || ortResultDataTxt.trim().length === 0) {
         yield put({ type: 'APP::SHOW_NO_REPORT' });
     } else {
-        const reportData = JSON.parse(reportDataText);
-        yield put({ type: 'APP::LOADING_REPORT_DONE', payload: reportData });
-        yield put({ type: 'APP::LOADING_CONVERTING_REPORT_START' });
+        const ortResultData = JSON.parse(ortResultDataTxt);
+        yield put({ type: 'APP::LOADING_ORT_RESULT_DATA_DONE', payload: ortResultData });
+        yield put({ type: 'APP::LOADING_PROCESS_ORT_RESULT_DATA_START' });
     }
 }
-
-export function* watchConvertReportData() {
-    yield takeEvery('APP::LOADING_CONVERTING_REPORT_START', convertReportData);
+export function* watchProcessOrtResultData() {
+    yield takeEvery('APP::LOADING_PROCESS_ORT_RESULT_DATA_START', processOrtResultData);
 }
 
-export function* watchLoadReportData() {
-    yield takeEvery('APP::LOADING_START', loadReportData);
+export function* watchLoadOrtResultData() {
+    yield takeEvery('APP::LOADING_START', loadOrtResultData);
 }
 
 // single entry point to start all Sagas at once
 export default function* rootSaga() {
     yield all([
-        watchLoadReportData(),
-        watchConvertReportData()
+        watchLoadOrtResultData(),
+        watchProcessOrtResultData()
     ]);
 }

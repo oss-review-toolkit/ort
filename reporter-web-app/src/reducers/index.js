@@ -23,6 +23,7 @@ const initState = {
             percentage: 0,
             text: ''
         },
+        showAboutModal: false,
         showKey: 'ort-loading'
     },
     summary: {
@@ -60,44 +61,88 @@ const initState = {
         showDrawer: false
     },
     data: {
-        report: {},
-        reportLastUpdate: null
+        ortResult: {},
+        ortResultLastUpdate: null
     }
 };
 
 export default (state = initState, action) => {
     switch (action.type) {
-    case 'APP::LOADING_CONVERTING_REPORT_START': {
+    case 'APP::LOADING_DONE': {
         return {
             ...state,
             app: {
                 ...state.app,
                 loading: {
                     ...state.app.loading,
-                    text: 'Processing data for optimal rendering...',
+                    text: 'Almost ready to display scan report...',
+                    percentage: 100
+                }
+            }
+        };
+    }
+    case 'APP::LOADING_ORT_RESULT_DATA_START': {
+        return {
+            ...state,
+            app: {
+                ...state.app,
+                loading: {
+                    ...state.app.loading,
+                    text: 'Loading result data...',
+                    percentage: 1
+                }
+            }
+        };
+    }
+    case 'APP::LOADING_ORT_RESULT_DATA_DONE': {
+        return {
+            ...state,
+            app: {
+                ...state.app,
+                loading: {
+                    ...state.app.loading,
+                    text: 'Loaded result data...',
+                    percentage: 20
+                }
+            },
+            data: {
+                ...state.data,
+                ortResult: action.payload,
+                ortResultLastUpdate: Date.now()
+            }
+        };
+    }
+    case 'APP::LOADING_PROCESS_ORT_RESULT_DATA_START': {
+        return {
+            ...state,
+            app: {
+                ...state.app,
+                loading: {
+                    ...state.app.loading,
+                    text: 'Processing result data...',
                     percentage: 25
                 }
             }
         };
     }
-    case 'APP::LOADING_CONVERTING_REPORT_DONE': {
+    case 'APP::LOADING_PROCESS_ORT_RESULT_DATA_DONE': {
         return {
             ...state,
             app: {
                 ...state.app,
                 loading: {
                     ...state.app.loading,
-                    text: 'Processing report data done...',
+                    text: 'Processed report data...',
                     percentage: 95
                 }
             },
             data: {
                 ...state.data,
-                report: action.payload
+                ortResult: action.payload
             }
         };
     }
-    case 'APP::LOADING_CONVERTING_REPORT': {
+    case 'APP::LOADING_PROCESS_ORT_RESULT_PROJECT_DATA': {
         const { index, total } = action;
         const { loading } = state.app;
         const { percentage: currentPercentage } = loading;
@@ -112,50 +157,6 @@ export default (state = initState, action) => {
                     text: `Processing project (${index}/${total})...`,
                     percentage: newPercentage
                 }
-            }
-        };
-    }
-    case 'APP::LOADING_DONE': {
-        return {
-            ...state,
-            app: {
-                ...state.app,
-                loading: {
-                    ...state.app.loading,
-                    text: 'Almost ready to display scan report...',
-                    percentage: 100
-                }
-            }
-        };
-    }
-    case 'APP::LOADING_REPORT_START': {
-        return {
-            ...state,
-            data: {
-                ...state.app,
-                loading: {
-                    ...state.app.loading,
-                    text: 'loading data...',
-                    percentage: 1
-                }
-            }
-        };
-    }
-    case 'APP::LOADING_REPORT_DONE': {
-        return {
-            ...state,
-            app: {
-                ...state.app,
-                loading: {
-                    ...state.app.loading,
-                    text: 'loaded data...',
-                    percentage: 20
-                }
-            },
-            data: {
-                ...state.data,
-                report: action.payload,
-                reportLastUpdate: Date.now()
             }
         };
     }
@@ -197,7 +198,25 @@ export default (state = initState, action) => {
 
         return newState;
     }
-    case 'APP::SHOW_LOADING': {
+    case 'APP::HIDE_ABOUT_MODAL': {
+        return {
+            ...state,
+            app: {
+                ...state.app,
+                showAboutModal: false
+            }
+        };
+    }
+    case 'APP::SHOW_ABOUT_MODAL': {
+        return {
+            ...state,
+            app: {
+                ...state.app,
+                showAboutModal: true
+            }
+        };
+    }
+    case 'APP::SHOW_LOAD_VIEW': {
         return {
             ...state,
             app: {

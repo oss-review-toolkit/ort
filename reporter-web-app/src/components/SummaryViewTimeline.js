@@ -22,120 +22,28 @@ import PropTypes from 'prop-types';
 import {
     Alert, Icon, Timeline
 } from 'antd';
-import SummaryViewTableMetadata from './SummaryViewTableMetadata';
 
 // Generates the HTML to display timeline of findings related to scanned project
 const SummaryViewTimeline = (props) => {
+    const { webAppOrtResult } = props;
     const {
-        issues,
-        levelsTotal = 'n/a',
-        licenses,
-        metadata,
-        packagesTotal = 'n/a',
-        projectsTotal = 'n/a',
-        scopesTotal = 'n/a',
-        repository
-    } = props;
+        declaredLicenses,
+        detectedLicenses,
+        errors,
+        levels,
+        packagesMap,
+        projectsMap,
+        repository: { vcsProcessed },
+        scopes,
+        violations
+    } = webAppOrtResult;
+    const { revision, type, url } = vcsProcessed;
+    const hasErrors = webAppOrtResult.hasErrors();
+    const hasViolations = webAppOrtResult.hasViolations();
 
-    const { errors, violations } = issues;
-
-    if (repository && repository.vcs && repository.vcs_processed) {
+    if (!revision || !type || !url) {
         return (<Alert message="No repository information available" type="error" />);
     }
-
-    const { openTotal: errorsOpenTotal } = errors;
-    const { openTotal: violationsOpenTotal } = violations;
-    const { declaredTotal: licensesDeclaredTotal, detectedTotal: licensesDetectedTotal } = licenses;
-    const renderLicensesText = () => {
-        if (licensesDetectedTotal === 0) {
-            return (
-                <span>
-                    {' '}
-                    Detected
-                    {' '}
-                    <b>
-                        {licensesDeclaredTotal}
-                    </b>
-                    {' '}
-                    declared licenses
-                </span>
-            );
-        }
-        return (
-            <span>
-                Detected
-                {' '}
-                <b>
-                    {licensesDetectedTotal}
-                </b>
-                {' '}
-                licenses and
-                {' '}
-                <b>
-                    {licensesDeclaredTotal}
-                </b>
-                {' '}
-                declared licenses
-            </span>
-        );
-    };
-    const renderCompletedText = () => {
-        if (errorsOpenTotal !== 0 && violationsOpenTotal === 0) {
-            return (
-                <span className="ort-error">
-                    <b>
-                        Completed scan with
-                        {' '}
-                        {errorsOpenTotal}
-                        {' '}
-                        error(s)
-                    </b>
-                </span>
-            );
-        }
-
-        if (errorsOpenTotal === 0 && violationsOpenTotal !== 0) {
-            return (
-                <span className="ort-error">
-                    <b>
-                        Completed scan with
-                        {' '}
-                        {violationsOpenTotal}
-                        {' '}
-                        policy violation(s)
-                    </b>
-                </span>
-            );
-        }
-
-        if (errorsOpenTotal !== 0 && violationsOpenTotal !== 0) {
-            return (
-                <span className="ort-error">
-                    <b>
-                        Completed scan with
-                        {' '}
-                        {errorsOpenTotal}
-                        {' '}
-                        error(s)
-                        {' '}
-                        and
-                        {' '}
-                        {violationsOpenTotal}
-                        {' '}
-                        policy violation(s)
-                    </b>
-                </span>
-            );
-        }
-
-        return (
-            <span className="ort-success">
-                <b>
-                    Completed scan successfully
-                </b>
-            </span>
-        );
-    };
 
     return (
         <Timeline className="ort-summary-timeline">
@@ -143,55 +51,88 @@ const SummaryViewTimeline = (props) => {
                 Cloned revision
                 {' '}
                 <b>
-                    {repository.revision}
+                    {revision}
                 </b>
                 {' '}
                 of
                 {' '}
-                {repository.type}
+                {type}
                 {' '}
                 repository
                 {' '}
                 <b>
-                    {repository.url}
+                    {url}
                 </b>
-                <SummaryViewTableMetadata data={metadata} />
             </Timeline.Item>
             <Timeline.Item>
                 Found
                 {' '}
                 <b>
-                    {projectsTotal}
+                    {projectsMap.size}
                 </b>
                 {' '}
                 files defining
                 {' '}
                 <b>
-                    {packagesTotal}
+                    {packagesMap.size}
                 </b>
                 {' '}
                 unique dependencies within
                 {' '}
                 <b>
-                    {scopesTotal}
+                    {scopes.length}
                 </b>
                 {' '}
                 scopes and
                 {' '}
                 <b>
-                    {levelsTotal}
+                    {levels.length}
                 </b>
                 {' '}
                 dependency levels
             </Timeline.Item>
             <Timeline.Item>
-                {renderLicensesText()}
+                {
+                    detectedLicenses.length === 0
+                    && (
+                        <span>
+                            {' '}
+                            Detected
+                            {' '}
+                            <b>
+                                {declaredLicenses.length}
+                            </b>
+                            {' '}
+                            declared licenses
+                        </span>
+                    )
+                }
+                {
+                    detectedLicenses.length !== 0
+                    && (
+                        <span>
+                            Detected
+                            {' '}
+                            <b>
+                                {detectedLicenses.length}
+                            </b>
+                            {' '}
+                            licenses and
+                            {' '}
+                            <b>
+                                {declaredLicenses.length}
+                            </b>
+                            {' '}
+                            declared licenses
+                        </span>
+                    )
+                }
             </Timeline.Item>
             <Timeline.Item
                 dot={(
                     <Icon
                         type={
-                            (errorsOpenTotal !== 0 || violationsOpenTotal !== 0)
+                            (hasErrors || hasViolations)
                                 ? 'exclamation-circle-o' : 'check-circle-o'
                         }
                         style={
@@ -199,23 +140,77 @@ const SummaryViewTimeline = (props) => {
                         }
                     />
                 )}
-                color={(errorsOpenTotal !== 0 || violationsOpenTotal !== 0) ? 'red' : 'green'}
+                color={(hasErrors || hasViolations) ? 'red' : 'green'}
             >
-                {renderCompletedText()}
+                {
+                    hasErrors && !hasViolations
+                    && (
+                        <span className="ort-error">
+                            <b>
+                                Completed scan with
+                                {' '}
+                                {errors.length}
+                                {' '}
+                                error
+                                { errors.length > 1 && 's'}
+                            </b>
+                        </span>
+                    )
+                }
+                {
+                    !hasErrors && hasViolations
+                    && (
+                        <span className="ort-error">
+                            <b>
+                                Completed scan with
+                                {' '}
+                                {violations.length}
+                                {' '}
+                                policy violation
+                                { violations.length > 1 && 's'}
+                            </b>
+                        </span>
+                    )
+                }
+                {
+                    hasErrors && hasViolations
+                    && (
+                        <span className="ort-error">
+                            <b>
+                                Completed scan with
+                                {' '}
+                                {errors.length}
+                                {' '}
+                                error
+                                { errors.length > 1 && 's'}
+                                {' '}
+                                and
+                                {' '}
+                                {violations.length}
+                                {' '}
+                                policy violation
+                                { violations.length > 1 && 's'}
+                            </b>
+                        </span>
+                    )
+                }
+                {
+                    !hasErrors && !hasViolations
+                    && (
+                        <span className="ort-success">
+                            <b>
+                                Completed scan successfully
+                            </b>
+                        </span>
+                    )
+                }
             </Timeline.Item>
         </Timeline>
     );
 };
 
 SummaryViewTimeline.propTypes = {
-    issues: PropTypes.object.isRequired,
-    levelsTotal: PropTypes.number.isRequired,
-    licenses: PropTypes.object.isRequired,
-    metadata: PropTypes.object.isRequired,
-    packagesTotal: PropTypes.number.isRequired,
-    projectsTotal: PropTypes.number.isRequired,
-    scopesTotal: PropTypes.number.isRequired,
-    repository: PropTypes.object.isRequired
+    webAppOrtResult: PropTypes.object.isRequired
 };
 
 export default SummaryViewTimeline;

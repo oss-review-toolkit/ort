@@ -17,28 +17,27 @@
  * License-Filename: LICENSE
  */
 
-// SPDX-License-Identifier: CC-BY-3.0
-// Author KimKha
-// https://stackoverflow.com/questions/194846/is-there-any-kind-of-hash-code-function-in-javascript#8076436
-export function hashCode(str) {
-    let hash = 0;
+/* eslint import/prefer-default-export: 0 */
 
-    for (let i = 0; i < str.length; i++) {
-        const character = str.charCodeAt(i);
-        hash = ((hash << 5) - hash) + character; // eslint-disable-line
-        // Convert to 32bit integer
-        hash &= hash; // eslint-disable-line
-    }
-    return hash;
-}
+/* Utility function to generate random numbers and letters string
+ * Based on vjt@openssl.it public domain code, see
+ * https://gist.github.com/vjt/2239787
+ */
+const randomStringGenerator = (length = (Math.floor(Math.random() * 501) + 20)) => {
+    const rand = str => str[Math.floor(Math.random() * str.length)];
+    const get = (source, len, a) => {
+        for (let i = 0; i < len; i++) {
+            a.push(rand(source));
+        }
 
-// Utility boolean function to determine if input is a number
-export function isNumeric(n) {
-    return !Number.isNaN(parseFloat(n)) && Number.isFinite(n);
-}
+        return a;
+    };
+    const alpha = (len, a) => get('A1BCD2EFG3HIJ4KLM5NOP6QRS7TUV8WXY9Z', len, a);
+    const symbol = (len, a) => get('-:;_$!', len, a);
+    const l = Math.floor(length / 2);
+    const r = Math.ceil(length / 2);
 
-// Utility function to remove duplicates from Array
-// https://codehandbook.org/how-to-remove-duplicates-from-javascript-array/
-export function removeDuplicatesInArray(arr) {
-    return Array.from(new Set(arr));
-}
+    return alpha(l, symbol(1, alpha(r, []))).join('');
+};
+
+export { randomStringGenerator };
