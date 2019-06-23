@@ -19,100 +19,99 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Col, Row } from 'antd';
-import ExpandablePanel from './ExpandablePanel';
-import ExpandablePanelContent from './ExpandablePanelContent';
-import ExpandablePanelTitle from './ExpandablePanelTitle';
-import LicenseTag from './LicenseTag';
+// import LicenseTag from './LicenseTag';
 
-// Generates the HTML for licenses declared or detected
-// in a package
+// Generates the HTML for licenses declared or detected in a package
 const PackageLicenses = (props) => {
-    const { data, show } = props;
-    const pkgObj = data;
+    const { pkg } = props;
     const {
-        detected_licenses: detected,
-        declared_licenses: declared
-    } = pkgObj;
+        concludedLicense,
+        detectedLicenses,
+        declaredLicenses,
+        declaredLicensesProcessed
+    } = pkg;
 
-    if (declared.length === 0 && detected.length === 0) {
-        return 0;
+    if (declaredLicenses.length === 0 && detectedLicenses.length === 0) {
+        return null;
     }
 
-    const renderDeclaredLicenses = () => {
-        if (declared.length !== 0) {
-            return (
-                <tr>
-                    <th>
-                        Declared
-                    </th>
-                    <td className="ort-package-licenses">
-                        {
-                            declared.map(license => (
-                                <LicenseTag
-                                    key={`ort-package-declared-license-${pkgObj.id}-${license}`}
-                                    text={license}
-                                />
-                            ))
-                        }
-                    </td>
-                </tr>
-            );
-        }
+    const renderTr = (thVal, tdVal) => (
+        <tr>
+            <th>
+                {thVal}
+            </th>
+            <td>
+                {tdVal}
+            </td>
+        </tr>
+    );
 
-        return null;
-    };
-
-    const renderDetectedLicenses = () => {
-        if (detected.length !== 0) {
-            return (
-                <tr>
-                    <th>
-                        Detected
-                    </th>
-                    <td className="ort-package-licenses">
-                        {
-                            detected.map(license => (
-                                <LicenseTag
-                                    key={`ort-package-detected-license-${pkgObj.id}-${license}`}
-                                    text={license}
-                                />
-                            ))
-                        }
-                    </td>
-                </tr>
-            );
-        }
-
-        return null;
-    };
+    const renderTrLicenses = (label, id, licenses) => (
+        <tr>
+            <th>
+                {label}
+            </th>
+            <td className="ort-package-licenses">
+                {
+                    licenses.map((license, index) => (
+                        <span key={`ort-package-license-${license}`}>
+                            {license}
+                            {index !== (licenses.length - 1) && ', '}
+                        </span>
+                        /*
+                        <LicenseTag
+                            key={`ort-package-declared-license-${id}-${license}`}
+                            text={license}
+                        />
+                        */
+                    ))
+                }
+            </td>
+        </tr>
+    );
 
     return (
-        <ExpandablePanel key="ort-package-licenses" show={show}>
-            <ExpandablePanelTitle titleElem="h4">Package Licenses</ExpandablePanelTitle>
-            <ExpandablePanelContent>
-                <Row>
-                    <Col span={22}>
-                        <table className="ort-package-props">
-                            <tbody>
-                                {renderDeclaredLicenses()}
-                                {renderDetectedLicenses()}
-                            </tbody>
-                        </table>
-                    </Col>
-                </Row>
-            </ExpandablePanelContent>
-        </ExpandablePanel>
+        <table className="ort-package-props">
+            <tbody>
+                {
+                    concludedLicense.length !== 0 && (
+                        renderTr(
+                            'Concluded SPDX',
+                            concludedLicense
+                        )
+                    )
+                }
+                {
+                    declaredLicenses.length !== 0
+                    && renderTrLicenses(
+                        'Declared',
+                        pkg.id,
+                        declaredLicenses
+                    )
+                }
+                {
+                    declaredLicensesProcessed.spdxExpression.length !== 0 && (
+                        renderTr(
+                            'Declared (SPDX)',
+                            declaredLicensesProcessed.spdxExpression
+                        )
+                    )
+                }
+                {
+                    detectedLicenses.length !== 0
+                    && renderTrLicenses(
+                        'Detected',
+                        pkg.id,
+                        detectedLicenses
+                    )
+                }
+            </tbody>
+        </table>
     );
 };
 
 PackageLicenses.propTypes = {
-    data: PropTypes.object.isRequired,
-    show: PropTypes.bool
-};
-
-PackageLicenses.defaultProps = {
-    show: false
+    pkg: PropTypes.object.isRequired
 };
 
 export default PackageLicenses;

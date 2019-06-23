@@ -19,17 +19,36 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
+import ScanFindingsTable from './ScanFindingsTable';
 
-const expandablePanelContent = (props) => {
-    const { children } = props;
+// Generates the HTML to display scan results for a package
+const PackageScanResults = (props) => {
+    const {
+        filter,
+        pkg,
+        webAppOrtResult
+    } = props;
 
     return (
-        <div>{children}</div>
+        <ScanFindingsTable
+            filter={filter}
+            pkg={pkg}
+            webAppOrtResult={webAppOrtResult}
+        />
     );
 };
 
-expandablePanelContent.propTypes = {
-    children: PropTypes.node.isRequired
+PackageScanResults.propTypes = {
+    filter: PropTypes.object,
+    pkg: PropTypes.object.isRequired,
+    webAppOrtResult: PropTypes.object.isRequired
 };
 
-export default expandablePanelContent;
+PackageScanResults.defaultProps = {
+    filter: {
+        type: [],
+        value: []
+    }
+};
+
+export default PackageScanResults;

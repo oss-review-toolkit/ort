@@ -1,36 +1,21 @@
 @import '~antd/dist/antd.css';
 
-/*
- FIXME Antd downloads the below fonts, need to figure out how we can embed them 
- within singe HTML page. SVG in CSS? How to override this default antd behavior?
- Use https://gero3.github.io/facetype.js/?
- https://at.alicdn.com/t/font_148784_v4ggb6wrjmkotj4i.woff
- https://at.alicdn.com/t/font_148784_v4ggb6wrjmkotj4i.ttf
- https://at.alicdn.com/t/font_148784_v4ggb6wrjmkotj4i.svg#iconfont
-*/
-
 body {
     background: #fafafa;
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
     height: auto;
 }
 
-.ort-app {
-    background-color: #fff;
-    border: 1px solid rgba(34,36,38,.15);
-    border-radius: .28rem;
-    font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif; 
-    font-weight: 300;
-    font-size: 14px;
-    padding: 0em 1em 0.5em 1em;
-    margin: 1em 2em 1em 2em;
-    min-height: 600px;
-}
-
 h1, h2, h3, h4 {
     color: #262727;
     margin: 1em 0em 1em 0em;
 }
+
+th: {
+    padding-right: 10px;
+}
+
+/* === Ant Design customizations === */
 
 /*
 FIXME Switch to use Ant Design customization
@@ -45,95 +30,100 @@ https://ant.design/docs/react/customize-theme
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
-.ort-loading-logo {
-    width: 285px;
-    height: 60px;
+/* Reduce margin around <Ant Col> to allow content to be displayed */
+.ant-col-offset-1 {
+    margin-left: 2.66666667%;
+}
+
+.ant-col-22 {
+    width: 94.16666667%;
+}
+
+/* Remove bottom border from Ant <Collapse> */
+.ant-collapse-borderless > .ant-collapse-item {
+    border-bottom: 0px;
+}
+
+.ant-table-small > .ant-table-content > .ant-table-body {
+    margin: 0px;
+}
+
+tr.ant-table-expanded-row, tr.ant-table-expanded-row,
+tr.ant-table-expanded-row, tr.ant-table-expanded-row:hover {
+    background: #fff;
 }
 
 .ant-steps-dot .ant-steps-item-content {
     width: auto;
 }
 
-.ant-table-wrapper {
-    min-height: 500px;
+// Styling specific for last item in SummaryView Timeline
+.ant-timeline-item-last {
+    padding-bottom: 1em;
 }
 
-button.ort-btn-expand {
-    background: none;
-    border: none;
-    color:inherit;
+.ant-timeline-item-last > .ant-timeline-item-content {
+    min-height: 1em;
+}
+
+/* === Styling for shared ORT elements === */
+
+.ort-app {
+    background-color: #fff;
+    border: 1px solid rgba(34,36,38,.15);
+    border-radius: .28rem;
+    font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif; 
+    font-weight: 300;
+    font-size: 14px;
+    padding: 0em 0.5em 0.5em 0.5em;
+    margin: 0.6em;
+    min-height: 600px;
+}
+
+/* Control button in top right of main Tabs menu */
+.ort-control {
     cursor: pointer;
-    font: inherit;
-    padding: 0;
+    margin: 1em 0.4em 0em 0em;
+    height: 1.4em;
+    width: 1.4em;
 }
 
-button.ort-btn-expand .anticon {
-    font-size: 9px;
+.ort-control > svg {
+    height: 1.2em;
+    width: 1.2em;
+}
+.ort-control > svg:hover {
+    color: #1890ff;
 }
 
-.ort-metadata-props {
-    font-size: 11px;
-}
-
-.ort-metadata-props .anticon {
-    font-size: 7px;
-}
-
-.ort-metadata-props .ort-clickable {
-    font-weight: 400;
-    margin: 3px 0px 5px 0px;
-}
-
-.ort-metadata-props th, .ort-app .ort-metadata-props td {
-    vertical-align: top;
-}
-
-.ort-metadata-props th {
-    font-weight: 400;
-    width: 90px;
-}
-
-.ort-summary .ant-tag {
-    cursor: unset;
-}
-
-.ort-summary .ant-row {
-    margin-top: 20px;
-}
-
-.ort-summary .ort-error {
+/* Colors of error, success and warning icons */
+.ort-error {
     color: #f5222d;
-    font-size: 1.1em;
-    line-height: 1.6;
 }
 
-.ort-summary .ort-success {
+.ort-hint {
+    color: #f7f5ff;
+}
+
+.ort-success {
     color: #52c41a;
-    font-size: 1.1em;
-    line-height: 1.6;
 }
 
-.ort-summary .ort-warning {
+.ort-warning {
     color: #faad14;
-    font-size: 1.1em;
-    line-height: 1.6;
 }
 
-.ort-summary .anticon.ort-error,
-.ort-summary .anticon.ort-warning {
-    margin-left: 12px;
-} 
-
-.ort-summary .ant-table-wrapper {
-    min-height: 350px;
+.ort-loading-logo {
+    width: 285px;
+    height: 60px;
 }
 
-ul.ort-table-list {
-    list-style-type: none;
-    margin: 0;
-    padding: 0;
+.ort-word-break-wrap {
+    word-break: break-all;
+    word-wrap: break-word;
 }
 
+/*
 .ort-table-list > li {
     margin: 3px 0 3px 0;
     padding: 0;
@@ -237,6 +227,25 @@ ul.ort-table-list {
 .ort-tree-tooltip .ant-tooltip-inner {
     max-width: 500px;
 }
+*/
+
+/* === Styling for TableView  === */
+
+/* Removes dot for all lists in TableView */
+ul.ort-table-list {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+
+/* Styling for 'Clear filters' button in TableView */
+.ort-table-operations button {
+    float: right;
+    margin: 16px 0px 16px 0px;
+    z-index: 999;
+}
+
+/* === Styling for TreeView  === */
 
 .ort-tree {
     display: flex;
@@ -271,6 +280,18 @@ ul.ort-table-list {
     flex: auto;
     height: calc(100vh - 150px);
 }
+
+/* Styling for 'Defined in' and 'Scope' in Package Paths */
+.ort-step-props th, .ort-app .ort-step-props td {
+    vertical-align: top;
+}
+
+.ort-step-props th {
+    font-weight: 400;
+    width: 90px;
+}
+
+/* === OSS Review Toolkit logo === */
 
 .ort-logo {
     background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg version='1.1' id='ORT' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' x='0px' y='0px' viewBox='0 0 1162.2 260.8' style='enable-background:new 0 0 1162.2 260.8;' xml:space='preserve'%3e%3cstyle type='text/css'%3e .st0%7bfill:%23FFFFFF;stroke:%23FFFFFF;stroke-width:0.8;stroke-miterlimit:10;%7d .st1%7bfill:%23FFFFFF;stroke:%23FFFFFF;stroke-width:0.4;stroke-miterlimit:10;%7d .st2%7bfill:%23FFFFFF;stroke:%23FFFFFF;stroke-width:1.5;stroke-miterlimit:10;%7d .st3%7bfilter:url(%23Adobe_OpacityMaskFilter);%7d .st4%7bfill:url(%23SVGID_2_);%7d .st5%7bmask:url(%23SVGID_1_);%7d .st6%7bfill:%23D14E60;%7d .st7%7bfill:%23FFFFFF;%7d .st8%7bfill:%23C41C33;%7d .st9%7bfill:%23D4596A;%7d .st10%7bfill:%23E18D99;%7d .st11%7bfill:%23E3949F;%7d .st12%7bfilter:url(%23Adobe_OpacityMaskFilter_1_);%7d .st13%7bfill:url(%23SVGID_4_);stroke:%23FFFFFF;stroke-width:0.4;stroke-miterlimit:10;%7d .st14%7bmask:url(%23SVGID_3_);%7d .st15%7bfill:%23B6A0CB;%7d .st16%7bfill:%23997BB7;%7d .st17%7bfill:%23B39CC9;%7d .st18%7bfill:%239575B3;%7d .st19%7bfill:%23673A93;%7d .st20%7bfill:%23AE97C6;%7d .st21%7bfilter:url(%23Adobe_OpacityMaskFilter_2_);%7d .st22%7bfill:url(%23SVGID_6_);stroke:%23FFFFFF;stroke-width:0.4;stroke-miterlimit:10;%7d .st23%7bmask:url(%23SVGID_5_);%7d .st24%7bfill:%2366CFCC;%7d .st25%7bfill:%2380D7D4;%7d .st26%7bfill:%231FB9B4;%7d .st27%7bfill:%2399DFDD;%7d .st28%7bfill:%2300AFAA;%7d .st29%7bfill:%23B2E7E5;%7d .st30%7bfill:%2385D9D6;%7d .st31%7bfilter:url(%23Adobe_OpacityMaskFilter_3_);%7d .st32%7bfill:url(%23SVGID_8_);stroke:%23FFFFFF;stroke-width:0.4086;stroke-miterlimit:10;%7d .st33%7bmask:url(%23SVGID_7_);%7d .st34%7bfill:%23ECBED6;%7d .st35%7bfill:%23D878AA;%7d .st36%7bfill:%23C53580;%7d .st37%7bfill:%23D56EA4;%7d .st38%7bfill:%23CB498D;%7d .st39%7bfill:%23DF90B9;%7d .st40%7bfill:%23F0CADE;%7d .st41%7bfilter:url(%23Adobe_OpacityMaskFilter_4_);%7d .st42%7bfill:url(%23SVGID_10_);stroke:%23FFFFFF;stroke-width:0.4;stroke-miterlimit:10;%7d .st43%7bmask:url(%23SVGID_9_);%7d .st44%7bfill:%23F39862;%7d .st45%7bfill:%23F0813E;%7d .st46%7bfill:%23EC610E;%7d .st47%7bfill:%23F7BB97;%7d .st48%7bfill:%23F29056;%7d .st49%7bfill:%23F9CCB2;%7d .st50%7bfilter:url(%23Adobe_OpacityMaskFilter_5_);%7d .st51%7bfill:url(%23SVGID_12_);stroke:%23FFFFFF;stroke-width:0.4081;stroke-miterlimit:10;%7d .st52%7bmask:url(%23SVGID_11_);%7d .st53%7bfill:%23B1D6EF;%7d .st54%7bfill:%238FC3E8;%7d .st55%7bfill:%2386BFE6;%7d .st56%7bfill:%23A8D1ED;%7d .st57%7bfill:%2352A3DB;%7d .st58%7bfill:%237DBAE4;%7d .st59%7bfilter:url(%23Adobe_OpacityMaskFilter_6_);%7d .st60%7bfill:url(%23SVGID_14_);stroke:%23FFFFFF;stroke-width:0.4133;stroke-miterlimit:10;%7d .st61%7bmask:url(%23SVGID_13_);%7d .st62%7bfill:%23FAB800;%7d .st63%7bfill:%23FCD466;%7d .st64%7bfill:%23FBCA40;%7d .st65%7bfill:%23FBC838;%7d .st66%7bfill:%23FCD873;%7d .st67%7bfilter:url(%23Adobe_OpacityMaskFilter_7_);%7d .st68%7bfill:url(%23SVGID_16_);%7d .st69%7bmask:url(%23SVGID_15_);%7d .st70%7bfilter:url(%23Adobe_OpacityMaskFilter_8_);%7d .st71%7bfill:url(%23SVGID_18_);stroke:%23FFFFFF;stroke-width:0.3102;stroke-miterlimit:10;%7d .st72%7bmask:url(%23SVGID_17_);%7d .st73%7bfilter:url(%23Adobe_OpacityMaskFilter_9_);%7d .st74%7bfill:url(%23SVGID_20_);stroke:%23FFFFFF;stroke-width:0.3102;stroke-miterlimit:10;%7d .st75%7bmask:url(%23SVGID_19_);%7d .st76%7bfilter:url(%23Adobe_OpacityMaskFilter_10_);%7d .st77%7bfill:url(%23SVGID_22_);stroke:%23FFFFFF;stroke-width:0.3168;stroke-miterlimit:10;%7d .st78%7bmask:url(%23SVGID_21_);%7d .st79%7bfilter:url(%23Adobe_OpacityMaskFilter_11_);%7d .st80%7bfill:url(%23SVGID_24_);stroke:%23FFFFFF;stroke-width:0.3102;stroke-miterlimit:10;%7d .st81%7bmask:url(%23SVGID_23_);%7d .st82%7bfilter:url(%23Adobe_OpacityMaskFilter_12_);%7d .st83%7bfill:url(%23SVGID_26_);stroke:%23FFFFFF;stroke-width:0.3165;stroke-miterlimit:10;%7d .st84%7bmask:url(%23SVGID_25_);%7d .st85%7bfilter:url(%23Adobe_OpacityMaskFilter_13_);%7d .st86%7bfill:url(%23SVGID_28_);stroke:%23FFFFFF;stroke-width:0.3205;stroke-miterlimit:10;%7d .st87%7bmask:url(%23SVGID_27_);%7d .st88%7bfilter:url(%23Adobe_OpacityMaskFilter_14_);%7d .st89%7bfill:url(%23SVGID_30_);%7d .st90%7bopacity:0.4;fill:url(%23SVGID_31_);%7d .st91%7bopacity:0.9;fill:url(%23SVGID_32_);%7d .st92%7bmask:url(%23SVGID_29_);%7d .st93%7bfill:%2359CBC8;%7d .st94%7bopacity:0.5;%7d .st95%7bfill:%23383C45;%7d %3c/style%3e%3cpolygon class='st2' points='88.7,1.3 2.8,87.2 2.8,173.1 2.8,259 88.7,259 174.6,258.9 260.5,173.1 260.5,1.3 '/%3e%3cg%3e%3cdefs%3e%3cfilter id='Adobe_OpacityMaskFilter' filterUnits='userSpaceOnUse' x='2.8' y='1.3' width='257.7' height='257.7'%3e%3cfeColorMatrix type='matrix' values='1 0 0 0 0 0 1 0 0 0 0 0 1 0 0 0 0 0 1 0'/%3e%3c/filter%3e%3c/defs%3e%3cmask maskUnits='userSpaceOnUse' x='2.8' y='1.3' width='257.7' height='257.7' id='SVGID_1_'%3e%3cg class='st3'%3e%3clinearGradient id='SVGID_2_' gradientUnits='userSpaceOnUse' x1='-1103.3953' y1='463.1002' x2='-1314.5052' y2='679.0081' gradientTransform='matrix(1 0 0 1 1333.9701 -435.5308)'%3e%3cstop offset='0' style='stop-color:%23FFFFFF'/%3e%3cstop offset='0.1127' style='stop-color:%23F9F9F9'/%3e%3cstop offset='0.262' style='stop-color:%23E8E8E8'/%3e%3cstop offset='0.4319' style='stop-color:%23CDCDCD'/%3e%3cstop offset='0.6171' style='stop-color:%23A6A6A6'/%3e%3cstop offset='0.8122' style='stop-color:%23767676'/%3e%3cstop offset='1' style='stop-color:%23404040'/%3e%3c/linearGradient%3e%3crect x='1.5' y='-2.9' class='st4' width='259' height='264.7'/%3e%3cradialGradient id='SVGID_3_' cx='-2704.3208' cy='2026.3745' r='80.6778' fx='-2726.7773' fy='2028.3864' gradientTransform='matrix(-2.882 -2.1339 0.6264 -0.8836 -8820.7871 -3807.8374)' gradientUnits='userSpaceOnUse'%3e%3cstop offset='3.205128e-04' style='stop-color:%230D0D0D'/%3e%3cstop offset='0.1455' style='stop-color:%23303030;stop-opacity:0.9564'/%3e%3cstop offset='1' style='stop-color:%23FFFFFF;stop-opacity:0.7'/%3e%3c/radialGradient%3e%3crect x='1.5' y='-2.9' style='opacity:0.4;fill:url(%23SVGID_3_);' width='259' height='264.7'/%3e%3clinearGradient id='SVGID_4_' gradientUnits='userSpaceOnUse' x1='1722.2903' y1='-2853.8572' x2='1468.9684' y2='-2707.6016' gradientTransform='matrix(0 1 -1 0 -2653.8706 -1473.4106)'%3e%3cstop offset='0' style='stop-color:%23FFFFFF;stop-opacity:0'/%3e%3cstop offset='0.1082' style='stop-color:%23F9F9F9;stop-opacity:0.1082'/%3e%3cstop offset='0.2516' style='stop-color:%23E8E8E8;stop-opacity:0.2516'/%3e%3cstop offset='0.4148' style='stop-color:%23CDCDCD;stop-opacity:0.4148'/%3e%3cstop offset='0.5927' style='stop-color:%23A6A6A6;stop-opacity:0.5927'/%3e%3cstop offset='0.7824' style='stop-color:%23757575;stop-opacity:0.7824'/%3e%3cstop offset='0.9792' style='stop-color:%233A3A3A;stop-opacity:0.9792'/%3e%3cstop offset='1' style='stop-color:%23333333'/%3e%3c/linearGradient%3e%3cpolygon style='opacity:0.9;fill:url(%23SVGID_4_);' points='1.5,-2.9 1.5,261.7 260.5,261.7 260.5,-2.9 '/%3e%3c/g%3e%3c/mask%3e%3cg class='st5'%3e%3cg%3e%3cpolygon class='st62' points='3.7,86.8 88.3,2.2 88.3,86.8 '/%3e%3cpath class='st7' d='M88,3.1l0,83.3H4.6L88,3.1 M88.7,1.3L2.8,87.2h85.9L88.7,1.3L88.7,1.3z'/%3e%3c/g%3e%3cg%3e%3cpolygon class='st93' points='89.1,172.7 89.1,2.2 259.6,172.7 '/%3e%3cg%3e%3cpath class='st7' d='M89.5,3.1l169.2,169.2H89.5L89.5,3.1 M88.7,1.3l0,171.8h171.8L88.7,1.3L88.7,1.3z'/%3e%3c/g%3e%3c/g%3e%3cg%3e%3cpolygon class='st28' points='89.6,1.7 260.1,1.7 260.1,172.2 '/%3e%3cpath class='st7' d='M259.7,2l0,169.2L90.5,2H259.7 M260.5,1.3H88.7l171.8,171.8L260.5,1.3L260.5,1.3z'/%3e%3c/g%3e%3cg%3e%3crect x='3.2' y='87.6' class='st46' width='85.1' height='85.1'/%3e%3cpath class='st7' d='M88,87.9l0,84.4H3.6l0-84.4H88 M88.7,87.2H2.8l0,85.9h85.9L88.7,87.2L88.7,87.2z'/%3e%3c/g%3e%3cg%3e%3cpolygon class='st57' points='3.2,258.6 3.2,174 87.8,258.6 '/%3e%3cpath class='st7' d='M3.6,174.9l83.3,83.3H3.6L3.6,174.9 M2.8,173.1l0,85.9h85.9L2.8,173.1L2.8,173.1z'/%3e%3c/g%3e%3cg%3e%3cpolygon class='st19' points='89.6,258.6 174.8,173.4 259.6,173.4 174.4,258.6 '/%3e%3cpath class='st7' d='M258.7,173.8l-84.4,84.4l-83.8,0l84.4-84.4H258.7 M260.5,173.1h-85.9L88.7,259l85.9,0L260.5,173.1 L260.5,173.1z'/%3e%3c/g%3e%3cg%3e%3cpolygon class='st8' points='3.7,173.4 173.7,173.4 88.7,258.4 '/%3e%3cpath class='st7' d='M172.8,173.8l-84.1,84.1L4.6,173.8H172.8 M174.6,173.1H2.8L88.7,259L174.6,173.1L174.6,173.1z'/%3e%3c/g%3e%3c/g%3e%3cg class='st94'%3e%3cpolygon class='st57' points='3.2,258.6 3.2,174 87.8,258.6 '/%3e%3cpath class='st7' d='M3.6,174.9l83.3,83.3H3.6L3.6,174.9 M2.8,173.1l0,85.9h85.9L2.8,173.1L2.8,173.1z'/%3e%3c/g%3e%3c/g%3e%3cg%3e%3cpath class='st95' d='M422.8,72.6c0,27.7-14.2,43.4-35.2,43.4c-20.9,0-35.2-15.1-35.2-43.2c0-27.7,14.4-43.7,35.2-43.7 C408.5,28.9,422.8,44.2,422.8,72.6z M363.6,72.7c0,24.4,9.8,34.4,23.9,34.4c14.7,0,23.9-10,23.9-34.6s-9.2-34.8-23.9-34.8 C373.2,37.7,363.6,48,363.6,72.7z'/%3e%3cpath class='st95' d='M488.2,38.6l-5.7,6.5c-6.4-5.1-12.2-7.3-19.3-7.3c-8.9,0-15.6,4.3-15.6,12.5c0,7.5,3.5,11,18.7,15.6 c13.8,4.2,24.7,9.5,24.7,25.3c0,14.7-11,24.8-29.4,24.8c-12,0-21.3-4-28.2-10.8l5.9-6.6c6.4,5.3,12.9,8.6,22.2,8.6 c10.3,0,18.6-5.3,18.6-15.6c0-8.7-4.2-12.5-18.6-16.9c-16.5-5-24.7-11.2-24.7-24.1c0-12.6,10.8-21.6,26-21.6 C474.2,28.9,481.4,32.4,488.2,38.6z'/%3e%3cpath class='st95' d='M553.2,38.6l-5.7,6.5c-6.4-5.1-12.2-7.3-19.3-7.3c-8.9,0-15.6,4.3-15.6,12.5c0,7.5,3.5,11,18.7,15.6 c13.8,4.2,24.7,9.5,24.7,25.3c0,14.7-11,24.8-29.4,24.8c-12,0-21.3-4-28.2-10.8l5.9-6.6c6.4,5.3,12.9,8.6,22.2,8.6 c10.3,0,18.6-5.3,18.6-15.6c0-8.7-4.2-12.5-18.6-16.9c-16.5-5-24.7-11.2-24.7-24.1c0-12.6,10.8-21.6,26-21.6 C539.2,28.9,546.4,32.4,553.2,38.6z'/%3e%3cpath class='st95' d='M381.1,193.6h-7.8V226h-20v-84.7H381c23,0,34.8,8.2,34.8,25.8c0,11.1-5.3,17.8-16.2,22.8l21.5,36h-22.6 L381.1,193.6z M373.3,179.8h8.4c8.8,0,13.4-3.8,13.4-12.7c0-8.2-4.8-11.7-14.7-11.7h-7.2V179.8z'/%3e%3cpath class='st95' d='M483.1,199.2h-40.2c1.3,11.6,6.8,14.8,14.8,14.8c5.3,0,9.9-1.8,15.5-5.7l7.9,10.8c-6.5,5.1-14.8,9-25.3,9 c-21.6,0-32.6-13.9-32.6-34.2c0-19.4,10.6-34.8,30.3-34.8c18.6,0,29.9,12.2,29.9,33.2C483.5,194.3,483.4,197.3,483.1,199.2z M464.5,186.8c-0.1-8.8-2.8-14.9-10.5-14.9c-6.5,0-10.3,4.2-11.1,15.8h21.6V186.8z'/%3e%3cpath class='st95' d='M529,226h-22.8l-20.9-64.9h21l11.5,50.2l12-50.2h19.7L529,226z'/%3e%3cpath class='st95' d='M577.2,137.9c0,6.2-4.8,11-11.5,11s-11.4-4.8-11.4-11c0-6.2,4.6-11,11.4-11S577.2,131.7,577.2,137.9z M575.5,226h-19.3v-64.9h19.3V226z'/%3e%3cpath class='st95' d='M646.7,199.2h-40.2c1.3,11.6,6.8,14.8,14.8,14.8c5.3,0,9.9-1.8,15.5-5.7l7.9,10.8c-6.5,5.1-14.8,9-25.3,9 c-21.6,0-32.6-13.9-32.6-34.2c0-19.4,10.6-34.8,30.3-34.8c18.6,0,29.9,12.2,29.9,33.2C647,194.3,646.9,197.3,646.7,199.2z M628.1,186.8c-0.1-8.8-2.8-14.9-10.5-14.9c-6.5,0-10.3,4.2-11.1,15.8h21.6V186.8z'/%3e%3cpath class='st95' d='M728,226h-23.1l-8.7-47.6l-8.6,47.6h-22.8l-13.8-64.9h19.5l6.7,50.5l10.1-50.5h18.8l8.9,50.5l7.8-50.5h18.4 L728,226z'/%3e%3cpath class='st95' d='M834.9,156.7H814V226h-20v-69.3h-21.9v-15.4h64.7L834.9,156.7z'/%3e%3cpath class='st95' d='M897.7,193.6c0,20.8-12,34.5-31.8,34.5c-19.7,0-31.8-12.7-31.8-34.6c0-20.8,12-34.4,31.8-34.4 C885.7,159,897.7,171.7,897.7,193.6z M854.2,193.5c0,14.4,3.9,20.4,11.7,20.4s11.7-6.2,11.7-20.3c0-14.4-3.9-20.4-11.7-20.4 S854.2,179.4,854.2,193.5z'/%3e%3cpath class='st95' d='M969.1,193.6c0,20.8-12,34.5-31.8,34.5c-19.7,0-31.8-12.7-31.8-34.6c0-20.8,12-34.4,31.8-34.4 C957.1,159,969.1,171.7,969.1,193.6z M925.6,193.5c0,14.4,3.9,20.4,11.7,20.4s11.7-6.2,11.7-20.3c0-14.4-3.9-20.4-11.7-20.4 S925.6,179.4,925.6,193.5z'/%3e%3cpath class='st95' d='M979.6,209.5v-74.2l19.3-2.1v75.5c0,2.7,1.1,4,3.4,4c1.2,0,2.3-0.2,3.2-0.6l3.7,13.7c-2.8,1.2-7,2.2-11.7,2.2 C986.2,228.1,979.6,221.3,979.6,209.5z'/%3e%3cpath class='st95' d='M1036.4,226h-19.3v-90.6l19.3-2.1V226z M1056.8,189.6L1078,226h-21.7l-19.3-35.4l19.8-29.4h19.7L1056.8,189.6 z'/%3e%3cpath class='st95' d='M1105.4,137.9c0,6.2-4.8,11-11.5,11s-11.4-4.8-11.4-11c0-6.2,4.6-11,11.4-11S1105.4,131.7,1105.4,137.9z M1103.7,226h-19.3v-64.9h19.3V226z'/%3e%3cpath class='st95' d='M1159.4,222.9c-4.9,3.4-11.7,5.1-17.6,5.1c-14.3-0.1-21.3-8.2-21.3-23.5v-30.1h-9.2v-13.4h9.2v-14l19.3-2.2 v16.2h14.9l-2.1,13.4h-12.8v29.8c0,6.2,2.1,8.4,6.1,8.4c2.2,0,4.4-0.6,7-2.1L1159.4,222.9z'/%3e%3c/g%3e%3c/svg%3e ");

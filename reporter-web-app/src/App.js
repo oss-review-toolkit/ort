@@ -19,17 +19,26 @@
 
 import React, { Component } from 'react';
 import {
-    Alert, Col, Progress, Row, Tabs
+    Alert,
+    Col,
+    Icon,
+    Progress,
+    Row,
+    Tabs
 } from 'antd';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import AboutModal from './components/AboutModal';
 import SummaryView from './components/SummaryView';
 import TableView from './components/TableView';
 import TreeView from './components/TreeView';
 import 'antd/dist/antd.css';
 import './App.css';
 import store from './store';
-import { getAppView } from './reducers/selectors';
+import {
+    getAppView,
+    getOrtResult
+} from './reducers/selectors';
 
 const { TabPane } = Tabs;
 
@@ -49,8 +58,19 @@ class ReporterApp extends Component {
         store.dispatch({ type: 'APP::CHANGE_TAB', key: activeKey });
     }
 
+    onClickAbout = () => {
+        store.dispatch({ type: 'APP::SHOW_ABOUT_MODAL' });
+    }
+
     render() {
-        const { appView: { loading, showKey } } = this.props;
+        const {
+            appView: {
+                loading,
+                showAboutModal,
+                showKey
+            },
+            webAppOrtResult
+        } = this.props;
 
         switch (showKey) {
         case 'ort-tabs-summary':
@@ -62,10 +82,20 @@ class ReporterApp extends Component {
                     className="ort-app"
                     key="ort-tabs"
                 >
+                    {
+                        showAboutModal && (<AboutModal webAppOrtResult={webAppOrtResult} />)
+                    }
                     <Tabs
                         activeKey={showKey}
                         animated={false}
                         onChange={this.onChangeTab}
+                        tabBarExtraContent={(
+                            <Icon
+                                className="ort-control"
+                                type="control"
+                                onClick={this.onClickAbout}
+                            />
+                        )}
                     >
                         <TabPane tab="Summary" key="ort-tabs-summary">
                             <SummaryView />
@@ -192,11 +222,13 @@ class ReporterApp extends Component {
 }
 
 ReporterApp.propTypes = {
-    appView: PropTypes.object.isRequired
+    appView: PropTypes.object.isRequired,
+    webAppOrtResult: PropTypes.object.isRequired
 };
 
 const mapStateToProps = state => ({
-    appView: getAppView(state)
+    appView: getAppView(state),
+    webAppOrtResult: getOrtResult(state)
 });
 
 export default connect(

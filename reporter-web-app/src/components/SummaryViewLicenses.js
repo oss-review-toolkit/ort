@@ -79,7 +79,7 @@ const SummaryViewLicenses = (props) => {
                 sortOrder: sortedInfo.columnKey === 'name' && sortedInfo.order,
                 key: 'name',
                 render: (text, row) => (
-                    <span>
+                    <span className="ort-word-break-wrap">
                         <Icon type="file-text" style={{ color: row.color }} />
                         {` ${text}`}
                     </span>
