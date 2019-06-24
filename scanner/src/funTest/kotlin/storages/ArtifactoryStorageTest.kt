@@ -32,7 +32,9 @@ import com.here.ort.model.ScanResult
 import com.here.ort.model.ScanSummary
 import com.here.ort.model.ScannerDetails
 import com.here.ort.model.VcsInfo
+import com.here.ort.model.config.ArtifactoryStorageConfiguration
 import com.here.ort.model.jsonMapper
+import com.here.ort.scanner.ScanResultsStorage
 
 import com.sun.net.httpserver.HttpExchange
 import com.sun.net.httpserver.HttpHandler
@@ -162,7 +164,9 @@ class ArtifactoryStorageTest : StringSpec() {
         super.afterSpec(spec)
     }
 
-    private fun createStorage() = ArtifactoryStorage("http://${loopback.hostAddress}:$port", "repository", "apiToken")
+    private fun createStorage() = ScanResultsStorage.apply {
+        configure(ArtifactoryStorageConfiguration("http://${loopback.hostAddress}:$port", "repository", "apiToken"))
+    }
 
     init {
         "Scan result can be added to the storage" {
