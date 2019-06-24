@@ -23,10 +23,8 @@ package com.here.ort.scanner.storages
 import ch.frankel.slf4k.*
 
 import com.here.ort.model.Identifier
-import com.here.ort.model.Package
 import com.here.ort.model.ScanResult
 import com.here.ort.model.ScanResultContainer
-import com.here.ort.model.ScannerDetails
 import com.here.ort.model.jsonMapper
 import com.here.ort.model.readValue
 import com.here.ort.model.yamlMapper
@@ -107,65 +105,6 @@ class ArtifactoryStorage(
 
         return ScanResultContainer(id, emptyList())
     }
-
-    override fun read(pkg: Package, scannerDetails: ScannerDetails): ScanResultContainer {
-        val scanResults = read(pkg.id).results.toMutableList()
-
-        if (scanResults.isEmpty()) return ScanResultContainer(pkg.id, scanResults)
-
-        // Only keep scan results whose provenance information matches the package information.
-        scanResults.retainAll { it.provenance.matches(pkg) }
-        if (scanResults.isEmpty()) {
-            log.info {
-                "No stored scan results found for $pkg. The following entries with non-matching provenance have " +
-                        "been ignored: ${scanResults.map { it.provenance }}"
-            }
-            return ScanResultContainer(pkg.id, scanResults)
-        }
-
-        // Only keep scan results from compatible scanners.
-        scanResults.retainAll { scannerDetails.isCompatible(it.scanner) }
-        if (scanResults.isEmpty()) {
-            log.info {
-                "No stored scan results found for $scannerDetails. The following entries with incompatible scanners " +
-                        "have been ignored: ${scanResults.map { it.scanner }}"
-            }
-            return ScanResultContainer(pkg.id, scanResults)
-        }
-
-        log.info {
-            "Found ${scanResults.size} stored scan result(s) for ${pkg.id.toCoordinates()} that are compatible with " +
-                    "$scannerDetails."
-        }
-
-        // TODO: Remove this code again once we migrated our scan result storage to contain the new "namespaced" license
-        //  names for ScanCode.
-        val patchedScanResults = patchScanCodeLicenseRefs(scanResults)
-
-        return ScanResultContainer(pkg.id, patchedScanResults)
-    }
-
-    internal fun patchScanCodeLicenseRefs(scanResults: List<ScanResult>) =
-        scanResults.map { result ->
-            if (result.scanner.name == "ScanCode") {
-                val findings = result.summary.licenseFindings.map { finding ->
-                    if (finding.license.startsWith("LicenseRef-") &&
-                        !finding.license.startsWith("LicenseRef-scancode-")
-                    ) {
-                        val suffix = finding.license.removePrefix("LicenseRef-")
-                        val license = "LicenseRef-scancode-$suffix"
-                        log.info { "Patched license name '${finding.license}' to '$license'." }
-                        finding.copy(license = license)
-                    } else {
-                        finding
-                    }
-                }
-
-                result.copy(summary = result.summary.copy(licenseFindings = findings.toSortedSet()))
-            } else {
-                result
-            }
-        }
 
     override fun add(id: Identifier, scanResult: ScanResult): Boolean {
         // Do not store empty scan results. It is likely that something went wrong when they were created, and if not,
