@@ -30,9 +30,7 @@ import com.here.ort.model.ScanResultContainer
 import com.here.ort.model.ScannerDetails
 import com.here.ort.model.config.ArtifactoryStorageConfiguration
 import com.here.ort.model.config.LocalFileStorageConfiguration
-import com.here.ort.scanner.storages.ArtifactoryStorage
-import com.here.ort.scanner.storages.LocalFileStorage
-import com.here.ort.scanner.storages.NoStorage
+import com.here.ort.scanner.storages.*
 import com.here.ort.utils.getUserOrtDirectory
 import com.here.ort.utils.log
 

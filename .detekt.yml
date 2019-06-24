@@ -42,6 +42,7 @@ style:
       com.here.ort.downloader.vcs.*,
       com.here.ort.reporter.reporters.*,
       com.here.ort.scanner.scanners.*,
+      com.here.ort.scanner.storages.*,
       com.here.ort.spdx.SpdxLicense.*,
       com.here.ort.spdx.SpdxLicenseException.*,
       kotlinx.html.*,
