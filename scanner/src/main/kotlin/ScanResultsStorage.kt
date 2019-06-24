@@ -32,7 +32,7 @@ import com.here.ort.model.config.ArtifactoryStorageConfiguration
 import com.here.ort.model.config.LocalFileStorageConfiguration
 import com.here.ort.scanner.storages.ArtifactoryStorage
 import com.here.ort.scanner.storages.LocalFileStorage
-import com.here.ort.scanner.storages.NoStorage
+import com.here.ort.utils.getUserOrtDirectory
 import com.here.ort.utils.log
 
 import java.util.SortedSet
@@ -48,7 +48,7 @@ interface ScanResultsStorage {
         /**
          * The scan result storage in use. Needs to be set via the corresponding configure function.
          */
-        var storage: ScanResultsStorage = NoStorage()
+        var storage: ScanResultsStorage = LocalFileStorage(getUserOrtDirectory().resolve(TOOL_NAME))
             private set
 
         /**

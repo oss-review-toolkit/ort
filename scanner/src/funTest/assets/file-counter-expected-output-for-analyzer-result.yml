@@ -300,6 +300,6 @@ scanner:
           license_findings: []
     storage_stats:
       num_reads: 5
-      num_hits: 0
+      num_hits: 4
     has_errors: true
 evaluator: null
