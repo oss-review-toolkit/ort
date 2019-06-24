@@ -232,25 +232,25 @@ class ExcludesTest : WordSpec() {
         }
 
         "isProjectExcluded" should {
-            "return true if the project is completely excluded" {
+            "return true if the definition file path is matched by a project exclude without scope excludes" {
                 val excludes = Excludes(projects = listOf(projectExclude1))
 
                 excludes.isProjectExcluded(project1, ortResult) shouldBe true
             }
 
-            "return true if the definition file of the project is excluded by a path exclude" {
-                val excludes = Excludes(paths = listOf(pathExclude1))
-
-                excludes.isProjectExcluded(project1, ortResult) shouldBe true
-            }
-
-            "return false if only scopes of the project are excluded" {
+            "return false if the definition file path is matched by a project exclude with scope excludes" {
                 val excludes = Excludes(projects = listOf(projectExcludeWithScopes1))
 
                 excludes.isProjectExcluded(project1, ortResult) shouldBe false
             }
 
-            "return false if the project is not in the list of project excludes" {
+            "return true if the definition file path is matched by a path exclude" {
+                val excludes = Excludes(paths = listOf(pathExclude1))
+
+                excludes.isProjectExcluded(project1, ortResult) shouldBe true
+            }
+
+            "return false if nothing is excluded" {
                 val excludes = Excludes()
 
                 excludes.isProjectExcluded(project1, ortResult) shouldBe false
