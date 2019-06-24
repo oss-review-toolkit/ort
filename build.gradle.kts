@@ -259,7 +259,7 @@ val checkCopyright by tasks.registering(Exec::class) {
     description = "Checks for HERE Copyright headers in Kotlin files."
     group = "Verification"
 
-    commandLine = listOf("git", "grep", "-EL", "Copyright.+HERE", "*.kt",
+    commandLine = listOf("git", "grep", "-EL", "Copyright \\(C\\) .+", "*.kt",
         ":!analyzer/src/funTest/assets/projects/external")
     setIgnoreExitValue(true)
     standardOutput = ByteArrayOutputStream()
