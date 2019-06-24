@@ -150,7 +150,7 @@ object ScannerCommand : CommandWithHelp() {
                 "The provided configuration file '$it' is not actually a file."
             }
 
-            it.readValue<ScannerConfiguration>()
+            it.readValue()
         } ?: ScannerConfiguration()
 
         config.artifactoryStorage?.let {
