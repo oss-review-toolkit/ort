@@ -32,6 +32,7 @@ import com.here.ort.model.config.ArtifactoryStorageConfiguration
 import com.here.ort.model.config.LocalFileStorageConfiguration
 import com.here.ort.scanner.storages.ArtifactoryStorage
 import com.here.ort.scanner.storages.LocalFileStorage
+import com.here.ort.scanner.storages.NoStorage
 import com.here.ort.utils.getUserOrtDirectory
 import com.here.ort.utils.log
 
@@ -55,6 +56,15 @@ interface ScanResultsStorage {
          * The access statistics for the scan result storage wrapper.
          */
         val stats = AccessStatistics()
+
+        /**
+         * Configure [NoStorage] to disable storing of scan results.
+         */
+        fun configureNoStorage() {
+            storage = NoStorage()
+
+            log.info { "The scan result storage was disabled." }
+        }
 
         /**
          * Configure a [LocalFileStorage] as the current storage backend.
