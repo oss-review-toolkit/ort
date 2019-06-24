@@ -77,6 +77,7 @@ class GitDownloadTest : StringSpec() {
             val pkg = Package.EMPTY.copy(vcsProcessed = VcsInfo("Git", REPO_URL, REPO_REV, path = REPO_PATH))
             val expectedFiles = listOf(
                 File("LICENSE"),
+                File("README.md"),
                 File(REPO_PATH, "dep_graph.js"),
                 File(REPO_PATH, "index.d.ts")
             )
@@ -113,6 +114,7 @@ class GitDownloadTest : StringSpec() {
             )
             val expectedFiles = listOf(
                 File("LICENSE"),
+                File("README.md"),
                 File(REPO_PATH_FOR_VERSION, "dep_graph_spec.js")
             )
 
