@@ -105,7 +105,7 @@ project:
                       - id: "NPM::is-buffer:1.1.6"
                   - id: "NPM::isobject:3.0.1"
                 - id: "NPM::isobject:3.0.1"
-                - id: "NPM::set-value:2.0.0"
+                - id: "NPM::set-value:2.0.1"
                   dependencies:
                   - id: "NPM::extend-shallow:2.0.1"
                     dependencies:
@@ -129,12 +129,12 @@ project:
                   - id: "NPM::kind-of:3.2.2"
                     dependencies:
                     - id: "NPM::is-buffer:1.1.6"
-                - id: "NPM::union-value:1.0.0"
+                - id: "NPM::union-value:1.0.1"
                   dependencies:
                   - id: "NPM::arr-union:3.1.0"
                   - id: "NPM::get-value:2.0.6"
                   - id: "NPM::is-extendable:0.1.1"
-                  - id: "NPM::set-value:0.4.3"
+                  - id: "NPM::set-value:2.0.1"
                     dependencies:
                     - id: "NPM::extend-shallow:2.0.1"
                       dependencies:
@@ -143,11 +143,16 @@ project:
                     - id: "NPM::is-plain-object:2.0.4"
                       dependencies:
                       - id: "NPM::isobject:3.0.1"
-                    - id: "NPM::to-object-path:0.3.0"
+                    - id: "NPM::split-string:3.1.0"
                       dependencies:
-                      - id: "NPM::kind-of:3.2.2"
+                      - id: "NPM::extend-shallow:3.0.2"
                         dependencies:
-                        - id: "NPM::is-buffer:1.1.6"
+                        - id: "NPM::assign-symbols:1.0.0"
+                        - id: "NPM::is-extendable:1.0.1"
+                          dependencies:
+                          - id: "NPM::is-plain-object:2.0.4"
+                            dependencies:
+                            - id: "NPM::isobject:3.0.1"
                 - id: "NPM::unset-value:1.0.0"
                   dependencies:
                   - id: "NPM::has-value:0.3.1"
@@ -228,7 +233,7 @@ project:
                     - id: "NPM::kind-of:6.0.2"
                   - id: "NPM::kind-of:6.0.2"
               - id: "NPM::isobject:3.0.1"
-              - id: "NPM::mixin-deep:1.3.1"
+              - id: "NPM::mixin-deep:1.3.2"
                 dependencies:
                 - id: "NPM::for-in:1.0.2"
                 - id: "NPM::is-extendable:1.0.1"
@@ -3259,8 +3264,8 @@ packages:
       path: ""
   curations: []
 - package:
-    id: "NPM::mixin-deep:1.3.1"
-    purl: "pkg://NPM//mixin-deep@1.3.1"
+    id: "NPM::mixin-deep:1.3.2"
+    purl: "pkg://NPM//mixin-deep@1.3.2"
     declared_licenses:
     - "MIT"
     declared_licenses_processed:
@@ -3274,19 +3279,19 @@ packages:
         value: ""
         algorithm: ""
     source_artifact:
-      url: "https://registry.npmjs.org/mixin-deep/-/mixin-deep-1.3.1.tgz"
+      url: "https://registry.npmjs.org/mixin-deep/-/mixin-deep-1.3.2.tgz"
       hash:
-        value: "a49e7268dce1a0d9698e45326c5626df3543d0fe"
+        value: "1120b43dc359a785dce65b55b82e257ccf479566"
         algorithm: "SHA-1"
     vcs:
       type: "git"
       url: "git+https://github.com/jonschlinkert/mixin-deep.git"
-      revision: "a4bcf3ef9cdc144c4c39ff8f1e1f566f338c477e"
+      revision: "754f0c20e1bc13ea5a21a64fbc7d6ba5f7b359b9"
       path: ""
     vcs_processed:
       type: "git"
       url: "https://github.com/jonschlinkert/mixin-deep.git"
-      revision: "a4bcf3ef9cdc144c4c39ff8f1e1f566f338c477e"
+      revision: "754f0c20e1bc13ea5a21a64fbc7d6ba5f7b359b9"
       path: ""
   curations: []
 - package:
@@ -4018,8 +4023,8 @@ packages:
       path: ""
   curations: []
 - package:
-    id: "NPM::set-value:0.4.3"
-    purl: "pkg://NPM//set-value@0.4.3"
+    id: "NPM::set-value:2.0.1"
+    purl: "pkg://NPM//set-value@2.0.1"
     declared_licenses:
     - "MIT"
     declared_licenses_processed:
@@ -4033,50 +4038,19 @@ packages:
         value: ""
         algorithm: ""
     source_artifact:
-      url: "https://registry.npmjs.org/set-value/-/set-value-0.4.3.tgz"
+      url: "https://registry.npmjs.org/set-value/-/set-value-2.0.1.tgz"
       hash:
-        value: "7db08f9d3d22dc7f78e53af3c3bf4666ecdfccf1"
+        value: "a18d40530e6f07de4228c7defe4227af8cad005b"
         algorithm: "SHA-1"
     vcs:
       type: "git"
       url: "git+https://github.com/jonschlinkert/set-value.git"
-      revision: "2a16afca69bce51978cd5396a68d4435de0c6cc5"
+      revision: "bb0f0382f7d7637f3de1bba52d1b4abdbbbde4d4"
       path: ""
     vcs_processed:
       type: "git"
       url: "https://github.com/jonschlinkert/set-value.git"
-      revision: "2a16afca69bce51978cd5396a68d4435de0c6cc5"
-      path: ""
-  curations: []
-- package:
-    id: "NPM::set-value:2.0.0"
-    purl: "pkg://NPM//set-value@2.0.0"
-    declared_licenses:
-    - "MIT"
-    declared_licenses_processed:
-      spdx_expression: "MIT"
-    description: "Create nested values and any intermediaries using dot notation (`'a.b.c'`)\
-      \ paths."
-    homepage_url: "https://github.com/jonschlinkert/set-value"
-    binary_artifact:
-      url: ""
-      hash:
-        value: ""
-        algorithm: ""
-    source_artifact:
-      url: "https://registry.npmjs.org/set-value/-/set-value-2.0.0.tgz"
-      hash:
-        value: "71ae4a88f0feefbbf52d1ea604f3fb315ebb6274"
-        algorithm: "SHA-1"
-    vcs:
-      type: "git"
-      url: "git+https://github.com/jonschlinkert/set-value.git"
-      revision: "197399e6e4eddf203a3e0f85351d4d8c89e60725"
-      path: ""
-    vcs_processed:
-      type: "git"
-      url: "https://github.com/jonschlinkert/set-value.git"
-      revision: "197399e6e4eddf203a3e0f85351d4d8c89e60725"
+      revision: "bb0f0382f7d7637f3de1bba52d1b4abdbbbde4d4"
       path: ""
   curations: []
 - package:
@@ -4718,8 +4692,8 @@ packages:
       path: ""
   curations: []
 - package:
-    id: "NPM::union-value:1.0.0"
-    purl: "pkg://NPM//union-value@1.0.0"
+    id: "NPM::union-value:1.0.1"
+    purl: "pkg://NPM//union-value@1.0.1"
     declared_licenses:
     - "MIT"
     declared_licenses_processed:
@@ -4733,19 +4707,19 @@ packages:
         value: ""
         algorithm: ""
     source_artifact:
-      url: "https://registry.npmjs.org/union-value/-/union-value-1.0.0.tgz"
+      url: "https://registry.npmjs.org/union-value/-/union-value-1.0.1.tgz"
       hash:
-        value: "5c71c34cb5bad5dcebe3ea0cd08207ba5aa1aea4"
+        value: "0b6fe7b835aecda61c6ea4d4f02c14221e109847"
         algorithm: "SHA-1"
     vcs:
       type: "git"
       url: "git+https://github.com/jonschlinkert/union-value.git"
-      revision: "3ef3dfbb89ae1f72aae88744dfafe70a47b313f8"
+      revision: "ae70c7747afc57d6d868fd55f80041e623d2df6a"
       path: ""
     vcs_processed:
       type: "git"
       url: "https://github.com/jonschlinkert/union-value.git"
-      revision: "3ef3dfbb89ae1f72aae88744dfafe70a47b313f8"
+      revision: "ae70c7747afc57d6d868fd55f80041e623d2df6a"
       path: ""
   curations: []
 - package:
