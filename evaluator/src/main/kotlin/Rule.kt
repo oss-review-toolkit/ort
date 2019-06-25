@@ -107,34 +107,42 @@ abstract class Rule(
      */
     abstract fun issueSource(): String
 
-    fun issue(severity: Severity, pkgId: Identifier, license: String?, licenseSource: LicenseSource?, message: String) {
+    fun issue(
+        severity: Severity,
+        pkgId: Identifier,
+        license: String?,
+        licenseSource: LicenseSource?,
+        message: String,
+        howToFix: String
+    ) {
         violations += RuleViolation(
             severity = severity,
             rule = name,
             pkg = pkgId,
             license = license,
             licenseSource = licenseSource,
-            message = message
+            message = message,
+            howToFix = howToFix
         )
     }
 
     /**
      * Add a [hint][Severity.HINT] to the list of [issues].
      */
-    fun hint(pkgId: Identifier, license: String?, licenseSource: LicenseSource?, message: String) =
-        issue(Severity.HINT, pkgId, license, licenseSource, message)
+    fun hint(pkgId: Identifier, license: String?, licenseSource: LicenseSource?, message: String, howToFix: String) =
+        issue(Severity.HINT, pkgId, license, licenseSource, message, howToFix)
 
     /**
      * Add a [warning][Severity.WARNING] to the list of [issues].
      */
-    fun warning(pkgId: Identifier, license: String?, licenseSource: LicenseSource?, message: String) =
-        issue(Severity.WARNING, pkgId, license, licenseSource, message)
+    fun warning(pkgId: Identifier, license: String?, licenseSource: LicenseSource?, message: String, howToFix: String) =
+        issue(Severity.WARNING, pkgId, license, licenseSource, message, howToFix)
 
     /**
      * Add an [error][Severity.ERROR] to the list of [issues].
      */
-    fun error(pkgId: Identifier, license: String?, licenseSource: LicenseSource?, message: String) =
-        issue(Severity.ERROR, pkgId, license, licenseSource, message)
+    fun error(pkgId: Identifier, license: String?, licenseSource: LicenseSource?, message: String, howToFix: String) =
+        issue(Severity.ERROR, pkgId, license, licenseSource, message, howToFix)
 
     /**
      * A DSL helper class, providing convenience functions for adding [RuleMatcher]s to this rule.
