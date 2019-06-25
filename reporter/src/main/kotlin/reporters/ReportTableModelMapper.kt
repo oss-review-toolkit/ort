@@ -86,11 +86,7 @@ class ReportTableModelMapper(private val resolutionProvider: ResolutionProvider)
         val analyzerResult = ortResult.analyzer!!.result
         val excludes = ortResult.repository.config.excludes ?: Excludes()
 
-        requireNotNull(ortResult.scanner?.results) {
-            "The provided ORT result does not contain any scan results."
-        }
-
-        val scanRecord = ortResult.scanner!!.results
+        val scanRecord = ortResult.scanner?.results
         val licenseFindings = ortResult.collectLicenseFindings()
 
         val projectTables = analyzerResult.projects.associateWith { project ->
@@ -106,7 +102,7 @@ class ReportTableModelMapper(private val resolutionProvider: ResolutionProvider)
             project.collectDependencies().mapTo(allIds) { it.id }
 
             val tableRows = allIds.map { id ->
-                val scanResult = scanRecord.scanResults.find { it.id == id }
+                val scanResult = scanRecord?.scanResults?.find { it.id == id }
 
                 val scopes = project.scopes.filter { id in it }.let { scopes ->
                     excludes.scopeExcludesByName(project, scopes, ortResult).toSortedMap()
