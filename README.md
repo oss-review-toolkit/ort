@@ -85,6 +85,12 @@ Follow these steps to run the OSS Review Toolkit from source code:
    or
 
    * `./gradlew cli:run --args="requirements"`
+   
+Using docker:
+
+1. Ensure you have Docker installed and its daemon running.
+
+2. execute in project folder `docker build -t heremaps/oss-review-toolkit:latest .`   
 
 Alternatively, you can also run the OSS Review Toolkit by building its Docker image:
 
