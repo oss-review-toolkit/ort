@@ -133,22 +133,23 @@ open class PackageRule(
         }
     }
 
-    fun issue(severity: Severity, message: String) = issue(severity, pkg.id, null, null, message)
+    fun issue(severity: Severity, message: String, howToFix: String) =
+        issue(severity, pkg.id, null, null, message, howToFix)
 
     /**
      * Add a [hint][Severity.HINT] to the list of [issues].
      */
-    fun hint(message: String) = hint(pkg.id, null, null, message)
+    fun hint(message: String, howToFix: String) = hint(pkg.id, null, null, message, howToFix)
 
     /**
      * Add a [warning][Severity.WARNING] to the list of [issues].
      */
-    fun warning(message: String) = warning(pkg.id, null, null, message)
+    fun warning(message: String, howToFix: String) = warning(pkg.id, null, null, message, howToFix)
 
     /**
      * Add an [error][Severity.ERROR] to the list of [issues].
      */
-    fun error(message: String) = error(pkg.id, null, null, message)
+    fun error(message: String, howToFix: String) = error(pkg.id, null, null, message, howToFix)
 
     /**
      * A [Rule] to check a single license of the [package][pkg].
@@ -211,21 +212,22 @@ open class PackageRule(
                 override fun matches() = SpdxLicense.forId(license) != null
             }
 
-        fun issue(severity: Severity, message: String) = issue(severity, pkg.id, license, licenseSource, message)
+        fun issue(severity: Severity, message: String, howToFix: String) =
+            issue(severity, pkg.id, license, licenseSource, message, howToFix)
 
         /**
          * Add a [hint][Severity.HINT] to the list of [issues].
          */
-        fun hint(message: String) = hint(pkg.id, license, licenseSource, message)
+        fun hint(message: String, howToFix: String) = hint(pkg.id, license, licenseSource, message, howToFix)
 
         /**
          * Add a [warning][Severity.WARNING] to the list of [issues].
          */
-        fun warning(message: String) = warning(pkg.id, license, licenseSource, message)
+        fun warning(message: String, howToFix: String) = warning(pkg.id, license, licenseSource, message, howToFix)
 
         /**
          * Add an [error][Severity.ERROR] to the list of [issues].
          */
-        fun error(message: String) = error(pkg.id, license, licenseSource, message)
+        fun error(message: String, howToFix: String) = error(pkg.id, license, licenseSource, message, howToFix)
     }
 }

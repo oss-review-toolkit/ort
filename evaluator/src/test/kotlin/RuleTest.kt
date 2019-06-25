@@ -34,6 +34,7 @@ class RuleTest : WordSpec() {
     private val license = "license"
     private val licenseSource = LicenseSource.DECLARED
     private val message = "violation message"
+    private val howToFix = "how to fix"
 
     private fun createRule() = object : Rule(ruleSet, "test") {
         override val description = "test"
@@ -45,7 +46,7 @@ class RuleTest : WordSpec() {
             "add an issue with the correct severity" {
                 val rule = createRule()
 
-                rule.hint(id, license, licenseSource, message)
+                rule.hint(id, license, licenseSource, message, howToFix)
 
                 rule.violations should haveSize(1)
                 rule.violations.first().let { violation ->
@@ -55,6 +56,7 @@ class RuleTest : WordSpec() {
                     violation.licenseSource shouldBe licenseSource
                     violation.severity shouldBe Severity.HINT
                     violation.message shouldBe message
+                    violation.howToFix shouldBe howToFix
                 }
             }
         }
@@ -63,7 +65,7 @@ class RuleTest : WordSpec() {
             "add an issue with the correct severity" {
                 val rule = createRule()
 
-                rule.warning(id, license, licenseSource, message)
+                rule.warning(id, license, licenseSource, message, howToFix)
 
                 rule.violations should haveSize(1)
                 rule.violations.first().let { violation ->
@@ -73,6 +75,7 @@ class RuleTest : WordSpec() {
                     violation.licenseSource shouldBe licenseSource
                     violation.severity shouldBe Severity.WARNING
                     violation.message shouldBe message
+                    violation.howToFix shouldBe howToFix
                 }
             }
         }
@@ -81,7 +84,7 @@ class RuleTest : WordSpec() {
             "add an issue with the correct severity" {
                 val rule = createRule()
 
-                rule.error(id, license, licenseSource, message)
+                rule.error(id, license, licenseSource, message, howToFix)
 
                 rule.violations should haveSize(1)
                 rule.violations.first().let { violation ->
@@ -91,6 +94,7 @@ class RuleTest : WordSpec() {
                     violation.licenseSource shouldBe licenseSource
                     violation.severity shouldBe Severity.ERROR
                     violation.message shouldBe message
+                    violation.howToFix shouldBe howToFix
                 }
             }
         }
