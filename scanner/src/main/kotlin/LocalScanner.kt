@@ -161,7 +161,7 @@ abstract class LocalScanner(name: String, config: ScannerConfiguration) : Scanne
 
                             val storedResults = withContext(storageDispatcher) {
                                 log.info {
-                                    "Reading stored scan results for ${pkg.id.toCoordinates()} in thread " +
+                                    "Trying to read stored scan results for ${pkg.id.toCoordinates()} in thread " +
                                             "'${Thread.currentThread().name}' $packageIndex."
                                 }
 
@@ -175,8 +175,8 @@ abstract class LocalScanner(name: String, config: ScannerConfiguration) : Scanne
                             } else {
                                 withContext(scanDispatcher) {
                                     log.info {
-                                        "Scanning package ${pkg.id.toCoordinates()} in thread " +
-                                                "'${Thread.currentThread().name}' $packageIndex."
+                                        "No stored results found, scanning package ${pkg.id.toCoordinates()} in " +
+                                                "thread '${Thread.currentThread().name}' $packageIndex."
                                     }
 
                                     listOf(
