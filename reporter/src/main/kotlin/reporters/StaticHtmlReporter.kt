@@ -121,7 +121,7 @@ class StaticHtmlReporter : Reporter() {
                         evaluatorTable(it)
                     }
 
-                    if (reportTableModel.issueSummary.rows.size > 0) {
+                    if (reportTableModel.issueSummary.rows.isNotEmpty()) {
                         issueTable(reportTableModel.issueSummary)
                     }
 
