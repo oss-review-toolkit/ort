@@ -25,13 +25,14 @@ import io.kotlintest.specs.WordSpec
 
 class RuleSetTest : WordSpec() {
     private val errorMessage = "error message"
+    private val howToFix = "how to fix"
 
     init {
         "package rule" should {
             "add errors if it has no requirements" {
                 val ruleSet = ruleSet(ortResult) {
                     packageRule("test") {
-                        error(errorMessage)
+                        error(errorMessage, howToFix)
                     }
                 }
 
@@ -45,7 +46,7 @@ class RuleSetTest : WordSpec() {
                             +isExcluded()
                         }
 
-                        error(errorMessage)
+                        error(errorMessage, howToFix)
                     }
                 }
 
@@ -65,7 +66,7 @@ class RuleSetTest : WordSpec() {
                                 +isSpdxLicense()
                             }
 
-                            error(errorMessage)
+                            error(errorMessage, howToFix)
                         }
                     }
                 }
@@ -78,7 +79,7 @@ class RuleSetTest : WordSpec() {
             "add errors if it has no requirements" {
                 val ruleSet = ruleSet(ortResult) {
                     dependencyRule("test") {
-                        error(errorMessage)
+                        error(errorMessage, howToFix)
                     }
                 }
 
@@ -92,7 +93,7 @@ class RuleSetTest : WordSpec() {
                             +isStaticallyLinked()
                         }
 
-                        error(errorMessage)
+                        error(errorMessage, howToFix)
                     }
                 }
 
@@ -111,7 +112,7 @@ class RuleSetTest : WordSpec() {
                                 +isSpdxLicense()
                             }
 
-                            error(errorMessage)
+                            error(errorMessage, howToFix)
                         }
 
                     }

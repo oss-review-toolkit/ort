@@ -25,6 +25,7 @@ class RuleViolation {
         this.licenseSource = '';
         this.severity = '';
         this.message = '';
+        this.howToFix = '';
 
         if (obj instanceof Object) {
             if (obj.rule) {
@@ -53,6 +54,10 @@ class RuleViolation {
 
             if (obj.message) {
                 this.message = obj.message;
+            }
+
+            if (obj.howToFix) {
+                this.howToFix = obj.howToFix;
             }
         }
     }

@@ -48,5 +48,11 @@ data class RuleViolation(
     /**
      * A message explaining the rule violation.
      */
-    val message: String
+    val message: String,
+
+    /**
+     * A text explaining how the rule violation can be fixed. Reporters rendering this string should support the
+     * [Markdown syntax](https://daringfireball.net/projects/markdown/syntax) to allow formatting of the text.
+     */
+    val howToFix: String
 )

@@ -68,7 +68,8 @@ class EvaluatorTest : WordSpec() {
                         license = "license 1",
                         licenseSource = LicenseSource.DETECTED,
                         severity = Severity.ERROR,
-                        message = "message 1"
+                        message = "message 1",
+                        howToFix = "how to fix 1"
                     )
 
                     ruleViolations += RuleViolation(
@@ -77,7 +78,8 @@ class EvaluatorTest : WordSpec() {
                         license = "license 2",
                         licenseSource = LicenseSource.DECLARED,
                         severity = Severity.WARNING,
-                        message = "message 2"
+                        message = "message 2",
+                        howToFix = "how to fix 2"
                     )
                     """.trimIndent()
                 )
@@ -91,6 +93,7 @@ class EvaluatorTest : WordSpec() {
                     licenseSource shouldBe LicenseSource.DETECTED
                     severity shouldBe Severity.ERROR
                     message shouldBe "message 1"
+                    howToFix shouldBe "how to fix 1"
                 }
 
                 with(result.violations[1]) {
@@ -100,6 +103,7 @@ class EvaluatorTest : WordSpec() {
                     licenseSource shouldBe LicenseSource.DECLARED
                     severity shouldBe Severity.WARNING
                     message shouldBe "message 2"
+                    howToFix shouldBe "how to fix 2"
                 }
             }
         }
