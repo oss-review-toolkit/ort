@@ -96,9 +96,9 @@ class ReportTableModelMapper(private val resolutionProvider: ResolutionProvider)
         val projectTables = analyzerResult.projects.associateWith { project ->
             // Only add the project exclude to the model if the whole project is excluded. If only parts of the
             // project are excluded this information will be stored in the rows of the affected dependencies.
-            val projectExclude = excludes.findProjectExcludes(project, ortResult)
-                .filter { it.isWholeProjectExcluded }
-                .singleOrNull()
+            val projectExclude = excludes.findProjectExcludes(project, ortResult).singleOrNull {
+                it.isWholeProjectExcluded
+            }
 
             val pathExcludes = excludes.findPathExcludes(project, ortResult)
 
