@@ -107,17 +107,24 @@ data class OrtResult(
     private val packages: Map<Identifier, PackageEntry> by lazy {
         log.info { "Computing excluded packages..." }
 
+        val includedPackages = mutableSetOf<Identifier>()
+        getProjects().forEach { project ->
+            project.scopes.forEach { scope ->
+                val isScopeExcluded = getExcludes().isScopeExcluded(scope, project, this)
+
+                if (!isProjectExcluded(project.id) && !isScopeExcluded) {
+                    val dependencies = scope.collectDependencies().map { it.id }
+                    includedPackages.addAll(dependencies)
+                }
+            }
+        }
+
         val result = getPackages().associateBy(
             { curatedPackage -> curatedPackage.pkg.id },
             { curatedPackage ->
                 PackageEntry(
                     curatedPackage = curatedPackage,
-                    isExcluded = getProjects().all { project ->
-                        isProjectExcluded(project.id) || project.scopes.all { scope ->
-                            getExcludes().isScopeExcluded(scope, project, this) ||
-                                    !scope.contains(curatedPackage.pkg.id)
-                        }
-                    }
+                    isExcluded = !includedPackages.contains(curatedPackage.pkg.id)
                 )
             }
         )
