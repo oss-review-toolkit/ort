@@ -102,6 +102,30 @@ data class OrtResult(
         result
     }
 
+    private data class PackageEntry(val curatedPackage: CuratedPackage, val isExcluded: Boolean)
+
+    private val packages: Map<Identifier, PackageEntry> by lazy {
+        log.info { "Computing excluded packages which may take a while..." }
+
+        val result = getPackages().associateBy(
+            { curatedPackage -> curatedPackage.pkg.id },
+            { curatedPackage ->
+                PackageEntry(
+                    curatedPackage = curatedPackage,
+                    isExcluded = getProjects().all { project ->
+                        isProjectExcluded(project.id) || project.scopes.all { scope ->
+                            getExcludes().isScopeExcluded(scope, project, this) ||
+                                    !scope.contains(curatedPackage.pkg.id)
+                        }
+                    }
+                )
+            }
+        )
+
+        log.info { "Computing excluded packages done." }
+        result
+    }
+
     /**
      * Return the concluded licenses for each package. If [omitExcluded] is set to true, excluded packages are omitted
      * from the result.
@@ -250,7 +274,7 @@ data class OrtResult(
      * Return the concluded license for the given package [id], or null if there is no concluded license.
      */
     fun getConcludedLicensesForId(id: Identifier): SpdxExpression? =
-        getPackages().find { it.pkg.id == id }?.pkg?.concludedLicense
+        getPackage(id)?.pkg?.concludedLicense
 
     /**
      * Return the declared licenses for the given [id] which may either refer to a project or to a package. If [id] is
@@ -258,7 +282,7 @@ data class OrtResult(
      */
     fun getDeclaredLicensesForId(id: Identifier): SortedSet<String> =
         getProject(id)?.declaredLicenses
-            ?: getPackages().find { it.pkg.id == id }?.pkg?.declaredLicenses
+            ?: getPackage(id)?.pkg?.declaredLicenses
             ?: sortedSetOf<String>()
 
     /**
@@ -295,7 +319,7 @@ data class OrtResult(
 
     @Suppress("UNUSED") // This is intended to be mostly used via scripting.
     fun getUncuratedPackageById(id: Identifier): Package? =
-        getPackages().find { it.pkg.id == id }?.toUncuratedPackage()
+        getPackage(id)?.toUncuratedPackage()
             ?: getProject(id)?.toPackage()
 
     /**
@@ -337,16 +361,26 @@ data class OrtResult(
             isProjectExcluded(id) && isPackageExcluded(id)
         } ?: isPackageExcluded(id)
 
-
     /**
      * Return true if all occurrences of the package identified by the given [id] are excluded.
      */
-    fun isPackageExcluded(id: Identifier): Boolean =
-        getProjects().all { project ->
-            isProjectExcluded(project.id) || project.scopes.all { scope ->
-                getExcludes().isScopeExcluded(scope, project, this) || !scope.contains(id)
-            }
+    fun isPackageExcluded(id: Identifier): Boolean {
+        val project = getProject(id)
+        if (project != null && !isProjectExcluded(id)) {
+            return false
         }
+
+        val pkg = getPackage(id)
+        if (pkg != null && !(packages[id]!!.isExcluded)) {
+            return false
+        }
+
+        if (project == null && pkg == null) {
+            return true
+        }
+
+        return project != null || pkg != null
+    }
 
     /**
      * True if the given [project] is excluded.
@@ -360,6 +394,8 @@ data class OrtResult(
         copy(repository = repository.copy(config = config)).also { it.data += data }
 
     fun getProject(id: Identifier): Project? = projects[id]?.project
+
+    fun getPackage(id: Identifier): CuratedPackage? = packages[id]?.curatedPackage
 
     private fun getPackages(): Set<CuratedPackage> = analyzer?.result?.packages ?: emptySet()
 
