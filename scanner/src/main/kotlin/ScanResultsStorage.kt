@@ -34,23 +34,18 @@ import com.here.ort.scanner.storages.NoStorage
 import com.here.ort.utils.log
 
 /**
- * The interface that storage backends for scan results need to implement.
+ * The abstract class that storage backends for scan results need to implement.
  */
-interface ScanResultsStorage {
+abstract class ScanResultsStorage {
     /**
-     * A companion object that wraps the real storage to use with access statistics.
+     * A companion object that allow to configure the globally used storage backend.
      */
-    companion object : ScanResultsStorage {
+    companion object {
         /**
          * The scan result storage in use. Needs to be set via the corresponding configure function.
          */
         var storage: ScanResultsStorage = NoStorage()
             private set
-
-        /**
-         * The access statistics for the scan result storage wrapper.
-         */
-        val stats = AccessStatistics()
 
         /**
          * Configure an [ArtifactoryStorage] as the current storage backend.
@@ -72,25 +67,12 @@ interface ScanResultsStorage {
 
             log.info { "Using Artifactory storage at ${config.url}." }
         }
-
-        override fun read(id: Identifier) =
-            storage.read(id).also {
-                stats.numReads.incrementAndGet()
-                if (it.results.isNotEmpty()) {
-                    stats.numHits.incrementAndGet()
-                }
-            }
-
-        override fun read(pkg: Package, scannerDetails: ScannerDetails) =
-            storage.read(pkg, scannerDetails).also {
-                stats.numReads.incrementAndGet()
-                if (it.results.isNotEmpty()) {
-                    stats.numHits.incrementAndGet()
-                }
-            }
-
-        override fun add(id: Identifier, scanResult: ScanResult) = storage.add(id, scanResult)
     }
+
+    /**
+     * The access statistics for the scan result storage.
+     */
+    val stats = AccessStatistics()
 
     /**
      * Read all [ScanResult]s for this [id] from the storage.
@@ -99,7 +81,13 @@ interface ScanResultsStorage {
      *
      * @return The [ScanResultContainer] for this [id].
      */
-    fun read(id: Identifier): ScanResultContainer
+    fun read(id: Identifier) =
+        readFromStorage(id).also {
+            stats.numReads.incrementAndGet()
+            if (it.results.isNotEmpty()) {
+                stats.numHits.incrementAndGet()
+            }
+        }
 
     /**
      * Read the [ScanResult]s matching the [id][Package.id] of [pkg] and the [scannerDetails] from the storage.
@@ -113,7 +101,13 @@ interface ScanResultsStorage {
      *
      * @return The [ScanResultContainer] matching the [id][Package.id] of [pkg] and the [scannerDetails].
      */
-    fun read(pkg: Package, scannerDetails: ScannerDetails): ScanResultContainer
+    fun read(pkg: Package, scannerDetails: ScannerDetails) =
+        readFromStorage(pkg, scannerDetails).also {
+            stats.numReads.incrementAndGet()
+            if (it.results.isNotEmpty()) {
+                stats.numHits.incrementAndGet()
+            }
+        }
 
     /**
      * Add a [ScanResult] to the [ScanResultContainer] for this [id] and write it to the storage.
@@ -123,5 +117,11 @@ interface ScanResultsStorage {
      *
      * @return If the [ScanResult] could be written to the storage.
      */
-    fun add(id: Identifier, scanResult: ScanResult): Boolean
+    fun add(id: Identifier, scanResult: ScanResult) = addToStorage(id, scanResult)
+
+    protected abstract fun readFromStorage(id: Identifier): ScanResultContainer
+
+    protected abstract fun readFromStorage(pkg: Package, scannerDetails: ScannerDetails): ScanResultContainer
+
+    protected abstract fun addToStorage(id: Identifier, scanResult: ScanResult): Boolean
 }

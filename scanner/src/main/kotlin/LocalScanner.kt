@@ -247,7 +247,7 @@ abstract class LocalScanner(name: String, config: ScannerConfiguration) : Scanne
      */
     private fun readFromStorage(scannerDetails: ScannerDetails, pkg: Package, outputDirectory: File): List<ScanResult> {
         val resultsFile = getResultsFile(scannerDetails, pkg, outputDirectory)
-        val storedResults = ScanResultsStorage.read(pkg, scannerDetails)
+        val storedResults = ScanResultsStorage.storage.read(pkg, scannerDetails)
 
         if (storedResults.results.isNotEmpty()) {
             // Some external tools rely on the raw results filer to be written to the scan results directory, so write
@@ -305,7 +305,7 @@ abstract class LocalScanner(name: String, config: ScannerConfiguration) : Scanne
         )
         val scanResult = scanPath(downloadResult.downloadDirectory, resultsFile).copy(provenance = provenance)
 
-        ScanResultsStorage.add(pkg.id, scanResult)
+        ScanResultsStorage.storage.add(pkg.id, scanResult)
 
         return scanResult
     }
@@ -360,7 +360,7 @@ abstract class LocalScanner(name: String, config: ScannerConfiguration) : Scanne
         )
 
         val scanResultContainer = ScanResultContainer(id, listOf(result))
-        val scanRecord = ScanRecord(sortedSetOf(), sortedSetOf(scanResultContainer), ScanResultsStorage.stats)
+        val scanRecord = ScanRecord(sortedSetOf(), sortedSetOf(scanResultContainer), ScanResultsStorage.storage.stats)
 
         val endTime = Instant.now()
         val scannerRun = ScannerRun(startTime, endTime, Environment(), config, scanRecord)

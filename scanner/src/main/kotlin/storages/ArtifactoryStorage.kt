@@ -57,7 +57,7 @@ class ArtifactoryStorage(
      */
     private val apiToken: String
 ) : FileBasedStorage() {
-    override fun read(id: Identifier): ScanResultContainer {
+    override fun readFromStorage(id: Identifier): ScanResultContainer {
         val storagePath = storagePath(id)
 
         log.info { "Trying to read scan results for '${id.toCoordinates()}' from Artifactory storage: $storagePath" }
@@ -101,7 +101,7 @@ class ArtifactoryStorage(
         return ScanResultContainer(id, emptyList())
     }
 
-    override fun add(id: Identifier, scanResult: ScanResult): Boolean {
+    override fun addToStorage(id: Identifier, scanResult: ScanResult): Boolean {
         // Do not store empty scan results. It is likely that something went wrong when they were created, and if not,
         // it is cheap to re-create them.
         if (scanResult.summary.fileCount == 0) {
