@@ -85,10 +85,8 @@ class RuleSet(val ortResult: OrtResult) {
 
             visitedPackages += pkgRef
 
-            val curatedPackage = ortResult.analyzer?.result?.let { analyzerResult ->
-                analyzerResult.packages.find { it.pkg.id == pkgRef.id }
-                    ?: ortResult.getProject(pkgRef.id)?.toPackage()?.toCuratedPackage()
-            }
+            val curatedPackage = ortResult.getPackage(pkgRef.id)
+                ?: ortResult.getProject(pkgRef.id)?.toPackage()?.toCuratedPackage()
 
             if (curatedPackage == null) {
                 log.warn { "Could not find package for dependency ${pkgRef.id.toCoordinates()}, skipping rule $name." }
