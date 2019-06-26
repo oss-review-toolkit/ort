@@ -415,7 +415,7 @@ Prism.languages.yaml={scalar:{pattern:/([\-:]\s*(?:![^\s]+)?[ \t]*[|>])[ \t]*(?:
       <h2>Index</h2>
       <ul>
         <li>
-          <a href="#rule-violation-summary">Rule Violation Summary (1 errors, 1 warnings, 1 hints to resolve)</a>
+          <a href="#rule-violation-summary">Rule Violation Summary (1 errors, 1 warnings, 0 hints to resolve)</a>
         </li>
         <li>
           <a href="#issue-summary">Issue Summary (1 errors, 0 warnings, 0 hints to resolve)</a>
@@ -431,7 +431,7 @@ Prism.languages.yaml={scalar:{pattern:/([\-:]\s*(?:![^\s]+)?[ \t]*[|>])[ \t]*(?:
           <a href="#repository-configuration">Repository Configuration</a>
         </li>
       </ul>
-      <h2 id="rule-violation-summary">Rule Violation Summary (1 errors, 1 warnings, 1 hints to resolve)</h2>
+      <h2 id="rule-violation-summary">Rule Violation Summary (1 errors, 1 warnings, 0 hints to resolve)</h2>
       <table class="ort-report-table ort-violations">
         <thead>
           <tr>
@@ -449,9 +449,11 @@ Prism.languages.yaml={scalar:{pattern:/([\-:]\s*(?:![^\s]+)?[ \t]*[|>])[ \t]*(?:
               <p>BSD-3-Clause warning</p>
             </td>
           </tr>
-          <tr class="ort-hint" id="violation-3">
+          <tr class="ort-resolved" id="violation-3">
             <td><a href="#violation-3">3</a></td><td>rule 2</td><td>Maven:org.apache.commons:commons-text:1.1</td><td>DECLARED: Apache-2.0</td><td>
               <p>Apache-2.0 hint</p>
+              <p>
+Resolved by: CANT_FIX_EXCEPTION - Apache-2 is not an issue.</p>
             </td>
           </tr>
         </tbody>
@@ -644,6 +646,11 @@ excludes:
   - pattern: "**.java"
     reason: "EXAMPLE_OF"
     comment: "These are example files."
+resolutions:
+  rule_violations:
+  - message: "Apache-2.0 hint"
+    reason: "CANT_FIX_EXCEPTION"
+    comment: "Apache-2 is not an issue."
 </code>
       </pre>
     </div>
