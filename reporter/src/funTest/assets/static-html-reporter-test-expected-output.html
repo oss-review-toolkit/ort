@@ -187,6 +187,10 @@ table.ort-excluded tr.ort-excluded td li.ort-excluded {
     color: #2c662d;
 }
 
+.ort-report-table details {
+    overflow: scroll;
+}
+
 @media all and (max-width: 1000px) {
     .ort-report-table th:nth-child(2), .ort-report-table td:nth-child(2) {
         display: none;
@@ -442,11 +446,59 @@ Prism.languages.yaml={scalar:{pattern:/([\-:]\s*(?:![^\s]+)?[ \t]*[|>])[ \t]*(?:
           <tr class="ort-error" id="violation-1">
             <td><a href="#violation-1">1</a></td><td>rule 1</td><td>Maven:junit:junit:4.12</td><td>DETECTED: EPL-1.0</td><td>
               <p>EPL-1.0 error</p>
+              <details>
+                <summary>How to fix</summary>
+                <ul>
+
+                  <li>
+                    <em>Step 1</em>
+                  </li>
+
+                  <li>
+                    <strong>Step 2</strong>
+                  </li>
+
+                  <li>
+                    <em><strong>Step 3</strong></em>
+                  </li>
+
+                </ul>
+
+                <pre>
+                  <code>Some long text verify that overflow:scroll is working as expected.
+</code>
+                </pre>
+
+              </details>
             </td>
           </tr>
           <tr class="ort-warning" id="violation-2">
             <td><a href="#violation-2">2</a></td><td>rule 3</td><td>Maven:org.hamcrest:hamcrest-core:1.3</td><td>CONCLUDED: BSD-3-Clause</td><td>
               <p>BSD-3-Clause warning</p>
+              <details>
+                <summary>How to fix</summary>
+                <ul>
+
+                  <li>
+                    <em>Step 1</em>
+                  </li>
+
+                  <li>
+                    <strong>Step 2</strong>
+                  </li>
+
+                  <li>
+                    <em><strong>Step 3</strong></em>
+                  </li>
+
+                </ul>
+
+                <pre>
+                  <code>Some long text verify that overflow:scroll is working as expected.
+</code>
+                </pre>
+
+              </details>
             </td>
           </tr>
           <tr class="ort-resolved" id="violation-3">

@@ -1,5 +1,6 @@
 val apachePoiVersion: String by project
 val apachePoiSchemasVersion: String by project
+val flexmarkVersion: String by project
 val hamcrestCoreVersion: String by project
 val kotlinxHtmlVersion: String by project
 val simpleExcelVersion: String by project
@@ -33,6 +34,8 @@ dependencies {
     api(project(":model"))
 
     implementation(project(":utils"))
+
+    implementation("com.vladsch.flexmark:flexmark:$flexmarkVersion")
 
     implementation("org.apache.poi:ooxml-schemas:$apachePoiSchemasVersion")
     implementation("org.apache.poi:poi-ooxml:$apachePoiVersion")
