@@ -36,10 +36,13 @@ import com.here.ort.scanner.LocalScanner
 import com.here.ort.scanner.ScanResultsStorage
 import com.here.ort.scanner.Scanner
 import com.here.ort.scanner.ScannerFactory
+import com.here.ort.scanner.TOOL_NAME
 import com.here.ort.scanner.scanners.ScanCode
+import com.here.ort.scanner.storages.LocalFileStorage
 import com.here.ort.utils.PARAMETER_ORDER_MANDATORY
 import com.here.ort.utils.PARAMETER_ORDER_OPTIONAL
 import com.here.ort.utils.expandTilde
+import com.here.ort.utils.getUserOrtDirectory
 import com.here.ort.utils.log
 
 import java.io.File
@@ -153,6 +156,10 @@ object ScannerCommand : CommandWithHelp() {
             it.readValue<ScannerConfiguration>()
         } ?: ScannerConfiguration()
 
+        // By default use a file based scan results storage.
+        ScanResultsStorage.storage = LocalFileStorage(getUserOrtDirectory().resolve(TOOL_NAME))
+
+        // Allow to override the default scan results storage.
         config.artifactoryStorage?.let {
             require(config.localFileStorage == null) {
                 "Only one scan results storage may be configured."
@@ -171,7 +178,7 @@ object ScannerCommand : CommandWithHelp() {
 
         val scanner = scannerFactory.create(config)
 
-        println("Using scanner '${scanner.scannerName}'.")
+        println("Using scanner '${scanner.scannerName}' with '${ScanResultsStorage.storage.javaClass.simpleName}'.")
 
         val ortResult = ortFile?.expandTilde()?.let {
             scanner.scanOrtResult(

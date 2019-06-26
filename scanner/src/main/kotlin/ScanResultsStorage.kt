@@ -45,7 +45,6 @@ abstract class ScanResultsStorage {
          * The scan result storage in use. Needs to be set via the corresponding configure function.
          */
         var storage: ScanResultsStorage = NoStorage()
-            private set
 
         /**
          * Configure a [LocalFileStorage] as the current storage backend.
