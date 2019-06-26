@@ -33,6 +33,8 @@ import com.here.ort.reporter.reporters.ReportTableModel.ProjectTable
 import com.here.ort.reporter.reporters.ReportTableModel.ResolvableIssue
 import com.here.ort.utils.isValidUrl
 import com.here.ort.utils.normalizeLineBreaks
+import com.vladsch.flexmark.html.HtmlRenderer
+import com.vladsch.flexmark.parser.Parser
 
 import java.io.OutputStream
 import java.time.Instant
@@ -272,8 +274,10 @@ class StaticHtmlReporter : Reporter() {
             }
             td {
                 p { +ruleViolation.violation.message }
-                if ( ruleViolation.isResolved) {
+                if (ruleViolation.isResolved) {
                     p { +ruleViolation.resolutionDescription }
+                } else {
+                    markdown(ruleViolation.violation.howToFix)
                 }
             }
         }
@@ -559,5 +563,12 @@ class StaticHtmlReporter : Reporter() {
                 +yamlMapper.writerWithDefaultPrettyPrinter().writeValueAsString(config)
             }
         }
+    }
+
+    private fun HTMLTag.markdown(markdown: String) {
+        val markdownParser = Parser.builder().build()
+        val document = markdownParser.parse(markdown)
+        val renderer = HtmlRenderer.builder().build()
+        unsafe { +renderer.render(document) }
     }
 }
