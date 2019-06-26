@@ -62,9 +62,12 @@ class StaticHtmlReporterTest : WordSpec() {
 
     private fun generateReport(ortResult: OrtResult) =
         ByteArrayOutputStream().also { outputStream ->
+            val resolutionProvider = DefaultResolutionProvider()
+            ortResult.repository.config.resolutions?.let { resolutionProvider.add(it) }
+
             StaticHtmlReporter().generateReport(
                 ortResult,
-                DefaultResolutionProvider(),
+                resolutionProvider,
                 CopyrightGarbage(),
                 outputStream
             )
