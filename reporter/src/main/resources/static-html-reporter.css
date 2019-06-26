@@ -180,6 +180,10 @@ table.ort-excluded tr.ort-excluded td li.ort-excluded {
     color: #2c662d;
 }
 
+.ort-report-table details {
+    overflow: scroll;
+}
+
 @media all and (max-width: 1000px) {
     .ort-report-table th:nth-child(2), .ort-report-table td:nth-child(2) {
         display: none;
