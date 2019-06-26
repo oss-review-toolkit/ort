@@ -54,7 +54,7 @@ class FileCounterTest : StringSpec() {
             patchActualResult(result, patchDownloadTime = true, patchStartAndEndTime = true) shouldBe expectedResult
 
             outputRootDir.safeDeleteRecursively(force = true)
-            ScanResultsStorage.stats.reset()
+            ScanResultsStorage.storage.stats.reset()
         }
     }
 }

@@ -28,8 +28,8 @@ import com.here.ort.model.ScannerDetails
 import com.here.ort.scanner.ScanResultsStorage
 import com.here.ort.utils.log
 
-abstract class FileBasedStorage : ScanResultsStorage {
-    override fun read(pkg: Package, scannerDetails: ScannerDetails): ScanResultContainer {
+abstract class FileBasedStorage : ScanResultsStorage() {
+    override fun readFromStorage(pkg: Package, scannerDetails: ScannerDetails): ScanResultContainer {
         val scanResults = read(pkg.id).results.toMutableList()
 
         if (scanResults.isEmpty()) return ScanResultContainer(pkg.id, scanResults)

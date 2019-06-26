@@ -157,7 +157,7 @@ abstract class Scanner(val scannerName: String, protected val config: ScannerCon
             }
         }
 
-        val scanRecord = ScanRecord(projectScanScopes, resultContainers, ScanResultsStorage.stats)
+        val scanRecord = ScanRecord(projectScanScopes, resultContainers, ScanResultsStorage.storage.stats)
 
         val endTime = Instant.now()
 
