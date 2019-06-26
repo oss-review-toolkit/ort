@@ -110,7 +110,7 @@ data class OrtResult(
         sortedMapOf<String, SortedSet<Identifier>>().also { licenses ->
 
             getProjects().forEach { project ->
-                if (!omitExcluded || !isProjectExcluded(project)) {
+                if (!omitExcluded || !isProjectExcluded(project.id)) {
                     project.declaredLicenses.forEach { license ->
                         licenses.getOrPut(license) { sortedSetOf() } += project.id
                     }
@@ -267,7 +267,7 @@ data class OrtResult(
         val vendorPackages = sortedSetOf<Package>()
 
         getProjects().filter {
-            it.id.isFromOrg(*names) && (!omitExcluded || !isProjectExcluded(it))
+            it.id.isFromOrg(*names) && (!omitExcluded || !isProjectExcluded(it.id))
         }.mapTo(vendorPackages) {
             it.toPackage()
         }
@@ -322,7 +322,7 @@ data class OrtResult(
     fun isExcluded(id: Identifier): Boolean =
         getProjects().find { it.id == id }?.let {
             // An excluded project could still be included as a dependency of another non-excluded project.
-            isProjectExcluded(it) && isPackageExcluded(id)
+            isProjectExcluded(id) && isPackageExcluded(id)
         } ?: isPackageExcluded(id)
 
 
@@ -331,7 +331,7 @@ data class OrtResult(
      */
     fun isPackageExcluded(id: Identifier): Boolean =
         getProjects().all { project ->
-            isProjectExcluded(project) || project.scopes.all { scope ->
+            isProjectExcluded(project.id) || project.scopes.all { scope ->
                 getExcludes().isScopeExcluded(scope, project, this) || !scope.contains(id)
             }
         }
@@ -339,7 +339,7 @@ data class OrtResult(
     /**
      * True if the given [project] is excluded.
      */
-    fun isProjectExcluded(project: Project): Boolean = excludedProjects.contains(project.id)
+    fun isProjectExcluded(id: Identifier): Boolean = excludedProjects.contains(id)
 
     /**
      * Return a copy of this [OrtResult] with the [Repository.config] replaced by [config].
