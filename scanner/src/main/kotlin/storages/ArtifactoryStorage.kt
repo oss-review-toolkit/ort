@@ -25,7 +25,6 @@ import ch.frankel.slf4k.*
 import com.here.ort.model.Identifier
 import com.here.ort.model.ScanResult
 import com.here.ort.model.ScanResultContainer
-import com.here.ort.model.jsonMapper
 import com.here.ort.model.readValue
 import com.here.ort.model.yamlMapper
 import com.here.ort.scanner.HTTP_CACHE_PATH
@@ -35,13 +34,10 @@ import com.here.ort.utils.showStackTrace
 
 import java.io.IOException
 import java.net.HttpURLConnection
-import java.util.SortedSet
 import java.util.concurrent.TimeUnit
 
 import okhttp3.CacheControl
-import okhttp3.MediaType
 import okhttp3.Request
-import okhttp3.RequestBody
 
 import okio.Okio
 
@@ -166,40 +162,6 @@ class ArtifactoryStorage(
             log.warn { "Could not upload $storagePath to Artifactory storage: ${e.message}" }
 
             return false
-        }
-    }
-
-    override fun listPackages(): SortedSet<Identifier> {
-        val aqlQuery = """
-            items.find({
-                "type": "file",
-                "repo": "$repository",
-                "path": {"${'$'}match": "scan-results/*"},
-                "name": "scan-results.yml"
-            })
-        """.trimIndent()
-
-        val body = RequestBody.create(MediaType.parse("text/plain"), aqlQuery)
-
-        val request = Request.Builder()
-            .header("X-JFrog-Art-Api", apiToken)
-            .post(body)
-            .url("$url/api/search/aql")
-            .build()
-
-        OkHttpClientHelper.execute(HTTP_CACHE_PATH, request).use { response ->
-            if (response.code() == HttpURLConnection.HTTP_OK) {
-                response.body()?.let { responseBody ->
-                    val json = jsonMapper.readTree(responseBody.charStream())
-
-                    return json["results"].map { node ->
-                        val elements = node["path"].textValue().split("/")
-                        Identifier("${elements[1]}:${elements[2]}:${elements[3]}:${elements[4]}")
-                    }.toSortedSet()
-                } ?: throw IOException("Could not fetch package list: Response body is null.")
-            } else {
-                throw IOException("Could not fetch package list: ${response.code()} - ${response.message()}")
-            }
         }
     }
 

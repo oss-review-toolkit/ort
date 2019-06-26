@@ -33,8 +33,6 @@ import com.here.ort.scanner.storages.ArtifactoryStorage
 import com.here.ort.scanner.storages.NoStorage
 import com.here.ort.utils.log
 
-import java.util.SortedSet
-
 /**
  * The interface that storage backends for scan results need to implement.
  */
@@ -92,8 +90,6 @@ interface ScanResultsStorage {
             }
 
         override fun add(id: Identifier, scanResult: ScanResult) = storage.add(id, scanResult)
-
-        override fun listPackages() = storage.listPackages()
     }
 
     /**
@@ -128,9 +124,4 @@ interface ScanResultsStorage {
      * @return If the [ScanResult] could be written to the storage.
      */
     fun add(id: Identifier, scanResult: ScanResult): Boolean
-
-    /**
-     * List the [Identifier]s of all stored packages.
-     */
-    fun listPackages(): SortedSet<Identifier>
 }
