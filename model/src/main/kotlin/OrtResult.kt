@@ -19,12 +19,15 @@
 
 package com.here.ort.model
 
+import ch.frankel.slf4k.*
+
 import com.fasterxml.jackson.annotation.JsonInclude
 
 import com.here.ort.model.config.Excludes
 import com.here.ort.model.config.PathExclude
 import com.here.ort.model.config.RepositoryConfiguration
 import com.here.ort.spdx.SpdxExpression
+import com.here.ort.utils.log
 import com.here.ort.utils.zipWithDefault
 
 import java.util.SortedSet
@@ -76,18 +79,27 @@ data class OrtResult(
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     val data: CustomData = mutableMapOf()
 
-    private val excludedProjects: Set<Identifier> by lazy {
-        getProjects()
-            .filter { project ->
+    private data class ProjectEntry(val project: Project, val isExcluded: Boolean)
+
+    private val projects: Map<Identifier, ProjectEntry> by lazy {
+        log.info { "Computing excluded projects which may take a while..." }
+
+        val result = getProjects().associateBy(
+            { project -> project.id },
+            { project ->
                 val projectExcludes = getExcludes()
                     .findProjectExcludes(project, this)
                     .filter { it.isWholeProjectExcluded }
                 val pathExcludes = getExcludes().findPathExcludes(project, this)
-                val isExcluded = projectExcludes.isNotEmpty() || pathExcludes.isNotEmpty()
-                isExcluded
+                ProjectEntry(
+                    project = project,
+                    isExcluded = projectExcludes.isNotEmpty() || pathExcludes.isNotEmpty()
+                )
             }
-            .map { it.id }
-            .toSet()
+        )
+
+        log.info { "Computing excluded projects done." }
+        result
     }
 
     /**
@@ -187,7 +199,7 @@ data class OrtResult(
             val excludes = getExcludes()
 
             scanner?.results?.scanResults?.forEach { result ->
-                val project = getProjects().find { it.id == result.id }
+                val project = getProject(result.id)
 
                 if (!omitExcluded || !isPackageExcluded(result.id)) {
                     result.results.flatMap { it.summary.licenseFindings }.forEach { finding ->
@@ -245,7 +257,7 @@ data class OrtResult(
      * not found an empty set is returned.
      */
     fun getDeclaredLicensesForId(id: Identifier): SortedSet<String> =
-        getProjects().find { it.id == id }?.declaredLicenses
+        getProject(id)?.declaredLicenses
             ?: getPackages().find { it.pkg.id == id }?.pkg?.declaredLicenses
             ?: sortedSetOf<String>()
 
@@ -284,7 +296,7 @@ data class OrtResult(
     @Suppress("UNUSED") // This is intended to be mostly used via scripting.
     fun getUncuratedPackageById(id: Identifier): Package? =
         getPackages().find { it.pkg.id == id }?.toUncuratedPackage()
-            ?: getProjects().find { it.id == id }?.toPackage()
+            ?: getProject(id)?.toPackage()
 
     /**
      * Returns the path of the definition file of the [project], relative to the analyzer root. If the project was
@@ -320,7 +332,7 @@ data class OrtResult(
      */
     @Suppress("UNUSED") // This is intended to be mostly used via scripting.
     fun isExcluded(id: Identifier): Boolean =
-        getProjects().find { it.id == id }?.let {
+        getProject(id)?.let {
             // An excluded project could still be included as a dependency of another non-excluded project.
             isProjectExcluded(id) && isPackageExcluded(id)
         } ?: isPackageExcluded(id)
@@ -339,13 +351,15 @@ data class OrtResult(
     /**
      * True if the given [project] is excluded.
      */
-    fun isProjectExcluded(id: Identifier): Boolean = excludedProjects.contains(id)
+    fun isProjectExcluded(id: Identifier): Boolean = projects[id]?.isExcluded ?: false
 
     /**
      * Return a copy of this [OrtResult] with the [Repository.config] replaced by [config].
      */
     fun replaceConfig(config: RepositoryConfiguration): OrtResult =
         copy(repository = repository.copy(config = config)).also { it.data += data }
+
+    fun getProject(id: Identifier): Project? = projects[id]?.project
 
     private fun getPackages(): Set<CuratedPackage> = analyzer?.result?.packages ?: emptySet()
 

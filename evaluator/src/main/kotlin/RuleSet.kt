@@ -87,7 +87,7 @@ class RuleSet(val ortResult: OrtResult) {
 
             val curatedPackage = ortResult.analyzer?.result?.let { analyzerResult ->
                 analyzerResult.packages.find { it.pkg.id == pkgRef.id }
-                    ?: analyzerResult.projects.find { it.id == pkgRef.id }?.toPackage()?.toCuratedPackage()
+                    ?: ortResult.getProject(pkgRef.id)?.toPackage()?.toCuratedPackage()
             }
 
             if (curatedPackage == null) {
