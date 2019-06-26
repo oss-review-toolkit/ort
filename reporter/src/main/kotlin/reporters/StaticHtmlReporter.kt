@@ -272,7 +272,9 @@ class StaticHtmlReporter : Reporter() {
             }
             td {
                 p { +ruleViolation.violation.message }
-                p { +ruleViolation.resolutionDescription }
+                if ( ruleViolation.isResolved) {
+                    p { +ruleViolation.resolutionDescription }
+                }
             }
         }
     }
