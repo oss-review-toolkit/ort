@@ -55,8 +55,10 @@ data class Excludes(
     /**
      * Return the [PathExclude]s matching the [definitionFilePath][Project.definitionFilePath].
      */
-    fun findPathExcludes(project: Project, ortResult: OrtResult) =
-        paths.filter { it.matches(ortResult.getDefinitionFilePathRelativeToAnalyzerRoot(project)) }
+    fun findPathExcludes(project: Project, ortResult: OrtResult): List<PathExclude> {
+        val definitionFilePath = ortResult.getDefinitionFilePathRelativeToAnalyzerRoot(project)
+        return paths.filter { it.matches(definitionFilePath) }
+    }
 
     /**
      * Return all [ProjectExclude]s for the provided [project].
