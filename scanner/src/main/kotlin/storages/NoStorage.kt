@@ -34,5 +34,4 @@ class NoStorage: ScanResultsStorage {
     override fun read(id: Identifier) = ScanResultContainer(id, emptyList())
     override fun read(pkg: Package, scannerDetails: ScannerDetails) = ScanResultContainer(pkg.id, emptyList())
     override fun add(id: Identifier, scanResult: ScanResult) = false
-    override fun listPackages() = sortedSetOf<Identifier>()
 }
