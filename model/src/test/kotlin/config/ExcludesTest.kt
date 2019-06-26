@@ -243,28 +243,28 @@ class ExcludesTest : WordSpec() {
                 setExcludes(Excludes(projects = listOf(projectExclude1)))
                 setProjects(project1)
 
-                ortResult.isProjectExcluded(project1) shouldBe true
+                ortResult.isProjectExcluded(project1.id) shouldBe true
             }
 
             "return false if the definition file path is matched by a project exclude with scope excludes" {
                 setExcludes(Excludes(projects = listOf(projectExcludeWithScopes1)))
                 setProjects(project1)
 
-                ortResult.isProjectExcluded(project1) shouldBe false
+                ortResult.isProjectExcluded(project1.id) shouldBe false
             }
 
             "return true if the definition file path is matched by a path exclude" {
                 setExcludes(Excludes(paths = listOf(pathExclude1)))
                 setProjects(project1)
 
-                ortResult.isProjectExcluded(project1) shouldBe true
+                ortResult.isProjectExcluded(project1.id) shouldBe true
             }
 
 
             "return false if nothing is excluded" {
                 setProjects(project1)
 
-                ortResult.isProjectExcluded(project1) shouldBe false
+                ortResult.isProjectExcluded(project1.id) shouldBe false
             }
         }
 
