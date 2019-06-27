@@ -60,7 +60,7 @@ object ReporterCommand : CommandWithHelp() {
     }
 
     @Parameter(
-        description = "The ORT result file to use. Must contain a scan result.",
+        description = "The ORT result file to use.",
         names = ["--ort-file", "-i"],
         required = true,
         order = PARAMETER_ORDER_MANDATORY
