@@ -21,13 +21,16 @@ package com.here.ort.model.config
 
 import com.here.ort.model.AnalyzerResult
 import com.here.ort.model.AnalyzerRun
+import com.here.ort.model.CuratedPackage
 import com.here.ort.model.Environment
 import com.here.ort.model.Identifier
 import com.here.ort.model.OrtResult
+import com.here.ort.model.Package
 import com.here.ort.model.PackageReference
 import com.here.ort.model.Project
 import com.here.ort.model.Repository
 import com.here.ort.model.Scope
+
 import io.kotlintest.TestCase
 
 import io.kotlintest.matchers.beEmpty
@@ -81,7 +84,11 @@ class ExcludesTest : WordSpec() {
             analyzer = AnalyzerRun(
                 environment = Environment(),
                 config = AnalyzerConfiguration(ignoreToolVersions = false, allowDynamicVersions = false),
-                result = AnalyzerResult.EMPTY
+                result = AnalyzerResult.EMPTY.copy(
+                    packages = sortedSetOf(
+                        CuratedPackage(pkg = Package.EMPTY.copy(id = id), curations = emptyList())
+                    )
+                )
             )
         )
     }
