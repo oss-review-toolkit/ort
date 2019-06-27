@@ -19,6 +19,7 @@
 
 package com.here.ort.evaluator
 
+import com.here.ort.model.CuratedPackage
 import com.here.ort.model.Identifier
 import com.here.ort.model.LicenseFinding
 import com.here.ort.model.LicenseSource
@@ -53,6 +54,9 @@ open class PackageRule(
     val detectedLicenses: List<LicenseFinding>
 ) : Rule(ruleSet, name) {
     private val licenseRules = mutableListOf<LicenseRule>()
+
+    @Suppress("UNUSED") // This is intended to be used by rule implementations.
+    val uncuratedPkg by lazy { CuratedPackage(pkg, curations).toUncuratedPackage() }
 
     override val description = "Evaluating rule '$name' for package '${pkg.id.toCoordinates()}'."
 
