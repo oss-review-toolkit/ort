@@ -42,6 +42,36 @@ import io.kotlintest.shouldBe
 import io.kotlintest.specs.WordSpec
 
 class ExcludesTest : WordSpec() {
+    private val id = Identifier("type", "namespace", "name", "version")
+
+    private val projectId1 = id.copy(name = "project1")
+    private val projectId2 = id.copy(name = "project2")
+    private val projectId3 = id.copy(name = "project3")
+
+    private val project1 = Project.EMPTY.copy(id = projectId1, definitionFilePath = "path1")
+    private val project2 = Project.EMPTY.copy(id = projectId2, definitionFilePath = "path2")
+    private val project3 = Project.EMPTY.copy(id = projectId3, definitionFilePath = "path3")
+
+    private val projectExclude1 = ProjectExclude("path1", ProjectExcludeReason.BUILD_TOOL_OF, "")
+    private val projectExclude2 = ProjectExclude("path2", ProjectExcludeReason.BUILD_TOOL_OF, "")
+    private val projectExclude3 = ProjectExclude("path3", ProjectExcludeReason.BUILD_TOOL_OF, "")
+    private val projectExclude4 = ProjectExclude(".*", ProjectExcludeReason.BUILD_TOOL_OF, "")
+
+
+    private val pathExclude1 = PathExclude("path1", PathExcludeReason.BUILD_TOOL_OF, "")
+    private val pathExclude2 = PathExclude("path2", PathExcludeReason.BUILD_TOOL_OF, "")
+    private val pathExclude3 = PathExclude("**.ext", PathExcludeReason.BUILD_TOOL_OF, "")
+    private val pathExclude4 = PathExclude("**/file.ext", PathExcludeReason.BUILD_TOOL_OF, "")
+
+    private val scope1 = Scope("scope1", sortedSetOf(PackageReference(id)))
+    private val scope2 = Scope("scope2", sortedSetOf(PackageReference(id)))
+
+    private val scopeExclude1 = ScopeExclude("scope1", ScopeExcludeReason.PROVIDED_BY, "")
+    private val scopeExclude2 = ScopeExclude("scope2", ScopeExcludeReason.PROVIDED_BY, "")
+
+    private val projectExcludeWithScopes1 = ProjectExclude("path1", scopes = listOf(scopeExclude1))
+    private val projectExcludeWithScopes2 = ProjectExclude("path2", scopes = listOf(scopeExclude2))
+
 
     private lateinit var ortResult: OrtResult
 
@@ -67,36 +97,6 @@ class ExcludesTest : WordSpec() {
     }
 
     init {
-        val id = Identifier("type", "namespace", "name", "version")
-
-        val projectId1 = id.copy(name = "project1")
-        val projectId2 = id.copy(name = "project2")
-        val projectId3 = id.copy(name = "project3")
-
-        val project1 = Project.EMPTY.copy(id = projectId1, definitionFilePath = "path1")
-        val project2 = Project.EMPTY.copy(id = projectId2, definitionFilePath = "path2")
-        val project3 = Project.EMPTY.copy(id = projectId3, definitionFilePath = "path3")
-
-        val projectExclude1 = ProjectExclude("path1", ProjectExcludeReason.BUILD_TOOL_OF, "")
-        val projectExclude2 = ProjectExclude("path2", ProjectExcludeReason.BUILD_TOOL_OF, "")
-        val projectExclude3 = ProjectExclude("path3", ProjectExcludeReason.BUILD_TOOL_OF, "")
-        val projectExclude4 = ProjectExclude(".*", ProjectExcludeReason.BUILD_TOOL_OF, "")
-
-
-        val pathExclude1 = PathExclude("path1", PathExcludeReason.BUILD_TOOL_OF, "")
-        val pathExclude2 = PathExclude("path2", PathExcludeReason.BUILD_TOOL_OF, "")
-        val pathExclude3 = PathExclude("**.ext", PathExcludeReason.BUILD_TOOL_OF, "")
-        val pathExclude4 = PathExclude("**/file.ext", PathExcludeReason.BUILD_TOOL_OF, "")
-
-        val scope1 = Scope("scope1", sortedSetOf(PackageReference(id)))
-        val scope2 = Scope("scope2", sortedSetOf(PackageReference(id)))
-
-        val scopeExclude1 = ScopeExclude("scope1", ScopeExcludeReason.PROVIDED_BY, "")
-        val scopeExclude2 = ScopeExclude("scope2", ScopeExcludeReason.PROVIDED_BY, "")
-
-        val projectExcludeWithScopes1 = ProjectExclude("path1", scopes = listOf(scopeExclude1))
-        val projectExcludeWithScopes2 = ProjectExclude("path2", scopes = listOf(scopeExclude2))
-
         "findPathExcludes" should {
             "find the correct path excludes for a path" {
                 val excludes = Excludes(paths = listOf(pathExclude1, pathExclude2, pathExclude3, pathExclude4))
