@@ -1,6 +1,6 @@
-name: funTest
+name: ort
 channels:
   - defaults
 dependencies:
   - python=3.7
-  - django
+  - django==2.2.1

@@ -77,14 +77,13 @@ class Conda(
         ) = Conda(managerName, analyzerRoot, analyzerConfig, repoConfig)
     }
 
-
+    // create an environment with conda named "ort"
+    // TODO: make this a more unique environment name
+    private val envName = "ort"
 
     override fun command(workingDir: File?) = "conda"
 
-    private fun runConda(envDir: File, workingDir: File, vararg commandArgs: String) =
-        runInEnv(envDir, workingDir, command(workingDir), *commandArgs)
-
-    private fun runInEnv(envDir: File, workingDir: File, commandName: String, vararg commandArgs: String):
+    private fun runInEnv(envDir: File, commandName: String, vararg commandArgs: String):
             ProcessCapture {
         val binDir = if (Os.isWindows) "Scripts" else "bin"
         var command = File(envDir, binDir + File.separator + commandName)
@@ -98,13 +97,10 @@ class Conda(
             }
         }
 
-        val process = ProcessCapture(workingDir, command.path, *commandArgs)
+        val process = ProcessCapture(command.path, *commandArgs)
         log.debug { process.stdout }
         return process
     }
-
-    override fun beforeResolution(definitionFiles: List<File>) =
-        VirtualEnv.checkVersion(ignoreActualVersion = analyzerConfig.ignoreToolVersions)
 
     override fun resolveDependencies(definitionFile: File): ProjectAnalyzerResult? {
         // For an overview, dependency resolution involves the following steps:
@@ -113,11 +109,13 @@ class Conda(
         // 3. Get the hierarchy of dependencies via pipdeptree.
         // 4. Get additional remote package meta-data via PyPIJSON.
 
+        // working directory is the one containing the environment.yml
+        // TODO: add support for environment.yml being in a different directory that setup.py
         val workingDir = definitionFile.parentFile
-        val envDir = setupEnv(workingDir, definitionFile)
+        val envDir = setupEnv(definitionFile)
 
         // List all packages installed locally in the environment.
-        val pipdeptree = runInEnv(envDir, workingDir, "pipdeptree", "-l", "--json-tree")
+        val pipdeptree = runInEnv(envDir,"pipdeptree", "-l", "--json-tree")
 
         // Install pydep after running any other command but before looking at the dependencies because it
         // downgrades pip to version 7.1.2. Use it to get meta-information from about the project from setup.py. As
@@ -127,26 +125,26 @@ class Conda(
             // On Windows, in-place pip up- / downgrades require pip to be wrapped by "python -m", see
             // https://github.com/pypa/pip/issues/1299.
             runInEnv(
-                envDir, workingDir, "python", "-m", command(workingDir),
-                "install", pydepUrl
+                envDir,"python", "-m", command(workingDir),
+                *TRUSTED_HOSTS, "install", pydepUrl
             )
         } else {
-            runConda(envDir, workingDir, "install", pydepUrl)
+            runInEnv(envDir, "pip", "install", pydepUrl)
         }
         conda.requireSuccess()
 
-        var declaredLicenses: SortedSet<String> = sortedSetOf<String>()
+        var declaredLicenses: SortedSet<String> = sortedSetOf()
 
         // First try to get meta-data from "setup.py" in any case, even for "requirements.txt" projects.
         val (setupName, setupVersion, setupHomepage) = if (File(workingDir, "setup.py").isFile) {
             val pydep = if (Os.isWindows) {
                 // On Windows, the script itself is not executable, so we need to wrap the call by "python".
                 runInEnv(
-                    envDir, workingDir, "python",
+                    envDir, "python",
                     envDir.path + "\\Scripts\\pydep-run.py", "info", "."
                 )
             } else {
-                runInEnv(envDir, workingDir, "pydep-run.py", "info", ".")
+                runInEnv(envDir,"pydep-run.py", "info", ".")
             }
             pydep.requireSuccess()
 
@@ -330,11 +328,11 @@ class Conda(
 
 
 
-    private fun setupEnv(workingDir: File, definitionFile: File): File {
+    private fun setupEnv(definitionFile: File): File {
         // Create an out-of-tree environment
-        log.info { "Creating a conda env for the '${workingDir.name}' project directory..." }
-        val envDir = createEnv(workingDir)
-        val install = installDependencies(workingDir, definitionFile, envDir)
+        log.info { "Creating a conda env for $definitionFile..." }
+        val envDir = createEnv(definitionFile)
+        val install = installDependencies(definitionFile, envDir)
 
         if (install.isError) {
             log.debug {
@@ -355,24 +353,25 @@ class Conda(
         return envDir
     }
 
-    private fun createEnv(workingDir: File): File {
-        ProcessCapture(workingDir, "conda env create --name ort").requireSuccess()
-        val envs = ProcessCapture(workingDir, "conda env list").requireSuccess()
+    /**
+     * Create a conda environment given the environment.yml or requirements.txt
+     */
+    private fun createEnv(envDefinition: File): File {
+        ProcessCapture("conda", "env", "create", "--force", "--name", envName, "--file", envDefinition.absolutePath).requireSuccess()
+        val envs = ProcessCapture("conda", "env", "list").requireSuccess()
         val res = envs.stdout.split('\n')
-            .filter{ it.split("\\s".toRegex()).first() == "ort" }.first()
+            .filter{ it.split("\\s".toRegex()).first() == envName }.first()
             .split("\\s".toRegex()).last()
         return File(res)
     }
 
-    private fun installDependencies(workingDir: File, definitionFile: File, envDir: File): ProcessCapture {
-        // TODO: Ensure to have installed a version of pip that is know to work for us.
-
-        // Install pipdeptree inside the virtualenv as that's the only way to make it report only the project's
+    private fun installDependencies(definitionFile: File, envDir: File): ProcessCapture {
+        // Install pipdeptree inside the conda environment as that's the only way to make it report only the project's
         // dependencies instead of those of all (globally) installed packages, see
         // https://github.com/naiquevin/pipdeptree#known-issues.
         // We only depend on pipdeptree to be at least version 0.5.0 for JSON output, but we stick to a fixed
         // version to be sure to get consistent results.
-        var conda = runConda(envDir, workingDir, "install", "pipdeptree==$PIPDEPTREE_VERSION")
+        var conda = runInEnv(envDir,"pip", *TRUSTED_HOSTS, "install", "pipdeptree==$PIPDEPTREE_VERSION")
         conda.requireSuccess()
 
         // TODO: Find a way to make installation of packages with native extensions work on Windows where often
@@ -380,11 +379,14 @@ class Conda(
         // http://www.lfd.uci.edu/~gohlke/pythonlibs/
         conda = if (definitionFile.name == "setup.py") {
             // Note that this only installs required "install" dependencies, not "extras" or "tests" dependencies.
-            runConda(envDir, workingDir, "install", ".")
+            runInEnv(envDir,"pip", *TRUSTED_HOSTS, "install", *INSTALL_OPTIONS, ".")
+        } else if (definitionFile.name == "environment.yml") {
+            // use conda update
+            ProcessCapture("conda", "env", "update", "--name", envName, "--file", definitionFile.absolutePath).requireSuccess()
         } else {
             // In "setup.py"-speak, "requirements.txt" just contains required "install" dependencies.
-            runConda(
-                envDir, workingDir, "install","-r",
+            runInEnv(
+                envDir,"pip", *TRUSTED_HOSTS, "install", *INSTALL_OPTIONS, "-r",
                 definitionFile.name
             )
         }

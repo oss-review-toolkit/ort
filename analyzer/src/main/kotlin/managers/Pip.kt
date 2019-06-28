@@ -63,9 +63,8 @@ import java.util.SortedSet
 import okhttp3.Request
 
 // The lowest version that supports "--prefer-binary".
-const val PIP_VERSION = "18.0"
-
-const val PIPDEPTREE_VERSION = "0.13.0"
+const val PIP_VERSION = "19.1.1"
+const val PIPDEPTREE_VERSION = "0.13.2"
 val PIPDEPTREE_DEPENDENCIES = arrayOf("pipdeptree", "setuptools", "wheel")
 
 const val PYDEP_REVISION = "license-and-classifiers"
@@ -148,19 +147,6 @@ class Pip(
             analyzerConfig: AnalyzerConfiguration,
             repoConfig: RepositoryConfiguration
         ) = Pip(managerName, analyzerRoot, analyzerConfig, repoConfig)
-    }
-
-    companion object {
-        private val INSTALL_OPTIONS = arrayOf(
-            "--no-warn-conflicts",
-            "--prefer-binary"
-        )
-
-        // TODO: Need to replace this hard-coded list of domains with e.g. a command line option.
-        private val TRUSTED_HOSTS = listOf(
-            "pypi.org",
-            "pypi.python.org" // Legacy
-        ).flatMap { listOf("--trusted-host", it) }.toTypedArray()
     }
 
     override fun command(workingDir: File?) = "pip"
@@ -595,3 +581,14 @@ fun getSourceArtifact(releaseNode: ArrayNode): RemoteArtifact {
 
     return RemoteArtifact(url, Hash.create(hash))
 }
+
+val INSTALL_OPTIONS = arrayOf(
+    "--no-warn-conflicts",
+    "--prefer-binary"
+)
+
+// TODO: Need to replace this hard-coded list of domains with e.g. a command line option.
+val TRUSTED_HOSTS = listOf(
+    "pypi.org",
+    "pypi.python.org" // Legacy
+).flatMap { listOf("--trusted-host", it) }.toTypedArray()

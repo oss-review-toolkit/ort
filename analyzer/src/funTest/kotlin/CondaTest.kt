@@ -46,7 +46,7 @@ class CondaTest : WordSpec() {
                 val vcsPath = vcsDir.getPathToRoot(definitionFile.parentFile)
 
                 val result = createConda().resolveDependencies(listOf(definitionFile))[definitionFile]
-                val expectedResultFile = File(projectsDir, "synthetic/python3-django-expected-output.yml")
+                val expectedResultFile = File(projectsDir, "synthetic/conda-django-expected-output.yml")
                 val expectedResult = patchExpectedResult(
                     expectedResultFile,
                     url = normalizeVcsUrl(vcsUrl),
