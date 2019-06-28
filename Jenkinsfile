@@ -87,7 +87,7 @@ pipeline {
         stage('Run ORT reporter') {
             steps {
                 sh 'rm -fr project/ort/reporter'
-                sh 'docker/run.sh "-v ${WORKSPACE}/project:/project" --info report -f StaticHTML -i /project/ort/scanner/scan-result.yml -o /project/ort/reporter'
+                sh 'docker/run.sh "-v ${WORKSPACE}/project:/project" --info report -f StaticHTML,WebApp -i /project/ort/scanner/scan-result.yml -o /project/ort/reporter'
             }
 
             post {
