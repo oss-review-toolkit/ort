@@ -46,6 +46,7 @@ class PackageManagerTest : WordSpec({
 
             managedFilesByName["Bower"] shouldBe listOf(File(projectDir, "bower.json"))
             managedFilesByName["Bundler"] shouldBe listOf(File(projectDir, "Gemfile"))
+            managedFilesByName["Conda"] shouldBe listOf(File(projectDir, "environment.yml"))
             managedFilesByName["DotNet"] shouldBe listOf(File(projectDir, "test.csproj"))
             managedFilesByName["GoDep"] shouldBe listOf(File(projectDir, "Gopkg.toml"))
             managedFilesByName["Gradle"] shouldBe listOf(File(projectDir, "build.gradle"))
@@ -62,10 +63,10 @@ class PackageManagerTest : WordSpec({
         "find only files for active package managers" {
             val managedFiles = PackageManager.findManagedFiles(
                 projectDir,
-                listOf(Gradle.Factory(), Pip.Factory(), Sbt.Factory())
+                listOf(Gradle.Factory(), Pip.Factory(), Sbt.Factory(), Conda.Factory())
             )
 
-            managedFiles.size shouldBe 3
+            managedFiles.size shouldBe 4
 
             // The keys in expected and actual maps of definition files are different instances of package manager
             // factories. So to compare values use the package manager names as keys instead.
@@ -75,6 +76,7 @@ class PackageManagerTest : WordSpec({
 
             managedFilesByName["Gradle"] shouldBe listOf(File(projectDir, "build.gradle"))
             managedFilesByName["PIP"] shouldBe listOf(File(projectDir, "setup.py"))
+            managedFilesByName["Conda"] shouldBe listOf(File(projectDir, "environment.yml"))
             managedFilesByName["SBT"] shouldBe listOf(File(projectDir, "build.sbt"))
         }
 

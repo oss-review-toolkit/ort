@@ -50,22 +50,21 @@ import com.here.ort.utils.log
 import com.here.ort.utils.safeDeleteRecursively
 import com.here.ort.utils.showStackTrace
 import com.here.ort.utils.textValueOrEmpty
+import com.here.ort.utils.stripLeadingZerosFromVersion
 
 import com.vdurmont.semver4j.Requirement
 
 import java.io.File
 import java.io.IOException
 import java.lang.IllegalArgumentException
-import java.lang.NumberFormatException
 import java.net.HttpURLConnection
 import java.util.SortedSet
 
 import okhttp3.Request
 
 // The lowest version that supports "--prefer-binary".
-const val PIP_VERSION = "18.0"
-
-const val PIPDEPTREE_VERSION = "0.13.0"
+const val PIP_VERSION = "19.1.1"
+const val PIPDEPTREE_VERSION = "0.13.2"
 val PIPDEPTREE_DEPENDENCIES = arrayOf("pipdeptree", "setuptools", "wheel")
 
 const val PYDEP_REVISION = "license-and-classifiers"
@@ -148,31 +147,6 @@ class Pip(
             analyzerConfig: AnalyzerConfiguration,
             repoConfig: RepositoryConfiguration
         ) = Pip(managerName, analyzerRoot, analyzerConfig, repoConfig)
-    }
-
-    companion object {
-        private val INSTALL_OPTIONS = arrayOf(
-            "--no-warn-conflicts",
-            "--prefer-binary"
-        )
-
-        // TODO: Need to replace this hard-coded list of domains with e.g. a command line option.
-        private val TRUSTED_HOSTS = listOf(
-            "pypi.org",
-            "pypi.python.org" // Legacy
-        ).flatMap { listOf("--trusted-host", it) }.toTypedArray()
-
-        /**
-         * Return a version string with leading zeros of components stripped.
-         */
-        fun stripLeadingZerosFromVersion(version: String) =
-            version.split(".").joinToString(".") {
-                try {
-                    it.toInt().toString()
-                } catch (e: NumberFormatException) {
-                    it
-                }
-            }
     }
 
     override fun command(workingDir: File?) = "pip"
@@ -426,53 +400,6 @@ class Pip(
         return ProjectAnalyzerResult(project, packages.map { it.toCuratedPackage() }.toSortedSet())
     }
 
-    private fun getBinaryArtifact(pkg: Package, releaseNode: ArrayNode): RemoteArtifact {
-        // Prefer python wheels and fall back to the first entry (probably a sdist).
-        val binaryArtifact = releaseNode.asSequence().find {
-            it["packagetype"].textValue() == "bdist_wheel"
-        } ?: releaseNode[0]
-
-        val url = binaryArtifact["url"]?.textValue() ?: pkg.binaryArtifact.url
-        val hash = binaryArtifact["md5_digest"]?.textValue()?.let { Hash.create(it) } ?: pkg.binaryArtifact.hash
-
-        return RemoteArtifact(url, hash)
-    }
-
-    private fun getSourceArtifact(releaseNode: ArrayNode): RemoteArtifact {
-        val sourceArtifacts = releaseNode.asSequence().filter {
-            it["packagetype"].textValue() == "sdist"
-        }
-
-        if (sourceArtifacts.count() == 0) return RemoteArtifact.EMPTY
-
-        val sourceArtifact = sourceArtifacts.find {
-            it["filename"].textValue().endsWith(".tar.bz2")
-        } ?: sourceArtifacts.elementAt(0)
-
-        val url = sourceArtifact["url"]?.textValue() ?: return RemoteArtifact.EMPTY
-        val hash = sourceArtifact["md5_digest"]?.textValue() ?: return RemoteArtifact.EMPTY
-
-        return RemoteArtifact(url, Hash.create(hash))
-    }
-
-    private fun getDeclaredLicenses(pkgInfo: JsonNode): SortedSet<String> {
-        val declaredLicenses = sortedSetOf<String>()
-
-        // Use the top-level license field as well as the license classifiers as the declared licenses.
-        setOf(pkgInfo["license"]).mapNotNullTo(declaredLicenses) { license ->
-            license?.textValue()?.removeSuffix(" License")?.takeUnless { it.isBlank() || it == "UNKNOWN" }
-        }
-
-        // Example license classifier:
-        // "License :: OSI Approved :: GNU Library or Lesser General Public License (LGPL)"
-        pkgInfo["classifiers"]?.mapNotNullTo(declaredLicenses) {
-            val classifier = it.textValue().split(" :: ")
-            classifier.takeIf { it.first() == "License" }?.last()?.removeSuffix(" License")
-        }
-
-        return declaredLicenses
-    }
-
     private fun setupVirtualEnv(workingDir: File, definitionFile: File): File {
         // Create an out-of-tree virtualenv.
         log.info { "Creating a virtualenv for the '${workingDir.name}' project directory..." }
@@ -572,35 +499,97 @@ class Pip(
 
         return pip
     }
+}
 
-    private fun parseDependencies(
-        dependencies: Iterable<JsonNode>,
-        allPackages: SortedSet<Package>, installDependencies: SortedSet<PackageReference>
-    ) {
-        dependencies.forEach { dependency ->
-            val name = dependency["package_name"].textValue()
-            val version = dependency["installed_version"].textValue()
+/**
+ * Get declared licenses from pip package JSON metadata
+ */
+fun getDeclaredLicenses(pkgInfo: JsonNode): SortedSet<String> {
+    val declaredLicenses = sortedSetOf<String>()
 
-            val pkg = Package(
-                id = Identifier(
-                    type = "PyPI",
-                    namespace = "",
-                    name = name,
-                    version = version
-                ),
-                declaredLicenses = sortedSetOf(),
-                description = "",
-                homepageUrl = "",
-                binaryArtifact = RemoteArtifact.EMPTY,
-                sourceArtifact = RemoteArtifact.EMPTY,
-                vcs = VcsInfo.EMPTY
-            )
-            allPackages += pkg
+    // Use the top-level license field as well as the license classifiers as the declared licenses.
+    setOf(pkgInfo["license"]).mapNotNullTo(declaredLicenses) { license ->
+        license?.textValue()?.removeSuffix(" License")?.takeUnless { it.isBlank() || it == "UNKNOWN" }
+    }
 
-            val packageRef = pkg.toReference()
-            installDependencies += packageRef
+    // Example license classifier:
+    // "License :: OSI Approved :: GNU Library or Lesser General Public License (LGPL)"
+    pkgInfo["classifiers"]?.mapNotNullTo(declaredLicenses) {
+        val classifier = it.textValue().split(" :: ")
+        classifier.takeIf { it.first() == "License" }?.last()?.removeSuffix(" License")
+    }
 
-            parseDependencies(dependency["dependencies"], allPackages, packageRef.dependencies)
-        }
+    return declaredLicenses
+}
+
+fun parseDependencies(
+    dependencies: Iterable<JsonNode>,
+    allPackages: SortedSet<Package>,
+    installDependencies: SortedSet<PackageReference>
+) {
+    dependencies.forEach { dependency ->
+        val name = dependency["package_name"].textValue()
+        val version = dependency["installed_version"].textValue()
+
+        val pkg = Package(
+            id = Identifier(
+                type = "PyPI",
+                namespace = "",
+                name = name,
+                version = version
+            ),
+            declaredLicenses = sortedSetOf(),
+            description = "",
+            homepageUrl = "",
+            binaryArtifact = RemoteArtifact.EMPTY,
+            sourceArtifact = RemoteArtifact.EMPTY,
+            vcs = VcsInfo.EMPTY
+        )
+        allPackages += pkg
+
+        val packageRef = pkg.toReference()
+        installDependencies += packageRef
+
+        parseDependencies(dependency["dependencies"], allPackages, packageRef.dependencies)
     }
 }
+
+fun getBinaryArtifact(pkg: Package, releaseNode: ArrayNode): RemoteArtifact {
+    // Prefer python wheels and fall back to the first entry (probably a sdist).
+    val binaryArtifact = releaseNode.asSequence().find {
+        it["packagetype"].textValue() == "bdist_wheel"
+    } ?: releaseNode[0]
+
+    val url = binaryArtifact["url"]?.textValue() ?: pkg.binaryArtifact.url
+    val hash = binaryArtifact["md5_digest"]?.textValue()?.let { Hash.create(it) } ?: pkg.binaryArtifact.hash
+
+    return RemoteArtifact(url, hash)
+}
+
+fun getSourceArtifact(releaseNode: ArrayNode): RemoteArtifact {
+    val sourceArtifacts = releaseNode.asSequence().filter {
+        it["packagetype"].textValue() == "sdist"
+    }
+
+    if (sourceArtifacts.count() == 0) return RemoteArtifact.EMPTY
+
+    val sourceArtifact = sourceArtifacts.find {
+        it["filename"].textValue().endsWith(".tar.bz2")
+    } ?: sourceArtifacts.elementAt(0)
+
+    val url = sourceArtifact["url"]?.textValue() ?: return RemoteArtifact.EMPTY
+    val hash = sourceArtifact["md5_digest"]?.textValue() ?: return RemoteArtifact.EMPTY
+
+    return RemoteArtifact(url, Hash.create(hash))
+}
+
+val INSTALL_OPTIONS = arrayOf(
+    "--no-warn-conflicts",
+    "--prefer-binary"
+)
+
+// TODO: Need to replace this hard-coded list of domains with e.g. a command line option.
+val TRUSTED_HOSTS = listOf(
+    "pypi.org",
+    "pypi.python.org" // Legacy
+).flatMap { listOf("--trusted-host", it) }.toTypedArray()

@@ -1,5 +1,6 @@
 com.here.ort.analyzer.managers.Bower$Factory
 com.here.ort.analyzer.managers.Bundler$Factory
+com.here.ort.analyzer.managers.Conda$Factory
 com.here.ort.analyzer.managers.DotNet$Factory
 com.here.ort.analyzer.managers.GoDep$Factory
 com.here.ort.analyzer.managers.Gradle$Factory
