@@ -136,6 +136,11 @@ or
 
     ./gradlew cli:run --args="--info analyze -f JSON -i /project -o /project/ort/analyzer"
 
+## Running on CI
+
+A basic ORT pipeline (using the analyzer, scanner and reporter) can easily be run on [Jenkins CI](https://jenkins.io/)
+by using the [Jenkinsfile](./Jenkinsfile) in a (declarative) [pipeline](https://jenkins.io/doc/book/pipeline/) job.
+
 ## Getting started
 
 Please see [GettingStarted.md](./docs/GettingStarted.md) for an introduction to the individual tools.
