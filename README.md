@@ -22,29 +22,31 @@
 
 # Introduction
 
-The goal of the OSS Review Toolkit (ORT) is to verify Free and Open Source Software license compliance by checking
-project source code and dependencies.
+The OSS Review Toolkit (ORT) assists with verifying Free and Open Source Software license compliance by checking a
+project's source code and its dependencies.
 
-At a high level, it works by analyzing the source code for dependencies, downloading the
-source code of the dependencies, scanning all source code for license information, and summarizing the results.
+From a bird's eye, it works by analyzing the project's build system for dependencies, downloading the source code of the
+dependencies, scanning all source code for license information, and summarizing the results.
 
-The different tools that make up ORT are designed as libraries (for programmatic use) with a minimal command line
+The different tools that make up ORT are designed as libraries (for programmatic use), with a minimal command line
 interface (for scripted use).
 
-The toolkit is envisioned to consist of the following libraries:
+The toolkit consists of the following tools:
 
-* [Analyzer](#analyzer) - determines dependencies of a software project even if multiple package managers are used. No
-  changes to the software project are required.
-* [Downloader](#downloader) - fetches the source code based on the Analyzer's output.
-* [Scanner](#scanner) - wraps existing copyright / license scanners to detect findings in local source code directories.
-* [Evaluator](#evaluator) - evaluates results as OK or NOT OK against user-specified rules.
-* *Advisor* * - retrieves security advisories based on Analyzer results.
-* [Reporter](#reporter) - presents results in various formats (incl. `NOTICE` files), making it easy to identify
-  dependencies, licenses, copyrights and policy violations.
-* *Documenter* * - generates the final outcome of the review process, e.g. annotated [SPDX](https://spdx.org/) files
-  that can be included into your distribution.
+* [Analyzer](#analyzer) - determines dependencies of a project. Supports multiple package managers and sub-projects. No
+  changes to the projects are required.
+* [Downloader](#downloader) - fetches the source code referred to by the Analyzer result.
+* [Scanner](#scanner) - wraps existing license / copyright scanners to detect findings in local source code directories.
+* [Evaluator](#evaluator) - evaluates license findings an created customizable results or follow-up actions using a
+   rules DSL based on Kotlin.
+* [Reporter](#reporter) - presents results in various formats like visual reports, compliance documents or
+  Bill-Of-Materials (BOMs) to easily identify dependencies, licenses, copyrights or policy violations.
 
-\* Libraries to be implemented, see our [roadmap](https://github.com/heremaps/oss-review-toolkit/projects/1) for details.
+The following tools are [planned](https://github.com/heremaps/oss-review-toolkit/projects/1) but not yet available:
+
+* *Advisor* - retrieves security advisories based on the Analyzer result.
+* *Documenter* - generates the final outcome of the review process incl. legal conclusions, e.g. annotated
+  [SPDX](https://spdx.org/) files that can be included into the distribution.
 
 ## Installation
 
