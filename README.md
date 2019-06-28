@@ -244,10 +244,11 @@ ORT comes with some example implementations for wrappers around license / copyri
 * [Licensee](https://github.com/benbalter/licensee)
 * [ScanCode](https://github.com/nexB/scancode-toolkit)
 
-# Supported remote storages
+# Supported scan results storages
 
-For reusing already known scan results, ORT can currently use one of the following backends as a remote storage:
+For reusing already known scan results, ORT can currently use one of the following backends as a storage:
 
+* [Local file based](./scanner/src/main/kotlin/storages/LocalFileStorage.kt) (the default)
 * [Artifactory](https://jfrog.com/artifactory/)
 
 # Development
