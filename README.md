@@ -48,58 +48,93 @@ The following tools are [planned](https://github.com/heremaps/oss-review-toolkit
 * *Documenter* - generates the final outcome of the review process incl. legal conclusions, e.g. annotated
   [SPDX](https://spdx.org/) files that can be included into the distribution.
 
-## Installation
+# Installation
 
-Follow these steps to run the OSS Review Toolkit from source code:
+## From binaries
 
-1. Install the following basic prerequisites:
+There are no binary releases of ORT yet.
 
-   * Git (any recent version will do).
-   * OpenJDK 8 or Oracle JDK 8u161 or later (not the JRE as you need the `javac` compiler); also remember to the
-    `JAVA_HOME` environment variable accordingly.
-   * [Node.js](https://nodejs.org) 8.* (for the Web App reporter).
-   * [Yarn](https://yarnpkg.com) 1.9.* - 1.16.* (for the Web App reporter).
+## From sources
 
-2. Clone this repository with submodules by running `git clone --recurse-submodules`. If you have already cloned
-   non-recursively, you can initialize submodules afterwards by running `git submodule update --init --recursive`. Note
-   that submodules are only required if you intend to run tests, though.
+Install the following basic prerequisites:
 
-3. Change into the created directory and run `./gradlew installDist` to build / install the start script for ORT. On
-   the first run, this will also bootstrap Gradle and download required dependencies. The start script can then be run
-   as:
+* Git (any recent version will do).
 
-   * `./cli/build/install/ort/bin/ort --help`
+Then clone this repository. If you intend to run tests, you need to clone with submodules by running
+`git clone --recurse-submodules`. If you have already cloned non-recursively, you can initialize submodules afterwards
+by running `git submodule update --init --recursive`.
 
-   Alternatively, ORT can be directly run by Gradle like:
+### Build using Docker
 
-   * `./gradlew cli:run --args="--help"`
+Install the following basic prerequisites:
 
-   Note that in this case the working directory used by ORT is that of the `cli` project, not directory `gradlew` is
-   located in (see https://github.com/gradle/gradle/issues/6074).
+* Docker (and ensure its daemon is running).
 
-4. Make sure that the locale of your system is set to `en_US.UTF-8`, using other locales might lead to issues with parsing
-   the output of external tools.
+Change into the created directory and run `docker/build.sh`.
 
-5. Install any missing external command line tools as listed by
+### Build natively
 
-   * `./cli/build/install/ort/bin/ort requirements`
+Install these additional prerequisites:
 
-   or
+* OpenJDK 8 or Oracle JDK 8u161 or later (not the JRE as you need the `javac` compiler); also remember to set the
+  `JAVA_HOME` environment variable accordingly.
+* For the Web App reporter:
+    * [Node.js](https://nodejs.org) 8.*
+    * [Yarn](https://yarnpkg.com) 1.9.* - 1.16.*
 
-   * `./gradlew cli:run --args="requirements"`
+Change into the created directory and run `./gradlew installDist` (on the first run this will bootstrap Gradle and
+download all required dependencies).
 
-Alternatively, you can also run the OSS Review Toolkit by building its Docker image:
+## Basic usage
 
-1. Ensure you have Docker installed and its daemon running.
+ORT can now be run using
 
-2. Clone this repository with submodules by running `git clone --recurse-submodules`. If you have already cloned
-   non-recursively, you can initialize submodules afterwards by running `git submodule update --init --recursive`. Note
-   that submodules are only required if you intend to run tests, though.
+    ./cli/build/install/ort/bin/ort --help
 
-3. Change into the created directory and run `./gradlew cli:dockerBuildImage` to build the Docker image and send it to
-   the locally running daemon.
+Note that if you make any changes to ORT's source code, you would have to regenerate the distribution using either the
+[Build using Docker](#build-using-docker) or [Build natively](#build-natively) steps above.
 
-4. Execute `docker run ort requirements` to verify all required command line tools are available in the container.
+To avoid that, you can also build and run ORT in one go (if you have the prerequisites from the
+[Build natively](#build-natively) section installed):
+
+   ./gradlew cli:run --args="--help"
+
+Note that in this case the working directory used by ORT is that of the `cli` project, not directory `gradlew` is
+located in (see https://github.com/gradle/gradle/issues/6074).
+
+# Running the tools
+
+Like for building ORT from sources you have the option to run ORT from a Docker image (which comes with all runtime
+dependencies) or to run ORT natively (in which case some additional requirements need to be fulfilled).
+
+## Run using Docker
+
+Run `docker/run.sh "<DOCKER_ARGS>" <ORT_ARGS>` where `<DOCKER_ARGS>` are passed to `docker run` (and need to be quoted
+if spaces are contained) and `<ORT_ARGS>` are passed to ORT. You typically use `<DOCKER_ARGS>` to mount the project
+directory to scan into the running container to let ORT access it, for example:
+
+    docker/run.sh "-v /workspace:/project" --info analyze -f JSON -i /project -o /project/ort/analyzer
+
+## Run natively
+
+First of all, make sure that the locale of your system is set to `en_US.UTF-8` as using other locales might lead to
+issues with parsing the output of some external tools.
+
+Then install any missing external command line tools as listed by
+
+    ./cli/build/install/ort/bin/ort requirements
+
+or
+
+    ./gradlew cli:run --args="requirements"
+
+Then run ORT like
+
+    ./cli/build/install/ort/bin/ort --info analyze -f JSON -i /project -o /project/ort/analyzer
+
+or
+
+    ./gradlew cli:run --args="--info analyze -f JSON -i /project -o /project/ort/analyzer"
 
 ## Tools
 
