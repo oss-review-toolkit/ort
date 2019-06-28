@@ -26,5 +26,5 @@ docker image inspect ort-build > /dev/null 2>&1 || docker/build.sh
 (cd $SCRIPT_DIR/.. && \
     . docker/lib && \
     buildWithoutContext docker/test/Dockerfile ort-test:latest && \
-    runGradleTask ort-test test
+    runGradleWrapper ort-test test
 )
