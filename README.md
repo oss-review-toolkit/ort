@@ -136,6 +136,14 @@ or
 
     ./gradlew cli:run --args="--info analyze -f JSON -i /project -o /project/ort/analyzer"
 
+## Getting started
+
+Please see [GettingStarted.md](./docs/GettingStarted.md) for an introduction to the individual tools.
+
+## Configuration
+
+Please see [Configuration.md](./docs/Configuration.md) for details about the ORT configuration.
+
 # Details on the tools
 
 <a name="analyzer"></a>
@@ -206,14 +214,6 @@ to support multiple output formats. Currently the following report formats are s
 * NOTICE file (`-f Notice`)
 * Static HTML (`-f StaticHtml`)
 * Web App (`-f WebApp`)
-
-## Getting Started
-
-Please see [GettingStarted.md](./docs/GettingStarted.md) for an introduction to the individual tools.
-
-## Configuration
-
-Please see [Configuration.md](./docs/Configuration.md) for details about the ORT configuration.
 
 ## Supported package managers
 
