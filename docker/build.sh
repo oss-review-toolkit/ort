@@ -23,5 +23,5 @@ SCRIPT_DIR="$(cd "$(dirname $0)" && pwd)"
 (cd $SCRIPT_DIR/.. && \
     . docker/lib && \
     buildWithoutContext docker/build/Dockerfile ort-build:latest && \
-    runGradleWrapper ort-build :cli:distTar
+    runGradleWrapper ort-build :cli:installDist :cli:distTar
 )
