@@ -215,7 +215,7 @@ to support multiple output formats. Currently the following report formats are s
 * Static HTML (`-f StaticHtml`)
 * Web App (`-f WebApp`)
 
-## Supported package managers
+# Supported package managers
 
 Currently, the following package managers / build systems can be detected and queried for their managed dependencies:
 
@@ -235,7 +235,7 @@ Currently, the following package managers / build systems can be detected and qu
 * [Stack](http://haskellstack.org/) (Haskell)
 * [Yarn](https://yarnpkg.com/) (Node.js)
 
-## Supported license scanners
+# Supported license scanners
 
 ORT comes with some example implementations for wrappers around license / copyright scanners:
 
@@ -244,13 +244,13 @@ ORT comes with some example implementations for wrappers around license / copyri
 * [Licensee](https://github.com/benbalter/licensee)
 * [ScanCode](https://github.com/nexB/scancode-toolkit)
 
-## Supported remote storages
+# Supported remote storages
 
 For reusing already known scan results, ORT can currently use one of the following backends as a remote storage:
 
 * [Artifactory](https://jfrog.com/artifactory/)
 
-## Development
+# Development
 
 The toolkit is written in [Kotlin](https://kotlinlang.org/) and uses [Gradle](https://gradle.org/) as the build system.
 We recommend the [IntelliJ IDEA Community Edition](https://www.jetbrains.com/idea/download/) as the IDE which can
@@ -266,7 +266,7 @@ The most important root project Gradle tasks are listed in the table below.
 | funTest     | Run functional tests for all projects                             |
 | installDist | Build all projects and install the start scripts for distribution |
 
-## License
+# License
 
 Copyright (C) 2017-2019 HERE Europe B.V.
 
