@@ -7097,7 +7097,7 @@ analyzer:
         declared_licenses:
         - "MIT/X11"
         declared_licenses_processed:
-          spdx_expression: "MIT AND X11"
+          spdx_expression: "MIT OR X11"
         description: "Light-weight option parsing with an argv hash. No optstrings\
           \ attached."
         homepage_url: "https://github.com/substack/node-optimist"
