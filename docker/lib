@@ -36,7 +36,8 @@ runAsUser () {
 
 runGradleWrapper () {
     DOCKER_IMAGE=$1
-    GRADLE_ARGS=$2
+    shift
+    GRADLE_ARGS=$@
 
     # Stop any running daemon to avoid it locking the cache on the host, see https://github.com/gradle/gradle/issues/851.
     ./gradlew --stop && \
