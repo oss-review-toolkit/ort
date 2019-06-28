@@ -1,0 +1,147 @@
+---
+project:
+  id: "Conda:::<REPLACE_REVISION>"
+  purl: "pkg://Conda//@<REPLACE_REVISION>"
+  definition_file_path: "analyzer/src/funTest/assets/projects/synthetic/python3-django/environment.yml"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "git"
+    url: "https://github.com/bryan-woods/oss-review-toolkit.git"
+    revision: "<REPLACE_REVISION>"
+    path: "analyzer/src/funTest/assets/projects/synthetic/python3-django"
+  homepage_url: ""
+  scopes:
+  - name: "install"
+    dependencies:
+    - id: "PyPI::certifi:2019.6.16"
+    - id: "PyPI::django:2.2.1"
+      dependencies:
+      - id: "PyPI::pytz:2019.1"
+      - id: "PyPI::sqlparse:?"
+packages:
+- package:
+    id: "PyPI::certifi:2019.6.16"
+    purl: "pkg://PyPI//certifi@2019.6.16"
+    declared_licenses:
+    - "MPL-2.0"
+    - "Mozilla Public License 2.0 (MPL 2.0)"
+    declared_licenses_processed:
+      spdx_expression: "MPL-2.0"
+    description: "Python package for providing Mozilla's CA Bundle."
+    homepage_url: "https://certifi.io/"
+    binary_artifact:
+      url: "https://files.pythonhosted.org/packages/69/1b/b853c7a9d4f6a6d00749e94eb6f3a041e342a885b87340b79c1ef73e3a78/certifi-2019.6.16-py2.py3-none-any.whl"
+      hash:
+        value: "d8cb5a5984c291e69b9b0bf34423c865"
+        algorithm: "MD5"
+    source_artifact:
+      url: "https://files.pythonhosted.org/packages/c5/67/5d0548226bcc34468e23a0333978f0e23d28d0b3f0c71a151aef9c3f7680/certifi-2019.6.16.tar.gz"
+      hash:
+        value: "af8fea5f3df6f7f81e9c6cbc6dd7c1e8"
+        algorithm: "MD5"
+    vcs:
+      type: ""
+      url: ""
+      revision: ""
+      path: ""
+    vcs_processed:
+      type: ""
+      url: ""
+      revision: ""
+      path: ""
+  curations: []
+- package:
+    id: "PyPI::django:2.2.1"
+    purl: "pkg://PyPI//django@2.2.1"
+    declared_licenses:
+    - "BSD"
+    declared_licenses_processed:
+      spdx_expression: "BSD-2-Clause"
+    description: "A high-level Python Web framework that encourages rapid development\
+      \ and clean, pragmatic design."
+    homepage_url: "https://www.djangoproject.com/"
+    binary_artifact:
+      url: "https://files.pythonhosted.org/packages/b1/1d/2476110614367adfb079a9bc718621f9fc8351e9214e1750cae1832d4090/Django-2.2.1-py3-none-any.whl"
+      hash:
+        value: "8a2f51f779351edcbceda98719e07254"
+        algorithm: "MD5"
+    source_artifact:
+      url: "https://files.pythonhosted.org/packages/fd/70/36c08f4c3b22523173b3a5e21fbdaa137bdb1722b76f356e0e2d5d8aa645/Django-2.2.1.tar.gz"
+      hash:
+        value: "3b1721c1b5014316e1af8b10613c7592"
+        algorithm: "MD5"
+    vcs:
+      type: ""
+      url: ""
+      revision: ""
+      path: ""
+    vcs_processed:
+      type: ""
+      url: ""
+      revision: ""
+      path: ""
+  curations: []
+- package:
+    id: "PyPI::pytz:2019.1"
+    purl: "pkg://PyPI//pytz@2019.1"
+    declared_licenses:
+    - "MIT"
+    declared_licenses_processed:
+      spdx_expression: "MIT"
+    description: "World timezone definitions, modern and historical"
+    homepage_url: "http://pythonhosted.org/pytz"
+    binary_artifact:
+      url: "https://files.pythonhosted.org/packages/3d/73/fe30c2daaaa0713420d0382b16fbb761409f532c56bdcc514bf7b6262bb6/pytz-2019.1-py2.py3-none-any.whl"
+      hash:
+        value: "9494cbd701404080e83cbb316e692891"
+        algorithm: "MD5"
+    source_artifact:
+      url: "https://files.pythonhosted.org/packages/df/d5/3e3ff673e8f3096921b3f1b79ce04b832e0100b4741573154b72b756a681/pytz-2019.1.tar.gz"
+      hash:
+        value: "8b2860a161bfb0a6165798b1a2d8c40c"
+        algorithm: "MD5"
+    vcs:
+      type: ""
+      url: ""
+      revision: ""
+      path: ""
+    vcs_processed:
+      type: ""
+      url: ""
+      revision: ""
+      path: ""
+  curations: []
+- package:
+    id: "PyPI::sqlparse:?"
+    purl: "pkg://PyPI//sqlparse@%3F"
+    declared_licenses: []
+    declared_licenses_processed: {}
+    description: ""
+    homepage_url: ""
+    binary_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    source_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    vcs:
+      type: ""
+      url: ""
+      revision: ""
+      path: ""
+    vcs_processed:
+      type: ""
+      url: ""
+      revision: ""
+      path: ""
+  curations: []

@@ -44,6 +44,7 @@ import java.nio.file.attribute.BasicFileAttributes
 import java.util.TreeSet
 
 import org.apache.commons.codec.digest.DigestUtils
+import java.lang.NumberFormatException
 
 /**
  * Return a string of hexadecimal digits representing the bytes in the array.
@@ -352,3 +353,15 @@ fun TypeFactory.constructTreeSetType(elementClass: Class<*>): CollectionType =
  * Check whether the URI has a fragment that looks like a VCS revision.
  */
 fun URI.hasFragmentRevision() = fragment?.let { Regex("[a-fA-F0-9]{7,}$").matches(it) } == true
+
+/**
+ * Return a version string with leading zeros of components stripped.
+ */
+fun stripLeadingZerosFromVersion(version: String) =
+    version.split(".").joinToString(".") {
+        try {
+            it.toInt().toString()
+        } catch (e: NumberFormatException) {
+            it
+        }
+    }

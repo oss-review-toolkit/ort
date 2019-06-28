@@ -55,6 +55,8 @@ object AnalyzerCommand : CommandWithHelp() {
                 ?: throw ParameterException("Package managers must be contained in ${PACKAGE_MANAGERS.keys}.")
     }
 
+    // be sure to add new package managers to:
+    //     analyzer/src/main/resources/META-INF/services/com.here.ort.analyzer.PackageManagerFactory
     @Parameter(
         description = "The list of package managers to activate.",
         names = ["--package-managers", "-m"],
