@@ -136,7 +136,7 @@ or
 
     ./gradlew cli:run --args="--info analyze -f JSON -i /project -o /project/ort/analyzer"
 
-## Tools
+# Details on the tools
 
 <a name="analyzer"></a>
 
