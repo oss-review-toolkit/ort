@@ -21,7 +21,6 @@ package com.here.ort.analyzer.managers
 
 import ch.frankel.slf4k.*
 
-import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.node.ArrayNode
 
 import com.here.ort.analyzer.AbstractPackageManagerFactory
@@ -29,13 +28,11 @@ import com.here.ort.analyzer.HTTP_CACHE_PATH
 import com.here.ort.analyzer.PackageManager
 import com.here.ort.downloader.VersionControlSystem
 import com.here.ort.model.EMPTY_JSON_NODE
-import com.here.ort.model.Hash
 import com.here.ort.model.Identifier
 import com.here.ort.model.Package
 import com.here.ort.model.PackageReference
 import com.here.ort.model.Project
 import com.here.ort.model.ProjectAnalyzerResult
-import com.here.ort.model.RemoteArtifact
 import com.here.ort.model.Scope
 import com.here.ort.model.VcsInfo
 import com.here.ort.model.config.AnalyzerConfiguration
@@ -45,14 +42,11 @@ import com.here.ort.utils.CommandLineTool
 import com.here.ort.utils.Os
 import com.here.ort.utils.OkHttpClientHelper
 import com.here.ort.utils.ProcessCapture
-import com.here.ort.utils.getPathFromEnvironment
 import com.here.ort.utils.log
 import com.here.ort.utils.safeDeleteRecursively
 import com.here.ort.utils.showStackTrace
 import com.here.ort.utils.textValueOrEmpty
 import com.here.ort.utils.stripLeadingZerosFromVersion
-
-import com.vdurmont.semver4j.Requirement
 
 import java.io.File
 import java.io.IOException
@@ -62,116 +56,38 @@ import java.util.SortedSet
 
 import okhttp3.Request
 
-// The lowest version that supports "--prefer-binary".
-const val PIP_VERSION = "18.0"
-
-const val PIPDEPTREE_VERSION = "0.13.0"
-val PIPDEPTREE_DEPENDENCIES = arrayOf("pipdeptree", "setuptools", "wheel")
-
-const val PYDEP_REVISION = "license-and-classifiers"
-
-object VirtualEnv : CommandLineTool {
-    override fun command(workingDir: File?) = "virtualenv"
-
-    // Allow to use versions that are known to work. Note that virtualenv bundles a version of pip.
-    override fun getVersionRequirement(): Requirement = Requirement.buildIvy("[15.1,16.5[")
-}
-
-object PythonVersion : CommandLineTool {
-    // To use a specific version of Python on Windows we can use the "py" command with argument "-2" or "-3", see
-    // https://docs.python.org/3/installing/#work-with-multiple-versions-of-python-installed-in-parallel.
-    override fun command(workingDir: File?) = if (Os.isWindows) "py" else "python3"
-
-    /**
-     * Check all Python files in [workingDir] and return which version of Python they are compatible with. If all files
-     * are compatible with Python 3, "3" is returned. If at least one file is incompatible with Python 3, "2" is
-     * returned.
-     */
-    fun getPythonVersion(workingDir: File): Int {
-        val scriptFile = File.createTempFile("python_compatibility", ".py")
-        scriptFile.writeBytes(javaClass.getResource("/scripts/python_compatibility.py").readBytes())
-
-        try {
-            // The helper script itself always has to be run with Python 3.
-            val scriptCmd = if (Os.isWindows) {
-                run("-3", scriptFile.path, "-d", workingDir.path)
-            } else {
-                run(scriptFile.path, "-d", workingDir.path)
-            }
-
-            return scriptCmd.stdout.toInt()
-        } finally {
-            if (!scriptFile.delete()) {
-                log.warn { "Helper script file '$scriptFile' could not be deleted." }
-            }
-        }
-    }
-
-    /**
-     * Return the absolute path to the Python interpreter for the given [version]. This is helpful as esp. on Windows
-     * different Python versions can by installed in arbitrary locations, and the Python executable is even usually
-     * called the same in those locations.
-     */
-    fun getPythonInterpreter(version: Int): String =
-        if (Os.isWindows) {
-            val scriptFile = File.createTempFile("python_interpreter", ".py")
-            scriptFile.writeBytes(javaClass.getResource("/scripts/python_interpreter.py").readBytes())
-
-            try {
-                run("-$version", scriptFile.path).stdout
-            } finally {
-                if (!scriptFile.delete()) {
-                    log.warn { "Helper script file '${scriptFile.path}' could not be deleted." }
-                }
-            }
-        } else {
-            getPathFromEnvironment("python$version")?.path.orEmpty()
-        }
-}
+const val DEP_REVISION = "license-and-classifiers"
 
 /**
- * The [PIP](https://pip.pypa.io/) package manager for Python. Also see
- * [install_requires vs requirements files](https://packaging.python.org/discussions/install-requires-vs-requirements/)
- * and [setup.py vs. requirements.txt](https://caremad.io/posts/2013/07/setup-vs-requirement/).
+ * The [Conda](https://docs.conda.io/en/latest/) package manager for Python.
  */
-class Pip(
+class Conda(
     name: String,
     analyzerRoot: File,
     analyzerConfig: AnalyzerConfiguration,
     repoConfig: RepositoryConfiguration
 ) : PackageManager(name, analyzerRoot, analyzerConfig, repoConfig), CommandLineTool {
-    class Factory : AbstractPackageManagerFactory<Pip>("PIP") {
-        override val globsForDefinitionFiles = listOf("requirements*.txt", "setup.py")
+    class Factory : AbstractPackageManagerFactory<Conda>("CONDA") {
+        override val globsForDefinitionFiles = listOf("requirements*.txt", "environment.yml", "setup.py")
 
         override fun create(
             analyzerRoot: File,
             analyzerConfig: AnalyzerConfiguration,
             repoConfig: RepositoryConfiguration
-        ) = Pip(managerName, analyzerRoot, analyzerConfig, repoConfig)
+        ) = Conda(managerName, analyzerRoot, analyzerConfig, repoConfig)
     }
 
-    companion object {
-        private val INSTALL_OPTIONS = arrayOf(
-            "--no-warn-conflicts",
-            "--prefer-binary"
-        )
 
-        // TODO: Need to replace this hard-coded list of domains with e.g. a command line option.
-        private val TRUSTED_HOSTS = listOf(
-            "pypi.org",
-            "pypi.python.org" // Legacy
-        ).flatMap { listOf("--trusted-host", it) }.toTypedArray()
-    }
 
-    override fun command(workingDir: File?) = "pip"
+    override fun command(workingDir: File?) = "conda"
 
-    private fun runPipInVirtualEnv(virtualEnvDir: File, workingDir: File, vararg commandArgs: String) =
-        runInVirtualEnv(virtualEnvDir, workingDir, command(workingDir), *TRUSTED_HOSTS, *commandArgs)
+    private fun runConda(envDir: File, workingDir: File, vararg commandArgs: String) =
+        runInEnv(envDir, workingDir, command(workingDir), *commandArgs)
 
-    private fun runInVirtualEnv(virtualEnvDir: File, workingDir: File, commandName: String, vararg commandArgs: String):
+    private fun runInEnv(envDir: File, workingDir: File, commandName: String, vararg commandArgs: String):
             ProcessCapture {
         val binDir = if (Os.isWindows) "Scripts" else "bin"
-        var command = File(virtualEnvDir, binDir + File.separator + commandName)
+        var command = File(envDir, binDir + File.separator + commandName)
 
         if (Os.isWindows && command.extension.isEmpty()) {
             // On Windows specifying the extension is optional, so try them in order.
@@ -182,8 +98,6 @@ class Pip(
             }
         }
 
-        // TODO: Maybe work around long shebang paths in generated scripts within a virtualenv by calling the Python
-        // executable in the virtualenv directly, see https://github.com/pypa/virtualenv/issues/997.
         val process = ProcessCapture(workingDir, command.path, *commandArgs)
         log.debug { process.stdout }
         return process
@@ -194,32 +108,32 @@ class Pip(
 
     override fun resolveDependencies(definitionFile: File): ProjectAnalyzerResult? {
         // For an overview, dependency resolution involves the following steps:
-        // 1. Install dependencies via pip (inside a virtualenv, for isolation from globally installed packages).
+        // 1. Install dependencies via conda
         // 2. Get meta-data about the local project via pydep (only for setup.py-based projects).
         // 3. Get the hierarchy of dependencies via pipdeptree.
         // 4. Get additional remote package meta-data via PyPIJSON.
 
         val workingDir = definitionFile.parentFile
-        val virtualEnvDir = setupVirtualEnv(workingDir, definitionFile)
+        val envDir = setupEnv(workingDir, definitionFile)
 
-        // List all packages installed locally in the virtualenv.
-        val pipdeptree = runInVirtualEnv(virtualEnvDir, workingDir, "pipdeptree", "-l", "--json-tree")
+        // List all packages installed locally in the environment.
+        val pipdeptree = runInEnv(envDir, workingDir, "pipdeptree", "-l", "--json-tree")
 
         // Install pydep after running any other command but before looking at the dependencies because it
         // downgrades pip to version 7.1.2. Use it to get meta-information from about the project from setup.py. As
         // pydep is not on PyPI, install it from Git instead.
-        val pydepUrl = "git+https://github.com/heremaps/pydep@$PYDEP_REVISION"
-        val pip = if (Os.isWindows) {
+        val pydepUrl = "git+https://github.com/heremaps/pydep@$DEP_REVISION"
+        val conda = if (Os.isWindows) {
             // On Windows, in-place pip up- / downgrades require pip to be wrapped by "python -m", see
             // https://github.com/pypa/pip/issues/1299.
-            runInVirtualEnv(
-                virtualEnvDir, workingDir, "python", "-m", command(workingDir),
-                *TRUSTED_HOSTS, "install", pydepUrl
+            runInEnv(
+                envDir, workingDir, "python", "-m", command(workingDir),
+                "install", pydepUrl
             )
         } else {
-            runPipInVirtualEnv(virtualEnvDir, workingDir, "install", pydepUrl)
+            runConda(envDir, workingDir, "install", pydepUrl)
         }
-        pip.requireSuccess()
+        conda.requireSuccess()
 
         var declaredLicenses: SortedSet<String> = sortedSetOf<String>()
 
@@ -227,12 +141,12 @@ class Pip(
         val (setupName, setupVersion, setupHomepage) = if (File(workingDir, "setup.py").isFile) {
             val pydep = if (Os.isWindows) {
                 // On Windows, the script itself is not executable, so we need to wrap the call by "python".
-                runInVirtualEnv(
-                    virtualEnvDir, workingDir, "python",
-                    virtualEnvDir.path + "\\Scripts\\pydep-run.py", "info", "."
+                runInEnv(
+                    envDir, workingDir, "python",
+                    envDir.path + "\\Scripts\\pydep-run.py", "info", "."
                 )
             } else {
-                runInVirtualEnv(virtualEnvDir, workingDir, "pydep-run.py", "info", ".")
+                runInEnv(envDir, workingDir, "pydep-run.py", "info", ".")
             }
             pydep.requireSuccess()
 
@@ -408,42 +322,25 @@ class Pip(
             scopes = scopes
         )
 
-        // Remove the virtualenv by simply deleting the directory.
-        virtualEnvDir.safeDeleteRecursively()
+        // Remove the env by simply deleting the directory.
+        envDir.safeDeleteRecursively()
 
         return ProjectAnalyzerResult(project, packages.map { it.toCuratedPackage() }.toSortedSet())
     }
 
-    private fun setupVirtualEnv(workingDir: File, definitionFile: File): File {
-        // Create an out-of-tree virtualenv.
-        log.info { "Creating a virtualenv for the '${workingDir.name}' project directory..." }
 
-        // Try to determine the Python version the project requires.
-        var projectPythonVersion = PythonVersion.getPythonVersion(workingDir)
 
-        log.info { "Trying to install dependencies using Python $projectPythonVersion..." }
-
-        var virtualEnvDir = createVirtualEnv(workingDir, projectPythonVersion)
-        var install = installDependencies(workingDir, definitionFile, virtualEnvDir)
+    private fun setupEnv(workingDir: File, definitionFile: File): File {
+        // Create an out-of-tree environment
+        log.info { "Creating a conda env for the '${workingDir.name}' project directory..." }
+        val envDir = createEnv(workingDir)
+        val install = installDependencies(workingDir, definitionFile, envDir)
 
         if (install.isError) {
             log.debug {
                 // pip writes the real error message to stdout instead of stderr.
-                "First try to install dependencies using Python $projectPythonVersion failed with:\n${install.stdout}"
+                "First try to install dependencies using conda failed with:\n${install.stdout}"
             }
-
-            // If there was a problem maybe the required Python version was detected incorrectly, so simply try again
-            // with the other version.
-            projectPythonVersion = when (projectPythonVersion) {
-                2 -> 3
-                3 -> 2
-                else -> throw IllegalArgumentException("Unsupported Python version $projectPythonVersion.")
-            }
-
-            log.info { "Falling back to trying to install dependencies using Python $projectPythonVersion..." }
-
-            virtualEnvDir = createVirtualEnv(workingDir, projectPythonVersion)
-            install = installDependencies(workingDir, definitionFile, virtualEnvDir)
 
             if (install.isError) {
                 // pip writes the real error message to stdout instead of stderr.
@@ -452,146 +349,54 @@ class Pip(
         }
 
         log.info {
-            "Successfully installed dependencies for project '$definitionFile' using Python $projectPythonVersion."
+            "Successfully installed dependencies for project '$definitionFile' using conda."
         }
 
-        return virtualEnvDir
+        return envDir
     }
 
-    private fun createVirtualEnv(workingDir: File, pythonVersion: Int): File {
-        val virtualEnvDir = createTempDir("ort", "${workingDir.name}-virtualenv")
-
-        val pythonInterpreter = PythonVersion.getPythonInterpreter(pythonVersion)
-        ProcessCapture(workingDir, "virtualenv", virtualEnvDir.path, "-p", pythonInterpreter).requireSuccess()
-
-        return virtualEnvDir
+    private fun createEnv(workingDir: File): File {
+        ProcessCapture(workingDir, "conda env create --name ort").requireSuccess()
+        val envs = ProcessCapture(workingDir, "conda env list").requireSuccess()
+        val res = envs.stdout.split('\n')
+            .filter{ it.split("\\s".toRegex()).first() == "ort" }.first()
+            .split("\\s".toRegex()).last()
+        return File(res)
     }
 
-    private fun installDependencies(workingDir: File, definitionFile: File, virtualEnvDir: File): ProcessCapture {
-        // Ensure to have installed a version of pip that is know to work for us.
-        var pip = if (Os.isWindows) {
-            // On Windows, in-place pip up- / downgrades require pip to be wrapped by "python -m", see
-            // https://github.com/pypa/pip/issues/1299.
-            runInVirtualEnv(
-                virtualEnvDir, workingDir, "python", "-m", command(workingDir),
-                *TRUSTED_HOSTS, "install", "pip==$PIP_VERSION"
-            )
-        } else {
-            runPipInVirtualEnv(virtualEnvDir, workingDir, "install", "pip==$PIP_VERSION")
-        }
-        pip.requireSuccess()
+    private fun installDependencies(workingDir: File, definitionFile: File, envDir: File): ProcessCapture {
+        // TODO: Ensure to have installed a version of pip that is know to work for us.
 
         // Install pipdeptree inside the virtualenv as that's the only way to make it report only the project's
         // dependencies instead of those of all (globally) installed packages, see
         // https://github.com/naiquevin/pipdeptree#known-issues.
         // We only depend on pipdeptree to be at least version 0.5.0 for JSON output, but we stick to a fixed
         // version to be sure to get consistent results.
-        pip = runPipInVirtualEnv(virtualEnvDir, workingDir, "install", "pipdeptree==$PIPDEPTREE_VERSION")
-        pip.requireSuccess()
+        var conda = runConda(envDir, workingDir, "install", "pipdeptree==$PIPDEPTREE_VERSION")
+        conda.requireSuccess()
 
         // TODO: Find a way to make installation of packages with native extensions work on Windows where often
         // the appropriate compiler is missing / not set up, e.g. by using pre-built packages from
         // http://www.lfd.uci.edu/~gohlke/pythonlibs/
-        pip = if (definitionFile.name == "setup.py") {
+        conda = if (definitionFile.name == "setup.py") {
             // Note that this only installs required "install" dependencies, not "extras" or "tests" dependencies.
-            runPipInVirtualEnv(virtualEnvDir, workingDir, "install", *INSTALL_OPTIONS, ".")
+            runConda(envDir, workingDir, "install", ".")
         } else {
             // In "setup.py"-speak, "requirements.txt" just contains required "install" dependencies.
-            runPipInVirtualEnv(
-                virtualEnvDir, workingDir, "install", *INSTALL_OPTIONS, "-r",
+            runConda(
+                envDir, workingDir, "install","-r",
                 definitionFile.name
             )
         }
 
         // TODO: Consider logging a warning instead of an error if the command is run on a file that likely belongs
         // to a test.
-        with(pip) {
+        with(conda) {
             if (isError) {
                 log.error { errorMessage }
             }
         }
 
-        return pip
+        return conda
     }
-}
-
-/**
- * Get declared licenses from pip package JSON metadata
- */
-fun getDeclaredLicenses(pkgInfo: JsonNode): SortedSet<String> {
-    val declaredLicenses = sortedSetOf<String>()
-
-    // Use the top-level license field as well as the license classifiers as the declared licenses.
-    setOf(pkgInfo["license"]).mapNotNullTo(declaredLicenses) { license ->
-        license?.textValue()?.removeSuffix(" License")?.takeUnless { it.isBlank() || it == "UNKNOWN" }
-    }
-
-    // Example license classifier:
-    // "License :: OSI Approved :: GNU Library or Lesser General Public License (LGPL)"
-    pkgInfo["classifiers"]?.mapNotNullTo(declaredLicenses) {
-        val classifier = it.textValue().split(" :: ")
-        classifier.takeIf { it.first() == "License" }?.last()?.removeSuffix(" License")
-    }
-
-    return declaredLicenses
-}
-
-fun parseDependencies(
-    dependencies: Iterable<JsonNode>,
-    allPackages: SortedSet<Package>, installDependencies: SortedSet<PackageReference>
-) {
-    dependencies.forEach { dependency ->
-        val name = dependency["package_name"].textValue()
-        val version = dependency["installed_version"].textValue()
-
-        val pkg = Package(
-            id = Identifier(
-                type = "PyPI",
-                namespace = "",
-                name = name,
-                version = version
-            ),
-            declaredLicenses = sortedSetOf(),
-            description = "",
-            homepageUrl = "",
-            binaryArtifact = RemoteArtifact.EMPTY,
-            sourceArtifact = RemoteArtifact.EMPTY,
-            vcs = VcsInfo.EMPTY
-        )
-        allPackages += pkg
-
-        val packageRef = pkg.toReference()
-        installDependencies += packageRef
-
-        parseDependencies(dependency["dependencies"], allPackages, packageRef.dependencies)
-    }
-}
-
-fun getBinaryArtifact(pkg: Package, releaseNode: ArrayNode): RemoteArtifact {
-    // Prefer python wheels and fall back to the first entry (probably a sdist).
-    val binaryArtifact = releaseNode.asSequence().find {
-        it["packagetype"].textValue() == "bdist_wheel"
-    } ?: releaseNode[0]
-
-    val url = binaryArtifact["url"]?.textValue() ?: pkg.binaryArtifact.url
-    val hash = binaryArtifact["md5_digest"]?.textValue()?.let { Hash.create(it) } ?: pkg.binaryArtifact.hash
-
-    return RemoteArtifact(url, hash)
-}
-
-fun getSourceArtifact(releaseNode: ArrayNode): RemoteArtifact {
-    val sourceArtifacts = releaseNode.asSequence().filter {
-        it["packagetype"].textValue() == "sdist"
-    }
-
-    if (sourceArtifacts.count() == 0) return RemoteArtifact.EMPTY
-
-    val sourceArtifact = sourceArtifacts.find {
-        it["filename"].textValue().endsWith(".tar.bz2")
-    } ?: sourceArtifacts.elementAt(0)
-
-    val url = sourceArtifact["url"]?.textValue() ?: return RemoteArtifact.EMPTY
-    val hash = sourceArtifact["md5_digest"]?.textValue() ?: return RemoteArtifact.EMPTY
-
-    return RemoteArtifact(url, Hash.create(hash))
 }
