@@ -360,9 +360,10 @@ class Conda(
         if (envDefinition.name.endsWith(".py")) {
             // python install script is not en environment definiton
             ProcessCapture(
-                "conda", "env", "create",
+                "conda", "create",
                 "--force",
-                "--name", envName
+                "--name", envName,
+                "python"
             ).requireSuccess()
         } else {
             ProcessCapture(
