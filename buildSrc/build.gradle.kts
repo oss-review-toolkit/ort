@@ -18,5 +18,5 @@ repositories {
 }
 
 dependencies {
-    compile("gradle.plugin.org.jetbrains.gradle.plugin.idea-ext:gradle-idea-ext:${extra["ideaExtPluginVersion"]}")
+    compile("gradle.plugin.org.jetbrains.gradle.plugin.idea-ext:gradle-idea-ext:${project.extra["ideaExtPluginVersion"]}")
 }
