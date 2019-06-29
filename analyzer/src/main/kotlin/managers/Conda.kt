@@ -357,7 +357,21 @@ class Conda(
      * Create a conda environment given the environment.yml or requirements.txt
      */
     private fun createEnv(envDefinition: File): File {
-        ProcessCapture("conda", "env", "create", "--force", "--name", envName, "--file", envDefinition.absolutePath).requireSuccess()
+        if (envDefinition.name.endsWith(".py")) {
+            // python install script is not en environment definiton
+            ProcessCapture(
+                "conda", "env", "create",
+                "--force",
+                "--name", envName
+            ).requireSuccess()
+        } else {
+            ProcessCapture(
+                "conda", "env", "create",
+                "--force",
+                "--name", envName,
+                "--file", envDefinition.absolutePath
+            ).requireSuccess()
+        }
         val envs = ProcessCapture("conda", "env", "list").requireSuccess()
         val res = envs.stdout.split('\n')
             .filter{ it.split("\\s".toRegex()).first() == envName }.first()
