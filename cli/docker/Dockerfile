@@ -48,6 +48,7 @@ ENV \
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
         # Install general tools required by this Dockefile.
+        bzip2 \
         curl \
         # Install VCS tools (no specific versions required here).
         cvs \
@@ -64,6 +65,13 @@ RUN apt-get update && \
         sbt=$SBT_VERSION \
     && \
     rm -rf /var/lib/apt/lists/*
+
+# install miniconda for python support
+RUN curl -sSL https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh -o /tmp/miniconda.sh \
+        && bash /tmp/miniconda.sh -bfp /usr/local \
+        && rm -rf /tmp/miniconda.sh \
+        && conda install -y python=3 \
+        && conda update conda
 
 # Custom install commands.
 RUN \
