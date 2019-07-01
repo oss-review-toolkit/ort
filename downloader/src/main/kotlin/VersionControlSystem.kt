@@ -62,6 +62,7 @@ abstract class VersionControlSystem {
         /**
          * Return the applicable VCS for the given [vcsUrl], or null if none is applicable.
          */
+        @Synchronized
         fun forUrl(vcsUrl: String) =
             if (vcsUrl in urlToVcsMap) {
                 urlToVcsMap[vcsUrl]
@@ -72,7 +73,9 @@ abstract class VersionControlSystem {
                     } else {
                         it.isApplicableUrl(vcsUrl)
                     }
-                }.also { urlToVcsMap[vcsUrl] = it }
+                }.also {
+                    urlToVcsMap[vcsUrl] = it
+                }
             }
 
         /**
@@ -84,6 +87,7 @@ abstract class VersionControlSystem {
         /**
          * Return the applicable VCS working tree for the given [vcsDirectory], or null if none is applicable.
          */
+        @Synchronized
         fun forDirectory(vcsDirectory: File): WorkingTree? {
             val absoluteVcsDirectory = vcsDirectory.absoluteFile
 
