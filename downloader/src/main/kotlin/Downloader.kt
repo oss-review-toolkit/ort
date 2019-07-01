@@ -43,7 +43,8 @@ import java.util.SortedSet
 
 import okhttp3.Request
 
-import okio.Okio
+import okio.buffer
+import okio.sink
 
 const val TOOL_NAME = "downloader"
 const val HTTP_CACHE_PATH = "$TOOL_NAME/cache/http"
@@ -294,13 +295,13 @@ class Downloader {
 
             try {
                 OkHttpClientHelper.execute(HTTP_CACHE_PATH, request).use { response ->
-                    val body = response.body()
+                    val body = response.body
                     if (!response.isSuccessful || body == null) {
                         throw DownloadException("Failed to download source artifact: $response")
                     }
 
                     createTempFile("ort", target.sourceArtifact.url.substringAfterLast("/")).also { tempFile ->
-                        Okio.buffer(Okio.sink(tempFile)).use { it.writeAll(body.source()) }
+                        tempFile.sink().buffer().use { it.writeAll(body.source()) }
                         tempFile.deleteOnExit()
                     }
                 }

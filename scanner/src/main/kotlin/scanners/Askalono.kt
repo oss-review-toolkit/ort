@@ -47,7 +47,8 @@ import java.time.Instant
 
 import okhttp3.Request
 
-import okio.Okio
+import okio.buffer
+import okio.sink
 
 class Askalono(name: String, config: ScannerConfiguration) : LocalScanner(name, config) {
     class Factory : AbstractScannerFactory<Askalono>("Askalono") {
@@ -90,20 +91,20 @@ class Askalono(name: String, config: ScannerConfiguration) : LocalScanner(name, 
         val request = Request.Builder().get().url(url).build()
 
         return OkHttpClientHelper.execute(HTTP_CACHE_PATH, request).use { response ->
-            val body = response.body()
+            val body = response.body
 
-            if (response.code() != HttpURLConnection.HTTP_OK || body == null) {
+            if (response.code != HttpURLConnection.HTTP_OK || body == null) {
                 throw IOException("Failed to download $scannerName from $url.")
             }
 
-            if (response.cacheResponse() != null) {
+            if (response.cacheResponse != null) {
                 log.info { "Retrieved $scannerName from local cache." }
             }
 
             val scannerDir = createTempDir("ort", "$scannerName-$scannerVersion").apply { deleteOnExit() }
 
             val scannerFile = File(scannerDir, scannerExe)
-            Okio.buffer(Okio.sink(scannerFile)).use { it.writeAll(body.source()) }
+            scannerFile.sink().buffer().use { it.writeAll(body.source()) }
 
             if (!Os.isWindows) {
                 // Ensure the executable Unix mode bit to be set.

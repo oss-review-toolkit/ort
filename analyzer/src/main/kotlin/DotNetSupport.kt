@@ -310,9 +310,9 @@ class DotNetSupport(
             .build()
 
         OkHttpClientHelper.execute(HTTP_CACHE_PATH, pkgRequest).use { response ->
-            val body = response.body()?.string()?.trim()
+            val body = response.body?.string()?.trim()
 
-            if (response.code() != HttpURLConnection.HTTP_OK || body.isNullOrEmpty()) {
+            if (response.code != HttpURLConnection.HTTP_OK || body.isNullOrEmpty()) {
                 throw IOException("GET with URL $this could not be resolved")
             }
 

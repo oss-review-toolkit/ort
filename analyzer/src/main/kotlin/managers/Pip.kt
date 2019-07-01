@@ -328,12 +328,12 @@ class Pip(
                     .build()
 
                 OkHttpClientHelper.execute(HTTP_CACHE_PATH, pkgRequest).use { response ->
-                    val body = response.body()?.string()?.trim()
+                    val body = response.body?.string()?.trim()
 
-                    if (response.code() != HttpURLConnection.HTTP_OK || body.isNullOrEmpty()) {
+                    if (response.code != HttpURLConnection.HTTP_OK || body.isNullOrEmpty()) {
                         log.warn { "Unable to retrieve PyPI meta-data for package '${pkg.id.toCoordinates()}'." }
                         if (body != null) {
-                            log.warn { "The response was '$body' (code ${response.code()})." }
+                            log.warn { "The response was '$body' (code ${response.code})." }
                         }
 
                         // Fall back to returning the original package data.

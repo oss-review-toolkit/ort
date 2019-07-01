@@ -51,14 +51,16 @@ import java.io.IOException
 import java.net.HttpURLConnection
 import java.nio.file.FileSystems
 import java.util.SortedSet
-
 import java.net.InetSocketAddress
 import java.net.Proxy
 import java.net.URI
 
+import okhttp3.Authenticator
 import okhttp3.Credentials
 import okhttp3.OkHttpClient
 import okhttp3.Request
+import okhttp3.Response
+import okhttp3.Route
 
 /**
  * The [Stack](https://haskellstack.org/) package manager for Haskell.
@@ -225,14 +227,16 @@ class Stack(
         if (proxyUrl != null) {
             val url = URI(proxyUrl)
             proxy(Proxy(Proxy.Type.HTTP, InetSocketAddress(url.host, url.port)))
-            proxyAuthenticator { _, response ->
-                val user = url.userInfo.substringBefore(':')
-                val password = url.userInfo.substringAfter(':')
-                val credential = Credentials.basic(user, password)
-                response.request().newBuilder()
-                    .header("Proxy-Authorization", credential)
-                    .build()
-            }
+            proxyAuthenticator(object : Authenticator {
+                override fun authenticate(route: Route?, response: Response): Request? {
+                    val user = url.userInfo.substringBefore(':')
+                    val password = url.userInfo.substringAfter(':')
+                    val credential = Credentials.basic(user, password)
+                    return response.request.newBuilder()
+                        .header("Proxy-Authorization", credential)
+                        .build()
+                }
+            })
         }
     }
 
@@ -243,12 +247,12 @@ class Stack(
             .build()
 
         return OkHttpClientHelper.execute(HTTP_CACHE_PATH, pkgRequest, applyProxySettingsFromEnv).use { response ->
-            val body = response.body()?.string()?.trim()
+            val body = response.body?.string()?.trim()
 
-            if (response.code() != HttpURLConnection.HTTP_OK || body.isNullOrEmpty()) {
+            if (response.code != HttpURLConnection.HTTP_OK || body.isNullOrEmpty()) {
                 log.warn { "Unable to retrieve Hackage meta-data for package '${pkgId.toCoordinates()}'." }
                 if (body != null) {
-                    log.warn { "The response was '$body' (code ${response.code()})." }
+                    log.warn { "The response was '$body' (code ${response.code})." }
                 }
 
                 null

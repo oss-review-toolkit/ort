@@ -39,7 +39,8 @@ import java.util.concurrent.TimeUnit
 import okhttp3.CacheControl
 import okhttp3.Request
 
-import okio.Okio
+import okio.buffer
+import okio.sink
 
 class ArtifactoryStorage(
     /**
@@ -73,12 +74,12 @@ class ArtifactoryStorage(
 
         try {
             OkHttpClientHelper.execute(HTTP_CACHE_PATH, request).use { response ->
-                if (response.code() == HttpURLConnection.HTTP_OK) {
-                    response.body()?.let { body ->
-                        Okio.buffer(Okio.sink(tempFile)).use { it.writeAll(body.source()) }
+                if (response.code == HttpURLConnection.HTTP_OK) {
+                    response.body?.let { body ->
+                        tempFile.sink().buffer().use { it.writeAll(body.source()) }
                     }
 
-                    if (response.cacheResponse() != null) {
+                    if (response.cacheResponse != null) {
                         log.info { "Retrieved $storagePath from local storage." }
                     } else {
                         log.info { "Downloaded $storagePath from Artifactory storage." }
@@ -87,8 +88,7 @@ class ArtifactoryStorage(
                     return tempFile.readValue()
                 } else {
                     log.info {
-                        "Could not get $storagePath from Artifactory storage: ${response.code()} - " +
-                                response.message()
+                        "Could not get $storagePath from Artifactory storage: ${response.code} - ${response.message}"
                     }
                 }
             }
@@ -119,13 +119,13 @@ class ArtifactoryStorage(
 
         try {
             return OkHttpClientHelper.execute(HTTP_CACHE_PATH, request).use { response ->
-                (response.code() == HttpURLConnection.HTTP_CREATED).also {
+                (response.code == HttpURLConnection.HTTP_CREATED).also {
                     log.info {
                         if (it) {
                             "Uploaded $storagePath to Artifactory storage."
                         } else {
-                            "Could not upload $storagePath to Artifactory storage: ${response.code()} - " +
-                                    response.message()
+                            "Could not upload $storagePath to Artifactory storage: ${response.code} - " +
+                                    response.message
                         }
                     }
                 }
