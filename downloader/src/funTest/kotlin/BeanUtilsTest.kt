@@ -23,6 +23,7 @@ import com.here.ort.model.Identifier
 import com.here.ort.model.Package
 import com.here.ort.model.RemoteArtifact
 import com.here.ort.model.VcsInfo
+import com.here.ort.model.VcsType
 import com.here.ort.utils.safeDeleteRecursively
 
 import io.kotlintest.TestCase
@@ -47,7 +48,7 @@ class BeanUtilsTest : StringSpec() {
     init {
         "BeanUtils SVN tag should be correctly downloaded" {
             val vcsFromCuration = VcsInfo(
-                type = "svn",
+                type = VcsType.SUBVERSION,
                 url = "https://svn.apache.org/repos/asf/commons/_moved_to_git/beanutils",
                 revision = ""
             )
@@ -70,7 +71,7 @@ class BeanUtilsTest : StringSpec() {
             val downloadResult = Downloader().download(pkg, outputDir)
             downloadResult.sourceArtifact shouldBe null
             downloadResult.vcsInfo shouldNotBe null
-            downloadResult.vcsInfo!!.type shouldBe "Subversion"
+            downloadResult.vcsInfo!!.type shouldBe VcsType.SUBVERSION
             downloadResult.vcsInfo!!.url shouldBe vcsFromCuration.url
             downloadResult.vcsInfo!!.revision shouldBe "928490"
             downloadResult.vcsInfo!!.resolvedRevision shouldBe "928490"

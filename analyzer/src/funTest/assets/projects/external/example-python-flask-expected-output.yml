@@ -11,7 +11,7 @@ project:
     revision: ""
     path: ""
   vcs_processed:
-    type: "git"
+    type: "Git"
     url: "https://github.com/deis/example-python-flask.git"
     revision: "0773991e36a4c69b121cdb05146d6140347d4065"
     path: ""
@@ -54,7 +54,7 @@ packages:
       revision: ""
       path: ""
     vcs_processed:
-      type: "git"
+      type: "Git"
       url: "https://github.com/pallets/flask.git"
       revision: ""
       path: ""

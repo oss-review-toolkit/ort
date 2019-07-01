@@ -20,6 +20,7 @@
 package com.here.ort.downloader
 
 import com.here.ort.downloader.vcs.Subversion
+import com.here.ort.model.VcsType
 import com.here.ort.utils.getUserOrtDirectory
 import com.here.ort.utils.safeDeleteRecursively
 import com.here.ort.utils.unpack
@@ -67,7 +68,7 @@ class SubversionTest : StringSpec() {
         "Detected Subversion working tree information is correct" {
             val workingTree = svn.getWorkingTree(zipContentDir)
 
-            workingTree.vcsType shouldBe "Subversion"
+            workingTree.vcsType shouldBe VcsType.SUBVERSION
             workingTree.isValid() shouldBe true
             workingTree.getRemoteUrl() shouldBe "https://svn.code.sf.net/p/docutils/code/trunk/docutils"
             workingTree.getRevision() shouldBe "8207"

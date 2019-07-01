@@ -23,6 +23,7 @@ import ch.frankel.slf4k.*
 
 import com.here.ort.model.Package
 import com.here.ort.model.VcsInfo
+import com.here.ort.model.VcsType
 import com.here.ort.utils.CommandLineTool
 import com.here.ort.utils.hasFragmentRevision
 import com.here.ort.utils.log
@@ -50,7 +51,7 @@ abstract class VersionControlSystem {
         /**
          * Return the applicable VCS for the given [vcsType], or null if none is applicable.
          */
-        fun forType(vcsType: String) = ALL.find { it.isApplicableType(vcsType) }
+        fun forType(vcsType: VcsType) = ALL.find { it.isApplicableType(vcsType) }
 
         /**
          * A map to cache the [VersionControlSystem], if any, for previously queried URLs. This helps to speed up
@@ -144,11 +145,11 @@ abstract class VersionControlSystem {
                 URI(vcsUrl)
             } catch (e: URISyntaxException) {
                 // Fall back to returning just the original URL.
-                return VcsInfo("", vcsUrl, "")
+                return VcsInfo(VcsType.UNKNOWN, vcsUrl, "")
             }
 
             return when {
-                uri.host == null -> VcsInfo("", vcsUrl, "")
+                uri.host == null -> VcsInfo(VcsType.UNKNOWN, vcsUrl, "")
 
                 uri.host.endsWith("bitbucket.org") -> {
                     var url = uri.scheme + "://" + uri.authority
@@ -172,8 +173,8 @@ abstract class VersionControlSystem {
                         }
                     }
 
-                    val type = forUrl(url)?.type.orEmpty()
-                    if (type == "Git") {
+                    val type = forUrl(url)?.type ?: VcsType.UNKNOWN
+                    if (type == VcsType.GIT) {
                         url += ".git"
                     }
 
@@ -213,7 +214,7 @@ abstract class VersionControlSystem {
                         if (uri.hasFragmentRevision()) revision = uri.fragment
                     }
 
-                    VcsInfo("git", url, revision, path = path)
+                    VcsInfo(VcsType.GIT, url, revision, path = path)
                 }
 
                 else -> {
@@ -221,16 +222,16 @@ abstract class VersionControlSystem {
                         vcsUrl.contains(".git/") -> {
                             val url = normalizeVcsUrl(vcsUrl.substringBefore(".git/"))
                             val path = vcsUrl.substringAfter(".git/")
-                            VcsInfo("git", "$url.git", "", null, path)
+                            VcsInfo(VcsType.GIT, "$url.git", "", null, path)
                         }
 
                         vcsUrl.contains(".git#") || Regex("git.+#[a-fA-F0-9]{7,}").matches(vcsUrl) -> {
                             val url = normalizeVcsUrl(vcsUrl.substringBeforeLast('#'))
                             val revision = vcsUrl.substringAfterLast('#')
-                            VcsInfo("git", url, revision, null, "")
+                            VcsInfo(VcsType.GIT, url, revision, null, "")
                         }
 
-                        else -> VcsInfo("", vcsUrl, "")
+                        else -> VcsInfo(VcsType.UNKNOWN, vcsUrl, "")
                     }
                 }
             }
@@ -238,14 +239,9 @@ abstract class VersionControlSystem {
     }
 
     /**
-     * A string uniquely identifying the type of this [VersionControlSystem], e.g. 'Git'.
+     * The [VcsType] of this [VersionControlSystem].
      */
-    val type: String = javaClass.simpleName
-
-    /**
-     * A list of alternative names for the VCS, for example "hg" for Mercurial.
-     */
-    protected open val aliases = emptyList<String>()
+    abstract val type: VcsType
 
     /**
      * The priority in which this VCS should be probed. A higher value means a higher priority.
@@ -268,9 +264,9 @@ abstract class VersionControlSystem {
     abstract fun getWorkingTree(vcsDirectory: File): WorkingTree
 
     /**
-     * Return true if this VCS can handle the named [vcsType].
+     * Return true if this VCS can handle the given [vcsType].
      */
-    fun isApplicableType(vcsType: String) = (aliases + type).any { it.equals(vcsType, true) }
+    fun isApplicableType(vcsType: VcsType) = vcsType == type
 
     /**
      * Return true if this VCS can download from the provided URL. Should only return true when it's almost unambiguous,

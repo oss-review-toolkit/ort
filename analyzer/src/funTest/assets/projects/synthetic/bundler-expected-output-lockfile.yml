@@ -11,7 +11,7 @@ project:
     revision: ""
     path: ""
   vcs_processed:
-    type: "git"
+    type: "Git"
     url: "<REPLACE_URL>"
     revision: "<REPLACE_REVISION>"
     path: "<REPLACE_PATH>"
@@ -67,12 +67,12 @@ packages:
         value: "ea7bf591567e391ef262a7c29edaf87c6205204afb5bb39dfa8f08f2e51282a3"
         algorithm: "SHA-256"
     vcs:
-      type: "git"
+      type: "Git"
       url: "https://github.com/halostatue/diff-lcs.git"
       revision: ""
       path: ""
     vcs_processed:
-      type: "git"
+      type: "Git"
       url: "https://github.com/halostatue/diff-lcs.git"
       revision: ""
       path: ""
@@ -99,13 +99,13 @@ packages:
         value: "216417b241ff4e7b1c726f257241eaf223e3abbe6ec2c6453352dea6a414a38d"
         algorithm: "SHA-256"
     vcs:
-      type: "git"
+      type: "Git"
       url: "http://github.com/flavorjones/mini_portile.git"
       revision: ""
       resolved_revision: ""
       path: ""
     vcs_processed:
-      type: "git"
+      type: "Git"
       url: "https://github.com/flavorjones/mini_portile.git"
       revision: ""
       resolved_revision: ""
@@ -132,12 +132,12 @@ packages:
         value: "1f93a829257b621d40c4cbfce3acdcd688b0b3d70497ceae4fa2baf955eede2f"
         algorithm: "SHA-256"
     vcs:
-      type: "git"
+      type: "Git"
       url: "https://github.com/sparklemotion/nokogiri.git"
       revision: ""
       path: ""
     vcs_processed:
-      type: "git"
+      type: "Git"
       url: "https://github.com/sparklemotion/nokogiri.git"
       revision: ""
       path: ""
@@ -166,12 +166,12 @@ packages:
         value: "ee2016b1ddf820f6e5ee437d10a85319506b60c0d493da1d15815361a91129bd"
         algorithm: "SHA-256"
     vcs:
-      type: "git"
+      type: "Git"
       url: "http://github.com/rack/rack.git"
       revision: ""
       path: ""
     vcs_processed:
-      type: "git"
+      type: "Git"
       url: "https://github.com/rack/rack.git"
       revision: ""
       path: ""
@@ -196,12 +196,12 @@ packages:
         value: "526e0b2d22feae638eb99bd746bbb25b18a4869a8f6ce4e8a87dabd1ab5f727f"
         algorithm: "SHA-256"
     vcs:
-      type: "git"
+      type: "Git"
       url: "http://github.com/rspec/rspec-core.git"
       revision: ""
       path: ""
     vcs_processed:
-      type: "git"
+      type: "Git"
       url: "https://github.com/rspec/rspec-core.git"
       revision: ""
       path: ""
@@ -227,12 +227,12 @@ packages:
         value: "7e571848a5cbdb1661187d04e5c1f29287ec80fcb5a395f9994836892a3780bb"
         algorithm: "SHA-256"
     vcs:
-      type: "git"
+      type: "Git"
       url: "http://github.com/rspec/rspec-expectations.git"
       revision: ""
       path: ""
     vcs_processed:
-      type: "git"
+      type: "Git"
       url: "https://github.com/rspec/rspec-expectations.git"
       revision: ""
       path: ""
@@ -257,12 +257,12 @@ packages:
         value: "23f7f0039e17f2841edfb51d678ac9e06c056903a7908db967f5618887f2022c"
         algorithm: "SHA-256"
     vcs:
-      type: "git"
+      type: "Git"
       url: "http://github.com/rspec/rspec-mocks.git"
       revision: ""
       path: ""
     vcs_processed:
-      type: "git"
+      type: "Git"
       url: "https://github.com/rspec/rspec-mocks.git"
       revision: ""
       path: ""
@@ -287,13 +287,13 @@ packages:
         value: "4152975a068756076f10c97317e9d2baf10028f3d25c0cb902945569560783da"
         algorithm: "SHA-256"
     vcs:
-      type: "git"
+      type: "Git"
       url: "https://github.com/rspec/rspec-support.git"
       revision: ""
       resolved_revision: ""
       path: ""
     vcs_processed:
-      type: "git"
+      type: "Git"
       url: "https://github.com/rspec/rspec-support.git"
       revision: ""
       resolved_revision: ""
@@ -319,12 +319,12 @@ packages:
         value: "0174cfbed780e42aa181227af623e2ae37511f20a2fdfec48b54f6cf4d7a6404"
         algorithm: "SHA-256"
     vcs:
-      type: "git"
+      type: "Git"
       url: "http://github.com/rspec/rspec.git"
       revision: ""
       path: ""
     vcs_processed:
-      type: "git"
+      type: "Git"
       url: "https://github.com/rspec/rspec.git"
       revision: ""
       path: ""

@@ -11,7 +11,7 @@ project:
     revision: ""
     path: ""
   vcs_processed:
-    type: "git"
+    type: "Git"
     url: "<REPLACE_URL>"
     revision: "<REPLACE_REVISION>"
     path: "analyzer/src/funTest/assets/projects/synthetic/gradle/app"
@@ -105,12 +105,12 @@ packages:
         value: "f7d878153e86a1cdddf6b37850e00a9f8bff726f"
         algorithm: "SHA-1"
     vcs:
-      type: "git"
+      type: "Git"
       url: "http://git-wip-us.apache.org/repos/asf/commons-lang.git"
       revision: "LANG_3_5"
       path: ""
     vcs_processed:
-      type: "git"
+      type: "Git"
       url: "http://git-wip-us.apache.org/repos/asf/commons-lang.git"
       revision: "LANG_3_5"
       path: ""
@@ -136,12 +136,12 @@ packages:
         value: "f0770f7f0472bf120ada47beecadce4056fbd20a"
         algorithm: "SHA-1"
     vcs:
-      type: "git"
+      type: "Git"
       url: "http://git-wip-us.apache.org/repos/asf/commons-text.git"
       revision: ""
       path: ""
     vcs_processed:
-      type: "git"
+      type: "Git"
       url: "http://git-wip-us.apache.org/repos/asf/commons-text.git"
       revision: ""
       path: ""
@@ -166,12 +166,12 @@ packages:
         value: ""
         algorithm: ""
     vcs:
-      type: "git"
+      type: "Git"
       url: "https://gitbox.apache.org/repos/asf/struts.git"
       revision: "STRUTS_2_5_14_1"
       path: ""
     vcs_processed:
-      type: "git"
+      type: "Git"
       url: "https://gitbox.apache.org/repos/asf/struts.git"
       revision: "STRUTS_2_5_14_1"
       path: ""

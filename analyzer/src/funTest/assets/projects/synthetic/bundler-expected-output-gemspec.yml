@@ -11,7 +11,7 @@ project:
     revision: ""
     path: ""
   vcs_processed:
-    type: "git"
+    type: "Git"
     url: "<REPLACE_URL>"
     revision: "<REPLACE_REVISION>"
     path: "analyzer/src/funTest/assets/projects/synthetic/bundler/gemspec"
@@ -68,12 +68,12 @@ packages:
         value: "73771ea960b3900d96e6b3729bd203e66f387d0717df83304411bf37efd7386e"
         algorithm: "SHA-256"
     vcs:
-      type: "git"
+      type: "Git"
       url: "http://github.com/sporkmonger/addressable.git"
       revision: ""
       path: ""
     vcs_processed:
-      type: "git"
+      type: "Git"
       url: "https://github.com/sporkmonger/addressable.git"
       revision: ""
       path: ""
@@ -106,12 +106,12 @@ packages:
         value: "ea7bf591567e391ef262a7c29edaf87c6205204afb5bb39dfa8f08f2e51282a3"
         algorithm: "SHA-256"
     vcs:
-      type: "git"
+      type: "Git"
       url: "https://github.com/halostatue/diff-lcs.git"
       revision: ""
       path: ""
     vcs_processed:
-      type: "git"
+      type: "Git"
       url: "https://github.com/halostatue/diff-lcs.git"
       revision: ""
       path: ""
@@ -136,13 +136,13 @@ packages:
         value: "bd5bd1ab8db9b3f99ed1113d80522dabf95941e40cc3107f9621546f6a357f60"
         algorithm: "SHA-256"
     vcs:
-      type: "git"
+      type: "Git"
       url: "https://github.com/lostisland/faraday.git"
       revision: ""
       resolved_revision: ""
       path: ""
     vcs_processed:
-      type: "git"
+      type: "Git"
       url: "https://github.com/lostisland/faraday.git"
       revision: ""
       resolved_revision: ""
@@ -169,13 +169,13 @@ packages:
         value: "7e7e7ffc1a5ebce628ac7da428341c50615a3a10ac47bb74c22c1cba325613f0"
         algorithm: "SHA-256"
     vcs:
-      type: "git"
+      type: "Git"
       url: "http://github.com/jwt/ruby-jwt.git"
       revision: ""
       resolved_revision: ""
       path: ""
     vcs_processed:
-      type: "git"
+      type: "Git"
       url: "https://github.com/jwt/ruby-jwt.git"
       revision: ""
       resolved_revision: ""
@@ -203,13 +203,13 @@ packages:
         value: "db8613c039b9501e6b2fb85efe4feabb02f55c3365bae52bba35381b89c780e6"
         algorithm: "SHA-256"
     vcs:
-      type: "git"
+      type: "Git"
       url: "http://github.com/intridea/multi_json.git"
       revision: ""
       resolved_revision: ""
       path: ""
     vcs_processed:
-      type: "git"
+      type: "Git"
       url: "https://github.com/intridea/multi_json.git"
       revision: ""
       resolved_revision: ""
@@ -237,13 +237,13 @@ packages:
         value: "3dc44e50d3df3d42da2b86272c568fd7b75c928d8af3cc5f9834e2e5d9586026"
         algorithm: "SHA-256"
     vcs:
-      type: "git"
+      type: "Git"
       url: "https://github.com/nicksieger/multipart-post.git"
       revision: ""
       resolved_revision: ""
       path: ""
     vcs_processed:
-      type: "git"
+      type: "Git"
       url: "https://github.com/nicksieger/multipart-post.git"
       revision: ""
       resolved_revision: ""
@@ -270,12 +270,12 @@ packages:
         value: "3a0168c33fa0b00886423a2ceb21c74199273ccd01bc250360fc8d18600bb0f4"
         algorithm: "SHA-256"
     vcs:
-      type: "git"
+      type: "Git"
       url: "http://github.com/weppos/publicsuffix-ruby.git"
       revision: ""
       path: ""
     vcs_processed:
-      type: "git"
+      type: "Git"
       url: "https://github.com/weppos/publicsuffix-ruby.git"
       revision: ""
       path: ""
@@ -304,12 +304,12 @@ packages:
         value: "ee2016b1ddf820f6e5ee437d10a85319506b60c0d493da1d15815361a91129bd"
         algorithm: "SHA-256"
     vcs:
-      type: "git"
+      type: "Git"
       url: "http://github.com/rack/rack.git"
       revision: ""
       path: ""
     vcs_processed:
-      type: "git"
+      type: "Git"
       url: "https://github.com/rack/rack.git"
       revision: ""
       path: ""
@@ -334,12 +334,12 @@ packages:
         value: "526e0b2d22feae638eb99bd746bbb25b18a4869a8f6ce4e8a87dabd1ab5f727f"
         algorithm: "SHA-256"
     vcs:
-      type: "git"
+      type: "Git"
       url: "http://github.com/rspec/rspec-core.git"
       revision: ""
       path: ""
     vcs_processed:
-      type: "git"
+      type: "Git"
       url: "https://github.com/rspec/rspec-core.git"
       revision: ""
       path: ""
@@ -365,12 +365,12 @@ packages:
         value: "7e571848a5cbdb1661187d04e5c1f29287ec80fcb5a395f9994836892a3780bb"
         algorithm: "SHA-256"
     vcs:
-      type: "git"
+      type: "Git"
       url: "http://github.com/rspec/rspec-expectations.git"
       revision: ""
       path: ""
     vcs_processed:
-      type: "git"
+      type: "Git"
       url: "https://github.com/rspec/rspec-expectations.git"
       revision: ""
       path: ""
@@ -395,12 +395,12 @@ packages:
         value: "23f7f0039e17f2841edfb51d678ac9e06c056903a7908db967f5618887f2022c"
         algorithm: "SHA-256"
     vcs:
-      type: "git"
+      type: "Git"
       url: "http://github.com/rspec/rspec-mocks.git"
       revision: ""
       path: ""
     vcs_processed:
-      type: "git"
+      type: "Git"
       url: "https://github.com/rspec/rspec-mocks.git"
       revision: ""
       path: ""
@@ -425,13 +425,13 @@ packages:
         value: "4152975a068756076f10c97317e9d2baf10028f3d25c0cb902945569560783da"
         algorithm: "SHA-256"
     vcs:
-      type: "git"
+      type: "Git"
       url: "https://github.com/rspec/rspec-support.git"
       revision: ""
       resolved_revision: ""
       path: ""
     vcs_processed:
-      type: "git"
+      type: "Git"
       url: "https://github.com/rspec/rspec-support.git"
       revision: ""
       resolved_revision: ""
@@ -457,12 +457,12 @@ packages:
         value: "0174cfbed780e42aa181227af623e2ae37511f20a2fdfec48b54f6cf4d7a6404"
         algorithm: "SHA-256"
     vcs:
-      type: "git"
+      type: "Git"
       url: "http://github.com/rspec/rspec.git"
       revision: ""
       path: ""
     vcs_processed:
-      type: "git"
+      type: "Git"
       url: "https://github.com/rspec/rspec.git"
       revision: ""
       path: ""
@@ -492,7 +492,7 @@ packages:
       revision: ""
       path: ""
     vcs_processed:
-      type: "git"
+      type: "Git"
       url: "https://github.com/google/signet.git"
       revision: ""
       path: ""

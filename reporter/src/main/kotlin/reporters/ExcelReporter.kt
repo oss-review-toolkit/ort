@@ -382,7 +382,7 @@ class ExcelReporter : Reporter() {
 
         sheet.createRow(++rows).apply {
             CellUtil.createCell(this, 0, "Type:", defaultStyle)
-            CellUtil.createCell(this, 1, vcsInfo.type, defaultStyle)
+            CellUtil.createCell(this, 1, vcsInfo.type.toString(), defaultStyle)
         }
         sheet.addMergedRegion(CellRangeAddress(rows, rows, 1, columns))
 

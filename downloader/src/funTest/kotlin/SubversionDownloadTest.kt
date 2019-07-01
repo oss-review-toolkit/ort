@@ -22,6 +22,7 @@ package com.here.ort.downloader.vcs
 import com.here.ort.model.Identifier
 import com.here.ort.model.Package
 import com.here.ort.model.VcsInfo
+import com.here.ort.model.VcsType
 import com.here.ort.utils.safeDeleteRecursively
 import com.here.ort.utils.test.ExpensiveTag
 
@@ -55,7 +56,7 @@ class SubversionDownloadTest : StringSpec() {
 
     init {
         "Subversion can download a given revision".config(tags = setOf(ExpensiveTag)) {
-            val pkg = Package.EMPTY.copy(vcsProcessed = VcsInfo("Subversion", REPO_URL, REPO_REV))
+            val pkg = Package.EMPTY.copy(vcsProcessed = VcsInfo(VcsType.SUBVERSION, REPO_URL, REPO_REV))
             val expectedFiles = listOf(
                 ".svn",
                 "branches",
@@ -74,7 +75,9 @@ class SubversionDownloadTest : StringSpec() {
 
         "Subversion can download only a single path"
             .config(tags = setOf(ExpensiveTag)) {
-                val pkg = Package.EMPTY.copy(vcsProcessed = VcsInfo("Subversion", REPO_URL, REPO_REV, path = REPO_PATH))
+                val pkg = Package.EMPTY.copy(
+                    vcsProcessed = VcsInfo(VcsType.SUBVERSION, REPO_URL, REPO_REV, path = REPO_PATH)
+                )
                 val expectedFiles = listOf(
                     "SendMessage.sln",
                     "default.build",
@@ -95,7 +98,7 @@ class SubversionDownloadTest : StringSpec() {
             }
 
         "Subversion can download a given tag".config(tags = setOf(ExpensiveTag)) {
-            val pkg = Package.EMPTY.copy(vcsProcessed = VcsInfo("Subversion", REPO_URL, "", path = REPO_TAG))
+            val pkg = Package.EMPTY.copy(vcsProcessed = VcsInfo(VcsType.SUBVERSION, REPO_URL, "", path = REPO_TAG))
             val expectedFiles = listOf(
                 "SendMessage.proj",
                 "SendMessage.sln",
@@ -116,7 +119,7 @@ class SubversionDownloadTest : StringSpec() {
             .config(tags = setOf(ExpensiveTag)) {
                 val pkg = Package.EMPTY.copy(
                     id = Identifier("Test:::$REPO_VERSION"),
-                    vcsProcessed = VcsInfo("Subversion", REPO_URL, "")
+                    vcsProcessed = VcsInfo(VcsType.SUBVERSION, REPO_URL, "")
                 )
 
                 val workingTree = svn.download(pkg, outputDir)
@@ -129,7 +132,7 @@ class SubversionDownloadTest : StringSpec() {
             .config(tags = setOf(ExpensiveTag)) {
                 val pkg = Package.EMPTY.copy(
                     id = Identifier("Test:::$REPO_VERSION"),
-                    vcsProcessed = VcsInfo("Subversion", REPO_URL, "", path = REPO_PATH_FOR_VERSION)
+                    vcsProcessed = VcsInfo(VcsType.SUBVERSION, REPO_URL, "", path = REPO_PATH_FOR_VERSION)
                 )
                 val expectedFiles = listOf(
                     "SendMessage.ico",

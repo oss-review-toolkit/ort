@@ -37,6 +37,7 @@ import com.here.ort.model.ProjectAnalyzerResult
 import com.here.ort.model.RemoteArtifact
 import com.here.ort.model.Scope
 import com.here.ort.model.VcsInfo
+import com.here.ort.model.VcsType
 import com.here.ort.model.config.AnalyzerConfiguration
 import com.here.ort.model.config.RepositoryConfiguration
 import com.here.ort.model.jsonMapper
@@ -345,7 +346,7 @@ data class GemSpec(
         private fun parseVcs(homepageUrl: String): VcsInfo =
             if (GITHUB_REGEX.matches(homepageUrl)) {
                 log.debug { "$homepageUrl is a GitHub URL." }
-                VcsInfo("git", "$homepageUrl.git", "", "")
+                VcsInfo(VcsType.GIT, "$homepageUrl.git", "", "")
             } else {
                 VcsInfo.EMPTY
             }

@@ -70,9 +70,9 @@ class OrtResultTest : WordSpec({
 
     "getDefinitionFilePathRelativeToAnalyzerRoot" should {
         "use the correct vcs" {
-            val vcs = VcsInfo(type = "Git", url = "https://example.com/git", revision = "")
-            val nestedVcs1 = VcsInfo(type = "Git", url = "https://example.com/git1", revision = "")
-            val nestedVcs2 = VcsInfo(type = "Git", url = "https://example.com/git2", revision = "")
+            val vcs = VcsInfo(type = VcsType.GIT, url = "https://example.com/git", revision = "")
+            val nestedVcs1 = VcsInfo(type = VcsType.GIT, url = "https://example.com/git1", revision = "")
+            val nestedVcs2 = VcsInfo(type = VcsType.GIT, url = "https://example.com/git2", revision = "")
             val project1 = Project.EMPTY.copy(
                 id = Identifier("Gradle:com.here:project1:1.0"),
                 definitionFilePath = "project1/build.gradle",
@@ -112,9 +112,9 @@ class OrtResultTest : WordSpec({
         }
 
         "fail if no vcs matches" {
-            val vcs = VcsInfo(type = "Git", url = "https://example.com/git", revision = "")
-            val nestedVcs1 = VcsInfo(type = "Git", url = "https://example.com/git1", revision = "")
-            val nestedVcs2 = VcsInfo(type = "Git", url = "https://example.com/git2", revision = "")
+            val vcs = VcsInfo(type = VcsType.GIT, url = "https://example.com/git", revision = "")
+            val nestedVcs1 = VcsInfo(type = VcsType.GIT, url = "https://example.com/git1", revision = "")
+            val nestedVcs2 = VcsInfo(type = VcsType.GIT, url = "https://example.com/git2", revision = "")
             val project = Project.EMPTY.copy(
                 id = Identifier("Gradle:com.here:project1:1.0"),
                 definitionFilePath = "build.gradle",

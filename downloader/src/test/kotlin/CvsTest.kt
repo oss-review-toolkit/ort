@@ -19,6 +19,7 @@
 
 package com.here.ort.downloader.vcs
 
+import com.here.ort.model.VcsType
 import com.here.ort.utils.getUserOrtDirectory
 import com.here.ort.utils.safeDeleteRecursively
 import com.here.ort.utils.unpack
@@ -68,7 +69,7 @@ class CvsTest : StringSpec() {
         "Detected CVS working tree information is correct".config(enabled = false) {
             val workingTree = cvs.getWorkingTree(zipContentDir)
 
-            workingTree.vcsType shouldBe "Cvs"
+            workingTree.vcsType shouldBe VcsType.CVS
             workingTree.isValid() shouldBe true
             workingTree.getRemoteUrl() shouldBe ":pserver:anonymous@tyrex.cvs.sourceforge.net:/cvsroot/tyrex"
             workingTree.getRevision() shouldBe "8707a14c78c6e77ffc59e685360fa20071c1afb6"

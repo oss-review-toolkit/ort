@@ -32,6 +32,7 @@ import com.here.ort.model.ScanResult
 import com.here.ort.model.ScanSummary
 import com.here.ort.model.ScannerDetails
 import com.here.ort.model.VcsInfo
+import com.here.ort.model.VcsType
 import com.here.ort.model.jsonMapper
 import com.here.ort.scanner.ScanResultsStorage
 
@@ -48,8 +49,8 @@ abstract class AbstractStorageTest : StringSpec() {
 
     private val sourceArtifact = RemoteArtifact("url", Hash.create("0123456789abcdef0123456789abcdef01234567"))
 
-    private val vcs = VcsInfo("type", "url", "revision", "resolvedRevision", "path")
-    private val vcsWithoutRevision = VcsInfo("type", "url", "", "")
+    private val vcs = VcsInfo(VcsType.UNKNOWN, "url", "revision", "resolvedRevision", "path")
+    private val vcsWithoutRevision = VcsInfo(VcsType.UNKNOWN, "url", "", "")
 
     private val pkg = Package.EMPTY.copy(
         id = id,

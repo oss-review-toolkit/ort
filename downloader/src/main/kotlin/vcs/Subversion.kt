@@ -31,6 +31,7 @@ import com.here.ort.downloader.DownloadException
 import com.here.ort.downloader.VersionControlSystem
 import com.here.ort.downloader.WorkingTree
 import com.here.ort.model.Package
+import com.here.ort.model.VcsType
 import com.here.ort.model.xmlMapper
 import com.here.ort.utils.CommandLineTool
 import com.here.ort.utils.ProcessCapture
@@ -99,7 +100,7 @@ data class SubversionPathEntry(
 class Subversion : VersionControlSystem(), CommandLineTool {
     private val versionRegex = Pattern.compile("svn, [Vv]ersion (?<version>[\\d.]+) \\(r\\d+\\)")
 
-    override val aliases = listOf("svn")
+    override val type = VcsType.SUBVERSION
     override val priority = 10
     override val latestRevisionNames = listOf("HEAD")
 

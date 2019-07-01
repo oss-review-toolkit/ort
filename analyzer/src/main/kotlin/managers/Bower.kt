@@ -34,6 +34,7 @@ import com.here.ort.model.ProjectAnalyzerResult
 import com.here.ort.model.RemoteArtifact
 import com.here.ort.model.Scope
 import com.here.ort.model.VcsInfo
+import com.here.ort.model.VcsType
 import com.here.ort.model.config.AnalyzerConfiguration
 import com.here.ort.model.config.RepositoryConfiguration
 import com.here.ort.model.jsonMapper
@@ -76,7 +77,7 @@ class Bower(
             )
 
         private fun extractRepositoryType(node: JsonNode) =
-            node["pkgMeta"]["repository"]?.get("type").textValueOrEmpty()
+            VcsType.fromString(node["pkgMeta"]["repository"]?.get("type").textValueOrEmpty())
 
         private fun extractRepositoryUrl(node: JsonNode) =
             node["pkgMeta"]["repository"]?.get("url")?.textValue()

@@ -59,7 +59,7 @@ class PackageCurationTest : WordSpec({
                         hash = Hash.create("source.hash")
                     ),
                     vcs = VcsInfoCuration(
-                        type = "git",
+                        type = VcsType.GIT,
                         url = "http://url.git",
                         revision = "revision",
                         resolvedRevision = "resolvedRevision",
@@ -100,7 +100,7 @@ class PackageCurationTest : WordSpec({
                 binaryArtifact = RemoteArtifact.EMPTY,
                 sourceArtifact = RemoteArtifact.EMPTY,
                 vcs = VcsInfo(
-                    type = "git",
+                    type = VcsType.GIT,
                     url = "http://url.git",
                     revision = "revision",
                     resolvedRevision = "resolvedRevision",
@@ -156,7 +156,7 @@ class PackageCurationTest : WordSpec({
                 binaryArtifact = RemoteArtifact.EMPTY,
                 sourceArtifact = RemoteArtifact.EMPTY,
                 vcs = VcsInfo(
-                    type = "git",
+                    type = VcsType.GIT,
                     url = "http://url.git",
                     revision = "revision",
                     path = "path"
@@ -167,7 +167,7 @@ class PackageCurationTest : WordSpec({
                 id = pkg.id,
                 data = PackageCurationData(
                     vcs = VcsInfoCuration(
-                        type = "",
+                        type = VcsType.UNKNOWN,
                         url = "",
                         revision = "",
                         path = ""
@@ -202,7 +202,7 @@ class PackageCurationTest : WordSpec({
                 data = PackageCurationData(
                     homepageUrl = "http://home.page",
                     vcs = VcsInfoCuration(
-                        type = "",
+                        type = VcsType.UNKNOWN,
                         url = "http://url.git",
                         revision = ""
                     )

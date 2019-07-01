@@ -8,12 +8,12 @@ project:
   declared_licenses_processed:
     spdx_expression: "BSD-3-Clause"
   vcs:
-    type: "git"
+    type: "Git"
     url: "https://github.com/advancedtelematic/quickcheck-state-machine"
     revision: ""
     path: ""
   vcs_processed:
-    type: "git"
+    type: "Git"
     url: "https://github.com/advancedtelematic/quickcheck-state-machine.git"
     revision: "aa38cb0aa2c6c0f61e5d38e6e5b385c4eb644ee1"
     path: ""
@@ -1113,12 +1113,12 @@ packages:
         value: ""
         algorithm: ""
     vcs:
-      type: "git"
+      type: "Git"
       url: "git://github.com/ekmett/transformers-compat.git"
       revision: ""
       path: ""
     vcs_processed:
-      type: "git"
+      type: "Git"
       url: "https://github.com/ekmett/transformers-compat.git"
       revision: ""
       path: ""
@@ -1151,12 +1151,12 @@ packages:
         value: ""
         algorithm: ""
     vcs:
-      type: "git"
+      type: "Git"
       url: "https://github.com/simonmar/async.git"
       revision: ""
       path: ""
     vcs_processed:
-      type: "git"
+      type: "Git"
       url: "https://github.com/simonmar/async.git"
       revision: ""
       path: ""
@@ -1182,12 +1182,12 @@ packages:
         value: ""
         algorithm: ""
     vcs:
-      type: "git"
+      type: "Git"
       url: "https://github.com/maoe/lifted-async.git"
       revision: ""
       path: ""
     vcs_processed:
-      type: "git"
+      type: "Git"
       url: "https://github.com/maoe/lifted-async.git"
       revision: ""
       path: ""
@@ -1217,12 +1217,12 @@ packages:
         value: ""
         algorithm: ""
     vcs:
-      type: "git"
+      type: "Git"
       url: "https://github.com/haskell/stm.git"
       revision: ""
       path: ""
     vcs_processed:
-      type: "git"
+      type: "Git"
       url: "https://github.com/haskell/stm.git"
       revision: ""
       path: ""
@@ -1249,12 +1249,12 @@ packages:
         value: ""
         algorithm: ""
     vcs:
-      type: "git"
+      type: "Git"
       url: "git://github.com/ekmett/constraints.git"
       revision: ""
       path: ""
     vcs_processed:
-      type: "git"
+      type: "Git"
       url: "https://github.com/ekmett/constraints.git"
       revision: ""
       path: ""
@@ -1287,12 +1287,12 @@ packages:
         value: ""
         algorithm: ""
     vcs:
-      type: "git"
+      type: "Git"
       url: "https://github.com/haskell/deepseq.git"
       revision: ""
       path: ""
     vcs_processed:
-      type: "git"
+      type: "Git"
       url: "https://github.com/haskell/deepseq.git"
       revision: ""
       path: ""
@@ -1322,12 +1322,12 @@ packages:
         value: ""
         algorithm: ""
     vcs:
-      type: "git"
+      type: "Git"
       url: "https://github.com/basvandijk/lifted-base.git"
       revision: ""
       path: ""
     vcs_processed:
-      type: "git"
+      type: "Git"
       url: "https://github.com/basvandijk/lifted-base.git"
       revision: ""
       path: ""
@@ -1362,12 +1362,12 @@ packages:
         value: ""
         algorithm: ""
     vcs:
-      type: "git"
+      type: "Git"
       url: "git://github.com/basvandijk/monad-control.git"
       revision: ""
       path: ""
     vcs_processed:
-      type: "git"
+      type: "Git"
       url: "https://github.com/basvandijk/monad-control.git"
       revision: ""
       path: ""
@@ -1395,12 +1395,12 @@ packages:
         value: ""
         algorithm: ""
     vcs:
-      type: "git"
+      type: "Git"
       url: "git://github.com/ekmett/mtl.git"
       revision: ""
       path: ""
     vcs_processed:
-      type: "git"
+      type: "Git"
       url: "https://github.com/ekmett/mtl.git"
       revision: ""
       path: ""
@@ -1426,12 +1426,12 @@ packages:
         value: ""
         algorithm: ""
     vcs:
-      type: "git"
+      type: "Git"
       url: "https://github.com/mvv/transformers-base.git"
       revision: ""
       path: ""
     vcs_processed:
-      type: "git"
+      type: "Git"
       url: "https://github.com/mvv/transformers-base.git"
       revision: ""
       path: ""
@@ -1501,12 +1501,12 @@ packages:
         value: ""
         algorithm: ""
     vcs:
-      type: "git"
+      type: "Git"
       url: "http://git.haskell.org/packages/array.git"
       revision: ""
       path: ""
     vcs_processed:
-      type: "git"
+      type: "Git"
       url: "http://git.haskell.org/packages/array.git"
       revision: ""
       path: ""
@@ -1534,12 +1534,12 @@ packages:
         value: ""
         algorithm: ""
     vcs:
-      type: "git"
+      type: "Git"
       url: "http://github.com/haskell/containers.git"
       revision: ""
       path: ""
     vcs_processed:
-      type: "git"
+      type: "Git"
       url: "https://github.com/haskell/containers.git"
       revision: ""
       path: ""
@@ -1569,12 +1569,12 @@ packages:
         value: ""
         algorithm: ""
     vcs:
-      type: "git"
+      type: "Git"
       url: "git://github.com/kolmodin/binary.git"
       revision: ""
       path: ""
     vcs_processed:
-      type: "git"
+      type: "Git"
       url: "https://github.com/kolmodin/binary.git"
       revision: ""
       path: ""
@@ -1612,7 +1612,7 @@ packages:
         value: ""
         algorithm: ""
     vcs:
-      type: "mercurial"
+      type: "Mercurial"
       url: "https://bitbucket.org/bos/text"
       revision: ""
       path: ""
@@ -1663,12 +1663,12 @@ packages:
         value: ""
         algorithm: ""
     vcs:
-      type: "git"
+      type: "Git"
       url: "https://github.com/haskell/bytestring"
       revision: ""
       path: ""
     vcs_processed:
-      type: "git"
+      type: "Git"
       url: "https://github.com/haskell/bytestring.git"
       revision: ""
       path: ""
@@ -1696,12 +1696,12 @@ packages:
         value: ""
         algorithm: ""
     vcs:
-      type: "git"
+      type: "Git"
       url: "https://github.com/tibbe/hashable.git"
       revision: ""
       path: ""
     vcs_processed:
-      type: "git"
+      type: "Git"
       url: "https://github.com/tibbe/hashable.git"
       revision: ""
       path: ""
@@ -1726,12 +1726,12 @@ packages:
         value: ""
         algorithm: ""
     vcs:
-      type: "git"
+      type: "Git"
       url: "https://github.com/haskell/primitive"
       revision: ""
       path: ""
     vcs_processed:
-      type: "git"
+      type: "Git"
       url: "https://github.com/haskell/primitive.git"
       revision: ""
       path: ""
@@ -1759,12 +1759,12 @@ packages:
         value: ""
         algorithm: ""
     vcs:
-      type: "git"
+      type: "Git"
       url: "https://github.com/glguy/th-abstraction.git"
       revision: ""
       path: ""
     vcs_processed:
-      type: "git"
+      type: "Git"
       url: "https://github.com/glguy/th-abstraction.git"
       revision: ""
       path: ""
@@ -1792,12 +1792,12 @@ packages:
         value: ""
         algorithm: ""
     vcs:
-      type: "git"
+      type: "Git"
       url: "http://git.haskell.org/ghc.git"
       revision: ""
       path: ""
     vcs_processed:
-      type: "git"
+      type: "Git"
       url: "http://git.haskell.org/ghc.git"
       revision: ""
       path: ""
@@ -1823,12 +1823,12 @@ packages:
         value: ""
         algorithm: ""
     vcs:
-      type: "git"
+      type: "Git"
       url: "http://git.haskell.org/ghc.git"
       revision: ""
       path: ""
     vcs_processed:
-      type: "git"
+      type: "Git"
       url: "http://git.haskell.org/ghc.git"
       revision: ""
       path: ""
@@ -1889,12 +1889,12 @@ packages:
         value: ""
         algorithm: ""
     vcs:
-      type: "git"
+      type: "Git"
       url: "http://git.haskell.org/ghc.git"
       revision: ""
       path: ""
     vcs_processed:
-      type: "git"
+      type: "Git"
       url: "http://git.haskell.org/ghc.git"
       revision: ""
       path: ""
@@ -1968,12 +1968,12 @@ packages:
         value: ""
         algorithm: ""
     vcs:
-      type: "git"
+      type: "Git"
       url: "http://git.haskell.org/packages/random.git"
       revision: ""
       path: ""
     vcs_processed:
-      type: "git"
+      type: "Git"
       url: "http://git.haskell.org/packages/random.git"
       revision: ""
       path: ""
@@ -2000,12 +2000,12 @@ packages:
         value: ""
         algorithm: ""
     vcs:
-      type: "git"
+      type: "Git"
       url: "http://git.haskell.org/ghc.git"
       revision: ""
       path: ""
     vcs_processed:
-      type: "git"
+      type: "Git"
       url: "http://git.haskell.org/ghc.git"
       revision: ""
       path: ""
@@ -2040,12 +2040,12 @@ packages:
         value: ""
         algorithm: ""
     vcs:
-      type: "git"
+      type: "Git"
       url: "https://github.com/nick8325/quickcheck"
       revision: "2.10.1"
       path: ""
     vcs_processed:
-      type: "git"
+      type: "Git"
       url: "https://github.com/nick8325/quickcheck.git"
       revision: "2.10.1"
       path: ""
@@ -2077,12 +2077,12 @@ packages:
         value: ""
         algorithm: ""
     vcs:
-      type: "git"
+      type: "Git"
       url: "https://github.com/nick8325/quickcheck-with-counterexamples"
       revision: "1.0"
       path: ""
     vcs_processed:
-      type: "git"
+      type: "Git"
       url: "https://github.com/nick8325/quickcheck-with-counterexamples.git"
       revision: "1.0"
       path: ""
@@ -2111,12 +2111,12 @@ packages:
         value: ""
         algorithm: ""
     vcs:
-      type: "git"
+      type: "Git"
       url: "http://github.com/haskell/pretty.git"
       revision: "1.1.3.3"
       path: ""
     vcs_processed:
-      type: "git"
+      type: "Git"
       url: "https://github.com/haskell/pretty.git"
       revision: "1.1.3.3"
       path: ""
@@ -2141,12 +2141,12 @@ packages:
         value: ""
         algorithm: ""
     vcs:
-      type: "git"
+      type: "Git"
       url: "https://github.com/haskell/time"
       revision: ""
       path: ""
     vcs_processed:
-      type: "git"
+      type: "Git"
       url: "https://github.com/haskell/time.git"
       revision: ""
       path: ""
@@ -2174,12 +2174,12 @@ packages:
         value: ""
         algorithm: ""
     vcs:
-      type: "git"
+      type: "Git"
       url: "https://github.com/ekmett/ansi-wl-pprint.git"
       revision: ""
       path: ""
     vcs_processed:
-      type: "git"
+      type: "Git"
       url: "https://github.com/ekmett/ansi-wl-pprint.git"
       revision: ""
       path: ""
@@ -2206,12 +2206,12 @@ packages:
         value: ""
         algorithm: ""
     vcs:
-      type: "git"
+      type: "Git"
       url: "git://github.com/feuerbach/ansi-terminal.git"
       revision: ""
       path: ""
     vcs_processed:
-      type: "git"
+      type: "Git"
       url: "https://github.com/feuerbach/ansi-terminal.git"
       revision: ""
       path: ""
