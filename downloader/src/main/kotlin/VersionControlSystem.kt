@@ -173,6 +173,8 @@ abstract class VersionControlSystem {
                     }
 
                     val type = forUrl(url)?.type.orEmpty()
+
+                    // Note: This "type" is not normalized in the sense of "VcsInfo.normalize()".
                     if (type == "Git") {
                         url += ".git"
                     }
@@ -213,7 +215,7 @@ abstract class VersionControlSystem {
                         if (uri.hasFragmentRevision()) revision = uri.fragment
                     }
 
-                    VcsInfo("git", url, revision, path = path)
+                    VcsInfo("Git", url, revision, path = path)
                 }
 
                 else -> {
@@ -221,13 +223,13 @@ abstract class VersionControlSystem {
                         vcsUrl.contains(".git/") -> {
                             val url = normalizeVcsUrl(vcsUrl.substringBefore(".git/"))
                             val path = vcsUrl.substringAfter(".git/")
-                            VcsInfo("git", "$url.git", "", null, path)
+                            VcsInfo("Git", "$url.git", "", null, path)
                         }
 
                         vcsUrl.contains(".git#") || Regex("git.+#[a-fA-F0-9]{7,}").matches(vcsUrl) -> {
                             val url = normalizeVcsUrl(vcsUrl.substringBeforeLast('#'))
                             val revision = vcsUrl.substringAfterLast('#')
-                            VcsInfo("git", url, revision, null, "")
+                            VcsInfo("Git", url, revision, null, "")
                         }
 
                         else -> VcsInfo("", vcsUrl, "")
