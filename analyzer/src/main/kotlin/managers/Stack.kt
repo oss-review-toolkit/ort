@@ -50,6 +50,12 @@ import java.net.HttpURLConnection
 import java.nio.file.FileSystems
 import java.util.SortedSet
 
+import java.net.InetSocketAddress
+import java.net.Proxy
+import java.net.URI
+
+import okhttp3.Credentials
+import okhttp3.OkHttpClient
 import okhttp3.Request
 
 /**
@@ -206,13 +212,29 @@ class Stack(
     private fun getPackageUrl(name: String, version: String) =
         "https://hackage.haskell.org/package/$name-$version"
 
+    private val applyProxySettingsFromEnv: OkHttpClient.Builder.() -> Unit = {
+        val proxyUrl = System.getenv("https_proxy") ?: System.getenv("http_proxy")
+        if (proxyUrl != null) {
+            val url = URI(proxyUrl)
+            proxy(Proxy(Proxy.Type.HTTP, InetSocketAddress(url.host, url.port)))
+            proxyAuthenticator { _, response ->
+                val user = url.userInfo.substringBefore(':')
+                val password = url.userInfo.substringAfter(':')
+                val credential = Credentials.basic(user, password)
+                response.request().newBuilder()
+                    .header("Proxy-Authorization", credential)
+                    .build()
+            }
+        }
+    }
+
     private fun downloadCabalFile(pkgId: Identifier): String? {
         val pkgRequest = Request.Builder()
             .get()
             .url("${getPackageUrl(pkgId.name, pkgId.version)}/src/${pkgId.name}.cabal")
             .build()
 
-        return OkHttpClientHelper.execute(HTTP_CACHE_PATH, pkgRequest).use { response ->
+        return OkHttpClientHelper.execute(HTTP_CACHE_PATH, pkgRequest, applyProxySettingsFromEnv).use { response ->
             val body = response.body()?.string()?.trim()
 
             if (response.code() != HttpURLConnection.HTTP_OK || body.isNullOrEmpty()) {
