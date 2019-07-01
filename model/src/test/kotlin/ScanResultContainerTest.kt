@@ -42,7 +42,7 @@ class ScanResultContainerTest : WordSpec() {
     )
     private val provenance2 = Provenance(
         downloadTime = downloadTime2,
-        vcsInfo = VcsInfo("type", "url", "revision", "resolvedRevision", "path")
+        vcsInfo = VcsInfo(VcsType.fromString("type"), "url", "revision", "resolvedRevision", "path")
     )
 
     private val scannerDetails1 = ScannerDetails("name 1", "version 1", "config 1")

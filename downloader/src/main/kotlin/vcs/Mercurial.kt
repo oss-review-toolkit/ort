@@ -25,6 +25,7 @@ import com.here.ort.downloader.DownloadException
 import com.here.ort.downloader.VersionControlSystem
 import com.here.ort.downloader.WorkingTree
 import com.here.ort.model.Package
+import com.here.ort.model.VcsType
 import com.here.ort.spdx.LICENSE_FILE_NAMES
 import com.here.ort.utils.CommandLineTool
 import com.here.ort.utils.ProcessCapture
@@ -40,7 +41,7 @@ const val MERCURIAL_SPARSE_EXTENSION = "sparse = "
 class Mercurial : VersionControlSystem(), CommandLineTool {
     private val versionRegex = Pattern.compile("Mercurial .*\\([Vv]ersion (?<version>[\\d.]+)\\)")
 
-    override val aliases = listOf("hg")
+    override val type = VcsType.MERCURIAL
     override val priority = 20
     override val latestRevisionNames = listOf("tip")
 

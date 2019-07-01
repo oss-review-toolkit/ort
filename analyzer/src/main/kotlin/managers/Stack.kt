@@ -33,6 +33,7 @@ import com.here.ort.model.ProjectAnalyzerResult
 import com.here.ort.model.RemoteArtifact
 import com.here.ort.model.Scope
 import com.here.ort.model.VcsInfo
+import com.here.ort.model.VcsType
 import com.here.ort.model.config.AnalyzerConfiguration
 import com.here.ort.model.config.RepositoryConfiguration
 import com.here.ort.utils.CommandLineTool
@@ -337,10 +338,12 @@ class Stack(
             url = "${getPackageUrl(id.name, id.version)}/${id.name}-${id.version}.tar.gz"
         )
 
+        val vcsType = (map["source-repository-this-type"] ?: map["source-repository-head-type"]).orEmpty()
+        val vcsUrl = (map["source-repository-this-location"] ?: map["source-repository-head-location"]).orEmpty()
         val vcs = VcsInfo(
-            type = map["source-repository-this-type"] ?: map["source-repository-head-type"].orEmpty(),
+            type = VcsType.fromString(vcsType),
             revision = map["source-repository-this-tag"].orEmpty(),
-            url = map["source-repository-this-location"] ?: map["source-repository-head-location"].orEmpty()
+            url = vcsUrl
         )
 
         val homepageUrl = map["homepage"].orEmpty()

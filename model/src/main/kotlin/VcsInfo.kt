@@ -39,9 +39,9 @@ import kotlin.reflect.full.memberProperties
 @JsonDeserialize(using = VcsInfoDeserializer::class)
 data class VcsInfo(
     /**
-     * The name of the VCS type, for example Git, GitRepo, Mercurial or Subversion.
+     * The type of the VCS, for example Git, GitRepo, Mercurial, etc.
      */
-    val type: String,
+    val type: VcsType,
 
     /**
      * The URL to the VCS repository.
@@ -73,7 +73,7 @@ data class VcsInfo(
          */
         @JvmField
         val EMPTY = VcsInfo(
-            type = "",
+            type = VcsType.UNKNOWN,
             url = "",
             revision = "",
             resolvedRevision = null,
@@ -91,7 +91,7 @@ data class VcsInfo(
         }
 
         var type = this.type
-        if (type.isBlank() && other.type.isNotBlank()) {
+        if (type == VcsType.UNKNOWN && (other.type != VcsType.UNKNOWN || other.type.toString().isNotEmpty())) {
             type = other.type
         }
 
@@ -119,10 +119,9 @@ data class VcsInfo(
     }
 
     /**
-     * Return this [VcsInfo] in normalized form. This transforms the [type] to a lower case string and applies
-     * [normalizeVcsUrl] to the [url].
+     * Return this [VcsInfo] in normalized form by applying [normalizeVcsUrl] to the [url].
      */
-    fun normalize() = copy(type = type.toLowerCase(), url = normalizeVcsUrl(url))
+    fun normalize() = copy(url = normalizeVcsUrl(url))
 
     /**
      * Return a [VcsInfoCuration] with the properties from this [VcsInfo].
@@ -146,7 +145,7 @@ class VcsInfoDeserializer : StdDeserializer<VcsInfo>(VcsInfo::class.java) {
         }
 
         return VcsInfo(
-            node["type"].textValueOrEmpty(),
+            VcsType.fromString(node["type"].textValueOrEmpty()),
             node["url"].textValueOrEmpty(),
             node["revision"].textValueOrEmpty(),
             (node["resolved_revision"] ?: node["resolvedRevision"])?.textValue(),

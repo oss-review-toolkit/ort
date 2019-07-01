@@ -11,7 +11,7 @@ project:
     revision: ""
     path: ""
   vcs_processed:
-    type: "git"
+    type: "Git"
     url: "<REPLACE_URL>"
     revision: "<REPLACE_REVISION>"
     path: "<REPLACE_PATH>"
@@ -72,7 +72,7 @@ packages:
       revision: ""
       path: ""
     vcs_processed:
-      type: "git"
+      type: "Git"
       url: "https://github.com/halostatue/diff-lcs.git"
       revision: ""
       path: ""
@@ -99,13 +99,13 @@ packages:
         value: "216417b241ff4e7b1c726f257241eaf223e3abbe6ec2c6453352dea6a414a38d"
         algorithm: "SHA-256"
     vcs:
-      type: "git"
+      type: "Git"
       url: "http://github.com/flavorjones/mini_portile.git"
       revision: ""
       resolved_revision: ""
       path: ""
     vcs_processed:
-      type: "git"
+      type: "Git"
       url: "https://github.com/flavorjones/mini_portile.git"
       revision: ""
       resolved_revision: ""
@@ -137,7 +137,7 @@ packages:
       revision: ""
       path: ""
     vcs_processed:
-      type: "git"
+      type: "Git"
       url: "https://github.com/sparklemotion/nokogiri.git"
       revision: ""
       path: ""
@@ -171,7 +171,7 @@ packages:
       revision: ""
       path: ""
     vcs_processed:
-      type: "git"
+      type: "Git"
       url: "https://github.com/rack/rack.git"
       revision: ""
       path: ""
@@ -201,7 +201,7 @@ packages:
       revision: ""
       path: ""
     vcs_processed:
-      type: "git"
+      type: "Git"
       url: "https://github.com/rspec/rspec-core.git"
       revision: ""
       path: ""
@@ -232,7 +232,7 @@ packages:
       revision: ""
       path: ""
     vcs_processed:
-      type: "git"
+      type: "Git"
       url: "https://github.com/rspec/rspec-expectations.git"
       revision: ""
       path: ""
@@ -262,7 +262,7 @@ packages:
       revision: ""
       path: ""
     vcs_processed:
-      type: "git"
+      type: "Git"
       url: "https://github.com/rspec/rspec-mocks.git"
       revision: ""
       path: ""
@@ -287,13 +287,13 @@ packages:
         value: "4152975a068756076f10c97317e9d2baf10028f3d25c0cb902945569560783da"
         algorithm: "SHA-256"
     vcs:
-      type: "git"
+      type: "Git"
       url: "https://github.com/rspec/rspec-support.git"
       revision: ""
       resolved_revision: ""
       path: ""
     vcs_processed:
-      type: "git"
+      type: "Git"
       url: "https://github.com/rspec/rspec-support.git"
       revision: ""
       resolved_revision: ""
@@ -324,7 +324,7 @@ packages:
       revision: ""
       path: ""
     vcs_processed:
-      type: "git"
+      type: "Git"
       url: "https://github.com/rspec/rspec.git"
       revision: ""
       path: ""

@@ -28,6 +28,7 @@ import com.here.ort.model.Identifier
 import com.here.ort.model.Project
 import com.here.ort.model.ProjectAnalyzerResult
 import com.here.ort.model.VcsInfo
+import com.here.ort.model.VcsType
 import com.here.ort.model.config.AnalyzerConfiguration
 import com.here.ort.model.config.RepositoryConfiguration
 import com.here.ort.utils.log
@@ -81,7 +82,7 @@ class Unmanaged(
                 )
             }
 
-            vcsInfo.type == "GitRepo" -> {
+            vcsInfo.type == VcsType.GIT_REPO -> {
                 // For GitRepo looking at the URL and revision only is not enough, we also need to take the used
                 // manifest into account.
                 Identifier(

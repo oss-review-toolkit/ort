@@ -11,7 +11,7 @@ project:
     revision: ""
     path: ""
   vcs_processed:
-    type: "git"
+    type: "Git"
     url: "<REPLACE_URL>"
     revision: "<REPLACE_REVISION>"
     path: "analyzer/src/funTest/assets/projects/synthetic/gradle-android/lib"
@@ -195,12 +195,12 @@ packages:
         value: "9d064d7d42ee1d04ae07ad23025b4f9616652eed"
         algorithm: "SHA-1"
     vcs:
-      type: "git"
+      type: "Git"
       url: "https://git-wip-us.apache.org/repos/asf/commons-compress.git"
       revision: ""
       path: ""
     vcs_processed:
-      type: "git"
+      type: "Git"
       url: "https://git-wip-us.apache.org/repos/asf/commons-compress.git"
       revision: ""
       path: ""
@@ -227,12 +227,12 @@ packages:
         value: "e7e36219edde1c66c93495a75490d8f526c377cb"
         algorithm: "SHA-1"
     vcs:
-      type: "git"
+      type: "Git"
       url: "http://git-wip-us.apache.org/repos/asf/commons-lang.git"
       revision: "LANG_3_6"
       path: ""
     vcs_processed:
-      type: "git"
+      type: "Git"
       url: "http://git-wip-us.apache.org/repos/asf/commons-lang.git"
       revision: "LANG_3_6"
       path: ""
@@ -258,12 +258,12 @@ packages:
         value: "679282ee0f6f2b236f58a7a1dc8395861ad9fd97"
         algorithm: "SHA-1"
     vcs:
-      type: "git"
+      type: "Git"
       url: "http://git-wip-us.apache.org/repos/asf/commons-text.git"
       revision: ""
       path: ""
     vcs_processed:
-      type: "git"
+      type: "Git"
       url: "http://git-wip-us.apache.org/repos/asf/commons-text.git"
       revision: ""
       path: ""
@@ -289,12 +289,12 @@ packages:
         value: "9c51853f855aca4ea31785f30385e980a58eaf4b"
         algorithm: "SHA-1"
     vcs:
-      type: "git"
+      type: "Git"
       url: "http://git-wip-us.apache.org/repos/asf/commons-text.git"
       revision: ""
       path: ""
     vcs_processed:
-      type: "git"
+      type: "Git"
       url: "http://git-wip-us.apache.org/repos/asf/commons-text.git"
       revision: ""
       path: ""

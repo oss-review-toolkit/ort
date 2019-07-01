@@ -23,6 +23,7 @@ import com.here.ort.model.Identifier
 import com.here.ort.model.Package
 import com.here.ort.model.RemoteArtifact
 import com.here.ort.model.VcsInfo
+import com.here.ort.model.VcsType
 import com.here.ort.utils.fileSystemEncode
 import com.here.ort.utils.safeDeleteRecursively
 
@@ -59,7 +60,7 @@ class DirectoryTest : StringSpec() {
                 homepageUrl = "",
                 binaryArtifact = RemoteArtifact.EMPTY,
                 sourceArtifact = RemoteArtifact.EMPTY,
-                vcs = VcsInfo("Git", "", "")
+                vcs = VcsInfo(VcsType.GIT, "", "")
             )
 
             // No download source specified, we expect exception in this case.

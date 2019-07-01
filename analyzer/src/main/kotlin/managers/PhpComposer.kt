@@ -37,6 +37,7 @@ import com.here.ort.model.ProjectAnalyzerResult
 import com.here.ort.model.RemoteArtifact
 import com.here.ort.model.Scope
 import com.here.ort.model.VcsInfo
+import com.here.ort.model.VcsType
 import com.here.ort.model.config.AnalyzerConfiguration
 import com.here.ort.model.config.RepositoryConfiguration
 import com.here.ort.model.jsonMapper
@@ -314,7 +315,11 @@ class PhpComposer(
 
     private fun parseVcsInfo(packageInfo: JsonNode) =
         packageInfo["source"]?.let {
-            VcsInfo(it["type"].textValueOrEmpty(), it["url"].textValueOrEmpty(), it["reference"].textValueOrEmpty())
+            VcsInfo(
+                VcsType.fromString(it["type"].textValueOrEmpty()),
+                it["url"].textValueOrEmpty(),
+                it["reference"].textValueOrEmpty()
+            )
         } ?: VcsInfo.EMPTY
 
     private fun parseArtifact(packageInfo: JsonNode) =
