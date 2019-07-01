@@ -35,6 +35,7 @@ import com.here.ort.utils.normalizeVcsUrl
 import com.here.ort.utils.showStackTrace
 
 import java.io.File
+import java.io.IOException
 import java.nio.file.FileSystems
 import java.nio.file.FileVisitResult
 import java.nio.file.Files
@@ -208,7 +209,7 @@ abstract class PackageManager(
                     resolveDependencies(definitionFile)?.let {
                         result[definitionFile] = it
                     }
-                } catch (e: Exception) {
+                } catch (e: IOException) {
                     e.showStackTrace()
 
                     log.error { "Resolving dependencies for '${definitionFile.name}' failed with: ${e.message}" }
