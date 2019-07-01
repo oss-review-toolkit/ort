@@ -68,7 +68,7 @@ class Conda(
     repoConfig: RepositoryConfiguration
 ) : PackageManager(name, analyzerRoot, analyzerConfig, repoConfig), CommandLineTool {
     class Factory : AbstractPackageManagerFactory<Conda>("CONDA") {
-        override val globsForDefinitionFiles = listOf("requirements*.txt", "environment.yml", "setup.py")
+        override val globsForDefinitionFiles = listOf("environment.yml")
 
         override fun create(
             analyzerRoot: File,
@@ -110,7 +110,6 @@ class Conda(
         // 4. Get additional remote package meta-data via PyPIJSON.
 
         // working directory is the one containing the environment.yml
-        // TODO: add support for environment.yml being in a different directory that setup.py
         val workingDir = definitionFile.parentFile
         val envDir = setupEnv(definitionFile)
 
@@ -135,16 +134,16 @@ class Conda(
 
         var declaredLicenses: SortedSet<String> = sortedSetOf()
 
-        // First try to get meta-data from "setup.py" in any case, even for "requirements.txt" projects.
+        // First try to get meta-data from "setup.py" in any case, even for projects with an environment file
         val (setupName, setupVersion, setupHomepage) = if (File(workingDir, "setup.py").isFile) {
             val pydep = if (Os.isWindows) {
                 // On Windows, the script itself is not executable, so we need to wrap the call by "python".
                 runInEnv(
                     envDir, "python",
-                    envDir.path + "\\Scripts\\pydep-run.py", "info", "."
+                    envDir.path + "\\Scripts\\pydep-run.py", "info", workingDir.path
                 )
             } else {
-                runInEnv(envDir,"pydep-run.py", "info", ".")
+                runInEnv(envDir,"pydep-run.py", "info", workingDir.path)
             }
             pydep.requireSuccess()
 
@@ -163,7 +162,7 @@ class Conda(
             listOf("", "", "")
         }
 
-        // Try to get additional information from any "requirements.txt" file.
+        // Try to get additional information from any environment file
         val (requirementsName, requirementsVersion, requirementsSuffix) = if (definitionFile.name != "setup.py") {
             val pythonVersionLines = definitionFile.readLines().filter { it.contains("python_version") }
             if (pythonVersionLines.isNotEmpty()) {
@@ -361,7 +360,7 @@ class Conda(
             // python install script is not en environment definiton
             ProcessCapture(
                 "conda", "create",
-                "--force",
+                "-y",
                 "--name", envName,
                 "python"
             ).requireSuccess()
@@ -392,19 +391,11 @@ class Conda(
         // TODO: Find a way to make installation of packages with native extensions work on Windows where often
         // the appropriate compiler is missing / not set up, e.g. by using pre-built packages from
         // http://www.lfd.uci.edu/~gohlke/pythonlibs/
-        conda = if (definitionFile.name == "setup.py") {
-            // Note that this only installs required "install" dependencies, not "extras" or "tests" dependencies.
-            runInEnv(envDir,"pip", *TRUSTED_HOSTS, "install", *INSTALL_OPTIONS, ".")
-        } else if (definitionFile.name == "environment.yml") {
-            // use conda update
-            ProcessCapture("conda", "env", "update", "--name", envName, "--file", definitionFile.absolutePath).requireSuccess()
-        } else {
-            // In "setup.py"-speak, "requirements.txt" just contains required "install" dependencies.
-            runInEnv(
-                envDir,"pip", *TRUSTED_HOSTS, "install", *INSTALL_OPTIONS, "-r",
-                definitionFile.name
-            )
-        }
+        conda = ProcessCapture("conda",
+            "env",
+            "update",
+            "--name", envName,
+            "--file", definitionFile.absolutePath).requireSuccess()
 
         // TODO: Consider logging a warning instead of an error if the command is run on a file that likely belongs
         // to a test.
