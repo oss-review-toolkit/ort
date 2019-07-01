@@ -22,6 +22,7 @@ package com.here.ort.downloader.vcs
 import com.here.ort.model.Identifier
 import com.here.ort.model.Package
 import com.here.ort.model.VcsInfo
+import com.here.ort.model.VcsType
 import com.here.ort.utils.safeDeleteRecursively
 import com.here.ort.utils.test.ExpensiveTag
 
@@ -54,7 +55,7 @@ class CvsDownloadTest : StringSpec() {
 
     init {
         "CVS can download a given revision".config(tags = setOf(ExpensiveTag)) {
-            val pkg = Package.EMPTY.copy(vcsProcessed = VcsInfo("CVS", REPO_URL, REPO_REV))
+            val pkg = Package.EMPTY.copy(vcsProcessed = VcsInfo(VcsType.CVS, REPO_URL, REPO_REV))
             val expectedFiles = listOf(
                 "CVS",
                 "xmlenc"
@@ -75,7 +76,7 @@ class CvsDownloadTest : StringSpec() {
         }
 
         "CVS can download only a single path".config(tags = setOf(ExpensiveTag)) {
-            val pkg = Package.EMPTY.copy(vcsProcessed = VcsInfo("CVS", REPO_URL, REPO_REV, path = REPO_PATH))
+            val pkg = Package.EMPTY.copy(vcsProcessed = VcsInfo(VcsType.CVS, REPO_URL, REPO_REV, path = REPO_PATH))
             val expectedFiles = listOf(
                 File(REPO_PATH, "changes.xml")
             )
@@ -94,7 +95,7 @@ class CvsDownloadTest : StringSpec() {
         "CVS can download based on a version".config(tags = setOf(ExpensiveTag)) {
             val pkg = Package.EMPTY.copy(
                 id = Identifier("Test:::$REPO_VERSION"),
-                vcsProcessed = VcsInfo("CVS", REPO_URL, "")
+                vcsProcessed = VcsInfo(VcsType.CVS, REPO_URL, "")
             )
 
             val workingTree = cvs.download(pkg, outputDir)
@@ -113,7 +114,7 @@ class CvsDownloadTest : StringSpec() {
             .config(tags = setOf(ExpensiveTag)) {
                 val pkg = Package.EMPTY.copy(
                     id = Identifier("Test:::$REPO_VERSION"),
-                    vcsProcessed = VcsInfo("CVS", REPO_URL, "", path = REPO_PATH_FOR_VERSION)
+                    vcsProcessed = VcsInfo(VcsType.CVS, REPO_URL, "", path = REPO_PATH_FOR_VERSION)
                 )
                 val expectedFiles = listOf(
                     File(REPO_PATH_FOR_VERSION)

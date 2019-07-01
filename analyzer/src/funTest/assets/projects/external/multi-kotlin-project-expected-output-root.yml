@@ -11,7 +11,7 @@ project:
     revision: ""
     path: ""
   vcs_processed:
-    type: "git"
+    type: "Git"
     url: "<REPLACE_URL>"
     revision: "<REPLACE_REVISION>"
     path: "analyzer/src/funTest/assets/projects/external/multi-kotlin-project"
@@ -63,12 +63,12 @@ packages:
         value: "e49742d3259938ea3539346c8ca3babb54a5140f"
         algorithm: "SHA-1"
     vcs:
-      type: "git"
+      type: "Git"
       url: "https://github.com/JetBrains/kotlin.git"
       revision: ""
       path: ""
     vcs_processed:
-      type: "git"
+      type: "Git"
       url: "https://github.com/JetBrains/kotlin.git"
       revision: ""
       path: ""
@@ -93,12 +93,12 @@ packages:
         value: "d46e00faac79f8ec6bb956154ecde4282871a6bf"
         algorithm: "SHA-1"
     vcs:
-      type: "git"
+      type: "Git"
       url: "https://github.com/JetBrains/kotlin.git"
       revision: ""
       path: ""
     vcs_processed:
-      type: "git"
+      type: "Git"
       url: "https://github.com/JetBrains/kotlin.git"
       revision: ""
       path: ""
@@ -123,12 +123,12 @@ packages:
         value: "5991ca87ef1fb5544943d9abc5a9a37583fabe03"
         algorithm: "SHA-1"
     vcs:
-      type: "git"
+      type: "Git"
       url: "https://github.com/JetBrains/intellij-community.git"
       revision: ""
       path: ""
     vcs_processed:
-      type: "git"
+      type: "Git"
       url: "https://github.com/JetBrains/intellij-community.git"
       revision: ""
       path: ""

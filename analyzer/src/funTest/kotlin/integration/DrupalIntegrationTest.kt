@@ -27,6 +27,7 @@ import com.here.ort.model.Identifier
 import com.here.ort.model.Package
 import com.here.ort.model.RemoteArtifact
 import com.here.ort.model.VcsInfo
+import com.here.ort.model.VcsType
 
 import java.io.File
 
@@ -44,7 +45,7 @@ class DrupalIntegrationTest : AbstractIntegrationSpec() {
         binaryArtifact = RemoteArtifact.EMPTY,
         sourceArtifact = RemoteArtifact.EMPTY,
         vcs = VcsInfo(
-            "Git",
+            VcsType.GIT,
             "https://github.com/drupal/drupal.git",
             "4a765491d80d1bcb11e542ffafccf10aef05b853",
             ""

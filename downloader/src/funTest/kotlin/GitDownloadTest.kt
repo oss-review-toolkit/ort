@@ -22,6 +22,7 @@ package com.here.ort.downloader.vcs
 import com.here.ort.model.Identifier
 import com.here.ort.model.Package
 import com.here.ort.model.VcsInfo
+import com.here.ort.model.VcsType
 import com.here.ort.utils.safeDeleteRecursively
 import com.here.ort.utils.test.ExpensiveTag
 
@@ -53,7 +54,7 @@ class GitDownloadTest : StringSpec() {
 
     init {
         "Git can download a given revision".config(tags = setOf(ExpensiveTag)) {
-            val pkg = Package.EMPTY.copy(vcsProcessed = VcsInfo("Git", REPO_URL, REPO_REV))
+            val pkg = Package.EMPTY.copy(vcsProcessed = VcsInfo(VcsType.GIT, REPO_URL, REPO_REV))
             val expectedFiles = listOf(
                 ".git",
                 ".gitignore",
@@ -74,7 +75,7 @@ class GitDownloadTest : StringSpec() {
         }
 
         "Git can download only a single path".config(tags = setOf(ExpensiveTag)) {
-            val pkg = Package.EMPTY.copy(vcsProcessed = VcsInfo("Git", REPO_URL, REPO_REV, path = REPO_PATH))
+            val pkg = Package.EMPTY.copy(vcsProcessed = VcsInfo(VcsType.GIT, REPO_URL, REPO_REV, path = REPO_PATH))
             val expectedFiles = listOf(
                 File("LICENSE"),
                 File("README.md"),
@@ -98,7 +99,7 @@ class GitDownloadTest : StringSpec() {
         "Git can download based on a version".config(tags = setOf(ExpensiveTag)) {
             val pkg = Package.EMPTY.copy(
                 id = Identifier("Test:::$REPO_VERSION"),
-                vcsProcessed = VcsInfo("Git", REPO_URL, "")
+                vcsProcessed = VcsInfo(VcsType.GIT, REPO_URL, "")
             )
 
             val workingTree = git.download(pkg, outputDir)
@@ -110,7 +111,7 @@ class GitDownloadTest : StringSpec() {
         "Git can download only a single path based on a version".config(tags = setOf(ExpensiveTag)) {
             val pkg = Package.EMPTY.copy(
                 id = Identifier("Test:::$REPO_VERSION"),
-                vcsProcessed = VcsInfo("Git", REPO_URL, "", path = REPO_PATH_FOR_VERSION)
+                vcsProcessed = VcsInfo(VcsType.GIT, REPO_URL, "", path = REPO_PATH_FOR_VERSION)
             )
             val expectedFiles = listOf(
                 File("LICENSE"),

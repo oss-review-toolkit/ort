@@ -27,6 +27,7 @@ import com.here.ort.model.Package
 import com.here.ort.model.Project
 import com.here.ort.model.RemoteArtifact
 import com.here.ort.model.VcsInfo
+import com.here.ort.model.VcsType
 import com.here.ort.utils.OkHttpClientHelper
 import com.here.ort.utils.collectMessages
 import com.here.ort.utils.log
@@ -208,7 +209,7 @@ class Downloader {
 
         var applicableVcs: VersionControlSystem? = null
 
-        if (target.vcsProcessed.type.isNotBlank()) {
+        if (target.vcsProcessed.type != VcsType.UNKNOWN) {
             applicableVcs = VersionControlSystem.forType(target.vcsProcessed.type)
             log.info {
                 applicableVcs?.let {

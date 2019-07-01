@@ -13,7 +13,7 @@ project:
     revision: ""
     path: ""
   vcs_processed:
-    type: "git"
+    type: "Git"
     url: "<REPLACE_URL>"
     revision: "<REPLACE_REVISION>"
     path: "<REPLACE_PATH>"
@@ -55,7 +55,7 @@ packages:
       revision: ""
       path: ""
     vcs_processed:
-      type: "git"
+      type: "Git"
       url: "https://github.com/pallets/flask.git"
       revision: ""
       path: ""
@@ -116,7 +116,7 @@ packages:
       revision: ""
       path: ""
     vcs_processed:
-      type: "git"
+      type: "Git"
       url: "https://github.com/pallets/markupsafe.git"
       revision: ""
       path: ""
@@ -176,7 +176,7 @@ packages:
       revision: ""
       path: ""
     vcs_processed:
-      type: "git"
+      type: "Git"
       url: "https://github.com/mitsuhiko/click.git"
       revision: ""
       path: ""
@@ -207,7 +207,7 @@ packages:
       revision: ""
       path: ""
     vcs_processed:
-      type: "git"
+      type: "Git"
       url: "https://github.com/mitsuhiko/itsdangerous.git"
       revision: ""
       path: ""

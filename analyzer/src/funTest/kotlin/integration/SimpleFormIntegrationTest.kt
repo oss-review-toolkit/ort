@@ -25,6 +25,7 @@ import com.here.ort.model.Identifier
 import com.here.ort.model.Package
 import com.here.ort.model.RemoteArtifact
 import com.here.ort.model.VcsInfo
+import com.here.ort.model.VcsType
 
 import java.io.File
 
@@ -42,7 +43,7 @@ class SimpleFormIntegrationTest : AbstractIntegrationSpec() {
         binaryArtifact = RemoteArtifact.EMPTY,
         sourceArtifact = RemoteArtifact.EMPTY,
         vcs = VcsInfo(
-            type = "Git",
+            type = VcsType.GIT,
             url = "https://github.com/plataformatec/simple_form.git",
             revision = "516e31ce8f3eb32c5bac9d2a4902fba0783363fb",
             path = ""

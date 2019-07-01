@@ -14,7 +14,7 @@ project:
     revision: ""
     path: ""
   vcs_processed:
-    type: "git"
+    type: "Git"
     url: "<REPLACE_URL>"
     revision: "<REPLACE_REVISION>"
     path: "<REPLACE_PATH>"
@@ -150,12 +150,12 @@ packages:
         value: ""
         algorithm: ""
     vcs:
-      type: "git"
+      type: "Git"
       url: "https://github.com/clue/php-stream-filter.git"
       revision: "d80fdee9b3a7e0d16fc330a22f41f3ad0eeb09d0"
       path: ""
     vcs_processed:
-      type: "git"
+      type: "Git"
       url: "https://github.com/clue/php-stream-filter.git"
       revision: "d80fdee9b3a7e0d16fc330a22f41f3ad0eeb09d0"
       path: ""
@@ -181,12 +181,12 @@ packages:
         value: ""
         algorithm: ""
     vcs:
-      type: "git"
+      type: "Git"
       url: "https://github.com/doctrine/instantiator.git"
       revision: "185b8868aa9bf7159f5f953ed5afb2d7fcdc3bda"
       path: ""
     vcs_processed:
-      type: "git"
+      type: "Git"
       url: "https://github.com/doctrine/instantiator.git"
       revision: "185b8868aa9bf7159f5f953ed5afb2d7fcdc3bda"
       path: ""
@@ -211,12 +211,12 @@ packages:
         value: ""
         algorithm: ""
     vcs:
-      type: "git"
+      type: "Git"
       url: "https://github.com/guzzle/guzzle.git"
       revision: "f4db5a78a5ea468d4831de7f0bf9d9415e348699"
       path: ""
     vcs_processed:
-      type: "git"
+      type: "Git"
       url: "https://github.com/guzzle/guzzle.git"
       revision: "f4db5a78a5ea468d4831de7f0bf9d9415e348699"
       path: ""
@@ -241,12 +241,12 @@ packages:
         value: ""
         algorithm: ""
     vcs:
-      type: "git"
+      type: "Git"
       url: "https://github.com/guzzle/promises.git"
       revision: "a59da6cf61d80060647ff4d3eb2c03a2bc694646"
       path: ""
     vcs_processed:
-      type: "git"
+      type: "Git"
       url: "https://github.com/guzzle/promises.git"
       revision: "a59da6cf61d80060647ff4d3eb2c03a2bc694646"
       path: ""
@@ -271,12 +271,12 @@ packages:
         value: ""
         algorithm: ""
     vcs:
-      type: "git"
+      type: "Git"
       url: "https://github.com/guzzle/psr7.git"
       revision: "04a6d1a00ea5da0727ee94309a9f0d3dbaecb569"
       path: ""
     vcs_processed:
-      type: "git"
+      type: "Git"
       url: "https://github.com/guzzle/psr7.git"
       revision: "04a6d1a00ea5da0727ee94309a9f0d3dbaecb569"
       path: ""
@@ -301,12 +301,12 @@ packages:
         value: ""
         algorithm: ""
     vcs:
-      type: "git"
+      type: "Git"
       url: "https://github.com/mailgun/mailgun-php.git"
       revision: "20783215042b181b0dec92c9e01947b93cb5d085"
       path: ""
     vcs_processed:
-      type: "git"
+      type: "Git"
       url: "https://github.com/mailgun/mailgun-php.git"
       revision: "20783215042b181b0dec92c9e01947b93cb5d085"
       path: ""
@@ -331,12 +331,12 @@ packages:
         value: ""
         algorithm: ""
     vcs:
-      type: "git"
+      type: "Git"
       url: "https://github.com/Seldaek/monolog.git"
       revision: "b704c49a3051536f67f2d39f13568f74615b9922"
       path: ""
     vcs_processed:
-      type: "git"
+      type: "Git"
       url: "https://github.com/Seldaek/monolog.git"
       revision: "b704c49a3051536f67f2d39f13568f74615b9922"
       path: ""
@@ -361,12 +361,12 @@ packages:
         value: ""
         algorithm: ""
     vcs:
-      type: "git"
+      type: "Git"
       url: "https://github.com/php-http/client-common.git"
       revision: "9accb4a082eb06403747c0ffd444112eda41a0fd"
       path: ""
     vcs_processed:
-      type: "git"
+      type: "Git"
       url: "https://github.com/php-http/client-common.git"
       revision: "9accb4a082eb06403747c0ffd444112eda41a0fd"
       path: ""
@@ -391,12 +391,12 @@ packages:
         value: ""
         algorithm: ""
     vcs:
-      type: "git"
+      type: "Git"
       url: "https://github.com/php-http/discovery.git"
       revision: "7b50ab4d6c9fdaa1ed53ae310c955900af6e3372"
       path: ""
     vcs_processed:
-      type: "git"
+      type: "Git"
       url: "https://github.com/php-http/discovery.git"
       revision: "7b50ab4d6c9fdaa1ed53ae310c955900af6e3372"
       path: ""
@@ -421,12 +421,12 @@ packages:
         value: ""
         algorithm: ""
     vcs:
-      type: "git"
+      type: "Git"
       url: "https://github.com/php-http/guzzle6-adapter.git"
       revision: "e884cf6dae5235fffd2a07f761e0066b9ebef170"
       path: ""
     vcs_processed:
-      type: "git"
+      type: "Git"
       url: "https://github.com/php-http/guzzle6-adapter.git"
       revision: "e884cf6dae5235fffd2a07f761e0066b9ebef170"
       path: ""
@@ -451,12 +451,12 @@ packages:
         value: ""
         algorithm: ""
     vcs:
-      type: "git"
+      type: "Git"
       url: "https://github.com/php-http/httplug.git"
       revision: "1c6381726c18579c4ca2ef1ec1498fdae8bdf018"
       path: ""
     vcs_processed:
-      type: "git"
+      type: "Git"
       url: "https://github.com/php-http/httplug.git"
       revision: "1c6381726c18579c4ca2ef1ec1498fdae8bdf018"
       path: ""
@@ -481,12 +481,12 @@ packages:
         value: ""
         algorithm: ""
     vcs:
-      type: "git"
+      type: "Git"
       url: "https://github.com/php-http/message-factory.git"
       revision: "a478cb11f66a6ac48d8954216cfed9aa06a501a1"
       path: ""
     vcs_processed:
-      type: "git"
+      type: "Git"
       url: "https://github.com/php-http/message-factory.git"
       revision: "a478cb11f66a6ac48d8954216cfed9aa06a501a1"
       path: ""
@@ -511,12 +511,12 @@ packages:
         value: ""
         algorithm: ""
     vcs:
-      type: "git"
+      type: "Git"
       url: "https://github.com/php-http/message.git"
       revision: "2edd63bae5f52f79363c5f18904b05ce3a4b7253"
       path: ""
     vcs_processed:
-      type: "git"
+      type: "Git"
       url: "https://github.com/php-http/message.git"
       revision: "2edd63bae5f52f79363c5f18904b05ce3a4b7253"
       path: ""
@@ -541,12 +541,12 @@ packages:
         value: ""
         algorithm: ""
     vcs:
-      type: "git"
+      type: "Git"
       url: "https://github.com/php-http/multipart-stream-builder.git"
       revision: "1fa3c623fc813a43b39494b2a1612174e36e0fb0"
       path: ""
     vcs_processed:
-      type: "git"
+      type: "Git"
       url: "https://github.com/php-http/multipart-stream-builder.git"
       revision: "1fa3c623fc813a43b39494b2a1612174e36e0fb0"
       path: ""
@@ -571,12 +571,12 @@ packages:
         value: ""
         algorithm: ""
     vcs:
-      type: "git"
+      type: "Git"
       url: "https://github.com/php-http/promise.git"
       revision: "dc494cdc9d7160b9a09bd5573272195242ce7980"
       path: ""
     vcs_processed:
-      type: "git"
+      type: "Git"
       url: "https://github.com/php-http/promise.git"
       revision: "dc494cdc9d7160b9a09bd5573272195242ce7980"
       path: ""
@@ -602,12 +602,12 @@ packages:
         value: ""
         algorithm: ""
     vcs:
-      type: "git"
+      type: "Git"
       url: "https://github.com/phpDocumentor/ReflectionCommon.git"
       revision: "21bdeb5f65d7ebf9f43b1b25d404f87deab5bfb6"
       path: ""
     vcs_processed:
-      type: "git"
+      type: "Git"
       url: "https://github.com/phpDocumentor/ReflectionCommon.git"
       revision: "21bdeb5f65d7ebf9f43b1b25d404f87deab5bfb6"
       path: ""
@@ -633,12 +633,12 @@ packages:
         value: ""
         algorithm: ""
     vcs:
-      type: "git"
+      type: "Git"
       url: "https://github.com/phpDocumentor/ReflectionDocBlock.git"
       revision: "66465776cfc249844bde6d117abff1d22e06c2da"
       path: ""
     vcs_processed:
-      type: "git"
+      type: "Git"
       url: "https://github.com/phpDocumentor/ReflectionDocBlock.git"
       revision: "66465776cfc249844bde6d117abff1d22e06c2da"
       path: ""
@@ -663,12 +663,12 @@ packages:
         value: ""
         algorithm: ""
     vcs:
-      type: "git"
+      type: "Git"
       url: "https://github.com/phpDocumentor/TypeResolver.git"
       revision: "9c977708995954784726e25d0cd1dddf4e65b0f7"
       path: ""
     vcs_processed:
-      type: "git"
+      type: "Git"
       url: "https://github.com/phpDocumentor/TypeResolver.git"
       revision: "9c977708995954784726e25d0cd1dddf4e65b0f7"
       path: ""
@@ -693,12 +693,12 @@ packages:
         value: ""
         algorithm: ""
     vcs:
-      type: "git"
+      type: "Git"
       url: "https://github.com/phpspec/prophecy.git"
       revision: "e4ed002c67da8eceb0eb8ddb8b3847bb53c5c2bf"
       path: ""
     vcs_processed:
-      type: "git"
+      type: "Git"
       url: "https://github.com/phpspec/prophecy.git"
       revision: "e4ed002c67da8eceb0eb8ddb8b3847bb53c5c2bf"
       path: ""
@@ -724,12 +724,12 @@ packages:
         value: ""
         algorithm: ""
     vcs:
-      type: "git"
+      type: "Git"
       url: "https://github.com/sebastianbergmann/php-code-coverage.git"
       revision: "eabf68b476ac7d0f73793aada060f1c1a9bf8979"
       path: ""
     vcs_processed:
-      type: "git"
+      type: "Git"
       url: "https://github.com/sebastianbergmann/php-code-coverage.git"
       revision: "eabf68b476ac7d0f73793aada060f1c1a9bf8979"
       path: ""
@@ -755,12 +755,12 @@ packages:
         value: ""
         algorithm: ""
     vcs:
-      type: "git"
+      type: "Git"
       url: "https://github.com/sebastianbergmann/php-file-iterator.git"
       revision: "730b01bc3e867237eaac355e06a36b85dd93a8b4"
       path: ""
     vcs_processed:
-      type: "git"
+      type: "Git"
       url: "https://github.com/sebastianbergmann/php-file-iterator.git"
       revision: "730b01bc3e867237eaac355e06a36b85dd93a8b4"
       path: ""
@@ -785,12 +785,12 @@ packages:
         value: ""
         algorithm: ""
     vcs:
-      type: "git"
+      type: "Git"
       url: "https://github.com/sebastianbergmann/php-text-template.git"
       revision: "31f8b717e51d9a2afca6c9f046f5d69fc27c8686"
       path: ""
     vcs_processed:
-      type: "git"
+      type: "Git"
       url: "https://github.com/sebastianbergmann/php-text-template.git"
       revision: "31f8b717e51d9a2afca6c9f046f5d69fc27c8686"
       path: ""
@@ -815,12 +815,12 @@ packages:
         value: ""
         algorithm: ""
     vcs:
-      type: "git"
+      type: "Git"
       url: "https://github.com/sebastianbergmann/php-timer.git"
       revision: "3dcf38ca72b158baf0bc245e9184d3fdffa9c46f"
       path: ""
     vcs_processed:
-      type: "git"
+      type: "Git"
       url: "https://github.com/sebastianbergmann/php-timer.git"
       revision: "3dcf38ca72b158baf0bc245e9184d3fdffa9c46f"
       path: ""
@@ -845,12 +845,12 @@ packages:
         value: ""
         algorithm: ""
     vcs:
-      type: "git"
+      type: "Git"
       url: "https://github.com/sebastianbergmann/php-token-stream.git"
       revision: "1ce90ba27c42e4e44e6d8458241466380b51fa16"
       path: ""
     vcs_processed:
-      type: "git"
+      type: "Git"
       url: "https://github.com/sebastianbergmann/php-token-stream.git"
       revision: "1ce90ba27c42e4e44e6d8458241466380b51fa16"
       path: ""
@@ -875,12 +875,12 @@ packages:
         value: ""
         algorithm: ""
     vcs:
-      type: "git"
+      type: "Git"
       url: "https://github.com/sebastianbergmann/phpunit-mock-objects.git"
       revision: "ac8e7a3db35738d56ee9a76e78a4e03d97628983"
       path: ""
     vcs_processed:
-      type: "git"
+      type: "Git"
       url: "https://github.com/sebastianbergmann/phpunit-mock-objects.git"
       revision: "ac8e7a3db35738d56ee9a76e78a4e03d97628983"
       path: ""
@@ -905,12 +905,12 @@ packages:
         value: ""
         algorithm: ""
     vcs:
-      type: "git"
+      type: "Git"
       url: "https://github.com/sebastianbergmann/phpunit.git"
       revision: "283111a903eb9225aedb95e846bef876e006a688"
       path: ""
     vcs_processed:
-      type: "git"
+      type: "Git"
       url: "https://github.com/sebastianbergmann/phpunit.git"
       revision: "283111a903eb9225aedb95e846bef876e006a688"
       path: ""
@@ -935,12 +935,12 @@ packages:
         value: ""
         algorithm: ""
     vcs:
-      type: "git"
+      type: "Git"
       url: "https://github.com/php-fig/http-message.git"
       revision: "f6561bf28d520154e4b0ec72be95418abe6d9363"
       path: ""
     vcs_processed:
-      type: "git"
+      type: "Git"
       url: "https://github.com/php-fig/http-message.git"
       revision: "f6561bf28d520154e4b0ec72be95418abe6d9363"
       path: ""
@@ -965,12 +965,12 @@ packages:
         value: ""
         algorithm: ""
     vcs:
-      type: "git"
+      type: "Git"
       url: "https://github.com/sebastianbergmann/comparator.git"
       revision: "2b7424b55f5047b47ac6e5ccb20b2aea4011d9be"
       path: ""
     vcs_processed:
-      type: "git"
+      type: "Git"
       url: "https://github.com/sebastianbergmann/comparator.git"
       revision: "2b7424b55f5047b47ac6e5ccb20b2aea4011d9be"
       path: ""
@@ -995,12 +995,12 @@ packages:
         value: ""
         algorithm: ""
     vcs:
-      type: "git"
+      type: "Git"
       url: "https://github.com/sebastianbergmann/diff.git"
       revision: "7f066a26a962dbe58ddea9f72a4e82874a3975a4"
       path: ""
     vcs_processed:
-      type: "git"
+      type: "Git"
       url: "https://github.com/sebastianbergmann/diff.git"
       revision: "7f066a26a962dbe58ddea9f72a4e82874a3975a4"
       path: ""
@@ -1025,12 +1025,12 @@ packages:
         value: ""
         algorithm: ""
     vcs:
-      type: "git"
+      type: "Git"
       url: "https://github.com/sebastianbergmann/environment.git"
       revision: "be2c607e43ce4c89ecd60e75c6a85c126e754aea"
       path: ""
     vcs_processed:
-      type: "git"
+      type: "Git"
       url: "https://github.com/sebastianbergmann/environment.git"
       revision: "be2c607e43ce4c89ecd60e75c6a85c126e754aea"
       path: ""
@@ -1055,12 +1055,12 @@ packages:
         value: ""
         algorithm: ""
     vcs:
-      type: "git"
+      type: "Git"
       url: "https://github.com/sebastianbergmann/exporter.git"
       revision: "42c4c2eec485ee3e159ec9884f95b431287edde4"
       path: ""
     vcs_processed:
-      type: "git"
+      type: "Git"
       url: "https://github.com/sebastianbergmann/exporter.git"
       revision: "42c4c2eec485ee3e159ec9884f95b431287edde4"
       path: ""
@@ -1085,12 +1085,12 @@ packages:
         value: ""
         algorithm: ""
     vcs:
-      type: "git"
+      type: "Git"
       url: "https://github.com/sebastianbergmann/global-state.git"
       revision: "bc37d50fea7d017d3d340f230811c9f1d7280af4"
       path: ""
     vcs_processed:
-      type: "git"
+      type: "Git"
       url: "https://github.com/sebastianbergmann/global-state.git"
       revision: "bc37d50fea7d017d3d340f230811c9f1d7280af4"
       path: ""
@@ -1115,12 +1115,12 @@ packages:
         value: ""
         algorithm: ""
     vcs:
-      type: "git"
+      type: "Git"
       url: "https://github.com/sebastianbergmann/recursion-context.git"
       revision: "b19cc3298482a335a95f3016d2f8a6950f0fbcd7"
       path: ""
     vcs_processed:
-      type: "git"
+      type: "Git"
       url: "https://github.com/sebastianbergmann/recursion-context.git"
       revision: "b19cc3298482a335a95f3016d2f8a6950f0fbcd7"
       path: ""
@@ -1146,12 +1146,12 @@ packages:
         value: ""
         algorithm: ""
     vcs:
-      type: "git"
+      type: "Git"
       url: "https://github.com/sebastianbergmann/version.git"
       revision: "58b3a85e7999757d6ad81c787a1fbf5ff6c628c6"
       path: ""
     vcs_processed:
-      type: "git"
+      type: "Git"
       url: "https://github.com/sebastianbergmann/version.git"
       revision: "58b3a85e7999757d6ad81c787a1fbf5ff6c628c6"
       path: ""
@@ -1176,12 +1176,12 @@ packages:
         value: ""
         algorithm: ""
     vcs:
-      type: "git"
+      type: "Git"
       url: "https://github.com/symfony/options-resolver.git"
       revision: "75fdda335eb0adbd464089e8a0184c61097808e0"
       path: ""
     vcs_processed:
-      type: "git"
+      type: "Git"
       url: "https://github.com/symfony/options-resolver.git"
       revision: "75fdda335eb0adbd464089e8a0184c61097808e0"
       path: ""
@@ -1206,12 +1206,12 @@ packages:
         value: ""
         algorithm: ""
     vcs:
-      type: "git"
+      type: "Git"
       url: "https://github.com/symfony/yaml.git"
       revision: "afe0cd38486505c9703707707d91450cfc1bd536"
       path: ""
     vcs_processed:
-      type: "git"
+      type: "Git"
       url: "https://github.com/symfony/yaml.git"
       revision: "afe0cd38486505c9703707707d91450cfc1bd536"
       path: ""
@@ -1236,12 +1236,12 @@ packages:
         value: ""
         algorithm: ""
     vcs:
-      type: "git"
+      type: "Git"
       url: "https://github.com/webmozart/assert.git"
       revision: "2db61e59ff05fe5126d152bd0655c9ea113e550f"
       path: ""
     vcs_processed:
-      type: "git"
+      type: "Git"
       url: "https://github.com/webmozart/assert.git"
       revision: "2db61e59ff05fe5126d152bd0655c9ea113e550f"
       path: ""

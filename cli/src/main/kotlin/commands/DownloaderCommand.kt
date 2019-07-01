@@ -33,6 +33,7 @@ import com.here.ort.model.OrtResult
 import com.here.ort.model.Package
 import com.here.ort.model.RemoteArtifact
 import com.here.ort.model.VcsInfo
+import com.here.ort.model.VcsType
 import com.here.ort.model.readValue
 import com.here.ort.utils.ARCHIVE_EXTENSIONS
 import com.here.ort.utils.PARAMETER_ORDER_MANDATORY
@@ -168,7 +169,12 @@ object DownloaderCommand : CommandWithHelp() {
             val dummyPackage = if (ARCHIVE_EXTENSIONS.any { projectFile.name.endsWith(it) }) {
                 Package.EMPTY.copy(id = dummyId, sourceArtifact = RemoteArtifact.EMPTY.copy(url = projectUrl!!))
             } else {
-                val vcs = VcsInfo(type = vcsType, url = projectUrl!!, revision = vcsRevision, path = vcsPath)
+                val vcs = VcsInfo(
+                    type = VcsType.fromString(vcsType),
+                    url = projectUrl!!,
+                    revision = vcsRevision,
+                    path = vcsPath
+                )
                 Package.EMPTY.copy(id = dummyId, vcs = vcs, vcsProcessed = vcs.normalize())
             }
 

@@ -28,6 +28,7 @@ import com.here.ort.model.Identifier
 import com.here.ort.model.Package
 import com.here.ort.model.RemoteArtifact
 import com.here.ort.model.VcsInfo
+import com.here.ort.model.VcsType
 import com.here.ort.model.yamlMapper
 import com.here.ort.utils.DiskCache
 import com.here.ort.utils.collectMessages
@@ -139,7 +140,7 @@ class MavenSupport(workspaceReader: WorkspaceReader) {
                         // the Maven SCM plugin, no double ":" is used in the connection string and we need to fix it up
                         // here.
                         type == "cvs" && !url.startsWith(":") -> {
-                            VcsInfo(type = type, url = ":$url", revision = tag)
+                            VcsInfo(type = VcsType.CVS, url = ":$url", revision = tag)
                         }
 
                         // Maven does not officially support git-repo as an SCM, see
@@ -147,7 +148,9 @@ class MavenSupport(workspaceReader: WorkspaceReader) {
                         // fragment for the path to the manifest inside the repository.
                         type == "git-repo" -> {
                             VcsInfo(
-                                type = type, url = url.substringBefore('?'), revision = tag,
+                                type = VcsType.GIT_REPO,
+                                url = url.substringBefore('?'),
+                                revision = tag,
                                 path = url.substringAfter('?')
                             )
                         }
@@ -155,10 +158,10 @@ class MavenSupport(workspaceReader: WorkspaceReader) {
                         type == "svn" -> {
                             // With Subversion, a tag actually is a path and not a symbolic revision.
                             val path = tag.takeIf { it.isEmpty() } ?: "tags/$tag"
-                            VcsInfo(type = type, url = url, revision = "", path = path)
+                            VcsInfo(type = VcsType.SUBVERSION, url = url, revision = "", path = path)
                         }
 
-                        else -> VcsInfo(type = type, url = url, revision = tag)
+                        else -> VcsInfo(type = VcsType.fromString(type), url = url, revision = tag)
                     }
                 } else {
                     // It is a common mistake to omit the "scm:[provider]:" prefix. Add fall-backs for nevertheless
@@ -166,7 +169,7 @@ class MavenSupport(workspaceReader: WorkspaceReader) {
                     if (connection.startsWith("git://") || connection.endsWith(".git")) {
                         log.warn { "Maven SCM connection URL '$connection' lacks the required 'scm' prefix." }
 
-                        VcsInfo("git", connection, tag)
+                        VcsInfo(VcsType.GIT, connection, tag)
                     } else {
                         log.info { "Ignoring Maven SCM connection URL '$connection' of unexpected format." }
 
