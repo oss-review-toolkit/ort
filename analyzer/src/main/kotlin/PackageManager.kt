@@ -150,8 +150,7 @@ abstract class PackageManager(
                 VersionControlSystem.forUrl(it) != null
             }.orEmpty()
 
-            val vcsFromUrl = VersionControlSystem.splitUrl(normalizedUrl)
-
+            val vcsFromUrl = VersionControlSystem.splitUrl(normalizedUrl).normalize()
             return vcsFromUrl.merge(normalizedVcsFromPackage)
         }
 
