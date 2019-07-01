@@ -198,12 +198,7 @@ class PackageCurationTest : WordSpec({
             )
 
             val curation = PackageCuration(
-                id = Identifier(
-                    type = "",
-                    namespace = "",
-                    name = "",
-                    version = ""
-                ),
+                id = Identifier.EMPTY,
                 data = PackageCurationData(
                     homepageUrl = "http://home.page",
                     vcs = VcsInfoCuration(
