@@ -204,6 +204,7 @@ abstract class PackageManager(
             log.info { "Resolving $managerName dependencies for '$definitionFile'..." }
 
             val elapsed = measureTimeMillis {
+                @Suppress("TooGenericExceptionCaught")
                 try {
                     resolveDependencies(definitionFile)?.let {
                         result[definitionFile] = it
