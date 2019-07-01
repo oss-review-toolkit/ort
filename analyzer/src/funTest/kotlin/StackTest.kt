@@ -21,15 +21,11 @@ package com.here.ort.analyzer
 
 import com.here.ort.analyzer.managers.Stack
 import com.here.ort.model.yamlMapper
-import com.here.ort.utils.Ci
 import com.here.ort.utils.Os
-import com.here.ort.utils.ProcessCapture
-import com.here.ort.utils.getPathFromEnvironment
 import com.here.ort.utils.test.DEFAULT_ANALYZER_CONFIGURATION
 import com.here.ort.utils.test.DEFAULT_REPOSITORY_CONFIGURATION
 import com.here.ort.utils.test.USER_DIR
 
-import io.kotlintest.Spec
 import io.kotlintest.shouldBe
 import io.kotlintest.specs.StringSpec
 
@@ -37,28 +33,6 @@ import java.io.File
 
 class StackTest : StringSpec() {
     private val projectsDir = File("src/funTest/assets/projects").absoluteFile
-
-    override fun beforeSpec(spec: Spec) {
-        super.beforeSpec(spec)
-
-        // Only install GHC, which takes along time, if we really are running this test until
-        // https://github.com/commercialhaskell/stack/issues/4390 is resolved.
-        if (getPathFromEnvironment("stack") == null) {
-            if (Ci.isAppVeyor) {
-                ProcessCapture("cinst", "haskell-stack", "--version", "1.9.3", "-y").requireSuccess()
-
-                // This installs the whole GHC to an isolated location!
-                ProcessCapture("stack", "setup").requireSuccess()
-            } else if (Ci.isTravis) {
-                val getStack = ProcessCapture("curl", "-sSL",
-                    "https://github.com/commercialhaskell/stack/raw/v1.9.3/etc/scripts/get-stack.sh").requireSuccess()
-                ProcessCapture("sh", getStack.stdoutFile.absolutePath).requireSuccess()
-
-                // This installs the whole GHC to an isolated location!
-                ProcessCapture("stack", "setup").requireSuccess()
-            }
-        }
-    }
 
     init {
         "Dependencies should be resolved correctly for quickcheck-state-machine" {
@@ -69,21 +43,6 @@ class StackTest : StringSpec() {
                 "external/quickcheck-state-machine-expected-output-win32.yml"
             } else {
                 "external/quickcheck-state-machine-expected-output.yml"
-            }
-            val expectedResult = File(projectsDir, expectedOutput).readText()
-            val actualResult = yamlMapper.writeValueAsString(result)
-
-            actualResult shouldBe expectedResult
-        }
-
-        "Dependencies should be resolved correctly for quickcheck-state-machine-example" {
-            val definitionFile = File(projectsDir, "external/quickcheck-state-machine/example/stack.yaml")
-
-            val result = createStack().resolveDependencies(listOf(definitionFile))[definitionFile]
-            val expectedOutput = if (Os.isWindows) {
-                "external/quickcheck-state-machine-example-expected-output-win32.yml"
-            } else {
-                "external/quickcheck-state-machine-example-expected-output.yml"
             }
             val expectedResult = File(projectsDir, expectedOutput).readText()
             val actualResult = yamlMapper.writeValueAsString(result)
