@@ -79,7 +79,7 @@ class BabelTest : StringSpec() {
 
             downloadResult.sourceArtifact shouldBe null
             downloadResult.vcsInfo shouldNotBe null
-            downloadResult.vcsInfo!!.type.toLowerCase() shouldBe pkg.vcsProcessed.type
+            downloadResult.vcsInfo!!.type shouldBe pkg.vcsProcessed.type
             downloadResult.vcsInfo!!.url shouldBe pkg.vcsProcessed.url
             downloadResult.vcsInfo!!.revision shouldBe "master"
             downloadResult.vcsInfo!!.resolvedRevision shouldBe "cee4cde53e4f452d89229986b9368ecdb41e00da"
