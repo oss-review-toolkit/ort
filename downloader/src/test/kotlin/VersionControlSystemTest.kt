@@ -69,7 +69,7 @@ class VersionControlSystemTest : WordSpec({
                 "https://git-wip-us.apache.org/repos/asf/zeppelin.git/zeppelin-interpreter"
             )
             val expected = VcsInfo(
-                type = "git",
+                type = "Git",
                 url = "https://git-wip-us.apache.org/repos/asf/zeppelin.git",
                 revision = "",
                 path = "zeppelin-interpreter"
@@ -82,7 +82,7 @@ class VersionControlSystemTest : WordSpec({
                 "git+ssh://sub.domain.com:42/foo-bar#b3b5b3c60dcdc39347b23cf94ab8f577239b7df3"
             )
             val expected = VcsInfo(
-                type = "git",
+                type = "Git",
                 url = "ssh://sub.domain.com:42/foo-bar",
                 revision = "b3b5b3c60dcdc39347b23cf94ab8f577239b7df3",
                 path = ""
@@ -95,7 +95,7 @@ class VersionControlSystemTest : WordSpec({
                 "https://github.com/mochajs/mocha.git#5bd33a0ba201d227159759e8ced86756595b0c54"
             )
             val expected = VcsInfo(
-                type = "git",
+                type = "Git",
                 url = "https://github.com/mochajs/mocha.git",
                 revision = "5bd33a0ba201d227159759e8ced86756595b0c54",
                 path = ""
@@ -150,7 +150,7 @@ class VersionControlSystemTest : WordSpec({
                 "https://github.com/heremaps/oss-review-toolkit.git"
             )
             val expected = VcsInfo(
-                type = "git",
+                type = "Git",
                 url = "https://github.com/heremaps/oss-review-toolkit.git",
                 revision = ""
             )
@@ -162,7 +162,7 @@ class VersionControlSystemTest : WordSpec({
                 "https://github.com/blob/tree.git"
             )
             val expected = VcsInfo(
-                type = "git",
+                type = "Git",
                 url = "https://github.com/blob/tree.git",
                 revision = ""
             )
@@ -174,7 +174,7 @@ class VersionControlSystemTest : WordSpec({
                 "https://github.com/babel/babel/tree/master/packages/babel-code-frame.git"
             )
             val expected = VcsInfo(
-                type = "git",
+                type = "Git",
                 url = "https://github.com/babel/babel.git",
                 revision = "master",
                 path = "packages/babel-code-frame"
@@ -187,7 +187,7 @@ class VersionControlSystemTest : WordSpec({
                 "https://github.com/crypto-browserify/crypto-browserify/blob/6aebafa/test/create-hmac.js"
             )
             val expected = VcsInfo(
-                type = "git",
+                type = "Git",
                 url = "https://github.com/crypto-browserify/crypto-browserify.git",
                 revision = "6aebafa",
                 path = "test/create-hmac.js"
@@ -200,7 +200,7 @@ class VersionControlSystemTest : WordSpec({
                 "ssh://git@github.com/EsotericSoftware/kryo.git/kryo-shaded"
             )
             val expected = VcsInfo(
-                type = "git",
+                type = "Git",
                 url = "ssh://git@github.com/EsotericSoftware/kryo.git",
                 revision = "",
                 path = "kryo-shaded"
@@ -215,7 +215,7 @@ class VersionControlSystemTest : WordSpec({
                 "https://gitlab.com/rich-harris/rollup-plugin-buble.git"
             )
             val expected = VcsInfo(
-                type = "git",
+                type = "Git",
                 url = "https://gitlab.com/rich-harris/rollup-plugin-buble.git",
                 revision = ""
             )
@@ -227,7 +227,7 @@ class VersionControlSystemTest : WordSpec({
                 "https://gitlab.com/Rich-Harris/rollup-plugin-buble/tree/master/src"
             )
             val expected = VcsInfo(
-                type = "git",
+                type = "Git",
                 url = "https://gitlab.com/Rich-Harris/rollup-plugin-buble.git",
                 revision = "master",
                 path = "src"
@@ -240,7 +240,7 @@ class VersionControlSystemTest : WordSpec({
                 "https://gitlab.com/Rich-Harris/rollup-plugin-buble/blob/v0.15.0/README.md"
             )
             val expected = VcsInfo(
-                type = "git",
+                type = "Git",
                 url = "https://gitlab.com/Rich-Harris/rollup-plugin-buble.git",
                 revision = "v0.15.0",
                 path = "README.md"
