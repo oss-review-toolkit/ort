@@ -43,6 +43,8 @@ import com.here.ort.utils.safeDeleteRecursively
 
 import com.paypal.digraph.parser.GraphParser
 
+import com.vdurmont.semver4j.Requirement
+
 import java.io.File
 import java.io.FileFilter
 import java.io.IOException
@@ -79,6 +81,14 @@ class Stack(
 
     override fun command(workingDir: File?) = "stack"
 
+    override fun getVersionRequirement(): Requirement = Requirement.buildStrict("2.1.1")
+
+    override fun beforeResolution(definitionFiles: List<File>) =
+        checkVersion(
+            ignoreActualVersion = analyzerConfig.ignoreToolVersions,
+            transform = { it.removePrefix("Version ").substringBefore(',') }
+        )
+
     override fun resolveDependencies(definitionFile: File): ProjectAnalyzerResult? {
         val workingDir = definitionFile.parentFile
 
@@ -107,7 +117,7 @@ class Stack(
         }
 
         fun mapParentsToChildren(scope: String): Map<String, List<String>> {
-            val dotGraph = runStack("dot", "--$scope").stdout
+            val dotGraph = runStack("dot", "--global-hints", "--$scope").stdout
 
             // Strip any leading garbage in case Stack was bootstrapping itself, resulting in unrelated output.
             val dotLines = dotGraph.lineSequence().dropWhile { !it.startsWith("strict digraph deps") }
@@ -127,7 +137,7 @@ class Stack(
         }
 
         fun mapNamesToVersions(scope: String): Map<String, String> {
-            val dependencies = runStack("ls", "dependencies", "--$scope").stdout
+            val dependencies = runStack("ls", "dependencies", "--global-hints", "--$scope").stdout
             return dependencies.lines().associate {
                 Pair(it.substringBefore(" "), it.substringAfter(" "))
             }.also {
@@ -180,9 +190,7 @@ class Stack(
             children.forEach { childName ->
                 val pkgTemplate = Package(
                     id = Identifier(
-                        // The runtime system ships with the Glasgow Haskell Compiler (GHC) and is not hosted
-                        // on Hackage.
-                        type = if (childName == "rts") "GHC" else "Hackage",
+                        type = "Hackage",
                         namespace = "",
                         name = childName,
                         version = versionMap[childName].orEmpty()
