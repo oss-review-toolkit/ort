@@ -65,9 +65,12 @@ import java.net.URISyntaxException
 import java.net.URLEncoder
 import java.util.SortedSet
 
+import okhttp3.Authenticator
 import okhttp3.Credentials
 import okhttp3.OkHttpClient
 import okhttp3.Request
+import okhttp3.Response
+import okhttp3.Route
 
 /**
  * The [Node package manager](https://www.npmjs.com/) for JavaScript.
@@ -195,14 +198,16 @@ open class Npm(
                 if (proxyUrl.isNotEmpty()) {
                     val url = URI(proxyUrl)
                     proxy(Proxy(Proxy.Type.HTTP, InetSocketAddress(url.host, url.port)))
-                    proxyAuthenticator { _, response ->
-                        val user = url.userInfo.substringBefore(':')
-                        val password = url.userInfo.substringAfter(':')
-                        val credential = Credentials.basic(user, password)
-                        response.request().newBuilder()
-                            .header("Proxy-Authorization", credential)
-                            .build()
-                    }
+                    proxyAuthenticator(object : Authenticator {
+                        override fun authenticate(route: Route?, response: Response): Request? {
+                            val user = url.userInfo.substringBefore(':')
+                            val password = url.userInfo.substringAfter(':')
+                            val credential = Credentials.basic(user, password)
+                            return response.request.newBuilder()
+                                .header("Proxy-Authorization", credential)
+                                .build()
+                        }
+                    })
                 }
             }
         }
@@ -275,16 +280,16 @@ open class Npm(
                     .build()
 
                 OkHttpClientHelper.execute(HTTP_CACHE_PATH, pkgRequest, applyProxySettingsFromNpmrc).use { response ->
-                    if (response.code() == HttpURLConnection.HTTP_OK) {
+                    if (response.code == HttpURLConnection.HTTP_OK) {
                         log.debug {
-                            if (response.cacheResponse() != null) {
+                            if (response.cacheResponse != null) {
                                 "Retrieved info about '$encodedName' from local cache."
                             } else {
                                 "Downloaded info about '$encodedName' from NPM registry."
                             }
                         }
 
-                        response.body()?.let { body ->
+                        response.body?.let { body ->
                             val packageInfo = jsonMapper.readTree(body.string())
 
                             packageInfo["versions"][version]?.let { versionInfo ->
@@ -311,7 +316,7 @@ open class Npm(
                     } else {
                         log.info {
                             "Could not retrieve package information for '$encodedName' " +
-                                    "from public NPM registry: ${response.message()} (code ${response.code()})."
+                                    "from public NPM registry: ${response.message} (code ${response.code})."
                         }
                     }
                 }

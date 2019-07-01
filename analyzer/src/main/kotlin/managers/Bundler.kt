@@ -240,9 +240,9 @@ class Bundler(
             .build()
 
         OkHttpClientHelper.execute(HTTP_CACHE_PATH, request).use { response ->
-            when (val code = response.code()) {
+            when (response.code) {
                 HttpURLConnection.HTTP_OK -> {
-                    val body = response.body()?.string()?.trim()
+                    val body = response.body?.string()?.trim()
                     return if (body.isNullOrEmpty()) null else GemSpec.createFromJson(body)
                 }
 
@@ -259,14 +259,14 @@ class Bundler(
                 }
 
                 else -> {
-                    if (retryCount > 0 && code == HttpURLConnection.HTTP_BAD_GATEWAY) {
+                    if (retryCount > 0 && response.code == HttpURLConnection.HTTP_BAD_GATEWAY) {
                         // We see a lot of sporadic "bad gateway" responses that disappear when trying again.
                         Thread.sleep(100)
                         return queryRubygems(name, version, retryCount - 1)
                     }
 
                     throw IOException(
-                        "RubyGems reported unhandled HTTP code $code when requesting meta-data for " +
+                        "RubyGems reported unhandled HTTP code ${response.code} when requesting meta-data for " +
                                 "gem '$name'."
                     )
                 }

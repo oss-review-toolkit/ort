@@ -48,7 +48,8 @@ import java.time.Instant
 
 import okhttp3.Request
 
-import okio.Okio
+import okio.buffer
+import okio.sink
 
 class BoyterLc(name: String, config: ScannerConfiguration) : LocalScanner(name, config) {
     class Factory : AbstractScannerFactory<BoyterLc>("BoyterLc") {
@@ -95,18 +96,18 @@ class BoyterLc(name: String, config: ScannerConfiguration) : LocalScanner(name, 
         val request = Request.Builder().get().url(url).build()
 
         return OkHttpClientHelper.execute(HTTP_CACHE_PATH, request).use { response ->
-            val body = response.body()
+            val body = response.body
 
-            if (response.code() != HttpURLConnection.HTTP_OK || body == null) {
+            if (response.code != HttpURLConnection.HTTP_OK || body == null) {
                 throw IOException("Failed to download $scannerName from $url.")
             }
 
-            if (response.cacheResponse() != null) {
+            if (response.cacheResponse != null) {
                 log.info { "Retrieved $scannerName from local cache." }
             }
 
             val scannerArchive = createTempFile("ort", url.substringAfterLast("/"))
-            Okio.buffer(Okio.sink(scannerArchive)).use { it.writeAll(body.source()) }
+            scannerArchive.sink().buffer().use { it.writeAll(body.source()) }
 
             val unpackDir = createTempDir("ort", "$scannerName-$scannerVersion").apply { deleteOnExit() }
 

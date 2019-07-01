@@ -25,9 +25,11 @@ import java.net.URLConnection
 import okhttp3.Cache
 import okhttp3.ConnectionSpec
 import okhttp3.MediaType
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.RequestBody
+import okhttp3.RequestBody.Companion.asRequestBody
 import okhttp3.Response
 
 /**
@@ -46,13 +48,13 @@ object OkHttpClientHelper {
      */
     private fun guessMediaType(name: String): MediaType? {
         val contentType = URLConnection.guessContentTypeFromName(name) ?: "application/octet-stream"
-        return MediaType.parse(contentType)
+        return contentType.toMediaTypeOrNull()
     }
 
     /**
      * Create a request body for the specified file.
      */
-    fun createRequestBody(source: File): RequestBody = RequestBody.create(guessMediaType(source.name), source)
+    fun createRequestBody(source: File): RequestBody = source.asRequestBody(guessMediaType(source.name))
 
     /**
      * Execute a [request] using the client for the specified [cache directory][cachePath]. The client can optionally
