@@ -129,7 +129,8 @@ class Stack(
             }
         }
 
-        val allPackages = mutableMapOf<Package, Package>()
+        // A map of package IDs to enriched package information.
+        val allPackages = mutableMapOf<Identifier, Package>()
 
         val externalChildren = mapParentsToChildren("external")
         val externalVersions = mapNamesToVersions("external")
@@ -166,37 +167,31 @@ class Stack(
     }
 
     private fun buildDependencyTree(
-        parentName: String, allPackages: MutableMap<Package, Package>,
+        parentName: String, allPackages: MutableMap<Identifier, Package>,
         childMap: Map<String, List<String>>, versionMap: Map<String, String>,
         scopeDependencies: SortedSet<PackageReference>
     ) {
         childMap[parentName]?.let { children ->
             children.forEach { childName ->
-                val pkgTemplate = Package(
-                    id = Identifier(
-                        // The runtime system ships with the Glasgow Haskell Compiler (GHC) and is not hosted
-                        // on Hackage.
-                        type = if (childName == "rts") "GHC" else "Hackage",
-                        namespace = "",
-                        name = childName,
-                        version = versionMap[childName].orEmpty()
-                    ),
-                    declaredLicenses = sortedSetOf(),
-                    description = "",
-                    homepageUrl = "",
-                    binaryArtifact = RemoteArtifact.EMPTY,
-                    sourceArtifact = RemoteArtifact.EMPTY,
-                    vcs = VcsInfo.EMPTY
+                val pkgId = Identifier(
+                    // The runtime system ships with the Glasgow Haskell Compiler (GHC) and is not hosted
+                    // on Hackage.
+                    type = if (childName == "rts") "GHC" else "Hackage",
+                    namespace = "",
+                    name = childName,
+                    version = versionMap[childName].orEmpty()
                 )
 
-                val pkg = allPackages.getOrPut(pkgTemplate) {
-                    if (pkgTemplate.id.type == "Hackage") {
+                val pkgFallback = Package.EMPTY.copy(id = pkgId, purl = pkgId.toPurl())
+
+                val pkg = allPackages.getOrPut(pkgId) {
+                    if (pkgId.type == "Hackage") {
                         // Enrich the package with additional meta-data from Hackage.
-                        downloadCabalFile(pkgTemplate)?.let {
+                        downloadCabalFile(pkgId)?.let {
                             parseCabalFile(it)
-                        } ?: pkgTemplate
+                        } ?: pkgFallback
                     } else {
-                        pkgTemplate
+                        pkgFallback
                     }
                 }
 
@@ -211,17 +206,17 @@ class Stack(
     private fun getPackageUrl(name: String, version: String) =
         "https://hackage.haskell.org/package/$name-$version"
 
-    private fun downloadCabalFile(pkg: Package): String? {
+    private fun downloadCabalFile(pkgId: Identifier): String? {
         val pkgRequest = Request.Builder()
             .get()
-            .url("${getPackageUrl(pkg.id.name, pkg.id.version)}/src/${pkg.id.name}.cabal")
+            .url("${getPackageUrl(pkgId.name, pkgId.version)}/src/${pkgId.name}.cabal")
             .build()
 
         return OkHttpClientHelper.execute(HTTP_CACHE_PATH, pkgRequest).use { response ->
             val body = response.body()?.string()?.trim()
 
             if (response.code() != HttpURLConnection.HTTP_OK || body.isNullOrEmpty()) {
-                log.warn { "Unable to retrieve Hackage meta-data for package '${pkg.id.toCoordinates()}'." }
+                log.warn { "Unable to retrieve Hackage meta-data for package '${pkgId.toCoordinates()}'." }
                 if (body != null) {
                     log.warn { "The response was '$body' (code ${response.code()})." }
                 }
