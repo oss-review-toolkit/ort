@@ -1,5 +1,3 @@
-import com.bmuschko.gradle.docker.tasks.image.DockerBuildImage
-
 val jcommanderVersion: String by project
 val kotlintestVersion: String by project
 val reflectionsVersion: String by project
@@ -7,33 +5,11 @@ val reflectionsVersion: String by project
 plugins {
     // Apply core plugins.
     application
-
-    // Apply third-party plugins.
-    id("com.bmuschko.docker-java-application")
-    id("com.bmuschko.docker-remote-api")
 }
 
 application {
     applicationName = "ort"
     mainClassName = "com.here.ort.Main"
-}
-
-docker {
-    javaApplication {
-        baseImage.set("ort-base:latest")
-        tag.set("ort:latest")
-    }
-}
-
-val dockerBuildBaseImage by tasks.registering(DockerBuildImage::class) {
-    description = "Builds the base Docker image to run ORT."
-
-    inputDir.set(file("docker"))
-    tags.set(listOf("ort-base:latest"))
-}
-
-tasks.dockerBuildImage {
-    dependsOn(dockerBuildBaseImage)
 }
 
 repositories {
