@@ -21,7 +21,6 @@ package com.here.ort.downloader
 
 import ch.frankel.slf4k.*
 
-import com.here.ort.downloader.vcs.*
 import com.here.ort.model.Package
 import com.here.ort.model.VcsInfo
 import com.here.ort.model.VcsType
@@ -38,19 +37,16 @@ import java.io.IOException
 import java.net.URI
 import java.net.URISyntaxException
 import java.nio.file.Paths
+import java.util.ServiceLoader
 
 abstract class VersionControlSystem {
     companion object {
+        private val LOADER = ServiceLoader.load(VersionControlSystem::class.java)!!
+
         /**
          * The (prioritized) list of all available Version Control Systems in the classpath.
          */
-        val ALL = listOf(
-            Git,
-            GitRepo,
-            Mercurial,
-            Subversion,
-            Cvs
-        )
+        val ALL by lazy { LOADER.iterator().asSequence().toList().sortedByDescending { it.priority } }
 
         /**
          * Return the applicable VCS for the given [vcsType], or null if none is applicable.
