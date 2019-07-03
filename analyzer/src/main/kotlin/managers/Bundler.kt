@@ -253,18 +253,24 @@ class Bundler(
 
                 OkHttpClientHelper.HTTP_TOO_MANY_REQUESTS -> {
                     throw IOException(
-                        "RubyGems reported too many requests, see " +
+                        "RubyGems reported too many requests when requesting meta-data for gem '$name', see " +
                                 "https://guides.rubygems.org/rubygems-org-api/#rate-limits."
                     )
                 }
 
-                else -> {
-                    if (retryCount > 0 && response.code == HttpURLConnection.HTTP_BAD_GATEWAY) {
+                HttpURLConnection.HTTP_BAD_GATEWAY -> {
+                    if (retryCount > 0) {
                         // We see a lot of sporadic "bad gateway" responses that disappear when trying again.
                         Thread.sleep(100)
                         return queryRubygems(name, version, retryCount - 1)
                     }
 
+                    throw IOException(
+                        "RubyGems reported too many bad gateway errors when requesting meta-data for gem '$name'."
+                    )
+                }
+
+                else -> {
                     throw IOException(
                         "RubyGems reported unhandled HTTP code ${response.code} when requesting meta-data for " +
                                 "gem '$name'."
