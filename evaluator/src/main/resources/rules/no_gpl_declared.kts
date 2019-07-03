@@ -20,7 +20,10 @@ val ruleSet = ruleSet(ortResult) {
                 +isGpl()
             }
 
-            error("The package '${pkg.id.toCoordinates()}' has the ${licenseSource.name} license '$license'.")
+            error(
+                "The package '${pkg.id.toCoordinates()}' has the ${licenseSource.name} license '$license'.",
+                "Remove the dependency on this package."
+            )
         }
     }
 }
