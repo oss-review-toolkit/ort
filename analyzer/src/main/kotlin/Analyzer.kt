@@ -24,6 +24,7 @@ import ch.frankel.slf4k.*
 import com.here.ort.analyzer.managers.Unmanaged
 import com.here.ort.downloader.VersionControlSystem
 import com.here.ort.downloader.vcs.GitRepo
+import com.here.ort.model.AnalyzerResult
 import com.here.ort.model.AnalyzerResultBuilder
 import com.here.ort.model.AnalyzerRun
 import com.here.ort.model.Environment
@@ -37,9 +38,16 @@ import com.here.ort.model.readValue
 import com.here.ort.utils.ORT_CONFIG_FILENAME
 import com.here.ort.utils.log
 import com.here.ort.utils.realFile
+import kotlinx.coroutines.ObsoleteCoroutinesApi
 
 import java.io.File
 import java.time.Instant
+
+import kotlinx.coroutines.async
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.newFixedThreadPoolContext
+import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.withContext
 
 const val TOOL_NAME = "analyzer"
 const val HTTP_CACHE_PATH = "$TOOL_NAME/cache/http"
@@ -48,6 +56,7 @@ const val HTTP_CACHE_PATH = "$TOOL_NAME/cache/http"
  * The class to run the analysis. The signatures of public functions in this class define the library API.
  */
 class Analyzer(private val config: AnalyzerConfiguration) {
+    @ObsoleteCoroutinesApi
     fun analyze(
         absoluteProjectPath: File,
         packageManagers: List<PackageManagerFactory> = PackageManager.ALL,
@@ -103,36 +112,8 @@ class Analyzer(private val config: AnalyzerConfiguration) {
             }
         }
 
-        val analyzerResultBuilder = AnalyzerResultBuilder()
-
         // Resolve dependencies per package manager.
-        managedFiles.forEach { (manager, files) ->
-            val results = manager.resolveDependencies(files)
-
-            val curatedResults = packageCurationsFile?.let {
-                val provider = FilePackageCurationProvider(it)
-                results.mapValues { entry ->
-                    ProjectAnalyzerResult(
-                        project = entry.value.project,
-                        errors = entry.value.errors,
-                        packages = entry.value.packages.map { curatedPackage ->
-                            val curations = provider.getCurationsFor(curatedPackage.pkg.id)
-                            curations.fold(curatedPackage) { cur, packageCuration ->
-                                log.debug {
-                                    "Applying curation '$packageCuration' to package " +
-                                            "'${curatedPackage.pkg.id.toCoordinates()}'."
-                                }
-                                packageCuration.apply(cur)
-                            }
-                        }.toSortedSet()
-                    )
-                }
-            } ?: results
-
-            curatedResults.forEach { (_, analyzerResult) ->
-                analyzerResultBuilder.addResult(analyzerResult)
-            }
-        }
+        val analyzerResult = runBlocking { analyzeInParallel(managedFiles, packageCurationsFile) }
 
         val workingTree = VersionControlSystem.forDirectory(absoluteProjectPath)
         val vcs = workingTree?.getInfo() ?: VcsInfo.EMPTY
@@ -144,9 +125,54 @@ class Analyzer(private val config: AnalyzerConfiguration) {
 
         val endTime = Instant.now()
 
-        val run = AnalyzerRun(startTime, endTime, Environment(), config, analyzerResultBuilder.build())
+        val run = AnalyzerRun(startTime, endTime, Environment(), config, analyzerResult)
 
         return OrtResult(repository, run)
+    }
+
+    @ObsoleteCoroutinesApi
+    private suspend fun analyzeInParallel(
+        managedFiles: Map<PackageManager, List<File>>,
+        packageCurationsFile: File?
+    ): AnalyzerResult {
+        val dispatcher = newFixedThreadPoolContext(5, "storage")
+        val analyzerResultBuilder = AnalyzerResultBuilder()
+
+        coroutineScope {
+            managedFiles.map { (manager, files) ->
+                async {
+                    withContext(dispatcher) {
+                        val results = manager.resolveDependencies(files)
+
+                        packageCurationsFile?.let {
+                            val provider = FilePackageCurationProvider(it)
+                            results.mapValues { entry ->
+                                ProjectAnalyzerResult(
+                                    project = entry.value.project,
+                                    errors = entry.value.errors,
+                                    packages = entry.value.packages.map { curatedPackage ->
+                                        val curations = provider.getCurationsFor(curatedPackage.pkg.id)
+                                        curations.fold(curatedPackage) { cur, packageCuration ->
+                                            log.debug {
+                                                "Applying curation '$packageCuration' to package " +
+                                                        "'${curatedPackage.pkg.id.toCoordinates()}'."
+                                            }
+                                            packageCuration.apply(cur)
+                                        }
+                                    }.toSortedSet()
+                                )
+                            }
+                        } ?: results
+                    }
+                }
+            }.forEach {
+                it.await().forEach { (_, analyzerResult) ->
+                    analyzerResultBuilder.addResult(analyzerResult)
+                }
+            }
+        }
+
+        return analyzerResultBuilder.build()
     }
 
     private fun locateRepositoryConfigurationFile(absoluteProjectPath: File) =
