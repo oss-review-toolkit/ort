@@ -1066,12 +1066,12 @@ packages:
         value: ""
         algorithm: ""
     vcs:
-      type: "git"
+      type: "Git"
       url: "git://github.com/ekmett/semigroups.git"
       revision: ""
       path: ""
     vcs_processed:
-      type: "git"
+      type: "Git"
       url: "https://github.com/ekmett/semigroups.git"
       revision: ""
       path: ""
@@ -1111,12 +1111,12 @@ packages:
         value: ""
         algorithm: ""
     vcs:
-      type: "git"
+      type: "Git"
       url: "https://github.com/haskell-compat/base-compat"
       revision: ""
       path: ""
     vcs_processed:
-      type: "git"
+      type: "Git"
       url: "https://github.com/haskell-compat/base-compat.git"
       revision: ""
       path: ""
@@ -1147,12 +1147,12 @@ packages:
         value: ""
         algorithm: ""
     vcs:
-      type: "git"
+      type: "Git"
       url: "https://github.com/haskell-compat/base-orphans"
       revision: ""
       path: ""
     vcs_processed:
-      type: "git"
+      type: "Git"
       url: "https://github.com/haskell-compat/base-orphans.git"
       revision: ""
       path: ""
@@ -1285,12 +1285,12 @@ packages:
         value: ""
         algorithm: ""
     vcs:
-      type: "git"
+      type: "Git"
       url: "git://github.com/ekmett/contravariant.git"
       revision: ""
       path: ""
     vcs_processed:
-      type: "git"
+      type: "Git"
       url: "https://github.com/ekmett/contravariant.git"
       revision: ""
       path: ""
@@ -1585,12 +1585,12 @@ packages:
         value: ""
         algorithm: ""
     vcs:
-      type: "git"
+      type: "Git"
       url: "https://github.com/haskell/fgl.git"
       revision: ""
       path: ""
     vcs_processed:
-      type: "git"
+      type: "Git"
       url: "https://github.com/haskell/fgl.git"
       revision: ""
       path: ""
@@ -1692,12 +1692,12 @@ packages:
         value: ""
         algorithm: ""
     vcs:
-      type: "git"
+      type: "Git"
       url: "https://github.com/haskell/vector.git"
       revision: ""
       path: ""
     vcs_processed:
-      type: "git"
+      type: "Git"
       url: "https://github.com/haskell/vector.git"
       revision: ""
       path: ""
@@ -1757,12 +1757,12 @@ packages:
         value: ""
         algorithm: ""
     vcs:
-      type: "git"
+      type: "Git"
       url: "git://github.com/ekmett/tagged.git"
       revision: ""
       path: ""
     vcs_processed:
-      type: "git"
+      type: "Git"
       url: "https://github.com/ekmett/tagged.git"
       revision: ""
       path: ""
@@ -1796,12 +1796,12 @@ packages:
         value: ""
         algorithm: ""
     vcs:
-      type: "git"
+      type: "Git"
       url: "https://github.com/phadej/tree-diff.git"
       revision: ""
       path: ""
     vcs_processed:
-      type: "git"
+      type: "Git"
       url: "https://github.com/phadej/tree-diff.git"
       revision: ""
       path: ""
@@ -1846,7 +1846,7 @@ packages:
       revision: ""
       path: ""
     vcs_processed:
-      type: "mercurial"
+      type: "Mercurial"
       url: "https://bitbucket.org/bos/text"
       revision: ""
       path: ""
@@ -1874,12 +1874,12 @@ packages:
         value: ""
         algorithm: ""
     vcs:
-      type: "git"
+      type: "Git"
       url: "git://github.com/conal/MemoTrie.git"
       revision: ""
       path: ""
     vcs_processed:
-      type: "git"
+      type: "Git"
       url: "https://github.com/conal/MemoTrie.git"
       revision: ""
       path: ""
@@ -1905,12 +1905,12 @@ packages:
         value: ""
         algorithm: ""
     vcs:
-      type: "git"
+      type: "Git"
       url: "https://github.com/haskell-opengl/StateVar.git"
       revision: ""
       path: ""
     vcs_processed:
-      type: "git"
+      type: "Git"
       url: "https://github.com/haskell-opengl/StateVar.git"
       revision: ""
       path: ""
@@ -1986,12 +1986,12 @@ packages:
         value: ""
         algorithm: ""
     vcs:
-      type: "git"
+      type: "Git"
       url: "git://github.com/ekmett/charset.git"
       revision: ""
       path: ""
     vcs_processed:
-      type: "git"
+      type: "Git"
       url: "https://github.com/ekmett/charset.git"
       revision: ""
       path: ""
@@ -2018,12 +2018,12 @@ packages:
         value: ""
         algorithm: ""
     vcs:
-      type: "git"
+      type: "Git"
       url: "git://github.com/spl/dlist.git"
       revision: ""
       path: ""
     vcs_processed:
-      type: "git"
+      type: "Git"
       url: "https://github.com/spl/dlist.git"
       revision: ""
       path: ""
@@ -2129,12 +2129,12 @@ packages:
         value: ""
         algorithm: ""
     vcs:
-      type: "git"
+      type: "Git"
       url: "git://github.com/basvandijk/scientific.git"
       revision: ""
       path: ""
     vcs_processed:
-      type: "git"
+      type: "Git"
       url: "https://github.com/basvandijk/scientific.git"
       revision: ""
       path: ""
@@ -2164,12 +2164,12 @@ packages:
         value: ""
         algorithm: ""
     vcs:
-      type: "git"
+      type: "Git"
       url: "https://github.com/well-typed/generics-sop"
       revision: ""
       path: ""
     vcs_processed:
-      type: "git"
+      type: "Git"
       url: "https://github.com/well-typed/generics-sop.git"
       revision: ""
       path: ""
@@ -2197,12 +2197,12 @@ packages:
         value: ""
         algorithm: ""
     vcs:
-      type: "git"
+      type: "Git"
       url: "https://github.com/tibbe/unordered-containers.git"
       revision: ""
       path: ""
     vcs_processed:
-      type: "git"
+      type: "Git"
       url: "https://github.com/tibbe/unordered-containers.git"
       revision: ""
       path: ""
@@ -2234,7 +2234,7 @@ packages:
       revision: ""
       path: ""
     vcs_processed:
-      type: "git"
+      type: "Git"
       url: "https://github.com/aslatter/uuid.git"
       revision: ""
       path: ""
@@ -2261,12 +2261,12 @@ packages:
         value: ""
         algorithm: ""
     vcs:
-      type: "git"
+      type: "Git"
       url: "https://github.com/simonmar/happy.git"
       revision: ""
       path: ""
     vcs_processed:
-      type: "git"
+      type: "Git"
       url: "https://github.com/simonmar/happy.git"
       revision: ""
       path: ""
@@ -2328,12 +2328,12 @@ packages:
         value: ""
         algorithm: ""
     vcs:
-      type: "git"
+      type: "Git"
       url: "https://github.com/haskell/cabal/"
       revision: ""
       path: ""
     vcs_processed:
-      type: "git"
+      type: "Git"
       url: "https://github.com/haskell/cabal.git"
       revision: ""
       path: ""
@@ -2410,7 +2410,7 @@ packages:
       revision: ""
       path: ""
     vcs_processed:
-      type: "git"
+      type: "Git"
       url: "https://github.com/well-typed/generics-sop.git"
       revision: ""
       path: ""
@@ -2448,12 +2448,12 @@ packages:
         value: ""
         algorithm: ""
     vcs:
-      type: "git"
+      type: "Git"
       url: "https://github.com/ivan-m/graphviz.git"
       revision: ""
       path: ""
     vcs_processed:
-      type: "git"
+      type: "Git"
       url: "https://github.com/ivan-m/graphviz.git"
       revision: ""
       path: ""
@@ -2478,7 +2478,7 @@ packages:
         value: ""
         algorithm: ""
     vcs:
-      type: "git"
+      type: "Git"
       url: "https://github.com/yav/haskell-lexer.git"
       revision: ""
       path: ""
@@ -2519,12 +2519,12 @@ packages:
         value: ""
         algorithm: ""
     vcs:
-      type: "git"
+      type: "Git"
       url: "http://github.com/byorgey/split.git"
       revision: ""
       path: ""
     vcs_processed:
-      type: "git"
+      type: "Git"
       url: "https://github.com/byorgey/split.git"
       revision: ""
       path: ""
@@ -2552,12 +2552,12 @@ packages:
         value: ""
         algorithm: ""
     vcs:
-      type: "git"
+      type: "Git"
       url: "https://github.com/Bodigrim/integer-logarithms"
       revision: ""
       path: ""
     vcs_processed:
-      type: "git"
+      type: "Git"
       url: "https://github.com/Bodigrim/integer-logarithms.git"
       revision: ""
       path: ""
@@ -2587,12 +2587,12 @@ packages:
         value: ""
         algorithm: ""
     vcs:
-      type: "git"
+      type: "Git"
       url: "git://github.com/Daniel-Diaz/matrix.git"
       revision: ""
       path: ""
     vcs_processed:
-      type: "git"
+      type: "Git"
       url: "https://github.com/Daniel-Diaz/matrix.git"
       revision: ""
       path: ""
@@ -2651,12 +2651,12 @@ packages:
         value: ""
         algorithm: ""
     vcs:
-      type: "git"
+      type: "Git"
       url: "https://github.com/Lysxia/generic-data"
       revision: ""
       path: ""
     vcs_processed:
-      type: "git"
+      type: "Git"
       url: "https://github.com/Lysxia/generic-data.git"
       revision: ""
       path: ""
@@ -2688,12 +2688,12 @@ packages:
         value: ""
         algorithm: ""
     vcs:
-      type: "git"
+      type: "Git"
       url: "https://github.com/hvr/parsec"
       revision: ""
       path: ""
     vcs_processed:
-      type: "git"
+      type: "Git"
       url: "https://github.com/hvr/parsec.git"
       revision: ""
       path: ""
@@ -2750,12 +2750,12 @@ packages:
         value: ""
         algorithm: ""
     vcs:
-      type: "git"
+      type: "Git"
       url: "git://github.com/feuerbach/temporary.git"
       revision: ""
       path: ""
     vcs_processed:
-      type: "git"
+      type: "Git"
       url: "https://github.com/feuerbach/temporary.git"
       revision: ""
       path: ""
@@ -2781,12 +2781,12 @@ packages:
         value: ""
         algorithm: ""
     vcs:
-      type: "git"
+      type: "Git"
       url: "https://github.com/haskell/directory"
       revision: ""
       path: ""
     vcs_processed:
-      type: "git"
+      type: "Git"
       url: "https://github.com/haskell/directory.git"
       revision: ""
       path: ""
@@ -2819,12 +2819,12 @@ packages:
         value: ""
         algorithm: ""
     vcs:
-      type: "git"
+      type: "Git"
       url: "https://github.com/haskell/filepath.git"
       revision: ""
       path: ""
     vcs_processed:
-      type: "git"
+      type: "Git"
       url: "https://github.com/haskell/filepath.git"
       revision: ""
       path: ""
@@ -2852,12 +2852,12 @@ packages:
         value: ""
         algorithm: ""
     vcs:
-      type: "git"
+      type: "Git"
       url: "https://github.com/haskell/process.git"
       revision: ""
       path: ""
     vcs_processed:
-      type: "git"
+      type: "Git"
       url: "https://github.com/haskell/process.git"
       revision: ""
       path: ""
@@ -2927,12 +2927,12 @@ packages:
         value: ""
         algorithm: ""
     vcs:
-      type: "git"
+      type: "Git"
       url: "https://github.com/phadej/splitmix.git"
       revision: ""
       path: ""
     vcs_processed:
-      type: "git"
+      type: "Git"
       url: "https://github.com/phadej/splitmix.git"
       revision: ""
       path: ""
@@ -2958,12 +2958,12 @@ packages:
         value: ""
         algorithm: ""
     vcs:
-      type: "mercurial"
+      type: "Mercurial"
       url: "https://bitbucket.org/khibino/haskell-time-locale-compat"
       revision: ""
       path: ""
     vcs_processed:
-      type: "mercurial"
+      type: "Mercurial"
       url: "https://bitbucket.org/khibino/haskell-time-locale-compat"
       revision: ""
       path: ""
@@ -2991,12 +2991,12 @@ packages:
         value: ""
         algorithm: ""
     vcs:
-      type: "git"
+      type: "Git"
       url: "https://github.com/haskell/unix.git"
       revision: ""
       path: ""
     vcs_processed:
-      type: "git"
+      type: "Git"
       url: "https://github.com/haskell/unix.git"
       revision: ""
       path: ""
@@ -3098,12 +3098,12 @@ packages:
         value: ""
         algorithm: ""
     vcs:
-      type: "git"
+      type: "Git"
       url: "https://github.com/advancedtelematic/markov-chain-usage-model"
       revision: ""
       path: ""
     vcs_processed:
-      type: "git"
+      type: "Git"
       url: "https://github.com/advancedtelematic/markov-chain-usage-model.git"
       revision: ""
       path: ""
@@ -3129,12 +3129,12 @@ packages:
         value: ""
         algorithm: ""
     vcs:
-      type: "git"
+      type: "Git"
       url: "https://github.com/bos/attoparsec"
       revision: ""
       path: ""
     vcs_processed:
-      type: "git"
+      type: "Git"
       url: "https://github.com/bos/attoparsec.git"
       revision: ""
       path: ""
@@ -3163,12 +3163,12 @@ packages:
         value: ""
         algorithm: ""
     vcs:
-      type: "git"
+      type: "Git"
       url: "git://github.com/ekmett/parsers.git"
       revision: ""
       path: ""
     vcs_processed:
-      type: "git"
+      type: "Git"
       url: "https://github.com/ekmett/parsers.git"
       revision: ""
       path: ""
@@ -3199,12 +3199,12 @@ packages:
         value: ""
         algorithm: ""
     vcs:
-      type: "git"
+      type: "Git"
       url: "https://github.com/hackage-/malcolm-wallace-universe.git"
       revision: "1.12.1"
       path: ""
     vcs_processed:
-      type: "git"
+      type: "Git"
       url: "https://github.com/hackage-/malcolm-wallace-universe.git"
       revision: "1.12.1"
       path: ""
@@ -3232,12 +3232,12 @@ packages:
         value: ""
         algorithm: ""
     vcs:
-      type: "git"
+      type: "Git"
       url: "git://github.com/bos/aeson.git"
       revision: ""
       path: ""
     vcs_processed:
-      type: "git"
+      type: "Git"
       url: "https://github.com/bos/aeson.git"
       revision: ""
       path: ""
@@ -3331,12 +3331,12 @@ packages:
         value: ""
         algorithm: ""
     vcs:
-      type: "git"
+      type: "Git"
       url: "https://github.com/Lysxia/show-combinators"
       revision: ""
       path: ""
     vcs_processed:
-      type: "git"
+      type: "Git"
       url: "https://github.com/Lysxia/show-combinators.git"
       revision: ""
       path: ""
@@ -3361,12 +3361,12 @@ packages:
         value: ""
         algorithm: ""
     vcs:
-      type: "git"
+      type: "Git"
       url: "https://github.com/ivan-m/wl-pprint-text.git"
       revision: ""
       path: ""
     vcs_processed:
-      type: "git"
+      type: "Git"
       url: "https://github.com/ivan-m/wl-pprint-text.git"
       revision: ""
       path: ""
