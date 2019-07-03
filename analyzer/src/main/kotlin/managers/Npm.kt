@@ -46,6 +46,7 @@ import com.here.ort.model.readValue
 import com.here.ort.utils.CommandLineTool
 import com.here.ort.utils.Os
 import com.here.ort.utils.OkHttpClientHelper
+import com.here.ort.utils.OkHttpClientHelper.applyProxySettingsFromUrl
 import com.here.ort.utils.getUserHomeDirectory
 import com.here.ort.utils.hasFragmentRevision
 import com.here.ort.utils.log
@@ -58,19 +59,14 @@ import com.vdurmont.semver4j.Requirement
 import java.io.File
 import java.io.IOException
 import java.net.HttpURLConnection
-import java.net.InetSocketAddress
-import java.net.Proxy
 import java.net.URI
 import java.net.URISyntaxException
+import java.net.URL
 import java.net.URLEncoder
 import java.util.SortedSet
 
-import okhttp3.Authenticator
-import okhttp3.Credentials
 import okhttp3.OkHttpClient
 import okhttp3.Request
-import okhttp3.Response
-import okhttp3.Route
 
 /**
  * The [Node package manager](https://www.npmjs.com/) for JavaScript.
@@ -196,18 +192,7 @@ open class Npm(
                 }
 
                 if (proxyUrl.isNotEmpty()) {
-                    val url = URI(proxyUrl)
-                    proxy(Proxy(Proxy.Type.HTTP, InetSocketAddress(url.host, url.port)))
-                    proxyAuthenticator(object : Authenticator {
-                        override fun authenticate(route: Route?, response: Response): Request? {
-                            val user = url.userInfo.substringBefore(':')
-                            val password = url.userInfo.substringAfter(':')
-                            val credential = Credentials.basic(user, password)
-                            return response.request.newBuilder()
-                                .header("Proxy-Authorization", credential)
-                                .build()
-                        }
-                    })
+                    applyProxySettingsFromUrl(URL(proxyUrl))
                 }
             }
         }

@@ -37,6 +37,7 @@ import com.here.ort.model.config.AnalyzerConfiguration
 import com.here.ort.model.config.RepositoryConfiguration
 import com.here.ort.utils.CommandLineTool
 import com.here.ort.utils.OkHttpClientHelper
+import com.here.ort.utils.OkHttpClientHelper.applyProxySettingsFromEnv
 import com.here.ort.utils.ProcessCapture
 import com.here.ort.utils.log
 import com.here.ort.utils.safeDeleteRecursively
@@ -51,16 +52,8 @@ import java.io.IOException
 import java.net.HttpURLConnection
 import java.nio.file.FileSystems
 import java.util.SortedSet
-import java.net.InetSocketAddress
-import java.net.Proxy
-import java.net.URI
 
-import okhttp3.Authenticator
-import okhttp3.Credentials
-import okhttp3.OkHttpClient
 import okhttp3.Request
-import okhttp3.Response
-import okhttp3.Route
 
 /**
  * The [Stack](https://haskellstack.org/) package manager for Haskell.
@@ -221,24 +214,6 @@ class Stack(
 
     private fun getPackageUrl(name: String, version: String) =
         "https://hackage.haskell.org/package/$name-$version"
-
-    private val applyProxySettingsFromEnv: OkHttpClient.Builder.() -> Unit = {
-        val proxyUrl = System.getenv("https_proxy") ?: System.getenv("http_proxy")
-        if (proxyUrl != null) {
-            val url = URI(proxyUrl)
-            proxy(Proxy(Proxy.Type.HTTP, InetSocketAddress(url.host, url.port)))
-            proxyAuthenticator(object : Authenticator {
-                override fun authenticate(route: Route?, response: Response): Request? {
-                    val user = url.userInfo.substringBefore(':')
-                    val password = url.userInfo.substringAfter(':')
-                    val credential = Credentials.basic(user, password)
-                    return response.request.newBuilder()
-                        .header("Proxy-Authorization", credential)
-                        .build()
-                }
-            })
-        }
-    }
 
     private fun downloadCabalFile(pkgId: Identifier): String? {
         val pkgRequest = Request.Builder()
