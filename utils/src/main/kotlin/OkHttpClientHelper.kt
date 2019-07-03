@@ -20,10 +20,15 @@
 package com.here.ort.utils
 
 import java.io.File
+import java.net.InetSocketAddress
+import java.net.Proxy
+import java.net.URL
 import java.net.URLConnection
 
+import okhttp3.Authenticator
 import okhttp3.Cache
 import okhttp3.ConnectionSpec
+import okhttp3.Credentials
 import okhttp3.MediaType
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.OkHttpClient
@@ -31,6 +36,7 @@ import okhttp3.Request
 import okhttp3.RequestBody
 import okhttp3.RequestBody.Companion.asRequestBody
 import okhttp3.Response
+import okhttp3.Route
 
 /**
  * A helper class to manage OkHttp instances backed by distinct cache directories.
@@ -55,6 +61,33 @@ object OkHttpClientHelper {
      * Create a request body for the specified file.
      */
     fun createRequestBody(source: File): RequestBody = source.asRequestBody(guessMediaType(source.name))
+
+    /**
+     * Apply HTTP proxy settings from a [url], optionally with credentials included.
+     */
+    fun OkHttpClient.Builder.applyProxySettingsFromUrl(url: URL) {
+        proxy(Proxy(Proxy.Type.HTTP, InetSocketAddress(url.host, url.port)))
+        proxyAuthenticator(object : Authenticator {
+            override fun authenticate(route: Route?, response: Response): Request? {
+                val user = url.userInfo.substringBefore(':')
+                val password = url.userInfo.substringAfter(':')
+                val credential = Credentials.basic(user, password)
+                return response.request.newBuilder()
+                    .header("Proxy-Authorization", credential)
+                    .build()
+            }
+        })
+    }
+
+    /**
+     * Apply HTTP proxy settings from the "https_proxy" or "http_proxy" environment variables.
+     */
+    val applyProxySettingsFromEnv: OkHttpClient.Builder.() -> Unit = {
+        val proxyUrl = System.getenv("https_proxy") ?: System.getenv("http_proxy")
+        if (proxyUrl != null) {
+            applyProxySettingsFromUrl(URL(proxyUrl))
+        }
+    }
 
     /**
      * Execute a [request] using the client for the specified [cache directory][cachePath]. The client can optionally
