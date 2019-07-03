@@ -1,5 +1,6 @@
 val digraphVersion: String by project
 val jacksonVersion: String by project
+val kotlinxCoroutinesVersion: String by project
 val mavenVersion: String by project
 val mavenResolverVersion: String by project
 val semverVersion: String by project
@@ -37,4 +38,5 @@ dependencies {
     implementation("org.apache.maven.resolver:maven-resolver-transport-wagon:$mavenResolverVersion")
 
     implementation("org.gradle:gradle-tooling-api:${gradle.gradleVersion}")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlinxCoroutinesVersion")
 }
