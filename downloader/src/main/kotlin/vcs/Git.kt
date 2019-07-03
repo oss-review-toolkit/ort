@@ -43,7 +43,6 @@ const val GIT_HISTORY_DEPTH = 50
 
 class Git : GitBase() {
     override val type = VcsType.GIT
-    override val priority = 100
 
     override fun isApplicableUrlInternal(vcsUrl: String) =
         suppressInput {
