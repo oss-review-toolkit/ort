@@ -6,7 +6,7 @@ repository:
     revision: "d302b1e93963c81ed511e072a52e95251b5d078b"
     path: ""
   vcs_processed:
-    type: "git"
+    type: "Git"
     url: "https://github.com/soc/directories-jvm.git"
     revision: "d302b1e93963c81ed511e072a52e95251b5d078b"
     path: ""
@@ -33,12 +33,12 @@ analyzer:
       declared_licenses_processed:
         spdx_expression: "MPL-2.0"
       vcs:
-        type: "git"
+        type: "Git"
         url: "git@github.com:soc/directories-jvm.git"
         revision: ""
         path: ""
       vcs_processed:
-        type: "git"
+        type: "Git"
         url: "https://github.com/soc/directories-jvm.git"
         revision: "d302b1e93963c81ed511e072a52e95251b5d078b"
         path: ""
@@ -73,12 +73,12 @@ analyzer:
             value: "c7c1394bbc5718aa256557544d891b3842825a8d"
             algorithm: "SHA-1"
         vcs:
-          type: "git"
+          type: "Git"
           url: "git@github.com:sbt/junit-interface.git"
           revision: ""
           path: ""
         vcs_processed:
-          type: "git"
+          type: "Git"
           url: "ssh://git@github.com/sbt/junit-interface.git"
           revision: ""
           path: ""
@@ -104,12 +104,12 @@ analyzer:
             value: "a6c32b40bf3d76eca54e3c601e5d1470c86fcdfa"
             algorithm: "SHA-1"
         vcs:
-          type: "git"
+          type: "Git"
           url: "git://github.com/junit-team/junit.git"
           revision: "r4.12"
           path: ""
         vcs_processed:
-          type: "git"
+          type: "Git"
           url: "https://github.com/junit-team/junit.git"
           revision: "r4.12"
           path: ""
@@ -136,12 +136,12 @@ analyzer:
             value: "1dc37250fbc78e23a65a67fbbaf71d2e9cbc3c0b"
             algorithm: "SHA-1"
         vcs:
-          type: "git"
+          type: "Git"
           url: "git@github.com:hamcrest/JavaHamcrest.git"
           revision: ""
           path: ""
         vcs_processed:
-          type: "git"
+          type: "Git"
           url: "ssh://git@github.com/hamcrest/JavaHamcrest.git"
           revision: ""
           path: ""

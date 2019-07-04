@@ -20,7 +20,9 @@
 package com.here.ort.downloader
 
 import com.here.ort.model.VcsInfo
+import com.here.ort.model.VcsType
 import com.here.ort.utils.filterVersionNames
+
 import java.io.File
 import java.io.IOException
 
@@ -28,7 +30,7 @@ import java.io.IOException
  * A class representing a local VCS working tree. The passed [workingDir] does not necessarily need to be the
  * root directory of the tree. The root directory can be determined by calling [getRootPath].
  */
-abstract class WorkingTree(val workingDir: File, val vcsType: String) {
+abstract class WorkingTree(val workingDir: File, val vcsType: VcsType) {
 
     /**
      * Conveniently return all VCS information about how this working tree was created, so it could be easily
