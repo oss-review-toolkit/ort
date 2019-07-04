@@ -11,7 +11,7 @@ project:
     revision: ""
     path: ""
   vcs_processed:
-    type: "git"
+    type: "Git"
     url: "https://github.com/QMSTR/qmstr.git"
     revision: "0cd17d10b931c9108450ca5a68d4f85b6e4953ef"
     path: ""
@@ -67,7 +67,7 @@ packages:
       revision: ""
       path: ""
     vcs_processed:
-      type: "git"
+      type: "Git"
       url: "https://github.com/dgraph-io/dgo.git"
       revision: "939c270eac93a70e63162abd53f78dbc9e928ff6"
       path: ""
@@ -95,7 +95,7 @@ packages:
       revision: ""
       path: ""
     vcs_processed:
-      type: "git"
+      type: "Git"
       url: "https://github.com/gogo/protobuf.git"
       revision: "342cbe0a04158f6dcb03ca0079991a51a4248c02"
       path: ""
@@ -123,7 +123,7 @@ packages:
       revision: ""
       path: ""
     vcs_processed:
-      type: "git"
+      type: "Git"
       url: "https://github.com/golang/protobuf.git"
       revision: "925541529c1fa6821df4e44ce2723319eb2be768"
       path: ""
@@ -151,7 +151,7 @@ packages:
       revision: ""
       path: ""
     vcs_processed:
-      type: "git"
+      type: "Git"
       url: "https://github.com/inconshreveable/mousetrap.git"
       revision: "76626ae9c91c4f2a10f34cad8ce83ea42c93bb75"
       path: ""
@@ -179,7 +179,7 @@ packages:
       revision: ""
       path: ""
     vcs_processed:
-      type: "git"
+      type: "Git"
       url: "https://github.com/pkg/errors.git"
       revision: "645ef00459ed84a119197bfb8d8205042c6df63d"
       path: ""
@@ -207,7 +207,7 @@ packages:
       revision: ""
       path: ""
     vcs_processed:
-      type: "git"
+      type: "Git"
       url: "https://github.com/spf13/cobra.git"
       revision: "7b2c5ac9fc04fc5efafb60700713d4fa609b777b"
       path: ""
@@ -235,7 +235,7 @@ packages:
       revision: ""
       path: ""
     vcs_processed:
-      type: "git"
+      type: "Git"
       url: "https://github.com/spf13/pflag.git"
       revision: "e57e3eeb33f795204c1ca35f56c44f83227c6e66"
       path: ""
@@ -263,7 +263,7 @@ packages:
       revision: ""
       path: ""
     vcs_processed:
-      type: "git"
+      type: "Git"
       url: "https://go.googlesource.com/net"
       revision: "b417086c80e91bfa321ef761574721644b8b9f61"
       path: ""
@@ -291,7 +291,7 @@ packages:
       revision: ""
       path: ""
     vcs_processed:
-      type: "git"
+      type: "Git"
       url: "https://go.googlesource.com/text"
       revision: "e19ae1496984b1c655b8044a65c0300a3c878dd3"
       path: ""
@@ -319,7 +319,7 @@ packages:
       revision: ""
       path: ""
     vcs_processed:
-      type: "git"
+      type: "Git"
       url: "https://github.com/google/go-genproto.git"
       revision: "4eb30f4778eed4c258ba66527a0d4f9ec8a36c45"
       path: ""
@@ -347,7 +347,7 @@ packages:
       revision: ""
       path: ""
     vcs_processed:
-      type: "git"
+      type: "Git"
       url: "https://github.com/grpc/grpc-go.git"
       revision: "6b51017f791ae1cfbec89c52efdf444b13b550ef"
       path: ""
@@ -375,7 +375,7 @@ packages:
       revision: ""
       path: ""
     vcs_processed:
-      type: "git"
+      type: "Git"
       url: "https://gopkg.in/yaml.v2"
       revision: "d670f9405373e636a5a2765eea47fac0c9bc91a4"
       path: ""

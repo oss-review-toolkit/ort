@@ -24,6 +24,7 @@ import com.here.ort.downloader.VersionControlSystem
 import com.here.ort.downloader.vcs.GitRepo
 import com.here.ort.model.Package
 import com.here.ort.model.VcsInfo
+import com.here.ort.model.VcsType
 import com.here.ort.model.yamlMapper
 import com.here.ort.utils.safeDeleteRecursively
 import com.here.ort.utils.test.DEFAULT_ANALYZER_CONFIGURATION
@@ -46,7 +47,7 @@ class GitRepoTest : StringSpec() {
     override fun beforeSpec(spec: Spec) {
         outputDir = createTempDir()
 
-        val vcs = VcsInfo("GitRepo", REPO_URL, REPO_REV, path = REPO_MANIFEST)
+        val vcs = VcsInfo(VcsType.GIT_REPO, REPO_URL, REPO_REV, path = REPO_MANIFEST)
         val pkg = Package.EMPTY.copy(vcsProcessed = vcs)
 
         GitRepo().download(pkg, outputDir)

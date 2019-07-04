@@ -6,7 +6,7 @@ repository:
     revision: "31687c099ea6d645e819ef9d6ac9fc4c757a96bc"
     path: ""
   vcs_processed:
-    type: "git"
+    type: "Git"
     url: "https://github.com/pbassiner/sbt-multi-project-example.git"
     revision: "31687c099ea6d645e819ef9d6ac9fc4c757a96bc"
     path: ""
@@ -36,7 +36,7 @@ analyzer:
         revision: ""
         path: ""
       vcs_processed:
-        type: "git"
+        type: "Git"
         url: "https://github.com/pbassiner/sbt-multi-project-example.git"
         revision: "31687c099ea6d645e819ef9d6ac9fc4c757a96bc"
         path: "common"
@@ -88,7 +88,7 @@ analyzer:
         revision: ""
         path: ""
       vcs_processed:
-        type: "git"
+        type: "Git"
         url: "https://github.com/pbassiner/sbt-multi-project-example.git"
         revision: "31687c099ea6d645e819ef9d6ac9fc4c757a96bc"
         path: "multi1"
@@ -148,7 +148,7 @@ analyzer:
         revision: ""
         path: ""
       vcs_processed:
-        type: "git"
+        type: "Git"
         url: "https://github.com/pbassiner/sbt-multi-project-example.git"
         revision: "31687c099ea6d645e819ef9d6ac9fc4c757a96bc"
         path: "multi2"
@@ -209,7 +209,7 @@ analyzer:
         revision: ""
         path: ""
       vcs_processed:
-        type: "git"
+        type: "Git"
         url: "https://github.com/pbassiner/sbt-multi-project-example.git"
         revision: "31687c099ea6d645e819ef9d6ac9fc4c757a96bc"
         path: ""
@@ -240,12 +240,12 @@ analyzer:
             value: "cfd5385e0c5ed1c8a5dce57d86e79cf357153a64"
             algorithm: "SHA-1"
         vcs:
-          type: "git"
+          type: "Git"
           url: "git@github.com:ceki/logback.git"
           revision: ""
           path: ""
         vcs_processed:
-          type: "git"
+          type: "Git"
           url: "ssh://git@github.com/ceki/logback.git"
           revision: ""
           path: ""
@@ -271,12 +271,12 @@ analyzer:
             value: "3ebabe69eba0196af9ad3a814f723fb720b9101e"
             algorithm: "SHA-1"
         vcs:
-          type: "git"
+          type: "Git"
           url: "git@github.com:ceki/logback.git"
           revision: ""
           path: ""
         vcs_processed:
-          type: "git"
+          type: "Git"
           url: "ssh://git@github.com/ceki/logback.git"
           revision: ""
           path: ""
@@ -301,12 +301,12 @@ analyzer:
             value: "6d83fa4fa6d25b1e8d8cd9d9d551c05c745633b1"
             algorithm: "SHA-1"
         vcs:
-          type: "git"
+          type: "Git"
           url: "git@github.com:milessabin/shapeless.git"
           revision: ""
           path: ""
         vcs_processed:
-          type: "git"
+          type: "Git"
           url: "ssh://git@github.com/milessabin/shapeless.git"
           revision: ""
           path: ""
@@ -332,12 +332,12 @@ analyzer:
             value: "29a1a95363d497e856c0a7d682e4f7973e334068"
             algorithm: "SHA-1"
         vcs:
-          type: "git"
+          type: "Git"
           url: "git@github.com:FasterXML/jackson-annotations.git"
           revision: "jackson-annotations-2.8.0"
           path: ""
         vcs_processed:
-          type: "git"
+          type: "Git"
           url: "ssh://git@github.com/FasterXML/jackson-annotations.git"
           revision: "jackson-annotations-2.8.0"
           path: ""
@@ -362,12 +362,12 @@ analyzer:
             value: "8cf3613202ddcd495137f8cb944e2da69964a641"
             algorithm: "SHA-1"
         vcs:
-          type: "git"
+          type: "Git"
           url: "git@github.com:FasterXML/jackson-core.git"
           revision: "jackson-core-2.8.9"
           path: ""
         vcs_processed:
-          type: "git"
+          type: "Git"
           url: "ssh://git@github.com/FasterXML/jackson-core.git"
           revision: "jackson-core-2.8.9"
           path: ""
@@ -393,12 +393,12 @@ analyzer:
             value: "98e1b4171628d8f230f6a60b248de84ed04fab0d"
             algorithm: "SHA-1"
         vcs:
-          type: "git"
+          type: "Git"
           url: "git@github.com:FasterXML/jackson-databind.git"
           revision: "jackson-databind-2.8.9"
           path: ""
         vcs_processed:
-          type: "git"
+          type: "Git"
           url: "ssh://git@github.com/FasterXML/jackson-databind.git"
           revision: "jackson-databind-2.8.9"
           path: ""
@@ -423,12 +423,12 @@ analyzer:
             value: "37d333798ca15a03f5dfbb02f133d5b6b8e57b8c"
             algorithm: "SHA-1"
         vcs:
-          type: "git"
+          type: "Git"
           url: "git@github.com:julien-truffaut/Monocle.git"
           revision: ""
           path: ""
         vcs_processed:
-          type: "git"
+          type: "Git"
           url: "ssh://git@github.com/julien-truffaut/Monocle.git"
           revision: ""
           path: ""
@@ -453,12 +453,12 @@ analyzer:
             value: "e7ce64d7973ad64f3fa872b931a31c8c25de59b3"
             algorithm: "SHA-1"
         vcs:
-          type: "git"
+          type: "Git"
           url: "git@github.com:julien-truffaut/Monocle.git"
           revision: ""
           path: ""
         vcs_processed:
-          type: "git"
+          type: "Git"
           url: "ssh://git@github.com/julien-truffaut/Monocle.git"
           revision: ""
           path: ""
@@ -483,12 +483,12 @@ analyzer:
             value: "7411f96540756236648b48347827b6ba2622e5e0"
             algorithm: "SHA-1"
         vcs:
-          type: "git"
+          type: "Git"
           url: "git@github.com:pureconfig/pureconfig.git"
           revision: ""
           path: ""
         vcs_processed:
-          type: "git"
+          type: "Git"
           url: "ssh://git@github.com/pureconfig/pureconfig.git"
           revision: ""
           path: ""
@@ -513,12 +513,12 @@ analyzer:
             value: "fa6de3ab2dd82543fb37288626687a9a6c1a67a2"
             algorithm: "SHA-1"
         vcs:
-          type: "git"
+          type: "Git"
           url: "git@github.com:pureconfig/pureconfig.git"
           revision: ""
           path: ""
         vcs_processed:
-          type: "git"
+          type: "Git"
           url: "ssh://git@github.com/pureconfig/pureconfig.git"
           revision: ""
           path: ""
@@ -543,12 +543,12 @@ analyzer:
             value: "9642cf6f2a774d781e2f2a2e5de152971bfd714e"
             algorithm: "SHA-1"
         vcs:
-          type: "git"
+          type: "Git"
           url: "git@github.com:akka/akka.git"
           revision: ""
           path: ""
         vcs_processed:
-          type: "git"
+          type: "Git"
           url: "ssh://git@github.com/akka/akka.git"
           revision: ""
           path: ""
@@ -573,12 +573,12 @@ analyzer:
             value: "14459df7523aea2cfd04080fe88eccd20897bcc5"
             algorithm: "SHA-1"
         vcs:
-          type: "git"
+          type: "Git"
           url: "git@github.com:akka/akka.git"
           revision: ""
           path: ""
         vcs_processed:
-          type: "git"
+          type: "Git"
           url: "ssh://git@github.com/akka/akka.git"
           revision: ""
           path: ""
@@ -603,12 +603,12 @@ analyzer:
             value: "a5f760917b60283e37c84bf3db2aeaf976980ad3"
             algorithm: "SHA-1"
         vcs:
-          type: "git"
+          type: "Git"
           url: "git://github.com/typesafehub/scala-logging.git"
           revision: ""
           path: ""
         vcs_processed:
-          type: "git"
+          type: "Git"
           url: "https://github.com/typesafehub/scala-logging.git"
           revision: ""
           path: ""
@@ -633,12 +633,12 @@ analyzer:
             value: "a27878630ff503b63ed25ff2a25fa8ef888740b3"
             algorithm: "SHA-1"
         vcs:
-          type: "git"
+          type: "Git"
           url: "git://github.com/typesafehub/config.git"
           revision: ""
           path: ""
         vcs_processed:
-          type: "git"
+          type: "Git"
           url: "https://github.com/typesafehub/config.git"
           revision: ""
           path: ""
@@ -663,12 +663,12 @@ analyzer:
             value: "1baaec9149929d0970330aa80aca73e3f1f15624"
             algorithm: "SHA-1"
         vcs:
-          type: "git"
+          type: "Git"
           url: "git://github.com/typesafehub/ssl-config.git"
           revision: ""
           path: ""
         vcs_processed:
-          type: "git"
+          type: "Git"
           url: "https://github.com/typesafehub/ssl-config.git"
           revision: ""
           path: ""
@@ -695,12 +695,12 @@ analyzer:
             value: "8b889d5eb55aabfa5d9aa9cad95529668f3edb2b"
             algorithm: "SHA-1"
         vcs:
-          type: "git"
+          type: "Git"
           url: "git@github.com:logstash/logstash-logback-encoder.git"
           revision: "logstash-logback-encoder-4.11"
           path: ""
         vcs_processed:
-          type: "git"
+          type: "Git"
           url: "ssh://git@github.com/logstash/logstash-logback-encoder.git"
           revision: "logstash-logback-encoder-4.11"
           path: ""
@@ -725,12 +725,12 @@ analyzer:
             value: "af471e34e448bd4f1c183e9b26c85679be11035c"
             algorithm: "SHA-1"
         vcs:
-          type: "git"
+          type: "Git"
           url: "git@github.com:reactive-streams/reactive-streams.git"
           revision: ""
           path: ""
         vcs_processed:
-          type: "git"
+          type: "Git"
           url: "ssh://git@github.com/reactive-streams/reactive-streams.git"
           revision: ""
           path: ""
@@ -755,12 +755,12 @@ analyzer:
             value: "0a33ce48278b9e3bbea8aed726e3c0abad3afadd"
             algorithm: "SHA-1"
         vcs:
-          type: "git"
+          type: "Git"
           url: "git://github.com/scala/scala-java8-compat.git"
           revision: ""
           path: ""
         vcs_processed:
-          type: "git"
+          type: "Git"
           url: "https://github.com/scala/scala-java8-compat.git"
           revision: ""
           path: ""
@@ -785,12 +785,12 @@ analyzer:
             value: "9ec2f46c07d355853654af38e8b06e15ccca8cd0"
             algorithm: "SHA-1"
         vcs:
-          type: "git"
+          type: "Git"
           url: "git://github.com/scala/scala-parser-combinators.git"
           revision: ""
           path: ""
         vcs_processed:
-          type: "git"
+          type: "Git"
           url: "https://github.com/scala/scala-parser-combinators.git"
           revision: ""
           path: ""
@@ -815,12 +815,12 @@ analyzer:
             value: "d12864d1a73aa540f7b624c8a92a5f48783c342c"
             algorithm: "SHA-1"
         vcs:
-          type: "git"
+          type: "Git"
           url: "git://github.com/scala/scala-xml.git"
           revision: ""
           path: ""
         vcs_processed:
-          type: "git"
+          type: "Git"
           url: "https://github.com/scala/scala-xml.git"
           revision: ""
           path: ""
@@ -845,12 +845,12 @@ analyzer:
             value: "b8fe133c260f72b7fe9889195e19efeeab1b8087"
             algorithm: "SHA-1"
         vcs:
-          type: "git"
+          type: "Git"
           url: "git://github.com/scala/scala.git"
           revision: ""
           path: ""
         vcs_processed:
-          type: "git"
+          type: "Git"
           url: "https://github.com/scala/scala.git"
           revision: ""
           path: ""
@@ -875,12 +875,12 @@ analyzer:
             value: "499c91b0a64bc706eee174481a3b7dde81b3591d"
             algorithm: "SHA-1"
         vcs:
-          type: "git"
+          type: "Git"
           url: "git://github.com/scala/scala.git"
           revision: ""
           path: ""
         vcs_processed:
-          type: "git"
+          type: "Git"
           url: "https://github.com/scala/scala.git"
           revision: ""
           path: ""
@@ -905,12 +905,12 @@ analyzer:
             value: "a8808be417014e233b25ee44439f725e1f5e92a4"
             algorithm: "SHA-1"
         vcs:
-          type: "git"
+          type: "Git"
           url: "git://github.com/scala/scala.git"
           revision: ""
           path: ""
         vcs_processed:
-          type: "git"
+          type: "Git"
           url: "https://github.com/scala/scala.git"
           revision: ""
           path: ""
@@ -966,12 +966,12 @@ analyzer:
             value: "d0e1376902de65c7fa327f455b61d5d71957d78e"
             algorithm: "SHA-1"
         vcs:
-          type: "git"
+          type: "Git"
           url: "git@github.com:rickynils/scalacheck.git"
           revision: ""
           path: ""
         vcs_processed:
-          type: "git"
+          type: "Git"
           url: "ssh://git@github.com/rickynils/scalacheck.git"
           revision: ""
           path: ""
@@ -996,12 +996,12 @@ analyzer:
             value: "9f7f02217c7d2f14c6b1982493c39243a20b749d"
             algorithm: "SHA-1"
         vcs:
-          type: "git"
+          type: "Git"
           url: "git@github.com:scalatest/scalatest.git"
           revision: ""
           path: ""
         vcs_processed:
-          type: "git"
+          type: "Git"
           url: "ssh://git@github.com/scalatest/scalatest.git"
           revision: ""
           path: ""
@@ -1026,12 +1026,12 @@ analyzer:
             value: "ba669c2c9b7092151e2a19e975b1bf2a2e7a5fda"
             algorithm: "SHA-1"
         vcs:
-          type: "git"
+          type: "Git"
           url: "git@github.com:scalatest/scalatest.git"
           revision: ""
           path: ""
         vcs_processed:
-          type: "git"
+          type: "Git"
           url: "ssh://git@github.com/scalatest/scalatest.git"
           revision: ""
           path: ""
@@ -1056,12 +1056,12 @@ analyzer:
             value: "c94295a434f26b5650ec0fcbf93c9d2c7aada88e"
             algorithm: "SHA-1"
         vcs:
-          type: "git"
+          type: "Git"
           url: "git@github.com:scalaz/scalaz.git"
           revision: ""
           path: ""
         vcs_processed:
-          type: "git"
+          type: "Git"
           url: "ssh://git@github.com/scalaz/scalaz.git"
           revision: ""
           path: ""
@@ -1086,12 +1086,12 @@ analyzer:
             value: "ffd0827a7c67d5915b7dc611afbda56a1f247191"
             algorithm: "SHA-1"
         vcs:
-          type: "git"
+          type: "Git"
           url: "git@github.com:qos-ch/slf4j.git"
           revision: ""
           path: ""
         vcs_processed:
-          type: "git"
+          type: "Git"
           url: "ssh://git@github.com/qos-ch/slf4j.git"
           revision: ""
           path: ""
@@ -1116,12 +1116,12 @@ analyzer:
             value: "962153db4a9ea71b79d047dfd1b2a0d80d8f4739"
             algorithm: "SHA-1"
         vcs:
-          type: "git"
+          type: "Git"
           url: "git@github.com:qos-ch/slf4j.git"
           revision: ""
           path: ""
         vcs_processed:
-          type: "git"
+          type: "Git"
           url: "ssh://git@github.com/qos-ch/slf4j.git"
           revision: ""
           path: ""
@@ -1146,12 +1146,12 @@ analyzer:
             value: "ade6d6ec81975cf514b0f9e2061614f2799cfe97"
             algorithm: "SHA-1"
         vcs:
-          type: "git"
+          type: "Git"
           url: "git@github.com:milessabin/macro-compat.git"
           revision: ""
           path: ""
         vcs_processed:
-          type: "git"
+          type: "Git"
           url: "ssh://git@github.com/milessabin/macro-compat.git"
           revision: ""
           path: ""

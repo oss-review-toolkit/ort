@@ -26,6 +26,7 @@ import com.here.ort.model.Identifier
 import com.here.ort.model.Package
 import com.here.ort.model.RemoteArtifact
 import com.here.ort.model.VcsInfo
+import com.here.ort.model.VcsType
 
 import java.io.File
 
@@ -43,7 +44,7 @@ class GradleIntegrationTest : AbstractIntegrationSpec() {
         binaryArtifact = RemoteArtifact.EMPTY,
         sourceArtifact = RemoteArtifact.EMPTY,
         vcs = VcsInfo(
-            type = "Git",
+            type = VcsType.GIT,
             url = "https://github.com/gradle/gradle.git",
             revision = "v4.4.0"
         )

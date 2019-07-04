@@ -13,7 +13,7 @@ project:
     revision: ""
     path: ""
   vcs_processed:
-    type: "git"
+    type: "Git"
     url: "<REPLACE_URL>"
     revision: "<REPLACE_REVISION>"
     path: "<REPLACE_PATH>"
@@ -79,12 +79,12 @@ packages:
         value: ""
         algorithm: ""
     vcs:
-      type: "git"
+      type: "Git"
       url: "https://github.com/Polymer/polymer.git"
       revision: "a474d40c843e2b00a5c0cea818c36b1a89e2a66e"
       path: ""
     vcs_processed:
-      type: "git"
+      type: "Git"
       url: "https://github.com/Polymer/polymer.git"
       revision: "a474d40c843e2b00a5c0cea818c36b1a89e2a66e"
       path: ""
@@ -137,12 +137,12 @@ packages:
         value: ""
         algorithm: ""
     vcs:
-      type: "git"
+      type: "Git"
       url: "https://github.com/webcomponents/webcomponentsjs.git"
       revision: "0dc4cd2cb4233e0e63ee8bd3ee5db90035856933"
       path: ""
     vcs_processed:
-      type: "git"
+      type: "Git"
       url: "https://github.com/webcomponents/webcomponentsjs.git"
       revision: "0dc4cd2cb4233e0e63ee8bd3ee5db90035856933"
       path: ""

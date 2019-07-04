@@ -39,6 +39,7 @@ import com.here.ort.model.ProjectAnalyzerResult
 import com.here.ort.model.RemoteArtifact
 import com.here.ort.model.Scope
 import com.here.ort.model.VcsInfo
+import com.here.ort.model.VcsType
 import com.here.ort.model.config.AnalyzerConfiguration
 import com.here.ort.model.config.RepositoryConfiguration
 import com.here.ort.model.jsonMapper
@@ -400,8 +401,8 @@ open class Npm(
             val type = repo["type"].textValueOrEmpty()
             val url = repo.textValue() ?: repo["url"].textValueOrEmpty()
             val path = repo["directory"].textValueOrEmpty()
-            VcsInfo(type, expandShortcutURL(url), head, path = path)
-        } ?: VcsInfo("", "", head)
+            VcsInfo(VcsType(type), expandShortcutURL(url), head, path = path)
+        } ?: VcsInfo(VcsType.NONE, "", head)
     }
 
     private fun buildTree(

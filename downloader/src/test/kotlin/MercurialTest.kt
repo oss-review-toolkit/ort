@@ -20,6 +20,7 @@
 package com.here.ort.downloader
 
 import com.here.ort.downloader.vcs.Mercurial
+import com.here.ort.model.VcsType
 import com.here.ort.utils.getUserOrtDirectory
 import com.here.ort.utils.safeDeleteRecursively
 import com.here.ort.utils.unpack
@@ -69,7 +70,7 @@ class MercurialTest : StringSpec() {
         "Detected Mercurial working tree information is correct" {
             val workingTree = hg.getWorkingTree(zipContentDir)
 
-            workingTree.vcsType shouldBe "Mercurial"
+            workingTree.vcsType shouldBe VcsType.MERCURIAL
             workingTree.isValid() shouldBe true
             workingTree.getRemoteUrl() shouldBe "https://bitbucket.org/facebook/lz4revlog"
             workingTree.getRevision() shouldBe "422ca71c35132f1f55d20a13355708aec7669b50"

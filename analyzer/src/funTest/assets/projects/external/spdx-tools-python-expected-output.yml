@@ -14,7 +14,7 @@ project:
     revision: ""
     path: ""
   vcs_processed:
-    type: "git"
+    type: "Git"
     url: "https://github.com/spdx/tools-python.git"
     revision: "a48022e65a8897d0e4f2e93d8e53695d2c13ea23"
     path: ""
@@ -56,7 +56,7 @@ packages:
       revision: ""
       path: ""
     vcs_processed:
-      type: "git"
+      type: "Git"
       url: "https://github.com/gweis/isodate.git"
       revision: ""
       path: ""
@@ -116,7 +116,7 @@ packages:
       revision: ""
       path: ""
     vcs_processed:
-      type: "git"
+      type: "Git"
       url: "https://github.com/pyparsing/pyparsing.git"
       revision: ""
       path: ""
@@ -148,7 +148,7 @@ packages:
       revision: ""
       path: ""
     vcs_processed:
-      type: "git"
+      type: "Git"
       url: "https://github.com/RDFLib/rdflib.git"
       revision: ""
       path: ""
@@ -178,7 +178,7 @@ packages:
       revision: ""
       path: ""
     vcs_processed:
-      type: "git"
+      type: "Git"
       url: "https://github.com/benjaminp/six.git"
       revision: ""
       path: ""

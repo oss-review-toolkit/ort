@@ -25,6 +25,7 @@ import com.here.ort.downloader.DownloadException
 import com.here.ort.downloader.WorkingTree
 import com.here.ort.model.Package
 import com.here.ort.model.VcsInfo
+import com.here.ort.model.VcsType
 import com.here.ort.utils.Os
 import com.here.ort.utils.ProcessCapture
 import com.here.ort.utils.getPathFromEnvironment
@@ -41,7 +42,7 @@ import java.io.IOException
 const val GIT_REPO_BRANCH = "master"
 
 class GitRepo : GitBase() {
-    override val aliases = listOf("git-repo", "repo")
+    override val type = VcsType.GIT_REPO
     override val priority = 50
 
     override fun getWorkingTree(vcsDirectory: File): WorkingTree {
