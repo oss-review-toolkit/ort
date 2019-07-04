@@ -55,7 +55,7 @@ pipeline {
         stage('Run ORT analyzer') {
             steps {
                 sh 'rm -fr project/ort/analyzer'
-                sh 'docker/run.sh "-v ${WORKSPACE}/project:/project" --info analyze -f JSON,YAML -i /project -o /project/ort/analyzer'
+                sh 'docker/run.sh "-v $WORKSPACE/project:/project" --info analyze -f JSON,YAML -i /project -o /project/ort/analyzer'
             }
 
             post {
@@ -71,7 +71,7 @@ pipeline {
         stage('Run ORT scanner') {
             steps {
                 sh 'rm -fr project/ort/scanner'
-                sh 'docker/run.sh "-v ${WORKSPACE}/project:/project" --info scan -f JSON,YAML -a /project/ort/analyzer/analyzer-result.yml -o /project/ort/scanner'
+                sh 'docker/run.sh "-v $WORKSPACE/project:/project" --info scan -f JSON,YAML -a /project/ort/analyzer/analyzer-result.yml -o /project/ort/scanner'
             }
 
             post {
@@ -87,7 +87,7 @@ pipeline {
         stage('Run ORT reporter') {
             steps {
                 sh 'rm -fr project/ort/reporter'
-                sh 'docker/run.sh "-v ${WORKSPACE}/project:/project" --info report -f StaticHTML,WebApp -i /project/ort/scanner/scan-result.yml -o /project/ort/reporter'
+                sh 'docker/run.sh "-v $WORKSPACE/project:/project" --info report -f StaticHTML,WebApp -i /project/ort/scanner/scan-result.yml -o /project/ort/reporter'
             }
 
             post {
