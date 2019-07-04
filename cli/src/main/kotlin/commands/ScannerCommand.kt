@@ -39,6 +39,7 @@ import com.here.ort.scanner.ScannerFactory
 import com.here.ort.scanner.TOOL_NAME
 import com.here.ort.scanner.scanners.ScanCode
 import com.here.ort.scanner.storages.LocalFileStorage
+import com.here.ort.scanner.storages.SCAN_RESULTS_FILE_NAME
 import com.here.ort.utils.PARAMETER_ORDER_MANDATORY
 import com.here.ort.utils.PARAMETER_ORDER_OPTIONAL
 import com.here.ort.utils.expandTilde
@@ -157,7 +158,16 @@ object ScannerCommand : CommandWithHelp() {
         } ?: ScannerConfiguration()
 
         // By default use a file based scan results storage.
-        ScanResultsStorage.storage = LocalFileStorage(getUserOrtDirectory().resolve(TOOL_NAME))
+        val localFileStorage = LocalFileStorage(getUserOrtDirectory().resolve(TOOL_NAME))
+
+        log.debug {
+            val fileCount = localFileStorage.scanResultsDirectory.walk().filter {
+                it.isFile && it.name == SCAN_RESULTS_FILE_NAME
+            }.count()
+            "Local file storage has $fileCount scan results files."
+        }
+
+        ScanResultsStorage.storage = localFileStorage
 
         // Allow to override the default scan results storage.
         config.artifactoryStorage?.let {
