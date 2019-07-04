@@ -47,7 +47,7 @@ class PackageTest : StringSpec() {
                 homepageUrl = "homepageUrl",
                 binaryArtifact = RemoteArtifact("url", Hash.create("hash")),
                 sourceArtifact = RemoteArtifact("url", Hash.create("hash")),
-                vcs = VcsInfo("type", "url", "revision")
+                vcs = VcsInfo(VcsType("type"), "url", "revision")
             )
 
             val other = Package(
@@ -62,7 +62,7 @@ class PackageTest : StringSpec() {
                 homepageUrl = "other homepageUrl",
                 binaryArtifact = RemoteArtifact("other url", Hash.create("other hash")),
                 sourceArtifact = RemoteArtifact("other url", Hash.create("other hash")),
-                vcs = VcsInfo("other type", "other url", "other revision")
+                vcs = VcsInfo(VcsType("other type"), "other url", "other revision")
             )
 
             val diff = pkg.diff(other)
@@ -88,7 +88,7 @@ class PackageTest : StringSpec() {
                 homepageUrl = "homepageUrl",
                 binaryArtifact = RemoteArtifact("url", Hash.create("hash")),
                 sourceArtifact = RemoteArtifact("url", Hash.create("hash")),
-                vcs = VcsInfo("type", "url", "revision")
+                vcs = VcsInfo(VcsType("type"), "url", "revision")
             )
 
             val diff = pkg.diff(pkg)

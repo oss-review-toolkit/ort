@@ -20,6 +20,7 @@
 package com.here.ort.analyzer
 
 import com.here.ort.model.VcsInfo
+import com.here.ort.model.VcsType
 
 import io.kotlintest.shouldBe
 import io.kotlintest.specs.WordSpec
@@ -38,7 +39,7 @@ class MavenSupportTest : WordSpec({
             }
 
             MavenSupport.parseVcsInfo(mavenProject) shouldBe VcsInfo(
-                type = "git-repo",
+                type = VcsType.GIT_REPO,
                 url = "ssh://host.com/project/foo",
                 revision = "v1.2.3",
                 path = "path/to/manifest.xml"

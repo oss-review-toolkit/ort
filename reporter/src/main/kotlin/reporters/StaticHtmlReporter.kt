@@ -409,7 +409,7 @@ class StaticHtmlReporter : Reporter() {
                 tbody {
                     tr {
                         td { +"Type" }
-                        td { +vcsInfo.type }
+                        td { +vcsInfo.type.toString() }
                     }
                     tr {
                         td { +"URL" }

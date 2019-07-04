@@ -22,6 +22,7 @@ package com.here.ort.downloader.vcs
 import com.here.ort.model.Identifier
 import com.here.ort.model.Package
 import com.here.ort.model.VcsInfo
+import com.here.ort.model.VcsType
 import com.here.ort.utils.safeDeleteRecursively
 import com.here.ort.utils.test.ExpensiveTag
 
@@ -53,7 +54,7 @@ class MercurialDownloadTest : StringSpec() {
 
     init {
         "Mercurial can download a given revision".config(tags = setOf(ExpensiveTag)) {
-            val pkg = Package.EMPTY.copy(vcsProcessed = VcsInfo("Mercurial", REPO_URL, REPO_REV))
+            val pkg = Package.EMPTY.copy(vcsProcessed = VcsInfo(VcsType.MERCURIAL, REPO_URL, REPO_REV))
             val expectedFiles = listOf(
                 ".hg",
                 ".hgsub",
@@ -76,7 +77,9 @@ class MercurialDownloadTest : StringSpec() {
 
         "Mercurial can download only a single path"
             .config(enabled = hg.isAtLeastVersion("4.3"), tags = setOf(ExpensiveTag)) {
-                val pkg = Package.EMPTY.copy(vcsProcessed = VcsInfo("Mercurial", REPO_URL, REPO_REV, path = REPO_PATH))
+                val pkg = Package.EMPTY.copy(
+                    vcsProcessed = VcsInfo(VcsType.MERCURIAL, REPO_URL, REPO_REV, path = REPO_PATH)
+                )
                 val expectedFiles = listOf(
                     File(".hgsub"), // We always get these configuration files, if present.
                     File(".hgsubstate"),
@@ -108,7 +111,7 @@ class MercurialDownloadTest : StringSpec() {
         "Mercurial can download based on a version".config(tags = setOf(ExpensiveTag)) {
             val pkg = Package.EMPTY.copy(
                 id = Identifier("Test:::$REPO_VERSION"),
-                vcsProcessed = VcsInfo("Mercurial", REPO_URL, "")
+                vcsProcessed = VcsInfo(VcsType.MERCURIAL, REPO_URL, "")
             )
 
             val workingTree = hg.download(pkg, outputDir)
@@ -121,7 +124,7 @@ class MercurialDownloadTest : StringSpec() {
             .config(enabled = hg.isAtLeastVersion("4.3"), tags = setOf(ExpensiveTag)) {
                 val pkg = Package.EMPTY.copy(
                     id = Identifier("Test:::$REPO_VERSION"),
-                    vcsProcessed = VcsInfo("Mercurial", REPO_URL, "", path = REPO_PATH_FOR_VERSION)
+                    vcsProcessed = VcsInfo(VcsType.MERCURIAL, REPO_URL, "", path = REPO_PATH_FOR_VERSION)
                 )
                 val expectedFiles = listOf(
                     File(".hgsub"), // We always get these configuration files, if present.

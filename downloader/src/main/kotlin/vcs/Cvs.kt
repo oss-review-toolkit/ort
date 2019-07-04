@@ -25,6 +25,7 @@ import com.here.ort.downloader.DownloadException
 import com.here.ort.downloader.VersionControlSystem
 import com.here.ort.downloader.WorkingTree
 import com.here.ort.model.Package
+import com.here.ort.model.VcsType
 import com.here.ort.utils.CommandLineTool
 import com.here.ort.utils.ProcessCapture
 import com.here.ort.utils.log
@@ -43,6 +44,7 @@ typealias CvsFileRevisions = List<Pair<String, String>>
 class Cvs : VersionControlSystem(), CommandLineTool {
     private val versionRegex = Pattern.compile("Concurrent Versions System \\(CVS\\) (?<version>[\\d.]+).+")
 
+    override val type = VcsType.CVS
     override val latestRevisionNames = emptyList<String>()
 
     override fun command(workingDir: File?) = "cvs"
