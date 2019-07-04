@@ -48,9 +48,6 @@ import java.time.Instant
 
 import okhttp3.Request
 
-import okio.buffer
-import okio.sink
-
 class BoyterLc(name: String, config: ScannerConfiguration) : LocalScanner(name, config) {
     class Factory : AbstractScannerFactory<BoyterLc>("BoyterLc") {
         override fun create(config: ScannerConfiguration) = BoyterLc(scannerName, config)
@@ -89,7 +86,8 @@ class BoyterLc(name: String, config: ScannerConfiguration) : LocalScanner(name, 
             else -> throw IllegalArgumentException("Unsupported operating system.")
         }
 
-        val url = "https://github.com/boyter/lc/releases/download/v$scannerVersion/lc-$scannerVersion-$platform.zip"
+        val archive = "lc-$scannerVersion-$platform.zip"
+        val url = "https://github.com/boyter/lc/releases/download/v$scannerVersion/$archive"
 
         log.info { "Downloading $scannerName from $url... " }
 
@@ -106,16 +104,10 @@ class BoyterLc(name: String, config: ScannerConfiguration) : LocalScanner(name, 
                 log.info { "Retrieved $scannerName from local cache." }
             }
 
-            val scannerArchive = createTempFile("ort", url.substringAfterLast("/"))
-            scannerArchive.sink().buffer().use { it.writeAll(body.source()) }
-
             val unpackDir = createTempDir("ort", "$scannerName-$scannerVersion").apply { deleteOnExit() }
 
-            log.info { "Unpacking '$scannerArchive' to '$unpackDir'... " }
-            scannerArchive.unpack(unpackDir)
-            if (!scannerArchive.delete()) {
-                log.warn { "Unable to delete temporary file '$scannerArchive'." }
-            }
+            log.info { "Unpacking '$archive' to '$unpackDir'... " }
+            body.byteStream().unpack(archive, unpackDir)
 
             if (!Os.isWindows) {
                 // The Linux version is distributed as a ZIP, but without having the Unix executable mode bits stored.
