@@ -43,7 +43,7 @@ class VcsInfoTest : StringSpec({
 
             val vcsInfo = yamlMapper.readValue<VcsInfo>(yaml)
 
-            vcsInfo.type shouldBe "type"
+            vcsInfo.type shouldBe VcsType("type")
             vcsInfo.url shouldBe "url"
             vcsInfo.revision shouldBe "revision"
             vcsInfo.path shouldBe "path"
@@ -57,7 +57,7 @@ class VcsInfoTest : StringSpec({
 
             val vcsInfo = yamlMapper.readValue<VcsInfo>(yaml)
 
-            vcsInfo.type shouldBe "type"
+            vcsInfo.type shouldBe VcsType("type")
             vcsInfo.url shouldBe ""
             vcsInfo.revision shouldBe ""
             vcsInfo.path shouldBe ""
@@ -71,7 +71,7 @@ class VcsInfoTest : StringSpec({
 
             val vcsInfo = yamlMapper.readValue<VcsInfo>(yaml)
 
-            vcsInfo.type shouldBe ""
+            vcsInfo.type shouldBe VcsType.UNKNOWN
             vcsInfo.url shouldBe ""
             vcsInfo.revision shouldBe ""
             vcsInfo.path shouldBe "path"
@@ -101,13 +101,13 @@ class VcsInfoTest : StringSpec({
     "Merging VcsInfo" should {
         "ignore empty information" {
             val inputA = VcsInfo(
-                type = "",
+                type = VcsType.UNKNOWN,
                 url = "",
                 revision = ""
             )
 
             val inputB = VcsInfo(
-                type = "type",
+                type = VcsType("type"),
                 url = "url",
                 revision = "revision",
                 resolvedRevision = "resolvedRevision",
@@ -115,7 +115,7 @@ class VcsInfoTest : StringSpec({
             )
 
             val output = VcsInfo(
-                type = "type",
+                type = VcsType("type"),
                 url = "url",
                 revision = "revision",
                 resolvedRevision = "resolvedRevision",
@@ -127,20 +127,20 @@ class VcsInfoTest : StringSpec({
 
         "prefer more complete information for GitHub" {
             val inputA = VcsInfo(
-                type = "Git",
+                type = VcsType.GIT,
                 url = "https://github.com/babel/babel.git",
                 revision = "master",
                 path = "packages/babel-cli"
             )
 
             val inputB = VcsInfo(
-                type = "git",
+                type = VcsType.GIT,
                 url = "https://github.com/babel/babel/tree/master/packages/babel-cli.git",
                 revision = ""
             )
 
             val output = VcsInfo(
-                type = "Git",
+                type = VcsType.GIT,
                 url = "https://github.com/babel/babel.git",
                 revision = "master",
                 path = "packages/babel-cli"
@@ -151,19 +151,19 @@ class VcsInfoTest : StringSpec({
 
         "prefer more complete information for GitLab" {
             val inputA = VcsInfo(
-                type = "",
+                type = VcsType.UNKNOWN,
                 url = "https://gitlab.com/rich-harris/rollup-plugin-buble.git",
                 revision = ""
             )
 
             val inputB = VcsInfo(
-                type = "git",
+                type = VcsType.GIT,
                 url = "git+https://gitlab.com/rich-harris/rollup-plugin-buble.git",
                 revision = "9928a569351a80c2f7dc065f61085954daed5312"
             )
 
             val output = VcsInfo(
-                type = "git",
+                type = VcsType.GIT,
                 url = "https://gitlab.com/rich-harris/rollup-plugin-buble.git",
                 revision = "9928a569351a80c2f7dc065f61085954daed5312"
             )
@@ -173,19 +173,19 @@ class VcsInfoTest : StringSpec({
 
         "mix and match empty revision fields" {
             val inputA = VcsInfo(
-                type = "Git",
+                type = VcsType.GIT,
                 url = "https://github.com/chalk/ansi-regex.git",
                 revision = ""
             )
 
             val inputB = VcsInfo(
-                type = "git",
+                type = VcsType.GIT,
                 url = "git+https://github.com/chalk/ansi-regex.git",
                 revision = "7c908e7b4eb6cd82bfe1295e33fdf6d166c7ed85"
             )
 
             val output = VcsInfo(
-                type = "Git",
+                type = VcsType.GIT,
                 url = "https://github.com/chalk/ansi-regex.git",
                 revision = "7c908e7b4eb6cd82bfe1295e33fdf6d166c7ed85"
             )
@@ -195,20 +195,20 @@ class VcsInfoTest : StringSpec({
 
         "mix and match empty revision and path fields" {
             val inputA = VcsInfo(
-                type = "Git",
+                type = VcsType.GIT,
                 url = "ssh://git@github.com/EsotericSoftware/kryo.git",
                 revision = "",
                 path = "kryo-shaded"
             )
 
             val inputB = VcsInfo(
-                type = "git",
+                type = VcsType.GIT,
                 url = "ssh://git@github.com/EsotericSoftware/kryo.git/kryo-shaded",
                 revision = "3a2eb7b3f3f04652e2dc40764c963f2bc99a92f5"
             )
 
             val output = VcsInfo(
-                type = "Git",
+                type = VcsType.GIT,
                 url = "ssh://git@github.com/EsotericSoftware/kryo.git",
                 revision = "3a2eb7b3f3f04652e2dc40764c963f2bc99a92f5",
                 path = "kryo-shaded"

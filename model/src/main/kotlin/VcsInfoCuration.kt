@@ -26,10 +26,10 @@ import com.fasterxml.jackson.annotation.JsonInclude
  */
 data class VcsInfoCuration(
     /**
-     * The name of the VCS type, for example Git, GitRepo, Mercurial or Subversion.
+     * The type of the VCS, for example Git, GitRepo, Mercurial, etc.
      */
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    val type: String? = null,
+    val type: VcsType? = null,
 
     /**
      * The URL to the VCS repository.

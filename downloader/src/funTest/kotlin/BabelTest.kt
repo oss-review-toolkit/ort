@@ -24,6 +24,7 @@ import com.here.ort.model.Identifier
 import com.here.ort.model.Package
 import com.here.ort.model.RemoteArtifact
 import com.here.ort.model.VcsInfo
+import com.here.ort.model.VcsType
 import com.here.ort.utils.normalizeVcsUrl
 import com.here.ort.utils.safeDeleteRecursively
 
@@ -49,7 +50,7 @@ class BabelTest : StringSpec() {
     init {
         "Babel packages should be correctly downloaded" {
             val vcsFromPackage = VcsInfo(
-                type = "git",
+                type = VcsType.GIT,
                 url = "https://github.com/babel/babel/tree/master/packages/babel-cli",
                 revision = ""
             )

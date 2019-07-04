@@ -11,7 +11,7 @@ project:
     revision: ""
     path: ""
   vcs_processed:
-    type: "git"
+    type: "Git"
     url: "<REPLACE_URL>"
     revision: "<REPLACE_REVISION>"
     path: "analyzer/src/funTest/assets/projects/synthetic/gradle-android/app"
@@ -476,12 +476,12 @@ packages:
         value: "0e99b7b608968f16b07104b93e62cb90701174d0"
         algorithm: "SHA-1"
     vcs:
-      type: "git"
+      type: "Git"
       url: "https://github.com/square/okhttp.git"
       revision: "parent-3.10.0"
       path: ""
     vcs_processed:
-      type: "git"
+      type: "Git"
       url: "https://github.com/square/okhttp.git"
       revision: "parent-3.10.0"
       path: ""
@@ -506,12 +506,12 @@ packages:
         value: "e7c96b4fe5651490d8f3c022042940d743a3bdd9"
         algorithm: "SHA-1"
     vcs:
-      type: "git"
+      type: "Git"
       url: "https://github.com/square/okio.git"
       revision: "okio-parent-1.14.0"
       path: ""
     vcs_processed:
-      type: "git"
+      type: "Git"
       url: "https://github.com/square/okio.git"
       revision: "okio-parent-1.14.0"
       path: ""
@@ -537,12 +537,12 @@ packages:
         value: "a6c32b40bf3d76eca54e3c601e5d1470c86fcdfa"
         algorithm: "SHA-1"
     vcs:
-      type: "git"
+      type: "Git"
       url: "git://github.com/junit-team/junit.git"
       revision: "r4.12"
       path: ""
     vcs_processed:
-      type: "git"
+      type: "Git"
       url: "https://github.com/junit-team/junit.git"
       revision: "r4.12"
       path: ""
@@ -570,12 +570,12 @@ packages:
         value: "9d064d7d42ee1d04ae07ad23025b4f9616652eed"
         algorithm: "SHA-1"
     vcs:
-      type: "git"
+      type: "Git"
       url: "https://git-wip-us.apache.org/repos/asf/commons-compress.git"
       revision: ""
       path: ""
     vcs_processed:
-      type: "git"
+      type: "Git"
       url: "https://git-wip-us.apache.org/repos/asf/commons-compress.git"
       revision: ""
       path: ""
@@ -602,12 +602,12 @@ packages:
         value: "e7e36219edde1c66c93495a75490d8f526c377cb"
         algorithm: "SHA-1"
     vcs:
-      type: "git"
+      type: "Git"
       url: "http://git-wip-us.apache.org/repos/asf/commons-lang.git"
       revision: "LANG_3_6"
       path: ""
     vcs_processed:
-      type: "git"
+      type: "Git"
       url: "http://git-wip-us.apache.org/repos/asf/commons-lang.git"
       revision: "LANG_3_6"
       path: ""
@@ -633,12 +633,12 @@ packages:
         value: "679282ee0f6f2b236f58a7a1dc8395861ad9fd97"
         algorithm: "SHA-1"
     vcs:
-      type: "git"
+      type: "Git"
       url: "http://git-wip-us.apache.org/repos/asf/commons-text.git"
       revision: ""
       path: ""
     vcs_processed:
-      type: "git"
+      type: "Git"
       url: "http://git-wip-us.apache.org/repos/asf/commons-text.git"
       revision: ""
       path: ""
@@ -664,12 +664,12 @@ packages:
         value: "9c51853f855aca4ea31785f30385e980a58eaf4b"
         algorithm: "SHA-1"
     vcs:
-      type: "git"
+      type: "Git"
       url: "http://git-wip-us.apache.org/repos/asf/commons-text.git"
       revision: ""
       path: ""
     vcs_processed:
-      type: "git"
+      type: "Git"
       url: "http://git-wip-us.apache.org/repos/asf/commons-text.git"
       revision: ""
       path: ""
@@ -696,12 +696,12 @@ packages:
         value: "1dc37250fbc78e23a65a67fbbaf71d2e9cbc3c0b"
         algorithm: "SHA-1"
     vcs:
-      type: "git"
+      type: "Git"
       url: "git@github.com:hamcrest/JavaHamcrest.git"
       revision: ""
       path: ""
     vcs_processed:
-      type: "git"
+      type: "Git"
       url: "ssh://git@github.com/hamcrest/JavaHamcrest.git"
       revision: ""
       path: ""

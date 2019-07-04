@@ -24,6 +24,7 @@ import com.here.ort.model.Identifier
 import com.here.ort.model.Package
 import com.here.ort.model.RemoteArtifact
 import com.here.ort.model.VcsInfo
+import com.here.ort.model.VcsType
 import com.here.ort.utils.safeDeleteRecursively
 import com.here.ort.utils.test.ExpensiveTag
 
@@ -128,7 +129,7 @@ class DownloaderTest : StringSpec() {
                     hash = Hash.create("a6c32b40bf3d76eca54e3c601e5d1470c86fcdfa")
                 ),
                 vcs = VcsInfo(
-                    type = "Git",
+                    type = VcsType.GIT,
                     url = "https://example.com/invalid-repo-url",
                     revision = "8964880d9bac33f0a7f030a74c7c9299a8f117c8"
                 )
