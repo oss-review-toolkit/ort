@@ -29,6 +29,8 @@ import com.here.ort.model.ScannerDetails
 import com.here.ort.scanner.ScanResultsStorage
 import com.here.ort.utils.log
 
+const val SCAN_RESULTS_FILE_NAME = "scan-results.yml"
+
 abstract class FileBasedStorage : ScanResultsStorage() {
     override fun readFromStorage(pkg: Package, scannerDetails: ScannerDetails): ScanResultContainer {
         val scanResults = read(pkg.id).results.toMutableList()

@@ -70,7 +70,7 @@ class ArtifactoryStorage(
             .url("$url/$repository/$storagePath")
             .build()
 
-        val tempFile = createTempFile("ort", "scan-results.yml")
+        val tempFile = createTempFile("ort", SCAN_RESULTS_FILE_NAME)
 
         try {
             OkHttpClientHelper.execute(HTTP_CACHE_PATH, request).use { response ->
@@ -104,7 +104,7 @@ class ArtifactoryStorage(
     override fun addToStorage(id: Identifier, scanResult: ScanResult): Boolean {
         val scanResults = ScanResultContainer(id, read(id).results + scanResult)
 
-        val tempFile = createTempFile("ort", "scan-results.yml")
+        val tempFile = createTempFile("ort", SCAN_RESULTS_FILE_NAME)
         yamlMapper.writeValue(tempFile, scanResults)
 
         val storagePath = storagePath(id)
@@ -139,5 +139,5 @@ class ArtifactoryStorage(
         }
     }
 
-    private fun storagePath(id: Identifier) = "scan-results/${id.toPath()}/scan-results.yml"
+    private fun storagePath(id: Identifier) = "scan-results/${id.toPath()}/$SCAN_RESULTS_FILE_NAME"
 }

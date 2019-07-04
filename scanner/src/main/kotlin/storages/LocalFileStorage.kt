@@ -35,13 +35,15 @@ import java.io.IOException
 
 class LocalFileStorage(
     /**
-     * The directory to use for storing scan results.
+     * The base directory under which to store the scan results.
      */
-    private val directory: File
+    private val baseDirectory: File
 ) : FileBasedStorage() {
+    val scanResultsDirectory = baseDirectory.resolve("scan-results")
+
     @Synchronized
     override fun readFromStorage(id: Identifier): ScanResultContainer {
-        val scanResultsFile = directory.resolve("scan-results/${id.toPath()}/scan-results.yml")
+        val scanResultsFile = scanResultsDirectory.resolve("${id.toPath()}/$SCAN_RESULTS_FILE_NAME")
 
         return if (scanResultsFile.isFile) {
             log.info { "Using stored scan result for '${id.toCoordinates()}' found at '$scanResultsFile'." }
@@ -57,8 +59,8 @@ class LocalFileStorage(
     @Synchronized
     override fun addToStorage(id: Identifier, scanResult: ScanResult): Boolean {
         val scanResults = ScanResultContainer(id, read(id).results + scanResult)
-        val scanResultsDirectory = directory.resolve("scan-results/${id.toPath()}").apply { safeMkdirs() }
-        val scanResultsFile = scanResultsDirectory.resolve("scan-results.yml")
+        val scanResultsDirectory = scanResultsDirectory.resolve("${id.toPath()}").apply { safeMkdirs() }
+        val scanResultsFile = scanResultsDirectory.resolve(SCAN_RESULTS_FILE_NAME)
 
         return try {
             yamlMapper.writeValue(scanResultsFile, scanResults)
