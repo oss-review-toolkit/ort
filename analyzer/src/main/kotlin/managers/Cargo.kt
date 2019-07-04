@@ -43,8 +43,9 @@ import com.here.ort.utils.CommandLineTool
 import com.here.ort.utils.log
 import com.here.ort.utils.textValueOrEmpty
 
-import com.vdurmont.semver4j.Requirement
 import com.moandjiezana.toml.Toml
+
+import com.vdurmont.semver4j.Requirement
 
 import java.io.File
 import java.util.SortedSet
@@ -62,8 +63,7 @@ class Cargo(
             analyzerRoot: File,
             analyzerConfig: AnalyzerConfiguration,
             repoConfig: RepositoryConfiguration
-        ) =
-            Cargo(managerName, analyzerRoot, analyzerConfig, repoConfig)
+        ) = Cargo(managerName, analyzerRoot, analyzerConfig, repoConfig)
     }
 
     companion object {
@@ -76,68 +76,57 @@ class Cargo(
 
     override fun getVersionRequirement(): Requirement = Requirement.buildStrict(REQUIRED_CARGO_VERSION)
 
-    private fun runMetadata(workingDir: File): String {
-        return run(workingDir, "metadata", "--format-version=1").stdout
-    }
+    private fun runMetadata(workingDir: File): String = run(workingDir, "metadata", "--format-version=1").stdout
 
-    private fun extractCargoId(node: JsonNode): String {
-        return node["id"].textValue()!!
-    }
+    private fun extractCargoId(node: JsonNode) = node["id"].textValue()!!
 
-    private fun extractPackageId(node: JsonNode) = Identifier(
-        type = "Cargo",
-        namespace = "",
-        name = node["name"].textValueOrEmpty(),
-        version = node["version"].textValueOrEmpty()
-    )
+    private fun extractPackageId(node: JsonNode) =
+        Identifier(
+            type = "Cargo",
+            namespace = "",
+            name = node["name"].textValueOrEmpty(),
+            version = node["version"].textValueOrEmpty()
+        )
 
-    private fun extractRepositoryUrl(node: JsonNode) =
-        node["repository"]?.textValue()
+    private fun extractRepositoryUrl(node: JsonNode) = node["repository"]?.textValue()
 
     private fun extractVcsInfo(node: JsonNode): VcsInfo {
         val url = extractRepositoryUrl(node)
-        val type = if (url != null) "git" else "" // for now cargo supports only git
+        val type = url?.let { "git" } ?: "" // for now cargo supports only git
         return VcsInfo(type, url.orEmpty(), revision = "")
     }
 
-    private fun extractDeclaredLicenses(node: JsonNode): SortedSet<String> {
-        return node["license"].textValueOrEmpty().split("/")
+    private fun extractDeclaredLicenses(node: JsonNode) =
+        node["license"].textValueOrEmpty().split("/")
             .map { it.trim() }
-            .filter { it.isNotBlank() }
+            .filter { it.isNotEmpty() }
             .toSortedSet()
-    }
 
     private fun extractSourceArtifact(
         node: JsonNode,
         hashes: Map<String, String>
     ): RemoteArtifact? {
-        if (node["source"].textValueOrEmpty()
-            == "registry+https://github.com/rust-lang/crates.io-index"
-        ) {
-            val name = node["name"]?.asText() ?: return null
-            val version = node["version"]?.asText() ?: return null
-            val url = "https://crates.io/api/v1/crates/$name/$version/download"
-            val checksum = checksumKeyOf(node)
-            val hash = Hash.create(hashes[checksum] ?: "")
-            return RemoteArtifact(url, hash)
-        } else {
+        if (node["source"].textValueOrEmpty() != "registry+https://github.com/rust-lang/crates.io-index") {
             return null
         }
+        val name = node["name"]?.textValue() ?: return null
+        val version = node["version"]?.textValue() ?: return null
+        val url = "https://crates.io/api/v1/crates/$name/$version/download"
+        val checksum = checksumKeyOf(node)
+        val hash = Hash.create(hashes[checksum] ?: "")
+        return RemoteArtifact(url, hash)
     }
 
-    private fun extractPackage(node: JsonNode, hashes: Map<String, String>): Package {
-        val vcsInfo = extractVcsInfo(node)
-        return Package(
+    private fun extractPackage(node: JsonNode, hashes: Map<String, String>) =
+        Package(
             id = extractPackageId(node),
             declaredLicenses = extractDeclaredLicenses(node),
             description = node["description"].textValueOrEmpty(),
             binaryArtifact = RemoteArtifact.EMPTY,
             sourceArtifact = extractSourceArtifact(node, hashes) ?: RemoteArtifact.EMPTY,
             homepageUrl = "",
-            vcs = vcsInfo,
-            vcsProcessed = vcsInfo.normalize()
+            vcs = extractVcsInfo(node)
         )
-    }
 
     private fun checksumKeyOf(metadata: JsonNode): String {
         val id = metadata["id"]!!.textValue()
@@ -151,12 +140,13 @@ class Cargo(
         var workingDir = definitionFile.parentFile
         while (workingDir != analyzerRoot.parentFile) {
             val lockfile = File(workingDir, "Cargo.lock")
-            if (lockfile.exists()) {
+            if (lockfile.isFile()) {
                 return lockfile
             }
             workingDir = workingDir.parentFile
         }
-        // we reached the root directory we are analyzing
+
+        // We reached the analyzer root directory.
         throw IllegalArgumentException("missing Cargo.lock file")
     }
 
@@ -164,15 +154,15 @@ class Cargo(
         val contents = Toml().read(lockfile)
         val metadata = contents.getTable("metadata") ?: return emptyMap()
         val metadataMap = metadata.toMap()
-        return metadataMap.asSequence().mapNotNull {
-            val key = it.key
-            val value = it.value as? String
-            if (key != null && value != null) {
-                Pair(key, value)
-            } else {
-                null
+
+        val metadataMapNotNull = mutableMapOf<String, String>()
+        metadataMap.forEach { (key, value) ->
+            if (key != null && (value as? String) != null) {
+                metadataMapNotNull[key] = value
             }
-        }.toMap()
+        }
+
+        return metadataMapNotNull
     }
 
     private fun resolveDependenciesTree(
@@ -184,9 +174,7 @@ class Cargo(
         val nodes = resolve["nodes"]
         val root = resolve["root"].textValueOrEmpty()
 
-        return resolveDependenciesOf(
-            root, nodes, packages, filter
-        ).dependencies
+        return resolveDependenciesOf(root, nodes, packages, filter).dependencies
     }
 
     private fun resolveDependenciesOf(
@@ -195,8 +183,8 @@ class Cargo(
         packages: Map<String, Package>,
         filter: (pkgId: String, depId: String) -> Boolean
     ): PackageReference {
-        val node = nodes.find { it["id"].textValueOrEmpty() == id }!!
-        val depsReferences = node["dependencies"].asSequence()
+        val node = nodes.single { it["id"].textValueOrEmpty() == id }
+        val depsReferences = node["dependencies"]
             .map { it.textValue()!! }
             .filter { filter(id, it) }
             .map { resolveDependenciesOf(it, nodes, packages, filter) }
@@ -216,9 +204,9 @@ class Cargo(
         return dep["kind"].textValueOrEmpty() == "dev"
     }
 
-    // Check if a package is a project
+    // Check if a package is a project.
     //
-    // We treat all path dependencies inside of the analyzer root as project dependencies
+    // We treat all path dependencies inside of the analyzer root as project dependencies.
     private fun isProjectDependency(id: String): Boolean {
         val pathRegex = Regex("""^.*\(path\+file://(.*)\)$""")
         val match = pathRegex.matchEntire(id)?.groups?.get(1)
@@ -232,7 +220,7 @@ class Cargo(
     override fun resolveDependencies(definitionFile: File): ProjectAnalyzerResult? {
         log.info { "Resolving dependencies for: '$definitionFile'" }
 
-        // get project name; if none => we have a workspace definition => return null
+        // Get the project name; if none => we have a workspace definition => return null.
         val pkgDefinition = Toml().read(definitionFile)
         val projectName = pkgDefinition.getString("package.name") ?: return null
         val projectVersion = pkgDefinition.getString("package.version") ?: return null
@@ -242,17 +230,20 @@ class Cargo(
         val metadata = jsonMapper.readTree(metadataJson)
         val hashes = readHashes(findCargoLock(definitionFile))
 
-        // collect all packages
+        // Collect all packages.
         val packages: Map<String, Package> = metadata["packages"].asSequence().associateBy(
             { extractCargoId(it) },
-            { extractPackage(it, hashes) })
+            { extractPackage(it, hashes) }
+        )
 
-        // resolve dependencies tree
-        val dependencies = resolveDependenciesTree(metadata, packages,
-            { id, devId -> !isDevDependencyOf(id, devId, metadata) })
+        // Resolve the dependencies tree.
+        val dependencies = resolveDependenciesTree(metadata, packages) { id, devId ->
+            !isDevDependencyOf(id, devId, metadata)
+        }
 
-        val devDependencies = resolveDependenciesTree(metadata, packages,
-            { id, devId -> isDevDependencyOf(id, devId, metadata) })
+        val devDependencies = resolveDependenciesTree(metadata, packages) { id, devId ->
+            isDevDependencyOf(id, devId, metadata)
+        }
 
         val dependenciesScope = Scope(
             name = SCOPE_NAME_DEPENDENCIES,
@@ -263,11 +254,10 @@ class Cargo(
             dependencies = devDependencies
         )
 
-        // resolve project
-        val projectPkg = packages.values.asSequence().find {
-            val pkgId = it.id
-            pkgId.name == projectName && pkgId.version == projectVersion
-        }!!
+        // Resolve project.
+        val projectPkg = packages.values.asSequence().single { pkg ->
+            pkg.id.name == projectName && pkg.id.version == projectVersion
+        }
 
         val homepageUrl = pkgDefinition.getString("package.homepage") ?: ""
         val project = Project(
@@ -281,7 +271,7 @@ class Cargo(
         )
 
         val nonProjectPackages = packages
-            .filter { !isProjectDependency(it.key) }
+            .filterNot { isProjectDependency(it.key) }
             .map { it.value.toCuratedPackage() }
             .toSortedSet()
 

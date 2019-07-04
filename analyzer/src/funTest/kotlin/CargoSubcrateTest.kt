@@ -38,8 +38,8 @@ import java.io.File
 
 class CargoSubcrateTest : StringSpec() {
     private val projectDir = File(
-        "src/funTest/assets/projects/synthetic/cargo-subcrate"
-    ).absoluteFile
+        "src/funTest/assets/projects/synthetic/cargo-subcrate")
+    .absoluteFile
     private val vcsDir = VersionControlSystem.forDirectory(projectDir)!!
     private val vcsUrl = vcsDir.getRemoteUrl()
     private val vcsRevision = vcsDir.getRevision()
@@ -62,9 +62,7 @@ class CargoSubcrateTest : StringSpec() {
             result!!.errors should beEmpty()
             yamlMapper.writeValueAsString(result) shouldBe expectedResult
         }
-    }
 
-    init {
         "Integration sub-project dependencies are detected correctly" {
             val integrationProjectDir = File(projectDir, "integration")
             val packageFile = File(integrationProjectDir, "Cargo.toml")
@@ -83,9 +81,7 @@ class CargoSubcrateTest : StringSpec() {
             result!!.errors should beEmpty()
             yamlMapper.writeValueAsString(result) shouldBe expectedResult
         }
-    }
 
-    init {
         "Client sub-project dependencies are detected correctly" {
             val clientProjectDir = File(projectDir, "client")
             val packageFile = File(clientProjectDir, "Cargo.toml")
