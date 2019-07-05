@@ -137,18 +137,14 @@ class Cargo(
     // Cargo.lock is located next to Cargo.toml or in one of the parent directories. The latter
     // is case when the project is part of a workspace. Cargo.lock is then located next to the
     // Cargo.toml file defining the workspace.
-    private fun findCargoLock(definitionFile: File): File {
-        var workingDir = definitionFile.parentFile
-        while (workingDir != analyzerRoot.parentFile) {
-            val lockfile = File(workingDir, "Cargo.lock")
-            if (lockfile.isFile) {
-                return lockfile
-            }
-            workingDir = workingDir.parentFile
+    private fun resolveLockfile(metadata: JsonNode): File {
+        val workspaceRoot = metadata["workspace_root"].textValueOrEmpty()
+        val lockfile = File(workspaceRoot, "Cargo.lock")
+        if (!lockfile.isFile) {
+            throw IllegalArgumentException("missing Cargo.lock file")
         }
 
-        // We reached the analyzer root directory.
-        throw IllegalArgumentException("missing Cargo.lock file")
+        return lockfile
     }
 
     private fun readHashes(lockfile: File): Map<String, String> {
@@ -167,14 +163,18 @@ class Cargo(
     }
 
     private fun resolveDependenciesTree(
+        pkgName: String,
+        pkgVersion: String,
         metadata: JsonNode,
         packages: Map<String, Package>,
         filter: (pkgId: String, depId: String) -> Boolean = { _, _ -> true }
     ): SortedSet<PackageReference> {
-        val resolve = metadata["resolve"]
-        val nodes = resolve["nodes"]
-        val root = resolve["root"].textValueOrEmpty()
-
+        val nodes = metadata["resolve"]["nodes"]
+        val pkg = metadata["packages"].single {
+            it["name"].textValueOrEmpty() == pkgName && it["version"].textValueOrEmpty() == pkgVersion
+        }
+        val pkgId = extractCargoId(pkg)
+        val root = nodes.map { extractCargoId(it) }.single { it == pkgId }
         return resolveDependenciesOf(root, nodes, packages, filter).dependencies
     }
 
@@ -226,7 +226,7 @@ class Cargo(
         val workingDir = definitionFile.parentFile
         val metadataJson = runMetadata(workingDir)
         val metadata = jsonMapper.readTree(metadataJson)
-        val hashes = readHashes(findCargoLock(definitionFile))
+        val hashes = readHashes(resolveLockfile(metadata))
 
         // Collect all packages.
         val packages: Map<String, Package> = metadata["packages"].asSequence().associateBy(
@@ -235,11 +235,11 @@ class Cargo(
         )
 
         // Resolve the dependencies tree.
-        val dependencies = resolveDependenciesTree(metadata, packages) { id, devId ->
+        val dependencies = resolveDependenciesTree(projectName, projectVersion, metadata, packages) { id, devId ->
             !isDevDependencyOf(id, devId, metadata)
         }
 
-        val devDependencies = resolveDependenciesTree(metadata, packages) { id, devId ->
+        val devDependencies = resolveDependenciesTree(projectName, projectVersion, metadata, packages) { id, devId ->
             isDevDependencyOf(id, devId, metadata)
         }
 
