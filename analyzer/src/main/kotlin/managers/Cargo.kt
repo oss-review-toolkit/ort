@@ -70,6 +70,7 @@ class Cargo(
         private const val REQUIRED_CARGO_VERSION = "1.0.0"
         private const val SCOPE_NAME_DEPENDENCIES = "dependencies"
         private const val SCOPE_NAME_DEV_DEPENDENCIES = "devDependencies"
+        private val pathDependencyRegex = Regex("""^.*\(path\+file://(.*)\)$""")
     }
 
     override fun command(workingDir: File?) = "cargo"
@@ -78,7 +79,7 @@ class Cargo(
 
     private fun runMetadata(workingDir: File): String = run(workingDir, "metadata", "--format-version=1").stdout
 
-    private fun extractCargoId(node: JsonNode) = node["id"].textValue()!!
+    private fun extractCargoId(node: JsonNode) = node["id"].textValueOrEmpty()
 
     private fun extractPackageId(node: JsonNode) =
         Identifier(
@@ -92,7 +93,7 @@ class Cargo(
 
     private fun extractVcsInfo(node: JsonNode): VcsInfo {
         val url = extractRepositoryUrl(node)
-        val type = url?.let { "git" } ?: "" // for now cargo supports only git
+        val type = url?.let { "git" } ?: "" // For now cargo supports only git.
         return VcsInfo(type, url.orEmpty(), revision = "")
     }
 
@@ -129,7 +130,7 @@ class Cargo(
         )
 
     private fun checksumKeyOf(metadata: JsonNode): String {
-        val id = metadata["id"]!!.textValue()
+        val id = extractCargoId(metadata)
         return "\"checksum $id\""
     }
 
@@ -140,7 +141,7 @@ class Cargo(
         var workingDir = definitionFile.parentFile
         while (workingDir != analyzerRoot.parentFile) {
             val lockfile = File(workingDir, "Cargo.lock")
-            if (lockfile.isFile()) {
+            if (lockfile.isFile) {
                 return lockfile
             }
             workingDir = workingDir.parentFile
@@ -185,37 +186,34 @@ class Cargo(
     ): PackageReference {
         val node = nodes.single { it["id"].textValueOrEmpty() == id }
         val depsReferences = node["dependencies"]
-            .map { it.textValue()!! }
+            .map { it.textValueOrEmpty() }
             .filter { filter(id, it) }
             .map { resolveDependenciesOf(it, nodes, packages, filter) }
-        val pkg = packages[id]!!
+        val pkg = packages.getValue(id)
         val linkage = if (isProjectDependency(id)) PackageLinkage.PROJECT_STATIC else PackageLinkage.STATIC
         return pkg.toReference(linkage, dependencies = depsReferences.toSortedSet())
     }
 
     private fun isDevDependencyOf(id: String, depId: String, metadata: JsonNode): Boolean {
         val packages = metadata["packages"]
-        val pkg = packages.asSequence().find { it["id"].textValueOrEmpty() == id }!!
-        val depPkg = packages.asSequence().find { it["id"].textValueOrEmpty() == depId }!!
-        val dep = pkg["dependencies"].find {
+        val pkg = packages.asSequence().single { it["id"].textValueOrEmpty() == id }
+        val depPkg = packages.asSequence().single { it["id"].textValueOrEmpty() == depId }
+        val dep = pkg["dependencies"].single {
             val name = it["name"].textValueOrEmpty()
             name == depPkg["name"].textValueOrEmpty()
-        }!!
+        }
+
         return dep["kind"].textValueOrEmpty() == "dev"
     }
 
     // Check if a package is a project.
     //
     // We treat all path dependencies inside of the analyzer root as project dependencies.
-    private fun isProjectDependency(id: String): Boolean {
-        val pathRegex = Regex("""^.*\(path\+file://(.*)\)$""")
-        val match = pathRegex.matchEntire(id)?.groups?.get(1)
-        if (match != null) {
+    private fun isProjectDependency(id: String) =
+        pathDependencyRegex.matchEntire(id)?.groups?.get(1)?.let { match ->
             val packageDir = File(match.value)
-            return packageDir.startsWith(analyzerRoot)
-        }
-        return false
-    }
+            packageDir.startsWith(analyzerRoot)
+        } ?: false
 
     override fun resolveDependencies(definitionFile: File): ProjectAnalyzerResult? {
         log.info { "Resolving dependencies for: '$definitionFile'" }

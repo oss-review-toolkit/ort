@@ -37,9 +37,7 @@ import io.kotlintest.specs.StringSpec
 import java.io.File
 
 class CargoSubcrateTest : StringSpec() {
-    private val projectDir = File(
-        "src/funTest/assets/projects/synthetic/cargo-subcrate")
-    .absoluteFile
+    private val projectDir = File("src/funTest/assets/projects/synthetic/cargo-subcrate").absoluteFile
     private val vcsDir = VersionControlSystem.forDirectory(projectDir)!!
     private val vcsUrl = vcsDir.getRemoteUrl()
     private val vcsRevision = vcsDir.getRevision()
