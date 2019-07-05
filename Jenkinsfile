@@ -43,11 +43,13 @@ pipeline {
     stages {
         stage('Clone project') {
             steps {
+                sh 'rm -fr project'
+
                 // See https://jenkins.io/doc/pipeline/steps/git/.
                 checkout([$class: 'GitSCM',
                     userRemoteConfigs: [[url: params.VCS_URL]],
                     branches: [[name: "*/${params.VCS_BRANCH}"]],
-                    extensions: [[$class: 'RelativeTargetDirectory', relativeTargetDir: 'project']]
+                    extensions: [[$class: 'RelativeTargetDirectory', relativeTargetDir: 'project/source']]
                 ])
             }
         }
@@ -60,8 +62,7 @@ pipeline {
 
         stage('Run ORT analyzer') {
             steps {
-                sh 'rm -fr project/ort/analyzer'
-                sh 'docker/run.sh "-v $WORKSPACE/project:/project" $LOG_LEVEL analyze -f JSON,YAML -i /project -o /project/ort/analyzer'
+                sh 'docker/run.sh "-v $WORKSPACE/project:/project" $LOG_LEVEL analyze -f JSON,YAML -i /project/source -o /project/ort/analyzer'
             }
 
             post {
@@ -76,7 +77,6 @@ pipeline {
 
         stage('Run ORT scanner') {
             steps {
-                sh 'rm -fr project/ort/scanner'
                 sh 'docker/run.sh "-v $WORKSPACE/project:/project" $LOG_LEVEL scan -f JSON,YAML -a /project/ort/analyzer/analyzer-result.yml -o /project/ort/scanner'
             }
 
@@ -92,7 +92,6 @@ pipeline {
 
         stage('Run ORT reporter') {
             steps {
-                sh 'rm -fr project/ort/reporter'
                 sh 'docker/run.sh "-v $WORKSPACE/project:/project" $LOG_LEVEL report -f StaticHTML,WebApp -i /project/ort/scanner/scan-result.yml -o /project/ort/reporter'
             }
 
