@@ -110,6 +110,7 @@ class Cargo(
         if (node["source"].textValueOrEmpty() != "registry+https://github.com/rust-lang/crates.io-index") {
             return null
         }
+
         val name = node["name"]?.textValue() ?: return null
         val version = node["version"]?.textValue() ?: return null
         val url = "https://crates.io/api/v1/crates/$name/$version/download"
@@ -173,6 +174,7 @@ class Cargo(
         val pkg = metadata["packages"].single {
             it["name"].textValueOrEmpty() == pkgName && it["version"].textValueOrEmpty() == pkgVersion
         }
+
         val pkgId = extractCargoId(pkg)
         val root = nodes.map { extractCargoId(it) }.single { it == pkgId }
         return resolveDependenciesOf(root, nodes, packages, filter).dependencies
