@@ -1,7 +1,7 @@
 ---
 project:
-  id: "Conda:::d4280424cbdb8fc0f1ad1c641c6d36464e1bedb6"
-  purl: "pkg://Conda//@d4280424cbdb8fc0f1ad1c641c6d36464e1bedb6"
+  id: "Conda:::<REPLACE_REVISION>"
+  purl: "pkg://Conda//@<REPLACE_REVISION>"
   definition_file_path: "analyzer/src/funTest/assets/projects/synthetic/python3-django/environment.yml"
   declared_licenses: []
   declared_licenses_processed: {}
@@ -13,7 +13,7 @@ project:
   vcs_processed:
     type: "git"
     url: "https://github.com/bryan-woods/oss-review-toolkit.git"
-    revision: "d4280424cbdb8fc0f1ad1c641c6d36464e1bedb6"
+    revision: "<REPLACE_REVISION>"
     path: "analyzer/src/funTest/assets/projects/synthetic/python3-django"
   homepage_url: ""
   scopes:
