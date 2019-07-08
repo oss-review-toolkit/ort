@@ -305,7 +305,9 @@ class Downloader {
                         throw DownloadException("Failed to download source artifact: $response")
                     }
 
-                    createTempFile("ort", target.sourceArtifact.url.substringAfterLast("/")).also { tempFile ->
+                    // Use the filename from the request for the last redirect.
+                    val tempFileName = response.request.url.pathSegments.last()
+                    createTempFile("ort", tempFileName).also { tempFile ->
                         tempFile.sink().buffer().use { it.writeAll(body.source()) }
                         tempFile.deleteOnExit()
                     }
@@ -340,12 +342,6 @@ class Downloader {
                         log.warn { "Unable to delete temporary directory '$gemDirectory'." }
                     }
                 }
-            } else if (target.id.type == "Cargo") {
-                // without following redirect Cargo's package do not have an extension
-                val tarFile = File(
-                    sourceArchive.parentFile, sourceArchive.nameWithoutExtension + ".tgz")
-                sourceArchive.renameTo(tarFile)
-                tarFile.unpack(outputDirectory)
             } else {
                 sourceArchive.unpack(outputDirectory)
             }

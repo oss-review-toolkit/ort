@@ -198,8 +198,8 @@ class Cargo(
 
     private fun isDevDependencyOf(id: String, depId: String, metadata: JsonNode): Boolean {
         val packages = metadata["packages"]
-        val pkg = packages.asSequence().single { it["id"].textValueOrEmpty() == id }
-        val depPkg = packages.asSequence().single { it["id"].textValueOrEmpty() == depId }
+        val pkg = packages.single { it["id"].textValueOrEmpty() == id }
+        val depPkg = packages.single { it["id"].textValueOrEmpty() == depId }
         val dep = pkg["dependencies"].single {
             val name = it["name"].textValueOrEmpty()
             name == depPkg["name"].textValueOrEmpty()
@@ -231,7 +231,7 @@ class Cargo(
         val hashes = readHashes(resolveLockfile(metadata))
 
         // Collect all packages.
-        val packages: Map<String, Package> = metadata["packages"].asSequence().associateBy(
+        val packages = metadata["packages"].associateBy(
             { extractCargoId(it) },
             { extractPackage(it, hashes) }
         )
@@ -255,7 +255,7 @@ class Cargo(
         )
 
         // Resolve project.
-        val projectPkg = packages.values.asSequence().single { pkg ->
+        val projectPkg = packages.values.single { pkg ->
             pkg.id.name == projectName && pkg.id.version == projectVersion
         }
 
