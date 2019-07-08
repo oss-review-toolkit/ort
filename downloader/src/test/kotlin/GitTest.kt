@@ -67,6 +67,7 @@ class GitTest : StringSpec() {
             git.isApplicableUrl("https://bitbucket.org/paniq/masagin") shouldBe false
         }
 
+        // TODO: Investigate why this succeeds locally on Windows but seem to make AppVeyor CI hang.
         "Git does not prompt for credentials for non-existing repositories".config(enabled = !Os.isWindows) {
             git.isApplicableUrl("https://github.com/heremaps/foobar.git") shouldBe false
         }

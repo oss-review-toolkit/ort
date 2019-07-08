@@ -30,7 +30,6 @@ import com.here.ort.utils.ProcessCapture
 import com.here.ort.utils.log
 import com.here.ort.utils.safeMkdirs
 import com.here.ort.utils.showStackTrace
-import com.here.ort.utils.suppressInput
 
 import com.vdurmont.semver4j.Semver
 
@@ -44,9 +43,7 @@ class Git : GitBase() {
     override val priority = 100
 
     override fun isApplicableUrlInternal(vcsUrl: String) =
-        suppressInput {
-            ProcessCapture("git", "-c", "credential.helper=", "-c", "core.askpass=", "ls-remote", vcsUrl).isSuccess
-        }
+        ProcessCapture("git", "-c", "credential.helper=", "-c", "core.askpass=echo", "ls-remote", vcsUrl).isSuccess
 
     override fun download(
         pkg: Package, targetDir: File, allowMovingRevisions: Boolean,
