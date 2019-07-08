@@ -50,7 +50,6 @@ import com.here.ort.utils.stripLeadingZerosFromVersion
 
 import java.io.File
 import java.io.IOException
-import java.lang.IllegalArgumentException
 import java.net.HttpURLConnection
 import java.util.SortedSet
 
@@ -203,12 +202,12 @@ class Conda(
                     .build()
 
                 OkHttpClientHelper.execute(HTTP_CACHE_PATH, pkgRequest).use { response ->
-                    val body = response.body()?.string()?.trim()
+                    val body = response.body?.string()?.trim()
 
-                    if (response.code() != HttpURLConnection.HTTP_OK || body.isNullOrEmpty()) {
+                    if (response.code != HttpURLConnection.HTTP_OK || body.isNullOrEmpty()) {
                         log.warn { "Unable to retrieve PyPI meta-data for package '${pkg.id.toCoordinates()}'." }
                         if (body != null) {
-                            log.warn { "The response was '$body' (code ${response.code()})." }
+                            log.warn { "The response was '$body' (code ${response.code})." }
                         }
 
                         // Fall back to returning the original package data.
@@ -349,8 +348,7 @@ class Conda(
             ).requireSuccess()
         }
         val envs = ProcessCapture("conda", "env", "list").requireSuccess()
-        val res = envs.stdout.split('\n')
-            .filter{ it.split("\\s".toRegex()).first() == envName }.first()
+        val res = envs.stdout.split('\n').first { it.split("\\s".toRegex()).first() == envName }
             .split("\\s".toRegex()).last()
         return File(res)
     }
