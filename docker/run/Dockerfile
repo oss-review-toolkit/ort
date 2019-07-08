@@ -28,6 +28,12 @@
 # - Haskell language's stack tool: https://github.com/commercialhaskell/stack
 # - ScanCode tool: https://github.com/nexB/scancode-toolkit
 
+FROM openjdk:8-jdk-alpine3.9 AS intermediate
+# build the JVM stack in an intermediate container
+RUN apk add --no-cache yarn
+COPY . .
+RUN ./gradlew installDist :cli:installDist :cli:distTar
+
 FROM openjdk:11-jre-slim-sid
 
 ENV \
@@ -91,6 +97,7 @@ RUN \
         chmod -R o=u /usr/local/scancode-toolkit-$SCANCODE_VERSION && \
         ln -s /usr/local/scancode-toolkit-$SCANCODE_VERSION/scancode /usr/local/bin/scancode
 
-# ort.tar not available if using just docker build
-ADD ort.tar* .
+# ort.tar not available if using just docker build, we touch touch it to make the add option
+COPY --from=intermediate ./cli/build/distributions/ort.tar /tmp/ort.tar
+RUN tar xvf /tmp/ort.tar && rm /tmp/ort.tar
 ENTRYPOINT ["/ort/bin/ort"]
