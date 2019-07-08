@@ -55,6 +55,7 @@ ENV \
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
         # Install general tools required by this Dockefile.
+        build-essential \
         bzip2 \
         curl \
         openssh-client \
