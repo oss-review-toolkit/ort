@@ -37,6 +37,7 @@ install:
   - npm install -g bower@%BOWER_VERSION% yarn@%YARN_VERSION%
   - pip install virtualenv==%VIRTUAL_ENV_VERSION%
   - cinst haskell-stack --version %STACK_VERSION% -y
+  - cinst rust --version %RUST_VERSION% -y
   - cinst sbt --version %SBT_VERSION% -y
   - cinst php --version %PHP_VERSION% -y
   - cinst composer --version %COMPOSER_VERSION% -y # The version refers to the installer, not to Composer.
@@ -57,8 +58,6 @@ install:
   - ps: Start-FileDownload "https://dl.google.com/android/repository/sdk-tools-windows-$env:ANDROID_SDK_VERSION.zip"
   - 7z x sdk-tools-windows-%ANDROID_SDK_VERSION%.zip -o%ANDROID_HOME% > nul
   - yes | %ANDROID_HOME%\tools\bin\sdkmanager.bat platform-tools
-  # Install rust
-  - cinst rust --version %RUST_VERSION% -y
 
 # Do something useful here to override the default MSBuild (which would fail otherwise).
 build_script:
