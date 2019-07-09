@@ -159,14 +159,6 @@ object ScannerCommand : CommandWithHelp() {
 
         // By default use a file based scan results storage.
         val localFileStorage = LocalFileStorage(getUserOrtDirectory().resolve(TOOL_NAME))
-
-        log.debug {
-            val fileCount = localFileStorage.scanResultsDirectory.walk().filter {
-                it.isFile && it.name == SCAN_RESULTS_FILE_NAME
-            }.count()
-            "Local file storage has $fileCount scan results files."
-        }
-
         ScanResultsStorage.storage = localFileStorage
 
         // Allow to override the default scan results storage.
@@ -189,6 +181,25 @@ object ScannerCommand : CommandWithHelp() {
         val scanner = scannerFactory.create(config)
 
         println("Using scanner '${scanner.scannerName}' with '${ScanResultsStorage.storage.javaClass.simpleName}'.")
+
+        val localFileStorageLogFunction: ((String) -> Unit)? = when {
+            // If the local file storage is in use, log about it already at info level.
+            log.isInfoEnabled && ScanResultsStorage.storage == localFileStorage -> log::info
+
+            // Otherwise log about the local file storage only at debug level.
+            log.isDebugEnabled -> log::debug
+
+            else -> null
+        }
+
+        if (localFileStorageLogFunction != null) {
+            val fileCount = localFileStorage.scanResultsDirectory.walk().filter {
+                it.isFile && it.name == SCAN_RESULTS_FILE_NAME
+            }.count()
+
+            localFileStorageLogFunction("Local file storage has $fileCount scan results files.")
+        }
+
 
         val ortResult = ortFile?.expandTilde()?.let {
             scanner.scanOrtResult(
