@@ -421,7 +421,7 @@ project:
             dependencies:
             - id: "NPM::safe-buffer:5.1.2"
           - id: "NPM::util-deprecate:1.0.2"
-        - id: "NPM::xtend:4.0.1"
+        - id: "NPM::xtend:4.0.2"
       - id: "NPM::tokenize-comment:1.0.3"
         dependencies:
         - id: "NPM::array-each:1.0.1"
@@ -4934,8 +4934,8 @@ packages:
       path: ""
   curations: []
 - package:
-    id: "NPM::xtend:4.0.1"
-    purl: "pkg://NPM//xtend@4.0.1"
+    id: "NPM::xtend:4.0.2"
+    purl: "pkg://NPM//xtend@4.0.2"
     declared_licenses:
     - "MIT"
     declared_licenses_processed:
@@ -4948,18 +4948,18 @@ packages:
         value: ""
         algorithm: ""
     source_artifact:
-      url: "https://registry.npmjs.org/xtend/-/xtend-4.0.1.tgz"
+      url: "https://registry.npmjs.org/xtend/-/xtend-4.0.2.tgz"
       hash:
-        value: "a5c6d532be656e23db820efb943a1f04998d63af"
+        value: "bb72779f5fa465186b1f438f674fa347fdb5db54"
         algorithm: "SHA-1"
     vcs:
       type: "git"
       url: "git://github.com/Raynos/xtend.git"
-      revision: "23dc302a89756da89c1897bc732a752317e35390"
+      revision: "37816c0e2e25da2901d584442235946d5cd8c80d"
       path: ""
     vcs_processed:
       type: "git"
       url: "https://github.com/Raynos/xtend.git"
-      revision: "23dc302a89756da89c1897bc732a752317e35390"
+      revision: "37816c0e2e25da2901d584442235946d5cd8c80d"
       path: ""
   curations: []

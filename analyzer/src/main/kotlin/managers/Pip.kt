@@ -74,7 +74,7 @@ object VirtualEnv : CommandLineTool {
     override fun command(workingDir: File?) = "virtualenv"
 
     // Allow to use versions that are known to work. Note that virtualenv bundles a version of pip.
-    override fun getVersionRequirement(): Requirement = Requirement.buildIvy("[15.1,16.5[")
+    override fun getVersionRequirement(): Requirement = Requirement.buildIvy("[15.1,16.7[")
 }
 
 object PythonVersion : CommandLineTool {
