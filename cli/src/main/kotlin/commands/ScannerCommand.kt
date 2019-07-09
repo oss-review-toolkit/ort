@@ -121,34 +121,7 @@ object ScannerCommand : CommandWithHelp() {
     )
     private var outputFormats = listOf(OutputFormat.YAML)
 
-    override fun runCommand(jc: JCommander): Int {
-        require((ortFile == null) != (inputPath == null)) {
-            "Either '--ort-file' or '--input-path' must be specified."
-        }
-
-        val absoluteOutputDir = outputDir.expandTilde().normalize()
-        val absoluteNativeOutputDir = absoluteOutputDir.resolve("native-scan-results")
-
-        val outputFiles = outputFormats.distinct().map { format ->
-            File(absoluteOutputDir, "scan-result.${format.fileExtension}")
-        }
-
-        val existingOutputFiles = outputFiles.filter { it.exists() }
-        if (existingOutputFiles.isNotEmpty()) {
-            log.error { "None of the output files $existingOutputFiles must exist yet." }
-            return 2
-        }
-
-        if (absoluteNativeOutputDir.exists() && absoluteNativeOutputDir.list().isNotEmpty()) {
-            log.error { "The directory '$absoluteNativeOutputDir' must not contain any files yet." }
-            return 2
-        }
-
-        val absoluteDownloadDir = downloadDir?.expandTilde()
-        require(absoluteDownloadDir?.exists() != true) {
-            "The download directory '$absoluteDownloadDir' must not exist yet."
-        }
-
+    private fun configureScanner(configFile: File?): Scanner {
         val config = configFile?.expandTilde()?.let {
             require(it.isFile) {
                 "The provided configuration file '$it' is not actually a file."
@@ -200,6 +173,38 @@ object ScannerCommand : CommandWithHelp() {
             localFileStorageLogFunction("Local file storage has $fileCount scan results files.")
         }
 
+        return scanner
+    }
+
+    override fun runCommand(jc: JCommander): Int {
+        require((ortFile == null) != (inputPath == null)) {
+            "Either '--ort-file' or '--input-path' must be specified."
+        }
+
+        val absoluteOutputDir = outputDir.expandTilde().normalize()
+        val absoluteNativeOutputDir = absoluteOutputDir.resolve("native-scan-results")
+
+        val outputFiles = outputFormats.distinct().map { format ->
+            File(absoluteOutputDir, "scan-result.${format.fileExtension}")
+        }
+
+        val existingOutputFiles = outputFiles.filter { it.exists() }
+        if (existingOutputFiles.isNotEmpty()) {
+            log.error { "None of the output files $existingOutputFiles must exist yet." }
+            return 2
+        }
+
+        if (absoluteNativeOutputDir.exists() && absoluteNativeOutputDir.list().isNotEmpty()) {
+            log.error { "The directory '$absoluteNativeOutputDir' must not contain any files yet." }
+            return 2
+        }
+
+        val absoluteDownloadDir = downloadDir?.expandTilde()
+        require(absoluteDownloadDir?.exists() != true) {
+            "The download directory '$absoluteDownloadDir' must not exist yet."
+        }
+
+        val scanner = configureScanner(configFile)
 
         val ortResult = ortFile?.expandTilde()?.let {
             scanner.scanOrtResult(
