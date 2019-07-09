@@ -69,7 +69,7 @@ data class Repository(
      */
     fun getRelativePath(vcs: VcsInfo): String? {
         fun VcsInfo.matches(other: VcsInfo) =
-            other.type == other.type && url == other.url && revision == other.revision
+            type == other.type && url == other.url && revision == other.revision
 
         val normalizedVcs = vcs.normalize()
 
