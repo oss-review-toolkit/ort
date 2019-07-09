@@ -63,7 +63,7 @@ fun File.unpack(targetDirectory: File) {
  */
 fun File.unpackTar(targetDirectory: File) {
     val inputStream = when (extension.toLowerCase()) {
-        "gz", "tgz" -> GzipCompressorInputStream(inputStream())
+        "gz", "tgz", "crate" -> GzipCompressorInputStream(inputStream())
         "bz2", "tbz2" -> BZip2CompressorInputStream(inputStream())
         "gem", "tar" -> inputStream()
         else -> throw IOException("Unknown compression scheme for tar file '$absolutePath'.")

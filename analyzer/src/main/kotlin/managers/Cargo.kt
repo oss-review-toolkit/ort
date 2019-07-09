@@ -171,11 +171,10 @@ class Cargo(
         filter: (pkgId: String, depId: String) -> Boolean = { _, _ -> true }
     ): SortedSet<PackageReference> {
         val nodes = metadata["resolve"]["nodes"]
-        val pkg = metadata["packages"].single {
-            it["name"].textValueOrEmpty() == pkgName && it["version"].textValueOrEmpty() == pkgVersion
-        }
+        val pkgId = metadata["workspace_members"]
+            .map { it.textValueOrEmpty() }
+            .single { it.contains(pkgName) && it.contains(pkgVersion) }
 
-        val pkgId = extractCargoId(pkg)
         val root = nodes.map { extractCargoId(it) }.single { it == pkgId }
         return resolveDependenciesOf(root, nodes, packages, filter).dependencies
     }
@@ -200,12 +199,11 @@ class Cargo(
         val packages = metadata["packages"]
         val pkg = packages.single { it["id"].textValueOrEmpty() == id }
         val depPkg = packages.single { it["id"].textValueOrEmpty() == depId }
-        val dep = pkg["dependencies"].single {
+        return pkg["dependencies"].any {
             val name = it["name"].textValueOrEmpty()
-            name == depPkg["name"].textValueOrEmpty()
+            val kind = it["kind"].textValueOrEmpty()
+            name == depPkg["name"].textValueOrEmpty() && (kind == "dev" || kind == "build")
         }
-
-        return dep["kind"].textValueOrEmpty() == "dev"
     }
 
     // Check if a package is a project.
