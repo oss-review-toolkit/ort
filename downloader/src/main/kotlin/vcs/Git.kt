@@ -24,13 +24,13 @@ import ch.frankel.slf4k.*
 import com.here.ort.downloader.DownloadException
 import com.here.ort.downloader.WorkingTree
 import com.here.ort.model.Package
+import com.here.ort.model.VcsType
 import com.here.ort.spdx.LICENSE_FILE_NAMES
 import com.here.ort.utils.Os
 import com.here.ort.utils.ProcessCapture
 import com.here.ort.utils.log
 import com.here.ort.utils.safeMkdirs
 import com.here.ort.utils.showStackTrace
-import com.here.ort.utils.suppressInput
 
 import com.vdurmont.semver4j.Semver
 
@@ -41,12 +41,11 @@ import java.io.IOException
 const val GIT_HISTORY_DEPTH = 50
 
 class Git : GitBase() {
+    override val type = VcsType.GIT
     override val priority = 100
 
     override fun isApplicableUrlInternal(vcsUrl: String) =
-        suppressInput {
-            ProcessCapture("git", "-c", "credential.helper=", "-c", "core.askpass=", "ls-remote", vcsUrl).isSuccess
-        }
+        ProcessCapture("git", "-c", "credential.helper=", "-c", "core.askpass=echo", "ls-remote", vcsUrl).isSuccess
 
     override fun download(
         pkg: Package, targetDir: File, allowMovingRevisions: Boolean,

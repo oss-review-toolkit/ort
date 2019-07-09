@@ -6,7 +6,7 @@ repository:
     revision: "<REPLACE_REVISION>"
     path: "analyzer/src/funTest/assets/projects/synthetic/gradle"
   vcs_processed:
-    type: "git"
+    type: "Git"
     url: "<REPLACE_URL_PROCESSED>"
     revision: "<REPLACE_REVISION>"
     path: "analyzer/src/funTest/assets/projects/synthetic/gradle"
@@ -60,7 +60,7 @@ analyzer:
         revision: ""
         path: ""
       vcs_processed:
-        type: "git"
+        type: "Git"
         url: "<REPLACE_URL_PROCESSED>"
         revision: "<REPLACE_REVISION>"
         path: "analyzer/src/funTest/assets/projects/synthetic/gradle"
@@ -77,7 +77,7 @@ analyzer:
         revision: ""
         path: ""
       vcs_processed:
-        type: "git"
+        type: "Git"
         url: "<REPLACE_URL_PROCESSED>"
         revision: "<REPLACE_REVISION>"
         path: "analyzer/src/funTest/assets/projects/synthetic/gradle/app"
@@ -185,7 +185,7 @@ analyzer:
         revision: ""
         path: ""
       vcs_processed:
-        type: "git"
+        type: "Git"
         url: "<REPLACE_URL_PROCESSED>"
         revision: "<REPLACE_REVISION>"
         path: "analyzer/src/funTest/assets/projects/synthetic/gradle/lib-without-repo"
@@ -330,7 +330,7 @@ analyzer:
         revision: ""
         path: ""
       vcs_processed:
-        type: "git"
+        type: "Git"
         url: "<REPLACE_URL_PROCESSED>"
         revision: "<REPLACE_REVISION>"
         path: "analyzer/src/funTest/assets/projects/synthetic/gradle/lib"
@@ -434,12 +434,12 @@ analyzer:
             value: "a6c32b40bf3d76eca54e3c601e5d1470c86fcdfa"
             algorithm: "SHA-1"
         vcs:
-          type: "git"
+          type: "Git"
           url: "git://github.com/junit-team/junit.git"
           revision: "r4.12"
           path: ""
         vcs_processed:
-          type: "git"
+          type: "Git"
           url: "https://github.com/junit-team/junit.git"
           revision: "r4.12"
           path: ""
@@ -466,12 +466,12 @@ analyzer:
             value: "f7d878153e86a1cdddf6b37850e00a9f8bff726f"
             algorithm: "SHA-1"
         vcs:
-          type: "git"
+          type: "Git"
           url: "http://git-wip-us.apache.org/repos/asf/commons-lang.git"
           revision: "LANG_3_5"
           path: ""
         vcs_processed:
-          type: "git"
+          type: "Git"
           url: "http://git-wip-us.apache.org/repos/asf/commons-lang.git"
           revision: "LANG_3_5"
           path: ""
@@ -497,12 +497,12 @@ analyzer:
             value: "f0770f7f0472bf120ada47beecadce4056fbd20a"
             algorithm: "SHA-1"
         vcs:
-          type: "git"
+          type: "Git"
           url: "http://git-wip-us.apache.org/repos/asf/commons-text.git"
           revision: ""
           path: ""
         vcs_processed:
-          type: "git"
+          type: "Git"
           url: "http://git-wip-us.apache.org/repos/asf/commons-text.git"
           revision: ""
           path: ""
@@ -527,12 +527,12 @@ analyzer:
             value: ""
             algorithm: ""
         vcs:
-          type: "git"
+          type: "Git"
           url: "https://gitbox.apache.org/repos/asf/struts.git"
           revision: "STRUTS_2_5_14_1"
           path: ""
         vcs_processed:
-          type: "git"
+          type: "Git"
           url: "https://gitbox.apache.org/repos/asf/struts.git"
           revision: "STRUTS_2_5_14_1"
           path: ""
@@ -559,12 +559,12 @@ analyzer:
             value: "1dc37250fbc78e23a65a67fbbaf71d2e9cbc3c0b"
             algorithm: "SHA-1"
         vcs:
-          type: "git"
+          type: "Git"
           url: "git@github.com:hamcrest/JavaHamcrest.git"
           revision: ""
           path: ""
         vcs_processed:
-          type: "git"
+          type: "Git"
           url: "ssh://git@github.com/hamcrest/JavaHamcrest.git"
           revision: ""
           path: ""

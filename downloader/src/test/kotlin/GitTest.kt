@@ -20,6 +20,7 @@
 package com.here.ort.downloader.vcs
 
 import com.here.ort.downloader.VersionControlSystem
+import com.here.ort.model.VcsType
 import com.here.ort.utils.Os
 import com.here.ort.utils.getUserOrtDirectory
 import com.here.ort.utils.safeDeleteRecursively
@@ -67,6 +68,7 @@ class GitTest : StringSpec() {
             git.isApplicableUrl("https://bitbucket.org/paniq/masagin") shouldBe false
         }
 
+        // TODO: Investigate why this succeeds locally on Windows but seem to make AppVeyor CI hang.
         "Git does not prompt for credentials for non-existing repositories".config(enabled = !Os.isWindows) {
             git.isApplicableUrl("https://github.com/heremaps/foobar.git") shouldBe false
         }
@@ -74,7 +76,7 @@ class GitTest : StringSpec() {
         "Detected Git working tree information is correct" {
             val workingTree = git.getWorkingTree(zipContentDir)
 
-            workingTree.vcsType shouldBe "Git"
+            workingTree.vcsType shouldBe VcsType.GIT
             workingTree.isValid() shouldBe true
             workingTree.getNested() shouldBe emptyMap()
             workingTree.getRemoteUrl() shouldBe "https://github.com/naiquevin/pipdeptree.git"
