@@ -22,6 +22,7 @@ package com.here.ort.analyzer
 
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
+
 import com.here.ort.model.EMPTY_JSON_NODE
 import com.here.ort.model.Hash
 import com.here.ort.model.Identifier
@@ -33,7 +34,6 @@ import com.here.ort.model.Scope
 import com.here.ort.model.VcsInfo
 import com.here.ort.model.VcsType
 import com.here.ort.model.xmlMapper
-
 import com.here.ort.utils.OkHttpClientHelper
 import com.here.ort.utils.textValueOrEmpty
 
