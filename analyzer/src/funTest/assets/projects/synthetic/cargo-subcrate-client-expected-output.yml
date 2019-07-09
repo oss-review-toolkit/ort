@@ -11,7 +11,7 @@ project:
     revision: ""
     path: ""
   vcs_processed:
-    type: "git"
+    type: "Git"
     url: "<REPLACE_URL>"
     revision: "<REPLACE_REVISION>"
     path: "<REPLACE_PATH>"
@@ -50,12 +50,12 @@ packages:
         value: "b486ce3ccf7ffd79fdeb678eac06a9e6c09fc88d33836340becb8fffe87c5e33"
         algorithm: "SHA-256"
     vcs:
-      type: "git"
+      type: "Git"
       url: "https://github.com/alexcrichton/cfg-if"
       revision: ""
       path: ""
     vcs_processed:
-      type: "git"
+      type: "Git"
       url: "https://github.com/alexcrichton/cfg-if.git"
       revision: ""
       path: ""

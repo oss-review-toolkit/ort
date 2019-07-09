@@ -11,7 +11,7 @@ project:
     revision: ""
     path: ""
   vcs_processed:
-    type: "git"
+    type: "Git"
     url: "<REPLACE_URL>"
     revision: "<REPLACE_REVISION>"
     path: "<REPLACE_PATH>"
@@ -45,12 +45,12 @@ packages:
         value: "ceac490aa12c567115b40b7b7fceca03a6c9d53d5defea066123debc83c5dc1f"
         algorithm: "SHA-256"
     vcs:
-      type: "git"
+      type: "Git"
       url: "https://github.com/mvdnes/spin-rs.git"
       revision: ""
       path: ""
     vcs_processed:
-      type: "git"
+      type: "Git"
       url: "https://github.com/mvdnes/spin-rs.git"
       revision: ""
       path: ""

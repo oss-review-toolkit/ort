@@ -36,6 +36,7 @@ import com.here.ort.model.RemoteArtifact
 import com.here.ort.model.Hash
 import com.here.ort.model.Scope
 import com.here.ort.model.VcsInfo
+import com.here.ort.model.VcsType
 import com.here.ort.model.config.AnalyzerConfiguration
 import com.here.ort.model.config.RepositoryConfiguration
 import com.here.ort.model.jsonMapper
@@ -93,7 +94,7 @@ class Cargo(
 
     private fun extractVcsInfo(node: JsonNode): VcsInfo {
         val url = extractRepositoryUrl(node)
-        val type = url?.let { "git" } ?: "" // For now cargo supports only git.
+        val type = url?.let { VcsType.GIT } ?: VcsType.NONE // For now cargo supports only git.
         return VcsInfo(type, url.orEmpty(), revision = "")
     }
 

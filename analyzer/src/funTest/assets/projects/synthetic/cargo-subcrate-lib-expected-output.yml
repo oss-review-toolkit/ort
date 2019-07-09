@@ -14,7 +14,7 @@ project:
     revision: ""
     path: ""
   vcs_processed:
-    type: "git"
+    type: "Git"
     url: "<REPLACE_URL>"
     revision: "<REPLACE_REVISION>"
     path: "<REPLACE_PATH>"
@@ -54,12 +54,12 @@ packages:
         value: "b486ce3ccf7ffd79fdeb678eac06a9e6c09fc88d33836340becb8fffe87c5e33"
         algorithm: "SHA-256"
     vcs:
-      type: "git"
+      type: "Git"
       url: "https://github.com/alexcrichton/cfg-if"
       revision: ""
       path: ""
     vcs_processed:
-      type: "git"
+      type: "Git"
       url: "https://github.com/alexcrichton/cfg-if.git"
       revision: ""
       path: ""
@@ -85,12 +85,12 @@ packages:
         value: "ceac490aa12c567115b40b7b7fceca03a6c9d53d5defea066123debc83c5dc1f"
         algorithm: "SHA-256"
     vcs:
-      type: "git"
+      type: "Git"
       url: "https://github.com/mvdnes/spin-rs.git"
       revision: ""
       path: ""
     vcs_processed:
-      type: "git"
+      type: "Git"
       url: "https://github.com/mvdnes/spin-rs.git"
       revision: ""
       path: ""
@@ -116,12 +116,12 @@ packages:
         value: "44363f6f51401c34e7be73db0db371c04705d35efbe9f7d6082e03a921a32c55"
         algorithm: "SHA-256"
     vcs:
-      type: "git"
+      type: "Git"
       url: "https://github.com/mvdnes/spin-rs.git"
       revision: ""
       path: ""
     vcs_processed:
-      type: "git"
+      type: "Git"
       url: "https://github.com/mvdnes/spin-rs.git"
       revision: ""
       path: ""
