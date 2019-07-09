@@ -90,13 +90,10 @@ class Cargo(
             version = node["version"].textValueOrEmpty()
         )
 
-    private fun extractRepositoryUrl(node: JsonNode) = node["repository"]?.textValue()
+    private fun extractRepositoryUrl(node: JsonNode) = node["repository"].textValueOrEmpty()
 
-    private fun extractVcsInfo(node: JsonNode): VcsInfo {
-        val url = extractRepositoryUrl(node)
-        val type = url?.let { VcsType.GIT } ?: VcsType.NONE // For now cargo supports only git.
-        return VcsInfo(type, url.orEmpty(), revision = "")
-    }
+    private fun extractVcsInfo(node: JsonNode) =
+        VersionControlSystem.splitUrl(extractRepositoryUrl(node))
 
     private fun extractDeclaredLicenses(node: JsonNode) =
         node["license"].textValueOrEmpty().split("/")

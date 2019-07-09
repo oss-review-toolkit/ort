@@ -55,7 +55,7 @@ packages:
         algorithm: "SHA-256"
     vcs:
       type: "Git"
-      url: "https://github.com/alexcrichton/cfg-if"
+      url: "https://github.com/alexcrichton/cfg-if.git"
       revision: ""
       path: ""
     vcs_processed:

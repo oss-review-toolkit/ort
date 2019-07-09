@@ -31,9 +31,9 @@ env:
     - GO_DEP_VERSION="0.5.1"
     - NPM_VERSION="6.4.0"
     - PHP_VERSION="7.1"
+    - RUST_VERSION="1.35.0"
     - STACK_VERSION="2.1.1"
     - YARN_VERSION="1.16.0"
-    - RUST_VERSION="1.35.0"
 
 before_install:
   - sudo rm -f $JAVA_HOME/lib/security/cacerts
