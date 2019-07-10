@@ -155,10 +155,10 @@ Please see [Configuration.md](./docs/Configuration.md) for details about the ORT
 
 [![Analyzer](./logos/analyzer.png)](./analyzer/src/main/kotlin)
 
-The Analyzer determines the dependencies of software projects inside the specified input directory (`-i`). It does so by
-querying whatever [supported package manager](#supported-package-managers) is found. No modifications to your existing
-project source code, or especially to the build system, are necessary for that to work. The tree of transitive
-dependencies per project is written out as part of an
+The Analyzer is a Software Composition Analysis (SCA) tool that determines the dependencies of software projects inside
+the specified input directory (`-i`). It does so by querying whatever [supported package manager](#supported-package-managers)
+is found. No modifications to your existing project source code, or especially to the build system, are necessary for
+that to work. The tree of transitive dependencies per project is written out as part of an
 [OrtResult](https://github.com/heremaps/oss-review-toolkit/blob/master/model/src/main/kotlin/OrtResult.kt) in YAML (or
 JSON, see `-f`) format to a file named `analyzer-result.yml` to the specified output directory (`-o`). The output file
 exactly documents the status quo of all package-related meta-data. It can be further processed or manually edited before
