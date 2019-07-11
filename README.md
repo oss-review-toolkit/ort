@@ -191,6 +191,14 @@ Taking an ORT result file with an analyzer result as the input (`-a`), the Downl
 contained packages to the specified output directory (`-o`). The Downloader takes care of things like normalizing URLs
 and using the [appropriate VCS tool](./downloader/src/main/kotlin/vcs) to checkout source code from version control.
 
+Currently, the following Version Control Systems are supported:
+
+* [CVS](https://en.wikipedia.org/wiki/Concurrent_Versions_System)
+* [Git](https://git-scm.com/)
+* [Git-Repo](https://source.android.com/setup/develop/repo)
+* [Mercurial](https://www.mercurial-scm.org/)
+* [Subversion](https://subversion.apache.org/)
+
 <a name="scanner">&nbsp;</a>
 
 [![Scanner](./logos/scanner.png)](./scanner/src/main/kotlin)
@@ -230,7 +238,7 @@ artifactory_storage:
 
 [![Evaluator](./logos/evaluator.png)](./evaluator/src/main/kotlin)
 
-The evaluator is used to perform custom license policy checks on scan results. The rules to check against are implemented
+The Evaluator is used to perform custom license policy checks on scan results. The rules to check against are implemented
 via scripting. Currently, Kotlin script with a dedicated DSL is used for that, but support for other scripting languages
 can be added as well. See [no_gpl_declared.kts](./evaluator/src/main/resources/rules/no_gpl_declared.kts) for a very
 simple example of a rule written in Kotlin script which verifies that no dependencies that declare the GPL are used.
