@@ -40,7 +40,7 @@ import org.apache.commons.compress.compressors.gzip.GzipCompressorInputStream
 private val UNCOMPRESSED_EXTENSIONS = listOf(".pom")
 private val TAR_EXTENSIONS = listOf(".gem", ".tar")
 private val TAR_BZIP2_EXTENSIONS = listOf(".tar.bz2", ".tbz2")
-private val TAR_GZIP_EXTENSIONS = listOf(".tar.gz", ".tgz", ".crate")
+private val TAR_GZIP_EXTENSIONS = listOf(".crate", ".tar.gz", ".tgz")
 private val ZIP_EXTENSIONS = listOf(".aar", ".egg", ".jar", ".war", ".whl", ".zip")
 private val SEVENZIP_EXTENSIONS = listOf(".7z")
 
