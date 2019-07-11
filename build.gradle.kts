@@ -227,7 +227,6 @@ subprojects {
         dependsOn(funTest)
     }
 
-
     val sourcesJar by tasks.registering(Jar::class) {
         archiveClassifier.set("sources")
         from(sourceSets["main"].allSource)
