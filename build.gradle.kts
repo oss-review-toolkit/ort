@@ -224,26 +224,38 @@ subprojects {
         dependsOn(funTest)
     }
 
-    val dokka by tasks.existing(DokkaTask::class)
-
-    val dokkaJavadoc by tasks.registering(DokkaTask::class) {
-        outputFormat = "javadoc"
-        outputDirectory = "$buildDir/javadoc"
-    }
 
     val sourcesJar by tasks.registering(Jar::class) {
         archiveClassifier.set("sources")
         from(sourceSets["main"].allSource)
     }
 
+    val dokka by tasks.existing(DokkaTask::class) {
+        description = "Generates minimalistic HTML documentation, Java classes are translated to Kotlin."
+    }
+
     val dokkaJar by tasks.registering(Jar::class) {
         dependsOn(dokka)
+
+        description = "Assembles a jar archive containing the minimalistic HTML documentation."
+        group = "Documentation"
+
         archiveClassifier.set("dokka")
         from(dokka.get().outputDirectory)
     }
 
+    val dokkaJavadoc by tasks.registering(DokkaTask::class) {
+        description = "Generates documentation that looks like normal Javadoc, Kotlin classes are translated to Java."
+        outputFormat = "javadoc"
+        outputDirectory = "$buildDir/javadoc"
+    }
+
     val javadocJar by tasks.registering(Jar::class) {
         dependsOn(dokkaJavadoc)
+
+        description = "Assembles a jar archive containing the Javadoc documentation."
+        group = "Documentation"
+
         archiveClassifier.set("javadoc")
         from(dokkaJavadoc.get().outputDirectory)
     }
