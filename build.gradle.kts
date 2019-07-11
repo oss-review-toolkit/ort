@@ -4,6 +4,8 @@ import com.here.ort.gradle.*
 
 import io.gitlab.arturbosch.detekt.detekt
 
+import org.ajoberstar.grgit.Grgit
+
 import org.gradle.api.tasks.testing.logging.TestExceptionFormat
 import org.gradle.api.tasks.testing.logging.TestLogEvent
 
@@ -259,6 +261,14 @@ subprojects {
 
         archiveClassifier.set("javadoc")
         from(dokkaJavadoc.get().outputDirectory)
+    }
+
+    version = object : Object() {
+        private val git = Grgit.open(mapOf("dir" to rootDir))
+
+        override fun toString(): String {
+            return git.describe(mapOf("longDescr" to true, "tags" to true)) ?: git.head().abbreviatedId
+        }
     }
 
     configure<PublishingExtension> {
