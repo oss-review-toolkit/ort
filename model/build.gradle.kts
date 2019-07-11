@@ -1,7 +1,5 @@
 import com.here.ort.gradle.*
 
-import org.ajoberstar.grgit.Grgit
-
 import org.jetbrains.kotlin.gradle.dsl.KotlinCompile
 
 val jacksonVersion: String by project
@@ -34,15 +32,13 @@ val generateVersionResource by tasks.registering {
     group = "Build"
     description = "Generates a plain text resource file containing the current application version."
 
-    val git = Grgit.open(mapOf("dir" to rootDir))
-    val version = git.describe(mapOf("longDescr" to true, "tags" to true)) ?: git.head().abbreviatedId
     val versionFile = file("$projectDir/src/main/resources/VERSION")
 
-    inputs.property("version", version)
+    inputs.property("version", version.toString())
     outputs.file(versionFile)
 
     doLast {
-        versionFile.writeText(version)
+        versionFile.writeText(version.toString())
     }
 }
 
