@@ -1,0 +1,5 @@
+jdk:
+  - openjdk8
+
+install:
+  - ./gradlew --no-daemon --stacktrace -x reporter-web-app:yarnBuild publishToMavenLocal
