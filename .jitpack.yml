@@ -1,0 +1,6 @@
+jdk:
+  - openjdk8
+
+install:
+  # Exclude the reporter-web-app from the build because there are issues installing Yarn on JitPack.
+  - ./gradlew --no-daemon --stacktrace -x reporter-web-app:yarnBuild publishToMavenLocal
