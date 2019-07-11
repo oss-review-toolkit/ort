@@ -77,6 +77,7 @@ subprojects {
 
     // Apply core plugins.
     apply(plugin = "jacoco")
+    apply(plugin = "maven-publish")
 
     // Apply third-party plugins.
     apply(plugin = "org.jetbrains.kotlin.jvm")
@@ -260,10 +261,33 @@ subprojects {
         from(dokkaJavadoc.get().outputDirectory)
     }
 
-    artifacts {
-        add("archives", sourcesJar)
-        add("archives", dokkaJar)
-        add("archives", javadocJar)
+    configure<PublishingExtension> {
+        publications {
+            create<MavenPublication>(name) {
+                groupId = "com.here.ort"
+
+                from(components["java"])
+                artifact(sourcesJar.get())
+                artifact(dokkaJar.get())
+                artifact(javadocJar.get())
+
+                pom {
+                    licenses {
+                        license {
+                            name.set("Apache-2.0")
+                            url.set("http://www.apache.org/licenses/LICENSE-2.0")
+                        }
+                    }
+
+                    scm {
+                        connection.set("scm:git:https://github.com/heremaps/oss-review-toolkit.git")
+                        developerConnection.set("scm:git:git@github.com:heremaps/oss-review-toolkit.git")
+                        tag.set(version.toString())
+                        url.set("https://github.com/heremaps/oss-review-toolkit")
+                    }
+                }
+            }
+        }
     }
 }
 
