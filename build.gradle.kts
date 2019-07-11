@@ -277,7 +277,6 @@ subprojects {
 
                 from(components["java"])
                 artifact(sourcesJar.get())
-                artifact(dokkaJar.get())
                 artifact(javadocJar.get())
 
                 pom {
