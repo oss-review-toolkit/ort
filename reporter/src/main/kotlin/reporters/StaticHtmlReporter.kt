@@ -187,10 +187,6 @@ class StaticHtmlReporter : Reporter() {
                         +project.id.toCoordinates()
 
                         if (projectTable.isExcluded()) {
-                            projectTable.projectExclude?.let { exclude ->
-                                +" "
-                                div("ort-reason") { +"Excluded: ${exclude.reason} - ${exclude.comment}" }
-                            }
                             projectTable.pathExcludes.forEach { exclude ->
                                 +" "
                                 div("ort-reason") { +"Excluded: ${exclude.reason} - ${exclude.comment}" }
@@ -388,12 +384,6 @@ class StaticHtmlReporter : Reporter() {
         if (table.isExcluded()) {
             h3 { +"Project is Excluded" }
             p { +"The project is excluded for the following reason(s):" }
-        }
-
-        table.projectExclude?.let { exclude ->
-            p {
-                div("ort-reason") { +"${exclude.reason} - ${exclude.comment}" }
-            }
         }
 
         table.pathExcludes.forEach { exclude ->

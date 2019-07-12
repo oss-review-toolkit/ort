@@ -28,7 +28,6 @@ import com.here.ort.model.ScanResult
 import com.here.ort.model.Severity
 import com.here.ort.model.VcsInfo
 import com.here.ort.model.config.PathExclude
-import com.here.ort.model.config.ProjectExclude
 import com.here.ort.model.config.RepositoryConfiguration
 import com.here.ort.model.config.ScopeExclude
 import com.here.ort.spdx.SpdxExpression
@@ -96,16 +95,11 @@ data class ReportTableModel(
         val fullDefinitionFilePath: String,
 
         /**
-         * Information about if and why the project is excluded by a [ProjectExclude].
-         */
-        val projectExclude: ProjectExclude?,
-
-        /**
          * Information about if and why the project is excluded by [PathExclude]s.
          */
         val pathExcludes: List<PathExclude>
     ) {
-        fun isExcluded() = projectExclude != null || pathExcludes.isNotEmpty()
+        fun isExcluded() = pathExcludes.isNotEmpty()
     }
 
     data class DependencyRow(
@@ -146,8 +140,7 @@ data class ReportTableModel(
     )
 
     data class SummaryTable(
-        val rows: List<SummaryRow>,
-        val projectExcludes: Map<Identifier, ProjectExclude?>
+        val rows: List<SummaryRow>
     )
 
     data class SummaryRow(
