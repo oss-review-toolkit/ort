@@ -23,7 +23,6 @@ import com.fasterxml.jackson.module.kotlin.readValue
 
 import com.here.ort.model.yamlMapper
 
-import io.kotlintest.matchers.beEmpty
 import io.kotlintest.matchers.haveSize
 import io.kotlintest.should
 import io.kotlintest.shouldBe
@@ -45,31 +44,26 @@ class RepositoryConfigurationTest : WordSpec() {
                 repositoryConfiguration.excludes shouldBe null
             }
 
-            "deserialize to a path regex working with escaped dots" {
+            "deserialize to a path regex working with double star" {
                 val configuration = """
                     excludes:
-                      projects:
-                      - path: "android/.*build\\.gradle"
+                      paths:
+                      - pattern: "android/**build.gradle"
                         reason: "BUILD_TOOL_OF"
                         comment: "project comment"
                     """.trimIndent()
 
                 val config = yamlMapper.readValue<RepositoryConfiguration>(configuration)
-                config.excludes!!.projects[0].path.matches("android/project1/build.gradle") shouldBe true
+                config.excludes!!.paths[0].matches("android/project1/build.gradle") shouldBe true
             }
 
             "be deserializable" {
                 val configuration = """
                     excludes:
-                      projects:
-                      - path: "project1/path"
+                      paths:
+                      - pattern: "project1/path"
                         reason: "BUILD_TOOL_OF"
                         comment: "project comment"
-                      - path: "project2/path"
-                        scopes:
-                        - name: "scope"
-                          reason: "PROVIDED_BY"
-                          comment: "scope comment"
                       scopes:
                       - name: "scope"
                         reason: "TEST_TOOL_OF"
@@ -90,26 +84,13 @@ class RepositoryConfigurationTest : WordSpec() {
                 repositoryConfiguration shouldNotBe null
                 repositoryConfiguration.excludes shouldNotBe null
 
-                val projects = repositoryConfiguration.excludes!!.projects
-                projects should haveSize(2)
+                val paths = repositoryConfiguration.excludes!!.paths
+                paths should haveSize(1)
 
-                val project1 = projects[0]
-                project1.path.pattern shouldBe "project1/path"
-                project1.reason shouldBe ProjectExcludeReason.BUILD_TOOL_OF
-                project1.comment shouldBe "project comment"
-                project1.isWholeProjectExcluded shouldBe true
-                project1.scopes should beEmpty()
-
-                val project2 = projects[1]
-                project2.path.pattern shouldBe "project2/path"
-                project2.reason shouldBe null
-                project2.comment shouldBe null
-                project2.isWholeProjectExcluded shouldBe false
-
-                project2.scopes should haveSize(1)
-                project2.scopes.first().name.pattern shouldBe "scope"
-                project2.scopes.first().reason shouldBe ScopeExcludeReason.PROVIDED_BY
-                project2.scopes.first().comment shouldBe "scope comment"
+                val path = paths[0]
+                path.pattern shouldBe "project1/path"
+                path.reason shouldBe PathExcludeReason.BUILD_TOOL_OF
+                path.comment shouldBe "project comment"
 
                 val scopes = repositoryConfiguration.excludes!!.scopes
                 scopes should haveSize(1)
