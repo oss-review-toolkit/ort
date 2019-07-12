@@ -50,6 +50,7 @@ RUN apt-get update && \
     apt-get install -y --no-install-recommends \
         # Install general tools required by this Dockefile.
         curl \
+        python3 \
         openssh-client \
         # Install VCS tools (no specific versions required here).
         cvs \
@@ -63,6 +64,7 @@ RUN apt-get update && \
         haskell-stack=$HASKELL_STACK_VERSION \
         npm=$NPM_VERSION \
         python-pip=$PYTHON_PIP_VERSION \
+        python3-pip=$PYTHON_PIP_VERSION \
         sbt=$SBT_VERSION \
     && \
     rm -rf /var/lib/apt/lists/*
@@ -74,7 +76,7 @@ RUN \
     chmod a+x /usr/local/bin/repo && \
     # Install package managers (in versions known to work).
     npm install --global bower@$BOWER_VERSION yarn@$YARN_VERSION && \
-    pip install virtualenv==$PYTHON_VIRTUALENV_VERSION && \
+    pip3 install virtualenv==$PYTHON_VIRTUALENV_VERSION && \
     # Add scanners (in versions known to work).
     curl -sSL https://github.com/nexB/scancode-toolkit/archive/v$SCANCODE_VERSION.tar.gz | \
         tar -zxC /usr/local && \
