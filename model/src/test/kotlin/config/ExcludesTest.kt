@@ -36,8 +36,6 @@ import io.kotlintest.TestCase
 import io.kotlintest.matchers.beEmpty
 import io.kotlintest.matchers.collections.contain
 import io.kotlintest.matchers.collections.containExactly
-import io.kotlintest.matchers.collections.containExactlyInAnyOrder
-import io.kotlintest.matchers.collections.containOnlyNulls
 import io.kotlintest.matchers.containAll
 import io.kotlintest.matchers.haveSize
 import io.kotlintest.should
@@ -55,12 +53,6 @@ class ExcludesTest : WordSpec() {
     private val project2 = Project.EMPTY.copy(id = projectId2, definitionFilePath = "path2")
     private val project3 = Project.EMPTY.copy(id = projectId3, definitionFilePath = "path3")
 
-    private val projectExclude1 = ProjectExclude("path1", ProjectExcludeReason.BUILD_TOOL_OF, "")
-    private val projectExclude2 = ProjectExclude("path2", ProjectExcludeReason.BUILD_TOOL_OF, "")
-    private val projectExclude3 = ProjectExclude("path3", ProjectExcludeReason.BUILD_TOOL_OF, "")
-    private val projectExclude4 = ProjectExclude(".*", ProjectExcludeReason.BUILD_TOOL_OF, "")
-
-
     private val pathExclude1 = PathExclude("path1", PathExcludeReason.BUILD_TOOL_OF, "")
     private val pathExclude2 = PathExclude("path2", PathExcludeReason.BUILD_TOOL_OF, "")
     private val pathExclude3 = PathExclude("**.ext", PathExcludeReason.BUILD_TOOL_OF, "")
@@ -71,10 +63,6 @@ class ExcludesTest : WordSpec() {
 
     private val scopeExclude1 = ScopeExclude("scope1", ScopeExcludeReason.PROVIDED_BY, "")
     private val scopeExclude2 = ScopeExclude("scope2", ScopeExcludeReason.PROVIDED_BY, "")
-
-    private val projectExcludeWithScopes1 = ProjectExclude("path1", scopes = listOf(scopeExclude1))
-    private val projectExcludeWithScopes2 = ProjectExclude("path2", scopes = listOf(scopeExclude2))
-
 
     private lateinit var ortResult: OrtResult
 
@@ -127,48 +115,19 @@ class ExcludesTest : WordSpec() {
             }
         }
 
-        "findProjectExcludes" should {
-            "return empty list if there is no matching project exclude" {
-                val excludes = Excludes(projects = listOf(projectExclude1, projectExclude3))
-
-                excludes.findProjectExcludes(project2, OrtResult.EMPTY) should beEmpty()
-            }
-
-            "find the correct project excludes" {
-                val excludes = Excludes(projects = listOf(projectExclude1, projectExclude2, projectExclude4))
-
-                excludes.findProjectExcludes(project2, OrtResult.EMPTY) should
-                        containExactlyInAnyOrder(projectExclude2, projectExclude4)
-            }
-        }
-
         "findScopeExcludes" should {
             "return an empty list if there are no matching scope excludes" {
-                val excludes = Excludes(
-                    projects = listOf(projectExcludeWithScopes2),
-                    scopes = listOf(scopeExclude2)
-                )
+                val excludes = Excludes(scopes = listOf(scopeExclude2))
 
-                excludes.findScopeExcludes(scope1, project1, OrtResult.EMPTY) should beEmpty()
+                excludes.findScopeExcludes(scope1) should beEmpty()
             }
 
-            "find the correct global scope excludes" {
+            "find the correct scope excludes" {
                 val excludes = Excludes(
                     scopes = listOf(scopeExclude1, scopeExclude2)
                 )
 
-                val scopeExcludes = excludes.findScopeExcludes(scope1, project1, OrtResult.EMPTY)
-
-                scopeExcludes should haveSize(1)
-                scopeExcludes should contain(scopeExclude1)
-            }
-
-            "find the correct project specific scope excludes" {
-                val excludes = Excludes(
-                    projects = listOf(projectExcludeWithScopes1, projectExcludeWithScopes2)
-                )
-
-                val scopeExcludes = excludes.findScopeExcludes(scope1, project1, OrtResult.EMPTY)
+                val scopeExcludes = excludes.findScopeExcludes(scope1)
 
                 scopeExcludes should haveSize(1)
                 scopeExcludes should contain(scopeExclude1)
@@ -183,7 +142,7 @@ class ExcludesTest : WordSpec() {
             "return true if all occurrences of the package are excluded" {
                 setExcludes(
                     Excludes(
-                        projects = listOf(projectExclude1),
+                        paths = listOf(pathExclude1),
                         scopes = listOf(scopeExclude2)
                     )
                 )
@@ -199,7 +158,7 @@ class ExcludesTest : WordSpec() {
             "return false if not all occurrences of the package are excluded" {
                 setExcludes(
                     Excludes(
-                        projects = listOf(projectExclude1),
+                        paths = listOf(pathExclude1),
                         scopes = listOf(scopeExclude2)
                     )
                 )
@@ -246,20 +205,6 @@ class ExcludesTest : WordSpec() {
         }
 
         "isProjectExcluded" should {
-            "return true if the definition file path is matched by a project exclude without scope excludes" {
-                setExcludes(Excludes(projects = listOf(projectExclude1)))
-                setProjects(project1)
-
-                ortResult.isProjectExcluded(project1.id) shouldBe true
-            }
-
-            "return false if the definition file path is matched by a project exclude with scope excludes" {
-                setExcludes(Excludes(projects = listOf(projectExcludeWithScopes1)))
-                setProjects(project1)
-
-                ortResult.isProjectExcluded(project1.id) shouldBe false
-            }
-
             "return true if the definition file path is matched by a path exclude" {
                 setExcludes(Excludes(paths = listOf(pathExclude1)))
                 setProjects(project1)
@@ -276,65 +221,22 @@ class ExcludesTest : WordSpec() {
         }
 
         "isScopeExcluded" should {
-            "return true if the scope is excluded in the project exclude" {
-                val excludes = Excludes(projects = listOf(projectExcludeWithScopes1))
-
-                excludes.isScopeExcluded(scope1, project1, OrtResult.EMPTY) shouldBe true
-            }
-
-            "return true if the scope is excluded globally" {
+            "return true if the scope is excluded" {
                 val excludes = Excludes(scopes = listOf(scopeExclude1))
 
-                excludes.isScopeExcluded(scope1, project1, OrtResult.EMPTY) shouldBe true
+                excludes.isScopeExcluded(scope1) shouldBe true
             }
 
             "return true if the scope is excluded using a regex" {
                 val excludes = Excludes(scopes = listOf(scopeExclude1.copy(name = Regex("sc.*"))))
 
-                excludes.isScopeExcluded(scope1, project1, OrtResult.EMPTY) shouldBe true
+                excludes.isScopeExcluded(scope1) shouldBe true
             }
 
             "return false if the scope is not excluded" {
                 val excludes = Excludes()
 
-                excludes.isScopeExcluded(scope1, project1, OrtResult.EMPTY) shouldBe false
-            }
-        }
-
-        "projectExcludesById" should {
-            "return null values for projects without a project exclude" {
-                val excludes = Excludes()
-
-                val excludesById = excludes.projectExcludesById(setOf(project1, project2, project3), OrtResult.EMPTY)
-
-                excludesById.keys should haveSize(3)
-                excludesById.keys should containAll(projectId1, projectId2, projectId3)
-                excludesById.values should containOnlyNulls()
-            }
-
-            "return the correct mapping of ids to project excludes" {
-                val excludes = Excludes(
-                    projects = listOf(projectExclude1, projectExclude2, projectExclude3)
-                )
-
-                val excludesById = excludes.projectExcludesById(setOf(project1, project2, project3), OrtResult.EMPTY)
-
-                excludesById.keys should haveSize(3)
-                excludesById[projectId1] shouldBe projectExclude1
-                excludesById[projectId2] shouldBe projectExclude2
-                excludesById[projectId3] shouldBe projectExclude3
-            }
-
-            "only return mappings for requested projects" {
-                val excludes = Excludes(
-                    projects = listOf(projectExclude1, projectExclude2, projectExclude3)
-                )
-
-                val excludesById = excludes.projectExcludesById(setOf(project1, project2), OrtResult.EMPTY)
-
-                excludesById.keys should haveSize(2)
-                excludesById[projectId1] shouldBe projectExclude1
-                excludesById[projectId2] shouldBe projectExclude2
+                excludes.isScopeExcluded(scope1) shouldBe false
             }
         }
 
@@ -342,7 +244,7 @@ class ExcludesTest : WordSpec() {
             "return empty lists for scopes without a scope exclude" {
                 val excludes = Excludes()
 
-                val excludesByName = excludes.scopeExcludesByName(project1, listOf(scope1, scope2), OrtResult.EMPTY)
+                val excludesByName = excludes.scopeExcludesByName(listOf(scope1, scope2))
 
                 excludesByName.keys should haveSize(2)
                 excludesByName.keys should containAll(scope1.name, scope2.name)
@@ -352,11 +254,10 @@ class ExcludesTest : WordSpec() {
 
             "return the correct mapping of scope names to scope excludes" {
                 val excludes = Excludes(
-                    projects = listOf(projectExcludeWithScopes1, projectExcludeWithScopes2, projectExclude3),
-                    scopes = listOf(scopeExclude2)
+                    scopes = listOf(scopeExclude1, scopeExclude2)
                 )
 
-                val excludesByName = excludes.scopeExcludesByName(project1, setOf(scope1, scope2), OrtResult.EMPTY)
+                val excludesByName = excludes.scopeExcludesByName(setOf(scope1, scope2))
 
                 excludesByName.keys should haveSize(2)
                 excludesByName.keys should containAll(scope1.name, scope2.name)
@@ -372,10 +273,10 @@ class ExcludesTest : WordSpec() {
 
             "only return mappings for requested scopes" {
                 val excludes = Excludes(
-                    projects = listOf(projectExcludeWithScopes1, projectExcludeWithScopes2)
+                    scopes = listOf(scopeExclude1, scopeExclude2)
                 )
 
-                val excludesByName = excludes.scopeExcludesByName(project1, listOf(scope1), OrtResult.EMPTY)
+                val excludesByName = excludes.scopeExcludesByName(listOf(scope1))
 
                 excludesByName.keys should haveSize(1)
                 excludesByName.keys should contain(scope1.name)
