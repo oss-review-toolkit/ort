@@ -88,12 +88,6 @@ class ReportTableModelMapper(private val resolutionProvider: ResolutionProvider)
         val licenseFindings = ortResult.collectLicenseFindings()
 
         val projectTables = analyzerResult.projects.associateWith { project ->
-            // Only add the project exclude to the model if the whole project is excluded. If only parts of the
-            // project are excluded this information will be stored in the rows of the affected dependencies.
-            val projectExclude = excludes.findProjectExcludes(project, ortResult).singleOrNull {
-                it.isWholeProjectExcluded
-            }
-
             val pathExcludes = excludes.findPathExcludes(project, ortResult)
 
             val allIds = sortedSetOf(project.id)
@@ -128,7 +122,7 @@ class ReportTableModelMapper(private val resolutionProvider: ResolutionProvider)
                     analyzerIssues = analyzerIssues.map { it.toResolvableIssue() },
                     scanIssues = scanIssues.map { it.toResolvableIssue() }
                 ).also { row ->
-                    val isRowExcluded = pathExcludes.isNotEmpty() || projectExclude != null
+                    val isRowExcluded = pathExcludes.isNotEmpty()
                             || (scopes.isNotEmpty() && scopes.all { it.value.isNotEmpty() })
 
                     val nonExcludedAnalyzerIssues = if (isRowExcluded) emptyList() else row.analyzerIssues
@@ -170,22 +164,15 @@ class ReportTableModelMapper(private val resolutionProvider: ResolutionProvider)
             ProjectTable(
                 tableRows,
                 ortResult.getDefinitionFilePathRelativeToAnalyzerRoot(project),
-                projectExclude,
                 pathExcludes
             )
         }.toSortedMap()
 
         val issueSummaryTable = IssueTable(issueSummaryRows.values.toList().sortedBy { it.id })
 
-        val projectExcludes = ortResult.analyzer?.result?.projects?.let { projects ->
-            excludes.projectExcludesById(projects, ortResult)
-        } ?: emptyMap()
-
-
         val summaryTable = SummaryTable(
             // Sort excluded rows to the end of the list.
-            summaryRows.values.toList().sortedWith(compareBy({ ortResult.isExcluded(it.id) }, { it.id })),
-            projectExcludes
+            summaryRows.values.toList().sortedWith(compareBy({ ortResult.isExcluded(it.id) }, { it.id }))
         )
 
         val metadata = mutableMapOf<String, String>()
