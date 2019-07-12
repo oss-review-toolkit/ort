@@ -181,19 +181,12 @@ class ReportTableModelMapper(private val resolutionProvider: ResolutionProvider)
             excludes.projectExcludesById(projects, ortResult)
         } ?: emptyMap()
 
-        val summaryTable = SummaryTable(summaryRows.values.toList().sortedWith(compareBy({
+
+        val summaryTable = SummaryTable(
             // Sort excluded rows to the end of the list.
-            val allScopes = it.scopes.flatMap { it.value.keys }
-            if (allScopes.isEmpty()) {
-                // $it is an excluded project.
-                projectExcludes[it.id] != null
-            } else {
-                // $it is an excluded dependency.
-                it.scopes.all {
-                    projectExcludes[it.key] != null || it.value.values.all { excludes -> excludes.isNotEmpty() }
-                }
-            }
-        }, { it.id })), projectExcludes)
+            summaryRows.values.toList().sortedWith(compareBy({ ortResult.isExcluded(it.id) }, { it.id })),
+            projectExcludes
+        )
 
         val metadata = mutableMapOf<String, String>()
         (ortResult.data["job_parameters"] as? Map<*, *>)?.let {
