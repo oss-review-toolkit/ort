@@ -20,10 +20,19 @@
 # Get the absolute directory this script resides in.
 SCRIPT_DIR="$(cd "$(dirname $0)" && pwd)"
 
-# If required, first build the image to build ORT.
-docker image inspect ort-build > /dev/null 2>&1 || docker/build.sh
+# Get the absolute directory of the project root.
+PROJECT_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
 
-(cd $SCRIPT_DIR/.. && \
+# If required, first build the distribution.
+ORT_VERSION=$(cat $PROJECT_DIR/model/src/main/resources/VERSION)
+if [ ! -f "$PROJECT_DIR/cli/build/distributions/ort-$ORT_VERSION.tar" ]; then
+    docker/build.sh
+    ORT_VERSION=$(cat $PROJECT_DIR/model/src/main/resources/VERSION)
+fi
+
+echo Testing ORT version $ORT_VERSION...
+
+(cd $PROJECT_DIR && \
     . docker/lib && \
     buildWithoutContext docker/test/Dockerfile ort-test:latest && \
     runGradleWrapper ort-test test
