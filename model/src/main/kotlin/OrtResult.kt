@@ -87,13 +87,10 @@ data class OrtResult(
         val result = getProjects().associateBy(
             { project -> project.id },
             { project ->
-                val projectExcludes = getExcludes()
-                    .findProjectExcludes(project, this)
-                    .filter { it.isWholeProjectExcluded }
                 val pathExcludes = getExcludes().findPathExcludes(project, this)
                 ProjectEntry(
                     project = project,
-                    isExcluded = projectExcludes.isNotEmpty() || pathExcludes.isNotEmpty()
+                    isExcluded = pathExcludes.isNotEmpty()
                 )
             }
         )
@@ -110,7 +107,7 @@ data class OrtResult(
         val includedPackages = mutableSetOf<Identifier>()
         getProjects().forEach { project ->
             project.scopes.forEach { scope ->
-                val isScopeExcluded = getExcludes().isScopeExcluded(scope, project, this)
+                val isScopeExcluded = getExcludes().isScopeExcluded(scope)
 
                 if (!isProjectExcluded(project.id) && !isScopeExcluded) {
                     val dependencies = scope.collectDependencies().map { it.id }

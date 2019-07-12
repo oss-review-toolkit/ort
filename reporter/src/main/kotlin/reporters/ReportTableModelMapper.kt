@@ -97,7 +97,7 @@ class ReportTableModelMapper(private val resolutionProvider: ResolutionProvider)
                 val scanResult = scanRecord?.scanResults?.find { it.id == id }
 
                 val scopes = project.scopes.filter { id in it }.let { scopes ->
-                    excludes.scopeExcludesByName(project, scopes, ortResult).toSortedMap()
+                    excludes.scopeExcludesByName(scopes).toSortedMap()
                 }
 
                 val concludedLicense = ortResult.getConcludedLicensesForId(id)
