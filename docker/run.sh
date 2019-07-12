@@ -33,8 +33,10 @@ fi
 echo Running ORT version $ORT_VERSION...
 
 DOCKER_ARGS=$1
-shift
-ORT_ARGS=$@
+if [ -n "$DOCKER_ARGS" ]; then
+    shift
+    ORT_ARGS=$@
+fi
 
 (cd $PROJECT_DIR && \
     . docker/lib && \
