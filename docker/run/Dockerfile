@@ -63,6 +63,7 @@ RUN apt-get update && \
         haskell-stack=$HASKELL_STACK_VERSION \
         npm=$NPM_VERSION \
         python-pip=$PYTHON_PIP_VERSION \
+        python3-pip=$PYTHON_PIP_VERSION \
         sbt=$SBT_VERSION \
     && \
     rm -rf /var/lib/apt/lists/*
