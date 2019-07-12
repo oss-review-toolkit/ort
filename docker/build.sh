@@ -20,7 +20,10 @@
 # Get the absolute directory this script resides in.
 SCRIPT_DIR="$(cd "$(dirname $0)" && pwd)"
 
-(cd $SCRIPT_DIR/.. && \
+# Get the absolute directory of the project root.
+PROJECT_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
+
+(cd $PROJECT_DIR && \
     . docker/lib && \
     buildWithoutContext docker/build/Dockerfile ort-build:latest && \
     runGradleWrapper ort-build :cli:installDist :cli:distTar
