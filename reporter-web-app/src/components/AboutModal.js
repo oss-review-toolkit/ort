@@ -61,7 +61,6 @@ const AboutModal = (props) => {
             <Tabs animated={false}>
                 {
                     (excludes.paths.length !== 0
-                    || excludes.projects.length !== 0
                     || excludes.scopes.length !== 0)
                     && (
                         <TabPane tab="Excludes" key="ort-tabs-excludes">
