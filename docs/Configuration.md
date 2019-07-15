@@ -57,38 +57,6 @@ The path exclude above has the following effects:
 For the available exclude reasons for paths, see
 [PathExcludeReason.kt](../model/src/main/kotlin/config/PathExcludeReason.kt).
 
-#### Excluding Projects
-
-ORT defines projects by searching for project definition files in the repositories. For example a Gradle project is
-created for each `build.gradle` file, or an NPM project for each `package.json` file. To exclude such projects, provide
-the path to the definition file relative to the root of the repository in the file, a `reason` and a `comment` in
-`.ort.yml` on this pattern:
-
-```yaml
-excludes:
-  projects:
-  - path: "integrationTests/build.gradle"
-    reason: "TEST_TOOL_OF"
-    comment: "The project contains integration tests which are not distributed."
-```
-
-This configuration marks a whole project and all its dependencies as excluded. If the scan of a dependency of this
-project finds an error, that error will not appear in the error summary in the generated reports.
-
-Note that `path` is a regular expression, which makes it possible to exclude all Gradle projects in a repository using a
-single rule:
-
-```yaml
-excludes:
-  projects:
-  - path: ".*build\\.gradle"
-    reason: "EXAMPLE_OF"
-    comment: "The project contains example code which is not distributed."
-```
-
-For the available exclude reasons for projects, see
-[ProjectExcludeReason.kt](../model/src/main/kotlin/config/ProjectExcludeReason.kt).
-
 #### Excluding Scopes
 
 Many package managers support grouping of dependencies by their use. Such groups are called `scopes` in ORT. For
@@ -98,8 +66,7 @@ example, Maven provides the scopes `compile`, `provided`, and `test`, while NPM 
 You can use regular expressions to select the scopes to exclude. This can be useful, for example, with Gradle, which
 creates a relatively large number of scopes (internally Gradle calls them `configurations`).
 
-Scopes can be excluded on different levels: globally for all projects, and locally for a single project. Global scope
-excludes are useful for repositories that contain many similar projects:
+Scopes are always excluded globally that is they apply to all projects.
 
 ```yaml
 excludes:
@@ -112,23 +79,6 @@ excludes:
 The above example excludes all of the following scopes for all projects: `testAnnotationProcessor`,`testApi`,
 `testCompile`, `testCompileClasspath`, `testCompileOnly`, `testImplementation`, `testRuntime`, `testRuntimeClasspath`,
 `testRuntimeOnly`.
-
-To exclude the same scopes for a single project:
-
-```yaml
-excludes:
-  projects:
-  - path: "app/build.gradle"
-    scopes:
-    - name: "test.*"
-      reason: "TEST_TOOL_OF"
-      comment: "Test dependencies which are not distributed."
-```
-
-Note that in this case only the defined scopes within the project are excluded, not the whole project. Therefore
-`reason` and `comment` do not need to be set for the project itself.
-
-It is possible to mix global and local scope excludes in a single `.ort.yml` file.
 
 For the available exclude reasons for scopes, see
 [ScopeExcludeReason.kt](../model/src/main/kotlin/config/ScopeExcludeReason.kt).
