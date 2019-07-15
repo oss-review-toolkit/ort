@@ -18,13 +18,10 @@
  */
 
 import PathExclude from './PathExclude';
-import ProjectExclude from './ProjectExclude';
 import ScopeExclude from './ScopeExclude';
 
 class Excludes {
     #paths = [];
-
-    #projects = [];
 
     #scopes = [];
 
@@ -32,10 +29,6 @@ class Excludes {
         if (obj instanceof Object) {
             if (obj.paths) {
                 this.#paths = obj.paths;
-            }
-
-            if (obj.projects) {
-                this.#projects = obj.projects;
             }
 
             if (obj.scopes) {
@@ -51,16 +44,6 @@ class Excludes {
     set paths(val) {
         for (let i = 0, len = val.length; i < len; i++) {
             this.#paths.push(new PathExclude(val[i]));
-        }
-    }
-
-    get projects() {
-        return this.#projects;
-    }
-
-    set projects(val) {
-        for (let i = 0, len = val.length; i < len; i++) {
-            this.#projects.push(new ProjectExclude(val[i]));
         }
     }
 
