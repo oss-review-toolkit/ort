@@ -1,7 +1,7 @@
 ---
 project:
-  id: "GoDep::qmstr:0cd17d10b931c9108450ca5a68d4f85b6e4953ef"
-  purl: "pkg://GoDep//qmstr@0cd17d10b931c9108450ca5a68d4f85b6e4953ef"
+  id: "GoDep::github.com/qmstr/qmstr:0cd17d10b931c9108450ca5a68d4f85b6e4953ef"
+  purl: "pkg://GoDep//github.com%2Fqmstr%2Fqmstr@0cd17d10b931c9108450ca5a68d4f85b6e4953ef"
   definition_file_path: "Gopkg.toml"
   declared_licenses: []
   declared_licenses_processed: {}

@@ -50,6 +50,7 @@ import com.moandjiezana.toml.Toml
 import java.io.File
 import java.io.IOException
 import java.net.URI
+import java.net.URISyntaxException
 import java.nio.file.Paths
 
 /**
@@ -135,13 +136,27 @@ class GoDep(
         }
 
         val scope = Scope("default", packageRefs.toSortedSet())
+        val projectName = try {
+            URI(projectVcs.url).let { uri ->
+                val vcsPath = VersionControlSystem.getPathInfo(definitionFile.parentFile).path
+                listOf(uri.host, uri.path.removePrefix("/").removeSuffix(".git"), vcsPath)
+                    .filterNot { it.isEmpty() }
+                    .joinToString(separator = "/")
+                    .toLowerCase()
+            }
+        } catch (e: URISyntaxException) { projectDir.name }
 
         // TODO Keeping this between scans would speed things up considerably.
         gopath.safeDeleteRecursively(force = true)
 
         return ProjectAnalyzerResult(
             project = Project(
-                id = Identifier(managerName, "", projectDir.name, projectVcs.revision),
+                id = Identifier(
+                    type = managerName,
+                    namespace = "",
+                    name =  projectName,
+                    version = projectVcs.revision
+                ),
                 definitionFilePath = VersionControlSystem.getPathInfo(definitionFile).path,
                 declaredLicenses = sortedSetOf(),
                 vcs = VcsInfo.EMPTY,
