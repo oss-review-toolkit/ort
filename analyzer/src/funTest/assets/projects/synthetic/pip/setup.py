@@ -10,6 +10,6 @@ setup(
     classifiers=[
         'License :: OSI Approved :: MIT License'
     ],
-    install_requires=['Flask>=0.12, <0.13'],
+    install_requires=['Flask>=0.12, <1.1'],
     packages=find_packages(),
 )
