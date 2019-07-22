@@ -92,7 +92,8 @@ class GitTest : StringSpec() {
                 "fixing-test-setups",
                 "master",
                 "release-0.10.1",
-                "reverse-mode"
+                "reverse-mode",
+                "v2beta"
             )
 
             val workingTree = git.getWorkingTree(zipContentDir)
