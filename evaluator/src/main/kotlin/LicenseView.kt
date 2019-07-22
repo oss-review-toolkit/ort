@@ -85,6 +85,9 @@ sealed class LicenseView {
         }
     }
 
+    /**
+     * Return only the detected licenses.
+     */
     object OnlyDetected : LicenseView() {
         override fun licenses(pkg: Package, detectedLicenses: List<String>): List<Pair<String, LicenseSource>> =
             detectedLicenses.map { Pair(it, LicenseSource.DETECTED) }
