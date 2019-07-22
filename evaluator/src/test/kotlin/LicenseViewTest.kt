@@ -207,4 +207,172 @@ class LicenseViewTest : WordSpec({
             )
         }
     }
+
+    "OnlyConcluded" should {
+        "return only the concluded licenses" {
+            LicenseView.OnlyConcluded.licenses(
+                packageWithoutLicense,
+                emptyList()
+            ) shouldBe emptyList()
+
+            LicenseView.OnlyConcluded.licenses(
+                packageWithoutLicense,
+                detectedLicenses
+            ) shouldBe emptyList()
+
+            LicenseView.OnlyConcluded.licenses(
+                packageWithOnlyConcludedLicense,
+                emptyList()
+            ) shouldBe listOf(
+                Pair("LicenseRef-a", LicenseSource.CONCLUDED),
+                Pair("LicenseRef-b", LicenseSource.CONCLUDED)
+            )
+
+            LicenseView.OnlyConcluded.licenses(
+                packageWithOnlyConcludedLicense,
+                detectedLicenses
+            ) shouldBe listOf(
+                Pair("LicenseRef-a", LicenseSource.CONCLUDED),
+                Pair("LicenseRef-b", LicenseSource.CONCLUDED)
+            )
+
+            LicenseView.OnlyConcluded.licenses(
+                packageWithOnlyDeclaredLicense,
+                emptyList()
+            ) shouldBe emptyList()
+
+            LicenseView.OnlyConcluded.licenses(
+                packageWithOnlyDeclaredLicense,
+                detectedLicenses
+            ) shouldBe emptyList()
+
+            LicenseView.OnlyConcluded.licenses(
+                packageWithConcludedAndDeclaredLicense,
+                emptyList()
+            ) shouldBe listOf(
+                Pair("LicenseRef-a", LicenseSource.CONCLUDED),
+                Pair("LicenseRef-b", LicenseSource.CONCLUDED)
+            )
+
+            LicenseView.OnlyConcluded.licenses(
+                packageWithConcludedAndDeclaredLicense,
+                detectedLicenses
+            ) shouldBe listOf(
+                Pair("LicenseRef-a", LicenseSource.CONCLUDED),
+                Pair("LicenseRef-b", LicenseSource.CONCLUDED)
+            )
+        }
+    }
+
+    "OnlyDeclared" should {
+        "return only the declared licenses" {
+            LicenseView.OnlyDeclared.licenses(
+                packageWithoutLicense,
+                emptyList()
+            ) shouldBe emptyList()
+
+            LicenseView.OnlyDeclared.licenses(
+                packageWithoutLicense,
+                detectedLicenses
+            ) shouldBe emptyList()
+
+            LicenseView.OnlyDeclared.licenses(
+                packageWithOnlyConcludedLicense,
+                emptyList()
+            ) shouldBe emptyList()
+
+            LicenseView.OnlyDeclared.licenses(
+                packageWithOnlyConcludedLicense,
+                detectedLicenses
+            ) shouldBe emptyList()
+
+            LicenseView.OnlyDeclared.licenses(
+                packageWithOnlyDeclaredLicense,
+                emptyList()
+            ) shouldBe listOf(
+                Pair("license-a", LicenseSource.DECLARED),
+                Pair("license-b", LicenseSource.DECLARED)
+            )
+
+            LicenseView.OnlyDeclared.licenses(
+                packageWithOnlyDeclaredLicense,
+                detectedLicenses
+            ) shouldBe listOf(
+                Pair("license-a", LicenseSource.DECLARED),
+                Pair("license-b", LicenseSource.DECLARED)
+            )
+
+            LicenseView.OnlyDeclared.licenses(
+                packageWithConcludedAndDeclaredLicense,
+                emptyList()
+            ) shouldBe listOf(
+                Pair("license-a", LicenseSource.DECLARED),
+                Pair("license-b", LicenseSource.DECLARED)
+            )
+
+            LicenseView.OnlyDeclared.licenses(
+                packageWithConcludedAndDeclaredLicense,
+                detectedLicenses
+            ) shouldBe listOf(
+                Pair("license-a", LicenseSource.DECLARED),
+                Pair("license-b", LicenseSource.DECLARED)
+            )
+        }
+    }
+
+    "OnlyDetected" should {
+        "return only the detected licenses" {
+            LicenseView.OnlyDetected.licenses(
+                packageWithoutLicense,
+                emptyList()
+            ) shouldBe emptyList()
+
+            LicenseView.OnlyDetected.licenses(
+                packageWithoutLicense,
+                detectedLicenses
+            ) shouldBe listOf(
+                Pair("LicenseRef-a", LicenseSource.DETECTED),
+                Pair("LicenseRef-b", LicenseSource.DETECTED)
+            )
+
+            LicenseView.OnlyDetected.licenses(
+                packageWithOnlyConcludedLicense,
+                emptyList()
+            ) shouldBe emptyList()
+
+            LicenseView.OnlyDetected.licenses(
+                packageWithOnlyConcludedLicense,
+                detectedLicenses
+            ) shouldBe listOf(
+                Pair("LicenseRef-a", LicenseSource.DETECTED),
+                Pair("LicenseRef-b", LicenseSource.DETECTED)
+            )
+
+            LicenseView.OnlyDetected.licenses(
+                packageWithOnlyDeclaredLicense,
+                emptyList()
+            ) shouldBe emptyList()
+
+            LicenseView.OnlyDetected.licenses(
+                packageWithOnlyDeclaredLicense,
+                detectedLicenses
+            ) shouldBe listOf(
+                Pair("LicenseRef-a", LicenseSource.DETECTED),
+                Pair("LicenseRef-b", LicenseSource.DETECTED)
+            )
+
+            LicenseView.OnlyDetected.licenses(
+                packageWithConcludedAndDeclaredLicense,
+                emptyList()
+            ) shouldBe emptyList()
+
+            LicenseView.OnlyDetected.licenses(
+                packageWithConcludedAndDeclaredLicense,
+                detectedLicenses
+            ) shouldBe listOf(
+                Pair("LicenseRef-a", LicenseSource.DETECTED),
+                Pair("LicenseRef-b", LicenseSource.DETECTED)
+            )
+        }
+    }
 })
