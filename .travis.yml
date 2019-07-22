@@ -33,7 +33,7 @@ env:
     - PHP_VERSION="7.1"
     - RUST_VERSION="1.35.0"
     - STACK_VERSION="2.1.1"
-    - YARN_VERSION="1.16.0"
+    - YARN_VERSION="1.17.3"
 
 before_install:
   - sudo rm -f $JAVA_HOME/lib/security/cacerts
