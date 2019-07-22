@@ -86,6 +86,14 @@ sealed class LicenseView {
     }
 
     /**
+     * Return only the declared licenses.
+     */
+    object OnlyDeclared : LicenseView() {
+        override fun licenses(pkg: Package, detectedLicenses: List<String>): List<Pair<String, LicenseSource>> =
+            pkg.declaredLicensesProcessed.spdxExpression?.licenses().orEmpty().map { Pair(it, LicenseSource.DECLARED) }
+    }
+
+    /**
      * Return only the detected licenses.
      */
     object OnlyDetected : LicenseView() {
