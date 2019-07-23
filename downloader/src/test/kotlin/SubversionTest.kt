@@ -83,6 +83,7 @@ class SubversionTest : StringSpec() {
                 "lossless-rst-writer",
                 "nesting",
                 "plugins",
+                "rel-0.15",
                 "subdocs"
             )
 
