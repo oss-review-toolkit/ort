@@ -253,6 +253,7 @@ object SpdxDeclaredLicenseMapping {
         "New BSD" to BSD_3_CLAUSE.toExpression(),
         "New BSD License" to BSD_3_CLAUSE.toExpression(),
         "New BSD license" to BSD_3_CLAUSE.toExpression(),
+        "PSFL" to PYTHON_2_0.toExpression(),
         "Perl Artistic v2" to ARTISTIC_1_0_PERL.toExpression(),
         "Public Domain" to licenseRef("public-domain-disclaimer", "scancode"),
         "Public Domain, per Creative Commons CC0" to CC0_1_0.toExpression(),
