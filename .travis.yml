@@ -60,7 +60,6 @@ install:
 script:
   - set -o pipefail
   - if [ "$TRAVIS_EVENT_TYPE" = "cron" ]; then
-      ./gradlew --no-daemon --stacktrace :cli:dockerBuildImage;
       ./gradlew --no-daemon --stacktrace -Dkotlintest.tags.exclude=ScanCodeTag check jacocoReport | tee log.txt;
     else
       ./gradlew --no-daemon --scan --stacktrace -Dkotlintest.tags.exclude=ExpensiveTag check jacocoReport | tee log.txt;
