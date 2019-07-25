@@ -259,6 +259,7 @@ object SpdxDeclaredLicenseMapping {
         "Public domain (CC0-1.0)" to CC0_1_0.toExpression(),
         "PublicDomain" to licenseRef("public-domain-disclaimer", "scancode"),
         "Python Software Foundation" to PYTHON_2_0.toExpression(),
+        "PSFL" to PYTHON_2_0.toExpression(),
         "Ruby's" to RUBY.toExpression(),
         "Sleepycat License" to SLEEPYCAT.toExpression(),
         "TMate Open Source License (with dual licensing option)" to TMATE.toExpression(),
