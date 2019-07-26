@@ -93,7 +93,8 @@ class MavenSupport(workspaceReader: WorkspaceReader) {
         private const val MAX_DISK_CACHE_ENTRY_AGE_SECONDS = 6 * 60 * 60
 
         // See http://maven.apache.org/pom.html#SCM.
-        val SCM_REGEX = Pattern.compile("scm:(?<type>[^:]+):(?<url>.+)")!!
+        val SCM_REGEX = Pattern.compile("scm:(?<type>[^:@]+):(?<url>.+)")!!
+        val USER_HOST_REGEX = Pattern.compile("scm:(?<user>[^:@]+)@(?<host>[^:]+):(?<url>.+)")!!
 
         private val remoteArtifactCache =
             DiskCache(
@@ -164,9 +165,18 @@ class MavenSupport(workspaceReader: WorkspaceReader) {
                         else -> VcsInfo(type = VcsType(type), url = url, revision = tag)
                     }
                 } else {
-                    // It is a common mistake to omit the "scm:[provider]:" prefix. Add fall-backs for nevertheless
-                    // clear cases.
-                    if (connection.startsWith("git://") || connection.endsWith(".git")) {
+                    val userHostMatcher = USER_HOST_REGEX.matcher(connection)
+
+                    if (userHostMatcher.matches()) {
+                        // Some projects omit the provider and use the SCP-like Git URL syntax, for example
+                        // "scm:git@github.com:facebook/facebook-android-sdk.git".
+                        val host = userHostMatcher.group("host")
+                        val url = userHostMatcher.group("url")
+
+                        VcsInfo(type = VcsType.GIT, url = "https://$host/$url", revision = tag)
+                    } else if (connection.startsWith("git://") || connection.endsWith(".git")) {
+                        // It is a common mistake to omit the "scm:[provider]:" prefix. Add fall-backs for nevertheless
+                        // clear cases.
                         log.warn { "Maven SCM connection URL '$connection' lacks the required 'scm' prefix." }
 
                         VcsInfo(VcsType.GIT, connection, tag)
