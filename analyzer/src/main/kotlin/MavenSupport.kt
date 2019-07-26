@@ -94,6 +94,7 @@ class MavenSupport(workspaceReader: WorkspaceReader) {
 
         // See http://maven.apache.org/pom.html#SCM.
         val SCM_REGEX = Pattern.compile("scm:(?<type>[^:]+):(?<url>.+)")!!
+        val USER_HOST_REGEX = Pattern.compile("(?<user>[^@]+)@(?<host>.+)")!!
 
         private val remoteArtifactCache =
             DiskCache(
@@ -135,7 +136,15 @@ class MavenSupport(workspaceReader: WorkspaceReader) {
                     val type = it.group("type")
                     val url = it.group("url")
 
+                    val userHostMatcher = USER_HOST_REGEX.matcher(type)
+
                     when {
+                        // Some projects omit the type fragment and use the SCP-like Git URL syntax.
+                        userHostMatcher.matches() -> {
+                            val host = userHostMatcher.group("host")
+                            VcsInfo(type = VcsType.GIT, url = "https://$host/$url", revision = tag)
+                        }
+
                         // CVS URLs usually start with ":pserver:" or ":ext:", but as ":" is also the delimiter used by
                         // the Maven SCM plugin, no double ":" is used in the connection string and we need to fix it up
                         // here.
