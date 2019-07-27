@@ -77,7 +77,7 @@ class Stack(
 
     override fun command(workingDir: File?) = "stack"
 
-    override fun getVersionRequirement(): Requirement = Requirement.buildStrict("2.1.1")
+    override fun getVersionRequirement(): Requirement = Requirement.buildIvy("[2.1.1,)")
 
     override fun beforeResolution(definitionFiles: List<File>) =
         checkVersion(
