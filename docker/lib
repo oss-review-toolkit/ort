@@ -31,7 +31,7 @@ runAsUser () {
     DOCKER_RUN_AS_USER="-v /etc/group:/etc/group:ro -v /etc/passwd:/etc/passwd:ro -v $HOME:$HOME -u $(id -u $USER):$(id -g $USER)"
 
     # Mount the project root into the image to run the command task from there.
-    docker run $DOCKER_ARGS $DOCKER_RUN_AS_USER -v /tmp:/tmp -v $PWD:/home/ort -w /home/ort $DOCKER_IMAGE $COMMAND
+    docker run $DOCKER_ARGS $DOCKER_RUN_AS_USER -e http_proxy -e https_proxy -v /tmp:/tmp -v $PWD:/home/ort -w /home/ort $DOCKER_IMAGE $COMMAND
 }
 
 runGradleWrapper () {
