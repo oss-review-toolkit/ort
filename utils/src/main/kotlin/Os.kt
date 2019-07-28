@@ -29,4 +29,8 @@ object Os {
     val isLinux = "linux" in nameLowerCase
     val isMac = "mac" in nameLowerCase
     val isWindows = "windows" in nameLowerCase
+
+    val env = System.getenv().let { env ->
+        if (isWindows) env.toSortedMap(String.CASE_INSENSITIVE_ORDER) else env.toSortedMap()
+    }
 }
