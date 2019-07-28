@@ -43,11 +43,9 @@ data class Environment(
     /**
      * Map of selected environment variables that might be relevant for debugging.
      */
-    val variables: Map<String, String> = System.getenv().mapKeys { (key, _) -> key.toUpperCase() }.let { env ->
-        RELEVANT_VARIABLES.mapNotNull { key ->
-            env[key]?.let { value -> key to value }
-        }.toMap()
-    },
+    val variables: Map<String, String> = RELEVANT_VARIABLES.mapNotNull { key ->
+        Os.env[key]?.let { value -> key to value }
+    }.toMap(),
 
     /**
      * Map of used tools and their installed versions, defaults to an empty map.

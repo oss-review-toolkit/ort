@@ -215,7 +215,7 @@ class UtilsTest : WordSpec({
 
     "getPathFromEnvironment" should {
         "find system executables on Windows".config(enabled = Os.isWindows) {
-            val winverPath = File(System.getenv("SYSTEMROOT"), "system32/winver.exe")
+            val winverPath = File(Os.env["SYSTEMROOT"], "system32/winver.exe")
 
             getPathFromEnvironment("winver") shouldNotBe null
             getPathFromEnvironment("winver") shouldBe winverPath
