@@ -83,7 +83,7 @@ object OkHttpClientHelper {
      * Apply HTTP proxy settings from the "https_proxy" or "http_proxy" environment variables.
      */
     val applyProxySettingsFromEnv: OkHttpClient.Builder.() -> Unit = {
-        val proxyUrl = System.getenv("https_proxy") ?: System.getenv("http_proxy")
+        val proxyUrl = Os.env["https_proxy"] ?: Os.env["http_proxy"]
         if (proxyUrl != null) {
             applyProxySettingsFromUrl(URL(proxyUrl))
         }

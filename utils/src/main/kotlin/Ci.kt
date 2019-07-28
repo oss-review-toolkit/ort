@@ -23,6 +23,6 @@ package com.here.ort.utils
  * Continuous-Integration-specific utility functions.
  */
 object Ci {
-    val isAppVeyor = listOf("APPVEYOR", "CI").all { System.getenv(it)?.toBoolean() == true }
-    val isTravis = listOf("TRAVIS", "CI").all { System.getenv(it)?.toBoolean() == true }
+    val isAppVeyor = listOf("APPVEYOR", "CI").all { Os.env[it]?.toBoolean() == true }
+    val isTravis = listOf("TRAVIS", "CI").all { Os.env[it]?.toBoolean() == true }
 }
