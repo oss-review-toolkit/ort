@@ -30,7 +30,7 @@ if [ ! -f "$PROJECT_DIR/cli/build/distributions/ort-$ORT_VERSION.tar" ]; then
     ORT_VERSION=$(cat $PROJECT_DIR/model/src/main/resources/VERSION)
 fi
 
-echo Running ORT version $ORT_VERSION...
+echo "Running ORT version $ORT_VERSION..."
 
 DOCKER_ARGS=$1
 if [ -n "$DOCKER_ARGS" ]; then
