@@ -41,5 +41,5 @@ runGradleWrapper () {
 
     # Stop any running daemon to avoid it locking the cache on the host, see https://github.com/gradle/gradle/issues/851.
     ./gradlew --stop && \
-        runAsUser "--rm" $DOCKER_IMAGE "./gradlew --no-daemon $GRADLE_ARGS"
+        runAsUser "--rm" $DOCKER_IMAGE "./gradlew --no-daemon --stacktrace $GRADLE_ARGS"
 }
