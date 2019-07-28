@@ -30,7 +30,7 @@ if [ ! -f "$PROJECT_DIR/cli/build/distributions/ort-$ORT_VERSION.tar" ]; then
     ORT_VERSION=$(cat $PROJECT_DIR/model/src/main/resources/VERSION)
 fi
 
-echo Testing ORT version $ORT_VERSION...
+echo "Testing ORT version $ORT_VERSION..."
 
 (cd $PROJECT_DIR && \
     . docker/lib && \
