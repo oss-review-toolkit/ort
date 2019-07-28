@@ -40,7 +40,5 @@ if [ -n "$DOCKER_ARGS" ]; then
     ORT_ARGS=$@
 fi
 
-(cd $PROJECT_DIR && \
-    docker build --build-arg ORT_VERSION=$ORT_VERSION -t ort:latest -f docker/run/Dockerfile cli/build/distributions && \
+docker build --build-arg ORT_VERSION=$ORT_VERSION -t ort:latest -f $PROJECT_DIR/docker/run/Dockerfile $PROJECT_DIR/cli/build/distributions && \
     runAsUser "$DOCKER_ARGS" ort "$ORT_ARGS"
-)

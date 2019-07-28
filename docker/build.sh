@@ -23,8 +23,7 @@ SCRIPT_DIR="$(cd "$(dirname $0)" && pwd)"
 # Get the absolute directory of the project root.
 PROJECT_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
 
-(cd $PROJECT_DIR && \
-    . docker/lib && \
-    buildWithoutContext docker/build/Dockerfile ort-build:latest && \
+. $SCRIPT_DIR/lib
+
+buildWithoutContext $PROJECT_DIR/docker/build/Dockerfile ort-build:latest && \
     runGradleWrapper ort-build :cli:installDist :cli:distTar
-)
