@@ -34,7 +34,5 @@ fi
 
 echo "Testing ORT version $ORT_VERSION..."
 
-(cd $PROJECT_DIR && \
-    buildWithoutContext docker/test/Dockerfile ort-test:latest && \
+buildWithoutContext $PROJECT_DIR/docker/test/Dockerfile ort-test:latest && \
     runGradleWrapper ort-test test
-)
