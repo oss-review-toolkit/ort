@@ -23,10 +23,12 @@ SCRIPT_DIR="$(cd "$(dirname $0)" && pwd)"
 # Get the absolute directory of the project root.
 PROJECT_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
 
+. $SCRIPT_DIR/lib
+
 # If required, first build the distribution.
 ORT_VERSION=$(cat $PROJECT_DIR/model/src/main/resources/VERSION)
 if [ ! -f "$PROJECT_DIR/cli/build/distributions/ort-$ORT_VERSION.tar" ]; then
-    docker/build.sh
+    docker/build.sh || die "Failed to build ORT."
     ORT_VERSION=$(cat $PROJECT_DIR/model/src/main/resources/VERSION)
 fi
 
@@ -39,7 +41,6 @@ if [ -n "$DOCKER_ARGS" ]; then
 fi
 
 (cd $PROJECT_DIR && \
-    . docker/lib && \
     docker build --build-arg ORT_VERSION=$ORT_VERSION -t ort:latest -f docker/run/Dockerfile cli/build/distributions && \
     runAsUser "$DOCKER_ARGS" ort "$ORT_ARGS"
 )
