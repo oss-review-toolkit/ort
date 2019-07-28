@@ -43,3 +43,8 @@ runGradleWrapper () {
     ./gradlew --stop && \
         runAsUser "--rm" $DOCKER_IMAGE "./gradlew --no-daemon --stacktrace $GRADLE_ARGS"
 }
+
+die () {
+    echo "$@" 1>&2
+    exit 1
+}
