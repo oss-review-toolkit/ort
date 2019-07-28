@@ -67,6 +67,8 @@ data class Environment(
             "SHELL",
             "TERM",
             // General variables.
+            "http_proxy",
+            "https_proxy",
             "JAVA_HOME",
             "ANDROID_HOME",
             "GOPATH"
