@@ -390,12 +390,11 @@ project:
             - id: "NPM::repeat-string:1.6.1"
           - id: "NPM::to-gfm-code-block:0.1.1"
         - id: "NPM::repeat-string:1.6.1"
-      - id: "NPM::remarkable:1.7.3"
+      - id: "NPM::remarkable:1.7.4"
         dependencies:
-        - id: "NPM::argparse:0.1.16"
+        - id: "NPM::argparse:1.0.10"
           dependencies:
-          - id: "NPM::underscore.string:2.4.0"
-          - id: "NPM::underscore:1.7.0"
+          - id: "NPM::sprintf-js:1.0.3"
         - id: "NPM::autolinker:0.28.1"
           dependencies:
           - id: "NPM::gulp-header:1.8.12"
@@ -699,34 +698,34 @@ packages:
       path: ""
   curations: []
 - package:
-    id: "NPM::argparse:0.1.16"
-    purl: "pkg://NPM//argparse@0.1.16"
+    id: "NPM::argparse:1.0.10"
+    purl: "pkg://NPM//argparse@1.0.10"
     declared_licenses:
     - "MIT"
     declared_licenses_processed:
       spdx_expression: "MIT"
     description: "Very powerful CLI arguments parser. Native port of argparse - python's\
       \ options parsing library"
-    homepage_url: "https://github.com/nodeca/argparse"
+    homepage_url: "https://github.com/nodeca/argparse#readme"
     binary_artifact:
       url: ""
       hash:
         value: ""
         algorithm: ""
     source_artifact:
-      url: "https://registry.npmjs.org/argparse/-/argparse-0.1.16.tgz"
+      url: "https://registry.npmjs.org/argparse/-/argparse-1.0.10.tgz"
       hash:
-        value: "cfd01e0fbba3d6caed049fbd758d40f65196f57c"
+        value: "bcd6791ea5ae09725e17e5ad988134cd40b3d911"
         algorithm: "SHA-1"
     vcs:
       type: "Git"
-      url: "git://github.com/nodeca/argparse.git"
-      revision: "9c32eb1405d5d4b5686087d95bac010774979659"
+      url: "git+https://github.com/nodeca/argparse.git"
+      revision: "ea45e14bad13b9e4a10af28f11fb7e731079ab72"
       path: ""
     vcs_processed:
       type: "Git"
       url: "https://github.com/nodeca/argparse.git"
-      revision: "9c32eb1405d5d4b5686087d95bac010774979659"
+      revision: "ea45e14bad13b9e4a10af28f11fb7e731079ab72"
       path: ""
   curations: []
 - package:
@@ -3866,8 +3865,8 @@ packages:
       path: ""
   curations: []
 - package:
-    id: "NPM::remarkable:1.7.3"
-    purl: "pkg://NPM//remarkable@1.7.3"
+    id: "NPM::remarkable:1.7.4"
+    purl: "pkg://NPM//remarkable@1.7.4"
     declared_licenses:
     - "MIT"
     declared_licenses_processed:
@@ -3881,9 +3880,9 @@ packages:
         value: ""
         algorithm: ""
     source_artifact:
-      url: "https://registry.npmjs.org/remarkable/-/remarkable-1.7.3.tgz"
+      url: "https://registry.npmjs.org/remarkable/-/remarkable-1.7.4.tgz"
       hash:
-        value: "3ef0eda2b2bec093c36368bf64d66b5811f8bf4d"
+        value: "19073cb960398c87a7d6546eaa5e50d2022fcd00"
         algorithm: "SHA-1"
     vcs:
       type: "Git"
@@ -4564,6 +4563,36 @@ packages:
       path: ""
   curations: []
 - package:
+    id: "NPM::sprintf-js:1.0.3"
+    purl: "pkg://NPM//sprintf-js@1.0.3"
+    declared_licenses:
+    - "BSD-3-Clause"
+    declared_licenses_processed:
+      spdx_expression: "BSD-3-Clause"
+    description: "JavaScript sprintf implementation"
+    homepage_url: "https://github.com/alexei/sprintf.js#readme"
+    binary_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    source_artifact:
+      url: "https://registry.npmjs.org/sprintf-js/-/sprintf-js-1.0.3.tgz"
+      hash:
+        value: "04e6926f662895354f3dd015203633b857297e2c"
+        algorithm: "SHA-1"
+    vcs:
+      type: "Git"
+      url: "git+https://github.com/alexei/sprintf.js.git"
+      revision: "747b806c2dab5b64d5c9958c42884946a187c3b1"
+      path: ""
+    vcs_processed:
+      type: "Git"
+      url: "https://github.com/alexei/sprintf.js.git"
+      revision: "747b806c2dab5b64d5c9958c42884946a187c3b1"
+      path: ""
+  curations: []
+- package:
     id: "NPM::static-extend:0.1.2"
     purl: "pkg://NPM//static-extend@0.1.2"
     declared_licenses:
@@ -4836,66 +4865,6 @@ packages:
       type: "Git"
       url: "https://github.com/jonschlinkert/tokenize-comment.git"
       revision: "9132c85a7ab4ac99ec8aafb7288928c55e2ee613"
-      path: ""
-  curations: []
-- package:
-    id: "NPM::underscore.string:2.4.0"
-    purl: "pkg://NPM//underscore.string@2.4.0"
-    declared_licenses:
-    - "MIT"
-    declared_licenses_processed:
-      spdx_expression: "MIT"
-    description: "String manipulation extensions for Underscore.js javascript library."
-    homepage_url: "http://epeli.github.com/underscore.string/"
-    binary_artifact:
-      url: ""
-      hash:
-        value: ""
-        algorithm: ""
-    source_artifact:
-      url: "https://registry.npmjs.org/underscore.string/-/underscore.string-2.4.0.tgz"
-      hash:
-        value: "8cdd8fbac4e2d2ea1e7e2e8097c42f442280f85b"
-        algorithm: "SHA-1"
-    vcs:
-      type: "Git"
-      url: "https://github.com/epeli/underscore.string.git"
-      revision: ""
-      path: ""
-    vcs_processed:
-      type: "Git"
-      url: "https://github.com/epeli/underscore.string.git"
-      revision: ""
-      path: ""
-  curations: []
-- package:
-    id: "NPM::underscore:1.7.0"
-    purl: "pkg://NPM//underscore@1.7.0"
-    declared_licenses:
-    - "MIT"
-    declared_licenses_processed:
-      spdx_expression: "MIT"
-    description: "JavaScript's functional programming helper library."
-    homepage_url: "http://underscorejs.org"
-    binary_artifact:
-      url: ""
-      hash:
-        value: ""
-        algorithm: ""
-    source_artifact:
-      url: "https://registry.npmjs.org/underscore/-/underscore-1.7.0.tgz"
-      hash:
-        value: "6bbaf0877500d36be34ecaa584e0db9fef035209"
-        algorithm: "SHA-1"
-    vcs:
-      type: "Git"
-      url: "git://github.com/jashkenas/underscore.git"
-      revision: "da996e665deb0b69b257e80e3e257c04fde4191c"
-      path: ""
-    vcs_processed:
-      type: "Git"
-      url: "https://github.com/jashkenas/underscore.git"
-      revision: "da996e665deb0b69b257e80e3e257c04fde4191c"
       path: ""
   curations: []
 - package:
