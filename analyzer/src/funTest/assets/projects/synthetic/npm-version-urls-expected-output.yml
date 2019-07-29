@@ -390,13 +390,39 @@ project:
             - id: "NPM::repeat-string:1.6.1"
           - id: "NPM::to-gfm-code-block:0.1.1"
         - id: "NPM::repeat-string:1.6.1"
-      - id: "NPM::remarkable:1.7.1"
+      - id: "NPM::remarkable:1.7.3"
         dependencies:
         - id: "NPM::argparse:0.1.16"
           dependencies:
           - id: "NPM::underscore.string:2.4.0"
           - id: "NPM::underscore:1.7.0"
-        - id: "NPM::autolinker:0.15.3"
+        - id: "NPM::autolinker:0.28.1"
+          dependencies:
+          - id: "NPM::gulp-header:1.8.12"
+            dependencies:
+            - id: "NPM::concat-with-sourcemaps:1.1.0"
+              dependencies:
+              - id: "NPM::source-map:0.6.1"
+            - id: "NPM::lodash.template:4.5.0"
+              dependencies:
+              - id: "NPM::lodash._reinterpolate:3.0.0"
+              - id: "NPM::lodash.templatesettings:4.2.0"
+                dependencies:
+                - id: "NPM::lodash._reinterpolate:3.0.0"
+            - id: "NPM::through2:2.0.5"
+              dependencies:
+              - id: "NPM::readable-stream:2.3.6"
+                dependencies:
+                - id: "NPM::core-util-is:1.0.2"
+                - id: "NPM::inherits:2.0.4"
+                - id: "NPM::isarray:1.0.0"
+                - id: "NPM::process-nextick-args:2.0.1"
+                - id: "NPM::safe-buffer:5.1.2"
+                - id: "NPM::string_decoder:1.1.1"
+                  dependencies:
+                  - id: "NPM::safe-buffer:5.1.2"
+                - id: "NPM::util-deprecate:1.0.2"
+              - id: "NPM::xtend:4.0.2"
       - id: "NPM::sections:1.0.0"
         dependencies:
         - id: "NPM::gfm-code-blocks:1.0.0"
@@ -860,10 +886,10 @@ packages:
       path: ""
   curations: []
 - package:
-    id: "NPM::autolinker:0.15.3"
-    purl: "pkg://NPM//autolinker@0.15.3"
+    id: "NPM::autolinker:0.28.1"
+    purl: "pkg://NPM//autolinker@0.28.1"
     declared_licenses:
-    - "MIT Licensed. http://www.opensource.org/licenses/mit-license.php"
+    - "MIT"
     declared_licenses_processed:
       spdx_expression: "MIT"
     description: "Utility to automatically link the URLs, email addresses, and Twitter\
@@ -875,19 +901,19 @@ packages:
         value: ""
         algorithm: ""
     source_artifact:
-      url: "https://registry.npmjs.org/autolinker/-/autolinker-0.15.3.tgz"
+      url: "https://registry.npmjs.org/autolinker/-/autolinker-0.28.1.tgz"
       hash:
-        value: "342417d8f2f3461b14cf09088d5edf8791dc9832"
+        value: "0652b491881879f0775dace0cdca3233942a4e47"
         algorithm: "SHA-1"
     vcs:
       type: "Git"
       url: "git://github.com/gregjacobs/Autolinker.js.git"
-      revision: "8f7f2161890dec21e6121eefdf5371d5d5815eae"
+      revision: "e6634b3736d462b60df5ee10d9e8c3c21a45f8e6"
       path: ""
     vcs_processed:
       type: "Git"
       url: "https://github.com/gregjacobs/Autolinker.js.git"
-      revision: "8f7f2161890dec21e6121eefdf5371d5d5815eae"
+      revision: "e6634b3736d462b60df5ee10d9e8c3c21a45f8e6"
       path: ""
   curations: []
 - package:
@@ -1313,6 +1339,37 @@ packages:
       type: "Git"
       url: "https://github.com/substack/node-concat-map.git"
       revision: ""
+      path: ""
+  curations: []
+- package:
+    id: "NPM::concat-with-sourcemaps:1.1.0"
+    purl: "pkg://NPM//concat-with-sourcemaps@1.1.0"
+    declared_licenses:
+    - "ISC"
+    declared_licenses_processed:
+      spdx_expression: "ISC"
+    description: "Concatenate file contents with a custom separator and generate a\
+      \ source map"
+    homepage_url: "http://github.com/floridoo/concat-with-sourcemaps"
+    binary_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    source_artifact:
+      url: "https://registry.npmjs.org/concat-with-sourcemaps/-/concat-with-sourcemaps-1.1.0.tgz"
+      hash:
+        value: "d4ea93f05ae25790951b99e7b3b09e3908a4082e"
+        algorithm: "SHA-1"
+    vcs:
+      type: "Git"
+      url: "git://github.com/floridoo/concat-with-sourcemaps.git"
+      revision: "fa7922b69c4054a6c5dc8f415f0dfcabaf5b8fe4"
+      path: ""
+    vcs_processed:
+      type: "Git"
+      url: "https://github.com/floridoo/concat-with-sourcemaps.git"
+      revision: "fa7922b69c4054a6c5dc8f415f0dfcabaf5b8fe4"
       path: ""
   curations: []
 - package:
@@ -2044,6 +2101,36 @@ packages:
       type: "Git"
       url: "https://github.com/jonschlinkert/gulp-format-md.git"
       revision: "ebcdcba3d9fb6eb16368921200b0621ec8178535"
+      path: ""
+  curations: []
+- package:
+    id: "NPM::gulp-header:1.8.12"
+    purl: "pkg://NPM//gulp-header@1.8.12"
+    declared_licenses:
+    - "MIT"
+    declared_licenses_processed:
+      spdx_expression: "MIT"
+    description: "Gulp extension to add header to file(s) in the pipeline."
+    homepage_url: "https://github.com/tracker1/gulp-header#readme"
+    binary_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    source_artifact:
+      url: "https://registry.npmjs.org/gulp-header/-/gulp-header-1.8.12.tgz"
+      hash:
+        value: "ad306be0066599127281c4f8786660e705080a84"
+        algorithm: "SHA-1"
+    vcs:
+      type: "Git"
+      url: "git://github.com/tracker1/gulp-header.git"
+      revision: "e2db2d463e59dc1ced8895c505b6671ab340dbb5"
+      path: ""
+    vcs_processed:
+      type: "Git"
+      url: "https://github.com/tracker1/gulp-header.git"
+      revision: "e2db2d463e59dc1ced8895c505b6671ab340dbb5"
       path: ""
   curations: []
 - package:
@@ -3022,6 +3109,96 @@ packages:
       path: ""
   curations: []
 - package:
+    id: "NPM::lodash._reinterpolate:3.0.0"
+    purl: "pkg://NPM//lodash._reinterpolate@3.0.0"
+    declared_licenses:
+    - "MIT"
+    declared_licenses_processed:
+      spdx_expression: "MIT"
+    description: "The modern build of lodash’s internal `reInterpolate` as a module."
+    homepage_url: "https://lodash.com/"
+    binary_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    source_artifact:
+      url: "https://registry.npmjs.org/lodash._reinterpolate/-/lodash._reinterpolate-3.0.0.tgz"
+      hash:
+        value: "0ccf2d89166af03b3663c796538b75ac6e114d9d"
+        algorithm: "SHA-1"
+    vcs:
+      type: "Git"
+      url: "https://github.com/lodash/lodash"
+      revision: ""
+      path: ""
+    vcs_processed:
+      type: "Git"
+      url: "https://github.com/lodash/lodash.git"
+      revision: ""
+      path: ""
+  curations: []
+- package:
+    id: "NPM::lodash.template:4.5.0"
+    purl: "pkg://NPM//lodash.template@4.5.0"
+    declared_licenses:
+    - "MIT"
+    declared_licenses_processed:
+      spdx_expression: "MIT"
+    description: "The Lodash method `_.template` exported as a module."
+    homepage_url: "https://lodash.com/"
+    binary_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    source_artifact:
+      url: "https://registry.npmjs.org/lodash.template/-/lodash.template-4.5.0.tgz"
+      hash:
+        value: "f976195cf3f347d0d5f52483569fe8031ccce8ab"
+        algorithm: "SHA-1"
+    vcs:
+      type: "Git"
+      url: "git+https://github.com/lodash/lodash.git"
+      revision: ""
+      path: ""
+    vcs_processed:
+      type: "Git"
+      url: "https://github.com/lodash/lodash.git"
+      revision: ""
+      path: ""
+  curations: []
+- package:
+    id: "NPM::lodash.templatesettings:4.2.0"
+    purl: "pkg://NPM//lodash.templatesettings@4.2.0"
+    declared_licenses:
+    - "MIT"
+    declared_licenses_processed:
+      spdx_expression: "MIT"
+    description: "The Lodash method `_.templateSettings` exported as a module."
+    homepage_url: "https://lodash.com/"
+    binary_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    source_artifact:
+      url: "https://registry.npmjs.org/lodash.templatesettings/-/lodash.templatesettings-4.2.0.tgz"
+      hash:
+        value: "e481310f049d3cf6d47e912ad09313b154f0fb33"
+        algorithm: "SHA-1"
+    vcs:
+      type: "Git"
+      url: "git+https://github.com/lodash/lodash.git"
+      revision: ""
+      path: ""
+    vcs_processed:
+      type: "Git"
+      url: "https://github.com/lodash/lodash.git"
+      revision: ""
+      path: ""
+  curations: []
+- package:
     id: "NPM::log-ok:0.1.1"
     purl: "pkg://NPM//log-ok@0.1.1"
     declared_licenses:
@@ -3689,8 +3866,8 @@ packages:
       path: ""
   curations: []
 - package:
-    id: "NPM::remarkable:1.7.1"
-    purl: "pkg://NPM//remarkable@1.7.1"
+    id: "NPM::remarkable:1.7.3"
+    purl: "pkg://NPM//remarkable@1.7.3"
     declared_licenses:
     - "MIT"
     declared_licenses_processed:
@@ -3704,13 +3881,13 @@ packages:
         value: ""
         algorithm: ""
     source_artifact:
-      url: "https://registry.npmjs.org/remarkable/-/remarkable-1.7.1.tgz"
+      url: "https://registry.npmjs.org/remarkable/-/remarkable-1.7.3.tgz"
       hash:
-        value: "aaca4972100b66a642a63a1021ca4bac1be3bff6"
+        value: "3ef0eda2b2bec093c36368bf64d66b5811f8bf4d"
         algorithm: "SHA-1"
     vcs:
       type: "Git"
-      url: "git+https://github.com/jonschlinkert/remarkable.git"
+      url: "https://github.com/jonschlinkert/remarkable.git"
       revision: ""
       path: ""
     vcs_processed:
@@ -4324,6 +4501,36 @@ packages:
       type: "Git"
       url: "ssh://git@github.com/mozilla/source-map.git"
       revision: "326dd955a366569759d9537ef5f0f167c89d92d2"
+      path: ""
+  curations: []
+- package:
+    id: "NPM::source-map:0.6.1"
+    purl: "pkg://NPM//source-map@0.6.1"
+    declared_licenses:
+    - "BSD-3-Clause"
+    declared_licenses_processed:
+      spdx_expression: "BSD-3-Clause"
+    description: "Generates and consumes source maps"
+    homepage_url: "https://github.com/mozilla/source-map"
+    binary_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    source_artifact:
+      url: "https://registry.npmjs.org/source-map/-/source-map-0.6.1.tgz"
+      hash:
+        value: "74722af32e9614e9c287a8d0bbde48b5e2f1a263"
+        algorithm: "SHA-1"
+    vcs:
+      type: "Git"
+      url: "git+ssh://git@github.com/mozilla/source-map.git"
+      revision: "ac518d2f21818146f3310557bd51c13d8cff2ba8"
+      path: ""
+    vcs_processed:
+      type: "Git"
+      url: "ssh://git@github.com/mozilla/source-map.git"
+      revision: "ac518d2f21818146f3310557bd51c13d8cff2ba8"
       path: ""
   curations: []
 - package:
