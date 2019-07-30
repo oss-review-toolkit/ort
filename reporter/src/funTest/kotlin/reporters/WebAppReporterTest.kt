@@ -37,7 +37,13 @@ class WebAppReporterTest : WordSpec({
     "WebAppReporter" should {
         "successfully export to a web application" {
             val outputStream = ByteArrayOutputStream()
-            WebAppReporter().generateReport(ortResult, DefaultResolutionProvider(), CopyrightGarbage(), outputStream)
+            WebAppReporter().generateReport(
+                ortResult,
+                DefaultResolutionProvider(),
+                DefaultLicenseTextProvider(),
+                CopyrightGarbage(),
+                outputStream
+            )
             outputStream.size() shouldNotBe 0
         }
     }
