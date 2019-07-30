@@ -19,15 +19,34 @@
 
 package com.here.ort.spdx
 
+import io.kotlintest.TestCase
+import io.kotlintest.TestResult
+import io.kotlintest.shouldBe
+import io.kotlintest.shouldNot
+import io.kotlintest.shouldNotBe
 import io.kotlintest.matchers.endWith
 import io.kotlintest.matchers.startWith
 import io.kotlintest.matchers.string.beBlank
-import io.kotlintest.should
-import io.kotlintest.shouldBe
-import io.kotlintest.shouldNot
 import io.kotlintest.specs.WordSpec
 
+import java.io.File
+
 class SpdxUtilsTest : WordSpec() {
+    private var tempDir: File? = null
+
+    private fun setupTempFile(filename: String, content: String) {
+        if (tempDir == null) {
+            tempDir = createTempDir(SpdxUtilsTest::class.simpleName!!)
+        }
+
+        File(tempDir, filename).writeText(content)
+    }
+
+    override fun afterTest(testCase: TestCase, result: TestResult) {
+        tempDir?.deleteRecursively()
+        tempDir = null
+    }
+
     init {
         "calculatePackageVerificationCode" should {
             "work for given SHA1s" {
@@ -111,6 +130,35 @@ class SpdxUtilsTest : WordSpec() {
 
             "return null for an unknown SPDX LicenseRef" {
                 getLicenseText("LicenseRef-foo-bar") shouldBe null
+            }
+        }
+
+        "getLicenseText provided a custom dir" should {
+            fun getText(id: String) = getLicenseText(id, true, tempDir)
+
+            "return the custom license text for a license ID not known by ort but in custom dir" {
+                val id = "LicenseRef-ort-abc"
+                val text = "a\nb\nc\n"
+
+                setupTempFile(id, text)
+
+                getText(id) shouldBe text
+            }
+
+            "return the ort license text for a license ID known by ort and also in custom dir" {
+                val id = "LicenseRef-scancode-here-proprietary"
+                val text = "x\ny\n"
+
+                setupTempFile(id, text)
+
+                getText(id) shouldNotBe text
+                getText(id) shouldBe getLicenseText(id, true)
+            }
+
+            "return null if license text is not known by ort and also not in custom dir" {
+                setupTempFile("LicenseRef-ort-abc", "abc")
+
+                getText("LicenseRef-not-present") shouldBe null
             }
         }
     }
