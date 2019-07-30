@@ -22,8 +22,14 @@ package com.here.ort.reporter.reporters
 import com.here.ort.reporter.LicenseTextProvider
 import com.here.ort.spdx.getLicenseText
 
-class DefaultLicenseTextProvider : LicenseTextProvider {
+import java.io.File
+
+class DefaultLicenseTextProvider(private val customLicenseTextsDir: File?) : LicenseTextProvider {
     override fun getLicenseText(licenseId: String): String? {
-        return getLicenseText(licenseId, true)
+        return getLicenseText(
+            id = licenseId,
+            handleExceptions = true,
+            customLicenseTextsDir = customLicenseTextsDir
+        )
     }
 }
