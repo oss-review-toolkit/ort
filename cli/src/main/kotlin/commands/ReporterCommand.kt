@@ -115,6 +115,13 @@ object ReporterCommand : CommandWithHelp() {
     )
     private var repositoryConfigurationFile: File? = null
 
+    @Parameter(
+        description = "TODO",
+        names = ["--custom-license-texts-dir"],
+        order = PARAMETER_ORDER_OPTIONAL
+    )
+    private var customLicenseTextsDir: File? = null
+
     override fun runCommand(jc: JCommander): Int {
         val absoluteOutputDir = outputDir.expandTilde().normalize()
 
@@ -148,7 +155,7 @@ object ReporterCommand : CommandWithHelp() {
                 reporter.generateReport(
                     ortResult,
                     resolutionProvider,
-                    LicenseTextProvider(),
+                    LicenseTextProvider(customLicenseTextsDir),
                     copyrightGarbage,
                     file.outputStream(),
                     postProcessingScript?.expandTilde()?.readText()

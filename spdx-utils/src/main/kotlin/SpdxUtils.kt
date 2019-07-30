@@ -82,11 +82,17 @@ inline fun <reified T : Enum<T>> enumSetOf(vararg elems: T): EnumSet<T> =
  * Retrieve the full text for the license with the provided SPDX [id], including "LicenseRefs". If [handleExceptions] is
  * enabled, the [id] may also refer to an exception instead of a license.
  */
-fun getLicenseText(id: String, handleExceptions: Boolean = false): String? {
+fun getLicenseText(id: String, handleExceptions: Boolean = false, customLicenseTextsDir: File? = null): String? {
     if (id.startsWith("LicenseRef-")) {
-        return try {
-            object {}.javaClass.getResource("/licenserefs/$id")?.readText()
-        } catch(e: Exception) { null }
+        try {
+            return object {}.javaClass.getResource("/licenserefs/$id")?.readText()
+        } catch(e: Exception) { }
+
+        try {
+            return File(customLicenseTextsDir, "$id").readText()
+        } catch(e: Exception) { }
+
+        return null
     }
 
     return SpdxLicense.forId(id)?.text
