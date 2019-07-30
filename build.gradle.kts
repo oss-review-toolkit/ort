@@ -58,7 +58,8 @@ tasks.named<DependencyUpdatesTask>("dependencyUpdates") {
     resolutionStrategy {
         componentSelection {
             all {
-                val isNonFinalVersion = listOf("alpha", "beta", "rc", "cr", "m", "preview", "b", "ea").any { qualifier ->
+                val nonFinalQualifiers = listOf("alpha", "b", "beta", "cr", "ea", "eap", "m", "pr", "preview", "rc")
+                val isNonFinalVersion = nonFinalQualifiers.any { qualifier ->
                     candidate.version.matches(Regex("(?i).*[.-]$qualifier[.\\d-+]*"))
                 }
 
