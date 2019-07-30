@@ -80,11 +80,22 @@ inline fun <reified T : Enum<T>> enumSetOf(vararg elems: T): EnumSet<T> =
 
 /**
  * Retrieve the full text for the license with the provided SPDX [id], including "LicenseRefs". If [handleExceptions] is
- * enabled, the [id] may also refer to an exception instead of a license.
+ * enabled, the [id] may also refer to an exception instead of a license. If [customLicenseTextsDir] is provided the
+ * license text is retrieved from that directory if and only if the license text is not known by ORT.
  */
-fun getLicenseText(id: String, handleExceptions: Boolean = false): String? =
+fun getLicenseText(id: String, handleExceptions: Boolean = false, customLicenseTextsDir: File? = null): String? =
     if (id.startsWith("LicenseRef-")) {
-        object {}.javaClass.getResource("/licenserefs/$id")?.readText()
+        getLicenseTextFromResources(id) ?: customLicenseTextsDir?.let { getLicenseTextFromDir(id, it) }
     } else {
         SpdxLicense.forId(id)?.text ?: SpdxLicenseException.forId(id)?.text?.takeIf { handleExceptions }
+    }
+
+private fun getLicenseTextFromResources(id: String): String? =
+    object {}.javaClass.getResource("/licenserefs/$id")?.readText()
+
+private fun getLicenseTextFromDir(id: String, dir: File): String? =
+    File(dir, "$id").let {
+        if (it.isFile) {
+            it.readText()
+        } else null
     }
