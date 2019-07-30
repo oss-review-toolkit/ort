@@ -59,6 +59,7 @@ abstract class Reporter {
     abstract fun generateReport(
         ortResult: OrtResult,
         resolutionProvider: ResolutionProvider,
+        licenseTextProvider: LicenseTextProvider,
         copyrightGarbage: CopyrightGarbage,
         outputStream: OutputStream,
         postProcessingScript: String? = null

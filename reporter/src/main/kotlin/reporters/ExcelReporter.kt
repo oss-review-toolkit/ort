@@ -23,6 +23,7 @@ import com.here.ort.model.AnalyzerResult
 import com.here.ort.model.OrtResult
 import com.here.ort.model.VcsInfo
 import com.here.ort.model.config.CopyrightGarbage
+import com.here.ort.reporter.LicenseTextProvider
 import com.here.ort.reporter.Reporter
 import com.here.ort.reporter.ResolutionProvider
 import com.here.ort.reporter.reporters.ReportTableModel.ProjectTable
@@ -85,6 +86,7 @@ class ExcelReporter : Reporter() {
     override fun generateReport(
         ortResult: OrtResult,
         resolutionProvider: ResolutionProvider,
+        licenseTextProvider: LicenseTextProvider,
         copyrightGarbage: CopyrightGarbage,
         outputStream: OutputStream,
         postProcessingScript: String?
