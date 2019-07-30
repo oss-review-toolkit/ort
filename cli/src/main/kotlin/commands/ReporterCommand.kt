@@ -34,6 +34,7 @@ import com.here.ort.model.config.Resolutions
 import com.here.ort.model.readValue
 import com.here.ort.reporter.DefaultResolutionProvider
 import com.here.ort.reporter.Reporter
+import com.here.ort.reporter.reporters.LicenseTextProvider
 import com.here.ort.utils.PARAMETER_ORDER_MANDATORY
 import com.here.ort.utils.PARAMETER_ORDER_OPTIONAL
 import com.here.ort.utils.expandTilde
@@ -147,6 +148,7 @@ object ReporterCommand : CommandWithHelp() {
                 reporter.generateReport(
                     ortResult,
                     resolutionProvider,
+                    LicenseTextProvider(),
                     copyrightGarbage,
                     file.outputStream(),
                     postProcessingScript?.expandTilde()?.readText()

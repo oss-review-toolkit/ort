@@ -85,6 +85,7 @@ class ExcelReporter : Reporter() {
     override fun generateReport(
         ortResult: OrtResult,
         resolutionProvider: ResolutionProvider,
+        licenseTextProvider: LicenseTextProvider,
         copyrightGarbage: CopyrightGarbage,
         outputStream: OutputStream,
         postProcessingScript: String?

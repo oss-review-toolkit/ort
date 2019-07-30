@@ -23,6 +23,7 @@ import com.here.ort.model.AnalyzerResult
 import com.here.ort.model.OrtResult
 import com.here.ort.model.ScanRecord
 import com.here.ort.model.config.CopyrightGarbage
+import com.here.ort.reporter.reporters.LicenseTextProvider
 
 import java.io.OutputStream
 import java.util.ServiceLoader
@@ -59,6 +60,7 @@ abstract class Reporter {
     abstract fun generateReport(
         ortResult: OrtResult,
         resolutionProvider: ResolutionProvider,
+        licenseTextProvider: LicenseTextProvider,
         copyrightGarbage: CopyrightGarbage,
         outputStream: OutputStream,
         postProcessingScript: String? = null

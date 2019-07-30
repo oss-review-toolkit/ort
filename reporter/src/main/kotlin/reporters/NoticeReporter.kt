@@ -28,7 +28,6 @@ import com.here.ort.model.processStatements
 import com.here.ort.model.removeGarbage
 import com.here.ort.reporter.Reporter
 import com.here.ort.reporter.ResolutionProvider
-import com.here.ort.spdx.getLicenseText
 import com.here.ort.utils.ScriptRunner
 import com.here.ort.utils.log
 
@@ -88,6 +87,7 @@ class NoticeReporter : Reporter() {
     override fun generateReport(
         ortResult: OrtResult,
         resolutionProvider: ResolutionProvider,
+        licenseTextProvider: LicenseTextProvider,
         copyrightGarbage: CopyrightGarbage,
         outputStream: OutputStream,
         postProcessingScript: String?
@@ -116,7 +116,7 @@ class NoticeReporter : Reporter() {
         }
 
         outputStream.bufferedWriter().use {
-            it.write(generateNotices(noticeReport))
+            it.write(generateNotices(noticeReport, licenseTextProvider))
         }
     }
 
@@ -138,12 +138,12 @@ class NoticeReporter : Reporter() {
         return licenseFindings
     }
 
-    private fun generateNotices(noticeReport: NoticeReport) =
+    private fun generateNotices(noticeReport: NoticeReport, licenseTextProvider: LicenseTextProvider) =
         buildString {
             append(noticeReport.headers.joinToString(NOTICE_SEPARATOR))
 
             noticeReport.findings.forEach { (license, copyrights) ->
-                getLicenseText(license, true)?.let { licenseText ->
+                licenseTextProvider.getLicenseText(license)?.let { licenseText ->
                     append(NOTICE_SEPARATOR)
 
                     // Note: Do not use appendln() here as that would write out platform-native line endings, but we

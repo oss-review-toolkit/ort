@@ -53,6 +53,7 @@ class StaticHtmlReporter : Reporter() {
     override fun generateReport(
         ortResult: OrtResult,
         resolutionProvider: ResolutionProvider,
+        licenseTextProvider: LicenseTextProvider,
         copyrightGarbage: CopyrightGarbage,
         outputStream: OutputStream,
         postProcessingScript: String?
@@ -212,7 +213,7 @@ class StaticHtmlReporter : Reporter() {
 
         h2 {
             id = "rule-violation-summary"
-            +"Rule Violation Summary ($errorCount errors, $warningCount warnings, $hintCount hints to resolve)"
+            +"Rule Violation Summary ($errorCount errors, $warningCount warnings, $hintCount hints to getLicenseText)"
         }
 
         if (ruleViolations.isEmpty()) {
@@ -286,7 +287,7 @@ class StaticHtmlReporter : Reporter() {
         h2 {
             id = "issue-summary"
             with(issueSummary) {
-                +"Issue Summary ($errorCount errors, $warningCount warnings, $hintCount hints to resolve)"
+                +"Issue Summary ($errorCount errors, $warningCount warnings, $hintCount hints to getLicenseText)"
             }
         }
 
