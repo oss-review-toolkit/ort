@@ -42,7 +42,13 @@ class ExcelReporterTest : WordSpec({
     "ExcelReporter" should {
         "successfully export to an Excel sheet".config(enabled = false) {
             val outputStream = ByteArrayOutputStream()
-            ExcelReporter().generateReport(ortResult, DefaultResolutionProvider(), CopyrightGarbage(), outputStream)
+            ExcelReporter().generateReport(
+                ortResult,
+                DefaultResolutionProvider(),
+                DefaultLicenseTextProvider(),
+                CopyrightGarbage(),
+                outputStream
+            )
             val actualWorkbook = WorkbookFactory.create(outputStream.toByteArray().inputStream())
 
             val expectedFile = File("src/funTest/assets/file-counter-expected-scan-report.xlsx")

@@ -134,6 +134,7 @@ class NoticeReporterTest : WordSpec() {
             NoticeReporter().generateReport(
                 ortResult,
                 DefaultResolutionProvider(),
+                DefaultLicenseTextProvider(),
                 copyrightGarbage,
                 outputStream,
                 postProcessingScript

@@ -68,6 +68,7 @@ class StaticHtmlReporterTest : WordSpec() {
             StaticHtmlReporter().generateReport(
                 ortResult,
                 resolutionProvider,
+                DefaultLicenseTextProvider(),
                 CopyrightGarbage(),
                 outputStream
             )
