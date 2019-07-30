@@ -32,7 +32,6 @@ import com.here.ort.spdx.getLicenseText
 import com.here.ort.utils.ScriptRunner
 import com.here.ort.utils.log
 
-import java.io.IOException
 import java.io.OutputStream
 
 class NoticeReporter : Reporter() {
@@ -144,9 +143,7 @@ class NoticeReporter : Reporter() {
             append(noticeReport.headers.joinToString(NOTICE_SEPARATOR))
 
             noticeReport.findings.forEach { (license, copyrights) ->
-                try {
-                    val licenseText = getLicenseText(license, true)
-
+                getLicenseText(license, true)?.let { licenseText ->
                     append(NOTICE_SEPARATOR)
 
                     // Note: Do not use appendln() here as that would write out platform-native line endings, but we
@@ -157,12 +154,8 @@ class NoticeReporter : Reporter() {
                     if (copyrights.isNotEmpty()) append("\n")
 
                     append(licenseText)
-                } catch (e: IOException) {
-                    // TODO: Consider introducing (resolvable) reporter errors to handle cases where we cannot
-                    // find license texts.
-                    log.warn {
-                        "No license text found for license '$license', it will be omitted from the report."
-                    }
+                } ?: log.warn {
+                    "No license text found for license '$license', it will be omitted from the report."
                 }
             }
 
