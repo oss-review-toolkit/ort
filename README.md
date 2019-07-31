@@ -2,23 +2,25 @@
 
 &nbsp;
 
-| Linux (OpenJDK 10)             | Windows (Oracle JDK 9)          |
-| :----------------------------- | :------------------------------ |
-| [![Linux build status][1]][2]  | [![Windows build status][3]][4] |
-| [![Linux code coverage][5]][6] |                                 |
+| Linux (OpenJDK 10)             | Windows (Oracle JDK 9)          | JitPack (OpenJDK 8)             |
+| :----------------------------- | :------------------------------ | :------------------------------ |
+| [![Linux build status][1]][2]  | [![Windows build status][3]][4] | [![JitPack build status][5]][6] |
+| [![Linux code coverage][7]][8] |                                 |                                 |
 
 | Interact with us!              |
 | :----------------------------- |
-| [![ort-talk][7]][8]            |
+| [![ort-talk][9]][10]            |
 
 [1]: https://travis-ci.com/heremaps/oss-review-toolkit.svg?branch=master
 [2]: https://travis-ci.com/heremaps/oss-review-toolkit
 [3]: https://ci.appveyor.com/api/projects/status/hbc1mn5hpo9a4hcq/branch/master?svg=true
 [4]: https://ci.appveyor.com/project/heremaps/oss-review-toolkit/branch/master
-[5]: https://codecov.io/gh/heremaps/oss-review-toolkit/branch/master/graph/badge.svg
-[6]: https://codecov.io/gh/heremaps/oss-review-toolkit/
-[7]: https://img.shields.io/badge/slack-ort--talk-blue.svg?longCache=true&logo=slack
-[8]: https://join.slack.com/t/ort-talk/shared_invite/enQtMzk3MDU5Njk0Njc1LWQwMDU3NDBjYmEzNGJkM2JiYTE2MmI0MzdhZDRiZjI0MWM3YjZlZGU2ODFhNjgwOTAyZTc5ZGRhZGEyNjMwYTc
+[5]: https://jitpack.io/v/heremaps/oss-review-toolkit.svg
+[6]: https://jitpack.io/#heremaps/oss-review-toolkit
+[7]: https://codecov.io/gh/heremaps/oss-review-toolkit/branch/master/graph/badge.svg
+[8]: https://codecov.io/gh/heremaps/oss-review-toolkit/
+[9]: https://img.shields.io/badge/slack-ort--talk-blue.svg?longCache=true&logo=slack
+[10]: https://join.slack.com/t/ort-talk/shared_invite/enQtMzk3MDU5Njk0Njc1LWQwMDU3NDBjYmEzNGJkM2JiYTE2MmI0MzdhZDRiZjI0MWM3YjZlZGU2ODFhNjgwOTAyZTc5ZGRhZGEyNjMwYTc
 
 # Introduction
 
