@@ -58,7 +58,7 @@ install:
     elif [ "$TRAVIS_OS_NAME" = "osx" ]; then
       mkdir ~/bin;
       brew search dep@;
-      brew install cvs dep@$GO_DEP_VERSION php${PHP_VERSION//./} sbt
+      brew install cvs dep@$GO_DEP_VERSION php${PHP_VERSION//./} sbt;
     fi
   - curl -sSL https://github.com/commercialhaskell/stack/raw/v$STACK_VERSION/etc/scripts/get-stack.sh | sh
   - curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --default-toolchain $RUST_VERSION
