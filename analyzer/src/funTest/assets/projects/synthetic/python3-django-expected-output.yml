@@ -21,7 +21,7 @@ project:
     dependencies:
     - id: "PyPI::Django:2.1.10"
       dependencies:
-      - id: "PyPI::pytz:2019.1"
+      - id: "PyPI::pytz:2019.2"
 packages:
 - package:
     id: "PyPI::Django:2.1.10"
@@ -55,8 +55,8 @@ packages:
       path: ""
   curations: []
 - package:
-    id: "PyPI::pytz:2019.1"
-    purl: "pkg://PyPI//pytz@2019.1"
+    id: "PyPI::pytz:2019.2"
+    purl: "pkg://PyPI//pytz@2019.2"
     declared_licenses:
     - "MIT"
     declared_licenses_processed:
@@ -64,14 +64,14 @@ packages:
     description: "World timezone definitions, modern and historical"
     homepage_url: "http://pythonhosted.org/pytz"
     binary_artifact:
-      url: "https://files.pythonhosted.org/packages/3d/73/fe30c2daaaa0713420d0382b16fbb761409f532c56bdcc514bf7b6262bb6/pytz-2019.1-py2.py3-none-any.whl"
+      url: "https://files.pythonhosted.org/packages/87/76/46d697698a143e05f77bec5a526bf4e56a0be61d63425b68f4ba553b51f2/pytz-2019.2-py2.py3-none-any.whl"
       hash:
-        value: "9494cbd701404080e83cbb316e692891"
+        value: "0d90c3bd94c12ca213196c4b7519a6b0"
         algorithm: "MD5"
     source_artifact:
-      url: "https://files.pythonhosted.org/packages/df/d5/3e3ff673e8f3096921b3f1b79ce04b832e0100b4741573154b72b756a681/pytz-2019.1.tar.gz"
+      url: "https://files.pythonhosted.org/packages/27/c0/fbd352ca76050952a03db776d241959d5a2ee1abddfeb9e2a53fdb489be4/pytz-2019.2.tar.gz"
       hash:
-        value: "8b2860a161bfb0a6165798b1a2d8c40c"
+        value: "8c21963449c3a793aa61ef122e171516"
         algorithm: "MD5"
     vcs:
       type: ""
