@@ -267,7 +267,7 @@ subprojects {
         private val git = Grgit.open(mapOf("dir" to rootDir))
 
         override fun toString(): String {
-            return git.describe(mapOf("longDescr" to true, "tags" to true)) ?: git.head().abbreviatedId
+            return git.describe(mapOf("tags" to true)) ?: git.head().abbreviatedId
         }
     }
 
