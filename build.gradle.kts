@@ -4,8 +4,6 @@ import com.here.ort.gradle.*
 
 import io.gitlab.arturbosch.detekt.detekt
 
-import org.ajoberstar.grgit.Grgit
-
 import org.gradle.api.tasks.testing.logging.TestExceptionFormat
 import org.gradle.api.tasks.testing.logging.TestLogEvent
 
@@ -29,8 +27,13 @@ plugins {
     id("org.jetbrains.dokka") apply false
 
     id("com.github.ben-manes.versions")
-    id("org.ajoberstar.grgit")
+    id("org.ajoberstar.reckon")
     id("org.jetbrains.gradle.plugin.idea-ext")
+}
+
+reckon {
+    scopeFromProp()
+    stageFromProp("beta", "rc", "final")
 }
 
 idea {
@@ -261,14 +264,6 @@ subprojects {
 
         archiveClassifier.set("javadoc")
         from(dokkaJavadoc.get().outputDirectory)
-    }
-
-    version = object : Object() {
-        private val git = Grgit.open(mapOf("dir" to rootDir))
-
-        override fun toString(): String {
-            return git.describe(mapOf("tags" to true)) ?: git.head().abbreviatedId
-        }
     }
 
     configure<PublishingExtension> {
