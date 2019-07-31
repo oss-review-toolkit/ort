@@ -54,7 +54,7 @@ The following tools are [planned](https://github.com/heremaps/oss-review-toolkit
 
 ## From binaries
 
-There are no binary releases of ORT yet.
+Binary artifacts for ORT are currently only available via [JitPack](https://jitpack.io/#heremaps/oss-review-toolkit).
 
 ## From sources
 
