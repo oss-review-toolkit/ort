@@ -466,7 +466,7 @@ open class Npm(
 
             // E.g. when using Yarn workspaces, the dependencies of the projects are consolidated in a single top-level
             // "node_modules" directory for de-duplication, so go up.
-            log.info {
+            log.debug {
                 "Could not find package file for '$name' in '$startModulesDir', looking in '$parentModulesDir' instead."
             }
 
