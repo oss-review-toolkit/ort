@@ -35,6 +35,7 @@ ENV \
     BOWER_VERSION=1.8.8 \
     BUNDLER_VERSION=1.17.3-3 \
     COMPOSER_VERSION=1.8.4-1 \
+    FLUTTER_VERSION=v1.7.8+hotfix.3-stable \
     GO_DEP_VERSION=0.5.1+really0.5.0-1 \
     HASKELL_STACK_VERSION=1.7.1-3 \
     NPM_VERSION=5.8.0+DS6-4 \
@@ -43,13 +44,18 @@ ENV \
     SBT_VERSION=0.13.13-2 \
     YARN_VERSION=1.17.3 \
     # Scanner versions.
-    SCANCODE_VERSION=2.9.7
+    SCANCODE_VERSION=2.9.7 \
+    # Installation directories.
+    FLUTTER_HOME=/opt/flutter
+
+ENV PATH="$PATH:$FLUTTER_HOME/bin:$FLUTTER_HOME/bin/cache/dart-sdk/bin"
 
 # Apt install commands.
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
         # Install general tools required by this Dockefile.
         curl \
+        lib32stdc++6 \
         openssh-client \
         # Install VCS tools (no specific versions required here).
         cvs \
@@ -76,6 +82,11 @@ RUN \
     # Install package managers (in versions known to work).
     npm install --global bower@$BOWER_VERSION yarn@$YARN_VERSION && \
     pip install virtualenv==$PYTHON_VIRTUALENV_VERSION && \
+    curl -Os https://storage.googleapis.com/flutter_infra/releases/stable/linux/flutter_linux_$FLUTTER_VERSION.tar.xz && \
+    tar xf flutter_linux_$FLUTTER_VERSION.tar.xz -C $(dirname $FLUTTER_HOME) && \
+    chmod -R a+rw $FLUTTER_HOME && \
+    flutter config --no-analytics && \
+    flutter doctor && \
     # Add scanners (in versions known to work).
     curl -sSL https://github.com/nexB/scancode-toolkit/archive/v$SCANCODE_VERSION.tar.gz | \
         tar -zxC /usr/local && \
