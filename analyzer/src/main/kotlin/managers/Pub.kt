@@ -46,6 +46,7 @@ import com.here.ort.utils.log
 import com.here.ort.utils.showStackTrace
 import com.here.ort.utils.textValueOrEmpty
 import com.here.ort.utils.collectMessagesAsString
+import com.here.ort.utils.getPathFromEnvironment
 import com.here.ort.utils.getUserHomeDirectory
 
 import com.vdurmont.semver4j.Requirement
@@ -92,27 +93,12 @@ class Pub(
         }
 
         private val flutterPubCacheRoot by lazy {
-            val flutterHome = findFlutterHome()
-            val pubCache = File(flutterHome, ".pub-cache")
-            if (pubCache.isDirectory) {
-                pubCache
-            } else {
-                null
-            }
+            findFlutterHome()?.resolve(".pub-cache")?.takeIf { it.isDirectory }
         }
 
         private fun findFlutterHome(): File? {
             val flutterCommand = if (Os.isWindows) "flutter.bat" else "flutter"
-            return if (ProcessCapture(flutterCommand, "--version").isSuccess) {
-                val flutterPath = if (Os.isWindows) {
-                    ProcessCapture("where", "flutter.bat").stdout.trim()
-                } else {
-                    ProcessCapture("which", "flutter").stdout.trim()
-                }
-                File(flutterPath).parentFile.parentFile
-            } else {
-                null
-            }
+            return getPathFromEnvironment(flutterCommand)?.parentFile?.parentFile
         }
 
         fun findFile(packageInfo: JsonNode, fileName: String): File? {
@@ -391,24 +377,30 @@ class Pub(
                     var vcsFromPackage = VcsInfo.EMPTY
 
                     // For now, we ignore SDKs like the Dart SDK and the Flutter SDK in the analyzer.
-                    if (pkgInfoFromLockFile["source"].textValue() != "sdk") {
-                        val pkgInfoYamlFile = readPackageInfoFromCache(pkgInfoFromLockFile)
-                        vcsFromPackage = parseVcsInfo(pkgInfoYamlFile)
-                        description = parseDescriptionInfo(pkgInfoYamlFile)
-                        rawName = pkgInfoFromLockFile["description"]["name"].textValueOrEmpty()
-                        homepageUrl = pkgInfoFromLockFile["description"]["url"].textValueOrEmpty()
-                    } else if (pkgInfoFromLockFile["description"].textValueOrEmpty() == "flutter") {
-                        // Set flutter flag, which triggers another scan for iOS and Android native dependencies.
-                        containsFlutter = true
-                        // Set hardcoded package details.
-                        rawName = "flutter"
-                        homepageUrl = "https://github.com/flutter/flutter"
-                        description = "Flutter SDK"
-                    } else if (pkgInfoFromLockFile["description"].textValueOrEmpty() == "flutter_test") {
-                        // Set hardcoded package details.
-                        rawName = "flutter_test"
-                        homepageUrl = "https://github.com/flutter/flutter/tree/master/packages/flutter_test"
-                        description = "Flutter Test SDK"
+                    when {
+                        pkgInfoFromLockFile["source"].textValueOrEmpty() != "sdk" -> {
+                            val pkgInfoYamlFile = readPackageInfoFromCache(pkgInfoFromLockFile)
+                            vcsFromPackage = parseVcsInfo(pkgInfoYamlFile)
+                            description = parseDescriptionInfo(pkgInfoYamlFile)
+                            rawName = pkgInfoFromLockFile["description"]["name"].textValueOrEmpty()
+                            homepageUrl = pkgInfoFromLockFile["description"]["url"].textValueOrEmpty()
+                        }
+
+                        pkgInfoFromLockFile["description"].textValueOrEmpty() == "flutter" -> {
+                            // Set flutter flag, which triggers another scan for iOS and Android native dependencies.
+                            containsFlutter = true
+                            // Set hardcoded package details.
+                            rawName = "flutter"
+                            homepageUrl = "https://github.com/flutter/flutter"
+                            description = "Flutter SDK"
+                        }
+
+                        pkgInfoFromLockFile["description"].textValueOrEmpty() == "flutter_test" -> {
+                            // Set hardcoded package details.
+                            rawName = "flutter_test"
+                            homepageUrl = "https://github.com/flutter/flutter/tree/master/packages/flutter_test"
+                            description = "Flutter Test SDK"
+                        }
                     }
 
                     if (version.isEmpty()) {
