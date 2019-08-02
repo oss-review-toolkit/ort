@@ -291,10 +291,79 @@ abstract class VersionControlSystem {
      *
      * @throws DownloadException In case the download failed.
      */
-    abstract fun download(
-        pkg: Package, targetDir: File, allowMovingRevisions: Boolean = false,
+    open fun download(
+        pkg: Package,
+        targetDir: File,
+        allowMovingRevisions: Boolean = false,
         recursive: Boolean = true
-    ): WorkingTree
+    ): WorkingTree {
+        log.info { "Using $type version ${getVersion()}." }
+
+        val workingTree = try {
+            initWorkingTree(targetDir, pkg.vcsProcessed)
+        } catch (e: IOException) {
+            throw DownloadException("Failed to initialize $type working tree at '$targetDir'.", e)
+        }
+
+        // E.g. for NPM packages is it sometimes the case that the "gitHead" from the registry points to a non-fetchable
+        // commit, but the repository still has a tag for the package version (pointing to a different commit). In order
+        // to allow to fall back to the guessed revision based on the version in such cases, use a prioritized list of
+        // revision candidates instead of a single revision.
+        val revisionCandidates = mutableListOf<String>()
+
+        pkg.vcsProcessed.revision.also {
+            if (it.isNotBlank() && (isFixedRevision(workingTree, it) || allowMovingRevisions)) {
+                log.info {
+                    "Adding $type revision '$it' (taken from package meta-data) as a candidate."
+                }
+
+                revisionCandidates += it
+            }
+        }
+
+        try {
+            workingTree.guessRevisionName(pkg.id.name, pkg.id.version).also {
+                log.info {
+                    "Adding $type revision '$it' (guessed from version '${pkg.id.version}') as a candidate."
+                }
+
+                revisionCandidates += it
+            }
+        } catch (e: IOException) {
+            e.showStackTrace()
+
+            log.info { "No $type revision for version '${pkg.id.version}' found: ${e.message}" }
+        }
+
+        if (revisionCandidates.isEmpty()) {
+            throw IOException("Unable to determine a revision to checkout.")
+        }
+
+        val workingTreeRevision = revisionCandidates.find { revision ->
+            updateWorkingTree(workingTree, revision, recursive)
+        } ?: throw DownloadException("$type failed to download from URL '${pkg.vcsProcessed.url}'.")
+
+        log.info {
+            "Successfully downloaded revision $workingTreeRevision which matches ${pkg.id.name} version " +
+                    "${pkg.id.version}."
+        }
+
+        return workingTree
+    }
+
+    /**
+     * Initialize the working tree without checking out any files yet.
+     *
+     * TODO: Make this abstract once all VCS implementation have been ported.
+     */
+    open fun initWorkingTree(targetDir: File, vcs: VcsInfo): WorkingTree = getWorkingTree(targetDir)
+
+    /**
+     * Update the [working tree][workingTree] by checking out the given [revision], optionally [recursively][recursive].
+     *
+     * TODO: Make this abstract once all VCS implementation have been ported.
+     */
+    open fun updateWorkingTree(workingTree: WorkingTree, revision: String, recursive: Boolean) = false
 
     /**
      * Check whether the given [revision] is likely to name a fixed revision that does not move.
