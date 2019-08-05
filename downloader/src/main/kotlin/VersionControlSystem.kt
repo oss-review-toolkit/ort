@@ -311,14 +311,20 @@ abstract class VersionControlSystem {
         // revision candidates instead of a single revision.
         val revisionCandidates = mutableListOf<String>()
 
-        pkg.vcsProcessed.revision.also {
-            if (it.isNotBlank() && (isFixedRevision(workingTree, it) || allowMovingRevisions)) {
-                log.info {
-                    "Adding $type revision '$it' (taken from package meta-data) as a candidate."
-                }
+        try {
+            pkg.vcsProcessed.revision.also {
+                if (it.isNotBlank() && (isFixedRevision(workingTree, it) || allowMovingRevisions)) {
+                    log.info {
+                        "Adding $type revision '$it' (taken from package meta-data) as a candidate."
+                    }
 
-                revisionCandidates += it
+                    revisionCandidates += it
+                }
             }
+        } catch (e: IOException) {
+            e.showStackTrace()
+
+            log.info { "Meta-data has invalid $type revision '${pkg.vcsProcessed.revision}': ${e.message}" }
         }
 
         try {
@@ -336,7 +342,7 @@ abstract class VersionControlSystem {
         }
 
         if (revisionCandidates.isEmpty()) {
-            throw IOException("Unable to determine a revision to checkout.")
+            throw DownloadException("Unable to determine a revision to checkout.")
         }
 
         var i = 0
