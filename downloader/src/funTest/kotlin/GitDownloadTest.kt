@@ -33,10 +33,12 @@ import io.kotlintest.specs.StringSpec
 
 import java.io.File
 
+private const val PKG_VERSION = "0.4.1"
+
 private const val REPO_URL = "https://github.com/jriecken/dependency-graph"
 private const val REPO_REV = "8964880d9bac33f0a7f030a74c7c9299a8f117c8"
 private const val REPO_PATH = "lib"
-private const val REPO_VERSION = "0.4.1"
+
 private const val REPO_REV_FOR_VERSION = "371b23f37da064687518bace268d607a92ecbe8f"
 private const val REPO_PATH_FOR_VERSION = "specs"
 
@@ -98,8 +100,10 @@ class GitDownloadTest : StringSpec() {
 
         "Git can download based on a version".config(tags = setOf(ExpensiveTag)) {
             val pkg = Package.EMPTY.copy(
-                id = Identifier("Test:::$REPO_VERSION"),
-                vcsProcessed = VcsInfo(VcsType.GIT, REPO_URL, "")
+                id = Identifier("Test:::$PKG_VERSION"),
+
+                // Use a non-blank dummy revsion to enforce multiple revision candidates being tried.
+                vcsProcessed = VcsInfo(VcsType.GIT, REPO_URL, "dummy")
             )
 
             val workingTree = git.download(pkg, outputDir)
@@ -110,8 +114,10 @@ class GitDownloadTest : StringSpec() {
 
         "Git can download only a single path based on a version".config(tags = setOf(ExpensiveTag)) {
             val pkg = Package.EMPTY.copy(
-                id = Identifier("Test:::$REPO_VERSION"),
-                vcsProcessed = VcsInfo(VcsType.GIT, REPO_URL, "", path = REPO_PATH_FOR_VERSION)
+                id = Identifier("Test:::$PKG_VERSION"),
+
+                // Use a non-blank dummy revsion to enforce multiple revision candidates being tried.
+                vcsProcessed = VcsInfo(VcsType.GIT, REPO_URL, "dummy", path = REPO_PATH_FOR_VERSION)
             )
             val expectedFiles = listOf(
                 File("LICENSE"),
