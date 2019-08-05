@@ -339,7 +339,9 @@ abstract class VersionControlSystem {
             throw IOException("Unable to determine a revision to checkout.")
         }
 
+        var i = 0
         val workingTreeRevision = revisionCandidates.find { revision ->
+            log.info { "Trying revision candidate '$revision' (${++i} of ${revisionCandidates.size})..." }
             updateWorkingTree(workingTree, revision, recursive)
         } ?: throw DownloadException("$type failed to download from URL '${pkg.vcsProcessed.url}'.")
 
