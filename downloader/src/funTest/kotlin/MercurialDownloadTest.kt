@@ -33,10 +33,12 @@ import io.kotlintest.specs.StringSpec
 
 import java.io.File
 
+private const val PKG_VERSION = "1.1"
+
 private const val REPO_URL = "https://bitbucket.org/creaceed/mercurial-xcode-plugin"
 private const val REPO_REV = "02098fc8bdaca4739ec52cbcb8ed51654eacee25"
 private const val REPO_PATH = "Classes"
-private const val REPO_VERSION = "1.1"
+
 private const val REPO_REV_FOR_VERSION = "562fed42b4f3dceaacf6f1051963c865c0241e28"
 private const val REPO_PATH_FOR_VERSION = "Resources"
 
@@ -110,8 +112,10 @@ class MercurialDownloadTest : StringSpec() {
 
         "Mercurial can download based on a version".config(tags = setOf(ExpensiveTag)) {
             val pkg = Package.EMPTY.copy(
-                id = Identifier("Test:::$REPO_VERSION"),
-                vcsProcessed = VcsInfo(VcsType.MERCURIAL, REPO_URL, "")
+                id = Identifier("Test:::$PKG_VERSION"),
+
+                // Use a non-blank dummy revision to enforce multiple revision candidates being tried.
+                vcsProcessed = VcsInfo(VcsType.MERCURIAL, REPO_URL, "dummy")
             )
 
             val workingTree = hg.download(pkg, outputDir)
@@ -123,8 +127,10 @@ class MercurialDownloadTest : StringSpec() {
         "Mercurial can download only a single path based on a version"
             .config(enabled = hg.isAtLeastVersion("4.3"), tags = setOf(ExpensiveTag)) {
                 val pkg = Package.EMPTY.copy(
-                    id = Identifier("Test:::$REPO_VERSION"),
-                    vcsProcessed = VcsInfo(VcsType.MERCURIAL, REPO_URL, "", path = REPO_PATH_FOR_VERSION)
+                    id = Identifier("Test:::$PKG_VERSION"),
+
+                    // Use a non-blank dummy revision to enforce multiple revision candidates being tried.
+                    vcsProcessed = VcsInfo(VcsType.MERCURIAL, REPO_URL, "dummy", path = REPO_PATH_FOR_VERSION)
                 )
                 val expectedFiles = listOf(
                     File(".hgsub"), // We always get these configuration files, if present.
