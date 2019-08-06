@@ -184,16 +184,18 @@ open class Npm(
         val npmrcFile = getUserHomeDirectory().resolve(".npmrc")
         if (npmrcFile.isFile) {
             npmrcFile.forEachLine { line ->
-                val (key, value) = line.split('=', limit = 2).map { it.trim() }
+                val keyAndValue = line.split('=', limit = 2).map { it.trim() }
+                if (keyAndValue.size == 2) {
+                    val (key, value) = keyAndValue
+                    val proxyUrl = value.takeIf { it.matches(HTTP_REGEX) } ?: when (key) {
+                        "proxy" -> "http://$value"
+                        "https-proxy" -> "https://$value"
+                        else -> ""
+                    }
 
-                val proxyUrl = value.takeIf { it.matches(HTTP_REGEX) } ?: when (key) {
-                    "proxy" -> "http://$value"
-                    "https-proxy" -> "https://$value"
-                    else -> ""
-                }
-
-                if (proxyUrl.isNotEmpty()) {
-                    applyProxySettingsFromUrl(URL(proxyUrl))
+                    if (proxyUrl.isNotEmpty()) {
+                        applyProxySettingsFromUrl(URL(proxyUrl))
+                    }
                 }
             }
         }
