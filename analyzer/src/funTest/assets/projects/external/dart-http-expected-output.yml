@@ -42,7 +42,7 @@ project:
         dependencies:
         - id: "Pub:args:args:1.5.2"
         - id: "Pub:convert:convert:2.1.1"
-        - id: "Pub:crypto:crypto:2.0.6"
+        - id: "Pub:crypto:crypto:2.1.1"
         - id: "Pub:front_end:front_end:0.1.20"
           dependencies:
           - id: "Pub:kernel:kernel:0.3.20"
@@ -289,8 +289,8 @@ packages:
       path: ""
   curations: []
 - package:
-    id: "Pub:crypto:crypto:2.0.6"
-    purl: "pkg://Pub/crypto/crypto@2.0.6"
+    id: "Pub:crypto:crypto:2.1.1"
+    purl: "pkg://Pub/crypto/crypto@2.1.1"
     declared_licenses: []
     declared_licenses_processed: {}
     description: "Library of cryptographic functions."
