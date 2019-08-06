@@ -351,6 +351,15 @@ abstract class VersionControlSystem {
             updateWorkingTree(workingTree, revision, recursive)
         } ?: throw DownloadException("$type failed to download from URL '${pkg.vcsProcessed.url}'.")
 
+        pkg.vcsProcessed.path.let {
+            if (it.isNotBlank() && !workingTree.workingDir.resolve(it).exists()) {
+                throw DownloadException(
+                    "The $type working directory at '${workingTree.workingDir}' does not contain the requested path " +
+                            "'$it'."
+                )
+            }
+        }
+
         log.info {
             "Successfully downloaded revision $workingTreeRevision which matches ${pkg.id.name} version " +
                     "${pkg.id.version}."
