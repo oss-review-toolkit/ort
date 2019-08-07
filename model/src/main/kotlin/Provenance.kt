@@ -97,12 +97,11 @@ data class Provenance(
         }
 
         return listOf(pkg.vcs, pkg.vcsProcessed).any {
-            // If "it" has a resolved revision it must be equal to the resolved revision of vcsInfo, otherwise the
-            // revision of "it" has to equal either the revision or the resolved revision of vcsInfo.
-            it.type == vcsInfo.type && it.url == vcsInfo.url && it.path == vcsInfo.path
-                    && (it.resolvedRevision?.let {
-                vcsInfo.resolvedRevision == it
-            } ?: vcsInfo.resolvedRevision == it.revision || vcsInfo.revision == it.revision)
+            if (it.resolvedRevision != null) {
+                it.resolvedRevision == vcsInfo.resolvedRevision
+            } else {
+                it.revision == vcsInfo.revision || it.revision == vcsInfo.resolvedRevision
+            } && it.type == vcsInfo.type && it.url == vcsInfo.url && it.path == vcsInfo.path
         }
     }
 }
