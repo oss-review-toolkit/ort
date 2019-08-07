@@ -19,8 +19,11 @@
 
 package com.here.ort.utils
 
+import ch.frankel.slf4k.*
+
 import java.io.File
 import java.net.InetSocketAddress
+import java.net.MalformedURLException
 import java.net.Proxy
 import java.net.URL
 import java.net.URLConnection
@@ -88,8 +91,12 @@ object OkHttpClientHelper {
         val proxyUrl = Os.env["https_proxy"]?.addProtocol("https")
             ?: Os.env["http_proxy"]?.addProtocol("http")
 
-        if (proxyUrl != null) {
+        try {
             applyProxySettingsFromUrl(URL(proxyUrl))
+        } catch (e: MalformedURLException) {
+            e.printStackTrace()
+
+            log.warn { "Invalid proxy URL '$proxyUrl' defined in environment." }
         }
     }
 
