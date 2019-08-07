@@ -102,7 +102,7 @@ class GitDownloadTest : StringSpec() {
             val pkg = Package.EMPTY.copy(
                 id = Identifier("Test:::$PKG_VERSION"),
 
-                // Use a non-blank dummy revsion to enforce multiple revision candidates being tried.
+                // Use a non-blank dummy revision to enforce multiple revision candidates being tried.
                 vcsProcessed = VcsInfo(VcsType.GIT, REPO_URL, "dummy")
             )
 
@@ -116,7 +116,7 @@ class GitDownloadTest : StringSpec() {
             val pkg = Package.EMPTY.copy(
                 id = Identifier("Test:::$PKG_VERSION"),
 
-                // Use a non-blank dummy revsion to enforce multiple revision candidates being tried.
+                // Use a non-blank dummy revision to enforce multiple revision candidates being tried.
                 vcsProcessed = VcsInfo(VcsType.GIT, REPO_URL, "dummy", path = REPO_PATH_FOR_VERSION)
             )
             val expectedFiles = listOf(
