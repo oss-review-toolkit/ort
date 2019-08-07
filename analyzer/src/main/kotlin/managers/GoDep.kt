@@ -144,7 +144,9 @@ class GoDep(
                     .joinToString(separator = "/")
                     .toLowerCase()
             }
-        } catch (e: URISyntaxException) { projectDir.name }
+        } catch (e: URISyntaxException) {
+            projectDir.name
+        }
 
         // TODO Keeping this between scans would speed things up considerably.
         gopath.safeDeleteRecursively(force = true)
