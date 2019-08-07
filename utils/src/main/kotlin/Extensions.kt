@@ -307,6 +307,7 @@ fun String.normalizeLineBreaks() = replace(NON_LINUX_LINE_BREAKS, "\n")
  */
 fun String.stripCredentialsFromUrl() =
     try {
+        // Use an URI instead of an URL as the former allows to specify the userInfo separately.
         URI(this).let {
             URI(it.scheme, null, it.host, it.port, it.path, it.query, it.fragment).toString()
         }

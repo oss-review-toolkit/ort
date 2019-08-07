@@ -246,6 +246,7 @@ fun normalizeVcsUrl(vcsUrl: String): String {
     // where a server-based "authority" has the syntax
     //     [user-info@]host[:port]
     val uri = try {
+        // At this point we do not know whether the URL is actually valid, so use the more general URI.
         URI(url)
     } catch (e: URISyntaxException) {
         // Fall back to a file if the URL is a Windows path.

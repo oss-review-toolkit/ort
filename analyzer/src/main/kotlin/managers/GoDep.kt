@@ -49,8 +49,8 @@ import com.moandjiezana.toml.Toml
 
 import java.io.File
 import java.io.IOException
-import java.net.URI
-import java.net.URISyntaxException
+import java.net.MalformedURLException
+import java.net.URL
 import java.nio.file.Paths
 
 /**
@@ -137,14 +137,13 @@ class GoDep(
 
         val scope = Scope("default", packageRefs.toSortedSet())
         val projectName = try {
-            URI(projectVcs.url).let { uri ->
-                val vcsPath = VersionControlSystem.getPathInfo(definitionFile.parentFile).path
-                listOf(uri.host, uri.path.removePrefix("/").removeSuffix(".git"), vcsPath)
-                    .filterNot { it.isEmpty() }
-                    .joinToString(separator = "/")
-                    .toLowerCase()
-            }
-        } catch (e: URISyntaxException) {
+            val url = URL(projectVcs.url)
+            val vcsPath = VersionControlSystem.getPathInfo(definitionFile.parentFile).path
+            listOf(url.host, url.path.removePrefix("/").removeSuffix(".git"), vcsPath)
+                .filterNot { it.isEmpty() }
+                .joinToString(separator = "/")
+                .toLowerCase()
+        } catch (e: MalformedURLException) {
             projectDir.name
         }
 
@@ -171,11 +170,11 @@ class GoDep(
     }
 
     fun deduceImportPath(projectDir: File, vcs: VcsInfo, gopath: File): File =
-        if (vcs == VcsInfo.EMPTY) {
+        try {
+            val url = URL(vcs.url)
+            Paths.get(gopath.path, "src", url.host, url.path)
+        } catch (e: MalformedURLException) {
             Paths.get(gopath.path, "src", projectDir.name)
-        } else {
-            val uri = URI(vcs.url)
-            Paths.get(gopath.path, "src", uri.host, uri.path)
         }.toFile()
 
     private fun resolveProjectRoot(definitionFile: File): File {
