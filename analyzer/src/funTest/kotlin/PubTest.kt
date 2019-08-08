@@ -47,6 +47,8 @@ class PubTest : WordSpec() {
         "Pub" should {
             "resolve dart http dependencies correctly" {
                 val workingDir = File(projectsDirExternal, "dart-http")
+                val lockFile = File(workingDir, "pubspec.lock")
+                File(projectsDirExternal, "dart-http-pubspec.lock").copyTo(lockFile)
 
                 try {
                     val packageFile = File(workingDir, "pubspec.yaml")
@@ -65,7 +67,7 @@ class PubTest : WordSpec() {
 
                     yamlMapper.writeValueAsString(result) shouldBe expectedResult
                 } finally {
-                    File(workingDir, "pubspec.lock").delete()
+                    lockFile.delete()
                 }
             }
 
