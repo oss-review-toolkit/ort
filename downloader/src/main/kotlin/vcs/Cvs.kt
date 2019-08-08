@@ -150,12 +150,12 @@ class Cvs : VersionControlSystem(), CommandLineTool {
 
             override fun listRemoteBranches() =
                 listSymbolicNames().mapNotNull { (name, version) ->
-                    if (isBranchVersion(version)) name else null
+                    name.takeIf { isBranchVersion(version) }
                 }
 
             override fun listRemoteTags() =
                 listSymbolicNames().mapNotNull { (name, version) ->
-                    if (isBranchVersion(version)) null else name
+                    name.takeUnless { isBranchVersion(version) }
                 }
         }
 
