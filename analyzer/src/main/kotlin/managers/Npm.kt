@@ -188,13 +188,14 @@ open class Npm(
                 val keyAndValue = line.split('=', limit = 2).map { it.trim() }
                 if (keyAndValue.size == 2) {
                     val (key, value) = keyAndValue
-                    val proxyUrl = value.takeIf { it.matches(HTTP_REGEX) } ?: when (key) {
-                        "proxy" -> "http://$value"
-                        "https-proxy" -> "https://$value"
-                        else -> ""
+                    val proxyUrl = value.takeIf { it.matches(HTTP_REGEX) } ?: when {
+                        value.isEmpty() || value == "null" -> null
+                        key == "proxy" -> "http://$value"
+                        key == "https-proxy" -> "https://$value"
+                        else -> null
                     }
 
-                    if (proxyUrl.isNotEmpty()) {
+                    if (proxyUrl != null) {
                         applyProxySettingsFromUrl(URL(proxyUrl))
                     }
                 }
