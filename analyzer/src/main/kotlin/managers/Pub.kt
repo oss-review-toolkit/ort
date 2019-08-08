@@ -38,6 +38,7 @@ import com.here.ort.model.VcsInfo
 import com.here.ort.model.config.AnalyzerConfiguration
 import com.here.ort.model.config.RepositoryConfiguration
 import com.here.ort.model.OrtIssue
+import com.here.ort.model.Severity
 import com.here.ort.model.VcsType
 import com.here.ort.utils.CommandLineTool
 import com.here.ort.utils.Os
@@ -157,6 +158,11 @@ class Pub(
         }
     }
 
+    private data class ParsePackagesResult(
+        val packages: Map<Identifier, Package>,
+        val issues: List<OrtIssue>
+    )
+
     private val processedPackages = mutableListOf<String>()
     private val reader = PubCacheReader()
 
@@ -170,7 +176,11 @@ class Pub(
             key.startsWith("dependencies") && value.count() > 0
         }
 
-        val (packages, scopes) = if (hasDependencies) {
+        val packages = mutableMapOf<Identifier, Package>()
+        val scopes = sortedSetOf<Scope>()
+        val issues = mutableListOf<OrtIssue>()
+
+        if (hasDependencies) {
             installDependencies(workingDir)
 
             log.info { "Reading $PUB_LOCK_FILE file in $workingDir." }
@@ -179,26 +189,21 @@ class Pub(
 
             log.info { "Successfully read lockfile." }
 
-            val packages = parseInstalledPackages(lockFile)
+            val parsePackagesResult = parseInstalledPackages(lockFile)
+            packages += parsePackagesResult.packages
+            issues += parsePackagesResult.issues
 
             log.info { "Successfully parsed installed packages." }
 
-            val scopes = sortedSetOf(
-                parseScope("dependencies", manifest, lockFile, packages),
-                parseScope("dev_dependencies", manifest, lockFile, packages)
-            )
-
-            Pair(packages, scopes)
-        } else {
-            Pair(emptyMap(), sortedSetOf())
+            scopes += parseScope("dependencies", manifest, lockFile, parsePackagesResult.packages)
+            scopes += parseScope("dev_dependencies", manifest, lockFile, parsePackagesResult.packages)
         }
 
         log.info { "Reading ${definitionFile.name} file in $workingDir." }
 
         val project = parseProject(definitionFile, scopes)
 
-        return ProjectAnalyzerResult(project, packages.values.map { it.toCuratedPackage() }.toSortedSet())
-
+        return ProjectAnalyzerResult(project, packages.values.map { it.toCuratedPackage() }.toSortedSet(), issues)
     }
 
     private fun parseScope(
@@ -332,8 +337,11 @@ class Pub(
     private fun scanIosPackages(packageInfo: JsonNode): ProjectAnalyzerResult? {
         // TODO: Implement similar to `scanAndroidPackages` once Cocoapods is implemented.
         val packageName = packageInfo["description"]["name"].textValueOrEmpty()
-        log.warn { "Cannot get iOS dependencies for package '$packageName'. Cocoapods is not yet implemented." }
-        return null
+        val message = "Cannot get iOS dependencies for package '$packageName'. " +
+                "Support for CocoaPods is not yet implemented."
+        log.warn { message }
+        val issue = OrtIssue(source = managerName, severity = Severity.WARNING, message = message)
+        return ProjectAnalyzerResult(Project.EMPTY, sortedSetOf(), listOf(issue))
     }
 
     private fun parseProject(definitionFile: File, scopes: SortedSet<Scope>): Project {
@@ -359,10 +367,11 @@ class Pub(
         )
     }
 
-    private fun parseInstalledPackages(lockFile: JsonNode): Map<Identifier, Package> {
+    private fun parseInstalledPackages(lockFile: JsonNode): ParsePackagesResult {
         log.info { "Parsing installed Pub packages..." }
 
         val packages = mutableMapOf<Identifier, Package>()
+        val issues = mutableListOf<OrtIssue>()
 
         try {
             // Flag if the project is a flutter project.
@@ -436,25 +445,35 @@ class Pub(
             if (containsFlutter) {
                 lockFile["packages"]?.forEach { pkgInfoFromLockFile ->
                     // As this package contains flutter, trigger Gradle manually for it.
-                    val resultAndroid = scanAndroidPackages(pkgInfoFromLockFile)
-                    resultAndroid?.collectPackagesByScope("releaseCompileClasspath")?.forEach { item ->
-                        packages[item.pkg.id] = item.pkg
+                    scanAndroidPackages(pkgInfoFromLockFile)?.let { result ->
+                        result.collectPackagesByScope("releaseCompileClasspath").forEach { item ->
+                            packages[item.pkg.id] = item.pkg
+                        }
+
+                        issues += result.errors
                     }
 
+
                     // As this package contains flutter, trigger CocoaPods manually for it.
-                    val resultIos = scanIosPackages(pkgInfoFromLockFile)
-                    resultIos?.packages?.forEach { item ->
-                        packages[item.pkg.id] = item.pkg
+                    scanIosPackages(pkgInfoFromLockFile)?.let { result ->
+                        result.packages.forEach { item ->
+                            packages[item.pkg.id] = item.pkg
+                        }
+
+                        issues += result.errors
                     }
                 }
             }
         } catch (e: Exception) {
             e.printStackTrace()
 
-            log.error { "Could not parse installed Pub packages: ${e.collectMessagesAsString()}" }
+            val message = "Could not parse installed Pub packages: ${e.collectMessagesAsString()}"
+            log.error { message }
+
+            issues += OrtIssue(source = managerName, severity = Severity.ERROR, message = message)
         }
 
-        return packages
+        return ParsePackagesResult(packages, issues)
     }
 
     private fun readPackageInfoFromCache(packageInfo: JsonNode): JsonNode {

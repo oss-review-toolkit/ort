@@ -27,6 +27,7 @@ import com.here.ort.utils.normalizeVcsUrl
 import com.here.ort.utils.test.DEFAULT_ANALYZER_CONFIGURATION
 import com.here.ort.utils.test.DEFAULT_REPOSITORY_CONFIGURATION
 import com.here.ort.utils.test.USER_DIR
+import com.here.ort.utils.test.patchActualResult
 import com.here.ort.utils.test.patchExpectedResult
 
 import io.kotlintest.shouldBe
@@ -87,7 +88,7 @@ class PubTest : WordSpec() {
                     path = vcsPath
                 )
 
-                yamlMapper.writeValueAsString(result) shouldBe expectedResult
+                patchActualResult(yamlMapper.writeValueAsString(result)) shouldBe expectedResult
             }
 
             "Resolve dependencies for a project with dependencies without a static version" {
