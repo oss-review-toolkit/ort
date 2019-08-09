@@ -337,6 +337,17 @@ class Pub(
     private fun scanIosPackages(packageInfo: JsonNode): ProjectAnalyzerResult? {
         // TODO: Implement similar to `scanAndroidPackages` once Cocoapods is implemented.
         val packageName = packageInfo["description"]["name"].textValueOrEmpty()
+
+        // We cannot find packages without a valid name.
+        if (packageName.isEmpty()) return null
+
+        val projectRoot = reader.findProjectRoot(packageInfo) ?: return null
+        val iosDir = File(projectRoot, "ios")
+        val packageFile = File(iosDir, "$packageName.podspec")
+
+        // Check for build.gradle failed, no Gradle scan required.
+        if (!packageFile.isFile) return null
+
         val message = "Cannot get iOS dependencies for package '$packageName'. " +
                 "Support for CocoaPods is not yet implemented."
         log.warn { message }
