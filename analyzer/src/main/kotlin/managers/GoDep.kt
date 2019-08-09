@@ -155,7 +155,7 @@ class GoDep(
                 id = Identifier(
                     type = managerName,
                     namespace = "",
-                    name =  projectName,
+                    name = projectName,
                     version = projectVcs.revision
                 ),
                 definitionFilePath = VersionControlSystem.getPathInfo(definitionFile).path,
