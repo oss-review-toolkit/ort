@@ -114,7 +114,6 @@ class RuleSetTest : WordSpec() {
 
                             error(errorMessage, howToFix)
                         }
-
                     }
                 }
 
