@@ -47,6 +47,7 @@ import com.here.ort.model.readValue
 import com.here.ort.utils.CommandLineTool
 import com.here.ort.utils.Os
 import com.here.ort.utils.OkHttpClientHelper
+import com.here.ort.utils.OkHttpClientHelper.applyProxySettingsFromEnv
 import com.here.ort.utils.OkHttpClientHelper.applyProxySettingsFromUrl
 import com.here.ort.utils.getUserHomeDirectory
 import com.here.ort.utils.hasFragmentRevision
@@ -181,7 +182,7 @@ open class Npm(
         }
     }
 
-    private val applyProxySettingsFromNpmrc: OkHttpClient.Builder.() -> Unit = {
+    private val applyProxySettings: OkHttpClient.Builder.() -> Unit = {
         val npmrcFile = getUserHomeDirectory().resolve(".npmrc")
         if (npmrcFile.isFile) {
             npmrcFile.forEachLine { line ->
@@ -197,6 +198,10 @@ open class Npm(
 
                     if (proxyUrl != null) {
                         applyProxySettingsFromUrl(URL(proxyUrl))
+                    } else {
+                        // If no proxy settings are defined in ".npmrc", fall back to using the "http(s)_proxy"
+                        // environment variables just like NPM does, see https://docs.npmjs.com/misc/config#proxy.
+                        applyProxySettingsFromEnv()
                     }
                 }
             }
@@ -269,7 +274,7 @@ open class Npm(
                     .url("https://registry.npmjs.org/$encodedName")
                     .build()
 
-                OkHttpClientHelper.execute(HTTP_CACHE_PATH, pkgRequest, applyProxySettingsFromNpmrc).use { response ->
+                OkHttpClientHelper.execute(HTTP_CACHE_PATH, pkgRequest, applyProxySettings).use { response ->
                     if (response.code == HttpURLConnection.HTTP_OK) {
                         log.debug {
                             if (response.cacheResponse != null) {
