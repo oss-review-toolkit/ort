@@ -463,7 +463,6 @@ class Pub(
                     issues += result.errors
                 }
 
-
                 // As this package contains flutter, trigger CocoaPods manually for it.
                 scanIosPackages(pkgInfoFromLockFile)?.let { result ->
                     result.packages.forEach { item ->
