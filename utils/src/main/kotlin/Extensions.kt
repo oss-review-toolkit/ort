@@ -86,7 +86,9 @@ fun File.safeCopyRecursively(target: File, overwrite: Boolean = false) {
     // FileVisitOption.FOLLOW_LINKS is not used, so symbolic links are not followed.
     Files.walkFileTree(sourcePath, object : SimpleFileVisitor<Path>() {
         override fun preVisitDirectory(dir: Path, attrs: BasicFileAttributes): FileVisitResult {
-            if ((!Os.isWindows && attrs.isSymbolicLink) || (Os.isWindows && attrs.isOther)) {
+            val isUnixLink = !Os.isWindows && attrs.isSymbolicLink
+            val isWindowsLink = Os.isWindows && attrs.isOther
+            if (isUnixLink || isWindowsLink) {
                 // Do not follow symbolic links or junctions.
                 return FileVisitResult.SKIP_SUBTREE
             }
