@@ -24,6 +24,7 @@ import ch.frankel.slf4k.*
 import com.fasterxml.jackson.annotation.JsonInclude
 
 import com.here.ort.spdx.SpdxDeclaredLicenseMapping
+import com.here.ort.spdx.SpdxException
 import com.here.ort.spdx.SpdxExpression
 
 object DeclaredLicenseProcessor {
@@ -49,7 +50,7 @@ object DeclaredLicenseProcessor {
     private fun parseLicense(declaredLicense: String) =
         try {
             SpdxExpression.parse(declaredLicense, SpdxExpression.Strictness.ALLOW_ANY)
-        } catch (e: Exception) {
+        } catch (e: SpdxException) {
             log.debug { "Could not parse declared license '$declaredLicense': ${e.message}" }
             null
         }
