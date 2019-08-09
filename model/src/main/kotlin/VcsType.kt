@@ -33,7 +33,7 @@ data class VcsType(val aliases: List<String>) {
      * with matching aliases, or an instance with only [type] as the alias if no aliases match.
      */
     @JsonCreator
-    constructor(type: String): this(
+    constructor(type: String) : this(
         ALL_ALIASES.find { aliases ->
             aliases.any { alias ->
                 alias.equals(type, ignoreCase = true)
