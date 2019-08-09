@@ -212,7 +212,6 @@ class ExcludesTest : WordSpec() {
                 ortResult.isProjectExcluded(project1.id) shouldBe true
             }
 
-
             "return false if nothing is excluded" {
                 setProjects(project1)
 
