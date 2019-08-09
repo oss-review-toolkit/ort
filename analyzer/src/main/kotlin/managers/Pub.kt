@@ -384,104 +384,95 @@ class Pub(
         val packages = mutableMapOf<Identifier, Package>()
         val issues = mutableListOf<OrtIssue>()
 
-        try {
-            // Flag if the project is a flutter project.
-            var containsFlutter = false
+        // Flag if the project is a flutter project.
+        var containsFlutter = false
 
-            listOf("packages"/*, "packages-dev"*/).forEach {
-                lockFile[it]?.forEach { pkgInfoFromLockFile ->
-                    val version = pkgInfoFromLockFile["version"].textValueOrEmpty()
-                    var description = ""
-                    var rawName = ""
-                    var homepageUrl = ""
-                    var vcsFromPackage = VcsInfo.EMPTY
+        listOf("packages"/*, "packages-dev"*/).forEach {
+            lockFile[it]?.forEach { pkgInfoFromLockFile ->
+                val version = pkgInfoFromLockFile["version"].textValueOrEmpty()
+                var description = ""
+                var rawName = ""
+                var homepageUrl = ""
+                var vcsFromPackage = VcsInfo.EMPTY
 
-                    // For now, we ignore SDKs like the Dart SDK and the Flutter SDK in the analyzer.
-                    when {
-                        pkgInfoFromLockFile["source"].textValueOrEmpty() != "sdk" -> {
-                            val pkgInfoYamlFile = readPackageInfoFromCache(pkgInfoFromLockFile)
-                            vcsFromPackage = parseVcsInfo(pkgInfoYamlFile)
-                            description = parseDescriptionInfo(pkgInfoYamlFile)
-                            rawName = pkgInfoFromLockFile["description"]["name"].textValueOrEmpty()
-                            homepageUrl = pkgInfoFromLockFile["description"]["url"].textValueOrEmpty()
-                        }
-
-                        pkgInfoFromLockFile["description"].textValueOrEmpty() == "flutter" -> {
-                            // Set flutter flag, which triggers another scan for iOS and Android native dependencies.
-                            containsFlutter = true
-                            // Set hardcoded package details.
-                            rawName = "flutter"
-                            homepageUrl = "https://github.com/flutter/flutter"
-                            description = "Flutter SDK"
-                        }
-
-                        pkgInfoFromLockFile["description"].textValueOrEmpty() == "flutter_test" -> {
-                            // Set hardcoded package details.
-                            rawName = "flutter_test"
-                            homepageUrl = "https://github.com/flutter/flutter/tree/master/packages/flutter_test"
-                            description = "Flutter Test SDK"
-                        }
+                // For now, we ignore SDKs like the Dart SDK and the Flutter SDK in the analyzer.
+                when {
+                    pkgInfoFromLockFile["source"].textValueOrEmpty() != "sdk" -> {
+                        val pkgInfoYamlFile = readPackageInfoFromCache(pkgInfoFromLockFile)
+                        vcsFromPackage = parseVcsInfo(pkgInfoYamlFile)
+                        description = parseDescriptionInfo(pkgInfoYamlFile)
+                        rawName = pkgInfoFromLockFile["description"]["name"].textValueOrEmpty()
+                        homepageUrl = pkgInfoFromLockFile["description"]["url"].textValueOrEmpty()
                     }
 
-                    if (version.isEmpty()) {
-                        log.warn { "No version information found for package $rawName." }
+                    pkgInfoFromLockFile["description"].textValueOrEmpty() == "flutter" -> {
+                        // Set flutter flag, which triggers another scan for iOS and Android native dependencies.
+                        containsFlutter = true
+                        // Set hardcoded package details.
+                        rawName = "flutter"
+                        homepageUrl = "https://github.com/flutter/flutter"
+                        description = "Flutter SDK"
                     }
 
-                    val id = Identifier(
-                        type = managerName,
-                        namespace = rawName.substringBefore("/"),
-                        name = rawName.substringAfter("/"),
-                        version = version
-                    )
-
-                    packages[id] = Package(
-                        id,
-                        // Pub does not declare any licenses in the pubspec files, therefore we keep this empty.
-                        declaredLicenses = sortedSetOf(),
-                        description = description,
-                        homepageUrl = homepageUrl,
-                        // Pub does not create binary artifacts, therefore use any empty artifact.
-                        binaryArtifact = RemoteArtifact.EMPTY,
-                        // Pub does not create source artifacts, therefore use any empty artifact.
-                        sourceArtifact = RemoteArtifact.EMPTY,
-                        vcs = vcsFromPackage,
-                        vcsProcessed = processPackageVcs(vcsFromPackage, homepageUrl)
-                    )
-                }
-            }
-
-            // If the project contains Flutter, we need to trigger the analyzer for Gradle and CocoaPod dependencies for
-            // each Pub dependency manually, as the analyzer will only analyze the projectRoot, but not the packages in
-            // the .pub-cache folder.
-            if (containsFlutter) {
-                lockFile["packages"]?.forEach { pkgInfoFromLockFile ->
-                    // As this package contains flutter, trigger Gradle manually for it.
-                    scanAndroidPackages(pkgInfoFromLockFile)?.let { result ->
-                        result.collectPackagesByScope("releaseCompileClasspath").forEach { item ->
-                            packages[item.pkg.id] = item.pkg
-                        }
-
-                        issues += result.errors
-                    }
-
-
-                    // As this package contains flutter, trigger CocoaPods manually for it.
-                    scanIosPackages(pkgInfoFromLockFile)?.let { result ->
-                        result.packages.forEach { item ->
-                            packages[item.pkg.id] = item.pkg
-                        }
-
-                        issues += result.errors
+                    pkgInfoFromLockFile["description"].textValueOrEmpty() == "flutter_test" -> {
+                        // Set hardcoded package details.
+                        rawName = "flutter_test"
+                        homepageUrl = "https://github.com/flutter/flutter/tree/master/packages/flutter_test"
+                        description = "Flutter Test SDK"
                     }
                 }
+
+                if (version.isEmpty()) {
+                    log.warn { "No version information found for package $rawName." }
+                }
+
+                val id = Identifier(
+                    type = managerName,
+                    namespace = rawName.substringBefore("/"),
+                    name = rawName.substringAfter("/"),
+                    version = version
+                )
+
+                packages[id] = Package(
+                    id,
+                    // Pub does not declare any licenses in the pubspec files, therefore we keep this empty.
+                    declaredLicenses = sortedSetOf(),
+                    description = description,
+                    homepageUrl = homepageUrl,
+                    // Pub does not create binary artifacts, therefore use any empty artifact.
+                    binaryArtifact = RemoteArtifact.EMPTY,
+                    // Pub does not create source artifacts, therefore use any empty artifact.
+                    sourceArtifact = RemoteArtifact.EMPTY,
+                    vcs = vcsFromPackage,
+                    vcsProcessed = processPackageVcs(vcsFromPackage, homepageUrl)
+                )
             }
-        } catch (e: Exception) {
-            e.printStackTrace()
+        }
 
-            val message = "Could not parse installed Pub packages: ${e.collectMessagesAsString()}"
-            log.error { message }
+        // If the project contains Flutter, we need to trigger the analyzer for Gradle and CocoaPod dependencies for
+        // each Pub dependency manually, as the analyzer will only analyze the projectRoot, but not the packages in
+        // the .pub-cache folder.
+        if (containsFlutter) {
+            lockFile["packages"]?.forEach { pkgInfoFromLockFile ->
+                // As this package contains flutter, trigger Gradle manually for it.
+                scanAndroidPackages(pkgInfoFromLockFile)?.let { result ->
+                    result.collectPackagesByScope("releaseCompileClasspath").forEach { item ->
+                        packages[item.pkg.id] = item.pkg
+                    }
 
-            issues += OrtIssue(source = managerName, severity = Severity.ERROR, message = message)
+                    issues += result.errors
+                }
+
+
+                // As this package contains flutter, trigger CocoaPods manually for it.
+                scanIosPackages(pkgInfoFromLockFile)?.let { result ->
+                    result.packages.forEach { item ->
+                        packages[item.pkg.id] = item.pkg
+                    }
+
+                    issues += result.errors
+                }
+            }
         }
 
         return ParsePackagesResult(packages, issues)
