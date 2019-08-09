@@ -134,10 +134,16 @@ class ReportTableModelMapper(private val resolutionProvider: ResolutionProvider)
                         concludedLicenses = row.concludedLicense?.let { setOf(it) } ?: emptySet(),
                         declaredLicenses = row.declaredLicenses,
                         detectedLicenses = row.detectedLicenses.map { it.key.license }.toSortedSet(),
-                        analyzerIssues = if (nonExcludedAnalyzerIssues.isNotEmpty())
-                            sortedMapOf(project.id to nonExcludedAnalyzerIssues) else sortedMapOf(),
-                        scanIssues = if (nonExcludedScanIssues.isNotEmpty())
-                            sortedMapOf(project.id to nonExcludedScanIssues) else sortedMapOf()
+                        analyzerIssues = if (nonExcludedAnalyzerIssues.isNotEmpty()) {
+                            sortedMapOf(project.id to nonExcludedAnalyzerIssues)
+                        } else {
+                            sortedMapOf()
+                        },
+                        scanIssues = if (nonExcludedScanIssues.isNotEmpty()) {
+                            sortedMapOf(project.id to nonExcludedScanIssues)
+                        } else {
+                            sortedMapOf()
+                        }
                     )
 
                     summaryRows[row.id] = summaryRows[row.id]?.merge(summaryRow) ?: summaryRow
@@ -150,10 +156,16 @@ class ReportTableModelMapper(private val resolutionProvider: ResolutionProvider)
                     ) {
                         val issueRow = IssueRow(
                             id = row.id,
-                            analyzerIssues = if (unresolvedAnalyzerIssues.isNotEmpty())
-                                sortedMapOf(project.id to unresolvedAnalyzerIssues) else sortedMapOf(),
-                            scanIssues = if (unresolvedScanIssues.isNotEmpty())
-                                sortedMapOf(project.id to unresolvedScanIssues) else sortedMapOf()
+                            analyzerIssues = if (unresolvedAnalyzerIssues.isNotEmpty()) {
+                                sortedMapOf(project.id to unresolvedAnalyzerIssues)
+                            } else {
+                                sortedMapOf()
+                            },
+                            scanIssues = if (unresolvedScanIssues.isNotEmpty()) {
+                                sortedMapOf(project.id to unresolvedScanIssues)
+                            } else {
+                                sortedMapOf()
+                            }
                         )
 
                         issueSummaryRows[row.id] = issueSummaryRows[issueRow.id]?.merge(issueRow) ?: issueRow
