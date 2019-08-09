@@ -314,14 +314,14 @@ class Pub(
         // We cannot find packages without a valid name.
         if (packageName.isEmpty()) return null
 
-        log.info { "Analyze Android dependencies for package '$packageName'." }
-
         val projectRoot = reader.findProjectRoot(packageInfo) ?: return null
         val androidDir = File(projectRoot, "android")
         val packageFile = File(androidDir, "build.gradle")
 
         // Check for build.gradle failed, no Gradle scan required.
         if (!packageFile.isFile) return null
+
+        log.info { "Analyzing Android dependencies for package '$packageName'." }
 
         return if (analyzerResultCacheAndroid.containsKey(packageName)) {
             analyzerResultCacheAndroid[packageName]
