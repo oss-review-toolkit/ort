@@ -31,7 +31,7 @@ import com.here.ort.scanner.ScanResultsStorage
  * A dummy storage that does not store scan results at all. Can be used to disable storing of scan results to always
  * trigger new scans.
  */
-class NoStorage: ScanResultsStorage() {
+class NoStorage : ScanResultsStorage() {
     override fun readFromStorage(id: Identifier) = ScanResultContainer(id, emptyList())
 
     override fun readFromStorage(pkg: Package, scannerDetails: ScannerDetails) =
