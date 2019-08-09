@@ -68,7 +68,6 @@ class MainTest : StringSpec() {
                 if (iterator.next() == "The following package managers are activated:") break
             }
 
-
             runResult.exitCode shouldBe 0
             iterator.hasNext() shouldBe true
             iterator.next() shouldBe "\tGradle"
