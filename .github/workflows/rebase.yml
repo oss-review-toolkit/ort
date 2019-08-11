@@ -1,0 +1,9 @@
+on: issue_comment
+
+jobs:
+  rebase:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: docker://cirrusactions/rebase:latest
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
