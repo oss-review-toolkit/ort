@@ -21,6 +21,7 @@ package com.here.ort.utils
 
 import ch.frankel.slf4k.*
 
+import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonInclude
 
 import com.here.ort.spdx.SpdxDeclaredLicenseMapping
@@ -76,4 +77,10 @@ data class ProcessedDeclaredLicense(
             unmapped = emptyList()
         )
     }
+
+    /**
+     * The list of all mapped and unmapped licenses.
+     */
+    @JsonIgnore
+    val allLicenses = spdxExpression?.licenses().orEmpty() + unmapped
 }

@@ -283,12 +283,12 @@ data class OrtResult(
         getPackage(id)?.pkg?.concludedLicense
 
     /**
-     * Return the declared licenses for the given [id] which may either refer to a project or to a package. If [id] is
-     * not found an empty set is returned.
+     * Return the processed declared licenses for the given [id] which may either refer to a project or to a package. If
+     * [id] is not found an empty set is returned.
      */
     fun getDeclaredLicensesForId(id: Identifier): SortedSet<String> =
-        getProject(id)?.declaredLicenses
-            ?: getPackage(id)?.pkg?.declaredLicenses
+        getProject(id)?.declaredLicensesProcessed?.allLicenses?.toSortedSet()
+            ?: getPackage(id)?.pkg?.declaredLicensesProcessed?.allLicenses?.toSortedSet()
             ?: sortedSetOf()
 
     /**
