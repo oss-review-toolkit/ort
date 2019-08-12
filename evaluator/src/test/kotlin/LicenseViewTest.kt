@@ -208,6 +208,68 @@ class LicenseViewTest : WordSpec({
         }
     }
 
+    "ConcludedOrDetected" should {
+        "return the correct licenses" {
+            LicenseView.ConcludedOrDetected.licenses(
+                packageWithoutLicense,
+                emptyList()
+            ) shouldBe emptyList()
+
+            LicenseView.ConcludedOrDetected.licenses(
+                packageWithoutLicense,
+                detectedLicenses
+            ) shouldBe listOf(
+                Pair("LicenseRef-a", LicenseSource.DETECTED),
+                Pair("LicenseRef-b", LicenseSource.DETECTED)
+            )
+
+            LicenseView.ConcludedOrDetected.licenses(
+                packageWithOnlyConcludedLicense,
+                emptyList()
+            ) shouldBe listOf(
+                Pair("LicenseRef-a", LicenseSource.CONCLUDED),
+                Pair("LicenseRef-b", LicenseSource.CONCLUDED)
+            )
+
+            LicenseView.ConcludedOrDetected.licenses(
+                packageWithOnlyConcludedLicense,
+                detectedLicenses
+            ) shouldBe listOf(
+                Pair("LicenseRef-a", LicenseSource.CONCLUDED),
+                Pair("LicenseRef-b", LicenseSource.CONCLUDED)
+            )
+
+            LicenseView.ConcludedOrDetected.licenses(
+                packageWithOnlyDeclaredLicense,
+                emptyList()
+            ) shouldBe emptyList()
+
+            LicenseView.ConcludedOrDetected.licenses(
+                packageWithOnlyDeclaredLicense,
+                detectedLicenses
+            ) shouldBe listOf(
+                Pair("LicenseRef-a", LicenseSource.DETECTED),
+                Pair("LicenseRef-b", LicenseSource.DETECTED)
+            )
+
+            LicenseView.ConcludedOrDetected.licenses(
+                packageWithConcludedAndDeclaredLicense,
+                emptyList()
+            ) shouldBe listOf(
+                Pair("LicenseRef-a", LicenseSource.CONCLUDED),
+                Pair("LicenseRef-b", LicenseSource.CONCLUDED)
+            )
+
+            LicenseView.ConcludedOrDetected.licenses(
+                packageWithConcludedAndDeclaredLicense,
+                detectedLicenses
+            ) shouldBe listOf(
+                Pair("LicenseRef-a", LicenseSource.CONCLUDED),
+                Pair("LicenseRef-b", LicenseSource.CONCLUDED)
+            )
+        }
+    }
+
     "OnlyConcluded" should {
         "return only the concluded licenses" {
             LicenseView.OnlyConcluded.licenses(

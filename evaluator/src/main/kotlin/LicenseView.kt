@@ -86,6 +86,19 @@ sealed class LicenseView {
     }
 
     /**
+     * Return only the concluded licenses if they exist, otherwise return detected licenses.
+     */
+    object ConcludedOrDetected : LicenseView() {
+        override fun licenses(pkg: Package, detectedLicenses: List<String>): List<Pair<String, LicenseSource>> {
+            pkg.concludedLicense?.licenses()?.let {
+                return it.map { license -> Pair(license, LicenseSource.CONCLUDED) }
+            }
+
+            return detectedLicenses.map { Pair(it, LicenseSource.DETECTED) }
+        }
+    }
+
+    /**
      * Return only the concluded licenses.
      */
     object OnlyConcluded : LicenseView() {
