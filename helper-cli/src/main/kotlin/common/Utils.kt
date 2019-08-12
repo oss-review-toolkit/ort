@@ -22,6 +22,7 @@
 package com.here.ort.helper.common
 
 import com.here.ort.analyzer.Analyzer
+import com.here.ort.analyzer.HTTP_CACHE_PATH
 import com.here.ort.analyzer.PackageManager
 import com.here.ort.downloader.Downloader
 import com.here.ort.model.Identifier
@@ -44,13 +45,50 @@ import com.here.ort.model.config.RuleViolationResolution
 import com.here.ort.model.config.ScopeExclude
 import com.here.ort.model.yamlMapper
 import com.here.ort.utils.safeMkdirs
+import com.here.ort.utils.OkHttpClientHelper
 
 import java.io.File
+import java.io.IOException
+
+import okhttp3.Request
+
+import okio.buffer
+import okio.sink
 
 /**
  * Represents a mapping from repository URLs to list of [PathExclude]s for the respective repository.
  */
 internal typealias RepositoryPathExcludes = Map<String, List<PathExclude>>
+
+/**
+ * Try to download the [url] and return the downloaded temporary file. The file is automatically deleted on exit. If the
+ * download fails, throw an [IOException].
+ */
+internal fun download(url: String): File {
+    val request = Request.Builder()
+        // Disable transparent gzip, otherwise we might end up writing a tar file to disk and expecting to
+        // find a tar.gz file, thus failing to unpack the archive.
+        // See https://github.com/square/okhttp/blob/parent-3.10.0/okhttp/src/main/java/okhttp3/internal/ \
+        // http/BridgeInterceptor.java#L79
+        .addHeader("Accept-Encoding", "identity")
+        .get()
+        .url(url)
+        .build()
+
+    OkHttpClientHelper.execute(HTTP_CACHE_PATH, request).use { response ->
+        val body = response.body
+        if (!response.isSuccessful || body == null) {
+            throw IOException(response.message)
+        }
+
+        // Use the filename from the request for the last redirect.
+        val tempFileName = response.request.url.pathSegments.last()
+        return createTempFile("ort", tempFileName).also { tempFile ->
+            tempFile.sink().buffer().use { it.writeAll(body.source()) }
+            tempFile.deleteOnExit()
+        }
+    }
+}
 
 /**
  * Return all files underneath the given [directory].
