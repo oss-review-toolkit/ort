@@ -81,6 +81,7 @@ object Main : CommandWithHelp() {
     fun run(args: Array<String>): Int {
         val jc = JCommander(this).apply {
             programName = TOOL_NAME
+            setExpandAtSign(false)
             addCommand(AnalyzerCommand)
             addCommand(DownloaderCommand)
             addCommand(EvaluatorCommand)
