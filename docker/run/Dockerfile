@@ -34,7 +34,7 @@ ENV \
     # Package manager versions.
     BOWER_VERSION=1.8.8 \
     BUNDLER_VERSION=1.17.3-3 \
-    COMPOSER_VERSION=1.8.4-1 \
+    COMPOSER_VERSION=1.9.0-2 \
     FLUTTER_VERSION=v1.7.8+hotfix.3-stable \
     GO_DEP_VERSION=0.5.1+really0.5.0-1 \
     HASKELL_STACK_VERSION=1.7.1-3 \
