@@ -44,7 +44,7 @@ ENV \
     SBT_VERSION=0.13.13-2 \
     YARN_VERSION=1.17.3 \
     # Scanner versions.
-    SCANCODE_VERSION=2.9.7 \
+    SCANCODE_VERSION=3.0.2 \
     # Installation directories.
     FLUTTER_HOME=/opt/flutter
 
