@@ -59,6 +59,7 @@ object Main : CommandWithHelp() {
             addCommand(ImportPathExcludesCommand())
             addCommand(ListLicensesCommand())
             addCommand(SortRepositoryConfigurationCommand())
+            addCommand(VerifySourceArtifactCurationsCommand())
 
             parse(*args)
         }
