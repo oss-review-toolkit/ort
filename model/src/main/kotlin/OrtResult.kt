@@ -289,7 +289,7 @@ data class OrtResult(
     fun getDeclaredLicensesForId(id: Identifier): SortedSet<String> =
         getProject(id)?.declaredLicenses
             ?: getPackage(id)?.pkg?.declaredLicenses
-            ?: sortedSetOf<String>()
+            ?: sortedSetOf()
 
     /**
      * Return all detected licenses for the given package [id]. As projects are implicitly converted to packages before
