@@ -61,6 +61,7 @@ import java.util.SortedSet
 import java.util.regex.Pattern
 
 import kotlin.math.absoluteValue
+import kotlin.math.max
 
 import okhttp3.Request
 
@@ -109,7 +110,7 @@ class ScanCode(name: String, config: ScannerConfiguration) : LocalScanner(name, 
          * file.
          */
         private val DEFAULT_NON_CONFIGURATION_OPTIONS = listOf(
-            "--processes", Math.max(1, Runtime.getRuntime().availableProcessors() - 1).toString()
+            "--processes", max(1, Runtime.getRuntime().availableProcessors() - 1).toString()
         )
 
         /**
