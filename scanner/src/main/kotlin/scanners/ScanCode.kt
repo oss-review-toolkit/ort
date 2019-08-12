@@ -22,6 +22,8 @@ package com.here.ort.scanner.scanners
 import ch.frankel.slf4k.*
 import ch.qos.logback.classic.Level
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties
+import com.fasterxml.jackson.annotation.JsonProperty
 import com.fasterxml.jackson.databind.JsonNode
 
 import com.here.ort.model.CopyrightFinding
@@ -49,6 +51,8 @@ import com.here.ort.utils.OkHttpClientHelper
 import com.here.ort.utils.ProcessCapture
 import com.here.ort.utils.log
 import com.here.ort.utils.unpack
+
+import com.vdurmont.semver4j.Semver
 
 import java.io.File
 import java.io.IOException
@@ -87,6 +91,107 @@ import okio.sink
 class ScanCode(name: String, config: ScannerConfiguration) : LocalScanner(name, config) {
     class Factory : AbstractScannerFactory<ScanCode>("ScanCode") {
         override fun create(config: ScannerConfiguration) = ScanCode(scannerName, config)
+    }
+
+    /**
+     * The ScanCode JSON result file format.
+     */
+    data class Result(
+        // This old header format is used by Scancode version 2.x.
+        @JsonProperty("scancode_notice")
+        val notice: String?,
+        @JsonProperty("scancode_version")
+        val version: Semver?,
+        @JsonProperty("scancode_options")
+        val options: Map<String, Any>?,
+        val scanStart: String?, // Not yet available in version 2.2.1.
+        val filesCount: Int?,
+
+        // This new header format is used by Scancode version 3.x.
+        val headers: List<Header>?,
+
+        val files: List<FileResult>
+    ) {
+        /**
+         * The total count of scanned files.
+         */
+        val totalFilesCount = headers.orEmpty().fold(filesCount ?: 0) { count, header ->
+            count + header.extraData.filesCount
+        }
+    }
+
+    /**
+     * The ScanCode 3.x separate header format.
+     */
+    data class Header(
+        val toolName: String,
+        val toolVersion: Semver,
+        val options: Map<String, Any>,
+        val notice: String,
+        val startTimestamp: String,
+        val endTimestamp: String,
+        val message: String?,
+        val errors: List<String>,
+        val extraData: Extra
+    )
+
+    /**
+     * The ScanCode 3.x extra header data.
+     */
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    data class Extra(
+        val filesCount: Int
+    )
+
+    /**
+     * The scan result for an individual file.
+     */
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    data class FileResult(
+        val path: String,
+        val scanErrors: List<String>,
+        val licenses: List<LicenseResult>?,
+        val copyrights: List<CopyrightResult>?
+    )
+
+    /**
+     * The license result for an individual file.
+     */
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    data class LicenseResult(
+        val key: String,
+        val score: Float,
+        val shortName: String,
+        val category: String,
+        val spdxLicenseKey: String,
+        val startLine: Int,
+        val endLine: Int
+    ) {
+        /**
+         * The SPDX license id (or a fallback) for this license result.
+         */
+        val spdxId = spdxLicenseKey.takeUnless { it.isEmpty() }
+            // Starting with version 2.9.8, ScanCode uses "scancode" as a LicenseRef namespace, but only for SPDX
+            // output formats, see https://github.com/nexB/scancode-toolkit/pull/1307.
+            ?: if (key == "unknown") "NOASSERTION" else "LicenseRef-scancode-$key"
+    }
+
+    /**
+     * The copyright result for an individual file.
+     */
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    data class CopyrightResult(
+        // While ScanCode 2.9.2 was still using "statements", version 2.9.7 is using "value".
+        val statements: List<String>?,
+        val value: String?,
+
+        val startLine: Int,
+        val endLine: Int
+    ) {
+        /**
+         * All copyright statements found in a file.
+         */
+        val allStatements = value?.let { listOf(it) } ?: statements.orEmpty()
     }
 
     companion object {
@@ -344,71 +449,37 @@ class ScanCode(name: String, config: ScannerConfiguration) : LocalScanner(name, 
             EMPTY_JSON_NODE
         }
 
-    private fun getFileCount(result: JsonNode): Int {
-        // Handling for ScanCode 2.9.8 and above.
-        result["headers"]?.forEach { header ->
-            header["extra_data"]?.get("files_count")?.let {
-                return it.intValue()
-            }
-        }
-
-        // Handling for ScanCode 2.9.7 and below.
-        return result["files_count"].intValue()
-    }
-
     override fun generateSummary(startTime: Instant, endTime: Instant, result: JsonNode): ScanSummary {
-        val fileCount = getFileCount(result)
-        val findings = associateFindings(result)
+        val scancodeResult = jsonMapper.treeToValue(result, Result::class.java)
+        val findings = associateFindings(scancodeResult)
         val errors = mutableListOf<OrtIssue>()
 
-        result["files"]?.forEach { file ->
-            val path = file["path"].textValue()
-            errors += file["scan_errors"].map {
-                OrtIssue(source = scannerName, message = "${it.textValue()} (File: $path)")
+        scancodeResult.files.forEach { file ->
+            errors += file.scanErrors.map { error ->
+                OrtIssue(source = scannerName, message = "$error (File: ${file.path})")
             }
         }
 
-        return ScanSummary(startTime, endTime, fileCount, findings, errors)
-    }
-
-    /**
-     * Get the SPDX license id (or a fallback) for a license finding.
-     */
-    private fun getLicenseId(license: JsonNode): String {
-        var name = license["spdx_license_key"].textValue()
-
-        if (name.isEmpty()) {
-            val key = license["key"].textValue()
-            name = if (key == "unknown") {
-                "NOASSERTION"
-            } else {
-                // Starting with version 2.9.8, ScanCode uses "scancode" as a LicenseRef namespace, but only for SPDX
-                // output formats, see https://github.com/nexB/scancode-toolkit/pull/1307.
-                "LicenseRef-${scannerName.toLowerCase()}-$key"
-            }
-        }
-
-        return name
+        return ScanSummary(startTime, endTime, scancodeResult.totalFilesCount, findings, errors)
     }
 
     /**
      * Get the license found in one of the commonly named license files, if any, or an empty string otherwise.
      */
-    internal fun getRootLicense(result: JsonNode): String {
+    internal fun getRootLicense(result: Result): String {
         // TODO: This function should return a list of all licenses found in all license files instead of only a single
         //       license.
 
-        val rootLicenseFile = result["files"].singleOrNull { file ->
-            val path = file["path"].textValue()
+        val rootLicenseFile = result.files.singleOrNull { file ->
             try {
-                file["licenses"]?.singleOrNull() != null
-                        && LICENSE_FILE_MATCHERS.any { it.matches(Paths.get(path)) }
+                file.licenses?.singleOrNull() != null
+                        && LICENSE_FILE_MATCHERS.any { it.matches(Paths.get(file.path)) }
             } catch (e: InvalidPathException) {
                 false
             }
-        } ?: return ""
+        }
 
-        return getLicenseId(rootLicenseFile["licenses"].single())
+        return rootLicenseFile?.licenses?.single()?.spdxId.orEmpty()
     }
 
     /**
@@ -417,21 +488,18 @@ class ScanCode(name: String, config: ScannerConfiguration) : LocalScanner(name, 
      * associating findings separated by blank lines but not skipping complete license statements.
      */
     internal fun getClosestCopyrightStatements(
-        path: String,
-        copyrights: Collection<JsonNode>,
+        result: FileResult,
         licenseStartLine: Int,
         toleranceLines: Int = 5
     ): SortedSet<CopyrightFinding> {
-        val closestCopyrights = copyrights.filter {
-            (it["start_line"].intValue() - licenseStartLine).absoluteValue <= toleranceLines
+        val closestCopyrights = result.copyrights.orEmpty().filter { copyright ->
+            (copyright.startLine - licenseStartLine).absoluteValue <= toleranceLines
         }
 
-        // While ScanCode 2.9.2 was still using "statements", version 2.9.7 is using "value".
-        return closestCopyrights.flatMap {
-            val startLine = it["start_line"].intValue()
-            val endLine = it["end_line"].intValue()
-            (it["statements"] ?: listOf(it["value"])).map { statements ->
-                CopyrightFinding(statements.textValue(), sortedSetOf(TextLocation(path, startLine, endLine)))
+        return closestCopyrights.flatMap { copyright ->
+            val location = TextLocation(result.path, copyright.startLine, copyright.endLine)
+            copyright.allStatements.map { statement ->
+                CopyrightFinding(statement, sortedSetOf(location))
             }
         }.toSortedSet()
     }
@@ -440,46 +508,32 @@ class ScanCode(name: String, config: ScannerConfiguration) : LocalScanner(name, 
      * Associate copyright findings to license findings within a single file.
      */
     private fun associateFileFindings(
-        path: String,
-        licenses: Collection<JsonNode>,
-        copyrights: Collection<JsonNode>,
+        result: FileResult,
         rootLicense: String = ""
     ): SortedMap<String, MutableSet<CopyrightFinding>> {
-        val copyrightsForLicenses = sortedMapOf<String, MutableSet<CopyrightFinding>>()
-
-        val allCopyrightStatements = copyrights.flatMap {
-            val startLine = it["start_line"].intValue()
-            val endLine = it["end_line"].intValue()
-
-            // While ScanCode 2.9.2 was still using "statements", version 2.9.7 is using "value".
-            (it["statements"] ?: listOf(it["value"])).map { statements ->
-                CopyrightFinding(statements.textValue(), sortedSetOf(TextLocation(path, startLine, endLine)))
+        val allCopyrightStatements = result.copyrights.orEmpty().flatMap { copyright ->
+            val location = TextLocation(result.path, copyright.startLine, copyright.endLine)
+            copyright.allStatements.map { statements ->
+                CopyrightFinding(statements, sortedSetOf(location))
             }
         }.toSortedSet()
 
-        when (licenses.size) {
-            0 -> {
-                // If there is no license finding but copyright findings, associate them with the root license, if any.
-                if (allCopyrightStatements.isNotEmpty() && rootLicense.isNotEmpty()) {
-                    copyrightsForLicenses[rootLicense] = allCopyrightStatements
-                }
-            }
+        val copyrightsForLicenses = sortedMapOf<String, MutableSet<CopyrightFinding>>()
 
-            1 -> {
-                // If there is only a single license finding, associate all copyright findings with that license.
-                val licenseId = getLicenseId(licenses.first())
-                copyrightsForLicenses[licenseId] = allCopyrightStatements
+        if (result.licenses == null || result.licenses.isEmpty()) {
+            // If there is no license finding but copyright findings, associate them with the root license, if any.
+            if (allCopyrightStatements.isNotEmpty() && rootLicense.isNotEmpty()) {
+                copyrightsForLicenses[rootLicense] = allCopyrightStatements
             }
-
-            else -> {
-                // If there are multiple license findings in a single file, search for the closest copyright statements
-                // for each of these, if any.
-                licenses.forEach {
-                    val licenseId = getLicenseId(it)
-                    val licenseStartLine = it["start_line"].intValue()
-                    val closestCopyrights = getClosestCopyrightStatements(path, copyrights, licenseStartLine)
-                    copyrightsForLicenses.getOrPut(licenseId) { sortedSetOf() } += closestCopyrights
-                }
+        } else if (result.licenses.size == 1) {
+            // If there is only a single license finding, associate all copyright findings with that license.
+            copyrightsForLicenses[result.licenses.first().spdxId] = allCopyrightStatements
+        } else {
+            // If there are multiple license findings in a single file, search for the closest copyright statements
+            // for each of these, if any.
+            result.licenses.forEach { license ->
+                val closestCopyrights = getClosestCopyrightStatements(result, license.startLine)
+                copyrightsForLicenses.getOrPut(license.spdxId) { sortedSetOf() } += closestCopyrights
             }
         }
 
@@ -489,26 +543,18 @@ class ScanCode(name: String, config: ScannerConfiguration) : LocalScanner(name, 
     /**
      * Associate copyright findings to license findings throughout the whole result.
      */
-    internal fun associateFindings(result: JsonNode): SortedSet<LicenseFinding> {
+    internal fun associateFindings(result: Result): SortedSet<LicenseFinding> {
         val locationsForLicenses = sortedMapOf<String, SortedSet<TextLocation>>()
         val copyrightsForLicenses = sortedMapOf<String, SortedSet<CopyrightFinding>>()
         val rootLicense = getRootLicense(result)
 
-        result["files"].forEach { file ->
-            val path = file["path"].textValue()
-
-            val licenses = file["licenses"]?.toList().orEmpty()
-            licenses.forEach {
-                val licenseId = getLicenseId(it)
-                val licenseStartLine = it["start_line"].intValue()
-                val licenseEndLine = it["end_line"].intValue()
-
-                locationsForLicenses.getOrPut(licenseId) { sortedSetOf() } +=
-                    TextLocation(path, licenseStartLine, licenseEndLine)
+        result.files.forEach { file ->
+            file.licenses.orEmpty().forEach { license ->
+                locationsForLicenses.getOrPut(license.spdxId) { sortedSetOf() } +=
+                    TextLocation(file.path, license.startLine, license.endLine)
             }
 
-            val copyrights = file["copyrights"]?.toList().orEmpty()
-            val findings = associateFileFindings(path, licenses, copyrights, rootLicense)
+            val findings = associateFileFindings(file, rootLicense)
             findings.forEach { (license, copyrightsForLicense) ->
                 copyrightsForLicenses.getOrPut(license) { sortedSetOf() }.let { copyrightFindings ->
                     copyrightsForLicense.forEach { copyrightFinding ->
