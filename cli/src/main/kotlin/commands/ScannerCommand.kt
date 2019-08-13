@@ -153,7 +153,7 @@ object ScannerCommand : CommandWithHelp() {
 
         val scanner = scannerFactory.create(config)
 
-        println("Using scanner '${scanner.scannerName}' with '${ScanResultsStorage.storage.javaClass.simpleName}'.")
+        println("Using scanner '${scanner.scannerName}' with storage '${ScanResultsStorage.storage.name}'.")
 
         val localFileStorageLogFunction: ((String) -> Unit)? = when {
             // If the local file storage is in use, log about it already at info level.
