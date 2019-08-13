@@ -48,6 +48,7 @@ style:
   UnusedImports:
     active: true
   WildcardImport:
+    excludes: ''
     excludeImports: '
       ch.frankel.slf4k.*,
       com.here.ort.analyzer.managers.*,
