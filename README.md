@@ -101,7 +101,7 @@ Note that if you make any changes to ORT's source code, you would have to regene
 To avoid that, you can also build and run ORT in one go (if you have the prerequisites from the
 [Build natively](#build-natively) section installed):
 
-   ./gradlew cli:run --args="--help"
+    ./gradlew cli:run --args="--help"
 
 Note that in this case the working directory used by ORT is that of the `cli` project, not directory `gradlew` is
 located in (see https://github.com/gradle/gradle/issues/6074).
