@@ -47,7 +47,7 @@ data class CuratedPackage(
      * applied.
      */
     fun toUncuratedPackage() =
-        curations.reversed().fold(this) {
-            current, curation -> curation.base.apply(current)
+        curations.reversed().fold(this) { current, curation ->
+            curation.base.apply(current)
         }.pkg
 }
