@@ -1,7 +1,7 @@
 ---
 project:
-  id: "PIP::python3-django:<REPLACE_REVISION>"
-  purl: "pkg://PIP//python3-django@<REPLACE_REVISION>"
+  id: "PIP::python3-django:d9fdc9b6a9885a5ebd8a4e2fb19565c05ee31d14"
+  purl: "pkg://PIP//python3-django@d9fdc9b6a9885a5ebd8a4e2fb19565c05ee31d14"
   definition_file_path: "analyzer/src/funTest/assets/projects/synthetic/python3-django/requirements.txt"
   declared_licenses: []
   declared_licenses_processed: {}
@@ -12,16 +12,15 @@ project:
     path: ""
   vcs_processed:
     type: "Git"
-    url: "<REPLACE_URL>"
-    revision: "<REPLACE_REVISION>"
-    path: "<REPLACE_PATH>"
+    url: "ssh://git@github.com/heremaps/oss-review-toolkit.git"
+    revision: "d9fdc9b6a9885a5ebd8a4e2fb19565c05ee31d14"
+    path: "analyzer/src/funTest/assets/projects/synthetic/python3-django"
   homepage_url: ""
   scopes:
   - name: "install"
     dependencies:
     - id: "PyPI::Django:2.1.11"
-      dependencies:
-      - id: "PyPI::pytz:2019.2"
+    - id: "PyPI::pkg-resources:0.0.0"
 packages:
 - package:
     id: "PyPI::Django:2.1.11"
@@ -55,24 +54,22 @@ packages:
       path: ""
   curations: []
 - package:
-    id: "PyPI::pytz:2019.2"
-    purl: "pkg://PyPI//pytz@2019.2"
-    declared_licenses:
-    - "MIT"
-    declared_licenses_processed:
-      spdx_expression: "MIT"
-    description: "World timezone definitions, modern and historical"
-    homepage_url: "http://pythonhosted.org/pytz"
+    id: "PyPI::pkg-resources:0.0.0"
+    purl: "pkg://PyPI//pkg-resources@0.0.0"
+    declared_licenses: []
+    declared_licenses_processed: {}
+    description: ""
+    homepage_url: ""
     binary_artifact:
-      url: "https://files.pythonhosted.org/packages/87/76/46d697698a143e05f77bec5a526bf4e56a0be61d63425b68f4ba553b51f2/pytz-2019.2-py2.py3-none-any.whl"
+      url: ""
       hash:
-        value: "0d90c3bd94c12ca213196c4b7519a6b0"
-        algorithm: "MD5"
+        value: ""
+        algorithm: ""
     source_artifact:
-      url: "https://files.pythonhosted.org/packages/27/c0/fbd352ca76050952a03db776d241959d5a2ee1abddfeb9e2a53fdb489be4/pytz-2019.2.tar.gz"
+      url: ""
       hash:
-        value: "8c21963449c3a793aa61ef122e171516"
-        algorithm: "MD5"
+        value: ""
+        algorithm: ""
     vcs:
       type: ""
       url: ""
