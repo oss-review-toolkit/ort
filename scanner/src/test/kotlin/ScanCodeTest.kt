@@ -39,6 +39,26 @@ import java.time.Instant
 class ScanCodeTest : WordSpec({
     val scanner = ScanCode("ScanCode", ScannerConfiguration())
 
+    "ScanCode 2 results" should {
+        "be correctly summarized" {
+            val resultFile = File("src/test/assets/mime-types-2.1.18_scancode-2.9.7.json")
+            val result = scanner.getRawResult(resultFile)
+            val summary = scanner.generateSummary(Instant.now(), Instant.now(), result)
+
+            summary.fileCount shouldBe 10
+        }
+    }
+
+    "ScanCode 3 results" should {
+        "be correctly summarized" {
+            val resultFile = File("src/test/assets/mime-types-2.1.18_scancode-3.0.2.json")
+            val result = scanner.getRawResult(resultFile)
+            val summary = scanner.generateSummary(Instant.now(), Instant.now(), result)
+
+            summary.fileCount shouldBe 10
+        }
+    }
+
     "mapTimeoutErrors()" should {
         "return true for scan results with only timeout errors" {
             val resultFile = File("src/test/assets/esprima-2.7.3_scancode-2.2.1.post277.4d68f9377.json")
