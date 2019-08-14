@@ -97,12 +97,14 @@ object OkHttpClientHelper {
         val proxyUrl = Os.env["https_proxy"]?.addProtocol("https")
             ?: Os.env["http_proxy"]?.addProtocol("http")
 
-        try {
-            applyProxySettingsFromUrl(URL(proxyUrl))
-        } catch (e: MalformedURLException) {
-            e.printStackTrace()
+        if (proxyUrl != null) {
+            try {
+                applyProxySettingsFromUrl(URL(proxyUrl))
+            } catch (e: MalformedURLException) {
+                e.printStackTrace()
 
-            log.warn { "Invalid proxy URL '$proxyUrl' defined in environment." }
+                log.warn { "Invalid proxy URL '$proxyUrl' defined in environment." }
+            }
         }
     }
 
