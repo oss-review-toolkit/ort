@@ -1,7 +1,7 @@
 ---
 project:
-  id: "PIP::example-python-flask:0773991e36a4c69b121cdb05146d6140347d4065"
-  purl: "pkg://PIP//example-python-flask@0773991e36a4c69b121cdb05146d6140347d4065"
+  id: "PIP::src/funTest/assets/projects/external/example-python-flask/requirements.txt:0773991e36a4c69b121cdb05146d6140347d4065"
+  purl: "pkg://PIP//src%2FfunTest%2Fassets%2Fprojects%2Fexternal%2Fexample-python-flask%2Frequirements.txt@0773991e36a4c69b121cdb05146d6140347d4065"
   definition_file_path: "requirements.txt"
   declared_licenses: []
   declared_licenses_processed: {}
