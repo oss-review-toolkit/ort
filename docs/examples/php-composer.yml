@@ -2,4 +2,4 @@ excludes:
   scopes:
   - name: "require-dev"
     reason: "BUILD_TOOL_OF"
-    comment: "These are dependencies only used for development. They are not distributed in the context of this product."
+    comment: "Scope with dependencies only used for development. Not included in released artifacts in the context of this project."

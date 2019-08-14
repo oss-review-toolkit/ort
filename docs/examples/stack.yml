@@ -2,7 +2,7 @@ excludes:
   scopes:
   - name: "bench"
     reason: "TEST_TOOL_OF"
-    comment: "These are dependencies only used for benchmarks. They are not distributed in the context of this product."
+    comment: "Scope with dependencies only used for benchmarking. Not included in released artifacts in the context of this project."
   - name: "test"
     reason: "TEST_TOOL_OF"
-    comment: "These are dependencies only used for testing. They are not distributed in the context of this product."
+    comment: "Scope with dependencies only used for testing. Not included in released artifacts in the context of this project."
