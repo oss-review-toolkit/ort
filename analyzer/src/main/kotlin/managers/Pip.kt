@@ -66,7 +66,17 @@ import okhttp3.Request
 const val PIP_VERSION = "18.0"
 
 const val PIPDEPTREE_VERSION = "0.13.0"
-val PIPDEPTREE_DEPENDENCIES = arrayOf("pipdeptree", "setuptools", "wheel")
+private val PHONY_DEPENDENCIES = mapOf(
+    "pipdeptree" to "", // A dependency of pipdeptree itself.
+    "pkg-resources" to "0.0.0", // Added by a bug with some Ubuntu distributions.
+    "setuptools" to "", // A dependency of pipdeptree itself.
+    "wheel" to "" // A dependency of pipdeptree itself.
+)
+
+private fun isPhonyDependency(name: String, version: String): Boolean =
+    PHONY_DEPENDENCIES[name].orEmpty().let { ignoredVersion ->
+        PHONY_DEPENDENCIES.containsKey(name) && (ignoredVersion.isEmpty() || version == ignoredVersion)
+    }
 
 const val PYDEP_REVISION = "license-and-classifiers"
 
@@ -314,7 +324,7 @@ class Pip(
                 // The tree does not contain a node for the project itself. Its dependencies are on the root level
                 // together with the dependencies of pipdeptree itself, which we need to filter out.
                 fullDependencyTree.filterNot {
-                    it["package_name"].textValue() in PIPDEPTREE_DEPENDENCIES
+                    isPhonyDependency(it["package_name"].textValue(), it["installed_version"].textValueOrEmpty())
                 }
             }
 
