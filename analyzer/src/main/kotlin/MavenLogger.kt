@@ -26,7 +26,10 @@ import com.here.ort.utils.log
 import org.codehaus.plexus.logging.AbstractLogger
 import org.codehaus.plexus.logging.Logger
 
-fun toPlexusLoggerLevel(level: Level) =
+/**
+ * Map a logback-classic log Level to a Plexus Logger level.
+ */
+private fun toPlexusLoggerLevel(level: Level) =
     when (level) {
         Level.OFF -> Logger.LEVEL_DISABLED
         Level.ERROR -> Logger.LEVEL_ERROR
