@@ -17,9 +17,9 @@
  * License-Filename: LICENSE
  */
 
-package com.here.ort.analyzer
+package com.here.ort.analyzer.managers
 
-import com.here.ort.analyzer.managers.Sbt
+import com.here.ort.analyzer.Analyzer
 import com.here.ort.downloader.vcs.Git
 import com.here.ort.model.yamlMapper
 import com.here.ort.utils.test.DEFAULT_ANALYZER_CONFIGURATION

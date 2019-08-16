@@ -17,9 +17,8 @@
  * License-Filename: LICENSE
  */
 
-package com.here.ort.analyzer
+package com.here.ort.analyzer.managers
 
-import com.here.ort.analyzer.managers.Cargo
 import com.here.ort.downloader.VersionControlSystem
 import com.here.ort.model.yamlMapper
 import com.here.ort.utils.normalizeVcsUrl
@@ -36,18 +35,56 @@ import io.kotlintest.specs.StringSpec
 
 import java.io.File
 
-class CargoTest : StringSpec() {
-    private val projectDir = File("src/funTest/assets/projects/synthetic/cargo").absoluteFile
+class CargoSubcrateTest : StringSpec() {
+    private val projectDir = File("src/funTest/assets/projects/synthetic/cargo-subcrate").absoluteFile
     private val vcsDir = VersionControlSystem.forDirectory(projectDir)!!
     private val vcsUrl = vcsDir.getRemoteUrl()
     private val vcsRevision = vcsDir.getRevision()
 
     init {
-        "Projects dependencies are detected correctly" {
+        "Lib project dependencies are detected correctly" {
             val packageFile = File(projectDir, "Cargo.toml")
             val vcsPath = vcsDir.getPathToRoot(projectDir)
             val expectedResult = patchExpectedResult(
-                File(projectDir.parentFile, "cargo-expected-output.yml"),
+                File(projectDir.parentFile, "cargo-subcrate-lib-expected-output.yml"),
+                definitionFilePath = "$vcsPath/Cargo.toml",
+                path = vcsPath,
+                revision = vcsRevision,
+                url = normalizeVcsUrl(vcsUrl)
+            )
+
+            val result = createCargo().resolveDependencies(listOf(packageFile))[packageFile]
+
+            result shouldNotBe null
+            result!!.errors should beEmpty()
+            yamlMapper.writeValueAsString(result) shouldBe expectedResult
+        }
+
+        "Integration sub-project dependencies are detected correctly" {
+            val integrationProjectDir = File(projectDir, "integration")
+            val packageFile = File(integrationProjectDir, "Cargo.toml")
+            val vcsPath = vcsDir.getPathToRoot(integrationProjectDir)
+            val expectedResult = patchExpectedResult(
+                File(projectDir.parentFile, "cargo-subcrate-integration-expected-output.yml"),
+                definitionFilePath = "$vcsPath/Cargo.toml",
+                path = vcsPath,
+                revision = vcsRevision,
+                url = normalizeVcsUrl(vcsUrl)
+            )
+
+            val result = createCargo().resolveDependencies(listOf(packageFile))[packageFile]
+
+            result shouldNotBe null
+            result!!.errors should beEmpty()
+            yamlMapper.writeValueAsString(result) shouldBe expectedResult
+        }
+
+        "Client sub-project dependencies are detected correctly" {
+            val clientProjectDir = File(projectDir, "client")
+            val packageFile = File(clientProjectDir, "Cargo.toml")
+            val vcsPath = vcsDir.getPathToRoot(clientProjectDir)
+            val expectedResult = patchExpectedResult(
+                File(projectDir.parentFile, "cargo-subcrate-client-expected-output.yml"),
                 definitionFilePath = "$vcsPath/Cargo.toml",
                 path = vcsPath,
                 revision = vcsRevision,

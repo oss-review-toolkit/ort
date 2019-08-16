@@ -17,9 +17,8 @@
  * License-Filename: LICENSE
  */
 
-package com.here.ort.analyzer
+package com.here.ort.analyzer.managers
 
-import com.here.ort.analyzer.managers.PhpComposer
 import com.here.ort.downloader.VersionControlSystem
 import com.here.ort.model.Identifier
 import com.here.ort.model.yamlMapper

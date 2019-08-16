@@ -1,6 +1,5 @@
 /*
- * Copyright (C) 2017-2019 HERE Europe B.V.
- * Copyright (C) 2019 Bosch Software Innovations GmbH
+ * Copyright (C) 2019 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,13 +17,8 @@
  * License-Filename: LICENSE
  */
 
-package com.here.ort.analyzer
+package com.here.ort.analyzer.managers
 
-import com.fasterxml.jackson.dataformat.xml.XmlMapper
-import com.fasterxml.jackson.module.kotlin.readValue
-import com.fasterxml.jackson.module.kotlin.registerKotlinModule
-
-import com.here.ort.analyzer.managers.NuGet
 import com.here.ort.downloader.VersionControlSystem
 import com.here.ort.model.yamlMapper
 import com.here.ort.utils.normalizeVcsUrl
@@ -41,42 +35,32 @@ import io.kotlintest.specs.StringSpec
 
 import java.io.File
 
-class NuGetTest : StringSpec() {
-    private val projectDir = File("src/funTest/assets/projects/synthetic/nuget").absoluteFile
+class CargoTest : StringSpec() {
+    private val projectDir = File("src/funTest/assets/projects/synthetic/cargo").absoluteFile
     private val vcsDir = VersionControlSystem.forDirectory(projectDir)!!
     private val vcsUrl = vcsDir.getRemoteUrl()
     private val vcsRevision = vcsDir.getRevision()
-    private val packageFile = File(projectDir, "packages.config")
 
     init {
-        "Project dependencies are detected correctly" {
+        "Projects dependencies are detected correctly" {
+            val packageFile = File(projectDir, "Cargo.toml")
             val vcsPath = vcsDir.getPathToRoot(projectDir)
             val expectedResult = patchExpectedResult(
-                File(
-                    projectDir.parentFile,
-                    "nuget-expected-output.yml"
-                ),
-                url = normalizeVcsUrl(vcsUrl),
+                File(projectDir.parentFile, "cargo-expected-output.yml"),
+                definitionFilePath = "$vcsPath/Cargo.toml",
+                path = vcsPath,
                 revision = vcsRevision,
-                path = vcsPath
+                url = normalizeVcsUrl(vcsUrl)
             )
-            val result = createNuGet().resolveDependencies(listOf(packageFile))[packageFile]
+
+            val result = createCargo().resolveDependencies(listOf(packageFile))[packageFile]
 
             result shouldNotBe null
             result!!.errors should beEmpty()
             yamlMapper.writeValueAsString(result) shouldBe expectedResult
         }
-
-        "Definition File is correctly mapped" {
-            val mapper = XmlMapper().registerKotlinModule()
-            val result = mapper.readValue<NuGet.PackagesConfig>(packageFile)
-
-            result shouldNotBe null
-            result.packages shouldNotBe null
-            result.packages.size shouldBe 2
-        }
     }
 
-    private fun createNuGet() =
-        NuGet("NuGet", USER_DIR, DEFAULT_ANALYZER_CONFIGURATION, DEFAULT_REPOSITORY_CONFIGURATION)
+    private fun createCargo() =
+        Cargo("Cargo", USER_DIR, DEFAULT_ANALYZER_CONFIGURATION, DEFAULT_REPOSITORY_CONFIGURATION)
 }
