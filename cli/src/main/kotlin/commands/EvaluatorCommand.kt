@@ -96,6 +96,14 @@ object EvaluatorCommand : CommandWithHelp() {
     )
     private var repositoryConfigurationFile: File? = null
 
+    @Parameter(
+        description = "A YAML file that contains package curation data. This replaces all package curations " +
+            "contained in the given ORT result file with the ones present in the given file.",
+        names = ["--package-curations-file"],
+        order = PARAMETER_ORDER_OPTIONAL
+    )
+    private var packageCurationsFile: File? = null
+
     override fun runCommand(jc: JCommander): Int {
         require((rulesFile == null) != (rulesResource == null)) {
             "Either '--rules-file' or '--rules-resource' must be specified."
@@ -119,6 +127,10 @@ object EvaluatorCommand : CommandWithHelp() {
         var ortResultInput = ortFile.expandTilde().readValue<OrtResult>()
         repositoryConfigurationFile?.expandTilde()?.let {
             ortResultInput = ortResultInput.replaceConfig(it.readValue())
+        }
+
+        packageCurationsFile?.expandTilde()?.let {
+            ortResultInput = ortResultInput.replacePackageCurations(it.readValue())
         }
 
         val script = rulesFile?.expandTilde()?.readText() ?: javaClass.classLoader.getResource(rulesResource).readText()
