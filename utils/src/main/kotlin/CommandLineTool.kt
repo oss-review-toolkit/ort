@@ -22,7 +22,6 @@ package com.here.ort.utils
 import ch.frankel.slf4k.*
 
 import com.vdurmont.semver4j.Requirement
-import com.vdurmont.semver4j.Semver
 
 import java.io.File
 import java.io.IOException
@@ -95,8 +94,7 @@ interface CommandLineTool {
         workingDir: File? = null,
         transform: (String) -> String = { it }
     ) {
-        val toolVersionOutput = getVersion(versionArguments, workingDir, transform)
-        val actualVersion = Semver(toolVersionOutput, Semver.SemverType.LOOSE)
+        val actualVersion = getVersion(versionArguments, workingDir, transform)
         val requiredVersion = getVersionRequirement()
 
         if (!requiredVersion.isSatisfiedBy(actualVersion)) {
