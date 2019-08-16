@@ -400,6 +400,23 @@ data class OrtResult(
     fun replaceConfig(config: RepositoryConfiguration): OrtResult =
         copy(repository = repository.copy(config = config)).also { it.data += data }
 
+    /**
+     * Return a copy of this [OrtResult] with the [PackageCurations]s replaced by the given [curations].
+     */
+    fun replacePackageCurations(curations: List<PackageCuration>): OrtResult =
+        copy(
+            analyzer = analyzer?.copy(
+                result = analyzer.result.copy(
+                    packages = getPackages().map { curatedPackage ->
+                        val uncuratedPackage = CuratedPackage(curatedPackage.toUncuratedPackage(), emptyList())
+                        curations
+                            .filter { it.isApplicable(curatedPackage.pkg.id) }
+                            .fold(uncuratedPackage) { current, packageCuration -> packageCuration.apply(current) }
+                    }.toSortedSet()
+                )
+            )
+        ).also { it.data += data }
+
     fun getProject(id: Identifier): Project? = projects[id]?.project
 
     fun getPackage(id: Identifier): CuratedPackage? = packages[id]?.curatedPackage
