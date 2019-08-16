@@ -1,7 +1,7 @@
 ---
 project:
-  id: "nuget::subProjectTest:"
-  purl: "pkg://nuget//subProjectTest@"
+  id: "DotNet::subProjectTest:"
+  purl: "pkg://DotNet//subProjectTest@"
   definition_file_path: "analyzer/src/funTest/assets/projects/synthetic/dotnet/subProjectTest/test.csproj"
   declared_licenses: []
   declared_licenses_processed: {}
