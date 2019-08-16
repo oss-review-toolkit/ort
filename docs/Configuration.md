@@ -86,18 +86,18 @@ For the available exclude reasons for scopes, see
 See the examples below for typical scope excludes for the supported package managers. Note that you must verify that
 these examples match the configuration of your project.
 
-* [bower.yml](examples/bower.yml)
-* [bundler.yml](examples/bundler.yml)
-* [go-dep.yml](examples/go-dep.yml)
-* [gradle.yml](examples/gradle.yml)
-* [gradle-android.yml](examples/gradle-android.yml)
-* [maven.yml](examples/maven.yml)
-* [npm.yml](examples/npm.yml)
-* [php-composer.yml](examples/php-composer.yml)
-* [pip.yml](examples/pip.yml)
-* [sbt.yml](examples/sbt.yml)
-* [stack.yml](examples/stack.yml)
-* [yarn.yml](examples/yarn.yml)
+* [bower.ort.yml](examples/bower.ort.yml)
+* [bundler.ort.yml](examples/bundler.ort.yml)
+* [go-dep.ort.yml](examples/go-dep.ort.yml)
+* [gradle.ort.yml](examples/gradle.ort.yml)
+* [gradle-android.ort.yml](examples/gradle-android.ort.yml)
+* [maven.ort.yml](examples/maven.ort.yml)
+* [npm.ort.yml](examples/npm.ort.yml)
+* [php-composer.ort.yml](examples/php-composer.ort.yml)
+* [pip.ort.yml](examples/pip.ort.yml)
+* [sbt.ort.yml](examples/sbt.ort.yml)
+* [stack.ort.yml](examples/stack.ort.yml)
+* [yarn.ort.yml](examples/yarn.ort.yml)
 
 ### Resolving errors
 
