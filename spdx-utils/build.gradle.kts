@@ -242,7 +242,7 @@ fun generateLicenseTextResources(description: String, ids: Map<String, LicenseMe
     logger.quiet("Determining SPDX $description texts...")
 
     val scanCodeLicensePath = "$buildDir/SvnExport/licenses/scancode-toolkit"
-    val spdxIdToScanCodeKey = mutableMapOf()
+    val spdxIdToScanCodeKey = mutableMapOf<String, String>()
 
     file(scanCodeLicensePath).listFiles(FileFilter { it.name.endsWith(".yml") }).forEach { file ->
         file.readLines().forEach { line ->
