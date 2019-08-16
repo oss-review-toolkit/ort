@@ -24,6 +24,7 @@ import kotlin.system.exitProcess
 import com.beust.jcommander.JCommander
 
 import com.here.ort.CommandWithHelp
+import com.here.ort.helper.commands.ExportPathExcludesCommand
 import com.here.ort.helper.commands.FormatRepositoryConfigurationCommand
 import com.here.ort.helper.commands.GenerateProjectExcludesCommand
 import com.here.ort.helper.commands.GenerateRuleViolationResolutionsCommand
@@ -54,6 +55,7 @@ object Main : CommandWithHelp() {
         val jc = JCommander(this).apply {
             programName = TOOL_NAME
 
+            addCommand(ExportPathExcludesCommand())
             addCommand(FormatRepositoryConfigurationCommand())
             addCommand(GenerateProjectExcludesCommand())
             addCommand(GenerateScopeExcludesCommand())

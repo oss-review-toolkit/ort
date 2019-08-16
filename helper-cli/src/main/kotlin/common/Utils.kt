@@ -17,8 +17,11 @@
  * License-Filename: LICENSE
  */
 
+@file:Suppress("TooManyFunctions")
+
 package com.here.ort.helper.common
 
+import com.here.ort.analyzer.PackageManager
 import com.here.ort.model.OrtIssue
 import com.here.ort.model.OrtResult
 import com.here.ort.model.RuleViolation
@@ -31,6 +34,11 @@ import com.here.ort.model.config.ScopeExclude
 import com.here.ort.model.yamlMapper
 
 import java.io.File
+
+/**
+ * Represents a mapping from repository URLs to list of [PathExclude]s for the respective repository.
+ */
+internal typealias RepositoryPathExcludes = Map<String, List<PathExclude>>
 
 /**
  * Return an approximation for the Set-Cover Problem, see https://en.wikipedia.org/wiki/Set_cover_problem.
@@ -72,6 +80,35 @@ fun OrtResult.getScanIssues(omitExcluded: Boolean = false): List<OrtIssue> {
     }
 
     return result
+}
+
+/**
+ * Return all path excludes from this [Ortresult] represented as [RepositoryPathExcludes].
+ */
+internal fun OrtResult.getRepositoryPathExcludes(): RepositoryPathExcludes {
+    fun isDefinitionsFile(pathExclude: PathExclude) = PackageManager.ALL.any {
+        it.matchersForDefinitionFiles.any {
+            pathExclude.pattern.endsWith(it.toString())
+        }
+    }
+
+    val result = mutableMapOf<String, MutableList<PathExclude>>()
+    val pathExcludes = repository.config.excludes?.paths ?: emptyList()
+
+    repository.nestedRepositories.forEach { (path, vcs) ->
+        val pathExcludesForRepository = result.getOrPut(vcs.url) { mutableListOf() }
+        pathExcludes.forEach { pathExclude ->
+            if (pathExclude.pattern.startsWith(path) && !isDefinitionsFile(pathExclude)) {
+                pathExcludesForRepository.add(
+                    pathExclude.copy(
+                        pattern = pathExclude.pattern.substring(path.length).removePrefix("/")
+                    )
+                )
+            }
+        }
+    }
+
+    return result.mapValues { excludes -> excludes.value.sortedBy { it.pattern } }.toSortedMap()
 }
 
 /**
@@ -141,3 +178,41 @@ internal fun RepositoryConfiguration.sortScopeExcludes(): RepositoryConfiguratio
  */
 internal fun RepositoryConfiguration.writeAsYaml(targetFile: File) =
     yamlMapper.writeValue(targetFile, this)
+
+/**
+ * Merge the given [RepositoryPathExcludes]s replacing entries with equal [PathExclude.pattern].
+ * If the given [updateOnlyExisting] is true then only entries with matching [PathExclude.pattern] are merged.
+ */
+internal fun RepositoryPathExcludes.merge(other: RepositoryPathExcludes, updateOnlyExisting: Boolean = false):
+        RepositoryPathExcludes {
+    val result: MutableMap<String, MutableMap<String, PathExclude>> = mutableMapOf()
+
+    fun merge(repositoryUrl: String, pathExclude: PathExclude, updateOnlyUpdateExisting: Boolean = false) {
+        if (updateOnlyUpdateExisting && !result.containsKey(repositoryUrl)) {
+            return
+        }
+
+        val pathExcludes = result.getOrPut(repositoryUrl, { mutableMapOf() })
+        if (updateOnlyUpdateExisting && !result.containsKey(pathExclude.pattern)) {
+            return
+        }
+
+        pathExcludes.put(pathExclude.pattern, pathExclude)
+    }
+
+    forEach { (repositoryUrl, pathExcludes) ->
+        pathExcludes.forEach { pathExclude ->
+            merge(repositoryUrl, pathExclude, false)
+        }
+    }
+
+    other.forEach { (repositoryUrl, pathExcludes) ->
+        pathExcludes.forEach { pathExclude ->
+            merge(repositoryUrl, pathExclude, updateOnlyExisting)
+        }
+    }
+
+    return result.mapValues { (_, pathExcludes) ->
+        pathExcludes.values.toList()
+    }
+}
