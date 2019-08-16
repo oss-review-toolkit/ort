@@ -26,6 +26,7 @@ import com.beust.jcommander.JCommander
 import com.here.ort.CommandWithHelp
 import com.here.ort.helper.commands.FormatRepositoryConfigurationCommand
 import com.here.ort.helper.commands.GenerateProjectExcludesCommand
+import com.here.ort.helper.commands.GenerateRuleViolationResolutionsCommand
 import com.here.ort.helper.commands.GenerateScopeExcludesCommand
 import com.here.ort.helper.commands.SortRepositoryConfigurationCommand
 
@@ -55,6 +56,7 @@ object Main : CommandWithHelp() {
             addCommand(FormatRepositoryConfigurationCommand())
             addCommand(GenerateProjectExcludesCommand())
             addCommand(GenerateScopeExcludesCommand())
+            addCommand(GenerateRuleViolationResolutionsCommand())
             addCommand(SortRepositoryConfigurationCommand())
 
             parse(*args)

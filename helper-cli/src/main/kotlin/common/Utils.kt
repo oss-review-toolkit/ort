@@ -19,9 +19,13 @@
 
 package com.here.ort.helper.common
 
+import com.here.ort.model.OrtResult
+import com.here.ort.model.RuleViolation
 import com.here.ort.model.config.Excludes
 import com.here.ort.model.config.PathExclude
 import com.here.ort.model.config.RepositoryConfiguration
+import com.here.ort.model.config.Resolutions
+import com.here.ort.model.config.RuleViolationResolution
 import com.here.ort.model.config.ScopeExclude
 import com.here.ort.model.yamlMapper
 
@@ -52,7 +56,19 @@ internal fun <K, V> greedySetCover(sets: Map<K, Set<V>>): Set<K> {
 }
 
 /**
- * Return a copy with the [PathExclude]s replaced by the given [pathExcludes].
+ * Return all unresolved rule violations.
+ */
+internal fun OrtResult.getUnresolvedRuleViolations(): List<RuleViolation> {
+    val resolutions = repository.config.resolutions?.ruleViolations ?: emptyList()
+    val violations = evaluator?.violations ?: emptyList()
+
+    return violations.filter { violation ->
+        !resolutions.any { it.matches(violation) }
+    }
+}
+
+/**
+ * Return a copy with the [PathExclude]s replaced by the given scope excludes.
  */
 internal fun RepositoryConfiguration.replacePathExcludes(pathExcludes: List<PathExclude>): RepositoryConfiguration =
     copy(excludes = (excludes ?: Excludes()).copy(paths = pathExcludes))
@@ -62,6 +78,12 @@ internal fun RepositoryConfiguration.replacePathExcludes(pathExcludes: List<Path
  */
 internal fun RepositoryConfiguration.replaceScopeExcludes(scopeExcludes: List<ScopeExclude>): RepositoryConfiguration =
     copy(excludes = (excludes ?: Excludes()).copy(scopes = scopeExcludes))
+
+/**
+ * Return a copy with the [RuleViolationResolution]s replaced by the given [ruleViolations].
+ */
+internal fun RepositoryConfiguration.replaceRuleViolationResolutions(ruleViolations: List<RuleViolationResolution>):
+    RepositoryConfiguration = copy(resolutions = (resolutions ?: Resolutions()).copy(ruleViolations = ruleViolations))
 
 /**
  * Return a copy with sorting applied to all entry types which are to be sorted.
