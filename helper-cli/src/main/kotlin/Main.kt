@@ -63,6 +63,7 @@ object Main : CommandWithHelp() {
             addCommand(GenerateRuleViolationResolutionsCommand())
             addCommand(GenerateTimeoutErrorResolutionsCommand())
             addCommand(ImportPathExcludesCommand())
+            addCommand(ListLicensesCommand())
             addCommand(SortRepositoryConfigurationCommand())
 
             parse(*args)

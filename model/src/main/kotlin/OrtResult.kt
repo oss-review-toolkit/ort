@@ -412,5 +412,11 @@ data class OrtResult(
     @JsonIgnore
     fun getProjects(): Set<Project> = analyzer?.result?.projects.orEmpty()
 
+    /**
+     * Return all [RuleViolation]s contained in this [OrtResult].
+     */
+    @JsonIgnore
+    fun getRuleViolations(): List<RuleViolation> = evaluator?.violations.orEmpty()
+
     private fun getExcludes(): Excludes = repository.config.excludes ?: Excludes()
 }
