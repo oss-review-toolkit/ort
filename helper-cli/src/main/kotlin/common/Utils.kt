@@ -23,9 +23,18 @@ package com.here.ort.helper.common
 
 import com.here.ort.analyzer.Analyzer
 import com.here.ort.analyzer.PackageManager
+import com.here.ort.downloader.Downloader
+import com.here.ort.model.Identifier
 import com.here.ort.model.OrtIssue
 import com.here.ort.model.OrtResult
+import com.here.ort.model.Package
+import com.here.ort.model.Project
+import com.here.ort.model.Provenance
+import com.here.ort.model.RemoteArtifact
 import com.here.ort.model.RuleViolation
+import com.here.ort.model.Severity
+import com.here.ort.model.TextLocation
+import com.here.ort.model.VcsInfo
 import com.here.ort.model.config.AnalyzerConfiguration
 import com.here.ort.model.config.Excludes
 import com.here.ort.model.config.PathExclude
@@ -108,6 +117,77 @@ internal fun <K, V> greedySetCover(sets: Map<K, Set<V>>): Set<K> {
     }
 
     return result
+}
+
+/**
+ * Fetches the sources from either the VCS or source artifact for the package denoted by
+ * the given [id] depending on whether a scan result is present with matching [Provenance].
+ */
+internal fun OrtResult.fetchScannedSources(id: Identifier): File {
+    val tempDir = createTempDir("helper-cli", ".temp", File("."))
+
+    val pkg = getPackageOrProject(id)!!.let {
+        if (getProvenance(id)!!.sourceArtifact != null) {
+            it.copy(vcs = VcsInfo.EMPTY, vcsProcessed = VcsInfo.EMPTY)
+        } else {
+            it.copy(sourceArtifact = RemoteArtifact.EMPTY)
+        }
+    }
+
+    return Downloader().download(pkg, tempDir).downloadDirectory
+}
+
+/**
+ * Return all license findings for the project or package associated with the given [id].
+ */
+internal fun OrtResult.getLicenseFindingsById(id: Identifier): Map<String, Set<TextLocation>> {
+    val result = mutableMapOf<String, MutableSet<TextLocation>>()
+
+    val pkg = getPackageOrProject(id)!!
+    scanner?.results?.scanResults?.forEach { container ->
+        container.results.forEach { scanResult ->
+            if (scanResult.provenance.matches(pkg)) {
+                scanResult.summary.licenseFindings.forEach {
+                    val locations = result.getOrPut(it.license, { mutableSetOf() })
+                    locations.addAll(it.locations)
+                }
+            }
+        }
+    }
+
+    return result
+}
+
+/**
+ * Return all license [Identifiers]s which are associated with at least one [RuleViolation] with a [severity]
+ * greater or equal to the given [minSeverity].
+ */
+internal fun OrtResult.getOffendingLicensesById(id: Identifier, minSeverity: Severity): Set<String> =
+    getRuleViolations().filter {
+        it.pkg == id && it.severity.ordinal <= minSeverity.ordinal
+    }.mapNotNull { it.license }.toSet()
+
+/**
+ * Return the Package with the given [id] denoting either a [Project] or a [Package].
+ */
+internal fun OrtResult.getPackageOrProject(id: Identifier): Package? =
+    getProject(id)?.let { it.toPackage() } ?: getPackage(id)?.pkg
+
+/**
+ * Return the first [Provenance] matching the given [id] or null if there is no match.
+ */
+internal fun OrtResult.getProvenance(id: Identifier): Provenance? {
+    val pkg = getPackageOrProject(id)!!
+
+    scanner?.results?.scanResults?.forEach { container ->
+        container.results.forEach { scanResult ->
+            if (scanResult.provenance.matches(pkg)) {
+                return scanResult.provenance
+            }
+        }
+    }
+
+    return null
 }
 
 /**
