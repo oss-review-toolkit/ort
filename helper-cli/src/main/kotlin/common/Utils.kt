@@ -19,10 +19,44 @@
 
 package com.here.ort.helper.common
 
+import com.here.ort.model.config.PathExclude
 import com.here.ort.model.config.RepositoryConfiguration
+import com.here.ort.model.config.ScopeExclude
 import com.here.ort.model.yamlMapper
 
 import java.io.File
+
+/**
+ * Return a copy with sorting applied to all entry types which are to be sorted.
+ */
+internal fun RepositoryConfiguration.sortEntries(): RepositoryConfiguration =
+    sortPathExcludes().sortScopeExcludes()
+
+/**
+ * Return a copy with the [PathExclude]s sorted.
+ */
+internal fun RepositoryConfiguration.sortPathExcludes(): RepositoryConfiguration =
+    copy(
+        excludes = excludes?.let {
+            val paths = it.paths.sortedBy { pathExclude ->
+                pathExclude.pattern.removePrefix("*").removePrefix("*")
+            }
+            it.copy(paths = paths)
+        }
+    )
+
+/**
+ * Return a copy with the [ScopeExclude]s sorted.
+ */
+internal fun RepositoryConfiguration.sortScopeExcludes(): RepositoryConfiguration =
+    copy(
+        excludes = excludes?.let {
+            val scopes = it.scopes.sortedBy { scopeExclude ->
+                scopeExclude.name.toString().removePrefix(".*")
+            }
+            it.copy(scopes = scopes)
+        }
+    )
 
 /**
  * Serialize a [RepositoryConfiguration] as YAML to the given target [File].

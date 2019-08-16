@@ -25,6 +25,7 @@ import com.beust.jcommander.JCommander
 
 import com.here.ort.CommandWithHelp
 import com.here.ort.helper.commands.FormatRepositoryConfigurationCommand
+import com.here.ort.helper.commands.SortRepositoryConfigurationCommand
 
 private const val TOOL_NAME = "orth"
 
@@ -48,7 +49,10 @@ object Main : CommandWithHelp() {
     fun run(args: Array<String>): Int {
         val jc = JCommander(this).apply {
             programName = TOOL_NAME
+
             addCommand(FormatRepositoryConfigurationCommand())
+            addCommand(SortRepositoryConfigurationCommand())
+
             parse(*args)
         }
 
