@@ -19,12 +19,19 @@
 
 package com.here.ort.helper.common
 
+import com.here.ort.model.config.Excludes
 import com.here.ort.model.config.PathExclude
 import com.here.ort.model.config.RepositoryConfiguration
 import com.here.ort.model.config.ScopeExclude
 import com.here.ort.model.yamlMapper
 
 import java.io.File
+
+/**
+ * Return a copy with the [PathExclude]s replaced by the given [pathExcludes].
+ */
+internal fun RepositoryConfiguration.replacePathExcludes(pathExcludes: List<PathExclude>): RepositoryConfiguration =
+    copy(excludes = (excludes ?: Excludes()).copy(paths = pathExcludes))
 
 /**
  * Return a copy with sorting applied to all entry types which are to be sorted.
