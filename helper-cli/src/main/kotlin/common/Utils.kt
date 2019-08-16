@@ -19,6 +19,7 @@
 
 package com.here.ort.helper.common
 
+import com.here.ort.model.OrtIssue
 import com.here.ort.model.OrtResult
 import com.here.ort.model.RuleViolation
 import com.here.ort.model.config.Excludes
@@ -49,6 +50,24 @@ internal fun <K, V> greedySetCover(sets: Map<K, Set<V>>): Set<K> {
             result.add(maxCover.key)
         } else {
             break
+        }
+    }
+
+    return result
+}
+
+/**
+ * Return all issues from scan results. Issues for excludes projects are not returned if and only if given
+ * [omitExcluded] is true.
+ */
+fun OrtResult.getScanIssues(omitExcluded: Boolean = false): List<OrtIssue> {
+    val result = mutableListOf<OrtIssue>()
+
+    scanner?.results?.scanResults?.forEach { container ->
+        if (!omitExcluded || !isExcluded(container.id)) {
+            container.results.forEach { scanResult ->
+                result.addAll(scanResult.summary.errors)
+            }
         }
     }
 
