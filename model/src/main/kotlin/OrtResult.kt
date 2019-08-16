@@ -407,7 +407,7 @@ data class OrtResult(
     private fun getPackages(): Set<CuratedPackage> = analyzer?.result?.packages ?: emptySet()
 
     /**
-     * Return all projects contained in this [OrtResult].
+     * Return all [Project]s contained in this [OrtResult].
      */
     @JsonIgnore
     fun getProjects(): Set<Project> = analyzer?.result?.projects.orEmpty()
