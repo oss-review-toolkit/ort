@@ -17,11 +17,11 @@
  * License-Filename: LICENSE
  */
 
-package com.here.ort.analyzer
+package com.here.ort.analyzer.managers.utils
 
-import com.here.ort.analyzer.PackageJsonUtils.Companion.expandShortcutURL
-import com.here.ort.analyzer.PackageJsonUtils.Companion.mapDefinitionFilesForNpm
-import com.here.ort.analyzer.PackageJsonUtils.Companion.mapDefinitionFilesForYarn
+import com.here.ort.analyzer.managers.utils.PackageJsonUtils.Companion.expandShortcutURL
+import com.here.ort.analyzer.managers.utils.PackageJsonUtils.Companion.mapDefinitionFilesForNpm
+import com.here.ort.analyzer.managers.utils.PackageJsonUtils.Companion.mapDefinitionFilesForYarn
 import com.here.ort.utils.safeDeleteRecursively
 import com.here.ort.utils.safeMkdirs
 
