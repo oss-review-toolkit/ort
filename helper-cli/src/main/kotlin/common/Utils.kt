@@ -28,10 +28,40 @@ import com.here.ort.model.yamlMapper
 import java.io.File
 
 /**
+ * Return an approximation for the Set-Cover Problem, see https://en.wikipedia.org/wiki/Set_cover_problem.
+ */
+internal fun <K, V> greedySetCover(sets: Map<K, Set<V>>): Set<K> {
+    val result = mutableSetOf<K>()
+
+    var uncovered = sets.values.flatMap { it }.toMutableSet()
+    var queue = sets.entries.toMutableSet()
+
+    while (queue.isNotEmpty()) {
+        val maxCover = queue.maxBy { it.value.intersect(uncovered).size }!!
+
+        if (uncovered.intersect(maxCover.value).isNotEmpty()) {
+            uncovered.removeAll(maxCover.value)
+            queue.remove(maxCover)
+            result.add(maxCover.key)
+        } else {
+            break
+        }
+    }
+
+    return result
+}
+
+/**
  * Return a copy with the [PathExclude]s replaced by the given [pathExcludes].
  */
 internal fun RepositoryConfiguration.replacePathExcludes(pathExcludes: List<PathExclude>): RepositoryConfiguration =
     copy(excludes = (excludes ?: Excludes()).copy(paths = pathExcludes))
+
+/**
+ * Return a copy with the [ScopeExclude]s replaced by the given [scopeExcludes].
+ */
+internal fun RepositoryConfiguration.replaceScopeExcludes(scopeExcludes: List<ScopeExclude>): RepositoryConfiguration =
+    copy(excludes = (excludes ?: Excludes()).copy(scopes = scopeExcludes))
 
 /**
  * Return a copy with sorting applied to all entry types which are to be sorted.
