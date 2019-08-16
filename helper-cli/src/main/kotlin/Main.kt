@@ -25,6 +25,7 @@ import com.beust.jcommander.JCommander
 
 import com.here.ort.CommandWithHelp
 import com.here.ort.helper.commands.FormatRepositoryConfigurationCommand
+import com.here.ort.helper.commands.GenerateProjectExcludesCommand
 import com.here.ort.helper.commands.SortRepositoryConfigurationCommand
 
 private const val TOOL_NAME = "orth"
@@ -51,6 +52,7 @@ object Main : CommandWithHelp() {
             programName = TOOL_NAME
 
             addCommand(FormatRepositoryConfigurationCommand())
+            addCommand(GenerateProjectExcludesCommand())
             addCommand(SortRepositoryConfigurationCommand())
 
             parse(*args)

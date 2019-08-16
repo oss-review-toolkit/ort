@@ -21,6 +21,7 @@ package com.here.ort.model
 
 import ch.frankel.slf4k.*
 
+import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonInclude
 
 import com.here.ort.model.config.Excludes
@@ -405,7 +406,11 @@ data class OrtResult(
 
     private fun getPackages(): Set<CuratedPackage> = analyzer?.result?.packages ?: emptySet()
 
-    private fun getProjects(): Set<Project> = analyzer?.result?.projects ?: emptySet()
+    /**
+     * Return all projects contained in this [OrtResult].
+     */
+    @JsonIgnore
+    fun getProjects(): Set<Project> = analyzer?.result?.projects.orEmpty()
 
     private fun getExcludes(): Excludes = repository.config.excludes ?: Excludes()
 }
