@@ -50,7 +50,6 @@ import com.here.ort.utils.OkHttpClientHelper
 import com.here.ort.utils.OkHttpClientHelper.applyProxySettingsFromEnv
 import com.here.ort.utils.OkHttpClientHelper.applyProxySettingsFromUrl
 import com.here.ort.utils.getUserHomeDirectory
-import com.here.ort.utils.hasFragmentRevision
 import com.here.ort.utils.log
 import com.here.ort.utils.realFile
 import com.here.ort.utils.stashDirectories
@@ -61,8 +60,6 @@ import com.vdurmont.semver4j.Requirement
 import java.io.File
 import java.io.IOException
 import java.net.HttpURLConnection
-import java.net.URI
-import java.net.URISyntaxException
 import java.net.URL
 import java.net.URLEncoder
 import java.util.SortedSet
@@ -81,46 +78,6 @@ open class Npm(
 ) : PackageManager(name, analyzerRoot, analyzerConfig, repoConfig), CommandLineTool {
     companion object {
         private val HTTP_REGEX = Regex("^https?://.+$")
-
-        /**
-         * Expand NPM shortcuts for URLs to hosting sites to full URLs so that they can be used in a regular way.
-         *
-         * @param url The URL to expand.
-         */
-        fun expandShortcutURL(url: String): String {
-            // A hierarchical URI looks like
-            //     [scheme:][//authority][path][?query][#fragment]
-            // where a server-based "authority" has the syntax
-            //     [user-info@]host[:port]
-            val uri = try {
-                // At this point we do not know whether the URL is actually valid, so use the more general URI.
-                URI(url)
-            } catch (e: URISyntaxException) {
-                // Fall back to returning the original URL.
-                return url
-            }
-
-            val path = uri.schemeSpecificPart
-
-            // Do not mess with crazy URLs.
-            if (path.startsWith("git@") || path.startsWith("github.com") || path.startsWith("gitlab.com")) return url
-
-            return if (!path.isNullOrEmpty() && listOf(uri.authority, uri.query).all { it == null }) {
-                // See https://docs.npmjs.com/files/package.json#github-urls.
-                val revision = if (uri.hasFragmentRevision()) "#${uri.fragment}" else ""
-
-                // See https://docs.npmjs.com/files/package.json#repository.
-                when (uri.scheme) {
-                    null, "github" -> "https://github.com/$path.git$revision"
-                    "gist" -> "https://gist.github.com/$path$revision"
-                    "bitbucket" -> "https://bitbucket.org/$path.git$revision"
-                    "gitlab" -> "https://gitlab.com/$path.git$revision"
-                    else -> url
-                }
-            } else {
-                url
-            }
-        }
     }
 
     class Factory : AbstractPackageManagerFactory<Npm>("NPM") {
@@ -317,7 +274,7 @@ open class Npm(
                 }
             }
 
-            val vcsFromDownloadUrl = VersionControlSystem.splitUrl(expandShortcutURL(downloadUrl))
+            val vcsFromDownloadUrl = VersionControlSystem.splitUrl(PackageJsonUtils.expandShortcutURL(downloadUrl))
             if (vcsFromDownloadUrl.url != downloadUrl) {
                 vcsFromPackage = vcsFromPackage.merge(vcsFromDownloadUrl)
             }
@@ -410,7 +367,7 @@ open class Npm(
             val type = repo["type"].textValueOrEmpty()
             val url = repo.textValue() ?: repo["url"].textValueOrEmpty()
             val path = repo["directory"].textValueOrEmpty()
-            VcsInfo(VcsType(type), expandShortcutURL(url), head, path = path)
+            VcsInfo(VcsType(type), PackageJsonUtils.expandShortcutURL(url), head, path = path)
         } ?: VcsInfo(VcsType.NONE, "", head)
     }
 

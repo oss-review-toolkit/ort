@@ -26,10 +26,13 @@ import com.fasterxml.jackson.databind.node.ArrayNode
 import com.fasterxml.jackson.databind.node.ObjectNode
 
 import com.here.ort.model.readValue
+import com.here.ort.utils.hasFragmentRevision
 import com.here.ort.utils.log
 import com.here.ort.utils.showStackTrace
 
 import java.io.File
+import java.net.URI
+import java.net.URISyntaxException
 import java.nio.file.FileSystems
 import java.nio.file.PathMatcher
 
@@ -65,6 +68,46 @@ internal class PackageJsonUtils {
             getDefinitionFileInfo(definitionFiles.toSet()).filter { entry ->
                 isHandledByYarn(entry) && !entry.isYarnWorkspaceSubmodule
             }.map { it.definitionFile }.toSet()
+
+        /**
+         * Expand NPM shortcuts for URLs to hosting sites to full URLs so that they can be used in a regular way.
+         *
+         * @param url The URL to expand.
+         */
+        fun expandShortcutURL(url: String): String {
+            // A hierarchical URI looks like
+            //     [scheme:][//authority][path][?query][#fragment]
+            // where a server-based "authority" has the syntax
+            //     [user-info@]host[:port]
+            val uri = try {
+                // At this point we do not know whether the URL is actually valid, so use the more general URI.
+                URI(url)
+            } catch (e: URISyntaxException) {
+                // Fall back to returning the original URL.
+                return url
+            }
+
+            val path = uri.schemeSpecificPart
+
+            // Do not mess with crazy URLs.
+            if (path.startsWith("git@") || path.startsWith("github.com") || path.startsWith("gitlab.com")) return url
+
+            return if (!path.isNullOrEmpty() && listOf(uri.authority, uri.query).all { it == null }) {
+                // See https://docs.npmjs.com/files/package.json#github-urls.
+                val revision = if (uri.hasFragmentRevision()) "#${uri.fragment}" else ""
+
+                // See https://docs.npmjs.com/files/package.json#repository.
+                when (uri.scheme) {
+                    null, "github" -> "https://github.com/$path.git$revision"
+                    "gist" -> "https://gist.github.com/$path$revision"
+                    "bitbucket" -> "https://bitbucket.org/$path.git$revision"
+                    "gitlab" -> "https://gitlab.com/$path.git$revision"
+                    else -> url
+                }
+            } else {
+                url
+            }
+        }
 
         private fun isHandledByYarn(entry: DefinitionFileInfo) =
             entry.isYarnWorkspaceRoot || entry.isYarnWorkspaceSubmodule || entry.hasYarnLockfile
