@@ -21,10 +21,12 @@
 
 package com.here.ort.helper.common
 
+import com.here.ort.analyzer.Analyzer
 import com.here.ort.analyzer.PackageManager
 import com.here.ort.model.OrtIssue
 import com.here.ort.model.OrtResult
 import com.here.ort.model.RuleViolation
+import com.here.ort.model.config.AnalyzerConfiguration
 import com.here.ort.model.config.Excludes
 import com.here.ort.model.config.PathExclude
 import com.here.ort.model.config.RepositoryConfiguration
@@ -39,6 +41,50 @@ import java.io.File
  * Represents a mapping from repository URLs to list of [PathExclude]s for the respective repository.
  */
 internal typealias RepositoryPathExcludes = Map<String, List<PathExclude>>
+
+/**
+ * Return all files underneath the given [directory].
+ */
+internal fun findFilesRecursive(directory: File): List<String> {
+    require(directory.isDirectory)
+
+    val result = mutableListOf<String>()
+
+    directory.walk().forEach { file ->
+        if (!file.isDirectory) {
+            result.add(file.relativeTo(directory).path)
+        }
+    }
+
+    return result
+}
+
+/**
+ * Search the given [directory] for repositories and return a mapping from repository URLs to the relative paths where
+ * each respective repository was found.
+ */
+internal fun findRepositoryPaths(directory: File): Map<String, Set<String>> {
+    require(directory.isDirectory)
+
+    val analyzer = Analyzer(AnalyzerConfiguration(true, true))
+    val ortResult = analyzer.analyze(
+        absoluteProjectPath = directory,
+        packageManagers = emptyList(),
+        packageCurationsFile = null,
+        repositoryConfigurationFile = null
+    )
+
+    val result = mutableMapOf<String, MutableSet<String>>()
+
+    ortResult.repository.nestedRepositories.forEach { path, vcs ->
+        result
+            .getOrPut(vcs.url) { mutableSetOf() }
+            .add(path)
+    }
+
+    // TODO: strip the user info from the vcs URLs
+    return result
+}
 
 /**
  * Return an approximation for the Set-Cover Problem, see https://en.wikipedia.org/wiki/Set_cover_problem.

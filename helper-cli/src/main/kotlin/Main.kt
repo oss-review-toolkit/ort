@@ -30,6 +30,7 @@ import com.here.ort.helper.commands.GenerateProjectExcludesCommand
 import com.here.ort.helper.commands.GenerateRuleViolationResolutionsCommand
 import com.here.ort.helper.commands.GenerateScopeExcludesCommand
 import com.here.ort.helper.commands.GenerateTimeoutErrorResolutionsCommand
+import com.here.ort.helper.commands.ImportPathExcludesCommand
 import com.here.ort.helper.commands.SortRepositoryConfigurationCommand
 
 private const val TOOL_NAME = "orth"
@@ -61,6 +62,7 @@ object Main : CommandWithHelp() {
             addCommand(GenerateScopeExcludesCommand())
             addCommand(GenerateRuleViolationResolutionsCommand())
             addCommand(GenerateTimeoutErrorResolutionsCommand())
+            addCommand(ImportPathExcludesCommand())
             addCommand(SortRepositoryConfigurationCommand())
 
             parse(*args)
