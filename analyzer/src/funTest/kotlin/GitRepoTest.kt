@@ -17,9 +17,8 @@
  * License-Filename: LICENSE
  */
 
-package com.here.ort.analyzer.vcs
+package com.here.ort.analyzer
 
-import com.here.ort.analyzer.Analyzer
 import com.here.ort.downloader.VersionControlSystem
 import com.here.ort.downloader.vcs.GitRepo
 import com.here.ort.model.Package
