@@ -17,17 +17,16 @@
  * License-Filename: LICENSE
  */
 
-package com.here.ort.analyzer
+package com.here.ort.analyzer.managers
 
-import com.here.ort.analyzer.managers.Npm
 import com.here.ort.downloader.VersionControlSystem
+import com.here.ort.model.config.AnalyzerConfiguration
 import com.here.ort.model.yamlMapper
 import com.here.ort.utils.normalizeVcsUrl
 import com.here.ort.utils.safeDeleteRecursively
 import com.here.ort.utils.test.DEFAULT_ANALYZER_CONFIGURATION
 import com.here.ort.utils.test.DEFAULT_REPOSITORY_CONFIGURATION
 import com.here.ort.utils.test.USER_DIR
-import com.here.ort.utils.test.patchActualResult
 import com.here.ort.utils.test.patchExpectedResult
 
 import io.kotlintest.TestCase
@@ -37,8 +36,8 @@ import io.kotlintest.specs.WordSpec
 
 import java.io.File
 
-class BabelTest : WordSpec() {
-    private val projectDir = File("src/funTest/assets/projects/synthetic/npm-babel").absoluteFile
+class NpmVersionUrlTest : WordSpec() {
+    private val projectDir = File("src/funTest/assets/projects/synthetic/npm-version-urls").absoluteFile
     private val vcsDir = VersionControlSystem.forDirectory(projectDir)!!
     private val vcsUrl = vcsDir.getRemoteUrl()
     private val vcsRevision = vcsDir.getRevision()
@@ -46,34 +45,34 @@ class BabelTest : WordSpec() {
     override fun afterTest(testCase: TestCase, result: TestResult) {
         // Make sure the node_modules directory is always deleted from each subdirectory to prevent side-effects
         // from failing tests.
-        projectDir.listFiles().forEach {
-            if (it.isDirectory) {
-                val nodeModulesDir = File(it, "node_modules")
-                val gitKeepFile = File(nodeModulesDir, ".gitkeep")
-                if (nodeModulesDir.isDirectory && !gitKeepFile.isFile) {
-                    nodeModulesDir.safeDeleteRecursively(force = true)
-                }
-            }
+        val nodeModulesDir = projectDir.resolve("node_modules")
+        val gitKeepFile = nodeModulesDir.resolve(".gitkeep")
+        if (nodeModulesDir.isDirectory && !gitKeepFile.isFile) {
+            nodeModulesDir.safeDeleteRecursively(force = true)
         }
     }
 
     init {
-        "Babel dependencies" should {
-            "be correctly analyzed" {
+        "NPM" should {
+            "resolve dependencies with URLs as versions correctly" {
                 val packageFile = File(projectDir, "package.json")
 
+                val config = AnalyzerConfiguration(ignoreToolVersions = false, allowDynamicVersions = true)
+                val result = createNPM(config).resolveDependencies(listOf(packageFile))[packageFile]
+                val vcsPath = vcsDir.getPathToRoot(projectDir)
                 val expectedResult = patchExpectedResult(
-                    File(projectDir.parentFile, "${projectDir.name}-expected-output.yml"),
+                    File(projectDir.parentFile, "npm-version-urls-expected-output.yml"),
+                    definitionFilePath = "$vcsPath/package.json",
                     url = normalizeVcsUrl(vcsUrl),
-                    revision = vcsRevision
+                    revision = vcsRevision,
+                    path = vcsPath
                 )
-                val actualResult = createNPM().resolveDependencies(listOf(packageFile))[packageFile]
 
-                patchActualResult(yamlMapper.writeValueAsString(actualResult)) shouldBe expectedResult
+                yamlMapper.writeValueAsString(result) shouldBe expectedResult
             }
         }
     }
 
-    private fun createNPM() =
-        Npm("NPM", USER_DIR, DEFAULT_ANALYZER_CONFIGURATION, DEFAULT_REPOSITORY_CONFIGURATION)
+    private fun createNPM(config: AnalyzerConfiguration = DEFAULT_ANALYZER_CONFIGURATION) =
+        Npm("NPM", USER_DIR, config, DEFAULT_REPOSITORY_CONFIGURATION)
 }

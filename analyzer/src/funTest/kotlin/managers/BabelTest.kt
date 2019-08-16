@@ -17,9 +17,8 @@
  * License-Filename: LICENSE
  */
 
-package com.here.ort.analyzer
+package com.here.ort.analyzer.managers
 
-import com.here.ort.analyzer.managers.Yarn
 import com.here.ort.downloader.VersionControlSystem
 import com.here.ort.model.yamlMapper
 import com.here.ort.utils.normalizeVcsUrl
@@ -27,6 +26,7 @@ import com.here.ort.utils.safeDeleteRecursively
 import com.here.ort.utils.test.DEFAULT_ANALYZER_CONFIGURATION
 import com.here.ort.utils.test.DEFAULT_REPOSITORY_CONFIGURATION
 import com.here.ort.utils.test.USER_DIR
+import com.here.ort.utils.test.patchActualResult
 import com.here.ort.utils.test.patchExpectedResult
 
 import io.kotlintest.TestCase
@@ -36,8 +36,8 @@ import io.kotlintest.specs.WordSpec
 
 import java.io.File
 
-class YarnTest : WordSpec() {
-    private val projectDir = File("src/funTest/assets/projects/synthetic/yarn").absoluteFile
+class BabelTest : WordSpec() {
+    private val projectDir = File("src/funTest/assets/projects/synthetic/npm-babel").absoluteFile
     private val vcsDir = VersionControlSystem.forDirectory(projectDir)!!
     private val vcsUrl = vcsDir.getRemoteUrl()
     private val vcsRevision = vcsDir.getRevision()
@@ -57,24 +57,22 @@ class YarnTest : WordSpec() {
     }
 
     init {
-        "yarn" should {
-            "resolve dependencies correctly" {
+        "Babel dependencies" should {
+            "be correctly analyzed" {
                 val packageFile = File(projectDir, "package.json")
-                val result = createYarn().resolveDependencies(listOf(packageFile))[packageFile]
-                val vcsPath = vcsDir.getPathToRoot(projectDir)
-                val expectedResult = patchExpectedResult(
-                    File(projectDir.parentFile, "yarn-expected-output.yml"),
-                    definitionFilePath = "$vcsPath/package.json",
-                    url = normalizeVcsUrl(vcsUrl),
-                    revision = vcsRevision,
-                    path = vcsPath
-                )
 
-                yamlMapper.writeValueAsString(result) shouldBe expectedResult
+                val expectedResult = patchExpectedResult(
+                    File(projectDir.parentFile, "${projectDir.name}-expected-output.yml"),
+                    url = normalizeVcsUrl(vcsUrl),
+                    revision = vcsRevision
+                )
+                val actualResult = createNPM().resolveDependencies(listOf(packageFile))[packageFile]
+
+                patchActualResult(yamlMapper.writeValueAsString(actualResult)) shouldBe expectedResult
             }
         }
     }
 
-    private fun createYarn() =
-        Yarn("Yarn", USER_DIR, DEFAULT_ANALYZER_CONFIGURATION, DEFAULT_REPOSITORY_CONFIGURATION)
+    private fun createNPM() =
+        Npm("NPM", USER_DIR, DEFAULT_ANALYZER_CONFIGURATION, DEFAULT_REPOSITORY_CONFIGURATION)
 }
