@@ -85,8 +85,7 @@ class SpdxExpressionDefaultVisitor(private val strictness: Strictness) :
         when (ctx.childCount) {
             1 -> SpdxLicenseReferenceExpression(ctx.text)
             else -> throw SpdxException(
-                "SpdxLicenseReferenceExpression has invalid amount of children:" +
-                        "'${ctx.childCount}'"
+                "SpdxLicenseReferenceExpression has invalid amount of children: '${ctx.childCount}'"
             )
         }.apply { validate(strictness) }
 }

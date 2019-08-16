@@ -70,7 +70,7 @@ class Unmanaged(
                 val projectDir = definitionFile
 
                 log.warn {
-                    "Analysis of local directory '$projectDir' which is not under version control will produce" +
+                    "Analysis of local directory '$projectDir' which is not under version control will produce " +
                             "non-cacheable results as no version for the cache key can be determined."
                 }
 
