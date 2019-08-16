@@ -29,8 +29,8 @@ import com.fasterxml.jackson.module.kotlin.readValue
 import com.fasterxml.jackson.module.kotlin.registerKotlinModule
 
 import com.here.ort.analyzer.AbstractPackageManagerFactory
-import com.here.ort.analyzer.DotNetSupport
 import com.here.ort.analyzer.PackageManager
+import com.here.ort.analyzer.managers.utils.DotNetSupport
 import com.here.ort.downloader.VersionControlSystem
 import com.here.ort.model.Identifier
 import com.here.ort.model.Project

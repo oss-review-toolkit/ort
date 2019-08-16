@@ -18,7 +18,7 @@
  * License-Filename: LICENSE
  */
 
-package com.here.ort.analyzer
+package com.here.ort.analyzer.managers.utils
 
 import com.here.ort.model.Identifier
 import com.here.ort.model.OrtIssue

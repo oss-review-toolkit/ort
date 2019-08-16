@@ -26,8 +26,8 @@ import com.fasterxml.jackson.databind.node.ObjectNode
 
 import com.here.ort.analyzer.AbstractPackageManagerFactory
 import com.here.ort.analyzer.HTTP_CACHE_PATH
-import com.here.ort.analyzer.PackageJsonUtils
 import com.here.ort.analyzer.PackageManager
+import com.here.ort.analyzer.managers.utils.PackageJsonUtils
 import com.here.ort.downloader.VersionControlSystem
 import com.here.ort.model.Hash
 import com.here.ort.model.Identifier

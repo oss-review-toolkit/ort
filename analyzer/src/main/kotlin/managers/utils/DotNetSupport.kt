@@ -18,11 +18,12 @@
  * License-Filename: LICENSE
  */
 
-package com.here.ort.analyzer
+package com.here.ort.analyzer.managers.utils
 
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 
+import com.here.ort.analyzer.HTTP_CACHE_PATH
 import com.here.ort.model.EMPTY_JSON_NODE
 import com.here.ort.model.Hash
 import com.here.ort.model.Identifier

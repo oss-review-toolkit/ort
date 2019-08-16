@@ -17,12 +17,14 @@
  * License-Filename: LICENSE
  */
 
-package com.here.ort.analyzer
+package com.here.ort.analyzer.managers.utils
 
 import ch.frankel.slf4k.*
 
 import com.fasterxml.jackson.module.kotlin.readValue
 
+import com.here.ort.analyzer.PackageManager
+import com.here.ort.analyzer.TOOL_NAME
 import com.here.ort.model.Hash
 import com.here.ort.model.Identifier
 import com.here.ort.model.Package
