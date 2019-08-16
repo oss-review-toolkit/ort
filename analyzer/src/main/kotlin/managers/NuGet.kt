@@ -96,7 +96,7 @@ class NuGet(
 
         val project = Project(
             id = Identifier(
-                type = "nuget",
+                type = managerName,
                 namespace = "",
                 name = workingDir.name,
                 version = ""
