@@ -38,7 +38,7 @@ class DotNetSupportTest : StringSpec() {
         "non-existing project gets registered as error and is not added to scope" {
             val testPackage = Pair("trifj", "2.0.0")
             val testPackage2 = Pair("tffrifj", "2.0.0")
-            val dotNetSupport = DotNetSupport(mapOf(testPackage, testPackage2), projectDir)
+            val dotNetSupport = DotNetSupport(mapOf(testPackage, testPackage2))
             val resultScope = Scope("dependencies", sortedSetOf())
             val resultErrors = listOf(
                 OrtIssue(
@@ -60,7 +60,7 @@ class DotNetSupportTest : StringSpec() {
 
         "dependencies are detected correctly" {
             val testPackage = Pair("WebGrease", "1.5.2")
-            val dotNetSupport = DotNetSupport(mapOf(testPackage), projectDir)
+            val dotNetSupport = DotNetSupport(mapOf(testPackage))
             val resultScope = Scope(
                 "dependencies", sortedSetOf(
                     PackageReference(

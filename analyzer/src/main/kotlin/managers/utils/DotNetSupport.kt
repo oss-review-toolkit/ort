@@ -40,14 +40,10 @@ import com.here.ort.utils.textValueOrEmpty
 
 import okhttp3.Request
 
-import java.io.File
 import java.io.IOException
 import java.net.HttpURLConnection
 
-class DotNetSupport(
-    packageReferencesMap: Map<String, String>,
-    val workingDir: File
-) {
+class DotNetSupport(packageReferencesMap: Map<String, String>) {
     companion object {
         private const val PROVIDER_NAME = "nuget"
 
