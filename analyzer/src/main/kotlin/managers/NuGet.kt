@@ -92,7 +92,7 @@ class NuGet(
 
     override fun resolveDependencies(definitionFile: File): ProjectAnalyzerResult? {
         val workingDir = definitionFile.parentFile
-        val nuget = DotNetSupport(mapPackageReferences(definitionFile), workingDir)
+        val nuget = DotNetSupport(mapPackageReferences(definitionFile))
 
         val project = Project(
             id = Identifier(

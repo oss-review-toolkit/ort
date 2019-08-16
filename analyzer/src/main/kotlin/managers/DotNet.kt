@@ -96,7 +96,7 @@ class DotNet(
 
     override fun resolveDependencies(definitionFile: File): ProjectAnalyzerResult? {
         val workingDir = definitionFile.parentFile
-        val dotnet = DotNetSupport(mapPackageReferences(definitionFile), workingDir)
+        val dotnet = DotNetSupport(mapPackageReferences(definitionFile))
 
         val project = Project(
             id = Identifier(
