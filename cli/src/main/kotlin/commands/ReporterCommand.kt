@@ -117,7 +117,7 @@ object ReporterCommand : CommandWithHelp() {
 
     @Parameter(
         description = "A directory which maps custom license IDs to license texts. " +
-                "It should contain one text file per license with the license ID as the filename." +
+                "It should contain one text file per license with the license ID as the filename. " +
                 "A custom license text is used only if its ID has a 'LicenseRef-' prefix and if " +
                 "the respective license text is not known by ORT.",
         names = ["--custom-license-texts-dir"],
