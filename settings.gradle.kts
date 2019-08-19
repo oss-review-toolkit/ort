@@ -25,6 +25,7 @@ pluginManagement {
 rootProject.name = "oss-review-toolkit"
 
 include("analyzer")
+include("clearly-defined")
 include("cli")
 include("downloader")
 include("evaluator")
