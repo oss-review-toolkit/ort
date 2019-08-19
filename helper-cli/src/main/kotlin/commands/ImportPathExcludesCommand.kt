@@ -36,7 +36,6 @@ import com.here.ort.model.readValue
 import com.here.ort.utils.PARAMETER_ORDER_MANDATORY
 
 import java.io.File
-import java.lang.Exception
 
 @Parameters(
     commandNames = ["import-path-excludes"],
@@ -67,10 +66,11 @@ internal class ImportPathExcludesCommand : CommandWithHelp() {
     override fun runCommand(jc: JCommander): Int {
         val allFiles = findFilesRecursive(sourceCodeDir)
 
-        @Suppress("TooGenericExceptionCaught")
-        val repositoryConfiguration: RepositoryConfiguration = try {
+        val repositoryConfiguration = if (repositoryConfigurationFile.isFile) {
             repositoryConfigurationFile.readValue()
-        } catch (e: Exception) { RepositoryConfiguration() }
+        } else {
+            RepositoryConfiguration()
+        }
 
         val existingPathExcludes = repositoryConfiguration.excludes?.paths ?: emptyList()
         val importedPathExcludes = importPathExcludes().filter { pathExclude ->
