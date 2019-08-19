@@ -1,7 +1,11 @@
+# Introduction
+
 The team behind the [OSS Review Toolkit](https://github.com/heremaps/oss-review-toolkit) gratefully accepts contributions via
 [pull requests](https://help.github.com/articles/about-pull-requests/) filed against the
 [GitHub project](https://github.com/heremaps/oss-review-toolkit/pulls). As part of filing a pull request we ask you to
 sign off the [Developer Certificate of Origin](https://developercertificate.org/) (DCO).
+
+## Git History
 
 In order to maintain a high software quality standard, we strongly prefer contributions to follow these rules:
 
