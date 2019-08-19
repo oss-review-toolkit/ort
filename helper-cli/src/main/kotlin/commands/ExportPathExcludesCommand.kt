@@ -75,7 +75,11 @@ internal class ExportPathExcludesCommand : CommandWithHelp() {
             .replaceConfig(repositoryConfigurationFile.readValue())
             .getRepositoryPathExcludes()
 
-        val globalPathExcludes = pathExcludesFile.readValue<RepositoryPathExcludes>()
+        val globalPathExcludes = if (pathExcludesFile.isFile) {
+            pathExcludesFile.readValue<RepositoryPathExcludes>()
+        } else {
+            mapOf()
+        }
 
         globalPathExcludes
             .merge(localPathExcludes, updateOnlyExisting = updateOnlyExisting)
