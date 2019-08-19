@@ -32,6 +32,7 @@ import com.here.ort.model.readValue
 import com.here.ort.model.yamlMapper
 import com.here.ort.utils.PARAMETER_ORDER_MANDATORY
 import com.here.ort.utils.PARAMETER_ORDER_OPTIONAL
+import com.here.ort.utils.safeMkdirs
 
 import java.io.File
 
@@ -92,10 +93,13 @@ internal class ExportPathExcludesCommand : CommandWithHelp() {
 /**
  * Serialize this [RepositoryPathExcludes] to the given [targetFile] as YAML.
  */
-internal fun RepositoryPathExcludes.writeAsYaml(targetFile: File) =
+internal fun RepositoryPathExcludes.writeAsYaml(targetFile: File) {
+    targetFile.parentFile.apply { safeMkdirs() }
+
     yamlMapper.writeValue(
         targetFile,
         mapValues { (_, pathExcludes) ->
             pathExcludes.sortedBy { it.pattern }
         }.toSortedMap()
     )
+}
