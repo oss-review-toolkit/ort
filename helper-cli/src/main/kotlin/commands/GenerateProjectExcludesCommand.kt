@@ -35,7 +35,6 @@ import com.here.ort.model.readValue
 import com.here.ort.utils.PARAMETER_ORDER_MANDATORY
 
 import java.io.File
-import java.io.IOException
 
 @Parameters(
     commandNames = ["generate-project-excludes"],
@@ -58,9 +57,11 @@ internal class GenerateProjectExcludesCommand : CommandWithHelp() {
     private lateinit var repositoryConfigurationFile: File
 
     override fun runCommand(jc: JCommander): Int {
-        val repositoryConfiguration = try {
-            repositoryConfigurationFile.readValue<RepositoryConfiguration>()
-        } catch (e: IOException) { RepositoryConfiguration() }
+        val repositoryConfiguration = if (repositoryConfigurationFile.isFile) {
+            repositoryConfigurationFile.readValue()
+        } else {
+            RepositoryConfiguration()
+        }
 
         val ortResult = ortResultFile.readValue<OrtResult>()
             .replaceConfig(repositoryConfiguration)
