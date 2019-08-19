@@ -66,9 +66,8 @@ class Downloader {
          *         from the same VCS working tree.
          */
         fun consolidateProjectPackagesByVcs(projects: SortedSet<Project>): Map<Package, List<Package>> {
-            // TODO: In case of GitRepo, we still download the whole GitRepo working tree *and* any individual
-            // Git repositories that contain project definition files, which in many cases is doing duplicate
-            // work.
+            // TODO: In case of GitRepo, we still download the whole GitRepo working tree *and* any individual Git
+            //       repositories that contain project definition files, which in many cases is doing duplicate work.
             val projectPackages = projects.map { it.toPackage() }
             val projectPackagesByVcs = projectPackages.groupBy {
                 if (it.vcsProcessed.type == GitRepo().type) {
@@ -241,7 +240,7 @@ class Downloader {
             applicableVcs.download(target, outputDirectory, allowMovingRevisions)
         } catch (e: DownloadException) {
             // TODO: We should introduce something like a "strict" mode and only do these kind of fallbacks in
-            // non-strict mode.
+            //       non-strict mode.
             val vcsUrlNoCredentials = target.vcsProcessed.url.stripCredentialsFromUrl()
             if (vcsUrlNoCredentials != target.vcsProcessed.url) {
                 // Try once more with any user name / password stripped from the URL.

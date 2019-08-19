@@ -507,8 +507,8 @@ open class Npm(
             run(workingDir, "install", *installParameters)
         }
 
-        // TODO: capture warnings from npm output, e.g. "Unsupported platform" which happens for fsevents on all
-        // platforms except for Mac.
+        // TODO: Capture warnings from npm output, e.g. "Unsupported platform" which happens for fsevents on all
+        //       platforms except for Mac.
     }
 
     private fun splitNamespaceAndName(rawName: String): Pair<String, String> {

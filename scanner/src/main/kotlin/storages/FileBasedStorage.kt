@@ -68,7 +68,7 @@ abstract class FileBasedStorage : ScanResultsStorage() {
     }
 
     // TODO: Remove this code again once we migrated our scan result storage to contain the new "namespaced" license
-    // names for ScanCode.
+    //       names for ScanCode.
     internal fun patchScanCodeLicenseRefs(scanResults: List<ScanResult>) =
         scanResults.map { result ->
             if (result.scanner.name == "ScanCode") {

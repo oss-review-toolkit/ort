@@ -201,7 +201,7 @@ class Maven(
             } else {
                 val pkg = packages.getOrPut(identifier) {
                     // TODO: Omit the "localProjects" argument here once SBT is implemented independently of Maven as at
-                    // this point we know already that "identifier" is not a local project.
+                    //       this point we know already that "identifier" is not a local project.
                     maven.parsePackage(node.artifact, node.repositories, localProjects, sbtMode)
                 }
 

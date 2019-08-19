@@ -107,7 +107,7 @@ class AnalyzerResultBuilder {
     fun addResult(projectAnalyzerResult: ProjectAnalyzerResult) =
         also {
             // TODO: It might be, e.g. in the case of PIP "requirements.txt" projects, that different projects with
-            // the same ID exist. We need to decide how to handle that case.
+            //       the same ID exist. We need to decide how to handle that case.
             val existingProject = projects.find { it.id == projectAnalyzerResult.project.id }
 
             if (existingProject != null) {
