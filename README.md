@@ -219,18 +219,25 @@ Currently, the following license scanners are supported:
 * [Licensee](https://github.com/benbalter/licensee)
 * [ScanCode](https://github.com/nexB/scancode-toolkit)
 
-In order to not download or scan any previously scanned sources again, the Scanner by default stores scan results on the
-local file system in the current user's home directory (i.e. `~/.ort/scanner/scan-results`) for later reuse. The storage
-directory can be customized by passing a scanner configuration file (`-c`) that contains a respective local file storage
-configuration:
+## Storage Backends
+
+In order to not download or scan any previously scanned sources again, the Scanner can use a storage backend to store
+scan results for later reuse.
+
+### Local File Storage
+
+By default the Scanner stores scan results on the local file system in the current user's home directory (i.e.
+`~/.ort/scanner/scan-results`) for later reuse. The storage directory can be customized by passing a scanner
+configuration file (`-c`) that contains a respective local file storage configuration:
 
 ```yaml
 local_file_storage:
   directory: "/tmp/ort/scan-results"
 ```
 
-Alternatively, Artifactory can be configured as a remote storage to use. To do so, use the following snippet instead of
-the above one:
+### Artifactory Storage
+
+To use Artifactory to store scan results, use the following configuration:
 
 ```yaml
 artifactory_storage:
@@ -238,6 +245,23 @@ artifactory_storage:
   repository: "generic-repository-name"
   apiToken: $ARTIFACTORY_API_KEY
 ```
+
+The scanner creates a directory "scan-results" in the configured repository and uses it to store scan results. 
+
+### PostgreSQL Storage
+
+To use PostgreSQL to store scan results, use the following configuration:
+
+```yaml
+postgres_storage:
+  url: "jdbc:postgresql://example.com:5444/database"
+  schema: "schema"
+  username: "username"
+  password: "password"
+```
+
+The scanner creates a table called `scan_results` and stores the data in a
+[jsonb](https://www.postgresql.org/docs/current/datatype-json.html) column.
 
 <a name="evaluator">&nbsp;</a>
 
