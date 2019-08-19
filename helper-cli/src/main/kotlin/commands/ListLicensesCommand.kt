@@ -17,7 +17,7 @@
  * License-Filename: LICENSE
  */
 
-package com.here.ort.helper
+package com.here.ort.helper.commands
 
 import com.beust.jcommander.JCommander
 import com.beust.jcommander.Parameter

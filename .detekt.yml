@@ -54,6 +54,7 @@ style:
       com.here.ort.analyzer.managers.*,
       com.here.ort.commands.*,
       com.here.ort.downloader.vcs.*,
+      com.here.ort.helper.commands.*,
       com.here.ort.reporter.reporters.*,
       com.here.ort.scanner.scanners.*,
       com.here.ort.scanner.storages.*,
