@@ -36,6 +36,7 @@ import com.here.ort.model.VcsInfo
 import com.here.ort.model.VcsType
 import com.here.ort.model.xmlMapper
 import com.here.ort.utils.OkHttpClientHelper
+import com.here.ort.utils.OkHttpClientHelper.applyProxySettingsFromEnv
 import com.here.ort.utils.textValueOrEmpty
 
 import okhttp3.Request
@@ -306,7 +307,7 @@ class DotNetSupport(packageReferencesMap: Map<String, String>) {
             .url(this)
             .build()
 
-        OkHttpClientHelper.execute(HTTP_CACHE_PATH, pkgRequest).use { response ->
+        OkHttpClientHelper.execute(HTTP_CACHE_PATH, pkgRequest, applyProxySettingsFromEnv).use { response ->
             val body = response.body?.string()?.trim()
 
             if (response.code != HttpURLConnection.HTTP_OK || body.isNullOrEmpty()) {
