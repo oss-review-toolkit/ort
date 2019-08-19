@@ -68,7 +68,7 @@ internal class GenerateRuleViolationResolutionsCommand : CommandWithHelp() {
 
     override fun runCommand(jc: JCommander): Int {
         val repositoryConfiguration = repositoryConfigurationFile.readValue<RepositoryConfiguration>()
-        var ortResult = ortResultFile.readValue<OrtResult>().replaceConfig(repositoryConfiguration)
+        val ortResult = ortResultFile.readValue<OrtResult>().replaceConfig(repositoryConfiguration)
 
         val generatedResolutions = ortResult
             .getUnresolvedRuleViolations()
