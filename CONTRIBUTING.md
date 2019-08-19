@@ -46,4 +46,8 @@ In order to maintain a high software quality standard, we strongly prefer contri
 - To resolve conflicts, rebase pull request branches onto their target branch instead of merging the target branch into
   the pull request branch. This again results in a cleaner history without "criss-cross" merges.
 
+## Coding Conventions
+
+- Use `println()` only in CLI modules and `log` in library modules.
+
 Thank you for reading and happy contributing!
