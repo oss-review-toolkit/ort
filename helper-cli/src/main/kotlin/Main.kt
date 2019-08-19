@@ -24,14 +24,7 @@ import kotlin.system.exitProcess
 import com.beust.jcommander.JCommander
 
 import com.here.ort.CommandWithHelp
-import com.here.ort.helper.commands.ExportPathExcludesCommand
-import com.here.ort.helper.commands.FormatRepositoryConfigurationCommand
-import com.here.ort.helper.commands.GenerateProjectExcludesCommand
-import com.here.ort.helper.commands.GenerateRuleViolationResolutionsCommand
-import com.here.ort.helper.commands.GenerateScopeExcludesCommand
-import com.here.ort.helper.commands.GenerateTimeoutErrorResolutionsCommand
-import com.here.ort.helper.commands.ImportPathExcludesCommand
-import com.here.ort.helper.commands.SortRepositoryConfigurationCommand
+import com.here.ort.helper.commands.*
 
 private const val TOOL_NAME = "orth"
 
