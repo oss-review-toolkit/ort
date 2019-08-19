@@ -68,7 +68,7 @@ internal class GenerateProjectExcludesCommand : CommandWithHelp() {
         val generatedPathExcludes = ortResult
             .getProjects()
             .filterNot { ortResult.isExcluded(it.id) }
-            .mapNotNull { project ->
+            .map { project ->
                 PathExclude(
                     pattern = ortResult.getDefinitionFilePathRelativeToAnalyzerRoot(project),
                     reason = PathExcludeReason.OPTIONAL_COMPONENT_OF,
