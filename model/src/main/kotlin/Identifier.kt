@@ -106,7 +106,7 @@ data class Identifier(
      * Create Maven-like coordinates based on the properties of the [Identifier].
      */
     // TODO: We probably want to already sanitize the individual properties, also in other classes, but Kotlin does not
-    // seem to offer a generic / elegant way to do so.
+    //       seem to offer a generic / elegant way to do so.
     @JsonValue
     fun toCoordinates() = components.joinToString(":") { it.trim().filterNot { it < ' ' } }
 
@@ -121,7 +121,7 @@ data class Identifier(
      * [Identifier].
      */
     // TODO: This is a preliminary implementation as some open questions remain, see e.g.
-    // https://github.com/package-url/purl-spec/issues/33.
+    //       https://github.com/package-url/purl-spec/issues/33.
     fun toPurl() = "".takeIf { this == EMPTY }
         ?: "pkg://$type/${namespace.percentEncode()}/${name.percentEncode()}@${version.percentEncode()}"
 }

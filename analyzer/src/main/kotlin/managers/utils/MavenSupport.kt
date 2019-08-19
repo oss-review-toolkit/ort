@@ -236,9 +236,9 @@ class MavenSupport(workspaceReader: WorkspaceReader) {
 
         val settingsBuilder = container.lookup(org.apache.maven.settings.MavenSettingsBuilder::class.java, "default")
         // TODO: Add a way to configure the location of a user settings file and pass it to the method below which will
-        // merge the user settings with the global settings. The default location of the global settings file is
-        // "${user.home}/.m2/settings.xml". The settings file locations can already be overwritten using the system
-        // properties "org.apache.maven.global-settings" and "org.apache.maven.user-settings".
+        //       merge the user settings with the global settings. The default location of the global settings file is
+        //       "${user.home}/.m2/settings.xml". The settings file locations can already be overwritten using the
+        //       system properties "org.apache.maven.global-settings" and "org.apache.maven.user-settings".
         val settings = settingsBuilder.buildSettings()
 
         populator.populateFromSettings(request, settings)
@@ -521,7 +521,7 @@ class MavenSupport(workspaceReader: WorkspaceReader) {
         val vcsFromPackage = parseVcsInfo(mavenProject)
         val localDirectory = localProject?.file?.parentFile?.let {
             // TODO: Once SBT is implemented independently of Maven we can completely remove the "localProjects"
-            // parameter to this function as no other caller is actually using it.
+            //       parameter to this function as no other caller is actually using it.
             if (sbtMode) {
                 it.searchUpwardsForSubdirectory("target") ?: it
             } else {

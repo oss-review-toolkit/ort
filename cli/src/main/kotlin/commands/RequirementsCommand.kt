@@ -118,7 +118,7 @@ object RequirementsCommand : CommandWithHelp() {
                 }
 
                 // TODO: State which version was found, and whether it could be bootstrapped, but that requires
-                // refactoring of CommandLineTool.
+                //       refactoring of CommandLineTool.
                 val (prefix, suffix) = if (tool.isInPath()) {
                     Pair("\t* ", " (Some version was found in the PATH environment.)")
                 } else {

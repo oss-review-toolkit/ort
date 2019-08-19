@@ -321,7 +321,7 @@ class Stack(
     }
 
     // TODO: Consider replacing this with a Haskell helper script that calls "readGenericPackageDescription" and dumps
-    // it as JSON to the console.
+    //       it as JSON to the console.
     private fun parseCabalFile(cabal: String): Package {
         // For an example file see
         // https://hackage.haskell.org/package/transformers-compat-0.5.1.4/src/transformers-compat.cabal

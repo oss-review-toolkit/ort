@@ -205,7 +205,7 @@ class Pip(
         }
 
         // TODO: Maybe work around long shebang paths in generated scripts within a virtualenv by calling the Python
-        // executable in the virtualenv directly, see https://github.com/pypa/virtualenv/issues/997.
+        //       executable in the virtualenv directly, see https://github.com/pypa/virtualenv/issues/997.
         val process = ProcessCapture(workingDir, command.path, *commandArgs)
         log.debug { process.stdout }
         return process
@@ -560,9 +560,9 @@ class Pip(
         pip = runPipInVirtualEnv(virtualEnvDir, workingDir, "install", "pipdeptree==$PIPDEPTREE_VERSION")
         pip.requireSuccess()
 
-        // TODO: Find a way to make installation of packages with native extensions work on Windows where often
-        // the appropriate compiler is missing / not set up, e.g. by using pre-built packages from
-        // http://www.lfd.uci.edu/~gohlke/pythonlibs/
+        // TODO: Find a way to make installation of packages with native extensions work on Windows where often the
+        //       appropriate compiler is missing / not set up, e.g. by using pre-built packages from
+        //       http://www.lfd.uci.edu/~gohlke/pythonlibs/
         pip = if (definitionFile.name == "setup.py") {
             // Note that this only installs required "install" dependencies, not "extras" or "tests" dependencies.
             runPipInVirtualEnv(virtualEnvDir, workingDir, "install", *INSTALL_OPTIONS, ".")
@@ -574,8 +574,8 @@ class Pip(
             )
         }
 
-        // TODO: Consider logging a warning instead of an error if the command is run on a file that likely belongs
-        // to a test.
+        // TODO: Consider logging a warning instead of an error if the command is run on a file that likely belongs to
+        //       a test.
         with(pip) {
             if (isError) {
                 log.error { errorMessage }
