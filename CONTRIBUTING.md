@@ -42,10 +42,4 @@ In order to maintain a high software quality standard, we strongly prefer contri
 - To resolve conflicts, rebase pull request branches onto their target branch instead of merging the target branch into
   the pull request branch. This again results in a cleaner history without "criss-cross" merges.
 
-As GitHub is not particularly good at reviewing pull requests commit by commit, it does not support adding review
-comments to commit messages at all, and it cannot show the diff between two iterations of force-pushed pull request
-branches, we encourage you to give [Reviewable](https://reviewable.io/) a try which addresses these GitHub limitations.
-Reviewable is integrated with pull requests to the OSS Review Toolkit and you can find a button to initiate reviews at
-the bottom of the first post in a pull request's conversation.
-
 Thank you for reading and happy contributing!
