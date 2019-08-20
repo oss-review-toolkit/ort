@@ -50,6 +50,7 @@ object Main : CommandWithHelp() {
             programName = TOOL_NAME
 
             addCommand(ExportPathExcludesCommand())
+            addCommand(ExtractRepositoryConfigurationCommand())
             addCommand(FormatRepositoryConfigurationCommand())
             addCommand(GenerateProjectExcludesCommand())
             addCommand(GenerateScopeExcludesCommand())
