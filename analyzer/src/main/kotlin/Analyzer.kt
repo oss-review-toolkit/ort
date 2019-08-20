@@ -19,8 +19,6 @@
 
 package com.here.ort.analyzer
 
-import ch.frankel.slf4k.*
-
 import com.here.ort.analyzer.managers.Unmanaged
 import com.here.ort.downloader.VersionControlSystem
 import com.here.ort.downloader.vcs.GitRepo
@@ -92,7 +90,7 @@ class Analyzer(private val config: AnalyzerConfiguration) {
             Pair(manager, mappedFiles).takeIf { mappedFiles.isNotEmpty() }
         }.toMap()
 
-        if (log.isInfoEnabled) {
+        if (log.delegate.isInfoEnabled) {
             // Log the summary of projects found per package manager.
             managedFiles.forEach { (manager, files) ->
                 // No need to use curly-braces-syntax for logging here as the log level check is already done above.

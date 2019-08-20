@@ -19,8 +19,6 @@
 
 package com.here.ort.model
 
-import ch.frankel.slf4k.*
-
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.annotation.JsonInclude
 

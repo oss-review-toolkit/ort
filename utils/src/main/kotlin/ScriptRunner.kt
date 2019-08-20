@@ -19,8 +19,6 @@
 
 package com.here.ort.utils
 
-import ch.frankel.slf4k.*
-
 import javax.script.Compilable
 import javax.script.ScriptEngine
 import javax.script.ScriptEngineManager

@@ -19,8 +19,6 @@
 
 package com.here.ort.analyzer.managers
 
-import ch.frankel.slf4k.*
-
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.node.ArrayNode
 

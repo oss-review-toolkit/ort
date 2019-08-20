@@ -19,8 +19,6 @@
 
 package com.here.ort.analyzer.managers
 
-import ch.frankel.slf4k.*
-
 import com.fasterxml.jackson.module.kotlin.readValue
 
 import com.here.ort.analyzer.AbstractPackageManagerFactory

@@ -168,7 +168,7 @@ subprojects {
         }
 
         externalDocumentationLink {
-            url = URL("https://logback.qos.ch/apidocs/")
+            url = URL("https://logging.apache.org/log4j/2.x/log4j-api/apidocs/")
         }
     }
 

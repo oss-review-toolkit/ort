@@ -19,8 +19,6 @@
 
 package com.here.ort.downloader.vcs
 
-import ch.frankel.slf4k.*
-
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.fasterxml.jackson.annotation.JsonRootName
 import com.fasterxml.jackson.databind.DeserializationFeature

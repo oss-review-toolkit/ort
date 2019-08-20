@@ -19,8 +19,6 @@
 
 package com.here.ort.commands
 
-import ch.frankel.slf4k.*
-
 import com.beust.jcommander.IStringConverter
 import com.beust.jcommander.JCommander
 import com.beust.jcommander.Parameter
@@ -157,10 +155,10 @@ object ScannerCommand : CommandWithHelp() {
 
         val localFileStorageLogFunction: ((String) -> Unit)? = when {
             // If the local file storage is in use, log about it already at info level.
-            log.isInfoEnabled && ScanResultsStorage.storage == localFileStorage -> log::info
+            log.delegate.isInfoEnabled && ScanResultsStorage.storage == localFileStorage -> log::info
 
             // Otherwise log about the local file storage only at debug level.
-            log.isDebugEnabled -> log::debug
+            log.delegate.isDebugEnabled -> log::debug
 
             else -> null
         }

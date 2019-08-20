@@ -19,8 +19,6 @@
 
 package com.here.ort.reporter.reporters
 
-import ch.frankel.slf4k.*
-
 import com.here.ort.model.LicenseFindingsMap
 import com.here.ort.model.OrtResult
 import com.here.ort.model.config.CopyrightGarbage

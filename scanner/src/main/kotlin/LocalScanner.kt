@@ -19,8 +19,6 @@
 
 package com.here.ort.scanner
 
-import ch.frankel.slf4k.*
-
 import com.fasterxml.jackson.databind.JsonNode
 
 import com.here.ort.downloader.DownloadException

@@ -20,8 +20,6 @@
 
 package com.here.ort.scanner.storages
 
-import ch.frankel.slf4k.*
-
 import com.here.ort.model.Identifier
 import com.here.ort.model.ScanResult
 import com.here.ort.model.ScanResultContainer

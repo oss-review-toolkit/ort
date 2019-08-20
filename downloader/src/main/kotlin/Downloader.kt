@@ -19,8 +19,6 @@
 
 package com.here.ort.downloader
 
-import ch.frankel.slf4k.*
-
 import com.here.ort.downloader.vcs.GitRepo
 import com.here.ort.model.Identifier
 import com.here.ort.model.Package

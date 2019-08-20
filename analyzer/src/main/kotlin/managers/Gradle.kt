@@ -22,8 +22,6 @@ package com.here.ort.analyzer.managers
 import Dependency
 import DependencyTreeModel
 
-import ch.frankel.slf4k.*
-
 import com.here.ort.analyzer.AbstractPackageManagerFactory
 import com.here.ort.analyzer.PackageManager
 import com.here.ort.analyzer.managers.utils.MavenSupport

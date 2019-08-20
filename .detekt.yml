@@ -50,7 +50,6 @@ style:
   WildcardImport:
     excludes: ''
     excludeImports: '
-      ch.frankel.slf4k.*,
       com.here.ort.analyzer.managers.*,
       com.here.ort.commands.*,
       com.here.ort.downloader.vcs.*,

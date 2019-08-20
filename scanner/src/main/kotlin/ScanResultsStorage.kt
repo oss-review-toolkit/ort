@@ -20,8 +20,6 @@
 
 package com.here.ort.scanner
 
-import ch.frankel.slf4k.*
-
 import com.here.ort.model.AccessStatistics
 import com.here.ort.model.Identifier
 import com.here.ort.model.Package

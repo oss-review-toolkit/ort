@@ -19,8 +19,6 @@
 
 package com.here.ort.analyzer.managers.utils
 
-import ch.frankel.slf4k.*
-
 import com.fasterxml.jackson.core.JsonProcessingException
 import com.fasterxml.jackson.databind.node.ArrayNode
 import com.fasterxml.jackson.databind.node.ObjectNode

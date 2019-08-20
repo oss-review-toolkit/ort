@@ -19,8 +19,6 @@
 
 package com.here.ort.scanner.scanners
 
-import ch.frankel.slf4k.*
-
 import com.fasterxml.jackson.databind.JsonNode
 
 import com.here.ort.model.EMPTY_JSON_NODE

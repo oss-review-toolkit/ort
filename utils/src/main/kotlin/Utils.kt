@@ -24,8 +24,7 @@ import java.net.URI
 import java.net.URISyntaxException
 import java.security.Permission
 
-@Suppress("UnsafeCast")
-val log = org.slf4j.LoggerFactory.getLogger({}.javaClass) as ch.qos.logback.classic.Logger
+val log = org.apache.logging.log4j.kotlin.logger("ORT")
 
 /**
  * Global variable that gets toggled by a command line parameter parsed in the main entry points of the modules.

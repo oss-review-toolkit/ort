@@ -19,8 +19,6 @@
 
 package com.here.ort.analyzer.managers.utils
 
-import ch.frankel.slf4k.*
-
 import com.fasterxml.jackson.module.kotlin.readValue
 
 import com.here.ort.analyzer.PackageManager
@@ -113,7 +111,7 @@ class MavenSupport(workspaceReader: WorkspaceReader) {
 
             return DefaultPlexusContainer(configuration).apply {
                 loggerManager = object : BaseLoggerManager() {
-                    override fun createLogger(name: String) = MavenLogger(log.effectiveLevel)
+                    override fun createLogger(name: String) = MavenLogger(log.delegate.level)
                 }
             }
         }
@@ -333,7 +331,7 @@ class MavenSupport(workspaceReader: WorkspaceReader) {
             it.url.startsWith("file:/")
         }
 
-        if (log.isDebugEnabled) {
+        if (log.delegate.isDebugEnabled) {
             val localRepositories = allRepositories - remoteRepositories
             if (localRepositories.isNotEmpty()) {
                 // No need to use curly-braces-syntax for logging here as the log level check is already done above.
