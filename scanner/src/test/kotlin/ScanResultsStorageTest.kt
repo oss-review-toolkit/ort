@@ -20,13 +20,11 @@
 
 package com.here.ort.scanner
 
-import com.here.ort.model.CopyrightFinding
 import com.here.ort.model.LicenseFinding
 import com.here.ort.model.Provenance
 import com.here.ort.model.ScanResult
 import com.here.ort.model.ScanSummary
 import com.here.ort.model.ScannerDetails
-import com.here.ort.model.TextLocation
 import com.here.ort.model.config.ArtifactoryStorageConfiguration
 import com.here.ort.scanner.storages.ArtifactoryStorage
 
@@ -99,7 +97,7 @@ class ScanResultsStorageTest : WordSpec() {
         "patchScanCodeLicenseRefs" should {
             "correctly patch existing ScanCode LicenseRef findings" {
                 fun generateDummyLicenseFinding(license: String) =
-                    LicenseFinding(license, sortedSetOf<TextLocation>(), sortedSetOf<CopyrightFinding>())
+                    LicenseFinding(license, sortedSetOf(), sortedSetOf())
 
                 val originalScanResult = ScanResult(
                     Provenance(),
