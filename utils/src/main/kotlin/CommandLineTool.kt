@@ -19,8 +19,6 @@
 
 package com.here.ort.utils
 
-import ch.frankel.slf4k.*
-
 import com.vdurmont.semver4j.Requirement
 
 import java.io.File

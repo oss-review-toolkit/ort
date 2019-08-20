@@ -19,9 +19,6 @@
 
 package com.here.ort.scanner.scanners
 
-import ch.frankel.slf4k.*
-import ch.qos.logback.classic.Level
-
 import com.fasterxml.jackson.databind.JsonNode
 
 import com.here.ort.model.CopyrightFinding
@@ -227,7 +224,7 @@ class ScanCode(name: String, config: ScannerConfiguration) : LocalScanner(name, 
             addAll(configurationOptions)
             addAll(nonConfigurationOptions)
 
-            if (log.isEnabledFor(Level.DEBUG)) {
+            if (log.delegate.isDebugEnabled) {
                 addAll(debugConfigurationOptions)
                 addAll(debugNonConfigurationOptions)
             }
@@ -297,7 +294,7 @@ class ScanCode(name: String, config: ScannerConfiguration) : LocalScanner(name, 
     override fun getConfiguration() =
         configurationOptions.toMutableList().run {
             add(OUTPUT_FORMAT_OPTION)
-            if (log.isEnabledFor(Level.DEBUG)) {
+            if (log.delegate.isDebugEnabled) {
                 addAll(debugConfigurationOptions)
             }
             joinToString(" ")

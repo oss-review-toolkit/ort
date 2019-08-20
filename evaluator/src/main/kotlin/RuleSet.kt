@@ -19,8 +19,6 @@
 
 package com.here.ort.evaluator
 
-import ch.frankel.slf4k.*
-
 import com.here.ort.model.Identifier
 import com.here.ort.model.LicenseFinding
 import com.here.ort.model.OrtResult

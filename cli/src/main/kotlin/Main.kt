@@ -26,10 +26,12 @@ import com.here.ort.commands.*
 import com.here.ort.model.Environment
 import com.here.ort.utils.PARAMETER_ORDER_LOGGING
 import com.here.ort.utils.PARAMETER_ORDER_OPTIONAL
-import com.here.ort.utils.log
 import com.here.ort.utils.printStackTrace
 
 import kotlin.system.exitProcess
+
+import org.apache.logging.log4j.Level
+import org.apache.logging.log4j.core.config.Configurator
 
 const val TOOL_NAME = "ort"
 
@@ -98,8 +100,8 @@ object Main : CommandWithHelp() {
 
     override fun runCommand(jc: JCommander): Int {
         when {
-            debug -> log.level = ch.qos.logback.classic.Level.DEBUG
-            info -> log.level = ch.qos.logback.classic.Level.INFO
+            debug -> Configurator.setRootLevel(Level.DEBUG)
+            info -> Configurator.setRootLevel(Level.INFO)
         }
 
         // Make the parameter globally available.

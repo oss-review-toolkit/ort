@@ -19,8 +19,6 @@
 
 package com.here.ort.analyzer.managers
 
-import ch.frankel.slf4k.*
-
 import com.here.ort.analyzer.AbstractPackageManagerFactory
 import com.here.ort.analyzer.PackageManager
 import com.here.ort.downloader.VersionControlSystem

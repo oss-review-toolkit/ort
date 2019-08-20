@@ -19,8 +19,6 @@
 
 package com.here.ort.scanner
 
-import ch.frankel.slf4k.*
-
 import com.here.ort.downloader.Downloader
 import com.here.ort.model.Environment
 import com.here.ort.model.OrtResult

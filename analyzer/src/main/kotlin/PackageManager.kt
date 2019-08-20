@@ -19,8 +19,6 @@
 
 package com.here.ort.analyzer
 
-import ch.frankel.slf4k.*
-
 import com.here.ort.downloader.VersionControlSystem
 import com.here.ort.model.Identifier
 import com.here.ort.model.OrtIssue

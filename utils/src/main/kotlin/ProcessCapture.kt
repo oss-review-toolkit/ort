@@ -19,8 +19,6 @@
 
 package com.here.ort.utils
 
-import ch.frankel.slf4k.*
-
 import java.io.File
 import java.io.IOException
 
@@ -128,7 +126,7 @@ class ProcessCapture(vararg command: String, workingDir: File? = null, environme
 
         process.waitFor()
 
-        if (log.isDebugEnabled) {
+        if (log.delegate.isDebugEnabled) {
             // No need to use curly-braces-syntax for logging below as the log level check is already done above.
 
             if (stdoutFile.length() > 0L) {

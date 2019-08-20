@@ -19,8 +19,6 @@
 
 package com.here.ort.commands
 
-import ch.frankel.slf4k.*
-
 import com.beust.jcommander.JCommander
 import com.beust.jcommander.Parameter
 import com.beust.jcommander.Parameters
@@ -143,7 +141,7 @@ object EvaluatorCommand : CommandWithHelp() {
 
         val evaluatorRun by lazy { evaluator.run(script) }
 
-        if (log.isErrorEnabled) {
+        if (log.delegate.isErrorEnabled) {
             evaluatorRun.violations.forEach { violation ->
                 log.error(violation.toString())
             }

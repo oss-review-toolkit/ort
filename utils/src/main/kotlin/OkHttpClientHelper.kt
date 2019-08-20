@@ -19,8 +19,6 @@
 
 package com.here.ort.utils
 
-import ch.frankel.slf4k.*
-
 import java.io.File
 import java.net.InetSocketAddress
 import java.net.MalformedURLException
