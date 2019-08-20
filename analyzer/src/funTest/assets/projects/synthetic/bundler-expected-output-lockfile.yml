@@ -19,9 +19,9 @@ project:
   scopes:
   - name: "default"
     dependencies:
-    - id: "Bundler::nokogiri:1.8.5"
+    - id: "Bundler::nokogiri:1.10.4"
       dependencies:
-      - id: "Bundler::mini_portile2:2.3.0"
+      - id: "Bundler::mini_portile2:2.4.0"
     - id: "Bundler::rack:1.6.11"
   - name: "test"
     dependencies:
@@ -78,8 +78,8 @@ packages:
       path: ""
   curations: []
 - package:
-    id: "Bundler::mini_portile2:2.3.0"
-    purl: "pkg://Bundler//mini_portile2@2.3.0"
+    id: "Bundler::mini_portile2:2.4.0"
+    purl: "pkg://Bundler//mini_portile2@2.4.0"
     declared_licenses:
     - "MIT"
     declared_licenses_processed:
@@ -94,9 +94,9 @@ packages:
         value: ""
         algorithm: ""
     source_artifact:
-      url: "https://rubygems.org/gems/mini_portile2-2.3.0.gem"
+      url: "https://rubygems.org/gems/mini_portile2-2.4.0.gem"
       hash:
-        value: "216417b241ff4e7b1c726f257241eaf223e3abbe6ec2c6453352dea6a414a38d"
+        value: "7e178a397ad62bb8a96977986130dc81f1b13201c6dd95a48bd8cec1dda5f797"
         algorithm: "SHA-256"
     vcs:
       type: "Git"
@@ -112,8 +112,8 @@ packages:
       path: ""
   curations: []
 - package:
-    id: "Bundler::nokogiri:1.8.5"
-    purl: "pkg://Bundler//nokogiri@1.8.5"
+    id: "Bundler::nokogiri:1.10.4"
+    purl: "pkg://Bundler//nokogiri@1.10.4"
     declared_licenses:
     - "MIT"
     declared_licenses_processed:
@@ -127,9 +127,9 @@ packages:
         value: ""
         algorithm: ""
     source_artifact:
-      url: "https://rubygems.org/gems/nokogiri-1.8.5.gem"
+      url: "https://rubygems.org/gems/nokogiri-1.10.4.gem"
       hash:
-        value: "1f93a829257b621d40c4cbfce3acdcd688b0b3d70497ceae4fa2baf955eede2f"
+        value: "fbf91c487d7ceb2b0593384f175843f99152322754f6ff267740bff031cead5a"
         algorithm: "SHA-256"
     vcs:
       type: "Git"
