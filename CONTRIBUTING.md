@@ -49,5 +49,6 @@ In order to maintain a high software quality standard, we strongly prefer contri
 ## Coding Conventions
 
 - Use `println()` only in CLI modules and `log` in library modules.
+- Use `2017-${current-year}` as the date range for copyright statements.  
 
 Thank you for reading and happy contributing!
