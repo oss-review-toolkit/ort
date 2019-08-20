@@ -164,7 +164,7 @@ subprojects {
         }
 
         externalDocumentationLink {
-            url = URL("http://jakewharton.github.io/DiskLruCache/")
+            url = URL("https://jakewharton.github.io/DiskLruCache/")
         }
 
         externalDocumentationLink {
