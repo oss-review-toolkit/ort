@@ -32,6 +32,7 @@ import com.here.ort.model.config.PostgresStorageConfiguration
 import com.here.ort.scanner.storages.*
 import com.here.ort.utils.log
 
+import java.lang.IllegalArgumentException
 import java.sql.DriverManager
 import java.util.Properties
 
@@ -47,6 +48,18 @@ abstract class ScanResultsStorage {
          * The scan result storage in use. Needs to be set via the corresponding configure function.
          */
         var storage: ScanResultsStorage = NoStorage()
+
+        /**
+         * Given a [config] for a known storage backend, configure it as the current one.
+         */
+        fun configure(config: Any) {
+            when (config) {
+                is LocalFileStorageConfiguration -> configure(config)
+                is ArtifactoryStorageConfiguration -> configure(config)
+                is PostgresStorageConfiguration -> configure(config)
+                else -> throw IllegalArgumentException("Unsupported configuration type '$config'.")
+            }
+        }
 
         /**
          * Configure a [LocalFileStorage] as the current storage backend.
