@@ -43,6 +43,7 @@ import com.here.ort.model.config.Resolutions
 import com.here.ort.model.config.RuleViolationResolution
 import com.here.ort.model.config.ScopeExclude
 import com.here.ort.model.yamlMapper
+import com.here.ort.utils.safeMkdirs
 
 import java.io.File
 
@@ -302,8 +303,11 @@ internal fun RepositoryConfiguration.sortScopeExcludes(): RepositoryConfiguratio
 /**
  * Serialize a [RepositoryConfiguration] as YAML to the given target [File].
  */
-internal fun RepositoryConfiguration.writeAsYaml(targetFile: File) =
+internal fun RepositoryConfiguration.writeAsYaml(targetFile: File) {
+    targetFile.parentFile.safeMkdirs()
+
     yamlMapper.writeValue(targetFile, this)
+}
 
 /**
  * Merge the given [RepositoryPathExcludes]s replacing entries with equal [PathExclude.pattern].
