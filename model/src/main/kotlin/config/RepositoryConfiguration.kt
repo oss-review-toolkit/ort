@@ -38,5 +38,11 @@ data class RepositoryConfiguration(
      * Defines resolutions for issues with this repository.
      */
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    val resolutions: Resolutions? = null
+    val resolutions: Resolutions? = null,
+
+    /**
+     * Defines curations for artifacts contained in this repository.
+     */
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    val curations: Curations? = null
 )
