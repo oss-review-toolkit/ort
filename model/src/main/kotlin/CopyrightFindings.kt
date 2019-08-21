@@ -32,30 +32,30 @@ import com.here.ort.utils.constructTreeSetType
 import java.util.SortedSet
 import java.util.TreeSet
 
-@JsonDeserialize(using = CopyrightFindingDeserializer::class)
-data class CopyrightFinding(
+@JsonDeserialize(using = CopyrightFindingsDeserializer::class)
+data class CopyrightFindings(
     val statement: String,
     val locations: SortedSet<TextLocation>
-) : Comparable<CopyrightFinding> {
+) : Comparable<CopyrightFindings> {
     companion object {
-        val SORTED_SET_COMPARATOR = SortedSetComparator<CopyrightFinding>()
-        val TREE_SET_TYPE by lazy { jsonMapper.typeFactory.constructTreeSetType(CopyrightFinding::class.java) }
+        val SORTED_SET_COMPARATOR = SortedSetComparator<CopyrightFindings>()
+        val TREE_SET_TYPE by lazy { jsonMapper.typeFactory.constructTreeSetType(CopyrightFindings::class.java) }
     }
 
-    override fun compareTo(other: CopyrightFinding) =
+    override fun compareTo(other: CopyrightFindings) =
         compareValuesBy(
             this,
             other,
-            compareBy(CopyrightFinding::statement)
-                .thenBy(TextLocation.SORTED_SET_COMPARATOR, CopyrightFinding::locations)
+            compareBy(CopyrightFindings::statement)
+                .thenBy(TextLocation.SORTED_SET_COMPARATOR, CopyrightFindings::locations)
         ) { it }
 }
 
-class CopyrightFindingDeserializer : StdDeserializer<CopyrightFinding>(CopyrightFinding::class.java) {
-    override fun deserialize(p: JsonParser, ctxt: DeserializationContext): CopyrightFinding {
+class CopyrightFindingsDeserializer : StdDeserializer<CopyrightFindings>(CopyrightFindings::class.java) {
+    override fun deserialize(p: JsonParser, ctxt: DeserializationContext): CopyrightFindings {
         val node = p.codec.readTree<JsonNode>(p)
         return when {
-            node.isTextual -> CopyrightFinding(node.textValue(), sortedSetOf())
+            node.isTextual -> CopyrightFindings(node.textValue(), sortedSetOf())
             else -> {
                 val statement = jsonMapper.treeToValue<String>(node["statement"])
 
@@ -64,7 +64,7 @@ class CopyrightFindingDeserializer : StdDeserializer<CopyrightFinding>(Copyright
                     TextLocation.TREE_SET_TYPE
                 )
 
-                CopyrightFinding(statement, locations)
+                CopyrightFindings(statement, locations)
             }
         }
     }
