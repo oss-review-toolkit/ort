@@ -81,7 +81,7 @@ data class ScanResult(
                     val copyrightLocations = copyright.locations.filterPath()
 
                     if (copyrightLocations.isNotEmpty()) {
-                        CopyrightFinding(copyright.statement, copyrightLocations)
+                        CopyrightFindings(copyright.statement, copyrightLocations)
                     } else {
                         null
                     }

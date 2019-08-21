@@ -21,7 +21,7 @@ package com.here.ort.scanner.scanners
 
 import com.fasterxml.jackson.databind.JsonNode
 
-import com.here.ort.model.CopyrightFinding
+import com.here.ort.model.CopyrightFindings
 import com.here.ort.model.EMPTY_JSON_NODE
 import com.here.ort.model.LicenseFindings
 import com.here.ort.model.OrtIssue
@@ -418,7 +418,7 @@ class ScanCode(name: String, config: ScannerConfiguration) : LocalScanner(name, 
         copyrights: Collection<JsonNode>,
         licenseStartLine: Int,
         toleranceLines: Int = 5
-    ): SortedSet<CopyrightFinding> {
+    ): SortedSet<CopyrightFindings> {
         val closestCopyrights = copyrights.filter {
             (it["start_line"].intValue() - licenseStartLine).absoluteValue <= toleranceLines
         }
@@ -428,7 +428,7 @@ class ScanCode(name: String, config: ScannerConfiguration) : LocalScanner(name, 
             val startLine = it["start_line"].intValue()
             val endLine = it["end_line"].intValue()
             (it["statements"] ?: listOf(it["value"])).map { statements ->
-                CopyrightFinding(statements.textValue(), sortedSetOf(TextLocation(path, startLine, endLine)))
+                CopyrightFindings(statements.textValue(), sortedSetOf(TextLocation(path, startLine, endLine)))
             }
         }.toSortedSet()
     }
@@ -441,8 +441,8 @@ class ScanCode(name: String, config: ScannerConfiguration) : LocalScanner(name, 
         licenses: Collection<JsonNode>,
         copyrights: Collection<JsonNode>,
         rootLicense: String = ""
-    ): SortedMap<String, MutableSet<CopyrightFinding>> {
-        val copyrightsForLicenses = sortedMapOf<String, MutableSet<CopyrightFinding>>()
+    ): SortedMap<String, MutableSet<CopyrightFindings>> {
+        val copyrightsForLicenses = sortedMapOf<String, MutableSet<CopyrightFindings>>()
 
         val allCopyrightStatements = copyrights.flatMap {
             val startLine = it["start_line"].intValue()
@@ -450,7 +450,7 @@ class ScanCode(name: String, config: ScannerConfiguration) : LocalScanner(name, 
 
             // While ScanCode 2.9.2 was still using "statements", version 2.9.7 is using "value".
             (it["statements"] ?: listOf(it["value"])).map { statements ->
-                CopyrightFinding(statements.textValue(), sortedSetOf(TextLocation(path, startLine, endLine)))
+                CopyrightFindings(statements.textValue(), sortedSetOf(TextLocation(path, startLine, endLine)))
             }
         }.toSortedSet()
 
@@ -488,7 +488,7 @@ class ScanCode(name: String, config: ScannerConfiguration) : LocalScanner(name, 
      */
     internal fun associateFindings(result: JsonNode): SortedSet<LicenseFindings> {
         val locationsForLicenses = sortedMapOf<String, SortedSet<TextLocation>>()
-        val copyrightsForLicenses = sortedMapOf<String, SortedSet<CopyrightFinding>>()
+        val copyrightsForLicenses = sortedMapOf<String, SortedSet<CopyrightFindings>>()
         val rootLicense = getRootLicense(result)
 
         result["files"].forEach { file ->

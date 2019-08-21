@@ -60,7 +60,7 @@ fun LicenseFindingsMap.removeGarbage(copyrightGarbage: CopyrightGarbage) =
 data class LicenseFindings(
     val license: String,
     val locations: SortedSet<TextLocation>,
-    val copyrights: SortedSet<CopyrightFinding>
+    val copyrights: SortedSet<CopyrightFindings>
 ) : Comparable<LicenseFindings> {
     override fun compareTo(other: LicenseFindings) =
         compareValuesBy(
@@ -68,7 +68,7 @@ data class LicenseFindings(
             other,
             compareBy(LicenseFindings::license)
                 .thenBy(TextLocation.SORTED_SET_COMPARATOR, LicenseFindings::locations)
-                .thenBy(CopyrightFinding.SORTED_SET_COMPARATOR, LicenseFindings::copyrights)
+                .thenBy(CopyrightFindings.SORTED_SET_COMPARATOR, LicenseFindings::copyrights)
         ) { it }
 }
 
@@ -83,9 +83,9 @@ class LicenseFindingsDeserializer : StdDeserializer<LicenseFindings>(LicenseFind
             else -> {
                 val license = jsonMapper.treeToValue<String>(node["license"])
 
-                val copyrights = jsonMapper.readValue<TreeSet<CopyrightFinding>>(
+                val copyrights = jsonMapper.readValue<TreeSet<CopyrightFindings>>(
                     jsonMapper.treeAsTokens(node["copyrights"]),
-                    CopyrightFinding.TREE_SET_TYPE
+                    CopyrightFindings.TREE_SET_TYPE
                 )
 
                 val locations = deserializeLocations(node)
