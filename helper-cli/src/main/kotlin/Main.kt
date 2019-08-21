@@ -22,9 +22,15 @@ package com.here.ort.helper
 import kotlin.system.exitProcess
 
 import com.beust.jcommander.JCommander
+import com.beust.jcommander.Parameter
 
 import com.here.ort.CommandWithHelp
 import com.here.ort.helper.commands.*
+import com.here.ort.utils.PARAMETER_ORDER_LOGGING
+import com.here.ort.utils.printStackTrace
+
+import org.apache.logging.log4j.Level
+import org.apache.logging.log4j.core.config.Configurator
 
 private const val TOOL_NAME = "orth"
 
@@ -32,6 +38,27 @@ private const val TOOL_NAME = "orth"
  * The main entry point of the application.
  */
 object Main : CommandWithHelp() {
+    @Parameter(
+        description = "Enable info logging.",
+        names = ["--info"],
+        order = PARAMETER_ORDER_LOGGING
+    )
+    private var info = false
+
+    @Parameter(
+        description = "Enable debug logging and keep any temporary files.",
+        names = ["--debug"],
+        order = PARAMETER_ORDER_LOGGING
+    )
+    private var debug = false
+
+    @Parameter(
+        description = "Print out the stacktrace for all exceptions.",
+        names = ["--stacktrace"],
+        order = PARAMETER_ORDER_LOGGING
+    )
+    private var stacktrace = false
+
     /**
      * The entry point for the application.
      *
@@ -68,6 +95,14 @@ object Main : CommandWithHelp() {
     }
 
     override fun runCommand(jc: JCommander): Int {
+        when {
+            debug -> Configurator.setRootLevel(Level.DEBUG)
+            info -> Configurator.setRootLevel(Level.INFO)
+        }
+
+        // Make the parameter globally available.
+        printStackTrace = stacktrace
+
         // JCommander already validates the command names.
         val command = jc.commands[jc.parsedCommand]!!
         val commandObject = command.objects.first() as CommandWithHelp
