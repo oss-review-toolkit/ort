@@ -19,7 +19,7 @@
 
 package com.here.ort.scanner
 
-import com.here.ort.model.CopyrightFinding
+import com.here.ort.model.CopyrightFindings
 import com.here.ort.model.LicenseFindings
 import com.here.ort.model.TextLocation
 import com.here.ort.model.config.ScannerConfiguration
@@ -166,13 +166,13 @@ class ScanCodeTest : WordSpec({
             }!!.get("copyrights").toList()
 
             scanner.getClosestCopyrightStatements(path, copyrights, 5) shouldBe sortedSetOf(
-                CopyrightFinding(
+                CopyrightFindings(
                     "Copyright 2005, 2012 jQuery Foundation, Inc.",
                     sortedSetOf(TextLocation(path, 8, 10))
                 )
             )
             scanner.getClosestCopyrightStatements(path, copyrights, 3690) shouldBe sortedSetOf(
-                CopyrightFinding(
+                CopyrightFindings(
                     "Copyright 2012 jQuery Foundation",
                     sortedSetOf(TextLocation(path, 3688, 3691))
                 )
@@ -188,15 +188,15 @@ class ScanCodeTest : WordSpec({
             }!!.get("copyrights").toList()
 
             scanner.getClosestCopyrightStatements(path, copyrights, 28) shouldBe sortedSetOf(
-                CopyrightFinding(
+                CopyrightFindings(
                     "Copyright (c) 2005-2007 Sam Stephenson",
                     sortedSetOf(TextLocation(path, 27, 29))
                 ),
-                CopyrightFinding(
+                CopyrightFindings(
                     "Copyright (c) 2006 Dean Edwards, GNU Lesser General Public",
                     sortedSetOf(TextLocation(path, 27, 29))
                 ),
-                CopyrightFinding(
+                CopyrightFindings(
                     "Copyright (c) 2006-2012 Valerio Proietti",
                     sortedSetOf(TextLocation(path, 23, 23))
                 )
@@ -214,7 +214,7 @@ class ScanCodeTest : WordSpec({
                     "Apache-2.0",
                     sortedSetOf(TextLocation("LICENSE", 1, 201)),
                     sortedSetOf(
-                        CopyrightFinding(
+                        CopyrightFindings(
                             "Copyright (C) 2017-2019 HERE Europe B.V.",
                             sortedSetOf(TextLocation("README.md", 162, 162))
                         )
@@ -249,7 +249,7 @@ class ScanCodeTest : WordSpec({
                     TextLocation("test/utils/error-to-object.js", 4, 22)
                 ),
                 sortedSetOf(
-                    CopyrightFinding(
+                    CopyrightFindings(
                         "Copyright (c) jQuery Foundation, Inc. and Contributors",
                         sortedSetOf(
                             TextLocation("LICENSE.BSD", 1, 1),
@@ -283,11 +283,11 @@ class ScanCodeTest : WordSpec({
                     TextLocation("test/3rdparty/jquery.mobile-1.4.2.js", 1910, 1910)
                 ),
                 sortedSetOf(
-                    CopyrightFinding(
+                    CopyrightFindings(
                         "copyright (c) 2012 Scott Jehl, Paul Irish, Nicholas Zakas.",
                         sortedSetOf(TextLocation("test/3rdparty/jquery.mobile-1.4.2.js", 1910, 1911))
                     ),
-                    CopyrightFinding(
+                    CopyrightFindings(
                         "Copyright 2013 Yahoo! Inc.",
                         sortedSetOf(TextLocation("test/3rdparty/yui-3.12.0.js", 2, 3))
                     )
@@ -306,26 +306,26 @@ class ScanCodeTest : WordSpec({
                     TextLocation("test/3rdparty/jquery.mobile-1.4.2.js", 14001, 14001)
                 ),
                 sortedSetOf(
-                    CopyrightFinding(
+                    CopyrightFindings(
                         "Copyright (c) 2010 Cowboy Ben Alman",
                         sortedSetOf(
                             TextLocation("test/3rdparty/jquery.mobile-1.4.2.js", 1521, 1523),
                             TextLocation("test/3rdparty/jquery.mobile-1.4.2.js", 1537, 1539)
                         )
                     ),
-                    CopyrightFinding(
+                    CopyrightFindings(
                         "Copyright 2005, 2012 jQuery Foundation, Inc.",
                         sortedSetOf(
                             TextLocation("test/3rdparty/jquery-1.9.1.js", 8, 10)
                         )
                     ),
-                    CopyrightFinding(
+                    CopyrightFindings(
                         "Copyright 2010, 2014 jQuery Foundation, Inc.",
                         sortedSetOf(
                             TextLocation("test/3rdparty/jquery.mobile-1.4.2.js", 6, 8)
                         )
                     ),
-                    CopyrightFinding(
+                    CopyrightFindings(
                         "Copyright 2013 jQuery Foundation",
                         sortedSetOf(
                             TextLocation("test/3rdparty/jquery.mobile-1.4.2.js", 231, 233),
@@ -343,15 +343,15 @@ class ScanCodeTest : WordSpec({
                     TextLocation("test/3rdparty/mootools-1.4.5.js", 4718, 4718)
                 ),
                 sortedSetOf(
-                    CopyrightFinding(
+                    CopyrightFindings(
                         "Copyright (c) 2005-2007 Sam Stephenson",
                         sortedSetOf(TextLocation("test/3rdparty/mootools-1.4.5.js", 27, 29))
                     ),
-                    CopyrightFinding(
+                    CopyrightFindings(
                         "Copyright (c) 2006 Dean Edwards, GNU Lesser General Public",
                         sortedSetOf(TextLocation("test/3rdparty/mootools-1.4.5.js", 27, 29))
                     ),
-                    CopyrightFinding(
+                    CopyrightFindings(
                         "Copyright (c) 2006-2012 Valerio Proietti",
                         sortedSetOf(TextLocation("test/3rdparty/mootools-1.4.5.js", 23, 23))
                     )
@@ -410,64 +410,64 @@ class ScanCodeTest : WordSpec({
                     TextLocation("test/3rdparty/backbone-1.1.0.js", 5, 5)
                 ),
                 sortedSetOf(
-                    CopyrightFinding(
+                    CopyrightFindings(
                         "(c) 2007-2008 Steven Levithan",
                         sortedSetOf(TextLocation("test/3rdparty/mootools-1.4.5.js", 1881, 1883))
                     ),
-                    CopyrightFinding(
+                    CopyrightFindings(
                         "(c) 2009-2013 Jeremy Ashkenas, DocumentCloud and Investigative Reporters & " +
                                 "Editors Underscore",
                         sortedSetOf(TextLocation("test/3rdparty/underscore-1.5.2.js", 2, 4))
                     ),
-                    CopyrightFinding(
+                    CopyrightFindings(
                         "(c) 2010-2011 Jeremy Ashkenas, DocumentCloud Inc.",
                         sortedSetOf(TextLocation("test/3rdparty/backbone-1.1.0.js", 3, 6))
                     ),
-                    CopyrightFinding(
+                    CopyrightFindings(
                         "(c) 2010-2014 Google, Inc. http://angularjs.org",
                         sortedSetOf(TextLocation("test/3rdparty/angular-1.2.5.js", 2, 4))
                     ),
-                    CopyrightFinding(
+                    CopyrightFindings(
                         "(c) 2011-2013 Jeremy Ashkenas, DocumentCloud and Investigative Reporters & " +
                                 "Editors Backbone",
                         sortedSetOf(TextLocation("test/3rdparty/backbone-1.1.0.js", 3, 6))
                     ),
-                    CopyrightFinding(
+                    CopyrightFindings(
                         "Copyright (c) 2005-2007 Sam Stephenson",
                         sortedSetOf(TextLocation("test/3rdparty/mootools-1.4.5.js", 27, 29))
                     ),
-                    CopyrightFinding(
+                    CopyrightFindings(
                         "Copyright (c) 2006 Dean Edwards, GNU Lesser General Public",
                         sortedSetOf(TextLocation("test/3rdparty/mootools-1.4.5.js", 27, 29))
                     ),
-                    CopyrightFinding(
+                    CopyrightFindings(
                         "Copyright (c) 2006-2012 Valerio Proietti",
                         sortedSetOf(TextLocation("test/3rdparty/mootools-1.4.5.js", 23, 23))
                     ),
-                    CopyrightFinding(
+                    CopyrightFindings(
                         "Copyright (c) 2010 Cowboy Ben Alman",
                         sortedSetOf(
                             TextLocation("test/3rdparty/jquery.mobile-1.4.2.js", 1521, 1523),
                             TextLocation("test/3rdparty/jquery.mobile-1.4.2.js", 1537, 1539)
                         )
                     ),
-                    CopyrightFinding(
+                    CopyrightFindings(
                         "Copyright 2005, 2012 jQuery Foundation, Inc.",
                         sortedSetOf(TextLocation("test/3rdparty/jquery-1.9.1.js", 8, 10))
                     ),
-                    CopyrightFinding(
+                    CopyrightFindings(
                         "Copyright 2010, 2014 jQuery Foundation, Inc.",
                         sortedSetOf(TextLocation("test/3rdparty/jquery.mobile-1.4.2.js", 6, 8))
                     ),
-                    CopyrightFinding(
+                    CopyrightFindings(
                         "Copyright 2010-2012 Mathias Bynens",
                         sortedSetOf(TextLocation("test/3rdparty/benchmark.js", 2, 6))
                     ),
-                    CopyrightFinding(
+                    CopyrightFindings(
                         "Copyright 2012 jQuery Foundation",
                         sortedSetOf(TextLocation("test/3rdparty/jquery-1.9.1.js", 3688, 3691))
                     ),
-                    CopyrightFinding(
+                    CopyrightFindings(
                         "Copyright 2013 jQuery Foundation",
                         sortedSetOf(
                             TextLocation("test/3rdparty/jquery.mobile-1.4.2.js", 231, 233),
@@ -475,11 +475,11 @@ class ScanCodeTest : WordSpec({
                             TextLocation("test/3rdparty/jquery.mobile-1.4.2.js", 13999, 14001)
                         )
                     ),
-                    CopyrightFinding(
+                    CopyrightFindings(
                         "copyright (c) 2012 Scott Jehl, Paul Irish, Nicholas Zakas.",
                         sortedSetOf(TextLocation("test/3rdparty/jquery.mobile-1.4.2.js", 1910, 1911))
                     ),
-                    CopyrightFinding(
+                    CopyrightFindings(
                         "copyright Robert Kieffer",
                         sortedSetOf(TextLocation("test/3rdparty/benchmark.js", 2, 6))
                     )

@@ -32,8 +32,8 @@ class LicenseFindingsTest : StringSpec({
             TextLocation("path 2", 3, 4)
         ),
         sortedSetOf(
-            CopyrightFinding("copyright 1", sortedSetOf()),
-            CopyrightFinding("copyright 2", sortedSetOf())
+            CopyrightFindings("copyright 1", sortedSetOf()),
+            CopyrightFindings("copyright 2", sortedSetOf())
         )
     )
 
@@ -91,8 +91,8 @@ class LicenseFindingsTest : StringSpec({
             "license",
             sortedSetOf(),
             sortedSetOf(
-                CopyrightFinding("copyright 1", sortedSetOf()),
-                CopyrightFinding("copyright 2", sortedSetOf())
+                CopyrightFindings("copyright 1", sortedSetOf()),
+                CopyrightFindings("copyright 2", sortedSetOf())
             )
         )
     }
