@@ -52,7 +52,7 @@ data class ScanSummary(
      * The licenses associated to their respective copyrights, if any.
      */
     @JsonAlias("licenses")
-    val licenseFindings: SortedSet<LicenseFinding>,
+    val licenseFindings: SortedSet<LicenseFindings>,
 
     /**
      * The list of errors that occurred during the scan.

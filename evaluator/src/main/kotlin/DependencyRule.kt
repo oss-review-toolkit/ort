@@ -20,7 +20,7 @@
 package com.here.ort.evaluator
 
 import com.here.ort.model.Identifier
-import com.here.ort.model.LicenseFinding
+import com.here.ort.model.LicenseFindings
 import com.here.ort.model.Package
 import com.here.ort.model.PackageCurationResult
 import com.here.ort.model.PackageLinkage
@@ -37,7 +37,7 @@ class DependencyRule(
     name: String,
     pkg: Package,
     curations: List<PackageCurationResult>,
-    detectedLicenses: List<LicenseFinding>,
+    detectedLicenses: List<LicenseFindings>,
 
     /**
      * The [dependency][PackageReference] to check.

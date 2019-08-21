@@ -21,7 +21,7 @@ package com.here.ort.evaluator
 
 import com.here.ort.model.CuratedPackage
 import com.here.ort.model.Identifier
-import com.here.ort.model.LicenseFinding
+import com.here.ort.model.LicenseFindings
 import com.here.ort.model.LicenseSource
 import com.here.ort.model.Package
 import com.here.ort.model.PackageCurationResult
@@ -51,7 +51,7 @@ open class PackageRule(
     /**
      * The detected licenses for the [Package].
      */
-    val detectedLicenses: List<LicenseFinding>
+    val detectedLicenses: List<LicenseFindings>
 ) : Rule(ruleSet, name) {
     private val licenseRules = mutableListOf<LicenseRule>()
 
@@ -172,9 +172,9 @@ open class PackageRule(
         val licenseSource: LicenseSource,
 
         /**
-         * The associated [LicenseFinding]s. Only used if [licenseSource] is [LicenseSource.DETECTED].
+         * The associated [LicenseFindings]s. Only used if [licenseSource] is [LicenseSource.DETECTED].
          */
-        val licenseFindings: Map<LicenseFinding, List<PathExclude>> = emptyMap()
+        val licenseFindings: Map<LicenseFindings, List<PathExclude>> = emptyMap()
     ) : Rule(ruleSet, name) {
         /**
          * A helper function to access [PackageRule.pkg] in extension functions for [LicenseRule], required because the

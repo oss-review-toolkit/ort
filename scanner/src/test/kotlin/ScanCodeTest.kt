@@ -20,7 +20,7 @@
 package com.here.ort.scanner
 
 import com.here.ort.model.CopyrightFinding
-import com.here.ort.model.LicenseFinding
+import com.here.ort.model.LicenseFindings
 import com.here.ort.model.TextLocation
 import com.here.ort.model.config.ScannerConfiguration
 import com.here.ort.model.jsonMapper
@@ -210,7 +210,7 @@ class ScanCodeTest : WordSpec({
             val result = jsonMapper.readTree(resultFile)
 
             scanner.associateFindings(result) shouldBe sortedSetOf(
-                LicenseFinding(
+                LicenseFindings(
                     "Apache-2.0",
                     sortedSetOf(TextLocation("LICENSE", 1, 201)),
                     sortedSetOf(
@@ -227,7 +227,7 @@ class ScanCodeTest : WordSpec({
             val resultFile = File("src/test/assets/esprima-2.7.3_scancode-2.2.1.json")
             val result = scanner.getRawResult(resultFile)
 
-            val expectedFindingBsd2 = LicenseFinding(
+            val expectedFindingBsd2 = LicenseFindings(
                 "BSD-2-Clause",
                 sortedSetOf(
                     TextLocation("esprima.js", 4, 22),
@@ -274,7 +274,7 @@ class ScanCodeTest : WordSpec({
                 )
             )
 
-            val expectedFindingBsd3 = LicenseFinding(
+            val expectedFindingBsd3 = LicenseFindings(
                 "BSD-3-Clause",
                 sortedSetOf(
                     TextLocation("package.json", 37, 37),
@@ -294,7 +294,7 @@ class ScanCodeTest : WordSpec({
                 )
             )
 
-            val expectedFindingGpl1 = LicenseFinding(
+            val expectedFindingGpl1 = LicenseFindings(
                 "GPL-1.0+",
                 sortedSetOf(
                     TextLocation("test/3rdparty/jquery-1.9.1.js", 10, 10),
@@ -336,7 +336,7 @@ class ScanCodeTest : WordSpec({
                 )
             )
 
-            val expectedFindingLgpl2 = LicenseFinding(
+            val expectedFindingLgpl2 = LicenseFindings(
                 "LGPL-2.0+",
                 sortedSetOf(
                     TextLocation("test/3rdparty/mootools-1.4.5.js", 28, 28),
@@ -358,7 +358,7 @@ class ScanCodeTest : WordSpec({
                 )
             )
 
-            val expectedFindingMit = LicenseFinding(
+            val expectedFindingMit = LicenseFindings(
                 "MIT",
                 sortedSetOf(
                     TextLocation("test/3rdparty/benchmark.js", 6, 6),
