@@ -25,7 +25,7 @@ import com.here.ort.model.AnalyzerRun
 import com.here.ort.model.CuratedPackage
 import com.here.ort.model.Environment
 import com.here.ort.model.Identifier
-import com.here.ort.model.LicenseFinding
+import com.here.ort.model.LicenseFindings
 import com.here.ort.model.OrtResult
 import com.here.ort.model.Package
 import com.here.ort.model.PackageLinkage
@@ -53,8 +53,8 @@ val declaredSpdxLicenses = sortedSetOf("Apache-2.0")
 val declaredSpdxLicensesProcessed = DeclaredLicenseProcessor.process(declaredSpdxLicenses)
 
 val licenseFindings = listOf(
-    LicenseFinding("LicenseRef-a", sortedSetOf(), sortedSetOf()),
-    LicenseFinding("LicenseRef-b", sortedSetOf(), sortedSetOf())
+    LicenseFindings("LicenseRef-a", sortedSetOf(), sortedSetOf()),
+    LicenseFindings("LicenseRef-b", sortedSetOf(), sortedSetOf())
 )
 
 val packageExcluded = Package.EMPTY.copy(

@@ -23,7 +23,7 @@ package com.here.ort.scanner.storages
 import com.here.ort.model.EMPTY_JSON_NODE
 import com.here.ort.model.Hash
 import com.here.ort.model.Identifier
-import com.here.ort.model.LicenseFinding
+import com.here.ort.model.LicenseFindings
 import com.here.ort.model.OrtIssue
 import com.here.ort.model.Package
 import com.here.ort.model.Provenance
@@ -98,8 +98,8 @@ abstract class AbstractStorageTest : StringSpec() {
         scannerEndTime1,
         1,
         sortedSetOf(
-            LicenseFinding("license 1.1", sortedSetOf(), sortedSetOf()),
-            LicenseFinding("license 1.2", sortedSetOf(), sortedSetOf())
+            LicenseFindings("license 1.1", sortedSetOf(), sortedSetOf()),
+            LicenseFindings("license 1.2", sortedSetOf(), sortedSetOf())
         ),
         mutableListOf(error1, error2)
     )

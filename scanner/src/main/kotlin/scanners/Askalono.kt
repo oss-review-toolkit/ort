@@ -22,7 +22,7 @@ package com.here.ort.scanner.scanners
 import com.fasterxml.jackson.databind.JsonNode
 
 import com.here.ort.model.EMPTY_JSON_NODE
-import com.here.ort.model.LicenseFinding
+import com.here.ort.model.LicenseFindings
 import com.here.ort.model.Provenance
 import com.here.ort.model.ScanResult
 import com.here.ort.model.ScanSummary
@@ -156,7 +156,7 @@ class Askalono(name: String, config: ScannerConfiguration) : LocalScanner(name, 
     override fun generateSummary(startTime: Instant, endTime: Instant, result: JsonNode): ScanSummary {
         val findings = result.map {
             val license = getSpdxLicenseIdString(it["License"].textValue())
-            LicenseFinding(license, sortedSetOf(), sortedSetOf())
+            LicenseFindings(license, sortedSetOf(), sortedSetOf())
         }.toSortedSet()
 
         return ScanSummary(startTime, endTime, result.size(), findings, errors = mutableListOf())
