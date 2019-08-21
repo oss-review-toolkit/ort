@@ -63,7 +63,7 @@ class ScanResultContainerTest : WordSpec() {
         scannerEndTime1,
         1,
         sortedSetOf(
-            LicenseFinding(
+            LicenseFindings(
                 "license 1.1",
                 sortedSetOf(TextLocation("path 1.1", 1, 1)),
                 sortedSetOf(
@@ -73,7 +73,7 @@ class ScanResultContainerTest : WordSpec() {
                     )
                 )
             ),
-            LicenseFinding(
+            LicenseFindings(
                 "license 1.2",
                 sortedSetOf(TextLocation("path 1.2", 1, 2)),
                 sortedSetOf(
@@ -91,12 +91,12 @@ class ScanResultContainerTest : WordSpec() {
         scannerEndTime2,
         2,
         sortedSetOf(
-            LicenseFinding(
+            LicenseFindings(
                 "license 2.1",
                 sortedSetOf(),
                 sortedSetOf(CopyrightFinding("copyright 3", sortedSetOf()))
             ),
-            LicenseFinding(
+            LicenseFindings(
                 "license 2.2",
                 sortedSetOf(),
                 sortedSetOf(CopyrightFinding("copyright 4", sortedSetOf()))

@@ -35,7 +35,7 @@ import java.util.TreeSet
 
 /**
  * A map that associates licenses with their belonging copyrights. This is provided mostly for convenience as creating
- * a similar collection based on the [LicenseFinding] class is a bit cumbersome due to its required layout to support
+ * a similar collection based on the [LicenseFindings] class is a bit cumbersome due to its required layout to support
  * legacy serialized formats.
  */
 typealias LicenseFindingsMap = SortedMap<String, MutableSet<String>>
@@ -56,30 +56,30 @@ fun LicenseFindingsMap.removeGarbage(copyrightGarbage: CopyrightGarbage) =
  * A class to store a [license] finding along with its belonging [copyrights] and the [locations] where the license was
  * found.
  */
-@JsonDeserialize(using = LicenseFindingDeserializer::class)
-data class LicenseFinding(
+@JsonDeserialize(using = LicenseFindingsDeserializer::class)
+data class LicenseFindings(
     val license: String,
     val locations: SortedSet<TextLocation>,
     val copyrights: SortedSet<CopyrightFinding>
-) : Comparable<LicenseFinding> {
-    override fun compareTo(other: LicenseFinding) =
+) : Comparable<LicenseFindings> {
+    override fun compareTo(other: LicenseFindings) =
         compareValuesBy(
             this,
             other,
-            compareBy(LicenseFinding::license)
-                .thenBy(TextLocation.SORTED_SET_COMPARATOR, LicenseFinding::locations)
-                .thenBy(CopyrightFinding.SORTED_SET_COMPARATOR, LicenseFinding::copyrights)
+            compareBy(LicenseFindings::license)
+                .thenBy(TextLocation.SORTED_SET_COMPARATOR, LicenseFindings::locations)
+                .thenBy(CopyrightFinding.SORTED_SET_COMPARATOR, LicenseFindings::copyrights)
         ) { it }
 }
 
 /**
- * Custom deserializer to support old versions of the [LicenseFinding] class.
+ * Custom deserializer to support old versions of the [LicenseFindings] class.
  */
-class LicenseFindingDeserializer : StdDeserializer<LicenseFinding>(LicenseFinding::class.java) {
-    override fun deserialize(p: JsonParser, ctxt: DeserializationContext): LicenseFinding {
+class LicenseFindingsDeserializer : StdDeserializer<LicenseFindings>(LicenseFindings::class.java) {
+    override fun deserialize(p: JsonParser, ctxt: DeserializationContext): LicenseFindings {
         val node = p.codec.readTree<JsonNode>(p)
         return when {
-            node.isTextual -> LicenseFinding(node.textValue(), sortedSetOf(), sortedSetOf())
+            node.isTextual -> LicenseFindings(node.textValue(), sortedSetOf(), sortedSetOf())
             else -> {
                 val license = jsonMapper.treeToValue<String>(node["license"])
 
@@ -90,7 +90,7 @@ class LicenseFindingDeserializer : StdDeserializer<LicenseFinding>(LicenseFindin
 
                 val locations = deserializeLocations(node)
 
-                LicenseFinding(license, locations, copyrights)
+                LicenseFindings(license, locations, copyrights)
             }
         }
     }

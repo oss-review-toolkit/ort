@@ -87,7 +87,7 @@ data class ScanResult(
                     }
                 }.toSortedSet()
 
-                LicenseFinding(finding.license, locations, copyrights)
+                LicenseFindings(finding.license, locations, copyrights)
             } else {
                 null
             }

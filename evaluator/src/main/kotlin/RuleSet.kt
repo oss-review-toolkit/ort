@@ -20,7 +20,7 @@
 package com.here.ort.evaluator
 
 import com.here.ort.model.Identifier
-import com.here.ort.model.LicenseFinding
+import com.here.ort.model.LicenseFindings
 import com.here.ort.model.OrtResult
 import com.here.ort.model.Package
 import com.here.ort.model.PackageReference
@@ -39,7 +39,7 @@ class RuleSet(val ortResult: OrtResult) {
     val violations = mutableSetOf<RuleViolation>()
 
     /**
-     * The map of all [LicenseFinding]s and associated path excludes by [Identifier].
+     * The map of all [LicenseFindings]s and associated path excludes by [Identifier].
      */
     val licenseFindings = ortResult.collectLicenseFindings()
 

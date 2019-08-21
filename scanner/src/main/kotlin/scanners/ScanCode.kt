@@ -23,7 +23,7 @@ import com.fasterxml.jackson.databind.JsonNode
 
 import com.here.ort.model.CopyrightFinding
 import com.here.ort.model.EMPTY_JSON_NODE
-import com.here.ort.model.LicenseFinding
+import com.here.ort.model.LicenseFindings
 import com.here.ort.model.OrtIssue
 import com.here.ort.model.Provenance
 import com.here.ort.model.ScanResult
@@ -486,7 +486,7 @@ class ScanCode(name: String, config: ScannerConfiguration) : LocalScanner(name, 
     /**
      * Associate copyright findings to license findings throughout the whole result.
      */
-    internal fun associateFindings(result: JsonNode): SortedSet<LicenseFinding> {
+    internal fun associateFindings(result: JsonNode): SortedSet<LicenseFindings> {
         val locationsForLicenses = sortedMapOf<String, SortedSet<TextLocation>>()
         val copyrightsForLicenses = sortedMapOf<String, SortedSet<CopyrightFinding>>()
         val rootLicense = getRootLicense(result)
@@ -518,7 +518,7 @@ class ScanCode(name: String, config: ScannerConfiguration) : LocalScanner(name, 
         }
 
         return (copyrightsForLicenses.keys + locationsForLicenses.keys).map { license ->
-            LicenseFinding(
+            LicenseFindings(
                 license,
                 locationsForLicenses[license] ?: sortedSetOf(),
                 copyrightsForLicenses[license] ?: sortedSetOf()

@@ -24,8 +24,8 @@ import com.fasterxml.jackson.module.kotlin.readValue
 import io.kotlintest.shouldBe
 import io.kotlintest.specs.StringSpec
 
-class LicenseFindingTest : StringSpec({
-    val licenseFinding = LicenseFinding(
+class LicenseFindingsTest : StringSpec({
+    val licenseFinding = LicenseFindings(
         "license",
         sortedSetOf(
             TextLocation("path 1", 1, 2),
@@ -39,7 +39,7 @@ class LicenseFindingTest : StringSpec({
 
     "can be serialized and deserialized" {
         val serializedLicenseFinding = yamlMapper.writeValueAsString(licenseFinding)
-        val deserializedLicenseFinding = yamlMapper.readValue<LicenseFinding>(serializedLicenseFinding)
+        val deserializedLicenseFinding = yamlMapper.readValue<LicenseFindings>(serializedLicenseFinding)
 
         deserializedLicenseFinding shouldBe licenseFinding
     }
@@ -71,9 +71,9 @@ class LicenseFindingTest : StringSpec({
             "license"
             """.trimIndent()
 
-        val deserializedLicenseFinding = yamlMapper.readValue<LicenseFinding>(yaml)
+        val deserializedLicenseFinding = yamlMapper.readValue<LicenseFindings>(yaml)
 
-        deserializedLicenseFinding shouldBe LicenseFinding("license", sortedSetOf(), sortedSetOf())
+        deserializedLicenseFinding shouldBe LicenseFindings("license", sortedSetOf(), sortedSetOf())
     }
 
     "can be deserialized from a license finding without locations" {
@@ -85,9 +85,9 @@ class LicenseFindingTest : StringSpec({
             - "copyright 2"
             """.trimIndent()
 
-        val deserializedLicenseFinding = yamlMapper.readValue<LicenseFinding>(yaml)
+        val deserializedLicenseFinding = yamlMapper.readValue<LicenseFindings>(yaml)
 
-        deserializedLicenseFinding shouldBe LicenseFinding(
+        deserializedLicenseFinding shouldBe LicenseFindings(
             "license",
             sortedSetOf(),
             sortedSetOf(
