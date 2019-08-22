@@ -39,9 +39,9 @@ class PostgresStorage(private val connection: Connection, private val schema: St
     private val table = "scan_results" // TODO: make configurable
 
     /**
-     * Initialize the database.
+     * Setup the database.
      */
-    fun init() {
+    fun setupDatabase() {
         if (!tableExists()) {
             log.info { "Creating table '$table'." }
             if (!createTable()) {
