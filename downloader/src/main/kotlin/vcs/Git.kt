@@ -22,7 +22,7 @@ package com.here.ort.downloader.vcs
 import com.here.ort.downloader.WorkingTree
 import com.here.ort.model.VcsInfo
 import com.here.ort.model.VcsType
-import com.here.ort.spdx.LICENSE_FILE_NAMES
+import com.here.ort.spdx.LicenseFileMatcher
 import com.here.ort.utils.Os
 import com.here.ort.utils.ProcessCapture
 import com.here.ort.utils.log
@@ -65,7 +65,7 @@ class Git : GitBase() {
             val gitInfoDir = File(targetDir, ".git/info").apply { safeMkdirs() }
             val path = vcs.path.let { if (it.startsWith("/")) it else "/$it" }
             File(gitInfoDir, "sparse-checkout").writeText("$path\n" +
-                    LICENSE_FILE_NAMES.joinToString("\n") { "/$it" })
+                    LicenseFileMatcher.DEFAULT_MATCHER.licenseFileNames.joinToString("\n") { "/$it" })
         }
 
         return getWorkingTree(targetDir)

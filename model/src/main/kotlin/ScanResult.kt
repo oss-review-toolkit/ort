@@ -23,10 +23,8 @@ import com.fasterxml.jackson.annotation.JsonAlias
 import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.databind.JsonNode
 
-import com.here.ort.spdx.LICENSE_FILE_MATCHERS
-import com.here.ort.spdx.LICENSE_FILE_NAMES
+import com.here.ort.spdx.LicenseFileMatcher
 
-import java.nio.file.Paths
 import java.util.SortedSet
 
 /**
@@ -58,14 +56,12 @@ data class ScanResult(
 ) {
     /**
      * Filter all detected licenses and copyrights from the [summary] which are underneath [path], and set the [path]
-     * for [provenance]. Findings in files which are listed in [LICENSE_FILE_NAMES] are also kept.
+     * for [provenance]. Findings which are matched by [LicenseFileMatcher.DEFAULT_MATCHER] are also kept.
      */
     fun filterPath(path: String): ScanResult {
         fun SortedSet<TextLocation>.filterPath() =
             filterTo(sortedSetOf()) { location ->
-                location.path.startsWith("$path/") || LICENSE_FILE_MATCHERS.any { matcher ->
-                    matcher.matches(Paths.get(location.path))
-                }
+                location.path.startsWith("$path/") || LicenseFileMatcher.DEFAULT_MATCHER.matches(location.path)
             }
 
         val newProvenance = provenance.copy(
