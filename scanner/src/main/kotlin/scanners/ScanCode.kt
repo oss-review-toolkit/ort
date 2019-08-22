@@ -39,7 +39,7 @@ import com.here.ort.scanner.HTTP_CACHE_PATH
 import com.here.ort.scanner.LocalScanner
 import com.here.ort.scanner.ScanException
 import com.here.ort.scanner.ScanResultsStorage
-import com.here.ort.spdx.LICENSE_FILE_MATCHERS
+import com.here.ort.spdx.LicenseFileMatcher
 import com.here.ort.spdx.NON_LICENSE_FILENAMES
 import com.here.ort.utils.CommandLineTool
 import com.here.ort.utils.ORT_CONFIG_FILENAME
@@ -52,8 +52,6 @@ import com.here.ort.utils.unpack
 import java.io.File
 import java.io.IOException
 import java.net.HttpURLConnection
-import java.nio.file.InvalidPathException
-import java.nio.file.Paths
 import java.time.Instant
 import java.util.SortedMap
 import java.util.SortedSet
@@ -440,11 +438,7 @@ class ScanCode(name: String, config: ScannerConfiguration) : LocalScanner(name, 
         // TODO: This function should return a list of all licenses found in all license files instead of only a single
         //       license.
         licenseFindings.singleOrNull { finding ->
-            try {
-                LICENSE_FILE_MATCHERS.any { it.matches(Paths.get(finding.location.path)) }
-            } catch (e: InvalidPathException) {
-                false
-            }
+            LicenseFileMatcher.DEFAULT_MATCHER.matches(finding.location.path)
         }?.license ?: ""
 
     /**

@@ -23,7 +23,7 @@ import com.here.ort.downloader.VersionControlSystem
 import com.here.ort.downloader.WorkingTree
 import com.here.ort.model.VcsInfo
 import com.here.ort.model.VcsType
-import com.here.ort.spdx.LICENSE_FILE_NAMES
+import com.here.ort.spdx.LicenseFileMatcher
 import com.here.ort.utils.CommandLineTool
 import com.here.ort.utils.ProcessCapture
 import com.here.ort.utils.log
@@ -121,7 +121,7 @@ class Mercurial : VersionControlSystem(), CommandLineTool {
             log.info { "Configuring Mercurial to do sparse checkout of path '${vcs.path}'." }
             run(
                 targetDir, "debugsparse", "-I", "${vcs.path}/**",
-                *LICENSE_FILE_NAMES.flatMap { listOf("-I", it) }.toTypedArray()
+                *LicenseFileMatcher.DEFAULT_MATCHER.licenseFileNames.flatMap { listOf("-I", it) }.toTypedArray()
             )
         }
 
