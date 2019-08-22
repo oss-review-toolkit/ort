@@ -81,7 +81,11 @@ import okio.sink
  *   be considered in [getConfiguration]. Only used if the [log] level is set to [Level.DEBUG]. Defaults to
  *   [DEFAULT_DEBUG_NON_CONFIGURATION_OPTIONS].
  */
-class ScanCode(name: String, config: ScannerConfiguration) : LocalScanner(name, config) {
+class ScanCode(
+    name: String,
+    config: ScannerConfiguration,
+    private val licenseFileMatcher: LicenseFileMatcher
+) : LocalScanner(name, config) {
     class Factory : AbstractScannerFactory<ScanCode>("ScanCode") {
         override fun create(config: ScannerConfiguration) = ScanCode(scannerName, config)
     }
@@ -230,6 +234,11 @@ class ScanCode(name: String, config: ScannerConfiguration) : LocalScanner(name, 
             }
         }.toList()
     }
+
+    constructor(
+        name: String,
+        config: ScannerConfiguration
+    ) : this(name, config, LicenseFileMatcher.DEFAULT_MATCHER)
 
     override fun command(workingDir: File?) = if (Os.isWindows) "scancode.bat" else "scancode"
 
@@ -438,7 +447,7 @@ class ScanCode(name: String, config: ScannerConfiguration) : LocalScanner(name, 
         // TODO: This function should return a list of all licenses found in all license files instead of only a single
         //       license.
         licenseFindings.singleOrNull { finding ->
-            LicenseFileMatcher.DEFAULT_MATCHER.matches(finding.location.path)
+            licenseFileMatcher.matches(finding.location.path)
         }?.license ?: ""
 
     /**

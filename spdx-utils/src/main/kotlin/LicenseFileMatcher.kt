@@ -38,6 +38,8 @@ class LicenseFileMatcher(val licenseFileNames: List<String>) {
         )
     }
 
+    constructor(vararg licenseFileNames: String) : this(licenseFileNames.toList())
+
     private val matchers = licenseFileNames.map {
         FileSystems.getDefault().getPathMatcher("glob:$it")
     }
