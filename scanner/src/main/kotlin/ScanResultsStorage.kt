@@ -117,7 +117,7 @@ abstract class ScanResultsStorage {
 
             val connection = DriverManager.getConnection(config.url, properties)
 
-            storage = PostgresStorage(connection, config.schema).also { it.init() }
+            storage = PostgresStorage(connection, config.schema).also { it.setupDatabase() }
         }
     }
 
