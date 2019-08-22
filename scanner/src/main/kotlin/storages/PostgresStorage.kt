@@ -109,7 +109,7 @@ class PostgresStorage(private val connection: Connection, private val schema: St
         val scanResults = mutableListOf<ScanResult>()
 
         while (resultSet.next()) {
-            val scanResult = jsonMapper.readValue<ScanResult>(resultSet.getString(1))
+            val scanResult = jsonMapper.readValue<ScanResult>(resultSet.getString(1).unescapeNull())
             scanResults.add(scanResult)
         }
 
@@ -143,7 +143,7 @@ class PostgresStorage(private val connection: Connection, private val schema: St
         val scanResults = mutableListOf<ScanResult>()
 
         while (resultSet.next()) {
-            val scanResult = jsonMapper.readValue<ScanResult>(resultSet.getString(1))
+            val scanResult = jsonMapper.readValue<ScanResult>(resultSet.getString(1).unescapeNull())
             scanResults.add(scanResult)
         }
 
@@ -192,11 +192,26 @@ class PostgresStorage(private val connection: Connection, private val schema: St
         // TODO: Check if there is already a matching entry for this provenance and scanner details.
         val query = "INSERT INTO $schema.$table (identifier, scan_result) VALUES (?, to_json(?::json)::jsonb)"
 
+        val scanResultJson = jsonMapper.writeValueAsString(scanResult).escapeNull()
+
         val statement = connection.prepareStatement(query)
         statement.setString(1, id.toCoordinates())
-        statement.setString(2, jsonMapper.writeValueAsString(scanResult))
+        statement.setString(2, scanResultJson)
         statement.execute()
 
         return true
     }
+
+    /**
+     * The null character "\u0000" can appear in raw scan results, for example in ScanCode if the matched text for a
+     * license or copyright contains this character. Since it is not allowed in PostgreSQL JSONB columns we need to
+     * escape it before writing a string to the database.
+     * See: [https://www.postgresql.org/docs/11/datatype-json.html]
+     */
+    private fun String.escapeNull() = replace("\\u0000", "\\\\u0000")
+
+    /**
+     * Unescape the null character "\u0000". For details see [escapeNull].
+     */
+    private fun String.unescapeNull() = replace("\\\\u0000", "\\u0000")
 }
