@@ -26,6 +26,16 @@ import com.fasterxml.jackson.annotation.JsonInclude
 import java.time.Instant
 import java.util.SortedSet
 
+data class LicenseFinding(
+    val license: String,
+    val location: TextLocation
+)
+
+data class CopyrightFinding(
+    val statement: String,
+    val location: TextLocation
+)
+
 /**
  * A short summary of the scan results.
  */
@@ -62,6 +72,26 @@ data class ScanSummary(
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     val errors: List<OrtIssue> = emptyList()
 ) {
+    fun getSingleLicenseFindings(): List<LicenseFinding> =
+        licenseFindings.flatMap { findings ->
+            findings.locations.map {
+                LicenseFinding(
+                    license = findings.license,
+                    location = it
+                )
+            }
+        }
+
+    fun getSingleCopyrightFindings(): List<CopyrightFinding> =
+        licenseFindings.flatMap { findings ->
+            findings.locations.map {
+                CopyrightFinding(
+                    statement = findings.license,
+                    location = it
+                )
+            }
+        }
+
     @get:JsonIgnore
     val licenseFindingsMap = sortedMapOf<String, SortedSet<CopyrightFindings>>().also {
         licenseFindings.forEach { finding ->
