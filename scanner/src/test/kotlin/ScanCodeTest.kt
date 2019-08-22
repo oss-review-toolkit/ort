@@ -20,11 +20,13 @@
 package com.here.ort.scanner
 
 import com.here.ort.model.CopyrightFindings
+import com.here.ort.model.LicenseFinding
 import com.here.ort.model.LicenseFindings
 import com.here.ort.model.TextLocation
 import com.here.ort.model.config.ScannerConfiguration
 import com.here.ort.model.jsonMapper
 import com.here.ort.scanner.scanners.ScanCode
+import com.here.ort.spdx.LicenseFileMatcher
 
 import io.kotlintest.matchers.haveSize
 import io.kotlintest.matchers.match
@@ -34,6 +36,16 @@ import io.kotlintest.specs.WordSpec
 
 import java.io.File
 import java.time.Instant
+
+private fun createLicenseFinding(license: String, path: String) =
+    LicenseFinding(
+        license = license,
+        location = TextLocation(
+            path = path,
+            startLine = 1,
+            endLine = 2
+        )
+    )
 
 @Suppress("LargeClass")
 class ScanCodeTest : WordSpec({
@@ -141,18 +153,24 @@ class ScanCodeTest : WordSpec({
     }
 
     "getRootLicense()" should {
-        "succeed for a result containing a LICENSE file" {
-            val resultFile = File("src/test/assets/oss-review-toolkit-license-and-readme_scancode-2.9.2.json")
-            val result = jsonMapper.readTree(resultFile)
+        "return the license of the file matched by the license file matcher" {
+            val licenseFindings = listOf(
+                createLicenseFinding(license = "abc", path = "a/LICENSE")
+            )
 
-            scanner.getRootLicense(scanner.getLicenseFindings(result)) shouldBe "Apache-2.0"
+            val scanCode = ScanCode("ScanCode", ScannerConfiguration(), LicenseFileMatcher("a/LICENSE"))
+
+            scanCode.getRootLicense(licenseFindings) shouldBe "abc"
         }
 
-        "succeed for a result containing a LICENSE.BSD file" {
-            val resultFile = File("src/test/assets/esprima-2.7.3_scancode-2.2.1.post277.4d68f9377.json")
-            val result = jsonMapper.readTree(resultFile)
+        "return an empty string given when no file is matched by the license file matcher" {
+            val licenseFindings = listOf(
+                createLicenseFinding(license = "abc", path = "b/LICENSE")
+            )
 
-            scanner.getRootLicense(scanner.getLicenseFindings(result)) shouldBe "BSD-2-Clause"
+            val scanCode = ScanCode("ScanCode", ScannerConfiguration(), LicenseFileMatcher("a/LICENSE"))
+
+            scanCode.getRootLicense(licenseFindings) shouldBe ""
         }
     }
 
