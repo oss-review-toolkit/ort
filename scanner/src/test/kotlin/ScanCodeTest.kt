@@ -145,14 +145,14 @@ class ScanCodeTest : WordSpec({
             val resultFile = File("src/test/assets/oss-review-toolkit-license-and-readme_scancode-2.9.2.json")
             val result = jsonMapper.readTree(resultFile)
 
-            scanner.getRootLicense(result) shouldBe "Apache-2.0"
+            scanner.getRootLicense(scanner.getLicenseFindings(result)) shouldBe "Apache-2.0"
         }
 
         "succeed for a result containing a LICENSE.BSD file" {
             val resultFile = File("src/test/assets/esprima-2.7.3_scancode-2.2.1.post277.4d68f9377.json")
             val result = jsonMapper.readTree(resultFile)
 
-            scanner.getRootLicense(result) shouldBe "BSD-2-Clause"
+            scanner.getRootLicense(scanner.getLicenseFindings(result)) shouldBe "BSD-2-Clause"
         }
     }
 
@@ -161,17 +161,15 @@ class ScanCodeTest : WordSpec({
             val resultFile = File("src/test/assets/esprima-2.7.3_scancode-2.2.1.json")
             val result = jsonMapper.readTree(resultFile)
             val path = "test/3rdparty/jquery-1.9.1.js"
-            val copyrights = result["files"].find {
-                it["path"].asText() == path
-            }!!.get("copyrights").toList()
+            val copyrights = scanner.getCopyrightFindings(result).filter { it.location.path == path }
 
-            scanner.getClosestCopyrightStatements(path, copyrights, 5) shouldBe sortedSetOf(
+            scanner.getClosestCopyrightStatements(copyrights, 5) shouldBe sortedSetOf(
                 CopyrightFindings(
                     "Copyright 2005, 2012 jQuery Foundation, Inc.",
                     sortedSetOf(TextLocation(path, 8, 10))
                 )
             )
-            scanner.getClosestCopyrightStatements(path, copyrights, 3690) shouldBe sortedSetOf(
+            scanner.getClosestCopyrightStatements(copyrights, 3690) shouldBe sortedSetOf(
                 CopyrightFindings(
                     "Copyright 2012 jQuery Foundation",
                     sortedSetOf(TextLocation(path, 3688, 3691))
@@ -183,11 +181,9 @@ class ScanCodeTest : WordSpec({
             val resultFile = File("src/test/assets/esprima-2.7.3_scancode-2.2.1.json")
             val result = jsonMapper.readTree(resultFile)
             val path = "test/3rdparty/mootools-1.4.5.js"
-            val copyrights = result["files"].find {
-                it["path"].asText() == path
-            }!!.get("copyrights").toList()
+            val copyrights = scanner.getCopyrightFindings(result).filter { it.location.path == path }
 
-            scanner.getClosestCopyrightStatements(path, copyrights, 28) shouldBe sortedSetOf(
+            scanner.getClosestCopyrightStatements(copyrights, 28) shouldBe sortedSetOf(
                 CopyrightFindings(
                     "Copyright (c) 2005-2007 Sam Stephenson",
                     sortedSetOf(TextLocation(path, 27, 29))

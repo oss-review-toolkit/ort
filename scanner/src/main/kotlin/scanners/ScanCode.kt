@@ -21,8 +21,10 @@ package com.here.ort.scanner.scanners
 
 import com.fasterxml.jackson.databind.JsonNode
 
+import com.here.ort.model.CopyrightFinding
 import com.here.ort.model.CopyrightFindings
 import com.here.ort.model.EMPTY_JSON_NODE
+import com.here.ort.model.LicenseFinding
 import com.here.ort.model.LicenseFindings
 import com.here.ort.model.OrtIssue
 import com.here.ort.model.Provenance
@@ -389,24 +391,61 @@ class ScanCode(name: String, config: ScannerConfiguration) : LocalScanner(name, 
     }
 
     /**
+     * Get the license findings from the given [result].
+     */
+    internal fun getLicenseFindings(result: JsonNode): List<LicenseFinding> =
+        result["files"].flatMap { file ->
+            file["licenses"]?.toList().orEmpty().map {
+                LicenseFinding(
+                    license = getLicenseId(it),
+                    location = TextLocation(
+                        path = file["path"].textValue(),
+                        startLine = it["start_line"].intValue(),
+                        endLine = it["end_line"].intValue()
+                    )
+                )
+            }
+        }
+
+    /**
+     * Get the copyright findings from the given [result].
+     */
+    internal fun getCopyrightFindings(result: JsonNode): List<CopyrightFinding> =
+        result["files"].flatMap { file ->
+            val path = file["path"].textValue()
+
+            file["copyrights"]?.toList().orEmpty().flatMap { copyrights ->
+                val startLine = copyrights["start_line"].intValue()
+                val endLine = copyrights["end_line"].intValue()
+                // While ScanCode 2.9.2 was still using "statements", version 2.9.7 is using "value".
+                val statements = (copyrights["statements"] ?: listOf(copyrights["value"]))
+
+                statements.map { statement ->
+                    CopyrightFinding(
+                        statement = statement.textValue(),
+                        location = TextLocation(
+                            path = path,
+                            startLine = startLine,
+                            endLine = endLine
+                        )
+                    )
+                }
+            }
+        }
+
+    /**
      * Get the license found in one of the commonly named license files, if any, or an empty string otherwise.
      */
-    internal fun getRootLicense(result: JsonNode): String {
+    internal fun getRootLicense(licenseFindings: List<LicenseFinding>): String =
         // TODO: This function should return a list of all licenses found in all license files instead of only a single
         //       license.
-
-        val rootLicenseFile = result["files"].singleOrNull { file ->
-            val path = file["path"].textValue()
+        licenseFindings.singleOrNull { finding ->
             try {
-                file["licenses"]?.singleOrNull() != null
-                        && LICENSE_FILE_MATCHERS.any { it.matches(Paths.get(path)) }
+                LICENSE_FILE_MATCHERS.any { it.matches(Paths.get(finding.location.path)) }
             } catch (e: InvalidPathException) {
                 false
             }
-        } ?: return ""
-
-        return getLicenseId(rootLicenseFile["licenses"].single())
-    }
+        }?.license ?: ""
 
     /**
      * Return the copyright statements in the vicinity, as specified by [toleranceLines], of [licenseStartLine] in the
@@ -414,45 +453,41 @@ class ScanCode(name: String, config: ScannerConfiguration) : LocalScanner(name, 
      * associating findings separated by blank lines but not skipping complete license statements.
      */
     internal fun getClosestCopyrightStatements(
-        path: String,
-        copyrights: Collection<JsonNode>,
+        copyrights: List<CopyrightFinding>,
         licenseStartLine: Int,
         toleranceLines: Int = 5
     ): SortedSet<CopyrightFindings> {
-        val closestCopyrights = copyrights.filter {
-            (it["start_line"].intValue() - licenseStartLine).absoluteValue <= toleranceLines
+        require(copyrights.map { it.location.path }.distinct().size <= 1) {
+            "Given copyright statements must all point to the same file."
         }
 
-        // While ScanCode 2.9.2 was still using "statements", version 2.9.7 is using "value".
-        return closestCopyrights.flatMap {
-            val startLine = it["start_line"].intValue()
-            val endLine = it["end_line"].intValue()
-            (it["statements"] ?: listOf(it["value"])).map { statements ->
-                CopyrightFindings(statements.textValue(), sortedSetOf(TextLocation(path, startLine, endLine)))
-            }
-        }.toSortedSet()
+        val closestCopyrights = copyrights.filter {
+            (it.location.startLine - licenseStartLine).absoluteValue <= toleranceLines
+        }
+
+        return closestCopyrights.map { it.toCopyrightFindings() }.toSortedSet()
     }
+
+    private fun CopyrightFinding.toCopyrightFindings() =
+        CopyrightFindings(
+            statement = statement,
+            locations = sortedSetOf(location)
+        )
 
     /**
      * Associate copyright findings to license findings within a single file.
      */
     private fun associateFileFindings(
-        path: String,
-        licenses: Collection<JsonNode>,
-        copyrights: Collection<JsonNode>,
+        licenses: List<LicenseFinding>,
+        copyrights: List<CopyrightFinding>,
         rootLicense: String = ""
     ): SortedMap<String, MutableSet<CopyrightFindings>> {
+        require((licenses.map { it.location.path } + copyrights.map { it.location.path }).distinct().size <= 1) {
+            "The given license and copyright findings must all point to the same file."
+        }
+
         val copyrightsForLicenses = sortedMapOf<String, MutableSet<CopyrightFindings>>()
-
-        val allCopyrightStatements = copyrights.flatMap {
-            val startLine = it["start_line"].intValue()
-            val endLine = it["end_line"].intValue()
-
-            // While ScanCode 2.9.2 was still using "statements", version 2.9.7 is using "value".
-            (it["statements"] ?: listOf(it["value"])).map { statements ->
-                CopyrightFindings(statements.textValue(), sortedSetOf(TextLocation(path, startLine, endLine)))
-            }
-        }.toSortedSet()
+        val allCopyrightStatements = copyrights.map { it.toCopyrightFindings() }.toSortedSet()
 
         when (licenses.size) {
             0 -> {
@@ -464,7 +499,7 @@ class ScanCode(name: String, config: ScannerConfiguration) : LocalScanner(name, 
 
             1 -> {
                 // If there is only a single license finding, associate all copyright findings with that license.
-                val licenseId = getLicenseId(licenses.first())
+                val licenseId = licenses.single().license
                 copyrightsForLicenses[licenseId] = allCopyrightStatements
             }
 
@@ -472,10 +507,11 @@ class ScanCode(name: String, config: ScannerConfiguration) : LocalScanner(name, 
                 // If there are multiple license findings in a single file, search for the closest copyright statements
                 // for each of these, if any.
                 licenses.forEach {
-                    val licenseId = getLicenseId(it)
-                    val licenseStartLine = it["start_line"].intValue()
-                    val closestCopyrights = getClosestCopyrightStatements(path, copyrights, licenseStartLine)
-                    copyrightsForLicenses.getOrPut(licenseId) { sortedSetOf() } += closestCopyrights
+                    val closestCopyrights = getClosestCopyrightStatements(
+                        copyrights = copyrights,
+                        licenseStartLine = it.location.startLine
+                    )
+                    copyrightsForLicenses.getOrPut(it.license) { sortedSetOf() } += closestCopyrights
                 }
             }
         }
@@ -486,26 +522,27 @@ class ScanCode(name: String, config: ScannerConfiguration) : LocalScanner(name, 
     /**
      * Associate copyright findings to license findings throughout the whole result.
      */
-    internal fun associateFindings(result: JsonNode): SortedSet<LicenseFindings> {
-        val locationsForLicenses = sortedMapOf<String, SortedSet<TextLocation>>()
+    internal fun associateFindings(result: JsonNode): SortedSet<LicenseFindings> =
+        associateFindings(getLicenseFindings(result), getCopyrightFindings(result))
+
+    private fun associateFindings(licenseFindings: List<LicenseFinding>, copyrightFindings: List<CopyrightFinding>):
+            SortedSet<LicenseFindings> {
+        val licenseFindingsByPath = licenseFindings.groupBy { it.location.path }
+        val copyrightFindingsByPath = copyrightFindings.groupBy { it.location.path }
+        val paths = (licenseFindingsByPath.keys + copyrightFindingsByPath.keys).toSet()
+        val rootLicense = getRootLicense(licenseFindings)
+
+        val locationsForLicenses = licenseFindings
+            .groupBy({ it.license }, { it.location })
+            .mapValues { it.value.toSortedSet() }
+            .toSortedMap()
+
         val copyrightsForLicenses = sortedMapOf<String, SortedSet<CopyrightFindings>>()
-        val rootLicense = getRootLicense(result)
+        paths.forEach { path ->
+            val licenses = licenseFindingsByPath[path].orEmpty()
+            val copyrights = copyrightFindingsByPath[path].orEmpty()
+            val findings = associateFileFindings(licenses, copyrights, rootLicense)
 
-        result["files"].forEach { file ->
-            val path = file["path"].textValue()
-
-            val licenses = file["licenses"]?.toList().orEmpty()
-            licenses.forEach {
-                val licenseId = getLicenseId(it)
-                val licenseStartLine = it["start_line"].intValue()
-                val licenseEndLine = it["end_line"].intValue()
-
-                locationsForLicenses.getOrPut(licenseId) { sortedSetOf() } +=
-                    TextLocation(path, licenseStartLine, licenseEndLine)
-            }
-
-            val copyrights = file["copyrights"]?.toList().orEmpty()
-            val findings = associateFileFindings(path, licenses, copyrights, rootLicense)
             findings.forEach { (license, copyrightsForLicense) ->
                 copyrightsForLicenses.getOrPut(license) { sortedSetOf() }.let { copyrightFindings ->
                     copyrightsForLicense.forEach { copyrightFinding ->
