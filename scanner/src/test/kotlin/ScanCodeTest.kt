@@ -19,17 +19,13 @@
 
 package com.here.ort.scanner
 
-import com.here.ort.model.CopyrightFinding
 import com.here.ort.model.CopyrightFindings
-import com.here.ort.model.LicenseFinding
 import com.here.ort.model.LicenseFindings
 import com.here.ort.model.TextLocation
 import com.here.ort.model.config.ScannerConfiguration
 import com.here.ort.model.jsonMapper
 import com.here.ort.scanner.scanners.ScanCode
-import com.here.ort.spdx.LicenseFileMatcher
 
-import io.kotlintest.matchers.collections.shouldContainExactlyInAnyOrder
 import io.kotlintest.matchers.haveSize
 import io.kotlintest.matchers.match
 import io.kotlintest.should
@@ -38,26 +34,6 @@ import io.kotlintest.specs.WordSpec
 
 import java.io.File
 import java.time.Instant
-
-private fun createLicenseFinding(license: String, path: String) =
-    LicenseFinding(
-        license = license,
-        location = TextLocation(
-            path = path,
-            startLine = 1,
-            endLine = 2
-        )
-    )
-
-private fun createCopyrightFinding(statement: String, path: String, line: Int) =
-    CopyrightFinding(
-        statement = statement,
-        location = TextLocation(
-            path = path,
-            startLine = line,
-            endLine = line
-        )
-    )
 
 @Suppress("LargeClass")
 class ScanCodeTest : WordSpec({
@@ -161,46 +137,6 @@ class ScanCodeTest : WordSpec({
             val summary = scanner.generateSummary(Instant.now(), Instant.now(), result)
 
             ScanCode.mapUnknownErrors(summary.errors.toMutableList()) shouldBe false
-        }
-    }
-
-    "getRootLicense()" should {
-        "return the license of the file matched by the license file matcher" {
-            val licenseFindings = listOf(
-                createLicenseFinding(license = "abc", path = "a/LICENSE")
-            )
-
-            val scanCode = ScanCode("ScanCode", ScannerConfiguration(), LicenseFileMatcher("a/LICENSE"))
-
-            scanCode.getRootLicense(licenseFindings) shouldBe "abc"
-        }
-
-        "return an empty string given when no file is matched by the license file matcher" {
-            val licenseFindings = listOf(
-                createLicenseFinding(license = "abc", path = "b/LICENSE")
-            )
-
-            val scanCode = ScanCode("ScanCode", ScannerConfiguration(), LicenseFileMatcher("a/LICENSE"))
-
-            scanCode.getRootLicense(licenseFindings) shouldBe ""
-        }
-    }
-
-    "getClosestCopyrightStatements" should {
-        "return exactly the statements within the line threshold" {
-            val lineThreshold = 5
-            val licenseStartLine = 10
-            val copyrightFindings = listOf(
-               createCopyrightFinding("statement1", "path", licenseStartLine - lineThreshold - 1),
-               createCopyrightFinding("statement2", "path", licenseStartLine - lineThreshold),
-               createCopyrightFinding("statement3", "path", licenseStartLine + lineThreshold),
-               createCopyrightFinding("statement4", "path", licenseStartLine + lineThreshold + 1)
-            )
-
-            val result = scanner.getClosestCopyrightStatements(copyrightFindings, licenseStartLine, lineThreshold)
-                .map { it.statement }
-
-            result shouldContainExactlyInAnyOrder listOf ("statement2", "statement3")
         }
     }
 

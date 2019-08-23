@@ -29,7 +29,7 @@ class LicenseFileMatcherTest : WordSpec({
         "match commonly used license file paths" {
             defaultMatcher.matches("LICENSE") shouldBe true
             defaultMatcher.matches("LICENSE.BSD") shouldBe true
-            // TODO: add more
+            // TODO: add more important license file names
         }
     }
 })
