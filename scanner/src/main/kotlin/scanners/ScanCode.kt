@@ -441,5 +441,5 @@ class ScanCode(
      * Associate copyright findings to license findings throughout the whole result.
      */
     internal fun associateFindings(result: JsonNode): SortedSet<LicenseFindings> =
-        copyrightToLicenseFindingsMatcher.associateFindings(getLicenseFindings(result), getCopyrightFindings(result))
+        copyrightToLicenseFindingsMatcher.match(getLicenseFindings(result), getCopyrightFindings(result))
 }
