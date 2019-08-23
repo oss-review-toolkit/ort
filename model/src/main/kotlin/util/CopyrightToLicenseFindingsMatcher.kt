@@ -120,7 +120,7 @@ class CopyrightToLicenseFindingsMatcher(
         return copyrightsForLicenses
     }
 
-    fun associateFindings(licenseFindings: List<LicenseFinding>, copyrightFindings: List<CopyrightFinding>):
+    fun match(licenseFindings: List<LicenseFinding>, copyrightFindings: List<CopyrightFinding>):
             SortedSet<LicenseFindings> {
         val licenseFindingsByPath = licenseFindings.groupBy { it.location.path }
         val copyrightFindingsByPath = copyrightFindings.groupBy { it.location.path }
