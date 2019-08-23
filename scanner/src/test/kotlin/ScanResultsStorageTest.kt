@@ -20,11 +20,6 @@
 
 package com.here.ort.scanner
 
-import com.here.ort.model.LicenseFinding
-import com.here.ort.model.Provenance
-import com.here.ort.model.ScanResult
-import com.here.ort.model.ScanSummary
-import com.here.ort.model.ScannerDetails
 import com.here.ort.model.config.ArtifactoryStorageConfiguration
 import com.here.ort.scanner.storages.ArtifactoryStorage
 
@@ -32,8 +27,6 @@ import io.kotlintest.shouldBe
 import io.kotlintest.shouldNotBe
 import io.kotlintest.shouldThrow
 import io.kotlintest.specs.WordSpec
-
-import java.time.Instant
 
 @Suppress("UnsafeCallOnNullableType", "UnsafeCast")
 class ScanResultsStorageTest : WordSpec() {
@@ -90,48 +83,6 @@ class ScanResultsStorageTest : WordSpec() {
                     getUrl() shouldBe "someUrl"
                     getRepository() shouldBe "someRepository"
                     getApiToken() shouldBe "someApiToken"
-                }
-            }
-        }
-
-        "patchScanCodeLicenseRefs" should {
-            "correctly patch existing ScanCode LicenseRef findings" {
-                fun generateDummyLicenseFinding(license: String) =
-                    LicenseFinding(license, sortedSetOf(), sortedSetOf())
-
-                val originalScanResult = ScanResult(
-                    Provenance(),
-                    ScannerDetails("ScanCode", "", ""),
-                    ScanSummary(
-                        Instant.EPOCH,
-                        Instant.EPOCH,
-                        0,
-                        sortedSetOf(
-                            generateDummyLicenseFinding("LicenseRef-foo-bar"),
-                            generateDummyLicenseFinding("LicenseRef-scancode-correct"),
-                            generateDummyLicenseFinding("Apache-2.0")
-                        )
-                    )
-                )
-
-                val expectedScanResult = ScanResult(
-                    Provenance(),
-                    ScannerDetails("ScanCode", "", ""),
-                    ScanSummary(
-                        Instant.EPOCH,
-                        Instant.EPOCH,
-                        0,
-                        sortedSetOf(
-                            generateDummyLicenseFinding("LicenseRef-scancode-foo-bar"),
-                            generateDummyLicenseFinding("LicenseRef-scancode-correct"),
-                            generateDummyLicenseFinding("Apache-2.0")
-                        )
-                    )
-                )
-
-                (ScanResultsStorage.storage as ArtifactoryStorage).apply {
-                    val actualScanResults = patchScanCodeLicenseRefs(listOf(originalScanResult)).single()
-                    actualScanResults shouldBe expectedScanResult
                 }
             }
         }
