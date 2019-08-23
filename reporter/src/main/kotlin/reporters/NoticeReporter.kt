@@ -54,11 +54,6 @@ class NoticeReporter : Reporter() {
 
             import java.util.*
 
-            // Input:
-            val ortResult = bindings["ortResult"] as OrtResult
-            val noticeReport = bindings["noticeReport"] as NoticeReport
-            val copyrightGarbage = bindings["copyrightGarbage"] as CopyrightGarbage
-
             var headers = noticeReport.headers
             var findings = noticeReport.findings
             var footers = noticeReport.footers

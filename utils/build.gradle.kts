@@ -25,7 +25,5 @@ dependencies {
     implementation("commons-codec:commons-codec:$commonsCodecVersion")
     implementation("org.apache.commons:commons-compress:$commonsCompressVersion")
     implementation("org.tukaani:xz:$xzVersion")
-    implementation("org.jetbrains.kotlin:kotlin-compiler-embeddable")
-    implementation("org.jetbrains.kotlin:kotlin-scripting-compiler-embeddable")
-    implementation("org.jetbrains.kotlin:kotlin-script-util")
+    implementation("org.jetbrains.kotlin:kotlin-scripting-jsr223-embeddable")
 }
