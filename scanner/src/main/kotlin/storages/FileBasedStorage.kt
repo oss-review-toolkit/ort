@@ -21,7 +21,6 @@
 package com.here.ort.scanner.storages
 
 import com.here.ort.model.Package
-import com.here.ort.model.ScanResult
 import com.here.ort.model.ScanResultContainer
 import com.here.ort.model.ScannerDetails
 import com.here.ort.scanner.ScanResultsStorage
@@ -60,32 +59,6 @@ abstract class FileBasedStorage : ScanResultsStorage() {
                     "$scannerDetails."
         }
 
-        val patchedScanResults = patchScanCodeLicenseRefs(scanResults)
-
-        return ScanResultContainer(pkg.id, patchedScanResults)
+        return ScanResultContainer(pkg.id, scanResults)
     }
-
-    // TODO: Remove this code again once we migrated our scan result storage to contain the new "namespaced" license
-    //       names for ScanCode.
-    internal fun patchScanCodeLicenseRefs(scanResults: List<ScanResult>) =
-        scanResults.map { result ->
-            if (result.scanner.name == "ScanCode") {
-                val findings = result.summary.licenseFindings.map { finding ->
-                    if (finding.license.startsWith("LicenseRef-") &&
-                        !finding.license.startsWith("LicenseRef-scancode-")
-                    ) {
-                        val suffix = finding.license.removePrefix("LicenseRef-")
-                        val license = "LicenseRef-scancode-$suffix"
-                        log.info { "Patched license name '${finding.license}' to '$license'." }
-                        finding.copy(license = license)
-                    } else {
-                        finding
-                    }
-                }
-
-                result.copy(summary = result.summary.copy(licenseFindings = findings.toSortedSet()))
-            } else {
-                result
-            }
-        }
 }
