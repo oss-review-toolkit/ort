@@ -13,12 +13,7 @@ plugins {
 }
 
 dependencies {
-    api("org.apache.logging.log4j:log4j-api-kotlin:$log4jApiKotlinVersion") {
-        // Our version of the Kotlin runtime is provided by the Gradle plugin.
-        exclude(module = "kotlin-runtime")
-        // The Kotlin standard library we use is now called "kotlin-stdlib-jdk8".
-        exclude(module = "kotlin-stdlib")
-    }
+    api("org.apache.logging.log4j:log4j-api-kotlin:$log4jApiKotlinVersion")
 
     api("com.fasterxml.jackson.core:jackson-databind:$jacksonVersion")
     api("com.squareup.okhttp3:okhttp:$okhttpVersion")
