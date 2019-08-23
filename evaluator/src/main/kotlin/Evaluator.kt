@@ -36,9 +36,6 @@ class Evaluator(ortResult: OrtResult) : ScriptRunner() {
 
             import java.util.*
 
-            // Input:
-            val ortResult = bindings["ortResult"] as OrtResult
-
             // Output:
             val ruleViolations = mutableListOf<RuleViolation>()
 

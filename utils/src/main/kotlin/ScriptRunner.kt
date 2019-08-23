@@ -24,8 +24,6 @@ import javax.script.ScriptEngine
 import javax.script.ScriptEngineManager
 import javax.script.ScriptException
 
-import org.jetbrains.kotlin.cli.common.environment.setIdeaIoUseFallback
-
 /**
  * A class providing the framework to run Kotlin scripts.
  */
@@ -44,17 +42,6 @@ abstract class ScriptRunner {
      * The text that should get appended to the main script.
      */
     abstract val postface: String
-
-    init {
-        // This is required to avoid
-        //
-        //     WARN: Failed to initialize native filesystem for Windows
-        //     java.lang.RuntimeException: Could not find installation home path. Please make sure bin/idea.properties
-        //     is present in the installation directory.
-        //
-        // on Windows for some reason.
-        setIdeaIoUseFallback()
-    }
 
     private fun completeScript(script: String) = preface + script + postface
 
