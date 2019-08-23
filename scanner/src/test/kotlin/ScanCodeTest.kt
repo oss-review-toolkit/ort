@@ -19,6 +19,7 @@
 
 package com.here.ort.scanner
 
+import com.here.ort.model.CopyrightFinding
 import com.here.ort.model.CopyrightFindings
 import com.here.ort.model.LicenseFinding
 import com.here.ort.model.LicenseFindings
@@ -28,6 +29,7 @@ import com.here.ort.model.jsonMapper
 import com.here.ort.scanner.scanners.ScanCode
 import com.here.ort.spdx.LicenseFileMatcher
 
+import io.kotlintest.matchers.collections.shouldContainExactlyInAnyOrder
 import io.kotlintest.matchers.haveSize
 import io.kotlintest.matchers.match
 import io.kotlintest.should
@@ -44,6 +46,16 @@ private fun createLicenseFinding(license: String, path: String) =
             path = path,
             startLine = 1,
             endLine = 2
+        )
+    )
+
+private fun createCopyrightFinding(statement: String, path: String, line: Int) =
+    CopyrightFinding(
+        statement = statement,
+        location = TextLocation(
+            path = path,
+            startLine = line,
+            endLine = line
         )
     )
 
@@ -174,47 +186,21 @@ class ScanCodeTest : WordSpec({
         }
     }
 
-    "getClosestCopyrightStatements()" should {
-        "properly return closest jquery copyright statements" {
-            val resultFile = File("src/test/assets/esprima-2.7.3_scancode-2.2.1.json")
-            val result = jsonMapper.readTree(resultFile)
-            val path = "test/3rdparty/jquery-1.9.1.js"
-            val copyrights = scanner.getCopyrightFindings(result).filter { it.location.path == path }
-
-            scanner.getClosestCopyrightStatements(copyrights, 5) shouldBe sortedSetOf(
-                CopyrightFindings(
-                    "Copyright 2005, 2012 jQuery Foundation, Inc.",
-                    sortedSetOf(TextLocation(path, 8, 10))
-                )
+    "getClosestCopyrightStatements" should {
+        "return exactly the statements within the line threshold" {
+            val lineThreshold = 5
+            val licenseStartLine = 10
+            val copyrightFindings = listOf(
+               createCopyrightFinding("statement1", "path", licenseStartLine - lineThreshold - 1),
+               createCopyrightFinding("statement2", "path", licenseStartLine - lineThreshold),
+               createCopyrightFinding("statement3", "path", licenseStartLine + lineThreshold),
+               createCopyrightFinding("statement4", "path", licenseStartLine + lineThreshold + 1)
             )
-            scanner.getClosestCopyrightStatements(copyrights, 3690) shouldBe sortedSetOf(
-                CopyrightFindings(
-                    "Copyright 2012 jQuery Foundation",
-                    sortedSetOf(TextLocation(path, 3688, 3691))
-                )
-            )
-        }
 
-        "properly return closest mootools copyright statements" {
-            val resultFile = File("src/test/assets/esprima-2.7.3_scancode-2.2.1.json")
-            val result = jsonMapper.readTree(resultFile)
-            val path = "test/3rdparty/mootools-1.4.5.js"
-            val copyrights = scanner.getCopyrightFindings(result).filter { it.location.path == path }
+            val result = scanner.getClosestCopyrightStatements(copyrightFindings, licenseStartLine, lineThreshold)
+                .map { it.statement }
 
-            scanner.getClosestCopyrightStatements(copyrights, 28) shouldBe sortedSetOf(
-                CopyrightFindings(
-                    "Copyright (c) 2005-2007 Sam Stephenson",
-                    sortedSetOf(TextLocation(path, 27, 29))
-                ),
-                CopyrightFindings(
-                    "Copyright (c) 2006 Dean Edwards, GNU Lesser General Public",
-                    sortedSetOf(TextLocation(path, 27, 29))
-                ),
-                CopyrightFindings(
-                    "Copyright (c) 2006-2012 Valerio Proietti",
-                    sortedSetOf(TextLocation(path, 23, 23))
-                )
-            )
+            result shouldContainExactlyInAnyOrder listOf ("statement2", "statement3")
         }
     }
 
