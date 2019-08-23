@@ -1,9 +1,3 @@
-package com.here.ort.spdx
-
-import java.nio.file.FileSystems
-import java.nio.file.InvalidPathException
-import java.nio.file.Paths
-
 /*
  * Copyright (C) 2017-2019 HERE Europe B.V.
  *
@@ -21,6 +15,17 @@ import java.nio.file.Paths
  *
  * SPDX-License-Identifier: Apache-2.0
  * License-Filename: LICENSE
+ */
+
+package com.here.ort.spdx
+
+import java.nio.file.FileSystems
+import java.nio.file.InvalidPathException
+import java.nio.file.Paths
+
+/**
+ * A class for determining based on a given file path whether that file path is a common place where license
+ * information for a project is placed.
  */
 class LicenseFileMatcher(val licenseFileNames: List<String>) {
     companion object {
@@ -44,6 +49,10 @@ class LicenseFileMatcher(val licenseFileNames: List<String>) {
         FileSystems.getDefault().getPathMatcher("glob:$it")
     }
 
+    /**
+     * Return true if and only if the given [path] is matched by any of the license file globs passed to the
+     * constructor.
+     */
     fun matches(path: String): Boolean = try {
         matchers.any { it.matches(Paths.get(path)) }
     } catch (e: InvalidPathException) {
