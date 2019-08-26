@@ -59,6 +59,15 @@ class EvaluatorTest : WordSpec() {
                 result.violations should beEmpty()
             }
 
+            "be able to access the ORT result" {
+                val result = Evaluator(OrtResult.EMPTY).run(
+                    """
+                    require(ortResult == OrtResult.EMPTY) { "Could not verify the ORT result to be empty." }
+                    """.trimIndent())
+
+                result.violations should beEmpty()
+            }
+
             "contain rule errors in the result" {
                 val result = Evaluator(OrtResult.EMPTY).run(
                     """
