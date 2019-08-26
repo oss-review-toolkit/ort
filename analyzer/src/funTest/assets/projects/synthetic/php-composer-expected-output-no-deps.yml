@@ -1,7 +1,7 @@
 ---
 project:
   id: "PhpComposer:ort:composer-test-project:0.1.0"
-  purl: "pkg:PhpComposer/ort/composer-test-project@0.1.0"
+  purl: "pkg:phpcomposer/ort/composer-test-project@0.1.0"
   definition_file_path: "<REPLACE_DEFINITION_FILE_PATH>"
   declared_licenses:
   - "Apache-2.0"

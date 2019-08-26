@@ -1,7 +1,7 @@
 ---
 project:
   id: "Bower::a-test-project:"
-  purl: "pkg:Bower//a-test-project@"
+  purl: "pkg:bower//a-test-project@"
   definition_file_path: "<REPLACE_DEFINITION_FILE_PATH>"
   declared_licenses:
   - "Apache-2.0"
@@ -31,7 +31,7 @@ project:
 packages:
 - package:
     id: "Bower::jquery:3.3.1"
-    purl: "pkg:Bower//jquery@3.3.1"
+    purl: "pkg:bower//jquery@3.3.1"
     declared_licenses:
     - "MIT"
     declared_licenses_processed:
@@ -61,7 +61,7 @@ packages:
   curations: []
 - package:
     id: "Bower::polymer:2.4.0"
-    purl: "pkg:Bower//polymer@2.4.0"
+    purl: "pkg:bower//polymer@2.4.0"
     declared_licenses:
     - "http://polymer.github.io/LICENSE.txt"
     declared_licenses_processed:
@@ -91,7 +91,7 @@ packages:
   curations: []
 - package:
     id: "Bower::shadycss:1.9.1"
-    purl: "pkg:Bower//shadycss@1.9.1"
+    purl: "pkg:bower//shadycss@1.9.1"
     declared_licenses: []
     declared_licenses_processed: {}
     description: ""
@@ -119,7 +119,7 @@ packages:
   curations: []
 - package:
     id: "Bower::webcomponentsjs:1.3.3"
-    purl: "pkg:Bower//webcomponentsjs@1.3.3"
+    purl: "pkg:bower//webcomponentsjs@1.3.3"
     declared_licenses:
     - "BSD-3-Clause"
     declared_licenses_processed:

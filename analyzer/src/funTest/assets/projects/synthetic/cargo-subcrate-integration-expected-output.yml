@@ -1,7 +1,7 @@
 ---
 project:
   id: "Cargo::integration:0.1.0"
-  purl: "pkg:Cargo//integration@0.1.0"
+  purl: "pkg:cargo//integration@0.1.0"
   definition_file_path: "<REPLACE_DEFINITION_FILE_PATH>"
   declared_licenses: []
   declared_licenses_processed: {}
@@ -26,7 +26,7 @@ project:
 packages:
 - package:
     id: "Cargo::spin:0.4.10"
-    purl: "pkg:Cargo//spin@0.4.10"
+    purl: "pkg:cargo//spin@0.4.10"
     declared_licenses:
     - "MIT"
     declared_licenses_processed:
