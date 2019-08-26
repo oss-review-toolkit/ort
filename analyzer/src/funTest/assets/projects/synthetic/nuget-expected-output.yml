@@ -1,7 +1,7 @@
 ---
 project:
   id: "NuGet::nuget:"
-  purl: "pkg://NuGet//nuget@"
+  purl: "pkg:NuGet//nuget@"
   definition_file_path: "analyzer/src/funTest/assets/projects/synthetic/nuget/packages.config"
   declared_licenses: []
   declared_licenses_processed: {}
@@ -27,7 +27,7 @@ project:
 packages:
 - package:
     id: "nuget::Antlr:3.4.1.9004"
-    purl: "pkg://nuget//Antlr@3.4.1.9004"
+    purl: "pkg:nuget//Antlr@3.4.1.9004"
     declared_licenses: []
     declared_licenses_processed: {}
     description: "ANother Tool for Language Recognition, is a language tool that provides\
@@ -57,7 +57,7 @@ packages:
   curations: []
 - package:
     id: "nuget::Newtonsoft.Json:5.0.4"
-    purl: "pkg://nuget//Newtonsoft.Json@5.0.4"
+    purl: "pkg:nuget//Newtonsoft.Json@5.0.4"
     declared_licenses:
     - "http://json.codeplex.com/license"
     declared_licenses_processed:
@@ -88,7 +88,7 @@ packages:
   curations: []
 - package:
     id: "nuget::WebGrease:1.5.2"
-    purl: "pkg://nuget//WebGrease@1.5.2"
+    purl: "pkg:nuget//WebGrease@1.5.2"
     declared_licenses:
     - "http://www.microsoft.com/web/webpi/eula/msn_webgrease_eula.htm"
     declared_licenses_processed:
@@ -120,7 +120,7 @@ packages:
   curations: []
 - package:
     id: "nuget::jQuery:3.3.1"
-    purl: "pkg://nuget//jQuery@3.3.1"
+    purl: "pkg:nuget//jQuery@3.3.1"
     declared_licenses:
     - "http://jquery.org/license"
     declared_licenses_processed:

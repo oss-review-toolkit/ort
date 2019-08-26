@@ -1,7 +1,7 @@
 ---
 project:
   id: "GoDep::github.com/tools/godep/godeps:ce0bfadeb516ab23c845a85c4b0eae421ec9614b"
-  purl: "pkg://GoDep//github.com%2Ftools%2Fgodep%2Fgodeps@ce0bfadeb516ab23c845a85c4b0eae421ec9614b"
+  purl: "pkg:GoDep//github.com%2Ftools%2Fgodep%2Fgodeps@ce0bfadeb516ab23c845a85c4b0eae421ec9614b"
   definition_file_path: "Godeps/Godeps.json"
   declared_licenses: []
   declared_licenses_processed: {}
@@ -32,7 +32,7 @@ project:
 packages:
 - package:
     id: "GoDep::github.com/kr/fs:2788f0dbd16903de03cb8186e5c7d97b69ad387b"
-    purl: "pkg://GoDep//github.com%2Fkr%2Ffs@2788f0dbd16903de03cb8186e5c7d97b69ad387b"
+    purl: "pkg:GoDep//github.com%2Fkr%2Ffs@2788f0dbd16903de03cb8186e5c7d97b69ad387b"
     declared_licenses: []
     declared_licenses_processed: {}
     description: ""
@@ -60,7 +60,7 @@ packages:
   curations: []
 - package:
     id: "GoDep::github.com/kr/pretty:f31442d60e51465c69811e2107ae978868dbea5c"
-    purl: "pkg://GoDep//github.com%2Fkr%2Fpretty@f31442d60e51465c69811e2107ae978868dbea5c"
+    purl: "pkg:GoDep//github.com%2Fkr%2Fpretty@f31442d60e51465c69811e2107ae978868dbea5c"
     declared_licenses: []
     declared_licenses_processed: {}
     description: ""
@@ -88,7 +88,7 @@ packages:
   curations: []
 - package:
     id: "GoDep::github.com/kr/text:6807e777504f54ad073ecef66747de158294b639"
-    purl: "pkg://GoDep//github.com%2Fkr%2Ftext@6807e777504f54ad073ecef66747de158294b639"
+    purl: "pkg:GoDep//github.com%2Fkr%2Ftext@6807e777504f54ad073ecef66747de158294b639"
     declared_licenses: []
     declared_licenses_processed: {}
     description: ""
@@ -116,7 +116,7 @@ packages:
   curations: []
 - package:
     id: "GoDep::github.com/pmezard/go-difflib:f78a839676152fd9f4863704f5d516195c18fc14"
-    purl: "pkg://GoDep//github.com%2Fpmezard%2Fgo-difflib@f78a839676152fd9f4863704f5d516195c18fc14"
+    purl: "pkg:GoDep//github.com%2Fpmezard%2Fgo-difflib@f78a839676152fd9f4863704f5d516195c18fc14"
     declared_licenses: []
     declared_licenses_processed: {}
     description: ""
@@ -144,7 +144,7 @@ packages:
   curations: []
 - package:
     id: "GoDep::golang.org/x/tools:1f1b3322f67af76803c942fd237291538ec68262"
-    purl: "pkg://GoDep//golang.org%2Fx%2Ftools@1f1b3322f67af76803c942fd237291538ec68262"
+    purl: "pkg:GoDep//golang.org%2Fx%2Ftools@1f1b3322f67af76803c942fd237291538ec68262"
     declared_licenses: []
     declared_licenses_processed: {}
     description: ""

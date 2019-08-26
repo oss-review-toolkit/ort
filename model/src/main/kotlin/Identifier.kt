@@ -117,11 +117,11 @@ data class Identifier(
     fun toPath() = components.joinToString("/") { it.encodeOrUnknown() }
 
     /**
-     * Create [package URL](https://github.com/package-url/purl-spec) ("purl") based on the properties of the
-     * [Identifier].
+     * Create the canonical [package URL](https://github.com/package-url/purl-spec) ("purl") based on the properties of
+     * the [Identifier].
      */
     // TODO: This is a preliminary implementation as some open questions remain, see e.g.
     //       https://github.com/package-url/purl-spec/issues/33.
     fun toPurl() = "".takeIf { this == EMPTY }
-        ?: "pkg://$type/${namespace.percentEncode()}/${name.percentEncode()}@${version.percentEncode()}"
+        ?: "pkg:$type/${namespace.percentEncode()}/${name.percentEncode()}@${version.percentEncode()}"
 }

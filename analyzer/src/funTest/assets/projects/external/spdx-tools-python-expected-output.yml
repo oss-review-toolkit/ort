@@ -1,7 +1,7 @@
 ---
 project:
   id: "PIP::spdx-tools:0.5.4"
-  purl: "pkg://PIP//spdx-tools@0.5.4"
+  purl: "pkg:PIP//spdx-tools@0.5.4"
   definition_file_path: "setup.py"
   declared_licenses:
   - "Apache Software"
@@ -33,7 +33,7 @@ project:
 packages:
 - package:
     id: "PyPI::isodate:0.6.0"
-    purl: "pkg://PyPI//isodate@0.6.0"
+    purl: "pkg:PyPI//isodate@0.6.0"
     declared_licenses:
     - "BSD"
     declared_licenses_processed:
@@ -63,7 +63,7 @@ packages:
   curations: []
 - package:
     id: "PyPI::ply:3.11"
-    purl: "pkg://PyPI//ply@3.11"
+    purl: "pkg:PyPI//ply@3.11"
     declared_licenses:
     - "BSD"
     declared_licenses_processed:
@@ -93,7 +93,7 @@ packages:
   curations: []
 - package:
     id: "PyPI::pyparsing:2.4.2"
-    purl: "pkg://PyPI//pyparsing@2.4.2"
+    purl: "pkg:PyPI//pyparsing@2.4.2"
     declared_licenses:
     - "MIT"
     declared_licenses_processed:
@@ -123,7 +123,7 @@ packages:
   curations: []
 - package:
     id: "PyPI::rdflib:4.2.2"
-    purl: "pkg://PyPI//rdflib@4.2.2"
+    purl: "pkg:PyPI//rdflib@4.2.2"
     declared_licenses:
     - "BSD"
     - "https://raw.github.com/RDFLib/rdflib/master/LICENSE"
@@ -155,7 +155,7 @@ packages:
   curations: []
 - package:
     id: "PyPI::six:1.12.0"
-    purl: "pkg://PyPI//six@1.12.0"
+    purl: "pkg:PyPI//six@1.12.0"
     declared_licenses:
     - "MIT"
     declared_licenses_processed:

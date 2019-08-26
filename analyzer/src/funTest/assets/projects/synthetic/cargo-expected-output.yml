@@ -1,7 +1,7 @@
 ---
 project:
   id: "Cargo::lib:0.1.0"
-  purl: "pkg://Cargo//lib@0.1.0"
+  purl: "pkg:Cargo//lib@0.1.0"
   definition_file_path: "<REPLACE_DEFINITION_FILE_PATH>"
   declared_licenses:
   - "Apache-2.0"
@@ -31,7 +31,7 @@ project:
 packages:
 - package:
     id: "Cargo::cfg-if:0.1.9"
-    purl: "pkg://Cargo//cfg-if@0.1.9"
+    purl: "pkg:Cargo//cfg-if@0.1.9"
     declared_licenses:
     - "Apache-2.0"
     - "MIT"
@@ -64,7 +64,7 @@ packages:
   curations: []
 - package:
     id: "Cargo::spin:0.5.0"
-    purl: "pkg://Cargo//spin@0.5.0"
+    purl: "pkg:Cargo//spin@0.5.0"
     declared_licenses:
     - "MIT"
     declared_licenses_processed:

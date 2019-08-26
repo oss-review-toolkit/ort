@@ -1,7 +1,7 @@
 ---
 project:
   id: "Stack:Testing:quickcheck-state-machine:0.6.0"
-  purl: "pkg://Stack/Testing/quickcheck-state-machine@0.6.0"
+  purl: "pkg:Stack/Testing/quickcheck-state-machine@0.6.0"
   definition_file_path: "stack.yaml"
   declared_licenses:
   - "BSD3"
@@ -1044,7 +1044,7 @@ project:
 packages:
 - package:
     id: "Hackage:Algebra, Data, Data Structures, Math:semigroups:0.18.5"
-    purl: "pkg://Hackage/Algebra%2C%20Data%2C%20Data%20Structures%2C%20Math/semigroups@0.18.5"
+    purl: "pkg:Hackage/Algebra%2C%20Data%2C%20Data%20Structures%2C%20Math/semigroups@0.18.5"
     declared_licenses:
     - "BSD3"
     declared_licenses_processed:
@@ -1078,7 +1078,7 @@ packages:
   curations: []
 - package:
     id: "Hackage:Compatibility:base-compat:0.10.5"
-    purl: "pkg://Hackage/Compatibility/base-compat@0.10.5"
+    purl: "pkg:Hackage/Compatibility/base-compat@0.10.5"
     declared_licenses:
     - "MIT"
     declared_licenses_processed:
@@ -1123,7 +1123,7 @@ packages:
   curations: []
 - package:
     id: "Hackage:Compatibility:base-orphans:0.8"
-    purl: "pkg://Hackage/Compatibility/base-orphans@0.8"
+    purl: "pkg:Hackage/Compatibility/base-orphans@0.8"
     declared_licenses:
     - "MIT"
     declared_licenses_processed:
@@ -1159,7 +1159,7 @@ packages:
   curations: []
 - package:
     id: "Hackage:Compatibility:transformers-compat:0.6.2"
-    purl: "pkg://Hackage/Compatibility/transformers-compat@0.6.2"
+    purl: "pkg:Hackage/Compatibility/transformers-compat@0.6.2"
     declared_licenses:
     - "BSD3"
     declared_licenses_processed:
@@ -1194,7 +1194,7 @@ packages:
   curations: []
 - package:
     id: "Hackage:Concurrency:async:2.2.1"
-    purl: "pkg://Hackage/Concurrency/async@2.2.1"
+    purl: "pkg:Hackage/Concurrency/async@2.2.1"
     declared_licenses:
     - "BSD3"
     declared_licenses_processed:
@@ -1232,7 +1232,7 @@ packages:
   curations: []
 - package:
     id: "Hackage:Concurrency:stm:2.5.0.0"
-    purl: "pkg://Hackage/Concurrency/stm@2.5.0.0"
+    purl: "pkg:Hackage/Concurrency/stm@2.5.0.0"
     declared_licenses:
     - "BSD3"
     declared_licenses_processed:
@@ -1267,7 +1267,7 @@ packages:
   curations: []
 - package:
     id: "Hackage:Control, Data:contravariant:1.5"
-    purl: "pkg://Hackage/Control%2C%20Data/contravariant@1.5"
+    purl: "pkg:Hackage/Control%2C%20Data/contravariant@1.5"
     declared_licenses:
     - "BSD3"
     declared_licenses_processed:
@@ -1297,7 +1297,7 @@ packages:
   curations: []
 - package:
     id: "Hackage:Control, Exceptions, Monad:exceptions:0.10.0"
-    purl: "pkg://Hackage/Control%2C%20Exceptions%2C%20Monad/exceptions@0.10.0"
+    purl: "pkg:Hackage/Control%2C%20Exceptions%2C%20Monad/exceptions@0.10.0"
     declared_licenses:
     - "BSD3"
     declared_licenses_processed:
@@ -1327,7 +1327,7 @@ packages:
   curations: []
 - package:
     id: "Hackage:Control:deepseq:1.4.4.0"
-    purl: "pkg://Hackage/Control/deepseq@1.4.4.0"
+    purl: "pkg:Hackage/Control/deepseq@1.4.4.0"
     declared_licenses:
     - "BSD3"
     declared_licenses_processed:
@@ -1366,7 +1366,7 @@ packages:
   curations: []
 - package:
     id: "Hackage:Control:loop:0.3.0"
-    purl: "pkg://Hackage/Control/loop@0.3.0"
+    purl: "pkg:Hackage/Control/loop@0.3.0"
     declared_licenses:
     - "MIT"
     declared_licenses_processed:
@@ -1398,7 +1398,7 @@ packages:
   curations: []
 - package:
     id: "Hackage:Control:mtl:2.2.2"
-    purl: "pkg://Hackage/Control/mtl@2.2.2"
+    purl: "pkg:Hackage/Control/mtl@2.2.2"
     declared_licenses:
     - "BSD3"
     declared_licenses_processed:
@@ -1431,7 +1431,7 @@ packages:
   curations: []
 - package:
     id: "Hackage:Control:newtype-generics:0.5.3"
-    purl: "pkg://Hackage/Control/newtype-generics@0.5.3"
+    purl: "pkg:Hackage/Control/newtype-generics@0.5.3"
     declared_licenses:
     - "BSD3"
     declared_licenses_processed:
@@ -1465,7 +1465,7 @@ packages:
   curations: []
 - package:
     id: "Hackage:Control:transformers:0.5.5.0"
-    purl: "pkg://Hackage/Control/transformers@0.5.5.0"
+    purl: "pkg:Hackage/Control/transformers@0.5.5.0"
     declared_licenses:
     - "BSD3"
     declared_licenses_processed:
@@ -1506,7 +1506,7 @@ packages:
   curations: []
 - package:
     id: "Hackage:Control:unliftio-core:0.1.2.0"
-    purl: "pkg://Hackage/Control/unliftio-core@0.1.2.0"
+    purl: "pkg:Hackage/Control/unliftio-core@0.1.2.0"
     declared_licenses:
     - "MIT"
     declared_licenses_processed:
@@ -1536,7 +1536,7 @@ packages:
   curations: []
 - package:
     id: "Hackage:Control:unliftio:0.2.10"
-    purl: "pkg://Hackage/Control/unliftio@0.2.10"
+    purl: "pkg:Hackage/Control/unliftio@0.2.10"
     declared_licenses:
     - "MIT"
     declared_licenses_processed:
@@ -1566,7 +1566,7 @@ packages:
   curations: []
 - package:
     id: "Hackage:Data Structures, Graphs:fgl:5.7.0.1"
-    purl: "pkg://Hackage/Data%20Structures%2C%20Graphs/fgl@5.7.0.1"
+    purl: "pkg:Hackage/Data%20Structures%2C%20Graphs/fgl@5.7.0.1"
     declared_licenses:
     - "BSD3"
     declared_licenses_processed:
@@ -1597,7 +1597,7 @@ packages:
   curations: []
 - package:
     id: "Hackage:Data Structures:array:0.5.3.0"
-    purl: "pkg://Hackage/Data%20Structures/array@0.5.3.0"
+    purl: "pkg:Hackage/Data%20Structures/array@0.5.3.0"
     declared_licenses:
     - "BSD3"
     declared_licenses_processed:
@@ -1630,7 +1630,7 @@ packages:
   curations: []
 - package:
     id: "Hackage:Data Structures:containers:0.6.0.1"
-    purl: "pkg://Hackage/Data%20Structures/containers@0.6.0.1"
+    purl: "pkg:Hackage/Data%20Structures/containers@0.6.0.1"
     declared_licenses:
     - "BSD3"
     declared_licenses_processed:
@@ -1665,7 +1665,7 @@ packages:
   curations: []
 - package:
     id: "Hackage:Data, Data Structures:vector:0.12.0.2"
-    purl: "pkg://Hackage/Data%2C%20Data%20Structures/vector@0.12.0.2"
+    purl: "pkg:Hackage/Data%2C%20Data%20Structures/vector@0.12.0.2"
     declared_licenses:
     - "BSD3"
     declared_licenses_processed:
@@ -1704,7 +1704,7 @@ packages:
   curations: []
 - package:
     id: "Hackage:Data, Parsing:binary:0.8.6.0"
-    purl: "pkg://Hackage/Data%2C%20Parsing/binary@0.8.6.0"
+    purl: "pkg:Hackage/Data%2C%20Parsing/binary@0.8.6.0"
     declared_licenses:
     - "BSD3"
     declared_licenses_processed:
@@ -1739,7 +1739,7 @@ packages:
   curations: []
 - package:
     id: "Hackage:Data, Phantom Types:tagged:0.8.6"
-    purl: "pkg://Hackage/Data%2C%20Phantom%20Types/tagged@0.8.6"
+    purl: "pkg:Hackage/Data%2C%20Phantom%20Types/tagged@0.8.6"
     declared_licenses:
     - "BSD3"
     declared_licenses_processed:
@@ -1769,7 +1769,7 @@ packages:
   curations: []
 - package:
     id: "Hackage:Data, Testing:tree-diff:0.0.2.1"
-    purl: "pkg://Hackage/Data%2C%20Testing/tree-diff@0.0.2.1"
+    purl: "pkg:Hackage/Data%2C%20Testing/tree-diff@0.0.2.1"
     declared_licenses:
     - "BSD3"
     declared_licenses_processed:
@@ -1808,7 +1808,7 @@ packages:
   curations: []
 - package:
     id: "Hackage:Data, Text:text:1.2.3.1"
-    purl: "pkg://Hackage/Data%2C%20Text/text@1.2.3.1"
+    purl: "pkg:Hackage/Data%2C%20Text/text@1.2.3.1"
     declared_licenses:
     - "BSD2"
     declared_licenses_processed:
@@ -1853,7 +1853,7 @@ packages:
   curations: []
 - package:
     id: "Hackage:Data:MemoTrie:0.6.9"
-    purl: "pkg://Hackage/Data/MemoTrie@0.6.9"
+    purl: "pkg:Hackage/Data/MemoTrie@0.6.9"
     declared_licenses:
     - "BSD3"
     declared_licenses_processed:
@@ -1886,7 +1886,7 @@ packages:
   curations: []
 - package:
     id: "Hackage:Data:StateVar:1.1.1.1"
-    purl: "pkg://Hackage/Data/StateVar@1.1.1.1"
+    purl: "pkg:Hackage/Data/StateVar@1.1.1.1"
     declared_licenses:
     - "BSD3"
     declared_licenses_processed:
@@ -1917,7 +1917,7 @@ packages:
   curations: []
 - package:
     id: "Hackage:Data:bytestring:0.10.8.2"
-    purl: "pkg://Hackage/Data/bytestring@0.10.8.2"
+    purl: "pkg:Hackage/Data/bytestring@0.10.8.2"
     declared_licenses:
     - "BSD3"
     declared_licenses_processed:
@@ -1968,7 +1968,7 @@ packages:
   curations: []
 - package:
     id: "Hackage:Data:charset:0.3.7.1"
-    purl: "pkg://Hackage/Data/charset@0.3.7.1"
+    purl: "pkg:Hackage/Data/charset@0.3.7.1"
     declared_licenses:
     - "BSD3"
     declared_licenses_processed:
@@ -1998,7 +1998,7 @@ packages:
   curations: []
 - package:
     id: "Hackage:Data:dlist:0.8.0.5"
-    purl: "pkg://Hackage/Data/dlist@0.8.0.5"
+    purl: "pkg:Hackage/Data/dlist@0.8.0.5"
     declared_licenses:
     - "BSD3"
     declared_licenses_processed:
@@ -2030,7 +2030,7 @@ packages:
   curations: []
 - package:
     id: "Hackage:Data:hashable:1.2.7.0"
-    purl: "pkg://Hackage/Data/hashable@1.2.7.0"
+    purl: "pkg:Hackage/Data/hashable@1.2.7.0"
     declared_licenses:
     - "BSD3"
     declared_licenses_processed:
@@ -2063,7 +2063,7 @@ packages:
   curations: []
 - package:
     id: "Hackage:Data:primitive:0.6.4.0"
-    purl: "pkg://Hackage/Data/primitive@0.6.4.0"
+    purl: "pkg:Hackage/Data/primitive@0.6.4.0"
     declared_licenses:
     - "BSD3"
     declared_licenses_processed:
@@ -2093,7 +2093,7 @@ packages:
   curations: []
 - package:
     id: "Hackage:Data:scientific:0.3.6.2"
-    purl: "pkg://Hackage/Data/scientific@0.3.6.2"
+    purl: "pkg:Hackage/Data/scientific@0.3.6.2"
     declared_licenses:
     - "BSD3"
     declared_licenses_processed:
@@ -2141,7 +2141,7 @@ packages:
   curations: []
 - package:
     id: "Hackage:Data:sop-core:0.4.0.0"
-    purl: "pkg://Hackage/Data/sop-core@0.4.0.0"
+    purl: "pkg:Hackage/Data/sop-core@0.4.0.0"
     declared_licenses:
     - "BSD3"
     declared_licenses_processed:
@@ -2176,7 +2176,7 @@ packages:
   curations: []
 - package:
     id: "Hackage:Data:unordered-containers:0.2.9.0"
-    purl: "pkg://Hackage/Data/unordered-containers@0.2.9.0"
+    purl: "pkg:Hackage/Data/unordered-containers@0.2.9.0"
     declared_licenses:
     - "BSD3"
     declared_licenses_processed:
@@ -2209,7 +2209,7 @@ packages:
   curations: []
 - package:
     id: "Hackage:Data:uuid-types:1.0.3"
-    purl: "pkg://Hackage/Data/uuid-types@1.0.3"
+    purl: "pkg:Hackage/Data/uuid-types@1.0.3"
     declared_licenses:
     - "BSD3"
     declared_licenses_processed:
@@ -2241,7 +2241,7 @@ packages:
   curations: []
 - package:
     id: "Hackage:Development:happy:1.19.9"
-    purl: "pkg://Hackage/Development/happy@1.19.9"
+    purl: "pkg:Hackage/Development/happy@1.19.9"
     declared_licenses:
     - "BSD2"
     declared_licenses_processed:
@@ -2273,7 +2273,7 @@ packages:
   curations: []
 - package:
     id: "Hackage:Development:th-abstraction:0.2.10.0"
-    purl: "pkg://Hackage/Development/th-abstraction@0.2.10.0"
+    purl: "pkg:Hackage/Development/th-abstraction@0.2.10.0"
     declared_licenses:
     - "ISC"
     declared_licenses_processed:
@@ -2306,7 +2306,7 @@ packages:
   curations: []
 - package:
     id: "Hackage:Distribution:Cabal:2.4.1.0"
-    purl: "pkg://Hackage/Distribution/Cabal@2.4.1.0"
+    purl: "pkg:Hackage/Distribution/Cabal@2.4.1.0"
     declared_licenses:
     - "BSD3"
     declared_licenses_processed:
@@ -2340,7 +2340,7 @@ packages:
   curations: []
 - package:
     id: "Hackage:GHC:ghc-prim:0.5.3"
-    purl: "pkg://Hackage/GHC/ghc-prim@0.5.3"
+    purl: "pkg:Hackage/GHC/ghc-prim@0.5.3"
     declared_licenses:
     - "BSD-3-Clause"
     declared_licenses_processed:
@@ -2371,7 +2371,7 @@ packages:
   curations: []
 - package:
     id: "Hackage:Generics:generics-sop:0.4.0.1"
-    purl: "pkg://Hackage/Generics/generics-sop@0.4.0.1"
+    purl: "pkg:Hackage/Generics/generics-sop@0.4.0.1"
     declared_licenses:
     - "BSD3"
     declared_licenses_processed:
@@ -2417,7 +2417,7 @@ packages:
   curations: []
 - package:
     id: "Hackage:Graphs, Graphics:graphviz:2999.20.0.3"
-    purl: "pkg://Hackage/Graphs%2C%20Graphics/graphviz@2999.20.0.3"
+    purl: "pkg:Hackage/Graphs%2C%20Graphics/graphviz@2999.20.0.3"
     declared_licenses:
     - "BSD3"
     declared_licenses_processed:
@@ -2460,7 +2460,7 @@ packages:
   curations: []
 - package:
     id: "Hackage:Language:haskell-lexer:1.0.2"
-    purl: "pkg://Hackage/Language/haskell-lexer@1.0.2"
+    purl: "pkg:Hackage/Language/haskell-lexer@1.0.2"
     declared_licenses:
     - "BSD3"
     declared_licenses_processed:
@@ -2490,7 +2490,7 @@ packages:
   curations: []
 - package:
     id: "Hackage:List:split:0.2.3.3"
-    purl: "pkg://Hackage/List/split@0.2.3.3"
+    purl: "pkg:Hackage/List/split@0.2.3.3"
     declared_licenses:
     - "BSD3"
     declared_licenses_processed:
@@ -2531,7 +2531,7 @@ packages:
   curations: []
 - package:
     id: "Hackage:Math, Algorithms, Number Theory:integer-logarithms:1.0.2.2"
-    purl: "pkg://Hackage/Math%2C%20Algorithms%2C%20Number%20Theory/integer-logarithms@1.0.2.2"
+    purl: "pkg:Hackage/Math%2C%20Algorithms%2C%20Number%20Theory/integer-logarithms@1.0.2.2"
     declared_licenses:
     - "MIT"
     declared_licenses_processed:
@@ -2564,7 +2564,7 @@ packages:
   curations: []
 - package:
     id: "Hackage:Math:matrix:0.3.6.1"
-    purl: "pkg://Hackage/Math/matrix@0.3.6.1"
+    purl: "pkg:Hackage/Math/matrix@0.3.6.1"
     declared_licenses:
     - "BSD3"
     declared_licenses_processed:
@@ -2599,7 +2599,7 @@ packages:
   curations: []
 - package:
     id: "Hackage:Numeric, Algebra:integer-gmp:1.0.2.0"
-    purl: "pkg://Hackage/Numeric%2C%20Algebra/integer-gmp@1.0.2.0"
+    purl: "pkg:Hackage/Numeric%2C%20Algebra/integer-gmp@1.0.2.0"
     declared_licenses:
     - "BSD3"
     declared_licenses_processed:
@@ -2633,7 +2633,7 @@ packages:
   curations: []
 - package:
     id: "Hackage:Other:generic-data:0.3.0.0"
-    purl: "pkg://Hackage/Other/generic-data@0.3.0.0"
+    purl: "pkg:Hackage/Other/generic-data@0.3.0.0"
     declared_licenses:
     - "MIT"
     declared_licenses_processed:
@@ -2663,7 +2663,7 @@ packages:
   curations: []
 - package:
     id: "Hackage:Parsing:parsec:3.1.13.0"
-    purl: "pkg://Hackage/Parsing/parsec@3.1.13.0"
+    purl: "pkg:Hackage/Parsing/parsec@3.1.13.0"
     declared_licenses:
     - "BSD3"
     declared_licenses_processed:
@@ -2700,7 +2700,7 @@ packages:
   curations: []
 - package:
     id: "Hackage:Prelude:base:4.12.0.0"
-    purl: "pkg://Hackage/Prelude/base@4.12.0.0"
+    purl: "pkg:Hackage/Prelude/base@4.12.0.0"
     declared_licenses:
     - "BSD-3-Clause"
     declared_licenses_processed:
@@ -2732,7 +2732,7 @@ packages:
   curations: []
 - package:
     id: "Hackage:System, Utils:temporary:1.3"
-    purl: "pkg://Hackage/System%2C%20Utils/temporary@1.3"
+    purl: "pkg:Hackage/System%2C%20Utils/temporary@1.3"
     declared_licenses:
     - "BSD3"
     declared_licenses_processed:
@@ -2762,7 +2762,7 @@ packages:
   curations: []
 - package:
     id: "Hackage:System:directory:1.3.3.0"
-    purl: "pkg://Hackage/System/directory@1.3.3.0"
+    purl: "pkg:Hackage/System/directory@1.3.3.0"
     declared_licenses:
     - "BSD3"
     declared_licenses_processed:
@@ -2793,7 +2793,7 @@ packages:
   curations: []
 - package:
     id: "Hackage:System:filepath:1.4.2.1"
-    purl: "pkg://Hackage/System/filepath@1.4.2.1"
+    purl: "pkg:Hackage/System/filepath@1.4.2.1"
     declared_licenses:
     - "BSD3"
     declared_licenses_processed:
@@ -2831,7 +2831,7 @@ packages:
   curations: []
 - package:
     id: "Hackage:System:process:1.6.3.0"
-    purl: "pkg://Hackage/System/process@1.6.3.0"
+    purl: "pkg:Hackage/System/process@1.6.3.0"
     declared_licenses:
     - "BSD3"
     declared_licenses_processed:
@@ -2864,7 +2864,7 @@ packages:
   curations: []
 - package:
     id: "Hackage:System:random:1.1"
-    purl: "pkg://Hackage/System/random@1.1"
+    purl: "pkg:Hackage/System/random@1.1"
     declared_licenses:
     - "BSD3"
     declared_licenses_processed:
@@ -2895,7 +2895,7 @@ packages:
   curations: []
 - package:
     id: "Hackage:System:splitmix:0.0.2"
-    purl: "pkg://Hackage/System/splitmix@0.0.2"
+    purl: "pkg:Hackage/System/splitmix@0.0.2"
     declared_licenses:
     - "BSD3"
     declared_licenses_processed:
@@ -2939,7 +2939,7 @@ packages:
   curations: []
 - package:
     id: "Hackage:System:time-locale-compat:0.1.1.5"
-    purl: "pkg://Hackage/System/time-locale-compat@0.1.1.5"
+    purl: "pkg:Hackage/System/time-locale-compat@0.1.1.5"
     declared_licenses:
     - "BSD3"
     declared_licenses_processed:
@@ -2970,7 +2970,7 @@ packages:
   curations: []
 - package:
     id: "Hackage:System:unix:2.7.2.2"
-    purl: "pkg://Hackage/System/unix@2.7.2.2"
+    purl: "pkg:Hackage/System/unix@2.7.2.2"
     declared_licenses:
     - "BSD3"
     declared_licenses_processed:
@@ -3003,7 +3003,7 @@ packages:
   curations: []
 - package:
     id: "Hackage:Template Haskell:template-haskell:2.14.0.0"
-    purl: "pkg://Hackage/Template%20Haskell/template-haskell@2.14.0.0"
+    purl: "pkg:Hackage/Template%20Haskell/template-haskell@2.14.0.0"
     declared_licenses:
     - "BSD3"
     declared_licenses_processed:
@@ -3035,7 +3035,7 @@ packages:
   curations: []
 - package:
     id: "Hackage:Testing:QuickCheck:2.13.1"
-    purl: "pkg://Hackage/Testing/QuickCheck@2.13.1"
+    purl: "pkg:Hackage/Testing/QuickCheck@2.13.1"
     declared_licenses:
     - "BSD3"
     declared_licenses_processed:
@@ -3080,7 +3080,7 @@ packages:
   curations: []
 - package:
     id: "Hackage:Testing:markov-chain-usage-model:0.0.0"
-    purl: "pkg://Hackage/Testing/markov-chain-usage-model@0.0.0"
+    purl: "pkg:Hackage/Testing/markov-chain-usage-model@0.0.0"
     declared_licenses:
     - "BSD2"
     declared_licenses_processed:
@@ -3110,7 +3110,7 @@ packages:
   curations: []
 - package:
     id: "Hackage:Text, Parsing:attoparsec:0.13.2.2"
-    purl: "pkg://Hackage/Text%2C%20Parsing/attoparsec@0.13.2.2"
+    purl: "pkg:Hackage/Text%2C%20Parsing/attoparsec@0.13.2.2"
     declared_licenses:
     - "BSD3"
     declared_licenses_processed:
@@ -3141,7 +3141,7 @@ packages:
   curations: []
 - package:
     id: "Hackage:Text, Parsing:parsers:0.12.9"
-    purl: "pkg://Hackage/Text%2C%20Parsing/parsers@0.12.9"
+    purl: "pkg:Hackage/Text%2C%20Parsing/parsers@0.12.9"
     declared_licenses:
     - "BSD3"
     declared_licenses_processed:
@@ -3175,7 +3175,7 @@ packages:
   curations: []
 - package:
     id: "Hackage:Text, Parsing:polyparse:1.12.1"
-    purl: "pkg://Hackage/Text%2C%20Parsing/polyparse@1.12.1"
+    purl: "pkg:Hackage/Text%2C%20Parsing/polyparse@1.12.1"
     declared_licenses:
     - "LGPL"
     declared_licenses_processed:
@@ -3211,7 +3211,7 @@ packages:
   curations: []
 - package:
     id: "Hackage:Text, Web, JSON:aeson:1.4.2.0"
-    purl: "pkg://Hackage/Text%2C%20Web%2C%20JSON/aeson@1.4.2.0"
+    purl: "pkg:Hackage/Text%2C%20Web%2C%20JSON/aeson@1.4.2.0"
     declared_licenses:
     - "BSD3"
     declared_licenses_processed:
@@ -3244,7 +3244,7 @@ packages:
   curations: []
 - package:
     id: "Hackage:Text:pretty-show:1.9.5"
-    purl: "pkg://Hackage/Text/pretty-show@1.9.5"
+    purl: "pkg:Hackage/Text/pretty-show@1.9.5"
     declared_licenses:
     - "MIT"
     declared_licenses_processed:
@@ -3279,7 +3279,7 @@ packages:
   curations: []
 - package:
     id: "Hackage:Text:pretty:1.1.3.6"
-    purl: "pkg://Hackage/Text/pretty@1.1.3.6"
+    purl: "pkg:Hackage/Text/pretty@1.1.3.6"
     declared_licenses:
     - "BSD3"
     declared_licenses_processed:
@@ -3313,7 +3313,7 @@ packages:
   curations: []
 - package:
     id: "Hackage:Text:show-combinators:0.1.0.0"
-    purl: "pkg://Hackage/Text/show-combinators@0.1.0.0"
+    purl: "pkg:Hackage/Text/show-combinators@0.1.0.0"
     declared_licenses:
     - "MIT"
     declared_licenses_processed:
@@ -3343,7 +3343,7 @@ packages:
   curations: []
 - package:
     id: "Hackage:Text:wl-pprint-text:1.2.0.0"
-    purl: "pkg://Hackage/Text/wl-pprint-text@1.2.0.0"
+    purl: "pkg:Hackage/Text/wl-pprint-text@1.2.0.0"
     declared_licenses:
     - "BSD3"
     declared_licenses_processed:
@@ -3373,7 +3373,7 @@ packages:
   curations: []
 - package:
     id: "Hackage:Time:time:1.8.0.2"
-    purl: "pkg://Hackage/Time/time@1.8.0.2"
+    purl: "pkg:Hackage/Time/time@1.8.0.2"
     declared_licenses:
     - "BSD3"
     declared_licenses_processed:
@@ -3403,7 +3403,7 @@ packages:
   curations: []
 - package:
     id: "Hackage:User Interfaces, Text:ansi-wl-pprint:0.6.8.2"
-    purl: "pkg://Hackage/User%20Interfaces%2C%20Text/ansi-wl-pprint@0.6.8.2"
+    purl: "pkg:Hackage/User%20Interfaces%2C%20Text/ansi-wl-pprint@0.6.8.2"
     declared_licenses:
     - "BSD3"
     declared_licenses_processed:
@@ -3436,7 +3436,7 @@ packages:
   curations: []
 - package:
     id: "Hackage:User Interfaces:ansi-terminal:0.8.2"
-    purl: "pkg://Hackage/User%20Interfaces/ansi-terminal@0.8.2"
+    purl: "pkg:Hackage/User%20Interfaces/ansi-terminal@0.8.2"
     declared_licenses:
     - "BSD3"
     declared_licenses_processed:
@@ -3468,7 +3468,7 @@ packages:
   curations: []
 - package:
     id: "Hackage:data, graphics:colour:2.3.4"
-    purl: "pkg://Hackage/data%2C%20graphics/colour@2.3.4"
+    purl: "pkg:Hackage/data%2C%20graphics/colour@2.3.4"
     declared_licenses:
     - "MIT"
     declared_licenses_processed:

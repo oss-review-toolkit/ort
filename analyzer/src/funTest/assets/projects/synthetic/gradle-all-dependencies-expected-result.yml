@@ -50,7 +50,7 @@ analyzer:
   result:
     projects:
     - id: "Gradle::Gradle-Example:"
-      purl: "pkg://Gradle//Gradle-Example@"
+      purl: "pkg:Gradle//Gradle-Example@"
       definition_file_path: "analyzer/src/funTest/assets/projects/synthetic/gradle/build.gradle"
       declared_licenses: []
       declared_licenses_processed: {}
@@ -67,7 +67,7 @@ analyzer:
       homepage_url: ""
       scopes: []
     - id: "Gradle:com.here.ort.gradle.example:app:1.0.0"
-      purl: "pkg://Gradle/com.here.ort.gradle.example/app@1.0.0"
+      purl: "pkg:Gradle/com.here.ort.gradle.example/app@1.0.0"
       definition_file_path: "analyzer/src/funTest/assets/projects/synthetic/gradle/app/build.gradle"
       declared_licenses: []
       declared_licenses_processed: {}
@@ -175,7 +175,7 @@ analyzer:
             - id: "Maven:org.apache.commons:commons-lang3:3.5"
           - id: "Maven:org.apache.struts:struts2-assembly:2.5.14.1"
     - id: "Gradle:com.here.ort.gradle.example:lib-without-repo:1.0.0"
-      purl: "pkg://Gradle/com.here.ort.gradle.example/lib-without-repo@1.0.0"
+      purl: "pkg:Gradle/com.here.ort.gradle.example/lib-without-repo@1.0.0"
       definition_file_path: "analyzer/src/funTest/assets/projects/synthetic/gradle/lib-without-repo/build.gradle"
       declared_licenses: []
       declared_licenses_processed: {}
@@ -320,7 +320,7 @@ analyzer:
               \ are defined."
             severity: "ERROR"
     - id: "Gradle:com.here.ort.gradle.example:lib:1.0.0"
-      purl: "pkg://Gradle/com.here.ort.gradle.example/lib@1.0.0"
+      purl: "pkg:Gradle/com.here.ort.gradle.example/lib@1.0.0"
       definition_file_path: "analyzer/src/funTest/assets/projects/synthetic/gradle/lib/build.gradle"
       declared_licenses: []
       declared_licenses_processed: {}
@@ -415,7 +415,7 @@ analyzer:
     packages:
     - package:
         id: "Maven:junit:junit:4.12"
-        purl: "pkg://Maven/junit/junit@4.12"
+        purl: "pkg:Maven/junit/junit@4.12"
         declared_licenses:
         - "Eclipse Public License 1.0"
         declared_licenses_processed:
@@ -446,7 +446,7 @@ analyzer:
       curations: []
     - package:
         id: "Maven:org.apache.commons:commons-lang3:3.5"
-        purl: "pkg://Maven/org.apache.commons/commons-lang3@3.5"
+        purl: "pkg:Maven/org.apache.commons/commons-lang3@3.5"
         declared_licenses:
         - "Apache License, Version 2.0"
         declared_licenses_processed:
@@ -478,7 +478,7 @@ analyzer:
       curations: []
     - package:
         id: "Maven:org.apache.commons:commons-text:1.1"
-        purl: "pkg://Maven/org.apache.commons/commons-text@1.1"
+        purl: "pkg:Maven/org.apache.commons/commons-text@1.1"
         declared_licenses:
         - "Apache License, Version 2.0"
         declared_licenses_processed:
@@ -509,7 +509,7 @@ analyzer:
       curations: []
     - package:
         id: "Maven:org.apache.struts:struts2-assembly:2.5.14.1"
-        purl: "pkg://Maven/org.apache.struts/struts2-assembly@2.5.14.1"
+        purl: "pkg:Maven/org.apache.struts/struts2-assembly@2.5.14.1"
         declared_licenses:
         - "The Apache Software License, Version 2.0"
         declared_licenses_processed:
@@ -539,7 +539,7 @@ analyzer:
       curations: []
     - package:
         id: "Maven:org.hamcrest:hamcrest-core:1.3"
-        purl: "pkg://Maven/org.hamcrest/hamcrest-core@1.3"
+        purl: "pkg:Maven/org.hamcrest/hamcrest-core@1.3"
         declared_licenses:
         - "New BSD License"
         declared_licenses_processed:
