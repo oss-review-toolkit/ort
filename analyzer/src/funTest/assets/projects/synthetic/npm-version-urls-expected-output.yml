@@ -1,7 +1,7 @@
 ---
 project:
   id: "NPM::npm-version-urls:1.0.0"
-  purl: "pkg://NPM//npm-version-urls@1.0.0"
+  purl: "pkg:NPM//npm-version-urls@1.0.0"
   definition_file_path: "<REPLACE_DEFINITION_FILE_PATH>"
   declared_licenses:
   - "Apache-2.0"
@@ -639,7 +639,7 @@ project:
 packages:
 - package:
     id: "NPM::ansi-green:0.1.1"
-    purl: "pkg://NPM//ansi-green@0.1.1"
+    purl: "pkg:NPM//ansi-green@0.1.1"
     declared_licenses:
     - "MIT"
     declared_licenses_processed:
@@ -669,7 +669,7 @@ packages:
   curations: []
 - package:
     id: "NPM::ansi-wrap:0.1.0"
-    purl: "pkg://NPM//ansi-wrap@0.1.0"
+    purl: "pkg:NPM//ansi-wrap@0.1.0"
     declared_licenses:
     - "MIT"
     declared_licenses_processed:
@@ -699,7 +699,7 @@ packages:
   curations: []
 - package:
     id: "NPM::argparse:1.0.10"
-    purl: "pkg://NPM//argparse@1.0.10"
+    purl: "pkg:NPM//argparse@1.0.10"
     declared_licenses:
     - "MIT"
     declared_licenses_processed:
@@ -730,7 +730,7 @@ packages:
   curations: []
 - package:
     id: "NPM::arr-union:3.1.0"
-    purl: "pkg://NPM//arr-union@3.1.0"
+    purl: "pkg:NPM//arr-union@3.1.0"
     declared_licenses:
     - "MIT"
     declared_licenses_processed:
@@ -761,7 +761,7 @@ packages:
   curations: []
 - package:
     id: "NPM::array-each:1.0.1"
-    purl: "pkg://NPM//array-each@1.0.1"
+    purl: "pkg:NPM//array-each@1.0.1"
     declared_licenses:
     - "MIT"
     declared_licenses_processed:
@@ -792,7 +792,7 @@ packages:
   curations: []
 - package:
     id: "NPM::array-slice:0.2.3"
-    purl: "pkg://NPM//array-slice@0.2.3"
+    purl: "pkg:NPM//array-slice@0.2.3"
     declared_licenses:
     - "MIT"
     declared_licenses_processed:
@@ -823,7 +823,7 @@ packages:
   curations: []
 - package:
     id: "NPM::assign-symbols:1.0.0"
-    purl: "pkg://NPM//assign-symbols@1.0.0"
+    purl: "pkg:NPM//assign-symbols@1.0.0"
     declared_licenses:
     - "MIT"
     declared_licenses_processed:
@@ -856,7 +856,7 @@ packages:
   curations: []
 - package:
     id: "NPM::atob:2.1.2"
-    purl: "pkg://NPM//atob@2.1.2"
+    purl: "pkg:NPM//atob@2.1.2"
     declared_licenses:
     - "(MIT OR Apache-2.0)"
     declared_licenses_processed:
@@ -886,7 +886,7 @@ packages:
   curations: []
 - package:
     id: "NPM::autolinker:0.28.1"
-    purl: "pkg://NPM//autolinker@0.28.1"
+    purl: "pkg:NPM//autolinker@0.28.1"
     declared_licenses:
     - "MIT"
     declared_licenses_processed:
@@ -917,7 +917,7 @@ packages:
   curations: []
 - package:
     id: "NPM::balanced-match:1.0.0"
-    purl: "pkg://NPM//balanced-match@1.0.0"
+    purl: "pkg:NPM//balanced-match@1.0.0"
     declared_licenses:
     - "MIT"
     declared_licenses_processed:
@@ -947,7 +947,7 @@ packages:
   curations: []
 - package:
     id: "NPM::base:0.11.2"
-    purl: "pkg://NPM//base@0.11.2"
+    purl: "pkg:NPM//base@0.11.2"
     declared_licenses:
     - "MIT"
     declared_licenses_processed:
@@ -979,7 +979,7 @@ packages:
   curations: []
 - package:
     id: "NPM::brace-expansion:1.1.11"
-    purl: "pkg://NPM//brace-expansion@1.1.11"
+    purl: "pkg:NPM//brace-expansion@1.1.11"
     declared_licenses:
     - "MIT"
     declared_licenses_processed:
@@ -1009,7 +1009,7 @@ packages:
   curations: []
 - package:
     id: "NPM::browser-stdout:1.3.1"
-    purl: "pkg://NPM//browser-stdout@1.3.1"
+    purl: "pkg:NPM//browser-stdout@1.3.1"
     declared_licenses:
     - "ISC"
     declared_licenses_processed:
@@ -1039,7 +1039,7 @@ packages:
   curations: []
 - package:
     id: "NPM::cache-base:1.0.1"
-    purl: "pkg://NPM//cache-base@1.0.1"
+    purl: "pkg:NPM//cache-base@1.0.1"
     declared_licenses:
     - "MIT"
     declared_licenses_processed:
@@ -1070,7 +1070,7 @@ packages:
   curations: []
 - package:
     id: "NPM::class-utils:0.3.6"
-    purl: "pkg://NPM//class-utils@0.3.6"
+    purl: "pkg:NPM//class-utils@0.3.6"
     declared_licenses:
     - "MIT"
     declared_licenses_processed:
@@ -1100,7 +1100,7 @@ packages:
   curations: []
 - package:
     id: "NPM::clone-buffer:1.0.0"
-    purl: "pkg://NPM//clone-buffer@1.0.0"
+    purl: "pkg:NPM//clone-buffer@1.0.0"
     declared_licenses:
     - "MIT"
     declared_licenses_processed:
@@ -1130,7 +1130,7 @@ packages:
   curations: []
 - package:
     id: "NPM::clone-stats:1.0.0"
-    purl: "pkg://NPM//clone-stats@1.0.0"
+    purl: "pkg:NPM//clone-stats@1.0.0"
     declared_licenses:
     - "MIT"
     declared_licenses_processed:
@@ -1161,7 +1161,7 @@ packages:
   curations: []
 - package:
     id: "NPM::clone:2.1.2"
-    purl: "pkg://NPM//clone@2.1.2"
+    purl: "pkg:NPM//clone@2.1.2"
     declared_licenses:
     - "MIT"
     declared_licenses_processed:
@@ -1191,7 +1191,7 @@ packages:
   curations: []
 - package:
     id: "NPM::cloneable-readable:1.1.3"
-    purl: "pkg://NPM//cloneable-readable@1.1.3"
+    purl: "pkg:NPM//cloneable-readable@1.1.3"
     declared_licenses:
     - "MIT"
     declared_licenses_processed:
@@ -1221,7 +1221,7 @@ packages:
   curations: []
 - package:
     id: "NPM::collection-visit:1.0.0"
-    purl: "pkg://NPM//collection-visit@1.0.0"
+    purl: "pkg:NPM//collection-visit@1.0.0"
     declared_licenses:
     - "MIT"
     declared_licenses_processed:
@@ -1252,7 +1252,7 @@ packages:
   curations: []
 - package:
     id: "NPM::commander:2.15.1"
-    purl: "pkg://NPM//commander@2.15.1"
+    purl: "pkg:NPM//commander@2.15.1"
     declared_licenses:
     - "MIT"
     declared_licenses_processed:
@@ -1282,7 +1282,7 @@ packages:
   curations: []
 - package:
     id: "NPM::component-emitter:1.3.0"
-    purl: "pkg://NPM//component-emitter@1.3.0"
+    purl: "pkg:NPM//component-emitter@1.3.0"
     declared_licenses:
     - "MIT"
     declared_licenses_processed:
@@ -1312,7 +1312,7 @@ packages:
   curations: []
 - package:
     id: "NPM::concat-map:0.0.1"
-    purl: "pkg://NPM//concat-map@0.0.1"
+    purl: "pkg:NPM//concat-map@0.0.1"
     declared_licenses:
     - "MIT"
     declared_licenses_processed:
@@ -1342,7 +1342,7 @@ packages:
   curations: []
 - package:
     id: "NPM::concat-with-sourcemaps:1.1.0"
-    purl: "pkg://NPM//concat-with-sourcemaps@1.1.0"
+    purl: "pkg:NPM//concat-with-sourcemaps@1.1.0"
     declared_licenses:
     - "ISC"
     declared_licenses_processed:
@@ -1373,7 +1373,7 @@ packages:
   curations: []
 - package:
     id: "NPM::copy-descriptor:0.1.1"
-    purl: "pkg://NPM//copy-descriptor@0.1.1"
+    purl: "pkg:NPM//copy-descriptor@0.1.1"
     declared_licenses:
     - "MIT"
     declared_licenses_processed:
@@ -1403,7 +1403,7 @@ packages:
   curations: []
 - package:
     id: "NPM::core-util-is:1.0.2"
-    purl: "pkg://NPM//core-util-is@1.0.2"
+    purl: "pkg:NPM//core-util-is@1.0.2"
     declared_licenses:
     - "MIT"
     declared_licenses_processed:
@@ -1433,7 +1433,7 @@ packages:
   curations: []
 - package:
     id: "NPM::debug:2.6.9"
-    purl: "pkg://NPM//debug@2.6.9"
+    purl: "pkg:NPM//debug@2.6.9"
     declared_licenses:
     - "MIT"
     declared_licenses_processed:
@@ -1463,7 +1463,7 @@ packages:
   curations: []
 - package:
     id: "NPM::debug:3.1.0"
-    purl: "pkg://NPM//debug@3.1.0"
+    purl: "pkg:NPM//debug@3.1.0"
     declared_licenses:
     - "MIT"
     declared_licenses_processed:
@@ -1493,7 +1493,7 @@ packages:
   curations: []
 - package:
     id: "NPM::decode-uri-component:0.2.0"
-    purl: "pkg://NPM//decode-uri-component@0.2.0"
+    purl: "pkg:NPM//decode-uri-component@0.2.0"
     declared_licenses:
     - "MIT"
     declared_licenses_processed:
@@ -1523,7 +1523,7 @@ packages:
   curations: []
 - package:
     id: "NPM::define-property:0.2.5"
-    purl: "pkg://NPM//define-property@0.2.5"
+    purl: "pkg:NPM//define-property@0.2.5"
     declared_licenses:
     - "MIT"
     declared_licenses_processed:
@@ -1553,7 +1553,7 @@ packages:
   curations: []
 - package:
     id: "NPM::define-property:1.0.0"
-    purl: "pkg://NPM//define-property@1.0.0"
+    purl: "pkg:NPM//define-property@1.0.0"
     declared_licenses:
     - "MIT"
     declared_licenses_processed:
@@ -1583,7 +1583,7 @@ packages:
   curations: []
 - package:
     id: "NPM::define-property:2.0.2"
-    purl: "pkg://NPM//define-property@2.0.2"
+    purl: "pkg:NPM//define-property@2.0.2"
     declared_licenses:
     - "MIT"
     declared_licenses_processed:
@@ -1614,7 +1614,7 @@ packages:
   curations: []
 - package:
     id: "NPM::diff:3.5.0"
-    purl: "pkg://NPM//diff@3.5.0"
+    purl: "pkg:NPM//diff@3.5.0"
     declared_licenses:
     - "BSD-3-Clause"
     declared_licenses_processed:
@@ -1644,7 +1644,7 @@ packages:
   curations: []
 - package:
     id: "NPM::escape-string-regexp:1.0.5"
-    purl: "pkg://NPM//escape-string-regexp@1.0.5"
+    purl: "pkg:NPM//escape-string-regexp@1.0.5"
     declared_licenses:
     - "MIT"
     declared_licenses_processed:
@@ -1674,7 +1674,7 @@ packages:
   curations: []
 - package:
     id: "NPM::expand-range:1.8.2"
-    purl: "pkg://NPM//expand-range@1.8.2"
+    purl: "pkg:NPM//expand-range@1.8.2"
     declared_licenses:
     - "MIT"
     declared_licenses_processed:
@@ -1705,7 +1705,7 @@ packages:
   curations: []
 - package:
     id: "NPM::expand-reflinks:0.2.1"
-    purl: "pkg://NPM//expand-reflinks@0.2.1"
+    purl: "pkg:NPM//expand-reflinks@0.2.1"
     declared_licenses:
     - "MIT"
     declared_licenses_processed:
@@ -1735,7 +1735,7 @@ packages:
   curations: []
 - package:
     id: "NPM::extend-shallow:2.0.1"
-    purl: "pkg://NPM//extend-shallow@2.0.1"
+    purl: "pkg:NPM//extend-shallow@2.0.1"
     declared_licenses:
     - "MIT"
     declared_licenses_processed:
@@ -1766,7 +1766,7 @@ packages:
   curations: []
 - package:
     id: "NPM::extend-shallow:3.0.2"
-    purl: "pkg://NPM//extend-shallow@3.0.2"
+    purl: "pkg:NPM//extend-shallow@3.0.2"
     declared_licenses:
     - "MIT"
     declared_licenses_processed:
@@ -1797,7 +1797,7 @@ packages:
   curations: []
 - package:
     id: "NPM::fill-range:2.2.4"
-    purl: "pkg://NPM//fill-range@2.2.4"
+    purl: "pkg:NPM//fill-range@2.2.4"
     declared_licenses:
     - "MIT"
     declared_licenses_processed:
@@ -1828,7 +1828,7 @@ packages:
   curations: []
 - package:
     id: "NPM::for-in:1.0.2"
-    purl: "pkg://NPM//for-in@1.0.2"
+    purl: "pkg:NPM//for-in@1.0.2"
     declared_licenses:
     - "MIT"
     declared_licenses_processed:
@@ -1860,7 +1860,7 @@ packages:
   curations: []
 - package:
     id: "NPM::fs-exists-sync:0.1.0"
-    purl: "pkg://NPM//fs-exists-sync@0.1.0"
+    purl: "pkg:NPM//fs-exists-sync@0.1.0"
     declared_licenses:
     - "MIT"
     declared_licenses_processed:
@@ -1892,7 +1892,7 @@ packages:
   curations: []
 - package:
     id: "NPM::fs.realpath:1.0.0"
-    purl: "pkg://NPM//fs.realpath@1.0.0"
+    purl: "pkg:NPM//fs.realpath@1.0.0"
     declared_licenses:
     - "ISC"
     declared_licenses_processed:
@@ -1923,7 +1923,7 @@ packages:
   curations: []
 - package:
     id: "NPM::get-value:2.0.6"
-    purl: "pkg://NPM//get-value@2.0.6"
+    purl: "pkg:NPM//get-value@2.0.6"
     declared_licenses:
     - "MIT"
     declared_licenses_processed:
@@ -1953,7 +1953,7 @@ packages:
   curations: []
 - package:
     id: "NPM::gfm-code-block-regex:1.0.0"
-    purl: "pkg://NPM//gfm-code-block-regex@1.0.0"
+    purl: "pkg:NPM//gfm-code-block-regex@1.0.0"
     declared_licenses:
     - "MIT"
     declared_licenses_processed:
@@ -1983,7 +1983,7 @@ packages:
   curations: []
 - package:
     id: "NPM::gfm-code-blocks:1.0.0"
-    purl: "pkg://NPM//gfm-code-blocks@1.0.0"
+    purl: "pkg:NPM//gfm-code-blocks@1.0.0"
     declared_licenses:
     - "MIT"
     declared_licenses_processed:
@@ -2014,7 +2014,7 @@ packages:
   curations: []
 - package:
     id: "NPM::glob:7.1.2"
-    purl: "pkg://NPM//glob@7.1.2"
+    purl: "pkg:NPM//glob@7.1.2"
     declared_licenses:
     - "ISC"
     declared_licenses_processed:
@@ -2044,7 +2044,7 @@ packages:
   curations: []
 - package:
     id: "NPM::growl:1.10.5"
-    purl: "pkg://NPM//growl@1.10.5"
+    purl: "pkg:NPM//growl@1.10.5"
     declared_licenses:
     - "MIT"
     declared_licenses_processed:
@@ -2074,7 +2074,7 @@ packages:
   curations: []
 - package:
     id: "NPM::gulp-format-md:1.0.0"
-    purl: "pkg://NPM//gulp-format-md@1.0.0"
+    purl: "pkg:NPM//gulp-format-md@1.0.0"
     declared_licenses:
     - "MIT"
     declared_licenses_processed:
@@ -2104,7 +2104,7 @@ packages:
   curations: []
 - package:
     id: "NPM::gulp-header:1.8.12"
-    purl: "pkg://NPM//gulp-header@1.8.12"
+    purl: "pkg:NPM//gulp-header@1.8.12"
     declared_licenses:
     - "MIT"
     declared_licenses_processed:
@@ -2134,7 +2134,7 @@ packages:
   curations: []
 - package:
     id: "NPM::has-flag:3.0.0"
-    purl: "pkg://NPM//has-flag@3.0.0"
+    purl: "pkg:NPM//has-flag@3.0.0"
     declared_licenses:
     - "MIT"
     declared_licenses_processed:
@@ -2164,7 +2164,7 @@ packages:
   curations: []
 - package:
     id: "NPM::has-value:0.3.1"
-    purl: "pkg://NPM//has-value@0.3.1"
+    purl: "pkg:NPM//has-value@0.3.1"
     declared_licenses:
     - "MIT"
     declared_licenses_processed:
@@ -2195,7 +2195,7 @@ packages:
   curations: []
 - package:
     id: "NPM::has-value:1.0.0"
-    purl: "pkg://NPM//has-value@1.0.0"
+    purl: "pkg:NPM//has-value@1.0.0"
     declared_licenses:
     - "MIT"
     declared_licenses_processed:
@@ -2226,7 +2226,7 @@ packages:
   curations: []
 - package:
     id: "NPM::has-values:0.1.4"
-    purl: "pkg://NPM//has-values@0.1.4"
+    purl: "pkg:NPM//has-values@0.1.4"
     declared_licenses:
     - "MIT"
     declared_licenses_processed:
@@ -2257,7 +2257,7 @@ packages:
   curations: []
 - package:
     id: "NPM::has-values:1.0.0"
-    purl: "pkg://NPM//has-values@1.0.0"
+    purl: "pkg:NPM//has-values@1.0.0"
     declared_licenses:
     - "MIT"
     declared_licenses_processed:
@@ -2288,7 +2288,7 @@ packages:
   curations: []
 - package:
     id: "NPM::he:1.1.1"
-    purl: "pkg://NPM//he@1.1.1"
+    purl: "pkg:NPM//he@1.1.1"
     declared_licenses:
     - "MIT"
     declared_licenses_processed:
@@ -2318,7 +2318,7 @@ packages:
   curations: []
 - package:
     id: "NPM::inflight:1.0.6"
-    purl: "pkg://NPM//inflight@1.0.6"
+    purl: "pkg:NPM//inflight@1.0.6"
     declared_licenses:
     - "ISC"
     declared_licenses_processed:
@@ -2348,7 +2348,7 @@ packages:
   curations: []
 - package:
     id: "NPM::inherits:2.0.4"
-    purl: "pkg://NPM//inherits@2.0.4"
+    purl: "pkg:NPM//inherits@2.0.4"
     declared_licenses:
     - "ISC"
     declared_licenses_processed:
@@ -2379,7 +2379,7 @@ packages:
   curations: []
 - package:
     id: "NPM::is-accessor-descriptor:0.1.6"
-    purl: "pkg://NPM//is-accessor-descriptor@0.1.6"
+    purl: "pkg:NPM//is-accessor-descriptor@0.1.6"
     declared_licenses:
     - "MIT"
     declared_licenses_processed:
@@ -2410,7 +2410,7 @@ packages:
   curations: []
 - package:
     id: "NPM::is-accessor-descriptor:1.0.0"
-    purl: "pkg://NPM//is-accessor-descriptor@1.0.0"
+    purl: "pkg:NPM//is-accessor-descriptor@1.0.0"
     declared_licenses:
     - "MIT"
     declared_licenses_processed:
@@ -2441,7 +2441,7 @@ packages:
   curations: []
 - package:
     id: "NPM::is-buffer:1.1.6"
-    purl: "pkg://NPM//is-buffer@1.1.6"
+    purl: "pkg:NPM//is-buffer@1.1.6"
     declared_licenses:
     - "MIT"
     declared_licenses_processed:
@@ -2471,7 +2471,7 @@ packages:
   curations: []
 - package:
     id: "NPM::is-data-descriptor:0.1.4"
-    purl: "pkg://NPM//is-data-descriptor@0.1.4"
+    purl: "pkg:NPM//is-data-descriptor@0.1.4"
     declared_licenses:
     - "MIT"
     declared_licenses_processed:
@@ -2502,7 +2502,7 @@ packages:
   curations: []
 - package:
     id: "NPM::is-data-descriptor:1.0.0"
-    purl: "pkg://NPM//is-data-descriptor@1.0.0"
+    purl: "pkg:NPM//is-data-descriptor@1.0.0"
     declared_licenses:
     - "MIT"
     declared_licenses_processed:
@@ -2533,7 +2533,7 @@ packages:
   curations: []
 - package:
     id: "NPM::is-descriptor:0.1.6"
-    purl: "pkg://NPM//is-descriptor@0.1.6"
+    purl: "pkg:NPM//is-descriptor@0.1.6"
     declared_licenses:
     - "MIT"
     declared_licenses_processed:
@@ -2564,7 +2564,7 @@ packages:
   curations: []
 - package:
     id: "NPM::is-descriptor:1.0.2"
-    purl: "pkg://NPM//is-descriptor@1.0.2"
+    purl: "pkg:NPM//is-descriptor@1.0.2"
     declared_licenses:
     - "MIT"
     declared_licenses_processed:
@@ -2595,7 +2595,7 @@ packages:
   curations: []
 - package:
     id: "NPM::is-extendable:0.1.1"
-    purl: "pkg://NPM//is-extendable@0.1.1"
+    purl: "pkg:NPM//is-extendable@0.1.1"
     declared_licenses:
     - "MIT"
     declared_licenses_processed:
@@ -2627,7 +2627,7 @@ packages:
   curations: []
 - package:
     id: "NPM::is-extendable:1.0.1"
-    purl: "pkg://NPM//is-extendable@1.0.1"
+    purl: "pkg:NPM//is-extendable@1.0.1"
     declared_licenses:
     - "MIT"
     declared_licenses_processed:
@@ -2657,7 +2657,7 @@ packages:
   curations: []
 - package:
     id: "NPM::is-number:2.1.0"
-    purl: "pkg://NPM//is-number@2.1.0"
+    purl: "pkg:NPM//is-number@2.1.0"
     declared_licenses:
     - "MIT"
     declared_licenses_processed:
@@ -2687,7 +2687,7 @@ packages:
   curations: []
 - package:
     id: "NPM::is-number:3.0.0"
-    purl: "pkg://NPM//is-number@3.0.0"
+    purl: "pkg:NPM//is-number@3.0.0"
     declared_licenses:
     - "MIT"
     declared_licenses_processed:
@@ -2717,7 +2717,7 @@ packages:
   curations: []
 - package:
     id: "NPM::is-number:4.0.0"
-    purl: "pkg://NPM//is-number@4.0.0"
+    purl: "pkg:NPM//is-number@4.0.0"
     declared_licenses:
     - "MIT"
     declared_licenses_processed:
@@ -2747,7 +2747,7 @@ packages:
   curations: []
 - package:
     id: "NPM::is-plain-object:2.0.4"
-    purl: "pkg://NPM//is-plain-object@2.0.4"
+    purl: "pkg:NPM//is-plain-object@2.0.4"
     declared_licenses:
     - "MIT"
     declared_licenses_processed:
@@ -2777,7 +2777,7 @@ packages:
   curations: []
 - package:
     id: "NPM::is-win:1.0.8"
-    purl: "pkg://NPM//is-win@1.0.8"
+    purl: "pkg:NPM//is-win@1.0.8"
     declared_licenses:
     - "MIT"
     declared_licenses_processed:
@@ -2807,7 +2807,7 @@ packages:
   curations: []
 - package:
     id: "NPM::is-windows:1.0.2"
-    purl: "pkg://NPM//is-windows@1.0.2"
+    purl: "pkg:NPM//is-windows@1.0.2"
     declared_licenses:
     - "MIT"
     declared_licenses_processed:
@@ -2838,7 +2838,7 @@ packages:
   curations: []
 - package:
     id: "NPM::isarray:1.0.0"
-    purl: "pkg://NPM//isarray@1.0.0"
+    purl: "pkg:NPM//isarray@1.0.0"
     declared_licenses:
     - "MIT"
     declared_licenses_processed:
@@ -2868,7 +2868,7 @@ packages:
   curations: []
 - package:
     id: "NPM::isobject:2.1.0"
-    purl: "pkg://NPM//isobject@2.1.0"
+    purl: "pkg:NPM//isobject@2.1.0"
     declared_licenses:
     - "MIT"
     declared_licenses_processed:
@@ -2898,7 +2898,7 @@ packages:
   curations: []
 - package:
     id: "NPM::isobject:3.0.1"
-    purl: "pkg://NPM//isobject@3.0.1"
+    purl: "pkg:NPM//isobject@3.0.1"
     declared_licenses:
     - "MIT"
     declared_licenses_processed:
@@ -2928,7 +2928,7 @@ packages:
   curations: []
 - package:
     id: "NPM::kind-of:3.2.2"
-    purl: "pkg://NPM//kind-of@3.2.2"
+    purl: "pkg:NPM//kind-of@3.2.2"
     declared_licenses:
     - "MIT"
     declared_licenses_processed:
@@ -2958,7 +2958,7 @@ packages:
   curations: []
 - package:
     id: "NPM::kind-of:4.0.0"
-    purl: "pkg://NPM//kind-of@4.0.0"
+    purl: "pkg:NPM//kind-of@4.0.0"
     declared_licenses:
     - "MIT"
     declared_licenses_processed:
@@ -2988,7 +2988,7 @@ packages:
   curations: []
 - package:
     id: "NPM::kind-of:5.1.0"
-    purl: "pkg://NPM//kind-of@5.1.0"
+    purl: "pkg:NPM//kind-of@5.1.0"
     declared_licenses:
     - "MIT"
     declared_licenses_processed:
@@ -3018,7 +3018,7 @@ packages:
   curations: []
 - package:
     id: "NPM::kind-of:6.0.2"
-    purl: "pkg://NPM//kind-of@6.0.2"
+    purl: "pkg:NPM//kind-of@6.0.2"
     declared_licenses:
     - "MIT"
     declared_licenses_processed:
@@ -3048,7 +3048,7 @@ packages:
   curations: []
 - package:
     id: "NPM::lazy-cache:2.0.2"
-    purl: "pkg://NPM//lazy-cache@2.0.2"
+    purl: "pkg:NPM//lazy-cache@2.0.2"
     declared_licenses:
     - "MIT"
     declared_licenses_processed:
@@ -3078,7 +3078,7 @@ packages:
   curations: []
 - package:
     id: "NPM::list-item:1.1.1"
-    purl: "pkg://NPM//list-item@1.1.1"
+    purl: "pkg:NPM//list-item@1.1.1"
     declared_licenses:
     - "MIT"
     declared_licenses_processed:
@@ -3109,7 +3109,7 @@ packages:
   curations: []
 - package:
     id: "NPM::lodash._reinterpolate:3.0.0"
-    purl: "pkg://NPM//lodash._reinterpolate@3.0.0"
+    purl: "pkg:NPM//lodash._reinterpolate@3.0.0"
     declared_licenses:
     - "MIT"
     declared_licenses_processed:
@@ -3139,7 +3139,7 @@ packages:
   curations: []
 - package:
     id: "NPM::lodash.template:4.5.0"
-    purl: "pkg://NPM//lodash.template@4.5.0"
+    purl: "pkg:NPM//lodash.template@4.5.0"
     declared_licenses:
     - "MIT"
     declared_licenses_processed:
@@ -3169,7 +3169,7 @@ packages:
   curations: []
 - package:
     id: "NPM::lodash.templatesettings:4.2.0"
-    purl: "pkg://NPM//lodash.templatesettings@4.2.0"
+    purl: "pkg:NPM//lodash.templatesettings@4.2.0"
     declared_licenses:
     - "MIT"
     declared_licenses_processed:
@@ -3199,7 +3199,7 @@ packages:
   curations: []
 - package:
     id: "NPM::log-ok:0.1.1"
-    purl: "pkg://NPM//log-ok@0.1.1"
+    purl: "pkg:NPM//log-ok@0.1.1"
     declared_licenses:
     - "MIT"
     declared_licenses_processed:
@@ -3229,7 +3229,7 @@ packages:
   curations: []
 - package:
     id: "NPM::map-cache:0.2.2"
-    purl: "pkg://NPM//map-cache@0.2.2"
+    purl: "pkg:NPM//map-cache@0.2.2"
     declared_licenses:
     - "MIT"
     declared_licenses_processed:
@@ -3259,7 +3259,7 @@ packages:
   curations: []
 - package:
     id: "NPM::map-visit:1.0.0"
-    purl: "pkg://NPM//map-visit@1.0.0"
+    purl: "pkg:NPM//map-visit@1.0.0"
     declared_licenses:
     - "MIT"
     declared_licenses_processed:
@@ -3289,7 +3289,7 @@ packages:
   curations: []
 - package:
     id: "NPM::markdown-utils:0.7.3"
-    purl: "pkg://NPM//markdown-utils@0.7.3"
+    purl: "pkg:NPM//markdown-utils@0.7.3"
     declared_licenses:
     - "MIT"
     declared_licenses_processed:
@@ -3319,7 +3319,7 @@ packages:
   curations: []
 - package:
     id: "NPM::math-random:1.0.4"
-    purl: "pkg://NPM//math-random@1.0.4"
+    purl: "pkg:NPM//math-random@1.0.4"
     declared_licenses:
     - "MIT"
     declared_licenses_processed:
@@ -3351,7 +3351,7 @@ packages:
   curations: []
 - package:
     id: "NPM::minimatch:3.0.4"
-    purl: "pkg://NPM//minimatch@3.0.4"
+    purl: "pkg:NPM//minimatch@3.0.4"
     declared_licenses:
     - "ISC"
     declared_licenses_processed:
@@ -3381,7 +3381,7 @@ packages:
   curations: []
 - package:
     id: "NPM::minimist:0.0.8"
-    purl: "pkg://NPM//minimist@0.0.8"
+    purl: "pkg:NPM//minimist@0.0.8"
     declared_licenses:
     - "MIT"
     declared_licenses_processed:
@@ -3411,7 +3411,7 @@ packages:
   curations: []
 - package:
     id: "NPM::minimist:1.2.0"
-    purl: "pkg://NPM//minimist@1.2.0"
+    purl: "pkg:NPM//minimist@1.2.0"
     declared_licenses:
     - "MIT"
     declared_licenses_processed:
@@ -3441,7 +3441,7 @@ packages:
   curations: []
 - package:
     id: "NPM::mixin-deep:1.3.2"
-    purl: "pkg://NPM//mixin-deep@1.3.2"
+    purl: "pkg:NPM//mixin-deep@1.3.2"
     declared_licenses:
     - "MIT"
     declared_licenses_processed:
@@ -3472,7 +3472,7 @@ packages:
   curations: []
 - package:
     id: "NPM::mkdirp:0.5.1"
-    purl: "pkg://NPM//mkdirp@0.5.1"
+    purl: "pkg:NPM//mkdirp@0.5.1"
     declared_licenses:
     - "MIT"
     declared_licenses_processed:
@@ -3502,7 +3502,7 @@ packages:
   curations: []
 - package:
     id: "NPM::mocha:5.2.0"
-    purl: "pkg://NPM//mocha@5.2.0"
+    purl: "pkg:NPM//mocha@5.2.0"
     declared_licenses:
     - "MIT"
     declared_licenses_processed:
@@ -3532,7 +3532,7 @@ packages:
   curations: []
 - package:
     id: "NPM::ms:2.0.0"
-    purl: "pkg://NPM//ms@2.0.0"
+    purl: "pkg:NPM//ms@2.0.0"
     declared_licenses:
     - "MIT"
     declared_licenses_processed:
@@ -3562,7 +3562,7 @@ packages:
   curations: []
 - package:
     id: "NPM::object-copy:0.1.0"
-    purl: "pkg://NPM//object-copy@0.1.0"
+    purl: "pkg:NPM//object-copy@0.1.0"
     declared_licenses:
     - "MIT"
     declared_licenses_processed:
@@ -3593,7 +3593,7 @@ packages:
   curations: []
 - package:
     id: "NPM::object-visit:1.0.1"
-    purl: "pkg://NPM//object-visit@1.0.1"
+    purl: "pkg:NPM//object-visit@1.0.1"
     declared_licenses:
     - "MIT"
     declared_licenses_processed:
@@ -3623,7 +3623,7 @@ packages:
   curations: []
 - package:
     id: "NPM::once:1.4.0"
-    purl: "pkg://NPM//once@1.4.0"
+    purl: "pkg:NPM//once@1.4.0"
     declared_licenses:
     - "ISC"
     declared_licenses_processed:
@@ -3653,7 +3653,7 @@ packages:
   curations: []
 - package:
     id: "NPM::pascalcase:0.1.1"
-    purl: "pkg://NPM//pascalcase@0.1.1"
+    purl: "pkg:NPM//pascalcase@0.1.1"
     declared_licenses:
     - "MIT"
     declared_licenses_processed:
@@ -3683,7 +3683,7 @@ packages:
   curations: []
 - package:
     id: "NPM::path-is-absolute:1.0.1"
-    purl: "pkg://NPM//path-is-absolute@1.0.1"
+    purl: "pkg:NPM//path-is-absolute@1.0.1"
     declared_licenses:
     - "MIT"
     declared_licenses_processed:
@@ -3713,7 +3713,7 @@ packages:
   curations: []
 - package:
     id: "NPM::pretty-remarkable:0.4.1"
-    purl: "pkg://NPM//pretty-remarkable@0.4.1"
+    purl: "pkg:NPM//pretty-remarkable@0.4.1"
     declared_licenses:
     - "MIT"
     declared_licenses_processed:
@@ -3744,7 +3744,7 @@ packages:
   curations: []
 - package:
     id: "NPM::process-nextick-args:2.0.1"
-    purl: "pkg://NPM//process-nextick-args@2.0.1"
+    purl: "pkg:NPM//process-nextick-args@2.0.1"
     declared_licenses:
     - "MIT"
     declared_licenses_processed:
@@ -3774,7 +3774,7 @@ packages:
   curations: []
 - package:
     id: "NPM::randomatic:3.1.1"
-    purl: "pkg://NPM//randomatic@3.1.1"
+    purl: "pkg:NPM//randomatic@3.1.1"
     declared_licenses:
     - "MIT"
     declared_licenses_processed:
@@ -3805,7 +3805,7 @@ packages:
   curations: []
 - package:
     id: "NPM::readable-stream:2.3.6"
-    purl: "pkg://NPM//readable-stream@2.3.6"
+    purl: "pkg:NPM//readable-stream@2.3.6"
     declared_licenses:
     - "MIT"
     declared_licenses_processed:
@@ -3835,7 +3835,7 @@ packages:
   curations: []
 - package:
     id: "NPM::regex-not:1.0.2"
-    purl: "pkg://NPM//regex-not@1.0.2"
+    purl: "pkg:NPM//regex-not@1.0.2"
     declared_licenses:
     - "MIT"
     declared_licenses_processed:
@@ -3866,7 +3866,7 @@ packages:
   curations: []
 - package:
     id: "NPM::remarkable:1.7.4"
-    purl: "pkg://NPM//remarkable@1.7.4"
+    purl: "pkg:NPM//remarkable@1.7.4"
     declared_licenses:
     - "MIT"
     declared_licenses_processed:
@@ -3897,7 +3897,7 @@ packages:
   curations: []
 - package:
     id: "NPM::remove-trailing-separator:1.1.0"
-    purl: "pkg://NPM//remove-trailing-separator@1.1.0"
+    purl: "pkg:NPM//remove-trailing-separator@1.1.0"
     declared_licenses:
     - "ISC"
     declared_licenses_processed:
@@ -3927,7 +3927,7 @@ packages:
   curations: []
 - package:
     id: "NPM::repeat-element:1.1.3"
-    purl: "pkg://NPM//repeat-element@1.1.3"
+    purl: "pkg:NPM//repeat-element@1.1.3"
     declared_licenses:
     - "MIT"
     declared_licenses_processed:
@@ -3957,7 +3957,7 @@ packages:
   curations: []
 - package:
     id: "NPM::repeat-string:1.6.1"
-    purl: "pkg://NPM//repeat-string@1.6.1"
+    purl: "pkg:NPM//repeat-string@1.6.1"
     declared_licenses:
     - "MIT"
     declared_licenses_processed:
@@ -3988,7 +3988,7 @@ packages:
   curations: []
 - package:
     id: "NPM::replace-ext:1.0.0"
-    purl: "pkg://NPM//replace-ext@1.0.0"
+    purl: "pkg:NPM//replace-ext@1.0.0"
     declared_licenses:
     - "MIT"
     declared_licenses_processed:
@@ -4018,7 +4018,7 @@ packages:
   curations: []
 - package:
     id: "NPM::resolve-url:0.2.1"
-    purl: "pkg://NPM//resolve-url@0.2.1"
+    purl: "pkg:NPM//resolve-url@0.2.1"
     declared_licenses:
     - "MIT"
     declared_licenses_processed:
@@ -4048,7 +4048,7 @@ packages:
   curations: []
 - package:
     id: "NPM::ret:0.1.15"
-    purl: "pkg://NPM//ret@0.1.15"
+    purl: "pkg:NPM//ret@0.1.15"
     declared_licenses:
     - "MIT"
     declared_licenses_processed:
@@ -4078,7 +4078,7 @@ packages:
   curations: []
 - package:
     id: "NPM::safe-buffer:5.1.2"
-    purl: "pkg://NPM//safe-buffer@5.1.2"
+    purl: "pkg:NPM//safe-buffer@5.1.2"
     declared_licenses:
     - "MIT"
     declared_licenses_processed:
@@ -4108,7 +4108,7 @@ packages:
   curations: []
 - package:
     id: "NPM::safe-regex:1.1.0"
-    purl: "pkg://NPM//safe-regex@1.1.0"
+    purl: "pkg:NPM//safe-regex@1.1.0"
     declared_licenses:
     - "MIT"
     declared_licenses_processed:
@@ -4138,7 +4138,7 @@ packages:
   curations: []
 - package:
     id: "NPM::sections:1.0.0"
-    purl: "pkg://NPM//sections@1.0.0"
+    purl: "pkg:NPM//sections@1.0.0"
     declared_licenses:
     - "MIT"
     declared_licenses_processed:
@@ -4169,7 +4169,7 @@ packages:
   curations: []
 - package:
     id: "NPM::set-getter:0.1.0"
-    purl: "pkg://NPM//set-getter@0.1.0"
+    purl: "pkg:NPM//set-getter@0.1.0"
     declared_licenses:
     - "MIT"
     declared_licenses_processed:
@@ -4200,7 +4200,7 @@ packages:
   curations: []
 - package:
     id: "NPM::set-value:2.0.1"
-    purl: "pkg://NPM//set-value@2.0.1"
+    purl: "pkg:NPM//set-value@2.0.1"
     declared_licenses:
     - "MIT"
     declared_licenses_processed:
@@ -4231,7 +4231,7 @@ packages:
   curations: []
 - package:
     id: "NPM::snapdragon-node:1.0.6"
-    purl: "pkg://NPM//snapdragon-node@1.0.6"
+    purl: "pkg:NPM//snapdragon-node@1.0.6"
     declared_licenses:
     - "MIT"
     declared_licenses_processed:
@@ -4262,7 +4262,7 @@ packages:
   curations: []
 - package:
     id: "NPM::snapdragon-util:1.0.6"
-    purl: "pkg://NPM//snapdragon-util@1.0.6"
+    purl: "pkg:NPM//snapdragon-util@1.0.6"
     declared_licenses:
     - "MIT"
     declared_licenses_processed:
@@ -4292,7 +4292,7 @@ packages:
   curations: []
 - package:
     id: "NPM::snapdragon-util:2.1.1"
-    purl: "pkg://NPM//snapdragon-util@2.1.1"
+    purl: "pkg:NPM//snapdragon-util@2.1.1"
     declared_licenses:
     - "MIT"
     declared_licenses_processed:
@@ -4322,7 +4322,7 @@ packages:
   curations: []
 - package:
     id: "NPM::snapdragon:0.11.5"
-    purl: "pkg://NPM//snapdragon@0.11.5"
+    purl: "pkg:NPM//snapdragon@0.11.5"
     declared_licenses:
     - "MIT"
     declared_licenses_processed:
@@ -4353,7 +4353,7 @@ packages:
   curations: []
 - package:
     id: "NPM::snapdragon:0.8.2"
-    purl: "pkg://NPM//snapdragon@0.8.2"
+    purl: "pkg:NPM//snapdragon@0.8.2"
     declared_licenses:
     - "MIT"
     declared_licenses_processed:
@@ -4383,7 +4383,7 @@ packages:
   curations: []
 - package:
     id: "NPM::sort-by-value:0.1.0"
-    purl: "pkg://NPM//sort-by-value@0.1.0"
+    purl: "pkg:NPM//sort-by-value@0.1.0"
     declared_licenses:
     - "MIT"
     declared_licenses_processed:
@@ -4414,7 +4414,7 @@ packages:
   curations: []
 - package:
     id: "NPM::source-map-resolve:0.5.2"
-    purl: "pkg://NPM//source-map-resolve@0.5.2"
+    purl: "pkg:NPM//source-map-resolve@0.5.2"
     declared_licenses:
     - "MIT"
     declared_licenses_processed:
@@ -4444,7 +4444,7 @@ packages:
   curations: []
 - package:
     id: "NPM::source-map-url:0.4.0"
-    purl: "pkg://NPM//source-map-url@0.4.0"
+    purl: "pkg:NPM//source-map-url@0.4.0"
     declared_licenses:
     - "MIT"
     declared_licenses_processed:
@@ -4474,7 +4474,7 @@ packages:
   curations: []
 - package:
     id: "NPM::source-map:0.5.7"
-    purl: "pkg://NPM//source-map@0.5.7"
+    purl: "pkg:NPM//source-map@0.5.7"
     declared_licenses:
     - "BSD-3-Clause"
     declared_licenses_processed:
@@ -4504,7 +4504,7 @@ packages:
   curations: []
 - package:
     id: "NPM::source-map:0.6.1"
-    purl: "pkg://NPM//source-map@0.6.1"
+    purl: "pkg:NPM//source-map@0.6.1"
     declared_licenses:
     - "BSD-3-Clause"
     declared_licenses_processed:
@@ -4534,7 +4534,7 @@ packages:
   curations: []
 - package:
     id: "NPM::split-string:3.1.0"
-    purl: "pkg://NPM//split-string@3.1.0"
+    purl: "pkg:NPM//split-string@3.1.0"
     declared_licenses:
     - "MIT"
     declared_licenses_processed:
@@ -4564,7 +4564,7 @@ packages:
   curations: []
 - package:
     id: "NPM::sprintf-js:1.0.3"
-    purl: "pkg://NPM//sprintf-js@1.0.3"
+    purl: "pkg:NPM//sprintf-js@1.0.3"
     declared_licenses:
     - "BSD-3-Clause"
     declared_licenses_processed:
@@ -4594,7 +4594,7 @@ packages:
   curations: []
 - package:
     id: "NPM::static-extend:0.1.2"
-    purl: "pkg://NPM//static-extend@0.1.2"
+    purl: "pkg:NPM//static-extend@0.1.2"
     declared_licenses:
     - "MIT"
     declared_licenses_processed:
@@ -4626,7 +4626,7 @@ packages:
   curations: []
 - package:
     id: "NPM::string_decoder:1.1.1"
-    purl: "pkg://NPM//string_decoder@1.1.1"
+    purl: "pkg:NPM//string_decoder@1.1.1"
     declared_licenses:
     - "MIT"
     declared_licenses_processed:
@@ -4656,7 +4656,7 @@ packages:
   curations: []
 - package:
     id: "NPM::success-symbol:0.1.0"
-    purl: "pkg://NPM//success-symbol@0.1.0"
+    purl: "pkg:NPM//success-symbol@0.1.0"
     declared_licenses:
     - "MIT"
     declared_licenses_processed:
@@ -4686,7 +4686,7 @@ packages:
   curations: []
 - package:
     id: "NPM::supports-color:5.4.0"
-    purl: "pkg://NPM//supports-color@5.4.0"
+    purl: "pkg:NPM//supports-color@5.4.0"
     declared_licenses:
     - "MIT"
     declared_licenses_processed:
@@ -4716,7 +4716,7 @@ packages:
   curations: []
 - package:
     id: "NPM::through2:2.0.5"
-    purl: "pkg://NPM//through2@2.0.5"
+    purl: "pkg:NPM//through2@2.0.5"
     declared_licenses:
     - "MIT"
     declared_licenses_processed:
@@ -4747,7 +4747,7 @@ packages:
   curations: []
 - package:
     id: "NPM::to-gfm-code-block:0.1.1"
-    purl: "pkg://NPM//to-gfm-code-block@0.1.1"
+    purl: "pkg:NPM//to-gfm-code-block@0.1.1"
     declared_licenses:
     - "MIT"
     declared_licenses_processed:
@@ -4777,7 +4777,7 @@ packages:
   curations: []
 - package:
     id: "NPM::to-object-path:0.3.0"
-    purl: "pkg://NPM//to-object-path@0.3.0"
+    purl: "pkg:NPM//to-object-path@0.3.0"
     declared_licenses:
     - "MIT"
     declared_licenses_processed:
@@ -4807,7 +4807,7 @@ packages:
   curations: []
 - package:
     id: "NPM::to-regex:3.0.2"
-    purl: "pkg://NPM//to-regex@3.0.2"
+    purl: "pkg:NPM//to-regex@3.0.2"
     declared_licenses:
     - "MIT"
     declared_licenses_processed:
@@ -4837,7 +4837,7 @@ packages:
   curations: []
 - package:
     id: "NPM::tokenize-comment:1.0.3"
-    purl: "pkg://NPM//tokenize-comment@1.0.3"
+    purl: "pkg:NPM//tokenize-comment@1.0.3"
     declared_licenses:
     - "MIT"
     declared_licenses_processed:
@@ -4869,7 +4869,7 @@ packages:
   curations: []
 - package:
     id: "NPM::union-value:1.0.1"
-    purl: "pkg://NPM//union-value@1.0.1"
+    purl: "pkg:NPM//union-value@1.0.1"
     declared_licenses:
     - "MIT"
     declared_licenses_processed:
@@ -4900,7 +4900,7 @@ packages:
   curations: []
 - package:
     id: "NPM::unset-value:1.0.0"
-    purl: "pkg://NPM//unset-value@1.0.0"
+    purl: "pkg:NPM//unset-value@1.0.0"
     declared_licenses:
     - "MIT"
     declared_licenses_processed:
@@ -4930,7 +4930,7 @@ packages:
   curations: []
 - package:
     id: "NPM::urix:0.1.0"
-    purl: "pkg://NPM//urix@0.1.0"
+    purl: "pkg:NPM//urix@0.1.0"
     declared_licenses:
     - "MIT"
     declared_licenses_processed:
@@ -4960,7 +4960,7 @@ packages:
   curations: []
 - package:
     id: "NPM::use:3.1.1"
-    purl: "pkg://NPM//use@3.1.1"
+    purl: "pkg:NPM//use@3.1.1"
     declared_licenses:
     - "MIT"
     declared_licenses_processed:
@@ -4990,7 +4990,7 @@ packages:
   curations: []
 - package:
     id: "NPM::util-deprecate:1.0.2"
-    purl: "pkg://NPM//util-deprecate@1.0.2"
+    purl: "pkg:NPM//util-deprecate@1.0.2"
     declared_licenses:
     - "MIT"
     declared_licenses_processed:
@@ -5020,7 +5020,7 @@ packages:
   curations: []
 - package:
     id: "NPM::vinyl:2.2.0"
-    purl: "pkg://NPM//vinyl@2.2.0"
+    purl: "pkg:NPM//vinyl@2.2.0"
     declared_licenses:
     - "MIT"
     declared_licenses_processed:
@@ -5050,7 +5050,7 @@ packages:
   curations: []
 - package:
     id: "NPM::wrappy:1.0.2"
-    purl: "pkg://NPM//wrappy@1.0.2"
+    purl: "pkg:NPM//wrappy@1.0.2"
     declared_licenses:
     - "ISC"
     declared_licenses_processed:
@@ -5080,7 +5080,7 @@ packages:
   curations: []
 - package:
     id: "NPM::write:0.3.3"
-    purl: "pkg://NPM//write@0.3.3"
+    purl: "pkg:NPM//write@0.3.3"
     declared_licenses:
     - "MIT"
     declared_licenses_processed:
@@ -5111,7 +5111,7 @@ packages:
   curations: []
 - package:
     id: "NPM::xtend:4.0.2"
-    purl: "pkg://NPM//xtend@4.0.2"
+    purl: "pkg:NPM//xtend@4.0.2"
     declared_licenses:
     - "MIT"
     declared_licenses_processed:

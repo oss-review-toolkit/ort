@@ -1,7 +1,7 @@
 ---
 project:
   id: "Maven:com.here.ort.maven:maven-app:1.0-SNAPSHOT"
-  purl: "pkg://Maven/com.here.ort.maven/maven-app@1.0-SNAPSHOT"
+  purl: "pkg:Maven/com.here.ort.maven/maven-app@1.0-SNAPSHOT"
   definition_file_path: "analyzer/src/funTest/assets/projects/synthetic/maven/app/pom.xml"
   declared_licenses:
   - "Apache License, Version 2.0"
@@ -32,7 +32,7 @@ project:
 packages:
 - package:
     id: "Maven:org.apache.beam:beam-parent:2.3.0"
-    purl: "pkg://Maven/org.apache.beam/beam-parent@2.3.0"
+    purl: "pkg:Maven/org.apache.beam/beam-parent@2.3.0"
     declared_licenses:
     - "Apache License, Version 2.0"
     declared_licenses_processed:
@@ -64,7 +64,7 @@ packages:
   curations: []
 - package:
     id: "Maven:org.apache.commons:commons-lang3:3.5"
-    purl: "pkg://Maven/org.apache.commons/commons-lang3@3.5"
+    purl: "pkg:Maven/org.apache.commons/commons-lang3@3.5"
     declared_licenses:
     - "Apache License, Version 2.0"
     declared_licenses_processed:
@@ -96,7 +96,7 @@ packages:
   curations: []
 - package:
     id: "Maven:org.apache.commons:commons-text:1.1"
-    purl: "pkg://Maven/org.apache.commons/commons-text@1.1"
+    purl: "pkg:Maven/org.apache.commons/commons-text@1.1"
     declared_licenses:
     - "Apache License, Version 2.0"
     declared_licenses_processed:
@@ -127,7 +127,7 @@ packages:
   curations: []
 - package:
     id: "Maven:org.jenkins-ci:version-number:1.4"
-    purl: "pkg://Maven/org.jenkins-ci/version-number@1.4"
+    purl: "pkg:Maven/org.jenkins-ci/version-number@1.4"
     declared_licenses:
     - "MIT License"
     declared_licenses_processed:
