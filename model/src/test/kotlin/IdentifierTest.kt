@@ -23,11 +23,11 @@ import com.fasterxml.jackson.module.kotlin.readValue
 
 import io.kotlintest.assertSoftly
 import io.kotlintest.shouldBe
-import io.kotlintest.specs.StringSpec
+import io.kotlintest.specs.WordSpec
 
-class IdentifierTest : StringSpec() {
-    init {
-        "String representation is correct" {
+class IdentifierTest : WordSpec({
+    "String representations" should {
+        "be correct" {
             val mapping = mapOf(
                 Identifier("manager", "namespace", "name", "version")
                         to "manager:namespace:name:version",
@@ -44,7 +44,7 @@ class IdentifierTest : StringSpec() {
             }
         }
 
-        "String representation is parsed correctly" {
+        "be parsed correctly" {
             val mapping = mapOf(
                 "manager:namespace:name:version"
                         to Identifier("manager", "namespace", "name", "version"),
@@ -61,7 +61,7 @@ class IdentifierTest : StringSpec() {
             }
         }
 
-        "Identifier is serialized to String" {
+        "be serialized correctly" {
             val id = Identifier("type", "namespace", "name", "version")
 
             val serializedId = yamlMapper.writeValueAsString(id)
@@ -69,7 +69,7 @@ class IdentifierTest : StringSpec() {
             serializedId shouldBe "--- \"type:namespace:name:version\"\n"
         }
 
-        "Identifier can be deserialized from String" {
+        "be deserialized correctly" {
             val serializedId = "--- \"type:namespace:name:version\""
 
             val id = yamlMapper.readValue<Identifier>(serializedId)
@@ -77,7 +77,7 @@ class IdentifierTest : StringSpec() {
             id shouldBe Identifier("type", "namespace", "name", "version")
         }
 
-        "Incomplete Identifier can be deserialized from String" {
+        "be deserialized correctly even if incomplete" {
             val serializedId = "--- \"type:namespace:\""
 
             val id = yamlMapper.readValue<Identifier>(serializedId)
@@ -85,7 +85,7 @@ class IdentifierTest : StringSpec() {
             id shouldBe Identifier("type", "namespace", "", "")
         }
 
-        "Identifier map key can be deserialized from String" {
+        "be deserialized correctly from a map key" {
             val serializedMap = "---\ntype:namespace:name:version: 1"
 
             val map = yamlMapper.readValue<Map<Identifier, Int>>(serializedMap)
@@ -93,15 +93,17 @@ class IdentifierTest : StringSpec() {
             map shouldBe mapOf(Identifier("type", "namespace", "name", "version") to 1)
         }
 
-        "Incomplete Identifier map key can be deserialized from String" {
+        "be deserialized correctly from a map key even if incomplete" {
             val serializedMap = "---\ntype:namespace:: 1"
 
             val map = yamlMapper.readValue<Map<Identifier, Int>>(serializedMap)
 
             map shouldBe mapOf(Identifier("type", "namespace", "", "") to 1)
         }
+    }
 
-        "Checking the vendor works as expected" {
+    "Checking the organization" should {
+        "work as expected" {
             assertSoftly {
                 Identifier("Maven:com.here:name:version").isFromOrg("here", "traffic") shouldBe true
                 Identifier("Maven:com.here.project:name:version").isFromOrg("here") shouldBe true
@@ -114,4 +116,4 @@ class IdentifierTest : StringSpec() {
             }
         }
     }
-}
+})
