@@ -1,7 +1,7 @@
 ---
 project:
   id: "PIP::src/funTest/assets/projects/external/example-python-flask/requirements.txt:0773991e36a4c69b121cdb05146d6140347d4065"
-  purl: "pkg:PIP//src%2FfunTest%2Fassets%2Fprojects%2Fexternal%2Fexample-python-flask%2Frequirements.txt@0773991e36a4c69b121cdb05146d6140347d4065"
+  purl: "pkg:pip//src%2FfunTest%2Fassets%2Fprojects%2Fexternal%2Fexample-python-flask%2Frequirements.txt@0773991e36a4c69b121cdb05146d6140347d4065"
   definition_file_path: "requirements.txt"
   declared_licenses: []
   declared_licenses_processed: {}
@@ -31,7 +31,7 @@ project:
 packages:
 - package:
     id: "PyPI::Flask:0.12"
-    purl: "pkg:PyPI//Flask@0.12"
+    purl: "pkg:pypi//Flask@0.12"
     declared_licenses:
     - "BSD"
     declared_licenses_processed:
@@ -61,7 +61,7 @@ packages:
   curations: []
 - package:
     id: "PyPI::Jinja2:2.8.1"
-    purl: "pkg:PyPI//Jinja2@2.8.1"
+    purl: "pkg:pypi//Jinja2@2.8.1"
     declared_licenses:
     - "BSD"
     declared_licenses_processed:
@@ -92,7 +92,7 @@ packages:
   curations: []
 - package:
     id: "PyPI::MarkupSafe:1.1.1"
-    purl: "pkg:PyPI//MarkupSafe@1.1.1"
+    purl: "pkg:pypi//MarkupSafe@1.1.1"
     declared_licenses:
     - "BSD"
     - "BSD-3-Clause"
@@ -123,7 +123,7 @@ packages:
   curations: []
 - package:
     id: "PyPI::Werkzeug:0.15.5"
-    purl: "pkg:PyPI//Werkzeug@0.15.5"
+    purl: "pkg:pypi//Werkzeug@0.15.5"
     declared_licenses:
     - "BSD"
     - "BSD-3-Clause"
@@ -154,7 +154,7 @@ packages:
   curations: []
 - package:
     id: "PyPI::click:7.0"
-    purl: "pkg:PyPI//click@7.0"
+    purl: "pkg:pypi//click@7.0"
     declared_licenses:
     - "BSD"
     declared_licenses_processed:
@@ -184,7 +184,7 @@ packages:
   curations: []
 - package:
     id: "PyPI::gunicorn:19.6.0"
-    purl: "pkg:PyPI//gunicorn@19.6.0"
+    purl: "pkg:pypi//gunicorn@19.6.0"
     declared_licenses:
     - "MIT"
     declared_licenses_processed:
@@ -214,7 +214,7 @@ packages:
   curations: []
 - package:
     id: "PyPI::itsdangerous:1.1.0"
-    purl: "pkg:PyPI//itsdangerous@1.1.0"
+    purl: "pkg:pypi//itsdangerous@1.1.0"
     declared_licenses:
     - "BSD"
     declared_licenses_processed:

@@ -1,7 +1,7 @@
 ---
 project:
   id: "PhpComposer:ort:composer-test-project:0.1.0"
-  purl: "pkg:PhpComposer/ort/composer-test-project@0.1.0"
+  purl: "pkg:phpcomposer/ort/composer-test-project@0.1.0"
   definition_file_path: "analyzer/src/funTest/assets/projects/synthetic/php-composer/lockfile/composer.json"
   declared_licenses:
   - "Apache-2.0"
@@ -132,7 +132,7 @@ project:
 packages:
 - package:
     id: "PhpComposer:clue:stream-filter:v1.4.0"
-    purl: "pkg:PhpComposer/clue/stream-filter@v1.4.0"
+    purl: "pkg:phpcomposer/clue/stream-filter@v1.4.0"
     declared_licenses:
     - "MIT"
     declared_licenses_processed:
@@ -162,7 +162,7 @@ packages:
   curations: []
 - package:
     id: "PhpComposer:doctrine:instantiator:1.1.0"
-    purl: "pkg:PhpComposer/doctrine/instantiator@1.1.0"
+    purl: "pkg:phpcomposer/doctrine/instantiator@1.1.0"
     declared_licenses:
     - "MIT"
     declared_licenses_processed:
@@ -193,7 +193,7 @@ packages:
   curations: []
 - package:
     id: "PhpComposer:guzzlehttp:guzzle:6.3.0"
-    purl: "pkg:PhpComposer/guzzlehttp/guzzle@6.3.0"
+    purl: "pkg:phpcomposer/guzzlehttp/guzzle@6.3.0"
     declared_licenses:
     - "MIT"
     declared_licenses_processed:
@@ -223,7 +223,7 @@ packages:
   curations: []
 - package:
     id: "PhpComposer:guzzlehttp:promises:v1.3.1"
-    purl: "pkg:PhpComposer/guzzlehttp/promises@v1.3.1"
+    purl: "pkg:phpcomposer/guzzlehttp/promises@v1.3.1"
     declared_licenses:
     - "MIT"
     declared_licenses_processed:
@@ -253,7 +253,7 @@ packages:
   curations: []
 - package:
     id: "PhpComposer:guzzlehttp:psr7:1.4.0"
-    purl: "pkg:PhpComposer/guzzlehttp/psr7@1.4.0"
+    purl: "pkg:phpcomposer/guzzlehttp/psr7@1.4.0"
     declared_licenses:
     - "MIT"
     declared_licenses_processed:
@@ -283,7 +283,7 @@ packages:
   curations: []
 - package:
     id: "PhpComposer:mailgun:mailgun-php:v2.4.0"
-    purl: "pkg:PhpComposer/mailgun/mailgun-php@v2.4.0"
+    purl: "pkg:phpcomposer/mailgun/mailgun-php@v2.4.0"
     declared_licenses:
     - "MIT"
     declared_licenses_processed:
@@ -313,7 +313,7 @@ packages:
   curations: []
 - package:
     id: "PhpComposer:monolog:monolog:1.0.2"
-    purl: "pkg:PhpComposer/monolog/monolog@1.0.2"
+    purl: "pkg:phpcomposer/monolog/monolog@1.0.2"
     declared_licenses:
     - "MIT"
     declared_licenses_processed:
@@ -343,7 +343,7 @@ packages:
   curations: []
 - package:
     id: "PhpComposer:php-http:client-common:1.7.0"
-    purl: "pkg:PhpComposer/php-http/client-common@1.7.0"
+    purl: "pkg:phpcomposer/php-http/client-common@1.7.0"
     declared_licenses:
     - "MIT"
     declared_licenses_processed:
@@ -373,7 +373,7 @@ packages:
   curations: []
 - package:
     id: "PhpComposer:php-http:discovery:1.3.0"
-    purl: "pkg:PhpComposer/php-http/discovery@1.3.0"
+    purl: "pkg:phpcomposer/php-http/discovery@1.3.0"
     declared_licenses:
     - "MIT"
     declared_licenses_processed:
@@ -403,7 +403,7 @@ packages:
   curations: []
 - package:
     id: "PhpComposer:php-http:guzzle6-adapter:v1.0.0"
-    purl: "pkg:PhpComposer/php-http/guzzle6-adapter@v1.0.0"
+    purl: "pkg:phpcomposer/php-http/guzzle6-adapter@v1.0.0"
     declared_licenses:
     - "MIT"
     declared_licenses_processed:
@@ -433,7 +433,7 @@ packages:
   curations: []
 - package:
     id: "PhpComposer:php-http:httplug:v1.1.0"
-    purl: "pkg:PhpComposer/php-http/httplug@v1.1.0"
+    purl: "pkg:phpcomposer/php-http/httplug@v1.1.0"
     declared_licenses:
     - "MIT"
     declared_licenses_processed:
@@ -463,7 +463,7 @@ packages:
   curations: []
 - package:
     id: "PhpComposer:php-http:message-factory:v1.0.2"
-    purl: "pkg:PhpComposer/php-http/message-factory@v1.0.2"
+    purl: "pkg:phpcomposer/php-http/message-factory@v1.0.2"
     declared_licenses:
     - "MIT"
     declared_licenses_processed:
@@ -493,7 +493,7 @@ packages:
   curations: []
 - package:
     id: "PhpComposer:php-http:message:1.6.0"
-    purl: "pkg:PhpComposer/php-http/message@1.6.0"
+    purl: "pkg:phpcomposer/php-http/message@1.6.0"
     declared_licenses:
     - "MIT"
     declared_licenses_processed:
@@ -523,7 +523,7 @@ packages:
   curations: []
 - package:
     id: "PhpComposer:php-http:multipart-stream-builder:1.0.0"
-    purl: "pkg:PhpComposer/php-http/multipart-stream-builder@1.0.0"
+    purl: "pkg:phpcomposer/php-http/multipart-stream-builder@1.0.0"
     declared_licenses:
     - "MIT"
     declared_licenses_processed:
@@ -553,7 +553,7 @@ packages:
   curations: []
 - package:
     id: "PhpComposer:php-http:promise:v1.0.0"
-    purl: "pkg:PhpComposer/php-http/promise@v1.0.0"
+    purl: "pkg:phpcomposer/php-http/promise@v1.0.0"
     declared_licenses:
     - "MIT"
     declared_licenses_processed:
@@ -583,7 +583,7 @@ packages:
   curations: []
 - package:
     id: "PhpComposer:phpdocumentor:reflection-common:1.0.1"
-    purl: "pkg:PhpComposer/phpdocumentor/reflection-common@1.0.1"
+    purl: "pkg:phpcomposer/phpdocumentor/reflection-common@1.0.1"
     declared_licenses:
     - "MIT"
     declared_licenses_processed:
@@ -614,7 +614,7 @@ packages:
   curations: []
 - package:
     id: "PhpComposer:phpdocumentor:reflection-docblock:4.2.0"
-    purl: "pkg:PhpComposer/phpdocumentor/reflection-docblock@4.2.0"
+    purl: "pkg:phpcomposer/phpdocumentor/reflection-docblock@4.2.0"
     declared_licenses:
     - "MIT"
     declared_licenses_processed:
@@ -645,7 +645,7 @@ packages:
   curations: []
 - package:
     id: "PhpComposer:phpdocumentor:type-resolver:0.4.0"
-    purl: "pkg:PhpComposer/phpdocumentor/type-resolver@0.4.0"
+    purl: "pkg:phpcomposer/phpdocumentor/type-resolver@0.4.0"
     declared_licenses:
     - "MIT"
     declared_licenses_processed:
@@ -675,7 +675,7 @@ packages:
   curations: []
 - package:
     id: "PhpComposer:phpspec:prophecy:1.7.3"
-    purl: "pkg:PhpComposer/phpspec/prophecy@1.7.3"
+    purl: "pkg:phpcomposer/phpspec/prophecy@1.7.3"
     declared_licenses:
     - "MIT"
     declared_licenses_processed:
@@ -705,7 +705,7 @@ packages:
   curations: []
 - package:
     id: "PhpComposer:phpunit:php-code-coverage:2.2.4"
-    purl: "pkg:PhpComposer/phpunit/php-code-coverage@2.2.4"
+    purl: "pkg:phpcomposer/phpunit/php-code-coverage@2.2.4"
     declared_licenses:
     - "BSD-3-Clause"
     declared_licenses_processed:
@@ -736,7 +736,7 @@ packages:
   curations: []
 - package:
     id: "PhpComposer:phpunit:php-file-iterator:1.4.5"
-    purl: "pkg:PhpComposer/phpunit/php-file-iterator@1.4.5"
+    purl: "pkg:phpcomposer/phpunit/php-file-iterator@1.4.5"
     declared_licenses:
     - "BSD-3-Clause"
     declared_licenses_processed:
@@ -767,7 +767,7 @@ packages:
   curations: []
 - package:
     id: "PhpComposer:phpunit:php-text-template:1.2.1"
-    purl: "pkg:PhpComposer/phpunit/php-text-template@1.2.1"
+    purl: "pkg:phpcomposer/phpunit/php-text-template@1.2.1"
     declared_licenses:
     - "BSD-3-Clause"
     declared_licenses_processed:
@@ -797,7 +797,7 @@ packages:
   curations: []
 - package:
     id: "PhpComposer:phpunit:php-timer:1.0.9"
-    purl: "pkg:PhpComposer/phpunit/php-timer@1.0.9"
+    purl: "pkg:phpcomposer/phpunit/php-timer@1.0.9"
     declared_licenses:
     - "BSD-3-Clause"
     declared_licenses_processed:
@@ -827,7 +827,7 @@ packages:
   curations: []
 - package:
     id: "PhpComposer:phpunit:php-token-stream:1.4.12"
-    purl: "pkg:PhpComposer/phpunit/php-token-stream@1.4.12"
+    purl: "pkg:phpcomposer/phpunit/php-token-stream@1.4.12"
     declared_licenses:
     - "BSD-3-Clause"
     declared_licenses_processed:
@@ -857,7 +857,7 @@ packages:
   curations: []
 - package:
     id: "PhpComposer:phpunit:phpunit-mock-objects:2.3.8"
-    purl: "pkg:PhpComposer/phpunit/phpunit-mock-objects@2.3.8"
+    purl: "pkg:phpcomposer/phpunit/phpunit-mock-objects@2.3.8"
     declared_licenses:
     - "BSD-3-Clause"
     declared_licenses_processed:
@@ -887,7 +887,7 @@ packages:
   curations: []
 - package:
     id: "PhpComposer:phpunit:phpunit:4.8.0"
-    purl: "pkg:PhpComposer/phpunit/phpunit@4.8.0"
+    purl: "pkg:phpcomposer/phpunit/phpunit@4.8.0"
     declared_licenses:
     - "BSD-3-Clause"
     declared_licenses_processed:
@@ -917,7 +917,7 @@ packages:
   curations: []
 - package:
     id: "PhpComposer:psr:http-message:1.0.1"
-    purl: "pkg:PhpComposer/psr/http-message@1.0.1"
+    purl: "pkg:phpcomposer/psr/http-message@1.0.1"
     declared_licenses:
     - "MIT"
     declared_licenses_processed:
@@ -947,7 +947,7 @@ packages:
   curations: []
 - package:
     id: "PhpComposer:sebastian:comparator:1.2.4"
-    purl: "pkg:PhpComposer/sebastian/comparator@1.2.4"
+    purl: "pkg:phpcomposer/sebastian/comparator@1.2.4"
     declared_licenses:
     - "BSD-3-Clause"
     declared_licenses_processed:
@@ -977,7 +977,7 @@ packages:
   curations: []
 - package:
     id: "PhpComposer:sebastian:diff:1.4.3"
-    purl: "pkg:PhpComposer/sebastian/diff@1.4.3"
+    purl: "pkg:phpcomposer/sebastian/diff@1.4.3"
     declared_licenses:
     - "BSD-3-Clause"
     declared_licenses_processed:
@@ -1007,7 +1007,7 @@ packages:
   curations: []
 - package:
     id: "PhpComposer:sebastian:environment:1.3.8"
-    purl: "pkg:PhpComposer/sebastian/environment@1.3.8"
+    purl: "pkg:phpcomposer/sebastian/environment@1.3.8"
     declared_licenses:
     - "BSD-3-Clause"
     declared_licenses_processed:
@@ -1037,7 +1037,7 @@ packages:
   curations: []
 - package:
     id: "PhpComposer:sebastian:exporter:1.2.2"
-    purl: "pkg:PhpComposer/sebastian/exporter@1.2.2"
+    purl: "pkg:phpcomposer/sebastian/exporter@1.2.2"
     declared_licenses:
     - "BSD-3-Clause"
     declared_licenses_processed:
@@ -1067,7 +1067,7 @@ packages:
   curations: []
 - package:
     id: "PhpComposer:sebastian:global-state:1.1.1"
-    purl: "pkg:PhpComposer/sebastian/global-state@1.1.1"
+    purl: "pkg:phpcomposer/sebastian/global-state@1.1.1"
     declared_licenses:
     - "BSD-3-Clause"
     declared_licenses_processed:
@@ -1097,7 +1097,7 @@ packages:
   curations: []
 - package:
     id: "PhpComposer:sebastian:recursion-context:1.0.5"
-    purl: "pkg:PhpComposer/sebastian/recursion-context@1.0.5"
+    purl: "pkg:phpcomposer/sebastian/recursion-context@1.0.5"
     declared_licenses:
     - "BSD-3-Clause"
     declared_licenses_processed:
@@ -1127,7 +1127,7 @@ packages:
   curations: []
 - package:
     id: "PhpComposer:sebastian:version:1.0.6"
-    purl: "pkg:PhpComposer/sebastian/version@1.0.6"
+    purl: "pkg:phpcomposer/sebastian/version@1.0.6"
     declared_licenses:
     - "BSD-3-Clause"
     declared_licenses_processed:
@@ -1158,7 +1158,7 @@ packages:
   curations: []
 - package:
     id: "PhpComposer:symfony:options-resolver:v4.0.2"
-    purl: "pkg:PhpComposer/symfony/options-resolver@v4.0.2"
+    purl: "pkg:phpcomposer/symfony/options-resolver@v4.0.2"
     declared_licenses:
     - "MIT"
     declared_licenses_processed:
@@ -1188,7 +1188,7 @@ packages:
   curations: []
 - package:
     id: "PhpComposer:symfony:yaml:v3.4.2"
-    purl: "pkg:PhpComposer/symfony/yaml@v3.4.2"
+    purl: "pkg:phpcomposer/symfony/yaml@v3.4.2"
     declared_licenses:
     - "MIT"
     declared_licenses_processed:
@@ -1218,7 +1218,7 @@ packages:
   curations: []
 - package:
     id: "PhpComposer:webmozart:assert:1.2.0"
-    purl: "pkg:PhpComposer/webmozart/assert@1.2.0"
+    purl: "pkg:phpcomposer/webmozart/assert@1.2.0"
     declared_licenses:
     - "MIT"
     declared_licenses_processed:

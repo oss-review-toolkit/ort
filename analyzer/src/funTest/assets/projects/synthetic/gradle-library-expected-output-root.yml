@@ -1,7 +1,7 @@
 ---
 project:
   id: "Gradle::Gradle-Example:"
-  purl: "pkg:Gradle//Gradle-Example@"
+  purl: "pkg:gradle//Gradle-Example@"
   definition_file_path: "analyzer/src/funTest/assets/projects/synthetic/gradle-library/build.gradle"
   declared_licenses: []
   declared_licenses_processed: {}
