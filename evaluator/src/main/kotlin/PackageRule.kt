@@ -172,7 +172,7 @@ open class PackageRule(
         val licenseSource: LicenseSource,
 
         /**
-         * The associated [LicenseFindings]s. Only used if [licenseSource] is [LicenseSource.DETECTED].
+         * The associated [LicenseFindings]. Only used if [licenseSource] is [LicenseSource.DETECTED].
          */
         val licenseFindings: Map<LicenseFindings, List<PathExclude>> = emptyMap()
     ) : Rule(ruleSet, name) {
