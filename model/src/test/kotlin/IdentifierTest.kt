@@ -22,6 +22,9 @@ package com.here.ort.model
 import com.fasterxml.jackson.module.kotlin.readValue
 
 import io.kotlintest.assertSoftly
+import io.kotlintest.matchers.string.shouldNotContain
+import io.kotlintest.matchers.string.shouldNotStartWith
+import io.kotlintest.matchers.string.shouldStartWith
 import io.kotlintest.shouldBe
 import io.kotlintest.specs.WordSpec
 
@@ -99,6 +102,45 @@ class IdentifierTest : WordSpec({
             val map = yamlMapper.readValue<Map<Identifier, Int>>(serializedMap)
 
             map shouldBe mapOf(Identifier("type", "namespace", "", "") to 1)
+        }
+    }
+
+    "Purl representations" should {
+        "not suffix the scheme with '//'" {
+            val purl = Identifier("type", "namespace", "name", "version").toPurl()
+
+            purl shouldStartWith "pkg:"
+            purl shouldNotStartWith "pkg://"
+        }
+
+        "not percent-encode the type" {
+            val purl = Identifier("azAZ09.+-", "namespace", "name", "version").toPurl()
+
+            purl shouldNotContain "%"
+        }
+
+        "not use '/' for empty namespaces" {
+            val purl = Identifier("type", "", "name", "version").toPurl()
+
+            purl shouldBe "pkg:type/name@version"
+        }
+
+        "percent-encode namespaces with segments" {
+            val purl = Identifier("type", "name/space", "name", "version").toPurl()
+
+            purl shouldBe "pkg:type/name%2Fspace/name@version"
+        }
+
+        "percent-encode the name" {
+            val purl = Identifier("type", "namespace", "fancy name", "version").toPurl()
+
+            purl shouldBe "pkg:type/namespace/fancy%20name@version"
+        }
+
+        "percent-encode the version" {
+            val purl = Identifier("type", "namespace", "name", "release candidate").toPurl()
+
+            purl shouldBe "pkg:type/namespace/name@release%20candidate"
         }
     }
 
