@@ -102,12 +102,14 @@ data class ScanSummary(
      */
     @JsonIgnore
     fun getSingleCopyrightFindings(): List<CopyrightFinding> =
-        licenseFindings.flatMap { findings ->
-            findings.locations.map {
-                CopyrightFinding(
-                    statement = findings.license,
-                    location = it
-                )
+        licenseFindings.flatMap { licenseFindings ->
+            licenseFindings.copyrights.flatMap { copyrightFindings ->
+                copyrightFindings.locations.map {
+                    CopyrightFinding(
+                        statement = copyrightFindings.statement,
+                        location = it
+                    )
+                }
             }
         }
 
