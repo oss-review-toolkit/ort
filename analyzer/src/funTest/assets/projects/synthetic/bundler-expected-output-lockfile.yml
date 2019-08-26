@@ -1,7 +1,7 @@
 ---
 project:
   id: "Bundler::lockfile:"
-  purl: "pkg:bundler//lockfile@"
+  purl: "pkg:bundler/lockfile@"
   definition_file_path: "analyzer/src/funTest/assets/projects/synthetic/bundler/lockfile/Gemfile"
   declared_licenses: []
   declared_licenses_processed: {}
@@ -41,7 +41,7 @@ project:
 packages:
 - package:
     id: "Bundler::diff-lcs:1.3"
-    purl: "pkg:bundler//diff-lcs@1.3"
+    purl: "pkg:bundler/diff-lcs@1.3"
     declared_licenses:
     - "Artistic-2.0"
     - "GPL-2.0+"
@@ -79,7 +79,7 @@ packages:
   curations: []
 - package:
     id: "Bundler::mini_portile2:2.4.0"
-    purl: "pkg:bundler//mini_portile2@2.4.0"
+    purl: "pkg:bundler/mini_portile2@2.4.0"
     declared_licenses:
     - "MIT"
     declared_licenses_processed:
@@ -113,7 +113,7 @@ packages:
   curations: []
 - package:
     id: "Bundler::nokogiri:1.10.4"
-    purl: "pkg:bundler//nokogiri@1.10.4"
+    purl: "pkg:bundler/nokogiri@1.10.4"
     declared_licenses:
     - "MIT"
     declared_licenses_processed:
@@ -144,7 +144,7 @@ packages:
   curations: []
 - package:
     id: "Bundler::rack:1.6.11"
-    purl: "pkg:bundler//rack@1.6.11"
+    purl: "pkg:bundler/rack@1.6.11"
     declared_licenses:
     - "MIT"
     declared_licenses_processed:
@@ -178,7 +178,7 @@ packages:
   curations: []
 - package:
     id: "Bundler::rspec-core:3.7.1"
-    purl: "pkg:bundler//rspec-core@3.7.1"
+    purl: "pkg:bundler/rspec-core@3.7.1"
     declared_licenses:
     - "MIT"
     declared_licenses_processed:
@@ -208,7 +208,7 @@ packages:
   curations: []
 - package:
     id: "Bundler::rspec-expectations:3.7.0"
-    purl: "pkg:bundler//rspec-expectations@3.7.0"
+    purl: "pkg:bundler/rspec-expectations@3.7.0"
     declared_licenses:
     - "MIT"
     declared_licenses_processed:
@@ -239,7 +239,7 @@ packages:
   curations: []
 - package:
     id: "Bundler::rspec-mocks:3.7.0"
-    purl: "pkg:bundler//rspec-mocks@3.7.0"
+    purl: "pkg:bundler/rspec-mocks@3.7.0"
     declared_licenses:
     - "MIT"
     declared_licenses_processed:
@@ -269,7 +269,7 @@ packages:
   curations: []
 - package:
     id: "Bundler::rspec-support:3.7.1"
-    purl: "pkg:bundler//rspec-support@3.7.1"
+    purl: "pkg:bundler/rspec-support@3.7.1"
     declared_licenses:
     - "MIT"
     declared_licenses_processed:
@@ -301,7 +301,7 @@ packages:
   curations: []
 - package:
     id: "Bundler::rspec:3.7.0"
-    purl: "pkg:bundler//rspec@3.7.0"
+    purl: "pkg:bundler/rspec@3.7.0"
     declared_licenses:
     - "MIT"
     declared_licenses_processed:
