@@ -39,7 +39,7 @@ class RuleSet(val ortResult: OrtResult) {
     val violations = mutableSetOf<RuleViolation>()
 
     /**
-     * The map of all [LicenseFindings]s and associated path excludes by [Identifier].
+     * The map of all [LicenseFindings] and associated path excludes by [Identifier].
      */
     val licenseFindings = ortResult.collectLicenseFindings()
 
