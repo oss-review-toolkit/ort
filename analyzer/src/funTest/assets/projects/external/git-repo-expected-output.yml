@@ -57,7 +57,7 @@ analyzer:
   result:
     projects:
     - id: "Bower::long:4.0.0"
-      purl: "pkg:bower//long@4.0.0"
+      purl: "pkg:bower/long@4.0.0"
       definition_file_path: "bower.json"
       declared_licenses:
       - "Apache-2.0"
@@ -212,7 +212,7 @@ analyzer:
           dependencies:
           - id: "Maven:org.hamcrest:hamcrest-core:1.3"
     - id: "NPM::entities:1.1.2"
-      purl: "pkg:npm//entities@1.1.2"
+      purl: "pkg:npm/entities@1.1.2"
       definition_file_path: "package.json"
       declared_licenses:
       - "BSD-2-Clause"
@@ -800,7 +800,7 @@ analyzer:
             dependencies:
             - id: "NPM::has-flag:3.0.0"
     - id: "NPM::npm-test-project:1.0.0"
-      purl: "pkg:npm//npm-test-project@1.0.0"
+      purl: "pkg:npm/npm-test-project@1.0.0"
       definition_file_path: "package.json"
       declared_licenses:
       - "Apache-2.0"
@@ -904,7 +904,7 @@ analyzer:
             - id: "NPM::editions:1.3.4"
             - id: "NPM::graceful-fs:4.1.15"
     - id: "NPM::submodules/test-data-npm/long.js/package.json:"
-      purl: "pkg:npm//submodules%2Ftest-data-npm%2Flong.js%2Fpackage.json@"
+      purl: "pkg:npm/submodules%2Ftest-data-npm%2Flong.js%2Fpackage.json@"
       definition_file_path: "package.json"
       declared_licenses: []
       declared_licenses_processed: {}
@@ -3017,7 +3017,7 @@ analyzer:
       curations: []
     - package:
         id: "NPM::abbrev:1.0.9"
-        purl: "pkg:npm//abbrev@1.0.9"
+        purl: "pkg:npm/abbrev@1.0.9"
         declared_licenses:
         - "ISC"
         declared_licenses_processed:
@@ -3047,7 +3047,7 @@ analyzer:
       curations: []
     - package:
         id: "NPM::ajv:5.5.2"
-        purl: "pkg:npm//ajv@5.5.2"
+        purl: "pkg:npm/ajv@5.5.2"
         declared_licenses:
         - "MIT"
         declared_licenses_processed:
@@ -3077,7 +3077,7 @@ analyzer:
       curations: []
     - package:
         id: "NPM::amdefine:1.0.1"
-        purl: "pkg:npm//amdefine@1.0.1"
+        purl: "pkg:npm/amdefine@1.0.1"
         declared_licenses:
         - "BSD-3-Clause OR MIT"
         declared_licenses_processed:
@@ -3108,7 +3108,7 @@ analyzer:
       curations: []
     - package:
         id: "NPM::argparse:1.0.10"
-        purl: "pkg:npm//argparse@1.0.10"
+        purl: "pkg:npm/argparse@1.0.10"
         declared_licenses:
         - "MIT"
         declared_licenses_processed:
@@ -3139,7 +3139,7 @@ analyzer:
       curations: []
     - package:
         id: "NPM::asn1:0.2.4"
-        purl: "pkg:npm//asn1@0.2.4"
+        purl: "pkg:npm/asn1@0.2.4"
         declared_licenses:
         - "MIT"
         declared_licenses_processed:
@@ -3169,7 +3169,7 @@ analyzer:
       curations: []
     - package:
         id: "NPM::assert-plus:1.0.0"
-        purl: "pkg:npm//assert-plus@1.0.0"
+        purl: "pkg:npm/assert-plus@1.0.0"
         declared_licenses:
         - "MIT"
         declared_licenses_processed:
@@ -3199,7 +3199,7 @@ analyzer:
       curations: []
     - package:
         id: "NPM::async:1.0.0"
-        purl: "pkg:npm//async@1.0.0"
+        purl: "pkg:npm/async@1.0.0"
         declared_licenses:
         - "MIT"
         declared_licenses_processed:
@@ -3230,7 +3230,7 @@ analyzer:
       curations: []
     - package:
         id: "NPM::async:1.5.2"
-        purl: "pkg:npm//async@1.5.2"
+        purl: "pkg:npm/async@1.5.2"
         declared_licenses:
         - "MIT"
         declared_licenses_processed:
@@ -3261,7 +3261,7 @@ analyzer:
       curations: []
     - package:
         id: "NPM::async:2.6.1"
-        purl: "pkg:npm//async@2.6.1"
+        purl: "pkg:npm/async@2.6.1"
         declared_licenses:
         - "MIT"
         declared_licenses_processed:
@@ -3292,7 +3292,7 @@ analyzer:
       curations: []
     - package:
         id: "NPM::asynckit:0.4.0"
-        purl: "pkg:npm//asynckit@0.4.0"
+        purl: "pkg:npm/asynckit@0.4.0"
         declared_licenses:
         - "MIT"
         declared_licenses_processed:
@@ -3322,7 +3322,7 @@ analyzer:
       curations: []
     - package:
         id: "NPM::aws-sign2:0.7.0"
-        purl: "pkg:npm//aws-sign2@0.7.0"
+        purl: "pkg:npm/aws-sign2@0.7.0"
         declared_licenses:
         - "Apache-2.0"
         declared_licenses_processed:
@@ -3353,7 +3353,7 @@ analyzer:
       curations: []
     - package:
         id: "NPM::aws4:1.8.0"
-        purl: "pkg:npm//aws4@1.8.0"
+        purl: "pkg:npm/aws4@1.8.0"
         declared_licenses:
         - "MIT"
         declared_licenses_processed:
@@ -3383,7 +3383,7 @@ analyzer:
       curations: []
     - package:
         id: "NPM::balanced-match:1.0.0"
-        purl: "pkg:npm//balanced-match@1.0.0"
+        purl: "pkg:npm/balanced-match@1.0.0"
         declared_licenses:
         - "MIT"
         declared_licenses_processed:
@@ -3413,7 +3413,7 @@ analyzer:
       curations: []
     - package:
         id: "NPM::bcrypt-pbkdf:1.0.2"
-        purl: "pkg:npm//bcrypt-pbkdf@1.0.2"
+        purl: "pkg:npm/bcrypt-pbkdf@1.0.2"
         declared_licenses:
         - "BSD-3-Clause"
         declared_licenses_processed:
@@ -3443,7 +3443,7 @@ analyzer:
       curations: []
     - package:
         id: "NPM::boolbase:1.0.0"
-        purl: "pkg:npm//boolbase@1.0.0"
+        purl: "pkg:npm/boolbase@1.0.0"
         declared_licenses:
         - "ISC"
         declared_licenses_processed:
@@ -3473,7 +3473,7 @@ analyzer:
       curations: []
     - package:
         id: "NPM::brace-expansion:1.1.11"
-        purl: "pkg:npm//brace-expansion@1.1.11"
+        purl: "pkg:npm/brace-expansion@1.1.11"
         declared_licenses:
         - "MIT"
         declared_licenses_processed:
@@ -3503,7 +3503,7 @@ analyzer:
       curations: []
     - package:
         id: "NPM::browser-stdout:1.3.1"
-        purl: "pkg:npm//browser-stdout@1.3.1"
+        purl: "pkg:npm/browser-stdout@1.3.1"
         declared_licenses:
         - "ISC"
         declared_licenses_processed:
@@ -3533,7 +3533,7 @@ analyzer:
       curations: []
     - package:
         id: "NPM::buffer-from:1.1.1"
-        purl: "pkg:npm//buffer-from@1.1.1"
+        purl: "pkg:npm/buffer-from@1.1.1"
         declared_licenses:
         - "MIT"
         declared_licenses_processed:
@@ -3564,7 +3564,7 @@ analyzer:
       curations: []
     - package:
         id: "NPM::caseless:0.12.0"
-        purl: "pkg:npm//caseless@0.12.0"
+        purl: "pkg:npm/caseless@0.12.0"
         declared_licenses:
         - "Apache-2.0"
         declared_licenses_processed:
@@ -3595,7 +3595,7 @@ analyzer:
       curations: []
     - package:
         id: "NPM::cheerio:1.0.0-rc.1"
-        purl: "pkg:npm//cheerio@1.0.0-rc.1"
+        purl: "pkg:npm/cheerio@1.0.0-rc.1"
         declared_licenses:
         - "MIT"
         declared_licenses_processed:
@@ -3626,7 +3626,7 @@ analyzer:
       curations: []
     - package:
         id: "NPM::cli:1.0.1"
-        purl: "pkg:npm//cli@1.0.1"
+        purl: "pkg:npm/cli@1.0.1"
         declared_licenses:
         - "MIT"
         declared_licenses_processed:
@@ -3656,7 +3656,7 @@ analyzer:
       curations: []
     - package:
         id: "NPM::co:4.6.0"
-        purl: "pkg:npm//co@4.6.0"
+        purl: "pkg:npm/co@4.6.0"
         declared_licenses:
         - "MIT"
         declared_licenses_processed:
@@ -3686,7 +3686,7 @@ analyzer:
       curations: []
     - package:
         id: "NPM::coffee-script:1.12.7"
-        purl: "pkg:npm//coffee-script@1.12.7"
+        purl: "pkg:npm/coffee-script@1.12.7"
         declared_licenses:
         - "MIT"
         declared_licenses_processed:
@@ -3716,7 +3716,7 @@ analyzer:
       curations: []
     - package:
         id: "NPM::colors:1.0.3"
-        purl: "pkg:npm//colors@1.0.3"
+        purl: "pkg:npm/colors@1.0.3"
         declared_licenses:
         - "MIT"
         declared_licenses_processed:
@@ -3746,7 +3746,7 @@ analyzer:
       curations: []
     - package:
         id: "NPM::combined-stream:1.0.7"
-        purl: "pkg:npm//combined-stream@1.0.7"
+        purl: "pkg:npm/combined-stream@1.0.7"
         declared_licenses:
         - "MIT"
         declared_licenses_processed:
@@ -3776,7 +3776,7 @@ analyzer:
       curations: []
     - package:
         id: "NPM::commander:2.15.1"
-        purl: "pkg:npm//commander@2.15.1"
+        purl: "pkg:npm/commander@2.15.1"
         declared_licenses:
         - "MIT"
         declared_licenses_processed:
@@ -3806,7 +3806,7 @@ analyzer:
       curations: []
     - package:
         id: "NPM::commander:2.17.1"
-        purl: "pkg:npm//commander@2.17.1"
+        purl: "pkg:npm/commander@2.17.1"
         declared_licenses:
         - "MIT"
         declared_licenses_processed:
@@ -3836,7 +3836,7 @@ analyzer:
       curations: []
     - package:
         id: "NPM::concat-map:0.0.1"
-        purl: "pkg:npm//concat-map@0.0.1"
+        purl: "pkg:npm/concat-map@0.0.1"
         declared_licenses:
         - "MIT"
         declared_licenses_processed:
@@ -3866,7 +3866,7 @@ analyzer:
       curations: []
     - package:
         id: "NPM::concat-stream:1.6.2"
-        purl: "pkg:npm//concat-stream@1.6.2"
+        purl: "pkg:npm/concat-stream@1.6.2"
         declared_licenses:
         - "MIT"
         declared_licenses_processed:
@@ -3897,7 +3897,7 @@ analyzer:
       curations: []
     - package:
         id: "NPM::console-browserify:1.1.0"
-        purl: "pkg:npm//console-browserify@1.1.0"
+        purl: "pkg:npm/console-browserify@1.1.0"
         declared_licenses:
         - "MIT"
         declared_licenses_processed:
@@ -3927,7 +3927,7 @@ analyzer:
       curations: []
     - package:
         id: "NPM::core-util-is:1.0.2"
-        purl: "pkg:npm//core-util-is@1.0.2"
+        purl: "pkg:npm/core-util-is@1.0.2"
         declared_licenses:
         - "MIT"
         declared_licenses_processed:
@@ -3957,7 +3957,7 @@ analyzer:
       curations: []
     - package:
         id: "NPM::coveralls:3.0.2"
-        purl: "pkg:npm//coveralls@3.0.2"
+        purl: "pkg:npm/coveralls@3.0.2"
         declared_licenses:
         - "BSD-2-Clause"
         declared_licenses_processed:
@@ -3987,7 +3987,7 @@ analyzer:
       curations: []
     - package:
         id: "NPM::cson-parser:1.3.5"
-        purl: "pkg:npm//cson-parser@1.3.5"
+        purl: "pkg:npm/cson-parser@1.3.5"
         declared_licenses:
         - "BSD-3-Clause"
         declared_licenses_processed:
@@ -4017,7 +4017,7 @@ analyzer:
       curations: []
     - package:
         id: "NPM::cson:4.1.0"
-        purl: "pkg:npm//cson@4.1.0"
+        purl: "pkg:npm/cson@4.1.0"
         declared_licenses:
         - "MIT"
         declared_licenses_processed:
@@ -4048,7 +4048,7 @@ analyzer:
       curations: []
     - package:
         id: "NPM::css-select:1.2.0"
-        purl: "pkg:npm//css-select@1.2.0"
+        purl: "pkg:npm/css-select@1.2.0"
         declared_licenses:
         - "BSD-like"
         declared_licenses_processed:
@@ -4078,7 +4078,7 @@ analyzer:
       curations: []
     - package:
         id: "NPM::css-what:2.1.3"
-        purl: "pkg:npm//css-what@2.1.3"
+        purl: "pkg:npm/css-what@2.1.3"
         declared_licenses:
         - "BSD-2-Clause"
         declared_licenses_processed:
@@ -4108,7 +4108,7 @@ analyzer:
       curations: []
     - package:
         id: "NPM::cycle:1.0.3"
-        purl: "pkg:npm//cycle@1.0.3"
+        purl: "pkg:npm/cycle@1.0.3"
         declared_licenses: []
         declared_licenses_processed: {}
         description: "decycle your json"
@@ -4136,7 +4136,7 @@ analyzer:
       curations: []
     - package:
         id: "NPM::dashdash:1.14.1"
-        purl: "pkg:npm//dashdash@1.14.1"
+        purl: "pkg:npm/dashdash@1.14.1"
         declared_licenses:
         - "MIT"
         declared_licenses_processed:
@@ -4166,7 +4166,7 @@ analyzer:
       curations: []
     - package:
         id: "NPM::date-now:0.1.4"
-        purl: "pkg:npm//date-now@0.1.4"
+        purl: "pkg:npm/date-now@0.1.4"
         declared_licenses:
         - "MIT"
         declared_licenses_processed:
@@ -4196,7 +4196,7 @@ analyzer:
       curations: []
     - package:
         id: "NPM::debug:2.6.9"
-        purl: "pkg:npm//debug@2.6.9"
+        purl: "pkg:npm/debug@2.6.9"
         declared_licenses:
         - "MIT"
         declared_licenses_processed:
@@ -4226,7 +4226,7 @@ analyzer:
       curations: []
     - package:
         id: "NPM::debug:3.1.0"
-        purl: "pkg:npm//debug@3.1.0"
+        purl: "pkg:npm/debug@3.1.0"
         declared_licenses:
         - "MIT"
         declared_licenses_processed:
@@ -4256,7 +4256,7 @@ analyzer:
       curations: []
     - package:
         id: "NPM::deep-is:0.1.3"
-        purl: "pkg:npm//deep-is@0.1.3"
+        purl: "pkg:npm/deep-is@0.1.3"
         declared_licenses:
         - "MIT"
         declared_licenses_processed:
@@ -4287,7 +4287,7 @@ analyzer:
       curations: []
     - package:
         id: "NPM::delayed-stream:1.0.0"
-        purl: "pkg:npm//delayed-stream@1.0.0"
+        purl: "pkg:npm/delayed-stream@1.0.0"
         declared_licenses:
         - "MIT"
         declared_licenses_processed:
@@ -4317,7 +4317,7 @@ analyzer:
       curations: []
     - package:
         id: "NPM::diff:3.5.0"
-        purl: "pkg:npm//diff@3.5.0"
+        purl: "pkg:npm/diff@3.5.0"
         declared_licenses:
         - "BSD-3-Clause"
         declared_licenses_processed:
@@ -4347,7 +4347,7 @@ analyzer:
       curations: []
     - package:
         id: "NPM::dom-serializer:0.1.0"
-        purl: "pkg:npm//dom-serializer@0.1.0"
+        purl: "pkg:npm/dom-serializer@0.1.0"
         declared_licenses:
         - "MIT"
         declared_licenses_processed:
@@ -4377,7 +4377,7 @@ analyzer:
       curations: []
     - package:
         id: "NPM::dom-serializer:0.1.1"
-        purl: "pkg:npm//dom-serializer@0.1.1"
+        purl: "pkg:npm/dom-serializer@0.1.1"
         declared_licenses:
         - "MIT"
         declared_licenses_processed:
@@ -4407,7 +4407,7 @@ analyzer:
       curations: []
     - package:
         id: "NPM::domelementtype:1.1.3"
-        purl: "pkg:npm//domelementtype@1.1.3"
+        purl: "pkg:npm/domelementtype@1.1.3"
         declared_licenses: []
         declared_licenses_processed: {}
         description: "all the types of nodes in htmlparser2's dom"
@@ -4435,7 +4435,7 @@ analyzer:
       curations: []
     - package:
         id: "NPM::domelementtype:1.3.0"
-        purl: "pkg:npm//domelementtype@1.3.0"
+        purl: "pkg:npm/domelementtype@1.3.0"
         declared_licenses: []
         declared_licenses_processed: {}
         description: "all the types of nodes in htmlparser2's dom"
@@ -4463,7 +4463,7 @@ analyzer:
       curations: []
     - package:
         id: "NPM::domelementtype:1.3.1"
-        purl: "pkg:npm//domelementtype@1.3.1"
+        purl: "pkg:npm/domelementtype@1.3.1"
         declared_licenses:
         - "BSD-2-Clause"
         declared_licenses_processed:
@@ -4493,7 +4493,7 @@ analyzer:
       curations: []
     - package:
         id: "NPM::domhandler:2.3.0"
-        purl: "pkg:npm//domhandler@2.3.0"
+        purl: "pkg:npm/domhandler@2.3.0"
         declared_licenses: []
         declared_licenses_processed: {}
         description: "handler for htmlparser2 that turns pages into a dom"
@@ -4521,7 +4521,7 @@ analyzer:
       curations: []
     - package:
         id: "NPM::domhandler:2.4.2"
-        purl: "pkg:npm//domhandler@2.4.2"
+        purl: "pkg:npm/domhandler@2.4.2"
         declared_licenses:
         - "BSD-2-Clause"
         declared_licenses_processed:
@@ -4551,7 +4551,7 @@ analyzer:
       curations: []
     - package:
         id: "NPM::domutils:1.5.1"
-        purl: "pkg:npm//domutils@1.5.1"
+        purl: "pkg:npm/domutils@1.5.1"
         declared_licenses: []
         declared_licenses_processed: {}
         description: "utilities for working with htmlparser2's dom"
@@ -4579,7 +4579,7 @@ analyzer:
       curations: []
     - package:
         id: "NPM::eachr:3.2.0"
-        purl: "pkg:npm//eachr@3.2.0"
+        purl: "pkg:npm/eachr@3.2.0"
         declared_licenses:
         - "MIT"
         declared_licenses_processed:
@@ -4611,7 +4611,7 @@ analyzer:
       curations: []
     - package:
         id: "NPM::ecc-jsbn:0.1.2"
-        purl: "pkg:npm//ecc-jsbn@0.1.2"
+        purl: "pkg:npm/ecc-jsbn@0.1.2"
         declared_licenses:
         - "MIT"
         declared_licenses_processed:
@@ -4641,7 +4641,7 @@ analyzer:
       curations: []
     - package:
         id: "NPM::editions:1.3.4"
-        purl: "pkg:npm//editions@1.3.4"
+        purl: "pkg:npm/editions@1.3.4"
         declared_licenses:
         - "MIT"
         declared_licenses_processed:
@@ -4672,7 +4672,7 @@ analyzer:
       curations: []
     - package:
         id: "NPM::editions:2.1.3"
-        purl: "pkg:npm//editions@2.1.3"
+        purl: "pkg:npm/editions@2.1.3"
         declared_licenses:
         - "MIT"
         declared_licenses_processed:
@@ -4703,7 +4703,7 @@ analyzer:
       curations: []
     - package:
         id: "NPM::entities:1.0.0"
-        purl: "pkg:npm//entities@1.0.0"
+        purl: "pkg:npm/entities@1.0.0"
         declared_licenses:
         - "BSD-like"
         declared_licenses_processed:
@@ -4733,7 +4733,7 @@ analyzer:
       curations: []
     - package:
         id: "NPM::entities:1.1.1"
-        purl: "pkg:npm//entities@1.1.1"
+        purl: "pkg:npm/entities@1.1.1"
         declared_licenses:
         - "BSD-like"
         declared_licenses_processed:
@@ -4763,7 +4763,7 @@ analyzer:
       curations: []
     - package:
         id: "NPM::entities:1.1.2"
-        purl: "pkg:npm//entities@1.1.2"
+        purl: "pkg:npm/entities@1.1.2"
         declared_licenses:
         - "BSD-2-Clause"
         declared_licenses_processed:
@@ -4793,7 +4793,7 @@ analyzer:
       curations: []
     - package:
         id: "NPM::errlop:1.1.1"
-        purl: "pkg:npm//errlop@1.1.1"
+        purl: "pkg:npm/errlop@1.1.1"
         declared_licenses:
         - "MIT"
         declared_licenses_processed:
@@ -4824,7 +4824,7 @@ analyzer:
       curations: []
     - package:
         id: "NPM::es6-promise:4.2.5"
-        purl: "pkg:npm//es6-promise@4.2.5"
+        purl: "pkg:npm/es6-promise@4.2.5"
         declared_licenses:
         - "MIT"
         declared_licenses_processed:
@@ -4855,7 +4855,7 @@ analyzer:
       curations: []
     - package:
         id: "NPM::escape-string-regexp:1.0.5"
-        purl: "pkg:npm//escape-string-regexp@1.0.5"
+        purl: "pkg:npm/escape-string-regexp@1.0.5"
         declared_licenses:
         - "MIT"
         declared_licenses_processed:
@@ -4885,7 +4885,7 @@ analyzer:
       curations: []
     - package:
         id: "NPM::escodegen:1.8.1"
-        purl: "pkg:npm//escodegen@1.8.1"
+        purl: "pkg:npm/escodegen@1.8.1"
         declared_licenses:
         - "BSD-2-Clause"
         declared_licenses_processed:
@@ -4915,7 +4915,7 @@ analyzer:
       curations: []
     - package:
         id: "NPM::esprima:2.7.3"
-        purl: "pkg:npm//esprima@2.7.3"
+        purl: "pkg:npm/esprima@2.7.3"
         declared_licenses:
         - "BSD-2-Clause"
         declared_licenses_processed:
@@ -4945,7 +4945,7 @@ analyzer:
       curations: []
     - package:
         id: "NPM::esprima:4.0.1"
-        purl: "pkg:npm//esprima@4.0.1"
+        purl: "pkg:npm/esprima@4.0.1"
         declared_licenses:
         - "BSD-2-Clause"
         declared_licenses_processed:
@@ -4975,7 +4975,7 @@ analyzer:
       curations: []
     - package:
         id: "NPM::estraverse:1.9.3"
-        purl: "pkg:npm//estraverse@1.9.3"
+        purl: "pkg:npm/estraverse@1.9.3"
         declared_licenses:
         - "BSD"
         declared_licenses_processed:
@@ -5005,7 +5005,7 @@ analyzer:
       curations: []
     - package:
         id: "NPM::esutils:2.0.2"
-        purl: "pkg:npm//esutils@2.0.2"
+        purl: "pkg:npm/esutils@2.0.2"
         declared_licenses:
         - "BSD"
         declared_licenses_processed:
@@ -5035,7 +5035,7 @@ analyzer:
       curations: []
     - package:
         id: "NPM::exit:0.1.2"
-        purl: "pkg:npm//exit@0.1.2"
+        purl: "pkg:npm/exit@0.1.2"
         declared_licenses:
         - "MIT"
         declared_licenses_processed:
@@ -5066,7 +5066,7 @@ analyzer:
       curations: []
     - package:
         id: "NPM::extend:3.0.2"
-        purl: "pkg:npm//extend@3.0.2"
+        purl: "pkg:npm/extend@3.0.2"
         declared_licenses:
         - "MIT"
         declared_licenses_processed:
@@ -5096,7 +5096,7 @@ analyzer:
       curations: []
     - package:
         id: "NPM::extract-opts:3.3.1"
-        purl: "pkg:npm//extract-opts@3.3.1"
+        purl: "pkg:npm/extract-opts@3.3.1"
         declared_licenses:
         - "MIT"
         declared_licenses_processed:
@@ -5127,7 +5127,7 @@ analyzer:
       curations: []
     - package:
         id: "NPM::extract-zip:1.6.7"
-        purl: "pkg:npm//extract-zip@1.6.7"
+        purl: "pkg:npm/extract-zip@1.6.7"
         declared_licenses:
         - "BSD-2-Clause"
         declared_licenses_processed:
@@ -5157,7 +5157,7 @@ analyzer:
       curations: []
     - package:
         id: "NPM::extsprintf:1.3.0"
-        purl: "pkg:npm//extsprintf@1.3.0"
+        purl: "pkg:npm/extsprintf@1.3.0"
         declared_licenses:
         - "MIT"
         declared_licenses_processed:
@@ -5187,7 +5187,7 @@ analyzer:
       curations: []
     - package:
         id: "NPM::eyes:0.1.8"
-        purl: "pkg:npm//eyes@0.1.8"
+        purl: "pkg:npm/eyes@0.1.8"
         declared_licenses: []
         declared_licenses_processed: {}
         description: "a customizable value inspector"
@@ -5215,7 +5215,7 @@ analyzer:
       curations: []
     - package:
         id: "NPM::fast-deep-equal:1.1.0"
-        purl: "pkg:npm//fast-deep-equal@1.1.0"
+        purl: "pkg:npm/fast-deep-equal@1.1.0"
         declared_licenses:
         - "MIT"
         declared_licenses_processed:
@@ -5245,7 +5245,7 @@ analyzer:
       curations: []
     - package:
         id: "NPM::fast-json-stable-stringify:2.0.0"
-        purl: "pkg:npm//fast-json-stable-stringify@2.0.0"
+        purl: "pkg:npm/fast-json-stable-stringify@2.0.0"
         declared_licenses:
         - "MIT"
         declared_licenses_processed:
@@ -5276,7 +5276,7 @@ analyzer:
       curations: []
     - package:
         id: "NPM::fast-levenshtein:2.0.6"
-        purl: "pkg:npm//fast-levenshtein@2.0.6"
+        purl: "pkg:npm/fast-levenshtein@2.0.6"
         declared_licenses:
         - "MIT"
         declared_licenses_processed:
@@ -5307,7 +5307,7 @@ analyzer:
       curations: []
     - package:
         id: "NPM::fd-slicer:1.0.1"
-        purl: "pkg:npm//fd-slicer@1.0.1"
+        purl: "pkg:npm/fd-slicer@1.0.1"
         declared_licenses:
         - "MIT"
         declared_licenses_processed:
@@ -5338,7 +5338,7 @@ analyzer:
       curations: []
     - package:
         id: "NPM::forever-agent:0.6.1"
-        purl: "pkg:npm//forever-agent@0.6.1"
+        purl: "pkg:npm/forever-agent@0.6.1"
         declared_licenses:
         - "Apache-2.0"
         declared_licenses_processed:
@@ -5369,7 +5369,7 @@ analyzer:
       curations: []
     - package:
         id: "NPM::form-data:2.3.3"
-        purl: "pkg:npm//form-data@2.3.3"
+        purl: "pkg:npm/form-data@2.3.3"
         declared_licenses:
         - "MIT"
         declared_licenses_processed:
@@ -5400,7 +5400,7 @@ analyzer:
       curations: []
     - package:
         id: "NPM::fs-extra:1.0.0"
-        purl: "pkg:npm//fs-extra@1.0.0"
+        purl: "pkg:npm/fs-extra@1.0.0"
         declared_licenses:
         - "MIT"
         declared_licenses_processed:
@@ -5431,7 +5431,7 @@ analyzer:
       curations: []
     - package:
         id: "NPM::fs.realpath:1.0.0"
-        purl: "pkg:npm//fs.realpath@1.0.0"
+        purl: "pkg:npm/fs.realpath@1.0.0"
         declared_licenses:
         - "ISC"
         declared_licenses_processed:
@@ -5462,7 +5462,7 @@ analyzer:
       curations: []
     - package:
         id: "NPM::getpass:0.1.7"
-        purl: "pkg:npm//getpass@0.1.7"
+        purl: "pkg:npm/getpass@0.1.7"
         declared_licenses:
         - "MIT"
         declared_licenses_processed:
@@ -5492,7 +5492,7 @@ analyzer:
       curations: []
     - package:
         id: "NPM::glob:5.0.15"
-        purl: "pkg:npm//glob@5.0.15"
+        purl: "pkg:npm/glob@5.0.15"
         declared_licenses:
         - "ISC"
         declared_licenses_processed:
@@ -5522,7 +5522,7 @@ analyzer:
       curations: []
     - package:
         id: "NPM::glob:7.1.2"
-        purl: "pkg:npm//glob@7.1.2"
+        purl: "pkg:npm/glob@7.1.2"
         declared_licenses:
         - "ISC"
         declared_licenses_processed:
@@ -5552,7 +5552,7 @@ analyzer:
       curations: []
     - package:
         id: "NPM::glob:7.1.3"
-        purl: "pkg:npm//glob@7.1.3"
+        purl: "pkg:npm/glob@7.1.3"
         declared_licenses:
         - "ISC"
         declared_licenses_processed:
@@ -5582,7 +5582,7 @@ analyzer:
       curations: []
     - package:
         id: "NPM::graceful-fs:4.1.11"
-        purl: "pkg:npm//graceful-fs@4.1.11"
+        purl: "pkg:npm/graceful-fs@4.1.11"
         declared_licenses:
         - "ISC"
         declared_licenses_processed:
@@ -5612,7 +5612,7 @@ analyzer:
       curations: []
     - package:
         id: "NPM::graceful-fs:4.1.15"
-        purl: "pkg:npm//graceful-fs@4.1.15"
+        purl: "pkg:npm/graceful-fs@4.1.15"
         declared_licenses:
         - "ISC"
         declared_licenses_processed:
@@ -5642,7 +5642,7 @@ analyzer:
       curations: []
     - package:
         id: "NPM::growl:1.10.5"
-        purl: "pkg:npm//growl@1.10.5"
+        purl: "pkg:npm/growl@1.10.5"
         declared_licenses:
         - "MIT"
         declared_licenses_processed:
@@ -5672,7 +5672,7 @@ analyzer:
       curations: []
     - package:
         id: "NPM::handlebars:4.0.12"
-        purl: "pkg:npm//handlebars@4.0.12"
+        purl: "pkg:npm/handlebars@4.0.12"
         declared_licenses:
         - "MIT"
         declared_licenses_processed:
@@ -5703,7 +5703,7 @@ analyzer:
       curations: []
     - package:
         id: "NPM::har-schema:2.0.0"
-        purl: "pkg:npm//har-schema@2.0.0"
+        purl: "pkg:npm/har-schema@2.0.0"
         declared_licenses:
         - "ISC"
         declared_licenses_processed:
@@ -5733,7 +5733,7 @@ analyzer:
       curations: []
     - package:
         id: "NPM::har-validator:5.1.0"
-        purl: "pkg:npm//har-validator@5.1.0"
+        purl: "pkg:npm/har-validator@5.1.0"
         declared_licenses:
         - "ISC"
         declared_licenses_processed:
@@ -5763,7 +5763,7 @@ analyzer:
       curations: []
     - package:
         id: "NPM::has-flag:1.0.0"
-        purl: "pkg:npm//has-flag@1.0.0"
+        purl: "pkg:npm/has-flag@1.0.0"
         declared_licenses:
         - "MIT"
         declared_licenses_processed:
@@ -5793,7 +5793,7 @@ analyzer:
       curations: []
     - package:
         id: "NPM::has-flag:3.0.0"
-        purl: "pkg:npm//has-flag@3.0.0"
+        purl: "pkg:npm/has-flag@3.0.0"
         declared_licenses:
         - "MIT"
         declared_licenses_processed:
@@ -5823,7 +5823,7 @@ analyzer:
       curations: []
     - package:
         id: "NPM::hasha:2.2.0"
-        purl: "pkg:npm//hasha@2.2.0"
+        purl: "pkg:npm/hasha@2.2.0"
         declared_licenses:
         - "MIT"
         declared_licenses_processed:
@@ -5853,7 +5853,7 @@ analyzer:
       curations: []
     - package:
         id: "NPM::he:1.1.1"
-        purl: "pkg:npm//he@1.1.1"
+        purl: "pkg:npm/he@1.1.1"
         declared_licenses:
         - "MIT"
         declared_licenses_processed:
@@ -5883,7 +5883,7 @@ analyzer:
       curations: []
     - package:
         id: "NPM::htmlparser2:3.10.1"
-        purl: "pkg:npm//htmlparser2@3.10.1"
+        purl: "pkg:npm/htmlparser2@3.10.1"
         declared_licenses:
         - "MIT"
         declared_licenses_processed:
@@ -5913,7 +5913,7 @@ analyzer:
       curations: []
     - package:
         id: "NPM::htmlparser2:3.8.3"
-        purl: "pkg:npm//htmlparser2@3.8.3"
+        purl: "pkg:npm/htmlparser2@3.8.3"
         declared_licenses:
         - "MIT"
         declared_licenses_processed:
@@ -5943,7 +5943,7 @@ analyzer:
       curations: []
     - package:
         id: "NPM::http-signature:1.2.0"
-        purl: "pkg:npm//http-signature@1.2.0"
+        purl: "pkg:npm/http-signature@1.2.0"
         declared_licenses:
         - "MIT"
         declared_licenses_processed:
@@ -5973,7 +5973,7 @@ analyzer:
       curations: []
     - package:
         id: "NPM::inflight:1.0.6"
-        purl: "pkg:npm//inflight@1.0.6"
+        purl: "pkg:npm/inflight@1.0.6"
         declared_licenses:
         - "ISC"
         declared_licenses_processed:
@@ -6003,7 +6003,7 @@ analyzer:
       curations: []
     - package:
         id: "NPM::inherits:2.0.3"
-        purl: "pkg:npm//inherits@2.0.3"
+        purl: "pkg:npm/inherits@2.0.3"
         declared_licenses:
         - "ISC"
         declared_licenses_processed:
@@ -6034,7 +6034,7 @@ analyzer:
       curations: []
     - package:
         id: "NPM::is-stream:1.1.0"
-        purl: "pkg:npm//is-stream@1.1.0"
+        purl: "pkg:npm/is-stream@1.1.0"
         declared_licenses:
         - "MIT"
         declared_licenses_processed:
@@ -6064,7 +6064,7 @@ analyzer:
       curations: []
     - package:
         id: "NPM::is-typedarray:1.0.0"
-        purl: "pkg:npm//is-typedarray@1.0.0"
+        purl: "pkg:npm/is-typedarray@1.0.0"
         declared_licenses:
         - "MIT"
         declared_licenses_processed:
@@ -6094,7 +6094,7 @@ analyzer:
       curations: []
     - package:
         id: "NPM::isarray:0.0.1"
-        purl: "pkg:npm//isarray@0.0.1"
+        purl: "pkg:npm/isarray@0.0.1"
         declared_licenses:
         - "MIT"
         declared_licenses_processed:
@@ -6124,7 +6124,7 @@ analyzer:
       curations: []
     - package:
         id: "NPM::isarray:1.0.0"
-        purl: "pkg:npm//isarray@1.0.0"
+        purl: "pkg:npm/isarray@1.0.0"
         declared_licenses:
         - "MIT"
         declared_licenses_processed:
@@ -6154,7 +6154,7 @@ analyzer:
       curations: []
     - package:
         id: "NPM::isexe:2.0.0"
-        purl: "pkg:npm//isexe@2.0.0"
+        purl: "pkg:npm/isexe@2.0.0"
         declared_licenses:
         - "ISC"
         declared_licenses_processed:
@@ -6184,7 +6184,7 @@ analyzer:
       curations: []
     - package:
         id: "NPM::isstream:0.1.2"
-        purl: "pkg:npm//isstream@0.1.2"
+        purl: "pkg:npm/isstream@0.1.2"
         declared_licenses:
         - "MIT"
         declared_licenses_processed:
@@ -6214,7 +6214,7 @@ analyzer:
       curations: []
     - package:
         id: "NPM::istanbul:0.4.5"
-        purl: "pkg:npm//istanbul@0.4.5"
+        purl: "pkg:npm/istanbul@0.4.5"
         declared_licenses:
         - "BSD-3-Clause"
         declared_licenses_processed:
@@ -6247,7 +6247,7 @@ analyzer:
       curations: []
     - package:
         id: "NPM::js-yaml:3.12.0"
-        purl: "pkg:npm//js-yaml@3.12.0"
+        purl: "pkg:npm/js-yaml@3.12.0"
         declared_licenses:
         - "MIT"
         declared_licenses_processed:
@@ -6277,7 +6277,7 @@ analyzer:
       curations: []
     - package:
         id: "NPM::jsbn:0.1.1"
-        purl: "pkg:npm//jsbn@0.1.1"
+        purl: "pkg:npm/jsbn@0.1.1"
         declared_licenses:
         - "MIT"
         declared_licenses_processed:
@@ -6309,7 +6309,7 @@ analyzer:
       curations: []
     - package:
         id: "NPM::jshint:2.9.6"
-        purl: "pkg:npm//jshint@2.9.6"
+        purl: "pkg:npm/jshint@2.9.6"
         declared_licenses:
         - "(MIT AND JSON)"
         declared_licenses_processed:
@@ -6339,7 +6339,7 @@ analyzer:
       curations: []
     - package:
         id: "NPM::json-schema-traverse:0.3.1"
-        purl: "pkg:npm//json-schema-traverse@0.3.1"
+        purl: "pkg:npm/json-schema-traverse@0.3.1"
         declared_licenses:
         - "MIT"
         declared_licenses_processed:
@@ -6369,7 +6369,7 @@ analyzer:
       curations: []
     - package:
         id: "NPM::json-schema:0.2.3"
-        purl: "pkg:npm//json-schema@0.2.3"
+        purl: "pkg:npm/json-schema@0.2.3"
         declared_licenses:
         - "AFLv2.1"
         - "BSD"
@@ -6400,7 +6400,7 @@ analyzer:
       curations: []
     - package:
         id: "NPM::json-stringify-safe:5.0.1"
-        purl: "pkg:npm//json-stringify-safe@5.0.1"
+        purl: "pkg:npm/json-stringify-safe@5.0.1"
         declared_licenses:
         - "ISC"
         declared_licenses_processed:
@@ -6430,7 +6430,7 @@ analyzer:
       curations: []
     - package:
         id: "NPM::jsonfile:2.4.0"
-        purl: "pkg:npm//jsonfile@2.4.0"
+        purl: "pkg:npm/jsonfile@2.4.0"
         declared_licenses:
         - "MIT"
         declared_licenses_processed:
@@ -6460,7 +6460,7 @@ analyzer:
       curations: []
     - package:
         id: "NPM::jsprim:1.4.1"
-        purl: "pkg:npm//jsprim@1.4.1"
+        purl: "pkg:npm/jsprim@1.4.1"
         declared_licenses:
         - "MIT"
         declared_licenses_processed:
@@ -6490,7 +6490,7 @@ analyzer:
       curations: []
     - package:
         id: "NPM::kew:0.7.0"
-        purl: "pkg:npm//kew@0.7.0"
+        purl: "pkg:npm/kew@0.7.0"
         declared_licenses:
         - "Apache-2.0"
         declared_licenses_processed:
@@ -6520,7 +6520,7 @@ analyzer:
       curations: []
     - package:
         id: "NPM::klaw:1.3.1"
-        purl: "pkg:npm//klaw@1.3.1"
+        purl: "pkg:npm/klaw@1.3.1"
         declared_licenses:
         - "MIT"
         declared_licenses_processed:
@@ -6550,7 +6550,7 @@ analyzer:
       curations: []
     - package:
         id: "NPM::lcov-parse:0.0.10"
-        purl: "pkg:npm//lcov-parse@0.0.10"
+        purl: "pkg:npm/lcov-parse@0.0.10"
         declared_licenses:
         - "BSD-3-Clause"
         declared_licenses_processed:
@@ -6580,7 +6580,7 @@ analyzer:
       curations: []
     - package:
         id: "NPM::levn:0.3.0"
-        purl: "pkg:npm//levn@0.3.0"
+        purl: "pkg:npm/levn@0.3.0"
         declared_licenses:
         - "MIT"
         declared_licenses_processed:
@@ -6611,7 +6611,7 @@ analyzer:
       curations: []
     - package:
         id: "NPM::lodash:4.17.11"
-        purl: "pkg:npm//lodash@4.17.11"
+        purl: "pkg:npm/lodash@4.17.11"
         declared_licenses:
         - "MIT"
         declared_licenses_processed:
@@ -6641,7 +6641,7 @@ analyzer:
       curations: []
     - package:
         id: "NPM::log-driver:1.2.7"
-        purl: "pkg:npm//log-driver@1.2.7"
+        purl: "pkg:npm/log-driver@1.2.7"
         declared_licenses:
         - "ISC"
         declared_licenses_processed:
@@ -6671,7 +6671,7 @@ analyzer:
       curations: []
     - package:
         id: "NPM::mime-db:1.37.0"
-        purl: "pkg:npm//mime-db@1.37.0"
+        purl: "pkg:npm/mime-db@1.37.0"
         declared_licenses:
         - "MIT"
         declared_licenses_processed:
@@ -6701,7 +6701,7 @@ analyzer:
       curations: []
     - package:
         id: "NPM::mime-types:2.1.21"
-        purl: "pkg:npm//mime-types@2.1.21"
+        purl: "pkg:npm/mime-types@2.1.21"
         declared_licenses:
         - "MIT"
         declared_licenses_processed:
@@ -6731,7 +6731,7 @@ analyzer:
       curations: []
     - package:
         id: "NPM::minimatch:3.0.4"
-        purl: "pkg:npm//minimatch@3.0.4"
+        purl: "pkg:npm/minimatch@3.0.4"
         declared_licenses:
         - "ISC"
         declared_licenses_processed:
@@ -6761,7 +6761,7 @@ analyzer:
       curations: []
     - package:
         id: "NPM::minimist:0.0.10"
-        purl: "pkg:npm//minimist@0.0.10"
+        purl: "pkg:npm/minimist@0.0.10"
         declared_licenses:
         - "MIT"
         declared_licenses_processed:
@@ -6791,7 +6791,7 @@ analyzer:
       curations: []
     - package:
         id: "NPM::minimist:0.0.8"
-        purl: "pkg:npm//minimist@0.0.8"
+        purl: "pkg:npm/minimist@0.0.8"
         declared_licenses:
         - "MIT"
         declared_licenses_processed:
@@ -6821,7 +6821,7 @@ analyzer:
       curations: []
     - package:
         id: "NPM::minimist:1.2.0"
-        purl: "pkg:npm//minimist@1.2.0"
+        purl: "pkg:npm/minimist@1.2.0"
         declared_licenses:
         - "MIT"
         declared_licenses_processed:
@@ -6851,7 +6851,7 @@ analyzer:
       curations: []
     - package:
         id: "NPM::mkdirp:0.5.1"
-        purl: "pkg:npm//mkdirp@0.5.1"
+        purl: "pkg:npm/mkdirp@0.5.1"
         declared_licenses:
         - "MIT"
         declared_licenses_processed:
@@ -6881,7 +6881,7 @@ analyzer:
       curations: []
     - package:
         id: "NPM::mocha-lcov-reporter:1.3.0"
-        purl: "pkg:npm//mocha-lcov-reporter@1.3.0"
+        purl: "pkg:npm/mocha-lcov-reporter@1.3.0"
         declared_licenses:
         - "BSD-2-Clause"
         declared_licenses_processed:
@@ -6911,7 +6911,7 @@ analyzer:
       curations: []
     - package:
         id: "NPM::mocha:5.2.0"
-        purl: "pkg:npm//mocha@5.2.0"
+        purl: "pkg:npm/mocha@5.2.0"
         declared_licenses:
         - "MIT"
         declared_licenses_processed:
@@ -6941,7 +6941,7 @@ analyzer:
       curations: []
     - package:
         id: "NPM::ms:2.0.0"
-        purl: "pkg:npm//ms@2.0.0"
+        purl: "pkg:npm/ms@2.0.0"
         declared_licenses:
         - "MIT"
         declared_licenses_processed:
@@ -6971,7 +6971,7 @@ analyzer:
       curations: []
     - package:
         id: "NPM::nopt:3.0.6"
-        purl: "pkg:npm//nopt@3.0.6"
+        purl: "pkg:npm/nopt@3.0.6"
         declared_licenses:
         - "ISC"
         declared_licenses_processed:
@@ -7002,7 +7002,7 @@ analyzer:
       curations: []
     - package:
         id: "NPM::nth-check:1.0.2"
-        purl: "pkg:npm//nth-check@1.0.2"
+        purl: "pkg:npm/nth-check@1.0.2"
         declared_licenses:
         - "BSD-2-Clause"
         declared_licenses_processed:
@@ -7032,7 +7032,7 @@ analyzer:
       curations: []
     - package:
         id: "NPM::oauth-sign:0.9.0"
-        purl: "pkg:npm//oauth-sign@0.9.0"
+        purl: "pkg:npm/oauth-sign@0.9.0"
         declared_licenses:
         - "Apache-2.0"
         declared_licenses_processed:
@@ -7063,7 +7063,7 @@ analyzer:
       curations: []
     - package:
         id: "NPM::once:1.4.0"
-        purl: "pkg:npm//once@1.4.0"
+        purl: "pkg:npm/once@1.4.0"
         declared_licenses:
         - "ISC"
         declared_licenses_processed:
@@ -7093,7 +7093,7 @@ analyzer:
       curations: []
     - package:
         id: "NPM::optimist:0.6.1"
-        purl: "pkg:npm//optimist@0.6.1"
+        purl: "pkg:npm/optimist@0.6.1"
         declared_licenses:
         - "MIT/X11"
         declared_licenses_processed:
@@ -7124,7 +7124,7 @@ analyzer:
       curations: []
     - package:
         id: "NPM::optionator:0.8.2"
-        purl: "pkg:npm//optionator@0.8.2"
+        purl: "pkg:npm/optionator@0.8.2"
         declared_licenses:
         - "MIT"
         declared_licenses_processed:
@@ -7154,7 +7154,7 @@ analyzer:
       curations: []
     - package:
         id: "NPM::parse5:3.0.3"
-        purl: "pkg:npm//parse5@3.0.3"
+        purl: "pkg:npm/parse5@3.0.3"
         declared_licenses:
         - "MIT"
         declared_licenses_processed:
@@ -7185,7 +7185,7 @@ analyzer:
       curations: []
     - package:
         id: "NPM::path-is-absolute:1.0.1"
-        purl: "pkg:npm//path-is-absolute@1.0.1"
+        purl: "pkg:npm/path-is-absolute@1.0.1"
         declared_licenses:
         - "MIT"
         declared_licenses_processed:
@@ -7215,7 +7215,7 @@ analyzer:
       curations: []
     - package:
         id: "NPM::pend:1.2.0"
-        purl: "pkg:npm//pend@1.2.0"
+        purl: "pkg:npm/pend@1.2.0"
         declared_licenses:
         - "MIT"
         declared_licenses_processed:
@@ -7245,7 +7245,7 @@ analyzer:
       curations: []
     - package:
         id: "NPM::performance-now:2.1.0"
-        purl: "pkg:npm//performance-now@2.1.0"
+        purl: "pkg:npm/performance-now@2.1.0"
         declared_licenses:
         - "MIT"
         declared_licenses_processed:
@@ -7275,7 +7275,7 @@ analyzer:
       curations: []
     - package:
         id: "NPM::phantom:4.0.12"
-        purl: "pkg:npm//phantom@4.0.12"
+        purl: "pkg:npm/phantom@4.0.12"
         declared_licenses:
         - "ISC"
         declared_licenses_processed:
@@ -7305,7 +7305,7 @@ analyzer:
       curations: []
     - package:
         id: "NPM::phantomjs-prebuilt:2.1.16"
-        purl: "pkg:npm//phantomjs-prebuilt@2.1.16"
+        purl: "pkg:npm/phantomjs-prebuilt@2.1.16"
         declared_licenses:
         - "Apache-2.0"
         declared_licenses_processed:
@@ -7335,7 +7335,7 @@ analyzer:
       curations: []
     - package:
         id: "NPM::pinkie-promise:2.0.1"
-        purl: "pkg:npm//pinkie-promise@2.0.1"
+        purl: "pkg:npm/pinkie-promise@2.0.1"
         declared_licenses:
         - "MIT"
         declared_licenses_processed:
@@ -7365,7 +7365,7 @@ analyzer:
       curations: []
     - package:
         id: "NPM::pinkie:2.0.4"
-        purl: "pkg:npm//pinkie@2.0.4"
+        purl: "pkg:npm/pinkie@2.0.4"
         declared_licenses:
         - "MIT"
         declared_licenses_processed:
@@ -7395,7 +7395,7 @@ analyzer:
       curations: []
     - package:
         id: "NPM::prelude-ls:1.1.2"
-        purl: "pkg:npm//prelude-ls@1.1.2"
+        purl: "pkg:npm/prelude-ls@1.1.2"
         declared_licenses:
         - "MIT"
         declared_licenses_processed:
@@ -7427,7 +7427,7 @@ analyzer:
       curations: []
     - package:
         id: "NPM::process-nextick-args:2.0.0"
-        purl: "pkg:npm//process-nextick-args@2.0.0"
+        purl: "pkg:npm/process-nextick-args@2.0.0"
         declared_licenses:
         - "MIT"
         declared_licenses_processed:
@@ -7457,7 +7457,7 @@ analyzer:
       curations: []
     - package:
         id: "NPM::progress:1.1.8"
-        purl: "pkg:npm//progress@1.1.8"
+        purl: "pkg:npm/progress@1.1.8"
         declared_licenses: []
         declared_licenses_processed: {}
         description: "Flexible ascii progress bar"
@@ -7485,7 +7485,7 @@ analyzer:
       curations: []
     - package:
         id: "NPM::psl:1.1.29"
-        purl: "pkg:npm//psl@1.1.29"
+        purl: "pkg:npm/psl@1.1.29"
         declared_licenses:
         - "MIT"
         declared_licenses_processed:
@@ -7515,7 +7515,7 @@ analyzer:
       curations: []
     - package:
         id: "NPM::punycode:1.4.1"
-        purl: "pkg:npm//punycode@1.4.1"
+        purl: "pkg:npm/punycode@1.4.1"
         declared_licenses:
         - "MIT"
         declared_licenses_processed:
@@ -7546,7 +7546,7 @@ analyzer:
       curations: []
     - package:
         id: "NPM::qs:6.5.2"
-        purl: "pkg:npm//qs@6.5.2"
+        purl: "pkg:npm/qs@6.5.2"
         declared_licenses:
         - "BSD-3-Clause"
         declared_licenses_processed:
@@ -7577,7 +7577,7 @@ analyzer:
       curations: []
     - package:
         id: "NPM::readable-stream:1.1.14"
-        purl: "pkg:npm//readable-stream@1.1.14"
+        purl: "pkg:npm/readable-stream@1.1.14"
         declared_licenses:
         - "MIT"
         declared_licenses_processed:
@@ -7608,7 +7608,7 @@ analyzer:
       curations: []
     - package:
         id: "NPM::readable-stream:2.3.6"
-        purl: "pkg:npm//readable-stream@2.3.6"
+        purl: "pkg:npm/readable-stream@2.3.6"
         declared_licenses:
         - "MIT"
         declared_licenses_processed:
@@ -7638,7 +7638,7 @@ analyzer:
       curations: []
     - package:
         id: "NPM::readable-stream:3.2.0"
-        purl: "pkg:npm//readable-stream@3.2.0"
+        purl: "pkg:npm/readable-stream@3.2.0"
         declared_licenses:
         - "MIT"
         declared_licenses_processed:
@@ -7668,7 +7668,7 @@ analyzer:
       curations: []
     - package:
         id: "NPM::request-progress:2.0.1"
-        purl: "pkg:npm//request-progress@2.0.1"
+        purl: "pkg:npm/request-progress@2.0.1"
         declared_licenses:
         - "MIT"
         declared_licenses_processed:
@@ -7700,7 +7700,7 @@ analyzer:
       curations: []
     - package:
         id: "NPM::request:2.88.0"
-        purl: "pkg:npm//request@2.88.0"
+        purl: "pkg:npm/request@2.88.0"
         declared_licenses:
         - "Apache-2.0"
         declared_licenses_processed:
@@ -7730,7 +7730,7 @@ analyzer:
       curations: []
     - package:
         id: "NPM::requirefresh:2.2.0"
-        purl: "pkg:npm//requirefresh@2.2.0"
+        purl: "pkg:npm/requirefresh@2.2.0"
         declared_licenses:
         - "MIT"
         declared_licenses_processed:
@@ -7760,7 +7760,7 @@ analyzer:
       curations: []
     - package:
         id: "NPM::resolve:1.1.7"
-        purl: "pkg:npm//resolve@1.1.7"
+        purl: "pkg:npm/resolve@1.1.7"
         declared_licenses:
         - "MIT"
         declared_licenses_processed:
@@ -7791,7 +7791,7 @@ analyzer:
       curations: []
     - package:
         id: "NPM::safe-buffer:5.1.2"
-        purl: "pkg:npm//safe-buffer@5.1.2"
+        purl: "pkg:npm/safe-buffer@5.1.2"
         declared_licenses:
         - "MIT"
         declared_licenses_processed:
@@ -7821,7 +7821,7 @@ analyzer:
       curations: []
     - package:
         id: "NPM::safefs:4.1.0"
-        purl: "pkg:npm//safefs@4.1.0"
+        purl: "pkg:npm/safefs@4.1.0"
         declared_licenses:
         - "MIT"
         declared_licenses_processed:
@@ -7852,7 +7852,7 @@ analyzer:
       curations: []
     - package:
         id: "NPM::safer-buffer:2.1.2"
-        purl: "pkg:npm//safer-buffer@2.1.2"
+        purl: "pkg:npm/safer-buffer@2.1.2"
         declared_licenses:
         - "MIT"
         declared_licenses_processed:
@@ -7882,7 +7882,7 @@ analyzer:
       curations: []
     - package:
         id: "NPM::semver:5.6.0"
-        purl: "pkg:npm//semver@5.6.0"
+        purl: "pkg:npm/semver@5.6.0"
         declared_licenses:
         - "ISC"
         declared_licenses_processed:
@@ -7912,7 +7912,7 @@ analyzer:
       curations: []
     - package:
         id: "NPM::shelljs:0.3.0"
-        purl: "pkg:npm//shelljs@0.3.0"
+        purl: "pkg:npm/shelljs@0.3.0"
         declared_licenses:
         - "BSD*"
         declared_licenses_processed:
@@ -7942,7 +7942,7 @@ analyzer:
       curations: []
     - package:
         id: "NPM::source-map:0.2.0"
-        purl: "pkg:npm//source-map@0.2.0"
+        purl: "pkg:npm/source-map@0.2.0"
         declared_licenses:
         - "BSD"
         declared_licenses_processed:
@@ -7972,7 +7972,7 @@ analyzer:
       curations: []
     - package:
         id: "NPM::source-map:0.6.1"
-        purl: "pkg:npm//source-map@0.6.1"
+        purl: "pkg:npm/source-map@0.6.1"
         declared_licenses:
         - "BSD-3-Clause"
         declared_licenses_processed:
@@ -8002,7 +8002,7 @@ analyzer:
       curations: []
     - package:
         id: "NPM::split:1.0.1"
-        purl: "pkg:npm//split@1.0.1"
+        purl: "pkg:npm/split@1.0.1"
         declared_licenses:
         - "MIT"
         declared_licenses_processed:
@@ -8032,7 +8032,7 @@ analyzer:
       curations: []
     - package:
         id: "NPM::sprintf-js:1.0.3"
-        purl: "pkg:npm//sprintf-js@1.0.3"
+        purl: "pkg:npm/sprintf-js@1.0.3"
         declared_licenses:
         - "BSD-3-Clause"
         declared_licenses_processed:
@@ -8062,7 +8062,7 @@ analyzer:
       curations: []
     - package:
         id: "NPM::sshpk:1.15.1"
-        purl: "pkg:npm//sshpk@1.15.1"
+        purl: "pkg:npm/sshpk@1.15.1"
         declared_licenses:
         - "MIT"
         declared_licenses_processed:
@@ -8092,7 +8092,7 @@ analyzer:
       curations: []
     - package:
         id: "NPM::stack-trace:0.0.10"
-        purl: "pkg:npm//stack-trace@0.0.10"
+        purl: "pkg:npm/stack-trace@0.0.10"
         declared_licenses:
         - "MIT"
         declared_licenses_processed:
@@ -8122,7 +8122,7 @@ analyzer:
       curations: []
     - package:
         id: "NPM::string_decoder:0.10.31"
-        purl: "pkg:npm//string_decoder@0.10.31"
+        purl: "pkg:npm/string_decoder@0.10.31"
         declared_licenses:
         - "MIT"
         declared_licenses_processed:
@@ -8152,7 +8152,7 @@ analyzer:
       curations: []
     - package:
         id: "NPM::string_decoder:1.1.1"
-        purl: "pkg:npm//string_decoder@1.1.1"
+        purl: "pkg:npm/string_decoder@1.1.1"
         declared_licenses:
         - "MIT"
         declared_licenses_processed:
@@ -8182,7 +8182,7 @@ analyzer:
       curations: []
     - package:
         id: "NPM::string_decoder:1.2.0"
-        purl: "pkg:npm//string_decoder@1.2.0"
+        purl: "pkg:npm/string_decoder@1.2.0"
         declared_licenses:
         - "MIT"
         declared_licenses_processed:
@@ -8212,7 +8212,7 @@ analyzer:
       curations: []
     - package:
         id: "NPM::strip-json-comments:1.0.4"
-        purl: "pkg:npm//strip-json-comments@1.0.4"
+        purl: "pkg:npm/strip-json-comments@1.0.4"
         declared_licenses:
         - "MIT"
         declared_licenses_processed:
@@ -8243,7 +8243,7 @@ analyzer:
       curations: []
     - package:
         id: "NPM::supports-color:3.2.3"
-        purl: "pkg:npm//supports-color@3.2.3"
+        purl: "pkg:npm/supports-color@3.2.3"
         declared_licenses:
         - "MIT"
         declared_licenses_processed:
@@ -8273,7 +8273,7 @@ analyzer:
       curations: []
     - package:
         id: "NPM::supports-color:5.4.0"
-        purl: "pkg:npm//supports-color@5.4.0"
+        purl: "pkg:npm/supports-color@5.4.0"
         declared_licenses:
         - "MIT"
         declared_licenses_processed:
@@ -8303,7 +8303,7 @@ analyzer:
       curations: []
     - package:
         id: "NPM::throttleit:1.0.0"
-        purl: "pkg:npm//throttleit@1.0.0"
+        purl: "pkg:npm/throttleit@1.0.0"
         declared_licenses:
         - "MIT"
         declared_licenses_processed:
@@ -8333,7 +8333,7 @@ analyzer:
       curations: []
     - package:
         id: "NPM::through:2.3.8"
-        purl: "pkg:npm//through@2.3.8"
+        purl: "pkg:npm/through@2.3.8"
         declared_licenses:
         - "MIT"
         declared_licenses_processed:
@@ -8363,7 +8363,7 @@ analyzer:
       curations: []
     - package:
         id: "NPM::tough-cookie:2.4.3"
-        purl: "pkg:npm//tough-cookie@2.4.3"
+        purl: "pkg:npm/tough-cookie@2.4.3"
         declared_licenses:
         - "BSD-3-Clause"
         declared_licenses_processed:
@@ -8393,7 +8393,7 @@ analyzer:
       curations: []
     - package:
         id: "NPM::tunnel-agent:0.6.0"
-        purl: "pkg:npm//tunnel-agent@0.6.0"
+        purl: "pkg:npm/tunnel-agent@0.6.0"
         declared_licenses:
         - "Apache-2.0"
         declared_licenses_processed:
@@ -8424,7 +8424,7 @@ analyzer:
       curations: []
     - package:
         id: "NPM::tweetnacl:0.14.5"
-        purl: "pkg:npm//tweetnacl@0.14.5"
+        purl: "pkg:npm/tweetnacl@0.14.5"
         declared_licenses:
         - "Unlicense"
         declared_licenses_processed:
@@ -8454,7 +8454,7 @@ analyzer:
       curations: []
     - package:
         id: "NPM::type-check:0.3.2"
-        purl: "pkg:npm//type-check@0.3.2"
+        purl: "pkg:npm/type-check@0.3.2"
         declared_licenses:
         - "MIT"
         declared_licenses_processed:
@@ -8485,7 +8485,7 @@ analyzer:
       curations: []
     - package:
         id: "NPM::typechecker:4.7.0"
-        purl: "pkg:npm//typechecker@4.7.0"
+        purl: "pkg:npm/typechecker@4.7.0"
         declared_licenses:
         - "MIT"
         declared_licenses_processed:
@@ -8516,7 +8516,7 @@ analyzer:
       curations: []
     - package:
         id: "NPM::typedarray:0.0.6"
-        purl: "pkg:npm//typedarray@0.0.6"
+        purl: "pkg:npm/typedarray@0.0.6"
         declared_licenses:
         - "MIT"
         declared_licenses_processed:
@@ -8546,7 +8546,7 @@ analyzer:
       curations: []
     - package:
         id: "NPM::uglify-js:3.4.9"
-        purl: "pkg:npm//uglify-js@3.4.9"
+        purl: "pkg:npm/uglify-js@3.4.9"
         declared_licenses:
         - "BSD-2-Clause"
         declared_licenses_processed:
@@ -8576,7 +8576,7 @@ analyzer:
       curations: []
     - package:
         id: "NPM::unicode-5.2.0:0.7.5"
-        purl: "pkg:npm//unicode-5.2.0@0.7.5"
+        purl: "pkg:npm/unicode-5.2.0@0.7.5"
         declared_licenses:
         - "MIT"
         declared_licenses_processed:
@@ -8608,7 +8608,7 @@ analyzer:
       curations: []
     - package:
         id: "NPM::util-deprecate:1.0.2"
-        purl: "pkg:npm//util-deprecate@1.0.2"
+        purl: "pkg:npm/util-deprecate@1.0.2"
         declared_licenses:
         - "MIT"
         declared_licenses_processed:
@@ -8638,7 +8638,7 @@ analyzer:
       curations: []
     - package:
         id: "NPM::uuid:3.3.2"
-        purl: "pkg:npm//uuid@3.3.2"
+        purl: "pkg:npm/uuid@3.3.2"
         declared_licenses:
         - "MIT"
         declared_licenses_processed:
@@ -8668,7 +8668,7 @@ analyzer:
       curations: []
     - package:
         id: "NPM::verror:1.10.0"
-        purl: "pkg:npm//verror@1.10.0"
+        purl: "pkg:npm/verror@1.10.0"
         declared_licenses:
         - "MIT"
         declared_licenses_processed:
@@ -8698,7 +8698,7 @@ analyzer:
       curations: []
     - package:
         id: "NPM::which:1.3.1"
-        purl: "pkg:npm//which@1.3.1"
+        purl: "pkg:npm/which@1.3.1"
         declared_licenses:
         - "ISC"
         declared_licenses_processed:
@@ -8729,7 +8729,7 @@ analyzer:
       curations: []
     - package:
         id: "NPM::winston:2.4.4"
-        purl: "pkg:npm//winston@2.4.4"
+        purl: "pkg:npm/winston@2.4.4"
         declared_licenses:
         - "MIT"
         declared_licenses_processed:
@@ -8759,7 +8759,7 @@ analyzer:
       curations: []
     - package:
         id: "NPM::wordwrap:0.0.3"
-        purl: "pkg:npm//wordwrap@0.0.3"
+        purl: "pkg:npm/wordwrap@0.0.3"
         declared_licenses:
         - "MIT"
         declared_licenses_processed:
@@ -8789,7 +8789,7 @@ analyzer:
       curations: []
     - package:
         id: "NPM::wordwrap:1.0.0"
-        purl: "pkg:npm//wordwrap@1.0.0"
+        purl: "pkg:npm/wordwrap@1.0.0"
         declared_licenses:
         - "MIT"
         declared_licenses_processed:
@@ -8819,7 +8819,7 @@ analyzer:
       curations: []
     - package:
         id: "NPM::wrappy:1.0.2"
-        purl: "pkg:npm//wrappy@1.0.2"
+        purl: "pkg:npm/wrappy@1.0.2"
         declared_licenses:
         - "ISC"
         declared_licenses_processed:
@@ -8849,7 +8849,7 @@ analyzer:
       curations: []
     - package:
         id: "NPM::yauzl:2.4.1"
-        purl: "pkg:npm//yauzl@2.4.1"
+        purl: "pkg:npm/yauzl@2.4.1"
         declared_licenses:
         - "MIT"
         declared_licenses_processed:

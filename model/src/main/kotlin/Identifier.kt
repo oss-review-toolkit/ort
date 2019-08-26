@@ -123,5 +123,19 @@ data class Identifier(
     // TODO: This is a preliminary implementation as some open questions remain, see e.g.
     //       https://github.com/package-url/purl-spec/issues/33.
     fun toPurl() = "".takeIf { this == EMPTY }
-        ?: "pkg:${type.toLowerCase()}/${namespace.percentEncode()}/${name.percentEncode()}@${version.percentEncode()}"
+        ?: buildString {
+            append("pkg:")
+            append(type.toLowerCase())
+
+            if (namespace.isNotEmpty()) {
+                append('/')
+                append(namespace.percentEncode())
+            }
+
+            append('/')
+            append(name.percentEncode())
+
+            append('@')
+            append(version.percentEncode())
+        }
 }
