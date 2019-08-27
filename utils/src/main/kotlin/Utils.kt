@@ -63,15 +63,15 @@ const val PARAMETER_ORDER_HELP = 100
 fun <T> disjoint(c1: Collection<T>, c2: Collection<T>, vararg cN: Collection<T>): Set<T> {
     val c = listOf(c1, c2, *cN)
 
-    val commonElememts = mutableSetOf<T>()
+    val commonElements = mutableSetOf<T>()
 
     for (a in c.indices) {
         for (b in a + 1 until c.size) {
-            commonElememts += c[a].intersect(c[b])
+            commonElements += c[a].intersect(c[b])
         }
     }
 
-    return commonElememts
+    return commonElements
 }
 
 /**
