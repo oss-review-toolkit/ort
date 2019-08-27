@@ -135,6 +135,12 @@ class ScanCode(
             Pattern.DOTALL
         )
 
+        private val UNKNOWN_LICENSE_KEYS = listOf(
+            "free-unknown",
+            "unknown",
+            "unknown-license-reference"
+        )
+
         private val TIMEOUT_ERROR_REGEX = Pattern.compile(
             "(ERROR: for scanner: (?<scanner>\\w+):\n)?" +
                     "ERROR: Processing interrupted: timeout after (?<timeout>\\d+) seconds. \\(File: (?<file>.+)\\)"
@@ -382,7 +388,7 @@ class ScanCode(
 
         if (name.isEmpty()) {
             val key = license["key"].textValue()
-            name = if (key == "unknown") {
+            name = if (key in UNKNOWN_LICENSE_KEYS) {
                 "NOASSERTION"
             } else {
                 // Starting with version 2.9.8, ScanCode uses "scancode" as a LicenseRef namespace, but only for SPDX
