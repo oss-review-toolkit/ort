@@ -78,41 +78,6 @@ data class ScanSummary(
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     val errors: List<OrtIssue> = emptyList()
 ) {
-    /**
-     * Return all license findings as one entry per finding as opposed to [licenseFindings] which is grouped.
-     * This function is temporary for the duration of an incremental license findings refactoring.
-     * When that refactoring is finished this function is supposed to be converted to a property which is serialized
-     * replacing [licenseFindings].
-     */
-    @JsonIgnore
-    fun getSingleLicenseFindings(): List<LicenseFinding> =
-        licenseFindings.flatMap { findings ->
-            findings.locations.map {
-                LicenseFinding(
-                    license = findings.license,
-                    location = it
-                )
-            }
-        }
-
-    /**
-     * Return all copyright findings as one entry per finding as opposed to [licenseFindings] which is grouped.
-     * When that refactoring is finished this function is supposed to be converted to a property which is serialized
-     * replacing [licenseFindings].
-     */
-    @JsonIgnore
-    fun getSingleCopyrightFindings(): List<CopyrightFinding> =
-        licenseFindings.flatMap { licenseFindings ->
-            licenseFindings.copyrights.flatMap { copyrightFindings ->
-                copyrightFindings.locations.map {
-                    CopyrightFinding(
-                        statement = copyrightFindings.statement,
-                        location = it
-                    )
-                }
-            }
-        }
-
     @get:JsonIgnore
     val licenseFindingsMap = sortedMapOf<String, SortedSet<CopyrightFindings>>().also {
         licenseFindings.forEach { finding ->
