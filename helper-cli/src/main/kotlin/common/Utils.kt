@@ -46,6 +46,7 @@ import com.here.ort.model.config.ScopeExclude
 import com.here.ort.model.yamlMapper
 import com.here.ort.utils.safeMkdirs
 import com.here.ort.utils.OkHttpClientHelper
+import com.here.ort.utils.expandTilde
 
 import java.io.File
 import java.io.IOException
@@ -342,7 +343,7 @@ internal fun RepositoryConfiguration.sortScopeExcludes(): RepositoryConfiguratio
  * Serialize a [RepositoryConfiguration] as YAML to the given target [File].
  */
 internal fun RepositoryConfiguration.writeAsYaml(targetFile: File) {
-    targetFile.parentFile.safeMkdirs()
+    targetFile.expandTilde().parentFile.safeMkdirs()
 
     yamlMapper.writeValue(targetFile, this)
 }
