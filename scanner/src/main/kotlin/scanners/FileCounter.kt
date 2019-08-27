@@ -77,6 +77,12 @@ class FileCounter(name: String, config: ScannerConfiguration) : LocalScanner(nam
 
     override fun generateSummary(startTime: Instant, endTime: Instant, result: JsonNode): ScanSummary {
         val fileCount = result["file_count"].intValue()
-        return ScanSummary(startTime, endTime, fileCount, licenseFindings = sortedSetOf(), errors = mutableListOf())
+        return ScanSummary(
+            startTime = startTime,
+            endTime = endTime,
+            fileCount = fileCount,
+            groupedLicenseFindings = sortedSetOf(),
+            errors = mutableListOf()
+        )
     }
 }

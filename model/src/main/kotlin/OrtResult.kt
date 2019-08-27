@@ -230,7 +230,7 @@ data class OrtResult(
                 val project = getProject(result.id)
 
                 if (!omitExcluded || !isPackageExcluded(result.id)) {
-                    result.results.flatMap { it.summary.licenseFindings }.forEach { finding ->
+                    result.results.flatMap { it.summary.groupedLicenseFindings }.forEach { finding ->
                         val matchingExcludes = mutableSetOf<PathExclude>()
 
                         // Only license findings of projects can be excluded by path excludes.
