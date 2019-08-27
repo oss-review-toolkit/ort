@@ -153,15 +153,21 @@ class BoyterLc(name: String, config: ScannerConfiguration) : LocalScanner(name, 
         }
 
     override fun generateSummary(startTime: Instant, endTime: Instant, result: JsonNode): ScanSummary {
-        val findings = sortedSetOf<LicenseFindings>()
+        val licenseFindings = sortedSetOf<LicenseFindings>()
 
         result.forEach { file ->
-            file["LicenseGuesses"].mapTo(findings) {
+            file["LicenseGuesses"].mapTo(licenseFindings) {
                 val license = getSpdxLicenseIdString(it["LicenseId"].textValue())
                 LicenseFindings(license, sortedSetOf(), sortedSetOf())
             }
         }
 
-        return ScanSummary(startTime, endTime, result.size(), findings, errors = mutableListOf())
+        return ScanSummary(
+            startTime = startTime,
+            endTime = endTime,
+            fileCount = result.size(),
+            groupedLicenseFindings = licenseFindings,
+            errors = mutableListOf()
+        )
     }
 }
