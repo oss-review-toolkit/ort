@@ -120,7 +120,7 @@ object Main : CommandWithHelp() {
         val variables = env.variables.entries.map { (key, value) -> "$key = $value" }
 
         val command = commandName?.let { " '$commandName'" }.orEmpty()
-        val with = if (variables.isNotEmpty()) "with" else ""
+        val with = "with".takeUnless { variables.isEmpty() }.orEmpty()
 
         var variableIndex = 0
 

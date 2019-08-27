@@ -377,7 +377,7 @@ class StaticHtmlReporter : Reporter() {
     }
 
     private fun DIV.projectTable(project: Project, table: ProjectTable) {
-        val excludedClass = if (table.isExcluded()) "ort-excluded" else ""
+        val excludedClass = "ort-excluded".takeIf { table.isExcluded() }.orEmpty()
 
         h2 {
             id = project.id.toCoordinates()
