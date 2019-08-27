@@ -365,20 +365,13 @@ class ScanCode(
         return result["files_count"].intValue()
     }
 
-    override fun generateSummary(startTime: Instant, endTime: Instant, result: JsonNode): ScanSummary {
-        val fileCount = getFileCount(result)
-        val findings = associateFindings(result)
-        val errors = mutableListOf<OrtIssue>()
-
-        result["files"]?.forEach { file ->
-            val path = file["path"].textValue()
-            errors += file["scan_errors"].map {
-                OrtIssue(source = scannerName, message = "${it.textValue()} (File: $path)")
-            }
-        }
-
-        return ScanSummary(startTime, endTime, fileCount, findings, errors)
-    }
+    override fun generateSummary(startTime: Instant, endTime: Instant, result: JsonNode) = ScanSummary(
+        startTime = startTime,
+        endTime = endTime,
+        fileCount = getFileCount(result),
+        groupedLicenseFindings = associateFindings(result),
+        errors = getErrors(result)
+    )
 
     /**
      * Get the SPDX license id (or a fallback) for a license finding.
@@ -399,6 +392,17 @@ class ScanCode(
 
         return name
     }
+
+    private fun getErrors(result: JsonNode): List<OrtIssue> =
+        result["files"]?.flatMap { file ->
+            val path = file["path"].textValue()
+            file["scan_errors"].map {
+                OrtIssue(
+                    source = scannerName,
+                    message = "${it.textValue()} (File: $path)"
+                )
+            }
+        }.orEmpty()
 
     /**
      * Get the license findings from the given [result].
