@@ -22,6 +22,12 @@ package com.here.ort.model.config
 
 import java.io.File
 
+/**
+ * A class to hold the configuration for using local files as a storage.
+ */
 data class LocalFileStorageConfiguration(
+    /**
+     * The directory to use as a storage root.
+     */
     val directory: File
 )

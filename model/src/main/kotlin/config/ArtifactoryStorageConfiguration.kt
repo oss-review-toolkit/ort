@@ -21,10 +21,23 @@ package com.here.ort.model.config
 
 import com.fasterxml.jackson.annotation.JsonProperty
 
+/**
+ * A class to hold the configuration for using Artifactory as a storage.
+ */
 data class ArtifactoryStorageConfiguration(
+    /**
+     * The URL of the Artifactory server, e.g. "https://example.com/artifactory".
+     */
     val url: String,
+
+    /**
+     * The name of the Artifactory repository to use as a storage.
+     */
     val repository: String,
 
+    /**
+     * An Artifactory API token with read/write access to [repository].
+     */
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     val apiToken: String = ""
 )

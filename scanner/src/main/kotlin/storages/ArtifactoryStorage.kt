@@ -36,6 +36,9 @@ import java.util.concurrent.TimeUnit
 import okhttp3.CacheControl
 import okhttp3.Request
 
+/**
+ * The Artifactory storage back-end.
+ */
 class ArtifactoryStorage(
     /**
      * The URL of the Artifactory server, e.g. "https://example.com/artifactory".
@@ -43,7 +46,7 @@ class ArtifactoryStorage(
     private val url: String,
 
     /**
-     * The name of the Artifactory repository to use for storing scan results.
+     * The name of the Artifactory repository to use as a storage.
      */
     private val repository: String,
 
