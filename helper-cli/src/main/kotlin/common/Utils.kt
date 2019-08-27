@@ -187,7 +187,7 @@ internal fun OrtResult.getLicenseFindingsById(id: Identifier): Map<String, Set<T
     scanner?.results?.scanResults?.forEach { container ->
         container.results.forEach { scanResult ->
             if (scanResult.provenance.matches(pkg)) {
-                scanResult.summary.licenseFindings.forEach {
+                scanResult.summary.groupedLicenseFindings.forEach {
                     val locations = result.getOrPut(it.license, { mutableSetOf() })
                     locations.addAll(it.locations)
                 }

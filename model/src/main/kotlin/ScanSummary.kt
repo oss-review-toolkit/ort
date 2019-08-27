@@ -22,6 +22,7 @@ package com.here.ort.model
 import com.fasterxml.jackson.annotation.JsonAlias
 import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonInclude
+import com.fasterxml.jackson.annotation.JsonProperty
 
 import java.time.Instant
 import java.util.SortedSet
@@ -67,8 +68,8 @@ data class ScanSummary(
     /**
      * The licenses associated to their respective copyrights, if any.
      */
-    @JsonAlias("licenses")
-    val licenseFindings: SortedSet<LicenseFindings>,
+    @JsonProperty("license_findings")
+    val groupedLicenseFindings: SortedSet<LicenseFindings>,
 
     /**
      * The list of errors that occurred during the scan.
@@ -80,7 +81,7 @@ data class ScanSummary(
 ) {
     @get:JsonIgnore
     val licenseFindingsMap = sortedMapOf<String, SortedSet<CopyrightFindings>>().also {
-        licenseFindings.forEach { finding ->
+        groupedLicenseFindings.forEach { finding ->
             it.getOrPut(finding.license) { sortedSetOf() } += finding.copyrights
         }
     }

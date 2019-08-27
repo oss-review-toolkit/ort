@@ -207,7 +207,7 @@ abstract class LocalScanner(name: String, config: ScannerConfiguration) : Scanne
                                         startTime = now,
                                         endTime = now,
                                         fileCount = 0,
-                                        licenseFindings = sortedSetOf(),
+                                        groupedLicenseFindings = sortedSetOf(),
                                         errors = listOf(
                                             OrtIssue(
                                                 source = scannerName,
@@ -286,7 +286,7 @@ abstract class LocalScanner(name: String, config: ScannerConfiguration) : Scanne
                     startTime = now,
                     endTime = now,
                     fileCount = 0,
-                    licenseFindings = sortedSetOf(),
+                    groupedLicenseFindings = sortedSetOf(),
                     errors = listOf(OrtIssue(source = scannerName, message = e.collectMessagesAsString()))
                 ),
                 EMPTY_JSON_NODE

@@ -69,7 +69,7 @@ data class ScanResult(
             originalVcsInfo = provenance.originalVcsInfo?.copy(path = path)
         )
 
-        val findings = summary.licenseFindings.mapNotNull { finding ->
+        val findings = summary.groupedLicenseFindings.mapNotNull { finding ->
             val locations = finding.locations.filterPath()
 
             if (locations.isNotEmpty()) {
@@ -90,7 +90,7 @@ data class ScanResult(
         }.toSortedSet()
 
         val fileCount = findings.flatMap { finding -> finding.locations.map { it.path } }.size
-        val summary = summary.copy(fileCount = fileCount, licenseFindings = findings)
+        val summary = summary.copy(fileCount = fileCount, groupedLicenseFindings = findings)
 
         return ScanResult(newProvenance, scanner, summary)
     }
