@@ -28,22 +28,6 @@ import java.time.Instant
 import java.util.SortedSet
 
 /**
- * A class representing a single license finding.
- */
-data class LicenseFinding(
-    val license: String,
-    val location: TextLocation
-)
-
-/**
- * A class representing a single copyright finding.
- */
-data class CopyrightFinding(
-    val statement: String,
-    val location: TextLocation
-)
-
-/**
  * A short summary of the scan results.
  */
 data class ScanSummary(
