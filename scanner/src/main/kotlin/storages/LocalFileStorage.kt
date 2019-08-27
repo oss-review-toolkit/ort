@@ -31,13 +31,19 @@ import com.here.ort.utils.showStackTrace
 import java.io.File
 import java.io.IOException
 
+/**
+ * The local file storage back-end.
+ */
 class LocalFileStorage(
     /**
-     * The base directory under which to store the scan results.
+     * The directory to use as a storage root.
      */
-    baseDirectory: File
+    directory: File
 ) : FileBasedStorage() {
-    val scanResultsDirectory = baseDirectory.resolve("scan-results")
+    /**
+     * The directory for scan results below the storage root.
+     */
+    val scanResultsDirectory = directory.resolve("scan-results")
 
     @Synchronized
     override fun readFromStorage(id: Identifier): ScanResultContainer {

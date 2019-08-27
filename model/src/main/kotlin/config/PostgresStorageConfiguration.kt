@@ -21,11 +21,28 @@ package com.here.ort.model.config
 
 import com.fasterxml.jackson.annotation.JsonProperty
 
+/**
+ * A class to hold the configuration for using Postgres as a storage.
+ */
 data class PostgresStorageConfiguration(
+    /**
+     * The database URL in JDBC format.
+     */
     val url: String,
+
+    /**
+     * The name of the database to use.
+     */
     val schema: String,
+
+    /**
+     * The username to use for authentication.
+     */
     val username: String,
 
+    /**
+     * The password to use for authentication.
+     */
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     val password: String = ""
 )
