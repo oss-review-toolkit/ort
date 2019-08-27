@@ -19,6 +19,7 @@
 
 package com.here.ort.utils
 
+import io.kotlintest.assertSoftly
 import io.kotlintest.shouldBe
 import io.kotlintest.shouldNotBe
 import io.kotlintest.shouldThrow
@@ -102,6 +103,33 @@ class ExtensionsTest : WordSpec({
 
         "return false for a URL" {
             "https://registry.npmjs.org/form-data/-/form-data-0.2.0.tgz".isSemanticVersion() shouldBe false
+        }
+    }
+
+    "String.percentEncode" should {
+        "encode characters according to RFC 3986" {
+            val genDelims = listOf(':', '/', '?', '#', '[', ']', '@')
+            val subDelims = listOf('!', '$', '&', '\'', '(', ')', '*', '+', ',', ';', '=')
+            val reserved = genDelims + subDelims
+
+            val alpha = CharArray(26) { 'a' + it } + CharArray(26) { 'A' + it }
+            val digit = CharArray(10) { '0' + it }
+            val special = listOf('-', '.', '_', '~')
+            val unreserved = alpha + digit + special
+
+            assertSoftly {
+                reserved.forEach {
+                    val hexString = String.format("%%%02X", it.toInt())
+                    it.toString().percentEncode() shouldBe hexString
+                }
+
+                unreserved.forEach {
+                    val singleCharString = it.toString()
+                    singleCharString.percentEncode() shouldBe singleCharString
+                }
+
+                " ".percentEncode() shouldBe "%20"
+            }
         }
     }
 
