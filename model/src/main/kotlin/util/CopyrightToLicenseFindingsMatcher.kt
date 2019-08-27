@@ -39,7 +39,7 @@ class CopyrightToLicenseFindingsMatcher(
     /**
      * Get the license found in one of the commonly named license files, if any, or an empty string otherwise.
      */
-    internal fun getRootLicense(licenseFindings: List<LicenseFinding>): String =
+    internal fun getRootLicense(licenseFindings: Collection<LicenseFinding>): String =
         // TODO: This function should return a list of all licenses found in all license files instead of only a single
         // license.
         licenseFindings.singleOrNull { finding ->
@@ -120,7 +120,7 @@ class CopyrightToLicenseFindingsMatcher(
         return copyrightsForLicenses
     }
 
-    fun match(licenseFindings: List<LicenseFinding>, copyrightFindings: List<CopyrightFinding>):
+    fun match(licenseFindings: Collection<LicenseFinding>, copyrightFindings: Collection<CopyrightFinding>):
             SortedSet<LicenseFindings> {
         val licenseFindingsByPath = licenseFindings.groupBy { it.location.path }
         val copyrightFindingsByPath = copyrightFindings.groupBy { it.location.path }
