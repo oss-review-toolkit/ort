@@ -35,7 +35,7 @@ class LocalFileStorage(
     /**
      * The base directory under which to store the scan results.
      */
-    private val baseDirectory: File
+    baseDirectory: File
 ) : FileBasedStorage() {
     val scanResultsDirectory = baseDirectory.resolve("scan-results")
 
