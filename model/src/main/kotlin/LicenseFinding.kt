@@ -25,4 +25,11 @@ package com.here.ort.model
 data class LicenseFinding(
     val license: String,
     val location: TextLocation
-)
+) : Comparable<LicenseFinding> {
+    override fun compareTo(other: LicenseFinding) =
+        compareValuesBy(
+            this,
+            other,
+            compareBy(LicenseFinding::license).thenBy(LicenseFinding::location)
+        ) { it }
+}
