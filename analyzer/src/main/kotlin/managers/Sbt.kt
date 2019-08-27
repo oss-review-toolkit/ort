@@ -52,7 +52,7 @@ class Sbt(
 
         // Batch mode (which suppresses interactive prompts) is only supported on non-Windows, see
         // https://github.com/sbt/sbt-launcher-package/blob/d251388/src/universal/bin/sbt#L86.
-        private val BATCH_MODE = if (!Os.isWindows) "-batch" else ""
+        private val BATCH_MODE = "-batch".takeUnless { Os.isWindows }.orEmpty()
 
         // See https://github.com/sbt/sbt/issues/2695.
         private val LOG_NO_FORMAT = "-Dsbt.log.noformat=true".let {
