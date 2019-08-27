@@ -246,9 +246,8 @@ fun String.encodeOrUnknown() = fileSystemEncode().takeUnless { it.isEmpty() } ?:
  */
 fun String.fileSystemEncode() =
     percentEncode()
-        // Percent-encoding does not necessarily encode some reserved characters that are invalid in some file
-        // systems, so map these afterwards.
-        .replace("*", "%2A")
+        // Percent-encoding does not necessarily encode some characters that are invalid in some file systems, so map
+        // these afterwards.
         .replace(Regex("(^\\.|\\.$)"), "%2E")
         .take(255)
 
@@ -261,6 +260,10 @@ fun String.percentEncode(): String =
         // "+" instead of "%20", so apply the proper mapping here afterwards ("+" in the original string is
         // encoded as "%2B").
         .replace("+", "%20")
+        // "*" is a reserved character in RFC 3986.
+        .replace("*", "%2A")
+        // "~" is an unreserved character in RFC 3986.
+        .replace("%7E", "~")
 
 /**
  * True if the string is a valid semantic version of the given [type], false otherwise.
