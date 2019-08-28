@@ -23,7 +23,14 @@ package com.here.ort.model
  * A class representing a single license finding.
  */
 data class LicenseFinding(
+    /**
+     * The SPDX license identifier corresponding to the license found.
+     */
     val license: String,
+
+    /**
+     * The text location where the license was found.
+     */
     val location: TextLocation
 ) : Comparable<LicenseFinding> {
     override fun compareTo(other: LicenseFinding) =
