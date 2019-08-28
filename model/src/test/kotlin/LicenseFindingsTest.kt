@@ -70,8 +70,10 @@ class LicenseFindingsTest : StringSpec({
             ---
             license: "license"
             copyrights:
-            - "copyright 1"
-            - "copyright 2"
+            - statement: "copyright 1"
+              locations: []
+            - statement: "copyright 2"
+              locations: []
             """.trimIndent()
 
         val deserializedLicenseFinding = yamlMapper.readValue<LicenseFindings>(yaml)
