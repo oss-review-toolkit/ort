@@ -23,7 +23,14 @@ package com.here.ort.model
  * A class representing a single copyright finding.
  */
 data class CopyrightFinding(
+    /**
+     * The copyright statement.
+     */
     val statement: String,
+
+    /**
+     * The text location where the copyright statement was found.
+     */
     val location: TextLocation
 ) : Comparable<CopyrightFinding> {
     override fun compareTo(other: CopyrightFinding) =
