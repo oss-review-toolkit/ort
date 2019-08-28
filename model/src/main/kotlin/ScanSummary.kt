@@ -23,13 +23,25 @@ import com.fasterxml.jackson.annotation.JsonAlias
 import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.annotation.JsonProperty
+import com.fasterxml.jackson.core.JsonParser
+import com.fasterxml.jackson.databind.DeserializationContext
+import com.fasterxml.jackson.databind.JsonNode
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize
+import com.fasterxml.jackson.databind.deser.std.StdDeserializer
+import com.fasterxml.jackson.module.kotlin.treeToValue
+
+import com.here.ort.model.util.CopyrightToLicenseFindingsMatcher
 
 import java.time.Instant
 import java.util.SortedSet
+import java.util.TreeSet
+
+import kotlin.reflect.KClass
 
 /**
  * A short summary of the scan results.
  */
+@JsonDeserialize(using = ScanSummaryDeserializer::class)
 data class ScanSummary(
     /**
      * The time when the scan started.
@@ -50,10 +62,16 @@ data class ScanSummary(
     val fileCount: Int,
 
     /**
-     * The licenses associated to their respective copyrights, if any.
+     * The license findings.
      */
-    @JsonProperty("license_findings")
-    val groupedLicenseFindings: SortedSet<LicenseFindings>,
+    @JsonProperty("licenses")
+    val licenseFindings: SortedSet<LicenseFinding>,
+
+    /**
+     * The copyright findings.
+     */
+    @JsonProperty("copyrights")
+    val copyrightFindings: SortedSet<CopyrightFinding>,
 
     /**
      * The list of errors that occurred during the scan.
@@ -64,6 +82,9 @@ data class ScanSummary(
     val errors: List<OrtIssue> = emptyList()
 ) {
     @get:JsonIgnore
+    val groupedLicenseFindings = CopyrightToLicenseFindingsMatcher().match(licenseFindings, copyrightFindings)
+
+    @get:JsonIgnore
     val licenseFindingsMap = sortedMapOf<String, SortedSet<CopyrightFindings>>().also {
         groupedLicenseFindings.forEach { finding ->
             it.getOrPut(finding.license) { sortedSetOf() } += finding.copyrights
@@ -72,4 +93,73 @@ data class ScanSummary(
 
     @get:JsonIgnore
     val licenses = licenseFindingsMap.keys
+}
+
+class ScanSummaryDeserializer : StdDeserializer<ScanSummary>(OrtIssue::class.java) {
+    private inline fun <reified T> JsonNode.readValue(property: String): T? =
+        if (has(property)) {
+            jsonMapper.treeToValue(this[property])
+        } else {
+            null
+        }
+
+    private inline fun <reified T : Any> JsonNode.readValues(property: String, kClass: KClass<T>): List<T> =
+        this[property]?.map {
+            jsonMapper.treeToValue(it, kClass.java)
+        }.orEmpty()
+
+    override fun deserialize(p: JsonParser, ctxt: DeserializationContext): ScanSummary {
+        val node = p.codec.readTree<JsonNode>(p)
+
+        val (legacyLicenseFindings, legacyCopyrightFindings) = deserializeLegacyFindings(node)
+        val licenseFindings = node.readValues("licenses", LicenseFinding::class)
+        val copyrightFindings = node.readValues("copyrights", CopyrightFinding::class)
+
+        return ScanSummary(
+            startTime = node.readValue("start_time")!!,
+            endTime = node.readValue("end_time")!!,
+            fileCount = node.readValue("file_count")!!,
+            licenseFindings = (licenseFindings + legacyLicenseFindings).toSortedSet(),
+            copyrightFindings = (copyrightFindings + legacyCopyrightFindings).toSortedSet(),
+            errors = node.readValues("errors", OrtIssue::class)
+        )
+    }
+
+    private fun deserializeLegacyFindings(node: JsonNode): Pair<List<LicenseFinding>, List<CopyrightFinding>> {
+        val licenseFindings = mutableListOf<LicenseFinding>()
+        val copyrightFindings = mutableListOf<CopyrightFinding>()
+
+        node["license_findings"]?.forEach { licenseNode ->
+            val license = licenseNode.readValue<String>("license")!!
+
+            deserializeLocations(licenseNode).apply {
+                require(isNotEmpty()) { "License findings without location are not supported anymore." }
+
+                forEach {
+                    licenseFindings.add(LicenseFinding(license = license, location = it))
+                }
+            }
+
+            licenseNode["copyrights"]?.forEach { copyrightsNode ->
+                val statement = copyrightsNode.readValue<String>("statement")!!
+                deserializeLocations(copyrightsNode).apply {
+                    require(isNotEmpty()) { "License findings without location are not supported anymore." }
+
+                    forEach {
+                        copyrightFindings.add(CopyrightFinding(statement = statement, location = it))
+                    }
+                }
+            }
+        }
+
+        return Pair(licenseFindings, copyrightFindings)
+    }
+
+    private fun deserializeLocations(node: JsonNode) =
+        node["locations"]?.let { locations ->
+            jsonMapper.readValue<TreeSet<TextLocation>>(
+                jsonMapper.treeAsTokens(locations),
+                TextLocation.TREE_SET_TYPE
+            )
+        } ?: sortedSetOf()
 }

@@ -23,7 +23,7 @@ package com.here.ort.scanner.storages
 import com.here.ort.model.EMPTY_JSON_NODE
 import com.here.ort.model.Hash
 import com.here.ort.model.Identifier
-import com.here.ort.model.LicenseFindings
+import com.here.ort.model.LicenseFinding
 import com.here.ort.model.OrtIssue
 import com.here.ort.model.Package
 import com.here.ort.model.Provenance
@@ -31,6 +31,7 @@ import com.here.ort.model.RemoteArtifact
 import com.here.ort.model.ScanResult
 import com.here.ort.model.ScanSummary
 import com.here.ort.model.ScannerDetails
+import com.here.ort.model.TextLocation
 import com.here.ort.model.VcsInfo
 import com.here.ort.model.VcsType
 import com.here.ort.model.jsonMapper
@@ -45,6 +46,10 @@ import java.time.Duration
 import java.time.Instant
 
 abstract class AbstractStorageTest : StringSpec() {
+    private companion object {
+        val DUMMY_TEXT_LOCATION = TextLocation("fakepath", 13, -21)
+    }
+
     private val id = Identifier("type", "namespace", "name", "version")
 
     private val sourceArtifact = RemoteArtifact("url", Hash.create("0123456789abcdef0123456789abcdef01234567"))
@@ -98,15 +103,17 @@ abstract class AbstractStorageTest : StringSpec() {
         scannerEndTime1,
         1,
         sortedSetOf(
-            LicenseFindings("license 1.1", sortedSetOf(), sortedSetOf()),
-            LicenseFindings("license 1.2", sortedSetOf(), sortedSetOf())
+            LicenseFinding("license 1.1", DUMMY_TEXT_LOCATION),
+            LicenseFinding("license 1.2", DUMMY_TEXT_LOCATION)
         ),
+        sortedSetOf(),
         mutableListOf(error1, error2)
     )
     private val scanSummaryWithoutFiles = ScanSummary(
         scannerStartTime2,
         scannerEndTime2,
         0,
+        sortedSetOf(),
         sortedSetOf(),
         mutableListOf()
     )

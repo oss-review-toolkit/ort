@@ -22,10 +22,11 @@ package com.here.ort.scanner.scanners
 import com.fasterxml.jackson.databind.JsonNode
 
 import com.here.ort.model.EMPTY_JSON_NODE
-import com.here.ort.model.LicenseFindings
+import com.here.ort.model.LicenseFinding
 import com.here.ort.model.Provenance
 import com.here.ort.model.ScanResult
 import com.here.ort.model.ScanSummary
+import com.here.ort.model.TextLocation
 import com.here.ort.model.config.ScannerConfiguration
 import com.here.ort.model.jsonMapper
 import com.here.ort.scanner.AbstractScannerFactory
@@ -133,17 +134,20 @@ class Licensee(name: String, config: ScannerConfiguration) : LocalScanner(name, 
 
     override fun generateSummary(startTime: Instant, endTime: Instant, result: JsonNode): ScanSummary {
         val matchedFiles = result["matched_files"]
-
         val licenseFindings = matchedFiles.map {
-            val license = getSpdxLicenseIdString(it["matched_license"].textValue())
-            LicenseFindings(license, sortedSetOf(), sortedSetOf())
+            // TODO: Set the location of the finding properly
+            LicenseFinding(
+                license = getSpdxLicenseIdString(it["matched_license"].textValue()),
+                location = TextLocation(path = "", startLine = -1, endLine = -1)
+            )
         }.toSortedSet()
 
         return ScanSummary(
             startTime = startTime,
             endTime = endTime,
             fileCount = matchedFiles.count(),
-            groupedLicenseFindings = licenseFindings,
+            licenseFindings = licenseFindings,
+            copyrightFindings = sortedSetOf(),
             errors = mutableListOf()
         )
     }

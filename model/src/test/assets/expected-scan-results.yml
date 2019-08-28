@@ -16,29 +16,28 @@ results:
     start_time: "1970-01-02T00:01:00Z"
     end_time: "1970-01-02T00:02:00Z"
     file_count: 1
-    license_findings:
+    licenses:
     - license: "license 1.1"
-      locations:
-      - path: "path 1.1"
+      location:
+        path: "path 1.1"
         start_line: 1
         end_line: 1
-      copyrights:
-      - statement: "copyright 1"
-        locations:
-        - path: "copyright path 1.1"
-          start_line: 1
-          end_line: 1
     - license: "license 1.2"
-      locations:
-      - path: "path 1.2"
+      location:
+        path: "path 1.2"
         start_line: 1
         end_line: 2
-      copyrights:
-      - statement: "copyright 2"
-        locations:
-        - path: "copyright path 1.2"
-          start_line: 1
-          end_line: 2
+    copyrights:
+    - statement: "copyright 1"
+      location:
+        path: "copyright path 1.1"
+        start_line: 1
+        end_line: 1
+    - statement: "copyright 2"
+      location:
+        path: "copyright path 1.2"
+        start_line: 1
+        end_line: 2
     errors:
     - timestamp: "1970-01-01T00:00:00Z"
       source: "source-11"
@@ -65,17 +64,28 @@ results:
     start_time: "1970-01-03T00:01:00Z"
     end_time: "1970-01-03T00:02:00Z"
     file_count: 2
-    license_findings:
+    licenses:
     - license: "license 2.1"
-      locations: []
-      copyrights:
-      - statement: "copyright 3"
-        locations: []
+      location:
+        path: "fakepath"
+        start_line: 1
+        end_line: 2
     - license: "license 2.2"
-      locations: []
-      copyrights:
-      - statement: "copyright 4"
-        locations: []
+      location:
+        path: "fakepath"
+        start_line: 3
+        end_line: 4
+    copyrights:
+    - statement: "copyright 3"
+      location:
+        path: "fakepath"
+        start_line: 1
+        end_line: 2
+    - statement: "copyright 4"
+      location:
+        path: "fakepath"
+        start_line: 3
+        end_line: 4
     errors:
     - timestamp: "1970-01-01T00:00:00Z"
       source: "source-21"

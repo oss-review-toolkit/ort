@@ -22,10 +22,11 @@ package com.here.ort.scanner.scanners
 import com.fasterxml.jackson.databind.JsonNode
 
 import com.here.ort.model.EMPTY_JSON_NODE
-import com.here.ort.model.LicenseFindings
+import com.here.ort.model.LicenseFinding
 import com.here.ort.model.Provenance
 import com.here.ort.model.ScanResult
 import com.here.ort.model.ScanSummary
+import com.here.ort.model.TextLocation
 import com.here.ort.model.config.ScannerConfiguration
 import com.here.ort.model.jsonMapper
 import com.here.ort.scanner.AbstractScannerFactory
@@ -153,20 +154,22 @@ class BoyterLc(name: String, config: ScannerConfiguration) : LocalScanner(name, 
         }
 
     override fun generateSummary(startTime: Instant, endTime: Instant, result: JsonNode): ScanSummary {
-        val licenseFindings = sortedSetOf<LicenseFindings>()
-
-        result.forEach { file ->
-            file["LicenseGuesses"].mapTo(licenseFindings) {
-                val license = getSpdxLicenseIdString(it["LicenseId"].textValue())
-                LicenseFindings(license, sortedSetOf(), sortedSetOf())
+        val licenseFindings = result.flatMap { file ->
+            file["LicenseGuesses"].map {
+                // TODO: Set the location of the finding properly
+                LicenseFinding(
+                    license = getSpdxLicenseIdString(it["LicenseId"].textValue()),
+                    location = TextLocation(path = "", startLine = -1, endLine = -1)
+                )
             }
-        }
+        }.toSortedSet()
 
         return ScanSummary(
             startTime = startTime,
             endTime = endTime,
             fileCount = result.size(),
-            groupedLicenseFindings = licenseFindings,
+            licenseFindings = licenseFindings,
+            copyrightFindings = sortedSetOf(),
             errors = mutableListOf()
         )
     }

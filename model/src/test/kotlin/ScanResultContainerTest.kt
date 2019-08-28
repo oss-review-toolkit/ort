@@ -23,6 +23,7 @@ import com.fasterxml.jackson.module.kotlin.readValue
 
 import com.here.ort.utils.test.patchActualResult
 
+import io.kotlintest.matchers.collections.shouldContainExactly
 import io.kotlintest.shouldBe
 import io.kotlintest.specs.WordSpec
 
@@ -31,6 +32,10 @@ import java.time.Duration
 import java.time.Instant
 
 class ScanResultContainerTest : WordSpec() {
+    companion object {
+        private val DUMMY_PATH = "fakepath"
+    }
+
     private val id = Identifier("type", "namespace", "name", "version")
 
     private val downloadTime1 = Instant.EPOCH + Duration.ofDays(1)
@@ -63,27 +68,25 @@ class ScanResultContainerTest : WordSpec() {
         scannerEndTime1,
         1,
         sortedSetOf(
-            LicenseFindings(
+            LicenseFinding(
                 "license 1.1",
-                sortedSetOf(TextLocation("path 1.1", 1, 1)),
-                sortedSetOf(
-                    CopyrightFindings(
-                        "copyright 1",
-                        sortedSetOf(TextLocation("copyright path 1.1", 1, 1))
-                    )
-                )
+                TextLocation("path 1.1", 1, 1)
             ),
-            LicenseFindings(
+            LicenseFinding(
                 "license 1.2",
-                sortedSetOf(TextLocation("path 1.2", 1, 2)),
-                sortedSetOf(
-                    CopyrightFindings(
-                        "copyright 2",
-                        sortedSetOf(TextLocation("copyright path 1.2", 1, 2))
-                    )
-                )
+                TextLocation("path 1.2", 1, 2)
             )
         ),
+        sortedSetOf(
+            CopyrightFinding(
+                "copyright 1",
+                TextLocation("copyright path 1.1", 1, 1)
+            ),
+            CopyrightFinding(
+                "copyright 2",
+                TextLocation("copyright path 1.2", 1, 2)
+            )
+         ),
         mutableListOf(error11, error12)
     )
     private val scanSummary2 = ScanSummary(
@@ -91,16 +94,19 @@ class ScanResultContainerTest : WordSpec() {
         scannerEndTime2,
         2,
         sortedSetOf(
-            LicenseFindings(
+            LicenseFinding(
                 "license 2.1",
-                sortedSetOf(),
-                sortedSetOf(CopyrightFindings("copyright 3", sortedSetOf()))
+                TextLocation(DUMMY_PATH, 1, 2)
+
             ),
-            LicenseFindings(
+            LicenseFinding(
                 "license 2.2",
-                sortedSetOf(),
-                sortedSetOf(CopyrightFindings("copyright 4", sortedSetOf()))
+                TextLocation(DUMMY_PATH, 3, 4)
             )
+        ),
+        sortedSetOf(
+            CopyrightFinding("copyright 3", TextLocation(DUMMY_PATH, 1, 2)),
+            CopyrightFinding("copyright 4", TextLocation(DUMMY_PATH, 3, 4))
         ),
         mutableListOf(error21, error22)
     )
@@ -132,6 +138,33 @@ class ScanResultContainerTest : WordSpec() {
 
                 patchActualResult(serializedScanResults) shouldBe expectedScanResults
             }
+
+            "deserialize with the deprecated license_findings field in the scan summary as expected" {
+                val deprecatedScanResult = File("src/test/assets/deprecated-license-findings-scan-result.yml")
+                    .readValue<ScanResultContainer>()
+
+                deprecatedScanResult.results[0].summary.copyrightFindings shouldContainExactly listOf(
+                    CopyrightFinding(
+                        statement = "copyright 1",
+                        location = TextLocation(path = "copyright path 1.1", startLine = 1, endLine = 1)
+                    ),
+                    CopyrightFinding(
+                        statement = "copyright 2",
+                        location = TextLocation(path = "copyright path 1.2", startLine = 1, endLine = 2)
+                    )
+                )
+
+                deprecatedScanResult.results[0].summary.licenseFindings shouldContainExactly listOf(
+                    LicenseFinding(
+                        license = "license 1.1",
+                        location = TextLocation(path = "path 1.1", startLine = 1, endLine = 1)
+                    ),
+                    LicenseFinding(
+                        license = "license 1.2",
+                        location = TextLocation(path = "path 1.2", startLine = 1, endLine = 2)
+                    )
+                )
+             }
         }
     }
 }
