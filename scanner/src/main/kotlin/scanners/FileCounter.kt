@@ -81,7 +81,8 @@ class FileCounter(name: String, config: ScannerConfiguration) : LocalScanner(nam
             startTime = startTime,
             endTime = endTime,
             fileCount = fileCount,
-            groupedLicenseFindings = sortedSetOf(),
+            licenseFindings = sortedSetOf(),
+            copyrightFindings = sortedSetOf(),
             errors = mutableListOf()
         )
     }

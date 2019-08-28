@@ -369,7 +369,8 @@ class ScanCode(
         startTime = startTime,
         endTime = endTime,
         fileCount = getFileCount(result),
-        groupedLicenseFindings = associateFindings(result),
+        licenseFindings = getLicenseFindings(result).toSortedSet(),
+        copyrightFindings = getCopyrightFindings(result).toSortedSet(),
         errors = getErrors(result)
     )
 

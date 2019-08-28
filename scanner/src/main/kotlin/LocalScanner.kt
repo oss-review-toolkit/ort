@@ -207,7 +207,8 @@ abstract class LocalScanner(name: String, config: ScannerConfiguration) : Scanne
                                         startTime = now,
                                         endTime = now,
                                         fileCount = 0,
-                                        groupedLicenseFindings = sortedSetOf(),
+                                        licenseFindings = sortedSetOf(),
+                                        copyrightFindings = sortedSetOf(),
                                         errors = listOf(
                                             OrtIssue(
                                                 source = scannerName,
@@ -286,7 +287,8 @@ abstract class LocalScanner(name: String, config: ScannerConfiguration) : Scanne
                     startTime = now,
                     endTime = now,
                     fileCount = 0,
-                    groupedLicenseFindings = sortedSetOf(),
+                    licenseFindings = sortedSetOf(),
+                    copyrightFindings = sortedSetOf(),
                     errors = listOf(OrtIssue(source = scannerName, message = e.collectMessagesAsString()))
                 ),
                 EMPTY_JSON_NODE
@@ -345,8 +347,12 @@ abstract class LocalScanner(name: String, config: ScannerConfiguration) : Scanne
 
             val now = Instant.now()
             val summary = ScanSummary(
-                now, now, 0, sortedSetOf(),
-                listOf(OrtIssue(source = scannerName, message = e.collectMessagesAsString()))
+                startTime = now,
+                endTime = now,
+                fileCount = 0,
+                licenseFindings = sortedSetOf(),
+                copyrightFindings = sortedSetOf(),
+                errors = listOf(OrtIssue(source = scannerName, message = e.collectMessagesAsString()))
             )
             ScanResult(Provenance(), getDetails(), summary)
         }

@@ -25,8 +25,6 @@ import com.fasterxml.jackson.databind.JsonNode
 
 import com.here.ort.spdx.LicenseFileMatcher
 
-import java.util.SortedSet
-
 /**
  * The result of a single scan of a single package.
  */
@@ -59,38 +57,24 @@ data class ScanResult(
      * for [provenance]. Findings which are matched by [LicenseFileMatcher.DEFAULT_MATCHER] are also kept.
      */
     fun filterPath(path: String): ScanResult {
-        fun SortedSet<TextLocation>.filterPath() =
-            filterTo(sortedSetOf()) { location ->
-                location.path.startsWith("$path/") || LicenseFileMatcher.DEFAULT_MATCHER.matches(location.path)
-            }
+        fun TextLocation.matchesPath() =
+            this.path.startsWith("$path/") || LicenseFileMatcher.DEFAULT_MATCHER.matches(this.path)
 
         val newProvenance = provenance.copy(
             vcsInfo = provenance.vcsInfo?.copy(path = path),
             originalVcsInfo = provenance.originalVcsInfo?.copy(path = path)
         )
 
-        val findings = summary.groupedLicenseFindings.mapNotNull { finding ->
-            val locations = finding.locations.filterPath()
+        val licenseFindings = summary.licenseFindings.filter { it.location.matchesPath() }.toSortedSet()
+        val copyrightFindings = summary.copyrightFindings.filter { it.location.matchesPath() }.toSortedSet()
+        val fileCount = (licenseFindings.map { it.location.path } + copyrightFindings.map { it.location.path })
+            .distinct().size
 
-            if (locations.isNotEmpty()) {
-                val copyrights = finding.copyrights.mapNotNull { copyright ->
-                    val copyrightLocations = copyright.locations.filterPath()
-
-                    if (copyrightLocations.isNotEmpty()) {
-                        CopyrightFindings(copyright.statement, copyrightLocations)
-                    } else {
-                        null
-                    }
-                }.toSortedSet()
-
-                LicenseFindings(finding.license, locations, copyrights)
-            } else {
-                null
-            }
-        }.toSortedSet()
-
-        val fileCount = findings.flatMap { finding -> finding.locations.map { it.path } }.size
-        val summary = summary.copy(fileCount = fileCount, groupedLicenseFindings = findings)
+        val summary = summary.copy(
+            fileCount = fileCount,
+            licenseFindings = licenseFindings,
+            copyrightFindings = copyrightFindings
+        )
 
         return ScanResult(newProvenance, scanner, summary)
     }
