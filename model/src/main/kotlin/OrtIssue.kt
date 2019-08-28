@@ -68,24 +68,19 @@ data class OrtIssue(
 class OrtIssueDeserializer : StdDeserializer<OrtIssue>(OrtIssue::class.java) {
     override fun deserialize(p: JsonParser, ctxt: DeserializationContext): OrtIssue {
         val node = p.codec.readTree<JsonNode>(p)
-        return if (node.isTextual) {
-            // For backward-compatibility if only an error string is specified.
-            OrtIssue(Instant.EPOCH, "", node.textValue())
+        return if (node.has("severity")) {
+            OrtIssue(
+                timestamp = Instant.parse(node.get("timestamp").textValue()),
+                source = node.get("source").textValue(),
+                message = node.get("message").textValue(),
+                severity = Severity.valueOf(node.get("severity").textValue())
+            )
         } else {
-            if (node.has("severity")) {
-                OrtIssue(
-                    timestamp = Instant.parse(node.get("timestamp").textValue()),
-                    source = node.get("source").textValue(),
-                    message = node.get("message").textValue(),
-                    severity = Severity.valueOf(node.get("severity").textValue())
-                )
-            } else {
-                OrtIssue(
-                    timestamp = Instant.parse(node.get("timestamp").textValue()),
-                    source = node.get("source").textValue(),
-                    message = node.get("message").textValue()
-                )
-            }
+            OrtIssue(
+                timestamp = Instant.parse(node.get("timestamp").textValue()),
+                source = node.get("source").textValue(),
+                message = node.get("message").textValue()
+            )
         }
     }
 }
