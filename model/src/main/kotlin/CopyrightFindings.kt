@@ -19,20 +19,11 @@
 
 package com.here.ort.model
 
-import com.fasterxml.jackson.core.JsonParser
-import com.fasterxml.jackson.databind.DeserializationContext
-import com.fasterxml.jackson.databind.JsonNode
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize
-import com.fasterxml.jackson.databind.deser.std.StdDeserializer
-import com.fasterxml.jackson.module.kotlin.treeToValue
-
 import com.here.ort.utils.SortedSetComparator
 import com.here.ort.utils.constructTreeSetType
 
 import java.util.SortedSet
-import java.util.TreeSet
 
-@JsonDeserialize(using = CopyrightFindingsDeserializer::class)
 data class CopyrightFindings(
     val statement: String,
     val locations: SortedSet<TextLocation>
@@ -49,23 +40,4 @@ data class CopyrightFindings(
             compareBy(CopyrightFindings::statement)
                 .thenBy(TextLocation.SORTED_SET_COMPARATOR, CopyrightFindings::locations)
         ) { it }
-}
-
-class CopyrightFindingsDeserializer : StdDeserializer<CopyrightFindings>(CopyrightFindings::class.java) {
-    override fun deserialize(p: JsonParser, ctxt: DeserializationContext): CopyrightFindings {
-        val node = p.codec.readTree<JsonNode>(p)
-        return when {
-            node.isTextual -> CopyrightFindings(node.textValue(), sortedSetOf())
-            else -> {
-                val statement = jsonMapper.treeToValue<String>(node["statement"])
-
-                val locations = jsonMapper.readValue<TreeSet<TextLocation>>(
-                    jsonMapper.treeAsTokens(node["locations"]),
-                    TextLocation.TREE_SET_TYPE
-                )
-
-                CopyrightFindings(statement, locations)
-            }
-        }
-    }
 }
