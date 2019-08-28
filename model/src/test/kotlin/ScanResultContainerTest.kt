@@ -140,21 +140,6 @@ class ScanResultContainerTest : WordSpec() {
                 scanResults.results[0].summary.licenses shouldBe sortedSetOf("license 1.1", "license 1.2")
                 scanResults.results[1].summary.licenses shouldBe sortedSetOf("license 2.1", "license 2.2")
             }
-
-            "deprecated errors field in scan summary can be parsed" {
-                val deprecatedScanResultsFile = File("src/test/assets/deprecated-errors-scan-results.yml")
-                val scanResults = deprecatedScanResultsFile.readValue<ScanResultContainer>()
-
-                scanResults.results[0].summary.errors shouldBe listOf(
-                    OrtIssue(timestamp = Instant.EPOCH, source = "", message = "error-11"),
-                    OrtIssue(timestamp = Instant.EPOCH, source = "", message = "error-12")
-                )
-
-                scanResults.results[1].summary.errors shouldBe listOf(
-                    OrtIssue(timestamp = Instant.EPOCH, source = "", message = "error-21"),
-                    OrtIssue(timestamp = Instant.EPOCH, source = "", message = "error-22")
-                )
-            }
         }
     }
 }
