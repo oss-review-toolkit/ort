@@ -132,14 +132,6 @@ class ScanResultContainerTest : WordSpec() {
 
                 patchActualResult(serializedScanResults) shouldBe expectedScanResults
             }
-
-            "deprecated licenses field in scan summary can be parsed" {
-                val deprecatedScanResultsFile = File("src/test/assets/deprecated-licenses-scan-results.yml")
-                val scanResults = deprecatedScanResultsFile.readValue<ScanResultContainer>()
-
-                scanResults.results[0].summary.licenses shouldBe sortedSetOf("license 1.1", "license 1.2")
-                scanResults.results[1].summary.licenses shouldBe sortedSetOf("license 2.1", "license 2.2")
-            }
         }
     }
 }
