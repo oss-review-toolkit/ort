@@ -78,21 +78,17 @@ data class LicenseFindings(
 class LicenseFindingsDeserializer : StdDeserializer<LicenseFindings>(LicenseFindings::class.java) {
     override fun deserialize(p: JsonParser, ctxt: DeserializationContext): LicenseFindings {
         val node = p.codec.readTree<JsonNode>(p)
-        return when {
-            node.isTextual -> LicenseFindings(node.textValue(), sortedSetOf(), sortedSetOf())
-            else -> {
-                val license = jsonMapper.treeToValue<String>(node["license"])
 
-                val copyrights = jsonMapper.readValue<TreeSet<CopyrightFindings>>(
-                    jsonMapper.treeAsTokens(node["copyrights"]),
-                    CopyrightFindings.TREE_SET_TYPE
-                )
+        val license = jsonMapper.treeToValue<String>(node["license"])
 
-                val locations = deserializeLocations(node)
+        val copyrights = jsonMapper.readValue<TreeSet<CopyrightFindings>>(
+            jsonMapper.treeAsTokens(node["copyrights"]),
+            CopyrightFindings.TREE_SET_TYPE
+        )
 
-                LicenseFindings(license, locations, copyrights)
-            }
-        }
+        val locations = deserializeLocations(node)
+
+        return LicenseFindings(license, locations, copyrights)
     }
 
     private fun deserializeLocations(node: JsonNode) =

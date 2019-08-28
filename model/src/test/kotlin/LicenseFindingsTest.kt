@@ -65,17 +65,6 @@ class LicenseFindingsTest : StringSpec({
             """.trimIndent()
     }
 
-    "can be deserialized from a single license string" {
-        val yaml = """
-            ---
-            "license"
-            """.trimIndent()
-
-        val deserializedLicenseFinding = yamlMapper.readValue<LicenseFindings>(yaml)
-
-        deserializedLicenseFinding shouldBe LicenseFindings("license", sortedSetOf(), sortedSetOf())
-    }
-
     "can be deserialized from a license finding without locations" {
         val yaml = """
             ---
