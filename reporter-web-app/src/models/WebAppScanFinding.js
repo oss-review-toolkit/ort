@@ -23,21 +23,17 @@ import TextLocation from './TextLocation';
 import { randomStringGenerator } from '../utils';
 
 class WebAppScanFinding extends TextLocation {
-    #license;
-
     #key;
 
     #provenance;
 
     #scanner;
 
+    #value;
+
     constructor(obj) {
         if (obj) {
             super(obj);
-
-            if (obj.license) {
-                this.#license = obj.license;
-            }
 
             if (obj.provenance) {
                 this.#provenance = obj.provenance;
@@ -48,15 +44,15 @@ class WebAppScanFinding extends TextLocation {
             }
 
             this.#key = randomStringGenerator(20);
+
+            if (obj.value) {
+                this.#value = obj.value;
+            }
         }
     }
 
     get key() {
         return this.#key;
-    }
-
-    get license() {
-        return this.#license;
     }
 
     get provenance() {
@@ -65,6 +61,10 @@ class WebAppScanFinding extends TextLocation {
 
     get scanner() {
         return this.#scanner;
+    }
+
+    get value() {
+        return this.#value;
     }
 }
 

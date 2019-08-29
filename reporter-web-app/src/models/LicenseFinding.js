@@ -17,23 +17,22 @@
  * License-Filename: LICENSE
  */
 
-import CopyrightFinding from './CopyrightFinding';
 import TextLocation from './TextLocation';
 
 class LicenseFinding {
     #license = '';
 
-    #locations = [];
-
-    #copyrights = [];
+    #location = new TextLocation();
 
     constructor(obj) {
         if (obj instanceof Object) {
-            Object.keys(obj).forEach((key) => {
-                if (obj[key] !== undefined) {
-                    this[key] = obj[key];
-                }
-            });
+            if (obj.license) {
+                this.license = obj.license;
+            }
+
+            if (obj.location) {
+                this.location = obj.location;
+            }
         }
     }
 
@@ -45,24 +44,12 @@ class LicenseFinding {
         this.#license = val;
     }
 
-    get locations() {
-        return this.#locations;
+    get location() {
+        return this.#location;
     }
 
-    set locations(val) {
-        for (let i = 0, len = val.length; i < len; i++) {
-            this.#locations.push(new TextLocation(val[i]));
-        }
-    }
-
-    get copyrights() {
-        return this.#copyrights;
-    }
-
-    set copyrights(val) {
-        for (let i = 0, len = val.length; i < len; i++) {
-            this.#copyrights.push(new CopyrightFinding(val[i]));
-        }
+    set location(val) {
+        this.#location = new TextLocation(val);
     }
 }
 

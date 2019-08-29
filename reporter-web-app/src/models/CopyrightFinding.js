@@ -20,17 +20,19 @@
 import TextLocation from './TextLocation';
 
 class CopyrightFinding {
-    #statement = '';
+    #location = new TextLocation();
 
-    #locations = [];
+    #statement = '';
 
     constructor(obj) {
         if (obj instanceof Object) {
-            Object.keys(obj).forEach((key) => {
-                if (obj[key] !== undefined) {
-                    this[key] = obj[key];
-                }
-            });
+            if (obj.location) {
+                this.location = obj.location;
+            }
+
+            if (obj.statement) {
+                this.statement = obj.statement;
+            }
         }
     }
 
@@ -42,14 +44,12 @@ class CopyrightFinding {
         this.#statement = val;
     }
 
-    get locations() {
-        return this.#locations;
+    get location() {
+        return this.#location;
     }
 
-    set locations(val) {
-        for (let i = 0, len = val.length; i < len; i++) {
-            this.#locations.push(new TextLocation(val[i]));
-        }
+    set location(val) {
+        this.#location = new TextLocation(val);
     }
 }
 
