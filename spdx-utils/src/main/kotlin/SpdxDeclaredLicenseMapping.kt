@@ -296,6 +296,7 @@ object SpdxDeclaredLicenseMapping {
         "ZPL 2.1" to ZPL_2_1.toExpression(),
         "Zope Public" to ZPL_2_1.toExpression(),
         "http://ant-contrib.sourceforge.net/tasks/LICENSE.txt" to APACHE_1_1.toExpression(),
+        "http://go.microsoft.com/fwlink/?LinkId=329770" to licenseRef("ms-net-library-2018-11", "scancode"),
         "http://opensource.org/licenses/MIT" to MIT.toExpression(),
         "http://polymer.github.io/LICENSE.txt" to BSD_3_CLAUSE.toExpression(),
         "http://svnkit.com/license.html" to TMATE.toExpression(),
