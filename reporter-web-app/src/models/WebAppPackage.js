@@ -228,48 +228,35 @@ class WebAppPackage extends Package {
                 const { results } = scanResultContainer;
                 this.#scanFindings = [];
 
-                // for (let i = results.length - 1; i >= 0; i -= 1) {
-                for (let i = 0, lenResults = results.length; i < lenResults; i++) {
-                    const { provenance, scanner, summary: { licenseFindings } } = results[i];
+                for (let x = 0, lenResults = results.length; x < lenResults; x++) {
+                    const { provenance, scanner, summary: { copyrightFindings, licenseFindings } } = results[x];
 
-                    // for (let y = licenseFindings.length - 1; y >= 0; y -= 1) {
-                    for (let j = 0, lenlicenseFindings = licenseFindings.length; j < lenlicenseFindings; j++) {
-                        const licenseFinding = licenseFindings[j];
-                        const { copyrights, license, locations: licenseLocations } = licenseFinding;
+                    for (let y = 0, lenCopyrightFindings = copyrightFindings.length; y < lenCopyrightFindings; y++) {
+                        const copyrightFinding = copyrightFindings[y];
+                        const { statement: value, location: { path, startLine, endLine } } = copyrightFinding;
 
-                        for (let x = 0, lenCopyrights = copyrights.length; x < lenCopyrights; x++) {
-                            const { locations: copyrightLocations, statement } = copyrights[x];
+                        this.#scanFindings.push(new WebAppScanFindingCopyright({
+                            path,
+                            startLine,
+                            endLine,
+                            value,
+                            provenance,
+                            scanner
+                        }));
+                    }
 
-                            for (
-                                let y = 0, lenCopyrightLocations = copyrightLocations.length;
-                                y < lenCopyrightLocations;
-                                y++
-                            ) {
-                                const { path, startLine, endLine } = copyrightLocations[y];
-                                this.#scanFindings.push(new WebAppScanFindingCopyright({
-                                    path,
-                                    startLine,
-                                    endLine,
-                                    license,
-                                    statement,
-                                    provenance,
-                                    scanner
-                                }));
-                            }
-                        }
+                    for (let z = 0, lenLicenseFindings = licenseFindings.length; z < lenLicenseFindings; z++) {
+                        const licenseFinding = licenseFindings[z];
+                        const { license: value, location: { path, startLine, endLine } } = licenseFinding;
 
-                        for (let z = 0, lenLocations = licenseLocations.length; z < lenLocations; z++) {
-                            const { path, startLine, endLine } = licenseLocations[z];
-
-                            this.#scanFindings.push(new WebAppScanFindingLicense({
-                                path,
-                                startLine,
-                                endLine,
-                                license,
-                                provenance,
-                                scanner
-                            }));
-                        }
+                        this.#scanFindings.push(new WebAppScanFindingLicense({
+                            path,
+                            startLine,
+                            endLine,
+                            value,
+                            provenance,
+                            scanner
+                        }));
                     }
                 }
             }

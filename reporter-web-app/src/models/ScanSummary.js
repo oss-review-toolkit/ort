@@ -17,6 +17,7 @@
  * License-Filename: LICENSE
  */
 
+import CopyrightFinding from './CopyrightFinding';
 import LicenseFinding from './LicenseFinding';
 import OrtIssue from './OrtIssue';
 
@@ -31,7 +32,7 @@ class ScanSummary {
 
     #licenseFindings = [];
 
-    #licenseFindingsMap;
+    #copyrightFindings = [];
 
     #licenses;
 
@@ -61,12 +62,12 @@ class ScanSummary {
                 this.#fileCount = obj.fileCount;
             }
 
-            if (obj.license_findings) {
-                this.licenseFindings = obj.license_findings;
+            if (obj.licenses) {
+                this.licenseFindings = obj.licenses;
             }
 
-            if (obj.licenseFindings) {
-                this.licenseFindings = obj.licenseFindings;
+            if (obj.copyrights) {
+                this.copyrightFindings = obj.copyrights;
             }
 
             if (obj.errors) {
@@ -97,6 +98,16 @@ class ScanSummary {
         }
     }
 
+    get copyrightFindings() {
+        return this.#copyrightFindings;
+    }
+
+    set copyrightFindings(val) {
+        for (let i = 0, len = val.length; i < len; i++) {
+            this.#copyrightFindings.push(new CopyrightFinding(val[i]));
+        }
+    }
+
     get errors() {
         return this.#errors;
     }
@@ -107,23 +118,12 @@ class ScanSummary {
         }
     }
 
-    get licenseFindingsMap() {
-        if (!this.#licenseFindingsMap) {
-            this.#licenseFindingsMap = new Set();
-            this.licenseFindings.forEach((finding) => {
-                this.#licenseFindingsMap.add(
-                    finding.license,
-                    finding.copyrights
-                );
-            });
-        }
-
-        return this.#licenseFindingsMap;
-    }
-
     get licenses() {
         if (!this.#licenses) {
-            this.#licenses = new Set(this.licenseFindingsMap.keys());
+            this.#licenses = new Set();
+            this.#licenseFindings.forEach((finding) => {
+                this.#licenses.add(finding.license);
+            });
         }
 
         return this.#licenses;

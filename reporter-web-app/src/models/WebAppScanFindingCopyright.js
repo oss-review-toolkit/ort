@@ -23,28 +23,8 @@
 import WebAppScanFinding from './WebAppScanFinding';
 
 class WebAppScanFindingCopyright extends WebAppScanFinding {
-    #statement = '';
-
-    constructor(obj) {
-        if (obj) {
-            super(obj);
-
-            if (obj.statement) {
-                this.#statement = obj.statement;
-            }
-        }
-    }
-
     get type() {
         return 'COPYRIGHT';
-    }
-
-    get statement() {
-        return this.#statement;
-    }
-
-    get value() {
-        return this.#statement;
     }
 }
 

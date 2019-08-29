@@ -25,10 +25,6 @@ class WebAppScanFindingLicense extends WebAppScanFinding {
     get type() {
         return 'LICENSE';
     }
-
-    get value() {
-        return this.license;
-    }
 }
 
 export default WebAppScanFindingLicense;
