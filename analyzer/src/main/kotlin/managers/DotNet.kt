@@ -69,7 +69,7 @@ class DotNet(
     }
 
     class Factory : AbstractPackageManagerFactory<DotNet>("DotNet") {
-        override val globsForDefinitionFiles = listOf("*.csproj")
+        override val globsForDefinitionFiles = listOf("*.csproj", "*.fsproj", "*.vcxproj")
 
         override fun create(
             analyzerRoot: File,
