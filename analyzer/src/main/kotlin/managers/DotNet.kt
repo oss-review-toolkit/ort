@@ -102,7 +102,7 @@ class DotNet(
             id = Identifier(
                 type = managerName,
                 namespace = "",
-                name = workingDir.name,
+                name = definitionFile.relativeTo(analyzerRoot).invariantSeparatorsPath,
                 version = ""
             ),
             definitionFilePath = VersionControlSystem.getPathInfo(definitionFile).path,
