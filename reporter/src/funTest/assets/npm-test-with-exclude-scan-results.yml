@@ -432,10 +432,16 @@ scanner:
           file_count: 6
           license_findings:
           - license: "MIT"
-            locations: []
+            locations:
+            - path: "path_196"
+              start_line: 197
+              end_line: 207
             copyrights:
             - statement: "Copyright (c) 2014"
-              locations: []
+              locations:
+              - path: "path_196"
+                start_line: 196
+                end_line: 196
     - id: "NPM::domelementtype:1.1.3"
       results:
       - provenance:
@@ -462,10 +468,16 @@ scanner:
           file_count: 4
           license_findings:
           - license: "BSD-2-Clause"
-            locations: []
+            locations:
+            - path: "path_197"
+              start_line: 198
+              end_line: 208
             copyrights:
             - statement: "Copyright (c) Felix Bohm"
-              locations: []
+              locations:
+              - path: "path_197"
+                start_line: 197
+                end_line: 197
     - id: "NPM::domelementtype:1.3.0"
       results:
       - provenance:
@@ -486,10 +498,16 @@ scanner:
           file_count: 4
           license_findings:
           - license: "BSD-2-Clause"
-            locations: []
+            locations:
+            - path: "path_198"
+              start_line: 199
+              end_line: 209
             copyrights:
             - statement: "Copyright (c) Felix Bohm"
-              locations: []
+              locations:
+              - path: "path_198"
+                start_line: 198
+                end_line: 198
     - id: "NPM::domutils:1.5.1"
       results:
       - provenance:
@@ -516,10 +534,16 @@ scanner:
           file_count: 15
           license_findings:
           - license: "BSD-2-Clause"
-            locations: []
+            locations:
+            - path: "path_199"
+              start_line: 200
+              end_line: 210
             copyrights:
             - statement: "Copyright (c) Felix Bohm"
-              locations: []
+              locations:
+              - path: "path_199"
+                start_line: 199
+                end_line: 199
     - id: "NPM::editions:1.3.4"
       results:
       - provenance:
@@ -546,7 +570,10 @@ scanner:
           file_count: 16
           license_findings:
           - license: "MIT"
-            locations: []
+            locations:
+            - path: "path_200"
+              start_line: 201
+              end_line: 211
             copyrights: []
     - id: "NPM::entities:1.1.1"
       results:
@@ -574,14 +601,26 @@ scanner:
           file_count: 14
           license_findings:
           - license: "BSD-2-Clause"
-            locations: []
+            locations:
+            - path: "path_201"
+              start_line: 202
+              end_line: 212
             copyrights:
             - statement: "(c) http://mathiasbynens.be/notes/javascript-encoding"
-              locations: []
+              locations:
+              - path: "path_201"
+                start_line: 201
+                end_line: 201
             - statement: "Copyright (c) Felix Bohm"
-              locations: []
+              locations:
+              - path: "path_201"
+                start_line: 201
+                end_line: 201
           - license: "BSD-3-Clause"
-            locations: []
+            locations:
+            - path: "path_202"
+              start_line: 203
+              end_line: 213
             copyrights: []
     - id: "NPM::graceful-fs:4.1.11"
       results:
@@ -609,10 +648,16 @@ scanner:
           file_count: 22
           license_findings:
           - license: "ISC"
-            locations: []
+            locations:
+            - path: "path_203"
+              start_line: 204
+              end_line: 214
             copyrights:
             - statement: "Copyright (c) Isaac Z. Schlueter, Ben Noordhuis, and Contributors"
-              locations: []
+              locations:
+              - path: "path_203"
+                start_line: 203
+                end_line: 203
     - id: "NPM::npm-excludes-test-project:1.0.0"
       results:
       - provenance:
@@ -666,7 +711,10 @@ scanner:
           file_count: 7
           license_findings:
           - license: "BSD-3-Clause"
-            locations: []
+            locations:
+            - path: "path_204"
+              start_line: 205
+              end_line: 215
             copyrights: []
     - id: "NPM::safefs:4.1.0"
       results:
@@ -694,10 +742,16 @@ scanner:
           file_count: 12
           license_findings:
           - license: "MIT"
-            locations: []
+            locations:
+            - path: "path_205"
+              start_line: 206
+              end_line: 216
             copyrights:
             - statement: "Copyright (c) 2011-2012 http://balupton.com' Benjamin Lupton"
-              locations: []
+              locations:
+              - path: "path_205"
+                start_line: 205
+                end_line: 205
     storage_stats:
       num_reads: 11
       num_hits: 0

@@ -255,10 +255,16 @@ scanner:
           file_count: 0
           license_findings:
           - license: "MIT"
-            locations: []
+            locations:
+            - path: "path_206"
+              start_line: 207
+              end_line: 217
             copyrights:
             - statement: "Copyright (c) example authors."
-              locations: []
+              locations:
+              - path: "path_206"
+                start_line: 206
+                end_line: 206
           errors:
           - timestamp: "1970-01-01T00:00:00Z"
             source: "FileCounter"
@@ -290,7 +296,10 @@ scanner:
               end_line: 2
             copyrights:
             - statement: "Copyright (c) example authors."
-              locations: []
+              locations:
+              - path: "file.java"
+                start_line: 0
+                end_line: 0
           - license: "MIT"
             locations:
             - path: "file1.java"
@@ -301,7 +310,10 @@ scanner:
               end_line: 2
             copyrights:
             - statement: "Copyright (c) example authors."
-              locations: []
+              locations:
+              - path: "file1.java"
+                start_line: 0
+                end_line: 0
     - id: "Maven:junit:junit:4.12"
       results:
       - provenance:
