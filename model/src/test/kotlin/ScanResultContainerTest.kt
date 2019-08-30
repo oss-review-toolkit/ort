@@ -32,10 +32,6 @@ import java.time.Duration
 import java.time.Instant
 
 class ScanResultContainerTest : WordSpec() {
-    companion object {
-        private val DUMMY_PATH = "fakepath"
-    }
-
     private val id = Identifier("type", "namespace", "name", "version")
 
     private val downloadTime1 = Instant.EPOCH + Duration.ofDays(1)
@@ -96,17 +92,17 @@ class ScanResultContainerTest : WordSpec() {
         sortedSetOf(
             LicenseFinding(
                 "license 2.1",
-                TextLocation(DUMMY_PATH, 1, 2)
+                TextLocation("path/to/file", 1, 2)
 
             ),
             LicenseFinding(
                 "license 2.2",
-                TextLocation(DUMMY_PATH, 3, 4)
+                TextLocation("path/to/another/file", 3, 4)
             )
         ),
         sortedSetOf(
-            CopyrightFinding("copyright 3", TextLocation(DUMMY_PATH, 1, 2)),
-            CopyrightFinding("copyright 4", TextLocation(DUMMY_PATH, 3, 4))
+            CopyrightFinding("copyright 3", TextLocation("path/to/file", 1, 2)),
+            CopyrightFinding("copyright 4", TextLocation("path/to/another/file", 3, 4))
         ),
         mutableListOf(error21, error22)
     )
