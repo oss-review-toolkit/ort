@@ -47,5 +47,15 @@ data class TextLocation(
         val TREE_SET_TYPE by lazy { jsonMapper.typeFactory.constructTreeSetType(TextLocation::class.java) }
     }
 
+    init {
+        require(path.isNotEmpty()) {
+            "The path must not be empty."
+        }
+
+        require(startLine in 1..endLine || (startLine == -1 && endLine == -1)) {
+            "Invalid start or end line values."
+        }
+    }
+
     override fun compareTo(other: TextLocation) = COMPARATOR.compare(this, other)
 }
