@@ -17,6 +17,7 @@ repositories {
 dependencies {
     api(project(":model"))
 
+    implementation(project(":clearly-defined"))
     implementation(project(":downloader"))
     implementation(project(":utils"))
 
