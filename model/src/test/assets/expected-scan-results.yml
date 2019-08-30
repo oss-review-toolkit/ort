@@ -67,23 +67,23 @@ results:
     licenses:
     - license: "license 2.1"
       location:
-        path: "fakepath"
+        path: "path/to/file"
         start_line: 1
         end_line: 2
     - license: "license 2.2"
       location:
-        path: "fakepath"
+        path: "path/to/another/file"
         start_line: 3
         end_line: 4
     copyrights:
     - statement: "copyright 3"
       location:
-        path: "fakepath"
+        path: "path/to/file"
         start_line: 1
         end_line: 2
     - statement: "copyright 4"
       location:
-        path: "fakepath"
+        path: "path/to/another/file"
         start_line: 3
         end_line: 4
     errors:
