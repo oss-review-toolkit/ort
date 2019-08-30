@@ -298,8 +298,8 @@ scanner:
             - statement: "Copyright (c) example authors."
               locations:
               - path: "file.java"
-                start_line: 0
-                end_line: 0
+                start_line: 1
+                end_line: 1
           - license: "MIT"
             locations:
             - path: "file1.java"
@@ -312,8 +312,8 @@ scanner:
             - statement: "Copyright (c) example authors."
               locations:
               - path: "file1.java"
-                start_line: 0
-                end_line: 0
+                start_line: 1
+                end_line: 1
     - id: "Maven:junit:junit:4.12"
       results:
       - provenance:
