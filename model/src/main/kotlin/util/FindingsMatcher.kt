@@ -33,7 +33,7 @@ import kotlin.math.absoluteValue
 /**
  * A class for matching copyright findings to license findings.
  */
-class CopyrightToLicenseFindingsMatcher(
+class FindingsMatcher(
     private val licenseFileMatcher: LicenseFileMatcher = LicenseFileMatcher.DEFAULT_MATCHER
 ) {
     /**

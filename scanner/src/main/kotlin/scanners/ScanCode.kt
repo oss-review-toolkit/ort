@@ -33,7 +33,7 @@ import com.here.ort.model.ScannerDetails
 import com.here.ort.model.TextLocation
 import com.here.ort.model.config.ScannerConfiguration
 import com.here.ort.model.jsonMapper
-import com.here.ort.model.util.CopyrightToLicenseFindingsMatcher
+import com.here.ort.model.util.FindingsMatcher
 import com.here.ort.scanner.AbstractScannerFactory
 import com.here.ort.scanner.HTTP_CACHE_PATH
 import com.here.ort.scanner.LocalScanner
@@ -81,7 +81,7 @@ import okio.sink
 class ScanCode(
     name: String,
     config: ScannerConfiguration,
-    private val copyrightToLicenseFindingsMatcher: CopyrightToLicenseFindingsMatcher
+    private val findingsMatcher: FindingsMatcher
 ) : LocalScanner(name, config) {
     class Factory : AbstractScannerFactory<ScanCode>("ScanCode") {
         override fun create(config: ScannerConfiguration) = ScanCode(scannerName, config)
@@ -241,7 +241,7 @@ class ScanCode(
     constructor(
         name: String,
         config: ScannerConfiguration
-    ) : this(name, config, CopyrightToLicenseFindingsMatcher())
+    ) : this(name, config, FindingsMatcher())
 
     override fun command(workingDir: File?) = if (Os.isWindows) "scancode.bat" else "scancode"
 
@@ -452,5 +452,5 @@ class ScanCode(
      * Associate copyright findings to license findings throughout the whole result.
      */
     internal fun associateFindings(result: JsonNode): SortedSet<LicenseFindings> =
-        copyrightToLicenseFindingsMatcher.match(getLicenseFindings(result), getCopyrightFindings(result))
+        findingsMatcher.match(getLicenseFindings(result), getCopyrightFindings(result))
 }
