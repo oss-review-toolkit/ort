@@ -47,6 +47,9 @@ import com.vdurmont.semver4j.Requirement
 import java.io.File
 import java.util.SortedSet
 
+/**
+ * The [Cargo](https://doc.rust-lang.org/cargo/) package manager for Rust.
+ */
 class Cargo(
     name: String,
     analyzerRoot: File,
