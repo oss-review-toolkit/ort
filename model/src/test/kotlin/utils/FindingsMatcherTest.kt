@@ -22,7 +22,7 @@ package com.here.ort.model.utils
 import com.here.ort.model.CopyrightFinding
 import com.here.ort.model.LicenseFinding
 import com.here.ort.model.TextLocation
-import com.here.ort.model.util.CopyrightToLicenseFindingsMatcher
+import com.here.ort.model.util.FindingsMatcher
 import com.here.ort.spdx.LicenseFileMatcher
 import io.kotlintest.matchers.collections.shouldContainExactlyInAnyOrder
 
@@ -49,8 +49,8 @@ private fun createCopyrightFinding(statement: String, path: String, line: Int) =
         )
     )
 
-class CopyrightToLicenseFindingsMatcherTest : WordSpec({
-    val matcher = CopyrightToLicenseFindingsMatcher(LicenseFileMatcher("a/LICENSE"))
+class FindingsMatcherTest : WordSpec({
+    val matcher = FindingsMatcher(LicenseFileMatcher("a/LICENSE"))
 
     "getRootLicense()" should {
         "return the license of the file matched by the license file matcher" {
