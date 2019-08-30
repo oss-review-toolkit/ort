@@ -31,7 +31,9 @@ import java.util.SortedSet
 import kotlin.math.absoluteValue
 
 /**
- * A class for matching copyright findings to license findings.
+ * A class for matching copyright findings to license findings. Copyright statements may be matched either to license
+ * findings located nearby in the same file or to a license found in a license file whereas the given
+ * [licenseFileMatcher] determines whether a file is a license file.
  */
 class FindingsMatcher(
     private val licenseFileMatcher: LicenseFileMatcher = LicenseFileMatcher.DEFAULT_MATCHER
@@ -120,6 +122,13 @@ class FindingsMatcher(
         return copyrightsForLicenses
     }
 
+    /**
+    * Return an association of the given [copyrightFindings] to [licenseFindings].
+    * Copyright findings are either matched to a license finding located nearby in the same file or to a license
+    * finding pointing to a license file. Whether a file is a license file is determined by the
+    * [LicenseFileMatcher] passed to the constructor. All [CopyrightFindings]s which cannot be matched are not present
+    * in the result while all given [licenseFindings] are contained in the result exactly once.
+    */
     fun match(licenseFindings: Collection<LicenseFinding>, copyrightFindings: Collection<CopyrightFinding>):
             SortedSet<LicenseFindings> {
         val licenseFindingsByPath = licenseFindings.groupBy { it.location.path }
