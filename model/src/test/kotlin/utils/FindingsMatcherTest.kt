@@ -49,42 +49,48 @@ private fun createCopyrightFinding(statement: String, path: String, line: Int) =
         )
     )
 
-class FindingsMatcherTest : WordSpec({
-    val matcher = FindingsMatcher(LicenseFileMatcher("a/LICENSE"))
-
-    "getRootLicense()" should {
-        "return the license of the file matched by the license file matcher" {
-            val licenseFindings = listOf(
-                createLicenseFinding(license = "abc", path = "a/LICENSE")
-            )
-
-            matcher.getRootLicense(licenseFindings) shouldBe "abc"
-        }
-
-        "return an empty string when no file is matched by the license file matcher" {
-            val licenseFindings = listOf(
-                createLicenseFinding(license = "abc", path = "b/LICENSE")
-            )
-
-            matcher.getRootLicense(licenseFindings) shouldBe ""
-        }
+class FindingsMatcherTest : WordSpec() {
+    companion object {
+        private const val LICENSE_FILE_PATH = "a/LICENSE"
     }
 
-    "getClosestCopyrightStatements()" should {
-        "return exactly the statements within the line threshold" {
-            val lineThreshold = 5
-            val licenseStartLine = 10
-            val copyrightFindings = listOf(
-                createCopyrightFinding("statement1", "path", licenseStartLine - lineThreshold - 1),
-                createCopyrightFinding("statement2", "path", licenseStartLine - lineThreshold),
-                createCopyrightFinding("statement3", "path", licenseStartLine + lineThreshold),
-                createCopyrightFinding("statement4", "path", licenseStartLine + lineThreshold + 1)
-            )
+    private val matcher = FindingsMatcher(LicenseFileMatcher(LICENSE_FILE_PATH))
 
-            val result = matcher.getClosestCopyrightStatements(copyrightFindings, licenseStartLine, lineThreshold)
-                .map { it.statement }
+    init {
+        "getRootLicense()" should {
+            "return the license of the file matched by the license file matcher" {
+                val licenseFindings = listOf(
+                    createLicenseFinding(license = "abc", path = LICENSE_FILE_PATH)
+                )
 
-            result shouldContainExactlyInAnyOrder listOf("statement2", "statement3")
+                matcher.getRootLicense(licenseFindings) shouldBe "abc"
+            }
+
+            "return an empty string when no file is matched by the license file matcher" {
+                val licenseFindings = listOf(
+                    createLicenseFinding(license = "abc", path = "b/LICENSE")
+                )
+
+                matcher.getRootLicense(licenseFindings) shouldBe ""
+            }
+        }
+
+        "getClosestCopyrightStatements()" should {
+            "return exactly the statements within the line threshold" {
+                val lineThreshold = 5
+                val licenseStartLine = 10
+                val copyrightFindings = listOf(
+                    createCopyrightFinding("statement1", "path", licenseStartLine - lineThreshold - 1),
+                    createCopyrightFinding("statement2", "path", licenseStartLine - lineThreshold),
+                    createCopyrightFinding("statement3", "path", licenseStartLine + lineThreshold),
+                    createCopyrightFinding("statement4", "path", licenseStartLine + lineThreshold + 1)
+                )
+
+                val result = matcher.getClosestCopyrightStatements(copyrightFindings, licenseStartLine, lineThreshold)
+                    .map { it.statement }
+
+                result shouldContainExactlyInAnyOrder listOf("statement2", "statement3")
+            }
         }
     }
-})
+}
