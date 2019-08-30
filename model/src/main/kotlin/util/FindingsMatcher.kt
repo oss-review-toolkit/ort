@@ -36,8 +36,17 @@ import kotlin.math.absoluteValue
  * [licenseFileMatcher] determines whether a file is a license file.
  */
 class FindingsMatcher(
-    private val licenseFileMatcher: LicenseFileMatcher = LicenseFileMatcher.DEFAULT_MATCHER
+    private val licenseFileMatcher: LicenseFileMatcher = LicenseFileMatcher.DEFAULT_MATCHER,
+    private val toleranceLines: Int = TOLERANCE_LINES_DEFAULT_VALUE
 ) {
+    companion object {
+        /**
+         * The default value of 5 seems to be a good balance between associating findings separated by blank lines but
+         * not skipping complete license statements.
+         */
+        const val TOLERANCE_LINES_DEFAULT_VALUE = 5
+    }
+
     /**
      * Get the license found in one of the commonly named license files, if any, or an empty string otherwise.
      */
@@ -50,13 +59,11 @@ class FindingsMatcher(
 
     /**
      * Return the copyright statements in the vicinity, as specified by [toleranceLines], of [licenseStartLine] in the
-     * file [path]. The default value of [toleranceLines] is set to 5 which seems to be a good balance between
-     * associating findings separated by blank lines but not skipping complete license statements.
+     * file [path].
      */
     internal fun getClosestCopyrightStatements(
         copyrights: List<CopyrightFinding>,
-        licenseStartLine: Int,
-        toleranceLines: Int = 5
+        licenseStartLine: Int
     ): SortedSet<CopyrightFindings> {
         require(
             copyrights.map { it.location.path }.distinct().size <= 1,
