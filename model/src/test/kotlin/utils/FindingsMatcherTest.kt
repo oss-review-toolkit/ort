@@ -52,10 +52,13 @@ private fun createCopyrightFinding(statement: String, path: String, line: Int) =
 class FindingsMatcherTest : WordSpec() {
     companion object {
         private const val LICENSE_FILE_PATH = "a/LICENSE"
-        private const val THRESHOLD = 5
+        private const val THRESHOLD = FindingsMatcher.TOLERANCE_LINES_DEFAULT_VALUE + 13
     }
 
-    private val matcher = FindingsMatcher(LicenseFileMatcher(LICENSE_FILE_PATH))
+    private val matcher = FindingsMatcher(
+        licenseFileMatcher = LicenseFileMatcher(LICENSE_FILE_PATH),
+        toleranceLines = THRESHOLD
+    )
 
     init {
         "getRootLicense()" should {
@@ -78,7 +81,7 @@ class FindingsMatcherTest : WordSpec() {
 
         "getClosestCopyrightStatements()" should {
             "return exactly the statements within the line threshold" {
-                val licenseStartLine = 10
+                val licenseStartLine = THRESHOLD + 20
                 val copyrightFindings = listOf(
                     createCopyrightFinding("statement1", "path", licenseStartLine - THRESHOLD - 1),
                     createCopyrightFinding("statement2", "path", licenseStartLine - THRESHOLD),
@@ -86,7 +89,7 @@ class FindingsMatcherTest : WordSpec() {
                     createCopyrightFinding("statement4", "path", licenseStartLine + THRESHOLD + 1)
                 )
 
-                val result = matcher.getClosestCopyrightStatements(copyrightFindings, licenseStartLine, THRESHOLD)
+                val result = matcher.getClosestCopyrightStatements(copyrightFindings, licenseStartLine)
                     .map { it.statement }
 
                 result shouldContainExactlyInAnyOrder listOf("statement2", "statement3")
