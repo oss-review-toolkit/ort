@@ -79,11 +79,11 @@ class NoticeReporter : Reporter() {
     override val defaultFilename = "NOTICE"
 
     override fun generateReport(
+        outputStream: OutputStream,
         ortResult: OrtResult,
         resolutionProvider: ResolutionProvider,
         licenseTextProvider: LicenseTextProvider,
         copyrightGarbage: CopyrightGarbage,
-        outputStream: OutputStream,
         postProcessingScript: String?
     ) {
         requireNotNull(ortResult.scanner) {
