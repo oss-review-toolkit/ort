@@ -37,14 +37,14 @@ import kotlin.math.absoluteValue
  */
 class FindingsMatcher(
     private val licenseFileMatcher: LicenseFileMatcher = LicenseFileMatcher.DEFAULT_MATCHER,
-    private val toleranceLines: Int = TOLERANCE_LINES_DEFAULT_VALUE
+    private val toleranceLines: Int = DEFAULT_TOLERANCE_LINES
 ) {
     companion object {
         /**
          * The default value of 5 seems to be a good balance between associating findings separated by blank lines but
          * not skipping complete license statements.
          */
-        const val TOLERANCE_LINES_DEFAULT_VALUE = 5
+        const val DEFAULT_TOLERANCE_LINES = 5
     }
 
     /**
