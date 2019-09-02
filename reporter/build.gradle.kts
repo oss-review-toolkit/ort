@@ -1,5 +1,6 @@
 val apachePoiVersion: String by project
 val apachePoiSchemasVersion: String by project
+val cyclonedxCoreJavaVersion: String by project
 val flexmarkVersion: String by project
 val hamcrestCoreVersion: String by project
 val kotlinxHtmlVersion: String by project
@@ -39,6 +40,8 @@ dependencies {
 
     implementation("org.apache.poi:ooxml-schemas:$apachePoiSchemasVersion")
     implementation("org.apache.poi:poi-ooxml:$apachePoiVersion")
+
+    implementation("org.cyclonedx:cyclonedx-core-java:$cyclonedxCoreJavaVersion")
 
     implementation("org.jetbrains.kotlinx:kotlinx-html-jvm:$kotlinxHtmlVersion")
 
