@@ -24,22 +24,25 @@ import com.here.ort.model.LicenseFinding
 import com.here.ort.model.TextLocation
 import com.here.ort.model.util.FindingsMatcher
 import com.here.ort.spdx.LicenseFileMatcher
-import io.kotlintest.matchers.collections.shouldContainExactlyInAnyOrder
 
+import io.kotlintest.matchers.collections.shouldContainExactlyInAnyOrder
 import io.kotlintest.shouldBe
 import io.kotlintest.specs.WordSpec
 
-private fun createLicenseFinding(license: String, path: String) =
+import kotlin.random.Random
+import kotlin.random.nextInt
+
+private fun createLicenseFinding(license: String, path: String, line: Int = Random.nextInt(1..1000)) =
     LicenseFinding(
         license = license,
         location = TextLocation(
             path = path,
-            startLine = 1,
-            endLine = 2
+            startLine = line,
+            endLine = line
         )
     )
 
-private fun createCopyrightFinding(statement: String, path: String, line: Int) =
+private fun createCopyrightFinding(statement: String, path: String, line: Int = Random.nextInt(1..1000)) =
     CopyrightFinding(
         statement = statement,
         location = TextLocation(
