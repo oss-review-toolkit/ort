@@ -1,3 +1,4 @@
+com.here.ort.reporter.reporters.CycloneDxReporter
 com.here.ort.reporter.reporters.ExcelReporter
 com.here.ort.reporter.reporters.NoticeReporter
 com.here.ort.reporter.reporters.StaticHtmlReporter
