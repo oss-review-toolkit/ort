@@ -33,11 +33,11 @@ class WebAppReporter : Reporter() {
     override val defaultFilename = "scan-report-web-app.html"
 
     override fun generateReport(
+        outputStream: OutputStream,
         ortResult: OrtResult,
         resolutionProvider: ResolutionProvider,
         licenseTextProvider: LicenseTextProvider,
         copyrightGarbage: CopyrightGarbage,
-        outputStream: OutputStream,
         postProcessingScript: String?
     ) {
         val template = javaClass.classLoader.getResource("scan-report-template.html").readText()

@@ -21,7 +21,6 @@ package com.here.ort.reporter.reporters
 
 import com.here.ort.model.OrtResult
 import com.here.ort.model.config.CopyrightGarbage
-import com.here.ort.reporter.DefaultResolutionProvider
 import com.here.ort.utils.test.readOrtResult
 
 import io.kotlintest.matchers.string.shouldContain
@@ -128,12 +127,10 @@ class NoticeReporterTest : WordSpec() {
     ) =
         ByteArrayOutputStream().also { outputStream ->
             NoticeReporter().generateReport(
-                ortResult,
-                DefaultResolutionProvider(),
-                DefaultLicenseTextProvider(),
-                copyrightGarbage,
                 outputStream,
-                postProcessingScript
+                ortResult,
+                copyrightGarbage = copyrightGarbage,
+                postProcessingScript = postProcessingScript
             )
         }.toString("UTF-8")
 }

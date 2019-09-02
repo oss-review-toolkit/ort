@@ -155,11 +155,11 @@ object ReporterCommand : CommandWithHelp() {
             @Suppress("TooGenericExceptionCaught")
             try {
                 reporter.generateReport(
+                    file.outputStream(),
                     ortResult,
                     resolutionProvider,
                     DefaultLicenseTextProvider(customLicenseTextsDir),
                     copyrightGarbage,
-                    file.outputStream(),
                     postProcessingScript?.expandTilde()?.readText()
                 )
 

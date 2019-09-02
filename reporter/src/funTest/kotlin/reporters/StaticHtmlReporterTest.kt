@@ -21,7 +21,6 @@ package com.here.ort.reporter.reporters
 
 import com.here.ort.model.Environment
 import com.here.ort.model.OrtResult
-import com.here.ort.model.config.CopyrightGarbage
 import com.here.ort.reporter.DefaultResolutionProvider
 import com.here.ort.utils.test.patchExpectedResult
 import com.here.ort.utils.test.readOrtResult
@@ -64,11 +63,9 @@ class StaticHtmlReporterTest : WordSpec() {
             ortResult.repository.config.resolutions?.let { resolutionProvider.add(it) }
 
             StaticHtmlReporter().generateReport(
+                outputStream,
                 ortResult,
-                resolutionProvider,
-                DefaultLicenseTextProvider(),
-                CopyrightGarbage(),
-                outputStream
+                resolutionProvider
             )
         }.toString("UTF-8")
 }

@@ -19,8 +19,6 @@
 
 package com.here.ort.reporter.reporters
 
-import com.here.ort.model.config.CopyrightGarbage
-import com.here.ort.reporter.DefaultResolutionProvider
 import com.here.ort.utils.test.readOrtResult
 
 import io.kotlintest.shouldNotBe
@@ -33,11 +31,8 @@ class WebAppReporterTest : WordSpec({
         "successfully export to a web application" {
             val outputStream = ByteArrayOutputStream()
             WebAppReporter().generateReport(
-                readOrtResult("../scanner/src/funTest/assets/file-counter-expected-output-for-analyzer-result.yml"),
-                DefaultResolutionProvider(),
-                DefaultLicenseTextProvider(),
-                CopyrightGarbage(),
-                outputStream
+                outputStream,
+                readOrtResult("../scanner/src/funTest/assets/file-counter-expected-output-for-analyzer-result.yml")
             )
             outputStream.size() shouldNotBe 0
         }
