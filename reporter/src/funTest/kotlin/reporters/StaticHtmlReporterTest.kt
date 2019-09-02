@@ -33,39 +33,37 @@ import java.io.File
 
 import javax.xml.transform.TransformerFactory
 
-class StaticHtmlReporterTest : WordSpec() {
-    init {
-        "StaticHtmlReporter" should {
-            "use the Apache Xalan TransformerFactory" {
-                val transformer = TransformerFactory.newInstance().newTransformer()
+private fun generateReport(ortResult: OrtResult) =
+    ByteArrayOutputStream().also { outputStream ->
+        val resolutionProvider = DefaultResolutionProvider()
+        ortResult.repository.config.resolutions?.let { resolutionProvider.add(it) }
 
-                transformer.javaClass.name shouldBe "org.apache.xalan.transformer.TransformerIdentityImpl"
-            }
+        StaticHtmlReporter().generateReport(
+            outputStream,
+            ortResult,
+            resolutionProvider
+        )
+    }.toString("UTF-8")
 
-            "successfully export to a static HTML page" {
-                val timeStampPattern = Regex("\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(\\.\\d+)?Z")
-                val ortResult = readOrtResult("src/funTest/assets/static-html-reporter-test-input.yml")
-                val actualReport = generateReport(ortResult).replace(timeStampPattern, "<REPLACE_TIMESTAMP>")
+class StaticHtmlReporterTest : WordSpec({
+    "StaticHtmlReporter" should {
+        "use the Apache Xalan TransformerFactory" {
+            val transformer = TransformerFactory.newInstance().newTransformer()
 
-                val expectedReport = patchExpectedResult(
-                    File("src/funTest/assets/static-html-reporter-test-expected-output.html"),
-                    "<REPLACE_ORT_VERSION>" to Environment().ortVersion
-                )
+            transformer.javaClass.name shouldBe "org.apache.xalan.transformer.TransformerIdentityImpl"
+        }
 
-                actualReport shouldBe expectedReport
-            }
+        "successfully export to a static HTML page" {
+            val timeStampPattern = Regex("\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(\\.\\d+)?Z")
+            val ortResult = readOrtResult("src/funTest/assets/static-html-reporter-test-input.yml")
+            val actualReport = generateReport(ortResult).replace(timeStampPattern, "<REPLACE_TIMESTAMP>")
+
+            val expectedReport = patchExpectedResult(
+                File("src/funTest/assets/static-html-reporter-test-expected-output.html"),
+                "<REPLACE_ORT_VERSION>" to Environment().ortVersion
+            )
+
+            actualReport shouldBe expectedReport
         }
     }
-
-    private fun generateReport(ortResult: OrtResult) =
-        ByteArrayOutputStream().also { outputStream ->
-            val resolutionProvider = DefaultResolutionProvider()
-            ortResult.repository.config.resolutions?.let { resolutionProvider.add(it) }
-
-            StaticHtmlReporter().generateReport(
-                outputStream,
-                ortResult,
-                resolutionProvider
-            )
-        }.toString("UTF-8")
-}
+})
