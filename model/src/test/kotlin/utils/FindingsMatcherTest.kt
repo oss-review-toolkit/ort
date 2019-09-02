@@ -54,17 +54,13 @@ private fun createCopyrightFinding(statement: String, path: String, line: Int = 
     )
 
 class FindingsMatcherTest : WordSpec() {
-    companion object {
-        private const val LICENSE_FILE_PATH = "a/LICENSE"
-    }
-
-    private val matcher = FindingsMatcher(LicenseFileMatcher(LICENSE_FILE_PATH))
+    private val matcher = FindingsMatcher(LicenseFileMatcher("a/LICENSE"))
 
     init {
         "getRootLicense()" should {
             "return the license of the file matched by the license file matcher" {
                 val licenseFindings = listOf(
-                    createLicenseFinding(license = "abc", path = LICENSE_FILE_PATH)
+                    createLicenseFinding(license = "abc", path = "a/LICENSE")
                 )
 
                 matcher.getRootLicense(licenseFindings) shouldBe "abc"
