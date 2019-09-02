@@ -31,106 +31,104 @@ import io.kotlintest.specs.WordSpec
 import java.io.ByteArrayOutputStream
 import java.io.File
 
-class NoticeReporterTest : WordSpec() {
-    init {
-        "NoticeReporter" should {
-            "generate the correct license notes" {
-                val expectedText = File("src/funTest/assets/NPM-is-windows-1.0.2-expected-NOTICE").readText()
-                val ortResult = readOrtResult("src/funTest/assets/NPM-is-windows-1.0.2-scan-result.json")
+private fun generateReport(
+    ortResult: OrtResult,
+    copyrightGarbage: CopyrightGarbage = CopyrightGarbage(),
+    postProcessingScript: String? = null
+) =
+    ByteArrayOutputStream().also { outputStream ->
+        NoticeReporter().generateReport(
+            outputStream,
+            ortResult,
+            copyrightGarbage = copyrightGarbage,
+            postProcessingScript = postProcessingScript
+        )
+    }.toString("UTF-8")
 
-                val report = generateReport(ortResult)
+class NoticeReporterTest : WordSpec({
+    "NoticeReporter" should {
+        "generate the correct license notes" {
+            val expectedText = File("src/funTest/assets/NPM-is-windows-1.0.2-expected-NOTICE").readText()
+            val ortResult = readOrtResult("src/funTest/assets/NPM-is-windows-1.0.2-scan-result.json")
 
-                report shouldBe expectedText
-            }
+            val report = generateReport(ortResult)
 
-            "contain all licenses without excludes" {
-                val expectedText = File("src/funTest/assets/npm-test-without-exclude-expected-NOTICE").readText()
-                val ortResult = readOrtResult("src/funTest/assets/npm-test-without-exclude-scan-results.yml")
+            report shouldBe expectedText
+        }
 
-                val report = generateReport(ortResult)
+        "contain all licenses without excludes" {
+            val expectedText = File("src/funTest/assets/npm-test-without-exclude-expected-NOTICE").readText()
+            val ortResult = readOrtResult("src/funTest/assets/npm-test-without-exclude-scan-results.yml")
 
-                report shouldBe expectedText
-            }
+            val report = generateReport(ortResult)
 
-            "not contain licenses of excluded packages" {
-                val expectedText = File("src/funTest/assets/npm-test-with-exclude-expected-NOTICE").readText()
-                val ortResult = readOrtResult("src/funTest/assets/npm-test-with-exclude-scan-results.yml")
+            report shouldBe expectedText
+        }
 
-                val report = generateReport(ortResult)
+        "not contain licenses of excluded packages" {
+            val expectedText = File("src/funTest/assets/npm-test-with-exclude-expected-NOTICE").readText()
+            val ortResult = readOrtResult("src/funTest/assets/npm-test-with-exclude-scan-results.yml")
 
-                report shouldBe expectedText
-            }
+            val report = generateReport(ortResult)
 
-            "evaluate the provided post-processing script" {
-                val expectedText = File("src/funTest/assets/post-processed-expected-NOTICE").readText()
-                val ortResult = readOrtResult("src/funTest/assets/NPM-is-windows-1.0.2-scan-result.json")
+            report shouldBe expectedText
+        }
 
-                val postProcessingScript = """
-                    headers = listOf("Header 1\n", "Header 2\n")
-                    findings = noticeReport.findings.filter { (_, copyrights) -> copyrights.isEmpty() }.toSortedMap()
-                    footers = listOf("Footer 1\n", "Footer 2\n")
-                """.trimIndent()
+        "evaluate the provided post-processing script" {
+            val expectedText = File("src/funTest/assets/post-processed-expected-NOTICE").readText()
+            val ortResult = readOrtResult("src/funTest/assets/NPM-is-windows-1.0.2-scan-result.json")
 
-                val report = generateReport(ortResult, postProcessingScript = postProcessingScript)
+            val postProcessingScript = """
+                headers = listOf("Header 1\n", "Header 2\n")
+                findings = noticeReport.findings.filter { (_, copyrights) -> copyrights.isEmpty() }.toSortedMap()
+                footers = listOf("Footer 1\n", "Footer 2\n")
+            """.trimIndent()
 
-                report shouldBe expectedText
-            }
+            val report = generateReport(ortResult, postProcessingScript = postProcessingScript)
 
-            "return the input as-is for an empty post-processing script" {
-                val expectedText =
-                    File("src/funTest/assets/NPM-is-windows-1.0.2-expected-NOTICE_UNPROCESSED").readText()
-                val ortResult = readOrtResult("src/funTest/assets/NPM-is-windows-1.0.2-scan-result.json")
+            report shouldBe expectedText
+        }
 
-                val report = generateReport(ortResult, postProcessingScript = "")
+        "return the input as-is for an empty post-processing script" {
+            val expectedText =
+                File("src/funTest/assets/NPM-is-windows-1.0.2-expected-NOTICE_UNPROCESSED").readText()
+            val ortResult = readOrtResult("src/funTest/assets/NPM-is-windows-1.0.2-scan-result.json")
 
-                report shouldBe expectedText
-            }
+            val report = generateReport(ortResult, postProcessingScript = "")
 
-            "contain a copyright statement if not contained in copyright garbage" {
-                val ortResult = readOrtResult("src/funTest/assets/npm-test-with-exclude-scan-results.yml")
+            report shouldBe expectedText
+        }
 
-                val report = generateReport(ortResult, CopyrightGarbage())
+        "contain a copyright statement if not contained in copyright garbage" {
+            val ortResult = readOrtResult("src/funTest/assets/npm-test-with-exclude-scan-results.yml")
 
-                report.shouldContain("\nCopyright (c) Felix Bohm")
-            }
+            val report = generateReport(ortResult, CopyrightGarbage())
 
-            "contain a copyright statement if only its prefix is contained in copyright garbage" {
-                val ortResult = readOrtResult("src/funTest/assets/npm-test-with-exclude-scan-results.yml")
+            report.shouldContain("\nCopyright (c) Felix Bohm")
+        }
 
-                val report = generateReport(ortResult, CopyrightGarbage("Copyright (c) Fel"))
+        "contain a copyright statement if only its prefix is contained in copyright garbage" {
+            val ortResult = readOrtResult("src/funTest/assets/npm-test-with-exclude-scan-results.yml")
 
-                report.shouldContain("\nCopyright (c) Felix Bohm")
-            }
+            val report = generateReport(ortResult, CopyrightGarbage("Copyright (c) Fel"))
 
-            "contain a copyright statement if only its super string contained in copyright garbage" {
-                val ortResult = readOrtResult("src/funTest/assets/npm-test-with-exclude-scan-results.yml")
+            report.shouldContain("\nCopyright (c) Felix Bohm")
+        }
 
-                val report = generateReport(ortResult, CopyrightGarbage("Copyright (c) Felix BohmX"))
+        "contain a copyright statement if only its super string contained in copyright garbage" {
+            val ortResult = readOrtResult("src/funTest/assets/npm-test-with-exclude-scan-results.yml")
 
-                report.shouldContain("\nCopyright (c) Felix Bohm")
-            }
+            val report = generateReport(ortResult, CopyrightGarbage("Copyright (c) Felix BohmX"))
 
-            "not contain a copyright statement if it is contained in garbage" {
-                val ortResult = readOrtResult("src/funTest/assets/npm-test-with-exclude-scan-results.yml")
+            report.shouldContain("\nCopyright (c) Felix Bohm")
+        }
 
-                val report = generateReport(ortResult, CopyrightGarbage("Copyright (c) Felix Bohm"))
+        "not contain a copyright statement if it is contained in garbage" {
+            val ortResult = readOrtResult("src/funTest/assets/npm-test-with-exclude-scan-results.yml")
 
-                report.shouldNotContain("\nCopyright (c) Felix Bohm")
-            }
+            val report = generateReport(ortResult, CopyrightGarbage("Copyright (c) Felix Bohm"))
+
+            report.shouldNotContain("\nCopyright (c) Felix Bohm")
         }
     }
-
-    private fun generateReport(
-        ortResult: OrtResult,
-        copyrightGarbage: CopyrightGarbage = CopyrightGarbage(),
-        postProcessingScript: String? = null
-    ) =
-        ByteArrayOutputStream().also { outputStream ->
-            NoticeReporter().generateReport(
-                outputStream,
-                ortResult,
-                copyrightGarbage = copyrightGarbage,
-                postProcessingScript = postProcessingScript
-            )
-        }.toString("UTF-8")
-}
+})
