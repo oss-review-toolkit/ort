@@ -19,26 +19,21 @@
 
 package com.here.ort.reporter.reporters
 
-import com.here.ort.model.OrtResult
 import com.here.ort.model.config.CopyrightGarbage
-import com.here.ort.model.readValue
 import com.here.ort.reporter.DefaultResolutionProvider
+import com.here.ort.utils.test.readOrtResult
 
 import io.kotlintest.shouldNotBe
 import io.kotlintest.specs.WordSpec
 
 import java.io.ByteArrayOutputStream
-import java.io.File
 
 class WebAppReporterTest : WordSpec({
-    val ortResult = File("../scanner/src/funTest/assets/file-counter-expected-output-for-analyzer-result.yml")
-        .readValue<OrtResult>()
-
     "WebAppReporter" should {
         "successfully export to a web application" {
             val outputStream = ByteArrayOutputStream()
             WebAppReporter().generateReport(
-                ortResult,
+                readOrtResult("../scanner/src/funTest/assets/file-counter-expected-output-for-analyzer-result.yml"),
                 DefaultResolutionProvider(),
                 DefaultLicenseTextProvider(),
                 CopyrightGarbage(),
