@@ -77,8 +77,8 @@ class FindingsMatcherTest : WordSpec() {
 
         "getClosestCopyrightStatements()" should {
             "return exactly the statements within the line threshold" {
-                // Use an arbitrary license start line that is larger than DEFAULT_TOLERANCE_LINES.
-                val licenseStartLine = 20
+                // Use an arbitrary license start line that is clearly larger than DEFAULT_TOLERANCE_LINES.
+                val licenseStartLine = Random.nextInt(2 * DEFAULT_TOLERANCE_LINES, 20 * DEFAULT_TOLERANCE_LINES)
                 val copyrightFindings = listOf(
                     createCopyrightFinding("statement1", "path", licenseStartLine - DEFAULT_TOLERANCE_LINES - 1),
                     createCopyrightFinding("statement2", "path", licenseStartLine - DEFAULT_TOLERANCE_LINES),
