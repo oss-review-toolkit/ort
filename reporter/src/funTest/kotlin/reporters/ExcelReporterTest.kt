@@ -21,10 +21,9 @@ package com.here.ort.reporter.reporters
 
 import bad.robot.excel.matchers.WorkbookMatcher.sameWorkbook
 
-import com.here.ort.model.OrtResult
 import com.here.ort.model.config.CopyrightGarbage
-import com.here.ort.model.readValue
 import com.here.ort.reporter.DefaultResolutionProvider
+import com.here.ort.utils.test.readOrtResult
 
 import io.kotlintest.specs.WordSpec
 
@@ -36,14 +35,11 @@ import org.apache.poi.ss.usermodel.WorkbookFactory
 import org.hamcrest.MatcherAssert.assertThat
 
 class ExcelReporterTest : WordSpec({
-    val ortResult = File("../scanner/src/funTest/assets/file-counter-expected-output-for-analyzer-result.yml")
-        .readValue<OrtResult>()
-
     "ExcelReporter" should {
         "successfully export to an Excel sheet".config(enabled = false) {
             val outputStream = ByteArrayOutputStream()
             ExcelReporter().generateReport(
-                ortResult,
+                readOrtResult("../scanner/src/funTest/assets/file-counter-expected-output-for-analyzer-result.yml"),
                 DefaultResolutionProvider(),
                 DefaultLicenseTextProvider(),
                 CopyrightGarbage(),

@@ -22,9 +22,9 @@ package com.here.ort.reporter.reporters
 import com.here.ort.model.Environment
 import com.here.ort.model.OrtResult
 import com.here.ort.model.config.CopyrightGarbage
-import com.here.ort.model.readValue
 import com.here.ort.reporter.DefaultResolutionProvider
 import com.here.ort.utils.test.patchExpectedResult
+import com.here.ort.utils.test.readOrtResult
 
 import io.kotlintest.shouldBe
 import io.kotlintest.specs.WordSpec
@@ -35,8 +35,6 @@ import java.io.File
 import javax.xml.transform.TransformerFactory
 
 class StaticHtmlReporterTest : WordSpec() {
-    private val ortResult = File("src/funTest/assets/static-html-reporter-test-input.yml").readValue<OrtResult>()
-
     init {
         "StaticHtmlReporter" should {
             "use the Apache Xalan TransformerFactory" {
@@ -47,6 +45,7 @@ class StaticHtmlReporterTest : WordSpec() {
 
             "successfully export to a static HTML page" {
                 val timeStampPattern = Regex("\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(\\.\\d+)?Z")
+                val ortResult = readOrtResult("src/funTest/assets/static-html-reporter-test-input.yml")
                 val actualReport = generateReport(ortResult).replace(timeStampPattern, "<REPLACE_TIMESTAMP>")
 
                 val expectedReport = patchExpectedResult(

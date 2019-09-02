@@ -21,8 +21,8 @@ package com.here.ort.reporter.reporters
 
 import com.here.ort.model.OrtResult
 import com.here.ort.model.config.CopyrightGarbage
-import com.here.ort.model.readValue
 import com.here.ort.reporter.DefaultResolutionProvider
+import com.here.ort.utils.test.readOrtResult
 
 import io.kotlintest.matchers.string.shouldContain
 import io.kotlintest.matchers.string.shouldNotContain
@@ -33,10 +33,6 @@ import java.io.ByteArrayOutputStream
 import java.io.File
 
 class NoticeReporterTest : WordSpec() {
-    companion object {
-        private fun readOrtResult(file: String) = File(file).readValue<OrtResult>()
-    }
-
     init {
         "NoticeReporter" should {
             "generate the correct license notes" {

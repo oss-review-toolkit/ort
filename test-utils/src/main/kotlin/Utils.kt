@@ -19,8 +19,10 @@
 
 package com.here.ort.utils.test
 
+import com.here.ort.model.OrtResult
 import com.here.ort.model.config.AnalyzerConfiguration
 import com.here.ort.model.config.RepositoryConfiguration
+import com.here.ort.model.readValue
 
 import java.io.File
 import java.time.Instant
@@ -75,3 +77,5 @@ fun patchActualResult(result: String, patchDownloadTime: Boolean = false, patchS
         .replaceIf(patchDownloadTime, DOWNLOAD_TIME_REGEX) { "${it.groupValues[1]}: \"${Instant.EPOCH}\"" }
         .replaceIf(patchStartAndEndTime, START_AND_END_TIME_REGEX) { "${it.groupValues[1]}: \"${Instant.EPOCH}\"" }
 }
+
+fun readOrtResult(file: String) = File(file).readValue<OrtResult>()
