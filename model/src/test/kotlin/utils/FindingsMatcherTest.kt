@@ -23,7 +23,7 @@ import com.here.ort.model.CopyrightFinding
 import com.here.ort.model.LicenseFinding
 import com.here.ort.model.TextLocation
 import com.here.ort.model.util.FindingsMatcher
-import com.here.ort.model.util.FindingsMatcher.Companion.TOLERANCE_LINES_DEFAULT_VALUE
+import com.here.ort.model.util.FindingsMatcher.Companion.DEFAULT_TOLERANCE_LINES
 import com.here.ort.spdx.LicenseFileMatcher
 
 import io.kotlintest.matchers.collections.shouldContainExactlyInAnyOrder
@@ -81,13 +81,13 @@ class FindingsMatcherTest : WordSpec() {
 
         "getClosestCopyrightStatements()" should {
             "return exactly the statements within the line threshold" {
-                // Use an arbitrary license start line that is larger than TOLERANCE_LINES_DEFAULT_VALUE.
+                // Use an arbitrary license start line that is larger than DEFAULT_TOLERANCE_LINES.
                 val licenseStartLine = 20
                 val copyrightFindings = listOf(
-                    createCopyrightFinding("statement1", "path", licenseStartLine - TOLERANCE_LINES_DEFAULT_VALUE - 1),
-                    createCopyrightFinding("statement2", "path", licenseStartLine - TOLERANCE_LINES_DEFAULT_VALUE),
-                    createCopyrightFinding("statement3", "path", licenseStartLine + TOLERANCE_LINES_DEFAULT_VALUE),
-                    createCopyrightFinding("statement4", "path", licenseStartLine + TOLERANCE_LINES_DEFAULT_VALUE + 1)
+                    createCopyrightFinding("statement1", "path", licenseStartLine - DEFAULT_TOLERANCE_LINES - 1),
+                    createCopyrightFinding("statement2", "path", licenseStartLine - DEFAULT_TOLERANCE_LINES),
+                    createCopyrightFinding("statement3", "path", licenseStartLine + DEFAULT_TOLERANCE_LINES),
+                    createCopyrightFinding("statement4", "path", licenseStartLine + DEFAULT_TOLERANCE_LINES + 1)
                 )
 
                 val result = matcher.getClosestCopyrightStatements(copyrightFindings, licenseStartLine)
