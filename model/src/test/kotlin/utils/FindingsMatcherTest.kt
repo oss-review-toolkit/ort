@@ -23,6 +23,7 @@ import com.here.ort.model.CopyrightFinding
 import com.here.ort.model.LicenseFinding
 import com.here.ort.model.TextLocation
 import com.here.ort.model.util.FindingsMatcher
+import com.here.ort.model.util.FindingsMatcher.Companion.TOLERANCE_LINES_DEFAULT_VALUE
 import com.here.ort.spdx.LicenseFileMatcher
 
 import io.kotlintest.matchers.collections.shouldContainExactlyInAnyOrder
@@ -55,13 +56,9 @@ private fun createCopyrightFinding(statement: String, path: String, line: Int = 
 class FindingsMatcherTest : WordSpec() {
     companion object {
         private const val LICENSE_FILE_PATH = "a/LICENSE"
-        private const val THRESHOLD = FindingsMatcher.TOLERANCE_LINES_DEFAULT_VALUE + 13
     }
 
-    private val matcher = FindingsMatcher(
-        licenseFileMatcher = LicenseFileMatcher(LICENSE_FILE_PATH),
-        toleranceLines = THRESHOLD
-    )
+    private val matcher = FindingsMatcher(LicenseFileMatcher(LICENSE_FILE_PATH))
 
     init {
         "getRootLicense()" should {
@@ -84,12 +81,13 @@ class FindingsMatcherTest : WordSpec() {
 
         "getClosestCopyrightStatements()" should {
             "return exactly the statements within the line threshold" {
-                val licenseStartLine = THRESHOLD + 20
+                // Use an arbitrary license start line that is larger than TOLERANCE_LINES_DEFAULT_VALUE.
+                val licenseStartLine = 20
                 val copyrightFindings = listOf(
-                    createCopyrightFinding("statement1", "path", licenseStartLine - THRESHOLD - 1),
-                    createCopyrightFinding("statement2", "path", licenseStartLine - THRESHOLD),
-                    createCopyrightFinding("statement3", "path", licenseStartLine + THRESHOLD),
-                    createCopyrightFinding("statement4", "path", licenseStartLine + THRESHOLD + 1)
+                    createCopyrightFinding("statement1", "path", licenseStartLine - TOLERANCE_LINES_DEFAULT_VALUE - 1),
+                    createCopyrightFinding("statement2", "path", licenseStartLine - TOLERANCE_LINES_DEFAULT_VALUE),
+                    createCopyrightFinding("statement3", "path", licenseStartLine + TOLERANCE_LINES_DEFAULT_VALUE),
+                    createCopyrightFinding("statement4", "path", licenseStartLine + TOLERANCE_LINES_DEFAULT_VALUE + 1)
                 )
 
                 val result = matcher.getClosestCopyrightStatements(copyrightFindings, licenseStartLine)
