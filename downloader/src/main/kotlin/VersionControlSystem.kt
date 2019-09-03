@@ -222,6 +222,10 @@ abstract class VersionControlSystem {
 
                 else -> {
                     when {
+                        vcsUrl.endsWith(".git") -> {
+                            VcsInfo(VcsType.GIT, normalizeVcsUrl(vcsUrl), "", null, "")
+                        }
+
                         vcsUrl.contains(".git/") -> {
                             val url = normalizeVcsUrl(vcsUrl.substringBefore(".git/"))
                             val path = vcsUrl.substringAfter(".git/")
