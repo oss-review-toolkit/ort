@@ -303,6 +303,7 @@ object SpdxDeclaredLicenseMapping {
         "http://www.apache.org/licenses/LICENSE-2.0" to APACHE_2_0.toExpression(),
         "http://www.apache.org/licenses/LICENSE-2.0.txt" to APACHE_2_0.toExpression(),
         "http://www.gnu.org/copyleft/lesser.html" to LGPL_3_0_ONLY.toExpression(),
+        "https://licenses.nuget.org/MIT" to MIT.toExpression(),
         "https://raw.github.com/RDFLib/rdflib/master/LICENSE" to BSD_3_CLAUSE.toExpression(),
         "new BSD" to BSD_3_CLAUSE.toExpression(),
         "public domain, Python, 2-Clause BSD, GPL 3 (see COPYING.txt)"
