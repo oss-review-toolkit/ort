@@ -23,7 +23,6 @@ import com.here.ort.model.Identifier
 import com.here.ort.model.OrtIssue
 import com.here.ort.model.OrtResult
 import com.here.ort.model.RuleViolation
-import com.here.ort.model.config.Excludes
 import com.here.ort.reporter.ResolutionProvider
 import com.here.ort.reporter.reporters.ReportTableModel.DependencyRow
 import com.here.ort.reporter.reporters.ReportTableModel.IssueRow
@@ -82,7 +81,7 @@ class ReportTableModelMapper(private val resolutionProvider: ResolutionProvider)
         }
 
         val analyzerResult = ortResult.analyzer!!.result
-        val excludes = ortResult.repository.config.excludes ?: Excludes()
+        val excludes = ortResult.getExcludes()
 
         val scanRecord = ortResult.scanner?.results
         val licenseFindings = ortResult.collectLicenseFindings()

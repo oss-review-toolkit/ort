@@ -419,7 +419,8 @@ data class OrtResult(
 
     fun getPackage(id: Identifier): CuratedPackage? = packages[id]?.curatedPackage
 
-    private fun getPackages(): Set<CuratedPackage> = analyzer?.result?.packages ?: emptySet()
+    @JsonIgnore
+    fun getPackages(): Set<CuratedPackage> = analyzer?.result?.packages ?: emptySet()
 
     /**
      * Return all [Project]s contained in this [OrtResult].
@@ -433,5 +434,6 @@ data class OrtResult(
     @JsonIgnore
     fun getRuleViolations(): List<RuleViolation> = evaluator?.violations.orEmpty()
 
-    private fun getExcludes(): Excludes = repository.config.excludes ?: Excludes()
+    @JsonIgnore
+    fun getExcludes(): Excludes = repository.config.excludes ?: Excludes()
 }
