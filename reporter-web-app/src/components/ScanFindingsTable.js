@@ -88,7 +88,7 @@ class ScanFindingsTable extends React.Component {
                 dataIndex: 'value',
                 filteredValue: filter.value,
                 filters: (() => pkg.detectedLicenses.map(license => ({ text: license, value: license })))(),
-                onFilter: (value, record) => record.license.includes(value),
+                onFilter: (value, record) => record.value.includes(value),
                 key: 'value',
                 render: value => (
                     <div className="ort-word-break-wrap">
