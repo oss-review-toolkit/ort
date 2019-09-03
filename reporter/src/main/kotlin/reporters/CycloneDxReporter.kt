@@ -55,7 +55,7 @@ class CycloneDxReporter : Reporter() {
     ) {
         val bom = Bom().apply { serialNumber = "urn:uuid:${UUID.randomUUID()}" }
 
-        ortResult.analyzer?.result?.packages?.forEach { (pkg, _) ->
+        ortResult.getPackages().forEach { (pkg, _) ->
             // TODO: We should actually use the concluded license expression here, but we first need a workflow to
             //       ensure it is being set.
             val licenseNames = ortResult.getDetectedLicensesForId(pkg.id) + pkg.declaredLicensesProcessed.allLicenses
