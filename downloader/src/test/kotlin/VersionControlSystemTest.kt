@@ -67,6 +67,19 @@ class VersionControlSystemTest : WordSpec({
     "splitUrl" should {
         "split paths from a URL to a Git repository" {
             val actual = VersionControlSystem.splitUrl(
+                "https://git-wip-us.apache.org/repos/asf/zeppelin.git"
+            )
+            val expected = VcsInfo(
+                type = VcsType.GIT,
+                url = "https://git-wip-us.apache.org/repos/asf/zeppelin.git",
+                revision = "",
+                path = ""
+            )
+            actual shouldBe expected
+        }
+
+        "split paths from a URL to a Git repository with path" {
+            val actual = VersionControlSystem.splitUrl(
                 "https://git-wip-us.apache.org/repos/asf/zeppelin.git/zeppelin-interpreter"
             )
             val expected = VcsInfo(
