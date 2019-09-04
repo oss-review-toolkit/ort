@@ -155,11 +155,11 @@ class BoyterLc(name: String, config: ScannerConfiguration) : LocalScanner(name, 
 
     override fun generateSummary(startTime: Instant, endTime: Instant, scanPath: File, result: JsonNode): ScanSummary {
         val licenseFindings = result.flatMap { file ->
+            val filePath = File(file["Directory"].textValue(), file["Filename"].textValue())
             file["LicenseGuesses"].map {
-                // TODO: Set the location of the finding properly
                 LicenseFinding(
                     license = getSpdxLicenseIdString(it["LicenseId"].textValue()),
-                    location = TextLocation(path = "", startLine = -1, endLine = -1)
+                    location = TextLocation(relativizePath(scanPath, filePath), -1, -1)
                 )
             }
         }.toSortedSet()
