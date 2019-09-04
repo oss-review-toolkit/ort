@@ -117,7 +117,7 @@ class Licensee(name: String, config: ScannerConfiguration) : LocalScanner(name, 
             if (isSuccess) {
                 stdoutFile.copyTo(resultsFile)
                 val result = getRawResult(resultsFile)
-                val summary = generateSummary(startTime, endTime, result)
+                val summary = generateSummary(startTime, endTime, path, result)
                 return ScanResult(Provenance(), getDetails(), summary, result)
             } else {
                 throw ScanException(errorMessage)
@@ -132,7 +132,7 @@ class Licensee(name: String, config: ScannerConfiguration) : LocalScanner(name, 
             EMPTY_JSON_NODE
         }
 
-    override fun generateSummary(startTime: Instant, endTime: Instant, result: JsonNode): ScanSummary {
+    override fun generateSummary(startTime: Instant, endTime: Instant, scanPath: File, result: JsonNode): ScanSummary {
         val matchedFiles = result["matched_files"]
         val licenseFindings = matchedFiles.map {
             // TODO: Set the location of the finding properly

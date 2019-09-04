@@ -134,7 +134,7 @@ class Askalono(name: String, config: ScannerConfiguration) : LocalScanner(name, 
             if (isSuccess) {
                 stdoutFile.copyTo(resultsFile)
                 val result = getRawResult(resultsFile)
-                val summary = generateSummary(startTime, endTime, result)
+                val summary = generateSummary(startTime, endTime, path, result)
                 return ScanResult(Provenance(), getDetails(), summary, result)
             } else {
                 throw ScanException(errorMessage)
@@ -154,7 +154,7 @@ class Askalono(name: String, config: ScannerConfiguration) : LocalScanner(name, 
         return yamlMapper.createArrayNode().apply { addAll(yamlNodes) }
     }
 
-    override fun generateSummary(startTime: Instant, endTime: Instant, result: JsonNode): ScanSummary {
+    override fun generateSummary(startTime: Instant, endTime: Instant, scanPath: File, result: JsonNode): ScanSummary {
         val licenseFindings = result.map {
             // TODO: Set the location of the finding properly
             LicenseFinding(

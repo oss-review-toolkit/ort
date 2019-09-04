@@ -138,7 +138,7 @@ class BoyterLc(name: String, config: ScannerConfiguration) : LocalScanner(name, 
         with(process) {
             if (isSuccess) {
                 val result = getRawResult(resultsFile)
-                val summary = generateSummary(startTime, endTime, result)
+                val summary = generateSummary(startTime, endTime, path, result)
                 return ScanResult(Provenance(), getDetails(), summary, result)
             } else {
                 throw ScanException(errorMessage)
@@ -153,7 +153,7 @@ class BoyterLc(name: String, config: ScannerConfiguration) : LocalScanner(name, 
             EMPTY_JSON_NODE
         }
 
-    override fun generateSummary(startTime: Instant, endTime: Instant, result: JsonNode): ScanSummary {
+    override fun generateSummary(startTime: Instant, endTime: Instant, scanPath: File, result: JsonNode): ScanSummary {
         val licenseFindings = result.flatMap { file ->
             file["LicenseGuesses"].map {
                 // TODO: Set the location of the finding properly
