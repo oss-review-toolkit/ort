@@ -69,6 +69,9 @@ class ScanPathTest : StringSpec() {
             resultsFile.isFile shouldBe true
             result.summary.fileCount shouldBe 1
             result.summary.licenses shouldBe sortedSetOf("Apache-2.0", "ECL-2.0")
+            result.summary.licenseFindings.all {
+                it.location.path == licenseFilePath.invariantSeparatorsPath
+            } shouldBe true
         }
 
         "Licensee recognizes our own LICENSE".config(tags = setOf(ExpensiveTag)) {
