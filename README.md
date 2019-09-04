@@ -282,8 +282,8 @@ to support multiple output formats.
 Currently, the following report formats are supported (reporter names are case-insensitive):
 
 * [CycloneDX](https://cyclonedx.org/) BOM (`-f CycloneDx`)
-* Excel sheet (`-f Excel`)
-* NOTICE file (`-f Notice`)
+* [Excel](https://products.office.com/excel) sheet (`-f Excel`)
+* [NOTICE](http://www.apache.org/dev/licensing-howto.html) file (`-f Notice`)
 * Static HTML (`-f StaticHtml`)
 * Web App (`-f WebApp`)
 
