@@ -389,6 +389,26 @@ abstract class LocalScanner(name: String, config: ScannerConfiguration) : Scanne
     internal abstract fun getRawResult(resultsFile: File): JsonNode
 
     /**
+     * Return the invariant relative path of the [scanned file][scannedFilename] with respect to the
+     * [scanned path][scanPath].
+     */
+    protected fun relativizePath(scanPath: File, scannedFilename: File): String {
+        val relativePathToScannedFile = if (scanPath.isFile) {
+            if (scanPath.isAbsolute) {
+                // Scanners are called with the current working directory unchanged. To avoid absolute paths, make a
+                // path to a file relative to the current working directory in the absence of a scan root directory.
+                scanPath.relativeTo(File(".").absoluteFile)
+            } else {
+                scanPath
+            }
+        } else {
+            scannedFilename.relativeTo(scanPath.absoluteFile)
+        }
+
+        return relativePathToScannedFile.invariantSeparatorsPath
+    }
+
+    /**
      * Generate a [ScanSummary] from the scanner's raw [result] for scanning [scanPath] and the [startTime] / [endTime].
      */
     internal abstract fun generateSummary(startTime: Instant, endTime: Instant, scanPath: File, result: JsonNode):
