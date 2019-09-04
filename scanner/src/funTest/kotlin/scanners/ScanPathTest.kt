@@ -46,7 +46,7 @@ class ScanPathTest : StringSpec() {
     }
 
     init {
-        "Askalono recognizes our own LICENSE".config(tags = setOf(ExpensiveTag)) {
+        "Askalono recognizes our own LICENSE" {
             val scanner = Askalono("Askalono", config)
             val resultsFile = outputDir.resolve("${scanner.scannerName}.${scanner.resultFileExt}")
 
@@ -60,7 +60,7 @@ class ScanPathTest : StringSpec() {
             } shouldBe true
         }
 
-        "BoyterLc recognizes our own LICENSE".config(tags = setOf(ExpensiveTag)) {
+        "BoyterLc recognizes our own LICENSE" {
             val scanner = BoyterLc("BoyterLc", config)
             val resultsFile = outputDir.resolve("${scanner.scannerName}.${scanner.resultFileExt}")
 
