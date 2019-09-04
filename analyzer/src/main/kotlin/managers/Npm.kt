@@ -70,10 +70,10 @@ import okhttp3.Request
  */
 open class Npm(
     name: String,
-    analyzerRoot: File,
+    analysisRoot: File,
     analyzerConfig: AnalyzerConfiguration,
     repoConfig: RepositoryConfiguration
-) : PackageManager(name, analyzerRoot, analyzerConfig, repoConfig), CommandLineTool {
+) : PackageManager(name, analysisRoot, analyzerConfig, repoConfig), CommandLineTool {
     companion object {
         private val HTTP_REGEX = Regex("^https?://.+$")
     }
@@ -82,10 +82,10 @@ open class Npm(
         override val globsForDefinitionFiles = listOf("package.json")
 
         override fun create(
-            analyzerRoot: File,
+            analysisRoot: File,
             analyzerConfig: AnalyzerConfiguration,
             repoConfig: RepositoryConfiguration
-        ) = Npm(managerName, analyzerRoot, analyzerConfig, repoConfig)
+        ) = Npm(managerName, analysisRoot, analyzerConfig, repoConfig)
     }
 
     /**
@@ -489,7 +489,7 @@ open class Npm(
      */
     private fun installDependencies(workingDir: File) {
         if (!hasLockFile(workingDir) && !analyzerConfig.allowDynamicVersions) {
-            val relativePathString = workingDir.relativeTo(analyzerRoot).invariantSeparatorsPath
+            val relativePathString = workingDir.relativeTo(analysisRoot).invariantSeparatorsPath
                 .takeUnless { it.isEmpty() } ?: "."
 
             throw IllegalArgumentException(

@@ -41,10 +41,10 @@ import java.util.Properties
  */
 class Sbt(
     name: String,
-    analyzerRoot: File,
+    analysisRoot: File,
     analyzerConfig: AnalyzerConfiguration,
     repoConfig: RepositoryConfiguration
-) : PackageManager(name, analyzerRoot, analyzerConfig, repoConfig), CommandLineTool {
+) : PackageManager(name, analysisRoot, analyzerConfig, repoConfig), CommandLineTool {
     companion object {
         private val VERSION_REGEX = Regex("\\[info]\\s+(\\d+\\.\\d+\\.[^\\s]+)")
         private val PROJECT_REGEX = Regex("\\[info] \t [ *] (.+)")
@@ -68,10 +68,10 @@ class Sbt(
         override val globsForDefinitionFiles = listOf("build.sbt", "build.scala")
 
         override fun create(
-            analyzerRoot: File,
+            analysisRoot: File,
             analyzerConfig: AnalyzerConfiguration,
             repoConfig: RepositoryConfiguration
-        ) = Sbt(managerName, analyzerRoot, analyzerConfig, repoConfig)
+        ) = Sbt(managerName, analysisRoot, analyzerConfig, repoConfig)
     }
 
     override fun command(workingDir: File?) = if (Os.isWindows) "sbt.bat" else "sbt"
@@ -187,7 +187,7 @@ class Sbt(
 
     override fun resolveDependencies(definitionFiles: List<File>) =
         // Simply pass on the list of POM files to Maven, ignoring the SBT build files here.
-        Maven(managerName, analyzerRoot, analyzerConfig, repoConfig)
+        Maven(managerName, analysisRoot, analyzerConfig, repoConfig)
             .enableSbtMode()
             .resolveDependencies(definitionFiles)
 

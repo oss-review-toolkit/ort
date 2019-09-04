@@ -66,18 +66,18 @@ import okhttp3.Request
  */
 class Bundler(
     name: String,
-    analyzerRoot: File,
+    analysisRoot: File,
     analyzerConfig: AnalyzerConfiguration,
     repoConfig: RepositoryConfiguration
-) : PackageManager(name, analyzerRoot, analyzerConfig, repoConfig), CommandLineTool {
+) : PackageManager(name, analysisRoot, analyzerConfig, repoConfig), CommandLineTool {
     class Factory : AbstractPackageManagerFactory<Bundler>("Bundler") {
         override val globsForDefinitionFiles = listOf("Gemfile")
 
         override fun create(
-            analyzerRoot: File,
+            analysisRoot: File,
             analyzerConfig: AnalyzerConfiguration,
             repoConfig: RepositoryConfiguration
-        ) = Bundler(managerName, analyzerRoot, analyzerConfig, repoConfig)
+        ) = Bundler(managerName, analysisRoot, analyzerConfig, repoConfig)
     }
 
     override fun command(workingDir: File?) = if (Os.isWindows) "bundle.bat" else "bundle"

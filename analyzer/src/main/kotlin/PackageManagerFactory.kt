@@ -42,11 +42,11 @@ interface PackageManagerFactory {
     val matchersForDefinitionFiles: List<PathMatcher>
 
     /**
-     * Create a [PackageManager] for analyzing the [analyzerRoot] directory using the specified [analyzerConfig] and
+     * Create a [PackageManager] for analyzing the [analysisRoot] directory using the specified [analyzerConfig] and
      * [repoConfig].
      */
     fun create(
-        analyzerRoot: File,
+        analysisRoot: File,
         analyzerConfig: AnalyzerConfiguration,
         repoConfig: RepositoryConfiguration
     ): PackageManager
@@ -71,7 +71,7 @@ abstract class AbstractPackageManagerFactory<out T : PackageManager>(
     }
 
     abstract override fun create(
-        analyzerRoot: File,
+        analysisRoot: File,
         analyzerConfig: AnalyzerConfiguration,
         repoConfig: RepositoryConfiguration
     ): T
