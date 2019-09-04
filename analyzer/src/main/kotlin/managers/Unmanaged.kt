@@ -38,18 +38,18 @@ import java.io.File
  */
 class Unmanaged(
     name: String,
-    analyzerRoot: File,
+    analysisRoot: File,
     analyzerConfig: AnalyzerConfiguration,
     repoConfig: RepositoryConfiguration
-) : PackageManager(name, analyzerRoot, analyzerConfig, repoConfig) {
+) : PackageManager(name, analysisRoot, analyzerConfig, repoConfig) {
     class Factory : AbstractPackageManagerFactory<Unmanaged>("Unmanaged") {
         override val globsForDefinitionFiles = emptyList<String>()
 
         override fun create(
-            analyzerRoot: File,
+            analysisRoot: File,
             analyzerConfig: AnalyzerConfiguration,
             repoConfig: RepositoryConfiguration
-        ) = Unmanaged(managerName, analyzerRoot, analyzerConfig, repoConfig)
+        ) = Unmanaged(managerName, analysisRoot, analyzerConfig, repoConfig)
     }
 
     /**

@@ -68,18 +68,18 @@ private val EXCLUDED_PACKAGES = setOf(
  */
 class PhpComposer(
     name: String,
-    analyzerRoot: File,
+    analysisRoot: File,
     analyzerConfig: AnalyzerConfiguration,
     repoConfig: RepositoryConfiguration
-) : PackageManager(name, analyzerRoot, analyzerConfig, repoConfig), CommandLineTool {
+) : PackageManager(name, analysisRoot, analyzerConfig, repoConfig), CommandLineTool {
     class Factory : AbstractPackageManagerFactory<PhpComposer>("PhpComposer") {
         override val globsForDefinitionFiles = listOf("composer.json")
 
         override fun create(
-            analyzerRoot: File,
+            analysisRoot: File,
             analyzerConfig: AnalyzerConfiguration,
             repoConfig: RepositoryConfiguration
-        ) = PhpComposer(managerName, analyzerRoot, analyzerConfig, repoConfig)
+        ) = PhpComposer(managerName, analysisRoot, analyzerConfig, repoConfig)
     }
 
     override fun command(workingDir: File?) =

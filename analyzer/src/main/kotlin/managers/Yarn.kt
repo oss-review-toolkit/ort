@@ -34,18 +34,18 @@ import java.io.File
  */
 class Yarn(
     name: String,
-    analyzerRoot: File,
+    analysisRoot: File,
     analyzerConfig: AnalyzerConfiguration,
     repoConfig: RepositoryConfiguration
-) : Npm(name, analyzerRoot, analyzerConfig, repoConfig) {
+) : Npm(name, analysisRoot, analyzerConfig, repoConfig) {
     class Factory : AbstractPackageManagerFactory<Yarn>("Yarn") {
         override val globsForDefinitionFiles = listOf("package.json")
 
         override fun create(
-            analyzerRoot: File,
+            analysisRoot: File,
             analyzerConfig: AnalyzerConfiguration,
             repoConfig: RepositoryConfiguration
-        ) = Yarn(managerName, analyzerRoot, analyzerConfig, repoConfig)
+        ) = Yarn(managerName, analysisRoot, analyzerConfig, repoConfig)
     }
 
     override val installParameters = arrayOf("--ignore-scripts", "--ignore-engines")

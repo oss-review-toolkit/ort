@@ -63,10 +63,10 @@ import org.gradle.tooling.GradleConnector
  */
 class Gradle(
     name: String,
-    analyzerRoot: File,
+    analysisRoot: File,
     analyzerConfig: AnalyzerConfiguration,
     repoConfig: RepositoryConfiguration
-) : PackageManager(name, analyzerRoot, analyzerConfig, repoConfig) {
+) : PackageManager(name, analysisRoot, analyzerConfig, repoConfig) {
     class Factory : AbstractPackageManagerFactory<Gradle>("Gradle") {
         // Gradle prefers Groovy ".gradle" files over Kotlin ".gradle.kts" files, but "build" files have to come before
         // "settings" files as we should consider "settings" files only if the same directory does not also contain a
@@ -77,10 +77,10 @@ class Gradle(
         )
 
         override fun create(
-            analyzerRoot: File,
+            analysisRoot: File,
             analyzerConfig: AnalyzerConfiguration,
             repoConfig: RepositoryConfiguration
-        ) = Gradle(managerName, analyzerRoot, analyzerConfig, repoConfig)
+        ) = Gradle(managerName, analysisRoot, analyzerConfig, repoConfig)
     }
 
     /**

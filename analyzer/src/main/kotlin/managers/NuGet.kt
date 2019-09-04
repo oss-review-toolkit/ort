@@ -46,10 +46,10 @@ import java.io.File
  */
 class NuGet(
     name: String,
-    analyzerRoot: File,
+    analysisRoot: File,
     analyzerConfig: AnalyzerConfiguration,
     repoConfig: RepositoryConfiguration
-) : PackageManager(name, analyzerRoot, analyzerConfig, repoConfig) {
+) : PackageManager(name, analysisRoot, analyzerConfig, repoConfig) {
     companion object {
         fun mapPackageReferences(definitionFile: File): Map<String, String> {
             val map = mutableMapOf<String, String>()
@@ -68,10 +68,10 @@ class NuGet(
         override val globsForDefinitionFiles = listOf("packages.config")
 
         override fun create(
-            analyzerRoot: File,
+            analysisRoot: File,
             analyzerConfig: AnalyzerConfiguration,
             repoConfig: RepositoryConfiguration
-        ) = NuGet(managerName, analyzerRoot, analyzerConfig, repoConfig)
+        ) = NuGet(managerName, analysisRoot, analyzerConfig, repoConfig)
     }
 
     // See https://docs.microsoft.com/en-us/nuget/reference/packages-config.
@@ -98,7 +98,7 @@ class NuGet(
             id = Identifier(
                 type = managerName,
                 namespace = "",
-                name = definitionFile.relativeTo(analyzerRoot).invariantSeparatorsPath,
+                name = definitionFile.relativeTo(analysisRoot).invariantSeparatorsPath,
                 version = ""
             ),
             definitionFilePath = VersionControlSystem.getPathInfo(definitionFile).path,

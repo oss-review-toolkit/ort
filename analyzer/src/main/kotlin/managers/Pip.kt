@@ -144,18 +144,18 @@ object PythonVersion : CommandLineTool {
  */
 class Pip(
     name: String,
-    analyzerRoot: File,
+    analysisRoot: File,
     analyzerConfig: AnalyzerConfiguration,
     repoConfig: RepositoryConfiguration
-) : PackageManager(name, analyzerRoot, analyzerConfig, repoConfig), CommandLineTool {
+) : PackageManager(name, analysisRoot, analyzerConfig, repoConfig), CommandLineTool {
     class Factory : AbstractPackageManagerFactory<Pip>("PIP") {
         override val globsForDefinitionFiles = listOf("requirements*.txt", "setup.py")
 
         override fun create(
-            analyzerRoot: File,
+            analysisRoot: File,
             analyzerConfig: AnalyzerConfiguration,
             repoConfig: RepositoryConfiguration
-        ) = Pip(managerName, analyzerRoot, analyzerConfig, repoConfig)
+        ) = Pip(managerName, analysisRoot, analyzerConfig, repoConfig)
     }
 
     companion object {
@@ -297,7 +297,7 @@ class Pip(
             Pair(true, false) -> setupName
             // In case of only a requirements file without further meta-data, use the relative path to the analyzer
             // root as a unique project name.
-            Pair(false, true) -> definitionFile.relativeTo(analyzerRoot).invariantSeparatorsPath
+            Pair(false, true) -> definitionFile.relativeTo(analysisRoot).invariantSeparatorsPath
             Pair(true, true) -> "$setupName-requirements$requirementsSuffix"
             else -> throw IllegalArgumentException("Unable to determine a project name for '$definitionFile'.")
         }

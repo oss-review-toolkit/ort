@@ -52,18 +52,18 @@ import java.util.SortedSet
  */
 class Cargo(
     name: String,
-    analyzerRoot: File,
+    analysisRoot: File,
     analyzerConfig: AnalyzerConfiguration,
     repoConfig: RepositoryConfiguration
-) : PackageManager(name, analyzerRoot, analyzerConfig, repoConfig), CommandLineTool {
+) : PackageManager(name, analysisRoot, analyzerConfig, repoConfig), CommandLineTool {
     class Factory : AbstractPackageManagerFactory<Cargo>("Cargo") {
         override val globsForDefinitionFiles = listOf("Cargo.toml")
 
         override fun create(
-            analyzerRoot: File,
+            analysisRoot: File,
             analyzerConfig: AnalyzerConfiguration,
             repoConfig: RepositoryConfiguration
-        ) = Cargo(managerName, analyzerRoot, analyzerConfig, repoConfig)
+        ) = Cargo(managerName, analysisRoot, analyzerConfig, repoConfig)
     }
 
     companion object {
@@ -209,7 +209,7 @@ class Cargo(
     private fun isProjectDependency(id: String) =
         pathDependencyRegex.matchEntire(id)?.groups?.get(1)?.let { match ->
             val packageDir = File(match.value)
-            packageDir.startsWith(analyzerRoot)
+            packageDir.startsWith(analysisRoot)
         } ?: false
 
     override fun resolveDependencies(definitionFile: File): ProjectAnalyzerResult? {

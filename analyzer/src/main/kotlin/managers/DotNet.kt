@@ -46,10 +46,10 @@ import java.io.File
  */
 class DotNet(
     name: String,
-    analyzerRoot: File,
+    analysisRoot: File,
     analyzerConfig: AnalyzerConfiguration,
     repoConfig: RepositoryConfiguration
-) : PackageManager(name, analyzerRoot, analyzerConfig, repoConfig) {
+) : PackageManager(name, analysisRoot, analyzerConfig, repoConfig) {
     companion object {
         fun mapPackageReferences(definitionFile: File): Map<String, String> {
             val map = mutableMapOf<String, String>()
@@ -72,10 +72,10 @@ class DotNet(
         override val globsForDefinitionFiles = listOf("*.csproj", "*.fsproj", "*.vcxproj")
 
         override fun create(
-            analyzerRoot: File,
+            analysisRoot: File,
             analyzerConfig: AnalyzerConfiguration,
             repoConfig: RepositoryConfiguration
-        ) = DotNet(managerName, analyzerRoot, analyzerConfig, repoConfig)
+        ) = DotNet(managerName, analysisRoot, analyzerConfig, repoConfig)
     }
 
     // See https://docs.microsoft.com/en-us/nuget/consume-packages/package-references-in-project-files.
@@ -102,7 +102,7 @@ class DotNet(
             id = Identifier(
                 type = managerName,
                 namespace = "",
-                name = definitionFile.relativeTo(analyzerRoot).invariantSeparatorsPath,
+                name = definitionFile.relativeTo(analysisRoot).invariantSeparatorsPath,
                 version = ""
             ),
             definitionFilePath = VersionControlSystem.getPathInfo(definitionFile).path,

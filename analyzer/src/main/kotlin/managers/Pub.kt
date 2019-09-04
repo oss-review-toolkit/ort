@@ -61,18 +61,18 @@ const val PUB_LOCK_FILE = "pubspec.lock"
  */
 class Pub(
     name: String,
-    analyzerRoot: File,
+    analysisRoot: File,
     analyzerConfig: AnalyzerConfiguration,
     repoConfig: RepositoryConfiguration
-) : PackageManager(name, analyzerRoot, analyzerConfig, repoConfig), CommandLineTool {
+) : PackageManager(name, analysisRoot, analyzerConfig, repoConfig), CommandLineTool {
     class Factory : AbstractPackageManagerFactory<Pub>("Pub") {
         override val globsForDefinitionFiles = listOf("pubspec.yaml")
 
         override fun create(
-            analyzerRoot: File,
+            analysisRoot: File,
             analyzerConfig: AnalyzerConfiguration,
             repoConfig: RepositoryConfiguration
-        ) = Pub(managerName, analyzerRoot, analyzerConfig, repoConfig)
+        ) = Pub(managerName, analysisRoot, analyzerConfig, repoConfig)
     }
 
     /**
