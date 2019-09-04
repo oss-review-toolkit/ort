@@ -389,7 +389,8 @@ abstract class LocalScanner(name: String, config: ScannerConfiguration) : Scanne
     internal abstract fun getRawResult(resultsFile: File): JsonNode
 
     /**
-     * Generate a [ScanSummary] from the scanner's raw [result] and the scan [startTime] / [endTime].
+     * Generate a [ScanSummary] from the scanner's raw [result] for scanning [scanPath] and the [startTime] / [endTime].
      */
-    internal abstract fun generateSummary(startTime: Instant, endTime: Instant, result: JsonNode): ScanSummary
+    internal abstract fun generateSummary(startTime: Instant, endTime: Instant, scanPath: File, result: JsonNode):
+            ScanSummary
 }

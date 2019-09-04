@@ -64,7 +64,7 @@ class FileCounter(name: String, config: ScannerConfiguration) : LocalScanner(nam
         val endTime = Instant.now()
 
         val result = getRawResult(resultsFile)
-        val summary = generateSummary(startTime, endTime, result)
+        val summary = generateSummary(startTime, endTime, path, result)
         return ScanResult(Provenance(), getDetails(), summary, result)
     }
 
@@ -75,7 +75,7 @@ class FileCounter(name: String, config: ScannerConfiguration) : LocalScanner(nam
             EMPTY_JSON_NODE
         }
 
-    override fun generateSummary(startTime: Instant, endTime: Instant, result: JsonNode): ScanSummary {
+    override fun generateSummary(startTime: Instant, endTime: Instant, scanPath: File, result: JsonNode): ScanSummary {
         val fileCount = result["file_count"].intValue()
         return ScanSummary(
             startTime = startTime,
