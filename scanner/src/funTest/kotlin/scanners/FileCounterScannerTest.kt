@@ -31,7 +31,7 @@ import io.kotlintest.specs.StringSpec
 
 import java.io.File
 
-class FileCounterTest : StringSpec() {
+class FileCounterScannerTest : StringSpec() {
     private val assetsDir = File("src/funTest/assets")
 
     private lateinit var outputRootDir: File
