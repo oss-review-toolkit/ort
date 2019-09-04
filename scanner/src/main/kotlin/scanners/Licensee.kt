@@ -135,10 +135,10 @@ class Licensee(name: String, config: ScannerConfiguration) : LocalScanner(name, 
     override fun generateSummary(startTime: Instant, endTime: Instant, scanPath: File, result: JsonNode): ScanSummary {
         val matchedFiles = result["matched_files"]
         val licenseFindings = matchedFiles.map {
-            // TODO: Set the location of the finding properly
+            val filePath = File(it["filename"].textValue())
             LicenseFinding(
                 license = getSpdxLicenseIdString(it["matched_license"].textValue()),
-                location = TextLocation(path = "", startLine = -1, endLine = -1)
+                location = TextLocation(relativizePath(scanPath, filePath), -1, -1)
             )
         }.toSortedSet()
 
