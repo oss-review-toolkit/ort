@@ -281,7 +281,7 @@ to support multiple output formats.
 
 Currently, the following report formats are supported (reporter names are case-insensitive):
 
-* [CycloneDX BOM](https://cyclonedx.org/) (`-f CycloneDx`)
+* [CycloneDX](https://cyclonedx.org/) BOM (`-f CycloneDx`)
 * Excel sheet (`-f Excel`)
 * NOTICE file (`-f Notice`)
 * Static HTML (`-f StaticHtml`)
