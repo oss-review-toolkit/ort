@@ -33,6 +33,7 @@ import org.cyclonedx.BomGeneratorFactory
 import org.cyclonedx.CycloneDxSchema
 import org.cyclonedx.model.Bom
 import org.cyclonedx.model.Component
+import org.cyclonedx.model.ExternalReference
 import org.cyclonedx.model.Hash
 import org.cyclonedx.model.License
 import org.cyclonedx.model.LicenseChoice
@@ -41,6 +42,16 @@ import org.cyclonedx.model.LicenseText
 class CycloneDxReporter : Reporter() {
     override val reporterName = "CycloneDx"
     override val defaultFilename = "bom.xml"
+
+    private fun Bom.addExternalReference(type: ExternalReference.Type, url: String, comment: String? = null) {
+        if (url.isBlank()) return
+
+        addExternalReference(ExternalReference().also { ref ->
+            ref.type = type
+            ref.url = url
+            if (!comment.isNullOrBlank()) ref.comment = comment
+        })
+    }
 
     private fun mapHash(hash: com.here.ort.model.Hash): Hash? =
         enumValues<Hash.Algorithm>().find { it.spec == hash.algorithm.toString() }?.let { Hash(it, hash.value) }
@@ -54,6 +65,58 @@ class CycloneDxReporter : Reporter() {
         postProcessingScript: String?
     ) {
         val bom = Bom().apply { serialNumber = "urn:uuid:${UUID.randomUUID()}" }
+
+        // Add information about projects as external references at the BOM level.
+        val rootProject = ortResult.getProjects().singleOrNull()
+        if (rootProject != null) {
+            // If there is only one project, it is clear that a single BOM should be created for that single project.
+            bom.addExternalReference(
+                ExternalReference.Type.VCS,
+                rootProject.vcsProcessed.url,
+                "URL to the project's ${rootProject.vcsProcessed.type} repository"
+            )
+
+            bom.addExternalReference(
+                ExternalReference.Type.WEBSITE,
+                rootProject.homepageUrl
+            )
+
+            val licenseNames = ortResult.getDetectedLicensesForId(rootProject.id) +
+                    rootProject.declaredLicensesProcessed.allLicenses
+            bom.addExternalReference(
+                ExternalReference.Type.LICENSE,
+                licenseNames.joinToString(", ")
+            )
+
+            bom.addExternalReference(
+                ExternalReference.Type.BUILD_SYSTEM,
+                rootProject.id.type
+            )
+
+            bom.addExternalReference(
+                ExternalReference.Type.OTHER,
+                rootProject.id.toPurl(),
+                "Package-URL of the project"
+            )
+        } else {
+            // In case of multiple projects it is not always clear how many BOMs to create, and for which project(s):
+            //
+            // - If a multi-module project only produces a single application that gets distributed, then usually only a
+            //   single BOM for that application is generated.
+            // - If a multi-module project produces multiple applications (e.g. if there is one module per independent
+            //   micro-service), then usually for each project a BOM is generated as there are multiple things being
+            //   distributed.
+            //
+            // As this distinction is hard to make programmatically (without additional information about the
+            // distributable), just create a single BOM for all projects in that case for now. As there also is no
+            // single correct project to pick for adding external references in that case, simply only use the global
+            // repository VCS information here.
+            bom.addExternalReference(
+                ExternalReference.Type.VCS,
+                ortResult.repository.vcsProcessed.url,
+                "URL to the ${ortResult.repository.vcsProcessed.type} repository of the projects"
+            )
+        }
 
         ortResult.getPackages().forEach { (pkg, _) ->
             // TODO: We should actually use the concluded license expression here, but we first need a workflow to
