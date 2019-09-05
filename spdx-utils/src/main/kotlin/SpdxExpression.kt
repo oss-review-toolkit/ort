@@ -126,7 +126,10 @@ sealed class SpdxExpression {
 }
 
 /**
- * An SPDX expression compound of two expressions with an operator.
+ * An SPDX expression compound of a [left] and a [right] expression with an [operator] as defined by version 2.1 of the
+ * [SPDX specification, appendix IV][1].
+ *
+ * [1]: https://spdx.org/spdx-specification-21-web-version#h.jxpfx0ykyb60
  */
 data class SpdxCompoundExpression(
     val left: SpdxExpression,
@@ -171,7 +174,7 @@ data class SpdxCompoundExpression(
 }
 
 /**
- * An SPDX expression for a license exception as defined by version 2.1 of the [SPDX specification, appendix I][1].
+ * An SPDX expression for a license exception [id] as defined by version 2.1 of the [SPDX specification, appendix I][1].
  *
  * [1]: https://spdx.org/spdx-specification-21-web-version#h.ruv3yl8g6czd
  */
@@ -197,7 +200,8 @@ data class SpdxLicenseExceptionExpression(
 }
 
 /**
- * An SPDX expression for a license id as defined by version 2.1 of the [SPDX specification, appendix I][1].
+ * An SPDX expression for a license [id] as defined by version 2.1 of the [SPDX specification, appendix I][1].
+ * [orLaterVersion] indicates whether the license id also describes later versions of the license.
  *
  * [1]: https://spdx.org/spdx-specification-21-web-version#h.luq9dgcle9mo
  */
@@ -237,7 +241,8 @@ data class SpdxLicenseIdExpression(
 }
 
 /**
- * An SPDX expression for a license reference as defined by version 2.1 of the [SPDX specification, appendix IV][1].
+ * An SPDX expression for a license reference [id] as defined by version 2.1 of the
+ * [SPDX specification, appendix IV][1].
  *
  * [1]: https://spdx.org/spdx-specification-21-web-version#h.jxpfx0ykyb60
  */
@@ -274,7 +279,22 @@ enum class SpdxOperator(
      */
     val priority: Int
 ) {
+    /**
+     * The conjunctive binary "AND" operator to construct a new license expression if required to simultaneously comply
+     * with two or more licenses, where both the left and right operands are valid [SpdxExpressions][SpdxExpression].
+     */
     AND(1),
+
+    /**
+     * The disjunctive binary "OR" operator to construct a new license expression if presented with a choice between
+     * two or more licenses, where both the left and right operands are valid [SpdxExpressions][SpdxExpression].
+     */
     OR(0),
+
+    /**
+     * Use the binary "WITH" operator to construct a new license expression if a set of license terms apply except under
+     * special circumstances. The left operand is a [SpdxLicenseIdExpression] value and the right operand is a
+     * [SpdxLicenseExceptionExpression] that represents the special exception terms.
+     */
     WITH(2)
 }
