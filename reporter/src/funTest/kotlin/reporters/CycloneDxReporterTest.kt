@@ -33,6 +33,7 @@ import java.io.ByteArrayOutputStream
 import java.io.File
 
 import org.cyclonedx.BomParser
+import org.cyclonedx.model.ExternalReference
 
 class CycloneDxReporterTest : WordSpec({
     "A generated BOM" should {
@@ -52,19 +53,18 @@ class CycloneDxReporterTest : WordSpec({
 
         "match the result from the official Gradle plugin" {
             val ortResultFile = File("src/funTest/assets/gradle-all-dependencies-result.yml")
+            val ortResult = yamlMapper.readValue(
+                patchExpectedResult(
+                    ortResultFile,
+                    url = "https://github.com/heremaps/oss-review-toolkit.git",
+                    urlProcessed = "https://github.com/heremaps/oss-review-toolkit.git",
+                    revision = "9fded2ad79d07ab5cda44f2549301669ea10442a"
+                ),
+                OrtResult::class.java
+            )
+
             val bomBytesFromReporter = ByteArrayOutputStream().also { outputStream ->
-                CycloneDxReporter().generateReport(
-                    outputStream,
-                    yamlMapper.readValue(
-                        patchExpectedResult(
-                            ortResultFile,
-                            url = "https://github.com/heremaps/oss-review-toolkit.git",
-                            urlProcessed = "https://github.com/heremaps/oss-review-toolkit.git",
-                            revision = "9fded2ad79d07ab5cda44f2549301669ea10442a"
-                        ),
-                        OrtResult::class.java
-                    )
-                )
+                CycloneDxReporter().generateReport(outputStream, ortResult)
             }.toByteArray()
             val bomFromReporter = BomParser().parse(bomBytesFromReporter).apply { components.sortBy { it.name } }
 
@@ -91,6 +91,13 @@ class CycloneDxReporterTest : WordSpec({
                     componentFromReporter.description = null
                 }
             }
+
+            // TODO: Remove this once the official Gradle plugin adds project information as external references.
+            bomFromPlugin.addExternalReference(ExternalReference().apply {
+                type = ExternalReference.Type.VCS
+                url = ortResult.repository.vcsProcessed.url
+                comment = "URL to the Git repository of the projects"
+            })
 
             // Clear out the unique serial numbers for comparison.
             bomFromReporter.serialNumber = null
