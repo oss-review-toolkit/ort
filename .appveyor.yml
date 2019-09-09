@@ -5,6 +5,7 @@ environment:
   ANDROID_HOME: C:\android-sdk
   ANDROID_SDK_VERSION: 3859397
   BOWER_VERSION: 1.8.8
+  CONAN_VERSION: 1.18
   COMPOSER_VERSION: 4.8.0
   FLUTTER_HOME: C:\flutter
   FLUTTER_VERSION: v1.7.8+hotfix.3-stable
@@ -38,6 +39,8 @@ install:
   - npm install -g npm@%NPM_VERSION%
   - npm install -g bower@%BOWER_VERSION% yarn@%YARN_VERSION%
   - pip install virtualenv==%VIRTUAL_ENV_VERSION%
+  - pip install conan==%CONAN_VERSION%
+  - cmmd: conan user # Create the conan data directory. Automatic detection of your arch, compiler, etc.
   - cinst haskell-stack --version %STACK_VERSION% -y
   - cinst rust --version %RUST_VERSION% -y
   - cinst sbt --version %SBT_VERSION% -y
