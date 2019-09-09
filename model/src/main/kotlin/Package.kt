@@ -41,7 +41,8 @@ import java.util.SortedSet
 @JsonIgnoreProperties(value = ["purl"], allowGetters = true)
 data class Package(
     /**
-     * The unique identifier of this package.
+     * The unique identifier of this package. The [id]'s type is the name of the package type or protocol (e.g. "Maven"
+     * for a file from a Maven repository).
      */
     val id: Identifier,
 
