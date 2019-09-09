@@ -27,6 +27,7 @@ env:
     - ANDROID_HOME="/opt/android"
     - ANDROID_SDK_VERSION="4333796"
     - BOWER_VERSION="1.8.8"
+    - CONAN_VERSION="1.18"
     - FLUTTER_HOME="/opt/flutter"
     - FLUTTER_VERSION="v1.7.8+hotfix.3-stable"
     - GIMME_GO_VERSION="1.12" # Used internally by Travis.
@@ -71,6 +72,8 @@ install:
   - export PATH="$PATH:$FLUTTER_HOME/bin:$FLUTTER_HOME/bin/cache/dart-sdk/bin"
   - flutter config --no-analytics
   - flutter doctor
+  - pip install conan==$CONAN_VERSION
+  - conan user  # Create the conan data directory. Automatic detection of your arch, compiler, etc.
 
 script:
   - set -o pipefail
