@@ -1,7 +1,6 @@
 ---
 project:
   id: "PIP::Example-App-requirements:2.4.0"
-  purl: "pkg:pip/Example-App-requirements@2.4.0"
   definition_file_path: "analyzer/src/funTest/assets/projects/synthetic/pip/requirements.txt"
   declared_licenses:
   - "MIT"

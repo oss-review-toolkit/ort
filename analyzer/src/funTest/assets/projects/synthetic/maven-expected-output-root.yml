@@ -1,7 +1,6 @@
 ---
 project:
   id: "Maven:com.here.ort.maven:maven-project:1.0-SNAPSHOT"
-  purl: "pkg:maven/com.here.ort.maven/maven-project@1.0-SNAPSHOT"
   definition_file_path: "analyzer/src/funTest/assets/projects/synthetic/maven/pom.xml"
   declared_licenses:
   - "Apache License, Version 2.0"

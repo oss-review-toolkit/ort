@@ -1,7 +1,6 @@
 ---
 project:
   id: "GoDep::github.com/masterminds/sprig:9d9aa1f74c86fd9d36ecfe3f2a44a3093c3d4c15"
-  purl: "pkg:godep/github.com%2Fmasterminds%2Fsprig@9d9aa1f74c86fd9d36ecfe3f2a44a3093c3d4c15"
   definition_file_path: "glide.yaml"
   declared_licenses: []
   declared_licenses_processed: {}

@@ -1,7 +1,6 @@
 ---
 project:
   id: "Cargo::client:0.1.0"
-  purl: "pkg:cargo/client@0.1.0"
   definition_file_path: "<REPLACE_DEFINITION_FILE_PATH>"
   declared_licenses: []
   declared_licenses_processed: {}

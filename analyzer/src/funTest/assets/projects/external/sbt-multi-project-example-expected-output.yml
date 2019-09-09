@@ -26,7 +26,6 @@ analyzer:
   result:
     projects:
     - id: "SBT:com.pbassiner:common_2.12:0.1-SNAPSHOT"
-      purl: "pkg:sbt/com.pbassiner/common_2.12@0.1-SNAPSHOT"
       definition_file_path: "common/target/scala-2.12/common_2.12-0.1-SNAPSHOT.pom"
       declared_licenses: []
       declared_licenses_processed: {}
@@ -78,7 +77,6 @@ analyzer:
           - id: "Maven:org.scala-lang.modules:scala-xml_2.12:1.0.5"
           - id: "Maven:org.scalactic:scalactic_2.12:3.0.4"
     - id: "SBT:com.pbassiner:multi1_2.12:0.1-SNAPSHOT"
-      purl: "pkg:sbt/com.pbassiner/multi1_2.12@0.1-SNAPSHOT"
       definition_file_path: "multi1/target/scala-2.12/multi1_2.12-0.1-SNAPSHOT.pom"
       declared_licenses: []
       declared_licenses_processed: {}
@@ -138,7 +136,6 @@ analyzer:
           - id: "Maven:org.scala-lang.modules:scala-xml_2.12:1.0.5"
           - id: "Maven:org.scalactic:scalactic_2.12:3.0.4"
     - id: "SBT:com.pbassiner:multi2_2.12:0.1-SNAPSHOT"
-      purl: "pkg:sbt/com.pbassiner/multi2_2.12@0.1-SNAPSHOT"
       definition_file_path: "multi2/target/scala-2.12/multi2_2.12-0.1-SNAPSHOT.pom"
       declared_licenses: []
       declared_licenses_processed: {}
@@ -199,7 +196,6 @@ analyzer:
           - id: "Maven:org.scala-lang.modules:scala-xml_2.12:1.0.5"
           - id: "Maven:org.scalactic:scalactic_2.12:3.0.4"
     - id: "SBT:com.pbassiner:sbt-multi-project-example_2.12:0.1-SNAPSHOT"
-      purl: "pkg:sbt/com.pbassiner/sbt-multi-project-example_2.12@0.1-SNAPSHOT"
       definition_file_path: "target/scala-2.12/sbt-multi-project-example_2.12-0.1-SNAPSHOT.pom"
       declared_licenses: []
       declared_licenses_processed: {}

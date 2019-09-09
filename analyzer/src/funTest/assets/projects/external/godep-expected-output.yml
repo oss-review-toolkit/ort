@@ -1,7 +1,6 @@
 ---
 project:
   id: "GoDep::github.com/tools/godep/godeps:ce0bfadeb516ab23c845a85c4b0eae421ec9614b"
-  purl: "pkg:godep/github.com%2Ftools%2Fgodep%2Fgodeps@ce0bfadeb516ab23c845a85c4b0eae421ec9614b"
   definition_file_path: "Godeps/Godeps.json"
   declared_licenses: []
   declared_licenses_processed: {}

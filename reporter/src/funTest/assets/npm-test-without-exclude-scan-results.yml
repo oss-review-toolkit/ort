@@ -26,7 +26,6 @@ analyzer:
   result:
     projects:
     - id: "NPM::npm-excludes-test-project:1.0.0"
-      purl: "pkg:npm/npm-excludes-test-project@1.0.0"
       definition_file_path: "analyzer/src/funTest/assets/projects/synthetic/project-with-excludes/npm/package.json"
       declared_licenses:
       - "Apache-2.0"

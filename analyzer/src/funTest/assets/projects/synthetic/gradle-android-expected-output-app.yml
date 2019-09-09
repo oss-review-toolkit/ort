@@ -1,7 +1,6 @@
 ---
 project:
   id: "Gradle:com.here.ort.gradle.example:app:1.0.0"
-  purl: "pkg:gradle/com.here.ort.gradle.example/app@1.0.0"
   definition_file_path: "analyzer/src/funTest/assets/projects/synthetic/gradle-android/app/build.gradle"
   declared_licenses: []
   declared_licenses_processed: {}

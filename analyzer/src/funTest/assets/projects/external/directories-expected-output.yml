@@ -26,7 +26,6 @@ analyzer:
   result:
     projects:
     - id: "SBT:io.github.soc:directories:10"
-      purl: "pkg:sbt/io.github.soc/directories@10"
       definition_file_path: "target/directories-10.pom"
       declared_licenses:
       - "Mozilla Public License 2.0"

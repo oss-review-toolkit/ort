@@ -217,7 +217,6 @@ abstract class PackageManager(
                     val id = Identifier.EMPTY.copy(type = managerName, name = relativePath)
                     val errorProject = Project.EMPTY.copy(
                         id = id,
-                        purl = id.toPurl(),
                         definitionFilePath = VersionControlSystem.getPathInfo(definitionFile).path,
                         vcsProcessed = processProjectVcs(definitionFile.parentFile)
                     )

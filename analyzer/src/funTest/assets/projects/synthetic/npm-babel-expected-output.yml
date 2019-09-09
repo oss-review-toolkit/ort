@@ -1,7 +1,6 @@
 ---
 project:
   id: "NPM::npm-project-that-depends-on-babel:1.0.0"
-  purl: "pkg:npm/npm-project-that-depends-on-babel@1.0.0"
   definition_file_path: "analyzer/src/funTest/assets/projects/synthetic/npm-babel/package.json"
   declared_licenses:
   - "Apache-2.0"

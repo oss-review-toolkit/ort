@@ -1,7 +1,6 @@
 ---
 project:
   id: "Pub:any-version:any-version:0.1.0"
-  purl: "pkg:pub/any-version/any-version@0.1.0"
   definition_file_path: "analyzer/src/funTest/assets/projects/synthetic/pub/any-version/pubspec.yaml"
   declared_licenses: []
   declared_licenses_processed: {}

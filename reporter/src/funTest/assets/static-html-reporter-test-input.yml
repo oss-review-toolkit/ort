@@ -45,7 +45,6 @@ analyzer:
   result:
     projects:
     - id: "Gradle:com.here.ort.gradle.example:lib:1.0.0"
-      purl: "pkg:gradle/com.here.ort.gradle.example/lib@1.0.0"
       definition_file_path: "analyzer/src/funTest/assets/projects/synthetic/gradle/lib/build.gradle"
       declared_licenses: []
       declared_licenses_processed: {}
@@ -75,7 +74,6 @@ analyzer:
           dependencies:
           - id: "Maven:org.apache.commons:commons-lang3:3.5"
     - id: "Gradle:com.here:nested-test-project:1.0.0"
-      purl: "pkg:gradle/com.here/nested-test-project@1.0.0"
       definition_file_path: "project/build.gradle"
       declared_licenses: []
       declared_licenses_processed: {}

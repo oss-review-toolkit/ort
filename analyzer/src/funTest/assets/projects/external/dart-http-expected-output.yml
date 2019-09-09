@@ -1,7 +1,6 @@
 ---
 project:
   id: "Pub:dart-http:dart-http:0.12.0+2"
-  purl: "pkg:pub/dart-http/dart-http@0.12.0%2B2"
   definition_file_path: "pubspec.yaml"
   declared_licenses: []
   declared_licenses_processed: {}

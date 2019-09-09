@@ -35,7 +35,6 @@
     "result" : {
       "projects" : [ {
         "id" : "NPM::is-windows:1.0.2",
-        "purl" : "pkg:npm/is-windows@1.0.2",
         "definition_file_path" : "package.json",
         "declared_licenses" : [ "MIT" ],
         "declared_licenses_processed" : {
