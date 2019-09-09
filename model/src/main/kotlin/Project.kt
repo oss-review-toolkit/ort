@@ -36,7 +36,8 @@ import java.util.SortedSet
 @JsonIgnoreProperties(value = ["aliases", "purl"], allowGetters = true)
 data class Project(
     /**
-     * The unique identifier of this project.
+     * The unique identifier of this project. The [id]'s type is the name of the package manager that manages this
+     * project (e.g. "Gradle" for a Gradle project).
      */
     val id: Identifier,
 

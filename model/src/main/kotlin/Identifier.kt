@@ -30,7 +30,9 @@ import com.here.ort.utils.percentEncode
  */
 data class Identifier(
     /**
-     * The type of package, i.e. its packaging type, for example "Maven" or "NPM".
+     * The type of package. When used in the context of a [Project], the type is the name of the package manager that
+     * manages the project (e.g. "Gradle" for a Gradle project). When used in the context of a [Package], the type is
+     * the name of the package type or protocol (e.g. "Maven" for a file from a Maven repository).
      */
     val type: String,
 
