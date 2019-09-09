@@ -1,7 +1,6 @@
 ---
 project:
   id: "NuGet::src/funTest/assets/projects/synthetic/nuget/packages.config:"
-  purl: "pkg:nuget/src%2FfunTest%2Fassets%2Fprojects%2Fsynthetic%2Fnuget%2Fpackages.config@"
   definition_file_path: "analyzer/src/funTest/assets/projects/synthetic/nuget/packages.config"
   declared_licenses: []
   declared_licenses_processed: {}

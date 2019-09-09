@@ -1,7 +1,6 @@
 ---
 project:
   id: "Bower::a-test-project:"
-  purl: "pkg:bower/a-test-project@"
   definition_file_path: "<REPLACE_DEFINITION_FILE_PATH>"
   declared_licenses:
   - "Apache-2.0"

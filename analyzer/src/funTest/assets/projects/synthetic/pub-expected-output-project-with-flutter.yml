@@ -1,7 +1,6 @@
 ---
 project:
   id: "Pub:project-with-flutter:project-with-flutter:0.1.0"
-  purl: "pkg:pub/project-with-flutter/project-with-flutter@0.1.0"
   definition_file_path: "analyzer/src/funTest/assets/projects/synthetic/pub/project-with-flutter/pubspec.yaml"
   declared_licenses: []
   declared_licenses_processed: {}

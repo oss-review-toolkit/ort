@@ -1,7 +1,6 @@
 ---
 project:
   id: "Bundler::test-project:1.0.0"
-  purl: "pkg:bundler/test-project@1.0.0"
   definition_file_path: "analyzer/src/funTest/assets/projects/synthetic/bundler/gemspec/Gemfile"
   declared_licenses: []
   declared_licenses_processed: {}

@@ -26,7 +26,6 @@ analyzer:
   result:
     projects:
     - id: "Gradle::Gradle-Example:"
-      purl: "pkg:gradle/Gradle-Example@"
       definition_file_path: "analyzer/src/funTest/assets/projects/synthetic/gradle/build.gradle"
       declared_licenses: []
       declared_licenses_processed: {}
@@ -43,7 +42,6 @@ analyzer:
       homepage_url: ""
       scopes: []
     - id: "Gradle:com.here.ort.gradle.example:app:1.0.0"
-      purl: "pkg:gradle/com.here.ort.gradle.example/app@1.0.0"
       definition_file_path: "analyzer/src/funTest/assets/projects/synthetic/gradle/app/build.gradle"
       declared_licenses: []
       declared_licenses_processed: {}
@@ -151,7 +149,6 @@ analyzer:
             - id: "Maven:org.apache.commons:commons-lang3:3.5"
           - id: "Maven:org.apache.struts:struts2-assembly:2.5.14.1"
     - id: "Gradle:com.here.ort.gradle.example:lib-without-repo:1.0.0"
-      purl: "pkg:gradle/com.here.ort.gradle.example/lib-without-repo@1.0.0"
       definition_file_path: "analyzer/src/funTest/assets/projects/synthetic/gradle/lib-without-repo/build.gradle"
       declared_licenses: []
       declared_licenses_processed: {}
@@ -296,7 +293,6 @@ analyzer:
               \ are defined."
             severity: "ERROR"
     - id: "Gradle:com.here.ort.gradle.example:lib:1.0.0"
-      purl: "pkg:gradle/com.here.ort.gradle.example/lib@1.0.0"
       definition_file_path: "analyzer/src/funTest/assets/projects/synthetic/gradle/lib/build.gradle"
       declared_licenses: []
       declared_licenses_processed: {}

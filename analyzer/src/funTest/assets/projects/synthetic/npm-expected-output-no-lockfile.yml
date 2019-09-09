@@ -1,7 +1,6 @@
 ---
 project:
   id: "NPM::src/funTest/assets/projects/synthetic/npm/no-lockfile/package.json:"
-  purl: "pkg:npm/src%2FfunTest%2Fassets%2Fprojects%2Fsynthetic%2Fnpm%2Fno-lockfile%2Fpackage.json@"
   definition_file_path: "<REPLACE_DEFINITION_FILE_PATH>"
   declared_licenses: []
   declared_licenses_processed: {}

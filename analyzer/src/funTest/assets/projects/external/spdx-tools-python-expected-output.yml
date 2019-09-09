@@ -1,7 +1,6 @@
 ---
 project:
   id: "PIP::spdx-tools:0.5.4"
-  purl: "pkg:pip/spdx-tools@0.5.4"
   definition_file_path: "setup.py"
   declared_licenses:
   - "Apache Software"

@@ -1,7 +1,6 @@
 ---
 project:
   id: "Stack:Testing:quickcheck-state-machine:0.6.0"
-  purl: "pkg:stack/Testing/quickcheck-state-machine@0.6.0"
   definition_file_path: "stack.yaml"
   declared_licenses:
   - "BSD3"
