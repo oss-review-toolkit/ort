@@ -116,11 +116,11 @@ class Analyzer(private val config: AnalyzerConfiguration) {
 
             val curatedResults = packageCurationsFile?.let {
                 val provider = FilePackageCurationProvider(it)
-                results.mapValues { entry ->
+                results.mapValues { (_, result) ->
                     ProjectAnalyzerResult(
-                        project = entry.value.project,
-                        errors = entry.value.errors,
-                        packages = entry.value.packages.map { curatedPackage ->
+                        project = result.project,
+                        errors = result.errors,
+                        packages = result.packages.map { curatedPackage ->
                             val curations = provider.getCurationsFor(curatedPackage.pkg.id)
                             curations.fold(curatedPackage) { cur, packageCuration ->
                                 log.debug {
