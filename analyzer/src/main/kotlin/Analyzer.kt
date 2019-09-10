@@ -107,6 +107,13 @@ class Analyzer(private val config: AnalyzerConfiguration) {
         managedFiles.forEach { (manager, files) ->
             val results = manager.resolveDependencies(files)
 
+            // By convention, project ids must be of the type of the respective package manager.
+            results.forEach { (_, result) ->
+                require(result.project.id.type == manager.managerName) {
+                    "Project '${result.project.id.toCoordinates()}' must be of type '${manager.managerName}'."
+                }
+            }
+
             val curatedResults = packageCurationsFile?.let {
                 val provider = FilePackageCurationProvider(it)
                 results.mapValues { entry ->
