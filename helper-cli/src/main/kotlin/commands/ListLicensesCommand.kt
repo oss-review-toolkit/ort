@@ -73,6 +73,13 @@ internal class ListLicensesCommand : CommandWithHelp() {
     private var onlyOffending: Boolean = false
 
     @Parameter(
+        names = ["--omit-excluded"],
+        required = false,
+        order = PARAMETER_ORDER_OPTIONAL
+    )
+    private var omitExcluded: Boolean = false
+
+    @Parameter(
         names = ["--no-license-texts"],
         required = false,
         order = PARAMETER_ORDER_OPTIONAL
@@ -91,6 +98,7 @@ internal class ListLicensesCommand : CommandWithHelp() {
         ortResult
             .getLicenseFindingsById(packageId)
             .filter { !onlyOffending || offendingLicenses.contains(it.key) }
+            .mapValues { (_, locations) -> locations.filter { !omitExcluded || !isPathExcluded(it.path) } }
             .mapValues { it.value.groupByText(sourcesDir) }
             .writeValueAsString(
                 isPathExcluded = { path -> isPathExcluded(path) },
