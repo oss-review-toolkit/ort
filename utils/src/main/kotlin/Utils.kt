@@ -27,34 +27,9 @@ import java.security.Permission
 val log = org.apache.logging.log4j.kotlin.logger("ORT")
 
 /**
- * Global variable that gets toggled by a command line parameter parsed in the main entry points of the modules.
- */
-var printStackTrace = false
-
-/**
  * The name of the ORT configuration file.
  */
 const val ORT_CONFIG_FILENAME = ".ort.yml"
-
-/**
- * Ordinal for mandatory program parameters.
- */
-const val PARAMETER_ORDER_MANDATORY = 0
-
-/**
- * Ordinal for optional program parameters.
- */
-const val PARAMETER_ORDER_OPTIONAL = 1
-
-/**
- * Ordinal for logging related program parameters.
- */
-const val PARAMETER_ORDER_LOGGING = 2
-
-/**
- * Ordinal for the help program parameter.
- */
-const val PARAMETER_ORDER_HELP = 100
 
 /**
  * Return the set of elements which are contained in at least two of the given collections, or an empty set if all
