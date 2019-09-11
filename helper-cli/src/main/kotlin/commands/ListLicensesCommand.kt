@@ -112,22 +112,28 @@ private fun Collection<TextLocationGroup>.assignReferenceNameAndSort(): List<Pai
         }
 }
 
-private fun Map<String, List<TextLocationGroup>>.writeValueAsString(includeLicenseTexts: Boolean = true): String =
-    buildString {
+private fun Map<String, List<TextLocationGroup>>.writeValueAsString(includeLicenseTexts: Boolean = true): String {
+    return buildString {
+        fun appendlnIndent(value: String, indent: Int) {
+            require(indent > 0)
+            appendln(value.replaceIndent(" ".repeat(indent)))
+        }
+
         this@writeValueAsString.forEach { (license, textLocationGroups) ->
-            appendln("  $license:")
+            appendlnIndent("$license:", 2)
 
             val sortedGroups = textLocationGroups.assignReferenceNameAndSort()
             sortedGroups.forEach { (group, name) ->
                 group.locations.forEach {
-                    appendln("    [$name] ${it.path}:${it.startLine}-${it.endLine}")
+                    appendlnIndent("[$name] ${it.path}:${it.startLine}-${it.endLine}", 4)
                 }
             }
 
             if (includeLicenseTexts) {
                 sortedGroups.forEach { (group, name) ->
                     if (group.text != null) {
-                        appendln("$name:\n\n${group.text}")
+                        appendlnIndent("\n\n[$name]", 4)
+                        appendlnIndent("\n\n${group.text}\n", 6)
                     }
                 }
             }
@@ -135,6 +141,7 @@ private fun Map<String, List<TextLocationGroup>>.writeValueAsString(includeLicen
             appendln()
         }
     }
+}
 
 private fun Collection<TextLocation>.groupByText(baseDir: File): List<TextLocationGroup> {
     val resolvedLocations = mutableMapOf<String, MutableSet<TextLocation>>()
