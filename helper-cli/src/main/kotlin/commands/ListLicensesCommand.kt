@@ -84,11 +84,18 @@ internal class ListLicensesCommand : CommandWithHelp() {
         val sourcesDir = sourceCodeDir ?: ortResult.fetchScannedSources(packageId)
         val offendingLicenses = ortResult.getOffendingLicensesById(packageId, Severity.ERROR)
 
+        fun isPathExcluded(path: String) = ortResult.repository.config.excludes?.let {
+            it.findPathExcludes(path).isNotEmpty()
+        } ?: false
+
         ortResult
             .getLicenseFindingsById(packageId)
             .filter { !onlyOffending || offendingLicenses.contains(it.key) }
             .mapValues { it.value.groupByText(sourcesDir) }
-            .writeValueAsString(includeLicenseTexts = !noLicenseTexts)
+            .writeValueAsString(
+                isPathExcluded = { path -> isPathExcluded(path) },
+                includeLicenseTexts = !noLicenseTexts
+            )
             .let { println(it) }
 
         return 0
@@ -112,7 +119,10 @@ private fun Collection<TextLocationGroup>.assignReferenceNameAndSort(): List<Pai
         }
 }
 
-private fun Map<String, List<TextLocationGroup>>.writeValueAsString(includeLicenseTexts: Boolean = true): String {
+private fun Map<String, List<TextLocationGroup>>.writeValueAsString(
+    isPathExcluded: (String) -> Boolean,
+    includeLicenseTexts: Boolean = true
+): String {
     return buildString {
         fun appendlnIndent(value: String, indent: Int) {
             require(indent > 0)
@@ -125,7 +135,11 @@ private fun Map<String, List<TextLocationGroup>>.writeValueAsString(includeLicen
             val sortedGroups = textLocationGroups.assignReferenceNameAndSort()
             sortedGroups.forEach { (group, name) ->
                 group.locations.forEach {
-                    appendlnIndent("[$name] ${it.path}:${it.startLine}-${it.endLine}", 4)
+                    val excludedIndicator = if (isPathExcluded(it.path)) "(-)" else "(+)"
+                    appendlnIndent(
+                        "[$name] $excludedIndicator ${it.path}:${it.startLine}-${it.endLine}",
+                        4
+                    )
                 }
             }
 
@@ -155,7 +169,7 @@ private fun Collection<TextLocation>.groupByText(baseDir: File): List<TextLocati
     val unresolvedLocations = (this - resolvedLocations.values.flatten()).distinct()
 
     return resolvedLocations.map { (text, locations) -> TextLocationGroup(locations = locations, text = text) } +
-         unresolvedLocations.map { TextLocationGroup(locations = setOf(it)) }
+            unresolvedLocations.map { TextLocationGroup(locations = setOf(it)) }
 }
 
 private fun TextLocation.resolve(baseDir: File): String? {
