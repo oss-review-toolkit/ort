@@ -24,8 +24,6 @@ import java.net.URI
 import java.net.URISyntaxException
 import java.security.Permission
 
-val log = org.apache.logging.log4j.kotlin.logger("ORT")
-
 /**
  * The name of the ORT configuration file.
  */
