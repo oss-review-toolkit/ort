@@ -87,7 +87,7 @@ internal class ListLicensesCommand : CommandWithHelp() {
         ortResult
             .getLicenseFindingsById(packageId)
             .filter { !onlyOffending || offendingLicenses.contains(it.key) }
-            .groups(sourcesDir)
+            .mapValues { it.value.groupByText(sourcesDir) }
             .writeValueAsString(includeLicenseTexts = !noLicenseTexts)
             .let { println(it) }
 
@@ -100,53 +100,60 @@ private data class TextLocationGroup(
     val text: String? = null
 )
 
+private fun Collection<TextLocationGroup>.assignReferenceNameAndSort(): List<Pair<TextLocationGroup, String>> {
+    var i = 0
+    return sortedWith(compareBy({ it.text == null }, { -it.locations.size }))
+        .map {
+            if (it.text != null) {
+                Pair(it, "${i++}")
+            } else {
+                Pair(it, "-")
+            }
+        }
+}
+
 private fun Map<String, List<TextLocationGroup>>.writeValueAsString(includeLicenseTexts: Boolean = true): String =
     buildString {
         this@writeValueAsString.forEach { (license, textLocationGroups) ->
             appendln("  $license:")
 
-            textLocationGroups
-                .sortedByDescending { it.locations.size }
-                .forEachIndexed { i, group ->
-                    group.locations.forEach {
-                        appendln("    [$i] ${it.path}:${it.startLine}-${it.endLine}")
-                    }
+            val sortedGroups = textLocationGroups.assignReferenceNameAndSort()
+            sortedGroups.forEach { (group, name) ->
+                group.locations.forEach {
+                    appendln("    [$name] ${it.path}:${it.startLine}-${it.endLine}")
                 }
+            }
 
             if (includeLicenseTexts) {
-                textLocationGroups
-                    .sortedByDescending { it.locations.size }
-                    .forEachIndexed { i, group ->
-                        appendln("$i:\n\n${group.text}")
+                sortedGroups.forEach { (group, name) ->
+                    if (group.text != null) {
+                        appendln("$name:\n\n${group.text}")
                     }
+                }
             }
 
             appendln()
         }
     }
 
-private fun Map<String, Collection<TextLocation>>.groups(baseDir: File): Map<String, List<TextLocationGroup>> =
-    mapValues { license ->
-        license.value.groupByText(baseDir) ?: return mapValues { (_, groups) ->
-            groups.map { TextLocationGroup(locations = setOf(it)) }
+private fun Collection<TextLocation>.groupByText(baseDir: File): List<TextLocationGroup> {
+    val resolvedLocations = mutableMapOf<String, MutableSet<TextLocation>>()
+
+    forEach { textLocation ->
+        textLocation.resolve(baseDir)?.let {
+            resolvedLocations.getOrPut(it, { mutableSetOf() }).add(textLocation)
         }
     }
 
-private fun Collection<TextLocation>.groupByText(baseDir: File): List<TextLocationGroup>? {
-    val map = mutableMapOf<String, MutableSet<TextLocation>>()
+    val unresolvedLocations = (this - resolvedLocations.values.flatten()).distinct()
 
-    forEach { textLocation ->
-        val text = textLocation.resolve(baseDir) ?: return null
-        map.getOrPut(text, { mutableSetOf() }).add(textLocation)
-    }
-
-    return map.map { (text, locations) -> TextLocationGroup(locations = locations, text = text) }
+    return resolvedLocations.map { (text, locations) -> TextLocationGroup(locations = locations, text = text) } +
+         unresolvedLocations.map { TextLocationGroup(locations = setOf(it)) }
 }
 
 private fun TextLocation.resolve(baseDir: File): String? {
     val lines = baseDir.resolve(path).readText().lines()
     return if (lines.size <= endLine) {
-        println("Could not resolve: $path:$startLine-$endLine")
         null
     } else {
         lines.subList(startLine - 1, endLine).joinToString(separator = "\n")
