@@ -45,7 +45,6 @@ import com.moandjiezana.toml.Toml
 import com.vdurmont.semver4j.Requirement
 
 import java.io.File
-import java.util.SortedSet
 
 /**
  * The [Cargo](https://doc.rust-lang.org/cargo/) package manager for Rust.
@@ -161,49 +160,6 @@ class Cargo(
         return metadataMapNotNull
     }
 
-    private fun resolveDependencyTree(
-        pkgName: String,
-        pkgVersion: String,
-        metadata: JsonNode,
-        packages: Map<String, Package>,
-        filter: (pkgId: String, depId: String) -> Boolean = { _, _ -> true }
-    ): SortedSet<PackageReference> {
-        val nodes = metadata["resolve"]["nodes"]
-        val pkgId = metadata["workspace_members"]
-            .map { it.textValueOrEmpty() }
-            .single { it.contains(pkgName) && it.contains(pkgVersion) }
-
-        val root = nodes.map { extractCargoId(it) }.single { it == pkgId }
-        return resolveDependenciesOf(root, nodes, packages, filter).dependencies
-    }
-
-    private fun resolveDependenciesOf(
-        id: String,
-        nodes: JsonNode,
-        packages: Map<String, Package>,
-        filter: (pkgId: String, depId: String) -> Boolean
-    ): PackageReference {
-        val node = nodes.single { it["id"].textValueOrEmpty() == id }
-        val depsReferences = node["dependencies"]
-            .map { it.textValueOrEmpty() }
-            .filter { filter(id, it) }
-            .map { resolveDependenciesOf(it, nodes, packages, filter) }
-        val pkg = packages.getValue(id)
-        val linkage = if (isProjectDependency(id)) PackageLinkage.PROJECT_STATIC else PackageLinkage.STATIC
-        return pkg.toReference(linkage, dependencies = depsReferences.toSortedSet())
-    }
-
-    private fun isDevDependencyOf(id: String, depId: String, metadata: JsonNode): Boolean {
-        val packages = metadata["packages"]
-        val pkg = packages.single { it["id"].textValueOrEmpty() == id }
-        val depPkg = packages.single { it["id"].textValueOrEmpty() == depId }
-        return pkg["dependencies"].any {
-            val name = it["name"].textValueOrEmpty()
-            val kind = it["kind"].textValueOrEmpty()
-            name == depPkg["name"].textValueOrEmpty() && (kind == "dev" || kind == "build")
-        }
-    }
-
     /**
      * Check if a package is a project. All path dependencies inside of the analyzer root are treated as project
      * dependencies.
@@ -213,6 +169,57 @@ class Cargo(
             val packageDir = File(match.value)
             packageDir.startsWith(analysisRoot)
         } ?: false
+
+    private fun buildDependencyTree(
+        name: String,
+        version: String,
+        packages: Map<String, Package>,
+        metadata: JsonNode
+    ): PackageReference {
+        val node = metadata["packages"].single {
+            it["name"].textValue() == name && it["version"].textValue() == version
+        }
+
+        val dependencies = node["dependencies"].filter {
+            // Filter dev and build dependencies, because they are not transitive.
+            val kind = it["kind"].textValueOrEmpty()
+            kind != "dev" && kind != "build"
+        }.mapNotNull {
+            // TODO: Handle renamed dependencies here, see:
+            //       https://doc.rust-lang.org/cargo/reference/specifying-dependencies.html#renaming-dependencies-in-cargotoml
+            val dependencyName = it["name"].textValue()
+
+            getResolvedVersion(name, version, dependencyName, metadata)?.let { dependencyVersion ->
+                buildDependencyTree(dependencyName, dependencyVersion, packages, metadata)
+            }
+        }.toSortedSet()
+
+        val id = extractCargoId(node)
+        val pkg = packages.getValue(id)
+        val linkage = if (isProjectDependency(id)) PackageLinkage.PROJECT_STATIC else PackageLinkage.STATIC
+
+        return pkg.toReference(linkage, dependencies)
+    }
+
+    private fun getResolvedVersion(
+        parentName: String,
+        parentVersion: String,
+        dependencyName: String,
+        metadata: JsonNode
+    ): String? {
+        val node = metadata["resolve"]["nodes"].single {
+            it["id"].textValue().startsWith("$parentName $parentVersion")
+        }
+
+        // This is null if the dependency is optional and the feature was not enabled. In this case the version was not
+        // resolved and the dependency should not appear in the dependency tree.
+        // See: https://doc.rust-lang.org/cargo/commands/cargo-metadata.html
+        val dependency = node["dependencies"].find {
+            it.textValue().startsWith(dependencyName)
+        }
+
+        return dependency?.textValue()?.split(' ')?.get(1)
+    }
 
     override fun resolveDependencies(definitionFile: File): ProjectAnalyzerResult? {
         log.info { "Resolving dependencies for: '$definitionFile'" }
@@ -233,12 +240,30 @@ class Cargo(
             { extractPackage(it, hashes) }
         )
 
-        val dependencies = resolveDependencyTree(projectName, projectVersion, metadata, packages) { id, devId ->
-            !isDevDependencyOf(id, devId, metadata)
-        }
+        val projectId = metadata["workspace_members"]
+            .map { it.textValueOrEmpty() }
+            .single { it.startsWith("$projectName $projectVersion") }
 
-        val devDependencies = resolveDependencyTree(projectName, projectVersion, metadata, packages) { id, devId ->
-            isDevDependencyOf(id, devId, metadata)
+        val projectNode = metadata["packages"].single { it["id"].textValueOrEmpty() == projectId }
+
+        fun filterDependencies(condition: (String) -> Boolean) =
+            projectNode["dependencies"].filter { node ->
+                val kind = node["kind"].textValueOrEmpty()
+                condition(kind)
+            }.mapNotNull {
+                val dependencyName = it["name"].textValue()
+                val version = getResolvedVersion(projectName, projectVersion, dependencyName, metadata)
+                if (version == null) null else Pair(dependencyName, version)
+            }
+
+        val directDependencies = filterDependencies { kind -> kind != "dev" && kind != "build" }
+        val directDevDependencies = filterDependencies { kind -> kind == "dev" || kind == "build" }
+
+        val dependencies = directDependencies.mapTo(sortedSetOf()) {
+            buildDependencyTree(name = it.first, version = it.second, packages = packages, metadata = metadata)
+        }
+        val devDependencies = directDevDependencies.mapTo(sortedSetOf()) {
+            buildDependencyTree(name = it.first, version = it.second, packages = packages, metadata = metadata)
         }
 
         val dependenciesScope = Scope(

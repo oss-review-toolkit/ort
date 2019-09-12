@@ -27,6 +27,9 @@ project:
     dependencies:
     - id: "Cargo::integration:0.1.0"
       linkage: "PROJECT_STATIC"
+      dependencies:
+      - id: "Cargo::spin:0.4.10"
+        linkage: "STATIC"
     - id: "Cargo::spin:0.5.0"
       linkage: "STATIC"
 packages:
