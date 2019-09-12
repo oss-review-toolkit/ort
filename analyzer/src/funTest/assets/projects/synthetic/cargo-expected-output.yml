@@ -28,8 +28,97 @@ project:
     - id: "Cargo::rand:0.6.5"
       linkage: "STATIC"
       dependencies:
-      - id: "Cargo::autocfg:0.1.6"
+      - id: "Cargo::libc:0.2.62"
         linkage: "STATIC"
+      - id: "Cargo::rand_chacha:0.1.1"
+        linkage: "STATIC"
+        dependencies:
+        - id: "Cargo::rand_core:0.3.1"
+          linkage: "STATIC"
+          dependencies:
+          - id: "Cargo::rand_core:0.4.2"
+            linkage: "STATIC"
+      - id: "Cargo::rand_core:0.4.2"
+        linkage: "STATIC"
+      - id: "Cargo::rand_hc:0.1.0"
+        linkage: "STATIC"
+        dependencies:
+        - id: "Cargo::rand_core:0.3.1"
+          linkage: "STATIC"
+          dependencies:
+          - id: "Cargo::rand_core:0.4.2"
+            linkage: "STATIC"
+      - id: "Cargo::rand_isaac:0.1.1"
+        linkage: "STATIC"
+        dependencies:
+        - id: "Cargo::rand_core:0.3.1"
+          linkage: "STATIC"
+          dependencies:
+          - id: "Cargo::rand_core:0.4.2"
+            linkage: "STATIC"
+      - id: "Cargo::rand_jitter:0.1.4"
+        linkage: "STATIC"
+        dependencies:
+        - id: "Cargo::libc:0.2.62"
+          linkage: "STATIC"
+        - id: "Cargo::rand_core:0.4.2"
+          linkage: "STATIC"
+        - id: "Cargo::winapi:0.3.8"
+          linkage: "STATIC"
+          dependencies:
+          - id: "Cargo::winapi-i686-pc-windows-gnu:0.4.0"
+            linkage: "STATIC"
+          - id: "Cargo::winapi-x86_64-pc-windows-gnu:0.4.0"
+            linkage: "STATIC"
+      - id: "Cargo::rand_os:0.1.3"
+        linkage: "STATIC"
+        dependencies:
+        - id: "Cargo::cloudabi:0.0.3"
+          linkage: "STATIC"
+          dependencies:
+          - id: "Cargo::bitflags:1.1.0"
+            linkage: "STATIC"
+        - id: "Cargo::fuchsia-cprng:0.1.1"
+          linkage: "STATIC"
+        - id: "Cargo::libc:0.2.62"
+          linkage: "STATIC"
+        - id: "Cargo::rand_core:0.4.2"
+          linkage: "STATIC"
+        - id: "Cargo::rdrand:0.4.0"
+          linkage: "STATIC"
+          dependencies:
+          - id: "Cargo::rand_core:0.3.1"
+            linkage: "STATIC"
+            dependencies:
+            - id: "Cargo::rand_core:0.4.2"
+              linkage: "STATIC"
+        - id: "Cargo::winapi:0.3.8"
+          linkage: "STATIC"
+          dependencies:
+          - id: "Cargo::winapi-i686-pc-windows-gnu:0.4.0"
+            linkage: "STATIC"
+          - id: "Cargo::winapi-x86_64-pc-windows-gnu:0.4.0"
+            linkage: "STATIC"
+      - id: "Cargo::rand_pcg:0.1.2"
+        linkage: "STATIC"
+        dependencies:
+        - id: "Cargo::rand_core:0.4.2"
+          linkage: "STATIC"
+      - id: "Cargo::rand_xorshift:0.1.1"
+        linkage: "STATIC"
+        dependencies:
+        - id: "Cargo::rand_core:0.3.1"
+          linkage: "STATIC"
+          dependencies:
+          - id: "Cargo::rand_core:0.4.2"
+            linkage: "STATIC"
+      - id: "Cargo::winapi:0.3.8"
+        linkage: "STATIC"
+        dependencies:
+        - id: "Cargo::winapi-i686-pc-windows-gnu:0.4.0"
+          linkage: "STATIC"
+        - id: "Cargo::winapi-x86_64-pc-windows-gnu:0.4.0"
+          linkage: "STATIC"
     - id: "Cargo::spin:0.5.0"
       linkage: "STATIC"
 packages:
