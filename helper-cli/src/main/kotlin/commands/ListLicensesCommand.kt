@@ -27,7 +27,7 @@ import com.here.ort.CommandWithHelp
 import com.here.ort.helper.common.IdentifierConverter
 import com.here.ort.helper.common.fetchScannedSources
 import com.here.ort.helper.common.getLicenseFindingsById
-import com.here.ort.helper.common.getOffendingLicensesById
+import com.here.ort.helper.common.getViolatedRulesByLicense
 import com.here.ort.model.Identifier
 import com.here.ort.model.OrtResult
 import com.here.ort.model.Severity
@@ -80,6 +80,13 @@ internal class ListLicensesCommand : CommandWithHelp() {
     private var omitExcluded: Boolean = false
 
     @Parameter(
+        names = ["--ignore-excluded-rule-ids"],
+        required = false,
+        order = PARAMETER_ORDER_OPTIONAL
+    )
+    private var ignoreExcludedRuleIds: List<String> = emptyList()
+
+    @Parameter(
         names = ["--no-license-texts"],
         required = false,
         order = PARAMETER_ORDER_OPTIONAL
@@ -89,7 +96,7 @@ internal class ListLicensesCommand : CommandWithHelp() {
     override fun runCommand(jc: JCommander): Int {
         val ortResult = ortResultFile.readValue<OrtResult>()
         val sourcesDir = sourceCodeDir ?: ortResult.fetchScannedSources(packageId)
-        val offendingLicenses = ortResult.getOffendingLicensesById(packageId, Severity.ERROR)
+        val violatedRulesByLicense = ortResult.getViolatedRulesByLicense(packageId, Severity.ERROR)
 
         fun isPathExcluded(path: String) = ortResult.repository.config.excludes?.let {
             it.findPathExcludes(path).isNotEmpty()
@@ -97,8 +104,13 @@ internal class ListLicensesCommand : CommandWithHelp() {
 
         ortResult
             .getLicenseFindingsById(packageId)
-            .filter { !onlyOffending || offendingLicenses.contains(it.key) }
-            .mapValues { (_, locations) -> locations.filter { !omitExcluded || !isPathExcluded(it.path) } }
+            .filter { (license, _) -> !onlyOffending || violatedRulesByLicense.contains(license) }
+            .mapValues { (license, locations) ->
+                locations.filter {
+                    !omitExcluded || !isPathExcluded(it.path) ||
+                            ignoreExcludedRuleIds.intersect(violatedRulesByLicense[license].orEmpty()).isNotEmpty()
+                }
+            }
             .mapValues { it.value.groupByText(sourcesDir) }
             .writeValueAsString(
                 isPathExcluded = { path -> isPathExcluded(path) },
