@@ -132,9 +132,10 @@ class Cargo(
         return "\"checksum $id\""
     }
 
-    // Cargo.lock is located next to Cargo.toml or in one of the parent directories. The latter
-    // is case when the project is part of a workspace. Cargo.lock is then located next to the
-    // Cargo.toml file defining the workspace.
+    /**
+     * Cargo.lock is located next to Cargo.toml or in one of the parent directories. The latter is the case when the
+     * project is part of a workspace. Cargo.lock is then located next to the Cargo.toml file defining the workspace.
+     */
     private fun resolveLockfile(metadata: JsonNode): File {
         val workspaceRoot = metadata["workspace_root"].textValueOrEmpty()
         val lockfile = File(workspaceRoot, "Cargo.lock")
@@ -203,9 +204,10 @@ class Cargo(
         }
     }
 
-    // Check if a package is a project.
-    //
-    // We treat all path dependencies inside of the analyzer root as project dependencies.
+    /**
+     * Check if a package is a project. All path dependencies inside of the analyzer root are treated as project
+     * dependencies.
+     */
     private fun isProjectDependency(id: String) =
         pathDependencyRegex.matchEntire(id)?.groups?.get(1)?.let { match ->
             val packageDir = File(match.value)
@@ -215,7 +217,8 @@ class Cargo(
     override fun resolveDependencies(definitionFile: File): ProjectAnalyzerResult? {
         log.info { "Resolving dependencies for: '$definitionFile'" }
 
-        // Get the project name; if none => we have a workspace definition => return null.
+        // Get the project name and version. If one of them is missing return null, because this is a workspace
+        // definition file that does not contain a project.
         val pkgDefinition = Toml().read(definitionFile)
         val projectName = pkgDefinition.getString("package.name") ?: return null
         val projectVersion = pkgDefinition.getString("package.version") ?: return null
@@ -225,13 +228,11 @@ class Cargo(
         val metadata = jsonMapper.readTree(metadataJson)
         val hashes = readHashes(resolveLockfile(metadata))
 
-        // Collect all packages.
         val packages = metadata["packages"].associateBy(
             { extractCargoId(it) },
             { extractPackage(it, hashes) }
         )
 
-        // Resolve the dependencies tree.
         val dependencies = resolveDependenciesTree(projectName, projectVersion, metadata, packages) { id, devId ->
             !isDevDependencyOf(id, devId, metadata)
         }
@@ -249,7 +250,6 @@ class Cargo(
             dependencies = devDependencies
         )
 
-        // Resolve project.
         val projectPkg = packages.values.single { pkg ->
             pkg.id.name == projectName && pkg.id.version == projectVersion
         }
