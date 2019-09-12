@@ -162,7 +162,7 @@ class Cargo(
         return metadataMapNotNull
     }
 
-    private fun resolveDependenciesTree(
+    private fun resolveDependencyTree(
         pkgName: String,
         pkgVersion: String,
         metadata: JsonNode,
@@ -234,11 +234,11 @@ class Cargo(
             { extractPackage(it, hashes) }
         )
 
-        val dependencies = resolveDependenciesTree(projectName, projectVersion, metadata, packages) { id, devId ->
+        val dependencies = resolveDependencyTree(projectName, projectVersion, metadata, packages) { id, devId ->
             !isDevDependencyOf(id, devId, metadata)
         }
 
-        val devDependencies = resolveDependenciesTree(projectName, projectVersion, metadata, packages) { id, devId ->
+        val devDependencies = resolveDependencyTree(projectName, projectVersion, metadata, packages) { id, devId ->
             isDevDependencyOf(id, devId, metadata)
         }
 
