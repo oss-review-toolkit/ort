@@ -199,13 +199,17 @@ internal fun OrtResult.getLicenseFindingsById(id: Identifier): Map<String, Set<T
 }
 
 /**
- * Return all license [Identifiers]s which are associated with at least one [RuleViolation] with a [severity]
- * greater or equal to the given [minSeverity].
+ * Return all license [Identifiers]s which triggered at least one [RuleViolation] with a [severity]
+ * greater or equal to the given [minSeverity] associated with the rule names of all corresponding violated rules.
  */
-internal fun OrtResult.getOffendingLicensesById(id: Identifier, minSeverity: Severity): Set<String> =
-    getRuleViolations().filter {
-        it.pkg == id && it.severity.ordinal <= minSeverity.ordinal
-    }.mapNotNull { it.license }.toSet()
+internal fun OrtResult.getViolatedRulesByLicense(
+    id: Identifier,
+    minSeverity: Severity
+): Map<String, List<String>> =
+    getRuleViolations()
+        .filter { it.pkg == id && it.severity.ordinal <= minSeverity.ordinal && it.license != null }
+        .groupBy { it.license!! }
+        .mapValues { (_, ruleViolations) -> ruleViolations.map { it.rule } }
 
 /**
  * Return the Package with the given [id] denoting either a [Project] or a [Package].
