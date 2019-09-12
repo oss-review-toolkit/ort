@@ -36,40 +36,46 @@ import io.kotlintest.specs.WordSpec
 import kotlin.random.Random
 import kotlin.random.nextInt
 
-private fun createLicenseFinding(license: String, path: String, line: Int = Random.nextInt(1..1000)) =
-    LicenseFinding(
-        license = license,
-        location = TextLocation(
-            path = path,
-            startLine = line,
-            endLine = line
-        )
-    )
-
-private fun createCopyrightFinding(statement: String, path: String, line: Int = Random.nextInt(1..1000)) =
-    CopyrightFinding(
-        statement = statement,
-        location = TextLocation(
-            path = path,
-            startLine = line,
-            endLine = line
-        )
-    )
-
 private fun Collection<LicenseFindings>.getFindings(license: String) = single { it.license == license }
 
 class FindingsMatcherTest : WordSpec() {
     private val matcher = FindingsMatcher(LicenseFileMatcher("a/LICENSE"))
+    private val licenseFindings = mutableListOf<LicenseFinding>()
+    private val copyrightFindings = mutableListOf<CopyrightFinding>()
+
+    override fun isInstancePerTest() = true
+
+    private fun setupLicenseFinding(license: String, path: String, line: Int = Random.nextInt(1..1000)) {
+        licenseFindings.add(
+            LicenseFinding(
+                license = license,
+                location = TextLocation(
+                    path = path,
+                    startLine = line,
+                    endLine = line
+                )
+            )
+        )
+    }
+
+    private fun setupCopyrightFinding(statement: String, path: String, line: Int = Random.nextInt(1..1000)) {
+        copyrightFindings.add(
+            CopyrightFinding(
+                statement = statement,
+                location = TextLocation(
+                    path = path,
+                    startLine = line,
+                    endLine = line
+                )
+            )
+        )
+    }
 
     init {
         "Given a license finding in a license file and a copyright finding in a file without license, match" should {
             "associate that copyright with the root license" {
-                val licenseFindings = listOf(
-                    createLicenseFinding(license = "some id", path = "a/LICENSE")
-                )
-                val copyrightFindings = listOf(
-                    createCopyrightFinding(statement = "some stmt", path = "some/other/file")
-                )
+                setupLicenseFinding(license = "some id", path = "a/LICENSE")
+                setupCopyrightFinding(statement = "some stmt", path = "some/other/file")
 
                 val result = matcher.match(licenseFindings, copyrightFindings)
 
@@ -82,10 +88,7 @@ class FindingsMatcherTest : WordSpec() {
 
         "Given no license finding in any license file and a copyright finding in a file without license, match" should {
             "discard that copyright" {
-                val licenseFindings = listOf<LicenseFinding>()
-                val copyrightFindings = listOf(
-                    createCopyrightFinding(statement = "some stmt", path = "some/other/file")
-                )
+                setupCopyrightFinding(statement = "some stmt", path = "some/other/file")
 
                 val result = matcher.match(licenseFindings, copyrightFindings)
 
@@ -97,16 +100,12 @@ class FindingsMatcherTest : WordSpec() {
             "associate exactly the statements within the line threshold to the licenses and discard the others" {
                 // Use an arbitrary license start line that is clearly larger than DEFAULT_TOLERANCE_LINES.
                 val licenseStartLine = Random.nextInt(2 * DEFAULT_TOLERANCE_LINES, 20 * DEFAULT_TOLERANCE_LINES)
-                val licenseFindings = listOf(
-                    createLicenseFinding("license nearby", "path", licenseStartLine),
-                    createLicenseFinding("license far away", "path", licenseStartLine + 100 * DEFAULT_TOLERANCE_LINES)
-                )
-                val copyrightFindings = listOf(
-                    createCopyrightFinding("statement1", "path", licenseStartLine - DEFAULT_TOLERANCE_LINES - 1),
-                    createCopyrightFinding("statement2", "path", licenseStartLine - DEFAULT_TOLERANCE_LINES),
-                    createCopyrightFinding("statement3", "path", licenseStartLine + DEFAULT_TOLERANCE_LINES),
-                    createCopyrightFinding("statement4", "path", licenseStartLine + DEFAULT_TOLERANCE_LINES + 1)
-                )
+                setupLicenseFinding("license nearby", "path", licenseStartLine)
+                setupLicenseFinding("license far away", "path", licenseStartLine + 100 * DEFAULT_TOLERANCE_LINES)
+                setupCopyrightFinding("statement1", "path", licenseStartLine - DEFAULT_TOLERANCE_LINES - 1)
+                setupCopyrightFinding("statement2", "path", licenseStartLine - DEFAULT_TOLERANCE_LINES)
+                setupCopyrightFinding("statement3", "path", licenseStartLine + DEFAULT_TOLERANCE_LINES)
+                setupCopyrightFinding("statement4", "path", licenseStartLine + DEFAULT_TOLERANCE_LINES + 1)
 
                 val result = matcher.match(licenseFindings, copyrightFindings)
 
