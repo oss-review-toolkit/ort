@@ -50,7 +50,7 @@ class FindingsMatcher(
     /**
      * Get the license found in one of the commonly named license files, if any, or an empty string otherwise.
      */
-    internal fun getRootLicense(licenseFindings: Collection<LicenseFinding>): String =
+    private fun getRootLicense(licenseFindings: Collection<LicenseFinding>): String =
         // TODO: This function should return a list of all licenses found in all license files instead of only a single
         // license.
         licenseFindings.singleOrNull { finding ->
@@ -61,7 +61,7 @@ class FindingsMatcher(
      * Return the copyright statements in the vicinity, as specified by [toleranceLines], of [licenseStartLine] in the
      * file [path].
      */
-    internal fun getClosestCopyrightStatements(
+    private fun getClosestCopyrightStatements(
         copyrights: List<CopyrightFinding>,
         licenseStartLine: Int
     ): SortedSet<CopyrightFindings> {
