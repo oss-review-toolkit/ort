@@ -23,7 +23,6 @@ import com.here.ort.model.CopyrightFindings
 import com.here.ort.model.LicenseFindings
 import com.here.ort.model.TextLocation
 import com.here.ort.model.config.ScannerConfiguration
-import com.here.ort.model.jsonMapper
 import com.here.ort.scanner.scanners.ScanCode
 
 import io.kotlintest.matchers.haveSize
@@ -141,24 +140,6 @@ class ScanCodeTest : WordSpec({
     }
 
     "associateFindings()" should {
-        "properly associate a separate copyright to a root license" {
-            val resultFile = File("src/test/assets/oss-review-toolkit-license-and-readme_scancode-2.9.2.json")
-            val result = jsonMapper.readTree(resultFile)
-
-            scanner.associateFindings(result) shouldBe sortedSetOf(
-                LicenseFindings(
-                    "Apache-2.0",
-                    sortedSetOf(TextLocation("LICENSE", 1, 201)),
-                    sortedSetOf(
-                        CopyrightFindings(
-                            "Copyright (C) 2017-2019 HERE Europe B.V.",
-                            sortedSetOf(TextLocation("README.md", 162, 162))
-                        )
-                    )
-                )
-            )
-        }
-
         "properly associate licenses to locations and copyrights" {
             val resultFile = File("src/test/assets/esprima-2.7.3_scancode-2.2.1.json")
             val result = scanner.getRawResult(resultFile)
