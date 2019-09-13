@@ -112,7 +112,7 @@ class Cargo(
         val version = node["version"]?.textValue() ?: return null
         val url = "https://crates.io/api/v1/crates/$name/$version/download"
         val checksum = checksumKeyOf(node)
-        val hash = Hash.create(hashes[checksum] ?: "")
+        val hash = Hash.create(hashes[checksum].orEmpty())
         return RemoteArtifact(url, hash)
     }
 
@@ -293,7 +293,7 @@ class Cargo(
             pkg.id.name == projectName && pkg.id.version == projectVersion
         }
 
-        val homepageUrl = pkgDefinition.getString("package.homepage") ?: ""
+        val homepageUrl = pkgDefinition.getString("package.homepage").orEmpty()
         val project = Project(
             id = projectPkg.id,
             definitionFilePath = VersionControlSystem.getPathInfo(definitionFile).path,
