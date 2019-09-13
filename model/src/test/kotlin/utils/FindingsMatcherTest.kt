@@ -34,7 +34,6 @@ import io.kotlintest.shouldBe
 import io.kotlintest.specs.WordSpec
 
 import kotlin.random.Random
-import kotlin.random.nextInt
 
 private fun Collection<LicenseFindings>.getFindings(license: String) = single { it.license == license }
 
@@ -45,7 +44,7 @@ class FindingsMatcherTest : WordSpec() {
 
     override fun isInstancePerTest() = true
 
-    private fun setupLicenseFinding(license: String, path: String, line: Int = Random.nextInt(1..1000)) {
+    private fun setupLicenseFinding(license: String, path: String, line: Int = 1) {
         licenseFindings.add(
             LicenseFinding(
                 license = license,
@@ -58,7 +57,7 @@ class FindingsMatcherTest : WordSpec() {
         )
     }
 
-    private fun setupCopyrightFinding(statement: String, path: String, line: Int = Random.nextInt(1..1000)) {
+    private fun setupCopyrightFinding(statement: String, path: String, line: Int = 1) {
         copyrightFindings.add(
             CopyrightFinding(
                 statement = statement,
