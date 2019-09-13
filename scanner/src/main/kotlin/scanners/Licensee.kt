@@ -132,7 +132,7 @@ class Licensee(name: String, config: ScannerConfiguration) : LocalScanner(name, 
             EMPTY_JSON_NODE
         }
 
-    override fun generateSummary(startTime: Instant, endTime: Instant, scanPath: File, result: JsonNode): ScanSummary {
+    private fun generateSummary(startTime: Instant, endTime: Instant, scanPath: File, result: JsonNode): ScanSummary {
         val matchedFiles = result["matched_files"]
         val licenseFindings = matchedFiles.map {
             val filePath = File(it["filename"].textValue())

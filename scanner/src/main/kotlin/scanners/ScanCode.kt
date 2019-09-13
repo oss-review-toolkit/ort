@@ -330,7 +330,7 @@ class ScanCode(
         }
 
         val result = getRawResult(resultsFile)
-        val summary = generateSummary(startTime, endTime, path, result)
+        val summary = generateSummary(startTime, endTime, result)
 
         val errors = summary.errors.toMutableList()
 
@@ -365,7 +365,7 @@ class ScanCode(
         return result["files_count"].intValue()
     }
 
-    override fun generateSummary(startTime: Instant, endTime: Instant, scanPath: File, result: JsonNode) = ScanSummary(
+    internal fun generateSummary(startTime: Instant, endTime: Instant, result: JsonNode) = ScanSummary(
         startTime = startTime,
         endTime = endTime,
         fileCount = getFileCount(result),
