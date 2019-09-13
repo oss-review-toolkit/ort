@@ -407,10 +407,4 @@ abstract class LocalScanner(name: String, config: ScannerConfiguration) : Scanne
 
         return relativePathToScannedFile.invariantSeparatorsPath
     }
-
-    /**
-     * Generate a [ScanSummary] from the scanner's raw [result] for scanning [scanPath] and the [startTime] / [endTime].
-     */
-    internal abstract fun generateSummary(startTime: Instant, endTime: Instant, scanPath: File, result: JsonNode):
-            ScanSummary
 }

@@ -42,7 +42,7 @@ class ScanCodeTest : WordSpec({
         "be correctly summarized" {
             val resultFile = File("src/test/assets/mime-types-2.1.18_scancode-2.9.7.json")
             val result = scanner.getRawResult(resultFile)
-            val summary = scanner.generateSummary(Instant.now(), Instant.now(), File("."), result)
+            val summary = scanner.generateSummary(Instant.now(), Instant.now(), result)
 
             summary.fileCount shouldBe 10
         }
@@ -52,7 +52,7 @@ class ScanCodeTest : WordSpec({
         "be correctly summarized" {
             val resultFile = File("src/test/assets/mime-types-2.1.18_scancode-3.0.2.json")
             val result = scanner.getRawResult(resultFile)
-            val summary = scanner.generateSummary(Instant.now(), Instant.now(), File("."), result)
+            val summary = scanner.generateSummary(Instant.now(), Instant.now(), result)
 
             summary.fileCount shouldBe 10
         }
@@ -62,7 +62,7 @@ class ScanCodeTest : WordSpec({
         "return true for scan results with only timeout errors" {
             val resultFile = File("src/test/assets/esprima-2.7.3_scancode-2.2.1.post277.4d68f9377.json")
             val result = scanner.getRawResult(resultFile)
-            val summary = scanner.generateSummary(Instant.now(), Instant.now(), File("."), result)
+            val summary = scanner.generateSummary(Instant.now(), Instant.now(), result)
             val errors = summary.errors.toMutableList()
 
             ScanCode.mapTimeoutErrors(errors) shouldBe true
@@ -98,7 +98,7 @@ class ScanCodeTest : WordSpec({
         "return false for scan results without errors" {
             val resultFile = File("src/test/assets/esprima-2.7.3_scancode-2.2.1.json")
             val result = scanner.getRawResult(resultFile)
-            val summary = scanner.generateSummary(Instant.now(), Instant.now(), File("."), result)
+            val summary = scanner.generateSummary(Instant.now(), Instant.now(), result)
 
             ScanCode.mapTimeoutErrors(summary.errors.toMutableList()) shouldBe false
         }
@@ -108,7 +108,7 @@ class ScanCodeTest : WordSpec({
         "return true for scan results with only memory errors" {
             val resultFile = File("src/test/assets/very-long-json-lines_scancode-2.2.1.post277.4d68f9377.json")
             val result = scanner.getRawResult(resultFile)
-            val summary = scanner.generateSummary(Instant.now(), Instant.now(), File("."), result)
+            val summary = scanner.generateSummary(Instant.now(), Instant.now(), result)
             val errors = summary.errors.toMutableList()
 
             ScanCode.mapUnknownErrors(errors) shouldBe true
@@ -120,7 +120,7 @@ class ScanCodeTest : WordSpec({
         "return false for scan results with other unknown errors" {
             val resultFile = File("src/test/assets/kotlin-annotation-processing-gradle-1.2.21_scancode.json")
             val result = scanner.getRawResult(resultFile)
-            val summary = scanner.generateSummary(Instant.now(), Instant.now(), File("."), result)
+            val summary = scanner.generateSummary(Instant.now(), Instant.now(), result)
             val errors = summary.errors.toMutableList()
 
             ScanCode.mapUnknownErrors(errors) shouldBe false
@@ -133,7 +133,7 @@ class ScanCodeTest : WordSpec({
         "return false for scan results without errors" {
             val resultFile = File("src/test/assets/esprima-2.7.3_scancode-2.2.1.json")
             val result = scanner.getRawResult(resultFile)
-            val summary = scanner.generateSummary(Instant.now(), Instant.now(), File("."), result)
+            val summary = scanner.generateSummary(Instant.now(), Instant.now(), result)
 
             ScanCode.mapUnknownErrors(summary.errors.toMutableList()) shouldBe false
         }

@@ -154,7 +154,7 @@ class Askalono(name: String, config: ScannerConfiguration) : LocalScanner(name, 
         return yamlMapper.createArrayNode().apply { addAll(yamlNodes) }
     }
 
-    override fun generateSummary(startTime: Instant, endTime: Instant, scanPath: File, result: JsonNode): ScanSummary {
+    private fun generateSummary(startTime: Instant, endTime: Instant, scanPath: File, result: JsonNode): ScanSummary {
         val licenseFindings = result.map {
             val filePath = File(it["Path"].textValue())
             LicenseFinding(

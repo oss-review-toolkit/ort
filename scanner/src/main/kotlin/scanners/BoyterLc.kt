@@ -153,7 +153,7 @@ class BoyterLc(name: String, config: ScannerConfiguration) : LocalScanner(name, 
             EMPTY_JSON_NODE
         }
 
-    override fun generateSummary(startTime: Instant, endTime: Instant, scanPath: File, result: JsonNode): ScanSummary {
+    private fun generateSummary(startTime: Instant, endTime: Instant, scanPath: File, result: JsonNode): ScanSummary {
         val licenseFindings = result.flatMap { file ->
             val filePath = File(file["Directory"].textValue(), file["Filename"].textValue())
             file["LicenseGuesses"].map {
