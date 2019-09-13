@@ -704,23 +704,18 @@ class ScanCodeTest : WordSpec({
 
             summary.copyrightFindings shouldContainExactlyInAnyOrder expectedCopyrightFindings
         }
-    }
 
-    "associateFindings()" should {
-        "properly associate licenses to locations and copyrights for the new output format" {
+        "properly summarize license findings for ScanCode 2.9.7" {
             val resultFile = File("src/test/assets/aws-java-sdk-core-1.11.160_scancode-2.9.7.json")
             val result = scanner.getRawResult(resultFile)
 
-            val actualFindings = scanner.associateFindings(result)
+            val actualFindings = scanner
+                .generateSummary(Instant.now(), Instant.now(), result)
+                .licenseFindings
 
-            actualFindings should haveSize(1)
-
-            val finding = actualFindings.first()
-            finding.license shouldBe "Apache-2.0"
-
-            // Only compare the first 10 elements because the result contains too many locations to list them all.
-            finding.locations should haveSize(517)
-            finding.locations.toList().subList(0, 10) shouldBe listOf(
+            actualFindings.distinctBy { it.license } should haveSize(1)
+            actualFindings should haveSize(517)
+            actualFindings.toList().subList(0, 10).map { it.location } shouldContainExactlyInAnyOrder listOf(
                 TextLocation("com/amazonaws/AbortedException.java", 4, 13),
                 TextLocation("com/amazonaws/AmazonClientException.java", 4, 13),
                 TextLocation("com/amazonaws/AmazonServiceException.java", 4, 13),
@@ -732,8 +727,17 @@ class ScanCodeTest : WordSpec({
                 TextLocation("com/amazonaws/ClientConfiguration.java", 4, 13),
                 TextLocation("com/amazonaws/ClientConfigurationFactory.java", 4, 13)
             )
+        }
 
-            finding.copyrights.map { it.statement } shouldBe listOf(
+        "properly summarize copyright findings for ScanCode 2.9.7" {
+            val resultFile = File("src/test/assets/aws-java-sdk-core-1.11.160_scancode-2.9.7.json")
+            val result = scanner.getRawResult(resultFile)
+
+            val actualFindings = scanner
+                .generateSummary(Instant.now(), Instant.now(), result)
+                .copyrightFindings
+
+            actualFindings.map { it.statement }.distinct() shouldContainExactlyInAnyOrder listOf(
                 "Copyright (c) 2016 Amazon.com, Inc.",
                 "Copyright (c) 2016. Amazon.com, Inc.",
                 "Copyright 2010-2017 Amazon.com, Inc.",
