@@ -342,9 +342,7 @@ class PhpComposer(
     }
 
     private fun installDependencies(workingDir: File) {
-        require(analyzerConfig.allowDynamicVersions || File(workingDir, COMPOSER_LOCK_FILE).isFile) {
-            "No lock file found in $workingDir, dependency versions are unstable."
-        }
+        requireLockfile(workingDir) { File(workingDir, COMPOSER_LOCK_FILE).isFile }
 
         // The "install" command creates a "composer.lock" file (if not yet present) except for projects without any
         // dependencies, see https://getcomposer.org/doc/01-basic-usage.md#installing-without-composer-lock.

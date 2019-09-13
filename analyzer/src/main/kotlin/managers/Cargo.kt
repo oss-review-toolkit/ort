@@ -137,16 +137,20 @@ class Cargo(
      */
     private fun resolveLockfile(metadata: JsonNode): File {
         val workspaceRoot = metadata["workspace_root"].textValueOrEmpty()
-        val lockfile = File(workspaceRoot, "Cargo.lock")
+        val workingDir = File(workspaceRoot)
+        val lockfile = workingDir.resolve("Cargo.lock")
 
-        require(lockfile.isFile) {
-            "Missing 'Cargo.lock' file in '$workspaceRoot'."
-        }
+        requireLockfile(workingDir) { lockfile.isFile }
 
         return lockfile
     }
 
     private fun readHashes(lockfile: File): Map<String, String> {
+        if (!lockfile.isFile) {
+            log.debug { "Cannot determine the hashes of remote artifacts because the Cargo lockfile is missing." }
+            return emptyMap()
+        }
+
         val contents = Toml().read(lockfile)
         val metadata = contents.getTable("metadata") ?: return emptyMap()
         val metadataMap = metadata.toMap()

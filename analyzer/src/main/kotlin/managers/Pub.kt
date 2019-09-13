@@ -513,9 +513,7 @@ class Pub(
     }
 
     private fun installDependencies(workingDir: File) {
-        require(analyzerConfig.allowDynamicVersions || File(workingDir, PUB_LOCK_FILE).isFile) {
-            "No lock file found in $workingDir, dependency versions are unstable."
-        }
+        requireLockfile(workingDir) { File(workingDir, PUB_LOCK_FILE).isFile }
 
         // The "get" command creates a "pubspec.lock" file (if not yet present) except for projects without any
         // dependencies, see https://dart.dev/tools/pub/cmd/pub-get.

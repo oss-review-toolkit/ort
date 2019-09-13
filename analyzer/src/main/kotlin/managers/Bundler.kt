@@ -224,9 +224,7 @@ class Bundler(
         workingDir.listFiles { _, name -> name.endsWith(".gemspec") }.firstOrNull()
 
     private fun installDependencies(workingDir: File) {
-        require(analyzerConfig.allowDynamicVersions || File(workingDir, "Gemfile.lock").isFile) {
-            "No lockfile found in ${workingDir.invariantSeparatorsPath}, dependency versions are unstable."
-        }
+        requireLockfile(workingDir) { File(workingDir, "Gemfile.lock").isFile }
 
         run(workingDir, "install", "--path", "vendor/bundle")
     }

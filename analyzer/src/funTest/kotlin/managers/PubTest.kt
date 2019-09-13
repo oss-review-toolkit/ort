@@ -109,7 +109,7 @@ class PubTest : WordSpec() {
                 yamlMapper.writeValueAsString(result) shouldBe expectedResult
             }
 
-            "Error is shown when no lock file is present" {
+            "Error is shown when no lockfile is present" {
                 val workingDir = File(projectsDir, "no-lockfile")
                 val packageFile = File(workingDir, "pubspec.yaml")
 
@@ -120,7 +120,7 @@ class PubTest : WordSpec() {
                         "analyzer/src/funTest/assets/projects/synthetic/pub/no-lockfile/pubspec.yaml"
                 result.packages.size shouldBe 0
                 result.errors.size shouldBe 1
-                result.errors.first().message should startWith("IllegalArgumentException: No lock file found in")
+                result.errors.first().message should startWith("IllegalArgumentException: No lockfile found in")
             }
         }
     }
