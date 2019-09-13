@@ -67,9 +67,7 @@ class Cargo(
 
     companion object {
         private const val REQUIRED_CARGO_VERSION = "1.0.0"
-        private const val SCOPE_NAME_DEPENDENCIES = "dependencies"
-        private const val SCOPE_NAME_DEV_DEPENDENCIES = "dev-dependencies"
-        private const val SCOPE_NAME_BUILD_DEPENDENCIES = "build-dependencies"
+
         private val pathDependencyRegex = Regex("""^.*\(path\+file://(.*)\)$""")
     }
 
@@ -251,43 +249,27 @@ class Cargo(
             .single { it.startsWith("$projectName $projectVersion") }
 
         val projectNode = metadata["packages"].single { it["id"].textValueOrEmpty() == projectId }
+        val groupedDependencies = projectNode["dependencies"].groupBy { it["kind"].textValueOrEmpty() }
 
-        fun filterDependencies(condition: (String) -> Boolean) =
-            projectNode["dependencies"].filter { node ->
-                val kind = node["kind"].textValueOrEmpty()
-                condition(kind)
-            }.mapNotNull {
-                val dependencyName = it["name"].textValue()
-                val version = getResolvedVersion(projectName, projectVersion, dependencyName, metadata)
-                if (version == null) null else Pair(dependencyName, version)
-            }
+        fun getTransitiveDependencies(directDependencies: List<JsonNode>?, scope: String): Scope {
+            val transitiveDependencies = directDependencies
+                .orEmpty()
+                .mapNotNull { dependency ->
+                    val dependencyName = dependency["name"].textValue()
+                    val version = getResolvedVersion(projectName, projectVersion, dependencyName, metadata)
+                    version?.let { Pair(dependencyName, it) }
+                }
+                .map {
+                    buildDependencyTree(name = it.first, version = it.second, packages = packages, metadata = metadata)
+                }
+                .toSortedSet()
 
-        val directDependencies = filterDependencies { kind -> kind != "dev" && kind != "build" }
-        val directDevDependencies = filterDependencies { kind -> kind == "dev" }
-        val directBuildDependencies = filterDependencies { kind -> kind == "build" }
-
-        val dependencies = directDependencies.mapTo(sortedSetOf()) {
-            buildDependencyTree(name = it.first, version = it.second, packages = packages, metadata = metadata)
-        }
-        val devDependencies = directDevDependencies.mapTo(sortedSetOf()) {
-            buildDependencyTree(name = it.first, version = it.second, packages = packages, metadata = metadata)
-        }
-        val buildDependencies = directBuildDependencies.mapTo(sortedSetOf()) {
-            buildDependencyTree(name = it.first, version = it.second, packages = packages, metadata = metadata)
+            return Scope(name = scope, dependencies = transitiveDependencies)
         }
 
-        val dependenciesScope = Scope(
-            name = SCOPE_NAME_DEPENDENCIES,
-            dependencies = dependencies
-        )
-        val devDependenciesScope = Scope(
-            name = SCOPE_NAME_DEV_DEPENDENCIES,
-            dependencies = devDependencies
-        )
-        val buildDependenciesScope = Scope(
-            name = SCOPE_NAME_BUILD_DEPENDENCIES,
-            dependencies = buildDependencies
-        )
+        val dependenciesScope = getTransitiveDependencies(groupedDependencies[""], "dependencies")
+        val devDependenciesScope = getTransitiveDependencies(groupedDependencies["dev"], "dev-dependencies")
+        val buildDependenciesScope = getTransitiveDependencies(groupedDependencies["build"], "build-dependencies")
 
         val projectPkg = packages.values.single { pkg ->
             pkg.id.name == projectName && pkg.id.version == projectVersion
