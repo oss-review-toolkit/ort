@@ -24,7 +24,6 @@ import com.fasterxml.jackson.databind.JsonNode
 import com.here.ort.model.CopyrightFinding
 import com.here.ort.model.EMPTY_JSON_NODE
 import com.here.ort.model.LicenseFinding
-import com.here.ort.model.LicenseFindings
 import com.here.ort.model.OrtIssue
 import com.here.ort.model.Provenance
 import com.here.ort.model.ScanResult
@@ -52,7 +51,6 @@ import java.io.File
 import java.io.IOException
 import java.net.HttpURLConnection
 import java.time.Instant
-import java.util.SortedSet
 import java.util.regex.Pattern
 
 import kotlin.math.max
@@ -447,10 +445,4 @@ class ScanCode(
                 }
             }
         }
-
-    /**
-     * Associate copyright findings to license findings throughout the whole result.
-     */
-    internal fun associateFindings(result: JsonNode): SortedSet<LicenseFindings> =
-        findingsMatcher.match(getLicenseFindings(result), getCopyrightFindings(result))
 }
