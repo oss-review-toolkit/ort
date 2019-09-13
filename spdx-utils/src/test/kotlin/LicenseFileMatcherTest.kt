@@ -32,4 +32,14 @@ class LicenseFileMatcherTest : WordSpec({
             // TODO: add more important license file names
         }
     }
+
+    "matches" should {
+        "match the given patterns" {
+            val matcher = LicenseFileMatcher("a/LICENSE", "b/LICENSE")
+
+            matcher.matches("a/LICENSE") shouldBe true
+            matcher.matches("b/LICENSE") shouldBe true
+            matcher.matches("c/LICENSE") shouldBe false
+        }
+    }
 })
