@@ -246,4 +246,14 @@ abstract class PackageManager(
      * Resolve dependencies for a single absolute [definitionFile] and return a [ProjectAnalyzerResult].
      */
     abstract fun resolveDependencies(definitionFile: File): ProjectAnalyzerResult?
+
+    protected fun requireLockfile(workingDir: File, condition: () -> Boolean) {
+        require(analyzerConfig.allowDynamicVersions || condition()) {
+            val relativePathString = workingDir.relativeTo(analysisRoot).invariantSeparatorsPath
+                .takeUnless { it.isEmpty() } ?: "."
+
+            "No lockfile found in '$relativePathString'. This potentially results in unstable versions of " +
+                    "dependencies. To allow this, enable support for dynamic versions."
+        }
+    }
 }

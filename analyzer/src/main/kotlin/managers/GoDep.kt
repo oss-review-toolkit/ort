@@ -186,14 +186,7 @@ class GoDep(
     }
 
     private fun importLegacyManifest(lockfileName: String, workingDir: File, gopath: File) {
-        if (lockfileName.isNotEmpty() && !File(workingDir, lockfileName).isFile &&
-            !analyzerConfig.allowDynamicVersions
-        ) {
-            throw IllegalArgumentException(
-                "No lockfile found in ${workingDir.invariantSeparatorsPath}, dependency " +
-                        "versions are unstable."
-            )
-        }
+        requireLockfile(workingDir) { lockfileName.isEmpty() || File(workingDir, lockfileName).isFile }
 
         run("init", workingDir = workingDir, environment = mapOf("GOPATH" to gopath.realFile().path))
     }

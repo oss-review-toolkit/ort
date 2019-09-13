@@ -488,15 +488,7 @@ open class Npm(
      * Install dependencies using the given package manager command.
      */
     private fun installDependencies(workingDir: File) {
-        if (!hasLockFile(workingDir) && !analyzerConfig.allowDynamicVersions) {
-            val relativePathString = workingDir.relativeTo(analysisRoot).invariantSeparatorsPath
-                .takeUnless { it.isEmpty() } ?: "."
-
-            throw IllegalArgumentException(
-                "No lockfile found in '$relativePathString'. This potentially results in unstable versions of " +
-                        "dependencies. To allow this, enable support for dynamic versions."
-            )
-        }
+        requireLockfile(workingDir) { hasLockFile(workingDir) }
 
         // Install all NPM dependencies to enable NPM to list dependencies.
         if (hasLockFile(workingDir) && this::class.java == Npm::class.java) {

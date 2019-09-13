@@ -57,7 +57,7 @@ class PhpComposerTest : StringSpec() {
             yamlMapper.writeValueAsString(result) shouldBe expectedResults
         }
 
-        "Error is shown when no lock file is present" {
+        "Error is shown when no lockfile is present" {
             val definitionFile = File(projectsDir, "no-lockfile/composer.json")
             val result = createPhpComposer().resolveDependencies(listOf(definitionFile))[definitionFile]
 
@@ -70,7 +70,7 @@ class PhpComposerTest : StringSpec() {
                     "analyzer/src/funTest/assets/projects/synthetic/php-composer/no-lockfile/composer.json"
             result.packages.size shouldBe 0
             result.errors.size shouldBe 1
-            result.errors.first().message should startWith("IllegalArgumentException: No lock file found in")
+            result.errors.first().message should startWith("IllegalArgumentException: No lockfile found in")
         }
 
         "No composer.lock is required for projects without dependencies" {
