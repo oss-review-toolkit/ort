@@ -408,7 +408,7 @@ class ScanCode(
     /**
      * Get the license findings from the given [result].
      */
-    internal fun getLicenseFindings(result: JsonNode): List<LicenseFinding> =
+    private fun getLicenseFindings(result: JsonNode): List<LicenseFinding> =
         result["files"].flatMap { file ->
             file["licenses"]?.toList().orEmpty().map {
                 LicenseFinding(
@@ -425,7 +425,7 @@ class ScanCode(
     /**
      * Get the copyright findings from the given [result].
      */
-    internal fun getCopyrightFindings(result: JsonNode): List<CopyrightFinding> =
+    private fun getCopyrightFindings(result: JsonNode): List<CopyrightFinding> =
         result["files"].flatMap { file ->
             val path = file["path"].textValue()
 
