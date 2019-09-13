@@ -86,6 +86,61 @@ class FindingsMatcherTest : WordSpec() {
             }
         }
 
+        "Given a license finding in a license file and a file with copyright and license findings, match" should {
+            "not associate that copyright with the root license" {
+                setupLicenseFinding(license = "some id", path = "a/LICENSE")
+                setupLicenseFinding(license = "some other id", path = "some/other/file")
+                setupCopyrightFinding(statement = "some stmt", path = "some/other/file")
+
+                val result = matcher.match(licenseFindings, copyrightFindings)
+
+                result.getFindings("some id").copyrights should beEmpty()
+            }
+        }
+
+        "Given license findings in two license files and copyright findings in a file without license, match" should {
+            "associate should discard those copyright findings" {
+                // This test illustrates a bug. TODO: Fix it.
+                setupLicenseFinding(license = "some id", path = "a/LICENSE")
+                setupLicenseFinding(license = "some other id", path = "b/LICENSE")
+
+                setupCopyrightFinding(statement = "some stmt", path = "some/file")
+
+                val result = FindingsMatcher(LicenseFileMatcher("a/LICENSE", "b/LICENSE"))
+                    .match(licenseFindings, copyrightFindings)
+
+                result.size shouldBe 2
+                result.flatMap { it.copyrights } should beEmpty()
+            }
+        }
+
+        "Given a file with multiple license findings and 6 copyrights above one of them, match" should {
+            "associate all except the top copyright finding" {
+                // TODO: change the behavior of the algorithm so that also the top most copyright is matched
+                setupLicenseFinding(license = "license nearby", path = "some/file", line = 16)
+                setupLicenseFinding(license = "license far away", path = "some/file", line = 1000)
+                setupCopyrightFinding(statement = "stmt 1", path = "some/file", line = 10)
+                setupCopyrightFinding(statement = "stmt 2", path = "some/file", line = 11)
+                setupCopyrightFinding(statement = "stmt 3", path = "some/file", line = 12)
+                setupCopyrightFinding(statement = "stmt 4", path = "some/file", line = 13)
+                setupCopyrightFinding(statement = "stmt 5", path = "some/file", line = 14)
+                setupCopyrightFinding(statement = "stmt 6", path = "some/file", line = 15)
+
+                val result = matcher.match(licenseFindings, copyrightFindings)
+
+                result.size shouldBe 2
+                result.flatMap { it.copyrights.filter { it.statement == "stmt 1" } } should beEmpty()
+                result.getFindings("license nearby").copyrights.map { it.statement } shouldContainExactlyInAnyOrder
+                        listOf(
+                            "stmt 2",
+                            "stmt 3",
+                            "stmt 4",
+                            "stmt 5",
+                            "stmt 6"
+                        )
+            }
+        }
+
         "Given no license finding in any license file and a copyright finding in a file without license, match" should {
             "discard that copyright" {
                 setupCopyrightFinding(statement = "some stmt", path = "some/other/file")
@@ -93,6 +148,32 @@ class FindingsMatcherTest : WordSpec() {
                 val result = matcher.match(licenseFindings, copyrightFindings)
 
                 result.size shouldBe 0
+            }
+        }
+
+        "Given license findings in non-license files and a copyright finding in a file without license, match" should {
+            "discard that copyright" {
+                setupLicenseFinding(license = "some license", path = "some/file")
+                setupCopyrightFinding(statement = "some stmt", path = "some/other/file")
+
+                val result = matcher.match(licenseFindings, copyrightFindings)
+
+                result.size shouldBe 1
+                result.flatMap { it.copyrights } should beEmpty()
+            }
+        }
+
+        "Given a copyright finding within line tolerance of two license findings, match" should {
+            "associate that copyright with both licenses" {
+                setupLicenseFinding(license = "some id", path = "some/file", line = 5)
+                setupLicenseFinding(license = "some other id", path = "some/file", line = 6)
+                setupCopyrightFinding(statement = "some stmt", path = "some/file", line = 4)
+
+                val result = matcher.match(licenseFindings, copyrightFindings)
+
+                result.size shouldBe 2
+                result.getFindings("some id").copyrights.map { it.statement } shouldBe listOf("some stmt")
+                result.getFindings("some other id").copyrights.map { it.statement } shouldBe listOf("some stmt")
             }
         }
 
