@@ -138,8 +138,9 @@ class Cargo(
     private fun resolveLockfile(metadata: JsonNode): File {
         val workspaceRoot = metadata["workspace_root"].textValueOrEmpty()
         val lockfile = File(workspaceRoot, "Cargo.lock")
-        if (!lockfile.isFile) {
-            throw IllegalArgumentException("missing Cargo.lock file")
+
+        require(lockfile.isFile) {
+            "Missing 'Cargo.lock' file in '$workspaceRoot'."
         }
 
         return lockfile
