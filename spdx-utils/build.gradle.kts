@@ -48,8 +48,6 @@ dependencies {
 
     api("com.fasterxml.jackson.core:jackson-databind:$jacksonVersion")
 
-    implementation("commons-codec:commons-codec:$commonsCodecVersion")
-
     testImplementation("com.fasterxml.jackson.module:jackson-module-kotlin:$jacksonVersion")
 }
 
