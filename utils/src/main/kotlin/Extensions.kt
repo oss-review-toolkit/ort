@@ -27,11 +27,9 @@ import com.fasterxml.jackson.databind.type.TypeFactory
 import com.fasterxml.jackson.databind.util.ClassUtil
 
 import com.vdurmont.semver4j.Semver
-import com.vdurmont.semver4j.SemverException
 
 import java.io.File
 import java.io.IOException
-import java.net.MalformedURLException
 import java.net.URI
 import java.net.URISyntaxException
 import java.net.URL
@@ -268,35 +266,17 @@ fun String.percentEncode(): String =
 /**
  * True if the string is a valid semantic version of the given [type], false otherwise.
  */
-fun String.isSemanticVersion(type: Semver.SemverType = Semver.SemverType.STRICT) =
-    try {
-        Semver(this, type)
-        true
-    } catch (e: SemverException) {
-        false
-    }
+fun String.isSemanticVersion(type: Semver.SemverType = Semver.SemverType.STRICT) = succeeds { Semver(this, type) }
 
 /**
  * True if the string is a valid [URI], false otherwise.
  */
-fun String.isValidUri() =
-    try {
-        URI(this)
-        true
-    } catch (e: URISyntaxException) {
-        false
-    }
+fun String.isValidUri() = succeeds { URI(this) }
 
 /**
  * True if the string is a valid [URL], false otherwise.
  */
-fun String.isValidUrl() =
-    try {
-        URL(this)
-        true
-    } catch (e: MalformedURLException) {
-        false
-    }
+fun String.isValidUrl() = succeeds { URL(this) }
 
 /**
  * A regular expression matching the non-linux line breaks "\r\n" and "\r".
