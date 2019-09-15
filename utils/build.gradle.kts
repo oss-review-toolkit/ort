@@ -22,7 +22,6 @@ dependencies {
     implementation(project(":spdx-utils"))
 
     implementation("com.jakewharton:disklrucache:$disklrucacheVersion")
-    implementation("commons-codec:commons-codec:$commonsCodecVersion")
     implementation("org.apache.commons:commons-compress:$commonsCompressVersion")
     implementation("org.tukaani:xz:$xzVersion")
     implementation("org.jetbrains.kotlin:kotlin-scripting-jsr223-embeddable")

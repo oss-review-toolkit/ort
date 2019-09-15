@@ -41,9 +41,8 @@ import java.nio.file.Path
 import java.nio.file.SimpleFileVisitor
 import java.nio.file.StandardCopyOption
 import java.nio.file.attribute.BasicFileAttributes
+import java.security.MessageDigest
 import java.util.TreeSet
-
-import org.apache.commons.codec.digest.DigestUtils
 
 /**
  * Return a string of hexadecimal digits representing the bytes in the array.
@@ -59,7 +58,8 @@ fun File.expandTilde(): File =
 /**
  * Return the hexadecimal digest of the given hash [algorithm] for this [File].
  */
-fun File.hash(algorithm: String = "SHA-1"): String = DigestUtils(algorithm).digestAsHex(this)
+fun File.hash(algorithm: String = "SHA-1"): String =
+    MessageDigest.getInstance(algorithm).digest(readBytes()).toHexString()
 
 /**
  * Resolve the file to the real underlying file. In contrast to Java's [File.getCanonicalFile], this also works to
