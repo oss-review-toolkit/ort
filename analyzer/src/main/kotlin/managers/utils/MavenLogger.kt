@@ -45,7 +45,7 @@ private fun toPlexusLoggerLevel(level: Level) =
  * Implementation of the Plexus [Logger] that forwards all logs to the [org.slf4j.Logger] [log] using the appropriate
  * log levels.
  */
-class MavenLogger(level: Level) : AbstractLogger(toPlexusLoggerLevel(level), log.delegate.name) {
+class MavenLogger(level: Level) : AbstractLogger(toPlexusLoggerLevel(level), "MavenLogger") {
     override fun getChildLogger(name: String?) = this
 
     override fun debug(message: String, throwable: Throwable?) = log.debug(message, throwable)
