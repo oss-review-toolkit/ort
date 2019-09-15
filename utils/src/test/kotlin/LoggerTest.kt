@@ -19,18 +19,14 @@
 
 package com.here.ort.utils
 
-import org.apache.logging.log4j.kotlin.KotlinLogger
-import org.apache.logging.log4j.kotlin.loggerOf
+import io.kotlintest.matchers.types.shouldBeSameInstanceAs
+import io.kotlintest.specs.StringSpec
 
-import java.util.concurrent.ConcurrentHashMap
+class LoggerTest : StringSpec({
+    "Only one logger is created per class" {
+        val a = this.log
+        val b = this.log
 
-/**
- * Global map of loggers for classes so only one logger needs to be instantiated per class.
- */
-val loggerOfClass = ConcurrentHashMap<Any, KotlinLogger>()
-
-/**
- * An extension property for adding a log instance to any (unique) class.
- */
-val <reified T : Any> T.log: KotlinLogger
-    inline get() = loggerOfClass.getOrPut(T::class.java) { loggerOf(T::class.java) }
+        a shouldBeSameInstanceAs b
+    }
+})
