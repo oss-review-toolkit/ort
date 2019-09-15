@@ -29,13 +29,12 @@ import com.here.ort.utils.ProcessCapture
 import com.here.ort.utils.log
 import com.here.ort.utils.safeDeleteRecursively
 import com.here.ort.utils.searchUpwardsForSubdirectory
+import com.here.ort.utils.toHexString
 
 import java.io.File
 import java.io.IOException
+import java.security.MessageDigest
 import java.util.regex.Pattern
-
-import org.apache.commons.codec.binary.Hex
-import org.apache.commons.codec.digest.DigestUtils
 
 typealias CvsFileRevisions = List<Pair<String, String>>
 
@@ -101,14 +100,13 @@ class Cvs : VersionControlSystem(), CommandLineTool {
                 }.sortedBy { it.first }
             }
 
-            private fun getFileRevisionsHash(fileRevisions: CvsFileRevisions): String {
-                val digest = fileRevisions.fold(DigestUtils.getSha1Digest()) { digest, (file, revision) ->
-                    DigestUtils.updateDigest(digest, file)
-                    DigestUtils.updateDigest(digest, revision)
-                }.digest()
-
-                return Hex.encodeHexString(digest)
-            }
+            private fun getFileRevisionsHash(fileRevisions: CvsFileRevisions) =
+                fileRevisions.fold(MessageDigest.getInstance("SHA-1")) { digest, (file, revision) ->
+                    digest.apply {
+                        update(file.toByteArray())
+                        update(revision.toByteArray())
+                    }
+                }.digest().toHexString()
 
             override fun getRootPath(): File {
                 val rootDir = workingDir.searchUpwardsForSubdirectory("CVS")

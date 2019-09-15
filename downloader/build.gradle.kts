@@ -12,6 +12,4 @@ dependencies {
     implementation(project(":utils"))
 
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin:$jacksonVersion")
-
-    implementation("commons-codec:commons-codec:$commonsCodecVersion")
 }
