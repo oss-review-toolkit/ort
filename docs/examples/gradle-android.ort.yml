@@ -5,4 +5,4 @@ excludes:
     comment: "Scope with dependencies only used for testing. Not included in released artifacts in the context of this project."
   - name: ".*Test.*"
     reason: "TEST_TOOL_OF"
-    comment: "Scope with dependencies only used for testing. Not included in released artifacts in the context of this project.."
+    comment: "Scope with dependencies only used for testing. Not included in released artifacts in the context of this project."
