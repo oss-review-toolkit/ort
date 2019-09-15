@@ -65,7 +65,6 @@ object SpdxLicenseAliasMapping {
         "MIT-style" to MIT,
         "MPL" to MPL_2_0,
         "MPLv2.0" to MPL_2_0,
-        "Ruby's" to RUBY,
         "UNLICENSE" to UNLICENSE,
         "UNLICENSED" to UNLICENSE,
         "boost" to BSL_1_0,
