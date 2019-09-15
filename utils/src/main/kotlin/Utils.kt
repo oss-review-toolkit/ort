@@ -17,6 +17,8 @@
  * License-Filename: LICENSE
  */
 
+@file:Suppress("TooManyFunctions")
+
 package com.here.ort.utils
 
 import java.io.File
@@ -252,6 +254,18 @@ fun normalizeVcsUrl(vcsUrl: String): String {
 
     return url
 }
+
+/**
+ * Return true if the call of [block] succeeds without throwing an exception, return false if an exception was thrown.
+ */
+@Suppress("TooGenericExceptionCaught")
+inline fun succeeds(block: () -> Unit) =
+    try {
+        block()
+        true
+    } catch (e: Throwable) {
+        false
+    }
 
 /**
  * Temporarily set the specified system [properties] while executing [block]. Afterwards, previously set properties have
