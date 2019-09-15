@@ -1,2 +1,4 @@
 * @sschuberth @mnonnenmacher @fviernau
+*.md @tsteenbe
 /reporter-web-app/ @tsteenbe
+/spdx-utils/src/main/ @tsteenbe
