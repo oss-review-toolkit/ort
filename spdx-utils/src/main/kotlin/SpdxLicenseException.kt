@@ -97,6 +97,10 @@ enum class SpdxLicenseException(
     QT_LGPL_EXCEPTION_1_1("Qt-LGPL-exception-1.1"),
     /** Qwt exception 1.0 */
     QWT_EXCEPTION_1_0("Qwt-exception-1.0"),
+    /** Swift Exception */
+    SWIFT_EXCEPTION("Swift-exception"),
+    /** Universal FOSS Exception, Version 1.0 */
+    UNIVERSAL_FOSS_EXCEPTION_1_0("Universal-FOSS-exception-1.0"),
     /** U-Boot exception 2.0 */
     U_BOOT_EXCEPTION_2_0("u-boot-exception-2.0"),
     /** WxWindows Library Exception 3.1 */
