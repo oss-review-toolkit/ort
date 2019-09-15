@@ -53,9 +53,10 @@ class LicenseFileMatcher(val licenseFileNames: List<String>) {
      * Return true if and only if the given [path] is matched by any of the license file globs passed to the
      * constructor.
      */
-    fun matches(path: String): Boolean = try {
-        matchers.any { it.matches(Paths.get(path)) }
-    } catch (e: InvalidPathException) {
-        false
-    }
+    fun matches(path: String): Boolean =
+        try {
+            matchers.any { it.matches(Paths.get(path)) }
+        } catch (e: InvalidPathException) {
+            false
+        }
 }
