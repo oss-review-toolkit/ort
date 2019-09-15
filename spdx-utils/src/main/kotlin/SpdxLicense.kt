@@ -115,6 +115,10 @@ enum class SpdxLicense(
     BITTORRENT_1_0("BitTorrent-1.0"),
     /** BitTorrent Open Source License v1.1 */
     BITTORRENT_1_1("BitTorrent-1.1"),
+    /** SQLite Blessing */
+    BLESSING("blessing"),
+    /** Blue Oak Model License 1.0.0 */
+    BLUEOAK_1_0_0("BlueOak-1.0.0"),
     /** Borceux license */
     BORCEUX("Borceux"),
     /** BSD 1-Clause License */
@@ -141,6 +145,8 @@ enum class SpdxLicense(
     BSD_3_CLAUSE_NO_NUCLEAR_LICENSE_2014("BSD-3-Clause-No-Nuclear-License-2014"),
     /** BSD 3-Clause No Nuclear Warranty */
     BSD_3_CLAUSE_NO_NUCLEAR_WARRANTY("BSD-3-Clause-No-Nuclear-Warranty"),
+    /** BSD 3-Clause Open MPI variant */
+    BSD_3_CLAUSE_OPEN_MPI("BSD-3-Clause-Open-MPI"),
     /** BSD 4-Clause "Original" or "Old" License */
     BSD_4_CLAUSE("BSD-4-Clause"),
     /** BSD-4-Clause (University of California-Specific) */
@@ -221,6 +227,8 @@ enum class SpdxLicense(
     CC_BY_SA_3_0("CC-BY-SA-3.0"),
     /** Creative Commons Attribution Share Alike 4.0 International */
     CC_BY_SA_4_0("CC-BY-SA-4.0"),
+    /** Creative Commons Public Domain Dedication and Certification */
+    CC_PDDC("CC-PDDC"),
     /** Common Development and Distribution License 1.0 */
     CDDL_1_0("CDDL-1.0"),
     /** Common Development and Distribution License 1.1 */
@@ -647,6 +655,8 @@ enum class SpdxLicense(
     OSL_2_1("OSL-2.1"),
     /** Open Software License 3.0 */
     OSL_3_0("OSL-3.0"),
+    /** The Parity Public License 6.0.0 */
+    PARITY_6_0_0("Parity-6.0.0"),
     /** ODC Public Domain Dedication & License 1.0 */
     PDDL_1_0("PDDL-1.0"),
     /** PHP License v3.0 */
@@ -699,6 +709,10 @@ enum class SpdxLicense(
     SGI_B_1_1("SGI-B-1.1"),
     /** SGI Free Software License B v2.0 */
     SGI_B_2_0("SGI-B-2.0"),
+    /** Solderpad Hardware License v0.5 */
+    SHL_0_5("SHL-0.5"),
+    /** Solderpad Hardware License, Version 0.51 */
+    SHL_0_51("SHL-0.51"),
     /** Simple Public License 2.0 */
     SIMPL_2_0("SimPL-2.0"),
     /** Sun Industry Standards Source License v1.1 */
@@ -721,6 +735,8 @@ enum class SpdxLicense(
     SPENCER_99("Spencer-99"),
     /** Sun Public License v1.0 */
     SPL_1_0("SPL-1.0"),
+    /** Server Side Public License, v 1 */
+    SSPL_1_0("SSPL-1.0"),
     /** Standard ML of New Jersey License */
     STANDARDML_NJ("StandardML-NJ", true),
     /** SugarCRM Public License v1.1.3 */
@@ -743,6 +759,8 @@ enum class SpdxLicense(
     TU_BERLIN_1_0("TU-Berlin-1.0"),
     /** Technische Universitaet Berlin License 2.0 */
     TU_BERLIN_2_0("TU-Berlin-2.0"),
+    /** Upstream Compatibility License v1.0 */
+    UCL_1_0("UCL-1.0"),
     /** Unicode License Agreement - Data Files and Software (2015) */
     UNICODE_DFS_2015("Unicode-DFS-2015"),
     /** Unicode License Agreement - Data Files and Software (2016) */
