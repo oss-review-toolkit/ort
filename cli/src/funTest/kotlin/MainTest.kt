@@ -21,6 +21,7 @@ package com.here.ort
 
 import com.here.ort.downloader.VersionControlSystem
 import com.here.ort.utils.normalizeVcsUrl
+import com.here.ort.utils.redirectStdout
 import com.here.ort.utils.safeDeleteRecursively
 import com.here.ort.utils.test.patchActualResult
 import com.here.ort.utils.test.patchExpectedResult
@@ -30,9 +31,7 @@ import io.kotlintest.TestResult
 import io.kotlintest.shouldBe
 import io.kotlintest.specs.StringSpec
 
-import java.io.ByteArrayOutputStream
 import java.io.File
-import java.io.PrintStream
 
 /**
  * A test for the main entry point of the application.
@@ -163,18 +162,8 @@ class MainTest : StringSpec() {
     private data class Result(val stdout: Sequence<String>, val exitCode: Int)
 
     private fun runMain(vararg args: String): Result {
-        // Redirect standard output to a stream.
-        val standardOut = System.out
-        val streamOut = ByteArrayOutputStream()
-
-        System.setOut(PrintStream(streamOut))
-
-        try {
-            val exitCode = Main.run(args.asList().toTypedArray())
-            return Result(streamOut.toString().lineSequence(), exitCode)
-        } finally {
-            // Restore standard output.
-            System.setOut(standardOut)
-        }
+        var exitCode = 0
+        val output = redirectStdout { exitCode = Main.run(args.asList().toTypedArray()) }
+        return Result(output.lineSequence(), exitCode)
     }
 }
