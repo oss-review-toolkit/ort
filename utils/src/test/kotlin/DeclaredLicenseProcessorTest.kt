@@ -57,6 +57,7 @@ class DeclaredLicenseProcessorTest : StringSpec() {
             declaredLicenses.forEach { declaredLicense ->
                 val processedLicense = DeclaredLicenseProcessor.process(declaredLicense)
 
+                processedLicense shouldNotBe null
                 processedLicense!!.spdxLicenses().forEach {
                     // Include the license ID in the comparison to make it easier to find the wrong mapping.
                     "$it ${it.deprecated}" shouldBe "$it false"
