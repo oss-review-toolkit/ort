@@ -19,8 +19,10 @@
 
 package com.here.ort.utils
 
+import com.here.ort.spdx.enumSetOf
 import com.here.ort.spdx.SpdxExpression
 import com.here.ort.spdx.SpdxDeclaredLicenseMapping
+import com.here.ort.spdx.SpdxLicense
 import com.here.ort.spdx.SpdxLicenseAliasMapping
 import com.here.ort.spdx.SpdxLicenseIdExpression
 
@@ -63,6 +65,13 @@ class DeclaredLicenseProcessorTest : StringSpec() {
                     "$it ${it.deprecated}" shouldBe "$it false"
                 }
             }
+        }
+
+        "A prefix is removed from the license" {
+            val processedLicense = DeclaredLicenseProcessor.process("https://choosealicense.com/licenses/apache-2.0")
+
+            processedLicense shouldNotBe null
+            processedLicense!!.spdxLicenses() shouldBe enumSetOf(SpdxLicense.APACHE_2_0)
         }
     }
 }
