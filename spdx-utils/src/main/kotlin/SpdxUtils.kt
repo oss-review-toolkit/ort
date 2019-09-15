@@ -21,10 +21,8 @@ package com.here.ort.spdx
 
 import java.io.File
 import java.nio.file.FileSystems
+import java.security.MessageDigest
 import java.util.EnumSet
-
-import org.apache.commons.codec.binary.Hex
-import org.apache.commons.codec.digest.DigestUtils
 
 /**
  * A list of globs that match typical license file names.
@@ -51,15 +49,20 @@ val NON_LICENSE_FILENAMES = listOf(
 )
 
 /**
+ * Return a string of hexadecimal digits representing the bytes in the array.
+ */
+private fun ByteArray.toHexString(): String = joinToString("") { String.format("%02x", it) }
+
+/**
  * Calculate the [SPDX package verification code][1] for a list of known SHA1s of files.
  *
  * [1]: https://spdx.github.io/spdx-spec/chapters/3-package-information.html#39-package-verification-code-
  */
 @JvmName("calculatePackageVerificationCodeForStrings")
 fun calculatePackageVerificationCode(sha1sums: List<String>): String =
-    Hex.encodeHexString(sha1sums.sorted().fold(DigestUtils.getSha1Digest()) { digest, sha1sum ->
-        DigestUtils.updateDigest(digest, sha1sum)
-    }.digest())
+    sha1sums.sorted().fold(MessageDigest.getInstance("SHA-1")) { digest, sha1sum ->
+        digest.apply { update(sha1sum.toByteArray()) }
+    }.digest().toHexString()
 
 /**
  * Calculate the [SPDX package verification code][1] for a list of files.
@@ -68,9 +71,11 @@ fun calculatePackageVerificationCode(sha1sums: List<String>): String =
  */
 @JvmName("calculatePackageVerificationCodeForFiles")
 fun calculatePackageVerificationCode(files: List<File>) =
-    calculatePackageVerificationCode(files.map { file ->
-        file.inputStream().use { DigestUtils.sha1Hex(it) }
-    })
+    MessageDigest.getInstance("SHA-1").let { digest ->
+        calculatePackageVerificationCode(files.map { file ->
+            file.inputStream().use { digest.digest(it.readBytes()).toHexString() }
+        })
+    }
 
 /**
  * A Kotlin-style convenience function to replace EnumSet.of() and EnumSet.noneOf().
