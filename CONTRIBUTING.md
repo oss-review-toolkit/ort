@@ -2,8 +2,30 @@
 
 The team behind the [OSS Review Toolkit](https://github.com/heremaps/oss-review-toolkit) gratefully accepts contributions via
 [pull requests](https://help.github.com/articles/about-pull-requests/) filed against the
-[GitHub project](https://github.com/heremaps/oss-review-toolkit/pulls). As part of filing a pull request we ask you to
-sign off the [Developer Certificate of Origin](https://developercertificate.org/) (DCO).
+[GitHub project](https://github.com/heremaps/oss-review-toolkit/pulls).
+
+# Signing each Commit
+
+As part of filing a pull request we ask you to sign off the
+[Developer Certificate of Origin](https://developercertificate.org/) (DCO) in each commit.
+Any Pull Request with commits that are not signed off will be reject by the
+[DCO check](https://probot.github.io/apps/dco/).
+
+A DCO is lightweight way for a contributor to confirm that they wrote or otherwise have the right
+to submit code or documentation to a project. Simply add `Signed-off-by` as shown in the example below
+to indicate that you agree with the DCO.
+
+An example signed commit message:
+
+```
+    spdx-utils: Add sanity checks for values of the mapping objects
+
+    Signed-off-by: John Doe <john.doe@oss-review-toolkit.org>
+```
+
+Git has the `-s` flag that can sign a commit for you, see example below:
+
+`$ git commit -s -m 'spdx-utils: Add sanity checks for values of the mapping objects'`
 
 ## Git History
 
