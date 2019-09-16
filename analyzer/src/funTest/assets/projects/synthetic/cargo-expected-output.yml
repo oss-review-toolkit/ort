@@ -19,7 +19,7 @@ project:
     path: "<REPLACE_PATH>"
   homepage_url: "https://example.org"
   scopes:
-  - name: "buildDependencies"
+  - name: "build-dependencies"
     dependencies:
     - id: "Cargo::spin:0.5.0"
       linkage: "STATIC"
@@ -27,7 +27,7 @@ project:
     dependencies:
     - id: "Cargo::cfg-if:0.1.9"
       linkage: "STATIC"
-  - name: "devDependencies"
+  - name: "dev-dependencies"
     dependencies:
     - id: "Cargo::rand:0.6.5"
       linkage: "STATIC"

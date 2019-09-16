@@ -68,8 +68,8 @@ class Cargo(
     companion object {
         private const val REQUIRED_CARGO_VERSION = "1.0.0"
         private const val SCOPE_NAME_DEPENDENCIES = "dependencies"
-        private const val SCOPE_NAME_DEV_DEPENDENCIES = "devDependencies"
-        private const val SCOPE_NAME_BUILD_DEPENDENCIES = "buildDependencies"
+        private const val SCOPE_NAME_DEV_DEPENDENCIES = "dev-dependencies"
+        private const val SCOPE_NAME_BUILD_DEPENDENCIES = "build-dependencies"
         private val pathDependencyRegex = Regex("""^.*\(path\+file://(.*)\)$""")
     }
 

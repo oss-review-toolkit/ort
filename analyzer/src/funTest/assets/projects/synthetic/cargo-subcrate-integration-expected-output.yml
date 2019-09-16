@@ -16,13 +16,13 @@ project:
     path: "<REPLACE_PATH>"
   homepage_url: ""
   scopes:
-  - name: "buildDependencies"
+  - name: "build-dependencies"
     dependencies: []
   - name: "dependencies"
     dependencies:
     - id: "Cargo::spin:0.4.10"
       linkage: "STATIC"
-  - name: "devDependencies"
+  - name: "dev-dependencies"
     dependencies: []
 packages:
 - package:
