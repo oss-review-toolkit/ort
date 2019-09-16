@@ -218,9 +218,7 @@ object SpdxDeclaredLicenseMapping {
         "LGPLv3 or later" to LGPL_3_0_OR_LATER.toExpression(),
         "Lesser General Public License (LGPL)" to LGPL_2_1_ONLY.toExpression(),
         "Lesser General Public License, version 3 or greater" to LGPL_3_0_OR_LATER.toExpression(),
-        "License :: OSI Approved :: Apache Software" to APACHE_2_0.toExpression(),
-        "License :: OSI Approved :: MIT" to MIT.toExpression(),
-        "License :: OSI Approved :: MIT License (http://opensource.org/licenses/MIT)" to MIT.toExpression(),
+        "MIT License (http://opensource.org/licenses/MIT)" to MIT.toExpression(),
         "License Agreement For Open Source Computer Vision Library (3-clause BSD License)"
                 to BSD_3_CLAUSE.toExpression(),
         "MIT / http://rem.mit-license.org" to MIT.toExpression(),
