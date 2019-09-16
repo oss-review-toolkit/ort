@@ -34,12 +34,12 @@ import java.io.File
 class SpdxUtilsTest : WordSpec() {
     private var tempDir: File? = null
 
-    private fun setupTempFile(filename: String, content: String) {
+    private fun setupTempFile(filename: String, content: String): File {
         if (tempDir == null) {
             tempDir = createTempDir(SpdxUtilsTest::class.simpleName!!)
         }
 
-        File(tempDir, filename).writeText(content)
+        return File(tempDir, filename).apply { writeText(content) }
     }
 
     override fun afterTest(testCase: TestCase, result: TestResult) {
@@ -82,6 +82,15 @@ class SpdxUtilsTest : WordSpec() {
                 )
 
                 calculatePackageVerificationCode(sha1sums) shouldBe "1a74d8321c452522ec516a46893e6a42f36b5953"
+            }
+
+            "work for given files" {
+                val files = listOf(
+                    setupTempFile("fileA", "Hello"),
+                    setupTempFile("fileB", "World")
+                )
+
+                calculatePackageVerificationCode(files) shouldBe "378d5a37b5b10b90535e32a190014d2a8d25354a"
             }
         }
 
