@@ -1,0 +1,8 @@
+excludes:
+  scopes:
+  - name: "build-dependencies"
+    reason: "BUILD_TOOL_OF"
+    comment: "Scope with dependencies only used for building the source code. Not included in released artifacts in the context of this project."
+  - name: "dev-dependencies"
+    reason: "BUILD_TOOL_OF"
+    comment: "Scope with dependencies only used for development. Not included in released artifacts in the context of this project."

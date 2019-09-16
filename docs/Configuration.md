@@ -88,6 +88,7 @@ these examples match the configuration of your project.
 
 * [bower.ort.yml](examples/bower.ort.yml)
 * [bundler.ort.yml](examples/bundler.ort.yml)
+* [cargo.ort.yml](examples/cargo.ort.yml)
 * [go-dep.ort.yml](examples/go-dep.ort.yml)
 * [gradle.ort.yml](examples/gradle.ort.yml)
 * [gradle-android.ort.yml](examples/gradle-android.ort.yml)
