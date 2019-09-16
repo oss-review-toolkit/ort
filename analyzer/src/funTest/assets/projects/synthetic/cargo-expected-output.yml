@@ -19,6 +19,10 @@ project:
     path: "<REPLACE_PATH>"
   homepage_url: "https://example.org"
   scopes:
+  - name: "buildDependencies"
+    dependencies:
+    - id: "Cargo::spin:0.5.0"
+      linkage: "STATIC"
   - name: "dependencies"
     dependencies:
     - id: "Cargo::cfg-if:0.1.9"
@@ -119,8 +123,6 @@ project:
           linkage: "STATIC"
         - id: "Cargo::winapi-x86_64-pc-windows-gnu:0.4.0"
           linkage: "STATIC"
-    - id: "Cargo::spin:0.5.0"
-      linkage: "STATIC"
 packages:
 - package:
     id: "Cargo::autocfg:0.1.6"

@@ -69,6 +69,7 @@ class Cargo(
         private const val REQUIRED_CARGO_VERSION = "1.0.0"
         private const val SCOPE_NAME_DEPENDENCIES = "dependencies"
         private const val SCOPE_NAME_DEV_DEPENDENCIES = "devDependencies"
+        private const val SCOPE_NAME_BUILD_DEPENDENCIES = "buildDependencies"
         private val pathDependencyRegex = Regex("""^.*\(path\+file://(.*)\)$""")
     }
 
@@ -262,12 +263,16 @@ class Cargo(
             }
 
         val directDependencies = filterDependencies { kind -> kind != "dev" && kind != "build" }
-        val directDevDependencies = filterDependencies { kind -> kind == "dev" || kind == "build" }
+        val directDevDependencies = filterDependencies { kind -> kind == "dev" }
+        val directBuildDependencies = filterDependencies { kind -> kind == "build" }
 
         val dependencies = directDependencies.mapTo(sortedSetOf()) {
             buildDependencyTree(name = it.first, version = it.second, packages = packages, metadata = metadata)
         }
         val devDependencies = directDevDependencies.mapTo(sortedSetOf()) {
+            buildDependencyTree(name = it.first, version = it.second, packages = packages, metadata = metadata)
+        }
+        val buildDependencies = directBuildDependencies.mapTo(sortedSetOf()) {
             buildDependencyTree(name = it.first, version = it.second, packages = packages, metadata = metadata)
         }
 
@@ -278,6 +283,10 @@ class Cargo(
         val devDependenciesScope = Scope(
             name = SCOPE_NAME_DEV_DEPENDENCIES,
             dependencies = devDependencies
+        )
+        val buildDependenciesScope = Scope(
+            name = SCOPE_NAME_BUILD_DEPENDENCIES,
+            dependencies = buildDependencies
         )
 
         val projectPkg = packages.values.single { pkg ->
@@ -292,7 +301,7 @@ class Cargo(
             vcs = projectPkg.vcs,
             vcsProcessed = processProjectVcs(workingDir, projectPkg.vcs, homepageUrl),
             homepageUrl = homepageUrl,
-            scopes = sortedSetOf(dependenciesScope, devDependenciesScope)
+            scopes = sortedSetOf(dependenciesScope, devDependenciesScope, buildDependenciesScope)
         )
 
         val nonProjectPackages = packages

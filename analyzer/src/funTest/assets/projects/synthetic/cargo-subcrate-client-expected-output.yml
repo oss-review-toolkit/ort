@@ -16,6 +16,8 @@ project:
     path: "<REPLACE_PATH>"
   homepage_url: ""
   scopes:
+  - name: "buildDependencies"
+    dependencies: []
   - name: "dependencies"
     dependencies:
     - id: "Cargo::lib:0.1.0"
