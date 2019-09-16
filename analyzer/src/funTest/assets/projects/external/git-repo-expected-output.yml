@@ -1123,8 +1123,7 @@ analyzer:
         declared_licenses:
         - "Revised BSD License"
         declared_licenses_processed:
-          unmapped:
-          - "Revised BSD License"
+          spdx_expression: "BSD-3-Clause"
         description: "Json-LD core implementation"
         homepage_url: "http://github.com/jsonld-java/jsonld-java/jsonld-java/"
         binary_artifact:
