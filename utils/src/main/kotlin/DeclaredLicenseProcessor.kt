@@ -29,7 +29,11 @@ import com.here.ort.spdx.SpdxExpression
 object DeclaredLicenseProcessor {
     private val prefixesToRemove = listOf(
         "https://choosealicense.com/licenses/",
-        "https://opensource.org/licenses/"
+        "https://licenses.nuget.org/",
+        "https://opensource.org/licenses/",
+        "https://spdx.org/licenses/",
+        "https://tldrlegal.com/license/",
+        "https://www.gnu.org/licenses/"
     )
 
     fun process(declaredLicense: String): SpdxExpression? {
