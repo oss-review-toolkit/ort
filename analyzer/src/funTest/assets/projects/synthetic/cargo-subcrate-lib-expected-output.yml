@@ -19,13 +19,13 @@ project:
     path: "<REPLACE_PATH>"
   homepage_url: "https://example.org"
   scopes:
-  - name: "buildDependencies"
+  - name: "build-dependencies"
     dependencies: []
   - name: "dependencies"
     dependencies:
     - id: "Cargo::cfg-if:0.1.9"
       linkage: "STATIC"
-  - name: "devDependencies"
+  - name: "dev-dependencies"
     dependencies:
     - id: "Cargo::integration:0.1.0"
       linkage: "PROJECT_STATIC"
