@@ -27,9 +27,10 @@ import com.here.ort.utils.safeMkdirs
 
 import io.kotlintest.TestCase
 import io.kotlintest.TestResult
-import io.kotlintest.matchers.collections.shouldBeEmpty
+import io.kotlintest.matchers.beEmpty
 import io.kotlintest.matchers.collections.shouldContainExactly
 import io.kotlintest.matchers.collections.shouldContainExactlyInAnyOrder
+import io.kotlintest.should
 import io.kotlintest.shouldBe
 import io.kotlintest.specs.WordSpec
 
@@ -86,7 +87,7 @@ class PackageJsonUtilsTest : WordSpec() {
             "happen for Yarn only if both Yarn and NPM lockfiles are present" {
                 setupProject(path = "a", hasNpmLockFile = true, hasYarnLockFile = true)
 
-                mapDefinitionFilesForNpm(definitionFiles).shouldBeEmpty()
+                mapDefinitionFilesForNpm(definitionFiles) should beEmpty()
                 mapDefinitionFilesForYarn(definitionFiles) shouldContainExactly absolutePaths("a/package.json")
             }
 
@@ -94,7 +95,7 @@ class PackageJsonUtilsTest : WordSpec() {
                 setupProject(path = "a")
 
                 mapDefinitionFilesForNpm(definitionFiles) shouldContainExactly absolutePaths("a/package.json")
-                mapDefinitionFilesForYarn(definitionFiles).shouldBeEmpty()
+                mapDefinitionFilesForYarn(definitionFiles) should beEmpty()
             }
         }
 

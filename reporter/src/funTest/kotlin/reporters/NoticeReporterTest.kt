@@ -23,9 +23,10 @@ import com.here.ort.model.OrtResult
 import com.here.ort.model.config.CopyrightGarbage
 import com.here.ort.utils.test.readOrtResult
 
-import io.kotlintest.matchers.string.shouldContain
-import io.kotlintest.matchers.string.shouldNotContain
+import io.kotlintest.matchers.string.contain
+import io.kotlintest.should
 import io.kotlintest.shouldBe
+import io.kotlintest.shouldNot
 import io.kotlintest.specs.WordSpec
 
 import java.io.ByteArrayOutputStream
@@ -104,7 +105,7 @@ class NoticeReporterTest : WordSpec({
 
             val report = generateReport(ortResult, CopyrightGarbage())
 
-            report.shouldContain("\nCopyright (c) Felix Bohm")
+            report should contain("\nCopyright (c) Felix Bohm")
         }
 
         "contain a copyright statement if only its prefix is contained in copyright garbage" {
@@ -112,7 +113,7 @@ class NoticeReporterTest : WordSpec({
 
             val report = generateReport(ortResult, CopyrightGarbage("Copyright (c) Fel"))
 
-            report.shouldContain("\nCopyright (c) Felix Bohm")
+            report should contain("\nCopyright (c) Felix Bohm")
         }
 
         "contain a copyright statement if only its super string contained in copyright garbage" {
@@ -120,7 +121,7 @@ class NoticeReporterTest : WordSpec({
 
             val report = generateReport(ortResult, CopyrightGarbage("Copyright (c) Felix BohmX"))
 
-            report.shouldContain("\nCopyright (c) Felix Bohm")
+            report should contain("\nCopyright (c) Felix Bohm")
         }
 
         "not contain a copyright statement if it is contained in garbage" {
@@ -128,7 +129,7 @@ class NoticeReporterTest : WordSpec({
 
             val report = generateReport(ortResult, CopyrightGarbage("Copyright (c) Felix Bohm"))
 
-            report.shouldNotContain("\nCopyright (c) Felix Bohm")
+            report shouldNot contain("\nCopyright (c) Felix Bohm")
         }
     }
 })
