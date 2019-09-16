@@ -70,7 +70,9 @@ class DeclaredLicenseProcessorTest : StringSpec() {
         }
 
         "A prefix is removed from the license" {
-            val processedLicense = DeclaredLicenseProcessor.process("https://choosealicense.com/licenses/apache-2.0")
+            val processedLicense = DeclaredLicenseProcessor.process(
+                "https://choosealicense.com/licenses/apache-2.0.txt"
+            )
 
             processedLicense shouldNotBe null
             processedLicense!!.spdxLicenses() shouldBe enumSetOf(SpdxLicense.APACHE_2_0)
