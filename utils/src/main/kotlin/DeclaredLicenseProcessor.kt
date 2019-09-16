@@ -27,18 +27,20 @@ import com.here.ort.spdx.SpdxException
 import com.here.ort.spdx.SpdxExpression
 
 object DeclaredLicenseProcessor {
-    private val prefixesToRemove = listOf(
-        "https://choosealicense.com/licenses/",
-        "https://licenses.nuget.org/",
-        "https://opensource.org/licenses/",
-        "https://spdx.org/licenses/",
-        "https://tldrlegal.com/license/",
-        "https://www.gnu.org/licenses/"
-    )
+    private val urlPrefixesToRemove = listOf(
+        "choosealicense.com/licenses/",
+        "gnu.org/licenses/",
+        "licenses.nuget.org/",
+        "opensource.org/licenses/",
+        "spdx.org/licenses/",
+        "tldrlegal.com/license/"
+    ).flatMap {
+        listOf("http://$it", "https://$it", "http://www.$it", "https://www.$it")
+    }
 
     fun process(declaredLicense: String): SpdxExpression? {
-        val licenseWithoutPrefix = prefixesToRemove.fold(declaredLicense) { license, prefix ->
-            license.removePrefix(prefix)
+        val licenseWithoutPrefix = urlPrefixesToRemove.fold(declaredLicense) { license, url ->
+            license.removePrefix(url)
         }
 
         return (SpdxDeclaredLicenseMapping.map(licenseWithoutPrefix) ?: parseLicense(licenseWithoutPrefix))?.normalize()
