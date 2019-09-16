@@ -41,7 +41,8 @@ class DeclaredLicenseProcessorTest : StringSpec() {
             declaredLicenses.forEach { declaredLicense ->
                 val processedLicense = DeclaredLicenseProcessor.process(declaredLicense)
 
-                processedLicense shouldNotBe null
+                // Include the declared license in the comparison to see where a failure comes from.
+                "$processedLicense from $declaredLicense" shouldNotBe "null from $declaredLicense"
                 processedLicense!!.validate(SpdxExpression.Strictness.ALLOW_DEPRECATED)
             }
         }
@@ -59,7 +60,8 @@ class DeclaredLicenseProcessorTest : StringSpec() {
             declaredLicenses.forEach { declaredLicense ->
                 val processedLicense = DeclaredLicenseProcessor.process(declaredLicense)
 
-                processedLicense shouldNotBe null
+                // Include the declared license in the comparison to see where a failure comes from.
+                "$processedLicense from $declaredLicense" shouldNotBe "null from $declaredLicense"
                 processedLicense!!.spdxLicenses().forEach {
                     // Include the license ID in the comparison to make it easier to find the wrong mapping.
                     "$it ${it.deprecated}" shouldBe "$it false"
