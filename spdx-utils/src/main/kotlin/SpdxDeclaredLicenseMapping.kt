@@ -297,13 +297,11 @@ object SpdxDeclaredLicenseMapping {
         "Zope Public" to ZPL_2_1.toExpression(),
         "http://ant-contrib.sourceforge.net/tasks/LICENSE.txt" to APACHE_1_1.toExpression(),
         "http://go.microsoft.com/fwlink/?LinkId=329770" to licenseRef("ms-net-library-2018-11", "scancode"),
-        "http://opensource.org/licenses/MIT" to MIT.toExpression(),
         "http://polymer.github.io/LICENSE.txt" to BSD_3_CLAUSE.toExpression(),
         "http://svnkit.com/license.html" to TMATE.toExpression(),
         "http://www.apache.org/licenses/LICENSE-2.0" to APACHE_2_0.toExpression(),
         "http://www.apache.org/licenses/LICENSE-2.0.txt" to APACHE_2_0.toExpression(),
         "http://www.gnu.org/copyleft/lesser.html" to LGPL_3_0_ONLY.toExpression(),
-        "https://licenses.nuget.org/MIT" to MIT.toExpression(),
         "https://raw.github.com/RDFLib/rdflib/master/LICENSE" to BSD_3_CLAUSE.toExpression(),
         "new BSD" to BSD_3_CLAUSE.toExpression(),
         "public domain, Python, 2-Clause BSD, GPL 3 (see COPYING.txt)"
