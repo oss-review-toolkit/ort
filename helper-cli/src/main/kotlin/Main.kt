@@ -85,6 +85,7 @@ object Main : CommandWithHelp() {
             addCommand(GenerateTimeoutErrorResolutionsCommand())
             addCommand(ImportPathExcludesCommand())
             addCommand(ListLicensesCommand())
+            addCommand(ListPackagesCommand())
             addCommand(SortRepositoryConfigurationCommand())
             addCommand(VerifySourceArtifactCurationsCommand())
 
