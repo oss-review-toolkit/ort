@@ -389,3 +389,24 @@ internal fun RepositoryPathExcludes.merge(other: RepositoryPathExcludes, updateO
         pathExcludes.values.toList()
     }
 }
+
+/**
+ * Merge the given [PathExclude]s replacing entries with equal [PathExclude.pattern].
+ * If the given [updateOnlyExisting] is true then only entries with matching [PathExclude.pattern] are merged.
+ */
+internal fun Collection<PathExclude>.merge(
+    other: Collection<PathExclude>,
+    updateOnlyExisting: Boolean = false
+): List<PathExclude> {
+    val result = mutableMapOf<String, PathExclude>()
+
+    associateByTo(result) { it.pattern }
+
+    other.forEach {
+        if (!updateOnlyExisting || result.containsKey(it.pattern)) {
+            result[it.pattern] = it
+        }
+    }
+
+    return result.values.toList()
+}

@@ -27,6 +27,7 @@ import com.here.ort.CommandWithHelp
 import com.here.ort.helper.common.RepositoryPathExcludes
 import com.here.ort.helper.common.findFilesRecursive
 import com.here.ort.helper.common.findRepositoryPaths
+import com.here.ort.helper.common.merge
 import com.here.ort.helper.common.replacePathExcludes
 import com.here.ort.helper.common.sortPathExcludes
 import com.here.ort.helper.common.writeAsYaml
@@ -34,6 +35,7 @@ import com.here.ort.model.config.PathExclude
 import com.here.ort.model.config.RepositoryConfiguration
 import com.here.ort.model.readValue
 import com.here.ort.utils.PARAMETER_ORDER_MANDATORY
+import com.here.ort.utils.PARAMETER_ORDER_OPTIONAL
 
 import java.io.File
 
@@ -63,6 +65,13 @@ internal class ImportPathExcludesCommand : CommandWithHelp() {
     )
     private lateinit var repositoryConfigurationFile: File
 
+    @Parameter(
+        names = ["--update-only-existing"],
+        required = false,
+        order = PARAMETER_ORDER_OPTIONAL
+    )
+    private var updateOnlyExisting = false
+
     override fun runCommand(jc: JCommander): Int {
         val allFiles = findFilesRecursive(sourceCodeDir)
 
@@ -77,7 +86,7 @@ internal class ImportPathExcludesCommand : CommandWithHelp() {
             allFiles.any { pathExclude.matches(it) }
         }
 
-        val pathExcludes = (importedPathExcludes + existingPathExcludes).distinctBy { it.pattern }
+        val pathExcludes = existingPathExcludes.merge(importedPathExcludes, updateOnlyExisting)
 
         repositoryConfiguration
             .replacePathExcludes(pathExcludes)
