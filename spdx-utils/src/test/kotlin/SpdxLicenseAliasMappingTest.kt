@@ -19,22 +19,33 @@
 
 package com.here.ort.spdx
 
+import io.kotlintest.assertSoftly
 import io.kotlintest.shouldBe
-import io.kotlintest.specs.StringSpec
+import io.kotlintest.specs.WordSpec
 
-class SpdxLicenseAliasMappingTest : StringSpec({
-    "Mapping contains only parsable keys" {
-        val unparsableLicenses = SpdxLicenseAliasMapping.mapping.filterNot { (declaredLicense, _) ->
-            try {
-                // Be as lenient as possible when parsing declared licenses as we really only want to check for general
-                // parsability here.
-                SpdxExpression.parse(declaredLicense)
-                true
-            } catch (e: SpdxException) {
-                false
+class SpdxLicenseAliasMappingTest : WordSpec({
+    "The mapping" should {
+        "contain only parsable keys" {
+            val unparsableLicenses = SpdxLicenseAliasMapping.mapping.filterNot { (declaredLicense, _) ->
+                try {
+                    // Be as lenient as possible when parsing declared licenses as we really only want to check for
+                    // general parsability here.
+                    SpdxExpression.parse(declaredLicense)
+                    true
+                } catch (e: SpdxException) {
+                    false
+                }
             }
+
+            unparsableLicenses shouldBe emptyMap()
         }
 
-        unparsableLicenses shouldBe emptyMap()
+        "not contain plain SPDX license ids" {
+            assertSoftly {
+                SpdxDeclaredLicenseMapping.mapping.forEach { (declaredLicense, _) ->
+                    SpdxLicense.forId(declaredLicense) shouldBe null
+                }
+            }
+        }
     }
 })
