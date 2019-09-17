@@ -55,7 +55,7 @@ class FindingsMatcher(
         // license.
         licenseFindings.singleOrNull { finding ->
             licenseFileMatcher.matches(finding.location.path)
-        }?.license ?: ""
+        }?.license.orEmpty()
 
     /**
      * Return the copyright statements in the vicinity, as specified by [toleranceLines], of [licenseStartLine] in the
