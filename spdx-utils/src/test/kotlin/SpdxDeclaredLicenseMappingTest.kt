@@ -21,22 +21,33 @@ package com.here.ort.spdx
 
 import com.here.ort.spdx.SpdxExpression.Strictness
 
+import io.kotlintest.assertSoftly
 import io.kotlintest.shouldBe
-import io.kotlintest.specs.StringSpec
+import io.kotlintest.specs.WordSpec
 
-class SpdxDeclaredLicenseMappingTest : StringSpec({
-    "Mapping contains only unparsable keys" {
-        val parsableLicenses = SpdxDeclaredLicenseMapping.mapping.filter { (declaredLicense, _) ->
-            try {
-                // Restrict parsing to SPDX license identifier strings as otherwise almost anything could be parsed, but
-                // we do want to have mappings e.g. for something like "CDDL or GPLv2 with exceptions".
-                SpdxExpression.parse(declaredLicense, Strictness.ALLOW_DEPRECATED)
-                true
-            } catch (e: SpdxException) {
-                false
+class SpdxDeclaredLicenseMappingTest : WordSpec({
+    "The mapping" should {
+        "contain only unparsable keys" {
+            val parsableLicenses = SpdxDeclaredLicenseMapping.mapping.filter { (declaredLicense, _) ->
+                try {
+                    // Restrict parsing to SPDX license identifier strings as otherwise almost anything could be parsed,
+                    // but we do want to have mappings e.g. for something like "CDDL or GPLv2 with exceptions".
+                    SpdxExpression.parse(declaredLicense, Strictness.ALLOW_DEPRECATED)
+                    true
+                } catch (e: SpdxException) {
+                    false
+                }
             }
+
+            parsableLicenses shouldBe emptyMap()
         }
 
-        parsableLicenses shouldBe emptyMap()
+        "not contain plain SPDX license ids" {
+            assertSoftly {
+                SpdxDeclaredLicenseMapping.mapping.forEach { (declaredLicense, _) ->
+                    SpdxLicense.forId(declaredLicense) shouldBe null
+                }
+            }
+        }
     }
 })
