@@ -24,10 +24,14 @@ import java.nio.file.InvalidPathException
 import java.nio.file.Paths
 
 /**
- * A class for determining based on a given file path whether that file path is a common place where license
- * information for a project is placed.
+ * A class to determine whether a path resolves to a license file.
  */
-class LicenseFileMatcher(val licenseFileNames: List<String>) {
+class LicenseFileMatcher(
+    /**
+     * The list of [license files names][licenseFileNames] to consider for matching.
+     */
+    licenseFileNames: List<String>
+) {
     companion object {
         /**
          * A default list of names which are commonly used for license files.
