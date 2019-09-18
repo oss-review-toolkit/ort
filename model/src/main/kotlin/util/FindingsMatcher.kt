@@ -57,8 +57,8 @@ class FindingsMatcher(
             .distinct()
 
     /**
-     * Return the copyright statements in the vicinity, as specified by [toleranceLines], of [licenseStartLine] in the
-     * file [path].
+     * Return those statements in [copyrights] which are in the vicinity of [licenseStartLine] as defined by
+     * [toleranceLines].
      */
     private fun getClosestCopyrightStatements(
         copyrights: List<CopyrightFinding>,
