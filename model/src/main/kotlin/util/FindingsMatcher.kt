@@ -64,10 +64,9 @@ class FindingsMatcher(
         copyrights: List<CopyrightFinding>,
         licenseStartLine: Int
     ): SortedSet<CopyrightFindings> {
-        require(
-            copyrights.map { it.location.path }.distinct().size <= 1,
-            { "Given copyright statements must all point to the same file." }
-        )
+        require(copyrights.map { it.location.path }.distinct().size <= 1) {
+            "Given copyright statements must all point to the same file."
+        }
 
         val closestCopyrights = copyrights.filter {
             (it.location.startLine - licenseStartLine).absoluteValue <= toleranceLines
@@ -90,10 +89,9 @@ class FindingsMatcher(
         copyrights: List<CopyrightFinding>,
         rootLicenses: Collection<String>
     ): SortedMap<String, MutableSet<CopyrightFindings>> {
-        require(
-            (licenses.map { it.location.path } + copyrights.map { it.location.path }).distinct().size <= 1,
-            { "The given license and copyright findings must all point to the same file." }
-        )
+        require((licenses.map { it.location.path } + copyrights.map { it.location.path }).distinct().size <= 1) {
+            "The given license and copyright findings must all point to the same file."
+        }
 
         val copyrightsForLicenses = sortedMapOf<String, MutableSet<CopyrightFindings>>()
         val allCopyrightStatements = copyrights.map { it.toCopyrightFindings() }.toSortedSet()
