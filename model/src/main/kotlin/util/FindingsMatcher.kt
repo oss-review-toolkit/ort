@@ -127,12 +127,12 @@ class FindingsMatcher(
     }
 
     /**
-    * Return an association of the given [copyrightFindings] to [licenseFindings].
-    * Copyright findings are either matched to a license finding located nearby in the same file or to a license
-    * finding pointing to a license file. Whether a file is a license file is determined by the
-    * [LicenseFileMatcher] passed to the constructor. All [CopyrightFindings]s which cannot be matched are not present
-    * in the result while all given [licenseFindings] are contained in the result exactly once.
-    */
+     * Return an association of the given [copyrightFindings] to [licenseFindings].
+     * Copyright findings are either matched to a license finding located nearby in the same file or to a license
+     * finding pointing to a license file. Whether a file is a license file is determined by the
+     * [LicenseFileMatcher] passed to the constructor. All [CopyrightFindings]s which cannot be matched are not present
+     * in the result while all given [licenseFindings] are contained in the result exactly once.
+     */
     fun match(licenseFindings: Collection<LicenseFinding>, copyrightFindings: Collection<CopyrightFinding>):
             SortedSet<LicenseFindings> {
         val licenseFindingsByPath = licenseFindings.groupBy { it.location.path }
