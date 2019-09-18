@@ -1,4 +1,3 @@
-val commonsCodecVersion: String by project
 val commonsCompressVersion: String by project
 val disklrucacheVersion: String by project
 val jacksonVersion: String by project

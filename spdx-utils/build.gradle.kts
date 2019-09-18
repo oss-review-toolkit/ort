@@ -12,7 +12,6 @@ import java.net.URL
 import java.time.Year
 
 val antlrVersion: String by project
-val commonsCodecVersion: String by project
 val jacksonVersion: String by project
 
 plugins {
