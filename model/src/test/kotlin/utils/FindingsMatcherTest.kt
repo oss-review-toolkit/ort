@@ -98,9 +98,8 @@ class FindingsMatcherTest : WordSpec() {
             }
         }
 
-        "Given license findings in two license files and copyright findings in a file without license, match" should {
-            "associate should discard those copyright findings" {
-                // This test illustrates a bug. TODO: Fix it.
+        "Given license findings in two license files and a copyright finding in a file without license, match" should {
+            "associate that copyright finding with exactly one root license" {
                 setupLicenseFinding(license = "some id", path = "a/LICENSE")
                 setupLicenseFinding(license = "some other id", path = "b/LICENSE")
 
@@ -110,7 +109,10 @@ class FindingsMatcherTest : WordSpec() {
                     .match(licenseFindings, copyrightFindings)
 
                 result.size shouldBe 2
-                result.flatMap { it.copyrights } should beEmpty()
+                result
+                    .filter { it.license in listOf("some id", "some other id") }
+                    .filter { it.copyrights.map { it.statement } == listOf("some stmt") }
+                    .size shouldBe 1
             }
         }
 
