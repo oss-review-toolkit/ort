@@ -29,18 +29,24 @@ import java.nio.file.Paths
  */
 class LicenseFileMatcher(val licenseFileNames: List<String>) {
     companion object {
-        val DEFAULT_MATCHER = LicenseFileMatcher(
-            listOf(
-                "license*",
-                "licence*",
-                "unlicense",
-                "unlicence",
-                "copying*",
-                "copyright",
-                "patents",
-                "readme*"
-            ).flatMap { listOf(it, it.toUpperCase(), it.capitalize()) }
-        )
+        /**
+         * A default list of names which are commonly used for license files.
+         */
+        val DEFAULT_NAMES = listOf(
+            "license*",
+            "licence*",
+            "unlicense",
+            "unlicence",
+            "copying*",
+            "copyright",
+            "patents",
+            "readme*"
+        ).flatMap { listOf(it, it.toUpperCase(), it.capitalize()) }
+
+        /**
+         * A matcher which uses the default license file names.
+         */
+        val DEFAULT_MATCHER = LicenseFileMatcher(DEFAULT_NAMES)
     }
 
     constructor(vararg licenseFileNames: String) : this(licenseFileNames.toList())
