@@ -25,7 +25,6 @@ import com.here.ort.model.LicenseFinding
 import com.here.ort.model.LicenseFindings
 import com.here.ort.spdx.LicenseFileMatcher
 
-import java.util.SortedMap
 import java.util.SortedSet
 
 import kotlin.math.absoluteValue
@@ -88,13 +87,13 @@ class FindingsMatcher(
         licenses: List<LicenseFinding>,
         copyrights: List<CopyrightFinding>,
         rootLicenses: Collection<String>
-    ): SortedMap<String, MutableSet<CopyrightFindings>> {
+    ): Map<String, Set<CopyrightFindings>> {
         require((licenses.map { it.location.path } + copyrights.map { it.location.path }).distinct().size <= 1) {
             "The given license and copyright findings must all point to the same file."
         }
 
-        val copyrightsForLicenses = sortedMapOf<String, MutableSet<CopyrightFindings>>()
-        val allCopyrightStatements = copyrights.map { it.toCopyrightFindings() }.toSortedSet()
+        val copyrightsForLicenses = mutableMapOf<String, MutableSet<CopyrightFindings>>()
+        val allCopyrightStatements = copyrights.mapTo(mutableSetOf()) { it.toCopyrightFindings() }
 
         when (licenses.size) {
             0 -> {
@@ -116,7 +115,7 @@ class FindingsMatcher(
                         copyrights = copyrights,
                         licenseStartLine = it.location.startLine
                     )
-                    copyrightsForLicenses.getOrPut(it.license) { sortedSetOf() } += closestCopyrights
+                    copyrightsForLicenses.getOrPut(it.license) { mutableSetOf() } += closestCopyrights
                 }
             }
         }
