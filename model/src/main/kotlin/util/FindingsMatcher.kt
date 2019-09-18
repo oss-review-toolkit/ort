@@ -53,9 +53,7 @@ class FindingsMatcher(
     private fun getRootLicense(licenseFindings: Collection<LicenseFinding>): String =
         // TODO: This function should return a list of all licenses found in all license files instead of only a single
         // license.
-        licenseFindings.singleOrNull { finding ->
-            licenseFileMatcher.matches(finding.location.path)
-        }?.license.orEmpty()
+        licenseFindings.find { licenseFileMatcher.matches(it.location.path) }?.license.orEmpty()
 
     /**
      * Return the copyright statements in the vicinity, as specified by [toleranceLines], of [licenseStartLine] in the
