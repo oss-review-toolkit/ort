@@ -99,20 +99,20 @@ class FindingsMatcherTest : WordSpec() {
         }
 
         "Given license findings in two license files and a copyright finding in a file without license, match" should {
-            "associate that copyright finding with exactly one root license" {
-                setupLicenseFinding(license = "some id", path = "a/LICENSE")
-                setupLicenseFinding(license = "some other id", path = "b/LICENSE")
+            "associate that copyright finding with all root licenses" {
+                setupLicenseFinding(license = "license-a1", path = "a/LICENSE")
+                setupLicenseFinding(license = "license-a2", path = "a/LICENSE")
+                setupLicenseFinding(license = "license-b1", path = "b/LICENSE")
 
                 setupCopyrightFinding(statement = "some stmt", path = "some/file")
 
                 val result = FindingsMatcher(LicenseFileMatcher("a/LICENSE", "b/LICENSE"))
                     .match(licenseFindings, copyrightFindings)
 
-                result.size shouldBe 2
-                result
-                    .filter { it.license in listOf("some id", "some other id") }
-                    .filter { it.copyrights.map { it.statement } == listOf("some stmt") }
-                    .size shouldBe 1
+                result.size shouldBe 3
+                result.getFindings("license-a1").copyrights.map { it.statement } shouldBe listOf("some stmt")
+                result.getFindings("license-a2").copyrights.map { it.statement } shouldBe listOf("some stmt")
+                result.getFindings("license-b1").copyrights.map { it.statement } shouldBe listOf("some stmt")
             }
         }
 

@@ -48,12 +48,13 @@ class FindingsMatcher(
     }
 
     /**
-     * Get the license found in one of the commonly named license files, if any, or an empty string otherwise.
+     * Get the licenses found in all commonly named license files, if any, or an empty list otherwise.
      */
-    private fun getRootLicense(licenseFindings: Collection<LicenseFinding>): String =
-        // TODO: This function should return a list of all licenses found in all license files instead of only a single
-        // license.
-        licenseFindings.find { licenseFileMatcher.matches(it.location.path) }?.license.orEmpty()
+    private fun getRootLicenses(licenseFindings: Collection<LicenseFinding>): List<String> =
+        licenseFindings
+            .filter { licenseFileMatcher.matches(it.location.path) }
+            .map { it.license }
+            .distinct()
 
     /**
      * Return the copyright statements in the vicinity, as specified by [toleranceLines], of [licenseStartLine] in the
@@ -87,7 +88,7 @@ class FindingsMatcher(
     private fun associateFileFindings(
         licenses: List<LicenseFinding>,
         copyrights: List<CopyrightFinding>,
-        rootLicense: String = ""
+        rootLicenses: Collection<String>
     ): SortedMap<String, MutableSet<CopyrightFindings>> {
         require(
             (licenses.map { it.location.path } + copyrights.map { it.location.path }).distinct().size <= 1,
@@ -99,10 +100,8 @@ class FindingsMatcher(
 
         when (licenses.size) {
             0 -> {
-                // If there is no license finding but copyright findings, associate them with the root license, if any.
-                if (allCopyrightStatements.isNotEmpty() && rootLicense.isNotEmpty()) {
-                    copyrightsForLicenses[rootLicense] = allCopyrightStatements
-                }
+                // If there is no license finding but copyright findings, associate them with all root licenses.
+                rootLicenses.associateByTo(copyrightsForLicenses, { it }, { allCopyrightStatements })
             }
 
             1 -> {
@@ -139,7 +138,7 @@ class FindingsMatcher(
         val licenseFindingsByPath = licenseFindings.groupBy { it.location.path }
         val copyrightFindingsByPath = copyrightFindings.groupBy { it.location.path }
         val paths = (licenseFindingsByPath.keys + copyrightFindingsByPath.keys).toSet()
-        val rootLicense = getRootLicense(licenseFindings)
+        val rootLicenses = getRootLicenses(licenseFindings)
 
         val locationsForLicenses = licenseFindings
             .groupBy({ it.license }, { it.location })
@@ -150,7 +149,7 @@ class FindingsMatcher(
         paths.forEach { path ->
             val licenses = licenseFindingsByPath[path].orEmpty()
             val copyrights = copyrightFindingsByPath[path].orEmpty()
-            val findings = associateFileFindings(licenses, copyrights, rootLicense)
+            val findings = associateFileFindings(licenses, copyrights, rootLicenses)
 
             findings.forEach { (license, copyrightsForLicense) ->
                 copyrightsForLicenses.getOrPut(license) { sortedSetOf() }.let { copyrightFindings ->
