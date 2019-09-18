@@ -63,7 +63,7 @@ class FindingsMatcher(
     private fun getClosestCopyrightStatements(
         copyrights: List<CopyrightFinding>,
         licenseStartLine: Int
-    ): SortedSet<CopyrightFindings> {
+    ): Set<CopyrightFindings> {
         require(copyrights.map { it.location.path }.distinct().size <= 1) {
             "Given copyright statements must all point to the same file."
         }
@@ -72,7 +72,7 @@ class FindingsMatcher(
             (it.location.startLine - licenseStartLine).absoluteValue <= toleranceLines
         }
 
-        return closestCopyrights.map { it.toCopyrightFindings() }.toSortedSet()
+        return closestCopyrights.mapTo(mutableSetOf()) { it.toCopyrightFindings() }
     }
 
     private fun CopyrightFinding.toCopyrightFindings() =
