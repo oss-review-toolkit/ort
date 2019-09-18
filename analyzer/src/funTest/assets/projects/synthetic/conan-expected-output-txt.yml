@@ -1,0 +1,86 @@
+---
+project:
+  id: "Conan::conanfile.txt:"
+  definition_file_path: "analyzer/src/funTest/assets/projects/synthetic/conan-txt/conanfile.txt"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  vcs:
+    type: "Git"
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "<REPLACE_URL>"
+    revision: "<REPLACE_REVISION>"
+    path: "<REPLACE_PATH>"
+  homepage_url: ""
+  scopes:
+  - name: "build_requires"
+    dependencies:
+    - id: "Conan::protobuf:3.6.1"
+    - id: "Conan::protoc_installer:3.6.1"
+  - name: "requires"
+    dependencies:
+    - id: "Conan::protobuf:3.6.1"
+packages:
+- package:
+    id: "Conan::protobuf:3.6.1"
+    purl: "pkg:conan/protobuf@3.6.1"
+    declared_licenses:
+    - "BSD-3-Clause"
+    declared_licenses_processed:
+      spdx_expression: "BSD-3-Clause"
+    description: "Protocol Buffers - Google's data interchange format"
+    homepage_url: "https://github.com/protocolbuffers/protobuf"
+    binary_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    source_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    vcs:
+      type: "Git"
+      url: "https://github.com/bincrafters/conan-protobuf"
+      revision: ""
+      path: ""
+    vcs_processed:
+      type: "Git"
+      url: "https://github.com/bincrafters/conan-protobuf.git"
+      revision: ""
+      path: ""
+  curations: []
+- package:
+    id: "Conan::protoc_installer:3.6.1"
+    purl: "pkg:conan/protoc_installer@3.6.1"
+    declared_licenses:
+    - "BSD-3-Clause"
+    declared_licenses_processed:
+      spdx_expression: "BSD-3-Clause"
+    description: "Protocol Buffers - Google's data interchange format"
+    homepage_url: "https://github.com/protocolbuffers/protobuf"
+    binary_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    source_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    vcs:
+      type: "Git"
+      url: "https://github.com/bincrafters/conan-protobuf"
+      revision: ""
+      path: ""
+    vcs_processed:
+      type: "Git"
+      url: "https://github.com/bincrafters/conan-protobuf.git"
+      revision: ""
+      path: ""
+  curations: []

@@ -40,7 +40,7 @@ install:
   - npm install -g bower@%BOWER_VERSION% yarn@%YARN_VERSION%
   - pip install virtualenv==%VIRTUAL_ENV_VERSION%
   - pip install conan==%CONAN_VERSION%
-  - cmmd: conan user # Create the conan data directory. Automatic detection of your arch, compiler, etc.
+  - cmd: conan user # Create the conan data directory. Automatic detection of your arch, compiler, etc.
   - cinst haskell-stack --version %STACK_VERSION% -y
   - cinst rust --version %RUST_VERSION% -y
   - cinst sbt --version %SBT_VERSION% -y
