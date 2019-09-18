@@ -103,8 +103,7 @@ class FindingsMatcher(
 
             1 -> {
                 // If there is only a single license finding, associate all copyright findings with that license.
-                val licenseId = licenses.single().license
-                copyrightsForLicenses[licenseId] = allCopyrightStatements
+                licenses.associateByTo(copyrightsForLicenses, { it.license }, { allCopyrightStatements })
             }
 
             else -> {
