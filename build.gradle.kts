@@ -147,7 +147,7 @@ subprojects {
         buildUponDefaultConfig = true
         config = files("../.detekt.yml")
 
-        input = files("src/main/kotlin", "src/test/kotlin", "src/funTest/kotlin")
+        input = files("src/main/kotlin", "src/test/kotlin", "src/funTest/kotlin", "build.gradle.kts")
     }
 
     tasks.named<DokkaTask>("dokka") {
