@@ -390,7 +390,7 @@ val generateSpdxLicenseExceptionEnum by tasks.registering {
 }
 
 val generateSpdxEnums by tasks.registering {
-    description = "Generates the enum classes of SPDX license and exception ids and their associated texts as resources."
+    description = "Generates the enums for SPDX license and exception ids and their associated texts."
     group = "SPDX"
 
     val generateTasks = tasks.matching { it.name.matches(Regex("generateSpdx.+Enum")) }
