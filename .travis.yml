@@ -72,7 +72,7 @@ install:
   - export PATH="$PATH:$FLUTTER_HOME/bin:$FLUTTER_HOME/bin/cache/dart-sdk/bin"
   - flutter config --no-analytics
   - flutter doctor
-  - pip install conan==$CONAN_VERSION
+  - pip install --user conan==$CONAN_VERSION
   - conan user  # Create the conan data directory. Automatic detection of your arch, compiler, etc.
 
 script:

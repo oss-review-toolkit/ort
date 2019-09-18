@@ -1,0 +1,94 @@
+---
+project:
+  id: "Conan::Poco:1.9.3"
+  definition_file_path: "analyzer/src/funTest/assets/projects/synthetic/conan-py/conanfile.py"
+  declared_licenses:
+  - "The Boost Software License 1.0"
+  declared_licenses_processed:
+    unmapped:
+    - "The Boost Software License 1.0"
+  vcs:
+    type: "Git"
+    url: "http://github.com/pocoproject/conan-poco"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "<REPLACE_URL>"
+    revision: "<REPLACE_REVISION>"
+    path: "<REPLACE_PATH>"
+  homepage_url: ""
+  scopes:
+  - name: "build_requires"
+    dependencies: []
+  - name: "requires"
+    dependencies:
+    - id: "Conan::OpenSSL:1.0.2o"
+      dependencies:
+      - id: "Conan::zlib:1.2.11"
+    - id: "Conan::zlib:1.2.11"
+packages:
+- package:
+    id: "Conan::OpenSSL:1.0.2o"
+    purl: "pkg:conan/OpenSSL@1.0.2o"
+    declared_licenses:
+    - "The current OpenSSL licence is an 'Apache style' license: https://www.openssl.org/source/license.html"
+    declared_licenses_processed:
+      unmapped:
+      - "The current OpenSSL licence is an 'Apache style' license: https://www.openssl.org/source/license.html"
+    description: "OpenSSL is an open source project that provides a robust, commercial-grade,\
+      \ and full-featured toolkit for the Transport Layer Security (TLS) and Secure\
+      \ Sockets Layer (SSL) protocols"
+    homepage_url: ""
+    binary_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    source_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    vcs:
+      type: "Git"
+      url: "http://github.com/lasote/conan-openssl"
+      revision: ""
+      path: ""
+    vcs_processed:
+      type: "Git"
+      url: "https://github.com/lasote/conan-openssl.git"
+      revision: ""
+      path: ""
+  curations: []
+- package:
+    id: "Conan::zlib:1.2.11"
+    purl: "pkg:conan/zlib@1.2.11"
+    declared_licenses:
+    - "Zlib"
+    declared_licenses_processed:
+      spdx_expression: "Zlib"
+    description: "A Massively Spiffy Yet Delicately Unobtrusive Compression Library\
+      \ (Also Free, Not to Mention Unencumbered by Patents)"
+    homepage_url: "https://zlib.net"
+    binary_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    source_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    vcs:
+      type: "Git"
+      url: "http://github.com/conan-community/conan-zlib"
+      revision: ""
+      path: ""
+    vcs_processed:
+      type: "Git"
+      url: "https://github.com/conan-community/conan-zlib.git"
+      revision: ""
+      path: ""
+  curations: []
