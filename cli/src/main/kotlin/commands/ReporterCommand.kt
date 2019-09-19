@@ -142,7 +142,7 @@ object ReporterCommand : CommandWithHelp() {
         }
 
         val resolutionProvider = DefaultResolutionProvider()
-        ortResult.repository.config.resolutions?.let { resolutionProvider.add(it) }
+        resolutionProvider.add(ortResult.getResolutions())
         resolutionsFile?.expandTilde()?.readValue<Resolutions>()?.let { resolutionProvider.add(it) }
 
         val copyrightGarbage = copyrightGarbageFile?.expandTilde()?.readValue() ?: CopyrightGarbage()

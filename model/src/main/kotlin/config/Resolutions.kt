@@ -22,6 +22,8 @@ package com.here.ort.model.config
 import com.fasterxml.jackson.annotation.JsonAlias
 import com.fasterxml.jackson.annotation.JsonInclude
 
+fun Resolutions?.orEmpty() = this ?: Resolutions()
+
 /**
  * Resolutions for issues with a repository.
  */

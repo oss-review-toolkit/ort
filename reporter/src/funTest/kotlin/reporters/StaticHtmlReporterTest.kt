@@ -36,7 +36,7 @@ import javax.xml.transform.TransformerFactory
 private fun generateReport(ortResult: OrtResult) =
     ByteArrayOutputStream().also { outputStream ->
         val resolutionProvider = DefaultResolutionProvider()
-        ortResult.repository.config.resolutions?.let { resolutionProvider.add(it) }
+        resolutionProvider.add(ortResult.getResolutions())
 
         StaticHtmlReporter().generateReport(
             outputStream,
