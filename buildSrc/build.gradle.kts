@@ -17,6 +17,8 @@ repositories {
     maven("https://plugins.gradle.org/m2/")
 }
 
+val ideaExtPluginVersion = extra["ideaExtPluginVersion"]
+
 dependencies {
-    compile("gradle.plugin.org.jetbrains.gradle.plugin.idea-ext:gradle-idea-ext:${project.extra["ideaExtPluginVersion"]}")
+    compile("gradle.plugin.org.jetbrains.gradle.plugin.idea-ext:gradle-idea-ext:$ideaExtPluginVersion")
 }
