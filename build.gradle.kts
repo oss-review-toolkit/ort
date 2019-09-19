@@ -41,8 +41,8 @@ idea {
         settings {
             runConfigurations {
                 defaults<JUnit> {
-                    // Disable "condensed" multi-line diffs when running tests from the IDE to more easily accept actual results
-                    // as expected results.
+                    // Disable "condensed" multi-line diffs when running tests from the IDE to more easily accept actual
+                    // results as expected results.
                     vmParameters = "-Dkotlintest.assertions.multi-line-diff=simple"
                 }
             }
