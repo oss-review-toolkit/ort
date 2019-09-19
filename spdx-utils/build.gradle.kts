@@ -1,3 +1,6 @@
+// TODO: Remove this again once https://github.com/arturbosch/detekt/issues/1937 has been fixed.
+@file:Suppress("SpacingBetweenPackageAndImports")
+
 import at.bxm.gradleplugins.svntools.tasks.SvnExport
 
 import com.here.ort.gradle.*
