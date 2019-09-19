@@ -58,17 +58,15 @@ extensions.findByName("buildScan")?.withGroovyBuilder {
 tasks.named<DependencyUpdatesTask>("dependencyUpdates") {
     gradleReleaseChannel = "current"
 
-    resolutionStrategy {
-        componentSelection {
-            all {
-                val nonFinalQualifiers = listOf("alpha", "b", "beta", "cr", "ea", "eap", "m", "pr", "preview", "rc")
-                val isNonFinalVersion = nonFinalQualifiers.any { qualifier ->
-                    candidate.version.matches(Regex("(?i).*[.-]$qualifier[.\\d-+]*"))
-                }
-
-                if (isNonFinalVersion) reject("Release candidate")
-            }
+    fun isNonFinalVersion(version: String): Boolean {
+        val nonFinalQualifiers = listOf("alpha", "b", "beta", "cr", "ea", "eap", "m", "pr", "preview", "rc")
+        return nonFinalQualifiers.any { qualifier ->
+            version.matches(Regex("(?i).*[.-]$qualifier[.\\d-+]*"))
         }
+    }
+
+    rejectVersionIf {
+        isNonFinalVersion(candidate.version)
     }
 }
 
