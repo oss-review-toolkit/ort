@@ -86,6 +86,7 @@ object Main : CommandWithHelp() {
             addCommand(ImportPathExcludesCommand())
             addCommand(ListLicensesCommand())
             addCommand(ListPackagesCommand())
+            addCommand(RemoveConfigurationEntriesCommand())
             addCommand(SortRepositoryConfigurationCommand())
             addCommand(VerifySourceArtifactCurationsCommand())
 
