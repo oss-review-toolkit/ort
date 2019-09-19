@@ -145,7 +145,7 @@ subprojects {
 
         // Only configure differences to the default.
         buildUponDefaultConfig = true
-        config = files("../.detekt.yml")
+        config = files("$rootDir/.detekt.yml")
 
         input = files("src/main/kotlin", "src/test/kotlin", "src/funTest/kotlin", "build.gradle.kts")
     }
