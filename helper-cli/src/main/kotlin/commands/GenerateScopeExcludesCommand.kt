@@ -24,7 +24,7 @@ import com.beust.jcommander.Parameter
 import com.beust.jcommander.Parameters
 
 import com.here.ort.CommandWithHelp
-import com.here.ort.helper.common.greedySetCover
+import com.here.ort.helper.common.minimize
 import com.here.ort.helper.common.replaceScopeExcludes
 import com.here.ort.helper.common.sortScopeExcludes
 import com.here.ort.helper.common.writeAsYaml
@@ -77,13 +77,9 @@ private fun OrtResult.generateScopeExcludes(): List<ScopeExclude> {
         project.scopes.map { it.name }
     }
 
-    val scopeExcludes = getProjects().flatMap { project ->
+    return getProjects().flatMap { project ->
         getScopeExcludesForPackageManager(project.id.type)
-    }.associateWith { scopeExclude ->
-        projectScopes.filter { scopeExclude.matches(it) }.toSet()
-    }
-
-    return greedySetCover(scopeExcludes).toList()
+    }.minimize(projectScopes)
 }
 
 private fun getScopeExcludesForPackageManager(packageManagerName: String): List<ScopeExclude> =

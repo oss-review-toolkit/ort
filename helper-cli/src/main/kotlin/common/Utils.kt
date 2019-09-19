@@ -160,6 +160,18 @@ internal fun <K, V> greedySetCover(sets: Map<K, Set<V>>): Set<K> {
 }
 
 /**
+ * Return an approximated minimal sublist of [this] so that the result still matches the exact same entries of the given
+ * [projectScopes].
+ */
+internal fun List<ScopeExclude>.minimize(projectScopes: List<String>): List<ScopeExclude> {
+    val scopeExcludes = associateWith { scopeExclude ->
+        projectScopes.filter { scopeExclude.matches(it) }.toSet()
+    }
+
+    return greedySetCover(scopeExcludes).toList()
+}
+
+/**
  * Fetches the sources from either the VCS or source artifact for the package denoted by
  * the given [id] depending on whether a scan result is present with matching [Provenance].
  */
