@@ -193,10 +193,11 @@ private fun Collection<TextLocation>.groupByText(baseDir: File): List<TextLocati
 }
 
 private fun TextLocation.resolve(baseDir: File): String? {
-    val lines = baseDir.resolve(path).readText().lines()
-    return if (lines.size <= endLine) {
-        null
-    } else {
-        lines.subList(startLine - 1, endLine).joinToString(separator = "\n")
-    }
+    val file = baseDir.resolve(path)
+    if (!file.isFile) return null
+
+    val lines = file.readText().lines()
+    if (lines.size <= endLine) return null
+
+    return lines.subList(startLine - 1, endLine).joinToString(separator = "\n")
 }
