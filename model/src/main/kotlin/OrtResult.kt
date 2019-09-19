@@ -25,6 +25,8 @@ import com.fasterxml.jackson.annotation.JsonInclude
 import com.here.ort.model.config.Excludes
 import com.here.ort.model.config.PathExclude
 import com.here.ort.model.config.RepositoryConfiguration
+import com.here.ort.model.config.Resolutions
+import com.here.ort.model.config.orEmpty
 import com.here.ort.spdx.SpdxExpression
 import com.here.ort.utils.log
 import com.here.ort.utils.zipWithDefault
@@ -436,4 +438,10 @@ data class OrtResult(
 
     @JsonIgnore
     fun getExcludes(): Excludes = repository.config.excludes ?: Excludes()
+
+    /**
+     * Return the [Resolution]s contained in the repository configuration of this [OrtResult].
+     */
+    @JsonIgnore
+    fun getResolutions(): Resolutions = repository.config.resolutions.orEmpty()
 }

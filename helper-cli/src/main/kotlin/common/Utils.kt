@@ -297,7 +297,7 @@ internal fun OrtResult.getRepositoryPathExcludes(): RepositoryPathExcludes {
  * Return all unresolved rule violations.
  */
 internal fun OrtResult.getUnresolvedRuleViolations(): List<RuleViolation> {
-    val resolutions = repository.config.resolutions?.ruleViolations ?: emptyList()
+    val resolutions = getResolutions().ruleViolations
     val violations = evaluator?.violations ?: emptyList()
 
     return violations.filter { violation ->

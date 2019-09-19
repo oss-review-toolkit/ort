@@ -83,9 +83,7 @@ internal class GenerateTimeoutErrorResolutionsCommand : CommandWithHelp() {
                 resolutions = resolutions.merge(it.readValue())
             }
 
-            ortResult.repository.config.resolutions?.let {
-                resolutions = resolutions.merge(it)
-            }
+            resolutions = resolutions.merge(ortResult.getResolutions())
 
             add(resolutions)
         }
