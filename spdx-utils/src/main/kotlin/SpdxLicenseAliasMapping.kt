@@ -29,7 +29,7 @@ object SpdxLicenseAliasMapping {
     /**
      * The map of custom license names associated with their corresponding SPDX expression.
      */
-    private val customNames = mapOf(
+    internal val customNames = mapOf(
         "AFLv2.1" to AFL_2_1,
         "ALv2" to APACHE_2_0,
         "APL2" to APACHE_2_0,
