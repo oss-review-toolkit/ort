@@ -65,13 +65,9 @@ object SpdxLicenseAliasMapping {
         "MIT-style" to MIT,
         "MPL" to MPL_2_0,
         "MPLv2.0" to MPL_2_0,
-        "UNLICENSE" to UNLICENSE,
         "UNLICENSED" to UNLICENSE,
         "boost" to BSL_1_0,
-        "lgpl" to LGPL_2_1_ONLY,
-        "ruby" to RUBY,
-        "wtfpl" to WTFPL,
-        "zlib" to ZLIB
+        "lgpl" to LGPL_2_1_ONLY
     ).mapValues { (_, v) -> v.toExpression() }
 
     /**
