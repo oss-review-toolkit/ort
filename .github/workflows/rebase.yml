@@ -1,6 +1,8 @@
 name: Automatic Rebase
 
-on: issue_comment
+on:
+  issue_comment:
+    types: [created]
 
 jobs:
   rebase:
@@ -8,10 +10,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout Action
-      if: github.event.issue.pull_request != null && github.event.action == 'created' && github.event.comment.body == '/rebase'
+      if: github.event.issue.pull_request != null && github.event.comment.body == '/rebase'
       uses: actions/checkout@master
     - name: Rebase Action
-      if: github.event.issue.pull_request != null && github.event.action == 'created' && github.event.comment.body == '/rebase'
+      if: github.event.issue.pull_request != null && github.event.comment.body == '/rebase'
       uses: docker://cirrusactions/rebase:latest
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
