@@ -133,60 +133,6 @@ data class OrtResult(
     }
 
     /**
-     * Return the concluded licenses for each package. If [omitExcluded] is set to true, excluded packages are omitted
-     * from the result.
-     */
-    @Suppress("UNUSED") // This is intended to be mostly used via scripting.
-    fun collectConcludedLicenses(omitExcluded: Boolean = false) =
-        sortedMapOf<Identifier, SpdxExpression?>().also { licenses ->
-            getPackages().filter { !omitExcluded || !isPackageExcluded(it.pkg.id) }
-                .associateTo(licenses) { it.pkg.id to it.pkg.concludedLicense }
-        }
-
-    /**
-     * Return the declared licenses associated to their project / package identifiers. If [omitExcluded] is set to true,
-     * excluded projects / packages are omitted from the result.
-     */
-    @Suppress("UNUSED") // This is intended to be mostly used via scripting.
-    fun collectDeclaredLicenses(omitExcluded: Boolean = false) =
-        sortedMapOf<String, SortedSet<Identifier>>().also { licenses ->
-
-            getProjects().forEach { project ->
-                if (!omitExcluded || !isProjectExcluded(project.id)) {
-                    project.declaredLicenses.forEach { license ->
-                        licenses.getOrPut(license) { sortedSetOf() } += project.id
-                    }
-                }
-            }
-
-            getPackages().forEach { (pkg, _) ->
-                if (!omitExcluded || !isPackageExcluded(pkg.id)) {
-                    pkg.declaredLicenses.forEach { license ->
-                        licenses.getOrPut(license) { sortedSetOf() } += pkg.id
-                    }
-                }
-            }
-        }
-
-    /**
-     * Return the detected licenses associated to their project / package identifiers. If [omitExcluded] is set to true,
-     * excluded projects / packages are omitted from the result.
-     */
-    @Suppress("UNUSED") // This is intended to be mostly used via scripting.
-    fun collectDetectedLicenses(omitExcluded: Boolean = false) =
-        sortedMapOf<String, SortedSet<Identifier>>().also { licenses ->
-            // Note that we require the analyzer result here to determine whether a package has been implicitly
-            // excluded via its project or scope.
-            scanner?.results?.scanResults?.forEach { result ->
-                if (!omitExcluded || !isPackageExcluded(result.id)) {
-                    result.getAllDetectedLicenses().forEach { license ->
-                        licenses.getOrPut(license) { sortedSetOf() } += result.id
-                    }
-                }
-            }
-        }
-
-    /**
      * Return the dependencies of the given [id] (which can refer to a [Project] or a [Package]), up to and including a
      * depth of [maxLevel] where counting starts at 0 (for the [Project] or [Package] itself) and 1 are direct
      * dependencies etc. A value below 0 means to not limit the depth.
