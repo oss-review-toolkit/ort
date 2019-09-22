@@ -92,7 +92,7 @@ data class ScanSummary(
     }
 
     @get:JsonIgnore
-    val licenses = licenseFindingsMap.keys
+    val licenses = licenseFindings.map { it.license }.toSet()
 }
 
 class ScanSummaryDeserializer : StdDeserializer<ScanSummary>(OrtIssue::class.java) {
