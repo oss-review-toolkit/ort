@@ -85,13 +85,6 @@ data class ScanSummary(
     val groupedLicenseFindings = FindingsMatcher().match(licenseFindings, copyrightFindings)
 
     @get:JsonIgnore
-    val licenseFindingsMap = sortedMapOf<String, SortedSet<CopyrightFindings>>().also {
-        groupedLicenseFindings.forEach { finding ->
-            it.getOrPut(finding.license) { sortedSetOf() } += finding.copyrights
-        }
-    }
-
-    @get:JsonIgnore
     val licenses = licenseFindings.map { it.license }.toSet()
 }
 
