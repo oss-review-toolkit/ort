@@ -114,23 +114,14 @@ class NoticeReporter : Reporter() {
         }
     }
 
-    private fun getLicenseFindings(ortResult: OrtResult): LicenseFindingsMap {
-        val scanRecord = ortResult.scanner!!.results
-
-        val licenseFindings = sortedMapOf<String, MutableSet<String>>()
-
-        scanRecord.scanResults.forEach { container ->
-            if (!ortResult.isExcluded(container.id)) {
-                container.results.forEach { result ->
-                    result.summary.licenseFindingsMap.forEach { (license, copyrights) ->
-                        licenseFindings.getOrPut(license) { mutableSetOf() } += copyrights.map { it.statement }
-                    }
-                }
-            }
-        }
-
-        return licenseFindings
-    }
+    private fun getLicenseFindings(ortResult: OrtResult): LicenseFindingsMap =
+        ortResult
+            .collectLicenseFindings(omitExcluded = true)
+            .values
+            .flatMap { licenseFindingsForPackage -> licenseFindingsForPackage.keys }
+            .groupBy({ it.license }, { it.copyrights.map { copyrightFinding -> copyrightFinding.statement } })
+            .mapValues { (_, copyrightStatements) -> copyrightStatements.flatten().toMutableSet() }
+            .toSortedMap()
 
     private fun generateNotices(noticeReport: NoticeReport, licenseTextProvider: LicenseTextProvider) =
         buildString {
