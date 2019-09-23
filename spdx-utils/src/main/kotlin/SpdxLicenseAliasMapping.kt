@@ -32,17 +32,18 @@ object SpdxLicenseAliasMapping {
     internal val customNames = mapOf(
         "AFLv2.1" to AFL_2_1,
         "ALv2" to APACHE_2_0,
-        "APL2" to APACHE_2_0,
-        "APLv2.0" to APACHE_2_0,
-        "ASL" to APACHE_2_0,
         "Apache" to APACHE_2_0,
         "Apache-2" to APACHE_2_0,
         "Apache2" to APACHE_2_0,
+        "APL2" to APACHE_2_0,
+        "APLv2.0" to APACHE_2_0,
+        "ASL" to APACHE_2_0,
         "BOOST" to BSL_1_0,
+        "boost" to BSL_1_0,
         "BSD" to BSD_2_CLAUSE,
         "BSD-3" to BSD_3_CLAUSE,
-        "BSD-Style" to BSD_3_CLAUSE,
         "BSD-like" to BSD_3_CLAUSE,
+        "BSD-Style" to BSD_3_CLAUSE,
         "BSD-style" to BSD_3_CLAUSE,
         "BSD2" to BSD_2_CLAUSE,
         "BSD3" to BSD_3_CLAUSE,
@@ -57,6 +58,7 @@ object SpdxLicenseAliasMapping {
         "GPL2" to GPL_2_0_ONLY,
         "GPLv2" to GPL_2_0_ONLY,
         "GPLv3" to GPL_3_0_ONLY,
+        "lgpl" to LGPL_2_1_ONLY,
         "LGPL" to LGPL_2_1_ONLY,
         "LGPL-3" to LGPL_3_0_ONLY,
         "LGPL3" to LGPL_3_0_ONLY,
@@ -65,9 +67,7 @@ object SpdxLicenseAliasMapping {
         "MIT-style" to MIT,
         "MPL" to MPL_2_0,
         "MPLv2.0" to MPL_2_0,
-        "UNLICENSED" to UNLICENSE,
-        "boost" to BSL_1_0,
-        "lgpl" to LGPL_2_1_ONLY
+        "UNLICENSED" to UNLICENSE
     ).mapValues { (_, v) -> v.toExpression() }
 
     /**
