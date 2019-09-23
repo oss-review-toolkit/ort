@@ -54,11 +54,11 @@ import com.vdurmont.semver4j.Requirement
 import java.io.File
 import java.io.IOException
 import java.time.Instant
+import java.util.concurrent.Executors
 
-import kotlinx.coroutines.ObsoleteCoroutinesApi
+import kotlinx.coroutines.asCoroutineDispatcher
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
-import kotlinx.coroutines.newFixedThreadPoolContext
 import kotlinx.coroutines.withContext
 
 /**
@@ -136,17 +136,12 @@ abstract class LocalScanner(name: String, config: ScannerConfiguration) : Scanne
      */
     fun getDetails() = ScannerDetails(scannerName, getVersion(), getConfiguration())
 
-    // `newFixedThreadPoolContext` is obsolete and will be replaced with a new API. Keep using it until the new API is
-    // available, see:
-    // https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines/new-fixed-thread-pool-context.html
-    // https://github.com/Kotlin/kotlinx.coroutines/issues/261
-    @ObsoleteCoroutinesApi
     override suspend fun scanPackages(packages: List<Package>, outputDirectory: File, downloadDirectory: File):
             Map<Package, List<ScanResult>> {
         val scannerDetails = getDetails()
 
-        val storageDispatcher = newFixedThreadPoolContext(5, "storage")
-        val scanDispatcher = newFixedThreadPoolContext(1, "scan")
+        val storageDispatcher = Executors.newFixedThreadPool(5).asCoroutineDispatcher()
+        val scanDispatcher = Executors.newSingleThreadExecutor().asCoroutineDispatcher()
 
         try {
             return coroutineScope {
