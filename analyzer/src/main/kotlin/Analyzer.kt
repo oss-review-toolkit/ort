@@ -33,6 +33,7 @@ import com.here.ort.model.VcsInfo
 import com.here.ort.model.config.AnalyzerConfiguration
 import com.here.ort.model.config.RepositoryConfiguration
 import com.here.ort.model.readValue
+import com.here.ort.utils.NamedThreadFactory
 import com.here.ort.utils.ORT_CONFIG_FILENAME
 import com.here.ort.utils.log
 import com.here.ort.utils.realFile
@@ -131,7 +132,7 @@ class Analyzer(private val config: AnalyzerConfiguration) {
         managedFiles: Map<PackageManager, List<File>>,
         packageCurationsFile: File?
     ): AnalyzerResult {
-        val dispatcher = Executors.newFixedThreadPool(5).asCoroutineDispatcher()
+        val dispatcher = Executors.newFixedThreadPool(5, NamedThreadFactory(TOOL_NAME)).asCoroutineDispatcher()
         val analyzerResultBuilder = AnalyzerResultBuilder()
 
         coroutineScope {
