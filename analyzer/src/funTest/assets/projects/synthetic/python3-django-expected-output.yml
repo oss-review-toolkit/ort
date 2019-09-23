@@ -28,7 +28,7 @@ packages:
     declared_licenses:
     - "BSD"
     declared_licenses_processed:
-      spdx_expression: "BSD-2-Clause"
+      spdx_expression: "BSD-3-Clause"
     description: "A high-level Python Web framework that encourages rapid development\
       \ and clean, pragmatic design."
     homepage_url: "https://www.djangoproject.com/"

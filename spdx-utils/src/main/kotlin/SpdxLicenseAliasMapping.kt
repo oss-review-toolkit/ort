@@ -23,7 +23,8 @@ import com.here.ort.spdx.SpdxLicense.*
 import com.here.ort.spdx.SpdxLicenseException.*
 
 /**
- * A mapping from varied SPDX license names to valid SPDX expressions.
+ * A mapping from varied SPDX license names to valid SPDX expressions. When mapping a name without any indication of a
+ * version to an SPDX expression with a version, the most commonly used version at the time of writing is used.
  */
 object SpdxLicenseAliasMapping {
     /**
@@ -40,7 +41,7 @@ object SpdxLicenseAliasMapping {
         "ASL" to APACHE_2_0,
         "BOOST" to BSL_1_0,
         "boost" to BSL_1_0,
-        "BSD" to BSD_2_CLAUSE,
+        "BSD" to BSD_3_CLAUSE,
         "BSD-3" to BSD_3_CLAUSE,
         "BSD-like" to BSD_3_CLAUSE,
         "BSD-Style" to BSD_3_CLAUSE,

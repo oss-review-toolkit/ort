@@ -917,7 +917,7 @@ analyzer:
         declared_licenses:
         - "BSD"
         declared_licenses_processed:
-          spdx_expression: "BSD-2-Clause"
+          spdx_expression: "BSD-3-Clause"
         description: "Uniform test interface to Scala/Java test frameworks (specs,\
           \ ScalaCheck, ScalaTest, JUnit and other)"
         homepage_url: "http://www.scala-sbt.org"
