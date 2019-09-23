@@ -35,7 +35,7 @@ packages:
     declared_licenses:
     - "BSD"
     declared_licenses_processed:
-      spdx_expression: "BSD-2-Clause"
+      spdx_expression: "BSD-3-Clause"
     description: "A simple framework for building complex web applications."
     homepage_url: "https://www.palletsprojects.com/p/flask/"
     binary_artifact:
@@ -65,7 +65,7 @@ packages:
     declared_licenses:
     - "BSD"
     declared_licenses_processed:
-      spdx_expression: "BSD-2-Clause"
+      spdx_expression: "BSD-3-Clause"
     description: "A small but fast and easy to use stand-alone template engine written\
       \ in pure python."
     homepage_url: "http://jinja.pocoo.org/"
@@ -96,7 +96,7 @@ packages:
     declared_licenses:
     - "BSD"
     declared_licenses_processed:
-      spdx_expression: "BSD-2-Clause"
+      spdx_expression: "BSD-3-Clause"
     description: "Implements a XML/HTML/XHTML Markup safe string for Python"
     homepage_url: "http://github.com/pallets/markupsafe"
     binary_artifact:
@@ -127,7 +127,7 @@ packages:
     - "BSD"
     - "BSD-3-Clause"
     declared_licenses_processed:
-      spdx_expression: "BSD-2-Clause AND BSD-3-Clause"
+      spdx_expression: "BSD-3-Clause"
     description: "The comprehensive WSGI web application library."
     homepage_url: "https://palletsprojects.com/p/werkzeug/"
     binary_artifact:
@@ -157,7 +157,7 @@ packages:
     declared_licenses:
     - "BSD"
     declared_licenses_processed:
-      spdx_expression: "BSD-2-Clause"
+      spdx_expression: "BSD-3-Clause"
     description: "A simple wrapper around optparse for powerful command line utilities."
     homepage_url: "http://github.com/mitsuhiko/click"
     binary_artifact:
@@ -187,7 +187,7 @@ packages:
     declared_licenses:
     - "BSD"
     declared_licenses_processed:
-      spdx_expression: "BSD-2-Clause"
+      spdx_expression: "BSD-3-Clause"
     description: "Various helpers to pass trusted data to untrusted environments and\
       \ back."
     homepage_url: "http://github.com/mitsuhiko/itsdangerous"

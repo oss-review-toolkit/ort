@@ -4133,7 +4133,7 @@ packages:
     declared_licenses:
     - "BSD"
     declared_licenses_processed:
-      spdx_expression: "BSD-2-Clause"
+      spdx_expression: "BSD-3-Clause"
     description: "utility box for ECMAScript language tools"
     homepage_url: "https://github.com/estools/esutils"
     binary_artifact:

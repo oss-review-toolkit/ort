@@ -34,7 +34,7 @@ packages:
     declared_licenses:
     - "BSD"
     declared_licenses_processed:
-      spdx_expression: "BSD-2-Clause"
+      spdx_expression: "BSD-3-Clause"
     description: "A microframework based on Werkzeug, Jinja2 and good intentions"
     homepage_url: "http://github.com/pallets/flask/"
     binary_artifact:
@@ -64,7 +64,7 @@ packages:
     declared_licenses:
     - "BSD"
     declared_licenses_processed:
-      spdx_expression: "BSD-2-Clause"
+      spdx_expression: "BSD-3-Clause"
     description: "A small but fast and easy to use stand-alone template engine written\
       \ in pure python."
     homepage_url: "http://jinja.pocoo.org/"
@@ -96,7 +96,7 @@ packages:
     - "BSD"
     - "BSD-3-Clause"
     declared_licenses_processed:
-      spdx_expression: "BSD-2-Clause AND BSD-3-Clause"
+      spdx_expression: "BSD-3-Clause"
     description: "Safely add untrusted strings to HTML/XML markup."
     homepage_url: "https://palletsprojects.com/p/markupsafe/"
     binary_artifact:
@@ -127,7 +127,7 @@ packages:
     - "BSD"
     - "BSD-3-Clause"
     declared_licenses_processed:
-      spdx_expression: "BSD-2-Clause AND BSD-3-Clause"
+      spdx_expression: "BSD-3-Clause"
     description: "The comprehensive WSGI web application library."
     homepage_url: "https://palletsprojects.com/p/werkzeug/"
     binary_artifact:
@@ -157,7 +157,7 @@ packages:
     declared_licenses:
     - "BSD"
     declared_licenses_processed:
-      spdx_expression: "BSD-2-Clause"
+      spdx_expression: "BSD-3-Clause"
     description: "Composable command line interface toolkit"
     homepage_url: "https://palletsprojects.com/p/click/"
     binary_artifact:
@@ -217,7 +217,7 @@ packages:
     declared_licenses:
     - "BSD"
     declared_licenses_processed:
-      spdx_expression: "BSD-2-Clause"
+      spdx_expression: "BSD-3-Clause"
     description: "Various helpers to pass data to untrusted environments and back."
     homepage_url: "https://palletsprojects.com/p/itsdangerous/"
     binary_artifact:

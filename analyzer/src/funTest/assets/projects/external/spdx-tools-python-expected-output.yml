@@ -36,7 +36,7 @@ packages:
     declared_licenses:
     - "BSD"
     declared_licenses_processed:
-      spdx_expression: "BSD-2-Clause"
+      spdx_expression: "BSD-3-Clause"
     description: "An ISO 8601 date/time/duration parser and formatter"
     homepage_url: "https://github.com/gweis/isodate/"
     binary_artifact:
@@ -66,7 +66,7 @@ packages:
     declared_licenses:
     - "BSD"
     declared_licenses_processed:
-      spdx_expression: "BSD-2-Clause"
+      spdx_expression: "BSD-3-Clause"
     description: "Python Lex & Yacc"
     homepage_url: "http://www.dabeaz.com/ply/"
     binary_artifact:
@@ -127,7 +127,7 @@ packages:
     - "BSD"
     - "https://raw.github.com/RDFLib/rdflib/master/LICENSE"
     declared_licenses_processed:
-      spdx_expression: "BSD-2-Clause AND BSD-3-Clause"
+      spdx_expression: "BSD-3-Clause"
     description: "RDFLib is a Python library for working with RDF, a simple yet powerful\
       \ language for representing information."
     homepage_url: "https://github.com/RDFLib/rdflib"

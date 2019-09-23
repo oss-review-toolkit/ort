@@ -4972,7 +4972,7 @@ analyzer:
         declared_licenses:
         - "BSD"
         declared_licenses_processed:
-          spdx_expression: "BSD-2-Clause"
+          spdx_expression: "BSD-3-Clause"
         description: "ECMAScript JS AST traversal functions"
         homepage_url: "https://github.com/estools/estraverse"
         binary_artifact:
@@ -5002,7 +5002,7 @@ analyzer:
         declared_licenses:
         - "BSD"
         declared_licenses_processed:
-          spdx_expression: "BSD-2-Clause"
+          spdx_expression: "BSD-3-Clause"
         description: "utility box for ECMAScript language tools"
         homepage_url: "https://github.com/estools/esutils"
         binary_artifact:
@@ -6367,7 +6367,7 @@ analyzer:
         - "AFLv2.1"
         - "BSD"
         declared_licenses_processed:
-          spdx_expression: "AFL-2.1 AND BSD-2-Clause"
+          spdx_expression: "AFL-2.1 AND BSD-3-Clause"
         description: "JSON Schema validation and specifications"
         homepage_url: "https://github.com/kriszyp/json-schema#readme"
         binary_artifact:
@@ -7939,7 +7939,7 @@ analyzer:
         declared_licenses:
         - "BSD"
         declared_licenses_processed:
-          spdx_expression: "BSD-2-Clause"
+          spdx_expression: "BSD-3-Clause"
         description: "Generates and consumes source maps"
         homepage_url: "https://github.com/mozilla/source-map"
         binary_artifact:
