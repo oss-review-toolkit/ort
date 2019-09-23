@@ -41,6 +41,7 @@ import com.here.ort.model.ScannerRun
 import com.here.ort.model.config.ScannerConfiguration
 import com.here.ort.model.mapper
 import com.here.ort.utils.CommandLineTool
+import com.here.ort.utils.NamedThreadFactory
 import com.here.ort.utils.Os
 import com.here.ort.utils.collectMessagesAsString
 import com.here.ort.utils.fileSystemEncode
@@ -140,8 +141,9 @@ abstract class LocalScanner(name: String, config: ScannerConfiguration) : Scanne
             Map<Package, List<ScanResult>> {
         val scannerDetails = getDetails()
 
-        val storageDispatcher = Executors.newFixedThreadPool(5).asCoroutineDispatcher()
-        val scanDispatcher = Executors.newSingleThreadExecutor().asCoroutineDispatcher()
+        val storageDispatcher =
+            Executors.newFixedThreadPool(5, NamedThreadFactory(ScanResultsStorage.storage.name)).asCoroutineDispatcher()
+        val scanDispatcher = Executors.newSingleThreadExecutor(NamedThreadFactory(scannerName)).asCoroutineDispatcher()
 
         try {
             return coroutineScope {
