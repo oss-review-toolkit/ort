@@ -111,24 +111,18 @@ data class LicenseMetaData(
     val deprecated: Boolean
 )
 
-data class EnumEntry(
-    val name: String,
-    val comment: String
-)
-
-fun licenseToEnumEntry(id: String, meta: LicenseMetaData): EnumEntry {
-    var enumName = id.toUpperCase().replace(Regex("[-.]"), "_").replace("+", "PLUS")
-    if (enumName[0].isDigit()) {
-        enumName = "_$enumName"
+fun licenseToEnumEntry(id: String, meta: LicenseMetaData): String {
+    var enumEntry = id.toUpperCase().replace(Regex("[-.]"), "_").replace("+", "PLUS")
+    if (enumEntry[0].isDigit()) {
+        enumEntry = "_$enumEntry"
     }
 
-    val enumNameWithArguments = if (meta.deprecated) {
-        "$enumName(\"$id\", true)"
+    val fullName = meta.name.replace("\"", "\\\"")
+    return if (meta.deprecated) {
+        "$enumEntry(\"$id\", \"$fullName\", true)"
     } else {
-        "$enumName(\"$id\")"
+        "$enumEntry(\"$id\", \"$fullName\")"
     }
-
-    return EnumEntry(enumNameWithArguments, "/** ${meta.name} */")
 }
 
 fun generateEnumClass(
@@ -147,6 +141,8 @@ fun generateEnumClass(
 
     enumFile.writeText(getLicenseHeader())
     enumFile.appendText("""
+    |@file:Suppress("MaximumLineLength")
+    |
     |package com.here.ort.spdx
     |
     |/**
@@ -156,9 +152,14 @@ fun generateEnumClass(
     |@Suppress("EnumNaming")
     |enum class $className(
     |    /**
-    |     * The id of the $description.
+    |     * The SPDX id of the $description.
     |     */
     |    val id: String,
+    |
+    |    /**
+    |     * The human-readable name of the $description.
+    |     */
+    |    val fullName: String,
     |
     |    /**
     |     * Whether the [id] is deprecated or not.
@@ -170,8 +171,8 @@ fun generateEnumClass(
 
     val enumValues = ids.map { (id, meta) ->
         licenseToEnumEntry(id, meta)
-    }.sortedBy { it.name }.joinToString(",\n") {
-        "    ${it.comment}\n    ${it.name}"
+    }.sorted().joinToString(",\n") {
+        "    $it"
     } + ";"
 
     enumFile.appendText(enumValues)
@@ -182,7 +183,7 @@ fun generateEnumClass(
     |        /**
     |         * Return the enum value for the given [id], or null if it is no SPDX $description id.
     |         */
-    |        fun forId(id: String) = values().find { it.id.equals(id, true) }
+    |        fun forId(id: String) = values().find { id.equals(it.id, true) || id.equals(it.fullName, true) }
     |    }
     |
     |
