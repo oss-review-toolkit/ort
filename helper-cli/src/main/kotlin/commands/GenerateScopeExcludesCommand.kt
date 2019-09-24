@@ -98,6 +98,18 @@ private fun getScopeExcludesForPackageManager(packageManagerName: String): List<
                 comment = "Test dependencies."
             )
         )
+        "Cargo" -> listOf(
+            ScopeExclude(
+                name = "build-dependencies",
+                reason = ScopeExcludeReason.BUILD_TOOL_OF,
+                comment = "Build dependencies."
+            ),
+            ScopeExclude(
+                name = "dev-dependencies",
+                reason = ScopeExcludeReason.BUILD_TOOL_OF,
+                comment = "Development dependencies."
+            )
+        )
         "Gradle" -> listOf(
             ScopeExclude(
                 name = "checkstyle",
