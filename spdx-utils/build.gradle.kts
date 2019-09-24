@@ -261,7 +261,7 @@ fun generateLicenseTextResources(description: String, ids: Map<String, LicenseMe
         mkdirs()
     }
 
-    ids.forEach { id, meta ->
+    ids.forEach { (id, meta) ->
         val resourceFile = resourcesDir.resolve(id)
 
         // Prefer the texts from ScanCode as these have better formatting than those from SPDX.
