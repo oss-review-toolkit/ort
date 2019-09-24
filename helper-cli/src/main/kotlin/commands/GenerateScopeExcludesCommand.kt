@@ -115,6 +115,11 @@ private fun getScopeExcludesForPackageManager(packageManagerName: String): List<
                 comment = "Findbugs dependencies."
             ),
             ScopeExclude(
+                name = "jacocoAgent",
+                reason = ScopeExcludeReason.BUILD_TOOL_OF,
+                comment = "Test dependencies."
+            ),
+            ScopeExclude(
                 name = "jacocoAnt",
                 reason = ScopeExcludeReason.BUILD_TOOL_OF,
                 comment = "Test dependencies."
