@@ -177,7 +177,11 @@ open class Npm(
             licenseNode["type"]?.textValue()
         }
 
-        return declaredLicenses
+        return declaredLicenses.mapTo(sortedSetOf()) {
+            // NPM does not mean https://unlicense.org/ here, but the wish to not "grant others the right to use a
+            // private or unpublished package under any terms", which corresponds to SPDX's "NONE".
+            if (it == "UNLICENSED") "NONE" else it
+        }
     }
 
     private fun parseInstalledModules(rootDirectory: File): Map<String, Package> {
