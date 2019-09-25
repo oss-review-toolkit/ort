@@ -168,8 +168,7 @@ open class Npm(
 
         // See https://docs.npmjs.com/files/package.json#license. Some old packages used license objects or ...
         json["license"]?.let { licenseNode ->
-            val type = licenseNode.textValue() ?: licenseNode["type"].textValueOrEmpty()
-            declaredLicenses += type
+            (licenseNode.textValue() ?: licenseNode["type"].textValue())?.let { declaredLicenses += it }
         }
 
         // ... a "licenses" property containing an array of license objects.
