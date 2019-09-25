@@ -104,7 +104,7 @@ interface ClearlyDefinedService {
         companion object {
             @JsonCreator
             @JvmStatic
-            fun fromString(value: String) = enumValues<Provider>().single { value.equals(it.value, true) }
+            fun fromString(value: String) = enumValues<Provider>().single { value.equals(it.value, ignoreCase = true) }
         }
 
         @JsonValue
@@ -129,7 +129,7 @@ interface ClearlyDefinedService {
         companion object {
             @JsonCreator
             @JvmStatic
-            fun fromString(value: String) = enumValues<Provider>().single { value.equals(it.value, true) }
+            fun fromString(value: String) = enumValues<Provider>().single { value.equals(it.value, ignoreCase = true) }
         }
 
         @JsonValue
