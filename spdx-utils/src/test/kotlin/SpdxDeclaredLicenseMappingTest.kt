@@ -50,5 +50,14 @@ class SpdxDeclaredLicenseMappingTest : WordSpec({
                 }
             }
         }
+
+        "be case-insensitve" {
+            val map = SpdxDeclaredLicenseMapping.mapping
+            map.forEach { (key, license) ->
+                map[key.toLowerCase()] shouldBe license
+                map[key.toUpperCase()] shouldBe license
+                map[key.toLowerCase().capitalize()] shouldBe license
+            }
+        }
     }
 })

@@ -30,7 +30,7 @@ object SpdxLicenseAliasMapping {
     /**
      * The map of custom license names associated with their corresponding SPDX expression.
      */
-    internal val customNames = mapOf(
+    internal val customNames: Map<String, SpdxExpression> = mapOf(
         "afl" to AFL_3_0,
         "afl-2" to AFL_2_0,
         "afl2" to AFL_2_0,
@@ -39,47 +39,33 @@ object SpdxLicenseAliasMapping {
         "AFLv2.1" to AFL_2_1,
         "agpl" to AGPL_3_0_ONLY,
         "ALv2" to APACHE_2_0,
-        "alv2" to APACHE_2_0,
         "Apache" to APACHE_2_0,
-        "apache" to APACHE_2_0,
         "Apache-2" to APACHE_2_0,
         "apache-license" to APACHE_2_0,
         "Apache2" to APACHE_2_0,
         "APL2" to APACHE_2_0,
         "APLv2.0" to APACHE_2_0,
         "ASL" to APACHE_2_0,
-        "asl" to APACHE_2_0,
-        "BOOST" to BSL_1_0,
-        "boost" to BSL_1_0,
+        "Boost" to BSL_1_0,
         "Bouncy" to MIT,
-        "bouncy" to MIT,
         "bouncy-license" to MIT,
         "BSD" to BSD_3_CLAUSE,
-        "bsd" to BSD_3_CLAUSE,
         "BSD-3" to BSD_3_CLAUSE,
         "bsd-license" to BSD_3_CLAUSE,
         "bsd-licensed" to BSD_3_CLAUSE,
         "BSD-like" to BSD_3_CLAUSE,
-        "bsd-like" to BSD_3_CLAUSE,
-        "BSD-Style" to BSD_3_CLAUSE,
         "BSD-style" to BSD_3_CLAUSE,
-        "bsd-style" to BSD_3_CLAUSE,
         "BSD2" to BSD_2_CLAUSE,
-        "bsd2" to BSD_2_CLAUSE,
         "BSD3" to BSD_3_CLAUSE,
-        "bsd3" to BSD_3_CLAUSE,
         "bsl" to BSL_1_0,
         "bsl1.0" to BSL_1_0,
         "CC0" to CC0_1_0,
-        "cc0" to CC0_1_0,
-        "CDDL" to CDDL_1_0,
         "cddl" to CDDL_1_0,
         "cddl1.0" to CDDL_1_0,
         "cddl1.1" to CDDL_1_1,
         "CPL" to CPL_1_0,
         "EDL-1.0" to BSD_3_CLAUSE,
         "efl" to EFL_2_0,
-        "EPL" to EPL_1_0,
         "epl" to EPL_1_0,
         "epl1.0" to EPL_1_0,
         "epl2.0" to EPL_2_0,
@@ -91,40 +77,30 @@ object SpdxLicenseAliasMapping {
         "FreeBSD" to BSD_2_CLAUSE_FREEBSD,
         "gfdl" to GFDL_1_3_ONLY,
         "GPL" to GPL_2_0_ONLY,
-        "gpl" to GPL_2_0_ONLY,
         "GPL-2" to GPL_2_0_ONLY,
         "gpl-license" to GPL_2_0_ONLY,
         "GPL2" to GPL_2_0_ONLY,
-        "gpl2" to GPL_2_0_ONLY,
         "gpl3" to GPL_3_0_ONLY,
         "GPLv2" to GPL_2_0_ONLY,
-        "gplv2" to GPL_2_0_ONLY,
         "GPLv3" to GPL_3_0_ONLY,
-        "gplv3" to GPL_3_0_ONLY,
         "isc-license" to ISC,
         "ISCL" to ISC,
-        "iscl" to ISC,
         "LGPL" to LGPL_2_0_OR_LATER,
-        "lgpl" to LGPL_2_0_OR_LATER,
         "LGPL-3" to LGPL_3_0_ONLY,
-        "lgpl2" to LGPL_2_1_ONLY,
+        "LGPL2" to LGPL_2_1_ONLY,
         "LGPL3" to LGPL_3_0_ONLY,
-        "lgpl3" to LGPL_3_0_ONLY,
-        "lgplv2" to LGPL_2_1_ONLY,
+        "LGPLv2" to LGPL_2_1_ONLY,
         "LGPLv3" to LGPL_3_0_ONLY,
-        "lgplv3" to LGPL_3_0_ONLY,
         "mit-license" to MIT,
         "mit-licensed" to MIT,
         "MIT-like" to MIT,
         "MIT-style" to MIT,
         "MPL" to MPL_2_0,
         "mpl-2" to MPL_2_0,
-        "MPL2" to MPL_2_0,
         "mpl2" to MPL_2_0,
         "mpl2.0" to MPL_2_0,
         "MPLv2" to MPL_2_0,
         "MPLv2.0" to MPL_2_0,
-        "ODbl" to ODBL_1_0,
         "ODBL" to ODBL_1_0,
         "psf" to PYTHON_2_0,
         "psfl" to PYTHON_2_0,
@@ -133,7 +109,16 @@ object SpdxLicenseAliasMapping {
         "w3cl" to W3C,
         "wtf" to WTFPL,
         "zope" to ZPL_2_1
-    ).mapValues { (_, v) -> v.toExpression() }
+    ).mapValues { (_, v) -> v.toExpression() }.let { caseSensitiveMap ->
+        caseSensitiveMap.toSortedMap(String.CASE_INSENSITIVE_ORDER).also { caseInsensitiveMap ->
+            if (caseSensitiveMap.size > caseInsensitiveMap.size) {
+                val difference = caseSensitiveMap.keys.subtract(caseInsensitiveMap.keys)
+                require(difference.isEmpty()) {
+                    "The following ${difference.size} keys are present in different capitalizations: $difference"
+                }
+            }
+        }
+    }
 
     /**
      * The map of deprecated SPDX license names associated with their current SPDX expression.

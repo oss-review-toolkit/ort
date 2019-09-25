@@ -31,13 +31,12 @@ object SpdxDeclaredLicenseMapping {
     /**
      * The map of collected license strings associated with their corresponding SPDX expression.
      */
-    val mapping = mapOf(
+    val mapping: Map<String, SpdxExpression> = mapOf(
         "(MIT-style) netCDF C library license" to NETCDF.toExpression(),
         "2-clause BSD license" to BSD_2_CLAUSE.toExpression(),
         "2-clause BSDL" to BSD_2_CLAUSE.toExpression(),
         "3-Clause BSD" to BSD_3_CLAUSE.toExpression(),
         "3-Clause BSD License" to BSD_3_CLAUSE.toExpression(),
-        "3-clause BSD" to BSD_3_CLAUSE.toExpression(),
         "AL 2.0" to APACHE_2_0.toExpression(),
         "ASF 2.0" to APACHE_2_0.toExpression(),
         "ASL 2" to APACHE_2_0.toExpression(),
@@ -51,7 +50,6 @@ object SpdxDeclaredLicenseMapping {
         "Apache License" to APACHE_2_0.toExpression(),
         "Apache License (2.0)" to APACHE_2_0.toExpression(),
         "Apache License 2" to APACHE_2_0.toExpression(),
-        "Apache License V2.0" to APACHE_2_0.toExpression(),
         "Apache License Version 2" to APACHE_2_0.toExpression(),
         "Apache License Version 2.0" to APACHE_2_0.toExpression(),
         "Apache License v2" to APACHE_2_0.toExpression(),
@@ -63,17 +61,14 @@ object SpdxDeclaredLicenseMapping {
         """Apache License, Version 2.0 and
         Common Development And Distribution License (CDDL) Version 1.0 """.trimIndent()
                 to (APACHE_2_0 and CDDL_1_0),
-        "Apache License, version 2.0" to APACHE_2_0.toExpression(),
         "Apache License,Version 2.0" to APACHE_2_0.toExpression(),
         "Apache Public License 2.0" to APACHE_2_0.toExpression(),
         "Apache Software" to APACHE_2_0.toExpression(),
         "Apache Software License - Version 2.0" to APACHE_2_0.toExpression(),
         "Apache Software License 2.0" to APACHE_2_0.toExpression(),
-        "Apache Software License, Version 1.1" to APACHE_1_1.toExpression(),
         "Apache Software License, version 1.1" to APACHE_1_1.toExpression(),
         "Apache Software License, version 2.0" to APACHE_2_0.toExpression(),
         "Apache Software Licenses" to APACHE_2_0.toExpression(),
-        "Apache license" to APACHE_2_0.toExpression(),
         "Apache v2" to APACHE_2_0.toExpression(),
         "Apache v2.0" to APACHE_2_0.toExpression(),
         "Apache version 2.0" to APACHE_2_0.toExpression(),
@@ -90,20 +85,16 @@ object SpdxDeclaredLicenseMapping {
         "BSD 3-Clause" to BSD_3_CLAUSE.toExpression(),
         "BSD 3-Clause \"New\" or \"Revised\" License (BSD-3-Clause)" to BSD_3_CLAUSE.toExpression(),
         "BSD 3-Clause License" to BSD_3_CLAUSE.toExpression(),
-        "BSD 3-Clause license" to BSD_3_CLAUSE.toExpression(),
-        "BSD 3-clause" to BSD_3_CLAUSE.toExpression(),
         "BSD Licence 3" to BSD_3_CLAUSE.toExpression(),
         "BSD License" to BSD_2_CLAUSE.toExpression(),
         "BSD License for HSQL" to BSD_3_CLAUSE.toExpression(),
         "BSD New" to BSD_3_CLAUSE.toExpression(),
         "BSD New license" to BSD_3_CLAUSE.toExpression(),
         "BSD licence" to BSD_2_CLAUSE.toExpression(),
-        "BSD license" to BSD_2_CLAUSE.toExpression(),
         "BSD or Apache License, Version 2.0" to (BSD_2_CLAUSE or APACHE_2_0),
         "BSD style" to BSD_3_CLAUSE.toExpression(),
         "BSD style license" to BSD_3_CLAUSE.toExpression(),
         "BSD*" to BSD_3_CLAUSE.toExpression(),
-        "BSD-Style License" to BSD_3_CLAUSE.toExpression(),
         "BSD-style license" to BSD_3_CLAUSE.toExpression(),
         "Berkeley Software Distribution (BSD) License" to BSD_2_CLAUSE.toExpression(),
         "Bouncy Castle Licence" to MIT.toExpression(),
@@ -123,7 +114,6 @@ object SpdxDeclaredLicenseMapping {
         "CDDL+GPLv2" to (CDDL_1_0 and GPL_2_0_ONLY),
         "CDDL/GPLv2 dual license" to (CDDL_1_0 or GPL_2_0_ONLY),
         "CDDL/GPLv2+CE" to (CDDL_1_0 or (GPL_2_0_ONLY with CLASSPATH_EXCEPTION_2_0)),
-        "COMMON DEVELOPMENT AND DISTRIBUTION LICENSE" to CDDL_1_0.toExpression(),
         "COMMON DEVELOPMENT AND DISTRIBUTION LICENSE (CDDL) Version 1.0" to CDDL_1_0.toExpression(),
         "Common Development and Distribution License" to CDDL_1_0.toExpression(),
         "Common Development and Distribution License (CDDL) v1.0" to CDDL_1_0.toExpression(),
@@ -167,10 +157,7 @@ object SpdxDeclaredLicenseMapping {
                 to (GPL_2_0_ONLY with CLASSPATH_EXCEPTION_2_0),
         "GNU General Public License, version 2, with the Classpath Exception"
                 to (GPL_2_0_ONLY with CLASSPATH_EXCEPTION_2_0),
-        "GNU LESSER GENERAL PUBLIC LICENSE" to LGPL_2_1_ONLY.toExpression(),
         "GNU LESSER GENERAL PUBLIC LICENSE V3.0" to LGPL_3_0_ONLY.toExpression(),
-        "GNU LESSER GENERAL PUBLIC LICENSE Version 2.1" to LGPL_2_1_ONLY.toExpression(),
-        "GNU LESSER GENERAL PUBLIC LICENSE, Version 2.1" to LGPL_2_1_ONLY.toExpression(),
         "GNU LGP (GNU General Public License), V2 or later" to LGPL_2_0_OR_LATER.toExpression(),
         "GNU LGPL" to LGPL_2_1_ONLY.toExpression(),
         "GNU LGPL (GNU Lesser General Public License), V2.1 or later" to LGPL_2_1_OR_LATER.toExpression(),
@@ -187,7 +174,6 @@ object SpdxDeclaredLicenseMapping {
         "GNU Lesser General Public License v3 or later (LGPLv3+)" to LGPL_3_0_OR_LATER.toExpression(),
         "GNU Lesser General Public License v3+" to LGPL_3_0_OR_LATER.toExpression(),
         "GNU Lesser General Public License, Version 2.1" to LGPL_2_1_ONLY.toExpression(),
-        "GNU Lesser General Public License, version 2.1" to LGPL_2_1_ONLY.toExpression(),
         "GNU Lesser Public License" to LGPL_2_1_ONLY.toExpression(),
         "GNU Library or Lesser General Public License (LGPL)" to LGPL_2_1_ONLY.toExpression(),
         "GNU Public" to GPL_2_0_ONLY.toExpression(),
@@ -220,7 +206,6 @@ object SpdxDeclaredLicenseMapping {
         "MIT Licence" to MIT.toExpression(),
         "MIT License (http://opensource.org/licenses/MIT)" to MIT.toExpression(),
         "MIT Licensed. http://www.opensource.org/licenses/mit-license.php" to MIT.toExpression(),
-        "MIT licence" to MIT.toExpression(),
         "MIT, 2-clause BSD" to (MIT and BSD_2_CLAUSE),
         "MIT/Expat" to MIT.toExpression(),
         "MIT/X11" to (MIT or X11),
@@ -236,14 +221,10 @@ object SpdxDeclaredLicenseMapping {
         "Mozilla Public License Version 1.0" to MPL_1_0.toExpression(),
         "Mozilla Public License Version 1.1" to MPL_1_1.toExpression(),
         "Mozilla Public License Version 2.0" to MPL_2_0.toExpression(),
-        "Mozilla Public License version 1.1" to MPL_1_1.toExpression(),
-        "Mozilla Public License version 2.0" to MPL_2_0.toExpression(),
         "Mozilla Public License, Version 2.0" to MPL_2_0.toExpression(),
-        "Mozilla Public License, version 2.0" to MPL_2_0.toExpression(),
         "NetBeans CDDL/GPL" to (CDDL_1_0 or GPL_2_0_ONLY),
         "New BSD" to BSD_3_CLAUSE.toExpression(),
         "New BSD License" to BSD_3_CLAUSE.toExpression(),
-        "New BSD license" to BSD_3_CLAUSE.toExpression(),
         "PSFL" to PYTHON_2_0.toExpression(),
         "Perl Artistic v2" to ARTISTIC_1_0_PERL.toExpression(),
         "Public Domain" to licenseRef("public-domain-disclaimer", "scancode"),
@@ -258,7 +239,6 @@ object SpdxDeclaredLicenseMapping {
         "The Apache License, Version 2.0" to APACHE_2_0.toExpression(),
         "The Apache Software Licence, Version 2.0" to APACHE_2_0.toExpression(),
         "The Apache Software License, Version 2.0" to APACHE_2_0.toExpression(),
-        "The Apache Software License, version 2.0" to APACHE_2_0.toExpression(),
         "The BSD 2-Clause License" to BSD_2_CLAUSE.toExpression(),
         "The BSD 3-Clause License" to BSD_3_CLAUSE.toExpression(),
         "The BSD License" to BSD_2_CLAUSE.toExpression(),
@@ -273,7 +253,6 @@ object SpdxDeclaredLicenseMapping {
         "The MIT License" to MIT.toExpression(),
         "The MIT License (MIT)" to MIT.toExpression(),
         "The MIT License(MIT)" to MIT.toExpression(),
-        "The MIT license" to MIT.toExpression(),
         "The New BSD License" to BSD_3_CLAUSE.toExpression(),
         "The PostgreSQL License" to POSTGRESQL.toExpression(),
         "The SAX License" to SAX_PD.toExpression(),
@@ -292,12 +271,20 @@ object SpdxDeclaredLicenseMapping {
         "http://www.apache.org/licenses/LICENSE-2.0.txt" to APACHE_2_0.toExpression(),
         "http://www.gnu.org/copyleft/lesser.html" to LGPL_3_0_ONLY.toExpression(),
         "https://raw.github.com/RDFLib/rdflib/master/LICENSE" to BSD_3_CLAUSE.toExpression(),
-        "new BSD" to BSD_3_CLAUSE.toExpression(),
         "public domain, Python, 2-Clause BSD, GPL 3 (see COPYING.txt)"
                 to (((licenseRef("public-domain-disclaimer", "scancode") and PYTHON_2_0.toExpression())
                 and BSD_2_CLAUSE.toExpression()) and GPL_3_0_ONLY.toExpression()),
         "the Apache License, ASL Version 2.0" to APACHE_2_0.toExpression()
-    )
+    ).let { caseSensitiveMap ->
+        caseSensitiveMap.toSortedMap(String.CASE_INSENSITIVE_ORDER).also { caseInsensitiveMap ->
+            if (caseSensitiveMap.size > caseInsensitiveMap.size) {
+                val difference = caseSensitiveMap.keys.subtract(caseInsensitiveMap.keys)
+                require(difference.isEmpty()) {
+                    "The following ${difference.size} keys are present in different capitalizations: $difference"
+                }
+            }
+        }
+    }
 
     /**
      * Return an SPDX LicenseRef string for the given [id] and optional [namespace].
