@@ -219,6 +219,8 @@ Currently, the following license scanners are supported:
 * [Licensee](https://github.com/benbalter/licensee)
 * [ScanCode](https://github.com/nexB/scancode-toolkit)
 
+For a comparison of some of these, see this [Bachelor Thesis](https://osr.cs.fau.de/2019/08/07/final-thesis-a-comparison-study-of-open-source-license-crawler/).
+
 ## Storage Backends
 
 In order to not download or scan any previously scanned sources again, the Scanner can use a storage backend to store
