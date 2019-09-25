@@ -444,7 +444,8 @@ enum class SpdxLicense(
         /**
          * Return the enum value for the given [id], or null if it is no SPDX license id.
          */
-        fun forId(id: String) = values().find { id.equals(it.id, true) || id.equals(it.fullName, true) }
+        fun forId(id: String) =
+            values().find { id.equals(it.id, ignoreCase = true) || id.equals(it.fullName, ignoreCase = true) }
     }
 
     /**

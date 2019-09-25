@@ -51,7 +51,7 @@ object ScannerCommand : CommandWithHelp() {
     private class ScannerConverter : IStringConverter<ScannerFactory> {
         override fun convert(scannerName: String): ScannerFactory {
             // TODO: Consider allowing to enable multiple scanners (and potentially running them in parallel).
-            return Scanner.ALL.find { it.scannerName.equals(scannerName, true) }
+            return Scanner.ALL.find { it.scannerName.equals(scannerName, ignoreCase = true) }
                 ?: throw ParameterException("Scanner '$scannerName' is not one of ${Scanner.ALL}.")
         }
     }
