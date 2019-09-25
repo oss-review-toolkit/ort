@@ -163,6 +163,23 @@ open class Npm(
         }
     }
 
+    private fun parseLicenses(json: JsonNode): SortedSet<String> {
+        val declaredLicenses = sortedSetOf<String>()
+
+        // See https://docs.npmjs.com/files/package.json#license. Some old packages used license objects or ...
+        json["license"]?.let { licenseNode ->
+            val type = licenseNode.textValue() ?: licenseNode["type"].textValueOrEmpty()
+            declaredLicenses += type
+        }
+
+        // ... a "licenses" property containing an array of license objects.
+        json["licenses"]?.mapNotNullTo(declaredLicenses) { licenseNode ->
+            licenseNode["type"]?.textValue()
+        }
+
+        return declaredLicenses
+    }
+
     private fun parseInstalledModules(rootDirectory: File): Map<String, Package> {
         val packages = mutableMapOf<String, Package>()
         val nodeModulesDir = File(rootDirectory, "node_modules")
@@ -190,16 +207,7 @@ open class Npm(
             val (namespace, name) = splitNamespaceAndName(rawName)
             val version = json["version"].textValue()
 
-            val declaredLicenses = sortedSetOf<String>()
-
-            json["license"]?.let { licenseNode ->
-                val type = licenseNode.textValue() ?: licenseNode["type"].textValueOrEmpty()
-                declaredLicenses += type
-            }
-
-            json["licenses"]?.mapNotNullTo(declaredLicenses) { licenseNode ->
-                licenseNode["type"]?.textValue()
-            }
+            val declaredLicenses = parseLicenses(json)
 
             var description = json["description"].textValueOrEmpty()
             var homepageUrl = json["homepage"].textValueOrEmpty()
@@ -455,15 +463,9 @@ open class Npm(
             log.warn { "'$packageJson' does not define a version." }
         }
 
-        val declaredLicenses = sortedSetOf<String>()
-        setOf(json["license"]).mapNotNullTo(declaredLicenses) {
-            it?.textValue()
-        }
-
+        val declaredLicenses = parseLicenses(json)
         val homepageUrl = json["homepage"].textValueOrEmpty()
-
         val projectDir = packageJson.parentFile
-
         val vcsFromPackage = parseVcsInfo(json)
 
         val project = Project(
