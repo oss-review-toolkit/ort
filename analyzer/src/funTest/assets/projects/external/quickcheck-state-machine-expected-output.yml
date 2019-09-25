@@ -3178,7 +3178,7 @@ packages:
     declared_licenses:
     - "LGPL"
     declared_licenses_processed:
-      spdx_expression: "LGPL-2.1-only"
+      spdx_expression: "LGPL-2.0-or-later"
     description: "This version, 1.12.1 is a Non-Maintainer Upload (NMU). Report issues\
       \ to the Hackage Trustees issue tracker.\n\nA variety of alternative parser\
       \ combinator libraries, including\nthe original HuttonMeijer set.  The Poly\
