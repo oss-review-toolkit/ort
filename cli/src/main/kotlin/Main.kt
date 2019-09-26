@@ -19,6 +19,7 @@
 
 package com.here.ort
 
+import com.beust.jcommander.DynamicParameter
 import com.beust.jcommander.JCommander
 import com.beust.jcommander.Parameter
 
@@ -82,6 +83,12 @@ object Main : CommandWithHelp() {
     )
     private var version = false
 
+    @DynamicParameter(
+        description = "Allows to override configuration parameters.",
+        names = ["-P"]
+    )
+    private var configArguments = mutableMapOf<String, String>()
+
     /**
      * The entry point for the application.
      *
@@ -110,13 +117,7 @@ object Main : CommandWithHelp() {
 
         showVersionHeader(jc.parsedCommand)
 
-        val config = configFile?.expandTilde()?.let {
-            require(it.isFile) {
-                "The provided configuration file '$it' is not actually a file."
-            }
-
-            ConfigFactory.parseFile(configFile).extract<OrtConfiguration>("ort")
-        } ?: OrtConfiguration(null)
+        val config = loadConfig()
 
         return if (version) 0 else run(jc, config)
     }
@@ -163,5 +164,25 @@ object Main : CommandWithHelp() {
         }
 
         println()
+    }
+
+    private fun loadConfig(): OrtConfiguration {
+        val argsConfig = ConfigFactory.parseMap(configArguments, "Command line").withOnlyPath("ort")
+        val fileConfig = configFile?.expandTilde()?.let {
+            require(it.isFile) {
+                "The provided configuration file '$it' is not actually a file."
+            }
+
+            ConfigFactory.parseFile(it).withOnlyPath("ort")
+        }
+        val defaultConfig = ConfigFactory.parseResources("default.conf")
+
+        var combinedConfig = argsConfig
+        if (fileConfig != null) {
+            combinedConfig = combinedConfig.withFallback(fileConfig)
+        }
+        combinedConfig = combinedConfig.withFallback(defaultConfig).resolve()
+
+        return combinedConfig.extract("ort")
     }
 }

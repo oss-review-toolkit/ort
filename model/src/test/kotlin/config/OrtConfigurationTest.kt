@@ -32,28 +32,7 @@ import java.io.File
 class OrtConfigurationTest : WordSpec({
     "OrtConfiguration" should {
         "be deserializable from HOCON" {
-            val hocon = """
-                    ort {
-                      scanner {
-                        artifactoryStorage {
-                          url = url
-                          repository = repository
-                          apiToken = apiToken
-                        }
-
-                        localFileStorage {
-                          directory = /storage
-                        }
-
-                        postgresStorage {
-                          url = url
-                          schema = schema
-                          username = username
-                          password = password
-                        }
-                      }
-                    }
-                """.trimIndent()
+            val hocon = javaClass.getResource("/reference.conf").readText()
 
             val config = ConfigFactory.parseString(hocon)
             val ortConfig = config.extract<OrtConfiguration>("ort")
@@ -65,19 +44,19 @@ class OrtConfigurationTest : WordSpec({
 
                 scanner!!.artifactoryStorage.let { artifactory ->
                     artifactory shouldNotBe null
-                    artifactory!!.url shouldBe "url"
+                    artifactory!!.url shouldBe "https://your-artifactory-server"
                     artifactory.repository shouldBe "repository"
                     artifactory.apiToken shouldBe "apiToken"
                 }
 
                 scanner.localFileStorage.let { localFile ->
                     localFile shouldNotBe null
-                    localFile!!.directory shouldBe File("/storage")
+                    localFile!!.directory shouldBe File("~/.ort/scanner")
                 }
 
                 scanner.postgresStorage.let { postgres ->
                     postgres shouldNotBe null
-                    postgres!!.url shouldBe "url"
+                    postgres!!.url shouldBe "postgresql://your-postgresql-server:5444/your-database"
                     postgres.schema shouldBe "schema"
                     postgres.username shouldBe "username"
                     postgres.password shouldBe "password"
