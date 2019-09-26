@@ -179,6 +179,13 @@ class SpdxExpressionTest : WordSpec() {
             }
         }
 
+        "An SpdxExpression" should {
+            "be properly deep copied" {
+                ((APACHE_2_0.toExpression() as SpdxExpression).copy() as SpdxLicenseIdExpression).spdxLicense shouldBe
+                        APACHE_2_0
+            }
+        }
+
         "The expression parser" should {
             "work for deprecated license identifiers" {
                 assertSoftly {
