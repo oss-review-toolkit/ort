@@ -69,7 +69,7 @@ class DeclaredLicenseProcessorTest : StringSpec() {
             }
         }
 
-        "A prefix is removed from the license" {
+        "Prefixes and suffixes are removed from the license" {
             val processedLicense = DeclaredLicenseProcessor.process(
                 "https://choosealicense.com/licenses/apache-2.0.txt"
             )
