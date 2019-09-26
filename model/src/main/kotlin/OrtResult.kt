@@ -27,6 +27,7 @@ import com.here.ort.model.config.PathExclude
 import com.here.ort.model.config.RepositoryConfiguration
 import com.here.ort.model.config.Resolutions
 import com.here.ort.model.config.orEmpty
+import com.here.ort.model.util.FindingsMatcher
 import com.here.ort.spdx.SpdxExpression
 import com.here.ort.utils.log
 import com.here.ort.utils.zipWithDefault
@@ -173,7 +174,9 @@ data class OrtResult(
         val excludes = getExcludes()
         val project = getProject(id)
 
-        scanResultsById[id].orEmpty().flatMap { it.summary.groupedLicenseFindings }.forEach { finding ->
+        scanResultsById[id].orEmpty().flatMap {
+            FindingsMatcher().match(it.summary.licenseFindings, it.summary.copyrightFindings)
+        }.forEach { finding ->
             val matchingExcludes = mutableSetOf<PathExclude>()
 
             // Only license findings of projects can be excluded by path excludes.
