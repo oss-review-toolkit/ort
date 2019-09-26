@@ -77,5 +77,13 @@ class DeclaredLicenseProcessorTest : StringSpec() {
             processedLicense shouldNotBe null
             processedLicense!!.spdxLicenses() shouldBe enumSetOf(SpdxLicense.APACHE_2_0)
         }
+
+        "Preprocessing licenses does not make mapping redundant" {
+            val processableLicenses = SpdxDeclaredLicenseMapping.mapping.keys.filter { declaredLicense ->
+                SpdxLicenseAliasMapping.map(DeclaredLicenseProcessor.preprocess(declaredLicense)) != null
+            }
+
+            processableLicenses shouldBe emptyList()
+        }
     }
 }

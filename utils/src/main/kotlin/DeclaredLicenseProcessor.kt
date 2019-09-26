@@ -43,7 +43,7 @@ object DeclaredLicenseProcessor {
         ".dbk", ".html", ".md", ".odt", ".php", ".rtf", ".tex", ".txt"
     )
 
-    fun process(declaredLicense: String): SpdxExpression? {
+    internal fun preprocess(declaredLicense: String): String {
         val licenseWithoutPrefix = urlPrefixesToRemove.fold(declaredLicense) { license, url ->
             license.removePrefix(url)
         }
@@ -51,14 +51,17 @@ object DeclaredLicenseProcessor {
         // Only also strip suffixes if at least one prefix was stripped. Otherwise URLs like
         // "http://ant-contrib.sourceforge.net/tasks/LICENSE.txt" would be stripped, but for such URLs separate
         // mappings might exist.
-        val licenseWithoutPrefixOrSuffix = if (licenseWithoutPrefix != declaredLicense) {
+        return if (licenseWithoutPrefix != declaredLicense) {
             fileSuffixesToRemove.fold(licenseWithoutPrefix) { license, extension ->
                 license.removeSuffix(extension)
             }
         } else {
             licenseWithoutPrefix
         }
+    }
 
+    fun process(declaredLicense: String): SpdxExpression? {
+        val licenseWithoutPrefixOrSuffix = preprocess(declaredLicense)
         val mappedLicense = SpdxDeclaredLicenseMapping.map(licenseWithoutPrefixOrSuffix)
         return (mappedLicense ?: parseLicense(licenseWithoutPrefixOrSuffix))?.normalize()
     }
