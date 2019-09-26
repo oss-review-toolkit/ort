@@ -29,6 +29,7 @@ import com.here.ort.spdx.SpdxExpression
 object DeclaredLicenseProcessor {
     private val urlPrefixesToRemove = listOf(
         "choosealicense.com/licenses/",
+        "gnu.org/licenses/old-licenses/",
         "gnu.org/licenses/",
         "licenses.nuget.org/",
         "opensource.org/licenses/",
