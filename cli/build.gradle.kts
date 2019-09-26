@@ -1,3 +1,4 @@
+val config4kVersion: String by project
 val jcommanderVersion: String by project
 val kotlintestVersion: String by project
 val log4jCoreVersion: String by project
@@ -31,6 +32,7 @@ dependencies {
     compile(project(":utils"))
 
     compile("com.beust:jcommander:$jcommanderVersion")
+    compile("io.github.config4k:config4k:$config4kVersion")
     compile("org.apache.logging.log4j:log4j-core:$log4jCoreVersion")
     compile("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
     compile("org.jetbrains.kotlin:kotlin-reflect")

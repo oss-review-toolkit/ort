@@ -29,7 +29,6 @@ import com.here.ort.CommandWithHelp
 import com.here.ort.model.OutputFormat
 import com.here.ort.model.config.ScannerConfiguration
 import com.here.ort.model.mapper
-import com.here.ort.model.readValue
 import com.here.ort.scanner.LocalScanner
 import com.here.ort.scanner.ScanResultsStorage
 import com.here.ort.scanner.Scanner
@@ -43,6 +42,10 @@ import com.here.ort.utils.PARAMETER_ORDER_OPTIONAL
 import com.here.ort.utils.expandTilde
 import com.here.ort.utils.getUserOrtDirectory
 import com.here.ort.utils.log
+
+import com.typesafe.config.ConfigFactory
+
+import io.github.config4k.extract
 
 import java.io.File
 
@@ -125,7 +128,7 @@ object ScannerCommand : CommandWithHelp() {
                 "The provided configuration file '$it' is not actually a file."
             }
 
-            it.readValue<ScannerConfiguration>()
+            ConfigFactory.parseFile(it).extract<ScannerConfiguration>()
         } ?: ScannerConfiguration()
 
         // By default use a file based scan results storage.
