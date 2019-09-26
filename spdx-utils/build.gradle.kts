@@ -180,6 +180,29 @@ fun generateEnumClass(
     |
     |
     |    companion object {
+    """.trimMargin())
+
+    if (description == "license") {
+        enumFile.appendText("""
+    |
+    |        /**
+    |         * A constant to indicate that the SPDX creator concludes there is no license available.
+    |         */
+    |        const val NONE = "NONE"
+    |
+    |        /**
+    |         * A constant to indicate that the SPDX creator either
+    |         * - has attempted to but cannot reach a reasonable objective determination,
+    |         * - has made no attempt to determine this field, or
+    |         * - has intentionally provided no information (no meaning should be implied by doing so).
+    |         */
+    |        const val NOASSERTION = "NOASSERTION"
+    |
+        """.trimMargin())
+    }
+
+    enumFile.appendText("""
+    |
     |        /**
     |         * Return the enum value for the given [id], or null if it is no SPDX $description id.
     |         */
