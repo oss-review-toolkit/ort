@@ -45,8 +45,8 @@ class SpdxDeclaredLicenseMappingTest : WordSpec({
         "not contain plain SPDX license ids" {
             assertSoftly {
                 SpdxDeclaredLicenseMapping.mapping.forEach { (declaredLicense, _) ->
-                    "'$declaredLicense' maps to ${SpdxLicense.forId(declaredLicense)}" shouldBe
-                            "'$declaredLicense' maps to null"
+                    "\"$declaredLicense\" maps to ${SpdxLicense.forId(declaredLicense)}" shouldBe
+                            "\"$declaredLicense\" maps to null"
                 }
             }
         }
