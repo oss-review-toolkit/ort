@@ -112,7 +112,7 @@ object SpdxLicenseAliasMapping {
     ).mapValues { (_, v) -> v.toExpression() }.let { caseSensitiveMap ->
         caseSensitiveMap.toSortedMap(String.CASE_INSENSITIVE_ORDER).also { caseInsensitiveMap ->
             if (caseSensitiveMap.size > caseInsensitiveMap.size) {
-                val difference = caseSensitiveMap.keys.subtract(caseInsensitiveMap.keys)
+                val difference = caseSensitiveMap.keys.subtract(caseInsensitiveMap.keys).map { "\"$it\"" }
                 require(difference.isEmpty()) {
                     "The following ${difference.size} keys are present in different capitalizations: $difference"
                 }
