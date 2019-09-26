@@ -2,6 +2,7 @@ import com.here.ort.gradle.*
 
 import org.jetbrains.kotlin.gradle.dsl.KotlinCompile
 
+val config4kVersion: String by project
 val jacksonVersion: String by project
 val semverVersion: String by project
 
@@ -26,6 +27,8 @@ dependencies {
     implementation("com.vdurmont:semver4j:$semverVersion")
 
     implementation("org.jetbrains.kotlin:kotlin-reflect")
+
+    testImplementation("io.github.config4k:config4k:$config4kVersion")
 }
 
 val generateVersionResource by tasks.registering {

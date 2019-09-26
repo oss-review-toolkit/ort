@@ -232,20 +232,22 @@ By default the Scanner stores scan results on the local file system in the curre
 `~/.ort/scanner/scan-results`) for later reuse. The storage directory can be customized by passing a scanner
 configuration file (`-c`) that contains a respective local file storage configuration:
 
-```yaml
-local_file_storage:
-  directory: "/tmp/ort/scan-results"
+```hocon
+localFileStorage {
+  directory = "/tmp/ort/scan-results"
+}
 ```
 
 ### Artifactory Storage
 
 To use Artifactory to store scan results, use the following configuration:
 
-```yaml
-artifactory_storage:
-  url: "https://artifactory.domain.com/artifactory"
-  repository: "generic-repository-name"
-  apiToken: $ARTIFACTORY_API_KEY
+```hocon
+artifactoryStorage {
+  url = "https://artifactory.domain.com/artifactory"
+  repository = "generic-repository-name"
+  apiToken = "api-token"
+}
 ```
 
 The scanner creates a directory "scan-results" in the configured repository and uses it to store scan results. 
@@ -254,12 +256,13 @@ The scanner creates a directory "scan-results" in the configured repository and 
 
 To use PostgreSQL to store scan results, use the following configuration:
 
-```yaml
-postgres_storage:
-  url: "jdbc:postgresql://example.com:5444/database"
-  schema: "schema"
-  username: "username"
-  password: "password"
+```hocon
+postgresStorage {
+  url = "jdbc:postgresql://example.com:5444/database"
+  schema = "schema"
+  username = "username"
+  password = "password"
+}
 ```
 
 The scanner creates a table called `scan_results` and stores the data in a
