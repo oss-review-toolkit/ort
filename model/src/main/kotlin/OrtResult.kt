@@ -166,6 +166,34 @@ data class OrtResult(
         return analyzerErrors.zipWithDefault(scannerErrors, emptySet()) { left, right -> left + right }
     }
 
+    private fun collectLicenseFindings(
+        id: Identifier
+    ): Map<LicenseFindings, List<PathExclude>> {
+        val result = mutableMapOf<LicenseFindings, List<PathExclude>>()
+        val excludes = getExcludes()
+        val project = getProject(id)
+
+        scanResultsById[id].orEmpty().flatMap { it.summary.groupedLicenseFindings }.forEach { finding ->
+            val matchingExcludes = mutableSetOf<PathExclude>()
+
+            // Only license findings of projects can be excluded by path excludes.
+            val isExcluded = project != null && finding.locations.all { location ->
+                val path = getFilePathRelativeToAnalyzerRoot(project, location.path)
+                excludes.paths.any { exclude ->
+                    exclude.matches(path)
+                        .also { matches -> if (matches) matchingExcludes += exclude }
+                }
+            }
+
+            // TODO: Also filter copyrights excluded by path excludes.
+
+            // Only add matching excludes if all license locations are excluded.
+            result[finding] = if (isExcluded) matchingExcludes.toList() else emptyList()
+        }
+
+        return result
+    }
+
     /**
      * Return a map of license findings for each project or package [Identifier]. The license findings for projects are
      * mapped to a list of [PathExclude]s matching the locations where a license was found. This list is only populated
@@ -177,34 +205,9 @@ data class OrtResult(
     fun collectLicenseFindings(
         omitExcluded: Boolean = false
     ): Map<Identifier, Map<LicenseFindings, List<PathExclude>>> =
-        mutableMapOf<Identifier, MutableMap<LicenseFindings, List<PathExclude>>>().also { findings ->
-            val excludes = getExcludes()
-
-            scanner?.results?.scanResults?.forEach { result ->
-                val project = getProject(result.id)
-
-                if (!omitExcluded || !isPackageExcluded(result.id)) {
-                    result.results.flatMap { it.summary.groupedLicenseFindings }.forEach { finding ->
-                        val matchingExcludes = mutableSetOf<PathExclude>()
-
-                        // Only license findings of projects can be excluded by path excludes.
-                        val isExcluded = project != null && finding.locations.all { location ->
-                            val path = getFilePathRelativeToAnalyzerRoot(project, location.path)
-                            excludes.paths.any { exclude ->
-                                exclude.matches(path)
-                                    .also { matches -> if (matches) matchingExcludes += exclude }
-                            }
-                        }
-
-                        // TODO: Also filter copyrights excluded by path excludes.
-
-                        findings.getOrPut(result.id) { mutableMapOf() }[finding] =
-                                // Only add matching excludes if all license locations are excluded.
-                            if (isExcluded) matchingExcludes.toList() else emptyList()
-                    }
-                }
-            }
-        }
+        getProjectAndPackageIds()
+            .filter { id -> !omitExcluded || !isPackageExcluded(id) }
+            .associateWith { id -> collectLicenseFindings(id).toMutableMap() }
 
     /**
      * Return the set of all project or package identifiers in the result, optionally [including those of sub-projects]
@@ -396,4 +399,11 @@ data class OrtResult(
      */
     @JsonIgnore
     fun getResolutions(): Resolutions = repository.config.resolutions.orEmpty()
+
+    /**
+     * Return the set of Identifiers of all [Package]s and [Project]s contained in this [OrtResult].
+     */
+    @JsonIgnore
+    fun getProjectAndPackageIds(): Set<Identifier> =
+        (getPackages().map { it.pkg.id } + getProjects().map { it.id }).toSet()
 }
