@@ -101,13 +101,11 @@ packages:
       type: "Git"
       url: "http://github.com/flavorjones/mini_portile.git"
       revision: ""
-      resolved_revision: ""
       path: ""
     vcs_processed:
       type: "Git"
       url: "https://github.com/flavorjones/mini_portile.git"
       revision: ""
-      resolved_revision: ""
       path: ""
   curations: []
 - package:
@@ -289,13 +287,11 @@ packages:
       type: "Git"
       url: "https://github.com/rspec/rspec-support.git"
       revision: ""
-      resolved_revision: ""
       path: ""
     vcs_processed:
       type: "Git"
       url: "https://github.com/rspec/rspec-support.git"
       revision: ""
-      resolved_revision: ""
       path: ""
   curations: []
 - package:

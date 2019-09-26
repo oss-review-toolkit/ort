@@ -24,6 +24,7 @@ import com.fasterxml.jackson.module.kotlin.readValue
 import com.here.ort.analyzer.AbstractPackageManagerFactory
 import com.here.ort.analyzer.HTTP_CACHE_PATH
 import com.here.ort.analyzer.PackageManager
+import com.here.ort.downloader.VcsHost
 import com.here.ort.downloader.VersionControlSystem
 import com.here.ort.model.Hash
 import com.here.ort.model.Identifier
@@ -35,7 +36,6 @@ import com.here.ort.model.ProjectAnalyzerResult
 import com.here.ort.model.RemoteArtifact
 import com.here.ort.model.Scope
 import com.here.ort.model.VcsInfo
-import com.here.ort.model.VcsType
 import com.here.ort.model.config.AnalyzerConfiguration
 import com.here.ort.model.config.RepositoryConfiguration
 import com.here.ort.model.jsonMapper
@@ -304,7 +304,7 @@ data class GemSpec(
                 yaml["licenses"]?.asIterable()?.mapTo(sortedSetOf()) { it.textValue() } ?: sortedSetOf(),
                 yaml["description"].textValueOrEmpty(),
                 runtimeDependencies ?: emptySet(),
-                parseVcs(homepage),
+                VcsHost.fromUrl(homepage)?.toVcsInfo() ?: VcsInfo.EMPTY,
                 RemoteArtifact.EMPTY
             )
         }
@@ -340,18 +340,6 @@ data class GemSpec(
                 artifact
             )
         }
-
-        private val GITHUB_REGEX = Regex("https?://github.com/(?<owner>[^/]+)/(?<repo>[^/]+)")
-
-        // Gems tend to have GitHub URL set as homepage. Seems like it is the only way to get any VCS information out of
-        // gemspec files.
-        private fun parseVcs(homepageUrl: String): VcsInfo =
-            if (GITHUB_REGEX.matches(homepageUrl)) {
-                log.debug { "$homepageUrl is a GitHub URL." }
-                VcsInfo(VcsType.GIT, "$homepageUrl.git", "", "")
-            } else {
-                VcsInfo.EMPTY
-            }
     }
 
     fun merge(other: GemSpec): GemSpec {
