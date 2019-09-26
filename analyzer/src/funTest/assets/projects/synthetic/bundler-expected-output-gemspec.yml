@@ -138,13 +138,11 @@ packages:
       type: "Git"
       url: "https://github.com/lostisland/faraday.git"
       revision: ""
-      resolved_revision: ""
       path: ""
     vcs_processed:
       type: "Git"
       url: "https://github.com/lostisland/faraday.git"
       revision: ""
-      resolved_revision: ""
       path: ""
   curations: []
 - package:
@@ -171,13 +169,11 @@ packages:
       type: "Git"
       url: "http://github.com/jwt/ruby-jwt.git"
       revision: ""
-      resolved_revision: ""
       path: ""
     vcs_processed:
       type: "Git"
       url: "https://github.com/jwt/ruby-jwt.git"
       revision: ""
-      resolved_revision: ""
       path: ""
   curations: []
 - package:
@@ -205,13 +201,11 @@ packages:
       type: "Git"
       url: "http://github.com/intridea/multi_json.git"
       revision: ""
-      resolved_revision: ""
       path: ""
     vcs_processed:
       type: "Git"
       url: "https://github.com/intridea/multi_json.git"
       revision: ""
-      resolved_revision: ""
       path: ""
   curations: []
 - package:
@@ -239,13 +233,11 @@ packages:
       type: "Git"
       url: "https://github.com/nicksieger/multipart-post.git"
       revision: ""
-      resolved_revision: ""
       path: ""
     vcs_processed:
       type: "Git"
       url: "https://github.com/nicksieger/multipart-post.git"
       revision: ""
-      resolved_revision: ""
       path: ""
   curations: []
 - package:
@@ -427,13 +419,11 @@ packages:
       type: "Git"
       url: "https://github.com/rspec/rspec-support.git"
       revision: ""
-      resolved_revision: ""
       path: ""
     vcs_processed:
       type: "Git"
       url: "https://github.com/rspec/rspec-support.git"
       revision: ""
-      resolved_revision: ""
       path: ""
   curations: []
 - package:
@@ -486,8 +476,8 @@ packages:
         value: "7b2efb61e689a22b4fc721ba5e9f4fc45b1702dcca38e11e52bfe5883b0d484b"
         algorithm: "SHA-256"
     vcs:
-      type: ""
-      url: ""
+      type: "Git"
+      url: "https://github.com/google/signet.git"
       revision: ""
       path: ""
     vcs_processed:

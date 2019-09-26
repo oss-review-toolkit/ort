@@ -23,7 +23,6 @@ import com.here.ort.model.Package
 import com.here.ort.model.VcsInfo
 import com.here.ort.model.VcsType
 import com.here.ort.utils.CommandLineTool
-import com.here.ort.utils.hasFragmentRevision
 import com.here.ort.utils.log
 import com.here.ort.utils.normalizeVcsUrl
 import com.here.ort.utils.showStackTrace
@@ -32,9 +31,6 @@ import com.vdurmont.semver4j.Semver
 
 import java.io.File
 import java.io.IOException
-import java.net.URI
-import java.net.URISyntaxException
-import java.nio.file.Paths
 import java.util.ServiceLoader
 
 abstract class VersionControlSystem {
@@ -139,107 +135,28 @@ abstract class VersionControlSystem {
          * Decompose a [vcsUrl] into any contained VCS information.
          */
         fun splitUrl(vcsUrl: String): VcsInfo {
-            // A hierarchical URI looks like
-            //     [scheme:][//authority][path][?query][#fragment]
-            // where a server-based "authority" has the syntax
-            //     [user-info@]host[:port]
-            val uri = try {
-                // At this point we do not know whether the URL is actually valid, so use the more general URI.
-                URI(vcsUrl)
-            } catch (e: URISyntaxException) {
-                // Fall back to returning just the original URL.
-                return VcsInfo(VcsType.NONE, vcsUrl, "")
-            }
-
-            return when {
-                uri.host == null -> VcsInfo(VcsType.NONE, vcsUrl, "")
-
-                uri.host.endsWith("bitbucket.org") -> {
-                    var url = uri.scheme + "://" + uri.authority
-
-                    // Append the first two path components that denote the user and project to the base URL.
-                    val pathIterator = Paths.get(uri.path).iterator()
-                    if (pathIterator.hasNext()) {
-                        url += "/${pathIterator.next()}"
-                    }
-                    if (pathIterator.hasNext()) {
-                        url += "/${pathIterator.next()}"
+            val host = VcsHost.fromUrl(vcsUrl)
+            return if (host != null) {
+                host.toVcsInfo() ?: VcsInfo.EMPTY
+            } else {
+                when {
+                    vcsUrl.endsWith(".git") -> {
+                        VcsInfo(VcsType.GIT, normalizeVcsUrl(vcsUrl), "", null, "")
                     }
 
-                    var revision = ""
-                    var path = ""
-
-                    if (pathIterator.hasNext() && pathIterator.next().toString() == "src") {
-                        if (pathIterator.hasNext()) {
-                            revision = pathIterator.next().toString()
-                            path = uri.path.substringAfter(revision).trimStart('/').removeSuffix(".git")
-                        }
+                    vcsUrl.contains(".git/") -> {
+                        val url = normalizeVcsUrl(vcsUrl.substringBefore(".git/"))
+                        val path = vcsUrl.substringAfter(".git/")
+                        VcsInfo(VcsType.GIT, "$url.git", "", null, path)
                     }
 
-                    val type = forUrl(url)?.type ?: VcsType.NONE
-                    if (type == VcsType.GIT) {
-                        url += ".git"
+                    vcsUrl.contains(".git#") || Regex("git.+#[a-fA-F0-9]{7,}").matches(vcsUrl) -> {
+                        val url = normalizeVcsUrl(vcsUrl.substringBeforeLast('#'))
+                        val revision = vcsUrl.substringAfterLast('#')
+                        VcsInfo(VcsType.GIT, url, revision, null, "")
                     }
 
-                    VcsInfo(type, url, revision, path = path)
-                }
-
-                uri.host.endsWith("github.com") || uri.host.endsWith("gitlab.com") -> {
-                    var url = uri.scheme + "://" + uri.authority
-
-                    // Append the first two path components that denote the user and project to the base URL.
-                    val pathIterator = Paths.get(uri.path).iterator()
-                    if (pathIterator.hasNext()) {
-                        url += "/${pathIterator.next()}"
-                    }
-                    if (pathIterator.hasNext()) {
-                        url += "/${pathIterator.next()}"
-
-                        // GitLab and GitHub only host Git repositories.
-                        if (!url.endsWith(".git")) {
-                            url += ".git"
-                        }
-                    }
-
-                    var revision = ""
-                    var path = ""
-
-                    if (pathIterator.hasNext()) {
-                        val extra = pathIterator.next().toString()
-                        if (extra in listOf("blob", "tree") && pathIterator.hasNext()) {
-                            revision = pathIterator.next().toString()
-                            path = uri.path.substringAfter(revision).trimStart('/').removeSuffix(".git")
-                        } else {
-                            // Just treat all the extra components as a path.
-                            path = (sequenceOf(extra) + pathIterator.asSequence()).joinToString("/")
-                        }
-                    } else {
-                        if (uri.hasFragmentRevision()) revision = uri.fragment
-                    }
-
-                    VcsInfo(VcsType.GIT, url, revision, path = path)
-                }
-
-                else -> {
-                    when {
-                        vcsUrl.endsWith(".git") -> {
-                            VcsInfo(VcsType.GIT, normalizeVcsUrl(vcsUrl), "", null, "")
-                        }
-
-                        vcsUrl.contains(".git/") -> {
-                            val url = normalizeVcsUrl(vcsUrl.substringBefore(".git/"))
-                            val path = vcsUrl.substringAfter(".git/")
-                            VcsInfo(VcsType.GIT, "$url.git", "", null, path)
-                        }
-
-                        vcsUrl.contains(".git#") || Regex("git.+#[a-fA-F0-9]{7,}").matches(vcsUrl) -> {
-                            val url = normalizeVcsUrl(vcsUrl.substringBeforeLast('#'))
-                            val revision = vcsUrl.substringAfterLast('#')
-                            VcsInfo(VcsType.GIT, url, revision, null, "")
-                        }
-
-                        else -> VcsInfo(VcsType.NONE, vcsUrl, "")
-                    }
+                    else -> VcsInfo(VcsType.NONE, vcsUrl, "")
                 }
             }
         }
