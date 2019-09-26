@@ -39,6 +39,7 @@ import com.here.ort.scanner.LocalScanner
 import com.here.ort.scanner.ScanException
 import com.here.ort.scanner.ScanResultsStorage
 import com.here.ort.spdx.NON_LICENSE_FILENAMES
+import com.here.ort.spdx.SpdxLicense
 import com.here.ort.utils.CommandLineTool
 import com.here.ort.utils.ORT_CONFIG_FILENAME
 import com.here.ort.utils.Os
@@ -381,7 +382,7 @@ class ScanCode(
         if (name.isEmpty()) {
             val key = license["key"].textValue()
             name = if (key in UNKNOWN_LICENSE_KEYS) {
-                "NOASSERTION"
+                SpdxLicense.NOASSERTION
             } else {
                 // Starting with version 2.9.8, ScanCode uses "scancode" as a LicenseRef namespace, but only for SPDX
                 // output formats, see https://github.com/nexB/scancode-toolkit/pull/1307.

@@ -42,6 +42,7 @@ import com.here.ort.model.config.AnalyzerConfiguration
 import com.here.ort.model.config.RepositoryConfiguration
 import com.here.ort.model.jsonMapper
 import com.here.ort.model.readValue
+import com.here.ort.spdx.SpdxLicense
 import com.here.ort.utils.CommandLineTool
 import com.here.ort.utils.Os
 import com.here.ort.utils.OkHttpClientHelper
@@ -179,7 +180,7 @@ open class Npm(
         return declaredLicenses.mapTo(sortedSetOf()) {
             // NPM does not mean https://unlicense.org/ here, but the wish to not "grant others the right to use a
             // private or unpublished package under any terms", which corresponds to SPDX's "NONE".
-            if (it == "UNLICENSED") "NONE" else it
+            if (it == "UNLICENSED") SpdxLicense.NONE else it
         }
     }
 
