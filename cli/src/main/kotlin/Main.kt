@@ -24,9 +24,17 @@ import com.beust.jcommander.Parameter
 
 import com.here.ort.commands.*
 import com.here.ort.model.Environment
+import com.here.ort.model.config.OrtConfiguration
 import com.here.ort.utils.PARAMETER_ORDER_LOGGING
 import com.here.ort.utils.PARAMETER_ORDER_OPTIONAL
+import com.here.ort.utils.expandTilde
 import com.here.ort.utils.printStackTrace
+
+import com.typesafe.config.ConfigFactory
+
+import io.github.config4k.extract
+
+import java.io.File
 
 import kotlin.system.exitProcess
 
@@ -39,6 +47,13 @@ const val TOOL_NAME = "ort"
  * The main entry point of the application.
  */
 object Main : CommandWithHelp() {
+    @Parameter(
+        description = "The path to a configuration file.",
+        names = ["--config", "-c"],
+        order = PARAMETER_ORDER_OPTIONAL
+    )
+    private var configFile: File? = null
+
     @Parameter(
         description = "Enable info logging.",
         names = ["--info"],
@@ -95,10 +110,18 @@ object Main : CommandWithHelp() {
 
         showVersionHeader(jc.parsedCommand)
 
-        return if (version) 0 else run(jc)
+        val config = configFile?.expandTilde()?.let {
+            require(it.isFile) {
+                "The provided configuration file '$it' is not actually a file."
+            }
+
+            ConfigFactory.parseFile(configFile).extract<OrtConfiguration>("ort")
+        } ?: OrtConfiguration(null)
+
+        return if (version) 0 else run(jc, config)
     }
 
-    override fun runCommand(jc: JCommander): Int {
+    override fun runCommand(jc: JCommander, config: OrtConfiguration): Int {
         when {
             debug -> Configurator.setRootLevel(Level.DEBUG)
             info -> Configurator.setRootLevel(Level.INFO)
@@ -112,7 +135,7 @@ object Main : CommandWithHelp() {
         val commandObject = command.objects.first() as CommandWithHelp
 
         // Delegate running actions to the specified command.
-        return commandObject.run(jc)
+        return commandObject.run(jc, config)
     }
 
     private fun showVersionHeader(commandName: String?) {

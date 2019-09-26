@@ -22,6 +22,8 @@ package com.here.ort
 import com.beust.jcommander.JCommander
 import com.beust.jcommander.Parameter
 
+import com.here.ort.model.config.OrtConfiguration
+
 import com.here.ort.utils.PARAMETER_ORDER_HELP
 
 /**
@@ -39,7 +41,7 @@ abstract class CommandWithHelp {
     /**
      * Run the command after processing command line help.
      */
-    fun run(jc: JCommander): Int {
+    fun run(jc: JCommander, config: OrtConfiguration): Int {
         if (jc.parsedCommand == null) {
             jc.usage()
             return 0
@@ -50,11 +52,11 @@ abstract class CommandWithHelp {
             return 0
         }
 
-        return runCommand(jc)
+        return runCommand(jc, config)
     }
 
     /**
      * Run the underlying command.
      */
-    protected abstract fun runCommand(jc: JCommander): Int
+    protected abstract fun runCommand(jc: JCommander, config: OrtConfiguration): Int
 }

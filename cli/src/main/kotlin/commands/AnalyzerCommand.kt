@@ -31,6 +31,7 @@ import com.here.ort.analyzer.PackageManager
 import com.here.ort.analyzer.PackageManagerFactory
 import com.here.ort.model.OutputFormat
 import com.here.ort.model.config.AnalyzerConfiguration
+import com.here.ort.model.config.OrtConfiguration
 import com.here.ort.model.mapper
 import com.here.ort.utils.PARAMETER_ORDER_MANDATORY
 import com.here.ort.utils.PARAMETER_ORDER_OPTIONAL
@@ -118,7 +119,7 @@ object AnalyzerCommand : CommandWithHelp() {
     )
     private var repositoryConfigurationFile: File? = null
 
-    override fun runCommand(jc: JCommander): Int {
+    override fun runCommand(jc: JCommander, config: OrtConfiguration): Int {
         val absoluteOutputDir = outputDir.expandTilde().normalize()
 
         val outputFiles = outputFormats.distinct().map { format ->
@@ -149,8 +150,8 @@ object AnalyzerCommand : CommandWithHelp() {
         val absoluteInputDir = inputDir.expandTilde().normalize()
         println("Analyzing project path:\n\t$absoluteInputDir")
 
-        val config = AnalyzerConfiguration(ignoreToolVersions, allowDynamicVersions)
-        val analyzer = Analyzer(config)
+        val analyzerConfig = AnalyzerConfiguration(ignoreToolVersions, allowDynamicVersions)
+        val analyzer = Analyzer(analyzerConfig)
         val ortResult = analyzer.analyze(
             absoluteInputDir, packageManagers, absolutePackageCurationsFile,
             absoluteRepositoryConfigurationFile

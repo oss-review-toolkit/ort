@@ -28,6 +28,7 @@ import com.beust.jcommander.Parameters
 import com.here.ort.CommandWithHelp
 import com.here.ort.model.OrtResult
 import com.here.ort.model.config.CopyrightGarbage
+import com.here.ort.model.config.OrtConfiguration
 import com.here.ort.model.config.Resolutions
 import com.here.ort.model.readValue
 import com.here.ort.reporter.DefaultResolutionProvider
@@ -123,7 +124,7 @@ object ReporterCommand : CommandWithHelp() {
     )
     private var customLicenseTextsDir: File? = null
 
-    override fun runCommand(jc: JCommander): Int {
+    override fun runCommand(jc: JCommander, config: OrtConfiguration): Int {
         val absoluteOutputDir = outputDir.expandTilde().normalize()
 
         val reports = reporters.associateWith { reporter ->

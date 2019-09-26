@@ -32,6 +32,7 @@ import com.here.ort.model.Package
 import com.here.ort.model.RemoteArtifact
 import com.here.ort.model.VcsInfo
 import com.here.ort.model.VcsType
+import com.here.ort.model.config.OrtConfiguration
 import com.here.ort.model.readValue
 import com.here.ort.utils.ARCHIVE_EXTENSIONS
 import com.here.ort.utils.PARAMETER_ORDER_MANDATORY
@@ -126,7 +127,7 @@ object DownloaderCommand : CommandWithHelp() {
     )
     private var allowMovingRevisions = false
 
-    override fun runCommand(jc: JCommander): Int {
+    override fun runCommand(jc: JCommander, config: OrtConfiguration): Int {
         if ((ortFile != null) == (projectUrl != null)) {
             throw IllegalArgumentException(
                 "Either '--ort-file' or '--project-url' must be specified."
