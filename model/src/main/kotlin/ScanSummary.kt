@@ -30,8 +30,6 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer
 import com.fasterxml.jackson.module.kotlin.treeToValue
 
-import com.here.ort.model.util.FindingsMatcher
-
 import java.time.Instant
 import java.util.SortedSet
 import java.util.TreeSet
@@ -81,9 +79,6 @@ data class ScanSummary(
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     val errors: List<OrtIssue> = emptyList()
 ) {
-    @get:JsonIgnore
-    val groupedLicenseFindings = FindingsMatcher().match(licenseFindings, copyrightFindings)
-
     @get:JsonIgnore
     val licenses = licenseFindings.map { it.license }.toSet()
 }
