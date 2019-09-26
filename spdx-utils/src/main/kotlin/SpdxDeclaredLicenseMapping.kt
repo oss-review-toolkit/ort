@@ -31,7 +31,7 @@ object SpdxDeclaredLicenseMapping {
     /**
      * The map of collected license strings associated with their corresponding SPDX expression.
      */
-    val mapping: Map<String, SpdxExpression> = mapOf(
+    val mapping: Map<String, SpdxExpression> = listOf(
         "(MIT-style) netCDF C library license" to NETCDF.toExpression(),
         "2-clause BSD license" to BSD_2_CLAUSE.toExpression(),
         "2-clause BSDL" to BSD_2_CLAUSE.toExpression(),
@@ -275,7 +275,17 @@ object SpdxDeclaredLicenseMapping {
                 to (((licenseRef("public-domain-disclaimer", "scancode") and PYTHON_2_0.toExpression())
                 and BSD_2_CLAUSE.toExpression()) and GPL_3_0_ONLY.toExpression()),
         "the Apache License, ASL Version 2.0" to APACHE_2_0.toExpression()
-    ).let { caseSensitiveMap ->
+    ).also {
+        val keys = it.unzip().first.toMutableList()
+        val uniqueKeys = keys.distinct()
+        if (keys.size > uniqueKeys.size) {
+            uniqueKeys.forEach { uniqueKey -> keys.remove(uniqueKey) }
+            require(keys.isEmpty()) {
+                val quotedKeys = keys.map { "\"$it\"" }
+                "The following ${keys.size} keys are present in the same capitalization: $quotedKeys"
+            }
+        }
+    }.toMap().let { caseSensitiveMap ->
         caseSensitiveMap.toSortedMap(String.CASE_INSENSITIVE_ORDER).also { caseInsensitiveMap ->
             if (caseSensitiveMap.size > caseInsensitiveMap.size) {
                 val difference = caseSensitiveMap.keys.subtract(caseInsensitiveMap.keys).map { "\"$it\"" }
