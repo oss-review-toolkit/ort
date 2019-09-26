@@ -339,4 +339,4 @@ fun TypeFactory.constructTreeSetType(elementClass: Class<*>): CollectionType =
 /**
  * Check whether the URI has a fragment that looks like a VCS revision.
  */
-fun URI.hasFragmentRevision() = fragment?.let { Regex("[a-fA-F0-9]{7,}$").matches(it) } == true
+fun URI.hasRevisionFragment() = fragment?.let { Regex("[a-fA-F0-9]{7,}$").matches(it) } == true

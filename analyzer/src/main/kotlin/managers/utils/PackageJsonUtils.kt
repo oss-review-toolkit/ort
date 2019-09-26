@@ -24,7 +24,7 @@ import com.fasterxml.jackson.databind.node.ArrayNode
 import com.fasterxml.jackson.databind.node.ObjectNode
 
 import com.here.ort.model.readValue
-import com.here.ort.utils.hasFragmentRevision
+import com.here.ort.utils.hasRevisionFragment
 import com.here.ort.utils.log
 import com.here.ort.utils.showStackTrace
 
@@ -92,7 +92,7 @@ internal class PackageJsonUtils {
 
             return if (!path.isNullOrEmpty() && listOf(uri.authority, uri.query).all { it == null }) {
                 // See https://docs.npmjs.com/files/package.json#github-urls.
-                val revision = if (uri.hasFragmentRevision()) "#${uri.fragment}" else ""
+                val revision = if (uri.hasRevisionFragment()) "#${uri.fragment}" else ""
 
                 // See https://docs.npmjs.com/files/package.json#repository.
                 when (uri.scheme) {

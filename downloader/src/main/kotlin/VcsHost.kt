@@ -22,7 +22,7 @@ package com.here.ort.downloader
 
 import com.here.ort.model.VcsInfo
 import com.here.ort.model.VcsType
-import com.here.ort.utils.hasFragmentRevision
+import com.here.ort.utils.hasRevisionFragment
 
 import java.net.URI
 import java.net.URISyntaxException
@@ -109,7 +109,7 @@ private fun gitUrlToVcsInfo(uri: URI): VcsInfo {
             path = (sequenceOf(extra) + pathIterator.asSequence()).joinToString("/")
         }
     } else {
-        if (uri.hasFragmentRevision()) revision = uri.fragment
+        if (uri.hasRevisionFragment()) revision = uri.fragment
     }
 
     return VcsInfo(VcsType.GIT, url, revision, path = path)
