@@ -229,12 +229,16 @@ scan results for later reuse.
 ### Local File Storage
 
 By default the Scanner stores scan results on the local file system in the current user's home directory (i.e.
-`~/.ort/scanner/scan-results`) for later reuse. The storage directory can be customized by passing a scanner
-configuration file (`-c`) that contains a respective local file storage configuration:
+`~/.ort/scanner/scan-results`) for later reuse. The storage directory can be customized by passing an ORT configuration
+file (`-c`) that contains a respective local file storage configuration:
 
 ```hocon
-localFileStorage {
-  directory = "/tmp/ort/scan-results"
+ort {
+  scanner {
+    localFileStorage {
+      directory = "/tmp/ort/scan-results"
+    }
+  }
 }
 ```
 
@@ -243,10 +247,14 @@ localFileStorage {
 To use Artifactory to store scan results, use the following configuration:
 
 ```hocon
-artifactoryStorage {
-  url = "https://artifactory.domain.com/artifactory"
-  repository = "generic-repository-name"
-  apiToken = "api-token"
+ort {
+  scanner {
+    artifactoryStorage {
+      url = "https://artifactory.domain.com/artifactory"
+      repository = "generic-repository-name"
+      apiToken = "api-token"
+    }
+  }
 }
 ```
 
@@ -257,11 +265,15 @@ The scanner creates a directory "scan-results" in the configured repository and 
 To use PostgreSQL to store scan results, use the following configuration:
 
 ```hocon
-postgresStorage {
-  url = "jdbc:postgresql://example.com:5444/database"
-  schema = "schema"
-  username = "username"
-  password = "password"
+ort {
+  scanner {
+    postgresStorage {
+      url = "jdbc:postgresql://example.com:5444/database"
+      schema = "schema"
+      username = "username"
+      password = "password"
+    }
+  }
 }
 ```
 

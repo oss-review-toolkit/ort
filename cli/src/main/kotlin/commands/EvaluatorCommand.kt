@@ -29,6 +29,7 @@ import com.here.ort.model.OrtResult
 import com.here.ort.model.OutputFormat
 import com.here.ort.model.RuleViolation
 import com.here.ort.model.Severity
+import com.here.ort.model.config.OrtConfiguration
 import com.here.ort.model.mapper
 import com.here.ort.model.readValue
 import com.here.ort.utils.PARAMETER_ORDER_MANDATORY
@@ -102,7 +103,7 @@ object EvaluatorCommand : CommandWithHelp() {
     )
     private var packageCurationsFile: File? = null
 
-    override fun runCommand(jc: JCommander): Int {
+    override fun runCommand(jc: JCommander, config: OrtConfiguration): Int {
         require((rulesFile == null) != (rulesResource == null)) {
             "Either '--rules-file' or '--rules-resource' must be specified."
         }

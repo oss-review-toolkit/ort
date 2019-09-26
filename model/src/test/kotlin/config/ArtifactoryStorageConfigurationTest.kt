@@ -23,36 +23,12 @@ import com.fasterxml.jackson.module.kotlin.readValue
 
 import com.here.ort.model.yamlMapper
 
-import com.typesafe.config.ConfigFactory
-
-import io.github.config4k.extract
-
 import io.kotlintest.shouldBe
 import io.kotlintest.specs.WordSpec
 
 class ArtifactoryStorageConfigurationTest : WordSpec() {
     init {
         "ArtifactoryStorageConfiguration" should {
-            "be deserializable from HOCON" {
-                val hocon = """
-                    scanner {
-                        artifactoryStorage {
-                            url = url
-                            repository = repository
-                            apiToken = apiToken
-                        }
-                    }
-                """.trimIndent()
-
-                val config = ConfigFactory.parseString(hocon)
-                val artifactoryStorageConfiguration =
-                    config.extract<ArtifactoryStorageConfiguration>("scanner.artifactoryStorage")
-
-                artifactoryStorageConfiguration.url shouldBe "url"
-                artifactoryStorageConfiguration.repository shouldBe "repository"
-                artifactoryStorageConfiguration.apiToken shouldBe "apiToken"
-            }
-
             "be deserializable" {
                 val yaml = """
                     ---

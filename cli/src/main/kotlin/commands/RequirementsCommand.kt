@@ -26,6 +26,7 @@ import com.here.ort.CommandWithHelp
 import com.here.ort.analyzer.PackageManager
 import com.here.ort.downloader.VersionControlSystem
 import com.here.ort.model.config.AnalyzerConfiguration
+import com.here.ort.model.config.OrtConfiguration
 import com.here.ort.model.config.RepositoryConfiguration
 import com.here.ort.model.config.ScannerConfiguration
 import com.here.ort.scanner.Scanner
@@ -39,7 +40,7 @@ import org.reflections.Reflections
 
 @Parameters(commandNames = ["requirements"], commandDescription = "List the required command line tools.")
 object RequirementsCommand : CommandWithHelp() {
-    override fun runCommand(jc: JCommander): Int {
+    override fun runCommand(jc: JCommander, config: OrtConfiguration): Int {
         var exitCode = 0
 
         val reflections = Reflections("com.here.ort")

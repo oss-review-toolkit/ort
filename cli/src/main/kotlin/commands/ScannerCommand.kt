@@ -27,6 +27,7 @@ import com.beust.jcommander.Parameters
 
 import com.here.ort.CommandWithHelp
 import com.here.ort.model.OutputFormat
+import com.here.ort.model.config.OrtConfiguration
 import com.here.ort.model.config.ScannerConfiguration
 import com.here.ort.model.mapper
 import com.here.ort.scanner.LocalScanner
@@ -42,10 +43,6 @@ import com.here.ort.utils.PARAMETER_ORDER_OPTIONAL
 import com.here.ort.utils.expandTilde
 import com.here.ort.utils.getUserOrtDirectory
 import com.here.ort.utils.log
-
-import com.typesafe.config.ConfigFactory
-
-import io.github.config4k.extract
 
 import java.io.File
 
@@ -109,27 +106,14 @@ object ScannerCommand : CommandWithHelp() {
     private var scannerFactory: ScannerFactory = ScanCode.Factory()
 
     @Parameter(
-        description = "The path to a configuration file.",
-        names = ["--config", "-c"],
-        order = PARAMETER_ORDER_OPTIONAL
-    )
-    private var configFile: File? = null
-
-    @Parameter(
         description = "The list of output formats to be used for the ORT result file(s).",
         names = ["--output-formats", "-f"],
         order = PARAMETER_ORDER_OPTIONAL
     )
     private var outputFormats = listOf(OutputFormat.YAML)
 
-    private fun configureScanner(configFile: File?): Scanner {
-        val config = configFile?.expandTilde()?.let {
-            require(it.isFile) {
-                "The provided configuration file '$it' is not actually a file."
-            }
-
-            ConfigFactory.parseFile(it).extract<ScannerConfiguration>()
-        } ?: ScannerConfiguration()
+    private fun configureScanner(scannerConfiguration: ScannerConfiguration?): Scanner {
+        val config = scannerConfiguration ?: ScannerConfiguration()
 
         // By default use a file based scan results storage.
         val localFileStorage = LocalFileStorage(getUserOrtDirectory().resolve(TOOL_NAME))
@@ -173,7 +157,7 @@ object ScannerCommand : CommandWithHelp() {
         return scanner
     }
 
-    override fun runCommand(jc: JCommander): Int {
+    override fun runCommand(jc: JCommander, config: OrtConfiguration): Int {
         require((ortFile == null) != (inputPath == null)) {
             "Either '--ort-file' or '--input-path' must be specified."
         }
@@ -201,7 +185,7 @@ object ScannerCommand : CommandWithHelp() {
             "The download directory '$absoluteDownloadDir' must not exist yet."
         }
 
-        val scanner = configureScanner(configFile)
+        val scanner = configureScanner(config.scanner)
 
         val ortResult = ortFile?.expandTilde()?.let {
             scanner.scanOrtResult(
