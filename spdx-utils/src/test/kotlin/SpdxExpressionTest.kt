@@ -67,7 +67,7 @@ class SpdxExpressionTest : WordSpec() {
             }
         }
 
-        "An dummy SpdxExpression" should {
+        "A dummy SpdxExpression" should {
             val dummyExpression = "license1+ AND (license2 WITH exception1 OR license3+) AND license4 WITH exception2"
 
             "be serializable to a string representation" {
