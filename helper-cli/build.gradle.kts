@@ -1,4 +1,5 @@
 val jcommanderVersion: String by project
+val log4jCoreVersion: String by project
 val reflectionsVersion: String by project
 
 plugins {
@@ -20,5 +21,11 @@ repositories {
 }
 
 dependencies {
-    compile(project(":cli"))
+    compile(project(":analyzer"))
+    compile(project(":downloader"))
+    compile(project(":reporter"))
+    compile(project(":utils"))
+
+    compile("com.beust:jcommander:$jcommanderVersion")
+    compile("org.apache.logging.log4j:log4j-core:$log4jCoreVersion")
 }

@@ -24,7 +24,6 @@ import kotlin.system.exitProcess
 import com.beust.jcommander.JCommander
 import com.beust.jcommander.Parameter
 
-import com.here.ort.CommandWithHelp
 import com.here.ort.helper.commands.*
 import com.here.ort.utils.PARAMETER_ORDER_LOGGING
 import com.here.ort.utils.printStackTrace

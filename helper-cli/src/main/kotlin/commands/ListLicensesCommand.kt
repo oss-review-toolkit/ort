@@ -23,7 +23,7 @@ import com.beust.jcommander.JCommander
 import com.beust.jcommander.Parameter
 import com.beust.jcommander.Parameters
 
-import com.here.ort.CommandWithHelp
+import com.here.ort.helper.CommandWithHelp
 import com.here.ort.helper.common.IdentifierConverter
 import com.here.ort.helper.common.fetchScannedSources
 import com.here.ort.helper.common.getLicenseFindingsById

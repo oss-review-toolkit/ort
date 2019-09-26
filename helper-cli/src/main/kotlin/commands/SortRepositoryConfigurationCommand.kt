@@ -24,7 +24,7 @@ import com.beust.jcommander.Parameter
 import com.beust.jcommander.Parameters
 import com.beust.jcommander.converters.FileConverter
 
-import com.here.ort.CommandWithHelp
+import com.here.ort.helper.CommandWithHelp
 import com.here.ort.helper.common.sortEntries
 import com.here.ort.helper.common.writeAsYaml
 import com.here.ort.model.config.RepositoryConfiguration
