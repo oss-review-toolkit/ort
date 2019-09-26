@@ -170,8 +170,10 @@ data class OrtResult(
      *
      * If [omitExcluded] is set to true, excluded projects / packages are omitted from the result.
      */
-    fun collectLicenseFindings(omitExcluded: Boolean = false) =
-        sortedMapOf<Identifier, MutableMap<LicenseFindings, List<PathExclude>>>().also { findings ->
+    fun collectLicenseFindings(
+        omitExcluded: Boolean = false
+    ): Map<Identifier, Map<LicenseFindings, List<PathExclude>>> =
+        mutableMapOf<Identifier, MutableMap<LicenseFindings, List<PathExclude>>>().also { findings ->
             val excludes = getExcludes()
 
             scanner?.results?.scanResults?.forEach { result ->
