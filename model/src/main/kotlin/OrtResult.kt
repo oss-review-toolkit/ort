@@ -132,6 +132,10 @@ data class OrtResult(
         result
     }
 
+    private val scanResultsById: Map<Identifier, ScanResultContainer> by lazy {
+        scanner?.results?.scanResults?.associateBy { it.id }.orEmpty()
+    }
+
     /**
      * Return the dependencies of the given [id] (which can refer to a [Project] or a [Package]), up to and including a
      * depth of [maxLevel] where counting starts at 0 (for the [Project] or [Package] itself) and 1 are direct
@@ -246,7 +250,7 @@ data class OrtResult(
      */
     @Suppress("UNUSED") // This is intended to be mostly used via scripting.
     fun getDetectedLicensesForId(id: Identifier) =
-        scanner?.results?.scanResults?.find { it.id == id }.getAllDetectedLicenses()
+        scanResultsById[id].getAllDetectedLicenses()
 
     /**
      * Return all projects and packages that are likely to belong to one of the organizations of the given [names]. If
