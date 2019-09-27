@@ -256,7 +256,7 @@ data class OrtResult(
      */
     @Suppress("UNUSED") // This is intended to be mostly used via scripting.
     fun getDetectedLicensesForId(id: Identifier): SortedSet<String> =
-        scanResultsById[id]?.flatMap { it.summary.licenses.toList() }.orEmpty().toSortedSet()
+        collectLicenseFindings(id).keys.mapTo(sortedSetOf()) { it.license }
 
     /**
      * Return all projects and packages that are likely to belong to one of the organizations of the given [names]. If
