@@ -162,6 +162,29 @@ resolutions:
 For details of the available reasons, see
 [RuleViolationResolutionReason.kt](../model/src/main/kotlin/config/RuleViolationResolutionReason.kt)
 
+### Curations
+
+#### Curating license findings
+
+A Scan result represents the detected licenses as a collection of license findings. A single `LicenseFinding` is represented 
+as tuple: `(license-Id, file-path, start-line, end-line)`. Applying a `LicenseFindingCuration` changes the license-Id
+of any `LicenseFinding` finding or eliminates the `LicenseFinding` in case the license is set to `NONE`.
+
+As an example, the following curation would replace similar findings of `Apache-1.1` with `Apache-2.0` in all `.cpp`
+files in the `src` directory:
+
+e.g.:
+```yaml
+  - path: "src/**/*.cpp"
+    start_lines: "3"
+    line_count: 11
+    detected_license: "Apache-1.1"
+    concluded_license: "Apache-1.0"
+ ```
+
+For details of the specification, see 
+[LicenseFindingCuration.kt](../model/src/main/kotlin/config/LicenseFindingCuration.kt).
+
 ## Global configuration
 
 This section describes repository-independent configuration options for ORT.
