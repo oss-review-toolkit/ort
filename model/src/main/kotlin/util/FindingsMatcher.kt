@@ -138,10 +138,9 @@ class FindingsMatcher(
 
         val locationsForLicenses = licenseFindings
             .groupBy({ it.license }, { it.location })
-            .mapValues { it.value.toSortedSet() }
-            .toSortedMap()
+            .mapValuesTo(mutableMapOf()) { it.value.toSortedSet() }
 
-        val copyrightsForLicenses = sortedMapOf<String, SortedSet<CopyrightFindings>>()
+        val copyrightsForLicenses = mutableMapOf<String, SortedSet<CopyrightFindings>>()
         paths.forEach { path ->
             val licenses = licenseFindingsByPath[path].orEmpty()
             val copyrights = copyrightFindingsByPath[path].orEmpty()
