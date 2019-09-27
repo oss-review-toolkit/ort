@@ -23,10 +23,12 @@ import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonInclude
 
 import com.here.ort.model.config.Excludes
+import com.here.ort.model.config.LicenseFindingCuration
 import com.here.ort.model.config.PathExclude
 import com.here.ort.model.config.RepositoryConfiguration
 import com.here.ort.model.config.Resolutions
 import com.here.ort.model.config.orEmpty
+import com.here.ort.model.util.FindingCurationMatcher
 import com.here.ort.model.util.FindingsMatcher
 import com.here.ort.spdx.SpdxExpression
 import com.here.ort.utils.log
@@ -175,7 +177,9 @@ data class OrtResult(
         val project = getProject(id)
 
         scanResultsById[id].orEmpty().flatMap {
-            FindingsMatcher().match(it.summary.licenseFindings, it.summary.copyrightFindings)
+            FindingCurationMatcher()
+                .applyAll(it.summary.licenseFindings, getLicenseFindingsCurations(id))
+                .let { findings -> FindingsMatcher().match(findings, it.summary.copyrightFindings).toSortedSet() }
         }.map { finding ->
             if (project != null) {
                 val copyrights = finding.copyrights.mapNotNullTo(sortedSetOf()) { copyrightFindings ->
@@ -420,6 +424,13 @@ data class OrtResult(
 
     @JsonIgnore
     fun getExcludes(): Excludes = repository.config.excludes ?: Excludes()
+
+    private fun getLicenseFindingsCurations(id: Identifier): List<LicenseFindingCuration> =
+        if (projects.containsKey(id)) {
+            repository.config.curations?.licenseFindings.orEmpty()
+        } else {
+            emptyList()
+        }
 
     /**
      * Return the [Resolution]s contained in the repository configuration of this [OrtResult].
