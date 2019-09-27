@@ -30,6 +30,7 @@ import com.here.ort.model.config.ArtifactoryStorageConfiguration
 import com.here.ort.model.config.LocalFileStorageConfiguration
 import com.here.ort.model.config.PostgresStorageConfiguration
 import com.here.ort.scanner.storages.*
+import com.here.ort.utils.expandTilde
 import com.here.ort.utils.log
 
 import java.lang.IllegalArgumentException
@@ -65,9 +66,9 @@ abstract class ScanResultsStorage {
          * Configure a [LocalFileStorage] as the current storage backend.
          */
         fun configure(config: LocalFileStorageConfiguration) {
-            storage = LocalFileStorage(config.directory)
-
-            log.info { "Using local file storage at ${config.directory}." }
+            storage = LocalFileStorage(config.directory.expandTilde()).also {
+                log.info { "Using local file storage at ${it.scanResultsDirectory}." }
+            }
         }
 
         /**
