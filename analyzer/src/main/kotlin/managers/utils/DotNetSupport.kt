@@ -246,7 +246,7 @@ class DotNetSupport(packageReferencesMap: Map<String, String>) {
 
         val node = jsonMapper.readTree(registrationInfo)
 
-        return if (node != null) {
+        return if (node?.isMissingNode == false) {
             Pair(getNuspecURL(node), getCatalogURL(node))
         } else {
             null
