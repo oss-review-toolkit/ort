@@ -271,6 +271,18 @@ data class OrtResult(
         collectLicenseFindings(id).keys.mapTo(sortedSetOf()) { it.license }
 
     /**
+     * Return all detected licenses for the given package[id] along with the copyrights.
+     */
+    @Suppress("UNUSED") // This is intended to be mostly used via scripting.
+    fun getDetectedLicensesWithCopyrights(id: Identifier): Map<String, Set<String>> =
+        collectLicenseFindings(id)
+            .map { (findings, _) -> findings }
+            .associateBy(
+                { it.license },
+                { it.copyrights.mapTo(mutableSetOf()) { it.statement } }
+            )
+
+    /**
      * Return all projects and packages that are likely to belong to one of the organizations of the given [names]. If
      * [omitExcluded] is set to true, excluded projects / packages are omitted from the result. Projects are converted
      * to packages in the result. If no analyzer result is present an empty set is returned.
