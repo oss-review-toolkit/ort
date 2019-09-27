@@ -176,6 +176,20 @@ data class OrtResult(
 
         scanResultsById[id].orEmpty().flatMap {
             FindingsMatcher().match(it.summary.licenseFindings, it.summary.copyrightFindings)
+        }.map { finding ->
+            if (project != null) {
+                val copyrights = finding.copyrights.mapNotNullTo(sortedSetOf()) { copyrightFindings ->
+                    val locations = copyrightFindings.locations.filterTo(sortedSetOf()) {
+                        val path = getFilePathRelativeToAnalyzerRoot(project, it.path)
+                        excludes.paths.any { exclude -> exclude.matches(path) }
+                    }
+                    if (locations.isNotEmpty()) copyrightFindings.copy(locations = locations)
+                    else null
+                }
+                finding.copy(copyrights = copyrights)
+            } else {
+                finding
+            }
         }.forEach { finding ->
             val matchingExcludes = mutableSetOf<PathExclude>()
 
@@ -187,8 +201,6 @@ data class OrtResult(
                         .also { matches -> if (matches) matchingExcludes += exclude }
                 }
             }
-
-            // TODO: Also filter copyrights excluded by path excludes.
 
             // Only add matching excludes if all license locations are excluded.
             result[finding] = if (isExcluded) matchingExcludes.toList() else emptyList()
