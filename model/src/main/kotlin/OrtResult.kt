@@ -342,6 +342,7 @@ data class OrtResult(
      * from a VCS the analyzer root is the root of the working tree, if the project was not checked out from a VCS the
      * analyzer root is the input directory of the analyzer.
      */
+    @Suppress("UNUSED") // This is intended to be mostly used via scripting.
     fun getFilePathRelativeToAnalyzerRoot(project: Project, path: String): String {
         val vcsPath = repository.getRelativePath(project.vcsProcessed)
 
