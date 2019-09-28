@@ -299,7 +299,7 @@ class DotNetSupport(packageReferencesMap: Map<String, String>) {
 
     private fun String.requestFromNugetAPI(): String {
         if (isNullOrEmpty()) {
-            throw IOException("GET with URL $this could not be resolved")
+            throw IOException("GET with URL '$this' could not be resolved")
         }
 
         val pkgRequest = Request.Builder()
