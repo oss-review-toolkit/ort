@@ -21,7 +21,6 @@
 package com.here.ort.analyzer.managers.utils
 
 import com.fasterxml.jackson.databind.JsonNode
-import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 
 import com.here.ort.analyzer.HTTP_CACHE_PATH
 import com.here.ort.model.EMPTY_JSON_NODE
@@ -34,6 +33,7 @@ import com.here.ort.model.RemoteArtifact
 import com.here.ort.model.Scope
 import com.here.ort.model.VcsInfo
 import com.here.ort.model.VcsType
+import com.here.ort.model.jsonMapper
 import com.here.ort.model.xmlMapper
 import com.here.ort.utils.OkHttpClientHelper
 import com.here.ort.utils.OkHttpClientHelper.applyProxySettingsFromEnv
@@ -140,7 +140,7 @@ class DotNetSupport(packageReferencesMap: Map<String, String>) {
         }
 
         return getInformationURL(packageReference.id.name, packageReference.id.version)?.let { informationUrl ->
-            Pair(informationUrl.first, jacksonObjectMapper().readTree(informationUrl.second.requestFromNugetAPI()))
+            Pair(informationUrl.first, jsonMapper.readTree(informationUrl.second.requestFromNugetAPI()))
         } ?: Pair("", EMPTY_JSON_NODE)
     }
 
@@ -225,7 +225,7 @@ class DotNetSupport(packageReferencesMap: Map<String, String>) {
 
     private fun preparePackageReference(packageID: String, version: String): JsonNode? {
         val (first, second) = getInformationURL(packageID, version) ?: return null
-        val packageJsonNode = jacksonObjectMapper().readTree(second.requestFromNugetAPI()) ?: EMPTY_JSON_NODE
+        val packageJsonNode = jsonMapper.readTree(second.requestFromNugetAPI()) ?: EMPTY_JSON_NODE
 
         packageReferencesAlreadyFound[Pair(packageID, version)] = Pair(first, packageJsonNode)
 
@@ -246,7 +246,7 @@ class DotNetSupport(packageReferencesMap: Map<String, String>) {
             }
         }
 
-        val node = jacksonObjectMapper().readTree(registrationInfo)
+        val node = jsonMapper.readTree(registrationInfo)
 
         return if (node != null) {
             Pair(getNuspecURL(node), getCatalogURL(node))
@@ -293,7 +293,7 @@ class DotNetSupport(packageReferencesMap: Map<String, String>) {
     }
 
     private fun getCreateSearchRestAPIURL(packageID: String) =
-        jacksonObjectMapper().readTree(
+        jsonMapper.readTree(
             "https://api-v2v3search-0.nuget.org/query?q=\"$packageID\"&prerelease=false".requestFromNugetAPI()
         )
 
