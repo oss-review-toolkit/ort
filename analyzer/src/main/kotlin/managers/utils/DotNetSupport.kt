@@ -135,20 +135,22 @@ class DotNetSupport(packageReferencesMap: Map<String, String>) {
         jsonNodeToPackage(getPackageReferenceJsonContent(packageReference))
 
     private fun getPackageReferenceJsonContent(packageReference: PackageReference): Pair<String, JsonNode> {
-        packageReferencesAlreadyFound[Pair(packageReference.id.name, packageReference.id.version)]?.let {
+        val (_, _, pkgName, pkgVersion) = packageReference.id
+
+        packageReferencesAlreadyFound[Pair(pkgName, pkgVersion)]?.let {
             return it
         }
 
-        return getInformationURL(packageReference.id.name, packageReference.id.version)?.let { informationUrl ->
-            Pair(informationUrl.first, jsonMapper.readTree(informationUrl.second.requestFromNugetAPI()))
+        return getInformationURL(pkgName, pkgVersion)?.let { (nuspecUrl, catalogUrl) ->
+            Pair(nuspecUrl, jsonMapper.readTree(catalogUrl.requestFromNugetAPI()))
         } ?: Pair("", EMPTY_JSON_NODE)
     }
 
     private fun jsonNodeToPackage(packageContent: Pair<String, JsonNode>): Package {
-        val jsonCatalogNode = packageContent.second
+        val (nuspecUrl, jsonCatalogNode) = packageContent
         val jsonNuspecNode = try {
             xmlMapper.readTree(
-                packageContent.first.replace(
+                nuspecUrl.replace(
                     "${jsonCatalogNode["version"].textValueOrEmpty()}.nupkg",
                     "nuspec"
                 ).requestFromNugetAPI()
@@ -224,10 +226,10 @@ class DotNetSupport(packageReferencesMap: Map<String, String>) {
     }
 
     private fun preparePackageReference(packageID: String, version: String): JsonNode? {
-        val (first, second) = getInformationURL(packageID, version) ?: return null
-        val packageJsonNode = jsonMapper.readTree(second.requestFromNugetAPI()) ?: EMPTY_JSON_NODE
+        val (nuspecUrl, catalogUrl) = getInformationURL(packageID, version) ?: return null
+        val packageJsonNode = jsonMapper.readTree(catalogUrl.requestFromNugetAPI()) ?: EMPTY_JSON_NODE
 
-        packageReferencesAlreadyFound[Pair(packageID, version)] = Pair(first, packageJsonNode)
+        packageReferencesAlreadyFound[Pair(packageID, version)] = Pair(nuspecUrl, packageJsonNode)
 
         return packageJsonNode
     }
