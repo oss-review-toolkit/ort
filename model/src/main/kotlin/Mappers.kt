@@ -23,6 +23,7 @@ import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.PropertyNamingStrategy
 import com.fasterxml.jackson.databind.SerializationFeature
+import com.fasterxml.jackson.databind.json.JsonMapper
 import com.fasterxml.jackson.databind.node.MissingNode
 import com.fasterxml.jackson.dataformat.xml.XmlMapper
 import com.fasterxml.jackson.dataformat.yaml.YAMLMapper
@@ -43,7 +44,7 @@ private val mapperConfig: ObjectMapper.() -> Unit = {
     propertyNamingStrategy = PROPERTY_NAMING_STRATEGY
 }
 
-val jsonMapper = ObjectMapper().apply(mapperConfig)
+val jsonMapper = JsonMapper().apply(mapperConfig)
 val xmlMapper = XmlMapper().apply(mapperConfig)
 val yamlMapper = YAMLMapper().apply(mapperConfig)
 
