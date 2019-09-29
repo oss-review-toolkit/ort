@@ -212,11 +212,13 @@ class DotNetSupport(packageReferencesMap: Map<String, String>) {
                     node["id"].textValueOrEmpty(),
                     extractVersion(node["range"].textValueOrEmpty())
                 )
-                if (!hasPackageReferenceAlready(nodeAsPair)) {
+
+                if (!packageReferencesAlreadyFound.containsKey(nodeAsPair)) {
                     val subPackageRef = getPackageReferenceFromRestAPI(
                         nodeAsPair.first,
                         nodeAsPair.second
                     )
+
                     if (subPackageRef != null) packageReference.dependencies += subPackageRef
                 }
             }
@@ -233,9 +235,6 @@ class DotNetSupport(packageReferencesMap: Map<String, String>) {
 
         return packageJsonNode
     }
-
-    private fun hasPackageReferenceAlready(nodeAsPair: Pair<String, String>) =
-        packageReferencesAlreadyFound.containsKey(nodeAsPair)
 
     private fun getInformationURL(packageID: String, version: String): Pair<String, String>? {
         val registrationInfo = try {
