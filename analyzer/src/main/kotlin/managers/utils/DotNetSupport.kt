@@ -119,7 +119,7 @@ class DotNetSupport(packageReferencesMap: Map<String, String>) {
     init {
         packageReferencesMap.forEach { (name, version) ->
             val scopeDependency = getPackageReferenceFromRestAPI(name, version)
-            if (scopeDependency != null) scope.dependencies += scopeDependency
+            scopeDependency?.let { scope.dependencies += it }
         }
 
         scope.collectDependencies().forEach { packageReference ->
@@ -263,7 +263,9 @@ class DotNetSupport(packageReferencesMap: Map<String, String>) {
         dataIterator: Iterator<JsonNode>?,
         packageID: String, version: String
     ): String? {
-        while (dataIterator != null && dataIterator.hasNext()) {
+        if (dataIterator == null) return null
+
+        while (dataIterator.hasNext()) {
             val packageNode = dataIterator.next()
             if (packageNode["id"].textValueOrEmpty() == packageID) {
                 packageNode["versions"].elements().forEach {
@@ -280,7 +282,9 @@ class DotNetSupport(packageReferencesMap: Map<String, String>) {
     }
 
     private fun getFirstMatchingIdUrl(dataIterator: Iterator<JsonNode>?, packageID: String): String? {
-        while (dataIterator != null && dataIterator.hasNext()) {
+        if (dataIterator == null) return null
+
+        while (dataIterator.hasNext()) {
             val packageNode = dataIterator.next()
             if (packageNode["id"].textValueOrEmpty() == packageID) {
                 return packageNode["versions"]?.last()?.get("@id").textValueOrEmpty()
