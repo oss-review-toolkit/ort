@@ -408,9 +408,13 @@ class ScanCode(
     /**
      * Get the license findings from the given [result].
      */
-    private fun getLicenseFindings(result: JsonNode): List<LicenseFinding> =
-        result["files"].flatMap { file ->
-            file["licenses"]?.toList().orEmpty().map {
+    private fun getLicenseFindings(result: JsonNode): List<LicenseFinding> {
+        val licenseFindings = mutableListOf<LicenseFinding>()
+
+        val files = result["files"]?.asSequence().orEmpty()
+        files.flatMapTo(licenseFindings) { file ->
+            val licenses = file["licenses"]?.asSequence().orEmpty()
+            licenses.map {
                 LicenseFinding(
                     license = getLicenseId(it),
                     location = TextLocation(
@@ -422,18 +426,26 @@ class ScanCode(
             }
         }
 
+        return licenseFindings
+    }
+
     /**
      * Get the copyright findings from the given [result].
      */
-    private fun getCopyrightFindings(result: JsonNode): List<CopyrightFinding> =
-        result["files"].flatMap { file ->
+    private fun getCopyrightFindings(result: JsonNode): List<CopyrightFinding> {
+        val copyrightFindings = mutableListOf<CopyrightFinding>()
+
+        val files = result["files"]?.asSequence().orEmpty()
+        files.flatMapTo(copyrightFindings) { file ->
             val path = file["path"].textValue()
 
-            file["copyrights"]?.toList().orEmpty().flatMap { copyrights ->
-                val startLine = copyrights["start_line"].intValue()
-                val endLine = copyrights["end_line"].intValue()
+            val copyrights = file["copyrights"]?.asSequence().orEmpty()
+            copyrights.flatMap { copyright ->
+                val startLine = copyright["start_line"].intValue()
+                val endLine = copyright["end_line"].intValue()
+
                 // While ScanCode 2.9.2 was still using "statements", version 2.9.7 is using "value".
-                val statements = (copyrights["statements"] ?: listOf(copyrights["value"]))
+                val statements = (copyright["statements"]?.asSequence() ?: sequenceOf(copyright["value"]))
 
                 statements.map { statement ->
                     CopyrightFinding(
@@ -447,4 +459,7 @@ class ScanCode(
                 }
             }
         }
+
+        return copyrightFindings
+    }
 }

@@ -154,7 +154,9 @@ class BoyterLc(name: String, config: ScannerConfiguration) : LocalScanner(name, 
         }
 
     private fun generateSummary(startTime: Instant, endTime: Instant, scanPath: File, result: JsonNode): ScanSummary {
-        val licenseFindings = result.flatMap { file ->
+        val licenseFindings = sortedSetOf<LicenseFinding>()
+
+        result.flatMapTo(licenseFindings) { file ->
             val filePath = File(file["Directory"].textValue(), file["Filename"].textValue())
             file["LicenseGuesses"].map {
                 LicenseFinding(
@@ -162,7 +164,7 @@ class BoyterLc(name: String, config: ScannerConfiguration) : LocalScanner(name, 
                     location = TextLocation(relativizePath(scanPath, filePath), -1, -1)
                 )
             }
-        }.toSortedSet()
+        }
 
         return ScanSummary(
             startTime = startTime,
