@@ -23,6 +23,7 @@ import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.PropertyNamingStrategy
 import com.fasterxml.jackson.databind.SerializationFeature
+import com.fasterxml.jackson.databind.node.MissingNode
 import com.fasterxml.jackson.dataformat.xml.XmlMapper
 import com.fasterxml.jackson.dataformat.yaml.YAMLMapper
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
@@ -46,4 +47,4 @@ val jsonMapper = ObjectMapper().apply(mapperConfig)
 val xmlMapper = XmlMapper().apply(mapperConfig)
 val yamlMapper = YAMLMapper().apply(mapperConfig)
 
-val EMPTY_JSON_NODE: JsonNode = jsonMapper.readTree("{}")
+val EMPTY_JSON_NODE: JsonNode = MissingNode.getInstance()
