@@ -201,26 +201,23 @@ class DotNetSupport(packageReferencesMap: Map<String, String>) {
             )
         )
 
-        val dependenciesIterator = packageJsonNode["dependencyGroups"]?.elements()
+        val dependencyGroups = packageJsonNode["dependencyGroups"]?.asSequence()
 
-        dependenciesIterator?.forEach {
-            val dependencyIterator = it["dependencies"]?.elements()
+        dependencyGroups?.mapNotNull {
+            it["dependencies"]?.asSequence()
+        }?.flatten()?.forEach { node ->
+            val nodeAsPair = Pair(
+                node["id"].textValueOrEmpty(),
+                extractVersion(node["range"].textValueOrEmpty())
+            )
 
-            if (dependencyIterator != null) while (dependencyIterator.hasNext()) {
-                val node = dependencyIterator.next()
-                val nodeAsPair = Pair(
-                    node["id"].textValueOrEmpty(),
-                    extractVersion(node["range"].textValueOrEmpty())
+            if (!packageReferencesAlreadyFound.containsKey(nodeAsPair)) {
+                val subPackageRef = getPackageReferenceFromRestAPI(
+                    nodeAsPair.first,
+                    nodeAsPair.second
                 )
 
-                if (!packageReferencesAlreadyFound.containsKey(nodeAsPair)) {
-                    val subPackageRef = getPackageReferenceFromRestAPI(
-                        nodeAsPair.first,
-                        nodeAsPair.second
-                    )
-
-                    if (subPackageRef != null) packageReference.dependencies += subPackageRef
-                }
+                subPackageRef?.let { packageReference.dependencies += it }
             }
         }
 
