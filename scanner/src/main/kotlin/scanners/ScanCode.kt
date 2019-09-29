@@ -364,14 +364,15 @@ class ScanCode(
         return result["files_count"].intValue()
     }
 
-    internal fun generateSummary(startTime: Instant, endTime: Instant, result: JsonNode) = ScanSummary(
-        startTime = startTime,
-        endTime = endTime,
-        fileCount = getFileCount(result),
-        licenseFindings = getLicenseFindings(result).toSortedSet(),
-        copyrightFindings = getCopyrightFindings(result).toSortedSet(),
-        errors = getErrors(result)
-    )
+    internal fun generateSummary(startTime: Instant, endTime: Instant, result: JsonNode) =
+        ScanSummary(
+            startTime = startTime,
+            endTime = endTime,
+            fileCount = getFileCount(result),
+            licenseFindings = getLicenseFindings(result).toSortedSet(),
+            copyrightFindings = getCopyrightFindings(result).toSortedSet(),
+            errors = getErrors(result)
+        )
 
     /**
      * Get the SPDX license id (or a fallback) for a license finding.
