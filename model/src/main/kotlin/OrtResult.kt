@@ -432,5 +432,8 @@ data class OrtResult(
      */
     @JsonIgnore
     fun getProjectAndPackageIds(): Set<Identifier> =
-        (getPackages().map { it.pkg.id } + getProjects().map { it.id }).toSet()
+        mutableSetOf<Identifier>().also { set ->
+            getPackages().mapTo(set) { it.pkg.id }
+            getProjects().mapTo(set) { it.id }
+        }
 }

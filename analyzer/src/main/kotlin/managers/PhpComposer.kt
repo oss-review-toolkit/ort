@@ -154,7 +154,7 @@ class PhpComposer(
 
             val project = parseProject(definitionFile, scopes)
 
-            return ProjectAnalyzerResult(project, packages.values.map { it.toCuratedPackage() }.toSortedSet())
+            return ProjectAnalyzerResult(project, packages.values.mapTo(sortedSetOf()) { it.toCuratedPackage() })
         }
     }
 
@@ -309,7 +309,7 @@ class PhpComposer(
         }.toSet()
 
     private fun parseDeclaredLicenses(packageInfo: JsonNode) =
-        packageInfo["license"]?.mapNotNull { it?.textValue() }?.toSortedSet() ?: sortedSetOf<String>()
+        packageInfo["license"]?.mapNotNullTo(sortedSetOf()) { it?.textValue() } ?: sortedSetOf<String>()
 
     private fun parseVcsInfo(packageInfo: JsonNode) =
         packageInfo["source"]?.let {

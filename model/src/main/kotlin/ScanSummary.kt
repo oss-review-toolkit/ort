@@ -80,7 +80,7 @@ data class ScanSummary(
     val errors: List<OrtIssue> = emptyList()
 ) {
     @get:JsonIgnore
-    val licenses = licenseFindings.map { it.license }.toSet()
+    val licenses: Set<String> = licenseFindings.mapTo(mutableSetOf()) { it.license }
 }
 
 class ScanSummaryDeserializer : StdDeserializer<ScanSummary>(OrtIssue::class.java) {

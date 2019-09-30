@@ -173,7 +173,7 @@ class Stack(
             scopes = scopes
         )
 
-        return ProjectAnalyzerResult(project, allPackages.values.map { it.toCuratedPackage() }.toSortedSet())
+        return ProjectAnalyzerResult(project, allPackages.values.mapTo(sortedSetOf()) { it.toCuratedPackage() })
     }
 
     private fun buildDependencyTree(

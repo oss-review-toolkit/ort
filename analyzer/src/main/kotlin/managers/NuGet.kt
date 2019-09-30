@@ -111,7 +111,7 @@ class NuGet(
 
         return ProjectAnalyzerResult(
             project = project,
-            packages = nuget.packages.map { it.toCuratedPackage() }.toSortedSet(),
+            packages = nuget.packages.mapTo(sortedSetOf()) { it.toCuratedPackage() },
             errors = nuget.errors
         )
     }

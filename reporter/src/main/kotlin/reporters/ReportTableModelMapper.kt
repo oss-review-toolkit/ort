@@ -132,7 +132,7 @@ class ReportTableModelMapper(private val resolutionProvider: ResolutionProvider)
                         scopes = sortedMapOf(project.id to row.scopes),
                         concludedLicenses = row.concludedLicense?.let { setOf(it) } ?: emptySet(),
                         declaredLicenses = row.declaredLicenses,
-                        detectedLicenses = row.detectedLicenses.map { it.key.license }.toSortedSet(),
+                        detectedLicenses = row.detectedLicenses.mapTo(sortedSetOf()) { it.key.license },
                         analyzerIssues = if (nonExcludedAnalyzerIssues.isNotEmpty()) {
                             sortedMapOf(project.id to nonExcludedAnalyzerIssues)
                         } else {

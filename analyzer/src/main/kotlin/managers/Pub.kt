@@ -201,7 +201,7 @@ class Pub(
 
         val project = parseProject(definitionFile, scopes)
 
-        return ProjectAnalyzerResult(project, packages.values.map { it.toCuratedPackage() }.toSortedSet(), issues)
+        return ProjectAnalyzerResult(project, packages.values.mapTo(sortedSetOf()) { it.toCuratedPackage() }, issues)
     }
 
     private fun parseScope(
