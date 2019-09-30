@@ -249,7 +249,7 @@ class Bower(
 
             return ProjectAnalyzerResult(
                 project = project,
-                packages = packages.map { it.value.toCuratedPackage() }.toSortedSet()
+                packages = packages.mapTo(sortedSetOf()) { it.value.toCuratedPackage() }
             )
         }
     }

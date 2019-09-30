@@ -120,7 +120,7 @@ class Bundler(
                 scopes = scopes.toSortedSet()
             )
 
-            return ProjectAnalyzerResult(project, packages.map { it.toCuratedPackage() }.toSortedSet(), issues)
+            return ProjectAnalyzerResult(project, packages.mapTo(sortedSetOf()) { it.toCuratedPackage() }, issues)
         }
     }
 
@@ -301,7 +301,7 @@ data class GemSpec(
                 yaml["name"].textValue(),
                 yaml["version"]["version"].textValue(),
                 homepage,
-                yaml["licenses"]?.asIterable()?.map { it.textValue() }?.toSortedSet() ?: sortedSetOf(),
+                yaml["licenses"]?.asIterable()?.mapTo(sortedSetOf()) { it.textValue() } ?: sortedSetOf(),
                 yaml["description"].textValueOrEmpty(),
                 runtimeDependencies ?: emptySet(),
                 parseVcs(homepage),
@@ -333,7 +333,7 @@ data class GemSpec(
                 json["name"].textValue(),
                 json["version"].textValue(),
                 json["homepage_uri"].textValueOrEmpty(),
-                json["licenses"]?.asIterable()?.map { it.textValue() }?.toSortedSet() ?: sortedSetOf(),
+                json["licenses"]?.asIterable()?.mapTo(sortedSetOf()) { it.textValue() } ?: sortedSetOf(),
                 json["description"].textValueOrEmpty(),
                 runtimeDependencies ?: emptySet(),
                 vcs,

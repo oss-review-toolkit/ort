@@ -200,7 +200,7 @@ class Gradle(
 
                 ProjectAnalyzerResult(
                     project,
-                    packages.values.map { it.toCuratedPackage() }.toSortedSet(),
+                    packages.values.mapTo(sortedSetOf()) { it.toCuratedPackage() },
                     issues
                 )
             }

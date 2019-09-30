@@ -433,7 +433,7 @@ class Pip(
         // Remove the virtualenv by simply deleting the directory.
         virtualEnvDir.safeDeleteRecursively()
 
-        return ProjectAnalyzerResult(project, packages.map { it.toCuratedPackage() }.toSortedSet())
+        return ProjectAnalyzerResult(project, packages.mapTo(sortedSetOf()) { it.toCuratedPackage() })
     }
 
     private fun getBinaryArtifact(pkg: Package, releaseNode: ArrayNode): RemoteArtifact {

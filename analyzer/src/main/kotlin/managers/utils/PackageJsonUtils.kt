@@ -57,15 +57,15 @@ internal class PackageJsonUtils {
                 File(directory, lockfile).isFile
             }
 
-        fun mapDefinitionFilesForNpm(definitionFiles: Collection<File>) =
+        fun mapDefinitionFilesForNpm(definitionFiles: Collection<File>): Set<File> =
             getDefinitionFileInfo(definitionFiles.toSet()).filter { entry ->
                 !isHandledByYarn(entry)
-            }.map { it.definitionFile }.toSet()
+            }.mapTo(mutableSetOf()) { it.definitionFile }
 
-        fun mapDefinitionFilesForYarn(definitionFiles: Collection<File>) =
+        fun mapDefinitionFilesForYarn(definitionFiles: Collection<File>): Set<File> =
             getDefinitionFileInfo(definitionFiles.toSet()).filter { entry ->
                 isHandledByYarn(entry) && !entry.isYarnWorkspaceSubmodule
-            }.map { it.definitionFile }.toSet()
+            }.mapTo(mutableSetOf()) { it.definitionFile }
 
         /**
          * Expand NPM shortcuts for URLs to hosting sites to full URLs so that they can be used in a regular way.

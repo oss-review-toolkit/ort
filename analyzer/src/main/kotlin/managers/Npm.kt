@@ -487,7 +487,7 @@ open class Npm(
             scopes = scopes
         )
 
-        return ProjectAnalyzerResult(project, packages.map { it.toCuratedPackage() }.toSortedSet())
+        return ProjectAnalyzerResult(project, packages.mapTo(sortedSetOf()) { it.toCuratedPackage() })
     }
 
     /**

@@ -163,7 +163,7 @@ class GoDep(
                 homepageUrl = "",
                 scopes = sortedSetOf(scope)
             ),
-            packages = packages.map { it.toCuratedPackage() }.toSortedSet()
+            packages = packages.mapTo(sortedSetOf()) { it.toCuratedPackage() }
         )
     }
 
