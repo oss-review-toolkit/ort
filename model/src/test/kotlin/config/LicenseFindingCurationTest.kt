@@ -32,6 +32,7 @@ class LicenseFindingCurationTest : WordSpec({
                 path: "a/path"
                 start_lines: "1,2,3,5"
                 detected_license: "MIT"
+                reason: "INCORRECT"
                 concluded_license: "Apache-2.0"
                 """.trimIndent()
 

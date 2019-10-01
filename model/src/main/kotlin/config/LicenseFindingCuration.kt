@@ -63,6 +63,11 @@ data class LicenseFindingCuration(
     val concludedLicense: String,
 
     /**
+     * The reason why the curation was made, out of a predefined choice.
+     */
+    val reason: LicenseFindingCurationReason,
+
+    /**
      * A comment explaining this [LicenseFindingCuration].
      */
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
