@@ -340,3 +340,9 @@ fun TypeFactory.constructTreeSetType(elementClass: Class<*>): CollectionType =
  * Check whether the URI has a fragment that looks like a VCS revision.
  */
 fun URI.hasFragmentRevision() = fragment?.let { Regex("[a-fA-F0-9]{7,}$").matches(it) } == true
+
+/**
+ * Return a copy of this [URI] with the user info removed.
+ */
+@Suppress("UNUSED") // Intended to be used via scripting.
+fun URI.stripUserInfo() = URI(scheme, null, host, port, path, query, fragment)

@@ -19,11 +19,14 @@
 
 package com.here.ort.spdx
 
+import com.here.ort.utils.stripUserInfo
+
 import io.kotlintest.matchers.beEmpty
 import io.kotlintest.should
 import io.kotlintest.shouldBe
 import io.kotlintest.specs.WordSpec
 
+import java.net.URI
 import java.time.DayOfWeek
 
 class ExtensionsTest : WordSpec({
@@ -38,6 +41,20 @@ class ExtensionsTest : WordSpec({
             val sum = enumSetOf(DayOfWeek.MONDAY, DayOfWeek.TUESDAY) + enumSetOf(DayOfWeek.TUESDAY, DayOfWeek.WEDNESDAY)
 
             sum shouldBe enumSetOf(DayOfWeek.MONDAY, DayOfWeek.TUESDAY, DayOfWeek.WEDNESDAY)
+        }
+    }
+
+    "URI.stripUserInfo()" should {
+        "remove only the user info given a URI with username" {
+            val uri = URI("ssh://user@example.com/some/path.git?some=query#withfragment").stripUserInfo()
+
+            uri shouldBe URI("ssh://example.com/some/path.git?some=query#withfragment")
+        }
+
+        "remove only the user info given a URI with username and password" {
+            val uri = URI("ssh://git:pass@example.com/some/path.git?some=query#withfragment").stripUserInfo()
+
+            uri shouldBe URI("ssh://example.com/some/path.git?some=query#withfragment")
         }
     }
 })
