@@ -20,15 +20,56 @@
 
 package com.here.ort.scanner.storages
 
+import com.fasterxml.jackson.module.kotlin.readValue
+
+import com.here.ort.model.Identifier
 import com.here.ort.model.Package
+import com.here.ort.model.ScanResult
 import com.here.ort.model.ScanResultContainer
 import com.here.ort.model.ScannerDetails
+import com.here.ort.model.yamlMapper
 import com.here.ort.scanner.ScanResultsStorage
+import com.here.ort.utils.collectMessagesAsString
 import com.here.ort.utils.log
+import com.here.ort.utils.storage.FileStorage
+
+import java.io.ByteArrayInputStream
+import java.io.IOException
 
 const val SCAN_RESULTS_FILE_NAME = "scan-results.yml"
 
-abstract class FileBasedStorage : ScanResultsStorage() {
+/**
+ * A [ScanResultsStorage] using a [FileStorage] as backend. Scan results are serialized using [YAML][yamlMapper].
+ */
+class FileBasedStorage(
+    /**
+     * The [FileStorage] to use for storing scan results.
+     */
+    private val backend: FileStorage
+) : ScanResultsStorage() {
+    override fun readFromStorage(id: Identifier): ScanResultContainer {
+        val path = storagePath(id)
+
+        @Suppress("TooGenericExceptionCaught")
+        return try {
+            backend.read(path).use { input ->
+                yamlMapper.readValue(input)
+            }
+        } catch (e: Exception) {
+            when (e) {
+                is java.lang.IllegalArgumentException, is IOException -> {
+                    log.info {
+                        "Could not read scan results for '${id.toCoordinates()}' from path '$path': " +
+                                e.collectMessagesAsString()
+                    }
+
+                    ScanResultContainer(id, emptyList())
+                }
+                else -> throw e
+            }
+        }
+    }
+
     override fun readFromStorage(pkg: Package, scannerDetails: ScannerDetails): ScanResultContainer {
         val scanResults = read(pkg.id).results.toMutableList()
 
@@ -61,4 +102,35 @@ abstract class FileBasedStorage : ScanResultsStorage() {
 
         return ScanResultContainer(pkg.id, scanResults)
     }
+
+    override fun addToStorage(id: Identifier, scanResult: ScanResult): Boolean {
+        val scanResults = ScanResultContainer(id, read(id).results + scanResult)
+
+        val path = storagePath(id)
+        val yamlBytes = yamlMapper.writeValueAsBytes(scanResults)
+        val input = ByteArrayInputStream(yamlBytes)
+
+        @Suppress("TooGenericExceptionCaught")
+        return try {
+            backend.write(path, input)
+            log.info { "Stored scan result for '${id.toCoordinates()}' at path '$path'." }
+            true
+        } catch (e: Exception) {
+            when (e) {
+                is IllegalArgumentException, is IOException -> {
+                    e.printStackTrace()
+
+                    log.info {
+                        "Could not store scan result for '${id.toCoordinates()}' at path '$path': " +
+                                e.collectMessagesAsString()
+                    }
+
+                    false
+                }
+                else -> throw e
+            }
+        }
+    }
+
+    private fun storagePath(id: Identifier) = "${id.toPath()}/$SCAN_RESULTS_FILE_NAME"
 }

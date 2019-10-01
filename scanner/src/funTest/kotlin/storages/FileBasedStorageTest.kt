@@ -1,6 +1,5 @@
 /*
- * Copyright (C) 2017-2019 HERE Europe B.V.
- * Copyright (C) 2019 Bosch Software Innovations GmbH
+ * Copyright (C) 2019 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,6 +19,8 @@
 
 package com.here.ort.scanner.storages
 
-class LocalFileStorageTest : AbstractStorageTest() {
-    override fun createStorage() = LocalFileStorage(createTempDir().apply { deleteOnExit() })
+import com.here.ort.utils.storage.LocalFileStorage
+
+class FileBasedStorageTest : AbstractStorageTest() {
+    override fun createStorage() = FileBasedStorage(LocalFileStorage(createTempDir().apply { deleteOnExit() }))
 }

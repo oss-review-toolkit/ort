@@ -26,12 +26,13 @@ import com.here.ort.model.Package
 import com.here.ort.model.ScanResult
 import com.here.ort.model.ScanResultContainer
 import com.here.ort.model.ScannerDetails
-import com.here.ort.model.config.ArtifactoryStorageConfiguration
-import com.here.ort.model.config.LocalFileStorageConfiguration
+import com.here.ort.model.config.FileBasedStorageConfiguration
 import com.here.ort.model.config.PostgresStorageConfiguration
 import com.here.ort.scanner.storages.*
 import com.here.ort.utils.expandTilde
 import com.here.ort.utils.log
+import com.here.ort.utils.storage.HttpFileStorage
+import com.here.ort.utils.storage.LocalFileStorage
 
 import java.lang.IllegalArgumentException
 import java.sql.DriverManager
@@ -55,41 +56,30 @@ abstract class ScanResultsStorage {
          */
         fun configure(config: Any) {
             when (config) {
-                is LocalFileStorageConfiguration -> configure(config)
-                is ArtifactoryStorageConfiguration -> configure(config)
+                is FileBasedStorageConfiguration -> configure(config)
                 is PostgresStorageConfiguration -> configure(config)
                 else -> throw IllegalArgumentException("Unsupported configuration type '$config'.")
             }
         }
 
         /**
-         * Configure a [LocalFileStorage] as the current storage backend.
+         * Configure a [FileBasedStorage] as the current storage backend.
          */
-        fun configure(config: LocalFileStorageConfiguration) {
-            storage = LocalFileStorage(config.directory.expandTilde()).also {
-                log.info { "Using local file storage at ${it.scanResultsDirectory}." }
-            }
-        }
-
-        /**
-         * Configure an [ArtifactoryStorage] as the current storage backend.
-         */
-        fun configure(config: ArtifactoryStorageConfiguration) {
-            require(config.url.isNotBlank()) {
-                "URL for Artifactory storage is missing."
+        fun configure(config: FileBasedStorageConfiguration) {
+            require((config.backend.httpFileStorage == null) xor (config.backend.localFileStorage == null)) {
+                "Exactly one storage backend must be configured for a FileBasedStorage."
             }
 
-            require(config.repository.isNotBlank()) {
-                "Repository for Artifactory storage is missing."
+            val backend = config.backend.httpFileStorage?.let { httpFileStorageConfiguration ->
+                log.info { "Using file based storage with HTTP backend '${httpFileStorageConfiguration.url}'." }
+                HttpFileStorage(httpFileStorageConfiguration.url, httpFileStorageConfiguration.headers)
+            } ?: config.backend.localFileStorage!!.let { localFileStorageConfiguration ->
+                val directory = localFileStorageConfiguration.directory.expandTilde()
+                log.info { "Using file based storage with local directory '${directory.invariantSeparatorsPath}'." }
+                LocalFileStorage(directory)
             }
 
-            require(config.apiToken.isNotBlank()) {
-                "API token for Artifactory storage is missing."
-            }
-
-            storage = ArtifactoryStorage(config.url, config.repository, config.apiToken)
-
-            log.info { "Using Artifactory storage at ${config.url}." }
+            storage = FileBasedStorage(backend)
         }
 
         /**

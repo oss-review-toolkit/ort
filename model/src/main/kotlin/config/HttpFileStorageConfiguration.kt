@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2019 HERE Europe B.V.
+ * Copyright (C) 2019 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,25 +19,23 @@
 
 package com.here.ort.model.config
 
-import com.fasterxml.jackson.annotation.JsonProperty
+import com.fasterxml.jackson.databind.annotation.JsonSerialize
+import com.fasterxml.jackson.databind.util.StdConverter
 
-/**
- * A class to hold the configuration for using Artifactory as a storage.
- */
-data class ArtifactoryStorageConfiguration(
+data class HttpFileStorageConfiguration(
     /**
-     * The URL of the Artifactory server, e.g. "https://example.com/artifactory".
+     * The URL of the HTTP server, e.g. "https://example.com/storage".
      */
     val url: String,
 
     /**
-     * The name of the Artifactory repository to use as a storage.
+     * Custom headers that are added to all HTTP requests. As headers are likely to contain sensitive information like
+     * credentials, values are masked when this class is serialized with Jackson.
      */
-    val repository: String,
-
-    /**
-     * An Artifactory API token with read/write access to [repository].
-     */
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-    val apiToken: String = ""
+    @JsonSerialize(contentConverter = MaskStringConverter::class)
+    val headers: Map<String, String>
 )
+
+class MaskStringConverter : StdConverter<String, String>() {
+    override fun convert(value: String) = "***"
+}

@@ -35,7 +35,6 @@ class ScannerRunTest : StringSpec() {
                   os: "Linux"
                   tool_versions: {}
                 config:
-                  artifactory_storage: null
                   scanner: null
                 results:
                   scanned_scopes: []
@@ -61,7 +60,6 @@ class ScannerRunTest : StringSpec() {
                   os: "Linux"
                   tool_versions: {}
                 config:
-                  artifactory_storage: null
                   scanner: null
                 results:
                   scanned_scopes: []

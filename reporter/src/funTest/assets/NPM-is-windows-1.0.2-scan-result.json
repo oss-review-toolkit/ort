@@ -6884,8 +6884,7 @@
       "tool_versions" : { }
     },
     "config" : {
-      "artifactory_storage" : null,
-      "local_file_storage" : null,
+      "file_based_storage" : null,
       "postgres_storage" : null,
       "scanner" : null
     },

@@ -235,30 +235,38 @@ file (`-c`) that contains a respective local file storage configuration:
 ```hocon
 ort {
   scanner {
-    localFileStorage {
-      directory = "/tmp/ort/scan-results"
+    fileBasedStorage {
+      backend {
+        localFileStorage {
+          directory = "/tmp/ort/scan-results"
+        }
+      }
     }
   }
 }
 ```
 
-### Artifactory Storage
+### HTTP Storage
 
-To use Artifactory to store scan results, use the following configuration:
+Any HTTP file server can be used to store scan results. Custom headers can be configured to provide authentication
+credentials. For example, to use Artifactory to store scan results, use the following configuration:
 
 ```hocon
 ort {
   scanner {
-    artifactoryStorage {
-      url = "https://artifactory.domain.com/artifactory"
-      repository = "generic-repository-name"
-      apiToken = "api-token"
+    fileBasedStorage {
+      backend {
+        httpFileStorage {
+          url = "https://artifactory.domain.com/artifactory/repository/scan-results"
+          headers {
+            X-JFrog-Art-Api = "api-token"
+          }
+        }
+      }
     }
   }
 }
 ```
-
-The scanner creates a directory "scan-results" in the configured repository and uses it to store scan results. 
 
 ### PostgreSQL Storage
 
