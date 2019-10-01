@@ -242,6 +242,7 @@ location of source artifacts. The structure of the curations file is:
     comment: "Revision found by comparing NPM packages with the sources from https://github.com/olov/ast-traverse."
     vcs:
       revision: "f864d24ba07cde4b79f16999b1c99bfb240a441e"
+
 - id: "NPM::ast-traverse:0.1.1"
   curations:
     comment: "Revision found by comparing NPM packages with the sources from https://github.com/olov/ast-traverse."
