@@ -22,6 +22,7 @@ package com.here.ort.model.utils
 import com.here.ort.model.LicenseFinding
 import com.here.ort.model.TextLocation
 import com.here.ort.model.config.LicenseFindingCuration
+import com.here.ort.model.config.LicenseFindingCurationReason.INCORRECT
 import com.here.ort.model.util.FindingCurationMatcher
 
 import io.kotlintest.matchers.collections.shouldContainExactlyInAnyOrder
@@ -58,6 +59,7 @@ class FindingCurationMatcherTest : WordSpec() {
             lineCount = lineCount,
             detectedLicense = license,
             concludedLicense = concludedLicense,
+            reason = INCORRECT,
             comment = comment
         )
     }
@@ -221,11 +223,13 @@ class FindingCurationMatcherTest : WordSpec() {
                     LicenseFindingCuration(
                         path = "some/path",
                         detectedLicense = "MIT",
+                        reason = INCORRECT,
                         concludedLicense = "Apache-2.0"
                     ),
                     LicenseFindingCuration(
                         path = "another/path",
                         detectedLicense = "MIT",
+                        reason = INCORRECT,
                         concludedLicense = "BSD-3-Clause"
                     )
                 )
