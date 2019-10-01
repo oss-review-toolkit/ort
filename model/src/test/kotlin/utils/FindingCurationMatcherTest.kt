@@ -46,7 +46,7 @@ class FindingCurationMatcherTest : WordSpec() {
     }
 
     private fun setupCuration(
-        license: String,
+        license: String?,
         path: String,
         startLines: List<Int>,
         lineCount: Int?,
@@ -105,6 +105,15 @@ class FindingCurationMatcherTest : WordSpec() {
             "return true" {
                 setupFinding(license = "MIT", path = "a/path", startLine = 8, endLine = 13)
                 setupCuration(license = "MIT", path = "**/path", startLines = listOf(8), lineCount = 6)
+
+                matcher.matches(finding, curation) shouldBe true
+            }
+        }
+
+        "Given matching curation with null detected license, matches" should {
+            "return true" {
+                setupFinding(license = "MIT", path = "a/path", startLine = 8, endLine = 13)
+                setupCuration(license = null, path = "a/path", startLines = listOf(8), lineCount = 6)
 
                 matcher.matches(finding, curation) shouldBe true
             }

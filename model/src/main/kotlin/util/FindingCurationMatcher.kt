@@ -42,7 +42,7 @@ class FindingCurationMatcher {
         curation.lineCount == null || curation.lineCount == finding.location.endLine - finding.location.startLine + 1
 
     private fun isDetectedLicenseMatching(finding: LicenseFinding, curation: LicenseFindingCuration): Boolean =
-        curation.detectedLicense == finding.license
+        curation.detectedLicense == null || curation.detectedLicense == finding.license
 
     /**
      * Return true if and only if the given curation is applicable to the given finding.
