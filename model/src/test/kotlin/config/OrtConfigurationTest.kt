@@ -42,16 +42,22 @@ class OrtConfigurationTest : WordSpec({
             ortConfig.scanner.let { scanner ->
                 scanner shouldNotBe null
 
-                scanner!!.artifactoryStorage.let { artifactory ->
-                    artifactory shouldNotBe null
-                    artifactory!!.url shouldBe "https://your-artifactory-server"
-                    artifactory.repository shouldBe "repository"
-                    artifactory.apiToken shouldBe "apiToken"
-                }
+                scanner!!.fileBasedStorage.let { fileBased ->
+                    fileBased shouldNotBe null
+                    fileBased!!.backend.let { backend ->
+                        backend shouldNotBe null
 
-                scanner.localFileStorage.let { localFile ->
-                    localFile shouldNotBe null
-                    localFile!!.directory shouldBe File("~/.ort/scanner")
+                        backend.httpFileStorage.let { httpFileStorage ->
+                            httpFileStorage shouldNotBe null
+                            httpFileStorage!!.url shouldBe "https://your-http-server"
+                            httpFileStorage.headers shouldBe mapOf("key1" to "value1", "key2" to "value2")
+                        }
+
+                        backend.localFileStorage.let { localFileStorage ->
+                            localFileStorage shouldNotBe null
+                            localFileStorage!!.directory shouldBe File("~/.ort/scanner")
+                        }
+                    }
                 }
 
                 scanner.postgresStorage.let { postgres ->

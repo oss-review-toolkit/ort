@@ -36,13 +36,14 @@ import com.here.ort.scanner.Scanner
 import com.here.ort.scanner.ScannerFactory
 import com.here.ort.scanner.TOOL_NAME
 import com.here.ort.scanner.scanners.ScanCode
-import com.here.ort.scanner.storages.LocalFileStorage
+import com.here.ort.scanner.storages.FileBasedStorage
 import com.here.ort.scanner.storages.SCAN_RESULTS_FILE_NAME
 import com.here.ort.utils.PARAMETER_ORDER_MANDATORY
 import com.here.ort.utils.PARAMETER_ORDER_OPTIONAL
 import com.here.ort.utils.expandTilde
 import com.here.ort.utils.getUserOrtDirectory
 import com.here.ort.utils.log
+import com.here.ort.utils.storage.LocalFileStorage
 
 import java.io.File
 
@@ -117,12 +118,12 @@ object ScannerCommand : CommandWithHelp() {
 
         // By default use a file based scan results storage.
         val localFileStorage = LocalFileStorage(getUserOrtDirectory().resolve(TOOL_NAME))
-        ScanResultsStorage.storage = localFileStorage
+        val fileBasedStorage = FileBasedStorage(localFileStorage)
+        ScanResultsStorage.storage = fileBasedStorage
 
         // Allow to override the default scan results storage.
         val configuredStorages = listOfNotNull(
-            config.artifactoryStorage,
-            config.localFileStorage,
+            config.fileBasedStorage,
             config.postgresStorage
         )
 
@@ -138,7 +139,7 @@ object ScannerCommand : CommandWithHelp() {
 
         val localFileStorageLogFunction: ((String) -> Unit)? = when {
             // If the local file storage is in use, log about it already at info level.
-            log.delegate.isInfoEnabled && ScanResultsStorage.storage == localFileStorage -> log::info
+            log.delegate.isInfoEnabled && ScanResultsStorage.storage == fileBasedStorage -> log::info
 
             // Otherwise log about the local file storage only at debug level.
             log.delegate.isDebugEnabled -> log::debug
@@ -147,7 +148,7 @@ object ScannerCommand : CommandWithHelp() {
         }
 
         if (localFileStorageLogFunction != null) {
-            val fileCount = localFileStorage.scanResultsDirectory.walk().filter {
+            val fileCount = localFileStorage.directory.walk().filter {
                 it.isFile && it.name == SCAN_RESULTS_FILE_NAME
             }.count()
 

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2019 HERE Europe B.V.
+ * Copyright (C) 2019 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,23 +19,14 @@
 
 package com.here.ort.model.config
 
+import com.here.ort.utils.storage.FileStorage
+
 /**
- * The configuration model of the scanner.
+ * The configuration model of a file based storage.
  */
-data class ScannerConfiguration(
+data class FileBasedStorageConfiguration(
     /**
-     * Configuration of a file based storage.
+     * The configuration of the [FileStorage] used to store the files.
      */
-    val fileBasedStorage: FileBasedStorageConfiguration? = null,
-
-    /**
-     * Configuration of the PostgreSQL scan results storage.
-     */
-    val postgresStorage: PostgresStorageConfiguration? = null,
-
-    /**
-     * Scanner specific configuration options. The key needs to match the name of the scanner class, e.g. "ScanCode"
-     * for the ScanCode wrapper. See the documentation of the scanner for available options.
-     */
-    val scanner: Map<String, Map<String, String>>? = null
+    val backend: FileStorageConfiguration
 )
