@@ -234,16 +234,17 @@ data class OrtResult(
      */
     fun collectProjectsAndPackages(includeSubProjects: Boolean = true): SortedSet<Identifier> {
         val projectsAndPackages = sortedSetOf<Identifier>()
-        val allSubProjects = sortedSetOf<Identifier>()
+
+        getProjects().mapTo(projectsAndPackages) { it.id }
 
         if (!includeSubProjects) {
+            val allSubProjects = sortedSetOf<Identifier>()
+
             getProjects().forEach {
                 it.collectSubProjects().mapTo(allSubProjects) { ref -> ref.id }
             }
-        }
 
-        getProjects().mapNotNullTo(projectsAndPackages) { project ->
-            project.id.takeUnless { it in allSubProjects }
+            projectsAndPackages -= allSubProjects
         }
 
         getPackages().mapTo(projectsAndPackages) { it.pkg.id }
