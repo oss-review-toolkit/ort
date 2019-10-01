@@ -179,7 +179,7 @@ e.g.:
     start_lines: "3"
     line_count: 11
     detected_license: "GPL-2.0-only"
-    reason: CODE,
+    reason: "CODE"
     comment: "The scanner matches a variable named `gpl`."
     concluded_license: "Apache-1.0"
  ```
