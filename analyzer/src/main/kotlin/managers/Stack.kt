@@ -78,9 +78,12 @@ class Stack(
     override fun getVersionRequirement(): Requirement = Requirement.buildIvy("[2.1.1,)")
 
     override fun beforeResolution(definitionFiles: List<File>) =
+        // Stack could report version strings like:
+        // Version 1.7.1 x86_64
+        // Version 2.1.1, Git revision f612ea85316bbc327a64e4ad8d9f0b150dc12d4b (7648 commits) x86_64 hpack-0.31.2
         checkVersion(
             ignoreActualVersion = analyzerConfig.ignoreToolVersions,
-            transform = { it.removePrefix("Version ").substringBefore(',') }
+            transform = { it.removePrefix("Version ").substringBefore(',').substringBefore(' ') }
         )
 
     override fun resolveDependencies(definitionFile: File): ProjectAnalyzerResult? {
