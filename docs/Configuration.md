@@ -178,12 +178,16 @@ e.g.:
   - path: "src/**/*.cpp"
     start_lines: "3"
     line_count: 11
-    detected_license: "Apache-1.1"
+    detected_license: "GPL-2.0-only"
+    reason: CODE,
+    comment: "The scanner matches a variable named `gpl`."
     concluded_license: "Apache-1.0"
  ```
 
 For details of the specification, see 
 [LicenseFindingCuration.kt](../model/src/main/kotlin/config/LicenseFindingCuration.kt).
+For details of the available reasons, see
+[LicenseFindingCurationReason.kt](../model/src/main/kotlin/config/LicenseFindingCurationReason.kt).
 
 ## Global configuration
 
