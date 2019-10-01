@@ -52,9 +52,9 @@ data class LicenseFindingCuration(
 
     /**
      * A matcher for the detected license of a license finding, matches if the detected license equals
-     * [detectedLicense].
+     * [detectedLicense] or if [detectedLicense] is null.
      */
-    val detectedLicense: String,
+    val detectedLicense: String?,
 
     /**
      * The concluded license as SPDX expression or [com.here.ort.spdx.SpdxLicense.NONE] for no license,
@@ -80,8 +80,8 @@ data class LicenseFindingCuration(
         require(lineCount == null || lineCount >= 0) {
             "The value for line count must not be negative."
         }
-        require(detectedLicense.isNotBlank()) {
-            "The detected license must not be blank."
+        require(detectedLicense == null || detectedLicense.isNotBlank()) {
+            "The detected license must either be omitted or not be blank."
         }
         require(concludedLicense.isNotBlank()) {
             "The concluded license must not be blank."
