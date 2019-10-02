@@ -19,8 +19,7 @@
 
 package com.here.ort.spdx
 
-import com.fasterxml.jackson.databind.ObjectMapper
-import com.fasterxml.jackson.dataformat.yaml.YAMLFactory
+import com.fasterxml.jackson.dataformat.yaml.YAMLMapper
 import com.fasterxml.jackson.module.kotlin.readValue
 
 import com.here.ort.spdx.SpdxExpression.Strictness
@@ -33,7 +32,7 @@ import io.kotlintest.shouldThrow
 import io.kotlintest.specs.WordSpec
 
 class SpdxExpressionTest : WordSpec() {
-    private val yamlMapper = ObjectMapper(YAMLFactory())
+    private val yamlMapper = YAMLMapper()
 
     init {
         "spdxLicenses()" should {
