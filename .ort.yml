@@ -1,26 +1,57 @@
 curations:
   license_findings:
+  - path: "analyzer/src/funTest/assets/projects/external/spdx-tools-python/spdx/licenses.json"
+    comment: "This file contains official SPDX.org license ids. SPDX is licensed under CC0-1.0, see \
+      https://github.com/spdx/license-list-XML/blob/master/package.json#L33"
+    reason: "DATA_OF"
+    concluded_license: "CC0-1.0"
+  - path: "analyzer/src/funTest/assets/projects/synthetic/php-composer/{empty-deps,lockfile,no-lockfile,no-deps,with-provide,with-replace}/composer.phar"
+    comment: "These files are part of PHP Composer and include a mapping from human readable strings to SPDX license ids."
+    reason: "DATA_OF"
+    concluded_license: "MIT"
   - path: "spdx-utils/src/main/kotlin/SpdxLicense.kt"
     comment: "This file defines official SPDX.org licenses so they can be used in OSS Review Toolkit."
     reason: "DATA_OF"
     concluded_license: "Apache-2.0"
+  - path: "spdx-utils/src/main/kotlin/{SpdxDeclaredLicenseMapping.kt,SpdxLicenseAliasMapping.kt}"
+    comment: "These files map declared licenses to SPDX.org license ids so they can be used in OSS Review Toolkit."
+    reason: "DATA_OF"
+    concluded_license: "Apache-2.0"
+  - path: "spdx-utils/src/main/kotlin/SpdxLicenseException.kt"
+    comment: "This file defines official SPDX.org exceptions so they can be used in OSS Review Toolkit."
+    reason: "DATA_OF"
+    concluded_license: "Apache-2.0" 
   - path: "spdx-utils/src/main/resources/licenses/**"
     comment: "This directory contains all official SPDX.org license ids which are used to generate open source notices. \
       SPDX and ScanCode license files are licensed under CC0-1.0, see \
       https://github.com/spdx/license-list-XML/blob/master/package.json#L33"
     reason: "DATA_OF"
     concluded_license: "CC0-1.0"
-  - path: "spdx-utils/src/main/resources/licensesrefs/**"
+  - path: "spdx-utils/src/main/resources/licenserefs/**"
     comment: "This directory contains all non-official SPDX license ids which are used to generate open source notices. \
       SPDX and ScanCode license files are licensed under CC0-1.0, see \
       https://github.com/spdx/license-list-XML/blob/master/package.json#L33 \
       https://github.com/nexB/scancode-toolkit/blame/develop/README.rst#L168"
     reason: "DATA_OF"
     concluded_license: "CC0-1.0"
-  - path: "analyzer/src/funTest/assets/projects/synthetic/php-composer/{empty-des, lockfile, no-deps, with-provide, with-replace}/composer.phar"
-    comment: "This file 'composer.phar' is part of PHP Composer and includes a mapping from human readable strings to SPDX license ids."
+  - path: "spdx-utils/src/test/kotlin/SpdxExpressionTest.kt"
+    comment: "This file uses several variables named after licenses."
+    reason: "CODE"
+    concluded_license: "Apache-2.0"
+  - path: "reporter-web-app/src/config.js"
+    comment: "Configuration file for WebApp reporter defining colors to use for each SPDX license."
     reason: "DATA_OF"
-    concluded_license: "MIT"
+    concluded_license: "Apache-2.0"
+  - path: "README.md"
+    comment: "Findings reference a file with 'gpl' in its name."
+    reason: "DOCUMENTATION_OF"
+    line_count: 1
+    detected_license: "GPL-1.0-or-later"
+    concluded_license: "NONE"
+  - path: "docs/**.md"
+    comment: "Documentation contains examples mentioning various licenses."
+    reason: "DOCUMENTATION_OF"
+    concluded_license: "Apache-2.0"
 excludes:
   paths:
   - pattern: "*/src/{funTest,test}/**"
