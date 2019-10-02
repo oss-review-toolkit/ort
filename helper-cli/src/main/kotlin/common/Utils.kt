@@ -385,7 +385,10 @@ internal fun RepositoryConfiguration.writeAsYaml(targetFile: File) {
  * Merge the given [RepositoryPathExcludes] replacing entries with equal [PathExclude.pattern].
  * If the given [updateOnlyExisting] is true then only entries with matching [PathExclude.pattern] are merged.
  */
-internal fun RepositoryPathExcludes.merge(other: RepositoryPathExcludes, updateOnlyExisting: Boolean = false):
+internal fun RepositoryPathExcludes.mergePathExcludes(
+    other: RepositoryPathExcludes,
+    updateOnlyExisting: Boolean = false
+):
         RepositoryPathExcludes {
     val result: MutableMap<String, MutableMap<String, PathExclude>> = mutableMapOf()
 
@@ -423,7 +426,7 @@ internal fun RepositoryPathExcludes.merge(other: RepositoryPathExcludes, updateO
  * Merge the given [PathExclude]s replacing entries with equal [PathExclude.pattern].
  * If the given [updateOnlyExisting] is true then only entries with matching [PathExclude.pattern] are merged.
  */
-internal fun Collection<PathExclude>.merge(
+internal fun Collection<PathExclude>.mergePathExcludes(
     other: Collection<PathExclude>,
     updateOnlyExisting: Boolean = false
 ): List<PathExclude> {

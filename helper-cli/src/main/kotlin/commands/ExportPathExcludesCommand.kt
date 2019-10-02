@@ -26,7 +26,7 @@ import com.beust.jcommander.Parameters
 import com.here.ort.helper.CommandWithHelp
 import com.here.ort.helper.common.RepositoryPathExcludes
 import com.here.ort.helper.common.getRepositoryPathExcludes
-import com.here.ort.helper.common.merge
+import com.here.ort.helper.common.mergePathExcludes
 import com.here.ort.model.OrtResult
 import com.here.ort.model.readValue
 import com.here.ort.model.yamlMapper
@@ -83,7 +83,7 @@ internal class ExportPathExcludesCommand : CommandWithHelp() {
         }
 
         globalPathExcludes
-            .merge(localPathExcludes, updateOnlyExisting = updateOnlyExisting)
+            .mergePathExcludes(localPathExcludes, updateOnlyExisting = updateOnlyExisting)
             .writeAsYaml(pathExcludesFile)
 
         return 0
