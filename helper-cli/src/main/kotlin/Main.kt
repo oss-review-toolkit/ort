@@ -75,6 +75,7 @@ object Main : CommandWithHelp() {
         val jc = JCommander(this).apply {
             programName = TOOL_NAME
 
+            addCommand(ExportLicenseFindingCurationsCommand())
             addCommand(ExportPathExcludesCommand())
             addCommand(ExtractRepositoryConfigurationCommand())
             addCommand(FormatRepositoryConfigurationCommand())
