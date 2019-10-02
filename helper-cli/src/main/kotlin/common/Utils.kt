@@ -38,6 +38,7 @@ import com.here.ort.model.TextLocation
 import com.here.ort.model.VcsInfo
 import com.here.ort.model.config.AnalyzerConfiguration
 import com.here.ort.model.config.Excludes
+import com.here.ort.model.config.LicenseFindingCuration
 import com.here.ort.model.config.PathExclude
 import com.here.ort.model.config.RepositoryConfiguration
 import com.here.ort.model.config.Resolutions
@@ -61,6 +62,8 @@ import okio.sink
  * Represents a mapping from repository URLs to list of [PathExclude]s for the respective repository.
  */
 internal typealias RepositoryPathExcludes = Map<String, List<PathExclude>>
+
+internal typealias RepositoryLicenseFindingCurations = Map<String, List<LicenseFindingCuration>>
 
 /**
  * Try to download the [url] and return the downloaded temporary file. The file is automatically deleted on exit. If the
@@ -213,6 +216,29 @@ internal fun OrtResult.getLicenseFindingsById(
         }
         .groupBy({ it.license }, { it.location })
         .mapValues { (_, locations) -> locations.toSet() }
+
+/**
+ * Return all license finding curations from this [OrtResult] represented as [RepositoryPathExcludes].
+ */
+internal fun OrtResult.getRepositoryLicenseFindingCurations(): RepositoryLicenseFindingCurations {
+    val result = mutableMapOf<String, MutableList<LicenseFindingCuration>>()
+    val curations = repository.config.curations?.licenseFindings ?: emptyList()
+
+    repository.nestedRepositories.forEach { (path, vcs) ->
+        val pathExcludesForRepository = result.getOrPut(vcs.url) { mutableListOf() }
+        curations.forEach { curation ->
+            if (curation.path.startsWith(path)) {
+                pathExcludesForRepository.add(
+                    curation.copy(
+                        path = curation.path.substring(path.length).removePrefix("/")
+                    )
+                )
+            }
+        }
+    }
+
+    return result.mapValues { excludes -> excludes.value.sortedBy { it.path } }.toSortedMap()
+}
 
 /**
  * Return all license [Identifiers]s which triggered at least one [RuleViolation] with a [severity]
@@ -382,14 +408,53 @@ internal fun RepositoryConfiguration.writeAsYaml(targetFile: File) {
 }
 
 /**
+ * Merge the given [RepositoryLicenseFindingCurations] replacing entries with equal [LicenseFindingCuration.path].
+ * If the given [updateOnlyExisting] is true then only entries with matching [LicenseFindingCuration.path] are merged.
+ */
+internal fun RepositoryLicenseFindingCurations.mergeLicenseFindingCurations(
+    other: RepositoryLicenseFindingCurations,
+    updateOnlyExisting: Boolean = false
+): RepositoryLicenseFindingCurations {
+    val result: MutableMap<String, MutableMap<String, LicenseFindingCuration>> = mutableMapOf()
+
+    fun merge(repositoryUrl: String, curation: LicenseFindingCuration, updateOnlyUpdateExisting: Boolean = false) {
+        if (updateOnlyUpdateExisting && !result.containsKey(repositoryUrl)) {
+            return
+        }
+
+        val curations = result.getOrPut(repositoryUrl, { mutableMapOf() })
+        if (updateOnlyUpdateExisting && !result.containsKey(curation.path)) {
+            return
+        }
+
+        curations.put(curation.path, curation)
+    }
+
+    forEach { (repositoryUrl, curations) ->
+        curations.forEach { curation ->
+            merge(repositoryUrl, curation, false)
+        }
+    }
+
+    other.forEach { (repositoryUrl, pathExcludes) ->
+        pathExcludes.forEach { pathExclude ->
+            merge(repositoryUrl, pathExclude, updateOnlyExisting)
+        }
+    }
+
+    return result.mapValues { (_, pathExcludes) ->
+        pathExcludes.values.toList()
+    }
+}
+
+/**
  * Merge the given [RepositoryPathExcludes] replacing entries with equal [PathExclude.pattern].
  * If the given [updateOnlyExisting] is true then only entries with matching [PathExclude.pattern] are merged.
  */
 internal fun RepositoryPathExcludes.mergePathExcludes(
     other: RepositoryPathExcludes,
     updateOnlyExisting: Boolean = false
-):
-        RepositoryPathExcludes {
+): RepositoryPathExcludes {
     val result: MutableMap<String, MutableMap<String, PathExclude>> = mutableMapOf()
 
     fun merge(repositoryUrl: String, pathExclude: PathExclude, updateOnlyUpdateExisting: Boolean = false) {
