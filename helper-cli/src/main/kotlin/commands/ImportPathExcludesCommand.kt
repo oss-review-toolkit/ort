@@ -27,7 +27,7 @@ import com.here.ort.helper.CommandWithHelp
 import com.here.ort.helper.common.RepositoryPathExcludes
 import com.here.ort.helper.common.findFilesRecursive
 import com.here.ort.helper.common.findRepositoryPaths
-import com.here.ort.helper.common.merge
+import com.here.ort.helper.common.mergePathExcludes
 import com.here.ort.helper.common.replacePathExcludes
 import com.here.ort.helper.common.sortPathExcludes
 import com.here.ort.helper.common.writeAsYaml
@@ -86,7 +86,7 @@ internal class ImportPathExcludesCommand : CommandWithHelp() {
             allFiles.any { pathExclude.matches(it) }
         }
 
-        val pathExcludes = existingPathExcludes.merge(importedPathExcludes, updateOnlyExisting)
+        val pathExcludes = existingPathExcludes.mergePathExcludes(importedPathExcludes, updateOnlyExisting)
 
         repositoryConfiguration
             .replacePathExcludes(pathExcludes)
