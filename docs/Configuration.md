@@ -175,6 +175,8 @@ files in the `src` directory:
 
 e.g.:
 ```yaml
+curations:
+  license_findings:
   - path: "src/**/*.cpp"
     start_lines: "3"
     line_count: 11
