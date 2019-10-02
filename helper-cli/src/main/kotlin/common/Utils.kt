@@ -37,6 +37,7 @@ import com.here.ort.model.Severity
 import com.here.ort.model.TextLocation
 import com.here.ort.model.VcsInfo
 import com.here.ort.model.config.AnalyzerConfiguration
+import com.here.ort.model.config.Curations
 import com.here.ort.model.config.Excludes
 import com.here.ort.model.config.LicenseFindingCuration
 import com.here.ort.model.config.PathExclude
@@ -336,6 +337,13 @@ internal fun OrtResult.getUnresolvedRuleViolations(): List<RuleViolation> {
 }
 
 /**
+ * Return a copy with the [LicenseFindingCuration]s replaced by the given scope excludes.
+ */
+internal fun RepositoryConfiguration.replaceLicenseFindingCurations(
+    curations: List<LicenseFindingCuration>
+): RepositoryConfiguration = copy(curations = (this.curations ?: Curations()).copy(licenseFindings = curations))
+
+/**
  * Return a copy with the [PathExclude]s replaced by the given scope excludes.
  */
 internal fun RepositoryConfiguration.replacePathExcludes(pathExcludes: List<PathExclude>): RepositoryConfiguration =
@@ -502,6 +510,37 @@ internal fun Collection<PathExclude>.mergePathExcludes(
     other.forEach {
         if (!updateOnlyExisting || result.containsKey(it.pattern)) {
             result[it.pattern] = it
+        }
+    }
+
+    return result.values.toList()
+}
+
+/**
+ * Merge the given [LicenseFindingCuration]s replacing entries with equal [LicenseFindingCuration.path],
+ * [LicenseFindingCuration.startLines], [LicenseFindingCuration.lineCount] and [LicenseFindingCuration.detectedLicense].
+ * If the given [updateOnlyExisting] is true then only entries replacing existing ones are merged.
+ */
+internal fun Collection<LicenseFindingCuration>.mergeLicenseFindingCurations(
+    other: Collection<LicenseFindingCuration>,
+    updateOnlyExisting: Boolean = false
+): List<LicenseFindingCuration> {
+    data class HashKey(
+        val path: String,
+        val startLines: List<Int> = emptyList(),
+        val lineCount: Int? = null,
+        val detectedLicense: String?
+    )
+
+    fun LicenseFindingCuration.hashKey(): HashKey = HashKey(path, startLines, lineCount, detectedLicense)
+
+    val result = mutableMapOf<HashKey, LicenseFindingCuration>()
+
+    associateByTo(result) { it.hashKey() }
+
+    other.forEach {
+        if (!updateOnlyExisting || result.containsKey(it.hashKey())) {
+            result[it.hashKey()] = it
         }
     }
 

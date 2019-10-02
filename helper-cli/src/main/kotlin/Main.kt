@@ -83,6 +83,7 @@ object Main : CommandWithHelp() {
             addCommand(GenerateScopeExcludesCommand())
             addCommand(GenerateRuleViolationResolutionsCommand())
             addCommand(GenerateTimeoutErrorResolutionsCommand())
+            addCommand(ImportLicenseFindingCurationsCommand())
             addCommand(ImportPathExcludesCommand())
             addCommand(ListLicensesCommand())
             addCommand(ListPackagesCommand())
