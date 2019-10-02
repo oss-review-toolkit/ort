@@ -382,7 +382,7 @@ internal fun RepositoryConfiguration.writeAsYaml(targetFile: File) {
 }
 
 /**
- * Merge the given [RepositoryPathExcludes]s replacing entries with equal [PathExclude.pattern].
+ * Merge the given [RepositoryPathExcludes] replacing entries with equal [PathExclude.pattern].
  * If the given [updateOnlyExisting] is true then only entries with matching [PathExclude.pattern] are merged.
  */
 internal fun RepositoryPathExcludes.merge(other: RepositoryPathExcludes, updateOnlyExisting: Boolean = false):
