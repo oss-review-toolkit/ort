@@ -106,7 +106,8 @@ The result file will contain information about the `mime-types` package itself, 
 information about each dependency. The scope names come from the package managers, for NPM packages these are usually
 `dependencies` and `devDependencies`, for Maven package it would be `compile`, `runtime`, `test`, and so on.
 
-The structure of the results file is:
+Following is an overview of the structure of the `analyzer-result.yml` file (comments were added for clarity and are not
+part of a real result file):
 
 ```yaml
 # VCS information about the input directory.
@@ -253,13 +254,13 @@ Running ScanCode version 2.9.2 on directory '[scanner-output-path]/downloads/NPM
 Writing scan result to '[scanner-output-path]/scan-result.yml'.
 ```
 
-As you can see from when you check the results file the licenses detected by `ScanCode` match the licenses declared by
-the packages. This is because we scanned a small and well-maintained package in this example, but if you run the scan on
-a bigger project you will see that `ScanCode` often finds more licenses than are declared by the packages.
-
 The `scanner` writes a new ORT result file to `[scanner-output-path]/scan-result.yml` containing the scan results in
 addition to the analyzer result from the input. This way belonging results are stored in the same place for traceability.
 If the input file already contained scan results they are replaced by the new scan results in the output.
+
+As you can see when checking the `scan-result.yml` file, the licenses detected by `ScanCode` match the licenses declared
+by the packages. This is because we scanned a small and well-maintained package in this example, but if you run the scan
+on a bigger project you will see that `ScanCode` often finds more licenses than are declared by the packages.
 
 ## 6. Running the evaluator
 
