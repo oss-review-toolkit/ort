@@ -88,7 +88,7 @@ abstract class Scanner(val scannerName: String, protected val config: ScannerCon
         scopesToScan: Set<String> = emptySet()
     ): OrtResult {
         require(ortResultFile.isFile) {
-            "Provided path for the configuration does not refer to a file: ${ortResultFile.absolutePath}"
+            "The provided ORT result file '${ortResultFile.canonicalPath}' does not exit."
         }
 
         val startTime = Instant.now()
