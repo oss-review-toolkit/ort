@@ -110,8 +110,20 @@ internal class ListLicensesCommand : CommandWithHelp() {
     )
     private var applyLicenseFindingCurations: Boolean = false
 
+    @Parameter(
+        names = ["--repository-configuration-file"],
+        required = false,
+        order = PARAMETER_ORDER_OPTIONAL,
+        description = "Override the repository configuration contained in the ORT result."
+    )
+    private var repositoryConfigurationFile: File? = null
+
     override fun runCommand(jc: JCommander): Int {
-        val ortResult = ortResultFile.readValue<OrtResult>()
+        var ortResult = ortResultFile.readValue<OrtResult>()
+        repositoryConfigurationFile?.let {
+            ortResult = ortResult.replaceConfig(it.readValue())
+        }
+
         val sourcesDir = sourceCodeDir ?: ortResult.fetchScannedSources(packageId)
         val violatedRulesByLicense = ortResult.getViolatedRulesByLicense(packageId, Severity.ERROR)
 
