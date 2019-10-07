@@ -43,6 +43,7 @@ import com.here.ort.model.config.RepositoryConfiguration
 import com.here.ort.model.config.Resolutions
 import com.here.ort.model.config.RuleViolationResolution
 import com.here.ort.model.config.ScopeExclude
+import com.here.ort.model.util.FindingCurationMatcher
 import com.here.ort.model.yamlMapper
 import com.here.ort.utils.safeMkdirs
 import com.here.ort.utils.OkHttpClientHelper
@@ -190,25 +191,28 @@ internal fun OrtResult.fetchScannedSources(id: Identifier): File {
 }
 
 /**
- * Return all license findings for the project or package associated with the given [id].
+ * Return all license findings for the project or package associated with the given [id]. The license
+ * [LicenseFindingCuration]s contained in this [OrtResult] are applied if and only if [applyCurations] is true.
  */
-internal fun OrtResult.getLicenseFindingsById(id: Identifier): Map<String, Set<TextLocation>> {
-    val result = mutableMapOf<String, MutableSet<TextLocation>>()
-
-    val pkg = getPackageOrProject(id)!!
-    scanner?.results?.scanResults?.forEach { container ->
-        container.results.forEach { scanResult ->
-            if (scanResult.provenance.matches(pkg)) {
-                scanResult.summary.licenseFindings.forEach {
-                    val locations = result.getOrPut(it.license, { mutableSetOf() })
-                    locations.add(it.location)
-                }
+internal fun OrtResult.getLicenseFindingsById(
+    id: Identifier,
+    applyCurations: Boolean = true
+): Map<String, Set<TextLocation>> =
+    scanner?.results?.scanResults
+        ?.filter { it.id == id }
+        .orEmpty()
+        .flatMapTo(mutableSetOf()) { container ->
+            container.results.flatMap { it.summary.licenseFindings }
+        }
+        .let { licenseFindings ->
+            if (applyCurations) {
+                FindingCurationMatcher().applyAll(licenseFindings, getLicenseFindingsCurations(id))
+            } else {
+                licenseFindings
             }
         }
-    }
-
-    return result
-}
+        .groupBy({ it.license }, { it.location })
+        .mapValues { (_, locations) -> locations.toSet() }
 
 /**
  * Return all license [Identifiers]s which triggered at least one [RuleViolation] with a [severity]
