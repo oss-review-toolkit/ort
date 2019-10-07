@@ -25,6 +25,8 @@ import com.here.ort.utils.ProcessCapture
 
 import java.io.File
 
+private const val GIT_STATUS_BRANCH_UPSTREAM_PREFIX = "# branch.upstream "
+
 open class GitWorkingTree(workingDir: File, private val gitBase: GitBase) : WorkingTree(workingDir, gitBase.type) {
     override fun isValid(): Boolean {
         if (!workingDir.isDirectory) {
@@ -49,7 +51,8 @@ open class GitWorkingTree(workingDir: File, private val gitBase: GitBase) : Work
         return paths.associateWith { GitWorkingTree(root.resolve(it), gitBase).getInfo() }
     }
 
-    override fun getRemoteUrl() = gitBase.run(workingDir, "remote", "get-url", getFirstRemote()).stdout.trimEnd()
+    override fun getRemoteUrl() =
+        gitBase.run(workingDir, "remote", "get-url", getRemoteForCheckout()).stdout.trimEnd()
 
     override fun getRevision() = gitBase.run(workingDir, "rev-parse", "HEAD").stdout.trimEnd()
 
@@ -58,7 +61,7 @@ open class GitWorkingTree(workingDir: File, private val gitBase: GitBase) : Work
 
     private fun listRemoteRefs(namespace: String): List<String> {
         val tags = gitBase.run(workingDir, "-c", "credential.helper=", "-c", "core.askpass=echo", "ls-remote",
-            "--refs", getFirstRemote(), "refs/$namespace/*").stdout.trimEnd()
+            "--refs", getRemoteForCheckout(), "refs/$namespace/*").stdout.trimEnd()
         return tags.lines().map {
             it.split('\t').last().removePrefix("refs/$namespace/")
         }
@@ -68,5 +71,18 @@ open class GitWorkingTree(workingDir: File, private val gitBase: GitBase) : Work
 
     override fun listRemoteTags() = listRemoteRefs("tags")
 
-    private fun getFirstRemote() = gitBase.run(workingDir, "remote", "show", "-n").stdout.lineSequence().first()
+    private fun getRemoteForCheckout(): String {
+        // Get the remote the current branch (if any) is configured to pull from.
+        val status = gitBase.run(workingDir, "status", "-sb", "--porcelain=v2").stdout
+        status.lineSequence().find { line ->
+            line.startsWith(GIT_STATUS_BRANCH_UPSTREAM_PREFIX)
+        }?.let { upstreamBranch ->
+            return upstreamBranch.substringAfter(GIT_STATUS_BRANCH_UPSTREAM_PREFIX).substringBefore('/')
+        }
+
+        // In case we are not on a branch, fall back to listing all remotes. Prefer "origin" if present but otherwise
+        // return the first remote.
+        val remotes = gitBase.run(workingDir, "remote", "show", "-n").stdout.lines()
+        return remotes.find { it == "origin" } ?: remotes.first()
+    }
 }
