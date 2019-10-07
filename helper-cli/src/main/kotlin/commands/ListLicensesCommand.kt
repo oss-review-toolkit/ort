@@ -46,7 +46,8 @@ internal class ListLicensesCommand : CommandWithHelp() {
     @Parameter(
         names = ["--ort-result-file"],
         required = true,
-        order = PARAMETER_ORDER_MANDATORY
+        order = PARAMETER_ORDER_MANDATORY,
+        description = "The ORT result file to read as input."
     )
     private lateinit var ortResultFile: File
 
@@ -54,42 +55,50 @@ internal class ListLicensesCommand : CommandWithHelp() {
         names = ["--package-id"],
         required = true,
         order = PARAMETER_ORDER_MANDATORY,
-        converter = IdentifierConverter::class
+        converter = IdentifierConverter::class,
+        description = "The target package for which the licenses shall be listed."
     )
     private lateinit var packageId: Identifier
 
     @Parameter(
         names = ["--source-code-dir"],
         required = false,
-        order = PARAMETER_ORDER_OPTIONAL
+        order = PARAMETER_ORDER_OPTIONAL,
+        description = "A directory containing the sources for the target package. These sources should match " +
+                "the provenance of the respective scan result in the ORT result. If not specified those sources " +
+                "are downloaded if needed."
     )
     private var sourceCodeDir: File? = null
 
     @Parameter(
         names = ["--only-offending"],
         required = false,
-        order = PARAMETER_ORDER_OPTIONAL
+        order = PARAMETER_ORDER_OPTIONAL,
+        description = "Only list licenses causing a rule violation of error severity in the given ORT result."
     )
     private var onlyOffending: Boolean = false
 
     @Parameter(
         names = ["--omit-excluded"],
         required = false,
-        order = PARAMETER_ORDER_OPTIONAL
+        order = PARAMETER_ORDER_OPTIONAL,
+        description = "Only list license findings for non-excluded file locations."
     )
     private var omitExcluded: Boolean = false
 
     @Parameter(
         names = ["--ignore-excluded-rule-ids"],
         required = false,
-        order = PARAMETER_ORDER_OPTIONAL
+        order = PARAMETER_ORDER_OPTIONAL,
+        description = "A comma separate list of rule names for which --omit-excluded should not have any effect."
     )
     private var ignoreExcludedRuleIds: List<String> = emptyList()
 
     @Parameter(
         names = ["--no-license-texts"],
         required = false,
-        order = PARAMETER_ORDER_OPTIONAL
+        order = PARAMETER_ORDER_OPTIONAL,
+        description = "Do not output the actual file content of file locations of license findings."
     )
     private var noLicenseTexts: Boolean = false
 
