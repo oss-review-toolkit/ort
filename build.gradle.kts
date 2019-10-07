@@ -200,7 +200,7 @@ subprojects {
 
         tasks.withType<Test>().configureEach {
             extensions.configure(JacocoTaskExtension::class) {
-                setEnabled(enabled)
+                isEnabled = enabled
             }
 
             systemProperties = listOf("kotlintest.tags.include", "kotlintest.tags.exclude").associateWith {
@@ -209,7 +209,7 @@ subprojects {
 
             testLogging {
                 events = setOf(TestLogEvent.STARTED, TestLogEvent.PASSED, TestLogEvent.SKIPPED, TestLogEvent.FAILED)
-                setExceptionFormat(TestExceptionFormat.FULL)
+                exceptionFormat = TestExceptionFormat.FULL
             }
 
             useJUnitPlatform()
@@ -219,7 +219,7 @@ subprojects {
     tasks.named<JacocoReport>("jacocoTestReport") {
         reports {
             // Enable XML in addition to HTML for CI integration.
-            xml.setEnabled(true)
+            xml.isEnabled = true
         }
     }
 
@@ -232,7 +232,7 @@ subprojects {
 
         reports {
             // Enable XML in addition to HTML for CI integration.
-            xml.setEnabled(true)
+            xml.isEnabled = true
         }
     }
 
@@ -317,7 +317,7 @@ val checkCopyright by tasks.registering(Exec::class) {
 
     commandLine = listOf("git", "grep", "-EL", "Copyright \\(C\\) .+", "*.kt",
         ":!analyzer/src/funTest/assets/projects/external")
-    setIgnoreExitValue(true)
+    isIgnoreExitValue = true
     standardOutput = ByteArrayOutputStream()
 
     doLast {
