@@ -426,7 +426,10 @@ data class OrtResult(
     @JsonIgnore
     fun getExcludes(): Excludes = repository.config.excludes ?: Excludes()
 
-    private fun getLicenseFindingsCurations(id: Identifier): List<LicenseFindingCuration> =
+    /**
+     * Return the [LicenseFindingCuration]s associated with the given package [id].
+     */
+    fun getLicenseFindingsCurations(id: Identifier): List<LicenseFindingCuration> =
         if (projects.containsKey(id)) {
             repository.config.curations?.licenseFindings.orEmpty()
         } else {

@@ -102,6 +102,14 @@ internal class ListLicensesCommand : CommandWithHelp() {
     )
     private var noLicenseTexts: Boolean = false
 
+    @Parameter(
+        names = ["--apply-license-finding-curations"],
+        required = false,
+        order = PARAMETER_ORDER_OPTIONAL,
+        description = "Apply the license finding curations contained in the ORT result."
+    )
+    private var applyLicenseFindingCurations: Boolean = false
+
     override fun runCommand(jc: JCommander): Int {
         val ortResult = ortResultFile.readValue<OrtResult>()
         val sourcesDir = sourceCodeDir ?: ortResult.fetchScannedSources(packageId)
@@ -112,7 +120,7 @@ internal class ListLicensesCommand : CommandWithHelp() {
         } ?: false
 
         ortResult
-            .getLicenseFindingsById(packageId)
+            .getLicenseFindingsById(packageId, applyLicenseFindingCurations)
             .filter { (license, _) -> !onlyOffending || violatedRulesByLicense.contains(license) }
             .mapValues { (license, locations) ->
                 locations.filter {
