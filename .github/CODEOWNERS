@@ -1,4 +1,4 @@
 * @sschuberth @mnonnenmacher @fviernau
-*.md @tsteenbe
+*.md @sschuberth @mnonnenmacher @fviernau @tsteenbe
 /reporter-web-app/ @tsteenbe
-/spdx-utils/src/main/ @tsteenbe
+/spdx-utils/src/main/ @sschuberth @mnonnenmacher @fviernau @tsteenbe
