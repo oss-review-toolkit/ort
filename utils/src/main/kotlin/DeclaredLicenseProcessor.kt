@@ -74,11 +74,7 @@ object DeclaredLicenseProcessor {
             process(declaredLicense)?.let { processedLicenses += it } ?: run { unmapped += declaredLicense }
         }
 
-        val spdxExpression = when {
-            processedLicenses.isEmpty() -> null
-            else -> processedLicenses.reduce { left, right -> left and right }
-        }
-
+        val spdxExpression = processedLicenses.takeUnless { it.isEmpty() }?.reduce { left, right -> left and right }
         return ProcessedDeclaredLicense(spdxExpression, unmapped)
     }
 
