@@ -35,8 +35,8 @@ import java.io.File
 
 @Parameters(
     commandNames = ["sort-repository-configuration"],
-    commandDescription = "Sorts all excludes entries of the given repository configuration alphabetically." +
-        "The output is written to the given repository configuration file."
+    commandDescription = "Sorts all exclude and curation entries of the given repository configuration " +
+        "alphabetically. The output is written to the given repository configuration file."
 )
 internal class SortRepositoryConfigurationCommand : CommandWithHelp() {
     @Parameter(
