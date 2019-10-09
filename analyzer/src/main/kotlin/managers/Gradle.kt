@@ -47,6 +47,7 @@ import com.here.ort.utils.temporaryProperties
 
 import java.io.File
 import java.util.Properties
+import java.util.concurrent.TimeUnit
 
 import org.apache.maven.project.ProjectBuildingException
 
@@ -57,6 +58,7 @@ import org.eclipse.aether.repository.WorkspaceReader
 import org.eclipse.aether.repository.WorkspaceRepository
 
 import org.gradle.tooling.GradleConnector
+import org.gradle.tooling.internal.consumer.DefaultGradleConnector
 
 /**
  * The [Gradle](https://gradle.org/) package manager for Java.
@@ -135,10 +137,13 @@ class Gradle(
             }
         }
 
-        val gradleConnection = GradleConnector
-            .newConnector()
-            .forProjectDirectory(definitionFile.parentFile)
-            .connect()
+        val gradleConnector = GradleConnector.newConnector()
+
+        if (gradleConnector is DefaultGradleConnector) {
+            gradleConnector.daemonMaxIdleTime(10, TimeUnit.SECONDS)
+        }
+
+        val gradleConnection = gradleConnector.forProjectDirectory(definitionFile.parentFile).connect()
 
         return temporaryProperties(*gradleSystemProperties.toTypedArray()) {
             gradleConnection.use { connection ->
