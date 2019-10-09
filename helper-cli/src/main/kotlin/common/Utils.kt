@@ -331,7 +331,20 @@ internal fun RepositoryConfiguration.replaceRuleViolationResolutions(ruleViolati
  * Return a copy with sorting applied to all entry types which are to be sorted.
  */
 internal fun RepositoryConfiguration.sortEntries(): RepositoryConfiguration =
-    sortPathExcludes().sortScopeExcludes()
+    sortLicenseFindingCurations().sortPathExcludes().sortScopeExcludes()
+
+/**
+ * Return a copy with the [LicenseFindingCuration]s sorted.
+ */
+internal fun RepositoryConfiguration.sortLicenseFindingCurations(): RepositoryConfiguration =
+    copy(
+        curations = curations?.let {
+            val licenseFindings = it.licenseFindings.sortedBy { curation ->
+                curation.path.removePrefix("*").removePrefix("*")
+            }
+            it.copy(licenseFindings = licenseFindings)
+        }
+    )
 
 /**
  * Return a copy with the [PathExclude]s sorted.
