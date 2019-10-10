@@ -87,7 +87,7 @@ class HttpFileStorage(
         inputStream.use {
             val request = Request.Builder()
                 .headers(headers.toHeaders())
-                .put(it.readAllBytes().toRequestBody())
+                .put(it.readBytes().toRequestBody())
                 .url(urlForPath(path))
                 .build()
 
