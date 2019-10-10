@@ -19,6 +19,7 @@
 
 package com.here.ort.model.config
 
+import com.here.ort.utils.expandTilde
 import com.here.ort.utils.storage.FileStorage
 import com.here.ort.utils.storage.HttpFileStorage
 import com.here.ort.utils.storage.LocalFileStorage
@@ -36,4 +37,20 @@ data class FileStorageConfiguration(
      * The configuration of a [LocalFileStorage].
      */
     val localFileStorage: LocalFileStorageConfiguration? = null
-)
+) {
+    /**
+     * Create a [FileStorage] based on this configuration.
+     */
+    fun createFileStorage(): FileStorage {
+        require((httpFileStorage == null) xor (localFileStorage == null)) {
+            "Exactly one implementation must be configured for a FileStorage."
+        }
+
+        return httpFileStorage?.let { httpFileStorageConfiguration ->
+            HttpFileStorage(httpFileStorageConfiguration.url, httpFileStorageConfiguration.headers)
+        } ?: localFileStorage!!.let { localFileStorageConfiguration ->
+            val directory = localFileStorageConfiguration.directory.expandTilde()
+            LocalFileStorage(directory)
+        }
+    }
+}

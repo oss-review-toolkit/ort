@@ -29,7 +29,6 @@ import com.here.ort.model.ScannerDetails
 import com.here.ort.model.config.FileBasedStorageConfiguration
 import com.here.ort.model.config.PostgresStorageConfiguration
 import com.here.ort.scanner.storages.*
-import com.here.ort.utils.expandTilde
 import com.here.ort.utils.log
 import com.here.ort.utils.storage.HttpFileStorage
 import com.here.ort.utils.storage.LocalFileStorage
@@ -66,17 +65,13 @@ abstract class ScanResultsStorage {
          * Configure a [FileBasedStorage] as the current storage backend.
          */
         fun configure(config: FileBasedStorageConfiguration) {
-            require((config.backend.httpFileStorage == null) xor (config.backend.localFileStorage == null)) {
-                "Exactly one storage backend must be configured for a FileBasedStorage."
-            }
+            val backend = config.backend.createFileStorage()
 
-            val backend = config.backend.httpFileStorage?.let { httpFileStorageConfiguration ->
-                log.info { "Using file based storage with HTTP backend '${httpFileStorageConfiguration.url}'." }
-                HttpFileStorage(httpFileStorageConfiguration.url, httpFileStorageConfiguration.headers)
-            } ?: config.backend.localFileStorage!!.let { localFileStorageConfiguration ->
-                val directory = localFileStorageConfiguration.directory.expandTilde()
-                log.info { "Using file based storage with local directory '${directory.invariantSeparatorsPath}'." }
-                LocalFileStorage(directory)
+            when (backend) {
+                is HttpFileStorage -> log.info { "Using file based storage with HTTP backend '${backend.url}'." }
+                is LocalFileStorage -> log.info {
+                    "Using file based storage with local directory '${backend.directory.invariantSeparatorsPath}'."
+                }
             }
 
             storage = FileBasedStorage(backend)
