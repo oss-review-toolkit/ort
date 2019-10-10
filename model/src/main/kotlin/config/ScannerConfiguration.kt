@@ -19,9 +19,12 @@
 
 package com.here.ort.model.config
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties
+
 /**
  * The configuration model of the scanner.
  */
+@JsonIgnoreProperties(ignoreUnknown = true)
 data class ScannerConfiguration(
     /**
      * Configuration of a file based storage.
