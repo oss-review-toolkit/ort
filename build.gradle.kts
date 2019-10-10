@@ -166,22 +166,24 @@ subprojects {
     }
 
     tasks.named<DokkaTask>("dokka") {
-        jdkVersion = 8
+        configuration {
+            jdkVersion = 8
 
-        externalDocumentationLink {
-            url = URL("https://codehaus-plexus.github.io/plexus-containers/plexus-container-default/apidocs/")
-        }
+            externalDocumentationLink {
+                url = URL("https://codehaus-plexus.github.io/plexus-containers/plexus-container-default/apidocs/")
+            }
 
-        externalDocumentationLink {
-            url = URL("https://fasterxml.github.io/jackson-databind/javadoc/2.9/")
-        }
+            externalDocumentationLink {
+                url = URL("https://fasterxml.github.io/jackson-databind/javadoc/2.9/")
+            }
 
-        externalDocumentationLink {
-            url = URL("https://jakewharton.github.io/DiskLruCache/")
-        }
+            externalDocumentationLink {
+                url = URL("https://jakewharton.github.io/DiskLruCache/")
+            }
 
-        externalDocumentationLink {
-            url = URL("https://logging.apache.org/log4j/2.x/log4j-api/apidocs/")
+            externalDocumentationLink {
+                url = URL("https://logging.apache.org/log4j/2.x/log4j-api/apidocs/")
+            }
         }
     }
 
