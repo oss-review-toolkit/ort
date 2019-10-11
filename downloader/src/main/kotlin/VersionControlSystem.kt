@@ -134,12 +134,9 @@ abstract class VersionControlSystem {
         /**
          * Decompose a [vcsUrl] into any contained VCS information.
          */
-        fun splitUrl(vcsUrl: String): VcsInfo {
-            val host = VcsHost.fromUrl(vcsUrl)
-            return if (host != null) {
-                host.toVcsInfo() ?: VcsInfo.EMPTY
-            } else {
-                when {
+        fun splitUrl(vcsUrl: String) =
+            VcsHost.toVcsInfo(vcsUrl)
+                ?: when {
                     vcsUrl.endsWith(".git") -> {
                         VcsInfo(VcsType.GIT, normalizeVcsUrl(vcsUrl), "", null, "")
                     }
@@ -158,8 +155,6 @@ abstract class VersionControlSystem {
 
                     else -> VcsInfo(VcsType.NONE, vcsUrl, "")
                 }
-            }
-        }
     }
 
     /**

@@ -28,61 +28,111 @@ import java.net.URI
 import java.net.URISyntaxException
 import java.nio.file.Paths
 
-import kotlin.reflect.full.primaryConstructor
-
 /**
- * A class to handle VCS-host-specific information.
+ * An enum to handle VCS-host-specific information.
  */
-sealed class VcsHost(val url: String) {
-    companion object {
-        private val ALL = VcsHost::class.sealedSubclasses
+enum class VcsHost(
+    /**
+     * The hostname of VCS host.
+     */
+    private val hostname: String,
 
+    /**
+     * The VCS types the host supports.
+     */
+    vararg supportedTypes: VcsType
+) {
+    /**
+     * The enum constant to handle [Bitbucket][https://bitbucket.org/]-specific information.
+     */
+    BITBUCKET("bitbucket.org", VcsType.GIT, VcsType.MERCURIAL) {
+        override fun toVcsInfo(projectUrl: URI): VcsInfo {
+            var vcsUrl = projectUrl.scheme + "://" + projectUrl.authority
+
+            // Append the first two path components that denote the user and project to the base URL.
+            val pathIterator = Paths.get(projectUrl.path).iterator()
+
+            if (pathIterator.hasNext()) {
+                vcsUrl += "/${pathIterator.next()}"
+            }
+
+            if (pathIterator.hasNext()) {
+                vcsUrl += "/${pathIterator.next()}"
+            }
+
+            var revision = ""
+            var path = ""
+
+            if (pathIterator.hasNext() && pathIterator.next().toString() == "src") {
+                if (pathIterator.hasNext()) {
+                    revision = pathIterator.next().toString()
+                    path = projectUrl.path.substringAfter(revision).trimStart('/').removeSuffix(".git")
+                }
+            }
+
+            val type = VersionControlSystem.forUrl(vcsUrl)?.type ?: VcsType.NONE
+            if (type == VcsType.GIT) {
+                vcsUrl += ".git"
+            }
+
+            return VcsInfo(type, vcsUrl, revision, path = path)
+        }
+    },
+
+    /**
+     * The enum constant to handle [GitHub][https://github.com/]-specific information.
+     */
+    GITHUB("github.com", VcsType.GIT) {
+        override fun toVcsInfo(projectUrl: URI) = gitProjectUrlToVcsInfo(projectUrl)
+    },
+
+    /**
+     * The enum constant to handle [GitLab][https://gitlab.com/]-specific information.
+     */
+    GITLAB("gitlab.com", VcsType.GIT) {
+        override fun toVcsInfo(projectUrl: URI) = gitProjectUrlToVcsInfo(projectUrl)
+    };
+
+    companion object {
         /**
-         * Get the VCS host that is applicable for [url].
+         * Return all [VcsInfo] that can be extracted from [projectUrl] by the applicable host.
          */
-        fun fromUrl(url: String): VcsHost? =
-            ALL.asSequence().map {
-                it.primaryConstructor!!.call(url)
-            }.find {
-                it.isApplicable()
+        fun toVcsInfo(projectUrl: String): VcsInfo? =
+            try {
+                URI(projectUrl).let {
+                    values().find { host -> host.isApplicable(it) }?.toVcsInfo(it)
+                }
+            } catch (e: URISyntaxException) {
+                null
             }
     }
 
-    /**
-     * The [URI] for [url] if it can be parsed, or null otherwise.
-     */
-    protected val uri = try {
-        URI(url)
-    } catch (e: URISyntaxException) {
-        null
-    }
+    private val supportedTypes = supportedTypes.toSet()
 
     /**
-     * The base hostname of VCS host.
+     * Return whether this host is applicable for [url].
      */
-    abstract val hostname: String
+    fun isApplicable(url: URI) = url.host == hostname
 
     /**
-     * The set of VCS types the host supports.
+     * Return all [VcsInfo] that can be extracted from the host-specific [projectUrl].
      */
-    abstract val supportedTypes: Set<VcsType>
+    fun toVcsInfo(projectUrl: String): VcsInfo? =
+        try {
+            val url = URI(projectUrl)
+            if (isApplicable(url)) toVcsInfo(url) else null
+        } catch (e: URISyntaxException) {
+            null
+        }
 
-    /**
-     * Return whether this instance is applicable for the [uri] it was constructed with.
-     */
-    fun isApplicable() = uri?.host == hostname
-
-    /**
-     * Return all [VcsInfo] that can be extracted from [uri].
-     */
-    abstract fun toVcsInfo(): VcsInfo?
+    protected abstract fun toVcsInfo(projectUrl: URI): VcsInfo
 }
 
-private fun gitUrlToVcsInfo(uri: URI): VcsInfo {
-    var url = uri.scheme + "://" + uri.authority
+private fun gitProjectUrlToVcsInfo(projectUrl: URI): VcsInfo {
+    var url = projectUrl.scheme + "://" + projectUrl.authority
 
     // Append the first two path components that denote the user and project to the base URL.
-    val pathIterator = Paths.get(uri.path).iterator()
+    val pathIterator = Paths.get(projectUrl.path).iterator()
 
     if (pathIterator.hasNext()) {
         url += "/${pathIterator.next()}"
@@ -103,79 +153,14 @@ private fun gitUrlToVcsInfo(uri: URI): VcsInfo {
         val extra = pathIterator.next().toString()
         if (extra in listOf("blob", "tree") && pathIterator.hasNext()) {
             revision = pathIterator.next().toString()
-            path = uri.path.substringAfter(revision).trimStart('/').removeSuffix(".git")
+            path = projectUrl.path.substringAfter(revision).trimStart('/').removeSuffix(".git")
         } else {
             // Just treat all the extra components as a path.
             path = (sequenceOf(extra) + pathIterator.asSequence()).joinToString("/")
         }
     } else {
-        if (uri.hasRevisionFragment()) revision = uri.fragment
+        if (projectUrl.hasRevisionFragment()) revision = projectUrl.fragment
     }
 
     return VcsInfo(VcsType.GIT, url, revision, path = path)
-}
-
-/**
- * A class to handle [Bitbucket][https://bitbucket.org/]-specific information.
- */
-class Bitbucket(url: String) : VcsHost(url) {
-    override val hostname = "bitbucket.org"
-    override val supportedTypes = setOf(VcsType.GIT, VcsType.MERCURIAL)
-
-    override fun toVcsInfo(): VcsInfo? {
-        if (uri == null) return null
-        var url = uri.scheme + "://" + uri.authority
-
-        // Append the first two path components that denote the user and project to the base URL.
-        val pathIterator = Paths.get(uri.path).iterator()
-
-        if (pathIterator.hasNext()) {
-            url += "/${pathIterator.next()}"
-        }
-
-        if (pathIterator.hasNext()) {
-            url += "/${pathIterator.next()}"
-        }
-
-        var revision = ""
-        var path = ""
-
-        if (pathIterator.hasNext() && pathIterator.next().toString() == "src") {
-            if (pathIterator.hasNext()) {
-                revision = pathIterator.next().toString()
-                path = uri.path.substringAfter(revision).trimStart('/').removeSuffix(".git")
-            }
-        }
-
-        val type = VersionControlSystem.forUrl(url)?.type ?: VcsType.NONE
-        if (type == VcsType.GIT) {
-            url += ".git"
-        }
-
-        return VcsInfo(type, url, revision, path = path)
-    }
-}
-
-/**
- * A class to handle [GitHub][https://github.com/]-specific information.
- */
-class GitHub(url: String) : VcsHost(url) {
-    override val hostname = "github.com"
-    override val supportedTypes = setOf(VcsType.GIT)
-
-    override fun toVcsInfo(): VcsInfo? {
-        return if (uri != null) gitUrlToVcsInfo(uri) else null
-    }
-}
-
-/**
- * A class to handle [GitLab][https://gitlab.com/]-specific information.
- */
-class GitLab(url: String) : VcsHost(url) {
-    override val hostname = "gitlab.com"
-    override val supportedTypes = setOf(VcsType.GIT)
-
-    override fun toVcsInfo(): VcsInfo? {
-        return if (uri != null) gitUrlToVcsInfo(uri) else null
-    }
 }
