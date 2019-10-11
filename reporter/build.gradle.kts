@@ -34,6 +34,7 @@ repositories {
 dependencies {
     api(project(":model"))
 
+    implementation(project(":downloader"))
     implementation(project(":utils"))
 
     implementation("com.vladsch.flexmark:flexmark:$flexmarkVersion")
