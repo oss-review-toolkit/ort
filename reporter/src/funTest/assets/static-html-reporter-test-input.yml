@@ -7,8 +7,8 @@ repository:
     path: ""
   vcs_processed:
     type: "Git"
-    url: ""
-    revision: ""
+    url: "https://github.com/heremaps/oss-review-toolkit.git"
+    revision: "master"
     path: "analyzer/src/funTest/assets/projects/synthetic/gradle/lib"
   nested_repositories:
     sub/module:
@@ -55,8 +55,8 @@ analyzer:
         path: ""
       vcs_processed:
         type: "Git"
-        url: ""
-        revision: ""
+        url: "https://github.com/heremaps/oss-review-toolkit.git"
+        revision: "master"
         path: "analyzer/src/funTest/assets/projects/synthetic/gradle/lib"
       homepage_url: ""
       scopes:
@@ -73,7 +73,7 @@ analyzer:
         - id: "Maven:org.apache.commons:commons-text:1.1"
           dependencies:
           - id: "Maven:org.apache.commons:commons-lang3:3.5"
-    - id: "Gradle:com.here:nested-test-project:1.0.0"
+    - id: "Gradle:com.here:nested-fake-project:1.0.0"
       definition_file_path: "project/build.gradle"
       declared_licenses: []
       declared_licenses_processed: {}
@@ -243,7 +243,7 @@ scanner:
       - provenance:
           download_time: "1970-01-01T00:00:00Z"
         scanner:
-          name: "FileCounter"
+          name: "FakeScanner"
           version: "1.0"
           configuration: ""
         summary:
@@ -251,15 +251,25 @@ scanner:
           end_time: "1970-01-01T00:00:00Z"
           file_count: 0
           license_findings:
-          - license: "MIT"
+          - license: "Apache-2.0 (multi-line)"
             locations:
-            - path: "path_206"
-              start_line: 207
-              end_line: 217
+            - path: "build.gradle"
+              start_line: 19
+              end_line: 20
+          - license: "Apache-2.0 (single-line)"
+            locations:
+            - path: "build.gradle"
+              start_line: 19
+              end_line: 19
+          - license: "Apache-2.0 (single-line)"
+            locations:
+            - path: "build.gradle"
+              start_line: 20
+              end_line: 20
             copyrights:
             - statement: "Copyright (c) example authors."
               locations:
-              - path: "path_206"
+              - path: "fake_path"
                 start_line: 206
                 end_line: 206
           errors:
@@ -270,12 +280,12 @@ scanner:
               \ Please make sure the release POM file includes the SCM connection,\
               \ see: https://docs.gradle.org/current/userguide/publishing_maven.html#example_customizing_the_pom_file"
             severity: "ERROR"
-    - id: "Gradle:com.here:nested-test-project:1.0.0"
+    - id: "Gradle:com.here:nested-fake-project:1.0.0"
       results:
       - provenance:
           download_time: "1970-01-01T00:00:00Z"
         scanner:
-          name: "FileCounter"
+          name: "FakeScanner"
           version: "1.0"
           configuration: ""
         summary:

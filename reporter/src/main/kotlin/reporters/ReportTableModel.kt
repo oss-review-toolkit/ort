@@ -109,6 +109,11 @@ data class ReportTableModel(
         val id: Identifier,
 
         /**
+         * The VCS information of the package.
+         */
+        val vcsInfo: VcsInfo,
+
+        /**
          * The scopes the package is used in.
          */
         val scopes: SortedMap<String, List<ScopeExclude>>,

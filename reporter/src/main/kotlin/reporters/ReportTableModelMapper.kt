@@ -114,6 +114,7 @@ class ReportTableModelMapper(private val resolutionProvider: ResolutionProvider)
 
                 DependencyRow(
                     id = id,
+                    vcsInfo = ortResult.getUncuratedPackageById(id)!!.vcsProcessed,
                     scopes = scopes,
                     concludedLicense = concludedLicense,
                     declaredLicenses = declaredLicenses,

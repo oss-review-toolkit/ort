@@ -9,6 +9,15 @@ a, a:visited {
     color: black;
 }
 
+dd {
+    margin-left: 1em;
+}
+
+dd div {
+    padding-left: 1em;
+    text-indent:-1em;
+}
+
 ul {
     list-style: none;
     margin: 0;

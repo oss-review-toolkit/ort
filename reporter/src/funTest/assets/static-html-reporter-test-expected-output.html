@@ -16,6 +16,15 @@ a, a:visited {
     color: black;
 }
 
+dd {
+    margin-left: 1em;
+}
+
+dd div {
+    padding-left: 1em;
+    text-indent:-1em;
+}
+
 ul {
     list-style: none;
     margin: 0;
@@ -428,7 +437,7 @@ Prism.languages.yaml={scalar:{pattern:/([\-:]\s*(?:![^\s]+)?[ \t]*[|>])[ \t]*(?:
           <a href="#Gradle:com.here.ort.gradle.example:lib:1.0.0">Gradle:com.here.ort.gradle.example:lib:1.0.0</a>
         </li>
         <li>
-          <a href="#Gradle:com.here:nested-test-project:1.0.0">Gradle:com.here:nested-test-project:1.0.0 <div class="ort-reason">Excluded: EXAMPLE_OF - The project is an example.</div>
+          <a href="#Gradle:com.here:nested-fake-project:1.0.0">Gradle:com.here:nested-fake-project:1.0.0 <div class="ort-reason">Excluded: EXAMPLE_OF - The project is an example.</div>
           </a>
         </li>
         <li>
@@ -540,13 +549,13 @@ Resolved by: CANT_FIX_EXCEPTION - Apache-2 is not an issue.</p>
             <td>Type</td><td>Git</td>
           </tr>
           <tr>
-            <td>URL</td><td></td>
+            <td>URL</td><td>https://github.com/heremaps/oss-review-toolkit.git</td>
           </tr>
           <tr>
             <td>Path</td><td>analyzer/src/funTest/assets/projects/synthetic/gradle/lib</td>
           </tr>
           <tr>
-            <td>Revision</td><td></td>
+            <td>Revision</td><td>master</td>
           </tr>
         </tbody>
       </table>
@@ -562,7 +571,8 @@ Resolved by: CANT_FIX_EXCEPTION - Apache-2 is not an issue.</p>
             <td><a href="#Gradle:com.here.ort.gradle.example:lib:1.0.0-pkg-1">1</a></td><td>Gradle:com.here.ort.gradle.example:lib:1.0.0</td><td></td><td><em>Detected Licenses:</em>
               <dl>
                 <dd>
-                  <div>MIT</div>
+                  <div>Apache-2.0 (multi-line) (<a href="https://github.com/heremaps/oss-review-toolkit/blob/master/analyzer/src/funTest/assets/projects/synthetic/gradle/lib/build.gradle#L19-L20">link</a> to the location)</div>
+                  <div>Apache-2.0 (single-line) (exemplary <a href="https://github.com/heremaps/oss-review-toolkit/blob/master/analyzer/src/funTest/assets/projects/synthetic/gradle/lib/build.gradle#L19">link</a> to the first of 2 locations)</div>
                 </dd>
               </dl>
             </td><td>
@@ -639,7 +649,7 @@ Resolved by: CANT_FIX_EXCEPTION - Apache-2 is not an issue.</p>
           </tr>
         </tbody>
       </table>
-      <h2 id="Gradle:com.here:nested-test-project:1.0.0">Gradle:com.here:nested-test-project:1.0.0 (sub/module/project/build.gradle)</h2>
+      <h2 id="Gradle:com.here:nested-fake-project:1.0.0">Gradle:com.here:nested-fake-project:1.0.0 (sub/module/project/build.gradle)</h2>
       <h3>Project is Excluded</h3>
       <p>The project is excluded for the following reason(s):</p>
       <p>
@@ -670,8 +680,8 @@ Resolved by: CANT_FIX_EXCEPTION - Apache-2 is not an issue.</p>
           </tr>
         </thead>
         <tbody>
-          <tr class="ort-success " id="Gradle:com.here:nested-test-project:1.0.0-pkg-1">
-            <td><a href="#Gradle:com.here:nested-test-project:1.0.0-pkg-1">1</a></td><td>Gradle:com.here:nested-test-project:1.0.0</td><td></td><td><em>Detected Licenses:</em>
+          <tr class="ort-success " id="Gradle:com.here:nested-fake-project:1.0.0-pkg-1">
+            <td><a href="#Gradle:com.here:nested-fake-project:1.0.0-pkg-1">1</a></td><td>Gradle:com.here:nested-fake-project:1.0.0</td><td></td><td><em>Detected Licenses:</em>
               <dl>
                 <dd>
                   <div>Apache-2.0</div>
