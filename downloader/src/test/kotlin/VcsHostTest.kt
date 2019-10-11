@@ -41,6 +41,20 @@ class VcsHostTest : WordSpec({
                         path = "COPYING"
                     )
         }
+
+        "be able to create permalinks from VCS information" {
+            val vcsInfo = VcsInfo(
+                type = VcsType.MERCURIAL,
+                url = "ssh://hg@bitbucket.org/paniq/masagin",
+                revision = "23349a9ba924f6341bd7f1ed907b1b413b298342",
+                path = "masagin.gpl"
+            )
+
+            BITBUCKET.toPermalink(vcsInfo, 5) shouldBe "https://bitbucket.org/paniq/masagin/" +
+                    "src/23349a9ba924f6341bd7f1ed907b1b413b298342/masagin.gpl#lines-5"
+            BITBUCKET.toPermalink(vcsInfo, 5, 8) shouldBe "https://bitbucket.org/paniq/masagin/" +
+                    "src/23349a9ba924f6341bd7f1ed907b1b413b298342/masagin.gpl#lines-5:8"
+        }
     }
 
     "GitHub" should {
@@ -55,6 +69,34 @@ class VcsHostTest : WordSpec({
                         path = "README.md"
                     )
         }
+
+        "be able to create permalinks from VCS information" {
+            val vcsInfo = VcsInfo(
+                type = VcsType.GIT,
+                url = "git@github.com:heremaps/oss-review-toolkit.git",
+                revision = "4a836c3a6a42d358362fa07b014b7d83572a13ed",
+                path = "docs/examples/gradle.ort.yml"
+            )
+
+            GITHUB.toPermalink(vcsInfo, 3) shouldBe "https://github.com/heremaps/oss-review-toolkit/" +
+                    "blob/4a836c3a6a42d358362fa07b014b7d83572a13ed/docs/examples/gradle.ort.yml#L3"
+            GITHUB.toPermalink(vcsInfo, 3, 5) shouldBe "https://github.com/heremaps/oss-review-toolkit/" +
+                    "blob/4a836c3a6a42d358362fa07b014b7d83572a13ed/docs/examples/gradle.ort.yml#L3-L5"
+        }
+
+        "be able to create permalinks to Markdown files" {
+            val vcsInfo = VcsInfo(
+                type = VcsType.GIT,
+                url = "https://github.com/heremaps/oss-review-toolkit.git",
+                revision = "da7e3a814fc0e6301bf3ed394eba1a661e4d88d7",
+                path = "README.md"
+            )
+
+            GITHUB.toPermalink(vcsInfo, 27) shouldBe "https://github.com/heremaps/oss-review-toolkit/" +
+                    "blame/da7e3a814fc0e6301bf3ed394eba1a661e4d88d7/README.md#L27"
+            GITHUB.toPermalink(vcsInfo, 27, 28) shouldBe "https://github.com/heremaps/oss-review-toolkit/" +
+                    "blame/da7e3a814fc0e6301bf3ed394eba1a661e4d88d7/README.md#L27-L28"
+        }
     }
 
     "GitLab" should {
@@ -68,6 +110,34 @@ class VcsHostTest : WordSpec({
                         revision = "ec80478f87f1941fe52f15c5f4fa7ee6a70d7006",
                         path = "NEWS.md"
                     )
+        }
+
+        "be able to create permalinks from VCS information" {
+            val vcsInfo = VcsInfo(
+                type = VcsType.GIT,
+                url = "https://gitlab.com/mbunkus/mkvtoolnix.git",
+                revision = "12542c481ff1e0abcf8d561d6741e561ef5675ca",
+                path = "autogen.sh"
+            )
+
+            GITLAB.toPermalink(vcsInfo, 7) shouldBe "https://gitlab.com/mbunkus/mkvtoolnix/" +
+                    "blob/12542c481ff1e0abcf8d561d6741e561ef5675ca/autogen.sh#L7"
+            GITLAB.toPermalink(vcsInfo, 7, 9) shouldBe "https://gitlab.com/mbunkus/mkvtoolnix/" +
+                    "blob/12542c481ff1e0abcf8d561d6741e561ef5675ca/autogen.sh#L7-9"
+        }
+
+        "be able to create permalinks to Markdown files" {
+            val vcsInfo = VcsInfo(
+                type = VcsType.GIT,
+                url = "https://gitlab.com/mbunkus/mkvtoolnix.git",
+                revision = "ec80478f87f1941fe52f15c5f4fa7ee6a70d7006",
+                path = "NEWS.md"
+            )
+
+            GITLAB.toPermalink(vcsInfo, 5) shouldBe "https://gitlab.com/mbunkus/mkvtoolnix/" +
+                    "blame/ec80478f87f1941fe52f15c5f4fa7ee6a70d7006/NEWS.md#L5"
+            GITLAB.toPermalink(vcsInfo, 5, 7) shouldBe "https://gitlab.com/mbunkus/mkvtoolnix/" +
+                    "blame/ec80478f87f1941fe52f15c5f4fa7ee6a70d7006/NEWS.md#L5-7"
         }
     }
 })
