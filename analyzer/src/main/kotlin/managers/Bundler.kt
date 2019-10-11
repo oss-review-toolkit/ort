@@ -304,7 +304,7 @@ data class GemSpec(
                 yaml["licenses"]?.asIterable()?.mapTo(sortedSetOf()) { it.textValue() } ?: sortedSetOf(),
                 yaml["description"].textValueOrEmpty(),
                 runtimeDependencies ?: emptySet(),
-                VcsHost.fromUrl(homepage)?.toVcsInfo() ?: VcsInfo.EMPTY,
+                VcsHost.toVcsInfo(homepage) ?: VcsInfo.EMPTY,
                 RemoteArtifact.EMPTY
             )
         }
