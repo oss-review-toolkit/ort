@@ -29,5 +29,5 @@ data class Curations(
      * Curations for license findings.
      */
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    val licenseFindings: List<LicenseFindingCuration>
+    val licenseFindings: List<LicenseFindingCuration> = emptyList()
 )
