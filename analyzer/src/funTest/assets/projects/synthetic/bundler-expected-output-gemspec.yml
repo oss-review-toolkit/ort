@@ -186,7 +186,7 @@ packages:
     description: "A common interface to multiple JSON libraries, including Oj, Yajl,\
       \ the JSON gem (with C-extensions), the pure-Ruby JSON gem, NSJSONSerialization,\
       \ gson.rb, JrJackson, and OkJson."
-    homepage_url: "http://github.com/intridea/multi_json"
+    homepage_url: "https://github.com/intridea/multi_json"
     binary_artifact:
       url: ""
       hash:
