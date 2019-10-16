@@ -20,7 +20,7 @@ buildWithoutContext () {
     DOCKER_IMAGE=$2
 
     # Build the image without a context to avoid it being sent to the daemon every time.
-    docker build -t $DOCKER_IMAGE - < $DOCKER_FILE
+    docker build --build-arg http_proxy=$http_proxy --build-arg https_proxy=$https_proxy -t $DOCKER_IMAGE - < $DOCKER_FILE
 }
 
 runAsUser () {
