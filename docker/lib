@@ -34,14 +34,31 @@ runAsUser () {
     docker run $DOCKER_ARGS $DOCKER_RUN_AS_USER -e http_proxy -e https_proxy -v /tmp:/tmp -v $PWD:/home/ort -w /home/ort $DOCKER_IMAGE $COMMAND
 }
 
+parseProxyToProps () {
+    PROXY=$1
+    PROTOCOL=$2
+
+    HOST=${PROXY%:*}
+    HOST=${HOST#*//}
+
+    PORT=${PROXY##*:}
+    [ "$PORT" -ge 0 ] 2>/dev/null || PORT=80
+
+    # TODO: Support proxy authentication once Gradle does, see https://github.com/gradle/gradle/issues/5052.
+    echo "-D$PROTOCOL.proxyHost=$HOST -D$PROTOCOL.proxyPort=$PORT"
+}
+
 runGradleWrapper () {
     DOCKER_IMAGE=$1
     shift
     GRADLE_ARGS=$@
 
+    [ -n "$http_proxy" ] && HTTP_PROXY_PROPERTIES=$(parseProxyToProps $http_proxy "http")
+    [ -n "$https_proxy" ] && HTTPS_PROXY_PROPERTIES=$(parseProxyToProps $https_proxy "https")
+
     # Stop any running daemon to avoid it locking the cache on the host, see https://github.com/gradle/gradle/issues/851.
-    ./gradlew --stop && \
-        runAsUser "--rm" $DOCKER_IMAGE "./gradlew --no-daemon --stacktrace $GRADLE_ARGS"
+    ./gradlew $HTTP_PROXY_PROPERTIES $HTTPS_PROXY_PROPERTIES --stop && \
+        runAsUser "--rm" $DOCKER_IMAGE "./gradlew $HTTP_PROXY_PROPERTIES $HTTPS_PROXY_PROPERTIES --no-daemon --stacktrace $GRADLE_ARGS"
 }
 
 die () {
