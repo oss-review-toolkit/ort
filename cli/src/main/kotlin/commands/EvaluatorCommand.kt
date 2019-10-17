@@ -30,6 +30,8 @@ import com.here.ort.model.OutputFormat
 import com.here.ort.model.RuleViolation
 import com.here.ort.model.Severity
 import com.here.ort.model.config.OrtConfiguration
+import com.here.ort.model.licenses.LicenseConfiguration
+import com.here.ort.model.licenses.orEmpty
 import com.here.ort.model.mapper
 import com.here.ort.model.readValue
 import com.here.ort.utils.PARAMETER_ORDER_MANDATORY
@@ -103,6 +105,14 @@ object EvaluatorCommand : CommandWithHelp() {
     )
     private var packageCurationsFile: File? = null
 
+    @Parameter(
+        description = "A file containing the license configuration. That license configuration is passed as " +
+            "parameter to the rules script.",
+        names = ["--license-configuration-file"],
+        order = PARAMETER_ORDER_OPTIONAL
+    )
+    private var licenseConfigurationFile: File? = null
+
     override fun runCommand(jc: JCommander, config: OrtConfiguration): Int {
         require((rulesFile == null) != (rulesResource == null)) {
             "Either '--rules-file' or '--rules-resource' must be specified."
@@ -128,13 +138,15 @@ object EvaluatorCommand : CommandWithHelp() {
             ortResultInput = ortResultInput.replaceConfig(it.readValue())
         }
 
+        val licenseConfiguration = licenseConfigurationFile?.expandTilde()?.readValue<LicenseConfiguration>().orEmpty()
+
         packageCurationsFile?.expandTilde()?.let {
             ortResultInput = ortResultInput.replacePackageCurations(it.readValue())
         }
 
         val script = rulesFile?.expandTilde()?.readText() ?: javaClass.classLoader.getResource(rulesResource).readText()
 
-        val evaluator = Evaluator(ortResultInput)
+        val evaluator = Evaluator(ortResultInput, licenseConfiguration)
 
         if (syntaxCheck) {
             return if (evaluator.checkSyntax(script)) 0 else 2
