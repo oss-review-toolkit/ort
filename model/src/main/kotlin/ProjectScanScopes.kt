@@ -19,6 +19,8 @@
 
 package com.here.ort.model
 
+import com.fasterxml.jackson.annotation.JsonAlias
+
 import java.util.SortedSet
 
 /**
@@ -33,13 +35,15 @@ data class ProjectScanScopes(
     /**
      * The dependencies from these [Scope]s of the [Project] were scanned.
      */
-    val scannedScopes: SortedSet<String>,
+    @JsonAlias("scanned_scopes")
+    val scanned: SortedSet<String>,
 
     /**
      * The dependencies from these [Scope]s of the [Project] were not scanned, except if they are also a dependency
      * of any of the [scannedScopes].
      */
-    val ignoredScopes: SortedSet<String>
+    @JsonAlias("ignored_scopes")
+    val ignored: SortedSet<String>
 ) : Comparable<ProjectScanScopes> {
     /**
      * A comparison function to sort project scan results by their identifier.

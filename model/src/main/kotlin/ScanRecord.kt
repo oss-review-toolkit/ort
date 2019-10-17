@@ -32,7 +32,8 @@ data class ScanRecord(
     /**
      * The scanned and ignored [Scope]s for each scanned [Project] by id.
      */
-    val scannedScopes: SortedSet<ProjectScanScopes>,
+    @JsonAlias("scanned_scopes")
+    val scopes: SortedSet<ProjectScanScopes>,
 
     /**
      * The [ScanResult]s for all [Package]s.

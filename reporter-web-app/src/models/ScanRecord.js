@@ -32,6 +32,10 @@ class ScanRecord {
         this.hasErrors = false;
 
         if (obj instanceof Object) {
+            if (obj.scopes) {
+                this.scannedScopes = obj.scopes;
+            }
+
             if (obj.scanned_scopes) {
                 this.scannedScopes = obj.scanned_scopes;
             }
