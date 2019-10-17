@@ -52,3 +52,5 @@ data class LicenseConfiguration(
         }
     }
 }
+
+fun LicenseConfiguration?.orEmpty(): LicenseConfiguration = this ?: LicenseConfiguration()

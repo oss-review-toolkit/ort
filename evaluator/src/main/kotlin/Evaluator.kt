@@ -22,15 +22,20 @@ package com.here.ort.evaluator
 import com.here.ort.model.EvaluatorRun
 import com.here.ort.model.OrtResult
 import com.here.ort.model.RuleViolation
+import com.here.ort.model.licenses.LicenseConfiguration
 import com.here.ort.utils.ScriptRunner
 
 import java.time.Instant
 
-class Evaluator(ortResult: OrtResult) : ScriptRunner() {
+class Evaluator(
+    ortResult: OrtResult,
+    licenseConfiguration: LicenseConfiguration = LicenseConfiguration()
+) : ScriptRunner() {
     override val preface = """
             import com.here.ort.evaluator.*
             import com.here.ort.model.*
             import com.here.ort.model.config.*
+            import com.here.ort.model.licenses.*
             import com.here.ort.spdx.*
             import com.here.ort.utils.*
 
@@ -48,6 +53,7 @@ class Evaluator(ortResult: OrtResult) : ScriptRunner() {
 
     init {
         engine.put("ortResult", ortResult)
+        engine.put("licenseConfiguration", licenseConfiguration)
     }
 
     override fun run(script: String): EvaluatorRun {
