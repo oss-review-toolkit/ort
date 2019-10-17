@@ -30,6 +30,10 @@ class ProjectScanScopes {
                 this.id = obj.id;
             }
 
+            if (obj.scopes) {
+                this.scannedScopes = obj.scopes;
+            }
+
             if (obj.scanned_scopes) {
                 this.scannedScopes = obj.scanned_scopes;
             }
