@@ -6889,10 +6889,10 @@
       "scanner" : null
     },
     "results" : {
-      "scanned_scopes" : [ {
+      "scopes" : [ {
         "id" : "NPM::is-windows:1.0.2",
-        "scanned_scopes" : [ "dependencies", "devDependencies" ],
-        "ignored_scopes" : [ ]
+        "scanned" : [ "dependencies", "devDependencies" ],
+        "ignored" : [ ]
       } ],
       "scan_results" : [ {
         "id" : "NPM::ansi-green:0.1.1",

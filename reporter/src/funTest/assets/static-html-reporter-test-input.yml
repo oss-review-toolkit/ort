@@ -231,12 +231,12 @@ scanner:
     postgres_storage: null
     scanner: null
   results:
-    scanned_scopes:
+    scopes:
     - id: "Gradle:com.here.ort.gradle.example:lib:1.0.0"
-      scanned_scopes:
+      scanned:
       - "compile"
       - "testCompile"
-      ignored_scopes: []
+      ignored: []
     scan_results:
     - id: "Gradle:com.here.ort.gradle.example:lib:1.0.0"
       results:
