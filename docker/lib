@@ -40,7 +40,7 @@ runAsUser () {
     docker run $DOCKER_ARGS $DOCKER_RUN_AS_USER $HTTP_PROXY_ENV $HTTPS_PROXY_ENV -v /tmp:/tmp -v $PWD:/home/ort -w /home/ort $DOCKER_IMAGE $COMMAND
 }
 
-parseProxyToProps () {
+parseProxyStringToJavaProps () {
     PROXY=$1
     PROTOCOL=$2
 
@@ -54,13 +54,17 @@ parseProxyToProps () {
     echo "-D$PROTOCOL.proxyHost=$HOST -D$PROTOCOL.proxyPort=$PORT"
 }
 
+parseProxyEnvToJavaProps () {
+    [ -n "$http_proxy" ] && HTTP_PROXY_PROPERTIES=$(parseProxyStringToJavaProps $http_proxy "http")
+    [ -n "$https_proxy" ] && HTTPS_PROXY_PROPERTIES=$(parseProxyStringToJavaProps $https_proxy "https")
+}
+
 runGradleWrapper () {
     DOCKER_IMAGE=$1
     shift
     GRADLE_ARGS=$@
 
-    [ -n "$http_proxy" ] && HTTP_PROXY_PROPERTIES=$(parseProxyToProps $http_proxy "http")
-    [ -n "$https_proxy" ] && HTTPS_PROXY_PROPERTIES=$(parseProxyToProps $https_proxy "https")
+    parseProxyEnvToJavaProps
 
     # Stop any running daemon to avoid it locking the cache on the host, see https://github.com/gradle/gradle/issues/851.
     ./gradlew $HTTP_PROXY_PROPERTIES $HTTPS_PROXY_PROPERTIES --stop && \
