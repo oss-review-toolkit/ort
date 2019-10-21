@@ -377,7 +377,7 @@ data class OrtResult(
     }
 
     /**
-     * True if the given [project] is excluded.
+     * True if the given [Project] is excluded.
      */
     fun isProjectExcluded(id: Identifier): Boolean = projects[id]?.isExcluded ?: false
 
@@ -388,7 +388,7 @@ data class OrtResult(
         copy(repository = repository.copy(config = config)).also { it.data += data }
 
     /**
-     * Return a copy of this [OrtResult] with the [PackageCurations]s replaced by the given [curations].
+     * Return a copy of this [OrtResult] with the [PackageCuration]s replaced by the given [curations].
      */
     fun replacePackageCurations(curations: List<PackageCuration>): OrtResult =
         copy(
@@ -437,7 +437,7 @@ data class OrtResult(
         }
 
     /**
-     * Return the [Resolution]s contained in the repository configuration of this [OrtResult].
+     * Return the [Resolutions] contained in the repository configuration of this [OrtResult].
      */
     @JsonIgnore
     fun getResolutions(): Resolutions = repository.config.resolutions.orEmpty()
