@@ -17,7 +17,7 @@
  * License-Filename: LICENSE
  */
 
-package com.here.ort.model.util
+package com.here.ort.model.utils
 
 import com.here.ort.model.LicenseFinding
 import com.here.ort.model.config.LicenseFindingCuration

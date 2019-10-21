@@ -43,7 +43,7 @@ import com.here.ort.model.config.RepositoryConfiguration
 import com.here.ort.model.config.Resolutions
 import com.here.ort.model.config.RuleViolationResolution
 import com.here.ort.model.config.ScopeExclude
-import com.here.ort.model.util.FindingCurationMatcher
+import com.here.ort.model.utils.FindingCurationMatcher
 import com.here.ort.model.yamlMapper
 import com.here.ort.utils.safeMkdirs
 import com.here.ort.utils.OkHttpClientHelper

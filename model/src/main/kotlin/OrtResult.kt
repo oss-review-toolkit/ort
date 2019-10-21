@@ -28,8 +28,8 @@ import com.here.ort.model.config.PathExclude
 import com.here.ort.model.config.RepositoryConfiguration
 import com.here.ort.model.config.Resolutions
 import com.here.ort.model.config.orEmpty
-import com.here.ort.model.util.FindingCurationMatcher
-import com.here.ort.model.util.FindingsMatcher
+import com.here.ort.model.utils.FindingCurationMatcher
+import com.here.ort.model.utils.FindingsMatcher
 import com.here.ort.spdx.SpdxExpression
 import com.here.ort.utils.log
 import com.here.ort.utils.zipWithDefault
