@@ -317,7 +317,7 @@ data class OrtResult(
             ?: getProject(id)?.toPackage()
 
     /**
-     * Returns the path of the definition file of the [project], relative to the analyzer root. If the project was
+     * Return the path of the definition file of the [project], relative to the analyzer root. If the project was
      * checked out from a VCS the analyzer root is the root of the working tree, if the project was not checked out from
      * a VCS the analyzer root is the input directory of the analyzer.
      */
@@ -325,7 +325,7 @@ data class OrtResult(
         getFilePathRelativeToAnalyzerRoot(project, project.definitionFilePath)
 
     /**
-     * Returns the path of a file contained in [project], relative to the analyzer root. If the project was checked out
+     * Return the path of a file contained in [project], relative to the analyzer root. If the project was checked out
      * from a VCS the analyzer root is the root of the working tree, if the project was not checked out from a VCS the
      * analyzer root is the input directory of the analyzer.
      */

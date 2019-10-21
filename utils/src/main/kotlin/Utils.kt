@@ -290,7 +290,7 @@ fun <R> temporaryProperties(vararg properties: Pair<String, String?>, block: () 
 
 /**
  * Trap a system exit call in [block]. This is useful e.g. when calling the Main class of a command line tool
- * programmatically. Returns the exit code or null if no system exit call was trapped.
+ * programmatically. Return the exit code or null if no system exit call was trapped.
  */
 fun trapSystemExitCall(block: () -> Unit): Int? {
     // Define a custom security exception which we can catch in order to ignore it.
