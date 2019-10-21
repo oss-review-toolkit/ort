@@ -20,25 +20,8 @@
 package com.here.ort.spdx
 
 import java.io.File
-import java.nio.file.FileSystems
 import java.security.MessageDigest
 import java.util.EnumSet
-
-/**
- * A list of globs that match typical license file names.
- */
-val LICENSE_FILE_NAMES = listOf(
-    "license*",
-    "licence*",
-    "unlicense",
-    "unlicence",
-    "copying*",
-    "copyright",
-    "patents",
-    "readme*"
-).flatMap { listOf(it, it.toUpperCase(), it.capitalize()) }
-
-val LICENSE_FILE_MATCHERS = LICENSE_FILE_NAMES.map { FileSystems.getDefault().getPathMatcher("glob:$it") }
 
 /**
  * A list of globs that match file names which are not license files but typically trigger false-positives.
