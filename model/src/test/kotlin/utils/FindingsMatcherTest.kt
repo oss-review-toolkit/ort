@@ -23,8 +23,7 @@ import com.here.ort.model.CopyrightFinding
 import com.here.ort.model.LicenseFinding
 import com.here.ort.model.LicenseFindings
 import com.here.ort.model.TextLocation
-import com.here.ort.model.util.FindingsMatcher
-import com.here.ort.model.util.FindingsMatcher.Companion.DEFAULT_TOLERANCE_LINES
+import com.here.ort.model.utils.FindingsMatcher.Companion.DEFAULT_TOLERANCE_LINES
 import com.here.ort.spdx.LicenseFileMatcher
 
 import io.kotlintest.matchers.beEmpty

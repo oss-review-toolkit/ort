@@ -23,7 +23,6 @@ import com.here.ort.model.LicenseFinding
 import com.here.ort.model.TextLocation
 import com.here.ort.model.config.LicenseFindingCuration
 import com.here.ort.model.config.LicenseFindingCurationReason.INCORRECT
-import com.here.ort.model.util.FindingCurationMatcher
 
 import io.kotlintest.matchers.collections.shouldContainExactlyInAnyOrder
 import io.kotlintest.shouldBe
