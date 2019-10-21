@@ -90,7 +90,7 @@ internal class ListLicensesCommand : CommandWithHelp() {
         names = ["--ignore-excluded-rule-ids"],
         required = false,
         order = PARAMETER_ORDER_OPTIONAL,
-        description = "A comma separate list of rule names for which --omit-excluded should not have any effect."
+        description = "A comma separated list of rule names for which --omit-excluded should not have any effect."
     )
     private var ignoreExcludedRuleIds: List<String> = emptyList()
 
