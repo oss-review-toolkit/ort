@@ -180,11 +180,13 @@ class Analyzer(private val config: AnalyzerConfiguration) {
         return analyzerResultBuilder.build()
     }
 
-    private fun locateRepositoryConfigurationFile(absoluteProjectPath: File) =
-        if (GitRepo().getWorkingTree(absoluteProjectPath).isValid()) {
-            val manifestFile = absoluteProjectPath.resolve(".repo/manifest.xml").realFile()
-            manifestFile.resolveSibling("${manifestFile.name}$ORT_CONFIG_FILENAME")
-        } else {
-            File(absoluteProjectPath, ORT_CONFIG_FILENAME)
+    private fun locateRepositoryConfigurationFile(absoluteProjectPath: File): File =
+        GitRepo().getWorkingTree(absoluteProjectPath).let { workingTree ->
+            if (workingTree.isValid() && workingTree.getRootPath() == absoluteProjectPath) {
+                val manifestFile = absoluteProjectPath.resolve(".repo/manifest.xml").realFile()
+                manifestFile.resolveSibling("${manifestFile.name}$ORT_CONFIG_FILENAME")
+            } else {
+                File(absoluteProjectPath, ORT_CONFIG_FILENAME)
+            }
         }
 }
