@@ -43,8 +43,7 @@ data class CuratedPackage(
     override fun compareTo(other: CuratedPackage) = pkg.id.compareTo(other.pkg.id)
 
     /**
-     * Returns a [Package] representing the same package as this one but which does not have any curations
-     * applied.
+     * Return a [Package] representing the same package as this one but which does not have any curations applied.
      */
     fun toUncuratedPackage() =
         curations.reversed().fold(this) { current, curation ->
