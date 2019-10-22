@@ -17,15 +17,15 @@
  * License-Filename: LICENSE
  */
 
-package com.here.ort.spdx
+package com.here.ort.utils
 
 import io.kotlintest.shouldBe
 import io.kotlintest.specs.WordSpec
 
-class LicenseFileMatcherTest : WordSpec({
-    val defaultMatcher = LicenseFileMatcher.DEFAULT_MATCHER
+class FileMatcherTest : WordSpec({
+    val defaultMatcher = FileMatcher.LICENSE_FILE_MATCHER
 
-    "default matcher" should {
+    "default license file matcher" should {
         "match commonly used license file paths" {
             defaultMatcher.matches("LICENSE") shouldBe true
             defaultMatcher.matches("LICENSE.BSD") shouldBe true
@@ -35,7 +35,7 @@ class LicenseFileMatcherTest : WordSpec({
 
     "matches" should {
         "match the given patterns" {
-            val matcher = LicenseFileMatcher("a/LICENSE", "b/LICENSE")
+            val matcher = FileMatcher("a/LICENSE", "b/LICENSE")
 
             matcher.matches("a/LICENSE") shouldBe true
             matcher.matches("b/LICENSE") shouldBe true
