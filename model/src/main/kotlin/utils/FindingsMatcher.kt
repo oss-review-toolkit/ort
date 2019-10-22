@@ -23,7 +23,7 @@ import com.here.ort.model.CopyrightFinding
 import com.here.ort.model.CopyrightFindings
 import com.here.ort.model.LicenseFinding
 import com.here.ort.model.LicenseFindings
-import com.here.ort.spdx.LicenseFileMatcher
+import com.here.ort.utils.FileMatcher
 
 import java.util.SortedSet
 
@@ -35,7 +35,7 @@ import kotlin.math.absoluteValue
  * [licenseFileMatcher] determines whether a file is a license file.
  */
 class FindingsMatcher(
-    private val licenseFileMatcher: LicenseFileMatcher = LicenseFileMatcher.DEFAULT_MATCHER,
+    private val licenseFileMatcher: FileMatcher = FileMatcher.LICENSE_FILE_MATCHER,
     private val toleranceLines: Int = DEFAULT_TOLERANCE_LINES
 ) {
     companion object {
@@ -126,7 +126,7 @@ class FindingsMatcher(
      * Return an association of the given [copyrightFindings] to [licenseFindings].
      * Copyright findings are either matched to a license finding located nearby in the same file or to a license
      * finding pointing to a license file. Whether a file is a license file is determined by the
-     * [LicenseFileMatcher] passed to the constructor. All [CopyrightFindings]s which cannot be matched are not present
+     * [FileMatcher] passed to the constructor. All [CopyrightFindings]s which cannot be matched are not present
      * in the result while all given [licenseFindings] are contained in the result exactly once.
      */
     fun match(licenseFindings: Collection<LicenseFinding>, copyrightFindings: Collection<CopyrightFinding>):

@@ -24,7 +24,7 @@ import com.here.ort.model.LicenseFinding
 import com.here.ort.model.LicenseFindings
 import com.here.ort.model.TextLocation
 import com.here.ort.model.utils.FindingsMatcher.Companion.DEFAULT_TOLERANCE_LINES
-import com.here.ort.spdx.LicenseFileMatcher
+import com.here.ort.utils.FileMatcher
 
 import io.kotlintest.matchers.beEmpty
 import io.kotlintest.matchers.collections.shouldContainExactlyInAnyOrder
@@ -37,7 +37,7 @@ import kotlin.random.Random
 private fun Collection<LicenseFindings>.getFindings(license: String) = single { it.license == license }
 
 class FindingsMatcherTest : WordSpec() {
-    private val matcher = FindingsMatcher(LicenseFileMatcher("a/LICENSE"))
+    private val matcher = FindingsMatcher(FileMatcher("a/LICENSE"))
     private val licenseFindings = mutableListOf<LicenseFinding>()
     private val copyrightFindings = mutableListOf<CopyrightFinding>()
 
@@ -104,7 +104,7 @@ class FindingsMatcherTest : WordSpec() {
 
                 setupCopyrightFinding(statement = "some stmt", path = "some/file")
 
-                val result = FindingsMatcher(LicenseFileMatcher("a/LICENSE", "b/LICENSE"))
+                val result = FindingsMatcher(FileMatcher("a/LICENSE", "b/LICENSE"))
                     .match(licenseFindings, copyrightFindings)
 
                 result.size shouldBe 3

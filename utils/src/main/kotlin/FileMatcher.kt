@@ -17,50 +17,47 @@
  * License-Filename: LICENSE
  */
 
-package com.here.ort.spdx
+package com.here.ort.utils
 
 import java.nio.file.FileSystems
 import java.nio.file.InvalidPathException
 import java.nio.file.Paths
 
 /**
- * A class to determine whether a path resolves to a license file.
+ * A class to determine whether a path is matched by any of the given globs.
  */
-class LicenseFileMatcher(
+class FileMatcher(
     /**
-     * The list of [license files names][licenseFileNames] to consider for matching.
+     * The list of file names to consider for matching.
      */
-    licenseFileNames: List<String>
+    val fileNames: List<String>
 ) {
     companion object {
         /**
-         * A default list of names which are commonly used for license files.
-         */
-        val DEFAULT_NAMES = listOf(
-            "license*",
-            "licence*",
-            "unlicense",
-            "unlicence",
-            "copying*",
-            "copyright",
-            "patents",
-            "readme*"
-        ).flatMap { listOf(it, it.toUpperCase(), it.capitalize()) }
-
-        /**
          * A matcher which uses the default license file names.
          */
-        val DEFAULT_MATCHER = LicenseFileMatcher(DEFAULT_NAMES)
+        val LICENSE_FILE_MATCHER = FileMatcher(
+            listOf(
+                "license*",
+                "licence*",
+                "unlicense",
+                "unlicence",
+                "copying*",
+                "copyright",
+                "patents",
+                "readme*"
+            ).flatMap { listOf(it, it.toUpperCase(), it.capitalize()) }
+        )
     }
 
     constructor(vararg licenseFileNames: String) : this(licenseFileNames.toList())
 
-    private val matchers = licenseFileNames.map {
+    private val matchers = fileNames.map {
         FileSystems.getDefault().getPathMatcher("glob:$it")
     }
 
     /**
-     * Return true if and only if the given [path] is matched by any of the license file globs passed to the
+     * Return true if and only if the given [path] is matched by any of the file globs passed to the
      * constructor.
      */
     fun matches(path: String): Boolean =
