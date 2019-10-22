@@ -30,7 +30,7 @@ class FileMatcher(
     /**
      * The list of file names to consider for matching.
      */
-    val fileNames: List<String>
+    val filenames: List<String>
 ) {
     companion object {
         /**
@@ -52,7 +52,7 @@ class FileMatcher(
 
     constructor(vararg licenseFileNames: String) : this(licenseFileNames.toList())
 
-    private val matchers = fileNames.map {
+    private val matchers = filenames.map {
         FileSystems.getDefault().getPathMatcher("glob:$it")
     }
 
