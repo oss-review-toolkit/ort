@@ -100,17 +100,17 @@ class Pub(
             return getPathFromEnvironment(flutterCommand)?.parentFile?.parentFile
         }
 
-        fun findFile(packageInfo: JsonNode, fileName: String): File? {
+        fun findFile(packageInfo: JsonNode, filename: String): File? {
             val artifactRootDir = findProjectRoot(packageInfo) ?: return null
 
             // Try to locate the file directly.
-            val file = File(artifactRootDir, fileName)
+            val file = File(artifactRootDir, filename)
             if (file.isFile) return file
 
             // Search the directory tree for the file.
             return artifactRootDir
                 .walkTopDown()
-                .find { it.isFile && it.name == fileName }
+                .find { it.isFile && it.name == filename }
         }
 
         fun findProjectRoot(packageInfo: JsonNode): File? {

@@ -60,13 +60,13 @@ fun File.unpack(targetDirectory: File) {
 }
 
 /**
- * Unpack the [InputStream] to [targetDirectory]. The compression scheme is guessed from the [fileName].
+ * Unpack the [InputStream] to [targetDirectory]. The compression scheme is guessed from the [filename].
  */
-fun InputStream.unpack(fileName: String, targetDirectory: File) {
-    val lowerName = fileName.toLowerCase()
+fun InputStream.unpack(filename: String, targetDirectory: File) {
+    val lowerName = filename.toLowerCase()
     when {
         UNCOMPRESSED_EXTENSIONS.any { lowerName.endsWith(it) } -> {
-            use { File(targetDirectory, fileName).outputStream().use { copyTo(it) } }
+            use { File(targetDirectory, filename).outputStream().use { copyTo(it) } }
         }
 
         TAR_BZIP2_EXTENSIONS.any { lowerName.endsWith(it) } -> {
@@ -82,7 +82,7 @@ fun InputStream.unpack(fileName: String, targetDirectory: File) {
         ZIP_EXTENSIONS.any { lowerName.endsWith(it) } -> unpackZip(targetDirectory)
 
         else -> {
-            throw IOException("Unable to guess compression scheme from file name '$fileName'.")
+            throw IOException("Unable to guess compression scheme from file name '$filename'.")
         }
     }
 }

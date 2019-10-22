@@ -121,7 +121,7 @@ class Mercurial : VersionControlSystem(), CommandLineTool {
             log.info { "Configuring Mercurial to do sparse checkout of path '${vcs.path}'." }
             run(
                 targetDir, "debugsparse", "-I", "${vcs.path}/**",
-                *FileMatcher.LICENSE_FILE_MATCHER.fileNames.flatMap { listOf("-I", it) }.toTypedArray()
+                *FileMatcher.LICENSE_FILE_MATCHER.filenames.flatMap { listOf("-I", it) }.toTypedArray()
             )
         }
 
