@@ -34,7 +34,7 @@ import com.here.ort.model.OrtResult
 import com.here.ort.model.config.LicenseFindingCuration
 import com.here.ort.model.config.RepositoryConfiguration
 import com.here.ort.model.readValue
-import com.here.ort.model.util.FindingCurationMatcher
+import com.here.ort.model.utils.FindingCurationMatcher
 import com.here.ort.utils.PARAMETER_ORDER_MANDATORY
 import com.here.ort.utils.PARAMETER_ORDER_OPTIONAL
 
