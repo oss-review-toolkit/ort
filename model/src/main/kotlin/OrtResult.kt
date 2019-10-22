@@ -377,7 +377,7 @@ data class OrtResult(
     }
 
     /**
-     * True if the given [Project] is excluded.
+     * True if the [Project] with the given [id] is excluded.
      */
     fun isProjectExcluded(id: Identifier): Boolean = projects[id]?.isExcluded ?: false
 
