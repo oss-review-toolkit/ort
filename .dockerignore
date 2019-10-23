@@ -3,6 +3,10 @@
 .dockerignore
 Dockerfile
 
+# Ignore the Jenkinsfile to avoid that all layers are invalidated if the
+# Jenkinsfile is changed during development.
+Jenkinsfile
+
 # Ignore the Git directory.
 .git/
 
