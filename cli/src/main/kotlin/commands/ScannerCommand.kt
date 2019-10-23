@@ -60,7 +60,7 @@ object ScannerCommand : CommandWithHelp() {
     @Parameter(
         description = "An ORT result file with an analyzer result to use. Source code will be downloaded " +
                 "automatically if needed. This parameter and '--input-path' are mutually exclusive.",
-        names = ["--ort-file", "-a"],
+        names = ["--ort-file", "-i"],
         order = PARAMETER_ORDER_OPTIONAL
     )
     private var ortFile: File? = null
@@ -68,7 +68,7 @@ object ScannerCommand : CommandWithHelp() {
     @Parameter(
         description = "An input directory or file to scan. This parameter and '--ort-file' are mutually " +
                 "exclusive.",
-        names = ["--input-path", "-i"],
+        names = ["--input-path", "-p"],
         order = PARAMETER_ORDER_OPTIONAL
     )
     private var inputPath: File? = null

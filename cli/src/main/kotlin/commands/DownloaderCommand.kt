@@ -51,7 +51,7 @@ object DownloaderCommand : CommandWithHelp() {
     @Parameter(
         description = "An ORT result file with an analyzer result to use. Must not be used together with " +
                 "'--project-url'.",
-        names = ["--ort-file", "-a"],
+        names = ["--ort-file", "-i"],
         order = PARAMETER_ORDER_OPTIONAL
     )
     private var ortFile: File? = null
