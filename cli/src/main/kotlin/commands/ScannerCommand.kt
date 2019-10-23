@@ -117,7 +117,7 @@ object ScannerCommand : CommandWithHelp() {
         val config = scannerConfiguration ?: ScannerConfiguration()
 
         // By default use a file based scan results storage.
-        val localFileStorage = LocalFileStorage(getUserOrtDirectory().resolve(TOOL_NAME))
+        val localFileStorage = LocalFileStorage(getUserOrtDirectory().resolve("$TOOL_NAME/results"))
         val fileBasedStorage = FileBasedStorage(localFileStorage)
         ScanResultsStorage.storage = fileBasedStorage
 
