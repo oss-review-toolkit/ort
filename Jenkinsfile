@@ -77,7 +77,7 @@ pipeline {
 
         stage('Run ORT scanner') {
             steps {
-                sh 'docker/run.sh "-v $WORKSPACE/project:/project" $LOG_LEVEL scan -f JSON,YAML -a /project/ort/analyzer/analyzer-result.yml -o /project/ort/scanner'
+                sh 'docker/run.sh "-v $WORKSPACE/project:/project" $LOG_LEVEL scan -f JSON,YAML -i /project/ort/analyzer/analyzer-result.yml -o /project/ort/scanner'
             }
 
             post {
