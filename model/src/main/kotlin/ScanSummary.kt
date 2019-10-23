@@ -60,6 +60,13 @@ data class ScanSummary(
     val fileCount: Int,
 
     /**
+     * The [SPDX package verification code](https://spdx.org/spdx_specification_2_0_html#h.2p2csry), calculated from
+     * all files in the package. Note that if the scanner is configured to ignore certain files they will still be
+     * included in the calculation of this code.
+     */
+    val packageVerificationCode: String,
+
+    /**
      * The license findings.
      */
     @JsonProperty("licenses")
@@ -103,10 +110,13 @@ class ScanSummaryDeserializer : StdDeserializer<ScanSummary>(OrtIssue::class.jav
         val licenseFindings = node.readValues("licenses", LicenseFinding::class)
         val copyrightFindings = node.readValues("copyrights", CopyrightFinding::class)
 
+        // TODO: Remove the fallback value for packageVerification code once any ORT feature depends on its existence,
+        //       as it is only there for backward compatibility.
         return ScanSummary(
             startTime = node.readValue("start_time")!!,
             endTime = node.readValue("end_time")!!,
             fileCount = node.readValue("file_count")!!,
+            packageVerificationCode = node.readValue<String>("package_verification_code").orEmpty(),
             licenseFindings = (licenseFindings + legacyLicenseFindings).toSortedSet(),
             copyrightFindings = (copyrightFindings + legacyCopyrightFindings).toSortedSet(),
             errors = node.readValues("errors", OrtIssue::class)

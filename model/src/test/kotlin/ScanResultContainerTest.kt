@@ -63,6 +63,7 @@ class ScanResultContainerTest : WordSpec() {
         scannerStartTime1,
         scannerEndTime1,
         1,
+        "packageVerificationCode",
         sortedSetOf(
             LicenseFinding(
                 "license 1.1",
@@ -89,6 +90,7 @@ class ScanResultContainerTest : WordSpec() {
         scannerStartTime2,
         scannerEndTime2,
         2,
+        "packageVerificationCode",
         sortedSetOf(
             LicenseFinding(
                 "license 2.1",

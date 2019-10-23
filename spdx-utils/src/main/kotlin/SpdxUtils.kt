@@ -37,9 +37,9 @@ val NON_LICENSE_FILENAMES = listOf(
 private fun ByteArray.toHexString(): String = joinToString("") { String.format("%02x", it) }
 
 /**
- * Calculate the [SPDX package verification code][1] for a list of known SHA1s of files.
+ * Calculate the [SPDX package verification code][1] for a list of [known SHA1s][sha1sums] of files.
  *
- * [1]: https://spdx.github.io/spdx-spec/chapters/3-package-information.html#39-package-verification-code-
+ * [1]: https://spdx.org/spdx_specification_2_0_html#h.2p2csry
  */
 @JvmName("calculatePackageVerificationCodeForStrings")
 fun calculatePackageVerificationCode(sha1sums: List<String>): String =
@@ -48,9 +48,9 @@ fun calculatePackageVerificationCode(sha1sums: List<String>): String =
     }.digest().toHexString()
 
 /**
- * Calculate the [SPDX package verification code][1] for a list of files.
+ * Calculate the [SPDX package verification code][1] for a list of [files].
  *
- * [1]: https://spdx.github.io/spdx-spec/chapters/3-package-information.html#39-package-verification-code-
+ * [1]: https://spdx.org/spdx_specification_2_0_html#h.2p2csry
  */
 @JvmName("calculatePackageVerificationCodeForFiles")
 fun calculatePackageVerificationCode(files: List<File>) =
@@ -59,6 +59,16 @@ fun calculatePackageVerificationCode(files: List<File>) =
             file.inputStream().use { digest.digest(it.readBytes()).toHexString() }
         })
     }
+
+/**
+ * Calculate the [SPDX package verification code][1] for all files in a [directory]. If [directory] points to a file
+ * instead of a directory the verification code for the single file is returned.
+ *
+ * [1]: https://spdx.org/spdx_specification_2_0_html#h.2p2csry
+ */
+@JvmName("calculatePackageVerificationCodeForDirectory")
+fun calculatePackageVerificationCode(directory: File) =
+    calculatePackageVerificationCode(directory.walkTopDown().filter { it.isFile }.toList())
 
 /**
  * A Kotlin-style convenience function to replace EnumSet.of() and EnumSet.noneOf().

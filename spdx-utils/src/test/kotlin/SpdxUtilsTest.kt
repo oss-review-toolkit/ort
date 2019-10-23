@@ -92,6 +92,21 @@ class SpdxUtilsTest : WordSpec() {
 
                 calculatePackageVerificationCode(files) shouldBe "378d5a37b5b10b90535e32a190014d2a8d25354a"
             }
+
+            "work for a given file" {
+                val file = setupTempFile("file", "file")
+
+                calculatePackageVerificationCode(file) shouldBe "81e250a78cc6386afc25fa57ad6eaee31394019b"
+            }
+
+            "work for a given directory" {
+                setupTempFile("fileA", "fileA")
+                setupTempFile("fileB", "fileB")
+                tempDir!!.resolve("dir").mkdir()
+                setupTempFile("dir/fileC", "fileC")
+
+                calculatePackageVerificationCode(tempDir!!) shouldBe "15d3fa138d9302ec9a1584180b5eba0d342b60fa"
+            }
         }
 
         "getLicenseText" should {

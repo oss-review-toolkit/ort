@@ -33,6 +33,7 @@ import com.here.ort.scanner.AbstractScannerFactory
 import com.here.ort.scanner.HTTP_CACHE_PATH
 import com.here.ort.scanner.LocalScanner
 import com.here.ort.scanner.ScanException
+import com.here.ort.spdx.calculatePackageVerificationCode
 import com.here.ort.utils.CommandLineTool
 import com.here.ort.utils.Os
 import com.here.ort.utils.OkHttpClientHelper
@@ -169,6 +170,7 @@ class Askalono(name: String, config: ScannerConfiguration) : LocalScanner(name, 
             startTime = startTime,
             endTime = endTime,
             fileCount = result.size(),
+            packageVerificationCode = calculatePackageVerificationCode(scanPath),
             licenseFindings = licenseFindings,
             copyrightFindings = sortedSetOf(),
             errors = mutableListOf()

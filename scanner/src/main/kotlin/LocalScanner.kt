@@ -231,6 +231,7 @@ abstract class LocalScanner(name: String, config: ScannerConfiguration) : Scanne
                                         startTime = now,
                                         endTime = now,
                                         fileCount = 0,
+                                        packageVerificationCode = "",
                                         licenseFindings = sortedSetOf(),
                                         copyrightFindings = sortedSetOf(),
                                         errors = listOf(
@@ -311,6 +312,7 @@ abstract class LocalScanner(name: String, config: ScannerConfiguration) : Scanne
                     startTime = now,
                     endTime = now,
                     fileCount = 0,
+                    packageVerificationCode = "",
                     licenseFindings = sortedSetOf(),
                     copyrightFindings = sortedSetOf(),
                     errors = listOf(OrtIssue(source = scannerName, message = e.collectMessagesAsString()))
@@ -387,6 +389,7 @@ abstract class LocalScanner(name: String, config: ScannerConfiguration) : Scanne
                 startTime = now,
                 endTime = now,
                 fileCount = 0,
+                packageVerificationCode = "",
                 licenseFindings = sortedSetOf(),
                 copyrightFindings = sortedSetOf(),
                 errors = listOf(OrtIssue(source = scannerName, message = e.collectMessagesAsString()))

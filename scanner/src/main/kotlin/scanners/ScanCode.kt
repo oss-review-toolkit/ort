@@ -39,6 +39,7 @@ import com.here.ort.scanner.ScanException
 import com.here.ort.scanner.ScanResultsStorage
 import com.here.ort.spdx.NON_LICENSE_FILENAMES
 import com.here.ort.spdx.SpdxLicense
+import com.here.ort.spdx.calculatePackageVerificationCode
 import com.here.ort.utils.CommandLineTool
 import com.here.ort.utils.ORT_CONFIG_FILENAME
 import com.here.ort.utils.Os
@@ -324,7 +325,7 @@ class ScanCode(
         }
 
         val result = getRawResult(resultsFile)
-        val summary = generateSummary(startTime, endTime, result)
+        val summary = generateSummary(startTime, endTime, path, result)
 
         val errors = summary.errors.toMutableList()
 
@@ -359,11 +360,12 @@ class ScanCode(
         return result["files_count"]?.intValue() ?: 0
     }
 
-    internal fun generateSummary(startTime: Instant, endTime: Instant, result: JsonNode) =
+    internal fun generateSummary(startTime: Instant, endTime: Instant, scanPath: File, result: JsonNode) =
         ScanSummary(
             startTime = startTime,
             endTime = endTime,
             fileCount = getFileCount(result),
+            packageVerificationCode = calculatePackageVerificationCode(scanPath),
             licenseFindings = getLicenseFindings(result).toSortedSet(),
             copyrightFindings = getCopyrightFindings(result).toSortedSet(),
             errors = getErrors(result)

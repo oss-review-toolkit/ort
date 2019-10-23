@@ -32,6 +32,7 @@ import com.here.ort.model.jsonMapper
 import com.here.ort.scanner.AbstractScannerFactory
 import com.here.ort.scanner.LocalScanner
 import com.here.ort.scanner.ScanException
+import com.here.ort.spdx.calculatePackageVerificationCode
 import com.here.ort.utils.Ci
 import com.here.ort.utils.CommandLineTool
 import com.here.ort.utils.Os
@@ -148,6 +149,7 @@ class Licensee(name: String, config: ScannerConfiguration) : LocalScanner(name, 
             startTime = startTime,
             endTime = endTime,
             fileCount = matchedFiles.count(),
+            packageVerificationCode = calculatePackageVerificationCode(scanPath),
             licenseFindings = licenseFindings,
             copyrightFindings = sortedSetOf(),
             errors = mutableListOf()

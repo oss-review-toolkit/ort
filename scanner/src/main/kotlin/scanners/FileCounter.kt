@@ -29,6 +29,7 @@ import com.here.ort.model.config.ScannerConfiguration
 import com.here.ort.model.jsonMapper
 import com.here.ort.scanner.AbstractScannerFactory
 import com.here.ort.scanner.LocalScanner
+import com.here.ort.spdx.calculatePackageVerificationCode
 
 import java.io.File
 import java.time.Instant
@@ -64,7 +65,7 @@ class FileCounter(name: String, config: ScannerConfiguration) : LocalScanner(nam
         val endTime = Instant.now()
 
         val result = getRawResult(resultsFile)
-        val summary = generateSummary(startTime, endTime, result)
+        val summary = generateSummary(startTime, endTime, path, result)
         return ScanResult(Provenance(), getDetails(), summary, result)
     }
 
@@ -75,12 +76,13 @@ class FileCounter(name: String, config: ScannerConfiguration) : LocalScanner(nam
             EMPTY_JSON_NODE
         }
 
-    private fun generateSummary(startTime: Instant, endTime: Instant, result: JsonNode): ScanSummary {
+    private fun generateSummary(startTime: Instant, endTime: Instant, scanPath: File, result: JsonNode): ScanSummary {
         val fileCount = result["file_count"].intValue()
         return ScanSummary(
             startTime = startTime,
             endTime = endTime,
             fileCount = fileCount,
+            packageVerificationCode = calculatePackageVerificationCode(scanPath),
             licenseFindings = sortedSetOf(),
             copyrightFindings = sortedSetOf(),
             errors = mutableListOf()
