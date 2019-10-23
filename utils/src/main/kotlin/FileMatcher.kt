@@ -40,6 +40,7 @@ class FileMatcher(
             listOf(
                 "license*",
                 "licence*",
+                "*.license",
                 "unlicense",
                 "unlicence",
                 "copying*",
