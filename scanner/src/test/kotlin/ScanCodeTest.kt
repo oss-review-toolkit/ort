@@ -43,9 +43,10 @@ class ScanCodeTest : WordSpec({
         "be correctly summarized" {
             val resultFile = File("src/test/assets/mime-types-2.1.18_scancode-2.9.7.json")
             val result = scanner.getRawResult(resultFile)
-            val summary = scanner.generateSummary(Instant.now(), Instant.now(), result)
+            val summary = scanner.generateSummary(Instant.now(), Instant.now(), resultFile, result)
 
             summary.fileCount shouldBe 10
+            summary.packageVerificationCode shouldBe "9e3fdffc51568b300a457228055f8dc8a99fc64b"
         }
     }
 
@@ -53,9 +54,10 @@ class ScanCodeTest : WordSpec({
         "be correctly summarized" {
             val resultFile = File("src/test/assets/mime-types-2.1.18_scancode-3.0.2.json")
             val result = scanner.getRawResult(resultFile)
-            val summary = scanner.generateSummary(Instant.now(), Instant.now(), result)
+            val summary = scanner.generateSummary(Instant.now(), Instant.now(), resultFile, result)
 
             summary.fileCount shouldBe 10
+            summary.packageVerificationCode shouldBe "8ec22f05b1a7006ae667901ae0853beff197c576"
         }
     }
 
@@ -63,7 +65,7 @@ class ScanCodeTest : WordSpec({
         "return true for scan results with only timeout errors" {
             val resultFile = File("src/test/assets/esprima-2.7.3_scancode-2.2.1.post277.4d68f9377.json")
             val result = scanner.getRawResult(resultFile)
-            val summary = scanner.generateSummary(Instant.now(), Instant.now(), result)
+            val summary = scanner.generateSummary(Instant.now(), Instant.now(), resultFile, result)
             val errors = summary.errors.toMutableList()
 
             ScanCode.mapTimeoutErrors(errors) shouldBe true
@@ -99,7 +101,7 @@ class ScanCodeTest : WordSpec({
         "return false for scan results without errors" {
             val resultFile = File("src/test/assets/esprima-2.7.3_scancode-2.2.1.json")
             val result = scanner.getRawResult(resultFile)
-            val summary = scanner.generateSummary(Instant.now(), Instant.now(), result)
+            val summary = scanner.generateSummary(Instant.now(), Instant.now(), resultFile, result)
 
             ScanCode.mapTimeoutErrors(summary.errors.toMutableList()) shouldBe false
         }
@@ -109,7 +111,7 @@ class ScanCodeTest : WordSpec({
         "return true for scan results with only memory errors" {
             val resultFile = File("src/test/assets/very-long-json-lines_scancode-2.2.1.post277.4d68f9377.json")
             val result = scanner.getRawResult(resultFile)
-            val summary = scanner.generateSummary(Instant.now(), Instant.now(), result)
+            val summary = scanner.generateSummary(Instant.now(), Instant.now(), resultFile, result)
             val errors = summary.errors.toMutableList()
 
             ScanCode.mapUnknownErrors(errors) shouldBe true
@@ -121,7 +123,7 @@ class ScanCodeTest : WordSpec({
         "return false for scan results with other unknown errors" {
             val resultFile = File("src/test/assets/kotlin-annotation-processing-gradle-1.2.21_scancode.json")
             val result = scanner.getRawResult(resultFile)
-            val summary = scanner.generateSummary(Instant.now(), Instant.now(), result)
+            val summary = scanner.generateSummary(Instant.now(), Instant.now(), resultFile, result)
             val errors = summary.errors.toMutableList()
 
             ScanCode.mapUnknownErrors(errors) shouldBe false
@@ -134,7 +136,7 @@ class ScanCodeTest : WordSpec({
         "return false for scan results without errors" {
             val resultFile = File("src/test/assets/esprima-2.7.3_scancode-2.2.1.json")
             val result = scanner.getRawResult(resultFile)
-            val summary = scanner.generateSummary(Instant.now(), Instant.now(), result)
+            val summary = scanner.generateSummary(Instant.now(), Instant.now(), resultFile, result)
 
             ScanCode.mapUnknownErrors(summary.errors.toMutableList()) shouldBe false
         }
@@ -514,8 +516,9 @@ class ScanCodeTest : WordSpec({
                 )
             )
 
-            val result = scanner.getRawResult(File("src/test/assets/esprima-2.7.3_scancode-2.2.1.json"))
-            val summary = scanner.generateSummary(Instant.now(), Instant.now(), result)
+            val resultFile = File("src/test/assets/esprima-2.7.3_scancode-2.2.1.json")
+            val result = scanner.getRawResult(resultFile)
+            val summary = scanner.generateSummary(Instant.now(), Instant.now(), resultFile, result)
 
             summary.licenseFindings shouldContainExactlyInAnyOrder expectedLicenseFindings
         }
@@ -699,8 +702,9 @@ class ScanCodeTest : WordSpec({
                 )
             )
 
-            val result = scanner.getRawResult(File("src/test/assets/esprima-2.7.3_scancode-2.2.1.json"))
-            val summary = scanner.generateSummary(Instant.now(), Instant.now(), result)
+            val resultFile = File("src/test/assets/esprima-2.7.3_scancode-2.2.1.json")
+            val result = scanner.getRawResult(resultFile)
+            val summary = scanner.generateSummary(Instant.now(), Instant.now(), resultFile, result)
 
             summary.copyrightFindings shouldContainExactlyInAnyOrder expectedCopyrightFindings
         }
@@ -710,7 +714,7 @@ class ScanCodeTest : WordSpec({
             val result = scanner.getRawResult(resultFile)
 
             val actualFindings = scanner
-                .generateSummary(Instant.now(), Instant.now(), result)
+                .generateSummary(Instant.now(), Instant.now(), resultFile, result)
                 .licenseFindings
 
             actualFindings.distinctBy { it.license } should haveSize(1)
@@ -734,7 +738,7 @@ class ScanCodeTest : WordSpec({
             val result = scanner.getRawResult(resultFile)
 
             val actualFindings = scanner
-                .generateSummary(Instant.now(), Instant.now(), result)
+                .generateSummary(Instant.now(), Instant.now(), resultFile, result)
                 .copyrightFindings
 
             actualFindings.map { it.statement }.distinct() shouldContainExactlyInAnyOrder listOf(

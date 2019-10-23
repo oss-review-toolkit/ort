@@ -102,6 +102,7 @@ abstract class AbstractStorageTest : StringSpec() {
         scannerStartTime1,
         scannerEndTime1,
         1,
+        "packageVerificationCode",
         sortedSetOf(
             LicenseFinding("license 1.1", DUMMY_TEXT_LOCATION),
             LicenseFinding("license 1.2", DUMMY_TEXT_LOCATION)
@@ -113,6 +114,7 @@ abstract class AbstractStorageTest : StringSpec() {
         scannerStartTime2,
         scannerEndTime2,
         0,
+        "packageVerificationCode",
         sortedSetOf(),
         sortedSetOf(),
         mutableListOf()
