@@ -55,7 +55,7 @@ class OrtConfigurationTest : WordSpec({
 
                         backend.localFileStorage.let { localFileStorage ->
                             localFileStorage shouldNotBe null
-                            localFileStorage!!.directory shouldBe File("~/.ort/scanner")
+                            localFileStorage!!.directory shouldBe File("~/.ort/scanner/results")
                         }
                     }
                 }
