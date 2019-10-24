@@ -321,7 +321,7 @@ class Conan(
     private fun generateProjectPackageFromConanfileTxt(node: JsonNode): Package =
         Package(
             id = Identifier(
-                    type = managerName,
+                type = managerName,
                 namespace = "",
                 name = node["reference"].textValueOrEmpty(),
                 version = ""
