@@ -54,7 +54,7 @@ import java.util.Stack
 /**
  * The [Conan](https://conan.io/) package manager for C / C++.
  *
- * TODO: Add support for `python_requires`
+ * TODO: Add support for `python_requires`.
  */
 class Conan(
     name: String,
@@ -81,7 +81,7 @@ class Conan(
 
     override fun command(workingDir: File?) = "conan"
 
-    // TODO: add support for using lockfile with Conan
+    // TODO: Add support for Conan lock files.
     // protected open fun hasLockFile(projectDir: File) = null
 
     override fun getVersionRequirement(): Requirement = Requirement.buildStrict(REQUIRED_CONAN_VERSION)
@@ -139,7 +139,7 @@ class Conan(
     }
 
     /**
-     * @return dependency tree from a [rootNode] for given [scopeName].
+     * Return the dependency tree starting from a [rootNode] for given [scopeName].
      */
     private fun extractDependencyTree(
         rootNode: JsonNode,
@@ -153,7 +153,7 @@ class Conan(
             val childRef = it.textValueOrEmpty()
             rootNode.iterator().forEach { child ->
                 if (child["reference"].textValueOrEmpty() == childRef) {
-                    log.debug { "Found child. '$childRef'" }
+                    log.debug { "Found child '$childRef'." }
 
                     val packageReference = PackageReference(
                         id = extractPackageId(child, workingDir),
@@ -194,7 +194,7 @@ class Conan(
     }
 
     /**
-     * @return map of packages and their identifiers, which are generated from a [node].
+     * Return the map of packages and their identifiers which are contained in [node].
      */
     private fun extractPackages(node: List<JsonNode>, workingDir: File): Map<String, Package> {
         val result = mutableMapOf<String, Package>()
@@ -210,7 +210,7 @@ class Conan(
     }
 
     /**
-     * @return `Package` object from given [node] object.
+     * Return the [Package] extracted from given [node].
      */
     private fun extractPackage(node: JsonNode, workingDir: File) =
         Package(
@@ -224,13 +224,13 @@ class Conan(
         )
 
     /**
-     * @return value, when the key is [field] from `conan inspect` output.
+     * Return the value `conan inspect` reports for the given [field].
      */
     private fun runInspectRawField(pkgName: String, workingDir: File, field: String): String =
         run(workingDir, "inspect", pkgName, "--raw", field).stdout
 
     /**
-     * @return full list of packages excluding the project level information.
+     * Return the full list of packages, excluding the project level information.
      */
     private fun removeProjectPackage(rootNode: JsonNode, definitionFile: File): List<JsonNode> =
         rootNode.find {
@@ -241,7 +241,7 @@ class Conan(
         } ?: rootNode.toList<JsonNode>()
 
     /**
-     * @return declared licenses in a set extracted form a [node].
+     * Return the set of declared licenses contained in [node].
      */
     private fun extractDeclaredLicenses(node: JsonNode): SortedSet<String> =
         sortedSetOf<String>().also { licenses ->
@@ -249,7 +249,7 @@ class Conan(
         }
 
     /**
-     * @return `Identifier` object generated from a [node].
+     * Return the [Identifier] for the package contained in [node].
      */
     private fun extractPackageId(node: JsonNode, workingDir: File) =
         Identifier(
@@ -260,7 +260,7 @@ class Conan(
         )
 
     /**
-     * @return `VcsInfo` object generated from a [node].
+     * Return the [VcsInfo] contained in [node].
      */
     private fun extractVcsInfo(node: JsonNode) =
         VcsInfo(
@@ -270,19 +270,18 @@ class Conan(
         )
 
     /**
-     * Run `conan inspect --raw` over a specified package to extract specified [field] from a [node].
-     * @return value of the [field].
+     * Return the value of [field] from the output of `conan inspect --raw` for the package in [node].
      */
     private fun extractPackageField(node: JsonNode, workingDir: File, field: String): String =
         runInspectRawField(node["display_name"].textValue(), workingDir, field)
 
     /**
-     * Project package options differ depending on which [definitionFile] is used:
-     * conanfile.py: `conan inspect conanfile.py` is allowed and more useful project metadata is extracted.
-     * conanfile.txt: `conan inspect conanfile.txt` is not allowed.
-     * TODO: Format of `conan info` output of conanfile.txt may be such that we can get project metadata
-     *       from the `requires` field... need to investigate whether this is a sure thing before implementing.
-     * @return `Package` object containing project-level information.
+     * Return a [Package] containing project-level information depending on which [definitionFile] was found:
+     * - conanfile.txt: `conan inspect conanfile.txt` is not supported.
+     * - conanfile.py: `conan inspect conanfile.py` is supported and more useful project metadata is extracted.
+     *
+     * TODO: The format of `conan info` output for a conanfile.txt file may be such that we can get project metadata
+     *       from the `requires` field. Need to investigate whether this is a sure thing before implementing.
      */
     private fun extractProjectPackage(rootNode: JsonNode, definitionFile: File, workingDir: File): Package {
         val projectPackageJson = requireNotNull(rootNode.find {
@@ -297,8 +296,8 @@ class Conan(
     }
 
     /**
-     * @return `Package` object containing project-level information extracted from a [node] and a [definitionFile]
-     * using `conan inspect` command.
+     * Return a [Package] containing project-level information extracted from [node] and [definitionFile] using the
+     * `conan inspect` command.
      */
     private fun generateProjectPackageFromConanfilePy(node: JsonNode, definitionFile: File, workingDir: File): Package =
         Package(
@@ -317,7 +316,7 @@ class Conan(
         )
 
     /**
-     * @return `Package` object containing project-level information extracted for [node].
+     * Return a [Package] containing project-level information extracted from [node].
      */
     private fun generateProjectPackageFromConanfileTxt(node: JsonNode): Package =
         Package(
@@ -336,12 +335,10 @@ class Conan(
         )
 
     /**
-     * Run `conan install .` to install packages in specified directory, [workingDir].
-     *
-     * `connan install .` command looks for the package from remote repository that is build for the same architecture
-     * as the host that runs this command. That package may not exist in the remote and this will fail the command.
-     * This is acceptable since package metadata is fetched anyway. Therefore `ProcessCapture` is used here instead of
-     * `run()` method.
+     * Run `conan install .` to install packages in [workingDir]. The `conan install .` command looks for the package
+     * in the remote repository that is built for the same architecture as the host that runs this command. That package
+     * may not exist in the remote and in that case the command will fail. As this is acceptable since package
+     * metadata is fetched anyway, ignore the exit code by not using [run] but [ProcessCapture] directly.
      */
     private fun installDependencies(workingDir: File) {
         ProcessCapture(workingDir, "conan", "install", ".")
