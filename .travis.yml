@@ -27,7 +27,7 @@ env:
     - ANDROID_HOME="/opt/android"
     - ANDROID_SDK_VERSION="4333796"
     - BOWER_VERSION="1.8.8"
-    - CONAN_VERSION="1.18"
+    - CONAN_VERSION="1.18.0"
     - FLUTTER_HOME="/opt/flutter"
     - FLUTTER_VERSION="v1.7.8+hotfix.3-stable"
     - GIMME_GO_VERSION="1.12" # Used internally by Travis.
