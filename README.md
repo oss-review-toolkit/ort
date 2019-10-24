@@ -184,6 +184,7 @@ Currently, the following package managers are supported:
 * [NuGet](https://www.nuget.org/) (.NET, with currently some [limitations](https://github.com/heremaps/oss-review-toolkit/pull/1303#issue-253860146))
 * [Composer](https://getcomposer.org/) (PHP)
 * [PIP](https://pip.pypa.io/) (Python)
+* [Pipenv](https://pipenv.readthedocs.io/) (Python)
 * [Pub](https://pub.dev/) (Dart / Flutter)
 * [SBT](http://www.scala-sbt.org/) (Scala)
 * [Stack](http://haskellstack.org/) (Haskell)

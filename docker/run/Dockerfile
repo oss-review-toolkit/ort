@@ -41,6 +41,7 @@ ENV \
     HASKELL_STACK_VERSION=1.7.1-3 \
     NPM_VERSION=5.8.0+DS6-4 \
     PYTHON_PIP_VERSION=18.1-5 \
+    PYTHON_PIPENV_VERSION=2018.11.26 \
     PYTHON_VIRTUALENV_VERSION=15.1.0 \
     SBT_VERSION=0.13.13-2 \
     YARN_VERSION=1.17.3 \
@@ -84,6 +85,7 @@ RUN \
     chmod a+x /usr/local/bin/repo && \
     # Install package managers (in versions known to work).
     npm install --global bower@$BOWER_VERSION yarn@$YARN_VERSION && \
+    pip install pipenv==$PYTHON_PIPENV_VERSION && \
     pip install virtualenv==$PYTHON_VIRTUALENV_VERSION && \
     curl -Os https://storage.googleapis.com/flutter_infra/releases/stable/linux/flutter_linux_$FLUTTER_VERSION.tar.xz && \
     tar xf flutter_linux_$FLUTTER_VERSION.tar.xz -C $(dirname $FLUTTER_HOME) && \

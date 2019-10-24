@@ -56,6 +56,7 @@ class PackageManagerTest : WordSpec({
             managedFilesByName["NuGet"] shouldBe listOf(File(projectDir, "packages.config"))
             managedFilesByName["PhpComposer"] shouldBe listOf(File(projectDir, "composer.json"))
             managedFilesByName["PIP"] shouldBe listOf(File(projectDir, "setup.py"))
+            managedFilesByName["Pipenv"] shouldBe listOf(File(projectDir, "Pipfile.lock"))
             managedFilesByName["Pub"] shouldBe listOf(File(projectDir, "pubspec.yaml"))
             managedFilesByName["SBT"] shouldBe listOf(File(projectDir, "build.sbt"))
             managedFilesByName["Stack"] shouldBe listOf(File(projectDir, "stack.yaml"))

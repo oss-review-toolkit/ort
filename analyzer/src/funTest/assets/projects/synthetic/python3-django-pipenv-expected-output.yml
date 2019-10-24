@@ -1,0 +1,85 @@
+---
+project:
+  id: "Pipenv::src/funTest/assets/projects/synthetic/python3-django-pipenv/requirements-from-pipenv.txt:<REPLACE_REVISION>"
+  definition_file_path: "analyzer/src/funTest/assets/projects/synthetic/python3-django-pipenv/requirements-from-pipenv.txt"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "<REPLACE_URL>"
+    revision: "<REPLACE_REVISION>"
+    path: "<REPLACE_PATH>"
+  homepage_url: ""
+  scopes:
+  - name: "install"
+    dependencies:
+    - id: "PyPI::Django:2.1.11"
+      dependencies:
+      - id: "PyPI::pytz:2019.3"
+packages:
+- package:
+    id: "PyPI::Django:2.1.11"
+    purl: "pkg:pypi/Django@2.1.11"
+    declared_licenses:
+    - "BSD"
+    declared_licenses_processed:
+      spdx_expression: "BSD-3-Clause"
+    description: "A high-level Python Web framework that encourages rapid development\
+      \ and clean, pragmatic design."
+    homepage_url: "https://www.djangoproject.com/"
+    binary_artifact:
+      url: "https://files.pythonhosted.org/packages/8c/49/d5038239995594281478bf209f8d93524ad342d500009a697b27f884668a/Django-2.1.11-py3-none-any.whl"
+      hash:
+        value: "5419065b487d22f584ca9d42df971092"
+        algorithm: "MD5"
+    source_artifact:
+      url: "https://files.pythonhosted.org/packages/e0/e9/7e6008abee3eb2a40704c95a5cfc8a9627012df1580289d3df0f34c99766/Django-2.1.11.tar.gz"
+      hash:
+        value: "42f0d3ccdcd89c566a30765ee0e25d42"
+        algorithm: "MD5"
+    vcs:
+      type: ""
+      url: ""
+      revision: ""
+      path: ""
+    vcs_processed:
+      type: ""
+      url: ""
+      revision: ""
+      path: ""
+  curations: []
+- package:
+    id: "PyPI::pytz:2019.3"
+    purl: "pkg:pypi/pytz@2019.3"
+    declared_licenses:
+    - "MIT"
+    declared_licenses_processed:
+      spdx_expression: "MIT"
+    description: "World timezone definitions, modern and historical"
+    homepage_url: "http://pythonhosted.org/pytz"
+    binary_artifact:
+      url: "https://files.pythonhosted.org/packages/e7/f9/f0b53f88060247251bf481fa6ea62cd0d25bf1b11a87888e53ce5b7c8ad2/pytz-2019.3-py2.py3-none-any.whl"
+      hash:
+        value: "cb3da4cc0427d718d2478350e0b4b169"
+        algorithm: "MD5"
+    source_artifact:
+      url: "https://files.pythonhosted.org/packages/82/c3/534ddba230bd4fbbd3b7a3d35f3341d014cca213f369a9940925e7e5f691/pytz-2019.3.tar.gz"
+      hash:
+        value: "c3d84a465fc56a4edd52cca8873ac0df"
+        algorithm: "MD5"
+    vcs:
+      type: ""
+      url: ""
+      revision: ""
+      path: ""
+    vcs_processed:
+      type: ""
+      url: ""
+      revision: ""
+      path: ""
+  curations: []

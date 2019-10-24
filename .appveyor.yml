@@ -12,6 +12,7 @@ environment:
   GO_DEP_VERSION: 0.5.0
   NPM_VERSION: 6.4.0
   PHP_VERSION: 7.2.0
+  PYTHON_PIPENV_VERSION: 2018.11.26
   RUST_VERSION: 1.35.0
   SBT_VERSION: 1.0.2
   STACK_VERSION: 2.1.3.20190715
@@ -69,6 +70,7 @@ install:
   - set "PATH=%FLUTTER_HOME%\bin;%FLUTTER_HOME%\bin\cache\dart-sdk\bin;%PATH%"
   - flutter config --no-analytics
   - flutter doctor
+  - pip install pipenv==%PYTHON_PIPENV_VERSION%
 
 # Do something useful here to override the default MSBuild (which would fail otherwise).
 build_script:
