@@ -73,7 +73,7 @@ install:
   - flutter config --no-analytics
   - flutter doctor
   - pip install --user conan==$CONAN_VERSION
-  - conan user  # Create the conan data directory. Automatic detection of your arch, compiler, etc.
+  - conan user # Create the conan data directory. Automatic detection of your arch, compiler, etc.
 
 script:
   - set -o pipefail
