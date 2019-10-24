@@ -1,6 +1,7 @@
 /*
  * Copyright (C) 2019 HERE Europe B.V.
  * Copyright (C) 2019 Verifa Oy.
+ * Copyright (C) 2019 Bosch Software Innovations GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -44,6 +45,8 @@ import com.here.ort.utils.stashDirectories
 import com.here.ort.utils.textValueOrEmpty
 import com.here.ort.utils.ProcessCapture
 
+import com.vdurmont.semver4j.Requirement
+
 import java.io.File
 import java.util.SortedSet
 import java.util.Stack
@@ -60,6 +63,8 @@ class Conan(
     repoConfig: RepositoryConfiguration
 ) : PackageManager(name, analysisRoot, analyzerConfig, repoConfig), CommandLineTool {
     companion object {
+        private const val REQUIRED_CONAN_VERSION = "1.18.0"
+
         private const val SCOPE_NAME_DEPENDENCIES = "requires"
         private const val SCOPE_NAME_DEV_DEPENDENCIES = "build_requires"
     }
@@ -79,10 +84,15 @@ class Conan(
     // TODO: add support for using lockfile with Conan
     // protected open fun hasLockFile(projectDir: File) = null
 
-    // TODO: add checker for specific Conan version on the build host
-    // override fun getVersionRequirement(): Requirement = Requirement.buildStrict(REQUIRED_CONAN_VERSION)
-    // override fun beforeResolution(definitionFiles: List<File>) =
-    //     checkVersion(ignoreActualVersion = analyzerConfig.ignoreToolVersions)
+    override fun getVersionRequirement(): Requirement = Requirement.buildStrict(REQUIRED_CONAN_VERSION)
+
+    override fun beforeResolution(definitionFiles: List<File>) =
+        // Conan could report version strings like:
+        // Conan version 1.18.0
+        checkVersion(
+            ignoreActualVersion = analyzerConfig.ignoreToolVersions,
+            transform = { it.removePrefix("Conan version ") }
+        )
 
     /**
      * Primary method for resolving dependencies from [definitionFile].
