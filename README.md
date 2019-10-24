@@ -172,8 +172,8 @@ Currently, the following package managers are supported:
 
 * [Bower](http://bower.io/) (JavaScript)
 * [Bundler](http://bundler.io/) (Ruby)
-* [Conan](https://conan.io/) (C / C++)
 * [Cargo](https://doc.rust-lang.org/cargo/) (Rust)
+* [Conan](https://conan.io/) (C / C++)
 * [dep](https://golang.github.io/dep/) (Go)
 * [DotNet](https://docs.microsoft.com/en-us/dotnet/core/tools/) (.NET, with currently some [limitations](https://github.com/heremaps/oss-review-toolkit/pull/1303#issue-253860146))
 * [Glide](https://glide.sh/) (Go)
