@@ -90,7 +90,7 @@ RUN \
     chmod -R a+rw $FLUTTER_HOME && \
     flutter config --no-analytics && \
     flutter doctor && \
-    pip install --user conan==$CONAN_VERSION && \
+    pip install conan==$CONAN_VERSION && \
     # Add scanners (in versions known to work).
     curl -sSL https://github.com/nexB/scancode-toolkit/archive/v$SCANCODE_VERSION.tar.gz | \
         tar -zxC /usr/local && \
