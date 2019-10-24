@@ -266,7 +266,7 @@ class Conan(
         VcsInfo(
             type = VcsType.GIT,
             url = node["url"].textValueOrEmpty(),
-            revision = if (node["revision"].textValueOrEmpty() == "0") "" else node["revision"].textValueOrEmpty()
+            revision = node["revision"].textValueOrEmpty().takeUnless { it == "0" }.orEmpty()
         )
 
     /**
