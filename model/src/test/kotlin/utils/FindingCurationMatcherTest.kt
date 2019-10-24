@@ -24,6 +24,7 @@ import com.here.ort.model.TextLocation
 import com.here.ort.model.config.LicenseFindingCuration
 import com.here.ort.model.config.LicenseFindingCurationReason.INCORRECT
 
+import io.kotlintest.IsolationMode
 import io.kotlintest.matchers.collections.shouldContainExactlyInAnyOrder
 import io.kotlintest.shouldBe
 import io.kotlintest.specs.WordSpec
@@ -35,7 +36,7 @@ class FindingCurationMatcherTest : WordSpec() {
     private lateinit var finding: LicenseFinding
     private lateinit var curation: LicenseFindingCuration
 
-    override fun isInstancePerTest() = true
+    override fun isolationMode() = IsolationMode.InstancePerLeaf
 
     private fun setupFinding(license: String, path: String, startLine: Int, endLine: Int) {
         finding = LicenseFinding(

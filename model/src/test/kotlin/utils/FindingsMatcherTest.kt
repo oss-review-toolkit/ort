@@ -26,6 +26,7 @@ import com.here.ort.model.TextLocation
 import com.here.ort.model.utils.FindingsMatcher.Companion.DEFAULT_TOLERANCE_LINES
 import com.here.ort.utils.FileMatcher
 
+import io.kotlintest.IsolationMode
 import io.kotlintest.matchers.beEmpty
 import io.kotlintest.matchers.collections.shouldContainExactlyInAnyOrder
 import io.kotlintest.should
@@ -41,7 +42,7 @@ class FindingsMatcherTest : WordSpec() {
     private val licenseFindings = mutableListOf<LicenseFinding>()
     private val copyrightFindings = mutableListOf<CopyrightFinding>()
 
-    override fun isInstancePerTest() = true
+    override fun isolationMode() = IsolationMode.InstancePerLeaf
 
     private fun setupLicenseFinding(license: String, path: String, line: Int = 1) {
         licenseFindings.add(
