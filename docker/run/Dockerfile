@@ -35,6 +35,7 @@ ENV \
     BOWER_VERSION=1.8.8 \
     BUNDLER_VERSION=1.17.3-3 \
     COMPOSER_VERSION=1.9.0-2 \
+    CONAN_VERSION=1.18 \
     FLUTTER_VERSION=v1.7.8+hotfix.3-stable \
     GO_DEP_VERSION=0.5.4-2 \
     HASKELL_STACK_VERSION=1.7.1-3 \
@@ -43,7 +44,6 @@ ENV \
     PYTHON_VIRTUALENV_VERSION=15.1.0 \
     SBT_VERSION=0.13.13-2 \
     YARN_VERSION=1.17.3 \
-    CONAN_VERSION=1.18 \
     # Scanner versions.
     SCANCODE_VERSION=3.0.2 \
     # Installation directories.
