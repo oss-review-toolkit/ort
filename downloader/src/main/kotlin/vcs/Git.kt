@@ -65,7 +65,7 @@ class Git : GitBase() {
             val gitInfoDir = File(targetDir, ".git/info").apply { safeMkdirs() }
             val path = vcs.path.let { if (it.startsWith("/")) it else "/$it" }
             File(gitInfoDir, "sparse-checkout").writeText("$path\n" +
-                    FileMatcher.LICENSE_FILE_MATCHER.filenames.joinToString("\n") { "/$it" })
+                    FileMatcher.LICENSE_FILE_MATCHER.patterns.joinToString("\n") { "/$it" })
         }
 
         return getWorkingTree(targetDir)

@@ -28,9 +28,11 @@ import java.nio.file.Paths
  */
 class FileMatcher(
     /**
-     * The list of file names to consider for matching.
+     * The list of [glob patterns][1] to consider for matching.
+     *
+     * [1]: https://docs.oracle.com/javase/tutorial/essential/io/fileOps.html#glob
      */
-    val filenames: List<String>
+    val patterns: List<String>
 ) {
     companion object {
         /**
@@ -51,9 +53,9 @@ class FileMatcher(
         )
     }
 
-    constructor(vararg licenseFileNames: String) : this(licenseFileNames.toList())
+    constructor(vararg patterns: String) : this(patterns.asList())
 
-    private val matchers = filenames.map {
+    private val matchers = patterns.map {
         FileSystems.getDefault().getPathMatcher("glob:$it")
     }
 
