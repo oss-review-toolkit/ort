@@ -184,8 +184,13 @@ fun File.unpack7Zip(targetDirectory: File) {
  * a [prefix] is specified, it is added to the file names in the ZIP file.
  * If not all files shall be added to the archive a [filter] can be provided.
  */
-fun File.packZip(targetFile: File, prefix: String = "", filter: (Path) -> Boolean = { true }) {
-    require(!targetFile.exists()) {
+fun File.packZip(
+    targetFile: File,
+    prefix: String = "",
+    overwrite: Boolean = false,
+    filter: (Path) -> Boolean = { true }
+) {
+    require(overwrite || !targetFile.exists()) {
         "The target ZIP file '${targetFile.absolutePath}' must not exist."
     }
 
