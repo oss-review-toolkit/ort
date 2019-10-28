@@ -60,6 +60,8 @@ import okhttp3.Request
 import okio.buffer
 import okio.sink
 
+import org.apache.logging.log4j.Level
+
 /**
  * A wrapper for [ScanCode](https://github.com/nexB/scancode-toolkit).
  *
