@@ -21,11 +21,19 @@ package com.here.ort.model.config
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 
+import com.here.ort.utils.storage.FileArchiver
+import com.here.ort.utils.storage.FileStorage
+
 /**
  * The configuration model of the scanner.
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 data class ScannerConfiguration(
+    /**
+     * Configuration of a [FileArchiver] that archives certain scanned files in an external [FileStorage].
+     */
+    val archive: FileArchiverConfiguration? = null,
+
     /**
      * Configuration of a file based storage.
      */

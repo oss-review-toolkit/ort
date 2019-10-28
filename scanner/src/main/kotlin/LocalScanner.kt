@@ -46,14 +46,19 @@ import com.here.ort.utils.Os
 import com.here.ort.utils.collectMessagesAsString
 import com.here.ort.utils.fileSystemEncode
 import com.here.ort.utils.getPathFromEnvironment
+import com.here.ort.utils.getUserOrtDirectory
 import com.here.ort.utils.log
 import com.here.ort.utils.safeMkdirs
 import com.here.ort.utils.showStackTrace
+import com.here.ort.utils.storage.FileArchiver
+import com.here.ort.utils.storage.LocalFileStorage
+import com.here.ort.utils.toHexString
 
 import com.vdurmont.semver4j.Requirement
 
 import java.io.File
 import java.io.IOException
+import java.security.MessageDigest
 import java.time.Instant
 import java.util.concurrent.Executors
 
@@ -67,6 +72,28 @@ import kotlinx.coroutines.withContext
  * serial order. Scan results can be stored in a [ScanResultsStorage].
  */
 abstract class LocalScanner(name: String, config: ScannerConfiguration) : Scanner(name, config), CommandLineTool {
+    companion object {
+        val DEFAULT_ARCHIVE_DIR by lazy { getUserOrtDirectory().resolve("scanner/archive") }
+
+        val DEFAULT_ARCHIVE_PATTERNS = listOf(
+            "license*",
+            "licence*",
+            "*.license",
+            "unlicense",
+            "unlicence",
+            "copying*",
+            "copyright",
+            "patents"
+        ).flatMap { listOf(it, it.toUpperCase(), it.capitalize()) }
+    }
+
+    val archiver by lazy {
+        config.archive?.createFileArchiver() ?: FileArchiver(
+            DEFAULT_ARCHIVE_PATTERNS,
+            LocalFileStorage(DEFAULT_ARCHIVE_DIR)
+        )
+    }
+
     /**
      * A property containing the file name extension of the scanner's native output format, without the dot.
      */
@@ -300,11 +327,24 @@ abstract class LocalScanner(name: String, config: ScannerConfiguration) : Scanne
             downloadResult.dateTime, downloadResult.sourceArtifact, downloadResult.vcsInfo,
             downloadResult.originalVcsInfo
         )
+
+        archiveFiles(downloadResult.downloadDirectory, pkg.id, provenance)
+
         val scanResult = scanPath(downloadResult.downloadDirectory, resultsFile).copy(provenance = provenance)
 
         ScanResultsStorage.storage.add(pkg.id, scanResult)
 
         return scanResult
+    }
+
+    private fun archiveFiles(directory: File, id: Identifier, provenance: Provenance) {
+        log.info { "Archiving files for ${id.toCoordinates()}." }
+
+        val provenanceBytes = provenance.toString().toByteArray()
+        val provenanceHash = MessageDigest.getInstance("SHA-1").digest(provenanceBytes).toHexString()
+        val path = "${id.toPath()}/$provenanceHash"
+
+        archiver.archive(directory, path)
     }
 
     /**
