@@ -42,7 +42,19 @@ class OrtConfigurationTest : WordSpec({
             ortConfig.scanner.let { scanner ->
                 scanner shouldNotBe null
 
-                scanner!!.fileBasedStorage.let { fileBased ->
+                scanner!!.archive shouldNotBe null
+                scanner.archive!!.let { archive ->
+                    archive.patterns shouldBe listOf("LICENSE*", "COPYING*")
+                    archive.storage.let { storage ->
+                        storage.httpFileStorage shouldBe null
+                        storage.localFileStorage shouldNotBe null
+                        storage.localFileStorage!!.let { localFileStorage ->
+                            localFileStorage.directory shouldBe File("~/.ort/scanner/archive")
+                        }
+                    }
+                }
+
+                scanner.fileBasedStorage.let { fileBased ->
                     fileBased shouldNotBe null
                     fileBased!!.backend.let { backend ->
                         backend shouldNotBe null

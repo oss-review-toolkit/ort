@@ -40,7 +40,7 @@ class HttpFileStorage(
     /**
      * The URL to store files at.
      */
-    private val url: String,
+    val url: String,
 
     /**
      * Custom headers that are added to all HTTP requests.
