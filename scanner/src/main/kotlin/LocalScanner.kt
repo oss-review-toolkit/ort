@@ -145,8 +145,8 @@ abstract class LocalScanner(name: String, config: ScannerConfiguration) : Scanne
             Executors.newFixedThreadPool(5, NamedThreadFactory(ScanResultsStorage.storage.name)).asCoroutineDispatcher()
         val scanDispatcher = Executors.newSingleThreadExecutor(NamedThreadFactory(scannerName)).asCoroutineDispatcher()
 
-        try {
-            return coroutineScope {
+        return try {
+            coroutineScope {
                 packages.withIndex().map { (index, pkg) ->
                     val packageIndex = "(${index + 1}/${packages.size})"
 
