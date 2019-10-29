@@ -135,46 +135,50 @@ class Analyzer(private val config: AnalyzerConfiguration) {
         val dispatcher = Executors.newFixedThreadPool(5, NamedThreadFactory(TOOL_NAME)).asCoroutineDispatcher()
         val analyzerResultBuilder = AnalyzerResultBuilder()
 
-        coroutineScope {
-            managedFiles.map { (manager, files) ->
-                async {
-                    withContext(dispatcher) {
-                        val results = manager.resolveDependencies(files)
+        try {
+            coroutineScope {
+                managedFiles.map { (manager, files) ->
+                    async {
+                        withContext(dispatcher) {
+                            val results = manager.resolveDependencies(files)
 
-                        // By convention, project ids must be of the type of the respective package manager.
-                        results.forEach { (_, result) ->
-                            require(result.project.id.type == manager.managerName) {
-                                "Project '${result.project.id.toCoordinates()}' must be of type " +
-                                        "'${manager.managerName}'."
+                            // By convention, project ids must be of the type of the respective package manager.
+                            results.forEach { (_, result) ->
+                                require(result.project.id.type == manager.managerName) {
+                                    "Project '${result.project.id.toCoordinates()}' must be of type " +
+                                            "'${manager.managerName}'."
+                                }
                             }
-                        }
 
-                        packageCurationsFile?.let {
-                            val provider = FilePackageCurationProvider(it)
-                            results.mapValues { entry ->
-                                ProjectAnalyzerResult(
-                                    project = entry.value.project,
-                                    errors = entry.value.errors,
-                                    packages = entry.value.packages.map { curatedPackage ->
-                                        val curations = provider.getCurationsFor(curatedPackage.pkg.id)
-                                        curations.fold(curatedPackage) { cur, packageCuration ->
-                                            log.debug {
-                                                "Applying curation '$packageCuration' to package " +
-                                                        "'${curatedPackage.pkg.id.toCoordinates()}'."
+                            packageCurationsFile?.let {
+                                val provider = FilePackageCurationProvider(it)
+                                results.mapValues { entry ->
+                                    ProjectAnalyzerResult(
+                                        project = entry.value.project,
+                                        errors = entry.value.errors,
+                                        packages = entry.value.packages.map { curatedPackage ->
+                                            val curations = provider.getCurationsFor(curatedPackage.pkg.id)
+                                            curations.fold(curatedPackage) { cur, packageCuration ->
+                                                log.debug {
+                                                    "Applying curation '$packageCuration' to package " +
+                                                            "'${curatedPackage.pkg.id.toCoordinates()}'."
+                                                }
+                                                packageCuration.apply(cur)
                                             }
-                                            packageCuration.apply(cur)
-                                        }
-                                    }.toSortedSet()
-                                )
-                            }
-                        } ?: results
+                                        }.toSortedSet()
+                                    )
+                                }
+                            } ?: results
+                        }
+                    }
+                }.forEach {
+                    it.await().forEach { (_, analyzerResult) ->
+                        analyzerResultBuilder.addResult(analyzerResult)
                     }
                 }
-            }.forEach {
-                it.await().forEach { (_, analyzerResult) ->
-                    analyzerResultBuilder.addResult(analyzerResult)
-                }
             }
+        } finally {
+            dispatcher.close()
         }
 
         return analyzerResultBuilder.build()
