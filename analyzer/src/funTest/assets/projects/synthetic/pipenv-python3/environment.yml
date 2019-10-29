@@ -1,0 +1,11 @@
+name: ort
+channels:
+  - defaults
+dependencies:
+  - python=3.7
+  - django==2.2.1
+  - certifi==2019.9.11
+  - pytz==2019.1
+  - sqlparse==0.3.0
+  - pip:
+    - wincertstore==0.2

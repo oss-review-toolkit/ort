@@ -317,6 +317,7 @@ Currently, the following package managers are supported:
 * [Composer](https://getcomposer.org/) (PHP)
 * [Conan](https://conan.io/) (C / C++, *experimental* as the VCS locations often times do not contain the actual source
   code, see [issue #2037](https://github.com/oss-review-toolkit/ort/issues/2037))
+* [Conda](https://docs.conda.io/en/latest/miniconda.html) (Python)
 * [dep](https://golang.github.io/dep/) (Go)
 * [DotNet](https://docs.microsoft.com/en-us/dotnet/core/tools/) (.NET, with currently some
   [limitations](https://github.com/oss-review-toolkit/ort/pull/1303#issue-253860146))

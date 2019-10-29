@@ -21,6 +21,7 @@ env:
     - ANDROID_SDK_VERSION="6609375"
     - BOWER_VERSION="1.8.8"
     - CONAN_VERSION="1.18.0"
+    - CONDA_VERSION="4.7.12.1"
     - FLUTTER_HOME="/opt/flutter"
     - FLUTTER_VERSION="v1.12.13+hotfix.9-stable"
     - GIMME_GO_VERSION="1.13" # Used internally by Travis.
@@ -75,6 +76,11 @@ install:
   - conan user # Create the conan data directory. Automatic detection of your arch, compiler, etc.
   - pyenv global system 3.6
   - pip3 install --user reuse
+  - wget https://repo.continuum.io/miniconda/Miniconda3-${CONDA_VERSION}-Linux-x86_64.sh -O miniconda.sh
+  - ./miniconda.sh -b -p $HOME/miniconda
+  - source "$HOME/miniconda/etc/profile.d/conda.sh"
+  - conda config --set always_yes yes --set changeps1 no
+  - conda update -q conda
 
 before_script:
   - reuse lint

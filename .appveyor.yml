@@ -8,6 +8,7 @@ environment:
   FLUTTER_HOME: C:\flutter
   FLUTTER_VERSION: v1.12.13+hotfix.9-stable
   GO_DEP_VERSION: 0.5.0
+  MINICONDA: C:\Miniconda3-x64
   NPM_VERSION: 6.14.1
   PHP_VERSION: 7.4.3
   PYTHON_PIPENV_VERSION: 2018.11.26
@@ -57,6 +58,10 @@ install:
   - flutter config --no-analytics
   - flutter doctor
   - pip install pipenv==%PYTHON_PIPENV_VERSION%
+  # Install Conda.
+  - set PATH=%MINICONDA%;%MINICONDA%\\Scripts;%MINICONDA%\\Library\\bin;%PATH%
+  - conda config --set always_yes yes --set changeps1 no
+  - conda update -q conda
   # Work around an issue with GPG failing to connect to its agent in GitRepoTest
   # as seen at https://ci.appveyor.com/project/heremaps/oss-review-toolkit/builds/30228453#L3030.
   - mv C:\msys64\usr\bin\gpg.exe C:\msys64\usr\bin\gpg.exe.orig
