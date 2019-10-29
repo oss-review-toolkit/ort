@@ -182,8 +182,9 @@ fun File.unpack7Zip(targetDirectory: File) {
  * Pack the file into a ZIP [targetFile] using [Deflater.BEST_COMPRESSION]. If the file is a directory its content is
  * recursively added to the archive. Only regular files are added, e.g. symbolic links or directories are skipped. If
  * a [prefix] is specified, it is added to the file names in the ZIP file.
+ * If not all files shall be added to the archive a [filter] can be provided.
  */
-fun File.packZip(targetFile: File, prefix: String = "") {
+fun File.packZip(targetFile: File, prefix: String = "", filter: (Path) -> Boolean = { true }) {
     require(!targetFile.exists()) {
         "The target ZIP file '${targetFile.absolutePath}' must not exist."
     }
@@ -192,7 +193,7 @@ fun File.packZip(targetFile: File, prefix: String = "") {
         output.setLevel(Deflater.BEST_COMPRESSION)
         Files.walkFileTree(toPath(), object : SimpleFileVisitor<Path>() {
             override fun visitFile(file: Path, attrs: BasicFileAttributes): FileVisitResult {
-                if (attrs.isRegularFile) {
+                if (attrs.isRegularFile && filter(file)) {
                     val entry = ZipArchiveEntry(file.toFile(), "$prefix${this@packZip.toPath().relativize(file)}")
                     output.putArchiveEntry(entry)
                     file.toFile().inputStream().use { input -> input.copyTo(output) }
