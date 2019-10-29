@@ -20,12 +20,13 @@
 package com.here.ort.utils.storage
 
 import com.here.ort.utils.safeMkdirs
+import com.here.ort.utils.unpack
 
 import io.kotlintest.shouldBe
 import io.kotlintest.specs.StringSpec
 
-class FileSaverTest : StringSpec({
-    "All files matching any of the patterns are saved" {
+class FileArchiverTest : StringSpec({
+    "All files matching any of the patterns are archived" {
         val dir = createTempDir("ort")
 
         fun createFile(path: String) {
@@ -36,31 +37,31 @@ class FileSaverTest : StringSpec({
 
         createFile("a")
         createFile("b")
-        createFile("c")
         createFile("d/a")
         createFile("d/b")
-        createFile("d/c")
-        createFile("d/d/a")
-        createFile("d/d/b")
-        createFile("d/d/c")
 
         val storageDir = createTempDir("ort")
         val storage = LocalFileStorage(storageDir)
-        val saver = FileSaver(listOf("a", "**/a", "**/b"), storage)
+        val archiver = FileArchiver(listOf("a", "**/a"), storage)
 
-        saver.save(dir, "save")
+        archiver.archive(dir, "save")
+
+        val archiveFile = storageDir.resolve("save/archive.zip")
+
+        archiveFile.isFile shouldBe true
+
+        val unzipDir = createTempDir()
+        unzipDir.deleteOnExit()
+        archiveFile.unpack(unzipDir)
 
         fun assertFileSaved(path: String) {
-            val file = storageDir.resolve("save/$path")
+            val file = unzipDir.resolve(path)
             file.isFile shouldBe true
             file.readText() shouldBe path
         }
 
         assertFileSaved("a")
         assertFileSaved("d/a")
-        assertFileSaved("d/b")
-        assertFileSaved("d/d/a")
-        assertFileSaved("d/d/b")
 
         fun assertFileNotSaved(path: String) {
             val file = storageDir.resolve("save/$path")
@@ -68,8 +69,6 @@ class FileSaverTest : StringSpec({
         }
 
         assertFileNotSaved("b")
-        assertFileNotSaved("c")
-        assertFileNotSaved("d/c")
-        assertFileNotSaved("d/d/c")
+        assertFileNotSaved("d/b")
     }
 })
