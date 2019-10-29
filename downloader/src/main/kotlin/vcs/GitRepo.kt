@@ -153,8 +153,10 @@ class GitRepo : GitBase() {
         if (Os.isWindows) {
             val repo = getPathFromEnvironment("repo") ?: throw IOException("'repo' not found in PATH.")
 
-            // On Windows, the script itself is not executable, so we need to wrap the call by "python".
-            ProcessCapture(targetDir, "python", repo.absolutePath, *args).requireSuccess()
+            // On Windows, the script itself is not executable, so we need to wrap the call by "python2".
+            // note that "repo" is late to the party and may not support python3
+            // ProcessCapture(targetDir, "python2", repo.absolutePath, *args).requireSuccess()
+            ProcessCapture(targetDir, "py", "-2", repo.absolutePath, *args).requireSuccess()
         } else {
             ProcessCapture(targetDir, "repo", *args).requireSuccess()
         }

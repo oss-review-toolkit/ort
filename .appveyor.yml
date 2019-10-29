@@ -10,6 +10,7 @@ environment:
   FLUTTER_HOME: C:\flutter
   FLUTTER_VERSION: v1.7.8+hotfix.3-stable
   GO_DEP_VERSION: 0.5.0
+  MINICONDA: C:\Miniconda3-x64
   NPM_VERSION: 6.13.0
   PHP_VERSION: 7.2.0
   PYTHON_PIPENV_VERSION: 2018.11.26
@@ -71,6 +72,10 @@ install:
   - flutter config --no-analytics
   - flutter doctor
   - pip install pipenv==%PYTHON_PIPENV_VERSION%
+  # Install Conda.
+  - set PATH=%MINICONDA%;%MINICONDA%\\Scripts;%MINICONDA%\\Library\\bin;%PATH%
+  - conda config --set always_yes yes --set changeps1 no
+  - conda update -q conda
 
 # Do something useful here to override the default MSBuild (which would fail otherwise).
 build_script:

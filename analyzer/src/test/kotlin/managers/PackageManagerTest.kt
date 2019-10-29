@@ -48,6 +48,7 @@ class PackageManagerTest : WordSpec({
             managedFilesByName["Bundler"] shouldBe listOf(File(projectDir, "Gemfile"))
             managedFilesByName["Cargo"] shouldBe listOf(File(projectDir, "Cargo.toml"))
             managedFilesByName["Conan"] shouldBe listOf(File(projectDir, "conanfile.py"))
+            managedFilesByName["Conda"] shouldBe listOf(File(projectDir, "environment.yml"))
             managedFilesByName["DotNet"] shouldBe listOf(File(projectDir, "test.csproj"))
             managedFilesByName["GoDep"] shouldBe listOf(File(projectDir, "Gopkg.toml"))
             managedFilesByName["GoMod"] shouldBe listOf(File(projectDir, "go.mod"))

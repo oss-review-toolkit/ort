@@ -1,0 +1,181 @@
+---
+project:
+  id: "Conda::src/funTest/assets/projects/synthetic/python3-django/environment.yml:<REPLACE_REVISION>"
+  definition_file_path: "analyzer/src/funTest/assets/projects/synthetic/python3-django/environment.yml"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "<REPLACE_URL>"
+    revision: "<REPLACE_REVISION>"
+    path: "<REPLACE_PATH>"
+  homepage_url: ""
+  scopes:
+  - name: "install"
+    dependencies:
+    - id: "PyPI::Django:2.2.1"
+      dependencies:
+      - id: "PyPI::pytz:2019.1"
+      - id: "PyPI::sqlparse:0.3.0"
+    - id: "PyPI::certifi:2019.9.11"
+    - id: "PyPI::wincertstore:0.2"
+packages:
+- package:
+    id: "PyPI::Django:2.2.1"
+    purl: "pkg:pypi/Django@2.2.1"
+    declared_licenses:
+    - "BSD"
+    declared_licenses_processed:
+      spdx_expression: "BSD-3-Clause"
+    description: "A high-level Python Web framework that encourages rapid development\
+      \ and clean, pragmatic design."
+    homepage_url: "https://www.djangoproject.com/"
+    binary_artifact:
+      url: "https://files.pythonhosted.org/packages/b1/1d/2476110614367adfb079a9bc718621f9fc8351e9214e1750cae1832d4090/Django-2.2.1-py3-none-any.whl"
+      hash:
+        value: "8a2f51f779351edcbceda98719e07254"
+        algorithm: "MD5"
+    source_artifact:
+      url: "https://files.pythonhosted.org/packages/fd/70/36c08f4c3b22523173b3a5e21fbdaa137bdb1722b76f356e0e2d5d8aa645/Django-2.2.1.tar.gz"
+      hash:
+        value: "3b1721c1b5014316e1af8b10613c7592"
+        algorithm: "MD5"
+    vcs:
+      type: ""
+      url: ""
+      revision: ""
+      path: ""
+    vcs_processed:
+      type: ""
+      url: ""
+      revision: ""
+      path: ""
+  curations: []
+- package:
+    id: "PyPI::certifi:2019.9.11"
+    purl: "pkg:pypi/certifi@2019.9.11"
+    declared_licenses:
+    - "MPL-2.0"
+    - "Mozilla Public License 2.0 (MPL 2.0)"
+    declared_licenses_processed:
+      spdx_expression: "MPL-2.0"
+    description: "Python package for providing Mozilla's CA Bundle."
+    homepage_url: "https://certifi.io/"
+    binary_artifact:
+      url: "https://files.pythonhosted.org/packages/18/b0/8146a4f8dd402f60744fa380bc73ca47303cccf8b9190fd16a827281eac2/certifi-2019.9.11-py2.py3-none-any.whl"
+      hash:
+        value: "c6eec42e5b000580fb096b892ea1e2b5"
+        algorithm: "MD5"
+    source_artifact:
+      url: "https://files.pythonhosted.org/packages/62/85/7585750fd65599e88df0fed59c74f5075d4ea2fe611deceb95dd1c2fb25b/certifi-2019.9.11.tar.gz"
+      hash:
+        value: "cadd4e373fc08f649fa39b82aed9ad96"
+        algorithm: "MD5"
+    vcs:
+      type: ""
+      url: ""
+      revision: ""
+      path: ""
+    vcs_processed:
+      type: ""
+      url: ""
+      revision: ""
+      path: ""
+  curations: []
+- package:
+    id: "PyPI::pytz:2019.1"
+    purl: "pkg:pypi/pytz@2019.1"
+    declared_licenses:
+    - "MIT"
+    declared_licenses_processed:
+      spdx_expression: "MIT"
+    description: "World timezone definitions, modern and historical"
+    homepage_url: "http://pythonhosted.org/pytz"
+    binary_artifact:
+      url: "https://files.pythonhosted.org/packages/3d/73/fe30c2daaaa0713420d0382b16fbb761409f532c56bdcc514bf7b6262bb6/pytz-2019.1-py2.py3-none-any.whl"
+      hash:
+        value: "9494cbd701404080e83cbb316e692891"
+        algorithm: "MD5"
+    source_artifact:
+      url: "https://files.pythonhosted.org/packages/df/d5/3e3ff673e8f3096921b3f1b79ce04b832e0100b4741573154b72b756a681/pytz-2019.1.tar.gz"
+      hash:
+        value: "8b2860a161bfb0a6165798b1a2d8c40c"
+        algorithm: "MD5"
+    vcs:
+      type: ""
+      url: ""
+      revision: ""
+      path: ""
+    vcs_processed:
+      type: ""
+      url: ""
+      revision: ""
+      path: ""
+  curations: []
+- package:
+    id: "PyPI::sqlparse:0.3.0"
+    purl: "pkg:pypi/sqlparse@0.3.0"
+    declared_licenses:
+    - "BSD"
+    declared_licenses_processed:
+      spdx_expression: "BSD-3-Clause"
+    description: "Non-validating SQL parser"
+    homepage_url: "https://github.com/andialbrecht/sqlparse"
+    binary_artifact:
+      url: "https://files.pythonhosted.org/packages/ef/53/900f7d2a54557c6a37886585a91336520e5539e3ae2423ff1102daf4f3a7/sqlparse-0.3.0-py2.py3-none-any.whl"
+      hash:
+        value: "19aaa5c1cdb4fcae4fd0717f104c524d"
+        algorithm: "MD5"
+    source_artifact:
+      url: "https://files.pythonhosted.org/packages/63/c8/229dfd2d18663b375975d953e2bdc06d0eed714f93dcb7732f39e349c438/sqlparse-0.3.0.tar.gz"
+      hash:
+        value: "2ce34181d6b7b234c9f3c0ecd1ffb93e"
+        algorithm: "MD5"
+    vcs:
+      type: ""
+      url: ""
+      revision: ""
+      path: ""
+    vcs_processed:
+      type: "Git"
+      url: "https://github.com/andialbrecht/sqlparse.git"
+      revision: ""
+      path: ""
+  curations: []
+- package:
+    id: "PyPI::wincertstore:0.2"
+    purl: "pkg:pypi/wincertstore@0.2"
+    declared_licenses:
+    - "PSFL"
+    - "Python Software Foundation"
+    declared_licenses_processed:
+      spdx_expression: "Python-2.0"
+    description: "Python module to extract CA and CRL certs from Windows' cert store\
+      \ (ctypes based)."
+    homepage_url: "https://bitbucket.org/tiran/wincertstore"
+    binary_artifact:
+      url: "https://files.pythonhosted.org/packages/d1/67/12f477fa1cc8cbcdc78027c9fb0933ad41daf2e95a29d1cc8f34fe80c692/wincertstore-0.2-py2.py3-none-any.whl"
+      hash:
+        value: "03510657cf5ed292c9debe22c16edbe0"
+        algorithm: "MD5"
+    source_artifact:
+      url: "https://files.pythonhosted.org/packages/df/e1/765f9abdd57610b1c6251e4853edddcac60f929cf6c9029200887dde0f9e/wincertstore-0.2.zip"
+      hash:
+        value: "ae728f2f007185648d0c7a8679b361e2"
+        algorithm: "MD5"
+    vcs:
+      type: ""
+      url: ""
+      revision: ""
+      path: ""
+    vcs_processed:
+      type: "Mercurial"
+      url: "https://bitbucket.org/tiran/wincertstore"
+      revision: ""
+      path: ""
+  curations: []

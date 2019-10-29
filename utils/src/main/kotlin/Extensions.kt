@@ -30,6 +30,7 @@ import com.vdurmont.semver4j.Semver
 
 import java.io.File
 import java.io.IOException
+import java.lang.NumberFormatException
 import java.net.URI
 import java.net.URISyntaxException
 import java.net.URL
@@ -345,3 +346,15 @@ fun TypeFactory.constructTreeSetType(elementClass: Class<*>): CollectionType =
  * Check whether the URI has a fragment that looks like a VCS revision.
  */
 fun URI.hasRevisionFragment() = fragment?.let { Regex("[a-fA-F0-9]{7,}$").matches(it) } == true
+
+/**
+ * Return a version string with leading zeros of components stripped.
+ */
+fun stripLeadingZerosFromVersion(version: String) =
+    version.split(".").joinToString(".") {
+        try {
+            it.toInt().toString()
+        } catch (e: NumberFormatException) {
+            it
+        }
+    }

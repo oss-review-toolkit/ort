@@ -37,6 +37,7 @@ ENV \
     CARGO_VERSION=0.40.0-2 \
     COMPOSER_VERSION=1.9.1-1 \
     CONAN_VERSION=1.18.0 \
+    CONDA_VERSION=4.7.12.1 \
     FLUTTER_VERSION=v1.7.8+hotfix.3-stable \
     GO_DEP_VERSION=0.5.4-2 \
     GO_VERSION=1.13.4 \
@@ -58,6 +59,8 @@ ENV PATH="$PATH:$FLUTTER_HOME/bin:$FLUTTER_HOME/bin/cache/dart-sdk/bin:/opt/go/b
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
         # Install general tools required by this Dockefile.
+        build-essential \
+        bzip2 \
         curl \
         lib32stdc++6 \
         openssh-client \
@@ -94,6 +97,11 @@ RUN \
     chmod -R a+rw $FLUTTER_HOME && \
     flutter config --no-analytics && \
     flutter doctor && \
+    curl -sSL https://repo.continuum.io/miniconda/Miniconda3-${CONDA_VERSION}-Linux-x86_64.sh -o /tmp/miniconda.sh && \
+        bash /tmp/miniconda.sh -bfp /usr/local && \
+        rm -rf /tmp/miniconda.sh && \
+        conda install -y python=3 && \
+        conda update -y conda && \
     # Install golang in order to have `go mod` as package manager.
     curl -s https://dl.google.com/go/go$GO_VERSION.linux-amd64.tar.gz -o go.tgz && \
     tar -C /opt -xzf go.tgz && \
