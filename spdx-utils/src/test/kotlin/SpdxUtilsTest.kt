@@ -49,7 +49,7 @@ class SpdxUtilsTest : WordSpec() {
 
     init {
         "calculatePackageVerificationCode" should {
-            "work for given SHA1s" {
+            "work for given SHA1s and excludes" {
                 val sha1sums = listOf(
                     "0811bcab4e7a186f4d0d08d44cc5f06d721e7f6d",
                     "f7a535db519cf832c1119fecdf1ea0514f583886",
@@ -81,16 +81,24 @@ class SpdxUtilsTest : WordSpec() {
                     "310fc965173381a02fbe83a889f7c858c4499862"
                 )
 
+                val excludes = listOf("./package.spdx")
+
                 calculatePackageVerificationCode(sha1sums) shouldBe "1a74d8321c452522ec516a46893e6a42f36b5953"
+                calculatePackageVerificationCode(sha1sums, excludes) shouldBe
+                        "1a74d8321c452522ec516a46893e6a42f36b5953 (excludes: ./package.spdx)"
             }
 
-            "work for given files" {
+            "work for given files and excludes" {
                 val files = listOf(
                     setupTempFile("fileA", "Hello"),
                     setupTempFile("fileB", "World")
                 )
 
+                val excludes = listOf("./package.spdx")
+
                 calculatePackageVerificationCode(files) shouldBe "378d5a37b5b10b90535e32a190014d2a8d25354a"
+                calculatePackageVerificationCode(files, excludes) shouldBe
+                        "378d5a37b5b10b90535e32a190014d2a8d25354a (excludes: ./package.spdx)"
             }
 
             "work for a given file" {
@@ -102,10 +110,28 @@ class SpdxUtilsTest : WordSpec() {
             "work for a given directory" {
                 setupTempFile("fileA", "fileA")
                 setupTempFile("fileB", "fileB")
+                setupTempFile("package.spdx", "content")
                 tempDir!!.resolve("dir").mkdir()
                 setupTempFile("dir/fileC", "fileC")
+                setupTempFile("dir/package.spdx", "content")
 
-                calculatePackageVerificationCode(tempDir!!) shouldBe "15d3fa138d9302ec9a1584180b5eba0d342b60fa"
+                calculatePackageVerificationCode(tempDir!!) shouldBe
+                        "15d3fa138d9302ec9a1584180b5eba0d342b60fa (excludes: ./package.spdx, ./dir/package.spdx)"
+            }
+
+            "exclude VCS directories" {
+                setupTempFile("file", "file")
+                tempDir!!.resolve(".git").mkdir()
+                tempDir!!.resolve(".hg").mkdir()
+                tempDir!!.resolve(".svn").mkdir()
+                tempDir!!.resolve("CVS").mkdir()
+                setupTempFile(".git/git", "git")
+                setupTempFile(".hg/hg", "hg")
+                setupTempFile(".svn/svn", "svn")
+                setupTempFile("CVS/cvs", "cvs")
+
+                calculatePackageVerificationCode(tempDir!!) shouldBe
+                        "81e250a78cc6386afc25fa57ad6eaee31394019b"
             }
         }
 
