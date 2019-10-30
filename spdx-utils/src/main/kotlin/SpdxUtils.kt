@@ -32,43 +32,81 @@ val NON_LICENSE_FILENAMES = listOf(
 )
 
 /**
+ * A list of directories used by version control systems to store metadata.
+ */
+private val VCS_DIRECTORIES = listOf(
+    ".git",
+    ".hg",
+    ".svn",
+    "CVS"
+)
+
+/**
  * Return a string of hexadecimal digits representing the bytes in the array.
  */
 private fun ByteArray.toHexString(): String = joinToString("") { String.format("%02x", it) }
 
 /**
- * Calculate the [SPDX package verification code][1] for a list of [known SHA1s][sha1sums] of files.
+ * Calculate the [SPDX package verification code][1] for a list of [known SHA1s][sha1sums] of files and [excludes].
  *
  * [1]: https://spdx.org/spdx_specification_2_0_html#h.2p2csry
  */
 @JvmName("calculatePackageVerificationCodeForStrings")
-fun calculatePackageVerificationCode(sha1sums: List<String>): String =
-    sha1sums.sorted().fold(MessageDigest.getInstance("SHA-1")) { digest, sha1sum ->
+fun calculatePackageVerificationCode(sha1sums: List<String>, excludes: List<String> = emptyList()): String {
+    val sha1sum = sha1sums.sorted().fold(MessageDigest.getInstance("SHA-1")) { digest, sha1sum ->
         digest.apply { update(sha1sum.toByteArray()) }
     }.digest().toHexString()
 
+    return if (excludes.isEmpty()) {
+        sha1sum
+    } else {
+        "$sha1sum (excludes: ${excludes.joinToString()})"
+    }
+}
+
 /**
- * Calculate the [SPDX package verification code][1] for a list of [files].
+ * Calculate the [SPDX package verification code][1] for a list of [files] and paths of [excludes].
  *
  * [1]: https://spdx.org/spdx_specification_2_0_html#h.2p2csry
  */
 @JvmName("calculatePackageVerificationCodeForFiles")
-fun calculatePackageVerificationCode(files: List<File>) =
-    MessageDigest.getInstance("SHA-1").let { digest ->
-        calculatePackageVerificationCode(files.map { file ->
+fun calculatePackageVerificationCode(files: List<File>, excludes: List<String> = emptyList()): String {
+    val digest = MessageDigest.getInstance("SHA-1")
+    return calculatePackageVerificationCode(
+        files.map { file ->
             file.inputStream().use { digest.digest(it.readBytes()).toHexString() }
-        })
-    }
+        },
+        excludes
+    )
+}
 
 /**
  * Calculate the [SPDX package verification code][1] for all files in a [directory]. If [directory] points to a file
  * instead of a directory the verification code for the single file is returned.
+ * All files with the extension ".spdx" are automatically excluded from the generated code. Additionally files from the
+ * following VCS directories are excluded:
+ * * .git/
+ * * .hg/
+ * * .svn/
+ * * CVS/
  *
  * [1]: https://spdx.org/spdx_specification_2_0_html#h.2p2csry
  */
 @JvmName("calculatePackageVerificationCodeForDirectory")
-fun calculatePackageVerificationCode(directory: File) =
-    calculatePackageVerificationCode(directory.walkTopDown().filter { it.isFile }.toList())
+fun calculatePackageVerificationCode(directory: File): String {
+    val (excludes, files) = directory.walkTopDown()
+        .filter { it.isFile }
+        .partition { it.extension == "spdx" }
+    // Sort the list of files to show the files in a directory before the files in its subdirectories. This can be
+    // omitted once breadth-first search is available in Kotlin: https://github.com/JetBrains/kotlin/pull/2232
+    val filteredFiles = files.filter {
+        val relativePath = it.relativeTo(directory).invariantSeparatorsPath
+        VCS_DIRECTORIES.none { vcs -> relativePath.startsWith("$vcs/") }
+    }
+    val sortedExcludes = excludes.map { "./${it.relativeTo(directory).invariantSeparatorsPath}" }
+        .sortedWith(compareBy({ it.count { char -> char == '/' } }, { it }))
+    return calculatePackageVerificationCode(filteredFiles, sortedExcludes)
+}
 
 /**
  * A Kotlin-style convenience function to replace EnumSet.of() and EnumSet.noneOf().
