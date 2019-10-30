@@ -4,8 +4,10 @@
 fixes:
   - "com/here/ort/::cli/src/main/kotlin/"
   - "com/here/ort/analyzer/::analyzer/src/main/kotlin/"
+  - "com/here/ort/clearlydefined/::clearly-defined/src/main/kotlin/"
   - "com/here/ort/downloader/::downloader/src/main/kotlin/"
   - "com/here/ort/evaluator/::evaluator/src/main/kotlin/"
+  - "com/here/ort/helper/::helper-cli/src/main/kotlin/"
   - "com/here/ort/model/::model/src/main/kotlin/"
   - "com/here/ort/reporter/::reporter/src/main/kotlin/"
   - "com/here/ort/scanner/::scanner/src/main/kotlin/"
