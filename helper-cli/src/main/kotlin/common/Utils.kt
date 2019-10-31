@@ -431,7 +431,7 @@ internal fun RepositoryLicenseFindingCurations.mergeLicenseFindingCurations(
         }
 
         val curations = result.getOrPut(repositoryUrl, { mutableMapOf() })
-        if (updateOnlyUpdateExisting && !result.containsKey(curation.path)) {
+        if (updateOnlyUpdateExisting && !curations.containsKey(curation.path)) {
             return
         }
 
