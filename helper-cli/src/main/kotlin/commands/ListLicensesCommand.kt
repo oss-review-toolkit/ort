@@ -27,6 +27,7 @@ import com.here.ort.helper.CommandWithHelp
 import com.here.ort.helper.common.IdentifierConverter
 import com.here.ort.helper.common.fetchScannedSources
 import com.here.ort.helper.common.getLicenseFindingsById
+import com.here.ort.helper.common.getPackageOrProject
 import com.here.ort.helper.common.getViolatedRulesByLicense
 import com.here.ort.model.Identifier
 import com.here.ort.model.OrtResult
@@ -120,6 +121,11 @@ internal class ListLicensesCommand : CommandWithHelp() {
 
     override fun runCommand(jc: JCommander): Int {
         var ortResult = ortResultFile.readValue<OrtResult>()
+        if (ortResult.getPackageOrProject(packageId) == null) {
+            println("Could not find a package for the given id `$packageId`.")
+            return -1
+        }
+
         repositoryConfigurationFile?.let {
             ortResult = ortResult.replaceConfig(it.readValue())
         }
