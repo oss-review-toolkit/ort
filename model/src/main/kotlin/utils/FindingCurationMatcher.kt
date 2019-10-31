@@ -64,17 +64,25 @@ class FindingCurationMatcher {
         else finding.copy(license = curation.concludedLicense)
 
     /**
-     * Applies the given [curations] to the given [findings]. In case multiple curations apply to any given finding only
-     * an arbitrary single one is applied.
+     * Applies the given [curations] to the given [findings]. In case multiple curations match any given finding all
+     * curations are applied to the original finding, thus in this case there are multiple curated findings for one
+     * finding.
      */
     fun applyAll(
         findings: Collection<LicenseFinding>,
         curations: Collection<LicenseFindingCuration>
-    ): List<LicenseFinding> =
-        findings.mapNotNull { finding ->
-            curations.find { matches(finding, it) }.let {
-                if (it != null) apply(finding, it)
-                else finding
+    ): List<LicenseFinding> {
+        val result = mutableListOf<LicenseFinding>()
+
+        findings.forEach { finding ->
+            val matchingCurations = curations.filter { matches(finding, it) }
+            if (matchingCurations.isNotEmpty()) {
+                result.addAll(matchingCurations.mapNotNull { apply(finding, it) })
+            } else {
+                result.add(finding)
             }
         }
+
+        return result
+    }
 }

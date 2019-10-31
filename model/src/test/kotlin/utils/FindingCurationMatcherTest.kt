@@ -261,5 +261,43 @@ class FindingCurationMatcherTest : WordSpec() {
                 )
             }
         }
+
+        "Given two curations matching a single finding, applyAll" should {
+            "return two findings with the respective curation applied" {
+                val findings = listOf(
+                    LicenseFinding(
+                        license = "MIT",
+                        location = TextLocation(path = "some/path", startLine = 1, endLine = 1)
+                    )
+                )
+                val curations = listOf(
+                    LicenseFindingCuration(
+                        path = "some/path",
+                        detectedLicense = "MIT",
+                        reason = INCORRECT,
+                        concludedLicense = "MIT-old-style"
+                    ),
+                    LicenseFindingCuration(
+                        path = "some/path",
+                        detectedLicense = "MIT",
+                        reason = INCORRECT,
+                        concludedLicense = "Apache-2.0"
+                    )
+                )
+
+                val result = matcher.applyAll(findings, curations)
+
+                result shouldContainExactlyInAnyOrder listOf(
+                    LicenseFinding(
+                        license = "MIT-old-style",
+                        location = TextLocation(path = "some/path", startLine = 1, endLine = 1)
+                    ),
+                    LicenseFinding(
+                        license = "Apache-2.0",
+                        location = TextLocation(path = "some/path", startLine = 1, endLine = 1)
+                    )
+                )
+            }
+        }
     }
 }
