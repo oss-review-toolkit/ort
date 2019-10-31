@@ -51,6 +51,32 @@ data class LicenseConfiguration(
             }
         }
     }
+
+    /**
+     * A property for fast look-ups of licenses for a given set.
+     */
+    private val licensesBySetId: Map<String, Set<License>> by lazy {
+        val result = mutableMapOf<String, MutableSet<License>>()
+
+        licenseSets.forEach { set ->
+            result.put(set.id, mutableSetOf())
+        }
+
+        licenses.forEach { license ->
+            license.sets.forEach { setId ->
+                result.getOrPut(setId) { mutableSetOf() }.add(license)
+            }
+        }
+
+        result
+    }
+
+    @Suppress("UNUSED") // This is intended to be mostly used via scripting.
+    fun getLicensesForSet(setId: String): Set<License> {
+        require(licensesBySetId.containsKey(setId)) { "Unknown license set ID: $setId." }
+
+        return licensesBySetId[setId]!!
+    }
 }
 
 fun LicenseConfiguration?.orEmpty(): LicenseConfiguration = this ?: LicenseConfiguration()
