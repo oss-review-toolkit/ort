@@ -25,6 +25,7 @@ import com.here.ort.model.Project
 import com.here.ort.model.Severity
 import com.here.ort.model.config.CopyrightGarbage
 import com.here.ort.model.config.RepositoryConfiguration
+import com.here.ort.model.licenses.LicenseConfiguration
 import com.here.ort.model.yamlMapper
 import com.here.ort.reporter.LicenseTextProvider
 import com.here.ort.reporter.Reporter
@@ -58,6 +59,7 @@ class StaticHtmlReporter : Reporter() {
         resolutionProvider: ResolutionProvider,
         licenseTextProvider: LicenseTextProvider,
         copyrightGarbage: CopyrightGarbage,
+        licenseConfiguration: LicenseConfiguration,
         postProcessingScript: String?
     ) {
         val tabularScanRecord = ReportTableModelMapper(resolutionProvider).mapToReportTableModel(ortResult)

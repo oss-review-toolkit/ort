@@ -22,6 +22,7 @@ package com.here.ort.reporter.reporters
 import com.here.ort.model.LicenseFindingsMap
 import com.here.ort.model.OrtResult
 import com.here.ort.model.config.CopyrightGarbage
+import com.here.ort.model.licenses.LicenseConfiguration
 import com.here.ort.model.processStatements
 import com.here.ort.model.removeGarbage
 import com.here.ort.reporter.LicenseTextProvider
@@ -43,11 +44,16 @@ class NoticeReporter : Reporter() {
         val footers: List<String>
     )
 
-    class PostProcessor(ortResult: OrtResult, noticeReport: NoticeReport, copyrightGarbage: CopyrightGarbage) :
-        ScriptRunner() {
+    class PostProcessor(
+        ortResult: OrtResult,
+        noticeReport: NoticeReport,
+        copyrightGarbage: CopyrightGarbage,
+        licenseConfiguration: LicenseConfiguration
+    ) : ScriptRunner() {
         override val preface = """
             import com.here.ort.model.*
             import com.here.ort.model.config.*
+            import com.here.ort.model.licenses.*
             import com.here.ort.spdx.*
             import com.here.ort.utils.*
             import com.here.ort.reporter.reporters.NoticeReporter.NoticeReport
@@ -70,6 +76,7 @@ class NoticeReporter : Reporter() {
             engine.put("ortResult", ortResult)
             engine.put("noticeReport", noticeReport)
             engine.put("copyrightGarbage", copyrightGarbage)
+            engine.put("licenseConfiguration", licenseConfiguration)
         }
 
         override fun run(script: String): NoticeReport = super.run(script) as NoticeReport
@@ -84,6 +91,7 @@ class NoticeReporter : Reporter() {
         resolutionProvider: ResolutionProvider,
         licenseTextProvider: LicenseTextProvider,
         copyrightGarbage: CopyrightGarbage,
+        licenseConfiguration: LicenseConfiguration,
         postProcessingScript: String?
     ) {
         requireNotNull(ortResult.scanner) {
@@ -102,7 +110,8 @@ class NoticeReporter : Reporter() {
             PostProcessor(
                 ortResult,
                 NoticeReport(listOf(header), licenseFindings, emptyList()),
-                copyrightGarbage
+                copyrightGarbage,
+                licenseConfiguration
             ).run(postProcessingScript)
         } else {
             val processedFindings = licenseFindings.removeGarbage(copyrightGarbage).processStatements()

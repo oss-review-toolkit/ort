@@ -23,6 +23,7 @@ import com.here.ort.model.AnalyzerResult
 import com.here.ort.model.OrtResult
 import com.here.ort.model.ScanRecord
 import com.here.ort.model.config.CopyrightGarbage
+import com.here.ort.model.licenses.LicenseConfiguration
 import com.here.ort.reporter.reporters.DefaultLicenseTextProvider
 
 import java.io.OutputStream
@@ -55,7 +56,8 @@ abstract class Reporter {
     /**
      * Generate a report for the [ortResult], taking into account any issue resolutions provided by [resolutionProvider]
      * and any license text provided by [LicenseTextProvider]. Copyright statements are cleaned from [copyrightGarbage].
-     * The report may be post-processed by a [postProcessingScript] before it is written to [outputStream].
+     * The report may be post-processed by a [postProcessingScript] before it is written to [outputStream] whereas the
+     * [licenseConfiguration] is passed as a parameter to that script.
      */
     abstract fun generateReport(
         outputStream: OutputStream,
@@ -63,6 +65,7 @@ abstract class Reporter {
         resolutionProvider: ResolutionProvider = DefaultResolutionProvider(),
         licenseTextProvider: LicenseTextProvider = DefaultLicenseTextProvider(),
         copyrightGarbage: CopyrightGarbage = CopyrightGarbage(),
+        licenseConfiguration: LicenseConfiguration = LicenseConfiguration(),
         postProcessingScript: String? = null
     )
 }
