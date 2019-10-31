@@ -416,14 +416,16 @@ internal fun RepositoryConfiguration.writeAsYaml(targetFile: File) {
 }
 
 /**
- * Merge the given [RepositoryLicenseFindingCurations] replacing entries with equal [LicenseFindingCuration.path].
- * If the given [updateOnlyExisting] is true then only entries with matching [LicenseFindingCuration.path] are merged.
+ * Merge the given [RepositoryLicenseFindingCurations] replacing entries with equal [LicenseFindingCuration.path],
+ * [LicenseFindingCuration.startLines], [LicenseFindingCuration.lineCount], [LicenseFindingCuration.detectedLicense]
+ * and [LicenseFindingCuration.concludedLicense]. If the given [updateOnlyExisting] is true then only entries with
+ * matching [LicenseFindingCuration.path] are merged.
  */
 internal fun RepositoryLicenseFindingCurations.mergeLicenseFindingCurations(
     other: RepositoryLicenseFindingCurations,
     updateOnlyExisting: Boolean = false
 ): RepositoryLicenseFindingCurations {
-    val result: MutableMap<String, MutableMap<String, LicenseFindingCuration>> = mutableMapOf()
+    val result: MutableMap<String, MutableMap<LicenseFindingCurationHashKey, LicenseFindingCuration>> = mutableMapOf()
 
     fun merge(repositoryUrl: String, curation: LicenseFindingCuration, updateOnlyUpdateExisting: Boolean = false) {
         if (updateOnlyUpdateExisting && !result.containsKey(repositoryUrl)) {
@@ -431,11 +433,13 @@ internal fun RepositoryLicenseFindingCurations.mergeLicenseFindingCurations(
         }
 
         val curations = result.getOrPut(repositoryUrl, { mutableMapOf() })
-        if (updateOnlyUpdateExisting && !curations.containsKey(curation.path)) {
+
+        val key = curation.hashKey()
+        if (updateOnlyUpdateExisting && !curations.containsKey(key)) {
             return
         }
 
-        curations.put(curation.path, curation)
+        curations.put(key, curation)
     }
 
     forEach { (repositoryUrl, curations) ->
@@ -526,17 +530,7 @@ internal fun Collection<LicenseFindingCuration>.mergeLicenseFindingCurations(
     other: Collection<LicenseFindingCuration>,
     updateOnlyExisting: Boolean = false
 ): List<LicenseFindingCuration> {
-    data class HashKey(
-        val path: String,
-        val startLines: List<Int> = emptyList(),
-        val lineCount: Int? = null,
-        val detectedLicense: String?,
-        val concludedLicense: String
-    )
-
-    fun LicenseFindingCuration.hashKey() = HashKey(path, startLines, lineCount, detectedLicense, concludedLicense)
-
-    val result = mutableMapOf<HashKey, LicenseFindingCuration>()
+    val result = mutableMapOf<LicenseFindingCurationHashKey, LicenseFindingCuration>()
 
     associateByTo(result) { it.hashKey() }
 
@@ -548,3 +542,14 @@ internal fun Collection<LicenseFindingCuration>.mergeLicenseFindingCurations(
 
     return result.values.toList()
 }
+
+private data class LicenseFindingCurationHashKey(
+    val path: String,
+    val startLines: List<Int> = emptyList(),
+    val lineCount: Int? = null,
+    val detectedLicense: String?,
+    val concludedLicense: String
+)
+
+private fun LicenseFindingCuration.hashKey()
+        = LicenseFindingCurationHashKey(path, startLines, lineCount, detectedLicense, concludedLicense)
