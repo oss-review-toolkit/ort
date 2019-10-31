@@ -518,7 +518,8 @@ internal fun Collection<PathExclude>.mergePathExcludes(
 
 /**
  * Merge the given [LicenseFindingCuration]s replacing entries with equal [LicenseFindingCuration.path],
- * [LicenseFindingCuration.startLines], [LicenseFindingCuration.lineCount] and [LicenseFindingCuration.detectedLicense].
+ * [LicenseFindingCuration.startLines], [LicenseFindingCuration.lineCount], [LicenseFindingCuration.detectedLicense]
+ * and [LicenseFindingCuration.concludedLicense].
  * If the given [updateOnlyExisting] is true then only entries replacing existing ones are merged.
  */
 internal fun Collection<LicenseFindingCuration>.mergeLicenseFindingCurations(
@@ -529,10 +530,11 @@ internal fun Collection<LicenseFindingCuration>.mergeLicenseFindingCurations(
         val path: String,
         val startLines: List<Int> = emptyList(),
         val lineCount: Int? = null,
-        val detectedLicense: String?
+        val detectedLicense: String?,
+        val concludedLicense: String
     )
 
-    fun LicenseFindingCuration.hashKey(): HashKey = HashKey(path, startLines, lineCount, detectedLicense)
+    fun LicenseFindingCuration.hashKey() = HashKey(path, startLines, lineCount, detectedLicense, concludedLicense)
 
     val result = mutableMapOf<HashKey, LicenseFindingCuration>()
 
