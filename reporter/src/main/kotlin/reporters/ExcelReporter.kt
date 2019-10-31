@@ -23,6 +23,7 @@ import com.here.ort.model.AnalyzerResult
 import com.here.ort.model.OrtResult
 import com.here.ort.model.VcsInfo
 import com.here.ort.model.config.CopyrightGarbage
+import com.here.ort.model.licenses.LicenseConfiguration
 import com.here.ort.reporter.LicenseTextProvider
 import com.here.ort.reporter.Reporter
 import com.here.ort.reporter.ResolutionProvider
@@ -89,6 +90,7 @@ class ExcelReporter : Reporter() {
         resolutionProvider: ResolutionProvider,
         licenseTextProvider: LicenseTextProvider,
         copyrightGarbage: CopyrightGarbage,
+        licenseConfiguration: LicenseConfiguration,
         postProcessingScript: String?
     ) {
         val tabularScanRecord = ReportTableModelMapper(resolutionProvider).mapToReportTableModel(ortResult)

@@ -30,6 +30,8 @@ import com.here.ort.model.OrtResult
 import com.here.ort.model.config.CopyrightGarbage
 import com.here.ort.model.config.OrtConfiguration
 import com.here.ort.model.config.Resolutions
+import com.here.ort.model.licenses.LicenseConfiguration
+import com.here.ort.model.licenses.orEmpty
 import com.here.ort.model.readValue
 import com.here.ort.reporter.DefaultResolutionProvider
 import com.here.ort.reporter.Reporter
@@ -124,6 +126,13 @@ object ReporterCommand : CommandWithHelp() {
     )
     private var customLicenseTextsDir: File? = null
 
+    @Parameter(
+        description = "A file containing the license configuration.",
+        names = ["--license-configuration-file"],
+        order = PARAMETER_ORDER_OPTIONAL
+    )
+    private var licenseConfigurationFile: File? = null
+
     override fun runCommand(jc: JCommander, config: OrtConfiguration): Int {
         val absoluteOutputDir = outputDir.expandTilde().normalize()
 
@@ -148,6 +157,8 @@ object ReporterCommand : CommandWithHelp() {
 
         val copyrightGarbage = copyrightGarbageFile?.expandTilde()?.readValue() ?: CopyrightGarbage()
 
+        val licenseConfiguration = licenseConfigurationFile?.expandTilde()?.readValue<LicenseConfiguration>().orEmpty()
+
         var exitCode = 0
 
         absoluteOutputDir.safeMkdirs()
@@ -161,6 +172,7 @@ object ReporterCommand : CommandWithHelp() {
                     resolutionProvider,
                     DefaultLicenseTextProvider(customLicenseTextsDir),
                     copyrightGarbage,
+                    licenseConfiguration,
                     postProcessingScript?.expandTilde()?.readText()
                 )
 

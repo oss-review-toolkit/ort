@@ -22,6 +22,7 @@ package com.here.ort.reporter.reporters
 import com.here.ort.model.OrtResult
 import com.here.ort.model.config.CopyrightGarbage
 import com.here.ort.model.jsonMapper
+import com.here.ort.model.licenses.LicenseConfiguration
 import com.here.ort.reporter.LicenseTextProvider
 import com.here.ort.reporter.Reporter
 import com.here.ort.reporter.ResolutionProvider
@@ -38,6 +39,7 @@ class WebAppReporter : Reporter() {
         resolutionProvider: ResolutionProvider,
         licenseTextProvider: LicenseTextProvider,
         copyrightGarbage: CopyrightGarbage,
+        licenseConfiguration: LicenseConfiguration,
         postProcessingScript: String?
     ) {
         val template = javaClass.classLoader.getResource("scan-report-template.html").readText()
