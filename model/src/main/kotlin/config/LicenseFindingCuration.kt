@@ -54,6 +54,7 @@ data class LicenseFindingCuration(
      * A matcher for the detected license of a license finding, matches if the detected license equals
      * [detectedLicense] or if [detectedLicense] is null.
      */
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     val detectedLicense: String?,
 
     /**
