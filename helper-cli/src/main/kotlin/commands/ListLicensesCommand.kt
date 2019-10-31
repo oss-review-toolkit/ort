@@ -130,7 +130,12 @@ internal class ListLicensesCommand : CommandWithHelp() {
             ortResult = ortResult.replaceConfig(it.readValue())
         }
 
-        val sourcesDir = sourceCodeDir ?: ortResult.fetchScannedSources(packageId)
+        val sourcesDir = if (sourceCodeDir == null) {
+            println("Downloading sources for package $packageId...")
+            ortResult.fetchScannedSources(packageId)
+        } else {
+            sourceCodeDir!!
+        }
         val violatedRulesByLicense = ortResult.getViolatedRulesByLicense(packageId, Severity.ERROR)
 
         fun isPathExcluded(path: String) = ortResult.repository.config.excludes?.let {
