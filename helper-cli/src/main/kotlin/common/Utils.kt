@@ -439,7 +439,7 @@ internal fun RepositoryLicenseFindingCurations.mergeLicenseFindingCurations(
             return
         }
 
-        curations.put(key, curation)
+        curations[key] = curation
     }
 
     forEach { (repositoryUrl, curations) ->
@@ -479,7 +479,7 @@ internal fun RepositoryPathExcludes.mergePathExcludes(
             return
         }
 
-        pathExcludes.put(pathExclude.pattern, pathExclude)
+        pathExcludes[pathExclude.pattern] = pathExclude
     }
 
     forEach { (repositoryUrl, pathExcludes) ->
@@ -551,5 +551,5 @@ private data class LicenseFindingCurationHashKey(
     val concludedLicense: String
 )
 
-private fun LicenseFindingCuration.hashKey()
-        = LicenseFindingCurationHashKey(path, startLines, lineCount, detectedLicense, concludedLicense)
+private fun LicenseFindingCuration.hashKey() =
+    LicenseFindingCurationHashKey(path, startLines, lineCount, detectedLicense, concludedLicense)
