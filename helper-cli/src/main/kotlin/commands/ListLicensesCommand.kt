@@ -123,7 +123,7 @@ internal class ListLicensesCommand : CommandWithHelp() {
         var ortResult = ortResultFile.readValue<OrtResult>()
         if (ortResult.getPackageOrProject(packageId) == null) {
             println("Could not find a package for the given id `$packageId`.")
-            return -1
+            return 2
         }
 
         repositoryConfigurationFile?.let {
