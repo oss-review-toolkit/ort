@@ -21,6 +21,8 @@ package com.here.ort.model.licenses
 
 import com.fasterxml.jackson.annotation.JsonInclude
 
+import com.here.ort.spdx.SpdxExpression
+
 import java.util.SortedSet
 
 /**
@@ -28,7 +30,8 @@ import java.util.SortedSet
  */
 data class License(
     /**
-     * The SPDX identifier of this [License].
+     * The SPDX identifier of this [License]. The value has to be either a compound expression of one license with an
+     * exception or no compound expression at all.
      */
     val id: String,
 
@@ -49,7 +52,8 @@ data class License(
     val includeSourceCodeOfferInNoticeFile: Boolean
 ) {
     init {
-        require(id.isNotEmpty()) { "The identifier must not be empty." }
-        // TODO: check if the id is a valid SPDX identifier.
+        require(SpdxExpression.parse(id).licenses().size == 1) {
+            "The id '$id' contains multiple licenses which is not allowed."
+        }
     }
 }
