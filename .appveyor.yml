@@ -77,12 +77,13 @@ build_script:
   - if not exist %HOME%\.gradle mkdir %HOME%\.gradle
   - echo org.gradle.daemon=false>>%HOME%\.gradle\gradle.properties
   - echo org.gradle.java.home=C:/Program Files/Java/jdk9>>%HOME%\.gradle\gradle.properties
+  - gradlew --stacktrace checkCopyright detekt
 
 test_script:
   - if "%APPVEYOR_SCHEDULED_BUILD%"=="True" (
-      gradlew --stacktrace dokkaJar check
+      gradlew --stacktrace dokkaJar test funTest
     ) else (
-      gradlew --stacktrace -Dkotlintest.tags.exclude=ExpensiveTag check
+      gradlew --stacktrace -Dkotlintest.tags.exclude=ExpensiveTag test funTest
     )
 
 on_finish:

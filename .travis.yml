@@ -77,12 +77,17 @@ install:
   - conan user # Create the conan data directory. Automatic detection of your arch, compiler, etc.
   - pip install --user pipenv==$PYTHON_PIPENV_VERSION
 
+before_script:
+  - mkdir -p $HOME/.gradle
+  - echo "org.gradle.daemon=false" >> $HOME/.gradle/gradle.properties
+
 script:
   - set -o pipefail
+  - ./gradlew --stacktrace checkCopyright detekt
   - if [ "$TRAVIS_EVENT_TYPE" = "cron" ]; then
-      ./gradlew --no-daemon --stacktrace -Dkotlintest.tags.exclude=ScanCodeTag check jacocoReport | tee log.txt;
+      ./gradlew --stacktrace -Dkotlintest.tags.exclude=ScanCodeTag test funTest jacocoReport | tee log.txt;
     else
-      ./gradlew --no-daemon --scan --stacktrace -Dkotlintest.tags.exclude=ExpensiveTag check jacocoReport | tee log.txt;
+      ./gradlew --scan --stacktrace -Dkotlintest.tags.exclude=ExpensiveTag test funTest jacocoReport | tee log.txt;
     fi
   - if grep -A1 ".+Test.+STARTED$" log.txt | grep -q "^:"; then
       echo "Some tests seemingly have been aborted.";
