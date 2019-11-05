@@ -27,5 +27,7 @@ PROJECT_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
 
 echo "Building ORT..."
 
-buildWithoutContext $PROJECT_DIR/docker/build/Dockerfile ort-build:latest && \
-    runGradleWrapper ort-build :cli:installDist :cli:distTar
+(cd $PROJECT_DIR &&
+    buildWithoutContext docker/build/Dockerfile ort-build:latest && \
+        runGradleWrapper ort-build :cli:installDist :cli:distTar
+)
