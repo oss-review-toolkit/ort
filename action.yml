@@ -1,0 +1,12 @@
+# action.yml
+name: 'OSS Analysis'
+description: 'Analyze a repository with the OSS Review Toolkit'
+inputs:
+    ort-args:
+      description: 'ORT command line arguments'
+      required: true
+runs:
+  using: 'docker'
+  image: 'docker/run/Dockerfile'
+  args:
+    - ${{ inputs.ort-args }}

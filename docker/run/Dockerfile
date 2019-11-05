@@ -101,8 +101,9 @@ RUN \
         chmod -R o=u /usr/local/scancode-toolkit-$SCANCODE_VERSION && \
         ln -s /usr/local/scancode-toolkit-$SCANCODE_VERSION/scancode /usr/local/bin/scancode
 
-ARG ORT_VERSION
-ADD ort-$ORT_VERSION.tar .
+# ARG ORT_VERSION
+# ADD ort-$ORT_VERSION.tar .
+ENV ORT_VERSION=0.1.0
 
 # As the ENTRYPOINT cannot contain variables, create a symbolic link to the specific version instead.
 RUN ln -s /ort-$ORT_VERSION /ort
