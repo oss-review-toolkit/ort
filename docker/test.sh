@@ -28,11 +28,13 @@ PROJECT_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
 # If required, first build the distribution.
 ORT_VERSION=$(cat $PROJECT_DIR/model/src/main/resources/VERSION)
 if [ ! -f "$PROJECT_DIR/cli/build/distributions/ort-$ORT_VERSION.tar" ]; then
-    docker/build.sh || die "Failed to build ORT."
+    $SCRIPT_DIR/build.sh || die "Failed to build ORT."
     ORT_VERSION=$(cat $PROJECT_DIR/model/src/main/resources/VERSION)
 fi
 
 echo "Testing ORT version $ORT_VERSION..."
 
-buildWithoutContext $PROJECT_DIR/docker/test/Dockerfile ort-test:latest && \
-    runGradleWrapper ort-test test
+(cd $PROJECT_DIR &&
+    buildWithoutContext docker/test/Dockerfile ort-test:latest && \
+        runGradleWrapper ort-test test
+)
