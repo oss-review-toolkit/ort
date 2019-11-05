@@ -26,9 +26,9 @@ project:
       dependencies:
       - id: "PyPI::isodate:0.6.0"
         dependencies:
-        - id: "PyPI::six:1.12.0"
-      - id: "PyPI::pyparsing:2.4.2"
-    - id: "PyPI::six:1.12.0"
+        - id: "PyPI::six:1.13.0"
+      - id: "PyPI::pyparsing:2.4.4"
+    - id: "PyPI::six:1.13.0"
 packages:
 - package:
     id: "PyPI::isodate:0.6.0"
@@ -91,8 +91,8 @@ packages:
       path: ""
   curations: []
 - package:
-    id: "PyPI::pyparsing:2.4.2"
-    purl: "pkg:pypi/pyparsing@2.4.2"
+    id: "PyPI::pyparsing:2.4.4"
+    purl: "pkg:pypi/pyparsing@2.4.4"
     declared_licenses:
     - "MIT"
     declared_licenses_processed:
@@ -100,14 +100,14 @@ packages:
     description: "Python parsing module"
     homepage_url: "https://github.com/pyparsing/pyparsing/"
     binary_artifact:
-      url: "https://files.pythonhosted.org/packages/11/fa/0160cd525c62d7abd076a070ff02b2b94de589f1a9789774f17d7c54058e/pyparsing-2.4.2-py2.py3-none-any.whl"
+      url: "https://files.pythonhosted.org/packages/a3/c4/7828cf9e71ce8fbd43c1e502f3fdd0498f069fcf9d1c268205ce278ae201/pyparsing-2.4.4-py2.py3-none-any.whl"
       hash:
-        value: "4f5f2362c6bd5914742009cf9c90cafe"
+        value: "135c38967954b88381f08dc86989da49"
         algorithm: "MD5"
     source_artifact:
-      url: "https://files.pythonhosted.org/packages/7e/24/eaa8d7003aee23eda270099eeec754d7bf4399f75c6a011ef948304f66a2/pyparsing-2.4.2.tar.gz"
+      url: "https://files.pythonhosted.org/packages/95/b7/1b8f7dbea6688a8ae97c6265e346120bb2a1888facaf58552ddbcbe502e3/pyparsing-2.4.4.tar.gz"
       hash:
-        value: "46d02cbe0461fe0571d51649e6006ef5"
+        value: "9db2819a2fedf328a9275268ad6fd48d"
         algorithm: "MD5"
     vcs:
       type: ""
@@ -153,8 +153,8 @@ packages:
       path: ""
   curations: []
 - package:
-    id: "PyPI::six:1.12.0"
-    purl: "pkg:pypi/six@1.12.0"
+    id: "PyPI::six:1.13.0"
+    purl: "pkg:pypi/six@1.13.0"
     declared_licenses:
     - "MIT"
     declared_licenses_processed:
@@ -162,14 +162,14 @@ packages:
     description: "Python 2 and 3 compatibility utilities"
     homepage_url: "https://github.com/benjaminp/six"
     binary_artifact:
-      url: "https://files.pythonhosted.org/packages/73/fb/00a976f728d0d1fecfe898238ce23f502a721c0ac0ecfedb80e0d88c64e9/six-1.12.0-py2.py3-none-any.whl"
+      url: "https://files.pythonhosted.org/packages/65/26/32b8464df2a97e6dd1b656ed26b2c194606c16fe163c695a992b36c11cdf/six-1.13.0-py2.py3-none-any.whl"
       hash:
-        value: "b0dc15d494e2d6e6c19cbbe482e91c5d"
+        value: "b642ef493974a23bb77f5c7e0e08b204"
         algorithm: "MD5"
     source_artifact:
-      url: "https://files.pythonhosted.org/packages/dd/bf/4138e7bfb757de47d1f4b6994648ec67a51efe58fa907c1e11e350cddfca/six-1.12.0.tar.gz"
+      url: "https://files.pythonhosted.org/packages/94/3e/edcf6fef41d89187df7e38e868b2dd2182677922b600e880baad7749c865/six-1.13.0.tar.gz"
       hash:
-        value: "9ae5d1feed8c0215f4ae4adcd9207fcb"
+        value: "e92c23c882c7d5564ce5773fe31b2771"
         algorithm: "MD5"
     vcs:
       type: ""
