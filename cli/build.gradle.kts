@@ -14,6 +14,15 @@ application {
     mainClassName = "com.here.ort.Main"
 }
 
+tasks.named<CreateStartScripts>("startScripts") {
+    doLast {
+        // Work around the command line length limit on Windows when passing the classpath to Java, see
+        // https://github.com/gradle/gradle/issues/1989#issuecomment-395001392.
+        windowsScript.writeText(windowsScript.readText().replace(Regex("set CLASSPATH=.*"),
+            "set CLASSPATH=%APP_HOME%\\\\lib\\\\*"))
+    }
+}
+
 repositories {
     jcenter()
 
