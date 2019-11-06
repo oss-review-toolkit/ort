@@ -77,10 +77,6 @@ install:
   - conan user # Create the conan data directory. Automatic detection of your arch, compiler, etc.
   - pip install --user pipenv==$PYTHON_PIPENV_VERSION
 
-before_script:
-  - mkdir -p $HOME/.gradle
-  - echo "org.gradle.daemon=false" >> $HOME/.gradle/gradle.properties
-
 script:
   - set -o pipefail
   - ./gradlew --stacktrace checkCopyright detekt
