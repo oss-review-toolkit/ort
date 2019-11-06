@@ -75,7 +75,6 @@ install:
 # Do something useful here to override the default MSBuild (which would fail otherwise).
 build_script:
   - if not exist %HOME%\.gradle mkdir %HOME%\.gradle
-  - echo org.gradle.daemon=false>>%HOME%\.gradle\gradle.properties
   - echo org.gradle.java.home=C:/Program Files/Java/jdk9>>%HOME%\.gradle\gradle.properties
   - gradlew --stacktrace checkCopyright detekt
 
