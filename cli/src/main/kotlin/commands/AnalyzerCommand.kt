@@ -29,6 +29,7 @@ import com.here.ort.CommandWithHelp
 import com.here.ort.analyzer.Analyzer
 import com.here.ort.analyzer.PackageManager
 import com.here.ort.analyzer.PackageManagerFactory
+import com.here.ort.analyzer.curation.FilePackageCurationProvider
 import com.here.ort.model.OutputFormat
 import com.here.ort.model.config.AnalyzerConfiguration
 import com.here.ort.model.config.OrtConfiguration
@@ -152,9 +153,11 @@ object AnalyzerCommand : CommandWithHelp() {
 
         val analyzerConfig = AnalyzerConfiguration(ignoreToolVersions, allowDynamicVersions)
         val analyzer = Analyzer(analyzerConfig)
+
+        val curationProvider = absolutePackageCurationsFile?.let { FilePackageCurationProvider(it) }
+
         val ortResult = analyzer.analyze(
-            absoluteInputDir, packageManagers, absolutePackageCurationsFile,
-            absoluteRepositoryConfigurationFile
+            absoluteInputDir, packageManagers, curationProvider, absoluteRepositoryConfigurationFile
         )
 
         println("Found ${ortResult.getProjects().size} project(s) in total.")
