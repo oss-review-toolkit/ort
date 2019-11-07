@@ -17,8 +17,9 @@
  * License-Filename: LICENSE
  */
 
-package com.here.ort.analyzer
+package com.here.ort.analyzer.curation
 
+import com.here.ort.analyzer.PackageCurationProvider
 import com.here.ort.clearlydefined.ClearlyDefinedService
 import com.here.ort.clearlydefined.ClearlyDefinedService.Provider
 import com.here.ort.clearlydefined.ClearlyDefinedService.Server
