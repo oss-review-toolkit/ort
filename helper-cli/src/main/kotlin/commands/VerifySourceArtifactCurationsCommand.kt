@@ -41,7 +41,7 @@ import java.io.IOException
 )
 internal class VerifySourceArtifactCurationsCommand : CommandWithHelp() {
     @Parameter(
-        description = "A YAML file that contains package curation data.",
+        description = "A file containing package curation data.",
         required = true,
         order = PARAMETER_ORDER_MANDATORY,
         converter = FileConverter::class

@@ -98,8 +98,8 @@ object EvaluatorCommand : CommandWithHelp() {
     private var repositoryConfigurationFile: File? = null
 
     @Parameter(
-        description = "A YAML file that contains package curation data. This replaces all package curations " +
-            "contained in the given ORT result file with the ones present in the given file.",
+        description = "A file containing package curation data. This replaces all package curations contained in the " +
+                "given ORT result file with the ones present in the given file.",
         names = ["--package-curations-file"],
         order = PARAMETER_ORDER_OPTIONAL
     )
