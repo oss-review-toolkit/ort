@@ -105,7 +105,7 @@ object AnalyzerCommand : CommandWithHelp() {
     private var allowDynamicVersions = false
 
     @Parameter(
-        description = "A YAML file that contains package curation data.",
+        description = "A file containing package curation data.",
         names = ["--package-curations-file"],
         order = PARAMETER_ORDER_OPTIONAL
     )
