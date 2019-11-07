@@ -19,7 +19,6 @@
 
 package com.here.ort.analyzer
 
-import com.here.ort.analyzer.curation.FilePackageCurationProvider
 import com.here.ort.analyzer.managers.Unmanaged
 import com.here.ort.downloader.VersionControlSystem
 import com.here.ort.downloader.vcs.GitRepo
@@ -59,7 +58,7 @@ class Analyzer(private val config: AnalyzerConfiguration) {
     fun analyze(
         absoluteProjectPath: File,
         packageManagers: List<PackageManagerFactory> = PackageManager.ALL,
-        packageCurationsFile: File? = null,
+        curationProvider: PackageCurationProvider? = null,
         repositoryConfigurationFile: File? = null
     ): OrtResult {
         val startTime = Instant.now()
@@ -112,7 +111,7 @@ class Analyzer(private val config: AnalyzerConfiguration) {
         }
 
         // Resolve dependencies per package manager.
-        val analyzerResult = runBlocking { analyzeInParallel(managedFiles, packageCurationsFile) }
+        val analyzerResult = runBlocking { analyzeInParallel(managedFiles, curationProvider) }
 
         val workingTree = VersionControlSystem.forDirectory(absoluteProjectPath)
         val vcs = workingTree?.getInfo() ?: VcsInfo.EMPTY
@@ -131,7 +130,7 @@ class Analyzer(private val config: AnalyzerConfiguration) {
 
     private suspend fun analyzeInParallel(
         managedFiles: Map<PackageManager, List<File>>,
-        packageCurationsFile: File?
+        curationProvider: PackageCurationProvider?
     ): AnalyzerResult {
         val analysisDispatcher = Executors.newFixedThreadPool(5, NamedThreadFactory(TOOL_NAME)).asCoroutineDispatcher()
         val analyzerResultBuilder = AnalyzerResultBuilder()
@@ -151,8 +150,7 @@ class Analyzer(private val config: AnalyzerConfiguration) {
                                 }
                             }
 
-                            packageCurationsFile?.let {
-                                val provider = FilePackageCurationProvider(it)
+                            curationProvider?.let { provider ->
                                 results.mapValues { entry ->
                                     ProjectAnalyzerResult(
                                         project = entry.value.project,

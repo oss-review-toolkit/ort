@@ -123,9 +123,7 @@ internal fun findRepositoryPaths(directory: File): Map<String, Set<String>> {
     val analyzer = Analyzer(AnalyzerConfiguration(true, true))
     val ortResult = analyzer.analyze(
         absoluteProjectPath = directory,
-        packageManagers = emptyList(),
-        packageCurationsFile = null,
-        repositoryConfigurationFile = null
+        packageManagers = emptyList()
     )
 
     val result = mutableMapOf<String, MutableSet<String>>()
