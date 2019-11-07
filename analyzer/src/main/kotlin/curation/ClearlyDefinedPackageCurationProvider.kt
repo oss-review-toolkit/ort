@@ -33,6 +33,9 @@ import com.here.ort.model.RemoteArtifact
 import com.here.ort.model.VcsInfoCuration
 import com.here.ort.model.VcsType
 
+/**
+ * A provider for curated package meta-data from the [ClearlyDefined](https://clearlydefined.io/) service.
+ */
 class ClearlyDefinedPackageCurationProvider(server: Server = Server.PRODUCTION) : PackageCurationProvider {
     private val service = ClearlyDefinedService.create(server)
 
