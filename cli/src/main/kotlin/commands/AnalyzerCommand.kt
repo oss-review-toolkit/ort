@@ -157,7 +157,7 @@ object AnalyzerCommand : CommandWithHelp() {
             absoluteRepositoryConfigurationFile
         )
 
-        println("Found ${ortResult.analyzer?.result?.projects.orEmpty().size} project(s) in total.")
+        println("Found ${ortResult.getProjects().size} project(s) in total.")
 
         absoluteOutputDir.safeMkdirs()
 
