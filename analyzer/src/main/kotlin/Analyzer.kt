@@ -132,10 +132,10 @@ class Analyzer(private val config: AnalyzerConfiguration) {
         managedFiles: Map<PackageManager, List<File>>,
         packageCurationsFile: File?
     ): AnalyzerResult {
-        val dispatcher = Executors.newFixedThreadPool(5, NamedThreadFactory(TOOL_NAME)).asCoroutineDispatcher()
+        val analysisDispatcher = Executors.newFixedThreadPool(5, NamedThreadFactory(TOOL_NAME)).asCoroutineDispatcher()
         val analyzerResultBuilder = AnalyzerResultBuilder()
 
-        try {
+        analysisDispatcher.use { dispatcher ->
             coroutineScope {
                 managedFiles.map { (manager, files) ->
                     async {
@@ -177,8 +177,6 @@ class Analyzer(private val config: AnalyzerConfiguration) {
                     }
                 }
             }
-        } finally {
-            dispatcher.close()
         }
 
         return analyzerResultBuilder.build()
