@@ -107,7 +107,7 @@ object EvaluatorCommand : CommandWithHelp() {
 
     @Parameter(
         description = "A file containing the license configuration. That license configuration is passed as " +
-            "parameter to the rules script.",
+                "parameter to the rules script.",
         names = ["--license-configuration-file"],
         order = PARAMETER_ORDER_OPTIONAL
     )
