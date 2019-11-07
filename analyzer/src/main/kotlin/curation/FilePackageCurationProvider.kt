@@ -31,9 +31,7 @@ import java.io.File
  * A [PackageCurationProvider] that loads [PackageCuration]s from a single file. Supports all file formats specified
  * in [OutputFormat].
  */
-class FilePackageCurationProvider(
-    curationFile: File
-) : PackageCurationProvider {
+class FilePackageCurationProvider(curationFile: File) : PackageCurationProvider {
     internal val packageCurations: List<PackageCuration> by lazy {
         curationFile.readValue<List<PackageCuration>>()
     }
