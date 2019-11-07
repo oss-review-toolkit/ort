@@ -29,6 +29,8 @@ import com.here.ort.CommandWithHelp
 import com.here.ort.analyzer.Analyzer
 import com.here.ort.analyzer.PackageManager
 import com.here.ort.analyzer.PackageManagerFactory
+import com.here.ort.analyzer.curation.ClearlyDefinedPackageCurationProvider
+import com.here.ort.analyzer.curation.FallbackPackageCurationProvider
 import com.here.ort.analyzer.curation.FilePackageCurationProvider
 import com.here.ort.model.OutputFormat
 import com.here.ort.model.config.AnalyzerConfiguration
@@ -113,6 +115,13 @@ object AnalyzerCommand : CommandWithHelp() {
     private var packageCurationsFile: File? = null
 
     @Parameter(
+        description = "Whether to fall back to package curation data from the ClearlyDefine service or not.",
+        names = ["--clearly-defined-curations"],
+        order = PARAMETER_ORDER_OPTIONAL
+    )
+    private var useClearlyDefinedCurations = false
+
+    @Parameter(
         description = "A file containing the repository configuration. If set the .ort.yml file from the " +
                 "repository will be ignored.",
         names = ["--repository-configuration-file"],
@@ -154,7 +163,12 @@ object AnalyzerCommand : CommandWithHelp() {
         val analyzerConfig = AnalyzerConfiguration(ignoreToolVersions, allowDynamicVersions)
         val analyzer = Analyzer(analyzerConfig)
 
-        val curationProvider = absolutePackageCurationsFile?.let { FilePackageCurationProvider(it) }
+        val curationProvider = FallbackPackageCurationProvider(
+            listOfNotNull(
+                absolutePackageCurationsFile?.let { FilePackageCurationProvider(it) },
+                ClearlyDefinedPackageCurationProvider().takeIf { useClearlyDefinedCurations }
+            )
+        )
 
         val ortResult = analyzer.analyze(
             absoluteInputDir, packageManagers, curationProvider, absoluteRepositoryConfigurationFile
