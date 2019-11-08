@@ -47,14 +47,16 @@ internal class GenerateRuleViolationResolutionsCommand : CommandWithHelp() {
     @Parameter(
         names = ["--ort-result-file"],
         required = true,
-        order = PARAMETER_ORDER_MANDATORY
+        order = PARAMETER_ORDER_MANDATORY,
+        description = "The input ORT file from which the rule violations are read."
     )
     private lateinit var ortResultFile: File
 
     @Parameter(
         names = ["--repository-configuration-file"],
         required = true,
-        order = PARAMETER_ORDER_MANDATORY
+        order = PARAMETER_ORDER_MANDATORY,
+        description = "Override the repository configuration contained in the given input ORT file."
     )
     private lateinit var repositoryConfigurationFile: File
 
@@ -62,7 +64,8 @@ internal class GenerateRuleViolationResolutionsCommand : CommandWithHelp() {
         names = ["--severity"],
         required = false,
         order = PARAMETER_ORDER_OPTIONAL,
-        converter = SeverityConverter::class
+        converter = SeverityConverter::class,
+        description = "Only consider violations of the given severity. Allowed values: ERROR|WARNING|HINT."
     )
     private var severity: Severity? = null
 
