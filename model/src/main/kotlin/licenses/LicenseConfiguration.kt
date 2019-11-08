@@ -73,7 +73,7 @@ data class LicenseConfiguration(
 
     @Suppress("UNUSED") // This is intended to be mostly used via scripting.
     fun getLicensesForSet(setId: String): Set<License> =
-        licensesBySetId[setId] ?: error("Unknown license set ID: $setId.")
+        licensesBySetId[setId] ?: error("Unknown license set identifier: $setId.")
 }
 
 fun LicenseConfiguration?.orEmpty(): LicenseConfiguration = this ?: LicenseConfiguration()
