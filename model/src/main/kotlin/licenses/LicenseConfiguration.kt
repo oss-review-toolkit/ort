@@ -72,11 +72,8 @@ data class LicenseConfiguration(
     }
 
     @Suppress("UNUSED") // This is intended to be mostly used via scripting.
-    fun getLicensesForSet(setId: String): Set<License> {
-        require(licensesBySetId.containsKey(setId)) { "Unknown license set ID: $setId." }
-
-        return licensesBySetId[setId]!!
-    }
+    fun getLicensesForSet(setId: String): Set<License> =
+        licensesBySetId[setId] ?: error("Unknown license set ID: $setId.")
 }
 
 fun LicenseConfiguration?.orEmpty(): LicenseConfiguration = this ?: LicenseConfiguration()
