@@ -45,28 +45,32 @@ internal class ExportPathExcludesCommand : CommandWithHelp() {
     @Parameter(
         names = ["--path-excludes-file"],
         required = true,
-        order = PARAMETER_ORDER_MANDATORY
+        order = PARAMETER_ORDER_MANDATORY,
+        description = "The output path excludes file."
     )
     private lateinit var pathExcludesFile: File
 
     @Parameter(
         names = ["--ort-result-file"],
         required = true,
-        order = PARAMETER_ORDER_MANDATORY
+        order = PARAMETER_ORDER_MANDATORY,
+        description = "The input ORT file from which the path excludes are to be read."
     )
     private lateinit var ortResultFile: File
 
     @Parameter(
         names = ["--repository-configuration-file"],
         required = true,
-        order = PARAMETER_ORDER_MANDATORY
+        order = PARAMETER_ORDER_MANDATORY,
+        description = "Override the repository configuration contained in the given input ORT file."
     )
     private lateinit var repositoryConfigurationFile: File
 
     @Parameter(
         names = ["--update-only-existing"],
         required = false,
-        order = PARAMETER_ORDER_OPTIONAL
+        order = PARAMETER_ORDER_OPTIONAL,
+        description = "If enabled, only entries are exported for which an entry with the same pattern already exists."
     )
     private var updateOnlyExisting = false
 
