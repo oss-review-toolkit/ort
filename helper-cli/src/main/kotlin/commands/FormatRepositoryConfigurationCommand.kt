@@ -39,10 +39,10 @@ import java.io.File
 )
 internal class FormatRepositoryConfigurationCommand : CommandWithHelp() {
     @Parameter(
-        description = "repository configuration file.",
         required = true,
         order = PARAMETER_ORDER_MANDATORY,
-        converter = FileConverter::class
+        converter = FileConverter::class,
+        description = "The repository configuration file to be formatted."
     )
     private lateinit var repositoryConfigurationFile: File
 
