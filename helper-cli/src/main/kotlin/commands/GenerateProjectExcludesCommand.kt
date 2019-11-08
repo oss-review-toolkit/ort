@@ -45,14 +45,17 @@ internal class GenerateProjectExcludesCommand : CommandWithHelp() {
     @Parameter(
         names = ["--ort-result-file"],
         required = true,
-        order = PARAMETER_ORDER_MANDATORY
+        order = PARAMETER_ORDER_MANDATORY,
+        description = "The input ORT file from which the projects and repository configuration are read."
     )
     private lateinit var ortResultFile: File
 
     @Parameter(
         names = ["--repository-configuration-file"],
         required = true,
-        order = PARAMETER_ORDER_MANDATORY
+        order = PARAMETER_ORDER_MANDATORY,
+        description = "The repository configuration file to write the result to. If the file does already exist it " +
+                "overrides the repository configuration contained in the given input ORT file."
     )
     private lateinit var repositoryConfigurationFile: File
 
