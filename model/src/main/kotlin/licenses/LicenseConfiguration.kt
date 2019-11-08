@@ -59,7 +59,7 @@ data class LicenseConfiguration(
         val result = mutableMapOf<String, MutableSet<License>>()
 
         licenseSets.forEach { set ->
-            result.put(set.id, mutableSetOf())
+            result[set.id] = mutableSetOf()
         }
 
         licenses.forEach { license ->
