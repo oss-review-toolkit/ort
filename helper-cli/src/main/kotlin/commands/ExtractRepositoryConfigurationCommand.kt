@@ -39,14 +39,16 @@ class ExtractRepositoryConfigurationCommand : CommandWithHelp() {
     @Parameter(
         names = ["--ort-result-file"],
         required = true,
-        order = PARAMETER_ORDER_MANDATORY
+        order = PARAMETER_ORDER_MANDATORY,
+        description = "The input ORT file from which repository configuration shall be extracted."
     )
     private lateinit var ortResultFile: File
 
     @Parameter(
         names = ["--repository-configuration-file"],
         required = true,
-        order = PARAMETER_ORDER_MANDATORY
+        order = PARAMETER_ORDER_MANDATORY,
+        description = "The output repository configuration file."
     )
     private lateinit var repositoryConfigurationFile: File
 
