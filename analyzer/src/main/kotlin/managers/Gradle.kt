@@ -67,7 +67,8 @@ class Gradle(
     name: String,
     analysisRoot: File,
     analyzerConfig: AnalyzerConfiguration,
-    repoConfig: RepositoryConfiguration
+    repoConfig: RepositoryConfiguration,
+    private val gradleVersion: String? = null
 ) : PackageManager(name, analysisRoot, analyzerConfig, repoConfig) {
     class Factory : AbstractPackageManagerFactory<Gradle>("Gradle") {
         // Gradle prefers Groovy ".gradle" files over Kotlin ".gradle.kts" files, but "build" files have to come before
@@ -138,6 +139,10 @@ class Gradle(
         }
 
         val gradleConnector = GradleConnector.newConnector()
+
+        if (gradleVersion != null) {
+            gradleConnector.useGradleVersion(gradleVersion)
+        }
 
         if (gradleConnector is DefaultGradleConnector) {
             gradleConnector.daemonMaxIdleTime(10, TimeUnit.SECONDS)

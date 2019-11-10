@@ -54,6 +54,7 @@ import java.io.File
 import java.io.IOException
 import java.util.SortedSet
 
+private const val GRADLE_VERSION = "5.6.4"
 const val PUB_LOCK_FILE = "pubspec.lock"
 
 /**
@@ -319,12 +320,13 @@ class Pub(
         // Check for build.gradle failed, no Gradle scan required.
         if (!packageFile.isFile) return null
 
-        log.info { "Analyzing Android dependencies for package '$packageName'." }
+        log.info { "Analyzing Android dependencies for package '$packageName' using Gradle version $GRADLE_VERSION." }
 
         return if (analyzerResultCacheAndroid.containsKey(packageName)) {
             analyzerResultCacheAndroid[packageName]
         } else {
-            Gradle("Gradle", androidDir, analyzerConfig, repoConfig)
+            // Use the latest 5.x Gradle version as Flutter / its Android Gradle plugin does not support Gradle 6 yet.
+            Gradle("Gradle", androidDir, analyzerConfig, repoConfig, GRADLE_VERSION)
                 .resolveDependencies(listOf(packageFile))[packageFile]
                 ?.also {
                     analyzerResultCacheAndroid[packageName] = it
