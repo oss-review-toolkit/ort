@@ -20,15 +20,18 @@
 package com.here.ort.clearlydefined
 
 import com.fasterxml.jackson.annotation.JsonCreator
+import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.annotation.JsonValue
 import com.fasterxml.jackson.databind.json.JsonMapper
 import com.fasterxml.jackson.module.kotlin.registerKotlinModule
 
 import retrofit2.Call
-import retrofit2.http.GET
-import retrofit2.http.Path
 import retrofit2.Retrofit
 import retrofit2.converter.jackson.JacksonConverterFactory
+import retrofit2.http.Body
+import retrofit2.http.GET
+import retrofit2.http.PATCH
+import retrofit2.http.Path
 
 import java.io.File
 import java.net.URL
@@ -69,6 +72,7 @@ interface ClearlyDefinedService {
     /**
      * See https://github.com/clearlydefined/service/blob/b339cb7/schemas/curation-1.0.json#L7-L16.
      */
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     data class Curation(
         val described: Described? = null,
         val files: List<FileEntry>? = null,
@@ -78,6 +82,7 @@ interface ClearlyDefinedService {
     /**
      * See https://github.com/clearlydefined/service/blob/b339cb7/schemas/curation-1.0.json#L66-L115.
      */
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     data class Described(
         val facets: Facets? = null,
         val issueTracker: URL? = null,
@@ -89,6 +94,7 @@ interface ClearlyDefinedService {
     /**
      * See https://github.com/clearlydefined/service/blob/b339cb7/schemas/curation-1.0.json#L70-L86.
      */
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     data class Facets(
         val data: List<String>? = null,
         val dev: List<String>? = null,
@@ -100,6 +106,7 @@ interface ClearlyDefinedService {
     /**
      * See https://github.com/clearlydefined/service/blob/b339cb7/schemas/curation-1.0.json#L137-L177.
      */
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     data class SourceLocation(
         val name: String,
         val namespace: String? = null,
@@ -165,6 +172,7 @@ interface ClearlyDefinedService {
     /**
      * See https://github.com/clearlydefined/service/blob/b339cb7/schemas/curation-1.0.json#L190-L218.
      */
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     data class FileEntry(
         val attributions: List<String>? = null,
         val license: String? = null,
@@ -174,8 +182,77 @@ interface ClearlyDefinedService {
     /**
      * See https://github.com/clearlydefined/service/blob/b339cb7/schemas/curation-1.0.json#L232-L236.
      */
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     data class Licensed(
         val declared: String? = null
+    )
+
+    /**
+     * See https://github.com/clearlydefined/service/blob/4e210d7/schemas/swagger.yaml#L84-L101.
+     */
+    data class ContributionPatch(
+        val contributionInfo: ContributionInfo,
+        val patches: List<Patch>
+    )
+
+    /**
+     * See https://github.com/clearlydefined/service/blob/4e210d7/schemas/swagger.yaml#L87-L97.
+     */
+    data class ContributionInfo(
+        val type: String,
+
+        // This will also be used as the pull-request title.
+        val summary: String,
+
+        val details: String,
+        val resolution: String,
+        val removedDefinitions: Boolean
+    )
+
+    /**
+     * See https://github.com/clearlydefined/service/blob/b339cb7/schemas/curations-1.0.json#L8-L15.
+     */
+    data class Patch(
+        val coordinates: Coordinates,
+        val revisions: Map<String, Curation>
+    )
+
+    /**
+     * See https://github.com/clearlydefined/service/blob/b339cb7/schemas/curations-1.0.json#L64-L83.
+     */
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    data class Coordinates(
+        val name: String,
+        val namespace: String? = null,
+        val provider: Provider,
+        val type: Type
+    )
+
+    /**
+     * See https://github.com/clearlydefined/service/blob/53acc01/routes/curations.js#L86-L89.
+     */
+    data class ContributionSummary(
+        val prNumber: Int,
+        val url: String
+    )
+
+    /**
+     * See https://github.com/clearlydefined/service/blob/c47a989/app.js#L201-L205.
+     */
+    data class ErrorResponse(
+        val error: Error
+    )
+
+    data class Error(
+        val code: String,
+        val message: String,
+        val innererror: InnerError
+    )
+
+    data class InnerError(
+        val name: String,
+        val message: String,
+        val stack: String
     )
 
     /**
@@ -190,4 +267,11 @@ interface ClearlyDefinedService {
         @Path("name") name: String,
         @Path("revision") revision: String
     ): Call<Curation>
+
+    /**
+     * Upload curation data, see
+     * https://api.clearlydefined.io/api-docs/#/curations/patch_curations.
+     */
+    @PATCH("curations")
+    fun putCuration(@Body patch: ContributionPatch): Call<ContributionSummary>
 }
