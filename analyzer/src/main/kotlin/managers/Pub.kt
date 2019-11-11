@@ -55,7 +55,7 @@ import java.io.IOException
 import java.util.SortedSet
 
 private const val GRADLE_VERSION = "5.6.4"
-const val PUB_LOCK_FILE = "pubspec.lock"
+private const val PUB_LOCK_FILE = "pubspec.lock"
 
 /**
  * The [Pub](https://https://pub.dev/) package manager for Dart / Flutter.
