@@ -107,6 +107,7 @@ object Main : CommandWithHelp() {
             programName = TOOL_NAME
             setExpandAtSign(false)
             addCommand(AnalyzerCommand)
+            addCommand(ClearlyDefinedUploadCommand)
             addCommand(DownloaderCommand)
             addCommand(EvaluatorCommand)
             addCommand(ReporterCommand)

@@ -21,10 +21,12 @@ package com.here.ort.analyzer.curation
 
 import com.here.ort.analyzer.PackageCurationProvider
 import com.here.ort.clearlydefined.ClearlyDefinedService
+import com.here.ort.clearlydefined.ClearlyDefinedService.Coordinates
 import com.here.ort.clearlydefined.ClearlyDefinedService.Provider
 import com.here.ort.clearlydefined.ClearlyDefinedService.Server
 import com.here.ort.clearlydefined.ClearlyDefinedService.SourceLocation
 import com.here.ort.clearlydefined.ClearlyDefinedService.Type
+import com.here.ort.downloader.VcsHost
 import com.here.ort.model.Identifier
 import com.here.ort.model.Hash
 import com.here.ort.model.PackageCuration
@@ -52,6 +54,64 @@ fun Identifier.toClearlyDefinedTypeAndProvider(): Pair<Type, Provider> =
         "Pub" -> Type.GIT to Provider.GITHUB
         else -> throw IllegalArgumentException("Unknown mapping of ORT type '$type' to ClearlyDefined.")
     }
+
+/**
+ * Map an ORT [Package id][pkgId] to ClearlyDefined [Coordinates].
+ */
+fun Identifier.toClearlyDefinedCoordinates(): Coordinates {
+    val (type, provider) = toClearlyDefinedTypeAndProvider()
+
+    return Coordinates(
+        name = name,
+        namespace = namespace.takeUnless { it.isEmpty() },
+        provider = provider,
+        type = type
+    )
+}
+
+/**
+ * Create a ClearlyDefined [SourceLocation] from an [Identifier] preferably a [VcsInfoCuration], but eventually fall
+ * back to a [RemoteArtifact], or return null if neither is specified.
+ */
+fun toClearlyDefinedSourceLocation(
+    id: Identifier,
+    vcs: VcsInfoCuration?,
+    sourceArtifact: RemoteArtifact?
+): SourceLocation? {
+    val vcsUrl = vcs?.url
+    val vcsRevision = vcs?.revision
+
+    return when {
+        // GitHub is the only VCS provider supported by ClearlyDefined for now.
+        // TODO: Find out how to handle VCS curations without a revision.
+        vcsUrl != null && VcsHost.GITHUB.isApplicable(vcsUrl) && vcsRevision != null -> {
+            SourceLocation(
+                name = id.name,
+                namespace = id.namespace,
+                path = vcs.path,
+                provider = Provider.GITHUB,
+                revision = vcsRevision,
+                type = Type.GIT,
+                url = vcsUrl
+            )
+        }
+
+        sourceArtifact != null -> {
+            val (_, provider) = id.toClearlyDefinedTypeAndProvider()
+
+            SourceLocation(
+                name = id.name,
+                namespace = id.namespace.takeUnless { it.isEmpty() },
+                provider = provider,
+                revision = id.version,
+                type = Type.SOURCE_ARCHIVE,
+                url = sourceArtifact.url
+            )
+        }
+
+        else -> null
+    }
+}
 
 /**
  * Map a ClearlyDefined [SourceLocation] to either a [VcsInfoCuration] or a [RemoteArtifact].
