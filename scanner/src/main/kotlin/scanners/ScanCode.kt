@@ -348,15 +348,15 @@ class ScanCode(
         }
 
     private fun getFileCount(result: JsonNode): Int {
-        // Handling for ScanCode 2.9.8 and above.
+        // ScanCode 2.9.8 and above nest the files count in an extra header.
         result["headers"]?.forEach { header ->
             header["extra_data"]?.get("files_count")?.let {
                 return it.intValue()
             }
         }
 
-        // Handling for ScanCode 2.9.7 and below.
-        return result["files_count"].intValue()
+        // ScanCode 2.9.7 and below contain the files count at the top level.
+        return result["files_count"]?.intValue() ?: 0
     }
 
     internal fun generateSummary(startTime: Instant, endTime: Instant, result: JsonNode) =
