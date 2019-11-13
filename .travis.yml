@@ -32,7 +32,7 @@ env:
     - FLUTTER_VERSION="v1.7.8+hotfix.3-stable"
     - GIMME_GO_VERSION="1.12" # Used internally by Travis.
     - GO_DEP_VERSION="0.5.4"
-    - NPM_VERSION="6.4.0"
+    - NPM_VERSION="6.13.0"
     - PHP_VERSION="7.1"
     - PYTHON_PIPENV_VERSION="2018.11.26"
     - RUST_VERSION="1.35.0"
