@@ -34,39 +34,31 @@ import com.here.ort.model.VcsInfoCuration
 import com.here.ort.model.VcsType
 
 /**
- * A provider for curated package meta-data from the [ClearlyDefined](https://clearlydefined.io/) service.
+ * Map an [Identifier] to a ClearlyDefined [Type] and [Provider]. Note that an Identifier's type in ORT currently
+ * implies a default provider.
  */
-class ClearlyDefinedPackageCurationProvider(server: Server = Server.PRODUCTION) : PackageCurationProvider {
-    private val service = ClearlyDefinedService.create(server)
-
-    /**
-     * Map an ORT [Package id][pkgId] to a ClearlyDefined type and provider. Note that a Package's type in ORT currently
-     * implies a default provider.
-     */
-    private fun mapIdToTypeAndProvider(pkgId: Identifier): Pair<Type, Provider> {
-        return when (pkgId.type) {
-            "Bower" -> Type.GIT to Provider.GITHUB
-            "Bundler" -> Type.GEM to Provider.RUBYGEMS
-            "Cargo" -> Type.CRATE to Provider.CRATES_IO
-            "CocoaPods" -> Type.POD to Provider.COCOAPODS
-            "nuget" -> Type.NUGET to Provider.NUGET
-            "GoDep" -> Type.GIT to Provider.GITHUB
-            "Maven" -> Type.MAVEN to Provider.MAVEN_CENTRAL
-            "NPM" -> Type.NPM to Provider.NPM_JS
-            "PhpComposer" -> Type.COMPOSER to Provider.PACKAGIST
-            "PyPI" -> Type.PYPI to Provider.PYPI
-            "Pub" -> Type.GIT to Provider.GITHUB
-            else -> throw IllegalArgumentException("Unknown mapping of ORT type '${pkgId.type}' to ClearlyDefined.")
-        }
+fun Identifier.toClearlyDefinedTypeAndProvider(): Pair<Type, Provider> =
+    when (type) {
+        "Bower" -> Type.GIT to Provider.GITHUB
+        "Bundler" -> Type.GEM to Provider.RUBYGEMS
+        "Cargo" -> Type.CRATE to Provider.CRATES_IO
+        "CocoaPods" -> Type.POD to Provider.COCOAPODS
+        "nuget" -> Type.NUGET to Provider.NUGET
+        "GoDep" -> Type.GIT to Provider.GITHUB
+        "Maven" -> Type.MAVEN to Provider.MAVEN_CENTRAL
+        "NPM" -> Type.NPM to Provider.NPM_JS
+        "PhpComposer" -> Type.COMPOSER to Provider.PACKAGIST
+        "PyPI" -> Type.PYPI to Provider.PYPI
+        "Pub" -> Type.GIT to Provider.GITHUB
+        else -> throw IllegalArgumentException("Unknown mapping of ORT type '$type' to ClearlyDefined.")
     }
 
-    /**
-     * Map a ClearlyDefined [sourceLocation] to either an ORT [VcsInfoCuration] or [RemoteArtifact].
-     */
-    private fun mapSourceLocationToArtifactOrVcs(sourceLocation: SourceLocation?): Any? {
-        if (sourceLocation == null) return null
-
-        return when (sourceLocation.type) {
+/**
+ * Map a ClearlyDefined [SourceLocation] to either a [VcsInfoCuration] or a [RemoteArtifact].
+ */
+fun SourceLocation?.toArtifactOrVcs(): Any? =
+    this?.let { sourceLocation ->
+        when (sourceLocation.type) {
             Type.GIT -> {
                 VcsInfoCuration(
                     type = VcsType.GIT,
@@ -92,14 +84,20 @@ class ClearlyDefinedPackageCurationProvider(server: Server = Server.PRODUCTION) 
         }
     }
 
+/**
+ * A provider for curated package meta-data from the [ClearlyDefined](https://clearlydefined.io/) service.
+ */
+class ClearlyDefinedPackageCurationProvider(server: Server = Server.PRODUCTION) : PackageCurationProvider {
+    private val service = ClearlyDefinedService.create(server)
+
     override fun getCurationsFor(pkgId: Identifier): List<PackageCuration> {
         val namespace = pkgId.namespace.takeUnless { it.isEmpty() } ?: "-"
-        val (type, provider) = mapIdToTypeAndProvider(pkgId)
+        val (type, provider) = pkgId.toClearlyDefinedTypeAndProvider()
         val curationCall = service.getCuration(type, provider, namespace, pkgId.name, pkgId.version)
 
         val curation = curationCall.execute().body() ?: return emptyList()
 
-        val sourceLocation = mapSourceLocationToArtifactOrVcs(curation.described?.sourceLocation)
+        val sourceLocation = curation.described?.sourceLocation.toArtifactOrVcs()
         val pkgCuration = PackageCuration(
             id = pkgId,
             data = PackageCurationData(
