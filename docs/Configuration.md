@@ -47,9 +47,7 @@ excludes:
 
 The path exclude above has the following effects:
 
-* All projects found below the `test-data` directory are marked as excluded. This overlaps with
-  [project excludes](#excluding-projects), with the difference that project excludes can also be used to exclude
-  specific [dependency scopes](#excluding-scopes).
+* All projects found below the `test-data` directory are marked as excluded.
 * License findings in files below the `test-data` directory are marked as excluded. This can be used to ignore such
   license findings when writing [evaluator rules](GettingStarted.md#6-running-the-evaluator) by checking if the are
   excluded.
