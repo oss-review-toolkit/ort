@@ -52,6 +52,11 @@ enum class PathExcludeReason {
     OPTIONAL_COMPONENT_OF,
 
     /**
+     * Any other reason which cannot be represented by any other element of [PathExcludeReason].
+     */
+    OTHER,
+
+    /**
      * The path only contains packages or sources for packages that have to be provided by the user of distributed build
      * artifacts.
      */
