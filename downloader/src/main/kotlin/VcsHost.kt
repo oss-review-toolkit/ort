@@ -148,19 +148,24 @@ enum class VcsHost(
     private val supportedTypes = supportedTypes.toSet()
 
     /**
-     * Return whether this host is applicable for [url].
+     * Return whether this host is applicable for the [url] URI.
      */
     fun isApplicable(url: URI) = url.host == hostname
 
     /**
-     * Return whether this host is applicable for [vcsInfo].
+     * Return whether this host is applicable for the [url] string.
      */
-    fun isApplicable(vcsInfo: VcsInfo) =
+    fun isApplicable(url: String) =
         try {
-            vcsInfo.type in supportedTypes && isApplicable(URI(vcsInfo.url))
+            isApplicable(URI(url))
         } catch (e: URISyntaxException) {
             false
         }
+
+    /**
+     * Return whether this host is applicable for [vcsInfo].
+     */
+    fun isApplicable(vcsInfo: VcsInfo) = vcsInfo.type in supportedTypes && isApplicable(vcsInfo.url)
 
     /**
      * Return all [VcsInfo] that can be extracted from the host-specific [projectUrl].
