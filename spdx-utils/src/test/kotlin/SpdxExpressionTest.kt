@@ -27,6 +27,7 @@ import com.here.ort.spdx.SpdxLicense.*
 import com.here.ort.spdx.SpdxLicenseException.*
 
 import io.kotlintest.assertSoftly
+import io.kotlintest.matchers.collections.shouldContainExactlyInAnyOrder
 import io.kotlintest.shouldBe
 import io.kotlintest.shouldThrow
 import io.kotlintest.specs.WordSpec
@@ -265,6 +266,45 @@ class SpdxExpressionTest : WordSpec() {
                     SpdxExpression.parse("GPL-3.0-with-GCC-exception").normalize() shouldBe
                             (GPL_3_0_ONLY with GCC_EXCEPTION_3_1)
                 }
+            }
+        }
+
+        "decompose" should {
+            fun String.decompose() = SpdxExpression.parse(this).decompose().map { it.toString() }
+
+            "not split-up compound expressions with a WITH operator" {
+                "GPL-2.0-or-later WITH Classpath-exception-2.0".decompose() shouldContainExactlyInAnyOrder listOf(
+                    "GPL-2.0-or-later WITH Classpath-exception-2.0"
+                )
+            }
+
+            "split-up compound expressions with AND or OR operator but not ones with WITH operator" {
+                "GPL-2.0-or-later WITH Classpath-exception-2.0 AND MIT"
+                    .decompose() shouldContainExactlyInAnyOrder listOf(
+                        "GPL-2.0-or-later WITH Classpath-exception-2.0",
+                        "MIT"
+                    )
+            }
+
+            "work with LicenseRef-* identifiers" {
+                "LicenseRef-gpl-2.0-custom WITH Classpath-exception-2.0 AND LicenseRef-scancode-commercial-license"
+                    .decompose() shouldContainExactlyInAnyOrder listOf(
+                        "LicenseRef-gpl-2.0-custom WITH Classpath-exception-2.0",
+                        "LicenseRef-scancode-commercial-license"
+                    )
+            }
+
+            "return distinct strings" {
+                "GPL-2.0-or-later WITH Classpath-exception-2.0 AND MIT AND MIT"
+                    .decompose().count { it == "MIT" } shouldBe 1
+            }
+
+            "not merge license-exception pairs with single matching licenses" {
+                "GPL-2.0-or-later WITH Classpath-exception-2.0 AND GPL-2.0-or-later"
+                    .decompose() shouldContainExactlyInAnyOrder listOf(
+                    "GPL-2.0-or-later WITH Classpath-exception-2.0",
+                    "GPL-2.0-or-later"
+                )
             }
         }
     }
