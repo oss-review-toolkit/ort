@@ -89,6 +89,13 @@ sealed class SpdxExpression {
     }
 
     /**
+     * Return all single licenses contained in the expression tree whereas a single license is one of:
+     * [SpdxLicenseIdExpression], [SpdxLicenseReferenceExpression] or [SpdxCompoundExpression] using [SpdxOperator.WITH]
+     * as operator.
+     */
+    abstract fun decompose(): Set<SpdxExpression>
+
+    /**
      * Return all license IDs contained in this expression. Non-SPDX licenses and SPDX license references are included.
      */
     abstract fun licenses(): List<String>
@@ -136,6 +143,12 @@ data class SpdxCompoundExpression(
     val operator: SpdxOperator,
     val right: SpdxExpression
 ) : SpdxExpression() {
+    override fun decompose(): Set<SpdxExpression> =
+        when (operator) {
+            SpdxOperator.WITH -> setOf(this)
+            else -> left.decompose() + right.decompose()
+        }
+
     override fun licenses() = left.licenses() + right.licenses()
 
     override fun spdxLicenses() = left.spdxLicenses() + right.spdxLicenses()
@@ -186,6 +199,8 @@ data class SpdxCompoundExpression(
 data class SpdxLicenseExceptionExpression(
     val id: String
 ) : SpdxExpression() {
+    override fun decompose(): Set<SpdxExpression> = emptySet()
+
     override fun licenses() = emptyList<String>()
 
     override fun spdxLicenses() = enumSetOf<SpdxLicense>()
@@ -214,6 +229,8 @@ data class SpdxLicenseIdExpression(
     val id: String,
     val orLaterVersion: Boolean = false
 ) : SpdxExpression() {
+    override fun decompose(): Set<SpdxExpression> = setOf(this)
+
     private val spdxLicense = SpdxLicense.forId(toString())
 
     override fun licenses() = listOf(toString())
@@ -254,6 +271,8 @@ data class SpdxLicenseIdExpression(
 data class SpdxLicenseReferenceExpression(
     val id: String
 ) : SpdxExpression() {
+    override fun decompose(): Set<SpdxExpression> = setOf(this)
+
     override fun licenses() = listOf(id)
 
     override fun spdxLicenses() = enumSetOf<SpdxLicense>()
