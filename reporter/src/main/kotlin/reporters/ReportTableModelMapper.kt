@@ -23,6 +23,7 @@ import com.here.ort.model.Identifier
 import com.here.ort.model.OrtIssue
 import com.here.ort.model.OrtResult
 import com.here.ort.model.RuleViolation
+import com.here.ort.model.VcsInfo
 import com.here.ort.reporter.ResolutionProvider
 import com.here.ort.reporter.reporters.ReportTableModel.DependencyRow
 import com.here.ort.reporter.reporters.ReportTableModel.IssueRow
@@ -114,7 +115,7 @@ class ReportTableModelMapper(private val resolutionProvider: ResolutionProvider)
 
                 DependencyRow(
                     id = id,
-                    vcsInfo = ortResult.getUncuratedPackageById(id)!!.vcsProcessed,
+                    vcsInfo = ortResult.getUncuratedPackageById(id)?.vcsProcessed ?: VcsInfo.EMPTY,
                     scopes = scopes,
                     concludedLicense = concludedLicense,
                     declaredLicenses = declaredLicenses,
