@@ -146,6 +146,11 @@ data class SpdxCompoundExpression(
     override fun validate(strictness: Strictness) {
         left.validate(strictness)
 
+        if (operator == SpdxOperator.WITH && !(left is SpdxLicenseIdExpression
+                    || left is SpdxLicenseReferenceExpression)) {
+            throw SpdxException("Argument '$left' for WITH is not a license identifier.")
+        }
+
         if (operator == SpdxOperator.WITH && right !is SpdxLicenseExceptionExpression) {
             throw SpdxException("Argument '$right' for WITH is not an SPDX license exception id.")
         }
