@@ -27,45 +27,47 @@ import io.kotlintest.specs.WordSpec
 class LicenseViewTest : WordSpec({
     "All" should {
         "return the correct licenses" {
-            LicenseView.All.licenses(packageWithoutLicense, emptyList()) shouldBe emptyList()
+            val view = LicenseView.All
 
-            LicenseView.All.licenses(packageWithoutLicense, detectedLicenses) shouldBe listOf(
+            view.licenses(packageWithoutLicense, emptyList()) shouldBe emptyList()
+
+            view.licenses(packageWithoutLicense, detectedLicenses) shouldBe listOf(
                 Pair("LicenseRef-a", LicenseSource.DETECTED),
                 Pair("LicenseRef-b", LicenseSource.DETECTED)
             )
 
-            LicenseView.All.licenses(packageWithOnlyConcludedLicense, emptyList()) shouldBe listOf(
+            view.licenses(packageWithOnlyConcludedLicense, emptyList()) shouldBe listOf(
                 Pair("LicenseRef-a", LicenseSource.CONCLUDED),
                 Pair("LicenseRef-b", LicenseSource.CONCLUDED)
             )
 
-            LicenseView.All.licenses(packageWithOnlyConcludedLicense, detectedLicenses) shouldBe listOf(
+            view.licenses(packageWithOnlyConcludedLicense, detectedLicenses) shouldBe listOf(
                 Pair("LicenseRef-a", LicenseSource.CONCLUDED),
                 Pair("LicenseRef-b", LicenseSource.CONCLUDED),
                 Pair("LicenseRef-a", LicenseSource.DETECTED),
                 Pair("LicenseRef-b", LicenseSource.DETECTED)
             )
 
-            LicenseView.All.licenses(packageWithOnlyDeclaredLicense, emptyList()) shouldBe listOf(
+            view.licenses(packageWithOnlyDeclaredLicense, emptyList()) shouldBe listOf(
                 Pair("license-a", LicenseSource.DECLARED),
                 Pair("license-b", LicenseSource.DECLARED)
             )
 
-            LicenseView.All.licenses(packageWithOnlyDeclaredLicense, detectedLicenses) shouldBe listOf(
+            view.licenses(packageWithOnlyDeclaredLicense, detectedLicenses) shouldBe listOf(
                 Pair("license-a", LicenseSource.DECLARED),
                 Pair("license-b", LicenseSource.DECLARED),
                 Pair("LicenseRef-a", LicenseSource.DETECTED),
                 Pair("LicenseRef-b", LicenseSource.DETECTED)
             )
 
-            LicenseView.All.licenses(packageWithConcludedAndDeclaredLicense, emptyList()) shouldBe listOf(
+            view.licenses(packageWithConcludedAndDeclaredLicense, emptyList()) shouldBe listOf(
                 Pair("LicenseRef-a", LicenseSource.CONCLUDED),
                 Pair("LicenseRef-b", LicenseSource.CONCLUDED),
                 Pair("license-a", LicenseSource.DECLARED),
                 Pair("license-b", LicenseSource.DECLARED)
             )
 
-            LicenseView.All.licenses(packageWithConcludedAndDeclaredLicense, detectedLicenses) shouldBe listOf(
+            view.licenses(packageWithConcludedAndDeclaredLicense, detectedLicenses) shouldBe listOf(
                 Pair("LicenseRef-a", LicenseSource.CONCLUDED),
                 Pair("LicenseRef-b", LicenseSource.CONCLUDED),
                 Pair("license-a", LicenseSource.DECLARED),
@@ -78,12 +80,14 @@ class LicenseViewTest : WordSpec({
 
     "ConcludedOrRest" should {
         "return the correct licenses" {
-            LicenseView.ConcludedOrRest.licenses(
+            val view = LicenseView.ConcludedOrRest
+
+            view.licenses(
                 packageWithoutLicense,
                 emptyList()
             ) shouldBe emptyList()
 
-            LicenseView.ConcludedOrRest.licenses(
+            view.licenses(
                 packageWithoutLicense,
                 detectedLicenses
             ) shouldBe listOf(
@@ -91,7 +95,7 @@ class LicenseViewTest : WordSpec({
                 Pair("LicenseRef-b", LicenseSource.DETECTED)
             )
 
-            LicenseView.ConcludedOrRest.licenses(
+            view.licenses(
                 packageWithOnlyConcludedLicense,
                 emptyList()
             ) shouldBe listOf(
@@ -99,7 +103,7 @@ class LicenseViewTest : WordSpec({
                 Pair("LicenseRef-b", LicenseSource.CONCLUDED)
             )
 
-            LicenseView.ConcludedOrRest.licenses(
+            view.licenses(
                 packageWithOnlyConcludedLicense,
                 detectedLicenses
             ) shouldBe listOf(
@@ -107,7 +111,7 @@ class LicenseViewTest : WordSpec({
                 Pair("LicenseRef-b", LicenseSource.CONCLUDED)
             )
 
-            LicenseView.ConcludedOrRest.licenses(
+            view.licenses(
                 packageWithOnlyDeclaredLicense,
                 emptyList()
             ) shouldBe listOf(
@@ -115,7 +119,7 @@ class LicenseViewTest : WordSpec({
                 Pair("license-b", LicenseSource.DECLARED)
             )
 
-            LicenseView.ConcludedOrRest.licenses(
+            view.licenses(
                 packageWithOnlyDeclaredLicense,
                 detectedLicenses
             ) shouldBe listOf(
@@ -125,7 +129,7 @@ class LicenseViewTest : WordSpec({
                 Pair("LicenseRef-b", LicenseSource.DETECTED)
             )
 
-            LicenseView.ConcludedOrRest.licenses(
+            view.licenses(
                 packageWithConcludedAndDeclaredLicense,
                 emptyList()
             ) shouldBe listOf(
@@ -133,7 +137,7 @@ class LicenseViewTest : WordSpec({
                 Pair("LicenseRef-b", LicenseSource.CONCLUDED)
             )
 
-            LicenseView.ConcludedOrRest.licenses(
+            view.licenses(
                 packageWithConcludedAndDeclaredLicense,
                 detectedLicenses
             ) shouldBe listOf(
@@ -145,12 +149,14 @@ class LicenseViewTest : WordSpec({
 
     "ConcludedOrDeclaredOrDetected" should {
         "return the correct licenses" {
-            LicenseView.ConcludedOrDeclaredOrDetected.licenses(
+            val view = LicenseView.ConcludedOrDeclaredOrDetected
+
+            view.licenses(
                 packageWithoutLicense,
                 emptyList()
             ) shouldBe emptyList()
 
-            LicenseView.ConcludedOrDeclaredOrDetected.licenses(
+            view.licenses(
                 packageWithoutLicense,
                 detectedLicenses
             ) shouldBe listOf(
@@ -158,7 +164,7 @@ class LicenseViewTest : WordSpec({
                 Pair("LicenseRef-b", LicenseSource.DETECTED)
             )
 
-            LicenseView.ConcludedOrDeclaredOrDetected.licenses(
+            view.licenses(
                 packageWithOnlyConcludedLicense,
                 emptyList()
             ) shouldBe listOf(
@@ -166,7 +172,7 @@ class LicenseViewTest : WordSpec({
                 Pair("LicenseRef-b", LicenseSource.CONCLUDED)
             )
 
-            LicenseView.ConcludedOrDeclaredOrDetected.licenses(
+            view.licenses(
                 packageWithOnlyConcludedLicense,
                 detectedLicenses
             ) shouldBe listOf(
@@ -174,7 +180,7 @@ class LicenseViewTest : WordSpec({
                 Pair("LicenseRef-b", LicenseSource.CONCLUDED)
             )
 
-            LicenseView.ConcludedOrDeclaredOrDetected.licenses(
+            view.licenses(
                 packageWithOnlyDeclaredLicense,
                 emptyList()
             ) shouldBe listOf(
@@ -182,7 +188,7 @@ class LicenseViewTest : WordSpec({
                 Pair("license-b", LicenseSource.DECLARED)
             )
 
-            LicenseView.ConcludedOrDeclaredOrDetected.licenses(
+            view.licenses(
                 packageWithOnlyDeclaredLicense,
                 detectedLicenses
             ) shouldBe listOf(
@@ -190,7 +196,7 @@ class LicenseViewTest : WordSpec({
                 Pair("license-b", LicenseSource.DECLARED)
             )
 
-            LicenseView.ConcludedOrDeclaredOrDetected.licenses(
+            view.licenses(
                 packageWithConcludedAndDeclaredLicense,
                 emptyList()
             ) shouldBe listOf(
@@ -198,7 +204,7 @@ class LicenseViewTest : WordSpec({
                 Pair("LicenseRef-b", LicenseSource.CONCLUDED)
             )
 
-            LicenseView.ConcludedOrDeclaredOrDetected.licenses(
+            view.licenses(
                 packageWithConcludedAndDeclaredLicense,
                 detectedLicenses
             ) shouldBe listOf(
@@ -210,12 +216,13 @@ class LicenseViewTest : WordSpec({
 
     "ConcludedOrDetected" should {
         "return the correct licenses" {
-            LicenseView.ConcludedOrDetected.licenses(
+            val view = LicenseView.ConcludedOrDetected
+            view.licenses(
                 packageWithoutLicense,
                 emptyList()
             ) shouldBe emptyList()
 
-            LicenseView.ConcludedOrDetected.licenses(
+            view.licenses(
                 packageWithoutLicense,
                 detectedLicenses
             ) shouldBe listOf(
@@ -223,7 +230,7 @@ class LicenseViewTest : WordSpec({
                 Pair("LicenseRef-b", LicenseSource.DETECTED)
             )
 
-            LicenseView.ConcludedOrDetected.licenses(
+            view.licenses(
                 packageWithOnlyConcludedLicense,
                 emptyList()
             ) shouldBe listOf(
@@ -231,7 +238,7 @@ class LicenseViewTest : WordSpec({
                 Pair("LicenseRef-b", LicenseSource.CONCLUDED)
             )
 
-            LicenseView.ConcludedOrDetected.licenses(
+            view.licenses(
                 packageWithOnlyConcludedLicense,
                 detectedLicenses
             ) shouldBe listOf(
@@ -239,12 +246,12 @@ class LicenseViewTest : WordSpec({
                 Pair("LicenseRef-b", LicenseSource.CONCLUDED)
             )
 
-            LicenseView.ConcludedOrDetected.licenses(
+            view.licenses(
                 packageWithOnlyDeclaredLicense,
                 emptyList()
             ) shouldBe emptyList()
 
-            LicenseView.ConcludedOrDetected.licenses(
+            view.licenses(
                 packageWithOnlyDeclaredLicense,
                 detectedLicenses
             ) shouldBe listOf(
@@ -252,7 +259,7 @@ class LicenseViewTest : WordSpec({
                 Pair("LicenseRef-b", LicenseSource.DETECTED)
             )
 
-            LicenseView.ConcludedOrDetected.licenses(
+            view.licenses(
                 packageWithConcludedAndDeclaredLicense,
                 emptyList()
             ) shouldBe listOf(
@@ -260,7 +267,7 @@ class LicenseViewTest : WordSpec({
                 Pair("LicenseRef-b", LicenseSource.CONCLUDED)
             )
 
-            LicenseView.ConcludedOrDetected.licenses(
+            view.licenses(
                 packageWithConcludedAndDeclaredLicense,
                 detectedLicenses
             ) shouldBe listOf(
@@ -272,17 +279,18 @@ class LicenseViewTest : WordSpec({
 
     "OnlyConcluded" should {
         "return only the concluded licenses" {
-            LicenseView.OnlyConcluded.licenses(
+            val view = LicenseView.OnlyConcluded
+            view.licenses(
                 packageWithoutLicense,
                 emptyList()
             ) shouldBe emptyList()
 
-            LicenseView.OnlyConcluded.licenses(
+            view.licenses(
                 packageWithoutLicense,
                 detectedLicenses
             ) shouldBe emptyList()
 
-            LicenseView.OnlyConcluded.licenses(
+            view.licenses(
                 packageWithOnlyConcludedLicense,
                 emptyList()
             ) shouldBe listOf(
@@ -290,7 +298,7 @@ class LicenseViewTest : WordSpec({
                 Pair("LicenseRef-b", LicenseSource.CONCLUDED)
             )
 
-            LicenseView.OnlyConcluded.licenses(
+            view.licenses(
                 packageWithOnlyConcludedLicense,
                 detectedLicenses
             ) shouldBe listOf(
@@ -298,17 +306,17 @@ class LicenseViewTest : WordSpec({
                 Pair("LicenseRef-b", LicenseSource.CONCLUDED)
             )
 
-            LicenseView.OnlyConcluded.licenses(
+            view.licenses(
                 packageWithOnlyDeclaredLicense,
                 emptyList()
             ) shouldBe emptyList()
 
-            LicenseView.OnlyConcluded.licenses(
+            view.licenses(
                 packageWithOnlyDeclaredLicense,
                 detectedLicenses
             ) shouldBe emptyList()
 
-            LicenseView.OnlyConcluded.licenses(
+            view.licenses(
                 packageWithConcludedAndDeclaredLicense,
                 emptyList()
             ) shouldBe listOf(
@@ -316,7 +324,7 @@ class LicenseViewTest : WordSpec({
                 Pair("LicenseRef-b", LicenseSource.CONCLUDED)
             )
 
-            LicenseView.OnlyConcluded.licenses(
+            view.licenses(
                 packageWithConcludedAndDeclaredLicense,
                 detectedLicenses
             ) shouldBe listOf(
@@ -328,27 +336,29 @@ class LicenseViewTest : WordSpec({
 
     "OnlyDeclared" should {
         "return only the declared licenses" {
-            LicenseView.OnlyDeclared.licenses(
+            val view = LicenseView.OnlyDeclared
+
+            view.licenses(
                 packageWithoutLicense,
                 emptyList()
             ) shouldBe emptyList()
 
-            LicenseView.OnlyDeclared.licenses(
+            view.licenses(
                 packageWithoutLicense,
                 detectedLicenses
             ) shouldBe emptyList()
 
-            LicenseView.OnlyDeclared.licenses(
+            view.licenses(
                 packageWithOnlyConcludedLicense,
                 emptyList()
             ) shouldBe emptyList()
 
-            LicenseView.OnlyDeclared.licenses(
+            view.licenses(
                 packageWithOnlyConcludedLicense,
                 detectedLicenses
             ) shouldBe emptyList()
 
-            LicenseView.OnlyDeclared.licenses(
+            view.licenses(
                 packageWithOnlyDeclaredLicense,
                 emptyList()
             ) shouldBe listOf(
@@ -356,7 +366,7 @@ class LicenseViewTest : WordSpec({
                 Pair("license-b", LicenseSource.DECLARED)
             )
 
-            LicenseView.OnlyDeclared.licenses(
+            view.licenses(
                 packageWithOnlyDeclaredLicense,
                 detectedLicenses
             ) shouldBe listOf(
@@ -364,7 +374,7 @@ class LicenseViewTest : WordSpec({
                 Pair("license-b", LicenseSource.DECLARED)
             )
 
-            LicenseView.OnlyDeclared.licenses(
+            view.licenses(
                 packageWithConcludedAndDeclaredLicense,
                 emptyList()
             ) shouldBe listOf(
@@ -372,7 +382,7 @@ class LicenseViewTest : WordSpec({
                 Pair("license-b", LicenseSource.DECLARED)
             )
 
-            LicenseView.OnlyDeclared.licenses(
+            view.licenses(
                 packageWithConcludedAndDeclaredLicense,
                 detectedLicenses
             ) shouldBe listOf(
@@ -384,12 +394,14 @@ class LicenseViewTest : WordSpec({
 
     "OnlyDetected" should {
         "return only the detected licenses" {
-            LicenseView.OnlyDetected.licenses(
+            val view = LicenseView.OnlyDetected
+
+            view.licenses(
                 packageWithoutLicense,
                 emptyList()
             ) shouldBe emptyList()
 
-            LicenseView.OnlyDetected.licenses(
+            view.licenses(
                 packageWithoutLicense,
                 detectedLicenses
             ) shouldBe listOf(
@@ -397,12 +409,12 @@ class LicenseViewTest : WordSpec({
                 Pair("LicenseRef-b", LicenseSource.DETECTED)
             )
 
-            LicenseView.OnlyDetected.licenses(
+            view.licenses(
                 packageWithOnlyConcludedLicense,
                 emptyList()
             ) shouldBe emptyList()
 
-            LicenseView.OnlyDetected.licenses(
+            view.licenses(
                 packageWithOnlyConcludedLicense,
                 detectedLicenses
             ) shouldBe listOf(
@@ -410,12 +422,12 @@ class LicenseViewTest : WordSpec({
                 Pair("LicenseRef-b", LicenseSource.DETECTED)
             )
 
-            LicenseView.OnlyDetected.licenses(
+            view.licenses(
                 packageWithOnlyDeclaredLicense,
                 emptyList()
             ) shouldBe emptyList()
 
-            LicenseView.OnlyDetected.licenses(
+            view.licenses(
                 packageWithOnlyDeclaredLicense,
                 detectedLicenses
             ) shouldBe listOf(
@@ -423,12 +435,12 @@ class LicenseViewTest : WordSpec({
                 Pair("LicenseRef-b", LicenseSource.DETECTED)
             )
 
-            LicenseView.OnlyDetected.licenses(
+            view.licenses(
                 packageWithConcludedAndDeclaredLicense,
                 emptyList()
             ) shouldBe emptyList()
 
-            LicenseView.OnlyDetected.licenses(
+            view.licenses(
                 packageWithConcludedAndDeclaredLicense,
                 detectedLicenses
             ) shouldBe listOf(
