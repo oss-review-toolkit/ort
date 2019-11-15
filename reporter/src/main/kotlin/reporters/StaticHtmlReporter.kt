@@ -496,7 +496,15 @@ class StaticHtmlReporter : Reporter() {
 
                 if (row.declaredLicenses.isNotEmpty()) {
                     em { +"Declared Licenses:" }
-                    dl { dd { +row.declaredLicenses.joinToString { if (it.contains(",")) "\"$it\"" else it } } }
+                    dl {
+                        dd {
+                            row.declaredLicenses.forEach {
+                                div {
+                                    +if (it.contains(",")) "\"$it\"" else it
+                                }
+                            }
+                        }
+                    }
                 }
 
                 if (row.detectedLicenses.isNotEmpty()) {
