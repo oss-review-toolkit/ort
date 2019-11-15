@@ -24,101 +24,83 @@ import com.here.ort.model.Package
 
 /**
  * A [LicenseView] provides a custom view on the licenses that belong to a [Package]. It can be used to filter the
- * relevant licenses by [source][LicenseSource] for a [Rule].
+ * licenses relevant to a [Rule] whereas the [licenseSources] is the filter criteria. Only the entry with the lowest
+ * index in the given [licenseSources] which yields a non-empty result is used as filter criteria.
  */
-sealed class LicenseView {
-    abstract fun licenses(pkg: Package, detectedLicenses: List<String>): List<Pair<String, LicenseSource>>
+class LicenseView(vararg licenseSources: List<LicenseSource>) {
+    companion object {
+        /**
+         * Return all licenses.
+         */
+        val All = LicenseView(listOf(LicenseSource.DECLARED, LicenseSource.DETECTED, LicenseSource.CONCLUDED))
 
-    /**
-     * Return all licenses.
-     */
-    object All : LicenseView() {
-        override fun licenses(pkg: Package, detectedLicenses: List<String>): List<Pair<String, LicenseSource>> {
-            val concluded = pkg.concludedLicense?.licenses()?.map { license ->
-                Pair(license, LicenseSource.CONCLUDED)
-            }.orEmpty()
+        /**
+         * Return only the concluded licenses if they exist, otherwise return declared and detected licenses.
+         */
+        val ConcludedOrRest = LicenseView(
+            listOf(LicenseSource.CONCLUDED),
+            listOf(LicenseSource.DECLARED, LicenseSource.DETECTED)
+        )
 
-            val declared =
-                pkg.declaredLicensesProcessed.spdxExpression?.licenses()?.map { Pair(it, LicenseSource.DECLARED) }
-                    .orEmpty()
+        /**
+         * Return only the concluded licenses if they exist, or return only the declared licenses if they exist, or
+         * return the detected licenses.
+         */
+        val ConcludedOrDeclaredOrDetected = LicenseView(
+            listOf(LicenseSource.CONCLUDED),
+            listOf(LicenseSource.DECLARED),
+            listOf(LicenseSource.DETECTED)
+        )
 
-            val detected = detectedLicenses.map { Pair(it, LicenseSource.DETECTED) }
+        /**
+         * Return only the concluded licenses if they exist, otherwise return detected licenses.
+         */
+        val ConcludedOrDetected = LicenseView(
+            listOf(LicenseSource.CONCLUDED),
+            listOf(LicenseSource.DETECTED)
+        )
 
-            return concluded + declared + detected
-        }
+        /**
+         * Return only the concluded licenses.
+         */
+        val OnlyConcluded = LicenseView(listOf(LicenseSource.CONCLUDED))
+
+        /**
+         * Return only the declared licenses.
+         */
+        val OnlyDeclared = LicenseView(listOf(LicenseSource.DECLARED))
+
+        /**
+         * Return only the detected licenses.
+         */
+        val OnlyDetected = LicenseView(listOf(LicenseSource.DETECTED))
     }
 
-    /**
-     * Return only the concluded licenses if they exist, otherwise return declared and detected licenses.
-     */
-    object ConcludedOrRest : LicenseView() {
-        override fun licenses(pkg: Package, detectedLicenses: List<String>): List<Pair<String, LicenseSource>> {
-            pkg.concludedLicense?.licenses()?.let {
-                return it.map { license -> Pair(license, LicenseSource.CONCLUDED) }
+    private val licenseSources = licenseSources.toList()
+
+    fun licenses(pkg: Package, detectedLicenses: List<String>): List<Pair<String, LicenseSource>> {
+        val declaredLicenses = pkg.declaredLicensesProcessed.spdxExpression?.licenses().orEmpty()
+        val concludedLicenses = pkg.concludedLicense?.licenses().orEmpty()
+
+        fun getLicenseForSources(
+            sources: Collection<LicenseSource>
+        ): List<Pair<String, LicenseSource>> =
+            sources.flatMap { source ->
+                when (source) {
+                    LicenseSource.DECLARED -> declaredLicenses
+                    LicenseSource.DETECTED -> detectedLicenses
+                    LicenseSource.CONCLUDED -> concludedLicenses
+                    else -> throw NotImplementedError()
+                }.map { license -> Pair(license, source) }.distinct()
             }
 
-            val declared =
-                pkg.declaredLicensesProcessed.spdxExpression?.licenses()?.map { Pair(it, LicenseSource.DECLARED) }
-                    .orEmpty()
-
-            val detected = detectedLicenses.map { Pair(it, LicenseSource.DETECTED) }
-
-            return declared + detected
-        }
-    }
-
-    /**
-     * Return only the concluded licenses if they exist, or return only the declared licenses if they exist, or return
-     * the detected licenses.
-     */
-    object ConcludedOrDeclaredOrDetected : LicenseView() {
-        override fun licenses(pkg: Package, detectedLicenses: List<String>): List<Pair<String, LicenseSource>> {
-            pkg.concludedLicense?.licenses()?.let {
-                return it.map { license -> Pair(license, LicenseSource.CONCLUDED) }
+        licenseSources.forEach { sources ->
+            val licenses = getLicenseForSources(sources)
+            if (licenses.isNotEmpty()) {
+                return licenses
             }
-
-            pkg.declaredLicensesProcessed.spdxExpression?.licenses()?.let {
-                return it.map { license -> Pair(license, LicenseSource.DECLARED) }
-            }
-
-            return detectedLicenses.map { Pair(it, LicenseSource.DETECTED) }
         }
-    }
 
-    /**
-     * Return only the concluded licenses if they exist, otherwise return detected licenses.
-     */
-    object ConcludedOrDetected : LicenseView() {
-        override fun licenses(pkg: Package, detectedLicenses: List<String>): List<Pair<String, LicenseSource>> {
-            pkg.concludedLicense?.licenses()?.let {
-                return it.map { license -> Pair(license, LicenseSource.CONCLUDED) }
-            }
-
-            return detectedLicenses.map { Pair(it, LicenseSource.DETECTED) }
-        }
-    }
-
-    /**
-     * Return only the concluded licenses.
-     */
-    object OnlyConcluded : LicenseView() {
-        override fun licenses(pkg: Package, detectedLicenses: List<String>): List<Pair<String, LicenseSource>> =
-            pkg.concludedLicense?.licenses().orEmpty().map { Pair(it, LicenseSource.CONCLUDED) }
-    }
-
-    /**
-     * Return only the declared licenses.
-     */
-    object OnlyDeclared : LicenseView() {
-        override fun licenses(pkg: Package, detectedLicenses: List<String>): List<Pair<String, LicenseSource>> =
-            pkg.declaredLicensesProcessed.spdxExpression?.licenses().orEmpty().map { Pair(it, LicenseSource.DECLARED) }
-    }
-
-    /**
-     * Return only the detected licenses.
-     */
-    object OnlyDetected : LicenseView() {
-        override fun licenses(pkg: Package, detectedLicenses: List<String>): List<Pair<String, LicenseSource>> =
-            detectedLicenses.map { Pair(it, LicenseSource.DETECTED) }
+        return emptyList()
     }
 }
