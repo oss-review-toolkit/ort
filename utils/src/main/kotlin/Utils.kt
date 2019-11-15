@@ -26,10 +26,18 @@ import java.net.URI
 import java.net.URISyntaxException
 import java.security.Permission
 
+import kotlin.reflect.full.memberProperties
+
 /**
  * The name of the ORT configuration file.
  */
 const val ORT_CONFIG_FILENAME = ".ort.yml"
+
+/**
+ * Return whether the [receiver] (usually an instance of a data class) has any non-null property.
+ */
+inline fun <reified T : Any> T.hasNonNullProperty() =
+    T::class.memberProperties.asSequence().map { it.get(this) }.any { it != null }
 
 /**
  * Return the set of elements which are contained in at least two of the given collections, or an empty set if all
