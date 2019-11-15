@@ -80,11 +80,9 @@ data class PackageCuration(
      * @see [PackageCurationData.apply]
      */
     fun apply(curatedPackage: CuratedPackage): CuratedPackage {
-        if (!isApplicable(curatedPackage.pkg.id)) {
-            throw IllegalArgumentException(
-                "Package curation identifier '${id.toCoordinates()}' does not match " +
-                        "package identifier '${curatedPackage.pkg.id.toCoordinates()}'."
-            )
+        require(isApplicable(curatedPackage.pkg.id)) {
+            "Package curation identifier '${id.toCoordinates()}' does not match package identifier " +
+                    "'${curatedPackage.pkg.id.toCoordinates()}'."
         }
 
         return data.apply(curatedPackage)
