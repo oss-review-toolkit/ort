@@ -20,7 +20,6 @@
 package com.here.ort.model
 
 import com.here.ort.utils.SortedSetComparator
-import com.here.ort.utils.constructTreeSetType
 
 import java.util.SortedSet
 
@@ -30,7 +29,6 @@ data class CopyrightFindings(
 ) : Comparable<CopyrightFindings> {
     companion object {
         val SORTED_SET_COMPARATOR = SortedSetComparator<CopyrightFindings>()
-        val TREE_SET_TYPE by lazy { jsonMapper.typeFactory.constructTreeSetType(CopyrightFindings::class.java) }
     }
 
     override fun compareTo(other: CopyrightFindings) =
