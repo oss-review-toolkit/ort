@@ -211,10 +211,8 @@ class GoDep(
     private fun parseProjects(workingDir: File, gopath: File): List<Map<String, String>> {
         val lockfile = File(workingDir, "Gopkg.lock")
         if (!lockfile.isFile) {
-            if (!analyzerConfig.allowDynamicVersions) {
-                throw IllegalArgumentException(
-                    "No lockfile found in ${workingDir.invariantSeparatorsPath}, dependency versions are unstable."
-                )
+            require(analyzerConfig.allowDynamicVersions) {
+                "No lockfile found in ${workingDir.invariantSeparatorsPath}, dependency versions are unstable."
             }
 
             log.debug { "Running 'dep ensure' to generate missing lockfile in $workingDir" }

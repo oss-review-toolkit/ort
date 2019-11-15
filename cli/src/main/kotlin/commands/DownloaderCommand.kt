@@ -128,10 +128,8 @@ object DownloaderCommand : CommandWithHelp() {
     private var allowMovingRevisions = false
 
     override fun runCommand(jc: JCommander, config: OrtConfiguration): Int {
-        if ((ortFile != null) == (projectUrl != null)) {
-            throw IllegalArgumentException(
-                "Either '--ort-file' or '--project-url' must be specified."
-            )
+        require((ortFile != null) != (projectUrl != null)) {
+            "Either '--ort-file' or '--project-url' must be specified."
         }
 
         val packages = ortFile?.expandTilde()?.let { absoluteOrtFile ->
