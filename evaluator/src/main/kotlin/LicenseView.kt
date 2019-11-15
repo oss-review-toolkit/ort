@@ -79,8 +79,8 @@ class LicenseView(vararg licenseSources: List<LicenseSource>) {
     private val licenseSources = licenseSources.toList()
 
     fun licenses(pkg: Package, detectedLicenses: List<String>): List<Pair<String, LicenseSource>> {
-        val declaredLicenses = pkg.declaredLicensesProcessed.spdxExpression?.licenses().orEmpty()
-        val concludedLicenses = pkg.concludedLicense?.licenses().orEmpty()
+        val declaredLicenses = pkg.declaredLicensesProcessed.spdxExpression?.decompose().orEmpty().map { it.toString() }
+        val concludedLicenses = pkg.concludedLicense?.decompose().orEmpty().map { it.toString() }
 
         fun getLicenseForSources(
             sources: Collection<LicenseSource>
