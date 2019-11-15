@@ -42,6 +42,7 @@ import com.here.ort.model.readValue
 import com.here.ort.utils.PARAMETER_ORDER_MANDATORY
 import com.here.ort.utils.PARAMETER_ORDER_OPTIONAL
 import com.here.ort.utils.expandTilde
+import com.here.ort.utils.hasNonNullProperty
 import com.here.ort.utils.log
 
 import java.io.File
@@ -82,11 +83,13 @@ object ClearlyDefinedUploadCommand : CommandWithHelp() {
 
         val licenseExpression = data.concludedLicense?.toString() ?: data.declaredLicenses?.joinToString(" AND ")
 
+        val described = Described(
+            projectWebsite = data.homepageUrl?.let { URL(it) },
+            sourceLocation = toClearlyDefinedSourceLocation(id, data.vcs, data.sourceArtifact)
+        )
+
         val curation = Curation(
-            described = Described(
-                projectWebsite = data.homepageUrl?.let { URL(it) },
-                sourceLocation = toClearlyDefinedSourceLocation(id, data.vcs, data.sourceArtifact)
-            ),
+            described = described.takeIf { it.hasNonNullProperty() },
             licensed = licenseExpression?.let { Licensed(it) }
         )
 
