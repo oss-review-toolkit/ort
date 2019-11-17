@@ -20,5 +20,5 @@ repositories {
 val ideaExtPluginVersion = extra["ideaExtPluginVersion"]
 
 dependencies {
-    compile("gradle.plugin.org.jetbrains.gradle.plugin.idea-ext:gradle-idea-ext:$ideaExtPluginVersion")
+    implementation("gradle.plugin.org.jetbrains.gradle.plugin.idea-ext:gradle-idea-ext:$ideaExtPluginVersion")
 }

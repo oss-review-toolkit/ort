@@ -30,11 +30,11 @@ repositories {
 }
 
 dependencies {
-    compile(project(":analyzer"))
-    compile(project(":downloader"))
-    compile(project(":reporter"))
-    compile(project(":utils"))
+    implementation(project(":analyzer"))
+    implementation(project(":downloader"))
+    implementation(project(":reporter"))
+    implementation(project(":utils"))
 
-    compile("com.beust:jcommander:$jcommanderVersion")
-    compile("org.apache.logging.log4j:log4j-core:$log4jCoreVersion")
+    implementation("com.beust:jcommander:$jcommanderVersion")
+    implementation("org.apache.logging.log4j:log4j-core:$log4jCoreVersion")
 }

@@ -32,30 +32,30 @@ repositories {
 }
 
 dependencies {
-    compile(project(":analyzer"))
-    compile(project(":downloader"))
-    compile(project(":evaluator"))
-    compile(project(":model"))
-    compile(project(":reporter"))
-    compile(project(":scanner"))
-    compile(project(":utils"))
+    implementation(project(":analyzer"))
+    implementation(project(":downloader"))
+    implementation(project(":evaluator"))
+    implementation(project(":model"))
+    implementation(project(":reporter"))
+    implementation(project(":scanner"))
+    implementation(project(":utils"))
 
-    compile("com.beust:jcommander:$jcommanderVersion")
-    compile("io.github.config4k:config4k:$config4kVersion")
-    compile("org.apache.logging.log4j:log4j-core:$log4jCoreVersion")
-    compile("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
-    compile("org.jetbrains.kotlin:kotlin-reflect")
-    compile("org.reflections:reflections:$reflectionsVersion")
+    implementation("com.beust:jcommander:$jcommanderVersion")
+    implementation("io.github.config4k:config4k:$config4kVersion")
+    implementation("org.apache.logging.log4j:log4j-core:$log4jCoreVersion")
+    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
+    implementation("org.jetbrains.kotlin:kotlin-reflect")
+    implementation("org.reflections:reflections:$reflectionsVersion")
 
-    testCompile(project(":test-utils"))
+    testImplementation(project(":test-utils"))
 
-    testCompile("io.kotlintest:kotlintest-core:$kotlintestVersion")
-    testCompile("io.kotlintest:kotlintest-assertions:$kotlintestVersion")
-    testCompile("io.kotlintest:kotlintest-runner-junit5:$kotlintestVersion")
+    testImplementation("io.kotlintest:kotlintest-core:$kotlintestVersion")
+    testImplementation("io.kotlintest:kotlintest-assertions:$kotlintestVersion")
+    testImplementation("io.kotlintest:kotlintest-runner-junit5:$kotlintestVersion")
 
-    funTestCompile(sourceSets["main"].output)
-    funTestCompile(sourceSets["test"].output)
+    funTestImplementation(sourceSets["main"].output)
+    funTestImplementation(sourceSets["test"].output)
 }
 
-configurations["funTestCompile"].extendsFrom(configurations.testCompile.get())
+configurations["funTestImplementation"].extendsFrom(configurations.testImplementation.get())
 configurations["funTestRuntime"].extendsFrom(configurations.testRuntime.get())
