@@ -21,6 +21,8 @@ package com.here.ort.clearlydefined
 
 import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonValue
+import com.fasterxml.jackson.databind.json.JsonMapper
+import com.fasterxml.jackson.module.kotlin.registerKotlinModule
 
 import retrofit2.Call
 import retrofit2.http.GET
@@ -40,7 +42,7 @@ interface ClearlyDefinedService {
         fun create(server: Server): ClearlyDefinedService {
             val retrofit = Retrofit.Builder()
                 .baseUrl(server.url)
-                .addConverterFactory(JacksonConverterFactory.create())
+                .addConverterFactory(JacksonConverterFactory.create(JsonMapper().registerKotlinModule()))
                 .build()
 
             return retrofit.create(ClearlyDefinedService::class.java)
