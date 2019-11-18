@@ -25,6 +25,7 @@ val flexmarkVersion: String by project
 val hamcrestCoreVersion: String by project
 val jacksonVersion: String by project
 val kotlinxHtmlVersion: String by project
+val retrofitVersion: String by project
 val simpleExcelVersion: String by project
 val xalanVersion: String by project
 
@@ -69,6 +70,9 @@ dependencies {
 
     implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:$jacksonVersion")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin:$jacksonVersion")
+
+    implementation("com.squareup.retrofit2:converter-jackson:$retrofitVersion")
+    implementation("com.squareup.retrofit2:retrofit:$retrofitVersion")
 
     implementation("com.vladsch.flexmark:flexmark:$flexmarkVersion")
 
