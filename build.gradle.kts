@@ -336,3 +336,12 @@ tasks.register("check") {
 
     dependsOn(checkCopyright)
 }
+
+tasks.register("allDependencies") {
+    val dependenciesTasks = allprojects.map { it.tasks.named("dependencies").get() }
+    dependsOn(dependenciesTasks)
+
+    dependenciesTasks.zipWithNext().forEach { (a, b) ->
+        b.mustRunAfter(a)
+    }
+}
