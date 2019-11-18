@@ -17,8 +17,8 @@ import java.net.URL
 
 val detektPluginVersion: String by project
 val kotlinPluginVersion: String by project
-
 val kotlintestVersion: String by project
+val okhttpVersion: String by project
 
 plugins {
     kotlin("jvm") apply false
@@ -141,6 +141,9 @@ subprojects {
 
     configurations.all {
         resolutionStrategy {
+            // Ensure all OkHttp versions in use match our version >= 4 to avoid Kotlin vs. Java issues with OkHttp 3.
+            force("com.squareup.okhttp3:okhttp:$okhttpVersion")
+
             // Ensure that all transitive versions of "kotlin-reflect" match our version of "kotlin-stdlib".
             force("org.jetbrains.kotlin:kotlin-reflect:$kotlinPluginVersion")
         }
