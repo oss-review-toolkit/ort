@@ -26,6 +26,9 @@ import org.ossreviewtoolkit.model.ScanRecord
 import java.io.OutputStream
 import java.util.ServiceLoader
 
+const val TOOL_NAME = "reporter"
+const val HTTP_CACHE_PATH = "$TOOL_NAME/cache/http"
+
 /**
  * A reporter that creates a human readable report from the [AnalyzerResult] and [ScanRecord] contained in an
  * [OrtResult]. The signatures of public functions in this class define the library API.
