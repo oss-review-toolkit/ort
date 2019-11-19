@@ -316,7 +316,7 @@ subprojects {
     }
 }
 
-val checkCopyright by tasks.registering(Exec::class) {
+tasks.register<Exec>("checkCopyright") {
     description = "Checks for HERE Copyright headers in Kotlin files."
     group = "Verification"
 
@@ -331,13 +331,6 @@ val checkCopyright by tasks.registering(Exec::class) {
             throw GradleException("Please add copyright statements to the following Kotlin files:\n$output")
         }
     }
-}
-
-tasks.register("check") {
-    description = "Runs all checks."
-    group = "Verification"
-
-    dependsOn(checkCopyright)
 }
 
 tasks.register("allDependencies") {
