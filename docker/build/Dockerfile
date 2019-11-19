@@ -15,7 +15,7 @@
 # SPDX-License-Identifier: Apache-2.0
 # License-Filename: LICENSE
 
-FROM openjdk:8-jdk-alpine3.9
+FROM frolvlad/alpine-java:jdk8-slim
 
-# Required to build the reporter-web-app.
-RUN apk add --no-cache yarn
+# Required for Node.js to build the reporter-web-app.
+RUN apk add --no-cache libstdc++
