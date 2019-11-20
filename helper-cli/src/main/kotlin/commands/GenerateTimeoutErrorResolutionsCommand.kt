@@ -39,34 +39,40 @@ import java.io.File
 
 @Parameters(
     commandNames = ["generate-timeout-error-resolutions"],
-    commandDescription = "Generates resolutions for scanner timeout errors."
+    commandDescription = "Generates resolutions for scanner timeout errors. The result is written to the standard " +
+            "output."
 )
 internal class GenerateTimeoutErrorResolutionsCommand : CommandWithHelp() {
     @Parameter(
         names = ["--ort-result-file"],
         required = true,
-        order = PARAMETER_ORDER_MANDATORY
+        order = PARAMETER_ORDER_MANDATORY,
+        description = "The input ORT file containing the scan timeout errors."
     )
     private lateinit var ortResultFile: File
 
     @Parameter(
         names = ["--repository-configuration-file"],
         required = false,
-        order = PARAMETER_ORDER_OPTIONAL
+        order = PARAMETER_ORDER_OPTIONAL,
+        description = "Override the repository configuration contained in the given input ORT file."
     )
     private var repositoryConfigurationFile: File? = null
 
     @Parameter(
         names = ["--resolutions-file"],
         required = false,
-        order = PARAMETER_ORDER_OPTIONAL
+        order = PARAMETER_ORDER_OPTIONAL,
+        description = "A file containing error resolutions to be used in addition to the ones contained in the given " +
+                "ORT file."
     )
     private var resolutionsFile: File? = null
 
     @Parameter(
         names = ["--omit-excluded"],
         required = false,
-        order = PARAMETER_ORDER_OPTIONAL
+        order = PARAMETER_ORDER_OPTIONAL,
+        description = "Only generate error resolutions for non-excluded projects or packages."
     )
     private var omitExcluded: Boolean = false
 
