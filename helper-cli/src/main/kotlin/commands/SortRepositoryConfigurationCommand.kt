@@ -40,10 +40,10 @@ import java.io.File
 )
 internal class SortRepositoryConfigurationCommand : CommandWithHelp() {
     @Parameter(
-        description = "repository configuration file.",
         required = true,
         order = PARAMETER_ORDER_MANDATORY,
-        converter = FileConverter::class
+        converter = FileConverter::class,
+        description = "The repository configuration file to be sorted."
     )
     private lateinit var repositoryConfigurationFile: File
 
