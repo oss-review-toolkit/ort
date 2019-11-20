@@ -19,6 +19,7 @@
 
 package com.here.ort.reporter.reporters
 
+import com.here.ort.model.Identifier
 import com.here.ort.model.LicenseFindingsMap
 import com.here.ort.model.OrtResult
 import com.here.ort.model.config.CopyrightGarbage
@@ -40,7 +41,7 @@ class NoticeReporter : Reporter() {
 
     data class NoticeReport(
         val headers: List<String>,
-        val findings: LicenseFindingsMap,
+        val findings: Map<Identifier, LicenseFindingsMap>,
         val footers: List<String>
     )
 
@@ -98,7 +99,7 @@ class NoticeReporter : Reporter() {
             "The provided ORT result file does not contain a scan result."
         }
 
-        val licenseFindings = getLicenseFindings(ortResult)
+        val licenseFindings: Map<Identifier, LicenseFindingsMap> = getLicenseFindings(ortResult)
 
         val header = if (licenseFindings.isEmpty()) {
             "This project neither contains or depends on any third-party software components.\n"
@@ -114,29 +115,38 @@ class NoticeReporter : Reporter() {
                 licenseConfiguration
             ).run(postProcessingScript)
         } else {
-            val processedFindings = licenseFindings.removeGarbage(copyrightGarbage).processStatements()
-            NoticeReport(listOf(header), processedFindings, emptyList())
+            NoticeReport(listOf(header), licenseFindings, emptyList())
         }
 
         outputStream.bufferedWriter().use {
-            it.write(generateNotices(noticeReport, licenseTextProvider))
+            it.write(generateNotices(noticeReport, licenseTextProvider, copyrightGarbage))
         }
     }
 
-    private fun getLicenseFindings(ortResult: OrtResult): LicenseFindingsMap =
-        ortResult
-            .collectLicenseFindings(omitExcluded = true)
-            .values
-            .flatMap { licenseFindingsForPackage -> licenseFindingsForPackage.keys }
-            .groupBy({ it.license }, { it.copyrights.map { copyrightFinding -> copyrightFinding.statement } })
-            .mapValues { (_, copyrightStatements) -> copyrightStatements.flatten().toMutableSet() }
-            .toSortedMap()
+    private fun getLicenseFindings(ortResult: OrtResult): Map<Identifier, LicenseFindingsMap> =
+        ortResult.collectLicenseFindings(omitExcluded = true).mapValues { (_, findings) ->
+            findings.filter { it.value.isEmpty() }.keys.associate { licenseFindings ->
+                Pair(licenseFindings.license, licenseFindings.copyrights.map { it.statement }.toMutableSet())
+            }.toSortedMap()
+        }
 
-    private fun generateNotices(noticeReport: NoticeReport, licenseTextProvider: LicenseTextProvider) =
+    private fun generateNotices(
+        noticeReport: NoticeReport,
+        licenseTextProvider: LicenseTextProvider,
+        copyrightGarbage: CopyrightGarbage
+    ) =
         buildString {
             append(noticeReport.headers.joinToString(NOTICE_SEPARATOR))
 
-            noticeReport.findings.forEach { (license, copyrights) ->
+            val mergedFindings = noticeReport.findings.values.reduce { left, right ->
+                left.apply {
+                    right.forEach { (license, copyrights) ->
+                        getOrPut(license) { mutableSetOf() } += copyrights
+                    }
+                }
+            }.removeGarbage(copyrightGarbage).processStatements()
+
+            mergedFindings.forEach { (license, copyrights) ->
                 licenseTextProvider.getLicenseText(license)?.let { licenseText ->
                     append(NOTICE_SEPARATOR)
 
