@@ -47,14 +47,16 @@ internal class GenerateScopeExcludesCommand : CommandWithHelp() {
     @Parameter(
         names = ["--ort-result-file"],
         required = true,
-        order = PARAMETER_ORDER_MANDATORY
+        order = PARAMETER_ORDER_MANDATORY,
+        description = "The input ORT file from which the rule violations are read."
     )
     private lateinit var ortResultFile: File
 
     @Parameter(
         names = ["--repository-configuration-file"],
         required = true,
-        order = PARAMETER_ORDER_OPTIONAL
+        order = PARAMETER_ORDER_OPTIONAL,
+        description = "Override the repository configuration contained in the given input ORT file."
     )
     private lateinit var repositoryConfigurationFile: File
 
