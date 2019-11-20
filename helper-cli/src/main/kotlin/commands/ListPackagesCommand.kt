@@ -38,7 +38,8 @@ class ListPackagesCommand : CommandWithHelp() {
     @Parameter(
         names = ["--ort-result-file"],
         required = true,
-        order = PARAMETER_ORDER_MANDATORY
+        order = PARAMETER_ORDER_MANDATORY,
+        description = "The ORT result file to read as input."
     )
     private lateinit var ortResultFile: File
 
