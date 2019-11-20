@@ -85,19 +85,21 @@ class Analyzer(private val config: AnalyzerConfiguration) {
             PackageManager.findManagedFiles(absoluteProjectPath, packageManagers).toMutableMap()
         }
 
-        val hasDefinitionFileInRootDirectory = factoryFiles.values.flatten().any {
-            it.parentFile.absoluteFile == absoluteProjectPath
-        }
-
-        if (factoryFiles.isEmpty() || !hasDefinitionFileInRootDirectory) {
-            factoryFiles[Unmanaged.Factory()] = listOf(absoluteProjectPath)
-        }
-
         val managedFiles = factoryFiles.mapNotNull { (factory, files) ->
             val manager = factory.create(absoluteProjectPath, config, repositoryConfiguration)
             val mappedFiles = manager.mapDefinitionFiles(files)
             Pair(manager, mappedFiles).takeIf { mappedFiles.isNotEmpty() }
-        }.toMap()
+        }.toMap(mutableMapOf())
+
+        val hasDefinitionFileInRootDirectory = managedFiles.values.flatten().any {
+            it.parentFile.absoluteFile == absoluteProjectPath
+        }
+
+        if (factoryFiles.isEmpty() || !hasDefinitionFileInRootDirectory) {
+            Unmanaged.Factory().create(absoluteProjectPath, config, repositoryConfiguration).let {
+                managedFiles[it] = listOf(absoluteProjectPath)
+            }
+        }
 
         if (log.delegate.isInfoEnabled) {
             // Log the summary of projects found per package manager.
