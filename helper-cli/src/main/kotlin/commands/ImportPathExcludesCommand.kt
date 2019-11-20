@@ -47,28 +47,33 @@ internal class ImportPathExcludesCommand : CommandWithHelp() {
     @Parameter(
         names = ["--path-excludes-file"],
         required = true,
-        order = PARAMETER_ORDER_MANDATORY
+        order = PARAMETER_ORDER_MANDATORY,
+        description = "The input path excludes file."
     )
     private lateinit var pathExcludesFile: File
 
     @Parameter(
         names = ["--source-code-dir"],
         required = true,
-        order = PARAMETER_ORDER_MANDATORY
+        order = PARAMETER_ORDER_MANDATORY,
+        description = "A directory containing the sources of the project(s) for which the imported path excludes are " +
+                "supposed to be used."
     )
     private lateinit var sourceCodeDir: File
 
     @Parameter(
         names = ["--repository-configuration-file"],
         required = true,
-        order = PARAMETER_ORDER_MANDATORY
+        order = PARAMETER_ORDER_MANDATORY,
+        description = "The repository configuration file where the imported path excludes are to be merged into."
     )
     private lateinit var repositoryConfigurationFile: File
 
     @Parameter(
         names = ["--update-only-existing"],
         required = false,
-        order = PARAMETER_ORDER_OPTIONAL
+        order = PARAMETER_ORDER_OPTIONAL,
+        description = "If enabled, only entries are imported for which an entry with the same pattern already exists."
     )
     private var updateOnlyExisting = false
 
