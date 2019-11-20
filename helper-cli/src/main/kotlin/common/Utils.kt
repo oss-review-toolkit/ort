@@ -276,8 +276,8 @@ internal fun OrtResult.getProvenance(id: Identifier): Provenance? {
 }
 
 /**
- * Return all issues from scan results. Issues for excludes projects are not returned if and only if given
- * [omitExcluded] is true.
+ * Return all issues from scan results. Issues for excludes [Project]s or [Package]s are not returned if and only if
+ * the given [omitExcluded] is true.
  */
 fun OrtResult.getScanIssues(omitExcluded: Boolean = false): List<OrtIssue> {
     val result = mutableListOf<OrtIssue>()
