@@ -46,21 +46,27 @@ internal class RemoveConfigurationEntriesCommand : CommandWithHelp() {
     @Parameter(
         names = ["--ort-result-file"],
         required = true,
-        order = PARAMETER_ORDER_MANDATORY
+        order = PARAMETER_ORDER_MANDATORY,
+        description = "The ORT result file to read as input which should contain an evaluator result."
     )
     private lateinit var ortResultFile: File
 
     @Parameter(
         names = ["--repository-configuration-file"],
         required = true,
-        order = PARAMETER_ORDER_MANDATORY
+        order = PARAMETER_ORDER_MANDATORY,
+        description = "The repository configuration to remove all non-matching entries from. Its initial content " +
+                "overrides the repository configuration contained in the given ORT result file."
     )
     private lateinit var repositoryConfigurationFile: File
 
     @Parameter(
         names = ["--source-code-dir"],
         required = true,
-        order = PARAMETER_ORDER_MANDATORY
+        order = PARAMETER_ORDER_MANDATORY,
+        description = "A directory containing the sources of the project(s) for which the configuration entries are " +
+                "are to be removed. The provenance of these sources must match with the scan results contained in " +
+                "the given ORT result file."
     )
     private lateinit var sourceCodeDir: File
 
