@@ -113,7 +113,7 @@ interface ClearlyDefinedService {
         val path: String? = null,
         val provider: Provider,
         val revision: String,
-        val type: Type,
+        val type: ComponentType,
         val url: String? = null
     )
 
@@ -145,7 +145,7 @@ interface ClearlyDefinedService {
     /**
      * See https://github.com/clearlydefined/service/blob/b339cb7/schemas/curation-1.0.json#L25-L38.
      */
-    enum class Type(val value: String) {
+    enum class ComponentType(val value: String) {
         COMPOSER("composer"),
         CRATE("crate"),
         DEBIAN("deb"),
@@ -246,7 +246,7 @@ interface ClearlyDefinedService {
         val name: String,
         val namespace: String? = null,
         val provider: Provider,
-        val type: Type
+        val type: ComponentType
     )
 
     /**
@@ -282,7 +282,7 @@ interface ClearlyDefinedService {
      */
     @GET("curations/{type}/{provider}/{namespace}/{name}/{revision}")
     fun getCuration(
-        @Path("type") type: Type,
+        @Path("type") type: ComponentType,
         @Path("provider") provider: Provider,
         @Path("namespace") namespace: String,
         @Path("name") name: String,

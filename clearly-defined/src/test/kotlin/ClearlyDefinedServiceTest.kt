@@ -19,6 +19,7 @@
 
 package com.here.ort.clearlydefined
 
+import com.here.ort.clearlydefined.ClearlyDefinedService.ComponentType
 import com.here.ort.clearlydefined.ClearlyDefinedService.ContributionInfo
 import com.here.ort.clearlydefined.ClearlyDefinedService.ContributionPatch
 import com.here.ort.clearlydefined.ClearlyDefinedService.ContributionType
@@ -28,7 +29,6 @@ import com.here.ort.clearlydefined.ClearlyDefinedService.Licensed
 import com.here.ort.clearlydefined.ClearlyDefinedService.Patch
 import com.here.ort.clearlydefined.ClearlyDefinedService.Provider
 import com.here.ort.clearlydefined.ClearlyDefinedService.Server
-import com.here.ort.clearlydefined.ClearlyDefinedService.Type
 
 import io.kotlintest.matchers.numerics.shouldBeGreaterThan
 import io.kotlintest.matchers.string.beEmpty
@@ -67,7 +67,7 @@ class ClearlyDefinedServiceTest : WordSpec({
                 name = "platform-express",
                 namespace = "@nestjs",
                 provider = Provider.NPM_JS,
-                type = Type.NPM
+                type = ComponentType.NPM
             ),
             revisions
         )
