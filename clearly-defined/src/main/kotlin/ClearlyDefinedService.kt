@@ -108,12 +108,14 @@ interface ClearlyDefinedService {
      */
     @JsonInclude(JsonInclude.Include.NON_NULL)
     data class SourceLocation(
-        val name: String,
-        val namespace: String? = null,
-        val path: String? = null,
-        val provider: Provider,
-        val revision: String,
+        // The following properties match those of Coordinates, except that the revision is mandatory here.
         val type: ComponentType,
+        val provider: Provider,
+        val namespace: String? = null,
+        val name: String,
+        val revision: String,
+
+        val path: String? = null,
         val url: String? = null
     )
 
