@@ -239,15 +239,41 @@ interface ClearlyDefinedService {
     )
 
     /**
-     * See https://github.com/clearlydefined/service/blob/b339cb7/schemas/curations-1.0.json#L64-L83.
+     * See https://github.com/clearlydefined/service/blob/b339cb7/schemas/curations-1.0.json#L64-L83 and
+     * https://docs.clearlydefined.io/using-data#a-note-on-definition-coordinates.
      */
     @JsonInclude(JsonInclude.Include.NON_NULL)
     data class Coordinates(
-        val name: String,
-        val namespace: String? = null,
+        /**
+         * The type of the component. For example, npm, git, nuget, maven, etc. This talks about the shape of the
+         * component.
+         */
+        val type: ComponentType,
+
+        /**
+         * Where the component can be found. Examples include npmjs, mavencentral, github, nuget, etc.
+         */
         val provider: Provider,
-        val type: ComponentType
-    )
+
+        /**
+         * Many component systems have namespaces: GitHub orgs, NPM namespace, Maven group id, etc. This segment must be
+         * supplied. If your component does not have a namespace, use '-' (ASCII hyphen).
+         */
+        val namespace: String? = null,
+
+        /**
+         * The name of the component. Given the mentioned [namespace] segment, this is just the simple name.
+         */
+        val name: String,
+
+        /**
+         * Components typically have some differentiator like a version or commit id. Use that here. If this segment is
+         * omitted, the latest revision is used (if that makes sense for the provider).
+         */
+        val revision: String? = null
+    ) {
+        override fun toString() = listOfNotNull(type, provider, namespace ?: "-", name, revision).joinToString("/")
+    }
 
     /**
      * See https://github.com/clearlydefined/service/blob/53acc01/routes/curations.js#L86-L89.

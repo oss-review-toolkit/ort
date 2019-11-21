@@ -62,10 +62,11 @@ fun Identifier.toClearlyDefinedCoordinates(): Coordinates {
     val (type, provider) = toClearlyDefinedTypeAndProvider()
 
     return Coordinates(
-        name = name,
-        namespace = namespace.takeUnless { it.isEmpty() },
+        type = type,
         provider = provider,
-        type = type
+        namespace = namespace.takeUnless { it.isEmpty() },
+        name = name,
+        revision = version.takeUnless { it.isEmpty() }
     )
 }
 
