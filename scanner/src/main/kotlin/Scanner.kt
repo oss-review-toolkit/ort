@@ -173,7 +173,8 @@ abstract class Scanner(val scannerName: String, protected val config: ScannerCon
      */
     private fun filterProjectScanResults(project: Project, resultContainer: ScanResultContainer): ScanResultContainer {
         // Do not filter the results if the definition file is in the root of the repository.
-        val parentPath = File(project.definitionFilePath).parentFile?.path ?: return resultContainer
+        val parentPath = File(project.definitionFilePath).parentFile?.path
+            ?: return resultContainer.copy(id = project.id)
 
         val filteredResults = resultContainer.results.map { result ->
             if (result.provenance.sourceArtifact != null) {
