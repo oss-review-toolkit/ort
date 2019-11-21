@@ -204,11 +204,25 @@ interface ClearlyDefinedService {
     data class ContributionInfo(
         val type: ContributionType,
 
-        // This will also be used as the pull-request title.
+        /**
+         * Short (100 char) description. This will also be used as the PR title.
+         */
         val summary: String,
 
+        /**
+         * Describe here the problem(s) being addressed.
+         */
         val details: String,
+
+        /**
+         * What does this PR do to address the issue? Include references to docs where the new data was found and, for
+         * example, links to public conversations with the affected project team.
+         */
         val resolution: String,
+
+        /**
+         * Remove contributed definitions from the list.
+         */
         val removedDefinitions: Boolean
     )
 
