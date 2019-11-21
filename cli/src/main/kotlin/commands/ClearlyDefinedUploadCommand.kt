@@ -73,7 +73,7 @@ object ClearlyDefinedUploadCommand : CommandWithHelp() {
             // The exact values to use here are unclear; use what is mostly used at
             // https://github.com/clearlydefined/curated-data/pulls.
             type = ContributionType.OTHER,
-            summary = "Curation for package with ${id.toClearlyDefinedCoordinates()}.",
+            summary = "Curation for component ${id.toClearlyDefinedCoordinates()}.",
             details = "Imported from curation data of the " +
                     "[OSS Review Toolkit](https://github.com/heremaps/oss-review-toolkit) via the " +
                     "[clearly-defined](https://github.com/heremaps/oss-review-toolkit/tree/master/clearly-defined) " +

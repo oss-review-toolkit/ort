@@ -64,10 +64,11 @@ class ClearlyDefinedServiceTest : WordSpec({
 
         val patch = Patch(
             Coordinates(
-                name = "platform-express",
-                namespace = "@nestjs",
+                type = ComponentType.NPM,
                 provider = Provider.NPM_JS,
-                type = ComponentType.NPM
+                namespace = "@nestjs",
+                name = "platform-express",
+                revision = "6.2.3"
             ),
             revisions
         )
