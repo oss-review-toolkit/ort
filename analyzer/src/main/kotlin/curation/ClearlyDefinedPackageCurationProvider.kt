@@ -21,11 +21,11 @@ package com.here.ort.analyzer.curation
 
 import com.here.ort.analyzer.PackageCurationProvider
 import com.here.ort.clearlydefined.ClearlyDefinedService
+import com.here.ort.clearlydefined.ClearlyDefinedService.ComponentType
 import com.here.ort.clearlydefined.ClearlyDefinedService.Coordinates
 import com.here.ort.clearlydefined.ClearlyDefinedService.Provider
 import com.here.ort.clearlydefined.ClearlyDefinedService.Server
 import com.here.ort.clearlydefined.ClearlyDefinedService.SourceLocation
-import com.here.ort.clearlydefined.ClearlyDefinedService.Type
 import com.here.ort.downloader.VcsHost
 import com.here.ort.model.Identifier
 import com.here.ort.model.Hash
@@ -36,22 +36,22 @@ import com.here.ort.model.VcsInfoCuration
 import com.here.ort.model.VcsType
 
 /**
- * Map an [Identifier] to a ClearlyDefined [Type] and [Provider]. Note that an Identifier's type in ORT currently
- * implies a default provider.
+ * Map an [Identifier] to a ClearlyDefined [ComponentType] and [Provider]. Note that an Identifier's type in ORT
+ * currently implies a default provider.
  */
-fun Identifier.toClearlyDefinedTypeAndProvider(): Pair<Type, Provider> =
+fun Identifier.toClearlyDefinedTypeAndProvider(): Pair<ComponentType, Provider> =
     when (type) {
-        "Bower" -> Type.GIT to Provider.GITHUB
-        "Bundler" -> Type.GEM to Provider.RUBYGEMS
-        "Cargo" -> Type.CRATE to Provider.CRATES_IO
-        "CocoaPods" -> Type.POD to Provider.COCOAPODS
-        "nuget" -> Type.NUGET to Provider.NUGET
-        "GoDep" -> Type.GIT to Provider.GITHUB
-        "Maven" -> Type.MAVEN to Provider.MAVEN_CENTRAL
-        "NPM" -> Type.NPM to Provider.NPM_JS
-        "PhpComposer" -> Type.COMPOSER to Provider.PACKAGIST
-        "PyPI" -> Type.PYPI to Provider.PYPI
-        "Pub" -> Type.GIT to Provider.GITHUB
+        "Bower" -> ComponentType.GIT to Provider.GITHUB
+        "Bundler" -> ComponentType.GEM to Provider.RUBYGEMS
+        "Cargo" -> ComponentType.CRATE to Provider.CRATES_IO
+        "CocoaPods" -> ComponentType.POD to Provider.COCOAPODS
+        "nuget" -> ComponentType.NUGET to Provider.NUGET
+        "GoDep" -> ComponentType.GIT to Provider.GITHUB
+        "Maven" -> ComponentType.MAVEN to Provider.MAVEN_CENTRAL
+        "NPM" -> ComponentType.NPM to Provider.NPM_JS
+        "PhpComposer" -> ComponentType.COMPOSER to Provider.PACKAGIST
+        "PyPI" -> ComponentType.PYPI to Provider.PYPI
+        "Pub" -> ComponentType.GIT to Provider.GITHUB
         else -> throw IllegalArgumentException("Unknown mapping of ORT type '$type' to ClearlyDefined.")
     }
 
@@ -91,7 +91,7 @@ fun toClearlyDefinedSourceLocation(
                 path = vcs.path,
                 provider = Provider.GITHUB,
                 revision = vcsRevision,
-                type = Type.GIT,
+                type = ComponentType.GIT,
                 url = vcsUrl
             )
         }
@@ -104,7 +104,7 @@ fun toClearlyDefinedSourceLocation(
                 namespace = id.namespace.takeUnless { it.isEmpty() },
                 provider = provider,
                 revision = id.version,
-                type = Type.SOURCE_ARCHIVE,
+                type = ComponentType.SOURCE_ARCHIVE,
                 url = sourceArtifact.url
             )
         }
@@ -119,7 +119,7 @@ fun toClearlyDefinedSourceLocation(
 fun SourceLocation?.toArtifactOrVcs(): Any? =
     this?.let { sourceLocation ->
         when (sourceLocation.type) {
-            Type.GIT -> {
+            ComponentType.GIT -> {
                 VcsInfoCuration(
                     type = VcsType.GIT,
                     url = sourceLocation.url,
