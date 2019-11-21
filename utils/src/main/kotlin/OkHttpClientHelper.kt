@@ -66,13 +66,13 @@ object OkHttpClientHelper {
     /**
      * Apply HTTP proxy settings from a [url], optionally with credentials included.
      */
-    fun OkHttpClient.Builder.applyProxySettingsFromUrl(url: URL) {
-        if (url.host.isEmpty()) return
+    fun OkHttpClient.Builder.applyProxySettingsFromUrl(url: URL): OkHttpClient.Builder {
+        if (url.host.isEmpty()) return this
 
         val port = url.port.takeIf { it in IntRange(0, 65535) } ?: 8080
         proxy(Proxy(Proxy.Type.HTTP, InetSocketAddress(url.host, port)))
 
-        if (url.userInfo == null) return
+        if (url.userInfo == null) return this
 
         proxyAuthenticator(object : Authenticator {
             override fun authenticate(route: Route?, response: Response): Request? {
@@ -84,6 +84,8 @@ object OkHttpClientHelper {
                     .build()
             }
         })
+
+        return this
     }
 
     /**
