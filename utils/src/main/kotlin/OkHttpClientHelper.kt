@@ -91,7 +91,7 @@ object OkHttpClientHelper {
     /**
      * Apply HTTP proxy settings from the "https_proxy" or "http_proxy" environment variables.
      */
-    val applyProxySettingsFromEnv: OkHttpClient.Builder.() -> Unit = {
+    fun OkHttpClient.Builder.applyProxySettingsFromEnv(): OkHttpClient.Builder {
         fun String.addProtocol(protocol: String) = if (!startsWith("http")) "$protocol://$this" else this
 
         val proxyUrl = Os.env["https_proxy"]?.addProtocol("https")
@@ -106,6 +106,8 @@ object OkHttpClientHelper {
                 log.warn { "Invalid proxy URL '$proxyUrl' defined in environment." }
             }
         }
+
+        return this
     }
 
     /**
@@ -121,6 +123,7 @@ object OkHttpClientHelper {
             OkHttpClient.Builder()
                 .cache(cache)
                 .connectionSpecs(specs)
+                .applyProxySettingsFromEnv()
                 .apply(block)
                 .build()
         }

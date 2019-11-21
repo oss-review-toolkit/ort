@@ -36,7 +36,6 @@ import com.here.ort.model.config.AnalyzerConfiguration
 import com.here.ort.model.config.RepositoryConfiguration
 import com.here.ort.utils.CommandLineTool
 import com.here.ort.utils.OkHttpClientHelper
-import com.here.ort.utils.OkHttpClientHelper.applyProxySettingsFromEnv
 import com.here.ort.utils.ProcessCapture
 import com.here.ort.utils.log
 import com.here.ort.utils.safeDeleteRecursively
@@ -223,7 +222,7 @@ class Stack(
             .url("${getPackageUrl(pkgId.name, pkgId.version)}/src/${pkgId.name}.cabal")
             .build()
 
-        return OkHttpClientHelper.execute(HTTP_CACHE_PATH, pkgRequest, applyProxySettingsFromEnv).use { response ->
+        return OkHttpClientHelper.execute(HTTP_CACHE_PATH, pkgRequest).use { response ->
             val body = response.body?.string()?.trim()
 
             if (response.code != HttpURLConnection.HTTP_OK || body.isNullOrEmpty()) {
