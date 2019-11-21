@@ -199,7 +199,7 @@ interface ClearlyDefinedService {
      * See https://github.com/clearlydefined/service/blob/4e210d7/schemas/swagger.yaml#L87-L97.
      */
     data class ContributionInfo(
-        val type: String,
+        val type: ContributionType,
 
         // This will also be used as the pull-request title.
         val summary: String,
@@ -208,6 +208,27 @@ interface ClearlyDefinedService {
         val resolution: String,
         val removedDefinitions: Boolean
     )
+
+    /**
+     * See https://github.com/clearlydefined/website/blob/43ec5e3/src/components/ContributePrompt.js#L78-L82.
+     */
+    enum class ContributionType {
+        MISSING,
+        INCORRECT,
+        INCOMPLETE,
+        AMBIGUOUS,
+        OTHER;
+
+        companion object {
+            @JsonCreator
+            @JvmStatic
+            fun fromString(value: String) =
+                enumValues<ContributionType>().single { value.equals(it.name, ignoreCase = true) }
+        }
+
+        @JsonValue
+        override fun toString() = name.toLowerCase().capitalize()
+    }
 
     /**
      * See https://github.com/clearlydefined/service/blob/b339cb7/schemas/curations-1.0.json#L8-L15.

@@ -29,6 +29,7 @@ import com.here.ort.analyzer.curation.toClearlyDefinedSourceLocation
 import com.here.ort.clearlydefined.ClearlyDefinedService
 import com.here.ort.clearlydefined.ClearlyDefinedService.ContributionInfo
 import com.here.ort.clearlydefined.ClearlyDefinedService.ContributionPatch
+import com.here.ort.clearlydefined.ClearlyDefinedService.ContributionType
 import com.here.ort.clearlydefined.ClearlyDefinedService.Curation
 import com.here.ort.clearlydefined.ClearlyDefinedService.Described
 import com.here.ort.clearlydefined.ClearlyDefinedService.ErrorResponse
@@ -71,7 +72,7 @@ object ClearlyDefinedUploadCommand : CommandWithHelp() {
         val info = ContributionInfo(
             // The exact values to use here are unclear; use what is mostly used at
             // https://github.com/clearlydefined/curated-data/pulls.
-            type = "Import",
+            type = ContributionType.OTHER,
             summary = "Curation for package with ${id.toClearlyDefinedCoordinates()}.",
             details = "Imported from curation data of the " +
                     "[OSS Review Toolkit](https://github.com/heremaps/oss-review-toolkit) via the " +

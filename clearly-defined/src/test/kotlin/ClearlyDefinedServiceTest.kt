@@ -21,6 +21,7 @@ package com.here.ort.clearlydefined
 
 import com.here.ort.clearlydefined.ClearlyDefinedService.ContributionInfo
 import com.here.ort.clearlydefined.ClearlyDefinedService.ContributionPatch
+import com.here.ort.clearlydefined.ClearlyDefinedService.ContributionType
 import com.here.ort.clearlydefined.ClearlyDefinedService.Coordinates
 import com.here.ort.clearlydefined.ClearlyDefinedService.Curation
 import com.here.ort.clearlydefined.ClearlyDefinedService.Licensed
@@ -50,7 +51,7 @@ private fun RequestBody.string() = Buffer().also { writeTo(it) }.readUtf8()
 class ClearlyDefinedServiceTest : WordSpec({
     "Uploading a contribution patch" should {
         val info = ContributionInfo(
-            type = "type",
+            type = ContributionType.OTHER,
             summary = "summary",
             details = "details",
             resolution = "resolution",
