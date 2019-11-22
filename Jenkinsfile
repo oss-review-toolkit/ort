@@ -28,8 +28,8 @@ pipeline {
         )
 
         string(
-            name: 'VCS_BRANCH',
-            description: 'VCS branch of the project',
+            name: 'VCS_REVISION',
+            description: 'VCS revision of the project (prefix tags with "refs/tags/")',
             defaultValue: 'master'
         )
 
@@ -48,7 +48,7 @@ pipeline {
                 // See https://jenkins.io/doc/pipeline/steps/git/.
                 checkout([$class: 'GitSCM',
                     userRemoteConfigs: [[url: params.VCS_URL]],
-                    branches: [[name: "*/${params.VCS_BRANCH}"]],
+                    branches: [[name: "${params.VCS_REVISION}"]],
                     extensions: [[$class: 'RelativeTargetDirectory', relativeTargetDir: 'project/source']]
                 ])
             }
