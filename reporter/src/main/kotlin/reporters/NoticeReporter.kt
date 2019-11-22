@@ -138,13 +138,13 @@ class NoticeReporter : Reporter() {
         buildString {
             append(noticeReport.headers.joinToString(NOTICE_SEPARATOR))
 
-            val mergedFindings = noticeReport.findings.values.reduce { left, right ->
+            val mergedFindings = noticeReport.findings.values.takeIf { it.isNotEmpty() }?.reduce { left, right ->
                 left.apply {
                     right.forEach { (license, copyrights) ->
                         getOrPut(license) { mutableSetOf() } += copyrights
                     }
                 }
-            }.removeGarbage(copyrightGarbage).processStatements()
+            }?.removeGarbage(copyrightGarbage)?.processStatements() ?: sortedMapOf()
 
             mergedFindings.forEach { (license, copyrights) ->
                 licenseTextProvider.getLicenseText(license)?.let { licenseText ->
