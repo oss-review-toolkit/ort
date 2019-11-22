@@ -33,6 +33,12 @@ pipeline {
             defaultValue: 'master'
         )
 
+        booleanParam(
+            name: 'ALLOW_DYNAMIC_VERSIONS',
+            defaultValue: false,
+            description: 'Allow dynamic versions of dependencies (support projects without lock files)'
+        )
+
         choice(
             name: 'LOG_LEVEL',
             description: 'Log message level',
@@ -62,7 +68,13 @@ pipeline {
 
         stage('Run ORT analyzer') {
             steps {
-                sh 'docker/run.sh "-v $WORKSPACE/project:/project" $LOG_LEVEL analyze -f JSON,YAML -i /project/source -o /project/ort/analyzer'
+                sh '''
+                    if [ "$ALLOW_DYNAMIC_VERSIONS" = "true" ]; then
+                        ALLOW_DYNAMIC_VERSIONS_PARAM="--allow-dynamic-versions"
+                    fi
+
+                    docker/run.sh "-v $WORKSPACE/project:/project" $LOG_LEVEL analyze $ALLOW_DYNAMIC_VERSIONS_PARAM -f JSON,YAML -i /project/source -o /project/ort/analyzer
+                '''
             }
 
             post {
