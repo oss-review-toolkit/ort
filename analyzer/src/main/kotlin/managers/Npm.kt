@@ -166,7 +166,7 @@ open class Npm(
         // which ...
         json["license"]?.let { licenseNode ->
             // ... can either be a direct text value, an array of text values (which is not officially supported), or
-            // an object containing nested "type" (and "url) text nodes.
+            // an object containing nested "type" (and "url") text nodes.
             when {
                 licenseNode.isTextual -> declaredLicenses += licenseNode.textValue()
                 licenseNode.isArray -> licenseNode.mapNotNullTo(declaredLicenses) { it.textValue() }
@@ -175,8 +175,8 @@ open class Npm(
             }
         }
 
-        // New packages use a "licenses" (plural) node containing an array of objects with nested "type" (and "url) text
-        // nodes.
+        // New packages use a "licenses" (plural) node containing an array of objects with nested "type" (and "url")
+        // text nodes.
         json["licenses"]?.mapNotNullTo(declaredLicenses) { licenseNode ->
             licenseNode["type"]?.textValue()
         }
