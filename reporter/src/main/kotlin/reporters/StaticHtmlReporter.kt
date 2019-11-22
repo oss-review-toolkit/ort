@@ -438,8 +438,10 @@ class StaticHtmlReporter : Reporter() {
             }
 
             tbody {
-                table.rows.forEachIndexed { rowIndex, pkg ->
-                    projectRow(project.id.toCoordinates(), rowIndex + 1, pkg)
+                val projectRow = table.rows.single { it.id == project.id }
+                projectRow(project.id.toCoordinates(), 1, projectRow)
+                (table.rows - projectRow).forEachIndexed { rowIndex, pkg ->
+                    projectRow(project.id.toCoordinates(), rowIndex + 2, pkg)
                 }
             }
         }
