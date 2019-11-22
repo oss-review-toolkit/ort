@@ -59,7 +59,10 @@ tasks.named<DependencyUpdatesTask>("dependencyUpdates") {
     gradleReleaseChannel = "current"
 
     fun isNonFinalVersion(version: String): Boolean {
-        val nonFinalQualifiers = listOf("alpha", "b", "beta", "cr", "ea", "eap", "m", "pr", "preview", "rc")
+        val nonFinalQualifiers = listOf(
+            "alpha", "b", "beta", "cr", "ea", "eap", "m", "milestone", "pr", "preview", "rc"
+        )
+
         return nonFinalQualifiers.any { qualifier ->
             version.matches(Regex("(?i).*[.-]$qualifier[.\\d-+]*"))
         }
