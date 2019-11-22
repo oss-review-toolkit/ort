@@ -39,6 +39,12 @@ pipeline {
             description: 'Allow dynamic versions of dependencies (support projects without lock files)'
         )
 
+        booleanParam(
+            name: 'USE_CLEARLY_DEFINED_CURATIONS',
+            defaultValue: true,
+            description: 'Use package curation data from the ClearlyDefined service'
+        )
+
         choice(
             name: 'LOG_LEVEL',
             description: 'Log message level',
@@ -73,7 +79,11 @@ pipeline {
                         ALLOW_DYNAMIC_VERSIONS_PARAM="--allow-dynamic-versions"
                     fi
 
-                    docker/run.sh "-v $WORKSPACE/project:/project" $LOG_LEVEL analyze $ALLOW_DYNAMIC_VERSIONS_PARAM -f JSON,YAML -i /project/source -o /project/ort/analyzer
+                    if [ "$USE_CLEARLY_DEFINED_CURATIONS" = "true" ]; then
+                        USE_CLEARLY_DEFINED_CURATIONS_PARAM="--clearly-defined-curations"
+                    fi
+
+                    docker/run.sh "-v $WORKSPACE/project:/project" $LOG_LEVEL analyze $ALLOW_DYNAMIC_VERSIONS_PARAM $USE_CLEARLY_DEFINED_CURATIONS_PARAM -f JSON,YAML -i /project/source -o /project/ort/analyzer
                 '''
             }
 
