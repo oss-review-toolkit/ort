@@ -162,12 +162,21 @@ open class Npm(
     private fun parseLicenses(json: JsonNode): SortedSet<String> {
         val declaredLicenses = sortedSetOf<String>()
 
-        // See https://docs.npmjs.com/files/package.json#license. Some old packages used license objects or ...
+        // See https://docs.npmjs.com/files/package.json#license. Some old packages use a "license" (singular) node
+        // which ...
         json["license"]?.let { licenseNode ->
-            (licenseNode.textValue() ?: licenseNode["type"].textValue())?.let { declaredLicenses += it }
+            // ... can either be a direct text value, an array of text values (which is not officially supported), or
+            // an object containing nested "type" (and "url) text nodes.
+            when {
+                licenseNode.isTextual -> declaredLicenses += licenseNode.textValue()
+                licenseNode.isArray -> licenseNode.mapNotNullTo(declaredLicenses) { it.textValue() }
+                licenseNode.isObject -> declaredLicenses += licenseNode["type"].textValue()
+                else -> throw IllegalArgumentException("Unsupported node type in '$licenseNode'.")
+            }
         }
 
-        // ... a "licenses" property containing an array of license objects.
+        // New packages use a "licenses" (plural) node containing an array of objects with nested "type" (and "url) text
+        // nodes.
         json["licenses"]?.mapNotNullTo(declaredLicenses) { licenseNode ->
             licenseNode["type"]?.textValue()
         }
