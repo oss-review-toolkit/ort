@@ -8,9 +8,6 @@ ORT's behavior can be customized for a specific repository by adding a `.ort.yml
 Currently, this file can only be used to configure the excludes described below, but more features are planned for the
 future.
 
-Note that for Git-Repo repositories, the default location of the configuration file is next to the manifest file. For
-example, if the manifest is `manifest.xml` the configuration should be `manifest.xml.ort.yml`.
-
 ### Excludes
 
 ORT's philosophy is to analyze and scan everything it can find to build a complete picture of a repository and its

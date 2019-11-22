@@ -21,7 +21,6 @@ package com.here.ort.analyzer
 
 import com.here.ort.analyzer.managers.Unmanaged
 import com.here.ort.downloader.VersionControlSystem
-import com.here.ort.downloader.vcs.GitRepo
 import com.here.ort.model.AnalyzerResult
 import com.here.ort.model.AnalyzerResultBuilder
 import com.here.ort.model.AnalyzerRun
@@ -36,7 +35,6 @@ import com.here.ort.model.readValue
 import com.here.ort.utils.NamedThreadFactory
 import com.here.ort.utils.ORT_CONFIG_FILENAME
 import com.here.ort.utils.log
-import com.here.ort.utils.realFile
 
 import java.io.File
 import java.time.Instant
@@ -64,7 +62,7 @@ class Analyzer(private val config: AnalyzerConfiguration) {
         val startTime = Instant.now()
 
         val actualRepositoryConfigurationFile = repositoryConfigurationFile
-            ?: locateRepositoryConfigurationFile(absoluteProjectPath)
+            ?: File(absoluteProjectPath, ORT_CONFIG_FILENAME)
 
         val repositoryConfiguration = if (actualRepositoryConfigurationFile.isFile) {
             log.info { "Using configuration file '${actualRepositoryConfigurationFile.absolutePath}'." }
@@ -182,14 +180,4 @@ class Analyzer(private val config: AnalyzerConfiguration) {
 
         return analyzerResultBuilder.build()
     }
-
-    private fun locateRepositoryConfigurationFile(absoluteProjectPath: File): File =
-        GitRepo().getWorkingTree(absoluteProjectPath).let { workingTree ->
-            if (workingTree.isValid() && workingTree.getRootPath() == absoluteProjectPath) {
-                val manifestFile = absoluteProjectPath.resolve(".repo/manifest.xml").realFile()
-                manifestFile.resolveSibling("${manifestFile.name}$ORT_CONFIG_FILENAME")
-            } else {
-                File(absoluteProjectPath, ORT_CONFIG_FILENAME)
-            }
-        }
 }
