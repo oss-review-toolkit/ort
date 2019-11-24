@@ -11,7 +11,7 @@ plugins {
 
 application {
     applicationName = "ort"
-    mainClassName = "com.here.ort.Main"
+    mainClassName = "com.here.ort.OrtMain"
 }
 
 tasks.named<CreateStartScripts>("startScripts") {
