@@ -58,7 +58,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook
  * for each project in the [AnalyzerResult] from [OrtResult.analyzer] and an additional sheet that summarizes all
  * dependencies.
  */
-class ExcelReporter : Reporter() {
+class ExcelReporter : Reporter {
     private val defaultColumns = 5
 
     private val borderColor = XSSFColor(Color(211, 211, 211))

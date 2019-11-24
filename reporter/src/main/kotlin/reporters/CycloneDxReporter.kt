@@ -40,7 +40,7 @@ import org.cyclonedx.model.License
 import org.cyclonedx.model.LicenseChoice
 import org.cyclonedx.model.LicenseText
 
-class CycloneDxReporter : Reporter() {
+class CycloneDxReporter : Reporter {
     override val reporterName = "CycloneDx"
     override val defaultFilename = "bom.xml"
 

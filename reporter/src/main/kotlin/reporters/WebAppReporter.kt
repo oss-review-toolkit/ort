@@ -29,7 +29,7 @@ import com.here.ort.reporter.ResolutionProvider
 
 import java.io.OutputStream
 
-class WebAppReporter : Reporter() {
+class WebAppReporter : Reporter {
     override val reporterName = "WebApp"
     override val defaultFilename = "scan-report-web-app.html"
 

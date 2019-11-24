@@ -34,7 +34,7 @@ import com.here.ort.utils.log
 
 import java.io.OutputStream
 
-class NoticeReporter : Reporter() {
+class NoticeReporter : Reporter {
     companion object {
         private const val NOTICE_SEPARATOR = "\n----\n\n"
     }

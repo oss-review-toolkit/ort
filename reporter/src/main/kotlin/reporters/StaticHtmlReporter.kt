@@ -48,7 +48,7 @@ import kotlinx.html.*
 import kotlinx.html.dom.*
 
 @Suppress("LargeClass")
-class StaticHtmlReporter : Reporter() {
+class StaticHtmlReporter : Reporter {
     private val css = javaClass.getResource("/static-html-reporter.css").readText()
 
     override val reporterName = "StaticHtml"

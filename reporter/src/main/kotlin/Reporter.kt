@@ -33,7 +33,7 @@ import java.util.ServiceLoader
  * A reporter that creates a human readable report from the [AnalyzerResult] and [ScanRecord] contained in an
  * [OrtResult]. The signatures of public functions in this class define the library API.
  */
-abstract class Reporter {
+interface Reporter {
     companion object {
         private val LOADER = ServiceLoader.load(Reporter::class.java)!!
 
@@ -46,12 +46,12 @@ abstract class Reporter {
     /**
      * The name to use to refer to the reporter.
      */
-    abstract val reporterName: String
+    val reporterName: String
 
     /**
      * The default output filename to use with this reporter format.
      */
-    abstract val defaultFilename: String
+    val defaultFilename: String
 
     /**
      * Generate a report for the [ortResult], taking into account any issue resolutions provided by [resolutionProvider]
@@ -59,7 +59,7 @@ abstract class Reporter {
      * The report may be post-processed by a [postProcessingScript] before it is written to [outputStream] whereas the
      * [licenseConfiguration] is passed as a parameter to that script.
      */
-    abstract fun generateReport(
+    fun generateReport(
         outputStream: OutputStream,
         ortResult: OrtResult,
         resolutionProvider: ResolutionProvider = DefaultResolutionProvider(),
