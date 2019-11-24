@@ -36,7 +36,7 @@ private const val TOOL_NAME = "orth"
 /**
  * The main entry point of the application.
  */
-object Main : CommandWithHelp() {
+object HelperMain : CommandWithHelp() {
     @Parameter(
         description = "Enable info logging.",
         names = ["--info"],
