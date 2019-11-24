@@ -47,7 +47,7 @@ const val TOOL_NAME = "ort"
 /**
  * The main entry point of the application.
  */
-object Main : CommandWithHelp() {
+object OrtMain : CommandWithHelp() {
     @Parameter(
         description = "The path to a configuration file.",
         names = ["--config", "-c"],

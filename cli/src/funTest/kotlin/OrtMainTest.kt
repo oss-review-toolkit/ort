@@ -36,7 +36,7 @@ import java.io.File
 /**
  * A test for the main entry point of the application.
  */
-class MainTest : StringSpec() {
+class OrtMainTest : StringSpec() {
     private val projectDir = File("../analyzer/src/funTest/assets/projects/synthetic")
     private val vcsDir = VersionControlSystem.forDirectory(projectDir)!!
     private val vcsUrl = vcsDir.getRemoteUrl()
@@ -163,7 +163,7 @@ class MainTest : StringSpec() {
 
     private fun runMain(vararg args: String): Result {
         var exitCode = 0
-        val output = redirectStdout { exitCode = Main.run(args.asList().toTypedArray()) }
+        val output = redirectStdout { exitCode = OrtMain.run(args.asList().toTypedArray()) }
         return Result(output.lineSequence(), exitCode)
     }
 }
