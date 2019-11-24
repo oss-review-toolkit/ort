@@ -23,8 +23,6 @@ complexity:
 formatting:
   ChainWrapping:
     active: false
-  NoItParamInMultilineLambda:
-    active: false
   NoWildcardImports:
     active: false
   ParameterListWrapping:
@@ -36,6 +34,8 @@ performance:
 
 style:
   ForbiddenComment:
+    active: false
+  LoopWithTooManyJumpStatements:
     active: false
   MagicNumber:
     active: false
