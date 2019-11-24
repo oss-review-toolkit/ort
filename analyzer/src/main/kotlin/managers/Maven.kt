@@ -84,7 +84,7 @@ class Maven(
         override fun getRepository() = workspaceRepository
     }
 
-    private val maven = MavenSupport(LocalProjectWorkspaceReader())
+    private val mvn = MavenSupport(LocalProjectWorkspaceReader())
 
     private val localProjectBuildingResults = mutableMapOf<String, ProjectBuildingResult>()
 
@@ -96,8 +96,8 @@ class Maven(
     fun enableSbtMode() = also { sbtMode = true }
 
     override fun beforeResolution(definitionFiles: List<File>) {
-        val projectBuilder = maven.container.lookup(ProjectBuilder::class.java, "default")
-        val projectBuildingRequest = maven.createProjectBuildingRequest(false)
+        val projectBuilder = mvn.container.lookup(ProjectBuilder::class.java, "default")
+        val projectBuildingRequest = mvn.createProjectBuildingRequest(false)
         val projectBuildingResults = try {
             projectBuilder.build(definitionFiles, false, projectBuildingRequest)
         } catch (e: ProjectBuildingException) {
@@ -128,7 +128,7 @@ class Maven(
 
     override fun resolveDependencies(definitionFile: File): ProjectAnalyzerResult? {
         val workingDir = definitionFile.parentFile
-        val projectBuildingResult = maven.buildMavenProject(definitionFile)
+        val projectBuildingResult = mvn.buildMavenProject(definitionFile)
         val mavenProject = projectBuildingResult.project
         val packages = mutableMapOf<String, Package>()
         val scopes = mutableMapOf<String, Scope>()
@@ -200,7 +200,7 @@ class Maven(
                 val pkg = packages.getOrPut(identifier) {
                     // TODO: Omit the "localProjects" argument here once SBT is implemented independently of Maven as at
                     //       this point we know already that "identifier" is not a local project.
-                    maven.parsePackage(node.artifact, node.repositories, localProjects, sbtMode)
+                    mvn.parsePackage(node.artifact, node.repositories, localProjects, sbtMode)
                 }
 
                 pkg.toReference(dependencies = dependencies)
