@@ -9,7 +9,7 @@ plugins {
 
 application {
     applicationName = "orth"
-    mainClassName = "com.here.ort.helper.Main"
+    mainClassName = "com.here.ort.helper.HelperMain"
 }
 
 tasks.named<CreateStartScripts>("startScripts") {
