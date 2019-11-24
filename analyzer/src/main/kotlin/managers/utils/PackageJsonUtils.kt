@@ -34,150 +34,148 @@ import java.net.URISyntaxException
 import java.nio.file.FileSystems
 import java.nio.file.PathMatcher
 
-internal class PackageJsonUtils {
-    companion object {
-        private val NPM_LOCK_FILES = listOf("npm-shrinkwrap.json", "package-lock.json")
-        private val YARN_LOCK_FILES = listOf("yarn.lock")
+internal object PackageJsonUtils {
+    private val NPM_LOCK_FILES = listOf("npm-shrinkwrap.json", "package-lock.json")
+    private val YARN_LOCK_FILES = listOf("yarn.lock")
 
-        private data class DefinitionFileInfo(
-            val definitionFile: File,
-            val hasYarnLockfile: Boolean = false,
-            val hasNpmLockfile: Boolean = false,
-            val isYarnWorkspaceRoot: Boolean = false,
-            val isYarnWorkspaceSubmodule: Boolean = false
-        )
+    private data class DefinitionFileInfo(
+        val definitionFile: File,
+        val hasYarnLockfile: Boolean = false,
+        val hasNpmLockfile: Boolean = false,
+        val isYarnWorkspaceRoot: Boolean = false,
+        val isYarnWorkspaceSubmodule: Boolean = false
+    )
 
-        fun hasNpmLockFile(directory: File) =
-            NPM_LOCK_FILES.any { lockfile ->
-                File(directory, lockfile).isFile
-            }
-
-        fun hasYarnLockFile(directory: File) =
-            YARN_LOCK_FILES.any { lockfile ->
-                File(directory, lockfile).isFile
-            }
-
-        fun mapDefinitionFilesForNpm(definitionFiles: Collection<File>): Set<File> =
-            getDefinitionFileInfo(definitionFiles.toSet()).filter { entry ->
-                !isHandledByYarn(entry)
-            }.mapTo(mutableSetOf()) { it.definitionFile }
-
-        fun mapDefinitionFilesForYarn(definitionFiles: Collection<File>): Set<File> =
-            getDefinitionFileInfo(definitionFiles.toSet()).filter { entry ->
-                isHandledByYarn(entry) && !entry.isYarnWorkspaceSubmodule
-            }.mapTo(mutableSetOf()) { it.definitionFile }
-
-        /**
-         * Expand NPM shortcuts for URLs to hosting sites to full URLs so that they can be used in a regular way.
-         *
-         * @param url The URL to expand.
-         */
-        fun expandShortcutURL(url: String): String {
-            // A hierarchical URI looks like
-            //     [scheme:][//authority][path][?query][#fragment]
-            // where a server-based "authority" has the syntax
-            //     [user-info@]host[:port]
-            val uri = try {
-                // At this point we do not know whether the URL is actually valid, so use the more general URI.
-                URI(url)
-            } catch (e: URISyntaxException) {
-                // Fall back to returning the original URL.
-                return url
-            }
-
-            val path = uri.schemeSpecificPart
-
-            // Do not mess with crazy URLs.
-            if (path.startsWith("git@") || path.startsWith("github.com") || path.startsWith("gitlab.com")) return url
-
-            return if (!path.isNullOrEmpty() && listOf(uri.authority, uri.query).all { it == null }) {
-                // See https://docs.npmjs.com/files/package.json#github-urls.
-                val revision = if (uri.hasRevisionFragment()) "#${uri.fragment}" else ""
-
-                // See https://docs.npmjs.com/files/package.json#repository.
-                when (uri.scheme) {
-                    null, "github" -> "https://github.com/$path.git$revision"
-                    "gist" -> "https://gist.github.com/$path$revision"
-                    "bitbucket" -> "https://bitbucket.org/$path.git$revision"
-                    "gitlab" -> "https://gitlab.com/$path.git$revision"
-                    else -> url
-                }
-            } else {
-                url
-            }
+    fun hasNpmLockFile(directory: File) =
+        NPM_LOCK_FILES.any { lockfile ->
+            File(directory, lockfile).isFile
         }
 
-        private fun isHandledByYarn(entry: DefinitionFileInfo) =
-            entry.isYarnWorkspaceRoot || entry.isYarnWorkspaceSubmodule || entry.hasYarnLockfile
-
-        private fun getDefinitionFileInfo(definitionFiles: Set<File>): Collection<DefinitionFileInfo> {
-            val yarnWorkspaceSubmodules = getYarnWorkspaceSubmodules(definitionFiles)
-
-            return definitionFiles.map { definitionFile ->
-                DefinitionFileInfo(
-                    definitionFile = definitionFile,
-                    isYarnWorkspaceRoot = isYarnWorkspaceRoot(definitionFile),
-                    hasYarnLockfile = hasYarnLockFile(definitionFile.parentFile),
-                    hasNpmLockfile = hasNpmLockFile(definitionFile.parentFile),
-                    isYarnWorkspaceSubmodule = yarnWorkspaceSubmodules.contains(definitionFile)
-                )
-            }
+    fun hasYarnLockFile(directory: File) =
+        YARN_LOCK_FILES.any { lockfile ->
+            File(directory, lockfile).isFile
         }
 
-        private fun isYarnWorkspaceRoot(definitionFile: File) =
-            try {
-                definitionFile.readValue<ObjectNode>()["workspaces"] != null
-            } catch (e: JsonProcessingException) {
-                e.showStackTrace()
+    fun mapDefinitionFilesForNpm(definitionFiles: Collection<File>): Set<File> =
+        getDefinitionFileInfo(definitionFiles.toSet()).filter { entry ->
+            !isHandledByYarn(entry)
+        }.mapTo(mutableSetOf()) { it.definitionFile }
 
-                log.error { "Could not parse '${definitionFile.invariantSeparatorsPath}': ${e.message}" }
+    fun mapDefinitionFilesForYarn(definitionFiles: Collection<File>): Set<File> =
+        getDefinitionFileInfo(definitionFiles.toSet()).filter { entry ->
+            isHandledByYarn(entry) && !entry.isYarnWorkspaceSubmodule
+        }.mapTo(mutableSetOf()) { it.definitionFile }
 
-                false
+    /**
+     * Expand NPM shortcuts for URLs to hosting sites to full URLs so that they can be used in a regular way.
+     *
+     * @param url The URL to expand.
+     */
+    fun expandShortcutURL(url: String): String {
+        // A hierarchical URI looks like
+        //     [scheme:][//authority][path][?query][#fragment]
+        // where a server-based "authority" has the syntax
+        //     [user-info@]host[:port]
+        val uri = try {
+            // At this point we do not know whether the URL is actually valid, so use the more general URI.
+            URI(url)
+        } catch (e: URISyntaxException) {
+            // Fall back to returning the original URL.
+            return url
+        }
+
+        val path = uri.schemeSpecificPart
+
+        // Do not mess with crazy URLs.
+        if (path.startsWith("git@") || path.startsWith("github.com") || path.startsWith("gitlab.com")) return url
+
+        return if (!path.isNullOrEmpty() && listOf(uri.authority, uri.query).all { it == null }) {
+            // See https://docs.npmjs.com/files/package.json#github-urls.
+            val revision = if (uri.hasRevisionFragment()) "#${uri.fragment}" else ""
+
+            // See https://docs.npmjs.com/files/package.json#repository.
+            when (uri.scheme) {
+                null, "github" -> "https://github.com/$path.git$revision"
+                "gist" -> "https://gist.github.com/$path$revision"
+                "bitbucket" -> "https://bitbucket.org/$path.git$revision"
+                "gitlab" -> "https://gitlab.com/$path.git$revision"
+                else -> url
             }
+        } else {
+            url
+        }
+    }
 
-        private fun getYarnWorkspaceSubmodules(definitionFiles: Set<File>): Set<File> {
-            val result = mutableSetOf<File>()
+    private fun isHandledByYarn(entry: DefinitionFileInfo) =
+        entry.isYarnWorkspaceRoot || entry.isYarnWorkspaceSubmodule || entry.hasYarnLockfile
 
-            definitionFiles.forEach { definitionFile ->
-                val workspaceMatchers = getWorkspaceMatchers(definitionFile)
-                workspaceMatchers.forEach { matcher ->
-                    definitionFiles.forEach inner@{ other ->
-                        // Since yarn workspaces matchers support '*' and '**' to match multiple directories the matcher
-                        // cannot be used as is for matching the 'package.json' file. Thus matching against the project
-                        // directory since this works out of the box. See also:
-                        //   https://github.com/yarnpkg/yarn/issues/3986
-                        //   https://github.com/yarnpkg/yarn/pull/5607
-                        val projectDir = other.parentFile.toPath()
-                        if (other != definitionFile && matcher.matches(projectDir)) {
-                            result.add(other)
-                            return@inner
-                        }
+    private fun getDefinitionFileInfo(definitionFiles: Set<File>): Collection<DefinitionFileInfo> {
+        val yarnWorkspaceSubmodules = getYarnWorkspaceSubmodules(definitionFiles)
+
+        return definitionFiles.map { definitionFile ->
+            DefinitionFileInfo(
+                definitionFile = definitionFile,
+                isYarnWorkspaceRoot = isYarnWorkspaceRoot(definitionFile),
+                hasYarnLockfile = hasYarnLockFile(definitionFile.parentFile),
+                hasNpmLockfile = hasNpmLockFile(definitionFile.parentFile),
+                isYarnWorkspaceSubmodule = yarnWorkspaceSubmodules.contains(definitionFile)
+            )
+        }
+    }
+
+    private fun isYarnWorkspaceRoot(definitionFile: File) =
+        try {
+            definitionFile.readValue<ObjectNode>()["workspaces"] != null
+        } catch (e: JsonProcessingException) {
+            e.showStackTrace()
+
+            log.error { "Could not parse '${definitionFile.invariantSeparatorsPath}': ${e.message}" }
+
+            false
+        }
+
+    private fun getYarnWorkspaceSubmodules(definitionFiles: Set<File>): Set<File> {
+        val result = mutableSetOf<File>()
+
+        definitionFiles.forEach { definitionFile ->
+            val workspaceMatchers = getWorkspaceMatchers(definitionFile)
+            workspaceMatchers.forEach { matcher ->
+                definitionFiles.forEach inner@{ other ->
+                    // Since yarn workspaces matchers support '*' and '**' to match multiple directories the matcher
+                    // cannot be used as is for matching the 'package.json' file. Thus matching against the project
+                    // directory since this works out of the box. See also:
+                    //   https://github.com/yarnpkg/yarn/issues/3986
+                    //   https://github.com/yarnpkg/yarn/pull/5607
+                    val projectDir = other.parentFile.toPath()
+                    if (other != definitionFile && matcher.matches(projectDir)) {
+                        result.add(other)
+                        return@inner
                     }
                 }
             }
-
-            return result
         }
 
-        private fun getWorkspaceMatchers(definitionFile: File): List<PathMatcher> {
-            var workspaces = try {
-                definitionFile.readValue<ObjectNode>()["workspaces"]
-            } catch (e: JsonProcessingException) {
-                e.showStackTrace()
+        return result
+    }
 
-                log.error { "Could not parse '${definitionFile.invariantSeparatorsPath}': ${e.message}" }
+    private fun getWorkspaceMatchers(definitionFile: File): List<PathMatcher> {
+        var workspaces = try {
+            definitionFile.readValue<ObjectNode>()["workspaces"]
+        } catch (e: JsonProcessingException) {
+            e.showStackTrace()
 
-                null
-            }
+            log.error { "Could not parse '${definitionFile.invariantSeparatorsPath}': ${e.message}" }
 
-            if (workspaces != null && workspaces !is ArrayNode) {
-                workspaces = workspaces["packages"]
-            }
-
-            return workspaces?.map {
-                val pattern = "glob:${definitionFile.parentFile.invariantSeparatorsPath}/${it.textValue()}"
-                FileSystems.getDefault().getPathMatcher(pattern)
-            } ?: emptyList()
+            null
         }
+
+        if (workspaces != null && workspaces !is ArrayNode) {
+            workspaces = workspaces["packages"]
+        }
+
+        return workspaces?.map {
+            val pattern = "glob:${definitionFile.parentFile.invariantSeparatorsPath}/${it.textValue()}"
+            FileSystems.getDefault().getPathMatcher(pattern)
+        } ?: emptyList()
     }
 }
