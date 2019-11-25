@@ -515,8 +515,10 @@ class StaticHtmlReporter : Reporter {
                         dd {
                             row.detectedLicenses.forEach { (finding, excludes) ->
                                 val firstFinding = finding.locations.first()
+                                val path = listOfNotNull(row.vcsInfo.path.takeIf { it.isNotEmpty() }, firstFinding.path)
+                                    .joinToString("/")
                                 val permalink = VcsHost.toPermalink(
-                                    row.vcsInfo.copy(path = "${row.vcsInfo.path}/${firstFinding.path}"),
+                                    row.vcsInfo.copy(path = path),
                                     firstFinding.startLine, firstFinding.endLine
                                 )
 
