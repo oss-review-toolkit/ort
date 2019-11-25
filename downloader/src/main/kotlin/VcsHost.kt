@@ -196,6 +196,9 @@ enum class VcsHost(
     ): String
 }
 
+private fun String.isPathToMarkdownFile() =
+    endsWith(".md", ignoreCase = true) || endsWith(".markdown", ignoreCase = true)
+
 private fun gitProjectUrlToVcsInfo(projectUrl: URI): VcsInfo {
     var url = projectUrl.scheme + "://" + projectUrl.authority
 
@@ -243,7 +246,7 @@ private fun toGitPermalink(
         // GitHub and GitLab are tolerant about "blob" vs. "tree" here.
         val gitObject = if (path.isNotEmpty()) {
             // Markdown files are usually rendered and can only link to lines in blame view.
-            if (path.endsWith(".md") && startLine != -1) "blame" else "blob"
+            if (path.isPathToMarkdownFile() && startLine != -1) "blame" else "blob"
         } else {
             "commit"
         }
