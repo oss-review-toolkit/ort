@@ -148,7 +148,7 @@ class Licensee(name: String, config: ScannerConfiguration) : LocalScanner(name, 
         return ScanSummary(
             startTime = startTime,
             endTime = endTime,
-            fileCount = matchedFiles.count(),
+            fileCount = matchedFiles.size,
             packageVerificationCode = calculatePackageVerificationCode(scanPath),
             licenseFindings = licenseFindings,
             copyrightFindings = sortedSetOf(),

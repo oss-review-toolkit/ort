@@ -122,7 +122,7 @@ class PhpComposer(
         stashDirectories(File(workingDir, "vendor")).use {
             val manifest = jsonMapper.readTree(definitionFile)
             val hasDependencies = manifest.fields().asSequence().any { (key, value) ->
-                key.startsWith("require") && value.count() > 0
+                key.startsWith("require") && value.size > 0
             }
 
             val (packages, scopes) = if (hasDependencies) {

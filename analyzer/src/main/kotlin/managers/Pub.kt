@@ -172,7 +172,7 @@ class Pub(
         val manifest = yamlMapper.readTree(definitionFile)
 
         val hasDependencies = manifest.fields().asSequence().any { (key, value) ->
-            key.startsWith("dependencies") && value.count() > 0
+            key.startsWith("dependencies") && value.size > 0
         }
 
         val packages = mutableMapOf<Identifier, Package>()
