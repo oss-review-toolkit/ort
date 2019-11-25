@@ -72,7 +72,7 @@ class Git : GitBase() {
     }
 
     override fun updateWorkingTree(workingTree: WorkingTree, revision: String, recursive: Boolean) =
-        updateWorkingTreeWithoutSubmodules(workingTree, revision) && (!recursive || initSubmodules(workingTree))
+        updateWorkingTreeWithoutSubmodules(workingTree, revision) && (!recursive || updateSubmodules(workingTree))
 
     private fun updateWorkingTreeWithoutSubmodules(workingTree: WorkingTree, revision: String): Boolean {
         // To safe network bandwidth, first try to only fetch exactly the revision we want. Skip this optimization for
@@ -142,7 +142,7 @@ class Git : GitBase() {
         }
     }
 
-    private fun initSubmodules(workingTree: WorkingTree) =
+    private fun updateSubmodules(workingTree: WorkingTree) =
         try {
             if (File(workingTree.workingDir, ".gitmodules").isFile) {
                 run(workingTree.workingDir, "submodule", "update", "--init", "--recursive")
@@ -152,7 +152,7 @@ class Git : GitBase() {
         } catch (e: IOException) {
             e.showStackTrace()
 
-            log.warn { "Failed to initialize submodules: ${e.message}" }
+            log.warn { "Failed to update submodules: ${e.message}" }
 
             false
         }
