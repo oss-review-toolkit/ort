@@ -60,6 +60,7 @@ interface Reporter {
      * The report may be post-processed by a [postProcessingScript] before it is written to [outputStream] whereas the
      * [licenseConfiguration] is passed as a parameter to that script.
      */
+    @Suppress("LongParameterList")
     fun generateReport(
         outputStream: OutputStream,
         ortResult: OrtResult,

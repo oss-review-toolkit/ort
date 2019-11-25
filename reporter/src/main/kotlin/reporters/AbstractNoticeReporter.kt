@@ -97,25 +97,19 @@ abstract class AbstractNoticeReporter : Reporter {
 
         val licenseFindings: Map<Identifier, LicenseFindingsMap> = getLicenseFindings(ortResult)
 
-        val header = if (licenseFindings.isEmpty()) {
-            "This project neither contains or depends on any third-party software components.\n"
-        } else {
-            "This project contains or depends on third-party software components pursuant to the following licenses:\n"
-        }
-
         val noticeReport = if (postProcessingScript != null) {
             PostProcessor(
                 ortResult,
-                NoticeReport(listOf(header), licenseFindings, emptyList()),
+                NoticeReport(emptyList(), licenseFindings, emptyList()),
                 copyrightGarbage,
                 licenseConfiguration
             ).run(postProcessingScript)
         } else {
-            NoticeReport(listOf(header), licenseFindings, emptyList())
+            NoticeReport(emptyList(), licenseFindings, emptyList())
         }
 
         outputStream.bufferedWriter().use {
-            it.write(generateNotices(noticeReport, licenseTextProvider, copyrightGarbage))
+            it.write(generateNotices(ortResult, ortConfig, noticeReport, licenseTextProvider, copyrightGarbage))
         }
     }
 
@@ -127,6 +121,8 @@ abstract class AbstractNoticeReporter : Reporter {
         }
 
     private fun generateNotices(
+        ortResult: OrtResult,
+        config: OrtConfiguration,
         noticeReport: NoticeReport,
         licenseTextProvider: LicenseTextProvider,
         copyrightGarbage: CopyrightGarbage
@@ -134,7 +130,11 @@ abstract class AbstractNoticeReporter : Reporter {
         buildString {
             append(noticeReport.headers.joinToString(NOTICE_SEPARATOR))
 
-            appendLicenses(noticeReport, licenseTextProvider, copyrightGarbage)
+            if (noticeReport.headers.isNotEmpty()) {
+                append(NOTICE_SEPARATOR)
+            }
+
+            appendLicenses(ortResult, config, noticeReport, licenseTextProvider, copyrightGarbage)
 
             noticeReport.footers.forEach { footer ->
                 append(NOTICE_SEPARATOR)
@@ -143,6 +143,8 @@ abstract class AbstractNoticeReporter : Reporter {
         }
 
     abstract fun StringBuilder.appendLicenses(
+        ortResult: OrtResult,
+        config: OrtConfiguration,
         noticeReport: NoticeReport,
         licenseTextProvider: LicenseTextProvider,
         copyrightGarbage: CopyrightGarbage

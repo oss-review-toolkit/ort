@@ -19,7 +19,9 @@
 
 package com.here.ort.reporter.reporters
 
+import com.here.ort.model.OrtResult
 import com.here.ort.model.config.CopyrightGarbage
+import com.here.ort.model.config.OrtConfiguration
 import com.here.ort.model.processStatements
 import com.here.ort.model.removeGarbage
 import com.here.ort.reporter.LicenseTextProvider
@@ -30,10 +32,19 @@ class NoticeReporter : AbstractNoticeReporter() {
     override val reporterName = "Notice"
 
     override fun StringBuilder.appendLicenses(
+        ortResult: OrtResult,
+        config: OrtConfiguration,
         noticeReport: NoticeReport,
         licenseTextProvider: LicenseTextProvider,
         copyrightGarbage: CopyrightGarbage
     ) {
+        if (noticeReport.findings.isEmpty()) {
+            append("This project neither contains nor depends on any third-party software components.\n")
+        } else {
+            append("This project contains or depends on third-party software components.\n")
+            append("The applicable license information is listed below:\n")
+        }
+
         val mergedFindings = noticeReport.findings.values.takeIf { it.isNotEmpty() }?.reduce { left, right ->
             left.apply {
                 right.forEach { (license, copyrights) ->

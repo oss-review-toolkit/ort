@@ -288,6 +288,11 @@ data class OrtResult(
             )
 
     /**
+     * Return the list of [ScanResult]s for the given [id].
+     */
+    fun getScanResultsForId(id: Identifier): List<ScanResult> = scanResultsById[id].orEmpty()
+
+    /**
      * Return all projects and packages that are likely to belong to one of the organizations of the given [names]. If
      * [omitExcluded] is set to true, excluded projects / packages are omitted from the result. Projects are converted
      * to packages in the result. If no analyzer result is present an empty set is returned.
