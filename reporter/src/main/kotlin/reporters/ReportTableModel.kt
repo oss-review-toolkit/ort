@@ -23,6 +23,7 @@ import com.here.ort.model.Identifier
 import com.here.ort.model.LicenseFindings
 import com.here.ort.model.OrtResult
 import com.here.ort.model.Project
+import com.here.ort.model.RemoteArtifact
 import com.here.ort.model.RuleViolation
 import com.here.ort.model.ScanResult
 import com.here.ort.model.Severity
@@ -107,6 +108,11 @@ data class ReportTableModel(
          * The identifier of the package.
          */
         val id: Identifier,
+
+        /**
+         * The remote artifact where the source package can be downloaded.
+         */
+        val sourceArtifact: RemoteArtifact,
 
         /**
          * The VCS information of the package.

@@ -22,6 +22,7 @@ package com.here.ort.reporter.reporters
 import com.here.ort.model.Identifier
 import com.here.ort.model.OrtIssue
 import com.here.ort.model.OrtResult
+import com.here.ort.model.RemoteArtifact
 import com.here.ort.model.RuleViolation
 import com.here.ort.model.VcsInfo
 import com.here.ort.reporter.ResolutionProvider
@@ -117,6 +118,7 @@ class ReportTableModelMapper(private val resolutionProvider: ResolutionProvider)
 
                 DependencyRow(
                     id = id,
+                    sourceArtifact = packageForId?.sourceArtifact ?: RemoteArtifact.EMPTY,
                     vcsInfo = packageForId?.vcsProcessed ?: VcsInfo.EMPTY,
                     scopes = scopes,
                     concludedLicense = concludedLicense,

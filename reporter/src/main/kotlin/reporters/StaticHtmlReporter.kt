@@ -23,7 +23,9 @@ import com.here.ort.downloader.VcsHost
 import com.here.ort.model.Environment
 import com.here.ort.model.OrtResult
 import com.here.ort.model.Project
+import com.here.ort.model.RemoteArtifact
 import com.here.ort.model.Severity
+import com.here.ort.model.VcsInfo
 import com.here.ort.model.config.CopyrightGarbage
 import com.here.ort.model.config.RepositoryConfiguration
 import com.here.ort.model.licenses.LicenseConfiguration
@@ -515,12 +517,40 @@ class StaticHtmlReporter : Reporter {
                         dd {
                             row.detectedLicenses.forEach { (finding, excludes) ->
                                 val firstFinding = finding.locations.first()
-                                val path = listOfNotNull(row.vcsInfo.path.takeIf { it.isNotEmpty() }, firstFinding.path)
-                                    .joinToString("/")
-                                val permalink = VcsHost.toPermalink(
-                                    row.vcsInfo.copy(path = path),
-                                    firstFinding.startLine, firstFinding.endLine
-                                )
+
+                                val permalink = when {
+                                    row.vcsInfo != VcsInfo.EMPTY -> {
+                                        val path = listOfNotNull(
+                                            row.vcsInfo.path.takeIf { it.isNotEmpty() },
+                                            firstFinding.path
+                                        ).joinToString("/")
+
+                                        VcsHost.toPermalink(
+                                            row.vcsInfo.copy(path = path),
+                                            firstFinding.startLine, firstFinding.endLine
+                                        )
+                                    }
+
+                                    row.sourceArtifact != RemoteArtifact.EMPTY -> {
+                                        val mavenCentralPattern = Regex("https?://repo[^/]+maven[^/]+org/.*")
+                                        if (row.sourceArtifact.url.matches(mavenCentralPattern)) {
+                                            // At least for source artifacts on Maven Central, use the "proxy" from
+                                            // Sonatype which has the Archive Browser plugin installed to link to the
+                                            // files with findings.
+                                            with(row.id) {
+                                                val group = namespace.replace('.', '/')
+                                                "https://repository.sonatype.org/" +
+                                                        "service/local/repositories/central-proxy/" +
+                                                        "archive/$group/$name/$version/$name-$version-sources.jar/" +
+                                                        "!/${firstFinding.path}"
+                                            }
+                                        } else {
+                                            null
+                                        }
+                                    }
+
+                                    else -> null
+                                }
 
                                 if (excludes.isEmpty()) {
                                     div {
