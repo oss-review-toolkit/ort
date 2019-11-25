@@ -113,9 +113,11 @@ class ReportTableModelMapper(private val resolutionProvider: ResolutionProvider)
                     it.summary.errors
                 }?.distinct() ?: emptyList()
 
+                val packageForId = ortResult.getPackage(id)?.pkg ?: ortResult.getProject(id)?.toPackage()
+
                 DependencyRow(
                     id = id,
-                    vcsInfo = ortResult.getUncuratedPackageById(id)?.vcsProcessed ?: VcsInfo.EMPTY,
+                    vcsInfo = packageForId?.vcsProcessed ?: VcsInfo.EMPTY,
                     scopes = scopes,
                     concludedLicense = concludedLicense,
                     declaredLicenses = declaredLicenses,
