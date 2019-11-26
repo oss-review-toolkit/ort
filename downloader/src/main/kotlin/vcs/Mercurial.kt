@@ -135,12 +135,10 @@ class Mercurial : VersionControlSystem(), CommandLineTool {
             // not be the case if the requested revision is already available locally.
             run(workingTree.workingDir, "pull", "-r", revision)
 
-            // Explicitly update the working tree to the desired revision.
-            run(workingTree.workingDir, "update", revision)
-
             // TODO: Implement updating of subrepositories.
 
-            true
+            // Explicitly update the working tree to the desired revision.
+            run(workingTree.workingDir, "update", revision).isSuccess
         } catch (e: IOException) {
             e.showStackTrace()
 
