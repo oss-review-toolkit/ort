@@ -41,12 +41,15 @@ class SubversionTest : StringSpec() {
 
         zipContentDir = createTempDir()
 
-        println("Extracting '$zipFile' to '$zipContentDir'...")
+        print("Extracting '$zipFile' to '$zipContentDir'... ")
         zipFile.unpack(zipContentDir)
+        println("done.")
     }
 
     override fun afterSpec(spec: Spec) {
+        print("Deleting '$zipContentDir'... ")
         zipContentDir.safeDeleteRecursively(force = true)
+        println("done.")
     }
 
     init {
