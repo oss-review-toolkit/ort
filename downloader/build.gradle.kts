@@ -1,4 +1,4 @@
-val jacksonVersion: String by project
+val svnkitVersion: String by project
 
 plugins {
     // Apply core plugins.
@@ -10,5 +10,5 @@ dependencies {
 
     implementation(project(":utils"))
 
-    implementation("com.fasterxml.jackson.module:jackson-module-kotlin:$jacksonVersion")
+    implementation("org.tmatesoft.svnkit:svnkit:$svnkitVersion")
 }

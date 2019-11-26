@@ -19,81 +19,23 @@
 
 package com.here.ort.downloader.vcs
 
-import com.fasterxml.jackson.annotation.JsonProperty
-import com.fasterxml.jackson.annotation.JsonRootName
-import com.fasterxml.jackson.databind.DeserializationFeature
-import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty
-import com.fasterxml.jackson.module.kotlin.readValue
-
 import com.here.ort.downloader.DownloadException
 import com.here.ort.downloader.VersionControlSystem
 import com.here.ort.downloader.WorkingTree
 import com.here.ort.model.Package
 import com.here.ort.model.VcsType
-import com.here.ort.model.xmlMapper
 import com.here.ort.utils.CommandLineTool
 import com.here.ort.utils.ProcessCapture
 import com.here.ort.utils.log
+import com.here.ort.utils.succeeds
 
 import java.io.File
 import java.io.IOException
 import java.util.regex.Pattern
 
-data class SubversionInfoRepository(
-    val root: String,
-    val uuid: String
-)
-
-data class SubversionInfoWorkingCopy(
-    @JsonProperty("wcroot-abspath")
-    val absolutePath: String,
-    val schedule: String,
-    val depth: String
-)
-
-data class SubversionInfoCommit(
-    @JacksonXmlProperty(isAttribute = true)
-    val revision: String,
-    val author: String?,
-    val date: String
-)
-
-data class SubversionInfoLock(
-    val created: String
-)
-
-@JsonRootName("entry")
-data class SubversionInfoEntry(
-    @JacksonXmlProperty(isAttribute = true)
-    val kind: String,
-    @JacksonXmlProperty(isAttribute = true)
-    val path: String,
-    @JacksonXmlProperty(isAttribute = true)
-    val revision: String,
-    val url: String,
-    @JsonProperty("relative-url")
-    val relativeUrl: String,
-    val repository: SubversionInfoRepository,
-    @JsonProperty("wc-info")
-    val workingCopy: SubversionInfoWorkingCopy,
-    val commit: SubversionInfoCommit
-)
-
-@JsonRootName("entry")
-data class SubversionPathEntry(
-    @JacksonXmlProperty(isAttribute = true)
-    val kind: String,
-    @JacksonXmlProperty(isAttribute = true)
-    val path: String,
-    @JacksonXmlProperty(isAttribute = true)
-    val revision: String,
-    val url: String,
-    @JsonProperty("relative-url")
-    val relativeUrl: String,
-    val repository: SubversionInfoRepository,
-    val commit: SubversionInfoCommit,
-    val lock: SubversionInfoLock?
-)
+import org.tmatesoft.svn.core.SVNURL
+import org.tmatesoft.svn.core.wc.SVNClientManager
+import org.tmatesoft.svn.core.wc.SVNRevision
 
 class Subversion : VersionControlSystem(), CommandLineTool {
     private val versionRegex = Pattern.compile("svn, [Vv]ersion (?<version>[\\d.]+) \\(r\\d+\\)")
@@ -117,61 +59,56 @@ class Subversion : VersionControlSystem(), CommandLineTool {
 
     override fun getWorkingTree(vcsDirectory: File) =
         object : WorkingTree(vcsDirectory, type) {
+            private val clientManager = SVNClientManager.newInstance()
             private val directoryNamespaces = listOf("branches", "tags", "trunk", "wiki")
-            private val svnInfoReader = xmlMapper.readerFor(SubversionInfoEntry::class.java)
-                .with(DeserializationFeature.UNWRAP_ROOT_VALUE)
 
             override fun isValid(): Boolean {
                 if (!workingDir.isDirectory) {
                     return false
                 }
 
-                return runSvnInfoCommand() != null
+                return succeeds { doSvnInfo() }
             }
 
             override fun isShallow() = false
 
-            override fun getRemoteUrl() = runSvnInfoCommand()?.url.orEmpty()
+            override fun getRemoteUrl() = doSvnInfo().url.toDecodedString()
 
-            override fun getRevision() = runSvnInfoCommand()?.commit?.revision.orEmpty()
+            override fun getRevision() = doSvnInfo().committedRevision.number.toString()
 
-            override fun getRootPath() =
-                runSvnInfoCommand()?.workingCopy?.absolutePath?.let { File(it) } ?: workingDir
+            override fun getRootPath() = doSvnInfo().workingCopyRoot
 
             private fun listRemoteRefs(namespace: String): List<String> {
+                val refs = mutableListOf<String>()
                 val remoteUrl = getRemoteUrl()
 
                 val projectRoot = if (directoryNamespaces.any { "/$it/" in remoteUrl }) {
-                    runSvnInfoCommand()?.repository?.root.orEmpty()
+                    doSvnInfo().repositoryRootURL.toDecodedString()
                 } else {
                     remoteUrl
                 }
 
-                return try {
-                    val svnPathInfo = run(
-                        workingDir, "info", "--xml", "--depth=immediates",
-                        "$projectRoot/$namespace"
-                    )
-                    val pathEntries = xmlMapper.readValue<List<SubversionPathEntry>>(svnPathInfo.stdout)
+                // We assume a single project directory layout.
+                val svnUrl = SVNURL.parseURIEncoded("$projectRoot/$namespace")
 
-                    // As the "immediates" depth includes the parent namespace itself, too, drop it.
-                    pathEntries.drop(1).map { it.path }.sorted()
-                } catch (e: IOException) {
-                    // We assume a single project directory layout above. If we fail, e.g. for a multi-project
-                    // layout whose directory names cannot be easily guessed from the project names, return an
-                    // empty list to give a later curation the chance to succeed.
-                    emptyList()
+                clientManager.logClient.doList(
+                    svnUrl,
+                    SVNRevision.HEAD,
+                    SVNRevision.HEAD,
+                    /*fetchLocks =*/ false,
+                    /*recursive =*/ false
+                ) { dirEntry ->
+                    if (dirEntry.name.isNotEmpty()) refs += dirEntry.relativePath
                 }
+
+                return refs
             }
 
             override fun listRemoteBranches() = listRemoteRefs("branches")
 
             override fun listRemoteTags() = listRemoteRefs("tags")
 
-            private fun runSvnInfoCommand(): SubversionInfoEntry? {
-                val info = ProcessCapture("svn", "info", "--xml", workingDir.absolutePath)
-                return if (info.isSuccess) svnInfoReader.readValue(info.stdout) else null
-            }
+            private fun doSvnInfo() = clientManager.wcClient.doInfo(workingDir, SVNRevision.WORKING)
         }
 
     override fun isApplicableUrlInternal(vcsUrl: String) =
