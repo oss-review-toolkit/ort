@@ -93,8 +93,7 @@ class Git : GitBase() {
                     run(workingTree.workingDir, "tag", revision, "FETCH_HEAD")
                 }
 
-                run(workingTree.workingDir, "checkout", revision)
-                return true
+                return run(workingTree.workingDir, "checkout", revision).isSuccess
             } catch (e: IOException) {
                 e.showStackTrace()
 
@@ -109,8 +108,7 @@ class Git : GitBase() {
         try {
             log.info { "Trying to fetch all refs with depth limited to $GIT_HISTORY_DEPTH." }
             run(workingTree.workingDir, "fetch", "--depth", GIT_HISTORY_DEPTH.toString(), "--tags", "origin")
-            run(workingTree.workingDir, "checkout", revision)
-            return true
+            return run(workingTree.workingDir, "checkout", revision).isSuccess
         } catch (e: IOException) {
             e.showStackTrace()
 
@@ -130,9 +128,7 @@ class Git : GitBase() {
                 run(workingTree.workingDir, "fetch", "--tags", "origin")
             }
 
-            run(workingTree.workingDir, "checkout", revision)
-
-            true
+            run(workingTree.workingDir, "checkout", revision).isSuccess
         } catch (e: IOException) {
             e.showStackTrace()
 
@@ -144,11 +140,8 @@ class Git : GitBase() {
 
     private fun updateSubmodules(workingTree: WorkingTree) =
         try {
-            if (File(workingTree.workingDir, ".gitmodules").isFile) {
-                run(workingTree.workingDir, "submodule", "update", "--init", "--recursive")
-            }
-
-            true
+            !File(workingTree.workingDir, ".gitmodules").isFile
+                    || run(workingTree.workingDir, "submodule", "update", "--init", "--recursive").isSuccess
         } catch (e: IOException) {
             e.showStackTrace()
 
