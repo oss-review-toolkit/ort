@@ -177,6 +177,48 @@ class Subversion : VersionControlSystem(), CommandLineTool {
     override fun isApplicableUrlInternal(vcsUrl: String) =
         (vcsUrl.startsWith("svn+") || ProcessCapture("svn", "list", vcsUrl).isSuccess)
 
+    private fun guessTagAndPath(targetDir: File, pkg: Package): Pair<String, String> {
+        // The path to the tag (including the tag name), relative to the repository root.
+        val tagPath: String
+
+        // The path within the tag to limit the working directory to, relative to the repository root.
+        val path: String
+
+        val tagsMarker = "tags/"
+        val tagsIndex = pkg.vcsProcessed.path.indexOf(tagsMarker)
+        val isTagsPath = tagsIndex == 0 || (tagsIndex > 0 && pkg.vcsProcessed.path[tagsIndex - 1] == '/')
+        if (isTagsPath) {
+            log.info {
+                "Ignoring the $type revision '${pkg.vcsProcessed.revision}' as the path points to a tag."
+            }
+
+            val tagsPathIndex = pkg.vcsProcessed.path.indexOf('/', tagsIndex + tagsMarker.length)
+
+            tagPath = pkg.vcsProcessed.path.let {
+                if (tagsPathIndex < 0) it else it.substring(0, tagsPathIndex)
+            }
+            path = pkg.vcsProcessed.path
+        } else {
+            log.info { "Trying to guess a $type revision for version '${pkg.id.version}'." }
+
+            val revision = try {
+                getWorkingTree(targetDir).guessRevisionName(pkg.id.name, pkg.id.version)
+            } catch (e: IOException) {
+                throw IOException("Unable to determine a revision to checkout.", e)
+            }
+
+            log.warn {
+                "Using guessed $type revision '$revision' for version '${pkg.id.version}'. This might cause " +
+                        "the downloaded source code to not match the package version."
+            }
+
+            tagPath = "tags/$revision"
+            path = "$tagPath/${pkg.vcsProcessed.path}"
+        }
+
+        return Pair(tagPath, path)
+    }
+
     override fun download(
         pkg: Package, targetDir: File, allowMovingRevisions: Boolean,
         recursive: Boolean
@@ -206,43 +248,7 @@ class Subversion : VersionControlSystem(), CommandLineTool {
                     getWorkingTree(File(targetDir, pkg.vcsProcessed.path))
                 }
             } else {
-                // The path to the tag (including the tag name), relative to the repository root.
-                val tagPath: String
-
-                // The path within the tag to limit the working directory to, relative to the repository root.
-                val path: String
-
-                val tagsMarker = "tags/"
-                val tagsIndex = pkg.vcsProcessed.path.indexOf(tagsMarker)
-                val isTagsPath = tagsIndex == 0 || (tagsIndex > 0 && pkg.vcsProcessed.path[tagsIndex - 1] == '/')
-                if (isTagsPath) {
-                    log.info {
-                        "Ignoring the $type revision '${pkg.vcsProcessed.revision}' as the path points to a tag."
-                    }
-
-                    val tagsPathIndex = pkg.vcsProcessed.path.indexOf('/', tagsIndex + tagsMarker.length)
-
-                    tagPath = pkg.vcsProcessed.path.let {
-                        if (tagsPathIndex < 0) it else it.substring(0, tagsPathIndex)
-                    }
-                    path = pkg.vcsProcessed.path
-                } else {
-                    log.info { "Trying to guess a $type revision for version '${pkg.id.version}'." }
-
-                    revision = try {
-                        getWorkingTree(targetDir).guessRevisionName(pkg.id.name, pkg.id.version)
-                    } catch (e: IOException) {
-                        throw IOException("Unable to determine a revision to checkout.", e)
-                    }
-
-                    log.warn {
-                        "Using guessed $type revision '$revision' for version '${pkg.id.version}'. This might cause " +
-                                "the downloaded source code to not match the package version."
-                    }
-
-                    tagPath = "tags/$revision"
-                    path = "$tagPath/${pkg.vcsProcessed.path}"
-                }
+                val (tagPath, path) = guessTagAndPath(targetDir, pkg)
 
                 // In Subversion, tags are not symbolic names for revisions but names of directories containing
                 // snapshots. Checking out a tag just is a sparse checkout of that path.
