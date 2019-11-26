@@ -206,16 +206,21 @@ class Subversion : VersionControlSystem(), CommandLineTool {
                     getWorkingTree(File(targetDir, pkg.vcsProcessed.path))
                 }
             } else {
+                // The path to the tag (including the tag name), relative to the repository root.
                 val tagPath: String
+
+                // The path within the tag to limit the working directory to, relative to the repository root.
                 val path: String
 
-                val tagsIndex = pkg.vcsProcessed.path.indexOf("tags/")
-                if (tagsIndex == 0 || (tagsIndex > 0 && pkg.vcsProcessed.path[tagsIndex - 1] == '/')) {
+                val tagsMarker = "tags/"
+                val tagsIndex = pkg.vcsProcessed.path.indexOf(tagsMarker)
+                val isTagsPath = tagsIndex == 0 || (tagsIndex > 0 && pkg.vcsProcessed.path[tagsIndex - 1] == '/')
+                if (isTagsPath) {
                     log.info {
                         "Ignoring the $type revision '${pkg.vcsProcessed.revision}' as the path points to a tag."
                     }
 
-                    val tagsPathIndex = pkg.vcsProcessed.path.indexOf('/', tagsIndex + "tags/".length)
+                    val tagsPathIndex = pkg.vcsProcessed.path.indexOf('/', tagsIndex + tagsMarker.length)
 
                     tagPath = pkg.vcsProcessed.path.let {
                         if (tagsPathIndex < 0) it else it.substring(0, tagsPathIndex)
@@ -240,7 +245,7 @@ class Subversion : VersionControlSystem(), CommandLineTool {
                 }
 
                 // In Subversion, tags are not symbolic names for revisions but names of directories containing
-                // snapshots, checking out a tag just is a sparse checkout of that path.
+                // snapshots. Checking out a tag just is a sparse checkout of that path.
                 run(targetDir, "update", "--depth", "infinity", "--parents", path)
 
                 // Only return that part of the working tree that has the right revision.
