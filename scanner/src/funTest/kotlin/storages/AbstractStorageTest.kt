@@ -47,7 +47,7 @@ import java.time.Instant
 
 abstract class AbstractStorageTest : StringSpec() {
     private companion object {
-        val DUMMY_TEXT_LOCATION = TextLocation("fakepath", 13, -21)
+        val DUMMY_TEXT_LOCATION = TextLocation("fakepath", 13, 21)
     }
 
     private val id = Identifier("type", "namespace", "name", "version")

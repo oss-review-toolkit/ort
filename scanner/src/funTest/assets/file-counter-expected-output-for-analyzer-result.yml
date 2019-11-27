@@ -192,6 +192,7 @@ scanner:
     variables: {}
     tool_versions: {}
   config:
+    archive: null
     file_based_storage: null
     postgres_storage: null
     scanner: null
