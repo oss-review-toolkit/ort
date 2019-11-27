@@ -77,9 +77,19 @@ fun calculatePackageVerificationCode(files: List<File>, excludes: List<String> =
  * Return the SHA-1 sum of the given file as hex string.
  */
 private fun sha1sum(file: File): String =
-    file.inputStream().use {
+    file.inputStream().use { inputStream ->
+        // 4MB has been choosen rather arbitrary hoping that it provides a good enough performance while not consuming
+        // too a lot of memory, also considering that this function could potentially be run on multiple thread in
+        // parallel.
+        val buffer = ByteArray(4 * 1024 * 1024)
         val digest = MessageDigest.getInstance("SHA-1")
-        digest.digest(it.readBytes()).toHexString()
+
+        var length: Int
+        while (inputStream.read(buffer).also { length = it } > 0) {
+            digest.update(buffer, 0, length)
+        }
+
+        digest.digest().toHexString()
     }
 
 /**
