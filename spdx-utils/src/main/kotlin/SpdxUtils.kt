@@ -70,15 +70,17 @@ fun calculatePackageVerificationCode(sha1sums: List<String>, excludes: List<Stri
  * [1]: https://spdx.org/spdx_specification_2_0_html#h.2p2csry
  */
 @JvmName("calculatePackageVerificationCodeForFiles")
-fun calculatePackageVerificationCode(files: List<File>, excludes: List<String> = emptyList()): String {
-    val digest = MessageDigest.getInstance("SHA-1")
-    return calculatePackageVerificationCode(
-        files.map { file ->
-            file.inputStream().use { digest.digest(it.readBytes()).toHexString() }
-        },
-        excludes
-    )
-}
+fun calculatePackageVerificationCode(files: List<File>, excludes: List<String> = emptyList()): String =
+    calculatePackageVerificationCode(files.map { sha1sum(it) }, excludes)
+
+/**
+ * Return the SHA-1 sum of the given file as hex string.
+ */
+private fun sha1sum(file: File): String =
+    file.inputStream().use {
+        val digest = MessageDigest.getInstance("SHA-1")
+        digest.digest(it.readBytes()).toHexString()
+    }
 
 /**
  * Calculate the [SPDX package verification code][1] for all files in a [directory]. If [directory] points to a file
