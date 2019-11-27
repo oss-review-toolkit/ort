@@ -38,6 +38,7 @@ import com.here.ort.model.ScanResultContainer
 import com.here.ort.model.ScanSummary
 import com.here.ort.model.ScannerDetails
 import com.here.ort.model.ScannerRun
+import com.here.ort.model.Severity
 import com.here.ort.model.config.ScannerConfiguration
 import com.here.ort.model.mapper
 import com.here.ort.utils.CommandLineTool
@@ -334,9 +335,20 @@ abstract class LocalScanner(name: String, config: ScannerConfiguration) : Scanne
 
         val scanResult = scanPath(downloadResult.downloadDirectory, resultsFile).copy(provenance = provenance)
 
-        ScanResultsStorage.storage.add(pkg.id, scanResult)
+        val addResult = ScanResultsStorage.storage.add(pkg.id, scanResult)
 
-        return scanResult
+        return if (addResult.success) {
+            scanResult
+        } else {
+            val issue = OrtIssue(
+                source = ScanResultsStorage.storage.name,
+                message = addResult.message ?: "Could not add result to scan results storage for unknown reason.",
+                severity = Severity.WARNING
+            )
+            val errors = scanResult.summary.errors + issue
+            val summary = scanResult.summary.copy(errors = errors)
+            scanResult.copy(summary = summary)
+        }
     }
 
     private fun archiveFiles(directory: File, id: Identifier, provenance: Provenance) {
