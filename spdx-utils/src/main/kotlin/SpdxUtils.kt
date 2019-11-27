@@ -17,9 +17,12 @@
  * License-Filename: LICENSE
  */
 
+@file:Suppress("TooManyFunctions")
+
 package com.here.ort.spdx
 
 import java.io.File
+import java.net.URL
 import java.security.MessageDigest
 import java.util.EnumSet
 
@@ -153,14 +156,26 @@ inline fun <reified T : Enum<T>> enumSetOf(vararg elems: T): EnumSet<T> =
  * license text is retrieved from that directory if and only if the license text is not known by ORT.
  */
 fun getLicenseText(id: String, handleExceptions: Boolean = false, customLicenseTextsDir: File? = null): String? =
+    getLicenseTextReader(id, handleExceptions, customLicenseTextsDir)?.invoke()
+
+fun hasLicenseText(id: String, handleExceptions: Boolean = false, customLicenseTextsDir: File? = null): Boolean =
+    getLicenseTextReader(id, handleExceptions, customLicenseTextsDir) != null
+
+private fun getLicenseTextReader(
+    id: String,
+    handleExceptions: Boolean = false,
+    customLicenseTextsDir: File? = null
+): (() -> String)? =
     if (id.startsWith("LicenseRef-")) {
-        getLicenseTextFromResource(id) ?: customLicenseTextsDir?.let { getLicenseTextFromDirectory(id, it) }
+        getLicenseTextResource(id)?.let { { it.readText() } }
+            ?: customLicenseTextsDir?.let { getLicenseTextFile(id, it)?.let { file -> { file.readText() } } }
     } else {
-        SpdxLicense.forId(id)?.text ?: SpdxLicenseException.forId(id)?.text?.takeIf { handleExceptions }
+        SpdxLicense.forId(id)?.let { { it.text } }
+            ?: SpdxLicenseException.forId(id)?.takeIf { handleExceptions }?.let { { it.text } }
     }
 
-private fun getLicenseTextFromResource(id: String): String? =
-    object {}.javaClass.getResource("/licenserefs/$id")?.readText()
+private fun getLicenseTextResource(id: String): URL? =
+    object {}.javaClass.getResource("/licenserefs/$id")
 
-private fun getLicenseTextFromDirectory(id: String, dir: File): String? =
-    dir.resolve(id).let { if (it.isFile) it.readText() else null }
+private fun getLicenseTextFile(id: String, dir: File): File? =
+    dir.resolve(id).let { if (it.isFile) it else null }
