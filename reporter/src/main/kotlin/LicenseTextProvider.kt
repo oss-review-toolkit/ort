@@ -24,8 +24,7 @@ package com.here.ort.reporter
  */
 interface LicenseTextProvider {
     /**
-     * Return the license text for the license identified by [licenseId] or null if the
-     * license text is not available.
+     * Return the license text for the license identified by [licenseId] or null if the license text is not available.
      */
     fun getLicenseText(licenseId: String): String?
 }
