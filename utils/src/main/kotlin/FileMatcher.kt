@@ -19,6 +19,9 @@
 
 package com.here.ort.utils
 
+import com.here.ort.spdx.LICENSE_FILENAMES
+import com.here.ort.spdx.ROOT_LICENSE_FILENAMES
+
 import java.nio.file.FileSystems
 import java.nio.file.InvalidPathException
 import java.nio.file.Paths
@@ -38,19 +41,7 @@ class FileMatcher(
         /**
          * A matcher which uses the default license file names.
          */
-        val LICENSE_FILE_MATCHER = FileMatcher(
-            listOf(
-                "license*",
-                "licence*",
-                "*.license",
-                "unlicense",
-                "unlicence",
-                "copying*",
-                "copyright",
-                "patents",
-                "readme*"
-            ).flatMap { listOf(it, it.toUpperCase(), it.capitalize()) }
-        )
+        val LICENSE_FILE_MATCHER = FileMatcher(LICENSE_FILENAMES + ROOT_LICENSE_FILENAMES)
     }
 
     constructor(vararg patterns: String) : this(patterns.asList())

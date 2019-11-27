@@ -41,6 +41,7 @@ import com.here.ort.model.ScannerRun
 import com.here.ort.model.Severity
 import com.here.ort.model.config.ScannerConfiguration
 import com.here.ort.model.mapper
+import com.here.ort.spdx.LICENSE_FILENAMES
 import com.here.ort.utils.CommandLineTool
 import com.here.ort.utils.NamedThreadFactory
 import com.here.ort.utils.Os
@@ -75,22 +76,11 @@ import kotlinx.coroutines.withContext
 abstract class LocalScanner(name: String, config: ScannerConfiguration) : Scanner(name, config), CommandLineTool {
     companion object {
         val DEFAULT_ARCHIVE_DIR by lazy { getUserOrtDirectory().resolve("scanner/archive") }
-
-        val DEFAULT_ARCHIVE_PATTERNS = listOf(
-            "license*",
-            "licence*",
-            "*.license",
-            "unlicense",
-            "unlicence",
-            "copying*",
-            "copyright",
-            "patents"
-        ).flatMap { listOf(it, it.toUpperCase(), it.capitalize()) }
     }
 
     val archiver by lazy {
         config.archive?.createFileArchiver() ?: FileArchiver(
-            DEFAULT_ARCHIVE_PATTERNS,
+            LICENSE_FILENAMES,
             LocalFileStorage(DEFAULT_ARCHIVE_DIR)
         )
     }

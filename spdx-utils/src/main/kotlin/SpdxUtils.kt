@@ -23,6 +23,30 @@ import java.io.File
 import java.security.MessageDigest
 import java.util.EnumSet
 
+private fun List<String>.generateCapitalizationVariants() = flatMap { listOf(it, it.toUpperCase(), it.capitalize()) }
+
+/**
+ * A list globs that match default license file names.
+ */
+val LICENSE_FILENAMES = listOf(
+    "license*",
+    "licence*",
+    "*.license",
+    "unlicense",
+    "unlicence",
+    "copying*",
+    "copyright",
+    "patents"
+).generateCapitalizationVariants()
+
+/**
+ * A list of globs that match files that often define the root license of a project, but are no license files and are
+ * therefore not contained in [LICENSE_FILENAMES].
+ */
+val ROOT_LICENSE_FILENAMES = listOf(
+    "readme*"
+).generateCapitalizationVariants()
+
 /**
  * A list of globs that match file names which are not license files but typically trigger false-positives.
  */
