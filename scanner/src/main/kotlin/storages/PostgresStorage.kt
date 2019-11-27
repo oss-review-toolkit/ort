@@ -174,32 +174,6 @@ class PostgresStorage(
     }
 
     override fun addToStorage(id: Identifier, scanResult: ScanResult): Boolean {
-        // Do not store empty scan results. It is likely that something went wrong when they were created, and if not,
-        // it is cheap to re-create them.
-        if (scanResult.summary.fileCount == 0) {
-            log.info { "Not storing scan result for '${id.toCoordinates()}' because no files were scanned." }
-
-            return false
-        }
-
-        // Do not store scan results without raw result. The raw result can be set to null for other usages, but in the
-        // storage it must never be null.
-        if (scanResult.rawResult == null) {
-            log.info { "Not storing scan result for '${id.toCoordinates()}' because the raw result is null." }
-
-            return false
-        }
-
-        // Do not store scan results without provenance information, because they cannot be assigned to the revision of
-        // the package source code later.
-        if (scanResult.provenance.sourceArtifact == null && scanResult.provenance.vcsInfo == null) {
-            log.info {
-                "Not storing scan result for '${id.toCoordinates()}' because no provenance information is available."
-            }
-
-            return false
-        }
-
         log.info { "Storing scan result for ${id.toCoordinates()} in storage." }
 
         // TODO: Check if there is already a matching entry for this provenance and scanner details.
