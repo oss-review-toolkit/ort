@@ -103,7 +103,7 @@ class FileBasedStorage(
         return ScanResultContainer(pkg.id, scanResults)
     }
 
-    override fun addToStorage(id: Identifier, scanResult: ScanResult): Boolean {
+    override fun addToStorage(id: Identifier, scanResult: ScanResult): AddResult {
         val scanResults = ScanResultContainer(id, read(id).results + scanResult)
 
         val path = storagePath(id)
@@ -114,18 +114,17 @@ class FileBasedStorage(
         return try {
             backend.write(path, input)
             log.info { "Stored scan result for '${id.toCoordinates()}' at path '$path'." }
-            true
+            AddResult(true)
         } catch (e: Exception) {
             when (e) {
                 is IllegalArgumentException, is IOException -> {
                     e.printStackTrace()
 
-                    log.info {
-                        "Could not store scan result for '${id.toCoordinates()}' at path '$path': " +
-                                e.collectMessagesAsString()
-                    }
+                    val message = "Could not store scan result for '${id.toCoordinates()}' at path '$path': " +
+                            e.collectMessagesAsString()
+                    log.info { message }
 
-                    false
+                    AddResult(false, message)
                 }
                 else -> throw e
             }
