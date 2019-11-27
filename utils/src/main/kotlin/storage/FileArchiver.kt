@@ -20,10 +20,14 @@
 package com.here.ort.utils.storage
 
 import com.here.ort.utils.FileMatcher
+import com.here.ort.utils.collectMessagesAsString
 import com.here.ort.utils.log
 import com.here.ort.utils.packZip
+import com.here.ort.utils.showStackTrace
+import com.here.ort.utils.unpackZip
 
 import java.io.File
+import java.io.IOException
 
 /**
  * A class to archive files matched by provided [patterns] in a ZIP file that is stored in a [FileStorage][storage].
@@ -65,6 +69,23 @@ class FileArchiver(
             }
         }
 
-        storage.write("${storagePath.removeSuffix("/")}/$ARCHIVE_FILE_NAME", zipFile.inputStream())
+        storage.write(getArchivePath(storagePath), zipFile.inputStream())
     }
+
+    fun unarchive(directory: File, storagePath: String): Boolean {
+        return try {
+            storage.read(getArchivePath(storagePath)).use { input ->
+                input.unpackZip(directory)
+            }
+            true
+        } catch (e: IOException) {
+            e.showStackTrace()
+
+            log.error { "Could not unarchive from $storagePath: ${e.collectMessagesAsString()}" }
+
+            false
+        }
+    }
+
+    private fun getArchivePath(storagePath: String) = "${storagePath.removeSuffix("/")}/$ARCHIVE_FILE_NAME"
 }
