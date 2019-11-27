@@ -37,5 +37,5 @@ class NoStorage : ScanResultsStorage() {
     override fun readFromStorage(pkg: Package, scannerDetails: ScannerDetails) =
         ScanResultContainer(pkg.id, emptyList())
 
-    override fun addToStorage(id: Identifier, scanResult: ScanResult) = false
+    override fun addToStorage(id: Identifier, scanResult: ScanResult) = AddResult(true)
 }

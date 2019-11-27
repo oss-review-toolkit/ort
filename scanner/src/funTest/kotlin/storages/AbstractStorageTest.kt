@@ -47,6 +47,7 @@ import java.time.Instant
 
 abstract class AbstractStorageTest : StringSpec() {
     private companion object {
+        val ADD_RESULT_SUCCESS = ScanResultsStorage.AddResult(true)
         val DUMMY_TEXT_LOCATION = TextLocation("fakepath", 13, 21)
     }
 
@@ -136,7 +137,7 @@ abstract class AbstractStorageTest : StringSpec() {
             val result = storage.add(id, scanResult)
             val storedResults = storage.read(id)
 
-            result shouldBe true
+            result shouldBe ADD_RESULT_SUCCESS
             storedResults.id shouldBe id
             storedResults.results.size shouldBe 1
             storedResults.results[0] shouldBe scanResult
@@ -149,7 +150,9 @@ abstract class AbstractStorageTest : StringSpec() {
             val result = storage.add(id, scanResult)
             val storedResults = storage.read(id)
 
-            result shouldBe false
+            result.success shouldBe false
+            result.message shouldBe
+                    "Not storing scan result for 'type:namespace:name:version' because no files were scanned."
             storedResults.id shouldBe id
             storedResults.results.size shouldBe 0
         }
@@ -164,7 +167,9 @@ abstract class AbstractStorageTest : StringSpec() {
             val result = storage.add(id, scanResult)
             val storedResults = storage.read(id)
 
-            result shouldBe false
+            result.success shouldBe false
+            result.message shouldBe
+                    "Not storing scan result for 'type:namespace:name:version' because no files were scanned."
             storedResults.id shouldBe id
             storedResults.results.size shouldBe 0
         }
@@ -179,7 +184,9 @@ abstract class AbstractStorageTest : StringSpec() {
             val result = storage.add(id, scanResult)
             val storedResults = storage.read(id)
 
-            result shouldBe false
+            result.success shouldBe false
+            result.message shouldBe "Not storing scan result for 'type:namespace:name:version' because no provenance " +
+                    "information is available."
             storedResults.id shouldBe id
             storedResults.results.size shouldBe 0
         }
@@ -199,8 +206,8 @@ abstract class AbstractStorageTest : StringSpec() {
             val result2 = storage.add(id, scanResult2)
             val storedResults = storage.read(id)
 
-            result1 shouldBe true
-            result2 shouldBe true
+            result1 shouldBe ADD_RESULT_SUCCESS
+            result2 shouldBe ADD_RESULT_SUCCESS
             storedResults.results.size shouldBe 2
             storedResults.results should contain(scanResult1)
             storedResults.results should contain(scanResult2)
@@ -226,9 +233,9 @@ abstract class AbstractStorageTest : StringSpec() {
             val result3 = storage.add(id, scanResult3)
             val storedResults = storage.read(pkg, scannerDetails1)
 
-            result1 shouldBe true
-            result2 shouldBe true
-            result3 shouldBe true
+            result1 shouldBe ADD_RESULT_SUCCESS
+            result2 shouldBe ADD_RESULT_SUCCESS
+            result3 shouldBe ADD_RESULT_SUCCESS
             storedResults.results.size shouldBe 2
             storedResults.results should contain(scanResult1)
             storedResults.results should contain(scanResult2)
@@ -259,10 +266,10 @@ abstract class AbstractStorageTest : StringSpec() {
             val resultIncompatible = storage.add(id, scanResultIncompatible)
             val storedResults = storage.read(pkg, scannerDetails1)
 
-            result shouldBe true
-            resultCompatible1 shouldBe true
-            resultCompatible2 shouldBe true
-            resultIncompatible shouldBe true
+            result shouldBe ADD_RESULT_SUCCESS
+            resultCompatible1 shouldBe ADD_RESULT_SUCCESS
+            resultCompatible2 shouldBe ADD_RESULT_SUCCESS
+            resultIncompatible shouldBe ADD_RESULT_SUCCESS
             storedResults.results.size shouldBe 3
             storedResults.results should contain(scanResult)
             storedResults.results should contain(scanResultCompatible1)
@@ -300,10 +307,10 @@ abstract class AbstractStorageTest : StringSpec() {
             val result4 = storage.add(id, scanResultVcsInfoNonMatching)
             val storedResults = storage.read(pkg, scannerDetails1)
 
-            result1 shouldBe true
-            result2 shouldBe true
-            result3 shouldBe true
-            result4 shouldBe true
+            result1 shouldBe ADD_RESULT_SUCCESS
+            result2 shouldBe ADD_RESULT_SUCCESS
+            result3 shouldBe ADD_RESULT_SUCCESS
+            result4 shouldBe ADD_RESULT_SUCCESS
             storedResults.results.size shouldBe 2
             storedResults.results should contain(scanResultSourceArtifactMatching)
             storedResults.results should contain(scanResultVcsMatching)
@@ -319,7 +326,7 @@ abstract class AbstractStorageTest : StringSpec() {
             val result = storage.add(id, scanResult)
             val storedResults = storage.read(pkgWithoutRevision, scannerDetails1)
 
-            result shouldBe true
+            result shouldBe ADD_RESULT_SUCCESS
             storedResults.results.size shouldBe 1
             storedResults.results should contain(scanResult)
         }

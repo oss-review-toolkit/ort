@@ -28,12 +28,15 @@ import com.here.ort.model.ScanResultContainer
 import com.here.ort.model.ScannerDetails
 import com.here.ort.model.jsonMapper
 import com.here.ort.scanner.ScanResultsStorage
+import com.here.ort.utils.collectMessagesAsString
 import com.here.ort.utils.log
+import com.here.ort.utils.showStackTrace
 
 import com.vdurmont.semver4j.Semver
 
 import java.io.IOException
 import java.sql.Connection
+import java.sql.SQLException
 
 /**
  * The Postgres storage back-end.
@@ -173,7 +176,7 @@ class PostgresStorage(
         return ScanResultContainer(pkg.id, scanResults)
     }
 
-    override fun addToStorage(id: Identifier, scanResult: ScanResult): Boolean {
+    override fun addToStorage(id: Identifier, scanResult: ScanResult): AddResult {
         log.info { "Storing scan result for ${id.toCoordinates()} in storage." }
 
         // TODO: Check if there is already a matching entry for this provenance and scanner details.
@@ -181,12 +184,21 @@ class PostgresStorage(
 
         val scanResultJson = jsonMapper.writeValueAsString(scanResult).escapeNull()
 
-        val statement = connection.prepareStatement(query)
-        statement.setString(1, id.toCoordinates())
-        statement.setString(2, scanResultJson)
-        statement.execute()
+        try {
+            val statement = connection.prepareStatement(query)
+            statement.setString(1, id.toCoordinates())
+            statement.setString(2, scanResultJson)
+            statement.execute()
+        } catch (e: SQLException) {
+            e.showStackTrace()
 
-        return true
+            val message = "Could not store scan result for '${id.toCoordinates()}': ${e.collectMessagesAsString()}"
+            log.info { message }
+
+            return AddResult(false, message)
+        }
+
+        return AddResult(true)
     }
 
     /**

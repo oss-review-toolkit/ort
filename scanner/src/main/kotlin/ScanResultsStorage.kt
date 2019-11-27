@@ -108,6 +108,21 @@ abstract class ScanResultsStorage {
     }
 
     /**
+     * The result of the [add] operation.
+     */
+    data class AddResult(
+        /**
+         * True, if the data was successfully added to the storage.
+         */
+        val success: Boolean,
+
+        /**
+         * Contains the error message if [success] is false.
+         */
+        val message: String? = null
+    )
+
+    /**
      * The name to refer to this storage implementation.
      */
     val name: String = javaClass.simpleName
@@ -158,33 +173,35 @@ abstract class ScanResultsStorage {
      * @param id The [Identifier] of the scanned [Package].
      * @param scanResult The [ScanResult]. The [ScanResult.rawResult] must not be null.
      *
-     * @return If the [ScanResult] could be written to the storage.
+     * @return An [AddResult] describing if the operation was successful.
      */
-    fun add(id: Identifier, scanResult: ScanResult): Boolean {
+    fun add(id: Identifier, scanResult: ScanResult): AddResult {
         // Do not store empty scan results. It is likely that something went wrong when they were created, and if not,
         // it is cheap to re-create them.
         if (scanResult.summary.fileCount == 0) {
-            log.info { "Not storing scan result for '${id.toCoordinates()}' because no files were scanned." }
+            val message = "Not storing scan result for '${id.toCoordinates()}' because no files were scanned."
+            log.info { message }
 
-            return false
+            return AddResult(false, message)
         }
 
         // Do not store scan results without raw result. The raw result can be set to null for other usages, but in the
         // storage it must never be null.
         if (scanResult.rawResult == null) {
-            log.info { "Not storing scan result for '${id.toCoordinates()}' because the raw result is null." }
+            val message = "Not storing scan result for '${id.toCoordinates()}' because the raw result is null."
+            log.info { message }
 
-            return false
+            return AddResult(false, message)
         }
 
         // Do not store scan results without provenance information, because they cannot be assigned to the revision of
         // the package source code later.
         if (scanResult.provenance.sourceArtifact == null && scanResult.provenance.vcsInfo == null) {
-            log.info {
+            val message =
                 "Not storing scan result for '${id.toCoordinates()}' because no provenance information is available."
-            }
+            log.info { message }
 
-            return false
+            return AddResult(false, message)
         }
 
         return addToStorage(id, scanResult)
@@ -194,5 +211,5 @@ abstract class ScanResultsStorage {
 
     protected abstract fun readFromStorage(pkg: Package, scannerDetails: ScannerDetails): ScanResultContainer
 
-    protected abstract fun addToStorage(id: Identifier, scanResult: ScanResult): Boolean
+    protected abstract fun addToStorage(id: Identifier, scanResult: ScanResult): AddResult
 }
