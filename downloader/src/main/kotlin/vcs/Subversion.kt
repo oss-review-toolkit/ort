@@ -27,12 +27,12 @@ import com.here.ort.model.VcsType
 import com.here.ort.utils.CommandLineTool
 import com.here.ort.utils.ProcessCapture
 import com.here.ort.utils.log
-import com.here.ort.utils.succeeds
 
 import java.io.File
 import java.io.IOException
 import java.util.regex.Pattern
 
+import org.tmatesoft.svn.core.SVNException
 import org.tmatesoft.svn.core.SVNURL
 import org.tmatesoft.svn.core.wc.SVNClientManager
 import org.tmatesoft.svn.core.wc.SVNRevision
@@ -67,23 +67,23 @@ class Subversion : VersionControlSystem(), CommandLineTool {
                     return false
                 }
 
-                return succeeds { doSvnInfo() }
+                return doSvnInfo() != null
             }
 
             override fun isShallow() = false
 
-            override fun getRemoteUrl() = doSvnInfo().url.toDecodedString()
+            override fun getRemoteUrl() = doSvnInfo()?.url?.toDecodedString().orEmpty()
 
-            override fun getRevision() = doSvnInfo().committedRevision.number.toString()
+            override fun getRevision() = doSvnInfo()?.committedRevision?.number?.toString().orEmpty()
 
-            override fun getRootPath() = doSvnInfo().workingCopyRoot
+            override fun getRootPath() = doSvnInfo()?.workingCopyRoot ?: workingDir
 
             private fun listRemoteRefs(namespace: String): List<String> {
                 val refs = mutableListOf<String>()
                 val remoteUrl = getRemoteUrl()
 
                 val projectRoot = if (directoryNamespaces.any { "/$it/" in remoteUrl }) {
-                    doSvnInfo().repositoryRootURL.toDecodedString()
+                    doSvnInfo()?.repositoryRootURL?.toDecodedString().orEmpty()
                 } else {
                     remoteUrl
                 }
@@ -108,7 +108,12 @@ class Subversion : VersionControlSystem(), CommandLineTool {
 
             override fun listRemoteTags() = listRemoteRefs("tags")
 
-            private fun doSvnInfo() = clientManager.wcClient.doInfo(workingDir, SVNRevision.WORKING)
+            private fun doSvnInfo() =
+                try {
+                    clientManager.wcClient.doInfo(workingDir, SVNRevision.WORKING)
+                } catch (e: SVNException) {
+                    null
+                }
         }
 
     override fun isApplicableUrlInternal(vcsUrl: String) =
