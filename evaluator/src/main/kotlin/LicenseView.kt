@@ -32,12 +32,12 @@ class LicenseView(vararg licenseSources: List<LicenseSource>) {
         /**
          * Return all licenses.
          */
-        val All = LicenseView(listOf(LicenseSource.DECLARED, LicenseSource.DETECTED, LicenseSource.CONCLUDED))
+        val ALL = LicenseView(listOf(LicenseSource.DECLARED, LicenseSource.DETECTED, LicenseSource.CONCLUDED))
 
         /**
          * Return only the concluded licenses if they exist, otherwise return declared and detected licenses.
          */
-        val ConcludedOrRest = LicenseView(
+        val CONCLUDED_OR_REST = LicenseView(
             listOf(LicenseSource.CONCLUDED),
             listOf(LicenseSource.DECLARED, LicenseSource.DETECTED)
         )
@@ -46,7 +46,7 @@ class LicenseView(vararg licenseSources: List<LicenseSource>) {
          * Return only the concluded licenses if they exist, or return only the declared licenses if they exist, or
          * return the detected licenses.
          */
-        val ConcludedOrDeclaredOrDetected = LicenseView(
+        val CONCLUDED_OR_DECLARED_OR_DETECTED = LicenseView(
             listOf(LicenseSource.CONCLUDED),
             listOf(LicenseSource.DECLARED),
             listOf(LicenseSource.DETECTED)
@@ -55,7 +55,7 @@ class LicenseView(vararg licenseSources: List<LicenseSource>) {
         /**
          * Return only the concluded licenses if they exist, otherwise return detected licenses.
          */
-        val ConcludedOrDetected = LicenseView(
+        val CONCLUDED_OR_DETECTED = LicenseView(
             listOf(LicenseSource.CONCLUDED),
             listOf(LicenseSource.DETECTED)
         )
@@ -63,17 +63,17 @@ class LicenseView(vararg licenseSources: List<LicenseSource>) {
         /**
          * Return only the concluded licenses.
          */
-        val OnlyConcluded = LicenseView(listOf(LicenseSource.CONCLUDED))
+        val ONLY_CONCLUDED = LicenseView(listOf(LicenseSource.CONCLUDED))
 
         /**
          * Return only the declared licenses.
          */
-        val OnlyDeclared = LicenseView(listOf(LicenseSource.DECLARED))
+        val ONLY_DECLARED = LicenseView(listOf(LicenseSource.DECLARED))
 
         /**
          * Return only the detected licenses.
          */
-        val OnlyDetected = LicenseView(listOf(LicenseSource.DETECTED))
+        val ONLY_DETECTED = LicenseView(listOf(LicenseSource.DETECTED))
     }
 
     private val licenseSources = licenseSources.toList()

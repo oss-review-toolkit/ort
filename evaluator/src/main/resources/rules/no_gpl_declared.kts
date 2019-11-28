@@ -15,7 +15,7 @@ val ruleSet = ruleSet(ortResult) {
     // Define a rule that is executed for each package.
     packageRule("NO_GPL") {
         // Define a rule that is executed for each license of the package.
-        licenseRule("NO_GPL", LicenseView.All) {
+        licenseRule("NO_GPL", LicenseView.ALL) {
             require {
                 +isGpl()
             }

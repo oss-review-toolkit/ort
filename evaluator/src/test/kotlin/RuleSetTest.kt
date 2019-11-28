@@ -61,7 +61,7 @@ class RuleSetTest : WordSpec() {
                             -isExcluded()
                         }
 
-                        licenseRule("test", LicenseView.All) {
+                        licenseRule("test", LicenseView.ALL) {
                             require {
                                 +isSpdxLicense()
                             }
@@ -107,7 +107,7 @@ class RuleSetTest : WordSpec() {
                             -isStaticallyLinked()
                         }
 
-                        licenseRule("test", LicenseView.All) {
+                        licenseRule("test", LicenseView.ALL) {
                             require {
                                 +isSpdxLicense()
                             }

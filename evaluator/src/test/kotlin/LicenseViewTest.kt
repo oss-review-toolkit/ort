@@ -28,7 +28,7 @@ import io.kotlintest.specs.WordSpec
 class LicenseViewTest : WordSpec({
     "All" should {
         "return the correct licenses" {
-            val view = LicenseView.All
+            val view = LicenseView.ALL
 
             view.licenses(packageWithoutLicense, emptyList()) shouldBe emptyList()
 
@@ -84,7 +84,7 @@ class LicenseViewTest : WordSpec({
 
     "ConcludedOrRest" should {
         "return the correct licenses" {
-            val view = LicenseView.ConcludedOrRest
+            val view = LicenseView.CONCLUDED_OR_REST
 
             view.licenses(
                 packageWithoutLicense,
@@ -153,7 +153,7 @@ class LicenseViewTest : WordSpec({
 
     "ConcludedOrDeclaredOrDetected" should {
         "return the correct licenses" {
-            val view = LicenseView.ConcludedOrDeclaredOrDetected
+            val view = LicenseView.CONCLUDED_OR_DECLARED_OR_DETECTED
 
             view.licenses(
                 packageWithoutLicense,
@@ -220,7 +220,7 @@ class LicenseViewTest : WordSpec({
 
     "ConcludedOrDetected" should {
         "return the correct licenses" {
-            val view = LicenseView.ConcludedOrDetected
+            val view = LicenseView.CONCLUDED_OR_DETECTED
             view.licenses(
                 packageWithoutLicense,
                 emptyList()
@@ -283,7 +283,7 @@ class LicenseViewTest : WordSpec({
 
     "OnlyConcluded" should {
         "return only the concluded licenses" {
-            val view = LicenseView.OnlyConcluded
+            val view = LicenseView.ONLY_CONCLUDED
             view.licenses(
                 packageWithoutLicense,
                 emptyList()
@@ -340,7 +340,7 @@ class LicenseViewTest : WordSpec({
 
     "OnlyDeclared" should {
         "return only the declared licenses" {
-            val view = LicenseView.OnlyDeclared
+            val view = LicenseView.ONLY_DECLARED
 
             view.licenses(
                 packageWithoutLicense,
@@ -398,7 +398,7 @@ class LicenseViewTest : WordSpec({
 
     "OnlyDetected" should {
         "return only the detected licenses" {
-            val view = LicenseView.OnlyDetected
+            val view = LicenseView.ONLY_DETECTED
 
             view.licenses(
                 packageWithoutLicense,
