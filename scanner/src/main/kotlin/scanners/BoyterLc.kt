@@ -162,7 +162,11 @@ class BoyterLc(name: String, config: ScannerConfiguration) : LocalScanner(name, 
             file["LicenseGuesses"].map {
                 LicenseFinding(
                     license = getSpdxLicenseIdString(it["LicenseId"].textValue()),
-                    location = TextLocation(relativizePath(scanPath, filePath), -1, -1)
+                    location = TextLocation(
+                        relativizePath(scanPath, filePath),
+                        TextLocation.UNKNOWN_LINE,
+                        TextLocation.UNKNOWN_LINE
+                    )
                 )
             }
         }
