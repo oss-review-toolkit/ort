@@ -123,7 +123,7 @@ packages:
     declared_licenses_processed:
       spdx_expression: "MIT"
     description: ""
-    homepage_url: "https://github.com/lostisland/faraday"
+    homepage_url: "https://lostisland.github.io/faraday"
     binary_artifact:
       url: ""
       hash:
