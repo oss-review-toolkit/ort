@@ -45,6 +45,7 @@ data class TextLocation(
         private val COMPARATOR = compareBy<TextLocation>({ it.path }, { it.startLine }, { it.endLine })
         val SORTED_SET_COMPARATOR = SortedSetComparator<TextLocation>()
         val TREE_SET_TYPE by lazy { jsonMapper.typeFactory.constructTreeSetType(TextLocation::class.java) }
+        const val UNKNOWN_LINE = -1
     }
 
     init {
@@ -52,7 +53,7 @@ data class TextLocation(
             "The path must not be empty."
         }
 
-        require(startLine in 1..endLine || (startLine == -1 && endLine == -1)) {
+        require(startLine in 1..endLine || (startLine == UNKNOWN_LINE && endLine == UNKNOWN_LINE)) {
             "Invalid start or end line values."
         }
     }

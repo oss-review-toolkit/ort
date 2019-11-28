@@ -162,7 +162,11 @@ class Askalono(name: String, config: ScannerConfiguration) : LocalScanner(name, 
             val filePath = File(it["Path"].textValue())
             LicenseFinding(
                 license = getSpdxLicenseIdString(it["License"].textValue()),
-                location = TextLocation(relativizePath(scanPath, filePath), -1, -1)
+                location = TextLocation(
+                    relativizePath(scanPath, filePath),
+                    TextLocation.UNKNOWN_LINE,
+                    TextLocation.UNKNOWN_LINE
+                )
             )
         }
 

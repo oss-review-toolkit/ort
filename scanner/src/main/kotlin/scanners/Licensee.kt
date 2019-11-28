@@ -141,7 +141,11 @@ class Licensee(name: String, config: ScannerConfiguration) : LocalScanner(name, 
             val filePath = File(it["filename"].textValue())
             LicenseFinding(
                 license = getSpdxLicenseIdString(it["matched_license"].textValue()),
-                location = TextLocation(relativizePath(scanPath, filePath), -1, -1)
+                location = TextLocation(
+                    relativizePath(scanPath, filePath),
+                    TextLocation.UNKNOWN_LINE,
+                    TextLocation.UNKNOWN_LINE
+                )
             )
         }
 
