@@ -219,7 +219,9 @@ class Cargo(
         // resolved and the dependency should not appear in the dependency tree.
         // See: https://doc.rust-lang.org/cargo/commands/cargo-metadata.html
         val dependency = node["dependencies"].find {
-            it.textValue().startsWith(dependencyName)
+            val text = it.textValue()
+            require(text.indexOf(' ') != -1) { "Unexpected format while parsing dependency JSON node." }
+            text.substringBefore(' ') == dependencyName
         }
 
         return dependency?.textValue()?.split(' ')?.get(1)
