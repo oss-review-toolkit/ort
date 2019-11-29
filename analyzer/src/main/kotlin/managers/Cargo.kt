@@ -216,15 +216,20 @@ class Cargo(
         }
 
         // This is null if the dependency is optional and the feature was not enabled. In this case the version was not
-        // resolved and the dependency should not appear in the dependency tree.
-        // See: https://doc.rust-lang.org/cargo/commands/cargo-metadata.html
-        val dependency = node["dependencies"].find {
-            val text = it.textValue()
-            require(text.indexOf(' ') != -1) { "Unexpected format while parsing dependency JSON node." }
-            text.substringBefore(' ') == dependencyName
+        // resolved and the dependency should not appear in the dependency tree. An example for a dependency string is
+        // "bitflags 1.0.4 (registry+https://github.com/rust-lang/crates.io-index)", for more details see
+        // https://doc.rust-lang.org/cargo/commands/cargo-metadata.html.
+        val dependency = node["dependencies"].asSequence().map {
+            it.textValue().split(' ').also { substrings ->
+                require(substrings.size > 1) {
+                    "Unexpected format while parsing dependency JSON node."
+                }
+            }
+        }.find {
+            it.first() == dependencyName
         }
 
-        return dependency?.textValue()?.split(' ')?.get(1)
+        return dependency?.get(1)
     }
 
     override fun resolveDependencies(definitionFile: File): ProjectAnalyzerResult? {
