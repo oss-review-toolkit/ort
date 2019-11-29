@@ -25,11 +25,10 @@ import com.here.ort.spdx.getLicenseText
 import java.io.File
 
 class DefaultLicenseTextProvider(private val customLicenseTextsDir: File? = null) : LicenseTextProvider {
-    override fun getLicenseText(licenseId: String): String? {
-        return getLicenseText(
+    override fun getLicenseText(licenseId: String): String? =
+        getLicenseText(
             id = licenseId,
             handleExceptions = true,
             customLicenseTextsDir = customLicenseTextsDir
         )
-    }
 }
