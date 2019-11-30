@@ -2,8 +2,6 @@ import com.github.benmanes.gradle.versions.updates.DependencyUpdatesTask
 
 import com.here.ort.gradle.*
 
-import io.gitlab.arturbosch.detekt.detekt
-
 import org.gradle.api.tasks.testing.logging.TestExceptionFormat
 import org.gradle.api.tasks.testing.logging.TestLogEvent
 
