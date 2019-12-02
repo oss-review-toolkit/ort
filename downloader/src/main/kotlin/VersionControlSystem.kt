@@ -153,6 +153,18 @@ abstract class VersionControlSystem {
                         VcsInfo(VcsType.GIT, url, revision, null, "")
                     }
 
+                    vcsUrl.contains("svn") -> {
+                        val branchOrTagPattern = Regex("(.+)/(branches|tags)/([^/]+)/?(.*)")
+                        branchOrTagPattern.matchEntire(vcsUrl)?.let { match ->
+                            VcsInfo(
+                                type = VcsType.SUBVERSION,
+                                url = match.groupValues[1],
+                                revision = "${match.groupValues[2]}/${match.groupValues[3]}",
+                                path = match.groupValues[4]
+                            )
+                        } ?: VcsInfo(VcsType.NONE, vcsUrl, "")
+                    }
+
                     else -> VcsInfo(VcsType.NONE, vcsUrl, "")
                 }
     }

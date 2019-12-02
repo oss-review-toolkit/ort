@@ -1619,8 +1619,8 @@ analyzer:
           path: ""
         vcs_processed:
           type: "Subversion"
-          url: "http://svn.sonatype.org/spice/tags/oss-parent-7"
-          revision: ""
+          url: "http://svn.sonatype.org/spice"
+          revision: "tags/oss-parent-7"
           path: ""
       curations: []
     - package:
