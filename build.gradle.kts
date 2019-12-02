@@ -21,7 +21,7 @@ val kotlintestVersion: String by project
 val okhttpVersion: String by project
 
 plugins {
-    kotlin("jvm") apply false
+    kotlin("jvm")
 
     id("io.gitlab.arturbosch.detekt")
     id("org.jetbrains.dokka") apply false
