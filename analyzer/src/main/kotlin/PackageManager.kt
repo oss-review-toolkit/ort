@@ -69,6 +69,12 @@ abstract class PackageManager(
         val ALL by lazy { LOADER.iterator().asSequence().toList() }
 
         private val IGNORED_DIRECTORY_MATCHERS = listOf(
+            // Ignore VCS configuration directories.
+            ".git",
+            ".hg",
+            ".repo",
+            ".svn",
+            "CVS",
             // Ignore intermediate build system directories.
             ".gradle",
             "node_modules",
