@@ -21,7 +21,6 @@ package com.here.ort.analyzer.managers
 
 import com.here.ort.downloader.VersionControlSystem
 import com.here.ort.model.yamlMapper
-import com.here.ort.utils.Ci
 import com.here.ort.utils.normalizeVcsUrl
 import com.here.ort.utils.test.DEFAULT_ANALYZER_CONFIGURATION
 import com.here.ort.utils.test.DEFAULT_REPOSITORY_CONFIGURATION
@@ -41,7 +40,7 @@ class GradleKotlinScriptTest : StringSpec() {
     private val vcsRevision = vcsDir.getRevision()
 
     init {
-        "root project dependencies are detected correctly".config(enabled = !Ci.isTravis) {
+        "root project dependencies are detected correctly" {
             val packageFile = File(projectDir, "build.gradle.kts")
             val expectedResult = patchExpectedResult(
                 File(projectDir.parentFile, "multi-kotlin-project-expected-output-root.yml"),
@@ -56,7 +55,7 @@ class GradleKotlinScriptTest : StringSpec() {
             yamlMapper.writeValueAsString(result) shouldBe expectedResult
         }
 
-        "core project dependencies are detected correctly".config(enabled = !Ci.isTravis) {
+        "core project dependencies are detected correctly" {
             val packageFile = File(projectDir, "core/build.gradle.kts")
             val expectedResult = patchExpectedResult(
                 File(projectDir.parentFile, "multi-kotlin-project-expected-output-core.yml"),
@@ -71,7 +70,7 @@ class GradleKotlinScriptTest : StringSpec() {
             yamlMapper.writeValueAsString(result) shouldBe expectedResult
         }
 
-        "cli project dependencies are detected correctly".config(enabled = !Ci.isTravis) {
+        "cli project dependencies are detected correctly" {
             val packageFile = File(projectDir, "cli/build.gradle.kts")
             val expectedResult = patchExpectedResult(
                 File(projectDir.parentFile, "multi-kotlin-project-expected-output-cli.yml"),
