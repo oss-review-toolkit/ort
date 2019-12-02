@@ -25,7 +25,6 @@ import com.here.ort.model.Package
 import com.here.ort.model.VcsInfo
 import com.here.ort.model.VcsType
 import com.here.ort.model.yamlMapper
-import com.here.ort.utils.Ci
 import com.here.ort.utils.safeDeleteRecursively
 import com.here.ort.utils.test.DEFAULT_ANALYZER_CONFIGURATION
 import com.here.ort.utils.test.patchActualResult
@@ -58,7 +57,7 @@ class GitRepoTest : StringSpec() {
     }
 
     init {
-        "Analyzer correctly reports VcsInfo for git-repo projects".config(enabled = !Ci.isTravis) {
+        "Analyzer correctly reports VcsInfo for git-repo projects" {
             val ortResult = Analyzer(DEFAULT_ANALYZER_CONFIGURATION).analyze(outputDir)
             val actualResult = yamlMapper.writeValueAsString(ortResult)
             val expectedResult = patchExpectedResult(
@@ -70,7 +69,7 @@ class GitRepoTest : StringSpec() {
             patchActualResult(actualResult, patchStartAndEndTime = true) shouldBe expectedResult
         }
 
-        "GitRepo correctly lists submodules".config(enabled = !Ci.isTravis) {
+        "GitRepo correctly lists submodules" {
             val expectedSubmodules = listOf(
                 "spdx-tools",
                 "submodules",
