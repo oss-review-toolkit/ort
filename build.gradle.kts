@@ -23,7 +23,7 @@ val okhttpVersion: String by project
 plugins {
     kotlin("jvm")
 
-    id("io.gitlab.arturbosch.detekt")
+    id("io.gitlab.arturbosch.detekt") apply false
     id("org.jetbrains.dokka") apply false
 
     id("com.github.ben-manes.versions")
@@ -73,28 +73,39 @@ tasks.named<DependencyUpdatesTask>("dependencyUpdates") {
     }
 }
 
-repositories {
-    jcenter()
-}
-
-detekt {
-    // Align the detekt core and plugin versions.
-    toolVersion = detektPluginVersion
-
-    // Only configure differences to the default.
-    buildUponDefaultConfig = true
-    config = files(".detekt.yml")
-
-    input = files("buildSrc", "build.gradle.kts")
-}
-
-subprojects {
+allprojects {
     buildscript {
         repositories {
             jcenter()
         }
     }
 
+    repositories {
+        jcenter()
+    }
+
+    apply(plugin = "io.gitlab.arturbosch.detekt")
+
+    // Note: Kotlin DSL cannot directly access configurations that are created by applying a plugin in the very same
+    // project, thus put configuration names in quotes to leverage lazy lookup.
+    dependencies {
+        "detektPlugins"("io.gitlab.arturbosch.detekt:detekt-formatting:$detektPluginVersion")
+    }
+
+    detekt {
+        // Align the detekt core and plugin versions.
+        toolVersion = detektPluginVersion
+
+        // Only configure differences to the default.
+        buildUponDefaultConfig = true
+        config = files("$rootDir/.detekt.yml")
+
+        input = files("$rootDir/buildSrc", "build.gradle.kts", "src/main/kotlin", "src/test/kotlin",
+            "src/funTest/kotlin")
+    }
+}
+
+subprojects {
     if (name == "reporter-web-app") return@subprojects
 
     // Apply core plugins.
@@ -104,7 +115,6 @@ subprojects {
     // Apply third-party plugins.
     apply(plugin = "org.jetbrains.kotlin.jvm")
     apply(plugin = "org.jetbrains.dokka")
-    apply(plugin = "io.gitlab.arturbosch.detekt")
 
     // Note: Kotlin DSL cannot directly access sourceSets that are created by applying a plugin in the very same
     // project, thus get the source set programmatically.
@@ -114,17 +124,6 @@ subprojects {
         withConvention(KotlinSourceSet::class) {
             kotlin.srcDirs("src/funTest/kotlin")
         }
-    }
-
-    repositories {
-        jcenter()
-    }
-
-    // Note: Kotlin DSL cannot directly access configurations that are created by applying a plugin in the very same
-    // project, thus put configuration names in quotes to leverage lazy lookup.
-
-    dependencies {
-        "detektPlugins"("io.gitlab.arturbosch.detekt:detekt-formatting:$detektPluginVersion")
     }
 
     plugins.withType<JavaLibraryPlugin> {
@@ -158,17 +157,6 @@ subprojects {
             jvmTarget = "1.8"
             apiVersion = "1.3"
         }
-    }
-
-    detekt {
-        // Align the detekt core and plugin versions.
-        toolVersion = detektPluginVersion
-
-        // Only configure differences to the default.
-        buildUponDefaultConfig = true
-        config = files("$rootDir/.detekt.yml")
-
-        input = files("src/main/kotlin", "src/test/kotlin", "src/funTest/kotlin", "build.gradle.kts")
     }
 
     tasks.named<DokkaTask>("dokka") {
