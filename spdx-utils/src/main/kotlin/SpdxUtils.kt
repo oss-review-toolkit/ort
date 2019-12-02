@@ -37,6 +37,7 @@ val NON_LICENSE_FILENAMES = listOf(
 private val VCS_DIRECTORIES = listOf(
     ".git",
     ".hg",
+    ".repo",
     ".svn",
     "CVS"
 )
