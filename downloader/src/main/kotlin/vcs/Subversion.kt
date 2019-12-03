@@ -91,14 +91,18 @@ class Subversion : VersionControlSystem(), CommandLineTool {
                 // We assume a single project directory layout.
                 val svnUrl = SVNURL.parseURIEncoded("$projectRoot/$namespace")
 
-                clientManager.logClient.doList(
-                    svnUrl,
-                    SVNRevision.HEAD,
-                    SVNRevision.HEAD,
-                    /*fetchLocks =*/ false,
-                    /*recursive =*/ false
-                ) { dirEntry ->
-                    if (dirEntry.name.isNotEmpty()) refs += dirEntry.relativePath
+                try {
+                    clientManager.logClient.doList(
+                        svnUrl,
+                        SVNRevision.HEAD,
+                        SVNRevision.HEAD,
+                        /*fetchLocks =*/ false,
+                        /*recursive =*/ false
+                    ) { dirEntry ->
+                        if (dirEntry.name.isNotEmpty()) refs += dirEntry.relativePath
+                    }
+                } catch (e: SVNException) {
+                    throw DownloadException("Unable to list remote refs for $type repository at $remoteUrl.")
                 }
 
                 return refs
