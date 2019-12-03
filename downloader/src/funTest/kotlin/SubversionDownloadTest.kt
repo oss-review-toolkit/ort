@@ -35,7 +35,7 @@ import java.io.File
 
 private const val REPO_URL = "https://svn.code.sf.net/p/sendmessage/code"
 private const val REPO_REV = "115"
-private const val REPO_PATH = "trunk"
+private const val REPO_PATH = "trunk/tools"
 private const val REPO_TAG = "tags/SendMessage-1.0.2"
 private const val REPO_REV_FOR_TAG = "37"
 private const val REPO_VERSION = "1.0.1"
@@ -78,18 +78,17 @@ class SubversionDownloadTest : StringSpec() {
                 vcsProcessed = VcsInfo(VcsType.SUBVERSION, REPO_URL, REPO_REV, path = REPO_PATH)
             )
             val expectedFiles = listOf(
-                "SendMessage.sln",
-                "default.build",
-                "default.build.user.tmpl",
-                "sktoolslib", // This is an external.
-                "src",
-                "tools",
-                "version.build.in",
-                "versioninfo.build"
+                File(REPO_PATH, "checkyear.js"),
+                File(REPO_PATH, "coverity.bat")
             )
 
             val workingTree = svn.download(pkg, outputDir)
-            val actualFiles = workingTree.workingDir.list().sorted()
+            val actualFiles = workingTree.workingDir.walkBottomUp()
+                .onEnter { it.name != ".svn" }
+                .filter { it.isFile }
+                .map { it.relativeTo(outputDir) }
+                .sortedBy { it.path }
+                .toList()
 
             workingTree.isValid() shouldBe true
             workingTree.getRevision() shouldBe REPO_REV
@@ -97,8 +96,9 @@ class SubversionDownloadTest : StringSpec() {
         }
 
         "Subversion can download a given tag".config(tags = setOf(ExpensiveTag)) {
-            val pkg = Package.EMPTY.copy(vcsProcessed = VcsInfo(VcsType.SUBVERSION, REPO_URL, "", path = REPO_TAG))
+            val pkg = Package.EMPTY.copy(vcsProcessed = VcsInfo(VcsType.SUBVERSION, REPO_URL, REPO_TAG))
             val expectedFiles = listOf(
+                ".svn",
                 "SendMessage.proj",
                 "SendMessage.sln",
                 "src",

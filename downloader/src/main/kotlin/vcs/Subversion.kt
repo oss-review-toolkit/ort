@@ -22,41 +22,32 @@ package com.here.ort.downloader.vcs
 import com.here.ort.downloader.DownloadException
 import com.here.ort.downloader.VersionControlSystem
 import com.here.ort.downloader.WorkingTree
-import com.here.ort.model.Package
+import com.here.ort.model.VcsInfo
 import com.here.ort.model.VcsType
-import com.here.ort.utils.CommandLineTool
+import com.here.ort.utils.collectMessagesAsString
 import com.here.ort.utils.log
+import com.here.ort.utils.showStackTrace
 import com.here.ort.utils.succeeds
 
 import java.io.File
 import java.io.IOException
-import java.util.regex.Pattern
+import java.nio.file.Paths
 
+import org.tmatesoft.svn.core.SVNDepth
 import org.tmatesoft.svn.core.SVNException
 import org.tmatesoft.svn.core.SVNURL
 import org.tmatesoft.svn.core.wc.SVNClientManager
 import org.tmatesoft.svn.core.wc.SVNRevision
+import org.tmatesoft.svn.util.Version
 
-class Subversion : VersionControlSystem(), CommandLineTool {
+class Subversion : VersionControlSystem() {
     private val clientManager = SVNClientManager.newInstance()
-    private val versionRegex = Pattern.compile("svn, [Vv]ersion (?<version>[\\d.]+) \\(r\\d+\\)")
 
     override val type = VcsType.SUBVERSION
     override val priority = 10
     override val latestRevisionNames = listOf("HEAD")
 
-    override fun command(workingDir: File?) = "svn"
-
-    override fun getVersion() =
-        getVersion { output ->
-            versionRegex.matcher(output.lineSequence().first()).let {
-                if (it.matches()) {
-                    it.group("version")
-                } else {
-                    ""
-                }
-            }
-        }
+    override fun getVersion() = Version.getVersionString()
 
     override fun getWorkingTree(vcsDirectory: File) =
         object : WorkingTree(vcsDirectory, type) {
@@ -99,7 +90,7 @@ class Subversion : VersionControlSystem(), CommandLineTool {
                         /*fetchLocks =*/ false,
                         /*recursive =*/ false
                     ) { dirEntry ->
-                        if (dirEntry.name.isNotEmpty()) refs += dirEntry.relativePath
+                        if (dirEntry.name.isNotEmpty()) refs += "$namespace/${dirEntry.relativePath}"
                     }
                 } catch (e: SVNException) {
                     throw IOException("Unable to list remote refs for $type repository at $remoteUrl.")
@@ -123,89 +114,99 @@ class Subversion : VersionControlSystem(), CommandLineTool {
     override fun isApplicableUrlInternal(vcsUrl: String) =
         succeeds { clientManager.wcClient.doInfo(SVNURL.parseURIEncoded(vcsUrl), SVNRevision.HEAD, SVNRevision.HEAD) }
 
-    private fun guessTagAndPath(targetDir: File, pkg: Package): Pair<String, String> {
-        // The path to the tag (including the tag name), relative to the repository root.
-        val tagPath: String
+    override fun initWorkingTree(targetDir: File, vcs: VcsInfo): WorkingTree {
+        try {
+            clientManager.updateClient.doCheckout(
+                SVNURL.parseURIEncoded(vcs.url),
+                targetDir,
+                SVNRevision.HEAD,
+                SVNRevision.HEAD,
+                SVNDepth.EMPTY,
+                /* allowUnversionedObstructions = */ false
+            )
+        } catch (e: SVNException) {
+            e.showStackTrace()
 
-        // The path within the tag to limit the working directory to, relative to the repository root.
-        val path: String
+            throw DownloadException("Unable to initialize the $type working tree at '$targetDir' from ${vcs.url}.", e)
+        }
 
-        val tagsMarker = "tags/"
-        val tagsIndex = pkg.vcsProcessed.path.indexOf(tagsMarker)
-        val isTagsPath = tagsIndex == 0 || (tagsIndex > 0 && pkg.vcsProcessed.path[tagsIndex - 1] == '/')
-        if (isTagsPath) {
-            log.info {
-                "Ignoring the $type revision '${pkg.vcsProcessed.revision}' as the path points to a tag."
+        return getWorkingTree(targetDir)
+    }
+
+    private fun updateEmptyPath(workingTree: WorkingTree, revision: SVNRevision, path: String) {
+        val pathIterator = Paths.get(path).iterator()
+        var currentPath = workingTree.workingDir
+
+        while (pathIterator.hasNext()) {
+            clientManager.updateClient.doUpdate(
+                currentPath,
+                revision,
+                SVNDepth.EMPTY,
+                /* allowUnversionedObstructions = */ false,
+                /* depthIsSticky = */ true
+            )
+
+            currentPath = currentPath.resolve(pathIterator.next().toFile())
+        }
+    }
+
+    override fun updateWorkingTree(workingTree: WorkingTree, revision: String, path: String, recursive: Boolean) =
+        try {
+            revision.toLongOrNull()?.let { numericRevision ->
+                // This code path updates the working tree to a numeric revision.
+                val svnRevision = SVNRevision.create(numericRevision)
+
+                // First update the (empty) working tree to the desired revision along the requested path.
+                updateEmptyPath(workingTree, svnRevision, path)
+
+                // Then deepen only the requested path in the desired revision.
+                clientManager.updateClient.apply { isIgnoreExternals = !recursive }.doUpdate(
+                    workingTree.workingDir.resolve(path),
+                    svnRevision,
+                    SVNDepth.INFINITY,
+                    /* allowUnversionedObstructions = */ false,
+                    /* depthIsSticky = */ true
+                )
+            } ?: run {
+                // This code path updates the working tree to a symbolic revision.
+                val svnUrl = SVNURL.parseURIEncoded(
+                    "${workingTree.getRemoteUrl()}/$revision"
+                )
+
+                // First switch the (empty) working tree to the requested branch / tag.
+                clientManager.updateClient.doSwitch(
+                    workingTree.workingDir,
+                    svnUrl,
+                    SVNRevision.HEAD,
+                    SVNRevision.HEAD,
+                    SVNDepth.EMPTY,
+                    /* allowUnversionedObstructions = */ false,
+                    /* depthIsSticky = */ true,
+                    /* ignoreAncestry = */ true
+                )
+
+                // Then update the working tree in the current revision along the requested path, and ...
+                updateEmptyPath(workingTree, SVNRevision.HEAD, path)
+
+                // finally deepen only the requested path in the current revision.
+                clientManager.updateClient.apply { isIgnoreExternals = !recursive }.doUpdate(
+                    workingTree.workingDir.resolve(path),
+                    SVNRevision.HEAD,
+                    SVNDepth.INFINITY,
+                    /* allowUnversionedObstructions = */ false,
+                    /* depthIsSticky = */ true
+                )
             }
 
-            val tagsPathIndex = pkg.vcsProcessed.path.indexOf('/', tagsIndex + tagsMarker.length)
-
-            tagPath = pkg.vcsProcessed.path.let {
-                if (tagsPathIndex < 0) it else it.substring(0, tagsPathIndex)
-            }
-            path = pkg.vcsProcessed.path
-        } else {
-            log.info { "Trying to guess a $type revision for version '${pkg.id.version}'." }
-
-            val revision = try {
-                getWorkingTree(targetDir).guessRevisionName(pkg.id.name, pkg.id.version)
-            } catch (e: IOException) {
-                // Enrich the IOException with a more specific message.
-                throw IOException("Unable to determine a revision to checkout.", e)
-            }
+            true
+        } catch (e: SVNException) {
+            e.showStackTrace()
 
             log.warn {
-                "Using guessed $type revision '$revision' for version '${pkg.id.version}'. This might cause " +
-                        "the downloaded source code to not match the package version."
+                "Failed to update the $type working tree at '${workingTree.workingDir}' to revision '$revision':\n" +
+                        "${e.collectMessagesAsString()}"
             }
 
-            tagPath = "tags/$revision"
-            path = "$tagPath/${pkg.vcsProcessed.path}"
+            false
         }
-
-        return Pair(tagPath, path)
-    }
-
-    override fun download(
-        pkg: Package, targetDir: File, allowMovingRevisions: Boolean,
-        recursive: Boolean
-    ): WorkingTree {
-        log.info { "Using $type version ${getVersion()}." }
-
-        return try {
-            // Create an empty working tree of the latest revision to allow sparse checkouts.
-            run(targetDir, "checkout", pkg.vcsProcessed.url, "--depth", "empty", ".")
-
-            var revision = pkg.vcsProcessed.revision.takeIf { it.isNotBlank() } ?: "HEAD"
-
-            val workingTree = getWorkingTree(targetDir)
-            if (allowMovingRevisions || isFixedRevision(workingTree, revision)) {
-                if (pkg.vcsProcessed.path.isBlank()) {
-                    // Deepen everything as we do not know whether the revision is contained in branches, tags or trunk.
-                    run(targetDir, "update", "-r", revision, "--set-depth", "infinity")
-                    workingTree
-                } else {
-                    // Deepen only the given path.
-                    run(
-                        targetDir, "update", "-r", revision, "--depth", "infinity", "--parents",
-                        pkg.vcsProcessed.path
-                    )
-
-                    // Only return that part of the working tree that has the right revision.
-                    getWorkingTree(File(targetDir, pkg.vcsProcessed.path))
-                }
-            } else {
-                val (tagPath, path) = guessTagAndPath(targetDir, pkg)
-
-                // In Subversion, tags are not symbolic names for revisions but names of directories containing
-                // snapshots. Checking out a tag just is a sparse checkout of that path.
-                run(targetDir, "update", "--depth", "infinity", "--parents", path)
-
-                // Only return that part of the working tree that has the right revision.
-                getWorkingTree(File(targetDir, tagPath))
-            }
-        } catch (e: IOException) {
-            throw DownloadException("$type failed to download from ${pkg.vcsProcessed.url}.", e)
-        }
-    }
 }

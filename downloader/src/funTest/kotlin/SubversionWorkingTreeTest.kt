@@ -88,7 +88,7 @@ class SubversionWorkingTreeTest : StringSpec() {
                 "plugins",
                 "rel-0.15",
                 "subdocs"
-            )
+            ).map { "branches/$it" }
 
             val workingTree = svn.getWorkingTree(zipContentDir)
             workingTree.listRemoteBranches().joinToString("\n") shouldBe expectedBranches.joinToString("\n")
@@ -121,7 +121,7 @@ class SubversionWorkingTreeTest : StringSpec() {
                 "prest-0.3.10",
                 "prest-0.3.11",
                 "start"
-            )
+            ).map { "tags/$it" }
 
             val workingTree = svn.getWorkingTree(zipContentDir)
             workingTree.listRemoteTags().joinToString("\n") shouldBe expectedTags.joinToString("\n")
