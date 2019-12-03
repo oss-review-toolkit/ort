@@ -23,8 +23,8 @@ val okhttpVersion: String by project
 plugins {
     kotlin("jvm")
 
-    id("io.gitlab.arturbosch.detekt") apply false
-    id("org.jetbrains.dokka") apply false
+    id("io.gitlab.arturbosch.detekt")
+    id("org.jetbrains.dokka")
 
     id("com.github.ben-manes.versions")
     id("org.ajoberstar.reckon")
