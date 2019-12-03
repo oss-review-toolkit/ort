@@ -15,7 +15,10 @@ import java.net.URL
 
 val detektPluginVersion: String by project
 val kotlinPluginVersion: String by project
+
+val jacksonVersion: String by project
 val kotlintestVersion: String by project
+val log4jCoreVersion: String by project
 val okhttpVersion: String by project
 
 plugins {
@@ -162,19 +165,29 @@ subprojects {
             jdkVersion = 8
 
             externalDocumentationLink {
-                url = URL("https://codehaus-plexus.github.io/plexus-containers/plexus-container-default/apidocs/")
+                val baseUrl = "https://codehaus-plexus.github.io/plexus-containers/plexus-container-default/apidocs/"
+                url = URL(baseUrl)
+                packageListUrl = URL("$baseUrl/package-list")
             }
 
             externalDocumentationLink {
-                url = URL("https://fasterxml.github.io/jackson-databind/javadoc/2.9/")
+                val majorMinorVersion = jacksonVersion.split('.').let { "${it[0]}.${it[1]}" }
+                val baseUrl = "https://fasterxml.github.io/jackson-databind/javadoc/$majorMinorVersion/"
+                url = URL(baseUrl)
+                packageListUrl = URL("$baseUrl/package-list")
             }
 
             externalDocumentationLink {
-                url = URL("https://jakewharton.github.io/DiskLruCache/")
+                val baseUrl = "https://jakewharton.github.io/DiskLruCache/"
+                url = URL(baseUrl)
+                packageListUrl = URL("$baseUrl/package-list")
             }
 
             externalDocumentationLink {
-                url = URL("https://logging.apache.org/log4j/2.x/log4j-api/apidocs/")
+                val majorVersion = log4jCoreVersion.split('.').first()
+                val baseUrl = "https://logging.apache.org/log4j/$majorVersion.x/log4j-api/apidocs/"
+                url = URL(baseUrl)
+                packageListUrl = URL("$baseUrl/package-list")
             }
         }
     }
