@@ -263,7 +263,7 @@ abstract class VersionControlSystem {
         var i = 0
         val workingTreeRevision = revisionCandidates.find { revision ->
             log.info { "Trying revision candidate '$revision' (${++i} of ${revisionCandidates.size})..." }
-            updateWorkingTree(workingTree, revision, recursive)
+            updateWorkingTree(workingTree, revision, pkg.vcsProcessed.path, recursive)
         } ?: throw DownloadException("$type failed to download from URL '${pkg.vcsProcessed.url}'.")
 
         pkg.vcsProcessed.path.let {
@@ -291,11 +291,12 @@ abstract class VersionControlSystem {
     open fun initWorkingTree(targetDir: File, vcs: VcsInfo): WorkingTree = getWorkingTree(targetDir)
 
     /**
-     * Update the [working tree][workingTree] by checking out the given [revision], optionally [recursively][recursive].
+     * Update the [working tree][workingTree] by checking out the given [revision], optionally limited to the given
+     * [path] and [recursively][recursive] updating any nested working trees.
      *
      * TODO: Make this abstract once all VCS implementation have been ported.
      */
-    open fun updateWorkingTree(workingTree: WorkingTree, revision: String, recursive: Boolean) = false
+    open fun updateWorkingTree(workingTree: WorkingTree, revision: String, path: String, recursive: Boolean) = false
 
     /**
      * Check whether the given [revision] is likely to name a fixed revision that does not move.
