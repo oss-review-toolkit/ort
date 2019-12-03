@@ -25,8 +25,8 @@ import com.here.ort.downloader.WorkingTree
 import com.here.ort.model.Package
 import com.here.ort.model.VcsType
 import com.here.ort.utils.CommandLineTool
-import com.here.ort.utils.ProcessCapture
 import com.here.ort.utils.log
+import com.here.ort.utils.succeeds
 
 import java.io.File
 import java.io.IOException
@@ -38,6 +38,7 @@ import org.tmatesoft.svn.core.wc.SVNClientManager
 import org.tmatesoft.svn.core.wc.SVNRevision
 
 class Subversion : VersionControlSystem(), CommandLineTool {
+    private val clientManager = SVNClientManager.newInstance()
     private val versionRegex = Pattern.compile("svn, [Vv]ersion (?<version>[\\d.]+) \\(r\\d+\\)")
 
     override val type = VcsType.SUBVERSION
@@ -59,7 +60,6 @@ class Subversion : VersionControlSystem(), CommandLineTool {
 
     override fun getWorkingTree(vcsDirectory: File) =
         object : WorkingTree(vcsDirectory, type) {
-            private val clientManager = SVNClientManager.newInstance()
             private val directoryNamespaces = listOf("branches", "tags", "trunk", "wiki")
 
             override fun isValid(): Boolean {
@@ -117,7 +117,7 @@ class Subversion : VersionControlSystem(), CommandLineTool {
         }
 
     override fun isApplicableUrlInternal(vcsUrl: String) =
-        (vcsUrl.startsWith("svn+") || ProcessCapture("svn", "list", vcsUrl).isSuccess)
+        succeeds { clientManager.wcClient.doInfo(SVNURL.parseURIEncoded(vcsUrl), SVNRevision.HEAD, SVNRevision.HEAD) }
 
     private fun guessTagAndPath(targetDir: File, pkg: Package): Pair<String, String> {
         // The path to the tag (including the tag name), relative to the repository root.
