@@ -132,7 +132,7 @@ abstract class VersionControlSystem {
         }
 
         /**
-         * Decompose a [vcsUrl] into any contained VCS information.
+         * Decompose a string representing a [VCS URL][vcsUrl] into any contained [VCS information][VcsInfo].
          */
         fun splitUrl(vcsUrl: String) =
             VcsHost.toVcsInfo(vcsUrl)

@@ -185,9 +185,7 @@ fun getUserHomeDirectory() = File(System.getProperty("user.home"))
 fun getUserOrtDirectory() = getUserHomeDirectory().resolve(".ort")
 
 /**
- * Normalize a VCS URL by converting it to a common pattern.
- *
- * @param vcsUrl The URL to normalize.
+ * Normalize a string representing a [VCS URL][vcsUrl] to a common string form.
  */
 fun normalizeVcsUrl(vcsUrl: String): String {
     var url = vcsUrl.trimEnd('/')
