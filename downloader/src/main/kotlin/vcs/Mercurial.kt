@@ -128,8 +128,8 @@ class Mercurial : VersionControlSystem(), CommandLineTool {
         return getWorkingTree(targetDir)
     }
 
-    override fun updateWorkingTree(workingTree: WorkingTree, revision: String, recursive: Boolean): Boolean {
-        return try {
+    override fun updateWorkingTree(workingTree: WorkingTree, revision: String, path: String, recursive: Boolean) =
+        try {
             // To safe network bandwidth, only pull exactly the revision we want. Do not use "-u" to update the
             // working tree just yet, as Mercurial would only update if new changesets were pulled. But that might
             // not be the case if the requested revision is already available locally.
@@ -146,5 +146,4 @@ class Mercurial : VersionControlSystem(), CommandLineTool {
 
             false
         }
-    }
 }

@@ -71,7 +71,7 @@ class Git : GitBase() {
         return getWorkingTree(targetDir)
     }
 
-    override fun updateWorkingTree(workingTree: WorkingTree, revision: String, recursive: Boolean) =
+    override fun updateWorkingTree(workingTree: WorkingTree, revision: String, path: String, recursive: Boolean) =
         updateWorkingTreeWithoutSubmodules(workingTree, revision) && (!recursive || updateSubmodules(workingTree))
 
     private fun updateWorkingTreeWithoutSubmodules(workingTree: WorkingTree, revision: String): Boolean {
