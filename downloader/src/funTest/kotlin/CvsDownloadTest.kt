@@ -110,25 +110,24 @@ class CvsDownloadTest : StringSpec() {
             buildXmlStatus.stdout should contain("Working revision:\t1.159")
         }
 
-        "CVS can download only a single path based on a version"
-            .config(tags = setOf(ExpensiveTag)) {
-                val pkg = Package.EMPTY.copy(
-                    id = Identifier("Test:::$REPO_VERSION"),
-                    vcsProcessed = VcsInfo(VcsType.CVS, REPO_URL, "", path = REPO_PATH_FOR_VERSION)
-                )
-                val expectedFiles = listOf(
-                    File(REPO_PATH_FOR_VERSION)
-                )
+        "CVS can download only a single path based on a version".config(tags = setOf(ExpensiveTag)) {
+            val pkg = Package.EMPTY.copy(
+                id = Identifier("Test:::$REPO_VERSION"),
+                vcsProcessed = VcsInfo(VcsType.CVS, REPO_URL, "", path = REPO_PATH_FOR_VERSION)
+            )
+            val expectedFiles = listOf(
+                File(REPO_PATH_FOR_VERSION)
+            )
 
-                val workingTree = cvs.download(pkg, outputDir)
-                val actualFiles = workingTree.workingDir.walkBottomUp()
-                    .onEnter { it.name != "CVS" }
-                    .filter { it.isFile }
-                    .map { it.relativeTo(outputDir) }
-                    .sortedBy { it.path }
+            val workingTree = cvs.download(pkg, outputDir)
+            val actualFiles = workingTree.workingDir.walkBottomUp()
+                .onEnter { it.name != "CVS" }
+                .filter { it.isFile }
+                .map { it.relativeTo(outputDir) }
+                .sortedBy { it.path }
 
-                workingTree.isValid() shouldBe true
-                actualFiles.joinToString("\n") shouldBe expectedFiles.joinToString("\n")
-            }
+            workingTree.isValid() shouldBe true
+            actualFiles.joinToString("\n") shouldBe expectedFiles.joinToString("\n")
+        }
     }
 }
