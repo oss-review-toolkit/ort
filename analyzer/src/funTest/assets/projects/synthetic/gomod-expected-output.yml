@@ -1,0 +1,2159 @@
+---
+project:
+  id: "GoMod::github.com/heremaps/oss-review-toolkit/gomod-synthetic-test-project:<REPLACE_REVISION>"
+  definition_file_path: "<REPLACE_DEFINITION_FILE_PATH>"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  vcs:
+    type: "Git"
+    url: "<REPLACE_URL>"
+    revision: "<REPLACE_REVISION>"
+    path: "<REPLACE_PATH>"
+  vcs_processed:
+    type: "Git"
+    url: "<REPLACE_URL>"
+    revision: "<REPLACE_REVISION>"
+    path: "<REPLACE_PATH>"
+  homepage_url: ""
+  scopes:
+  - name: "all"
+    dependencies:
+    - id: "GoMod::github.com/fatih/color:v1.7.0"
+      linkage: "PROJECT_STATIC"
+    - id: "GoMod::github.com/hashicorp/go-multierror:v1.0.0"
+      linkage: "PROJECT_STATIC"
+      dependencies:
+      - id: "GoMod::github.com/hashicorp/errwrap:v1.0.0"
+        linkage: "PROJECT_STATIC"
+    - id: "GoMod::github.com/hashicorp/hcl2:v0.0.0-20190503213020-640445e16309"
+      linkage: "PROJECT_STATIC"
+      dependencies:
+      - id: "GoMod::github.com/agext/levenshtein:v1.2.1"
+        linkage: "PROJECT_STATIC"
+      - id: "GoMod::github.com/apparentlymart/go-dump:v0.0.0-20180507223929-23540a00eaa3"
+        linkage: "PROJECT_STATIC"
+      - id: "GoMod::github.com/apparentlymart/go-textseg:v1.0.0"
+        linkage: "PROJECT_STATIC"
+      - id: "GoMod::github.com/bsm/go-vlq:v0.0.0-20150828105119-ec6e8d4f5f4e"
+        linkage: "PROJECT_STATIC"
+      - id: "GoMod::github.com/davecgh/go-spew:v1.1.1"
+        linkage: "PROJECT_STATIC"
+      - id: "GoMod::github.com/go-test/deep:v1.0.1"
+        linkage: "PROJECT_STATIC"
+      - id: "GoMod::github.com/google/go-cmp:v0.2.0"
+        linkage: "PROJECT_STATIC"
+      - id: "GoMod::github.com/hashicorp/errwrap:v0.0.0-20180715044906-d6c0cd880357"
+        linkage: "PROJECT_STATIC"
+      - id: "GoMod::github.com/hashicorp/go-multierror:v0.0.0-20180717150148-3d5d8f294aa0"
+        linkage: "PROJECT_STATIC"
+      - id: "GoMod::github.com/kr/pretty:v0.1.0"
+        linkage: "PROJECT_STATIC"
+        dependencies:
+        - id: "GoMod::github.com/kr/text:v0.1.0"
+          linkage: "PROJECT_STATIC"
+          dependencies:
+          - id: "GoMod::github.com/kr/pty:v1.1.1"
+            linkage: "PROJECT_STATIC"
+      - id: "GoMod::github.com/kylelemons/godebug:v0.0.0-20170820004349-d65d576e9348"
+        linkage: "PROJECT_STATIC"
+      - id: "GoMod::github.com/mitchellh/go-wordwrap:v0.0.0-20150314170334-ad45545899c7"
+        linkage: "PROJECT_STATIC"
+      - id: "GoMod::github.com/onsi/ginkgo:v1.7.0"
+        linkage: "PROJECT_STATIC"
+      - id: "GoMod::github.com/onsi/gomega:v1.4.3"
+        linkage: "PROJECT_STATIC"
+        dependencies:
+        - id: "GoMod::github.com/fsnotify/fsnotify:v1.4.7"
+          linkage: "PROJECT_STATIC"
+        - id: "GoMod::github.com/golang/protobuf:v1.2.0"
+          linkage: "PROJECT_STATIC"
+        - id: "GoMod::github.com/hpcloud/tail:v1.0.0"
+          linkage: "PROJECT_STATIC"
+        - id: "GoMod::github.com/onsi/ginkgo:v1.6.0"
+          linkage: "PROJECT_STATIC"
+        - id: "GoMod::golang.org/x/net:v0.0.0-20180906233101-161cd47e91fd"
+          linkage: "PROJECT_STATIC"
+        - id: "GoMod::golang.org/x/sync:v0.0.0-20180314180146-1d60e4601c6f"
+          linkage: "PROJECT_STATIC"
+        - id: "GoMod::golang.org/x/sys:v0.0.0-20180909124046-d0be0721c37e"
+          linkage: "PROJECT_STATIC"
+        - id: "GoMod::golang.org/x/text:v0.3.0"
+          linkage: "PROJECT_STATIC"
+        - id: "GoMod::gopkg.in/fsnotify.v1:v1.4.7"
+          linkage: "PROJECT_STATIC"
+        - id: "GoMod::gopkg.in/tomb.v1:v1.0.0-20141024135613-dd632973f1e7"
+          linkage: "PROJECT_STATIC"
+        - id: "GoMod::gopkg.in/yaml.v2:v2.2.1"
+          linkage: "PROJECT_STATIC"
+          dependencies:
+          - id: "GoMod::gopkg.in/check.v1:v0.0.0-20161208181325-20d25e280405"
+            linkage: "PROJECT_STATIC"
+      - id: "GoMod::github.com/pmezard/go-difflib:v1.0.0"
+        linkage: "PROJECT_STATIC"
+      - id: "GoMod::github.com/sergi/go-diff:v1.0.0"
+        linkage: "PROJECT_STATIC"
+      - id: "GoMod::github.com/spf13/pflag:v1.0.2"
+        linkage: "PROJECT_STATIC"
+      - id: "GoMod::github.com/stretchr/testify:v1.2.2"
+        linkage: "PROJECT_STATIC"
+      - id: "GoMod::github.com/zclconf/go-cty:v0.0.0-20190426224007-b18a157db9e2"
+        linkage: "PROJECT_STATIC"
+        dependencies:
+        - id: "GoMod::github.com/apparentlymart/go-textseg:v1.0.0"
+          linkage: "PROJECT_STATIC"
+        - id: "GoMod::github.com/golang/protobuf:v1.1.0"
+          linkage: "PROJECT_STATIC"
+        - id: "GoMod::github.com/kr/pretty:v0.1.0"
+          linkage: "PROJECT_STATIC"
+          dependencies:
+          - id: "GoMod::github.com/kr/text:v0.1.0"
+            linkage: "PROJECT_STATIC"
+            dependencies:
+            - id: "GoMod::github.com/kr/pty:v1.1.1"
+              linkage: "PROJECT_STATIC"
+        - id: "GoMod::github.com/kylelemons/godebug:v0.0.0-20170820004349-d65d576e9348"
+          linkage: "PROJECT_STATIC"
+        - id: "GoMod::github.com/vmihailenco/msgpack:v3.3.3+incompatible"
+          linkage: "PROJECT_STATIC"
+        - id: "GoMod::golang.org/x/net:v0.0.0-20180811021610-c39426892332"
+          linkage: "PROJECT_STATIC"
+        - id: "GoMod::golang.org/x/sync:v0.0.0-20180314180146-1d60e4601c6f"
+          linkage: "PROJECT_STATIC"
+        - id: "GoMod::golang.org/x/text:v0.3.0"
+          linkage: "PROJECT_STATIC"
+        - id: "GoMod::google.golang.org/appengine:v1.1.0"
+          linkage: "PROJECT_STATIC"
+        - id: "GoMod::gopkg.in/check.v1:v1.0.0-20180628173108-788fd7840127"
+          linkage: "PROJECT_STATIC"
+      - id: "GoMod::golang.org/x/crypto:v0.0.0-20190426145343-a29dc8fdc734"
+        linkage: "PROJECT_STATIC"
+        dependencies:
+        - id: "GoMod::golang.org/x/net:v0.0.0-20190404232315-eb5bcb51f2a3"
+          linkage: "PROJECT_STATIC"
+          dependencies:
+          - id: "GoMod::golang.org/x/crypto:v0.0.0-20190308221718-c2843e01d9a2"
+            linkage: "PROJECT_STATIC"
+            dependencies:
+            - id: "GoMod::golang.org/x/sys:v0.0.0-20190215142949-d0b11bdaac8a"
+              linkage: "PROJECT_STATIC"
+          - id: "GoMod::golang.org/x/text:v0.3.0"
+            linkage: "PROJECT_STATIC"
+        - id: "GoMod::golang.org/x/sys:v0.0.0-20190412213103-97732733099d"
+          linkage: "PROJECT_STATIC"
+      - id: "GoMod::golang.org/x/net:v0.0.0-20190502183928-7f726cade0ab"
+        linkage: "PROJECT_STATIC"
+        dependencies:
+        - id: "GoMod::golang.org/x/crypto:v0.0.0-20190308221718-c2843e01d9a2"
+          linkage: "PROJECT_STATIC"
+          dependencies:
+          - id: "GoMod::golang.org/x/sys:v0.0.0-20190215142949-d0b11bdaac8a"
+            linkage: "PROJECT_STATIC"
+        - id: "GoMod::golang.org/x/text:v0.3.0"
+          linkage: "PROJECT_STATIC"
+      - id: "GoMod::golang.org/x/sync:v0.0.0-20190423024810-112230192c58"
+        linkage: "PROJECT_STATIC"
+      - id: "GoMod::golang.org/x/sys:v0.0.0-20190502175342-a43fa875dd82"
+        linkage: "PROJECT_STATIC"
+      - id: "GoMod::golang.org/x/text:v0.3.2"
+        linkage: "PROJECT_STATIC"
+        dependencies:
+        - id: "GoMod::golang.org/x/tools:v0.0.0-20180917221912-90fa682c2a6e"
+          linkage: "PROJECT_STATIC"
+      - id: "GoMod::gopkg.in/yaml.v2:v2.2.2"
+        linkage: "PROJECT_STATIC"
+        dependencies:
+        - id: "GoMod::gopkg.in/check.v1:v0.0.0-20161208181325-20d25e280405"
+          linkage: "PROJECT_STATIC"
+      - id: "GoMod::howett.net/plist:v0.0.0-20181124034731-591f970eefbb"
+        linkage: "PROJECT_STATIC"
+        dependencies:
+        - id: "GoMod::github.com/jessevdk/go-flags:v1.4.0"
+          linkage: "PROJECT_STATIC"
+        - id: "GoMod::github.com/kr/pretty:v0.1.0"
+          linkage: "PROJECT_STATIC"
+          dependencies:
+          - id: "GoMod::github.com/kr/text:v0.1.0"
+            linkage: "PROJECT_STATIC"
+            dependencies:
+            - id: "GoMod::github.com/kr/pty:v1.1.1"
+              linkage: "PROJECT_STATIC"
+        - id: "GoMod::gopkg.in/check.v1:v1.0.0-20180628173108-788fd7840127"
+          linkage: "PROJECT_STATIC"
+        - id: "GoMod::gopkg.in/yaml.v2:v2.2.1"
+          linkage: "PROJECT_STATIC"
+          dependencies:
+          - id: "GoMod::gopkg.in/check.v1:v0.0.0-20161208181325-20d25e280405"
+            linkage: "PROJECT_STATIC"
+    - id: "GoMod::github.com/mattn/go-colorable:v0.1.4"
+      linkage: "PROJECT_STATIC"
+      dependencies:
+      - id: "GoMod::github.com/mattn/go-isatty:v0.0.8"
+        linkage: "PROJECT_STATIC"
+        dependencies:
+        - id: "GoMod::golang.org/x/sys:v0.0.0-20190222072716-a9d3bda3a223"
+          linkage: "PROJECT_STATIC"
+    - id: "GoMod::github.com/mattn/go-isatty:v0.0.10"
+      linkage: "PROJECT_STATIC"
+      dependencies:
+      - id: "GoMod::golang.org/x/sys:v0.0.0-20191008105621-543471e840be"
+        linkage: "PROJECT_STATIC"
+    - id: "GoMod::golang.org/x/mod:v0.1.0"
+      linkage: "PROJECT_STATIC"
+      dependencies:
+      - id: "GoMod::golang.org/x/crypto:v0.0.0-20190510104115-cbcb75029529"
+        linkage: "PROJECT_STATIC"
+        dependencies:
+        - id: "GoMod::golang.org/x/net:v0.0.0-20190404232315-eb5bcb51f2a3"
+          linkage: "PROJECT_STATIC"
+          dependencies:
+          - id: "GoMod::golang.org/x/crypto:v0.0.0-20190308221718-c2843e01d9a2"
+            linkage: "PROJECT_STATIC"
+            dependencies:
+            - id: "GoMod::golang.org/x/sys:v0.0.0-20190215142949-d0b11bdaac8a"
+              linkage: "PROJECT_STATIC"
+          - id: "GoMod::golang.org/x/text:v0.3.0"
+            linkage: "PROJECT_STATIC"
+        - id: "GoMod::golang.org/x/sys:v0.0.0-20190412213103-97732733099d"
+          linkage: "PROJECT_STATIC"
+    - id: "GoMod::golang.org/x/oauth2:v0.0.0-20190226205417-e64efc72b421"
+      linkage: "PROJECT_STATIC"
+      dependencies:
+      - id: "GoMod::cloud.google.com/go:v0.34.0"
+        linkage: "PROJECT_STATIC"
+      - id: "GoMod::golang.org/x/net:v0.0.0-20190108225652-1e06a53dbb7e"
+        linkage: "PROJECT_STATIC"
+      - id: "GoMod::golang.org/x/sync:v0.0.0-20181221193216-37e7f081c4d4"
+        linkage: "PROJECT_STATIC"
+      - id: "GoMod::google.golang.org/appengine:v1.4.0"
+        linkage: "PROJECT_STATIC"
+        dependencies:
+        - id: "GoMod::github.com/golang/protobuf:v1.2.0"
+          linkage: "PROJECT_STATIC"
+        - id: "GoMod::golang.org/x/net:v0.0.0-20180724234803-3673e40ba225"
+          linkage: "PROJECT_STATIC"
+        - id: "GoMod::golang.org/x/text:v0.3.0"
+          linkage: "PROJECT_STATIC"
+  - name: "vendor"
+    dependencies:
+    - id: "GoMod::github.com/fatih/color:v1.7.0"
+      linkage: "PROJECT_STATIC"
+    - id: "GoMod::github.com/hashicorp/go-multierror:v1.0.0"
+      linkage: "PROJECT_STATIC"
+    - id: "GoMod::github.com/hashicorp/hcl2:v0.0.0-20190503213020-640445e16309"
+      linkage: "PROJECT_STATIC"
+    - id: "GoMod::github.com/mattn/go-colorable:v0.1.4"
+      linkage: "PROJECT_STATIC"
+    - id: "GoMod::github.com/mattn/go-isatty:v0.0.10"
+      linkage: "PROJECT_STATIC"
+      dependencies:
+      - id: "GoMod::golang.org/x/sys:v0.0.0-20191008105621-543471e840be"
+        linkage: "PROJECT_STATIC"
+    - id: "GoMod::golang.org/x/mod:v0.1.0"
+      linkage: "PROJECT_STATIC"
+    - id: "GoMod::golang.org/x/oauth2:v0.0.0-20190226205417-e64efc72b421"
+      linkage: "PROJECT_STATIC"
+packages:
+- package:
+    id: "GoMod::cloud.google.com/go:v0.34.0"
+    purl: "pkg:gomod/cloud.google.com%2Fgo@v0.34.0"
+    declared_licenses: []
+    declared_licenses_processed: {}
+    description: ""
+    homepage_url: ""
+    binary_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    source_artifact:
+      url: "https://proxy.golang.org/cloud.google.com/go/@v/v0.34.0.zip"
+      hash:
+        value: ""
+        algorithm: ""
+    vcs:
+      type: ""
+      url: ""
+      revision: ""
+      path: ""
+    vcs_processed:
+      type: ""
+      url: ""
+      revision: ""
+      path: ""
+  curations: []
+- package:
+    id: "GoMod::github.com/agext/levenshtein:v1.2.1"
+    purl: "pkg:gomod/github.com%2Fagext%2Flevenshtein@v1.2.1"
+    declared_licenses: []
+    declared_licenses_processed: {}
+    description: ""
+    homepage_url: ""
+    binary_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    source_artifact:
+      url: "https://proxy.golang.org/github.com/agext/levenshtein/@v/v1.2.1.zip"
+      hash:
+        value: ""
+        algorithm: ""
+    vcs:
+      type: ""
+      url: ""
+      revision: ""
+      path: ""
+    vcs_processed:
+      type: ""
+      url: ""
+      revision: ""
+      path: ""
+  curations: []
+- package:
+    id: "GoMod::github.com/apparentlymart/go-dump:v0.0.0-20180507223929-23540a00eaa3"
+    purl: "pkg:gomod/github.com%2Fapparentlymart%2Fgo-dump@v0.0.0-20180507223929-23540a00eaa3"
+    declared_licenses: []
+    declared_licenses_processed: {}
+    description: ""
+    homepage_url: ""
+    binary_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    source_artifact:
+      url: "https://proxy.golang.org/github.com/apparentlymart/go-dump/@v/v0.0.0-20180507223929-23540a00eaa3.zip"
+      hash:
+        value: ""
+        algorithm: ""
+    vcs:
+      type: ""
+      url: ""
+      revision: ""
+      path: ""
+    vcs_processed:
+      type: ""
+      url: ""
+      revision: ""
+      path: ""
+  curations: []
+- package:
+    id: "GoMod::github.com/apparentlymart/go-textseg:v1.0.0"
+    purl: "pkg:gomod/github.com%2Fapparentlymart%2Fgo-textseg@v1.0.0"
+    declared_licenses: []
+    declared_licenses_processed: {}
+    description: ""
+    homepage_url: ""
+    binary_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    source_artifact:
+      url: "https://proxy.golang.org/github.com/apparentlymart/go-textseg/@v/v1.0.0.zip"
+      hash:
+        value: ""
+        algorithm: ""
+    vcs:
+      type: ""
+      url: ""
+      revision: ""
+      path: ""
+    vcs_processed:
+      type: ""
+      url: ""
+      revision: ""
+      path: ""
+  curations: []
+- package:
+    id: "GoMod::github.com/bsm/go-vlq:v0.0.0-20150828105119-ec6e8d4f5f4e"
+    purl: "pkg:gomod/github.com%2Fbsm%2Fgo-vlq@v0.0.0-20150828105119-ec6e8d4f5f4e"
+    declared_licenses: []
+    declared_licenses_processed: {}
+    description: ""
+    homepage_url: ""
+    binary_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    source_artifact:
+      url: "https://proxy.golang.org/github.com/bsm/go-vlq/@v/v0.0.0-20150828105119-ec6e8d4f5f4e.zip"
+      hash:
+        value: ""
+        algorithm: ""
+    vcs:
+      type: ""
+      url: ""
+      revision: ""
+      path: ""
+    vcs_processed:
+      type: ""
+      url: ""
+      revision: ""
+      path: ""
+  curations: []
+- package:
+    id: "GoMod::github.com/davecgh/go-spew:v1.1.1"
+    purl: "pkg:gomod/github.com%2Fdavecgh%2Fgo-spew@v1.1.1"
+    declared_licenses: []
+    declared_licenses_processed: {}
+    description: ""
+    homepage_url: ""
+    binary_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    source_artifact:
+      url: "https://proxy.golang.org/github.com/davecgh/go-spew/@v/v1.1.1.zip"
+      hash:
+        value: ""
+        algorithm: ""
+    vcs:
+      type: ""
+      url: ""
+      revision: ""
+      path: ""
+    vcs_processed:
+      type: ""
+      url: ""
+      revision: ""
+      path: ""
+  curations: []
+- package:
+    id: "GoMod::github.com/fatih/color:v1.7.0"
+    purl: "pkg:gomod/github.com%2Ffatih%2Fcolor@v1.7.0"
+    declared_licenses: []
+    declared_licenses_processed: {}
+    description: ""
+    homepage_url: ""
+    binary_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    source_artifact:
+      url: "https://proxy.golang.org/github.com/fatih/color/@v/v1.7.0.zip"
+      hash:
+        value: ""
+        algorithm: ""
+    vcs:
+      type: ""
+      url: ""
+      revision: ""
+      path: ""
+    vcs_processed:
+      type: ""
+      url: ""
+      revision: ""
+      path: ""
+  curations: []
+- package:
+    id: "GoMod::github.com/fsnotify/fsnotify:v1.4.7"
+    purl: "pkg:gomod/github.com%2Ffsnotify%2Ffsnotify@v1.4.7"
+    declared_licenses: []
+    declared_licenses_processed: {}
+    description: ""
+    homepage_url: ""
+    binary_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    source_artifact:
+      url: "https://proxy.golang.org/github.com/fsnotify/fsnotify/@v/v1.4.7.zip"
+      hash:
+        value: ""
+        algorithm: ""
+    vcs:
+      type: ""
+      url: ""
+      revision: ""
+      path: ""
+    vcs_processed:
+      type: ""
+      url: ""
+      revision: ""
+      path: ""
+  curations: []
+- package:
+    id: "GoMod::github.com/go-test/deep:v1.0.1"
+    purl: "pkg:gomod/github.com%2Fgo-test%2Fdeep@v1.0.1"
+    declared_licenses: []
+    declared_licenses_processed: {}
+    description: ""
+    homepage_url: ""
+    binary_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    source_artifact:
+      url: "https://proxy.golang.org/github.com/go-test/deep/@v/v1.0.1.zip"
+      hash:
+        value: ""
+        algorithm: ""
+    vcs:
+      type: ""
+      url: ""
+      revision: ""
+      path: ""
+    vcs_processed:
+      type: ""
+      url: ""
+      revision: ""
+      path: ""
+  curations: []
+- package:
+    id: "GoMod::github.com/golang/protobuf:v1.1.0"
+    purl: "pkg:gomod/github.com%2Fgolang%2Fprotobuf@v1.1.0"
+    declared_licenses: []
+    declared_licenses_processed: {}
+    description: ""
+    homepage_url: ""
+    binary_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    source_artifact:
+      url: "https://proxy.golang.org/github.com/golang/protobuf/@v/v1.1.0.zip"
+      hash:
+        value: ""
+        algorithm: ""
+    vcs:
+      type: ""
+      url: ""
+      revision: ""
+      path: ""
+    vcs_processed:
+      type: ""
+      url: ""
+      revision: ""
+      path: ""
+  curations: []
+- package:
+    id: "GoMod::github.com/golang/protobuf:v1.2.0"
+    purl: "pkg:gomod/github.com%2Fgolang%2Fprotobuf@v1.2.0"
+    declared_licenses: []
+    declared_licenses_processed: {}
+    description: ""
+    homepage_url: ""
+    binary_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    source_artifact:
+      url: "https://proxy.golang.org/github.com/golang/protobuf/@v/v1.2.0.zip"
+      hash:
+        value: ""
+        algorithm: ""
+    vcs:
+      type: ""
+      url: ""
+      revision: ""
+      path: ""
+    vcs_processed:
+      type: ""
+      url: ""
+      revision: ""
+      path: ""
+  curations: []
+- package:
+    id: "GoMod::github.com/google/go-cmp:v0.2.0"
+    purl: "pkg:gomod/github.com%2Fgoogle%2Fgo-cmp@v0.2.0"
+    declared_licenses: []
+    declared_licenses_processed: {}
+    description: ""
+    homepage_url: ""
+    binary_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    source_artifact:
+      url: "https://proxy.golang.org/github.com/google/go-cmp/@v/v0.2.0.zip"
+      hash:
+        value: ""
+        algorithm: ""
+    vcs:
+      type: ""
+      url: ""
+      revision: ""
+      path: ""
+    vcs_processed:
+      type: ""
+      url: ""
+      revision: ""
+      path: ""
+  curations: []
+- package:
+    id: "GoMod::github.com/hashicorp/errwrap:v0.0.0-20180715044906-d6c0cd880357"
+    purl: "pkg:gomod/github.com%2Fhashicorp%2Ferrwrap@v0.0.0-20180715044906-d6c0cd880357"
+    declared_licenses: []
+    declared_licenses_processed: {}
+    description: ""
+    homepage_url: ""
+    binary_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    source_artifact:
+      url: "https://proxy.golang.org/github.com/hashicorp/errwrap/@v/v0.0.0-20180715044906-d6c0cd880357.zip"
+      hash:
+        value: ""
+        algorithm: ""
+    vcs:
+      type: ""
+      url: ""
+      revision: ""
+      path: ""
+    vcs_processed:
+      type: ""
+      url: ""
+      revision: ""
+      path: ""
+  curations: []
+- package:
+    id: "GoMod::github.com/hashicorp/errwrap:v1.0.0"
+    purl: "pkg:gomod/github.com%2Fhashicorp%2Ferrwrap@v1.0.0"
+    declared_licenses: []
+    declared_licenses_processed: {}
+    description: ""
+    homepage_url: ""
+    binary_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    source_artifact:
+      url: "https://proxy.golang.org/github.com/hashicorp/errwrap/@v/v1.0.0.zip"
+      hash:
+        value: ""
+        algorithm: ""
+    vcs:
+      type: ""
+      url: ""
+      revision: ""
+      path: ""
+    vcs_processed:
+      type: ""
+      url: ""
+      revision: ""
+      path: ""
+  curations: []
+- package:
+    id: "GoMod::github.com/hashicorp/go-multierror:v0.0.0-20180717150148-3d5d8f294aa0"
+    purl: "pkg:gomod/github.com%2Fhashicorp%2Fgo-multierror@v0.0.0-20180717150148-3d5d8f294aa0"
+    declared_licenses: []
+    declared_licenses_processed: {}
+    description: ""
+    homepage_url: ""
+    binary_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    source_artifact:
+      url: "https://proxy.golang.org/github.com/hashicorp/go-multierror/@v/v0.0.0-20180717150148-3d5d8f294aa0.zip"
+      hash:
+        value: ""
+        algorithm: ""
+    vcs:
+      type: ""
+      url: ""
+      revision: ""
+      path: ""
+    vcs_processed:
+      type: ""
+      url: ""
+      revision: ""
+      path: ""
+  curations: []
+- package:
+    id: "GoMod::github.com/hashicorp/go-multierror:v1.0.0"
+    purl: "pkg:gomod/github.com%2Fhashicorp%2Fgo-multierror@v1.0.0"
+    declared_licenses: []
+    declared_licenses_processed: {}
+    description: ""
+    homepage_url: ""
+    binary_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    source_artifact:
+      url: "https://proxy.golang.org/github.com/hashicorp/go-multierror/@v/v1.0.0.zip"
+      hash:
+        value: ""
+        algorithm: ""
+    vcs:
+      type: ""
+      url: ""
+      revision: ""
+      path: ""
+    vcs_processed:
+      type: ""
+      url: ""
+      revision: ""
+      path: ""
+  curations: []
+- package:
+    id: "GoMod::github.com/hashicorp/hcl2:v0.0.0-20190503213020-640445e16309"
+    purl: "pkg:gomod/github.com%2Fhashicorp%2Fhcl2@v0.0.0-20190503213020-640445e16309"
+    declared_licenses: []
+    declared_licenses_processed: {}
+    description: ""
+    homepage_url: ""
+    binary_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    source_artifact:
+      url: "https://proxy.golang.org/github.com/hashicorp/hcl2/@v/v0.0.0-20190503213020-640445e16309.zip"
+      hash:
+        value: ""
+        algorithm: ""
+    vcs:
+      type: ""
+      url: ""
+      revision: ""
+      path: ""
+    vcs_processed:
+      type: ""
+      url: ""
+      revision: ""
+      path: ""
+  curations: []
+- package:
+    id: "GoMod::github.com/hpcloud/tail:v1.0.0"
+    purl: "pkg:gomod/github.com%2Fhpcloud%2Ftail@v1.0.0"
+    declared_licenses: []
+    declared_licenses_processed: {}
+    description: ""
+    homepage_url: ""
+    binary_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    source_artifact:
+      url: "https://proxy.golang.org/github.com/hpcloud/tail/@v/v1.0.0.zip"
+      hash:
+        value: ""
+        algorithm: ""
+    vcs:
+      type: ""
+      url: ""
+      revision: ""
+      path: ""
+    vcs_processed:
+      type: ""
+      url: ""
+      revision: ""
+      path: ""
+  curations: []
+- package:
+    id: "GoMod::github.com/jessevdk/go-flags:v1.4.0"
+    purl: "pkg:gomod/github.com%2Fjessevdk%2Fgo-flags@v1.4.0"
+    declared_licenses: []
+    declared_licenses_processed: {}
+    description: ""
+    homepage_url: ""
+    binary_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    source_artifact:
+      url: "https://proxy.golang.org/github.com/jessevdk/go-flags/@v/v1.4.0.zip"
+      hash:
+        value: ""
+        algorithm: ""
+    vcs:
+      type: ""
+      url: ""
+      revision: ""
+      path: ""
+    vcs_processed:
+      type: ""
+      url: ""
+      revision: ""
+      path: ""
+  curations: []
+- package:
+    id: "GoMod::github.com/kr/pretty:v0.1.0"
+    purl: "pkg:gomod/github.com%2Fkr%2Fpretty@v0.1.0"
+    declared_licenses: []
+    declared_licenses_processed: {}
+    description: ""
+    homepage_url: ""
+    binary_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    source_artifact:
+      url: "https://proxy.golang.org/github.com/kr/pretty/@v/v0.1.0.zip"
+      hash:
+        value: ""
+        algorithm: ""
+    vcs:
+      type: ""
+      url: ""
+      revision: ""
+      path: ""
+    vcs_processed:
+      type: ""
+      url: ""
+      revision: ""
+      path: ""
+  curations: []
+- package:
+    id: "GoMod::github.com/kr/pty:v1.1.1"
+    purl: "pkg:gomod/github.com%2Fkr%2Fpty@v1.1.1"
+    declared_licenses: []
+    declared_licenses_processed: {}
+    description: ""
+    homepage_url: ""
+    binary_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    source_artifact:
+      url: "https://proxy.golang.org/github.com/kr/pty/@v/v1.1.1.zip"
+      hash:
+        value: ""
+        algorithm: ""
+    vcs:
+      type: ""
+      url: ""
+      revision: ""
+      path: ""
+    vcs_processed:
+      type: ""
+      url: ""
+      revision: ""
+      path: ""
+  curations: []
+- package:
+    id: "GoMod::github.com/kr/text:v0.1.0"
+    purl: "pkg:gomod/github.com%2Fkr%2Ftext@v0.1.0"
+    declared_licenses: []
+    declared_licenses_processed: {}
+    description: ""
+    homepage_url: ""
+    binary_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    source_artifact:
+      url: "https://proxy.golang.org/github.com/kr/text/@v/v0.1.0.zip"
+      hash:
+        value: ""
+        algorithm: ""
+    vcs:
+      type: ""
+      url: ""
+      revision: ""
+      path: ""
+    vcs_processed:
+      type: ""
+      url: ""
+      revision: ""
+      path: ""
+  curations: []
+- package:
+    id: "GoMod::github.com/kylelemons/godebug:v0.0.0-20170820004349-d65d576e9348"
+    purl: "pkg:gomod/github.com%2Fkylelemons%2Fgodebug@v0.0.0-20170820004349-d65d576e9348"
+    declared_licenses: []
+    declared_licenses_processed: {}
+    description: ""
+    homepage_url: ""
+    binary_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    source_artifact:
+      url: "https://proxy.golang.org/github.com/kylelemons/godebug/@v/v0.0.0-20170820004349-d65d576e9348.zip"
+      hash:
+        value: ""
+        algorithm: ""
+    vcs:
+      type: ""
+      url: ""
+      revision: ""
+      path: ""
+    vcs_processed:
+      type: ""
+      url: ""
+      revision: ""
+      path: ""
+  curations: []
+- package:
+    id: "GoMod::github.com/mattn/go-colorable:v0.1.4"
+    purl: "pkg:gomod/github.com%2Fmattn%2Fgo-colorable@v0.1.4"
+    declared_licenses: []
+    declared_licenses_processed: {}
+    description: ""
+    homepage_url: ""
+    binary_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    source_artifact:
+      url: "https://proxy.golang.org/github.com/mattn/go-colorable/@v/v0.1.4.zip"
+      hash:
+        value: ""
+        algorithm: ""
+    vcs:
+      type: ""
+      url: ""
+      revision: ""
+      path: ""
+    vcs_processed:
+      type: ""
+      url: ""
+      revision: ""
+      path: ""
+  curations: []
+- package:
+    id: "GoMod::github.com/mattn/go-isatty:v0.0.10"
+    purl: "pkg:gomod/github.com%2Fmattn%2Fgo-isatty@v0.0.10"
+    declared_licenses: []
+    declared_licenses_processed: {}
+    description: ""
+    homepage_url: ""
+    binary_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    source_artifact:
+      url: "https://proxy.golang.org/github.com/mattn/go-isatty/@v/v0.0.10.zip"
+      hash:
+        value: ""
+        algorithm: ""
+    vcs:
+      type: ""
+      url: ""
+      revision: ""
+      path: ""
+    vcs_processed:
+      type: ""
+      url: ""
+      revision: ""
+      path: ""
+  curations: []
+- package:
+    id: "GoMod::github.com/mattn/go-isatty:v0.0.8"
+    purl: "pkg:gomod/github.com%2Fmattn%2Fgo-isatty@v0.0.8"
+    declared_licenses: []
+    declared_licenses_processed: {}
+    description: ""
+    homepage_url: ""
+    binary_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    source_artifact:
+      url: "https://proxy.golang.org/github.com/mattn/go-isatty/@v/v0.0.8.zip"
+      hash:
+        value: ""
+        algorithm: ""
+    vcs:
+      type: ""
+      url: ""
+      revision: ""
+      path: ""
+    vcs_processed:
+      type: ""
+      url: ""
+      revision: ""
+      path: ""
+  curations: []
+- package:
+    id: "GoMod::github.com/mitchellh/go-wordwrap:v0.0.0-20150314170334-ad45545899c7"
+    purl: "pkg:gomod/github.com%2Fmitchellh%2Fgo-wordwrap@v0.0.0-20150314170334-ad45545899c7"
+    declared_licenses: []
+    declared_licenses_processed: {}
+    description: ""
+    homepage_url: ""
+    binary_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    source_artifact:
+      url: "https://proxy.golang.org/github.com/mitchellh/go-wordwrap/@v/v0.0.0-20150314170334-ad45545899c7.zip"
+      hash:
+        value: ""
+        algorithm: ""
+    vcs:
+      type: ""
+      url: ""
+      revision: ""
+      path: ""
+    vcs_processed:
+      type: ""
+      url: ""
+      revision: ""
+      path: ""
+  curations: []
+- package:
+    id: "GoMod::github.com/onsi/ginkgo:v1.6.0"
+    purl: "pkg:gomod/github.com%2Fonsi%2Fginkgo@v1.6.0"
+    declared_licenses: []
+    declared_licenses_processed: {}
+    description: ""
+    homepage_url: ""
+    binary_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    source_artifact:
+      url: "https://proxy.golang.org/github.com/onsi/ginkgo/@v/v1.6.0.zip"
+      hash:
+        value: ""
+        algorithm: ""
+    vcs:
+      type: ""
+      url: ""
+      revision: ""
+      path: ""
+    vcs_processed:
+      type: ""
+      url: ""
+      revision: ""
+      path: ""
+  curations: []
+- package:
+    id: "GoMod::github.com/onsi/ginkgo:v1.7.0"
+    purl: "pkg:gomod/github.com%2Fonsi%2Fginkgo@v1.7.0"
+    declared_licenses: []
+    declared_licenses_processed: {}
+    description: ""
+    homepage_url: ""
+    binary_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    source_artifact:
+      url: "https://proxy.golang.org/github.com/onsi/ginkgo/@v/v1.7.0.zip"
+      hash:
+        value: ""
+        algorithm: ""
+    vcs:
+      type: ""
+      url: ""
+      revision: ""
+      path: ""
+    vcs_processed:
+      type: ""
+      url: ""
+      revision: ""
+      path: ""
+  curations: []
+- package:
+    id: "GoMod::github.com/onsi/gomega:v1.4.3"
+    purl: "pkg:gomod/github.com%2Fonsi%2Fgomega@v1.4.3"
+    declared_licenses: []
+    declared_licenses_processed: {}
+    description: ""
+    homepage_url: ""
+    binary_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    source_artifact:
+      url: "https://proxy.golang.org/github.com/onsi/gomega/@v/v1.4.3.zip"
+      hash:
+        value: ""
+        algorithm: ""
+    vcs:
+      type: ""
+      url: ""
+      revision: ""
+      path: ""
+    vcs_processed:
+      type: ""
+      url: ""
+      revision: ""
+      path: ""
+  curations: []
+- package:
+    id: "GoMod::github.com/pmezard/go-difflib:v1.0.0"
+    purl: "pkg:gomod/github.com%2Fpmezard%2Fgo-difflib@v1.0.0"
+    declared_licenses: []
+    declared_licenses_processed: {}
+    description: ""
+    homepage_url: ""
+    binary_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    source_artifact:
+      url: "https://proxy.golang.org/github.com/pmezard/go-difflib/@v/v1.0.0.zip"
+      hash:
+        value: ""
+        algorithm: ""
+    vcs:
+      type: ""
+      url: ""
+      revision: ""
+      path: ""
+    vcs_processed:
+      type: ""
+      url: ""
+      revision: ""
+      path: ""
+  curations: []
+- package:
+    id: "GoMod::github.com/sergi/go-diff:v1.0.0"
+    purl: "pkg:gomod/github.com%2Fsergi%2Fgo-diff@v1.0.0"
+    declared_licenses: []
+    declared_licenses_processed: {}
+    description: ""
+    homepage_url: ""
+    binary_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    source_artifact:
+      url: "https://proxy.golang.org/github.com/sergi/go-diff/@v/v1.0.0.zip"
+      hash:
+        value: ""
+        algorithm: ""
+    vcs:
+      type: ""
+      url: ""
+      revision: ""
+      path: ""
+    vcs_processed:
+      type: ""
+      url: ""
+      revision: ""
+      path: ""
+  curations: []
+- package:
+    id: "GoMod::github.com/spf13/pflag:v1.0.2"
+    purl: "pkg:gomod/github.com%2Fspf13%2Fpflag@v1.0.2"
+    declared_licenses: []
+    declared_licenses_processed: {}
+    description: ""
+    homepage_url: ""
+    binary_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    source_artifact:
+      url: "https://proxy.golang.org/github.com/spf13/pflag/@v/v1.0.2.zip"
+      hash:
+        value: ""
+        algorithm: ""
+    vcs:
+      type: ""
+      url: ""
+      revision: ""
+      path: ""
+    vcs_processed:
+      type: ""
+      url: ""
+      revision: ""
+      path: ""
+  curations: []
+- package:
+    id: "GoMod::github.com/stretchr/testify:v1.2.2"
+    purl: "pkg:gomod/github.com%2Fstretchr%2Ftestify@v1.2.2"
+    declared_licenses: []
+    declared_licenses_processed: {}
+    description: ""
+    homepage_url: ""
+    binary_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    source_artifact:
+      url: "https://proxy.golang.org/github.com/stretchr/testify/@v/v1.2.2.zip"
+      hash:
+        value: ""
+        algorithm: ""
+    vcs:
+      type: ""
+      url: ""
+      revision: ""
+      path: ""
+    vcs_processed:
+      type: ""
+      url: ""
+      revision: ""
+      path: ""
+  curations: []
+- package:
+    id: "GoMod::github.com/vmihailenco/msgpack:v3.3.3+incompatible"
+    purl: "pkg:gomod/github.com%2Fvmihailenco%2Fmsgpack@v3.3.3%2Bincompatible"
+    declared_licenses: []
+    declared_licenses_processed: {}
+    description: ""
+    homepage_url: ""
+    binary_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    source_artifact:
+      url: "https://proxy.golang.org/github.com/vmihailenco/msgpack/@v/v3.3.3+incompatible.zip"
+      hash:
+        value: ""
+        algorithm: ""
+    vcs:
+      type: ""
+      url: ""
+      revision: ""
+      path: ""
+    vcs_processed:
+      type: ""
+      url: ""
+      revision: ""
+      path: ""
+  curations: []
+- package:
+    id: "GoMod::github.com/zclconf/go-cty:v0.0.0-20190426224007-b18a157db9e2"
+    purl: "pkg:gomod/github.com%2Fzclconf%2Fgo-cty@v0.0.0-20190426224007-b18a157db9e2"
+    declared_licenses: []
+    declared_licenses_processed: {}
+    description: ""
+    homepage_url: ""
+    binary_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    source_artifact:
+      url: "https://proxy.golang.org/github.com/zclconf/go-cty/@v/v0.0.0-20190426224007-b18a157db9e2.zip"
+      hash:
+        value: ""
+        algorithm: ""
+    vcs:
+      type: ""
+      url: ""
+      revision: ""
+      path: ""
+    vcs_processed:
+      type: ""
+      url: ""
+      revision: ""
+      path: ""
+  curations: []
+- package:
+    id: "GoMod::golang.org/x/crypto:v0.0.0-20190308221718-c2843e01d9a2"
+    purl: "pkg:gomod/golang.org%2Fx%2Fcrypto@v0.0.0-20190308221718-c2843e01d9a2"
+    declared_licenses: []
+    declared_licenses_processed: {}
+    description: ""
+    homepage_url: ""
+    binary_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    source_artifact:
+      url: "https://proxy.golang.org/golang.org/x/crypto/@v/v0.0.0-20190308221718-c2843e01d9a2.zip"
+      hash:
+        value: ""
+        algorithm: ""
+    vcs:
+      type: ""
+      url: ""
+      revision: ""
+      path: ""
+    vcs_processed:
+      type: ""
+      url: ""
+      revision: ""
+      path: ""
+  curations: []
+- package:
+    id: "GoMod::golang.org/x/crypto:v0.0.0-20190426145343-a29dc8fdc734"
+    purl: "pkg:gomod/golang.org%2Fx%2Fcrypto@v0.0.0-20190426145343-a29dc8fdc734"
+    declared_licenses: []
+    declared_licenses_processed: {}
+    description: ""
+    homepage_url: ""
+    binary_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    source_artifact:
+      url: "https://proxy.golang.org/golang.org/x/crypto/@v/v0.0.0-20190426145343-a29dc8fdc734.zip"
+      hash:
+        value: ""
+        algorithm: ""
+    vcs:
+      type: ""
+      url: ""
+      revision: ""
+      path: ""
+    vcs_processed:
+      type: ""
+      url: ""
+      revision: ""
+      path: ""
+  curations: []
+- package:
+    id: "GoMod::golang.org/x/crypto:v0.0.0-20190510104115-cbcb75029529"
+    purl: "pkg:gomod/golang.org%2Fx%2Fcrypto@v0.0.0-20190510104115-cbcb75029529"
+    declared_licenses: []
+    declared_licenses_processed: {}
+    description: ""
+    homepage_url: ""
+    binary_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    source_artifact:
+      url: "https://proxy.golang.org/golang.org/x/crypto/@v/v0.0.0-20190510104115-cbcb75029529.zip"
+      hash:
+        value: ""
+        algorithm: ""
+    vcs:
+      type: ""
+      url: ""
+      revision: ""
+      path: ""
+    vcs_processed:
+      type: ""
+      url: ""
+      revision: ""
+      path: ""
+  curations: []
+- package:
+    id: "GoMod::golang.org/x/mod:v0.1.0"
+    purl: "pkg:gomod/golang.org%2Fx%2Fmod@v0.1.0"
+    declared_licenses: []
+    declared_licenses_processed: {}
+    description: ""
+    homepage_url: ""
+    binary_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    source_artifact:
+      url: "https://proxy.golang.org/golang.org/x/mod/@v/v0.1.0.zip"
+      hash:
+        value: ""
+        algorithm: ""
+    vcs:
+      type: ""
+      url: ""
+      revision: ""
+      path: ""
+    vcs_processed:
+      type: ""
+      url: ""
+      revision: ""
+      path: ""
+  curations: []
+- package:
+    id: "GoMod::golang.org/x/net:v0.0.0-20180724234803-3673e40ba225"
+    purl: "pkg:gomod/golang.org%2Fx%2Fnet@v0.0.0-20180724234803-3673e40ba225"
+    declared_licenses: []
+    declared_licenses_processed: {}
+    description: ""
+    homepage_url: ""
+    binary_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    source_artifact:
+      url: "https://proxy.golang.org/golang.org/x/net/@v/v0.0.0-20180724234803-3673e40ba225.zip"
+      hash:
+        value: ""
+        algorithm: ""
+    vcs:
+      type: ""
+      url: ""
+      revision: ""
+      path: ""
+    vcs_processed:
+      type: ""
+      url: ""
+      revision: ""
+      path: ""
+  curations: []
+- package:
+    id: "GoMod::golang.org/x/net:v0.0.0-20180811021610-c39426892332"
+    purl: "pkg:gomod/golang.org%2Fx%2Fnet@v0.0.0-20180811021610-c39426892332"
+    declared_licenses: []
+    declared_licenses_processed: {}
+    description: ""
+    homepage_url: ""
+    binary_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    source_artifact:
+      url: "https://proxy.golang.org/golang.org/x/net/@v/v0.0.0-20180811021610-c39426892332.zip"
+      hash:
+        value: ""
+        algorithm: ""
+    vcs:
+      type: ""
+      url: ""
+      revision: ""
+      path: ""
+    vcs_processed:
+      type: ""
+      url: ""
+      revision: ""
+      path: ""
+  curations: []
+- package:
+    id: "GoMod::golang.org/x/net:v0.0.0-20180906233101-161cd47e91fd"
+    purl: "pkg:gomod/golang.org%2Fx%2Fnet@v0.0.0-20180906233101-161cd47e91fd"
+    declared_licenses: []
+    declared_licenses_processed: {}
+    description: ""
+    homepage_url: ""
+    binary_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    source_artifact:
+      url: "https://proxy.golang.org/golang.org/x/net/@v/v0.0.0-20180906233101-161cd47e91fd.zip"
+      hash:
+        value: ""
+        algorithm: ""
+    vcs:
+      type: ""
+      url: ""
+      revision: ""
+      path: ""
+    vcs_processed:
+      type: ""
+      url: ""
+      revision: ""
+      path: ""
+  curations: []
+- package:
+    id: "GoMod::golang.org/x/net:v0.0.0-20190108225652-1e06a53dbb7e"
+    purl: "pkg:gomod/golang.org%2Fx%2Fnet@v0.0.0-20190108225652-1e06a53dbb7e"
+    declared_licenses: []
+    declared_licenses_processed: {}
+    description: ""
+    homepage_url: ""
+    binary_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    source_artifact:
+      url: "https://proxy.golang.org/golang.org/x/net/@v/v0.0.0-20190108225652-1e06a53dbb7e.zip"
+      hash:
+        value: ""
+        algorithm: ""
+    vcs:
+      type: ""
+      url: ""
+      revision: ""
+      path: ""
+    vcs_processed:
+      type: ""
+      url: ""
+      revision: ""
+      path: ""
+  curations: []
+- package:
+    id: "GoMod::golang.org/x/net:v0.0.0-20190404232315-eb5bcb51f2a3"
+    purl: "pkg:gomod/golang.org%2Fx%2Fnet@v0.0.0-20190404232315-eb5bcb51f2a3"
+    declared_licenses: []
+    declared_licenses_processed: {}
+    description: ""
+    homepage_url: ""
+    binary_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    source_artifact:
+      url: "https://proxy.golang.org/golang.org/x/net/@v/v0.0.0-20190404232315-eb5bcb51f2a3.zip"
+      hash:
+        value: ""
+        algorithm: ""
+    vcs:
+      type: ""
+      url: ""
+      revision: ""
+      path: ""
+    vcs_processed:
+      type: ""
+      url: ""
+      revision: ""
+      path: ""
+  curations: []
+- package:
+    id: "GoMod::golang.org/x/net:v0.0.0-20190502183928-7f726cade0ab"
+    purl: "pkg:gomod/golang.org%2Fx%2Fnet@v0.0.0-20190502183928-7f726cade0ab"
+    declared_licenses: []
+    declared_licenses_processed: {}
+    description: ""
+    homepage_url: ""
+    binary_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    source_artifact:
+      url: "https://proxy.golang.org/golang.org/x/net/@v/v0.0.0-20190502183928-7f726cade0ab.zip"
+      hash:
+        value: ""
+        algorithm: ""
+    vcs:
+      type: ""
+      url: ""
+      revision: ""
+      path: ""
+    vcs_processed:
+      type: ""
+      url: ""
+      revision: ""
+      path: ""
+  curations: []
+- package:
+    id: "GoMod::golang.org/x/oauth2:v0.0.0-20190226205417-e64efc72b421"
+    purl: "pkg:gomod/golang.org%2Fx%2Foauth2@v0.0.0-20190226205417-e64efc72b421"
+    declared_licenses: []
+    declared_licenses_processed: {}
+    description: ""
+    homepage_url: ""
+    binary_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    source_artifact:
+      url: "https://proxy.golang.org/golang.org/x/oauth2/@v/v0.0.0-20190226205417-e64efc72b421.zip"
+      hash:
+        value: ""
+        algorithm: ""
+    vcs:
+      type: ""
+      url: ""
+      revision: ""
+      path: ""
+    vcs_processed:
+      type: ""
+      url: ""
+      revision: ""
+      path: ""
+  curations: []
+- package:
+    id: "GoMod::golang.org/x/sync:v0.0.0-20180314180146-1d60e4601c6f"
+    purl: "pkg:gomod/golang.org%2Fx%2Fsync@v0.0.0-20180314180146-1d60e4601c6f"
+    declared_licenses: []
+    declared_licenses_processed: {}
+    description: ""
+    homepage_url: ""
+    binary_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    source_artifact:
+      url: "https://proxy.golang.org/golang.org/x/sync/@v/v0.0.0-20180314180146-1d60e4601c6f.zip"
+      hash:
+        value: ""
+        algorithm: ""
+    vcs:
+      type: ""
+      url: ""
+      revision: ""
+      path: ""
+    vcs_processed:
+      type: ""
+      url: ""
+      revision: ""
+      path: ""
+  curations: []
+- package:
+    id: "GoMod::golang.org/x/sync:v0.0.0-20181221193216-37e7f081c4d4"
+    purl: "pkg:gomod/golang.org%2Fx%2Fsync@v0.0.0-20181221193216-37e7f081c4d4"
+    declared_licenses: []
+    declared_licenses_processed: {}
+    description: ""
+    homepage_url: ""
+    binary_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    source_artifact:
+      url: "https://proxy.golang.org/golang.org/x/sync/@v/v0.0.0-20181221193216-37e7f081c4d4.zip"
+      hash:
+        value: ""
+        algorithm: ""
+    vcs:
+      type: ""
+      url: ""
+      revision: ""
+      path: ""
+    vcs_processed:
+      type: ""
+      url: ""
+      revision: ""
+      path: ""
+  curations: []
+- package:
+    id: "GoMod::golang.org/x/sync:v0.0.0-20190423024810-112230192c58"
+    purl: "pkg:gomod/golang.org%2Fx%2Fsync@v0.0.0-20190423024810-112230192c58"
+    declared_licenses: []
+    declared_licenses_processed: {}
+    description: ""
+    homepage_url: ""
+    binary_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    source_artifact:
+      url: "https://proxy.golang.org/golang.org/x/sync/@v/v0.0.0-20190423024810-112230192c58.zip"
+      hash:
+        value: ""
+        algorithm: ""
+    vcs:
+      type: ""
+      url: ""
+      revision: ""
+      path: ""
+    vcs_processed:
+      type: ""
+      url: ""
+      revision: ""
+      path: ""
+  curations: []
+- package:
+    id: "GoMod::golang.org/x/sys:v0.0.0-20180909124046-d0be0721c37e"
+    purl: "pkg:gomod/golang.org%2Fx%2Fsys@v0.0.0-20180909124046-d0be0721c37e"
+    declared_licenses: []
+    declared_licenses_processed: {}
+    description: ""
+    homepage_url: ""
+    binary_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    source_artifact:
+      url: "https://proxy.golang.org/golang.org/x/sys/@v/v0.0.0-20180909124046-d0be0721c37e.zip"
+      hash:
+        value: ""
+        algorithm: ""
+    vcs:
+      type: ""
+      url: ""
+      revision: ""
+      path: ""
+    vcs_processed:
+      type: ""
+      url: ""
+      revision: ""
+      path: ""
+  curations: []
+- package:
+    id: "GoMod::golang.org/x/sys:v0.0.0-20190215142949-d0b11bdaac8a"
+    purl: "pkg:gomod/golang.org%2Fx%2Fsys@v0.0.0-20190215142949-d0b11bdaac8a"
+    declared_licenses: []
+    declared_licenses_processed: {}
+    description: ""
+    homepage_url: ""
+    binary_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    source_artifact:
+      url: "https://proxy.golang.org/golang.org/x/sys/@v/v0.0.0-20190215142949-d0b11bdaac8a.zip"
+      hash:
+        value: ""
+        algorithm: ""
+    vcs:
+      type: ""
+      url: ""
+      revision: ""
+      path: ""
+    vcs_processed:
+      type: ""
+      url: ""
+      revision: ""
+      path: ""
+  curations: []
+- package:
+    id: "GoMod::golang.org/x/sys:v0.0.0-20190222072716-a9d3bda3a223"
+    purl: "pkg:gomod/golang.org%2Fx%2Fsys@v0.0.0-20190222072716-a9d3bda3a223"
+    declared_licenses: []
+    declared_licenses_processed: {}
+    description: ""
+    homepage_url: ""
+    binary_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    source_artifact:
+      url: "https://proxy.golang.org/golang.org/x/sys/@v/v0.0.0-20190222072716-a9d3bda3a223.zip"
+      hash:
+        value: ""
+        algorithm: ""
+    vcs:
+      type: ""
+      url: ""
+      revision: ""
+      path: ""
+    vcs_processed:
+      type: ""
+      url: ""
+      revision: ""
+      path: ""
+  curations: []
+- package:
+    id: "GoMod::golang.org/x/sys:v0.0.0-20190412213103-97732733099d"
+    purl: "pkg:gomod/golang.org%2Fx%2Fsys@v0.0.0-20190412213103-97732733099d"
+    declared_licenses: []
+    declared_licenses_processed: {}
+    description: ""
+    homepage_url: ""
+    binary_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    source_artifact:
+      url: "https://proxy.golang.org/golang.org/x/sys/@v/v0.0.0-20190412213103-97732733099d.zip"
+      hash:
+        value: ""
+        algorithm: ""
+    vcs:
+      type: ""
+      url: ""
+      revision: ""
+      path: ""
+    vcs_processed:
+      type: ""
+      url: ""
+      revision: ""
+      path: ""
+  curations: []
+- package:
+    id: "GoMod::golang.org/x/sys:v0.0.0-20190502175342-a43fa875dd82"
+    purl: "pkg:gomod/golang.org%2Fx%2Fsys@v0.0.0-20190502175342-a43fa875dd82"
+    declared_licenses: []
+    declared_licenses_processed: {}
+    description: ""
+    homepage_url: ""
+    binary_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    source_artifact:
+      url: "https://proxy.golang.org/golang.org/x/sys/@v/v0.0.0-20190502175342-a43fa875dd82.zip"
+      hash:
+        value: ""
+        algorithm: ""
+    vcs:
+      type: ""
+      url: ""
+      revision: ""
+      path: ""
+    vcs_processed:
+      type: ""
+      url: ""
+      revision: ""
+      path: ""
+  curations: []
+- package:
+    id: "GoMod::golang.org/x/sys:v0.0.0-20191008105621-543471e840be"
+    purl: "pkg:gomod/golang.org%2Fx%2Fsys@v0.0.0-20191008105621-543471e840be"
+    declared_licenses: []
+    declared_licenses_processed: {}
+    description: ""
+    homepage_url: ""
+    binary_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    source_artifact:
+      url: "https://proxy.golang.org/golang.org/x/sys/@v/v0.0.0-20191008105621-543471e840be.zip"
+      hash:
+        value: ""
+        algorithm: ""
+    vcs:
+      type: ""
+      url: ""
+      revision: ""
+      path: ""
+    vcs_processed:
+      type: ""
+      url: ""
+      revision: ""
+      path: ""
+  curations: []
+- package:
+    id: "GoMod::golang.org/x/text:v0.3.0"
+    purl: "pkg:gomod/golang.org%2Fx%2Ftext@v0.3.0"
+    declared_licenses: []
+    declared_licenses_processed: {}
+    description: ""
+    homepage_url: ""
+    binary_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    source_artifact:
+      url: "https://proxy.golang.org/golang.org/x/text/@v/v0.3.0.zip"
+      hash:
+        value: ""
+        algorithm: ""
+    vcs:
+      type: ""
+      url: ""
+      revision: ""
+      path: ""
+    vcs_processed:
+      type: ""
+      url: ""
+      revision: ""
+      path: ""
+  curations: []
+- package:
+    id: "GoMod::golang.org/x/text:v0.3.2"
+    purl: "pkg:gomod/golang.org%2Fx%2Ftext@v0.3.2"
+    declared_licenses: []
+    declared_licenses_processed: {}
+    description: ""
+    homepage_url: ""
+    binary_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    source_artifact:
+      url: "https://proxy.golang.org/golang.org/x/text/@v/v0.3.2.zip"
+      hash:
+        value: ""
+        algorithm: ""
+    vcs:
+      type: ""
+      url: ""
+      revision: ""
+      path: ""
+    vcs_processed:
+      type: ""
+      url: ""
+      revision: ""
+      path: ""
+  curations: []
+- package:
+    id: "GoMod::golang.org/x/tools:v0.0.0-20180917221912-90fa682c2a6e"
+    purl: "pkg:gomod/golang.org%2Fx%2Ftools@v0.0.0-20180917221912-90fa682c2a6e"
+    declared_licenses: []
+    declared_licenses_processed: {}
+    description: ""
+    homepage_url: ""
+    binary_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    source_artifact:
+      url: "https://proxy.golang.org/golang.org/x/tools/@v/v0.0.0-20180917221912-90fa682c2a6e.zip"
+      hash:
+        value: ""
+        algorithm: ""
+    vcs:
+      type: ""
+      url: ""
+      revision: ""
+      path: ""
+    vcs_processed:
+      type: ""
+      url: ""
+      revision: ""
+      path: ""
+  curations: []
+- package:
+    id: "GoMod::google.golang.org/appengine:v1.1.0"
+    purl: "pkg:gomod/google.golang.org%2Fappengine@v1.1.0"
+    declared_licenses: []
+    declared_licenses_processed: {}
+    description: ""
+    homepage_url: ""
+    binary_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    source_artifact:
+      url: "https://proxy.golang.org/google.golang.org/appengine/@v/v1.1.0.zip"
+      hash:
+        value: ""
+        algorithm: ""
+    vcs:
+      type: ""
+      url: ""
+      revision: ""
+      path: ""
+    vcs_processed:
+      type: ""
+      url: ""
+      revision: ""
+      path: ""
+  curations: []
+- package:
+    id: "GoMod::google.golang.org/appengine:v1.4.0"
+    purl: "pkg:gomod/google.golang.org%2Fappengine@v1.4.0"
+    declared_licenses: []
+    declared_licenses_processed: {}
+    description: ""
+    homepage_url: ""
+    binary_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    source_artifact:
+      url: "https://proxy.golang.org/google.golang.org/appengine/@v/v1.4.0.zip"
+      hash:
+        value: ""
+        algorithm: ""
+    vcs:
+      type: ""
+      url: ""
+      revision: ""
+      path: ""
+    vcs_processed:
+      type: ""
+      url: ""
+      revision: ""
+      path: ""
+  curations: []
+- package:
+    id: "GoMod::gopkg.in/check.v1:v0.0.0-20161208181325-20d25e280405"
+    purl: "pkg:gomod/gopkg.in%2Fcheck.v1@v0.0.0-20161208181325-20d25e280405"
+    declared_licenses: []
+    declared_licenses_processed: {}
+    description: ""
+    homepage_url: ""
+    binary_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    source_artifact:
+      url: "https://proxy.golang.org/gopkg.in/check.v1/@v/v0.0.0-20161208181325-20d25e280405.zip"
+      hash:
+        value: ""
+        algorithm: ""
+    vcs:
+      type: ""
+      url: ""
+      revision: ""
+      path: ""
+    vcs_processed:
+      type: ""
+      url: ""
+      revision: ""
+      path: ""
+  curations: []
+- package:
+    id: "GoMod::gopkg.in/check.v1:v1.0.0-20180628173108-788fd7840127"
+    purl: "pkg:gomod/gopkg.in%2Fcheck.v1@v1.0.0-20180628173108-788fd7840127"
+    declared_licenses: []
+    declared_licenses_processed: {}
+    description: ""
+    homepage_url: ""
+    binary_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    source_artifact:
+      url: "https://proxy.golang.org/gopkg.in/check.v1/@v/v1.0.0-20180628173108-788fd7840127.zip"
+      hash:
+        value: ""
+        algorithm: ""
+    vcs:
+      type: ""
+      url: ""
+      revision: ""
+      path: ""
+    vcs_processed:
+      type: ""
+      url: ""
+      revision: ""
+      path: ""
+  curations: []
+- package:
+    id: "GoMod::gopkg.in/fsnotify.v1:v1.4.7"
+    purl: "pkg:gomod/gopkg.in%2Ffsnotify.v1@v1.4.7"
+    declared_licenses: []
+    declared_licenses_processed: {}
+    description: ""
+    homepage_url: ""
+    binary_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    source_artifact:
+      url: "https://proxy.golang.org/gopkg.in/fsnotify.v1/@v/v1.4.7.zip"
+      hash:
+        value: ""
+        algorithm: ""
+    vcs:
+      type: ""
+      url: ""
+      revision: ""
+      path: ""
+    vcs_processed:
+      type: ""
+      url: ""
+      revision: ""
+      path: ""
+  curations: []
+- package:
+    id: "GoMod::gopkg.in/tomb.v1:v1.0.0-20141024135613-dd632973f1e7"
+    purl: "pkg:gomod/gopkg.in%2Ftomb.v1@v1.0.0-20141024135613-dd632973f1e7"
+    declared_licenses: []
+    declared_licenses_processed: {}
+    description: ""
+    homepage_url: ""
+    binary_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    source_artifact:
+      url: "https://proxy.golang.org/gopkg.in/tomb.v1/@v/v1.0.0-20141024135613-dd632973f1e7.zip"
+      hash:
+        value: ""
+        algorithm: ""
+    vcs:
+      type: ""
+      url: ""
+      revision: ""
+      path: ""
+    vcs_processed:
+      type: ""
+      url: ""
+      revision: ""
+      path: ""
+  curations: []
+- package:
+    id: "GoMod::gopkg.in/yaml.v2:v2.2.1"
+    purl: "pkg:gomod/gopkg.in%2Fyaml.v2@v2.2.1"
+    declared_licenses: []
+    declared_licenses_processed: {}
+    description: ""
+    homepage_url: ""
+    binary_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    source_artifact:
+      url: "https://proxy.golang.org/gopkg.in/yaml.v2/@v/v2.2.1.zip"
+      hash:
+        value: ""
+        algorithm: ""
+    vcs:
+      type: ""
+      url: ""
+      revision: ""
+      path: ""
+    vcs_processed:
+      type: ""
+      url: ""
+      revision: ""
+      path: ""
+  curations: []
+- package:
+    id: "GoMod::gopkg.in/yaml.v2:v2.2.2"
+    purl: "pkg:gomod/gopkg.in%2Fyaml.v2@v2.2.2"
+    declared_licenses: []
+    declared_licenses_processed: {}
+    description: ""
+    homepage_url: ""
+    binary_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    source_artifact:
+      url: "https://proxy.golang.org/gopkg.in/yaml.v2/@v/v2.2.2.zip"
+      hash:
+        value: ""
+        algorithm: ""
+    vcs:
+      type: ""
+      url: ""
+      revision: ""
+      path: ""
+    vcs_processed:
+      type: ""
+      url: ""
+      revision: ""
+      path: ""
+  curations: []
+- package:
+    id: "GoMod::howett.net/plist:v0.0.0-20181124034731-591f970eefbb"
+    purl: "pkg:gomod/howett.net%2Fplist@v0.0.0-20181124034731-591f970eefbb"
+    declared_licenses: []
+    declared_licenses_processed: {}
+    description: ""
+    homepage_url: ""
+    binary_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    source_artifact:
+      url: "https://proxy.golang.org/howett.net/plist/@v/v0.0.0-20181124034731-591f970eefbb.zip"
+      hash:
+        value: ""
+        algorithm: ""
+    vcs:
+      type: ""
+      url: ""
+      revision: ""
+      path: ""
+    vcs_processed:
+      type: ""
+      url: ""
+      revision: ""
+      path: ""
+  curations: []
