@@ -204,7 +204,7 @@ abstract class VersionControlSystem {
      *
      * @return An object describing the downloaded working tree.
      *
-     * @throws DownloadException In case the download failed.
+     * @throws DownloadException in case the download failed.
      */
     open fun download(
         pkg: Package,
@@ -286,13 +286,16 @@ abstract class VersionControlSystem {
     /**
      * Initialize the working tree without checking out any files yet.
      *
+     * @throws IOException in case the initialization failed.
+     *
      * TODO: Make this abstract once all VCS implementation have been ported.
      */
     open fun initWorkingTree(targetDir: File, vcs: VcsInfo): WorkingTree = getWorkingTree(targetDir)
 
     /**
      * Update the [working tree][workingTree] by checking out the given [revision], optionally limited to the given
-     * [path] and [recursively][recursive] updating any nested working trees.
+     * [path] and [recursively][recursive] updating any nested working trees. Return true on success and false
+     * otherwise.
      *
      * TODO: Make this abstract once all VCS implementation have been ported.
      */
