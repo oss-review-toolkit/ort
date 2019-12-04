@@ -296,7 +296,12 @@ abstract class VersionControlSystem {
      *
      * TODO: Make this abstract once all VCS implementation have been ported.
      */
-    open fun updateWorkingTree(workingTree: WorkingTree, revision: String, path: String, recursive: Boolean) = false
+    open fun updateWorkingTree(
+        workingTree: WorkingTree,
+        revision: String,
+        path: String = "",
+        recursive: Boolean = false
+    ) = false
 
     /**
      * Check whether the given [revision] is likely to name a fixed revision that does not move.
