@@ -93,8 +93,6 @@ class GitRepo : GitBase() {
      * Clones the Git repositories defined in the manifest file using the Git Repo tool. The manifest file is checked
      * out from the repository defined in [pkg.vcsProcessed][Package.vcsProcessed], its location is defined by
      * [pkg.vcsProcessed.path][VcsInfo.path].
-     *
-     * @throws DownloadException In case the download failed.
      */
     override fun download(
         pkg: Package, targetDir: File, allowMovingRevisions: Boolean,

@@ -102,7 +102,7 @@ class Subversion : VersionControlSystem(), CommandLineTool {
                         if (dirEntry.name.isNotEmpty()) refs += dirEntry.relativePath
                     }
                 } catch (e: SVNException) {
-                    throw DownloadException("Unable to list remote refs for $type repository at $remoteUrl.")
+                    throw IOException("Unable to list remote refs for $type repository at $remoteUrl.")
                 }
 
                 return refs
@@ -150,6 +150,7 @@ class Subversion : VersionControlSystem(), CommandLineTool {
             val revision = try {
                 getWorkingTree(targetDir).guessRevisionName(pkg.id.name, pkg.id.version)
             } catch (e: IOException) {
+                // Enrich the IOException with a more specific message.
                 throw IOException("Unable to determine a revision to checkout.", e)
             }
 

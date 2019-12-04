@@ -190,6 +190,7 @@ class Cvs : VersionControlSystem(), CommandLineTool {
                         }
                     }
                 } catch (e: IOException) {
+                    // Enrich the IOException with a more specific message.
                     throw IOException("Unable to determine a revision to checkout.", e)
                 } finally {
                     // Clean the temporarily updated working tree again.
@@ -208,9 +209,9 @@ class Cvs : VersionControlSystem(), CommandLineTool {
 
             pkg.vcsProcessed.path.let {
                 if (it.isNotEmpty() && !workingTree.workingDir.resolve(it).exists()) {
-                    throw DownloadException(
-                        "The $type working directory at '${workingTree.workingDir}' does not " +
-                                "contain the requested path '$it'."
+                    throw IOException(
+                        "The $type working directory at '${workingTree.workingDir}' does not contain the requested " +
+                                "path '$it'."
                     )
                 }
             }
