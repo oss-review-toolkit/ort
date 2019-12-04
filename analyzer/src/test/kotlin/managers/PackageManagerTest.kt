@@ -50,6 +50,7 @@ class PackageManagerTest : WordSpec({
             managedFilesByName["Conan"] shouldBe listOf(File(projectDir, "conanfile.py"))
             managedFilesByName["DotNet"] shouldBe listOf(File(projectDir, "test.csproj"))
             managedFilesByName["GoDep"] shouldBe listOf(File(projectDir, "Gopkg.toml"))
+            managedFilesByName["GoMod"] shouldBe listOf(File(projectDir, "go.mod"))
             managedFilesByName["Gradle"] shouldBe listOf(File(projectDir, "build.gradle"))
             managedFilesByName["Maven"] shouldBe listOf(File(projectDir, "pom.xml"))
             managedFilesByName["NPM"] shouldBe listOf(File(projectDir, "package.json"))
