@@ -76,6 +76,16 @@ class GoMod(
 
     override fun command(workingDir: File?) = "go"
 
+    override fun mapDefinitionFiles(definitionFiles: List<File>): List<File> =
+        definitionFiles.filterNot { definitionFile ->
+            definitionFile
+                .parentFile
+                .relativeTo(analysisRoot)
+                .invariantSeparatorsPath
+                .split('/')
+                .contains("vendor")
+        }
+
     override fun resolveDependencies(definitionFile: File): ProjectAnalyzerResult? {
         val projectDir = definitionFile.parentFile
 
