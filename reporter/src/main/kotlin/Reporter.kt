@@ -23,6 +23,7 @@ import com.here.ort.model.AnalyzerResult
 import com.here.ort.model.OrtResult
 import com.here.ort.model.ScanRecord
 import com.here.ort.model.config.CopyrightGarbage
+import com.here.ort.model.config.OrtConfiguration
 import com.here.ort.model.licenses.LicenseConfiguration
 import com.here.ort.reporter.reporters.DefaultLicenseTextProvider
 
@@ -62,6 +63,7 @@ interface Reporter {
     fun generateReport(
         outputStream: OutputStream,
         ortResult: OrtResult,
+        ortConfig: OrtConfiguration = OrtConfiguration(),
         resolutionProvider: ResolutionProvider = DefaultResolutionProvider(),
         licenseTextProvider: LicenseTextProvider = DefaultLicenseTextProvider(),
         copyrightGarbage: CopyrightGarbage = CopyrightGarbage(),

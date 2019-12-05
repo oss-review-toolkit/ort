@@ -21,6 +21,7 @@ package com.here.ort.reporter.reporters
 
 import com.here.ort.model.OrtResult
 import com.here.ort.model.config.CopyrightGarbage
+import com.here.ort.model.config.OrtConfiguration
 import com.here.ort.model.jsonMapper
 import com.here.ort.model.licenses.LicenseConfiguration
 import com.here.ort.reporter.LicenseTextProvider
@@ -36,6 +37,7 @@ class WebAppReporter : Reporter {
     override fun generateReport(
         outputStream: OutputStream,
         ortResult: OrtResult,
+        ortConfig: OrtConfiguration,
         resolutionProvider: ResolutionProvider,
         licenseTextProvider: LicenseTextProvider,
         copyrightGarbage: CopyrightGarbage,

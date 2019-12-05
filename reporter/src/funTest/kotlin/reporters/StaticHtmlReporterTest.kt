@@ -41,7 +41,7 @@ private fun generateReport(ortResult: OrtResult) =
         StaticHtmlReporter().generateReport(
             outputStream,
             ortResult,
-            resolutionProvider
+            resolutionProvider = resolutionProvider
         )
     }.toString("UTF-8")
 
