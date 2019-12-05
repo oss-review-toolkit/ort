@@ -117,7 +117,7 @@ packages:
       spdx_expression: "MIT"
     description: "Nokogiri (鋸) is an HTML, XML, SAX, and Reader parser.  Among\nNokogiri's\
       \ many features is the ability to search documents via XPath\nor CSS3 selectors."
-    homepage_url: ""
+    homepage_url: "https://nokogiri.org"
     binary_artifact:
       url: ""
       hash:
