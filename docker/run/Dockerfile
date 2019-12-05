@@ -65,7 +65,6 @@ RUN apt-get update && \
         cvs \
         git \
         mercurial \
-        subversion \
         # Install package managers (in versions known to work).
         bundler=$BUNDLER_VERSION \
         cargo=$CARGO_VERSION \
