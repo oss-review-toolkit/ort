@@ -34,7 +34,7 @@ val NON_LICENSE_FILENAMES = listOf(
 /**
  * A list of directories used by version control systems to store metadata.
  */
-private val VCS_DIRECTORIES = listOf(
+internal val VCS_DIRECTORIES = listOf(
     ".git",
     ".hg",
     ".repo",
