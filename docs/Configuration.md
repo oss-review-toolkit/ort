@@ -85,6 +85,7 @@ these examples match the configuration of your project.
 * [bundler.ort.yml](examples/bundler.ort.yml)
 * [cargo.ort.yml](examples/cargo.ort.yml)
 * [go-dep.ort.yml](examples/go-dep.ort.yml)
+* [go-mod.ort.yml](examples/go-mod.ort.yml)
 * [gradle.ort.yml](examples/gradle.ort.yml)
 * [gradle-android.ort.yml](examples/gradle-android.ort.yml)
 * [maven.ort.yml](examples/maven.ort.yml)
