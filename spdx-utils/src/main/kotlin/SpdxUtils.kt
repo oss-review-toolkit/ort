@@ -96,12 +96,8 @@ private fun sha1sum(file: File): String =
 /**
  * Calculate the [SPDX package verification code][1] for all files in a [directory]. If [directory] points to a file
  * instead of a directory the verification code for the single file is returned.
- * All files with the extension ".spdx" are automatically excluded from the generated code. Additionally files from the
- * following VCS directories are excluded:
- * * .git/
- * * .hg/
- * * .svn/
- * * CVS/
+ * All files with the extension ".spdx" are automatically excluded from the generated code. Additionally files from
+ * [VCS directories][VCS_DIRECTORIES] are excluded.
  *
  * [1]: https://spdx.org/spdx_specification_2_0_html#h.2p2csry
  */
