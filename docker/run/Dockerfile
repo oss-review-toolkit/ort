@@ -38,6 +38,7 @@ ENV \
     CONAN_VERSION=1.18.0 \
     FLUTTER_VERSION=v1.7.8+hotfix.3-stable \
     GO_DEP_VERSION=0.5.4-2 \
+    GO_VERSION=1.13.4 \
     HASKELL_STACK_VERSION=1.7.1-3 \
     NPM_VERSION=5.8.0+DS6-4 \
     PYTHON_PIP_VERSION=18.1-5 \
@@ -50,7 +51,7 @@ ENV \
     # Installation directories.
     FLUTTER_HOME=/opt/flutter
 
-ENV PATH="$PATH:$FLUTTER_HOME/bin:$FLUTTER_HOME/bin/cache/dart-sdk/bin"
+ENV PATH="$PATH:$FLUTTER_HOME/bin:$FLUTTER_HOME/bin/cache/dart-sdk/bin:/opt/go/bin"
 
 # Apt install commands.
 RUN apt-get update && \
@@ -93,6 +94,10 @@ RUN \
     flutter config --no-analytics && \
     flutter doctor && \
     pip install conan==$CONAN_VERSION && \
+    # Install golang in order to have `go mod` as package manager.
+    curl -s https://dl.google.com/go/go$GO_VERSION.linux-amd64.tar.gz -o go.tgz && \
+    tar -C /opt -xzf go.tgz && \
+    rm go.tgz && \
     # Add scanners (in versions known to work).
     curl -sSL https://github.com/nexB/scancode-toolkit/archive/v$SCANCODE_VERSION.tar.gz | \
         tar -zxC /usr/local && \
