@@ -121,14 +121,10 @@ class SpdxUtilsTest : WordSpec() {
 
             "exclude VCS directories" {
                 setupTempFile("file", "file")
-                tempDir!!.resolve(".git").mkdir()
-                tempDir!!.resolve(".hg").mkdir()
-                tempDir!!.resolve(".svn").mkdir()
-                tempDir!!.resolve("CVS").mkdir()
-                setupTempFile(".git/git", "git")
-                setupTempFile(".hg/hg", "hg")
-                setupTempFile(".svn/svn", "svn")
-                setupTempFile("CVS/cvs", "cvs")
+                VCS_DIRECTORIES.forEach {
+                    tempDir!!.resolve(it).mkdir()
+                    setupTempFile("$it/dummy", "dummy")
+                }
 
                 calculatePackageVerificationCode(tempDir!!) shouldBe
                         "81e250a78cc6386afc25fa57ad6eaee31394019b"
