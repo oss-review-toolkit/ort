@@ -27,6 +27,7 @@ import com.here.ort.model.RemoteArtifact
 import com.here.ort.model.Severity
 import com.here.ort.model.VcsInfo
 import com.here.ort.model.config.CopyrightGarbage
+import com.here.ort.model.config.OrtConfiguration
 import com.here.ort.model.config.RepositoryConfiguration
 import com.here.ort.model.licenses.LicenseConfiguration
 import com.here.ort.model.yamlMapper
@@ -59,6 +60,7 @@ class StaticHtmlReporter : Reporter {
     override fun generateReport(
         outputStream: OutputStream,
         ortResult: OrtResult,
+        ortConfig: OrtConfiguration,
         resolutionProvider: ResolutionProvider,
         licenseTextProvider: LicenseTextProvider,
         copyrightGarbage: CopyrightGarbage,

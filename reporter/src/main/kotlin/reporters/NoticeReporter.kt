@@ -23,6 +23,7 @@ import com.here.ort.model.Identifier
 import com.here.ort.model.LicenseFindingsMap
 import com.here.ort.model.OrtResult
 import com.here.ort.model.config.CopyrightGarbage
+import com.here.ort.model.config.OrtConfiguration
 import com.here.ort.model.licenses.LicenseConfiguration
 import com.here.ort.model.processStatements
 import com.here.ort.model.removeGarbage
@@ -89,6 +90,7 @@ class NoticeReporter : Reporter {
     override fun generateReport(
         outputStream: OutputStream,
         ortResult: OrtResult,
+        ortConfig: OrtConfiguration,
         resolutionProvider: ResolutionProvider,
         licenseTextProvider: LicenseTextProvider,
         copyrightGarbage: CopyrightGarbage,
