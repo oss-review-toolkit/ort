@@ -169,6 +169,7 @@ object ReporterCommand : CommandWithHelp() {
                 reporter.generateReport(
                     file.outputStream(),
                     ortResult,
+                    config,
                     resolutionProvider,
                     DefaultLicenseTextProvider(customLicenseTextsDir),
                     copyrightGarbage,

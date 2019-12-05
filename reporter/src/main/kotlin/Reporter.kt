@@ -23,6 +23,7 @@ import com.here.ort.model.AnalyzerResult
 import com.here.ort.model.OrtResult
 import com.here.ort.model.ScanRecord
 import com.here.ort.model.config.CopyrightGarbage
+import com.here.ort.model.config.OrtConfiguration
 import com.here.ort.model.licenses.LicenseConfiguration
 import com.here.ort.reporter.reporters.DefaultLicenseTextProvider
 
@@ -59,9 +60,11 @@ interface Reporter {
      * The report may be post-processed by a [postProcessingScript] before it is written to [outputStream] whereas the
      * [licenseConfiguration] is passed as a parameter to that script.
      */
+    @Suppress("LongParameterList")
     fun generateReport(
         outputStream: OutputStream,
         ortResult: OrtResult,
+        ortConfig: OrtConfiguration = OrtConfiguration(),
         resolutionProvider: ResolutionProvider = DefaultResolutionProvider(),
         licenseTextProvider: LicenseTextProvider = DefaultLicenseTextProvider(),
         copyrightGarbage: CopyrightGarbage = CopyrightGarbage(),
