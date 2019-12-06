@@ -65,7 +65,7 @@ class StaticHtmlReporter : Reporter {
         licenseTextProvider: LicenseTextProvider,
         copyrightGarbage: CopyrightGarbage,
         licenseConfiguration: LicenseConfiguration,
-        postProcessingScript: String?
+        preProcessingScript: String?
     ) {
         val tabularScanRecord = ReportTableModelMapper(resolutionProvider).mapToReportTableModel(ortResult)
         val html = renderHtml(tabularScanRecord)

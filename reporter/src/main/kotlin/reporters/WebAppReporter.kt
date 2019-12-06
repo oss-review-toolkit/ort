@@ -42,7 +42,7 @@ class WebAppReporter : Reporter {
         licenseTextProvider: LicenseTextProvider,
         copyrightGarbage: CopyrightGarbage,
         licenseConfiguration: LicenseConfiguration,
-        postProcessingScript: String?
+        preProcessingScript: String?
     ) {
         val template = javaClass.classLoader.getResource("scan-report-template.html").readText()
         val resultJson = jsonMapper.writeValueAsString(ortResult)
