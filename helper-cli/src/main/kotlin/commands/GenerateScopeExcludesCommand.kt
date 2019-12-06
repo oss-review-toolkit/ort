@@ -112,6 +112,13 @@ private fun getScopeExcludesForPackageManager(packageManagerName: String): List<
                 comment = "Development dependencies."
             )
         )
+        "GoMod" -> listOf(
+            ScopeExclude(
+                name = "all",
+                reason = ScopeExcludeReason.BUILD_TOOL_OF,
+                comment = "Dependencies used to build all targets including non-released artifacts like tests."
+            )
+        )
         "Gradle" -> listOf(
             ScopeExclude(
                 name = "checkstyle",
