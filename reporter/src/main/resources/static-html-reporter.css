@@ -48,7 +48,7 @@ ul {
     padding: 0.4em 0.4em 0.4em 0.4em;
     margin-bottom: 1em;
     top: -10px;
-    width: 110px;
+    width: max-content;
 }
 
 .ort-report-metadata {

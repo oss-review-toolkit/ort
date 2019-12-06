@@ -1,0 +1,4695 @@
+{
+  "repository" : {
+    "vcs" : {
+      "type" : "Git",
+      "url" : "ssh://gerrit.it.here.com:29418/olp/components/live-weather/platform-weather-schema",
+      "revision" : "dca4cb02e89974faead1b2ea9980043b5ed2f226",
+      "path" : ""
+    },
+    "vcs_processed" : {
+      "type" : "Git",
+      "url" : "ssh://gerrit.it.here.com:29418/olp/components/live-weather/platform-weather-schema",
+      "revision" : "dca4cb02e89974faead1b2ea9980043b5ed2f226",
+      "path" : ""
+    },
+    "config" : { }
+  },
+  "analyzer" : {
+    "start_time" : "2019-10-15T09:03:45.584080Z",
+    "end_time" : "2019-10-15T09:03:49.810097Z",
+    "environment" : {
+      "ort_version" : "0.1.0-beta.0.1+c1173bf",
+      "java_version" : "10",
+      "os" : "Linux",
+      "variables" : {
+        "JAVA_HOME" : "/opt/jdk-10",
+        "ANDROID_HOME" : "/opt/android-sdk-linux"
+      },
+      "tool_versions" : { }
+    },
+    "config" : {
+      "ignore_tool_versions" : false,
+      "allow_dynamic_versions" : false
+    },
+    "result" : {
+      "projects" : [ {
+        "id" : "Maven:com.here.platform.schema.weather:platform-weather-schema_v1:1.0.0-SNAPSHOT",
+        "definition_file_path" : "pom.xml",
+        "declared_licenses" : [ "HERE Proprietary License" ],
+        "declared_licenses_processed" : {
+          "unmapped" : [ "HERE Proprietary License" ]
+        },
+        "vcs" : {
+          "type" : "Git",
+          "url" : "ssh://gerrit.it.here.com:29418/olp/components/live-weather/platform-weather-schema",
+          "revision" : "1.0.1",
+          "path" : ""
+        },
+        "vcs_processed" : {
+          "type" : "Git",
+          "url" : "ssh://gerrit.it.here.com:29418/olp/components/live-weather/platform-weather-schema",
+          "revision" : "dca4cb02e89974faead1b2ea9980043b5ed2f226",
+          "path" : ""
+        },
+        "homepage_url" : "",
+        "scopes" : [ ]
+      }, {
+        "id" : "Maven:com.here.platform.schema.weather:platform-weather-schema_v1_ds:1.0.0-SNAPSHOT",
+        "definition_file_path" : "ds/pom.xml",
+        "declared_licenses" : [ "HERE Proprietary License" ],
+        "declared_licenses_processed" : {
+          "unmapped" : [ "HERE Proprietary License" ]
+        },
+        "vcs" : {
+          "type" : "Git",
+          "url" : "ssh://gerrit.it.here.com:29418/olp/components/live-weather/platform-weather-schema",
+          "revision" : "1.0.1",
+          "path" : ""
+        },
+        "vcs_processed" : {
+          "type" : "Git",
+          "url" : "ssh://gerrit.it.here.com:29418/olp/components/live-weather/platform-weather-schema",
+          "revision" : "dca4cb02e89974faead1b2ea9980043b5ed2f226",
+          "path" : "ds"
+        },
+        "homepage_url" : "",
+        "scopes" : [ {
+          "name" : "compile",
+          "dependencies" : [ {
+            "id" : "Maven:com.here.platform.schema.weather:platform-weather-schema_v1_proto:1.0.0-SNAPSHOT",
+            "linkage" : "PROJECT_DYNAMIC",
+            "dependencies" : [ {
+              "id" : "Maven:com.google.protobuf:protobuf-java:3.3.1"
+            } ]
+          } ]
+        } ]
+      }, {
+        "id" : "Maven:com.here.platform.schema.weather:platform-weather-schema_v1_java:1.0.0-SNAPSHOT",
+        "definition_file_path" : "java/pom.xml",
+        "declared_licenses" : [ "HERE Proprietary License" ],
+        "declared_licenses_processed" : {
+          "unmapped" : [ "HERE Proprietary License" ]
+        },
+        "vcs" : {
+          "type" : "Git",
+          "url" : "ssh://gerrit.it.here.com:29418/olp/components/live-weather/platform-weather-schema",
+          "revision" : "1.0.1",
+          "path" : ""
+        },
+        "vcs_processed" : {
+          "type" : "Git",
+          "url" : "ssh://gerrit.it.here.com:29418/olp/components/live-weather/platform-weather-schema",
+          "revision" : "dca4cb02e89974faead1b2ea9980043b5ed2f226",
+          "path" : "java"
+        },
+        "homepage_url" : "",
+        "scopes" : [ {
+          "name" : "compile",
+          "dependencies" : [ {
+            "id" : "Maven:com.google.protobuf:protobuf-java:3.3.1"
+          }, {
+            "id" : "Maven:com.here.platform.schema.weather:platform-weather-schema_v1_proto:1.0.0-SNAPSHOT",
+            "linkage" : "PROJECT_DYNAMIC"
+          } ]
+        } ]
+      }, {
+        "id" : "Maven:com.here.platform.schema.weather:platform-weather-schema_v1_proto:1.0.0-SNAPSHOT",
+        "definition_file_path" : "proto/pom.xml",
+        "declared_licenses" : [ "HERE Proprietary License" ],
+        "declared_licenses_processed" : {
+          "unmapped" : [ "HERE Proprietary License" ]
+        },
+        "vcs" : {
+          "type" : "Git",
+          "url" : "ssh://gerrit.it.here.com:29418/olp/components/live-weather/platform-weather-schema",
+          "revision" : "1.0.1",
+          "path" : ""
+        },
+        "vcs_processed" : {
+          "type" : "Git",
+          "url" : "ssh://gerrit.it.here.com:29418/olp/components/live-weather/platform-weather-schema",
+          "revision" : "dca4cb02e89974faead1b2ea9980043b5ed2f226",
+          "path" : "proto"
+        },
+        "homepage_url" : "",
+        "scopes" : [ {
+          "name" : "compile",
+          "dependencies" : [ {
+            "id" : "Maven:com.google.protobuf:protobuf-java:3.3.1"
+          } ]
+        } ]
+      }, {
+        "id" : "Maven:com.here.platform.schema.weather:platform-weather-schema_v1_scala_2.11:1.0.0-SNAPSHOT",
+        "definition_file_path" : "scala/pom.xml",
+        "declared_licenses" : [ "HERE Proprietary License" ],
+        "declared_licenses_processed" : {
+          "unmapped" : [ "HERE Proprietary License" ]
+        },
+        "vcs" : {
+          "type" : "Git",
+          "url" : "ssh://gerrit.it.here.com:29418/olp/components/live-weather/platform-weather-schema",
+          "revision" : "1.0.1",
+          "path" : ""
+        },
+        "vcs_processed" : {
+          "type" : "Git",
+          "url" : "ssh://gerrit.it.here.com:29418/olp/components/live-weather/platform-weather-schema",
+          "revision" : "dca4cb02e89974faead1b2ea9980043b5ed2f226",
+          "path" : "scala"
+        },
+        "homepage_url" : "",
+        "scopes" : [ {
+          "name" : "compile",
+          "dependencies" : [ {
+            "id" : "Maven:com.here.platform.schema.weather:platform-weather-schema_v1_proto:1.0.0-SNAPSHOT",
+            "linkage" : "PROJECT_DYNAMIC"
+          }, {
+            "id" : "Maven:com.thesamet.scalapb:scalapb-runtime_2.11:0.7.3",
+            "dependencies" : [ {
+              "id" : "Maven:com.google.protobuf:protobuf-java:3.3.1"
+            }, {
+              "id" : "Maven:com.lihaoyi:fastparse_2.11:1.0.0",
+              "dependencies" : [ {
+                "id" : "Maven:com.lihaoyi:fastparse-utils_2.11:1.0.0"
+              }, {
+                "id" : "Maven:com.lihaoyi:sourcecode_2.11:0.1.4"
+              } ]
+            }, {
+              "id" : "Maven:com.thesamet.scalapb:lenses_2.11:0.7.0"
+            } ]
+          }, {
+            "id" : "Maven:org.scala-lang:scala-library:2.11.8"
+          } ]
+        } ]
+      } ],
+      "packages" : [ {
+        "package" : {
+          "id" : "Maven:com.google.protobuf:protobuf-java:3.3.1",
+          "purl" : "pkg:maven/com.google.protobuf/protobuf-java@3.3.1",
+          "declared_licenses" : [ "3-Clause BSD License" ],
+          "declared_licenses_processed" : {
+            "spdx_expression" : "BSD-3-Clause"
+          },
+          "description" : "Core Protocol Buffers library. Protocol Buffers are a way of encoding structured data in an\n    efficient yet extensible format.",
+          "homepage_url" : "https://developers.google.com/protocol-buffers/protobuf-java/",
+          "binary_artifact" : {
+            "url" : "https://repo.maven.apache.org/maven2/com/google/protobuf/protobuf-java/3.3.1/protobuf-java-3.3.1.jar",
+            "hash" : {
+              "value" : "e8964a2667e55d11a4505b329a4c34247663920b",
+              "algorithm" : "SHA-1"
+            }
+          },
+          "source_artifact" : {
+            "url" : "https://repo.maven.apache.org/maven2/com/google/protobuf/protobuf-java/3.3.1/protobuf-java-3.3.1-sources.jar",
+            "hash" : {
+              "value" : "733c81a020b1eaf0c09ee8c2cb8fa166bd8a2f2d",
+              "algorithm" : "SHA-1"
+            }
+          },
+          "vcs" : {
+            "type" : "Git",
+            "url" : "https://github.com/google/protobuf.git",
+            "revision" : "",
+            "path" : "java"
+          },
+          "vcs_processed" : {
+            "type" : "Git",
+            "url" : "https://github.com/google/protobuf.git",
+            "revision" : "",
+            "path" : "java"
+          }
+        },
+        "curations" : [ {
+          "base" : {
+            "vcs" : {
+              "type" : "Git",
+              "url" : "https://github.com/google/protobuf.git",
+              "revision" : "",
+              "path" : ""
+            }
+          },
+          "curation" : {
+            "vcs" : {
+              "path" : "java"
+            },
+            "comment" : "The VCS information defined in the pom points to the root of the Git repository which contains several projects which are not packaged with this java implementation of protobuf. The 'java' implementation resides under the 'java' directory."
+          }
+        } ]
+      }, {
+        "package" : {
+          "id" : "Maven:com.lihaoyi:fastparse-utils_2.11:1.0.0",
+          "purl" : "pkg:maven/com.lihaoyi/fastparse-utils_2.11@1.0.0",
+          "declared_licenses" : [ "MIT license" ],
+          "declared_licenses_processed" : {
+            "spdx_expression" : "MIT"
+          },
+          "description" : "fastparse-utils",
+          "homepage_url" : "https://github.com/lihaoyi/scala-parser",
+          "binary_artifact" : {
+            "url" : "https://repo.maven.apache.org/maven2/com/lihaoyi/fastparse-utils_2.11/1.0.0/fastparse-utils_2.11-1.0.0.jar",
+            "hash" : {
+              "value" : "98716ae2093a51449f41485009ce1bb1cefd3336",
+              "algorithm" : "SHA-1"
+            }
+          },
+          "source_artifact" : {
+            "url" : "https://repo.maven.apache.org/maven2/com/lihaoyi/fastparse-utils_2.11/1.0.0/fastparse-utils_2.11-1.0.0-sources.jar",
+            "hash" : {
+              "value" : "e2735bfc5fbf85a21f7335ac672e27b4ec55358c",
+              "algorithm" : "SHA-1"
+            }
+          },
+          "vcs" : {
+            "type" : "Git",
+            "url" : "//github.com/lihaoyi/fastparse.git",
+            "revision" : "",
+            "path" : ""
+          },
+          "vcs_processed" : {
+            "type" : "Git",
+            "url" : "file:///github.com/lihaoyi/fastparse.git",
+            "revision" : "",
+            "path" : ""
+          }
+        },
+        "curations" : [ ]
+      }, {
+        "package" : {
+          "id" : "Maven:com.lihaoyi:fastparse_2.11:1.0.0",
+          "purl" : "pkg:maven/com.lihaoyi/fastparse_2.11@1.0.0",
+          "declared_licenses" : [ "MIT license" ],
+          "declared_licenses_processed" : {
+            "spdx_expression" : "MIT"
+          },
+          "description" : "fastparse",
+          "homepage_url" : "https://github.com/lihaoyi/scala-parser",
+          "binary_artifact" : {
+            "url" : "https://repo.maven.apache.org/maven2/com/lihaoyi/fastparse_2.11/1.0.0/fastparse_2.11-1.0.0.jar",
+            "hash" : {
+              "value" : "334cc8841a7f72a16c258252232fd1db8c0e9791",
+              "algorithm" : "SHA-1"
+            }
+          },
+          "source_artifact" : {
+            "url" : "https://repo.maven.apache.org/maven2/com/lihaoyi/fastparse_2.11/1.0.0/fastparse_2.11-1.0.0-sources.jar",
+            "hash" : {
+              "value" : "32f0ce22bbe0407737ac5346952a3556062400cf",
+              "algorithm" : "SHA-1"
+            }
+          },
+          "vcs" : {
+            "type" : "Git",
+            "url" : "//github.com/lihaoyi/fastparse.git",
+            "revision" : "",
+            "path" : ""
+          },
+          "vcs_processed" : {
+            "type" : "Git",
+            "url" : "file:///github.com/lihaoyi/fastparse.git",
+            "revision" : "",
+            "path" : ""
+          }
+        },
+        "curations" : [ ]
+      }, {
+        "package" : {
+          "id" : "Maven:com.lihaoyi:sourcecode_2.11:0.1.4",
+          "purl" : "pkg:maven/com.lihaoyi/sourcecode_2.11@0.1.4",
+          "declared_licenses" : [ "MIT" ],
+          "declared_licenses_processed" : {
+            "spdx_expression" : "MIT"
+          },
+          "description" : "sourcecode",
+          "homepage_url" : "https://github.com/lihaoyi/sourcecode",
+          "binary_artifact" : {
+            "url" : "https://repo.maven.apache.org/maven2/com/lihaoyi/sourcecode_2.11/0.1.4/sourcecode_2.11-0.1.4.jar",
+            "hash" : {
+              "value" : "78369535832ebb91fb1c4054c5662b2c9a0d2c88",
+              "algorithm" : "SHA-1"
+            }
+          },
+          "source_artifact" : {
+            "url" : "https://repo.maven.apache.org/maven2/com/lihaoyi/sourcecode_2.11/0.1.4/sourcecode_2.11-0.1.4-sources.jar",
+            "hash" : {
+              "value" : "c910950e1170659ba1671b24c2c4f8f2b174b336",
+              "algorithm" : "SHA-1"
+            }
+          },
+          "vcs" : {
+            "type" : "Git",
+            "url" : "git@github.com:lihaoyi/sourcecode.git",
+            "revision" : "",
+            "path" : ""
+          },
+          "vcs_processed" : {
+            "type" : "Git",
+            "url" : "ssh://git@github.com/lihaoyi/sourcecode.git",
+            "revision" : "",
+            "path" : ""
+          }
+        },
+        "curations" : [ ]
+      }, {
+        "package" : {
+          "id" : "Maven:com.thesamet.scalapb:lenses_2.11:0.7.0",
+          "purl" : "pkg:maven/com.thesamet.scalapb/lenses_2.11@0.7.0",
+          "declared_licenses" : [ "Apache 2" ],
+          "declared_licenses_processed" : {
+            "spdx_expression" : "Apache-2.0"
+          },
+          "description" : "lenses",
+          "homepage_url" : "https://github.com/scalapb/Lenses",
+          "binary_artifact" : {
+            "url" : "https://repo.maven.apache.org/maven2/com/thesamet/scalapb/lenses_2.11/0.7.0/lenses_2.11-0.7.0.jar",
+            "hash" : {
+              "value" : "c8667ae573ceceac958a6639a2d3b350ddb911c4",
+              "algorithm" : "SHA-1"
+            }
+          },
+          "source_artifact" : {
+            "url" : "https://repo.maven.apache.org/maven2/com/thesamet/scalapb/lenses_2.11/0.7.0/lenses_2.11-0.7.0-sources.jar",
+            "hash" : {
+              "value" : "61f071b95bba32b64f869ccf62e7ad43eee8c8e4",
+              "algorithm" : "SHA-1"
+            }
+          },
+          "vcs" : {
+            "type" : "Git",
+            "url" : "https://github.com/scalapb/Lenses.git",
+            "revision" : "",
+            "path" : ""
+          },
+          "vcs_processed" : {
+            "type" : "Git",
+            "url" : "https://github.com/scalapb/Lenses.git",
+            "revision" : "",
+            "path" : ""
+          }
+        },
+        "curations" : [ ]
+      }, {
+        "package" : {
+          "id" : "Maven:com.thesamet.scalapb:scalapb-runtime_2.11:0.7.3",
+          "purl" : "pkg:maven/com.thesamet.scalapb/scalapb-runtime_2.11@0.7.3",
+          "declared_licenses" : [ "Apache 2" ],
+          "declared_licenses_processed" : {
+            "spdx_expression" : "Apache-2.0"
+          },
+          "description" : "scalapb-runtime",
+          "homepage_url" : "https://github.com/scalapb/ScalaPB",
+          "binary_artifact" : {
+            "url" : "https://repo.maven.apache.org/maven2/com/thesamet/scalapb/scalapb-runtime_2.11/0.7.3/scalapb-runtime_2.11-0.7.3.jar",
+            "hash" : {
+              "value" : "9b058e3d2a70220f73f49e9369ab6d2bbc3289ea",
+              "algorithm" : "SHA-1"
+            }
+          },
+          "source_artifact" : {
+            "url" : "https://repo.maven.apache.org/maven2/com/thesamet/scalapb/scalapb-runtime_2.11/0.7.3/scalapb-runtime_2.11-0.7.3-sources.jar",
+            "hash" : {
+              "value" : "4c66950a8e465dcde08588ac851f5874ed257a5f",
+              "algorithm" : "SHA-1"
+            }
+          },
+          "vcs" : {
+            "type" : "Git",
+            "url" : "github.com:scalapb/ScalaPB.git",
+            "revision" : "",
+            "path" : ""
+          },
+          "vcs_processed" : {
+            "type" : "Git",
+            "url" : "ssh://git@github.com/scalapb/ScalaPB.git",
+            "revision" : "",
+            "path" : ""
+          }
+        },
+        "curations" : [ ]
+      }, {
+        "package" : {
+          "id" : "Maven:org.scala-lang:scala-library:2.11.8",
+          "purl" : "pkg:maven/org.scala-lang/scala-library@2.11.8",
+          "declared_licenses" : [ "BSD 3-Clause" ],
+          "declared_licenses_processed" : {
+            "spdx_expression" : "BSD-3-Clause"
+          },
+          "description" : "Standard library for the Scala Programming Language",
+          "homepage_url" : "http://www.scala-lang.org/",
+          "binary_artifact" : {
+            "url" : "https://repo.maven.apache.org/maven2/org/scala-lang/scala-library/2.11.8/scala-library-2.11.8.jar",
+            "hash" : {
+              "value" : "ddd5a8bced249bedd86fb4578a39b9fb71480573",
+              "algorithm" : "SHA-1"
+            }
+          },
+          "source_artifact" : {
+            "url" : "https://repo.maven.apache.org/maven2/org/scala-lang/scala-library/2.11.8/scala-library-2.11.8-sources.jar",
+            "hash" : {
+              "value" : "17178a95c4b47c0a9745cfb8d01924359824fd7c",
+              "algorithm" : "SHA-1"
+            }
+          },
+          "vcs" : {
+            "type" : "Git",
+            "url" : "git://github.com/scala/scala.git",
+            "revision" : "",
+            "path" : "src/library"
+          },
+          "vcs_processed" : {
+            "type" : "Git",
+            "url" : "https://github.com/scala/scala.git",
+            "revision" : "",
+            "path" : "src/library"
+          }
+        },
+        "curations" : [ {
+          "base" : {
+            "vcs" : {
+              "type" : "Git",
+              "url" : "git://github.com/scala/scala.git",
+              "revision" : "",
+              "path" : ""
+            }
+          },
+          "curation" : {
+            "vcs" : {
+              "path" : "src/library"
+            },
+            "comment" : "The VCS information defined in the pom points to the root of the Git repository which contains multiple projects which are not packaged with this library. 'scala-library' resides under 'src/library'."
+          }
+        } ]
+      } ],
+      "has_errors" : false
+    }
+  },
+  "scanner" : {
+    "start_time" : "2019-10-15T09:04:23.332646Z",
+    "end_time" : "2019-10-15T09:04:54.174902Z",
+    "environment" : {
+      "ort_version" : "0.1.0-beta.0.1+c1173bf",
+      "java_version" : "10",
+      "os" : "Linux",
+      "variables" : {
+        "JAVA_HOME" : "/opt/jdk-10",
+        "ANDROID_HOME" : "/opt/android-sdk-linux"
+      },
+      "tool_versions" : { }
+    },
+    "config" : {
+      "file_based_storage" : {
+        "backend" : {
+          "http_file_storage" : {
+            "url" : "https://artifactory.in.here.com/artifactory/here-oss-local/scancode-3/scan-results",
+            "headers" : {
+              "X-JFrog-Art-Api" : "***"
+            }
+          },
+          "local_file_storage" : null
+        }
+      },
+      "postgres_storage" : null,
+      "scanner" : null
+    },
+    "results" : {
+      "scanned_scopes" : [ {
+        "id" : "Maven:com.here.platform.schema.weather:platform-weather-schema_v1:1.0.0-SNAPSHOT",
+        "scanned_scopes" : [ ],
+        "ignored_scopes" : [ ]
+      }, {
+        "id" : "Maven:com.here.platform.schema.weather:platform-weather-schema_v1_ds:1.0.0-SNAPSHOT",
+        "scanned_scopes" : [ "compile" ],
+        "ignored_scopes" : [ ]
+      }, {
+        "id" : "Maven:com.here.platform.schema.weather:platform-weather-schema_v1_java:1.0.0-SNAPSHOT",
+        "scanned_scopes" : [ "compile" ],
+        "ignored_scopes" : [ ]
+      }, {
+        "id" : "Maven:com.here.platform.schema.weather:platform-weather-schema_v1_proto:1.0.0-SNAPSHOT",
+        "scanned_scopes" : [ "compile" ],
+        "ignored_scopes" : [ ]
+      }, {
+        "id" : "Maven:com.here.platform.schema.weather:platform-weather-schema_v1_scala_2.11:1.0.0-SNAPSHOT",
+        "scanned_scopes" : [ "compile" ],
+        "ignored_scopes" : [ ]
+      } ],
+      "scan_results" : [ {
+        "id" : "Maven:com.google.protobuf:protobuf-java:3.3.1",
+        "results" : [ {
+          "provenance" : {
+            "download_time" : "2019-08-09T14:42:05.113666Z",
+            "vcs_info" : {
+              "type" : "Git",
+              "url" : "https://github.com/google/protobuf.git",
+              "revision" : "49a56da93ff3ab7d9a2252639344ad28db8cdff6",
+              "resolved_revision" : "49a56da93ff3ab7d9a2252639344ad28db8cdff6",
+              "path" : "java"
+            },
+            "original_vcs_info" : {
+              "type" : "Git",
+              "url" : "https://github.com/google/protobuf.git",
+              "revision" : "",
+              "path" : "java"
+            }
+          },
+          "scanner" : {
+            "name" : "ScanCode",
+            "version" : "3.0.2",
+            "configuration" : "--copyright --license --ignore *.ort.yml --info --strip-root --timeout 300 --ignore HERE_NOTICE --ignore META-INF/DEPENDENCIES --json-pp"
+          },
+          "summary" : {
+            "start_time" : "2019-08-09T14:42:09.125403Z",
+            "end_time" : "2019-08-09T14:42:38.501898Z",
+            "file_count" : 253,
+            "licenses" : [ {
+              "license" : "BSD-3-Clause",
+              "location" : {
+                "path" : "java/compatibility_tests/v2.5.0/more_protos/src/proto/com/google/protobuf/multiple_files_test.proto",
+                "start_line" : 5,
+                "end_line" : 29
+              }
+            }, {
+              "license" : "BSD-3-Clause",
+              "location" : {
+                "path" : "java/compatibility_tests/v2.5.0/more_protos/src/proto/com/google/protobuf/nested_builders_test.proto",
+                "start_line" : 5,
+                "end_line" : 29
+              }
+            }, {
+              "license" : "BSD-3-Clause",
+              "location" : {
+                "path" : "java/compatibility_tests/v2.5.0/more_protos/src/proto/com/google/protobuf/nested_extension.proto",
+                "start_line" : 5,
+                "end_line" : 29
+              }
+            }, {
+              "license" : "BSD-3-Clause",
+              "location" : {
+                "path" : "java/compatibility_tests/v2.5.0/more_protos/src/proto/com/google/protobuf/nested_extension_lite.proto",
+                "start_line" : 5,
+                "end_line" : 29
+              }
+            }, {
+              "license" : "BSD-3-Clause",
+              "location" : {
+                "path" : "java/compatibility_tests/v2.5.0/more_protos/src/proto/com/google/protobuf/non_nested_extension.proto",
+                "start_line" : 5,
+                "end_line" : 29
+              }
+            }, {
+              "license" : "BSD-3-Clause",
+              "location" : {
+                "path" : "java/compatibility_tests/v2.5.0/more_protos/src/proto/com/google/protobuf/non_nested_extension_lite.proto",
+                "start_line" : 5,
+                "end_line" : 29
+              }
+            }, {
+              "license" : "BSD-3-Clause",
+              "location" : {
+                "path" : "java/compatibility_tests/v2.5.0/more_protos/src/proto/com/google/protobuf/test_bad_identifiers.proto",
+                "start_line" : 5,
+                "end_line" : 29
+              }
+            }, {
+              "license" : "BSD-3-Clause",
+              "location" : {
+                "path" : "java/compatibility_tests/v2.5.0/more_protos/src/proto/google/protobuf/descriptor.proto",
+                "start_line" : 5,
+                "end_line" : 29
+              }
+            }, {
+              "license" : "BSD-3-Clause",
+              "location" : {
+                "path" : "java/compatibility_tests/v2.5.0/more_protos/src/proto/google/protobuf/unittest.proto",
+                "start_line" : 5,
+                "end_line" : 29
+              }
+            }, {
+              "license" : "BSD-3-Clause",
+              "location" : {
+                "path" : "java/compatibility_tests/v2.5.0/more_protos/src/proto/google/protobuf/unittest_custom_options.proto",
+                "start_line" : 5,
+                "end_line" : 29
+              }
+            }, {
+              "license" : "BSD-3-Clause",
+              "location" : {
+                "path" : "java/compatibility_tests/v2.5.0/more_protos/src/proto/google/protobuf/unittest_embed_optimize_for.proto",
+                "start_line" : 5,
+                "end_line" : 29
+              }
+            }, {
+              "license" : "BSD-3-Clause",
+              "location" : {
+                "path" : "java/compatibility_tests/v2.5.0/more_protos/src/proto/google/protobuf/unittest_empty.proto",
+                "start_line" : 5,
+                "end_line" : 29
+              }
+            }, {
+              "license" : "BSD-3-Clause",
+              "location" : {
+                "path" : "java/compatibility_tests/v2.5.0/more_protos/src/proto/google/protobuf/unittest_enormous_descriptor.proto",
+                "start_line" : 5,
+                "end_line" : 29
+              }
+            }, {
+              "license" : "BSD-3-Clause",
+              "location" : {
+                "path" : "java/compatibility_tests/v2.5.0/more_protos/src/proto/google/protobuf/unittest_import.proto",
+                "start_line" : 5,
+                "end_line" : 29
+              }
+            }, {
+              "license" : "BSD-3-Clause",
+              "location" : {
+                "path" : "java/compatibility_tests/v2.5.0/more_protos/src/proto/google/protobuf/unittest_import_lite.proto",
+                "start_line" : 5,
+                "end_line" : 29
+              }
+            }, {
+              "license" : "BSD-3-Clause",
+              "location" : {
+                "path" : "java/compatibility_tests/v2.5.0/more_protos/src/proto/google/protobuf/unittest_import_public.proto",
+                "start_line" : 5,
+                "end_line" : 29
+              }
+            }, {
+              "license" : "BSD-3-Clause",
+              "location" : {
+                "path" : "java/compatibility_tests/v2.5.0/more_protos/src/proto/google/protobuf/unittest_import_public_lite.proto",
+                "start_line" : 5,
+                "end_line" : 29
+              }
+            }, {
+              "license" : "BSD-3-Clause",
+              "location" : {
+                "path" : "java/compatibility_tests/v2.5.0/more_protos/src/proto/google/protobuf/unittest_lite.proto",
+                "start_line" : 5,
+                "end_line" : 29
+              }
+            }, {
+              "license" : "BSD-3-Clause",
+              "location" : {
+                "path" : "java/compatibility_tests/v2.5.0/more_protos/src/proto/google/protobuf/unittest_lite_imports_nonlite.proto",
+                "start_line" : 5,
+                "end_line" : 29
+              }
+            }, {
+              "license" : "BSD-3-Clause",
+              "location" : {
+                "path" : "java/compatibility_tests/v2.5.0/more_protos/src/proto/google/protobuf/unittest_mset.proto",
+                "start_line" : 5,
+                "end_line" : 29
+              }
+            }, {
+              "license" : "BSD-3-Clause",
+              "location" : {
+                "path" : "java/compatibility_tests/v2.5.0/more_protos/src/proto/google/protobuf/unittest_no_generic_services.proto",
+                "start_line" : 5,
+                "end_line" : 29
+              }
+            }, {
+              "license" : "BSD-3-Clause",
+              "location" : {
+                "path" : "java/compatibility_tests/v2.5.0/more_protos/src/proto/google/protobuf/unittest_optimize_for.proto",
+                "start_line" : 5,
+                "end_line" : 29
+              }
+            }, {
+              "license" : "BSD-3-Clause",
+              "location" : {
+                "path" : "java/compatibility_tests/v2.5.0/protos/src/proto/com/google/protobuf/multiple_files_test.proto",
+                "start_line" : 5,
+                "end_line" : 29
+              }
+            }, {
+              "license" : "BSD-3-Clause",
+              "location" : {
+                "path" : "java/compatibility_tests/v2.5.0/protos/src/proto/com/google/protobuf/nested_builders_test.proto",
+                "start_line" : 5,
+                "end_line" : 29
+              }
+            }, {
+              "license" : "BSD-3-Clause",
+              "location" : {
+                "path" : "java/compatibility_tests/v2.5.0/protos/src/proto/com/google/protobuf/nested_extension.proto",
+                "start_line" : 5,
+                "end_line" : 29
+              }
+            }, {
+              "license" : "BSD-3-Clause",
+              "location" : {
+                "path" : "java/compatibility_tests/v2.5.0/protos/src/proto/com/google/protobuf/nested_extension_lite.proto",
+                "start_line" : 5,
+                "end_line" : 29
+              }
+            }, {
+              "license" : "BSD-3-Clause",
+              "location" : {
+                "path" : "java/compatibility_tests/v2.5.0/protos/src/proto/com/google/protobuf/non_nested_extension.proto",
+                "start_line" : 5,
+                "end_line" : 29
+              }
+            }, {
+              "license" : "BSD-3-Clause",
+              "location" : {
+                "path" : "java/compatibility_tests/v2.5.0/protos/src/proto/com/google/protobuf/non_nested_extension_lite.proto",
+                "start_line" : 5,
+                "end_line" : 29
+              }
+            }, {
+              "license" : "BSD-3-Clause",
+              "location" : {
+                "path" : "java/compatibility_tests/v2.5.0/protos/src/proto/com/google/protobuf/test_bad_identifiers.proto",
+                "start_line" : 5,
+                "end_line" : 29
+              }
+            }, {
+              "license" : "BSD-3-Clause",
+              "location" : {
+                "path" : "java/compatibility_tests/v2.5.0/protos/src/proto/google/protobuf/descriptor.proto",
+                "start_line" : 5,
+                "end_line" : 29
+              }
+            }, {
+              "license" : "BSD-3-Clause",
+              "location" : {
+                "path" : "java/compatibility_tests/v2.5.0/protos/src/proto/google/protobuf/unittest.proto",
+                "start_line" : 5,
+                "end_line" : 29
+              }
+            }, {
+              "license" : "BSD-3-Clause",
+              "location" : {
+                "path" : "java/compatibility_tests/v2.5.0/protos/src/proto/google/protobuf/unittest_custom_options.proto",
+                "start_line" : 5,
+                "end_line" : 29
+              }
+            }, {
+              "license" : "BSD-3-Clause",
+              "location" : {
+                "path" : "java/compatibility_tests/v2.5.0/protos/src/proto/google/protobuf/unittest_embed_optimize_for.proto",
+                "start_line" : 5,
+                "end_line" : 29
+              }
+            }, {
+              "license" : "BSD-3-Clause",
+              "location" : {
+                "path" : "java/compatibility_tests/v2.5.0/protos/src/proto/google/protobuf/unittest_empty.proto",
+                "start_line" : 5,
+                "end_line" : 29
+              }
+            }, {
+              "license" : "BSD-3-Clause",
+              "location" : {
+                "path" : "java/compatibility_tests/v2.5.0/protos/src/proto/google/protobuf/unittest_enormous_descriptor.proto",
+                "start_line" : 5,
+                "end_line" : 29
+              }
+            }, {
+              "license" : "BSD-3-Clause",
+              "location" : {
+                "path" : "java/compatibility_tests/v2.5.0/protos/src/proto/google/protobuf/unittest_import.proto",
+                "start_line" : 5,
+                "end_line" : 29
+              }
+            }, {
+              "license" : "BSD-3-Clause",
+              "location" : {
+                "path" : "java/compatibility_tests/v2.5.0/protos/src/proto/google/protobuf/unittest_import_lite.proto",
+                "start_line" : 5,
+                "end_line" : 29
+              }
+            }, {
+              "license" : "BSD-3-Clause",
+              "location" : {
+                "path" : "java/compatibility_tests/v2.5.0/protos/src/proto/google/protobuf/unittest_import_public.proto",
+                "start_line" : 5,
+                "end_line" : 29
+              }
+            }, {
+              "license" : "BSD-3-Clause",
+              "location" : {
+                "path" : "java/compatibility_tests/v2.5.0/protos/src/proto/google/protobuf/unittest_import_public_lite.proto",
+                "start_line" : 5,
+                "end_line" : 29
+              }
+            }, {
+              "license" : "BSD-3-Clause",
+              "location" : {
+                "path" : "java/compatibility_tests/v2.5.0/protos/src/proto/google/protobuf/unittest_lite.proto",
+                "start_line" : 5,
+                "end_line" : 29
+              }
+            }, {
+              "license" : "BSD-3-Clause",
+              "location" : {
+                "path" : "java/compatibility_tests/v2.5.0/protos/src/proto/google/protobuf/unittest_lite_imports_nonlite.proto",
+                "start_line" : 5,
+                "end_line" : 29
+              }
+            }, {
+              "license" : "BSD-3-Clause",
+              "location" : {
+                "path" : "java/compatibility_tests/v2.5.0/protos/src/proto/google/protobuf/unittest_mset.proto",
+                "start_line" : 5,
+                "end_line" : 29
+              }
+            }, {
+              "license" : "BSD-3-Clause",
+              "location" : {
+                "path" : "java/compatibility_tests/v2.5.0/protos/src/proto/google/protobuf/unittest_no_generic_services.proto",
+                "start_line" : 5,
+                "end_line" : 29
+              }
+            }, {
+              "license" : "BSD-3-Clause",
+              "location" : {
+                "path" : "java/compatibility_tests/v2.5.0/protos/src/proto/google/protobuf/unittest_optimize_for.proto",
+                "start_line" : 5,
+                "end_line" : 29
+              }
+            }, {
+              "license" : "BSD-3-Clause",
+              "location" : {
+                "path" : "java/compatibility_tests/v2.5.0/tests/src/main/java/com/google/protobuf/test/AbstractMessageTest.java",
+                "start_line" : 5,
+                "end_line" : 29
+              }
+            }, {
+              "license" : "BSD-3-Clause",
+              "location" : {
+                "path" : "java/compatibility_tests/v2.5.0/tests/src/main/java/com/google/protobuf/test/BoundedByteStringTest.java",
+                "start_line" : 5,
+                "end_line" : 29
+              }
+            }, {
+              "license" : "BSD-3-Clause",
+              "location" : {
+                "path" : "java/compatibility_tests/v2.5.0/tests/src/main/java/com/google/protobuf/test/ByteStringTest.java",
+                "start_line" : 5,
+                "end_line" : 29
+              }
+            }, {
+              "license" : "BSD-3-Clause",
+              "location" : {
+                "path" : "java/compatibility_tests/v2.5.0/tests/src/main/java/com/google/protobuf/test/CodedInputStreamTest.java",
+                "start_line" : 5,
+                "end_line" : 29
+              }
+            }, {
+              "license" : "BSD-3-Clause",
+              "location" : {
+                "path" : "java/compatibility_tests/v2.5.0/tests/src/main/java/com/google/protobuf/test/CodedOutputStreamTest.java",
+                "start_line" : 5,
+                "end_line" : 29
+              }
+            }, {
+              "license" : "BSD-3-Clause",
+              "location" : {
+                "path" : "java/compatibility_tests/v2.5.0/tests/src/main/java/com/google/protobuf/test/DeprecatedFieldTest.java",
+                "start_line" : 5,
+                "end_line" : 29
+              }
+            }, {
+              "license" : "BSD-3-Clause",
+              "location" : {
+                "path" : "java/compatibility_tests/v2.5.0/tests/src/main/java/com/google/protobuf/test/DescriptorsTest.java",
+                "start_line" : 5,
+                "end_line" : 29
+              }
+            }, {
+              "license" : "BSD-3-Clause",
+              "location" : {
+                "path" : "java/compatibility_tests/v2.5.0/tests/src/main/java/com/google/protobuf/test/DynamicMessageTest.java",
+                "start_line" : 5,
+                "end_line" : 29
+              }
+            }, {
+              "license" : "BSD-3-Clause",
+              "location" : {
+                "path" : "java/compatibility_tests/v2.5.0/tests/src/main/java/com/google/protobuf/test/ForceFieldBuildersPreRun.java",
+                "start_line" : 5,
+                "end_line" : 29
+              }
+            }, {
+              "license" : "BSD-3-Clause",
+              "location" : {
+                "path" : "java/compatibility_tests/v2.5.0/tests/src/main/java/com/google/protobuf/test/GeneratedMessageTest.java",
+                "start_line" : 5,
+                "end_line" : 29
+              }
+            }, {
+              "license" : "BSD-3-Clause",
+              "location" : {
+                "path" : "java/compatibility_tests/v2.5.0/tests/src/main/java/com/google/protobuf/test/LazyStringArrayListTest.java",
+                "start_line" : 5,
+                "end_line" : 29
+              }
+            }, {
+              "license" : "BSD-3-Clause",
+              "location" : {
+                "path" : "java/compatibility_tests/v2.5.0/tests/src/main/java/com/google/protobuf/test/LazyStringEndToEndTest.java",
+                "start_line" : 5,
+                "end_line" : 29
+              }
+            }, {
+              "license" : "BSD-3-Clause",
+              "location" : {
+                "path" : "java/compatibility_tests/v2.5.0/tests/src/main/java/com/google/protobuf/test/LiteralByteStringTest.java",
+                "start_line" : 5,
+                "end_line" : 29
+              }
+            }, {
+              "license" : "BSD-3-Clause",
+              "location" : {
+                "path" : "java/compatibility_tests/v2.5.0/tests/src/main/java/com/google/protobuf/test/MessageTest.java",
+                "start_line" : 5,
+                "end_line" : 29
+              }
+            }, {
+              "license" : "BSD-3-Clause",
+              "location" : {
+                "path" : "java/compatibility_tests/v2.5.0/tests/src/main/java/com/google/protobuf/test/NestedBuildersTest.java",
+                "start_line" : 5,
+                "end_line" : 29
+              }
+            }, {
+              "license" : "BSD-3-Clause",
+              "location" : {
+                "path" : "java/compatibility_tests/v2.5.0/tests/src/main/java/com/google/protobuf/test/ParserTest.java",
+                "start_line" : 5,
+                "end_line" : 29
+              }
+            }, {
+              "license" : "BSD-3-Clause",
+              "location" : {
+                "path" : "java/compatibility_tests/v2.5.0/tests/src/main/java/com/google/protobuf/test/RopeByteStringSubstringTest.java",
+                "start_line" : 5,
+                "end_line" : 29
+              }
+            }, {
+              "license" : "BSD-3-Clause",
+              "location" : {
+                "path" : "java/compatibility_tests/v2.5.0/tests/src/main/java/com/google/protobuf/test/RopeByteStringTest.java",
+                "start_line" : 5,
+                "end_line" : 29
+              }
+            }, {
+              "license" : "BSD-3-Clause",
+              "location" : {
+                "path" : "java/compatibility_tests/v2.5.0/tests/src/main/java/com/google/protobuf/test/ServiceTest.java",
+                "start_line" : 5,
+                "end_line" : 29
+              }
+            }, {
+              "license" : "BSD-3-Clause",
+              "location" : {
+                "path" : "java/compatibility_tests/v2.5.0/tests/src/main/java/com/google/protobuf/test/TestBadIdentifiers.java",
+                "start_line" : 5,
+                "end_line" : 29
+              }
+            }, {
+              "license" : "BSD-3-Clause",
+              "location" : {
+                "path" : "java/compatibility_tests/v2.5.0/tests/src/main/java/com/google/protobuf/test/TestUtil.java",
+                "start_line" : 5,
+                "end_line" : 29
+              }
+            }, {
+              "license" : "BSD-3-Clause",
+              "location" : {
+                "path" : "java/compatibility_tests/v2.5.0/tests/src/main/java/com/google/protobuf/test/TextFormatTest.java",
+                "start_line" : 5,
+                "end_line" : 29
+              }
+            }, {
+              "license" : "BSD-3-Clause",
+              "location" : {
+                "path" : "java/compatibility_tests/v2.5.0/tests/src/main/java/com/google/protobuf/test/UnknownFieldSetTest.java",
+                "start_line" : 5,
+                "end_line" : 29
+              }
+            }, {
+              "license" : "BSD-3-Clause",
+              "location" : {
+                "path" : "java/compatibility_tests/v2.5.0/tests/src/main/java/com/google/protobuf/test/UnmodifiableLazyStringListTest.java",
+                "start_line" : 5,
+                "end_line" : 29
+              }
+            }, {
+              "license" : "BSD-3-Clause",
+              "location" : {
+                "path" : "java/compatibility_tests/v2.5.0/tests/src/main/java/com/google/protobuf/test/WireFormatTest.java",
+                "start_line" : 5,
+                "end_line" : 29
+              }
+            }, {
+              "license" : "BSD-3-Clause",
+              "location" : {
+                "path" : "java/core/src/main/java/com/google/protobuf/AbstractMessage.java",
+                "start_line" : 5,
+                "end_line" : 29
+              }
+            }, {
+              "license" : "BSD-3-Clause",
+              "location" : {
+                "path" : "java/core/src/main/java/com/google/protobuf/AbstractMessageLite.java",
+                "start_line" : 5,
+                "end_line" : 29
+              }
+            }, {
+              "license" : "BSD-3-Clause",
+              "location" : {
+                "path" : "java/core/src/main/java/com/google/protobuf/AbstractParser.java",
+                "start_line" : 5,
+                "end_line" : 29
+              }
+            }, {
+              "license" : "BSD-3-Clause",
+              "location" : {
+                "path" : "java/core/src/main/java/com/google/protobuf/AbstractProtobufList.java",
+                "start_line" : 5,
+                "end_line" : 29
+              }
+            }, {
+              "license" : "BSD-3-Clause",
+              "location" : {
+                "path" : "java/core/src/main/java/com/google/protobuf/BlockingRpcChannel.java",
+                "start_line" : 5,
+                "end_line" : 29
+              }
+            }, {
+              "license" : "BSD-3-Clause",
+              "location" : {
+                "path" : "java/core/src/main/java/com/google/protobuf/BlockingService.java",
+                "start_line" : 5,
+                "end_line" : 29
+              }
+            }, {
+              "license" : "BSD-3-Clause",
+              "location" : {
+                "path" : "java/core/src/main/java/com/google/protobuf/BooleanArrayList.java",
+                "start_line" : 5,
+                "end_line" : 29
+              }
+            }, {
+              "license" : "BSD-3-Clause",
+              "location" : {
+                "path" : "java/core/src/main/java/com/google/protobuf/ByteBufferWriter.java",
+                "start_line" : 5,
+                "end_line" : 29
+              }
+            }, {
+              "license" : "BSD-3-Clause",
+              "location" : {
+                "path" : "java/core/src/main/java/com/google/protobuf/ByteOutput.java",
+                "start_line" : 5,
+                "end_line" : 29
+              }
+            }, {
+              "license" : "BSD-3-Clause",
+              "location" : {
+                "path" : "java/core/src/main/java/com/google/protobuf/ByteString.java",
+                "start_line" : 5,
+                "end_line" : 29
+              }
+            }, {
+              "license" : "BSD-3-Clause",
+              "location" : {
+                "path" : "java/core/src/main/java/com/google/protobuf/CodedInputStream.java",
+                "start_line" : 5,
+                "end_line" : 29
+              }
+            }, {
+              "license" : "BSD-3-Clause",
+              "location" : {
+                "path" : "java/core/src/main/java/com/google/protobuf/CodedOutputStream.java",
+                "start_line" : 5,
+                "end_line" : 29
+              }
+            }, {
+              "license" : "BSD-3-Clause",
+              "location" : {
+                "path" : "java/core/src/main/java/com/google/protobuf/Descriptors.java",
+                "start_line" : 5,
+                "end_line" : 29
+              }
+            }, {
+              "license" : "BSD-3-Clause",
+              "location" : {
+                "path" : "java/core/src/main/java/com/google/protobuf/DoubleArrayList.java",
+                "start_line" : 5,
+                "end_line" : 29
+              }
+            }, {
+              "license" : "BSD-3-Clause",
+              "location" : {
+                "path" : "java/core/src/main/java/com/google/protobuf/DynamicMessage.java",
+                "start_line" : 5,
+                "end_line" : 29
+              }
+            }, {
+              "license" : "BSD-3-Clause",
+              "location" : {
+                "path" : "java/core/src/main/java/com/google/protobuf/ExperimentalApi.java",
+                "start_line" : 5,
+                "end_line" : 29
+              }
+            }, {
+              "license" : "BSD-3-Clause",
+              "location" : {
+                "path" : "java/core/src/main/java/com/google/protobuf/Extension.java",
+                "start_line" : 5,
+                "end_line" : 29
+              }
+            }, {
+              "license" : "BSD-3-Clause",
+              "location" : {
+                "path" : "java/core/src/main/java/com/google/protobuf/ExtensionLite.java",
+                "start_line" : 5,
+                "end_line" : 29
+              }
+            }, {
+              "license" : "BSD-3-Clause",
+              "location" : {
+                "path" : "java/core/src/main/java/com/google/protobuf/ExtensionRegistry.java",
+                "start_line" : 5,
+                "end_line" : 29
+              }
+            }, {
+              "license" : "BSD-3-Clause",
+              "location" : {
+                "path" : "java/core/src/main/java/com/google/protobuf/ExtensionRegistryFactory.java",
+                "start_line" : 5,
+                "end_line" : 29
+              }
+            }, {
+              "license" : "BSD-3-Clause",
+              "location" : {
+                "path" : "java/core/src/main/java/com/google/protobuf/ExtensionRegistryLite.java",
+                "start_line" : 5,
+                "end_line" : 29
+              }
+            }, {
+              "license" : "BSD-3-Clause",
+              "location" : {
+                "path" : "java/core/src/main/java/com/google/protobuf/FieldSet.java",
+                "start_line" : 5,
+                "end_line" : 29
+              }
+            }, {
+              "license" : "BSD-3-Clause",
+              "location" : {
+                "path" : "java/core/src/main/java/com/google/protobuf/FloatArrayList.java",
+                "start_line" : 5,
+                "end_line" : 29
+              }
+            }, {
+              "license" : "BSD-3-Clause",
+              "location" : {
+                "path" : "java/core/src/main/java/com/google/protobuf/GeneratedMessage.java",
+                "start_line" : 5,
+                "end_line" : 29
+              }
+            }, {
+              "license" : "BSD-3-Clause",
+              "location" : {
+                "path" : "java/core/src/main/java/com/google/protobuf/GeneratedMessageLite.java",
+                "start_line" : 5,
+                "end_line" : 29
+              }
+            }, {
+              "license" : "BSD-3-Clause",
+              "location" : {
+                "path" : "java/core/src/main/java/com/google/protobuf/GeneratedMessageV3.java",
+                "start_line" : 5,
+                "end_line" : 29
+              }
+            }, {
+              "license" : "BSD-3-Clause",
+              "location" : {
+                "path" : "java/core/src/main/java/com/google/protobuf/IntArrayList.java",
+                "start_line" : 5,
+                "end_line" : 29
+              }
+            }, {
+              "license" : "BSD-3-Clause",
+              "location" : {
+                "path" : "java/core/src/main/java/com/google/protobuf/Internal.java",
+                "start_line" : 5,
+                "end_line" : 29
+              }
+            }, {
+              "license" : "BSD-3-Clause",
+              "location" : {
+                "path" : "java/core/src/main/java/com/google/protobuf/InvalidProtocolBufferException.java",
+                "start_line" : 5,
+                "end_line" : 29
+              }
+            }, {
+              "license" : "BSD-3-Clause",
+              "location" : {
+                "path" : "java/core/src/main/java/com/google/protobuf/LazyField.java",
+                "start_line" : 5,
+                "end_line" : 29
+              }
+            }, {
+              "license" : "BSD-3-Clause",
+              "location" : {
+                "path" : "java/core/src/main/java/com/google/protobuf/LazyFieldLite.java",
+                "start_line" : 5,
+                "end_line" : 29
+              }
+            }, {
+              "license" : "BSD-3-Clause",
+              "location" : {
+                "path" : "java/core/src/main/java/com/google/protobuf/LazyStringArrayList.java",
+                "start_line" : 5,
+                "end_line" : 29
+              }
+            }, {
+              "license" : "BSD-3-Clause",
+              "location" : {
+                "path" : "java/core/src/main/java/com/google/protobuf/LazyStringList.java",
+                "start_line" : 5,
+                "end_line" : 29
+              }
+            }, {
+              "license" : "BSD-3-Clause",
+              "location" : {
+                "path" : "java/core/src/main/java/com/google/protobuf/LongArrayList.java",
+                "start_line" : 5,
+                "end_line" : 29
+              }
+            }, {
+              "license" : "BSD-3-Clause",
+              "location" : {
+                "path" : "java/core/src/main/java/com/google/protobuf/MapEntry.java",
+                "start_line" : 5,
+                "end_line" : 29
+              }
+            }, {
+              "license" : "BSD-3-Clause",
+              "location" : {
+                "path" : "java/core/src/main/java/com/google/protobuf/MapEntryLite.java",
+                "start_line" : 5,
+                "end_line" : 29
+              }
+            }, {
+              "license" : "BSD-3-Clause",
+              "location" : {
+                "path" : "java/core/src/main/java/com/google/protobuf/MapField.java",
+                "start_line" : 5,
+                "end_line" : 29
+              }
+            }, {
+              "license" : "BSD-3-Clause",
+              "location" : {
+                "path" : "java/core/src/main/java/com/google/protobuf/MapFieldLite.java",
+                "start_line" : 5,
+                "end_line" : 29
+              }
+            }, {
+              "license" : "BSD-3-Clause",
+              "location" : {
+                "path" : "java/core/src/main/java/com/google/protobuf/Message.java",
+                "start_line" : 5,
+                "end_line" : 29
+              }
+            }, {
+              "license" : "BSD-3-Clause",
+              "location" : {
+                "path" : "java/core/src/main/java/com/google/protobuf/MessageLite.java",
+                "start_line" : 5,
+                "end_line" : 29
+              }
+            }, {
+              "license" : "BSD-3-Clause",
+              "location" : {
+                "path" : "java/core/src/main/java/com/google/protobuf/MessageLiteOrBuilder.java",
+                "start_line" : 5,
+                "end_line" : 29
+              }
+            }, {
+              "license" : "BSD-3-Clause",
+              "location" : {
+                "path" : "java/core/src/main/java/com/google/protobuf/MessageLiteToString.java",
+                "start_line" : 5,
+                "end_line" : 29
+              }
+            }, {
+              "license" : "BSD-3-Clause",
+              "location" : {
+                "path" : "java/core/src/main/java/com/google/protobuf/MessageOrBuilder.java",
+                "start_line" : 5,
+                "end_line" : 29
+              }
+            }, {
+              "license" : "BSD-3-Clause",
+              "location" : {
+                "path" : "java/core/src/main/java/com/google/protobuf/MessageReflection.java",
+                "start_line" : 5,
+                "end_line" : 29
+              }
+            }, {
+              "license" : "BSD-3-Clause",
+              "location" : {
+                "path" : "java/core/src/main/java/com/google/protobuf/MutabilityOracle.java",
+                "start_line" : 5,
+                "end_line" : 29
+              }
+            }, {
+              "license" : "BSD-3-Clause",
+              "location" : {
+                "path" : "java/core/src/main/java/com/google/protobuf/NioByteString.java",
+                "start_line" : 5,
+                "end_line" : 29
+              }
+            }, {
+              "license" : "BSD-3-Clause",
+              "location" : {
+                "path" : "java/core/src/main/java/com/google/protobuf/Parser.java",
+                "start_line" : 5,
+                "end_line" : 29
+              }
+            }, {
+              "license" : "BSD-3-Clause",
+              "location" : {
+                "path" : "java/core/src/main/java/com/google/protobuf/PrimitiveNonBoxingCollection.java",
+                "start_line" : 5,
+                "end_line" : 29
+              }
+            }, {
+              "license" : "BSD-3-Clause",
+              "location" : {
+                "path" : "java/core/src/main/java/com/google/protobuf/ProtobufArrayList.java",
+                "start_line" : 5,
+                "end_line" : 29
+              }
+            }, {
+              "license" : "BSD-3-Clause",
+              "location" : {
+                "path" : "java/core/src/main/java/com/google/protobuf/ProtocolMessageEnum.java",
+                "start_line" : 5,
+                "end_line" : 29
+              }
+            }, {
+              "license" : "BSD-3-Clause",
+              "location" : {
+                "path" : "java/core/src/main/java/com/google/protobuf/ProtocolStringList.java",
+                "start_line" : 5,
+                "end_line" : 29
+              }
+            }, {
+              "license" : "BSD-3-Clause",
+              "location" : {
+                "path" : "java/core/src/main/java/com/google/protobuf/RepeatedFieldBuilder.java",
+                "start_line" : 5,
+                "end_line" : 29
+              }
+            }, {
+              "license" : "BSD-3-Clause",
+              "location" : {
+                "path" : "java/core/src/main/java/com/google/protobuf/RepeatedFieldBuilderV3.java",
+                "start_line" : 5,
+                "end_line" : 29
+              }
+            }, {
+              "license" : "BSD-3-Clause",
+              "location" : {
+                "path" : "java/core/src/main/java/com/google/protobuf/RopeByteString.java",
+                "start_line" : 5,
+                "end_line" : 29
+              }
+            }, {
+              "license" : "BSD-3-Clause",
+              "location" : {
+                "path" : "java/core/src/main/java/com/google/protobuf/RpcCallback.java",
+                "start_line" : 5,
+                "end_line" : 29
+              }
+            }, {
+              "license" : "BSD-3-Clause",
+              "location" : {
+                "path" : "java/core/src/main/java/com/google/protobuf/RpcChannel.java",
+                "start_line" : 5,
+                "end_line" : 29
+              }
+            }, {
+              "license" : "BSD-3-Clause",
+              "location" : {
+                "path" : "java/core/src/main/java/com/google/protobuf/RpcController.java",
+                "start_line" : 5,
+                "end_line" : 29
+              }
+            }, {
+              "license" : "BSD-3-Clause",
+              "location" : {
+                "path" : "java/core/src/main/java/com/google/protobuf/RpcUtil.java",
+                "start_line" : 5,
+                "end_line" : 29
+              }
+            }, {
+              "license" : "BSD-3-Clause",
+              "location" : {
+                "path" : "java/core/src/main/java/com/google/protobuf/Service.java",
+                "start_line" : 5,
+                "end_line" : 29
+              }
+            }, {
+              "license" : "BSD-3-Clause",
+              "location" : {
+                "path" : "java/core/src/main/java/com/google/protobuf/ServiceException.java",
+                "start_line" : 5,
+                "end_line" : 29
+              }
+            }, {
+              "license" : "BSD-3-Clause",
+              "location" : {
+                "path" : "java/core/src/main/java/com/google/protobuf/SingleFieldBuilder.java",
+                "start_line" : 5,
+                "end_line" : 29
+              }
+            }, {
+              "license" : "BSD-3-Clause",
+              "location" : {
+                "path" : "java/core/src/main/java/com/google/protobuf/SingleFieldBuilderV3.java",
+                "start_line" : 5,
+                "end_line" : 29
+              }
+            }, {
+              "license" : "BSD-3-Clause",
+              "location" : {
+                "path" : "java/core/src/main/java/com/google/protobuf/SmallSortedMap.java",
+                "start_line" : 5,
+                "end_line" : 29
+              }
+            }, {
+              "license" : "BSD-3-Clause",
+              "location" : {
+                "path" : "java/core/src/main/java/com/google/protobuf/TextFormat.java",
+                "start_line" : 5,
+                "end_line" : 29
+              }
+            }, {
+              "license" : "BSD-3-Clause",
+              "location" : {
+                "path" : "java/core/src/main/java/com/google/protobuf/TextFormatEscaper.java",
+                "start_line" : 5,
+                "end_line" : 29
+              }
+            }, {
+              "license" : "BSD-3-Clause",
+              "location" : {
+                "path" : "java/core/src/main/java/com/google/protobuf/TextFormatParseInfoTree.java",
+                "start_line" : 5,
+                "end_line" : 29
+              }
+            }, {
+              "license" : "BSD-3-Clause",
+              "location" : {
+                "path" : "java/core/src/main/java/com/google/protobuf/TextFormatParseLocation.java",
+                "start_line" : 5,
+                "end_line" : 29
+              }
+            }, {
+              "license" : "BSD-3-Clause",
+              "location" : {
+                "path" : "java/core/src/main/java/com/google/protobuf/UninitializedMessageException.java",
+                "start_line" : 5,
+                "end_line" : 29
+              }
+            }, {
+              "license" : "BSD-3-Clause",
+              "location" : {
+                "path" : "java/core/src/main/java/com/google/protobuf/UnknownFieldSet.java",
+                "start_line" : 5,
+                "end_line" : 29
+              }
+            }, {
+              "license" : "BSD-3-Clause",
+              "location" : {
+                "path" : "java/core/src/main/java/com/google/protobuf/UnknownFieldSetLite.java",
+                "start_line" : 5,
+                "end_line" : 29
+              }
+            }, {
+              "license" : "BSD-3-Clause",
+              "location" : {
+                "path" : "java/core/src/main/java/com/google/protobuf/UnmodifiableLazyStringList.java",
+                "start_line" : 5,
+                "end_line" : 29
+              }
+            }, {
+              "license" : "BSD-3-Clause",
+              "location" : {
+                "path" : "java/core/src/main/java/com/google/protobuf/UnsafeByteOperations.java",
+                "start_line" : 5,
+                "end_line" : 29
+              }
+            }, {
+              "license" : "BSD-3-Clause",
+              "location" : {
+                "path" : "java/core/src/main/java/com/google/protobuf/UnsafeUtil.java",
+                "start_line" : 5,
+                "end_line" : 29
+              }
+            }, {
+              "license" : "BSD-3-Clause",
+              "location" : {
+                "path" : "java/core/src/main/java/com/google/protobuf/Utf8.java",
+                "start_line" : 5,
+                "end_line" : 29
+              }
+            }, {
+              "license" : "BSD-3-Clause",
+              "location" : {
+                "path" : "java/core/src/main/java/com/google/protobuf/WireFormat.java",
+                "start_line" : 5,
+                "end_line" : 29
+              }
+            }, {
+              "license" : "BSD-3-Clause",
+              "location" : {
+                "path" : "java/core/src/test/java/com/google/protobuf/AbstractMessageTest.java",
+                "start_line" : 5,
+                "end_line" : 29
+              }
+            }, {
+              "license" : "BSD-3-Clause",
+              "location" : {
+                "path" : "java/core/src/test/java/com/google/protobuf/AnyTest.java",
+                "start_line" : 5,
+                "end_line" : 29
+              }
+            }, {
+              "license" : "BSD-3-Clause",
+              "location" : {
+                "path" : "java/core/src/test/java/com/google/protobuf/BooleanArrayListTest.java",
+                "start_line" : 5,
+                "end_line" : 29
+              }
+            }, {
+              "license" : "BSD-3-Clause",
+              "location" : {
+                "path" : "java/core/src/test/java/com/google/protobuf/BoundedByteStringTest.java",
+                "start_line" : 5,
+                "end_line" : 29
+              }
+            }, {
+              "license" : "BSD-3-Clause",
+              "location" : {
+                "path" : "java/core/src/test/java/com/google/protobuf/ByteBufferWriterTest.java",
+                "start_line" : 5,
+                "end_line" : 29
+              }
+            }, {
+              "license" : "BSD-3-Clause",
+              "location" : {
+                "path" : "java/core/src/test/java/com/google/protobuf/ByteStringTest.java",
+                "start_line" : 5,
+                "end_line" : 29
+              }
+            }, {
+              "license" : "BSD-3-Clause",
+              "location" : {
+                "path" : "java/core/src/test/java/com/google/protobuf/CheckUtf8Test.java",
+                "start_line" : 5,
+                "end_line" : 29
+              }
+            }, {
+              "license" : "BSD-3-Clause",
+              "location" : {
+                "path" : "java/core/src/test/java/com/google/protobuf/CodedInputStreamTest.java",
+                "start_line" : 5,
+                "end_line" : 29
+              }
+            }, {
+              "license" : "BSD-3-Clause",
+              "location" : {
+                "path" : "java/core/src/test/java/com/google/protobuf/CodedOutputStreamTest.java",
+                "start_line" : 5,
+                "end_line" : 29
+              }
+            }, {
+              "license" : "BSD-3-Clause",
+              "location" : {
+                "path" : "java/core/src/test/java/com/google/protobuf/DeprecatedFieldTest.java",
+                "start_line" : 5,
+                "end_line" : 29
+              }
+            }, {
+              "license" : "BSD-3-Clause",
+              "location" : {
+                "path" : "java/core/src/test/java/com/google/protobuf/DescriptorsTest.java",
+                "start_line" : 5,
+                "end_line" : 29
+              }
+            }, {
+              "license" : "BSD-3-Clause",
+              "location" : {
+                "path" : "java/core/src/test/java/com/google/protobuf/DoubleArrayListTest.java",
+                "start_line" : 5,
+                "end_line" : 29
+              }
+            }, {
+              "license" : "BSD-3-Clause",
+              "location" : {
+                "path" : "java/core/src/test/java/com/google/protobuf/DynamicMessageTest.java",
+                "start_line" : 5,
+                "end_line" : 29
+              }
+            }, {
+              "license" : "BSD-3-Clause",
+              "location" : {
+                "path" : "java/core/src/test/java/com/google/protobuf/EnumTest.java",
+                "start_line" : 5,
+                "end_line" : 29
+              }
+            }, {
+              "license" : "BSD-3-Clause",
+              "location" : {
+                "path" : "java/core/src/test/java/com/google/protobuf/ExtensionRegistryFactoryTest.java",
+                "start_line" : 5,
+                "end_line" : 29
+              }
+            }, {
+              "license" : "BSD-3-Clause",
+              "location" : {
+                "path" : "java/core/src/test/java/com/google/protobuf/FieldPresenceTest.java",
+                "start_line" : 5,
+                "end_line" : 29
+              }
+            }, {
+              "license" : "BSD-3-Clause",
+              "location" : {
+                "path" : "java/core/src/test/java/com/google/protobuf/FloatArrayListTest.java",
+                "start_line" : 5,
+                "end_line" : 29
+              }
+            }, {
+              "license" : "BSD-3-Clause",
+              "location" : {
+                "path" : "java/core/src/test/java/com/google/protobuf/ForceFieldBuildersPreRun.java",
+                "start_line" : 5,
+                "end_line" : 29
+              }
+            }, {
+              "license" : "BSD-3-Clause",
+              "location" : {
+                "path" : "java/core/src/test/java/com/google/protobuf/GeneratedMessageTest.java",
+                "start_line" : 5,
+                "end_line" : 29
+              }
+            }, {
+              "license" : "BSD-3-Clause",
+              "location" : {
+                "path" : "java/core/src/test/java/com/google/protobuf/IntArrayListTest.java",
+                "start_line" : 5,
+                "end_line" : 29
+              }
+            }, {
+              "license" : "BSD-3-Clause",
+              "location" : {
+                "path" : "java/core/src/test/java/com/google/protobuf/IsValidUtf8Test.java",
+                "start_line" : 5,
+                "end_line" : 29
+              }
+            }, {
+              "license" : "BSD-3-Clause",
+              "location" : {
+                "path" : "java/core/src/test/java/com/google/protobuf/IsValidUtf8TestUtil.java",
+                "start_line" : 5,
+                "end_line" : 29
+              }
+            }, {
+              "license" : "BSD-3-Clause",
+              "location" : {
+                "path" : "java/core/src/test/java/com/google/protobuf/LazyFieldLiteTest.java",
+                "start_line" : 5,
+                "end_line" : 29
+              }
+            }, {
+              "license" : "BSD-3-Clause",
+              "location" : {
+                "path" : "java/core/src/test/java/com/google/protobuf/LazyFieldTest.java",
+                "start_line" : 5,
+                "end_line" : 29
+              }
+            }, {
+              "license" : "BSD-3-Clause",
+              "location" : {
+                "path" : "java/core/src/test/java/com/google/protobuf/LazyMessageLiteTest.java",
+                "start_line" : 5,
+                "end_line" : 29
+              }
+            }, {
+              "license" : "BSD-3-Clause",
+              "location" : {
+                "path" : "java/core/src/test/java/com/google/protobuf/LazyStringArrayListTest.java",
+                "start_line" : 5,
+                "end_line" : 29
+              }
+            }, {
+              "license" : "BSD-3-Clause",
+              "location" : {
+                "path" : "java/core/src/test/java/com/google/protobuf/LazyStringEndToEndTest.java",
+                "start_line" : 5,
+                "end_line" : 29
+              }
+            }, {
+              "license" : "BSD-3-Clause",
+              "location" : {
+                "path" : "java/core/src/test/java/com/google/protobuf/LiteEqualsAndHashTest.java",
+                "start_line" : 5,
+                "end_line" : 29
+              }
+            }, {
+              "license" : "BSD-3-Clause",
+              "location" : {
+                "path" : "java/core/src/test/java/com/google/protobuf/LiteTest.java",
+                "start_line" : 5,
+                "end_line" : 29
+              }
+            }, {
+              "license" : "BSD-3-Clause",
+              "location" : {
+                "path" : "java/core/src/test/java/com/google/protobuf/LiteralByteStringTest.java",
+                "start_line" : 5,
+                "end_line" : 29
+              }
+            }, {
+              "license" : "BSD-3-Clause",
+              "location" : {
+                "path" : "java/core/src/test/java/com/google/protobuf/LongArrayListTest.java",
+                "start_line" : 5,
+                "end_line" : 29
+              }
+            }, {
+              "license" : "BSD-3-Clause",
+              "location" : {
+                "path" : "java/core/src/test/java/com/google/protobuf/MapForProto2LiteTest.java",
+                "start_line" : 5,
+                "end_line" : 29
+              }
+            }, {
+              "license" : "BSD-3-Clause",
+              "location" : {
+                "path" : "java/core/src/test/java/com/google/protobuf/MapForProto2Test.java",
+                "start_line" : 5,
+                "end_line" : 29
+              }
+            }, {
+              "license" : "BSD-3-Clause",
+              "location" : {
+                "path" : "java/core/src/test/java/com/google/protobuf/MapTest.java",
+                "start_line" : 5,
+                "end_line" : 29
+              }
+            }, {
+              "license" : "BSD-3-Clause",
+              "location" : {
+                "path" : "java/core/src/test/java/com/google/protobuf/MessageTest.java",
+                "start_line" : 5,
+                "end_line" : 29
+              }
+            }, {
+              "license" : "BSD-3-Clause",
+              "location" : {
+                "path" : "java/core/src/test/java/com/google/protobuf/NestedBuildersTest.java",
+                "start_line" : 5,
+                "end_line" : 29
+              }
+            }, {
+              "license" : "BSD-3-Clause",
+              "location" : {
+                "path" : "java/core/src/test/java/com/google/protobuf/NioByteStringTest.java",
+                "start_line" : 5,
+                "end_line" : 29
+              }
+            }, {
+              "license" : "BSD-3-Clause",
+              "location" : {
+                "path" : "java/core/src/test/java/com/google/protobuf/ParseExceptionsTest.java",
+                "start_line" : 5,
+                "end_line" : 29
+              }
+            }, {
+              "license" : "BSD-3-Clause",
+              "location" : {
+                "path" : "java/core/src/test/java/com/google/protobuf/ParserTest.java",
+                "start_line" : 5,
+                "end_line" : 29
+              }
+            }, {
+              "license" : "BSD-3-Clause",
+              "location" : {
+                "path" : "java/core/src/test/java/com/google/protobuf/ProtobufArrayListTest.java",
+                "start_line" : 5,
+                "end_line" : 29
+              }
+            }, {
+              "license" : "BSD-3-Clause",
+              "location" : {
+                "path" : "java/core/src/test/java/com/google/protobuf/RepeatedFieldBuilderV3Test.java",
+                "start_line" : 5,
+                "end_line" : 29
+              }
+            }, {
+              "license" : "BSD-3-Clause",
+              "location" : {
+                "path" : "java/core/src/test/java/com/google/protobuf/RopeByteStringSubstringTest.java",
+                "start_line" : 5,
+                "end_line" : 29
+              }
+            }, {
+              "license" : "BSD-3-Clause",
+              "location" : {
+                "path" : "java/core/src/test/java/com/google/protobuf/RopeByteStringTest.java",
+                "start_line" : 5,
+                "end_line" : 29
+              }
+            }, {
+              "license" : "BSD-3-Clause",
+              "location" : {
+                "path" : "java/core/src/test/java/com/google/protobuf/ServiceTest.java",
+                "start_line" : 5,
+                "end_line" : 29
+              }
+            }, {
+              "license" : "BSD-3-Clause",
+              "location" : {
+                "path" : "java/core/src/test/java/com/google/protobuf/SingleFieldBuilderV3Test.java",
+                "start_line" : 5,
+                "end_line" : 29
+              }
+            }, {
+              "license" : "BSD-3-Clause",
+              "location" : {
+                "path" : "java/core/src/test/java/com/google/protobuf/SmallSortedMapTest.java",
+                "start_line" : 5,
+                "end_line" : 29
+              }
+            }, {
+              "license" : "BSD-3-Clause",
+              "location" : {
+                "path" : "java/core/src/test/java/com/google/protobuf/TestBadIdentifiers.java",
+                "start_line" : 5,
+                "end_line" : 29
+              }
+            }, {
+              "license" : "BSD-3-Clause",
+              "location" : {
+                "path" : "java/core/src/test/java/com/google/protobuf/TestUtil.java",
+                "start_line" : 5,
+                "end_line" : 29
+              }
+            }, {
+              "license" : "BSD-3-Clause",
+              "location" : {
+                "path" : "java/core/src/test/java/com/google/protobuf/TestUtilLite.java",
+                "start_line" : 5,
+                "end_line" : 29
+              }
+            }, {
+              "license" : "BSD-3-Clause",
+              "location" : {
+                "path" : "java/core/src/test/java/com/google/protobuf/TextFormatParseInfoTreeTest.java",
+                "start_line" : 5,
+                "end_line" : 29
+              }
+            }, {
+              "license" : "BSD-3-Clause",
+              "location" : {
+                "path" : "java/core/src/test/java/com/google/protobuf/TextFormatParseLocationTest.java",
+                "start_line" : 5,
+                "end_line" : 29
+              }
+            }, {
+              "license" : "BSD-3-Clause",
+              "location" : {
+                "path" : "java/core/src/test/java/com/google/protobuf/TextFormatTest.java",
+                "start_line" : 5,
+                "end_line" : 29
+              }
+            }, {
+              "license" : "BSD-3-Clause",
+              "location" : {
+                "path" : "java/core/src/test/java/com/google/protobuf/UnknownEnumValueTest.java",
+                "start_line" : 5,
+                "end_line" : 29
+              }
+            }, {
+              "license" : "BSD-3-Clause",
+              "location" : {
+                "path" : "java/core/src/test/java/com/google/protobuf/UnknownFieldSetLiteTest.java",
+                "start_line" : 5,
+                "end_line" : 29
+              }
+            }, {
+              "license" : "BSD-3-Clause",
+              "location" : {
+                "path" : "java/core/src/test/java/com/google/protobuf/UnknownFieldSetTest.java",
+                "start_line" : 5,
+                "end_line" : 29
+              }
+            }, {
+              "license" : "BSD-3-Clause",
+              "location" : {
+                "path" : "java/core/src/test/java/com/google/protobuf/UnmodifiableLazyStringListTest.java",
+                "start_line" : 5,
+                "end_line" : 29
+              }
+            }, {
+              "license" : "BSD-3-Clause",
+              "location" : {
+                "path" : "java/core/src/test/java/com/google/protobuf/WellKnownTypesTest.java",
+                "start_line" : 5,
+                "end_line" : 29
+              }
+            }, {
+              "license" : "BSD-3-Clause",
+              "location" : {
+                "path" : "java/core/src/test/java/com/google/protobuf/WireFormatTest.java",
+                "start_line" : 5,
+                "end_line" : 29
+              }
+            }, {
+              "license" : "BSD-3-Clause",
+              "location" : {
+                "path" : "java/core/src/test/proto/com/google/protobuf/any_test.proto",
+                "start_line" : 5,
+                "end_line" : 29
+              }
+            }, {
+              "license" : "BSD-3-Clause",
+              "location" : {
+                "path" : "java/core/src/test/proto/com/google/protobuf/field_presence_test.proto",
+                "start_line" : 5,
+                "end_line" : 29
+              }
+            }, {
+              "license" : "BSD-3-Clause",
+              "location" : {
+                "path" : "java/core/src/test/proto/com/google/protobuf/lazy_fields_lite.proto",
+                "start_line" : 5,
+                "end_line" : 29
+              }
+            }, {
+              "license" : "BSD-3-Clause",
+              "location" : {
+                "path" : "java/core/src/test/proto/com/google/protobuf/lite_equals_and_hash.proto",
+                "start_line" : 5,
+                "end_line" : 29
+              }
+            }, {
+              "license" : "BSD-3-Clause",
+              "location" : {
+                "path" : "java/core/src/test/proto/com/google/protobuf/map_for_proto2_lite_test.proto",
+                "start_line" : 5,
+                "end_line" : 29
+              }
+            }, {
+              "license" : "BSD-3-Clause",
+              "location" : {
+                "path" : "java/core/src/test/proto/com/google/protobuf/map_for_proto2_test.proto",
+                "start_line" : 5,
+                "end_line" : 29
+              }
+            }, {
+              "license" : "BSD-3-Clause",
+              "location" : {
+                "path" : "java/core/src/test/proto/com/google/protobuf/map_initialization_order_test.proto",
+                "start_line" : 5,
+                "end_line" : 29
+              }
+            }, {
+              "license" : "BSD-3-Clause",
+              "location" : {
+                "path" : "java/core/src/test/proto/com/google/protobuf/map_test.proto",
+                "start_line" : 5,
+                "end_line" : 29
+              }
+            }, {
+              "license" : "BSD-3-Clause",
+              "location" : {
+                "path" : "java/core/src/test/proto/com/google/protobuf/multiple_files_test.proto",
+                "start_line" : 5,
+                "end_line" : 29
+              }
+            }, {
+              "license" : "BSD-3-Clause",
+              "location" : {
+                "path" : "java/core/src/test/proto/com/google/protobuf/nested_builders_test.proto",
+                "start_line" : 5,
+                "end_line" : 29
+              }
+            }, {
+              "license" : "BSD-3-Clause",
+              "location" : {
+                "path" : "java/core/src/test/proto/com/google/protobuf/nested_extension.proto",
+                "start_line" : 5,
+                "end_line" : 29
+              }
+            }, {
+              "license" : "BSD-3-Clause",
+              "location" : {
+                "path" : "java/core/src/test/proto/com/google/protobuf/nested_extension_lite.proto",
+                "start_line" : 5,
+                "end_line" : 29
+              }
+            }, {
+              "license" : "BSD-3-Clause",
+              "location" : {
+                "path" : "java/core/src/test/proto/com/google/protobuf/non_nested_extension.proto",
+                "start_line" : 5,
+                "end_line" : 29
+              }
+            }, {
+              "license" : "BSD-3-Clause",
+              "location" : {
+                "path" : "java/core/src/test/proto/com/google/protobuf/non_nested_extension_lite.proto",
+                "start_line" : 5,
+                "end_line" : 29
+              }
+            }, {
+              "license" : "BSD-3-Clause",
+              "location" : {
+                "path" : "java/core/src/test/proto/com/google/protobuf/outer_class_name_test.proto",
+                "start_line" : 5,
+                "end_line" : 29
+              }
+            }, {
+              "license" : "BSD-3-Clause",
+              "location" : {
+                "path" : "java/core/src/test/proto/com/google/protobuf/outer_class_name_test2.proto",
+                "start_line" : 5,
+                "end_line" : 29
+              }
+            }, {
+              "license" : "BSD-3-Clause",
+              "location" : {
+                "path" : "java/core/src/test/proto/com/google/protobuf/outer_class_name_test3.proto",
+                "start_line" : 5,
+                "end_line" : 29
+              }
+            }, {
+              "license" : "BSD-3-Clause",
+              "location" : {
+                "path" : "java/core/src/test/proto/com/google/protobuf/test_bad_identifiers.proto",
+                "start_line" : 5,
+                "end_line" : 29
+              }
+            }, {
+              "license" : "BSD-3-Clause",
+              "location" : {
+                "path" : "java/core/src/test/proto/com/google/protobuf/test_check_utf8.proto",
+                "start_line" : 5,
+                "end_line" : 29
+              }
+            }, {
+              "license" : "BSD-3-Clause",
+              "location" : {
+                "path" : "java/core/src/test/proto/com/google/protobuf/test_check_utf8_size.proto",
+                "start_line" : 5,
+                "end_line" : 29
+              }
+            }, {
+              "license" : "BSD-3-Clause",
+              "location" : {
+                "path" : "java/core/src/test/proto/com/google/protobuf/test_custom_options.proto",
+                "start_line" : 5,
+                "end_line" : 29
+              }
+            }, {
+              "license" : "BSD-3-Clause",
+              "location" : {
+                "path" : "java/core/src/test/proto/com/google/protobuf/test_extra_interfaces.proto",
+                "start_line" : 5,
+                "end_line" : 29
+              }
+            }, {
+              "license" : "BSD-3-Clause",
+              "location" : {
+                "path" : "java/pom.xml",
+                "start_line" : 40,
+                "end_line" : 46
+              }
+            }, {
+              "license" : "BSD-3-Clause",
+              "location" : {
+                "path" : "java/util/src/main/java/com/google/protobuf/util/Durations.java",
+                "start_line" : 5,
+                "end_line" : 29
+              }
+            }, {
+              "license" : "BSD-3-Clause",
+              "location" : {
+                "path" : "java/util/src/main/java/com/google/protobuf/util/FieldMaskTree.java",
+                "start_line" : 5,
+                "end_line" : 29
+              }
+            }, {
+              "license" : "BSD-3-Clause",
+              "location" : {
+                "path" : "java/util/src/main/java/com/google/protobuf/util/FieldMaskUtil.java",
+                "start_line" : 5,
+                "end_line" : 29
+              }
+            }, {
+              "license" : "BSD-3-Clause",
+              "location" : {
+                "path" : "java/util/src/main/java/com/google/protobuf/util/JsonFormat.java",
+                "start_line" : 5,
+                "end_line" : 29
+              }
+            }, {
+              "license" : "BSD-3-Clause",
+              "location" : {
+                "path" : "java/util/src/main/java/com/google/protobuf/util/TimeUtil.java",
+                "start_line" : 5,
+                "end_line" : 29
+              }
+            }, {
+              "license" : "BSD-3-Clause",
+              "location" : {
+                "path" : "java/util/src/main/java/com/google/protobuf/util/Timestamps.java",
+                "start_line" : 5,
+                "end_line" : 29
+              }
+            }, {
+              "license" : "BSD-3-Clause",
+              "location" : {
+                "path" : "java/util/src/test/java/com/google/protobuf/util/FieldMaskTreeTest.java",
+                "start_line" : 5,
+                "end_line" : 29
+              }
+            }, {
+              "license" : "BSD-3-Clause",
+              "location" : {
+                "path" : "java/util/src/test/java/com/google/protobuf/util/FieldMaskUtilTest.java",
+                "start_line" : 5,
+                "end_line" : 29
+              }
+            }, {
+              "license" : "BSD-3-Clause",
+              "location" : {
+                "path" : "java/util/src/test/java/com/google/protobuf/util/JsonFormatTest.java",
+                "start_line" : 5,
+                "end_line" : 29
+              }
+            }, {
+              "license" : "BSD-3-Clause",
+              "location" : {
+                "path" : "java/util/src/test/java/com/google/protobuf/util/TimeUtilTest.java",
+                "start_line" : 5,
+                "end_line" : 29
+              }
+            }, {
+              "license" : "BSD-3-Clause",
+              "location" : {
+                "path" : "java/util/src/test/proto/com/google/protobuf/util/json_test.proto",
+                "start_line" : 5,
+                "end_line" : 29
+              }
+            }, {
+              "license" : "LicenseRef-scancode-protobuf",
+              "location" : {
+                "path" : "LICENSE",
+                "start_line" : 11,
+                "end_line" : 42
+              }
+            } ],
+            "copyrights" : [ {
+              "statement" : "Copyright 2008 Google Inc.",
+              "location" : {
+                "path" : "README.md",
+                "start_line" : 6,
+                "end_line" : 6
+              }
+            }, {
+              "statement" : "Copyright 2008 Google Inc.",
+              "location" : {
+                "path" : "java/README.md",
+                "start_line" : 6,
+                "end_line" : 6
+              }
+            }, {
+              "statement" : "Copyright 2008 Google Inc.",
+              "location" : {
+                "path" : "java/compatibility_tests/v2.5.0/more_protos/src/proto/com/google/protobuf/multiple_files_test.proto",
+                "start_line" : 2,
+                "end_line" : 2
+              }
+            }, {
+              "statement" : "Copyright 2008 Google Inc.",
+              "location" : {
+                "path" : "java/compatibility_tests/v2.5.0/more_protos/src/proto/com/google/protobuf/nested_builders_test.proto",
+                "start_line" : 2,
+                "end_line" : 2
+              }
+            }, {
+              "statement" : "Copyright 2008 Google Inc.",
+              "location" : {
+                "path" : "java/compatibility_tests/v2.5.0/more_protos/src/proto/com/google/protobuf/nested_extension.proto",
+                "start_line" : 2,
+                "end_line" : 2
+              }
+            }, {
+              "statement" : "Copyright 2008 Google Inc.",
+              "location" : {
+                "path" : "java/compatibility_tests/v2.5.0/more_protos/src/proto/com/google/protobuf/nested_extension_lite.proto",
+                "start_line" : 2,
+                "end_line" : 2
+              }
+            }, {
+              "statement" : "Copyright 2008 Google Inc.",
+              "location" : {
+                "path" : "java/compatibility_tests/v2.5.0/more_protos/src/proto/com/google/protobuf/non_nested_extension.proto",
+                "start_line" : 2,
+                "end_line" : 2
+              }
+            }, {
+              "statement" : "Copyright 2008 Google Inc.",
+              "location" : {
+                "path" : "java/compatibility_tests/v2.5.0/more_protos/src/proto/com/google/protobuf/non_nested_extension_lite.proto",
+                "start_line" : 2,
+                "end_line" : 2
+              }
+            }, {
+              "statement" : "Copyright 2008 Google Inc.",
+              "location" : {
+                "path" : "java/compatibility_tests/v2.5.0/more_protos/src/proto/com/google/protobuf/test_bad_identifiers.proto",
+                "start_line" : 2,
+                "end_line" : 2
+              }
+            }, {
+              "statement" : "Copyright 2008 Google Inc.",
+              "location" : {
+                "path" : "java/compatibility_tests/v2.5.0/more_protos/src/proto/google/protobuf/descriptor.proto",
+                "start_line" : 2,
+                "end_line" : 2
+              }
+            }, {
+              "statement" : "Copyright 2008 Google Inc.",
+              "location" : {
+                "path" : "java/compatibility_tests/v2.5.0/more_protos/src/proto/google/protobuf/unittest.proto",
+                "start_line" : 2,
+                "end_line" : 2
+              }
+            }, {
+              "statement" : "Copyright 2008 Google Inc.",
+              "location" : {
+                "path" : "java/compatibility_tests/v2.5.0/more_protos/src/proto/google/protobuf/unittest_custom_options.proto",
+                "start_line" : 2,
+                "end_line" : 2
+              }
+            }, {
+              "statement" : "Copyright 2008 Google Inc.",
+              "location" : {
+                "path" : "java/compatibility_tests/v2.5.0/more_protos/src/proto/google/protobuf/unittest_embed_optimize_for.proto",
+                "start_line" : 2,
+                "end_line" : 2
+              }
+            }, {
+              "statement" : "Copyright 2008 Google Inc.",
+              "location" : {
+                "path" : "java/compatibility_tests/v2.5.0/more_protos/src/proto/google/protobuf/unittest_empty.proto",
+                "start_line" : 2,
+                "end_line" : 2
+              }
+            }, {
+              "statement" : "Copyright 2008 Google Inc.",
+              "location" : {
+                "path" : "java/compatibility_tests/v2.5.0/more_protos/src/proto/google/protobuf/unittest_enormous_descriptor.proto",
+                "start_line" : 2,
+                "end_line" : 2
+              }
+            }, {
+              "statement" : "Copyright 2008 Google Inc.",
+              "location" : {
+                "path" : "java/compatibility_tests/v2.5.0/more_protos/src/proto/google/protobuf/unittest_import.proto",
+                "start_line" : 2,
+                "end_line" : 2
+              }
+            }, {
+              "statement" : "Copyright 2008 Google Inc.",
+              "location" : {
+                "path" : "java/compatibility_tests/v2.5.0/more_protos/src/proto/google/protobuf/unittest_import_lite.proto",
+                "start_line" : 2,
+                "end_line" : 2
+              }
+            }, {
+              "statement" : "Copyright 2008 Google Inc.",
+              "location" : {
+                "path" : "java/compatibility_tests/v2.5.0/more_protos/src/proto/google/protobuf/unittest_import_public.proto",
+                "start_line" : 2,
+                "end_line" : 2
+              }
+            }, {
+              "statement" : "Copyright 2008 Google Inc.",
+              "location" : {
+                "path" : "java/compatibility_tests/v2.5.0/more_protos/src/proto/google/protobuf/unittest_import_public_lite.proto",
+                "start_line" : 2,
+                "end_line" : 2
+              }
+            }, {
+              "statement" : "Copyright 2008 Google Inc.",
+              "location" : {
+                "path" : "java/compatibility_tests/v2.5.0/more_protos/src/proto/google/protobuf/unittest_lite.proto",
+                "start_line" : 2,
+                "end_line" : 2
+              }
+            }, {
+              "statement" : "Copyright 2008 Google Inc.",
+              "location" : {
+                "path" : "java/compatibility_tests/v2.5.0/more_protos/src/proto/google/protobuf/unittest_lite_imports_nonlite.proto",
+                "start_line" : 2,
+                "end_line" : 2
+              }
+            }, {
+              "statement" : "Copyright 2008 Google Inc.",
+              "location" : {
+                "path" : "java/compatibility_tests/v2.5.0/more_protos/src/proto/google/protobuf/unittest_mset.proto",
+                "start_line" : 2,
+                "end_line" : 2
+              }
+            }, {
+              "statement" : "Copyright 2008 Google Inc.",
+              "location" : {
+                "path" : "java/compatibility_tests/v2.5.0/more_protos/src/proto/google/protobuf/unittest_no_generic_services.proto",
+                "start_line" : 2,
+                "end_line" : 2
+              }
+            }, {
+              "statement" : "Copyright 2008 Google Inc.",
+              "location" : {
+                "path" : "java/compatibility_tests/v2.5.0/more_protos/src/proto/google/protobuf/unittest_optimize_for.proto",
+                "start_line" : 2,
+                "end_line" : 2
+              }
+            }, {
+              "statement" : "Copyright 2008 Google Inc.",
+              "location" : {
+                "path" : "java/compatibility_tests/v2.5.0/protos/src/proto/com/google/protobuf/multiple_files_test.proto",
+                "start_line" : 2,
+                "end_line" : 2
+              }
+            }, {
+              "statement" : "Copyright 2008 Google Inc.",
+              "location" : {
+                "path" : "java/compatibility_tests/v2.5.0/protos/src/proto/com/google/protobuf/nested_builders_test.proto",
+                "start_line" : 2,
+                "end_line" : 2
+              }
+            }, {
+              "statement" : "Copyright 2008 Google Inc.",
+              "location" : {
+                "path" : "java/compatibility_tests/v2.5.0/protos/src/proto/com/google/protobuf/nested_extension.proto",
+                "start_line" : 2,
+                "end_line" : 2
+              }
+            }, {
+              "statement" : "Copyright 2008 Google Inc.",
+              "location" : {
+                "path" : "java/compatibility_tests/v2.5.0/protos/src/proto/com/google/protobuf/nested_extension_lite.proto",
+                "start_line" : 2,
+                "end_line" : 2
+              }
+            }, {
+              "statement" : "Copyright 2008 Google Inc.",
+              "location" : {
+                "path" : "java/compatibility_tests/v2.5.0/protos/src/proto/com/google/protobuf/non_nested_extension.proto",
+                "start_line" : 2,
+                "end_line" : 2
+              }
+            }, {
+              "statement" : "Copyright 2008 Google Inc.",
+              "location" : {
+                "path" : "java/compatibility_tests/v2.5.0/protos/src/proto/com/google/protobuf/non_nested_extension_lite.proto",
+                "start_line" : 2,
+                "end_line" : 2
+              }
+            }, {
+              "statement" : "Copyright 2008 Google Inc.",
+              "location" : {
+                "path" : "java/compatibility_tests/v2.5.0/protos/src/proto/com/google/protobuf/test_bad_identifiers.proto",
+                "start_line" : 2,
+                "end_line" : 2
+              }
+            }, {
+              "statement" : "Copyright 2008 Google Inc.",
+              "location" : {
+                "path" : "java/compatibility_tests/v2.5.0/protos/src/proto/google/protobuf/descriptor.proto",
+                "start_line" : 2,
+                "end_line" : 2
+              }
+            }, {
+              "statement" : "Copyright 2008 Google Inc.",
+              "location" : {
+                "path" : "java/compatibility_tests/v2.5.0/protos/src/proto/google/protobuf/unittest.proto",
+                "start_line" : 2,
+                "end_line" : 2
+              }
+            }, {
+              "statement" : "Copyright 2008 Google Inc.",
+              "location" : {
+                "path" : "java/compatibility_tests/v2.5.0/protos/src/proto/google/protobuf/unittest_custom_options.proto",
+                "start_line" : 2,
+                "end_line" : 2
+              }
+            }, {
+              "statement" : "Copyright 2008 Google Inc.",
+              "location" : {
+                "path" : "java/compatibility_tests/v2.5.0/protos/src/proto/google/protobuf/unittest_embed_optimize_for.proto",
+                "start_line" : 2,
+                "end_line" : 2
+              }
+            }, {
+              "statement" : "Copyright 2008 Google Inc.",
+              "location" : {
+                "path" : "java/compatibility_tests/v2.5.0/protos/src/proto/google/protobuf/unittest_empty.proto",
+                "start_line" : 2,
+                "end_line" : 2
+              }
+            }, {
+              "statement" : "Copyright 2008 Google Inc.",
+              "location" : {
+                "path" : "java/compatibility_tests/v2.5.0/protos/src/proto/google/protobuf/unittest_enormous_descriptor.proto",
+                "start_line" : 2,
+                "end_line" : 2
+              }
+            }, {
+              "statement" : "Copyright 2008 Google Inc.",
+              "location" : {
+                "path" : "java/compatibility_tests/v2.5.0/protos/src/proto/google/protobuf/unittest_import.proto",
+                "start_line" : 2,
+                "end_line" : 2
+              }
+            }, {
+              "statement" : "Copyright 2008 Google Inc.",
+              "location" : {
+                "path" : "java/compatibility_tests/v2.5.0/protos/src/proto/google/protobuf/unittest_import_lite.proto",
+                "start_line" : 2,
+                "end_line" : 2
+              }
+            }, {
+              "statement" : "Copyright 2008 Google Inc.",
+              "location" : {
+                "path" : "java/compatibility_tests/v2.5.0/protos/src/proto/google/protobuf/unittest_import_public.proto",
+                "start_line" : 2,
+                "end_line" : 2
+              }
+            }, {
+              "statement" : "Copyright 2008 Google Inc.",
+              "location" : {
+                "path" : "java/compatibility_tests/v2.5.0/protos/src/proto/google/protobuf/unittest_import_public_lite.proto",
+                "start_line" : 2,
+                "end_line" : 2
+              }
+            }, {
+              "statement" : "Copyright 2008 Google Inc.",
+              "location" : {
+                "path" : "java/compatibility_tests/v2.5.0/protos/src/proto/google/protobuf/unittest_lite.proto",
+                "start_line" : 2,
+                "end_line" : 2
+              }
+            }, {
+              "statement" : "Copyright 2008 Google Inc.",
+              "location" : {
+                "path" : "java/compatibility_tests/v2.5.0/protos/src/proto/google/protobuf/unittest_lite_imports_nonlite.proto",
+                "start_line" : 2,
+                "end_line" : 2
+              }
+            }, {
+              "statement" : "Copyright 2008 Google Inc.",
+              "location" : {
+                "path" : "java/compatibility_tests/v2.5.0/protos/src/proto/google/protobuf/unittest_mset.proto",
+                "start_line" : 2,
+                "end_line" : 2
+              }
+            }, {
+              "statement" : "Copyright 2008 Google Inc.",
+              "location" : {
+                "path" : "java/compatibility_tests/v2.5.0/protos/src/proto/google/protobuf/unittest_no_generic_services.proto",
+                "start_line" : 2,
+                "end_line" : 2
+              }
+            }, {
+              "statement" : "Copyright 2008 Google Inc.",
+              "location" : {
+                "path" : "java/compatibility_tests/v2.5.0/protos/src/proto/google/protobuf/unittest_optimize_for.proto",
+                "start_line" : 2,
+                "end_line" : 2
+              }
+            }, {
+              "statement" : "Copyright 2008 Google Inc.",
+              "location" : {
+                "path" : "java/compatibility_tests/v2.5.0/tests/src/main/java/com/google/protobuf/test/AbstractMessageTest.java",
+                "start_line" : 2,
+                "end_line" : 2
+              }
+            }, {
+              "statement" : "Copyright 2008 Google Inc.",
+              "location" : {
+                "path" : "java/compatibility_tests/v2.5.0/tests/src/main/java/com/google/protobuf/test/BoundedByteStringTest.java",
+                "start_line" : 2,
+                "end_line" : 2
+              }
+            }, {
+              "statement" : "Copyright 2008 Google Inc.",
+              "location" : {
+                "path" : "java/compatibility_tests/v2.5.0/tests/src/main/java/com/google/protobuf/test/ByteStringTest.java",
+                "start_line" : 2,
+                "end_line" : 2
+              }
+            }, {
+              "statement" : "Copyright 2008 Google Inc.",
+              "location" : {
+                "path" : "java/compatibility_tests/v2.5.0/tests/src/main/java/com/google/protobuf/test/CodedInputStreamTest.java",
+                "start_line" : 2,
+                "end_line" : 2
+              }
+            }, {
+              "statement" : "Copyright 2008 Google Inc.",
+              "location" : {
+                "path" : "java/compatibility_tests/v2.5.0/tests/src/main/java/com/google/protobuf/test/CodedOutputStreamTest.java",
+                "start_line" : 2,
+                "end_line" : 2
+              }
+            }, {
+              "statement" : "Copyright 2008 Google Inc.",
+              "location" : {
+                "path" : "java/compatibility_tests/v2.5.0/tests/src/main/java/com/google/protobuf/test/DeprecatedFieldTest.java",
+                "start_line" : 2,
+                "end_line" : 2
+              }
+            }, {
+              "statement" : "Copyright 2008 Google Inc.",
+              "location" : {
+                "path" : "java/compatibility_tests/v2.5.0/tests/src/main/java/com/google/protobuf/test/DescriptorsTest.java",
+                "start_line" : 2,
+                "end_line" : 2
+              }
+            }, {
+              "statement" : "Copyright 2008 Google Inc.",
+              "location" : {
+                "path" : "java/compatibility_tests/v2.5.0/tests/src/main/java/com/google/protobuf/test/DynamicMessageTest.java",
+                "start_line" : 2,
+                "end_line" : 2
+              }
+            }, {
+              "statement" : "Copyright 2008 Google Inc.",
+              "location" : {
+                "path" : "java/compatibility_tests/v2.5.0/tests/src/main/java/com/google/protobuf/test/ForceFieldBuildersPreRun.java",
+                "start_line" : 2,
+                "end_line" : 2
+              }
+            }, {
+              "statement" : "Copyright 2008 Google Inc.",
+              "location" : {
+                "path" : "java/compatibility_tests/v2.5.0/tests/src/main/java/com/google/protobuf/test/GeneratedMessageTest.java",
+                "start_line" : 2,
+                "end_line" : 2
+              }
+            }, {
+              "statement" : "Copyright 2008 Google Inc.",
+              "location" : {
+                "path" : "java/compatibility_tests/v2.5.0/tests/src/main/java/com/google/protobuf/test/LazyStringArrayListTest.java",
+                "start_line" : 2,
+                "end_line" : 2
+              }
+            }, {
+              "statement" : "Copyright 2008 Google Inc.",
+              "location" : {
+                "path" : "java/compatibility_tests/v2.5.0/tests/src/main/java/com/google/protobuf/test/LazyStringEndToEndTest.java",
+                "start_line" : 2,
+                "end_line" : 2
+              }
+            }, {
+              "statement" : "Copyright 2008 Google Inc.",
+              "location" : {
+                "path" : "java/compatibility_tests/v2.5.0/tests/src/main/java/com/google/protobuf/test/LiteralByteStringTest.java",
+                "start_line" : 2,
+                "end_line" : 2
+              }
+            }, {
+              "statement" : "Copyright 2008 Google Inc.",
+              "location" : {
+                "path" : "java/compatibility_tests/v2.5.0/tests/src/main/java/com/google/protobuf/test/MessageTest.java",
+                "start_line" : 2,
+                "end_line" : 2
+              }
+            }, {
+              "statement" : "Copyright 2008 Google Inc.",
+              "location" : {
+                "path" : "java/compatibility_tests/v2.5.0/tests/src/main/java/com/google/protobuf/test/NestedBuildersTest.java",
+                "start_line" : 2,
+                "end_line" : 2
+              }
+            }, {
+              "statement" : "Copyright 2008 Google Inc.",
+              "location" : {
+                "path" : "java/compatibility_tests/v2.5.0/tests/src/main/java/com/google/protobuf/test/ParserTest.java",
+                "start_line" : 2,
+                "end_line" : 2
+              }
+            }, {
+              "statement" : "Copyright 2008 Google Inc.",
+              "location" : {
+                "path" : "java/compatibility_tests/v2.5.0/tests/src/main/java/com/google/protobuf/test/RopeByteStringSubstringTest.java",
+                "start_line" : 2,
+                "end_line" : 2
+              }
+            }, {
+              "statement" : "Copyright 2008 Google Inc.",
+              "location" : {
+                "path" : "java/compatibility_tests/v2.5.0/tests/src/main/java/com/google/protobuf/test/RopeByteStringTest.java",
+                "start_line" : 2,
+                "end_line" : 2
+              }
+            }, {
+              "statement" : "Copyright 2008 Google Inc.",
+              "location" : {
+                "path" : "java/compatibility_tests/v2.5.0/tests/src/main/java/com/google/protobuf/test/ServiceTest.java",
+                "start_line" : 2,
+                "end_line" : 2
+              }
+            }, {
+              "statement" : "Copyright 2008 Google Inc.",
+              "location" : {
+                "path" : "java/compatibility_tests/v2.5.0/tests/src/main/java/com/google/protobuf/test/TestBadIdentifiers.java",
+                "start_line" : 2,
+                "end_line" : 2
+              }
+            }, {
+              "statement" : "Copyright 2008 Google Inc.",
+              "location" : {
+                "path" : "java/compatibility_tests/v2.5.0/tests/src/main/java/com/google/protobuf/test/TestUtil.java",
+                "start_line" : 2,
+                "end_line" : 2
+              }
+            }, {
+              "statement" : "Copyright 2008 Google Inc.",
+              "location" : {
+                "path" : "java/compatibility_tests/v2.5.0/tests/src/main/java/com/google/protobuf/test/TextFormatTest.java",
+                "start_line" : 2,
+                "end_line" : 2
+              }
+            }, {
+              "statement" : "Copyright 2008 Google Inc.",
+              "location" : {
+                "path" : "java/compatibility_tests/v2.5.0/tests/src/main/java/com/google/protobuf/test/UnknownFieldSetTest.java",
+                "start_line" : 2,
+                "end_line" : 2
+              }
+            }, {
+              "statement" : "Copyright 2008 Google Inc.",
+              "location" : {
+                "path" : "java/compatibility_tests/v2.5.0/tests/src/main/java/com/google/protobuf/test/UnmodifiableLazyStringListTest.java",
+                "start_line" : 2,
+                "end_line" : 2
+              }
+            }, {
+              "statement" : "Copyright 2008 Google Inc.",
+              "location" : {
+                "path" : "java/compatibility_tests/v2.5.0/tests/src/main/java/com/google/protobuf/test/WireFormatTest.java",
+                "start_line" : 2,
+                "end_line" : 2
+              }
+            }, {
+              "statement" : "Copyright 2008 Google Inc.",
+              "location" : {
+                "path" : "java/core/src/main/java/com/google/protobuf/AbstractMessage.java",
+                "start_line" : 2,
+                "end_line" : 2
+              }
+            }, {
+              "statement" : "Copyright 2008 Google Inc.",
+              "location" : {
+                "path" : "java/core/src/main/java/com/google/protobuf/AbstractMessageLite.java",
+                "start_line" : 2,
+                "end_line" : 2
+              }
+            }, {
+              "statement" : "Copyright 2008 Google Inc.",
+              "location" : {
+                "path" : "java/core/src/main/java/com/google/protobuf/AbstractParser.java",
+                "start_line" : 2,
+                "end_line" : 2
+              }
+            }, {
+              "statement" : "Copyright 2008 Google Inc.",
+              "location" : {
+                "path" : "java/core/src/main/java/com/google/protobuf/AbstractProtobufList.java",
+                "start_line" : 2,
+                "end_line" : 2
+              }
+            }, {
+              "statement" : "Copyright 2008 Google Inc.",
+              "location" : {
+                "path" : "java/core/src/main/java/com/google/protobuf/BlockingRpcChannel.java",
+                "start_line" : 2,
+                "end_line" : 2
+              }
+            }, {
+              "statement" : "Copyright 2008 Google Inc.",
+              "location" : {
+                "path" : "java/core/src/main/java/com/google/protobuf/BlockingService.java",
+                "start_line" : 2,
+                "end_line" : 2
+              }
+            }, {
+              "statement" : "Copyright 2008 Google Inc.",
+              "location" : {
+                "path" : "java/core/src/main/java/com/google/protobuf/BooleanArrayList.java",
+                "start_line" : 2,
+                "end_line" : 2
+              }
+            }, {
+              "statement" : "Copyright 2008 Google Inc.",
+              "location" : {
+                "path" : "java/core/src/main/java/com/google/protobuf/ByteBufferWriter.java",
+                "start_line" : 2,
+                "end_line" : 2
+              }
+            }, {
+              "statement" : "Copyright 2008 Google Inc.",
+              "location" : {
+                "path" : "java/core/src/main/java/com/google/protobuf/ByteOutput.java",
+                "start_line" : 2,
+                "end_line" : 2
+              }
+            }, {
+              "statement" : "Copyright 2008 Google Inc.",
+              "location" : {
+                "path" : "java/core/src/main/java/com/google/protobuf/ByteString.java",
+                "start_line" : 2,
+                "end_line" : 2
+              }
+            }, {
+              "statement" : "Copyright 2008 Google Inc.",
+              "location" : {
+                "path" : "java/core/src/main/java/com/google/protobuf/CodedInputStream.java",
+                "start_line" : 2,
+                "end_line" : 2
+              }
+            }, {
+              "statement" : "Copyright 2008 Google Inc.",
+              "location" : {
+                "path" : "java/core/src/main/java/com/google/protobuf/CodedOutputStream.java",
+                "start_line" : 2,
+                "end_line" : 2
+              }
+            }, {
+              "statement" : "Copyright 2008 Google Inc.",
+              "location" : {
+                "path" : "java/core/src/main/java/com/google/protobuf/Descriptors.java",
+                "start_line" : 2,
+                "end_line" : 2
+              }
+            }, {
+              "statement" : "Copyright 2008 Google Inc.",
+              "location" : {
+                "path" : "java/core/src/main/java/com/google/protobuf/DoubleArrayList.java",
+                "start_line" : 2,
+                "end_line" : 2
+              }
+            }, {
+              "statement" : "Copyright 2008 Google Inc.",
+              "location" : {
+                "path" : "java/core/src/main/java/com/google/protobuf/DynamicMessage.java",
+                "start_line" : 2,
+                "end_line" : 2
+              }
+            }, {
+              "statement" : "Copyright 2008 Google Inc.",
+              "location" : {
+                "path" : "java/core/src/main/java/com/google/protobuf/ExperimentalApi.java",
+                "start_line" : 2,
+                "end_line" : 2
+              }
+            }, {
+              "statement" : "Copyright 2008 Google Inc.",
+              "location" : {
+                "path" : "java/core/src/main/java/com/google/protobuf/Extension.java",
+                "start_line" : 2,
+                "end_line" : 2
+              }
+            }, {
+              "statement" : "Copyright 2008 Google Inc.",
+              "location" : {
+                "path" : "java/core/src/main/java/com/google/protobuf/ExtensionLite.java",
+                "start_line" : 2,
+                "end_line" : 2
+              }
+            }, {
+              "statement" : "Copyright 2008 Google Inc.",
+              "location" : {
+                "path" : "java/core/src/main/java/com/google/protobuf/ExtensionRegistry.java",
+                "start_line" : 2,
+                "end_line" : 2
+              }
+            }, {
+              "statement" : "Copyright 2008 Google Inc.",
+              "location" : {
+                "path" : "java/core/src/main/java/com/google/protobuf/ExtensionRegistryFactory.java",
+                "start_line" : 2,
+                "end_line" : 2
+              }
+            }, {
+              "statement" : "Copyright 2008 Google Inc.",
+              "location" : {
+                "path" : "java/core/src/main/java/com/google/protobuf/ExtensionRegistryLite.java",
+                "start_line" : 2,
+                "end_line" : 2
+              }
+            }, {
+              "statement" : "Copyright 2008 Google Inc.",
+              "location" : {
+                "path" : "java/core/src/main/java/com/google/protobuf/FieldSet.java",
+                "start_line" : 2,
+                "end_line" : 2
+              }
+            }, {
+              "statement" : "Copyright 2008 Google Inc.",
+              "location" : {
+                "path" : "java/core/src/main/java/com/google/protobuf/FloatArrayList.java",
+                "start_line" : 2,
+                "end_line" : 2
+              }
+            }, {
+              "statement" : "Copyright 2008 Google Inc.",
+              "location" : {
+                "path" : "java/core/src/main/java/com/google/protobuf/GeneratedMessage.java",
+                "start_line" : 2,
+                "end_line" : 2
+              }
+            }, {
+              "statement" : "Copyright 2008 Google Inc.",
+              "location" : {
+                "path" : "java/core/src/main/java/com/google/protobuf/GeneratedMessageLite.java",
+                "start_line" : 2,
+                "end_line" : 2
+              }
+            }, {
+              "statement" : "Copyright 2008 Google Inc.",
+              "location" : {
+                "path" : "java/core/src/main/java/com/google/protobuf/GeneratedMessageV3.java",
+                "start_line" : 2,
+                "end_line" : 2
+              }
+            }, {
+              "statement" : "Copyright 2008 Google Inc.",
+              "location" : {
+                "path" : "java/core/src/main/java/com/google/protobuf/IntArrayList.java",
+                "start_line" : 2,
+                "end_line" : 2
+              }
+            }, {
+              "statement" : "Copyright 2008 Google Inc.",
+              "location" : {
+                "path" : "java/core/src/main/java/com/google/protobuf/Internal.java",
+                "start_line" : 2,
+                "end_line" : 2
+              }
+            }, {
+              "statement" : "Copyright 2008 Google Inc.",
+              "location" : {
+                "path" : "java/core/src/main/java/com/google/protobuf/InvalidProtocolBufferException.java",
+                "start_line" : 2,
+                "end_line" : 2
+              }
+            }, {
+              "statement" : "Copyright 2008 Google Inc.",
+              "location" : {
+                "path" : "java/core/src/main/java/com/google/protobuf/LazyField.java",
+                "start_line" : 2,
+                "end_line" : 2
+              }
+            }, {
+              "statement" : "Copyright 2008 Google Inc.",
+              "location" : {
+                "path" : "java/core/src/main/java/com/google/protobuf/LazyFieldLite.java",
+                "start_line" : 2,
+                "end_line" : 2
+              }
+            }, {
+              "statement" : "Copyright 2008 Google Inc.",
+              "location" : {
+                "path" : "java/core/src/main/java/com/google/protobuf/LazyStringArrayList.java",
+                "start_line" : 2,
+                "end_line" : 2
+              }
+            }, {
+              "statement" : "Copyright 2008 Google Inc.",
+              "location" : {
+                "path" : "java/core/src/main/java/com/google/protobuf/LazyStringList.java",
+                "start_line" : 2,
+                "end_line" : 2
+              }
+            }, {
+              "statement" : "Copyright 2008 Google Inc.",
+              "location" : {
+                "path" : "java/core/src/main/java/com/google/protobuf/LongArrayList.java",
+                "start_line" : 2,
+                "end_line" : 2
+              }
+            }, {
+              "statement" : "Copyright 2008 Google Inc.",
+              "location" : {
+                "path" : "java/core/src/main/java/com/google/protobuf/MapEntry.java",
+                "start_line" : 2,
+                "end_line" : 2
+              }
+            }, {
+              "statement" : "Copyright 2008 Google Inc.",
+              "location" : {
+                "path" : "java/core/src/main/java/com/google/protobuf/MapEntryLite.java",
+                "start_line" : 2,
+                "end_line" : 2
+              }
+            }, {
+              "statement" : "Copyright 2008 Google Inc.",
+              "location" : {
+                "path" : "java/core/src/main/java/com/google/protobuf/MapField.java",
+                "start_line" : 2,
+                "end_line" : 2
+              }
+            }, {
+              "statement" : "Copyright 2008 Google Inc.",
+              "location" : {
+                "path" : "java/core/src/main/java/com/google/protobuf/MapFieldLite.java",
+                "start_line" : 2,
+                "end_line" : 2
+              }
+            }, {
+              "statement" : "Copyright 2008 Google Inc.",
+              "location" : {
+                "path" : "java/core/src/main/java/com/google/protobuf/Message.java",
+                "start_line" : 2,
+                "end_line" : 2
+              }
+            }, {
+              "statement" : "Copyright 2008 Google Inc.",
+              "location" : {
+                "path" : "java/core/src/main/java/com/google/protobuf/MessageLite.java",
+                "start_line" : 2,
+                "end_line" : 2
+              }
+            }, {
+              "statement" : "Copyright 2008 Google Inc.",
+              "location" : {
+                "path" : "java/core/src/main/java/com/google/protobuf/MessageLiteOrBuilder.java",
+                "start_line" : 2,
+                "end_line" : 2
+              }
+            }, {
+              "statement" : "Copyright 2008 Google Inc.",
+              "location" : {
+                "path" : "java/core/src/main/java/com/google/protobuf/MessageLiteToString.java",
+                "start_line" : 2,
+                "end_line" : 2
+              }
+            }, {
+              "statement" : "Copyright 2008 Google Inc.",
+              "location" : {
+                "path" : "java/core/src/main/java/com/google/protobuf/MessageOrBuilder.java",
+                "start_line" : 2,
+                "end_line" : 2
+              }
+            }, {
+              "statement" : "Copyright 2008 Google Inc.",
+              "location" : {
+                "path" : "java/core/src/main/java/com/google/protobuf/MessageReflection.java",
+                "start_line" : 2,
+                "end_line" : 2
+              }
+            }, {
+              "statement" : "Copyright 2008 Google Inc.",
+              "location" : {
+                "path" : "java/core/src/main/java/com/google/protobuf/MutabilityOracle.java",
+                "start_line" : 2,
+                "end_line" : 2
+              }
+            }, {
+              "statement" : "Copyright 2008 Google Inc.",
+              "location" : {
+                "path" : "java/core/src/main/java/com/google/protobuf/NioByteString.java",
+                "start_line" : 2,
+                "end_line" : 2
+              }
+            }, {
+              "statement" : "Copyright 2008 Google Inc.",
+              "location" : {
+                "path" : "java/core/src/main/java/com/google/protobuf/Parser.java",
+                "start_line" : 2,
+                "end_line" : 2
+              }
+            }, {
+              "statement" : "Copyright 2008 Google Inc.",
+              "location" : {
+                "path" : "java/core/src/main/java/com/google/protobuf/PrimitiveNonBoxingCollection.java",
+                "start_line" : 2,
+                "end_line" : 2
+              }
+            }, {
+              "statement" : "Copyright 2008 Google Inc.",
+              "location" : {
+                "path" : "java/core/src/main/java/com/google/protobuf/ProtobufArrayList.java",
+                "start_line" : 2,
+                "end_line" : 2
+              }
+            }, {
+              "statement" : "Copyright 2008 Google Inc.",
+              "location" : {
+                "path" : "java/core/src/main/java/com/google/protobuf/ProtocolMessageEnum.java",
+                "start_line" : 2,
+                "end_line" : 2
+              }
+            }, {
+              "statement" : "Copyright 2008 Google Inc.",
+              "location" : {
+                "path" : "java/core/src/main/java/com/google/protobuf/ProtocolStringList.java",
+                "start_line" : 2,
+                "end_line" : 2
+              }
+            }, {
+              "statement" : "Copyright 2008 Google Inc.",
+              "location" : {
+                "path" : "java/core/src/main/java/com/google/protobuf/RepeatedFieldBuilder.java",
+                "start_line" : 2,
+                "end_line" : 2
+              }
+            }, {
+              "statement" : "Copyright 2008 Google Inc.",
+              "location" : {
+                "path" : "java/core/src/main/java/com/google/protobuf/RepeatedFieldBuilderV3.java",
+                "start_line" : 2,
+                "end_line" : 2
+              }
+            }, {
+              "statement" : "Copyright 2008 Google Inc.",
+              "location" : {
+                "path" : "java/core/src/main/java/com/google/protobuf/RopeByteString.java",
+                "start_line" : 2,
+                "end_line" : 2
+              }
+            }, {
+              "statement" : "Copyright 2008 Google Inc.",
+              "location" : {
+                "path" : "java/core/src/main/java/com/google/protobuf/RpcCallback.java",
+                "start_line" : 2,
+                "end_line" : 2
+              }
+            }, {
+              "statement" : "Copyright 2008 Google Inc.",
+              "location" : {
+                "path" : "java/core/src/main/java/com/google/protobuf/RpcChannel.java",
+                "start_line" : 2,
+                "end_line" : 2
+              }
+            }, {
+              "statement" : "Copyright 2008 Google Inc.",
+              "location" : {
+                "path" : "java/core/src/main/java/com/google/protobuf/RpcController.java",
+                "start_line" : 2,
+                "end_line" : 2
+              }
+            }, {
+              "statement" : "Copyright 2008 Google Inc.",
+              "location" : {
+                "path" : "java/core/src/main/java/com/google/protobuf/RpcUtil.java",
+                "start_line" : 2,
+                "end_line" : 2
+              }
+            }, {
+              "statement" : "Copyright 2008 Google Inc.",
+              "location" : {
+                "path" : "java/core/src/main/java/com/google/protobuf/Service.java",
+                "start_line" : 2,
+                "end_line" : 2
+              }
+            }, {
+              "statement" : "Copyright 2008 Google Inc.",
+              "location" : {
+                "path" : "java/core/src/main/java/com/google/protobuf/ServiceException.java",
+                "start_line" : 2,
+                "end_line" : 2
+              }
+            }, {
+              "statement" : "Copyright 2008 Google Inc.",
+              "location" : {
+                "path" : "java/core/src/main/java/com/google/protobuf/SingleFieldBuilder.java",
+                "start_line" : 2,
+                "end_line" : 2
+              }
+            }, {
+              "statement" : "Copyright 2008 Google Inc.",
+              "location" : {
+                "path" : "java/core/src/main/java/com/google/protobuf/SingleFieldBuilderV3.java",
+                "start_line" : 2,
+                "end_line" : 2
+              }
+            }, {
+              "statement" : "Copyright 2008 Google Inc.",
+              "location" : {
+                "path" : "java/core/src/main/java/com/google/protobuf/SmallSortedMap.java",
+                "start_line" : 2,
+                "end_line" : 2
+              }
+            }, {
+              "statement" : "Copyright 2008 Google Inc.",
+              "location" : {
+                "path" : "java/core/src/main/java/com/google/protobuf/TextFormat.java",
+                "start_line" : 2,
+                "end_line" : 2
+              }
+            }, {
+              "statement" : "Copyright 2008 Google Inc.",
+              "location" : {
+                "path" : "java/core/src/main/java/com/google/protobuf/TextFormatEscaper.java",
+                "start_line" : 2,
+                "end_line" : 2
+              }
+            }, {
+              "statement" : "Copyright 2008 Google Inc.",
+              "location" : {
+                "path" : "java/core/src/main/java/com/google/protobuf/TextFormatParseInfoTree.java",
+                "start_line" : 2,
+                "end_line" : 2
+              }
+            }, {
+              "statement" : "Copyright 2008 Google Inc.",
+              "location" : {
+                "path" : "java/core/src/main/java/com/google/protobuf/TextFormatParseLocation.java",
+                "start_line" : 2,
+                "end_line" : 2
+              }
+            }, {
+              "statement" : "Copyright 2008 Google Inc.",
+              "location" : {
+                "path" : "java/core/src/main/java/com/google/protobuf/UninitializedMessageException.java",
+                "start_line" : 2,
+                "end_line" : 2
+              }
+            }, {
+              "statement" : "Copyright 2008 Google Inc.",
+              "location" : {
+                "path" : "java/core/src/main/java/com/google/protobuf/UnknownFieldSet.java",
+                "start_line" : 2,
+                "end_line" : 2
+              }
+            }, {
+              "statement" : "Copyright 2008 Google Inc.",
+              "location" : {
+                "path" : "java/core/src/main/java/com/google/protobuf/UnknownFieldSetLite.java",
+                "start_line" : 2,
+                "end_line" : 2
+              }
+            }, {
+              "statement" : "Copyright 2008 Google Inc.",
+              "location" : {
+                "path" : "java/core/src/main/java/com/google/protobuf/UnmodifiableLazyStringList.java",
+                "start_line" : 2,
+                "end_line" : 2
+              }
+            }, {
+              "statement" : "Copyright 2008 Google Inc.",
+              "location" : {
+                "path" : "java/core/src/main/java/com/google/protobuf/UnsafeByteOperations.java",
+                "start_line" : 2,
+                "end_line" : 2
+              }
+            }, {
+              "statement" : "Copyright 2008 Google Inc.",
+              "location" : {
+                "path" : "java/core/src/main/java/com/google/protobuf/UnsafeUtil.java",
+                "start_line" : 2,
+                "end_line" : 2
+              }
+            }, {
+              "statement" : "Copyright 2008 Google Inc.",
+              "location" : {
+                "path" : "java/core/src/main/java/com/google/protobuf/Utf8.java",
+                "start_line" : 2,
+                "end_line" : 2
+              }
+            }, {
+              "statement" : "Copyright 2008 Google Inc.",
+              "location" : {
+                "path" : "java/core/src/main/java/com/google/protobuf/WireFormat.java",
+                "start_line" : 2,
+                "end_line" : 2
+              }
+            }, {
+              "statement" : "Copyright 2008 Google Inc.",
+              "location" : {
+                "path" : "java/core/src/test/java/com/google/protobuf/AbstractMessageTest.java",
+                "start_line" : 2,
+                "end_line" : 2
+              }
+            }, {
+              "statement" : "Copyright 2008 Google Inc.",
+              "location" : {
+                "path" : "java/core/src/test/java/com/google/protobuf/AnyTest.java",
+                "start_line" : 2,
+                "end_line" : 2
+              }
+            }, {
+              "statement" : "Copyright 2008 Google Inc.",
+              "location" : {
+                "path" : "java/core/src/test/java/com/google/protobuf/BooleanArrayListTest.java",
+                "start_line" : 2,
+                "end_line" : 2
+              }
+            }, {
+              "statement" : "Copyright 2008 Google Inc.",
+              "location" : {
+                "path" : "java/core/src/test/java/com/google/protobuf/BoundedByteStringTest.java",
+                "start_line" : 2,
+                "end_line" : 2
+              }
+            }, {
+              "statement" : "Copyright 2008 Google Inc.",
+              "location" : {
+                "path" : "java/core/src/test/java/com/google/protobuf/ByteBufferWriterTest.java",
+                "start_line" : 2,
+                "end_line" : 2
+              }
+            }, {
+              "statement" : "Copyright 2008 Google Inc.",
+              "location" : {
+                "path" : "java/core/src/test/java/com/google/protobuf/ByteStringTest.java",
+                "start_line" : 2,
+                "end_line" : 2
+              }
+            }, {
+              "statement" : "Copyright 2008 Google Inc.",
+              "location" : {
+                "path" : "java/core/src/test/java/com/google/protobuf/CheckUtf8Test.java",
+                "start_line" : 2,
+                "end_line" : 2
+              }
+            }, {
+              "statement" : "Copyright 2008 Google Inc.",
+              "location" : {
+                "path" : "java/core/src/test/java/com/google/protobuf/CodedInputStreamTest.java",
+                "start_line" : 2,
+                "end_line" : 2
+              }
+            }, {
+              "statement" : "Copyright 2008 Google Inc.",
+              "location" : {
+                "path" : "java/core/src/test/java/com/google/protobuf/CodedOutputStreamTest.java",
+                "start_line" : 2,
+                "end_line" : 2
+              }
+            }, {
+              "statement" : "Copyright 2008 Google Inc.",
+              "location" : {
+                "path" : "java/core/src/test/java/com/google/protobuf/DeprecatedFieldTest.java",
+                "start_line" : 2,
+                "end_line" : 2
+              }
+            }, {
+              "statement" : "Copyright 2008 Google Inc.",
+              "location" : {
+                "path" : "java/core/src/test/java/com/google/protobuf/DescriptorsTest.java",
+                "start_line" : 2,
+                "end_line" : 2
+              }
+            }, {
+              "statement" : "Copyright 2008 Google Inc.",
+              "location" : {
+                "path" : "java/core/src/test/java/com/google/protobuf/DoubleArrayListTest.java",
+                "start_line" : 2,
+                "end_line" : 2
+              }
+            }, {
+              "statement" : "Copyright 2008 Google Inc.",
+              "location" : {
+                "path" : "java/core/src/test/java/com/google/protobuf/DynamicMessageTest.java",
+                "start_line" : 2,
+                "end_line" : 2
+              }
+            }, {
+              "statement" : "Copyright 2008 Google Inc.",
+              "location" : {
+                "path" : "java/core/src/test/java/com/google/protobuf/EnumTest.java",
+                "start_line" : 2,
+                "end_line" : 2
+              }
+            }, {
+              "statement" : "Copyright 2008 Google Inc.",
+              "location" : {
+                "path" : "java/core/src/test/java/com/google/protobuf/ExtensionRegistryFactoryTest.java",
+                "start_line" : 2,
+                "end_line" : 2
+              }
+            }, {
+              "statement" : "Copyright 2008 Google Inc.",
+              "location" : {
+                "path" : "java/core/src/test/java/com/google/protobuf/FieldPresenceTest.java",
+                "start_line" : 2,
+                "end_line" : 2
+              }
+            }, {
+              "statement" : "Copyright 2008 Google Inc.",
+              "location" : {
+                "path" : "java/core/src/test/java/com/google/protobuf/FloatArrayListTest.java",
+                "start_line" : 2,
+                "end_line" : 2
+              }
+            }, {
+              "statement" : "Copyright 2008 Google Inc.",
+              "location" : {
+                "path" : "java/core/src/test/java/com/google/protobuf/ForceFieldBuildersPreRun.java",
+                "start_line" : 2,
+                "end_line" : 2
+              }
+            }, {
+              "statement" : "Copyright 2008 Google Inc.",
+              "location" : {
+                "path" : "java/core/src/test/java/com/google/protobuf/GeneratedMessageTest.java",
+                "start_line" : 2,
+                "end_line" : 2
+              }
+            }, {
+              "statement" : "Copyright 2008 Google Inc.",
+              "location" : {
+                "path" : "java/core/src/test/java/com/google/protobuf/IntArrayListTest.java",
+                "start_line" : 2,
+                "end_line" : 2
+              }
+            }, {
+              "statement" : "Copyright 2008 Google Inc.",
+              "location" : {
+                "path" : "java/core/src/test/java/com/google/protobuf/IsValidUtf8Test.java",
+                "start_line" : 2,
+                "end_line" : 2
+              }
+            }, {
+              "statement" : "Copyright 2008 Google Inc.",
+              "location" : {
+                "path" : "java/core/src/test/java/com/google/protobuf/IsValidUtf8TestUtil.java",
+                "start_line" : 2,
+                "end_line" : 2
+              }
+            }, {
+              "statement" : "Copyright 2008 Google Inc.",
+              "location" : {
+                "path" : "java/core/src/test/java/com/google/protobuf/LazyFieldLiteTest.java",
+                "start_line" : 2,
+                "end_line" : 2
+              }
+            }, {
+              "statement" : "Copyright 2008 Google Inc.",
+              "location" : {
+                "path" : "java/core/src/test/java/com/google/protobuf/LazyFieldTest.java",
+                "start_line" : 2,
+                "end_line" : 2
+              }
+            }, {
+              "statement" : "Copyright 2008 Google Inc.",
+              "location" : {
+                "path" : "java/core/src/test/java/com/google/protobuf/LazyMessageLiteTest.java",
+                "start_line" : 2,
+                "end_line" : 2
+              }
+            }, {
+              "statement" : "Copyright 2008 Google Inc.",
+              "location" : {
+                "path" : "java/core/src/test/java/com/google/protobuf/LazyStringArrayListTest.java",
+                "start_line" : 2,
+                "end_line" : 2
+              }
+            }, {
+              "statement" : "Copyright 2008 Google Inc.",
+              "location" : {
+                "path" : "java/core/src/test/java/com/google/protobuf/LazyStringEndToEndTest.java",
+                "start_line" : 2,
+                "end_line" : 2
+              }
+            }, {
+              "statement" : "Copyright 2008 Google Inc.",
+              "location" : {
+                "path" : "java/core/src/test/java/com/google/protobuf/LiteEqualsAndHashTest.java",
+                "start_line" : 2,
+                "end_line" : 2
+              }
+            }, {
+              "statement" : "Copyright 2008 Google Inc.",
+              "location" : {
+                "path" : "java/core/src/test/java/com/google/protobuf/LiteTest.java",
+                "start_line" : 2,
+                "end_line" : 2
+              }
+            }, {
+              "statement" : "Copyright 2008 Google Inc.",
+              "location" : {
+                "path" : "java/core/src/test/java/com/google/protobuf/LiteralByteStringTest.java",
+                "start_line" : 2,
+                "end_line" : 2
+              }
+            }, {
+              "statement" : "Copyright 2008 Google Inc.",
+              "location" : {
+                "path" : "java/core/src/test/java/com/google/protobuf/LongArrayListTest.java",
+                "start_line" : 2,
+                "end_line" : 2
+              }
+            }, {
+              "statement" : "Copyright 2008 Google Inc.",
+              "location" : {
+                "path" : "java/core/src/test/java/com/google/protobuf/MapForProto2LiteTest.java",
+                "start_line" : 2,
+                "end_line" : 2
+              }
+            }, {
+              "statement" : "Copyright 2008 Google Inc.",
+              "location" : {
+                "path" : "java/core/src/test/java/com/google/protobuf/MapForProto2Test.java",
+                "start_line" : 2,
+                "end_line" : 2
+              }
+            }, {
+              "statement" : "Copyright 2008 Google Inc.",
+              "location" : {
+                "path" : "java/core/src/test/java/com/google/protobuf/MapTest.java",
+                "start_line" : 2,
+                "end_line" : 2
+              }
+            }, {
+              "statement" : "Copyright 2008 Google Inc.",
+              "location" : {
+                "path" : "java/core/src/test/java/com/google/protobuf/MessageTest.java",
+                "start_line" : 2,
+                "end_line" : 2
+              }
+            }, {
+              "statement" : "Copyright 2008 Google Inc.",
+              "location" : {
+                "path" : "java/core/src/test/java/com/google/protobuf/NestedBuildersTest.java",
+                "start_line" : 2,
+                "end_line" : 2
+              }
+            }, {
+              "statement" : "Copyright 2008 Google Inc.",
+              "location" : {
+                "path" : "java/core/src/test/java/com/google/protobuf/NioByteStringTest.java",
+                "start_line" : 2,
+                "end_line" : 2
+              }
+            }, {
+              "statement" : "Copyright 2008 Google Inc.",
+              "location" : {
+                "path" : "java/core/src/test/java/com/google/protobuf/ParseExceptionsTest.java",
+                "start_line" : 2,
+                "end_line" : 2
+              }
+            }, {
+              "statement" : "Copyright 2008 Google Inc.",
+              "location" : {
+                "path" : "java/core/src/test/java/com/google/protobuf/ParserTest.java",
+                "start_line" : 2,
+                "end_line" : 2
+              }
+            }, {
+              "statement" : "Copyright 2008 Google Inc.",
+              "location" : {
+                "path" : "java/core/src/test/java/com/google/protobuf/ProtobufArrayListTest.java",
+                "start_line" : 2,
+                "end_line" : 2
+              }
+            }, {
+              "statement" : "Copyright 2008 Google Inc.",
+              "location" : {
+                "path" : "java/core/src/test/java/com/google/protobuf/RepeatedFieldBuilderV3Test.java",
+                "start_line" : 2,
+                "end_line" : 2
+              }
+            }, {
+              "statement" : "Copyright 2008 Google Inc.",
+              "location" : {
+                "path" : "java/core/src/test/java/com/google/protobuf/RopeByteStringSubstringTest.java",
+                "start_line" : 2,
+                "end_line" : 2
+              }
+            }, {
+              "statement" : "Copyright 2008 Google Inc.",
+              "location" : {
+                "path" : "java/core/src/test/java/com/google/protobuf/RopeByteStringTest.java",
+                "start_line" : 2,
+                "end_line" : 2
+              }
+            }, {
+              "statement" : "Copyright 2008 Google Inc.",
+              "location" : {
+                "path" : "java/core/src/test/java/com/google/protobuf/ServiceTest.java",
+                "start_line" : 2,
+                "end_line" : 2
+              }
+            }, {
+              "statement" : "Copyright 2008 Google Inc.",
+              "location" : {
+                "path" : "java/core/src/test/java/com/google/protobuf/SingleFieldBuilderV3Test.java",
+                "start_line" : 2,
+                "end_line" : 2
+              }
+            }, {
+              "statement" : "Copyright 2008 Google Inc.",
+              "location" : {
+                "path" : "java/core/src/test/java/com/google/protobuf/SmallSortedMapTest.java",
+                "start_line" : 2,
+                "end_line" : 2
+              }
+            }, {
+              "statement" : "Copyright 2008 Google Inc.",
+              "location" : {
+                "path" : "java/core/src/test/java/com/google/protobuf/TestBadIdentifiers.java",
+                "start_line" : 2,
+                "end_line" : 2
+              }
+            }, {
+              "statement" : "Copyright 2008 Google Inc.",
+              "location" : {
+                "path" : "java/core/src/test/java/com/google/protobuf/TestUtil.java",
+                "start_line" : 2,
+                "end_line" : 2
+              }
+            }, {
+              "statement" : "Copyright 2008 Google Inc.",
+              "location" : {
+                "path" : "java/core/src/test/java/com/google/protobuf/TestUtilLite.java",
+                "start_line" : 2,
+                "end_line" : 2
+              }
+            }, {
+              "statement" : "Copyright 2008 Google Inc.",
+              "location" : {
+                "path" : "java/core/src/test/java/com/google/protobuf/TextFormatParseInfoTreeTest.java",
+                "start_line" : 2,
+                "end_line" : 2
+              }
+            }, {
+              "statement" : "Copyright 2008 Google Inc.",
+              "location" : {
+                "path" : "java/core/src/test/java/com/google/protobuf/TextFormatParseLocationTest.java",
+                "start_line" : 2,
+                "end_line" : 2
+              }
+            }, {
+              "statement" : "Copyright 2008 Google Inc.",
+              "location" : {
+                "path" : "java/core/src/test/java/com/google/protobuf/TextFormatTest.java",
+                "start_line" : 2,
+                "end_line" : 2
+              }
+            }, {
+              "statement" : "Copyright 2008 Google Inc.",
+              "location" : {
+                "path" : "java/core/src/test/java/com/google/protobuf/UnknownEnumValueTest.java",
+                "start_line" : 2,
+                "end_line" : 2
+              }
+            }, {
+              "statement" : "Copyright 2008 Google Inc.",
+              "location" : {
+                "path" : "java/core/src/test/java/com/google/protobuf/UnknownFieldSetLiteTest.java",
+                "start_line" : 2,
+                "end_line" : 2
+              }
+            }, {
+              "statement" : "Copyright 2008 Google Inc.",
+              "location" : {
+                "path" : "java/core/src/test/java/com/google/protobuf/UnknownFieldSetTest.java",
+                "start_line" : 2,
+                "end_line" : 2
+              }
+            }, {
+              "statement" : "Copyright 2008 Google Inc.",
+              "location" : {
+                "path" : "java/core/src/test/java/com/google/protobuf/UnmodifiableLazyStringListTest.java",
+                "start_line" : 2,
+                "end_line" : 2
+              }
+            }, {
+              "statement" : "Copyright 2008 Google Inc.",
+              "location" : {
+                "path" : "java/core/src/test/java/com/google/protobuf/WellKnownTypesTest.java",
+                "start_line" : 2,
+                "end_line" : 2
+              }
+            }, {
+              "statement" : "Copyright 2008 Google Inc.",
+              "location" : {
+                "path" : "java/core/src/test/java/com/google/protobuf/WireFormatTest.java",
+                "start_line" : 2,
+                "end_line" : 2
+              }
+            }, {
+              "statement" : "Copyright 2008 Google Inc.",
+              "location" : {
+                "path" : "java/core/src/test/proto/com/google/protobuf/any_test.proto",
+                "start_line" : 2,
+                "end_line" : 2
+              }
+            }, {
+              "statement" : "Copyright 2008 Google Inc.",
+              "location" : {
+                "path" : "java/core/src/test/proto/com/google/protobuf/field_presence_test.proto",
+                "start_line" : 2,
+                "end_line" : 2
+              }
+            }, {
+              "statement" : "Copyright 2008 Google Inc.",
+              "location" : {
+                "path" : "java/core/src/test/proto/com/google/protobuf/lazy_fields_lite.proto",
+                "start_line" : 2,
+                "end_line" : 2
+              }
+            }, {
+              "statement" : "Copyright 2008 Google Inc.",
+              "location" : {
+                "path" : "java/core/src/test/proto/com/google/protobuf/lite_equals_and_hash.proto",
+                "start_line" : 2,
+                "end_line" : 2
+              }
+            }, {
+              "statement" : "Copyright 2008 Google Inc.",
+              "location" : {
+                "path" : "java/core/src/test/proto/com/google/protobuf/map_for_proto2_lite_test.proto",
+                "start_line" : 2,
+                "end_line" : 2
+              }
+            }, {
+              "statement" : "Copyright 2008 Google Inc.",
+              "location" : {
+                "path" : "java/core/src/test/proto/com/google/protobuf/map_for_proto2_test.proto",
+                "start_line" : 2,
+                "end_line" : 2
+              }
+            }, {
+              "statement" : "Copyright 2008 Google Inc.",
+              "location" : {
+                "path" : "java/core/src/test/proto/com/google/protobuf/map_initialization_order_test.proto",
+                "start_line" : 2,
+                "end_line" : 2
+              }
+            }, {
+              "statement" : "Copyright 2008 Google Inc.",
+              "location" : {
+                "path" : "java/core/src/test/proto/com/google/protobuf/map_test.proto",
+                "start_line" : 2,
+                "end_line" : 2
+              }
+            }, {
+              "statement" : "Copyright 2008 Google Inc.",
+              "location" : {
+                "path" : "java/core/src/test/proto/com/google/protobuf/multiple_files_test.proto",
+                "start_line" : 2,
+                "end_line" : 2
+              }
+            }, {
+              "statement" : "Copyright 2008 Google Inc.",
+              "location" : {
+                "path" : "java/core/src/test/proto/com/google/protobuf/nested_builders_test.proto",
+                "start_line" : 2,
+                "end_line" : 2
+              }
+            }, {
+              "statement" : "Copyright 2008 Google Inc.",
+              "location" : {
+                "path" : "java/core/src/test/proto/com/google/protobuf/nested_extension.proto",
+                "start_line" : 2,
+                "end_line" : 2
+              }
+            }, {
+              "statement" : "Copyright 2008 Google Inc.",
+              "location" : {
+                "path" : "java/core/src/test/proto/com/google/protobuf/nested_extension_lite.proto",
+                "start_line" : 2,
+                "end_line" : 2
+              }
+            }, {
+              "statement" : "Copyright 2008 Google Inc.",
+              "location" : {
+                "path" : "java/core/src/test/proto/com/google/protobuf/non_nested_extension.proto",
+                "start_line" : 2,
+                "end_line" : 2
+              }
+            }, {
+              "statement" : "Copyright 2008 Google Inc.",
+              "location" : {
+                "path" : "java/core/src/test/proto/com/google/protobuf/non_nested_extension_lite.proto",
+                "start_line" : 2,
+                "end_line" : 2
+              }
+            }, {
+              "statement" : "Copyright 2008 Google Inc.",
+              "location" : {
+                "path" : "java/core/src/test/proto/com/google/protobuf/outer_class_name_test.proto",
+                "start_line" : 2,
+                "end_line" : 2
+              }
+            }, {
+              "statement" : "Copyright 2008 Google Inc.",
+              "location" : {
+                "path" : "java/core/src/test/proto/com/google/protobuf/outer_class_name_test2.proto",
+                "start_line" : 2,
+                "end_line" : 2
+              }
+            }, {
+              "statement" : "Copyright 2008 Google Inc.",
+              "location" : {
+                "path" : "java/core/src/test/proto/com/google/protobuf/outer_class_name_test3.proto",
+                "start_line" : 2,
+                "end_line" : 2
+              }
+            }, {
+              "statement" : "Copyright 2008 Google Inc.",
+              "location" : {
+                "path" : "java/core/src/test/proto/com/google/protobuf/test_bad_identifiers.proto",
+                "start_line" : 2,
+                "end_line" : 2
+              }
+            }, {
+              "statement" : "Copyright 2008 Google Inc.",
+              "location" : {
+                "path" : "java/core/src/test/proto/com/google/protobuf/test_check_utf8.proto",
+                "start_line" : 2,
+                "end_line" : 2
+              }
+            }, {
+              "statement" : "Copyright 2008 Google Inc.",
+              "location" : {
+                "path" : "java/core/src/test/proto/com/google/protobuf/test_check_utf8_size.proto",
+                "start_line" : 2,
+                "end_line" : 2
+              }
+            }, {
+              "statement" : "Copyright 2008 Google Inc.",
+              "location" : {
+                "path" : "java/core/src/test/proto/com/google/protobuf/test_custom_options.proto",
+                "start_line" : 2,
+                "end_line" : 2
+              }
+            }, {
+              "statement" : "Copyright 2008 Google Inc.",
+              "location" : {
+                "path" : "java/core/src/test/proto/com/google/protobuf/test_extra_interfaces.proto",
+                "start_line" : 2,
+                "end_line" : 2
+              }
+            }, {
+              "statement" : "Copyright 2008 Google Inc.",
+              "location" : {
+                "path" : "java/util/src/main/java/com/google/protobuf/util/Durations.java",
+                "start_line" : 2,
+                "end_line" : 2
+              }
+            }, {
+              "statement" : "Copyright 2008 Google Inc.",
+              "location" : {
+                "path" : "java/util/src/main/java/com/google/protobuf/util/FieldMaskTree.java",
+                "start_line" : 2,
+                "end_line" : 2
+              }
+            }, {
+              "statement" : "Copyright 2008 Google Inc.",
+              "location" : {
+                "path" : "java/util/src/main/java/com/google/protobuf/util/FieldMaskUtil.java",
+                "start_line" : 2,
+                "end_line" : 2
+              }
+            }, {
+              "statement" : "Copyright 2008 Google Inc.",
+              "location" : {
+                "path" : "java/util/src/main/java/com/google/protobuf/util/JsonFormat.java",
+                "start_line" : 2,
+                "end_line" : 2
+              }
+            }, {
+              "statement" : "Copyright 2008 Google Inc.",
+              "location" : {
+                "path" : "java/util/src/main/java/com/google/protobuf/util/TimeUtil.java",
+                "start_line" : 2,
+                "end_line" : 2
+              }
+            }, {
+              "statement" : "Copyright 2008 Google Inc.",
+              "location" : {
+                "path" : "java/util/src/main/java/com/google/protobuf/util/Timestamps.java",
+                "start_line" : 2,
+                "end_line" : 2
+              }
+            }, {
+              "statement" : "Copyright 2008 Google Inc.",
+              "location" : {
+                "path" : "java/util/src/test/java/com/google/protobuf/util/FieldMaskTreeTest.java",
+                "start_line" : 2,
+                "end_line" : 2
+              }
+            }, {
+              "statement" : "Copyright 2008 Google Inc.",
+              "location" : {
+                "path" : "java/util/src/test/java/com/google/protobuf/util/FieldMaskUtilTest.java",
+                "start_line" : 2,
+                "end_line" : 2
+              }
+            }, {
+              "statement" : "Copyright 2008 Google Inc.",
+              "location" : {
+                "path" : "java/util/src/test/java/com/google/protobuf/util/JsonFormatTest.java",
+                "start_line" : 2,
+                "end_line" : 2
+              }
+            }, {
+              "statement" : "Copyright 2008 Google Inc.",
+              "location" : {
+                "path" : "java/util/src/test/java/com/google/protobuf/util/TimeUtilTest.java",
+                "start_line" : 2,
+                "end_line" : 2
+              }
+            }, {
+              "statement" : "Copyright 2008 Google Inc.",
+              "location" : {
+                "path" : "java/util/src/test/proto/com/google/protobuf/util/json_test.proto",
+                "start_line" : 2,
+                "end_line" : 2
+              }
+            }, {
+              "statement" : "Copyright 2014, Google Inc.",
+              "location" : {
+                "path" : "LICENSE",
+                "start_line" : 11,
+                "end_line" : 11
+              }
+            }, {
+              "statement" : "copyrighted by Bloomberg Finance",
+              "location" : {
+                "path" : "LICENSE",
+                "start_line" : 9,
+                "end_line" : 9
+              }
+            }, {
+              "statement" : "copyrighted by Red Hat Inc.",
+              "location" : {
+                "path" : "LICENSE",
+                "start_line" : 5,
+                "end_line" : 5
+              }
+            } ]
+          }
+        } ]
+      }, {
+        "id" : "Maven:com.here.platform.schema.weather:platform-weather-schema_v1:1.0.0-SNAPSHOT",
+        "results" : [ {
+          "provenance" : {
+            "download_time" : "2019-10-08T17:22:52.073877Z",
+            "vcs_info" : {
+              "type" : "Git",
+              "url" : "ssh://gerrit.it.here.com:29418/olp/components/live-weather/platform-weather-schema",
+              "revision" : "dca4cb02e89974faead1b2ea9980043b5ed2f226",
+              "resolved_revision" : "dca4cb02e89974faead1b2ea9980043b5ed2f226",
+              "path" : ""
+            },
+            "original_vcs_info" : {
+              "type" : "Git",
+              "url" : "ssh://gerrit.it.here.com:29418/olp/components/live-weather/platform-weather-schema",
+              "revision" : "dca4cb02e89974faead1b2ea9980043b5ed2f226",
+              "path" : ""
+            }
+          },
+          "scanner" : {
+            "name" : "ScanCode",
+            "version" : "3.0.2",
+            "configuration" : "--copyright --license --ignore *.ort.yml --info --strip-root --timeout 300 --ignore HERE_NOTICE --ignore META-INF/DEPENDENCIES --json-pp"
+          },
+          "summary" : {
+            "start_time" : "2019-10-08T17:22:53.193207Z",
+            "end_time" : "2019-10-08T17:23:03.194925Z",
+            "file_count" : 21,
+            "licenses" : [ {
+              "license" : "LicenseRef-scancode-here-proprietary",
+              "location" : {
+                "path" : "LICENSE",
+                "start_line" : 4,
+                "end_line" : 10
+              }
+            }, {
+              "license" : "LicenseRef-scancode-here-proprietary",
+              "location" : {
+                "path" : "ds/META-INF/LICENSE",
+                "start_line" : 4,
+                "end_line" : 10
+              }
+            }, {
+              "license" : "LicenseRef-scancode-here-proprietary",
+              "location" : {
+                "path" : "ds/src/main/resources/LICENSE",
+                "start_line" : 4,
+                "end_line" : 10
+              }
+            }, {
+              "license" : "LicenseRef-scancode-here-proprietary",
+              "location" : {
+                "path" : "ds/src/main/resources/META-INF/LICENSE",
+                "start_line" : 4,
+                "end_line" : 10
+              }
+            }, {
+              "license" : "LicenseRef-scancode-here-proprietary",
+              "location" : {
+                "path" : "java/src/main/resources/LICENSE",
+                "start_line" : 4,
+                "end_line" : 10
+              }
+            }, {
+              "license" : "LicenseRef-scancode-here-proprietary",
+              "location" : {
+                "path" : "java/src/main/resources/META-INF/LICENSE",
+                "start_line" : 4,
+                "end_line" : 10
+              }
+            }, {
+              "license" : "LicenseRef-scancode-here-proprietary",
+              "location" : {
+                "path" : "proto/META-INF/LICENSE",
+                "start_line" : 4,
+                "end_line" : 10
+              }
+            }, {
+              "license" : "LicenseRef-scancode-here-proprietary",
+              "location" : {
+                "path" : "scala/src/main/resources/LICENSE",
+                "start_line" : 4,
+                "end_line" : 10
+              }
+            }, {
+              "license" : "LicenseRef-scancode-here-proprietary",
+              "location" : {
+                "path" : "scala/src/main/resources/META-INF/LICENSE",
+                "start_line" : 4,
+                "end_line" : 10
+              }
+            }, {
+              "license" : "LicenseRef-scancode-proprietary-license",
+              "location" : {
+                "path" : "pom.xml",
+                "start_line" : 30,
+                "end_line" : 30
+              }
+            }, {
+              "license" : "LicenseRef-scancode-unknown-spdx",
+              "location" : {
+                "path" : "pom.xml",
+                "start_line" : 33,
+                "end_line" : 33
+              }
+            } ],
+            "copyrights" : [ {
+              "statement" : "Copyright (c) 2017-2018 HERE Global B.V. and its affiliate(s).",
+              "location" : {
+                "path" : "LICENSE",
+                "start_line" : 1,
+                "end_line" : 2
+              }
+            }, {
+              "statement" : "Copyright (c) 2017-2018 HERE Global B.V. and its affiliate(s).",
+              "location" : {
+                "path" : "ds/META-INF/LICENSE",
+                "start_line" : 1,
+                "end_line" : 2
+              }
+            }, {
+              "statement" : "Copyright (c) 2017-2018 HERE Global B.V. and its affiliate(s).",
+              "location" : {
+                "path" : "ds/src/main/resources/LICENSE",
+                "start_line" : 1,
+                "end_line" : 2
+              }
+            }, {
+              "statement" : "Copyright (c) 2017-2018 HERE Global B.V. and its affiliate(s).",
+              "location" : {
+                "path" : "ds/src/main/resources/META-INF/LICENSE",
+                "start_line" : 1,
+                "end_line" : 2
+              }
+            }, {
+              "statement" : "Copyright (c) 2017-2018 HERE Global B.V. and its affiliate(s).",
+              "location" : {
+                "path" : "java/src/main/resources/LICENSE",
+                "start_line" : 1,
+                "end_line" : 2
+              }
+            }, {
+              "statement" : "Copyright (c) 2017-2018 HERE Global B.V. and its affiliate(s).",
+              "location" : {
+                "path" : "java/src/main/resources/META-INF/LICENSE",
+                "start_line" : 1,
+                "end_line" : 2
+              }
+            }, {
+              "statement" : "Copyright (c) 2017-2018 HERE Global B.V. and its affiliate(s).",
+              "location" : {
+                "path" : "proto/META-INF/LICENSE",
+                "start_line" : 1,
+                "end_line" : 2
+              }
+            }, {
+              "statement" : "Copyright (c) 2017-2018 HERE Global B.V. and its affiliate(s).",
+              "location" : {
+                "path" : "scala/src/main/resources/LICENSE",
+                "start_line" : 1,
+                "end_line" : 2
+              }
+            }, {
+              "statement" : "Copyright (c) 2017-2018 HERE Global B.V. and its affiliate(s).",
+              "location" : {
+                "path" : "scala/src/main/resources/META-INF/LICENSE",
+                "start_line" : 1,
+                "end_line" : 2
+              }
+            } ]
+          }
+        } ]
+      }, {
+        "id" : "Maven:com.here.platform.schema.weather:platform-weather-schema_v1_ds:1.0.0-SNAPSHOT",
+        "results" : [ {
+          "provenance" : {
+            "download_time" : "2019-10-08T17:22:52.073877Z",
+            "vcs_info" : {
+              "type" : "Git",
+              "url" : "ssh://gerrit.it.here.com:29418/olp/components/live-weather/platform-weather-schema",
+              "revision" : "dca4cb02e89974faead1b2ea9980043b5ed2f226",
+              "resolved_revision" : "dca4cb02e89974faead1b2ea9980043b5ed2f226",
+              "path" : "ds"
+            },
+            "original_vcs_info" : {
+              "type" : "Git",
+              "url" : "ssh://gerrit.it.here.com:29418/olp/components/live-weather/platform-weather-schema",
+              "revision" : "dca4cb02e89974faead1b2ea9980043b5ed2f226",
+              "path" : "ds"
+            }
+          },
+          "scanner" : {
+            "name" : "ScanCode",
+            "version" : "3.0.2",
+            "configuration" : "--copyright --license --ignore *.ort.yml --info --strip-root --timeout 300 --ignore HERE_NOTICE --ignore META-INF/DEPENDENCIES --json-pp"
+          },
+          "summary" : {
+            "start_time" : "2019-10-08T17:22:53.193207Z",
+            "end_time" : "2019-10-08T17:23:03.194925Z",
+            "file_count" : 4,
+            "licenses" : [ {
+              "license" : "LicenseRef-scancode-here-proprietary",
+              "location" : {
+                "path" : "LICENSE",
+                "start_line" : 4,
+                "end_line" : 10
+              }
+            }, {
+              "license" : "LicenseRef-scancode-here-proprietary",
+              "location" : {
+                "path" : "ds/META-INF/LICENSE",
+                "start_line" : 4,
+                "end_line" : 10
+              }
+            }, {
+              "license" : "LicenseRef-scancode-here-proprietary",
+              "location" : {
+                "path" : "ds/src/main/resources/LICENSE",
+                "start_line" : 4,
+                "end_line" : 10
+              }
+            }, {
+              "license" : "LicenseRef-scancode-here-proprietary",
+              "location" : {
+                "path" : "ds/src/main/resources/META-INF/LICENSE",
+                "start_line" : 4,
+                "end_line" : 10
+              }
+            } ],
+            "copyrights" : [ {
+              "statement" : "Copyright (c) 2017-2018 HERE Global B.V. and its affiliate(s).",
+              "location" : {
+                "path" : "LICENSE",
+                "start_line" : 1,
+                "end_line" : 2
+              }
+            }, {
+              "statement" : "Copyright (c) 2017-2018 HERE Global B.V. and its affiliate(s).",
+              "location" : {
+                "path" : "ds/META-INF/LICENSE",
+                "start_line" : 1,
+                "end_line" : 2
+              }
+            }, {
+              "statement" : "Copyright (c) 2017-2018 HERE Global B.V. and its affiliate(s).",
+              "location" : {
+                "path" : "ds/src/main/resources/LICENSE",
+                "start_line" : 1,
+                "end_line" : 2
+              }
+            }, {
+              "statement" : "Copyright (c) 2017-2018 HERE Global B.V. and its affiliate(s).",
+              "location" : {
+                "path" : "ds/src/main/resources/META-INF/LICENSE",
+                "start_line" : 1,
+                "end_line" : 2
+              }
+            } ]
+          }
+        } ]
+      }, {
+        "id" : "Maven:com.here.platform.schema.weather:platform-weather-schema_v1_java:1.0.0-SNAPSHOT",
+        "results" : [ {
+          "provenance" : {
+            "download_time" : "2019-10-08T17:22:52.073877Z",
+            "vcs_info" : {
+              "type" : "Git",
+              "url" : "ssh://gerrit.it.here.com:29418/olp/components/live-weather/platform-weather-schema",
+              "revision" : "dca4cb02e89974faead1b2ea9980043b5ed2f226",
+              "resolved_revision" : "dca4cb02e89974faead1b2ea9980043b5ed2f226",
+              "path" : "java"
+            },
+            "original_vcs_info" : {
+              "type" : "Git",
+              "url" : "ssh://gerrit.it.here.com:29418/olp/components/live-weather/platform-weather-schema",
+              "revision" : "dca4cb02e89974faead1b2ea9980043b5ed2f226",
+              "path" : "java"
+            }
+          },
+          "scanner" : {
+            "name" : "ScanCode",
+            "version" : "3.0.2",
+            "configuration" : "--copyright --license --ignore *.ort.yml --info --strip-root --timeout 300 --ignore HERE_NOTICE --ignore META-INF/DEPENDENCIES --json-pp"
+          },
+          "summary" : {
+            "start_time" : "2019-10-08T17:22:53.193207Z",
+            "end_time" : "2019-10-08T17:23:03.194925Z",
+            "file_count" : 3,
+            "licenses" : [ {
+              "license" : "LicenseRef-scancode-here-proprietary",
+              "location" : {
+                "path" : "LICENSE",
+                "start_line" : 4,
+                "end_line" : 10
+              }
+            }, {
+              "license" : "LicenseRef-scancode-here-proprietary",
+              "location" : {
+                "path" : "java/src/main/resources/LICENSE",
+                "start_line" : 4,
+                "end_line" : 10
+              }
+            }, {
+              "license" : "LicenseRef-scancode-here-proprietary",
+              "location" : {
+                "path" : "java/src/main/resources/META-INF/LICENSE",
+                "start_line" : 4,
+                "end_line" : 10
+              }
+            } ],
+            "copyrights" : [ {
+              "statement" : "Copyright (c) 2017-2018 HERE Global B.V. and its affiliate(s).",
+              "location" : {
+                "path" : "LICENSE",
+                "start_line" : 1,
+                "end_line" : 2
+              }
+            }, {
+              "statement" : "Copyright (c) 2017-2018 HERE Global B.V. and its affiliate(s).",
+              "location" : {
+                "path" : "java/src/main/resources/LICENSE",
+                "start_line" : 1,
+                "end_line" : 2
+              }
+            }, {
+              "statement" : "Copyright (c) 2017-2018 HERE Global B.V. and its affiliate(s).",
+              "location" : {
+                "path" : "java/src/main/resources/META-INF/LICENSE",
+                "start_line" : 1,
+                "end_line" : 2
+              }
+            } ]
+          }
+        } ]
+      }, {
+        "id" : "Maven:com.here.platform.schema.weather:platform-weather-schema_v1_proto:1.0.0-SNAPSHOT",
+        "results" : [ {
+          "provenance" : {
+            "download_time" : "2019-10-08T17:22:52.073877Z",
+            "vcs_info" : {
+              "type" : "Git",
+              "url" : "ssh://gerrit.it.here.com:29418/olp/components/live-weather/platform-weather-schema",
+              "revision" : "dca4cb02e89974faead1b2ea9980043b5ed2f226",
+              "resolved_revision" : "dca4cb02e89974faead1b2ea9980043b5ed2f226",
+              "path" : "proto"
+            },
+            "original_vcs_info" : {
+              "type" : "Git",
+              "url" : "ssh://gerrit.it.here.com:29418/olp/components/live-weather/platform-weather-schema",
+              "revision" : "dca4cb02e89974faead1b2ea9980043b5ed2f226",
+              "path" : "proto"
+            }
+          },
+          "scanner" : {
+            "name" : "ScanCode",
+            "version" : "3.0.2",
+            "configuration" : "--copyright --license --ignore *.ort.yml --info --strip-root --timeout 300 --ignore HERE_NOTICE --ignore META-INF/DEPENDENCIES --json-pp"
+          },
+          "summary" : {
+            "start_time" : "2019-10-08T17:22:53.193207Z",
+            "end_time" : "2019-10-08T17:23:03.194925Z",
+            "file_count" : 2,
+            "licenses" : [ {
+              "license" : "LicenseRef-scancode-here-proprietary",
+              "location" : {
+                "path" : "LICENSE",
+                "start_line" : 4,
+                "end_line" : 10
+              }
+            }, {
+              "license" : "LicenseRef-scancode-here-proprietary",
+              "location" : {
+                "path" : "proto/META-INF/LICENSE",
+                "start_line" : 4,
+                "end_line" : 10
+              }
+            } ],
+            "copyrights" : [ {
+              "statement" : "Copyright (c) 2017-2018 HERE Global B.V. and its affiliate(s).",
+              "location" : {
+                "path" : "LICENSE",
+                "start_line" : 1,
+                "end_line" : 2
+              }
+            }, {
+              "statement" : "Copyright (c) 2017-2018 HERE Global B.V. and its affiliate(s).",
+              "location" : {
+                "path" : "proto/META-INF/LICENSE",
+                "start_line" : 1,
+                "end_line" : 2
+              }
+            } ]
+          }
+        } ]
+      }, {
+        "id" : "Maven:com.here.platform.schema.weather:platform-weather-schema_v1_scala_2.11:1.0.0-SNAPSHOT",
+        "results" : [ {
+          "provenance" : {
+            "download_time" : "2019-10-08T17:22:52.073877Z",
+            "vcs_info" : {
+              "type" : "Git",
+              "url" : "ssh://gerrit.it.here.com:29418/olp/components/live-weather/platform-weather-schema",
+              "revision" : "dca4cb02e89974faead1b2ea9980043b5ed2f226",
+              "resolved_revision" : "dca4cb02e89974faead1b2ea9980043b5ed2f226",
+              "path" : "scala"
+            },
+            "original_vcs_info" : {
+              "type" : "Git",
+              "url" : "ssh://gerrit.it.here.com:29418/olp/components/live-weather/platform-weather-schema",
+              "revision" : "dca4cb02e89974faead1b2ea9980043b5ed2f226",
+              "path" : "scala"
+            }
+          },
+          "scanner" : {
+            "name" : "ScanCode",
+            "version" : "3.0.2",
+            "configuration" : "--copyright --license --ignore *.ort.yml --info --strip-root --timeout 300 --ignore HERE_NOTICE --ignore META-INF/DEPENDENCIES --json-pp"
+          },
+          "summary" : {
+            "start_time" : "2019-10-08T17:22:53.193207Z",
+            "end_time" : "2019-10-08T17:23:03.194925Z",
+            "file_count" : 3,
+            "licenses" : [ {
+              "license" : "LicenseRef-scancode-here-proprietary",
+              "location" : {
+                "path" : "LICENSE",
+                "start_line" : 4,
+                "end_line" : 10
+              }
+            }, {
+              "license" : "LicenseRef-scancode-here-proprietary",
+              "location" : {
+                "path" : "scala/src/main/resources/LICENSE",
+                "start_line" : 4,
+                "end_line" : 10
+              }
+            }, {
+              "license" : "LicenseRef-scancode-here-proprietary",
+              "location" : {
+                "path" : "scala/src/main/resources/META-INF/LICENSE",
+                "start_line" : 4,
+                "end_line" : 10
+              }
+            } ],
+            "copyrights" : [ {
+              "statement" : "Copyright (c) 2017-2018 HERE Global B.V. and its affiliate(s).",
+              "location" : {
+                "path" : "LICENSE",
+                "start_line" : 1,
+                "end_line" : 2
+              }
+            }, {
+              "statement" : "Copyright (c) 2017-2018 HERE Global B.V. and its affiliate(s).",
+              "location" : {
+                "path" : "scala/src/main/resources/LICENSE",
+                "start_line" : 1,
+                "end_line" : 2
+              }
+            }, {
+              "statement" : "Copyright (c) 2017-2018 HERE Global B.V. and its affiliate(s).",
+              "location" : {
+                "path" : "scala/src/main/resources/META-INF/LICENSE",
+                "start_line" : 1,
+                "end_line" : 2
+              }
+            } ]
+          }
+        } ]
+      }, {
+        "id" : "Maven:com.lihaoyi:fastparse-utils_2.11:1.0.0",
+        "results" : [ {
+          "provenance" : {
+            "download_time" : "2019-08-09T14:41:10.654761Z",
+            "source_artifact" : {
+              "url" : "https://repo.maven.apache.org/maven2/com/lihaoyi/fastparse-utils_2.11/1.0.0/fastparse-utils_2.11-1.0.0-sources.jar",
+              "hash" : {
+                "value" : "e2735bfc5fbf85a21f7335ac672e27b4ec55358c",
+                "algorithm" : "SHA-1"
+              }
+            }
+          },
+          "scanner" : {
+            "name" : "ScanCode",
+            "version" : "3.0.2",
+            "configuration" : "--copyright --license --ignore *.ort.yml --info --strip-root --timeout 300 --ignore HERE_NOTICE --ignore META-INF/DEPENDENCIES --json-pp"
+          },
+          "summary" : {
+            "start_time" : "2019-08-09T14:41:10.804888Z",
+            "end_time" : "2019-08-09T14:41:53.679844Z",
+            "file_count" : 8,
+            "licenses" : [ {
+              "license" : "BSD-2-Clause",
+              "location" : {
+                "path" : "fastparse/utils/Base64.scala",
+                "start_line" : 8,
+                "end_line" : 8
+              }
+            } ],
+            "copyrights" : [ {
+              "statement" : "Copyright (c) 2014 - 2015 Mark Lister",
+              "location" : {
+                "path" : "fastparse/utils/Base64.scala",
+                "start_line" : 10,
+                "end_line" : 10
+              }
+            } ]
+          }
+        } ]
+      }, {
+        "id" : "Maven:com.lihaoyi:fastparse_2.11:1.0.0",
+        "results" : [ {
+          "provenance" : {
+            "download_time" : "2019-08-09T14:41:55.160436Z",
+            "source_artifact" : {
+              "url" : "https://repo.maven.apache.org/maven2/com/lihaoyi/fastparse_2.11/1.0.0/fastparse_2.11-1.0.0-sources.jar",
+              "hash" : {
+                "value" : "32f0ce22bbe0407737ac5346952a3556062400cf",
+                "algorithm" : "SHA-1"
+              }
+            }
+          },
+          "scanner" : {
+            "name" : "ScanCode",
+            "version" : "3.0.2",
+            "configuration" : "--copyright --license --ignore *.ort.yml --info --strip-root --timeout 300 --ignore HERE_NOTICE --ignore META-INF/DEPENDENCIES --json-pp"
+          },
+          "summary" : {
+            "start_time" : "2019-08-09T14:41:55.174761Z",
+            "end_time" : "2019-08-09T14:42:03.818027Z",
+            "file_count" : 15,
+            "licenses" : [ ],
+            "copyrights" : [ ]
+          }
+        } ]
+      }, {
+        "id" : "Maven:com.lihaoyi:sourcecode_2.11:0.1.4",
+        "results" : [ {
+          "provenance" : {
+            "download_time" : "2019-08-09T14:42:39.949247Z",
+            "vcs_info" : {
+              "type" : "Git",
+              "url" : "ssh://git@github.com/lihaoyi/sourcecode.git",
+              "revision" : "f917ee842958bc3dd99b51b1c71837a6e3cd8697",
+              "resolved_revision" : "f917ee842958bc3dd99b51b1c71837a6e3cd8697",
+              "path" : ""
+            },
+            "original_vcs_info" : {
+              "type" : "Git",
+              "url" : "ssh://git@github.com/lihaoyi/sourcecode.git",
+              "revision" : "",
+              "path" : ""
+            }
+          },
+          "scanner" : {
+            "name" : "ScanCode",
+            "version" : "3.0.2",
+            "configuration" : "--copyright --license --ignore *.ort.yml --info --strip-root --timeout 300 --ignore HERE_NOTICE --ignore META-INF/DEPENDENCIES --json-pp"
+          },
+          "summary" : {
+            "start_time" : "2019-08-09T14:42:45.639228Z",
+            "end_time" : "2019-08-09T14:42:56.240540Z",
+            "file_count" : 27,
+            "licenses" : [ {
+              "license" : "MIT",
+              "location" : {
+                "path" : "LICENSE",
+                "start_line" : 5,
+                "end_line" : 25
+              }
+            }, {
+              "license" : "MIT",
+              "location" : {
+                "path" : "build.sbt",
+                "start_line" : 19,
+                "end_line" : 19
+              }
+            } ],
+            "copyrights" : [ {
+              "statement" : "Copyright (c) 2014 Li Haoyi (haoyi.sg@gmail.com)",
+              "location" : {
+                "path" : "LICENSE",
+                "start_line" : 7,
+                "end_line" : 7
+              }
+            } ]
+          }
+        } ]
+      }, {
+        "id" : "Maven:com.thesamet.scalapb:lenses_2.11:0.7.0",
+        "results" : [ {
+          "provenance" : {
+            "download_time" : "2019-08-09T14:44:05.090014Z",
+            "vcs_info" : {
+              "type" : "Git",
+              "url" : "https://github.com/scalapb/Lenses.git",
+              "revision" : "1dcb3c4ae8214d6c4dfd28149e399e43e0d05daa",
+              "resolved_revision" : "1dcb3c4ae8214d6c4dfd28149e399e43e0d05daa",
+              "path" : ""
+            },
+            "original_vcs_info" : {
+              "type" : "Git",
+              "url" : "https://github.com/scalapb/Lenses.git",
+              "revision" : "",
+              "path" : ""
+            }
+          },
+          "scanner" : {
+            "name" : "ScanCode",
+            "version" : "3.0.2",
+            "configuration" : "--copyright --license --ignore *.ort.yml --info --strip-root --timeout 300 --ignore HERE_NOTICE --ignore META-INF/DEPENDENCIES --json-pp"
+          },
+          "summary" : {
+            "start_time" : "2019-08-09T14:44:07.147152Z",
+            "end_time" : "2019-08-09T14:44:16.826764Z",
+            "file_count" : 15,
+            "licenses" : [ {
+              "license" : "Apache-2.0",
+              "location" : {
+                "path" : "LICENSE",
+                "start_line" : 1,
+                "end_line" : 201
+              }
+            }, {
+              "license" : "Apache-2.0",
+              "location" : {
+                "path" : "sonatype.sbt",
+                "start_line" : 5,
+                "end_line" : 8
+              }
+            } ],
+            "copyrights" : [ ]
+          }
+        } ]
+      }, {
+        "id" : "Maven:com.thesamet.scalapb:scalapb-runtime_2.11:0.7.3",
+        "results" : [ {
+          "provenance" : {
+            "download_time" : "2019-08-09T14:43:40.903082Z",
+            "source_artifact" : {
+              "url" : "https://repo.maven.apache.org/maven2/com/thesamet/scalapb/scalapb-runtime_2.11/0.7.3/scalapb-runtime_2.11-0.7.3-sources.jar",
+              "hash" : {
+                "value" : "4c66950a8e465dcde08588ac851f5874ed257a5f",
+                "algorithm" : "SHA-1"
+              }
+            }
+          },
+          "scanner" : {
+            "name" : "ScanCode",
+            "version" : "3.0.2",
+            "configuration" : "--copyright --license --ignore *.ort.yml --info --strip-root --timeout 300 --ignore HERE_NOTICE --ignore META-INF/DEPENDENCIES --json-pp"
+          },
+          "summary" : {
+            "start_time" : "2019-08-09T14:43:40.956004Z",
+            "end_time" : "2019-08-09T14:44:03.656113Z",
+            "file_count" : 96,
+            "licenses" : [ ],
+            "copyrights" : [ ]
+          }
+        } ]
+      }, {
+        "id" : "Maven:org.scala-lang:scala-library:2.11.8",
+        "results" : [ {
+          "provenance" : {
+            "download_time" : "2019-08-10T07:28:44.660869Z",
+            "vcs_info" : {
+              "type" : "Git",
+              "url" : "https://github.com/scala/scala.git",
+              "revision" : "1706a37eb84ec252aea77bccebad3e48448534ad",
+              "resolved_revision" : "1706a37eb84ec252aea77bccebad3e48448534ad",
+              "path" : "src/library"
+            },
+            "original_vcs_info" : {
+              "type" : "Git",
+              "url" : "https://github.com/scala/scala.git",
+              "revision" : "",
+              "path" : "src/library"
+            }
+          },
+          "scanner" : {
+            "name" : "ScanCode",
+            "version" : "3.0.2",
+            "configuration" : "--copyright --license --ignore *.ort.yml --info --strip-root --timeout 300 --ignore HERE_NOTICE --ignore META-INF/DEPENDENCIES --json-pp"
+          },
+          "summary" : {
+            "start_time" : "2019-08-10T07:28:48.328680Z",
+            "end_time" : "2019-08-10T07:29:15.247048Z",
+            "file_count" : 614,
+            "licenses" : [ {
+              "license" : "CC0-1.0",
+              "location" : {
+                "path" : "src/library/scala/concurrent/impl/Promise.scala",
+                "start_line" : 64,
+                "end_line" : 65
+              }
+            } ],
+            "copyrights" : [ {
+              "statement" : "(c) 2003-2013",
+              "location" : {
+                "path" : "src/library/scala/concurrent/impl/Promise.scala",
+                "start_line" : 3,
+                "end_line" : 4
+              }
+            } ]
+          }
+        }, {
+          "provenance" : {
+            "download_time" : "2019-08-10T07:34:27.940944Z",
+            "vcs_info" : {
+              "type" : "Git",
+              "url" : "https://github.com/scala/scala.git",
+              "revision" : "1706a37eb84ec252aea77bccebad3e48448534ad",
+              "resolved_revision" : "1706a37eb84ec252aea77bccebad3e48448534ad",
+              "path" : "src/library"
+            },
+            "original_vcs_info" : {
+              "type" : "Git",
+              "url" : "https://github.com/scala/scala.git",
+              "revision" : "",
+              "path" : "src/library"
+            }
+          },
+          "scanner" : {
+            "name" : "ScanCode",
+            "version" : "3.0.2",
+            "configuration" : "--copyright --license --ignore *.ort.yml --info --strip-root --timeout 300 --ignore HERE_NOTICE --ignore META-INF/DEPENDENCIES --json-pp"
+          },
+          "summary" : {
+            "start_time" : "2019-08-10T07:34:31.542638Z",
+            "end_time" : "2019-08-10T07:34:59.637838Z",
+            "file_count" : 614,
+            "licenses" : [ {
+              "license" : "CC0-1.0",
+              "location" : {
+                "path" : "src/library/scala/concurrent/impl/Promise.scala",
+                "start_line" : 64,
+                "end_line" : 65
+              }
+            } ],
+            "copyrights" : [ {
+              "statement" : "(c) 2003-2013",
+              "location" : {
+                "path" : "src/library/scala/concurrent/impl/Promise.scala",
+                "start_line" : 3,
+                "end_line" : 4
+              }
+            } ]
+          }
+        } ]
+      } ],
+      "storage_stats" : {
+        "num_reads" : 16,
+        "num_hits" : 16
+      },
+      "has_errors" : false
+    }
+  },
+  "evaluator" : {
+    "start_time" : "2019-10-15T09:05:30.435644Z",
+    "end_time" : "2019-10-15T09:05:40.927059Z",
+    "violations" : [ ]
+  },
+  "data" : {
+    "job_parameters" : {
+      "CONFLUENCE_URL" : "https://confluence.in.here.com/pages/viewpage.action?pageId=506980908",
+      "JENKINS_URL" : "https://cto-oss.jenkins.release.in.here.com/job/ssr/job/main/8206/",
+      "REVIEW_ID" : "506980908",
+      "SW_NAME" : "Weather - Live Protobuf Schema",
+      "SW_VERSION" : "1.0.0-20191009",
+      "SW_ARTIFACT_URL" : "https://artifactory.in.here.com/artifactory/webapp/#/artifacts/browse/tree/General/olp-candidate-local/com/here/platform/schema/weather/platform-weather-schema_v1",
+      "VCS_TYPE" : "git",
+      "VCS_URL" : "ssh://gerrit.it.here.com:29418/olp/components/live-weather/platform-weather-schema",
+      "VCS_REVISION" : "dca4cb02e89974faead1b2ea9980043b5ed2f226",
+      "VCS_PATH" : "",
+      "ORT_CONFIG_FILE" : "",
+      "ALLOW_DYNAMIC_VERSIONS" : "false",
+      "ENABLE_OLP_ARTIFACTS_REPOSITORY" : "false",
+      "DRY_RUN" : "false",
+      "SSR_DEBUG" : "false"
+    },
+    "process_parameters" : {
+      "JIRA_ID" : "OSSREVIEW-687",
+      "LABELS" : "[review, project=library-here, project=data-binding-schema-here, dist=external, product=olp, org=development]",
+      "PEOPLE" : "[Project owner:sid.routray@here.com, Engineers:sid.routray@here.com,deepan.sathyamoorthy@here.com,abhish.philip@here.com,reza.iskandar@here.com, Contact for OSS:abhish.philip@here.com,sid.routray@here.com, Release manager:sid.routray@here.com]",
+      "SW_ALIASES" : "MapData Weather proto Schema",
+      "SW_DESCRIPTION" : "This is the protobuf schema that describes the Weather information. This project is created in line with all OLP platform schemas using the schema maven archetype.\n\n*Project aliases*: \n    * MapData Weather proto Schema\n\n*Project links*:\n\n    * [Live Weather and Patterns|https://confluence.in.here.com/display/HLSEngineering/Live+Weather+and+Patterns]",
+      "SW_WEBPAGES" : "Live Weather and Patterns|https://confluence.in.here.com/display/HLSEngineering/Live+Weather+and+Patterns"
+    },
+    "excel_report_extra_columns" : [ "Issues", "Action Points", "Clarification from Product Owner" ]
+  }
+}
