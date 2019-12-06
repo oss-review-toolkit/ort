@@ -31,6 +31,8 @@ import io.kotlintest.specs.WordSpec
 
 import java.io.ByteArrayOutputStream
 import java.io.File
+// import java.text.SimpleDateFormat
+// import java.util.*
 
 import javax.xml.transform.TransformerFactory
 
@@ -57,12 +59,15 @@ class StaticHtmlReporterTest : WordSpec({
         }
 
         "successfully export to a static HTML page" {
-            val timeStampPattern = Regex("\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(\\.\\d+)?Z")
-            val ortResult = readOrtResult("src/funTest/assets/static-html-reporter-test-input.yml")
-            val actualReport = generateReport(ortResult).replace(timeStampPattern, "<REPLACE_TIMESTAMP>")
+            val timeStampPattern = Regex("\\d{2}:\\d{2}:\\d{2} [a-zA-Z]{3} \\d{2}, \\d{4}")
+            val inputPath = "src/funTest/assets"
+
+             val ortResult = readOrtResult("$inputPath/static-html-reporter-test-input.yml")
+            val actualReport = generateReport(ortResult)
+                .replace(timeStampPattern, "<REPLACE_TIMESTAMP>")
 
             val expectedReport = patchExpectedResult(
-                File("src/funTest/assets/static-html-reporter-test-expected-output.html"),
+                File("$inputPath/static-html-reporter-test-expected-output.html"),
                 "<REPLACE_ORT_VERSION>" to Environment().ortVersion
             )
 

@@ -55,7 +55,7 @@ ul {
     padding: 0.4em 0.4em 0.4em 0.4em;
     margin-bottom: 1em;
     top: -10px;
-    width: 110px;
+    width: max-content;
 }
 
 .ort-report-metadata {
@@ -423,28 +423,37 @@ var _self="undefined"!=typeof window?window:"undefined"!=typeof WorkerGlobalScop
 Prism.languages.yaml={scalar:{pattern:/([\-:]\s*(?:![^\s]+)?[ \t]*[|>])[ \t]*(?:((?:\r?\n|\r)[ \t]+)[^\r\n]+(?:\2[^\r\n]+)*)/,lookbehind:!0,alias:"string"},comment:/#.*/,key:{pattern:/(\s*(?:^|[:\-,[{\r\n?])[ \t]*(?:![^\s]+)?[ \t]*)[^\r\n{[\]},#\s]+?(?=\s*:\s)/,lookbehind:!0,alias:"atrule"},directive:{pattern:/(^[ \t]*)%.+/m,lookbehind:!0,alias:"important"},datetime:{pattern:/([:\-,[{]\s*(?:![^\s]+)?[ \t]*)(?:\d{4}-\d\d?-\d\d?(?:[tT]|[ \t]+)\d\d?:\d{2}:\d{2}(?:\.\d*)?[ \t]*(?:Z|[-+]\d\d?(?::\d{2})?)?|\d{4}-\d{2}-\d{2}|\d\d?:\d{2}(?::\d{2}(?:\.\d*)?)?)(?=[ \t]*(?:$|,|]|}))/m,lookbehind:!0,alias:"number"},boolean:{pattern:/([:\-,[{]\s*(?:![^\s]+)?[ \t]*)(?:true|false)[ \t]*(?=$|,|]|})/im,lookbehind:!0,alias:"important"},null:{pattern:/([:\-,[{]\s*(?:![^\s]+)?[ \t]*)(?:null|~)[ \t]*(?=$|,|]|})/im,lookbehind:!0,alias:"important"},string:{pattern:/([:\-,[{]\s*(?:![^\s]+)?[ \t]*)("|')(?:(?!\2)[^\\\r\n]|\\.)*\2(?=[ \t]*(?:$|,|]|}|\s*#))/m,lookbehind:!0,greedy:!0},number:{pattern:/([:\-,[{]\s*(?:![^\s]+)?[ \t]*)[+-]?(?:0x[\da-f]+|0o[0-7]+|(?:\d+\.?\d*|\.?\d+)(?:e[+-]?\d+)?|\.inf|\.nan)[ \t]*(?=$|,|]|})/im,lookbehind:!0},tag:/![^\s]+/,important:/[&*][\w]+/,punctuation:/---|[:[\]{}\-,|>?]|\.\.\./},Prism.languages.yml=Prism.languages.yaml;
 </script>
     <div id="report-container">
-      <div class="ort-report-label">Scan Report</div>
-      <div>Created by <strong>ORT</strong>, the <a href="http://oss-review-toolkit.org/">OSS Review Toolkit</a>, version <REPLACE_ORT_VERSION> on <REPLACE_TIMESTAMP>.</div>
+      <div class="ort-report-label">Scan Report<i></i>
+      </div>
+      <h2>Highlights</h2>
+      <details>
+        <summary>2 errors to fix, 1 warning</summary>
+        <p></p>
+        <ul>
+          <li>
+            <a href="#rule-violation-summary">Policy Violations (errors: 1, warnings: 1, hints: 0)</a>
+          </li>
+          <li>
+            <a href="#issue-summary">Technical Issues (errors: 1, warnings: 0, hints: 0)</a>
+          </li>
+        </ul>
+      </details>
       <h2>Index</h2>
       <ul>
         <li>
-          <a href="#rule-violation-summary">Rule Violation Summary (1 errors, 1 warnings, 0 hints to resolve)</a>
+          <a href="#rule-violation-summary">Policy Violations</a>
         </li>
         <li>
-          <a href="#issue-summary">Issue Summary (1 errors, 0 warnings, 0 hints to resolve)</a>
+          <a href="#issue-summary">Technical Issues</a>
         </li>
         <li>
-          <a href="#Gradle:com.here.ort.gradle.example:lib:1.0.0">Gradle:com.here.ort.gradle.example:lib:1.0.0</a>
-        </li>
-        <li>
-          <a href="#Gradle:com.here:nested-fake-project:1.0.0">Gradle:com.here:nested-fake-project:1.0.0 <div class="ort-reason">Excluded: EXAMPLE_OF - The project is an example.</div>
-          </a>
+          <a href="#project-dependencies">Projects and Dependencies</a>
         </li>
         <li>
           <a href="#repository-configuration">Repository Configuration</a>
         </li>
       </ul>
-      <h2 id="rule-violation-summary">Rule Violation Summary (1 errors, 1 warnings, 0 hints to resolve)</h2>
+      <h2 id="rule-violation-summary">Policy Violations (errors: 1, warnings: 1, hints: 0)</h2>
       <table class="ort-report-table ort-violations">
         <thead>
           <tr>
@@ -519,7 +528,7 @@ Resolved by: CANT_FIX_EXCEPTION - Apache-2 is not an issue.</p>
           </tr>
         </tbody>
       </table>
-      <h2 id="issue-summary">Issue Summary (1 errors, 0 warnings, 0 hints to resolve)</h2>
+      <h2 id="issue-summary">Technical Issues (errors: 1, warnings: 0, hints: 0)</h2>
       <p>Issues from excluded components are not shown in this summary.</p>
       <h3>Packages</h3>
       <table class="ort-report-table">
@@ -541,25 +550,42 @@ Resolved by: CANT_FIX_EXCEPTION - Apache-2 is not an issue.</p>
           </tr>
         </tbody>
       </table>
-      <h2 id="Gradle:com.here.ort.gradle.example:lib:1.0.0">Gradle:com.here.ort.gradle.example:lib:1.0.0 (analyzer/src/funTest/assets/projects/synthetic/gradle/lib/build.gradle)</h2>
-      <h3 class="">VCS Information</h3>
-      <table class="ort-report-metadata ">
-        <tbody>
-          <tr>
-            <td>Type</td><td>Git</td>
-          </tr>
-          <tr>
-            <td>URL</td><td>https://github.com/oss-review-toolkit/ort.git</td>
-          </tr>
-          <tr>
-            <td>Path</td><td>analyzer/src/funTest/assets/projects/synthetic/gradle/lib</td>
-          </tr>
-          <tr>
-            <td>Revision</td><td>master</td>
-          </tr>
-        </tbody>
-      </table>
-      <h3 class="">Packages</h3>
+      <h2 id="project-dependencies">Projects and Dependencies</h2>
+      <details>
+        <summary>Project and Dependency Index</summary>
+        <ul>
+          <li>
+            <a href="#Gradle:com.here.ort.gradle.example:lib:1.0.0">Gradle:com.here.ort.gradle.example:lib:1.0.0</a>
+          </li>
+          <li>
+            <a href="#Gradle:com.here:nested-fake-project:1.0.0">Gradle:com.here:nested-fake-project:1.0.0 <div class="ort-reason">Excluded: EXAMPLE_OF - The project is an example.</div>
+            </a>
+          </li>
+        </ul>
+      </details>
+      <h3 id="Gradle:com.here.ort.gradle.example:lib:1.0.0">Gradle:com.here.ort.gradle.example:lib:1.0.0 (analyzer/src/funTest/assets/projects/synthetic/gradle/lib/build.gradle)</h3>
+      <details>
+        <summary>
+          <strong id="">VCS Information</strong>
+        </summary>
+        <table class="ort-report-metadata ">
+          <tbody>
+            <tr>
+              <td>Type</td><td>Git</td>
+            </tr>
+            <tr>
+              <td>URL</td><td>https://github.com/heremaps/oss-review-toolkit.git</td>
+            </tr>
+            <tr>
+              <td>Path</td><td>analyzer/src/funTest/assets/projects/synthetic/gradle/lib</td>
+            </tr>
+            <tr>
+              <td>Revision</td><td>master</td>
+            </tr>
+          </tbody>
+        </table>
+      </details>
+      <h4 class="">Packages</h4>
       <table class="ort-report-table ort-packages ">
         <thead>
           <tr>
@@ -571,8 +597,8 @@ Resolved by: CANT_FIX_EXCEPTION - Apache-2 is not an issue.</p>
             <td><a href="#Gradle:com.here.ort.gradle.example:lib:1.0.0-pkg-1">1</a></td><td>Gradle:com.here.ort.gradle.example:lib:1.0.0</td><td></td><td><em>Detected Licenses:</em>
               <dl>
                 <dd>
-                  <div>Apache-2.0 (multi-line) (<a href="https://github.com/oss-review-toolkit/ort/tree/master/analyzer/src/funTest/assets/projects/synthetic/gradle/lib/build.gradle#L19-L20">link</a> to the location)</div>
-                  <div>Apache-2.0 (single-line) (exemplary <a href="https://github.com/oss-review-toolkit/ort/tree/master/analyzer/src/funTest/assets/projects/synthetic/gradle/lib/build.gradle#L19">link</a> to the first of 2 locations)</div>
+                  <div>Apache-2.0 (multi-line) (<a href="https://github.com/heremaps/oss-review-toolkit/tree/master/analyzer/src/funTest/assets/projects/synthetic/gradle/lib/build.gradle#L19-L20">link to finding 1/1</a>)</div>
+                  <div>Apache-2.0 (single-line) (<a href="https://github.com/heremaps/oss-review-toolkit/tree/master/analyzer/src/funTest/assets/projects/synthetic/gradle/lib/build.gradle#L19">link to finding 1/2</a>)</div>
                 </dd>
               </dl>
             </td><td>
@@ -657,30 +683,34 @@ Resolved by: CANT_FIX_EXCEPTION - Apache-2 is not an issue.</p>
           </tr>
         </tbody>
       </table>
-      <h2 id="Gradle:com.here:nested-fake-project:1.0.0">Gradle:com.here:nested-fake-project:1.0.0 (sub/module/project/build.gradle)</h2>
-      <h3>Project is Excluded</h3>
+      <h3 id="Gradle:com.here:nested-fake-project:1.0.0">Gradle:com.here:nested-fake-project:1.0.0 (sub/module/project/build.gradle)</h3>
+      <h4>Project is Excluded</h4>
       <p>The project is excluded for the following reason(s):</p>
       <p>
         <div class="ort-reason">EXAMPLE_OF - The project is an example.</div>
       </p>
-      <h3 class="ort-excluded">VCS Information</h3>
-      <table class="ort-report-metadata ort-excluded">
-        <tbody>
-          <tr>
-            <td>Type</td><td>Git</td>
-          </tr>
-          <tr>
-            <td>URL</td><td>https://example.com/git</td>
-          </tr>
-          <tr>
-            <td>Path</td><td>project</td>
-          </tr>
-          <tr>
-            <td>Revision</td><td></td>
-          </tr>
-        </tbody>
-      </table>
-      <h3 class="ort-excluded">Packages</h3>
+      <details>
+        <summary>
+          <strong id="ort-excluded">VCS Information</strong>
+        </summary>
+        <table class="ort-report-metadata ort-excluded">
+          <tbody>
+            <tr>
+              <td>Type</td><td>Git</td>
+            </tr>
+            <tr>
+              <td>URL</td><td>https://example.com/git</td>
+            </tr>
+            <tr>
+              <td>Path</td><td>project</td>
+            </tr>
+            <tr>
+              <td>Revision</td><td></td>
+            </tr>
+          </tbody>
+        </table>
+      </details>
+      <h4 class="ort-excluded">Packages</h4>
       <table class="ort-report-table ort-packages ort-excluded">
         <thead>
           <tr>
@@ -723,6 +753,7 @@ resolutions:
     comment: "Apache-2 is not an issue."
 </code>
       </pre>
+      <div>Created by <strong><a href="http://oss-review-toolkit.org/">ORT</a></strong> version 0.1.0-SNAPSHOT at <REPLACE_TIMESTAMP></div>
     </div>
   </body>
 </html>
