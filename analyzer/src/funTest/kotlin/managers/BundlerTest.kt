@@ -67,13 +67,15 @@ class BundlerTest : WordSpec() {
                 val actualResult = createBundler().resolveDependencies(listOf(definitionFile))[definitionFile]
 
                 actualResult shouldNotBe null
-                actualResult!!.project.id shouldBe
-                        Identifier("Bundler::src/funTest/assets/projects/synthetic/bundler/no-lockfile/Gemfile:")
-                actualResult.project.definitionFilePath shouldBe
-                        "analyzer/src/funTest/assets/projects/synthetic/bundler/no-lockfile/Gemfile"
-                actualResult.packages.size shouldBe 0
-                actualResult.errors.size shouldBe 1
-                actualResult.errors.first().message should startWith("IllegalArgumentException: No lockfile found in")
+                with(actualResult!!) {
+                    project.id shouldBe
+                            Identifier("Bundler::src/funTest/assets/projects/synthetic/bundler/no-lockfile/Gemfile:")
+                    project.definitionFilePath shouldBe
+                            "analyzer/src/funTest/assets/projects/synthetic/bundler/no-lockfile/Gemfile"
+                    packages.size shouldBe 0
+                    errors.size shouldBe 1
+                    errors.first().message should startWith("IllegalArgumentException: No lockfile found in")
+                }
             }
 
             "resolve dependencies correctly when the project is a Gem" {

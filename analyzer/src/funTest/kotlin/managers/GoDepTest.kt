@@ -54,13 +54,15 @@ class GoDepTest : WordSpec() {
                 val result = createGoDep().resolveDependencies(listOf(manifestFile))[manifestFile]
 
                 result shouldNotBe null
-                result!!.project.id shouldBe
-                        Identifier("GoDep::src/funTest/assets/projects/synthetic/godep/no-lockfile/Gopkg.toml:")
-                result.project.definitionFilePath shouldBe
-                        "analyzer/src/funTest/assets/projects/synthetic/godep/no-lockfile/Gopkg.toml"
-                result.packages.size shouldBe 0
-                result.errors.size shouldBe 1
-                result.errors.first().message should startWith("IllegalArgumentException: No lockfile found in")
+                with(result!!) {
+                    project.id shouldBe
+                            Identifier("GoDep::src/funTest/assets/projects/synthetic/godep/no-lockfile/Gopkg.toml:")
+                    project.definitionFilePath shouldBe
+                            "analyzer/src/funTest/assets/projects/synthetic/godep/no-lockfile/Gopkg.toml"
+                    packages.size shouldBe 0
+                    errors.size shouldBe 1
+                    errors.first().message should startWith("IllegalArgumentException: No lockfile found in")
+                }
             }
 
             "invoke the dependency solver if no lockfile is present and allowDynamicVersions is set" {
@@ -69,9 +71,11 @@ class GoDepTest : WordSpec() {
                 val result = createGoDep(config).resolveDependencies(listOf(manifestFile))[manifestFile]
 
                 result shouldNotBe null
-                result!!.project shouldNotBe Project.EMPTY
-                result.packages.size shouldBe 4
-                result.errors.size shouldBe 0
+                with(result!!) {
+                    project shouldNotBe Project.EMPTY
+                    packages.size shouldBe 4
+                    errors.size shouldBe 0
+                }
             }
 
             "import dependencies from Glide" {

@@ -80,11 +80,13 @@ class BabelTest : StringSpec() {
 
             downloadResult.sourceArtifact shouldBe null
             downloadResult.vcsInfo shouldNotBe null
-            downloadResult.vcsInfo!!.type shouldBe pkg.vcsProcessed.type
-            downloadResult.vcsInfo!!.url shouldBe pkg.vcsProcessed.url
-            downloadResult.vcsInfo!!.revision shouldBe "master"
-            downloadResult.vcsInfo!!.resolvedRevision shouldBe "cee4cde53e4f452d89229986b9368ecdb41e00da"
-            downloadResult.vcsInfo!!.path shouldBe pkg.vcsProcessed.path
+            with(downloadResult.vcsInfo!!) {
+                type shouldBe pkg.vcsProcessed.type
+                url shouldBe pkg.vcsProcessed.url
+                revision shouldBe "master"
+                resolvedRevision shouldBe "cee4cde53e4f452d89229986b9368ecdb41e00da"
+                path shouldBe pkg.vcsProcessed.path
+            }
 
             val workingTree = VersionControlSystem.forDirectory(downloadResult.downloadDirectory)
 
