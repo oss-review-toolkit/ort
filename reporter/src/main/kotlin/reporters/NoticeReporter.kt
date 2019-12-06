@@ -46,7 +46,7 @@ class NoticeReporter : Reporter {
         val footers: List<String>
     )
 
-    class PostProcessor(
+    class PreProcessor(
         ortResult: OrtResult,
         noticeReport: NoticeReport,
         copyrightGarbage: CopyrightGarbage,
@@ -95,7 +95,7 @@ class NoticeReporter : Reporter {
         licenseTextProvider: LicenseTextProvider,
         copyrightGarbage: CopyrightGarbage,
         licenseConfiguration: LicenseConfiguration,
-        postProcessingScript: String?
+        preProcessingScript: String?
     ) {
         requireNotNull(ortResult.scanner) {
             "The provided ORT result file does not contain a scan result."
@@ -109,13 +109,13 @@ class NoticeReporter : Reporter {
             "This project contains or depends on third-party software components pursuant to the following licenses:\n"
         }
 
-        val noticeReport = if (postProcessingScript != null) {
-            PostProcessor(
+        val noticeReport = if (preProcessingScript != null) {
+            PreProcessor(
                 ortResult,
                 NoticeReport(listOf(header), licenseFindings, emptyList()),
                 copyrightGarbage,
                 licenseConfiguration
-            ).run(postProcessingScript)
+            ).run(preProcessingScript)
         } else {
             NoticeReport(listOf(header), licenseFindings, emptyList())
         }

@@ -66,7 +66,7 @@ class CycloneDxReporter : Reporter {
         licenseTextProvider: LicenseTextProvider,
         copyrightGarbage: CopyrightGarbage,
         licenseConfiguration: LicenseConfiguration,
-        postProcessingScript: String?
+        preProcessingScript: String?
     ) {
         val bom = Bom().apply { serialNumber = "urn:uuid:${UUID.randomUUID()}" }
 

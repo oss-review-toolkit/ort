@@ -35,14 +35,14 @@ import java.io.File
 private fun generateReport(
     ortResult: OrtResult,
     copyrightGarbage: CopyrightGarbage = CopyrightGarbage(),
-    postProcessingScript: String? = null
+    preProcessingScript: String? = null
 ) =
     ByteArrayOutputStream().also { outputStream ->
         NoticeReporter().generateReport(
             outputStream,
             ortResult,
             copyrightGarbage = copyrightGarbage,
-            postProcessingScript = postProcessingScript
+            preProcessingScript = preProcessingScript
         )
     }.toString("UTF-8")
 
@@ -75,11 +75,11 @@ class NoticeReporterTest : WordSpec({
             report shouldBe expectedText
         }
 
-        "evaluate the provided post-processing script" {
-            val expectedText = File("src/funTest/assets/post-processed-expected-NOTICE").readText()
+        "evaluate the provided pre-processing script" {
+            val expectedText = File("src/funTest/assets/pre-processed-expected-NOTICE").readText()
             val ortResult = readOrtResult("src/funTest/assets/NPM-is-windows-1.0.2-scan-result.json")
 
-            val postProcessingScript = """
+            val preProcessingScript = """
                 headers = listOf("Header 1\n", "Header 2\n")
                 findings = noticeReport.findings.filter { (_, findings) -> 
                     findings.all { it.value.isEmpty() }
@@ -87,17 +87,17 @@ class NoticeReporterTest : WordSpec({
                 footers = listOf("Footer 1\n", "Footer 2\n")
             """.trimIndent()
 
-            val report = generateReport(ortResult, postProcessingScript = postProcessingScript)
+            val report = generateReport(ortResult, preProcessingScript = preProcessingScript)
 
             report shouldBe expectedText
         }
 
-        "return the input as-is for an empty post-processing script" {
+        "return the input as-is for an empty pre-processing script" {
             val expectedText =
                 File("src/funTest/assets/NPM-is-windows-1.0.2-expected-NOTICE").readText()
             val ortResult = readOrtResult("src/funTest/assets/NPM-is-windows-1.0.2-scan-result.json")
 
-            val report = generateReport(ortResult, postProcessingScript = "")
+            val report = generateReport(ortResult, preProcessingScript = "")
 
             report shouldBe expectedText
         }

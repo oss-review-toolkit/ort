@@ -95,11 +95,11 @@ object ReporterCommand : CommandWithHelp() {
     private var resolutionsFile: File? = null
 
     @Parameter(
-        description = "The path to a Kotlin script to post-process the notice report before writing it to disk.",
-        names = ["--post-processing-script"],
+        description = "The path to a Kotlin script to pre-process the notice report before writing it to disk.",
+        names = ["--pre-processing-script"],
         order = PARAMETER_ORDER_OPTIONAL
     )
-    private var postProcessingScript: File? = null
+    private var preProcessingScript: File? = null
 
     @Parameter(
         description = "A file containing garbage copyright statements entries which are to be ignored.",
@@ -174,7 +174,7 @@ object ReporterCommand : CommandWithHelp() {
                     DefaultLicenseTextProvider(customLicenseTextsDir),
                     copyrightGarbage,
                     licenseConfiguration,
-                    postProcessingScript?.expandTilde()?.readText()
+                    preProcessingScript?.expandTilde()?.readText()
                 )
 
                 println("Created '${reporter.reporterName}' report:\n\t$file")

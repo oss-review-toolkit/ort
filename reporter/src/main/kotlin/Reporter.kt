@@ -57,8 +57,8 @@ interface Reporter {
     /**
      * Generate a report for the [ortResult], taking into account any issue resolutions provided by [resolutionProvider]
      * and any license text provided by [LicenseTextProvider]. Copyright statements are cleaned from [copyrightGarbage].
-     * The report may be post-processed by a [postProcessingScript] before it is written to [outputStream] whereas the
-     * [licenseConfiguration] is passed as a parameter to that script.
+     * The data passed to the reporter may be pre-processed by a [preProcessingScript] before it is written to
+     * [outputStream] whereas the [licenseConfiguration] is passed as a parameter to that script.
      */
     @Suppress("LongParameterList")
     fun generateReport(
@@ -69,6 +69,6 @@ interface Reporter {
         licenseTextProvider: LicenseTextProvider = DefaultLicenseTextProvider(),
         copyrightGarbage: CopyrightGarbage = CopyrightGarbage(),
         licenseConfiguration: LicenseConfiguration = LicenseConfiguration(),
-        postProcessingScript: String? = null
+        preProcessingScript: String? = null
     )
 }
