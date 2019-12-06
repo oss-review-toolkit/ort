@@ -2,4 +2,4 @@ excludes:
   scopes:
     - name: "all"
       reason: "BUILD_TOOL_OF"
-      comment: "Scope dependencies used to build all targets including non-released artifacts like tests."
+      comment: "Dependencies used to build all targets including non-released artifacts like tests."
