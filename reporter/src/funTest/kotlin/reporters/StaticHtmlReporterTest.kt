@@ -30,6 +30,8 @@ import io.kotlintest.specs.WordSpec
 
 import java.io.ByteArrayOutputStream
 import java.io.File
+import java.text.SimpleDateFormat
+import java.util.*
 
 import javax.xml.transform.TransformerFactory
 
@@ -55,15 +57,30 @@ class StaticHtmlReporterTest : WordSpec({
 
         "successfully export to a static HTML page" {
             val timeStampPattern = Regex("\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(\\.\\d+)?Z")
-            val ortResult = readOrtResult("src/funTest/assets/static-html-reporter-test-input.yml")
-            val actualReport = generateReport(ortResult).replace(timeStampPattern, "<REPLACE_TIMESTAMP>")
+            val createdAtPattern = Regex("at \\d{2}:\\d{2}:\\d{2} [a-zA-Z]{3} \\d{2}, \\d{4}")
+            val versionTSPattern = Regex("\\+\\d{4}\\d{2}\\d{2}T\\d{2}\\d{2}\\d{2}(\\.\\d+)?Z")
+            val partFileNames = arrayOf("errors", "warnings", "success")
+            val inputPath = "src/funTest/assets"
 
-            val expectedReport = patchExpectedResult(
-                File("src/funTest/assets/static-html-reporter-test-expected-output.html"),
-                "<REPLACE_ORT_VERSION>" to Environment().ortVersion
-            )
+            partFileNames.forEach {
+                // val ortResult = readOrtResult("$inputPath/static-html-reporter-test-input.yml")
+                val createdStr = "at ${SimpleDateFormat("HH:mm:ss MMM dd, yyyy").format(Date())}"
+                val ortResult = readOrtResult("$inputPath/static-html-reporter-test-input-$it.json")
+                val actualReport = generateReport(ortResult)
+                    .replace(timeStampPattern, "<REPLACE_TIMESTAMP>")
+                    .replace(createdAtPattern, createdStr)
+                    .replace(versionTSPattern, "")
 
-            actualReport shouldBe expectedReport
+                val expectedReport = patchExpectedResult(
+                    File("$inputPath/static-html-reporter-test-expected-output-$it.html"),
+                    "<REPLACE_ORT_VERSION>" to Environment().ortVersion)
+                    .replace(createdAtPattern, createdStr)
+                    .replace(timeStampPattern, "<REPLACE_TIMESTAMP>")
+                    .replace(versionTSPattern, "")
+
+                // File("${System.getProperty("user.dir")}/../build/tmp/static-html-reporter-test-expected-output-$it.html").writeText(actualReport)
+                actualReport shouldBe expectedReport
+            }
         }
     }
 })
