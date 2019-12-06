@@ -1,5 +1,5 @@
 excludes:
   scopes:
     - name: "all"
-      reason: "OPTIONAL_COMPONENT_OF"
+      reason: "BUILD_TOOL_OF"
       comment: "Scope dependencies used to build all targets including non-released artifacts like tests."
