@@ -175,7 +175,7 @@ Currently, the following package managers are supported:
 * [DotNet](https://docs.microsoft.com/en-us/dotnet/core/tools/) (.NET, with currently some [limitations](https://github.com/heremaps/oss-review-toolkit/pull/1303#issue-253860146))
 * [Glide](https://glide.sh/) (Go)
 * [Godep](https://github.com/tools/godep) (Go)
-* [GoMod](https://github.com/golang/go/wiki/Modules) (Go, experimental as only proxy-based source artifact- but no VCS locations are supported.)
+* [GoMod](https://github.com/golang/go/wiki/Modules) (Go, *experimental* as only proxy-based source artifacts but no VCS locations are supported)
 * [Gradle](https://gradle.org/) (Java)
 * [Maven](http://maven.apache.org/) (Java)
 * [NPM](https://www.npmjs.com/) (Node.js)
