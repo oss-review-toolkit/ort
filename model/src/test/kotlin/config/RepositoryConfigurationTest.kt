@@ -95,7 +95,7 @@ class RepositoryConfigurationTest : WordSpec() {
                 val scopes = repositoryConfiguration.excludes!!.scopes
                 scopes should haveSize(1)
                 with(scopes.first()) {
-                    name.pattern shouldBe "scope"
+                    pattern shouldBe "scope"
                     reason shouldBe ScopeExcludeReason.TEST_TOOL_OF
                     comment shouldBe "scope comment"
                 }
