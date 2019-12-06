@@ -88,137 +88,137 @@ private fun getScopeExcludesForPackageManager(packageManagerName: String): List<
     when (packageManagerName) {
         "Bower" -> listOf(
             ScopeExclude(
-                name = "devDependencies",
+                pattern = "devDependencies",
                 reason = ScopeExcludeReason.BUILD_TOOL_OF,
                 comment = "Development dependencies."
             )
         )
         "Bundler" -> listOf(
             ScopeExclude(
-                name = "test",
+                pattern = "test",
                 reason = ScopeExcludeReason.TEST_TOOL_OF,
                 comment = "Test dependencies."
             )
         )
         "Cargo" -> listOf(
             ScopeExclude(
-                name = "build-dependencies",
+                pattern = "build-dependencies",
                 reason = ScopeExcludeReason.BUILD_TOOL_OF,
                 comment = "Build dependencies."
             ),
             ScopeExclude(
-                name = "dev-dependencies",
+                pattern = "dev-dependencies",
                 reason = ScopeExcludeReason.BUILD_TOOL_OF,
                 comment = "Development dependencies."
             )
         )
         "GoMod" -> listOf(
             ScopeExclude(
-                name = "all",
+                pattern = "all",
                 reason = ScopeExcludeReason.BUILD_TOOL_OF,
                 comment = "Dependencies used to build all targets including non-released artifacts like tests."
             )
         )
         "Gradle" -> listOf(
             ScopeExclude(
-                name = "checkstyle",
+                pattern = "checkstyle",
                 reason = ScopeExcludeReason.BUILD_TOOL_OF,
                 comment = "Checkstyle dependencies."
             ),
             ScopeExclude(
-                name = "detekt",
+                pattern = "detekt",
                 reason = ScopeExcludeReason.BUILD_TOOL_OF,
                 comment = "Detekt dependencies."
             ),
             ScopeExclude(
-                name = "findbugs",
+                pattern = "findbugs",
                 reason = ScopeExcludeReason.BUILD_TOOL_OF,
                 comment = "Findbugs dependencies."
             ),
             ScopeExclude(
-                name = "jacocoAgent",
+                pattern = "jacocoAgent",
                 reason = ScopeExcludeReason.BUILD_TOOL_OF,
                 comment = "Test dependencies."
             ),
             ScopeExclude(
-                name = "jacocoAnt",
+                pattern = "jacocoAnt",
                 reason = ScopeExcludeReason.BUILD_TOOL_OF,
                 comment = "Test dependencies."
             ),
             ScopeExclude(
-                name = "kapt.*",
+                pattern = "kapt.*",
                 reason = ScopeExcludeReason.PROVIDED_BY,
                 comment = "Annotation processing dependencies."
             ),
             ScopeExclude(
-                name = "lintClassPath",
+                pattern = "lintClassPath",
                 reason = ScopeExcludeReason.BUILD_TOOL_OF,
                 comment = "Linter dependencies."
             ),
             ScopeExclude(
-                name = "test.*",
+                pattern = "test.*",
                 reason = ScopeExcludeReason.TEST_TOOL_OF,
                 comment = "Test dependencies."
             ),
             ScopeExclude(
-                name = ".*Test.*",
+                pattern = ".*Test.*",
                 reason = ScopeExcludeReason.TEST_TOOL_OF,
                 comment = "Test dependencies."
             )
         )
         "Maven" -> listOf(
             ScopeExclude(
-                name = "provided",
+                pattern = "provided",
                 reason = ScopeExcludeReason.PROVIDED_BY,
                 comment = "Dependencies provided by the user."
             ),
             ScopeExclude(
-                name = "test",
+                pattern = "test",
                 reason = ScopeExcludeReason.TEST_TOOL_OF,
                 comment = "Test dependencies."
             )
         )
         "NPM" -> listOf(
             ScopeExclude(
-                name = "devDependencies",
+                pattern = "devDependencies",
                 reason = ScopeExcludeReason.BUILD_TOOL_OF,
                 comment = "Development dependencies."
             )
         )
         "PhpComposer" -> listOf(
             ScopeExclude(
-                name = "require-dev",
+                pattern = "require-dev",
                 reason = ScopeExcludeReason.BUILD_TOOL_OF,
                 comment = "Development dependencies."
             )
         )
         "SBT" -> listOf(
             ScopeExclude(
-                name = "provided",
+                pattern = "provided",
                 reason = ScopeExcludeReason.PROVIDED_BY,
                 comment = "Dependencies provided at runtime."
             ),
             ScopeExclude(
-                name = "test",
+                pattern = "test",
                 reason = ScopeExcludeReason.TEST_TOOL_OF,
                 comment = "Test dependencies."
             )
         )
         "Stack" -> listOf(
             ScopeExclude(
-                name = "bench",
+                pattern = "bench",
                 reason = ScopeExcludeReason.TEST_TOOL_OF,
                 comment = "Benchmark dependencies."
             ),
             ScopeExclude(
-                name = "test",
+                pattern = "test",
                 reason = ScopeExcludeReason.TEST_TOOL_OF,
                 comment = "Test dependencies."
             )
         )
         "Yarn" -> listOf(
             ScopeExclude(
-                name = "devDependencies",
+                pattern = "devDependencies",
                 reason = ScopeExcludeReason.BUILD_TOOL_OF,
                 comment = "Development dependencies."
             )
