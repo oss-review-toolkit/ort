@@ -116,11 +116,13 @@ class PubTest : WordSpec() {
                 val result = createPub().resolveDependencies(listOf(packageFile))[packageFile]
 
                 result shouldNotBe null
-                result!!.project.definitionFilePath shouldBe
-                        "analyzer/src/funTest/assets/projects/synthetic/pub/no-lockfile/pubspec.yaml"
-                result.packages.size shouldBe 0
-                result.errors.size shouldBe 1
-                result.errors.first().message should startWith("IllegalArgumentException: No lockfile found in")
+                with(result!!) {
+                    project.definitionFilePath shouldBe
+                            "analyzer/src/funTest/assets/projects/synthetic/pub/no-lockfile/pubspec.yaml"
+                    packages.size shouldBe 0
+                    errors.size shouldBe 1
+                    errors.first().message should startWith("IllegalArgumentException: No lockfile found in")
+                }
             }
         }
     }

@@ -94,23 +94,27 @@ class RepositoryConfigurationTest : WordSpec() {
 
                 val scopes = repositoryConfiguration.excludes!!.scopes
                 scopes should haveSize(1)
-                scopes.first().name.pattern shouldBe "scope"
-                scopes.first().reason shouldBe ScopeExcludeReason.TEST_TOOL_OF
-                scopes.first().comment shouldBe "scope comment"
+                with(scopes.first()) {
+                    name.pattern shouldBe "scope"
+                    reason shouldBe ScopeExcludeReason.TEST_TOOL_OF
+                    comment shouldBe "scope comment"
+                }
 
                 val errors = repositoryConfiguration.resolutions!!.errors
                 errors should haveSize(1)
-                val error = errors.first()
-                error.message shouldBe "message"
-                error.reason shouldBe ErrorResolutionReason.CANT_FIX_ISSUE
-                error.comment shouldBe "error comment"
+                with(errors.first()) {
+                    message shouldBe "message"
+                    reason shouldBe ErrorResolutionReason.CANT_FIX_ISSUE
+                    comment shouldBe "error comment"
+                }
 
                 val evalErrors = repositoryConfiguration.resolutions!!.ruleViolations
                 evalErrors should haveSize(1)
-                val evalError = evalErrors.first()
-                evalError.message shouldBe "rule message"
-                evalError.reason shouldBe RuleViolationResolutionReason.PATENT_GRANT_EXCEPTION
-                evalError.comment shouldBe "rule comment"
+                with(evalErrors.first()) {
+                    message shouldBe "rule message"
+                    reason shouldBe RuleViolationResolutionReason.PATENT_GRANT_EXCEPTION
+                    comment shouldBe "rule comment"
+                }
             }
         }
     }
