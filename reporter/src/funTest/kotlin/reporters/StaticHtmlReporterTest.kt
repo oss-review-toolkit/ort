@@ -55,7 +55,7 @@ class StaticHtmlReporterTest : WordSpec({
             transformer.javaClass.name shouldBe "org.apache.xalan.transformer.TransformerIdentityImpl"
         }
 
-        val partTestName = arrayOf("errors", "warnings", "success")
+        val partTestName = arrayOf("errors", "warnings", "success", "errors-long")
 
         partTestName.forEach {
             "successfully export to a static HTML page $it test" {
@@ -67,12 +67,12 @@ class StaticHtmlReporterTest : WordSpec({
                 val actualReport = generateReport(ortResult)
                     .replace(timeStampPattern, "<REPLACE_TIMESTAMP>")
 
+                // File("$inputPath/static-html-reporter-test-expected-output-$it.html").writeText(actualReport)
                 val expectedReport = patchExpectedResult(
                     File("$inputPath/static-html-reporter-test-expected-output-$it.html"),
                     "<REPLACE_ORT_VERSION>" to Environment().ortVersion
                 )
 
-                // File("$inputPath/static-html-reporter-test-expected-output-$it.html").writeText(actualReport)
                 actualReport shouldBe expectedReport
             }
         }
