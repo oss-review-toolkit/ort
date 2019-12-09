@@ -33,12 +33,12 @@ import io.kotlintest.specs.StringSpec
 
 import java.io.File
 
-class GitTest : StringSpec() {
+class GitWorkingTreeTest : StringSpec() {
     private val git = Git()
     private lateinit var zipContentDir: File
 
     override fun beforeSpec(spec: Spec) {
-        val zipFile = File("src/test/assets/pipdeptree-2018-01-03-git.zip")
+        val zipFile = File("src/funTest/assets/pipdeptree-2018-01-03-git.zip")
 
         zipContentDir = createTempDir()
 

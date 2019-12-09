@@ -31,12 +31,12 @@ import io.kotlintest.specs.StringSpec
 
 import java.io.File
 
-class CvsTest : StringSpec() {
+class CvsWorkingTreeTest : StringSpec() {
     private val cvs = Cvs()
     private lateinit var zipContentDir: File
 
     override fun beforeSpec(spec: Spec) {
-        val zipFile = File("src/test/assets/tyrex-2018-01-29-cvs.zip")
+        val zipFile = File("src/funTest/assets/tyrex-2018-01-29-cvs.zip")
 
         zipContentDir = createTempDir()
 
