@@ -26,7 +26,7 @@ import io.kotlintest.specs.WordSpec
 class SpdxLicenseAliasMappingTest : WordSpec({
     "The mapping" should {
         "contain only parsable keys" {
-            val unparsableLicenses = SpdxLicenseAliasMapping.mapping.filterNot { (declaredLicense, _) ->
+            val unparsableLicenses = SpdxLicenseAliasMapping.mapping.filterNot { (declaredLicense) ->
                 try {
                     // Be as lenient as possible when parsing declared licenses as we really only want to check for
                     // general parsability here.
@@ -42,7 +42,7 @@ class SpdxLicenseAliasMappingTest : WordSpec({
 
         "not contain plain SPDX license ids" {
             assertSoftly {
-                SpdxLicenseAliasMapping.customNames.forEach { (declaredLicense, _) ->
+                SpdxLicenseAliasMapping.customNames.forEach { (declaredLicense) ->
                     "\"$declaredLicense\" maps to ${SpdxLicense.forId(declaredLicense)}" shouldBe
                             "\"$declaredLicense\" maps to null"
                 }

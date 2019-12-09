@@ -28,7 +28,7 @@ import io.kotlintest.specs.WordSpec
 class SpdxDeclaredLicenseMappingTest : WordSpec({
     "The mapping" should {
         "contain only unparsable keys" {
-            val parsableLicenses = SpdxDeclaredLicenseMapping.mapping.filter { (declaredLicense, _) ->
+            val parsableLicenses = SpdxDeclaredLicenseMapping.mapping.filter { (declaredLicense) ->
                 try {
                     // Restrict parsing to SPDX license identifier strings as otherwise almost anything could be parsed,
                     // but we do want to have mappings e.g. for something like "CDDL or GPLv2 with exceptions".
@@ -44,7 +44,7 @@ class SpdxDeclaredLicenseMappingTest : WordSpec({
 
         "not contain plain SPDX license ids" {
             assertSoftly {
-                SpdxDeclaredLicenseMapping.mapping.forEach { (declaredLicense, _) ->
+                SpdxDeclaredLicenseMapping.mapping.forEach { (declaredLicense) ->
                     "\"$declaredLicense\" maps to ${SpdxLicense.forId(declaredLicense)}" shouldBe
                             "\"$declaredLicense\" maps to null"
                 }
