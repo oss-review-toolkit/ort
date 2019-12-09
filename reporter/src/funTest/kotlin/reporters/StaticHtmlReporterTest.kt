@@ -55,12 +55,13 @@ class StaticHtmlReporterTest : WordSpec({
             transformer.javaClass.name shouldBe "org.apache.xalan.transformer.TransformerIdentityImpl"
         }
 
-        "successfully export to a static HTML page" {
-            val timeStampPattern = Regex("\\d{2}:\\d{2}:\\d{2} [a-zA-Z]{3} \\d{2}, \\d{4}")
-            val partFileNames = arrayOf("errors", "warnings", "success")
-            val inputPath = "src/funTest/assets"
+        val partTestName = arrayOf("errors", "warnings", "success")
 
-            partFileNames.forEach {
+        partTestName.forEach {
+            "successfully export to a static HTML page $it test" {
+                val timeStampPattern = Regex("\\d{2}:\\d{2}:\\d{2} [a-zA-Z]{3} \\d{2}, \\d{4}")
+                val inputPath = "src/funTest/assets"
+
                 // val ortResult = readOrtResult("$inputPath/static-html-reporter-test-input.yml")
                 val ortResult = readOrtResult("$inputPath/static-html-reporter-test-input-$it.json")
                 val actualReport = generateReport(ortResult)
@@ -68,11 +69,10 @@ class StaticHtmlReporterTest : WordSpec({
 
                 val expectedReport = patchExpectedResult(
                     File("$inputPath/static-html-reporter-test-expected-output-$it.html"),
-                    "<REPLACE_ORT_VERSION>" to Environment().ortVersion)
+                    "<REPLACE_ORT_VERSION>" to Environment().ortVersion
+                )
 
-                println("actual:" + actualReport.length)
-                println("expected:" + expectedReport.length)
-                // File("${System.getProperty("user.dir")}/../build/tmp/static-html-reporter-test-expected-output-$it.html").writeText(actualReport)
+                // File("$inputPath/static-html-reporter-test-expected-output-errors.html").writeText(actualReport)
                 actualReport shouldBe expectedReport
             }
         }
