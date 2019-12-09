@@ -43,7 +43,7 @@ data class PathExclude(
      */
     val comment: String
 ) {
-    private val pathMatcher by lazy { FileSystems.getDefault().getPathMatcher("glob:$pattern") }
+    private val glob by lazy { FileSystems.getDefault().getPathMatcher("glob:$pattern") }
 
-    fun matches(path: String) = pathMatcher.matches(Paths.get(path))
+    fun matches(path: String) = glob.matches(Paths.get(path))
 }
