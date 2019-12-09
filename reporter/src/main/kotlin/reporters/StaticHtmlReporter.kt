@@ -140,11 +140,11 @@ class StaticHtmlReporter : Reporter {
 
                             val resultStr =
                                 when {
-                                    (errors >= 0 && warnings > 0) ->
-                                        "$errors error${if (errors == 1) "" else "s"} to fix, " +
+                                    (errors == 0 && warnings == 0) ->
+                                        "All OK: 0 errors, 0 warnings"
+                                     else ->
+                                         "$errors error${if (errors == 1) "" else "s"} to fix, " +
                                         "$warnings warning${if (warnings == 1) "" else "s"}"
-                                    // (errors == 0 && warnings > 0) -> "No errors to fix, $warnings warnings"
-                                    else -> "All OK: 0 errors, 0 warnings"
                                 }
 
                             unsafe { +"<summary>$resultStr</summary>" }
