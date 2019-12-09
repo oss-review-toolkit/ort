@@ -32,12 +32,12 @@ import io.kotlintest.specs.StringSpec
 
 import java.io.File
 
-class SubversionTest : StringSpec() {
+class SubversionWorkingTreeTest : StringSpec() {
     private val svn = Subversion()
     private lateinit var zipContentDir: File
 
     override fun beforeSpec(spec: Spec) {
-        val zipFile = File("src/test/assets/docutils-2018-01-03-svn-trunk.zip")
+        val zipFile = File("src/funTest/assets/docutils-2018-01-03-svn-trunk.zip")
 
         zipContentDir = createTempDir()
 

@@ -32,12 +32,12 @@ import io.kotlintest.specs.StringSpec
 
 import java.io.File
 
-class MercurialTest : StringSpec() {
+class MercurialWorkingTreeTest : StringSpec() {
     private val hg = Mercurial()
     private lateinit var zipContentDir: File
 
     override fun beforeSpec(spec: Spec) {
-        val zipFile = File("src/test/assets/lz4revlog-2018-01-03-hg.zip")
+        val zipFile = File("src/funTest/assets/lz4revlog-2018-01-03-hg.zip")
 
         zipContentDir = createTempDir()
 
