@@ -72,7 +72,7 @@ class StaticHtmlReporterTest : WordSpec({
                     "<REPLACE_ORT_VERSION>" to Environment().ortVersion
                 )
 
-                // File("$inputPath/static-html-reporter-test-expected-output-errors.html").writeText(actualReport)
+                // File("$inputPath/static-html-reporter-test-expected-output-$it.html").writeText(actualReport)
                 actualReport shouldBe expectedReport
             }
         }
