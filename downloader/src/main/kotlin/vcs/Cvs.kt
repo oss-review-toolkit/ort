@@ -19,20 +19,18 @@
 
 package com.here.ort.downloader.vcs
 
-import com.here.ort.downloader.DownloadException
 import com.here.ort.downloader.VersionControlSystem
 import com.here.ort.downloader.WorkingTree
-import com.here.ort.model.Package
+import com.here.ort.model.VcsInfo
 import com.here.ort.model.VcsType
 import com.here.ort.utils.CommandLineTool
 import com.here.ort.utils.ProcessCapture
-import com.here.ort.utils.log
 import com.here.ort.utils.safeDeleteRecursively
 import com.here.ort.utils.searchUpwardsForSubdirectory
+import com.here.ort.utils.succeeds
 import com.here.ort.utils.toHexString
 
 import java.io.File
-import java.io.IOException
 import java.security.MessageDigest
 import java.util.regex.Pattern
 
@@ -174,52 +172,16 @@ class Cvs : VersionControlSystem(), CommandLineTool {
 
     override fun isApplicableUrlInternal(vcsUrl: String) = vcsUrl.matches(":(ext|pserver):[^@]+@.+".toRegex())
 
-    override fun download(
-        pkg: Package, targetDir: File, allowMovingRevisions: Boolean,
-        recursive: Boolean
-    ): WorkingTree {
-        log.info { "Using $type version ${getVersion()}." }
+    override fun initWorkingTree(targetDir: File, vcs: VcsInfo): WorkingTree {
+        // Create a "fake" checkout as described at https://stackoverflow.com/a/3448891/1127485.
+        run(targetDir, "-z3", "-d", vcs.url, "checkout", "-l", ".")
 
-        try {
-            val path = pkg.vcsProcessed.path.takeUnless { it.isEmpty() } ?: "."
-
-            // Create a "fake" checkout as described at https://stackoverflow.com/a/3448891/1127485.
-            run(targetDir, "-z3", "-d", pkg.vcsProcessed.url, "checkout", "-l", ".")
-            val workingTree = getWorkingTree(targetDir)
-
-            val revision = if (allowMovingRevisions || isFixedRevision(workingTree, pkg.vcsProcessed.revision)) {
-                pkg.vcsProcessed.revision
-            } else {
-                log.info { "Trying to guess a $type revision for version '${pkg.id.version}'." }
-
-                try {
-                    workingTree.guessRevisionName(pkg.id.name, pkg.id.version).also { revision ->
-                        log.warn {
-                            "Using guessed $type revision '$revision' for version '${pkg.id.version}'. This might " +
-                                    "cause the downloaded source code to not match the package version."
-                        }
-                    }
-                } catch (e: IOException) {
-                    // Enrich the IOException with a more specific message.
-                    throw IOException("Unable to determine a revision to checkout.", e)
-                }
-            }
-
-            // Checkout the working tree of the desired revision.
-            run(targetDir, "checkout", "-r", revision, path)
-
-            pkg.vcsProcessed.path.let {
-                if (it.isNotEmpty() && !workingTree.workingDir.resolve(it).exists()) {
-                    throw IOException(
-                        "The $type working directory at '${workingTree.workingDir}' does not contain the requested " +
-                                "path '$it'."
-                    )
-                }
-            }
-
-            return workingTree
-        } catch (e: IOException) {
-            throw DownloadException("$type failed to download from ${pkg.vcsProcessed.url}.", e)
-        }
+        return getWorkingTree(targetDir)
     }
+
+    override fun updateWorkingTree(workingTree: WorkingTree, revision: String, path: String, recursive: Boolean) =
+        succeeds {
+            // Checkout the working tree of the desired revision.
+            run(workingTree.workingDir, "checkout", "-r", revision, path.takeUnless { it.isEmpty() } ?: ".")
+        }
 }
