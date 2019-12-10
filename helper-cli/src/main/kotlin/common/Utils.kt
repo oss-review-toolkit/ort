@@ -397,7 +397,7 @@ internal fun RepositoryConfiguration.sortPathExcludes(): RepositoryConfiguration
 internal fun RepositoryConfiguration.sortScopeExcludes(): RepositoryConfiguration =
     copy(
         excludes = excludes?.let {
-            val scopes = it.scopes.sortedBy { (pattern) ->
+            val scopes = it.scopes.sortedBy { (pattern, _, _) ->
                 pattern.removePrefix(".*")
             }
             it.copy(scopes = scopes)
