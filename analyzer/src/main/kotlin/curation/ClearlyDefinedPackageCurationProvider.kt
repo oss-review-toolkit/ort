@@ -32,7 +32,7 @@ import com.here.ort.model.Hash
 import com.here.ort.model.PackageCuration
 import com.here.ort.model.PackageCurationData
 import com.here.ort.model.RemoteArtifact
-import com.here.ort.model.VcsInfoCuration
+import com.here.ort.model.VcsInfoCurationData
 import com.here.ort.model.VcsType
 
 /**
@@ -71,12 +71,12 @@ fun Identifier.toClearlyDefinedCoordinates(): Coordinates {
 }
 
 /**
- * Create a ClearlyDefined [SourceLocation] from an [Identifier] preferably a [VcsInfoCuration], but eventually fall
+ * Create a ClearlyDefined [SourceLocation] from an [Identifier] preferably a [VcsInfoCurationData], but eventually fall
  * back to a [RemoteArtifact], or return null if neither is specified.
  */
 fun toClearlyDefinedSourceLocation(
     id: Identifier,
-    vcs: VcsInfoCuration?,
+    vcs: VcsInfoCurationData?,
     sourceArtifact: RemoteArtifact?
 ): SourceLocation? {
     val vcsUrl = vcs?.url
@@ -115,13 +115,13 @@ fun toClearlyDefinedSourceLocation(
 }
 
 /**
- * Map a ClearlyDefined [SourceLocation] to either a [VcsInfoCuration] or a [RemoteArtifact].
+ * Map a ClearlyDefined [SourceLocation] to either a [VcsInfoCurationData] or a [RemoteArtifact].
  */
 fun SourceLocation?.toArtifactOrVcs(): Any? =
     this?.let { sourceLocation ->
         when (sourceLocation.type) {
             ComponentType.GIT -> {
-                VcsInfoCuration(
+                VcsInfoCurationData(
                     type = VcsType.GIT,
                     url = sourceLocation.url,
                     revision = sourceLocation.revision,
@@ -165,7 +165,7 @@ class ClearlyDefinedPackageCurationProvider(server: Server = Server.PRODUCTION) 
                 declaredLicenses = curation.licensed?.declared?.let { sortedSetOf(it) },
                 homepageUrl = curation.described?.projectWebsite?.toString(),
                 sourceArtifact = sourceLocation as? RemoteArtifact,
-                vcs = sourceLocation as? VcsInfoCuration,
+                vcs = sourceLocation as? VcsInfoCurationData,
                 comment = "Provided by ClearlyDefined."
             )
         )

@@ -58,7 +58,7 @@ class PackageCurationTest : WordSpec({
                         url = "http://source.artifact",
                         hash = Hash.create("source.hash")
                     ),
-                    vcs = VcsInfoCuration(
+                    vcs = VcsInfoCurationData(
                         type = VcsType.GIT,
                         url = "http://url.git",
                         revision = "revision",
@@ -112,7 +112,7 @@ class PackageCurationTest : WordSpec({
                 id = pkg.id,
                 data = PackageCurationData(
                     homepageUrl = "http://home.page",
-                    vcs = VcsInfoCuration(
+                    vcs = VcsInfoCurationData(
                         url = "http://url.git"
                     )
                 )
@@ -166,7 +166,7 @@ class PackageCurationTest : WordSpec({
             val curation = PackageCuration(
                 id = pkg.id,
                 data = PackageCurationData(
-                    vcs = VcsInfoCuration(
+                    vcs = VcsInfoCurationData(
                         type = VcsType.NONE,
                         url = "",
                         revision = "",
@@ -201,7 +201,7 @@ class PackageCurationTest : WordSpec({
                 id = Identifier.EMPTY,
                 data = PackageCurationData(
                     homepageUrl = "http://home.page",
-                    vcs = VcsInfoCuration(
+                    vcs = VcsInfoCurationData(
                         type = VcsType.NONE,
                         url = "http://url.git",
                         revision = ""
