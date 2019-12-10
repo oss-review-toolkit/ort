@@ -73,7 +73,7 @@ data class PackageCurationData(
      * VCS-related information.
      */
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    val vcs: VcsInfoCuration? = null,
+    val vcs: VcsInfoCurationData? = null,
 
     /**
      * A plain-text comment about this curation. Should contain information about how and why the curation was

@@ -24,7 +24,7 @@ import com.fasterxml.jackson.annotation.JsonInclude
 /**
  * Bundles curation data for Version Control System information.
  */
-data class VcsInfoCuration(
+data class VcsInfoCurationData(
     /**
      * The type of the VCS, for example Git, GitRepo, Mercurial, etc.
      */
