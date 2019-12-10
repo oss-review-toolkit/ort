@@ -24,30 +24,27 @@ import com.fasterxml.jackson.annotation.JsonInclude
 /**
  * Bundles curation data for Version Control System information.
  */
+@JsonInclude(JsonInclude.Include.NON_NULL)
 data class VcsInfoCurationData(
     /**
      * The type of the VCS, for example Git, GitRepo, Mercurial, etc.
      */
-    @JsonInclude(JsonInclude.Include.NON_NULL)
     val type: VcsType? = null,
 
     /**
      * The URL to the VCS repository.
      */
-    @JsonInclude(JsonInclude.Include.NON_NULL)
     val url: String? = null,
 
     /**
      * The VCS-specific revision (tag, branch, SHA1) that the version of the package maps to.
      */
-    @JsonInclude(JsonInclude.Include.NON_NULL)
     val revision: String? = null,
 
     /**
      * The VCS-specific revision resolved during downloading from the VCS. In contrast to [revision] this must not
      * contain symbolic names like branches or tags.
      */
-    @JsonInclude(JsonInclude.Include.NON_NULL)
     val resolvedRevision: String? = null,
 
     /**
@@ -55,6 +52,5 @@ data class VcsInfoCurationData(
      * example, for Git only this subdirectory of the repository should be cloned, or for Git Repo it is
      * interpreted as the path to the manifest file.
      */
-    @JsonInclude(JsonInclude.Include.NON_NULL)
     val path: String? = null
 )
