@@ -30,56 +30,49 @@ import java.util.SortedSet
  * package with corrections. This is required because the meta data provided by a package can be wrong (e.g. outdated
  * VCS data) or incomplete.
  */
+@JsonInclude(JsonInclude.Include.NON_NULL)
 data class PackageCurationData(
     /**
      * The list of licenses the authors have declared for this package. This does not necessarily correspond to the
      * licenses as detected by a scanner. Both need to be taken into account for any conclusions.
      */
-    @JsonInclude(JsonInclude.Include.NON_NULL)
     val declaredLicenses: SortedSet<String>? = null,
 
     /**
      * The concluded license as an [SpdxExpression]. It can be used to correct the license of a package in case the
      * [declaredLicenses] found in the packages metadata or the licenses detected by a scanner do not match reality.
      */
-    @JsonInclude(JsonInclude.Include.NON_NULL)
     val concludedLicense: SpdxExpression? = null,
 
     /**
      * The description of the package, as provided by the package manager.
      */
-    @JsonInclude(JsonInclude.Include.NON_NULL)
     val description: String? = null,
 
     /**
      * The homepage of the package.
      */
-    @JsonInclude(JsonInclude.Include.NON_NULL)
     val homepageUrl: String? = null,
 
     /**
      * The remote artifact where the binary package can be downloaded.
      */
-    @JsonInclude(JsonInclude.Include.NON_NULL)
     val binaryArtifact: RemoteArtifact? = null,
 
     /**
      * The remote artifact where the source package can be downloaded.
      */
-    @JsonInclude(JsonInclude.Include.NON_NULL)
     val sourceArtifact: RemoteArtifact? = null,
 
     /**
      * VCS-related information.
      */
-    @JsonInclude(JsonInclude.Include.NON_NULL)
     val vcs: VcsInfoCurationData? = null,
 
     /**
      * A plain-text comment about this curation. Should contain information about how and why the curation was
      * created.
      */
-    @JsonInclude(JsonInclude.Include.NON_NULL)
     val comment: String? = null
 ) {
     /**
