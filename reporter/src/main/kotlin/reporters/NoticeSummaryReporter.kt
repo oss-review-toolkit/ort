@@ -64,7 +64,7 @@ class NoticeSummaryProcessor(input: ReporterInput) : AbstractNoticeReporter.Noti
         }
 
     private fun MutableList<() -> String>.addLicense(license: String, copyrights: Set<String>) {
-        input.licenseTextProvider.getLicenseText(license)?.let { licenseText ->
+        input.licenseTextProvider.getLicenseTextReader(license)?.let { licenseTextReader ->
             add { AbstractNoticeReporter.NOTICE_SEPARATOR }
 
             copyrights.forEach { copyright ->
@@ -72,7 +72,7 @@ class NoticeSummaryProcessor(input: ReporterInput) : AbstractNoticeReporter.Noti
             }
             if (copyrights.isNotEmpty()) add { "\n" }
 
-            add { licenseText }
+            add(licenseTextReader)
         } ?: log.warn {
             "No license text found for license '$license', it will be omitted from the report."
         }

@@ -185,7 +185,7 @@ class NoticeByPackageProcessor(input: ReporterInput) : AbstractNoticeReporter.No
 
     private fun MutableList<() -> String>.addProcessedFindings(processedFindings: LicenseFindingsMap) {
         processedFindings.entries.forEachIndexed { index, (license, copyrights) ->
-            input.licenseTextProvider.getLicenseText(license)?.let { licenseText ->
+            input.licenseTextProvider.getLicenseTextReader(license)?.let { licenseTextReader ->
                 copyrights.forEach { copyright ->
                     add { "$copyright\n" }
                 }
@@ -193,7 +193,7 @@ class NoticeByPackageProcessor(input: ReporterInput) : AbstractNoticeReporter.No
                     add { "\n" }
                 }
 
-                add { licenseText }
+                add(licenseTextReader)
 
                 if (index < processedFindings.size - 1) {
                     add { LICENSE_SEPARATOR }
