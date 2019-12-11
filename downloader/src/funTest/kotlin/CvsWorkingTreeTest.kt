@@ -36,7 +36,7 @@ class CvsWorkingTreeTest : StringSpec() {
     private lateinit var zipContentDir: File
 
     override fun beforeSpec(spec: Spec) {
-        val zipFile = File("src/funTest/assets/tyrex-2018-01-29-cvs.zip")
+        val zipFile = File("src/funTest/assets/jhove-2019-12-11-cvs.zip")
 
         zipContentDir = createTempDir()
 
@@ -65,42 +65,37 @@ class CvsWorkingTreeTest : StringSpec() {
             cvs.isApplicableUrl("http://svn.code.sf.net/p/grepwin/code/") shouldBe false
         }
 
-        // Disabled as it causes "waiting for anoncvs_tyrex's lock in /cvsroot/tyrex/tyrex" for unknown reasons.
-        "Detected CVS working tree information is correct".config(enabled = false) {
+        "Detected CVS working tree information is correct" {
             val workingTree = cvs.getWorkingTree(zipContentDir)
 
             workingTree.vcsType shouldBe VcsType.CVS
             workingTree.isValid() shouldBe true
-            workingTree.getRemoteUrl() shouldBe ":pserver:anonymous@tyrex.cvs.sourceforge.net:/cvsroot/tyrex"
-            workingTree.getRevision() shouldBe "8707a14c78c6e77ffc59e685360fa20071c1afb6"
+            workingTree.getRemoteUrl() shouldBe ":pserver:anonymous@a.cvs.sourceforge.net:/cvsroot/jhove"
+            workingTree.getRevision() shouldBe "449addc0d9e0ee7be48bfaa06f99a6f23cd3bae0"
             workingTree.getRootPath() shouldBe zipContentDir
-            workingTree.getPathToRoot(File(zipContentDir, "tomcat")) shouldBe "tomcat"
+            workingTree.getPathToRoot(File(zipContentDir, "lib")) shouldBe "lib"
         }
 
-        // Disabled as it causes "waiting for anoncvs_tyrex's lock in /cvsroot/tyrex/tyrex" for unknown reasons.
-        "CVS correctly lists remote branches".config(enabled = false) {
+        "CVS correctly lists remote branches" {
             val expectedBranches = listOf(
-                "Exoffice"
+                "JHOVE_1_7",
+                "branch_lpeer",
+                "junit_tests",
+                "pdfprofile_noncompliance_analyzer"
             )
 
             val workingTree = cvs.getWorkingTree(zipContentDir)
             workingTree.listRemoteBranches().joinToString("\n") shouldBe expectedBranches.joinToString("\n")
         }
 
-        // Disabled as it causes "waiting for anoncvs_tyrex's lock in /cvsroot/tyrex/tyrex" for unknown reasons.
-        "CVS correctly lists remote tags".config(enabled = false) {
+        "CVS correctly lists remote tags" {
             val expectedTags = listOf(
-                "A02",
-                "A03",
-                "A04",
-                "DEV0_9_3",
-                "DEV0_9_4",
-                "DEV_0_9_7",
-                "PROD_1_0_1",
-                "PROD_1_0_2",
-                "PROD_1_0_3",
-                "before_SourceForge",
-                "before_debug_changes"
+                "JHOVE_1_1",
+                "JHOVE_1_11",
+                "JHOVE_1_8",
+                "JHOVE_1_9",
+                "Root_JHOVE_1_7",
+                "lpeer_0"
             )
 
             val workingTree = cvs.getWorkingTree(zipContentDir)
