@@ -28,6 +28,7 @@ import com.here.ort.helper.common.getProcessedCopyrightStatements
 import com.here.ort.model.OrtResult
 import com.here.ort.model.readValue
 import com.here.ort.utils.PARAMETER_ORDER_MANDATORY
+import com.here.ort.utils.expandTilde
 
 import java.io.File
 
@@ -45,7 +46,7 @@ internal class ListCopyrightsCommand : CommandWithHelp() {
     private lateinit var ortResultFile: File
 
     override fun runCommand(jc: JCommander): Int {
-        val ortResult = ortResultFile.readValue<OrtResult>()
+        val ortResult = ortResultFile.expandTilde().readValue<OrtResult>()
 
         val copyrightStatements = ortResult
             .getProcessedCopyrightStatements()
