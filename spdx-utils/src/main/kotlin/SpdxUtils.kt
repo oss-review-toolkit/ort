@@ -137,7 +137,7 @@ fun getLicenseText(id: String, handleExceptions: Boolean = false, customLicenseT
 fun hasLicenseText(id: String, handleExceptions: Boolean = false, customLicenseTextsDir: File? = null): Boolean =
     getLicenseTextReader(id, handleExceptions, customLicenseTextsDir) != null
 
-private fun getLicenseTextReader(
+fun getLicenseTextReader(
     id: String,
     handleExceptions: Boolean = false,
     customLicenseTextsDir: File? = null

@@ -29,6 +29,12 @@ interface LicenseTextProvider {
     fun getLicenseText(licenseId: String): String?
 
     /**
+     * Return a lambda that can read the license text for the license identified by [licenseId] or null if no license
+     * text is available. This is useful if the license text shall not immediately be read from disk.
+     */
+    fun getLicenseTextReader(licenseId: String): (() -> String)?
+
+    /**
      * Return true if a license text for the license identified by [licenseId] is available.
      */
     fun hasLicenseText(licenseId: String): Boolean
