@@ -81,6 +81,7 @@ class NoticeSummaryReporterTest : WordSpec({
 
             val preProcessingScript = """
                 headers = listOf("Header 1\n", "Header 2\n")
+                headerWithLicenses = "Custom header with licenses.\n"
                 findings = model.findings.filter { (_, findings) ->
                     findings.all { it.value.isEmpty() }
                 }.toSortedMap()

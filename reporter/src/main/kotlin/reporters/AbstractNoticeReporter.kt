@@ -34,11 +34,17 @@ import java.io.OutputStream
 
 abstract class AbstractNoticeReporter : Reporter {
     companion object {
+        const val DEFAULT_HEADER_WITH_LICENSES =
+            "This project contains or depends on third-party software components pursuant to the following licenses:\n"
+        const val DEFAULT_HEADER_WITHOUT_LICENSES =
+            "This project neither contains or depends on any third-party software components.\n"
         const val NOTICE_SEPARATOR = "\n----\n\n"
     }
 
     data class NoticeReportModel(
         val headers: List<String>,
+        val headerWithLicenses: String,
+        val headerWithoutLicenses: String,
         val findings: Map<Identifier, LicenseFindingsMap>,
         val footers: List<String>
     )
@@ -60,6 +66,8 @@ abstract class AbstractNoticeReporter : Reporter {
             import java.util.*
 
             var headers = model.headers
+            var headerWithLicenses = model.headerWithLicenses
+            var headerWithoutLicenses = model.headerWithoutLicenses
             var findings = model.findings
             var footers = model.footers
 
@@ -68,7 +76,7 @@ abstract class AbstractNoticeReporter : Reporter {
         override val postface = """
 
             // Output:
-            NoticeReportModel(headers, findings, footers)
+            NoticeReportModel(headers, headerWithLicenses, headerWithoutLicenses, findings, footers)
         """.trimIndent()
 
         init {
@@ -108,21 +116,27 @@ abstract class AbstractNoticeReporter : Reporter {
 
         val licenseFindings: Map<Identifier, LicenseFindingsMap> = getLicenseFindings(ortResult)
 
-        val header = if (licenseFindings.isEmpty()) {
-            "This project neither contains or depends on any third-party software components.\n"
-        } else {
-            "This project contains or depends on third-party software components pursuant to the following licenses:\n"
-        }
-
         val model = if (preProcessingScript != null) {
             PreProcessor(
                 ortResult,
-                NoticeReportModel(listOf(header), licenseFindings, emptyList()),
+                NoticeReportModel(
+                    emptyList(),
+                    DEFAULT_HEADER_WITH_LICENSES,
+                    DEFAULT_HEADER_WITHOUT_LICENSES,
+                    licenseFindings,
+                    emptyList()
+                ),
                 copyrightGarbage,
                 licenseConfiguration
             ).run(preProcessingScript)
         } else {
-            NoticeReportModel(listOf(header), licenseFindings, emptyList())
+            NoticeReportModel(
+                emptyList(),
+                DEFAULT_HEADER_WITH_LICENSES,
+                DEFAULT_HEADER_WITHOUT_LICENSES,
+                licenseFindings,
+                emptyList()
+            )
         }
 
         val processor = createProcessor(
