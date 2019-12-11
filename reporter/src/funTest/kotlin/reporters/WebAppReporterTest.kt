@@ -19,6 +19,7 @@
 
 package com.here.ort.reporter.reporters
 
+import com.here.ort.reporter.ReporterInput
 import com.here.ort.utils.test.readOrtResult
 
 import io.kotlintest.shouldNotBe
@@ -30,10 +31,9 @@ class WebAppReporterTest : WordSpec({
     "WebAppReporter" should {
         "successfully export to a web application" {
             val outputStream = ByteArrayOutputStream()
-            WebAppReporter().generateReport(
-                outputStream,
+            val ortResult =
                 readOrtResult("../scanner/src/funTest/assets/file-counter-expected-output-for-analyzer-result.yml")
-            )
+            WebAppReporter().generateReport(outputStream, ReporterInput(ortResult))
             outputStream.size() shouldNotBe 0
         }
     }

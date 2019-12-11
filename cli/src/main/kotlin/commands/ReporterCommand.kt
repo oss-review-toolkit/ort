@@ -36,6 +36,7 @@ import com.here.ort.model.licenses.orEmpty
 import com.here.ort.model.readValue
 import com.here.ort.reporter.DefaultResolutionProvider
 import com.here.ort.reporter.Reporter
+import com.here.ort.reporter.ReporterInput
 import com.here.ort.reporter.reporters.DefaultLicenseTextProvider
 import com.here.ort.utils.PARAMETER_ORDER_MANDATORY
 import com.here.ort.utils.PARAMETER_ORDER_OPTIONAL
@@ -164,19 +165,20 @@ object ReporterCommand : CommandWithHelp() {
 
         absoluteOutputDir.safeMkdirs()
 
+        val input = ReporterInput(
+            ortResult,
+            config,
+            resolutionProvider,
+            DefaultLicenseTextProvider(customLicenseTextsDir),
+            copyrightGarbage,
+            licenseConfiguration,
+            preProcessingScript?.expandTilde()?.readText()
+        )
+
         reports.forEach { (reporter, file) ->
             @Suppress("TooGenericExceptionCaught")
             try {
-                reporter.generateReport(
-                    file.outputStream(),
-                    ortResult,
-                    config,
-                    resolutionProvider,
-                    DefaultLicenseTextProvider(customLicenseTextsDir),
-                    copyrightGarbage,
-                    licenseConfiguration,
-                    preProcessingScript?.expandTilde()?.readText()
-                )
+                reporter.generateReport(file.outputStream(), input)
 
                 println("Created '${reporter.reporterName}' report:\n\t$file")
             } catch (e: Exception) {

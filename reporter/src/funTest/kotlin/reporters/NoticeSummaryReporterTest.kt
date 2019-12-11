@@ -21,6 +21,7 @@ package com.here.ort.reporter.reporters
 
 import com.here.ort.model.OrtResult
 import com.here.ort.model.config.CopyrightGarbage
+import com.here.ort.reporter.ReporterInput
 import com.here.ort.utils.test.readOrtResult
 
 import io.kotlintest.matchers.string.contain
@@ -40,9 +41,11 @@ private fun generateReport(
     ByteArrayOutputStream().also { outputStream ->
         NoticeSummaryReporter().generateReport(
             outputStream,
-            ortResult,
-            copyrightGarbage = copyrightGarbage,
-            preProcessingScript = preProcessingScript
+            ReporterInput(
+                ortResult,
+                copyrightGarbage = copyrightGarbage,
+                preProcessingScript = preProcessingScript
+            )
         )
     }.toString("UTF-8")
 

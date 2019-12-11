@@ -22,10 +22,6 @@ package com.here.ort.reporter
 import com.here.ort.model.AnalyzerResult
 import com.here.ort.model.OrtResult
 import com.here.ort.model.ScanRecord
-import com.here.ort.model.config.CopyrightGarbage
-import com.here.ort.model.config.OrtConfiguration
-import com.here.ort.model.licenses.LicenseConfiguration
-import com.here.ort.reporter.reporters.DefaultLicenseTextProvider
 
 import java.io.OutputStream
 import java.util.ServiceLoader
@@ -55,20 +51,8 @@ interface Reporter {
     val defaultFilename: String
 
     /**
-     * Generate a report for the [ortResult], taking into account any issue resolutions provided by [resolutionProvider]
-     * and any license text provided by [LicenseTextProvider]. Copyright statements are cleaned from [copyrightGarbage].
-     * The data passed to the reporter may be pre-processed by a [preProcessingScript] before it is written to
-     * [outputStream] whereas the [licenseConfiguration] is passed as a parameter to that script.
+     * Generate a report for the provided [input] and write the result to the [outputStream]. If and how the [input]
+     * data is used depends on the specific reporter implementation.
      */
-    @Suppress("LongParameterList")
-    fun generateReport(
-        outputStream: OutputStream,
-        ortResult: OrtResult,
-        ortConfig: OrtConfiguration = OrtConfiguration(),
-        resolutionProvider: ResolutionProvider = DefaultResolutionProvider(),
-        licenseTextProvider: LicenseTextProvider = DefaultLicenseTextProvider(),
-        copyrightGarbage: CopyrightGarbage = CopyrightGarbage(),
-        licenseConfiguration: LicenseConfiguration = LicenseConfiguration(),
-        preProcessingScript: String? = null
-    )
+    fun generateReport(outputStream: OutputStream, input: ReporterInput)
 }

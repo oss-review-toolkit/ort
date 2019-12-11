@@ -21,6 +21,7 @@ package com.here.ort.reporter.reporters
 
 import bad.robot.excel.matchers.WorkbookMatcher.sameWorkbook
 
+import com.here.ort.reporter.ReporterInput
 import com.here.ort.utils.test.readOrtResult
 
 import io.kotlintest.specs.WordSpec
@@ -36,10 +37,9 @@ class ExcelReporterTest : WordSpec({
     "ExcelReporter" should {
         "successfully export to an Excel sheet".config(enabled = false) {
             val outputStream = ByteArrayOutputStream()
-            ExcelReporter().generateReport(
-                outputStream,
+            val ortResult =
                 readOrtResult("../scanner/src/funTest/assets/file-counter-expected-output-for-analyzer-result.yml")
-            )
+            ExcelReporter().generateReport(outputStream, ReporterInput(ortResult))
             val actualWorkbook = WorkbookFactory.create(outputStream.toByteArray().inputStream())
 
             val expectedFile = File("src/funTest/assets/file-counter-expected-scan-report.xlsx")

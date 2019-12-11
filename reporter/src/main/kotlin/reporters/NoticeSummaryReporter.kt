@@ -19,14 +19,9 @@
 
 package com.here.ort.reporter.reporters
 
-import com.here.ort.model.OrtResult
-import com.here.ort.model.config.CopyrightGarbage
-import com.here.ort.model.config.OrtConfiguration
-import com.here.ort.model.licenses.LicenseConfiguration
 import com.here.ort.model.processStatements
 import com.here.ort.model.removeGarbage
-import com.here.ort.reporter.LicenseTextProvider
-import com.here.ort.reporter.ResolutionProvider
+import com.here.ort.reporter.ReporterInput
 import com.here.ort.utils.log
 
 /**
@@ -37,39 +32,10 @@ class NoticeSummaryReporter : AbstractNoticeReporter() {
     override val reporterName = "NoticeSummary"
     override val defaultFilename = "NOTICE_SUMMARY"
 
-    override fun createProcessor(
-        ortResult: OrtResult,
-        ortConfig: OrtConfiguration,
-        resolutionProvider: ResolutionProvider,
-        licenseTextProvider: LicenseTextProvider,
-        copyrightGarbage: CopyrightGarbage,
-        licenseConfiguration: LicenseConfiguration
-    ): NoticeProcessor =
-        NoticeSummaryProcessor(
-            ortResult,
-            ortConfig,
-            resolutionProvider,
-            licenseTextProvider,
-            copyrightGarbage,
-            licenseConfiguration
-        )
+    override fun createProcessor(input: ReporterInput): NoticeProcessor = NoticeSummaryProcessor(input)
 }
 
-class NoticeSummaryProcessor(
-    ortResult: OrtResult,
-    ortConfig: OrtConfiguration,
-    resolutionProvider: ResolutionProvider,
-    licenseTextProvider: LicenseTextProvider,
-    copyrightGarbage: CopyrightGarbage,
-    licenseConfiguration: LicenseConfiguration
-) : AbstractNoticeReporter.NoticeProcessor(
-    ortResult,
-    ortConfig,
-    resolutionProvider,
-    licenseTextProvider,
-    copyrightGarbage,
-    licenseConfiguration
-) {
+class NoticeSummaryProcessor(input: ReporterInput) : AbstractNoticeReporter.NoticeProcessor(input) {
     override fun process(model: AbstractNoticeReporter.NoticeReportModel): List<() -> String> =
         mutableListOf<() -> String>().apply {
             add { model.headers.joinToString(AbstractNoticeReporter.NOTICE_SEPARATOR) }
@@ -84,7 +50,7 @@ class NoticeSummaryProcessor(
                         getOrPut(license) { mutableSetOf() } += copyrights
                     }
                 }
-            }?.removeGarbage(copyrightGarbage)?.processStatements() ?: sortedMapOf()
+            }?.removeGarbage(input.copyrightGarbage)?.processStatements() ?: sortedMapOf()
 
             if (mergedFindings.isEmpty()) {
                 add { model.headerWithoutLicenses }
@@ -93,7 +59,7 @@ class NoticeSummaryProcessor(
             }
 
             mergedFindings.forEach { (license, copyrights) ->
-                licenseTextProvider.getLicenseText(license)?.let { licenseText ->
+                input.licenseTextProvider.getLicenseText(license)?.let { licenseText ->
                     add { AbstractNoticeReporter.NOTICE_SEPARATOR }
 
                     copyrights.forEach { copyright ->

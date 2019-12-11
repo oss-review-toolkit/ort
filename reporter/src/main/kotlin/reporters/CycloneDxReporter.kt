@@ -19,13 +19,8 @@
 
 package com.here.ort.reporter.reporters
 
-import com.here.ort.model.OrtResult
-import com.here.ort.model.config.CopyrightGarbage
-import com.here.ort.model.config.OrtConfiguration
-import com.here.ort.model.licenses.LicenseConfiguration
-import com.here.ort.reporter.LicenseTextProvider
 import com.here.ort.reporter.Reporter
-import com.here.ort.reporter.ResolutionProvider
+import com.here.ort.reporter.ReporterInput
 import com.here.ort.spdx.SpdxLicense
 
 import java.io.OutputStream
@@ -58,16 +53,8 @@ class CycloneDxReporter : Reporter {
     private fun mapHash(hash: com.here.ort.model.Hash): Hash? =
         enumValues<Hash.Algorithm>().find { it.spec == hash.algorithm.toString() }?.let { Hash(it, hash.value) }
 
-    override fun generateReport(
-        outputStream: OutputStream,
-        ortResult: OrtResult,
-        ortConfig: OrtConfiguration,
-        resolutionProvider: ResolutionProvider,
-        licenseTextProvider: LicenseTextProvider,
-        copyrightGarbage: CopyrightGarbage,
-        licenseConfiguration: LicenseConfiguration,
-        preProcessingScript: String?
-    ) {
+    override fun generateReport(outputStream: OutputStream, input: ReporterInput) {
+        val ortResult = input.ortResult
         val bom = Bom().apply { serialNumber = "urn:uuid:${UUID.randomUUID()}" }
 
         // Add information about projects as external references at the BOM level.
@@ -138,7 +125,7 @@ class CycloneDxReporter : Reporter {
                     licenseText = LicenseText().apply {
                         contentType = "plain/text"
                         encoding = "UTF-8"
-                        text = licenseTextProvider.getLicenseText(licenseName)
+                        text = input.licenseTextProvider.getLicenseText(licenseName)
                     }
                 }
             }

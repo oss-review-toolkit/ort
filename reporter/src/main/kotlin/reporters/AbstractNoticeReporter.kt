@@ -23,11 +23,9 @@ import com.here.ort.model.Identifier
 import com.here.ort.model.LicenseFindingsMap
 import com.here.ort.model.OrtResult
 import com.here.ort.model.config.CopyrightGarbage
-import com.here.ort.model.config.OrtConfiguration
 import com.here.ort.model.licenses.LicenseConfiguration
-import com.here.ort.reporter.LicenseTextProvider
 import com.here.ort.reporter.Reporter
-import com.here.ort.reporter.ResolutionProvider
+import com.here.ort.reporter.ReporterInput
 import com.here.ort.utils.ScriptRunner
 
 import java.io.OutputStream
@@ -89,32 +87,19 @@ abstract class AbstractNoticeReporter : Reporter {
         override fun run(script: String): NoticeReportModel = super.run(script) as NoticeReportModel
     }
 
-    abstract class NoticeProcessor(
-        protected val ortResult: OrtResult,
-        protected val ortConfig: OrtConfiguration,
-        protected val resolutionProvider: ResolutionProvider,
-        protected val licenseTextProvider: LicenseTextProvider,
-        protected val copyrightGarbage: CopyrightGarbage,
-        protected val licenseConfiguration: LicenseConfiguration
-    ) {
+    abstract class NoticeProcessor(protected val input: ReporterInput) {
         abstract fun process(model: NoticeReportModel): List<() -> String>
     }
 
     override fun generateReport(
         outputStream: OutputStream,
-        ortResult: OrtResult,
-        ortConfig: OrtConfiguration,
-        resolutionProvider: ResolutionProvider,
-        licenseTextProvider: LicenseTextProvider,
-        copyrightGarbage: CopyrightGarbage,
-        licenseConfiguration: LicenseConfiguration,
-        preProcessingScript: String?
+        input: ReporterInput
     ) {
-        requireNotNull(ortResult.scanner) {
+        requireNotNull(input.ortResult.scanner) {
             "The provided ORT result file does not contain a scan result."
         }
 
-        val licenseFindings: Map<Identifier, LicenseFindingsMap> = getLicenseFindings(ortResult)
+        val licenseFindings: Map<Identifier, LicenseFindingsMap> = getLicenseFindings(input.ortResult)
 
         val model = NoticeReportModel(
             emptyList(),
@@ -124,20 +109,12 @@ abstract class AbstractNoticeReporter : Reporter {
             emptyList()
         )
 
-        val preProcessedModel = if (preProcessingScript != null) {
-            PreProcessor(ortResult, model, copyrightGarbage, licenseConfiguration).run(preProcessingScript)
-        } else {
-            model
-        }
+        val preProcessedModel = input.preProcessingScript?.let { preProcessingScript ->
+            PreProcessor(input.ortResult, model, input.copyrightGarbage, input.licenseConfiguration)
+                .run(preProcessingScript)
+        } ?: model
 
-        val processor = createProcessor(
-            ortResult,
-            ortConfig,
-            resolutionProvider,
-            licenseTextProvider,
-            copyrightGarbage,
-            licenseConfiguration
-        )
+        val processor = createProcessor(input)
 
         val notices = processor.process(preProcessedModel)
 
@@ -155,12 +132,5 @@ abstract class AbstractNoticeReporter : Reporter {
             }.toSortedMap()
         }
 
-    abstract fun createProcessor(
-        ortResult: OrtResult,
-        ortConfig: OrtConfiguration,
-        resolutionProvider: ResolutionProvider,
-        licenseTextProvider: LicenseTextProvider,
-        copyrightGarbage: CopyrightGarbage,
-        licenseConfiguration: LicenseConfiguration
-    ): NoticeProcessor
+    abstract fun createProcessor(input: ReporterInput): NoticeProcessor
 }
