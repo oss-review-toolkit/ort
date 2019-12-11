@@ -92,9 +92,6 @@ abstract class AbstractNoticeReporter : Reporter {
         abstract fun process(noticeReport: AbstractNoticeReporter.NoticeReport): List<() -> String>
     }
 
-    override val reporterName = "Notice"
-    override val defaultFilename = "NOTICE"
-
     override fun generateReport(
         outputStream: OutputStream,
         ortResult: OrtResult,
