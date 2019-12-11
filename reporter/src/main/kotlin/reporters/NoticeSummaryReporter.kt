@@ -74,6 +74,10 @@ class NoticeSummaryProcessor(
         mutableListOf<() -> String>().apply {
             add { model.headers.joinToString(AbstractNoticeReporter.NOTICE_SEPARATOR) }
 
+            if (model.headers.isNotEmpty()) {
+                add { AbstractNoticeReporter.NOTICE_SEPARATOR }
+            }
+
             val mergedFindings = model.findings.values.takeIf { it.isNotEmpty() }?.reduce { left, right ->
                 left.apply {
                     right.forEach { (license, copyrights) ->
@@ -81,6 +85,12 @@ class NoticeSummaryProcessor(
                     }
                 }
             }?.removeGarbage(copyrightGarbage)?.processStatements() ?: sortedMapOf()
+
+            if (mergedFindings.isEmpty()) {
+                add { model.headerWithoutLicenses }
+            } else {
+                add { model.headerWithLicenses }
+            }
 
             mergedFindings.forEach { (license, copyrights) ->
                 licenseTextProvider.getLicenseText(license)?.let { licenseText ->
