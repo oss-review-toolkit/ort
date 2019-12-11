@@ -113,28 +113,41 @@ class Cvs : VersionControlSystem(), CommandLineTool {
                 return rootDir ?: workingDir
             }
 
-            private fun listSymbolicNames(): Map<String, String> {
-                val cvsLog = run(workingDir, "log", "-h")
-                var tagsSectionStarted = false
+            private fun listSymbolicNames(): Map<String, String> =
+                try {
+                    // Create all working tree directories in order to be able to query the log.
+                    run(workingDir, "update", "-d")
 
-                return cvsLog.stdout.lines().mapNotNull { line ->
-                    if (tagsSectionStarted) {
-                        if (line.startsWith('\t')) {
-                            line.split(':', limit = 2).let {
-                                Pair(it.first().trim(), it.last().trim())
+                    val cvsLog = run(workingDir, "log", "-h")
+                    var tagsSectionStarted = false
+
+                    cvsLog.stdout.lines().mapNotNull { line ->
+                        if (tagsSectionStarted) {
+                            if (line.startsWith('\t')) {
+                                line.split(':', limit = 2).let {
+                                    Pair(it.first().trim(), it.last().trim())
+                                }
+                            } else {
+                                tagsSectionStarted = false
+                                null
                             }
                         } else {
-                            tagsSectionStarted = false
+                            if (line == "symbolic names:") {
+                                tagsSectionStarted = true
+                            }
                             null
                         }
-                    } else {
-                        if (line == "symbolic names:") {
-                            tagsSectionStarted = true
+                    }.toMap().toSortedMap()
+                } finally {
+                    // Clean the temporarily updated working tree again.
+                    workingDir.listFiles().forEach {
+                        if (it.isDirectory) {
+                            if (it.name != "CVS") it.safeDeleteRecursively()
+                        } else {
+                            it.delete()
                         }
-                        null
                     }
-                }.toMap().toSortedMap()
-            }
+                }
 
             private fun isBranchVersion(version: String): Boolean {
                 // See http://cvsgui.sourceforge.net/howto/cvsdoc/cvs_5.html#SEC59.
@@ -177,9 +190,6 @@ class Cvs : VersionControlSystem(), CommandLineTool {
             val revision = if (allowMovingRevisions || isFixedRevision(workingTree, pkg.vcsProcessed.revision)) {
                 pkg.vcsProcessed.revision
             } else {
-                // Create all working tree directories in order to be able to query the log.
-                run(targetDir, "update", "-d")
-
                 log.info { "Trying to guess a $type revision for version '${pkg.id.version}'." }
 
                 try {
@@ -192,15 +202,6 @@ class Cvs : VersionControlSystem(), CommandLineTool {
                 } catch (e: IOException) {
                     // Enrich the IOException with a more specific message.
                     throw IOException("Unable to determine a revision to checkout.", e)
-                } finally {
-                    // Clean the temporarily updated working tree again.
-                    targetDir.listFiles().forEach {
-                        if (it.isDirectory) {
-                            if (it.name != "CVS") it.safeDeleteRecursively()
-                        } else {
-                            it.delete()
-                        }
-                    }
                 }
             }
 
