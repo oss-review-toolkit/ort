@@ -26,8 +26,11 @@ import com.beust.jcommander.Parameters
 import com.here.ort.helper.CommandWithHelp
 import com.here.ort.helper.common.getProcessedCopyrightStatements
 import com.here.ort.model.OrtResult
+import com.here.ort.model.config.CopyrightGarbage
+import com.here.ort.model.config.orEmpty
 import com.here.ort.model.readValue
 import com.here.ort.utils.PARAMETER_ORDER_MANDATORY
+import com.here.ort.utils.PARAMETER_ORDER_OPTIONAL
 import com.here.ort.utils.expandTilde
 
 import java.io.File
@@ -45,11 +48,19 @@ internal class ListCopyrightsCommand : CommandWithHelp() {
     )
     private lateinit var ortResultFile: File
 
+    @Parameter(
+        description = "A file containing garbage copyright statements entries which are to be ignored.",
+        names = ["--copyright-garbage-file"],
+        order = PARAMETER_ORDER_OPTIONAL
+    )
+    private var copyrightGarbageFile: File? = null
+
     override fun runCommand(jc: JCommander): Int {
         val ortResult = ortResultFile.expandTilde().readValue<OrtResult>()
+        val copyrightGarbage = copyrightGarbageFile?.expandTilde()?.readValue<CopyrightGarbage>().orEmpty()
 
         val copyrightStatements = ortResult
-            .getProcessedCopyrightStatements()
+            .getProcessedCopyrightStatements(copyrightGarbage = copyrightGarbage.items)
             .values
             .flatMap { it.values }
             .flatten()

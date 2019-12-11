@@ -195,10 +195,11 @@ internal fun OrtResult.fetchScannedSources(id: Identifier): File {
 
 /**
  * Return the processed copyright statements for each package or project contained in this [OrtResult] grouped by
- * the package and license ID.
+ * the package and license ID. Statements contained in the given [copyrightGarbage] are omitted.
  */
 internal fun OrtResult.getProcessedCopyrightStatements(
-    omitExcluded: Boolean = true
+    omitExcluded: Boolean = true,
+    copyrightGarbage: Set<String> = emptySet()
 ): Map<Identifier, Map<String, Set<String>>> {
     val result = mutableMapOf<Identifier, MutableMap<String, MutableSet<String>>>()
     val processor = CopyrightStatementsProcessor()
@@ -210,8 +211,9 @@ internal fun OrtResult.getProcessedCopyrightStatements(
             if (omitExcluded && pathExcludes.isNotEmpty()) return@innerForEach
 
             val statements = processor
-                .process(licenseFindings.copyrights.map { it.statement })
+                .process(licenseFindings.copyrights.map { it.statement }.filterNot { it in copyrightGarbage })
                 .toMutableSet()
+                .filterNot { it in copyrightGarbage }
 
             if (statements.isEmpty()) return@innerForEach
 
