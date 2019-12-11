@@ -30,6 +30,7 @@ import com.here.ort.model.OrtResult
 import com.here.ort.model.config.CopyrightGarbage
 import com.here.ort.model.config.OrtConfiguration
 import com.here.ort.model.config.Resolutions
+import com.here.ort.model.config.orEmpty
 import com.here.ort.model.licenses.LicenseConfiguration
 import com.here.ort.model.licenses.orEmpty
 import com.here.ort.model.readValue
@@ -155,7 +156,7 @@ object ReporterCommand : CommandWithHelp() {
         resolutionProvider.add(ortResult.getResolutions())
         resolutionsFile?.expandTilde()?.readValue<Resolutions>()?.let { resolutionProvider.add(it) }
 
-        val copyrightGarbage = copyrightGarbageFile?.expandTilde()?.readValue() ?: CopyrightGarbage()
+        val copyrightGarbage = copyrightGarbageFile?.expandTilde()?.readValue<CopyrightGarbage>().orEmpty()
 
         val licenseConfiguration = licenseConfigurationFile?.expandTilde()?.readValue<LicenseConfiguration>().orEmpty()
 
