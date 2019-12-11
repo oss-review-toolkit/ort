@@ -44,32 +44,15 @@ class NoticeSummaryProcessor(input: ReporterInput) : AbstractNoticeReporter.Noti
                 add { AbstractNoticeReporter.NOTICE_SEPARATOR }
             }
 
-            val mergedFindings = model.findings.values.takeIf { it.isNotEmpty() }?.reduce { left, right ->
-                left.apply {
-                    right.forEach { (license, copyrights) ->
-                        getOrPut(license) { mutableSetOf() } += copyrights
-                    }
-                }
-            }?.removeGarbage(input.copyrightGarbage)?.processStatements() ?: sortedMapOf()
+            val mergedFindings = mergeFindings(model)
 
             if (mergedFindings.isEmpty()) {
                 add { model.headerWithoutLicenses }
             } else {
                 add { model.headerWithLicenses }
-            }
 
-            mergedFindings.forEach { (license, copyrights) ->
-                input.licenseTextProvider.getLicenseText(license)?.let { licenseText ->
-                    add { AbstractNoticeReporter.NOTICE_SEPARATOR }
-
-                    copyrights.forEach { copyright ->
-                        add { "$copyright\n" }
-                    }
-                    if (copyrights.isNotEmpty()) add { "\n" }
-
-                    add { licenseText }
-                } ?: log.warn {
-                    "No license text found for license '$license', it will be omitted from the report."
+                mergedFindings.forEach { (license, copyrights) ->
+                    addLicense(license, copyrights)
                 }
             }
 
@@ -78,4 +61,28 @@ class NoticeSummaryProcessor(input: ReporterInput) : AbstractNoticeReporter.Noti
                 add { footer }
             }
         }
+
+    private fun MutableList<() -> String>.addLicense(license: String, copyrights: Set<String>) {
+        input.licenseTextProvider.getLicenseText(license)?.let { licenseText ->
+            add { AbstractNoticeReporter.NOTICE_SEPARATOR }
+
+            copyrights.forEach { copyright ->
+                add { "$copyright\n" }
+            }
+            if (copyrights.isNotEmpty()) add { "\n" }
+
+            add { licenseText }
+        } ?: log.warn {
+            "No license text found for license '$license', it will be omitted from the report."
+        }
+    }
+
+    private fun mergeFindings(model: AbstractNoticeReporter.NoticeReportModel) =
+        model.findings.values.takeIf { it.isNotEmpty() }?.reduce { left, right ->
+            left.apply {
+                right.forEach { (license, copyrights) ->
+                    getOrPut(license) { mutableSetOf() } += copyrights
+                }
+            }
+        }?.removeGarbage(input.copyrightGarbage)?.processStatements() ?: sortedMapOf()
 }
