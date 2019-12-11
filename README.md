@@ -309,7 +309,9 @@ Currently, the following report formats are supported (reporter names are case-i
 
 * [CycloneDX](https://cyclonedx.org/) BOM (`-f CycloneDx`)
 * [Excel](https://products.office.com/excel) sheet (`-f Excel`)
-* [NOTICE_SUMMARY](http://www.apache.org/dev/licensing-howto.html) file (`-f NoticeSummary`)
+* [NOTICE](http://www.apache.org/dev/licensing-howto.html) file in two variants
+  * List license texts and copyrights by package (`-f NoticeByPackage`)
+  * Summarize all license texts and copyrights (`-f NoticeSummary`)
 * Static HTML (`-f StaticHtml`)
 * Web App (`-f WebApp`)
 

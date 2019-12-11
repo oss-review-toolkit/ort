@@ -451,4 +451,9 @@ data class OrtResult(
             getPackages().mapTo(set) { it.pkg.id }
             getProjects().mapTo(set) { it.id }
         }
+
+    /**
+     * Return the list of [ScanResult]s for the given [id].
+     */
+    fun getScanResultsForId(id: Identifier): List<ScanResult> = scanResultsById[id].orEmpty()
 }
