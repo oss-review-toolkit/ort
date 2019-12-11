@@ -47,6 +47,7 @@ import com.here.ort.model.config.RuleViolationResolution
 import com.here.ort.model.config.ScopeExclude
 import com.here.ort.model.utils.FindingCurationMatcher
 import com.here.ort.model.yamlMapper
+import com.here.ort.utils.CopyrightStatementsProcessor
 import com.here.ort.utils.safeMkdirs
 import com.here.ort.utils.OkHttpClientHelper
 import com.here.ort.utils.expandTilde
@@ -190,6 +191,41 @@ internal fun OrtResult.fetchScannedSources(id: Identifier): File {
     }
 
     return Downloader().download(pkg, tempDir).downloadDirectory
+}
+
+/**
+ * Return the processed copyright statements for each package or project contained in this [OrtResult] grouped by
+ * the package and license ID.
+ */
+internal fun OrtResult.getProcessedCopyrightStatements(
+    omitExcluded: Boolean = true
+): Map<Identifier, Map<String, Set<String>>> {
+    val result = mutableMapOf<Identifier, MutableMap<String, MutableSet<String>>>()
+    val processor = CopyrightStatementsProcessor()
+
+    collectLicenseFindings(omitExcluded).forEach { (id, findings) ->
+        val copyrightsForPackage = mutableMapOf<String, MutableSet<String>>()
+
+        findings.forEach innerForEach@{ (licenseFindings, pathExcludes) ->
+            if (omitExcluded && pathExcludes.isNotEmpty()) return@innerForEach
+
+            val statements = processor
+                .process(licenseFindings.copyrights.map { it.statement })
+                .toMutableSet()
+
+            if (statements.isEmpty()) return@innerForEach
+
+            copyrightsForPackage
+                .getOrPut(licenseFindings.license, { mutableSetOf() })
+                .addAll(statements)
+        }
+
+        if (copyrightsForPackage.isNotEmpty()) {
+            result[id] = copyrightsForPackage
+        }
+    }
+
+    return result
 }
 
 /**
