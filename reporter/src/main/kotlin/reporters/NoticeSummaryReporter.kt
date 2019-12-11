@@ -70,11 +70,11 @@ class NoticeSummaryProcessor(
     copyrightGarbage,
     licenseConfiguration
 ) {
-    override fun process(noticeReport: AbstractNoticeReporter.NoticeReport): List<() -> String> =
+    override fun process(model: AbstractNoticeReporter.NoticeReportModel): List<() -> String> =
         mutableListOf<() -> String>().apply {
-            add { noticeReport.headers.joinToString(AbstractNoticeReporter.NOTICE_SEPARATOR) }
+            add { model.headers.joinToString(AbstractNoticeReporter.NOTICE_SEPARATOR) }
 
-            val mergedFindings = noticeReport.findings.values.takeIf { it.isNotEmpty() }?.reduce { left, right ->
+            val mergedFindings = model.findings.values.takeIf { it.isNotEmpty() }?.reduce { left, right ->
                 left.apply {
                     right.forEach { (license, copyrights) ->
                         getOrPut(license) { mutableSetOf() } += copyrights
@@ -97,7 +97,7 @@ class NoticeSummaryProcessor(
                 }
             }
 
-            noticeReport.footers.forEach { footer ->
+            model.footers.forEach { footer ->
                 add { AbstractNoticeReporter.NOTICE_SEPARATOR }
                 add { footer }
             }
