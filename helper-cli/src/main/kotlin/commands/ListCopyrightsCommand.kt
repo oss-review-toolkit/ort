@@ -62,7 +62,7 @@ internal class ListCopyrightsCommand : CommandWithHelp() {
         val copyrightStatements = ortResult
             .getProcessedCopyrightStatements(copyrightGarbage = copyrightGarbage.items)
             .values
-            .flatMap { it.values }
+            .flatMap { copyrightsForPackage -> copyrightsForPackage.values.map { it.keys } }
             .flatten()
             .toSortedSet()
 
