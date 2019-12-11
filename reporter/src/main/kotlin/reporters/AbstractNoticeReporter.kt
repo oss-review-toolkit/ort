@@ -37,7 +37,7 @@ abstract class AbstractNoticeReporter : Reporter {
         const val NOTICE_SEPARATOR = "\n----\n\n"
     }
 
-    data class NoticeReport(
+    data class NoticeReportModel(
         val headers: List<String>,
         val findings: Map<Identifier, LicenseFindingsMap>,
         val footers: List<String>
@@ -45,7 +45,7 @@ abstract class AbstractNoticeReporter : Reporter {
 
     class PreProcessor(
         ortResult: OrtResult,
-        noticeReport: NoticeReport,
+        model: NoticeReportModel,
         copyrightGarbage: CopyrightGarbage,
         licenseConfiguration: LicenseConfiguration
     ) : ScriptRunner() {
@@ -55,30 +55,30 @@ abstract class AbstractNoticeReporter : Reporter {
             import com.here.ort.model.licenses.*
             import com.here.ort.spdx.*
             import com.here.ort.utils.*
-            import com.here.ort.reporter.reporters.AbstractNoticeReporter.NoticeReport
+            import com.here.ort.reporter.reporters.AbstractNoticeReporter.NoticeReportModel
 
             import java.util.*
 
-            var headers = noticeReport.headers
-            var findings = noticeReport.findings
-            var footers = noticeReport.footers
+            var headers = model.headers
+            var findings = model.findings
+            var footers = model.footers
 
         """.trimIndent()
 
         override val postface = """
 
             // Output:
-            NoticeReport(headers, findings, footers)
+            NoticeReportModel(headers, findings, footers)
         """.trimIndent()
 
         init {
             engine.put("ortResult", ortResult)
-            engine.put("noticeReport", noticeReport)
+            engine.put("model", model)
             engine.put("copyrightGarbage", copyrightGarbage)
             engine.put("licenseConfiguration", licenseConfiguration)
         }
 
-        override fun run(script: String): NoticeReport = super.run(script) as NoticeReport
+        override fun run(script: String): NoticeReportModel = super.run(script) as NoticeReportModel
     }
 
     abstract class NoticeProcessor(
@@ -89,7 +89,7 @@ abstract class AbstractNoticeReporter : Reporter {
         protected val copyrightGarbage: CopyrightGarbage,
         protected val licenseConfiguration: LicenseConfiguration
     ) {
-        abstract fun process(noticeReport: AbstractNoticeReporter.NoticeReport): List<() -> String>
+        abstract fun process(model: NoticeReportModel): List<() -> String>
     }
 
     override fun generateReport(
@@ -114,15 +114,15 @@ abstract class AbstractNoticeReporter : Reporter {
             "This project contains or depends on third-party software components pursuant to the following licenses:\n"
         }
 
-        val noticeReport = if (preProcessingScript != null) {
+        val model = if (preProcessingScript != null) {
             PreProcessor(
                 ortResult,
-                NoticeReport(listOf(header), licenseFindings, emptyList()),
+                NoticeReportModel(listOf(header), licenseFindings, emptyList()),
                 copyrightGarbage,
                 licenseConfiguration
             ).run(preProcessingScript)
         } else {
-            NoticeReport(listOf(header), licenseFindings, emptyList())
+            NoticeReportModel(listOf(header), licenseFindings, emptyList())
         }
 
         val processor = createProcessor(
@@ -134,7 +134,7 @@ abstract class AbstractNoticeReporter : Reporter {
             licenseConfiguration
         )
 
-        val notices = processor.process(noticeReport)
+        val notices = processor.process(model)
 
         outputStream.bufferedWriter().use { writer ->
             notices.forEach {
