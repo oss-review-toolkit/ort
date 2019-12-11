@@ -33,7 +33,10 @@ import com.here.ort.utils.log
  * Creates a summary notice file containing all licenses for all non-excluded projects and packages. Each license
  * appears only once and all copyrights associated to this license are listed next to it.
  */
-class NoticeReporter : AbstractNoticeReporter() {
+class NoticeSummaryReporter : AbstractNoticeReporter() {
+    override val reporterName = "NoticeSummary"
+    override val defaultFilename = "NOTICE_SUMMARY"
+
     override fun createProcessor(
         ortResult: OrtResult,
         ortConfig: OrtConfiguration,
@@ -42,7 +45,7 @@ class NoticeReporter : AbstractNoticeReporter() {
         copyrightGarbage: CopyrightGarbage,
         licenseConfiguration: LicenseConfiguration
     ): NoticeProcessor =
-        com.here.ort.reporter.reporters.NoticeProcessor(
+        NoticeSummaryProcessor(
             ortResult,
             ortConfig,
             resolutionProvider,
@@ -52,7 +55,7 @@ class NoticeReporter : AbstractNoticeReporter() {
         )
 }
 
-class NoticeProcessor(
+class NoticeSummaryProcessor(
     ortResult: OrtResult,
     ortConfig: OrtConfiguration,
     resolutionProvider: ResolutionProvider,

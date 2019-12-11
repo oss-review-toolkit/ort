@@ -38,7 +38,7 @@ private fun generateReport(
     preProcessingScript: String? = null
 ) =
     ByteArrayOutputStream().also { outputStream ->
-        NoticeReporter().generateReport(
+        NoticeSummaryReporter().generateReport(
             outputStream,
             ortResult,
             copyrightGarbage = copyrightGarbage,
@@ -46,7 +46,7 @@ private fun generateReport(
         )
     }.toString("UTF-8")
 
-class NoticeReporterTest : WordSpec({
+class NoticeSummaryReporterTest : WordSpec({
     "NoticeReporter" should {
         "generate the correct license notes" {
             val expectedText = File("src/funTest/assets/NPM-is-windows-1.0.2-expected-NOTICE").readText()
