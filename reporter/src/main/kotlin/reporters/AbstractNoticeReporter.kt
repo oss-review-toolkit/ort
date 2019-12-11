@@ -116,27 +116,18 @@ abstract class AbstractNoticeReporter : Reporter {
 
         val licenseFindings: Map<Identifier, LicenseFindingsMap> = getLicenseFindings(ortResult)
 
-        val model = if (preProcessingScript != null) {
-            PreProcessor(
-                ortResult,
-                NoticeReportModel(
-                    emptyList(),
-                    DEFAULT_HEADER_WITH_LICENSES,
-                    DEFAULT_HEADER_WITHOUT_LICENSES,
-                    licenseFindings,
-                    emptyList()
-                ),
-                copyrightGarbage,
-                licenseConfiguration
-            ).run(preProcessingScript)
+        val model = NoticeReportModel(
+            emptyList(),
+            DEFAULT_HEADER_WITH_LICENSES,
+            DEFAULT_HEADER_WITHOUT_LICENSES,
+            licenseFindings,
+            emptyList()
+        )
+
+        val preProcessedModel = if (preProcessingScript != null) {
+            PreProcessor(ortResult, model, copyrightGarbage, licenseConfiguration).run(preProcessingScript)
         } else {
-            NoticeReportModel(
-                emptyList(),
-                DEFAULT_HEADER_WITH_LICENSES,
-                DEFAULT_HEADER_WITHOUT_LICENSES,
-                licenseFindings,
-                emptyList()
-            )
+            model
         }
 
         val processor = createProcessor(
@@ -148,7 +139,7 @@ abstract class AbstractNoticeReporter : Reporter {
             licenseConfiguration
         )
 
-        val notices = processor.process(model)
+        val notices = processor.process(preProcessedModel)
 
         outputStream.bufferedWriter().use { writer ->
             notices.forEach {
