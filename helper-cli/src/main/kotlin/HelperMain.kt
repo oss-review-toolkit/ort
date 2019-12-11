@@ -85,6 +85,7 @@ object HelperMain : CommandWithHelp() {
             addCommand(GenerateTimeoutErrorResolutionsCommand())
             addCommand(ImportLicenseFindingCurationsCommand())
             addCommand(ImportPathExcludesCommand())
+            addCommand(ListCopyrightsCommand())
             addCommand(ListLicensesCommand())
             addCommand(ListPackagesCommand())
             addCommand(RemoveConfigurationEntriesCommand())
