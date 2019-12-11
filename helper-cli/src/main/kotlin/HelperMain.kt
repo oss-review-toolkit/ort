@@ -83,6 +83,7 @@ object HelperMain : CommandWithHelp() {
             addCommand(GenerateScopeExcludesCommand())
             addCommand(GenerateRuleViolationResolutionsCommand())
             addCommand(GenerateTimeoutErrorResolutionsCommand())
+            addCommand(ImportCopyrightGarbageCommand())
             addCommand(ImportLicenseFindingCurationsCommand())
             addCommand(ImportPathExcludesCommand())
             addCommand(ListCopyrightsCommand())
