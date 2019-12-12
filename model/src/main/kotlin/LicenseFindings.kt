@@ -44,6 +44,15 @@ fun LicenseFindingsMap.removeGarbage(copyrightGarbage: CopyrightGarbage) =
         }.toMutableSet()
     }.toSortedMap()
 
+fun Collection<LicenseFindingsMap>.merge() =
+    takeIf { it.isNotEmpty() }?.reduce { left, right ->
+        left.apply {
+            right.forEach { (license, copyrights) ->
+                getOrPut(license) { mutableSetOf() } += copyrights
+            }
+        }
+    } ?: sortedMapOf()
+
 /**
  * A class to store a [license] finding along with its belonging [copyrights] and the [locations] where the license was
  * found.
