@@ -19,6 +19,7 @@
 
 package com.here.ort.reporter.reporters
 
+import com.here.ort.model.merge
 import com.here.ort.model.processStatements
 import com.here.ort.model.removeGarbage
 import com.here.ort.reporter.ReporterInput
@@ -78,11 +79,5 @@ class NoticeSummaryProcessor(input: ReporterInput) : AbstractNoticeReporter.Noti
     }
 
     private fun mergeFindings(model: AbstractNoticeReporter.NoticeReportModel) =
-        model.findings.values.takeIf { it.isNotEmpty() }?.reduce { left, right ->
-            left.apply {
-                right.forEach { (license, copyrights) ->
-                    getOrPut(license) { mutableSetOf() } += copyrights
-                }
-            }
-        }?.removeGarbage(input.copyrightGarbage)?.processStatements() ?: sortedMapOf()
+        model.findings.values.merge().removeGarbage(input.copyrightGarbage).processStatements()
 }
