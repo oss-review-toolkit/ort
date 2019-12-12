@@ -101,6 +101,7 @@ class NoticeByPackageProcessor(input: ReporterInput) : AbstractNoticeReporter.No
             .merge()
             .removeGarbage(input.copyrightGarbage)
             .processStatements()
+            .removeGarbage(input.copyrightGarbage)
             .filter { (license, _) ->
                 input.licenseTextProvider.hasLicenseText(license).also {
                     if (!it) {
@@ -155,7 +156,10 @@ class NoticeByPackageProcessor(input: ReporterInput) : AbstractNoticeReporter.No
             addLicenseFileFindings(licenseFileFindings, archiveDir)
 
             val licensesInNoticeFiles = licenseFileFindings.values.map { it.keys }.flatten().toSet()
-            val processedFindings = licenseFindingsMap.removeGarbage(input.copyrightGarbage).processStatements()
+            val processedFindings = licenseFindingsMap
+                .removeGarbage(input.copyrightGarbage)
+                .processStatements()
+                .removeGarbage(input.copyrightGarbage)
                 .filter { (license, _) -> license !in licensesInNoticeFiles }
                 .filter { (license, _) ->
                     input.licenseTextProvider.hasLicenseText(license).also {
