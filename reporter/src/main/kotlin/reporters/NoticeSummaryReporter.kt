@@ -79,5 +79,9 @@ class NoticeSummaryProcessor(input: ReporterInput) : AbstractNoticeReporter.Noti
     }
 
     private fun mergeFindings(model: AbstractNoticeReporter.NoticeReportModel) =
-        model.findings.values.merge().removeGarbage(input.copyrightGarbage).processStatements()
+        model.findings.values
+            .merge()
+            .removeGarbage(input.copyrightGarbage)
+            .processStatements()
+            .removeGarbage(input.copyrightGarbage)
 }
