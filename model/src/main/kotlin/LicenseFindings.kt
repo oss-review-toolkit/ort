@@ -32,11 +32,18 @@ import java.util.SortedSet
  */
 typealias LicenseFindingsMap = SortedMap<String, MutableSet<String>>
 
+/**
+ * Process all copyright statements contained in this [LicenseFindingsMap] using the [CopyrightStatementsProcessor].
+ */
 fun LicenseFindingsMap.processStatements() =
     mapValues { (_, copyrights) ->
         CopyrightStatementsProcessor().process(copyrights).toMutableSet()
     }.toSortedMap()
 
+/**
+ * Remove all copyright statements from this [LicenseFindingsMap] which are contained in the provided
+ * [copyrightGarbage].
+ */
 fun LicenseFindingsMap.removeGarbage(copyrightGarbage: CopyrightGarbage) =
     mapValues { (_, copyrights) ->
         copyrights.filterNot {
@@ -44,6 +51,9 @@ fun LicenseFindingsMap.removeGarbage(copyrightGarbage: CopyrightGarbage) =
         }.toMutableSet()
     }.toSortedMap()
 
+/**
+ * Merge all [LicenseFindingsMap]s into a single one.
+ */
 fun Collection<LicenseFindingsMap>.merge() =
     takeIf { it.isNotEmpty() }?.reduce { left, right ->
         left.apply {
