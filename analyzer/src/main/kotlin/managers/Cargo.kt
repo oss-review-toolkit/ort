@@ -42,8 +42,6 @@ import com.here.ort.utils.textValueOrEmpty
 
 import com.moandjiezana.toml.Toml
 
-import com.vdurmont.semver4j.Requirement
-
 import java.io.File
 
 /**
@@ -66,14 +64,10 @@ class Cargo(
     }
 
     companion object {
-        private const val REQUIRED_CARGO_VERSION = "1.0.0"
-
         private val pathDependencyRegex = Regex("""^.*\(path\+file://(.*)\)$""")
     }
 
     override fun command(workingDir: File?) = "cargo"
-
-    override fun getVersionRequirement(): Requirement = Requirement.buildStrict(REQUIRED_CARGO_VERSION)
 
     private fun runMetadata(workingDir: File): String = run(workingDir, "metadata", "--format-version=1").stdout
 
