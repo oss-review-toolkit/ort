@@ -87,14 +87,12 @@ RUN \
     # Install package managers (in versions known to work).
     npm install --global bower@$BOWER_VERSION yarn@$YARN_VERSION && \
     pip install wheel && \
-    pip install pipenv==$PYTHON_PIPENV_VERSION && \
-    pip install virtualenv==$PYTHON_VIRTUALENV_VERSION && \
+    pip install conan==$CONAN_VERSION pipenv==$PYTHON_PIPENV_VERSION virtualenv==$PYTHON_VIRTUALENV_VERSION && \
     curl -Os https://storage.googleapis.com/flutter_infra/releases/stable/linux/flutter_linux_$FLUTTER_VERSION.tar.xz && \
     tar xf flutter_linux_$FLUTTER_VERSION.tar.xz -C $(dirname $FLUTTER_HOME) && \
     chmod -R a+rw $FLUTTER_HOME && \
     flutter config --no-analytics && \
     flutter doctor && \
-    pip install conan==$CONAN_VERSION && \
     # Install golang in order to have `go mod` as package manager.
     curl -s https://dl.google.com/go/go$GO_VERSION.linux-amd64.tar.gz -o go.tgz && \
     tar -C /opt -xzf go.tgz && \
