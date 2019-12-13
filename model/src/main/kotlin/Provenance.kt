@@ -22,6 +22,9 @@ package com.here.ort.model
 import com.fasterxml.jackson.annotation.JsonAlias
 import com.fasterxml.jackson.annotation.JsonInclude
 
+import com.here.ort.utils.toHexString
+
+import java.security.MessageDigest
 import java.time.Instant
 
 /**
@@ -61,12 +64,21 @@ data class Provenance(
     @JsonInclude(JsonInclude.Include.NON_NULL)
     val originalVcsInfo: VcsInfo? = null
 ) {
+    companion object {
+        private val SHA1_DIGEST by lazy { MessageDigest.getInstance("SHA-1") }
+    }
+
     init {
         require(sourceArtifact == null || vcsInfo == null) {
             "Provenance does not allow both 'sourceArtifact' and 'vcsInfo' to be set, otherwise it is ambiguous " +
                     "which was used."
         }
     }
+
+    /**
+     * Calculate the SHA-1 hash of the string representation of this [Provenance] instance.
+     */
+    fun hash(): String = SHA1_DIGEST.digest(toString().toByteArray()).toHexString()
 
     /**
      * True if this [Provenance] refers to the same source code as [pkg], assuming that it belongs to the package id.
