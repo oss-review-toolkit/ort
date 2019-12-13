@@ -64,7 +64,7 @@ class Cargo(
     }
 
     companion object {
-        private val pathDependencyRegex = Regex("""^.*\(path\+file://(.*)\)$""")
+        private val PATH_DEPENDENCY_REGEX = Regex("""^.*\(path\+file://(.*)\)$""")
     }
 
     override fun command(workingDir: File?) = "cargo"
@@ -163,7 +163,7 @@ class Cargo(
      * dependencies.
      */
     private fun isProjectDependency(id: String) =
-        pathDependencyRegex.matchEntire(id)?.groups?.get(1)?.let { match ->
+        PATH_DEPENDENCY_REGEX.matchEntire(id)?.groups?.get(1)?.let { match ->
             val packageDir = File(match.value)
             packageDir.startsWith(analysisRoot)
         } ?: false
