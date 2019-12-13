@@ -86,6 +86,7 @@ RUN \
     chmod a+x /usr/local/bin/repo && \
     # Install package managers (in versions known to work).
     npm install --global bower@$BOWER_VERSION yarn@$YARN_VERSION && \
+    pip install wheel && \
     pip install pipenv==$PYTHON_PIPENV_VERSION && \
     pip install virtualenv==$PYTHON_VIRTUALENV_VERSION && \
     curl -Os https://storage.googleapis.com/flutter_infra/releases/stable/linux/flutter_linux_$FLUTTER_VERSION.tar.xz && \
