@@ -54,13 +54,11 @@ import com.here.ort.utils.safeMkdirs
 import com.here.ort.utils.showStackTrace
 import com.here.ort.utils.storage.FileArchiver
 import com.here.ort.utils.storage.LocalFileStorage
-import com.here.ort.utils.toHexString
 
 import com.vdurmont.semver4j.Requirement
 
 import java.io.File
 import java.io.IOException
-import java.security.MessageDigest
 import java.time.Instant
 import java.util.concurrent.Executors
 
@@ -344,9 +342,7 @@ abstract class LocalScanner(name: String, config: ScannerConfiguration) : Scanne
     private fun archiveFiles(directory: File, id: Identifier, provenance: Provenance) {
         log.info { "Archiving files for ${id.toCoordinates()}." }
 
-        val provenanceBytes = provenance.toString().toByteArray()
-        val provenanceHash = MessageDigest.getInstance("SHA-1").digest(provenanceBytes).toHexString()
-        val path = "${id.toPath()}/$provenanceHash"
+        val path = "${id.toPath()}/${provenance.hash()}"
 
         archiver.archive(directory, path)
     }

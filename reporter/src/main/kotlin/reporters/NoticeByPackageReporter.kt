@@ -32,11 +32,9 @@ import com.here.ort.utils.getUserOrtDirectory
 import com.here.ort.utils.log
 import com.here.ort.utils.storage.FileArchiver
 import com.here.ort.utils.storage.LocalFileStorage
-import com.here.ort.utils.toHexString
 
 import java.io.File
 import java.nio.file.Path
-import java.security.MessageDigest
 
 /**
  * Creates a notice file containing the licenses for all non-excluded projects and packages, listed by their identifier.
@@ -138,9 +136,7 @@ class NoticeByPackageProcessor(input: ReporterInput) : AbstractNoticeReporter.No
             val archiveDir = createTempDir(prefix = "notice").also { it.deleteOnExit() }
 
             val licenseFileFindings = if (scanResult != null) {
-                val provenanceBytes = scanResult.provenance.toString().toByteArray()
-                val provenanceHash = MessageDigest.getInstance("SHA-1").digest(provenanceBytes).toHexString()
-                val path = "${id.toPath()}/$provenanceHash"
+                val path = "${id.toPath()}/${scanResult.provenance.hash()}"
                 if (archiver.unarchive(archiveDir, path)) {
                     getFindingsForLicenseFiles(scanResult, archiveDir, licenseFindingsMap)
                 } else {
