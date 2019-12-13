@@ -34,6 +34,7 @@ ENV \
     # Package manager versions.
     BOWER_VERSION=1.8.8 \
     BUNDLER_VERSION=1.17.3-3 \
+    CARGO_VERSION=0.40.0-2 \
     COMPOSER_VERSION=1.9.1-1 \
     CONAN_VERSION=1.18.0 \
     FLUTTER_VERSION=v1.7.8+hotfix.3-stable \
@@ -67,6 +68,7 @@ RUN apt-get update && \
         subversion \
         # Install package managers (in versions known to work).
         bundler=$BUNDLER_VERSION \
+        cargo=$CARGO_VERSION \
         composer=$COMPOSER_VERSION \
         go-dep=$GO_DEP_VERSION \
         haskell-stack=$HASKELL_STACK_VERSION \
