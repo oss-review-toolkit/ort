@@ -109,28 +109,26 @@ object RequirementsCommand : CommandWithHelp() {
         allTools.forEach { (category, tools) ->
             println("${category}s:")
             tools.forEach { tool ->
-                val message = if (tool.getVersionRequirement().toString() == CommandLineTool.ANY_VERSION.toString()) {
-                    "${tool.javaClass.simpleName} requires '${tool.command()}' in no specific version."
-                } else {
-                    "${tool.javaClass.simpleName} has ${tool.getVersionRequirement()} on the version of " +
-                            "'${tool.command()}'."
-                }
-
                 // TODO: State which version was found, and whether it could be bootstrapped, but that requires
                 //       refactoring of CommandLineTool.
-                val (prefix, suffix) = if (tool.isInPath()) {
-                    Pair("\t* ", " (Some version was found in the PATH environment.)")
-                } else {
-                    Pair("\t- ", "")
+                val message = buildString {
+                    if (tool.isInPath()) append("\t* ") else append("\t- ")
+
+                    append("${tool.javaClass.simpleName}: Requires '${tool.command()}' in ")
+                    if (tool.getVersionRequirement().toString() == CommandLineTool.ANY_VERSION.toString()) {
+                        append("no specific version.")
+                    } else {
+                        append("version ${tool.getVersionRequirement()}.")
+                    }
                 }
 
-                println(prefix + message + suffix)
+                println(message)
             }
         }
 
         println("Legend:")
-        println("\tA '-' prefix means that the tool was not found in the PATH environment.")
-        println("\tA '*' prefix means that some version of the tool was found in the PATH environment.")
+        println("\tA '-' prefix means that the tool was _not_ found in the PATH environment.")
+        println("\tA '*' prefix means that _some_ version of the tool was found in the PATH environment.")
 
         return exitCode
     }
