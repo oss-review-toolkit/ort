@@ -22,9 +22,8 @@ package com.here.ort.reporter.reporters
 import com.here.ort.model.Identifier
 import com.here.ort.model.LicenseFindingsMap
 import com.here.ort.model.ScanResult
+import com.here.ort.model.clean
 import com.here.ort.model.merge
-import com.here.ort.model.processStatements
-import com.here.ort.model.removeGarbage
 import com.here.ort.reporter.ReporterInput
 import com.here.ort.utils.CopyrightStatementsProcessor
 import com.here.ort.utils.FileMatcher
@@ -99,9 +98,7 @@ class NoticeByPackageProcessor(input: ReporterInput) : AbstractNoticeReporter.No
     private fun MutableList<() -> String>.addProjectFindings(findings: Map<Identifier, LicenseFindingsMap>) {
         val processedFindings = findings.values
             .merge()
-            .removeGarbage(input.copyrightGarbage)
-            .processStatements()
-            .removeGarbage(input.copyrightGarbage)
+            .clean(input.copyrightGarbage)
             .filter { (license, _) ->
                 input.licenseTextProvider.hasLicenseText(license).also {
                     if (!it) {
@@ -157,9 +154,7 @@ class NoticeByPackageProcessor(input: ReporterInput) : AbstractNoticeReporter.No
 
             val licensesInNoticeFiles = licenseFileFindings.values.map { it.keys }.flatten().toSet()
             val processedFindings = licenseFindingsMap
-                .removeGarbage(input.copyrightGarbage)
-                .processStatements()
-                .removeGarbage(input.copyrightGarbage)
+                .clean(input.copyrightGarbage)
                 .filter { (license, _) -> license !in licensesInNoticeFiles }
                 .filter { (license, _) ->
                     input.licenseTextProvider.hasLicenseText(license).also {

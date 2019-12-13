@@ -19,9 +19,8 @@
 
 package com.here.ort.reporter.reporters
 
+import com.here.ort.model.clean
 import com.here.ort.model.merge
-import com.here.ort.model.processStatements
-import com.here.ort.model.removeGarbage
 import com.here.ort.reporter.ReporterInput
 import com.here.ort.utils.log
 
@@ -79,9 +78,5 @@ class NoticeSummaryProcessor(input: ReporterInput) : AbstractNoticeReporter.Noti
     }
 
     private fun mergeFindings(model: AbstractNoticeReporter.NoticeReportModel) =
-        model.findings.values
-            .merge()
-            .removeGarbage(input.copyrightGarbage)
-            .processStatements()
-            .removeGarbage(input.copyrightGarbage)
+        model.findings.values.merge().clean(input.copyrightGarbage)
 }

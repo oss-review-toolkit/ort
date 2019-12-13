@@ -52,6 +52,13 @@ fun LicenseFindingsMap.removeGarbage(copyrightGarbage: CopyrightGarbage) =
     }.toSortedMap()
 
 /**
+ * Clean this [LicenseFindingsMap] by calling [removeGarbage], [processStatements], and again [removeGarbage] to make
+ * sure that processed statements which are contained in [copyrightGarbage] are also removed.
+ */
+fun LicenseFindingsMap.clean(copyrightGarbage: CopyrightGarbage) =
+    removeGarbage(copyrightGarbage).processStatements().removeGarbage(copyrightGarbage)
+
+/**
  * Merge all [LicenseFindingsMap]s into a single one.
  */
 fun Collection<LicenseFindingsMap>.merge() =
