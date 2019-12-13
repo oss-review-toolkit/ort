@@ -35,7 +35,7 @@ fi
 echo "Running ORT version $ORT_VERSION..."
 
 DOCKER_ARGS=$1
-if [ -n "$DOCKER_ARGS" ]; then
+if [ $# -gt 0 ]; then
     shift
     ORT_ARGS=$@
 fi
