@@ -147,6 +147,9 @@ subprojects {
             // Ensure all OkHttp versions in use match our version >= 4 to avoid Kotlin vs. Java issues with OkHttp 3.
             force("com.squareup.okhttp3:okhttp:$okhttpVersion")
 
+            // Ensure all API library versions match our core library version.
+            force("org.apache.logging.log4j:log4j-api:$log4jCoreVersion")
+
             // Ensure that all transitive versions of "kotlin-reflect" match our version of "kotlin-stdlib".
             force("org.jetbrains.kotlin:kotlin-reflect:$kotlinPluginVersion")
         }
