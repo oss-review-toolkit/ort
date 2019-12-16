@@ -65,6 +65,13 @@ internal class ListCopyrightsCommand : CommandWithHelp() {
     )
     private var packageId: Identifier? = null
 
+    @Parameter(
+        names = ["--license-id"],
+        order = PARAMETER_ORDER_OPTIONAL,
+        description = "The license for which the copyrights shall be listed."
+    )
+    private var licenseId: String? = null
+
     override fun runCommand(jc: JCommander): Int {
         val ortResult = ortResultFile.expandTilde().readValue<OrtResult>()
         val copyrightGarbage = copyrightGarbageFile?.expandTilde()?.readValue<CopyrightGarbage>().orEmpty()
@@ -72,6 +79,9 @@ internal class ListCopyrightsCommand : CommandWithHelp() {
         val copyrightStatements = ortResult
             .getProcessedCopyrightStatements(copyrightGarbage = copyrightGarbage.items)
             .filterNot { (id, _) -> id != packageId }
+            .mapValues { (_, copyrightForPackage) ->
+                copyrightForPackage.filterNot { (license, _) -> license != licenseId }
+            }
             .values
             .flatMap { copyrightsForPackage -> copyrightsForPackage.values.map { it.keys } }
             .flatten()
