@@ -34,7 +34,7 @@ class CopyrightStatementsProcessorTest : WordSpec() {
             "return a result with items merged by owner and prefix, sorted by owner and year" {
                 val input = File("src/test/assets/copyright-statements.txt").readLines()
 
-                val result = yamlMapper.writeValueAsString(processor.process(input))
+                val result = processor.process(input).toYaml()
 
                 val expectedResult = File("src/test/assets/copyright-statements-expected-output.yml").readText()
                 result shouldBe expectedResult
@@ -42,3 +42,5 @@ class CopyrightStatementsProcessorTest : WordSpec() {
         }
     }
 }
+
+private fun CopyrightStatementsProcessor.Result.toYaml(): String = yamlMapper.writeValueAsString(this)
