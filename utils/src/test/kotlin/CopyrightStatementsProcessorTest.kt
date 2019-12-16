@@ -19,6 +19,9 @@
 
 package com.here.ort.utils
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect
+import com.fasterxml.jackson.annotation.PropertyAccessor
+
 import com.here.ort.model.yamlMapper
 
 import io.kotlintest.shouldBe
@@ -43,4 +46,9 @@ class CopyrightStatementsProcessorTest : WordSpec() {
     }
 }
 
-private fun CopyrightStatementsProcessor.Result.toYaml(): String = yamlMapper.writeValueAsString(this)
+private fun CopyrightStatementsProcessor.Result.toYaml(): String =
+    yamlMapper.copy()
+        // Disable getter serialization without changing field serialization.
+        .setVisibility(PropertyAccessor.GETTER, JsonAutoDetect.Visibility.NONE)
+        .setVisibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.ANY)
+        .writeValueAsString(this)

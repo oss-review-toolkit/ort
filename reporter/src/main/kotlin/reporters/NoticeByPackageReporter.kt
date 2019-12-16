@@ -205,7 +205,7 @@ class NoticeByPackageProcessor(input: ReporterInput) : AbstractNoticeReporter.No
             add { "This package contains the file $file with the following contents:\n\n" }
             add { "${archiveDir.resolve(file).readText()}\n" }
             val allCopyrights = findings.values.flatten().toSet()
-            val processedCopyrights = CopyrightStatementsProcessor().process(allCopyrights).toMutableSet()
+            val processedCopyrights = CopyrightStatementsProcessor().process(allCopyrights).getAllStatements()
             if (processedCopyrights.isNotEmpty()) {
                 add { "The following copyright holder information relates to the license(s) above:\n\n" }
             }
