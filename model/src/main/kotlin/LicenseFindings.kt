@@ -37,7 +37,10 @@ typealias LicenseFindingsMap = SortedMap<String, MutableSet<String>>
  */
 fun LicenseFindingsMap.processStatements() =
     mapValues { (_, copyrights) ->
-        CopyrightStatementsProcessor().process(copyrights).getAllStatements()
+        CopyrightStatementsProcessor()
+            .process(copyrights)
+            .getAllStatements()
+            .toMutableSet()
     }.toSortedMap()
 
 /**
