@@ -24,7 +24,9 @@ import com.beust.jcommander.Parameter
 import com.beust.jcommander.Parameters
 
 import com.here.ort.helper.CommandWithHelp
+import com.here.ort.helper.common.IdentifierConverter
 import com.here.ort.helper.common.getProcessedCopyrightStatements
+import com.here.ort.model.Identifier
 import com.here.ort.model.OrtResult
 import com.here.ort.model.config.CopyrightGarbage
 import com.here.ort.model.config.orEmpty
@@ -55,12 +57,21 @@ internal class ListCopyrightsCommand : CommandWithHelp() {
     )
     private var copyrightGarbageFile: File? = null
 
+    @Parameter(
+        names = ["--package-id"],
+        order = PARAMETER_ORDER_OPTIONAL,
+        converter = IdentifierConverter::class,
+        description = "The target package for which the copyrights shall be listed."
+    )
+    private var packageId: Identifier? = null
+
     override fun runCommand(jc: JCommander): Int {
         val ortResult = ortResultFile.expandTilde().readValue<OrtResult>()
         val copyrightGarbage = copyrightGarbageFile?.expandTilde()?.readValue<CopyrightGarbage>().orEmpty()
 
         val copyrightStatements = ortResult
             .getProcessedCopyrightStatements(copyrightGarbage = copyrightGarbage.items)
+            .filterNot { (id, _) -> id != packageId }
             .values
             .flatMap { copyrightsForPackage -> copyrightsForPackage.values.map { it.keys } }
             .flatten()
