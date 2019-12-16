@@ -114,7 +114,7 @@ pipeline {
 
         stage('Run ORT reporter') {
             steps {
-                sh 'docker/run.sh "-v $WORKSPACE/project:/project" $LOG_LEVEL report -f CycloneDX,NoticeSummary,StaticHTML,WebApp -i /project/ort/scanner/scan-result.yml -o /project/ort/reporter'
+                sh 'docker/run.sh "-v $WORKSPACE/project:/project" $LOG_LEVEL report -f CycloneDX,NoticeByPackage,NoticeSummary,StaticHTML,WebApp -i /project/ort/scanner/scan-result.yml -o /project/ort/reporter'
             }
 
             post {
