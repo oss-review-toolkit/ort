@@ -42,6 +42,7 @@ val LICENSE_FILENAMES = listOf(
     "license*",
     "licence*",
     "*.license",
+    "*.licence",
     "unlicense",
     "unlicence",
     "copying*",
