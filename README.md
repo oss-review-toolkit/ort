@@ -35,19 +35,18 @@ interface (for scripted use).
 
 The toolkit consists of the following tools:
 
-* [Analyzer](#analyzer) - determines dependencies of a project. Supports multiple package managers and sub-projects. No
+* [_Analyzer_](#analyzer) - determines dependencies of a project. Supports multiple package managers and sub-projects. No
   changes to the projects are required.
-* [Downloader](#downloader) - fetches the source code referred to by the Analyzer result.
-* [Scanner](#scanner) - wraps existing license / copyright scanners to detect findings in local source code directories.
-* [Evaluator](#evaluator) - evaluates license findings an created customizable results or follow-up actions using a
-   rules DSL based on Kotlin.
-* [Reporter](#reporter) - presents results in various formats like visual reports, compliance documents or
-  Bill-Of-Materials (BOMs) to easily identify dependencies, licenses, copyrights or policy violations.
+* [_Downloader_](#downloader) - fetches the source code referred to by the Analyzer result.
+* [_Scanner_](#scanner) - wraps existing license / copyright scanners to detect findings in local source code directories.
+* [_Evaluator_](#evaluator) - evaluates license findings against customizable policy rules.
+* [_Reporter_](#reporter) - presents results in various formats such as visual reports, open source notices or
+  Bill-Of-Materials (BOMs) to easily identify dependencies, licenses, copyrights or policy rule violations.
 
 The following tools are [planned](https://github.com/heremaps/oss-review-toolkit/projects/1) but not yet available:
 
-* *Advisor* - retrieves security advisories based on the Analyzer result.
-* *Documenter* - generates the final outcome of the review process incl. legal conclusions, e.g. annotated
+* _Advisor_ - retrieves security advisories based on the Analyzer result.
+* _Documenter_ - generates the final outcome of the review process incl. legal conclusions, e.g. annotated
   [SPDX](https://spdx.org/) files that can be included into the distribution.
 
 # Installation
@@ -139,16 +138,23 @@ or
 
 ## Running on CI
 
-A basic ORT pipeline (using the analyzer, scanner and reporter) can easily be run on [Jenkins CI](https://jenkins.io/)
+A basic ORT pipeline (using the _analyzer_, _scanner_ and _reporter_) can easily be run on [Jenkins CI](https://jenkins.io/)
 by using the [Jenkinsfile](./Jenkinsfile) in a (declarative) [pipeline](https://jenkins.io/doc/book/pipeline/) job.
 
 ## Getting started
 
-Please see [GettingStarted.md](./docs/GettingStarted.md) for an introduction to the individual tools.
+Please see [Getting Started](./docs/getting-started.md) for an introduction to the individual tools.
 
 ## Configuration
 
-Please see [Configuration.md](./docs/Configuration.md) for details about the ORT configuration.
+Please see the documentation below for details about the ORT configuration.
+
+* [The .ort.yml file](docs/config-file-ort-yml.md) - project-specific license finding curations, exclusions
+  and resolutions to address issues found within a project's code repository.
+* [The curations.yml file](docs/config-file-curations-yml.md) - curations correct invalid or missing package metadata
+  and set the concluded license for packages.
+* [The resolutions.yml file](docs/config-file-resolution-yml.md) - resolutions allow *resolving* any errors
+  or policy rule violations by providing a reason why they are acceptable and can be ignored.
 
 # Details on the tools
 
@@ -156,7 +162,7 @@ Please see [Configuration.md](./docs/Configuration.md) for details about the ORT
 
 [![Analyzer](./logos/analyzer.png)](./analyzer/src/main/kotlin)
 
-The Analyzer is a Software Composition Analysis (SCA) tool that determines the dependencies of software projects inside
+The _analyzer_ is a Software Composition Analysis (SCA) tool that determines the dependencies of software projects inside
 the specified input directory (`-i`). It does so by querying the detected package managers; **no modifications** to your
 existing project source code, like applying build system plugins, are necessary for that to work. The tree of transitive
 dependencies per project is written out as part of an
@@ -193,8 +199,8 @@ Currently, the following package managers are supported:
 
 [![Downloader](./logos/downloader.png)](./downloader/src/main/kotlin)
 
-Taking an ORT result file with an analyzer result as the input (`-a`), the Downloader retrieves the source code of all
-contained packages to the specified output directory (`-o`). The Downloader takes care of things like normalizing URLs
+Taking an ORT result file with an _analyzer_ result as the input (`-a`), the _downloader_ retrieves the source code of all
+contained packages to the specified output directory (`-o`). The _downloader_ takes care of things like normalizing URLs
 and using the [appropriate VCS tool](./downloader/src/main/kotlin/vcs) to checkout source code from version control.
 
 Currently, the following Version Control Systems are supported:
@@ -211,7 +217,7 @@ Currently, the following Version Control Systems are supported:
 
 This tool wraps underlying license / copyright scanners with a common API so all supported scanners can be used in the
 same way to easily run them and compare their results. If passed an ORT result file with an analyzer result (`-a`), the
-Scanner will automatically download the sources of the dependencies via the Downloader and scan them afterwards.
+_scanner_ will automatically download the sources of the dependencies via the _downloader_ and scan them afterwards.
 
 Currently, the following license scanners are supported:
 
@@ -224,12 +230,12 @@ For a comparison of some of these, see this [Bachelor Thesis](https://osr.cs.fau
 
 ## Storage Backends
 
-In order to not download or scan any previously scanned sources again, the Scanner can use a storage backend to store
+In order to not download or scan any previously scanned sources again, the _scanner_ can use a storage backend to store
 scan results for later reuse.
 
 ### Local File Storage
 
-By default the Scanner stores scan results on the local file system in the current user's home directory (i.e.
+By default the _scanner_ stores scan results on the local file system in the current user's home directory (i.e.
 `~/.ort/scanner/scan-results`) for later reuse. The storage directory can be customized by passing an ORT configuration
 file (`-c`) that contains a respective local file storage configuration:
 
@@ -286,23 +292,22 @@ ort {
 }
 ```
 
-The scanner creates a table called `scan_results` and stores the data in a
+The _scanner_ creates a table called `scan_results` and stores the data in a
 [jsonb](https://www.postgresql.org/docs/current/datatype-json.html) column.
 
 <a name="evaluator">&nbsp;</a>
 
 [![Evaluator](./logos/evaluator.png)](./evaluator/src/main/kotlin)
 
-The Evaluator is used to perform custom license policy checks on scan results. The rules to check against are implemented
-via scripting. Currently, Kotlin script with a dedicated DSL is used for that, but support for other scripting languages
-can be added as well. See [no_gpl_declared.kts](./evaluator/src/main/resources/rules/no_gpl_declared.kts) for a very
-simple example of a rule written in Kotlin script which verifies that no dependencies that declare the GPL are used.
+The _evaluator_ is used to perform custom license policy checks on scan results. The rules to check against are implemented
+as scripts (currently Kontlin scripts, with a dedicated DSL, but support for other scripting can be added as well.
+See [rules.kts](./docs/examples/rules.kts) for an example file.
 
 <a name="reporter">&nbsp;</a>
 
 [![Reporter](./logos/reporter.png)](./reporter/src/main/kotlin)
 
-The reporter generates human-readable reports from the scan result file generated by the scanner (`-s`). It is designed
+The _reporter_ generates human-readable reports from the scan result file generated by the _scanner_ (`-s`). It is designed
 to support multiple output formats.
 
 Currently, the following report formats are supported (reporter names are case-insensitive):

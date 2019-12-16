@@ -5,7 +5,7 @@ This tutorial gives a brief introduction to how the tools work together at the e
 ORT:
 
 * Install ORT.
-* Analyze the dependencies of `mime-types` using the `analyzer`.
+* Analyze the dependencies of `mime-types` using the _analyzer_.
 * Scan the source code of `mime-types` and its dependencies using the `scanner`.
 
 ## 1. Prerequisites
@@ -17,9 +17,9 @@ In addition to Java (version >= 8), for some of the supported package managers a
 tools need to be installed. In the context of this tutorial the following tools are required:
 
 * Git (any recent version will do)
-* [Node.js](https://nodejs.org) 8.*
-* [NPM](https://www.npmjs.com) 5.5.* - 6.4.*
-* [Yarn](https://yarnpkg.com) 1.9.* - 1.17.*
+* [Node.js](https://nodejs.org) 10.* or higher.
+* [NPM](https://www.npmjs.com) 6.4.* or higher.
+* [Yarn](https://yarnpkg.com) 1.9.* or higher.
 
 For the full list of supported package managers and Version Control Systems see the [README](../README.md).
 
@@ -59,7 +59,7 @@ git checkout 2.1.18
 
 ## 4. Run the analyzer on `mime-types`
 
-The next step is to run the `analyzer`. It will create a JSON or YAML output file containing the full dependency tree of
+The next step is to run the _analyzer_. It will create a JSON or YAML output file containing the full dependency tree of
 `mime-types` including the meta-data of `mime-types` and its dependencies.
 
 ```bash
@@ -76,7 +76,7 @@ cli/build/install/ort/bin/ort analyze -i [mime-types-path] -o [analyzer-output-p
 cli/build/install/ort/bin/ort --debug --stacktrace analyze -i [mime-types-path] -o [analyzer-output-path]
 ```
 
-The `analyzer` will search for build files of all supported package managers. In case of `mime-types` it will find the
+The _analyzer_ will search for build files of all supported package managers. In case of `mime-types` it will find the
 `package.json` file and write the results of the dependency analysis to the output file `analyzer-result.yml`. On the
 first attempt of running the analyzer on the `mime-types` package it will fail with an error message:
 
@@ -218,7 +218,7 @@ analyzer:
 ## 5. Run the scanner
 
 To scan the source code of `mime-types` and its dependencies the source code of `mime-types` and all its dependencies
-needs to be downloaded. The `downloader` tool could be used for this, but it is also integrated in the `scanner` tool,
+needs to be downloaded. The _downloader_ tool could be used for this, but it is also integrated in the `scanner` tool,
 so the scanner will automatically download the source code if the required VCS metadata could be obtained.
 
 ORT is designed to integrate lots of different scanners and is not limited to license scanners, technically any tool
@@ -229,7 +229,7 @@ will perform the actual scanning remotely.
 For this tutorial we will use `ScanCode`. You do not have to install the tool manually, it will automatically be
 bootstrapped by the `scanner`.
 
-As for the `analyzer` you can get the command line options for the `scanner` using the `--help` option:
+As for the _analyzer_ you can get the command line options for the `scanner` using the `--help` option:
 
 ```bash
 cli/build/install/ort/bin/ort scan --help
@@ -264,39 +264,52 @@ on a bigger project you will see that `ScanCode` often finds more licenses than 
 
 ## 6. Running the evaluator
 
-The evaluator can apply a set of rules against the scan result created above. ORT provides a
-[sample rules file](../evaluator/src/main/resources/rules/no_gpl_declared.kts) on the classpath that can be used for
-testing the evaluator. The sample rule creates an error if any package contained in the result declares a GPL license.
-To run the sample rules use:
+The evaluator can apply a set of rules against the scan result created above. ORT provides an
+[example of a policy rules file](examples/rules.kts) that can be used for testing the _evaluator_. 
+
+To run the example rules use:
 
 ```bash
-cli/build/install/ort/bin/ort evaluate --rules-resource rules/no_gpl_declared.kts \
-    -i [scanner-output-path]/scan-result.yml -o [evaluator-output-path]/mime-types
+cli/build/install/ort/bin/ort evaluate
+  --rules-file rules.kts
+  -i [scanner-output-path]/scan-result.yml
+  -o [evaluator-output-path]/mime-types
 ```
 
-Because neither mime-types nor any of its dependencies declares a GPL license this finishes without an error.
-
-It is possible to write your own evaluator rules as Kotlin script and pass it to the evaluator using `--rules-file`.
+It is possible to write your own evaluator rules as a Kotlin script and pass it to the _evaluator_ using `--rules-file`.
 Note that detailed documentation for writing custom rules is not yet available.
 
 ## 7. Generate a report
 
-The `evaluation-result.yml` file can now be used as input for the reporter to generate human-readable reports. For
-example, to generate both a static HTML report and an Excel report use:
+The `evaluation-result.yml` file can now be used as input for the reporter to generate human-readable reports
+and open source notices. 
+
+For example, to generate a static HTML report, WebApp report and an open source notice by package, use:
 
 ```bash
-cli/build/install/ort/bin/ort report -f StaticHtml,Excel -i [evaluator-output-path]/evaluation-result.yml -o [reporter-output-path]
-Writing static HTML report to '[reporter-output-path]/scan-report.html'.
-Writing Excel report to '[reporter-output-path]/scan-report.xlsx'.
+cli/build/install/ort/bin/ort report
+  -f NoticeByPackage,StaticHtml,WebApp
+  -i [evaluator-output-path]/evaluation-result.yml
+  -o [reporter-output-path]
+Created 'StaticHtml' report: [reporter-output-path]/scan-report.html
+Created 'WebApp' report: [reporter-output-path]/scan-report-web-app.html
+Created 'NoticeByPackage' report: [reporter-output-path]/NOTICE_BY_PACKAGE
 ```
 
-If you do not want to run the evaluator you can pass the scan result `[scanner-output-path/scan-result.yml` to the
-reporter instead.
+If you do not want to run the _evaluator_ you can pass the _scanner_ result e.g. `[scanner-output-path/scan-result.yml` to the `reporter` instead. To learn how you can customize generated notices see
+[notice-pre-processor-kts.md](notice-pre-processor-kts.md)
 
-## 8. Curating the metadata
+## 8. Curating Package Metadata or License Findings
 
 In the example above everything went well because the VCS information provided by the packages was correct, but this is
 not always the case. Often the metadata of packages has no VCS information, points to outdated repositories, or the
-repositories are not correctly tagged. Because this information can not always be fixed in remote packages ORT provides
-a mechanism to curate metadata of packages. For details, see
-[Configuration.md](./Configuration.md#curating-metadata-of-packages).
+repositories are not correctly tagged.
+
+ORT provides a variety of mechanisms to fix a variety of issues, for details see:
+
+* [The .ort.yml file](docs/config-file-ort-yml.md) - project-specific license finding curations, exclusions
+  and resolutions to address issues found within a project's code repository.
+* [The curations.yml file](docs/config-file-curations-yml.md) - curations correct invalid or missing package metadata
+  and set the concluded license for packages.
+* [The resolutions.yml file](docs/config-file-resolution-yml.md) - resolutions allow *resolving* any errors
+  or policy rule violations by providing a reason why they are acceptable and can be ignored.
