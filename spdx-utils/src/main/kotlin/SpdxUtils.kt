@@ -82,7 +82,7 @@ fun calculatePackageVerificationCode(files: List<File>, excludes: List<String> =
  */
 private fun sha1sum(file: File): String =
     file.inputStream().use { inputStream ->
-        // 4MB has been choosen rather arbitrary hoping that it provides a good enough performance while not consuming
+        // 4MB has been chosen rather arbitrary hoping that it provides a good enough performance while not consuming
         // too a lot of memory, also considering that this function could potentially be run on multiple thread in
         // parallel.
         val buffer = ByteArray(4 * 1024 * 1024)
