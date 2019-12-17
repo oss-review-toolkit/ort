@@ -17,7 +17,7 @@
  * License-Filename: LICENSE
  */
 
-@file:Suppress("TooManyFunctions")
+@file:Suppress("MatchingDeclarationName", "TooManyFunctions")
 
 package com.here.ort.helper.common
 
@@ -194,20 +194,47 @@ internal fun OrtResult.fetchScannedSources(id: Identifier): File {
 }
 
 /**
- * Return the processed copyright statements associated with the corresponding unprocessed copyright statements
- * for each package or project contained in this [OrtResult] grouped by the package and license ID. Statements contained
- * in the given [copyrightGarbage] are omitted.
+ * A processed copyright statement.
+ */
+internal data class ProcessedCopyrightStatement(
+    /**
+     * The package containing the copyright statement.
+     */
+    val packageId: Identifier,
+
+    /**
+     * The license associated with the copyright statement.
+     */
+    val licenseId: String,
+
+    /**
+     * The processed coypright statement.
+     */
+    val statement: String,
+
+    /**
+     * The original statement(s) which yield this processed [statement].
+     */
+    val rawStatements: Set<String>
+) {
+    init {
+        require(rawStatements.isNotEmpty()) { "The set of raw statements must not be empty." }
+    }
+}
+
+/**
+ * Return the processed copyright statements of all packages and projects contained in this [OrtResult]. The statements
+ * are processed for each package and license separately for consistency with the [NoticeByPackageReporter].
+ * Statements contained in the given [copyrightGarbage] are omitted.
  */
 internal fun OrtResult.getProcessedCopyrightStatements(
     omitExcluded: Boolean = true,
     copyrightGarbage: Set<String> = emptySet()
-): Map<Identifier, Map<String, Map<String, Set<String>>>> {
-    val result = mutableMapOf<Identifier, MutableMap<String, MutableMap<String, Set<String>>>>()
+): List<ProcessedCopyrightStatement> {
+    val result = mutableListOf<ProcessedCopyrightStatement>()
     val processor = CopyrightStatementsProcessor()
 
     collectLicenseFindings(omitExcluded).forEach { (id, findings) ->
-        val copyrightsForPackage = mutableMapOf<String, MutableMap<String, Set<String>>>()
-
         findings.forEach innerForEach@{ (licenseFindings, pathExcludes) ->
             if (omitExcluded && pathExcludes.isNotEmpty()) return@innerForEach
 
@@ -215,23 +242,27 @@ internal fun OrtResult.getProcessedCopyrightStatements(
                 licenseFindings.copyrights.map { it.statement }.filterNot { it in copyrightGarbage }
             )
 
-            val statements = mutableMapOf<String, MutableSet<String>>()
             processResult.processedStatements.filterNot { it.key in copyrightGarbage }.forEach {
-                statements[it.key] = it.value.toMutableSet()
+                result.add(
+                    ProcessedCopyrightStatement(
+                        packageId = id,
+                        licenseId = licenseFindings.license,
+                        statement = it.key,
+                        rawStatements = it.value.toSet()
+                    )
+                )
             }
+
             processResult.unprocessedStatements.filterNot { it in copyrightGarbage }.forEach {
-                statements.getOrPut(it, { mutableSetOf() }).add(it)
+                result.add(
+                        ProcessedCopyrightStatement(
+                        packageId = id,
+                        licenseId = licenseFindings.license,
+                        statement = it,
+                        rawStatements = setOf(it)
+                    )
+                )
             }
-
-            if (statements.isEmpty()) return@innerForEach
-
-            copyrightsForPackage
-                .getOrPut(licenseFindings.license, { mutableMapOf() })
-                .putAll(statements)
-        }
-
-        if (copyrightsForPackage.isNotEmpty()) {
-            result[id] = copyrightsForPackage
         }
     }
 

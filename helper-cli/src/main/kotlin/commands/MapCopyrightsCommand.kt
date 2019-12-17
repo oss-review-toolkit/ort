@@ -82,15 +82,11 @@ internal class MapCopyrightsCommand : CommandWithHelp() {
 private fun OrtResult.getUnprocessedCopyrightStatements(processedStatements: Collection<String>): Set<String> {
     val processedToUnprocessed = mutableMapOf<String, MutableSet<String>>()
 
-    getProcessedCopyrightStatements().values.forEach { statementsForPackage ->
-        statementsForPackage.values.forEach { statementsForLicense ->
-            statementsForLicense.forEach { (processedStatement, unprocessedStatements) ->
-                unprocessedStatements.forEach { unprocessedStatement ->
-                    processedToUnprocessed
-                        .getOrPut(processedStatement, { mutableSetOf() })
-                        .add(unprocessedStatement)
-                }
-            }
+    getProcessedCopyrightStatements().forEach {
+        it.rawStatements.forEach { unprocessedStatement ->
+            processedToUnprocessed
+                .getOrPut(it.statement, { mutableSetOf() })
+                .add(unprocessedStatement)
         }
     }
 
