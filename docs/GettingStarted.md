@@ -175,7 +175,7 @@ analyzer:
           dependencies:
           - id: "NPM::builtin-modules:1.1.1"
           - id: "NPM::contains-path:0.1.0"
-            # If an error occured during the dependency analysis of this package there would be an additional "errors"
+            # If an error occurred during the dependency analysis of this package there would be an additional "errors"
             # array.
 # ...
 # Detailed metadata about each package from the dependency trees.
