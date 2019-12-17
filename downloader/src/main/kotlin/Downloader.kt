@@ -97,7 +97,7 @@ class Downloader {
     }
 
     /**
-     * This class describes what was downloaded by [download] to the [downloadDirectory] or if any exception occured.
+     * This class describes what was downloaded by [download] to the [downloadDirectory] or if any exception occurred.
      * Either [sourceArtifact] or [vcsInfo] is set to a non-null value. The download was started at [dateTime].
      */
     data class DownloadResult(
