@@ -78,9 +78,9 @@ internal class ListCopyrightsCommand : CommandWithHelp() {
 
         val copyrightStatements = ortResult
             .getProcessedCopyrightStatements(copyrightGarbage = copyrightGarbage.items)
-            .filterNot { (id, _) -> id != packageId }
+            .filter { (id, _) -> packageId == null || id == packageId }
             .mapValues { (_, copyrightForPackage) ->
-                copyrightForPackage.filterNot { (license, _) -> license != licenseId }
+                copyrightForPackage.filter { (license, _) -> licenseId == null || license == licenseId }
             }
             .values
             .flatMap { copyrightsForPackage -> copyrightsForPackage.values.map { it.keys } }
