@@ -92,7 +92,7 @@ object RequirementsCommand : CommandWithHelp() {
                     }
 
                     else -> {
-                        log.debug { "Trying to instanciate $it without any arguments." }
+                        log.debug { "Trying to instantiate $it without any arguments." }
                         it.getDeclaredConstructor().newInstance()
                     }
                 }
@@ -101,7 +101,7 @@ object RequirementsCommand : CommandWithHelp() {
                     allTools.getOrPut(key) { mutableListOf() } += instance
                 }
             } catch (e: Exception) {
-                log.error { "There was an error instanciating $it: $e." }
+                log.error { "There was an error instantiating $it: $e." }
                 exitCode = 1
             }
         }
