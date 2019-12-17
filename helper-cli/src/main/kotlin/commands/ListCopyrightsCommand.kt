@@ -72,6 +72,13 @@ internal class ListCopyrightsCommand : CommandWithHelp() {
     )
     private var licenseId: String? = null
 
+    @Parameter(
+        names = ["--show-raw-statements"],
+        order = PARAMETER_ORDER_OPTIONAL,
+        description = "Show the raw statements corresponding to each processed statement if these are any different."
+    )
+    private var showRawStatements: Boolean = false
+
     override fun runCommand(jc: JCommander): Int {
         val ortResult = ortResultFile.expandTilde().readValue<OrtResult>()
         val copyrightGarbage = copyrightGarbageFile?.expandTilde()?.readValue<CopyrightGarbage>().orEmpty()
@@ -80,12 +87,17 @@ internal class ListCopyrightsCommand : CommandWithHelp() {
             .getProcessedCopyrightStatements(copyrightGarbage = copyrightGarbage.items)
             .filter { packageId == null || it.packageId == packageId }
             .filter { licenseId == null || it.licenseId == licenseId }
-            .map { it.statement }
-            .toSortedSet()
+            .groupBy({ it.statement }, { it.rawStatements })
+            .mapValues { it.value.flatten().toSortedSet() }
 
         val result = buildString {
-            copyrightStatements.forEach {
-                appendln(it)
+            copyrightStatements.forEach { (processedStatement, unprocessedStatements) ->
+                appendln(processedStatement)
+                if (showRawStatements && unprocessedStatements.size > 1) {
+                    unprocessedStatements.forEach {
+                        appendln("  $it")
+                    }
+                }
             }
         }
 
