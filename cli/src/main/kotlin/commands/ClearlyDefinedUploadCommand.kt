@@ -78,7 +78,7 @@ object ClearlyDefinedUploadCommand : CommandWithHelp() {
                     "[OSS Review Toolkit](https://github.com/heremaps/oss-review-toolkit) via the " +
                     "[clearly-defined](https://github.com/heremaps/oss-review-toolkit/tree/master/clearly-defined) " +
                     "module.",
-            resolution = data.comment ?: "Unkown, original data contains no comment.",
+            resolution = data.comment ?: "Unknown, original data contains no comment.",
             removedDefinitions = false
         )
 
