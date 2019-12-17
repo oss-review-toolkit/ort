@@ -208,7 +208,7 @@ internal data class ProcessedCopyrightStatement(
     val licenseId: String,
 
     /**
-     * The processed coypright statement.
+     * The processed copyright statement.
      */
     val statement: String,
 
