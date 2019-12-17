@@ -25,7 +25,7 @@ import com.beust.jcommander.Parameters
 
 import com.here.ort.helper.CommandWithHelp
 import com.here.ort.helper.common.IdentifierConverter
-import com.here.ort.helper.common.getProcessedCopyrightStatements
+import com.here.ort.helper.common.processAllCopyrightStatements
 import com.here.ort.model.Identifier
 import com.here.ort.model.OrtResult
 import com.here.ort.model.config.CopyrightGarbage
@@ -84,7 +84,7 @@ internal class ListCopyrightsCommand : CommandWithHelp() {
         val copyrightGarbage = copyrightGarbageFile?.expandTilde()?.readValue<CopyrightGarbage>().orEmpty()
 
         val copyrightStatements = ortResult
-            .getProcessedCopyrightStatements(copyrightGarbage = copyrightGarbage.items)
+            .processAllCopyrightStatements(copyrightGarbage = copyrightGarbage.items)
             .filter { packageId == null || it.packageId == packageId }
             .filter { licenseId == null || it.licenseId == licenseId }
             .groupBy({ it.statement }, { it.rawStatements })

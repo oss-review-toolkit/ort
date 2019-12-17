@@ -24,7 +24,7 @@ import com.beust.jcommander.Parameter
 import com.beust.jcommander.Parameters
 
 import com.here.ort.helper.CommandWithHelp
-import com.here.ort.helper.common.getProcessedCopyrightStatements
+import com.here.ort.helper.common.processAllCopyrightStatements
 import com.here.ort.model.OrtResult
 import com.here.ort.model.readValue
 import com.here.ort.utils.PARAMETER_ORDER_MANDATORY
@@ -82,7 +82,7 @@ internal class MapCopyrightsCommand : CommandWithHelp() {
 private fun OrtResult.getUnprocessedCopyrightStatements(processedStatements: Collection<String>): Set<String> {
     val processedToUnprocessed = mutableMapOf<String, MutableSet<String>>()
 
-    getProcessedCopyrightStatements().forEach {
+    processAllCopyrightStatements().forEach {
         it.rawStatements.forEach { unprocessedStatement ->
             processedToUnprocessed
                 .getOrPut(it.statement, { mutableSetOf() })
