@@ -19,9 +19,6 @@
 
 package com.here.ort.analyzer.managers.utils
 
-import com.here.ort.analyzer.managers.utils.PackageJsonUtils.expandShortcutURL
-import com.here.ort.analyzer.managers.utils.PackageJsonUtils.mapDefinitionFilesForNpm
-import com.here.ort.analyzer.managers.utils.PackageJsonUtils.mapDefinitionFilesForYarn
 import com.here.ort.utils.safeDeleteRecursively
 import com.here.ort.utils.safeMkdirs
 
@@ -150,9 +147,9 @@ class PackageJsonUtilsTest : WordSpec() {
             }
         }
 
-        "expandShortcutURL" should {
+        "expandNpmShortcutURL" should {
             "do nothing for empty URLs" {
-                expandShortcutURL("") shouldBe ""
+                expandNpmShortcutURL("") shouldBe ""
             }
 
             "properly handle NPM shortcut URLs" {
@@ -172,7 +169,7 @@ class PackageJsonUtilsTest : WordSpec() {
                 )
 
                 packages.forEach { (actualUrl, expectedUrl) ->
-                    expandShortcutURL(actualUrl) shouldBe expectedUrl
+                    expandNpmShortcutURL(actualUrl) shouldBe expectedUrl
                 }
             }
 
@@ -187,7 +184,7 @@ class PackageJsonUtilsTest : WordSpec() {
                 )
 
                 packages.forEach { (actualUrl, expectedUrl) ->
-                    expandShortcutURL(actualUrl) shouldBe expectedUrl
+                    expandNpmShortcutURL(actualUrl) shouldBe expectedUrl
                 }
             }
         }
@@ -230,7 +227,7 @@ class PackageJsonUtilsTest : WordSpec() {
             tempDir.resolve(file)
         }
 
-    private fun hasNpmLockFile(path: String) = PackageJsonUtils.hasNpmLockFile(tempDir.resolve(path))
+    private fun hasNpmLockFile(path: String) = hasNpmLockFile(tempDir.resolve(path))
 
-    private fun hasYarnLockFile(path: String) = PackageJsonUtils.hasYarnLockFile(tempDir.resolve(path))
+    private fun hasYarnLockFile(path: String) = hasYarnLockFile(tempDir.resolve(path))
 }
