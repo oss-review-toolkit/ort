@@ -74,10 +74,10 @@ excludes:
     comment: "Licenses contained in this directory are used for testing and do not apply to the OSS Review Toolkit."
   scopes:
   - name   : "devDependencies"
-    reason : "BUILD_TOOL_OF"
+    reason : "DEV_DEPENDENCY_OF"
     comment: "Scope with dependencies only used for development. Not included in released artifacts in the context of this project."
   - name   : "(test.*|funTest.*)"
-    reason : "TEST_TOOL_OF"
+    reason : "TEST_DEPENDENCY_OF"
     comment: "Scope with dependencies only used for testing. Not included in released artifacts in the context of this project."
 resolutions:
   errors:

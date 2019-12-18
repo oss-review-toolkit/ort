@@ -1,8 +1,8 @@
 excludes:
   scopes:
   - pattern: "provided"
-    reason: "PROVIDED_BY"
+    reason: "PROVIDED_DEPENDENCY_OF"
     comment: "Scope with dependencies provided by the JDK or container at runtime. Not included in released artifacts in the context of this project."
   - pattern: "test"
-    reason: "TEST_TOOL_OF"
+    reason: "TEST_DEPENDENCY_OF"
     comment: "Scope with dependencies only used for development. Not included in released artifacts in the context of this project."
