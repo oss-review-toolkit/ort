@@ -32,14 +32,12 @@ packages:
     id: "Conan::OpenSSL:1.0.2o"
     purl: "pkg:conan/OpenSSL@1.0.2o"
     declared_licenses:
-    - "The current OpenSSL licence is an 'Apache style' license: https://www.openssl.org/source/license.html"
+    - "OpenSSL"
     declared_licenses_processed:
-      unmapped:
-      - "The current OpenSSL licence is an 'Apache style' license: https://www.openssl.org/source/license.html"
-    description: "OpenSSL is an open source project that provides a robust, commercial-grade,\
-      \ and full-featured toolkit for the Transport Layer Security (TLS) and Secure\
-      \ Sockets Layer (SSL) protocols"
-    homepage_url: ""
+      spdx_expression: "OpenSSL"
+    description: "A toolkit for the Transport Layer Security (TLS) and Secure Sockets\
+      \ Layer (SSL) protocols"
+    homepage_url: "https://github.com/openssl/openssl"
     binary_artifact:
       url: ""
       hash:
@@ -52,12 +50,12 @@ packages:
         algorithm: ""
     vcs:
       type: "Git"
-      url: "http://github.com/lasote/conan-openssl"
+      url: "http://github.com/conan-community/conan-openssl"
       revision: ""
       path: ""
     vcs_processed:
       type: "Git"
-      url: "https://github.com/lasote/conan-openssl.git"
+      url: "https://github.com/conan-community/conan-openssl.git"
       revision: ""
       path: ""
   curations: []
