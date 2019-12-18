@@ -298,7 +298,7 @@ internal fun OrtResult.getLicenseFindingsById(
  */
 internal fun OrtResult.getRepositoryLicenseFindingCurations(): RepositoryLicenseFindingCurations {
     val result = mutableMapOf<String, MutableList<LicenseFindingCuration>>()
-    val curations = repository.config.curations?.licenseFindings ?: emptyList()
+    val curations = repository.config.curations?.licenseFindings.orEmpty()
 
     repository.nestedRepositories.forEach { (path, vcs) ->
         val pathExcludesForRepository = result.getOrPut(vcs.url) { mutableListOf() }
@@ -381,7 +381,7 @@ internal fun OrtResult.getRepositoryPathExcludes(): RepositoryPathExcludes {
     }
 
     val result = mutableMapOf<String, MutableList<PathExclude>>()
-    val pathExcludes = repository.config.excludes?.paths ?: emptyList()
+    val pathExcludes = repository.config.excludes?.paths.orEmpty()
 
     repository.nestedRepositories.forEach { (path, vcs) ->
         val pathExcludesForRepository = result.getOrPut(vcs.url) { mutableListOf() }
@@ -404,7 +404,7 @@ internal fun OrtResult.getRepositoryPathExcludes(): RepositoryPathExcludes {
  */
 internal fun OrtResult.getUnresolvedRuleViolations(): List<RuleViolation> {
     val resolutions = getResolutions().ruleViolations
-    val violations = evaluator?.violations ?: emptyList()
+    val violations = evaluator?.violations.orEmpty()
 
     return violations.filter { violation ->
         !resolutions.any { it.matches(violation) }

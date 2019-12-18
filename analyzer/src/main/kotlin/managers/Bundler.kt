@@ -303,7 +303,7 @@ data class GemSpec(
                 homepage,
                 yaml["licenses"]?.asIterable()?.mapTo(sortedSetOf()) { it.textValue() } ?: sortedSetOf(),
                 yaml["description"].textValueOrEmpty(),
-                runtimeDependencies ?: emptySet(),
+                runtimeDependencies.orEmpty(),
                 VcsHost.toVcsInfo(homepage) ?: VcsInfo.EMPTY,
                 RemoteArtifact.EMPTY
             )
@@ -335,7 +335,7 @@ data class GemSpec(
                 json["homepage_uri"].textValueOrEmpty(),
                 json["licenses"]?.asIterable()?.mapTo(sortedSetOf()) { it.textValue() } ?: sortedSetOf(),
                 json["description"].textValueOrEmpty(),
-                runtimeDependencies ?: emptySet(),
+                runtimeDependencies.orEmpty(),
                 vcs,
                 artifact
             )

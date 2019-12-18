@@ -84,7 +84,7 @@ internal class GenerateRuleViolationResolutionsCommand : CommandWithHelp() {
                 )
             }
 
-        val resolutions = (repositoryConfiguration.resolutions?.ruleViolations ?: emptyList()) + generatedResolutions
+        val resolutions = (repositoryConfiguration.resolutions?.ruleViolations.orEmpty()) + generatedResolutions
 
         repositoryConfiguration
             .replaceRuleViolationResolutions(resolutions)

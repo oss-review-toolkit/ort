@@ -28,5 +28,5 @@ import com.here.ort.model.Identifier
  */
 class FallbackPackageCurationProvider(private val providers: List<PackageCurationProvider>) : PackageCurationProvider {
     override fun getCurationsFor(pkgId: Identifier) =
-        providers.asSequence().map { it.getCurationsFor(pkgId) }.find { it.isNotEmpty() } ?: emptyList()
+        providers.asSequence().map { it.getCurationsFor(pkgId) }.find { it.isNotEmpty() }.orEmpty()
 }

@@ -43,7 +43,7 @@ class DefaultResolutionProvider : ResolutionProvider {
 
         val ruleViolationResolutions = ortResult.evaluator?.violations?.let { violations ->
             resolutions.ruleViolations.filter { resolution -> violations.any { resolution.matches(it) } }
-        } ?: emptyList()
+        }.orEmpty()
 
         return Resolutions(errorResolutions, ruleViolationResolutions)
     }

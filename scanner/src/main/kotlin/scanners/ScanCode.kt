@@ -215,7 +215,7 @@ class ScanCode(
     override val scannerVersion = "3.0.2"
     override val resultFileExt = "json"
 
-    private val scanCodeConfiguration = config.scanner?.get("ScanCode") ?: emptyMap()
+    private val scanCodeConfiguration = config.scanner?.get("ScanCode").orEmpty()
 
     private val configurationOptions = scanCodeConfiguration["commandLine"]?.split(" ")
         ?: DEFAULT_CONFIGURATION_OPTIONS
