@@ -46,21 +46,33 @@ internal object PackageJsonUtils {
         val isYarnWorkspaceSubmodule: Boolean = false
     )
 
+    /**
+     * Return whether the [directory] contains an NPM lock file.
+     */
     fun hasNpmLockFile(directory: File) =
         NPM_LOCK_FILES.any { lockfile ->
             File(directory, lockfile).isFile
         }
 
+    /**
+     * Return whether the [directory] contains a Yarn lock file.
+     */
     fun hasYarnLockFile(directory: File) =
         YARN_LOCK_FILES.any { lockfile ->
             File(directory, lockfile).isFile
         }
 
+    /**
+     * Map [definitionFiles] to contain only files handled by NPM.
+     */
     fun mapDefinitionFilesForNpm(definitionFiles: Collection<File>): Set<File> =
         getDefinitionFileInfo(definitionFiles.toSet()).filter { entry ->
             !isHandledByYarn(entry)
         }.mapTo(mutableSetOf()) { it.definitionFile }
 
+    /**
+     * Map [definitionFiles] to contain only files handled by Yarn.
+     */
     fun mapDefinitionFilesForYarn(definitionFiles: Collection<File>): Set<File> =
         getDefinitionFileInfo(definitionFiles.toSet()).filter { entry ->
             isHandledByYarn(entry) && !entry.isYarnWorkspaceSubmodule
