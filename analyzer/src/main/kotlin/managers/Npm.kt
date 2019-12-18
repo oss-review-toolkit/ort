@@ -25,7 +25,9 @@ import com.fasterxml.jackson.databind.node.ObjectNode
 import com.here.ort.analyzer.AbstractPackageManagerFactory
 import com.here.ort.analyzer.HTTP_CACHE_PATH
 import com.here.ort.analyzer.PackageManager
-import com.here.ort.analyzer.managers.utils.PackageJsonUtils
+import com.here.ort.analyzer.managers.utils.expandNpmShortcutURL
+import com.here.ort.analyzer.managers.utils.hasNpmLockFile
+import com.here.ort.analyzer.managers.utils.mapDefinitionFilesForNpm
 import com.here.ort.downloader.VersionControlSystem
 import com.here.ort.model.Hash
 import com.here.ort.model.Identifier
@@ -93,14 +95,13 @@ open class Npm(
      */
     protected open val installParameters = arrayOf("--ignore-scripts")
 
-    protected open fun hasLockFile(projectDir: File) = PackageJsonUtils.hasNpmLockFile(projectDir)
+    protected open fun hasLockFile(projectDir: File) = hasNpmLockFile(projectDir)
 
     override fun command(workingDir: File?) = if (Os.isWindows) "npm.cmd" else "npm"
 
     override fun getVersionRequirement(): Requirement = Requirement.buildNPM("5.7.* - 6.13.*")
 
-    override fun mapDefinitionFiles(definitionFiles: List<File>) =
-        PackageJsonUtils.mapDefinitionFilesForNpm(definitionFiles).toList()
+    override fun mapDefinitionFiles(definitionFiles: List<File>) = mapDefinitionFilesForNpm(definitionFiles).toList()
 
     override fun beforeResolution(definitionFiles: List<File>) =
         // We do not actually depend on any features specific to an NPM version, but we still want to stick to a
@@ -288,7 +289,7 @@ open class Npm(
                 }
             }
 
-            val vcsFromDownloadUrl = VersionControlSystem.splitUrl(PackageJsonUtils.expandShortcutURL(downloadUrl))
+            val vcsFromDownloadUrl = VersionControlSystem.splitUrl(expandNpmShortcutURL(downloadUrl))
             if (vcsFromDownloadUrl.url != downloadUrl) {
                 vcsFromPackage = vcsFromPackage.merge(vcsFromDownloadUrl)
             }
@@ -381,7 +382,7 @@ open class Npm(
             val type = repo["type"].textValueOrEmpty()
             val url = repo.textValue() ?: repo["url"].textValueOrEmpty()
             val path = repo["directory"].textValueOrEmpty()
-            VcsInfo(VcsType(type), PackageJsonUtils.expandShortcutURL(url), head, path = path)
+            VcsInfo(VcsType(type), expandNpmShortcutURL(url), head, path = path)
         } ?: VcsInfo(VcsType.NONE, "", head)
     }
 
