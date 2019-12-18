@@ -17,6 +17,8 @@
  * License-Filename: LICENSE
  */
 
+@file:Suppress("TooManyFunctions")
+
 package com.here.ort.analyzer.managers.utils
 
 import com.fasterxml.jackson.core.JsonProcessingException
@@ -103,6 +105,32 @@ fun expandNpmShortcutURL(url: String): String {
         url
     }
 }
+
+/**
+ * Extract any proxy URL from [NPM configuration][npmRc], return null if no proxy URL is configured.
+ */
+fun readProxySettingFromNpmRc(npmRc: String): String? {
+    var proxyUrl: String? = null
+
+    npmRc.lines().forEach { line ->
+        val keyAndValue = line.split('=', limit = 2).map { it.trim() }
+        if (keyAndValue.size != 2) return@forEach
+
+        val (key, value) = keyAndValue
+        if (key != "proxy" && key != "https-proxy") return@forEach
+
+        if (value.matches(HTTP_REGEX)) {
+            proxyUrl = value
+        } else if (value.isNotBlank() && value != "null") {
+            // Note that even HTTPS proxies use "http://" as the protocol!
+            proxyUrl = "http://$value"
+        }
+    }
+
+    return proxyUrl
+}
+
+private val HTTP_REGEX = Regex("^https?://.+$")
 
 private val NPM_LOCK_FILES = listOf("npm-shrinkwrap.json", "package-lock.json")
 private val YARN_LOCK_FILES = listOf("yarn.lock")

@@ -188,6 +188,30 @@ class PackageJsonUtilsTest : WordSpec() {
                 }
             }
         }
+
+        "readProxySettingFromNpmRc" should {
+            "properly read proxy configuration" {
+                readProxySettingFromNpmRc("proxy=http://user:passsword@host.domain.com:8080/") shouldBe
+                        "http://user:passsword@host.domain.com:8080/"
+                readProxySettingFromNpmRc("https-proxy=http://user:passsword@host.domain.com:8080/") shouldBe
+                        "http://user:passsword@host.domain.com:8080/"
+
+                readProxySettingFromNpmRc("proxy=http://user:passsword@host.domain.com") shouldBe
+                        "http://user:passsword@host.domain.com"
+                readProxySettingFromNpmRc("https-proxy=http://user:passsword@host.domain.com") shouldBe
+                        "http://user:passsword@host.domain.com"
+
+                readProxySettingFromNpmRc("proxy=user:passsword@host.domain.com") shouldBe
+                        "http://user:passsword@host.domain.com"
+                readProxySettingFromNpmRc("https-proxy=user:passsword@host.domain.com") shouldBe
+                        "http://user:passsword@host.domain.com"
+            }
+
+            "ignore non-proxy URLs" {
+                readProxySettingFromNpmRc("registry=http://my.artifactory.com/artifactory/api/npm/npm-virtual") shouldBe
+                        null
+            }
+        }
     }
 
     private lateinit var tempDir: File

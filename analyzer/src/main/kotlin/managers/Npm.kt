@@ -28,6 +28,7 @@ import com.here.ort.analyzer.PackageManager
 import com.here.ort.analyzer.managers.utils.expandNpmShortcutURL
 import com.here.ort.analyzer.managers.utils.hasNpmLockFile
 import com.here.ort.analyzer.managers.utils.mapDefinitionFilesForNpm
+import com.here.ort.analyzer.managers.utils.readProxySettingFromNpmRc
 import com.here.ort.downloader.VersionControlSystem
 import com.here.ort.model.Hash
 import com.here.ort.model.Identifier
@@ -76,10 +77,6 @@ open class Npm(
     analyzerConfig: AnalyzerConfiguration,
     repoConfig: RepositoryConfiguration
 ) : PackageManager(name, analysisRoot, analyzerConfig, repoConfig), CommandLineTool {
-    companion object {
-        private val HTTP_REGEX = Regex("^https?://.+$")
-    }
-
     class Factory : AbstractPackageManagerFactory<Npm>("NPM") {
         override val globsForDefinitionFiles = listOf("package.json")
 
@@ -139,23 +136,10 @@ open class Npm(
     }
 
     private val applyProxySettingsFromNpmRc: OkHttpClient.Builder.() -> Unit = {
-        val npmrcFile = getUserHomeDirectory().resolve(".npmrc")
-        if (npmrcFile.isFile) {
-            npmrcFile.forEachLine { line ->
-                val keyAndValue = line.split('=', limit = 2).map { it.trim() }
-                if (keyAndValue.size == 2) {
-                    val (key, value) = keyAndValue
-                    val proxyUrl = value.takeIf { it.matches(HTTP_REGEX) } ?: when {
-                        value.isEmpty() || value == "null" -> null
-                        key == "proxy" -> "http://$value"
-                        key == "https-proxy" -> "https://$value"
-                        else -> null
-                    }
-
-                    if (proxyUrl != null) {
-                        applyProxySettingsFromUrl(URL(proxyUrl))
-                    }
-                }
+        val npmRcFile = getUserHomeDirectory().resolve(".npmrc")
+        if (npmRcFile.isFile) {
+            readProxySettingFromNpmRc(npmRcFile.readText())?.let { proxyUrl ->
+                applyProxySettingsFromUrl(URL(proxyUrl))
             }
         }
     }
