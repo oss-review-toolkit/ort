@@ -18,13 +18,13 @@ project:
   scopes:
   - name: "install"
     dependencies:
-    - id: "PyPI::Django:2.1.11"
+    - id: "PyPI::Django:2.1.15"
       dependencies:
       - id: "PyPI::pytz:2019.3"
 packages:
 - package:
-    id: "PyPI::Django:2.1.11"
-    purl: "pkg:pypi/Django@2.1.11"
+    id: "PyPI::Django:2.1.15"
+    purl: "pkg:pypi/Django@2.1.15"
     declared_licenses:
     - "BSD"
     declared_licenses_processed:
@@ -33,14 +33,14 @@ packages:
       \ and clean, pragmatic design."
     homepage_url: "https://www.djangoproject.com/"
     binary_artifact:
-      url: "https://files.pythonhosted.org/packages/8c/49/d5038239995594281478bf209f8d93524ad342d500009a697b27f884668a/Django-2.1.11-py3-none-any.whl"
+      url: "https://files.pythonhosted.org/packages/ff/82/55a696532518aa47666b45480b579a221638ab29d60d33ce71fcbd3cef9a/Django-2.1.15-py3-none-any.whl"
       hash:
-        value: "5419065b487d22f584ca9d42df971092"
+        value: "dc0ae37c86505e64a58b5f28d4fe768c"
         algorithm: "MD5"
     source_artifact:
-      url: "https://files.pythonhosted.org/packages/e0/e9/7e6008abee3eb2a40704c95a5cfc8a9627012df1580289d3df0f34c99766/Django-2.1.11.tar.gz"
+      url: "https://files.pythonhosted.org/packages/a5/ea/a3424e68851acb44a1f8f823dc32ee3eb10b7fda474b03d527f7e666b443/Django-2.1.15.tar.gz"
       hash:
-        value: "42f0d3ccdcd89c566a30765ee0e25d42"
+        value: "a9d02735cb5722608c08fb2d79350523"
         algorithm: "MD5"
     vcs:
       type: ""
