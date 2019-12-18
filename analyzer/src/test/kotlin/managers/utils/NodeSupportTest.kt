@@ -33,7 +33,7 @@ import io.kotlintest.specs.WordSpec
 
 import java.io.File
 
-class PackageJsonUtilsTest : WordSpec() {
+class NodeSupportTest : WordSpec() {
     companion object {
         private fun createPackageJson(matchers: List<String>, flattenWorkspaceDefinition: Boolean) =
             if (matchers.isNotEmpty()) {
