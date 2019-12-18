@@ -72,7 +72,7 @@ The path exclude above has the following effects:
 excludes:
   paths:
   - pattern: "test-data/**"
-    reason: "TEST_TOOL_OF"
+    reason: "TEST_DEPENDENCY_OF"
     comment: "This folder contains test data which are not distributed."
 ```
 
@@ -92,7 +92,7 @@ Scopes excludes always apply to all found projects in a scan.
 excludes:
   scopes:
   - pattern: "test.*"
-    reason: "TEST_TOOL_OF"
+    reason: "TEST_DEPENDENCY_OF"
     comment: "Test dependencies which are not distributed."
 ```
 
