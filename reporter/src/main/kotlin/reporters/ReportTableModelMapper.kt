@@ -112,7 +112,7 @@ class ReportTableModelMapper(private val resolutionProvider: ResolutionProvider)
 
                 val scanIssues = scanResult?.results?.flatMap {
                     it.summary.errors
-                }?.distinct() ?: emptyList()
+                }?.distinct().orEmpty()
 
                 val packageForId = ortResult.getPackage(id)?.pkg ?: ortResult.getProject(id)?.toPackage()
 
@@ -136,7 +136,7 @@ class ReportTableModelMapper(private val resolutionProvider: ResolutionProvider)
                     val summaryRow = SummaryRow(
                         id = row.id,
                         scopes = sortedMapOf(project.id to row.scopes),
-                        concludedLicenses = row.concludedLicense?.let { setOf(it) } ?: emptySet(),
+                        concludedLicenses = row.concludedLicense?.let { setOf(it) }.orEmpty(),
                         declaredLicenses = row.declaredLicenses,
                         detectedLicenses = row.detectedLicenses.mapTo(sortedSetOf()) { it.key.license },
                         analyzerIssues = if (nonExcludedAnalyzerIssues.isNotEmpty()) {
@@ -214,7 +214,7 @@ class ReportTableModelMapper(private val resolutionProvider: ResolutionProvider)
             { it.violation.license },
             { it.violation.message },
             { it.resolutionDescription }
-        )) ?: emptyList()
+        )).orEmpty()
 
         return ReportTableModel(
             ortResult.repository.vcsProcessed,

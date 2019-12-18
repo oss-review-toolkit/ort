@@ -176,6 +176,6 @@ internal object PackageJsonUtils {
         return workspaces?.map {
             val pattern = "glob:${definitionFile.parentFile.invariantSeparatorsPath}/${it.textValue()}"
             FileSystems.getDefault().getPathMatcher(pattern)
-        } ?: emptyList()
+        }.orEmpty()
     }
 }

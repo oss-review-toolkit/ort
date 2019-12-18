@@ -164,8 +164,8 @@ data class OrtResult(
      * Return a map of all de-duplicated errors associated by [Identifier].
      */
     fun collectErrors(): Map<Identifier, Set<OrtIssue>> {
-        val analyzerErrors = analyzer?.result?.collectErrors() ?: emptyMap()
-        val scannerErrors = scanner?.results?.collectErrors() ?: emptyMap()
+        val analyzerErrors = analyzer?.result?.collectErrors().orEmpty()
+        val scannerErrors = scanner?.results?.collectErrors().orEmpty()
         return analyzerErrors.zipWithDefault(scannerErrors, emptySet()) { left, right -> left + right }
     }
 
@@ -409,7 +409,7 @@ data class OrtResult(
     fun getPackage(id: Identifier): CuratedPackage? = packages[id]?.curatedPackage
 
     @JsonIgnore
-    fun getPackages(): Set<CuratedPackage> = analyzer?.result?.packages ?: emptySet()
+    fun getPackages(): Set<CuratedPackage> = analyzer?.result?.packages.orEmpty()
 
     /**
      * Return all [Project]s contained in this [OrtResult].

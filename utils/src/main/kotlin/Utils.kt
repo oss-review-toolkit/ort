@@ -168,13 +168,13 @@ fun getCommonFileParent(files: Collection<File>) =
  * Return the full path to the given executable file if it is in the system's PATH environment, or null otherwise.
  */
 fun getPathFromEnvironment(executable: String): File? {
-    val paths = Os.env["PATH"]?.splitToSequence(File.pathSeparatorChar) ?: emptySequence()
+    val paths = Os.env["PATH"]?.splitToSequence(File.pathSeparatorChar).orEmpty()
 
     val executables = if (Os.isWindows) {
         // Get the list of executable file extensions without the leading dot each.
         val pathExt = Os.env["PATHEXT"]?.let {
             it.split(File.pathSeparatorChar).map { ext -> ext.toLowerCase().removePrefix(".") }
-        } ?: emptyList()
+        }.orEmpty()
 
         if (executable.substringAfterLast(".").toLowerCase() !in pathExt) {
             // Specifying an executable's file extension is optional on Windows, so try all of them in order, but still

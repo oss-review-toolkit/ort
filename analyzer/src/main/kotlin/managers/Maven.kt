@@ -79,7 +79,7 @@ class Maven(
 
         override fun findVersions(artifact: Artifact) =
             // Avoid resolution of (SNAPSHOT) versions for local projects.
-            localProjectBuildingResults[artifact.identifier()]?.let { listOf(artifact.version) } ?: emptyList()
+            localProjectBuildingResults[artifact.identifier()]?.let { listOf(artifact.version) }.orEmpty()
 
         override fun getRepository() = workspaceRepository
     }

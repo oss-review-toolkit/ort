@@ -305,7 +305,7 @@ class PhpComposer(
 
     private fun parseVirtualNames(packageInfo: JsonNode) =
         listOf("replace", "provide").flatMap {
-            packageInfo[it]?.fieldNames()?.asSequence()?.toSet() ?: emptySet()
+            packageInfo[it]?.fieldNames()?.asSequence()?.toSet().orEmpty()
         }.toSet()
 
     private fun parseDeclaredLicenses(packageInfo: JsonNode) =
