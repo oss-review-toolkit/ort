@@ -25,6 +25,7 @@ import com.here.ort.model.VcsType
 import com.here.ort.utils.FileMatcher
 import com.here.ort.utils.Os
 import com.here.ort.utils.ProcessCapture
+import com.here.ort.utils.collectMessagesAsString
 import com.here.ort.utils.log
 import com.here.ort.utils.safeMkdirs
 import com.here.ort.utils.showStackTrace
@@ -98,7 +99,7 @@ class Git : GitBase() {
                 e.showStackTrace()
 
                 log.warn {
-                    "Could not fetch only revision '$revision': ${e.message}\n" +
+                    "Could not fetch only revision '$revision': ${e.collectMessagesAsString()}\n" +
                             "Falling back to fetching all refs."
                 }
             }
@@ -113,7 +114,7 @@ class Git : GitBase() {
             e.showStackTrace()
 
             log.warn {
-                "Could not fetch with only a depth of $GIT_HISTORY_DEPTH: ${e.message}\n" +
+                "Could not fetch with only a depth of $GIT_HISTORY_DEPTH: ${e.collectMessagesAsString()}\n" +
                         "Falling back to fetching everything."
             }
         }
@@ -132,7 +133,7 @@ class Git : GitBase() {
         } catch (e: IOException) {
             e.showStackTrace()
 
-            log.warn { "Failed to fetch everything: ${e.message}" }
+            log.warn { "Failed to fetch everything: ${e.collectMessagesAsString()}" }
 
             false
         }
@@ -145,7 +146,7 @@ class Git : GitBase() {
         } catch (e: IOException) {
             e.showStackTrace()
 
-            log.warn { "Failed to update submodules: ${e.message}" }
+            log.warn { "Failed to update submodules: ${e.collectMessagesAsString()}" }
 
             false
         }

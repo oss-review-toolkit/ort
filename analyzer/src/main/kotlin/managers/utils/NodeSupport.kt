@@ -26,6 +26,7 @@ import com.fasterxml.jackson.databind.node.ArrayNode
 import com.fasterxml.jackson.databind.node.ObjectNode
 
 import com.here.ort.model.readValue
+import com.here.ort.utils.collectMessagesAsString
 import com.here.ort.utils.hasRevisionFragment
 import com.here.ort.utils.log
 import com.here.ort.utils.showStackTrace
@@ -166,7 +167,7 @@ private fun isYarnWorkspaceRoot(definitionFile: File) =
     } catch (e: JsonProcessingException) {
         e.showStackTrace()
 
-        e.log.error { "Could not parse '${definitionFile.invariantSeparatorsPath}': ${e.message}" }
+        e.log.error { "Could not parse '${definitionFile.invariantSeparatorsPath}': ${e.collectMessagesAsString()}" }
 
         false
     }
@@ -201,7 +202,7 @@ private fun getWorkspaceMatchers(definitionFile: File): List<PathMatcher> {
     } catch (e: JsonProcessingException) {
         e.showStackTrace()
 
-        e.log.error { "Could not parse '${definitionFile.invariantSeparatorsPath}': ${e.message}" }
+        e.log.error { "Could not parse '${definitionFile.invariantSeparatorsPath}': ${e.collectMessagesAsString()}" }
 
         null
     }
