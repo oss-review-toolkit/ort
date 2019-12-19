@@ -54,7 +54,7 @@ The code below shows the structure of a path exclude in the `.ort.yml` file:
 excludes:
   paths:
   - pattern: "A glob pattern matching files or paths."
-    reason: "One of PathExcludeReason e.g. BUILD_TOOL_OF or CANT_FIX_ISSUE."
+    reason: "One of PathExcludeReason e.g. BUILD_TOOL_OF or DOCUMENTATION_OF."
     comment: "A comment further explaining why the exclude ."
 ```
 
@@ -203,7 +203,7 @@ For example, to ignore an error related to a build tool problem, your `.ort.yml`
 resolutions:
   errors:
   - message: "Does not have X.*"
-    reason: "BUILD_TOOL_OF"
+    reason: "BUILD_TOOL_ISSUE"
     comment: "Error caused by a known issue for which a fix is being implemented, see https://github.com/..."
 ```
 
