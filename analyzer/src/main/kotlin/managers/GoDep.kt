@@ -34,6 +34,7 @@ import com.here.ort.model.Scope
 import com.here.ort.model.VcsInfo
 import com.here.ort.model.config.AnalyzerConfiguration
 import com.here.ort.model.config.RepositoryConfiguration
+import com.here.ort.model.createAndLogIssue
 import com.here.ort.utils.CommandLineTool
 import com.here.ort.utils.ProcessCapture
 import com.here.ort.utils.collectMessagesAsString
@@ -111,9 +112,11 @@ class GoDep(
             } catch (e: IOException) {
                 e.showStackTrace()
 
-                log.error { "Could not resolve VCS information for project '$name': ${e.collectMessagesAsString()}" }
+                errors += createAndLogIssue(
+                    source = managerName,
+                    message = "Could not resolve VCS information for project '$name': ${e.collectMessagesAsString()}"
+                )
 
-                errors += OrtIssue(source = managerName, message = e.collectMessagesAsString())
                 VcsInfo.EMPTY
             }
 

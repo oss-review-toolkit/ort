@@ -38,6 +38,7 @@ import com.here.ort.model.config.RepositoryConfiguration
 import com.here.ort.model.OrtIssue
 import com.here.ort.model.Severity
 import com.here.ort.model.VcsType
+import com.here.ort.model.createAndLogIssue
 import com.here.ort.utils.CommandLineTool
 import com.here.ort.utils.Os
 import com.here.ort.utils.ProcessCapture
@@ -292,10 +293,14 @@ class Pub(
                     } catch (e: IOException) {
                         e.showStackTrace()
 
-                        log.error { "Could not resolve dependencies of '$packageName': ${e.collectMessagesAsString()}" }
-
                         packageInfo.toReference(
-                            errors = listOf(OrtIssue(source = managerName, message = e.collectMessagesAsString()))
+                            errors = listOf(
+                                createAndLogIssue(
+                                    source = managerName,
+                                    message = "Could not resolve dependencies of '$packageName': " +
+                                            e.collectMessagesAsString()
+                                )
+                            )
                         )
                     }
                 }
@@ -348,10 +353,13 @@ class Pub(
         // Check for build.gradle failed, no Gradle scan required.
         if (!packageFile.isFile) return null
 
-        val message = "Cannot get iOS dependencies for package '$packageName'. " +
-                "Support for CocoaPods is not yet implemented."
-        log.warn { message }
-        val issue = OrtIssue(source = managerName, severity = Severity.WARNING, message = message)
+        val issue = createAndLogIssue(
+            source = managerName,
+            severity = Severity.WARNING,
+            message = "Cannot get iOS dependencies for package '$packageName'. Support for CocoaPods is not yet " +
+                    "implemented."
+        )
+
         return ProjectAnalyzerResult(Project.EMPTY, sortedSetOf(), listOf(issue))
     }
 

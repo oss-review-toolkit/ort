@@ -33,6 +33,7 @@ import com.here.ort.model.RemoteArtifact
 import com.here.ort.model.Scope
 import com.here.ort.model.VcsInfo
 import com.here.ort.model.VcsType
+import com.here.ort.model.createAndLogIssue
 import com.here.ort.model.jsonMapper
 import com.here.ort.model.xmlMapper
 import com.here.ort.utils.OkHttpClientHelper
@@ -178,12 +179,11 @@ class DotNetSupport(packageReferencesMap: Map<String, String>) {
         val packageJsonNode = preparePackageReference(packageID, version)
 
         if (packageJsonNode == null) {
-            errors.add(
-                OrtIssue(
-                    source = "nuget-API does not provide package",
-                    message = "$packageID:$version can not be found on Nugets RestAPI "
-                )
+            errors += createAndLogIssue(
+                source = "nuget-API",
+                message = "$packageID:$version can not be found on Nugets RestAPI."
             )
+
             return null
         }
 

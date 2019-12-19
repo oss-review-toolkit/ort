@@ -22,8 +22,6 @@ package com.here.ort.model
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.annotation.JsonInclude
 
-import com.here.ort.utils.log
-
 import java.util.SortedMap
 import java.util.SortedSet
 
@@ -116,15 +114,13 @@ class AnalyzerResultBuilder {
                     "${it.vcsProcessed.url}/${it.definitionFilePath}"
                 }
 
-                val error = OrtIssue(
+                val error = createAndLogIssue(
                     source = "analyzer",
                     message = "Multiple projects with the same id '${existingProject.id.toCoordinates()}' " +
                             "found. Not adding the project defined in '$incomingDefinitionFileUrl' to the " +
                             "analyzer results as it duplicates the project defined in " +
                             "'$existingDefinitionFileUrl'."
                 )
-
-                log.error { error.message }
 
                 val projectErrors = errors.getOrDefault(existingProject.id, emptyList())
                 errors[existingProject.id] = projectErrors + error

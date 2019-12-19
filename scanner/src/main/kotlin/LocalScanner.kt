@@ -40,6 +40,7 @@ import com.here.ort.model.ScannerDetails
 import com.here.ort.model.ScannerRun
 import com.here.ort.model.Severity
 import com.here.ort.model.config.ScannerConfiguration
+import com.here.ort.model.createAndLogIssue
 import com.here.ort.model.mapper
 import com.here.ort.utils.CommandLineTool
 import com.here.ort.utils.LICENSE_FILENAMES
@@ -206,10 +207,11 @@ abstract class LocalScanner(name: String, config: ScannerConfiguration) : Scanne
                         } catch (e: ScanException) {
                             e.showStackTrace()
 
-                            log.error {
-                                "Could not scan '${pkg.id.toCoordinates()}' $packageIndex: " +
+                            val issue = createAndLogIssue(
+                                source = scannerName,
+                                message = "Could not scan '${pkg.id.toCoordinates()}' $packageIndex: " +
                                         e.collectMessagesAsString()
-                            }
+                            )
 
                             val now = Instant.now()
                             listOf(
@@ -223,12 +225,7 @@ abstract class LocalScanner(name: String, config: ScannerConfiguration) : Scanne
                                         packageVerificationCode = "",
                                         licenseFindings = sortedSetOf(),
                                         copyrightFindings = sortedSetOf(),
-                                        errors = listOf(
-                                            OrtIssue(
-                                                source = scannerName,
-                                                message = e.collectMessagesAsString()
-                                            )
-                                        )
+                                        errors = listOf(issue)
                                     ),
                                     rawResult = EMPTY_JSON_NODE
                                 )
@@ -291,8 +288,6 @@ abstract class LocalScanner(name: String, config: ScannerConfiguration) : Scanne
         } catch (e: DownloadException) {
             e.showStackTrace()
 
-            log.error { "Could not download '${pkg.id.toCoordinates()}': ${e.collectMessagesAsString()}" }
-
             val now = Instant.now()
             return ScanResult(
                 Provenance(),
@@ -304,7 +299,12 @@ abstract class LocalScanner(name: String, config: ScannerConfiguration) : Scanne
                     packageVerificationCode = "",
                     licenseFindings = sortedSetOf(),
                     copyrightFindings = sortedSetOf(),
-                    errors = listOf(OrtIssue(source = scannerName, message = e.collectMessagesAsString()))
+                    errors = listOf(
+                        createAndLogIssue(
+                            source = scannerName,
+                            message = "Could not download '${pkg.id.toCoordinates()}': ${e.collectMessagesAsString()}"
+                        )
+                    )
                 ),
                 EMPTY_JSON_NODE
             )
@@ -380,8 +380,6 @@ abstract class LocalScanner(name: String, config: ScannerConfiguration) : Scanne
         } catch (e: ScanException) {
             e.showStackTrace()
 
-            log.error { "Could not scan path '$absoluteInputPath': ${e.collectMessagesAsString()}" }
-
             val now = Instant.now()
             val summary = ScanSummary(
                 startTime = now,
@@ -390,7 +388,12 @@ abstract class LocalScanner(name: String, config: ScannerConfiguration) : Scanne
                 packageVerificationCode = "",
                 licenseFindings = sortedSetOf(),
                 copyrightFindings = sortedSetOf(),
-                errors = listOf(OrtIssue(source = scannerName, message = e.collectMessagesAsString()))
+                errors = listOf(
+                    createAndLogIssue(
+                        source = scannerName,
+                        message = "Could not scan path '$absoluteInputPath': ${e.collectMessagesAsString()}"
+                    )
+                )
             )
             ScanResult(Provenance(), getDetails(), summary)
         }

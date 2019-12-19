@@ -27,7 +27,6 @@ import com.here.ort.analyzer.PackageManager
 import com.here.ort.downloader.VersionControlSystem
 import com.here.ort.model.Hash
 import com.here.ort.model.Identifier
-import com.here.ort.model.OrtIssue
 import com.here.ort.model.Package
 import com.here.ort.model.PackageReference
 import com.here.ort.model.Project
@@ -38,6 +37,7 @@ import com.here.ort.model.VcsInfo
 import com.here.ort.model.VcsType
 import com.here.ort.model.config.AnalyzerConfiguration
 import com.here.ort.model.config.RepositoryConfiguration
+import com.here.ort.model.createAndLogIssue
 import com.here.ort.model.jsonMapper
 import com.here.ort.utils.CommandLineTool
 import com.here.ort.utils.Os
@@ -202,13 +202,11 @@ class PhpComposer(
             } catch (e: IOException) {
                 e.showStackTrace()
 
-                log.error { "Could not resolve dependencies of '$packageName': ${e.collectMessagesAsString()}" }
-
                 packageInfo.toReference(
                     errors = listOf(
-                        OrtIssue(
+                        createAndLogIssue(
                             source = managerName,
-                            message = e.collectMessagesAsString()
+                            message = "Could not resolve dependencies of '$packageName': ${e.collectMessagesAsString()}"
                         )
                     )
                 )
