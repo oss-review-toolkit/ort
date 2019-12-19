@@ -380,7 +380,7 @@ abstract class LocalScanner(name: String, config: ScannerConfiguration) : Scanne
         } catch (e: ScanException) {
             e.showStackTrace()
 
-            log.error { "Could not scan path '$absoluteInputPath': ${e.message}" }
+            log.error { "Could not scan path '$absoluteInputPath': ${e.collectMessagesAsString()}" }
 
             val now = Instant.now()
             val summary = ScanSummary(

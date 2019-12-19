@@ -40,6 +40,7 @@ import com.here.ort.reporter.ReporterInput
 import com.here.ort.reporter.reporters.DefaultLicenseTextProvider
 import com.here.ort.utils.PARAMETER_ORDER_MANDATORY
 import com.here.ort.utils.PARAMETER_ORDER_OPTIONAL
+import com.here.ort.utils.collectMessagesAsString
 import com.here.ort.utils.expandTilde
 import com.here.ort.utils.log
 import com.here.ort.utils.safeMkdirs
@@ -184,7 +185,7 @@ object ReporterCommand : CommandWithHelp() {
             } catch (e: Exception) {
                 e.showStackTrace()
 
-                log.error { "Could not create '${reporter.reporterName}' report: ${e.message}" }
+                log.error { "Could not create '${reporter.reporterName}' report: ${e.collectMessagesAsString()}" }
 
                 exitCode = 1
             }

@@ -37,6 +37,7 @@ import com.here.ort.model.readValue
 import com.here.ort.utils.ARCHIVE_EXTENSIONS
 import com.here.ort.utils.PARAMETER_ORDER_MANDATORY
 import com.here.ort.utils.PARAMETER_ORDER_OPTIONAL
+import com.here.ort.utils.collectMessagesAsString
 import com.here.ort.utils.encodeOrUnknown
 import com.here.ort.utils.expandTilde
 import com.here.ort.utils.log
@@ -205,7 +206,7 @@ object DownloaderCommand : CommandWithHelp() {
                     } catch (e: IllegalArgumentException) {
                         e.showStackTrace()
 
-                        log.error { "Could not archive '${pkg.id.toCoordinates()}': ${e.message}" }
+                        log.error { "Could not archive '${pkg.id.toCoordinates()}': ${e.collectMessagesAsString()}" }
                     } finally {
                         val relativePath =
                             absoluteOutputDir.toPath().relativize(result.downloadDirectory.toPath()).first()
@@ -215,7 +216,7 @@ object DownloaderCommand : CommandWithHelp() {
             } catch (e: DownloadException) {
                 e.showStackTrace()
 
-                log.error { "Could not download '${pkg.id.toCoordinates()}': ${e.message}" }
+                log.error { "Could not download '${pkg.id.toCoordinates()}': ${e.collectMessagesAsString()}" }
 
                 error = true
             }

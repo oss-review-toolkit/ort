@@ -105,7 +105,7 @@ class Maven(
 
             log.warn {
                 "There have been issues building the Maven project models, this could lead to errors during " +
-                        "dependency analysis: ${e.message}"
+                        "dependency analysis: ${e.collectMessagesAsString()}"
             }
 
             e.results
@@ -209,7 +209,7 @@ class Maven(
             e.showStackTrace()
 
             log.error {
-                "Could not get package information for dependency '$identifier': ${e.message}"
+                "Could not get package information for dependency '$identifier': ${e.collectMessagesAsString()}"
             }
 
             return PackageReference(

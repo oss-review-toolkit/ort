@@ -216,7 +216,10 @@ abstract class PackageManager(
                 } catch (e: Exception) {
                     e.showStackTrace()
 
-                    log.error { "Resolving dependencies for '${definitionFile.name}' failed with: ${e.message}" }
+                    log.error {
+                        "Resolving dependencies for '${definitionFile.name}' failed with: " +
+                                e.collectMessagesAsString()
+                    }
 
                     val relativePath = definitionFile.absoluteFile.relativeTo(analysisRoot).invariantSeparatorsPath
 

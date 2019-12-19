@@ -242,7 +242,7 @@ class Gradle(
                     e.showStackTrace()
 
                     log.error {
-                        "Could not get package information for dependency '$identifier': ${e.message}"
+                        "Could not get package information for dependency '$identifier': ${e.collectMessagesAsString()}"
                     }
 
                     issues += OrtIssue(source = managerName, message = e.collectMessagesAsString())

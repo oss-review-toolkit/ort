@@ -23,6 +23,7 @@ import com.here.ort.model.Package
 import com.here.ort.model.VcsInfo
 import com.here.ort.model.VcsType
 import com.here.ort.utils.CommandLineTool
+import com.here.ort.utils.collectMessagesAsString
 import com.here.ort.utils.log
 import com.here.ort.utils.normalizeVcsUrl
 import com.here.ort.utils.showStackTrace
@@ -103,7 +104,7 @@ abstract class VersionControlSystem {
 
                         log.debug {
                             "Exception while validating ${it.vcsType} working tree, treating it as non-applicable: " +
-                                    e.message
+                                    e.collectMessagesAsString()
                         }
 
                         false
@@ -251,7 +252,9 @@ abstract class VersionControlSystem {
         } catch (e: IOException) {
             e.showStackTrace()
 
-            log.info { "Meta-data has invalid $type revision '${pkg.vcsProcessed.revision}': ${e.message}" }
+            log.info {
+                "Meta-data has invalid $type revision '${pkg.vcsProcessed.revision}': ${e.collectMessagesAsString()}"
+            }
         }
 
         try {
@@ -265,7 +268,7 @@ abstract class VersionControlSystem {
         } catch (e: IOException) {
             e.showStackTrace()
 
-            log.info { "No $type revision for version '${pkg.id.version}' found: ${e.message}" }
+            log.info { "No $type revision for version '${pkg.id.version}' found: ${e.collectMessagesAsString()}" }
         }
 
         if (revisionCandidates.isEmpty()) {

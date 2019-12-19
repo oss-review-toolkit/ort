@@ -31,7 +31,7 @@ import com.here.ort.model.VcsInfo
 import com.here.ort.model.VcsType
 import com.here.ort.model.yamlMapper
 import com.here.ort.utils.DiskCache
-import com.here.ort.utils.collectMessages
+import com.here.ort.utils.collectMessagesAsString
 import com.here.ort.utils.getUserOrtDirectory
 import com.here.ort.utils.log
 import com.here.ort.utils.searchUpwardsForSubdirectory
@@ -287,11 +287,11 @@ class MavenSupport(workspaceReader: WorkspaceReader) {
             if (failedProject != null) {
                 log.warn {
                     "There was an error building '${pomFile.invariantSeparatorsPath}', continuing with the " +
-                            "incompletely built project: ${e.collectMessages()}"
+                            "incompletely built project: ${e.collectMessagesAsString()}"
                 }
                 failedProject
             } else {
-                log.error { "Failed to build '${pomFile.invariantSeparatorsPath}': ${e.collectMessages()}" }
+                log.error { "Failed to build '${pomFile.invariantSeparatorsPath}': ${e.collectMessagesAsString()}" }
                 throw e
             }
         }
@@ -349,7 +349,7 @@ class MavenSupport(workspaceReader: WorkspaceReader) {
             } catch (e: NoRepositoryLayoutException) {
                 e.showStackTrace()
 
-                log.warn { "Could not search for '$artifact' in '$repository': ${e.collectMessages()}" }
+                log.warn { "Could not search for '$artifact' in '$repository': ${e.collectMessagesAsString()}" }
 
                 return@forEach
             }
@@ -385,7 +385,7 @@ class MavenSupport(workspaceReader: WorkspaceReader) {
             } catch (e: NoRepositoryConnectorException) {
                 e.showStackTrace()
 
-                log.warn { "Could not create connector for repository '$repository': ${e.collectMessages()}" }
+                log.warn { "Could not create connector for repository '$repository': ${e.collectMessagesAsString()}" }
 
                 return@forEach
             }
@@ -412,7 +412,7 @@ class MavenSupport(workspaceReader: WorkspaceReader) {
                 } catch (e: Exception) {
                     e.showStackTrace()
 
-                    log.warn { "Could not get checksum for '$artifact': ${e.collectMessages()}" }
+                    log.warn { "Could not get checksum for '$artifact': ${e.collectMessagesAsString()}" }
 
                     // Fall back to an empty checksum string.
                     ""
@@ -429,7 +429,8 @@ class MavenSupport(workspaceReader: WorkspaceReader) {
                 }
             } else {
                 log.debug {
-                    "Could not find '$artifact' in '$repository': ${artifactDownload.exception.collectMessages()}"
+                    "Could not find '$artifact' in '$repository': " +
+                            artifactDownload.exception.collectMessagesAsString()
                 }
             }
         }
@@ -490,11 +491,11 @@ class MavenSupport(workspaceReader: WorkspaceReader) {
                 if (failedProject != null) {
                     log.warn {
                         "There was an error building '${it.identifier()}', continuing with the incompletely built " +
-                                "project: ${e.collectMessages()}"
+                                "project: ${e.collectMessagesAsString()}"
                     }
                     failedProject.project
                 } else {
-                    log.error { "Failed to build '${it.identifier()}': ${e.collectMessages()}" }
+                    log.error { "Failed to build '${it.identifier()}': ${e.collectMessagesAsString()}" }
                     throw e
                 }
             }

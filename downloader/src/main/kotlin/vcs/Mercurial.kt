@@ -26,6 +26,7 @@ import com.here.ort.model.VcsType
 import com.here.ort.utils.CommandLineTool
 import com.here.ort.utils.FileMatcher
 import com.here.ort.utils.ProcessCapture
+import com.here.ort.utils.collectMessagesAsString
 import com.here.ort.utils.log
 import com.here.ort.utils.showStackTrace
 
@@ -142,7 +143,7 @@ class Mercurial : VersionControlSystem(), CommandLineTool {
         } catch (e: IOException) {
             e.showStackTrace()
 
-            log.warn { "Failed to update $type working tree to revision '$revision': ${e.message}" }
+            log.warn { "Failed to update $type working tree to revision '$revision': ${e.collectMessagesAsString()}" }
 
             false
         }
