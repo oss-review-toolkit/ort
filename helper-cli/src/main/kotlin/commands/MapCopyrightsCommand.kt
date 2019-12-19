@@ -33,7 +33,7 @@ import com.here.ort.utils.expandTilde
 import java.io.File
 
 @Parameters(
-    commandNames = ["remove-configuration-entries"],
+    commandNames = ["map-copyrights"],
     commandDescription = "Reads processed copyright statements from the input file, maps them to unprocessed "
             + "copyright statements using the given ORT file, and writes those mapped statements to the given "
             + "output file."
