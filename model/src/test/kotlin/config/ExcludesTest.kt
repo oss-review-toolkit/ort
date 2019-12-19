@@ -61,8 +61,8 @@ class ExcludesTest : WordSpec() {
     private val scope1 = Scope("scope1", sortedSetOf(PackageReference(id)))
     private val scope2 = Scope("scope2", sortedSetOf(PackageReference(id)))
 
-    private val scopeExclude1 = ScopeExclude("scope1", ScopeExcludeReason.PROVIDED_BY, "")
-    private val scopeExclude2 = ScopeExclude("scope2", ScopeExcludeReason.PROVIDED_BY, "")
+    private val scopeExclude1 = ScopeExclude("scope1", ScopeExcludeReason.PROVIDED_DEPENDENCY_OF, "")
+    private val scopeExclude2 = ScopeExclude("scope2", ScopeExcludeReason.PROVIDED_DEPENDENCY_OF, "")
 
     private lateinit var ortResult: OrtResult
 

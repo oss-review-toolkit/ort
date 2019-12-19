@@ -66,7 +66,7 @@ class RepositoryConfigurationTest : WordSpec() {
                         comment: "project comment"
                       scopes:
                       - name: "scope"
-                        reason: "TEST_TOOL_OF"
+                        reason: "TEST_DEPENDENCY_OF"
                         comment: "scope comment"
                     resolutions:
                       errors:
@@ -96,7 +96,7 @@ class RepositoryConfigurationTest : WordSpec() {
                 scopes should haveSize(1)
                 with(scopes.first()) {
                     pattern shouldBe "scope"
-                    reason shouldBe ScopeExcludeReason.TEST_TOOL_OF
+                    reason shouldBe ScopeExcludeReason.TEST_DEPENDENCY_OF
                     comment shouldBe "scope comment"
                 }
 

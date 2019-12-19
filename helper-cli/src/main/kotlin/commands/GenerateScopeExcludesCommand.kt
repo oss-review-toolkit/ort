@@ -89,137 +89,137 @@ private fun getScopeExcludesForPackageManager(packageManagerName: String): List<
         "Bower" -> listOf(
             ScopeExclude(
                 pattern = "devDependencies",
-                reason = ScopeExcludeReason.BUILD_TOOL_OF,
+                reason = ScopeExcludeReason.BUILD_DEPENDENCY_OF,
                 comment = "Development dependencies."
             )
         )
         "Bundler" -> listOf(
             ScopeExclude(
                 pattern = "test",
-                reason = ScopeExcludeReason.TEST_TOOL_OF,
+                reason = ScopeExcludeReason.TEST_DEPENDENCY_OF,
                 comment = "Test dependencies."
             )
         )
         "Cargo" -> listOf(
             ScopeExclude(
                 pattern = "build-dependencies",
-                reason = ScopeExcludeReason.BUILD_TOOL_OF,
+                reason = ScopeExcludeReason.BUILD_DEPENDENCY_OF,
                 comment = "Build dependencies."
             ),
             ScopeExclude(
                 pattern = "dev-dependencies",
-                reason = ScopeExcludeReason.BUILD_TOOL_OF,
+                reason = ScopeExcludeReason.BUILD_DEPENDENCY_OF,
                 comment = "Development dependencies."
             )
         )
         "GoMod" -> listOf(
             ScopeExclude(
                 pattern = "all",
-                reason = ScopeExcludeReason.BUILD_TOOL_OF,
+                reason = ScopeExcludeReason.BUILD_DEPENDENCY_OF,
                 comment = "Dependencies used to build all targets including non-released artifacts like tests."
             )
         )
         "Gradle" -> listOf(
             ScopeExclude(
                 pattern = "checkstyle",
-                reason = ScopeExcludeReason.BUILD_TOOL_OF,
+                reason = ScopeExcludeReason.BUILD_DEPENDENCY_OF,
                 comment = "Checkstyle dependencies."
             ),
             ScopeExclude(
                 pattern = "detekt",
-                reason = ScopeExcludeReason.BUILD_TOOL_OF,
+                reason = ScopeExcludeReason.BUILD_DEPENDENCY_OF,
                 comment = "Detekt dependencies."
             ),
             ScopeExclude(
                 pattern = "findbugs",
-                reason = ScopeExcludeReason.BUILD_TOOL_OF,
+                reason = ScopeExcludeReason.BUILD_DEPENDENCY_OF,
                 comment = "Findbugs dependencies."
             ),
             ScopeExclude(
                 pattern = "jacocoAgent",
-                reason = ScopeExcludeReason.BUILD_TOOL_OF,
+                reason = ScopeExcludeReason.BUILD_DEPENDENCY_OF,
                 comment = "Test dependencies."
             ),
             ScopeExclude(
                 pattern = "jacocoAnt",
-                reason = ScopeExcludeReason.BUILD_TOOL_OF,
+                reason = ScopeExcludeReason.BUILD_DEPENDENCY_OF,
                 comment = "Test dependencies."
             ),
             ScopeExclude(
                 pattern = "kapt.*",
-                reason = ScopeExcludeReason.PROVIDED_BY,
+                reason = ScopeExcludeReason.PROVIDED_DEPENDENCY_OF,
                 comment = "Annotation processing dependencies."
             ),
             ScopeExclude(
                 pattern = "lintClassPath",
-                reason = ScopeExcludeReason.BUILD_TOOL_OF,
+                reason = ScopeExcludeReason.BUILD_DEPENDENCY_OF,
                 comment = "Linter dependencies."
             ),
             ScopeExclude(
                 pattern = "test.*",
-                reason = ScopeExcludeReason.TEST_TOOL_OF,
+                reason = ScopeExcludeReason.TEST_DEPENDENCY_OF,
                 comment = "Test dependencies."
             ),
             ScopeExclude(
                 pattern = ".*Test.*",
-                reason = ScopeExcludeReason.TEST_TOOL_OF,
+                reason = ScopeExcludeReason.TEST_DEPENDENCY_OF,
                 comment = "Test dependencies."
             )
         )
         "Maven" -> listOf(
             ScopeExclude(
                 pattern = "provided",
-                reason = ScopeExcludeReason.PROVIDED_BY,
+                reason = ScopeExcludeReason.PROVIDED_DEPENDENCY_OF,
                 comment = "Dependencies provided by the user."
             ),
             ScopeExclude(
                 pattern = "test",
-                reason = ScopeExcludeReason.TEST_TOOL_OF,
+                reason = ScopeExcludeReason.TEST_DEPENDENCY_OF,
                 comment = "Test dependencies."
             )
         )
         "NPM" -> listOf(
             ScopeExclude(
                 pattern = "devDependencies",
-                reason = ScopeExcludeReason.BUILD_TOOL_OF,
+                reason = ScopeExcludeReason.BUILD_DEPENDENCY_OF,
                 comment = "Development dependencies."
             )
         )
         "PhpComposer" -> listOf(
             ScopeExclude(
                 pattern = "require-dev",
-                reason = ScopeExcludeReason.BUILD_TOOL_OF,
+                reason = ScopeExcludeReason.BUILD_DEPENDENCY_OF,
                 comment = "Development dependencies."
             )
         )
         "SBT" -> listOf(
             ScopeExclude(
                 pattern = "provided",
-                reason = ScopeExcludeReason.PROVIDED_BY,
+                reason = ScopeExcludeReason.PROVIDED_DEPENDENCY_OF,
                 comment = "Dependencies provided at runtime."
             ),
             ScopeExclude(
                 pattern = "test",
-                reason = ScopeExcludeReason.TEST_TOOL_OF,
+                reason = ScopeExcludeReason.TEST_DEPENDENCY_OF,
                 comment = "Test dependencies."
             )
         )
         "Stack" -> listOf(
             ScopeExclude(
                 pattern = "bench",
-                reason = ScopeExcludeReason.TEST_TOOL_OF,
+                reason = ScopeExcludeReason.TEST_DEPENDENCY_OF,
                 comment = "Benchmark dependencies."
             ),
             ScopeExclude(
                 pattern = "test",
-                reason = ScopeExcludeReason.TEST_TOOL_OF,
+                reason = ScopeExcludeReason.TEST_DEPENDENCY_OF,
                 comment = "Test dependencies."
             )
         )
         "Yarn" -> listOf(
             ScopeExclude(
                 pattern = "devDependencies",
-                reason = ScopeExcludeReason.BUILD_TOOL_OF,
+                reason = ScopeExcludeReason.BUILD_DEPENDENCY_OF,
                 comment = "Development dependencies."
             )
         )
