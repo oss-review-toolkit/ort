@@ -38,6 +38,7 @@ import com.here.ort.model.Scope
 import com.here.ort.model.VcsInfo
 import com.here.ort.model.config.AnalyzerConfiguration
 import com.here.ort.model.config.RepositoryConfiguration
+import com.here.ort.model.createAndLogIssue
 import com.here.ort.model.jsonMapper
 import com.here.ort.model.yamlMapper
 import com.here.ort.utils.CommandLineTool
@@ -183,10 +184,10 @@ class Bundler(
         } catch (e: IOException) {
             e.showStackTrace()
 
-            val errorMsg = "Failed to parse spec for gem '$gemName': ${e.collectMessagesAsString()}"
-            log.error { errorMsg }
-
-            issues += OrtIssue(source = managerName, message = errorMsg)
+            issues += createAndLogIssue(
+                source = managerName,
+                message = "Failed to parse spec for gem '$gemName': ${e.collectMessagesAsString()}"
+            )
         }
     }
 

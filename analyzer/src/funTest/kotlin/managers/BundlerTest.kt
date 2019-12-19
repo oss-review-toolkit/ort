@@ -29,7 +29,7 @@ import com.here.ort.utils.test.DEFAULT_REPOSITORY_CONFIGURATION
 import com.here.ort.utils.test.USER_DIR
 import com.here.ort.utils.test.patchExpectedResult
 
-import io.kotlintest.matchers.startWith
+import io.kotlintest.matchers.haveSubstring
 import io.kotlintest.shouldBe
 import io.kotlintest.shouldNotBe
 import io.kotlintest.specs.WordSpec
@@ -74,7 +74,7 @@ class BundlerTest : WordSpec() {
                             "analyzer/src/funTest/assets/projects/synthetic/bundler/no-lockfile/Gemfile"
                     packages.size shouldBe 0
                     errors.size shouldBe 1
-                    errors.first().message should startWith("IllegalArgumentException: No lockfile found in")
+                    errors.first().message should haveSubstring("IllegalArgumentException: No lockfile found in")
                 }
             }
 

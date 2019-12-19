@@ -32,7 +32,6 @@ import com.here.ort.analyzer.managers.utils.readProxySettingFromNpmRc
 import com.here.ort.downloader.VersionControlSystem
 import com.here.ort.model.Hash
 import com.here.ort.model.Identifier
-import com.here.ort.model.OrtIssue
 import com.here.ort.model.Package
 import com.here.ort.model.PackageReference
 import com.here.ort.model.Project
@@ -43,6 +42,7 @@ import com.here.ort.model.VcsInfo
 import com.here.ort.model.VcsType
 import com.here.ort.model.config.AnalyzerConfiguration
 import com.here.ort.model.config.RepositoryConfiguration
+import com.here.ort.model.createAndLogIssue
 import com.here.ort.model.jsonMapper
 import com.here.ort.model.readValue
 import com.here.ort.spdx.SpdxLicense
@@ -412,13 +412,15 @@ open class Npm(
                 ?: throw IOException("Could not find package info for $identifier")
             return packageInfo.toReference(dependencies = dependencies)
         } else if (rootModulesDir == startModulesDir) {
-            log.warn {
-                "Could not find package file for '$name' anywhere in '$rootModulesDir'. This might be fine if the " +
-                        "module was not installed because it is specific to a different platform."
-            }
-
             val id = Identifier(managerName, "", name, "")
-            val issue = OrtIssue(source = managerName, message = "Package '$name' was not installed.")
+
+            val issue = createAndLogIssue(
+                source = managerName,
+                message = "Package '$name' was not installed, because the package file could not be found anywhere " +
+                        "in '$rootModulesDir'. This might be fine if the module was not installed because it is " +
+                        "specific to a different platform."
+            )
+
             return PackageReference(id, errors = listOf(issue))
         } else {
             // Skip the package name directory when going up.

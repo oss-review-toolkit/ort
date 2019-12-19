@@ -43,14 +43,13 @@ class DotNetSupportTest : StringSpec() {
             val resultErrors = listOf(
                 OrtIssue(
                     timestamp = Instant.EPOCH,
-                    source = "nuget-API does not provide package",
-                    message = "${testPackage.first}:${testPackage.second} can not be found on Nugets RestAPI "
+                    source = "nuget-API",
+                    message = "${testPackage.first}:${testPackage.second} can not be found on Nugets RestAPI."
                 ),
                 OrtIssue(
                     timestamp = Instant.EPOCH,
-                    source = "nuget-API does not provide package",
-                    message = "${testPackage2.first}:${testPackage2.second} " +
-                            "can not be found on Nugets RestAPI "
+                    source = "nuget-API",
+                    message = "${testPackage2.first}:${testPackage2.second} can not be found on Nugets RestAPI."
                 )
             )
 

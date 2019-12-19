@@ -28,7 +28,7 @@ import com.here.ort.utils.test.DEFAULT_REPOSITORY_CONFIGURATION
 import com.here.ort.utils.test.USER_DIR
 import com.here.ort.utils.test.patchExpectedResult
 
-import io.kotlintest.matchers.startWith
+import io.kotlintest.matchers.haveSubstring
 import io.kotlintest.should
 import io.kotlintest.shouldBe
 import io.kotlintest.shouldNotBe
@@ -71,7 +71,7 @@ class PhpComposerTest : StringSpec() {
                         "analyzer/src/funTest/assets/projects/synthetic/php-composer/no-lockfile/composer.json"
                 packages.size shouldBe 0
                 errors.size shouldBe 1
-                errors.first().message should startWith("IllegalArgumentException: No lockfile found in")
+                errors.first().message should haveSubstring("IllegalArgumentException: No lockfile found in")
             }
         }
 
