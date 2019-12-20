@@ -67,7 +67,7 @@ internal class MapCopyrightsCommand : CommandWithHelp() {
             .expandTilde()
             .readText()
             .lines()
-            .filter { it.isBlank() }
+            .filterNot { it.isBlank() }
 
         val unprocessedCopyrightStatements = ortResultFile
             .expandTilde()
