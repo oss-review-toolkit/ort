@@ -249,7 +249,7 @@ class Downloader {
                 }
 
                 // Clean up any files left from the failed VCS download (i.e. a ".git" directory).
-                outputDirectory.safeDeleteRecursively()
+                outputDirectory.safeDeleteRecursively(force = true)
                 outputDirectory.safeMkdirs()
 
                 val fallbackTarget = target.copy(vcsProcessed = target.vcsProcessed.copy(url = vcsUrlNoCredentials))
