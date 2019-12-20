@@ -219,7 +219,7 @@ abstract class VersionControlSystem {
      *
      * @throws DownloadException in case the download failed.
      */
-    open fun download(
+    fun download(
         pkg: Package,
         targetDir: File,
         allowMovingRevisions: Boolean = false,
@@ -302,24 +302,20 @@ abstract class VersionControlSystem {
      * Initialize the working tree without checking out any files yet.
      *
      * @throws IOException in case the initialization failed.
-     *
-     * TODO: Make this abstract once all VCS implementation have been ported.
      */
-    open fun initWorkingTree(targetDir: File, vcs: VcsInfo): WorkingTree = getWorkingTree(targetDir)
+    abstract fun initWorkingTree(targetDir: File, vcs: VcsInfo): WorkingTree
 
     /**
      * Update the [working tree][workingTree] by checking out the given [revision], optionally limited to the given
      * [path] and [recursively][recursive] updating any nested working trees. Return true on success and false
      * otherwise.
-     *
-     * TODO: Make this abstract once all VCS implementation have been ported.
      */
-    open fun updateWorkingTree(
+    abstract fun updateWorkingTree(
         workingTree: WorkingTree,
         revision: String,
         path: String = "",
         recursive: Boolean = false
-    ) = false
+    ): Boolean
 
     /**
      * Check whether the given [revision] is likely to name a fixed revision that does not move.
