@@ -55,7 +55,7 @@ excludes:
   paths:
   - pattern: "A glob pattern matching files or paths."
     reason: "One of PathExcludeReason e.g. BUILD_TOOL_OF or DOCUMENTATION_OF."
-    comment: "A comment further explaining why the exclude ."
+    comment: "A comment further explaining why the path is excluded."
 ```
 
 Where the list of available options for `reason` is defined in
@@ -73,7 +73,7 @@ excludes:
   paths:
   - pattern: "test-data/**"
     reason: "TEST_DEPENDENCY_OF"
-    comment: "This folder contains test data which are not distributed."
+    comment: "This directory contains test data which are not distributed."
 ```
 
 ### Excluding Scopes
@@ -93,7 +93,7 @@ excludes:
   scopes:
   - pattern: "test.*"
     reason: "TEST_DEPENDENCY_OF"
-    comment: "Test dependencies which are not distributed."
+    comment: "Scope with dependencies only used for testing. Not included in released artifacts."
 ```
 
 The above example excludes all of the following scopes for all projects: `testAnnotationProcessor`,`testApi`,
