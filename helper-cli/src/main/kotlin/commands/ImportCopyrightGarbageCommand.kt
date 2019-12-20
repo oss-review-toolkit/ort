@@ -61,7 +61,7 @@ internal class ImportCopyrightGarbageCommand : CommandWithHelp() {
             .expandTilde()
             .readText()
             .lines()
-            .filter { it.isBlank() }
+            .filterNot { it.isBlank() }
 
         val existingCopyrightGarbage = if (outputCopyrightGarbageFile.isFile) {
             outputCopyrightGarbageFile.expandTilde().readValue<CopyrightGarbage>().items
