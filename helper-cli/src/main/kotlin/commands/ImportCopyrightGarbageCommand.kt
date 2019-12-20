@@ -23,6 +23,9 @@ import com.beust.jcommander.JCommander
 import com.beust.jcommander.Parameter
 import com.beust.jcommander.Parameters
 
+import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.dataformat.yaml.YAMLGenerator
+
 import com.here.ort.helper.CommandWithHelp
 import com.here.ort.model.config.CopyrightGarbage
 import com.here.ort.model.readValue
@@ -71,9 +74,11 @@ internal class ImportCopyrightGarbageCommand : CommandWithHelp() {
 
         val collator = Collator.getInstance(Locale("en", "US.utf-8", "POSIX"))
         CopyrightGarbage((entriesToImport + existingCopyrightGarbage).toSortedSet(collator)).let {
-            yamlMapper.writeValue(outputCopyrightGarbageFile, it)
+            createYamlMapper().writeValue(outputCopyrightGarbageFile, it)
         }
 
         return 0
     }
 }
+
+private fun createYamlMapper(): ObjectMapper = yamlMapper.copy().disable(YAMLGenerator.Feature.SPLIT_LINES)
