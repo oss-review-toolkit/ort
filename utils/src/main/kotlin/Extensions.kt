@@ -270,17 +270,18 @@ fun String.percentEncode(): String =
 /**
  * True if the string is a valid semantic version of the given [type], false otherwise.
  */
-fun String.isSemanticVersion(type: Semver.SemverType = Semver.SemverType.STRICT) = succeeds { Semver(this, type) }
+fun String.isSemanticVersion(type: Semver.SemverType = Semver.SemverType.STRICT) =
+    runCatching { Semver(this, type) }.isSuccess
 
 /**
  * True if the string is a valid [URI], false otherwise.
  */
-fun String.isValidUri() = succeeds { URI(this) }
+fun String.isValidUri() = runCatching { URI(this) }.isSuccess
 
 /**
  * True if the string is a valid [URL], false otherwise.
  */
-fun String.isValidUrl() = succeeds { URL(this) }
+fun String.isValidUrl() = runCatching { URL(this) }.isSuccess
 
 /**
  * A regular expression matching the non-linux line breaks "\r\n" and "\r".

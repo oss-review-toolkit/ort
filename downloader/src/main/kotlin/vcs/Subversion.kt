@@ -27,7 +27,6 @@ import com.here.ort.model.VcsType
 import com.here.ort.utils.collectMessagesAsString
 import com.here.ort.utils.log
 import com.here.ort.utils.showStackTrace
-import com.here.ort.utils.succeeds
 
 import java.io.File
 import java.io.IOException
@@ -112,7 +111,9 @@ class Subversion : VersionControlSystem() {
         }
 
     override fun isApplicableUrlInternal(vcsUrl: String) =
-        succeeds { clientManager.wcClient.doInfo(SVNURL.parseURIEncoded(vcsUrl), SVNRevision.HEAD, SVNRevision.HEAD) }
+        runCatching {
+            clientManager.wcClient.doInfo(SVNURL.parseURIEncoded(vcsUrl), SVNRevision.HEAD, SVNRevision.HEAD)
+        }.isSuccess
 
     override fun initWorkingTree(targetDir: File, vcs: VcsInfo): WorkingTree {
         try {

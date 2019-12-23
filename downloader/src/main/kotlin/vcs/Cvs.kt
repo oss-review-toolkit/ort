@@ -27,7 +27,6 @@ import com.here.ort.utils.CommandLineTool
 import com.here.ort.utils.ProcessCapture
 import com.here.ort.utils.safeDeleteRecursively
 import com.here.ort.utils.searchUpwardsForSubdirectory
-import com.here.ort.utils.succeeds
 import com.here.ort.utils.toHexString
 
 import java.io.File
@@ -180,8 +179,8 @@ class Cvs : VersionControlSystem(), CommandLineTool {
     }
 
     override fun updateWorkingTree(workingTree: WorkingTree, revision: String, path: String, recursive: Boolean) =
-        succeeds {
+        runCatching {
             // Checkout the working tree of the desired revision.
             run(workingTree.workingDir, "checkout", "-r", revision, path.takeUnless { it.isEmpty() } ?: ".")
-        }
+        }.isSuccess
 }
