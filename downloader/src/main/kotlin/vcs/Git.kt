@@ -29,12 +29,13 @@ import com.here.ort.utils.log
 import com.here.ort.utils.safeMkdirs
 import com.here.ort.utils.showStackTrace
 
-import com.vdurmont.semver4j.Semver
-
 import java.io.File
 import java.io.IOException
 
+import org.eclipse.jgit.api.Git
 import org.eclipse.jgit.api.LsRemoteCommand
+import org.eclipse.jgit.api.errors.GitAPIException
+import org.eclipse.jgit.transport.URIish
 
 // TODO: Make this configurable.
 const val GIT_HISTORY_DEPTH = 50
@@ -49,27 +50,32 @@ class Git : GitBase() {
         }.isSuccess
 
     override fun initWorkingTree(targetDir: File, vcs: VcsInfo): WorkingTree {
-        // Do not use "git clone" to have more control over what is being fetched.
-        run(targetDir, "init")
-        run(targetDir, "remote", "add", "origin", vcs.url)
+        try {
+            Git.init().setDirectory(targetDir).call().use { git ->
+                git.remoteAdd().setName("origin").setUri(URIish(vcs.url)).call()
 
-        // Enable the more efficient Git Wire Protocol version 2, if possible. See
-        // https://github.com/git/git/blob/master/Documentation/technical/protocol-v2.txt
-        if (Semver(getVersion()).isGreaterThanOrEqualTo("2.18.0")) {
-            run(targetDir, "config", "protocol.version", "2")
-        }
+                // JGit supports the Git wire protocol version 2 since its version 5.1.
+                git.repository.config.setInt("protocol", null, "version", 2)
 
-        if (Os.isWindows) {
-            run(targetDir, "config", "core.longpaths", "true")
-        }
+                if (Os.isWindows) {
+                    git.repository.config.setBoolean("core", null, "longpaths", true)
+                }
 
-        if (vcs.path.isNotBlank()) {
-            log.info { "Configuring Git to do sparse checkout of path '${vcs.path}'." }
-            run(targetDir, "config", "core.sparseCheckout", "true")
-            val gitInfoDir = File(targetDir, ".git/info").apply { safeMkdirs() }
-            val path = vcs.path.let { if (it.startsWith("/")) it else "/$it" }
-            File(gitInfoDir, "sparse-checkout").writeText("$path\n" +
-                    FileMatcher.LICENSE_FILE_MATCHER.patterns.joinToString("\n") { "/$it" })
+                if (vcs.path.isNotBlank()) {
+                    log.info { "Configuring Git to do sparse checkout of path '${vcs.path}'." }
+
+                    git.repository.config.setBoolean("core", null, "sparseCheckout", true)
+
+                    val gitInfoDir = File(targetDir, ".git/info").apply { safeMkdirs() }
+                    val path = vcs.path.let { if (it.startsWith("/")) it else "/$it" }
+                    File(gitInfoDir, "sparse-checkout").writeText("$path\n" +
+                            FileMatcher.LICENSE_FILE_MATCHER.patterns.joinToString("\n") { "/$it" })
+                }
+
+                git.repository.config.save()
+            }
+        } catch (e: GitAPIException) {
+            throw IOException("Unable to initialize $type working tree at directory '$targetDir'.", e)
         }
 
         return getWorkingTree(targetDir)
