@@ -287,18 +287,6 @@ fun normalizeVcsUrl(vcsUrl: String): String {
 }
 
 /**
- * Return true if the call of [block] succeeds without throwing an exception, return false if an exception was thrown.
- */
-@Suppress("TooGenericExceptionCaught")
-inline fun succeeds(block: () -> Unit) =
-    try {
-        block()
-        true
-    } catch (e: Throwable) {
-        false
-    }
-
-/**
  * Temporarily set the specified system [properties] while executing [block]. Afterwards, previously set properties have
  * their original values restored and previously unset properties are cleared.
  */
