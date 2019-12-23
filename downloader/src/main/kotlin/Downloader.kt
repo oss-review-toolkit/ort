@@ -172,7 +172,7 @@ class Downloader {
             }
 
             // Clean up any left-over files.
-            targetDir.safeDeleteRecursively()
+            targetDir.safeDeleteRecursively(force = true)
             targetDir.safeMkdirs()
 
             exception.addSuppressed(DownloadException(message, e))
