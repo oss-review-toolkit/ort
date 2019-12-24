@@ -21,68 +21,100 @@ package com.here.ort.downloader.vcs
 
 import com.here.ort.downloader.WorkingTree
 import com.here.ort.model.VcsInfo
-import com.here.ort.utils.ProcessCapture
 
 import java.io.File
 
-private const val GIT_STATUS_BRANCH_UPSTREAM_PREFIX = "# branch.upstream "
+import org.eclipse.jgit.api.LsRemoteCommand
+import org.eclipse.jgit.api.errors.GitAPIException
+import org.eclipse.jgit.lib.BranchConfig
+import org.eclipse.jgit.lib.Constants
+import org.eclipse.jgit.lib.Repository
+import org.eclipse.jgit.storage.file.FileRepositoryBuilder
+import org.eclipse.jgit.submodule.SubmoduleWalk
+import java.io.IOException
+
+private fun findGitOrSubmoduleDir(workingDir: File): Repository {
+    // First try to open an existing working tree exactly at the given directory. This also works for submodules which
+    // since Git 1.7.8 do not have their own ".git" directory anymore in favor of a ".git" file.
+    FileRepositoryBuilder().setWorkTree(workingDir).setMustExist(true).runCatching {
+        build()
+    }.onSuccess {
+        return it
+    }
+
+    // Fall back to searching for a .git directory upwards in the directory tree.
+    FileRepositoryBuilder().findGitDir(workingDir).runCatching {
+        build()
+    }.onSuccess {
+        return it
+    }
+
+    // Finally, fall back to treating the directory as a working tree that is yet to be created.
+    return FileRepositoryBuilder().setWorkTree(workingDir).build()
+}
 
 open class GitWorkingTree(workingDir: File, private val gitBase: GitBase) : WorkingTree(workingDir, gitBase.type) {
-    override fun isValid(): Boolean {
-        if (!workingDir.isDirectory) {
-            return false
+    private val repo = findGitOrSubmoduleDir(workingDir.absoluteFile)
+
+    override fun isValid(): Boolean = repo.objectDatabase?.exists() == true
+
+    override fun isShallow(): Boolean = repo.directory?.resolve("shallow")?.isFile == true
+
+    private fun listSubmodulePaths(repo: Repository): List<String> {
+        fun listSubmodules(parent: String, repo: Repository, paths: MutableList<String>) {
+            val prefix = if (parent.isEmpty()) parent else "$parent/"
+
+            SubmoduleWalk.forIndex(repo).use { walk ->
+                while (walk.next()) {
+                    paths += "$prefix${walk.path}"
+                    walk.repository.use { submoduleRepo ->
+                        listSubmodules(paths.last(), submoduleRepo, paths)
+                    }
+                }
+            }
         }
 
-        // Do not use runGitCommand() here as we do not require the command to succeed.
-        val isInsideWorkTree = ProcessCapture(workingDir, "git", "rev-parse", "--is-inside-work-tree")
-        return isInsideWorkTree.isSuccess && isInsideWorkTree.stdout.trimEnd().toBoolean()
-    }
-
-    override fun isShallow(): Boolean {
-        val dotGitDir = gitBase.run(workingDir, "rev-parse", "--absolute-git-dir").stdout.trimEnd()
-        return File(dotGitDir, "shallow").isFile
-    }
-
-    override fun getNested(): Map<String, VcsInfo> {
-        val root = getRootPath()
-        val paths = gitBase.run(root, "submodule", "--quiet", "foreach", "--recursive", "echo \$displaypath").stdout
-            .lines().filter { it.isNotBlank() }
-
-        return paths.associateWith { GitWorkingTree(root.resolve(it), gitBase).getInfo() }
-    }
-
-    override fun getRemoteUrl() =
-        gitBase.run(workingDir, "remote", "get-url", getRemoteForCheckout()).stdout.trimEnd()
-
-    override fun getRevision() = gitBase.run(workingDir, "rev-parse", "HEAD").stdout.trimEnd()
-
-    override fun getRootPath() =
-        File(gitBase.run(workingDir, "rev-parse", "--show-toplevel").stdout.trimEnd('\n', '/'))
-
-    private fun listRemoteRefs(namespace: String): List<String> {
-        val tags = gitBase.run(workingDir, "-c", "credential.helper=", "-c", "core.askpass=echo", "ls-remote",
-            "--refs", getRemoteForCheckout(), "refs/$namespace/*").stdout.trimEnd()
-        return tags.lines().map {
-            it.split('\t').last().removePrefix("refs/$namespace/")
+        return mutableListOf<String>().also { paths ->
+            listSubmodules("", repo, paths)
         }
     }
 
-    override fun listRemoteBranches() = listRemoteRefs("heads")
+    override fun getNested(): Map<String, VcsInfo> =
+        listSubmodulePaths(repo).associateWith { GitWorkingTree(repo.workTree.resolve(it), gitBase).getInfo() }
 
-    override fun listRemoteTags() = listRemoteRefs("tags")
+    override fun getRemoteUrl(): String =
+        try {
+            val remotes = org.eclipse.jgit.api.Git(repo).remoteList().call()
+            val remoteForCurrentBranch = BranchConfig(repo.config, repo.branch).remote
 
-    private fun getRemoteForCheckout(): String {
-        // Get the remote the current branch (if any) is configured to pull from.
-        val status = gitBase.run(workingDir, "status", "-sb", "--porcelain=v2").stdout
-        status.lineSequence().find { line ->
-            line.startsWith(GIT_STATUS_BRANCH_UPSTREAM_PREFIX)
-        }?.let { upstreamBranch ->
-            return upstreamBranch.substringAfter(GIT_STATUS_BRANCH_UPSTREAM_PREFIX).substringBefore('/')
+            val remote = if (remotes.size <= 1 || remoteForCurrentBranch == null) {
+                remotes.firstOrNull()
+            } else {
+                remotes.find { remote ->
+                    remote.name == remoteForCurrentBranch
+                }
+            }
+
+            remote?.urIs?.firstOrNull()?.toString().orEmpty()
+        } catch (e: GitAPIException) {
+            throw IOException("Unable to get the remote URL.", e)
         }
 
-        // In case we are not on a branch, fall back to listing all remotes. Prefer "origin" if present but otherwise
-        // return the first remote.
-        val remotes = gitBase.run(workingDir, "remote", "show", "-n").stdout.lines()
-        return remotes.find { it == "origin" } ?: remotes.first()
-    }
+    override fun getRevision(): String = repo.exactRef(Constants.HEAD)?.objectId?.name().orEmpty()
+
+    override fun getRootPath(): File = repo.workTree ?: workingDir
+
+    override fun listRemoteBranches(): List<String> =
+        try {
+            LsRemoteCommand(repo).setHeads(true).call().map { it.name.removePrefix("refs/heads/") }
+        } catch (e: GitAPIException) {
+            throw IOException("Unable to list the remote branches.", e)
+        }
+
+    override fun listRemoteTags(): List<String> =
+        try {
+            LsRemoteCommand(repo).setTags(true).call().map { it.name.removePrefix("refs/tags/") }
+        } catch (e: GitAPIException) {
+            throw IOException("Unable to list the remote tags.", e)
+        }
 }
