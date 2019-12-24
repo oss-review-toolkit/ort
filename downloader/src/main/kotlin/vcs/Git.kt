@@ -24,7 +24,6 @@ import com.here.ort.model.VcsInfo
 import com.here.ort.model.VcsType
 import com.here.ort.utils.FileMatcher
 import com.here.ort.utils.Os
-import com.here.ort.utils.ProcessCapture
 import com.here.ort.utils.collectMessagesAsString
 import com.here.ort.utils.log
 import com.here.ort.utils.safeMkdirs
@@ -35,6 +34,8 @@ import com.vdurmont.semver4j.Semver
 import java.io.File
 import java.io.IOException
 
+import org.eclipse.jgit.api.LsRemoteCommand
+
 // TODO: Make this configurable.
 const val GIT_HISTORY_DEPTH = 50
 
@@ -42,8 +43,10 @@ class Git : GitBase() {
     override val type = VcsType.GIT
     override val priority = 100
 
-    override fun isApplicableUrlInternal(vcsUrl: String) =
-        ProcessCapture("git", "-c", "credential.helper=", "-c", "core.askpass=echo", "ls-remote", vcsUrl).isSuccess
+    override fun isApplicableUrlInternal(vcsUrl: String): Boolean =
+        runCatching {
+            LsRemoteCommand(null).setRemote(vcsUrl).call().isNotEmpty()
+        }.isSuccess
 
     override fun initWorkingTree(targetDir: File, vcs: VcsInfo): WorkingTree {
         // Do not use "git clone" to have more control over what is being fetched.

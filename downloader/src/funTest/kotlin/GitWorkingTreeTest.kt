@@ -21,7 +21,6 @@ package com.here.ort.downloader.vcs
 
 import com.here.ort.downloader.VersionControlSystem
 import com.here.ort.model.VcsType
-import com.here.ort.utils.Os
 import com.here.ort.utils.getUserOrtDirectory
 import com.here.ort.utils.safeDeleteRecursively
 import com.here.ort.utils.unpack
@@ -68,8 +67,7 @@ class GitWorkingTreeTest : StringSpec() {
             git.isApplicableUrl("https://bitbucket.org/paniq/masagin") shouldBe false
         }
 
-        // TODO: Investigate why this succeeds locally on Windows but seem to make AppVeyor CI hang.
-        "Git does not prompt for credentials for non-existing repositories".config(enabled = !Os.isWindows) {
+        "Git does not prompt for credentials for non-existing repositories" {
             git.isApplicableUrl("https://github.com/heremaps/foobar.git") shouldBe false
         }
 
