@@ -263,7 +263,7 @@ project:
               dependencies:
               - id: "NPM::is-extendable:0.1.1"
             - id: "NPM::map-cache:0.2.2"
-            - id: "NPM::source-map-resolve:0.5.2"
+            - id: "NPM::source-map-resolve:0.5.3"
               dependencies:
               - id: "NPM::atob:2.1.2"
               - id: "NPM::decode-uri-component:0.2.0"
@@ -409,7 +409,7 @@ project:
                 - id: "NPM::lodash._reinterpolate:3.0.0"
             - id: "NPM::through2:2.0.5"
               dependencies:
-              - id: "NPM::readable-stream:2.3.6"
+              - id: "NPM::readable-stream:2.3.7"
                 dependencies:
                 - id: "NPM::core-util-is:1.0.2"
                 - id: "NPM::inherits:2.0.4"
@@ -434,7 +434,7 @@ project:
           - id: "NPM::isobject:3.0.1"
       - id: "NPM::through2:2.0.5"
         dependencies:
-        - id: "NPM::readable-stream:2.3.6"
+        - id: "NPM::readable-stream:2.3.7"
           dependencies:
           - id: "NPM::core-util-is:1.0.2"
           - id: "NPM::inherits:2.0.4"
@@ -555,7 +555,7 @@ project:
             - id: "NPM::kind-of:3.2.2"
               dependencies:
               - id: "NPM::is-buffer:1.1.6"
-          - id: "NPM::source-map-resolve:0.5.2"
+          - id: "NPM::source-map-resolve:0.5.3"
             dependencies:
             - id: "NPM::atob:2.1.2"
             - id: "NPM::decode-uri-component:0.2.0"
@@ -573,7 +573,7 @@ project:
           dependencies:
           - id: "NPM::inherits:2.0.4"
           - id: "NPM::process-nextick-args:2.0.1"
-          - id: "NPM::readable-stream:2.3.6"
+          - id: "NPM::readable-stream:2.3.7"
             dependencies:
             - id: "NPM::core-util-is:1.0.2"
             - id: "NPM::inherits:2.0.4"
@@ -3803,8 +3803,8 @@ packages:
       path: ""
   curations: []
 - package:
-    id: "NPM::readable-stream:2.3.6"
-    purl: "pkg:npm/readable-stream@2.3.6"
+    id: "NPM::readable-stream:2.3.7"
+    purl: "pkg:npm/readable-stream@2.3.7"
     declared_licenses:
     - "MIT"
     declared_licenses_processed:
@@ -3817,19 +3817,19 @@ packages:
         value: ""
         algorithm: ""
     source_artifact:
-      url: "https://registry.npmjs.org/readable-stream/-/readable-stream-2.3.6.tgz"
+      url: "https://registry.npmjs.org/readable-stream/-/readable-stream-2.3.7.tgz"
       hash:
-        value: "b11c27d88b8ff1fbe070643cf94b0c79ae1b0aaf"
+        value: "1eca1cf711aef814c04f62252a36a62f6cb23b57"
         algorithm: "SHA-1"
     vcs:
       type: "Git"
       url: "git://github.com/nodejs/readable-stream.git"
-      revision: "b3cf9b1f46eaa1865930ae03b96d7a4a570746f0"
+      revision: "2eb8861e029107b7e079e22c826835cad6ae7854"
       path: ""
     vcs_processed:
       type: "Git"
       url: "https://github.com/nodejs/readable-stream.git"
-      revision: "b3cf9b1f46eaa1865930ae03b96d7a4a570746f0"
+      revision: "2eb8861e029107b7e079e22c826835cad6ae7854"
       path: ""
   curations: []
 - package:
@@ -4412,8 +4412,8 @@ packages:
       path: ""
   curations: []
 - package:
-    id: "NPM::source-map-resolve:0.5.2"
-    purl: "pkg:npm/source-map-resolve@0.5.2"
+    id: "NPM::source-map-resolve:0.5.3"
+    purl: "pkg:npm/source-map-resolve@0.5.3"
     declared_licenses:
     - "MIT"
     declared_licenses_processed:
@@ -4426,19 +4426,19 @@ packages:
         value: ""
         algorithm: ""
     source_artifact:
-      url: "https://registry.npmjs.org/source-map-resolve/-/source-map-resolve-0.5.2.tgz"
+      url: "https://registry.npmjs.org/source-map-resolve/-/source-map-resolve-0.5.3.tgz"
       hash:
-        value: "72e2cc34095543e43b2c62b2c4c10d4a9054f259"
+        value: "190866bece7553e1f8f267a2ee82c606b5509a1a"
         algorithm: "SHA-1"
     vcs:
       type: "Git"
       url: "git+https://github.com/lydell/source-map-resolve.git"
-      revision: "858cd9e2ecce25427761b8be616cabf704c69316"
+      revision: "b8244f108af0aaf34c32a61e97b66e38db682afc"
       path: ""
     vcs_processed:
       type: "Git"
       url: "https://github.com/lydell/source-map-resolve.git"
-      revision: "858cd9e2ecce25427761b8be616cabf704c69316"
+      revision: "b8244f108af0aaf34c32a61e97b66e38db682afc"
       path: ""
   curations: []
 - package:
