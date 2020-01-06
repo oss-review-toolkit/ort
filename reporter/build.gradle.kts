@@ -51,7 +51,7 @@ sourceSets.named("main") {
 repositories {
     exclusiveContent {
         forRepository {
-            maven("http://www.robotooling.com/maven/")
+            maven("https://www.robotooling.com/maven/")
         }
 
         filter {
