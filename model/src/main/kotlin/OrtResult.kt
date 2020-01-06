@@ -36,6 +36,8 @@ import com.here.ort.utils.zipWithDefault
 
 import java.util.SortedSet
 
+typealias CustomData = MutableMap<String, Any>
+
 /**
  * The common output format for the analyzer and scanner. It contains information about the scanned repository, and the
  * analyzer and scanner will add their result to it.
