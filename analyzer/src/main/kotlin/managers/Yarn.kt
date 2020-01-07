@@ -55,7 +55,7 @@ class Yarn(
 
     override fun command(workingDir: File?) = if (Os.isWindows) "yarn.cmd" else "yarn"
 
-    override fun getVersionRequirement(): Requirement = Requirement.buildNPM("1.3.* - 1.17.*")
+    override fun getVersionRequirement(): Requirement = Requirement.buildNPM("1.3.* - 1.21.*")
 
     override fun mapDefinitionFiles(definitionFiles: List<File>) = mapDefinitionFilesForYarn(definitionFiles).toList()
 
