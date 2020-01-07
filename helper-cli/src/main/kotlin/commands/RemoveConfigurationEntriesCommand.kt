@@ -27,13 +27,18 @@ import com.here.ort.helper.CommandWithHelp
 import com.here.ort.helper.common.findFilesRecursive
 import com.here.ort.helper.common.minimize
 import com.here.ort.helper.common.replacePathExcludes
+import com.here.ort.helper.common.replaceErrorResolutions
 import com.here.ort.helper.common.replaceRuleViolationResolutions
 import com.here.ort.helper.common.replaceScopeExcludes
 import com.here.ort.helper.common.writeAsYaml
 import com.here.ort.model.OrtResult
 import com.here.ort.model.config.RepositoryConfiguration
+import com.here.ort.model.config.Resolutions
 import com.here.ort.model.readValue
+import com.here.ort.reporter.DefaultResolutionProvider
 import com.here.ort.utils.PARAMETER_ORDER_MANDATORY
+import com.here.ort.utils.PARAMETER_ORDER_OPTIONAL
+import com.here.ort.utils.expandTilde
 
 import java.io.File
 
@@ -70,6 +75,13 @@ internal class RemoveConfigurationEntriesCommand : CommandWithHelp() {
     )
     private lateinit var sourceCodeDir: File
 
+    @Parameter(
+        description = "A file containing error resolutions.",
+        names = ["--resolutions-file"],
+        order = PARAMETER_ORDER_OPTIONAL
+    )
+    private var resolutionsFile: File? = null
+
     override fun runCommand(jc: JCommander): Int {
         val repositoryConfiguration = repositoryConfigurationFile.readValue<RepositoryConfiguration>()
         val ortResult = ortResultFile.readValue<OrtResult>().replaceConfig(repositoryConfiguration)
@@ -91,17 +103,30 @@ internal class RemoveConfigurationEntriesCommand : CommandWithHelp() {
             }
         }
 
-        // TODO: Implement the removal of not needed error resolutions.
+        val resolutionProvider = DefaultResolutionProvider().apply {
+            resolutionsFile?.expandTilde()?.readValue<Resolutions>()?.let {
+                add(it)
+            }
+        }
+        val notGloballyResolvedErrors = ortResult.collectErrors().values.flatten().filter {
+            resolutionProvider.getErrorResolutionsFor(it).isEmpty()
+        }
+        val errorResolutions = ortResult.getResolutions().errors.filter { resolution ->
+            notGloballyResolvedErrors.any { resolution.matches(it) }
+        }
 
         repositoryConfiguration
             .replaceScopeExcludes(scopeExcludes)
             .replacePathExcludes(pathExcludes)
+            .replaceErrorResolutions(errorResolutions)
             .replaceRuleViolationResolutions(ruleViolationResolutions)
             .writeAsYaml(repositoryConfigurationFile)
 
         buildString {
             val removedPathExcludes = (repositoryConfiguration.excludes?.paths?.size ?: 0) - pathExcludes.size
             val removedScopeExcludes = (repositoryConfiguration.excludes?.scopes?.size ?: 0) - scopeExcludes.size
+            val removedErrorResolutions = (repositoryConfiguration.resolutions?.errors?.size ?: 0) -
+                    errorResolutions.size
             val removedRuleViolationResolutions = (repositoryConfiguration.resolutions?.ruleViolations?.size ?: 0) -
                     ruleViolationResolutions.size
 
@@ -109,6 +134,7 @@ internal class RemoveConfigurationEntriesCommand : CommandWithHelp() {
             appendln()
             appendln("  path excludes             : $removedPathExcludes")
             appendln("  scope excludes            : $removedScopeExcludes")
+            appendln("  error resolutions         : $removedErrorResolutions")
             appendln("  rule violation resolutions: $removedRuleViolationResolutions")
         }.let { println(it) }
 
