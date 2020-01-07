@@ -130,19 +130,19 @@ abstract class Rule(
     }
 
     /**
-     * Add a [hint][Severity.HINT] to the list of [issues].
+     * Add a [hint][Severity.HINT] to the list of [violations].
      */
     fun hint(pkgId: Identifier, license: String?, licenseSource: LicenseSource?, message: String, howToFix: String) =
         issue(Severity.HINT, pkgId, license, licenseSource, message, howToFix)
 
     /**
-     * Add a [warning][Severity.WARNING] to the list of [issues].
+     * Add a [warning][Severity.WARNING] to the list of [violations].
      */
     fun warning(pkgId: Identifier, license: String?, licenseSource: LicenseSource?, message: String, howToFix: String) =
         issue(Severity.WARNING, pkgId, license, licenseSource, message, howToFix)
 
     /**
-     * Add an [error][Severity.ERROR] to the list of [issues].
+     * Add an [error][Severity.ERROR] to the list of [violations].
      */
     fun error(pkgId: Identifier, license: String?, licenseSource: LicenseSource?, message: String, howToFix: String) =
         issue(Severity.ERROR, pkgId, license, licenseSource, message, howToFix)
