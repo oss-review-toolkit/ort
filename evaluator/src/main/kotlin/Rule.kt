@@ -105,6 +105,11 @@ abstract class Rule(
      */
     abstract fun issueSource(): String
 
+    /**
+     * Add an issue of the given [severity] for [pkgId] to the list of violations. Optionally, the offending [license]
+     * and its [source][licenseSource] can be specified. The [message] further explains the violation itself and
+     * [howToFix] explains how it can be fixed.
+     */
     fun issue(
         severity: Severity,
         pkgId: Identifier,
