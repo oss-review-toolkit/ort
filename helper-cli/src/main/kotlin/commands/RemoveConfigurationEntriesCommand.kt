@@ -86,16 +86,16 @@ internal class RemoveConfigurationEntriesCommand : CommandWithHelp() {
         val repositoryConfiguration = repositoryConfigurationFile.readValue<RepositoryConfiguration>()
         val ortResult = ortResultFile.readValue<OrtResult>().replaceConfig(repositoryConfiguration)
 
-        val scopeExcludes = ortResult
-            .getProjects()
-            .flatMap { project -> project.scopes.map { it.name } }
-            .let { projectScopes -> ortResult.getExcludes().scopes.minimize(projectScopes) }
-
         val pathExcludes = findFilesRecursive(sourceCodeDir).let { allFiles ->
             ortResult.getExcludes().paths.filter { pathExclude ->
                 allFiles.any { pathExclude.matches(it) }
             }
         }
+
+        val scopeExcludes = ortResult
+            .getProjects()
+            .flatMap { project -> project.scopes.map { it.name } }
+            .let { projectScopes -> ortResult.getExcludes().scopes.minimize(projectScopes) }
 
         val ruleViolationResolutions = ortResult.getRuleViolations().let { ruleViolations ->
             ortResult.getResolutions().ruleViolations.filter { resolutions ->
@@ -116,8 +116,8 @@ internal class RemoveConfigurationEntriesCommand : CommandWithHelp() {
         }
 
         repositoryConfiguration
-            .replaceScopeExcludes(scopeExcludes)
             .replacePathExcludes(pathExcludes)
+            .replaceScopeExcludes(scopeExcludes)
             .replaceErrorResolutions(errorResolutions)
             .replaceRuleViolationResolutions(ruleViolationResolutions)
             .writeAsYaml(repositoryConfigurationFile)
