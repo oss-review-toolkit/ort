@@ -39,6 +39,7 @@ import com.here.ort.model.VcsInfo
 import com.here.ort.model.config.AnalyzerConfiguration
 import com.here.ort.model.config.Curations
 import com.here.ort.model.config.Excludes
+import com.here.ort.model.config.ErrorResolution
 import com.here.ort.model.config.LicenseFindingCuration
 import com.here.ort.model.config.PathExclude
 import com.here.ort.model.config.RepositoryConfiguration
@@ -410,6 +411,13 @@ internal fun OrtResult.getUnresolvedRuleViolations(): List<RuleViolation> {
         !resolutions.any { it.matches(violation) }
     }
 }
+
+/**
+ * Return a copy with the [ErrorResolution]s replaced by the given [errorResolutions].
+ */
+internal fun RepositoryConfiguration.replaceErrorResolutions(
+    errorResolutions: List<ErrorResolution>
+): RepositoryConfiguration = copy(resolutions = (resolutions ?: Resolutions()).copy(errors = errorResolutions))
 
 /**
  * Return a copy with the [LicenseFindingCuration]s replaced by the given scope excludes.
