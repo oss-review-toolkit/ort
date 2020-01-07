@@ -2,15 +2,10 @@
   "name": "npm-version-urls",
   "version": "1.0.0",
   "description": "An NPM project that uses URLs as versions of dependencies.",
-  "main": "index.js",
   "repository": {
     "type": "git",
     "url": "https://github.com/heremaps/oss-review-toolkit.git"
   },
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "author": "",
   "license": "Apache-2.0",
   "dependencies": {
     "is-win": "https://registry.npmjs.org/is-win/-/is-win-1.0.8.tgz",
