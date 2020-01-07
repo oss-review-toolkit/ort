@@ -98,8 +98,8 @@ internal class RemoveConfigurationEntriesCommand : CommandWithHelp() {
             .let { projectScopes -> ortResult.getExcludes().scopes.minimize(projectScopes) }
 
         val ruleViolationResolutions = ortResult.getRuleViolations().let { ruleViolations ->
-            ortResult.getResolutions().ruleViolations.filter { resolutions ->
-                ruleViolations.any { resolutions.matches(it) }
+            ortResult.getResolutions().ruleViolations.filter { resolution ->
+                ruleViolations.any { resolution.matches(it) }
             }
         }
 
