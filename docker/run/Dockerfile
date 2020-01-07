@@ -46,7 +46,7 @@ ENV \
     PYTHON_PIPENV_VERSION=2018.11.26 \
     PYTHON_VIRTUALENV_VERSION=15.1.0 \
     SBT_VERSION=0.13.13-2 \
-    YARN_VERSION=1.17.3 \
+    YARN_VERSION=1.21.1 \
     # Scanner versions.
     SCANCODE_VERSION=3.0.2 \
     # Installation directories.
