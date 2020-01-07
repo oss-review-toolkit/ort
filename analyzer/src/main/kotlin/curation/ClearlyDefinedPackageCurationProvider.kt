@@ -56,7 +56,7 @@ fun Identifier.toClearlyDefinedTypeAndProvider(): Pair<ComponentType, Provider> 
     }
 
 /**
- * Map an ORT [Package id][pkgId] to ClearlyDefined [Coordinates].
+ * Map an ORT [Identifier] to ClearlyDefined [Coordinates].
  */
 fun Identifier.toClearlyDefinedCoordinates(): Coordinates {
     val (type, provider) = toClearlyDefinedTypeAndProvider()
