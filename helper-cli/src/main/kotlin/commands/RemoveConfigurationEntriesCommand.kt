@@ -71,32 +71,46 @@ internal class RemoveConfigurationEntriesCommand : CommandWithHelp() {
     private lateinit var sourceCodeDir: File
 
     override fun runCommand(jc: JCommander): Int {
-        var repositoryConfiguration = repositoryConfigurationFile.readValue<RepositoryConfiguration>()
+        val repositoryConfiguration = repositoryConfigurationFile.readValue<RepositoryConfiguration>()
         val ortResult = ortResultFile.readValue<OrtResult>().replaceConfig(repositoryConfiguration)
 
         val scopeExcludes = ortResult
             .getProjects()
             .flatMap { project -> project.scopes.map { it.name } }
             .let { projectScopes -> ortResult.getExcludes().scopes.minimize(projectScopes) }
-        repositoryConfiguration = repositoryConfiguration.replaceScopeExcludes(scopeExcludes)
 
         val pathExcludes = findFilesRecursive(sourceCodeDir).let { allFiles ->
             ortResult.getExcludes().paths.filter { pathExclude ->
                 allFiles.any { pathExclude.matches(it) }
             }
         }
-        repositoryConfiguration = repositoryConfiguration.replacePathExcludes(pathExcludes)
 
         val ruleViolationResolutions = ortResult.getRuleViolations().let { ruleViolations ->
             ortResult.getResolutions().ruleViolations.filter { resolutions ->
                 ruleViolations.any { resolutions.matches(it) }
             }
         }
-        repositoryConfiguration = repositoryConfiguration.replaceRuleViolationResolutions(ruleViolationResolutions)
 
         // TODO: Implement the removal of not needed error resolutions.
 
-        repositoryConfiguration.writeAsYaml(repositoryConfigurationFile)
+        repositoryConfiguration
+            .replaceScopeExcludes(scopeExcludes)
+            .replacePathExcludes(pathExcludes)
+            .replaceRuleViolationResolutions(ruleViolationResolutions)
+            .writeAsYaml(repositoryConfigurationFile)
+
+        buildString {
+            val removedPathExcludes = (repositoryConfiguration.excludes?.paths?.size ?: 0) - pathExcludes.size
+            val removedScopeExcludes = (repositoryConfiguration.excludes?.scopes?.size ?: 0) - scopeExcludes.size
+            val removedRuleViolationResolutions = (repositoryConfiguration.resolutions?.ruleViolations?.size ?: 0) -
+                    ruleViolationResolutions.size
+
+            appendln("Removed entries:")
+            appendln()
+            appendln("  path excludes             : $removedPathExcludes")
+            appendln("  scope excludes            : $removedScopeExcludes")
+            appendln("  rule violation resolutions: $removedRuleViolationResolutions")
+        }.let { println(it) }
 
         return 0
     }
