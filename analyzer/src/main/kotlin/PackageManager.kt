@@ -56,9 +56,9 @@ typealias ResolutionResult = MutableMap<File, ProjectAnalyzerResult>
  */
 abstract class PackageManager(
     val managerName: String,
-    protected val analysisRoot: File,
-    protected val analyzerConfig: AnalyzerConfiguration,
-    protected val repoConfig: RepositoryConfiguration
+    val analysisRoot: File,
+    val analyzerConfig: AnalyzerConfiguration,
+    val repoConfig: RepositoryConfiguration
 ) {
     companion object {
         private val LOADER = ServiceLoader.load(PackageManagerFactory::class.java)!!
