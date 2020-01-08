@@ -32,6 +32,7 @@ import org.ossreviewtoolkit.analyzer.AbstractPackageManagerFactory
 import org.ossreviewtoolkit.analyzer.PackageManager
 import org.ossreviewtoolkit.analyzer.managers.utils.XmlPackageReferenceMapper
 import org.ossreviewtoolkit.analyzer.managers.utils.resolveDotNetDependencies
+import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.ProjectAnalyzerResult
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
@@ -53,19 +54,17 @@ class DotNetPackageReferenceMapper : XmlPackageReferenceMapper() {
         val version: String
     )
 
-    override fun mapPackageReferences(definitionFile: File): Map<String, String> {
-        val map = mutableMapOf<String, String>()
+    override fun mapPackageReferences(definitionFile: File): Set<Identifier> {
+        val ids = mutableSetOf<Identifier>()
         val itemGroups = mapper.readValue<List<ItemGroup>>(definitionFile)
 
         itemGroups.forEach { itemGroup ->
             itemGroup.packageReference?.forEach {
-                if (it.include.isNotEmpty()) {
-                    map[it.include] = it.version
-                }
+                ids += Identifier.EMPTY.copy(name = it.include, version = it.version)
             }
         }
 
-        return map
+        return ids
     }
 }
 

@@ -21,17 +21,18 @@
 package org.ossreviewtoolkit.analyzer.managers
 
 import io.kotest.core.spec.style.StringSpec
+import io.kotest.matchers.collections.containExactly
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 
 import java.io.File
 
 import org.ossreviewtoolkit.downloader.VersionControlSystem
+import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.utils.normalizeVcsUrl
 import org.ossreviewtoolkit.utils.test.DEFAULT_ANALYZER_CONFIGURATION
 import org.ossreviewtoolkit.utils.test.DEFAULT_REPOSITORY_CONFIGURATION
 import org.ossreviewtoolkit.utils.test.USER_DIR
-import org.ossreviewtoolkit.utils.test.containExactly
 import org.ossreviewtoolkit.utils.test.patchExpectedResult
 
 class DotNetTest : StringSpec() {
@@ -47,8 +48,8 @@ class DotNetTest : StringSpec() {
             val result = mapper.mapPackageReferences(packageFile)
 
             result should containExactly(
-                "jQuery" to "3.3.1",
-                "WebGrease" to "1.5.2"
+                Identifier.EMPTY.copy(name = "jQuery", version = "3.3.1"),
+                Identifier.EMPTY.copy(name = "WebGrease", version = "1.5.2")
             )
         }
 
