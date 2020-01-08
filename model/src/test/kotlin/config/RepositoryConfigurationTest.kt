@@ -87,7 +87,7 @@ class RepositoryConfigurationTest : WordSpec() {
                     comment shouldBe "scope comment"
                 }
 
-                val errors = repositoryConfiguration.resolutions!!.errors
+                val errors = repositoryConfiguration.resolutions.errors
                 errors should haveSize(1)
                 with(errors.first()) {
                     message shouldBe "message"
@@ -95,7 +95,7 @@ class RepositoryConfigurationTest : WordSpec() {
                     comment shouldBe "error comment"
                 }
 
-                val evalErrors = repositoryConfiguration.resolutions!!.ruleViolations
+                val evalErrors = repositoryConfiguration.resolutions.ruleViolations
                 evalErrors should haveSize(1)
                 with(evalErrors.first()) {
                     message shouldBe "rule message"
