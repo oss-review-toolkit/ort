@@ -125,9 +125,8 @@ internal class RemoveConfigurationEntriesCommand : CommandWithHelp() {
         buildString {
             val removedPathExcludes = repositoryConfiguration.excludes.paths.size - pathExcludes.size
             val removedScopeExcludes = repositoryConfiguration.excludes.scopes.size - scopeExcludes.size
-            val removedErrorResolutions = (repositoryConfiguration.resolutions?.errors?.size ?: 0) -
-                    errorResolutions.size
-            val removedRuleViolationResolutions = (repositoryConfiguration.resolutions?.ruleViolations?.size ?: 0) -
+            val removedErrorResolutions = repositoryConfiguration.resolutions.errors.size - errorResolutions.size
+            val removedRuleViolationResolutions = repositoryConfiguration.resolutions.ruleViolations.size -
                     ruleViolationResolutions.size
 
             appendln("Removed entries:")

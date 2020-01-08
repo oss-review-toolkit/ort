@@ -37,8 +37,8 @@ data class RepositoryConfiguration(
     /**
      * Defines resolutions for issues with this repository.
      */
-    @JsonInclude(JsonInclude.Include.NON_NULL)
-    val resolutions: Resolutions? = null,
+    @JsonInclude(value = JsonInclude.Include.CUSTOM, valueFilter = ResolutionsFilter::class)
+    val resolutions: Resolutions = Resolutions(),
 
     /**
      * Defines curations for artifacts contained in this repository.
@@ -51,4 +51,10 @@ data class RepositoryConfiguration(
 class ExcludesFilter {
     override fun equals(other: Any?): Boolean =
         if (other is Excludes) other.paths.isEmpty() && other.scopes.isEmpty() else false
+}
+
+@Suppress("EqualsWithHashCodeExist") // The class is not supposed to be used with hashing.
+class ResolutionsFilter {
+    override fun equals(other: Any?): Boolean =
+        if (other is Resolutions) other.errors.isEmpty() && other.ruleViolations.isEmpty() else false
 }
