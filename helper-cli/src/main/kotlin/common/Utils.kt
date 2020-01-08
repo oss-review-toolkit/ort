@@ -37,7 +37,6 @@ import com.here.ort.model.Severity
 import com.here.ort.model.TextLocation
 import com.here.ort.model.VcsInfo
 import com.here.ort.model.config.AnalyzerConfiguration
-import com.here.ort.model.config.Curations
 import com.here.ort.model.config.ErrorResolution
 import com.here.ort.model.config.LicenseFindingCuration
 import com.here.ort.model.config.PathExclude
@@ -297,7 +296,7 @@ internal fun OrtResult.getLicenseFindingsById(
  */
 internal fun OrtResult.getRepositoryLicenseFindingCurations(): RepositoryLicenseFindingCurations {
     val result = mutableMapOf<String, MutableList<LicenseFindingCuration>>()
-    val curations = repository.config.curations?.licenseFindings.orEmpty()
+    val curations = repository.config.curations.licenseFindings
 
     repository.nestedRepositories.forEach { (path, vcs) ->
         val pathExcludesForRepository = result.getOrPut(vcs.url) { mutableListOf() }
@@ -422,7 +421,7 @@ internal fun RepositoryConfiguration.replaceErrorResolutions(
  */
 internal fun RepositoryConfiguration.replaceLicenseFindingCurations(
     curations: List<LicenseFindingCuration>
-): RepositoryConfiguration = copy(curations = (this.curations ?: Curations()).copy(licenseFindings = curations))
+): RepositoryConfiguration = copy(curations = this.curations.copy(licenseFindings = curations))
 
 /**
  * Return a copy with the [PathExclude]s replaced by the given scope excludes.
@@ -453,12 +452,11 @@ internal fun RepositoryConfiguration.sortEntries(): RepositoryConfiguration =
  */
 internal fun RepositoryConfiguration.sortLicenseFindingCurations(): RepositoryConfiguration =
     copy(
-        curations = curations?.let {
-            val licenseFindings = it.licenseFindings.sortedBy { curation ->
+        curations = curations.copy(
+            licenseFindings = curations.licenseFindings.sortedBy { curation ->
                 curation.path.removePrefix("*").removePrefix("*")
             }
-            it.copy(licenseFindings = licenseFindings)
-        }
+        )
     )
 
 /**

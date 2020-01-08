@@ -433,7 +433,7 @@ data class OrtResult(
      */
     fun getLicenseFindingsCurations(id: Identifier): List<LicenseFindingCuration> =
         if (projects.containsKey(id)) {
-            repository.config.curations?.licenseFindings.orEmpty()
+            repository.config.curations.licenseFindings
         } else {
             emptyList()
         }
