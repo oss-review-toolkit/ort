@@ -96,7 +96,7 @@ internal class ImportLicenseFindingCurationsCommand : CommandWithHelp() {
                     findingCurationMatcher.matches(finding, curation)
                 }
             }
-        val existingCurations = repositoryConfiguration.curations?.licenseFindings.orEmpty()
+        val existingCurations = repositoryConfiguration.curations.licenseFindings
         val curations = existingCurations.mergeLicenseFindingCurations(importedCurations, updateOnlyExisting)
 
         repositoryConfiguration

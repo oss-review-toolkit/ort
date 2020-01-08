@@ -43,8 +43,8 @@ data class RepositoryConfiguration(
     /**
      * Defines curations for artifacts contained in this repository.
      */
-    @JsonInclude(JsonInclude.Include.NON_NULL)
-    val curations: Curations? = null
+    @JsonInclude(value = JsonInclude.Include.CUSTOM, valueFilter = Curations::class)
+    val curations: Curations = Curations()
 )
 
 @Suppress("EqualsWithHashCodeExist") // The class is not supposed to be used with hashing.
@@ -57,4 +57,10 @@ class ExcludesFilter {
 class ResolutionsFilter {
     override fun equals(other: Any?): Boolean =
         if (other is Resolutions) other.errors.isEmpty() && other.ruleViolations.isEmpty() else false
+}
+
+@Suppress("EqualsWithHashCodeExist") // The class is not supposed to be used with hashing.
+class CurationsFilter {
+    override fun equals(other: Any?): Boolean =
+        if (other is Curations) other.licenseFindings.isEmpty() else false
 }
