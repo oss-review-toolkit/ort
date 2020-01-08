@@ -38,7 +38,6 @@ import com.here.ort.model.TextLocation
 import com.here.ort.model.VcsInfo
 import com.here.ort.model.config.AnalyzerConfiguration
 import com.here.ort.model.config.Curations
-import com.here.ort.model.config.Excludes
 import com.here.ort.model.config.ErrorResolution
 import com.here.ort.model.config.LicenseFindingCuration
 import com.here.ort.model.config.PathExclude
@@ -382,7 +381,7 @@ internal fun OrtResult.getRepositoryPathExcludes(): RepositoryPathExcludes {
     }
 
     val result = mutableMapOf<String, MutableList<PathExclude>>()
-    val pathExcludes = repository.config.excludes?.paths.orEmpty()
+    val pathExcludes = repository.config.excludes.paths
 
     repository.nestedRepositories.forEach { (path, vcs) ->
         val pathExcludesForRepository = result.getOrPut(vcs.url) { mutableListOf() }
@@ -430,13 +429,13 @@ internal fun RepositoryConfiguration.replaceLicenseFindingCurations(
  * Return a copy with the [PathExclude]s replaced by the given scope excludes.
  */
 internal fun RepositoryConfiguration.replacePathExcludes(pathExcludes: List<PathExclude>): RepositoryConfiguration =
-    copy(excludes = (excludes ?: Excludes()).copy(paths = pathExcludes))
+    copy(excludes = excludes.copy(paths = pathExcludes))
 
 /**
  * Return a copy with the [ScopeExclude]s replaced by the given [scopeExcludes].
  */
 internal fun RepositoryConfiguration.replaceScopeExcludes(scopeExcludes: List<ScopeExclude>): RepositoryConfiguration =
-    copy(excludes = (excludes ?: Excludes()).copy(scopes = scopeExcludes))
+    copy(excludes = excludes.copy(scopes = scopeExcludes))
 
 /**
  * Return a copy with the [RuleViolationResolution]s replaced by the given [ruleViolations].
@@ -468,12 +467,11 @@ internal fun RepositoryConfiguration.sortLicenseFindingCurations(): RepositoryCo
  */
 internal fun RepositoryConfiguration.sortPathExcludes(): RepositoryConfiguration =
     copy(
-        excludes = excludes?.let {
-            val paths = it.paths.sortedBy { pathExclude ->
+        excludes = excludes.copy(
+            paths = excludes.paths.sortedBy { pathExclude ->
                 pathExclude.pattern.removePrefix("*").removePrefix("*")
             }
-            it.copy(paths = paths)
-        }
+        )
     )
 
 /**
@@ -481,12 +479,11 @@ internal fun RepositoryConfiguration.sortPathExcludes(): RepositoryConfiguration
  */
 internal fun RepositoryConfiguration.sortScopeExcludes(): RepositoryConfiguration =
     copy(
-        excludes = excludes?.let {
-            val scopes = it.scopes.sortedBy { (pattern, _, _) ->
+        excludes = excludes.copy(
+            scopes = excludes.scopes.sortedBy { (pattern, _, _) ->
                 pattern.removePrefix(".*")
             }
-            it.copy(scopes = scopes)
-        }
+        )
     )
 
 /**

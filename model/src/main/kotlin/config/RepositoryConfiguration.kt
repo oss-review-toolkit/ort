@@ -31,8 +31,8 @@ data class RepositoryConfiguration(
      * Defines which parts of the repository will be excluded. Note that excluded parts will still be analyzed and
      * scanned, but related errors will be marked as resolved in the reporter output.
      */
-    @JsonInclude(JsonInclude.Include.NON_NULL)
-    val excludes: Excludes? = null,
+    @JsonInclude(value = JsonInclude.Include.CUSTOM, valueFilter = ExcludesFilter::class)
+    val excludes: Excludes = Excludes(),
 
     /**
      * Defines resolutions for issues with this repository.
@@ -46,3 +46,9 @@ data class RepositoryConfiguration(
     @JsonInclude(JsonInclude.Include.NON_NULL)
     val curations: Curations? = null
 )
+
+@Suppress("EqualsWithHashCodeExist") // The class is not supposed to be used with hashing.
+class ExcludesFilter {
+    override fun equals(other: Any?): Boolean =
+        if (other is Excludes) other.paths.isEmpty() && other.scopes.isEmpty() else false
+}

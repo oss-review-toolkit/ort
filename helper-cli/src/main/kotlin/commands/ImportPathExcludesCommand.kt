@@ -86,7 +86,7 @@ internal class ImportPathExcludesCommand : CommandWithHelp() {
             RepositoryConfiguration()
         }
 
-        val existingPathExcludes = repositoryConfiguration.excludes?.paths.orEmpty()
+        val existingPathExcludes = repositoryConfiguration.excludes.paths
         val importedPathExcludes = importPathExcludes().filter { pathExclude ->
             allFiles.any { pathExclude.matches(it) }
         }

@@ -123,8 +123,8 @@ internal class RemoveConfigurationEntriesCommand : CommandWithHelp() {
             .writeAsYaml(repositoryConfigurationFile)
 
         buildString {
-            val removedPathExcludes = (repositoryConfiguration.excludes?.paths?.size ?: 0) - pathExcludes.size
-            val removedScopeExcludes = (repositoryConfiguration.excludes?.scopes?.size ?: 0) - scopeExcludes.size
+            val removedPathExcludes = repositoryConfiguration.excludes.paths.size - pathExcludes.size
+            val removedScopeExcludes = repositoryConfiguration.excludes.scopes.size - scopeExcludes.size
             val removedErrorResolutions = (repositoryConfiguration.resolutions?.errors?.size ?: 0) -
                     errorResolutions.size
             val removedRuleViolationResolutions = (repositoryConfiguration.resolutions?.ruleViolations?.size ?: 0) -
