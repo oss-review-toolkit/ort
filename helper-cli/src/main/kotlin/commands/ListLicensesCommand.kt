@@ -138,9 +138,7 @@ internal class ListLicensesCommand : CommandWithHelp() {
         }
         val violatedRulesByLicense = ortResult.getViolatedRulesByLicense(packageId, Severity.ERROR)
 
-        fun isPathExcluded(path: String) = ortResult.repository.config.excludes?.let {
-            it.findPathExcludes(path).isNotEmpty()
-        } ?: false
+        fun isPathExcluded(path: String) = ortResult.repository.config.excludes.findPathExcludes(path).isNotEmpty()
 
         ortResult
             .getLicenseFindingsById(packageId, applyLicenseFindingCurations)

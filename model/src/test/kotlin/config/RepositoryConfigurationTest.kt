@@ -42,7 +42,7 @@ class RepositoryConfigurationTest : WordSpec() {
                     """.trimIndent()
 
                 val config = yamlMapper.readValue<RepositoryConfiguration>(configuration)
-                config.excludes!!.paths[0].matches("android/project1/build.gradle") shouldBe true
+                config.excludes.paths[0].matches("android/project1/build.gradle") shouldBe true
             }
 
             "be deserializable" {
@@ -70,9 +70,8 @@ class RepositoryConfigurationTest : WordSpec() {
                 val repositoryConfiguration = yamlMapper.readValue<RepositoryConfiguration>(configuration)
 
                 repositoryConfiguration shouldNotBe null
-                repositoryConfiguration.excludes shouldNotBe null
 
-                val paths = repositoryConfiguration.excludes!!.paths
+                val paths = repositoryConfiguration.excludes.paths
                 paths should haveSize(1)
 
                 val path = paths[0]
@@ -80,7 +79,7 @@ class RepositoryConfigurationTest : WordSpec() {
                 path.reason shouldBe PathExcludeReason.BUILD_TOOL_OF
                 path.comment shouldBe "project comment"
 
-                val scopes = repositoryConfiguration.excludes!!.scopes
+                val scopes = repositoryConfiguration.excludes.scopes
                 scopes should haveSize(1)
                 with(scopes.first()) {
                     pattern shouldBe "scope"

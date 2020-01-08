@@ -426,7 +426,7 @@ data class OrtResult(
     fun getRuleViolations(): List<RuleViolation> = evaluator?.violations.orEmpty()
 
     @JsonIgnore
-    fun getExcludes(): Excludes = repository.config.excludes ?: Excludes()
+    fun getExcludes(): Excludes = repository.config.excludes
 
     /**
      * Return the [LicenseFindingCuration]s associated with the given package [id].

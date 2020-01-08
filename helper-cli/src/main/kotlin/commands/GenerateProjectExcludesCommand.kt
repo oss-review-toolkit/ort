@@ -79,7 +79,7 @@ internal class GenerateProjectExcludesCommand : CommandWithHelp() {
                     comment = "TODO"
                 )
             }
-        val existingPathExcludes = repositoryConfiguration.excludes?.paths.orEmpty()
+        val existingPathExcludes = repositoryConfiguration.excludes.paths
         val pathExcludes = (existingPathExcludes + generatedPathExcludes).distinctBy { it.pattern }
 
         repositoryConfiguration
