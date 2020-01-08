@@ -23,6 +23,15 @@ import com.here.ort.utils.SortedSetComparator
 
 import java.util.SortedSet
 
+// TODO: This class currently co-exists with the singular form class [CopyrightFinding] which can be confusing.
+// The singular classes [CopyrightFinding] and [LicenseFinding] are the model of the scanner module while the plural
+// form ones are the model of the output of [com.here.ort.model.utils.FindingsMatcher], thus instances of
+// [CopyrightFindings] are used only when associated with (or rather referenced by) [LicenseFindings].
+// The output format of [com.here.ort.model.utils.FindingsMatcher] needs to change as it misses the association
+// between copyright finding and the actual text location of the matched license finding. Further the way copyright
+// findings are matched to root licenses might also need to change which in turn may also require changing theses
+// plural form classes. Due to the above it seems to make sense to defer the clarification of singular vs. plural form
+// copyright finding classes until the mentioned improvements to the matching have been applied.
 data class CopyrightFindings(
     val statement: String,
     val locations: SortedSet<TextLocation>
