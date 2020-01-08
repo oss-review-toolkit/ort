@@ -32,20 +32,20 @@ import org.ossreviewtoolkit.model.Scope
 
 class DotNetSupportTest : StringSpec({
     "non-existing project gets registered as error and is not added to scope" {
-        val testPackage = Pair("trifj", "2.0.0")
-        val testPackage2 = Pair("tffrifj", "2.0.0")
-        val dotNetSupport = DotNetSupport(mapOf(testPackage, testPackage2))
+        val testPackage = Identifier.EMPTY.copy(name = "trifj", version = "2.0.0")
+        val testPackage2 = Identifier.EMPTY.copy(name = "tffrifj", version = "2.0.0")
+        val dotNetSupport = DotNetSupport(setOf(testPackage, testPackage2))
         val resultScope = Scope("dependencies", sortedSetOf())
         val resultErrors = listOf(
             OrtIssue(
                 timestamp = Instant.EPOCH,
                 source = "nuget-API",
-                message = "${testPackage.first}:${testPackage.second} can not be found on Nugets RestAPI."
+                message = "${testPackage.name}:${testPackage.version} can not be found on Nugets RestAPI."
             ),
             OrtIssue(
                 timestamp = Instant.EPOCH,
                 source = "nuget-API",
-                message = "${testPackage2.first}:${testPackage2.second} can not be found on Nugets RestAPI."
+                message = "${testPackage2.name}:${testPackage2.version} can not be found on Nugets RestAPI."
             )
         )
 
@@ -54,8 +54,8 @@ class DotNetSupportTest : StringSpec({
     }
 
     "dependencies are detected correctly" {
-        val testPackage = Pair("WebGrease", "1.5.2")
-        val dotNetSupport = DotNetSupport(mapOf(testPackage))
+        val testPackage = Identifier.EMPTY.copy(name = "WebGrease", version = "1.5.2")
+        val dotNetSupport = DotNetSupport(setOf(testPackage))
         val resultScope = Scope(
             "dependencies", sortedSetOf(
                 PackageReference(
