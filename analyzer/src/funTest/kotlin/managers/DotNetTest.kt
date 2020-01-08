@@ -34,10 +34,6 @@ import io.kotlintest.shouldBe
 import io.kotlintest.shouldNotBe
 import io.kotlintest.specs.StringSpec
 
-import com.fasterxml.jackson.dataformat.xml.XmlMapper
-import com.fasterxml.jackson.module.kotlin.readValue
-import com.fasterxml.jackson.module.kotlin.registerKotlinModule
-
 import java.io.File
 
 class DotNetTest : StringSpec() {
@@ -48,6 +44,13 @@ class DotNetTest : StringSpec() {
     private val packageFile = File(projectDir, "subProjectTest/test.csproj")
 
     init {
+        "Definition file is correctly mapped" {
+            val mapper = DotNetPackageReferenceMapper()
+            val result = mapper.mapPackageReferences(packageFile)
+
+            result.size shouldBe 2
+        }
+
         "Project dependencies are detected correctly" {
             val vcsPath = vcsDir.getPathToRoot(projectDir)
             val expectedResult = patchExpectedResult(
@@ -64,15 +67,6 @@ class DotNetTest : StringSpec() {
             result shouldNotBe null
             result!!.errors should beEmpty()
             yamlMapper.writeValueAsString(result) shouldBe expectedResult
-        }
-
-        "Definition File is correctly mapped" {
-            val mapper = XmlMapper().registerKotlinModule()
-            val result = mapper.readValue<List<DotNet.ItemGroup>>(packageFile)
-
-            result shouldNotBe null
-            result.size shouldBe 4
-            result[1].packageReference?.size shouldBe 2
         }
     }
 
