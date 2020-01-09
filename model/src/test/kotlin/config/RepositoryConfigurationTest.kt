@@ -32,18 +32,6 @@ import io.kotlintest.specs.WordSpec
 class RepositoryConfigurationTest : WordSpec() {
     init {
         "RepositoryConfiguration" should {
-            "be deserializable with empty excludes and resolutions" {
-                val configuration = """
-                    excludes:
-                    resolutions:
-                    """.trimIndent()
-
-                val repositoryConfiguration = yamlMapper.readValue<RepositoryConfiguration>(configuration)
-
-                repositoryConfiguration shouldNotBe null
-                repositoryConfiguration.excludes shouldBe null
-            }
-
             "deserialize to a path regex working with double star" {
                 val configuration = """
                     excludes:
