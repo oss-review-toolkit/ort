@@ -91,8 +91,8 @@ abstract class VersionControlSystem {
                 dirToVcsMap[absoluteVcsDirectory]
             } else {
                 ALL.asSequence().mapNotNull {
-                    if (it is CommandLineTool) {
-                        if (it.isInPath()) it.getWorkingTree(absoluteVcsDirectory) else null
+                    if (it is CommandLineTool && !it.isInPath()) {
+                        null
                     } else {
                         it.getWorkingTree(absoluteVcsDirectory)
                     }
