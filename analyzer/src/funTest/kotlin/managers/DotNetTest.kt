@@ -44,8 +44,8 @@ class DotNetTest : StringSpec() {
 
     init {
         "Definition file is correctly mapped" {
-            val mapper = DotNetPackageReferenceMapper()
-            val result = mapper.mapPackageReferences(packageFile)
+            val reader = DotNetPackageFileReader()
+            val result = reader.getPackageReferences(packageFile)
 
             result should containExactly(
                 Identifier.EMPTY.copy(name = "jQuery", version = "3.3.1"),

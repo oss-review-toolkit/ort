@@ -50,18 +50,18 @@ import org.ossreviewtoolkit.model.xmlMapper
 import org.ossreviewtoolkit.utils.OkHttpClientHelper
 import org.ossreviewtoolkit.utils.textValueOrEmpty
 
-abstract class XmlPackageReferenceMapper {
+abstract class XmlPackageFileReader {
     protected val mapper = XmlMapper().registerKotlinModule()
 
-    abstract fun mapPackageReferences(definitionFile: File): Set<Identifier>
+    abstract fun getPackageReferences(definitionFile: File): Set<Identifier>
 }
 
 fun PackageManager.resolveDotNetDependencies(
     definitionFile: File,
-    mapper: XmlPackageReferenceMapper
+    mapper: XmlPackageFileReader
 ): ProjectAnalyzerResult? {
     val workingDir = definitionFile.parentFile
-    val support = DotNetSupport(mapper.mapPackageReferences(definitionFile))
+    val support = DotNetSupport(mapper.getPackageReferences(definitionFile))
 
     val project = Project(
         id = Identifier(

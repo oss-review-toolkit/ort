@@ -30,14 +30,14 @@ import java.io.File
 
 import org.ossreviewtoolkit.analyzer.AbstractPackageManagerFactory
 import org.ossreviewtoolkit.analyzer.PackageManager
-import org.ossreviewtoolkit.analyzer.managers.utils.XmlPackageReferenceMapper
+import org.ossreviewtoolkit.analyzer.managers.utils.XmlPackageFileReader
 import org.ossreviewtoolkit.analyzer.managers.utils.resolveDotNetDependencies
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.ProjectAnalyzerResult
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 
-class DotNetPackageReferenceMapper : XmlPackageReferenceMapper() {
+class DotNetPackageFileReader : XmlPackageFileReader() {
     // See https://docs.microsoft.com/en-us/nuget/consume-packages/package-references-in-project-files.
     @JsonIgnoreProperties(ignoreUnknown = true)
     data class ItemGroup(
@@ -54,7 +54,7 @@ class DotNetPackageReferenceMapper : XmlPackageReferenceMapper() {
         val version: String
     )
 
-    override fun mapPackageReferences(definitionFile: File): Set<Identifier> {
+    override fun getPackageReferences(definitionFile: File): Set<Identifier> {
         val ids = mutableSetOf<Identifier>()
         val itemGroups = mapper.readValue<List<ItemGroup>>(definitionFile)
 
@@ -88,5 +88,5 @@ class DotNet(
     }
 
     override fun resolveDependencies(definitionFile: File): List<ProjectAnalyzerResult> =
-        listOfNotNull(resolveDotNetDependencies(definitionFile, DotNetPackageReferenceMapper()))
+        listOfNotNull(resolveDotNetDependencies(definitionFile, DotNetPackageFileReader()))
 }
