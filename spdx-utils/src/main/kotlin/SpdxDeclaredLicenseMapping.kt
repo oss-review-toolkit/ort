@@ -127,6 +127,7 @@ object SpdxDeclaredLicenseMapping {
         "BSD style license" to BSD_3_CLAUSE.toExpression(),
         "BSD*" to BSD_3_CLAUSE.toExpression(),
         "BSD-like license" to BSD_3_CLAUSE.toExpression(),
+        "BSD-Style" to BSD_3_CLAUSE.toExpression(),
         "BSD-Style + Attribution" to BSD_3_CLAUSE_ATTRIBUTION.toExpression(),
         "BSD-style license" to BSD_3_CLAUSE.toExpression(),
         "Berkeley Software Distribution (BSD) License" to BSD_2_CLAUSE.toExpression(),
