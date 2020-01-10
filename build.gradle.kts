@@ -325,7 +325,7 @@ tasks.register<Exec>("checkCopyright") {
     description = "Checks for Copyright headers in Kotlin files."
     group = "Verification"
 
-    commandLine = listOf("git", "grep", "-EL", "Copyright \\(C\\) .+", "*.kt",
+    commandLine = listOf("git", "grep", "-EL", "Copyright \\(C\\) .+", "*.kt", "*.kts",
         ":!analyzer/src/funTest/assets/projects/external")
     isIgnoreExitValue = true
     standardOutput = ByteArrayOutputStream()
