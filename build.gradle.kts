@@ -322,7 +322,7 @@ subprojects {
 }
 
 tasks.register<Exec>("checkCopyright") {
-    description = "Checks for HERE Copyright headers in Kotlin files."
+    description = "Checks for Copyright headers in Kotlin files."
     group = "Verification"
 
     commandLine = listOf("git", "grep", "-EL", "Copyright \\(C\\) .+", "*.kt",
