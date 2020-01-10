@@ -86,6 +86,7 @@ object SpdxDeclaredLicenseMapping {
         """Apache-2.0 */ &#39; &quot; &#x3D;end --
 
  """.trimIndent() to APACHE_2_0.toExpression(),
+        "Apache-style" to APACHE_2_0.toExpression(),
         "Apple Public Source License" to APSL_1_0.toExpression(),
         "Artistic License" to ARTISTIC_2_0.toExpression(),
         "Artistic 2.0" to ARTISTIC_2_0.toExpression(),
