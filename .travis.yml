@@ -66,10 +66,12 @@ install:
   - chmod a+x ~/bin/repo
   - curl -Os https://dl.google.com/android/repository/sdk-tools-linux-$ANDROID_SDK_VERSION.zip
   - unzip -q sdk-tools-linux-$ANDROID_SDK_VERSION.zip -d $ANDROID_HOME
+  - rm sdk-tools-linux-$ANDROID_SDK_VERSION.zip
   - export SDKMANAGER_OPTS="--add-modules java.xml.bind"
   - yes | $ANDROID_HOME/tools/bin/sdkmanager --verbose "platform-tools"
   - curl -Os https://storage.googleapis.com/flutter_infra/releases/stable/linux/flutter_linux_$FLUTTER_VERSION.tar.xz
   - tar xf flutter_linux_$FLUTTER_VERSION.tar.xz -C $(dirname $FLUTTER_HOME)
+  - rm flutter_linux_$FLUTTER_VERSION.tar.xz
   - export PATH="$PATH:$FLUTTER_HOME/bin:$FLUTTER_HOME/bin/cache/dart-sdk/bin"
   - flutter config --no-analytics
   - flutter doctor
