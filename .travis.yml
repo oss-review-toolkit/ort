@@ -77,6 +77,11 @@ install:
   - flutter doctor
   - pip install --user conan==$CONAN_VERSION pipenv==$PYTHON_PIPENV_VERSION
   - conan user # Create the conan data directory. Automatic detection of your arch, compiler, etc.
+  - pyenv global system 3.6
+  - pip3 install --user reuse
+
+before_script:
+  - reuse lint
 
 script:
   - set -o pipefail
