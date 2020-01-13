@@ -54,7 +54,7 @@ plugins {
 
 reckon {
     scopeFromProp()
-    stageFromProp("beta", "rc", "final")
+    snapshotFromProp()
 }
 
 idea {
