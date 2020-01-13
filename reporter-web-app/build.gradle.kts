@@ -41,6 +41,7 @@ val yarnDir = kotlinYarnSetup.get().destination
 val yarnJs = yarnDir.resolve("bin/yarn.js")
 
 kotlinNodeJsSetup {
+    outputs.cacheIf { true }
     logger.quiet("Will use the Node executable file from '$nodeExecutable'.")
 
     // If the node binary is missing, force a re-download of the NodeJs distribution, see
@@ -51,6 +52,7 @@ kotlinNodeJsSetup {
 }
 
 kotlinYarnSetup {
+    outputs.cacheIf { true }
     logger.quiet("Will use the Yarn JavaScript file from '$yarnJs'.")
 }
 
