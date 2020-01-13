@@ -64,6 +64,7 @@ tasks.addRule("Pattern: yarn<Command>") {
         tasks.register<Exec>(taskName) {
             // Execute the Yarn version downloaded by Gradle using the NodeJs version downloaded by Gradle.
             commandLine = listOf(nodeExecutable.path, yarnJs.path, command)
+            outputs.cacheIf { true }
         }
     }
 }
