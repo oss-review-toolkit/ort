@@ -41,6 +41,7 @@ val copyWebAppTemplate by tasks.registering(Copy::class) {
     }
 
     into(generatedResourcesDir)
+    outputs.cacheIf { true }
 }
 
 sourceSets.named("main") {
