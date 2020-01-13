@@ -7,9 +7,9 @@
 | [![Linux build status][1]][2]  | [![Windows build status][3]][4] | [![JitPack build status][5]][6] |
 | [![Linux code coverage][7]][8] |                                 |                                 |
 
-| Interact with us!              |
-| :----------------------------- |
-| [![ort-talk][9]][10]            |
+| REUSE status             | Interact with us!              |
+| :----------------------- | :----------------------------- |
+| [![REUSE status][9]][10] | [![ort-talk][11]][12]          |
 
 [1]: https://travis-ci.com/heremaps/oss-review-toolkit.svg?branch=master
 [2]: https://travis-ci.com/heremaps/oss-review-toolkit
@@ -19,8 +19,10 @@
 [6]: https://jitpack.io/#heremaps/oss-review-toolkit
 [7]: https://codecov.io/gh/heremaps/oss-review-toolkit/branch/master/graph/badge.svg
 [8]: https://codecov.io/gh/heremaps/oss-review-toolkit/
-[9]: https://img.shields.io/badge/slack-ort--talk-blue.svg?longCache=true&logo=slack
-[10]: https://join.slack.com/t/ort-talk/shared_invite/enQtMzk3MDU5Njk0Njc1LThiNmJmMjc5YWUxZTU4OGI5NmY3YTFlZWM5YTliZmY5ODc0MGMyOWIwYmRiZWFmNGMzOWY2NzVhYTI0NTJkNmY
+[9]: https://api.reuse.software/badge/github.com/fsfe/reuse-tool
+[10]: https://api.reuse.software/info/github.com/fsfe/reuse-tool
+[11]: https://img.shields.io/badge/slack-ort--talk-blue.svg?longCache=true&logo=slack
+[12]: https://join.slack.com/t/ort-talk/shared_invite/enQtMzk3MDU5Njk0Njc1LThiNmJmMjc5YWUxZTU4OGI5NmY3YTFlZWM5YTliZmY5ODc0MGMyOWIwYmRiZWFmNGMzOWY2NzVhYTI0NTJkNmY
 
 # Introduction
 
