@@ -106,6 +106,7 @@ class SubversionWorkingTreeTest : StringSpec() {
                 "docutils-0.14rc1",
                 "docutils-0.14rc2",
                 "docutils-0.15",
+                "docutils-0.16",
                 "docutils-0.3.7",
                 "docutils-0.3.9",
                 "docutils-0.4",
