@@ -218,10 +218,11 @@ to the .ort.yml file if the finding is in your code repository or add a curation
 The code below shows the structure of an policy rule violation resolution in the `.ort.yml` file:
 
 ```yaml
-rule_violations:
-- message: "A regular expression matching the policy rule violation message."
-  reason: "One of RuleViolationResolutionReason e.g. CANT_FIX_EXCEPTION, DYNAMIC_LINKAGE_EXCEPTION."
-  comment: "A comment further explaining why the reason above is applicable."
+resolutions:
+  rule_violations:
+  - message: "A regular expression matching the policy rule violation message."
+    reason: "One of RuleViolationResolutionReason e.g. CANT_FIX_EXCEPTION, DYNAMIC_LINKAGE_EXCEPTION."
+    comment: "A comment further explaining why the reason above is applicable."
 ```
 
 Where the list of available options for `reason` is defined in [RuleViolationResolutionReason.kt](../model/src/main/kotlin/config/RuleViolationResolutionReason.kt)
