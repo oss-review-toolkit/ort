@@ -87,9 +87,9 @@ script:
   - set -o pipefail
   - ./gradlew --stacktrace checkCopyright detekt
   - if [ "$TRAVIS_EVENT_TYPE" = "cron" ]; then
-      ./gradlew --stacktrace -Dkotlintest.tags.exclude=ScanCodeTag test funTest jacocoReport | tee log.txt;
+      ./gradlew --stacktrace -Dkotlintest.tags.exclude=ScanCodeTag test jacocoReport | tee log.txt;
     else
-      ./gradlew --scan --stacktrace -Dkotlintest.tags.exclude=ExpensiveTag test funTest jacocoReport | tee log.txt;
+      ./gradlew --scan --stacktrace -Dkotlintest.tags.exclude=ExpensiveTag test jacocoReport | tee log.txt;
     fi
   - if grep -A1 ".+Test.+STARTED$" log.txt | grep -q "^:"; then
       echo "Some tests seemingly have been aborted.";
