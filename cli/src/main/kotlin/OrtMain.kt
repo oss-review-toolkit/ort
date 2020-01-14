@@ -171,14 +171,14 @@ object OrtMain : CommandWithHelp() {
         val variables = env.variables.entries.map { (key, value) -> "$key = $value" }
 
         val command = commandName?.let { " '$commandName'" }.orEmpty()
-        val with = "with".takeUnless { variables.isEmpty() }.orEmpty()
+        val with = if (variables.isNotEmpty()) " with" else "."
 
         var variableIndex = 0
 
         """
             ________ _____________________
             \_____  \\______   \__    ___/ the OSS Review Toolkit, version ${env.ortVersion}.
-             /   |   \|       _/ |    |    Running$command on Java ${env.javaVersion} and ${env.os} $with
+             /   |   \|       _/ |    |    Running$command using Java ${env.javaVersion} on ${env.os}$with
             /    |    \    |   \ |    |    ${variables.getOrElse(variableIndex++) { "" }}
             \_______  /____|_  / |____|    ${variables.getOrElse(variableIndex++) { "" }}
                     \/       \/
