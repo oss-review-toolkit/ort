@@ -281,8 +281,9 @@ data class OrtResult(
      * Return all detected licenses for the given package[id] along with the copyrights.
      */
     @Suppress("UNUSED") // This is intended to be mostly used via scripting.
-    fun getDetectedLicensesWithCopyrights(id: Identifier): Map<String, Set<String>> =
+    fun getDetectedLicensesWithCopyrights(id: Identifier, omitExcluded: Boolean = true): Map<String, Set<String>> =
         collectLicenseFindings(id)
+            .filter { (_, excludes) -> !omitExcluded || excludes.isEmpty() }
             .map { (findings, _) -> findings }
             .associateBy(
                 { it.license },
