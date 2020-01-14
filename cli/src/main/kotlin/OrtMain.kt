@@ -28,6 +28,7 @@ import com.here.ort.model.Environment
 import com.here.ort.model.config.OrtConfiguration
 import com.here.ort.utils.PARAMETER_ORDER_LOGGING
 import com.here.ort.utils.PARAMETER_ORDER_OPTIONAL
+import com.here.ort.utils.getUserOrtDirectory
 import com.here.ort.utils.expandTilde
 import com.here.ort.utils.printStackTrace
 
@@ -168,7 +169,9 @@ object OrtMain : CommandWithHelp() {
 
     private fun showVersionHeader(commandName: String?) {
         val env = Environment()
-        val variables = env.variables.entries.map { (key, value) -> "$key = $value" }
+
+        val variables = mutableListOf("$ORT_USER_HOME_ENV = ${getUserOrtDirectory()}")
+        env.variables.entries.mapTo(variables) { (key, value) -> "$key = $value" }
 
         val command = commandName?.let { " '$commandName'" }.orEmpty()
         val with = if (variables.isNotEmpty()) " with" else "."
