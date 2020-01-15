@@ -30,6 +30,7 @@ import com.here.ort.model.config.Resolutions
 import com.here.ort.model.config.orEmpty
 import com.here.ort.model.utils.FindingCurationMatcher
 import com.here.ort.model.utils.FindingsMatcher
+import com.here.ort.model.utils.StatsCalculator
 import com.here.ort.spdx.SpdxExpression
 import com.here.ort.utils.log
 import com.here.ort.utils.zipWithDefault
@@ -79,6 +80,11 @@ data class OrtResult(
             evaluator = null
         )
     }
+
+    /**
+     * Summarizing statistics about this [OrtResult].
+     */
+    val stats: Stats by lazy { StatsCalculator().getStats(this) }
 
     /**
      * A map that holds arbitrary data. Can be used by third-party tools to add custom data to the model.
