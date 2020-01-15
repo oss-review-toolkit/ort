@@ -75,4 +75,14 @@ data class Scope(
      */
     fun findReferences(id: Identifier) =
         dependencies.filter { it.id == id } + dependencies.flatMap { it.findReferences(id) }
+
+    /**
+     * Return the depth of the dependency tree rooted at the project associated with this scope.
+     */
+    fun getTreeDepth(): Int {
+        fun getTreeDepthRec(dependencies: Collection<PackageReference>): Int =
+            dependencies.map { dependency -> 1 + getTreeDepthRec(dependency.dependencies) }.max() ?: 0
+
+        return getTreeDepthRec(dependencies)
+    }
 }
