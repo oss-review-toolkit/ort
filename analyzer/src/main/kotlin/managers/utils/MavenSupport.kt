@@ -73,6 +73,7 @@ import org.eclipse.aether.artifact.Artifact
 import org.eclipse.aether.artifact.DefaultArtifact
 import org.eclipse.aether.impl.RemoteRepositoryManager
 import org.eclipse.aether.impl.RepositoryConnectorProvider
+import org.eclipse.aether.repository.MirrorSelector
 import org.eclipse.aether.repository.RemoteRepository
 import org.eclipse.aether.repository.WorkspaceReader
 import org.eclipse.aether.resolution.ArtifactDescriptorRequest
@@ -255,6 +256,8 @@ class MavenSupport(workspaceReader: WorkspaceReader) {
 
         val repositorySystemSession = repositorySystemSessionFactory
             .newRepositorySession(createMavenExecutionRequest())
+
+        repositorySystemSession.mirrorSelector = HttpsMirrorSelector(repositorySystemSession.mirrorSelector)
 
         val localRepository = mavenRepositorySystem.createLocalRepository(
             createMavenExecutionRequest(),
@@ -575,5 +578,48 @@ class MavenSupport(workspaceReader: WorkspaceReader) {
             sessionScope.exit()
             legacySupport.session = null
         }
+    }
+}
+
+/**
+ * Several Maven repositories have disabled HTTP access and require HTTPS now. To be able to still analyze old Maven
+ * projects that use the HTTP URLs, this [MirrorSelector] implementation automatically creates an HTTPS mirror if a
+ * [RemoteRepository] uses a disabled HTTP URL. Without that Maven would abort with an exception as soon as it tries to
+ * download an Artifact from any of those repositories.
+ *
+ * **See also:**
+ *
+ * [GitHub Security Lab issue](https://github.com/github/security-lab/issues/21)
+ * [Medium article](https://medium.com/p/d069d253fe23)
+ */
+class HttpsMirrorSelector(private val originalMirrorSelector: MirrorSelector?) : MirrorSelector {
+    companion object {
+        private val DISABLED_HTTP_REPOSITORY_URLS = listOf(
+            "http://jcenter.bintray.com",
+            "http://repo.maven.apache.org",
+            "http://repo1.maven.org",
+            "http://repo.spring.io/"
+        )
+    }
+
+    override fun getMirror(repository: RemoteRepository?): RemoteRepository? {
+        originalMirrorSelector?.getMirror(repository)?.let { return it }
+
+        if (repository == null || repository.url !in DISABLED_HTTP_REPOSITORY_URLS) return null
+
+        log.info {
+            "HTTP access to ${repository.id} (${repository.url}) was disabled. Automatically switching to HTTPS."
+        }
+
+        return RemoteRepository.Builder(
+            "${repository.id}-https-mirror",
+            repository.contentType,
+            "https://${repository.url.removePrefix("http://")}"
+        ).apply {
+            setRepositoryManager(false)
+            setSnapshotPolicy(repository.getPolicy(true))
+            setReleasePolicy(repository.getPolicy(false))
+            setMirroredRepositories(listOf(repository))
+        }.build()
     }
 }
