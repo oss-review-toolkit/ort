@@ -45,6 +45,11 @@ import org.apache.logging.log4j.core.config.Configurator
 const val TOOL_NAME = "ort"
 
 /**
+ * The name of the environment variable to customize the ORT user home.
+ */
+const val ORT_USER_HOME_ENV = "ORT_USER_HOME"
+
+/**
  * The main entry point of the application.
  */
 object OrtMain : CommandWithHelp() {
@@ -96,7 +101,28 @@ object OrtMain : CommandWithHelp() {
      */
     @JvmStatic
     fun main(args: Array<String>) {
+        fixupUserHomeProperty()
         exitProcess(run(args))
+    }
+
+    /**
+     * Check if the "user.home" property is set to a sane value and otherwise set it to the value of the ORT_USER_HOME
+     * environment variable, if set, or to the value of an (OS-specific) environment variable for the user home
+     * directory. This works around the issue that esp. in certain Docker scenarios "user.home" is set to "?", see
+     * https://bugs.openjdk.java.net/browse/JDK-8193433 for some background information.
+     */
+    fun fixupUserHomeProperty() {
+        val userHome = System.getProperty("user.home")
+        val checkedUserHome = sequenceOf(
+            userHome,
+            System.getenv(ORT_USER_HOME_ENV),
+            System.getenv("HOME"),
+            System.getenv("USERPROFILE")
+        ).first {
+            it != null && it.isNotBlank() && it != "?"
+        }
+
+        if (checkedUserHome != userHome) System.setProperty("user.home", checkedUserHome)
     }
 
     /**
