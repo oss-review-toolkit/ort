@@ -23,15 +23,15 @@ import io.kotlintest.shouldBe
 import io.kotlintest.specs.StringSpec
 
 class ProjectAnalyzerResultTest : StringSpec({
-    "collectErrors should find all errors" {
-        val error1 = OrtIssue(source = "source-1", message = "error-1")
-        val error2 = OrtIssue(source = "source-2", message = "error-2")
-        val error3 = OrtIssue(source = "source-3", message = "error-3")
-        val error4 = OrtIssue(source = "source-4", message = "error-4")
-        val error5 = OrtIssue(source = "source-5", message = "error-5")
-        val error6 = OrtIssue(source = "source-6", message = "error-6")
-        val error7 = OrtIssue(source = "source-7", message = "error-7")
-        val error8 = OrtIssue(source = "source-8", message = "error-8")
+    "collectIssues should find all issues" {
+        val issue1 = OrtIssue(source = "source-1", message = "issue-1")
+        val issue2 = OrtIssue(source = "source-2", message = "issue-2")
+        val issue3 = OrtIssue(source = "source-3", message = "issue-3")
+        val issue4 = OrtIssue(source = "source-4", message = "issue-4")
+        val issue5 = OrtIssue(source = "source-5", message = "issue-5")
+        val issue6 = OrtIssue(source = "source-6", message = "issue-6")
+        val issue7 = OrtIssue(source = "source-7", message = "issue-7")
+        val issue8 = OrtIssue(source = "source-8", message = "issue-8")
 
         val result = ProjectAnalyzerResult(
             project = Project(
@@ -60,10 +60,10 @@ class ProjectAnalyzerResultTest : StringSpec({
                                             version = "version2"
                                         ),
                                         dependencies = sortedSetOf(),
-                                        errors = listOf(error1, error2)
+                                        errors = listOf(issue1, issue2)
                                     )
                                 ),
-                                errors = listOf(error3, error4)
+                                errors = listOf(issue3, issue4)
                             ),
                             PackageReference(
                                 Identifier(
@@ -73,21 +73,21 @@ class ProjectAnalyzerResultTest : StringSpec({
                                     version = "version3"
                                 ),
                                 dependencies = sortedSetOf(),
-                                errors = listOf(error5, error6)
+                                errors = listOf(issue5, issue6)
                             )
                         )
                     )
                 )
             ),
             packages = sortedSetOf(),
-            errors = listOf(error7, error8)
+            issues = listOf(issue7, issue8)
         )
 
-        val errors = result.collectErrors()
-        errors.size shouldBe 4
-        errors[Identifier("type:namespace:name:version")] shouldBe listOf(error7, error8)
-        errors[Identifier("type1:namespace1:name1:version1")] shouldBe listOf(error3, error4)
-        errors[Identifier("type2:namespace2:name2:version2")] shouldBe listOf(error1, error2)
-        errors[Identifier("type3:namespace3:name3:version3")] shouldBe listOf(error5, error6)
+        val issues = result.collectIssues()
+        issues.size shouldBe 4
+        issues[Identifier("type:namespace:name:version")] shouldBe listOf(issue7, issue8)
+        issues[Identifier("type1:namespace1:name1:version1")] shouldBe listOf(issue3, issue4)
+        issues[Identifier("type2:namespace2:name2:version2")] shouldBe listOf(issue1, issue2)
+        issues[Identifier("type3:namespace3:name3:version3")] shouldBe listOf(issue5, issue6)
     }
 })

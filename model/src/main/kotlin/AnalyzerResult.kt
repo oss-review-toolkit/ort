@@ -129,8 +129,8 @@ class AnalyzerResultBuilder {
             } else {
                 projects += projectAnalyzerResult.project
                 packages += projectAnalyzerResult.packages
-                if (projectAnalyzerResult.errors.isNotEmpty()) {
-                    issues[projectAnalyzerResult.project.id] = projectAnalyzerResult.errors
+                if (projectAnalyzerResult.issues.isNotEmpty()) {
+                    issues[projectAnalyzerResult.project.id] = projectAnalyzerResult.issues
                 }
             }
         }

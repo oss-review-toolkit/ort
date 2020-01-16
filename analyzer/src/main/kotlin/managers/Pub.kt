@@ -468,7 +468,7 @@ class Pub(
                         packages[item.pkg.id] = item.pkg
                     }
 
-                    issues += result.errors
+                    issues += result.issues
                 }
 
                 // As this package contains flutter, trigger CocoaPods manually for it.
@@ -477,7 +477,7 @@ class Pub(
                         packages[item.pkg.id] = item.pkg
                     }
 
-                    issues += result.errors
+                    issues += result.issues
                 }
             }
         }

@@ -63,7 +63,7 @@ class ConanTest : StringSpec() {
             val result = createConan().resolveDependencies(listOf(packageFile))[packageFile]
 
             result shouldNotBe null
-            result!!.errors should beEmpty()
+            result!!.issues should beEmpty()
             patchActualResult(yamlMapper.writeValueAsString(result)) shouldBe expectedResult
         }
 
@@ -81,7 +81,7 @@ class ConanTest : StringSpec() {
             val result = createConan().resolveDependencies(listOf(packageFile))[packageFile]
 
             result shouldNotBe null
-            result!!.errors should beEmpty()
+            result!!.issues should beEmpty()
             patchActualResult(yamlMapper.writeValueAsString(result)) shouldBe expectedResult
         }
     }

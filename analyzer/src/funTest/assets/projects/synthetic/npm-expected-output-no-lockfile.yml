@@ -17,7 +17,7 @@ project:
   homepage_url: ""
   scopes: []
 packages: []
-errors:
+issues:
 - timestamp: "1970-01-01T00:00:00Z"
   source: "NPM"
   message: "Resolving dependencies for 'package.json' failed with: IllegalArgumentException:\

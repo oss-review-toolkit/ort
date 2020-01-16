@@ -65,7 +65,7 @@ class DotNetTest : StringSpec() {
             val result = createDotNet().resolveDependencies(listOf(packageFile))[packageFile]
 
             result shouldNotBe null
-            result!!.errors should beEmpty()
+            result!!.issues should beEmpty()
             yamlMapper.writeValueAsString(result) shouldBe expectedResult
         }
     }
