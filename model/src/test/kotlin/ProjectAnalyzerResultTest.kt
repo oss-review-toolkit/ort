@@ -60,10 +60,10 @@ class ProjectAnalyzerResultTest : StringSpec({
                                             version = "version2"
                                         ),
                                         dependencies = sortedSetOf(),
-                                        errors = listOf(issue1, issue2)
+                                        issues = listOf(issue1, issue2)
                                     )
                                 ),
-                                errors = listOf(issue3, issue4)
+                                issues = listOf(issue3, issue4)
                             ),
                             PackageReference(
                                 Identifier(
@@ -73,7 +73,7 @@ class ProjectAnalyzerResultTest : StringSpec({
                                     version = "version3"
                                 ),
                                 dependencies = sortedSetOf(),
-                                errors = listOf(issue5, issue6)
+                                issues = listOf(issue5, issue6)
                             )
                         )
                     )

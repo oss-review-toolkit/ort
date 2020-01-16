@@ -105,14 +105,14 @@ class GoDep(
             val revision = project.getValue("revision")
             val version = project.getValue("version")
 
-            val errors = mutableListOf<OrtIssue>()
+            val issues = mutableListOf<OrtIssue>()
 
             val vcsProcessed = try {
                 resolveVcsInfo(name, revision, gopath)
             } catch (e: IOException) {
                 e.showStackTrace()
 
-                errors += createAndLogIssue(
+                issues += createAndLogIssue(
                     source = managerName,
                     message = "Could not resolve VCS information for project '$name': ${e.collectMessagesAsString()}"
                 )
@@ -133,7 +133,7 @@ class GoDep(
 
             packages += pkg
 
-            packageRefs += pkg.toReference(linkage = PackageLinkage.STATIC, errors = errors)
+            packageRefs += pkg.toReference(linkage = PackageLinkage.STATIC, issues = issues)
         }
 
         val scope = Scope("default", packageRefs.toSortedSet())

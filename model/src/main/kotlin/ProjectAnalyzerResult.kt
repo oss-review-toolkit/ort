@@ -66,7 +66,7 @@ data class ProjectAnalyzerResult(
 
         fun addIssues(pkgReference: PackageReference) {
             val issuesForPkg = collectedIssues.getOrPut(pkgReference.id) { mutableListOf() }
-            issuesForPkg += pkgReference.errors
+            issuesForPkg += pkgReference.issues
 
             pkgReference.dependencies.forEach { addIssues(it) }
         }

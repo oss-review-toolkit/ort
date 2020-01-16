@@ -211,7 +211,7 @@ class Maven(
             return PackageReference(
                 Identifier(managerName, node.artifact.groupId, node.artifact.artifactId, node.artifact.version),
                 dependencies = sortedSetOf(),
-                errors = listOf(
+                issues = listOf(
                     createAndLogIssue(
                         source = managerName,
                         message = "Could not get package information for dependency '$identifier': " +

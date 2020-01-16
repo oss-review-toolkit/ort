@@ -114,8 +114,8 @@ data class Project(
         val collectedErrors = mutableMapOf<Identifier, MutableSet<OrtIssue>>()
 
         fun addErrors(pkgRef: PackageReference) {
-            if (pkgRef.errors.isNotEmpty()) {
-                collectedErrors.getOrPut(pkgRef.id) { mutableSetOf() } += pkgRef.errors
+            if (pkgRef.issues.isNotEmpty()) {
+                collectedErrors.getOrPut(pkgRef.id) { mutableSetOf() } += pkgRef.issues
             }
 
             pkgRef.dependencies.forEach { addErrors(it) }
@@ -147,7 +147,7 @@ data class Project(
 
         fun addErrors(pkgRef: PackageReference) {
             if (pkgRef.id == id) {
-                collectedErrors += pkgRef.errors
+                collectedErrors += pkgRef.issues
             }
 
             pkgRef.dependencies.forEach { addErrors(it) }
