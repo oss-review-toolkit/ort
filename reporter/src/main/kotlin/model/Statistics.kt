@@ -96,7 +96,7 @@ data class DependencyTreeStatistics(
     val includedTreeDepth: Int,
 
     /**
-     * The set of scopes names which have at least one not excluded corresponding [Scope].
+     * The set of scope names which have at least one not excluded corresponding [Scope].
      */
     val includedScopes: SortedSet<String>,
 
