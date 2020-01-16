@@ -23,7 +23,7 @@ project:
   - name: "compile"
     dependencies:
     - id: "Unknown:org.apache.commons:commons-text:1.1"
-      errors:
+      issues:
       - timestamp: "1970-01-01T00:00:00Z"
         source: "Gradle"
         message: "Unresolved: ModuleVersionNotFoundException: Cannot resolve external\
@@ -33,7 +33,7 @@ project:
   - name: "compileClasspath"
     dependencies:
     - id: "Unknown:org.apache.commons:commons-text:1.1"
-      errors:
+      issues:
       - timestamp: "1970-01-01T00:00:00Z"
         source: "Gradle"
         message: "Unresolved: ModuleVersionNotFoundException: Cannot resolve external\
@@ -45,7 +45,7 @@ project:
   - name: "default"
     dependencies:
     - id: "Unknown:org.apache.commons:commons-text:1.1"
-      errors:
+      issues:
       - timestamp: "1970-01-01T00:00:00Z"
         source: "Gradle"
         message: "Unresolved: ModuleVersionNotFoundException: Cannot resolve external\
@@ -55,7 +55,7 @@ project:
   - name: "runtime"
     dependencies:
     - id: "Unknown:org.apache.commons:commons-text:1.1"
-      errors:
+      issues:
       - timestamp: "1970-01-01T00:00:00Z"
         source: "Gradle"
         message: "Unresolved: ModuleVersionNotFoundException: Cannot resolve external\
@@ -65,7 +65,7 @@ project:
   - name: "runtimeClasspath"
     dependencies:
     - id: "Unknown:org.apache.commons:commons-text:1.1"
-      errors:
+      issues:
       - timestamp: "1970-01-01T00:00:00Z"
         source: "Gradle"
         message: "Unresolved: ModuleVersionNotFoundException: Cannot resolve external\
@@ -77,14 +77,14 @@ project:
   - name: "testCompile"
     dependencies:
     - id: "Unknown:junit:junit:4.12"
-      errors:
+      issues:
       - timestamp: "1970-01-01T00:00:00Z"
         source: "Gradle"
         message: "Unresolved: ModuleVersionNotFoundException: Cannot resolve external\
           \ dependency junit:junit:4.12 because no repositories are defined."
         severity: "ERROR"
     - id: "Unknown:org.apache.commons:commons-text:1.1"
-      errors:
+      issues:
       - timestamp: "1970-01-01T00:00:00Z"
         source: "Gradle"
         message: "Unresolved: ModuleVersionNotFoundException: Cannot resolve external\
@@ -94,14 +94,14 @@ project:
   - name: "testCompileClasspath"
     dependencies:
     - id: "Unknown:junit:junit:4.12"
-      errors:
+      issues:
       - timestamp: "1970-01-01T00:00:00Z"
         source: "Gradle"
         message: "Unresolved: ModuleVersionNotFoundException: Cannot resolve external\
           \ dependency junit:junit:4.12 because no repositories are defined."
         severity: "ERROR"
     - id: "Unknown:org.apache.commons:commons-text:1.1"
-      errors:
+      issues:
       - timestamp: "1970-01-01T00:00:00Z"
         source: "Gradle"
         message: "Unresolved: ModuleVersionNotFoundException: Cannot resolve external\
@@ -113,14 +113,14 @@ project:
   - name: "testRuntime"
     dependencies:
     - id: "Unknown:junit:junit:4.12"
-      errors:
+      issues:
       - timestamp: "1970-01-01T00:00:00Z"
         source: "Gradle"
         message: "Unresolved: ModuleVersionNotFoundException: Cannot resolve external\
           \ dependency junit:junit:4.12 because no repositories are defined."
         severity: "ERROR"
     - id: "Unknown:org.apache.commons:commons-text:1.1"
-      errors:
+      issues:
       - timestamp: "1970-01-01T00:00:00Z"
         source: "Gradle"
         message: "Unresolved: ModuleVersionNotFoundException: Cannot resolve external\
@@ -130,14 +130,14 @@ project:
   - name: "testRuntimeClasspath"
     dependencies:
     - id: "Unknown:junit:junit:4.12"
-      errors:
+      issues:
       - timestamp: "1970-01-01T00:00:00Z"
         source: "Gradle"
         message: "Unresolved: ModuleVersionNotFoundException: Cannot resolve external\
           \ dependency junit:junit:4.12 because no repositories are defined."
         severity: "ERROR"
     - id: "Unknown:org.apache.commons:commons-text:1.1"
-      errors:
+      issues:
       - timestamp: "1970-01-01T00:00:00Z"
         source: "Gradle"
         message: "Unresolved: ModuleVersionNotFoundException: Cannot resolve external\

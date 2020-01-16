@@ -421,7 +421,7 @@ open class Npm(
                         "specific to a different platform."
             )
 
-            return PackageReference(id, errors = listOf(issue))
+            return PackageReference(id, issues = listOf(issue))
         } else {
             // Skip the package name directory when going up.
             var parentModulesDir = startModulesDir.parentFile.parentFile

@@ -203,7 +203,7 @@ class PhpComposer(
                 e.showStackTrace()
 
                 packageInfo.toReference(
-                    errors = listOf(
+                    issues = listOf(
                         createAndLogIssue(
                             source = managerName,
                             message = "Could not resolve dependencies of '$packageName': ${e.collectMessagesAsString()}"
