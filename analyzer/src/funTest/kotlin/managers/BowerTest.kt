@@ -56,7 +56,7 @@ class BowerTest : StringSpec() {
             val result = createBower().resolveDependencies(listOf(packageFile))[packageFile]
 
             result shouldNotBe null
-            result!!.errors should beEmpty()
+            result!!.issues should beEmpty()
             yamlMapper.writeValueAsString(result) shouldBe expectedResult
         }
     }

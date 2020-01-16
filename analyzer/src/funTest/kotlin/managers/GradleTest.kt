@@ -68,7 +68,7 @@ class GradleTest : StringSpec() {
             val result = createGradle().resolveDependencies(listOf(packageFile))[packageFile]
 
             result shouldNotBe null
-            result!!.errors shouldBe emptyList()
+            result!!.issues shouldBe emptyList()
             yamlMapper.writeValueAsString(result) shouldBe expectedResult
         }
 
@@ -83,7 +83,7 @@ class GradleTest : StringSpec() {
             val result = createGradle().resolveDependencies(listOf(packageFile))[packageFile]
 
             result shouldNotBe null
-            result!!.errors shouldBe emptyList()
+            result!!.issues shouldBe emptyList()
             yamlMapper.writeValueAsString(result) shouldBe expectedResult
         }
 
@@ -98,7 +98,7 @@ class GradleTest : StringSpec() {
             val result = createGradle().resolveDependencies(listOf(packageFile))[packageFile]
 
             result shouldNotBe null
-            result!!.errors shouldBe emptyList()
+            result!!.issues shouldBe emptyList()
             yamlMapper.writeValueAsString(result) shouldBe expectedResult
         }
 
@@ -113,7 +113,7 @@ class GradleTest : StringSpec() {
             val result = createGradle().resolveDependencies(listOf(packageFile))[packageFile]
 
             result shouldNotBe null
-            result!!.errors shouldBe emptyList()
+            result!!.issues shouldBe emptyList()
             patchActualResult(yamlMapper.writeValueAsString(result)) shouldBe expectedResult
         }
 
@@ -189,7 +189,7 @@ class GradleTest : StringSpec() {
                 val result = createGradle().resolveDependencies(listOf(packageFile))[packageFile]
 
                 result shouldNotBe null
-                result!!.errors shouldBe emptyList()
+                result!!.issues shouldBe emptyList()
                 yamlMapper.writeValueAsString(result) shouldBe expectedResult
             }
         }

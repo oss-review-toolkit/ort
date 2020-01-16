@@ -147,7 +147,7 @@ class AnalyzerResultTest : WordSpec() {
                     package3.toCuratedPackage()
                 )
                 mergedResults.issues shouldBe
-                        sortedMapOf(project1.id to analyzerResult1.errors, project2.id to analyzerResult2.errors)
+                        sortedMapOf(project1.id to analyzerResult1.issues, project2.id to analyzerResult2.issues)
             }
         }
     }

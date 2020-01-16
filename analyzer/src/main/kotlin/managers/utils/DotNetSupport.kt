@@ -82,7 +82,7 @@ fun PackageManager.resolveDotNetDependencies(
     return ProjectAnalyzerResult(
         project,
         packages = support.packages.mapTo(sortedSetOf()) { it.toCuratedPackage() },
-        errors = support.errors
+        issues = support.issues
     )
 }
 
@@ -152,7 +152,7 @@ class DotNetSupport(packageReferencesMap: Map<String, String>) {
     }
 
     val packages = mutableListOf<Package>()
-    val errors = mutableListOf<OrtIssue>()
+    val issues = mutableListOf<OrtIssue>()
     val scope = Scope("dependencies", sortedSetOf())
 
     // Maps an (id, version) pair to a (nupkg URL, catalog entry) pair.
@@ -221,7 +221,7 @@ class DotNetSupport(packageReferencesMap: Map<String, String>) {
         val packageJsonNode = preparePackageReference(packageID, version)
 
         if (packageJsonNode == null) {
-            errors += createAndLogIssue(
+            issues += createAndLogIssue(
                 source = "nuget-API",
                 message = "$packageID:$version can not be found on Nugets RestAPI."
             )
