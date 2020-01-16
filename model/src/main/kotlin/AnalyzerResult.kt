@@ -76,9 +76,9 @@ data class AnalyzerResult(
         }
 
         packages.forEach { curatedPackage ->
-            val errors = curatedPackage.pkg.collectErrors()
-            if (errors.isNotEmpty()) {
-                collectedIssues.getOrPut(curatedPackage.pkg.id) { mutableSetOf() } += errors
+            val issues = curatedPackage.pkg.collectIssues()
+            if (issues.isNotEmpty()) {
+                collectedIssues.getOrPut(curatedPackage.pkg.id) { mutableSetOf() } += issues
             }
         }
 
