@@ -99,7 +99,7 @@ data class Project(
     /**
      * Return the set of [PackageReference]s in this [Project], up to and including a depth of [maxDepth] where counting
      * starts at 0 (for the [Project] itself) and 1 are direct dependencies etc. A value below 0 means to not limit the
-     * depth. If [includeErroneous] is true, [PackageReference]s with errors (but not their dependencies without errors)
+     * depth. If [includeErroneous] is true, [PackageReference]s with issues (but not their dependencies without issues)
      * are excluded, otherwise they are included.
      */
     fun collectDependencies(maxDepth: Int = -1, includeErroneous: Boolean = true) =
@@ -108,27 +108,27 @@ data class Project(
         }
 
     /**
-     * Return a map of all de-duplicated errors associated by [Identifier].
+     * Return a map of all de-duplicated [OrtIssue]s associated by [Identifier].
      */
-    fun collectErrors(): Map<Identifier, Set<OrtIssue>> {
-        val collectedErrors = mutableMapOf<Identifier, MutableSet<OrtIssue>>()
+    fun collectIssues(): Map<Identifier, Set<OrtIssue>> {
+        val collectedIssues = mutableMapOf<Identifier, MutableSet<OrtIssue>>()
 
-        fun addErrors(pkgRef: PackageReference) {
+        fun addIssues(pkgRef: PackageReference) {
             if (pkgRef.issues.isNotEmpty()) {
-                collectedErrors.getOrPut(pkgRef.id) { mutableSetOf() } += pkgRef.issues
+                collectedIssues.getOrPut(pkgRef.id) { mutableSetOf() } += pkgRef.issues
             }
 
-            pkgRef.dependencies.forEach { addErrors(it) }
+            pkgRef.dependencies.forEach { addIssues(it) }
         }
 
         for (scope in scopes) {
             for (dependency in scope.dependencies) {
-                addErrors(dependency)
+                addIssues(dependency)
             }
         }
 
         declaredLicensesProcessed.unmapped.forEach { unmappedLicense ->
-            collectedErrors.getOrPut(id) { mutableSetOf() } += OrtIssue(
+            collectedIssues.getOrPut(id) { mutableSetOf() } += OrtIssue(
                 severity = Severity.ERROR,
                 source = id.toCoordinates(),
                 message = "The declared license '$unmappedLicense' could not be mapped to a valid license or " +
@@ -136,30 +136,30 @@ data class Project(
             )
         }
 
-        return collectedErrors
+        return collectedIssues
     }
 
     /**
-     * Return a de-duplicated list of all errors for the provided [id].
+     * Return a de-duplicated list of all [OrtIssue]s for the provided [id].
      */
-    fun collectErrors(id: Identifier): List<OrtIssue> {
-        val collectedErrors = mutableListOf<OrtIssue>()
+    fun collectIssues(id: Identifier): List<OrtIssue> {
+        val collectedIssues = mutableListOf<OrtIssue>()
 
-        fun addErrors(pkgRef: PackageReference) {
+        fun addIssues(pkgRef: PackageReference) {
             if (pkgRef.id == id) {
-                collectedErrors += pkgRef.issues
+                collectedIssues += pkgRef.issues
             }
 
-            pkgRef.dependencies.forEach { addErrors(it) }
+            pkgRef.dependencies.forEach { addIssues(it) }
         }
 
         for (scope in scopes) {
             for (dependency in scope.dependencies) {
-                addErrors(dependency)
+                addIssues(dependency)
             }
         }
 
-        return collectedErrors.distinct()
+        return collectedIssues.distinct()
     }
 
     /**
