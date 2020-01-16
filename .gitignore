@@ -1,7 +1,6 @@
 .gradle/
 .idea/
 build/
-!/docker/build/
 out/
 /local.properties
 /*.iml
