@@ -93,8 +93,8 @@ ORT can now be run using
 
     ./cli/build/install/ort/bin/ort --help
 
-Note that if you make any changes to ORT's source code, you would have to regenerate the distribution using either the
-[Build using Docker](#build-using-docker) or [Build natively](#build-natively) steps above.
+Note that if you make any changes to ORT's source code, you would have to regenerate the distribution using the steps
+above.
 
 To avoid that, you can also build and run ORT in one go (if you have the prerequisites from the
 [Build natively](#build-natively) section installed):
