@@ -226,11 +226,11 @@ project:
                   dependencies:
                   - id: "NPM::is-accessor-descriptor:1.0.0"
                     dependencies:
-                    - id: "NPM::kind-of:6.0.2"
+                    - id: "NPM::kind-of:6.0.3"
                   - id: "NPM::is-data-descriptor:1.0.0"
                     dependencies:
-                    - id: "NPM::kind-of:6.0.2"
-                  - id: "NPM::kind-of:6.0.2"
+                    - id: "NPM::kind-of:6.0.3"
+                  - id: "NPM::kind-of:6.0.3"
               - id: "NPM::isobject:3.0.1"
               - id: "NPM::mixin-deep:1.3.2"
                 dependencies:
@@ -280,11 +280,11 @@ project:
                 dependencies:
                 - id: "NPM::is-accessor-descriptor:1.0.0"
                   dependencies:
-                  - id: "NPM::kind-of:6.0.2"
+                  - id: "NPM::kind-of:6.0.3"
                 - id: "NPM::is-data-descriptor:1.0.0"
                   dependencies:
-                  - id: "NPM::kind-of:6.0.2"
-                - id: "NPM::kind-of:6.0.2"
+                  - id: "NPM::kind-of:6.0.3"
+                - id: "NPM::kind-of:6.0.3"
               - id: "NPM::isobject:3.0.1"
             - id: "NPM::extend-shallow:3.0.2"
               dependencies:
@@ -336,7 +336,7 @@ project:
               - id: "NPM::randomatic:3.1.1"
                 dependencies:
                 - id: "NPM::is-number:4.0.0"
-                - id: "NPM::kind-of:6.0.2"
+                - id: "NPM::kind-of:6.0.3"
                 - id: "NPM::math-random:1.0.4"
               - id: "NPM::repeat-element:1.1.3"
               - id: "NPM::repeat-string:1.6.1"
@@ -374,7 +374,7 @@ project:
                 - id: "NPM::randomatic:3.1.1"
                   dependencies:
                   - id: "NPM::is-number:4.0.0"
-                  - id: "NPM::kind-of:6.0.2"
+                  - id: "NPM::kind-of:6.0.3"
                   - id: "NPM::math-random:1.0.4"
                 - id: "NPM::repeat-element:1.1.3"
                 - id: "NPM::repeat-string:1.6.1"
@@ -3016,8 +3016,8 @@ packages:
       path: ""
   curations: []
 - package:
-    id: "NPM::kind-of:6.0.2"
-    purl: "pkg:npm/kind-of@6.0.2"
+    id: "NPM::kind-of:6.0.3"
+    purl: "pkg:npm/kind-of@6.0.3"
     declared_licenses:
     - "MIT"
     declared_licenses_processed:
@@ -3030,19 +3030,19 @@ packages:
         value: ""
         algorithm: ""
     source_artifact:
-      url: "https://registry.npmjs.org/kind-of/-/kind-of-6.0.2.tgz"
+      url: "https://registry.npmjs.org/kind-of/-/kind-of-6.0.3.tgz"
       hash:
-        value: "01146b36a6218e64e58f3a8d66de5d7fc6f6d051"
+        value: "07c05034a6c349fa06e24fa35aa76db4580ce4dd"
         algorithm: "SHA-1"
     vcs:
       type: "Git"
       url: "git+https://github.com/jonschlinkert/kind-of.git"
-      revision: "1491da72e8d276479f5f6198a9e79c1379c5d0c7"
+      revision: "abab085d65f7ee978011da8f135291892fcd97db"
       path: ""
     vcs_processed:
       type: "Git"
       url: "https://github.com/jonschlinkert/kind-of.git"
-      revision: "1491da72e8d276479f5f6198a9e79c1379c5d0c7"
+      revision: "abab085d65f7ee978011da8f135291892fcd97db"
       path: ""
   curations: []
 - package:
