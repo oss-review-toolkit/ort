@@ -150,7 +150,7 @@ data class Package(
     /**
      * Check if this package contains any erroneous data.
      */
-    fun collectErrors() =
+    fun collectIssues() =
         declaredLicensesProcessed.unmapped.map { unmappedLicense ->
             OrtIssue(
                 severity = Severity.ERROR,
