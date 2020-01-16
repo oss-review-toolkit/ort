@@ -101,7 +101,7 @@ To avoid that, you can also build and run ORT in one go (if you have the prerequ
 
     ./gradlew cli:run --args="--help"
 
-Note that in this case the working directory used by ORT is that of the `cli` project, not directory `gradlew` is
+Note that in this case the working directory used by ORT is that of the `cli` project, not the directory `gradlew` is
 located in (see https://github.com/gradle/gradle/issues/6074).
 
 # Running the tools
