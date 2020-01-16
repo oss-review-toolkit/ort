@@ -75,7 +75,7 @@ Install the following basic prerequisites:
 
 * Docker (and ensure its daemon is running).
 
-Change into the created directory and run `docker/build.sh`.
+Change into the directory with ORT's source code and run `docker build -t ort .`.
 
 ### Build natively
 
@@ -111,11 +111,10 @@ dependencies) or to run ORT natively (in which case some additional requirements
 
 ## Run using Docker
 
-Run `docker/run.sh "<DOCKER_ARGS>" <ORT_ARGS>` where `<DOCKER_ARGS>` are passed to `docker run` (and need to be quoted
-if spaces are contained) and `<ORT_ARGS>` are passed to ORT. You typically use `<DOCKER_ARGS>` to mount the project
-directory to scan into the running container to let ORT access it, for example:
+After you have built the image as [described above](#build-using-docker), simply run `docker run <DOCKER_ARGS> ort <ORT_ARGS>`. You typically use `<DOCKER_ARGS>` to mount the project
+directory to analyze into the container for ORT to access it, like:
 
-    docker/run.sh "-v /workspace:/project" --info analyze -f JSON -i /project -o /project/ort/analyzer
+    docker run -v /workspace:/project ort --info analyze -f JSON -i /project -o /project/ort/analyzer
 
 ## Run natively
 
