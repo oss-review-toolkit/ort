@@ -53,6 +53,9 @@ data class Environment(
     val toolVersions: Map<String, String> = emptyMap()
 ) {
     companion object {
+        /**
+         * The version of the OSS Review Toolkit as a string.
+         */
         val ORT_VERSION = this::class.java.getResource("/VERSION").readText()
 
         private val RELEVANT_VARIABLES = listOf(
