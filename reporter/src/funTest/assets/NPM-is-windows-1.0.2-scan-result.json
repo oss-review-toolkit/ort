@@ -6863,10 +6863,10 @@
         },
         "curations" : [ ]
       } ],
-      "errors" : {
+      "issues" : {
         "NPM::is-windows:1.0.2" : [ ]
       },
-      "has_errors" : false
+      "has_issues" : false
     }
   },
   "scanner" : {

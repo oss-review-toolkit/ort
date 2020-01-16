@@ -541,6 +541,6 @@ analyzer:
           revision: ""
           path: ""
       curations: []
-    has_errors: true
+    has_issues: true
 scanner: null
 evaluator: null

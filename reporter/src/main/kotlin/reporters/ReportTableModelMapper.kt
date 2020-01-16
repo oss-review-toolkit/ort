@@ -106,7 +106,7 @@ class ReportTableModelMapper(private val resolutionProvider: ResolutionProvider)
                 val detectedLicenses = licenseFindings[id]?.toSortedMap(compareBy { it.license }) ?: sortedMapOf()
 
                 val analyzerIssues = project.collectErrors(id).toMutableList()
-                analyzerResult.errors[id]?.let {
+                analyzerResult.issues[id]?.let {
                     analyzerIssues += it
                 }
 

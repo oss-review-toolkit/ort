@@ -1168,6 +1168,6 @@ analyzer:
           revision: ""
           path: ""
       curations: []
-    has_errors: false
+    has_issues: false
 scanner: null
 evaluator: null

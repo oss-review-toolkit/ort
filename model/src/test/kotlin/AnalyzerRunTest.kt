@@ -40,7 +40,7 @@ class AnalyzerRunTest : StringSpec() {
                 result:
                   projects: []
                   packages: []
-                  has_errors: false
+                  has_issues: false
             """.trimIndent()
 
             val analyzerRun = yamlMapper.readValue<AnalyzerRun>(yaml)
@@ -63,7 +63,7 @@ class AnalyzerRunTest : StringSpec() {
                 result:
                   projects: []
                   packages: []
-                  has_errors: false
+                  has_issues: false
             """.trimIndent()
 
             val analyzerRun = yamlMapper.readValue<AnalyzerRun>(yaml)
