@@ -68,15 +68,15 @@ class ProjectTest : WordSpec({
         }
     }
 
-    "collectErrors" should {
-        "find all errors" {
+    "collectIssues" should {
+        "find all issues" {
             val analyzerResultsFile = File(
                 "../analyzer/src/funTest/assets/projects/synthetic/" +
                         "gradle-expected-output-lib-without-repo.yml"
             )
             val project = analyzerResultsFile.readValue<ProjectAnalyzerResult>().project
 
-            project.collectErrors() shouldBe mapOf(
+            project.collectIssues() shouldBe mapOf(
                 Identifier("Unknown:org.apache.commons:commons-text:1.1") to setOf(
                     OrtIssue(
                         Instant.EPOCH,

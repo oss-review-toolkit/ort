@@ -70,8 +70,8 @@ data class AnalyzerResult(
         val collectedIssues = issues.mapValuesTo(mutableMapOf()) { it.value.toMutableSet() }
 
         projects.forEach { project ->
-            project.collectErrors().forEach { (id, errors) ->
-                collectedIssues.getOrPut(id) { mutableSetOf() } += errors
+            project.collectIssues().forEach { (id, issues) ->
+                collectedIssues.getOrPut(id) { mutableSetOf() } += issues
             }
         }
 
