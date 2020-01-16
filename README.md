@@ -84,8 +84,8 @@ Install these additional prerequisites:
 * OpenJDK 8 or Oracle JDK 8u161 or later (not the JRE as you need the `javac` compiler); also remember to set the
   `JAVA_HOME` environment variable accordingly.
 
-Change into the created directory and run `./gradlew installDist` (on the first run this will bootstrap Gradle and
-download all required dependencies).
+Change into the directory with ORT's source code and run `./gradlew installDist` (on the first run this will bootstrap
+Gradle and download all required dependencies).
 
 ## Basic usage
 
