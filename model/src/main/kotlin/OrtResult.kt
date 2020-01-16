@@ -166,7 +166,7 @@ data class OrtResult(
      * Return a map of all de-duplicated errors associated by [Identifier].
      */
     fun collectErrors(): Map<Identifier, Set<OrtIssue>> {
-        val analyzerErrors = analyzer?.result?.collectErrors().orEmpty()
+        val analyzerErrors = analyzer?.result?.collectIssues().orEmpty()
         val scannerErrors = scanner?.results?.collectErrors().orEmpty()
         return analyzerErrors.zipWithDefault(scannerErrors, emptySet()) { left, right -> left + right }
     }

@@ -586,6 +586,6 @@ analyzer:
           - "curated license a"
           - "curated license b"
           comment: "Declared license in pom.xml is wrong."
-    has_errors: true
+    has_issues: true
 scanner: null
 evaluator: null
