@@ -36,7 +36,7 @@ data class Environment(
     val javaVersion: String = System.getProperty("java.version"),
 
     /**
-     * Name of the operating system, defaults to [OS.name].
+     * Name of the operating system, defaults to [Os.name].
      */
     val os: String = Os.name,
 
