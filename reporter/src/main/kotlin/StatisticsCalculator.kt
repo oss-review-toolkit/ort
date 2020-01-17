@@ -67,7 +67,7 @@ internal class StatisticsCalculator {
             .filterNot { (id, _) -> ortResult.isExcluded(id) }
             .values
             .flatten()
-            .filter { issue -> resolutionProvider.getErrorResolutionsFor(issue).isEmpty() }
+            .filter { issue -> resolutionProvider.getIssueResolutionsFor(issue).isEmpty() }
 
         return IssueStatistics(
             errors = openIssues.count { it.severity == Severity.ERROR },

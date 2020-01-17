@@ -57,10 +57,10 @@ class RepositoryConfigurationTest : WordSpec() {
                         reason: "TEST_DEPENDENCY_OF"
                         comment: "scope comment"
                     resolutions:
-                      errors:
+                      issues:
                       - message: "message"
                         reason: "CANT_FIX_ISSUE"
-                        comment: "error comment"
+                        comment: "issue comment"
                       rule_violations:
                       - message: "rule message"
                         reason: "PATENT_GRANT_EXCEPTION"
@@ -87,12 +87,12 @@ class RepositoryConfigurationTest : WordSpec() {
                     comment shouldBe "scope comment"
                 }
 
-                val errors = repositoryConfiguration.resolutions.errors
-                errors should haveSize(1)
-                with(errors.first()) {
+                val issues = repositoryConfiguration.resolutions.issues
+                issues should haveSize(1)
+                with(issues.first()) {
                     message shouldBe "message"
                     reason shouldBe ErrorResolutionReason.CANT_FIX_ISSUE
-                    comment shouldBe "error comment"
+                    comment shouldBe "issue comment"
                 }
 
                 val evalErrors = repositoryConfiguration.resolutions.ruleViolations

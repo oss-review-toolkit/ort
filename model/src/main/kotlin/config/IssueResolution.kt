@@ -24,18 +24,18 @@ import com.fasterxml.jackson.annotation.JsonIgnore
 import com.here.ort.model.OrtIssue
 
 /**
- * Defines the resolution of an error. This can be used to silence false positives, or errors that have been identified
- * as not being relevant.
+ * Defines the resolution of an [OrtIssue]. This can be used to silence false positives, or issues that have been
+ * identified as not being relevant.
  */
-data class ErrorResolution(
+data class IssueResolution(
     /**
-     * A regular expression string to match the messages of errors to resolve. Will be converted to a [Regex] using
+     * A regular expression string to match the messages of issues to resolve. Will be converted to a [Regex] using
      * [RegexOption.DOT_MATCHES_ALL].
      */
     val message: String,
 
     /**
-     * The reason why the errors is resolved.
+     * The reason why the issue is resolved.
      */
     val reason: ErrorResolutionReason,
 
@@ -48,7 +48,7 @@ data class ErrorResolution(
     private val regex = Regex(message, RegexOption.DOT_MATCHES_ALL)
 
     /**
-     * True if [message] matches the message of [error].
+     * True if [message] matches the message of [issue].
      */
-    fun matches(error: OrtIssue) = regex.matches(error.message)
+    fun matches(issue: OrtIssue) = regex.matches(issue.message)
 }
