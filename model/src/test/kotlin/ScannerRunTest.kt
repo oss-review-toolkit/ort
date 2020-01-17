@@ -42,7 +42,7 @@ class ScannerRunTest : StringSpec() {
                   storage_stats:
                     num_reads: 0
                     num_hits: 0
-                  has_errors: false
+                  has_issues: false
             """.trimIndent()
 
             val scannerRun = yamlMapper.readValue<ScannerRun>(yaml)
@@ -67,7 +67,7 @@ class ScannerRunTest : StringSpec() {
                   storage_stats:
                     num_reads: 0
                     num_hits: 0
-                  has_errors: false
+                  has_issues: false
             """.trimIndent()
 
             val scannerRun = yamlMapper.readValue<ScannerRun>(yaml)

@@ -167,7 +167,7 @@ data class OrtResult(
      */
     fun collectErrors(): Map<Identifier, Set<OrtIssue>> {
         val analyzerErrors = analyzer?.result?.collectIssues().orEmpty()
-        val scannerErrors = scanner?.results?.collectErrors().orEmpty()
+        val scannerErrors = scanner?.results?.collectIssues().orEmpty()
         return analyzerErrors.zipWithDefault(scannerErrors, emptySet()) { left, right -> left + right }
     }
 

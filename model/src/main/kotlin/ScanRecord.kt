@@ -27,7 +27,7 @@ import java.util.SortedSet
 /**
  * A record of a single run of the scanner tool, containing the input and the scan results for all scanned packages.
  */
-@JsonIgnoreProperties(value = ["has_errors"], allowGetters = true)
+@JsonIgnoreProperties(value = ["has_issues"], allowGetters = true)
 data class ScanRecord(
     /**
      * The scanned and ignored [Scope]s for each scanned [Project] by id.
@@ -47,23 +47,23 @@ data class ScanRecord(
     val storageStats: AccessStatistics
 ) {
     /**
-     * Return a map of all de-duplicated errors associated by [Identifier].
+     * Return a map of all de-duplicated [OrtIssue]s associated by [Identifier].
      */
-    fun collectErrors(): Map<Identifier, Set<OrtIssue>> {
-        val collectedErrors = mutableMapOf<Identifier, MutableSet<OrtIssue>>()
+    fun collectIssues(): Map<Identifier, Set<OrtIssue>> {
+        val collectedIssues = mutableMapOf<Identifier, MutableSet<OrtIssue>>()
 
         scanResults.forEach { container ->
             container.results.forEach { result ->
-                collectedErrors.getOrPut(container.id) { mutableSetOf() } += result.summary.errors
+                collectedIssues.getOrPut(container.id) { mutableSetOf() } += result.summary.errors
             }
         }
 
-        return collectedErrors
+        return collectedIssues
     }
 
     /**
-     * True if any of the [scanResults] contain errors.
+     * True if any of the [scanResults] contain [OrtIssue]s.
      */
     @Suppress("UNUSED") // Not used in code, but shall be serialized.
-    val hasErrors by lazy { scanResults.any { it.results.any { it.summary.errors.isNotEmpty() } } }
+    val hasIssues by lazy { scanResults.any { it.results.any { it.summary.errors.isNotEmpty() } } }
 }

@@ -753,5 +753,5 @@ scanner:
     storage_stats:
       num_reads: 11
       num_hits: 0
-    has_errors: true
+    has_issues: true
 evaluator: null
