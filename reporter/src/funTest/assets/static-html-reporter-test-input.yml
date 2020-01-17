@@ -272,7 +272,7 @@ scanner:
               - path: "fake_path"
                 start_line: 206
                 end_line: 206
-          errors:
+          issues:
           - timestamp: "1970-01-01T00:00:00Z"
             source: "FileCounter"
             message: "DownloadException: No source artifact URL provided for 'Gradle:com.here.ort.gradle.example:lib:1.0.0'.\n\

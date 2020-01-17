@@ -79,12 +79,12 @@ data class ScanSummary(
     val copyrightFindings: SortedSet<CopyrightFinding>,
 
     /**
-     * The list of errors that occurred during the scan.
+     * The list of issues that occurred during the scan.
      */
-    // Do not serialize if empty to reduce the size of the result file. If there are no errors at all,
-    // [ScanRecord.hasErrors] already contains that information.
+    // Do not serialize if empty to reduce the size of the result file. If there are no issues at all,
+    // [ScanRecord.hasIssues] already contains that information.
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    val errors: List<OrtIssue> = emptyList()
+    val issues: List<OrtIssue> = emptyList()
 ) {
     @get:JsonIgnore
     val licenses: Set<String> = licenseFindings.mapTo(mutableSetOf()) { it.license }
@@ -112,6 +112,7 @@ class ScanSummaryDeserializer : StdDeserializer<ScanSummary>(OrtIssue::class.jav
 
         // TODO: Remove the fallback value for packageVerification code once any ORT feature depends on its existence,
         //       as it is only there for backward compatibility.
+        //       Remove backward compatibility with the old "errors" property once it is not required anymore.
         return ScanSummary(
             startTime = node.readValue("start_time")!!,
             endTime = node.readValue("end_time")!!,
@@ -119,7 +120,11 @@ class ScanSummaryDeserializer : StdDeserializer<ScanSummary>(OrtIssue::class.jav
             packageVerificationCode = node.readValue<String>("package_verification_code").orEmpty(),
             licenseFindings = (licenseFindings + legacyLicenseFindings).toSortedSet(),
             copyrightFindings = (copyrightFindings + legacyCopyrightFindings).toSortedSet(),
-            errors = node.readValues("errors", OrtIssue::class)
+            issues = if (node.has("errors")) {
+                node.readValues("errors", OrtIssue::class)
+            } else {
+                node.readValues("issues", OrtIssue::class)
+            }
         )
     }
 

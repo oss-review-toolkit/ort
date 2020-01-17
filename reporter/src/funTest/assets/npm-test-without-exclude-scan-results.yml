@@ -665,7 +665,7 @@ scanner:
           end_time: "2018-08-21T16:20:45.663Z"
           file_count: 0
           license_findings: []
-          errors:
+          issues:
           - timestamp: "2018-08-21T16:20:45.663Z"
             source: "ScanCode"
             message: "DownloadException: No source artifact URL provided for 'NPM::npm-excludes-test-project:1.0.0'."

@@ -39,14 +39,14 @@ results:
                 - path: "copyright path 1.2"
                   start_line: 1
                   end_line: 2
-      errors:
+      issues:
         - timestamp: "1970-01-01T00:00:00Z"
           source: "source-11"
-          message: "error-11"
+          message: "issue-11"
           severity: "ERROR"
         - timestamp: "1970-01-01T00:00:00Z"
           source: "source-12"
-          message: "error-12"
+          message: "issue-12"
           severity: "ERROR"
     raw_result: "key 1"
   - provenance:
@@ -88,13 +88,13 @@ results:
                 - path: "path 2.2"
                   start_line: 1
                   end_line: 1
-      errors:
+      issues:
         - timestamp: "1970-01-01T00:00:00Z"
           source: "source-21"
-          message: "error-21"
+          message: "issue-21"
           severity: "ERROR"
         - timestamp: "1970-01-01T00:00:00Z"
           source: "source-22"
-          message: "error-22"
+          message: "issue-22"
           severity: "ERROR"
     raw_result: "key 2"
