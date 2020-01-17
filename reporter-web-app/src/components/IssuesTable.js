@@ -21,21 +21,21 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Icon, Table } from 'antd';
 
-// Generates the HTML to display errors as a Table
-const ErrorsTable = (props) => {
+// Generates the HTML to display issues as a Table
+const IssuesTable = (props) => {
     const {
-        errors,
+        issues,
         expandedRowRender,
         showPackageColumn
     } = props;
 
-    // If return null to prevent React render error
-    if (!errors) {
+    // If return null to prevent React render issue
+    if (!issues) {
         return null;
     }
 
     const columns = [];
-    const totalErrors = errors.length;
+    const totalIssues = issues.length;
 
     columns.push({
         align: 'right',
@@ -105,10 +105,10 @@ const ErrorsTable = (props) => {
     return (
         <Table
             columns={columns}
-            dataSource={errors}
+            dataSource={issues}
             expandedRowRender={expandedRowRender}
             locale={{
-                emptyText: 'No errors'
+                emptyText: 'No issues'
             }}
             pagination={
                 {
@@ -118,25 +118,25 @@ const ErrorsTable = (props) => {
                     position: 'bottom',
                     showQuickJumper: true,
                     showSizeChanger: true,
-                    showTotal: (total, range) => `${range[0]}-${range[1]} of ${total} errors`
+                    showTotal: (total, range) => `${range[0]}-${range[1]} of ${total} issues`
                 }
             }
             rowKey="key"
-            showHeader={totalErrors > 1}
+            showHeader={totalIssues > 1}
             size="small"
         />
     );
 };
 
-ErrorsTable.propTypes = {
-    errors: PropTypes.array.isRequired,
+IssuesTable.propTypes = {
+    issues: PropTypes.array.isRequired,
     expandedRowRender: PropTypes.func,
     showPackageColumn: PropTypes.bool
 };
 
-ErrorsTable.defaultProps = {
+IssuesTable.defaultProps = {
     expandedRowRender: null,
     showPackageColumn: false
 };
 
-export default ErrorsTable;
+export default IssuesTable;

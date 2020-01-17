@@ -23,7 +23,7 @@ import PropTypes from 'prop-types';
 import {
     Collapse
 } from 'antd';
-import ErrorsTable from './ErrorsTable';
+import IssuesTable from './IssuesTable';
 import PackageDetails from './PackageDetails';
 import PackageLicenses from './PackageLicenses';
 import PackagePaths from './PackagePaths';
@@ -32,19 +32,19 @@ import ViolationsTable from './ViolationsTable';
 
 const { Panel } = Collapse;
 
-// Generates the HTML for packages errors
+// Generates the HTML for packages issues
 const PackageCollapse = (props) => {
     const {
         pkg,
         filterScanFindings,
         includeLicenses,
-        includeErrors,
+        includeIssues,
         includeViolations,
         includePaths,
         includeScanFindings,
         showDetails,
         showLicenses,
-        showErrors,
+        showIssues,
         showViolations,
         showPaths,
         showScanFindings,
@@ -61,7 +61,7 @@ const PackageCollapse = (props) => {
         defaultActiveKey.push('2');
     }
 
-    if (showErrors) {
+    if (showIssues) {
         defaultActiveKey.push('3');
     }
 
@@ -95,12 +95,12 @@ const PackageCollapse = (props) => {
                 )
             }
             {
-                includeErrors
-                && pkg.hasErrors(webAppOrtResult)
+                includeIssues
+                && pkg.hasIssues(webAppOrtResult)
                 && (
-                    <Panel header="Package Errors" key="3">
-                        <ErrorsTable
-                            errors={pkg.getErrors(webAppOrtResult)}
+                    <Panel header="Package Issues" key="3">
+                        <IssuesTable
+                            issues={pkg.getIssues(webAppOrtResult)}
                             showPackageColumn={false}
                         />
                     </Panel>
@@ -149,13 +149,13 @@ PackageCollapse.propTypes = {
     filterScanFindings: PropTypes.object,
     pkg: PropTypes.object.isRequired,
     includeLicenses: PropTypes.bool,
-    includeErrors: PropTypes.bool,
+    includeIssues: PropTypes.bool,
     includeViolations: PropTypes.bool,
     includePaths: PropTypes.bool,
     includeScanFindings: PropTypes.bool,
     showDetails: PropTypes.bool,
     showLicenses: PropTypes.bool,
-    showErrors: PropTypes.bool,
+    showIssues: PropTypes.bool,
     showViolations: PropTypes.bool,
     showPaths: PropTypes.bool,
     showScanFindings: PropTypes.bool,
@@ -168,13 +168,13 @@ PackageCollapse.defaultProps = {
         value: []
     },
     includeLicenses: true,
-    includeErrors: true,
+    includeIssues: true,
     includeViolations: true,
     includePaths: true,
     includeScanFindings: true,
     showDetails: true,
     showLicenses: true,
-    showErrors: true,
+    showIssues: true,
     showViolations: true,
     showPaths: false,
     showScanFindings: false
