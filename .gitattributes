@@ -1,3 +1,7 @@
+# Always use Unix line endings for Unix shell scripts.
+gradlew						text eol=lf
+*.sh						text eol=lf
+
 # Use Unix line endings for expected test results for consistency across platforms.
 */src/*/assets/**/*expected*.yml		text eol=lf
 reporter/src/funTest/assets/*-expected-*	text eol=lf
