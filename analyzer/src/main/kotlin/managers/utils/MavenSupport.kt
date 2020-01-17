@@ -31,6 +31,7 @@ import com.here.ort.model.VcsInfo
 import com.here.ort.model.VcsType
 import com.here.ort.model.yamlMapper
 import com.here.ort.utils.DiskCache
+import com.here.ort.utils.Os
 import com.here.ort.utils.collectMessagesAsString
 import com.here.ort.utils.getUserOrtDirectory
 import com.here.ort.utils.log
@@ -38,6 +39,7 @@ import com.here.ort.utils.searchUpwardsForSubdirectory
 import com.here.ort.utils.showStackTrace
 
 import java.io.File
+import java.net.URL
 import java.util.regex.Pattern
 
 import org.apache.maven.artifact.repository.LegacyLocalRepositoryManager
@@ -58,6 +60,7 @@ import org.apache.maven.project.ProjectBuildingRequest
 import org.apache.maven.project.ProjectBuildingResult
 import org.apache.maven.properties.internal.EnvironmentUtils
 import org.apache.maven.session.scope.internal.SessionScope
+import org.apache.maven.settings.Proxy
 
 import org.codehaus.plexus.DefaultContainerConfiguration
 import org.codehaus.plexus.DefaultPlexusContainer
@@ -114,6 +117,17 @@ class MavenSupport(workspaceReader: WorkspaceReader) {
                 loggerManager = object : BaseLoggerManager() {
                     override fun createLogger(name: String) = MavenLogger(log.delegate.level)
                 }
+            }
+        }
+
+        fun createProxyFromUrl(proxyUrl: String): Proxy {
+            val url = URL(proxyUrl)
+            return Proxy().apply {
+                protocol = url.protocol
+                username = url.userInfo?.substringBefore(':')
+                password = url.userInfo?.substringAfter(':')
+                host = url.host
+                if (url.port != -1) port = url.port
             }
         }
 
@@ -239,6 +253,12 @@ class MavenSupport(workspaceReader: WorkspaceReader) {
         //       "${user.home}/.m2/settings.xml". The settings file locations can already be overwritten using the
         //       system properties "org.apache.maven.global-settings" and "org.apache.maven.user-settings".
         val settings = settingsBuilder.buildSettings()
+
+        Os.proxy?.let { proxyUrl ->
+            // Maven only uses the first active proxy for both HTTP and HTTPS traffic.
+            settings.proxies.add(createProxyFromUrl(proxyUrl))
+            log.debug { "Added $proxyUrl as proxy." }
+        }
 
         populator.populateFromSettings(request, settings)
         populator.populateDefaults(request)
