@@ -94,7 +94,8 @@ object OkHttpClientHelper {
     fun OkHttpClient.Builder.applyProxySettingsFromEnv(): OkHttpClient.Builder {
         fun String.addProtocol(protocol: String) = if (!startsWith("http")) "$protocol://$this" else this
 
-        val proxyUrl = Os.env["https_proxy"]?.addProtocol("https")
+        // Note that even HTTPS proxies use "http://" as the protocol!
+        val proxyUrl = Os.env["https_proxy"]?.addProtocol("http")
             ?: Os.env["http_proxy"]?.addProtocol("http")
 
         if (proxyUrl != null) {
