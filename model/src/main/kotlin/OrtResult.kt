@@ -163,12 +163,12 @@ data class OrtResult(
     }
 
     /**
-     * Return a map of all de-duplicated errors associated by [Identifier].
+     * Return a map of all de-duplicated [OrtIssue]s associated by [Identifier].
      */
-    fun collectErrors(): Map<Identifier, Set<OrtIssue>> {
-        val analyzerErrors = analyzer?.result?.collectIssues().orEmpty()
-        val scannerErrors = scanner?.results?.collectIssues().orEmpty()
-        return analyzerErrors.zipWithDefault(scannerErrors, emptySet()) { left, right -> left + right }
+    fun collectIssues(): Map<Identifier, Set<OrtIssue>> {
+        val analyzerIssues = analyzer?.result?.collectIssues().orEmpty()
+        val scannerIssues = scanner?.results?.collectIssues().orEmpty()
+        return analyzerIssues.zipWithDefault(scannerIssues, emptySet()) { left, right -> left + right }
     }
 
     private fun collectLicenseFindings(

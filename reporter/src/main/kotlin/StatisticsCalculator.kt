@@ -63,7 +63,7 @@ internal class StatisticsCalculator {
 
     private fun getOpenIssuesIssues(ortResult: OrtResult, resolutionProvider: ResolutionProvider): IssueStatistics {
         val openIssues = ortResult
-            .collectErrors()
+            .collectIssues()
             .filterNot { (id, _) -> ortResult.isExcluded(id) }
             .values
             .flatten()

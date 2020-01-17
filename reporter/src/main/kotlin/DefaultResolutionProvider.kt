@@ -37,7 +37,7 @@ class DefaultResolutionProvider : ResolutionProvider {
         resolutions.ruleViolations.filter { it.matches(violation) }
 
     override fun getResolutionsFor(ortResult: OrtResult): Resolutions {
-        val errorResolutions = ortResult.collectErrors().values.flatten().let { errors ->
+        val errorResolutions = ortResult.collectIssues().values.flatten().let { errors ->
             resolutions.errors.filter { resolution -> errors.any { resolution.matches(it) } }
         }
 
