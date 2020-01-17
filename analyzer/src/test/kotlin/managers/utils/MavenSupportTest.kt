@@ -21,12 +21,14 @@ package com.here.ort.analyzer.managers.utils
 
 import com.here.ort.model.VcsInfo
 import com.here.ort.model.VcsType
+import com.here.ort.model.yamlMapper
 
 import io.kotlintest.shouldBe
 import io.kotlintest.specs.WordSpec
 
 import org.apache.maven.model.Scm
 import org.apache.maven.project.MavenProject
+import org.apache.maven.settings.Proxy
 
 class MavenSupportTest : WordSpec({
     "parseVcsInfo()" should {
@@ -44,6 +46,42 @@ class MavenSupportTest : WordSpec({
                 revision = "v1.2.3",
                 path = "path/to/manifest.xml"
             )
+        }
+    }
+
+    "createProxyFromUrl" should {
+        "correctly convert URLs" {
+            val actualProxy = MavenSupport.createProxyFromUrl("https://host:23")
+            val expectedProxy = Proxy().apply {
+                protocol = "https"
+                host = "host"
+                port = 23
+            }
+
+            yamlMapper.writeValueAsString(actualProxy) shouldBe yamlMapper.writeValueAsString(expectedProxy)
+        }
+
+        "correctly convert URLs without a port" {
+            val actualProxy = MavenSupport.createProxyFromUrl("http://host")
+            val expectedProxy = Proxy().apply {
+                protocol = "http"
+                host = "host"
+            }
+
+            yamlMapper.writeValueAsString(actualProxy) shouldBe yamlMapper.writeValueAsString(expectedProxy)
+        }
+
+        "correctly convert URLs with user info" {
+            val actualProxy = MavenSupport.createProxyFromUrl("https://user:pass@host:42")
+            val expectedProxy = Proxy().apply {
+                protocol = "https"
+                username = "user"
+                password = "pass"
+                host = "host"
+                port = 42
+            }
+
+            yamlMapper.writeValueAsString(actualProxy) shouldBe yamlMapper.writeValueAsString(expectedProxy)
         }
     }
 })
