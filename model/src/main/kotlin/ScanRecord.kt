@@ -54,7 +54,7 @@ data class ScanRecord(
 
         scanResults.forEach { container ->
             container.results.forEach { result ->
-                collectedIssues.getOrPut(container.id) { mutableSetOf() } += result.summary.errors
+                collectedIssues.getOrPut(container.id) { mutableSetOf() } += result.summary.issues
             }
         }
 
@@ -65,5 +65,5 @@ data class ScanRecord(
      * True if any of the [scanResults] contain [OrtIssue]s.
      */
     @Suppress("UNUSED") // Not used in code, but shall be serialized.
-    val hasIssues by lazy { scanResults.any { it.results.any { it.summary.errors.isNotEmpty() } } }
+    val hasIssues by lazy { scanResults.any { it.results.any { it.summary.issues.isNotEmpty() } } }
 }

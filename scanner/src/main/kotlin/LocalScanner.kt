@@ -225,7 +225,7 @@ abstract class LocalScanner(name: String, config: ScannerConfiguration) : Scanne
                                         packageVerificationCode = "",
                                         licenseFindings = sortedSetOf(),
                                         copyrightFindings = sortedSetOf(),
-                                        errors = listOf(issue)
+                                        issues = listOf(issue)
                                     ),
                                     rawResult = EMPTY_JSON_NODE
                                 )
@@ -299,7 +299,7 @@ abstract class LocalScanner(name: String, config: ScannerConfiguration) : Scanne
                     packageVerificationCode = "",
                     licenseFindings = sortedSetOf(),
                     copyrightFindings = sortedSetOf(),
-                    errors = listOf(
+                    issues = listOf(
                         createAndLogIssue(
                             source = scannerName,
                             message = "Could not download '${pkg.id.toCoordinates()}': ${e.collectMessagesAsString()}"
@@ -333,8 +333,8 @@ abstract class LocalScanner(name: String, config: ScannerConfiguration) : Scanne
                 message = addResult.message ?: "Could not add result to scan results storage for unknown reason.",
                 severity = Severity.WARNING
             )
-            val errors = scanResult.summary.errors + issue
-            val summary = scanResult.summary.copy(errors = errors)
+            val issues = scanResult.summary.issues + issue
+            val summary = scanResult.summary.copy(issues = issues)
             scanResult.copy(summary = summary)
         }
     }
@@ -388,7 +388,7 @@ abstract class LocalScanner(name: String, config: ScannerConfiguration) : Scanne
                 packageVerificationCode = "",
                 licenseFindings = sortedSetOf(),
                 copyrightFindings = sortedSetOf(),
-                errors = listOf(
+                issues = listOf(
                     createAndLogIssue(
                         source = scannerName,
                         message = "Could not scan path '$absoluteInputPath': ${e.collectMessagesAsString()}"

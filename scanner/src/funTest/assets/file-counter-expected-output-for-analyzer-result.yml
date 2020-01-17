@@ -219,7 +219,7 @@ scanner:
           package_verification_code: ""
           licenses: []
           copyrights: []
-          errors:
+          issues:
           - timestamp: "1970-01-01T00:00:00Z"
             source: "FileCounter"
             message: "Could not download 'Gradle:com.here.ort.gradle.example:lib:1.0.0':\

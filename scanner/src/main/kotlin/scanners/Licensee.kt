@@ -156,7 +156,7 @@ class Licensee(name: String, config: ScannerConfiguration) : LocalScanner(name, 
             packageVerificationCode = calculatePackageVerificationCode(scanPath),
             licenseFindings = licenseFindings,
             copyrightFindings = sortedSetOf(),
-            errors = mutableListOf()
+            issues = mutableListOf()
         )
     }
 }
