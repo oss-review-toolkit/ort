@@ -16059,7 +16059,7 @@
         "num_reads" : 154,
         "num_hits" : 0
       },
-      "has_errors" : false
+      "has_issues" : false
     }
   },
   "evaluator" : null
