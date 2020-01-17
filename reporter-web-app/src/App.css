@@ -57,7 +57,7 @@ tr.ant-table-expanded-row, tr.ant-table-expanded-row:hover {
     width: auto;
 }
 
-// Styling specific for last item in SummaryView Timeline
+/* Styling specific for last item in SummaryView Timeline */
 .ant-timeline-item-last {
     padding-bottom: 1em;
 }
