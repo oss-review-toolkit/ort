@@ -26,7 +26,7 @@ class PackageReference {
 
     #dependencies = [];
 
-    #errors = [];
+    #issues = [];
 
     constructor(obj) {
         if (obj instanceof Object) {
@@ -64,13 +64,13 @@ class PackageReference {
         }
     }
 
-    get errors() {
-        return this.#errors;
+    get issues() {
+        return this.#issues;
     }
 
-    set errors(val) {
+    set issues(val) {
         for (let i = 0, len = val.length; i < len; i++) {
-            this.#errors.push(new OrtIssue(val[i]));
+            this.#issues.push(new OrtIssue(val[i]));
         }
     }
 }

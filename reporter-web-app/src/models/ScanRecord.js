@@ -29,7 +29,7 @@ class ScanRecord {
     #storageStats = new AccessStatistics();
 
     constructor(obj) {
-        this.hasErrors = false;
+        this.hasIssues = false;
 
         if (obj instanceof Object) {
             if (obj.scopes) {
@@ -60,12 +60,12 @@ class ScanRecord {
                 this.storageStats = obj.storageStats;
             }
 
-            if (obj.has_errors) {
-                this.hasErrors = obj.has_errors;
+            if (obj.has_issues) {
+                this.hasIssues = obj.has_issues;
             }
 
-            if (obj.hasErrors) {
-                this.hasErrors = obj.hasErrors;
+            if (obj.hasIssues) {
+                this.hasIssues = obj.hasIssues;
             }
         }
     }

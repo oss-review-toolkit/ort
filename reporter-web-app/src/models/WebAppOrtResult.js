@@ -31,7 +31,7 @@ class WebAppOrtResult extends OrtResult {
 
     #detectedLicenses;
 
-    #errors = [];
+    #issues = [];
 
     #levels = new Set();
 
@@ -92,7 +92,7 @@ class WebAppOrtResult extends OrtResult {
                 for (let j = 0, lenScanResultContainer = scanResultContainer.length; j < lenScanResultContainer; j++) {
                     const scanResult = scanResultContainer[j];
                     const { scanner, summary } = scanResult;
-                    const { errors } = summary;
+                    const { issues } = summary;
                     const scannerId = `${scanner.name}-${scanner.version}`;
 
                     if (!this.#scannersUsed.has(scannerId)) {
@@ -100,12 +100,12 @@ class WebAppOrtResult extends OrtResult {
                         scannersIndex.set(scannerId, j);
                     }
 
-                    if (errors !== 0) {
-                        for (let k = 0, len = errors.length; k < len; k++) {
-                            const webAppOrtIssue = new WebAppOrtIssueScanner(errors[k]);
+                    if (issues !== 0) {
+                        for (let k = 0, len = issues.length; k < len; k++) {
+                            const webAppOrtIssue = new WebAppOrtIssueScanner(issues[k]);
                             webAppOrtIssue.pkg = id;
 
-                            this.#errors.push(webAppOrtIssue);
+                            this.#issues.push(webAppOrtIssue);
                         }
                     }
                 }
@@ -153,8 +153,8 @@ class WebAppOrtResult extends OrtResult {
         this.#detectedLicenses = set;
     }
 
-    get errors() {
-        return this.#errors;
+    get issues() {
+        return this.#issues;
     }
 
     get levels() {
@@ -239,9 +239,9 @@ class WebAppOrtResult extends OrtResult {
         return this.#violations;
     }
 
-    addError(err) {
+    addIssue(err) {
         if (err instanceof WebAppOrtIssueAnalyzer || err instanceof WebAppOrtIssueScanner) {
-            this.#errors.push(err);
+            this.#issues.push(err);
         }
     }
 
@@ -337,8 +337,8 @@ class WebAppOrtResult extends OrtResult {
         return this.analyzer.result.projects;
     }
 
-    hasErrors() {
-        return this.errors.length > 0;
+    hasIssues() {
+        return this.issues.length > 0;
     }
 
     hasProjectId(id) {

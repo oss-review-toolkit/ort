@@ -174,7 +174,7 @@ class TreeView extends React.Component {
             <Drawer
                 title={
                     (() => {
-                        if (selectedPackage.hasErrors(webAppOrtResult)
+                        if (selectedPackage.hasIssues(webAppOrtResult)
                         || selectedPackage.hasViolations(webAppOrtResult)) {
                             return (
                                 <span>
