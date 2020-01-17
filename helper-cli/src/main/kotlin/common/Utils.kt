@@ -37,7 +37,7 @@ import com.here.ort.model.Severity
 import com.here.ort.model.TextLocation
 import com.here.ort.model.VcsInfo
 import com.here.ort.model.config.AnalyzerConfiguration
-import com.here.ort.model.config.ErrorResolution
+import com.here.ort.model.config.IssueResolution
 import com.here.ort.model.config.LicenseFindingCuration
 import com.here.ort.model.config.PathExclude
 import com.here.ort.model.config.RepositoryConfiguration
@@ -410,11 +410,11 @@ internal fun OrtResult.getUnresolvedRuleViolations(): List<RuleViolation> {
 }
 
 /**
- * Return a copy with the [ErrorResolution]s replaced by the given [errorResolutions].
+ * Return a copy with the [IssueResolution]s replaced by the given [issueResolutions].
  */
-internal fun RepositoryConfiguration.replaceErrorResolutions(
-    errorResolutions: List<ErrorResolution>
-): RepositoryConfiguration = copy(resolutions = resolutions.copy(errors = errorResolutions))
+internal fun RepositoryConfiguration.replaceIssueResolutions(
+    issueResolutions: List<IssueResolution>
+): RepositoryConfiguration = copy(resolutions = resolutions.copy(issues = issueResolutions))
 
 /**
  * Return a copy with the [LicenseFindingCuration]s replaced by the given scope excludes.

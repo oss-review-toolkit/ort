@@ -26,7 +26,7 @@ import com.beust.jcommander.Parameters
 import com.here.ort.helper.CommandWithHelp
 import com.here.ort.helper.common.getScanIssues
 import com.here.ort.model.OrtResult
-import com.here.ort.model.config.ErrorResolution
+import com.here.ort.model.config.IssueResolution
 import com.here.ort.model.config.ErrorResolutionReason
 import com.here.ort.model.config.Resolutions
 import com.here.ort.model.readValue
@@ -63,7 +63,7 @@ internal class GenerateTimeoutErrorResolutionsCommand : CommandWithHelp() {
         names = ["--resolutions-file"],
         required = false,
         order = PARAMETER_ORDER_OPTIONAL,
-        description = "A file containing error resolutions to be used in addition to the ones contained in the given " +
+        description = "A file containing issue resolutions to be used in addition to the ones contained in the given " +
                 "ORT file."
     )
     private var resolutionsFile: File? = null
@@ -72,7 +72,7 @@ internal class GenerateTimeoutErrorResolutionsCommand : CommandWithHelp() {
         names = ["--omit-excluded"],
         required = false,
         order = PARAMETER_ORDER_OPTIONAL,
-        description = "Only generate error resolutions for non-excluded projects or packages."
+        description = "Only generate issue resolutions for non-excluded projects or packages."
     )
     private var omitExcluded: Boolean = false
 
@@ -98,11 +98,11 @@ internal class GenerateTimeoutErrorResolutionsCommand : CommandWithHelp() {
             .getScanIssues(omitExcluded)
             .filter {
                 it.message.startsWith("ERROR: Timeout")
-                        && resolutionProvider.getErrorResolutionsFor(it).isEmpty()
+                        && resolutionProvider.getIssueResolutionsFor(it).isEmpty()
             }
 
         val generatedResolutions = timeoutIssues.map {
-            ErrorResolution(
+            IssueResolution(
                 message = it.message,
                 reason = ErrorResolutionReason.SCANNER_ISSUE,
                 comment = "TODO"
