@@ -108,7 +108,7 @@ internal class RemoveConfigurationEntriesCommand : CommandWithHelp() {
                 add(it)
             }
         }
-        val notGloballyResolvedErrors = ortResult.collectErrors().values.flatten().filter {
+        val notGloballyResolvedErrors = ortResult.collectIssues().values.flatten().filter {
             resolutionProvider.getErrorResolutionsFor(it).isEmpty()
         }
         val errorResolutions = ortResult.getResolutions().errors.filter { resolution ->
