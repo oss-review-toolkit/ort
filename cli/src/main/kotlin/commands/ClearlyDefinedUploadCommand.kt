@@ -24,6 +24,7 @@ import com.beust.jcommander.Parameter
 import com.beust.jcommander.Parameters
 
 import com.here.ort.CommandWithHelp
+import com.here.ort.analyzer.HTTP_CACHE_PATH
 import com.here.ort.analyzer.curation.toClearlyDefinedCoordinates
 import com.here.ort.analyzer.curation.toClearlyDefinedSourceLocation
 import com.here.ort.clearlydefined.ClearlyDefinedService
@@ -42,6 +43,7 @@ import com.here.ort.model.jsonMapper
 import com.here.ort.model.readValue
 import com.here.ort.utils.PARAMETER_ORDER_MANDATORY
 import com.here.ort.utils.PARAMETER_ORDER_OPTIONAL
+import com.here.ort.utils.OkHttpClientHelper
 import com.here.ort.utils.expandTilde
 import com.here.ort.utils.hasNonNullProperty
 import com.here.ort.utils.log
@@ -111,7 +113,7 @@ object ClearlyDefinedUploadCommand : CommandWithHelp() {
 
         val curations = absoluteInputFile.readValue<List<PackageCuration>>()
 
-        val service = ClearlyDefinedService.create(server)
+        val service = ClearlyDefinedService.create(server, OkHttpClientHelper.buildClient(HTTP_CACHE_PATH))
 
         curations.forEachIndexed { index, curation ->
             val patchCall = service.putCuration(curation.toContributionPatch())
