@@ -19,6 +19,7 @@
 
 package com.here.ort.analyzer.curation
 
+import com.here.ort.analyzer.HTTP_CACHE_PATH
 import com.here.ort.analyzer.PackageCurationProvider
 import com.here.ort.clearlydefined.ClearlyDefinedService
 import com.here.ort.clearlydefined.ClearlyDefinedService.ComponentType
@@ -34,6 +35,7 @@ import com.here.ort.model.PackageCurationData
 import com.here.ort.model.RemoteArtifact
 import com.here.ort.model.VcsInfoCurationData
 import com.here.ort.model.VcsType
+import com.here.ort.utils.OkHttpClientHelper
 
 /**
  * Map an [Identifier] to a ClearlyDefined [ComponentType] and [Provider]. Note that an Identifier's type in ORT
@@ -149,7 +151,7 @@ fun SourceLocation?.toArtifactOrVcs(): Any? =
  * A provider for curated package meta-data from the [ClearlyDefined](https://clearlydefined.io/) service.
  */
 class ClearlyDefinedPackageCurationProvider(server: Server = Server.PRODUCTION) : PackageCurationProvider {
-    private val service = ClearlyDefinedService.create(server)
+    private val service = ClearlyDefinedService.create(server, OkHttpClientHelper.buildClient(HTTP_CACHE_PATH))
 
     override fun getCurationsFor(pkgId: Identifier): List<PackageCuration> {
         val namespace = pkgId.namespace.takeUnless { it.isEmpty() } ?: "-"
