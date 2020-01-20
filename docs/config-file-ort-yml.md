@@ -6,7 +6,7 @@ to the root of the source code repository.
 * [excludes](#excludes) - Mark [files, directories](#excluding-paths).
   or [package manager scopes](#excluding-scopes) as not included in released artifacts
 * [license finding curations](#curations): Overwrite scan results to correct identified licenses.
-* [resolutions](#resolutions) - Resolve any error or policy rule violations.
+* [resolutions](#resolutions) - Resolve any issues or policy rule violations.
 
 The sections below explain each in futher detail. Prefer to learn by example? See the [.ort.yml](../.ort.yml)
 for OSS Review Toolkit itself.
@@ -34,7 +34,7 @@ to mark files, directories or scopes included in the repository as excluded.
 
 Note that the excluded parts are analyzed and scanned, but are treated differently in the reports ORT generates:
 
-* The error summary does not show errors in the excluded parts.
+* The issue summary does not show issues in the excluded parts.
 * The excluded parts are grayed out.
 * The reason for the exclusion is shown next to the result.
 
@@ -166,8 +166,8 @@ If a resolution is not project-specific than add it to [resolutions.yml](./confi
 so that it is applied to each scan.
 
 ### Resolution Basics
-Resolutions allow you to *resolve* errors or policy rule violations by marking them as acceptable.
-A resolution is applied to specific errors or violations via the regular expression specified
+Resolutions allow you to *resolve* issues or policy rule violations by marking them as acceptable.
+A resolution is applied to specific issues or violations via the regular expression specified
 in the `message` of a resolution.
 
 To be able to show why a resolution is acceptable, each resolution must include an explanation. 
@@ -176,32 +176,32 @@ The explanation consists of:
 * `reason` -- an identifier selected from a predefined list of options. 
 * `comment` -- free text, providing an explanation and optionally a link to further information.
 
-### Resolving Errors
+### Resolving Issues
 
-If the ORT results show errors, the best approach is usually to fix them and run the scan again.
-However, sometimes it is not possible, for example if an error occurs in the license scan
+If the ORT results show issues, the best approach is usually to fix them and run the scan again.
+However, sometimes it is not possible, for example if an issue occurs in the license scan
 of a third-party dependency which cannot be fixed or updated.
 
-In such situations, you can *resolve* the error in any future scan by adding a resolution
+In such situations, you can *resolve* the issue in any future scan by adding a resolution
 to the `.ort.yml` to mark it as acceptable.
 
-The code below shows the structure of an error resolution in the `.ort.yml` file:
+The code below shows the structure of an issue resolution in the `.ort.yml` file:
 
 ```yaml
 resolutions:
-  errors:
+  issues:
   - message: "A regular expression matching the error message."
-    reason: "One of ErrorResolutionReason e.g BUILD_TOOL_ISSUE,CANT_FIX_ISSUE."
+    reason: "One of IssueResolutionReason e.g BUILD_TOOL_ISSUE,CANT_FIX_ISSUE."
     comment: "A comment further explaining why the reason above is acceptable."
 ```
 Where the list of available options for `reason` is defined in
-[ErrorResolutionReason.kt](../model/src/main/kotlin/config/ErrorResolutionReason.kt)
+[IssueResolutionReason.kt](../model/src/main/kotlin/config/IssueResolutionReason.kt)
 
-For example, to ignore an error related to a build tool problem, your `.ort.yml` could include:
+For example, to ignore an issue related to a build tool problem, your `.ort.yml` could include:
 
 ```yaml
 resolutions:
-  errors:
+  issues:
   - message: "Does not have X.*"
     reason: "BUILD_TOOL_ISSUE"
     comment: "Error caused by a known issue for which a fix is being implemented, see https://github.com/..."

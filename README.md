@@ -154,7 +154,7 @@ Please see the documentation below for details about the ORT configuration.
   and resolutions to address issues found within a project's code repository.
 * [The curations.yml file](docs/config-file-curations-yml.md) - curations correct invalid or missing package metadata
   and set the concluded license for packages.
-* [The resolutions.yml file](docs/config-file-resolution-yml.md) - resolutions allow *resolving* any errors
+* [The resolutions.yml file](docs/config-file-resolution-yml.md) - resolutions allow *resolving* any issues
   or policy rule violations by providing a reason why they are acceptable and can be ignored.
 
 # Details on the tools
