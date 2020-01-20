@@ -88,11 +88,11 @@ object OkHttpClientHelper {
     }
 
     /**
-     * Execute a [request] using the client for the specified [cache directory][cachePath]. The client can optionally
-     * be further configured via the [block].
+     * Build a client that uses the specified [cache directory][cachePath]. Proxy environment variables are by default
+     * regarded, but the client can further be configured via the [block].
      */
-    fun execute(cachePath: String, request: Request, block: OkHttpClient.Builder.() -> Unit = {}): Response {
-        val client = clients.getOrPut(cachePath) {
+    fun buildClient(cachePath: String, block: OkHttpClient.Builder.() -> Unit = {}): OkHttpClient =
+        clients.getOrPut(cachePath) {
             val cacheDirectory = File(getUserOrtDirectory(), cachePath)
             val maxCacheSizeInBytes = 1024L * 1024L * 1024L
             val cache = Cache(cacheDirectory, maxCacheSizeInBytes)
@@ -105,6 +105,10 @@ object OkHttpClientHelper {
                 .build()
         }
 
-        return client.newCall(request).execute()
-    }
+    /**
+     * Execute a [request] using the client for the specified [cache directory][cachePath]. The client can optionally
+     * be further configured via the [block].
+     */
+    fun execute(cachePath: String, request: Request, block: OkHttpClient.Builder.() -> Unit = {}): Response =
+        buildClient(cachePath, block).newCall(request).execute()
 }
