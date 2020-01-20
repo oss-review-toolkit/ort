@@ -27,7 +27,7 @@ import com.here.ort.helper.CommandWithHelp
 import com.here.ort.helper.common.getScanIssues
 import com.here.ort.model.OrtResult
 import com.here.ort.model.config.IssueResolution
-import com.here.ort.model.config.ErrorResolutionReason
+import com.here.ort.model.config.IssueResolutionReason
 import com.here.ort.model.config.Resolutions
 import com.here.ort.model.readValue
 import com.here.ort.model.yamlMapper
@@ -104,7 +104,7 @@ internal class GenerateTimeoutErrorResolutionsCommand : CommandWithHelp() {
         val generatedResolutions = timeoutIssues.map {
             IssueResolution(
                 message = it.message,
-                reason = ErrorResolutionReason.SCANNER_ISSUE,
+                reason = IssueResolutionReason.SCANNER_ISSUE,
                 comment = "TODO"
             )
         }.distinct().sortedBy { it.message }
