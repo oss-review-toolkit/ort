@@ -28,9 +28,9 @@ Exclusions apply to paths (files/directories) or scopes. Examples of currently s
 ORT's philosophy is to analyze and scan everything it can find to build a complete picture of a repository
 and its dependencies.
 
-However, the users may not be interested in the results for components that are not included in their released artifacts,
-for example build files, documentation, examples or test code. To support such use cases, ORT provides a mechanism
-to mark files, directories or scopes included in the repository as excluded.
+However, the users may not be interested in the results for components that are not included in their released
+artifacts, for example build files, documentation, examples or test code. To support such use cases, ORT provides a
+mechanism to mark files, directories or scopes included in the repository as excluded.
 
 Note that the excluded parts are analyzed and scanned, but are treated differently in the reports ORT generates:
 
@@ -66,7 +66,9 @@ For how to write a glob pattern, please see this
 The path exclude above has the following effects:
 
 * All projects found below the `test-data` directory are marked as excluded.
-* License findings in files below the `test-data` directory are marked as excluded. This can be used in [evaluator rules](getting-started.md#6-running-the-evaluator) to for instance change the severity from error to warning.
+* License findings in files below the `test-data` directory are marked as excluded. This can be used in
+  [evaluator rules](getting-started.md#6-running-the-evaluator) to for instance change the severity from error to
+  warning.
 
 ```yaml
 excludes:
@@ -125,8 +127,8 @@ Note that you must verify that the scopes defined in the examples below match th
 
 ### When to Use Curations
 
-Project-specific curations should be used when you want to correct the licenses detected in the source code of the project.
-If you need to correct the license findings for a third-party dependency then add a curation to
+Project-specific curations should be used when you want to correct the licenses detected in the source code of the
+project. If you need to correct the license findings for a third-party dependency then add a curation to
 [curations.yml](config-file-curations-yml.md).
 
 ### Curating License Findings
@@ -225,7 +227,8 @@ resolutions:
     comment: "A comment further explaining why the reason above is applicable."
 ```
 
-Where the list of available options for `reason` is defined in [RuleViolationResolutionReason.kt](../model/src/main/kotlin/config/RuleViolationResolutionReason.kt)
+Where the list of available options for `reason` is defined in
+[RuleViolationResolutionReason.kt](../model/src/main/kotlin/config/RuleViolationResolutionReason.kt).
 
 For example, to confirm you acquired a commercial Qt license for your project, your `.ort.yml` could include:
 
