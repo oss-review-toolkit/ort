@@ -95,9 +95,9 @@ class RepositoryConfigurationTest : WordSpec() {
                     comment shouldBe "issue comment"
                 }
 
-                val evalErrors = repositoryConfiguration.resolutions.ruleViolations
-                evalErrors should haveSize(1)
-                with(evalErrors.first()) {
+                val ruleViolations = repositoryConfiguration.resolutions.ruleViolations
+                ruleViolations should haveSize(1)
+                with(ruleViolations.first()) {
                     message shouldBe "rule message"
                     reason shouldBe RuleViolationResolutionReason.PATENT_GRANT_EXCEPTION
                     comment shouldBe "rule comment"
