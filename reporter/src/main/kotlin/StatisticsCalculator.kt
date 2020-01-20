@@ -35,7 +35,7 @@ internal class StatisticsCalculator {
      * Return the [Statistics] for the given [ortResult].
      */
     fun getStatistics(ortResult: OrtResult, resolutionProvider: ResolutionProvider) = Statistics(
-        openIssues = getOpenIssuesIssues(ortResult, resolutionProvider),
+        openIssues = getOpenIssues(ortResult, resolutionProvider),
         openRuleViolations = getOpenRuleViolations(ortResult, resolutionProvider),
         dependencyTree = DependencyTreeStatistics(
             includedProjects = ortResult.getProjects().count { !ortResult.isExcluded(it.id) },
@@ -61,7 +61,7 @@ internal class StatisticsCalculator {
         )
     }
 
-    private fun getOpenIssuesIssues(ortResult: OrtResult, resolutionProvider: ResolutionProvider): IssueStatistics {
+    private fun getOpenIssues(ortResult: OrtResult, resolutionProvider: ResolutionProvider): IssueStatistics {
         val openIssues = ortResult
             .collectIssues()
             .filterNot { (id, _) -> ortResult.isExcluded(id) }
