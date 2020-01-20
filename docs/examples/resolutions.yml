@@ -1,5 +1,5 @@
 ---
-# This file contains global resolutions for issues and rule violations occuring in the OSS scan.
+# This file contains global resolutions for issues and rule violations occurring in the OSS scan.
 # These resolutions are applied to all scanned projects, so make sure to only
 # add resolutions that are not specific to a project. Project specific
 # resolutions can be configured in the .ort.yml file of the project.
