@@ -36,12 +36,13 @@ interface ResolutionProvider {
     fun getIssueResolutionsFor(issue: OrtIssue): List<IssueResolution>
 
     /**
-     * Get all rule violation resolutions that match [error].
+     * Get all rule violation resolutions that match [violation].
      */
     fun getRuleViolationResolutionsFor(violation: RuleViolation): List<RuleViolationResolution>
 
     /**
-     * Get a [Resolutions] object that contains all resolutions which apply to errors contained in [ortResult].
+     * Get a [Resolutions] object that contains all resolutions which apply to [OrtIssue]s or [RuleViolation]s contained
+     * in [ortResult].
      */
     fun getResolutionsFor(ortResult: OrtResult): Resolutions
 }
