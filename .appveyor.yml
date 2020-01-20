@@ -71,6 +71,10 @@ install:
   - flutter config --no-analytics
   - flutter doctor
   - pip install pipenv==%PYTHON_PIPENV_VERSION%
+  # Work around an issue with GPG failing to connect to its agent in GitRepoTest
+  # as seen at https://ci.appveyor.com/project/heremaps/oss-review-toolkit/builds/30228453#L3030.
+  - mv C:\msys64\usr\bin\gpg.exe C:\msys64\usr\bin\gpg.exe.orig
+  - mv "C:\Program Files\Git\usr\bin\gpg.exe" "C:\Program Files\Git\usr\bin\gpg.exe.orig"
 
 # Do something useful here to override the default MSBuild (which would fail otherwise).
 build_script:
