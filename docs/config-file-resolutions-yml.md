@@ -59,7 +59,8 @@ issues:
 Resolutions should not be used to resolve license policy rule violations as they do not
 the change generated open source notices.
 To resolve a license policy rule violation either add a local `license_findings` curation
-to the [.ort.yml file](./config-file-ort-yml.md) if the finding is in your code repository or add a curation to the [curations.yml](config-file-curations-yml.md) if the violation occurs in a third-party dependency.
+to the [.ort.yml file](./config-file-ort-yml.md) if the finding is in your code repository or add a curation to the
+[curations.yml](config-file-curations-yml.md) if the violation occurs in a third-party dependency.
 
 The code below shows the structure of a policy rule violation resolution in the `resolutions.yml`file:
 
@@ -70,9 +71,11 @@ rule_violations:
   comment: "A comment further explaining why the reason above is applicable."
 ```
 
-Where the list of available options for `reason` is defined in [RuleViolationResolutionReason.kt](../model/src/main/kotlin/config/RuleViolationResolutionReason.kt)
+Where the list of available options for `reason` is defined in
+[RuleViolationResolutionReason.kt](../model/src/main/kotlin/config/RuleViolationResolutionReason.kt).
 
-For example, to confirm your organization has acquired an org-wide Qt commercial license, your `resolutions.yml` could include:
+For example, to confirm your organization has acquired an org-wide Qt commercial license, your `resolutions.yml` could
+include:
 
 ```yaml
 rule_violations:
