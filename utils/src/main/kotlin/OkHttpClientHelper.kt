@@ -24,18 +24,13 @@ import java.net.InetSocketAddress
 import java.net.MalformedURLException
 import java.net.Proxy
 import java.net.URL
-import java.net.URLConnection
 
 import okhttp3.Authenticator
 import okhttp3.Cache
 import okhttp3.ConnectionSpec
 import okhttp3.Credentials
-import okhttp3.MediaType
-import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.OkHttpClient
 import okhttp3.Request
-import okhttp3.RequestBody
-import okhttp3.RequestBody.Companion.asRequestBody
 import okhttp3.Response
 import okhttp3.Route
 
@@ -49,19 +44,6 @@ object OkHttpClientHelper {
      * A constant for the "too many requests" HTTP code as HttpURLConnection has none.
      */
     const val HTTP_TOO_MANY_REQUESTS = 429
-
-    /**
-     * Guess the media type based on the file component of a string.
-     */
-    private fun guessMediaType(name: String): MediaType? {
-        val contentType = URLConnection.guessContentTypeFromName(name) ?: "application/octet-stream"
-        return contentType.toMediaTypeOrNull()
-    }
-
-    /**
-     * Create a request body for the specified file.
-     */
-    fun createRequestBody(source: File): RequestBody = source.asRequestBody(guessMediaType(source.name))
 
     /**
      * Apply HTTP proxy settings from a [url], optionally with credentials included.
