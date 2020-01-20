@@ -37,7 +37,7 @@ data class IssueResolution(
     /**
      * The reason why the issue is resolved.
      */
-    val reason: ErrorResolutionReason,
+    val reason: IssueResolutionReason,
 
     /**
      * A comment to further explain why the [reason] is applicable here.

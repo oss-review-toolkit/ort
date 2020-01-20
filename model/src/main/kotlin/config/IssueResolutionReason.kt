@@ -19,19 +19,24 @@
 
 package com.here.ort.model.config
 
-enum class ErrorResolutionReason {
+import com.here.ort.model.OrtIssue
+
+/**
+ * Possible reasons for resolving an [OrtIssue] using a [IssueResolution].
+ */
+enum class IssueResolutionReason {
     /**
-     * The error originates from the build tool used by the project.
+     * The issue originates from the build tool used by the project.
      */
     BUILD_TOOL_ISSUE,
 
     /**
-     * The error can not be fixed, e.g. because it requires a change to be made by a third party that is not responsive.
+     * The issue can not be fixed, e.g. because it requires a change to be made by a third party that is not responsive.
      */
     CANT_FIX_ISSUE,
 
     /**
-     * The error is due to an irrelevant scanner issue, such as time out on a large file that is not distributed.
+     * The issue is due to an irrelevant scanner issue, such as time out on a large file that is not distributed.
      */
     SCANNER_ISSUE
 }

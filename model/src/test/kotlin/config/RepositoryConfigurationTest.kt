@@ -91,7 +91,7 @@ class RepositoryConfigurationTest : WordSpec() {
                 issues should haveSize(1)
                 with(issues.first()) {
                     message shouldBe "message"
-                    reason shouldBe ErrorResolutionReason.CANT_FIX_ISSUE
+                    reason shouldBe IssueResolutionReason.CANT_FIX_ISSUE
                     comment shouldBe "issue comment"
                 }
 
