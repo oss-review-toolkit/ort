@@ -28,4 +28,4 @@ issues:
 rule_violations:
 - message: "^$"
   reason: "CANT_FIX_EXCEPTION"
-  comment: "An rule violation resolution which resolves only errors with an empty rule message."
+  comment: "A rule violation resolution which resolves only rule violations with an empty message."
