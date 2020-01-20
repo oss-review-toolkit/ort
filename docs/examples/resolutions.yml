@@ -1,5 +1,5 @@
 ---
-# This file contains global resolutions for errors and rule violations occuring in the OSS scan.
+# This file contains global resolutions for issues and rule violations occuring in the OSS scan.
 # These resolutions are applied to all scanned projects, so make sure to only
 # add resolutions that are not specific to a project. Project specific
 # resolutions can be configured in the .ort.yml file of the project.
@@ -7,16 +7,16 @@
 # For detailed documentation, see:
 # https://github.com/heremaps/oss-review-toolkit/blob/master/docs/config-file-resolutions-yml.md
 
-# Structure of error resolution:
+# Structure of issue resolution:
 #
-# errors:
+# issues:
 # - message: "A regular expression matching the error message."
 #   reason: "One of: BUILD_TOOL_ISSUE|CANT_FIX_ISSUE|SCANNER_ISSUE"
 #   comment: "A comment further explaining why the reason above is applicable."
-errors:
+issues:
 - message: "^$"
   reason: "CANT_FIX_ISSUE"
-  comment: "An error resolution which resolves only errors with an empty error message."
+  comment: "An issue resolution which resolves only issues with an empty message."
 
 # Structure of policy rule violation resolution:
 #

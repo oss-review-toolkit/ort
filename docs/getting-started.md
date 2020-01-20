@@ -175,7 +175,7 @@ analyzer:
           dependencies:
           - id: "NPM::builtin-modules:1.1.1"
           - id: "NPM::contains-path:0.1.0"
-            # If an error occurred during the dependency analysis of this package there would be an additional "errors"
+            # If an issue occurred during the dependency analysis of this package there would be an additional "issues"
             # array.
 # ...
 # Detailed metadata about each package from the dependency trees.
@@ -209,10 +209,10 @@ analyzer:
           path: ""
       curations: []
 # ...
-# Finally a list of project related errors that happened during dependency analysis. Fortunately empty in this case.
-    errors: {}
-# A field to quickly check if the analyzer result contains any errors.
-    has_errors: false
+# Finally a list of project related issues that happened during dependency analysis. Fortunately empty in this case.
+    issues: {}
+# A field to quickly check if the analyzer result contains any issues.
+    has_issues: false
 ```
 
 ## 5. Run the scanner
@@ -311,5 +311,5 @@ ORT provides a variety of mechanisms to fix a variety of issues, for details see
   and resolutions to address issues found within a project's code repository.
 * [The curations.yml file](docs/config-file-curations-yml.md) - curations correct invalid or missing package metadata
   and set the concluded license for packages.
-* [The resolutions.yml file](docs/config-file-resolution-yml.md) - resolutions allow *resolving* any errors
+* [The resolutions.yml file](docs/config-file-resolution-yml.md) - resolutions allow *resolving* any issues
   or policy rule violations by providing a reason why they are acceptable and can be ignored.
