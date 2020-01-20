@@ -151,6 +151,11 @@ private fun getScopeExcludesForPackageManager(packageManagerName: String): List<
                 comment = "Annotation processing dependencies."
             ),
             ScopeExclude(
+                pattern = "kotlinCompiler.*",
+                reason = ScopeExcludeReason.BUILD_DEPENDENCY_OF,
+                comment = "Kotlin compiler dependencies."
+            ),
+            ScopeExclude(
                 pattern = "lintClassPath",
                 reason = ScopeExcludeReason.BUILD_DEPENDENCY_OF,
                 comment = "Linter dependencies."
