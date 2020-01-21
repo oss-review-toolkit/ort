@@ -577,27 +577,6 @@ internal fun RepositoryPathExcludes.mergePathExcludes(
 }
 
 /**
- * Merge the given [PathExclude]s replacing entries with equal [PathExclude.pattern].
- * If the given [updateOnlyExisting] is true then only entries with matching [PathExclude.pattern] are merged.
- */
-internal fun Collection<PathExclude>.mergePathExcludes(
-    other: Collection<PathExclude>,
-    updateOnlyExisting: Boolean = false
-): List<PathExclude> {
-    val result = mutableMapOf<String, PathExclude>()
-
-    associateByTo(result) { it.pattern }
-
-    other.forEach {
-        if (!updateOnlyExisting || result.containsKey(it.pattern)) {
-            result[it.pattern] = it
-        }
-    }
-
-    return result.values.toList()
-}
-
-/**
  * Merge the given [LicenseFindingCuration]s replacing entries with equal [LicenseFindingCuration.path],
  * [LicenseFindingCuration.startLines], [LicenseFindingCuration.lineCount], [LicenseFindingCuration.detectedLicense]
  * and [LicenseFindingCuration.concludedLicense].
@@ -630,3 +609,24 @@ private data class LicenseFindingCurationHashKey(
 
 private fun LicenseFindingCuration.hashKey() =
     LicenseFindingCurationHashKey(path, startLines, lineCount, detectedLicense, concludedLicense)
+
+/**
+ * Merge the given [PathExclude]s replacing entries with equal [PathExclude.pattern].
+ * If the given [updateOnlyExisting] is true then only entries with matching [PathExclude.pattern] are merged.
+ */
+internal fun Collection<PathExclude>.mergePathExcludes(
+    other: Collection<PathExclude>,
+    updateOnlyExisting: Boolean = false
+): List<PathExclude> {
+    val result = mutableMapOf<String, PathExclude>()
+
+    associateByTo(result) { it.pattern }
+
+    other.forEach {
+        if (!updateOnlyExisting || result.containsKey(it.pattern)) {
+            result[it.pattern] = it
+        }
+    }
+
+    return result.values.toList()
+}
