@@ -37,10 +37,13 @@ import com.here.ort.model.Severity
 import com.here.ort.model.TextLocation
 import com.here.ort.model.VcsInfo
 import com.here.ort.model.config.AnalyzerConfiguration
+import com.here.ort.model.config.Curations
+import com.here.ort.model.config.Excludes
 import com.here.ort.model.config.IssueResolution
 import com.here.ort.model.config.LicenseFindingCuration
 import com.here.ort.model.config.PathExclude
 import com.here.ort.model.config.RepositoryConfiguration
+import com.here.ort.model.config.Resolutions
 import com.here.ort.model.config.RuleViolationResolution
 import com.here.ort.model.config.ScopeExclude
 import com.here.ort.model.utils.FindingCurationMatcher
@@ -577,6 +580,20 @@ internal fun RepositoryPathExcludes.mergePathExcludes(
 }
 
 /**
+ * Merge the given [IssueResolution]s replacing entries with equal [IssueResolution.message].
+ */
+internal fun Collection<IssueResolution>.mergeIssueResolutions(
+    other: Collection<IssueResolution>
+): List<IssueResolution> {
+    val result = mutableMapOf<String, IssueResolution>()
+
+    associateByTo(result) { it.message }
+    other.associateByTo(result) { it.message }
+
+    return result.values.toList()
+}
+
+/**
  * Merge the given [LicenseFindingCuration]s replacing entries with equal [LicenseFindingCuration.path],
  * [LicenseFindingCuration.startLines], [LicenseFindingCuration.lineCount], [LicenseFindingCuration.detectedLicense]
  * and [LicenseFindingCuration.concludedLicense].
@@ -630,3 +647,51 @@ internal fun Collection<PathExclude>.mergePathExcludes(
 
     return result.values.toList()
 }
+
+/**
+ * Merge the given [ScopeExclude]s replacing entries with equal [ScopeExclude.pattern].
+ */
+internal fun Collection<ScopeExclude>.mergeScopeExcludes(
+    other: Collection<ScopeExclude>
+): List<ScopeExclude> {
+    val result = mutableMapOf<String, ScopeExclude>()
+
+    associateByTo(result) { it.pattern }
+    other.associateByTo(result) { it.pattern }
+
+    return result.values.toList()
+}
+
+/**
+ * Merge the given [RuleViolationResolution]s replacing entries with equal [RuleViolationResolution.message].
+ */
+internal fun Collection<RuleViolationResolution>.mergeRuleViolationResolutions(
+    other: Collection<RuleViolationResolution>
+): List<RuleViolationResolution> {
+    val result = mutableMapOf<String, RuleViolationResolution>()
+
+    associateByTo(result) { it.message }
+    other.associateByTo(result) { it.message }
+
+    return result.values.toList()
+}
+
+/**
+ * Merge the given [RepositoryConfiguration] replacing entries with equal matchers.
+ */
+internal fun RepositoryConfiguration.merge(
+    other: RepositoryConfiguration
+): RepositoryConfiguration =
+    RepositoryConfiguration(
+        excludes = Excludes(
+            paths = excludes.paths.mergePathExcludes(other.excludes.paths),
+            scopes = excludes.scopes.mergeScopeExcludes(other.excludes.scopes)
+        ),
+        curations = Curations(
+            curations.licenseFindings.mergeLicenseFindingCurations(other.curations.licenseFindings)
+        ),
+        resolutions = Resolutions(
+            issues = resolutions.issues.mergeIssueResolutions(other.resolutions.issues),
+            ruleViolations = resolutions.ruleViolations.mergeRuleViolationResolutions(other.resolutions.ruleViolations)
+        )
+    )
