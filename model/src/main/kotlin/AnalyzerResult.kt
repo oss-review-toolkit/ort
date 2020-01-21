@@ -29,7 +29,7 @@ import java.util.SortedSet
 /**
  * A class that merges all information from individual [ProjectAnalyzerResult]s created for each found definition file.
  */
-@JsonIgnoreProperties(value = ["has_issues"], allowGetters = true)
+@JsonIgnoreProperties(value = ["has_issues", /* Backwards-compatibility: */ "has_errors"], allowGetters = true)
 data class AnalyzerResult(
     /**
      * Sorted set of the projects, as they appear in the individual analyzer results.
