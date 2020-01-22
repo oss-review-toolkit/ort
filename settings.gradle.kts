@@ -47,6 +47,7 @@ rootProject.name = "oss-review-toolkit"
 include("analyzer")
 include("clearly-defined")
 include("cli")
+include("detekt-rules")
 include("downloader")
 include("evaluator")
 include("helper-cli")
