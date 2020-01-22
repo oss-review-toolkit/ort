@@ -20,11 +20,11 @@
 package com.here.ort.reporter.reporters
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.here.ort.model.Statistics
 
 import com.here.ort.model.jsonMapper
-import com.here.ort.model.utils.StatisticsCalculator
 import com.here.ort.model.yamlMapper
+import com.here.ort.reporter.model.Statistics
+import com.here.ort.reporter.utils.StatisticsCalculator
 import com.here.ort.reporter.Reporter
 import com.here.ort.reporter.ReporterInput
 

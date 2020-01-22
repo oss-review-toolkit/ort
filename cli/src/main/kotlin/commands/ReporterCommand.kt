@@ -34,10 +34,10 @@ import com.here.ort.model.config.orEmpty
 import com.here.ort.model.licenses.LicenseConfiguration
 import com.here.ort.model.licenses.orEmpty
 import com.here.ort.model.readValue
+import com.here.ort.reporter.DefaultLicenseTextProvider
 import com.here.ort.reporter.DefaultResolutionProvider
 import com.here.ort.reporter.Reporter
 import com.here.ort.reporter.ReporterInput
-import com.here.ort.reporter.reporters.DefaultLicenseTextProvider
 import com.here.ort.utils.PARAMETER_ORDER_MANDATORY
 import com.here.ort.utils.PARAMETER_ORDER_OPTIONAL
 import com.here.ort.utils.collectMessagesAsString
