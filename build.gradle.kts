@@ -22,6 +22,8 @@ import com.github.benmanes.gradle.versions.updates.DependencyUpdatesTask
 
 import com.here.ort.gradle.*
 
+import io.gitlab.arturbosch.detekt.Detekt
+
 import org.gradle.api.tasks.testing.logging.TestExceptionFormat
 import org.gradle.api.tasks.testing.logging.TestLogEvent
 
@@ -110,6 +112,8 @@ allprojects {
     // Note: Kotlin DSL cannot directly access configurations that are created by applying a plugin in the very same
     // project, thus put configuration names in quotes to leverage lazy lookup.
     dependencies {
+        "detektPlugins"(project(":detekt-rules"))
+
         "detektPlugins"("io.gitlab.arturbosch.detekt:detekt-formatting:$detektPluginVersion")
     }
 
@@ -123,6 +127,10 @@ allprojects {
 
         input = files("$rootDir/buildSrc", "build.gradle.kts", "src/main/kotlin", "src/test/kotlin",
             "src/funTest/kotlin")
+    }
+
+    tasks.withType<Detekt> {
+        dependsOn(":detekt-rules:assemble")
     }
 }
 
