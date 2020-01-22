@@ -214,7 +214,6 @@ open class Npm(
 
             // Download package info from registry.npmjs.org.
             // TODO: check if unpkg.com can be used as a fallback in case npmjs.org is down.
-            log.debug { "Retrieving package info for '$identifier'." }
             val encodedName = if (rawName.startsWith("@")) {
                 "@${URLEncoder.encode(rawName.substringAfter("@"), "UTF-8")}"
             } else {
@@ -224,9 +223,13 @@ open class Npm(
             if (isSymbolicPackageDir) {
                 // Yarn workspaces refer to project dependencies from the same workspace via symbolic links. Use that
                 // as the trigger to get VcsInfo locally instead of querying the NPM registry.
+                log.debug { "Resolving the package info for '$identifier' locally." }
+
                 val vcsFromDirectory = VersionControlSystem.forDirectory(realPackageDir)?.getInfo() ?: VcsInfo.EMPTY
                 vcsFromPackage = vcsFromPackage.merge(vcsFromDirectory)
             } else {
+                log.debug { "Resolving the package info for '$identifier' via NPM registry." }
+
                 val pkgRequest = Request.Builder()
                     .get()
                     .url("https://registry.npmjs.org/$encodedName")
