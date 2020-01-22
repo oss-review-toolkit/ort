@@ -222,6 +222,8 @@ open class Npm(
             }
 
             if (isSymbolicPackageDir) {
+                // Yarn workspaces refer to project dependencies from the same workspace via symbolic links. Use that
+                // as the trigger to get VcsInfo locally instead of querying the NPM registry.
                 val vcsFromDirectory = VersionControlSystem.forDirectory(realPackageDir)?.getInfo() ?: VcsInfo.EMPTY
                 vcsFromPackage = vcsFromPackage.merge(vcsFromDirectory)
             } else {
