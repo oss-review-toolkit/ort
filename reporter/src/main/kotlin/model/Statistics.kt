@@ -17,7 +17,7 @@
  * License-Filename: LICENSE
  */
 
-package com.here.ort.model
+package com.here.ort.reporter.model
 
 import java.util.SortedSet
 

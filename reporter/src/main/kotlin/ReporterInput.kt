@@ -26,7 +26,6 @@ import com.here.ort.model.config.CopyrightGarbage
 import com.here.ort.model.config.OrtConfiguration
 import com.here.ort.model.licenses.LicenseConfiguration
 import com.here.ort.reporter.reporters.AbstractNoticeReporter
-import com.here.ort.reporter.reporters.DefaultLicenseTextProvider
 
 /**
  * A bundle of input to be used by [Reporter] implementations.

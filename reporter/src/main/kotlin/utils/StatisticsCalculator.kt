@@ -17,13 +17,13 @@
  * License-Filename: LICENSE
  */
 
-package com.here.ort.model.utils
+package com.here.ort.reporter.utils
 
-import com.here.ort.model.DependencyTreeStatistics
-import com.here.ort.model.IssueStatistics
 import com.here.ort.model.OrtResult
 import com.here.ort.model.Severity
-import com.here.ort.model.Statistics
+import com.here.ort.reporter.model.DependencyTreeStatistics
+import com.here.ort.reporter.model.IssueStatistics
+import com.here.ort.reporter.model.Statistics
 import com.here.ort.reporter.ResolutionProvider
 
 /**
