@@ -103,6 +103,14 @@ abstract class ScanResultsStorage {
             properties["password"] = config.password
             properties["ApplicationName"] = "$ORT_NAME - $TOOL_NAME"
 
+            // Configure SSL, see: https://jdbc.postgresql.org/documentation/head/connect.html
+            // Note that the "ssl" property is only a fallback in case "sslmode" is not used. Since we always set
+            // "sslmode", "ssl" is not required.
+            properties["sslmode"] = config.sslmode
+            config.sslcert?.let { properties["sslcert"] = it }
+            config.sslkey?.let { properties["sslkey"] = it }
+            config.sslrootcert?.let { properties["sslrootcert"] = it }
+
             val connection = DriverManager.getConnection(config.url, properties)
 
             storage = PostgresStorage(connection, config.schema).also { it.setupDatabase() }
