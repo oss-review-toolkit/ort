@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2019 HERE Europe B.V.
+ * Copyright (C) 2017-2020 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -46,6 +46,14 @@ fun hasNpmLockFile(directory: File) =
     }
 
 /**
+ * Return a Boolean indicating whether the [directory] contains a PNPM lock file.
+ */
+fun hasPnpmLockFile(directory: File) =
+    PNPM_LOCK_FILES.any { lockfile ->
+        File(directory, lockfile).isFile
+    }
+
+/**
  * Return whether the [directory] contains a Yarn lock file.
  */
 fun hasYarnLockFile(directory: File) =
@@ -58,7 +66,15 @@ fun hasYarnLockFile(directory: File) =
  */
 fun mapDefinitionFilesForNpm(definitionFiles: Collection<File>): Set<File> =
     getPackageJsonInfo(definitionFiles.toSet()).filter { entry ->
-        !isHandledByYarn(entry)
+        !isHandledByYarn(entry) && !entry.hasPnpmLockfile
+    }.mapTo(mutableSetOf()) { it.definitionFile }
+
+/**
+ * Map [definitionFiles] to contain only files handled by PNPM.
+ */
+fun mapDefinitionFilesForPnpm(definitionFiles: Collection<File>): Set<File> =
+    getPackageJsonInfo(definitionFiles.toSet()).filter { entry ->
+        entry.hasPnpmLockfile
     }.mapTo(mutableSetOf()) { it.definitionFile }
 
 /**
@@ -66,7 +82,7 @@ fun mapDefinitionFilesForNpm(definitionFiles: Collection<File>): Set<File> =
  */
 fun mapDefinitionFilesForYarn(definitionFiles: Collection<File>): Set<File> =
     getPackageJsonInfo(definitionFiles.toSet()).filter { entry ->
-        isHandledByYarn(entry) && !entry.isYarnWorkspaceSubmodule
+        isHandledByYarn(entry) && !entry.isYarnWorkspaceSubmodule && !entry.hasPnpmLockfile
     }.mapTo(mutableSetOf()) { it.definitionFile }
 
 /**
@@ -134,12 +150,14 @@ fun readProxySettingFromNpmRc(npmRc: String): String? {
 private val HTTP_REGEX = Regex("^https?://.+$")
 
 private val NPM_LOCK_FILES = listOf("npm-shrinkwrap.json", "package-lock.json")
+private val PNPM_LOCK_FILES = listOf("pnpm-lock.yaml")
 private val YARN_LOCK_FILES = listOf("yarn.lock")
 
 private data class PackageJsonInfo(
     val definitionFile: File,
     val hasYarnLockfile: Boolean = false,
     val hasNpmLockfile: Boolean = false,
+    val hasPnpmLockfile: Boolean = false,
     val isYarnWorkspaceRoot: Boolean = false,
     val isYarnWorkspaceSubmodule: Boolean = false
 )
@@ -156,6 +174,7 @@ private fun getPackageJsonInfo(definitionFiles: Set<File>): Collection<PackageJs
             isYarnWorkspaceRoot = isYarnWorkspaceRoot(definitionFile),
             hasYarnLockfile = hasYarnLockFile(definitionFile.parentFile),
             hasNpmLockfile = hasNpmLockFile(definitionFile.parentFile),
+            hasPnpmLockfile = hasPnpmLockFile(definitionFile.parentFile),
             isYarnWorkspaceSubmodule = yarnWorkspaceSubmodules.contains(definitionFile)
         )
     }

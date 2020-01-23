@@ -1,0 +1,3015 @@
+---
+project:
+  id: "PNPM:@pnpm:file-reporter:0.1.0"
+  definition_file_path: "<REPLACE_DEFINITION_FILE_PATH>"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  vcs:
+    type: "Git"
+    url: "git+https://github.com/pnpm/file-reporter.git"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "<REPLACE_URL>"
+    revision: "<REPLACE_REVISION>"
+    path: "<REPLACE_PATH>"
+  homepage_url: "https://github.com/pnpm/file-reporter#readme"
+  scopes:
+  - name: "dependencies"
+    dependencies:
+    - id: "NPM::graceful-fs:4.1.15"
+    - id: "NPM::path-exists:4.0.0"
+  - name: "devDependencies"
+    dependencies:
+    - id: "NPM::exists-file:3.0.2"
+      dependencies:
+      - id: "NPM::cb2promise:1.1.1"
+        dependencies:
+        - id: "NPM::mimic-fn:2.0.0"
+        - id: "NPM::sliced:1.0.1"
+    - id: "NPM::ndjson:1.5.0"
+      dependencies:
+      - id: "NPM::json-stringify-safe:5.0.1"
+      - id: "NPM::minimist:1.2.0"
+      - id: "NPM::split2:2.2.0"
+        dependencies:
+        - id: "NPM::through2:2.0.5"
+          dependencies:
+          - id: "NPM::readable-stream:2.3.6"
+            dependencies:
+            - id: "NPM::core-util-is:1.0.2"
+            - id: "NPM::inherits:2.0.3"
+            - id: "NPM::isarray:1.0.0"
+            - id: "NPM::process-nextick-args:2.0.0"
+            - id: "NPM::safe-buffer:5.1.2"
+            - id: "NPM::string_decoder:1.1.1"
+              dependencies:
+              - id: "NPM::safe-buffer:5.1.2"
+            - id: "NPM::util-deprecate:1.0.2"
+          - id: "NPM::xtend:4.0.1"
+      - id: "NPM::through2:2.0.5"
+        dependencies:
+        - id: "NPM::readable-stream:2.3.6"
+          dependencies:
+          - id: "NPM::core-util-is:1.0.2"
+          - id: "NPM::inherits:2.0.3"
+          - id: "NPM::isarray:1.0.0"
+          - id: "NPM::process-nextick-args:2.0.0"
+          - id: "NPM::safe-buffer:5.1.2"
+          - id: "NPM::string_decoder:1.1.1"
+            dependencies:
+            - id: "NPM::safe-buffer:5.1.2"
+          - id: "NPM::util-deprecate:1.0.2"
+        - id: "NPM::xtend:4.0.1"
+    - id: "NPM::rimraf:2.6.3"
+      dependencies:
+      - id: "NPM::glob:7.1.4"
+        dependencies:
+        - id: "NPM::fs.realpath:1.0.0"
+        - id: "NPM::inflight:1.0.6"
+          dependencies:
+          - id: "NPM::once:1.4.0"
+            dependencies:
+            - id: "NPM::wrappy:1.0.2"
+          - id: "NPM::wrappy:1.0.2"
+        - id: "NPM::inherits:2.0.3"
+        - id: "NPM::minimatch:3.0.4"
+          dependencies:
+          - id: "NPM::brace-expansion:1.1.11"
+            dependencies:
+            - id: "NPM::balanced-match:1.0.0"
+            - id: "NPM::concat-map:0.0.1"
+        - id: "NPM::once:1.4.0"
+          dependencies:
+          - id: "NPM::wrappy:1.0.2"
+        - id: "NPM::path-is-absolute:1.0.1"
+    - id: "NPM::tape:4.10.2"
+      dependencies:
+      - id: "NPM::deep-equal:1.0.1"
+      - id: "NPM::defined:1.0.0"
+      - id: "NPM::for-each:0.3.3"
+        dependencies:
+        - id: "NPM::is-callable:1.1.4"
+      - id: "NPM::function-bind:1.1.1"
+      - id: "NPM::glob:7.1.4"
+        dependencies:
+        - id: "NPM::fs.realpath:1.0.0"
+        - id: "NPM::inflight:1.0.6"
+          dependencies:
+          - id: "NPM::once:1.4.0"
+            dependencies:
+            - id: "NPM::wrappy:1.0.2"
+          - id: "NPM::wrappy:1.0.2"
+        - id: "NPM::inherits:2.0.3"
+        - id: "NPM::minimatch:3.0.4"
+          dependencies:
+          - id: "NPM::brace-expansion:1.1.11"
+            dependencies:
+            - id: "NPM::balanced-match:1.0.0"
+            - id: "NPM::concat-map:0.0.1"
+        - id: "NPM::once:1.4.0"
+          dependencies:
+          - id: "NPM::wrappy:1.0.2"
+        - id: "NPM::path-is-absolute:1.0.1"
+      - id: "NPM::has:1.0.3"
+        dependencies:
+        - id: "NPM::function-bind:1.1.1"
+      - id: "NPM::inherits:2.0.3"
+      - id: "NPM::minimist:1.2.0"
+      - id: "NPM::object-inspect:1.6.0"
+      - id: "NPM::resolve:1.10.1"
+        dependencies:
+        - id: "NPM::path-parse:1.0.6"
+      - id: "NPM::resumer:0.0.0"
+        dependencies:
+        - id: "NPM::through:2.3.8"
+      - id: "NPM::string.prototype.trim:1.1.2"
+        dependencies:
+        - id: "NPM::define-properties:1.1.3"
+          dependencies:
+          - id: "NPM::object-keys:1.1.1"
+        - id: "NPM::es-abstract:1.13.0"
+          dependencies:
+          - id: "NPM::es-to-primitive:1.2.0"
+            dependencies:
+            - id: "NPM::is-callable:1.1.4"
+            - id: "NPM::is-date-object:1.0.1"
+            - id: "NPM::is-symbol:1.0.2"
+              dependencies:
+              - id: "NPM::has-symbols:1.0.0"
+          - id: "NPM::function-bind:1.1.1"
+          - id: "NPM::has:1.0.3"
+            dependencies:
+            - id: "NPM::function-bind:1.1.1"
+          - id: "NPM::is-callable:1.1.4"
+          - id: "NPM::is-regex:1.0.4"
+            dependencies:
+            - id: "NPM::has:1.0.3"
+              dependencies:
+              - id: "NPM::function-bind:1.1.1"
+          - id: "NPM::object-keys:1.1.1"
+        - id: "NPM::function-bind:1.1.1"
+      - id: "NPM::through:2.3.8"
+    - id: "NPM::ts-node:8.3.0"
+      dependencies:
+      - id: "NPM::arg:4.1.0"
+      - id: "NPM::diff:4.0.1"
+      - id: "NPM::make-error:1.3.5"
+      - id: "NPM::source-map-support:0.5.12"
+        dependencies:
+        - id: "NPM::buffer-from:1.1.1"
+        - id: "NPM::source-map:0.6.1"
+      - id: "NPM::yn:3.1.0"
+    - id: "NPM::tslint:5.17.0"
+      dependencies:
+      - id: "NPM::builtin-modules:1.1.1"
+      - id: "NPM::chalk:2.4.2"
+        dependencies:
+        - id: "NPM::ansi-styles:3.2.1"
+          dependencies:
+          - id: "NPM::color-convert:1.9.3"
+            dependencies:
+            - id: "NPM::color-name:1.1.3"
+        - id: "NPM::escape-string-regexp:1.0.5"
+        - id: "NPM::supports-color:5.5.0"
+          dependencies:
+          - id: "NPM::has-flag:3.0.0"
+      - id: "NPM::commander:2.20.0"
+      - id: "NPM::diff:4.0.1"
+      - id: "NPM::glob:7.1.4"
+        dependencies:
+        - id: "NPM::fs.realpath:1.0.0"
+        - id: "NPM::inflight:1.0.6"
+          dependencies:
+          - id: "NPM::once:1.4.0"
+            dependencies:
+            - id: "NPM::wrappy:1.0.2"
+          - id: "NPM::wrappy:1.0.2"
+        - id: "NPM::inherits:2.0.3"
+        - id: "NPM::minimatch:3.0.4"
+          dependencies:
+          - id: "NPM::brace-expansion:1.1.11"
+            dependencies:
+            - id: "NPM::balanced-match:1.0.0"
+            - id: "NPM::concat-map:0.0.1"
+        - id: "NPM::once:1.4.0"
+          dependencies:
+          - id: "NPM::wrappy:1.0.2"
+        - id: "NPM::path-is-absolute:1.0.1"
+      - id: "NPM::js-yaml:3.13.1"
+        dependencies:
+        - id: "NPM::argparse:1.0.10"
+          dependencies:
+          - id: "NPM::sprintf-js:1.0.3"
+        - id: "NPM::esprima:4.0.1"
+      - id: "NPM::minimatch:3.0.4"
+        dependencies:
+        - id: "NPM::brace-expansion:1.1.11"
+          dependencies:
+          - id: "NPM::balanced-match:1.0.0"
+          - id: "NPM::concat-map:0.0.1"
+      - id: "NPM::mkdirp:0.5.1"
+        dependencies:
+        - id: "NPM::minimist:1.2.0"
+      - id: "NPM::resolve:1.10.1"
+        dependencies:
+        - id: "NPM::path-parse:1.0.6"
+      - id: "NPM::semver:5.7.0"
+      - id: "NPM::tslib:1.10.0"
+      - id: "NPM::tsutils:2.29.0"
+        dependencies:
+        - id: "NPM::tslib:1.10.0"
+      - id: "NPM:@babel:code-frame:7.0.0"
+        dependencies:
+        - id: "NPM:@babel:highlight:7.0.0"
+          dependencies:
+          - id: "NPM::chalk:2.4.2"
+            dependencies:
+            - id: "NPM::ansi-styles:3.2.1"
+              dependencies:
+              - id: "NPM::color-convert:1.9.3"
+                dependencies:
+                - id: "NPM::color-name:1.1.3"
+            - id: "NPM::escape-string-regexp:1.0.5"
+            - id: "NPM::supports-color:5.5.0"
+              dependencies:
+              - id: "NPM::has-flag:3.0.0"
+          - id: "NPM::esutils:2.0.2"
+          - id: "NPM::js-tokens:4.0.0"
+    - id: "NPM::typescript:3.5.2"
+    - id: "NPM:@types:graceful-fs:4.1.3"
+      dependencies:
+      - id: "NPM:@types:node:12.0.8"
+    - id: "NPM:@types:node:12.0.8"
+    - id: "NPM:@types:tape:4.2.33"
+      dependencies:
+      - id: "NPM:@types:node:12.0.8"
+packages:
+- package:
+    id: "NPM::ansi-styles:3.2.1"
+    purl: "pkg:npm/ansi-styles@3.2.1"
+    declared_licenses:
+    - "MIT"
+    declared_licenses_processed:
+      spdx_expression: "MIT"
+    description: "ANSI escape codes for styling strings in the terminal"
+    homepage_url: ""
+    binary_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    source_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    vcs:
+      type: "Git"
+      url: "https://github.com/chalk/ansi-styles.git"
+      revision: ""
+      resolved_revision: ""
+      path: ""
+    vcs_processed:
+      type: "Git"
+      url: "https://github.com/chalk/ansi-styles.git"
+      revision: ""
+      resolved_revision: ""
+      path: ""
+  curations: []
+- package:
+    id: "NPM::arg:4.1.0"
+    purl: "pkg:npm/arg@4.1.0"
+    declared_licenses:
+    - "MIT"
+    declared_licenses_processed:
+      spdx_expression: "MIT"
+    description: "Another simple argument parser"
+    homepage_url: ""
+    binary_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    source_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    vcs:
+      type: "Git"
+      url: "https://github.com/zeit/arg.git"
+      revision: ""
+      resolved_revision: ""
+      path: ""
+    vcs_processed:
+      type: "Git"
+      url: "https://github.com/zeit/arg.git"
+      revision: ""
+      resolved_revision: ""
+      path: ""
+  curations: []
+- package:
+    id: "NPM::argparse:1.0.10"
+    purl: "pkg:npm/argparse@1.0.10"
+    declared_licenses:
+    - "MIT"
+    declared_licenses_processed:
+      spdx_expression: "MIT"
+    description: "Very powerful CLI arguments parser. Native port of argparse - python's\
+      \ options parsing library"
+    homepage_url: ""
+    binary_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    source_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    vcs:
+      type: "Git"
+      url: "https://github.com/nodeca/argparse.git"
+      revision: ""
+      resolved_revision: ""
+      path: ""
+    vcs_processed:
+      type: "Git"
+      url: "https://github.com/nodeca/argparse.git"
+      revision: ""
+      resolved_revision: ""
+      path: ""
+  curations: []
+- package:
+    id: "NPM::balanced-match:1.0.0"
+    purl: "pkg:npm/balanced-match@1.0.0"
+    declared_licenses:
+    - "MIT"
+    declared_licenses_processed:
+      spdx_expression: "MIT"
+    description: "Match balanced character pairs, like \"{\" and \"}\""
+    homepage_url: "https://github.com/juliangruber/balanced-match"
+    binary_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    source_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    vcs:
+      type: "Git"
+      url: "git://github.com/juliangruber/balanced-match.git"
+      revision: ""
+      resolved_revision: ""
+      path: ""
+    vcs_processed:
+      type: "Git"
+      url: "https://github.com/juliangruber/balanced-match.git"
+      revision: ""
+      resolved_revision: ""
+      path: ""
+  curations: []
+- package:
+    id: "NPM::brace-expansion:1.1.11"
+    purl: "pkg:npm/brace-expansion@1.1.11"
+    declared_licenses:
+    - "MIT"
+    declared_licenses_processed:
+      spdx_expression: "MIT"
+    description: "Brace expansion as known from sh/bash"
+    homepage_url: "https://github.com/juliangruber/brace-expansion"
+    binary_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    source_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    vcs:
+      type: "Git"
+      url: "git://github.com/juliangruber/brace-expansion.git"
+      revision: ""
+      resolved_revision: ""
+      path: ""
+    vcs_processed:
+      type: "Git"
+      url: "https://github.com/juliangruber/brace-expansion.git"
+      revision: ""
+      resolved_revision: ""
+      path: ""
+  curations: []
+- package:
+    id: "NPM::buffer-from:1.1.1"
+    purl: "pkg:npm/buffer-from@1.1.1"
+    declared_licenses:
+    - "MIT"
+    declared_licenses_processed:
+      spdx_expression: "MIT"
+    description: ""
+    homepage_url: ""
+    binary_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    source_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    vcs:
+      type: "Git"
+      url: "https://github.com/LinusU/buffer-from.git"
+      revision: ""
+      resolved_revision: ""
+      path: ""
+    vcs_processed:
+      type: "Git"
+      url: "https://github.com/LinusU/buffer-from.git"
+      revision: ""
+      resolved_revision: ""
+      path: ""
+  curations: []
+- package:
+    id: "NPM::builtin-modules:1.1.1"
+    purl: "pkg:npm/builtin-modules@1.1.1"
+    declared_licenses:
+    - "MIT"
+    declared_licenses_processed:
+      spdx_expression: "MIT"
+    description: "List of the Node.js builtin modules"
+    homepage_url: ""
+    binary_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    source_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    vcs:
+      type: "Git"
+      url: "https://github.com/sindresorhus/builtin-modules.git"
+      revision: ""
+      resolved_revision: ""
+      path: ""
+    vcs_processed:
+      type: "Git"
+      url: "https://github.com/sindresorhus/builtin-modules.git"
+      revision: ""
+      resolved_revision: ""
+      path: ""
+  curations: []
+- package:
+    id: "NPM::cb2promise:1.1.1"
+    purl: "pkg:npm/cb2promise@1.1.1"
+    declared_licenses:
+    - "MIT"
+    declared_licenses_processed:
+      spdx_expression: "MIT"
+    description: "Converts whatever standard NodeJS callback function into ES6 standard\
+      \ promise."
+    homepage_url: "https://github.com/Kikobeats/cb2promise"
+    binary_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    source_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    vcs:
+      type: "Git"
+      url: "git+https://github.com/kikobeats/cb2promise.git"
+      revision: ""
+      resolved_revision: ""
+      path: ""
+    vcs_processed:
+      type: "Git"
+      url: "https://github.com/kikobeats/cb2promise.git"
+      revision: ""
+      resolved_revision: ""
+      path: ""
+  curations: []
+- package:
+    id: "NPM::chalk:2.4.2"
+    purl: "pkg:npm/chalk@2.4.2"
+    declared_licenses:
+    - "MIT"
+    declared_licenses_processed:
+      spdx_expression: "MIT"
+    description: "Terminal string styling done right"
+    homepage_url: ""
+    binary_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    source_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    vcs:
+      type: "Git"
+      url: "https://github.com/chalk/chalk.git"
+      revision: ""
+      resolved_revision: ""
+      path: ""
+    vcs_processed:
+      type: "Git"
+      url: "https://github.com/chalk/chalk.git"
+      revision: ""
+      resolved_revision: ""
+      path: ""
+  curations: []
+- package:
+    id: "NPM::color-convert:1.9.3"
+    purl: "pkg:npm/color-convert@1.9.3"
+    declared_licenses:
+    - "MIT"
+    declared_licenses_processed:
+      spdx_expression: "MIT"
+    description: "Plain color conversion functions"
+    homepage_url: ""
+    binary_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    source_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    vcs:
+      type: "Git"
+      url: "https://github.com/Qix-/color-convert.git"
+      revision: ""
+      resolved_revision: ""
+      path: ""
+    vcs_processed:
+      type: "Git"
+      url: "https://github.com/Qix-/color-convert.git"
+      revision: ""
+      resolved_revision: ""
+      path: ""
+  curations: []
+- package:
+    id: "NPM::color-name:1.1.3"
+    purl: "pkg:npm/color-name@1.1.3"
+    declared_licenses:
+    - "MIT"
+    declared_licenses_processed:
+      spdx_expression: "MIT"
+    description: "A list of color names and its values"
+    homepage_url: "https://github.com/dfcreative/color-name"
+    binary_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    source_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    vcs:
+      type: "Git"
+      url: "git@github.com:dfcreative/color-name.git"
+      revision: ""
+      resolved_revision: ""
+      path: ""
+    vcs_processed:
+      type: "Git"
+      url: "ssh://git@github.com/dfcreative/color-name.git"
+      revision: ""
+      resolved_revision: ""
+      path: ""
+  curations: []
+- package:
+    id: "NPM::commander:2.20.0"
+    purl: "pkg:npm/commander@2.20.0"
+    declared_licenses:
+    - "MIT"
+    declared_licenses_processed:
+      spdx_expression: "MIT"
+    description: "the complete solution for node.js command-line programs"
+    homepage_url: ""
+    binary_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    source_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    vcs:
+      type: "Git"
+      url: "https://github.com/tj/commander.js.git"
+      revision: ""
+      resolved_revision: ""
+      path: ""
+    vcs_processed:
+      type: "Git"
+      url: "https://github.com/tj/commander.js.git"
+      revision: ""
+      resolved_revision: ""
+      path: ""
+  curations: []
+- package:
+    id: "NPM::concat-map:0.0.1"
+    purl: "pkg:npm/concat-map@0.0.1"
+    declared_licenses:
+    - "MIT"
+    declared_licenses_processed:
+      spdx_expression: "MIT"
+    description: "concatenative mapdashery"
+    homepage_url: ""
+    binary_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    source_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    vcs:
+      type: "Git"
+      url: "git://github.com/substack/node-concat-map.git"
+      revision: ""
+      resolved_revision: ""
+      path: ""
+    vcs_processed:
+      type: "Git"
+      url: "https://github.com/substack/node-concat-map.git"
+      revision: ""
+      resolved_revision: ""
+      path: ""
+  curations: []
+- package:
+    id: "NPM::core-util-is:1.0.2"
+    purl: "pkg:npm/core-util-is@1.0.2"
+    declared_licenses:
+    - "MIT"
+    declared_licenses_processed:
+      spdx_expression: "MIT"
+    description: "The `util.is*` functions introduced in Node v0.12."
+    homepage_url: ""
+    binary_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    source_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    vcs:
+      type: "Git"
+      url: "git://github.com/isaacs/core-util-is"
+      revision: ""
+      resolved_revision: ""
+      path: ""
+    vcs_processed:
+      type: "Git"
+      url: "https://github.com/isaacs/core-util-is.git"
+      revision: ""
+      resolved_revision: ""
+      path: ""
+  curations: []
+- package:
+    id: "NPM::deep-equal:1.0.1"
+    purl: "pkg:npm/deep-equal@1.0.1"
+    declared_licenses:
+    - "MIT"
+    declared_licenses_processed:
+      spdx_expression: "MIT"
+    description: "node's assert.deepEqual algorithm"
+    homepage_url: ""
+    binary_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    source_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    vcs:
+      type: "Git"
+      url: "http://github.com/substack/node-deep-equal.git"
+      revision: ""
+      resolved_revision: ""
+      path: ""
+    vcs_processed:
+      type: "Git"
+      url: "https://github.com/substack/node-deep-equal.git"
+      revision: ""
+      resolved_revision: ""
+      path: ""
+  curations: []
+- package:
+    id: "NPM::define-properties:1.1.3"
+    purl: "pkg:npm/define-properties@1.1.3"
+    declared_licenses:
+    - "MIT"
+    declared_licenses_processed:
+      spdx_expression: "MIT"
+    description: "Define multiple non-enumerable properties at once. Uses `Object.defineProperty`\
+      \ when available; falls back to standard assignment in older engines."
+    homepage_url: ""
+    binary_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    source_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    vcs:
+      type: "Git"
+      url: "git://github.com/ljharb/define-properties.git"
+      revision: ""
+      resolved_revision: ""
+      path: ""
+    vcs_processed:
+      type: "Git"
+      url: "https://github.com/ljharb/define-properties.git"
+      revision: ""
+      resolved_revision: ""
+      path: ""
+  curations: []
+- package:
+    id: "NPM::defined:1.0.0"
+    purl: "pkg:npm/defined@1.0.0"
+    declared_licenses:
+    - "MIT"
+    declared_licenses_processed:
+      spdx_expression: "MIT"
+    description: "return the first argument that is `!== undefined`"
+    homepage_url: "https://github.com/substack/defined"
+    binary_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    source_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    vcs:
+      type: "Git"
+      url: "git://github.com/substack/defined.git"
+      revision: ""
+      resolved_revision: ""
+      path: ""
+    vcs_processed:
+      type: "Git"
+      url: "https://github.com/substack/defined.git"
+      revision: ""
+      resolved_revision: ""
+      path: ""
+  curations: []
+- package:
+    id: "NPM::diff:4.0.1"
+    purl: "pkg:npm/diff@4.0.1"
+    declared_licenses:
+    - "BSD-3-Clause"
+    declared_licenses_processed:
+      spdx_expression: "BSD-3-Clause"
+    description: "A javascript text diff implementation."
+    homepage_url: ""
+    binary_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    source_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    vcs:
+      type: "Git"
+      url: "git://github.com/kpdecker/jsdiff.git"
+      revision: ""
+      resolved_revision: ""
+      path: ""
+    vcs_processed:
+      type: "Git"
+      url: "https://github.com/kpdecker/jsdiff.git"
+      revision: ""
+      resolved_revision: ""
+      path: ""
+  curations: []
+- package:
+    id: "NPM::es-abstract:1.13.0"
+    purl: "pkg:npm/es-abstract@1.13.0"
+    declared_licenses:
+    - "MIT"
+    declared_licenses_processed:
+      spdx_expression: "MIT"
+    description: "ECMAScript spec abstract operations."
+    homepage_url: ""
+    binary_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    source_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    vcs:
+      type: "Git"
+      url: "git://github.com/ljharb/es-abstract.git"
+      revision: ""
+      resolved_revision: ""
+      path: ""
+    vcs_processed:
+      type: "Git"
+      url: "https://github.com/ljharb/es-abstract.git"
+      revision: ""
+      resolved_revision: ""
+      path: ""
+  curations: []
+- package:
+    id: "NPM::es-to-primitive:1.2.0"
+    purl: "pkg:npm/es-to-primitive@1.2.0"
+    declared_licenses:
+    - "MIT"
+    declared_licenses_processed:
+      spdx_expression: "MIT"
+    description: "ECMAScript “ToPrimitive” algorithm. Provides ES5 and ES2015 versions."
+    homepage_url: ""
+    binary_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    source_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    vcs:
+      type: "Git"
+      url: "git://github.com/ljharb/es-to-primitive.git"
+      revision: ""
+      resolved_revision: ""
+      path: ""
+    vcs_processed:
+      type: "Git"
+      url: "https://github.com/ljharb/es-to-primitive.git"
+      revision: ""
+      resolved_revision: ""
+      path: ""
+  curations: []
+- package:
+    id: "NPM::escape-string-regexp:1.0.5"
+    purl: "pkg:npm/escape-string-regexp@1.0.5"
+    declared_licenses:
+    - "MIT"
+    declared_licenses_processed:
+      spdx_expression: "MIT"
+    description: "Escape RegExp special characters"
+    homepage_url: ""
+    binary_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    source_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    vcs:
+      type: "Git"
+      url: "https://github.com/sindresorhus/escape-string-regexp.git"
+      revision: ""
+      resolved_revision: ""
+      path: ""
+    vcs_processed:
+      type: "Git"
+      url: "https://github.com/sindresorhus/escape-string-regexp.git"
+      revision: ""
+      resolved_revision: ""
+      path: ""
+  curations: []
+- package:
+    id: "NPM::esprima:4.0.1"
+    purl: "pkg:npm/esprima@4.0.1"
+    declared_licenses:
+    - "BSD-2-Clause"
+    declared_licenses_processed:
+      spdx_expression: "BSD-2-Clause"
+    description: "ECMAScript parsing infrastructure for multipurpose analysis"
+    homepage_url: "http://esprima.org"
+    binary_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    source_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    vcs:
+      type: "Git"
+      url: "https://github.com/jquery/esprima.git"
+      revision: ""
+      resolved_revision: ""
+      path: ""
+    vcs_processed:
+      type: "Git"
+      url: "https://github.com/jquery/esprima.git"
+      revision: ""
+      resolved_revision: ""
+      path: ""
+  curations: []
+- package:
+    id: "NPM::esutils:2.0.2"
+    purl: "pkg:npm/esutils@2.0.2"
+    declared_licenses:
+    - "BSD"
+    declared_licenses_processed:
+      spdx_expression: "BSD-3-Clause"
+    description: "utility box for ECMAScript language tools"
+    homepage_url: "https://github.com/estools/esutils"
+    binary_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    source_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    vcs:
+      type: "Git"
+      url: "http://github.com/estools/esutils.git"
+      revision: ""
+      resolved_revision: ""
+      path: ""
+    vcs_processed:
+      type: "Git"
+      url: "https://github.com/estools/esutils.git"
+      revision: ""
+      resolved_revision: ""
+      path: ""
+  curations: []
+- package:
+    id: "NPM::exists-file:3.0.2"
+    purl: "pkg:npm/exists-file@3.0.2"
+    declared_licenses:
+    - "MIT"
+    declared_licenses_processed:
+      spdx_expression: "MIT"
+    description: "Check if a file exists. A fs.exists implementation that is not deprecated."
+    homepage_url: "https://github.com/Kikobeats/exists-file"
+    binary_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    source_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    vcs:
+      type: "Git"
+      url: "git+https://github.com/kikobeats/exists-file.git"
+      revision: ""
+      resolved_revision: ""
+      path: ""
+    vcs_processed:
+      type: "Git"
+      url: "https://github.com/kikobeats/exists-file.git"
+      revision: ""
+      resolved_revision: ""
+      path: ""
+  curations: []
+- package:
+    id: "NPM::for-each:0.3.3"
+    purl: "pkg:npm/for-each@0.3.3"
+    declared_licenses:
+    - "MIT"
+    declared_licenses_processed:
+      spdx_expression: "MIT"
+    description: "A better forEach"
+    homepage_url: "https://github.com/Raynos/for-each"
+    binary_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    source_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    vcs:
+      type: "Git"
+      url: "git://github.com/Raynos/for-each.git"
+      revision: ""
+      resolved_revision: ""
+      path: ""
+    vcs_processed:
+      type: "Git"
+      url: "https://github.com/Raynos/for-each.git"
+      revision: ""
+      resolved_revision: ""
+      path: ""
+  curations: []
+- package:
+    id: "NPM::fs.realpath:1.0.0"
+    purl: "pkg:npm/fs.realpath@1.0.0"
+    declared_licenses:
+    - "ISC"
+    declared_licenses_processed:
+      spdx_expression: "ISC"
+    description: "Use node's fs.realpath, but fall back to the JS implementation if\
+      \ the native one fails"
+    homepage_url: ""
+    binary_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    source_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    vcs:
+      type: "Git"
+      url: "git+https://github.com/isaacs/fs.realpath.git"
+      revision: ""
+      resolved_revision: ""
+      path: ""
+    vcs_processed:
+      type: "Git"
+      url: "https://github.com/isaacs/fs.realpath.git"
+      revision: ""
+      resolved_revision: ""
+      path: ""
+  curations: []
+- package:
+    id: "NPM::function-bind:1.1.1"
+    purl: "pkg:npm/function-bind@1.1.1"
+    declared_licenses:
+    - "MIT"
+    declared_licenses_processed:
+      spdx_expression: "MIT"
+    description: "Implementation of Function.prototype.bind"
+    homepage_url: "https://github.com/Raynos/function-bind"
+    binary_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    source_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    vcs:
+      type: "Git"
+      url: "git://github.com/Raynos/function-bind.git"
+      revision: ""
+      resolved_revision: ""
+      path: ""
+    vcs_processed:
+      type: "Git"
+      url: "https://github.com/Raynos/function-bind.git"
+      revision: ""
+      resolved_revision: ""
+      path: ""
+  curations: []
+- package:
+    id: "NPM::glob:7.1.4"
+    purl: "pkg:npm/glob@7.1.4"
+    declared_licenses:
+    - "ISC"
+    declared_licenses_processed:
+      spdx_expression: "ISC"
+    description: "a little globber"
+    homepage_url: ""
+    binary_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    source_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    vcs:
+      type: "Git"
+      url: "git://github.com/isaacs/node-glob.git"
+      revision: ""
+      resolved_revision: ""
+      path: ""
+    vcs_processed:
+      type: "Git"
+      url: "https://github.com/isaacs/node-glob.git"
+      revision: ""
+      resolved_revision: ""
+      path: ""
+  curations: []
+- package:
+    id: "NPM::graceful-fs:4.1.15"
+    purl: "pkg:npm/graceful-fs@4.1.15"
+    declared_licenses:
+    - "ISC"
+    declared_licenses_processed:
+      spdx_expression: "ISC"
+    description: "A drop-in replacement for fs, making various improvements."
+    homepage_url: ""
+    binary_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    source_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    vcs:
+      type: "Git"
+      url: "https://github.com/isaacs/node-graceful-fs"
+      revision: ""
+      resolved_revision: ""
+      path: ""
+    vcs_processed:
+      type: "Git"
+      url: "https://github.com/isaacs/node-graceful-fs.git"
+      revision: ""
+      resolved_revision: ""
+      path: ""
+  curations: []
+- package:
+    id: "NPM::has-flag:3.0.0"
+    purl: "pkg:npm/has-flag@3.0.0"
+    declared_licenses:
+    - "MIT"
+    declared_licenses_processed:
+      spdx_expression: "MIT"
+    description: "Check if argv has a specific flag"
+    homepage_url: ""
+    binary_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    source_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    vcs:
+      type: "Git"
+      url: "https://github.com/sindresorhus/has-flag.git"
+      revision: ""
+      resolved_revision: ""
+      path: ""
+    vcs_processed:
+      type: "Git"
+      url: "https://github.com/sindresorhus/has-flag.git"
+      revision: ""
+      resolved_revision: ""
+      path: ""
+  curations: []
+- package:
+    id: "NPM::has-symbols:1.0.0"
+    purl: "pkg:npm/has-symbols@1.0.0"
+    declared_licenses:
+    - "MIT"
+    declared_licenses_processed:
+      spdx_expression: "MIT"
+    description: "Determine if the JS environment has Symbol support. Supports spec,\
+      \ or shams."
+    homepage_url: ""
+    binary_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    source_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    vcs:
+      type: "Git"
+      url: "git://github.com/ljharb/has-symbols.git"
+      revision: ""
+      resolved_revision: ""
+      path: ""
+    vcs_processed:
+      type: "Git"
+      url: "https://github.com/ljharb/has-symbols.git"
+      revision: ""
+      resolved_revision: ""
+      path: ""
+  curations: []
+- package:
+    id: "NPM::has:1.0.3"
+    purl: "pkg:npm/has@1.0.3"
+    declared_licenses:
+    - "MIT"
+    declared_licenses_processed:
+      spdx_expression: "MIT"
+    description: "Object.prototype.hasOwnProperty.call shortcut"
+    homepage_url: "https://github.com/tarruda/has"
+    binary_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    source_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    vcs:
+      type: "Git"
+      url: "git://github.com/tarruda/has.git"
+      revision: ""
+      resolved_revision: ""
+      path: ""
+    vcs_processed:
+      type: "Git"
+      url: "https://github.com/tarruda/has.git"
+      revision: ""
+      resolved_revision: ""
+      path: ""
+  curations: []
+- package:
+    id: "NPM::inflight:1.0.6"
+    purl: "pkg:npm/inflight@1.0.6"
+    declared_licenses:
+    - "ISC"
+    declared_licenses_processed:
+      spdx_expression: "ISC"
+    description: "Add callbacks to requests in flight to avoid async duplication"
+    homepage_url: "https://github.com/isaacs/inflight"
+    binary_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    source_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    vcs:
+      type: "Git"
+      url: "https://github.com/npm/inflight.git"
+      revision: ""
+      resolved_revision: ""
+      path: ""
+    vcs_processed:
+      type: "Git"
+      url: "https://github.com/npm/inflight.git"
+      revision: ""
+      resolved_revision: ""
+      path: ""
+  curations: []
+- package:
+    id: "NPM::inherits:2.0.3"
+    purl: "pkg:npm/inherits@2.0.3"
+    declared_licenses:
+    - "ISC"
+    declared_licenses_processed:
+      spdx_expression: "ISC"
+    description: "Browser-friendly inheritance fully compatible with standard node.js\
+      \ inherits()"
+    homepage_url: ""
+    binary_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    source_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    vcs:
+      type: "Git"
+      url: "git://github.com/isaacs/inherits"
+      revision: ""
+      resolved_revision: ""
+      path: ""
+    vcs_processed:
+      type: "Git"
+      url: "https://github.com/isaacs/inherits.git"
+      revision: ""
+      resolved_revision: ""
+      path: ""
+  curations: []
+- package:
+    id: "NPM::is-callable:1.1.4"
+    purl: "pkg:npm/is-callable@1.1.4"
+    declared_licenses:
+    - "MIT"
+    declared_licenses_processed:
+      spdx_expression: "MIT"
+    description: "Is this JS value callable? Works with Functions and GeneratorFunctions,\
+      \ despite ES6 @@toStringTag."
+    homepage_url: ""
+    binary_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    source_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    vcs:
+      type: "Git"
+      url: "git://github.com/ljharb/is-callable.git"
+      revision: ""
+      resolved_revision: ""
+      path: ""
+    vcs_processed:
+      type: "Git"
+      url: "https://github.com/ljharb/is-callable.git"
+      revision: ""
+      resolved_revision: ""
+      path: ""
+  curations: []
+- package:
+    id: "NPM::is-date-object:1.0.1"
+    purl: "pkg:npm/is-date-object@1.0.1"
+    declared_licenses:
+    - "MIT"
+    declared_licenses_processed:
+      spdx_expression: "MIT"
+    description: "Is this value a JS Date object? This module works cross-realm/iframe,\
+      \ and despite ES6 @@toStringTag."
+    homepage_url: ""
+    binary_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    source_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    vcs:
+      type: "Git"
+      url: "git://github.com/ljharb/is-date-object.git"
+      revision: ""
+      resolved_revision: ""
+      path: ""
+    vcs_processed:
+      type: "Git"
+      url: "https://github.com/ljharb/is-date-object.git"
+      revision: ""
+      resolved_revision: ""
+      path: ""
+  curations: []
+- package:
+    id: "NPM::is-regex:1.0.4"
+    purl: "pkg:npm/is-regex@1.0.4"
+    declared_licenses:
+    - "MIT"
+    declared_licenses_processed:
+      spdx_expression: "MIT"
+    description: "Is this value a JS regex? Works cross-realm/iframe, and despite\
+      \ ES6 @@toStringTag"
+    homepage_url: "https://github.com/ljharb/is-regex"
+    binary_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    source_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    vcs:
+      type: "Git"
+      url: "git://github.com/ljharb/is-regex.git"
+      revision: ""
+      resolved_revision: ""
+      path: ""
+    vcs_processed:
+      type: "Git"
+      url: "https://github.com/ljharb/is-regex.git"
+      revision: ""
+      resolved_revision: ""
+      path: ""
+  curations: []
+- package:
+    id: "NPM::is-symbol:1.0.2"
+    purl: "pkg:npm/is-symbol@1.0.2"
+    declared_licenses:
+    - "MIT"
+    declared_licenses_processed:
+      spdx_expression: "MIT"
+    description: "Determine if a value is an ES6 Symbol or not."
+    homepage_url: ""
+    binary_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    source_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    vcs:
+      type: "Git"
+      url: "git://github.com/ljharb/is-symbol.git"
+      revision: ""
+      resolved_revision: ""
+      path: ""
+    vcs_processed:
+      type: "Git"
+      url: "https://github.com/ljharb/is-symbol.git"
+      revision: ""
+      resolved_revision: ""
+      path: ""
+  curations: []
+- package:
+    id: "NPM::isarray:1.0.0"
+    purl: "pkg:npm/isarray@1.0.0"
+    declared_licenses:
+    - "MIT"
+    declared_licenses_processed:
+      spdx_expression: "MIT"
+    description: "Array#isArray for older browsers"
+    homepage_url: "https://github.com/juliangruber/isarray"
+    binary_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    source_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    vcs:
+      type: "Git"
+      url: "git://github.com/juliangruber/isarray.git"
+      revision: ""
+      resolved_revision: ""
+      path: ""
+    vcs_processed:
+      type: "Git"
+      url: "https://github.com/juliangruber/isarray.git"
+      revision: ""
+      resolved_revision: ""
+      path: ""
+  curations: []
+- package:
+    id: "NPM::js-tokens:4.0.0"
+    purl: "pkg:npm/js-tokens@4.0.0"
+    declared_licenses:
+    - "MIT"
+    declared_licenses_processed:
+      spdx_expression: "MIT"
+    description: "A regex that tokenizes JavaScript."
+    homepage_url: ""
+    binary_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    source_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    vcs:
+      type: "Git"
+      url: "https://github.com/lydell/js-tokens.git"
+      revision: ""
+      resolved_revision: ""
+      path: ""
+    vcs_processed:
+      type: "Git"
+      url: "https://github.com/lydell/js-tokens.git"
+      revision: ""
+      resolved_revision: ""
+      path: ""
+  curations: []
+- package:
+    id: "NPM::js-yaml:3.13.1"
+    purl: "pkg:npm/js-yaml@3.13.1"
+    declared_licenses:
+    - "MIT"
+    declared_licenses_processed:
+      spdx_expression: "MIT"
+    description: "YAML 1.2 parser and serializer"
+    homepage_url: "https://github.com/nodeca/js-yaml"
+    binary_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    source_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    vcs:
+      type: "Git"
+      url: "https://github.com/nodeca/js-yaml.git"
+      revision: ""
+      resolved_revision: ""
+      path: ""
+    vcs_processed:
+      type: "Git"
+      url: "https://github.com/nodeca/js-yaml.git"
+      revision: ""
+      resolved_revision: ""
+      path: ""
+  curations: []
+- package:
+    id: "NPM::json-stringify-safe:5.0.1"
+    purl: "pkg:npm/json-stringify-safe@5.0.1"
+    declared_licenses:
+    - "ISC"
+    declared_licenses_processed:
+      spdx_expression: "ISC"
+    description: "Like JSON.stringify, but doesn't blow up on circular refs."
+    homepage_url: "https://github.com/isaacs/json-stringify-safe"
+    binary_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    source_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    vcs:
+      type: "Git"
+      url: "git://github.com/isaacs/json-stringify-safe"
+      revision: ""
+      resolved_revision: ""
+      path: ""
+    vcs_processed:
+      type: "Git"
+      url: "https://github.com/isaacs/json-stringify-safe.git"
+      revision: ""
+      resolved_revision: ""
+      path: ""
+  curations: []
+- package:
+    id: "NPM::make-error:1.3.5"
+    purl: "pkg:npm/make-error@1.3.5"
+    declared_licenses:
+    - "ISC"
+    declared_licenses_processed:
+      spdx_expression: "ISC"
+    description: "Make your own error types!"
+    homepage_url: "https://github.com/JsCommunity/make-error"
+    binary_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    source_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    vcs:
+      type: "Git"
+      url: "git://github.com/JsCommunity/make-error.git"
+      revision: ""
+      resolved_revision: ""
+      path: ""
+    vcs_processed:
+      type: "Git"
+      url: "https://github.com/JsCommunity/make-error.git"
+      revision: ""
+      resolved_revision: ""
+      path: ""
+  curations: []
+- package:
+    id: "NPM::mimic-fn:2.0.0"
+    purl: "pkg:npm/mimic-fn@2.0.0"
+    declared_licenses:
+    - "MIT"
+    declared_licenses_processed:
+      spdx_expression: "MIT"
+    description: "Make a function mimic another one"
+    homepage_url: ""
+    binary_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    source_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    vcs:
+      type: "Git"
+      url: "https://github.com/sindresorhus/mimic-fn.git"
+      revision: ""
+      resolved_revision: ""
+      path: ""
+    vcs_processed:
+      type: "Git"
+      url: "https://github.com/sindresorhus/mimic-fn.git"
+      revision: ""
+      resolved_revision: ""
+      path: ""
+  curations: []
+- package:
+    id: "NPM::minimatch:3.0.4"
+    purl: "pkg:npm/minimatch@3.0.4"
+    declared_licenses:
+    - "ISC"
+    declared_licenses_processed:
+      spdx_expression: "ISC"
+    description: "a glob matcher in javascript"
+    homepage_url: ""
+    binary_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    source_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    vcs:
+      type: "Git"
+      url: "git://github.com/isaacs/minimatch.git"
+      revision: ""
+      resolved_revision: ""
+      path: ""
+    vcs_processed:
+      type: "Git"
+      url: "https://github.com/isaacs/minimatch.git"
+      revision: ""
+      resolved_revision: ""
+      path: ""
+  curations: []
+- package:
+    id: "NPM::minimist:1.2.0"
+    purl: "pkg:npm/minimist@1.2.0"
+    declared_licenses:
+    - "MIT"
+    declared_licenses_processed:
+      spdx_expression: "MIT"
+    description: "parse argument options"
+    homepage_url: "https://github.com/substack/minimist"
+    binary_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    source_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    vcs:
+      type: "Git"
+      url: "git://github.com/substack/minimist.git"
+      revision: ""
+      resolved_revision: ""
+      path: ""
+    vcs_processed:
+      type: "Git"
+      url: "https://github.com/substack/minimist.git"
+      revision: ""
+      resolved_revision: ""
+      path: ""
+  curations: []
+- package:
+    id: "NPM::mkdirp:0.5.1"
+    purl: "pkg:npm/mkdirp@0.5.1"
+    declared_licenses:
+    - "MIT"
+    declared_licenses_processed:
+      spdx_expression: "MIT"
+    description: "Recursively mkdir, like `mkdir -p`"
+    homepage_url: ""
+    binary_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    source_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    vcs:
+      type: "Git"
+      url: "https://github.com/substack/node-mkdirp.git"
+      revision: ""
+      resolved_revision: ""
+      path: ""
+    vcs_processed:
+      type: "Git"
+      url: "https://github.com/substack/node-mkdirp.git"
+      revision: ""
+      resolved_revision: ""
+      path: ""
+  curations: []
+- package:
+    id: "NPM::ndjson:1.5.0"
+    purl: "pkg:npm/ndjson@1.5.0"
+    declared_licenses:
+    - "BSD-3-Clause"
+    declared_licenses_processed:
+      spdx_expression: "BSD-3-Clause"
+    description: "streaming newline delimited json parser + serializer"
+    homepage_url: "https://github.com/maxogden/ndjson"
+    binary_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    source_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    vcs:
+      type: "Git"
+      url: "git://github.com/maxogden/ndjson.git"
+      revision: ""
+      resolved_revision: ""
+      path: ""
+    vcs_processed:
+      type: "Git"
+      url: "https://github.com/maxogden/ndjson.git"
+      revision: ""
+      resolved_revision: ""
+      path: ""
+  curations: []
+- package:
+    id: "NPM::object-inspect:1.6.0"
+    purl: "pkg:npm/object-inspect@1.6.0"
+    declared_licenses:
+    - "MIT"
+    declared_licenses_processed:
+      spdx_expression: "MIT"
+    description: "string representations of objects in node and the browser"
+    homepage_url: "https://github.com/substack/object-inspect"
+    binary_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    source_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    vcs:
+      type: "Git"
+      url: "git://github.com/substack/object-inspect.git"
+      revision: ""
+      resolved_revision: ""
+      path: ""
+    vcs_processed:
+      type: "Git"
+      url: "https://github.com/substack/object-inspect.git"
+      revision: ""
+      resolved_revision: ""
+      path: ""
+  curations: []
+- package:
+    id: "NPM::object-keys:1.1.1"
+    purl: "pkg:npm/object-keys@1.1.1"
+    declared_licenses:
+    - "MIT"
+    declared_licenses_processed:
+      spdx_expression: "MIT"
+    description: "An Object.keys replacement, in case Object.keys is not available.\
+      \ From https://github.com/es-shims/es5-shim"
+    homepage_url: ""
+    binary_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    source_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    vcs:
+      type: "Git"
+      url: "git://github.com/ljharb/object-keys.git"
+      revision: ""
+      resolved_revision: ""
+      path: ""
+    vcs_processed:
+      type: "Git"
+      url: "https://github.com/ljharb/object-keys.git"
+      revision: ""
+      resolved_revision: ""
+      path: ""
+  curations: []
+- package:
+    id: "NPM::once:1.4.0"
+    purl: "pkg:npm/once@1.4.0"
+    declared_licenses:
+    - "ISC"
+    declared_licenses_processed:
+      spdx_expression: "ISC"
+    description: "Run a function exactly one time"
+    homepage_url: ""
+    binary_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    source_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    vcs:
+      type: "Git"
+      url: "git://github.com/isaacs/once"
+      revision: ""
+      resolved_revision: ""
+      path: ""
+    vcs_processed:
+      type: "Git"
+      url: "https://github.com/isaacs/once.git"
+      revision: ""
+      resolved_revision: ""
+      path: ""
+  curations: []
+- package:
+    id: "NPM::path-exists:4.0.0"
+    purl: "pkg:npm/path-exists@4.0.0"
+    declared_licenses:
+    - "MIT"
+    declared_licenses_processed:
+      spdx_expression: "MIT"
+    description: "Check if a path exists"
+    homepage_url: ""
+    binary_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    source_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    vcs:
+      type: "Git"
+      url: "https://github.com/sindresorhus/path-exists.git"
+      revision: ""
+      resolved_revision: ""
+      path: ""
+    vcs_processed:
+      type: "Git"
+      url: "https://github.com/sindresorhus/path-exists.git"
+      revision: ""
+      resolved_revision: ""
+      path: ""
+  curations: []
+- package:
+    id: "NPM::path-is-absolute:1.0.1"
+    purl: "pkg:npm/path-is-absolute@1.0.1"
+    declared_licenses:
+    - "MIT"
+    declared_licenses_processed:
+      spdx_expression: "MIT"
+    description: "Node.js 0.12 path.isAbsolute() ponyfill"
+    homepage_url: ""
+    binary_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    source_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    vcs:
+      type: "Git"
+      url: "https://github.com/sindresorhus/path-is-absolute.git"
+      revision: ""
+      resolved_revision: ""
+      path: ""
+    vcs_processed:
+      type: "Git"
+      url: "https://github.com/sindresorhus/path-is-absolute.git"
+      revision: ""
+      resolved_revision: ""
+      path: ""
+  curations: []
+- package:
+    id: "NPM::path-parse:1.0.6"
+    purl: "pkg:npm/path-parse@1.0.6"
+    declared_licenses:
+    - "MIT"
+    declared_licenses_processed:
+      spdx_expression: "MIT"
+    description: "Node.js path.parse() ponyfill"
+    homepage_url: "https://github.com/jbgutierrez/path-parse#readme"
+    binary_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    source_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    vcs:
+      type: "Git"
+      url: "https://github.com/jbgutierrez/path-parse.git"
+      revision: ""
+      resolved_revision: ""
+      path: ""
+    vcs_processed:
+      type: "Git"
+      url: "https://github.com/jbgutierrez/path-parse.git"
+      revision: ""
+      resolved_revision: ""
+      path: ""
+  curations: []
+- package:
+    id: "NPM::process-nextick-args:2.0.0"
+    purl: "pkg:npm/process-nextick-args@2.0.0"
+    declared_licenses:
+    - "MIT"
+    declared_licenses_processed:
+      spdx_expression: "MIT"
+    description: "process.nextTick but always with args"
+    homepage_url: "https://github.com/calvinmetcalf/process-nextick-args"
+    binary_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    source_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    vcs:
+      type: "Git"
+      url: "https://github.com/calvinmetcalf/process-nextick-args.git"
+      revision: ""
+      resolved_revision: ""
+      path: ""
+    vcs_processed:
+      type: "Git"
+      url: "https://github.com/calvinmetcalf/process-nextick-args.git"
+      revision: ""
+      resolved_revision: ""
+      path: ""
+  curations: []
+- package:
+    id: "NPM::readable-stream:2.3.6"
+    purl: "pkg:npm/readable-stream@2.3.6"
+    declared_licenses:
+    - "MIT"
+    declared_licenses_processed:
+      spdx_expression: "MIT"
+    description: "Streams3, a user-land copy of the stream library from Node.js"
+    homepage_url: ""
+    binary_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    source_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    vcs:
+      type: "Git"
+      url: "git://github.com/nodejs/readable-stream"
+      revision: ""
+      resolved_revision: ""
+      path: ""
+    vcs_processed:
+      type: "Git"
+      url: "https://github.com/nodejs/readable-stream.git"
+      revision: ""
+      resolved_revision: ""
+      path: ""
+  curations: []
+- package:
+    id: "NPM::resolve:1.10.1"
+    purl: "pkg:npm/resolve@1.10.1"
+    declared_licenses:
+    - "MIT"
+    declared_licenses_processed:
+      spdx_expression: "MIT"
+    description: "resolve like require.resolve() on behalf of files asynchronously\
+      \ and synchronously"
+    homepage_url: ""
+    binary_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    source_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    vcs:
+      type: "Git"
+      url: "git://github.com/browserify/resolve.git"
+      revision: ""
+      resolved_revision: ""
+      path: ""
+    vcs_processed:
+      type: "Git"
+      url: "https://github.com/browserify/resolve.git"
+      revision: ""
+      resolved_revision: ""
+      path: ""
+  curations: []
+- package:
+    id: "NPM::resumer:0.0.0"
+    purl: "pkg:npm/resumer@0.0.0"
+    declared_licenses:
+    - "MIT"
+    declared_licenses_processed:
+      spdx_expression: "MIT"
+    description: "a through stream that starts paused and resumes on the next tick"
+    homepage_url: "https://github.com/substack/resumer"
+    binary_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    source_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    vcs:
+      type: "Git"
+      url: "git://github.com/substack/resumer.git"
+      revision: ""
+      resolved_revision: ""
+      path: ""
+    vcs_processed:
+      type: "Git"
+      url: "https://github.com/substack/resumer.git"
+      revision: ""
+      resolved_revision: ""
+      path: ""
+  curations: []
+- package:
+    id: "NPM::rimraf:2.6.3"
+    purl: "pkg:npm/rimraf@2.6.3"
+    declared_licenses:
+    - "ISC"
+    declared_licenses_processed:
+      spdx_expression: "ISC"
+    description: "A deep deletion module for node (like `rm -rf`)"
+    homepage_url: ""
+    binary_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    source_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    vcs:
+      type: "Git"
+      url: "git://github.com/isaacs/rimraf.git"
+      revision: ""
+      resolved_revision: ""
+      path: ""
+    vcs_processed:
+      type: "Git"
+      url: "https://github.com/isaacs/rimraf.git"
+      revision: ""
+      resolved_revision: ""
+      path: ""
+  curations: []
+- package:
+    id: "NPM::safe-buffer:5.1.2"
+    purl: "pkg:npm/safe-buffer@5.1.2"
+    declared_licenses:
+    - "MIT"
+    declared_licenses_processed:
+      spdx_expression: "MIT"
+    description: "Safer Node.js Buffer API"
+    homepage_url: "https://github.com/feross/safe-buffer"
+    binary_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    source_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    vcs:
+      type: "Git"
+      url: "git://github.com/feross/safe-buffer.git"
+      revision: ""
+      resolved_revision: ""
+      path: ""
+    vcs_processed:
+      type: "Git"
+      url: "https://github.com/feross/safe-buffer.git"
+      revision: ""
+      resolved_revision: ""
+      path: ""
+  curations: []
+- package:
+    id: "NPM::semver:5.7.0"
+    purl: "pkg:npm/semver@5.7.0"
+    declared_licenses:
+    - "ISC"
+    declared_licenses_processed:
+      spdx_expression: "ISC"
+    description: "The semantic version parser used by npm."
+    homepage_url: ""
+    binary_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    source_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    vcs:
+      type: "Git"
+      url: "https://github.com/npm/node-semver"
+      revision: ""
+      resolved_revision: ""
+      path: ""
+    vcs_processed:
+      type: "Git"
+      url: "https://github.com/npm/node-semver.git"
+      revision: ""
+      resolved_revision: ""
+      path: ""
+  curations: []
+- package:
+    id: "NPM::sliced:1.0.1"
+    purl: "pkg:npm/sliced@1.0.1"
+    declared_licenses:
+    - "MIT"
+    declared_licenses_processed:
+      spdx_expression: "MIT"
+    description: "A faster Node.js alternative to Array.prototype.slice.call(arguments)"
+    homepage_url: ""
+    binary_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    source_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    vcs:
+      type: "Git"
+      url: "git://github.com/aheckmann/sliced"
+      revision: ""
+      resolved_revision: ""
+      path: ""
+    vcs_processed:
+      type: "Git"
+      url: "https://github.com/aheckmann/sliced.git"
+      revision: ""
+      resolved_revision: ""
+      path: ""
+  curations: []
+- package:
+    id: "NPM::source-map-support:0.5.12"
+    purl: "pkg:npm/source-map-support@0.5.12"
+    declared_licenses:
+    - "MIT"
+    declared_licenses_processed:
+      spdx_expression: "MIT"
+    description: "Fixes stack traces for files with source maps"
+    homepage_url: ""
+    binary_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    source_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    vcs:
+      type: "Git"
+      url: "https://github.com/evanw/node-source-map-support"
+      revision: ""
+      resolved_revision: ""
+      path: ""
+    vcs_processed:
+      type: "Git"
+      url: "https://github.com/evanw/node-source-map-support.git"
+      revision: ""
+      resolved_revision: ""
+      path: ""
+  curations: []
+- package:
+    id: "NPM::source-map:0.6.1"
+    purl: "pkg:npm/source-map@0.6.1"
+    declared_licenses:
+    - "BSD-3-Clause"
+    declared_licenses_processed:
+      spdx_expression: "BSD-3-Clause"
+    description: "Generates and consumes source maps"
+    homepage_url: "https://github.com/mozilla/source-map"
+    binary_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    source_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    vcs:
+      type: "Git"
+      url: "http://github.com/mozilla/source-map.git"
+      revision: ""
+      resolved_revision: ""
+      path: ""
+    vcs_processed:
+      type: "Git"
+      url: "https://github.com/mozilla/source-map.git"
+      revision: ""
+      resolved_revision: ""
+      path: ""
+  curations: []
+- package:
+    id: "NPM::split2:2.2.0"
+    purl: "pkg:npm/split2@2.2.0"
+    declared_licenses:
+    - "ISC"
+    declared_licenses_processed:
+      spdx_expression: "ISC"
+    description: "split a Text Stream into a Line Stream, using Stream 3"
+    homepage_url: ""
+    binary_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    source_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    vcs:
+      type: "Git"
+      url: "https://github.com/mcollina/split2.git"
+      revision: ""
+      resolved_revision: ""
+      path: ""
+    vcs_processed:
+      type: "Git"
+      url: "https://github.com/mcollina/split2.git"
+      revision: ""
+      resolved_revision: ""
+      path: ""
+  curations: []
+- package:
+    id: "NPM::sprintf-js:1.0.3"
+    purl: "pkg:npm/sprintf-js@1.0.3"
+    declared_licenses:
+    - "BSD-3-Clause"
+    declared_licenses_processed:
+      spdx_expression: "BSD-3-Clause"
+    description: "JavaScript sprintf implementation"
+    homepage_url: ""
+    binary_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    source_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    vcs:
+      type: "Git"
+      url: "https://github.com/alexei/sprintf.js.git"
+      revision: ""
+      resolved_revision: ""
+      path: ""
+    vcs_processed:
+      type: "Git"
+      url: "https://github.com/alexei/sprintf.js.git"
+      revision: ""
+      resolved_revision: ""
+      path: ""
+  curations: []
+- package:
+    id: "NPM::string.prototype.trim:1.1.2"
+    purl: "pkg:npm/string.prototype.trim@1.1.2"
+    declared_licenses:
+    - "MIT"
+    declared_licenses_processed:
+      spdx_expression: "MIT"
+    description: "ES5 spec-compliant shim for String.prototype.trim"
+    homepage_url: ""
+    binary_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    source_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    vcs:
+      type: "Git"
+      url: "git://github.com/es-shims/String.prototype.trim.git"
+      revision: ""
+      resolved_revision: ""
+      path: ""
+    vcs_processed:
+      type: "Git"
+      url: "https://github.com/es-shims/String.prototype.trim.git"
+      revision: ""
+      resolved_revision: ""
+      path: ""
+  curations: []
+- package:
+    id: "NPM::string_decoder:1.1.1"
+    purl: "pkg:npm/string_decoder@1.1.1"
+    declared_licenses:
+    - "MIT"
+    declared_licenses_processed:
+      spdx_expression: "MIT"
+    description: "The string_decoder module from Node core"
+    homepage_url: "https://github.com/nodejs/string_decoder"
+    binary_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    source_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    vcs:
+      type: "Git"
+      url: "git://github.com/nodejs/string_decoder.git"
+      revision: ""
+      resolved_revision: ""
+      path: ""
+    vcs_processed:
+      type: "Git"
+      url: "https://github.com/nodejs/string_decoder.git"
+      revision: ""
+      resolved_revision: ""
+      path: ""
+  curations: []
+- package:
+    id: "NPM::supports-color:5.5.0"
+    purl: "pkg:npm/supports-color@5.5.0"
+    declared_licenses:
+    - "MIT"
+    declared_licenses_processed:
+      spdx_expression: "MIT"
+    description: "Detect whether a terminal supports color"
+    homepage_url: ""
+    binary_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    source_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    vcs:
+      type: "Git"
+      url: "https://github.com/chalk/supports-color.git"
+      revision: ""
+      resolved_revision: ""
+      path: ""
+    vcs_processed:
+      type: "Git"
+      url: "https://github.com/chalk/supports-color.git"
+      revision: ""
+      resolved_revision: ""
+      path: ""
+  curations: []
+- package:
+    id: "NPM::tape:4.10.2"
+    purl: "pkg:npm/tape@4.10.2"
+    declared_licenses:
+    - "MIT"
+    declared_licenses_processed:
+      spdx_expression: "MIT"
+    description: "tap-producing test harness for node and browsers"
+    homepage_url: "https://github.com/substack/tape"
+    binary_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    source_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    vcs:
+      type: "Git"
+      url: "git://github.com/substack/tape.git"
+      revision: ""
+      resolved_revision: ""
+      path: ""
+    vcs_processed:
+      type: "Git"
+      url: "https://github.com/substack/tape.git"
+      revision: ""
+      resolved_revision: ""
+      path: ""
+  curations: []
+- package:
+    id: "NPM::through2:2.0.5"
+    purl: "pkg:npm/through2@2.0.5"
+    declared_licenses:
+    - "MIT"
+    declared_licenses_processed:
+      spdx_expression: "MIT"
+    description: "A tiny wrapper around Node streams2 Transform to avoid explicit\
+      \ subclassing noise"
+    homepage_url: ""
+    binary_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    source_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    vcs:
+      type: "Git"
+      url: "https://github.com/rvagg/through2.git"
+      revision: ""
+      resolved_revision: ""
+      path: ""
+    vcs_processed:
+      type: "Git"
+      url: "https://github.com/rvagg/through2.git"
+      revision: ""
+      resolved_revision: ""
+      path: ""
+  curations: []
+- package:
+    id: "NPM::through:2.3.8"
+    purl: "pkg:npm/through@2.3.8"
+    declared_licenses:
+    - "MIT"
+    declared_licenses_processed:
+      spdx_expression: "MIT"
+    description: "simplified stream construction"
+    homepage_url: "https://github.com/dominictarr/through"
+    binary_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    source_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    vcs:
+      type: "Git"
+      url: "https://github.com/dominictarr/through.git"
+      revision: ""
+      resolved_revision: ""
+      path: ""
+    vcs_processed:
+      type: "Git"
+      url: "https://github.com/dominictarr/through.git"
+      revision: ""
+      resolved_revision: ""
+      path: ""
+  curations: []
+- package:
+    id: "NPM::ts-node:8.3.0"
+    purl: "pkg:npm/ts-node@8.3.0"
+    declared_licenses:
+    - "MIT"
+    declared_licenses_processed:
+      spdx_expression: "MIT"
+    description: "TypeScript execution environment and REPL for node.js, with source\
+      \ map support"
+    homepage_url: "https://github.com/TypeStrong/ts-node"
+    binary_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    source_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    vcs:
+      type: "Git"
+      url: "git://github.com/TypeStrong/ts-node.git"
+      revision: ""
+      resolved_revision: ""
+      path: ""
+    vcs_processed:
+      type: "Git"
+      url: "https://github.com/TypeStrong/ts-node.git"
+      revision: ""
+      resolved_revision: ""
+      path: ""
+  curations: []
+- package:
+    id: "NPM::tslib:1.10.0"
+    purl: "pkg:npm/tslib@1.10.0"
+    declared_licenses:
+    - "Apache-2.0"
+    declared_licenses_processed:
+      spdx_expression: "Apache-2.0"
+    description: "Runtime library for TypeScript helper functions"
+    homepage_url: "http://typescriptlang.org/"
+    binary_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    source_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    vcs:
+      type: "Git"
+      url: "https://github.com/Microsoft/tslib.git"
+      revision: ""
+      resolved_revision: ""
+      path: ""
+    vcs_processed:
+      type: "Git"
+      url: "https://github.com/Microsoft/tslib.git"
+      revision: ""
+      resolved_revision: ""
+      path: ""
+  curations: []
+- package:
+    id: "NPM::tslint:5.17.0"
+    purl: "pkg:npm/tslint@5.17.0"
+    declared_licenses:
+    - "Apache-2.0"
+    declared_licenses_processed:
+      spdx_expression: "Apache-2.0"
+    description: "An extensible static analysis linter for the TypeScript language"
+    homepage_url: "https://palantir.github.io/tslint"
+    binary_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    source_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    vcs:
+      type: "Git"
+      url: "https://github.com/palantir/tslint.git"
+      revision: ""
+      resolved_revision: ""
+      path: ""
+    vcs_processed:
+      type: "Git"
+      url: "https://github.com/palantir/tslint.git"
+      revision: ""
+      resolved_revision: ""
+      path: ""
+  curations: []
+- package:
+    id: "NPM::tsutils:2.29.0"
+    purl: "pkg:npm/tsutils@2.29.0"
+    declared_licenses:
+    - "MIT"
+    declared_licenses_processed:
+      spdx_expression: "MIT"
+    description: "utilities for working with typescript's AST"
+    homepage_url: ""
+    binary_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    source_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    vcs:
+      type: "Git"
+      url: "https://github.com/ajafff/tsutils"
+      revision: ""
+      resolved_revision: ""
+      path: ""
+    vcs_processed:
+      type: "Git"
+      url: "https://github.com/ajafff/tsutils.git"
+      revision: ""
+      resolved_revision: ""
+      path: ""
+  curations: []
+- package:
+    id: "NPM::typescript:3.5.2"
+    purl: "pkg:npm/typescript@3.5.2"
+    declared_licenses:
+    - "Apache-2.0"
+    declared_licenses_processed:
+      spdx_expression: "Apache-2.0"
+    description: "TypeScript is a language for application scale JavaScript development"
+    homepage_url: "https://www.typescriptlang.org/"
+    binary_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    source_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    vcs:
+      type: "Git"
+      url: "https://github.com/Microsoft/TypeScript.git"
+      revision: ""
+      resolved_revision: ""
+      path: ""
+    vcs_processed:
+      type: "Git"
+      url: "https://github.com/Microsoft/TypeScript.git"
+      revision: ""
+      resolved_revision: ""
+      path: ""
+  curations: []
+- package:
+    id: "NPM::util-deprecate:1.0.2"
+    purl: "pkg:npm/util-deprecate@1.0.2"
+    declared_licenses:
+    - "MIT"
+    declared_licenses_processed:
+      spdx_expression: "MIT"
+    description: "The Node.js `util.deprecate()` function with browser support"
+    homepage_url: "https://github.com/TooTallNate/util-deprecate"
+    binary_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    source_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    vcs:
+      type: "Git"
+      url: "git://github.com/TooTallNate/util-deprecate.git"
+      revision: ""
+      resolved_revision: ""
+      path: ""
+    vcs_processed:
+      type: "Git"
+      url: "https://github.com/TooTallNate/util-deprecate.git"
+      revision: ""
+      resolved_revision: ""
+      path: ""
+  curations: []
+- package:
+    id: "NPM::wrappy:1.0.2"
+    purl: "pkg:npm/wrappy@1.0.2"
+    declared_licenses:
+    - "ISC"
+    declared_licenses_processed:
+      spdx_expression: "ISC"
+    description: "Callback wrapping utility"
+    homepage_url: "https://github.com/npm/wrappy"
+    binary_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    source_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    vcs:
+      type: "Git"
+      url: "https://github.com/npm/wrappy"
+      revision: ""
+      resolved_revision: ""
+      path: ""
+    vcs_processed:
+      type: "Git"
+      url: "https://github.com/npm/wrappy.git"
+      revision: ""
+      resolved_revision: ""
+      path: ""
+  curations: []
+- package:
+    id: "NPM::xtend:4.0.1"
+    purl: "pkg:npm/xtend@4.0.1"
+    declared_licenses:
+    - "MIT"
+    declared_licenses_processed:
+      spdx_expression: "MIT"
+    description: "extend like a boss"
+    homepage_url: "https://github.com/Raynos/xtend"
+    binary_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    source_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    vcs:
+      type: "Git"
+      url: "git://github.com/Raynos/xtend.git"
+      revision: ""
+      resolved_revision: ""
+      path: ""
+    vcs_processed:
+      type: "Git"
+      url: "https://github.com/Raynos/xtend.git"
+      revision: ""
+      resolved_revision: ""
+      path: ""
+  curations: []
+- package:
+    id: "NPM::yn:3.1.0"
+    purl: "pkg:npm/yn@3.1.0"
+    declared_licenses:
+    - "MIT"
+    declared_licenses_processed:
+      spdx_expression: "MIT"
+    description: "Parse yes/no like values"
+    homepage_url: ""
+    binary_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    source_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    vcs:
+      type: "Git"
+      url: "https://github.com/sindresorhus/yn.git"
+      revision: ""
+      resolved_revision: ""
+      path: ""
+    vcs_processed:
+      type: "Git"
+      url: "https://github.com/sindresorhus/yn.git"
+      revision: ""
+      resolved_revision: ""
+      path: ""
+  curations: []
+- package:
+    id: "NPM:@babel:code-frame:7.0.0"
+    purl: "pkg:npm/%40babel/code-frame@7.0.0"
+    declared_licenses:
+    - "MIT"
+    declared_licenses_processed:
+      spdx_expression: "MIT"
+    description: "Generate errors that contain a code frame that point to source locations."
+    homepage_url: "https://babeljs.io/"
+    binary_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    source_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    vcs:
+      type: "Git"
+      url: "https://github.com/babel/babel/tree/master/packages/babel-code-frame"
+      revision: ""
+      resolved_revision: ""
+      path: ""
+    vcs_processed:
+      type: "Git"
+      url: "https://github.com/babel/babel.git"
+      revision: "master"
+      resolved_revision: ""
+      path: "packages/babel-code-frame"
+  curations: []
+- package:
+    id: "NPM:@babel:highlight:7.0.0"
+    purl: "pkg:npm/%40babel/highlight@7.0.0"
+    declared_licenses:
+    - "MIT"
+    declared_licenses_processed:
+      spdx_expression: "MIT"
+    description: "Syntax highlight JavaScript strings for output in terminals."
+    homepage_url: "https://babeljs.io/"
+    binary_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    source_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    vcs:
+      type: "Git"
+      url: "https://github.com/babel/babel/tree/master/packages/babel-highlight"
+      revision: ""
+      resolved_revision: ""
+      path: ""
+    vcs_processed:
+      type: "Git"
+      url: "https://github.com/babel/babel.git"
+      revision: "master"
+      resolved_revision: ""
+      path: "packages/babel-highlight"
+  curations: []
+- package:
+    id: "NPM:@types:graceful-fs:4.1.3"
+    purl: "pkg:npm/%40types/graceful-fs@4.1.3"
+    declared_licenses:
+    - "MIT"
+    declared_licenses_processed:
+      spdx_expression: "MIT"
+    description: "TypeScript definitions for graceful-fs"
+    homepage_url: ""
+    binary_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    source_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    vcs:
+      type: "Git"
+      url: "https://github.com/DefinitelyTyped/DefinitelyTyped.git"
+      revision: ""
+      resolved_revision: ""
+      path: ""
+    vcs_processed:
+      type: "Git"
+      url: "https://github.com/DefinitelyTyped/DefinitelyTyped.git"
+      revision: ""
+      resolved_revision: ""
+      path: ""
+  curations: []
+- package:
+    id: "NPM:@types:node:12.0.8"
+    purl: "pkg:npm/%40types/node@12.0.8"
+    declared_licenses:
+    - "MIT"
+    declared_licenses_processed:
+      spdx_expression: "MIT"
+    description: "TypeScript definitions for Node.js"
+    homepage_url: ""
+    binary_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    source_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    vcs:
+      type: "Git"
+      url: "https://github.com/DefinitelyTyped/DefinitelyTyped.git"
+      revision: ""
+      resolved_revision: ""
+      path: "types/node"
+    vcs_processed:
+      type: "Git"
+      url: "https://github.com/DefinitelyTyped/DefinitelyTyped.git"
+      revision: ""
+      resolved_revision: ""
+      path: "types/node"
+  curations: []
+- package:
+    id: "NPM:@types:tape:4.2.33"
+    purl: "pkg:npm/%40types/tape@4.2.33"
+    declared_licenses:
+    - "MIT"
+    declared_licenses_processed:
+      spdx_expression: "MIT"
+    description: "TypeScript definitions for tape"
+    homepage_url: ""
+    binary_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    source_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    vcs:
+      type: "Git"
+      url: "https://github.com/DefinitelyTyped/DefinitelyTyped.git"
+      revision: ""
+      resolved_revision: ""
+      path: ""
+    vcs_processed:
+      type: "Git"
+      url: "https://github.com/DefinitelyTyped/DefinitelyTyped.git"
+      revision: ""
+      resolved_revision: ""
+      path: ""
+  curations: []

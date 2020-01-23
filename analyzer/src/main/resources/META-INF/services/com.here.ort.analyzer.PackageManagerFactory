@@ -8,6 +8,7 @@ com.here.ort.analyzer.managers.GoMod$Factory
 com.here.ort.analyzer.managers.Gradle$Factory
 com.here.ort.analyzer.managers.Maven$Factory
 com.here.ort.analyzer.managers.Npm$Factory
+com.here.ort.analyzer.managers.Pnpm$Factory
 com.here.ort.analyzer.managers.NuGet$Factory
 com.here.ort.analyzer.managers.PhpComposer$Factory
 com.here.ort.analyzer.managers.Pip$Factory

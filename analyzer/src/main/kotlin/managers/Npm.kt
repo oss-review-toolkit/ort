@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2019 HERE Europe B.V.
+ * Copyright (C) 2017-2020 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,14 +25,12 @@ import com.fasterxml.jackson.databind.node.ObjectNode
 import com.here.ort.analyzer.AbstractPackageManagerFactory
 import com.here.ort.analyzer.HTTP_CACHE_PATH
 import com.here.ort.analyzer.PackageManager
-import com.here.ort.analyzer.managers.utils.expandNpmShortcutURL
-import com.here.ort.analyzer.managers.utils.hasNpmLockFile
-import com.here.ort.analyzer.managers.utils.mapDefinitionFilesForNpm
-import com.here.ort.analyzer.managers.utils.readProxySettingFromNpmRc
+import com.here.ort.analyzer.managers.utils.*
 import com.here.ort.downloader.VersionControlSystem
 import com.here.ort.model.Hash
 import com.here.ort.model.Identifier
 import com.here.ort.model.Package
+import com.here.ort.model.PackageLinkage
 import com.here.ort.model.PackageReference
 import com.here.ort.model.Project
 import com.here.ort.model.ProjectAnalyzerResult
@@ -173,6 +171,10 @@ open class Npm(
         }
     }
 
+    protected open fun vcsUpdateFromDirectory(vcsFromPkg: VcsInfo, truePackageDir: File): VcsInfo {
+        return vcsFromPkg.merge(VersionControlSystem.forDirectory(truePackageDir)?.getInfo() ?: VcsInfo.EMPTY)
+    }
+
     private fun parseInstalledModules(rootDirectory: File): Map<String, Package> {
         val packages = mutableMapOf<String, Package>()
         val nodeModulesDir = File(rootDirectory, "node_modules")
@@ -222,8 +224,7 @@ open class Npm(
             }
 
             if (isSymbolicPackageDir) {
-                val vcsFromDirectory = VersionControlSystem.forDirectory(realPackageDir)?.getInfo() ?: VcsInfo.EMPTY
-                vcsFromPackage = vcsFromPackage.merge(vcsFromDirectory)
+                vcsFromPackage = vcsUpdateFromDirectory(vcsFromPackage, realPackageDir)
             } else {
                 val pkgRequest = Request.Builder()
                     .get()
@@ -340,7 +341,7 @@ open class Npm(
         return modulesDir.takeIf { it.name == "node_modules" }
     }
 
-    private fun parseDependencies(packageJson: File, scope: String, packages: Map<String, Package>):
+    protected fun parseDependencies(packageJson: File, scope: String, packages: Map<String, Package>):
             SortedSet<PackageReference> {
         // Read package.json
         val json = jsonMapper.readTree(packageJson)
@@ -370,7 +371,24 @@ open class Npm(
         } ?: VcsInfo(VcsType.NONE, "", head)
     }
 
-    private fun buildTree(
+    protected open fun packageNotInRootModulesDir(packageName: String,
+                                                  rootModulesDir: File,
+                                                  startModulesDir: File = File(""),
+                                                  packages: Map<String, Package> = emptyMap(),
+                                                  dependencyBranch: List<String> = emptyList()): PackageReference? {
+        val id = Identifier(managerName, "", packageName, "")
+
+        val issue = createAndLogIssue(
+            source = managerName,
+            message = "Package '$packageName' was not installed, because the package file could not be found " +
+                    "anywhere in '$rootModulesDir'. This might be fine if the module was not installed because it is " +
+                    "specific to a different platform."
+        )
+
+        return PackageReference(id, PackageLinkage.DYNAMIC, sortedSetOf(), listOf(issue))
+    }
+
+    protected fun buildTree(
         rootModulesDir: File, startModulesDir: File, name: String, packages: Map<String, Package>,
         dependencyBranch: List<String> = emptyList()
     ): PackageReference? {
@@ -412,16 +430,7 @@ open class Npm(
                 ?: throw IOException("Could not find package info for $identifier")
             return packageInfo.toReference(dependencies = dependencies)
         } else if (rootModulesDir == startModulesDir) {
-            val id = Identifier(managerName, "", name, "")
-
-            val issue = createAndLogIssue(
-                source = managerName,
-                message = "Package '$name' was not installed, because the package file could not be found anywhere " +
-                        "in '$rootModulesDir'. This might be fine if the module was not installed because it is " +
-                        "specific to a different platform."
-            )
-
-            return PackageReference(id, errors = listOf(issue))
+            return packageNotInRootModulesDir(name, rootModulesDir, startModulesDir, packages, dependencyBranch)
         } else {
             // Skip the package name directory when going up.
             var parentModulesDir = startModulesDir.parentFile.parentFile
@@ -484,8 +493,13 @@ open class Npm(
     /**
      * Install dependencies using the given package manager command.
      */
-    private fun installDependencies(workingDir: File) {
+    protected open fun installDependencies(workingDir: File) {
         requireLockfile(workingDir) { hasLockFile(workingDir) }
+
+        // Do nothing if PNPM lock is present
+        if (hasPnpmLockFile(workingDir)) {
+            return
+        }
 
         // Install all NPM dependencies to enable NPM to list dependencies.
         if (hasLockFile(workingDir) && this::class.java == Npm::class.java) {

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2019 HERE Europe B.V.
+ * Copyright (C) 2017-2020 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -58,6 +58,7 @@ class PackageManagerTest : WordSpec({
             managedFilesByName["PhpComposer"] shouldBe listOf(File(projectDir, "composer.json"))
             managedFilesByName["PIP"] shouldBe listOf(File(projectDir, "setup.py"))
             managedFilesByName["Pipenv"] shouldBe listOf(File(projectDir, "Pipfile.lock"))
+            managedFilesByName["PNPM"] shouldBe listOf(File(projectDir, "package.json"))
             managedFilesByName["Pub"] shouldBe listOf(File(projectDir, "pubspec.yaml"))
             managedFilesByName["SBT"] shouldBe listOf(File(projectDir, "build.sbt"))
             managedFilesByName["Stack"] shouldBe listOf(File(projectDir, "stack.yaml"))

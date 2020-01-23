@@ -75,7 +75,7 @@ Install the following basic prerequisites:
 
 * Docker (and ensure its daemon is running).
 
-Change into the created directory and run `docker/build.sh`.
+Change into the directory with ORT's source code and run `docker build -t ort .`.
 
 ### Build natively
 
@@ -101,7 +101,7 @@ To avoid that, you can also build and run ORT in one go (if you have the prerequ
 
     ./gradlew cli:run --args="--help"
 
-Note that in this case the working directory used by ORT is that of the `cli` project, not directory `gradlew` is
+Note that in this case the working directory used by ORT is that of the `cli` project, not the directory `gradlew` is
 located in (see https://github.com/gradle/gradle/issues/6074).
 
 # Running the tools
@@ -111,11 +111,11 @@ dependencies) or to run ORT natively (in which case some additional requirements
 
 ## Run using Docker
 
-Run `docker/run.sh "<DOCKER_ARGS>" <ORT_ARGS>` where `<DOCKER_ARGS>` are passed to `docker run` (and need to be quoted
-if spaces are contained) and `<ORT_ARGS>` are passed to ORT. You typically use `<DOCKER_ARGS>` to mount the project
-directory to scan into the running container to let ORT access it, for example:
+After you have built the image as [described above](#build-using-docker), simply run
+`docker run <DOCKER_ARGS> ort <ORT_ARGS>`. You typically use `<DOCKER_ARGS>` to mount the project directory to analyze
+into the container for ORT to access it, like:
 
-    docker/run.sh "-v /workspace:/project" --info analyze -f JSON -i /project -o /project/ort/analyzer
+    docker run -v /workspace:/project ort --info analyze -f JSON -i /project -o /project/ort/analyzer
 
 ## Run natively
 
@@ -192,6 +192,7 @@ Currently, the following package managers are supported:
 * [Composer](https://getcomposer.org/) (PHP)
 * [PIP](https://pip.pypa.io/) (Python)
 * [Pipenv](https://pipenv.readthedocs.io/) (Python)
+* [PNPM](https://pnpm.js.org) (Node.js)
 * [Pub](https://pub.dev/) (Dart / Flutter)
 * [SBT](http://www.scala-sbt.org/) (Scala)
 * [Stack](http://haskellstack.org/) (Haskell)

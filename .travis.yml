@@ -32,8 +32,9 @@ env:
     - FLUTTER_VERSION="v1.7.8+hotfix.3-stable"
     - GIMME_GO_VERSION="1.13" # Used internally by Travis.
     - GO_DEP_VERSION="0.5.4"
-    - NPM_VERSION="6.13.0"
+    - NPM_VERSION="6.13.1"
     - PHP_VERSION="7.1"
+    - PNPM_VERSION="4.7.2"
     - PYTHON_PIPENV_VERSION="2018.11.26"
     - RUST_VERSION="1.35.0"
     - STACK_VERSION="2.1.3"
@@ -55,7 +56,7 @@ before_install:
 install:
   - eval "$(gimme)"
   - curl https://raw.githubusercontent.com/golang/dep/v$GO_DEP_VERSION/install.sh | sh
-  - npm install -g bower@$BOWER_VERSION npm@$NPM_VERSION yarn@$YARN_VERSION
+  - npm install -g bower@$BOWER_VERSION npm@$NPM_VERSION pnpm@$PNPM_VERSION yarn@$YARN_VERSION
   - phpenv global $PHP_VERSION
   - curl -Ls https://git.io/sbt > ~/bin/sbt
   - chmod a+x ~/bin/sbt

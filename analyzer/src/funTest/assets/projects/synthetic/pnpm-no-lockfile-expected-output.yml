@@ -1,0 +1,27 @@
+---
+project:
+  id: "PNPM::src/funTest/assets/projects/synthetic/pnpm/no-lockfile/package.json:"
+  definition_file_path: "<REPLACE_DEFINITION_FILE_PATH>"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "<REPLACE_URL>"
+    revision: "<REPLACE_REVISION>"
+    path: "<REPLACE_PATH>"
+  homepage_url: ""
+  scopes: []
+packages: []
+issues:
+- timestamp: "1970-01-01T00:00:00Z"
+  source: "PNPM"
+  message: "Resolving dependencies for 'package.json' failed with: IllegalArgumentException:\
+    \ No lockfile found in 'src/funTest/assets/projects/synthetic/pnpm/no-lockfile'.\
+    \ This potentially results in unstable versions of dependencies. To allow this,\
+    \ enable support for dynamic versions."
+  severity: "ERROR"
