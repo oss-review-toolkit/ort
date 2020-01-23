@@ -76,6 +76,10 @@ class OrtConfigurationTest : WordSpec({
                     postgres.schema shouldBe "schema"
                     postgres.username shouldBe "username"
                     postgres.password shouldBe "password"
+                    postgres.sslmode shouldBe "required"
+                    postgres.sslcert shouldBe "/defaultdir/postgresql.crt"
+                    postgres.sslkey shouldBe "/defaultdir/postgresql.pk8"
+                    postgres.sslrootcert shouldBe "/defaultdir/root.crt"
                 }
 
                 scanner.options shouldNotBe null

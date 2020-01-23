@@ -44,5 +44,34 @@ data class PostgresStorageConfiguration(
      * The password to use for authentication.
      */
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-    val password: String = ""
+    val password: String = "",
+
+    /**
+     * The SSL mode to use, one of "disable", "allow", "prefer", "require", "verify-ca" or "verify-full".
+     * See: https://jdbc.postgresql.org/documentation/head/ssl-client.html
+     */
+    val sslmode: String = "verify-full",
+
+    /**
+     * The full path of the certificate file.
+     * See: https://jdbc.postgresql.org/documentation/head/connect.html
+     */
+    val sslcert: String? = null,
+
+    /**
+     * The full path of the key file.
+     * See: https://jdbc.postgresql.org/documentation/head/connect.html
+     */
+    val sslkey: String? = null,
+
+    /**
+     * The full path of the root certificate file.
+     * See: https://jdbc.postgresql.org/documentation/head/connect.html
+     */
+    val sslrootcert: String? = null
+
+    /**
+     * TODO: Make additional parameters configurable, see:
+     *       https://jdbc.postgresql.org/documentation/head/connect.html
+     */
 )

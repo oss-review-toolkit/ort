@@ -299,6 +299,7 @@ ort {
       schema = "schema"
       username = "username"
       password = "password"
+      sslmode = "verify-full"
     }
   }
 }
@@ -306,6 +307,10 @@ ort {
 
 The _scanner_ creates a table called `scan_results` and stores the data in a
 [jsonb](https://www.postgresql.org/docs/current/datatype-json.html) column.
+
+If you do not want to use SSL set the `sslmode` to `disabled`, other possible values are explained in the
+[documentation](https://jdbc.postgresql.org/documentation/head/ssl-client.html). For other supported configuration
+options see [PostgresStorageConfiguration.kt](model/src/main/kotlin/config/PostgresStorageConfiguration.kt).
 
 <a name="evaluator">&nbsp;</a>
 
