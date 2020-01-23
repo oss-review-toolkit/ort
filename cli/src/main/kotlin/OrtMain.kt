@@ -182,7 +182,7 @@ object OrtMain : CommandWithHelp() {
         """
             ________ _____________________
             \_____  \\______   \__    ___/ the OSS Review Toolkit, version ${env.ortVersion}.
-             /   |   \|       _/ |    |    Running$command using Java ${env.javaVersion} on ${env.os}$with
+             /   |   \|       _/ |    |    Running$command under Java ${env.javaVersion} on ${env.os}$with
             /    |    \    |   \ |    |    ${variables.getOrElse(variableIndex++) { "" }}
             \_______  /____|_  / |____|    ${variables.getOrElse(variableIndex++) { "" }}
                     \/       \/
