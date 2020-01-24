@@ -185,7 +185,7 @@ object DownloaderCommand : CommandWithHelp() {
         packages.forEach { pkg ->
             try {
                 val absoluteOutputDir = outputDir.expandTilde()
-                val result = Downloader().download(pkg, absoluteOutputDir)
+                val result = Downloader().download(pkg, absoluteOutputDir, allowMovingRevisions)
 
                 if (archive) {
                     val zipFile = File(
