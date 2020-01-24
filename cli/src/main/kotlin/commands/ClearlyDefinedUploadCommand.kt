@@ -112,8 +112,9 @@ object ClearlyDefinedUploadCommand : CommandWithHelp() {
         }
 
         val curations = absoluteInputFile.readValue<List<PackageCuration>>()
-
         val service = ClearlyDefinedService.create(server, OkHttpClientHelper.buildClient(HTTP_CACHE_PATH))
+
+        var error = false
 
         curations.forEachIndexed { index, curation ->
             val patchCall = service.putCuration(curation.toContributionPatch())
@@ -127,14 +128,17 @@ object ClearlyDefinedUploadCommand : CommandWithHelp() {
                 } ?: log.warn { "The REST API call succeeded but no response body was returned." }
             } else {
                 println("failed to be uploaded (response code $responseCode).")
+
                 response.errorBody()?.let { errorBody ->
                     val errorResponse = jsonMapper.readValue(errorBody.string(), ErrorResponse::class.java)
                     log.error { "The REST API call failed with: ${errorResponse.error.innererror.message}" }
                     log.debug { errorResponse.error.innererror.stack }
                 }
+
+                error = true
             }
         }
 
-        return 0
+        return if (error) 2 else 0
     }
 }
