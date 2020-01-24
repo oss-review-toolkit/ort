@@ -19,14 +19,12 @@
 
 package com.here.ort.commands
 
-import com.beust.jcommander.JCommander
-import com.beust.jcommander.Parameters
+import com.github.ajalt.clikt.core.CliktCommand
+import com.github.ajalt.clikt.core.UsageError
 
-import com.here.ort.CommandWithHelp
 import com.here.ort.analyzer.PackageManager
 import com.here.ort.downloader.VersionControlSystem
 import com.here.ort.model.config.AnalyzerConfiguration
-import com.here.ort.model.config.OrtConfiguration
 import com.here.ort.model.config.RepositoryConfiguration
 import com.here.ort.model.config.ScannerConfiguration
 import com.here.ort.scanner.Scanner
@@ -38,11 +36,8 @@ import java.lang.reflect.Modifier
 
 import org.reflections.Reflections
 
-@Parameters(commandNames = ["requirements"], commandDescription = "List the required command line tools.")
-object RequirementsCommand : CommandWithHelp() {
-    override fun runCommand(jc: JCommander, config: OrtConfiguration): Int {
-        var exitCode = 0
-
+class RequirementsCommand : CliktCommand(name = "requirements", help = "List the required command line tools.") {
+    override fun run() {
         val reflections = Reflections("com.here.ort")
         val classes = reflections.getSubTypesOf(CommandLineTool::class.java)
 
@@ -101,8 +96,7 @@ object RequirementsCommand : CommandWithHelp() {
                     allTools.getOrPut(key) { mutableListOf() } += instance
                 }
             } catch (e: Exception) {
-                log.error { "There was an error instantiating $it: $e." }
-                exitCode = 1
+                throw UsageError("There was an error instantiating $it: $e.", statusCode = 1)
             }
         }
 
@@ -129,7 +123,5 @@ object RequirementsCommand : CommandWithHelp() {
         println("Legend:")
         println("\tA '-' prefix means that the tool was _not_ found in the PATH environment.")
         println("\tA '*' prefix means that _some_ version of the tool was found in the PATH environment.")
-
-        return exitCode
     }
 }

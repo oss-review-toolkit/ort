@@ -19,15 +19,24 @@
 
 package com.here.ort
 
-import com.beust.jcommander.DynamicParameter
-import com.beust.jcommander.JCommander
-import com.beust.jcommander.Parameter
+import com.github.ajalt.clikt.core.CliktCommand
+import com.github.ajalt.clikt.core.context
+import com.github.ajalt.clikt.core.findOrSetObject
+import com.github.ajalt.clikt.core.subcommands
+import com.github.ajalt.clikt.output.CliktHelpFormatter
+import com.github.ajalt.clikt.output.HelpFormatter
+import com.github.ajalt.clikt.parameters.options.default
+import com.github.ajalt.clikt.parameters.options.flag
+import com.github.ajalt.clikt.parameters.options.multiple
+import com.github.ajalt.clikt.parameters.options.option
+import com.github.ajalt.clikt.parameters.options.pair
+import com.github.ajalt.clikt.parameters.options.switch
+import com.github.ajalt.clikt.parameters.options.versionOption
+import com.github.ajalt.clikt.parameters.types.file
 
 import com.here.ort.commands.*
 import com.here.ort.model.Environment
 import com.here.ort.model.config.OrtConfiguration
-import com.here.ort.utils.PARAMETER_ORDER_LOGGING
-import com.here.ort.utils.PARAMETER_ORDER_OPTIONAL
 import com.here.ort.utils.getUserOrtDirectory
 import com.here.ort.utils.expandTilde
 import com.here.ort.utils.printStackTrace
@@ -37,8 +46,6 @@ import com.typesafe.config.ConfigFactory
 import io.github.config4k.extract
 
 import java.io.File
-
-import kotlin.system.exitProcess
 
 import org.apache.logging.log4j.Level
 import org.apache.logging.log4j.core.config.Configurator
@@ -51,128 +58,84 @@ const val TOOL_NAME = "ort"
 const val ORT_USER_HOME_ENV = "ORT_USER_HOME"
 
 /**
- * The main entry point of the application.
+ * Helper class for mutually exclusive command line options of different types.
  */
-object OrtMain : CommandWithHelp() {
-    @Parameter(
-        description = "The path to a configuration file.",
-        names = ["--config", "-c"],
-        order = PARAMETER_ORDER_OPTIONAL
-    )
-    private var configFile: File? = null
+sealed class GroupTypes {
+    data class FileType(val file: File) : GroupTypes()
+    data class StringType(val string: String) : GroupTypes()
+}
 
-    @Parameter(
-        description = "Enable info logging.",
-        names = ["--info"],
-        order = PARAMETER_ORDER_LOGGING
-    )
-    private var info = false
+class OrtMain : CliktCommand(name = TOOL_NAME, epilog = "* denotes required options.") {
+    private val configFile by option("--config", "-c", help = "The path to a configuration file.")
+        .file(exists = true, fileOkay = true, folderOkay = false, writable = false, readable = true)
 
-    @Parameter(
-        description = "Enable debug logging and keep any temporary files.",
-        names = ["--debug"],
-        order = PARAMETER_ORDER_LOGGING
-    )
-    private var debug = false
+    private val logLevel by option(help = "Set the verbosity level of log output.").switch(
+        "--info" to Level.INFO,
+        "--debug" to Level.DEBUG
+    ).default(Level.WARN)
 
-    @Parameter(
-        description = "Print out the stacktrace for all exceptions.",
-        names = ["--stacktrace"],
-        order = PARAMETER_ORDER_LOGGING
-    )
-    private var stacktrace = false
+    private val stacktrace by option(help = "Print out the stacktrace for all exceptions.").flag()
 
-    @Parameter(
-        description = "Show version information and exit.",
-        names = ["--version", "-v"],
-        order = PARAMETER_ORDER_OPTIONAL
-    )
-    private var version = false
+    private val configArguments by option("-P", help = "Allows to override configuration parameters.").pair().multiple()
 
-    @DynamicParameter(
-        description = "Allows to override configuration parameters.",
-        names = ["-P"]
-    )
-    private var configArguments = mutableMapOf<String, String>()
+    private val env = Environment()
 
-    /**
-     * The entry point for the application.
-     *
-     * @param args The list of application arguments.
-     */
-    @JvmStatic
-    fun main(args: Array<String>) {
-        fixupUserHomeProperty()
-        exitProcess(run(args))
+    private inner class OrtHelpFormatter : CliktHelpFormatter(requiredOptionMarker = "*", showDefaultValues = true) {
+        override fun formatHelp(
+            prolog: String,
+            epilog: String,
+            parameters: List<HelpFormatter.ParameterHelp>,
+            programName: String
+        ) =
+            buildString {
+                // If help is invoked without a subcommand, the main run() is not invoked and no header is printed, so
+                // we need to do that manually here.
+                if (context.invokedSubcommand == null) appendln(getVersionHeader(env.ortVersion))
+                append(super.formatHelp(prolog, epilog, parameters, programName))
+            }
     }
 
-    /**
-     * Check if the "user.home" property is set to a sane value and otherwise set it to the value of the ORT_USER_HOME
-     * environment variable, if set, or to the value of an (OS-specific) environment variable for the user home
-     * directory. This works around the issue that esp. in certain Docker scenarios "user.home" is set to "?", see
-     * https://bugs.openjdk.java.net/browse/JDK-8193433 for some background information.
-     */
-    fun fixupUserHomeProperty() {
-        val userHome = System.getProperty("user.home")
-        val checkedUserHome = sequenceOf(
-            userHome,
-            System.getenv(ORT_USER_HOME_ENV),
-            System.getenv("HOME"),
-            System.getenv("USERPROFILE")
-        ).first {
-            it != null && it.isNotBlank() && it != "?"
+    init {
+        context {
+            expandArgumentFiles = false
+            helpFormatter = OrtHelpFormatter()
         }
 
-        if (checkedUserHome != userHome) System.setProperty("user.home", checkedUserHome)
+        subcommands(
+            AnalyzerCommand(),
+            ClearlyDefinedUploadCommand(),
+            DownloaderCommand(),
+            EvaluatorCommand(),
+            ReporterCommand(),
+            RequirementsCommand(),
+            ScannerCommand()
+        )
+
+        versionOption(
+            version = env.ortVersion,
+            names = setOf("--version", "-v"),
+            help = "Show version information and exit.",
+            message = ::getVersionHeader
+        )
     }
 
-    /**
-     * Run the ORT CLI with the provided [args] and return the exit code of [CommandWithHelp.run].
-     */
-    fun run(args: Array<String>): Int {
-        val jc = JCommander(this).apply {
-            programName = TOOL_NAME
-            setExpandAtSign(false)
-            addCommand(AnalyzerCommand)
-            addCommand(ClearlyDefinedUploadCommand)
-            addCommand(DownloaderCommand)
-            addCommand(EvaluatorCommand)
-            addCommand(ReporterCommand)
-            addCommand(RequirementsCommand)
-            addCommand(ScannerCommand)
-            parse(*args)
-        }
-
-        println(getVersionHeader(jc.parsedCommand))
-
-        val config = loadConfig()
-
-        return if (version) 0 else run(jc, config)
-    }
-
-    override fun runCommand(jc: JCommander, config: OrtConfiguration): Int {
-        when {
-            debug -> Configurator.setRootLevel(Level.DEBUG)
-            info -> Configurator.setRootLevel(Level.INFO)
-        }
+    override fun run() {
+        Configurator.setRootLevel(logLevel)
 
         // Make the parameter globally available.
         printStackTrace = stacktrace
 
-        // JCommander already validates the command names.
-        val command = jc.commands[jc.parsedCommand]!!
-        val commandObject = command.objects.first() as CommandWithHelp
+        // Make the OrtConfiguration available to subcommands.
+        context.findOrSetObject { loadConfig() }
 
-        // Delegate running actions to the specified command.
-        return commandObject.run(jc, config)
+        println(getVersionHeader(env.ortVersion))
     }
 
-    private fun getVersionHeader(commandName: String?): String {
-        val env = Environment()
-
+    private fun getVersionHeader(version: String): String {
         val variables = mutableListOf("$ORT_USER_HOME_ENV = ${getUserOrtDirectory()}")
         env.variables.entries.mapTo(variables) { (key, value) -> "$key = $value" }
 
+        val commandName = context.invokedSubcommand?.commandName
         val command = commandName?.let { " '$commandName'" }.orEmpty()
         val with = if (variables.isNotEmpty()) " with" else "."
 
@@ -181,7 +144,7 @@ object OrtMain : CommandWithHelp() {
         val header = mutableListOf<String>()
         """
             ________ _____________________
-            \_____  \\______   \__    ___/ the OSS Review Toolkit, version ${env.ortVersion}.
+            \_____  \\______   \__    ___/ the OSS Review Toolkit, version $version.
              /   |   \|       _/ |    |    Running$command under Java ${env.javaVersion} on ${env.os}$with
             /    |    \    |   \ |    |    ${variables.getOrElse(variableIndex++) { "" }}
             \_______  /____|_  / |____|    ${variables.getOrElse(variableIndex++) { "" }}
@@ -198,12 +161,8 @@ object OrtMain : CommandWithHelp() {
     }
 
     private fun loadConfig(): OrtConfiguration {
-        val argsConfig = ConfigFactory.parseMap(configArguments, "Command line").withOnlyPath("ort")
+        val argsConfig = ConfigFactory.parseMap(configArguments.toMap(), "Command line").withOnlyPath("ort")
         val fileConfig = configFile?.expandTilde()?.let {
-            require(it.isFile) {
-                "The provided configuration file '$it' is not actually a file."
-            }
-
             ConfigFactory.parseFile(it).withOnlyPath("ort")
         }
         val defaultConfig = ConfigFactory.parseResources("default.conf")
@@ -216,4 +175,32 @@ object OrtMain : CommandWithHelp() {
 
         return combinedConfig.extract("ort")
     }
+}
+
+/**
+ * Check if the "user.home" property is set to a sane value and otherwise set it to the value of the ORT_USER_HOME
+ * environment variable, if set, or to the value of an (OS-specific) environment variable for the user home
+ * directory. This works around the issue that esp. in certain Docker scenarios "user.home" is set to "?", see
+ * https://bugs.openjdk.java.net/browse/JDK-8193433 for some background information.
+ */
+fun fixupUserHomeProperty() {
+    val userHome = System.getProperty("user.home")
+    val checkedUserHome = sequenceOf(
+        userHome,
+        System.getenv(ORT_USER_HOME_ENV),
+        System.getenv("HOME"),
+        System.getenv("USERPROFILE")
+    ).first {
+        it != null && it.isNotBlank() && it != "?"
+    }
+
+    if (checkedUserHome != userHome) System.setProperty("user.home", checkedUserHome)
+}
+
+/**
+ * The entry point for the application with [args] being the list of arguments.
+ */
+fun main(args: Array<String>) {
+    fixupUserHomeProperty()
+    return OrtMain().main(args)
 }
