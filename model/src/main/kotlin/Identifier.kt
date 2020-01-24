@@ -26,28 +26,29 @@ import com.here.ort.utils.encodeOrUnknown
 import com.here.ort.utils.percentEncode
 
 /**
- * A unique identifier for a software package.
+ * A unique identifier for a software component.
  */
-data class Identifier(
+sealed class Identifier(
     /**
-     * The type of package. When used in the context of a [Project], the type is the name of the package manager that
-     * manages the project (e.g. "Gradle" for a Gradle project). When used in the context of a [Package], the type is
-     * the name of the package type or protocol (e.g. "Maven" for a file from a Maven repository).
+     * The type of component this identifier describes. When used in the context of a [Project], the type describes the
+     * package manager that manages the project (e.g. [GRADLE][ProjectIdentifier.Type.GRADLE] for a Gradle project).
+     * When used in the context of a [Package], the type describes the package format or protocol (e.g.
+     * [MAVEN][PackageIdentifier.Type.MAVEN] for a file from a Maven repository).
      */
     val type: String,
 
     /**
-     * The namespace of the package, for example the group for "Maven" or the scope for "NPM".
+     * The namespace of the component, for example the group for "Maven" or the scope for "NPM".
      */
     val namespace: String,
 
     /**
-     * The name of the package.
+     * The name of the component.
      */
     val name: String,
 
     /**
-     * The version of the package.
+     * The version of the component.
      */
     val version: String
 ) : Comparable<Identifier> {
@@ -56,32 +57,13 @@ data class Identifier(
          * A constant for an [Identifier] where all properties are empty strings.
          */
         @JvmField
-        val EMPTY = Identifier(
-            type = "",
-            namespace = "",
-            name = "",
-            version = ""
-        )
+        val EMPTY = EmptyIdentifier()
     }
 
-    private constructor(components: List<String>) : this(
-        type = components.getOrElse(0) { "" },
-        namespace = components.getOrElse(1) { "" },
-        name = components.getOrElse(2) { "" },
-        version = components.getOrElse(3) { "" }
-    )
-
-    /**
-     * Create an [Identifier] from a string with the format "type:namespace:name:version". If the string has less than
-     * three colon separators the missing values are assigned empty strings.
-     */
-    @JsonCreator
-    constructor(identifier: String) : this(identifier.split(':'))
-
-    private val components = listOf(type, namespace, name, version)
+    private val properties = listOf(type, namespace, name, version)
 
     init {
-        require(components.none { ":" in it }) {
+        require(properties.none { ":" in it }) {
             "An identifier's properties must not contain ':' because that character is used as a separator in the " +
                     "string representation: type='$type', namespace='$namespace', name='$name', version='$version'."
         }
@@ -90,33 +72,70 @@ data class Identifier(
     override fun compareTo(other: Identifier) = toCoordinates().compareTo(other.toCoordinates())
 
     /**
-     * Return whether this [Identifier] is likely to belong any of the organizations mentioned in [names].
-     */
-    fun isFromOrg(vararg names: String) =
-        names.any { name ->
-            val lowerName = name.toLowerCase()
-            val vendorNamespace = when (type) {
-                "NPM" -> "@$lowerName"
-                "Gradle", "Maven", "SBT" -> "(com|net|org)\\.$lowerName(\\..+)?"
-                else -> ""
-            }
-
-            vendorNamespace.isNotEmpty() && namespace.matches(vendorNamespace.toRegex())
-        }
-
-    /**
      * Create Maven-like coordinates based on the properties of the [Identifier].
      */
     // TODO: We probably want to already sanitize the individual properties, also in other classes, but Kotlin does not
     //       seem to offer a generic / elegant way to do so.
     @JsonValue
-    fun toCoordinates() = components.joinToString(":") { it.trim().filterNot { it < ' ' } }
+    fun toCoordinates() = properties.joinToString(":") { it.trim().filterNot { it < ' ' } }
 
     /**
      * Create a file system path based on the properties of the [Identifier]. All properties are encoded using
      * [encodeOrUnknown].
      */
-    fun toPath() = components.joinToString("/") { it.encodeOrUnknown() }
+    fun toPath() = properties.joinToString("/") { it.encodeOrUnknown() }
+}
+
+class EmptyIdentifier : Identifier("", "", "", "")
+
+class ProjectIdentifier(val projectType: Type, namespace: String, name: String, version: String) :
+    Identifier(projectType.toString(), namespace, name, version) {
+    enum class Type(val value: String) {
+        GRADLE("Gradle"),
+        MAVEN("Maven"),
+        NPM("NPM"),
+        SBT("sbt");
+
+        companion object {
+            @JsonCreator
+            @JvmStatic
+            fun fromString(value: String) = enumValues<Type>().single { value.equals(it.value, ignoreCase = true) }
+        }
+
+        @JsonValue
+        override fun toString() = value
+    }
+
+    /**
+     * Return whether this [Identifier] is likely to belong any of the organizations mentioned in [names].
+     */
+    fun isFromOrg(vararg names: String) =
+        names.any { name ->
+            val lowerName = name.toLowerCase()
+            val vendorNamespace = when (projectType) {
+                Type.NPM -> "@$lowerName"
+                Type.GRADLE, Type.MAVEN, Type.SBT -> "(com|net|org)\\.$lowerName(\\..+)?"
+            }
+
+            vendorNamespace.isNotEmpty() && namespace.matches(vendorNamespace.toRegex())
+        }
+}
+
+class PackageIdentifier(val packageType: Type, namespace: String, name: String, version: String) :
+    Identifier(packageType.toString(), namespace, name, version) {
+    enum class Type(val value: String) {
+        MAVEN("Maven"),
+        NPM("NPM");
+
+        companion object {
+            @JsonCreator
+            @JvmStatic
+            fun fromString(value: String) = enumValues<Type>().single { value.equals(it.value, ignoreCase = true) }
+        }
+
+        @JsonValue
+        override fun toString() = value
+    }
 
     /**
      * Create the canonical [package URL](https://github.com/package-url/purl-spec) ("purl") based on the properties of
@@ -124,8 +143,8 @@ data class Identifier(
      */
     // TODO: This is a preliminary implementation as some open questions remain, see e.g.
     //       https://github.com/package-url/purl-spec/issues/33.
-    fun toPurl() = "".takeIf { this == EMPTY }
-        ?: buildString {
+    fun toPurl() =
+        buildString {
             append("pkg:")
             append(type.toLowerCase())
 
