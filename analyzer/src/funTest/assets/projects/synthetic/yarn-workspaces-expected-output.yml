@@ -19,7 +19,13 @@ project:
   homepage_url: ""
   scopes:
   - name: "dependencies"
-    dependencies: []
+    dependencies:
+    - id: "NPM:@here:harp-fetch:0.11.0"
+      dependencies:
+      - id: "NPM::node-fetch:2.6.0"
+    - id: "NPM:@here:harp-fetch:0.3.6"
+      dependencies:
+      - id: "NPM::node-fetch:2.6.0"
   - name: "devDependencies"
     dependencies: []
 packages:

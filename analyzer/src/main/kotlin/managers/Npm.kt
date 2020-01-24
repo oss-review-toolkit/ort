@@ -372,8 +372,26 @@ open class Npm(
         )
     }
 
-    private fun parseDependencies(moduleDir: File, scopes: Set<String>): SortedSet<PackageReference> =
-        buildTree(moduleDir, scopes)!!.dependencies
+    private fun parseDependencies(moduleDir: File, scopes: Set<String>): SortedSet<PackageReference> {
+        val workspaceModuleDirs = moduleDir.resolve("node_modules").let { nodeModulesDir ->
+            if (nodeModulesDir.isDirectory) {
+                nodeModulesDir.listFiles().filter { file ->
+                    val realFile = file.realFile()
+                    realFile != file && realFile.isDirectory
+                }
+            } else {
+                emptyList()
+            }
+        }
+
+        return sortedSetOf<PackageReference>().apply {
+            addAll(buildTree(moduleDir, scopes)!!.dependencies)
+
+            workspaceModuleDirs.forEach { workspaceModuleDir ->
+                addAll(buildTree(workspaceModuleDir, scopes, listOf(moduleDir))!!.dependencies)
+            }
+        }
+    }
 
     private fun buildTree(
         moduleDir: File,
