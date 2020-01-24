@@ -114,7 +114,8 @@ object DownloaderCommand : CommandWithHelp() {
     private var archive = false
 
     @Parameter(
-        description = "The type of data entities from the ORT file's analyzer result to download.",
+        description = "The data entities from the ORT file's analyzer result to limit downloads to. If not specified," +
+                "all data entities are downloaded.",
         names = ["--entities", "-e"],
         order = PARAMETER_ORDER_OPTIONAL
     )
