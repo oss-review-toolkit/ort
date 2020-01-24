@@ -19,6 +19,8 @@
 
 package com.here.ort
 
+import com.github.ajalt.clikt.core.MutuallyExclusiveGroupException
+
 import com.here.ort.downloader.VersionControlSystem
 import com.here.ort.utils.normalizeVcsUrl
 import com.here.ort.utils.redirectStdout
@@ -29,6 +31,7 @@ import com.here.ort.utils.test.patchExpectedResult
 import io.kotlintest.TestCase
 import io.kotlintest.TestResult
 import io.kotlintest.shouldBe
+import io.kotlintest.shouldThrow
 import io.kotlintest.specs.StringSpec
 
 import java.io.File
@@ -143,6 +146,17 @@ class OrtMainTest : StringSpec() {
             val analyzerResult = File(analyzerOutputDir, "analyzer-result.yml").readText()
 
             patchActualResult(analyzerResult, patchStartAndEndTime = true) shouldBe expectedResult
+        }
+
+        "Passing mutually exclusive evaluator options fails" {
+            shouldThrow<MutuallyExclusiveGroupException> {
+                runMain(
+                    "evaluate",
+                    "-i", "build.gradle.kts",
+                    "--rules-file", "build.gradle.kts",
+                    "--rules-resource", "DUMMY"
+                )
+            }
         }
 
         "Requirements are listed correctly" {
