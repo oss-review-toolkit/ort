@@ -27,7 +27,7 @@ import com.here.ort.helper.CommandWithHelp
 import com.here.ort.helper.common.findFilesRecursive
 import com.here.ort.helper.common.minimize
 import com.here.ort.helper.common.replacePathExcludes
-import com.here.ort.helper.common.replaceErrorResolutions
+import com.here.ort.helper.common.replaceIssueResolutions
 import com.here.ort.helper.common.replaceRuleViolationResolutions
 import com.here.ort.helper.common.replaceScopeExcludes
 import com.here.ort.helper.common.writeAsYaml
@@ -76,7 +76,7 @@ internal class RemoveConfigurationEntriesCommand : CommandWithHelp() {
     private lateinit var sourceCodeDir: File
 
     @Parameter(
-        description = "A file containing error resolutions.",
+        description = "A file containing issue resolutions.",
         names = ["--resolutions-file"],
         order = PARAMETER_ORDER_OPTIONAL
     )
@@ -108,24 +108,24 @@ internal class RemoveConfigurationEntriesCommand : CommandWithHelp() {
                 add(it)
             }
         }
-        val notGloballyResolvedErrors = ortResult.collectErrors().values.flatten().filter {
-            resolutionProvider.getErrorResolutionsFor(it).isEmpty()
+        val notGloballyResolvedIssues = ortResult.collectIssues().values.flatten().filter {
+            resolutionProvider.getIssueResolutionsFor(it).isEmpty()
         }
-        val errorResolutions = ortResult.getResolutions().errors.filter { resolution ->
-            notGloballyResolvedErrors.any { resolution.matches(it) }
+        val issueResolutions = ortResult.getResolutions().issues.filter { resolution ->
+            notGloballyResolvedIssues.any { resolution.matches(it) }
         }
 
         repositoryConfiguration
             .replacePathExcludes(pathExcludes)
             .replaceScopeExcludes(scopeExcludes)
-            .replaceErrorResolutions(errorResolutions)
+            .replaceIssueResolutions(issueResolutions)
             .replaceRuleViolationResolutions(ruleViolationResolutions)
             .writeAsYaml(repositoryConfigurationFile)
 
         buildString {
             val removedPathExcludes = repositoryConfiguration.excludes.paths.size - pathExcludes.size
             val removedScopeExcludes = repositoryConfiguration.excludes.scopes.size - scopeExcludes.size
-            val removedErrorResolutions = repositoryConfiguration.resolutions.errors.size - errorResolutions.size
+            val removedIssueResolutions = repositoryConfiguration.resolutions.issues.size - issueResolutions.size
             val removedRuleViolationResolutions = repositoryConfiguration.resolutions.ruleViolations.size -
                     ruleViolationResolutions.size
 
@@ -133,7 +133,7 @@ internal class RemoveConfigurationEntriesCommand : CommandWithHelp() {
             appendln()
             appendln("  path excludes             : $removedPathExcludes")
             appendln("  scope excludes            : $removedScopeExcludes")
-            appendln("  error resolutions         : $removedErrorResolutions")
+            appendln("  issue resolutions         : $removedIssueResolutions")
             appendln("  rule violation resolutions: $removedRuleViolationResolutions")
         }.let { println(it) }
 

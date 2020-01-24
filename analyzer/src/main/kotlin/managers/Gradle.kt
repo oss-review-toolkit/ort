@@ -281,7 +281,7 @@ class Gradle(
         } else {
             val type = dependency.pomFile?.let { "Maven" } ?: "Unknown"
             val id = Identifier(type, dependency.groupId, dependency.artifactId, dependency.version)
-            PackageReference(id, dependencies = transitiveDependencies.toSortedSet(), errors = issues)
+            PackageReference(id, dependencies = transitiveDependencies.toSortedSet(), issues = issues)
         }
     }
 }

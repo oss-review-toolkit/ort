@@ -29,8 +29,8 @@ import java.util.SortedSet
 // [CopyrightFindings] are used only when associated with (or rather referenced by) [LicenseFindings].
 // The output format of [com.here.ort.model.utils.FindingsMatcher] needs to change as it misses the association
 // between copyright finding and the actual text location of the matched license finding. Further the way copyright
-// findings are matched to root licenses might also need to change which in turn may also require changing theses
-// plural form classes. Due to the above it seems to make sense to defer the clarification of singular vs. plural form
+// findings are matched to root licenses might also need to change which in turn may also require changing these plural
+// form classes. Due to the above it seems to make sense to defer the clarification of singular vs. plural form
 // copyright finding classes until the mentioned improvements to the matching have been applied.
 data class CopyrightFindings(
     val statement: String,

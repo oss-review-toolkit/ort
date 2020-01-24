@@ -363,7 +363,7 @@ analyzer:
           revision: "51d15eaa03e53aaedd3002dc67814355073e8a55"
           path: ""
       curations: []
-    has_errors: false
+    has_issues: false
 scanner:
   start_time: "1970-01-01T00:00:00Z"
   end_time: "1970-01-01T00:00:00Z"
@@ -670,7 +670,7 @@ scanner:
           end_time: "2018-08-21T16:20:45.663Z"
           file_count: 0
           license_findings: []
-          errors:
+          issues:
           - timestamp: "2018-08-21T16:20:45.663Z"
             source: "ScanCode"
             message: "DownloadException: No source artifact URL provided for 'NPM::npm-excludes-test-project:1.0.0'."
@@ -753,5 +753,5 @@ scanner:
     storage_stats:
       num_reads: 11
       num_hits: 0
-    has_errors: true
+    has_issues: true
 evaluator: null

@@ -85,7 +85,7 @@ class FileCounter(name: String, config: ScannerConfiguration) : LocalScanner(nam
             packageVerificationCode = calculatePackageVerificationCode(scanPath),
             licenseFindings = sortedSetOf(),
             copyrightFindings = sortedSetOf(),
-            errors = mutableListOf()
+            issues = mutableListOf()
         )
     }
 }

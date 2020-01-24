@@ -53,7 +53,7 @@ class Licensee(name: String, config: ScannerConfiguration) : LocalScanner(name, 
         val CONFIGURATION_OPTIONS = listOf("--json")
     }
 
-    override val scannerVersion = "9.12.0"
+    override val scannerVersion = "9.13.0"
     override val resultFileExt = "json"
 
     override fun command(workingDir: File?) = if (Os.isWindows) "licensee.bat" else "licensee"
@@ -156,7 +156,7 @@ class Licensee(name: String, config: ScannerConfiguration) : LocalScanner(name, 
             packageVerificationCode = calculatePackageVerificationCode(scanPath),
             licenseFindings = licenseFindings,
             copyrightFindings = sortedSetOf(),
-            errors = mutableListOf()
+            issues = mutableListOf()
         )
     }
 }

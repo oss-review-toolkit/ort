@@ -17,9 +17,8 @@
  * License-Filename: LICENSE
  */
 
-package com.here.ort.reporter.reporters
+package com.here.ort.reporter
 
-import com.here.ort.reporter.LicenseTextProvider
 import com.here.ort.spdx.getLicenseText
 import com.here.ort.spdx.getLicenseTextReader
 import com.here.ort.spdx.hasLicenseText

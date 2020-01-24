@@ -60,8 +60,8 @@ class GoDepTest : WordSpec() {
                     project.definitionFilePath shouldBe
                             "analyzer/src/funTest/assets/projects/synthetic/godep/no-lockfile/Gopkg.toml"
                     packages.size shouldBe 0
-                    errors.size shouldBe 1
-                    errors.first().message should haveSubstring("IllegalArgumentException: No lockfile found in")
+                    issues.size shouldBe 1
+                    issues.first().message should haveSubstring("IllegalArgumentException: No lockfile found in")
                 }
             }
 
@@ -74,7 +74,7 @@ class GoDepTest : WordSpec() {
                 with(result!!) {
                     project shouldNotBe Project.EMPTY
                     packages.size shouldBe 4
-                    errors.size shouldBe 0
+                    issues.size shouldBe 0
                 }
             }
 

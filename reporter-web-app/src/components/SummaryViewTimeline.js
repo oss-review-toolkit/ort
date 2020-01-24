@@ -29,7 +29,7 @@ const SummaryViewTimeline = (props) => {
     const {
         declaredLicenses,
         detectedLicenses,
-        errors,
+        issues,
         levels,
         packagesMap,
         projectsMap,
@@ -38,7 +38,7 @@ const SummaryViewTimeline = (props) => {
         violations
     } = webAppOrtResult;
     const { revision, type, url } = vcsProcessed;
-    const hasErrors = webAppOrtResult.hasErrors();
+    const hasIssues = webAppOrtResult.hasIssues();
     const hasViolations = webAppOrtResult.hasViolations();
 
     if (!revision || !type || !url) {
@@ -132,7 +132,7 @@ const SummaryViewTimeline = (props) => {
                 dot={(
                     <Icon
                         type={
-                            (hasErrors || hasViolations)
+                            (hasIssues || hasViolations)
                                 ? 'exclamation-circle-o' : 'check-circle-o'
                         }
                         style={
@@ -140,25 +140,25 @@ const SummaryViewTimeline = (props) => {
                         }
                     />
                 )}
-                color={(hasErrors || hasViolations) ? 'red' : 'green'}
+                color={(hasIssues || hasViolations) ? 'red' : 'green'}
             >
                 {
-                    hasErrors && !hasViolations
+                    hasIssues && !hasViolations
                     && (
                         <span className="ort-error">
                             <b>
                                 Completed scan with
                                 {' '}
-                                {errors.length}
+                                {issues.length}
                                 {' '}
-                                error
-                                { errors.length > 1 && 's'}
+                                issue
+                                { issues.length > 1 && 's'}
                             </b>
                         </span>
                     )
                 }
                 {
-                    !hasErrors && hasViolations
+                    !hasIssues && hasViolations
                     && (
                         <span className="ort-error">
                             <b>
@@ -173,16 +173,16 @@ const SummaryViewTimeline = (props) => {
                     )
                 }
                 {
-                    hasErrors && hasViolations
+                    hasIssues && hasViolations
                     && (
                         <span className="ort-error">
                             <b>
                                 Completed scan with
                                 {' '}
-                                {errors.length}
+                                {issues.length}
                                 {' '}
-                                error
-                                { errors.length > 1 && 's'}
+                                issue
+                                { issues.length > 1 && 's'}
                                 {' '}
                                 and
                                 {' '}
@@ -195,7 +195,7 @@ const SummaryViewTimeline = (props) => {
                     )
                 }
                 {
-                    !hasErrors && !hasViolations
+                    !hasIssues && !hasViolations
                     && (
                         <span className="ort-success">
                             <b>

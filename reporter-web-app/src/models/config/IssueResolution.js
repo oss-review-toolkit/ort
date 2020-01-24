@@ -17,7 +17,7 @@
  * License-Filename: LICENSE
  */
 
-class ErrorResolution {
+class IssueResolution {
     constructor(obj) {
         this.message = '';
         this.reason = '';
@@ -33,4 +33,4 @@ class ErrorResolution {
     }
 }
 
-export default ErrorResolution;
+export default IssueResolution;

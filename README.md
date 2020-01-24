@@ -37,10 +37,11 @@ interface (for scripted use).
 
 The toolkit consists of the following tools:
 
-* [_Analyzer_](#analyzer) - determines dependencies of a project. Supports multiple package managers and sub-projects. No
-  changes to the projects are required.
+* [_Analyzer_](#analyzer) - determines dependencies of a project. Supports multiple package managers and sub-projects.
+  No changes to the projects are required.
 * [_Downloader_](#downloader) - fetches the source code referred to by the Analyzer result.
-* [_Scanner_](#scanner) - wraps existing license / copyright scanners to detect findings in local source code directories.
+* [_Scanner_](#scanner) - wraps existing license / copyright scanners to detect findings in local source code
+  directories.
 * [_Evaluator_](#evaluator) - evaluates license findings against customizable policy rules.
 * [_Reporter_](#reporter) - presents results in various formats such as visual reports, open source notices or
   Bill-Of-Materials (BOMs) to easily identify dependencies, licenses, copyrights or policy rule violations.
@@ -55,9 +56,9 @@ The following tools are [planned](https://github.com/heremaps/oss-review-toolkit
 
 ## From binaries
 
-Preliminary binary artifacts for ORT are currently available via [JitPack](https://jitpack.io/#heremaps/oss-review-toolkit).
-Please note that due to limitations with the JitPack build environment, the reporter is not able to create the Web App
-report.
+Preliminary binary artifacts for ORT are currently available via
+[JitPack](https://jitpack.io/#heremaps/oss-review-toolkit). Please note that due to limitations with the JitPack build
+environment, the reporter is not able to create the Web App report.
 
 ## From sources
 
@@ -140,8 +141,9 @@ or
 
 ## Running on CI
 
-A basic ORT pipeline (using the _analyzer_, _scanner_ and _reporter_) can easily be run on [Jenkins CI](https://jenkins.io/)
-by using the [Jenkinsfile](./Jenkinsfile) in a (declarative) [pipeline](https://jenkins.io/doc/book/pipeline/) job.
+A basic ORT pipeline (using the _analyzer_, _scanner_ and _reporter_) can easily be run on
+[Jenkins CI](https://jenkins.io/) by using the [Jenkinsfile](./Jenkinsfile) in a (declarative)
+[pipeline](https://jenkins.io/doc/book/pipeline/) job.
 
 ## Getting started
 
@@ -155,7 +157,7 @@ Please see the documentation below for details about the ORT configuration.
   and resolutions to address issues found within a project's code repository.
 * [The curations.yml file](docs/config-file-curations-yml.md) - curations correct invalid or missing package metadata
   and set the concluded license for packages.
-* [The resolutions.yml file](docs/config-file-resolution-yml.md) - resolutions allow *resolving* any errors
+* [The resolutions.yml file](docs/config-file-resolution-yml.md) - resolutions allow *resolving* any issues
   or policy rule violations by providing a reason why they are acceptable and can be ignored.
 
 # Details on the tools
@@ -164,10 +166,10 @@ Please see the documentation below for details about the ORT configuration.
 
 [![Analyzer](./logos/analyzer.png)](./analyzer/src/main/kotlin)
 
-The _analyzer_ is a Software Composition Analysis (SCA) tool that determines the dependencies of software projects inside
-the specified input directory (`-i`). It does so by querying the detected package managers; **no modifications** to your
-existing project source code, like applying build system plugins, are necessary for that to work. The tree of transitive
-dependencies per project is written out as part of an
+The _analyzer_ is a Software Composition Analysis (SCA) tool that determines the dependencies of software projects
+inside the specified input directory (`-i`). It does so by querying the detected package managers; **no modifications**
+to your existing project source code, like applying build system plugins, are necessary for that to work. The tree of
+transitive dependencies per project is written out as part of an
 [OrtResult](https://github.com/heremaps/oss-review-toolkit/blob/master/model/src/main/kotlin/OrtResult.kt) in YAML (or
 JSON, see `-f`) format to a file named `analyzer-result.yml` in the specified output directory (`-o`). The output file
 exactly documents the status quo of all package-related meta-data. It can be further processed or manually edited before
@@ -181,14 +183,17 @@ Currently, the following package managers are supported:
 * [Conan](https://conan.io/) (C / C++, *experimental* as the VCS locations often times do not contain the actual source
   code, see #2037)
 * [dep](https://golang.github.io/dep/) (Go)
-* [DotNet](https://docs.microsoft.com/en-us/dotnet/core/tools/) (.NET, with currently some [limitations](https://github.com/heremaps/oss-review-toolkit/pull/1303#issue-253860146))
+* [DotNet](https://docs.microsoft.com/en-us/dotnet/core/tools/) (.NET, with currently some
+  [limitations](https://github.com/heremaps/oss-review-toolkit/pull/1303#issue-253860146))
 * [Glide](https://glide.sh/) (Go)
 * [Godep](https://github.com/tools/godep) (Go)
-* [GoMod](https://github.com/golang/go/wiki/Modules) (Go, *experimental* as only proxy-based source artifacts but no VCS locations are supported)
+* [GoMod](https://github.com/golang/go/wiki/Modules) (Go, *experimental* as only proxy-based source artifacts but no VCS
+  locations are supported)
 * [Gradle](https://gradle.org/) (Java)
 * [Maven](http://maven.apache.org/) (Java)
 * [NPM](https://www.npmjs.com/) (Node.js)
-* [NuGet](https://www.nuget.org/) (.NET, with currently some [limitations](https://github.com/heremaps/oss-review-toolkit/pull/1303#issue-253860146))
+* [NuGet](https://www.nuget.org/) (.NET, with currently some
+  [limitations](https://github.com/heremaps/oss-review-toolkit/pull/1303#issue-253860146))
 * [Composer](https://getcomposer.org/) (PHP)
 * [PIP](https://pip.pypa.io/) (Python)
 * [Pipenv](https://pipenv.readthedocs.io/) (Python)
@@ -202,9 +207,10 @@ Currently, the following package managers are supported:
 
 [![Downloader](./logos/downloader.png)](./downloader/src/main/kotlin)
 
-Taking an ORT result file with an _analyzer_ result as the input (`-a`), the _downloader_ retrieves the source code of all
-contained packages to the specified output directory (`-o`). The _downloader_ takes care of things like normalizing URLs
-and using the [appropriate VCS tool](./downloader/src/main/kotlin/vcs) to checkout source code from version control.
+Taking an ORT result file with an _analyzer_ result as the input (`-a`), the _downloader_ retrieves the source code of
+all contained packages to the specified output directory (`-o`). The _downloader_ takes care of things like normalizing
+URLs and using the [appropriate VCS tool](./downloader/src/main/kotlin/vcs) to checkout source code from version
+control.
 
 Currently, the following Version Control Systems are supported:
 
@@ -229,7 +235,8 @@ Currently, the following license scanners are supported:
 * [Licensee](https://github.com/benbalter/licensee)
 * [ScanCode](https://github.com/nexB/scancode-toolkit)
 
-For a comparison of some of these, see this [Bachelor Thesis](https://osr.cs.fau.de/2019/08/07/final-thesis-a-comparison-study-of-open-source-license-crawler/).
+For a comparison of some of these, see this
+[Bachelor Thesis](https://osr.cs.fau.de/2019/08/07/final-thesis-a-comparison-study-of-open-source-license-crawler/).
 
 ## Storage Backends
 
@@ -302,16 +309,16 @@ The _scanner_ creates a table called `scan_results` and stores the data in a
 
 [![Evaluator](./logos/evaluator.png)](./evaluator/src/main/kotlin)
 
-The _evaluator_ is used to perform custom license policy checks on scan results. The rules to check against are implemented
-as scripts (currently Kontlin scripts, with a dedicated DSL, but support for other scripting can be added as well.
-See [rules.kts](./docs/examples/rules.kts) for an example file.
+The _evaluator_ is used to perform custom license policy checks on scan results. The rules to check against are
+implemented as scripts (currently Kontlin scripts, with a dedicated DSL, but support for other scripting can be added as
+well. See [rules.kts](./docs/examples/rules.kts) for an example file.
 
 <a name="reporter">&nbsp;</a>
 
 [![Reporter](./logos/reporter.png)](./reporter/src/main/kotlin)
 
-The _reporter_ generates human-readable reports from the scan result file generated by the _scanner_ (`-s`). It is designed
-to support multiple output formats.
+The _reporter_ generates human-readable reports from the scan result file generated by the _scanner_ (`-s`). It is
+designed to support multiple output formats.
 
 Currently, the following report formats are supported (reporter names are case-insensitive):
 
@@ -328,8 +335,9 @@ Currently, the following report formats are supported (reporter names are case-i
 ORT is written in [Kotlin](https://kotlinlang.org/) and uses [Gradle](https://gradle.org/) as the build system, with
 [Kotlin script](https://docs.gradle.org/current/userguide/kotlin_dsl.html) instead of Groovy as the DSL.
 
-When developing on the command line, use the committed [Gradle wrapper](https://docs.gradle.org/current/userguide/gradle_wrapper.html)
-to bootstrap Gradle in the configured version and execute any given tasks. The most important tasks for this project are:
+When developing on the command line, use the committed
+[Gradle wrapper](https://docs.gradle.org/current/userguide/gradle_wrapper.html) to bootstrap Gradle in the configured
+version and execute any given tasks. The most important tasks for this project are:
 
 | Task        | Purpose                                                           |
 | ----------- | ----------------------------------------------------------------- |

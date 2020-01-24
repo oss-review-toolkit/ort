@@ -31,12 +31,12 @@ import io.kotlintest.specs.StringSpec
 
 import java.io.File
 
-class CvsWorkingTreeTest : StringSpec() {
-    private val cvs = Cvs()
+class MercurialWorkingTreeTest : StringSpec() {
+    private val hg = Mercurial()
     private lateinit var zipContentDir: File
 
     override fun beforeSpec(spec: Spec) {
-        val zipFile = File("src/funTest/assets/jhove-2019-12-11-cvs.zip")
+        val zipFile = File("src/funTest/assets/lz4revlog-2018-01-03-hg.zip")
 
         zipContentDir = createTempDir()
 
@@ -49,56 +49,51 @@ class CvsWorkingTreeTest : StringSpec() {
     }
 
     init {
-        "Detected CVS version is not empty" {
-            val version = cvs.getVersion()
-            println("CVS version $version detected.")
+        "Detected Mercurial version is not empty" {
+            val version = hg.getVersion()
+            println("Mercurial version $version detected.")
             version shouldNotBe ""
         }
 
-        "CVS detects non-working-trees" {
-            cvs.getWorkingTree(getUserOrtDirectory()).isValid() shouldBe false
+        "Mercurial detects non-working-trees" {
+            hg.getWorkingTree(getUserOrtDirectory()).isValid() shouldBe false
         }
 
-        "CVS correctly detects URLs to remote repositories" {
-            cvs.isApplicableUrl(":pserver:anonymous@tyrex.cvs.sourceforge.net:/cvsroot/tyrex") shouldBe true
-            cvs.isApplicableUrl(":ext:jrandom@cvs.foobar.com:/usr/local/cvs") shouldBe true
-            cvs.isApplicableUrl("http://svn.code.sf.net/p/grepwin/code/") shouldBe false
+        "Mercurial correctly detects URLs to remote repositories" {
+            hg.isApplicableUrl("https://bitbucket.org/paniq/masagin") shouldBe true
+
+            // Bitbucket forwards to ".git" URLs for Git repositories, so we can omit the suffix.
+            hg.isApplicableUrl("https://bitbucket.org/yevster/spdxtraxample") shouldBe false
         }
 
-        "Detected CVS working tree information is correct" {
-            val workingTree = cvs.getWorkingTree(zipContentDir)
+        "Detected Mercurial working tree information is correct" {
+            val workingTree = hg.getWorkingTree(zipContentDir)
 
-            workingTree.vcsType shouldBe VcsType.CVS
+            workingTree.vcsType shouldBe VcsType.MERCURIAL
             workingTree.isValid() shouldBe true
-            workingTree.getRemoteUrl() shouldBe ":pserver:anonymous@a.cvs.sourceforge.net:/cvsroot/jhove"
-            workingTree.getRevision() shouldBe "449addc0d9e0ee7be48bfaa06f99a6f23cd3bae0"
+            workingTree.getRemoteUrl() shouldBe "https://bitbucket.org/facebook/lz4revlog"
+            workingTree.getRevision() shouldBe "422ca71c35132f1f55d20a13355708aec7669b50"
             workingTree.getRootPath() shouldBe zipContentDir
-            workingTree.getPathToRoot(File(zipContentDir, "lib")) shouldBe "lib"
+            workingTree.getPathToRoot(File(zipContentDir, "tests")) shouldBe "tests"
         }
 
-        "CVS correctly lists remote branches" {
+        "Mercurial correctly lists remote branches" {
             val expectedBranches = listOf(
-                "JHOVE_1_7",
-                "branch_lpeer",
-                "junit_tests",
-                "pdfprofile_noncompliance_analyzer"
+                "default"
             )
 
-            val workingTree = cvs.getWorkingTree(zipContentDir)
+            val workingTree = hg.getWorkingTree(zipContentDir)
             workingTree.listRemoteBranches().joinToString("\n") shouldBe expectedBranches.joinToString("\n")
         }
 
-        "CVS correctly lists remote tags" {
+        "Mercurial correctly lists remote tags" {
             val expectedTags = listOf(
-                "JHOVE_1_1",
-                "JHOVE_1_11",
-                "JHOVE_1_8",
-                "JHOVE_1_9",
-                "Root_JHOVE_1_7",
-                "lpeer_0"
+                "1.0",
+                "1.0.1",
+                "1.0.2"
             )
 
-            val workingTree = cvs.getWorkingTree(zipContentDir)
+            val workingTree = hg.getWorkingTree(zipContentDir)
             workingTree.listRemoteTags().joinToString("\n") shouldBe expectedTags.joinToString("\n")
         }
     }

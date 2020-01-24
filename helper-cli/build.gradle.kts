@@ -20,7 +20,6 @@
 
 val jcommanderVersion: String by project
 val log4jCoreVersion: String by project
-val reflectionsVersion: String by project
 
 plugins {
     // Apply core plugins.

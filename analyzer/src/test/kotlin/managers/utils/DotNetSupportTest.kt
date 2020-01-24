@@ -54,7 +54,7 @@ class DotNetSupportTest : StringSpec() {
             )
 
             dotNetSupport.scope shouldBe resultScope
-            dotNetSupport.errors.map { it.copy(timestamp = Instant.EPOCH) } shouldBe resultErrors
+            dotNetSupport.issues.map { it.copy(timestamp = Instant.EPOCH) } shouldBe resultErrors
         }
 
         "dependencies are detected correctly" {

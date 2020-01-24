@@ -11,7 +11,7 @@ h1, h2, h3, h4 {
     margin: 1em 0em 1em 0em;
 }
 
-th: {
+th {
     padding-right: 10px;
 }
 
@@ -57,7 +57,7 @@ tr.ant-table-expanded-row, tr.ant-table-expanded-row:hover {
     width: auto;
 }
 
-// Styling specific for last item in SummaryView Timeline
+/* Styling specific for last item in SummaryView Timeline */
 .ant-timeline-item-last {
     padding-bottom: 1em;
 }

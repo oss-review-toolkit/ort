@@ -175,7 +175,7 @@ analyzer:
           dependencies:
           - id: "NPM::builtin-modules:1.1.1"
           - id: "NPM::contains-path:0.1.0"
-            # If an error occurred during the dependency analysis of this package there would be an additional "errors"
+            # If an issue occurred during the dependency analysis of this package there would be an additional "issues"
             # array.
 # ...
 # Detailed metadata about each package from the dependency trees.
@@ -209,10 +209,10 @@ analyzer:
           path: ""
       curations: []
 # ...
-# Finally a list of project related errors that happened during dependency analysis. Fortunately empty in this case.
-    errors: {}
-# A field to quickly check if the analyzer result contains any errors.
-    has_errors: false
+# Finally a list of project related issues that happened during dependency analysis. Fortunately empty in this case.
+    issues: {}
+# A field to quickly check if the analyzer result contains any issues.
+    has_issues: false
 ```
 
 ## 5. Run the scanner
@@ -238,7 +238,8 @@ cli/build/install/ort/bin/ort scan --help
 The `mime-types` package has only one dependency in the `depenencies` scope, but a lot of dependencies in the
 `devDependencies` scope. Scanning all of the `devDependencies` would take a lot of time, so we will only run the
 scanner on the `dependencies` scope in this tutorial. If you also want to scan the `devDependencies` it is strongly
-advised to configure a cache for the scan results as documented in the [README](../README.md) to speed up repeated scans.
+advised to configure a cache for the scan results as documented in the [README](../README.md) to speed up repeated
+scans.
 
 ```bash
 $ cli/build/install/ort/bin/ort scan -i [analyzer-output-path]/analyzer-result.yml -o [scanner-output-path] --scopes dependencies
@@ -255,8 +256,8 @@ Writing scan result to '[scanner-output-path]/scan-result.yml'.
 ```
 
 The `scanner` writes a new ORT result file to `[scanner-output-path]/scan-result.yml` containing the scan results in
-addition to the analyzer result from the input. This way belonging results are stored in the same place for traceability.
-If the input file already contained scan results they are replaced by the new scan results in the output.
+addition to the analyzer result from the input. This way belonging results are stored in the same place for
+traceability. If the input file already contained scan results they are replaced by the new scan results in the output.
 
 As you can see when checking the `scan-result.yml` file, the licenses detected by `ScanCode` match the licenses declared
 by the packages. This is because we scanned a small and well-maintained package in this example, but if you run the scan
@@ -296,8 +297,9 @@ Created 'WebApp' report: [reporter-output-path]/scan-report-web-app.html
 Created 'NoticeByPackage' report: [reporter-output-path]/NOTICE_BY_PACKAGE
 ```
 
-If you do not want to run the _evaluator_ you can pass the _scanner_ result e.g. `[scanner-output-path/scan-result.yml` to the `reporter` instead. To learn how you can customize generated notices see
-[notice-pre-processor-kts.md](notice-pre-processor-kts.md)
+If you do not want to run the _evaluator_ you can pass the _scanner_ result e.g. `[scanner-output-path/scan-result.yml`
+to the `reporter` instead. To learn how you can customize generated notices see
+[notice-pre-processor-kts.md](notice-pre-processor-kts.md).
 
 ## 8. Curating Package Metadata or License Findings
 
@@ -311,5 +313,5 @@ ORT provides a variety of mechanisms to fix a variety of issues, for details see
   and resolutions to address issues found within a project's code repository.
 * [The curations.yml file](docs/config-file-curations-yml.md) - curations correct invalid or missing package metadata
   and set the concluded license for packages.
-* [The resolutions.yml file](docs/config-file-resolution-yml.md) - resolutions allow *resolving* any errors
+* [The resolutions.yml file](docs/config-file-resolution-yml.md) - resolutions allow *resolving* any issues
   or policy rule violations by providing a reason why they are acceptable and can be ignored.

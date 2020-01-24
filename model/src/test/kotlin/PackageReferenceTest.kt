@@ -71,14 +71,14 @@ class PackageReferenceTest : WordSpec() {
                     val name = "${it.id.name}_suffix"
                     it.copy(
                         id = it.id.copy(name = name),
-                        errors = listOf(OrtIssue(source = "test", message = "error $name"))
+                        issues = listOf(OrtIssue(source = "test", message = "issue $name"))
                     )
                 }
 
                 modifiedTree.traverse {
                     it.id.name should endWith("_suffix")
-                    it.errors should haveSize(1)
-                    it.errors.first().message shouldBe "error ${it.id.name}"
+                    it.issues should haveSize(1)
+                    it.issues.first().message shouldBe "issue ${it.id.name}"
                     it
                 }
             }

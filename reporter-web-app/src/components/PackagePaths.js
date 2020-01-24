@@ -23,7 +23,7 @@ import PropTypes from 'prop-types';
 
 const { Step } = Steps;
 
-// Generates the HTML for packages errors
+// Generates the HTML for packages issues
 const PackagePaths = (props) => {
     const { pkg, webAppOrtResult } = props;
     const { id, paths } = pkg;

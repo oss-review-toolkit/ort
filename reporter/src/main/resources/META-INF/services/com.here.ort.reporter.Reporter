@@ -1,4 +1,6 @@
 com.here.ort.reporter.reporters.CycloneDxReporter
+com.here.ort.reporter.reporters.EvaluatedModelJsonReporter
+com.here.ort.reporter.reporters.EvaluatedModelYamlReporter
 com.here.ort.reporter.reporters.ExcelReporter
 com.here.ort.reporter.reporters.NoticeByPackageReporter
 com.here.ort.reporter.reporters.NoticeSummaryReporter

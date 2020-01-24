@@ -39,12 +39,12 @@ data class ProjectAnalyzerResult(
     val packages: SortedSet<CuratedPackage>,
 
     /**
-     * The list of errors that occurred during dependency resolution. Defaults to an empty list.
+     * The list of issues that occurred during dependency resolution. Defaults to an empty list.
+     * This property is not serialized if the list is empty for consistency with the issue properties in other classes,
+     * even if this class is not serialized as part of an [OrtResult].
      */
-    // Do not serialize if empty for consistency with the error properties in other classes, even if this class is
-    // not serialized as part of an [OrtResult].
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    val errors: List<OrtIssue> = emptyList()
+    val issues: List<OrtIssue> = emptyList()
 ) {
     init {
         // Perform a sanity check to ensure we have no references to non-existing packages.
@@ -61,30 +61,30 @@ data class ProjectAnalyzerResult(
         }
     }
 
-    fun collectErrors(): Map<Identifier, List<OrtIssue>> {
-        val collectedErrors = mutableMapOf<Identifier, MutableList<OrtIssue>>()
+    fun collectIssues(): Map<Identifier, List<OrtIssue>> {
+        val collectedIssues = mutableMapOf<Identifier, MutableList<OrtIssue>>()
 
-        fun addErrors(pkgReference: PackageReference) {
-            val errorsForPkg = collectedErrors.getOrPut(pkgReference.id) { mutableListOf() }
-            errorsForPkg += pkgReference.errors
+        fun addIssues(pkgReference: PackageReference) {
+            val issuesForPkg = collectedIssues.getOrPut(pkgReference.id) { mutableListOf() }
+            issuesForPkg += pkgReference.issues
 
-            pkgReference.dependencies.forEach { addErrors(it) }
+            pkgReference.dependencies.forEach { addIssues(it) }
         }
 
         for (scope in project.scopes) {
             for (dependency in scope.dependencies) {
-                addErrors(dependency)
+                addIssues(dependency)
             }
         }
 
         return mutableMapOf<Identifier, List<OrtIssue>>().apply {
-            if (errors.isNotEmpty()) {
-                this[project.id] = errors.toMutableList()
+            if (issues.isNotEmpty()) {
+                this[project.id] = issues.toMutableList()
             }
 
-            collectedErrors.forEach { (pkgId, errors) ->
-                if (errors.isNotEmpty()) {
-                    this[pkgId] = errors.distinct()
+            collectedIssues.forEach { (pkgId, issues) ->
+                if (issues.isNotEmpty()) {
+                    this[pkgId] = issues.distinct()
                 }
             }
         }

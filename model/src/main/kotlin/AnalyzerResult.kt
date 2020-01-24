@@ -19,6 +19,7 @@
 
 package com.here.ort.model
 
+import com.fasterxml.jackson.annotation.JsonAlias
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.annotation.JsonInclude
 
@@ -28,7 +29,7 @@ import java.util.SortedSet
 /**
  * A class that merges all information from individual [ProjectAnalyzerResult]s created for each found definition file.
  */
-@JsonIgnoreProperties(value = ["has_errors"], allowGetters = true)
+@JsonIgnoreProperties(value = ["has_issues", /* Backwards-compatibility: */ "has_errors"], allowGetters = true)
 data class AnalyzerResult(
     /**
      * Sorted set of the projects, as they appear in the individual analyzer results.
@@ -41,13 +42,14 @@ data class AnalyzerResult(
     val packages: SortedSet<CuratedPackage>,
 
     /**
-     * The lists of errors that occurred within the analyzed projects themselves. Errors related to project
+     * The lists of [OrtIssue]s that occurred within the analyzed projects themselves. Issues related to project
      * dependencies are contained in the dependencies of the project's scopes.
+     * This property is not serialized if the map is empty to reduce the size of the result file. If there are no issues
+     * at all, [AnalyzerResult.hasIssues] already contains that information.
      */
-    // Do not serialize if empty to reduce the size of the result file. If there are no errors at all,
-    // [AnalyzerResult.hasErrors] already contains that information.
+    @JsonAlias("errors")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    val errors: SortedMap<Identifier, List<OrtIssue>> = sortedMapOf()
+    val issues: SortedMap<Identifier, List<OrtIssue>> = sortedMapOf()
 ) {
     companion object {
         /**
@@ -57,48 +59,48 @@ data class AnalyzerResult(
         val EMPTY = AnalyzerResult(
             projects = sortedSetOf(),
             packages = sortedSetOf(),
-            errors = sortedMapOf()
+            issues = sortedMapOf()
         )
     }
 
     /**
-     * Return a map of all de-duplicated errors associated by [Identifier].
+     * Return a map of all de-duplicated [OrtIssue]s associated by [Identifier].
      */
-    fun collectErrors(): Map<Identifier, Set<OrtIssue>> {
-        val collectedErrors = errors.mapValuesTo(mutableMapOf()) { it.value.toMutableSet() }
+    fun collectIssues(): Map<Identifier, Set<OrtIssue>> {
+        val collectedIssues = issues.mapValuesTo(mutableMapOf()) { it.value.toMutableSet() }
 
         projects.forEach { project ->
-            project.collectErrors().forEach { (id, errors) ->
-                collectedErrors.getOrPut(id) { mutableSetOf() } += errors
+            project.collectIssues().forEach { (id, issues) ->
+                collectedIssues.getOrPut(id) { mutableSetOf() } += issues
             }
         }
 
         packages.forEach { curatedPackage ->
-            val errors = curatedPackage.pkg.collectErrors()
-            if (errors.isNotEmpty()) {
-                collectedErrors.getOrPut(curatedPackage.pkg.id) { mutableSetOf() } += errors
+            val issues = curatedPackage.pkg.collectIssues()
+            if (issues.isNotEmpty()) {
+                collectedIssues.getOrPut(curatedPackage.pkg.id) { mutableSetOf() } += issues
             }
         }
 
-        return collectedErrors
+        return collectedIssues
     }
 
     /**
-     * True if there were any errors during the analysis, false otherwise.
+     * True if there were any issues during the analysis, false otherwise.
      */
     @Suppress("UNUSED") // Not used in code, but shall be serialized.
-    val hasErrors by lazy {
-        errors.any { it.value.isNotEmpty() }
-                || projects.any { it.scopes.any { it.dependencies.any { it.hasErrors() } } }
+    val hasIssues by lazy {
+        issues.any { it.value.isNotEmpty() }
+                || projects.any { it.scopes.any { it.dependencies.any { it.hasIssues() } } }
     }
 }
 
 class AnalyzerResultBuilder {
     private val projects = sortedSetOf<Project>()
     private val packages = sortedSetOf<CuratedPackage>()
-    private val errors = sortedMapOf<Identifier, List<OrtIssue>>()
+    private val issues = sortedMapOf<Identifier, List<OrtIssue>>()
 
-    fun build() = AnalyzerResult(projects, packages, errors)
+    fun build() = AnalyzerResult(projects, packages, issues)
 
     fun addResult(projectAnalyzerResult: ProjectAnalyzerResult) =
         also {
@@ -114,7 +116,7 @@ class AnalyzerResultBuilder {
                     "${it.vcsProcessed.url}/${it.definitionFilePath}"
                 }
 
-                val error = createAndLogIssue(
+                val issue = createAndLogIssue(
                     source = "analyzer",
                     message = "Multiple projects with the same id '${existingProject.id.toCoordinates()}' " +
                             "found. Not adding the project defined in '$incomingDefinitionFileUrl' to the " +
@@ -122,13 +124,13 @@ class AnalyzerResultBuilder {
                             "'$existingDefinitionFileUrl'."
                 )
 
-                val projectErrors = errors.getOrDefault(existingProject.id, emptyList())
-                errors[existingProject.id] = projectErrors + error
+                val projectIssues = issues.getOrDefault(existingProject.id, emptyList())
+                issues[existingProject.id] = projectIssues + issue
             } else {
                 projects += projectAnalyzerResult.project
                 packages += projectAnalyzerResult.packages
-                if (projectAnalyzerResult.errors.isNotEmpty()) {
-                    errors[projectAnalyzerResult.project.id] = projectAnalyzerResult.errors
+                if (projectAnalyzerResult.issues.isNotEmpty()) {
+                    issues[projectAnalyzerResult.project.id] = projectAnalyzerResult.issues
                 }
             }
         }

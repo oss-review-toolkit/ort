@@ -40,7 +40,7 @@ function recursiveAnalyzerResultProcessor(
 ) {
     const treeId = parentTreeId === '' ? `${childIndex}` : `${parentTreeId}-${childIndex}`;
     const children = [];
-    const { dependencies, errors, scopes } = pkg;
+    const { dependencies, issues, scopes } = pkg;
     const id = pkg.id || pkg.name;
     const level = path.length;
     const scanResultContainer = webAppOrtResult.getScanResultContainerForPackageId(id);
@@ -131,14 +131,14 @@ function recursiveAnalyzerResultProcessor(
     webAppPkgTreeNodeWithNoChildren.children = [];
     webAppOrtResult.addPackageToPackagesTreeFlatArray(webAppPkgTreeNodeWithNoChildren, true);
 
-    if (errors && errors.length !== 0) {
-        for (let i = 0, len = errors.length; i < len; i++) {
-            const error = errors[i];
-            const webAppOrtIssueAnalyzer = new WebAppOrtIssueAnalyzer(error);
+    if (issues && issues.length !== 0) {
+        for (let i = 0, len = issues.length; i < len; i++) {
+            const issue = issues[i];
+            const webAppOrtIssueAnalyzer = new WebAppOrtIssueAnalyzer(issue);
 
             webAppOrtIssueAnalyzer.pkg = id;
 
-            webAppOrtResult.addError(webAppOrtIssueAnalyzer);
+            webAppOrtResult.addIssue(webAppOrtIssueAnalyzer);
         }
     }
 

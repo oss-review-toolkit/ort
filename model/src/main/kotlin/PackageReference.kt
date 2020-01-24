@@ -19,6 +19,7 @@
 
 package com.here.ort.model
 
+import com.fasterxml.jackson.annotation.JsonAlias
 import com.fasterxml.jackson.annotation.JsonInclude
 
 import java.util.SortedSet
@@ -57,21 +58,22 @@ data class PackageReference(
         val dependencies: SortedSet<PackageReference> = sortedSetOf(),
 
     /**
-     * A list of errors that occurred handling this [PackageReference].
+     * A list of [OrtIssue]s that occurred handling this [PackageReference].
      */
-    val errors: List<OrtIssue> = emptyList()
+    @JsonAlias("errors")
+    val issues: List<OrtIssue> = emptyList()
 ) : Comparable<PackageReference> {
     /**
      * Return the set of [PackageReference]s this [PackageReference] transitively depends on, up to and including a
      * depth of [maxDepth] where counting starts at 0 (for the [PackageReference] itself) and 1 are direct dependencies
-     * etc. A value below 0 means to not limit the depth. If [includeErroneous] is true, [PackageReference]s with errors
-     * (but not their dependencies without errors) are excluded, otherwise they are included.
+     * etc. A value below 0 means to not limit the depth. If [includeErroneous] is true, [PackageReference]s with issues
+     * (but not their dependencies without issues) are excluded, otherwise they are included.
      */
     fun collectDependencies(maxDepth: Int = -1, includeErroneous: Boolean = true): SortedSet<PackageReference> =
         dependencies.fold(sortedSetOf<PackageReference>()) { refs, ref ->
             refs.also {
                 if (maxDepth != 0) {
-                    if (ref.errors.isEmpty() || includeErroneous) it += ref
+                    if (ref.issues.isEmpty() || includeErroneous) it += ref
                     it += ref.collectDependencies(maxDepth - 1, includeErroneous)
                 }
             }
@@ -95,9 +97,9 @@ data class PackageReference(
         dependencies.filter { it.id == id } + dependencies.flatMap { it.findReferences(id) }
 
     /**
-     * Return whether this package reference or any of its dependencies has errors.
+     * Return whether this package reference or any of its dependencies has issues.
      */
-    fun hasErrors(): Boolean = errors.isNotEmpty() || dependencies.any { it.hasErrors() }
+    fun hasIssues(): Boolean = issues.isNotEmpty() || dependencies.any { it.hasIssues() }
 
     /**
      * Apply the provided [transform] to each node in the dependency tree represented by this [PackageReference] and

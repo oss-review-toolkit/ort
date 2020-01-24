@@ -4,7 +4,8 @@ The sections below outline the steps needed to add support for a new package man
 
 ## 1. Initial Questions / Requirements
 
-Before you start any implementation work, determine whether the package manager meets the minimal requirements to provide the data needed for OSS Review Toolkit to work.
+Before you start any implementation work, determine whether the package manager meets the minimal requirements to
+provide the data needed for OSS Review Toolkit to work.
 
 Answers to the questions below should help you. 
 

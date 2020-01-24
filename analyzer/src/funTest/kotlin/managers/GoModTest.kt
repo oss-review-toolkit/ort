@@ -56,7 +56,7 @@ class GoModTest : StringSpec() {
             val result = createGoMod().resolveDependencies(listOf(definitionFile))[definitionFile]
 
             result shouldNotBe null
-            result!!.errors should beEmpty()
+            result!!.issues should beEmpty()
             yamlMapper.writeValueAsString(result) shouldBe expectedResult
         }
     }

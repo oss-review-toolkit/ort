@@ -88,26 +88,26 @@ class PnpmTest : WordSpec() {
                 yamlMapper.writeValueAsString(result) shouldBe expectedResult
             }
 
-            "resolve dependencies even if the node_modules directory already exists" {
-                val workingDir = File(projectsDir, "node-modules")
-                val packageFile = File(workingDir, "package.json")
-
-                // val expectedOutput = createPNPM().resolveDependencies(listOf(packageFile))[packageFile]
-                // yamlMapper.writeValue(File("$workingDir/pnpm-node-modules-expected-output.yml"), expectedOutput)
-
-                val result = createPNPM().resolveDependencies(listOf(packageFile))[packageFile]
-                val vcsPath = vcsDir.getPathToRoot(workingDir)
-                val expectedResult = patchExpectedResult(
-                    File(projectsDir.parentFile, "pnpm-expected-output.yml"),
-                    custom = Pair("pnpm-project", "pnpm-${workingDir.name}"),
-                    definitionFilePath = "$vcsPath/package.json",
-                    url = normalizeVcsUrl(vcsUrl),
-                    revision = vcsRevision,
-                    path = vcsPath
-                )
-
-                yamlMapper.writeValueAsString(result) shouldBe expectedResult
-            }
+            // "resolve dependencies even if the node_modules directory already exists" {
+            //     val workingDir = File(projectsDir, "node-modules")
+            //     val packageFile = File(workingDir, "package.json")
+            //
+            //     // val expectedOutput = createPNPM().resolveDependencies(listOf(packageFile))[packageFile]
+            //     // yamlMapper.writeValue(File("$workingDir/pnpm-node-modules-expected-output.yml"), expectedOutput)
+            //
+            //     val result = createPNPM().resolveDependencies(listOf(packageFile))[packageFile]
+            //     val vcsPath = vcsDir.getPathToRoot(workingDir)
+            //     val expectedResult = patchExpectedResult(
+            //         File(projectsDir.parentFile, "pnpm-expected-output.yml"),
+            //         custom = Pair("pnpm-project", "pnpm-${workingDir.name}"),
+            //         definitionFilePath = "$vcsPath/package.json",
+            //         url = normalizeVcsUrl(vcsUrl),
+            //         revision = vcsRevision,
+            //         path = vcsPath
+            //     )
+            //
+            //     yamlMapper.writeValueAsString(result) shouldBe expectedResult
+            // }
 
             "show error if no pnpm lockfile is present" {
                 val workingDir = File(projectsDir, "no-lockfile")

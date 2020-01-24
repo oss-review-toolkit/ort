@@ -143,7 +143,7 @@ object OrtMain : CommandWithHelp() {
             parse(*args)
         }
 
-        showVersionHeader(jc.parsedCommand)
+        println(getVersionHeader(jc.parsedCommand))
 
         val config = loadConfig()
 
@@ -167,7 +167,7 @@ object OrtMain : CommandWithHelp() {
         return commandObject.run(jc, config)
     }
 
-    private fun showVersionHeader(commandName: String?) {
+    private fun getVersionHeader(commandName: String?): String {
         val env = Environment()
 
         val variables = mutableListOf("$ORT_USER_HOME_ENV = ${getUserOrtDirectory()}")
@@ -178,6 +178,7 @@ object OrtMain : CommandWithHelp() {
 
         var variableIndex = 0
 
+        val header = mutableListOf<String>()
         """
             ________ _____________________
             \_____  \\______   \__    ___/ the OSS Review Toolkit, version ${env.ortVersion}.
@@ -185,15 +186,15 @@ object OrtMain : CommandWithHelp() {
             /    |    \    |   \ |    |    ${variables.getOrElse(variableIndex++) { "" }}
             \_______  /____|_  / |____|    ${variables.getOrElse(variableIndex++) { "" }}
                     \/       \/
-        """.trimIndent().lines().forEach { println(it.trimEnd()) }
+        """.trimIndent().lines().mapTo(header) { it.trimEnd() }
 
         val moreVariables = variables.drop(variableIndex)
         if (moreVariables.isNotEmpty()) {
-            println("More environment variables:")
-            moreVariables.forEach(::println)
+            header += "More environment variables:"
+            header += moreVariables
         }
 
-        println()
+        return header.joinToString("\n", postfix = "\n")
     }
 
     private fun loadConfig(): OrtConfiguration {

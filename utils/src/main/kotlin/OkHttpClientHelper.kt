@@ -24,18 +24,13 @@ import java.net.InetSocketAddress
 import java.net.MalformedURLException
 import java.net.Proxy
 import java.net.URL
-import java.net.URLConnection
 
 import okhttp3.Authenticator
 import okhttp3.Cache
 import okhttp3.ConnectionSpec
 import okhttp3.Credentials
-import okhttp3.MediaType
-import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.OkHttpClient
 import okhttp3.Request
-import okhttp3.RequestBody
-import okhttp3.RequestBody.Companion.asRequestBody
 import okhttp3.Response
 import okhttp3.Route
 
@@ -49,19 +44,6 @@ object OkHttpClientHelper {
      * A constant for the "too many requests" HTTP code as HttpURLConnection has none.
      */
     const val HTTP_TOO_MANY_REQUESTS = 429
-
-    /**
-     * Guess the media type based on the file component of a string.
-     */
-    private fun guessMediaType(name: String): MediaType? {
-        val contentType = URLConnection.guessContentTypeFromName(name) ?: "application/octet-stream"
-        return contentType.toMediaTypeOrNull()
-    }
-
-    /**
-     * Create a request body for the specified file.
-     */
-    fun createRequestBody(source: File): RequestBody = source.asRequestBody(guessMediaType(source.name))
 
     /**
      * Apply HTTP proxy settings from a [url], optionally with credentials included.
@@ -89,15 +71,10 @@ object OkHttpClientHelper {
     }
 
     /**
-     * Apply HTTP proxy settings from the "https_proxy" or "http_proxy" environment variables.
+     * Apply HTTP proxy settings from environment variables.
      */
     fun OkHttpClient.Builder.applyProxySettingsFromEnv(): OkHttpClient.Builder {
-        fun String.addProtocol(protocol: String) = if (!startsWith("http")) "$protocol://$this" else this
-
-        val proxyUrl = Os.env["https_proxy"]?.addProtocol("https")
-            ?: Os.env["http_proxy"]?.addProtocol("http")
-
-        if (proxyUrl != null) {
+        Os.proxy?.let { proxyUrl ->
             try {
                 applyProxySettingsFromUrl(URL(proxyUrl))
             } catch (e: MalformedURLException) {
@@ -111,11 +88,11 @@ object OkHttpClientHelper {
     }
 
     /**
-     * Execute a [request] using the client for the specified [cache directory][cachePath]. The client can optionally
-     * be further configured via the [block].
+     * Build a client that uses the specified [cache directory][cachePath]. Proxy environment variables are by default
+     * regarded, but the client can further be configured via the [block].
      */
-    fun execute(cachePath: String, request: Request, block: OkHttpClient.Builder.() -> Unit = {}): Response {
-        val client = clients.getOrPut(cachePath) {
+    fun buildClient(cachePath: String, block: OkHttpClient.Builder.() -> Unit = {}): OkHttpClient =
+        clients.getOrPut(cachePath) {
             val cacheDirectory = File(getUserOrtDirectory(), cachePath)
             val maxCacheSizeInBytes = 1024L * 1024L * 1024L
             val cache = Cache(cacheDirectory, maxCacheSizeInBytes)
@@ -128,6 +105,10 @@ object OkHttpClientHelper {
                 .build()
         }
 
-        return client.newCall(request).execute()
-    }
+    /**
+     * Execute a [request] using the client for the specified [cache directory][cachePath]. The client can optionally
+     * be further configured via the [block].
+     */
+    fun execute(cachePath: String, request: Request, block: OkHttpClient.Builder.() -> Unit = {}): Response =
+        buildClient(cachePath, block).newCall(request).execute()
 }

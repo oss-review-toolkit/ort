@@ -90,6 +90,7 @@ object HelperMain : CommandWithHelp() {
             addCommand(ListLicensesCommand())
             addCommand(ListPackagesCommand())
             addCommand(MapCopyrightsCommand())
+            addCommand(MergeRepositoryConfigurationsCommand())
             addCommand(RemoveConfigurationEntriesCommand())
             addCommand(SortRepositoryConfigurationCommand())
             addCommand(VerifySourceArtifactCurationsCommand())

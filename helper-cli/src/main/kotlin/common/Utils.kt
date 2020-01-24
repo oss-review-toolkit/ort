@@ -37,10 +37,13 @@ import com.here.ort.model.Severity
 import com.here.ort.model.TextLocation
 import com.here.ort.model.VcsInfo
 import com.here.ort.model.config.AnalyzerConfiguration
-import com.here.ort.model.config.ErrorResolution
+import com.here.ort.model.config.Curations
+import com.here.ort.model.config.Excludes
+import com.here.ort.model.config.IssueResolution
 import com.here.ort.model.config.LicenseFindingCuration
 import com.here.ort.model.config.PathExclude
 import com.here.ort.model.config.RepositoryConfiguration
+import com.here.ort.model.config.Resolutions
 import com.here.ort.model.config.RuleViolationResolution
 import com.here.ort.model.config.ScopeExclude
 import com.here.ort.model.utils.FindingCurationMatcher
@@ -360,7 +363,7 @@ fun OrtResult.getScanIssues(omitExcluded: Boolean = false): List<OrtIssue> {
     scanner?.results?.scanResults?.forEach { container ->
         if (!omitExcluded || !isExcluded(container.id)) {
             container.results.forEach { scanResult ->
-                result.addAll(scanResult.summary.errors)
+                result.addAll(scanResult.summary.issues)
             }
         }
     }
@@ -410,11 +413,11 @@ internal fun OrtResult.getUnresolvedRuleViolations(): List<RuleViolation> {
 }
 
 /**
- * Return a copy with the [ErrorResolution]s replaced by the given [errorResolutions].
+ * Return a copy with the [IssueResolution]s replaced by the given [issueResolutions].
  */
-internal fun RepositoryConfiguration.replaceErrorResolutions(
-    errorResolutions: List<ErrorResolution>
-): RepositoryConfiguration = copy(resolutions = resolutions.copy(errors = errorResolutions))
+internal fun RepositoryConfiguration.replaceIssueResolutions(
+    issueResolutions: List<IssueResolution>
+): RepositoryConfiguration = copy(resolutions = resolutions.copy(issues = issueResolutions))
 
 /**
  * Return a copy with the [LicenseFindingCuration]s replaced by the given scope excludes.
@@ -577,22 +580,15 @@ internal fun RepositoryPathExcludes.mergePathExcludes(
 }
 
 /**
- * Merge the given [PathExclude]s replacing entries with equal [PathExclude.pattern].
- * If the given [updateOnlyExisting] is true then only entries with matching [PathExclude.pattern] are merged.
+ * Merge the given [IssueResolution]s replacing entries with equal [IssueResolution.message].
  */
-internal fun Collection<PathExclude>.mergePathExcludes(
-    other: Collection<PathExclude>,
-    updateOnlyExisting: Boolean = false
-): List<PathExclude> {
-    val result = mutableMapOf<String, PathExclude>()
+internal fun Collection<IssueResolution>.mergeIssueResolutions(
+    other: Collection<IssueResolution>
+): List<IssueResolution> {
+    val result = mutableMapOf<String, IssueResolution>()
 
-    associateByTo(result) { it.pattern }
-
-    other.forEach {
-        if (!updateOnlyExisting || result.containsKey(it.pattern)) {
-            result[it.pattern] = it
-        }
-    }
+    associateByTo(result) { it.message }
+    other.associateByTo(result) { it.message }
 
     return result.values.toList()
 }
@@ -630,3 +626,72 @@ private data class LicenseFindingCurationHashKey(
 
 private fun LicenseFindingCuration.hashKey() =
     LicenseFindingCurationHashKey(path, startLines, lineCount, detectedLicense, concludedLicense)
+
+/**
+ * Merge the given [PathExclude]s replacing entries with equal [PathExclude.pattern].
+ * If the given [updateOnlyExisting] is true then only entries with matching [PathExclude.pattern] are merged.
+ */
+internal fun Collection<PathExclude>.mergePathExcludes(
+    other: Collection<PathExclude>,
+    updateOnlyExisting: Boolean = false
+): List<PathExclude> {
+    val result = mutableMapOf<String, PathExclude>()
+
+    associateByTo(result) { it.pattern }
+
+    other.forEach {
+        if (!updateOnlyExisting || result.containsKey(it.pattern)) {
+            result[it.pattern] = it
+        }
+    }
+
+    return result.values.toList()
+}
+
+/**
+ * Merge the given [ScopeExclude]s replacing entries with equal [ScopeExclude.pattern].
+ */
+internal fun Collection<ScopeExclude>.mergeScopeExcludes(
+    other: Collection<ScopeExclude>
+): List<ScopeExclude> {
+    val result = mutableMapOf<String, ScopeExclude>()
+
+    associateByTo(result) { it.pattern }
+    other.associateByTo(result) { it.pattern }
+
+    return result.values.toList()
+}
+
+/**
+ * Merge the given [RuleViolationResolution]s replacing entries with equal [RuleViolationResolution.message].
+ */
+internal fun Collection<RuleViolationResolution>.mergeRuleViolationResolutions(
+    other: Collection<RuleViolationResolution>
+): List<RuleViolationResolution> {
+    val result = mutableMapOf<String, RuleViolationResolution>()
+
+    associateByTo(result) { it.message }
+    other.associateByTo(result) { it.message }
+
+    return result.values.toList()
+}
+
+/**
+ * Merge the given [RepositoryConfiguration] replacing entries with equal matchers.
+ */
+internal fun RepositoryConfiguration.merge(
+    other: RepositoryConfiguration
+): RepositoryConfiguration =
+    RepositoryConfiguration(
+        excludes = Excludes(
+            paths = excludes.paths.mergePathExcludes(other.excludes.paths),
+            scopes = excludes.scopes.mergeScopeExcludes(other.excludes.scopes)
+        ),
+        curations = Curations(
+            curations.licenseFindings.mergeLicenseFindingCurations(other.curations.licenseFindings)
+        ),
+        resolutions = Resolutions(
+            issues = resolutions.issues.mergeIssueResolutions(other.resolutions.issues),
+            ruleViolations = resolutions.ruleViolations.mergeRuleViolationResolutions(other.resolutions.ruleViolations)
+        )
+    )

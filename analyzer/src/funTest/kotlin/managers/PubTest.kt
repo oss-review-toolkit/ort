@@ -120,8 +120,8 @@ class PubTest : WordSpec() {
                     project.definitionFilePath shouldBe
                             "analyzer/src/funTest/assets/projects/synthetic/pub/no-lockfile/pubspec.yaml"
                     packages.size shouldBe 0
-                    errors.size shouldBe 1
-                    errors.first().message should haveSubstring("IllegalArgumentException: No lockfile found in")
+                    issues.size shouldBe 1
+                    issues.first().message should haveSubstring("IllegalArgumentException: No lockfile found in")
                 }
             }
         }

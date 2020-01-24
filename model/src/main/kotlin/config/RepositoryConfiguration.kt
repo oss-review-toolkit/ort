@@ -56,7 +56,7 @@ class ExcludesFilter {
 @Suppress("EqualsWithHashCodeExist") // The class is not supposed to be used with hashing.
 class ResolutionsFilter {
     override fun equals(other: Any?): Boolean =
-        if (other is Resolutions) other.errors.isEmpty() && other.ruleViolations.isEmpty() else false
+        if (other is Resolutions) other.issues.isEmpty() && other.ruleViolations.isEmpty() else false
 }
 
 @Suppress("EqualsWithHashCodeExist") // The class is not supposed to be used with hashing.

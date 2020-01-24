@@ -204,5 +204,5 @@ val ruleSet = ruleSet(ortResult) {
 }
 
 
-// Populate the list of policy rule violation errors to return
+// Populate the list of policy rule violations to return.
 ruleViolations += ruleSet.violations

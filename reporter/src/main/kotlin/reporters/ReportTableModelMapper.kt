@@ -41,7 +41,7 @@ private fun Collection<ResolvableIssue>.filterUnresolved() = filter { !it.isReso
  */
 class ReportTableModelMapper(private val resolutionProvider: ResolutionProvider) {
     private fun OrtIssue.toResolvableIssue(): ResolvableIssue {
-        val resolutions = resolutionProvider.getErrorResolutionsFor(this)
+        val resolutions = resolutionProvider.getIssueResolutionsFor(this)
         return ResolvableIssue(
             source = this@toResolvableIssue.source,
             description = this@toResolvableIssue.toString(),
@@ -105,13 +105,13 @@ class ReportTableModelMapper(private val resolutionProvider: ResolutionProvider)
                 val declaredLicenses = ortResult.getDeclaredLicensesForId(id)
                 val detectedLicenses = licenseFindings[id]?.toSortedMap(compareBy { it.license }) ?: sortedMapOf()
 
-                val analyzerIssues = project.collectErrors(id).toMutableList()
-                analyzerResult.errors[id]?.let {
+                val analyzerIssues = project.collectIssues(id).toMutableList()
+                analyzerResult.issues[id]?.let {
                     analyzerIssues += it
                 }
 
                 val scanIssues = scanResult?.results?.flatMap {
-                    it.summary.errors
+                    it.summary.issues
                 }?.distinct().orEmpty()
 
                 val packageForId = ortResult.getPackage(id)?.pkg ?: ortResult.getProject(id)?.toPackage()

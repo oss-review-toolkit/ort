@@ -17,9 +17,8 @@
  * License-Filename: LICENSE
  */
 
-package com.here.ort.downloader
+package com.here.ort.downloader.vcs
 
-import com.here.ort.downloader.vcs.Subversion
 import com.here.ort.model.VcsType
 import com.here.ort.utils.getUserOrtDirectory
 import com.here.ort.utils.safeDeleteRecursively

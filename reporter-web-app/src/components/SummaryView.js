@@ -23,7 +23,7 @@ import PropTypes from 'prop-types';
 import {
     Col, Row, Tabs
 } from 'antd';
-import ErrorsTable from './ErrorsTable';
+import IssuesTable from './IssuesTable';
 import SummaryViewLicenses from './SummaryViewLicenses';
 import SummaryViewTimeline from './SummaryViewTimeline';
 import PackageCollapse from './PackageCollapse';
@@ -65,7 +65,7 @@ class SummaryView extends React.Component {
                 </Row>
                 <Row>
                     <Col span={22} offset={1}>
-                        {(webAppOrtResult.hasErrors() || webAppOrtResult.hasViolations())
+                        {(webAppOrtResult.hasIssues() || webAppOrtResult.hasViolations())
                             && (
                                 <Tabs tabPosition="top" className="ort-summary-issues">
                                     { webAppOrtResult.hasViolations()
@@ -89,11 +89,11 @@ class SummaryView extends React.Component {
                                                                     type: ['LICENSE'],
                                                                     value: [violation.license]
                                                                 }}
-                                                                includeErrors
+                                                                includeIssues
                                                                 includeScanFindings
                                                                 includeViolations={false}
                                                                 showDetails={false}
-                                                                showErrors={false}
+                                                                showIssues={false}
                                                                 showLicenses
                                                                 showScanFindings
                                                                 webAppOrtResult={webAppOrtResult}
@@ -106,24 +106,24 @@ class SummaryView extends React.Component {
                                             </TabPane>
                                         )
                                     }
-                                    { webAppOrtResult.hasErrors()
+                                    { webAppOrtResult.hasIssues()
                                         && (
                                             <TabPane
                                                 tab={(
                                                     <span>
-                                                        Errors (
-                                                        {webAppOrtResult.errors.length}
+                                                        Issues (
+                                                        {webAppOrtResult.issues.length}
                                                         )
                                                     </span>
                                                 )}
                                                 key="2"
                                             >
-                                                <ErrorsTable
+                                                <IssuesTable
                                                     expandedRowRender={
-                                                        error => (
+                                                        issue => (
                                                             <PackageCollapse
-                                                                pkg={webAppOrtResult.getPackageById(error.pkg)}
-                                                                includeErrors={false}
+                                                                pkg={webAppOrtResult.getPackageById(issue.pkg)}
+                                                                includeIssues={false}
                                                                 includeScanFindings={false}
                                                                 includeViolations={false}
                                                                 showDetails
@@ -133,7 +133,7 @@ class SummaryView extends React.Component {
                                                             />
                                                         )
                                                     }
-                                                    errors={webAppOrtResult.errors}
+                                                    issues={webAppOrtResult.issues}
                                                     showPackageColumn
                                                 />
                                             </TabPane>
