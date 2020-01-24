@@ -19,11 +19,24 @@
 
 package com.here.ort.commands
 
-import com.beust.jcommander.JCommander
-import com.beust.jcommander.Parameter
-import com.beust.jcommander.Parameters
+import com.github.ajalt.clikt.core.CliktCommand
+import com.github.ajalt.clikt.core.UsageError
+import com.github.ajalt.clikt.parameters.groups.mutuallyExclusiveOptions
+import com.github.ajalt.clikt.parameters.groups.required
+import com.github.ajalt.clikt.parameters.groups.single
+import com.github.ajalt.clikt.parameters.options.convert
+import com.github.ajalt.clikt.parameters.options.default
+import com.github.ajalt.clikt.parameters.options.flag
+import com.github.ajalt.clikt.parameters.options.option
+import com.github.ajalt.clikt.parameters.options.required
+import com.github.ajalt.clikt.parameters.options.split
+import com.github.ajalt.clikt.parameters.options.wrapValue
+import com.github.ajalt.clikt.parameters.types.enum
+import com.github.ajalt.clikt.parameters.types.file
 
-import com.here.ort.CommandWithHelp
+import com.here.ort.GroupTypes
+import com.here.ort.GroupTypes.FileType
+import com.here.ort.GroupTypes.StringType
 import com.here.ort.downloader.DownloadException
 import com.here.ort.downloader.Downloader
 import com.here.ort.model.Identifier
@@ -32,11 +45,8 @@ import com.here.ort.model.Package
 import com.here.ort.model.RemoteArtifact
 import com.here.ort.model.VcsInfo
 import com.here.ort.model.VcsType
-import com.here.ort.model.config.OrtConfiguration
 import com.here.ort.model.readValue
 import com.here.ort.utils.ARCHIVE_EXTENSIONS
-import com.here.ort.utils.PARAMETER_ORDER_MANDATORY
-import com.here.ort.utils.PARAMETER_ORDER_OPTIONAL
 import com.here.ort.utils.collectMessagesAsString
 import com.here.ort.utils.encodeOrUnknown
 import com.here.ort.utils.expandTilde
@@ -47,137 +57,108 @@ import com.here.ort.utils.showStackTrace
 
 import java.io.File
 
-@Parameters(commandNames = ["download"], commandDescription = "Fetch source code from a remote location.")
-object DownloaderCommand : CommandWithHelp() {
-    @Parameter(
-        description = "An ORT result file with an analyzer result to use. Must not be used together with " +
-                "'--project-url'.",
-        names = ["--ort-file", "-i"],
-        order = PARAMETER_ORDER_OPTIONAL
+class DownloaderCommand : CliktCommand(name = "download", help = "Fetch source code from a remote location.") {
+    private val input by mutuallyExclusiveOptions<GroupTypes>(
+        option(
+            "--ort-file", "-i",
+            help = "An ORT result file with an analyzer result to use. Must not be used together with '--project-url'."
+        ).file(exists = true, fileOkay = true, folderOkay = false, writable = false, readable = true)
+            .wrapValue(::FileType),
+        option(
+            "--project-url",
+            help = "A VCS or archive URL of a project to download. Must not be used together with '--ort-file'."
+        ).convert { StringType(it) }
+    ).single().required()
+
+    private val projectNameOption by option(
+        "--project-name",
+        help = "The speaking name of the project to download. For use together with '--project-url'. Will be ignored " +
+                "if '--ort-file' is also specified."
     )
-    private var ortFile: File? = null
 
-    @Parameter(
-        description = "A VCS or archive URL of a project to download. Must not be used together with " +
-                "'--ort-file'.",
-        names = ["--project-url"],
-        order = PARAMETER_ORDER_OPTIONAL
-    )
-    private var projectUrl: String? = null
+    private val vcsType by option(
+        "--vcs-type",
+        help = "The VCS type if '--project-url' points to a VCS. Will be ignored if '--ort-file' is also specified."
+    ).default("")
 
-    @Parameter(
-        description = "The speaking name of the project to download. For use together with '--project-url'. " +
-                "Will be ignored if '--ort-file' is also specified.",
-        names = ["--project-name"],
-        order = PARAMETER_ORDER_OPTIONAL
-    )
-    private var projectName: String? = null
+    private val vcsRevision by option(
+        "--vcs-revision",
+        help = "The VCS revision if '--project-url' points to a VCS. Will be ignored if '--ort-file' is also specified."
+    ).default("")
 
-    @Parameter(
-        description = "The VCS type if '--project-url' points to a VCS. Will be ignored if '--ort-file' is " +
-                "also specified.",
-        names = ["--vcs-type"],
-        order = PARAMETER_ORDER_OPTIONAL
-    )
-    private var vcsType = ""
+    private val vcsPath by option(
+        "--vcs-path",
+        help = "The VCS path if '--project-url' points to a VCS. Will be ignored if '--ort-file' is also specified."
+    ).default("")
 
-    @Parameter(
-        description = "The VCS revision if '--project-url' points to a VCS. Will be ignored if '--ort-file' " +
-                "is also specified.",
-        names = ["--vcs-revision"],
-        order = PARAMETER_ORDER_OPTIONAL
-    )
-    private var vcsRevision = ""
+    private val outputDir by option(
+        "--output-dir", "-o",
+        help = "The output directory to download the source code to."
+    ).file(exists = false, fileOkay = false, folderOkay = true, writable = false, readable = false).required()
 
-    @Parameter(
-        description = "The VCS path if '--project-url' points to a VCS. Will be ignored if '--ort-file' is " +
-                "also specified.",
-        names = ["--vcs-path"],
-        order = PARAMETER_ORDER_OPTIONAL
-    )
-    private var vcsPath = ""
+    private val archive by option(
+        "--archive",
+        help = "Archive the downloaded source code as ZIP files to the output directory."
+    ).flag()
 
-    @Parameter(
-        description = "The output directory to download the source code to.",
-        names = ["--output-dir", "-o"],
-        required = true,
-        order = PARAMETER_ORDER_MANDATORY
-    )
-    @Suppress("LateinitUsage")
-    private lateinit var outputDir: File
+    private val entities by option(
+        "--entities", "-e",
+        help = "The data entities from the ORT file's analyzer result to limit downloads to. If not specified, all " +
+                "data entities are downloaded."
+    ).enum<Downloader.DataEntity>().split(",").default(emptyList())
 
-    @Parameter(
-        description = "Archive the downloaded source code as ZIP files to the output directory.",
-        names = ["--archive"],
-        order = PARAMETER_ORDER_OPTIONAL
-    )
-    private var archive = false
+    private val allowMovingRevisionsOption by option(
+        "--allow-moving-revisions",
+        help = "Allow the download of moving revisions (like e.g. HEAD or master in Git). By default these revision " +
+                "are forbidden because they are not pointing to a stable revision of the source code."
+    ).flag()
 
-    @Parameter(
-        description = "The data entities from the ORT file's analyzer result to limit downloads to. If not specified," +
-                "all data entities are downloaded.",
-        names = ["--entities", "-e"],
-        order = PARAMETER_ORDER_OPTIONAL
-    )
-    private var entities = enumValues<Downloader.DataEntity>().asList()
+    override fun run() {
+        var allowMovingRevisions = allowMovingRevisionsOption
 
-    @Parameter(
-        description = "Allow the download of moving revisions (like e.g. HEAD or master in Git). By default " +
-                "these revision are forbidden because they are not pointing to a stable revision of the source code.",
-        names = ["--allow-moving-revisions"],
-        order = PARAMETER_ORDER_OPTIONAL
-    )
-    private var allowMovingRevisions = false
+        val packages = when (input) {
+            is FileType -> {
+                val absoluteOrtFile = (input as FileType).file.expandTilde().normalize()
+                val analyzerResult = absoluteOrtFile.readValue<OrtResult>().analyzer?.result
 
-    override fun runCommand(jc: JCommander, config: OrtConfiguration): Int {
-        require((ortFile != null) != (projectUrl != null)) {
-            "Either '--ort-file' or '--project-url' must be specified."
-        }
-
-        val packages = ortFile?.expandTilde()?.let { absoluteOrtFile ->
-            require(absoluteOrtFile.isFile) {
-                "Provided path is not a file: $absoluteOrtFile"
-            }
-
-            val analyzerResult = absoluteOrtFile.readValue<OrtResult>().analyzer?.result
-
-            requireNotNull(analyzerResult) {
-                "The provided ORT result file '$absoluteOrtFile' does not contain an analyzer result."
-            }
-
-            mutableListOf<Package>().apply {
-                entities = entities.distinct()
-
-                if (Downloader.DataEntity.PROJECT in entities) {
-                    addAll(Downloader.consolidateProjectPackagesByVcs(analyzerResult.projects).keys)
+                requireNotNull(analyzerResult) {
+                    "The provided ORT result file '$absoluteOrtFile' does not contain an analyzer result."
                 }
 
-                if (Downloader.DataEntity.PACKAGES in entities) {
-                    addAll(analyzerResult.packages.map { curatedPackage -> curatedPackage.pkg })
+                mutableListOf<Package>().apply {
+                    if (Downloader.DataEntity.PROJECT in entities) {
+                        addAll(Downloader.consolidateProjectPackagesByVcs(analyzerResult.projects).keys)
+                    }
+
+                    if (Downloader.DataEntity.PACKAGES in entities) {
+                        addAll(analyzerResult.packages.map { curatedPackage -> curatedPackage.pkg })
+                    }
                 }
             }
-        } ?: run {
-            allowMovingRevisions = true
 
-            val projectFile = File(projectUrl)
-            if (projectName == null) {
-                projectName = projectFile.nameWithoutExtension
+            is StringType -> {
+                val projectUrl = (input as StringType).string
+
+                val projectFile = File(projectUrl)
+                val projectName = projectNameOption ?: projectFile.nameWithoutExtension
+
+                val dummyId = Identifier("Downloader::$projectName:")
+                val dummyPackage = if (ARCHIVE_EXTENSIONS.any { projectFile.name.endsWith(it) }) {
+                    Package.EMPTY.copy(id = dummyId, sourceArtifact = RemoteArtifact.EMPTY.copy(url = projectUrl))
+                } else {
+                    val vcs = VcsInfo(
+                        type = VcsType(vcsType),
+                        url = projectUrl,
+                        revision = vcsRevision,
+                        path = vcsPath
+                    )
+                    Package.EMPTY.copy(id = dummyId, vcs = vcs, vcsProcessed = vcs.normalize())
+                }
+
+                allowMovingRevisions = true
+
+                listOf(dummyPackage)
             }
-
-            val dummyId = Identifier("Downloader::$projectName:")
-            val dummyPackage = if (ARCHIVE_EXTENSIONS.any { projectFile.name.endsWith(it) }) {
-                Package.EMPTY.copy(id = dummyId, sourceArtifact = RemoteArtifact.EMPTY.copy(url = projectUrl!!))
-            } else {
-                val vcs = VcsInfo(
-                    type = VcsType(vcsType),
-                    url = projectUrl!!,
-                    revision = vcsRevision,
-                    path = vcsPath
-                )
-                Package.EMPTY.copy(id = dummyId, vcs = vcs, vcsProcessed = vcs.normalize())
-            }
-
-            listOf(dummyPackage)
         }
 
         var error = false
@@ -223,6 +204,6 @@ object DownloaderCommand : CommandWithHelp() {
             }
         }
 
-        return if (error) 2 else 0
+        if (error) throw UsageError("An error occurred.", statusCode = 2)
     }
 }

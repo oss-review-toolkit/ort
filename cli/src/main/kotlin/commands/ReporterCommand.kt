@@ -19,13 +19,16 @@
 
 package com.here.ort.commands
 
-import com.beust.jcommander.IStringConverter
-import com.beust.jcommander.JCommander
-import com.beust.jcommander.Parameter
-import com.beust.jcommander.ParameterException
-import com.beust.jcommander.Parameters
+import com.github.ajalt.clikt.core.BadParameterValue
+import com.github.ajalt.clikt.core.CliktCommand
+import com.github.ajalt.clikt.core.UsageError
+import com.github.ajalt.clikt.core.requireObject
+import com.github.ajalt.clikt.parameters.options.convert
+import com.github.ajalt.clikt.parameters.options.option
+import com.github.ajalt.clikt.parameters.options.required
+import com.github.ajalt.clikt.parameters.options.split
+import com.github.ajalt.clikt.parameters.types.file
 
-import com.here.ort.CommandWithHelp
 import com.here.ort.model.OrtResult
 import com.here.ort.model.config.CopyrightGarbage
 import com.here.ort.model.config.OrtConfiguration
@@ -38,105 +41,73 @@ import com.here.ort.reporter.DefaultLicenseTextProvider
 import com.here.ort.reporter.DefaultResolutionProvider
 import com.here.ort.reporter.Reporter
 import com.here.ort.reporter.ReporterInput
-import com.here.ort.utils.PARAMETER_ORDER_MANDATORY
-import com.here.ort.utils.PARAMETER_ORDER_OPTIONAL
 import com.here.ort.utils.collectMessagesAsString
 import com.here.ort.utils.expandTilde
-import com.here.ort.utils.log
 import com.here.ort.utils.safeMkdirs
 import com.here.ort.utils.showStackTrace
 
 import java.io.File
 
-@Parameters(
-    commandNames = ["report"],
-    commandDescription = "Present Analyzer and Scanner results in various formats."
-)
-object ReporterCommand : CommandWithHelp() {
-    private class ReporterConverter : IStringConverter<Reporter> {
-        companion object {
-            // Map upper-cased reporter names to their instances.
-            val REPORTERS = Reporter.ALL.associateBy { it.reporterName.toUpperCase() }
-        }
+class ReporterCommand : CliktCommand(
+    name = "report",
+    help = "Present Analyzer and Scanner results in various formats."
+) {
+    private val ortFile by option(
+        "--ort-file", "-i",
+        help = "The ORT result file to use."
+    ).file(exists = true, fileOkay = true, folderOkay = false, writable = false, readable = true).required()
 
-        override fun convert(name: String): Reporter =
-            REPORTERS[name.toUpperCase()]
-                ?: throw ParameterException("Reporters must be contained in ${REPORTERS.keys}.")
-    }
+    private val outputDir by option(
+        "--output-dir", "-o",
+        help = "The output directory to store the generated reports in."
+    ).file(exists = false, fileOkay = false, folderOkay = true, writable = false, readable = false).required()
 
-    @Parameter(
-        description = "The ORT result file to use.",
-        names = ["--ort-file", "-i"],
-        required = true,
-        order = PARAMETER_ORDER_MANDATORY
-    )
-    private lateinit var ortFile: File
+    private val reporters by option(
+        "--report-formats", "-f",
+        help = "The list of report formats that will be generated."
+    ).convert { reporterName ->
+        // Map upper-cased reporter names to their instances.
+        val reporters = Reporter.ALL.associateBy { it.reporterName.toUpperCase() }
+        reporters[reporterName.toUpperCase()]
+            ?: throw BadParameterValue("Reporters must be contained in ${reporters.keys}.")
+    }.split(",").required()
 
-    @Parameter(
-        description = "The output directory to store the generated reports in.",
-        names = ["--output-dir", "-o"],
-        required = true,
-        order = PARAMETER_ORDER_MANDATORY
-    )
-    @Suppress("LateinitUsage")
-    private lateinit var outputDir: File
+    private val resolutionsFile by option(
+        "--resolutions-file",
+        help = "A file containing error resolutions."
+    ).file(exists = true, fileOkay = true, folderOkay = false, writable = false, readable = true)
 
-    @Parameter(
-        description = "The list of report formats that will be generated.",
-        names = ["--report-formats", "-f"],
-        converter = ReporterConverter::class,
-        required = true,
-        order = PARAMETER_ORDER_MANDATORY
-    )
-    private lateinit var reporters: List<Reporter>
+    private val preProcessingScript by option(
+        "--pre-processing-script",
+        help = "The path to a Kotlin script to pre-process the notice report before writing it to disk."
+    ).file(exists = true, fileOkay = true, folderOkay = false, writable = false, readable = true)
 
-    @Parameter(
-        description = "A file containing error resolutions.",
-        names = ["--resolutions-file"],
-        order = PARAMETER_ORDER_OPTIONAL
-    )
-    private var resolutionsFile: File? = null
+    private val copyrightGarbageFile by option(
+        "--copyright-garbage-file",
+        help = "A file containing garbage copyright statements entries which are to be ignored."
+    ).file(exists = true, fileOkay = true, folderOkay = false, writable = false, readable = true)
 
-    @Parameter(
-        description = "The path to a Kotlin script to pre-process the notice report before writing it to disk.",
-        names = ["--pre-processing-script"],
-        order = PARAMETER_ORDER_OPTIONAL
-    )
-    private var preProcessingScript: File? = null
+    private val repositoryConfigurationFile by option(
+        "--repository-configuration-file",
+        help = "A file containing the repository configuration. If set the .ort.yml overrides the repository " +
+                "configuration contained in the ort result from the input file."
+    ).file(exists = true, fileOkay = true, folderOkay = false, writable = false, readable = true)
 
-    @Parameter(
-        description = "A file containing garbage copyright statements entries which are to be ignored.",
-        names = ["--copyright-garbage-file"],
-        order = PARAMETER_ORDER_OPTIONAL
-    )
-    private var copyrightGarbageFile: File? = null
+    private val customLicenseTextsDir by option(
+        "--custom-license-texts-dir",
+        help = "A directory which maps custom license IDs to license texts. It should contain one text file per " +
+                "license with the license ID as the filename. A custom license text is used only if its ID has a " +
+                "'LicenseRef-' prefix and if the respective license text is not known by ORT."
+    ).file(exists = false, fileOkay = false, folderOkay = true, writable = false, readable = false)
 
-    @Parameter(
-        description = "A file containing the repository configuration. If set the .ort.yml " +
-                "overrides the repository configuration contained in the ort result from the input file.",
-        names = ["--repository-configuration-file"],
-        order = PARAMETER_ORDER_OPTIONAL
-    )
-    private var repositoryConfigurationFile: File? = null
+    private val licenseConfigurationFile by option(
+        "--license-configuration-file",
+        help = "A file containing the license configuration."
+    ).file(exists = true, fileOkay = true, folderOkay = false, writable = false, readable = true)
 
-    @Parameter(
-        description = "A directory which maps custom license IDs to license texts. " +
-                "It should contain one text file per license with the license ID as the filename. " +
-                "A custom license text is used only if its ID has a 'LicenseRef-' prefix and if " +
-                "the respective license text is not known by ORT.",
-        names = ["--custom-license-texts-dir"],
-        order = PARAMETER_ORDER_OPTIONAL
-    )
-    private var customLicenseTextsDir: File? = null
+    private val config by requireObject<OrtConfiguration>()
 
-    @Parameter(
-        description = "A file containing the license configuration.",
-        names = ["--license-configuration-file"],
-        order = PARAMETER_ORDER_OPTIONAL
-    )
-    private var licenseConfigurationFile: File? = null
-
-    override fun runCommand(jc: JCommander, config: OrtConfiguration): Int {
+    override fun run() {
         val absoluteOutputDir = outputDir.expandTilde().normalize()
 
         val reports = reporters.associateWith { reporter ->
@@ -145,8 +116,7 @@ object ReporterCommand : CommandWithHelp() {
 
         val existingReportFiles = reports.values.filter { it.exists() }
         if (existingReportFiles.isNotEmpty()) {
-            log.error { "None of the report files $existingReportFiles must exist yet." }
-            return 2
+            throw UsageError("None of the report files $existingReportFiles must exist yet.", statusCode = 2)
         }
 
         var ortResult = ortFile.expandTilde().readValue<OrtResult>()
@@ -161,8 +131,6 @@ object ReporterCommand : CommandWithHelp() {
         val copyrightGarbage = copyrightGarbageFile?.expandTilde()?.readValue<CopyrightGarbage>().orEmpty()
 
         val licenseConfiguration = licenseConfigurationFile?.expandTilde()?.readValue<LicenseConfiguration>().orEmpty()
-
-        var exitCode = 0
 
         absoluteOutputDir.safeMkdirs()
 
@@ -185,12 +153,9 @@ object ReporterCommand : CommandWithHelp() {
             } catch (e: Exception) {
                 e.showStackTrace()
 
-                log.error { "Could not create '${reporter.reporterName}' report: ${e.collectMessagesAsString()}" }
-
-                exitCode = 1
+                throw UsageError("Could not create '${reporter.reporterName}' report: ${e.collectMessagesAsString()}",
+                    statusCode = 1)
             }
         }
-
-        return exitCode
     }
 }
