@@ -376,15 +376,15 @@ open class Npm(
     }
 
     private fun buildTree(
-        rootModulesDir: File, startModulesDir: File, name: String, packages: Map<String, Package>,
+        rootModulesDir: File, startModulesDir: File, moduleName: String, packages: Map<String, Package>,
         dependencyBranch: List<String> = emptyList()
     ): PackageReference? {
-        log.debug { "Building dependency tree for '$name' from directory '$startModulesDir'." }
+        log.debug { "Building dependency tree for '$moduleName' from directory '$startModulesDir'." }
 
-        val packageFile = startModulesDir.resolve(name).resolve("package.json")
+        val packageFile = startModulesDir.resolve(moduleName).resolve("package.json")
 
         if (packageFile.isFile) {
-            log.debug { "Found package file for module '$name' at '$packageFile'." }
+            log.debug { "Found package file for module '$moduleName' at '$packageFile'." }
 
             val packageJson = jsonMapper.readTree(packageFile)
             val rawName = packageJson["name"].textValue()
@@ -417,13 +417,13 @@ open class Npm(
                 ?: throw IOException("Could not find package info for $identifier")
             return packageInfo.toReference(dependencies = dependencies)
         } else if (rootModulesDir == startModulesDir) {
-            val id = Identifier(managerName, "", name, "")
+            val id = Identifier(managerName, "", moduleName, "")
 
             val issue = createAndLogIssue(
                 source = managerName,
-                message = "Package '$name' was not installed, because the package file could not be found anywhere " +
-                        "in '$rootModulesDir'. This might be fine if the module was not installed because it is " +
-                        "specific to a different platform."
+                message = "Package '$moduleName' was not installed, because the package file could not be found " +
+                        "anywhere in '$rootModulesDir'. This might be fine if the module was not installed because " +
+                        "it is specific to a different platform."
             )
 
             return PackageReference(id, issues = listOf(issue))
@@ -439,10 +439,11 @@ open class Npm(
             // E.g. when using Yarn workspaces, the dependencies of the projects are consolidated in a single top-level
             // "node_modules" directory for de-duplication, so go up.
             log.debug {
-                "Could not find package file for '$name' in '$startModulesDir', looking in '$parentModulesDir' instead."
+                "Could not find package file for '$moduleName' in '$startModulesDir', looking in '$parentModulesDir' " +
+                        "instead."
             }
 
-            return buildTree(rootModulesDir, parentModulesDir, name, packages, dependencyBranch)
+            return buildTree(rootModulesDir, parentModulesDir, moduleName, packages, dependencyBranch)
         }
     }
 
