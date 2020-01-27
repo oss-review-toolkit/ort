@@ -32,6 +32,7 @@ import com.here.ort.reporter.ReporterInput
 import com.here.ort.reporter.reporters.ReportTableModel.IssueTable
 import com.here.ort.reporter.reporters.ReportTableModel.ProjectTable
 import com.here.ort.reporter.reporters.ReportTableModel.ResolvableIssue
+import com.here.ort.utils.ORT_NAME
 import com.here.ort.utils.isValidUrl
 import com.here.ort.utils.normalizeLineBreaks
 import com.vladsch.flexmark.html.HtmlRenderer
@@ -104,7 +105,7 @@ class StaticHtmlReporter : Reporter {
                         +", the "
                         a {
                             href = "http://oss-review-toolkit.org/"
-                            +"OSS Review Toolkit"
+                            +ORT_NAME
                         }
                         +", version ${Environment().ortVersion} on ${Instant.now()}."
                     }
