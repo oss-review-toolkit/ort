@@ -291,8 +291,7 @@ abstract class VersionControlSystem {
         }
 
         log.info {
-            "Successfully downloaded revision $workingTreeRevision which matches ${pkg.id.name} version " +
-                    "${pkg.id.version}."
+            "Successfully downloaded revision $workingTreeRevision for package '${pkg.id.toCoordinates()}.'."
         }
 
         return workingTree
