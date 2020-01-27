@@ -417,7 +417,8 @@ open class Npm(
                 ?: throw IOException("Could not find package info for $identifier")
             return packageInfo.toReference(dependencies = dependencies)
         } else if (rootModulesDir == startModulesDir) {
-            val id = Identifier(managerName, "", moduleName, "")
+            val (namespace, name) = splitNamespaceAndName(moduleName)
+            val id = Identifier(managerName, namespace, name, "")
 
             val issue = createAndLogIssue(
                 source = managerName,
