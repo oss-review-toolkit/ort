@@ -375,6 +375,21 @@ open class Npm(
         } ?: VcsInfo(VcsType.NONE, "", head)
     }
 
+    private fun getPackageReferenceForMissingModule(moduleName: String, rootModuleDir: File): PackageReference {
+        val issue = createAndLogIssue(
+            source = managerName,
+            message = "Package '$moduleName' was not installed, because the package file could not be found " +
+                    "anywhere in '$rootModuleDir'. This might be fine if the module was not installed because it is " +
+                    "specific to a different platform."
+        )
+        val (namespace, name) = splitNamespaceAndName(moduleName)
+
+        return PackageReference(
+            id = Identifier(managerName, namespace, name, ""),
+            issues = listOf(issue)
+        )
+    }
+
     private fun buildTree(
         rootModulesDir: File, startModulesDir: File, moduleName: String, packages: Map<String, Package>,
         dependencyBranch: List<String> = emptyList()
@@ -417,17 +432,7 @@ open class Npm(
                 ?: throw IOException("Could not find package info for $identifier")
             return packageInfo.toReference(dependencies = dependencies)
         } else if (rootModulesDir == startModulesDir) {
-            val (namespace, name) = splitNamespaceAndName(moduleName)
-            val id = Identifier(managerName, namespace, name, "")
-
-            val issue = createAndLogIssue(
-                source = managerName,
-                message = "Package '$moduleName' was not installed, because the package file could not be found " +
-                        "anywhere in '$rootModulesDir'. This might be fine if the module was not installed because " +
-                        "it is specific to a different platform."
-            )
-
-            return PackageReference(id, issues = listOf(issue))
+            return getPackageReferenceForMissingModule(moduleName, rootModulesDir)
         } else {
             // Skip the package name directory when going up.
             var parentModulesDir = startModulesDir.parentFile.parentFile
