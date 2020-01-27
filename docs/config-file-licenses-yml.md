@@ -1,14 +1,15 @@
 # The `licenses.yml` file
 
-The `licenses.yml` file holds a user-defined the categorization of licenses.
+The `licenses.yml` file holds a user-defined categorization of licenses.
 
 You can use [examples/licenses.yml](examples/licenses.yml) as the base configuration file for your scans.
 
 ### When to Use
 
-Set *include\_in_notice_file* if the licenses does not require attribution.
-Similarly setting include_source_code_offer_in_notice_file to `true` will ensure
-a written source code offers is included at the bottom in the notices.
+Set *include\_in_notice_file* if the license does not require attribution. Similarly setting
+*include_source_code_offer_in_notice_file* to `true` will ensure a written source code offer is included in the notices.
+Licenses can be assigned to license sets like "permissive" or "public domain" which can be used by the
+[rules](file-rules-kts.md) to determine how to handle the license.
 
 ## Command Line
 
