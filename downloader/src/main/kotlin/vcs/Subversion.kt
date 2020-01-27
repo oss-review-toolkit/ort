@@ -33,7 +33,9 @@ import java.nio.file.Paths
 
 import org.tmatesoft.svn.core.SVNDepth
 import org.tmatesoft.svn.core.SVNException
+import org.tmatesoft.svn.core.SVNNodeKind
 import org.tmatesoft.svn.core.SVNURL
+import org.tmatesoft.svn.core.io.SVNRepositoryFactory
 import org.tmatesoft.svn.core.wc.SVNClientManager
 import org.tmatesoft.svn.core.wc.SVNRevision
 import org.tmatesoft.svn.util.Version
@@ -112,9 +114,17 @@ class Subversion : VersionControlSystem() {
         }
 
     override fun isApplicableUrlInternal(vcsUrl: String) =
-        runCatching {
-            clientManager.wcClient.doInfo(SVNURL.parseURIEncoded(vcsUrl), SVNRevision.HEAD, SVNRevision.HEAD)
-        }.isSuccess
+        try {
+            SVNRepositoryFactory.create(SVNURL.parseURIEncoded(vcsUrl)).checkPath("", -1) != SVNNodeKind.NONE
+        } catch (e: SVNException) {
+            e.showStackTrace()
+
+            log.debug {
+                "An exception was thrown when checking $vcsUrl for a $type repository: ${e.collectMessagesAsString()}"
+            }
+
+            false
+        }
 
     override fun initWorkingTree(targetDir: File, vcs: VcsInfo): WorkingTree {
         try {
