@@ -23,14 +23,11 @@ import com.here.ort.downloader.VersionControlSystem
 import com.here.ort.model.config.AnalyzerConfiguration
 import com.here.ort.model.yamlMapper
 import com.here.ort.utils.normalizeVcsUrl
-import com.here.ort.utils.safeDeleteRecursively
 import com.here.ort.utils.test.DEFAULT_ANALYZER_CONFIGURATION
 import com.here.ort.utils.test.DEFAULT_REPOSITORY_CONFIGURATION
 import com.here.ort.utils.test.USER_DIR
 import com.here.ort.utils.test.patchExpectedResult
 
-import io.kotlintest.TestCase
-import io.kotlintest.TestResult
 import io.kotlintest.shouldBe
 import io.kotlintest.specs.WordSpec
 
@@ -41,16 +38,6 @@ class NpmVersionUrlTest : WordSpec() {
     private val vcsDir = VersionControlSystem.forDirectory(projectDir)!!
     private val vcsUrl = vcsDir.getRemoteUrl()
     private val vcsRevision = vcsDir.getRevision()
-
-    override fun afterTest(testCase: TestCase, result: TestResult) {
-        // Make sure the node_modules directory is always deleted from each subdirectory to prevent side-effects
-        // from failing tests.
-        val nodeModulesDir = projectDir.resolve("node_modules")
-        val gitKeepFile = nodeModulesDir.resolve(".gitkeep")
-        if (nodeModulesDir.isDirectory && !gitKeepFile.isFile) {
-            nodeModulesDir.safeDeleteRecursively(force = true)
-        }
-    }
 
     init {
         "NPM" should {
