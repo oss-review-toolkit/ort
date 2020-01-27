@@ -385,15 +385,15 @@ open class Npm(
         }
 
         return sortedSetOf<PackageReference>().apply {
-            addAll(buildTree(moduleDir, scopes)!!.dependencies)
+            addAll(getPackageReferenceForModule(moduleDir, scopes)!!.dependencies)
 
             workspaceModuleDirs.forEach { workspaceModuleDir ->
-                addAll(buildTree(workspaceModuleDir, scopes, listOf(moduleDir))!!.dependencies)
+                addAll(getPackageReferenceForModule(workspaceModuleDir, scopes, listOf(moduleDir))!!.dependencies)
             }
         }
     }
 
-    private fun buildTree(
+    private fun getPackageReferenceForModule(
         moduleDir: File,
         scopes: Set<String>,
         ancestorModuleDirs: List<File> = emptyList(),
@@ -426,7 +426,7 @@ open class Npm(
                 val dependencyModuleDir = dependencyModuleDirPath.first()
                 log.debug { "Found module dir for '$dependencyName' at '$dependencyModuleDir'." }
 
-                buildTree(
+                getPackageReferenceForModule(
                     moduleDir = dependencyModuleDir,
                     scopes = setOf("dependencies", "optionalDependencies"),
                     ancestorModuleDirs = dependencyModuleDirPath.subList(1, dependencyModuleDirPath.size),
