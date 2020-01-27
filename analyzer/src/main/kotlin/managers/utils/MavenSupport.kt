@@ -618,14 +618,14 @@ class HttpsMirrorSelector(private val originalMirrorSelector: MirrorSelector?) :
             "http://jcenter.bintray.com",
             "http://repo.maven.apache.org",
             "http://repo1.maven.org",
-            "http://repo.spring.io/"
+            "http://repo.spring.io"
         )
     }
 
     override fun getMirror(repository: RemoteRepository?): RemoteRepository? {
         originalMirrorSelector?.getMirror(repository)?.let { return it }
 
-        if (repository == null || repository.url !in DISABLED_HTTP_REPOSITORY_URLS) return null
+        if (repository == null || DISABLED_HTTP_REPOSITORY_URLS.none { repository.url.startsWith(it) }) return null
 
         log.info {
             "HTTP access to ${repository.id} (${repository.url}) was disabled. Automatically switching to HTTPS."
