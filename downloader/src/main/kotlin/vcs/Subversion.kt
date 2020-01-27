@@ -128,7 +128,7 @@ class Subversion : VersionControlSystem() {
         } catch (e: SVNException) {
             e.showStackTrace()
 
-            throw DownloadException("Unable to initialize the $type working tree at '$targetDir' from ${vcs.url}.", e)
+            throw DownloadException("Unable to initialize a $type working tree in '$targetDir' from ${vcs.url}.", e)
         }
 
         return getWorkingTree(targetDir)
