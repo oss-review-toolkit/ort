@@ -120,10 +120,10 @@ open class Npm(
             // Optional dependencies are just like regular dependencies except that NPM ignores failures when installing
             // them (see https://docs.npmjs.com/files/package.json#optionaldependencies), i.e. they are not a separate
             // scope in our semantics.
-            val dependencies = parseDependencies(workingDir, setOf("dependencies", "optionalDependencies"))
+            val dependencies = getModuleDependencies(workingDir, setOf("dependencies", "optionalDependencies"))
             val dependenciesScope = Scope("dependencies", dependencies.toSortedSet())
 
-            val devDependencies = parseDependencies(workingDir, setOf("devDependencies"))
+            val devDependencies = getModuleDependencies(workingDir, setOf("devDependencies"))
             val devDependenciesScope = Scope("devDependencies", devDependencies)
 
             // TODO: add support for peerDependencies and bundledDependencies.
@@ -372,7 +372,7 @@ open class Npm(
         )
     }
 
-    private fun parseDependencies(moduleDir: File, scopes: Set<String>): SortedSet<PackageReference> {
+    private fun getModuleDependencies(moduleDir: File, scopes: Set<String>): SortedSet<PackageReference> {
         val workspaceModuleDirs = moduleDir.resolve("node_modules").let { nodeModulesDir ->
             if (nodeModulesDir.isDirectory) {
                 nodeModulesDir.listFiles().filter { file ->
