@@ -29,7 +29,6 @@ import com.here.ort.utils.log
 import com.here.ort.utils.showStackTrace
 
 import java.io.File
-import java.io.IOException
 import java.nio.file.Paths
 
 import org.tmatesoft.svn.core.SVNDepth
@@ -92,7 +91,9 @@ class Subversion : VersionControlSystem() {
                         if (dirEntry.name.isNotEmpty()) refs += "$namespace/${dirEntry.relativePath}"
                     }
                 } catch (e: SVNException) {
-                    throw IOException("Unable to list remote refs for $type repository at $remoteUrl.")
+                    e.showStackTrace()
+
+                    log.info { "Unable to list remote refs for $type repository at $remoteUrl." }
                 }
 
                 return refs
