@@ -28,6 +28,8 @@ import java.security.Permission
 
 import kotlin.reflect.full.memberProperties
 
+const val ORT_NAME = "OSS Review Toolkit"
+
 /**
  * The name of the ORT configuration file.
  */
