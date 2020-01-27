@@ -2962,8 +2962,8 @@ packages:
       revision: ""
       path: ""
     vcs_processed:
-      type: "Mercurial"
-      url: "https://bitbucket.org/khibino/haskell-time-locale-compat"
+      type: "Git"
+      url: "https://bitbucket.org/khibino/haskell-time-locale-compat.git"
       revision: ""
       path: ""
   curations: []
