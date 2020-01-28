@@ -33,25 +33,30 @@ import io.kotlintest.specs.WordSpec
 import java.io.File
 
 class YarnTest : WordSpec() {
-    private val projectDir = File("src/funTest/assets/projects/synthetic/yarn").absoluteFile
-    private val vcsDir = VersionControlSystem.forDirectory(projectDir)!!
-    private val vcsUrl = vcsDir.getRemoteUrl()
-    private val vcsRevision = vcsDir.getRevision()
+    private fun getExpectedResult(projectDir: File, expectedResultTemplate: File): String {
+        val vcsDir = VersionControlSystem.forDirectory(projectDir)!!
+        val vcsUrl = vcsDir.getRemoteUrl()
+        val vcsPath = vcsDir.getPathToRoot(projectDir)
+        val vcsRevision = vcsDir.getRevision()
+
+        return patchExpectedResult(
+            result = expectedResultTemplate,
+            definitionFilePath = "$vcsPath/package.json",
+            url = normalizeVcsUrl(vcsUrl),
+            revision = vcsRevision,
+            path = vcsPath
+        )
+    }
 
     init {
         "yarn" should {
             "resolve dependencies correctly" {
+                val projectDir = File("src/funTest/assets/projects/synthetic/yarn").absoluteFile
                 val packageFile = File(projectDir, "package.json")
-                val result = createYarn().resolveDependencies(listOf(packageFile))[packageFile]
-                val vcsPath = vcsDir.getPathToRoot(projectDir)
-                val expectedResult = patchExpectedResult(
-                    File(projectDir.parentFile, "yarn-expected-output.yml"),
-                    definitionFilePath = "$vcsPath/package.json",
-                    url = normalizeVcsUrl(vcsUrl),
-                    revision = vcsRevision,
-                    path = vcsPath
-                )
 
+                val result = createYarn().resolveDependencies(listOf(packageFile))[packageFile]
+
+                val expectedResult = getExpectedResult(projectDir, projectDir.resolve("yarn-expected-output.yml"))
                 yamlMapper.writeValueAsString(result) shouldBe expectedResult
             }
         }
