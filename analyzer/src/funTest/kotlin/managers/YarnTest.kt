@@ -49,28 +49,32 @@ class YarnTest : WordSpec() {
         )
     }
 
+    private fun resolveDependencies(projectDir: File): String {
+        val packageFile = File(projectDir, "package.json")
+        val result = createYarn().resolveDependencies(listOf(packageFile))[packageFile]
+        return yamlMapper.writeValueAsString(result)
+    }
+
     init {
         "yarn" should {
             "resolve dependencies correctly" {
                 val projectDir = File("src/funTest/assets/projects/synthetic/yarn").absoluteFile
-                val packageFile = File(projectDir, "package.json")
 
-                val result = createYarn().resolveDependencies(listOf(packageFile))[packageFile]
+                val result = resolveDependencies(projectDir)
 
                 val expectedResult = getExpectedResult(projectDir, "yarn-expected-output.yml")
-                yamlMapper.writeValueAsString(result) shouldBe expectedResult
+                result shouldBe expectedResult
             }
 
             "resolve workspace dependencies correctly" {
                 // This test case illustrates the lack of Yarn workspaces support, in particular not all workspace
                 // dependencies get assigned to a scope.
                 val projectDir = File("src/funTest/assets/projects/synthetic/yarn-workspaces").absoluteFile
-                val packageFile = File(projectDir, "package.json")
 
-                val result = createYarn().resolveDependencies(listOf(packageFile))[packageFile]
+                val result = resolveDependencies(projectDir)
 
                 val expectedResult = getExpectedResult(projectDir, "yarn-workspaces-expected-output.yml")
-                yamlMapper.writeValueAsString(result) shouldBe expectedResult
+                result shouldBe expectedResult
             }
         }
     }
