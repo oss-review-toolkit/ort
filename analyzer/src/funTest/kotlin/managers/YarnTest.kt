@@ -33,14 +33,15 @@ import io.kotlintest.specs.WordSpec
 import java.io.File
 
 class YarnTest : WordSpec() {
-    private fun getExpectedResult(projectDir: File, expectedResultTemplate: File): String {
+    private fun getExpectedResult(projectDir: File, expectedResultTemplateFile: String): String {
         val vcsDir = VersionControlSystem.forDirectory(projectDir)!!
         val vcsUrl = vcsDir.getRemoteUrl()
         val vcsPath = vcsDir.getPathToRoot(projectDir)
         val vcsRevision = vcsDir.getRevision()
+        val expectedOutputTemplate = projectDir.parentFile.resolve(expectedResultTemplateFile)
 
         return patchExpectedResult(
-            result = expectedResultTemplate,
+            result = expectedOutputTemplate,
             definitionFilePath = "$vcsPath/package.json",
             url = normalizeVcsUrl(vcsUrl),
             revision = vcsRevision,
@@ -56,7 +57,19 @@ class YarnTest : WordSpec() {
 
                 val result = createYarn().resolveDependencies(listOf(packageFile))[packageFile]
 
-                val expectedResult = getExpectedResult(projectDir, projectDir.resolve("yarn-expected-output.yml"))
+                val expectedResult = getExpectedResult(projectDir, "yarn-expected-output.yml")
+                yamlMapper.writeValueAsString(result) shouldBe expectedResult
+            }
+
+            "resolve workspace dependencies correctly" {
+                // This test case illustrates the lack of Yarn workspaces support, in particular not all workspace
+                // dependencies get assigned to a scope.
+                val projectDir = File("src/funTest/assets/projects/synthetic/yarn-workspaces").absoluteFile
+                val packageFile = File(projectDir, "package.json")
+
+                val result = createYarn().resolveDependencies(listOf(packageFile))[packageFile]
+
+                val expectedResult = getExpectedResult(projectDir, "yarn-workspaces-expected-output.yml")
                 yamlMapper.writeValueAsString(result) shouldBe expectedResult
             }
         }
