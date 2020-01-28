@@ -124,7 +124,6 @@ class CycloneDxReporter : Reporter {
                     name = licenseName.takeIf { spdxId == null }
                     licenseText = LicenseText().apply {
                         contentType = "plain/text"
-                        encoding = "UTF-8"
                         text = input.licenseTextProvider.getLicenseText(licenseName)
                     }
                 }
