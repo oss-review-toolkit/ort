@@ -53,6 +53,7 @@ import com.here.ort.utils.Os
 import com.here.ort.utils.OkHttpClientHelper
 import com.here.ort.utils.OkHttpClientHelper.applyProxySettingsFromUrl
 import com.here.ort.utils.getUserHomeDirectory
+import com.here.ort.utils.isSymlink
 import com.here.ort.utils.log
 import com.here.ort.utils.realFile
 import com.here.ort.utils.stashDirectories
@@ -375,10 +376,7 @@ open class Npm(
     private fun findWorkspaceSubmodules(moduleDir: File): List<File> =
         moduleDir.resolve("node_modules").let { nodeModulesDir ->
             if (nodeModulesDir.isDirectory) {
-                nodeModulesDir.listFiles().filter { file ->
-                    val realFile = file.realFile()
-                    realFile != file && realFile.isDirectory
-                }
+                nodeModulesDir.listFiles().filter { file -> file.isSymlink() && file.isDirectory }
             } else {
                 emptyList()
             }
