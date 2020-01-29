@@ -60,36 +60,6 @@ packages:
       path: ""
   curations: []
 - package:
-    id: "NPM::pkg1:1.0.0"
-    purl: "pkg:npm/pkg1@1.0.0"
-    declared_licenses:
-    - "Apache-2.0"
-    declared_licenses_processed:
-      spdx_expression: "Apache-2.0"
-    description: ""
-    homepage_url: ""
-    binary_artifact:
-      url: ""
-      hash:
-        value: ""
-        algorithm: ""
-    source_artifact:
-      url: ""
-      hash:
-        value: ""
-        algorithm: ""
-    vcs:
-      type: "Git"
-      url: "<REPLACE_URL>"
-      revision: "<REPLACE_REVISION>"
-      path: "analyzer/src/funTest/assets/projects/synthetic/yarn-workspaces/packages/pkg1"
-    vcs_processed:
-      type: "Git"
-      url: "<REPLACE_URL>"
-      revision: "<REPLACE_REVISION>"
-      path: "analyzer/src/funTest/assets/projects/synthetic/yarn-workspaces/packages/pkg1"
-  curations: []
-- package:
     id: "NPM::pkg2:1.0.0"
     purl: "pkg:npm/pkg2@1.0.0"
     declared_licenses:
@@ -178,4 +148,34 @@ packages:
       url: "https://github.com/heremaps/harp.gl.git"
       revision: "0c2857f958a34ef7638384afada4fceec427d48d"
       path: "@here/harp-fetch"
+  curations: []
+- package:
+    id: "NPM:@scope1:pkg1:1.0.0"
+    purl: "pkg:npm/%40scope1/pkg1@1.0.0"
+    declared_licenses:
+    - "Apache-2.0"
+    declared_licenses_processed:
+      spdx_expression: "Apache-2.0"
+    description: ""
+    homepage_url: ""
+    binary_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    source_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    vcs:
+      type: "Git"
+      url: "<REPLACE_URL>"
+      revision: "<REPLACE_REVISION>"
+      path: "analyzer/src/funTest/assets/projects/synthetic/yarn-workspaces/packages/pkg1"
+    vcs_processed:
+      type: "Git"
+      url: "<REPLACE_URL>"
+      revision: "<REPLACE_REVISION>"
+      path: "analyzer/src/funTest/assets/projects/synthetic/yarn-workspaces/packages/pkg1"
   curations: []

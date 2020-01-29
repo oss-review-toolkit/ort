@@ -373,14 +373,18 @@ open class Npm(
         )
     }
 
-    private fun findWorkspaceSubmodules(moduleDir: File): List<File> =
-        moduleDir.resolve("node_modules").let { nodeModulesDir ->
-            if (nodeModulesDir.isDirectory) {
-                nodeModulesDir.listFiles().filter { file -> file.isSymlink() && file.isDirectory }
-            } else {
-                emptyList()
-            }
-        }
+    private fun findWorkspaceSubmodules(moduleDir: File): List<File> {
+        val nodeModulesDir = moduleDir.resolve("node_modules")
+        if (!nodeModulesDir.isDirectory) return emptyList()
+
+        val searchDirs = nodeModulesDir.listFiles().filter { file ->
+            file.isDirectory && file.name.startsWith("@")
+        } + nodeModulesDir
+
+        return searchDirs.map { dir ->
+            dir.listFiles().filter { file -> file.isSymlink() && file.isDirectory }
+        }.flatten()
+    }
 
     private fun getModuleDependencies(moduleDir: File, scopes: Set<String>): SortedSet<PackageReference> {
         val workspaceModuleDirs = findWorkspaceSubmodules(moduleDir)
