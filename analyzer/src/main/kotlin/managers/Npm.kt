@@ -372,8 +372,8 @@ open class Npm(
         )
     }
 
-    private fun getModuleDependencies(moduleDir: File, scopes: Set<String>): SortedSet<PackageReference> {
-        val workspaceModuleDirs = moduleDir.resolve("node_modules").let { nodeModulesDir ->
+    private fun findWorkspaceSubmodules(moduleDir: File): List<File> =
+        moduleDir.resolve("node_modules").let { nodeModulesDir ->
             if (nodeModulesDir.isDirectory) {
                 nodeModulesDir.listFiles().filter { file ->
                     val realFile = file.realFile()
@@ -383,6 +383,9 @@ open class Npm(
                 emptyList()
             }
         }
+
+    private fun getModuleDependencies(moduleDir: File, scopes: Set<String>): SortedSet<PackageReference> {
+        val workspaceModuleDirs = findWorkspaceSubmodules(moduleDir)
 
         return sortedSetOf<PackageReference>().apply {
             addAll(getPackageReferenceForModule(moduleDir, scopes)!!.dependencies)
