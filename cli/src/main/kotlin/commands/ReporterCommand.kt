@@ -153,6 +153,10 @@ class ReporterCommand : CliktCommand(
             } catch (e: Exception) {
                 e.showStackTrace()
 
+                // The "file.outputStream()" above already creates the file, so delete it here if the exception occurred
+                // before any content was written.
+                if (file.length() == 0L) file.delete()
+
                 throw UsageError("Could not create '${reporter.reporterName}' report: ${e.collectMessagesAsString()}",
                     statusCode = 1)
             }
