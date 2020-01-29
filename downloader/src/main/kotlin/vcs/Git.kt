@@ -29,18 +29,60 @@ import com.here.ort.utils.log
 import com.here.ort.utils.safeMkdirs
 import com.here.ort.utils.showStackTrace
 
+import com.jcraft.jsch.JSch
+import com.jcraft.jsch.Session
+import com.jcraft.jsch.agentproxy.AgentProxyException
+import com.jcraft.jsch.agentproxy.RemoteIdentityRepository
+import com.jcraft.jsch.agentproxy.connector.SSHAgentConnector
+import com.jcraft.jsch.agentproxy.usocket.JNAUSocketFactory
+
 import java.io.File
 import java.io.IOException
 
 import org.eclipse.jgit.api.Git
 import org.eclipse.jgit.api.LsRemoteCommand
 import org.eclipse.jgit.api.errors.GitAPIException
+import org.eclipse.jgit.transport.JschConfigSessionFactory
+import org.eclipse.jgit.transport.OpenSshConfig
+import org.eclipse.jgit.transport.SshSessionFactory
 import org.eclipse.jgit.transport.URIish
+import org.eclipse.jgit.util.FS
 
 // TODO: Make this configurable.
 const val GIT_HISTORY_DEPTH = 50
 
 class Git : GitBase() {
+    companion object {
+        init {
+            // Configure JGit to connect to the SSH-Agent if it is available.
+            val sessionFactory = object : JschConfigSessionFactory() {
+                override fun configure(hc: OpenSshConfig.Host, session: Session) {}
+
+                override fun createDefaultJSch(fs: FS): JSch {
+                    val jSch = super.createDefaultJSch(fs)
+
+                    try {
+                        if (SSHAgentConnector.isConnectorAvailable()) {
+                            val socketFactory = JNAUSocketFactory()
+                            val connector = SSHAgentConnector(socketFactory)
+                            JSch.setConfig("PreferredAuthentications", "publickey")
+                            val identityRepository = RemoteIdentityRepository(connector)
+                            jSch.identityRepository = identityRepository
+                        }
+                    } catch (e: AgentProxyException) {
+                        e.showStackTrace()
+
+                        log.error { "Could not create SSH Agent connector: ${e.collectMessagesAsString()}" }
+                    }
+
+                    return jSch
+                }
+            }
+
+            SshSessionFactory.setInstance(sessionFactory)
+        }
+    }
+
     override val type = VcsType.GIT
     override val priority = 100
 

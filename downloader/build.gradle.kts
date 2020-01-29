@@ -19,6 +19,7 @@
  */
 
 val jgitVersion: String by project
+val jSchAgentProxyVersion: String by project
 val svnkitVersion: String by project
 
 plugins {
@@ -31,6 +32,7 @@ dependencies {
 
     implementation(project(":utils"))
 
+    implementation("com.jcraft:jsch.agentproxy.jsch:$jSchAgentProxyVersion")
     implementation("org.eclipse.jgit:org.eclipse.jgit:$jgitVersion")
     implementation("org.tmatesoft.svnkit:svnkit:$svnkitVersion")
 }
