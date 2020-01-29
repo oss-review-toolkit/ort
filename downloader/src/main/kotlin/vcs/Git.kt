@@ -56,7 +56,9 @@ class Git : GitBase() {
         init {
             // Configure JGit to connect to the SSH-Agent if it is available.
             val sessionFactory = object : JschConfigSessionFactory() {
-                override fun configure(hc: OpenSshConfig.Host, session: Session) {}
+                override fun configure(hc: OpenSshConfig.Host, session: Session) {
+                    session.setConfig("StrictHostKeyChecking", "no")
+                }
 
                 override fun createDefaultJSch(fs: FS): JSch {
                     val jSch = super.createDefaultJSch(fs)
