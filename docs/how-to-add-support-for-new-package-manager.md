@@ -21,8 +21,8 @@ Let's assume you want to implement support for `pnpm` then
 1. How can you detect a project is using pnpm?
 
 The presence of a [pnpm-lock.yaml](https://github.com/pnpm/pnpm/blob/master/pnpm-lock.yaml) file 
-can unique indentify that a project is using pnpm.
-You can't say the same for `package.json` as there multiple package manager who use a `package.json`.
+can uniquely identify that a project is using pnpm.
+You can't say the same for `package.json` as there are multiple package managers using a `package.json`.
 
 2. How can you get the declared license for a pnpm package??
 
