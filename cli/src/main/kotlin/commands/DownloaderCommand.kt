@@ -161,8 +161,7 @@ class DownloaderCommand : CliktCommand(name = "download", help = "Fetch source c
             }
         }
 
-        var error = false
-
+        val errorMessages = mutableListOf<String>()
         packages.forEach { pkg ->
             try {
                 val absoluteOutputDir = outputDir.expandTilde()
@@ -198,12 +197,16 @@ class DownloaderCommand : CliktCommand(name = "download", help = "Fetch source c
             } catch (e: DownloadException) {
                 e.showStackTrace()
 
-                log.error { "Could not download '${pkg.id.toCoordinates()}': ${e.collectMessagesAsString()}" }
+                val errorMessage = "Could not download '${pkg.id.toCoordinates()}': ${e.collectMessagesAsString()}"
+                errorMessages += errorMessage
 
-                error = true
+                log.error { errorMessage }
             }
         }
 
-        if (error) throw UsageError("An error occurred.", statusCode = 2)
+        if (errorMessages.isNotEmpty()) {
+            log.error { "Error Summary:\n\n${errorMessages.joinToString("\n\n")}" }
+            throw UsageError("${errorMessages.size} error(s) occurred.", statusCode = 2)
+        }
     }
 }
