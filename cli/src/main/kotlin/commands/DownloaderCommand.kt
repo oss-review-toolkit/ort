@@ -46,7 +46,7 @@ import com.here.ort.model.RemoteArtifact
 import com.here.ort.model.VcsInfo
 import com.here.ort.model.VcsType
 import com.here.ort.model.readValue
-import com.here.ort.utils.ARCHIVE_EXTENSIONS
+import com.here.ort.utils.ArchiveType
 import com.here.ort.utils.collectMessagesAsString
 import com.here.ort.utils.encodeOrUnknown
 import com.here.ort.utils.expandTilde
@@ -143,7 +143,7 @@ class DownloaderCommand : CliktCommand(name = "download", help = "Fetch source c
                 val projectName = projectNameOption ?: projectFile.nameWithoutExtension
 
                 val dummyId = Identifier("Downloader::$projectName:")
-                val dummyPackage = if (ARCHIVE_EXTENSIONS.any { projectFile.name.endsWith(it) }) {
+                val dummyPackage = if (ArchiveType.getType(projectFile.name) != ArchiveType.NONE) {
                     Package.EMPTY.copy(id = dummyId, sourceArtifact = RemoteArtifact.EMPTY.copy(url = projectUrl))
                 } else {
                     val vcs = VcsInfo(
