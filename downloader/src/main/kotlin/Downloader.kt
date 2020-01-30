@@ -37,6 +37,8 @@ import com.here.ort.utils.unpack
 import java.io.File
 import java.io.IOException
 import java.net.URI
+import java.nio.file.Files
+import java.nio.file.StandardCopyOption
 import java.time.Instant
 import java.util.SortedSet
 
@@ -352,11 +354,47 @@ class Downloader {
             throw DownloadException(e)
         }
 
+        // Check if the outputDirectory contains only a single directory, if so move its content one level up. This
+        // removes clutter from the scan results if all files in a source artifact are inside a directory at the root
+        // of the archive.
+        if (outputDirectory.containsSingleDirectory()) {
+            outputDirectory.listFiles().first().moveUp()
+        }
+
         log.info {
             "Successfully downloaded source artifact for '${target.id.toCoordinates()}' to " +
                     "'${outputDirectory.absolutePath}'..."
         }
 
         return DownloadResult(startTime, outputDirectory, sourceArtifact = target.sourceArtifact)
+    }
+
+    /**
+     * Check if this [File] is a directory and contains only a single other directory.
+     */
+    private fun File.containsSingleDirectory(): Boolean =
+        isDirectory && listFiles().size == 1 && listFiles().first().isDirectory
+
+    /**
+     * Move all contents of a directory to its parent directory.
+     */
+    private fun File.moveUp() {
+        if (!isDirectory) return
+
+        // Move the content to a temporary directory to avoid naming conflicts with this directory.
+        val tempDir = createTempDir(prefix = "ort")
+        listFiles().forEach { file ->
+            Files.move(file.toPath(), tempDir.toPath().resolve(file.name), StandardCopyOption.ATOMIC_MOVE)
+        }
+
+        // Delete the directory.
+        delete()
+
+        // Move the content back to the parent directory.
+        tempDir.listFiles().forEach { file ->
+            Files.move(file.toPath(), parentFile.toPath().resolve(file.name), StandardCopyOption.ATOMIC_MOVE)
+        }
+
+        tempDir.delete()
     }
 }
