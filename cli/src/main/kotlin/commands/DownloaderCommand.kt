@@ -105,7 +105,7 @@ class DownloaderCommand : CliktCommand(name = "download", help = "Fetch source c
         "--entities", "-e",
         help = "The data entities from the ORT file's analyzer result to limit downloads to. If not specified, all " +
                 "data entities are downloaded."
-    ).enum<Downloader.DataEntity>().split(",").default(emptyList())
+    ).enum<Downloader.DataEntity>().split(",").default(enumValues<Downloader.DataEntity>().asList())
 
     private val allowMovingRevisionsOption by option(
         "--allow-moving-revisions",
