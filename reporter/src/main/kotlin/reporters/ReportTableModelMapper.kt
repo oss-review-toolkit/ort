@@ -92,7 +92,7 @@ class ReportTableModelMapper(private val resolutionProvider: ResolutionProvider)
             val pathExcludes = excludes.findPathExcludes(project, ortResult)
 
             val allIds = sortedSetOf(project.id)
-            project.collectDependencies().mapTo(allIds) { it.id }
+            allIds += project.collectDependencies()
 
             val tableRows = allIds.map { id ->
                 val scanResult = scanRecord?.scanResults?.find { it.id == id }
