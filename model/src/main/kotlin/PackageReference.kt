@@ -70,7 +70,7 @@ data class PackageReference(
      * (but not their dependencies without issues) are excluded, otherwise they are included.
      */
     fun collectDependencies(maxDepth: Int = -1, includeErroneous: Boolean = true): SortedSet<PackageReference> =
-        dependencies.fold(sortedSetOf<PackageReference>()) { refs, ref ->
+        dependencies.fold(sortedSetOf()) { refs, ref ->
             refs.also {
                 if (maxDepth != 0) {
                     if (ref.issues.isEmpty() || includeErroneous) it += ref
