@@ -163,14 +163,14 @@ data class Project(
     }
 
     /**
-     * Return the set of [PackageReference]s that refer to sub-projects of this [Project].
+     * Return the set of [Identifier]s that refer to sub-projects of this [Project].
      */
-    fun collectSubProjects(): SortedSet<PackageReference> =
+    fun collectSubProjects(): SortedSet<Identifier> =
         scopes.fold(sortedSetOf()) { refs, scope ->
             refs.also {
                 it += scope.collectDependencies().filter { ref ->
                     ref.linkage in PackageLinkage.PROJECT_LINKAGE
-                }
+                }.map { packageReference -> packageReference.id }
             }
         }
 

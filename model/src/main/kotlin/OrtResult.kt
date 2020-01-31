@@ -243,7 +243,7 @@ data class OrtResult(
             val allSubProjects = sortedSetOf<Identifier>()
 
             getProjects().forEach {
-                it.collectSubProjects().mapTo(allSubProjects) { ref -> ref.id }
+                allSubProjects += it.collectSubProjects()
             }
 
             projectsAndPackages -= allSubProjects
