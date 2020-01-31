@@ -165,7 +165,7 @@ class DotNetSupport(packageReferencesMap: Map<String, String>) {
         }
 
         scope.collectDependencies().forEach { packageReference ->
-            val pkg = packageReferenceToPackage(packageReference)
+            val pkg = getPackageForId(packageReference.id)
 
             if (pkg != Package.EMPTY) {
                 packages += pkg
@@ -173,11 +173,11 @@ class DotNetSupport(packageReferencesMap: Map<String, String>) {
         }
     }
 
-    private fun packageReferenceToPackage(packageReference: PackageReference) =
-        jsonNodeToPackage(getPackageReferenceJsonContent(packageReference))
+    private fun getPackageForId(packageId: Identifier) =
+        jsonNodeToPackage(getPackageJsonContent(packageId))
 
-    private fun getPackageReferenceJsonContent(packageReference: PackageReference): Pair<String, JsonNode> {
-        val (_, _, pkgName, pkgVersion) = packageReference.id
+    private fun getPackageJsonContent(packageId: Identifier): Pair<String, JsonNode> {
+        val (_, _, pkgName, pkgVersion) = packageId
 
         packageReferencesAlreadyFound[Pair(pkgName, pkgVersion)]?.let {
             return it
