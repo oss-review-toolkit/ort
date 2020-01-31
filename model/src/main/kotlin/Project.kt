@@ -105,7 +105,7 @@ data class Project(
     fun collectDependencies(
         maxDepth: Int = -1,
         filterPredicate: (PackageReference) -> Boolean = { true }
-    ): SortedSet<PackageReference> =
+    ): SortedSet<Identifier> =
         scopes.fold(sortedSetOf()) { refs, scope ->
             refs.also { it += scope.collectDependencies(maxDepth, filterPredicate) }
         }
@@ -171,9 +171,7 @@ data class Project(
     fun collectSubProjects(): SortedSet<Identifier> =
         scopes.fold(sortedSetOf()) { refs, scope ->
             refs.also {
-                it += scope.collectDependencies { ref ->
-                    ref.linkage in PackageLinkage.PROJECT_LINKAGE
-                }.map { packageReference -> packageReference.id }
+                it += scope.collectDependencies { ref -> ref.linkage in PackageLinkage.PROJECT_LINKAGE }
             }
         }
 
