@@ -29,7 +29,7 @@ RUN apk add --no-cache \
     scripts/import_proxy_certs.sh
 
 RUN scripts/set_gradle_proxy.sh && \
-    ./gradlew --no-daemon :cli:distTar
+    ./gradlew --no-daemon --stacktrace :cli:distTar
 
 FROM openjdk:11-jre-slim-sid
 
