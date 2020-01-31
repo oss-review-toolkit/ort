@@ -22,6 +22,8 @@ formatting:
     active: false
   FinalNewline:
     active: false
+  MaximumLineLength:
+    active: false
   NoWildcardImports:
     active: false
   ParameterListWrapping:
