@@ -51,7 +51,7 @@ data class Scope(
      * depth. If [includeErroneous] is true, [PackageReference]s with issues (but not their dependencies without issues)
      * are excluded, otherwise they are included.
      */
-    fun collectDependencies(maxDepth: Int = -1, includeErroneous: Boolean = true) =
+    fun collectDependencies(maxDepth: Int = -1, includeErroneous: Boolean = true): SortedSet<PackageReference> =
         dependencies.fold(sortedSetOf<PackageReference>()) { refs, ref ->
             refs.also {
                 if (maxDepth != 0) {

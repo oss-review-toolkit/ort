@@ -102,8 +102,8 @@ data class Project(
      * depth. If [includeErroneous] is true, [PackageReference]s with issues (but not their dependencies without issues)
      * are excluded, otherwise they are included.
      */
-    fun collectDependencies(maxDepth: Int = -1, includeErroneous: Boolean = true) =
-        scopes.fold(sortedSetOf<PackageReference>()) { refs, scope ->
+    fun collectDependencies(maxDepth: Int = -1, includeErroneous: Boolean = true): SortedSet<PackageReference> =
+        scopes.fold(sortedSetOf()) { refs, scope ->
             refs.also { it += scope.collectDependencies(maxDepth, includeErroneous) }
         }
 
@@ -165,8 +165,8 @@ data class Project(
     /**
      * Return the set of [PackageReference]s that refer to sub-projects of this [Project].
      */
-    fun collectSubProjects() =
-        scopes.fold(sortedSetOf<PackageReference>()) { refs, scope ->
+    fun collectSubProjects(): SortedSet<PackageReference> =
+        scopes.fold(sortedSetOf()) { refs, scope ->
             refs.also {
                 it += scope.collectDependencies().filter { ref ->
                     ref.linkage in PackageLinkage.PROJECT_LINKAGE
