@@ -19,8 +19,8 @@
 [6]: https://jitpack.io/#heremaps/oss-review-toolkit
 [7]: https://codecov.io/gh/heremaps/oss-review-toolkit/branch/master/graph/badge.svg
 [8]: https://codecov.io/gh/heremaps/oss-review-toolkit/
-[9]: https://api.reuse.software/badge/github.com/fsfe/reuse-tool
-[10]: https://api.reuse.software/info/github.com/fsfe/reuse-tool
+[9]: https://api.reuse.software/badge/github.com/heremaps/oss-review-toolkit
+[10]: https://api.reuse.software/info/github.com/heremaps/oss-review-toolkit
 [11]: https://img.shields.io/badge/slack-ort--talk-blue.svg?longCache=true&logo=slack
 [12]: https://join.slack.com/t/ort-talk/shared_invite/enQtMzk3MDU5Njk0Njc1LThiNmJmMjc5YWUxZTU4OGI5NmY3YTFlZWM5YTliZmY5ODc0MGMyOWIwYmRiZWFmNGMzOWY2NzVhYTI0NTJkNmY
 
