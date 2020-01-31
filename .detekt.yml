@@ -20,6 +20,8 @@ complexity:
 formatting:
   ChainWrapping:
     active: false
+  FinalNewline:
+    active: false
   NoWildcardImports:
     active: false
   ParameterListWrapping:
