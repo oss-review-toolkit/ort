@@ -309,9 +309,9 @@ repositories are not correctly tagged.
 
 ORT provides a variety of mechanisms to fix a variety of issues, for details see:
 
-* [The .ort.yml file](docs/config-file-ort-yml.md) - project-specific license finding curations, exclusions
+* [The .ort.yml file](config-file-ort-yml.md) - project-specific license finding curations, exclusions
   and resolutions to address issues found within a project's code repository.
-* [The curations.yml file](docs/config-file-curations-yml.md) - curations correct invalid or missing package metadata
+* [The curations.yml file](config-file-curations-yml.md) - curations correct invalid or missing package metadata
   and set the concluded license for packages.
-* [The resolutions.yml file](docs/config-file-resolution-yml.md) - resolutions allow *resolving* any issues
+* [The resolutions.yml file](config-file-resolutions-yml.md) - resolutions allow *resolving* any issues
   or policy rule violations by providing a reason why they are acceptable and can be ignored.
