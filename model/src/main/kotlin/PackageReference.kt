@@ -64,10 +64,11 @@ data class PackageReference(
     val issues: List<OrtIssue> = emptyList()
 ) : Comparable<PackageReference> {
     /**
-     * Return the set of [PackageReference]s this [PackageReference] transitively depends on, up to and including a
-     * depth of [maxDepth] where counting starts at 0 (for the [PackageReference] itself) and 1 are direct dependencies
-     * etc. A value below 0 means to not limit the depth. If [includeErroneous] is true, [PackageReference]s with issues
-     * (but not their dependencies without issues) are excluded, otherwise they are included.
+     * Return the set of [PackageReference]s the package referred by this [PackageReference] transitively depends on,
+     * up to and including a depth of [maxDepth] where counting starts at 0 (for the [PackageReference] itself) and 1
+     * are direct dependencies etc. A value below 0 means to not limit the depth. If [includeErroneous] is true,
+     * [PackageReference]s with issues (but not their dependencies without issues) are excluded, otherwise they are
+     * included.
      */
     fun collectDependencies(maxDepth: Int = -1, includeErroneous: Boolean = true): SortedSet<PackageReference> =
         dependencies.fold(sortedSetOf()) { refs, ref ->
