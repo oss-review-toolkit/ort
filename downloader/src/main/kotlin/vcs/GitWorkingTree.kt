@@ -21,6 +21,7 @@ package com.here.ort.downloader.vcs
 
 import com.here.ort.downloader.WorkingTree
 import com.here.ort.model.VcsInfo
+import com.here.ort.utils.log
 
 import java.io.File
 
@@ -66,9 +67,16 @@ open class GitWorkingTree(workingDir: File, private val gitBase: GitBase) : Work
 
             SubmoduleWalk.forIndex(repo).use { walk ->
                 while (walk.next()) {
-                    paths += "$prefix${walk.path}"
+                    val path = "$prefix${walk.path}"
+                    paths += path
+
+                    if (walk.repository == null) {
+                        log.info { "Git submodule at '$path' not initialized. Cannot recursively list its submodules." }
+                        continue
+                    }
+
                     walk.repository.use { submoduleRepo ->
-                        listSubmodules(paths.last(), submoduleRepo, paths)
+                        listSubmodules(path, submoduleRepo, paths)
                     }
                 }
             }
