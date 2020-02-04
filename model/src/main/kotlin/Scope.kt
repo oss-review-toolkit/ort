@@ -19,6 +19,7 @@
 
 package com.here.ort.model
 
+import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 
 import java.util.SortedSet
@@ -45,17 +46,20 @@ data class Scope(
     val dependencies: SortedSet<PackageReference> = sortedSetOf()
 ) : Comparable<Scope> {
     /**
-     * Return the set of [PackageReference]s in this [Scope], up to and including a depth of [maxDepth] where counting
+     * Return the set of package [Identifier]s in this [Scope], up to and including a depth of [maxDepth] where counting
      * starts at 0 (for the [Scope] itself) and 1 are direct dependencies etc. A value below 0 means to not limit the
-     * depth. If [includeErroneous] is true, [PackageReference]s with errors (but not their dependencies without errors)
-     * are excluded, otherwise they are included.
+     * depth. If the given [filterPredicate] is false for a specific [PackageReference] the corresponding [Identifier]
+     * is excluded from the result.
      */
-    fun collectDependencies(maxDepth: Int = -1, includeErroneous: Boolean = true) =
-        dependencies.fold(sortedSetOf<PackageReference>()) { refs, ref ->
+    fun collectDependencies(
+        maxDepth: Int = -1,
+        filterPredicate: (PackageReference) -> Boolean = { true }
+    ): SortedSet<Identifier> =
+        dependencies.fold(sortedSetOf<Identifier>()) { refs, ref ->
             refs.also {
                 if (maxDepth != 0) {
-                    if (ref.errors.isEmpty() || includeErroneous) it += ref
-                    it += ref.collectDependencies(maxDepth - 1, includeErroneous)
+                    if (filterPredicate(ref)) it += ref.id
+                    it += ref.collectDependencies(maxDepth - 1, filterPredicate)
                 }
             }
         }
@@ -75,4 +79,15 @@ data class Scope(
      */
     fun findReferences(id: Identifier) =
         dependencies.filter { it.id == id } + dependencies.flatMap { it.findReferences(id) }
+
+    /**
+     * Return the depth of the dependency tree rooted at the project associated with this scope.
+     */
+    @JsonIgnore
+    fun getDependencyTreeDepth(): Int {
+        fun getTreeDepthRec(dependencies: Collection<PackageReference>): Int =
+            dependencies.map { dependency -> 1 + getTreeDepthRec(dependency.dependencies) }.max() ?: 0
+
+        return getTreeDepthRec(dependencies)
+    }
 }

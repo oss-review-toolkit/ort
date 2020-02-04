@@ -141,17 +141,17 @@ open class PackageRule(
         issue(severity, pkg.id, null, null, message, howToFix)
 
     /**
-     * Add a [hint][Severity.HINT] to the list of [issues].
+     * Add a [hint][Severity.HINT] to the list of [violations].
      */
     fun hint(message: String, howToFix: String) = hint(pkg.id, null, null, message, howToFix)
 
     /**
-     * Add a [warning][Severity.WARNING] to the list of [issues].
+     * Add a [warning][Severity.WARNING] to the list of [violations].
      */
     fun warning(message: String, howToFix: String) = warning(pkg.id, null, null, message, howToFix)
 
     /**
-     * Add an [error][Severity.ERROR] to the list of [issues].
+     * Add an [error][Severity.ERROR] to the list of [violations].
      */
     fun error(message: String, howToFix: String) = error(pkg.id, null, null, message, howToFix)
 
@@ -220,17 +220,17 @@ open class PackageRule(
             issue(severity, pkg.id, license, licenseSource, message, howToFix)
 
         /**
-         * Add a [hint][Severity.HINT] to the list of [issues].
+         * Add a [hint][Severity.HINT] to the list of [violations].
          */
         fun hint(message: String, howToFix: String) = hint(pkg.id, license, licenseSource, message, howToFix)
 
         /**
-         * Add a [warning][Severity.WARNING] to the list of [issues].
+         * Add a [warning][Severity.WARNING] to the list of [violations].
          */
         fun warning(message: String, howToFix: String) = warning(pkg.id, license, licenseSource, message, howToFix)
 
         /**
-         * Add an [error][Severity.ERROR] to the list of [issues].
+         * Add an [error][Severity.ERROR] to the list of [violations].
          */
         fun error(message: String, howToFix: String) = error(pkg.id, license, licenseSource, message, howToFix)
     }

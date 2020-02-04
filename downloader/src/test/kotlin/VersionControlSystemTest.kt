@@ -116,6 +116,58 @@ class VersionControlSystemTest : WordSpec({
             )
             actual shouldBe expected
         }
+
+        "separate an SVN branch into the revision" {
+            val actual = VersionControlSystem.splitUrl(
+                "http://svn.osdn.net/svnroot/tortoisesvn/branches/1.13.x"
+            )
+            val expected = VcsInfo(
+                type = VcsType.SUBVERSION,
+                url = "http://svn.osdn.net/svnroot/tortoisesvn",
+                revision = "branches/1.13.x",
+                path = ""
+            )
+            actual shouldBe expected
+        }
+
+        "separate branch and path from an SVN URL" {
+            val actual = VersionControlSystem.splitUrl(
+                "http://svn.osdn.net/svnroot/tortoisesvn/branches/1.13.x/src/gpl.txt"
+            )
+            val expected = VcsInfo(
+                type = VcsType.SUBVERSION,
+                url = "http://svn.osdn.net/svnroot/tortoisesvn",
+                revision = "branches/1.13.x",
+                path = "src/gpl.txt"
+            )
+            actual shouldBe expected
+        }
+
+        "separate an SVN tag into the revision" {
+            val actual = VersionControlSystem.splitUrl(
+                "http://svn.terracotta.org/svn/ehcache/tags/ehcache-parent-2.21"
+            )
+            val expected = VcsInfo(
+                type = VcsType.SUBVERSION,
+                url = "http://svn.terracotta.org/svn/ehcache",
+                revision = "tags/ehcache-parent-2.21",
+                path = ""
+            )
+            actual shouldBe expected
+        }
+
+        "separate tag and path from an SVN URL" {
+            val actual = VersionControlSystem.splitUrl(
+                "http://svn.terracotta.org/svn/ehcache/tags/ehcache-parent-2.21/pom.xml"
+            )
+            val expected = VcsInfo(
+                type = VcsType.SUBVERSION,
+                url = "http://svn.terracotta.org/svn/ehcache",
+                revision = "tags/ehcache-parent-2.21",
+                path = "pom.xml"
+            )
+            actual shouldBe expected
+        }
     }
 
     "splitUrl for Bitbucket" should {

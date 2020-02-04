@@ -22,6 +22,7 @@ package com.here.ort.reporter.reporters
 import com.here.ort.model.Environment
 import com.here.ort.model.OrtResult
 import com.here.ort.reporter.DefaultResolutionProvider
+import com.here.ort.reporter.ReporterInput
 import com.here.ort.utils.test.patchExpectedResult
 import com.here.ort.utils.test.readOrtResult
 
@@ -42,8 +43,10 @@ private fun generateReport(ortResult: OrtResult) =
 
         StaticHtmlReporter().generateReport(
             outputStream,
-            ortResult,
-            resolutionProvider
+            ReporterInput(
+                ortResult,
+                resolutionProvider = resolutionProvider
+            )
         )
     }.toString("UTF-8")
 

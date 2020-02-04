@@ -20,7 +20,8 @@
 package com.here.ort.analyzer.managers
 
 import com.here.ort.analyzer.AbstractPackageManagerFactory
-import com.here.ort.analyzer.managers.utils.PackageJsonUtils
+import com.here.ort.analyzer.managers.utils.hasYarnLockFile
+import com.here.ort.analyzer.managers.utils.mapDefinitionFilesForYarn
 import com.here.ort.model.config.AnalyzerConfiguration
 import com.here.ort.model.config.RepositoryConfiguration
 import com.here.ort.utils.Os
@@ -50,14 +51,13 @@ class Yarn(
 
     override val installParameters = arrayOf("--ignore-scripts", "--ignore-engines")
 
-    override fun hasLockFile(projectDir: File) = PackageJsonUtils.hasYarnLockFile(projectDir)
+    override fun hasLockFile(projectDir: File) = hasYarnLockFile(projectDir)
 
     override fun command(workingDir: File?) = if (Os.isWindows) "yarn.cmd" else "yarn"
 
-    override fun getVersionRequirement(): Requirement = Requirement.buildNPM("1.3.* - 1.17.*")
+    override fun getVersionRequirement(): Requirement = Requirement.buildNPM("1.3.* - 1.21.*")
 
-    override fun mapDefinitionFiles(definitionFiles: List<File>) =
-        PackageJsonUtils.mapDefinitionFilesForYarn(definitionFiles).toList()
+    override fun mapDefinitionFiles(definitionFiles: List<File>) = mapDefinitionFilesForYarn(definitionFiles).toList()
 
     override fun beforeResolution(definitionFiles: List<File>) =
         // We do not actually depend on any features specific to a Yarn version, but we still want to stick to a

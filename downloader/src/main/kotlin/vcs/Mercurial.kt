@@ -26,6 +26,7 @@ import com.here.ort.model.VcsType
 import com.here.ort.utils.CommandLineTool
 import com.here.ort.utils.FileMatcher
 import com.here.ort.utils.ProcessCapture
+import com.here.ort.utils.collectMessagesAsString
 import com.here.ort.utils.log
 import com.here.ort.utils.showStackTrace
 
@@ -128,8 +129,8 @@ class Mercurial : VersionControlSystem(), CommandLineTool {
         return getWorkingTree(targetDir)
     }
 
-    override fun updateWorkingTree(workingTree: WorkingTree, revision: String, recursive: Boolean): Boolean {
-        return try {
+    override fun updateWorkingTree(workingTree: WorkingTree, revision: String, path: String, recursive: Boolean) =
+        try {
             // To safe network bandwidth, only pull exactly the revision we want. Do not use "-u" to update the
             // working tree just yet, as Mercurial would only update if new changesets were pulled. But that might
             // not be the case if the requested revision is already available locally.
@@ -142,9 +143,8 @@ class Mercurial : VersionControlSystem(), CommandLineTool {
         } catch (e: IOException) {
             e.showStackTrace()
 
-            log.warn { "Failed to update $type working tree to revision '$revision': ${e.message}" }
+            log.warn { "Failed to update $type working tree to revision '$revision': ${e.collectMessagesAsString()}" }
 
             false
         }
-    }
 }

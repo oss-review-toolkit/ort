@@ -21,21 +21,18 @@ package com.here.ort.reporter.reporters
 
 import com.here.ort.downloader.VcsHost
 import com.here.ort.model.Environment
-import com.here.ort.model.OrtResult
 import com.here.ort.model.Project
 import com.here.ort.model.RemoteArtifact
 import com.here.ort.model.Severity
 import com.here.ort.model.VcsInfo
-import com.here.ort.model.config.CopyrightGarbage
 import com.here.ort.model.config.RepositoryConfiguration
-import com.here.ort.model.licenses.LicenseConfiguration
 import com.here.ort.model.yamlMapper
-import com.here.ort.reporter.LicenseTextProvider
 import com.here.ort.reporter.Reporter
-import com.here.ort.reporter.ResolutionProvider
+import com.here.ort.reporter.ReporterInput
 import com.here.ort.reporter.reporters.ReportTableModel.IssueTable
 import com.here.ort.reporter.reporters.ReportTableModel.ProjectTable
 import com.here.ort.reporter.reporters.ReportTableModel.ResolvableIssue
+import com.here.ort.utils.ORT_NAME
 import com.here.ort.utils.isValidUrl
 import com.here.ort.utils.normalizeLineBreaks
 import com.vladsch.flexmark.html.HtmlRenderer
@@ -57,16 +54,8 @@ class StaticHtmlReporter : Reporter {
     override val reporterName = "StaticHtml"
     override val defaultFilename = "scan-report.html"
 
-    override fun generateReport(
-        outputStream: OutputStream,
-        ortResult: OrtResult,
-        resolutionProvider: ResolutionProvider,
-        licenseTextProvider: LicenseTextProvider,
-        copyrightGarbage: CopyrightGarbage,
-        licenseConfiguration: LicenseConfiguration,
-        postProcessingScript: String?
-    ) {
-        val tabularScanRecord = ReportTableModelMapper(resolutionProvider).mapToReportTableModel(ortResult)
+    override fun generateReport(outputStream: OutputStream, input: ReporterInput) {
+        val tabularScanRecord = ReportTableModelMapper(input.resolutionProvider).mapToReportTableModel(input.ortResult)
         val html = renderHtml(tabularScanRecord)
 
         outputStream.bufferedWriter().use {

@@ -60,9 +60,9 @@ abstract class AbstractIntegrationSpec : StringSpec() {
     protected open val managedFilesForTest by lazy { expectedManagedFiles }
 
     /**
-     * The list of package identifiers for which errors are expected.
+     * The list of package identifiers for which issues are expected.
      */
-    protected open val identifiersWithExpectedErrors = setOf<Identifier>()
+    protected open val identifiersWithExpectedIssues = setOf<Identifier>()
 
     /**
      * The temporary parent directory for downloads.
@@ -126,7 +126,7 @@ abstract class AbstractIntegrationSpec : StringSpec() {
                     result.project.vcsProcessed.url shouldBe pkg.vcs.url
                     result.project.scopes shouldNot beEmpty()
                     result.packages shouldNot beEmpty()
-                    result.collectErrors().keys should containExactly(identifiersWithExpectedErrors)
+                    result.collectIssues().keys should containExactly(identifiersWithExpectedIssues)
                 }
             }
         }

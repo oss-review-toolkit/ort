@@ -42,7 +42,7 @@ class ProjectTest : WordSpec({
                 File("../analyzer/src/funTest/assets/projects/synthetic/gradle-expected-output-lib.yml")
             val project = analyzerResultsFile.readValue<ProjectAnalyzerResult>().project
 
-            project.collectDependencies().map { it.id.toCoordinates() } shouldBe expectedDependencies
+            project.collectDependencies().map { it.toCoordinates() } shouldBe expectedDependencies
         }
 
         "get no dependencies for a depth of 0" {
@@ -64,19 +64,19 @@ class ProjectTest : WordSpec({
                 File("../analyzer/src/funTest/assets/projects/synthetic/gradle-expected-output-lib.yml")
             val project = analyzerResultsFile.readValue<ProjectAnalyzerResult>().project
 
-            project.collectDependencies(maxDepth = 1).map { it.id.toCoordinates() } shouldBe expectedDependencies
+            project.collectDependencies(maxDepth = 1).map { it.toCoordinates() } shouldBe expectedDependencies
         }
     }
 
-    "collectErrors" should {
-        "find all errors" {
+    "collectIssues" should {
+        "find all issues" {
             val analyzerResultsFile = File(
                 "../analyzer/src/funTest/assets/projects/synthetic/" +
                         "gradle-expected-output-lib-without-repo.yml"
             )
             val project = analyzerResultsFile.readValue<ProjectAnalyzerResult>().project
 
-            project.collectErrors() shouldBe mapOf(
+            project.collectIssues() shouldBe mapOf(
                 Identifier("Unknown:org.apache.commons:commons-text:1.1") to setOf(
                     OrtIssue(
                         Instant.EPOCH,

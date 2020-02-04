@@ -36,7 +36,7 @@ data class Environment(
     val javaVersion: String = System.getProperty("java.version"),
 
     /**
-     * Name of the operating system, defaults to [OS.name].
+     * Name of the operating system, defaults to [Os.name].
      */
     val os: String = Os.name,
 
@@ -53,6 +53,9 @@ data class Environment(
     val toolVersions: Map<String, String> = emptyMap()
 ) {
     companion object {
+        /**
+         * The version of the OSS Review Toolkit as a string.
+         */
         val ORT_VERSION = this::class.java.getResource("/VERSION").readText()
 
         private val RELEVANT_VARIABLES = listOf(

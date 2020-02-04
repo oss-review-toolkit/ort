@@ -1,3 +1,23 @@
+/*
+ * Copyright (C) 2017-2019 HERE Europe B.V.
+ * Copyright (C) 2019 Bosch Software Innovations GmbH
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ * License-Filename: LICENSE
+ */
+
 import org.apache.tools.ant.taskdefs.condition.Os
 
 import org.jetbrains.kotlin.gradle.targets.js.nodejs.NodeJsSetupTask
@@ -6,7 +26,7 @@ import org.jetbrains.kotlin.gradle.targets.js.yarn.YarnSetupTask
 
 // The Yarn plugin is only applied programmatically for Kotlin projects that target JavaScript. As we do not target
 // JavaScript from Kotlin (yet), manually apply the plugin to make its setup tasks available.
-YarnPlugin.apply(project).version = "1.17.3"
+YarnPlugin.apply(project).version = "1.21.1"
 
 // The Yarn plugin registers tasks always on the root project, see
 // https://github.com/JetBrains/kotlin/blob/2f90742/libraries/tools/kotlin-gradle-plugin/src/main/kotlin/org/jetbrains/kotlin/gradle/targets/js/yarn/YarnPlugin.kt#L27-L31
@@ -21,6 +41,7 @@ val yarnDir = kotlinYarnSetup.get().destination
 val yarnJs = yarnDir.resolve("bin/yarn.js")
 
 kotlinNodeJsSetup {
+    outputs.cacheIf { true }
     logger.quiet("Will use the Node executable file from '$nodeExecutable'.")
 
     // If the node binary is missing, force a re-download of the NodeJs distribution, see
@@ -31,6 +52,7 @@ kotlinNodeJsSetup {
 }
 
 kotlinYarnSetup {
+    outputs.cacheIf { true }
     logger.quiet("Will use the Yarn JavaScript file from '$yarnJs'.")
 }
 
@@ -42,6 +64,7 @@ tasks.addRule("Pattern: yarn<Command>") {
         tasks.register<Exec>(taskName) {
             // Execute the Yarn version downloaded by Gradle using the NodeJs version downloaded by Gradle.
             commandLine = listOf(nodeExecutable.path, yarnJs.path, command)
+            outputs.cacheIf { true }
         }
     }
 }

@@ -66,6 +66,11 @@ fun File.hash(algorithm: String = "SHA-1"): String =
     MessageDigest.getInstance(algorithm).digest(readBytes()).toHexString()
 
 /**
+ * Return true if and only if this file is a symbolic link.
+ */
+fun File.isSymlink(): Boolean = realFile() != absoluteFile
+
+/**
  * Resolve the file to the real underlying file. In contrast to Java's [File.getCanonicalFile], this also works to
  * resolve symbolic links on Windows.
  */
@@ -270,17 +275,18 @@ fun String.percentEncode(): String =
 /**
  * True if the string is a valid semantic version of the given [type], false otherwise.
  */
-fun String.isSemanticVersion(type: Semver.SemverType = Semver.SemverType.STRICT) = succeeds { Semver(this, type) }
+fun String.isSemanticVersion(type: Semver.SemverType = Semver.SemverType.STRICT) =
+    runCatching { Semver(this, type) }.isSuccess
 
 /**
  * True if the string is a valid [URI], false otherwise.
  */
-fun String.isValidUri() = succeeds { URI(this) }
+fun String.isValidUri() = runCatching { URI(this) }.isSuccess
 
 /**
  * True if the string is a valid [URL], false otherwise.
  */
-fun String.isValidUrl() = succeeds { URL(this) }
+fun String.isValidUrl() = runCatching { URL(this) }.isSuccess
 
 /**
  * A regular expression matching the non-linux line breaks "\r\n" and "\r".

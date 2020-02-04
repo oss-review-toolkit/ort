@@ -29,18 +29,18 @@ import io.kotlintest.shouldBe
 import io.kotlintest.specs.WordSpec
 
 class AnalyzerResultTest : WordSpec() {
-    private val error1 = OrtIssue(source = "source-1", message = "message-1")
-    private val error2 = OrtIssue(source = "source-2", message = "message-2")
-    private val error3 = OrtIssue(source = "source-3", message = "message-3")
-    private val error4 = OrtIssue(source = "source-4", message = "message-4")
+    private val issue1 = OrtIssue(source = "source-1", message = "message-1")
+    private val issue2 = OrtIssue(source = "source-2", message = "message-2")
+    private val issue3 = OrtIssue(source = "source-3", message = "message-3")
+    private val issue4 = OrtIssue(source = "source-4", message = "message-4")
 
     private val package1 = Package.EMPTY.copy(id = Identifier("type-1", "namespace-1", "package-1", "version-1"))
     private val package2 = Package.EMPTY.copy(id = Identifier("type-2", "namespace-2", "package-2", "version-2"))
     private val package3 = Package.EMPTY.copy(id = Identifier("type-3", "namespace-3", "package-3", "version-3"))
 
-    private val pkgRef1 = package1.toReference(errors = listOf(error1))
+    private val pkgRef1 = package1.toReference(issues = listOf(issue1))
     private val pkgRef2 = package2.toReference(
-        dependencies = sortedSetOf(package3.toReference(errors = listOf(error2)))
+        dependencies = sortedSetOf(package3.toReference(issues = listOf(issue2)))
     )
 
     private val scope1 = Scope("scope-1", sortedSetOf(pkgRef1))
@@ -57,12 +57,12 @@ class AnalyzerResultTest : WordSpec() {
 
     private val analyzerResult1 = ProjectAnalyzerResult(
         project1, sortedSetOf(package1.toCuratedPackage()),
-        listOf(error3, error4)
+        listOf(issue3, issue4)
     )
     private val analyzerResult2 = ProjectAnalyzerResult(
         project2,
         sortedSetOf(package1.toCuratedPackage(), package2.toCuratedPackage(), package3.toCuratedPackage()),
-        listOf(error4)
+        listOf(issue4)
     )
 
     init {
@@ -80,22 +80,22 @@ class AnalyzerResultTest : WordSpec() {
             }
         }
 
-        "collectErrors" should {
-            "find all errors" {
+        "collectIssues" should {
+            "find all issues" {
                 val analyzerResult = AnalyzerResultBuilder()
                     .addResult(analyzerResult1)
                     .addResult(analyzerResult2)
                     .build()
 
-                analyzerResult.collectErrors() shouldBe mapOf(
-                    package1.id to setOf(error1),
-                    package3.id to setOf(error2),
-                    project1.id to setOf(error3, error4),
-                    project2.id to setOf(error4)
+                analyzerResult.collectIssues() shouldBe mapOf(
+                    package1.id to setOf(issue1),
+                    package3.id to setOf(issue2),
+                    project1.id to setOf(issue3, issue4),
+                    project2.id to setOf(issue4)
                 )
             }
 
-            "contain declared license errors" {
+            "contain declared license issues" {
                 val invalidProjectLicense = sortedSetOf("invalid project license")
                 val invalidPackageLicense = sortedSetOf("invalid package license")
                 val analyzerResult = AnalyzerResult(
@@ -114,21 +114,21 @@ class AnalyzerResultTest : WordSpec() {
                     )
                 )
 
-                val errors = analyzerResult.collectErrors()
+                val issues = analyzerResult.collectIssues()
 
-                errors.getValue(project1.id).let { projectErrors ->
-                    projectErrors should haveSize(1)
-                    projectErrors.first().severity shouldBe Severity.ERROR
-                    projectErrors.first().source shouldBe project1.id.toCoordinates()
-                    projectErrors.first().message shouldBe "The declared license 'invalid project license' could not " +
+                issues.getValue(project1.id).let { projectIssues ->
+                    projectIssues should haveSize(1)
+                    projectIssues.first().severity shouldBe Severity.ERROR
+                    projectIssues.first().source shouldBe project1.id.toCoordinates()
+                    projectIssues.first().message shouldBe "The declared license 'invalid project license' could not " +
                             "be mapped to a valid license or parsed as an SPDX expression."
                 }
 
-                errors.getValue(package1.id).let { packageErrors ->
-                    packageErrors should haveSize(1)
-                    packageErrors.first().severity shouldBe Severity.ERROR
-                    packageErrors.first().source shouldBe package1.id.toCoordinates()
-                    packageErrors.first().message shouldBe "The declared license 'invalid package license' could not " +
+                issues.getValue(package1.id).let { packageIssues ->
+                    packageIssues should haveSize(1)
+                    packageIssues.first().severity shouldBe Severity.ERROR
+                    packageIssues.first().source shouldBe package1.id.toCoordinates()
+                    packageIssues.first().message shouldBe "The declared license 'invalid package license' could not " +
                             "be mapped to a valid license or parsed as an SPDX expression."
                 }
             }
@@ -146,8 +146,8 @@ class AnalyzerResultTest : WordSpec() {
                     package1.toCuratedPackage(), package2.toCuratedPackage(),
                     package3.toCuratedPackage()
                 )
-                mergedResults.errors shouldBe
-                        sortedMapOf(project1.id to analyzerResult1.errors, project2.id to analyzerResult2.errors)
+                mergedResults.issues shouldBe
+                        sortedMapOf(project1.id to analyzerResult1.issues, project2.id to analyzerResult2.issues)
             }
         }
     }

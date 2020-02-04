@@ -2,9 +2,6 @@
 # This file only lists the differences to the default configuration at
 # https://github.com/arturbosch/detekt/blob/master/detekt-cli/src/main/resources/default-detekt-config.yml.
 
-build:
-  maxIssues: 0
-
 complexity:
   ComplexMethod:
     threshold: 33
@@ -22,6 +19,10 @@ complexity:
 # respective rules completely.
 formatting:
   ChainWrapping:
+    active: false
+  FinalNewline:
+    active: false
+  MaximumLineLength:
     active: false
   NoWildcardImports:
     active: false

@@ -82,7 +82,7 @@ object DeclaredLicenseProcessor {
         try {
             SpdxExpression.parse(declaredLicense, SpdxExpression.Strictness.ALLOW_ANY)
         } catch (e: SpdxException) {
-            log.debug { "Could not parse declared license '$declaredLicense': ${e.message}" }
+            log.debug { "Could not parse declared license '$declaredLicense': ${e.collectMessagesAsString()}" }
             null
         }
 }

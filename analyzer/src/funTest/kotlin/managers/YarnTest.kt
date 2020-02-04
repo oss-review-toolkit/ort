@@ -22,54 +22,59 @@ package com.here.ort.analyzer.managers
 import com.here.ort.downloader.VersionControlSystem
 import com.here.ort.model.yamlMapper
 import com.here.ort.utils.normalizeVcsUrl
-import com.here.ort.utils.safeDeleteRecursively
 import com.here.ort.utils.test.DEFAULT_ANALYZER_CONFIGURATION
 import com.here.ort.utils.test.DEFAULT_REPOSITORY_CONFIGURATION
 import com.here.ort.utils.test.USER_DIR
 import com.here.ort.utils.test.patchExpectedResult
 
-import io.kotlintest.TestCase
-import io.kotlintest.TestResult
 import io.kotlintest.shouldBe
 import io.kotlintest.specs.WordSpec
 
 import java.io.File
 
 class YarnTest : WordSpec() {
-    private val projectDir = File("src/funTest/assets/projects/synthetic/yarn").absoluteFile
-    private val vcsDir = VersionControlSystem.forDirectory(projectDir)!!
-    private val vcsUrl = vcsDir.getRemoteUrl()
-    private val vcsRevision = vcsDir.getRevision()
+    private fun getExpectedResult(projectDir: File, expectedResultTemplateFile: String): String {
+        val vcsDir = VersionControlSystem.forDirectory(projectDir)!!
+        val vcsUrl = vcsDir.getRemoteUrl()
+        val vcsPath = vcsDir.getPathToRoot(projectDir)
+        val vcsRevision = vcsDir.getRevision()
+        val expectedOutputTemplate = projectDir.parentFile.resolve(expectedResultTemplateFile)
 
-    override fun afterTest(testCase: TestCase, result: TestResult) {
-        // Make sure the node_modules directory is always deleted from each subdirectory to prevent side-effects
-        // from failing tests.
-        projectDir.listFiles().forEach {
-            if (it.isDirectory) {
-                val nodeModulesDir = File(it, "node_modules")
-                val gitKeepFile = File(nodeModulesDir, ".gitkeep")
-                if (nodeModulesDir.isDirectory && !gitKeepFile.isFile) {
-                    nodeModulesDir.safeDeleteRecursively(force = true)
-                }
-            }
-        }
+        return patchExpectedResult(
+            result = expectedOutputTemplate,
+            definitionFilePath = "$vcsPath/package.json",
+            url = normalizeVcsUrl(vcsUrl),
+            revision = vcsRevision,
+            path = vcsPath
+        )
+    }
+
+    private fun resolveDependencies(projectDir: File): String {
+        val packageFile = File(projectDir, "package.json")
+        val result = createYarn().resolveDependencies(listOf(packageFile))[packageFile]
+        return yamlMapper.writeValueAsString(result)
     }
 
     init {
         "yarn" should {
             "resolve dependencies correctly" {
-                val packageFile = File(projectDir, "package.json")
-                val result = createYarn().resolveDependencies(listOf(packageFile))[packageFile]
-                val vcsPath = vcsDir.getPathToRoot(projectDir)
-                val expectedResult = patchExpectedResult(
-                    File(projectDir.parentFile, "yarn-expected-output.yml"),
-                    definitionFilePath = "$vcsPath/package.json",
-                    url = normalizeVcsUrl(vcsUrl),
-                    revision = vcsRevision,
-                    path = vcsPath
-                )
+                val projectDir = File("src/funTest/assets/projects/synthetic/yarn").absoluteFile
 
-                yamlMapper.writeValueAsString(result) shouldBe expectedResult
+                val result = resolveDependencies(projectDir)
+
+                val expectedResult = getExpectedResult(projectDir, "yarn-expected-output.yml")
+                result shouldBe expectedResult
+            }
+
+            "resolve workspace dependencies correctly" {
+                // This test case illustrates the lack of Yarn workspaces support, in particular not all workspace
+                // dependencies get assigned to a scope.
+                val projectDir = File("src/funTest/assets/projects/synthetic/yarn-workspaces").absoluteFile
+
+                val result = resolveDependencies(projectDir)
+
+                val expectedResult = getExpectedResult(projectDir, "yarn-workspaces-expected-output.yml")
+                result shouldBe expectedResult
             }
         }
     }

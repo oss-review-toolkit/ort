@@ -22,7 +22,7 @@ package com.here.ort.reporter
 import com.here.ort.model.OrtIssue
 import com.here.ort.model.OrtResult
 import com.here.ort.model.RuleViolation
-import com.here.ort.model.config.ErrorResolution
+import com.here.ort.model.config.IssueResolution
 import com.here.ort.model.config.Resolutions
 import com.here.ort.model.config.RuleViolationResolution
 
@@ -31,17 +31,18 @@ import com.here.ort.model.config.RuleViolationResolution
  */
 interface ResolutionProvider {
     /**
-     * Get all error resolutions that match [error].
+     * Get all issue resolutions that match [issue].
      */
-    fun getErrorResolutionsFor(issue: OrtIssue): List<ErrorResolution>
+    fun getIssueResolutionsFor(issue: OrtIssue): List<IssueResolution>
 
     /**
-     * Get all rule violation resolutions that match [error].
+     * Get all rule violation resolutions that match [violation].
      */
     fun getRuleViolationResolutionsFor(violation: RuleViolation): List<RuleViolationResolution>
 
     /**
-     * Get a [Resolutions] object that contains all resolutions which apply to errors contained in [ortResult].
+     * Get a [Resolutions] object that contains all resolutions which apply to [OrtIssue]s or [RuleViolation]s contained
+     * in [ortResult].
      */
     fun getResolutionsFor(ortResult: OrtResult): Resolutions
 }

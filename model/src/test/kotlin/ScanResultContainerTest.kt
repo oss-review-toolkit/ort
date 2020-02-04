@@ -54,10 +54,10 @@ class ScanResultContainerTest : WordSpec() {
     private val scannerStartTime2 = downloadTime2 + Duration.ofMinutes(1)
     private val scannerEndTime2 = scannerStartTime2 + Duration.ofMinutes(1)
 
-    private val error11 = OrtIssue(source = "source-11", message = "error-11")
-    private val error12 = OrtIssue(source = "source-12", message = "error-12")
-    private val error21 = OrtIssue(source = "source-21", message = "error-21")
-    private val error22 = OrtIssue(source = "source-22", message = "error-22")
+    private val issue11 = OrtIssue(source = "source-11", message = "issue-11")
+    private val issue12 = OrtIssue(source = "source-12", message = "issue-12")
+    private val issue21 = OrtIssue(source = "source-21", message = "issue-21")
+    private val issue22 = OrtIssue(source = "source-22", message = "issue-22")
 
     private val scanSummary1 = ScanSummary(
         scannerStartTime1,
@@ -84,7 +84,7 @@ class ScanResultContainerTest : WordSpec() {
                 TextLocation("copyright path 1.2", 1, 2)
             )
          ),
-        mutableListOf(error11, error12)
+        mutableListOf(issue11, issue12)
     )
     private val scanSummary2 = ScanSummary(
         scannerStartTime2,
@@ -106,7 +106,7 @@ class ScanResultContainerTest : WordSpec() {
             CopyrightFinding("copyright 3", TextLocation("path/to/file", 1, 2)),
             CopyrightFinding("copyright 4", TextLocation("path/to/another/file", 3, 4))
         ),
-        mutableListOf(error21, error22)
+        mutableListOf(issue21, issue22)
     )
 
     private val rawResult1 = jsonMapper.readTree("\"key 1\": \"value 1\"")

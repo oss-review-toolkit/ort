@@ -1619,8 +1619,8 @@ analyzer:
           path: ""
         vcs_processed:
           type: "Subversion"
-          url: "http://svn.sonatype.org/spice/tags/oss-parent-7"
-          revision: ""
+          url: "http://svn.sonatype.org/spice"
+          revision: "tags/oss-parent-7"
           path: ""
       curations: []
     - package:
@@ -8899,14 +8899,15 @@ analyzer:
           revision: ""
           path: "types/node"
       curations: []
-    errors:
+    issues:
       'NPM::submodules/test-data-npm/long.js/package.json:':
       - timestamp: "1970-01-01T00:00:00Z"
         source: "NPM"
-        message: "IllegalArgumentException: No lockfile found in 'submodules/test-data-npm/long.js'.\
-          \ This potentially results in unstable versions of dependencies. To allow\
-          \ this, enable support for dynamic versions."
+        message: "Resolving dependencies for 'package.json' failed with: IllegalArgumentException:\
+          \ No lockfile found in 'submodules/test-data-npm/long.js'. This potentially\
+          \ results in unstable versions of dependencies. To allow this, enable support\
+          \ for dynamic versions."
         severity: "ERROR"
-    has_errors: true
+    has_issues: true
 scanner: null
 evaluator: null

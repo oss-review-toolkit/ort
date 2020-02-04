@@ -38,19 +38,7 @@ class FileMatcher(
         /**
          * A matcher which uses the default license file names.
          */
-        val LICENSE_FILE_MATCHER = FileMatcher(
-            listOf(
-                "license*",
-                "licence*",
-                "*.license",
-                "unlicense",
-                "unlicence",
-                "copying*",
-                "copyright",
-                "patents",
-                "readme*"
-            ).flatMap { listOf(it, it.toUpperCase(), it.capitalize()) }
-        )
+        val LICENSE_FILE_MATCHER = FileMatcher(LICENSE_FILENAMES + ROOT_LICENSE_FILENAMES)
     }
 
     constructor(vararg patterns: String) : this(patterns.asList())

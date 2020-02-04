@@ -1,8 +1,8 @@
 excludes:
   scopes:
-  - name: "test.*"
-    reason: "TEST_TOOL_OF"
+  - pattern: "test.*"
+    reason: "TEST_DEPENDENCY_OF"
     comment: "Scope with dependencies only used for testing. Not included in released artifacts in the context of this project."
-  - name: ".*Test.*"
-    reason: "TEST_TOOL_OF"
+  - pattern: ".*Test.*"
+    reason: "TEST_DEPENDENCY_OF"
     comment: "Scope with dependencies only used for testing. Not included in released artifacts in the context of this project."

@@ -1,0 +1,32 @@
+# Ignore the Docker files themselves to avoid that all layers are invalidated if
+# the Docker files are changed during development.
+.dockerignore
+Dockerfile
+
+# Ignore the Jenkinsfile to avoid that all layers are invalidated if the
+# Jenkinsfile is changed during development.
+Jenkinsfile
+
+# Ignore the Git directory.
+.git/
+
+# Ignore IntelliJ IDEA files.
+.idea/
+*.iml
+
+# Ignore intermediate build artifacts.
+**/.gradle/
+**/.kotlintest/
+**/build/
+!docker/build
+**/out/
+reporter-web-app/node_modules/
+
+# Ignore the logos as we do not need them to run ORT.
+logos/
+
+# Ignore test directories as we do not need them to run ORT.
+**/*[Tt]est/
+
+# Ignore macOS-specific files.
+.DS_Store

@@ -17,18 +17,18 @@
  * License-Filename: LICENSE
  */
 
-import ErrorResolution from './ErrorResolution';
+import IssueResolution from './IssueResolution';
 import RuleViolationResolution from './RuleViolationResolution';
 
 class Resolutions {
-    #errors = [];
+    #issues = [];
 
     #resolutions = [];
 
     constructor(obj) {
         if (obj instanceof Object) {
-            if (obj.errors) {
-                this.errors = obj.errors;
+            if (obj.issues) {
+                this.issues = obj.issues;
             }
 
             if (obj.resolutions) {
@@ -37,13 +37,13 @@ class Resolutions {
         }
     }
 
-    get errors() {
-        return this.#errors;
+    get issues() {
+        return this.#issues;
     }
 
-    set errors(val) {
+    set issues(val) {
         for (let i = 0, len = val.length; i < len; i++) {
-            this.#errors.push(new ErrorResolution(val[i]));
+            this.#issues.push(new IssueResolution(val[i]));
         }
     }
 

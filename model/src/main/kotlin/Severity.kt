@@ -19,6 +19,8 @@
 
 package com.here.ort.model
 
+import org.apache.logging.log4j.Level
+
 /**
  * A generic class describing a severity, e.g. of issues.
  */
@@ -36,5 +38,12 @@ enum class Severity {
     /**
      * A hint is something that is provided for information only.
      */
-    HINT
+    HINT;
+
+    fun toLog4jLevel(): Level =
+        when (this) {
+            ERROR -> Level.ERROR
+            WARNING -> Level.WARN
+            HINT -> Level.INFO
+        }
 }

@@ -147,17 +147,17 @@ class ScanCode(
         )
 
         /**
-         * Map messages about unknown errors to a more compact form. Return true if solely memory errors occurred,
+         * Map messages about unknown issues to a more compact form. Return true if solely memory errors occurred,
          * return false otherwise.
          */
-        internal fun mapUnknownErrors(errors: MutableList<OrtIssue>): Boolean {
-            if (errors.isEmpty()) {
+        internal fun mapUnknownIssues(issues: MutableList<OrtIssue>): Boolean {
+            if (issues.isEmpty()) {
                 return false
             }
 
             var onlyMemoryErrors = true
 
-            val mappedErrors = errors.map { fullError ->
+            val mappedIssues = issues.map { fullError ->
                 UNKNOWN_ERROR_REGEX.matcher(fullError.message).let { matcher ->
                     if (matcher.matches()) {
                         val file = matcher.group("file")
@@ -176,8 +176,8 @@ class ScanCode(
                 }
             }
 
-            errors.clear()
-            errors += mappedErrors.distinctBy { it.message }
+            issues.clear()
+            issues += mappedIssues.distinctBy { it.message }
 
             return onlyMemoryErrors
         }
@@ -186,14 +186,14 @@ class ScanCode(
          * Map messages about timeout errors to a more compact form. Return true if solely timeout errors occurred,
          * return false otherwise.
          */
-        internal fun mapTimeoutErrors(errors: MutableList<OrtIssue>): Boolean {
-            if (errors.isEmpty()) {
+        internal fun mapTimeoutErrors(issues: MutableList<OrtIssue>): Boolean {
+            if (issues.isEmpty()) {
                 return false
             }
 
             var onlyTimeoutErrors = true
 
-            val mappedErrors = errors.map { fullError ->
+            val mappedIssues = issues.map { fullError ->
                 TIMEOUT_ERROR_REGEX.matcher(fullError.message).let { matcher ->
                     if (matcher.matches() && matcher.group("timeout") == TIMEOUT.toString()) {
                         val file = matcher.group("file")
@@ -205,8 +205,8 @@ class ScanCode(
                 }
             }
 
-            errors.clear()
-            errors += mappedErrors.distinctBy { it.message }
+            issues.clear()
+            issues += mappedIssues.distinctBy { it.message }
 
             return onlyTimeoutErrors
         }
@@ -215,7 +215,7 @@ class ScanCode(
     override val scannerVersion = "3.0.2"
     override val resultFileExt = "json"
 
-    private val scanCodeConfiguration = config.scanner?.get("ScanCode") ?: emptyMap()
+    private val scanCodeConfiguration = config.scanner?.get("ScanCode").orEmpty()
 
     private val configurationOptions = scanCodeConfiguration["commandLine"]?.split(" ")
         ?: DEFAULT_CONFIGURATION_OPTIONS
@@ -327,14 +327,14 @@ class ScanCode(
         val result = getRawResult(resultsFile)
         val summary = generateSummary(startTime, endTime, path, result)
 
-        val errors = summary.errors.toMutableList()
+        val issues = summary.issues.toMutableList()
 
-        val hasOnlyMemoryErrors = mapUnknownErrors(errors)
-        val hasOnlyTimeoutErrors = mapTimeoutErrors(errors)
+        val hasOnlyMemoryErrors = mapUnknownIssues(issues)
+        val hasOnlyTimeoutErrors = mapTimeoutErrors(issues)
 
         with(process) {
             if (isSuccess || hasOnlyMemoryErrors || hasOnlyTimeoutErrors) {
-                return ScanResult(Provenance(), getDetails(), summary.copy(errors = errors), result)
+                return ScanResult(Provenance(), getDetails(), summary.copy(issues = issues), result)
             } else {
                 throw ScanException(errorMessage)
             }
@@ -368,7 +368,7 @@ class ScanCode(
             packageVerificationCode = calculatePackageVerificationCode(scanPath),
             licenseFindings = getLicenseFindings(result).toSortedSet(),
             copyrightFindings = getCopyrightFindings(result).toSortedSet(),
-            errors = getErrors(result)
+            issues = getIssues(result)
         )
 
     /**
@@ -391,7 +391,7 @@ class ScanCode(
         return name
     }
 
-    private fun getErrors(result: JsonNode): List<OrtIssue> =
+    private fun getIssues(result: JsonNode): List<OrtIssue> =
         result["files"]?.flatMap { file ->
             val path = file["path"].textValue()
             file["scan_errors"].map {

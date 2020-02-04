@@ -31,13 +31,15 @@ import com.here.ort.model.VcsInfo
 import com.here.ort.model.VcsType
 import com.here.ort.model.yamlMapper
 import com.here.ort.utils.DiskCache
-import com.here.ort.utils.collectMessages
+import com.here.ort.utils.Os
+import com.here.ort.utils.collectMessagesAsString
 import com.here.ort.utils.getUserOrtDirectory
 import com.here.ort.utils.log
 import com.here.ort.utils.searchUpwardsForSubdirectory
 import com.here.ort.utils.showStackTrace
 
 import java.io.File
+import java.net.URL
 import java.util.regex.Pattern
 
 import org.apache.maven.artifact.repository.LegacyLocalRepositoryManager
@@ -58,6 +60,7 @@ import org.apache.maven.project.ProjectBuildingRequest
 import org.apache.maven.project.ProjectBuildingResult
 import org.apache.maven.properties.internal.EnvironmentUtils
 import org.apache.maven.session.scope.internal.SessionScope
+import org.apache.maven.settings.Proxy
 
 import org.codehaus.plexus.DefaultContainerConfiguration
 import org.codehaus.plexus.DefaultPlexusContainer
@@ -73,6 +76,7 @@ import org.eclipse.aether.artifact.Artifact
 import org.eclipse.aether.artifact.DefaultArtifact
 import org.eclipse.aether.impl.RemoteRepositoryManager
 import org.eclipse.aether.impl.RepositoryConnectorProvider
+import org.eclipse.aether.repository.MirrorSelector
 import org.eclipse.aether.repository.RemoteRepository
 import org.eclipse.aether.repository.WorkspaceReader
 import org.eclipse.aether.resolution.ArtifactDescriptorRequest
@@ -113,6 +117,17 @@ class MavenSupport(workspaceReader: WorkspaceReader) {
                 loggerManager = object : BaseLoggerManager() {
                     override fun createLogger(name: String) = MavenLogger(log.delegate.level)
                 }
+            }
+        }
+
+        fun createProxyFromUrl(proxyUrl: String): Proxy {
+            val url = URL(proxyUrl)
+            return Proxy().apply {
+                protocol = url.protocol
+                username = url.userInfo?.substringBefore(':')
+                password = url.userInfo?.substringAfter(':')
+                host = url.host
+                if (url.port != -1) port = url.port
             }
         }
 
@@ -239,6 +254,12 @@ class MavenSupport(workspaceReader: WorkspaceReader) {
         //       system properties "org.apache.maven.global-settings" and "org.apache.maven.user-settings".
         val settings = settingsBuilder.buildSettings()
 
+        Os.proxy?.let { proxyUrl ->
+            // Maven only uses the first active proxy for both HTTP and HTTPS traffic.
+            settings.proxies.add(createProxyFromUrl(proxyUrl))
+            log.debug { "Added $proxyUrl as proxy." }
+        }
+
         populator.populateFromSettings(request, settings)
         populator.populateDefaults(request)
 
@@ -255,6 +276,8 @@ class MavenSupport(workspaceReader: WorkspaceReader) {
 
         val repositorySystemSession = repositorySystemSessionFactory
             .newRepositorySession(createMavenExecutionRequest())
+
+        repositorySystemSession.mirrorSelector = HttpsMirrorSelector(repositorySystemSession.mirrorSelector)
 
         val localRepository = mavenRepositorySystem.createLocalRepository(
             createMavenExecutionRequest(),
@@ -287,11 +310,11 @@ class MavenSupport(workspaceReader: WorkspaceReader) {
             if (failedProject != null) {
                 log.warn {
                     "There was an error building '${pomFile.invariantSeparatorsPath}', continuing with the " +
-                            "incompletely built project: ${e.collectMessages()}"
+                            "incompletely built project: ${e.collectMessagesAsString()}"
                 }
                 failedProject
             } else {
-                log.error { "Failed to build '${pomFile.invariantSeparatorsPath}': ${e.collectMessages()}" }
+                log.error { "Failed to build '${pomFile.invariantSeparatorsPath}': ${e.collectMessagesAsString()}" }
                 throw e
             }
         }
@@ -349,7 +372,7 @@ class MavenSupport(workspaceReader: WorkspaceReader) {
             } catch (e: NoRepositoryLayoutException) {
                 e.showStackTrace()
 
-                log.warn { "Could not search for '$artifact' in '$repository': ${e.collectMessages()}" }
+                log.warn { "Could not search for '$artifact' in '$repository': ${e.collectMessagesAsString()}" }
 
                 return@forEach
             }
@@ -385,7 +408,7 @@ class MavenSupport(workspaceReader: WorkspaceReader) {
             } catch (e: NoRepositoryConnectorException) {
                 e.showStackTrace()
 
-                log.warn { "Could not create connector for repository '$repository': ${e.collectMessages()}" }
+                log.warn { "Could not create connector for repository '$repository': ${e.collectMessagesAsString()}" }
 
                 return@forEach
             }
@@ -412,7 +435,7 @@ class MavenSupport(workspaceReader: WorkspaceReader) {
                 } catch (e: Exception) {
                     e.showStackTrace()
 
-                    log.warn { "Could not get checksum for '$artifact': ${e.collectMessages()}" }
+                    log.warn { "Could not get checksum for '$artifact': ${e.collectMessagesAsString()}" }
 
                     // Fall back to an empty checksum string.
                     ""
@@ -429,7 +452,8 @@ class MavenSupport(workspaceReader: WorkspaceReader) {
                 }
             } else {
                 log.debug {
-                    "Could not find '$artifact' in '$repository': ${artifactDownload.exception.collectMessages()}"
+                    "Could not find '$artifact' in '$repository': " +
+                            artifactDownload.exception.collectMessagesAsString()
                 }
             }
         }
@@ -490,11 +514,11 @@ class MavenSupport(workspaceReader: WorkspaceReader) {
                 if (failedProject != null) {
                     log.warn {
                         "There was an error building '${it.identifier()}', continuing with the incompletely built " +
-                                "project: ${e.collectMessages()}"
+                                "project: ${e.collectMessagesAsString()}"
                     }
                     failedProject.project
                 } else {
-                    log.error { "Failed to build '${it.identifier()}': ${e.collectMessages()}" }
+                    log.error { "Failed to build '${it.identifier()}': ${e.collectMessagesAsString()}" }
                     throw e
                 }
             }
@@ -574,5 +598,48 @@ class MavenSupport(workspaceReader: WorkspaceReader) {
             sessionScope.exit()
             legacySupport.session = null
         }
+    }
+}
+
+/**
+ * Several Maven repositories have disabled HTTP access and require HTTPS now. To be able to still analyze old Maven
+ * projects that use the HTTP URLs, this [MirrorSelector] implementation automatically creates an HTTPS mirror if a
+ * [RemoteRepository] uses a disabled HTTP URL. Without that Maven would abort with an exception as soon as it tries to
+ * download an Artifact from any of those repositories.
+ *
+ * **See also:**
+ *
+ * [GitHub Security Lab issue](https://github.com/github/security-lab/issues/21)
+ * [Medium article](https://medium.com/p/d069d253fe23)
+ */
+class HttpsMirrorSelector(private val originalMirrorSelector: MirrorSelector?) : MirrorSelector {
+    companion object {
+        private val DISABLED_HTTP_REPOSITORY_URLS = listOf(
+            "http://jcenter.bintray.com",
+            "http://repo.maven.apache.org",
+            "http://repo1.maven.org",
+            "http://repo.spring.io"
+        )
+    }
+
+    override fun getMirror(repository: RemoteRepository?): RemoteRepository? {
+        originalMirrorSelector?.getMirror(repository)?.let { return it }
+
+        if (repository == null || DISABLED_HTTP_REPOSITORY_URLS.none { repository.url.startsWith(it) }) return null
+
+        log.info {
+            "HTTP access to ${repository.id} (${repository.url}) was disabled. Automatically switching to HTTPS."
+        }
+
+        return RemoteRepository.Builder(
+            "${repository.id}-https-mirror",
+            repository.contentType,
+            "https://${repository.url.removePrefix("http://")}"
+        ).apply {
+            setRepositoryManager(false)
+            setSnapshotPolicy(repository.getPolicy(true))
+            setReleasePolicy(repository.getPolicy(false))
+            setMirroredRepositories(listOf(repository))
+        }.build()
     }
 }

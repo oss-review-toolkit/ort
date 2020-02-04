@@ -22,62 +22,21 @@ package com.here.ort.analyzer.managers
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.annotation.JsonProperty
-import com.fasterxml.jackson.dataformat.xml.XmlMapper
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty
 import com.fasterxml.jackson.module.kotlin.readValue
-import com.fasterxml.jackson.module.kotlin.registerKotlinModule
 
 import com.here.ort.analyzer.AbstractPackageManagerFactory
 import com.here.ort.analyzer.PackageManager
-import com.here.ort.analyzer.managers.utils.DotNetSupport
-import com.here.ort.downloader.VersionControlSystem
-import com.here.ort.model.Identifier
-import com.here.ort.model.Project
+import com.here.ort.analyzer.managers.utils.XmlPackageReferenceMapper
+import com.here.ort.analyzer.managers.utils.resolveDotNetDependencies
 import com.here.ort.model.ProjectAnalyzerResult
-import com.here.ort.model.VcsInfo
 import com.here.ort.model.config.AnalyzerConfiguration
 import com.here.ort.model.config.RepositoryConfiguration
 
 import java.io.File
 
-/**
- * The [DotNet](https://docs.microsoft.com/en-us/dotnet/core/tools/) package manager for .NET.
- */
-class DotNet(
-    name: String,
-    analysisRoot: File,
-    analyzerConfig: AnalyzerConfiguration,
-    repoConfig: RepositoryConfiguration
-) : PackageManager(name, analysisRoot, analyzerConfig, repoConfig) {
-    companion object {
-        fun mapPackageReferences(definitionFile: File): Map<String, String> {
-            val map = mutableMapOf<String, String>()
-            val mapper = XmlMapper().registerKotlinModule()
-            val itemGroups = mapper.readValue<List<ItemGroup>>(definitionFile)
-
-            itemGroups.forEach { itemGroup ->
-                itemGroup.packageReference?.forEach {
-                    if (it.include.isNotEmpty()) {
-                        map[it.include] = it.version
-                    }
-                }
-            }
-
-            return map
-        }
-    }
-
-    class Factory : AbstractPackageManagerFactory<DotNet>("DotNet") {
-        override val globsForDefinitionFiles = listOf("*.csproj", "*.fsproj", "*.vcxproj")
-
-        override fun create(
-            analysisRoot: File,
-            analyzerConfig: AnalyzerConfiguration,
-            repoConfig: RepositoryConfiguration
-        ) = DotNet(managerName, analysisRoot, analyzerConfig, repoConfig)
-    }
-
+class DotNetPackageReferenceMapper : XmlPackageReferenceMapper() {
     // See https://docs.microsoft.com/en-us/nuget/consume-packages/package-references-in-project-files.
     @JsonIgnoreProperties(ignoreUnknown = true)
     data class ItemGroup(
@@ -94,29 +53,41 @@ class DotNet(
         val version: String
     )
 
-    override fun resolveDependencies(definitionFile: File): ProjectAnalyzerResult? {
-        val workingDir = definitionFile.parentFile
-        val dotnet = DotNetSupport(mapPackageReferences(definitionFile))
+    override fun mapPackageReferences(definitionFile: File): Map<String, String> {
+        val map = mutableMapOf<String, String>()
+        val itemGroups = mapper.readValue<List<ItemGroup>>(definitionFile)
 
-        val project = Project(
-            id = Identifier(
-                type = managerName,
-                namespace = "",
-                name = definitionFile.relativeTo(analysisRoot).invariantSeparatorsPath,
-                version = ""
-            ),
-            definitionFilePath = VersionControlSystem.getPathInfo(definitionFile).path,
-            declaredLicenses = sortedSetOf(),
-            vcs = VcsInfo.EMPTY,
-            vcsProcessed = processProjectVcs(workingDir),
-            homepageUrl = "",
-            scopes = sortedSetOf(dotnet.scope)
-        )
+        itemGroups.forEach { itemGroup ->
+            itemGroup.packageReference?.forEach {
+                if (it.include.isNotEmpty()) {
+                    map[it.include] = it.version
+                }
+            }
+        }
 
-        return ProjectAnalyzerResult(
-            project,
-            packages = dotnet.packages.mapTo(sortedSetOf()) { it.toCuratedPackage() },
-            errors = dotnet.errors
-        )
+        return map
     }
+}
+
+/**
+ * The [DotNet](https://docs.microsoft.com/en-us/dotnet/core/tools/) package manager for .NET.
+ */
+class DotNet(
+    name: String,
+    analysisRoot: File,
+    analyzerConfig: AnalyzerConfiguration,
+    repoConfig: RepositoryConfiguration
+) : PackageManager(name, analysisRoot, analyzerConfig, repoConfig) {
+    class Factory : AbstractPackageManagerFactory<DotNet>("DotNet") {
+        override val globsForDefinitionFiles = listOf("*.csproj", "*.fsproj", "*.vcxproj")
+
+        override fun create(
+            analysisRoot: File,
+            analyzerConfig: AnalyzerConfiguration,
+            repoConfig: RepositoryConfiguration
+        ) = DotNet(managerName, analysisRoot, analyzerConfig, repoConfig)
+    }
+
+    override fun resolveDependencies(definitionFile: File): ProjectAnalyzerResult? =
+        resolveDotNetDependencies(definitionFile, DotNetPackageReferenceMapper())
 }

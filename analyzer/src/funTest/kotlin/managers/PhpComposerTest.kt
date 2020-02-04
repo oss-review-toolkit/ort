@@ -28,7 +28,7 @@ import com.here.ort.utils.test.DEFAULT_REPOSITORY_CONFIGURATION
 import com.here.ort.utils.test.USER_DIR
 import com.here.ort.utils.test.patchExpectedResult
 
-import io.kotlintest.matchers.startWith
+import io.kotlintest.matchers.haveSubstring
 import io.kotlintest.should
 import io.kotlintest.shouldBe
 import io.kotlintest.shouldNotBe
@@ -62,15 +62,17 @@ class PhpComposerTest : StringSpec() {
             val result = createPhpComposer().resolveDependencies(listOf(definitionFile))[definitionFile]
 
             result shouldNotBe null
-            result!!.project.id shouldBe Identifier(
-                "PhpComposer::src/funTest/assets/projects/synthetic/" +
-                        "php-composer/no-lockfile/composer.json:"
-            )
-            result.project.definitionFilePath shouldBe
-                    "analyzer/src/funTest/assets/projects/synthetic/php-composer/no-lockfile/composer.json"
-            result.packages.size shouldBe 0
-            result.errors.size shouldBe 1
-            result.errors.first().message should startWith("IllegalArgumentException: No lockfile found in")
+            with(result!!) {
+                project.id shouldBe Identifier(
+                    "PhpComposer::src/funTest/assets/projects/synthetic/" +
+                            "php-composer/no-lockfile/composer.json:"
+                )
+                project.definitionFilePath shouldBe
+                        "analyzer/src/funTest/assets/projects/synthetic/php-composer/no-lockfile/composer.json"
+                packages.size shouldBe 0
+                issues.size shouldBe 1
+                issues.first().message should haveSubstring("IllegalArgumentException: No lockfile found in")
+            }
         }
 
         "No composer.lock is required for projects without dependencies" {

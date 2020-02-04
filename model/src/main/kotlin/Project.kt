@@ -97,38 +97,41 @@ data class Project(
     }
 
     /**
-     * Return the set of [PackageReference]s in this [Project], up to and including a depth of [maxDepth] where counting
-     * starts at 0 (for the [Project] itself) and 1 are direct dependencies etc. A value below 0 means to not limit the
-     * depth. If [includeErroneous] is true, [PackageReference]s with errors (but not their dependencies without errors)
-     * are excluded, otherwise they are included.
+     * Return the set of package [Identifier]s of all transitive dependencies of this [Project], up to and including a
+     * depth of [maxDepth] where counting starts at 0 (for the [Project] itself) and 1 are direct dependencies etc. A
+     * value below 0 means to not limit the depth. If the given [filterPredicate] is false for a specific
+     * [PackageReference] the corresponding [Identifier] is excluded from the result.
      */
-    fun collectDependencies(maxDepth: Int = -1, includeErroneous: Boolean = true) =
-        scopes.fold(sortedSetOf<PackageReference>()) { refs, scope ->
-            refs.also { it += scope.collectDependencies(maxDepth, includeErroneous) }
+    fun collectDependencies(
+        maxDepth: Int = -1,
+        filterPredicate: (PackageReference) -> Boolean = { true }
+    ): SortedSet<Identifier> =
+        scopes.fold(sortedSetOf()) { refs, scope ->
+            refs.also { it += scope.collectDependencies(maxDepth, filterPredicate) }
         }
 
     /**
-     * Return a map of all de-duplicated errors associated by [Identifier].
+     * Return a map of all de-duplicated [OrtIssue]s associated by [Identifier].
      */
-    fun collectErrors(): Map<Identifier, Set<OrtIssue>> {
-        val collectedErrors = mutableMapOf<Identifier, MutableSet<OrtIssue>>()
+    fun collectIssues(): Map<Identifier, Set<OrtIssue>> {
+        val collectedIssues = mutableMapOf<Identifier, MutableSet<OrtIssue>>()
 
-        fun addErrors(pkgRef: PackageReference) {
-            if (pkgRef.errors.isNotEmpty()) {
-                collectedErrors.getOrPut(pkgRef.id) { mutableSetOf() } += pkgRef.errors
+        fun addIssues(pkgRef: PackageReference) {
+            if (pkgRef.issues.isNotEmpty()) {
+                collectedIssues.getOrPut(pkgRef.id) { mutableSetOf() } += pkgRef.issues
             }
 
-            pkgRef.dependencies.forEach { addErrors(it) }
+            pkgRef.dependencies.forEach { addIssues(it) }
         }
 
         for (scope in scopes) {
             for (dependency in scope.dependencies) {
-                addErrors(dependency)
+                addIssues(dependency)
             }
         }
 
         declaredLicensesProcessed.unmapped.forEach { unmappedLicense ->
-            collectedErrors.getOrPut(id) { mutableSetOf() } += OrtIssue(
+            collectedIssues.getOrPut(id) { mutableSetOf() } += OrtIssue(
                 severity = Severity.ERROR,
                 source = id.toCoordinates(),
                 message = "The declared license '$unmappedLicense' could not be mapped to a valid license or " +
@@ -136,41 +139,39 @@ data class Project(
             )
         }
 
-        return collectedErrors
+        return collectedIssues
     }
 
     /**
-     * Return a de-duplicated list of all errors for the provided [id].
+     * Return a de-duplicated list of all [OrtIssue]s for the provided [id].
      */
-    fun collectErrors(id: Identifier): List<OrtIssue> {
-        val collectedErrors = mutableListOf<OrtIssue>()
+    fun collectIssues(id: Identifier): List<OrtIssue> {
+        val collectedIssues = mutableListOf<OrtIssue>()
 
-        fun addErrors(pkgRef: PackageReference) {
+        fun addIssues(pkgRef: PackageReference) {
             if (pkgRef.id == id) {
-                collectedErrors += pkgRef.errors
+                collectedIssues += pkgRef.issues
             }
 
-            pkgRef.dependencies.forEach { addErrors(it) }
+            pkgRef.dependencies.forEach { addIssues(it) }
         }
 
         for (scope in scopes) {
             for (dependency in scope.dependencies) {
-                addErrors(dependency)
+                addIssues(dependency)
             }
         }
 
-        return collectedErrors.distinct()
+        return collectedIssues.distinct()
     }
 
     /**
-     * Return the set of [PackageReference]s that refer to sub-projects of this [Project].
+     * Return the set of [Identifier]s that refer to sub-projects of this [Project].
      */
-    fun collectSubProjects() =
-        scopes.fold(sortedSetOf<PackageReference>()) { refs, scope ->
+    fun collectSubProjects(): SortedSet<Identifier> =
+        scopes.fold(sortedSetOf()) { refs, scope ->
             refs.also {
-                it += scope.collectDependencies().filter { ref ->
-                    ref.linkage in PackageLinkage.PROJECT_LINKAGE
-                }
+                it += scope.collectDependencies { ref -> ref.linkage in PackageLinkage.PROJECT_LINKAGE }
             }
         }
 

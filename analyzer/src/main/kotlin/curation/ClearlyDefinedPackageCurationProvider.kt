@@ -19,6 +19,7 @@
 
 package com.here.ort.analyzer.curation
 
+import com.here.ort.analyzer.HTTP_CACHE_PATH
 import com.here.ort.analyzer.PackageCurationProvider
 import com.here.ort.clearlydefined.ClearlyDefinedService
 import com.here.ort.clearlydefined.ClearlyDefinedService.ComponentType
@@ -32,8 +33,9 @@ import com.here.ort.model.Hash
 import com.here.ort.model.PackageCuration
 import com.here.ort.model.PackageCurationData
 import com.here.ort.model.RemoteArtifact
-import com.here.ort.model.VcsInfoCuration
+import com.here.ort.model.VcsInfoCurationData
 import com.here.ort.model.VcsType
+import com.here.ort.utils.OkHttpClientHelper
 
 /**
  * Map an [Identifier] to a ClearlyDefined [ComponentType] and [Provider]. Note that an Identifier's type in ORT
@@ -45,8 +47,8 @@ fun Identifier.toClearlyDefinedTypeAndProvider(): Pair<ComponentType, Provider> 
         "Bundler" -> ComponentType.GEM to Provider.RUBYGEMS
         "Cargo" -> ComponentType.CRATE to Provider.CRATES_IO
         "CocoaPods" -> ComponentType.POD to Provider.COCOAPODS
-        "nuget" -> ComponentType.NUGET to Provider.NUGET
-        "GoDep" -> ComponentType.GIT to Provider.GITHUB
+        "DotNet", "nuget" -> ComponentType.NUGET to Provider.NUGET
+        "GoDep", "GoMod" -> ComponentType.GIT to Provider.GITHUB
         "Maven" -> ComponentType.MAVEN to Provider.MAVEN_CENTRAL
         "NPM" -> ComponentType.NPM to Provider.NPM_JS
         "PhpComposer" -> ComponentType.COMPOSER to Provider.PACKAGIST
@@ -56,7 +58,7 @@ fun Identifier.toClearlyDefinedTypeAndProvider(): Pair<ComponentType, Provider> 
     }
 
 /**
- * Map an ORT [Package id][pkgId] to ClearlyDefined [Coordinates].
+ * Map an ORT [Identifier] to ClearlyDefined [Coordinates].
  */
 fun Identifier.toClearlyDefinedCoordinates(): Coordinates {
     val (type, provider) = toClearlyDefinedTypeAndProvider()
@@ -71,12 +73,12 @@ fun Identifier.toClearlyDefinedCoordinates(): Coordinates {
 }
 
 /**
- * Create a ClearlyDefined [SourceLocation] from an [Identifier] preferably a [VcsInfoCuration], but eventually fall
+ * Create a ClearlyDefined [SourceLocation] from an [Identifier] preferably a [VcsInfoCurationData], but eventually fall
  * back to a [RemoteArtifact], or return null if neither is specified.
  */
 fun toClearlyDefinedSourceLocation(
     id: Identifier,
-    vcs: VcsInfoCuration?,
+    vcs: VcsInfoCurationData?,
     sourceArtifact: RemoteArtifact?
 ): SourceLocation? {
     val vcsUrl = vcs?.url
@@ -115,13 +117,13 @@ fun toClearlyDefinedSourceLocation(
 }
 
 /**
- * Map a ClearlyDefined [SourceLocation] to either a [VcsInfoCuration] or a [RemoteArtifact].
+ * Map a ClearlyDefined [SourceLocation] to either a [VcsInfoCurationData] or a [RemoteArtifact].
  */
 fun SourceLocation?.toArtifactOrVcs(): Any? =
     this?.let { sourceLocation ->
         when (sourceLocation.type) {
             ComponentType.GIT -> {
-                VcsInfoCuration(
+                VcsInfoCurationData(
                     type = VcsType.GIT,
                     url = sourceLocation.url,
                     revision = sourceLocation.revision,
@@ -149,7 +151,7 @@ fun SourceLocation?.toArtifactOrVcs(): Any? =
  * A provider for curated package meta-data from the [ClearlyDefined](https://clearlydefined.io/) service.
  */
 class ClearlyDefinedPackageCurationProvider(server: Server = Server.PRODUCTION) : PackageCurationProvider {
-    private val service = ClearlyDefinedService.create(server)
+    private val service = ClearlyDefinedService.create(server, OkHttpClientHelper.buildClient(HTTP_CACHE_PATH))
 
     override fun getCurationsFor(pkgId: Identifier): List<PackageCuration> {
         val namespace = pkgId.namespace.takeUnless { it.isEmpty() } ?: "-"
@@ -165,7 +167,7 @@ class ClearlyDefinedPackageCurationProvider(server: Server = Server.PRODUCTION) 
                 declaredLicenses = curation.licensed?.declared?.let { sortedSetOf(it) },
                 homepageUrl = curation.described?.projectWebsite?.toString(),
                 sourceArtifact = sourceLocation as? RemoteArtifact,
-                vcs = sourceLocation as? VcsInfoCuration,
+                vcs = sourceLocation as? VcsInfoCurationData,
                 comment = "Provided by ClearlyDefined."
             )
         )

@@ -17,7 +17,7 @@
  * License-Filename: LICENSE
  */
 
-@file:Suppress("MaximumLineLength")
+@file:Suppress("MaxLineLength")
 
 package com.here.ort.spdx
 

@@ -1,5 +1,5 @@
 excludes:
   scopes:
-  - name: "test.*"
-    reason: "TEST_TOOL_OF"
-    comment: "Scope dependencies only used for testing. Not included in released artifacts in the context of this project."
+  - pattern: "test.*"
+    reason: "TEST_DEPENDENCY_OF"
+    comment: "Scope with dependencies only used for testing. Not included in released artifacts in the context of this project."

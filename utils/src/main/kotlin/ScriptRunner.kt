@@ -57,7 +57,7 @@ abstract class ScriptRunner {
             engine.compile(completeScript(script))
             true
         } catch (e: ScriptException) {
-            log.error { e.message ?: "No error message available." }
+            log.error { "Could not compile Kotlin script: ${e.collectMessagesAsString()}" }
             false
         }
     }

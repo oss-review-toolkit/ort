@@ -38,6 +38,7 @@ import com.here.ort.model.Scope
 import com.here.ort.model.VcsInfo
 import com.here.ort.model.config.AnalyzerConfiguration
 import com.here.ort.model.config.RepositoryConfiguration
+import com.here.ort.model.createAndLogIssue
 import com.here.ort.model.jsonMapper
 import com.here.ort.model.yamlMapper
 import com.here.ort.utils.CommandLineTool
@@ -183,10 +184,10 @@ class Bundler(
         } catch (e: IOException) {
             e.showStackTrace()
 
-            val errorMsg = "Failed to parse spec for gem '$gemName': ${e.collectMessagesAsString()}"
-            log.error { errorMsg }
-
-            issues += OrtIssue(source = managerName, message = errorMsg)
+            issues += createAndLogIssue(
+                source = managerName,
+                message = "Failed to parse spec for gem '$gemName': ${e.collectMessagesAsString()}"
+            )
         }
     }
 
@@ -303,7 +304,7 @@ data class GemSpec(
                 homepage,
                 yaml["licenses"]?.asIterable()?.mapTo(sortedSetOf()) { it.textValue() } ?: sortedSetOf(),
                 yaml["description"].textValueOrEmpty(),
-                runtimeDependencies ?: emptySet(),
+                runtimeDependencies.orEmpty(),
                 VcsHost.toVcsInfo(homepage) ?: VcsInfo.EMPTY,
                 RemoteArtifact.EMPTY
             )
@@ -335,7 +336,7 @@ data class GemSpec(
                 json["homepage_uri"].textValueOrEmpty(),
                 json["licenses"]?.asIterable()?.mapTo(sortedSetOf()) { it.textValue() } ?: sortedSetOf(),
                 json["description"].textValueOrEmpty(),
-                runtimeDependencies ?: emptySet(),
+                runtimeDependencies.orEmpty(),
                 vcs,
                 artifact
             )

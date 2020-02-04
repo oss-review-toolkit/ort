@@ -48,8 +48,8 @@ class ConanTest : StringSpec() {
     private val vcsRevisionPy = vcsDirPy.getRevision()
     private val vcsUrlPy = vcsDirPy.getRemoteUrl()
 
-   init {
-       "Project dependencies are detected correctly for conanfile.txt" {
+    init {
+        "Project dependencies are detected correctly for conanfile.txt" {
             val packageFile = File(projectsDirTxt, "conanfile.txt")
             val vcsPath = vcsDirTxt.getPathToRoot(projectsDirTxt)
             val expectedResult = patchExpectedResult(
@@ -63,11 +63,11 @@ class ConanTest : StringSpec() {
             val result = createConan().resolveDependencies(listOf(packageFile))[packageFile]
 
             result shouldNotBe null
-            result!!.errors should beEmpty()
+            result!!.issues should beEmpty()
             patchActualResult(yamlMapper.writeValueAsString(result)) shouldBe expectedResult
         }
 
-       "Project dependencies are detected correctly for conanfile.py" {
+        "Project dependencies are detected correctly for conanfile.py" {
             val packageFile = File(projectsDirPy, "conanfile.py")
             val vcsPath = vcsDirPy.getPathToRoot(projectsDirPy)
             val expectedResult = patchExpectedResult(
@@ -81,7 +81,7 @@ class ConanTest : StringSpec() {
             val result = createConan().resolveDependencies(listOf(packageFile))[packageFile]
 
             result shouldNotBe null
-            result!!.errors should beEmpty()
+            result!!.issues should beEmpty()
             patchActualResult(yamlMapper.writeValueAsString(result)) shouldBe expectedResult
         }
     }

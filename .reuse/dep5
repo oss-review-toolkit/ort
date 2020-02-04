@@ -1,0 +1,67 @@
+Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
+Upstream-Name: OSS Review Toolkit
+Source: https://github.com/heremaps/oss-review-toolkit
+
+# If multiple globs match the same files, the last match wins.
+
+Files: .*
+Copyright: 2017-2020 HERE Europe B.V. <opensource@here.com>
+License: Apache-2.0
+
+Files: */.gitignore
+Copyright: 2017-2020 HERE Europe B.V. <opensource@here.com>
+License: Apache-2.0
+
+Files: *.md
+Copyright: 2017-2020 HERE Europe B.V. <opensource@here.com>
+License: Apache-2.0
+
+Files: docs/*
+Copyright: 2017-2020 HERE Europe B.V. <opensource@here.com>
+License: Apache-2.0
+
+Files: logos/*
+Copyright: 2017-2020 HERE Europe B.V. <opensource@here.com>
+License: Apache-2.0
+
+Files: */src/main/resources/*
+Copyright: 2017-2020 HERE Europe B.V. <opensource@here.com>
+License: Apache-2.0
+
+Files: */src/funTest/assets/*
+Copyright: 2017-2020 HERE Europe B.V. <opensource@here.com>
+License: Apache-2.0
+
+Files: */src/test/assets/*
+Copyright: 2017-2020 HERE Europe B.V. <opensource@here.com>
+License: Apache-2.0
+
+Files: reporter-web-app/*
+Copyright: 2017-2020 HERE Europe B.V. <opensource@here.com>
+License: Apache-2.0
+
+# Third-party files.
+
+Files: gradlew*
+Copyright: 2007-2020 The original author or authors <info@gradle.com>
+License: Apache-2.0
+
+Files: gradle/*
+Copyright: 2007-2020 The original author or authors <info@gradle.com>
+License: Apache-2.0
+
+Files: reporter-web-app/src/data/choosealicense/*
+Copyright: 2013-2020 GitHub, Inc. and contributors <support@github.com>
+License: CC-BY-3.0
+
+Files: spdx-utils/src/main/resources/exceptions/*
+Copyright: 2011-2020 SPDX Workgroup <spdx-legal@lists.spdx.org>
+License: CC0-1.0
+
+Files: spdx-utils/src/main/resources/licenses/*
+Copyright: 2011-2020 SPDX Workgroup <spdx-legal@lists.spdx.org>
+License: CC0-1.0
+
+Files: spdx-utils/src/main/resources/licenserefs/*
+Copyright: 2011-2020 SPDX Workgroup <spdx-legal@lists.spdx.org>
+License: CC0-1.0

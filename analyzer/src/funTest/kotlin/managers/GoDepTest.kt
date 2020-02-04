@@ -29,7 +29,7 @@ import com.here.ort.utils.test.DEFAULT_ANALYZER_CONFIGURATION
 import com.here.ort.utils.test.DEFAULT_REPOSITORY_CONFIGURATION
 import com.here.ort.utils.test.USER_DIR
 
-import io.kotlintest.matchers.startWith
+import io.kotlintest.matchers.haveSubstring
 import io.kotlintest.shouldBe
 import io.kotlintest.shouldNotBe
 import io.kotlintest.specs.WordSpec
@@ -54,13 +54,15 @@ class GoDepTest : WordSpec() {
                 val result = createGoDep().resolveDependencies(listOf(manifestFile))[manifestFile]
 
                 result shouldNotBe null
-                result!!.project.id shouldBe
-                        Identifier("GoDep::src/funTest/assets/projects/synthetic/godep/no-lockfile/Gopkg.toml:")
-                result.project.definitionFilePath shouldBe
-                        "analyzer/src/funTest/assets/projects/synthetic/godep/no-lockfile/Gopkg.toml"
-                result.packages.size shouldBe 0
-                result.errors.size shouldBe 1
-                result.errors.first().message should startWith("IllegalArgumentException: No lockfile found in")
+                with(result!!) {
+                    project.id shouldBe
+                            Identifier("GoDep::src/funTest/assets/projects/synthetic/godep/no-lockfile/Gopkg.toml:")
+                    project.definitionFilePath shouldBe
+                            "analyzer/src/funTest/assets/projects/synthetic/godep/no-lockfile/Gopkg.toml"
+                    packages.size shouldBe 0
+                    issues.size shouldBe 1
+                    issues.first().message should haveSubstring("IllegalArgumentException: No lockfile found in")
+                }
             }
 
             "invoke the dependency solver if no lockfile is present and allowDynamicVersions is set" {
@@ -69,9 +71,11 @@ class GoDepTest : WordSpec() {
                 val result = createGoDep(config).resolveDependencies(listOf(manifestFile))[manifestFile]
 
                 result shouldNotBe null
-                result!!.project shouldNotBe Project.EMPTY
-                result.packages.size shouldBe 4
-                result.errors.size shouldBe 0
+                with(result!!) {
+                    project shouldNotBe Project.EMPTY
+                    packages.size shouldBe 4
+                    issues.size shouldBe 0
+                }
             }
 
             "import dependencies from Glide" {

@@ -25,7 +25,6 @@ import com.here.ort.analyzer.managers.utils.MavenSupport
 import com.here.ort.analyzer.managers.utils.identifier
 import com.here.ort.downloader.VersionControlSystem
 import com.here.ort.model.Identifier
-import com.here.ort.model.OrtIssue
 import com.here.ort.model.Package
 import com.here.ort.model.PackageLinkage
 import com.here.ort.model.PackageReference
@@ -34,6 +33,7 @@ import com.here.ort.model.ProjectAnalyzerResult
 import com.here.ort.model.Scope
 import com.here.ort.model.config.AnalyzerConfiguration
 import com.here.ort.model.config.RepositoryConfiguration
+import com.here.ort.model.createAndLogIssue
 import com.here.ort.utils.collectMessagesAsString
 import com.here.ort.utils.log
 import com.here.ort.utils.searchUpwardsForSubdirectory
@@ -79,7 +79,7 @@ class Maven(
 
         override fun findVersions(artifact: Artifact) =
             // Avoid resolution of (SNAPSHOT) versions for local projects.
-            localProjectBuildingResults[artifact.identifier()]?.let { listOf(artifact.version) } ?: emptyList()
+            localProjectBuildingResults[artifact.identifier()]?.let { listOf(artifact.version) }.orEmpty()
 
         override fun getRepository() = workspaceRepository
     }
@@ -105,7 +105,7 @@ class Maven(
 
             log.warn {
                 "There have been issues building the Maven project models, this could lead to errors during " +
-                        "dependency analysis: ${e.message}"
+                        "dependency analysis: ${e.collectMessagesAsString()}"
             }
 
             e.results
@@ -208,14 +208,16 @@ class Maven(
         } catch (e: ProjectBuildingException) {
             e.showStackTrace()
 
-            log.error {
-                "Could not get package information for dependency '$identifier': ${e.message}"
-            }
-
             return PackageReference(
                 Identifier(managerName, node.artifact.groupId, node.artifact.artifactId, node.artifact.version),
                 dependencies = sortedSetOf(),
-                errors = listOf(OrtIssue(source = managerName, message = e.collectMessagesAsString()))
+                issues = listOf(
+                    createAndLogIssue(
+                        source = managerName,
+                        message = "Could not get package information for dependency '$identifier': " +
+                                e.collectMessagesAsString()
+                    )
+                )
             )
         }
     }

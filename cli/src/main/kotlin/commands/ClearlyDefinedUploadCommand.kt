@@ -19,11 +19,15 @@
 
 package com.here.ort.commands
 
-import com.beust.jcommander.JCommander
-import com.beust.jcommander.Parameter
-import com.beust.jcommander.Parameters
+import com.github.ajalt.clikt.core.CliktCommand
+import com.github.ajalt.clikt.core.UsageError
+import com.github.ajalt.clikt.parameters.options.default
+import com.github.ajalt.clikt.parameters.options.option
+import com.github.ajalt.clikt.parameters.options.required
+import com.github.ajalt.clikt.parameters.types.enum
+import com.github.ajalt.clikt.parameters.types.file
 
-import com.here.ort.CommandWithHelp
+import com.here.ort.analyzer.HTTP_CACHE_PATH
 import com.here.ort.analyzer.curation.toClearlyDefinedCoordinates
 import com.here.ort.analyzer.curation.toClearlyDefinedSourceLocation
 import com.here.ort.clearlydefined.ClearlyDefinedService
@@ -37,36 +41,29 @@ import com.here.ort.clearlydefined.ClearlyDefinedService.Licensed
 import com.here.ort.clearlydefined.ClearlyDefinedService.Patch
 import com.here.ort.clearlydefined.ClearlyDefinedService.Server
 import com.here.ort.model.PackageCuration
-import com.here.ort.model.config.OrtConfiguration
 import com.here.ort.model.jsonMapper
 import com.here.ort.model.readValue
-import com.here.ort.utils.PARAMETER_ORDER_MANDATORY
-import com.here.ort.utils.PARAMETER_ORDER_OPTIONAL
+import com.here.ort.utils.OkHttpClientHelper
 import com.here.ort.utils.expandTilde
 import com.here.ort.utils.hasNonNullProperty
 import com.here.ort.utils.log
 
-import java.io.File
 import java.net.HttpURLConnection
 import java.net.URL
 
-@Parameters(commandNames = ["cd-upload"], commandDescription = "Upload ORT package curations to ClearlyDefined.")
-object ClearlyDefinedUploadCommand : CommandWithHelp() {
-    @Parameter(
-        description = "The file with package curations to upload.",
-        names = ["--input-file", "-i"],
-        required = true,
-        order = PARAMETER_ORDER_MANDATORY
-    )
-    @Suppress("LateinitUsage")
-    private lateinit var inputFile: File
+class ClearlyDefinedUploadCommand : CliktCommand(
+    name = "cd-upload",
+    help = "Upload ORT package curations to ClearlyDefined."
+) {
+    private val inputFile by option(
+        "--input-file", "-i",
+        help = "The file with package curations to upload."
+    ).file(exists = true, fileOkay = true, folderOkay = false, writable = false, readable = true).required()
 
-    @Parameter(
-        description = "The ClearlyDefined server to upload to.",
-        names = ["--server", "-s"],
-        order = PARAMETER_ORDER_OPTIONAL
-    )
-    private var server = Server.DEVELOPMENT
+    private val server by option(
+        "--server", "-s",
+        help = "The ClearlyDefined server to upload to."
+    ).enum<Server>().default(Server.DEVELOPMENT)
 
     private fun PackageCuration.toContributionPatch(): ContributionPatch {
         val info = ContributionInfo(
@@ -78,7 +75,7 @@ object ClearlyDefinedUploadCommand : CommandWithHelp() {
                     "[OSS Review Toolkit](https://github.com/heremaps/oss-review-toolkit) via the " +
                     "[clearly-defined](https://github.com/heremaps/oss-review-toolkit/tree/master/clearly-defined) " +
                     "module.",
-            resolution = data.comment ?: "Unkown, original data contains no comment.",
+            resolution = data.comment ?: "Unknown, original data contains no comment.",
             removedDefinitions = false
         )
 
@@ -102,16 +99,12 @@ object ClearlyDefinedUploadCommand : CommandWithHelp() {
         return ContributionPatch(info, listOf(patch))
     }
 
-    override fun runCommand(jc: JCommander, config: OrtConfiguration): Int {
+    override fun run() {
         val absoluteInputFile = inputFile.expandTilde().normalize()
-
-        require(absoluteInputFile.isFile) {
-            "The file '$absoluteInputFile' could not be found."
-        }
-
         val curations = absoluteInputFile.readValue<List<PackageCuration>>()
+        val service = ClearlyDefinedService.create(server, OkHttpClientHelper.buildClient(HTTP_CACHE_PATH))
 
-        val service = ClearlyDefinedService.create(server)
+        var error = false
 
         curations.forEachIndexed { index, curation ->
             val patchCall = service.putCuration(curation.toContributionPatch())
@@ -125,14 +118,17 @@ object ClearlyDefinedUploadCommand : CommandWithHelp() {
                 } ?: log.warn { "The REST API call succeeded but no response body was returned." }
             } else {
                 println("failed to be uploaded (response code $responseCode).")
+
                 response.errorBody()?.let { errorBody ->
                     val errorResponse = jsonMapper.readValue(errorBody.string(), ErrorResponse::class.java)
                     log.error { "The REST API call failed with: ${errorResponse.error.innererror.message}" }
                     log.debug { errorResponse.error.innererror.stack }
                 }
+
+                error = true
             }
         }
 
-        return 0
+        if (error) throw UsageError("An error occurred.", statusCode = 2)
     }
 }

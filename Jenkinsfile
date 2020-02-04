@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2019 Bosch Software Innovations GmbH
+ * Copyright (C) 2020 Bosch.IO GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,8 +17,13 @@
  * License-Filename: LICENSE
  */
 
+final DOCKER_BUILD_ARGS = '--build-arg http_proxy=$http_proxy --build-arg https_proxy=$https_proxy'
+
+// Disable the entry point to work around https://issues.jenkins-ci.org/browse/JENKINS-51307.
+final DOCKER_RUN_ARGS = '-e http_proxy -e https_proxy --entrypoint=""'
+
 pipeline {
-    agent any
+    agent none
 
     parameters {
         string(
@@ -54,25 +59,38 @@ pipeline {
 
     stages {
         stage('Clone project') {
+            agent any
+
+            environment {
+                HOME = "${env.WORKSPACE}@tmp"
+                PROJECT_DIR = "${env.HOME}/project"
+            }
+
             steps {
-                sh 'rm -fr project'
+                sh 'rm -fr $PROJECT_DIR'
 
                 // See https://jenkins.io/doc/pipeline/steps/git/.
                 checkout([$class: 'GitSCM',
                     userRemoteConfigs: [[url: params.VCS_URL]],
                     branches: [[name: "${params.VCS_REVISION}"]],
-                    extensions: [[$class: 'RelativeTargetDirectory', relativeTargetDir: 'project/source']]
+                    extensions: [[$class: 'RelativeTargetDirectory', relativeTargetDir: "${env.PROJECT_DIR}/source"]]
                 ])
             }
         }
 
-        stage('Build ORT distribution') {
-            steps {
-                sh 'docker/build.sh'
+        stage('Run the ORT analyzer') {
+            agent {
+                dockerfile {
+                    additionalBuildArgs DOCKER_BUILD_ARGS
+                    args DOCKER_RUN_ARGS
+                }
             }
-        }
 
-        stage('Run ORT analyzer') {
+            environment {
+                HOME = "${env.WORKSPACE}@tmp"
+                PROJECT_DIR = "${env.HOME}/project"
+            }
+
             steps {
                 sh '''
                     if [ "$ALLOW_DYNAMIC_VERSIONS" = "true" ]; then
@@ -83,44 +101,73 @@ pipeline {
                         USE_CLEARLY_DEFINED_CURATIONS_PARAM="--clearly-defined-curations"
                     fi
 
-                    docker/run.sh "-v $WORKSPACE/project:/project" $LOG_LEVEL analyze $ALLOW_DYNAMIC_VERSIONS_PARAM $USE_CLEARLY_DEFINED_CURATIONS_PARAM -f JSON,YAML -i /project/source -o /project/ort/analyzer
+                    rm -fr analyzer/out/results
+                    /opt/ort/bin/ort $LOG_LEVEL analyze $ALLOW_DYNAMIC_VERSIONS_PARAM $USE_CLEARLY_DEFINED_CURATIONS_PARAM -f JSON,YAML -i $PROJECT_DIR/source -o analyzer/out/results
                 '''
             }
 
             post {
                 always {
                     archiveArtifacts(
-                        artifacts: 'project/ort/analyzer/*',
+                        artifacts: 'analyzer/out/results/*',
                         fingerprint: true
                     )
                 }
             }
         }
 
-        stage('Run ORT scanner') {
+        stage('Run the ORT scanner') {
+            agent {
+                dockerfile {
+                    additionalBuildArgs DOCKER_BUILD_ARGS
+                    args DOCKER_RUN_ARGS
+                }
+            }
+
+            environment {
+                HOME = "${env.WORKSPACE}@tmp"
+            }
+
             steps {
-                sh 'docker/run.sh "-v $WORKSPACE/project:/project" $LOG_LEVEL scan -f JSON,YAML -i /project/ort/analyzer/analyzer-result.yml -o /project/ort/scanner'
+                sh '''
+                    rm -fr scanner/out/results
+                    /opt/ort/bin/ort $LOG_LEVEL scan -f JSON,YAML -i analyzer/out/results/analyzer-result.yml -o scanner/out/results
+                '''
             }
 
             post {
                 always {
                     archiveArtifacts(
-                        artifacts: 'project/ort/scanner/*',
+                        artifacts: 'scanner/out/results/*',
                         fingerprint: true
                     )
                 }
             }
         }
 
-        stage('Run ORT reporter') {
+        stage('Run the ORT reporter') {
+            agent {
+                dockerfile {
+                    additionalBuildArgs DOCKER_BUILD_ARGS
+                    args DOCKER_RUN_ARGS
+                }
+            }
+
+            environment {
+                HOME = "${env.WORKSPACE}@tmp"
+            }
+
             steps {
-                sh 'docker/run.sh "-v $WORKSPACE/project:/project" $LOG_LEVEL report -f CycloneDX,NOTICE,StaticHTML,WebApp -i /project/ort/scanner/scan-result.yml -o /project/ort/reporter'
+                sh '''
+                    rm -fr reporter/out/results
+                    /opt/ort/bin/ort $LOG_LEVEL report -f CycloneDX,NoticeByPackage,NoticeSummary,StaticHTML,WebApp -i scanner/out/results/scan-result.yml -o reporter/out/results
+                '''
             }
 
             post {
                 always {
                     archiveArtifacts(
-                        artifacts: 'project/ort/reporter/*',
+                        artifacts: 'reporter/out/results/*',
                         fingerprint: true
                     )
                 }

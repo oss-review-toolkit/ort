@@ -27,16 +27,63 @@ enum class ScopeExcludeReason {
      * The scope only contains packages used for building source code which are not included in distributed build
      * artifacts.
      */
+    @Deprecated(
+        message = "Use SPDX-2.2-style enum value instead.",
+        replaceWith = ReplaceWith(
+            expression = "ScopeExcludeReason.BUILD_DEPENDENCY_OF",
+            imports = ["com.here.ort.model.config.ScopeExcludeReason"]
+        )
+    )
     BUILD_TOOL_OF,
+
+    /**
+     * The scope only contains packages used for building source code which are not included in distributed build.
+     */
+    BUILD_DEPENDENCY_OF,
+
+    /**
+     * The scope only contains packages used for development which are not included in distributed build.
+     */
+    DEV_DEPENDENCY_OF,
 
     /**
      * The scope only contains packages that have to be provided by the user of distributed build artifacts.
      */
+    @Deprecated(
+        message = "Use SPDX-2.2-style enum value instead.",
+        replaceWith = ReplaceWith(
+            expression = "ScopeExcludeReason.PROVIDED_DEPENDENCY_OF",
+            imports = ["com.here.ort.model.config.ScopeExcludeReason"]
+        )
+    )
     PROVIDED_BY,
+
+    /**
+     * The scope only contains packages that have to be provided by the user of distributed build artifacts.
+     */
+    PROVIDED_DEPENDENCY_OF,
 
     /**
      * The scope only contains packages used for testing source code which are not included in distributed build
      * artifacts.
      */
-    TEST_TOOL_OF
+    @Deprecated(
+        message = "Use SPDX-2.2-style enum value instead.",
+        replaceWith = ReplaceWith(
+            expression = "ScopeExcludeReason.TEST_DEPENDENCY_OF",
+            imports = ["com.here.ort.model.config.ScopeExcludeReason"]
+        )
+    )
+    TEST_TOOL_OF,
+
+    /**
+     * The scope only contains packages used for testing which are not included in distributed build.
+     */
+    TEST_DEPENDENCY_OF,
+
+    /**
+     * The scope only contains packages that have to be provided by the user during the execution of the artifacts but
+     * are not included in distributed build artifacts.
+     */
+    RUNTIME_DEPENDENCY_OF
 }

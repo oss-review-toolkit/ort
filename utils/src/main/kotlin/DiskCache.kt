@@ -122,7 +122,7 @@ class DiskCache(
         } catch (e: IOException) {
             e.showStackTrace()
 
-            log.error { "Could not read cache entry for key '$diskKey': ${e.message}" }
+            log.error { "Could not read cache entry for key '$diskKey': ${e.collectMessagesAsString()}" }
         }
         return null
     }
@@ -140,7 +140,7 @@ class DiskCache(
         } catch (e: IOException) {
             e.showStackTrace()
 
-            log.error { "Could not write to disk cache for key '$diskKey': ${e.message}" }
+            log.error { "Could not write to disk cache for key '$diskKey': ${e.collectMessagesAsString()}" }
         }
         return false
     }

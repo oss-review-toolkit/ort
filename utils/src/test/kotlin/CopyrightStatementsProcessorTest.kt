@@ -19,6 +19,9 @@
 
 package com.here.ort.utils
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect
+import com.fasterxml.jackson.annotation.PropertyAccessor
+
 import com.here.ort.model.yamlMapper
 
 import io.kotlintest.shouldBe
@@ -34,7 +37,7 @@ class CopyrightStatementsProcessorTest : WordSpec() {
             "return a result with items merged by owner and prefix, sorted by owner and year" {
                 val input = File("src/test/assets/copyright-statements.txt").readLines()
 
-                val result = yamlMapper.writeValueAsString(processor.process(input))
+                val result = processor.process(input).toYaml()
 
                 val expectedResult = File("src/test/assets/copyright-statements-expected-output.yml").readText()
                 result shouldBe expectedResult
@@ -42,3 +45,10 @@ class CopyrightStatementsProcessorTest : WordSpec() {
         }
     }
 }
+
+private fun CopyrightStatementsProcessor.Result.toYaml(): String =
+    yamlMapper.copy()
+        // Disable getter serialization without changing field serialization.
+        .setVisibility(PropertyAccessor.GETTER, JsonAutoDetect.Visibility.NONE)
+        .setVisibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.ANY)
+        .writeValueAsString(this)

@@ -27,13 +27,18 @@ import com.here.ort.helper.CommandWithHelp
 import com.here.ort.helper.common.findFilesRecursive
 import com.here.ort.helper.common.minimize
 import com.here.ort.helper.common.replacePathExcludes
+import com.here.ort.helper.common.replaceIssueResolutions
 import com.here.ort.helper.common.replaceRuleViolationResolutions
 import com.here.ort.helper.common.replaceScopeExcludes
 import com.here.ort.helper.common.writeAsYaml
 import com.here.ort.model.OrtResult
 import com.here.ort.model.config.RepositoryConfiguration
+import com.here.ort.model.config.Resolutions
 import com.here.ort.model.readValue
+import com.here.ort.reporter.DefaultResolutionProvider
 import com.here.ort.utils.PARAMETER_ORDER_MANDATORY
+import com.here.ort.utils.PARAMETER_ORDER_OPTIONAL
+import com.here.ort.utils.expandTilde
 
 import java.io.File
 
@@ -70,33 +75,67 @@ internal class RemoveConfigurationEntriesCommand : CommandWithHelp() {
     )
     private lateinit var sourceCodeDir: File
 
-    override fun runCommand(jc: JCommander): Int {
-        var repositoryConfiguration = repositoryConfigurationFile.readValue<RepositoryConfiguration>()
-        val ortResult = ortResultFile.readValue<OrtResult>().replaceConfig(repositoryConfiguration)
+    @Parameter(
+        description = "A file containing issue resolutions.",
+        names = ["--resolutions-file"],
+        order = PARAMETER_ORDER_OPTIONAL
+    )
+    private var resolutionsFile: File? = null
 
-        val scopeExcludes = ortResult
-            .getProjects()
-            .flatMap { project -> project.scopes.map { it.name } }
-            .let { projectScopes -> ortResult.getExcludes().scopes.minimize(projectScopes) }
-        repositoryConfiguration = repositoryConfiguration.replaceScopeExcludes(scopeExcludes)
+    override fun runCommand(jc: JCommander): Int {
+        val repositoryConfiguration = repositoryConfigurationFile.readValue<RepositoryConfiguration>()
+        val ortResult = ortResultFile.readValue<OrtResult>().replaceConfig(repositoryConfiguration)
 
         val pathExcludes = findFilesRecursive(sourceCodeDir).let { allFiles ->
             ortResult.getExcludes().paths.filter { pathExclude ->
                 allFiles.any { pathExclude.matches(it) }
             }
         }
-        repositoryConfiguration = repositoryConfiguration.replacePathExcludes(pathExcludes)
+
+        val scopeExcludes = ortResult
+            .getProjects()
+            .flatMap { project -> project.scopes.map { it.name } }
+            .let { projectScopes -> ortResult.getExcludes().scopes.minimize(projectScopes) }
 
         val ruleViolationResolutions = ortResult.getRuleViolations().let { ruleViolations ->
-            ortResult.getResolutions().ruleViolations.filter { resolutions ->
-                ruleViolations.any { resolutions.matches(it) }
+            ortResult.getResolutions().ruleViolations.filter { resolution ->
+                ruleViolations.any { resolution.matches(it) }
             }
         }
-        repositoryConfiguration = repositoryConfiguration.replaceRuleViolationResolutions(ruleViolationResolutions)
 
-        // TODO: Implement the removal of not needed error resolutions.
+        val resolutionProvider = DefaultResolutionProvider().apply {
+            resolutionsFile?.expandTilde()?.readValue<Resolutions>()?.let {
+                add(it)
+            }
+        }
+        val notGloballyResolvedIssues = ortResult.collectIssues().values.flatten().filter {
+            resolutionProvider.getIssueResolutionsFor(it).isEmpty()
+        }
+        val issueResolutions = ortResult.getResolutions().issues.filter { resolution ->
+            notGloballyResolvedIssues.any { resolution.matches(it) }
+        }
 
-        repositoryConfiguration.writeAsYaml(repositoryConfigurationFile)
+        repositoryConfiguration
+            .replacePathExcludes(pathExcludes)
+            .replaceScopeExcludes(scopeExcludes)
+            .replaceIssueResolutions(issueResolutions)
+            .replaceRuleViolationResolutions(ruleViolationResolutions)
+            .writeAsYaml(repositoryConfigurationFile)
+
+        buildString {
+            val removedPathExcludes = repositoryConfiguration.excludes.paths.size - pathExcludes.size
+            val removedScopeExcludes = repositoryConfiguration.excludes.scopes.size - scopeExcludes.size
+            val removedIssueResolutions = repositoryConfiguration.resolutions.issues.size - issueResolutions.size
+            val removedRuleViolationResolutions = repositoryConfiguration.resolutions.ruleViolations.size -
+                    ruleViolationResolutions.size
+
+            appendln("Removed entries:")
+            appendln()
+            appendln("  path excludes             : $removedPathExcludes")
+            appendln("  scope excludes            : $removedScopeExcludes")
+            appendln("  issue resolutions         : $removedIssueResolutions")
+            appendln("  rule violation resolutions: $removedRuleViolationResolutions")
+        }.let { println(it) }
 
         return 0
     }

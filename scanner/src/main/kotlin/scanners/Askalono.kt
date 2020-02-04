@@ -55,7 +55,7 @@ class Askalono(name: String, config: ScannerConfiguration) : LocalScanner(name, 
         override fun create(config: ScannerConfiguration) = Askalono(scannerName, config)
     }
 
-    override val scannerVersion = "0.4.0"
+    override val scannerVersion = "0.4.2"
     override val resultFileExt = "txt"
 
     override fun command(workingDir: File?): String {
@@ -177,7 +177,7 @@ class Askalono(name: String, config: ScannerConfiguration) : LocalScanner(name, 
             packageVerificationCode = calculatePackageVerificationCode(scanPath),
             licenseFindings = licenseFindings,
             copyrightFindings = sortedSetOf(),
-            errors = mutableListOf()
+            issues = mutableListOf()
         )
     }
 }
