@@ -32,17 +32,46 @@ import java.util.SortedSet
  */
 typealias LicenseFindingsMap = SortedMap<String, MutableSet<String>>
 
+/**
+ * Process all copyright statements contained in this [LicenseFindingsMap] using the [CopyrightStatementsProcessor].
+ */
 fun LicenseFindingsMap.processStatements() =
     mapValues { (_, copyrights) ->
-        CopyrightStatementsProcessor().process(copyrights).toMutableSet()
+        CopyrightStatementsProcessor()
+            .process(copyrights)
+            .getAllStatements()
+            .toMutableSet()
     }.toSortedMap()
 
+/**
+ * Remove all copyright statements from this [LicenseFindingsMap] which are contained in the provided
+ * [copyrightGarbage].
+ */
 fun LicenseFindingsMap.removeGarbage(copyrightGarbage: CopyrightGarbage) =
     mapValues { (_, copyrights) ->
         copyrights.filterNot {
             it in copyrightGarbage.items
         }.toMutableSet()
     }.toSortedMap()
+
+/**
+ * Clean this [LicenseFindingsMap] by calling [removeGarbage], [processStatements], and again [removeGarbage] to make
+ * sure that processed statements which are contained in [copyrightGarbage] are also removed.
+ */
+fun LicenseFindingsMap.clean(copyrightGarbage: CopyrightGarbage) =
+    removeGarbage(copyrightGarbage).processStatements().removeGarbage(copyrightGarbage)
+
+/**
+ * Merge all [LicenseFindingsMap]s into a single one.
+ */
+fun Collection<LicenseFindingsMap>.merge() =
+    takeIf { it.isNotEmpty() }?.reduce { left, right ->
+        left.apply {
+            right.forEach { (license, copyrights) ->
+                getOrPut(license) { mutableSetOf() } += copyrights
+            }
+        }
+    } ?: sortedMapOf()
 
 /**
  * A class to store a [license] finding along with its belonging [copyrights] and the [locations] where the license was

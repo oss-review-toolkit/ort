@@ -39,20 +39,20 @@ data class ProjectAnalyzerResult(
     val packages: SortedSet<CuratedPackage>,
 
     /**
-     * The list of errors that occurred during dependency resolution. Defaults to an empty list.
+     * The list of issues that occurred during dependency resolution. Defaults to an empty list.
+     * This property is not serialized if the list is empty for consistency with the issue properties in other classes,
+     * even if this class is not serialized as part of an [OrtResult].
      */
-    // Do not serialize if empty for consistency with the error properties in other classes, even if this class is
-    // not serialized as part of an [OrtResult].
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    val errors: List<OrtIssue> = emptyList()
+    val issues: List<OrtIssue> = emptyList()
 ) {
     init {
         // Perform a sanity check to ensure we have no references to non-existing packages.
         val packageIds = packages.map { it.pkg.id }
-        val referencedIds = project.collectDependencies(includeErroneous = false).mapNotNull { ref ->
+        val referencedIds = project.collectDependencies {
             // Exclude project dependencies in multi-projects from the check as these appear as references in the
             // dependency tree but not in the list of packages used.
-            ref.id.takeUnless { ref.linkage in PackageLinkage.PROJECT_LINKAGE }
+            !it.hasIssues() && it.linkage !in PackageLinkage.PROJECT_LINKAGE
         }
 
         // Note that not all packageIds have to be contained in the referencedIds, e.g. for NPM optional dependencies.
@@ -61,30 +61,30 @@ data class ProjectAnalyzerResult(
         }
     }
 
-    fun collectErrors(): Map<Identifier, List<OrtIssue>> {
-        val collectedErrors = mutableMapOf<Identifier, MutableList<OrtIssue>>()
+    fun collectIssues(): Map<Identifier, List<OrtIssue>> {
+        val collectedIssues = mutableMapOf<Identifier, MutableList<OrtIssue>>()
 
-        fun addErrors(pkgReference: PackageReference) {
-            val errorsForPkg = collectedErrors.getOrPut(pkgReference.id) { mutableListOf() }
-            errorsForPkg += pkgReference.errors
+        fun addIssues(pkgReference: PackageReference) {
+            val issuesForPkg = collectedIssues.getOrPut(pkgReference.id) { mutableListOf() }
+            issuesForPkg += pkgReference.issues
 
-            pkgReference.dependencies.forEach { addErrors(it) }
+            pkgReference.dependencies.forEach { addIssues(it) }
         }
 
         for (scope in project.scopes) {
             for (dependency in scope.dependencies) {
-                addErrors(dependency)
+                addIssues(dependency)
             }
         }
 
         return mutableMapOf<Identifier, List<OrtIssue>>().apply {
-            if (errors.isNotEmpty()) {
-                this[project.id] = errors.toMutableList()
+            if (issues.isNotEmpty()) {
+                this[project.id] = issues.toMutableList()
             }
 
-            collectedErrors.forEach { (pkgId, errors) ->
-                if (errors.isNotEmpty()) {
-                    this[pkgId] = errors.distinct()
+            collectedIssues.forEach { (pkgId, issues) ->
+                if (issues.isNotEmpty()) {
+                    this[pkgId] = issues.distinct()
                 }
             }
         }

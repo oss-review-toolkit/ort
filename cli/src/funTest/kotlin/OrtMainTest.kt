@@ -19,6 +19,8 @@
 
 package com.here.ort
 
+import com.github.ajalt.clikt.core.MutuallyExclusiveGroupException
+
 import com.here.ort.downloader.VersionControlSystem
 import com.here.ort.utils.normalizeVcsUrl
 import com.here.ort.utils.redirectStdout
@@ -29,6 +31,7 @@ import com.here.ort.utils.test.patchExpectedResult
 import io.kotlintest.TestCase
 import io.kotlintest.TestResult
 import io.kotlintest.shouldBe
+import io.kotlintest.shouldThrow
 import io.kotlintest.specs.StringSpec
 
 import java.io.File
@@ -56,18 +59,17 @@ class OrtMainTest : StringSpec() {
         "Activating only Gradle works" {
             val inputDir = File(projectDir, "gradle")
 
-            val runResult = runMain(
+            val stdout = runMain(
                 "analyze",
                 "-m", "Gradle",
                 "-i", inputDir.path,
                 "-o", File(outputDir, "gradle").path
             )
-            val iterator = runResult.stdout.iterator()
+            val iterator = stdout.iterator()
             while (iterator.hasNext()) {
                 if (iterator.next() == "The following package managers are activated:") break
             }
 
-            runResult.exitCode shouldBe 0
             iterator.hasNext() shouldBe true
             iterator.next() shouldBe "\tGradle"
         }
@@ -75,18 +77,17 @@ class OrtMainTest : StringSpec() {
         "Activating only NPM works" {
             val inputDir = File(projectDir, "npm/package-lock")
 
-            val runResult = runMain(
+            val stdout = runMain(
                 "analyze",
                 "-m", "NPM",
                 "-i", inputDir.path,
                 "-o", File(outputDir, "package-lock").path
             )
-            val iterator = runResult.stdout.iterator()
+            val iterator = stdout.iterator()
             while (iterator.hasNext()) {
                 if (iterator.next() == "The following package managers are activated:") break
             }
 
-            runResult.exitCode shouldBe 0
             iterator.hasNext() shouldBe true
             iterator.next() shouldBe "\tNPM"
         }
@@ -94,16 +95,15 @@ class OrtMainTest : StringSpec() {
         "Output formats are deduplicated" {
             val inputDir = File(projectDir, "gradle")
 
-            val runResult = runMain(
+            val stdout = runMain(
                 "analyze",
                 "-m", "Gradle",
                 "-i", inputDir.path,
                 "-o", File(outputDir, "gradle").path,
                 "-f", "json,yaml,json"
             )
-            val lines = runResult.stdout.filter { it.startsWith("Writing analyzer result to ") }
+            val lines = stdout.filter { it.startsWith("Writing analyzer result to ") }
 
-            runResult.exitCode shouldBe 0
             lines.count() shouldBe 2
         }
 
@@ -116,7 +116,7 @@ class OrtMainTest : StringSpec() {
                 urlProcessed = normalizeVcsUrl(vcsUrl)
             )
 
-            val runResult = runMain(
+            runMain(
                 "analyze",
                 "-m", "Gradle",
                 "-i", File(projectDir, "gradle").absolutePath,
@@ -124,7 +124,6 @@ class OrtMainTest : StringSpec() {
             )
             val analyzerResult = File(analyzerOutputDir, "analyzer-result.yml").readText()
 
-            runResult.exitCode shouldBe 0
             patchActualResult(analyzerResult, patchStartAndEndTime = true) shouldBe expectedResult
         }
 
@@ -137,7 +136,7 @@ class OrtMainTest : StringSpec() {
                 urlProcessed = normalizeVcsUrl(vcsUrl)
             )
 
-            val runResult = runMain(
+            runMain(
                 "analyze",
                 "-m", "Gradle",
                 "-i", File(projectDir, "gradle").absolutePath,
@@ -146,24 +145,27 @@ class OrtMainTest : StringSpec() {
             )
             val analyzerResult = File(analyzerOutputDir, "analyzer-result.yml").readText()
 
-            runResult.exitCode shouldBe 0
             patchActualResult(analyzerResult, patchStartAndEndTime = true) shouldBe expectedResult
         }
 
+        "Passing mutually exclusive evaluator options fails" {
+            shouldThrow<MutuallyExclusiveGroupException> {
+                runMain(
+                    "evaluate",
+                    "-i", "build.gradle.kts",
+                    "--rules-file", "build.gradle.kts",
+                    "--rules-resource", "DUMMY"
+                )
+            }
+        }
+
         "Requirements are listed correctly" {
-            val runResult = runMain("requirements")
-            val errorLogs = runResult.stdout.find { it.contains(" ERROR - ") }
+            val stdout = runMain("requirements")
+            val errorLogs = stdout.find { it.contains(" ERROR - ") }
 
             errorLogs shouldBe null
-            runResult.exitCode shouldBe 0
         }
     }
 
-    private data class Result(val stdout: Sequence<String>, val exitCode: Int)
-
-    private fun runMain(vararg args: String): Result {
-        var exitCode = 0
-        val output = redirectStdout { exitCode = OrtMain.run(args.asList().toTypedArray()) }
-        return Result(output.lineSequence(), exitCode)
-    }
+    private fun runMain(vararg args: String) = redirectStdout { OrtMain().parse(args.asList()) }.lineSequence()
 }

@@ -592,8 +592,8 @@ packages:
       path: ""
     vcs_processed:
       type: "Subversion"
-      url: "http://svn.apache.org/repos/asf/logging/log4j/tags/v1_2_17_rc3"
-      revision: ""
+      url: "http://svn.apache.org/repos/asf/logging/log4j"
+      revision: "tags/v1_2_17_rc3"
       path: ""
   curations: []
 - package:

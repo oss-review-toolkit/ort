@@ -17,6 +17,8 @@
  * License-Filename: LICENSE
  */
 
+@file:Suppress("TooManyFunctions")
+
 package com.here.ort.analyzer.managers
 
 import com.fasterxml.jackson.databind.JsonNode
@@ -25,11 +27,13 @@ import com.fasterxml.jackson.databind.node.ObjectNode
 import com.here.ort.analyzer.AbstractPackageManagerFactory
 import com.here.ort.analyzer.HTTP_CACHE_PATH
 import com.here.ort.analyzer.PackageManager
-import com.here.ort.analyzer.managers.utils.PackageJsonUtils
+import com.here.ort.analyzer.managers.utils.expandNpmShortcutURL
+import com.here.ort.analyzer.managers.utils.hasNpmLockFile
+import com.here.ort.analyzer.managers.utils.mapDefinitionFilesForNpm
+import com.here.ort.analyzer.managers.utils.readProxySettingFromNpmRc
 import com.here.ort.downloader.VersionControlSystem
 import com.here.ort.model.Hash
 import com.here.ort.model.Identifier
-import com.here.ort.model.OrtIssue
 import com.here.ort.model.Package
 import com.here.ort.model.PackageReference
 import com.here.ort.model.Project
@@ -40,6 +44,7 @@ import com.here.ort.model.VcsInfo
 import com.here.ort.model.VcsType
 import com.here.ort.model.config.AnalyzerConfiguration
 import com.here.ort.model.config.RepositoryConfiguration
+import com.here.ort.model.createAndLogIssue
 import com.here.ort.model.jsonMapper
 import com.here.ort.model.readValue
 import com.here.ort.spdx.SpdxLicense
@@ -48,6 +53,7 @@ import com.here.ort.utils.Os
 import com.here.ort.utils.OkHttpClientHelper
 import com.here.ort.utils.OkHttpClientHelper.applyProxySettingsFromUrl
 import com.here.ort.utils.getUserHomeDirectory
+import com.here.ort.utils.isSymlink
 import com.here.ort.utils.log
 import com.here.ort.utils.realFile
 import com.here.ort.utils.stashDirectories
@@ -56,7 +62,6 @@ import com.here.ort.utils.textValueOrEmpty
 import com.vdurmont.semver4j.Requirement
 
 import java.io.File
-import java.io.IOException
 import java.net.HttpURLConnection
 import java.net.URL
 import java.net.URLEncoder
@@ -74,10 +79,6 @@ open class Npm(
     analyzerConfig: AnalyzerConfiguration,
     repoConfig: RepositoryConfiguration
 ) : PackageManager(name, analysisRoot, analyzerConfig, repoConfig), CommandLineTool {
-    companion object {
-        private val HTTP_REGEX = Regex("^https?://.+$")
-    }
-
     class Factory : AbstractPackageManagerFactory<Npm>("NPM") {
         override val globsForDefinitionFiles = listOf("package.json")
 
@@ -93,14 +94,13 @@ open class Npm(
      */
     protected open val installParameters = arrayOf("--ignore-scripts")
 
-    protected open fun hasLockFile(projectDir: File) = PackageJsonUtils.hasNpmLockFile(projectDir)
+    protected open fun hasLockFile(projectDir: File) = hasNpmLockFile(projectDir)
 
     override fun command(workingDir: File?) = if (Os.isWindows) "npm.cmd" else "npm"
 
     override fun getVersionRequirement(): Requirement = Requirement.buildNPM("5.7.* - 6.13.*")
 
-    override fun mapDefinitionFiles(definitionFiles: List<File>) =
-        PackageJsonUtils.mapDefinitionFilesForNpm(definitionFiles).toList()
+    override fun mapDefinitionFiles(definitionFiles: List<File>) = mapDefinitionFilesForNpm(definitionFiles).toList()
 
     override fun beforeResolution(definitionFiles: List<File>) =
         // We do not actually depend on any features specific to an NPM version, but we still want to stick to a
@@ -121,11 +121,10 @@ open class Npm(
             // Optional dependencies are just like regular dependencies except that NPM ignores failures when installing
             // them (see https://docs.npmjs.com/files/package.json#optionaldependencies), i.e. they are not a separate
             // scope in our semantics.
-            val dependencies = parseDependencies(definitionFile, "dependencies", packages) +
-                    parseDependencies(definitionFile, "optionalDependencies", packages)
+            val dependencies = getModuleDependencies(workingDir, setOf("dependencies", "optionalDependencies"))
             val dependenciesScope = Scope("dependencies", dependencies.toSortedSet())
 
-            val devDependencies = parseDependencies(definitionFile, "devDependencies", packages)
+            val devDependencies = getModuleDependencies(workingDir, setOf("devDependencies"))
             val devDependenciesScope = Scope("devDependencies", devDependencies)
 
             // TODO: add support for peerDependencies and bundledDependencies.
@@ -138,23 +137,10 @@ open class Npm(
     }
 
     private val applyProxySettingsFromNpmRc: OkHttpClient.Builder.() -> Unit = {
-        val npmrcFile = getUserHomeDirectory().resolve(".npmrc")
-        if (npmrcFile.isFile) {
-            npmrcFile.forEachLine { line ->
-                val keyAndValue = line.split('=', limit = 2).map { it.trim() }
-                if (keyAndValue.size == 2) {
-                    val (key, value) = keyAndValue
-                    val proxyUrl = value.takeIf { it.matches(HTTP_REGEX) } ?: when {
-                        value.isEmpty() || value == "null" -> null
-                        key == "proxy" -> "http://$value"
-                        key == "https-proxy" -> "https://$value"
-                        else -> null
-                    }
-
-                    if (proxyUrl != null) {
-                        applyProxySettingsFromUrl(URL(proxyUrl))
-                    }
-                }
+        val npmRcFile = getUserHomeDirectory().resolve(".npmrc")
+        if (npmRcFile.isFile) {
+            readProxySettingFromNpmRc(npmRcFile.readText())?.let { proxyUrl ->
+                applyProxySettingsFromUrl(URL(proxyUrl))
             }
         }
     }
@@ -229,7 +215,6 @@ open class Npm(
 
             // Download package info from registry.npmjs.org.
             // TODO: check if unpkg.com can be used as a fallback in case npmjs.org is down.
-            log.debug { "Retrieving package info for '$identifier'." }
             val encodedName = if (rawName.startsWith("@")) {
                 "@${URLEncoder.encode(rawName.substringAfter("@"), "UTF-8")}"
             } else {
@@ -237,9 +222,15 @@ open class Npm(
             }
 
             if (isSymbolicPackageDir) {
+                // Yarn workspaces refer to project dependencies from the same workspace via symbolic links. Use that
+                // as the trigger to get VcsInfo locally instead of querying the NPM registry.
+                log.debug { "Resolving the package info for '$identifier' locally." }
+
                 val vcsFromDirectory = VersionControlSystem.forDirectory(realPackageDir)?.getInfo() ?: VcsInfo.EMPTY
                 vcsFromPackage = vcsFromPackage.merge(vcsFromDirectory)
             } else {
+                log.debug { "Resolving the package info for '$identifier' via NPM registry." }
+
                 val pkgRequest = Request.Builder()
                     .get()
                     .url("https://registry.npmjs.org/$encodedName")
@@ -288,7 +279,7 @@ open class Npm(
                 }
             }
 
-            val vcsFromDownloadUrl = VersionControlSystem.splitUrl(PackageJsonUtils.expandShortcutURL(downloadUrl))
+            val vcsFromDownloadUrl = VersionControlSystem.splitUrl(expandNpmShortcutURL(downloadUrl))
             if (vcsFromDownloadUrl.url != downloadUrl) {
                 vcsFromPackage = vcsFromPackage.merge(vcsFromDownloadUrl)
             }
@@ -355,24 +346,6 @@ open class Npm(
         return modulesDir.takeIf { it.name == "node_modules" }
     }
 
-    private fun parseDependencies(packageJson: File, scope: String, packages: Map<String, Package>):
-            SortedSet<PackageReference> {
-        // Read package.json
-        val json = jsonMapper.readTree(packageJson)
-        val dependencies = sortedSetOf<PackageReference>()
-        json[scope]?.let { dependencyMap ->
-            log.debug { "Looking for dependencies in scope '$scope'." }
-            dependencyMap.fields().forEach { (name, _) ->
-                val modulesDir = packageJson.resolveSibling("node_modules")
-                buildTree(modulesDir, modulesDir, name, packages)?.let { dependency ->
-                    dependencies += dependency
-                }
-            }
-        } ?: log.debug { "Could not find scope '$scope' in '$packageJson'." }
-
-        return dependencies
-    }
-
     private fun parseVcsInfo(node: JsonNode): VcsInfo {
         // See https://github.com/npm/read-package-json/issues/7 for some background info.
         val head = node["gitHead"].textValueOrEmpty()
@@ -381,77 +354,129 @@ open class Npm(
             val type = repo["type"].textValueOrEmpty()
             val url = repo.textValue() ?: repo["url"].textValueOrEmpty()
             val path = repo["directory"].textValueOrEmpty()
-            VcsInfo(VcsType(type), PackageJsonUtils.expandShortcutURL(url), head, path = path)
+            VcsInfo(VcsType(type), expandNpmShortcutURL(url), head, path = path)
         } ?: VcsInfo(VcsType.NONE, "", head)
     }
 
-    private fun buildTree(
-        rootModulesDir: File, startModulesDir: File, name: String, packages: Map<String, Package>,
-        dependencyBranch: List<String> = emptyList()
-    ): PackageReference? {
-        log.debug { "Building dependency tree for '$name' from directory '$startModulesDir'." }
+    private fun getPackageReferenceForMissingModule(moduleName: String, rootModuleDir: File): PackageReference {
+        val issue = createAndLogIssue(
+            source = managerName,
+            message = "Package '$moduleName' was not installed, because the package file could not be found " +
+                    "anywhere in '$rootModuleDir'. This might be fine if the module was not installed because it is " +
+                    "specific to a different platform."
+        )
+        val (namespace, name) = splitNamespaceAndName(moduleName)
 
-        val packageFile = startModulesDir.resolve(name).resolve("package.json")
+        return PackageReference(
+            id = Identifier(managerName, namespace, name, ""),
+            issues = listOf(issue)
+        )
+    }
 
-        if (packageFile.isFile) {
-            log.debug { "Found package file for module '$name' at '$packageFile'." }
+    private fun findWorkspaceSubmodules(moduleDir: File): List<File> {
+        val nodeModulesDir = moduleDir.resolve("node_modules")
+        if (!nodeModulesDir.isDirectory) return emptyList()
 
-            val packageJson = jsonMapper.readTree(packageFile)
-            val rawName = packageJson["name"].textValue()
-            val version = packageJson["version"].textValue()
-            val identifier = "$rawName@$version"
+        val searchDirs = nodeModulesDir.listFiles().filter { file ->
+            file.isDirectory && file.name.startsWith("@")
+        } + nodeModulesDir
 
-            if (identifier in dependencyBranch) {
-                log.debug {
-                    "Not adding circular dependency '$identifier' to the tree, it is already on this branch of the " +
-                            "dependency tree: ${dependencyBranch.joinToString(" -> ")}."
-                }
-                return null
+        return searchDirs.map { dir ->
+            dir.listFiles().filter { file -> file.isSymlink() && file.isDirectory }
+        }.flatten()
+    }
+
+    private fun getModuleDependencies(moduleDir: File, scopes: Set<String>): SortedSet<PackageReference> {
+        val workspaceModuleDirs = findWorkspaceSubmodules(moduleDir)
+
+        return sortedSetOf<PackageReference>().apply {
+            addAll(getPackageReferenceForModule(moduleDir, scopes)!!.dependencies)
+
+            workspaceModuleDirs.forEach { workspaceModuleDir ->
+                addAll(getPackageReferenceForModule(workspaceModuleDir, scopes, listOf(moduleDir))!!.dependencies)
             }
-
-            val dependencies = sortedSetOf<PackageReference>()
-
-            val dependencyNames = mutableSetOf<String>()
-            packageJson["dependencies"]?.fieldNames()?.forEach { dependencyNames += it }
-            packageJson["optionalDependencies"]?.fieldNames()?.forEach { dependencyNames += it }
-
-            val newDependencyBranch = dependencyBranch + identifier
-            dependencyNames.forEach { dependencyName ->
-                buildTree(
-                    rootModulesDir, packageFile.resolveSibling("node_modules"),
-                    dependencyName, packages, newDependencyBranch
-                )?.let { dependencies += it }
-            }
-
-            val packageInfo = packages[identifier]
-                ?: throw IOException("Could not find package info for $identifier")
-            return packageInfo.toReference(dependencies = dependencies)
-        } else if (rootModulesDir == startModulesDir) {
-            log.warn {
-                "Could not find package file for '$name' anywhere in '$rootModulesDir'. This might be fine if the " +
-                        "module was not installed because it is specific to a different platform."
-            }
-
-            val id = Identifier(managerName, "", name, "")
-            val issue = OrtIssue(source = managerName, message = "Package '$name' was not installed.")
-            return PackageReference(id, errors = listOf(issue))
-        } else {
-            // Skip the package name directory when going up.
-            var parentModulesDir = startModulesDir.parentFile.parentFile
-
-            // For scoped packages we need to go one more directory up.
-            if (parentModulesDir.name.startsWith("@")) {
-                parentModulesDir = parentModulesDir.parentFile
-            }
-
-            // E.g. when using Yarn workspaces, the dependencies of the projects are consolidated in a single top-level
-            // "node_modules" directory for de-duplication, so go up.
-            log.debug {
-                "Could not find package file for '$name' in '$startModulesDir', looking in '$parentModulesDir' instead."
-            }
-
-            return buildTree(rootModulesDir, parentModulesDir, name, packages, dependencyBranch)
         }
+    }
+
+    private fun getPackageReferenceForModule(
+        moduleDir: File,
+        scopes: Set<String>,
+        ancestorModuleDirs: List<File> = emptyList(),
+        ancestorModuleIds: List<Identifier> = emptyList(),
+        packageType: String = managerName
+    ): PackageReference? {
+        val moduleInfo = getModuleInfo(moduleDir, scopes)
+        val dependencies = sortedSetOf<PackageReference>()
+        val moduleId = splitNamespaceAndName(moduleInfo.name).let { (namespace, name) ->
+            Identifier(packageType, namespace, name, moduleInfo.version)
+        }
+
+        if (ancestorModuleIds.contains(moduleId)) {
+            val cycle = ancestorModuleIds.toList().let {
+                val cycleStartIndex = it.indexOf(moduleId)
+                it.subList(cycleStartIndex, it.size) + moduleId
+            }.joinToString(" -> ")
+
+            log.debug { "Not adding dependency '$moduleId' to avoid cycle: $cycle." }
+            return null
+        }
+
+        log.debug { "Building dependency tree for '${moduleInfo.name}' from directory '$moduleDir'." }
+
+        val pathToRoot = listOf(moduleDir) + ancestorModuleDirs
+        moduleInfo.dependencyNames.forEach { dependencyName ->
+            val dependencyModuleDirPath = findDependencyModuleDir(dependencyName, pathToRoot)
+
+            if (dependencyModuleDirPath.isNotEmpty()) {
+                val dependencyModuleDir = dependencyModuleDirPath.first()
+                log.debug { "Found module dir for '$dependencyName' at '$dependencyModuleDir'." }
+
+                getPackageReferenceForModule(
+                    moduleDir = dependencyModuleDir,
+                    scopes = setOf("dependencies", "optionalDependencies"),
+                    ancestorModuleDirs = dependencyModuleDirPath.subList(1, dependencyModuleDirPath.size),
+                    ancestorModuleIds = ancestorModuleIds + moduleId,
+                    packageType = "NPM"
+                )?.let { dependencies.add(it) }
+
+                return@forEach
+            }
+
+            log.debug { "Could not find module dir for '$dependencyName' within: '${pathToRoot.joinToString()}'." }
+            getPackageReferenceForMissingModule(dependencyName, pathToRoot.first())
+        }
+
+        return PackageReference(id = moduleId, dependencies = dependencies)
+    }
+
+    private data class ModuleInfo(
+        val name: String,
+        val version: String,
+        val dependencyNames: Set<String>
+    )
+
+    private fun getModuleInfo(moduleDir: File, scopes: Set<String>): ModuleInfo {
+        val packageJsonFile = moduleDir.resolve("package.json")
+        val json = jsonMapper.readTree(packageJsonFile)
+
+        return ModuleInfo(
+            name = json["name"].textValue(),
+            version = json["version"].textValue(),
+            dependencyNames = scopes.map { scope ->
+                json[scope]?.fieldNames()?.asSequence()?.toSet().orEmpty()
+            }.flatten().toSet()
+        )
+    }
+
+    private fun findDependencyModuleDir(dependencyName: String, searchModuleDirs: List<File>): List<File> {
+        searchModuleDirs.forEachIndexed { index, moduleDir ->
+            // Note: resolve() also works for scoped dependencies, e.g. dependencyName = "@x/y"
+            val dependencyModuleDir = moduleDir.resolve("node_modules/$dependencyName")
+            if (dependencyModuleDir.isDirectory) {
+                return listOf(dependencyModuleDir) + searchModuleDirs.subList(index, searchModuleDirs.size)
+            }
+        }
+        return emptyList()
     }
 
     private fun parseProject(packageJson: File, scopes: SortedSet<Scope>, packages: SortedSet<Package>):

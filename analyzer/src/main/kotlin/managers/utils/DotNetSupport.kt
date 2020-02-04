@@ -21,18 +21,25 @@
 package com.here.ort.analyzer.managers.utils
 
 import com.fasterxml.jackson.databind.JsonNode
+import com.fasterxml.jackson.dataformat.xml.XmlMapper
+import com.fasterxml.jackson.module.kotlin.registerKotlinModule
 
 import com.here.ort.analyzer.HTTP_CACHE_PATH
+import com.here.ort.analyzer.PackageManager
+import com.here.ort.downloader.VersionControlSystem
 import com.here.ort.model.EMPTY_JSON_NODE
 import com.here.ort.model.Hash
 import com.here.ort.model.Identifier
 import com.here.ort.model.OrtIssue
 import com.here.ort.model.Package
 import com.here.ort.model.PackageReference
+import com.here.ort.model.Project
+import com.here.ort.model.ProjectAnalyzerResult
 import com.here.ort.model.RemoteArtifact
 import com.here.ort.model.Scope
 import com.here.ort.model.VcsInfo
 import com.here.ort.model.VcsType
+import com.here.ort.model.createAndLogIssue
 import com.here.ort.model.jsonMapper
 import com.here.ort.model.xmlMapper
 import com.here.ort.utils.OkHttpClientHelper
@@ -40,8 +47,44 @@ import com.here.ort.utils.textValueOrEmpty
 
 import okhttp3.Request
 
+import java.io.File
 import java.io.IOException
 import java.net.HttpURLConnection
+
+abstract class XmlPackageReferenceMapper {
+    protected val mapper = XmlMapper().registerKotlinModule()
+
+    abstract fun mapPackageReferences(definitionFile: File): Map<String, String>
+}
+
+fun PackageManager.resolveDotNetDependencies(
+    definitionFile: File,
+    mapper: XmlPackageReferenceMapper
+): ProjectAnalyzerResult? {
+    val workingDir = definitionFile.parentFile
+    val support = DotNetSupport(mapper.mapPackageReferences(definitionFile))
+
+    val project = Project(
+        id = Identifier(
+            type = managerName,
+            namespace = "",
+            name = definitionFile.relativeTo(analysisRoot).invariantSeparatorsPath,
+            version = ""
+        ),
+        definitionFilePath = VersionControlSystem.getPathInfo(definitionFile).path,
+        declaredLicenses = sortedSetOf(),
+        vcs = VcsInfo.EMPTY,
+        vcsProcessed = PackageManager.processProjectVcs(workingDir),
+        homepageUrl = "",
+        scopes = sortedSetOf(support.scope)
+    )
+
+    return ProjectAnalyzerResult(
+        project,
+        packages = support.packages.mapTo(sortedSetOf()) { it.toCuratedPackage() },
+        issues = support.issues
+    )
+}
 
 class DotNetSupport(packageReferencesMap: Map<String, String>) {
     companion object {
@@ -109,7 +152,7 @@ class DotNetSupport(packageReferencesMap: Map<String, String>) {
     }
 
     val packages = mutableListOf<Package>()
-    val errors = mutableListOf<OrtIssue>()
+    val issues = mutableListOf<OrtIssue>()
     val scope = Scope("dependencies", sortedSetOf())
 
     // Maps an (id, version) pair to a (nupkg URL, catalog entry) pair.
@@ -121,8 +164,8 @@ class DotNetSupport(packageReferencesMap: Map<String, String>) {
             scopeDependency?.let { scope.dependencies += it }
         }
 
-        scope.collectDependencies().forEach { packageReference ->
-            val pkg = packageReferenceToPackage(packageReference)
+        scope.collectDependencies().forEach { id ->
+            val pkg = getPackageForId(id)
 
             if (pkg != Package.EMPTY) {
                 packages += pkg
@@ -130,11 +173,11 @@ class DotNetSupport(packageReferencesMap: Map<String, String>) {
         }
     }
 
-    private fun packageReferenceToPackage(packageReference: PackageReference) =
-        jsonNodeToPackage(getPackageReferenceJsonContent(packageReference))
+    private fun getPackageForId(packageId: Identifier) =
+        jsonNodeToPackage(getPackageJsonContent(packageId))
 
-    private fun getPackageReferenceJsonContent(packageReference: PackageReference): Pair<String, JsonNode> {
-        val (_, _, pkgName, pkgVersion) = packageReference.id
+    private fun getPackageJsonContent(packageId: Identifier): Pair<String, JsonNode> {
+        val (_, _, pkgName, pkgVersion) = packageId
 
         packageReferencesAlreadyFound[Pair(pkgName, pkgVersion)]?.let {
             return it
@@ -178,12 +221,11 @@ class DotNetSupport(packageReferencesMap: Map<String, String>) {
         val packageJsonNode = preparePackageReference(packageID, version)
 
         if (packageJsonNode == null) {
-            errors.add(
-                OrtIssue(
-                    source = "nuget-API does not provide package",
-                    message = "$packageID:$version can not be found on Nugets RestAPI "
-                )
+            issues += createAndLogIssue(
+                source = "nuget-API",
+                message = "$packageID:$version can not be found on Nugets RestAPI."
             )
+
             return null
         }
 

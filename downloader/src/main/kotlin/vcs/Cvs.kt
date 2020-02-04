@@ -19,20 +19,17 @@
 
 package com.here.ort.downloader.vcs
 
-import com.here.ort.downloader.DownloadException
 import com.here.ort.downloader.VersionControlSystem
 import com.here.ort.downloader.WorkingTree
-import com.here.ort.model.Package
+import com.here.ort.model.VcsInfo
 import com.here.ort.model.VcsType
 import com.here.ort.utils.CommandLineTool
 import com.here.ort.utils.ProcessCapture
-import com.here.ort.utils.log
 import com.here.ort.utils.safeDeleteRecursively
 import com.here.ort.utils.searchUpwardsForSubdirectory
 import com.here.ort.utils.toHexString
 
 import java.io.File
-import java.io.IOException
 import java.security.MessageDigest
 import java.util.regex.Pattern
 
@@ -113,28 +110,41 @@ class Cvs : VersionControlSystem(), CommandLineTool {
                 return rootDir ?: workingDir
             }
 
-            private fun listSymbolicNames(): Map<String, String> {
-                val cvsLog = run(workingDir, "log", "-h")
-                var tagsSectionStarted = false
+            private fun listSymbolicNames(): Map<String, String> =
+                try {
+                    // Create all working tree directories in order to be able to query the log.
+                    run(workingDir, "update", "-d")
 
-                return cvsLog.stdout.lines().mapNotNull { line ->
-                    if (tagsSectionStarted) {
-                        if (line.startsWith('\t')) {
-                            line.split(':', limit = 2).let {
-                                Pair(it.first().trim(), it.last().trim())
+                    val cvsLog = run(workingDir, "log", "-h")
+                    var tagsSectionStarted = false
+
+                    cvsLog.stdout.lines().mapNotNull { line ->
+                        if (tagsSectionStarted) {
+                            if (line.startsWith('\t')) {
+                                line.split(':', limit = 2).let {
+                                    Pair(it.first().trim(), it.last().trim())
+                                }
+                            } else {
+                                tagsSectionStarted = false
+                                null
                             }
                         } else {
-                            tagsSectionStarted = false
+                            if (line == "symbolic names:") {
+                                tagsSectionStarted = true
+                            }
                             null
                         }
-                    } else {
-                        if (line == "symbolic names:") {
-                            tagsSectionStarted = true
+                    }.toMap().toSortedMap()
+                } finally {
+                    // Clean the temporarily updated working tree again.
+                    workingDir.listFiles().forEach {
+                        if (it.isDirectory) {
+                            if (it.name != "CVS") it.safeDeleteRecursively()
+                        } else {
+                            it.delete()
                         }
-                        null
                     }
-                }.toMap().toSortedMap()
-            }
+                }
 
             private fun isBranchVersion(version: String): Boolean {
                 // See http://cvsgui.sourceforge.net/howto/cvsdoc/cvs_5.html#SEC59.
@@ -150,74 +160,27 @@ class Cvs : VersionControlSystem(), CommandLineTool {
 
             override fun listRemoteBranches() =
                 listSymbolicNames().mapNotNull { (name, version) ->
-                    if (isBranchVersion(version)) name else null
+                    name.takeIf { isBranchVersion(version) }
                 }
 
             override fun listRemoteTags() =
                 listSymbolicNames().mapNotNull { (name, version) ->
-                    if (isBranchVersion(version)) null else name
+                    name.takeUnless { isBranchVersion(version) }
                 }
         }
 
     override fun isApplicableUrlInternal(vcsUrl: String) = vcsUrl.matches(":(ext|pserver):[^@]+@.+".toRegex())
 
-    override fun download(
-        pkg: Package, targetDir: File, allowMovingRevisions: Boolean,
-        recursive: Boolean
-    ): WorkingTree {
-        log.info { "Using $type version ${getVersion()}." }
+    override fun initWorkingTree(targetDir: File, vcs: VcsInfo): WorkingTree {
+        // Create a "fake" checkout as described at https://stackoverflow.com/a/3448891/1127485.
+        run(targetDir, "-z3", "-d", vcs.url, "checkout", "-l", ".")
 
-        try {
-            val path = pkg.vcsProcessed.path.takeUnless { it.isEmpty() } ?: "."
-
-            // Create a "fake" checkout as described at https://stackoverflow.com/a/3448891/1127485.
-            run(targetDir, "-z3", "-d", pkg.vcsProcessed.url, "checkout", "-l", ".")
-            val workingTree = getWorkingTree(targetDir)
-
-            val revision = if (allowMovingRevisions || isFixedRevision(workingTree, pkg.vcsProcessed.revision)) {
-                pkg.vcsProcessed.revision
-            } else {
-                // Create all working tree directories in order to be able to query the log.
-                run(targetDir, "update", "-d")
-
-                log.info { "Trying to guess a $type revision for version '${pkg.id.version}'." }
-
-                try {
-                    workingTree.guessRevisionName(pkg.id.name, pkg.id.version).also { revision ->
-                        log.warn {
-                            "Using guessed $type revision '$revision' for version '${pkg.id.version}'. This might " +
-                                    "cause the downloaded source code to not match the package version."
-                        }
-                    }
-                } catch (e: IOException) {
-                    throw IOException("Unable to determine a revision to checkout.", e)
-                } finally {
-                    // Clean the temporarily updated working tree again.
-                    targetDir.listFiles().forEach {
-                        if (it.isDirectory) {
-                            if (it.name != "CVS") it.safeDeleteRecursively()
-                        } else {
-                            it.delete()
-                        }
-                    }
-                }
-            }
-
-            // Checkout the working tree of the desired revision.
-            run(targetDir, "checkout", "-r", revision, path)
-
-            pkg.vcsProcessed.path.let {
-                if (it.isNotEmpty() && !workingTree.workingDir.resolve(it).exists()) {
-                    throw DownloadException(
-                        "The $type working directory at '${workingTree.workingDir}' does not " +
-                                "contain the requested path '$it'."
-                    )
-                }
-            }
-
-            return workingTree
-        } catch (e: IOException) {
-            throw DownloadException("$type failed to download from ${pkg.vcsProcessed.url}.", e)
-        }
+        return getWorkingTree(targetDir)
     }
+
+    override fun updateWorkingTree(workingTree: WorkingTree, revision: String, path: String, recursive: Boolean) =
+        runCatching {
+            // Checkout the working tree of the desired revision.
+            run(workingTree.workingDir, "checkout", "-r", revision, path.takeUnless { it.isEmpty() } ?: ".")
+        }.isSuccess
 }

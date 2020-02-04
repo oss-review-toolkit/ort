@@ -29,6 +29,7 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer
 import com.fasterxml.jackson.databind.ser.std.StdSerializer
 
+import com.here.ort.utils.log
 import com.here.ort.utils.normalizeLineBreaks
 
 import java.time.Instant
@@ -94,4 +95,12 @@ class OrtIssueSerializer : StdSerializer<OrtIssue>(OrtIssue::class.java) {
         gen.writeStringField("severity", value.severity.name)
         gen.writeEndObject()
     }
+}
+
+/**
+ * Create an [OrtIssue] and [log] the message. The log level is aligned with the [severity].
+ */
+fun Any.createAndLogIssue(source: String, message: String, severity: Severity = Severity.ERROR): OrtIssue {
+    log.log(severity.toLog4jLevel(), message)
+    return OrtIssue(source = source, message = message, severity = severity)
 }

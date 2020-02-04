@@ -21,6 +21,7 @@ package com.here.ort.reporter.reporters
 
 import com.here.ort.model.OrtResult
 import com.here.ort.model.yamlMapper
+import com.here.ort.reporter.ReporterInput
 import com.here.ort.utils.test.patchExpectedResult
 import com.here.ort.utils.test.readOrtResult
 
@@ -42,7 +43,7 @@ class CycloneDxReporterTest : WordSpec({
             val bomFile = createTempFile().also {
                 CycloneDxReporter().generateReport(
                     it.outputStream(),
-                    readOrtResult("src/funTest/assets/NPM-is-windows-1.0.2-scan-result.json")
+                    ReporterInput(readOrtResult("src/funTest/assets/NPM-is-windows-1.0.2-scan-result.json"))
                 )
 
                 it.deleteOnExit()
@@ -64,7 +65,7 @@ class CycloneDxReporterTest : WordSpec({
             )
 
             val bomBytesFromReporter = ByteArrayOutputStream().also { outputStream ->
-                CycloneDxReporter().generateReport(outputStream, ortResult)
+                CycloneDxReporter().generateReport(outputStream, ReporterInput(ortResult))
             }.toByteArray()
             val bomFromReporter = BomParser().parse(bomBytesFromReporter).apply { components.sortBy { it.name } }
 

@@ -31,8 +31,9 @@ data class Resolutions(
     /**
      * Resolutions for issues with the analysis or scan of the projects in this repository and their dependencies.
      */
+    @JsonAlias("errors")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    val errors: List<ErrorResolution> = emptyList(),
+    val issues: List<IssueResolution> = emptyList(),
 
     /**
      * Resolutions for license policy violations.
@@ -46,7 +47,7 @@ data class Resolutions(
      */
     fun merge(other: Resolutions) =
         Resolutions(
-            errors = (errors + other.errors).distinct(),
+            issues = (issues + other.issues).distinct(),
             ruleViolations = (ruleViolations + other.ruleViolations).distinct()
         )
 }

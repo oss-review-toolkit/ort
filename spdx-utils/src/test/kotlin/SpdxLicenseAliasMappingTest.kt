@@ -42,7 +42,7 @@ class SpdxLicenseAliasMappingTest : WordSpec({
 
         "not contain plain SPDX license ids" {
             assertSoftly {
-                SpdxLicenseAliasMapping.customNames.forEach { (declaredLicense, _) ->
+                SpdxLicenseAliasMapping.customLicenseIds.forEach { (declaredLicense, _) ->
                     "\"$declaredLicense\" maps to ${SpdxLicense.forId(declaredLicense)}" shouldBe
                             "\"$declaredLicense\" maps to null"
                 }
@@ -50,7 +50,7 @@ class SpdxLicenseAliasMappingTest : WordSpec({
         }
 
         "be case-insensitve" {
-            val map = SpdxLicenseAliasMapping.customNames
+            val map = SpdxLicenseAliasMapping.customLicenseIds
             map.forEach { (key, license) ->
                 map[key.toLowerCase()] shouldBe license
                 map[key.toUpperCase()] shouldBe license

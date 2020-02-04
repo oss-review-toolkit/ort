@@ -19,105 +19,93 @@
 
 package com.here.ort.commands
 
-import com.beust.jcommander.JCommander
-import com.beust.jcommander.Parameter
-import com.beust.jcommander.Parameters
+import com.github.ajalt.clikt.core.CliktCommand
+import com.github.ajalt.clikt.core.UsageError
+import com.github.ajalt.clikt.parameters.groups.mutuallyExclusiveOptions
+import com.github.ajalt.clikt.parameters.groups.required
+import com.github.ajalt.clikt.parameters.groups.single
+import com.github.ajalt.clikt.parameters.options.convert
+import com.github.ajalt.clikt.parameters.options.default
+import com.github.ajalt.clikt.parameters.options.flag
+import com.github.ajalt.clikt.parameters.options.option
+import com.github.ajalt.clikt.parameters.options.required
+import com.github.ajalt.clikt.parameters.options.split
+import com.github.ajalt.clikt.parameters.options.wrapValue
+import com.github.ajalt.clikt.parameters.types.enum
+import com.github.ajalt.clikt.parameters.types.file
 
-import com.here.ort.CommandWithHelp
+import com.here.ort.GroupTypes
+import com.here.ort.GroupTypes.FileType
+import com.here.ort.GroupTypes.StringType
 import com.here.ort.evaluator.Evaluator
 import com.here.ort.model.OrtResult
 import com.here.ort.model.OutputFormat
 import com.here.ort.model.RuleViolation
 import com.here.ort.model.Severity
-import com.here.ort.model.config.OrtConfiguration
 import com.here.ort.model.licenses.LicenseConfiguration
 import com.here.ort.model.licenses.orEmpty
 import com.here.ort.model.mapper
 import com.here.ort.model.readValue
-import com.here.ort.utils.PARAMETER_ORDER_MANDATORY
-import com.here.ort.utils.PARAMETER_ORDER_OPTIONAL
 import com.here.ort.utils.expandTilde
 import com.here.ort.utils.log
 import com.here.ort.utils.safeMkdirs
 
 import java.io.File
 
-@Parameters(commandNames = ["evaluate"], commandDescription = "Evaluate rules on ORT result files.")
-object EvaluatorCommand : CommandWithHelp() {
-    @Parameter(
-        description = "The ORT result file to read as input.",
-        names = ["--ort-file", "-i"],
-        required = true,
-        order = PARAMETER_ORDER_MANDATORY
-    )
-    private lateinit var ortFile: File
+class EvaluatorCommand : CliktCommand(name = "evaluate", help = "Evaluate rules on ORT result files.") {
+    private val ortFile by option(
+        "--ort-file", "-i",
+        help = "The ORT result file to read as input."
+    ).file(exists = true, fileOkay = true, folderOkay = false, writable = false, readable = true).required()
 
-    @Parameter(
-        description = "The name of a script file containing rules.",
-        names = ["--rules-file", "-r"],
-        order = PARAMETER_ORDER_OPTIONAL
-    )
-    private var rulesFile: File? = null
+    private val rules by mutuallyExclusiveOptions<GroupTypes>(
+        option(
+            "--rules-file", "-r",
+            help = "The name of a script file containing rules."
+        ).file(exists = true, fileOkay = true, folderOkay = false, writable = false, readable = true)
+            .wrapValue(::FileType),
+        option(
+            "--rules-resource",
+            help = "The name of a script resource on the classpath that contains rules."
+        ).convert { StringType(it) }
+    ).single().required()
 
-    @Parameter(
-        description = "The name of a script resource on the classpath that contains rules.",
-        names = ["--rules-resource"],
-        order = PARAMETER_ORDER_OPTIONAL
-    )
-    private var rulesResource: String? = null
+    private val outputDir by option(
+        "--output-dir", "-o",
+        help = "The directory to write the evaluation results as ORT result file(s) to, in the specified output " +
+                "format(s). If no output directory is specified, no output formats are written and only the exit " +
+                "code signals a success or failure."
+    ).file(exists = false, fileOkay = false, folderOkay = true, writable = false, readable = false)
 
-    @Parameter(
-        description = "The directory to write the evaluation results as ORT result file(s) to, in the " +
-                "specified output format(s). If no output directory is specified, no output formats are written and " +
-                "only the exit code signals a success or failure.",
-        names = ["--output-dir", "-o"],
-        order = PARAMETER_ORDER_OPTIONAL
-    )
-    private var outputDir: File? = null
+    private val outputFormats by option(
+        "--output-formats", "-f",
+        help = "The list of output formats to be used for the ORT result file(s)."
+    ).enum<OutputFormat>().split(",").default(listOf(OutputFormat.YAML))
 
-    @Parameter(
-        description = "The list of output formats to be used for the ORT result file(s).",
-        names = ["--output-formats", "-f"],
-        order = PARAMETER_ORDER_OPTIONAL
-    )
-    private var outputFormats = listOf(OutputFormat.YAML)
+    private val syntaxCheck by option(
+        "--syntax-check",
+        help = "Do not evaluate the script but only check its syntax. No output is written in this case."
+    ).flag()
 
-    @Parameter(
-        description = "Do not evaluate the script but only check its syntax. No output is written in this case.",
-        names = ["--syntax-check"],
-        order = PARAMETER_ORDER_OPTIONAL
-    )
-    private var syntaxCheck = false
+    private val repositoryConfigurationFile by option(
+        "--repository-configuration-file",
+        help = "A file containing the repository configuration. If set the .ort.yml overrides the repository " +
+                "configuration contained in the ort result from the input file."
+    ).file(exists = true, fileOkay = true, folderOkay = false, writable = false, readable = true)
 
-    @Parameter(
-        description = "A file containing the repository configuration. If set the .ort.yml " +
-                "overrides the repository configuration contained in the ort result from the input file.",
-        names = ["--repository-configuration-file"],
-        order = PARAMETER_ORDER_OPTIONAL
-    )
-    private var repositoryConfigurationFile: File? = null
+    private val packageCurationsFile by option(
+        "--package-curations-file",
+        help = "A file containing package curation data. This replaces all package curations contained in the given " +
+                "ORT result file with the ones present in the given file."
+    ).file(exists = true, fileOkay = true, folderOkay = false, writable = false, readable = true)
 
-    @Parameter(
-        description = "A file containing package curation data. This replaces all package curations contained in the " +
-                "given ORT result file with the ones present in the given file.",
-        names = ["--package-curations-file"],
-        order = PARAMETER_ORDER_OPTIONAL
-    )
-    private var packageCurationsFile: File? = null
+    private val licenseConfigurationFile by option(
+        "--license-configuration-file",
+        help = "A file containing the license configuration. That license configuration is passed as parameter to " +
+                "the rules script."
+    ).file(exists = true, fileOkay = true, folderOkay = false, writable = false, readable = true)
 
-    @Parameter(
-        description = "A file containing the license configuration. That license configuration is passed as " +
-                "parameter to the rules script.",
-        names = ["--license-configuration-file"],
-        order = PARAMETER_ORDER_OPTIONAL
-    )
-    private var licenseConfigurationFile: File? = null
-
-    override fun runCommand(jc: JCommander, config: OrtConfiguration): Int {
-        require((rulesFile == null) != (rulesResource == null)) {
-            "Either '--rules-file' or '--rules-resource' must be specified."
-        }
-
+    override fun run() {
         val absoluteOutputDir = outputDir?.expandTilde()?.normalize()
         val outputFiles = mutableListOf<File>()
 
@@ -128,8 +116,7 @@ object EvaluatorCommand : CommandWithHelp() {
 
             val existingOutputFiles = outputFiles.filter { it.exists() }
             if (existingOutputFiles.isNotEmpty()) {
-                log.error { "None of the output files $existingOutputFiles must exist yet." }
-                return 2
+                throw UsageError("None of the output files $existingOutputFiles must exist yet.", statusCode = 2)
             }
         }
 
@@ -144,12 +131,19 @@ object EvaluatorCommand : CommandWithHelp() {
             ortResultInput = ortResultInput.replacePackageCurations(it.readValue())
         }
 
-        val script = rulesFile?.expandTilde()?.readText() ?: javaClass.classLoader.getResource(rulesResource).readText()
+        val script = when (rules) {
+            is FileType -> (rules as FileType).file.expandTilde().readText()
+            is StringType -> {
+                val rulesResource = (rules as StringType).string
+                javaClass.classLoader.getResource(rulesResource)?.readText()
+                    ?: throw UsageError("Invalid rules resource '$rulesResource'.", statusCode = 2)
+            }
+        }
 
         val evaluator = Evaluator(ortResultInput, licenseConfiguration)
 
         if (syntaxCheck) {
-            return if (evaluator.checkSyntax(script)) 0 else 2
+            if (evaluator.checkSyntax(script)) return else throw UsageError("Syntax check failed.", statusCode = 2)
         }
 
         val evaluatorRun by lazy { evaluator.run(script) }
@@ -176,7 +170,7 @@ object EvaluatorCommand : CommandWithHelp() {
             }
         }
 
-        return if (evaluatorRun.violations.isEmpty()) 0 else 2
+        if (evaluatorRun.violations.isNotEmpty()) throw UsageError("Rule violations found.", statusCode = 2)
     }
 
     private fun printSummary(errors: List<RuleViolation>) {

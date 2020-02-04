@@ -26,7 +26,7 @@ class ScanSummary {
 
     #endTime = '';
 
-    #errors = [];
+    #issues = [];
 
     #fileCount = 0;
 
@@ -70,8 +70,8 @@ class ScanSummary {
                 this.copyrightFindings = obj.copyrights;
             }
 
-            if (obj.errors) {
-                this.errors = obj.errors;
+            if (obj.issues) {
+                this.issues = obj.issues;
             }
         }
     }
@@ -108,13 +108,13 @@ class ScanSummary {
         }
     }
 
-    get errors() {
-        return this.#errors;
+    get issues() {
+        return this.#issues;
     }
 
-    set errors(val) {
+    set issues(val) {
         for (let i = 0, len = val.length; i < len; i++) {
-            this.#errors.push(new OrtIssue(val[i]));
+            this.#issues.push(new OrtIssue(val[i]));
         }
     }
 

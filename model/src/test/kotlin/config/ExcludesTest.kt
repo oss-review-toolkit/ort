@@ -61,8 +61,8 @@ class ExcludesTest : WordSpec() {
     private val scope1 = Scope("scope1", sortedSetOf(PackageReference(id)))
     private val scope2 = Scope("scope2", sortedSetOf(PackageReference(id)))
 
-    private val scopeExclude1 = ScopeExclude("scope1", ScopeExcludeReason.PROVIDED_BY, "")
-    private val scopeExclude2 = ScopeExclude("scope2", ScopeExcludeReason.PROVIDED_BY, "")
+    private val scopeExclude1 = ScopeExclude("scope1", ScopeExcludeReason.PROVIDED_DEPENDENCY_OF, "")
+    private val scopeExclude2 = ScopeExclude("scope2", ScopeExcludeReason.PROVIDED_DEPENDENCY_OF, "")
 
     private lateinit var ortResult: OrtResult
 
@@ -227,7 +227,7 @@ class ExcludesTest : WordSpec() {
             }
 
             "return true if the scope is excluded using a regex" {
-                val excludes = Excludes(scopes = listOf(scopeExclude1.copy(name = Regex("sc.*"))))
+                val excludes = Excludes(scopes = listOf(scopeExclude1.copy(pattern = "sc.*")))
 
                 excludes.isScopeExcluded(scope1) shouldBe true
             }

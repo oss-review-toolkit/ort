@@ -31,18 +31,36 @@ data class RepositoryConfiguration(
      * Defines which parts of the repository will be excluded. Note that excluded parts will still be analyzed and
      * scanned, but related errors will be marked as resolved in the reporter output.
      */
-    @JsonInclude(JsonInclude.Include.NON_NULL)
-    val excludes: Excludes? = null,
+    @JsonInclude(value = JsonInclude.Include.CUSTOM, valueFilter = ExcludesFilter::class)
+    val excludes: Excludes = Excludes(),
 
     /**
      * Defines resolutions for issues with this repository.
      */
-    @JsonInclude(JsonInclude.Include.NON_NULL)
-    val resolutions: Resolutions? = null,
+    @JsonInclude(value = JsonInclude.Include.CUSTOM, valueFilter = ResolutionsFilter::class)
+    val resolutions: Resolutions = Resolutions(),
 
     /**
      * Defines curations for artifacts contained in this repository.
      */
-    @JsonInclude(JsonInclude.Include.NON_NULL)
-    val curations: Curations? = null
+    @JsonInclude(value = JsonInclude.Include.CUSTOM, valueFilter = Curations::class)
+    val curations: Curations = Curations()
 )
+
+@Suppress("EqualsWithHashCodeExist") // The class is not supposed to be used with hashing.
+class ExcludesFilter {
+    override fun equals(other: Any?): Boolean =
+        if (other is Excludes) other.paths.isEmpty() && other.scopes.isEmpty() else false
+}
+
+@Suppress("EqualsWithHashCodeExist") // The class is not supposed to be used with hashing.
+class ResolutionsFilter {
+    override fun equals(other: Any?): Boolean =
+        if (other is Resolutions) other.issues.isEmpty() && other.ruleViolations.isEmpty() else false
+}
+
+@Suppress("EqualsWithHashCodeExist") // The class is not supposed to be used with hashing.
+class CurationsFilter {
+    override fun equals(other: Any?): Boolean =
+        if (other is Curations) other.licenseFindings.isEmpty() else false
+}

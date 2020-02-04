@@ -108,7 +108,7 @@ class CopyrightStatementsProcessor {
         val processedStatements: LinkedHashMap<String, List<String>>,
         val unprocessedStatements: List<String>
     ) {
-        fun toMutableSet() = (unprocessedStatements + processedStatements.keys).toMutableSet()
+        fun getAllStatements(): Set<String> = (unprocessedStatements + processedStatements.keys).toSet()
     }
 
     fun process(copyrightStatments: Collection<String>): Result {

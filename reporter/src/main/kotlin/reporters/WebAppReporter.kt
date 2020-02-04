@@ -19,13 +19,9 @@
 
 package com.here.ort.reporter.reporters
 
-import com.here.ort.model.OrtResult
-import com.here.ort.model.config.CopyrightGarbage
 import com.here.ort.model.jsonMapper
-import com.here.ort.model.licenses.LicenseConfiguration
-import com.here.ort.reporter.LicenseTextProvider
 import com.here.ort.reporter.Reporter
-import com.here.ort.reporter.ResolutionProvider
+import com.here.ort.reporter.ReporterInput
 
 import java.io.OutputStream
 
@@ -35,17 +31,12 @@ class WebAppReporter : Reporter {
 
     override fun generateReport(
         outputStream: OutputStream,
-        ortResult: OrtResult,
-        resolutionProvider: ResolutionProvider,
-        licenseTextProvider: LicenseTextProvider,
-        copyrightGarbage: CopyrightGarbage,
-        licenseConfiguration: LicenseConfiguration,
-        postProcessingScript: String?
+        input: ReporterInput
     ) {
         val template = javaClass.classLoader.getResource("scan-report-template.html").readText()
-        val resultJson = jsonMapper.writeValueAsString(ortResult)
+        val resultJson = jsonMapper.writeValueAsString(input.ortResult)
 
-        val relevantResolutions = resolutionProvider.getResolutionsFor(ortResult)
+        val relevantResolutions = input.resolutionProvider.getResolutionsFor(input.ortResult)
         val resolutionsJson = jsonMapper.writeValueAsString(relevantResolutions)
 
         val result = template

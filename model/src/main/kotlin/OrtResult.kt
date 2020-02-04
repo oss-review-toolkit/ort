@@ -36,6 +36,8 @@ import com.here.ort.utils.zipWithDefault
 
 import java.util.SortedSet
 
+typealias CustomData = MutableMap<String, Any>
+
 /**
  * The common output format for the analyzer and scanner. It contains information about the scanned repository, and the
  * analyzer and scanner will add their result to it.
@@ -115,7 +117,7 @@ data class OrtResult(
                 val isScopeExcluded = getExcludes().isScopeExcluded(scope)
 
                 if (!isProjectExcluded(project.id) && !isScopeExcluded) {
-                    val dependencies = scope.collectDependencies().map { it.id }
+                    val dependencies = scope.collectDependencies()
                     includedPackages.addAll(dependencies)
                 }
             }
@@ -144,8 +146,8 @@ data class OrtResult(
      * depth of [maxLevel] where counting starts at 0 (for the [Project] or [Package] itself) and 1 are direct
      * dependencies etc. A value below 0 means to not limit the depth.
      */
-    fun collectDependencies(id: Identifier, maxLevel: Int = -1): SortedSet<PackageReference> {
-        val dependencies = sortedSetOf<PackageReference>()
+    fun collectDependencies(id: Identifier, maxLevel: Int = -1): SortedSet<Identifier> {
+        val dependencies = sortedSetOf<Identifier>()
 
         getProjects().forEach { project ->
             if (project.id == id) {
@@ -161,12 +163,12 @@ data class OrtResult(
     }
 
     /**
-     * Return a map of all de-duplicated errors associated by [Identifier].
+     * Return a map of all de-duplicated [OrtIssue]s associated by [Identifier].
      */
-    fun collectErrors(): Map<Identifier, Set<OrtIssue>> {
-        val analyzerErrors = analyzer?.result?.collectErrors() ?: emptyMap()
-        val scannerErrors = scanner?.results?.collectErrors() ?: emptyMap()
-        return analyzerErrors.zipWithDefault(scannerErrors, emptySet()) { left, right -> left + right }
+    fun collectIssues(): Map<Identifier, Set<OrtIssue>> {
+        val analyzerIssues = analyzer?.result?.collectIssues().orEmpty()
+        val scannerIssues = scanner?.results?.collectIssues().orEmpty()
+        return analyzerIssues.zipWithDefault(scannerIssues, emptySet()) { left, right -> left + right }
     }
 
     private fun collectLicenseFindings(
@@ -241,7 +243,7 @@ data class OrtResult(
             val allSubProjects = sortedSetOf<Identifier>()
 
             getProjects().forEach {
-                it.collectSubProjects().mapTo(allSubProjects) { ref -> ref.id }
+                allSubProjects += it.collectSubProjects()
             }
 
             projectsAndPackages -= allSubProjects
@@ -279,8 +281,9 @@ data class OrtResult(
      * Return all detected licenses for the given package[id] along with the copyrights.
      */
     @Suppress("UNUSED") // This is intended to be mostly used via scripting.
-    fun getDetectedLicensesWithCopyrights(id: Identifier): Map<String, Set<String>> =
+    fun getDetectedLicensesWithCopyrights(id: Identifier, omitExcluded: Boolean = true): Map<String, Set<String>> =
         collectLicenseFindings(id)
+            .filter { (_, excludes) -> !omitExcluded || excludes.isEmpty() }
             .map { (findings, _) -> findings }
             .associateBy(
                 { it.license },
@@ -409,7 +412,7 @@ data class OrtResult(
     fun getPackage(id: Identifier): CuratedPackage? = packages[id]?.curatedPackage
 
     @JsonIgnore
-    fun getPackages(): Set<CuratedPackage> = analyzer?.result?.packages ?: emptySet()
+    fun getPackages(): Set<CuratedPackage> = analyzer?.result?.packages.orEmpty()
 
     /**
      * Return all [Project]s contained in this [OrtResult].
@@ -424,14 +427,14 @@ data class OrtResult(
     fun getRuleViolations(): List<RuleViolation> = evaluator?.violations.orEmpty()
 
     @JsonIgnore
-    fun getExcludes(): Excludes = repository.config.excludes ?: Excludes()
+    fun getExcludes(): Excludes = repository.config.excludes
 
     /**
      * Return the [LicenseFindingCuration]s associated with the given package [id].
      */
     fun getLicenseFindingsCurations(id: Identifier): List<LicenseFindingCuration> =
         if (projects.containsKey(id)) {
-            repository.config.curations?.licenseFindings.orEmpty()
+            repository.config.curations.licenseFindings
         } else {
             emptyList()
         }
@@ -451,4 +454,9 @@ data class OrtResult(
             getPackages().mapTo(set) { it.pkg.id }
             getProjects().mapTo(set) { it.id }
         }
+
+    /**
+     * Return the list of [ScanResult]s for the given [id].
+     */
+    fun getScanResultsForId(id: Identifier): List<ScanResult> = scanResultsById[id].orEmpty()
 }

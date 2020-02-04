@@ -18,17 +18,17 @@ project:
   scopes:
   - name: "default"
     dependencies:
-    - id: "Bundler::rack:1.6.11"
+    - id: "Bundler::rack:2.0.8"
     - id: "Bundler::signet:0.8.1"
       dependencies:
-      - id: "Bundler::addressable:2.5.2"
+      - id: "Bundler::addressable:2.7.0"
         dependencies:
-        - id: "Bundler::public_suffix:3.0.2"
-      - id: "Bundler::faraday:0.15.1"
+        - id: "Bundler::public_suffix:4.0.1"
+      - id: "Bundler::faraday:0.17.1"
         dependencies:
-        - id: "Bundler::multipart-post:2.0.0"
-      - id: "Bundler::jwt:2.1.0"
-      - id: "Bundler::multi_json:1.13.1"
+        - id: "Bundler::multipart-post:2.1.1"
+      - id: "Bundler::jwt:2.2.1"
+      - id: "Bundler::multi_json:1.14.1"
   - name: "development"
     dependencies:
     - id: "Bundler::rspec:3.7.0"
@@ -46,15 +46,15 @@ project:
         - id: "Bundler::rspec-support:3.7.1"
 packages:
 - package:
-    id: "Bundler::addressable:2.5.2"
-    purl: "pkg:bundler/addressable@2.5.2"
+    id: "Bundler::addressable:2.7.0"
+    purl: "pkg:bundler/addressable@2.7.0"
     declared_licenses:
     - "Apache-2.0"
     declared_licenses_processed:
       spdx_expression: "Apache-2.0"
-    description: "Addressable is a replacement for the URI implementation that is\
-      \ part of\nRuby's standard library. It more closely conforms to the relevant\
-      \ RFCs and\nadds support for IRIs and URI templates.\n"
+    description: "Addressable is an alternative implementation to the URI implementation\
+      \ that is\npart of Ruby's standard library. It is flexible, offers heuristic\
+      \ parsing, and\nadditionally provides extensive support for IRIs and URI templates.\n"
     homepage_url: "https://github.com/sporkmonger/addressable"
     binary_artifact:
       url: ""
@@ -62,9 +62,9 @@ packages:
         value: ""
         algorithm: ""
     source_artifact:
-      url: "https://rubygems.org/gems/addressable-2.5.2.gem"
+      url: "https://rubygems.org/gems/addressable-2.7.0.gem"
       hash:
-        value: "73771ea960b3900d96e6b3729bd203e66f387d0717df83304411bf37efd7386e"
+        value: "5e9b62fe1239091ea9b2893cd00ffe1bcbdd9371f4e1d35fac595c98c5856cbb"
         algorithm: "SHA-256"
     vcs:
       type: "Git"
@@ -116,8 +116,8 @@ packages:
       path: ""
   curations: []
 - package:
-    id: "Bundler::faraday:0.15.1"
-    purl: "pkg:bundler/faraday@0.15.1"
+    id: "Bundler::faraday:0.17.1"
+    purl: "pkg:bundler/faraday@0.17.1"
     declared_licenses:
     - "MIT"
     declared_licenses_processed:
@@ -130,9 +130,9 @@ packages:
         value: ""
         algorithm: ""
     source_artifact:
-      url: "https://rubygems.org/gems/faraday-0.15.1.gem"
+      url: "https://rubygems.org/gems/faraday-0.17.1.gem"
       hash:
-        value: "bd5bd1ab8db9b3f99ed1113d80522dabf95941e40cc3107f9621546f6a357f60"
+        value: "88a71dc346e55a20dcf2961395f9efabfcb0a956ea722768ecb9cdbdf7f8efbd"
         algorithm: "SHA-256"
     vcs:
       type: "Git"
@@ -146,8 +146,8 @@ packages:
       path: ""
   curations: []
 - package:
-    id: "Bundler::jwt:2.1.0"
-    purl: "pkg:bundler/jwt@2.1.0"
+    id: "Bundler::jwt:2.2.1"
+    purl: "pkg:bundler/jwt@2.2.1"
     declared_licenses:
     - "MIT"
     declared_licenses_processed:
@@ -161,13 +161,13 @@ packages:
         value: ""
         algorithm: ""
     source_artifact:
-      url: "https://rubygems.org/gems/jwt-2.1.0.gem"
+      url: "https://rubygems.org/gems/jwt-2.2.1.gem"
       hash:
-        value: "7e7e7ffc1a5ebce628ac7da428341c50615a3a10ac47bb74c22c1cba325613f0"
+        value: "2c899043f87f4287e30a57c0e71e1e0339f846622ccf263d75837a3aee0eef07"
         algorithm: "SHA-256"
     vcs:
       type: "Git"
-      url: "http://github.com/jwt/ruby-jwt.git"
+      url: "https://github.com/jwt/ruby-jwt.git"
       revision: ""
       path: ""
     vcs_processed:
@@ -177,8 +177,8 @@ packages:
       path: ""
   curations: []
 - package:
-    id: "Bundler::multi_json:1.13.1"
-    purl: "pkg:bundler/multi_json@1.13.1"
+    id: "Bundler::multi_json:1.14.1"
+    purl: "pkg:bundler/multi_json@1.14.1"
     declared_licenses:
     - "MIT"
     declared_licenses_processed:
@@ -193,31 +193,31 @@ packages:
         value: ""
         algorithm: ""
     source_artifact:
-      url: "https://rubygems.org/gems/multi_json-1.13.1.gem"
+      url: "https://rubygems.org/gems/multi_json-1.14.1.gem"
       hash:
-        value: "db8613c039b9501e6b2fb85efe4feabb02f55c3365bae52bba35381b89c780e6"
+        value: "d971296c0eacea289d31e4a7ab7ac5eda97262c62bbc8c110de4f5e36425c577"
         algorithm: "SHA-256"
     vcs:
       type: "Git"
-      url: "http://github.com/intridea/multi_json.git"
-      revision: ""
+      url: "https://github.com/intridea/multi_json.git"
+      revision: "v1.14.1"
       path: ""
     vcs_processed:
       type: "Git"
       url: "https://github.com/intridea/multi_json.git"
-      revision: ""
+      revision: "v1.14.1"
       path: ""
   curations: []
 - package:
-    id: "Bundler::multipart-post:2.0.0"
-    purl: "pkg:bundler/multipart-post@2.0.0"
+    id: "Bundler::multipart-post:2.1.1"
+    purl: "pkg:bundler/multipart-post@2.1.1"
     declared_licenses:
     - "MIT"
     declared_licenses_processed:
       spdx_expression: "MIT"
-    description: "Use with Net::HTTP to do multipart form posts.  IO values that have\
-      \ #content_type, #original_filename, and #local_path will be posted as a binary\
-      \ file."
+    description: "Use with Net::HTTP to do multipart form postspec. IO values that\
+      \ have #content_type, #original_filename, and #local_path will be posted as\
+      \ a binary file."
     homepage_url: "https://github.com/nicksieger/multipart-post"
     binary_artifact:
       url: ""
@@ -225,9 +225,9 @@ packages:
         value: ""
         algorithm: ""
     source_artifact:
-      url: "https://rubygems.org/gems/multipart-post-2.0.0.gem"
+      url: "https://rubygems.org/gems/multipart-post-2.1.1.gem"
       hash:
-        value: "3dc44e50d3df3d42da2b86272c568fd7b75c928d8af3cc5f9834e2e5d9586026"
+        value: "d2dd7aa957650e0d99e0513cd388401b069f09528441b87d884609c8e94ffcfd"
         algorithm: "SHA-256"
     vcs:
       type: "Git"
@@ -241,8 +241,8 @@ packages:
       path: ""
   curations: []
 - package:
-    id: "Bundler::public_suffix:3.0.2"
-    purl: "pkg:bundler/public_suffix@3.0.2"
+    id: "Bundler::public_suffix:4.0.1"
+    purl: "pkg:bundler/public_suffix@4.0.1"
     declared_licenses:
     - "MIT"
     declared_licenses_processed:
@@ -256,9 +256,9 @@ packages:
         value: ""
         algorithm: ""
     source_artifact:
-      url: "https://rubygems.org/gems/public_suffix-3.0.2.gem"
+      url: "https://rubygems.org/gems/public_suffix-4.0.1.gem"
       hash:
-        value: "3a0168c33fa0b00886423a2ceb21c74199273ccd01bc250360fc8d18600bb0f4"
+        value: "6035585fe67676a195ba53fa5860625a70e057cf2226ecc5bbede125a4d8ce76"
         algorithm: "SHA-256"
     vcs:
       type: "Git"
@@ -272,8 +272,8 @@ packages:
       path: ""
   curations: []
 - package:
-    id: "Bundler::rack:1.6.11"
-    purl: "pkg:bundler/rack@1.6.11"
+    id: "Bundler::rack:2.0.8"
+    purl: "pkg:bundler/rack@2.0.8"
     declared_licenses:
     - "MIT"
     declared_licenses_processed:
@@ -282,7 +282,7 @@ packages:
       web applications in Ruby.  By wrapping HTTP requests and responses in\nthe simplest\
       \ way possible, it unifies and distills the API for web\nservers, web frameworks,\
       \ and software in between (the so-called\nmiddleware) into a single method call.\n\
-      \nAlso see http://rack.github.io/.\n"
+      \nAlso see https://rack.github.io/.\n"
     homepage_url: "https://rack.github.io/"
     binary_artifact:
       url: ""
@@ -290,9 +290,9 @@ packages:
         value: ""
         algorithm: ""
     source_artifact:
-      url: "https://rubygems.org/gems/rack-1.6.11.gem"
+      url: "https://rubygems.org/gems/rack-2.0.8.gem"
       hash:
-        value: "ee2016b1ddf820f6e5ee437d10a85319506b60c0d493da1d15815361a91129bd"
+        value: "f98171fb30e104950abe1e9fb97c177d8bb5643dd649bc2ed837864eb596a0c5"
         algorithm: "SHA-256"
     vcs:
       type: "Git"

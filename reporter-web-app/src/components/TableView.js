@@ -39,14 +39,14 @@ class TableView extends React.Component {
             {
                 align: 'right',
                 filters: (() => [
-                    { text: 'Errors', value: 'errors' },
+                    { text: 'Issues', value: 'issues' },
                     { text: 'Violations', value: 'violations' }
                 ])(),
                 filterMultiple: true,
-                key: 'errors',
+                key: 'issues',
                 onFilter: (value, pkg) => {
-                    if (value === 'errors') {
-                        return pkg.hasErrors(webAppOrtResult);
+                    if (value === 'issues') {
+                        return pkg.hasIssues(webAppOrtResult);
                     }
 
                     if (value === 'violations') {
@@ -56,7 +56,7 @@ class TableView extends React.Component {
                     return false;
                 },
                 render: (pkg) => {
-                    if (pkg.hasErrors(webAppOrtResult) || pkg.hasViolations(webAppOrtResult)) {
+                    if (pkg.hasIssues(webAppOrtResult) || pkg.hasViolations(webAppOrtResult)) {
                         return (
                             <Icon
                                 type="exclamation-circle"

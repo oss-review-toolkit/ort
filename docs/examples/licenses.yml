@@ -1,0 +1,378 @@
+---
+# Example licenses.yml based on categorization from
+# https://github.com/nexB/scancode-toolkit/commit/ed644e4
+#
+# To demonstrate how one can insert a custom written offer
+# include_source_code_offer_in_notice_file has been set to
+# true for all licenses of the GPL familiy.
+license_sets:
+- id: "copyleft"
+- id: "copyleft-limited"
+- id: "permissive"
+- id: "public-domain"
+licenses:
+- id: "AGPL-1.0"
+  sets:
+  - "copyleft"
+  include_in_notice_file: true
+  include_source_code_offer_in_notice_file: true
+- id: "AGPL-1.0-only"
+  sets:
+  - "copyleft"
+  include_in_notice_file: true
+  include_source_code_offer_in_notice_file: true
+- id: "AGPL-1.0-or-later"
+  sets:
+  - "copyleft"
+  include_in_notice_file: true
+  include_source_code_offer_in_notice_file: true
+- id: "AGPL-3.0"
+  sets:
+  - "copyleft"
+  include_in_notice_file: true
+  include_source_code_offer_in_notice_file: true
+- id: "AGPL-3.0-only"
+  sets:
+  - "copyleft"
+  include_in_notice_file: true
+  include_source_code_offer_in_notice_file: true
+- id: "AGPL-3.0-or-later"
+  sets:
+  - "copyleft"
+  include_in_notice_file: true
+  include_source_code_offer_in_notice_file: true
+- id: "Apache-2.0"
+  sets:
+  - "permissive"
+  include_in_notice_file: true
+  include_source_code_offer_in_notice_file: false 
+- id: "Artistic-1.0"
+  sets:
+  - "copyleft-limited"
+  include_in_notice_file: true
+  include_source_code_offer_in_notice_file: false
+- id: "Artistic-2.0"
+  sets:
+  - "copyleft-limited"
+  include_in_notice_file: true
+  include_source_code_offer_in_notice_file: false
+- id: "BSD-1-Clause"
+  sets:
+  - "permissive"
+  include_in_notice_file: true
+  include_source_code_offer_in_notice_file: false
+- id: "BSD-2-Clause"
+  sets:
+  - "permissive"
+  include_in_notice_file: true
+  include_source_code_offer_in_notice_file: false
+- id: "BSD-2-Clause-FreeBSD"
+  sets:
+  - "permissive"
+  include_in_notice_file: true
+  include_source_code_offer_in_notice_file: false
+- id: "BSD-2-Clause-NetBSD"
+  sets:
+  - "permissive"
+  include_in_notice_file: true
+  include_source_code_offer_in_notice_file: false
+- id: "BSD-3-Clause"
+  sets:
+  - "permissive"
+  include_in_notice_file: true
+  include_source_code_offer_in_notice_file: false
+- id: "BSD-4-Clause"
+  sets:
+  - "permissive"
+  include_in_notice_file: true
+  include_source_code_offer_in_notice_file: false
+- id: "BSD-4-Clause-UC"
+  sets:
+  - "permissive"
+  include_in_notice_file: true
+  include_source_code_offer_in_notice_file: false
+- id: "CC-BY-1.0"
+  sets:
+  - "permissive"
+  include_in_notice_file: true
+  include_source_code_offer_in_notice_file: false
+- id: "CC-BY-2.0"
+  sets:
+  - "permissive"
+  include_in_notice_file: true
+  include_source_code_offer_in_notice_file: false
+- id: "CC-BY-2.5"
+  sets:
+  - "permissive"
+  include_in_notice_file: true
+  include_source_code_offer_in_notice_file: false
+- id: "CC-BY-3.0"
+  sets:
+  - "permissive"
+  include_in_notice_file: true
+  include_source_code_offer_in_notice_file: false
+- id: "CC-BY-4.0"
+  sets:
+  - "permissive"
+  include_in_notice_file: true
+  include_source_code_offer_in_notice_file: false
+- id: "CC0-1.0"
+  sets:
+  - "public-domain"
+  include_in_notice_file: true
+  include_source_code_offer_in_notice_file: false
+- id: "CDDL-1.0"
+  sets:
+  - "copyleft-limited"
+  include_in_notice_file: true
+  include_source_code_offer_in_notice_file: false
+- id: "CDDL-1.1"
+  sets:
+  - "copyleft-limited"
+  include_in_notice_file: true
+  include_source_code_offer_in_notice_file: false
+- id: "EPL-1.0"
+  sets:
+  - "copyleft-limited"
+  include_in_notice_file: true
+  include_source_code_offer_in_notice_file: false
+- id: "EPL-2.0"
+  sets:
+  - "copyleft-limited"
+  include_in_notice_file: true
+  include_source_code_offer_in_notice_file: false
+- id: "EUPL-1.1"
+  sets:
+  - "copyleft-limited"
+  include_in_notice_file: true
+  include_source_code_offer_in_notice_file: false
+- id: "EUPL-1.2"
+  sets:
+  - "copyleft-limited"
+  include_in_notice_file: true
+  include_source_code_offer_in_notice_file: false
+- id: "GPL-1.0+"
+  sets:
+  - "copyleft"
+  include_in_notice_file: true
+  include_source_code_offer_in_notice_file: true
+- id: "GPL-1.0-only"
+  sets:
+  - "copyleft"
+  include_in_notice_file: true
+  include_source_code_offer_in_notice_file: true
+- id: "GPL-1.0-or-later"
+  sets:
+  - "copyleft"
+  include_in_notice_file: true
+  include_source_code_offer_in_notice_file: true
+- id: "GPL-2.0"
+  sets:
+  - "copyleft"
+  include_in_notice_file: true
+  include_source_code_offer_in_notice_file: true
+- id: "GPL-2.0+"
+  sets:
+  - "copyleft"
+  include_in_notice_file: true
+  include_source_code_offer_in_notice_file: true
+- id: "GPL-2.0-only"
+  sets:
+  - "copyleft"
+  include_in_notice_file: true
+  include_source_code_offer_in_notice_file: true
+- id: "GPL-2.0-only WITH Classpath-exception-2.0"
+  sets:
+  - "copyleft-limited"
+  include_in_notice_file: true
+  include_source_code_offer_in_notice_file: true
+- id: "GPL-2.0-only WITH Font-exception-2.0"
+  sets:
+  - "copyleft-limited"
+  include_in_notice_file: true
+  include_source_code_offer_in_notice_file: true
+- id: "GPL-2.0-or-later"
+  sets:
+  - "copyleft"
+  include_in_notice_file: true
+  include_source_code_offer_in_notice_file: true
+- id: "GPL-3.0"
+  sets:
+  - "copyleft"
+  include_in_notice_file: true
+  include_source_code_offer_in_notice_file: true
+- id: "GPL-3.0+"
+  sets:
+  - "copyleft"
+  include_in_notice_file: true
+  include_source_code_offer_in_notice_file: true
+- id: "GPL-3.0-only"
+  sets:
+  - "copyleft"
+  include_in_notice_file: true
+  include_source_code_offer_in_notice_file: true
+- id: "GPL-3.0-or-later"
+  sets:
+  - "copyleft"
+  include_in_notice_file: true
+  include_source_code_offer_in_notice_file: true
+- id: "JSON"
+  sets:
+  - "permissive"
+  include_in_notice_file: true
+  include_source_code_offer_in_notice_file: false
+- id: "LGPL-2.0-only"
+  sets:
+  - "copyleft-limited"
+  include_in_notice_file: true
+  include_source_code_offer_in_notice_file: false
+- id: "LGPL-2.0-or-later"
+  sets:
+  - "copyleft-limited"
+  include_in_notice_file: true
+  include_source_code_offer_in_notice_file: true
+- id: "LGPL-2.1-only"
+  sets:
+  - "copyleft-limited"
+  include_in_notice_file: true
+  include_source_code_offer_in_notice_file: true
+- id: "LGPL-2.1-or-later"
+  sets:
+  - "copyleft-limited"
+  include_in_notice_file: true
+  include_source_code_offer_in_notice_file: true
+- id: "LGPL-3.0-only"
+  sets:
+  - "copyleft-limited"
+  include_in_notice_file: true
+  include_source_code_offer_in_notice_file: true
+- id: "LGPL-3.0-or-later"
+  sets:
+  - "copyleft-limited"
+  include_in_notice_file: true
+  include_source_code_offer_in_notice_file: true
+- id: "Libpng"
+  sets:
+  - "permissive"
+  include_in_notice_file: true
+  include_source_code_offer_in_notice_file: false
+- id: "MIT"
+  sets:
+  - "permissive"
+  include_in_notice_file: true
+  include_source_code_offer_in_notice_file: false
+- id: "MIT-0"
+  sets:
+  - "permissive"
+  include_in_notice_file: true
+  include_source_code_offer_in_notice_file: false
+- id: "MIT-feh"
+  sets:
+  - "permissive"
+  include_in_notice_file: true
+  include_source_code_offer_in_notice_file: false
+- id: "MPL-1.0"
+  sets:
+  - "copyleft-limited"
+  include_in_notice_file: true
+  include_source_code_offer_in_notice_file: false
+- id: "MPL-1.1"
+  sets:
+  - "copyleft-limited"
+  include_in_notice_file: true
+  include_source_code_offer_in_notice_file: false
+- id: "MPL-2.0"
+  sets:
+  - "copyleft-limited"
+  include_in_notice_file: true
+  include_source_code_offer_in_notice_file: false
+- id: "MS-PL"
+  sets:
+  - "permissive"
+  include_in_notice_file: true
+  include_source_code_offer_in_notice_file: false
+- id: "MS-RL"
+  sets:
+  - "copyleft-limited"
+  include_in_notice_file: true
+  include_source_code_offer_in_notice_file: false
+- id: "ODbL-1.0"
+  sets:
+  - "copyleft"
+  include_in_notice_file: true
+  include_source_code_offer_in_notice_file: false
+- id: "OFL-1.0"
+  sets:
+  - "permissive"
+  include_in_notice_file: true
+  include_source_code_offer_in_notice_file: false
+- id: "OFL-1.1"
+  sets:
+  - "permissive"
+  include_in_notice_file: true
+  include_source_code_offer_in_notice_file: false
+- id: "OpenSSL"
+  sets:
+  - "permissive"
+  include_in_notice_file: true
+  include_source_code_offer_in_notice_file: false
+- id: "PSF"
+  sets:
+  - "strong-copyleft"
+  include_in_notice_file: true
+  include_source_code_offer_in_notice_file: false
+- id: "Python-2.0"
+  sets:
+  - "permissive"
+  include_in_notice_file: true
+  include_source_code_offer_in_notice_file: false
+- id: "Ruby"
+  sets:
+  - "copyleft-limited"
+  include_in_notice_file: true
+  include_source_code_offer_in_notice_file: false
+- id: "SAX-PD"
+  sets:
+  - "public-domain"
+  include_in_notice_file: true
+  include_source_code_offer_in_notice_file: false
+- id: "Unlicense"
+  sets:
+  - "public-domain"
+  include_in_notice_file: true
+  include_source_code_offer_in_notice_file: false
+- id: "W3C"
+  sets:
+  - "permissive"
+  include_in_notice_file: true
+  include_source_code_offer_in_notice_file: false
+- id: "WTFPL"
+  sets:
+  - "permissive"
+  include_in_notice_file: true
+  include_source_code_offer_in_notice_file: false
+- id: "X11"
+  sets:
+  - "permissive"
+  include_in_notice_file: true
+  include_source_code_offer_in_notice_file: false
+- id: "Zlib"
+  sets:
+  - "permissive"
+  include_in_notice_file: true
+  include_source_code_offer_in_notice_file: false
+- id: "bzip2-1.0.5"
+  sets:
+  - "permissive"
+  include_in_notice_file: true
+  include_source_code_offer_in_notice_file: false
+- id: "bzip2-1.0.6"
+  sets:
+  - "permissive"
+  include_in_notice_file: true
+  include_source_code_offer_in_notice_file: false
+- id: "curl"
+  sets:
+  - "permissive"
+  include_in_notice_file: true
+  include_source_code_offer_in_notice_file: false

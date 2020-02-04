@@ -138,7 +138,7 @@ fun generateEnumClass(
 
     enumFile.writeText(getLicenseHeader())
     enumFile.appendText("""
-    |@file:Suppress("MaximumLineLength")
+    |@file:Suppress("MaxLineLength")
     |
     |package com.here.ort.spdx
     |

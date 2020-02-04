@@ -40,8 +40,10 @@ import com.here.ort.model.ScannerDetails
 import com.here.ort.model.ScannerRun
 import com.here.ort.model.Severity
 import com.here.ort.model.config.ScannerConfiguration
+import com.here.ort.model.createAndLogIssue
 import com.here.ort.model.mapper
 import com.here.ort.utils.CommandLineTool
+import com.here.ort.utils.LICENSE_FILENAMES
 import com.here.ort.utils.NamedThreadFactory
 import com.here.ort.utils.Os
 import com.here.ort.utils.collectMessagesAsString
@@ -53,13 +55,11 @@ import com.here.ort.utils.safeMkdirs
 import com.here.ort.utils.showStackTrace
 import com.here.ort.utils.storage.FileArchiver
 import com.here.ort.utils.storage.LocalFileStorage
-import com.here.ort.utils.toHexString
 
 import com.vdurmont.semver4j.Requirement
 
 import java.io.File
 import java.io.IOException
-import java.security.MessageDigest
 import java.time.Instant
 import java.util.concurrent.Executors
 
@@ -75,22 +75,11 @@ import kotlinx.coroutines.withContext
 abstract class LocalScanner(name: String, config: ScannerConfiguration) : Scanner(name, config), CommandLineTool {
     companion object {
         val DEFAULT_ARCHIVE_DIR by lazy { getUserOrtDirectory().resolve("scanner/archive") }
-
-        val DEFAULT_ARCHIVE_PATTERNS = listOf(
-            "license*",
-            "licence*",
-            "*.license",
-            "unlicense",
-            "unlicence",
-            "copying*",
-            "copyright",
-            "patents"
-        ).flatMap { listOf(it, it.toUpperCase(), it.capitalize()) }
     }
 
     val archiver by lazy {
         config.archive?.createFileArchiver() ?: FileArchiver(
-            DEFAULT_ARCHIVE_PATTERNS,
+            LICENSE_FILENAMES,
             LocalFileStorage(DEFAULT_ARCHIVE_DIR)
         )
     }
@@ -218,10 +207,11 @@ abstract class LocalScanner(name: String, config: ScannerConfiguration) : Scanne
                         } catch (e: ScanException) {
                             e.showStackTrace()
 
-                            log.error {
-                                "Could not scan '${pkg.id.toCoordinates()}' $packageIndex: " +
+                            val issue = createAndLogIssue(
+                                source = scannerName,
+                                message = "Could not scan '${pkg.id.toCoordinates()}' $packageIndex: " +
                                         e.collectMessagesAsString()
-                            }
+                            )
 
                             val now = Instant.now()
                             listOf(
@@ -235,12 +225,7 @@ abstract class LocalScanner(name: String, config: ScannerConfiguration) : Scanne
                                         packageVerificationCode = "",
                                         licenseFindings = sortedSetOf(),
                                         copyrightFindings = sortedSetOf(),
-                                        errors = listOf(
-                                            OrtIssue(
-                                                source = scannerName,
-                                                message = e.collectMessagesAsString()
-                                            )
-                                        )
+                                        issues = listOf(issue)
                                     ),
                                     rawResult = EMPTY_JSON_NODE
                                 )
@@ -303,8 +288,6 @@ abstract class LocalScanner(name: String, config: ScannerConfiguration) : Scanne
         } catch (e: DownloadException) {
             e.showStackTrace()
 
-            log.error { "Could not download '${pkg.id.toCoordinates()}': ${e.collectMessagesAsString()}" }
-
             val now = Instant.now()
             return ScanResult(
                 Provenance(),
@@ -316,7 +299,12 @@ abstract class LocalScanner(name: String, config: ScannerConfiguration) : Scanne
                     packageVerificationCode = "",
                     licenseFindings = sortedSetOf(),
                     copyrightFindings = sortedSetOf(),
-                    errors = listOf(OrtIssue(source = scannerName, message = e.collectMessagesAsString()))
+                    issues = listOf(
+                        createAndLogIssue(
+                            source = scannerName,
+                            message = "Could not download '${pkg.id.toCoordinates()}': ${e.collectMessagesAsString()}"
+                        )
+                    )
                 ),
                 EMPTY_JSON_NODE
             )
@@ -345,8 +333,8 @@ abstract class LocalScanner(name: String, config: ScannerConfiguration) : Scanne
                 message = addResult.message ?: "Could not add result to scan results storage for unknown reason.",
                 severity = Severity.WARNING
             )
-            val errors = scanResult.summary.errors + issue
-            val summary = scanResult.summary.copy(errors = errors)
+            val issues = scanResult.summary.issues + issue
+            val summary = scanResult.summary.copy(issues = issues)
             scanResult.copy(summary = summary)
         }
     }
@@ -354,9 +342,7 @@ abstract class LocalScanner(name: String, config: ScannerConfiguration) : Scanne
     private fun archiveFiles(directory: File, id: Identifier, provenance: Provenance) {
         log.info { "Archiving files for ${id.toCoordinates()}." }
 
-        val provenanceBytes = provenance.toString().toByteArray()
-        val provenanceHash = MessageDigest.getInstance("SHA-1").digest(provenanceBytes).toHexString()
-        val path = "${id.toPath()}/$provenanceHash"
+        val path = "${id.toPath()}/${provenance.hash()}"
 
         archiver.archive(directory, path)
     }
@@ -394,8 +380,6 @@ abstract class LocalScanner(name: String, config: ScannerConfiguration) : Scanne
         } catch (e: ScanException) {
             e.showStackTrace()
 
-            log.error { "Could not scan path '$absoluteInputPath': ${e.message}" }
-
             val now = Instant.now()
             val summary = ScanSummary(
                 startTime = now,
@@ -404,7 +388,12 @@ abstract class LocalScanner(name: String, config: ScannerConfiguration) : Scanne
                 packageVerificationCode = "",
                 licenseFindings = sortedSetOf(),
                 copyrightFindings = sortedSetOf(),
-                errors = listOf(OrtIssue(source = scannerName, message = e.collectMessagesAsString()))
+                issues = listOf(
+                    createAndLogIssue(
+                        source = scannerName,
+                        message = "Could not scan path '$absoluteInputPath': ${e.collectMessagesAsString()}"
+                    )
+                )
             )
             ScanResult(Provenance(), getDetails(), summary)
         }

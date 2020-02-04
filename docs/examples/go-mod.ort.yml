@@ -1,0 +1,5 @@
+excludes:
+  scopes:
+    - pattern: "all"
+      reason: "DEV_DEPENDENCY_OF"
+      comment: "Scope with dependencies used to build all targets including non-released artifacts like tests."

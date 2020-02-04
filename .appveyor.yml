@@ -17,7 +17,7 @@ environment:
   SBT_VERSION: 1.0.2
   STACK_VERSION: 2.1.3.20190715
   VIRTUAL_ENV_VERSION: 15.1.0
-  YARN_VERSION: 1.17.3
+  YARN_VERSION: 1.21.1
 
 cache:
   - $(HOME)\.gradle\caches\build-cache-1
@@ -71,6 +71,10 @@ install:
   - flutter config --no-analytics
   - flutter doctor
   - pip install pipenv==%PYTHON_PIPENV_VERSION%
+  # Work around an issue with GPG failing to connect to its agent in GitRepoTest
+  # as seen at https://ci.appveyor.com/project/heremaps/oss-review-toolkit/builds/30228453#L3030.
+  - mv C:\msys64\usr\bin\gpg.exe C:\msys64\usr\bin\gpg.exe.orig
+  - mv "C:\Program Files\Git\usr\bin\gpg.exe" "C:\Program Files\Git\usr\bin\gpg.exe.orig"
 
 # Do something useful here to override the default MSBuild (which would fail otherwise).
 build_script:

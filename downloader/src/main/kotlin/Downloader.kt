@@ -27,7 +27,7 @@ import com.here.ort.model.RemoteArtifact
 import com.here.ort.model.VcsInfo
 import com.here.ort.model.VcsType
 import com.here.ort.utils.OkHttpClientHelper
-import com.here.ort.utils.collectMessages
+import com.here.ort.utils.collectMessagesAsString
 import com.here.ort.utils.log
 import com.here.ort.utils.safeDeleteRecursively
 import com.here.ort.utils.safeMkdirs
@@ -97,7 +97,7 @@ class Downloader {
     }
 
     /**
-     * This class describes what was downloaded by [download] to the [downloadDirectory] or if any exception occured.
+     * This class describes what was downloaded by [download] to the [downloadDirectory] or if any exception occurred.
      * Either [sourceArtifact] or [vcsInfo] is set to a non-null value. The download was started at [dateTime].
      */
     data class DownloadResult(
@@ -146,7 +146,7 @@ class Downloader {
                 log.info { "Skipping VCS download for Cargo package '${target.id.toCoordinates()}'." }
             }
         } catch (e: DownloadException) {
-            log.debug { "VCS download failed for '${target.id.toCoordinates()}': ${e.message}" }
+            log.debug { "VCS download failed for '${target.id.toCoordinates()}': ${e.collectMessagesAsString()}" }
 
             val message = if (target.vcsProcessed.url.isBlank()) {
                 val hint = when (target.id.type) {
@@ -172,7 +172,7 @@ class Downloader {
             }
 
             // Clean up any left-over files.
-            targetDir.safeDeleteRecursively()
+            targetDir.safeDeleteRecursively(force = true)
             targetDir.safeMkdirs()
 
             exception.addSuppressed(DownloadException(message, e))
@@ -182,7 +182,9 @@ class Downloader {
         try {
             return downloadSourceArtifact(target, targetDir)
         } catch (e: DownloadException) {
-            log.debug { "Source artifact download failed for '${target.id.toCoordinates()}': ${e.message}" }
+            log.debug {
+                "Source artifact download failed for '${target.id.toCoordinates()}': ${e.collectMessagesAsString()}"
+            }
 
             // Clean up any left-over files.
             targetDir.safeDeleteRecursively()
@@ -247,7 +249,7 @@ class Downloader {
                 }
 
                 // Clean up any files left from the failed VCS download (i.e. a ".git" directory).
-                outputDirectory.safeDeleteRecursively()
+                outputDirectory.safeDeleteRecursively(force = true)
                 outputDirectory.safeMkdirs()
 
                 val fallbackTarget = target.copy(vcsProcessed = target.vcsProcessed.copy(url = vcsUrlNoCredentials))
@@ -311,7 +313,7 @@ class Downloader {
                     }
                 }
             } catch (e: IOException) {
-                throw DownloadException("Failed to download source artifact: ${e.collectMessages()}", e)
+                throw DownloadException("Failed to download source artifact.", e)
             }
         }
 
@@ -344,7 +346,9 @@ class Downloader {
                 sourceArchive.unpack(outputDirectory)
             }
         } catch (e: IOException) {
-            log.error { "Could not unpack source artifact '${sourceArchive.absolutePath}': ${e.message}" }
+            log.error {
+                "Could not unpack source artifact '${sourceArchive.absolutePath}': ${e.collectMessagesAsString()}"
+            }
             throw DownloadException(e)
         }
 

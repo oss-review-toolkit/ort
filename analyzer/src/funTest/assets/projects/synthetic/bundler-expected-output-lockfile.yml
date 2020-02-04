@@ -21,7 +21,7 @@ project:
     - id: "Bundler::nokogiri:1.10.4"
       dependencies:
       - id: "Bundler::mini_portile2:2.4.0"
-    - id: "Bundler::rack:1.6.11"
+    - id: "Bundler::rack:1.6.12"
   - name: "test"
     dependencies:
     - id: "Bundler::rspec:3.7.0"
@@ -117,7 +117,7 @@ packages:
       spdx_expression: "MIT"
     description: "Nokogiri (鋸) is an HTML, XML, SAX, and Reader parser.  Among\nNokogiri's\
       \ many features is the ability to search documents via XPath\nor CSS3 selectors."
-    homepage_url: ""
+    homepage_url: "https://nokogiri.org"
     binary_artifact:
       url: ""
       hash:
@@ -140,8 +140,8 @@ packages:
       path: ""
   curations: []
 - package:
-    id: "Bundler::rack:1.6.11"
-    purl: "pkg:bundler/rack@1.6.11"
+    id: "Bundler::rack:1.6.12"
+    purl: "pkg:bundler/rack@1.6.12"
     declared_licenses:
     - "MIT"
     declared_licenses_processed:
@@ -158,9 +158,9 @@ packages:
         value: ""
         algorithm: ""
     source_artifact:
-      url: "https://rubygems.org/gems/rack-1.6.11.gem"
+      url: "https://rubygems.org/gems/rack-1.6.12.gem"
       hash:
-        value: "ee2016b1ddf820f6e5ee437d10a85319506b60c0d493da1d15815361a91129bd"
+        value: "928527a0897796d2575e8cacdfa526341dc4c55d05e09b31c39b3704c80738e6"
         algorithm: "SHA-256"
     vcs:
       type: "Git"

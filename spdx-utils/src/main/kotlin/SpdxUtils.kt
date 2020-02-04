@@ -17,9 +17,12 @@
  * License-Filename: LICENSE
  */
 
+@file:Suppress("TooManyFunctions")
+
 package com.here.ort.spdx
 
 import java.io.File
+import java.net.URL
 import java.security.MessageDigest
 import java.util.EnumSet
 
@@ -34,7 +37,7 @@ val NON_LICENSE_FILENAMES = listOf(
 /**
  * A list of directories used by version control systems to store metadata.
  */
-private val VCS_DIRECTORIES = listOf(
+internal val VCS_DIRECTORIES = listOf(
     ".git",
     ".hg",
     ".repo",
@@ -79,7 +82,7 @@ fun calculatePackageVerificationCode(files: List<File>, excludes: List<String> =
  */
 private fun sha1sum(file: File): String =
     file.inputStream().use { inputStream ->
-        // 4MB has been choosen rather arbitrary hoping that it provides a good enough performance while not consuming
+        // 4MB has been chosen rather arbitrary hoping that it provides a good enough performance while not consuming
         // too a lot of memory, also considering that this function could potentially be run on multiple thread in
         // parallel.
         val buffer = ByteArray(4 * 1024 * 1024)
@@ -96,12 +99,8 @@ private fun sha1sum(file: File): String =
 /**
  * Calculate the [SPDX package verification code][1] for all files in a [directory]. If [directory] points to a file
  * instead of a directory the verification code for the single file is returned.
- * All files with the extension ".spdx" are automatically excluded from the generated code. Additionally files from the
- * following VCS directories are excluded:
- * * .git/
- * * .hg/
- * * .svn/
- * * CVS/
+ * All files with the extension ".spdx" are automatically excluded from the generated code. Additionally files from
+ * [VCS directories][VCS_DIRECTORIES] are excluded.
  *
  * [1]: https://spdx.org/spdx_specification_2_0_html#h.2p2csry
  */
@@ -133,14 +132,26 @@ inline fun <reified T : Enum<T>> enumSetOf(vararg elems: T): EnumSet<T> =
  * license text is retrieved from that directory if and only if the license text is not known by ORT.
  */
 fun getLicenseText(id: String, handleExceptions: Boolean = false, customLicenseTextsDir: File? = null): String? =
+    getLicenseTextReader(id, handleExceptions, customLicenseTextsDir)?.invoke()
+
+fun hasLicenseText(id: String, handleExceptions: Boolean = false, customLicenseTextsDir: File? = null): Boolean =
+    getLicenseTextReader(id, handleExceptions, customLicenseTextsDir) != null
+
+fun getLicenseTextReader(
+    id: String,
+    handleExceptions: Boolean = false,
+    customLicenseTextsDir: File? = null
+): (() -> String)? =
     if (id.startsWith("LicenseRef-")) {
-        getLicenseTextFromResource(id) ?: customLicenseTextsDir?.let { getLicenseTextFromDirectory(id, it) }
+        getLicenseTextResource(id)?.let { { it.readText() } }
+            ?: customLicenseTextsDir?.let { getLicenseTextFile(id, it)?.let { file -> { file.readText() } } }
     } else {
-        SpdxLicense.forId(id)?.text ?: SpdxLicenseException.forId(id)?.text?.takeIf { handleExceptions }
+        SpdxLicense.forId(id)?.let { { it.text } }
+            ?: SpdxLicenseException.forId(id)?.takeIf { handleExceptions }?.let { { it.text } }
     }
 
-private fun getLicenseTextFromResource(id: String): String? =
-    object {}.javaClass.getResource("/licenserefs/$id")?.readText()
+private fun getLicenseTextResource(id: String): URL? =
+    object {}.javaClass.getResource("/licenserefs/$id")
 
-private fun getLicenseTextFromDirectory(id: String, dir: File): String? =
-    dir.resolve(id).let { if (it.isFile) it.readText() else null }
+private fun getLicenseTextFile(id: String, dir: File): File? =
+    dir.resolve(id).takeIf { it.isFile }

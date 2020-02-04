@@ -4,6 +4,7 @@ com.here.ort.analyzer.managers.Cargo$Factory
 com.here.ort.analyzer.managers.Conan$Factory
 com.here.ort.analyzer.managers.DotNet$Factory
 com.here.ort.analyzer.managers.GoDep$Factory
+com.here.ort.analyzer.managers.GoMod$Factory
 com.here.ort.analyzer.managers.Gradle$Factory
 com.here.ort.analyzer.managers.Maven$Factory
 com.here.ort.analyzer.managers.Npm$Factory

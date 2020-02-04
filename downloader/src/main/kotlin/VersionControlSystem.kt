@@ -23,6 +23,7 @@ import com.here.ort.model.Package
 import com.here.ort.model.VcsInfo
 import com.here.ort.model.VcsType
 import com.here.ort.utils.CommandLineTool
+import com.here.ort.utils.collectMessagesAsString
 import com.here.ort.utils.log
 import com.here.ort.utils.normalizeVcsUrl
 import com.here.ort.utils.showStackTrace
@@ -90,8 +91,8 @@ abstract class VersionControlSystem {
                 dirToVcsMap[absoluteVcsDirectory]
             } else {
                 ALL.asSequence().mapNotNull {
-                    if (it is CommandLineTool) {
-                        if (it.isInPath()) it.getWorkingTree(absoluteVcsDirectory) else null
+                    if (it is CommandLineTool && !it.isInPath()) {
+                        null
                     } else {
                         it.getWorkingTree(absoluteVcsDirectory)
                     }
@@ -103,7 +104,7 @@ abstract class VersionControlSystem {
 
                         log.debug {
                             "Exception while validating ${it.vcsType} working tree, treating it as non-applicable: " +
-                                    e.message
+                                    e.collectMessagesAsString()
                         }
 
                         false
@@ -120,8 +121,8 @@ abstract class VersionControlSystem {
         fun getCloneInfo(workingDir: File) = forDirectory(workingDir)?.getInfo() ?: VcsInfo.EMPTY
 
         /**
-         * Return all VCS information about a specific [path]. If [path] points to a nested VCS (like an individual Git
-         * working tree of GitRepo), information for the nested VCS is returned.
+         * Return all VCS information about a specific [path]. If [path] points to a nested VCS (like a Git submodule or
+         * a separate Git repository within a GitRepo working tree), information for that nested VCS is returned.
          */
         fun getPathInfo(path: File): VcsInfo {
             val dir = path.takeIf { it.isDirectory } ?: path.parentFile
@@ -132,7 +133,7 @@ abstract class VersionControlSystem {
         }
 
         /**
-         * Decompose a [vcsUrl] into any contained VCS information.
+         * Decompose a string representing a [VCS URL][vcsUrl] into any contained [VCS information][VcsInfo].
          */
         fun splitUrl(vcsUrl: String) =
             VcsHost.toVcsInfo(vcsUrl)
@@ -151,6 +152,18 @@ abstract class VersionControlSystem {
                         val url = normalizeVcsUrl(vcsUrl.substringBeforeLast('#'))
                         val revision = vcsUrl.substringAfterLast('#')
                         VcsInfo(VcsType.GIT, url, revision, null, "")
+                    }
+
+                    vcsUrl.contains("svn") -> {
+                        val branchOrTagPattern = Regex("(.+)/(branches|tags)/([^/]+)/?(.*)")
+                        branchOrTagPattern.matchEntire(vcsUrl)?.let { match ->
+                            VcsInfo(
+                                type = VcsType.SUBVERSION,
+                                url = match.groupValues[1],
+                                revision = "${match.groupValues[2]}/${match.groupValues[3]}",
+                                path = match.groupValues[4]
+                            )
+                        } ?: VcsInfo(VcsType.NONE, vcsUrl, "")
                     }
 
                     else -> VcsInfo(VcsType.NONE, vcsUrl, "")
@@ -204,9 +217,9 @@ abstract class VersionControlSystem {
      *
      * @return An object describing the downloaded working tree.
      *
-     * @throws DownloadException In case the download failed.
+     * @throws DownloadException in case the download failed.
      */
-    open fun download(
+    fun download(
         pkg: Package,
         targetDir: File,
         allowMovingRevisions: Boolean = false,
@@ -239,7 +252,9 @@ abstract class VersionControlSystem {
         } catch (e: IOException) {
             e.showStackTrace()
 
-            log.info { "Meta-data has invalid $type revision '${pkg.vcsProcessed.revision}': ${e.message}" }
+            log.info {
+                "Meta-data has invalid $type revision '${pkg.vcsProcessed.revision}': ${e.collectMessagesAsString()}"
+            }
         }
 
         try {
@@ -253,7 +268,7 @@ abstract class VersionControlSystem {
         } catch (e: IOException) {
             e.showStackTrace()
 
-            log.info { "No $type revision for version '${pkg.id.version}' found: ${e.message}" }
+            log.info { "No $type revision for version '${pkg.id.version}' found: ${e.collectMessagesAsString()}" }
         }
 
         if (revisionCandidates.isEmpty()) {
@@ -263,7 +278,7 @@ abstract class VersionControlSystem {
         var i = 0
         val workingTreeRevision = revisionCandidates.find { revision ->
             log.info { "Trying revision candidate '$revision' (${++i} of ${revisionCandidates.size})..." }
-            updateWorkingTree(workingTree, revision, recursive)
+            updateWorkingTree(workingTree, revision, pkg.vcsProcessed.path, recursive)
         } ?: throw DownloadException("$type failed to download from URL '${pkg.vcsProcessed.url}'.")
 
         pkg.vcsProcessed.path.let {
@@ -276,8 +291,7 @@ abstract class VersionControlSystem {
         }
 
         log.info {
-            "Successfully downloaded revision $workingTreeRevision which matches ${pkg.id.name} version " +
-                    "${pkg.id.version}."
+            "Successfully downloaded revision $workingTreeRevision for package '${pkg.id.toCoordinates()}.'."
         }
 
         return workingTree
@@ -286,16 +300,21 @@ abstract class VersionControlSystem {
     /**
      * Initialize the working tree without checking out any files yet.
      *
-     * TODO: Make this abstract once all VCS implementation have been ported.
+     * @throws IOException in case the initialization failed.
      */
-    open fun initWorkingTree(targetDir: File, vcs: VcsInfo): WorkingTree = getWorkingTree(targetDir)
+    abstract fun initWorkingTree(targetDir: File, vcs: VcsInfo): WorkingTree
 
     /**
-     * Update the [working tree][workingTree] by checking out the given [revision], optionally [recursively][recursive].
-     *
-     * TODO: Make this abstract once all VCS implementation have been ported.
+     * Update the [working tree][workingTree] by checking out the given [revision], optionally limited to the given
+     * [path] and [recursively][recursive] updating any nested working trees. Return true on success and false
+     * otherwise.
      */
-    open fun updateWorkingTree(workingTree: WorkingTree, revision: String, recursive: Boolean) = false
+    abstract fun updateWorkingTree(
+        workingTree: WorkingTree,
+        revision: String,
+        path: String = "",
+        recursive: Boolean = false
+    ): Boolean
 
     /**
      * Check whether the given [revision] is likely to name a fixed revision that does not move.

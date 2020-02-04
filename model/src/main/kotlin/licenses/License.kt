@@ -26,7 +26,7 @@ import com.here.ort.spdx.SpdxExpression
 import java.util.SortedSet
 
 /**
- * A class for configuring meta data for a specific license refered to by a SPDX license identifier.
+ * A class for configuring meta data for a specific license referred to by a SPDX license identifier.
  */
 data class License(
     /**

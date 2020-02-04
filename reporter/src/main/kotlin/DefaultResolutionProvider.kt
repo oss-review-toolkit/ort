@@ -31,20 +31,20 @@ class DefaultResolutionProvider : ResolutionProvider {
         this.resolutions = this.resolutions.merge(resolutions)
     }
 
-    override fun getErrorResolutionsFor(issue: OrtIssue) = resolutions.errors.filter { it.matches(issue) }
+    override fun getIssueResolutionsFor(issue: OrtIssue) = resolutions.issues.filter { it.matches(issue) }
 
     override fun getRuleViolationResolutionsFor(violation: RuleViolation) =
         resolutions.ruleViolations.filter { it.matches(violation) }
 
     override fun getResolutionsFor(ortResult: OrtResult): Resolutions {
-        val errorResolutions = ortResult.collectErrors().values.flatten().let { errors ->
-            resolutions.errors.filter { resolution -> errors.any { resolution.matches(it) } }
+        val issueResolutions = ortResult.collectIssues().values.flatten().let { issues ->
+            resolutions.issues.filter { resolution -> issues.any { resolution.matches(it) } }
         }
 
         val ruleViolationResolutions = ortResult.evaluator?.violations?.let { violations ->
             resolutions.ruleViolations.filter { resolution -> violations.any { resolution.matches(it) } }
-        } ?: emptyList()
+        }.orEmpty()
 
-        return Resolutions(errorResolutions, ruleViolationResolutions)
+        return Resolutions(issueResolutions, ruleViolationResolutions)
     }
 }

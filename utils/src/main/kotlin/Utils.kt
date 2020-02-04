@@ -28,10 +28,37 @@ import java.security.Permission
 
 import kotlin.reflect.full.memberProperties
 
+const val ORT_NAME = "OSS Review Toolkit"
+
 /**
  * The name of the ORT configuration file.
  */
 const val ORT_CONFIG_FILENAME = ".ort.yml"
+
+private fun List<String>.generateCapitalizationVariants() = flatMap { listOf(it, it.toUpperCase(), it.capitalize()) }
+
+/**
+ * A list globs that match default license file names.
+ */
+val LICENSE_FILENAMES = listOf(
+    "license*",
+    "licence*",
+    "*.license",
+    "*.licence",
+    "unlicense",
+    "unlicence",
+    "copying*",
+    "copyright",
+    "patents"
+).generateCapitalizationVariants()
+
+/**
+ * A list of globs that match files that often define the root license of a project, but are no license files and are
+ * therefore not contained in [LICENSE_FILENAMES].
+ */
+val ROOT_LICENSE_FILENAMES = listOf(
+    "readme*"
+).generateCapitalizationVariants()
 
 /**
  * Return whether the [receiver] (usually an instance of a data class) has any non-null property.
@@ -143,13 +170,13 @@ fun getCommonFileParent(files: Collection<File>) =
  * Return the full path to the given executable file if it is in the system's PATH environment, or null otherwise.
  */
 fun getPathFromEnvironment(executable: String): File? {
-    val paths = Os.env["PATH"]?.splitToSequence(File.pathSeparatorChar) ?: emptySequence()
+    val paths = Os.env["PATH"]?.splitToSequence(File.pathSeparatorChar).orEmpty()
 
     val executables = if (Os.isWindows) {
         // Get the list of executable file extensions without the leading dot each.
         val pathExt = Os.env["PATHEXT"]?.let {
             it.split(File.pathSeparatorChar).map { ext -> ext.toLowerCase().removePrefix(".") }
-        } ?: emptyList()
+        }.orEmpty()
 
         if (executable.substringAfterLast(".").toLowerCase() !in pathExt) {
             // Specifying an executable's file extension is optional on Windows, so try all of them in order, but still
@@ -185,9 +212,7 @@ fun getUserHomeDirectory() = File(System.getProperty("user.home"))
 fun getUserOrtDirectory() = getUserHomeDirectory().resolve(".ort")
 
 /**
- * Normalize a VCS URL by converting it to a common pattern.
- *
- * @param vcsUrl The URL to normalize.
+ * Normalize a string representing a [VCS URL][vcsUrl] to a common string form.
  */
 fun normalizeVcsUrl(vcsUrl: String): String {
     var url = vcsUrl.trimEnd('/')
@@ -262,18 +287,6 @@ fun normalizeVcsUrl(vcsUrl: String): String {
 
     return url
 }
-
-/**
- * Return true if the call of [block] succeeds without throwing an exception, return false if an exception was thrown.
- */
-@Suppress("TooGenericExceptionCaught")
-inline fun succeeds(block: () -> Unit) =
-    try {
-        block()
-        true
-    } catch (e: Throwable) {
-        false
-    }
 
 /**
  * Temporarily set the specified system [properties] while executing [block]. Afterwards, previously set properties have

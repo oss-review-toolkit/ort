@@ -19,17 +19,17 @@
 
 package com.here.ort.downloader.vcs
 
-import com.here.ort.downloader.DownloadException
 import com.here.ort.downloader.WorkingTree
-import com.here.ort.model.Package
 import com.here.ort.model.VcsInfo
 import com.here.ort.model.VcsType
 import com.here.ort.utils.Os
 import com.here.ort.utils.ProcessCapture
+import com.here.ort.utils.collectMessagesAsString
 import com.here.ort.utils.getPathFromEnvironment
 import com.here.ort.utils.log
 import com.here.ort.utils.realFile
 import com.here.ort.utils.searchUpwardsForSubdirectory
+import com.here.ort.utils.showStackTrace
 
 import java.io.File
 import java.io.IOException
@@ -37,7 +37,7 @@ import java.io.IOException
 /**
  * The branch of git-repo to use. This allows to override git-repo's default of using the "stable" branch.
  */
-const val GIT_REPO_BRANCH = "master"
+private const val GIT_REPO_BRANCH = "master"
 
 class GitRepo : GitBase() {
     override val type = VcsType.GIT_REPO
@@ -89,35 +89,39 @@ class GitRepo : GitBase() {
 
     override fun isApplicableUrlInternal(vcsUrl: String) = false
 
-    /**
-     * Clones the Git repositories defined in the manifest file using the Git Repo tool. The manifest file is checked
-     * out from the repository defined in [pkg.vcsProcessed][Package.vcsProcessed], its location is defined by
-     * [pkg.vcsProcessed.path][VcsInfo.path].
-     *
-     * @throws DownloadException In case the download failed.
-     */
-    override fun download(
-        pkg: Package, targetDir: File, allowMovingRevisions: Boolean,
+    override fun initWorkingTree(targetDir: File, vcs: VcsInfo): WorkingTree {
+        val manifestRevision = vcs.revision.takeUnless { it.isBlank() } ?: "master"
+        val manifestPath = vcs.path.takeUnless { it.isBlank() } ?: "default.xml"
+
+        log.info {
+            "Initializing git-repo from ${vcs.url} with revision '$manifestRevision' and manifest '$manifestPath'."
+        }
+
+        // Clone all projects instead of only those in the "default" group until we support specifying groups.
+        runRepoCommand(
+            targetDir,
+            "init", "--groups=all", "--no-repo-verify",
+            "--no-clone-bundle", "--repo-branch=$GIT_REPO_BRANCH",
+            "-b", manifestRevision,
+            "-u", vcs.url,
+            "-m", manifestPath
+        )
+
+        return getWorkingTree(targetDir)
+    }
+
+    override fun updateWorkingTree(
+        workingTree: WorkingTree,
+        revision: String,
+        path: String,
         recursive: Boolean
-    ): WorkingTree {
-        val revision = pkg.vcsProcessed.revision.takeUnless { it.isBlank() } ?: "master"
-        val manifestPath = pkg.vcsProcessed.path.takeUnless { it.isBlank() } ?: "default.xml"
+    ): Boolean {
+        val manifestRevision = revision.takeUnless { it.isBlank() } ?: "master"
+        val manifestPath = path.takeUnless { it.isBlank() } ?: "default.xml"
 
-        try {
-            log.info {
-                "Initializing git-repo from ${pkg.vcsProcessed.url} with revision '$revision' " +
-                        "and manifest '$manifestPath'."
-            }
-
-            // Clone all projects instead of only those in the "default" group until we support specifying groups.
-            runRepoCommand(
-                targetDir,
-                "init", "--groups=all", "--no-repo-verify",
-                "--no-clone-bundle", "--repo-branch=$GIT_REPO_BRANCH",
-                "-b", revision,
-                "-u", pkg.vcsProcessed.url,
-                "-m", manifestPath
-            )
+        return try {
+            // Switching manifest branches / revisions requires running "init" again.
+            runRepoCommand(workingTree.workingDir, "init", "-b", manifestRevision, "-m", manifestPath)
 
             // Repo allows to checkout Git repositories to nested directories. If a manifest is badly configured, a
             // nested Git checkout overwrites files in a directory of the upper-level Git repository. However, we still
@@ -128,13 +132,20 @@ class GitRepo : GitBase() {
                 syncArgs += "--fetch-submodules"
             }
 
-            runRepoCommand(targetDir, *syncArgs.toTypedArray())
+            runRepoCommand(workingTree.workingDir, *syncArgs.toTypedArray())
 
-            log.debug { runRepoCommand(targetDir, "info").stdout }
+            log.debug { runRepoCommand(workingTree.workingDir, "info").stdout }
 
-            return getWorkingTree(targetDir)
+            true
         } catch (e: IOException) {
-            throw DownloadException("Could not clone from ${pkg.vcsProcessed.url} using manifest '$manifestPath'.", e)
+            e.showStackTrace()
+
+            log.warn {
+                "Failed to sync the working tree to revision '$manifestRevision' using manifest '$manifestPath': " +
+                        e.collectMessagesAsString()
+            }
+
+            false
         }
     }
 

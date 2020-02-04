@@ -53,7 +53,7 @@ class EvaluatorTest : WordSpec() {
         }
 
         "evaluate" should {
-            "return no errors for an empty script" {
+            "return no rule violations for an empty script" {
                 val result = Evaluator(OrtResult.EMPTY).run("")
 
                 result.violations should beEmpty()
@@ -68,7 +68,7 @@ class EvaluatorTest : WordSpec() {
                 result.violations should beEmpty()
             }
 
-            "contain rule errors in the result" {
+            "contain rule violations in the result" {
                 val result = Evaluator(OrtResult.EMPTY).run(
                     """
                     ruleViolations += RuleViolation(

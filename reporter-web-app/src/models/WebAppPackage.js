@@ -32,7 +32,7 @@ class WebAppPackage extends Package {
 
     #detectedLicenses = new Set();
 
-    #errors;
+    #issues;
 
     #key;
 
@@ -198,16 +198,16 @@ class WebAppPackage extends Package {
         return null;
     }
 
-    getErrors(webAppOrtResult) {
-        if (!this.#errors) {
+    getIssues(webAppOrtResult) {
+        if (!this.#issues) {
             if (webAppOrtResult) {
-                this.#errors = webAppOrtResult.errors.filter(
-                    error => error.pkg === this.id
+                this.#issues = webAppOrtResult.issues.filter(
+                    issue => issue.pkg === this.id
                 );
             }
         }
 
-        return this.#errors;
+        return this.#issues;
     }
 
     getScanSummaryForScannerId(webAppOrtResult, scannerId) {
@@ -279,12 +279,12 @@ class WebAppPackage extends Package {
         return this.#violations;
     }
 
-    hasErrors(webAppOrtResult) {
-        if (!this.#errors) {
-            this.getErrors(webAppOrtResult);
+    hasIssues(webAppOrtResult) {
+        if (!this.#issues) {
+            this.getIssues(webAppOrtResult);
         }
 
-        return this.#errors.length;
+        return this.#issues.length;
     }
 
     hasCurations() {

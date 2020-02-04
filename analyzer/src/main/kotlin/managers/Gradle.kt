@@ -39,6 +39,7 @@ import com.here.ort.model.Severity
 import com.here.ort.model.VcsInfo
 import com.here.ort.model.config.AnalyzerConfiguration
 import com.here.ort.model.config.RepositoryConfiguration
+import com.here.ort.model.createAndLogIssue
 import com.here.ort.utils.collectMessagesAsString
 import com.here.ort.utils.getUserHomeDirectory
 import com.here.ort.utils.log
@@ -201,11 +202,11 @@ class Gradle(
                 val issues = mutableListOf<OrtIssue>()
 
                 dependencyTreeModel.errors.mapTo(issues) {
-                    OrtIssue(source = managerName, message = it, severity = Severity.ERROR)
+                    createAndLogIssue(source = managerName, message = it, severity = Severity.ERROR)
                 }
 
                 dependencyTreeModel.warnings.mapTo(issues) {
-                    OrtIssue(source = managerName, message = it, severity = Severity.WARNING)
+                    createAndLogIssue(source = managerName, message = it, severity = Severity.WARNING)
                 }
 
                 ProjectAnalyzerResult(
@@ -223,8 +224,21 @@ class Gradle(
     ): PackageReference {
         val issues = mutableListOf<OrtIssue>()
 
-        dependency.error?.let { issues += OrtIssue(source = managerName, message = it, severity = Severity.ERROR) }
-        dependency.warning?.let { issues += OrtIssue(source = managerName, message = it, severity = Severity.WARNING) }
+        dependency.error?.let {
+            issues += createAndLogIssue(
+                source = managerName,
+                message = it,
+                severity = Severity.ERROR
+            )
+        }
+
+        dependency.warning?.let {
+            issues += createAndLogIssue(
+                source = managerName,
+                message = it,
+                severity = Severity.WARNING
+            )
+        }
 
         // Only look for a package if there was no error resolving the dependency and it is no project dependency.
         if (dependency.error == null && dependency.localPath == null) {
@@ -241,11 +255,11 @@ class Gradle(
                 } catch (e: ProjectBuildingException) {
                     e.showStackTrace()
 
-                    log.error {
-                        "Could not get package information for dependency '$identifier': ${e.message}"
-                    }
-
-                    issues += OrtIssue(source = managerName, message = e.collectMessagesAsString())
+                    issues += createAndLogIssue(
+                        source = managerName,
+                        message = "Could not get package information for dependency '$identifier': " +
+                                e.collectMessagesAsString()
+                    )
 
                     Package.EMPTY.copy(
                         id = Identifier(
@@ -267,7 +281,7 @@ class Gradle(
         } else {
             val type = dependency.pomFile?.let { "Maven" } ?: "Unknown"
             val id = Identifier(type, dependency.groupId, dependency.artifactId, dependency.version)
-            PackageReference(id, dependencies = transitiveDependencies.toSortedSet(), errors = issues)
+            PackageReference(id, dependencies = transitiveDependencies.toSortedSet(), issues = issues)
         }
     }
 }

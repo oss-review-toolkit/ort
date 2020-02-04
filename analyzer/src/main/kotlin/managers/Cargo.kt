@@ -42,8 +42,6 @@ import com.here.ort.utils.textValueOrEmpty
 
 import com.moandjiezana.toml.Toml
 
-import com.vdurmont.semver4j.Requirement
-
 import java.io.File
 
 /**
@@ -66,14 +64,10 @@ class Cargo(
     }
 
     companion object {
-        private const val REQUIRED_CARGO_VERSION = "1.0.0"
-
-        private val pathDependencyRegex = Regex("""^.*\(path\+file://(.*)\)$""")
+        private val PATH_DEPENDENCY_REGEX = Regex("""^.*\(path\+file://(.*)\)$""")
     }
 
     override fun command(workingDir: File?) = "cargo"
-
-    override fun getVersionRequirement(): Requirement = Requirement.buildStrict(REQUIRED_CARGO_VERSION)
 
     private fun runMetadata(workingDir: File): String = run(workingDir, "metadata", "--format-version=1").stdout
 
@@ -169,7 +163,7 @@ class Cargo(
      * dependencies.
      */
     private fun isProjectDependency(id: String) =
-        pathDependencyRegex.matchEntire(id)?.groups?.get(1)?.let { match ->
+        PATH_DEPENDENCY_REGEX.matchEntire(id)?.groups?.get(1)?.let { match ->
             val packageDir = File(match.value)
             packageDir.startsWith(analysisRoot)
         } ?: false
@@ -219,17 +213,14 @@ class Cargo(
         // resolved and the dependency should not appear in the dependency tree. An example for a dependency string is
         // "bitflags 1.0.4 (registry+https://github.com/rust-lang/crates.io-index)", for more details see
         // https://doc.rust-lang.org/cargo/commands/cargo-metadata.html.
-        val dependency = node["dependencies"].asSequence().map {
-            it.textValue().split(' ').also { substrings ->
-                require(substrings.size > 1) {
-                    "Unexpected format while parsing dependency JSON node."
-                }
-            }
-        }.find {
-            it.first() == dependencyName
+        node["dependencies"].forEach {
+            val substrings = it.textValue().split(' ')
+            require(substrings.size > 1) { "Unexpected format while parsing dependency JSON node." }
+
+            if (substrings[0] == dependencyName) return substrings[1]
         }
 
-        return dependency?.get(1)
+        return null
     }
 
     override fun resolveDependencies(definitionFile: File): ProjectAnalyzerResult? {

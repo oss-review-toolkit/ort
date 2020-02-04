@@ -20,10 +20,6 @@
 
 package com.here.ort.analyzer.managers
 
-import com.fasterxml.jackson.dataformat.xml.XmlMapper
-import com.fasterxml.jackson.module.kotlin.readValue
-import com.fasterxml.jackson.module.kotlin.registerKotlinModule
-
 import com.here.ort.downloader.VersionControlSystem
 import com.here.ort.model.yamlMapper
 import com.here.ort.utils.normalizeVcsUrl
@@ -48,6 +44,13 @@ class NuGetTest : StringSpec() {
     private val packageFile = File(projectDir, "packages.config")
 
     init {
+        "Definition file is correctly mapped" {
+            val mapper = NuGetPackageReferenceMapper()
+            val result = mapper.mapPackageReferences(packageFile)
+
+            result.size shouldBe 2
+        }
+
         "Project dependencies are detected correctly" {
             val vcsPath = vcsDir.getPathToRoot(projectDir)
             val expectedResult = patchExpectedResult(
@@ -62,17 +65,8 @@ class NuGetTest : StringSpec() {
             val result = createNuGet().resolveDependencies(listOf(packageFile))[packageFile]
 
             result shouldNotBe null
-            result!!.errors should beEmpty()
+            result!!.issues should beEmpty()
             yamlMapper.writeValueAsString(result) shouldBe expectedResult
-        }
-
-        "Definition File is correctly mapped" {
-            val mapper = XmlMapper().registerKotlinModule()
-            val result = mapper.readValue<NuGet.PackagesConfig>(packageFile)
-
-            result shouldNotBe null
-            result.packages shouldNotBe null
-            result.packages.size shouldBe 2
         }
     }
 

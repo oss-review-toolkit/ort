@@ -37,8 +37,6 @@ class OrtConfigurationTest : WordSpec({
             val config = ConfigFactory.parseString(hocon)
             val ortConfig = config.extract<OrtConfiguration>("ort")
 
-            ortConfig shouldNotBe null
-
             ortConfig.scanner.let { scanner ->
                 scanner shouldNotBe null
 

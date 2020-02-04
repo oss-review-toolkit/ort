@@ -32,18 +32,6 @@ import io.kotlintest.specs.WordSpec
 class RepositoryConfigurationTest : WordSpec() {
     init {
         "RepositoryConfiguration" should {
-            "be deserializable with empty excludes and resolutions" {
-                val configuration = """
-                    excludes:
-                    resolutions:
-                    """.trimIndent()
-
-                val repositoryConfiguration = yamlMapper.readValue<RepositoryConfiguration>(configuration)
-
-                repositoryConfiguration shouldNotBe null
-                repositoryConfiguration.excludes shouldBe null
-            }
-
             "deserialize to a path regex working with double star" {
                 val configuration = """
                     excludes:
@@ -54,7 +42,7 @@ class RepositoryConfigurationTest : WordSpec() {
                     """.trimIndent()
 
                 val config = yamlMapper.readValue<RepositoryConfiguration>(configuration)
-                config.excludes!!.paths[0].matches("android/project1/build.gradle") shouldBe true
+                config.excludes.paths[0].matches("android/project1/build.gradle") shouldBe true
             }
 
             "be deserializable" {
@@ -66,13 +54,13 @@ class RepositoryConfigurationTest : WordSpec() {
                         comment: "project comment"
                       scopes:
                       - name: "scope"
-                        reason: "TEST_TOOL_OF"
+                        reason: "TEST_DEPENDENCY_OF"
                         comment: "scope comment"
                     resolutions:
-                      errors:
+                      issues:
                       - message: "message"
                         reason: "CANT_FIX_ISSUE"
-                        comment: "error comment"
+                        comment: "issue comment"
                       rule_violations:
                       - message: "rule message"
                         reason: "PATENT_GRANT_EXCEPTION"
@@ -82,9 +70,8 @@ class RepositoryConfigurationTest : WordSpec() {
                 val repositoryConfiguration = yamlMapper.readValue<RepositoryConfiguration>(configuration)
 
                 repositoryConfiguration shouldNotBe null
-                repositoryConfiguration.excludes shouldNotBe null
 
-                val paths = repositoryConfiguration.excludes!!.paths
+                val paths = repositoryConfiguration.excludes.paths
                 paths should haveSize(1)
 
                 val path = paths[0]
@@ -92,25 +79,29 @@ class RepositoryConfigurationTest : WordSpec() {
                 path.reason shouldBe PathExcludeReason.BUILD_TOOL_OF
                 path.comment shouldBe "project comment"
 
-                val scopes = repositoryConfiguration.excludes!!.scopes
+                val scopes = repositoryConfiguration.excludes.scopes
                 scopes should haveSize(1)
-                scopes.first().name.pattern shouldBe "scope"
-                scopes.first().reason shouldBe ScopeExcludeReason.TEST_TOOL_OF
-                scopes.first().comment shouldBe "scope comment"
+                with(scopes.first()) {
+                    pattern shouldBe "scope"
+                    reason shouldBe ScopeExcludeReason.TEST_DEPENDENCY_OF
+                    comment shouldBe "scope comment"
+                }
 
-                val errors = repositoryConfiguration.resolutions!!.errors
-                errors should haveSize(1)
-                val error = errors.first()
-                error.message shouldBe "message"
-                error.reason shouldBe ErrorResolutionReason.CANT_FIX_ISSUE
-                error.comment shouldBe "error comment"
+                val issues = repositoryConfiguration.resolutions.issues
+                issues should haveSize(1)
+                with(issues.first()) {
+                    message shouldBe "message"
+                    reason shouldBe IssueResolutionReason.CANT_FIX_ISSUE
+                    comment shouldBe "issue comment"
+                }
 
-                val evalErrors = repositoryConfiguration.resolutions!!.ruleViolations
-                evalErrors should haveSize(1)
-                val evalError = evalErrors.first()
-                evalError.message shouldBe "rule message"
-                evalError.reason shouldBe RuleViolationResolutionReason.PATENT_GRANT_EXCEPTION
-                evalError.comment shouldBe "rule comment"
+                val ruleViolations = repositoryConfiguration.resolutions.ruleViolations
+                ruleViolations should haveSize(1)
+                with(ruleViolations.first()) {
+                    message shouldBe "rule message"
+                    reason shouldBe RuleViolationResolutionReason.PATENT_GRANT_EXCEPTION
+                    comment shouldBe "rule comment"
+                }
             }
         }
     }

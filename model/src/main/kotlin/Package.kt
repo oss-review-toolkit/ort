@@ -150,7 +150,7 @@ data class Package(
     /**
      * Check if this package contains any erroneous data.
      */
-    fun collectErrors() =
+    fun collectIssues() =
         declaredLicensesProcessed.unmapped.map { unmappedLicense ->
             OrtIssue(
                 severity = Severity.ERROR,
@@ -166,12 +166,12 @@ data class Package(
     fun toCuratedPackage() = CuratedPackage(this, emptyList())
 
     /**
-     * Return a [PackageReference] to refer to this [Package] with optional [dependencies] and [errors].
+     * Return a [PackageReference] to refer to this [Package] with optional [dependencies] and [issues].
      */
     fun toReference(
         linkage: PackageLinkage? = null,
         dependencies: SortedSet<PackageReference>? = null,
-        errors: List<OrtIssue>? = null
+        issues: List<OrtIssue>? = null
     ): PackageReference {
         var ref = PackageReference(id)
 
@@ -183,8 +183,8 @@ data class Package(
             ref = ref.copy(dependencies = dependencies)
         }
 
-        if (errors != null) {
-            ref = ref.copy(errors = errors)
+        if (issues != null) {
+            ref = ref.copy(issues = issues)
         }
 
         return ref

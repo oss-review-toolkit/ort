@@ -1,8 +1,28 @@
+/*
+ * Copyright (C) 2017-2019 HERE Europe B.V.
+ * Copyright (C) 2019 Bosch Software Innovations GmbH
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ * License-Filename: LICENSE
+ */
+
 import com.github.benmanes.gradle.versions.updates.DependencyUpdatesTask
 
 import com.here.ort.gradle.*
 
-import io.gitlab.arturbosch.detekt.detekt
+import io.gitlab.arturbosch.detekt.Detekt
 
 import org.gradle.api.tasks.testing.logging.TestExceptionFormat
 import org.gradle.api.tasks.testing.logging.TestLogEvent
@@ -17,14 +37,17 @@ import java.net.URL
 
 val detektPluginVersion: String by project
 val kotlinPluginVersion: String by project
+
+val jacksonVersion: String by project
 val kotlintestVersion: String by project
+val log4jCoreVersion: String by project
 val okhttpVersion: String by project
 
 plugins {
     kotlin("jvm")
 
-    id("io.gitlab.arturbosch.detekt") apply false
-    id("org.jetbrains.dokka") apply false
+    id("io.gitlab.arturbosch.detekt")
+    id("org.jetbrains.dokka")
 
     id("com.github.ben-manes.versions")
     id("org.ajoberstar.reckon")
@@ -33,7 +56,7 @@ plugins {
 
 reckon {
     scopeFromProp()
-    stageFromProp("beta", "rc", "final")
+    snapshotFromProp()
 }
 
 idea {
@@ -89,6 +112,8 @@ allprojects {
     // Note: Kotlin DSL cannot directly access configurations that are created by applying a plugin in the very same
     // project, thus put configuration names in quotes to leverage lazy lookup.
     dependencies {
+        "detektPlugins"(project(":detekt-rules"))
+
         "detektPlugins"("io.gitlab.arturbosch.detekt:detekt-formatting:$detektPluginVersion")
     }
 
@@ -102,6 +127,10 @@ allprojects {
 
         input = files("$rootDir/buildSrc", "build.gradle.kts", "src/main/kotlin", "src/test/kotlin",
             "src/funTest/kotlin")
+    }
+
+    tasks.withType<Detekt> {
+        dependsOn(":detekt-rules:assemble")
     }
 }
 
@@ -146,6 +175,9 @@ subprojects {
             // Ensure all OkHttp versions in use match our version >= 4 to avoid Kotlin vs. Java issues with OkHttp 3.
             force("com.squareup.okhttp3:okhttp:$okhttpVersion")
 
+            // Ensure all API library versions match our core library version.
+            force("org.apache.logging.log4j:log4j-api:$log4jCoreVersion")
+
             // Ensure that all transitive versions of "kotlin-reflect" match our version of "kotlin-stdlib".
             force("org.jetbrains.kotlin:kotlin-reflect:$kotlinPluginVersion")
         }
@@ -164,19 +196,29 @@ subprojects {
             jdkVersion = 8
 
             externalDocumentationLink {
-                url = URL("https://codehaus-plexus.github.io/plexus-containers/plexus-container-default/apidocs/")
+                val baseUrl = "https://codehaus-plexus.github.io/plexus-containers/plexus-container-default/apidocs"
+                url = URL(baseUrl)
+                packageListUrl = URL("$baseUrl/package-list")
             }
 
             externalDocumentationLink {
-                url = URL("https://fasterxml.github.io/jackson-databind/javadoc/2.9/")
+                val majorMinorVersion = jacksonVersion.split('.').let { "${it[0]}.${it[1]}" }
+                val baseUrl = "https://fasterxml.github.io/jackson-databind/javadoc/$majorMinorVersion"
+                url = URL(baseUrl)
+                packageListUrl = URL("$baseUrl/package-list")
             }
 
             externalDocumentationLink {
-                url = URL("https://jakewharton.github.io/DiskLruCache/")
+                val baseUrl = "https://jakewharton.github.io/DiskLruCache"
+                url = URL(baseUrl)
+                packageListUrl = URL("$baseUrl/package-list")
             }
 
             externalDocumentationLink {
-                url = URL("https://logging.apache.org/log4j/2.x/log4j-api/apidocs/")
+                val majorVersion = log4jCoreVersion.split('.').first()
+                val baseUrl = "https://logging.apache.org/log4j/$majorVersion.x/log4j-api/apidocs"
+                url = URL(baseUrl)
+                packageListUrl = URL("$baseUrl/package-list")
             }
         }
     }
@@ -308,10 +350,10 @@ subprojects {
 }
 
 tasks.register<Exec>("checkCopyright") {
-    description = "Checks for HERE Copyright headers in Kotlin files."
+    description = "Checks for Copyright headers in Kotlin files."
     group = "Verification"
 
-    commandLine = listOf("git", "grep", "-EL", "Copyright \\(C\\) .+", "*.kt",
+    commandLine = listOf("git", "grep", "-EL", "Copyright \\(C\\) .+", "*.kt", "*.kts",
         ":!analyzer/src/funTest/assets/projects/external")
     isIgnoreExitValue = true
     standardOutput = ByteArrayOutputStream()

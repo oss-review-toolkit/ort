@@ -43,6 +43,7 @@ import com.here.ort.utils.CommandLineTool
 import com.here.ort.utils.Os
 import com.here.ort.utils.OkHttpClientHelper
 import com.here.ort.utils.ProcessCapture
+import com.here.ort.utils.collectMessagesAsString
 import com.here.ort.utils.getPathFromEnvironment
 import com.here.ort.utils.log
 import com.here.ort.utils.safeDeleteRecursively
@@ -195,7 +196,7 @@ class Pip(
 
         if (Os.isWindows && command.extension.isEmpty()) {
             // On Windows specifying the extension is optional, so try them in order.
-            val extensions = Os.env["PATHEXT"]?.splitToSequence(File.pathSeparatorChar) ?: emptySequence()
+            val extensions = Os.env["PATHEXT"]?.splitToSequence(File.pathSeparatorChar).orEmpty()
             val commandWin = extensions.map { File(command.path + it.toLowerCase()) }.find { it.isFile }
             if (commandWin != null) {
                 command = commandWin
@@ -212,6 +213,7 @@ class Pip(
     override fun beforeResolution(definitionFiles: List<File>) =
         VirtualEnv.checkVersion(ignoreActualVersion = analyzerConfig.ignoreToolVersions)
 
+    @Suppress("LongMethod")
     override fun resolveDependencies(definitionFile: File): ProjectAnalyzerResult? {
         // For an overview, dependency resolution involves the following steps:
         // 1. Install dependencies via pip (inside a virtualenv, for isolation from globally installed packages).
@@ -356,7 +358,8 @@ class Pip(
                         e.showStackTrace()
 
                         log.warn {
-                            "Unable to parse PyPI meta-data for package '${pkg.id.toCoordinates()}': ${e.message}"
+                            "Unable to parse PyPI meta-data for package '${pkg.id.toCoordinates()}': " +
+                                    e.collectMessagesAsString()
                         }
 
                         // Fall back to returning the original package data.

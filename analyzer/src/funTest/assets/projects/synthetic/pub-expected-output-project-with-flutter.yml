@@ -14283,7 +14283,7 @@ packages:
       revision: ""
       path: ""
   curations: []
-errors:
+issues:
 - timestamp: "1970-01-01T00:00:00Z"
   source: "Pub"
   message: "Cannot get iOS dependencies for package 'flutter_crashlytics'. Support\

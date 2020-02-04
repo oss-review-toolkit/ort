@@ -17,7 +17,7 @@
  * License-Filename: LICENSE
  */
 
-@file:Suppress("TooManyFunctions")
+@file:Suppress("MatchingDeclarationName", "TooManyFunctions")
 
 package com.here.ort.helper.common
 
@@ -39,6 +39,7 @@ import com.here.ort.model.VcsInfo
 import com.here.ort.model.config.AnalyzerConfiguration
 import com.here.ort.model.config.Curations
 import com.here.ort.model.config.Excludes
+import com.here.ort.model.config.IssueResolution
 import com.here.ort.model.config.LicenseFindingCuration
 import com.here.ort.model.config.PathExclude
 import com.here.ort.model.config.RepositoryConfiguration
@@ -47,6 +48,7 @@ import com.here.ort.model.config.RuleViolationResolution
 import com.here.ort.model.config.ScopeExclude
 import com.here.ort.model.utils.FindingCurationMatcher
 import com.here.ort.model.yamlMapper
+import com.here.ort.utils.CopyrightStatementsProcessor
 import com.here.ort.utils.safeMkdirs
 import com.here.ort.utils.OkHttpClientHelper
 import com.here.ort.utils.expandTilde
@@ -193,6 +195,82 @@ internal fun OrtResult.fetchScannedSources(id: Identifier): File {
 }
 
 /**
+ * A processed copyright statement.
+ */
+internal data class ProcessedCopyrightStatement(
+    /**
+     * The package containing the copyright statement.
+     */
+    val packageId: Identifier,
+
+    /**
+     * The license associated with the copyright statement.
+     */
+    val licenseId: String,
+
+    /**
+     * The processed copyright statement.
+     */
+    val statement: String,
+
+    /**
+     * The original statement(s) which yield this processed [statement].
+     */
+    val rawStatements: Set<String>
+) {
+    init {
+        require(rawStatements.isNotEmpty()) { "The set of raw statements must not be empty." }
+    }
+}
+
+/**
+ * Return the processed copyright statements of all packages and projects contained in this [OrtResult]. The statements
+ * are processed for each package and license separately for consistency with the [NoticeByPackageReporter].
+ * Statements contained in the given [copyrightGarbage] are omitted.
+ */
+internal fun OrtResult.processAllCopyrightStatements(
+    omitExcluded: Boolean = true,
+    copyrightGarbage: Set<String> = emptySet()
+): List<ProcessedCopyrightStatement> {
+    val result = mutableListOf<ProcessedCopyrightStatement>()
+    val processor = CopyrightStatementsProcessor()
+
+    collectLicenseFindings(omitExcluded).forEach { (id, findings) ->
+        findings.forEach innerForEach@{ (licenseFindings, pathExcludes) ->
+            if (omitExcluded && pathExcludes.isNotEmpty()) return@innerForEach
+
+            val processResult = processor.process(
+                licenseFindings.copyrights.map { it.statement }.filterNot { it in copyrightGarbage }
+            )
+
+            processResult.processedStatements.filterNot { it.key in copyrightGarbage }.forEach {
+                result.add(
+                    ProcessedCopyrightStatement(
+                        packageId = id,
+                        licenseId = licenseFindings.license,
+                        statement = it.key,
+                        rawStatements = it.value.toSet()
+                    )
+                )
+            }
+
+            processResult.unprocessedStatements.filterNot { it in copyrightGarbage }.forEach {
+                result.add(
+                        ProcessedCopyrightStatement(
+                        packageId = id,
+                        licenseId = licenseFindings.license,
+                        statement = it,
+                        rawStatements = setOf(it)
+                    )
+                )
+            }
+        }
+    }
+
+    return result
+}
+
+/**
  * Return all license findings for the project or package associated with the given [id]. The license
  * [LicenseFindingCuration]s contained in this [OrtResult] are applied if and only if [applyCurations] is true.
  */
@@ -221,7 +299,7 @@ internal fun OrtResult.getLicenseFindingsById(
  */
 internal fun OrtResult.getRepositoryLicenseFindingCurations(): RepositoryLicenseFindingCurations {
     val result = mutableMapOf<String, MutableList<LicenseFindingCuration>>()
-    val curations = repository.config.curations?.licenseFindings ?: emptyList()
+    val curations = repository.config.curations.licenseFindings
 
     repository.nestedRepositories.forEach { (path, vcs) ->
         val pathExcludesForRepository = result.getOrPut(vcs.url) { mutableListOf() }
@@ -285,7 +363,7 @@ fun OrtResult.getScanIssues(omitExcluded: Boolean = false): List<OrtIssue> {
     scanner?.results?.scanResults?.forEach { container ->
         if (!omitExcluded || !isExcluded(container.id)) {
             container.results.forEach { scanResult ->
-                result.addAll(scanResult.summary.errors)
+                result.addAll(scanResult.summary.issues)
             }
         }
     }
@@ -304,7 +382,7 @@ internal fun OrtResult.getRepositoryPathExcludes(): RepositoryPathExcludes {
     }
 
     val result = mutableMapOf<String, MutableList<PathExclude>>()
-    val pathExcludes = repository.config.excludes?.paths ?: emptyList()
+    val pathExcludes = repository.config.excludes.paths
 
     repository.nestedRepositories.forEach { (path, vcs) ->
         val pathExcludesForRepository = result.getOrPut(vcs.url) { mutableListOf() }
@@ -327,7 +405,7 @@ internal fun OrtResult.getRepositoryPathExcludes(): RepositoryPathExcludes {
  */
 internal fun OrtResult.getUnresolvedRuleViolations(): List<RuleViolation> {
     val resolutions = getResolutions().ruleViolations
-    val violations = evaluator?.violations ?: emptyList()
+    val violations = evaluator?.violations.orEmpty()
 
     return violations.filter { violation ->
         !resolutions.any { it.matches(violation) }
@@ -335,29 +413,36 @@ internal fun OrtResult.getUnresolvedRuleViolations(): List<RuleViolation> {
 }
 
 /**
+ * Return a copy with the [IssueResolution]s replaced by the given [issueResolutions].
+ */
+internal fun RepositoryConfiguration.replaceIssueResolutions(
+    issueResolutions: List<IssueResolution>
+): RepositoryConfiguration = copy(resolutions = resolutions.copy(issues = issueResolutions))
+
+/**
  * Return a copy with the [LicenseFindingCuration]s replaced by the given scope excludes.
  */
 internal fun RepositoryConfiguration.replaceLicenseFindingCurations(
     curations: List<LicenseFindingCuration>
-): RepositoryConfiguration = copy(curations = (this.curations ?: Curations()).copy(licenseFindings = curations))
+): RepositoryConfiguration = copy(curations = this.curations.copy(licenseFindings = curations))
 
 /**
  * Return a copy with the [PathExclude]s replaced by the given scope excludes.
  */
 internal fun RepositoryConfiguration.replacePathExcludes(pathExcludes: List<PathExclude>): RepositoryConfiguration =
-    copy(excludes = (excludes ?: Excludes()).copy(paths = pathExcludes))
+    copy(excludes = excludes.copy(paths = pathExcludes))
 
 /**
  * Return a copy with the [ScopeExclude]s replaced by the given [scopeExcludes].
  */
 internal fun RepositoryConfiguration.replaceScopeExcludes(scopeExcludes: List<ScopeExclude>): RepositoryConfiguration =
-    copy(excludes = (excludes ?: Excludes()).copy(scopes = scopeExcludes))
+    copy(excludes = excludes.copy(scopes = scopeExcludes))
 
 /**
  * Return a copy with the [RuleViolationResolution]s replaced by the given [ruleViolations].
  */
 internal fun RepositoryConfiguration.replaceRuleViolationResolutions(ruleViolations: List<RuleViolationResolution>):
-    RepositoryConfiguration = copy(resolutions = (resolutions ?: Resolutions()).copy(ruleViolations = ruleViolations))
+    RepositoryConfiguration = copy(resolutions = resolutions.copy(ruleViolations = ruleViolations))
 
 /**
  * Return a copy with sorting applied to all entry types which are to be sorted.
@@ -370,12 +455,11 @@ internal fun RepositoryConfiguration.sortEntries(): RepositoryConfiguration =
  */
 internal fun RepositoryConfiguration.sortLicenseFindingCurations(): RepositoryConfiguration =
     copy(
-        curations = curations?.let {
-            val licenseFindings = it.licenseFindings.sortedBy { curation ->
+        curations = curations.copy(
+            licenseFindings = curations.licenseFindings.sortedBy { curation ->
                 curation.path.removePrefix("*").removePrefix("*")
             }
-            it.copy(licenseFindings = licenseFindings)
-        }
+        )
     )
 
 /**
@@ -383,12 +467,11 @@ internal fun RepositoryConfiguration.sortLicenseFindingCurations(): RepositoryCo
  */
 internal fun RepositoryConfiguration.sortPathExcludes(): RepositoryConfiguration =
     copy(
-        excludes = excludes?.let {
-            val paths = it.paths.sortedBy { pathExclude ->
+        excludes = excludes.copy(
+            paths = excludes.paths.sortedBy { pathExclude ->
                 pathExclude.pattern.removePrefix("*").removePrefix("*")
             }
-            it.copy(paths = paths)
-        }
+        )
     )
 
 /**
@@ -396,12 +479,11 @@ internal fun RepositoryConfiguration.sortPathExcludes(): RepositoryConfiguration
  */
 internal fun RepositoryConfiguration.sortScopeExcludes(): RepositoryConfiguration =
     copy(
-        excludes = excludes?.let {
-            val scopes = it.scopes.sortedBy { scopeExclude ->
-                scopeExclude.name.toString().removePrefix(".*")
+        excludes = excludes.copy(
+            scopes = excludes.scopes.sortedBy { (pattern, _, _) ->
+                pattern.removePrefix(".*")
             }
-            it.copy(scopes = scopes)
-        }
+        )
     )
 
 /**
@@ -498,22 +580,15 @@ internal fun RepositoryPathExcludes.mergePathExcludes(
 }
 
 /**
- * Merge the given [PathExclude]s replacing entries with equal [PathExclude.pattern].
- * If the given [updateOnlyExisting] is true then only entries with matching [PathExclude.pattern] are merged.
+ * Merge the given [IssueResolution]s replacing entries with equal [IssueResolution.message].
  */
-internal fun Collection<PathExclude>.mergePathExcludes(
-    other: Collection<PathExclude>,
-    updateOnlyExisting: Boolean = false
-): List<PathExclude> {
-    val result = mutableMapOf<String, PathExclude>()
+internal fun Collection<IssueResolution>.mergeIssueResolutions(
+    other: Collection<IssueResolution>
+): List<IssueResolution> {
+    val result = mutableMapOf<String, IssueResolution>()
 
-    associateByTo(result) { it.pattern }
-
-    other.forEach {
-        if (!updateOnlyExisting || result.containsKey(it.pattern)) {
-            result[it.pattern] = it
-        }
-    }
+    associateByTo(result) { it.message }
+    other.associateByTo(result) { it.message }
 
     return result.values.toList()
 }
@@ -551,3 +626,72 @@ private data class LicenseFindingCurationHashKey(
 
 private fun LicenseFindingCuration.hashKey() =
     LicenseFindingCurationHashKey(path, startLines, lineCount, detectedLicense, concludedLicense)
+
+/**
+ * Merge the given [PathExclude]s replacing entries with equal [PathExclude.pattern].
+ * If the given [updateOnlyExisting] is true then only entries with matching [PathExclude.pattern] are merged.
+ */
+internal fun Collection<PathExclude>.mergePathExcludes(
+    other: Collection<PathExclude>,
+    updateOnlyExisting: Boolean = false
+): List<PathExclude> {
+    val result = mutableMapOf<String, PathExclude>()
+
+    associateByTo(result) { it.pattern }
+
+    other.forEach {
+        if (!updateOnlyExisting || result.containsKey(it.pattern)) {
+            result[it.pattern] = it
+        }
+    }
+
+    return result.values.toList()
+}
+
+/**
+ * Merge the given [ScopeExclude]s replacing entries with equal [ScopeExclude.pattern].
+ */
+internal fun Collection<ScopeExclude>.mergeScopeExcludes(
+    other: Collection<ScopeExclude>
+): List<ScopeExclude> {
+    val result = mutableMapOf<String, ScopeExclude>()
+
+    associateByTo(result) { it.pattern }
+    other.associateByTo(result) { it.pattern }
+
+    return result.values.toList()
+}
+
+/**
+ * Merge the given [RuleViolationResolution]s replacing entries with equal [RuleViolationResolution.message].
+ */
+internal fun Collection<RuleViolationResolution>.mergeRuleViolationResolutions(
+    other: Collection<RuleViolationResolution>
+): List<RuleViolationResolution> {
+    val result = mutableMapOf<String, RuleViolationResolution>()
+
+    associateByTo(result) { it.message }
+    other.associateByTo(result) { it.message }
+
+    return result.values.toList()
+}
+
+/**
+ * Merge the given [RepositoryConfiguration] replacing entries with equal matchers.
+ */
+internal fun RepositoryConfiguration.merge(
+    other: RepositoryConfiguration
+): RepositoryConfiguration =
+    RepositoryConfiguration(
+        excludes = Excludes(
+            paths = excludes.paths.mergePathExcludes(other.excludes.paths),
+            scopes = excludes.scopes.mergeScopeExcludes(other.excludes.scopes)
+        ),
+        curations = Curations(
+            curations.licenseFindings.mergeLicenseFindingCurations(other.curations.licenseFindings)
+        ),
+        resolutions = Resolutions(
+            issues = resolutions.issues.mergeIssueResolutions(other.resolutions.issues),
+            ruleViolations = resolutions.ruleViolations.mergeRuleViolationResolutions(other.resolutions.ruleViolations)
+        )
+    )

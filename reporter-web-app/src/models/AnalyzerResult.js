@@ -26,10 +26,10 @@ class AnalyzerResult {
 
     #packages = [];
 
-    #errors = new Map();
+    #issues = new Map();
 
     constructor(obj) {
-        this.hasErrors = false;
+        this.hasIssues = false;
 
         if (obj instanceof Object) {
             if (obj.projects) {
@@ -40,16 +40,16 @@ class AnalyzerResult {
                 this.packages = obj.packages;
             }
 
-            if (obj.errors) {
-                this.errors = obj.errors;
+            if (obj.issues) {
+                this.issues = obj.issues;
             }
 
-            if (obj.has_errors) {
-                this.hasErrors = obj.has_errors;
+            if (obj.has_issues) {
+                this.hasIssues = obj.has_issues;
             }
 
-            if (obj.hasErrors) {
-                this.hasErrors = obj.hasErrors;
+            if (obj.hasIssues) {
+                this.hasIssues = obj.hasIssues;
             }
         }
     }
@@ -74,13 +74,13 @@ class AnalyzerResult {
         }
     }
 
-    get errors() {
-        return this.#errors;
+    get issues() {
+        return this.#issues;
     }
 
-    set errors(obj) {
+    set issues(obj) {
         Object.keys(obj).forEach((key) => {
-            this.#errors.set(key, new OrtIssue(obj[key]));
+            this.#issues.set(key, new OrtIssue(obj[key]));
         });
     }
 }

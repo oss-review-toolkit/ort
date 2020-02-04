@@ -21,12 +21,12 @@ package com.here.ort.analyzer
 
 import com.here.ort.downloader.VersionControlSystem
 import com.here.ort.model.Identifier
-import com.here.ort.model.OrtIssue
 import com.here.ort.model.Project
 import com.here.ort.model.ProjectAnalyzerResult
 import com.here.ort.model.VcsInfo
 import com.here.ort.model.config.AnalyzerConfiguration
 import com.here.ort.model.config.RepositoryConfiguration
+import com.here.ort.model.createAndLogIssue
 import com.here.ort.utils.collectMessagesAsString
 import com.here.ort.utils.log
 import com.here.ort.utils.normalizeVcsUrl
@@ -56,9 +56,9 @@ typealias ResolutionResult = MutableMap<File, ProjectAnalyzerResult>
  */
 abstract class PackageManager(
     val managerName: String,
-    protected val analysisRoot: File,
-    protected val analyzerConfig: AnalyzerConfiguration,
-    protected val repoConfig: RepositoryConfiguration
+    val analysisRoot: File,
+    val analyzerConfig: AnalyzerConfiguration,
+    val repoConfig: RepositoryConfiguration
 ) {
     companion object {
         private val LOADER = ServiceLoader.load(PackageManagerFactory::class.java)!!
@@ -216,8 +216,6 @@ abstract class PackageManager(
                 } catch (e: Exception) {
                     e.showStackTrace()
 
-                    log.error { "Resolving dependencies for '${definitionFile.name}' failed with: ${e.message}" }
-
                     val relativePath = definitionFile.absoluteFile.relativeTo(analysisRoot).invariantSeparatorsPath
 
                     val id = Identifier.EMPTY.copy(type = managerName, name = relativePath)
@@ -227,7 +225,13 @@ abstract class PackageManager(
                         vcsProcessed = processProjectVcs(definitionFile.parentFile)
                     )
 
-                    val errors = listOf(OrtIssue(source = managerName, message = e.collectMessagesAsString()))
+                    val errors = listOf(
+                        createAndLogIssue(
+                            source = managerName,
+                            message = "Resolving dependencies for '${definitionFile.name}' failed with: " +
+                                    e.collectMessagesAsString()
+                        )
+                    )
 
                     result[definitionFile] = ProjectAnalyzerResult(errorProject, sortedSetOf(), errors)
                 }

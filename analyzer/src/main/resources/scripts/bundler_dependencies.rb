@@ -19,7 +19,7 @@
 
 # This script produces a list of top-level dependencies with group information. No bundle
 # command except for 'bundle viz' seem to produce a dependency list with corresponding groups.
-# But parsing the dot / svg output of 'bundle viz' seemes to be overhead.
+# But parsing the dot / svg output of 'bundle viz' seems to be overhead.
 
 require 'bundler'
 require 'json'
