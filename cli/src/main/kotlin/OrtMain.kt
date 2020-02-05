@@ -49,6 +49,7 @@ import java.io.File
 
 import org.apache.logging.log4j.Level
 import org.apache.logging.log4j.core.config.Configurator
+import kotlin.system.exitProcess
 
 const val TOOL_NAME = "ort"
 
@@ -202,5 +203,6 @@ fun fixupUserHomeProperty() {
  */
 fun main(args: Array<String>) {
     fixupUserHomeProperty()
-    return OrtMain().main(args)
+    OrtMain().main(args)
+    exitProcess(0)
 }
