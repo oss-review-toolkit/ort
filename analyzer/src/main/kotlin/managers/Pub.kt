@@ -273,7 +273,7 @@ class Pub(
                                 packageReferences += packageInfo.toReference(
                                     dependencies = resultAndroid.project.scopes
                                         .find { it.name == "releaseCompileClasspath" }
-                                        ?.collectDependencies(-1, false)
+                                        ?.dependencies
                                 )
                             }
                             // TODO: Enable support for iOS / Cocoapods once the package manager is implemented.

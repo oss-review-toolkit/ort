@@ -97,14 +97,17 @@ data class Project(
     }
 
     /**
-     * Return the set of [PackageReference]s in this [Project], up to and including a depth of [maxDepth] where counting
-     * starts at 0 (for the [Project] itself) and 1 are direct dependencies etc. A value below 0 means to not limit the
-     * depth. If [includeErroneous] is true, [PackageReference]s with issues (but not their dependencies without issues)
-     * are excluded, otherwise they are included.
+     * Return the set of package [Identifier]s of all transitive dependencies of this [Project], up to and including a
+     * depth of [maxDepth] where counting starts at 0 (for the [Project] itself) and 1 are direct dependencies etc. A
+     * value below 0 means to not limit the depth. If the given [filterPredicate] is false for a specific
+     * [PackageReference] the corresponding [Identifier] is excluded from the result.
      */
-    fun collectDependencies(maxDepth: Int = -1, includeErroneous: Boolean = true) =
-        scopes.fold(sortedSetOf<PackageReference>()) { refs, scope ->
-            refs.also { it += scope.collectDependencies(maxDepth, includeErroneous) }
+    fun collectDependencies(
+        maxDepth: Int = -1,
+        filterPredicate: (PackageReference) -> Boolean = { true }
+    ): SortedSet<Identifier> =
+        scopes.fold(sortedSetOf()) { refs, scope ->
+            refs.also { it += scope.collectDependencies(maxDepth, filterPredicate) }
         }
 
     /**
@@ -163,14 +166,12 @@ data class Project(
     }
 
     /**
-     * Return the set of [PackageReference]s that refer to sub-projects of this [Project].
+     * Return the set of [Identifier]s that refer to sub-projects of this [Project].
      */
-    fun collectSubProjects() =
-        scopes.fold(sortedSetOf<PackageReference>()) { refs, scope ->
+    fun collectSubProjects(): SortedSet<Identifier> =
+        scopes.fold(sortedSetOf()) { refs, scope ->
             refs.also {
-                it += scope.collectDependencies().filter { ref ->
-                    ref.linkage in PackageLinkage.PROJECT_LINKAGE
-                }
+                it += scope.collectDependencies { ref -> ref.linkage in PackageLinkage.PROJECT_LINKAGE }
             }
         }
 

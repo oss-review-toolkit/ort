@@ -17,6 +17,8 @@
  * License-Filename: LICENSE
  */
 
+@file:Suppress("MatchingDeclarationName")
+
 package com.here.ort.utils
 
 import java.io.File
@@ -37,51 +39,52 @@ import org.apache.commons.compress.archivers.zip.ZipArchiveOutputStream
 import org.apache.commons.compress.compressors.bzip2.BZip2CompressorInputStream
 import org.apache.commons.compress.compressors.gzip.GzipCompressorInputStream
 
-private val UNCOMPRESSED_EXTENSIONS = listOf(".pom")
-private val TAR_EXTENSIONS = listOf(".gem", ".tar")
-private val TAR_BZIP2_EXTENSIONS = listOf(".tar.bz2", ".tbz2")
-private val TAR_GZIP_EXTENSIONS = listOf(".crate", ".tar.gz", ".tgz")
-private val ZIP_EXTENSIONS = listOf(".aar", ".egg", ".jar", ".war", ".whl", ".zip")
-private val SEVENZIP_EXTENSIONS = listOf(".7z")
+enum class ArchiveType(vararg val extensions: String) {
+    TAR(".gem", ".tar"),
+    TAR_BZIP2(".tar.bz2", ".tbz2"),
+    TAR_GZIP(".crate", ".tar.gz", ".tgz"),
+    ZIP(".aar", ".egg", ".jar", ".war", ".whl", ".zip"),
+    SEVENZIP(".7z"),
+    POM(".pom"), // Special case of a "fake archive".
+    NONE("");
 
-val ARCHIVE_EXTENSIONS = TAR_EXTENSIONS + TAR_BZIP2_EXTENSIONS + TAR_GZIP_EXTENSIONS + ZIP_EXTENSIONS +
-        SEVENZIP_EXTENSIONS
+    companion object {
+        fun getType(filename: String): ArchiveType {
+            val lowerName = filename.toLowerCase()
+            return (enumValues<ArchiveType>().asList() - NONE).find { type ->
+                type.extensions.any { lowerName.endsWith(it) }
+            } ?: NONE
+        }
+    }
+}
 
 /**
  * Unpack the [File] to [targetDirectory].
  */
-fun File.unpack(targetDirectory: File) {
-    val lowerName = name.toLowerCase()
-    if (SEVENZIP_EXTENSIONS.any { lowerName.endsWith(it) }) {
+fun File.unpack(targetDirectory: File) =
+    if (ArchiveType.getType(name) == ArchiveType.SEVENZIP) {
         unpack7Zip(targetDirectory)
     } else {
         inputStream().unpack(name, targetDirectory)
     }
-}
 
 /**
  * Unpack the [InputStream] to [targetDirectory]. The compression scheme is guessed from the [filename].
  */
 fun InputStream.unpack(filename: String, targetDirectory: File) {
-    val lowerName = filename.toLowerCase()
-    when {
-        UNCOMPRESSED_EXTENSIONS.any { lowerName.endsWith(it) } -> {
-            use { File(targetDirectory, filename).outputStream().use { copyTo(it) } }
+    when (ArchiveType.getType(filename)) {
+        ArchiveType.TAR -> unpackTar(targetDirectory)
+        ArchiveType.TAR_BZIP2 -> BZip2CompressorInputStream(this).unpackTar(targetDirectory)
+        ArchiveType.TAR_GZIP -> GzipCompressorInputStream(this).unpackTar(targetDirectory)
+        ArchiveType.ZIP -> unpackZip(targetDirectory)
+        ArchiveType.SEVENZIP -> {
+            throw IOException("Cannot unpack a 7-Zip archive from an InputStream, use a File instead.")
         }
-
-        TAR_BZIP2_EXTENSIONS.any { lowerName.endsWith(it) } -> {
-            BZip2CompressorInputStream(this).unpackTar(targetDirectory)
+        ArchiveType.POM -> use {
+            // Special case, copy the POM to the target directory.
+            File(targetDirectory, filename).outputStream().use { copyTo(it) }
         }
-
-        TAR_GZIP_EXTENSIONS.any { lowerName.endsWith(it) } -> {
-            GzipCompressorInputStream(this).unpackTar(targetDirectory)
-        }
-
-        TAR_EXTENSIONS.any { lowerName.endsWith(it) } -> unpackTar(targetDirectory)
-
-        ZIP_EXTENSIONS.any { lowerName.endsWith(it) } -> unpackZip(targetDirectory)
-
-        else -> {
+        ArchiveType.NONE -> {
             throw IOException("Unable to guess compression scheme from file name '$filename'.")
         }
     }

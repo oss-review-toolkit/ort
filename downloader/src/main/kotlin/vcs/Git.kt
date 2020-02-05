@@ -29,17 +29,62 @@ import com.here.ort.utils.log
 import com.here.ort.utils.safeMkdirs
 import com.here.ort.utils.showStackTrace
 
-import com.vdurmont.semver4j.Semver
+import com.jcraft.jsch.JSch
+import com.jcraft.jsch.Session
+import com.jcraft.jsch.agentproxy.AgentProxyException
+import com.jcraft.jsch.agentproxy.RemoteIdentityRepository
+import com.jcraft.jsch.agentproxy.connector.SSHAgentConnector
+import com.jcraft.jsch.agentproxy.usocket.JNAUSocketFactory
 
 import java.io.File
 import java.io.IOException
 
+import org.eclipse.jgit.api.Git
 import org.eclipse.jgit.api.LsRemoteCommand
+import org.eclipse.jgit.api.errors.GitAPIException
+import org.eclipse.jgit.transport.JschConfigSessionFactory
+import org.eclipse.jgit.transport.OpenSshConfig
+import org.eclipse.jgit.transport.SshSessionFactory
+import org.eclipse.jgit.transport.URIish
+import org.eclipse.jgit.util.FS
 
 // TODO: Make this configurable.
 const val GIT_HISTORY_DEPTH = 50
 
 class Git : GitBase() {
+    companion object {
+        init {
+            // Configure JGit to connect to the SSH-Agent if it is available.
+            val sessionFactory = object : JschConfigSessionFactory() {
+                override fun configure(hc: OpenSshConfig.Host, session: Session) {
+                    session.setConfig("StrictHostKeyChecking", "no")
+                }
+
+                override fun createDefaultJSch(fs: FS): JSch {
+                    val jSch = super.createDefaultJSch(fs)
+
+                    try {
+                        if (SSHAgentConnector.isConnectorAvailable()) {
+                            val socketFactory = JNAUSocketFactory()
+                            val connector = SSHAgentConnector(socketFactory)
+                            JSch.setConfig("PreferredAuthentications", "publickey")
+                            val identityRepository = RemoteIdentityRepository(connector)
+                            jSch.identityRepository = identityRepository
+                        }
+                    } catch (e: AgentProxyException) {
+                        e.showStackTrace()
+
+                        log.error { "Could not create SSH Agent connector: ${e.collectMessagesAsString()}" }
+                    }
+
+                    return jSch
+                }
+            }
+
+            SshSessionFactory.setInstance(sessionFactory)
+        }
+    }
+
     override val type = VcsType.GIT
     override val priority = 100
 
@@ -49,27 +94,32 @@ class Git : GitBase() {
         }.isSuccess
 
     override fun initWorkingTree(targetDir: File, vcs: VcsInfo): WorkingTree {
-        // Do not use "git clone" to have more control over what is being fetched.
-        run(targetDir, "init")
-        run(targetDir, "remote", "add", "origin", vcs.url)
+        try {
+            Git.init().setDirectory(targetDir).call().use { git ->
+                git.remoteAdd().setName("origin").setUri(URIish(vcs.url)).call()
 
-        // Enable the more efficient Git Wire Protocol version 2, if possible. See
-        // https://github.com/git/git/blob/master/Documentation/technical/protocol-v2.txt
-        if (Semver(getVersion()).isGreaterThanOrEqualTo("2.18.0")) {
-            run(targetDir, "config", "protocol.version", "2")
-        }
+                // JGit supports the Git wire protocol version 2 since its version 5.1.
+                git.repository.config.setInt("protocol", null, "version", 2)
 
-        if (Os.isWindows) {
-            run(targetDir, "config", "core.longpaths", "true")
-        }
+                if (Os.isWindows) {
+                    git.repository.config.setBoolean("core", null, "longpaths", true)
+                }
 
-        if (vcs.path.isNotBlank()) {
-            log.info { "Configuring Git to do sparse checkout of path '${vcs.path}'." }
-            run(targetDir, "config", "core.sparseCheckout", "true")
-            val gitInfoDir = File(targetDir, ".git/info").apply { safeMkdirs() }
-            val path = vcs.path.let { if (it.startsWith("/")) it else "/$it" }
-            File(gitInfoDir, "sparse-checkout").writeText("$path\n" +
-                    FileMatcher.LICENSE_FILE_MATCHER.patterns.joinToString("\n") { "/$it" })
+                if (vcs.path.isNotBlank()) {
+                    log.info { "Configuring Git to do sparse checkout of path '${vcs.path}'." }
+
+                    git.repository.config.setBoolean("core", null, "sparseCheckout", true)
+
+                    val gitInfoDir = File(targetDir, ".git/info").apply { safeMkdirs() }
+                    val path = vcs.path.let { if (it.startsWith("/")) it else "/$it" }
+                    File(gitInfoDir, "sparse-checkout").writeText("$path\n" +
+                            FileMatcher.LICENSE_FILE_MATCHER.patterns.joinToString("\n") { "/$it" })
+                }
+
+                git.repository.config.save()
+            }
+        } catch (e: GitAPIException) {
+            throw IOException("Unable to initialize $type working tree at directory '$targetDir'.", e)
         }
 
         return getWorkingTree(targetDir)

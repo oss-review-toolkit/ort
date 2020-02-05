@@ -45,7 +45,7 @@ class OrtResultTest : WordSpec({
             val result = resultFile.readValue<OrtResult>()
 
             val id = Identifier("Maven:com.typesafe.akka:akka-stream_2.12:2.5.6")
-            result.collectDependencies(id, 1).map { it.id.toCoordinates() } shouldBe expectedDependencies
+            result.collectDependencies(id, 1).map { it.toCoordinates() } shouldBe expectedDependencies
         }
     }
 

@@ -26,6 +26,7 @@ import com.here.ort.utils.safeDeleteRecursively
 import com.here.ort.utils.unpack
 
 import io.kotlintest.Spec
+import io.kotlintest.matchers.collections.shouldContainExactlyInAnyOrder
 import io.kotlintest.shouldBe
 import io.kotlintest.shouldNotBe
 import io.kotlintest.specs.StringSpec
@@ -95,7 +96,7 @@ class GitWorkingTreeTest : StringSpec() {
             )
 
             val workingTree = git.getWorkingTree(zipContentDir)
-            workingTree.listRemoteBranches().joinToString("\n") shouldBe expectedBranches.joinToString("\n")
+            workingTree.listRemoteBranches() shouldContainExactlyInAnyOrder expectedBranches
         }
 
         "Git correctly lists remote tags" {
@@ -116,7 +117,7 @@ class GitWorkingTreeTest : StringSpec() {
             )
 
             val workingTree = git.getWorkingTree(zipContentDir)
-            workingTree.listRemoteTags().joinToString("\n") shouldBe expectedTags.joinToString("\n")
+            workingTree.listRemoteTags() shouldContainExactlyInAnyOrder expectedTags
         }
 
         "Git correctly lists submodules" {

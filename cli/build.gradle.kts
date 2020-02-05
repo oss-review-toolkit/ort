@@ -18,8 +18,8 @@
  * License-Filename: LICENSE
  */
 
+val cliktVersion: String by project
 val config4kVersion: String by project
-val jcommanderVersion: String by project
 val kotlintestVersion: String by project
 val log4jCoreVersion: String by project
 val reflectionsVersion: String by project
@@ -31,7 +31,7 @@ plugins {
 
 application {
     applicationName = "ort"
-    mainClassName = "com.here.ort.OrtMain"
+    mainClassName = "com.here.ort.OrtMainKt"
 }
 
 tasks.named<CreateStartScripts>("startScripts") {
@@ -60,7 +60,7 @@ dependencies {
     implementation(project(":scanner"))
     implementation(project(":utils"))
 
-    implementation("com.beust:jcommander:$jcommanderVersion")
+    implementation("com.github.ajalt:clikt:$cliktVersion")
     implementation("io.github.config4k:config4k:$config4kVersion")
     implementation("org.apache.logging.log4j:log4j-core:$log4jCoreVersion")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")

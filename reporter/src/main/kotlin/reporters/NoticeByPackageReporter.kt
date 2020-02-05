@@ -100,7 +100,7 @@ class NoticeByPackageProcessor(input: ReporterInput) : AbstractNoticeReporter.No
             .filter { (license, _) ->
                 input.licenseTextProvider.hasLicenseText(license).also {
                     if (!it) {
-                        log.warn {
+                        NoticeByPackageProcessor.log.warn {
                             "No license text found for license '$license', it will be omitted from the report."
                         }
                     }
@@ -155,7 +155,7 @@ class NoticeByPackageProcessor(input: ReporterInput) : AbstractNoticeReporter.No
                 .filter { (license, _) ->
                     input.licenseTextProvider.hasLicenseText(license).also {
                         if (!it) {
-                            log.warn {
+                            NoticeByPackageProcessor.log.warn {
                                 "No license text found for license '$license', it will be omitted from the report."
                             }
                         }
@@ -173,7 +173,9 @@ class NoticeByPackageProcessor(input: ReporterInput) : AbstractNoticeReporter.No
             addProcessedFindings(processedFindings)
 
             if (licenseFileFindings.isEmpty() && processedFindings.isEmpty()) {
-                log.error { "No license information was added for package ${id.toCoordinates()}." }
+                NoticeByPackageProcessor.log.error {
+                    "No license information was added for package ${id.toCoordinates()}."
+                }
             }
         }
     }

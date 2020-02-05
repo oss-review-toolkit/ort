@@ -29,12 +29,13 @@ import com.here.ort.utils.log
 import com.here.ort.utils.showStackTrace
 
 import java.io.File
-import java.io.IOException
 import java.nio.file.Paths
 
 import org.tmatesoft.svn.core.SVNDepth
 import org.tmatesoft.svn.core.SVNException
+import org.tmatesoft.svn.core.SVNNodeKind
 import org.tmatesoft.svn.core.SVNURL
+import org.tmatesoft.svn.core.io.SVNRepositoryFactory
 import org.tmatesoft.svn.core.wc.SVNClientManager
 import org.tmatesoft.svn.core.wc.SVNRevision
 import org.tmatesoft.svn.util.Version
@@ -92,7 +93,9 @@ class Subversion : VersionControlSystem() {
                         if (dirEntry.name.isNotEmpty()) refs += "$namespace/${dirEntry.relativePath}"
                     }
                 } catch (e: SVNException) {
-                    throw IOException("Unable to list remote refs for $type repository at $remoteUrl.")
+                    e.showStackTrace()
+
+                    log.info { "Unable to list remote refs for $type repository at $remoteUrl." }
                 }
 
                 return refs
@@ -111,9 +114,17 @@ class Subversion : VersionControlSystem() {
         }
 
     override fun isApplicableUrlInternal(vcsUrl: String) =
-        runCatching {
-            clientManager.wcClient.doInfo(SVNURL.parseURIEncoded(vcsUrl), SVNRevision.HEAD, SVNRevision.HEAD)
-        }.isSuccess
+        try {
+            SVNRepositoryFactory.create(SVNURL.parseURIEncoded(vcsUrl)).checkPath("", -1) != SVNNodeKind.NONE
+        } catch (e: SVNException) {
+            e.showStackTrace()
+
+            log.debug {
+                "An exception was thrown when checking $vcsUrl for a $type repository: ${e.collectMessagesAsString()}"
+            }
+
+            false
+        }
 
     override fun initWorkingTree(targetDir: File, vcs: VcsInfo): WorkingTree {
         try {
@@ -128,7 +139,7 @@ class Subversion : VersionControlSystem() {
         } catch (e: SVNException) {
             e.showStackTrace()
 
-            throw DownloadException("Unable to initialize the $type working tree at '$targetDir' from ${vcs.url}.", e)
+            throw DownloadException("Unable to initialize a $type working tree in '$targetDir' from ${vcs.url}.", e)
         }
 
         return getWorkingTree(targetDir)

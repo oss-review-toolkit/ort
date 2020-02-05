@@ -46,17 +46,20 @@ data class Scope(
     val dependencies: SortedSet<PackageReference> = sortedSetOf()
 ) : Comparable<Scope> {
     /**
-     * Return the set of [PackageReference]s in this [Scope], up to and including a depth of [maxDepth] where counting
+     * Return the set of package [Identifier]s in this [Scope], up to and including a depth of [maxDepth] where counting
      * starts at 0 (for the [Scope] itself) and 1 are direct dependencies etc. A value below 0 means to not limit the
-     * depth. If [includeErroneous] is true, [PackageReference]s with issues (but not their dependencies without issues)
-     * are excluded, otherwise they are included.
+     * depth. If the given [filterPredicate] is false for a specific [PackageReference] the corresponding [Identifier]
+     * is excluded from the result.
      */
-    fun collectDependencies(maxDepth: Int = -1, includeErroneous: Boolean = true) =
-        dependencies.fold(sortedSetOf<PackageReference>()) { refs, ref ->
+    fun collectDependencies(
+        maxDepth: Int = -1,
+        filterPredicate: (PackageReference) -> Boolean = { true }
+    ): SortedSet<Identifier> =
+        dependencies.fold(sortedSetOf<Identifier>()) { refs, ref ->
             refs.also {
                 if (maxDepth != 0) {
-                    if (ref.issues.isEmpty() || includeErroneous) it += ref
-                    it += ref.collectDependencies(maxDepth - 1, includeErroneous)
+                    if (filterPredicate(ref)) it += ref.id
+                    it += ref.collectDependencies(maxDepth - 1, filterPredicate)
                 }
             }
         }

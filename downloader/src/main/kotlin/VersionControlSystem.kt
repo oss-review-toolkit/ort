@@ -91,8 +91,8 @@ abstract class VersionControlSystem {
                 dirToVcsMap[absoluteVcsDirectory]
             } else {
                 ALL.asSequence().mapNotNull {
-                    if (it is CommandLineTool) {
-                        if (it.isInPath()) it.getWorkingTree(absoluteVcsDirectory) else null
+                    if (it is CommandLineTool && !it.isInPath()) {
+                        null
                     } else {
                         it.getWorkingTree(absoluteVcsDirectory)
                     }
@@ -121,8 +121,8 @@ abstract class VersionControlSystem {
         fun getCloneInfo(workingDir: File) = forDirectory(workingDir)?.getInfo() ?: VcsInfo.EMPTY
 
         /**
-         * Return all VCS information about a specific [path]. If [path] points to a nested VCS (like an individual Git
-         * working tree of GitRepo), information for the nested VCS is returned.
+         * Return all VCS information about a specific [path]. If [path] points to a nested VCS (like a Git submodule or
+         * a separate Git repository within a GitRepo working tree), information for that nested VCS is returned.
          */
         fun getPathInfo(path: File): VcsInfo {
             val dir = path.takeIf { it.isDirectory } ?: path.parentFile
@@ -291,8 +291,7 @@ abstract class VersionControlSystem {
         }
 
         log.info {
-            "Successfully downloaded revision $workingTreeRevision which matches ${pkg.id.name} version " +
-                    "${pkg.id.version}."
+            "Successfully downloaded revision $workingTreeRevision for package '${pkg.id.toCoordinates()}.'."
         }
 
         return workingTree

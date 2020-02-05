@@ -64,17 +64,20 @@ data class PackageReference(
     val issues: List<OrtIssue> = emptyList()
 ) : Comparable<PackageReference> {
     /**
-     * Return the set of [PackageReference]s this [PackageReference] transitively depends on, up to and including a
-     * depth of [maxDepth] where counting starts at 0 (for the [PackageReference] itself) and 1 are direct dependencies
-     * etc. A value below 0 means to not limit the depth. If [includeErroneous] is true, [PackageReference]s with issues
-     * (but not their dependencies without issues) are excluded, otherwise they are included.
+     * Return the set of [Identifier]s the package referred by this [PackageReference] transitively depends on,
+     * up to and including a depth of [maxDepth] where counting starts at 0 (for the [PackageReference] itself) and 1
+     * are direct dependencies etc. A value below 0 means to not limit the depth. If the given [filterPredicate] is
+     * false for a specific [PackageReference] the corresponding [Identifier] is excluded from the result.
      */
-    fun collectDependencies(maxDepth: Int = -1, includeErroneous: Boolean = true): SortedSet<PackageReference> =
-        dependencies.fold(sortedSetOf<PackageReference>()) { refs, ref ->
+    fun collectDependencies(
+        maxDepth: Int = -1,
+        filterPredicate: (PackageReference) -> Boolean = { true }
+    ): SortedSet<Identifier> =
+        dependencies.fold(sortedSetOf()) { refs, ref ->
             refs.also {
                 if (maxDepth != 0) {
-                    if (ref.issues.isEmpty() || includeErroneous) it += ref
-                    it += ref.collectDependencies(maxDepth - 1, includeErroneous)
+                    if (filterPredicate(ref)) it += ref.id
+                    it += ref.collectDependencies(maxDepth - 1, filterPredicate)
                 }
             }
         }

@@ -117,7 +117,7 @@ data class OrtResult(
                 val isScopeExcluded = getExcludes().isScopeExcluded(scope)
 
                 if (!isProjectExcluded(project.id) && !isScopeExcluded) {
-                    val dependencies = scope.collectDependencies().map { it.id }
+                    val dependencies = scope.collectDependencies()
                     includedPackages.addAll(dependencies)
                 }
             }
@@ -146,8 +146,8 @@ data class OrtResult(
      * depth of [maxLevel] where counting starts at 0 (for the [Project] or [Package] itself) and 1 are direct
      * dependencies etc. A value below 0 means to not limit the depth.
      */
-    fun collectDependencies(id: Identifier, maxLevel: Int = -1): SortedSet<PackageReference> {
-        val dependencies = sortedSetOf<PackageReference>()
+    fun collectDependencies(id: Identifier, maxLevel: Int = -1): SortedSet<Identifier> {
+        val dependencies = sortedSetOf<Identifier>()
 
         getProjects().forEach { project ->
             if (project.id == id) {
@@ -243,7 +243,7 @@ data class OrtResult(
             val allSubProjects = sortedSetOf<Identifier>()
 
             getProjects().forEach {
-                it.collectSubProjects().mapTo(allSubProjects) { ref -> ref.id }
+                allSubProjects += it.collectSubProjects()
             }
 
             projectsAndPackages -= allSubProjects
