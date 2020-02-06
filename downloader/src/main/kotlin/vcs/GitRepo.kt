@@ -34,11 +34,6 @@ import com.here.ort.utils.showStackTrace
 import java.io.File
 import java.io.IOException
 
-/**
- * The branch of git-repo to use. This allows to override git-repo's default of using the "stable" branch.
- */
-private const val GIT_REPO_BRANCH = "master"
-
 class GitRepo : GitBase() {
     override val type = VcsType.GIT_REPO
     override val priority = 50
@@ -100,8 +95,7 @@ class GitRepo : GitBase() {
         // Clone all projects instead of only those in the "default" group until we support specifying groups.
         runRepoCommand(
             targetDir,
-            "init", "--groups=all", "--no-repo-verify",
-            "--no-clone-bundle", "--repo-branch=$GIT_REPO_BRANCH",
+            "init", "--groups=all", "--no-repo-verify", "--no-clone-bundle",
             "-b", manifestRevision,
             "-u", vcs.url,
             "-m", manifestPath
