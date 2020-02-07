@@ -221,6 +221,19 @@ To scan the source code of `mime-types` and its dependencies the source code of 
 needs to be downloaded. The _downloader_ tool could be used for this, but it is also integrated in the `scanner` tool,
 so the scanner will automatically download the source code if the required VCS metadata could be obtained.
 
+Note that if _downloader_ is unable to download the source code due to say a missing
+source code location in the package metadata then you can use curations as a workaround.
+
+To use curations, create a [curations.yml](config-file-curations-yml.md)
+and pass it to the `--package-curations-file` option of the _analyzer_:
+
+```
+cli/build/install/ort/bin/ort analyze
+  -i [mime-types-path]
+  -o [analyzer-output-path]
+  --package-curations-file [ort-configuration-path]/curations.yml
+```
+
 ORT is designed to integrate lots of different scanners and is not limited to license scanners, technically any tool
 that explores the source code of a software package could be integrated. The actual scanner does not have to run on the
 same machine, for example we will soon integrate the [ClearlyDefined](https://clearlydefined.io/) scanner backend which
@@ -265,17 +278,24 @@ on a bigger project you will see that `ScanCode` often finds more licenses than 
 
 ## 6. Running the evaluator
 
-The evaluator can apply a set of rules against the scan result created above. ORT provides an
-[example of a policy rules file](examples/rules.kts) that can be used for testing the _evaluator_. 
+The evaluator can apply a set of rules against the scan result created above.
+ORT provides examples for the policy rules file [(rules.kts)](examples/rules.kts),
+[user-defined categorization of licenses (licenses.yml)](examples/licenses.yml) and
+[user-defined package curations (curations.yml)](examples/licenses.yml) that can be used for testing the _evaluator_. 
 
 To run the example rules use:
 
 ```bash
 cli/build/install/ort/bin/ort evaluate
+  --package-curations-file curations.yml
   --rules-file rules.kts
+  --license-configuration-file licenses.yml
   -i [scanner-output-path]/scan-result.yml
   -o [evaluator-output-path]/mime-types
 ```
+
+See the [curations.yml documentation](config-file-curations-yml.md) to learn more about using curations to correct invalid or missing package metadata
+and the [licenses.yml documentation](config-file-licenses-yml.md) on how you can classify licenses to simplify writing the policy rules.
 
 It is possible to write your own evaluator rules as a Kotlin script and pass it to the _evaluator_ using `--rules-file`.
 Note that detailed documentation for writing custom rules is not yet available.
