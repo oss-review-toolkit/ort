@@ -355,10 +355,10 @@ For IDE development we recommend the [IntelliJ IDEA Community Edition](https://w
 can directly import the Gradle build files. After cloning the project's source code recursively, simply run IDEA and use
 the following steps to import the project.
 
-1. From the wizard dialog: Select *Import Project*. 
+1. From the wizard dialog: Select *Import Project*.
 
    From a running IDEA instance: Select *File* -> *New* -> *Project from Existing Sources...*
- 
+
 2. Browse to ORT's source code directory and select either the `build.gradle.kts` or the `settings.gradle.kts` file.
 
 3. In the *Import Project from Gradle* dialog select *Use auto-import* and leave all other settings at their defaults.
