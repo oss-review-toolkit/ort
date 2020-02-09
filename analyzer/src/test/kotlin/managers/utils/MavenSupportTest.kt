@@ -47,6 +47,31 @@ class MavenSupportTest : WordSpec({
                 path = "path/to/manifest.xml"
             )
         }
+
+        "handle GitHub URLs with missing SCM provider" {
+            val httpsProvider = MavenProject().apply {
+                scm = Scm().apply {
+                    connection = "scm:https://ben-manes@github.com/ben-manes/caffeine.git"
+                    tag = "v2.8.1"
+                }
+            }
+            val gitProvider = MavenProject().apply {
+                scm = Scm().apply {
+                    connection = "scm:git://github.com/vigna/fastutil.git"
+                }
+            }
+
+            MavenSupport.parseVcsInfo(httpsProvider) shouldBe VcsInfo(
+                type = VcsType.GIT,
+                url = "https://ben-manes@github.com/ben-manes/caffeine.git",
+                revision = "v2.8.1"
+            )
+            MavenSupport.parseVcsInfo(gitProvider) shouldBe VcsInfo(
+                type = VcsType.GIT,
+                url = "git://github.com/vigna/fastutil.git",
+                revision = ""
+            )
+        }
     }
 
     "createProxyFromUrl" should {
