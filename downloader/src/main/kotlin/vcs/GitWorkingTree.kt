@@ -24,15 +24,14 @@ import com.here.ort.model.VcsInfo
 import com.here.ort.utils.log
 
 import java.io.File
+import java.io.IOException
 
 import org.eclipse.jgit.api.LsRemoteCommand
-import org.eclipse.jgit.api.errors.GitAPIException
 import org.eclipse.jgit.lib.BranchConfig
 import org.eclipse.jgit.lib.Constants
 import org.eclipse.jgit.lib.Repository
 import org.eclipse.jgit.storage.file.FileRepositoryBuilder
 import org.eclipse.jgit.submodule.SubmoduleWalk
-import java.io.IOException
 
 private fun findGitOrSubmoduleDir(workingDir: File): Repository {
     // First try to open an existing working tree exactly at the given directory. This also works for submodules which
@@ -91,7 +90,7 @@ open class GitWorkingTree(workingDir: File, private val gitBase: GitBase) : Work
         listSubmodulePaths(repo).associateWith { GitWorkingTree(repo.workTree.resolve(it), gitBase).getInfo() }
 
     override fun getRemoteUrl(): String =
-        try {
+        runCatching {
             val remotes = org.eclipse.jgit.api.Git(repo).remoteList().call()
             val remoteForCurrentBranch = BranchConfig(repo.config, repo.branch).remote
 
@@ -104,8 +103,8 @@ open class GitWorkingTree(workingDir: File, private val gitBase: GitBase) : Work
             }
 
             remote?.urIs?.firstOrNull()?.toString().orEmpty()
-        } catch (e: GitAPIException) {
-            throw IOException("Unable to get the remote URL.", e)
+        }.getOrElse {
+            throw IOException("Unable to get the remote URL.", it)
         }
 
     override fun getRevision(): String = repo.exactRef(Constants.HEAD)?.objectId?.name().orEmpty()
@@ -113,16 +112,16 @@ open class GitWorkingTree(workingDir: File, private val gitBase: GitBase) : Work
     override fun getRootPath(): File = repo.workTree ?: workingDir
 
     override fun listRemoteBranches(): List<String> =
-        try {
+        runCatching {
             LsRemoteCommand(repo).setHeads(true).call().map { it.name.removePrefix("refs/heads/") }
-        } catch (e: GitAPIException) {
-            throw IOException("Unable to list the remote branches.", e)
+        }.getOrElse {
+            throw IOException("Unable to list the remote branches.", it)
         }
 
     override fun listRemoteTags(): List<String> =
-        try {
+        runCatching {
             LsRemoteCommand(repo).setTags(true).call().map { it.name.removePrefix("refs/tags/") }
-        } catch (e: GitAPIException) {
-            throw IOException("Unable to list the remote tags.", e)
+        }.getOrElse {
+            throw IOException("Unable to list the remote tags.", it)
         }
 }
