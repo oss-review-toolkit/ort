@@ -23,6 +23,7 @@ import com.fasterxml.jackson.module.kotlin.readValue
 
 import com.here.ort.analyzer.PackageManager
 import com.here.ort.analyzer.TOOL_NAME
+import com.here.ort.downloader.VersionControlSystem
 import com.here.ort.model.Hash
 import com.here.ort.model.Identifier
 import com.here.ort.model.Package
@@ -175,6 +176,17 @@ class MavenSupport(workspaceReader: WorkspaceReader) {
                             // With Subversion, a tag actually is a path and not a symbolic revision.
                             val path = tag.takeIf { it.isEmpty() } ?: "tags/$tag"
                             VcsInfo(type = VcsType.SUBVERSION, url = url, revision = "", path = path)
+                        }
+
+                        url.startsWith("//") -> {
+                            // Work around the common mistake to omit the Maven SCM provider.
+                            val fixedUrl = "$type:$url"
+
+                            // Try to detect the Maven SCM provider from the URL only, e.g. by looking at the host or
+                            // special URL paths.
+                            VersionControlSystem.splitUrl(fixedUrl).copy(revision = tag).also {
+                                log.info { "Fixed up invalid SCM connection '$connection' without a provider to $it." }
+                            }
                         }
 
                         else -> VcsInfo(type = VcsType(type), url = url, revision = tag)
