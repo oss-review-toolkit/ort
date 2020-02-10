@@ -36,9 +36,9 @@ FROM openjdk:11-jre-slim-sid
 ENV \
     # Package manager versions.
     BOWER_VERSION=1.8.8 \
-    BUNDLER_VERSION=1.17.3-3 \
+    BUNDLER_VERSION=2.1.4-1 \
     CARGO_VERSION=0.40.0-3 \
-    COMPOSER_VERSION=1.9.2-1 \
+    COMPOSER_VERSION=1.9.3-1 \
     CONAN_VERSION=1.18.0 \
     FLUTTER_VERSION=v1.7.8+hotfix.3-stable \
     GO_DEP_VERSION=0.5.4-3 \
