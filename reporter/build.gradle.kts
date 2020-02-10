@@ -23,6 +23,7 @@ val apachePoiSchemasVersion: String by project
 val cyclonedxCoreJavaVersion: String by project
 val flexmarkVersion: String by project
 val hamcrestCoreVersion: String by project
+val jacksonVersion: String by project
 val kotlinxHtmlVersion: String by project
 val simpleExcelVersion: String by project
 val xalanVersion: String by project
@@ -65,6 +66,9 @@ dependencies {
 
     implementation(project(":downloader"))
     implementation(project(":utils"))
+
+    implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:$jacksonVersion")
+    implementation("com.fasterxml.jackson.module:jackson-module-kotlin:$jacksonVersion")
 
     implementation("com.vladsch.flexmark:flexmark:$flexmarkVersion")
 
