@@ -20,7 +20,9 @@
 package com.here.ort.reporter.reporters
 
 import com.here.ort.model.OrtResult
+import com.here.ort.reporter.DefaultResolutionProvider
 import com.here.ort.reporter.ReporterInput
+import com.here.ort.utils.normalizeLineBreaks
 import com.here.ort.utils.test.readOrtResult
 
 import io.kotlintest.shouldBe
@@ -29,21 +31,37 @@ import io.kotlintest.specs.WordSpec
 import java.io.ByteArrayOutputStream
 import java.io.File
 
-class EvaluatedModelYamlReporterTest : WordSpec({
-    "Evaluated model" should {
-        "contain the expected stats" {
+class EvaluatedModelReporterTest : WordSpec({
+    "EvaluatedModelReporter" should {
+        "create the expected JSON output" {
             val expectedResult = File(
-                "src/funTest/assets/evaluated-model-test-expected-statistics.yml"
+                "src/funTest/assets/evaluated-model-reporter-test-expected-output.json"
             ).readText()
             val ortResult = readOrtResult("src/funTest/assets/static-html-reporter-test-input.yml")
 
-            println(generateReport(ortResult))
-            generateReport(ortResult) shouldBe expectedResult
+            generateReport(EvaluatedModelJsonReporter(), ortResult).normalizeLineBreaks() shouldBe expectedResult
+        }
+
+        "create the expected YAML output" {
+            val expectedResult = File(
+                "src/funTest/assets/evaluated-model-reporter-test-expected-output.yml"
+            ).readText()
+            val ortResult = readOrtResult("src/funTest/assets/static-html-reporter-test-input.yml")
+
+            generateReport(EvaluatedModelYamlReporter(), ortResult) shouldBe expectedResult
         }
     }
 })
 
-private fun generateReport(ortResult: OrtResult) =
+private fun generateReport(reporter: EvaluatedModelReporter, ortResult: OrtResult) =
     ByteArrayOutputStream().also { outputStream ->
-        EvaluatedModelYamlReporter().generateReport(outputStream, ReporterInput(ortResult))
+        val resolutionProvider = DefaultResolutionProvider()
+        resolutionProvider.add(ortResult.getResolutions())
+
+        val input = ReporterInput(
+            ortResult = ortResult,
+            resolutionProvider = resolutionProvider
+        )
+
+        reporter.generateReport(outputStream, input)
     }.toString("UTF-8")
