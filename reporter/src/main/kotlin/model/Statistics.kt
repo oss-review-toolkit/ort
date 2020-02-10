@@ -19,6 +19,13 @@
 
 package com.here.ort.reporter.model
 
+import com.here.ort.model.OrtIssue
+import com.here.ort.model.OrtResult
+import com.here.ort.model.Project
+import com.here.ort.model.RuleViolation
+import com.here.ort.model.Scope
+import com.here.ort.model.Severity
+
 import java.util.SortedSet
 
 /**
