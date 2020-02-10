@@ -23,10 +23,10 @@ import com.fasterxml.jackson.databind.ObjectMapper
 
 import com.here.ort.model.jsonMapper
 import com.here.ort.model.yamlMapper
-import com.here.ort.reporter.model.Statistics
 import com.here.ort.reporter.utils.StatisticsCalculator
 import com.here.ort.reporter.Reporter
 import com.here.ort.reporter.ReporterInput
+import com.here.ort.reporter.model.EvaluatedModel
 
 import java.io.OutputStream
 
@@ -60,11 +60,6 @@ abstract class EvaluatedModelReporter(
     override val defaultFilename = defaultFileName
 
     override fun generateReport(outputStream: OutputStream, input: ReporterInput) {
-        data class EvaluatedModel(
-            val stats: Statistics
-            // TODO: add the actual evaluated data model.
-        )
-
         val evaluatedModel = EvaluatedModel(
             stats = StatisticsCalculator().getStatistics(input.ortResult, input.resolutionProvider)
         )
