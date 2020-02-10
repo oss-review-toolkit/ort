@@ -60,7 +60,7 @@ ENV PATH="$PATH:$FLUTTER_HOME/bin:$FLUTTER_HOME/bin/cache/dart-sdk/bin:/opt/go/b
 # Apt install commands.
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
-        # Install general tools required by this Dockefile.
+        # Install general tools required by this Dockerfile.
         curl \
         lib32stdc++6 \
         openssh-client \
