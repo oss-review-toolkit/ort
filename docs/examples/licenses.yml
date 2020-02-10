@@ -4,7 +4,7 @@
 #
 # To demonstrate how one can insert a custom written offer
 # include_source_code_offer_in_notice_file has been set to
-# true for all licenses of the GPL familiy.
+# true for all licenses of the GPL family.
 license_sets:
 - id: "copyleft"
 - id: "copyleft-limited"
