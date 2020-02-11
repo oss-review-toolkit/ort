@@ -84,7 +84,7 @@ Many package managers support grouping of dependencies by their use. Such groups
 For example, Maven provides the scopes `compile`, `provided`, and `test`, while NPM scopes are `dependencies` and
 `devDependencies`.
 
-You can use regular expresssions for `pattern` to match the scopes to exclude.
+You can use regular expressions for `pattern` to match the scopes to exclude.
 This can be useful, for example, with Gradle, which creates a relatively large number
 of scopes (internally Gradle calls them `configurations`).
 
