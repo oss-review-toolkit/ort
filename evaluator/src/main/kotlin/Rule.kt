@@ -69,8 +69,8 @@ abstract class Rule(
     }
 
     /**
-     * Evaluate this rule by checking if all matchers apply. If this is the case all [issues] configured in this rule
-     * are added to the [ruleSet]. To add custom behavior if the rule matches override [runInternal].
+     * Evaluate this rule by checking if all matchers apply. If this is the case all [violations] configured in this
+     * rule are added to the [ruleSet]. To add custom behavior if the rule matches override [runInternal].
      */
     fun evaluate() {
         log.info { description }
