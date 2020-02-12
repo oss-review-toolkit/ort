@@ -459,4 +459,10 @@ data class OrtResult(
      * Return the list of [ScanResult]s for the given [id].
      */
     fun getScanResultsForId(id: Identifier): List<ScanResult> = scanResultsById[id].orEmpty()
+
+    /**
+     * Return true if and only if the given [id] denotes a [Project] contained in this [OrtResult].
+     */
+    @Suppress("UNUSED") // This is intended to be mostly used via scripting.
+    fun isProject(id: Identifier): Boolean = getProject(id) != null
 }
