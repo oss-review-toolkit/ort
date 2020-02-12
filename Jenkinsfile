@@ -55,6 +55,12 @@ pipeline {
             description: 'Log message level',
             choices: ['--info', '--debug', '']
         )
+
+        string(
+            name: 'DOWNSTREAM_JOB',
+            description: 'Name of an optional downstream job to trigger',
+            defaultValue: ''
+        )
     }
 
     stages {
@@ -171,6 +177,22 @@ pipeline {
                         fingerprint: true
                     )
                 }
+            }
+        }
+
+        stage('Trigger downstream job') {
+            agent any
+
+            when {
+                beforeAgent true
+
+                expression {
+                    !params.DOWNSTREAM_JOB.allWhitespace
+                }
+            }
+
+            steps {
+                build job: params.DOWNSTREAM_JOB, wait: false
             }
         }
     }
