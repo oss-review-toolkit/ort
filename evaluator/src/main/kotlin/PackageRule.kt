@@ -107,7 +107,7 @@ open class PackageRule(
         object : RuleMatcher {
             override val description = "isProject()"
 
-            override fun matches() = ruleSet.ortResult.analyzer?.result?.projects?.find { it.id == pkg.id } != null
+            override fun matches() = ruleSet.ortResult.isProject(pkg.id)
         }
 
     /**
