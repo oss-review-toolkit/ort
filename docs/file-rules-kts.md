@@ -21,5 +21,5 @@ cli/build/install/ort/bin/ort evaluate \
   --output-formats YAML \
   --license-configuration-file [ort-configuration-path]/licenses.yml \
   --package-curations-file [ort-configuration-path]/curations.yml  \
-  --rules-file ~/ort-config/rules.kts
+  --rules-file [ort-configuration-path]/rules.kts
 ```
