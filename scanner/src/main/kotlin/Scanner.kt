@@ -141,14 +141,14 @@ abstract class Scanner(val scannerName: String, protected val config: ScannerCon
         consolidatedProjectPackageMap.forEach { (referencePackage, deduplicatedPackages) ->
             resultContainers.find { it.id == referencePackage.id }?.let { resultContainer ->
                 deduplicatedPackages.forEach { deduplicatedPackage ->
-                    analyzerResult.projects.find { it.id == deduplicatedPackage.id }?.let { project ->
+                    ortResult.getProject(deduplicatedPackage.id)?.let { project ->
                         resultContainers += filterProjectScanResults(project, resultContainer)
                     } ?: throw IllegalArgumentException(
                         "Could not find project '${deduplicatedPackage.id.toCoordinates()}'."
                     )
                 }
 
-                analyzerResult.projects.find { it.id == referencePackage.id }?.let { project ->
+                ortResult.getProject(referencePackage.id)?.let { project ->
                     resultContainers.remove(resultContainer)
                     resultContainers += filterProjectScanResults(project, resultContainer)
                 } ?: throw IllegalArgumentException("Could not find project '${referencePackage.id.toCoordinates()}'.")
