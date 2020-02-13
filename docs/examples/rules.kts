@@ -96,7 +96,7 @@ fun PackageRule.LicenseRule.isCopyleftLimited() =
 val ruleSet = ruleSet(ortResult) {
     // Define a rule that is executed for each package.
     packageRule("UNHANDLED_LICENSE") {
-        // Do not trigger this rule on packages that have been exclude in the .ort.yml.
+        // Do not trigger this rule on packages that have been excluded in the .ort.yml.
         require {
             -isExcluded()
         }
