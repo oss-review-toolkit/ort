@@ -100,35 +100,33 @@ abstract class Scanner(val scannerName: String, protected val config: ScannerCon
                     "result."
         }
 
-        val analyzerResult = ortResult.analyzer!!.result
-
         // Add the projects as packages to scan.
-        val consolidatedProjectPackageMap = Downloader.consolidateProjectPackagesByVcs(analyzerResult.projects)
+        val consolidatedProjectPackageMap = Downloader.consolidateProjectPackagesByVcs(ortResult.getProjects())
         val consolidatedReferencePackages = consolidatedProjectPackageMap.keys.map { it.toCuratedPackage() }
 
         val projectScanScopes = if (scopesToScan.isNotEmpty()) {
             log.info { "Limiting scan to scopes $scopesToScan." }
 
-            analyzerResult.projects.map { project ->
+            ortResult.getProjects().map { project ->
                 project.scopes.map { it.name }.partition { it in scopesToScan }.let {
                     ProjectScanScopes(project.id, it.first.toSortedSet(), it.second.toSortedSet())
                 }
             }
         } else {
-            analyzerResult.projects.map { project ->
+            ortResult.getProjects().map { project ->
                 val scopes = project.scopes.map { it.name }
                 ProjectScanScopes(project.id, scopes.toSortedSet(), sortedSetOf())
             }
         }.toSortedSet()
 
         val curatedPackages = if (scopesToScan.isNotEmpty()) {
-            consolidatedReferencePackages + analyzerResult.packages.filter { (pkg, _) ->
-                analyzerResult.projects.any { project ->
+            consolidatedReferencePackages + ortResult.getPackages().filter { (pkg, _) ->
+                ortResult.getProjects().any { project ->
                     project.scopes.any { it.name in scopesToScan && pkg.id in it }
                 }
             }
         } else {
-            consolidatedReferencePackages + analyzerResult.packages
+            consolidatedReferencePackages + ortResult.getPackages()
         }.toSortedSet()
 
         val packagesToScan = curatedPackages.map { it.pkg }
