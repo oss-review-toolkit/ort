@@ -39,11 +39,12 @@ The structure of the curations file consist of one or more `id` entries:
 ```
 - id: "package identifier."
   curations:
+    comment: "An explanation why the curation is needed or the reasoning for a license conclusion"
     concluded_license: "valid SPDX license expression to override the license findings."
     declared_licenses:
     - "license a"
     - "license b"
-    description: "curated description"
+    description: "Curated description"
     homepage_url: "http://example.com"
     binary_artifact:
       url: "http://example.com/binary.zip"
@@ -72,7 +73,7 @@ cli/build/install/ort/bin/ort analyze
 ```
 
 In the future we will integrate [ClearlyDefined](https://clearlydefined.io/) as a source for curated metadata. Until
-then, and also for curations for internal packages that cannot be published, the curations file can be used.
+then, and also for curations for organization internal packages which are not publicly available, the curations file can be used.
 
 To test curations you can also pass the `curations.yml` file to the `--package-curations-file` option of the
 _evaluator_:
