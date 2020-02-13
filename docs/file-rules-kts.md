@@ -7,7 +7,7 @@ For each policy rule violation, you can define 'How to fix' follow-up actions to
 resolve policy rules violations by themselves.
 
 You can use [examples/rules.kts](examples/rules.kts) as the base script file for your policy rules. Note that this
-example depends on the rule sets defined in [examples/licenses.yml](examples/licenses.yml), see the
+example depends on the licenses categorizations defined in [examples/licenses.yml](examples/licenses.yml), see the
 [licenses.yml docs](config-file-licenses-yml.md).
 
 ## Command Line
