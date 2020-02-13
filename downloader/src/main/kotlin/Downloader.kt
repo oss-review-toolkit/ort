@@ -38,7 +38,6 @@ import java.io.File
 import java.io.IOException
 import java.net.URI
 import java.time.Instant
-import java.util.SortedSet
 
 import okhttp3.Request
 
@@ -59,11 +58,11 @@ class Downloader {
          * working tree, it does not make sense to download (and scan) all of them individually, not even if doing
          * sparse checkouts.
          *
-         * @param projects A set of projects to consolidate into packages.
+         * @param projects The projects to consolidate into packages.
          * @return A map that associates packages for projects with distinct VCS working trees to all other projects
          *         from the same VCS working tree.
          */
-        fun consolidateProjectPackagesByVcs(projects: SortedSet<Project>): Map<Package, List<Package>> {
+        fun consolidateProjectPackagesByVcs(projects: Collection<Project>): Map<Package, List<Package>> {
             // TODO: In case of GitRepo, we still download the whole GitRepo working tree *and* any individual Git
             //       repositories that contain project definition files, which in many cases is doing duplicate work.
             val projectPackages = projects.map { it.toPackage() }
