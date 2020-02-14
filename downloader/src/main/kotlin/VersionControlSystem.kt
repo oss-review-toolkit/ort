@@ -46,7 +46,9 @@ abstract class VersionControlSystem {
         /**
          * Return the applicable VCS for the given [vcsType], or null if none is applicable.
          */
-        fun forType(vcsType: VcsType) = ALL.find { it.isApplicableType(vcsType) }
+        fun forType(vcsType: VcsType) = ALL.find {
+            (it !is CommandLineTool || it.isInPath()) && it.isApplicableType(vcsType)
+        }
 
         /**
          * A map to cache the [VersionControlSystem], if any, for previously queried URLs. This helps to speed up
