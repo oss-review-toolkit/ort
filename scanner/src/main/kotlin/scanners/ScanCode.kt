@@ -46,6 +46,7 @@ import com.here.ort.utils.Os
 import com.here.ort.utils.OkHttpClientHelper
 import com.here.ort.utils.ProcessCapture
 import com.here.ort.utils.log
+import com.here.ort.utils.textValueOrEmpty
 import com.here.ort.utils.unpack
 
 import java.io.File
@@ -375,7 +376,9 @@ class ScanCode(
      * Get the SPDX license id (or a fallback) for a license finding.
      */
     private fun getLicenseId(license: JsonNode): String {
-        var name = license["spdx_license_key"].textValue()
+        // The fact that ScanCode 3.0.2 uses an empty string here for licenses unknown to SPDX seems to have been a bug
+        // in ScanCode, and it should have always been using null instead.
+        var name = license["spdx_license_key"].textValueOrEmpty()
 
         if (name.isEmpty()) {
             val key = license["key"].textValue()
