@@ -64,11 +64,7 @@ abstract class VersionControlSystem {
                 urlToVcsMap[vcsUrl]
             } else {
                 ALL.find {
-                    if (it is CommandLineTool) {
-                        it.isInPath() && it.isApplicableUrl(vcsUrl)
-                    } else {
-                        it.isApplicableUrl(vcsUrl)
-                    }
+                    (it !is CommandLineTool || it.isInPath()) && it.isApplicableUrl(vcsUrl)
                 }.also {
                     urlToVcsMap[vcsUrl] = it
                 }
