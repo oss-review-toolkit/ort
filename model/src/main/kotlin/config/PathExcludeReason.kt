@@ -63,6 +63,12 @@ enum class PathExcludeReason {
     PROVIDED_BY,
 
     /**
+     * The path only contains files used for testing source code which are not included in distributed build
+     * artifacts.
+     */
+    TEST_OF,
+
+    /**
      * The path only contains tools used for testing source code which are not included in distributed build
      * artifacts.
      */
