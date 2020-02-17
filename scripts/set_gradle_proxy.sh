@@ -20,6 +20,7 @@
 writeProxyStringToGradleProps () {
     PROXY=$1
     PROTOCOL=$2
+    FILE=$3
 
     HOST=${PROXY%:*}
     HOST=${HOST#*//}
@@ -27,30 +28,30 @@ writeProxyStringToGradleProps () {
     PORT=${PROXY##*:}
     [ "$PORT" -ge 0 ] 2>/dev/null || PORT=80
 
-    GRADLE_PROPS="$HOME/.gradle/gradle.properties"
+    grep -qF "systemProp.$PROTOCOL.proxy" $FILE 2>/dev/null && return 1
 
-    grep -qF "systemProp.$PROTOCOL.proxy" $GRADLE_PROPS 2>/dev/null && return 1
-
-    mkdir -p $(dirname $GRADLE_PROPS)
+    mkdir -p $(dirname $FILE)
 
     # TODO: Support proxy authentication once Gradle does, see https://github.com/gradle/gradle/issues/5052.
-    cat <<- EOF >> ~/.gradle/gradle.properties
+    cat <<- EOF >> $FILE
 	systemProp.$PROTOCOL.proxyHost=$HOST
 	systemProp.$PROTOCOL.proxyPort=$PORT
 	EOF
 }
 
 writeProxyEnvToGradleProps () {
+    GRADLE_PROPS="$HOME/.gradle/gradle.properties"
+
     if [ -n "$http_proxy" ]; then
-        echo "Setting HTTP proxy $http_proxy for Gradle..."
-        if ! writeProxyStringToGradleProps $http_proxy "http"; then
+        echo "Setting HTTP proxy $http_proxy for Gradle in file '$GRADLE_PROPS'..."
+        if ! writeProxyStringToGradleProps $http_proxy "http" $GRADLE_PROPS; then
             echo "Not replacing existing HTTP proxy."
         fi
     fi
 
     if [ -n "$https_proxy" ]; then
-        echo "Setting HTTPS proxy $https_proxy for Gradle..."
-        if ! writeProxyStringToGradleProps $https_proxy "https"; then
+        echo "Setting HTTPS proxy $https_proxy for Gradle in file '$GRADLE_PROPS'..."
+        if ! writeProxyStringToGradleProps $https_proxy "https" $GRADLE_PROPS; then
             echo "Not replacing existing HTTPS proxy."
         fi
     fi
