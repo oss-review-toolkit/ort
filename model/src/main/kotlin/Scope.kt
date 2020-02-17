@@ -55,7 +55,7 @@ data class Scope(
         maxDepth: Int = -1,
         filterPredicate: (PackageReference) -> Boolean = { true }
     ): SortedSet<Identifier> =
-        dependencies.fold(sortedSetOf<Identifier>()) { refs, ref ->
+        dependencies.fold(sortedSetOf()) { refs, ref ->
             refs.also {
                 if (maxDepth != 0) {
                     if (filterPredicate(ref)) it += ref.id
