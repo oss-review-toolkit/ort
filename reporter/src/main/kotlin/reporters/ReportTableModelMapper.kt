@@ -24,7 +24,6 @@ import com.here.ort.model.OrtIssue
 import com.here.ort.model.OrtResult
 import com.here.ort.model.RemoteArtifact
 import com.here.ort.model.RuleViolation
-import com.here.ort.model.Scope
 import com.here.ort.model.VcsInfo
 import com.here.ort.model.config.Excludes
 import com.here.ort.model.config.ScopeExclude
@@ -39,8 +38,8 @@ import com.here.ort.reporter.reporters.ReportTableModel.SummaryTable
 
 private fun Collection<ResolvableIssue>.filterUnresolved() = filter { !it.isResolved }
 
-private fun Excludes.scopeExcludesByName(scopes: Collection<Scope>): Map<String, List<ScopeExclude>> =
-    scopes.associate { Pair(it.name, findScopeExcludes(it)) }
+private fun Excludes.scopeExcludesByName(scopeNames: Collection<String>): Map<String, List<ScopeExclude>> =
+    scopeNames.associateWith { scopeName -> findScopeExcludes(scopeName) }
 
 /**
  * A mapper which converts an [OrtIssue] to a [ReportTableModel] view model.
@@ -104,9 +103,11 @@ class ReportTableModelMapper(private val resolutionProvider: ResolutionProvider)
             val tableRows = allIds.map { id ->
                 val scanResult = scanRecord?.scanResults?.find { it.id == id }
 
-                val scopes = project.scopes.filter { id in it }.let { scopes ->
-                    excludes.scopeExcludesByName(scopes).toSortedMap()
-                }
+                val scopes = project
+                    .scopes
+                    .filter { id in it }
+                    .map { it.name }
+                    .let { scopesNames -> excludes.scopeExcludesByName(scopesNames).toSortedMap() }
 
                 val concludedLicense = ortResult.getConcludedLicensesForId(id)
                 val declaredLicenses = ortResult.getDeclaredLicensesForId(id)
