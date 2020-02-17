@@ -35,35 +35,37 @@ private fun readAnalyzerResult(analyzerResultFilename: String): Project =
 class ProjectTest : WordSpec({
     "collectDependencies" should {
         "get all dependencies by default" {
-            val expectedDependencies = listOf(
+            val project = readAnalyzerResult("gradle-expected-output-lib.yml")
+
+            val dependencies = project.collectDependencies().map { it.toCoordinates() }
+
+            dependencies shouldBe listOf(
                 "Maven:junit:junit:4.12",
                 "Maven:org.apache.commons:commons-lang3:3.5",
                 "Maven:org.apache.commons:commons-text:1.1",
                 "Maven:org.apache.struts:struts2-assembly:2.5.14.1",
                 "Maven:org.hamcrest:hamcrest-core:1.3"
             )
-
-            val project = readAnalyzerResult("gradle-expected-output-lib.yml")
-
-            project.collectDependencies().map { it.toCoordinates() } shouldBe expectedDependencies
         }
 
         "get no dependencies for a depth of 0" {
             val project = readAnalyzerResult("gradle-expected-output-lib.yml")
 
-            project.collectDependencies(maxDepth = 0) should beEmpty()
+            val dependencies = project.collectDependencies(maxDepth = 0)
+
+            dependencies should beEmpty()
         }
 
         "get only direct dependencies for a depth of 1" {
-            val expectedDependencies = listOf(
+            val project = readAnalyzerResult("gradle-expected-output-lib.yml")
+
+            val dependencies = project.collectDependencies(maxDepth = 1).map { it.toCoordinates() }
+
+            dependencies shouldBe listOf(
                 "Maven:junit:junit:4.12",
                 "Maven:org.apache.commons:commons-text:1.1",
                 "Maven:org.apache.struts:struts2-assembly:2.5.14.1"
             )
-
-            val project = readAnalyzerResult("gradle-expected-output-lib.yml")
-
-            project.collectDependencies(maxDepth = 1).map { it.toCoordinates() } shouldBe expectedDependencies
         }
     }
 
@@ -71,7 +73,9 @@ class ProjectTest : WordSpec({
         "find all issues" {
             val project = readAnalyzerResult("gradle-expected-output-lib-without-repo.yml")
 
-            project.collectIssues() shouldBe mapOf(
+            val issues = project.collectIssues()
+
+            issues shouldBe mapOf(
                 Identifier("Unknown:org.apache.commons:commons-text:1.1") to setOf(
                     OrtIssue(
                         Instant.EPOCH,
