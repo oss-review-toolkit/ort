@@ -137,6 +137,15 @@ class Gradle(
                     (systemPropKey to (value as String)).takeIf { systemPropKey != key }
                 }
             }
+
+            log.info {
+                "Will apply the following system properties defined in file '$gradlePropertiesFile': " +
+                        gradleSystemProperties
+            }
+        } else {
+            log.info {
+                "Not applying any system properties as no '$gradlePropertiesFile' file was found."
+            }
         }
 
         val gradleConnector = GradleConnector.newConnector()
