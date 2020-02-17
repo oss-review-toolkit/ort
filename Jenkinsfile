@@ -58,7 +58,7 @@ pipeline {
 
         string(
             name: 'DOWNSTREAM_JOB',
-            description: 'Name of an optional downstream job to trigger',
+            description: 'Optional name of a downstream job to trigger',
             defaultValue: ''
         )
     }
