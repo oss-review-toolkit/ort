@@ -57,8 +57,7 @@ data class Excludes(
     /**
      * Return the [ScopeExclude]s for the provided [scope].
      */
-    fun findScopeExcludes(scope: Scope): List<ScopeExclude> =
-        scopes.filter { it.matches(scope.name) }
+    fun findScopeExcludes(scope: Scope): List<ScopeExclude> = scopes.filter { it.matches(scope.name) }
 
     /**
      * True if any [path exclude][paths] matches [path].
@@ -68,8 +67,7 @@ data class Excludes(
     /**
      * True if the [scope] is excluded by this [Excludes] configuration.
      */
-    fun isScopeExcluded(scope: Scope) =
-        findScopeExcludes(scope).isNotEmpty()
+    fun isScopeExcluded(scope: Scope): Boolean = findScopeExcludes(scope).isNotEmpty()
 
     /**
      * Map the scope excludes for [project] by the names of the provided [scopes].
