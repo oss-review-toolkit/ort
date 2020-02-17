@@ -20,6 +20,7 @@
 package com.here.ort.model
 
 import io.kotlintest.matchers.beEmpty
+import io.kotlintest.matchers.collections.shouldContainExactlyInAnyOrder
 import io.kotlintest.should
 import io.kotlintest.shouldBe
 import io.kotlintest.specs.WordSpec
@@ -39,7 +40,7 @@ class ProjectTest : WordSpec({
 
             val dependencies = project.collectDependencies().map { it.toCoordinates() }
 
-            dependencies shouldBe listOf(
+            dependencies shouldContainExactlyInAnyOrder listOf(
                 "Maven:junit:junit:4.12",
                 "Maven:org.apache.commons:commons-lang3:3.5",
                 "Maven:org.apache.commons:commons-text:1.1",
@@ -61,7 +62,7 @@ class ProjectTest : WordSpec({
 
             val dependencies = project.collectDependencies(maxDepth = 1).map { it.toCoordinates() }
 
-            dependencies shouldBe listOf(
+            dependencies shouldContainExactlyInAnyOrder listOf(
                 "Maven:junit:junit:4.12",
                 "Maven:org.apache.commons:commons-text:1.1",
                 "Maven:org.apache.struts:struts2-assembly:2.5.14.1"
