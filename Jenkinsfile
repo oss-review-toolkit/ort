@@ -105,6 +105,8 @@ pipeline {
 
             steps {
                 sh '''
+                    /opt/ort/bin/set_gradle_proxy.sh
+
                     if [ "$ALLOW_DYNAMIC_VERSIONS" = "true" ]; then
                         ALLOW_DYNAMIC_VERSIONS_PARAM="--allow-dynamic-versions"
                     fi
