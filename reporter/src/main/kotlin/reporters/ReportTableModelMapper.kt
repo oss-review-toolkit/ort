@@ -94,6 +94,7 @@ class ReportTableModelMapper(private val resolutionProvider: ResolutionProvider)
             val allIds = sortedSetOf(project.id)
             allIds += project.collectDependencies()
 
+            val projectIssues = project.collectIssues()
             val tableRows = allIds.map { id ->
                 val scanResult = scanRecord?.scanResults?.find { it.id == id }
 
@@ -105,7 +106,7 @@ class ReportTableModelMapper(private val resolutionProvider: ResolutionProvider)
                 val declaredLicenses = ortResult.getDeclaredLicensesForId(id)
                 val detectedLicenses = licenseFindings[id]?.toSortedMap(compareBy { it.license }) ?: sortedMapOf()
 
-                val analyzerIssues = project.collectIssues(id).toMutableList()
+                val analyzerIssues = projectIssues[id].orEmpty().toMutableList()
                 analyzerResult.issues[id]?.let {
                     analyzerIssues += it
                 }
