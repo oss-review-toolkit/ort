@@ -22,6 +22,7 @@ package com.here.ort.reporter.reporters
 import com.here.ort.model.Identifier
 import com.here.ort.model.OrtIssue
 import com.here.ort.model.OrtResult
+import com.here.ort.model.Project
 import com.here.ort.model.RemoteArtifact
 import com.here.ort.model.RuleViolation
 import com.here.ort.model.VcsInfo
@@ -40,6 +41,18 @@ private fun Collection<ResolvableIssue>.filterUnresolved() = filter { !it.isReso
 
 private fun Excludes.scopeExcludesByName(scopeNames: Collection<String>): Map<String, List<ScopeExclude>> =
     scopeNames.associateWith { scopeName -> findScopeExcludes(scopeName) }
+
+private fun Project.getScopesForDependencies(): Map<Identifier, Set<String>> {
+    val result = mutableMapOf<Identifier, MutableSet<String>>()
+
+    scopes.forEach { scope ->
+        scope.collectDependencies().forEach { dependency ->
+            result.getOrPut(dependency, { mutableSetOf() }).add(scope.name)
+        }
+    }
+
+    return result
+}
 
 /**
  * A mapper which converts an [OrtIssue] to a [ReportTableModel] view model.
@@ -94,6 +107,7 @@ class ReportTableModelMapper(private val resolutionProvider: ResolutionProvider)
         val licenseFindings = ortResult.collectLicenseFindings()
 
         val projectTables = analyzerResult.projects.associateWith { project ->
+            val scopesForDependencies = project.getScopesForDependencies()
             val pathExcludes = excludes.findPathExcludes(project, ortResult)
 
             val allIds = sortedSetOf(project.id)
@@ -103,11 +117,9 @@ class ReportTableModelMapper(private val resolutionProvider: ResolutionProvider)
             val tableRows = allIds.map { id ->
                 val scanResult = scanRecord?.scanResults?.find { it.id == id }
 
-                val scopes = project
-                    .scopes
-                    .filter { id in it }
-                    .map { it.name }
-                    .let { scopesNames -> excludes.scopeExcludesByName(scopesNames).toSortedMap() }
+                val scopes = scopesForDependencies[id].orEmpty().let { scopesNames ->
+                    excludes.scopeExcludesByName(scopesNames).toSortedMap()
+                }
 
                 val concludedLicense = ortResult.getConcludedLicensesForId(id)
                 val declaredLicenses = ortResult.getDeclaredLicensesForId(id)
