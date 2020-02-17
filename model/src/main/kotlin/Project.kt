@@ -158,6 +158,11 @@ data class Project(
     override fun compareTo(other: Project) = id.compareTo(other.id)
 
     /**
+     * Return whether the package identified by [id] is contained as a (transitive) dependency in this project.
+     */
+    operator fun contains(id: Identifier) = scopes.any { id in it }
+
+    /**
      * Return all references to [id] as a dependency in this project.
      */
     fun findReferences(id: Identifier) = scopes.flatMap { it.findReferences(id) }
