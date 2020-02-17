@@ -36,7 +36,6 @@ import io.kotlintest.TestCase
 import io.kotlintest.matchers.beEmpty
 import io.kotlintest.matchers.collections.contain
 import io.kotlintest.matchers.collections.containExactly
-import io.kotlintest.matchers.containAll
 import io.kotlintest.matchers.haveSize
 import io.kotlintest.should
 import io.kotlintest.shouldBe
@@ -236,53 +235,6 @@ class ExcludesTest : WordSpec() {
                 val excludes = Excludes()
 
                 excludes.isScopeExcluded(scope1) shouldBe false
-            }
-        }
-
-        "scopeExcludesByName" should {
-            "return empty lists for scopes without a scope exclude" {
-                val excludes = Excludes()
-
-                val excludesByName = excludes.scopeExcludesByName(listOf(scope1, scope2))
-
-                excludesByName.keys should haveSize(2)
-                excludesByName.keys should containAll(scope1.name, scope2.name)
-                excludesByName.getValue(scope1.name) should beEmpty()
-                excludesByName.getValue(scope2.name) should beEmpty()
-            }
-
-            "return the correct mapping of scope names to scope excludes" {
-                val excludes = Excludes(
-                    scopes = listOf(scopeExclude1, scopeExclude2)
-                )
-
-                val excludesByName = excludes.scopeExcludesByName(setOf(scope1, scope2))
-
-                excludesByName.keys should haveSize(2)
-                excludesByName.keys should containAll(scope1.name, scope2.name)
-                excludesByName.getValue(scope1.name).let {
-                    it should haveSize(1)
-                    it should contain(scopeExclude1)
-                }
-                excludesByName.getValue(scope2.name).let {
-                    it should haveSize(1)
-                    it should contain(scopeExclude2)
-                }
-            }
-
-            "only return mappings for requested scopes" {
-                val excludes = Excludes(
-                    scopes = listOf(scopeExclude1, scopeExclude2)
-                )
-
-                val excludesByName = excludes.scopeExcludesByName(listOf(scope1))
-
-                excludesByName.keys should haveSize(1)
-                excludesByName.keys should contain(scope1.name)
-                excludesByName.getValue(scope1.name).let {
-                    it should haveSize(1)
-                    it should contain(scopeExclude1)
-                }
             }
         }
     }

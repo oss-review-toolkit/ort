@@ -68,10 +68,4 @@ data class Excludes(
      * True if the [scope] is excluded by this [Excludes] configuration.
      */
     fun isScopeExcluded(scope: Scope): Boolean = findScopeExcludes(scope).isNotEmpty()
-
-    /**
-     * Map the scope excludes for [project] by the names of the provided [scopes].
-     */
-    fun scopeExcludesByName(scopes: Collection<Scope>): Map<String, List<ScopeExclude>> =
-        scopes.associate { Pair(it.name, findScopeExcludes(it)) }
 }
