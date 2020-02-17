@@ -146,8 +146,8 @@ data class OrtResult(
      * depth of [maxLevel] where counting starts at 0 (for the [Project] or [Package] itself) and 1 are direct
      * dependencies etc. A value below 0 means to not limit the depth.
      */
-    fun collectDependencies(id: Identifier, maxLevel: Int = -1): SortedSet<Identifier> {
-        val dependencies = sortedSetOf<Identifier>()
+    fun collectDependencies(id: Identifier, maxLevel: Int = -1): Set<Identifier> {
+        val dependencies = mutableSetOf<Identifier>()
 
         getProjects().forEach { project ->
             if (project.id == id) {

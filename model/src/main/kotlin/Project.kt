@@ -105,8 +105,8 @@ data class Project(
     fun collectDependencies(
         maxDepth: Int = -1,
         filterPredicate: (PackageReference) -> Boolean = { true }
-    ): SortedSet<Identifier> =
-        scopes.fold(sortedSetOf()) { refs, scope ->
+    ): Set<Identifier> =
+        scopes.fold(mutableSetOf()) { refs, scope ->
             refs.also { it += scope.collectDependencies(maxDepth, filterPredicate) }
         }
 

@@ -72,7 +72,7 @@ data class PackageReference(
     fun collectDependencies(
         maxDepth: Int = -1,
         filterPredicate: (PackageReference) -> Boolean = { true }
-    ): SortedSet<Identifier> =
+    ): Set<Identifier> =
         dependencies.fold(sortedSetOf()) { refs, ref ->
             refs.also {
                 if (maxDepth != 0) {
