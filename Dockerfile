@@ -111,6 +111,6 @@ RUN \
         ln -s /usr/local/scancode-toolkit-$SCANCODE_VERSION/scancode /usr/local/bin/scancode
 
 COPY --from=build /usr/local/src/ort/cli/build/distributions/ort-*.tar /opt/ort.tar
-RUN mkdir /opt/ort && tar xf /opt/ort.tar -C /opt/ort --strip-components 1
+RUN mkdir /opt/ort && tar xf /opt/ort.tar -C /opt/ort --strip-components 1 && rm /opt/ort.tar
 
 ENTRYPOINT ["/opt/ort/bin/ort"]
