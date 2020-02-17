@@ -22,6 +22,8 @@ package com.here.ort.model
 import com.fasterxml.jackson.annotation.JsonAlias
 import com.fasterxml.jackson.annotation.JsonInclude
 
+import java.util.Deque
+import java.util.LinkedList
 import java.util.SortedSet
 
 // A custom value filter for [PackageLinkage] to work around
@@ -72,15 +74,27 @@ data class PackageReference(
     fun collectDependencies(
         maxDepth: Int = -1,
         filterPredicate: (PackageReference) -> Boolean = { true }
-    ): Set<Identifier> =
-        dependencies.fold(sortedSetOf()) { refs, ref ->
-            refs.also {
-                if (maxDepth != 0) {
-                    if (filterPredicate(ref)) it += ref.id
-                    it += ref.collectDependencies(maxDepth - 1, filterPredicate)
-                }
+    ): Set<Identifier> {
+        val result = mutableSetOf<Identifier>()
+
+        val queue: Deque<Pair<PackageReference, Int>> = LinkedList()
+        fun enqueue(packages: Collection<PackageReference>, level: Int) {
+            if (maxDepth < 0 || level <= maxDepth) {
+                packages.forEach { queue.add(Pair(it, level)) }
             }
         }
+
+        enqueue(dependencies, 1)
+        while (queue.isNotEmpty()) {
+            val (pkg, level) = queue.removeFirst()
+
+            if (filterPredicate(pkg)) result += pkg.id
+
+            enqueue(pkg.dependencies, level + 1)
+        }
+
+        return result
+    }
 
     /**
      * A comparison function to sort package references by their identifier. This function ignores all other properties
