@@ -24,7 +24,10 @@ import com.here.ort.model.OrtIssue
 import com.here.ort.model.OrtResult
 import com.here.ort.model.RemoteArtifact
 import com.here.ort.model.RuleViolation
+import com.here.ort.model.Scope
 import com.here.ort.model.VcsInfo
+import com.here.ort.model.config.Excludes
+import com.here.ort.model.config.ScopeExclude
 import com.here.ort.reporter.ResolutionProvider
 import com.here.ort.reporter.reporters.ReportTableModel.DependencyRow
 import com.here.ort.reporter.reporters.ReportTableModel.IssueRow
@@ -35,6 +38,9 @@ import com.here.ort.reporter.reporters.ReportTableModel.SummaryRow
 import com.here.ort.reporter.reporters.ReportTableModel.SummaryTable
 
 private fun Collection<ResolvableIssue>.filterUnresolved() = filter { !it.isResolved }
+
+private fun Excludes.scopeExcludesByName(scopes: Collection<Scope>): Map<String, List<ScopeExclude>> =
+    scopes.associate { Pair(it.name, findScopeExcludes(it)) }
 
 /**
  * A mapper which converts an [OrtIssue] to a [ReportTableModel] view model.
