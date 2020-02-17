@@ -143,29 +143,6 @@ data class Project(
     }
 
     /**
-     * Return a de-duplicated list of all [OrtIssue]s for the provided [id].
-     */
-    fun collectIssues(id: Identifier): List<OrtIssue> {
-        val collectedIssues = mutableListOf<OrtIssue>()
-
-        fun addIssues(pkgRef: PackageReference) {
-            if (pkgRef.id == id) {
-                collectedIssues += pkgRef.issues
-            }
-
-            pkgRef.dependencies.forEach { addIssues(it) }
-        }
-
-        for (scope in scopes) {
-            for (dependency in scope.dependencies) {
-                addIssues(dependency)
-            }
-        }
-
-        return collectedIssues.distinct()
-    }
-
-    /**
      * Return the set of [Identifier]s that refer to sub-projects of this [Project].
      */
     fun collectSubProjects(): SortedSet<Identifier> =
