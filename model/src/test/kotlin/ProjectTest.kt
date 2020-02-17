@@ -27,6 +27,11 @@ import io.kotlintest.specs.WordSpec
 import java.io.File
 import java.time.Instant
 
+private fun readAnalyzerResult(analyzerResultFilename: String): Project =
+    File("../analyzer/src/funTest/assets/projects/synthetic")
+        .resolve(analyzerResultFilename)
+        .readValue<ProjectAnalyzerResult>().project
+
 class ProjectTest : WordSpec({
     "collectDependencies" should {
         "get all dependencies by default" {
@@ -38,17 +43,13 @@ class ProjectTest : WordSpec({
                 "Maven:org.hamcrest:hamcrest-core:1.3"
             )
 
-            val analyzerResultsFile =
-                File("../analyzer/src/funTest/assets/projects/synthetic/gradle-expected-output-lib.yml")
-            val project = analyzerResultsFile.readValue<ProjectAnalyzerResult>().project
+            val project = readAnalyzerResult("gradle-expected-output-lib.yml")
 
             project.collectDependencies().map { it.toCoordinates() } shouldBe expectedDependencies
         }
 
         "get no dependencies for a depth of 0" {
-            val analyzerResultsFile =
-                File("../analyzer/src/funTest/assets/projects/synthetic/gradle-expected-output-lib.yml")
-            val project = analyzerResultsFile.readValue<ProjectAnalyzerResult>().project
+            val project = readAnalyzerResult("gradle-expected-output-lib.yml")
 
             project.collectDependencies(maxDepth = 0) should beEmpty()
         }
@@ -60,9 +61,7 @@ class ProjectTest : WordSpec({
                 "Maven:org.apache.struts:struts2-assembly:2.5.14.1"
             )
 
-            val analyzerResultsFile =
-                File("../analyzer/src/funTest/assets/projects/synthetic/gradle-expected-output-lib.yml")
-            val project = analyzerResultsFile.readValue<ProjectAnalyzerResult>().project
+            val project = readAnalyzerResult("gradle-expected-output-lib.yml")
 
             project.collectDependencies(maxDepth = 1).map { it.toCoordinates() } shouldBe expectedDependencies
         }
@@ -70,11 +69,7 @@ class ProjectTest : WordSpec({
 
     "collectIssues" should {
         "find all issues" {
-            val analyzerResultsFile = File(
-                "../analyzer/src/funTest/assets/projects/synthetic/" +
-                        "gradle-expected-output-lib-without-repo.yml"
-            )
-            val project = analyzerResultsFile.readValue<ProjectAnalyzerResult>().project
+            val project = readAnalyzerResult("gradle-expected-output-lib-without-repo.yml")
 
             project.collectIssues() shouldBe mapOf(
                 Identifier("Unknown:org.apache.commons:commons-text:1.1") to setOf(
