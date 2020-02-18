@@ -92,31 +92,23 @@ class FindingsMatcher(
             "The given license and copyright findings must all point to the same file."
         }
 
-        val copyrightsForLicenses = mutableMapOf<String, MutableSet<CopyrightFindings>>()
         val allCopyrightStatements = copyrights.mapTo(mutableSetOf()) { it.toCopyrightFindings() }
 
-        when (licenses.size) {
-            0 -> {
-                // If there is no license finding but copyright findings, associate them with all root licenses.
-                rootLicenses.associateByTo(copyrightsForLicenses, { it }, { allCopyrightStatements })
-            }
+        // If there is no license finding but copyright findings, associate them with all root licenses.
+        if (licenses.isEmpty()) return rootLicenses.associateBy({ it }, { allCopyrightStatements })
 
-            1 -> {
-                // If there is only a single license finding, associate all copyright findings with that license.
-                licenses.associateByTo(copyrightsForLicenses, { it.license }, { allCopyrightStatements })
-            }
+        // If there is only a single license finding, associate all copyright findings with that license.
+        if (licenses.size == 1) return licenses.associateBy({ it.license }, { allCopyrightStatements })
 
-            else -> {
-                // If there are multiple license findings in a single file, search for the closest copyright statements
-                // for each of these, if any.
-                licenses.forEach {
-                    val closestCopyrights = getClosestCopyrightStatements(
-                        copyrights = copyrights,
-                        licenseStartLine = it.location.startLine
-                    )
-                    copyrightsForLicenses.getOrPut(it.license) { mutableSetOf() } += closestCopyrights
-                }
-            }
+        // If there are multiple license findings in a single file, search for the closest copyright statements
+        // for each of these, if any.
+        val copyrightsForLicenses = mutableMapOf<String, MutableSet<CopyrightFindings>>()
+        licenses.forEach {
+            val closestCopyrights = getClosestCopyrightStatements(
+                copyrights = copyrights,
+                licenseStartLine = it.location.startLine
+            )
+            copyrightsForLicenses.getOrPut(it.license) { mutableSetOf() } += closestCopyrights
         }
 
         return copyrightsForLicenses
