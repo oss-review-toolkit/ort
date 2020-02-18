@@ -256,7 +256,7 @@ internal fun OrtResult.processAllCopyrightStatements(
 
             processResult.unprocessedStatements.filterNot { it in copyrightGarbage }.forEach {
                 result.add(
-                        ProcessedCopyrightStatement(
+                    ProcessedCopyrightStatement(
                         packageId = id,
                         licenseId = licenseFindings.license,
                         statement = it,
@@ -442,7 +442,7 @@ internal fun RepositoryConfiguration.replaceScopeExcludes(scopeExcludes: List<Sc
  * Return a copy with the [RuleViolationResolution]s replaced by the given [ruleViolations].
  */
 internal fun RepositoryConfiguration.replaceRuleViolationResolutions(ruleViolations: List<RuleViolationResolution>):
-    RepositoryConfiguration = copy(resolutions = resolutions.copy(ruleViolations = ruleViolations))
+        RepositoryConfiguration = copy(resolutions = resolutions.copy(ruleViolations = ruleViolations))
 
 /**
  * Return a copy with sorting applied to all entry types which are to be sorted.
