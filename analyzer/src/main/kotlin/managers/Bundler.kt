@@ -83,7 +83,7 @@ class Bundler(
 
     override fun command(workingDir: File?) = if (Os.isWindows) "bundle.bat" else "bundle"
 
-    override fun getVersionRequirement(): Requirement = Requirement.buildIvy("[1.16,2.1[")
+    override fun getVersionRequirement(): Requirement = Requirement.buildIvy("[1.16,2.2[")
 
     override fun beforeResolution(definitionFiles: List<File>) =
         // We do not actually depend on any features specific to a version of Bundler, but we still want to stick to
