@@ -26,7 +26,7 @@ import java.io.File
 import java.io.InputStream
 
 /**
- * A [FileStorage] that stores file in a [directory] of the local file system. The [read] and [write] operations are
+ * A [FileStorage] that stores files in a [directory] of the local file system. The [read] and [write] operations are
  * [Synchronized].
  */
 class LocalFileStorage(
