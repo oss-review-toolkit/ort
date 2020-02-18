@@ -20,6 +20,8 @@
 package com.here.ort.model
 
 import com.here.ort.model.config.AnalyzerConfiguration
+import io.kotlintest.matchers.collections.shouldContainExactly
+import io.kotlintest.matchers.collections.shouldContainExactlyInAnyOrder
 
 import io.kotlintest.matchers.haveSize
 import io.kotlintest.matchers.match
@@ -44,7 +46,7 @@ class OrtResultTest : WordSpec({
             val id = Identifier("Maven:com.typesafe.akka:akka-stream_2.12:2.5.6")
             val dependencies = ortResult.collectDependencies(id, 1).map { it.toCoordinates() }
 
-            dependencies shouldBe listOf(
+            dependencies shouldContainExactlyInAnyOrder listOf(
                 "Maven:com.typesafe.akka:akka-actor_2.12:2.5.6",
                 "Maven:com.typesafe:ssl-config-core_2.12:0.2.2",
                 "Maven:org.reactivestreams:reactive-streams:1.0.1"
@@ -62,7 +64,7 @@ class OrtResultTest : WordSpec({
 
             ids should haveSize(9)
             idsWithoutSubProjects should haveSize(8)
-            actualIds shouldBe sortedSetOf(Identifier("Gradle:com.here.ort.gradle.example:lib:1.0.0"))
+            actualIds shouldContainExactly listOf(Identifier("Gradle:com.here.ort.gradle.example:lib:1.0.0"))
         }
     }
 
