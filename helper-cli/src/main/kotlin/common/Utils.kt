@@ -334,7 +334,7 @@ internal fun OrtResult.getViolatedRulesByLicense(
  * Return the Package with the given [id] denoting either a [Project] or a [Package].
  */
 internal fun OrtResult.getPackageOrProject(id: Identifier): Package? =
-    getProject(id)?.let { it.toPackage() } ?: getPackage(id)?.pkg
+    getProject(id)?.toPackage() ?: getPackage(id)?.pkg
 
 /**
  * Return the first [Provenance] matching the given [id] or null if there is no match.
