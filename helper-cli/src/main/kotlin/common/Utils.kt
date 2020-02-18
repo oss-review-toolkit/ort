@@ -146,7 +146,7 @@ internal fun findRepositoryPaths(directory: File): Map<String, Set<String>> {
 internal fun <K, V> greedySetCover(sets: Map<K, Set<V>>): Set<K> {
     val result = mutableSetOf<K>()
 
-    val uncovered = sets.values.flatMap { it }.toMutableSet()
+    val uncovered = sets.values.flatten().toMutableSet()
     val queue = sets.entries.toMutableSet()
 
     while (queue.isNotEmpty()) {
