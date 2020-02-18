@@ -24,12 +24,13 @@ import com.here.ort.utils.safeMkdirs
 
 import java.io.File
 import java.io.InputStream
+import java.io.OutputStream
 
 /**
  * A [FileStorage] that stores files in a [directory] of the local file system. The [read] and [write] operations are
  * [Synchronized].
  */
-class LocalFileStorage(
+open class LocalFileStorage(
     /**
      * The directory used to store files in.
      */
@@ -57,8 +58,7 @@ class LocalFileStorage(
         return file.inputStream()
     }
 
-    @Synchronized
-    override fun write(path: String, inputStream: InputStream) {
+    protected open fun getOutputStream(path: String): OutputStream {
         val file = directory.resolve(path)
 
         require(file.canonicalFile.startsWith(directory.canonicalFile)) {
@@ -67,7 +67,12 @@ class LocalFileStorage(
 
         file.parentFile.safeMkdirs()
 
-        file.outputStream().use {
+        return file.outputStream()
+    }
+
+    @Synchronized
+    override fun write(path: String, inputStream: InputStream) {
+        getOutputStream(path).use {
             inputStream.copyTo(it)
         }
     }
