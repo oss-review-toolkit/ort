@@ -376,8 +376,8 @@ fun OrtResult.getScanIssues(omitExcluded: Boolean = false): List<OrtIssue> {
  */
 internal fun OrtResult.getRepositoryPathExcludes(): RepositoryPathExcludes {
     fun isDefinitionsFile(pathExclude: PathExclude) = PackageManager.ALL.any {
-        it.matchersForDefinitionFiles.any {
-            pathExclude.pattern.endsWith(it.toString())
+        it.matchersForDefinitionFiles.any { matcher ->
+            pathExclude.pattern.endsWith(matcher.toString())
         }
     }
 
