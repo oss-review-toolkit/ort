@@ -52,6 +52,7 @@ import com.here.ort.utils.CopyrightStatementsProcessor
 import com.here.ort.utils.safeMkdirs
 import com.here.ort.utils.OkHttpClientHelper
 import com.here.ort.utils.expandTilde
+import com.here.ort.utils.stripCredentialsFromUrl
 
 import java.io.File
 import java.io.IOException
@@ -132,11 +133,10 @@ internal fun findRepositoryPaths(directory: File): Map<String, Set<String>> {
 
     ortResult.repository.nestedRepositories.forEach { (path, vcs) ->
         result
-            .getOrPut(vcs.url) { mutableSetOf() }
+            .getOrPut(vcs.url.stripCredentialsFromUrl()) { mutableSetOf() }
             .add(path)
     }
 
-    // TODO: strip the user info from the vcs URLs
     return result
 }
 
