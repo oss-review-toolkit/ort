@@ -45,19 +45,19 @@ class OrtResultTest : WordSpec({
                 "Maven:org.reactivestreams:reactive-streams:1.0.1"
             )
 
-            val result = readOrtResult("external/sbt-multi-project-example-expected-output.yml")
+            val ortResult = readOrtResult("external/sbt-multi-project-example-expected-output.yml")
 
             val id = Identifier("Maven:com.typesafe.akka:akka-stream_2.12:2.5.6")
-            result.collectDependencies(id, 1).map { it.toCoordinates() } shouldBe expectedDependencies
+            ortResult.collectDependencies(id, 1).map { it.toCoordinates() } shouldBe expectedDependencies
         }
     }
 
     "collectProjectsAndPackages" should {
         "be able to get all ids except for ones for sub-projects" {
-            val result = readOrtResult("synthetic/gradle-all-dependencies-expected-result.yml")
+            val ortResult = readOrtResult("synthetic/gradle-all-dependencies-expected-result.yml")
 
-            val ids = result.collectProjectsAndPackages()
-            val idsWithoutSubProjects = result.collectProjectsAndPackages(false)
+            val ids = ortResult.collectProjectsAndPackages()
+            val idsWithoutSubProjects = ortResult.collectProjectsAndPackages(false)
 
             val actualIds = ids - idsWithoutSubProjects
             val expectedIds = sortedSetOf(Identifier("Gradle:com.here.ort.gradle.example:lib:1.0.0"))
