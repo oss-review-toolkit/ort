@@ -39,16 +39,16 @@ private fun readOrtResult(relativeOrtResultFilePath: String): OrtResult =
 class OrtResultTest : WordSpec({
     "collectDependencies" should {
         "be able to get all direct dependencies of a package" {
-            val expectedDependencies = listOf(
+            val ortResult = readOrtResult("external/sbt-multi-project-example-expected-output.yml")
+
+            val id = Identifier("Maven:com.typesafe.akka:akka-stream_2.12:2.5.6")
+            val dependencies = ortResult.collectDependencies(id, 1).map { it.toCoordinates() }
+
+            dependencies shouldBe listOf(
                 "Maven:com.typesafe.akka:akka-actor_2.12:2.5.6",
                 "Maven:com.typesafe:ssl-config-core_2.12:0.2.2",
                 "Maven:org.reactivestreams:reactive-streams:1.0.1"
             )
-
-            val ortResult = readOrtResult("external/sbt-multi-project-example-expected-output.yml")
-
-            val id = Identifier("Maven:com.typesafe.akka:akka-stream_2.12:2.5.6")
-            ortResult.collectDependencies(id, 1).map { it.toCoordinates() } shouldBe expectedDependencies
         }
     }
 
@@ -58,14 +58,11 @@ class OrtResultTest : WordSpec({
 
             val ids = ortResult.collectProjectsAndPackages()
             val idsWithoutSubProjects = ortResult.collectProjectsAndPackages(false)
-
             val actualIds = ids - idsWithoutSubProjects
-            val expectedIds = sortedSetOf(Identifier("Gradle:com.here.ort.gradle.example:lib:1.0.0"))
 
             ids should haveSize(9)
             idsWithoutSubProjects should haveSize(8)
-
-            actualIds shouldBe expectedIds
+            actualIds shouldBe sortedSetOf(Identifier("Gradle:com.here.ort.gradle.example:lib:1.0.0"))
         }
     }
 
