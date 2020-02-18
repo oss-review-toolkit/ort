@@ -110,7 +110,7 @@ class HttpFileStorageTest : WordSpec() {
 
         "Writing a file" should {
             "succeed if the file does not exist" {
-                storage.write("target/file", "content".toByteArray().inputStream())
+                storage.write("target/file", "content".byteInputStream())
 
                 handler.requests["/target/file"] shouldBe "content"
             }
@@ -118,7 +118,7 @@ class HttpFileStorageTest : WordSpec() {
             "succeed if the file does exist" {
                 handler.requests["/target/file"] = "old content"
 
-                storage.write("target/file", "content".toByteArray().inputStream())
+                storage.write("target/file", "content".byteInputStream())
 
                 handler.requests["/target/file"] shouldBe "content"
             }

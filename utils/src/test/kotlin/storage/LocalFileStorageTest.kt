@@ -95,7 +95,7 @@ class LocalFileStorageTest : WordSpec() {
         "Writing a file" should {
             "succeed if the file does not exist" {
                 storage { storage, directory ->
-                    storage.write("target/file", "content".toByteArray().inputStream())
+                    storage.write("target/file", "content".byteInputStream())
 
                     val file = directory.resolve("target/file")
 
@@ -109,7 +109,7 @@ class LocalFileStorageTest : WordSpec() {
                     val file = directory.resolve("file")
                     file.writeText("old content")
 
-                    storage.write("file", "content".toByteArray().inputStream())
+                    storage.write("file", "content".byteInputStream())
 
                     file.isFile shouldBe true
                     file.readText() shouldBe "content"
@@ -119,7 +119,7 @@ class LocalFileStorageTest : WordSpec() {
             "fail if the target path is not inside the storage directory" {
                 storage { storage, directory ->
                     shouldThrow<IllegalArgumentException> {
-                        storage.write("../file", "content".toByteArray().inputStream())
+                        storage.write("../file", "content".byteInputStream())
                     }
 
                     val file = directory.resolve("../file")
@@ -134,7 +134,7 @@ class LocalFileStorageTest : WordSpec() {
                     dir.safeMkdirs()
 
                     shouldThrow<FileNotFoundException> {
-                        storage.write("dir", "content".toByteArray().inputStream())
+                        storage.write("dir", "content".byteInputStream())
                     }
 
                     dir.isDirectory shouldBe true
