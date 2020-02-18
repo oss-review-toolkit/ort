@@ -68,12 +68,12 @@ class LocalFileStorageTest : WordSpec() {
         "Reading a file" should {
             "succeed if the file exists" {
                 storage { storage, directory ->
-                    val file = directory.resolve("file-exists")
-                    file.writeText("file-exists")
+                    val file = directory.resolve("existing-file")
+                    file.writeText("content")
 
-                    val content = storage.read("file-exists").bufferedReader().use(BufferedReader::readText)
+                    val content = storage.read("existing-file").bufferedReader().use(BufferedReader::readText)
 
-                    content shouldBe "file-exists"
+                    content shouldBe "content"
                 }
             }
 
