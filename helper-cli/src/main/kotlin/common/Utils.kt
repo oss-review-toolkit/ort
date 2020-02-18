@@ -122,7 +122,7 @@ internal fun findFilesRecursive(directory: File): List<String> {
 internal fun findRepositoryPaths(directory: File): Map<String, Set<String>> {
     require(directory.isDirectory)
 
-    val analyzer = Analyzer(AnalyzerConfiguration(true, true))
+    val analyzer = Analyzer(AnalyzerConfiguration(ignoreToolVersions = true, allowDynamicVersions = true))
     val ortResult = analyzer.analyze(
         absoluteProjectPath = directory,
         packageManagers = emptyList()
