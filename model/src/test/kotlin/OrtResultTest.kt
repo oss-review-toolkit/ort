@@ -31,6 +31,11 @@ import io.kotlintest.specs.WordSpec
 import java.io.File
 import java.lang.IllegalArgumentException
 
+private fun readOrtResult(relativeOrtResultFilePath: String): OrtResult =
+    File("../analyzer/src/funTest/assets/projects")
+        .resolve(relativeOrtResultFilePath)
+        .readValue()
+
 class OrtResultTest : WordSpec({
     "collectDependencies" should {
         "be able to get all direct dependencies of a package" {
@@ -40,9 +45,7 @@ class OrtResultTest : WordSpec({
                 "Maven:org.reactivestreams:reactive-streams:1.0.1"
             )
 
-            val projectsDir = File("../analyzer/src/funTest/assets/projects")
-            val resultFile = projectsDir.resolve("external/sbt-multi-project-example-expected-output.yml")
-            val result = resultFile.readValue<OrtResult>()
+            val result = readOrtResult("external/sbt-multi-project-example-expected-output.yml")
 
             val id = Identifier("Maven:com.typesafe.akka:akka-stream_2.12:2.5.6")
             result.collectDependencies(id, 1).map { it.toCoordinates() } shouldBe expectedDependencies
@@ -51,9 +54,7 @@ class OrtResultTest : WordSpec({
 
     "collectProjectsAndPackages" should {
         "be able to get all ids except for ones for sub-projects" {
-            val projectsDir = File("../analyzer/src/funTest/assets/projects")
-            val resultFile = projectsDir.resolve("synthetic/gradle-all-dependencies-expected-result.yml")
-            val result = resultFile.readValue<OrtResult>()
+            val result = readOrtResult("synthetic/gradle-all-dependencies-expected-result.yml")
 
             val ids = result.collectProjectsAndPackages()
             val idsWithoutSubProjects = result.collectProjectsAndPackages(false)
