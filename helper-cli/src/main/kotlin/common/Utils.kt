@@ -130,7 +130,7 @@ internal fun findRepositoryPaths(directory: File): Map<String, Set<String>> {
 
     val result = mutableMapOf<String, MutableSet<String>>()
 
-    ortResult.repository.nestedRepositories.forEach { path, vcs ->
+    ortResult.repository.nestedRepositories.forEach { (path, vcs) ->
         result
             .getOrPut(vcs.url) { mutableSetOf() }
             .add(path)
