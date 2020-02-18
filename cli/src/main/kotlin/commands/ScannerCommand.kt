@@ -48,7 +48,7 @@ import com.here.ort.scanner.storages.SCAN_RESULTS_FILE_NAME
 import com.here.ort.utils.expandTilde
 import com.here.ort.utils.getUserOrtDirectory
 import com.here.ort.utils.log
-import com.here.ort.utils.storage.LocalFileStorage
+import com.here.ort.utils.storage.XZCompressedLocalFileStorage
 
 import java.io.File
 
@@ -101,7 +101,7 @@ class ScannerCommand : CliktCommand(name = "scan", help = "Run existing copyrigh
         val config = scannerConfiguration ?: ScannerConfiguration()
 
         // By default use a file based scan results storage.
-        val localFileStorage = LocalFileStorage(getUserOrtDirectory().resolve("$TOOL_NAME/results"))
+        val localFileStorage = XZCompressedLocalFileStorage(getUserOrtDirectory().resolve("$TOOL_NAME/results"))
         val fileBasedStorage = FileBasedStorage(localFileStorage)
         ScanResultsStorage.storage = fileBasedStorage
 
