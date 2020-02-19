@@ -92,13 +92,11 @@ class FindingsMatcher(
             "The given license and copyright findings must all point to the same file."
         }
 
-        val allCopyrightStatements = copyrights.toSet()
-
         // If there is no license finding but copyright findings, associate them with all root licenses.
-        if (licenses.isEmpty()) return rootLicenses.associateBy({ it }, { allCopyrightStatements })
+        if (licenses.isEmpty()) return rootLicenses.associateBy({ it }, { copyrights.toSet() })
 
         // If there is only a single license finding, associate all copyright findings with that license.
-        if (licenses.size == 1) return licenses.associateBy({ it.license }, { allCopyrightStatements })
+        if (licenses.size == 1) return licenses.associateBy({ it.license }, { copyrights.toSet() })
 
         // If there are multiple license findings in a single file, search for the closest copyright statements
         // for each of these, if any.
