@@ -28,70 +28,65 @@ import com.here.ort.model.Scope
 import io.kotlintest.shouldBe
 import io.kotlintest.specs.StringSpec
 
-import java.io.File
 import java.time.Instant
 
-class DotNetSupportTest : StringSpec() {
-    private val projectDir = File("src/funTest/assets/projects/synthetic/dotnet").absoluteFile
-
-    init {
-        "non-existing project gets registered as error and is not added to scope" {
-            val testPackage = Pair("trifj", "2.0.0")
-            val testPackage2 = Pair("tffrifj", "2.0.0")
-            val dotNetSupport = DotNetSupport(mapOf(testPackage, testPackage2))
-            val resultScope = Scope("dependencies", sortedSetOf())
-            val resultErrors = listOf(
-                OrtIssue(
-                    timestamp = Instant.EPOCH,
-                    source = "nuget-API",
-                    message = "${testPackage.first}:${testPackage.second} can not be found on Nugets RestAPI."
-                ),
-                OrtIssue(
-                    timestamp = Instant.EPOCH,
-                    source = "nuget-API",
-                    message = "${testPackage2.first}:${testPackage2.second} can not be found on Nugets RestAPI."
-                )
+class DotNetSupportTest : StringSpec({
+    "non-existing project gets registered as error and is not added to scope" {
+        val testPackage = Pair("trifj", "2.0.0")
+        val testPackage2 = Pair("tffrifj", "2.0.0")
+        val dotNetSupport = DotNetSupport(mapOf(testPackage, testPackage2))
+        val resultScope = Scope("dependencies", sortedSetOf())
+        val resultErrors = listOf(
+            OrtIssue(
+                timestamp = Instant.EPOCH,
+                source = "nuget-API",
+                message = "${testPackage.first}:${testPackage.second} can not be found on Nugets RestAPI."
+            ),
+            OrtIssue(
+                timestamp = Instant.EPOCH,
+                source = "nuget-API",
+                message = "${testPackage2.first}:${testPackage2.second} can not be found on Nugets RestAPI."
             )
+        )
 
-            dotNetSupport.scope shouldBe resultScope
-            dotNetSupport.issues.map { it.copy(timestamp = Instant.EPOCH) } shouldBe resultErrors
-        }
+        dotNetSupport.scope shouldBe resultScope
+        dotNetSupport.issues.map { it.copy(timestamp = Instant.EPOCH) } shouldBe resultErrors
+    }
 
-        "dependencies are detected correctly" {
-            val testPackage = Pair("WebGrease", "1.5.2")
-            val dotNetSupport = DotNetSupport(mapOf(testPackage))
-            val resultScope = Scope(
-                "dependencies", sortedSetOf(
-                    PackageReference(
-                        Identifier(
-                            type = "nuget",
-                            namespace = "",
-                            name = "WebGrease",
-                            version = "1.5.2"
+    "dependencies are detected correctly" {
+        val testPackage = Pair("WebGrease", "1.5.2")
+        val dotNetSupport = DotNetSupport(mapOf(testPackage))
+        val resultScope = Scope(
+            "dependencies", sortedSetOf(
+                PackageReference(
+                    Identifier(
+                        type = "nuget",
+                        namespace = "",
+                        name = "WebGrease",
+                        version = "1.5.2"
+                    ),
+                    dependencies = sortedSetOf(
+                        PackageReference(
+                            Identifier(
+                                type = "nuget",
+                                namespace = "",
+                                name = "Antlr",
+                                version = "3.4.1.9004"
+                            )
                         ),
-                        dependencies = sortedSetOf(
-                            PackageReference(
-                                Identifier(
-                                    type = "nuget",
-                                    namespace = "",
-                                    name = "Antlr",
-                                    version = "3.4.1.9004"
-                                )
-                            ),
-                            PackageReference(
-                                Identifier(
-                                    type = "nuget",
-                                    namespace = "",
-                                    name = "Newtonsoft.Json",
-                                    version = "5.0.4"
-                                )
+                        PackageReference(
+                            Identifier(
+                                type = "nuget",
+                                namespace = "",
+                                name = "Newtonsoft.Json",
+                                version = "5.0.4"
                             )
                         )
                     )
                 )
             )
+        )
 
-            dotNetSupport.scope shouldBe resultScope
-        }
+        dotNetSupport.scope shouldBe resultScope
     }
-}
+})
