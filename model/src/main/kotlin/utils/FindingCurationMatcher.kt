@@ -31,9 +31,9 @@ import java.nio.file.Paths
  */
 class FindingCurationMatcher {
     private fun isPathMatching(finding: LicenseFinding, curation: LicenseFindingCuration): Boolean =
-        FileSystems.getDefault().getPathMatcher("glob:${curation.path}").let {
-            it.matches(Paths.get(finding.location.path))
-        }
+        FileSystems.getDefault()
+            .getPathMatcher("glob:${curation.path}")
+            .matches(Paths.get(finding.location.path))
 
     private fun isStartLineMatching(finding: LicenseFinding, curation: LicenseFindingCuration): Boolean =
         curation.startLines.isEmpty() || curation.startLines.any { it.equals(finding.location.startLine) }
