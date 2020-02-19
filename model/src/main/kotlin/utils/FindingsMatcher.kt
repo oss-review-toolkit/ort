@@ -23,11 +23,22 @@ import com.here.ort.model.CopyrightFinding
 import com.here.ort.model.CopyrightFindings
 import com.here.ort.model.LicenseFinding
 import com.here.ort.model.LicenseFindings
+import com.here.ort.model.TextLocation
 import com.here.ort.utils.FileMatcher
 
-import java.util.SortedSet
-
 import kotlin.math.absoluteValue
+
+private fun Collection<CopyrightFinding>.toCopyrightFindings(): List<CopyrightFindings> {
+    val locationsByStatement = mutableMapOf<String, MutableSet<TextLocation>>()
+
+    forEach { copyrightFinding ->
+        locationsByStatement.getOrPut(copyrightFinding.statement) { mutableSetOf() } += copyrightFinding.location
+    }
+
+    return locationsByStatement.map { (statement, locations) ->
+        CopyrightFindings(statement, locations.toSortedSet())
+    }
+}
 
 /**
  * A class for matching copyright findings to license findings. Copyright statements may be matched either to license
@@ -73,12 +84,6 @@ class FindingsMatcher(
 
         return closestCopyrights.toSet()
     }
-
-    private fun CopyrightFinding.toCopyrightFindings() =
-        CopyrightFindings(
-            statement = statement,
-            locations = sortedSetOf(location)
-        )
 
     /**
      * Associate copyright findings to license findings within a single file.
@@ -127,20 +132,15 @@ class FindingsMatcher(
             .groupBy({ it.license }, { it.location })
             .mapValuesTo(mutableMapOf()) { it.value.toSortedSet() }
 
-        val copyrightsForLicenses = mutableMapOf<String, SortedSet<CopyrightFindings>>()
+        val copyrightsForLicenses = mutableMapOf<String, MutableSet<CopyrightFinding>>()
+
         paths.forEach { path ->
             val licenses = licenseFindingsByPath[path].orEmpty()
             val copyrights = copyrightFindingsByPath[path].orEmpty()
             val findings = associateFileFindings(licenses, copyrights, rootLicenses)
 
-            findings.forEach { (license, copyrightsForLicense) ->
-                copyrightsForLicenses.getOrPut(license) { sortedSetOf() }.let { copyrightFindings ->
-                    copyrightsForLicense.forEach { copyrightFinding ->
-                        copyrightFindings.find { it.statement == copyrightFinding.statement }?.let {
-                            it.locations += copyrightFinding.location
-                        } ?: copyrightFindings.add(copyrightFinding.toCopyrightFindings())
-                    }
-                }
+            findings.forEach { (license, copyrightFindings) ->
+                copyrightsForLicenses.getOrPut(license) { mutableSetOf() } += copyrightFindings
             }
         }
 
@@ -148,7 +148,7 @@ class FindingsMatcher(
             LicenseFindings(
                 license,
                 locationsForLicenses[license] ?: sortedSetOf(),
-                copyrightsForLicenses[license] ?: sortedSetOf()
+                copyrightsForLicenses[license].orEmpty().toCopyrightFindings().toSortedSet()
             )
         }
     }
