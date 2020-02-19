@@ -37,6 +37,8 @@ import kotlin.random.Random
 
 private fun Collection<LicenseFindings>.getFindings(license: String) = single { it.license == license }
 
+private fun Collection<LicenseFindings>.getAllStatements() = flatMap { it.copyrights.map { it.statement } }
+
 private const val NESTED_LICENSE_FILE_A = "a/LICENSE"
 private const val NESTED_LICENSE_FILE_B = "b/LICENSE"
 
@@ -179,8 +181,8 @@ class FindingsMatcherTest : WordSpec() {
             }
         }
 
-        "Given a file with multiple license and copyright findings match" should {
-            "associate exactly the statements within the line threshold to the licenses and discard the others" {
+        "Given a file with multiple license and copyright findings, match" should {
+            "associate the statements to the license nearby but not to the license far away" {
                 // Use an arbitrary license start line that is clearly larger than DEFAULT_TOLERANCE_LINES.
                 val licenseStartLine = Random.nextInt(2 * DEFAULT_TOLERANCE_LINES, 20 * DEFAULT_TOLERANCE_LINES)
                 setupLicenseFinding("license nearby", "path", licenseStartLine)
@@ -192,13 +194,25 @@ class FindingsMatcherTest : WordSpec() {
 
                 val result = matcher.match(licenseFindings, copyrightFindings)
 
-                result.size shouldBe 2
                 result.getFindings("license nearby")
                     .copyrights.map { it.statement } shouldContainExactlyInAnyOrder listOf(
                         "statement2",
                         "statement3"
                     )
                 result.getFindings("license far away").copyrights should beEmpty()
+            }
+        }
+
+        "Given a file with multiple license and a not nearby copyright finding and a root license, match" should {
+            "discard that statement" {
+                setupLicenseFinding("license 1", "path", 1)
+                setupLicenseFinding("license 2", "path", 2)
+                setupCopyrightFinding("statement 1", "path", 2 + DEFAULT_TOLERANCE_LINES + 1)
+                setupLicenseFinding("root license 1", NESTED_LICENSE_FILE_A, 102)
+
+                val result = matcher.match(licenseFindings, copyrightFindings)
+
+                result.getAllStatements() should beEmpty()
             }
         }
     }
