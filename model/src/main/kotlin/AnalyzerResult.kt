@@ -90,8 +90,9 @@ data class AnalyzerResult(
      */
     @Suppress("UNUSED") // Not used in code, but shall be serialized.
     val hasIssues by lazy {
-        issues.any { it.value.isNotEmpty() }
-                || projects.any { it.scopes.any { it.dependencies.any { it.hasIssues() } } }
+        issues.any { it.value.isNotEmpty() } || projects.any { project ->
+            project.scopes.any { scope -> scope.dependencies.any { pkg -> pkg.hasIssues() } }
+        }
     }
 }
 
