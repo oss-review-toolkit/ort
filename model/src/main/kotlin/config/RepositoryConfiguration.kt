@@ -43,7 +43,7 @@ data class RepositoryConfiguration(
     /**
      * Defines curations for artifacts contained in this repository.
      */
-    @JsonInclude(value = JsonInclude.Include.CUSTOM, valueFilter = Curations::class)
+    @JsonInclude(value = JsonInclude.Include.CUSTOM, valueFilter = CurationsFilter::class)
     val curations: Curations = Curations()
 )
 
