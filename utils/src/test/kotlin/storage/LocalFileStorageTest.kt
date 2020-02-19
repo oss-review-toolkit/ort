@@ -19,6 +19,7 @@
 
 package com.here.ort.utils.storage
 
+import com.here.ort.utils.safeDeleteRecursively
 import com.here.ort.utils.safeMkdirs
 
 import io.kotlintest.shouldBe
@@ -35,6 +36,7 @@ class LocalFileStorageTest : WordSpec() {
         val directory = createTempDir(javaClass.simpleName)
         val storage = LocalFileStorage(directory)
         block(storage, directory)
+        directory.safeDeleteRecursively()
     }
 
     init {
