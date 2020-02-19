@@ -62,7 +62,7 @@ class FindingsMatcher(
     private fun getClosestCopyrightStatements(
         copyrights: List<CopyrightFinding>,
         licenseStartLine: Int
-    ): Set<CopyrightFindings> {
+    ): Set<CopyrightFinding> {
         require(copyrights.map { it.location.path }.distinct().size <= 1) {
             "Given copyright statements must all point to the same file."
         }
@@ -71,7 +71,7 @@ class FindingsMatcher(
             (it.location.startLine - licenseStartLine).absoluteValue <= toleranceLines
         }
 
-        return closestCopyrights.mapTo(mutableSetOf()) { it.toCopyrightFindings() }
+        return closestCopyrights.toSet()
     }
 
     private fun CopyrightFinding.toCopyrightFindings() =
@@ -103,12 +103,12 @@ class FindingsMatcher(
         // If there are multiple license findings in a single file, search for the closest copyright statements
         // for each of these, if any.
         val copyrightsForLicenses = mutableMapOf<String, MutableSet<CopyrightFindings>>()
-        licenses.forEach {
+        licenses.forEach { (license, location) ->
             val closestCopyrights = getClosestCopyrightStatements(
                 copyrights = copyrights,
-                licenseStartLine = it.location.startLine
-            )
-            copyrightsForLicenses.getOrPut(it.license) { mutableSetOf() } += closestCopyrights
+                licenseStartLine = location.startLine
+            ).map { it.toCopyrightFindings() }
+            copyrightsForLicenses.getOrPut(license) { mutableSetOf() } += closestCopyrights
         }
 
         return copyrightsForLicenses
