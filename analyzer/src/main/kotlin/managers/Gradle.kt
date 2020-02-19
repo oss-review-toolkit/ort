@@ -139,8 +139,8 @@ class Gradle(
             }
 
             log.info {
-                "Will apply the following system properties defined in file '$gradlePropertiesFile': " +
-                        gradleSystemProperties
+                "Will apply the following system properties defined in file '$gradlePropertiesFile':\n" +
+                        gradleSystemProperties.joinToString(separator = "\n") { "${it.first} = ${it.second}" }
             }
         } else {
             log.info {
