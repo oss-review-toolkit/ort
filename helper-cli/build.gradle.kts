@@ -45,7 +45,15 @@ repositories {
 
     // Need to repeat the analyzer's custom repository definition here, see
     // https://github.com/gradle/gradle/issues/4106.
-    maven("https://repo.gradle.org/gradle/libs-releases-local/")
+    exclusiveContent {
+        forRepository {
+            maven("https://repo.gradle.org/gradle/libs-releases-local/")
+        }
+
+        filter {
+            includeGroup("org.gradle")
+        }
+    }
 }
 
 dependencies {

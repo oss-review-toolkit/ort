@@ -32,7 +32,15 @@ plugins {
 }
 
 repositories {
-    maven("https://repo.gradle.org/gradle/libs-releases-local/")
+    exclusiveContent {
+        forRepository {
+            maven("https://repo.gradle.org/gradle/libs-releases-local/")
+        }
+
+        filter {
+            includeGroup("org.gradle")
+        }
+    }
 }
 
 dependencies {

@@ -49,7 +49,15 @@ sourceSets.named("main") {
 }
 
 repositories {
-    maven("http://www.robotooling.com/maven/")
+    exclusiveContent {
+        forRepository {
+            maven("http://www.robotooling.com/maven/")
+        }
+
+        filter {
+            includeGroup("bad.robot")
+        }
+    }
 }
 
 dependencies {
