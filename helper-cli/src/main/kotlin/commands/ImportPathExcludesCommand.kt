@@ -112,7 +112,7 @@ internal class ImportPathExcludesCommand : CommandWithHelp() {
 
         val result = mutableListOf<PathExclude>()
 
-        repositoryPaths.forEach { vcsUrl, relativePaths ->
+        repositoryPaths.forEach { (vcsUrl, relativePaths) ->
             pathExcludes[vcsUrl]?.let { pathExcludesForRepository ->
                 pathExcludesForRepository.forEach { pathExclude ->
                     relativePaths.forEach { path ->
