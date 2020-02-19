@@ -207,7 +207,7 @@ class GoMod(
     }
 
     private fun getGoProxy(): String {
-        var firstProxy = System.getenv("GOPROXY").orEmpty()
+        val firstProxy = System.getenv("GOPROXY").orEmpty()
             .split(",")
             .filterNot { it == "direct" || it == "off" }
             .firstOrNull()
