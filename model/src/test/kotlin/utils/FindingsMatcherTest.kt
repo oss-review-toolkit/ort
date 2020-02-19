@@ -28,6 +28,7 @@ import com.here.ort.utils.FileMatcher
 
 import io.kotlintest.IsolationMode
 import io.kotlintest.matchers.beEmpty
+import io.kotlintest.matchers.collections.shouldContainExactly
 import io.kotlintest.matchers.collections.shouldContainExactlyInAnyOrder
 import io.kotlintest.should
 import io.kotlintest.shouldBe
@@ -204,7 +205,7 @@ class FindingsMatcherTest : WordSpec() {
         }
 
         "Given a file with multiple license and a not nearby copyright finding and a root license, match" should {
-            "discard that statement" {
+            "associated that finding with the root license" {
                 setupLicenseFinding("license 1", "path", 1)
                 setupLicenseFinding("license 2", "path", 2)
                 setupCopyrightFinding("statement 1", "path", 2 + DEFAULT_TOLERANCE_LINES + 1)
@@ -212,7 +213,7 @@ class FindingsMatcherTest : WordSpec() {
 
                 val result = matcher.match(licenseFindings, copyrightFindings)
 
-                result.getAllStatements() should beEmpty()
+                result.getFindings("root license 1").copyrights.map { it.statement } shouldBe listOf("statement 1")
             }
         }
     }
