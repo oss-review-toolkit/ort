@@ -88,7 +88,7 @@ class FindingsMatcher(
     /**
      * Associate copyright findings to license findings within a single file.
      */
-    private fun associateFileFindings(
+    private fun matchFileFindings(
         licenses: List<LicenseFinding>,
         copyrights: List<CopyrightFinding>,
         rootLicenses: Collection<String>
@@ -137,7 +137,7 @@ class FindingsMatcher(
         paths.forEach { path ->
             val licenses = licenseFindingsByPath[path].orEmpty()
             val copyrights = copyrightFindingsByPath[path].orEmpty()
-            val findings = associateFileFindings(licenses, copyrights, rootLicenses)
+            val findings = matchFileFindings(licenses, copyrights, rootLicenses)
 
             findings.forEach { (license, copyrightFindings) ->
                 copyrightsForLicenses.getOrPut(license) { mutableSetOf() } += copyrightFindings
