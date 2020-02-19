@@ -19,10 +19,13 @@
 
 package com.here.ort.utils.storage
 
+import com.here.ort.utils.showStackTrace
+
 import org.apache.commons.compress.compressors.xz.XZCompressorInputStream
 import org.apache.commons.compress.compressors.xz.XZCompressorOutputStream
 
 import java.io.File
+import java.io.FileNotFoundException
 
 /**
  * A [FileStorage] that stores compressed files in a [directory] of the local file system.
@@ -33,7 +36,21 @@ class XZCompressedLocalFileStorage(
      */
     directory: File
 ) : LocalFileStorage(directory) {
-    override fun read(path: String) = XZCompressorInputStream(super.read("$path.xz"))
+    override fun read(path: String) =
+        try {
+            XZCompressorInputStream(super.read("$path.xz"))
+        } catch (compressedFileNotFoundException: FileNotFoundException) {
+            compressedFileNotFoundException.showStackTrace()
+
+            // Fall back to try reading the uncompressed file.
+            try {
+                super.read(path)
+            } catch (uncompressedFileNotFoundException: FileNotFoundException) {
+                uncompressedFileNotFoundException.showStackTrace()
+
+                throw uncompressedFileNotFoundException.initCause(compressedFileNotFoundException)
+            }
+        }
 
     override fun getOutputStream(path: String) = XZCompressorOutputStream(super.getOutputStream("$path.xz"))
 }
