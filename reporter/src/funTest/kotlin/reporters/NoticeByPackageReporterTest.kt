@@ -390,7 +390,8 @@ class NoticeByPackageReporterTest : WordSpec({
                         patterns = LICENSE_FILENAMES,
                         storage = FileStorageConfiguration(
                             localFileStorage = LocalFileStorageConfiguration(
-                                archiveDir
+                                directory = archiveDir,
+                                compression = false
                             )
                         )
                     )

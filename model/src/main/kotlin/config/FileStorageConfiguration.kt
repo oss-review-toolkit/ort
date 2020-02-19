@@ -23,6 +23,7 @@ import com.here.ort.utils.expandTilde
 import com.here.ort.utils.storage.FileStorage
 import com.here.ort.utils.storage.HttpFileStorage
 import com.here.ort.utils.storage.LocalFileStorage
+import com.here.ort.utils.storage.XZCompressedLocalFileStorage
 
 /**
  * The configuration model for a [FileStorage]. Only one of the storage options can be configured.
@@ -50,7 +51,12 @@ data class FileStorageConfiguration(
             HttpFileStorage(httpFileStorageConfiguration.url, httpFileStorageConfiguration.headers)
         } ?: localFileStorage!!.let { localFileStorageConfiguration ->
             val directory = localFileStorageConfiguration.directory.expandTilde()
-            LocalFileStorage(directory)
+
+            if (localFileStorageConfiguration.compression) {
+                XZCompressedLocalFileStorage(directory)
+            } else {
+                LocalFileStorage(directory)
+            }
         }
     }
 }

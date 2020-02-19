@@ -257,6 +257,7 @@ ort {
       backend {
         localFileStorage {
           directory = "/tmp/ort/scan-results"
+          compression = false
         }
       }
     }
