@@ -128,18 +128,15 @@ class FindingsMatcher(
      */
     private fun matchFileFindings(
         licenses: List<LicenseFinding>,
-        copyrights: List<CopyrightFinding>,
-        rootLicenses: Collection<String>
+        copyrights: List<CopyrightFinding>
     ): Map<String, Set<CopyrightFinding>> {
         require((licenses.map { it.location.path } + copyrights.map { it.location.path }).distinct().size <= 1) {
             "The given license and copyright findings must all point to the same file."
         }
 
-        // If there is no license finding but copyright findings, associate them with all root licenses.
-        if (licenses.isEmpty()) return rootLicenses.associateBy({ it }, { copyrights.toSet() })
-
-        // If there is only a single license finding, associate all copyright findings with that license.
-        if (licenses.size == 1) return licenses.associateBy({ it.license }, { copyrights.toSet() })
+        // If there is only a single license finding, associate all copyright findings with that license. If there is
+        // no license return no matches.
+        if (licenses.size <= 1) return licenses.associateBy({ it.license }, { copyrights.toSet() })
 
         // If there are multiple license findings in a single file, search for the closest copyright statements
         // for each of these, if any.
@@ -175,10 +172,16 @@ class FindingsMatcher(
         paths.forEach { path ->
             val licenses = licenseFindingsByPath[path].orEmpty()
             val copyrights = copyrightFindingsByPath[path].orEmpty()
-            val findings = matchFileFindings(licenses, copyrights, rootLicenses)
+            val findings = matchFileFindings(licenses, copyrights)
 
             findings.forEach { (license, copyrightFindings) ->
                 copyrightsByLicense.getOrPut(license) { mutableSetOf() } += copyrightFindings
+            }
+
+            // Associate all unmatched copyright findings with all root licenses.
+            val unmatchedCopyrights = copyrights.toSet() - findings.values.flatten()
+            rootLicenses.forEach { license ->
+                copyrightsByLicense.getOrPut(license) { mutableSetOf() } += unmatchedCopyrights
             }
         }
 
