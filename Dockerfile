@@ -33,6 +33,7 @@ RUN scripts/set_gradle_proxy.sh && \
 
 FROM openjdk:11-jre-slim-sid
 
+COPY --from=build /usr/local/src/ort/scripts/import_proxy_certs.sh /opt/ort/bin/import_proxy_certs.sh
 COPY --from=build /usr/local/src/ort/scripts/set_gradle_proxy.sh /opt/ort/bin/set_gradle_proxy.sh
 COPY --from=build /usr/local/src/ort/cli/build/distributions/ort-*.tar /opt/ort.tar
 RUN tar xf /opt/ort.tar -C /opt/ort --strip-components 1 && rm /opt/ort.tar
@@ -88,7 +89,7 @@ RUN apt-get update && \
     rm -rf /var/lib/apt/lists/*
 
 # Custom install commands.
-RUN \
+RUN /opt/ort/bin/import_proxy_certs.sh && \
     # Install VCS tools (no specific versions required here).
     curl -ksS https://storage.googleapis.com/git-repo-downloads/repo > /usr/local/bin/repo && \
     chmod a+x /usr/local/bin/repo && \
