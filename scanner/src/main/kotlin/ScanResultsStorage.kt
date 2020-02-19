@@ -127,7 +127,7 @@ abstract class ScanResultsStorage {
     /**
      * The name to refer to this storage implementation.
      */
-    val name: String = javaClass.simpleName
+    open val name: String = javaClass.simpleName
 
     /**
      * The access statistics for the scan result storage.
