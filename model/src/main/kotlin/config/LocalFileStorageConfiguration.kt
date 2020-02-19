@@ -29,5 +29,10 @@ data class LocalFileStorageConfiguration(
     /**
      * The directory to use as a storage root.
      */
-    val directory: File
+    val directory: File,
+
+    /**
+     * Whether to use compression for storing files or not.
+     */
+    val compression: Boolean
 )
