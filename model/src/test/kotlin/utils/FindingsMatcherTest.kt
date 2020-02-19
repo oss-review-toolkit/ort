@@ -37,8 +37,11 @@ import kotlin.random.Random
 
 private fun Collection<LicenseFindings>.getFindings(license: String) = single { it.license == license }
 
+private const val NESTED_LICENSE_FILE_A = "a/LICENSE"
+private const val NESTED_LICENSE_FILE_B = "b/LICENSE"
+
 class FindingsMatcherTest : WordSpec() {
-    private val matcher = FindingsMatcher(FileMatcher("a/LICENSE"))
+    private val matcher = FindingsMatcher(FileMatcher(NESTED_LICENSE_FILE_A, NESTED_LICENSE_FILE_B))
     private val licenseFindings = mutableListOf<LicenseFinding>()
     private val copyrightFindings = mutableListOf<CopyrightFinding>()
 
@@ -73,21 +76,21 @@ class FindingsMatcherTest : WordSpec() {
     init {
         "Given a license finding in a license file and a copyright finding in a file without license, match" should {
             "associate that copyright with the root license" {
-                setupLicenseFinding(license = "some id", path = "a/LICENSE")
+                setupLicenseFinding(license = "some id", path = NESTED_LICENSE_FILE_A)
                 setupCopyrightFinding(statement = "some stmt", path = "some/other/file")
 
                 val result = matcher.match(licenseFindings, copyrightFindings)
 
                 result.size shouldBe 1
                 val findings = result.getFindings("some id")
-                findings.locations.map { it.path } shouldContainExactlyInAnyOrder listOf("a/LICENSE")
+                findings.locations.map { it.path } shouldContainExactlyInAnyOrder listOf(NESTED_LICENSE_FILE_A)
                 findings.copyrights.map { it.statement } shouldContainExactlyInAnyOrder listOf("some stmt")
             }
         }
 
         "Given a license finding in a license file and a file with copyright and license findings, match" should {
             "not associate that copyright with the root license" {
-                setupLicenseFinding(license = "some id", path = "a/LICENSE")
+                setupLicenseFinding(license = "some id", path = NESTED_LICENSE_FILE_A)
                 setupLicenseFinding(license = "some other id", path = "some/other/file")
                 setupCopyrightFinding(statement = "some stmt", path = "some/other/file")
 
@@ -99,14 +102,12 @@ class FindingsMatcherTest : WordSpec() {
 
         "Given license findings in two license files and a copyright finding in a file without license, match" should {
             "associate that copyright finding with all root licenses" {
-                setupLicenseFinding(license = "license-a1", path = "a/LICENSE")
-                setupLicenseFinding(license = "license-a2", path = "a/LICENSE")
-                setupLicenseFinding(license = "license-b1", path = "b/LICENSE")
-
+                setupLicenseFinding(license = "license-a1", path = NESTED_LICENSE_FILE_A)
+                setupLicenseFinding(license = "license-a2", path = NESTED_LICENSE_FILE_A)
+                setupLicenseFinding(license = "license-b1", path = NESTED_LICENSE_FILE_B)
                 setupCopyrightFinding(statement = "some stmt", path = "some/file")
 
-                val result = FindingsMatcher(FileMatcher("a/LICENSE", "b/LICENSE"))
-                    .match(licenseFindings, copyrightFindings)
+                val result = matcher.match(licenseFindings, copyrightFindings)
 
                 result.size shouldBe 3
                 result.getFindings("license-a1").copyrights.map { it.statement } shouldBe listOf("some stmt")
