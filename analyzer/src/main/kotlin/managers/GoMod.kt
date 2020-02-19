@@ -178,7 +178,7 @@ class GoMod(
 
     private fun createPackage(id: Identifier) =
         Package(
-            id = Identifier(managerName, "", id.name, id.version.orEmpty()),
+            id = Identifier(managerName, "", id.name, id.version),
             declaredLicenses = sortedSetOf(), // Go mod doesn't support declared licenses.
             description = "",
             homepageUrl = "",
