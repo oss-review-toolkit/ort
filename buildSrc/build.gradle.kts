@@ -34,7 +34,16 @@ plugins {
 
 repositories {
     jcenter()
-    maven("https://plugins.gradle.org/m2/")
+
+    exclusiveContent {
+        forRepository {
+            maven("https://plugins.gradle.org/m2/")
+        }
+
+        filter {
+            includeGroupByRegex(".*gradle\\.plugin.*")
+        }
+    }
 }
 
 val ideaExtPluginVersion = extra["ideaExtPluginVersion"]
