@@ -47,6 +47,8 @@ class FileBasedStorage(
      */
     private val backend: FileStorage
 ) : ScanResultsStorage() {
+    override val name = "${javaClass.simpleName} with ${backend.javaClass.simpleName} backend"
+
     override fun readFromStorage(id: Identifier): ScanResultContainer {
         val path = storagePath(id)
 
