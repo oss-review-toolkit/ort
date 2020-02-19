@@ -172,14 +172,14 @@ class FindingsMatcher(
         paths.forEach { path ->
             val licenses = licenseFindingsByPath[path].orEmpty()
             val copyrights = copyrightFindingsByPath[path].orEmpty()
-            val findings = matchFileFindings(licenses, copyrights)
+            val matchedFindings = matchFileFindings(licenses, copyrights)
 
-            findings.forEach { (license, copyrightFindings) ->
+            matchedFindings.forEach { (license, copyrightFindings) ->
                 copyrightsByLicense.getOrPut(license) { mutableSetOf() } += copyrightFindings
             }
 
             // Associate all unmatched copyright findings with all root licenses.
-            val unmatchedCopyrights = copyrights.toSet() - findings.values.flatten()
+            val unmatchedCopyrights = copyrights.toSet() - matchedFindings.values.flatten()
             rootLicenses.forEach { license ->
                 copyrightsByLicense.getOrPut(license) { mutableSetOf() } += unmatchedCopyrights
             }
