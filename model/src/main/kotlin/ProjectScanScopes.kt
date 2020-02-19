@@ -40,7 +40,7 @@ data class ProjectScanScopes(
 
     /**
      * The dependencies from these [Scope]s of the [Project] were not scanned, except if they are also a dependency
-     * of any of the [scannedScopes].
+     * of any of the [scanned] Scopes.
      */
     @JsonAlias("ignored_scopes")
     val ignored: SortedSet<String>
