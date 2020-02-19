@@ -368,7 +368,7 @@ data class OrtResult(
         }
 
         val pkg = getPackage(id)
-        if (pkg != null && !(packages[id]!!.isExcluded)) {
+        if (pkg != null && !packages.getValue(id).isExcluded) {
             return false
         }
 
