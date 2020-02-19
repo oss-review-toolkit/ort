@@ -87,12 +87,12 @@ class FindingsMatcher(
         licenses: List<LicenseFinding>,
         copyrights: List<CopyrightFinding>,
         rootLicenses: Collection<String>
-    ): Map<String, Set<CopyrightFindings>> {
+    ): Map<String, Set<CopyrightFinding>> {
         require((licenses.map { it.location.path } + copyrights.map { it.location.path }).distinct().size <= 1) {
             "The given license and copyright findings must all point to the same file."
         }
 
-        val allCopyrightStatements = copyrights.mapTo(mutableSetOf()) { it.toCopyrightFindings() }
+        val allCopyrightStatements = copyrights.toSet()
 
         // If there is no license finding but copyright findings, associate them with all root licenses.
         if (licenses.isEmpty()) return rootLicenses.associateBy({ it }, { allCopyrightStatements })
@@ -102,16 +102,13 @@ class FindingsMatcher(
 
         // If there are multiple license findings in a single file, search for the closest copyright statements
         // for each of these, if any.
-        val copyrightsForLicenses = mutableMapOf<String, MutableSet<CopyrightFindings>>()
+        val result = mutableMapOf<String, MutableSet<CopyrightFinding>>()
         licenses.forEach { (license, location) ->
-            val closestCopyrights = getClosestCopyrightStatements(
-                copyrights = copyrights,
-                licenseStartLine = location.startLine
-            ).map { it.toCopyrightFindings() }
-            copyrightsForLicenses.getOrPut(license) { mutableSetOf() } += closestCopyrights
+            val closestCopyrights = getClosestCopyrightStatements(copyrights, location.startLine)
+            result.getOrPut(license) { mutableSetOf() } += closestCopyrights
         }
 
-        return copyrightsForLicenses
+        return result
     }
 
     /**
@@ -142,8 +139,8 @@ class FindingsMatcher(
                 copyrightsForLicenses.getOrPut(license) { sortedSetOf() }.let { copyrightFindings ->
                     copyrightsForLicense.forEach { copyrightFinding ->
                         copyrightFindings.find { it.statement == copyrightFinding.statement }?.let {
-                            it.locations += copyrightFinding.locations
-                        } ?: copyrightFindings.add(copyrightFinding)
+                            it.locations += copyrightFinding.location
+                        } ?: copyrightFindings.add(copyrightFinding.toCopyrightFindings())
                     }
                 }
             }
