@@ -36,7 +36,7 @@ class FindingCurationMatcher {
             .matches(Paths.get(finding.location.path))
 
     private fun isStartLineMatching(finding: LicenseFinding, curation: LicenseFindingCuration): Boolean =
-        curation.startLines.isEmpty() || curation.startLines.any { it.equals(finding.location.startLine) }
+        curation.startLines.isEmpty() || curation.startLines.any { it == finding.location.startLine }
 
     private fun isLineCountMatching(finding: LicenseFinding, curation: LicenseFindingCuration): Boolean =
         curation.lineCount == null || curation.lineCount == finding.location.endLine - finding.location.startLine + 1
