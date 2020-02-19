@@ -128,11 +128,11 @@ class FindingsMatcher(
         val paths = (licenseFindingsByPath.keys + copyrightFindingsByPath.keys).toSet()
         val rootLicenses = getRootLicenses(licenseFindings)
 
-        val locationsForLicenses = licenseFindings
+        val locationsByLicense = licenseFindings
             .groupBy({ it.license }, { it.location })
             .mapValuesTo(mutableMapOf()) { it.value.toSortedSet() }
 
-        val copyrightsForLicenses = mutableMapOf<String, MutableSet<CopyrightFinding>>()
+        val copyrightsByLicense = mutableMapOf<String, MutableSet<CopyrightFinding>>()
 
         paths.forEach { path ->
             val licenses = licenseFindingsByPath[path].orEmpty()
@@ -140,15 +140,15 @@ class FindingsMatcher(
             val findings = matchFileFindings(licenses, copyrights, rootLicenses)
 
             findings.forEach { (license, copyrightFindings) ->
-                copyrightsForLicenses.getOrPut(license) { mutableSetOf() } += copyrightFindings
+                copyrightsByLicense.getOrPut(license) { mutableSetOf() } += copyrightFindings
             }
         }
 
-        return (copyrightsForLicenses.keys + locationsForLicenses.keys).mapTo(mutableSetOf()) { license ->
+        return (copyrightsByLicense.keys + locationsByLicense.keys).mapTo(mutableSetOf()) { license ->
             LicenseFindings(
                 license,
-                locationsForLicenses[license] ?: sortedSetOf(),
-                copyrightsForLicenses[license].orEmpty().toCopyrightFindings().toSortedSet()
+                locationsByLicense[license] ?: sortedSetOf(),
+                copyrightsByLicense[license].orEmpty().toCopyrightFindings().toSortedSet()
             )
         }
     }
