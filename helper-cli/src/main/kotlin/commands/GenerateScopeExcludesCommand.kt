@@ -161,6 +161,11 @@ private fun getScopeExcludesForPackageManager(packageManagerName: String): List<
                 comment = "Packages for code linting (testing) only."
             ),
             ScopeExclude(
+                pattern = "pmd",
+                reason = ScopeExcludeReason.TEST_DEPENDENCY_OF,
+                comment = "Packages for code analysis (testing) only."
+            ),
+            ScopeExclude(
                 pattern = "test.*",
                 reason = ScopeExcludeReason.TEST_DEPENDENCY_OF,
                 comment = "Packages for testing only."
