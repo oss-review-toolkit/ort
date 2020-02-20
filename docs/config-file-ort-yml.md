@@ -95,7 +95,7 @@ excludes:
   scopes:
   - pattern: "test.*"
     reason: "TEST_DEPENDENCY_OF"
-    comment: "Scope with dependencies only used for testing. Not included in released artifacts."
+    comment: "Packages for testing only."
 ```
 
 The above example excludes all of the following scopes for all projects: `testAnnotationProcessor`,`testApi`,
