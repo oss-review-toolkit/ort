@@ -414,6 +414,7 @@ object SpdxDeclaredLicenseMapping {
         "Ruby's" to RUBY.toExpression(),
         "Qt Public License" to QPL_1_0.toExpression(),
         "Qt Public License (QPL)" to QPL_1_0.toExpression(),
+        "SEE LICENSE IN LICENSE" to licenseRef("unknown-license-reference", "scancode"),
         "SIL OPEN FONT LICENSE Version 1.1" to OFL_1_1.toExpression(),
         "SIL Open Font License 1.1 (OFL-1.1)" to OFL_1_1.toExpression(),
         "Simplified BSD" to BSD_2_CLAUSE.toExpression(),
