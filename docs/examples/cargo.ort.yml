@@ -2,7 +2,7 @@ excludes:
   scopes:
   - pattern: "build-dependencies"
     reason: "BUILD_DEPENDENCY_OF"
-    comment: "Scope with dependencies only used for building the source code. Not included in released artifacts in the context of this project."
+    comment: "Packages for building the code only."
   - pattern: "dev-dependencies"
     reason: "DEV_DEPENDENCY_OF"
-    comment: "Scope with dependencies only used for development. Not included in released artifacts in the context of this project."
+    comment: "Packages for development only."
