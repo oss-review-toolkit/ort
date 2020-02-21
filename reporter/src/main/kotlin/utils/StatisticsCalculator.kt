@@ -21,14 +21,16 @@ package com.here.ort.reporter.utils
 
 import com.here.ort.model.OrtResult
 import com.here.ort.model.Severity
+import com.here.ort.model.config.IssueResolution
+import com.here.ort.model.config.RuleViolationResolution
 import com.here.ort.reporter.model.DependencyTreeStatistics
 import com.here.ort.reporter.model.IssueStatistics
 import com.here.ort.reporter.model.Statistics
 import com.here.ort.reporter.ResolutionProvider
 
 /**
- * This class calculates [Statistics] for a given [OrtResult] and applicable
- * [com.here.ort.model.config.ErrorResolution]s and applicable [com.here.ort.model.config.RuleViolationResolution]s.
+ * This class calculates [Statistics] for a given [OrtResult] and applicable [IssueResolution]s and applicable
+ * [RuleViolationResolution]s.
  */
 internal class StatisticsCalculator {
     /**
