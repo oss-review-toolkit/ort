@@ -47,7 +47,7 @@ abstract class VersionControlSystem {
          * Return the applicable VCS for the given [vcsType], or null if none is applicable.
          */
         fun forType(vcsType: VcsType) = ALL.find {
-            (it !is CommandLineTool || it.isInPath()) && it.isApplicableType(vcsType)
+            it.isAvailable() && it.isApplicableType(vcsType)
         }
 
         /**
@@ -66,7 +66,7 @@ abstract class VersionControlSystem {
                 urlToVcsMap[vcsUrl]
             } else {
                 ALL.find {
-                    (it !is CommandLineTool || it.isInPath()) && it.isApplicableUrl(vcsUrl)
+                    it.isAvailable() && it.isApplicableUrl(vcsUrl)
                 }.also {
                     urlToVcsMap[vcsUrl] = it
                 }
@@ -205,6 +205,11 @@ abstract class VersionControlSystem {
      */
     fun isApplicableUrl(vcsUrl: String) =
         vcsUrl.isNotBlank() && !vcsUrl.endsWith(".html") && isApplicableUrlInternal(vcsUrl)
+
+    /**
+     * Return true if this [VersionControlSystem] is available for use.
+     */
+    fun isAvailable(): Boolean = this !is CommandLineTool || isInPath()
 
     protected abstract fun isApplicableUrlInternal(vcsUrl: String): Boolean
 
