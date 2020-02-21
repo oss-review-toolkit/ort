@@ -37,7 +37,9 @@ import com.here.ort.model.VcsType
 import com.here.ort.model.jsonMapper
 import com.here.ort.scanner.ScanResultsStorage
 
-import io.kotlintest.matchers.collections.contain
+import io.kotlintest.matchers.beEmpty
+import io.kotlintest.matchers.collections.containExactly
+import io.kotlintest.matchers.collections.containExactlyInAnyOrder
 import io.kotlintest.should
 import io.kotlintest.shouldBe
 import io.kotlintest.specs.StringSpec
@@ -139,8 +141,7 @@ abstract class AbstractStorageTest : StringSpec() {
 
             result shouldBe ADD_RESULT_SUCCESS
             storedResults.id shouldBe id
-            storedResults.results.size shouldBe 1
-            storedResults.results[0] shouldBe scanResult
+            storedResults.results should containExactly(scanResult)
         }
 
         "Does not add scan result without raw result to storage" {
@@ -154,7 +155,7 @@ abstract class AbstractStorageTest : StringSpec() {
             result.message shouldBe
                     "Not storing scan result for 'type:namespace:name:version' because no files were scanned."
             storedResults.id shouldBe id
-            storedResults.results.size shouldBe 0
+            storedResults.results should beEmpty()
         }
 
         "Does not add scan result with fileCount 0 to storage" {
@@ -171,7 +172,7 @@ abstract class AbstractStorageTest : StringSpec() {
             result.message shouldBe
                     "Not storing scan result for 'type:namespace:name:version' because no files were scanned."
             storedResults.id shouldBe id
-            storedResults.results.size shouldBe 0
+            storedResults.results should beEmpty()
         }
 
         "Does not add scan result without provenance information to storage" {
@@ -188,7 +189,7 @@ abstract class AbstractStorageTest : StringSpec() {
             result.message shouldBe "Not storing scan result for 'type:namespace:name:version' because no provenance " +
                     "information is available."
             storedResults.id shouldBe id
-            storedResults.results.size shouldBe 0
+            storedResults.results should beEmpty()
         }
 
         "Can retrieve all scan results from storage" {
@@ -208,9 +209,7 @@ abstract class AbstractStorageTest : StringSpec() {
 
             result1 shouldBe ADD_RESULT_SUCCESS
             result2 shouldBe ADD_RESULT_SUCCESS
-            storedResults.results.size shouldBe 2
-            storedResults.results should contain(scanResult1)
-            storedResults.results should contain(scanResult2)
+            storedResults.results should containExactlyInAnyOrder(scanResult1, scanResult2)
         }
 
         "Can retrieve all scan results for specific scanner from storage" {
@@ -236,9 +235,7 @@ abstract class AbstractStorageTest : StringSpec() {
             result1 shouldBe ADD_RESULT_SUCCESS
             result2 shouldBe ADD_RESULT_SUCCESS
             result3 shouldBe ADD_RESULT_SUCCESS
-            storedResults.results.size shouldBe 2
-            storedResults.results should contain(scanResult1)
-            storedResults.results should contain(scanResult2)
+            storedResults.results should containExactlyInAnyOrder(scanResult1, scanResult2)
         }
 
         "Can retrieve all scan results for compatible scanners from storage" {
@@ -270,10 +267,11 @@ abstract class AbstractStorageTest : StringSpec() {
             resultCompatible1 shouldBe ADD_RESULT_SUCCESS
             resultCompatible2 shouldBe ADD_RESULT_SUCCESS
             resultIncompatible shouldBe ADD_RESULT_SUCCESS
-            storedResults.results.size shouldBe 3
-            storedResults.results should contain(scanResult)
-            storedResults.results should contain(scanResultCompatible1)
-            storedResults.results should contain(scanResultCompatible2)
+            storedResults.results should containExactlyInAnyOrder(
+                scanResult,
+                scanResultCompatible1,
+                scanResultCompatible2
+            )
         }
 
         "Returns only packages with matching provenance" {
@@ -311,9 +309,10 @@ abstract class AbstractStorageTest : StringSpec() {
             result2 shouldBe ADD_RESULT_SUCCESS
             result3 shouldBe ADD_RESULT_SUCCESS
             result4 shouldBe ADD_RESULT_SUCCESS
-            storedResults.results.size shouldBe 2
-            storedResults.results should contain(scanResultSourceArtifactMatching)
-            storedResults.results should contain(scanResultVcsMatching)
+            storedResults.results should containExactlyInAnyOrder(
+                scanResultSourceArtifactMatching,
+                scanResultVcsMatching
+            )
         }
 
         "Stored result is found if revision was detected from version" {
@@ -327,8 +326,7 @@ abstract class AbstractStorageTest : StringSpec() {
             val storedResults = storage.read(pkgWithoutRevision, scannerDetails1)
 
             result shouldBe ADD_RESULT_SUCCESS
-            storedResults.results.size shouldBe 1
-            storedResults.results should contain(scanResult)
+            storedResults.results should containExactly(scanResult)
         }
     }
 }
