@@ -19,7 +19,8 @@
 
 package com.here.ort.model
 
-import io.kotlintest.shouldBe
+import io.kotlintest.matchers.containExactly
+import io.kotlintest.should
 import io.kotlintest.specs.StringSpec
 
 class ProjectAnalyzerResultTest : StringSpec({
@@ -83,11 +84,13 @@ class ProjectAnalyzerResultTest : StringSpec({
             issues = listOf(issue7, issue8)
         )
 
-        val issues = result.collectIssues()
-        issues.size shouldBe 4
-        issues[Identifier("type:namespace:name:version")] shouldBe listOf(issue7, issue8)
-        issues[Identifier("type1:namespace1:name1:version1")] shouldBe listOf(issue3, issue4)
-        issues[Identifier("type2:namespace2:name2:version2")] shouldBe listOf(issue1, issue2)
-        issues[Identifier("type3:namespace3:name3:version3")] shouldBe listOf(issue5, issue6)
+        result.collectIssues() should containExactly(
+            mapOf(
+                Identifier("type:namespace:name:version") to listOf(issue7, issue8),
+                Identifier("type1:namespace1:name1:version1") to listOf(issue3, issue4),
+                Identifier("type2:namespace2:name2:version2") to listOf(issue1, issue2),
+                Identifier("type3:namespace3:name3:version3") to listOf(issue5, issue6)
+            )
+        )
     }
 })
