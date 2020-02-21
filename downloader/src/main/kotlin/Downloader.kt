@@ -147,7 +147,7 @@ class Downloader {
         } catch (e: DownloadException) {
             log.debug { "VCS download failed for '${target.id.toCoordinates()}': ${e.collectMessagesAsString()}" }
 
-            // Clean up any left-over files.
+            // Clean up any left-over files (force to delete read-only files in ".git" directories on Windows).
             targetDir.safeDeleteRecursively(force = true)
             targetDir.safeMkdirs()
 
