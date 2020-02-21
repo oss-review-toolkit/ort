@@ -134,7 +134,7 @@ class Downloader {
             "The output directory '$targetDir' must not contain any files yet."
         }
 
-        val exception = DownloadException("Download failed for '${target.id.toCoordinates()}'.")
+        var lastCause: Throwable? = null
 
         // Try downloading from VCS.
         try {
@@ -151,7 +151,8 @@ class Downloader {
             targetDir.safeDeleteRecursively(force = true)
             targetDir.safeMkdirs()
 
-            exception.addSuppressed(e)
+            e.initCause(lastCause)
+            lastCause = e
         }
 
         // Try downloading the source artifact.
@@ -166,10 +167,11 @@ class Downloader {
             targetDir.safeDeleteRecursively()
             targetDir.safeMkdirs()
 
-            exception.addSuppressed(e)
+            e.initCause(lastCause)
+            lastCause = e
         }
 
-        throw exception
+        throw DownloadException("Download failed for '${target.id.toCoordinates()}'.", lastCause)
     }
 
     private fun downloadFromVcs(target: Package, outputDirectory: File, allowMovingRevisions: Boolean): DownloadResult {
