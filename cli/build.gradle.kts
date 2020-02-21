@@ -44,6 +44,34 @@ tasks.named<CreateStartScripts>("startScripts") {
     }
 }
 
+val fatJar by tasks.registering(Jar::class) {
+    description = "Creates a fat jar that includes all required dependencies."
+    group = "Build"
+
+    archiveBaseName.set(application.applicationName)
+
+    manifest.from(tasks.jar.get().manifest)
+    manifest {
+        attributes["Main-Class"] = application.mainClassName
+    }
+
+    isZip64 = true
+
+    val classpath = configurations.runtimeClasspath.get().filterNot {
+        it.isFile && it.extension == "pom"
+    }.map {
+        if (it.isDirectory) it else zipTree(it)
+    }
+
+    from(classpath) {
+        exclude("META-INF/*.DSA")
+        exclude("META-INF/*.RSA")
+        exclude("META-INF/*.SF")
+    }
+
+    with(tasks.jar.get())
+}
+
 repositories {
     // Need to repeat the analyzer's custom repository definition here, see
     // https://github.com/gradle/gradle/issues/4106.
