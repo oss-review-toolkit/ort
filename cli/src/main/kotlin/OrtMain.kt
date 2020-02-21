@@ -191,7 +191,7 @@ fun fixupUserHomeProperty() {
         System.getenv("HOME"),
         System.getenv("USERPROFILE")
     ).first {
-        it != null && it.isNotBlank() && it != "?"
+        !it.isNullOrBlank() && it != "?"
     }
 
     if (checkedUserHome != userHome) System.setProperty("user.home", checkedUserHome)
