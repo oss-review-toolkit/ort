@@ -55,12 +55,14 @@ class ReporterCommand : CliktCommand(
     private val ortFile by option(
         "--ort-file", "-i",
         help = "The ORT result file to use."
-    ).file(exists = true, fileOkay = true, folderOkay = false, writable = false, readable = true).required()
+    ).file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
+        .required()
 
     private val outputDir by option(
         "--output-dir", "-o",
         help = "The output directory to store the generated reports in."
-    ).file(exists = false, fileOkay = false, folderOkay = true, writable = false, readable = false).required()
+    ).file(mustExist = false, canBeFile = false, canBeDir = true, mustBeWritable = false, mustBeReadable = false)
+        .required()
 
     private val reporters by option(
         "--report-formats", "-f",
@@ -75,35 +77,35 @@ class ReporterCommand : CliktCommand(
     private val resolutionsFile by option(
         "--resolutions-file",
         help = "A file containing error resolutions."
-    ).file(exists = true, fileOkay = true, folderOkay = false, writable = false, readable = true)
+    ).file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
 
     private val preProcessingScript by option(
         "--pre-processing-script",
         help = "The path to a Kotlin script to pre-process the notice report before writing it to disk."
-    ).file(exists = true, fileOkay = true, folderOkay = false, writable = false, readable = true)
+    ).file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
 
     private val copyrightGarbageFile by option(
         "--copyright-garbage-file",
         help = "A file containing garbage copyright statements entries which are to be ignored."
-    ).file(exists = true, fileOkay = true, folderOkay = false, writable = false, readable = true)
+    ).file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
 
     private val repositoryConfigurationFile by option(
         "--repository-configuration-file",
         help = "A file containing the repository configuration. If set the .ort.yml overrides the repository " +
                 "configuration contained in the ort result from the input file."
-    ).file(exists = true, fileOkay = true, folderOkay = false, writable = false, readable = true)
+    ).file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
 
     private val customLicenseTextsDir by option(
         "--custom-license-texts-dir",
         help = "A directory which maps custom license IDs to license texts. It should contain one text file per " +
                 "license with the license ID as the filename. A custom license text is used only if its ID has a " +
                 "'LicenseRef-' prefix and if the respective license text is not known by ORT."
-    ).file(exists = false, fileOkay = false, folderOkay = true, writable = false, readable = false)
+    ).file(mustExist = false, canBeFile = false, canBeDir = true, mustBeWritable = false, mustBeReadable = false)
 
     private val licenseConfigurationFile by option(
         "--license-configuration-file",
         help = "A file containing the license configuration."
-    ).file(exists = true, fileOkay = true, folderOkay = false, writable = false, readable = true)
+    ).file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
 
     private val config by requireObject<OrtConfiguration>()
 

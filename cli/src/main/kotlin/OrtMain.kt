@@ -67,7 +67,7 @@ sealed class GroupTypes {
 
 class OrtMain : CliktCommand(name = TOOL_NAME, epilog = "* denotes required options.") {
     private val configFile by option("--config", "-c", help = "The path to a configuration file.")
-        .file(exists = true, fileOkay = true, folderOkay = false, writable = false, readable = true)
+        .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
 
     private val logLevel by option(help = "Set the verbosity level of log output.").switch(
         "--info" to Level.INFO,
@@ -90,7 +90,7 @@ class OrtMain : CliktCommand(name = TOOL_NAME, epilog = "* denotes required opti
             buildString {
                 // If help is invoked without a subcommand, the main run() is not invoked and no header is printed, so
                 // we need to do that manually here.
-                if (context.invokedSubcommand == null) appendln(getVersionHeader(env.ortVersion))
+                if (currentContext.invokedSubcommand == null) appendln(getVersionHeader(env.ortVersion))
                 append(super.formatHelp(prolog, epilog, parameters, programName))
             }
     }
@@ -126,7 +126,7 @@ class OrtMain : CliktCommand(name = TOOL_NAME, epilog = "* denotes required opti
         printStackTrace = stacktrace
 
         // Make the OrtConfiguration available to subcommands.
-        context.findOrSetObject { loadConfig() }
+        currentContext.findOrSetObject { loadConfig() }
 
         println(getVersionHeader(env.ortVersion))
     }
@@ -135,7 +135,7 @@ class OrtMain : CliktCommand(name = TOOL_NAME, epilog = "* denotes required opti
         val variables = mutableListOf("$ORT_USER_HOME_ENV = ${getUserOrtDirectory()}")
         env.variables.entries.mapTo(variables) { (key, value) -> "$key = $value" }
 
-        val commandName = context.invokedSubcommand?.commandName
+        val commandName = currentContext.invokedSubcommand?.commandName
         val command = commandName?.let { " '$commandName'" }.orEmpty()
         val with = if (variables.isNotEmpty()) " with" else "."
 

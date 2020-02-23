@@ -58,7 +58,8 @@ class ClearlyDefinedUploadCommand : CliktCommand(
     private val inputFile by option(
         "--input-file", "-i",
         help = "The file with package curations to upload."
-    ).file(exists = true, fileOkay = true, folderOkay = false, writable = false, readable = true).required()
+    ).file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
+        .required()
 
     private val server by option(
         "--server", "-s",
