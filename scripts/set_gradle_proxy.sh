@@ -22,8 +22,18 @@ writeProxyStringToGradleProps () {
     PROTOCOL=$2
     FILE=$3
 
+    # Strip the port.
     HOST=${PROXY%:*}
+    # Strip the protocol.
     HOST=${HOST#*//}
+    # Extract authentication info.
+    AUTH=${HOST%%@*}
+    # Strip authentication info.
+    HOST=${HOST#$AUTH@}
+    # Extract the user.
+    USER=${AUTH%%:*}
+    # Extract the password.
+    PASSWORD=${AUTH#*:}
 
     PORT=${PROXY##*:}
     [ "$PORT" -ge 0 ] 2>/dev/null || PORT=80
@@ -32,10 +42,11 @@ writeProxyStringToGradleProps () {
 
     mkdir -p $(dirname $FILE)
 
-    # TODO: Support proxy authentication once Gradle does, see https://github.com/gradle/gradle/issues/5052.
     cat <<- EOF >> $FILE
 	systemProp.$PROTOCOL.proxyHost=$HOST
 	systemProp.$PROTOCOL.proxyPort=$PORT
+	systemProp.$PROTOCOL.proxyUser=$USER
+	systemProp.$PROTOCOL.proxyPassword=$PASSWORD
 	EOF
 }
 
