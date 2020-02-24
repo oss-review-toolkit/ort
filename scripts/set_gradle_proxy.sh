@@ -18,24 +18,24 @@
 # License-Filename: LICENSE
 
 writeProxyStringToGradleProps () {
-    PROXY=$1
-    PROTOCOL=$2
-    FILE=$3
+    local PROXY=$1
+    local PROTOCOL=$2
+    local FILE=$3
 
     # Strip the port.
-    HOST=${PROXY%:*}
+    local HOST=${PROXY%:*}
     # Strip the protocol.
     HOST=${HOST#*//}
     # Extract authentication info.
-    AUTH=${HOST%%@*}
+    local AUTH=${HOST%%@*}
     # Strip authentication info.
     HOST=${HOST#$AUTH@}
     # Extract the user.
-    USER=${AUTH%%:*}
+    local USER=${AUTH%%:*}
     # Extract the password.
-    PASSWORD=${AUTH#*:}
+    local PASSWORD=${AUTH#*:}
 
-    PORT=${PROXY##*:}
+    local PORT=${PROXY##*:}
     [ "$PORT" -ge 0 ] 2>/dev/null || PORT=80
 
     grep -qF "systemProp.$PROTOCOL.proxy" $FILE 2>/dev/null && return 1
@@ -51,7 +51,7 @@ writeProxyStringToGradleProps () {
 }
 
 writeProxyEnvToGradleProps () {
-    GRADLE_PROPS="$HOME/.gradle/gradle.properties"
+    local GRADLE_PROPS="$HOME/.gradle/gradle.properties"
 
     if [ -n "$http_proxy" ]; then
         echo "Setting HTTP proxy $http_proxy for Gradle in file '$GRADLE_PROPS'..."
