@@ -33,7 +33,13 @@ REGEX_END="/^-----END CERTIFICATE-----$"
 # Pick a server to connect to that is used during the Gradle build, and which reports the proxy's certificate instead of
 # its own.
 echo "Getting the proxy's certificates..."
-openssl s_client -showcerts -proxy ${https_proxy#*//} -connect $CONNECT_SERVER | \
+
+# Strip the protocol.
+PROXY=${https_proxy#*//}
+# Strip authentication info.
+PROXY=${PROXY#*@}
+
+openssl s_client -showcerts -proxy $PROXY -connect $CONNECT_SERVER | \
     sed -n "$REGEX_BEGIN,$REGEX_END/p" > $FILE
 
 # Split the potentially multiple certificates into multiple files to avoid only the first certificate being imported.
