@@ -28,12 +28,14 @@ writeProxyStringToGradleProps () {
     HOST=${HOST#*//}
     # Extract authentication info.
     local AUTH=${HOST%%@*}
-    # Strip authentication info.
-    HOST=${HOST#$AUTH@}
-    # Extract the user.
-    local USER=${AUTH%%:*}
-    # Extract the password.
-    local PASSWORD=${AUTH#*:}
+    if [ "$AUTH" != "$HOST" ]; then
+        # Strip authentication info.
+        HOST=${HOST#$AUTH@}
+        # Extract the user.
+        local USER=${AUTH%%:*}
+        # Extract the password.
+        local PASSWORD=${AUTH#*:}
+    fi
 
     local PORT=${PROXY##*:}
     [ "$PORT" -ge 0 ] 2>/dev/null || PORT=80
