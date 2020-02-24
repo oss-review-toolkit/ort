@@ -64,7 +64,8 @@ for CRT_FILE in $FILE_PREFIX*; do
     echo "Adding the following proxy certificate from '$CRT_FILE' to the JRE's certificate store at '$KEYSTORE':"
     cat $CRT_FILE
 
-    $KEYTOOL -importcert -noprompt -trustcacerts -alias $CRT_FILE -file $CRT_FILE -keystore $KEYSTORE -storepass changeit
+    ALIAS=$(basename $CRT_FILE .crt)
+    $KEYTOOL -importcert -noprompt -trustcacerts -alias $ALIAS -file $CRT_FILE -keystore $KEYSTORE -storepass changeit
 done
 
 # Also add the proxy certificates to the system certificates, e.g. for curl to work.
