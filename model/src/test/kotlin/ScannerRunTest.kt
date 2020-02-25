@@ -37,7 +37,6 @@ class ScannerRunTest : StringSpec() {
                 config:
                   scanner: null
                 results:
-                  scopes: []
                   scan_results: []
                   storage_stats:
                     num_reads: 0
@@ -62,7 +61,6 @@ class ScannerRunTest : StringSpec() {
                 config:
                   scanner: null
                 results:
-                  scopes: []
                   scan_results: []
                   storage_stats:
                     num_reads: 0

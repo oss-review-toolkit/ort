@@ -178,7 +178,6 @@ val ortResult = OrtResult(
         environment = Environment(),
         config = ScannerConfiguration(),
         results = ScanRecord(
-            scopes = sortedSetOf(),
             scanResults = sortedSetOf(),
             storageStats = AccessStatistics()
         )
