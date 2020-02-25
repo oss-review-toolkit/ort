@@ -99,9 +99,8 @@ abstract class Scanner(val scannerName: String, protected val config: ScannerCon
         }
 
         // Add the projects as packages to scan.
-        val consolidatedProjectPackageMap =
-            Downloader.consolidateProjectPackagesByVcs(ortResult.getProjects(skipExcluded))
-        val consolidatedReferencePackages = consolidatedProjectPackageMap.keys.map { it.toCuratedPackage() }
+        val consolidatedProjects = Downloader.consolidateProjectPackagesByVcs(ortResult.getProjects(skipExcluded))
+        val consolidatedReferencePackages = consolidatedProjects.keys.map { it.toCuratedPackage() }
 
         val packagesToScan = (consolidatedReferencePackages + ortResult.getPackages(skipExcluded)).map { it.pkg }
         val results = runBlocking { scanPackages(packagesToScan, outputDirectory, downloadDirectory) }
@@ -110,7 +109,7 @@ abstract class Scanner(val scannerName: String, protected val config: ScannerCon
         }.toSortedSet()
 
         // Add scan results from de-duplicated project packages to result.
-        consolidatedProjectPackageMap.forEach { (referencePackage, deduplicatedPackages) ->
+        consolidatedProjects.forEach { (referencePackage, deduplicatedPackages) ->
             resultContainers.find { it.id == referencePackage.id }?.let { resultContainer ->
                 deduplicatedPackages.forEach { deduplicatedPackage ->
                     ortResult.getProject(deduplicatedPackage.id)?.let { project ->
