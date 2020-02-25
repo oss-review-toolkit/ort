@@ -167,10 +167,10 @@ open class Npm(
             licenseNode["type"]?.textValue()
         }
 
-        return declaredLicenses.mapTo(sortedSetOf()) {
+        return declaredLicenses.mapTo(sortedSetOf()) { declaredLicense ->
             // NPM does not mean https://unlicense.org/ here, but the wish to not "grant others the right to use a
             // private or unpublished package under any terms", which corresponds to SPDX's "NONE".
-            if (it == "UNLICENSED") SpdxLicense.NONE else it
+            if (declaredLicense == "UNLICENSED") SpdxLicense.NONE else declaredLicense
         }
     }
 
