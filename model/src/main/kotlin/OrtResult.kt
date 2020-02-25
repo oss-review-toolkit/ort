@@ -412,16 +412,22 @@ data class OrtResult(
     fun getPackage(id: Identifier): CuratedPackage? = packages[id]?.curatedPackage
 
     /**
-     * Return all [Package]s contained in this [OrtResult].
+     * Return all [Package]s contained in this [OrtResult] or only the non-excluded ones if [omitExcluded] is true.
      */
     @JsonIgnore
-    fun getPackages(): Set<CuratedPackage> = analyzer?.result?.packages.orEmpty()
+    fun getPackages(omitExcluded: Boolean = false): Set<CuratedPackage> =
+        analyzer?.result?.packages.orEmpty().filterTo(mutableSetOf()) { pkg ->
+            !omitExcluded || !isExcluded(pkg.pkg.id)
+        }
 
     /**
-     * Return all [Project]s contained in this [OrtResult].
+     * Return all [Project]s contained in this [OrtResult] or only the non-excluded ones if [omitExcluded] is true.
      */
     @JsonIgnore
-    fun getProjects(): Set<Project> = analyzer?.result?.projects.orEmpty()
+    fun getProjects(omitExcluded: Boolean = false): Set<Project> =
+        analyzer?.result?.projects.orEmpty().filterTo(mutableSetOf()) { project ->
+            !omitExcluded || !isExcluded(project.id)
+        }
 
     /**
      * Return all [RuleViolation]s contained in this [OrtResult].
