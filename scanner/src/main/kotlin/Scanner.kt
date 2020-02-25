@@ -82,7 +82,8 @@ abstract class Scanner(val scannerName: String, protected val config: ScannerCon
     fun scanOrtResult(
         ortResultFile: File,
         outputDirectory: File,
-        downloadDirectory: File
+        downloadDirectory: File,
+        skipExcluded: Boolean = false
     ): OrtResult {
         require(ortResultFile.isFile) {
             "The provided ORT result file '${ortResultFile.canonicalPath}' does not exit."
@@ -98,10 +99,11 @@ abstract class Scanner(val scannerName: String, protected val config: ScannerCon
         }
 
         // Add the projects as packages to scan.
-        val consolidatedProjectPackageMap = Downloader.consolidateProjectPackagesByVcs(ortResult.getProjects())
+        val consolidatedProjectPackageMap =
+            Downloader.consolidateProjectPackagesByVcs(ortResult.getProjects(skipExcluded))
         val consolidatedReferencePackages = consolidatedProjectPackageMap.keys.map { it.toCuratedPackage() }
 
-        val packagesToScan = (consolidatedReferencePackages + ortResult.getPackages()).map { it.pkg }
+        val packagesToScan = (consolidatedReferencePackages + ortResult.getPackages(skipExcluded)).map { it.pkg }
         val results = runBlocking { scanPackages(packagesToScan, outputDirectory, downloadDirectory) }
         val resultContainers = results.map { (pkg, results) ->
             ScanResultContainer(pkg.id, results)
