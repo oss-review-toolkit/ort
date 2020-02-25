@@ -65,12 +65,6 @@ class ScannerCommand : CliktCommand(name = "scan", help = "Run existing copyrigh
         ).file(mustExist = true, canBeFile = true, canBeDir = true, mustBeWritable = false, mustBeReadable = true)
     ).single().required()
 
-    private val scopesToScan by option(
-        "--scopes",
-        help = "The list of scopes whose packages shall be scanned. Works only with the '--ort-file' parameter. If " +
-                "empty, all scopes are scanned."
-    ).split(",").default(emptyList())
-
     private val outputDir by option(
         "--output-dir", "-o",
         help = "The directory to write the scan results as ORT result file(s) to, in the specified output format(s)."
@@ -172,8 +166,7 @@ class ScannerCommand : CliktCommand(name = "scan", help = "Run existing copyrigh
             scanner.scanOrtResult(
                 ortResultFile = ortFile,
                 outputDirectory = absoluteNativeOutputDir,
-                downloadDirectory = absoluteDownloadDir ?: absoluteOutputDir.resolve("downloads"),
-                scopesToScan = scopesToScan.toSet()
+                downloadDirectory = absoluteDownloadDir ?: absoluteOutputDir.resolve("downloads")
             )
         } else {
             require(scanner is LocalScanner) {

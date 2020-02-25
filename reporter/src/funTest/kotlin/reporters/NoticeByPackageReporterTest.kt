@@ -176,7 +176,6 @@ class NoticeByPackageReporterTest : WordSpec({
             environment = Environment(),
             config = ScannerConfiguration(),
             results = ScanRecord(
-                scopes = sortedSetOf(),
                 scanResults = sortedSetOf(
                     ScanResultContainer(
                         id = Identifier("NPM:@ort:project-with-findings:1.0"),

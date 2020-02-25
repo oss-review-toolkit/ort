@@ -27,14 +27,11 @@ import java.util.SortedSet
 /**
  * A record of a single run of the scanner tool, containing the input and the scan results for all scanned packages.
  */
-@JsonIgnoreProperties(value = ["has_issues", /* Backwards-compatibility: */ "has_errors"], allowGetters = true)
+@JsonIgnoreProperties(
+    value = ["has_issues", /* Backwards-compatibility: */ "has_errors", "scopes"],
+    allowGetters = true
+)
 data class ScanRecord(
-    /**
-     * The scanned and ignored [Scope]s for each scanned [Project] by id.
-     */
-    @JsonAlias("scanned_scopes")
-    val scopes: SortedSet<ProjectScanScopes>,
-
     /**
      * The [ScanResult]s for all [Package]s.
      */

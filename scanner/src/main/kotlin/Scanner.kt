@@ -24,7 +24,6 @@ import com.here.ort.model.Environment
 import com.here.ort.model.OrtResult
 import com.here.ort.model.Package
 import com.here.ort.model.Project
-import com.here.ort.model.ProjectScanScopes
 import com.here.ort.model.ScanRecord
 import com.here.ort.model.ScanResult
 import com.here.ort.model.ScanResultContainer
@@ -32,7 +31,6 @@ import com.here.ort.model.ScannerRun
 import com.here.ort.model.config.ScannerConfiguration
 import com.here.ort.model.readValue
 import com.here.ort.spdx.SpdxLicense
-import com.here.ort.utils.log
 
 import java.io.File
 import java.lang.IllegalArgumentException
@@ -84,8 +82,7 @@ abstract class Scanner(val scannerName: String, protected val config: ScannerCon
     fun scanOrtResult(
         ortResultFile: File,
         outputDirectory: File,
-        downloadDirectory: File,
-        scopesToScan: Set<String> = emptySet()
+        downloadDirectory: File
     ): OrtResult {
         require(ortResultFile.isFile) {
             "The provided ORT result file '${ortResultFile.canonicalPath}' does not exit."
@@ -104,32 +101,7 @@ abstract class Scanner(val scannerName: String, protected val config: ScannerCon
         val consolidatedProjectPackageMap = Downloader.consolidateProjectPackagesByVcs(ortResult.getProjects())
         val consolidatedReferencePackages = consolidatedProjectPackageMap.keys.map { it.toCuratedPackage() }
 
-        val projectScanScopes = if (scopesToScan.isNotEmpty()) {
-            log.info { "Limiting scan to scopes $scopesToScan." }
-
-            ortResult.getProjects().map { project ->
-                project.scopes.map { it.name }.partition { it in scopesToScan }.let {
-                    ProjectScanScopes(project.id, it.first.toSortedSet(), it.second.toSortedSet())
-                }
-            }
-        } else {
-            ortResult.getProjects().map { project ->
-                val scopes = project.scopes.map { it.name }
-                ProjectScanScopes(project.id, scopes.toSortedSet(), sortedSetOf())
-            }
-        }.toSortedSet()
-
-        val curatedPackages = if (scopesToScan.isNotEmpty()) {
-            consolidatedReferencePackages + ortResult.getPackages().filter { (pkg, _) ->
-                ortResult.getProjects().any { project ->
-                    project.scopes.any { it.name in scopesToScan && pkg.id in it }
-                }
-            }
-        } else {
-            consolidatedReferencePackages + ortResult.getPackages()
-        }.toSortedSet()
-
-        val packagesToScan = curatedPackages.map { it.pkg }
+        val packagesToScan = (consolidatedReferencePackages + ortResult.getPackages()).map { it.pkg }
         val results = runBlocking { scanPackages(packagesToScan, outputDirectory, downloadDirectory) }
         val resultContainers = results.map { (pkg, results) ->
             ScanResultContainer(pkg.id, results)
@@ -153,7 +125,7 @@ abstract class Scanner(val scannerName: String, protected val config: ScannerCon
             }
         }
 
-        val scanRecord = ScanRecord(projectScanScopes, resultContainers, ScanResultsStorage.storage.stats)
+        val scanRecord = ScanRecord(resultContainers, ScanResultsStorage.storage.stats)
 
         val endTime = Instant.now()
 

@@ -405,7 +405,7 @@ abstract class LocalScanner(name: String, config: ScannerConfiguration) : Scanne
         )
 
         val scanResultContainer = ScanResultContainer(id, listOf(result))
-        val scanRecord = ScanRecord(sortedSetOf(), sortedSetOf(scanResultContainer), ScanResultsStorage.storage.stats)
+        val scanRecord = ScanRecord(sortedSetOf(scanResultContainer), ScanResultsStorage.storage.stats)
 
         val endTime = Instant.now()
         val scannerRun = ScannerRun(startTime, endTime, Environment(), config, scanRecord)
