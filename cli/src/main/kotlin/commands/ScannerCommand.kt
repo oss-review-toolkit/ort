@@ -170,8 +170,10 @@ class ScannerCommand : CliktCommand(name = "scan", help = "Run existing copyrigh
         val ortResult = if (input.isFile) {
             val ortFile = input.expandTilde()
             scanner.scanOrtResult(
-                ortFile, absoluteNativeOutputDir,
-                absoluteDownloadDir ?: absoluteOutputDir.resolve("downloads"), scopesToScan.toSet()
+                ortResultFile = ortFile,
+                outputDirectory = absoluteNativeOutputDir,
+                downloadDirectory = absoluteDownloadDir ?: absoluteOutputDir.resolve("downloads"),
+                scopesToScan = scopesToScan.toSet()
             )
         } else {
             require(scanner is LocalScanner) {
