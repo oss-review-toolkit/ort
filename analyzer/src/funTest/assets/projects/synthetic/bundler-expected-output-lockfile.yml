@@ -18,7 +18,7 @@ project:
   scopes:
   - name: "default"
     dependencies:
-    - id: "Bundler::nokogiri:1.10.4"
+    - id: "Bundler::nokogiri:1.10.8"
       dependencies:
       - id: "Bundler::mini_portile2:2.4.0"
     - id: "Bundler::rack:1.6.12"
@@ -109,8 +109,8 @@ packages:
       path: ""
   curations: []
 - package:
-    id: "Bundler::nokogiri:1.10.4"
-    purl: "pkg:bundler/nokogiri@1.10.4"
+    id: "Bundler::nokogiri:1.10.8"
+    purl: "pkg:bundler/nokogiri@1.10.8"
     declared_licenses:
     - "MIT"
     declared_licenses_processed:
@@ -124,9 +124,9 @@ packages:
         value: ""
         algorithm: ""
     source_artifact:
-      url: "https://rubygems.org/gems/nokogiri-1.10.4.gem"
+      url: "https://rubygems.org/gems/nokogiri-1.10.8.gem"
       hash:
-        value: "fbf91c487d7ceb2b0593384f175843f99152322754f6ff267740bff031cead5a"
+        value: "0806b8b0541850b59c4f588c53cff42ef2da6c7fa2f0b1cbcb83d1cc219228fa"
         algorithm: "SHA-256"
     vcs:
       type: "Git"
