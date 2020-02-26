@@ -98,14 +98,16 @@ fun InputStream.unpackTar(targetDirectory: File) {
     TarArchiveInputStream(this).use {
         while (true) {
             val entry = it.nextTarEntry ?: break
+            val target = File(targetDirectory, entry.name)
+
+            if (entry.isDirectory) {
+                target.safeMkdirs()
+                continue
+            }
 
             if (!entry.isFile) {
                 continue
             }
-
-            val target = File(targetDirectory, entry.name)
-
-            target.parentFile.safeMkdirs()
 
             target.outputStream().use { output ->
                 it.copyTo(output)
@@ -131,14 +133,16 @@ fun InputStream.unpackZip(targetDirectory: File) {
     ZipArchiveInputStream(this).use {
         while (true) {
             val entry = it.nextZipEntry ?: break
+            val target = File(targetDirectory, entry.name)
 
-            if (entry.isDirectory || entry.isUnixSymlink) {
+            if (entry.isDirectory) {
+                target.safeMkdirs()
                 continue
             }
 
-            val target = File(targetDirectory, entry.name)
-
-            target.parentFile.safeMkdirs()
+            if (entry.isUnixSymlink) {
+                continue
+            }
 
             target.outputStream().use { output ->
                 it.copyTo(output)
