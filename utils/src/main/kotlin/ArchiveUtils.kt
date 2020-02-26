@@ -105,6 +105,8 @@ fun InputStream.unpackTar(targetDirectory: File) {
 
             val target = File(targetDirectory, entry.name)
 
+            // There is no guarantee that directory entries appear before file entries, so always ensure the parent
+            // directory for a file exists.
             target.parentFile.safeMkdirs()
 
             target.outputStream().use { output ->
@@ -138,6 +140,8 @@ fun InputStream.unpackZip(targetDirectory: File) {
 
             val target = File(targetDirectory, entry.name)
 
+            // There is no guarantee that directory entries appear before file entries, so always ensure the parent
+            // directory for a file exists.
             target.parentFile.safeMkdirs()
 
             target.outputStream().use { output ->
@@ -170,6 +174,8 @@ fun File.unpack7Zip(targetDirectory: File) {
 
             val target = File(targetDirectory, entry.name)
 
+            // There is no guarantee that directory entries appear before file entries, so always ensure the parent
+            // directory for a file exists.
             target.parentFile.safeMkdirs()
 
             target.outputStream().use { output ->
