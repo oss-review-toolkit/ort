@@ -411,6 +411,9 @@ data class OrtResult(
 
     fun getPackage(id: Identifier): CuratedPackage? = packages[id]?.curatedPackage
 
+    /**
+     * Return all [Package]s contained in this [OrtResult].
+     */
     @JsonIgnore
     fun getPackages(): Set<CuratedPackage> = analyzer?.result?.packages.orEmpty()
 
