@@ -175,7 +175,8 @@ class Maven(
 
         try {
             val dependencies = node.children.mapNotNull { child ->
-                if (child.artifact.identifier().startsWith("jdk.tools:jdk.tools:")) {
+                val toolsJarCoordinates = listOf("com.sun:tools:", "jdk.tools:jdk.tools:")
+                if (toolsJarCoordinates.any { child.artifact.identifier().startsWith(it) }) {
                     log.info { "Omitting the Java < 1.9 system dependency on 'tools.jar'." }
                     null
                 } else {
