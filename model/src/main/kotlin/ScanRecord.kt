@@ -28,7 +28,7 @@ import java.util.SortedSet
  * A record of a single run of the scanner tool, containing the input and the scan results for all scanned packages.
  */
 @JsonIgnoreProperties(
-    value = ["has_issues", /* Backwards-compatibility: */ "has_errors", "scopes"],
+    value = ["has_issues", /* Backwards-compatibility: */ "has_errors", "scanned_scopes", "scopes"],
     allowGetters = true
 )
 data class ScanRecord(
