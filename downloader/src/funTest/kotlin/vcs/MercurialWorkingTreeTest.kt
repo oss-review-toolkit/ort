@@ -60,7 +60,7 @@ class MercurialWorkingTreeTest : StringSpec() {
         }
 
         "Mercurial correctly detects URLs to remote repositories" {
-            hg.isApplicableUrl("https://bitbucket.org/paniq/masagin") shouldBe true
+            hg.isApplicableUrl("https://hg.sr.ht/~duangle/paniq_legacy") shouldBe true
 
             // Bitbucket forwards to ".git" URLs for Git repositories, so we can omit the suffix.
             hg.isApplicableUrl("https://bitbucket.org/yevster/spdxtraxample") shouldBe false
