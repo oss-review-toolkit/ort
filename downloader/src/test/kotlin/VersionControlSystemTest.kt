@@ -173,11 +173,11 @@ class VersionControlSystemTest : WordSpec({
     "splitUrl for Bitbucket" should {
         "not modify URLs without a path" {
             val actual = VersionControlSystem.splitUrl(
-                "https://bitbucket.org/paniq/masagin"
+                "https://bitbucket.org/tanaylab/tglkmeans"
             )
             val expected = VcsInfo(
                 type = VcsType.MERCURIAL,
-                url = "https://bitbucket.org/paniq/masagin",
+                url = "https://bitbucket.org/tanaylab/tglkmeans",
                 revision = ""
             )
             actual shouldBe expected
