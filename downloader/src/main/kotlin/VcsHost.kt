@@ -78,15 +78,16 @@ enum class VcsHost(
             return VcsInfo(type, url, revision, path = path)
         }
 
-        override fun toPermalink(vcsUrl: URI, revision: String, path: String, startLine: Int, endLine: Int) =
+        override fun toPermalinkInternal(vcsInfo: VcsInfo, startLine: Int, endLine: Int) =
             buildString {
+                val vcsUrl = URI(vcsInfo.url)
                 append("https://${vcsUrl.host}${vcsUrl.path}")
 
-                if (revision.isNotEmpty()) {
-                    append("/src/$revision")
+                if (vcsInfo.revision.isNotEmpty()) {
+                    append("/src/${vcsInfo.revision}")
 
-                    if (path.isNotEmpty()) {
-                        append("/$path")
+                    if (vcsInfo.path.isNotEmpty()) {
+                        append("/${vcsInfo.path}")
 
                         if (startLine > 0) {
                             append("#lines-$startLine")
@@ -104,8 +105,8 @@ enum class VcsHost(
     GITHUB("github.com", VcsType.GIT) {
         override fun toVcsInfo(projectUrl: URI) = gitProjectUrlToVcsInfo(projectUrl)
 
-        override fun toPermalink(vcsUrl: URI, revision: String, path: String, startLine: Int, endLine: Int) =
-            toGitPermalink(vcsUrl, revision, path, startLine, endLine, "#L", "-L")
+        override fun toPermalinkInternal(vcsInfo: VcsInfo, startLine: Int, endLine: Int) =
+            toGitPermalink(URI(vcsInfo.url), vcsInfo.revision, vcsInfo.path, startLine, endLine, "#L", "-L")
     },
 
     /**
@@ -114,8 +115,8 @@ enum class VcsHost(
     GITLAB("gitlab.com", VcsType.GIT) {
         override fun toVcsInfo(projectUrl: URI) = gitProjectUrlToVcsInfo(projectUrl)
 
-        override fun toPermalink(vcsUrl: URI, revision: String, path: String, startLine: Int, endLine: Int) =
-            toGitPermalink(vcsUrl, revision, path, startLine, endLine, "#L", "-")
+        override fun toPermalinkInternal(vcsInfo: VcsInfo, startLine: Int, endLine: Int) =
+            toGitPermalink(URI(vcsInfo.url), vcsInfo.revision, vcsInfo.path, startLine, endLine, "#L", "-")
     };
 
     companion object {
@@ -138,7 +139,7 @@ enum class VcsHost(
         fun toPermalink(vcsInfo: VcsInfo, startLine: Int = -1, endLine: Int = -1): String? {
             if (!isValidLineRange(startLine, endLine)) return null
             return values().find { host -> host.isApplicable(vcsInfo) }
-                ?.toPermalink(URI(vcsInfo.url), vcsInfo.revision, vcsInfo.path, startLine, endLine)
+                ?.toPermalinkInternal(vcsInfo, startLine, endLine)
         }
 
         protected fun isValidLineRange(startLine: Int, endLine: Int): Boolean =
@@ -187,13 +188,10 @@ enum class VcsHost(
     fun toPermalink(vcsInfo: VcsInfo, startLine: Int = -1, endLine: Int = -1): String? {
         val normalizedVcsInfo = vcsInfo.normalize()
         if (!isApplicable(normalizedVcsInfo) || !isValidLineRange(startLine, endLine)) return null
-        return toPermalink(URI(normalizedVcsInfo.url), vcsInfo.revision, vcsInfo.path, startLine, endLine)
+        return toPermalinkInternal(normalizedVcsInfo, startLine, endLine)
     }
 
-    protected abstract fun toPermalink(
-        vcsUrl: URI, revision: String, path: String,
-        startLine: Int, endLine: Int
-    ): String
+    protected abstract fun toPermalinkInternal(vcsInfo: VcsInfo, startLine: Int, endLine: Int): String
 }
 
 private fun String.isPathToMarkdownFile() =
