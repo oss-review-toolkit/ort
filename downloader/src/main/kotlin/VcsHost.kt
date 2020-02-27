@@ -150,7 +150,7 @@ enum class VcsHost(
     /**
      * Return whether this host is applicable for the [url] URI.
      */
-    fun isApplicable(url: URI) = url.host == hostname
+    fun isApplicable(url: URI) = url.host?.endsWith(hostname) == true
 
     /**
      * Return whether this host is applicable for the [url] string.
