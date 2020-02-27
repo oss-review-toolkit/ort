@@ -47,17 +47,17 @@ enum class VcsHost(
      */
     BITBUCKET("bitbucket.org", VcsType.GIT, VcsType.MERCURIAL) {
         override fun toVcsInfo(projectUrl: URI): VcsInfo {
-            var vcsUrl = projectUrl.scheme + "://" + projectUrl.authority
+            var url = projectUrl.scheme + "://" + projectUrl.authority
 
             // Append the first two path components that denote the user and project to the base URL.
             val pathIterator = Paths.get(projectUrl.path).iterator()
 
             if (pathIterator.hasNext()) {
-                vcsUrl += "/${pathIterator.next()}"
+                url += "/${pathIterator.next()}"
             }
 
             if (pathIterator.hasNext()) {
-                vcsUrl += "/${pathIterator.next()}"
+                url += "/${pathIterator.next()}"
             }
 
             var revision = ""
@@ -70,12 +70,12 @@ enum class VcsHost(
                 }
             }
 
-            val type = VersionControlSystem.forUrl(vcsUrl)?.type ?: VcsType.NONE
+            val type = VersionControlSystem.forUrl(url)?.type ?: VcsType.NONE
             if (type == VcsType.GIT) {
-                vcsUrl += ".git"
+                url += ".git"
             }
 
-            return VcsInfo(type, vcsUrl, revision, path = path)
+            return VcsInfo(type, url, revision, path = path)
         }
 
         override fun toPermalink(vcsUrl: URI, revision: String, path: String, startLine: Int, endLine: Int) =
