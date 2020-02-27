@@ -22,6 +22,7 @@ package com.here.ort.downloader
 import com.here.ort.downloader.VcsHost.BITBUCKET
 import com.here.ort.downloader.VcsHost.GITHUB
 import com.here.ort.downloader.VcsHost.GITLAB
+import com.here.ort.downloader.VcsHost.SOURCEHUT
 import com.here.ort.model.VcsInfo
 import com.here.ort.model.VcsType
 
@@ -60,7 +61,7 @@ class VcsHostTest : WordSpec({
     "GitHub" should {
         "be able to extract VCS information from a project URL" {
             GITHUB.toVcsInfo(
-                "https://github.com/heremaps/oss-review-toolkit/blob/da7e3a814fc0e6301bf3ed394eba1a661e4d88d7/README.md"
+                "https://github.com/heremaps/oss-review-toolkit/tree/da7e3a814fc0e6301bf3ed394eba1a661e4d88d7/README.md"
             ) shouldBe
                     VcsInfo(
                         type = VcsType.GIT,
@@ -79,9 +80,9 @@ class VcsHostTest : WordSpec({
             )
 
             GITHUB.toPermalink(vcsInfo, 3) shouldBe "https://github.com/heremaps/oss-review-toolkit/" +
-                    "blob/4a836c3a6a42d358362fa07b014b7d83572a13ed/docs/examples/gradle.ort.yml#L3"
+                    "tree/4a836c3a6a42d358362fa07b014b7d83572a13ed/docs/examples/gradle.ort.yml#L3"
             GITHUB.toPermalink(vcsInfo, 3, 5) shouldBe "https://github.com/heremaps/oss-review-toolkit/" +
-                    "blob/4a836c3a6a42d358362fa07b014b7d83572a13ed/docs/examples/gradle.ort.yml#L3-L5"
+                    "tree/4a836c3a6a42d358362fa07b014b7d83572a13ed/docs/examples/gradle.ort.yml#L3-L5"
         }
 
         "be able to create permalinks to Markdown files" {
@@ -102,7 +103,7 @@ class VcsHostTest : WordSpec({
     "GitLab" should {
         "be able to extract VCS information from a project URL" {
             GITLAB.toVcsInfo(
-                "https://gitlab.com/mbunkus/mkvtoolnix/blob/ec80478f87f1941fe52f15c5f4fa7ee6a70d7006/NEWS.md"
+                "https://gitlab.com/mbunkus/mkvtoolnix/tree/ec80478f87f1941fe52f15c5f4fa7ee6a70d7006/NEWS.md"
             ) shouldBe
                     VcsInfo(
                         type = VcsType.GIT,
@@ -121,9 +122,9 @@ class VcsHostTest : WordSpec({
             )
 
             GITLAB.toPermalink(vcsInfo, 7) shouldBe "https://gitlab.com/mbunkus/mkvtoolnix/" +
-                    "blob/12542c481ff1e0abcf8d561d6741e561ef5675ca/autogen.sh#L7"
+                    "tree/12542c481ff1e0abcf8d561d6741e561ef5675ca/autogen.sh#L7"
             GITLAB.toPermalink(vcsInfo, 7, 9) shouldBe "https://gitlab.com/mbunkus/mkvtoolnix/" +
-                    "blob/12542c481ff1e0abcf8d561d6741e561ef5675ca/autogen.sh#L7-9"
+                    "tree/12542c481ff1e0abcf8d561d6741e561ef5675ca/autogen.sh#L7-9"
         }
 
         "be able to create permalinks to Markdown files" {
@@ -138,6 +139,59 @@ class VcsHostTest : WordSpec({
                     "blame/ec80478f87f1941fe52f15c5f4fa7ee6a70d7006/NEWS.md#L5"
             GITLAB.toPermalink(vcsInfo, 5, 7) shouldBe "https://gitlab.com/mbunkus/mkvtoolnix/" +
                     "blame/ec80478f87f1941fe52f15c5f4fa7ee6a70d7006/NEWS.md#L5-7"
+        }
+    }
+
+    "SourceHut" should {
+        "be able to extract VCS information from a Git project URL" {
+            SOURCEHUT.toVcsInfo(
+                "https://git.sr.ht/~ben/web/tree/2c3d173d/pkgs.nix"
+            ) shouldBe
+                    VcsInfo(
+                        type = VcsType.GIT,
+                        url = "https://git.sr.ht/~ben/web",
+                        revision = "2c3d173d",
+                        path = "pkgs.nix"
+                    )
+        }
+
+        "be able to extract VCS information from a Mercurial project URL" {
+            SOURCEHUT.toVcsInfo(
+                "https://hg.sr.ht/~duangle/paniq_legacy/browse/f04521a92844/masagin/visual_cues.png"
+            ) shouldBe
+                    VcsInfo(
+                        type = VcsType.MERCURIAL,
+                        url = "https://hg.sr.ht/~duangle/paniq_legacy",
+                        revision = "f04521a92844",
+                        path = "masagin/visual_cues.png"
+                    )
+        }
+
+        "be able to create permalinks from Git VCS information" {
+            val vcsInfo = VcsInfo(
+                type = VcsType.GIT,
+                url = "https://git.sr.ht/~ben/web",
+                revision = "2c3d173d",
+                path = "assets/css/main.css"
+            )
+
+            SOURCEHUT.toPermalink(vcsInfo, 26) shouldBe
+                    "https://git.sr.ht/~ben/web/tree/2c3d173d/assets/css/main.css#L26"
+            SOURCEHUT.toPermalink(vcsInfo, 26, 29) shouldBe
+                    "https://git.sr.ht/~ben/web/tree/2c3d173d/assets/css/main.css#L26-29"
+        }
+
+        "be able to create permalinks from Mercurial VCS information" {
+            val vcsInfo = VcsInfo(
+                type = VcsType.MERCURIAL,
+                url = "https://hg.sr.ht/~duangle/paniq_legacy",
+                revision = "f04521a92844",
+                path = "masagin/README.txt"
+            )
+
+            SOURCEHUT.toPermalink(vcsInfo, 9) shouldBe
+                    "https://hg.sr.ht/~duangle/paniq_legacy/browse/f04521a92844/masagin/README.txt#L9"
+            // SourceHut does not support an end line in permalinks to Mercural repos.
         }
     }
 })

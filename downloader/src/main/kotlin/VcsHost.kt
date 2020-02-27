@@ -117,6 +117,75 @@ enum class VcsHost(
 
         override fun toPermalinkInternal(vcsInfo: VcsInfo, startLine: Int, endLine: Int) =
             toGitPermalink(URI(vcsInfo.url), vcsInfo.revision, vcsInfo.path, startLine, endLine, "#L", "-")
+    },
+
+    SOURCEHUT("sr.ht", VcsType.GIT, VcsType.MERCURIAL) {
+        override fun toVcsInfo(projectUrl: URI): VcsInfo {
+            val type = when (projectUrl.host.substringBefore('.')) {
+                "git" -> VcsType.GIT
+                "hg" -> VcsType.MERCURIAL
+                else -> VcsType.NONE
+            }
+
+            var url = projectUrl.scheme + "://" + projectUrl.authority
+
+            // Append the first two path components that denote the user and project to the base URL.
+            val pathIterator = Paths.get(projectUrl.path).iterator()
+
+            if (pathIterator.hasNext()) {
+                url += "/${pathIterator.next()}"
+            }
+
+            if (pathIterator.hasNext()) {
+                url += "/${pathIterator.next()}"
+            }
+
+            var revision = ""
+            var path = ""
+
+            if (pathIterator.hasNext()) {
+                val component = pathIterator.next().toString()
+                val isGitUrl = type == VcsType.GIT && component == "tree"
+                val isHgUrl = type == VcsType.MERCURIAL && component == "browse"
+
+                if ((isGitUrl || isHgUrl) && pathIterator.hasNext()) {
+                    revision = pathIterator.next().toString()
+                    path = projectUrl.path.substringAfter(revision).trimStart('/')
+                }
+            }
+
+            return VcsInfo(type, url, revision, path = path)
+        }
+
+        override fun toPermalinkInternal(vcsInfo: VcsInfo, startLine: Int, endLine: Int) =
+            when (vcsInfo.type) {
+                VcsType.GIT -> {
+                    toGitPermalink(URI(vcsInfo.url), vcsInfo.revision, vcsInfo.path, startLine, endLine, "#L", "-")
+                }
+
+                VcsType.MERCURIAL -> {
+                    val vcsUrl = URI(vcsInfo.url)
+                    var permalink = "https://${vcsUrl.host}${vcsUrl.path}"
+
+                    if (vcsInfo.revision.isNotEmpty()) {
+                        permalink += "/browse/${vcsInfo.revision}"
+
+                        if (vcsInfo.path.isNotEmpty()) {
+                            permalink += "/${vcsInfo.path}"
+
+                            if (startLine > 0) {
+                                permalink += "#L$startLine"
+
+                                // SourceHut does not support an end line in permalinks to Mercural repos.
+                            }
+                        }
+                    }
+
+                    permalink
+                }
+
+                else -> ""
+            }
     };
 
     companion object {
@@ -241,10 +310,10 @@ private fun toGitPermalink(
     var permalink = "https://${vcsUrl.host}${vcsUrl.path.removeSuffix(".git")}"
 
     if (revision.isNotEmpty()) {
-        // GitHub and GitLab are tolerant about "blob" vs. "tree" here.
+        // GitHub and GitLab are tolerant about "blob" vs. "tree" here, but SourceHut requires "tree" also for files.
         val gitObject = if (path.isNotEmpty()) {
             // Markdown files are usually rendered and can only link to lines in blame view.
-            if (path.isPathToMarkdownFile() && startLine != -1) "blame" else "blob"
+            if (path.isPathToMarkdownFile() && startLine != -1) "blame" else "tree"
         } else {
             "commit"
         }
