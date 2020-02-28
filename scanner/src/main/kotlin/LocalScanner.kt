@@ -75,6 +75,11 @@ import kotlinx.coroutines.withContext
 abstract class LocalScanner(name: String, config: ScannerConfiguration) : Scanner(name, config), CommandLineTool {
     companion object {
         val DEFAULT_ARCHIVE_DIR by lazy { getUserOrtDirectory().resolve("scanner/archive") }
+
+        val STORAGE_DISPATCHER = Executors.newFixedThreadPool(5, NamedThreadFactory(ScanResultsStorage.storage.name))
+            .asCoroutineDispatcher()
+        val SCAN_DISPATCHER = Executors.newSingleThreadExecutor(NamedThreadFactory(LocalScanner::class.java.simpleName))
+            .asCoroutineDispatcher()
     }
 
     val archiver by lazy {
@@ -158,10 +163,6 @@ abstract class LocalScanner(name: String, config: ScannerConfiguration) : Scanne
             Map<Package, List<ScanResult>> {
         val scannerDetails = getDetails()
 
-        val storageDispatcher =
-            Executors.newFixedThreadPool(5, NamedThreadFactory(ScanResultsStorage.storage.name)).asCoroutineDispatcher()
-        val scanDispatcher = Executors.newSingleThreadExecutor(NamedThreadFactory(scannerName)).asCoroutineDispatcher()
-
         return try {
             coroutineScope {
                 packages.withIndex().map { (index, pkg) ->
@@ -171,7 +172,7 @@ abstract class LocalScanner(name: String, config: ScannerConfiguration) : Scanne
                         val result = try {
                             log.info { "Queueing scan of '${pkg.id.toCoordinates()}' $packageIndex." }
 
-                            val storedResults = withContext(storageDispatcher) {
+                            val storedResults = withContext(STORAGE_DISPATCHER) {
                                 log.info {
                                     "Trying to read stored scan results for ${pkg.id.toCoordinates()} in thread " +
                                             "'${Thread.currentThread().name}' $packageIndex."
@@ -185,7 +186,7 @@ abstract class LocalScanner(name: String, config: ScannerConfiguration) : Scanne
 
                                 storedResults
                             } else {
-                                withContext(scanDispatcher) {
+                                withContext(SCAN_DISPATCHER) {
                                     log.info {
                                         "No stored results found, scanning package ${pkg.id.toCoordinates()} in " +
                                                 "thread '${Thread.currentThread().name}' $packageIndex."
@@ -237,8 +238,8 @@ abstract class LocalScanner(name: String, config: ScannerConfiguration) : Scanne
                 }.associate { it.await() }
             }
         } finally {
-            storageDispatcher.close()
-            scanDispatcher.close()
+            STORAGE_DISPATCHER.close()
+            SCAN_DISPATCHER.close()
         }
     }
 

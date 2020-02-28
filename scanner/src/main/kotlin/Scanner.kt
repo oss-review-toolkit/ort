@@ -37,6 +37,7 @@ import java.lang.IllegalArgumentException
 import java.time.Instant
 import java.util.ServiceLoader
 
+import kotlinx.coroutines.async
 import kotlinx.coroutines.runBlocking
 
 const val TOOL_NAME = "scanner"
@@ -49,6 +50,21 @@ const val HTTP_CACHE_PATH = "$TOOL_NAME/cache/http"
  */
 fun scanOrtResult(
     scanner: Scanner,
+    ortResultFile: File,
+    outputDirectory: File,
+    downloadDirectory: File,
+    skipExcluded: Boolean = false
+) = scanOrtResult(scanner, scanner, ortResultFile, outputDirectory, downloadDirectory, skipExcluded)
+
+/**
+ * Use the [scanner] and [projectScanner] to scan the [Package]s and [Project]s specified in [ortResultFile],
+ * respectively. If [skipExcluded] is true, packages for which excludes are defined are not scanned. Scan results are
+ * storted in the [outputDirectory]. The [downloadDirectory] is used to download the source code for scanning to. Return
+ * scan results as an [OrtResult].
+ */
+fun scanOrtResult(
+    scanner: Scanner,
+    projectScanner: Scanner,
     ortResultFile: File,
     outputDirectory: File,
     downloadDirectory: File,
@@ -67,15 +83,30 @@ fun scanOrtResult(
                 "result."
     }
 
-    // Add the projects as packages to scan.
+    // Determine the projects to scan as packages.
     val consolidatedProjects = Downloader.consolidateProjectPackagesByVcs(ortResult.getProjects(skipExcluded))
     val consolidatedReferencePackages = consolidatedProjects.keys.map { it.toCuratedPackage() }
 
-    val packagesToScan = (consolidatedReferencePackages + ortResult.getPackages(skipExcluded)).map { it.pkg }
-    val results = runBlocking { scanner.scanPackages(packagesToScan, outputDirectory, downloadDirectory) }
-    val resultContainers = results.map { (pkg, results) ->
-        ScanResultContainer(pkg.id, results)
-    }.toSortedSet()
+    val resultContainers = runBlocking {
+        // Scan the projects from the ORT result.
+        val deferredProjectScan = async {
+            val packagesToScan = consolidatedReferencePackages.map { it.pkg }
+            projectScanner.scanPackages(packagesToScan, outputDirectory, downloadDirectory)
+        }
+
+        // Scan the packages from the ORT result.
+        val deferredPackageScan = async {
+            val packagesToScan = ortResult.getPackages(skipExcluded).map { it.pkg }
+            scanner.scanPackages(packagesToScan, outputDirectory, downloadDirectory)
+        }
+
+        val projectResults = deferredProjectScan.await()
+        val packageResults = deferredPackageScan.await()
+
+        (projectResults + packageResults).map { (pkg, results) ->
+            ScanResultContainer(pkg.id, results)
+        }.toSortedSet()
+    }
 
     // Add scan results from de-duplicated project packages to result.
     consolidatedProjects.forEach { (referencePackage, deduplicatedPackages) ->

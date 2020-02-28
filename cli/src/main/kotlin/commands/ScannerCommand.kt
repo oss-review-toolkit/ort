@@ -26,6 +26,7 @@ import com.github.ajalt.clikt.core.requireObject
 import com.github.ajalt.clikt.parameters.groups.mutuallyExclusiveOptions
 import com.github.ajalt.clikt.parameters.groups.required
 import com.github.ajalt.clikt.parameters.groups.single
+import com.github.ajalt.clikt.parameters.options.RawOption
 import com.github.ajalt.clikt.parameters.options.convert
 import com.github.ajalt.clikt.parameters.options.default
 import com.github.ajalt.clikt.parameters.options.flag
@@ -42,6 +43,7 @@ import com.here.ort.model.mapper
 import com.here.ort.scanner.LocalScanner
 import com.here.ort.scanner.ScanResultsStorage
 import com.here.ort.scanner.Scanner
+import com.here.ort.scanner.ScannerFactory
 import com.here.ort.scanner.TOOL_NAME
 import com.here.ort.scanner.scanners.ScanCode
 import com.here.ort.scanner.scanOrtResult
@@ -53,6 +55,13 @@ import com.here.ort.utils.log
 import com.here.ort.utils.storage.XZCompressedLocalFileStorage
 
 import java.io.File
+
+private fun RawOption.convertToScanner() =
+    convert { scannerName ->
+        // TODO: Consider allowing to enable multiple scanners (and potentially running them in parallel).
+        Scanner.ALL.find { it.scannerName.equals(scannerName, ignoreCase = true) }
+            ?: throw BadParameterValue("Scanner '$scannerName' is not one of ${Scanner.ALL}.")
+    }
 
 class ScannerCommand : CliktCommand(name = "scan", help = "Run existing copyright / license scanners.") {
     private val input by mutuallyExclusiveOptions(
@@ -85,12 +94,15 @@ class ScannerCommand : CliktCommand(name = "scan", help = "Run existing copyrigh
 
     private val scannerFactory by option(
         "--scanner", "-s",
-        help = "The scanner to use, one of ${Scanner.ALL}."
-    ).convert { scannerName ->
-        // TODO: Consider allowing to enable multiple scanners (and potentially running them in parallel).
-        Scanner.ALL.find { it.scannerName.equals(scannerName, ignoreCase = true) }
-            ?: throw BadParameterValue("Scanner '$scannerName' is not one of ${Scanner.ALL}.")
-    }.default(ScanCode.Factory())
+        help = "The scanner to use for scanning the source code of projects and packages, one of ${Scanner.ALL}. Use " +
+                "'--project-scanner' to use a different scanner for projects only."
+    ).convertToScanner().default(ScanCode.Factory())
+
+    private val projectScannerFactory by option(
+        "--project-scanner",
+        help = "The scanner to use for scanning the source code of projects. By default, projects and packages are " +
+                "scanned with the same scanner as specified by '--scanner'."
+    ).convertToScanner()
 
     private val outputFormats by option(
         "--output-formats", "-f",
@@ -99,9 +111,7 @@ class ScannerCommand : CliktCommand(name = "scan", help = "Run existing copyrigh
 
     private val config by requireObject<OrtConfiguration>()
 
-    private fun configureScanner(scannerConfiguration: ScannerConfiguration?): Scanner {
-        val config = scannerConfiguration ?: ScannerConfiguration()
-
+    private fun configureScanner(factory: ScannerFactory, config: ScannerConfiguration): Scanner {
         // By default use a file based scan results storage.
         val localFileStorage = XZCompressedLocalFileStorage(getUserOrtDirectory().resolve("$TOOL_NAME/results"))
         val fileBasedStorage = FileBasedStorage(localFileStorage)
@@ -119,9 +129,7 @@ class ScannerCommand : CliktCommand(name = "scan", help = "Run existing copyrigh
 
         configuredStorages.forEach { ScanResultsStorage.configure(it) }
 
-        val scanner = scannerFactory.create(config)
-
-        println("Using scanner '${scanner.scannerName}' with storage '${ScanResultsStorage.storage.name}'.")
+        val scanner = factory.create(config)
 
         val localFileStorageLogFunction: ((String) -> Unit)? = when {
             // If the local file storage is in use, log about it already at info level.
@@ -166,25 +174,35 @@ class ScannerCommand : CliktCommand(name = "scan", help = "Run existing copyrigh
             "The download directory '$absoluteDownloadDir' must not exist yet."
         }
 
-        val scanner = configureScanner(config.scanner)
+        val scannerConfig = config.scanner ?: ScannerConfiguration()
+        val scanner = configureScanner(scannerFactory, scannerConfig).also {
+            println("Using scanner '${it.scannerName}' with storage '${ScanResultsStorage.storage.name}'.")
+        }
+
+        val projectScanner = projectScannerFactory?.let { scannerFactory ->
+            configureScanner(scannerFactory, scannerConfig).also {
+                println("Using project scanner '${it.scannerName}' with storage '${ScanResultsStorage.storage.name}'.")
+            }
+        } ?: scanner
 
         val ortResult = if (input.isFile) {
             val ortFile = input.expandTilde()
             scanOrtResult(
                 scanner = scanner,
+                projectScanner = projectScanner,
                 ortResultFile = ortFile,
                 outputDirectory = absoluteNativeOutputDir,
                 downloadDirectory = absoluteDownloadDir ?: absoluteOutputDir.resolve("downloads"),
                 skipExcluded = skipExcluded
             )
         } else {
-            require(scanner is LocalScanner) {
-                "To scan local files the chosen scanner must be a local scanner."
+            require(projectScanner is LocalScanner) {
+                "To scan local files the chosen project scanner must be a local scanner."
             }
 
             val inputPath = input.expandTilde()
             val absoluteInputPath = inputPath.normalize()
-            scanner.scanPath(absoluteInputPath, absoluteNativeOutputDir)
+            projectScanner.scanPath(absoluteInputPath, absoluteNativeOutputDir)
         }
 
         outputFiles.forEach { file ->
