@@ -77,6 +77,8 @@ class OrtConfigurationTest : WordSpec({
                     postgres.username shouldBe "username"
                     postgres.password shouldBe "password"
                 }
+
+                scanner.options shouldNotBe null
             }
         }
     }
