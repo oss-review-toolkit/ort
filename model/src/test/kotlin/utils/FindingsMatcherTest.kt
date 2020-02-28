@@ -23,6 +23,7 @@ import com.here.ort.model.CopyrightFinding
 import com.here.ort.model.LicenseFinding
 import com.here.ort.model.LicenseFindings
 import com.here.ort.model.TextLocation
+import com.here.ort.model.utils.FindingsMatcher.Companion.DEFAULT_EXPAND_TOLERANCE_LINES
 import com.here.ort.model.utils.FindingsMatcher.Companion.DEFAULT_TOLERANCE_LINES
 import com.here.ort.utils.FileMatcher
 
@@ -118,17 +119,18 @@ class FindingsMatcherTest : WordSpec() {
             }
         }
 
-        "Given a file with multiple license findings and 6 copyrights above one of them, match" should {
+        "Given a file with multiple license findings and 7 copyrights above one of them, match" should {
             "associate all except the top copyright finding" {
-                // TODO: change the behavior of the algorithm so that also the top most copyright is matched
                 setupLicenseFinding(license = "license nearby", path = "some/file", line = 16)
                 setupLicenseFinding(license = "license far away", path = "some/file", line = 1000)
-                setupCopyrightFinding(statement = "stmt 1", path = "some/file", line = 10)
-                setupCopyrightFinding(statement = "stmt 2", path = "some/file", line = 11)
-                setupCopyrightFinding(statement = "stmt 3", path = "some/file", line = 12)
-                setupCopyrightFinding(statement = "stmt 4", path = "some/file", line = 13)
-                setupCopyrightFinding(statement = "stmt 5", path = "some/file", line = 14)
-                setupCopyrightFinding(statement = "stmt 6", path = "some/file", line = 15)
+                setupCopyrightFinding(statement = "stmt 5", path = "some/file", line = 5)
+                setupCopyrightFinding(statement = "stmt 8", path = "some/file", line = 8)
+                setupCopyrightFinding(statement = "stmt 10", path = "some/file", line = 10)
+                setupCopyrightFinding(statement = "stmt 11", path = "some/file", line = 11)
+                setupCopyrightFinding(statement = "stmt 12", path = "some/file", line = 12)
+                setupCopyrightFinding(statement = "stmt 13", path = "some/file", line = 13)
+                setupCopyrightFinding(statement = "stmt 14", path = "some/file", line = 14)
+                setupCopyrightFinding(statement = "stmt 15", path = "some/file", line = 15)
 
                 val result = matcher.match(licenseFindings, copyrightFindings)
 
@@ -136,11 +138,13 @@ class FindingsMatcherTest : WordSpec() {
                 result.flatMap { it.copyrights.filter { it.statement == "stmt 1" } } should beEmpty()
                 result.getFindings("license nearby").copyrights.map { it.statement } shouldContainExactlyInAnyOrder
                         listOf(
-                            "stmt 2",
-                            "stmt 3",
-                            "stmt 4",
-                            "stmt 5",
-                            "stmt 6"
+                            "stmt 8",
+                            "stmt 10",
+                            "stmt 11",
+                            "stmt 12",
+                            "stmt 13",
+                            "stmt 14",
+                            "stmt 15"
                         )
             }
         }
@@ -187,7 +191,8 @@ class FindingsMatcherTest : WordSpec() {
                 val licenseStartLine = Random.nextInt(2 * DEFAULT_TOLERANCE_LINES, 20 * DEFAULT_TOLERANCE_LINES)
                 setupLicenseFinding("license nearby", "path", licenseStartLine)
                 setupLicenseFinding("license far away", "path", licenseStartLine + 100 * DEFAULT_TOLERANCE_LINES)
-                setupCopyrightFinding("statement1", "path", licenseStartLine - DEFAULT_TOLERANCE_LINES - 1)
+                setupCopyrightFinding("statement1", "path", licenseStartLine - DEFAULT_TOLERANCE_LINES -
+                        DEFAULT_EXPAND_TOLERANCE_LINES - 1)
                 setupCopyrightFinding("statement2", "path", licenseStartLine - DEFAULT_TOLERANCE_LINES)
                 setupCopyrightFinding("statement3", "path", licenseStartLine + DEFAULT_TOLERANCE_LINES)
                 setupCopyrightFinding("statement4", "path", licenseStartLine + DEFAULT_TOLERANCE_LINES + 1)
