@@ -43,12 +43,96 @@ import org.ossreviewtoolkit.utils.log
 const val TOOL_NAME = "scanner"
 
 /**
+ * Use the [scanner] to scan the [Project]s and [Package]s specified in the [ortResult]. Scan results are stored in the
+ * [outputDirectory].  If [skipExcluded] is true, packages for which excludes are defined are not scanned. Return scan
+ * results as an [OrtResult].
+ */
+fun scanOrtResult(
+    scanner: Scanner,
+    ortResult: OrtResult,
+    outputDirectory: File,
+    skipExcluded: Boolean = false
+): OrtResult {
+    val startTime = Instant.now()
+
+    if (ortResult.analyzer == null) {
+        scanner.log.warn {
+            "Cannot run the scanner as the provided ORT result does not contain an analyzer result. " +
+                    "No result will be added."
+        }
+
+        return ortResult
+    }
+
+    // Add the projects as packages to scan.
+    val consolidatedProjects = consolidateProjectPackagesByVcs(ortResult.getProjects(skipExcluded))
+    val projectPackages = consolidatedProjects.keys
+
+    val projectPackageIds = projectPackages.map { it.id }
+    val packages = ortResult.getPackages(skipExcluded)
+        .filter { it.pkg.id !in projectPackageIds }
+        .map { it.pkg }
+
+    val allPackages = projectPackages + packages
+
+    val packagesToScan = if (scanner.scannerConfig.skipConcluded) {
+        // Remove all packages that have a concluded license and authors set.
+        allPackages.filterNot { it.concludedLicense != null && it.authors.isNotEmpty() }.also {
+            val concludedPackages = allPackages - it
+            if (concludedPackages.isNotEmpty()) {
+                scanner.log.debug { "Not scanning the following packages with concluded licenses: $concludedPackages" }
+            }
+        }
+    } else {
+        allPackages
+    }
+
+    val scanResults = runBlocking {
+        scanner.scanPackages(packagesToScan, outputDirectory).mapKeys { it.key.id }
+    }.toSortedMap()
+
+    // Add scan results from de-duplicated project packages to result.
+    consolidatedProjects.forEach { (referencePackage, deduplicatedPackages) ->
+        scanResults[referencePackage.id]?.let { results ->
+            deduplicatedPackages.forEach { deduplicatedPackage ->
+                ortResult.getProject(deduplicatedPackage.id)?.let { project ->
+                    scanResults[project.id] = results.filterByProject(project)
+                } ?: throw IllegalArgumentException(
+                    "Could not find project '${deduplicatedPackage.id.toCoordinates()}'."
+                )
+            }
+
+            ortResult.getProject(referencePackage.id)?.let { project ->
+                scanResults[project.id] = results.filterByProject(project)
+            } ?: throw IllegalArgumentException("Could not find project '${referencePackage.id.toCoordinates()}'.")
+        }
+    }
+
+    val scanRecord = ScanRecord(scanResults, ScanResultsStorage.storage.stats)
+
+    val endTime = Instant.now()
+
+    val filteredScannerOptions = scanner.scannerConfig.options?.let { options ->
+        options[scanner.scannerName]?.let { scannerOptions ->
+            val filteredScannerOptions = scanner.filterOptionsForResult(scannerOptions)
+            options.toMutableMap().apply { put(scanner.scannerName, filteredScannerOptions) }
+        }
+    } ?: scanner.scannerConfig.options
+
+    val configWithFilteredOptions = scanner.scannerConfig.copy(options = filteredScannerOptions)
+    val scannerRun = ScannerRun(startTime, endTime, Environment(), configWithFilteredOptions, scanRecord)
+
+    // Note: This overwrites any existing ScannerRun from the input file.
+    return ortResult.copy(scanner = scannerRun)
+}
+
+/**
  * The class to run license / copyright scanners. The signatures of public functions in this class define the library
  * API.
  */
 abstract class Scanner(
     val scannerName: String,
-    protected val scannerConfig: ScannerConfiguration,
+    val scannerConfig: ScannerConfiguration,
     protected val downloaderConfig: DownloaderConfiguration
 ) {
     companion object {
@@ -58,85 +142,6 @@ abstract class Scanner(
          * The list of all available scanners in the classpath.
          */
         val ALL by lazy { LOADER.iterator().asSequence().toList() }
-    }
-
-    /**
-     * Scan the [Project]s and [Package]s specified in [ortResult] and store the scan results in [outputDirectory]. If
-     * [skipExcluded] is true, packages for which excludes are defined are not scanned. Return scan results as an
-     * [OrtResult].
-     */
-    fun scanOrtResult(ortResult: OrtResult, outputDirectory: File, skipExcluded: Boolean = false): OrtResult {
-        val startTime = Instant.now()
-
-        if (ortResult.analyzer == null) {
-            log.warn {
-                "Cannot run the scanner as the provided ORT result does not contain an analyzer result. " +
-                        "No result will be added."
-            }
-
-            return ortResult
-        }
-
-        // Add the projects as packages to scan.
-        val consolidatedProjects = consolidateProjectPackagesByVcs(ortResult.getProjects(skipExcluded))
-        val projectPackages = consolidatedProjects.keys
-
-        val projectPackageIds = projectPackages.map { it.id }
-        val packages = ortResult.getPackages(skipExcluded)
-            .filter { it.pkg.id !in projectPackageIds }
-            .map { it.pkg }
-
-        val allPackages = projectPackages + packages
-
-        val packagesToScan = if (scannerConfig.skipConcluded) {
-            // Remove all packages that have a concluded license and authors set.
-            allPackages.filterNot { it.concludedLicense != null && it.authors.isNotEmpty() }.also {
-                val concludedPackages = allPackages - it
-                if (concludedPackages.isNotEmpty()) {
-                    log.debug { "Not scanning the following packages with concluded licenses: $concludedPackages" }
-                }
-            }
-        } else {
-            allPackages
-        }
-
-        val scanResults = runBlocking {
-            scanPackages(packagesToScan, outputDirectory).mapKeys { it.key.id }
-        }.toSortedMap()
-
-        // Add scan results from de-duplicated project packages to result.
-        consolidatedProjects.forEach { (referencePackage, deduplicatedPackages) ->
-            scanResults[referencePackage.id]?.let { results ->
-                deduplicatedPackages.forEach { deduplicatedPackage ->
-                    ortResult.getProject(deduplicatedPackage.id)?.let { project ->
-                        scanResults[project.id] = results.filterByProject(project)
-                    } ?: throw IllegalArgumentException(
-                        "Could not find project '${deduplicatedPackage.id.toCoordinates()}'."
-                    )
-                }
-
-                ortResult.getProject(referencePackage.id)?.let { project ->
-                    scanResults[project.id] = results.filterByProject(project)
-                } ?: throw IllegalArgumentException("Could not find project '${referencePackage.id.toCoordinates()}'.")
-            }
-        }
-
-        val scanRecord = ScanRecord(scanResults, ScanResultsStorage.storage.stats)
-
-        val endTime = Instant.now()
-
-        val filteredScannerOptions = scannerConfig.options?.let { options ->
-            options[scannerName]?.let { scannerOptions ->
-                val filteredScannerOptions = filterOptionsForResult(scannerOptions)
-                options.toMutableMap().apply { put(scannerName, filteredScannerOptions) }
-            }
-        } ?: scannerConfig.options
-
-        val configWithFilteredOptions = scannerConfig.copy(options = filteredScannerOptions)
-        val scannerRun = ScannerRun(startTime, endTime, Environment(), configWithFilteredOptions, scanRecord)
-
-        // Note: This overwrites any existing ScannerRun from the input file.
-        return ortResult.copy(scanner = scannerRun)
     }
 
     /**
@@ -153,5 +158,5 @@ abstract class Scanner(
      * Filter the options specific to this scanner that will be included into the result, e.g. to perform obfuscation of
      * credentials.
      */
-    protected open fun filterOptionsForResult(options: ScannerOptions) = options
+    open fun filterOptionsForResult(options: ScannerOptions) = options
 }

@@ -50,6 +50,7 @@ import org.ossreviewtoolkit.model.utils.mergeLabels
 import org.ossreviewtoolkit.scanner.LocalScanner
 import org.ossreviewtoolkit.scanner.ScanResultsStorage
 import org.ossreviewtoolkit.scanner.Scanner
+import org.ossreviewtoolkit.scanner.scanOrtResult
 import org.ossreviewtoolkit.scanner.scanners.scancode.ScanCode
 import org.ossreviewtoolkit.scanner.storages.FileBasedStorage
 import org.ossreviewtoolkit.scanner.storages.SCAN_RESULTS_FILE_NAME
@@ -160,7 +161,7 @@ class ScannerCommand : CliktCommand(name = "scan", help = "Run external license 
 
         val ortResult = if (input.isFile) {
             val ortResult = readOrtResult(input)
-            scanner.scanOrtResult(ortResult, nativeOutputDir, skipExcluded)
+            scanOrtResult(scanner, ortResult, nativeOutputDir, skipExcluded)
         } else {
             require(scanner is LocalScanner) {
                 "To scan local files the chosen scanner must be a local scanner."

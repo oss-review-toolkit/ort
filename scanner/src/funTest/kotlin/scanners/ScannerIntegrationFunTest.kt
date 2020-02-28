@@ -35,6 +35,7 @@ import org.ossreviewtoolkit.model.yamlMapper
 import org.ossreviewtoolkit.scanner.AbstractScannerFactory
 import org.ossreviewtoolkit.scanner.LocalScanner
 import org.ossreviewtoolkit.scanner.ScanResultsStorage
+import org.ossreviewtoolkit.scanner.scanOrtResult
 import org.ossreviewtoolkit.spdx.calculatePackageVerificationCode
 import org.ossreviewtoolkit.utils.test.convertToDependencyGraph
 import org.ossreviewtoolkit.utils.test.createTestTempDir
@@ -58,7 +59,7 @@ class ScannerIntegrationFunTest : StringSpec() {
             )
 
             val scanner = DummyScanner("Dummy", ScannerConfiguration(), DownloaderConfiguration())
-            val ortResult = scanner.scanOrtResult(analyzerResultFile.readValue(), outputDir)
+            val ortResult = scanOrtResult(scanner, analyzerResultFile.readValue(), outputDir)
             val result = yamlMapper.writeValueAsString(ortResult)
 
             patchActualResult(result, patchStartAndEndTime = true) shouldBe expectedResult

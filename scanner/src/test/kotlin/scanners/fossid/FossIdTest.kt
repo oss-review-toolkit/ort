@@ -87,6 +87,7 @@ import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.config.DownloaderConfiguration
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
+import org.ossreviewtoolkit.scanner.scanOrtResult
 import org.ossreviewtoolkit.utils.test.shouldNotBeNull
 
 class FossIdTest : WordSpec({
@@ -908,7 +909,7 @@ private fun FossId.scan(packages: List<Package>): ScannerRun {
     every { mockResult.getPackages(any()) } returns curatedPackages
     every { mockResult.getProjects(any()) } returns emptySet()
 
-    val newResult = runBlocking { scanOrtResult(mockResult, File("irrelevant")) }
+    val newResult = runBlocking { scanOrtResult(this@scan, mockResult, File("irrelevant")) }
 
     return newResult.scanner!!
 }
