@@ -36,6 +36,8 @@ import com.jcraft.jsch.agentproxy.RemoteIdentityRepository
 import com.jcraft.jsch.agentproxy.connector.SSHAgentConnector
 import com.jcraft.jsch.agentproxy.usocket.JNAUSocketFactory
 
+import com.vdurmont.semver4j.Semver
+
 import java.io.File
 import java.io.IOException
 
@@ -98,8 +100,12 @@ class Git : GitBase() {
             Git.init().setDirectory(targetDir).call().use { git ->
                 git.remoteAdd().setName("origin").setUri(URIish(vcs.url)).call()
 
-                // JGit supports the Git wire protocol version 2 since its version 5.1.
-                git.repository.config.setInt("protocol", null, "version", 2)
+                // Enable the more efficient Git wire protocol version 2, if possible. While JGit supports it since its
+                // version 5.1, we still use the Git CLI to update the working tree (as JGit does not support sparse
+                // checkouts yet), so we need to still also check the Git CLI's version.
+                if (Semver(getVersion()).isGreaterThanOrEqualTo("2.18.0")) {
+                    git.repository.config.setInt("protocol", null, "version", 2)
+                }
 
                 if (Os.isWindows) {
                     git.repository.config.setBoolean("core", null, "longpaths", true)
