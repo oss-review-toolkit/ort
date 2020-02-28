@@ -187,7 +187,7 @@ data class OrtResult(
                 val copyrights = finding.copyrights.mapNotNullTo(sortedSetOf()) { copyrightFindings ->
                     val locations = copyrightFindings.locations.filterTo(sortedSetOf()) {
                         val path = getFilePathRelativeToAnalyzerRoot(project, it.path)
-                        excludes.paths.any { exclude -> exclude.matches(path) }
+                        excludes.paths.none { exclude -> exclude.matches(path) }
                     }
                     if (locations.isNotEmpty()) copyrightFindings.copy(locations = locations)
                     else null
