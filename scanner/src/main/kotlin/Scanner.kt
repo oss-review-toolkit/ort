@@ -24,6 +24,7 @@ import java.lang.IllegalArgumentException
 import java.time.Instant
 import java.util.ServiceLoader
 
+import kotlinx.coroutines.async
 import kotlinx.coroutines.runBlocking
 
 import org.ossreviewtoolkit.downloader.consolidateProjectPackagesByVcs
@@ -52,6 +53,19 @@ fun scanOrtResult(
     ortResult: OrtResult,
     outputDirectory: File,
     skipExcluded: Boolean = false
+) = scanOrtResult(scanner, scanner, ortResult, outputDirectory, skipExcluded)
+
+/**
+ * Use the [scanner] and [projectScanner] to scan the [Project]s and [Package]s specified in the [ortResult],
+ * respectively. Scan results are stored in the [outputDirectory]. If [skipExcluded] is true, packages for which
+ * excludes are defined are not scanned. Return scan results as an [OrtResult].
+ */
+fun scanOrtResult(
+    scanner: Scanner,
+    projectScanner: Scanner,
+    ortResult: OrtResult,
+    outputDirectory: File,
+    skipExcluded: Boolean = false
 ): OrtResult {
     val startTime = Instant.now()
 
@@ -73,11 +87,19 @@ fun scanOrtResult(
         .filter { it.pkg.id !in projectPackageIds }
         .map { it.pkg }
 
-    val allPackages = projectPackages + packages
-
-    val packagesToScan = allPackages.takeUnless { scanner.scannerConfig.skipConcluded }
+    val filteredProjectPackages = projectPackages.takeUnless { scanner.scannerConfig.skipConcluded }
         // Remove all packages that have a concluded license and authors set.
-        ?: allPackages.partition { it.concludedLicense != null && it.authors.isNotEmpty() }.let { (skip, keep) ->
+        ?: projectPackages.partition { it.concludedLicense != null && it.authors.isNotEmpty() }.let { (skip, keep) ->
+            if (skip.isNotEmpty()) {
+                projectScanner.log.debug { "Not scanning the following packages with concluded licenses: $skip" }
+            }
+
+            keep
+        }
+
+    val filteredPackages = packages.takeUnless { scanner.scannerConfig.skipConcluded }
+        // Remove all packages that have a concluded license and authors set.
+        ?: packages.partition { it.concludedLicense != null && it.authors.isNotEmpty() }.let { (skip, keep) ->
             if (skip.isNotEmpty()) {
                 scanner.log.debug { "Not scanning the following packages with concluded licenses: $skip" }
             }
@@ -86,7 +108,20 @@ fun scanOrtResult(
         }
 
     val scanResults = runBlocking {
-        scanner.scanPackages(packagesToScan, outputDirectory).mapKeys { it.key.id }
+        // Scan the projects from the ORT result.
+        val deferredProjectScan = async {
+            projectScanner.scanPackages(filteredProjectPackages, outputDirectory).mapKeys { it.key.id }
+        }
+
+        // Scan the packages from the ORT result.
+        val deferredPackageScan = async {
+            scanner.scanPackages(filteredPackages, outputDirectory).mapKeys { it.key.id }
+        }
+
+        val projectResults = deferredProjectScan.await()
+        val packageResults = deferredPackageScan.await()
+
+        projectResults + packageResults
     }.toSortedMap()
 
     // Add scan results from de-duplicated project packages to result.
