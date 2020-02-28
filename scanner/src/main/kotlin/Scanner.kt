@@ -71,7 +71,7 @@ abstract class Scanner(val scannerName: String, protected val config: ScannerCon
     /**
      * Return the scanner-specific SPDX idstring for the given [license].
      */
-    fun getSpdxLicenseIdString(license: String) =
+    protected fun getSpdxLicenseIdString(license: String) =
         SpdxLicense.forId(license)?.id ?: "LicenseRef-$scannerName-$license"
 
     /**
