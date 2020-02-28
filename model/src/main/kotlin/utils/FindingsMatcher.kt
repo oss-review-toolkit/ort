@@ -26,7 +26,10 @@ import com.here.ort.model.LicenseFindings
 import com.here.ort.model.TextLocation
 import com.here.ort.utils.FileMatcher
 
-import kotlin.math.absoluteValue
+import java.util.PriorityQueue
+
+import kotlin.math.max
+import kotlin.math.min
 
 private fun Collection<CopyrightFinding>.toCopyrightFindings(): List<CopyrightFindings> {
     val locationsByStatement = mutableMapOf<String, MutableSet<TextLocation>>()
@@ -40,6 +43,8 @@ private fun Collection<CopyrightFinding>.toCopyrightFindings(): List<CopyrightFi
     }
 }
 
+private val CopyrightFinding.line get(): Int = location.startLine
+
 /**
  * A class for matching copyright findings to license findings. Copyright statements may be matched either to license
  * findings located nearby in the same file or to a license found in a license file whereas the given
@@ -47,7 +52,8 @@ private fun Collection<CopyrightFinding>.toCopyrightFindings(): List<CopyrightFi
  */
 class FindingsMatcher(
     private val licenseFileMatcher: FileMatcher = FileMatcher.LICENSE_FILE_MATCHER,
-    private val toleranceLines: Int = DEFAULT_TOLERANCE_LINES
+    private val toleranceLines: Int = DEFAULT_TOLERANCE_LINES,
+    private val expandToleranceLines: Int = DEFAULT_EXPAND_TOLERANCE_LINES
 ) {
     companion object {
         /**
@@ -55,6 +61,12 @@ class FindingsMatcher(
          * not skipping complete license statements.
          */
         const val DEFAULT_TOLERANCE_LINES = 5
+
+        /**
+         * The default value of 2 seems to be a good balance between associating findings separated by blank lines but
+         * not skipping complete license statements.
+         */
+        const val DEFAULT_EXPAND_TOLERANCE_LINES = 2
     }
 
     /**
@@ -67,22 +79,48 @@ class FindingsMatcher(
             .distinct()
 
     /**
-     * Return those statements in [copyrights] which are in the vicinity of [licenseStartLine] as defined by
-     * [toleranceLines].
+     * Return the line range in which copyright statements should be matched against the license finding at the
+     * location given by [licenseStartLine] and [licenseEndLine]. The given [copyrightLines] must contain exactly all
+     * lines of all copyright statements present in the file where the given license location points to.
+     */
+    private fun getMatchingRange(
+        licenseStartLine: Int,
+        licenseEndLine: Int,
+        copyrightLines: Collection<Int>
+    ): IntRange {
+        val range = max(0, licenseStartLine - toleranceLines) until
+                max(licenseStartLine + toleranceLines, licenseEndLine) + 1
+
+        var expandedStartLine = copyrightLines.filter { it in range }.min() ?: return range
+        val queue = PriorityQueue<Int>(copyrightLines.size, compareByDescending { it })
+        queue.addAll(copyrightLines.filter { it in 0 until expandedStartLine })
+
+        while (queue.isNotEmpty()) {
+            val line = queue.poll()
+            if (expandedStartLine - line > expandToleranceLines) break
+
+            expandedStartLine = line
+        }
+
+        return min(range.first, expandedStartLine) until range.last + 1
+    }
+
+    /**
+     * Return those statements in [copyrights] which match the license location given by [licenseStartLine] and
+     * [licenseEndLine]. That matching is configured by [toleranceLines] and [expandToleranceLines].
      */
     private fun getClosestCopyrightStatements(
         copyrights: List<CopyrightFinding>,
-        licenseStartLine: Int
+        licenseStartLine: Int,
+        licenseEndLine: Int
     ): Set<CopyrightFinding> {
         require(copyrights.map { it.location.path }.distinct().size <= 1) {
             "Given copyright statements must all point to the same file."
         }
 
-        val closestCopyrights = copyrights.filter {
-            (it.location.startLine - licenseStartLine).absoluteValue <= toleranceLines
-        }
+        val lineRange = getMatchingRange(licenseStartLine, licenseEndLine, copyrights.map { it.line })
 
-        return closestCopyrights.toSet()
+        return copyrights.filterTo(mutableSetOf()) { it.line in lineRange }
     }
 
     /**
@@ -107,7 +145,7 @@ class FindingsMatcher(
         // for each of these, if any.
         val result = mutableMapOf<String, MutableSet<CopyrightFinding>>()
         licenses.forEach { (license, location) ->
-            val closestCopyrights = getClosestCopyrightStatements(copyrights, location.startLine)
+            val closestCopyrights = getClosestCopyrightStatements(copyrights, location.startLine, location.endLine)
             result.getOrPut(license) { mutableSetOf() } += closestCopyrights
         }
 
