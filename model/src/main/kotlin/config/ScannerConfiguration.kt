@@ -19,6 +19,7 @@
 
 package com.here.ort.model.config
 
+import com.fasterxml.jackson.annotation.JsonAlias
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 
 import com.here.ort.utils.storage.FileArchiver
@@ -48,5 +49,6 @@ data class ScannerConfiguration(
      * Scanner specific configuration options. The key needs to match the name of the scanner class, e.g. "ScanCode"
      * for the ScanCode wrapper. See the documentation of the scanner for available options.
      */
-    val scanner: Map<String, Map<String, String>>? = null
+    @JsonAlias("scanner")
+    val options: Map<String, Map<String, String>>? = null
 )
