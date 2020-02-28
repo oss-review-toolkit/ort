@@ -35,13 +35,11 @@ import java.io.File
 class FileCounterScannerTest : StringSpec() {
     private val assetsDir = File("src/funTest/assets")
 
-    private lateinit var outputRootDir: File
     private lateinit var outputDir: File
 
     init {
         "Gradle project scan results for a given analyzer result are correct".config(invocations = 3) {
-            outputRootDir = createTempDir(ORT_NAME, javaClass.simpleName)
-            outputDir = File(outputRootDir, "output")
+            outputDir = createTempDir(ORT_NAME, javaClass.simpleName)
 
             val analyzerResultFile = File(assetsDir, "analyzer-result.yml")
             val expectedResult = patchExpectedResult(
@@ -54,7 +52,7 @@ class FileCounterScannerTest : StringSpec() {
 
             patchActualResult(result, patchDownloadTime = true, patchStartAndEndTime = true) shouldBe expectedResult
 
-            outputRootDir.safeDeleteRecursively(force = true)
+            outputDir.safeDeleteRecursively(force = true)
             ScanResultsStorage.storage.stats.reset()
         }
     }
