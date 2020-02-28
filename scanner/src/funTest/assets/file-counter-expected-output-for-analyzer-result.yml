@@ -195,7 +195,7 @@ scanner:
     archive: null
     file_based_storage: null
     postgres_storage: null
-    scanner: null
+    options: null
   results:
     scan_results:
     - id: "Gradle:com.here.ort.gradle.example:lib:1.0.0"
