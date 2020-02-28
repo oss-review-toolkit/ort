@@ -44,6 +44,7 @@ import com.here.ort.scanner.ScanResultsStorage
 import com.here.ort.scanner.Scanner
 import com.here.ort.scanner.TOOL_NAME
 import com.here.ort.scanner.scanners.ScanCode
+import com.here.ort.scanner.scanOrtResult
 import com.here.ort.scanner.storages.FileBasedStorage
 import com.here.ort.scanner.storages.SCAN_RESULTS_FILE_NAME
 import com.here.ort.utils.expandTilde
@@ -169,7 +170,8 @@ class ScannerCommand : CliktCommand(name = "scan", help = "Run existing copyrigh
 
         val ortResult = if (input.isFile) {
             val ortFile = input.expandTilde()
-            scanner.scanOrtResult(
+            scanOrtResult(
+                scanner = scanner,
                 ortResultFile = ortFile,
                 outputDirectory = absoluteNativeOutputDir,
                 downloadDirectory = absoluteDownloadDir ?: absoluteOutputDir.resolve("downloads"),

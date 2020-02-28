@@ -22,6 +22,7 @@ package com.here.ort.scanner.scanners
 import com.here.ort.model.config.ScannerConfiguration
 import com.here.ort.model.yamlMapper
 import com.here.ort.scanner.ScanResultsStorage
+import com.here.ort.scanner.scanOrtResult
 import com.here.ort.utils.ORT_NAME
 import com.here.ort.utils.safeDeleteRecursively
 import com.here.ort.utils.test.patchActualResult
@@ -47,7 +48,7 @@ class FileCounterScannerTest : StringSpec() {
             )
 
             val scanner = FileCounter("FileCounter", ScannerConfiguration())
-            val ortResult = scanner.scanOrtResult(analyzerResultFile, outputDir, outputDir.resolve("downloads"))
+            val ortResult = scanOrtResult(scanner, analyzerResultFile, outputDir, outputDir.resolve("downloads"))
             val result = yamlMapper.writeValueAsString(ortResult)
 
             patchActualResult(result, patchDownloadTime = true, patchStartAndEndTime = true) shouldBe expectedResult
