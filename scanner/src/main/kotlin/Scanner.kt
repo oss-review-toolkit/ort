@@ -43,6 +43,29 @@ const val TOOL_NAME = "scanner"
 const val HTTP_CACHE_PATH = "$TOOL_NAME/cache/http"
 
 /**
+ * Filter the scan results in the [resultContainer] for only license findings that are in the same subdirectory as
+ * the [project]s definition file.
+ */
+private fun filterProjectScanResults(project: Project, resultContainer: ScanResultContainer): ScanResultContainer {
+    var filteredResults = resultContainer.results
+
+    // Do not filter the results if the definition file is in the root of the repository.
+    val parentPath = File(project.definitionFilePath).parentFile?.path
+    if (parentPath != null) {
+        filteredResults = resultContainer.results.map { result ->
+            if (result.provenance.sourceArtifact != null) {
+                // Do not filter the result if a source artifact was scanned.
+                result
+            } else {
+                result.filterPath(parentPath)
+            }
+        }
+    }
+
+    return ScanResultContainer(project.id, filteredResults)
+}
+
+/**
  * The class to run license / copyright scanners. The signatures of public functions in this class define the library
  * API.
  */
@@ -136,28 +159,5 @@ abstract class Scanner(val scannerName: String, protected val config: ScannerCon
         return ortResult.copy(scanner = scannerRun).apply {
             data += ortResult.data
         }
-    }
-
-    /**
-     * Filter the scan results in the [resultContainer] for only license findings that are in the same subdirectory as
-     * the [project]s definition file.
-     */
-    private fun filterProjectScanResults(project: Project, resultContainer: ScanResultContainer): ScanResultContainer {
-        var filteredResults = resultContainer.results
-
-        // Do not filter the results if the definition file is in the root of the repository.
-        val parentPath = File(project.definitionFilePath).parentFile?.path
-        if (parentPath != null) {
-            filteredResults = resultContainer.results.map { result ->
-                if (result.provenance.sourceArtifact != null) {
-                    // Do not filter the result if a source artifact was scanned.
-                    result
-                } else {
-                    result.filterPath(parentPath)
-                }
-            }
-        }
-
-        return ScanResultContainer(project.id, filteredResults)
     }
 }
