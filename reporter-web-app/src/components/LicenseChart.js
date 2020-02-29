@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2019 HERE Europe B.V.
+ * Copyright (C) 2019-2020 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -118,8 +118,12 @@ class LicenseChart extends React.Component {
         };
     }
 
-    componentWillReceiveProps(nextProps) {
-        this.setState(prevState => ({ ...prevState, ...nextProps }));
+    static getDerivedStateFromProps(nextProps, prevState) {
+        if (nextProps.licenses.length !== prevState.licenses.length) {
+            return { licenses: nextProps.licenses };
+        }
+
+        return null;
     }
 
     render() {
@@ -156,7 +160,7 @@ class LicenseChart extends React.Component {
                     }
                 >
                     {
-                        licenses.map(entry => <Cell key={entry.name} fill={entry.color} />)
+                        licenses.map((entry) => <Cell key={entry.name} fill={entry.color} />)
                     }
                 </Pie>
             </PieChart>

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2019 HERE Europe B.V.
+ * Copyright (C) 2020 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,24 +17,197 @@
  * License-Filename: LICENSE
  */
 
-/* eslint constructor-super: 0 */
-
 import { randomStringGenerator } from '../utils';
-import RuleViolation from './RuleViolation';
 
-class WebAppRuleViolation extends RuleViolation {
-    #key;
+class WebAppRuleViolation {
+    #_id;
 
-    constructor(obj) {
+    #howToFix;
+
+    #license;
+
+    #licenseIndex;
+
+    #licenseSource;
+
+    #message;
+
+    #package;
+
+    #packageIndex;
+
+    #severity;
+
+    #resolutionIndexes = new Set();
+
+    #resolutionReasons;
+
+    #resolutions;
+
+    #rule;
+
+    #webAppOrtResult;
+
+    constructor(obj, webAppOrtResult) {
         if (obj) {
-            super(obj);
+            if (Number.isInteger(obj._id)) {
+                this.#_id = obj._id;
+            }
 
-            this.#key = randomStringGenerator(20);
+            if (obj.how_to_fix || obj.howToFix) {
+                this.#howToFix = obj.how_to_fix
+                    || obj.howToFix;
+            }
+
+            if (obj.license) {
+                this.#licenseIndex = obj.license;
+            }
+
+            if (obj.license_source || obj.licenseSource) {
+                this.#licenseSource = obj.license_source
+                    || obj.licenseSource;
+            }
+
+            if (obj.message) {
+                this.#message = obj.message;
+            }
+
+            if (Number.isInteger(obj.pkg)) {
+                this.#packageIndex = obj.pkg;
+            }
+
+            if (obj.severity) {
+                this.#severity = obj.severity;
+            }
+
+            if (obj.resolutions) {
+                this.#resolutionIndexes = new Set(obj.resolutions);
+            }
+
+            if (obj.rule) {
+                this.#rule = obj.rule;
+            }
+
+            if (webAppOrtResult) {
+                this.#webAppOrtResult = webAppOrtResult;
+
+                const webAppPackage = webAppOrtResult.getPackageByIndex(this.#packageIndex);
+                if (webAppPackage) {
+                    this.#package = webAppPackage;
+                }
+
+                const webAppLicense = webAppOrtResult.getLicenseByIndex(this.#licenseIndex);
+                if (webAppLicense) {
+                    this.#license = webAppLicense;
+                }
+            }
+
+            this.key = randomStringGenerator(20);
         }
     }
 
-    get key() {
-        return this.#key;
+    get _id() {
+        return this.#_id;
+    }
+
+    get isResolved() {
+        if (this.#resolutionIndexes && this.#resolutionIndexes.size > 0) {
+            return true;
+        }
+
+        return false;
+    }
+
+    get howToFix() {
+        return this.#howToFix;
+    }
+
+    get license() {
+        return this.#license;
+    }
+
+    get licenseName() {
+        return this.#license.id;
+    }
+
+    get message() {
+        return this.#message;
+    }
+
+    get package() {
+        return this.#package;
+    }
+
+    get packageIndex() {
+        return this.#packageIndex;
+    }
+
+    get packageName() {
+        return this.#package ? this.#package.id : '';
+    }
+
+    get severity() {
+        return this.#severity;
+    }
+
+    get severityIndex() {
+        if (this.isResolved) {
+            return 3;
+        }
+
+        if (this.#severity === 'ERROR') {
+            return 0;
+        }
+
+        if (this.#severity === 'WARNING') {
+            return 1;
+        }
+
+        if (this.#severity === 'HINT') {
+            return 2;
+        }
+
+        return -1;
+    }
+
+    get resolutionIndexes() {
+        return this.#resolutionIndexes;
+    }
+
+    get resolutions() {
+        if (!this.#resolutions && this.#webAppOrtResult) {
+            this.#resolutions = [];
+            this.#resolutionIndexes.forEach((index) => {
+                const webAppResolution = this.#webAppOrtResult.getRuleViolationResolutionByIndex(index) || null;
+                if (webAppResolution) {
+                    this.#resolutions.push(webAppResolution);
+                }
+            });
+        }
+
+        return this.#resolutions;
+    }
+
+    get resolutionReasons() {
+        if (!this.#resolutionReasons && this.#webAppOrtResult) {
+            this.#resolutionReasons = new Set();
+            this.#resolutionIndexes.forEach((index) => {
+                const webAppResolution = this.#webAppOrtResult.getRuleViolationResolutionByIndex(index) || null;
+                if (webAppResolution && webAppResolution.reason) {
+                    this.#resolutionReasons.add(webAppResolution.reason);
+                }
+            });
+        }
+
+        return this.#resolutionReasons;
+    }
+
+    get rule() {
+        return this.#rule;
+    }
+
+    hasHowToFix() {
+        return !!this.#howToFix;
     }
 }
 

@@ -17,6 +17,19 @@
         "babel"
     ],
     "rules": {
+        "camelcase": [
+            "error", {
+              "ignoreDestructuring": true,
+              "allow": [ "^UNSAFE_" ]
+            }
+        ],
+        "comma-dangle": ["error", {
+            "arrays": "never",
+            "objects": "never",
+            "imports": "never",
+            "exports": "never",
+            "functions": "ignore"
+        }],
         "indent": [
             "error",
             4
@@ -27,21 +40,15 @@
         ],
         "max-len": ["error", { "code": 120 }],
         "no-plusplus": [2, { "allowForLoopAfterthoughts": true }],
-        "quotes": [
-            "error",
-            "single"
-        ],
+        "no-underscore-dangle": ["error", {
+            "allow": [
+                "_id"
+            ]
+        }],
         "semi": [
             "error",
             "always"
         ],
-        "comma-dangle": ["error", {
-            "arrays": "never",
-            "objects": "never",
-            "imports": "never",
-            "exports": "never",
-            "functions": "ignore"
-        }],
         "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }],
         "react/jsx-indent": [2, 4],
         "react/jsx-indent-props": [2, 4],
@@ -55,6 +62,10 @@
               "render"
             ]
           }],
-          "react/forbid-prop-types": [0, {}]
+        "react/forbid-prop-types": [0, {}],
+        "quotes": [
+            "error",
+            "single"
+        ]
     }
 }

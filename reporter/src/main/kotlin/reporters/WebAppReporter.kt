@@ -19,9 +19,9 @@
 
 package com.here.ort.reporter.reporters
 
-import com.here.ort.model.jsonMapper
 import com.here.ort.reporter.Reporter
 import com.here.ort.reporter.ReporterInput
+import com.here.ort.reporter.model.EvaluatedModel
 
 import java.io.OutputStream
 
@@ -34,17 +34,17 @@ class WebAppReporter : Reporter {
         input: ReporterInput
     ) {
         val template = javaClass.classLoader.getResource("scan-report-template.html").readText()
-        val resultJson = jsonMapper.writeValueAsString(input.ortResult)
+        val evaluatedModel = EvaluatedModel.create(input)
 
-        val relevantResolutions = input.resolutionProvider.getResolutionsFor(input.ortResult)
-        val resolutionsJson = jsonMapper.writeValueAsString(relevantResolutions)
-
-        val result = template
-            .replace("id=\"ort-report-data\"><", "id=\"ort-report-data\">$resultJson<")
-            .replace("id=\"ort-report-resolution-data\"><", "id=\"ort-report-resolution-data\">$resolutionsJson<")
+        val prefix = template.substringBefore("id=\"ort-report-data\"><")
+        val suffix = template.substringAfter("id=\"ort-report-data\"><")
 
         outputStream.bufferedWriter().use {
-            it.write(result)
+            it.write(prefix)
+            it.write("id=\"ort-report-data\">")
+            evaluatedModel.toJson(it)
+            it.write("<")
+            it.write(suffix)
         }
     }
 }

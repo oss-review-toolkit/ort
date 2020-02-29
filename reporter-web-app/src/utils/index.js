@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2019 HERE Europe B.V.
+ * Copyright (C) 2017-2020 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,7 +24,7 @@
  * https://gist.github.com/vjt/2239787
  */
 const randomStringGenerator = (length = (Math.floor(Math.random() * 501) + 20)) => {
-    const rand = str => str[Math.floor(Math.random() * str.length)];
+    const rand = (str) => str[Math.floor(Math.random() * str.length)];
     const get = (source, len, a) => {
         for (let i = 0; i < len; i++) {
             a.push(rand(source));

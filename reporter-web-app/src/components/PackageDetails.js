@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2019 HERE Europe B.V.
+ * Copyright (C) 2017-2020 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,13 +19,18 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Descriptions } from 'antd';
+
+const { Item } = Descriptions;
 
 // Generates the HTML for packages details like
 // description, source code location(s), etc.
 const PackageDetails = (props) => {
-    const { pkg, webAppOrtResult } = props;
+    const { webAppPackage } = props;
     const {
         id,
+        isProject,
+        definitionFilePath,
         purl,
         description,
         homepageUrl,
@@ -33,7 +38,7 @@ const PackageDetails = (props) => {
         sourceArtifact,
         vcs,
         vcsProcessed
-    } = pkg;
+    } = webAppPackage;
 
     const renderAhref = (text, href) => (
         <a
@@ -44,67 +49,110 @@ const PackageDetails = (props) => {
             {text}
         </a>
     );
-    const renderTr = (thVal, tdVal) => (
-        <tr>
-            <th>
-                {thVal}
-            </th>
-            <td>
-                {tdVal}
-            </td>
-        </tr>
-    );
 
     return (
-        <table className="ort-package-props">
-            <tbody>
-                {renderTr('Id', id) }
-                { purl.length !== 0 && (renderTr('Package URL', purl)) }
-                { webAppOrtResult.hasProjectId(id) && (
-                    renderTr(
-                        'Defined in',
-                        webAppOrtResult.getProjectById(id).definitionFilePath
-                    ))
-                }
-                { description.length !== 0 && (renderTr('Description', description)) }
-                { homepageUrl.length !== 0 && (
-                    renderTr(
-                        'Homepage',
-                        renderAhref(homepageUrl)
-                    ))
-                }
-                { vcs.url.length !== 0 && (
-                    renderTr(
-                        'Repository Declared',
-                        renderAhref(vcs.url)
-                    ))
-                }
-                { vcsProcessed.url.length !== 0 && (
-                    renderTr(
-                        'Repository Processed',
-                        renderAhref(vcsProcessed.url)
-                    ))
-                }
-                { sourceArtifact.url.length !== 0 && (
-                    renderTr(
-                        'Source Artifact',
-                        renderAhref(sourceArtifact.url)
-                    ))
-                }
-                { binaryArtifact.url.length !== 0 && (
-                    renderTr(
-                        'Binary Artifact',
-                        renderAhref(binaryArtifact.url)
-                    ))
-                }
-            </tbody>
-        </table>
+        <Descriptions
+            className="ort-package-details"
+            column={1}
+            size="small"
+        >
+            <Item label="Id">
+                {id}
+            </Item>
+            {
+                purl.length !== 0
+                && (
+                    <Item
+                        label="Package URL"
+                        key="ort-package-purl"
+                    >
+                        {purl}
+                    </Item>
+                )
+            }
+            {
+                isProject
+                && (
+                    <Item
+                        label="Defined in"
+                        key="ort-package-definition-file-path"
+                    >
+                        {definitionFilePath}
+                    </Item>
+                )
+            }
+            {
+                description
+                && (
+                    <Item
+                        label="Description"
+                        key="ort-package-description"
+                    >
+                        {description}
+                    </Item>
+                )
+            }
+            {
+                homepageUrl
+                && (
+                    <Item
+                        label="Homepage"
+                        key="ort-package-homepage"
+                    >
+                        {renderAhref(homepageUrl)}
+                    </Item>
+                )
+            }
+            {
+                vcs.url.length !== 0
+                && (
+                    <Item
+                        label="Repository Declared"
+                        key="ort-package-vcs-url"
+                    >
+                        {renderAhref(vcs.url)}
+                    </Item>
+                )
+            }
+            {
+                vcsProcessed.url.length !== 0
+                && (
+                    <Item
+                        label="Repository Processed"
+                        key="ort-package-vcs-processed-url"
+                    >
+                        {renderAhref(vcsProcessed.url)}
+                    </Item>
+                )
+            }
+            {
+                sourceArtifact.url.length !== 0
+                && (
+                    <Item
+                        label="Source Artifact"
+                        key="ort-package-source-artifact"
+                    >
+                        {renderAhref(sourceArtifact.url)}
+                    </Item>
+                )
+            }
+            {
+                binaryArtifact.url.length !== 0
+                && (
+                    <Item
+                        label="Binary Artifact"
+                        key="ort-package-binary-artifact"
+                    >
+                        {renderAhref(binaryArtifact.url)}
+                    </Item>
+                )
+            }
+        </Descriptions>
     );
 };
 
 PackageDetails.propTypes = {
-    pkg: PropTypes.object.isRequired,
-    webAppOrtResult: PropTypes.object.isRequired
+    webAppPackage: PropTypes.object.isRequired
 };
 
 export default PackageDetails;

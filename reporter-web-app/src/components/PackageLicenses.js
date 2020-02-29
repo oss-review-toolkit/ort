@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2019 HERE Europe B.V.
+ * Copyright (C) 2017-2020 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,99 +19,81 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-// import LicenseTag from './LicenseTag';
+import { Descriptions } from 'antd';
+
+const { Item } = Descriptions;
 
 // Generates the HTML for licenses declared or detected in a package
 const PackageLicenses = (props) => {
-    const { pkg } = props;
-    const {
-        concludedLicense,
-        detectedLicenses,
-        declaredLicenses,
-        declaredLicensesProcessed
-    } = pkg;
-
-    if (declaredLicenses.length === 0 && detectedLicenses.length === 0) {
-        return null;
-    }
-
-    const renderTr = (thVal, tdVal) => (
-        <tr>
-            <th>
-                {thVal}
-            </th>
-            <td>
-                {tdVal}
-            </td>
-        </tr>
-    );
-
-    const renderTrLicenses = (label, id, licenses) => (
-        <tr>
-            <th>
-                {label}
-            </th>
-            <td className="ort-package-licenses">
-                {
-                    licenses.map((license, index) => (
-                        <span key={`ort-package-license-${license}`}>
-                            {license}
-                            {index !== (licenses.length - 1) && ', '}
-                        </span>
-                        /*
-                        <LicenseTag
-                            key={`ort-package-declared-license-${id}-${license}`}
-                            text={license}
-                        />
-                        */
-                    ))
-                }
-            </td>
-        </tr>
-    );
+    const { webAppPackage } = props;
 
     return (
-        <table className="ort-package-props">
-            <tbody>
-                {
-                    concludedLicense.length !== 0 && (
-                        renderTr(
-                            'Concluded SPDX',
-                            concludedLicense
-                        )
-                    )
-                }
-                {
-                    declaredLicenses.length !== 0
-                    && renderTrLicenses(
-                        'Declared',
-                        pkg.id,
-                        declaredLicenses
-                    )
-                }
-                {
-                    declaredLicensesProcessed.spdxExpression.length !== 0 && (
-                        renderTr(
-                            'Declared (SPDX)',
-                            declaredLicensesProcessed.spdxExpression
-                        )
-                    )
-                }
-                {
-                    detectedLicenses.length !== 0
-                    && renderTrLicenses(
-                        'Detected',
-                        pkg.id,
-                        detectedLicenses
-                    )
-                }
-            </tbody>
-        </table>
+        <Descriptions
+            className="ort-package-details"
+            column={1}
+            size="small"
+        >
+            {
+                webAppPackage.hasConcludedLicense()
+                && (
+                    <Item
+                        label="Concluded SPDX"
+                        key="ort-package-concluded-licenses"
+                    >
+                        {webAppPackage.concludedLicense}
+                    </Item>
+                )
+            }
+            {
+                webAppPackage.hasDeclaredLicenses()
+                && (
+                    <Item
+                        label="Declared"
+                        key="ort-package-declared-licenses"
+                    >
+                        {Array.from(webAppPackage.declaredLicenses).join(', ')}
+                    </Item>
+                )
+            }
+            {
+                webAppPackage.hasDeclaredLicensesSpdxExpression()
+                && (
+                    <Item
+                        label="Declared (SPDX)"
+                        key="ort-package-declared-spdx-licenses"
+                    >
+                        {webAppPackage.declaredLicensesSpdxExpression}
+                    </Item>
+                )
+            }
+            {
+                webAppPackage.hasDeclaredLicensesUnmapped()
+                && (
+                    <Item
+                        label="Declared (non-SPDX)"
+                        key="ort-package-declared-non-spdx-licenses"
+                    >
+                        {webAppPackage.webAppPackage.declaredLicensesUnmapped}
+                    </Item>
+                )
+            }
+            {
+                webAppPackage.hasDetectedLicenses()
+                && (
+                    <Item
+                        label="Detected"
+                        key="ort-package-detected-licenses"
+                    >
+                        {Array.from(webAppPackage.detectedLicenses).join(', ')}
+                    </Item>
+                )
+            }
+        </Descriptions>
     );
 };
 
 PackageLicenses.propTypes = {
-    pkg: PropTypes.object.isRequired
+    webAppPackage: PropTypes.object.isRequired
 };
 
 export default PackageLicenses;

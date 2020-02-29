@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2019 HERE Europe B.V.
+ * Copyright (C) 2019-2020 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,291 +17,567 @@
  * License-Filename: LICENSE
  */
 
-/* eslint constructor-super: 0 */
+import RemoteArtifact from './RemoteArtifact';
+import VcsInfo from './VcsInfo';
+import WebAppFinding from './WebAppFinding';
+import WebAppScanResult from './WebAppScanResult';
+import { randomStringGenerator } from '../utils';
 
-import Package from './Package';
-import WebAppScanFindingCopyright from './WebAppScanFindingCopyright';
-import WebAppScanFindingLicense from './WebAppScanFindingLicense';
+class WebAppPackage {
+    #_id;
 
-class WebAppPackage extends Package {
-    #children = [];
+    #binaryArtifact;
+
+    #concludedLicense;
 
     #curations = [];
 
-    #delivered = false;
+    #declaredLicenses = new Set();
+
+    #declaredLicensesIndexes = new Set();
+
+    #declaredLicensesSpdxExpression;
+
+    #declaredLicensesMapped = new Set();
+
+    #declaredLicensesUnmapped = new Set();
+
+    #definitionFilePath;
+
+    #description;
 
     #detectedLicenses = new Set();
 
+    #detectedLicensesIndexes = new Set();
+
+    #findings = [];
+
+    #homepageUrl;
+
+    #id;
+
+    #isExcluded = false;
+
+    #isProject = false;
+
     #issues;
 
-    #key;
+    #levels = new Set([]);
 
-    #levels = new Set();
+    #pathExcludes;
 
-    #paths = [];
+    #pathExcludeIndexes = new Set();
 
-    #projectIndexes = new Set();
+    #pathExcludeReasons;
 
-    #scanFindings;
+    #paths;
 
-    #scopes = new Set();
+    #pathIndexes = new Set();
 
-    #violations;
+    #projectIndexes;
 
-    constructor(obj) {
+    #purl;
+
+    #scanResults = [];
+
+    #scopeExcludes;
+
+    #scopeExcludeIndexes = new Set();
+
+    #scopeExcludeReasons;
+
+    #scopes;
+
+    #scopeIndexes = new Set();
+
+    #scopeNames;
+
+    #sourceArtifact;
+
+    #ruleViolations;
+
+    #vcs = new VcsInfo();
+
+    #vcsProcessed = new VcsInfo();
+
+    #webAppOrtResult;
+
+    constructor(obj, webAppOrtResult) {
         if (obj) {
-            super(obj);
+            if (Number.isInteger(obj._id)) {
+                this.#_id = obj._id;
+            }
 
-            if (obj.children) {
-                this.children = obj.children;
+            if (obj.binary_artifact || obj.binaryArtifact) {
+                const binaryArtifact = obj.binary_artifact || obj.binaryArtifact;
+                this.#binaryArtifact = new RemoteArtifact(binaryArtifact);
+            }
+
+            if (obj.concluded_license || obj.concludedLicense) {
+                this.#concludedLicense = obj.concluded_license
+                    || obj.concludedLicense;
             }
 
             if (obj.curations) {
-                this.curations = obj.curations;
+                this.#curations = obj.curations;
             }
 
-            if (obj.delivered) {
-                this.delivered = obj.delivered;
+            if (obj.declared_licenses || obj.declaredLicenses) {
+                const declaredLicensesIndexes = obj.declared_licenses
+                    || obj.declaredLicenses;
+                this.#declaredLicensesIndexes = new Set(declaredLicensesIndexes);
             }
 
-            if (obj.detectedLicenses) {
-                this.detectedLicenses = obj.detectedLicenses;
+            if (obj.declared_licenses_processed || obj.declaredLicensesProcessed) {
+                const declaredLicensesProcessed = obj.declared_licenses_processed
+                    || obj.declaredLicensesProcessed;
+
+                if (declaredLicensesProcessed.mapped_licenses || declaredLicensesProcessed.mappedLicenses) {
+                    const mappedLicenses = declaredLicensesProcessed.mapped_licenses
+                        || declaredLicensesProcessed.mappedLicenses;
+                    if (mappedLicenses && mappedLicenses.length > 0) {
+                        this.#declaredLicensesMapped = new Set(mappedLicenses);
+                    }
+                }
+
+                if (declaredLicensesProcessed.spdx_expression || declaredLicensesProcessed.spdxExpression) {
+                    const spdxExpression = declaredLicensesProcessed.spdx_expression
+                        || declaredLicensesProcessed.spdxExpression;
+                    if (spdxExpression) {
+                        this.#declaredLicensesSpdxExpression = spdxExpression;
+                    }
+                }
+
+                if (declaredLicensesProcessed.unmapped_licenses || declaredLicensesProcessed.unmappedLicenses) {
+                    const unmappedLicenses = declaredLicensesProcessed.unmapped_licenses
+                        || declaredLicensesProcessed.unmappedLicenses;
+                    if (unmappedLicenses && unmappedLicenses.length > 0) {
+                        this.#declaredLicensesUnmapped = new Set(unmappedLicenses);
+                    }
+                }
             }
 
-            if (obj.key) {
-                this.key = obj.key;
+            if (obj.definition_file_path || obj.definitionFilePath) {
+                this.#definitionFilePath = obj.definition_file_path
+                    || obj.definitionFilePath;
+            }
+
+            if (obj.description) {
+                this.#description = obj.description;
+            }
+
+            if (obj.detected_licenses || obj.detectedLicenses) {
+                const detectedLicensesIndexes = obj.detected_licenses
+                    || obj.detectedLicenses;
+                this.#detectedLicensesIndexes = new Set(detectedLicensesIndexes);
+            }
+
+            if (obj.homepage_url || obj.homepageUrl) {
+                this.#homepageUrl = obj.homepage_url || obj.homepageUrl;
+            }
+
+            if (obj.id) {
+                this.#id = obj.id;
+            }
+
+            if (obj.is_excluded || obj.isExcluded) {
+                this.#isExcluded = obj.is_excluded || obj.isExcluded;
+            }
+
+            if (obj.findings && webAppOrtResult) {
+                for (let i = 0, len = obj.findings.length; i < len; i++) {
+                    this.#findings.push(new WebAppFinding(obj.findings[i], webAppOrtResult));
+                }
+            }
+
+            if (obj.is_project || obj.isProject) {
+                this.#isProject = obj.is_project || obj.isProject;
             }
 
             if (obj.levels) {
-                this.levels = obj.levels;
+                this.#levels = new Set(obj.levels);
+            }
+
+            if (obj.path_excludes || obj.pathExcludes) {
+                const pathExcludeIndexes = obj.path_excludes || obj.pathExcludes;
+                this.#pathExcludeIndexes = new Set(pathExcludeIndexes);
             }
 
             if (obj.paths) {
-                this.paths = obj.paths;
+                this.#pathIndexes = obj.paths;
             }
 
-            if (obj.projectIndexes) {
-                this.projectIndexes = obj.projectIndexes;
+            if (obj.purl) {
+                this.#purl = obj.purl;
+            }
+
+            if (obj.scan_results || obj.scanResults) {
+                const scanResults = obj.scan_results || obj.scanResults;
+                for (let i = 0, len = scanResults.length; i < len; i++) {
+                    this.#scanResults.push(new WebAppScanResult(scanResults[i]));
+                }
+            }
+
+            if (obj.scope_excludes || obj.scopeExcludes) {
+                const scopeExcludesIndexes = obj.scope_excludes || obj.scopeExcludes;
+                this.#scopeExcludeIndexes = new Set(scopeExcludesIndexes);
             }
 
             if (obj.scopes) {
-                this.scopes = obj.scopes;
+                this.#scopeIndexes = new Set(obj.scopes);
             }
 
-            if (obj.violations) {
-                this.violations = obj.violations;
+            if (obj.source_artifact || obj.sourceArtifact) {
+                const sourceArtifact = obj.source_artifact || obj.sourceArtifact;
+                this.#sourceArtifact = new RemoteArtifact(sourceArtifact);
+            }
+
+            if (obj.vcs) {
+                this.#vcs = new VcsInfo(obj.vcs);
+            }
+
+            if (obj.vcs_processed || obj.vcsProcessed) {
+                const vcsProcessed = obj.vcs_processed || obj.vcsProcessed;
+                this.#vcsProcessed = new VcsInfo(vcsProcessed);
+            }
+
+            if (webAppOrtResult) {
+                this.#webAppOrtResult = webAppOrtResult;
+
+                if (this.#declaredLicensesIndexes.size !== 0) {
+                    this.#declaredLicensesIndexes.forEach((index) => {
+                        const webAppLicense = webAppOrtResult.getLicenseByIndex(index);
+                        if (webAppLicense) {
+                            const { id } = webAppLicense;
+                            this.#declaredLicenses.add(id);
+                        }
+                    });
+                }
+
+                if (this.#detectedLicensesIndexes.size !== 0) {
+                    this.#detectedLicensesIndexes.forEach((index) => {
+                        const webAppLicense = webAppOrtResult.getLicenseByIndex(index);
+                        if (webAppLicense) {
+                            const { id } = webAppLicense;
+                            this.#detectedLicenses.add(id);
+                        }
+                    });
+                }
+
+                this.key = randomStringGenerator(20);
             }
         }
     }
 
-    get children() {
-        return this.#children;
+    get _id() {
+        return this.#_id;
     }
 
-    set children(children) {
-        this.#children = children;
+    get binaryArtifact() {
+        return this.#binaryArtifact;
+    }
+
+    get concludedLicense() {
+        return this.#concludedLicense;
     }
 
     get curations() {
         return this.#curations;
     }
 
-    set curations(curations) {
-        this.#curations = curations;
+    get declaredLicenses() {
+        return this.#declaredLicenses;
     }
 
-    get delivered() {
-        return this.#delivered;
+    get declaredLicensesIndexes() {
+        return this.#declaredLicensesIndexes;
     }
 
-    set delivered(delivered) {
-        this.#delivered = delivered;
+    get declaredLicensesMapped() {
+        return this.#declaredLicensesMapped;
+    }
+
+    get declaredLicensesSpdxExpression() {
+        return this.#declaredLicensesSpdxExpression;
+    }
+
+    get declaredLicensesUnmapped() {
+        return this.#declaredLicensesUnmapped;
+    }
+
+    get definitionFilePath() {
+        return this.#definitionFilePath;
+    }
+
+    get description() {
+        return this.#description;
     }
 
     get detectedLicenses() {
-        return Array.from(this.#detectedLicenses);
+        return this.#detectedLicenses;
     }
 
-    set detectedLicenses(set) {
-        this.#detectedLicenses = new Set(set);
+    get detectedLicensesIndexes() {
+        return this.#detectedLicensesIndexes;
     }
 
-    get key() {
-        return this.#key;
+    get findings() {
+        return this.#findings;
     }
 
-    set key(key) {
-        this.#key = key;
+    get id() {
+        return this.#id;
     }
 
-    get levels() {
-        return Array.from(this.#levels);
+    get isExcluded() {
+        return this.#isExcluded;
     }
 
-    set levels(levels) {
-        this.#levels = levels;
+    get isProject() {
+        return this.#isProject;
     }
 
-    get paths() {
-        return this.#paths;
-    }
-
-    set paths(paths) {
-        this.#paths = paths;
-    }
-
-    get projectIndexes() {
-        return Array.from(this.#projectIndexes).sort();
-    }
-
-    set projectIndexes(projectIndexes) {
-        this.#projectIndexes = projectIndexes;
-    }
-
-    get scopes() {
-        return Array.from(this.#scopes);
-    }
-
-    set scopes(scopes) {
-        this.#scopes = scopes;
-    }
-
-    addLevel(level) {
-        if (Number.isInteger(level)) {
-            return this.#levels.add(level);
-        }
-
-        return null;
-    }
-
-    addPath(path) {
-        if (path) {
-            return this.#paths.push(path);
-        }
-
-        return null;
-    }
-
-    addProjectIndex(num) {
-        if (Number.isInteger(num)) {
-            return this.#projectIndexes.add(num);
-        }
-
-        return null;
-    }
-
-    addScope(scope) {
-        if (scope) {
-            return this.#scopes.add(scope);
-        }
-
-        return null;
-    }
-
-    getIssues(webAppOrtResult) {
-        if (!this.#issues) {
-            if (webAppOrtResult) {
-                this.#issues = webAppOrtResult.issues.filter(
-                    issue => issue.pkg === this.id
-                );
-            }
+    get issues() {
+        if (!this.#issues && this.#webAppOrtResult) {
+            this.#issues = this.#webAppOrtResult.getIssuesForPackageIndex(this.#_id);
         }
 
         return this.#issues;
     }
 
-    getScanSummaryForScannerId(webAppOrtResult, scannerId) {
-        if (webAppOrtResult && scannerId) {
-            return webAppOrtResult.getScanSummaryByPackageIdAndByScannerId(
-                this.id,
-                scannerId
-            );
-        }
-
-        return null;
+    get levels() {
+        return this.#levels;
     }
 
-    getScanFindings(webAppOrtResult) {
-        if (this.hasScanFindings(webAppOrtResult)) {
-            if (!this.#scanFindings) {
-                const scanResultContainer = webAppOrtResult.getScanResultContainerForPackageId(this.id);
-                const { results } = scanResultContainer;
-                this.#scanFindings = [];
+    get packageIndex() {
+        return this.#_id;
+    }
 
-                for (let x = 0, lenResults = results.length; x < lenResults; x++) {
-                    const { provenance, scanner, summary: { copyrightFindings, licenseFindings } } = results[x];
-
-                    for (let y = 0, lenCopyrightFindings = copyrightFindings.length; y < lenCopyrightFindings; y++) {
-                        const copyrightFinding = copyrightFindings[y];
-                        const { statement: value, location: { path, startLine, endLine } } = copyrightFinding;
-
-                        this.#scanFindings.push(new WebAppScanFindingCopyright({
-                            path,
-                            startLine,
-                            endLine,
-                            value,
-                            provenance,
-                            scanner
-                        }));
-                    }
-
-                    for (let z = 0, lenLicenseFindings = licenseFindings.length; z < lenLicenseFindings; z++) {
-                        const licenseFinding = licenseFindings[z];
-                        const { license: value, location: { path, startLine, endLine } } = licenseFinding;
-
-                        this.#scanFindings.push(new WebAppScanFindingLicense({
-                            path,
-                            startLine,
-                            endLine,
-                            value,
-                            provenance,
-                            scanner
-                        }));
-                    }
+    get pathExcludes() {
+        if (!this.#pathExcludes && this.#webAppOrtResult) {
+            this.#pathExcludes = [];
+            this.#pathExcludeIndexes.forEach((index) => {
+                const webAppPathExclude = this.#webAppOrtResult.getPathExcludeByIndex(index) || null;
+                if (webAppPathExclude) {
+                    this.#pathExcludes.push(webAppPathExclude);
                 }
+            });
+        }
+
+        return this.#pathExcludes;
+    }
+
+    get pathExcludeIndexes() {
+        return this.#pathExcludeIndexes;
+    }
+
+    get pathExcludeReasons() {
+        if (!this.#pathExcludeReasons && this.#webAppOrtResult) {
+            this.#pathExcludeReasons = new Set();
+
+            this.#pathExcludeIndexes.forEach((index) => {
+                const webAppPathExclude = this.#webAppOrtResult.getPathExcludeByIndex(index) || null;
+                if (webAppPathExclude && webAppPathExclude.reason) {
+                    this.#pathExcludeReasons.add(webAppPathExclude.reason);
+                }
+            });
+        }
+
+        return this.#pathExcludeReasons;
+    }
+
+    get pathIndexes() {
+        return this.#pathIndexes;
+    }
+
+    get paths() {
+        if (!this.#paths && this.#webAppOrtResult) {
+            this.#paths = [];
+            this.#pathIndexes.forEach((index) => {
+                const webAppPath = this.#webAppOrtResult.getPathByIndex(index) || null;
+                if (webAppPath) {
+                    this.#paths.push(webAppPath);
+                }
+            });
+        }
+
+        return this.#paths;
+    }
+
+    get projectIndexes() {
+        if (!this.#projectIndexes && this.#webAppOrtResult) {
+            this.#projectIndexes = new Set();
+            if (this.#isProject) {
+                this.#projectIndexes.add(this.#_id);
+            } else {
+                this.#pathIndexes.forEach((index) => {
+                    const webAppPath = this.#webAppOrtResult.getPathByIndex(index) || null;
+                    if (webAppPath && webAppPath.projectIndex) {
+                        this.#projectIndexes.add(webAppPath.projectIndex);
+                    }
+                });
             }
-
-            return this.#scanFindings;
         }
 
-        return null;
+        return this.#projectIndexes;
     }
 
-    getViolations(webAppOrtResult) {
-        if (!this.#violations) {
-            if (webAppOrtResult && webAppOrtResult.violations) {
-                this.#violations = webAppOrtResult.violations.filter(
-                    violation => violation.pkg === this.id
-                );
-            }
+    get purl() {
+        return this.#purl;
+    }
+
+    get scanResults() {
+        return this.#scanResults;
+    }
+
+    get scopeExcludes() {
+        if (!this.#scopeExcludes && this.#webAppOrtResult) {
+            this.#scopeExcludes = [];
+            this.#scopeExcludeIndexes.forEach((index) => {
+                const webAppScopeExclude = this.#webAppOrtResult.getScopeExcludeByIndex(index) || null;
+                if (webAppScopeExclude) {
+                    this.#scopeExcludes.push(webAppScopeExclude);
+                }
+            });
         }
 
-        return this.#violations;
+        return this.#scopeExcludes;
     }
 
-    hasIssues(webAppOrtResult) {
-        if (!this.#issues) {
-            this.getIssues(webAppOrtResult);
+    get scopeExcludeIndexes() {
+        return this.#scopeExcludeIndexes;
+    }
+
+    get scopeExcludeReasons() {
+        if (!this.#scopeExcludeReasons) {
+            this.#scopeExcludeReasons = new Set();
+
+            this.#scopeExcludeIndexes.forEach((index) => {
+                const webAppScopeExclude = this.#webAppOrtResult.getScopeExcludeByIndex(index) || null;
+                if (webAppScopeExclude && webAppScopeExclude.reason) {
+                    this.#scopeExcludeReasons.add(webAppScopeExclude.reason);
+                }
+            });
         }
 
-        return this.#issues.length;
+        return this.#scopeExcludeReasons;
     }
 
-    hasCurations() {
-        return this.#curations.length;
+    get scopeIndexes() {
+        return this.#scopeIndexes;
     }
 
-    hasDetectedLicense(license) {
-        return this.#detectedLicenses.has(license);
+    get scopeNames() {
+        if (!this.#scopeNames) {
+            this.#scopeNames = new Set();
+
+            this.#scopeIndexes.forEach((index) => {
+                const webAppScope = this.#webAppOrtResult.getScopeByIndex(index) || null;
+                if (webAppScope && webAppScope.name) {
+                    this.#scopeNames.add(webAppScope.name);
+                }
+            });
+        }
+
+        return this.#scopeNames;
+    }
+
+    get scopes() {
+        if (!this.#scopes && this.#webAppOrtResult) {
+            this.#scopes = [];
+            this.#scopeIndexes.forEach((index) => {
+                const webAppScope = this.#webAppOrtResult.getScopeByIndex(index) || null;
+                if (webAppScope) {
+                    this.#scopes.add(webAppScope);
+                }
+            });
+        }
+        return this.#scopes;
+    }
+
+    get sourceArtifact() {
+        return this.#sourceArtifact;
+    }
+
+    get ruleViolations() {
+        if (!this.#ruleViolations && this.#webAppOrtResult) {
+            this.#ruleViolations = this.#webAppOrtResult.getRuleViolationsForPackageIndex(this.#_id);
+        }
+
+        return this.#ruleViolations;
+    }
+
+    get vcs() {
+        return this.#vcs;
+    }
+
+    get vcsProcessed() {
+        return this.#vcsProcessed;
+    }
+
+    hasConcludedLicense() {
+        if (this.#concludedLicense) {
+            return this.#concludedLicense.length !== 0;
+        }
+
+        return false;
+    }
+
+    hasDeclaredLicenses() {
+        return this.#declaredLicenses.size !== 0;
+    }
+
+    hasDeclaredLicensesMapped() {
+        if (this.#declaredLicensesMapped) {
+            return this.#declaredLicensesMapped.size !== 0;
+        }
+
+        return false;
+    }
+
+    hasDeclaredLicensesSpdxExpression() {
+        if (this.#declaredLicensesSpdxExpression) {
+            return this.#declaredLicensesSpdxExpression.length !== 0;
+        }
+
+        return false;
+    }
+
+    hasDeclaredLicensesUnmapped() {
+        if (this.#declaredLicensesUnmapped) {
+            return this.#declaredLicensesUnmapped.size !== 0;
+        }
+
+        return false;
     }
 
     hasDetectedLicenses() {
-        return this.#detectedLicenses.size > 0;
+        return this.#detectedLicenses.size !== 0;
+    }
+
+    hasFindings() {
+        return this.#findings.length > 0;
+    }
+
+    hasIssues() {
+        return this.issues.length > 0;
+    }
+
+    hasLevel(val) {
+        return this.#levels.has(val);
     }
 
     hasLicenses() {
-        if (this.declaredLicenses.length !== 0
-            || this.detectedLicenses.length !== 0) {
+        if (this.declaredLicenses.size !== 0
+            || this.detectedLicenses.size !== 0) {
+            return true;
+        }
+
+        return false;
+    }
+
+    hasPathExcludes() {
+        if (this.pathExcludeIndexes.size !== 0) {
             return true;
         }
 
@@ -309,27 +585,35 @@ class WebAppPackage extends Package {
     }
 
     hasPaths() {
-        if (this.paths.length === 1 && this.paths[0].length === 0) {
-            return false;
-        }
-
-        return true;
-    }
-
-    hasScanFindings(webAppOrtResult) {
-        if (webAppOrtResult && webAppOrtResult.hasScanResultContainerForPackageId(this.id)) {
+        if (this.paths && this.paths.length > 0) {
             return true;
         }
 
         return false;
     }
 
-    hasViolations(webAppOrtResult) {
-        if (!this.#violations) {
-            this.getViolations(webAppOrtResult);
+    hasScopeIndex(val) {
+        return this.#scopeIndexes.has(val);
+    }
+
+    hasScopeExcludes() {
+        if (this.scopeExcludeIndexes.size !== 0) {
+            return true;
         }
 
-        return this.#violations.length;
+        return false;
+    }
+
+    hasScopes() {
+        if (this.scopes && this.scopes.length > 0) {
+            return true;
+        }
+
+        return false;
+    }
+
+    hasRuleViolations() {
+        return this.ruleViolations.length > 0;
     }
 }
 

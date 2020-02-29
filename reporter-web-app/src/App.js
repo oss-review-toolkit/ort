@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2019 HERE Europe B.V.
+ * Copyright (C) 2017-2020 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,11 +21,11 @@ import React, { Component } from 'react';
 import {
     Alert,
     Col,
-    Icon,
     Progress,
     Row,
     Tabs
 } from 'antd';
+import { ControlOutlined } from '@ant-design/icons';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import AboutModal from './components/AboutModal';
@@ -90,9 +90,8 @@ class ReporterApp extends Component {
                         animated={false}
                         onChange={this.onChangeTab}
                         tabBarExtraContent={(
-                            <Icon
+                            <ControlOutlined
                                 className="ort-control"
-                                type="control"
                                 onClick={this.onClickAbout}
                             />
                         )}
@@ -226,7 +225,7 @@ ReporterApp.propTypes = {
     webAppOrtResult: PropTypes.object.isRequired
 };
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
     appView: getAppView(state),
     webAppOrtResult: getOrtResult(state)
 });

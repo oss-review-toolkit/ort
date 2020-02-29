@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2019 HERE Europe B.V.
+ * Copyright (C) 2017-2020 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,19 +27,25 @@ const initState = {
         showKey: 'ort-loading'
     },
     summary: {
-        licenses: {
-            declaredChart: [],
-            detectedChart: [],
-            declaredFilter: {
-                filteredInfo: {},
-                sortedInfo: {}
-            },
-            detectedFilter: {
-                filteredInfo: {},
-                sortedInfo: {}
-            }
+        declaredLicensesChart: [],
+        detectedLicensesChart: [],
+        declaredLicensesFilter: {
+            filteredInfo: {},
+            sortedInfo: {}
         },
-        shouldComponentUpdate: false
+        detectedLicensesFilter: {
+            filteredInfo: {},
+            sortedInfo: {}
+        },
+        issuesFilter: {
+            filteredInfo: {},
+            sortedInfo: {}
+        },
+        shouldComponentUpdate: false,
+        ruleViolationsFilter: {
+            filteredInfo: {},
+            sortedInfo: {}
+        }
     },
     table: {
         filter: {
@@ -55,7 +61,7 @@ const initState = {
         matchedKeys: [],
         searchValue: '',
         searchIndex: 0,
-        selectedPackage: null,
+        selectedWebAppTreeNode: null,
         selectedKeys: [],
         shouldComponentUpdate: false,
         showDrawer: false
@@ -120,7 +126,7 @@ export default (state = initState, action) => {
                 loading: {
                     ...state.app.loading,
                     text: 'Processing result data...',
-                    percentage: 25
+                    percentage: 55
                 }
             }
         };
@@ -139,24 +145,6 @@ export default (state = initState, action) => {
             data: {
                 ...state.data,
                 ortResult: action.payload
-            }
-        };
-    }
-    case 'APP::LOADING_PROCESS_ORT_RESULT_PROJECT_DATA': {
-        const { index, total } = action;
-        const { loading } = state.app;
-        const { percentage: currentPercentage } = loading;
-        const newPercentage = Math.floor(currentPercentage + (95 - currentPercentage) / (total - index));
-
-        return {
-            ...state,
-            app: {
-                ...state.app,
-                loading: {
-                    ...state.app.loading,
-                    text: `Processing project (${index}/${total})...`,
-                    percentage: newPercentage
-                }
             }
         };
     }
@@ -239,32 +227,58 @@ export default (state = initState, action) => {
         };
     }
     case 'SUMMARY::CHANGE_DECLARED_LICENSES_TABLE': {
-        const { declaredChart, declaredFilter } = action.payload;
+        const {
+            declaredLicensesChart,
+            declaredLicensesFilter
+        } = action.payload;
 
         return {
             ...state,
             summary: {
                 ...state.summary,
-                licenses: {
-                    ...state.summary.licenses,
-                    declaredChart,
-                    declaredFilter
-                }
+                declaredLicensesChart,
+                declaredLicensesFilter
             }
         };
     }
     case 'SUMMARY::CHANGE_DETECTED_LICENSES_TABLE': {
-        const { detectedChart, detectedFilter } = action.payload;
+        const {
+            detectedLicensesChart,
+            detectedLicensesFilter
+        } = action.payload;
 
         return {
             ...state,
             summary: {
                 ...state.summary,
-                licenses: {
-                    ...state.summary.licenses,
-                    detectedChart,
-                    detectedFilter
-                }
+                detectedLicensesChart,
+                detectedLicensesFilter
+            }
+        };
+    }
+    case 'SUMMARY::CHANGE_ISSUES_TABLE': {
+        const {
+            issuesFilter
+        } = action.payload;
+
+        return {
+            ...state,
+            summary: {
+                ...state.summary,
+                issuesFilter
+            }
+        };
+    }
+    case 'SUMMARY::CHANGE_RULE_VIOLATIONS_TABLE': {
+        const {
+            ruleViolationsFilter
+        } = action.payload;
+
+        return {
+            ...state,
+            summary: {
+                ...state.summary,
+                ruleViolationsFilter
             }
         };
     }
@@ -314,14 +328,25 @@ export default (state = initState, action) => {
         };
     }
     case 'TREE::NODE_SELECT': {
-        const { selectedKeys, selectedPackage } = action.payload;
+        const { selectedKeys, selectedWebAppTreeNode } = action.payload;
+
+        if (selectedWebAppTreeNode) {
+            return {
+                ...state,
+                tree: {
+                    ...state.tree,
+                    selectedWebAppTreeNode: selectedWebAppTreeNode || state.tree.selectedWebAppTreeNode,
+                    selectedKeys,
+                    showDrawer: true
+                }
+            };
+        }
 
         return {
             ...state,
             tree: {
                 ...state.tree,
                 selectedKeys,
-                selectedPackage,
                 showDrawer: true
             }
         };
@@ -338,8 +363,8 @@ export default (state = initState, action) => {
                 matchedKeys,
                 searchIndex: 0,
                 searchValue,
-                selectedPackage: null,
-                selectedKeys: matchedKeys.length > 0 ? [matchedKeys[0].key] : [],
+                selectedWebAppTreeNode: null,
+                selectedKeys: matchedKeys.length > 0 ? [matchedKeys[0]] : [],
                 showDrawer: false
             }
         };
@@ -353,7 +378,7 @@ export default (state = initState, action) => {
             tree: {
                 ...state.tree,
                 searchIndex: index,
-                selectedKeys: [matchedKeys[index].key]
+                selectedKeys: [matchedKeys[index]]
             }
         };
     }
@@ -366,7 +391,7 @@ export default (state = initState, action) => {
             tree: {
                 ...state.tree,
                 searchIndex: index,
-                selectedKeys: [matchedKeys[index].key]
+                selectedKeys: [matchedKeys[index]]
             }
         };
     }

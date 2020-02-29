@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2019 HERE Europe B.V.
+ * Copyright (C) 2019-2020 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,36 +31,20 @@ class Provenance {
 
     constructor(obj) {
         if (obj instanceof Object) {
-            if (obj.download_time) {
-                this.downloadTime = obj.download_time;
+            if (obj.download_time || obj.downloadTime) {
+                this.#downloadTime = obj.download_time || obj.downloadTime;
             }
 
-            if (obj.downloadTime) {
-                this.downloadTime = obj.downloadTime;
+            if (obj.source_artifact || obj.sourceArtifact) {
+                this.#sourceArtifact = obj.source_artifact || obj.sourceArtifact;
             }
 
-            if (obj.source_artifact) {
-                this.sourceArtifact = obj.source_artifact;
+            if (obj.vcs_info || obj.vcsInfo) {
+                this.#vcsInfo = obj.vcs_info || obj.vcsInfo;
             }
 
-            if (obj.sourceArtifact) {
-                this.sourceArtifact = obj.sourceArtifact;
-            }
-
-            if (obj.vcs_info) {
-                this.vcsInfo = obj.vcs_info;
-            }
-
-            if (obj.vcsInfo) {
-                this.vcsInfo = obj.vcsInfo;
-            }
-
-            if (obj.original_vcs_info) {
-                this.originalVcsInfo = obj.original_vcs_info;
-            }
-
-            if (obj.originalVcsInfo) {
-                this.originalVcsInfo = obj.originalVcsInfo;
+            if (obj.original_vcs_info || obj.originalVcsInfo) {
+                this.#originalVcsInfo = obj.original_vcs_info || obj.originalVcsInfo;
             }
         }
     }
@@ -69,32 +53,16 @@ class Provenance {
         return this.#downloadTime;
     }
 
-    set downloadTime(val) {
-        this.#downloadTime = val;
-    }
-
     get sourceArtifact() {
         return this.#sourceArtifact;
-    }
-
-    set sourceArtifact(val) {
-        this.#sourceArtifact = new RemoteArtifact(val);
     }
 
     get vcsInfo() {
         return this.#vcsInfo;
     }
 
-    set vcsInfo(val) {
-        this.#vcsInfo = new VcsInfo(val);
-    }
-
     get originalVcsInfo() {
         return this.#originalVcsInfo;
-    }
-
-    set originalVcsInfo(val) {
-        this.#originalVcsInfo = new VcsInfo(val);
     }
 }
 

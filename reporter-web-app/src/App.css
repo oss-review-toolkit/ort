@@ -39,11 +39,6 @@ https://ant.design/docs/react/customize-theme
     width: 94.16666667%;
 }
 
-/* Remove bottom border from Ant <Collapse> */
-.ant-collapse-borderless > .ant-collapse-item {
-    border-bottom: 0px;
-}
-
 .ant-table-small > .ant-table-content > .ant-table-body {
     margin: 0px;
 }
@@ -93,24 +88,28 @@ tr.ant-table-expanded-row, tr.ant-table-expanded-row:hover {
     width: 1.2em;
 }
 .ort-control > svg:hover {
-    color: #1890ff;
+    color: #1890FF;
 }
 
-/* Colors of error, success and warning icons */
+/* Colors of exclude, error, hint, success and warning icons */
 .ort-error {
-    color: #f5222d;
+    color: #F5222D;
+}
+
+.ort-excluded {
+    color: #B0C4DE;
 }
 
 .ort-hint {
-    color: #f7f5ff;
+    color: #FFCC00;
 }
 
-.ort-success {
-    color: #52c41a;
+.ort-ok {
+    color: #52C41A;
 }
 
 .ort-warning {
-    color: #faad14;
+    color: #FAAD14;
 }
 
 .ort-loading-logo {
@@ -123,120 +122,66 @@ tr.ant-table-expanded-row, tr.ant-table-expanded-row:hover {
     word-wrap: break-word;
 }
 
-/*
-.ort-table-list > li {
-    margin: 3px 0 3px 0;
-    padding: 0;
-}
+/* === Styling for PackageCollapse === */
 
-.ort-package-id .ant-tag {
-    font-size: 10px;
-    height: 13px;
-    line-height: 10px;
-    padding: 0 3px 0 3px;
-}
-
-.ort-license.ant-tag:hover {
-    color: #fff;
-    background: rgba(0, 0, 0, 0.65);;
-    border-color: rgba(0, 0, 0, 0.65);;
-}
-
-.ort-license.ant-tag-green {
-    color: #007020;
-    background: #f6ffed;
-    border-color: #4e8b60;
-}
-
-.ort-license.ant-tag-green:hover {
-    color: #fff;
-    background: #007020;
-    border-color: #007020;
-}
-
-.ort-license.ant-tag-red:hover {
-    color: #fff;
-    background-color: #cf1322;
-    border-color: #cf1322;
-}
-
-.ort-license.ant-tag-orange:hover {
-    color: #fff;
-    background: #fa8c16;
-    border-color: #fa8c16;
-}
-
-.ort-license.ant-tag-blue:hover, 
-.ort-status-ok.ant-tag-blue:hover {
-    color: #fff;
-    background: #1890ff;
-    border-color: #1890ff;
-}
-
-.ort-package-props th, .ort-app .ort-package-props td {
-    vertical-align: top;
-}
-
-.ort-package-props th {
+.ort-package-collapse {
+    background-color: #FFF;
     font-weight: 400;
-    width: 110px;
 }
 
-.ort-package-deps-paths .ant-list-something-after-last-item .ant-spin-container > .ant-list-item:last-child {
+.ort-package-collapse > .ant-collapse-item,
+.ort-package-collapse tr.ant-descriptions-row {
+    border-bottom: 0px;
+    line-height: 0.9em;
+}
+
+.ort-package-collapse .ant-descriptions-row > td {
     border-bottom: 0px;
 }
 
-.ort-package-deps-paths .ant-list-pagination {
-    margin: 0px 0px 5px 0px;
-    text-align: left;
+.ort-package-collapse .ant-descriptions-item-label,
+.ort-package-collapse .ant-descriptions-item-content {
+    font-size: 0.9em;
 }
 
-.ort-package-licenses .ort-license.ant-tag {
-    margin-bottom: 5px;
+.ort-package-collapse .ort-package-path-description div > table > tbody > tr {
+    border-bottom: 0px;
+    padding: 0px;
 }
 
-.ort-license-info .ort-license-obligations {
-    padding: 0 25px 0 25px;
+.ort-package-collapse .ort-package-path-description div > table > tbody > tr > td {
+    border-bottom: 0px;
+    padding: 2px 0px 0px 0px !important;
 }
 
-.ort-license-info .ort-license-obligations ul {
-    list-style-type: none;
-    margin: 0;
-    padding: 0;
-}
-
-.ort-license-info .ort-license-obligations .ort-data-attribution {
-    font-size: 0.5em;
-}
-
-.ort-license-info .ort-license-fulltext {
+.ort-package-collapse .ort-package-path-description div > table > tbody > tr > td > span {
     font-size: 0.7em;
-    white-space: pre-wrap;
 }
 
-.ort-table-operations button {
-    float: right;
-    margin: 16px 0px 16px 0px;
-    z-index: 999;
+.ort-package-collapse td {
+    font-size: 0.9em;
 }
 
-.oss-tree-tooltip .ant-tooltip-inner {
-  max-width: 500px;
+.ort-how-to-fix {
+    line-height: 1.1em;
 }
 
-.ort-tree-tooltip .ant-tooltip-inner {
-    max-width: 500px;
+.ort-how-to-fix li {
+    line-height: 1.3em;
 }
-*/
+
+.ort-table-issues, .ort-table-rule-violations {
+    background: transparent;
+    border-bottom: 0px;
+}
+
+/* === Styling for PackagePaths === */
+
+.ort-package-path .ant-steps-item .ant-steps-item-content {
+    width: auto;
+}
 
 /* === Styling for TableView  === */
-
-/* Removes dot for all lists in TableView */
-ul.ort-table-list {
-    list-style-type: none;
-    margin: 0;
-    padding: 0;
-}
 
 /* Styling for 'Clear filters' button in TableView */
 .ort-table-operations button {
@@ -245,7 +190,7 @@ ul.ort-table-list {
     z-index: 999;
 }
 
-/* === Styling for TreeView  === */
+/* === Styling for TreeView === */
 
 .ort-tree {
     display: flex;
@@ -279,16 +224,6 @@ ul.ort-table-list {
     overflow: auto;
     flex: auto;
     height: calc(100vh - 150px);
-}
-
-/* Styling for 'Defined in' and 'Scope' in Package Paths */
-.ort-step-props th, .ort-app .ort-step-props td {
-    vertical-align: top;
-}
-
-.ort-step-props th {
-    font-weight: 400;
-    width: 90px;
 }
 
 /* === OSS Review Toolkit logo === */
