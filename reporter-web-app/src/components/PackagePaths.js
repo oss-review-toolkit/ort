@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2019 HERE Europe B.V.
+ * Copyright (C) 2019-2020 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,23 +18,16 @@
  */
 
 import React from 'react';
-import { List, Steps } from 'antd';
+import { Descriptions, List, Steps } from 'antd';
 import PropTypes from 'prop-types';
 
+const { Item } = Descriptions;
 const { Step } = Steps;
 
 // Generates the HTML for packages issues
 const PackagePaths = (props) => {
-    const { pkg, webAppOrtResult } = props;
-    const { id, paths } = pkg;
+    const { paths } = props;
     let grid;
-
-    // Do not render anything if no dependency paths
-    if (!pkg.hasPaths()) {
-        return (
-            <span>No paths for this package.</span>
-        );
-    }
 
     // Change layout grid to use all available width for single path
     if (paths.length === 1) {
@@ -70,76 +63,65 @@ const PackagePaths = (props) => {
                 size: 'small'
             }}
             dataSource={paths}
-            renderItem={path => (
-                <List.Item>
-                    <Steps progressDot direction="vertical" size="small" current={path.length}>
-                        {
-                            path.map(
-                                (item, index) => {
-                                    if (index === 0) {
-                                        const description = (
-                                            <div className="ort-step-props">
-                                                <table>
-                                                    <tbody>
-                                                        <tr>
-                                                            <th>
-                                                                Defined in:
-                                                            </th>
-                                                            <td>
-                                                                {
-                                                                    (() => {
-                                                                        const prj = webAppOrtResult
-                                                                            .getProjectById(item.pkg);
-                                                                        if (prj && prj.definitionFilePath) {
-                                                                            return prj.definitionFilePath;
-                                                                        }
+            renderItem={
+                (webAppPath) => {
+                    const steps = [];
+                    steps.push(
+                        <Step
+                            description={(
+                                <Descriptions
+                                    className="ort-package-path-description"
+                                    column={1}
+                                    size="small"
+                                >
+                                    <Item
+                                        key="ort-package-path-definition-file-path"
+                                        label="Defined in"
+                                    >
+                                        {webAppPath.project.definitionFilePath}
+                                    </Item>
+                                    <Item
+                                        key="ort-package-path-scope"
+                                        label="Scope"
+                                    >
+                                        {webAppPath.scopeName}
+                                    </Item>
+                                </Descriptions>
+                            )}
+                            key={webAppPath.projectName}
+                            title={webAppPath.projectName}
+                        />
+                    );
 
-                                                                        return 'unknown path';
-                                                                    })()
-                                                                }
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <th>
-                                                                Scope:
-                                                            </th>
-                                                            <td>
-                                                                {item.scope}
-                                                            </td>
-                                                        </tr>
-                                                    </tbody>
-                                                </table>
-                                            </div>
-                                        );
-                                        return (
-                                            <Step
-                                                key={item.pkg}
-                                                title={item.pkg}
-                                                description={description}
-                                            />
-                                        );
-                                    }
-
-                                    return (
-                                        <Step
-                                            key={item.pkg}
-                                            title={item.pkg}
-                                        />
-                                    );
-                                }
-                            )
+                    webAppPath.path.forEach(
+                        (pathWebAppPackage) => {
+                            steps.push(<Step key={pathWebAppPackage.id} title={pathWebAppPackage.id} />);
                         }
-                        <Step key={id} title={id} />
-                    </Steps>
-                </List.Item>
-            )}
+                    );
+
+                    steps.push(<Step key={webAppPath.packageName} title={webAppPath.packageName} />);
+
+                    return (
+                        <List.Item>
+                            <Steps
+                                className="ort-package-path"
+                                current={steps.length - 1}
+                                direction="vertical"
+                                progressDot
+                                size="small"
+                            >
+                                {steps}
+                            </Steps>
+                        </List.Item>
+                    );
+                }
+            }
         />
     );
 };
 
 PackagePaths.propTypes = {
-    webAppOrtResult: PropTypes.object.isRequired,
-    pkg: PropTypes.object.isRequired
+    paths: PropTypes.array.isRequired
 };
 
 export default PackagePaths;

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2019 HERE Europe B.V.
+ * Copyright (C) 2019-2020 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -38,12 +38,9 @@ class VcsInfo {
                 this.revision = obj.revision;
             }
 
-            if (obj.resolved_revision) {
-                this.resolvedRevision = obj.resolved_revision;
-            }
-
-            if (obj.resolvedRevision) {
-                this.resolvedRevision = obj.resolvedRevision;
+            if (obj.resolved_revision || obj.resolvedRevision) {
+                this.resolvedRevision = obj.resolved_revision
+                    || obj.resolvedRevision;
             }
 
             if (obj.path) {

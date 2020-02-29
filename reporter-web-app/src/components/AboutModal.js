@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2019 HERE Europe B.V.
+ * Copyright (C) 2019-2020 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,40 +18,37 @@
  */
 
 import React from 'react';
-import ObjectInspector from 'react-inspector';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import {
+    Descriptions,
     Modal,
     Tabs
 } from 'antd';
+import { Light as SyntaxHighlighter } from 'react-syntax-highlighter';
+import dark from 'react-syntax-highlighter/dist/esm/styles/hljs/dark';
+import markdown from 'react-syntax-highlighter/dist/esm/languages/hljs/markdown';
 import {
+    getCustomDataAsFlatArray,
     getOrtResult
 } from '../reducers/selectors';
 import store from '../store';
 
+const { Item } = Descriptions;
 const { TabPane } = Tabs;
 
-const AboutModal = (props) => {
-    const { webAppOrtResult } = props;
-    const { data, repository: { config } } = webAppOrtResult;
-    const { excludes } = config;
-    const { paths, projects, scopes } = excludes;
-    const parameters = Array.from(data.values()).reduce(
-        (acc, item) => {
-            acc.push(...Object.entries(item));
+SyntaxHighlighter.registerLanguage('markdown', markdown);
 
-            return acc;
-        },
-        []
-    );
+const AboutModal = (props) => {
+    const { customDataAsFlatArray, webAppOrtResult } = props;
+    const { repositoryConfiguration } = webAppOrtResult;
 
     return (
         <Modal
             footer={null}
             visible
             height="90%"
-            width="80%"
+            width="90%"
             onCancel={
                 () => {
                     store.dispatch({ type: 'APP::HIDE_ABOUT_MODAL' });
@@ -60,64 +57,60 @@ const AboutModal = (props) => {
         >
             <Tabs animated={false}>
                 {
-                    (excludes.paths.length !== 0
-                    || excludes.scopes.length !== 0)
+                    webAppOrtResult.hasRepositoryConfiguration()
                     && (
-                        <TabPane tab="Excludes" key="ort-tabs-excludes">
-                            <ObjectInspector
-                                data={{
-                                    paths,
-                                    projects,
-                                    scopes
-                                }}
-                                expandLevel={6}
-                                name=".ort.yml"
-                                showNonenumerable={false}
-                            />
+                        <TabPane tab="Excludes (.ort.yml)" key="ort-tabs-excludes">
+                            <SyntaxHighlighter
+                                language="markdown"
+                                showLineNumbers
+                                style={dark}
+                            >
+                                {repositoryConfiguration}
+                            </SyntaxHighlighter>
                         </TabPane>
                     )
                 }
                 {
-                    parameters.length > 0
+                    customDataAsFlatArray
+                    && customDataAsFlatArray.length > 0
                     && (
-                        <TabPane tab="Parameters" key="ort-tabs-report-params">
-                            <table className="ort-params">
-                                <tbody>
-                                    {
-                                        parameters.map(([key, value]) => {
-                                            if (value.startsWith('http')) {
-                                                return (
-                                                    <tr key={`ort-params-value${key}`}>
-                                                        <th>
-                                                            {`${key} `}
-                                                        </th>
-                                                        <td>
-                                                            <a
-                                                                href={value}
-                                                                rel="noopener noreferrer"
-                                                                target="_blank"
-                                                            >
-                                                                {value}
-                                                            </a>
-                                                        </td>
-                                                    </tr>
-                                                );
+                        <TabPane tab="Parameters" key="ort-tabs-params">
+                            <Descriptions
+                                bordered
+                                column={1}
+                                size="small"
+                            >
+                                {
+                                    customDataAsFlatArray.map(([param, value]) => (
+                                        <Item
+                                            key={`ort-params-${param}`}
+                                            label={param}
+                                        >
+                                            {
+                                                value.startsWith('http')
+                                                    ? (
+                                                        <a
+                                                            href={value}
+                                                            rel="noopener noreferrer"
+                                                            target="_blank"
+                                                        >
+                                                            {value}
+                                                        </a>
+                                                    )
+                                                    : value
                                             }
-
-                                            return (
-                                                <tr key={`ort-params-value-${key}`}>
-                                                    <th>
-                                                        {`${key} `}
-                                                    </th>
-                                                    <td>
-                                                        {value}
-                                                    </td>
-                                                </tr>
-                                            );
-                                        })
-                                    }
-                                </tbody>
-                            </table>
+                                        </Item>
+                                    ))
+                                }
+                            </Descriptions>
+                            {/* FIXME: Replace with Ant Descriptions once uniqe key bug is fixed */}
+                            <div className="ant-descriptions ant-descriptions-small ant-descriptions-bordered">
+                                <div className="ant-descriptions-view">
+                                    <table>
+                                        <tbody />
+                                    </table>
+                                </div>
+                            </div>
                         </TabPane>
                     )
                 }
@@ -129,11 +122,6 @@ const AboutModal = (props) => {
                     >
                         <div className="ort-loading-logo ort-logo" />
                     </a>
-                    <p>
-                        version
-                        {' '}
-                        {webAppOrtResult.getOrtVersion()}
-                    </p>
                     <p>
                         For documentation on how to create this report please see
                         {' '}
@@ -158,10 +146,12 @@ const AboutModal = (props) => {
 };
 
 AboutModal.propTypes = {
+    customDataAsFlatArray: PropTypes.array.isRequired,
     webAppOrtResult: PropTypes.object.isRequired
 };
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
+    customDataAsFlatArray: getCustomDataAsFlatArray(state),
     webAppOrtResult: getOrtResult(state)
 });
 

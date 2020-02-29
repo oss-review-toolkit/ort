@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2019 HERE Europe B.V.
+ * Copyright (C) 2017-2020 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,17 +20,28 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {
-    Alert,
     Button,
+    Collapse,
     Drawer,
-    Icon,
     Input,
+    message,
     Row,
     Tree
 } from 'antd';
+import {
+    ArrowDownOutlined,
+    ArrowUpOutlined,
+    FileAddOutlined,
+    FileExcelOutlined
+} from '@ant-design/icons';
 import { connect } from 'react-redux';
 import scrollIntoView from 'scroll-into-view-if-needed';
-import PackageCollapse from './PackageCollapse';
+import PackageDetails from './PackageDetails';
+import PackageFindingsTable from './PackageFindingsTable';
+import PackageLicenses from './PackageLicenses';
+import PackagePaths from './PackagePaths';
+import PathExcludesTable from './PathExcludesTable';
+import ScopeExcludesTable from './ScopeExcludesTable';
 import {
     getOrtResult,
     getTreeView,
@@ -38,23 +49,8 @@ import {
 } from '../reducers/selectors';
 import store from '../store';
 
-const { TreeNode } = Tree;
+const { Panel } = Collapse;
 const { Search } = Input;
-
-const getParentKey = (key, tree) => {
-    let parentKey;
-    for (let i = 0; i < tree.length; i++) {
-        const node = tree[i];
-        if (node.children) {
-            if (node.children.some(item => item.key === key)) {
-                parentKey = node.key;
-            } else if (getParentKey(key, node.children)) {
-                parentKey = getParentKey(key, node.children);
-            }
-        }
-    }
-    return parentKey;
-};
 
 class TreeView extends React.Component {
     componentDidMount() {
@@ -75,22 +71,33 @@ class TreeView extends React.Component {
 
         const { value } = e.target;
         const searchValue = value.trim();
-        const {
-            webAppOrtResult: {
-                packagesTreeArray: tree,
-                packagesTreeNodesArray: treeNodes
-            }
-        } = this.props;
-        const expandedKeys = (searchValue === '') ? [] : treeNodes
-            .map((item) => {
-                if (item.id.indexOf(searchValue) > -1) {
-                    return getParentKey(item.key, tree);
+        const { webAppOrtResult } = this.props;
+        const searchPackageTreeNodeKeys = (searchValue === '') ? [] : webAppOrtResult.packages
+            .reduce((acc, webAppPackage) => {
+                if (webAppPackage.id.indexOf(searchValue) > -1) {
+                    const treeNodeKeys = webAppOrtResult.getTreeNodeParentKeysByIndex(webAppPackage.packageIndex);
+                    if (treeNodeKeys) {
+                        acc.push(treeNodeKeys);
+                    }
                 }
-                return null;
-            })
-            .filter((item, i, self) => item && self.indexOf(item) === i);
-        const matchedKeys = (searchValue === '') ? [] : treeNodes
-            .filter(item => item.id.indexOf(searchValue) > -1);
+
+                return acc;
+            }, []);
+
+        const expandedKeys = Array.from(searchPackageTreeNodeKeys
+            .reduce(
+                (acc, treeNodeKeys) => new Set([...acc, ...treeNodeKeys.parentKeys]),
+                new Set()
+            ));
+        const matchedKeys = Array.from(searchPackageTreeNodeKeys
+            .reduce(
+                (acc, treeNodeKeys) => new Set([...acc, ...treeNodeKeys.keys]),
+                new Set()
+            ));
+
+        if (matchedKeys.length === 0 && searchValue !== '') {
+            message.info(`No search results found for '${searchValue}'`);
+        }
 
         store.dispatch({
             type: 'TREE::SEARCH',
@@ -107,15 +114,22 @@ class TreeView extends React.Component {
     };
 
     onSelectTreeNode = (selectedKeys, e) => {
-        const { node: { props: { dataRef } } } = e;
+        const { node: { key } } = e;
+        const { webAppOrtResult } = this.props;
 
-        store.dispatch({
-            type: 'TREE::NODE_SELECT',
-            payload: {
-                selectedPackage: dataRef,
-                selectedKeys
+        if (key) {
+            const webAppTreeNode = webAppOrtResult.getTreeNodeByKey(key);
+
+            if (webAppTreeNode && !webAppTreeNode.isScope) {
+                store.dispatch({
+                    type: 'TREE::NODE_SELECT',
+                    payload: {
+                        selectedWebAppTreeNode: webAppTreeNode,
+                        selectedKeys: [key]
+                    }
+                });
             }
-        });
+        }
     }
 
     onClickPreviousSearchMatch = (e) => {
@@ -146,8 +160,8 @@ class TreeView extends React.Component {
             return;
         }
 
-        const selectedElemId = `ort-tree-node-${selectedKeys[0]}`;
-        const selectedElem = document.querySelector(`#${selectedElemId}`);
+        const selectedElemClassName = `ort-tree-node-${selectedKeys[0]}`;
+        const selectedElem = document.querySelector(`.${selectedElemClassName}`);
 
         if (selectedElem) {
             scrollIntoView(selectedElem, {
@@ -157,129 +171,20 @@ class TreeView extends React.Component {
         }
     }
 
-    renderDrawer = () => {
-        const {
-            webAppOrtResult,
-            treeView: {
-                selectedPackage,
-                showDrawer
-            }
-        } = this.props;
-
-        if (!showDrawer) {
-            return null;
-        }
-
-        return (
-            <Drawer
-                title={
-                    (() => {
-                        if (selectedPackage.hasIssues(webAppOrtResult)
-                        || selectedPackage.hasViolations(webAppOrtResult)) {
-                            return (
-                                <span>
-                                    <Icon
-                                        type="exclamation-circle"
-                                        className="ort-error"
-                                    />
-                                    {' '}
-                                    {selectedPackage.id}
-                                </span>
-                            );
-                        }
-
-                        return (
-                            <span>
-                                <Icon
-                                    type="check-circle"
-                                    className="ort-success"
-                                />
-                                {' '}
-                                {selectedPackage.id}
-                            </span>
-                        );
-                    })()
-                }
-                placement="right"
-                closable
-                onClose={this.onCloseDrawer}
-                mask={false}
-                visible={showDrawer}
-                width="60%"
-            >
-                <PackageCollapse
-                    pkg={selectedPackage}
-                    webAppOrtResult={webAppOrtResult}
-                />
-            </Drawer>
-        );
-    }
-
-    renderTreeNode = data => data.map((item) => {
-        const {
-            treeView: {
-                searchValue
-            }
-        } = this.props;
-
-        const index = item.id.indexOf(searchValue);
-        const beforeSearchValueStr = item.id.substr(0, index);
-        const afterSearchValueStr = item.id.substr(index + searchValue.length);
-        let title;
-
-        if (index > -1) {
-            title = (
-                <span id={`ort-tree-node-${item.key}`}>
-                    {beforeSearchValueStr}
-                    <span className="ort-tree-search-match">
-                        {searchValue}
-                    </span>
-                    {afterSearchValueStr}
-                </span>
-            );
-        } else {
-            title = (
-                <span id={`ort-tree-node-${item.key}`}>{item.id}</span>
-            );
-        }
-        if (item.children) {
-            return (
-                <TreeNode
-                    className={item.key}
-                    dataRef={item}
-                    key={item.key}
-                    title={title}
-                >
-                    {this.renderTreeNode(item.children)}
-                </TreeNode>
-            );
-        }
-
-        return (
-            <TreeNode
-                className={item.key}
-                dataRef={item}
-                key={item.key}
-                title={title}
-            />
-        );
-    });
-
-
     render() {
         const {
-            webAppOrtResult: {
-                packagesTreeArray: tree
-            },
             treeView: {
                 autoExpandParent,
                 expandedKeys,
                 matchedKeys,
                 searchIndex,
-                searchValue,
-                selectedKeys
-            }
+                selectedWebAppTreeNode,
+                selectedKeys,
+                showDrawer
+            },
+            webAppOrtResult
         } = this.props;
+        const { dependencyTrees } = webAppOrtResult;
 
         return (
             <div className="ort-tree">
@@ -295,8 +200,12 @@ class TreeView extends React.Component {
                                 align="middle"
                                 className="ort-tree-navigation"
                             >
-                                <Button onClick={this.onClickNextSearchMatch} icon="arrow-down" />
-                                <Button onClick={this.onClickPreviousSearchMatch} icon="arrow-up" />
+                                <Button onClick={this.onClickNextSearchMatch}>
+                                    <ArrowDownOutlined />
+                                </Button>
+                                <Button onClick={this.onClickPreviousSearchMatch}>
+                                    <ArrowUpOutlined />
+                                </Button>
                                 <span className="ort-tree-navigation-counter">
                                     {searchIndex + 1}
                                     {' '}
@@ -307,14 +216,6 @@ class TreeView extends React.Component {
                         ) : null
                     }
                 </div>
-                {
-                    matchedKeys.length === 0 && searchValue !== '' && (
-                        <Alert
-                            message={`No package names found which include '${searchValue}'`}
-                            type="info"
-                        />
-                    )
-                }
                 <div className="ort-tree-wrapper">
                     <Tree
                         autoExpandParent={autoExpandParent}
@@ -323,13 +224,117 @@ class TreeView extends React.Component {
                         onSelect={this.onSelectTreeNode}
                         showLine
                         selectedKeys={selectedKeys}
-                    >
-                        {this.renderTreeNode(tree)}
-                    </Tree>
+                        treeData={dependencyTrees}
+                    />
                 </div>
-                <div className="ort-tree-drawer">
-                    {this.renderDrawer()}
-                </div>
+                {
+                    selectedWebAppTreeNode
+                    && !selectedWebAppTreeNode.isScope
+                    && (
+                        <div className="ort-tree-drawer">
+                            <Drawer
+                                title={
+                                    (() => {
+                                        if (webAppOrtResult.hasExcludes()) {
+                                            if (selectedWebAppTreeNode.isExcluded) {
+                                                return (
+                                                    <span>
+                                                        <FileExcelOutlined
+                                                            className="ort-excluded"
+                                                        />
+                                                        {' '}
+                                                        {selectedWebAppTreeNode.packageName}
+                                                    </span>
+                                                );
+                                            }
+
+                                            return (
+                                                <span>
+                                                    <FileAddOutlined />
+                                                    {' '}
+                                                    {selectedWebAppTreeNode.packageName}
+                                                </span>
+                                            );
+                                        }
+
+                                        return (
+                                            <span>
+                                                {selectedWebAppTreeNode.packageName}
+                                            </span>
+                                        );
+                                    })()
+                                }
+                                placement="right"
+                                closable
+                                onClose={this.onCloseDrawer}
+                                visible={showDrawer}
+                                width="65%"
+                            >
+                                <Collapse
+                                    className="ort-package-collapse"
+                                    bordered={false}
+                                    defaultActiveKey={[0, 1]}
+                                >
+                                    <Panel header="Details" key="0">
+                                        <PackageDetails
+                                            webAppPackage={selectedWebAppTreeNode.package}
+                                        />
+                                    </Panel>
+                                    {
+                                        selectedWebAppTreeNode.package.hasLicenses()
+                                        && (
+                                            <Panel header="Licenses" key="1">
+                                                <PackageLicenses
+                                                    webAppPackage={selectedWebAppTreeNode.package}
+                                                />
+                                            </Panel>
+                                        )
+                                    }
+                                    {
+                                        selectedWebAppTreeNode.hasWebAppPath()
+                                        && (
+                                            <Panel header="Path" key="2">
+                                                <PackagePaths
+                                                    paths={[selectedWebAppTreeNode.webAppPath]}
+                                                />
+                                            </Panel>
+                                        )
+                                    }
+                                    {
+                                        selectedWebAppTreeNode.package.hasFindings()
+                                        && (
+                                            <Panel header="Scan Results" key="3">
+                                                <PackageFindingsTable
+                                                    webAppPackage={selectedWebAppTreeNode.package}
+                                                />
+                                            </Panel>
+                                        )
+                                    }
+                                    {
+                                        selectedWebAppTreeNode.package.hasPathExcludes()
+                                        && (
+                                            <Panel header="Path Excludes" key="4">
+                                                <PathExcludesTable
+                                                    excludes={selectedWebAppTreeNode.package.pathExcludes}
+                                                />
+                                            </Panel>
+                                        )
+                                    }
+                                    {
+                                        selectedWebAppTreeNode.package.hasScopeExcludes()
+                                        && (
+                                            <Panel header="Scope Excludes" key="5">
+                                                <ScopeExcludesTable
+                                                    excludes={selectedWebAppTreeNode.package.scopeExcludes}
+                                                />
+                                            </Panel>
+                                        )
+                                    }
+                                </Collapse>
+                            </Drawer>
+                        </div>
+                    )
+                }
             </div>
         );
     }
@@ -341,7 +346,7 @@ TreeView.propTypes = {
     webAppOrtResult: PropTypes.object.isRequired
 };
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
     shouldComponentUpdate: getTreeViewShouldComponentUpdate(state),
     treeView: getTreeView(state),
     webAppOrtResult: getOrtResult(state)
