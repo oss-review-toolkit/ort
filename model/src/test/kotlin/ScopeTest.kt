@@ -48,12 +48,9 @@ class ScopeTest : WordSpec({
             val scope = Scope(
                 name = "test",
                 dependencies = sortedSetOf(
-                    PackageReference(
-                        id = Identifier("a"),
-                        dependencies = sortedSetOf(
-                            PackageReference(id = Identifier("a1"))
-                        )
-                    )
+                    pkg("a") {
+                        pkg("a1")
+                    }
                 )
             )
 
@@ -64,19 +61,13 @@ class ScopeTest : WordSpec({
             val scope = Scope(
                 name = "test",
                 dependencies = sortedSetOf(
-                    PackageReference(
-                        id = Identifier("a"),
-                        dependencies = sortedSetOf(
-                            PackageReference(
-                                id = Identifier("a1"),
-                                dependencies = sortedSetOf(
-                                    PackageReference(id = Identifier("a11")),
-                                    PackageReference(id = Identifier("a12"))
-                                )
-                            )
-                        )
-                    ),
-                    PackageReference(id = Identifier("b"))
+                    pkg("a") {
+                        pkg("a1") {
+                            pkg("a11")
+                            pkg("a12")
+                        }
+                    },
+                    pkg("b")
                 )
             )
 
@@ -134,7 +125,7 @@ class ScopeTest : WordSpec({
     }
 })
 
-class PackageReferenceBuilder(id: String) {
+private class PackageReferenceBuilder(id: String) {
     private val id = Identifier(id)
     private val dependencies = sortedSetOf<PackageReference>()
 
@@ -145,5 +136,5 @@ class PackageReferenceBuilder(id: String) {
     fun build(): PackageReference = PackageReference(id = id, dependencies = dependencies)
 }
 
-fun pkg(id: String, block: PackageReferenceBuilder.() -> Unit = {}): PackageReference =
+private fun pkg(id: String, block: PackageReferenceBuilder.() -> Unit = {}): PackageReference =
     PackageReferenceBuilder(id).apply { block() }.build()
