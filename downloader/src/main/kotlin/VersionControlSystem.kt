@@ -179,6 +179,11 @@ abstract class VersionControlSystem {
     protected open val priority: Int = 0
 
     /**
+     * The name of the remote branch that gets checked out by default if none if specified.
+     */
+    abstract val defaultBranchName: String
+
+    /**
      * A list of symbolic names that point to the latest revision.
      */
     protected abstract val latestRevisionNames: List<String>
