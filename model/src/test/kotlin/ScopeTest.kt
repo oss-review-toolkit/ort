@@ -19,6 +19,8 @@
 
 package com.here.ort.model
 
+import io.kotlintest.matchers.containExactly
+import io.kotlintest.should
 import io.kotlintest.shouldBe
 import io.kotlintest.specs.WordSpec
 
@@ -81,4 +83,67 @@ class ScopeTest : WordSpec({
             scope.getDependencyTreeDepth() shouldBe 3
         }
     }
+
+    "getShortestPaths()" should {
+        "find the shortest path to each dependency" {
+            val scope = Scope(
+                name = "test",
+                dependencies = sortedSetOf(
+                    pkg("A"),
+                    pkg("B") {
+                        pkg("A")
+                    },
+                    pkg("C") {
+                        pkg("B") {
+                            pkg("A") {
+                                pkg("H")
+                                pkg("I") {
+                                    pkg("H")
+                                }
+                            }
+                        }
+                        pkg("D") {
+                            pkg("E")
+                        }
+                    },
+                    pkg("F") {
+                        pkg("E") {
+                            pkg("I")
+                        }
+                    },
+                    pkg("G") {
+                        pkg("E")
+                    }
+                )
+            )
+
+            scope.getShortestPaths() should containExactly(
+                mapOf(
+                    Identifier("A") to emptyList(),
+                    Identifier("B") to emptyList(),
+                    Identifier("C") to emptyList(),
+                    Identifier("D") to listOf(Identifier("C")),
+                    Identifier("E") to listOf(Identifier("F")),
+                    Identifier("F") to emptyList(),
+                    Identifier("G") to emptyList(),
+                    Identifier("H") to listOf(Identifier("C"), Identifier("B"), Identifier("A")),
+                    Identifier("I") to listOf(Identifier("F"), Identifier("E"))
+                )
+            )
+        }
+    }
 })
+
+class PackageReferenceBuilder(id: String) {
+    private val id = Identifier(id)
+    private val dependencies = sortedSetOf<PackageReference>()
+
+    fun pkg(id: String, block: PackageReferenceBuilder.() -> Unit = {}) {
+        dependencies += PackageReferenceBuilder(id).apply { block() }.build()
+    }
+
+    fun build(): PackageReference = PackageReference(id = id, dependencies = dependencies)
+}
+
+fun pkg(id: String, block: PackageReferenceBuilder.() -> Unit = {}): PackageReference =
+    PackageReferenceBuilder(id).apply { block() }.build()
