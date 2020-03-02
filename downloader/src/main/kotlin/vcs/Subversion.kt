@@ -45,6 +45,7 @@ class Subversion : VersionControlSystem() {
 
     override val type = VcsType.SUBVERSION
     override val priority = 10
+    override val defaultBranchName = "trunk"
     override val latestRevisionNames = listOf("HEAD")
 
     override fun getVersion() = Version.getVersionString()

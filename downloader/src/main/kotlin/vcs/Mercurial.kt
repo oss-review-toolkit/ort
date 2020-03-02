@@ -42,6 +42,7 @@ class Mercurial : VersionControlSystem(), CommandLineTool {
 
     override val type = VcsType.MERCURIAL
     override val priority = 20
+    override val defaultBranchName = "default"
     override val latestRevisionNames = listOf("tip")
 
     override fun command(workingDir: File?) = "hg"
