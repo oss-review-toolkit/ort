@@ -21,7 +21,7 @@ project:
     - id: "PyPI::Django:2.2.10"
       dependencies:
       - id: "PyPI::pytz:2019.3"
-      - id: "PyPI::sqlparse:0.3.0"
+      - id: "PyPI::sqlparse:0.3.1"
 packages:
 - package:
     id: "PyPI::Django:2.2.10"
@@ -85,8 +85,8 @@ packages:
       path: ""
   curations: []
 - package:
-    id: "PyPI::sqlparse:0.3.0"
-    purl: "pkg:pypi/sqlparse@0.3.0"
+    id: "PyPI::sqlparse:0.3.1"
+    purl: "pkg:pypi/sqlparse@0.3.1"
     declared_licenses:
     - "BSD"
     declared_licenses_processed:
@@ -94,14 +94,14 @@ packages:
     description: "Non-validating SQL parser"
     homepage_url: "https://github.com/andialbrecht/sqlparse"
     binary_artifact:
-      url: "https://files.pythonhosted.org/packages/ef/53/900f7d2a54557c6a37886585a91336520e5539e3ae2423ff1102daf4f3a7/sqlparse-0.3.0-py2.py3-none-any.whl"
+      url: "https://files.pythonhosted.org/packages/85/ee/6e821932f413a5c4b76be9c5936e313e4fc626b33f16e027866e1d60f588/sqlparse-0.3.1-py2.py3-none-any.whl"
       hash:
-        value: "19aaa5c1cdb4fcae4fd0717f104c524d"
+        value: "70f7ca550f636db5db40a5d26daff378"
         algorithm: "MD5"
     source_artifact:
-      url: "https://files.pythonhosted.org/packages/63/c8/229dfd2d18663b375975d953e2bdc06d0eed714f93dcb7732f39e349c438/sqlparse-0.3.0.tar.gz"
+      url: "https://files.pythonhosted.org/packages/67/4b/253b6902c1526885af6d361ca8c6b1400292e649f0e9c95ee0d2e8ec8681/sqlparse-0.3.1.tar.gz"
       hash:
-        value: "2ce34181d6b7b234c9f3c0ecd1ffb93e"
+        value: "423047887a3590b04dd18f8caf843a2f"
         algorithm: "MD5"
     vcs:
       type: ""
