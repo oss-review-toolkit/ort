@@ -39,6 +39,7 @@ import com.here.ort.GroupTypes.FileType
 import com.here.ort.GroupTypes.StringType
 import com.here.ort.downloader.DownloadException
 import com.here.ort.downloader.Downloader
+import com.here.ort.downloader.VersionControlSystem
 import com.here.ort.model.Identifier
 import com.here.ort.model.OrtResult
 import com.here.ort.model.Package
@@ -76,15 +77,15 @@ class DownloaderCommand : CliktCommand(name = "download", help = "Fetch source c
                 "if '--ort-file' is also specified."
     )
 
-    private val vcsType by option(
+    private val vcsTypeOption by option(
         "--vcs-type",
         help = "The VCS type if '--project-url' points to a VCS. Will be ignored if '--ort-file' is also specified."
-    ).default("")
+    )
 
-    private val vcsRevision by option(
+    private val vcsRevisionOption by option(
         "--vcs-revision",
         help = "The VCS revision if '--project-url' points to a VCS. Will be ignored if '--ort-file' is also specified."
-    ).default("")
+    )
 
     private val vcsPath by option(
         "--vcs-path",
@@ -140,6 +141,10 @@ class DownloaderCommand : CliktCommand(name = "download", help = "Fetch source c
             is StringType -> {
                 val projectUrl = (input as StringType).string
 
+                val vcs = VersionControlSystem.forUrl(projectUrl)
+                val vcsType = vcsTypeOption?.let { VcsType(it) } ?: (vcs?.type ?: VcsType.NONE)
+                val vcsRevision = vcsRevisionOption ?: vcs?.defaultBranchName.orEmpty()
+
                 val projectFile = File(projectUrl)
                 val projectName = projectNameOption ?: projectFile.nameWithoutExtension
 
@@ -147,13 +152,13 @@ class DownloaderCommand : CliktCommand(name = "download", help = "Fetch source c
                 val dummyPackage = if (ArchiveType.getType(projectFile.name) != ArchiveType.NONE) {
                     Package.EMPTY.copy(id = dummyId, sourceArtifact = RemoteArtifact.EMPTY.copy(url = projectUrl))
                 } else {
-                    val vcs = VcsInfo(
-                        type = VcsType(vcsType),
+                    val vcsInfo = VcsInfo(
+                        type = vcsType,
                         url = projectUrl,
                         revision = vcsRevision,
                         path = vcsPath
                     )
-                    Package.EMPTY.copy(id = dummyId, vcs = vcs, vcsProcessed = vcs.normalize())
+                    Package.EMPTY.copy(id = dummyId, vcs = vcsInfo, vcsProcessed = vcsInfo.normalize())
                 }
 
                 allowMovingRevisions = true
