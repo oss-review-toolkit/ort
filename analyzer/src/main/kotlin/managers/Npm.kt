@@ -53,7 +53,7 @@ import com.here.ort.utils.Os
 import com.here.ort.utils.OkHttpClientHelper
 import com.here.ort.utils.OkHttpClientHelper.applyProxySettingsFromUrl
 import com.here.ort.utils.getUserHomeDirectory
-import com.here.ort.utils.isSymlink
+import com.here.ort.utils.isSymbolicLink
 import com.here.ort.utils.log
 import com.here.ort.utils.realFile
 import com.here.ort.utils.stashDirectories
@@ -388,7 +388,7 @@ open class Npm(
         } + nodeModulesDir
 
         return searchDirs.map { dir ->
-            dir.listFiles().filter { file -> file.isSymlink() && file.isDirectory }
+            dir.listFiles().filter { file -> file.isSymbolicLink() && file.isDirectory }
         }.flatten()
     }
 
