@@ -68,7 +68,7 @@ fun File.hash(algorithm: String = "SHA-1"): String =
 /**
  * Return true if and only if this file is a symbolic link.
  */
-fun File.isSymlink(): Boolean = realFile() != absoluteFile
+fun File.isSymlink(): Boolean = Files.isSymbolicLink(toPath())
 
 /**
  * Resolve the file to the real underlying file. In contrast to Java's [File.getCanonicalFile], this also works to
