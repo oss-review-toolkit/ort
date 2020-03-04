@@ -129,50 +129,24 @@ fun File.safeCopyRecursively(target: File, overwrite: Boolean = false) {
 
 /**
  * Delete files recursively without following symbolic links (Unix) or junctions (Windows). If [force] is `true`, it is
- * tried to make undeletable files writable before trying again to delete them.
- *
- * @throws IOException if the directory could not be deleted.
+ * tried to make undeletable files writable before trying again to delete them. Throws an [IOException] if a file could
+ * not be deleted.
  */
 fun File.safeDeleteRecursively(force: Boolean = false) {
-    if (!exists()) {
-        return
+    if (isDirectory && !isSymbolicLink()) {
+        Files.newDirectoryStream(toPath()).use { stream ->
+            stream.forEach { path ->
+                path.toFile().safeDeleteRecursively(force)
+            }
+        }
     }
 
-    // This call to walkFileTree() implicitly uses EnumSet.noneOf(FileVisitOption.class), i.e.
-    // FileVisitOption.FOLLOW_LINKS is not used, so symbolic links are not followed.
-    Files.walkFileTree(toPath(), object : SimpleFileVisitor<Path>() {
-        override fun preVisitDirectory(dir: Path, attrs: BasicFileAttributes): FileVisitResult {
-            if (Os.isWindows && attrs.isOther) {
-                // delete() actually works to delete only the junction and not the directory it points to.
-                dir.toFile().delete()
-                return FileVisitResult.SKIP_SUBTREE
-            }
-
-            return FileVisitResult.CONTINUE
-        }
-
-        override fun visitFile(file: Path, attrs: BasicFileAttributes): FileVisitResult {
-            try {
-                Files.delete(file)
-            } catch (e: java.nio.file.AccessDeniedException) {
-                if (!force) throw e
-
-                if (file.toFile().setWritable(true)) {
-                    // Try again.
-                    Files.delete(file)
-                }
-            }
-
-            return FileVisitResult.CONTINUE
-        }
-
-        override fun postVisitDirectory(dir: Path, exc: IOException?) =
-            FileVisitResult.CONTINUE.also { Files.delete(dir) }
-    })
-
-    if (exists()) {
-        throw IOException("Could not delete directory '$absolutePath'.")
+    if (!delete() && force && setWritable(true)) {
+        // Try again.
+        delete()
     }
+
+    if (exists()) throw IOException("Could not delete file '$absolutePath'.")
 }
 
 /**
