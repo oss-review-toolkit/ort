@@ -37,6 +37,7 @@ import java.nio.file.CopyOption
 import java.nio.file.FileVisitResult
 import java.nio.file.Files
 import java.nio.file.LinkOption
+import java.nio.file.NoSuchFileException
 import java.nio.file.Path
 import java.nio.file.SimpleFileVisitor
 import java.nio.file.StandardCopyOption
@@ -68,7 +69,16 @@ fun File.hash(algorithm: String = "SHA-1"): String =
 /**
  * Return true if and only if this file is a symbolic link.
  */
-fun File.isSymbolicLink(): Boolean = realFile() != absoluteFile
+fun File.isSymbolicLink(): Boolean =
+    try {
+        // Note that we cannot use exists() to check beforehand whether a symbolic link exists to avoid a
+        // NoSuchFileException to be thrown as it returns "false" e.g. for dangling Windows junctions.
+        Files.readAttributes(toPath(), BasicFileAttributes::class.java, LinkOption.NOFOLLOW_LINKS).let {
+            it.isSymbolicLink || (Os.isWindows && it.isOther)
+        }
+    } catch (e: NoSuchFileException) {
+        false
+    }
 
 /**
  * Resolve the file to the real underlying file. In contrast to Java's [File.getCanonicalFile], this also works to
