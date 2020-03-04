@@ -45,6 +45,67 @@ class ExtensionsTest : WordSpec({
         }
     }
 
+    "File.isSymbolicLink" should {
+        val tempDir = createTempDir()
+        val file = tempDir.resolve("file").apply { createNewFile() }
+        val directory = tempDir.resolve("directory").apply { safeMkdirs() }
+
+        "return 'false' for non-existent files" {
+            tempDir.resolve("non-existent").let { nonExistent ->
+                nonExistent.exists() shouldBe false
+                nonExistent.isSymbolicLink() shouldBe false
+            }
+        }
+
+        "return 'false' for files" {
+            file.isFile shouldBe true
+            file.isSymbolicLink() shouldBe false
+        }
+
+        "return 'false' for directories" {
+            directory.isDirectory shouldBe true
+            directory.isSymbolicLink() shouldBe false
+        }
+
+        "return 'false' for hard links on Windows".config(enabled = Os.isWindows) {
+            ProcessCapture(tempDir, "cmd", "/c", "mklink", "/h", "hardlink", "file")
+
+            tempDir.resolve("hardlink").let { hardlink ->
+                hardlink.isFile shouldBe true
+                hardlink.isSymbolicLink() shouldBe false
+            }
+        }
+
+        "return 'true' for junctions on Windows".config(enabled = Os.isWindows) {
+            ProcessCapture(tempDir, "cmd", "/c", "mklink", "/j", "junction", "directory")
+
+            tempDir.resolve("junction").let { junction ->
+                junction.isDirectory shouldBe true
+                junction.isSymbolicLink() shouldBe true
+            }
+        }
+
+        "return 'true' for symbolic links to files on Windows".config(enabled = Os.isWindows) {
+            ProcessCapture(tempDir, "cmd", "/c", "mklink", "symlink-to-file", "file")
+
+            tempDir.resolve("symlink-to-file").let { symlinkToFile ->
+                symlinkToFile.isFile shouldBe true
+                symlinkToFile.isSymbolicLink() shouldBe true
+            }
+        }
+
+        "return 'true' for symbolic links to directories on Windows".config(enabled = Os.isWindows) {
+            ProcessCapture(tempDir, "cmd", "/c", "mklink", "/d", "symlink-to-directory", "directory")
+
+            tempDir.resolve("symlink-to-directory").let { symlinkToDirectory ->
+                symlinkToDirectory.isDirectory shouldBe true
+                symlinkToDirectory.isSymbolicLink() shouldBe true
+            }
+        }
+
+        tempDir.safeDeleteRecursively()
+    }
+
     "File.searchUpwardsForSubdirectory" should {
         "find the root Git directory" {
             val gitRoot = File(".").searchUpwardsForSubdirectory(".git")
