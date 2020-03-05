@@ -70,51 +70,7 @@ class EvaluatedModelMapper(private val input: ReporterInput) {
     private val packageExcludeInfo = mutableMapOf<Identifier, PackageExcludeInfo>()
 
     fun build(): EvaluatedModel {
-        input.ortResult.analyzer?.result?.projects?.forEach { project ->
-            packageExcludeInfo[project.id] = PackageExcludeInfo(project.id, true)
-        }
-        input.ortResult.analyzer?.result?.packages?.forEach { pkg ->
-            packageExcludeInfo[pkg.pkg.id] = PackageExcludeInfo(pkg.pkg.id, true)
-        }
-
-        input.ortResult.analyzer?.result?.projects?.forEach { project ->
-            val pathExcludes = input.ortResult.getExcludes().findPathExcludes(project, input.ortResult)
-            val dependencies = project.collectDependencies()
-            if (pathExcludes.isEmpty()) {
-                val info = packageExcludeInfo.getValue(project.id)
-                if (info.isExcluded) {
-                    info.isExcluded = false
-                    info.pathExcludes.clear()
-                    info.scopeExcludes.clear()
-                }
-            } else {
-                dependencies.forEach { id ->
-                    val info = packageExcludeInfo.getValue(id)
-                    if (info.isExcluded) {
-                        info.pathExcludes += pathExcludes
-                    }
-                }
-            }
-            project.scopes.forEach { scope ->
-                val scopeExcludes = input.ortResult.getExcludes().findScopeExcludes(scope)
-                val scopeDependencies = scope.collectDependencies()
-                if (scopeExcludes.isNotEmpty()) {
-                    scopeDependencies.forEach { id ->
-                        val info = packageExcludeInfo.getValue(id)
-                        if (info.isExcluded) {
-                            info.scopeExcludes += scopeExcludes
-                        }
-                    }
-                } else if (pathExcludes.isEmpty()) {
-                    scopeDependencies.forEach { id ->
-                        val info = packageExcludeInfo.getValue(id)
-                        info.isExcluded = false
-                        info.pathExcludes.clear()
-                        info.scopeExcludes.clear()
-                    }
-                }
-            }
-        }
+        createExcludeInfo()
 
         input.ortResult.analyzer?.result?.projects?.forEach { project ->
             addProject(project)
@@ -171,6 +127,55 @@ class EvaluatedModelMapper(private val input: ReporterInput) {
             repositoryConfiguration = yamlMapper.writeValueAsString(input.ortResult.repository.config),
             customData = input.ortResult.data
         )
+    }
+
+    private fun createExcludeInfo() {
+        input.ortResult.analyzer?.result?.projects?.forEach { project ->
+            packageExcludeInfo[project.id] = PackageExcludeInfo(project.id, true)
+        }
+
+        input.ortResult.analyzer?.result?.packages?.forEach { pkg ->
+            packageExcludeInfo[pkg.pkg.id] = PackageExcludeInfo(pkg.pkg.id, true)
+        }
+
+        input.ortResult.analyzer?.result?.projects?.forEach { project ->
+            val pathExcludes = input.ortResult.getExcludes().findPathExcludes(project, input.ortResult)
+            val dependencies = project.collectDependencies()
+            if (pathExcludes.isEmpty()) {
+                val info = packageExcludeInfo.getValue(project.id)
+                if (info.isExcluded) {
+                    info.isExcluded = false
+                    info.pathExcludes.clear()
+                    info.scopeExcludes.clear()
+                }
+            } else {
+                dependencies.forEach { id ->
+                    val info = packageExcludeInfo.getValue(id)
+                    if (info.isExcluded) {
+                        info.pathExcludes += pathExcludes
+                    }
+                }
+            }
+            project.scopes.forEach { scope ->
+                val scopeExcludes = input.ortResult.getExcludes().findScopeExcludes(scope)
+                val scopeDependencies = scope.collectDependencies()
+                if (scopeExcludes.isNotEmpty()) {
+                    scopeDependencies.forEach { id ->
+                        val info = packageExcludeInfo.getValue(id)
+                        if (info.isExcluded) {
+                            info.scopeExcludes += scopeExcludes
+                        }
+                    }
+                } else if (pathExcludes.isEmpty()) {
+                    scopeDependencies.forEach { id ->
+                        val info = packageExcludeInfo.getValue(id)
+                        info.isExcluded = false
+                        info.pathExcludes.clear()
+                        info.scopeExcludes.clear()
+                    }
+                }
+            }
+        }
     }
 
     private fun addProject(project: Project) {
