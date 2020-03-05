@@ -21,22 +21,8 @@ package com.here.ort.scanner.scanners
 
 import com.here.ort.utils.test.ExpensiveTag
 
-import io.kotlintest.shouldBe
-
 class LicenseeScannerTest : AbstractScannerTest() {
-    init {
-        "Licensee recognizes our own LICENSE".config(tags = setOf(ExpensiveTag)) {
-            val scanner = Licensee("Licensee", config)
-            val resultsFile = outputDir.resolve("${scanner.scannerName}.${scanner.resultFileExt}")
-
-            val result = scanner.scanPath(licenseFilePath, resultsFile)
-
-            resultsFile.isFile shouldBe true
-            result.summary.fileCount shouldBe 1
-            result.summary.licenses shouldBe sortedSetOf("Apache-2.0")
-            result.summary.licenseFindings.all {
-                it.location.path == licenseFilePath.invariantSeparatorsPath
-            } shouldBe true
-        }
-    }
+    override val scanner = Licensee("Licensee", config)
+    override val expectedFileLicenses = sortedSetOf("Apache-2.0")
+    override val testTags = setOf(ExpensiveTag)
 }

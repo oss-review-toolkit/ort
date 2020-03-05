@@ -19,22 +19,10 @@
 
 package com.here.ort.scanner.scanners
 
-import io.kotlintest.shouldBe
+import io.kotlintest.Tag
 
 class BoyterLcScannerTest : AbstractScannerTest() {
-    init {
-        "BoyterLc recognizes our own LICENSE" {
-            val scanner = BoyterLc("BoyterLc", config)
-            val resultsFile = outputDir.resolve("${scanner.scannerName}.${scanner.resultFileExt}")
-
-            val result = scanner.scanPath(licenseFilePath, resultsFile)
-
-            resultsFile.isFile shouldBe true
-            result.summary.fileCount shouldBe 1
-            result.summary.licenses shouldBe sortedSetOf("Apache-2.0", "ECL-2.0")
-            result.summary.licenseFindings.all {
-                it.location.path == licenseFilePath.invariantSeparatorsPath
-            } shouldBe true
-        }
-    }
+    override val scanner = BoyterLc("BoyterLc", config)
+    override val expectedFileLicenses = sortedSetOf("Apache-2.0", "ECL-2.0")
+    override val testTags = emptySet<Tag>()
 }
