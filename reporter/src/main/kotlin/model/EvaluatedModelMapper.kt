@@ -28,6 +28,7 @@ import com.here.ort.model.RemoteArtifact
 import com.here.ort.model.RuleViolation
 import com.here.ort.model.ScanResult
 import com.here.ort.model.ScanSummary
+import com.here.ort.model.VcsInfo
 import com.here.ort.model.config.IssueResolution
 import com.here.ort.model.config.PathExclude
 import com.here.ort.model.config.RuleViolationResolution
@@ -150,7 +151,8 @@ class EvaluatedModelMapper(private val input: ReporterInput) {
                 }
             } else {
                 dependencies.forEach { id ->
-                    val info = packageExcludeInfo.getValue(id)
+                    val info = packageExcludeInfo.getOrPut(id) { PackageExcludeInfo(id, true) }
+
                     if (info.isExcluded) {
                         info.pathExcludes += pathExcludes
                     }
@@ -346,7 +348,7 @@ class EvaluatedModelMapper(private val input: ReporterInput) {
 
     private fun addDependencyTree(project: Project, pkg: EvaluatedPackage) {
         fun PackageReference.toEvaluatedTreeNode(scope: ScopeName, path: List<EvaluatedPackage>): DependencyTreeNode {
-            val dependency = packages.getValue(id)
+            val dependency = packages.getOrPut(id) { createEmptyPackage(id) }
             val issues = mutableListOf<EvaluatedOrtIssue>()
             val packagePath = EvaluatedPackagePath(
                 pkg = dependency,
@@ -404,6 +406,44 @@ class EvaluatedModelMapper(private val input: ReporterInput) {
         )
 
         dependencyTrees += tree
+    }
+
+    private fun createEmptyPackage(id: Identifier): EvaluatedPackage {
+        val excludeInfo = packageExcludeInfo.getValue(id)
+
+        val evaluatedPathExcludes = pathExcludes.addIfRequired(excludeInfo.pathExcludes)
+        val evaluatedScopeExcludes = scopeExcludes.addIfRequired(excludeInfo.scopeExcludes)
+
+        val evaluatedPackage = EvaluatedPackage(
+            id = id,
+            isProject = false,
+            definitionFilePath = "",
+            purl = id.toPurl(),
+            declaredLicenses = emptyList(),
+            declaredLicensesProcessed = EvaluatedProcessedDeclaredLicense(null, emptyList(), emptyList()),
+            detectedLicenses = emptySet(),
+            concludedLicense = null,
+            description = "",
+            homepageUrl = "",
+            binaryArtifact = RemoteArtifact.EMPTY,
+            sourceArtifact = RemoteArtifact.EMPTY,
+            vcs = VcsInfo.EMPTY,
+            vcsProcessed = VcsInfo.EMPTY,
+            curations = emptyList(),
+            paths = mutableListOf(),
+            levels = sortedSetOf(),
+            scopes = mutableSetOf(),
+            scanResults = emptyList(),
+            findings = emptyList(),
+            isExcluded = excludeInfo.isExcluded,
+            pathExcludes = evaluatedPathExcludes,
+            scopeExcludes = evaluatedScopeExcludes,
+            issues = emptyList()
+        )
+
+        packages[id] = evaluatedPackage
+
+        return evaluatedPackage
     }
 
     private fun addIssues(
