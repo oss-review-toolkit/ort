@@ -19,6 +19,10 @@
 
 package com.here.ort.reporter.model
 
+/**
+ * The path to a [dependency][pkg] used by the [EvaluatedModel]. It is defined by the [project] and [scope] that contain
+ * the dependency and the [list of parents][path] in the dependency tree.
+ */
 data class EvaluatedPackagePath(
     val pkg: EvaluatedPackage,
     val project: EvaluatedPackage,

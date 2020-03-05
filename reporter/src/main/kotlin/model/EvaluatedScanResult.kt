@@ -21,9 +21,14 @@ package com.here.ort.reporter.model
 
 import com.here.ort.model.Provenance
 import com.here.ort.model.ScannerDetails
+import com.here.ort.model.ScanSummary
 
 import java.time.Instant
 
+/**
+ * The evaluated form of a [ScanSummary] used by the [EvaluatedModel]. The findings are stored directly in
+ * [EvaluatedPackage].
+ */
 data class EvaluatedScanResult(
     val provenance: Provenance,
     val scanner: ScannerDetails,

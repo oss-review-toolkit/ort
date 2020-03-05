@@ -19,6 +19,9 @@
 
 package com.here.ort.reporter.model
 
+/**
+ * The possible types of an [EvaluatedFinding].
+ */
 enum class EvaluatedFindingType {
     COPYRIGHT, LICENSE
 }

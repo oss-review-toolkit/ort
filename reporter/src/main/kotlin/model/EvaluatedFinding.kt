@@ -21,6 +21,11 @@ package com.here.ort.reporter.model
 
 import com.fasterxml.jackson.annotation.JsonInclude
 
+import com.here.ort.model.LicenseFinding
+
+/**
+ * The evaluated form of a [LicenseFinding] used by the [EvaluatedModel].
+ */
 data class EvaluatedFinding(
     val type: EvaluatedFindingType,
     @JsonInclude(JsonInclude.Include.NON_NULL)

@@ -27,6 +27,9 @@ import com.here.ort.model.config.PathExclude
 import com.here.ort.model.config.ScopeExclude
 import com.here.ort.reporter.utils.ZeroBasedIntSequenceGenerator
 
+/**
+ * A node for the dependency trees of the [EvaluatedModel].
+ */
 @JsonIdentityInfo(property = "key", generator = ZeroBasedIntSequenceGenerator::class, scope = DependencyTreeNode::class)
 data class DependencyTreeNode(
     val title: String,

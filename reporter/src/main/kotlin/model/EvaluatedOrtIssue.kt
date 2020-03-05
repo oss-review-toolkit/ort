@@ -22,11 +22,15 @@ package com.here.ort.reporter.model
 import com.fasterxml.jackson.annotation.JsonIdentityReference
 import com.fasterxml.jackson.annotation.JsonInclude
 
+import com.here.ort.model.OrtIssue
 import com.here.ort.model.Severity
 import com.here.ort.model.config.IssueResolution
 
 import java.time.Instant
 
+/**
+ * The evaluated form of a [OrtIssue] used by the [EvaluatedModel].
+ */
 data class EvaluatedOrtIssue(
     val timestamp: Instant,
     val type: EvaluatedOrtIssueType,

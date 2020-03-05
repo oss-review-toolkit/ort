@@ -20,7 +20,11 @@
 package com.here.ort.reporter.model
 
 import com.here.ort.spdx.SpdxExpression
+import com.here.ort.utils.ProcessedDeclaredLicense
 
+/**
+ * The evaluated form of a [ProcessedDeclaredLicense] used by the [EvaluatedModel].
+ */
 data class EvaluatedProcessedDeclaredLicense(
     val spdxExpression: SpdxExpression?,
     val mappedLicenses: List<LicenseId>,

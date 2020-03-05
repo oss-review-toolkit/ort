@@ -22,9 +22,13 @@ package com.here.ort.reporter.model
 import com.fasterxml.jackson.annotation.JsonInclude
 
 import com.here.ort.model.LicenseSource
+import com.here.ort.model.RuleViolation
 import com.here.ort.model.Severity
 import com.here.ort.model.config.RuleViolationResolution
 
+/**
+ * The evaluated form of a [RuleViolation] used by the [EvaluatedModel].
+ */
 data class EvaluatedRuleViolation(
     val rule: String,
     val pkg: EvaluatedPackage,
