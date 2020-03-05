@@ -143,7 +143,7 @@ class NoticeByPackageProcessor(input: ReporterInput) : AbstractNoticeReporter.No
                     emptyMap()
                 }
             } else {
-                emptyMap<String, LicenseFindingsMap>()
+                emptyMap()
             }
 
             addLicenseFileFindings(licenseFileFindings, archiveDir)
