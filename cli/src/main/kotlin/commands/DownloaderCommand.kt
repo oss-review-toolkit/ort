@@ -161,6 +161,9 @@ class DownloaderCommand : CliktCommand(name = "download", help = "Fetch source c
                     Package.EMPTY.copy(id = dummyId, vcs = vcsInfo, vcsProcessed = vcsInfo.normalize())
                 }
 
+                // Always allow moving revisions when directly downloading a single project only. This is for
+                // convenience as often the latest revision (referred to by some VCS-specific symbolic name) of a
+                // project needs to be downloaded.
                 allowMovingRevisions = true
 
                 listOf(dummyPackage)
