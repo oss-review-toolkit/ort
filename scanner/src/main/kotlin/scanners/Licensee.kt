@@ -90,22 +90,13 @@ class Licensee(name: String, config: ScannerConfiguration) : LocalScanner(name, 
     override fun getConfiguration() = CONFIGURATION_OPTIONS.joinToString(" ")
 
     override fun scanPath(path: File, resultsFile: File): ScanResult {
-        // Licensee has issues with absolute Windows paths passed as an argument. Work around that by using the path to
-        // scan as the working directory.
-        val (parentPath, relativePath) = if (path.isDirectory) {
-            Pair(path, ".")
-        } else {
-            Pair(path.parentFile, path.name)
-        }
-
         val startTime = Instant.now()
 
         val process = ProcessCapture(
-            parentPath,
             scannerPath.absolutePath,
             "detect",
             *CONFIGURATION_OPTIONS.toTypedArray(),
-            relativePath
+            path.absolutePath
         )
 
         val endTime = Instant.now()
@@ -142,7 +133,7 @@ class Licensee(name: String, config: ScannerConfiguration) : LocalScanner(name, 
             LicenseFinding(
                 license = getSpdxLicenseIdString(it["matched_license"].textValue()),
                 location = TextLocation(
-                    relativizePath(scanPath, filePath),
+                    filePath.path,
                     TextLocation.UNKNOWN_LINE,
                     TextLocation.UNKNOWN_LINE
                 )
