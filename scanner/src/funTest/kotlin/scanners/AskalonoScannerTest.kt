@@ -24,5 +24,6 @@ import io.kotlintest.Tag
 class AskalonoScannerTest : AbstractScannerTest() {
     override val scanner = Askalono("Askalono", config)
     override val expectedFileLicenses = sortedSetOf("Apache-2.0")
+    override val expectedDirectoryLicenses = sortedSetOf("Apache-2.0")
     override val testTags = emptySet<Tag>()
 }
