@@ -31,7 +31,7 @@ import com.here.ort.utils.printStackTrace
 import org.apache.logging.log4j.Level
 import org.apache.logging.log4j.core.config.Configurator
 
-private const val TOOL_NAME = "orth"
+private const val ORTH_NAME = "orth"
 
 /**
  * The main entry point of the application.
@@ -73,7 +73,7 @@ object HelperMain : CommandWithHelp() {
      */
     fun run(args: Array<String>): Int {
         val jc = JCommander(this).apply {
-            programName = TOOL_NAME
+            programName = ORTH_NAME
 
             addCommand(ExportLicenseFindingCurationsCommand())
             addCommand(ExportPathExcludesCommand())

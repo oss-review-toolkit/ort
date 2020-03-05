@@ -50,7 +50,7 @@ import org.apache.logging.log4j.Level
 import org.apache.logging.log4j.core.config.Configurator
 import kotlin.system.exitProcess
 
-const val TOOL_NAME = "ort"
+const val ORT_NAME = "ort"
 
 /**
  * The name of the environment variable to customize the ORT user home.
@@ -65,7 +65,7 @@ sealed class GroupTypes {
     data class StringType(val string: String) : GroupTypes()
 }
 
-class OrtMain : CliktCommand(name = TOOL_NAME, epilog = "* denotes required options.") {
+class OrtMain : CliktCommand(name = ORT_NAME, epilog = "* denotes required options.") {
     private val configFile by option("--config", "-c", help = "The path to a configuration file.")
         .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
 
