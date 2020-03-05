@@ -62,6 +62,8 @@ import okhttp3.Request
 import okio.buffer
 import okio.sink
 
+const val ORTH_NAME = "orth"
+
 /**
  * Represents a mapping from repository URLs to list of [PathExclude]s for the respective repository.
  */
@@ -181,7 +183,7 @@ internal fun List<ScopeExclude>.minimize(projectScopes: List<String>): List<Scop
  * the given [id] depending on whether a scan result is present with matching [Provenance].
  */
 internal fun OrtResult.fetchScannedSources(id: Identifier): File {
-    val tempDir = createTempDir("helper-cli", ".temp", File("."))
+    val tempDir = createTempDir(ORTH_NAME, directory = File("."))
 
     val pkg = getPackageOrProject(id)!!.let {
         if (getProvenance(id)!!.sourceArtifact != null) {
