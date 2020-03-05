@@ -20,7 +20,6 @@
 package com.here.ort.reporter.model
 
 import com.fasterxml.jackson.annotation.JsonIdentityReference
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.annotation.JsonInclude
 
 import com.here.ort.model.Severity
@@ -28,7 +27,6 @@ import com.here.ort.model.config.IssueResolution
 
 import java.time.Instant
 
-@JsonIgnoreProperties(value = ["pkg", "scanResult", "path"], allowGetters = true)
 data class EvaluatedOrtIssue(
     val timestamp: Instant,
     val type: EvaluatedOrtIssueType,
