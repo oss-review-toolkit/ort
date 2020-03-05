@@ -42,7 +42,7 @@ import com.here.ort.utils.ProcessedDeclaredLicense
 /**
  * Maps the [reporter input][input] to an [EvaluatedModel].
  */
-class EvaluatedModelMapper(private val input: ReporterInput) {
+internal class EvaluatedModelMapper(private val input: ReporterInput) {
     private val packages = mutableMapOf<Identifier, EvaluatedPackage>()
     private val paths = mutableListOf<EvaluatedPackagePath>()
     private val dependencyTrees = mutableListOf<DependencyTreeNode>()
