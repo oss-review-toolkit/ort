@@ -21,11 +21,13 @@ package com.here.ort.reporter.model
 
 import com.here.ort.model.OrtIssue
 import com.here.ort.model.OrtResult
+import com.here.ort.model.Package
 import com.here.ort.model.Project
 import com.here.ort.model.RuleViolation
 import com.here.ort.model.Scope
 import com.here.ort.model.Severity
 
+import java.util.SortedMap
 import java.util.SortedSet
 
 /**
@@ -45,7 +47,12 @@ data class Statistics(
     /**
      * Statistics for the dependency tree.
      */
-    val dependencyTree: DependencyTreeStatistics
+    val dependencyTree: DependencyTreeStatistics,
+
+    /**
+     * Statistics of used licenses.
+     */
+    val licenses: LicenseStatistics
 )
 
 /**
@@ -111,4 +118,19 @@ data class DependencyTreeStatistics(
      * The set of scope names which do not have a single not excluded corresponding [Scope].
      */
     val excludedScopes: SortedSet<String>
+)
+
+/**
+ * A class containing statistics about licenses.
+ */
+data class LicenseStatistics(
+    /**
+     * All declared licenses, mapped to the number of [Project]s and [Package]s they are declared in.
+     */
+    val declared: SortedMap<String, Int>,
+
+    /**
+     * All detected licenses, mapped to the number of [Project]s and [Package]s they were detected in.
+     */
+    val detected: SortedMap<String, Int>
 )

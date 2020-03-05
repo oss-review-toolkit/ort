@@ -63,7 +63,6 @@ import com.here.ort.spdx.SpdxExpression
 
 import java.io.Writer
 import java.time.Instant
-import java.util.SortedMap
 import java.util.SortedSet
 
 /**
@@ -121,8 +120,6 @@ data class EvaluatedModel(
     val dependencyTrees: List<DependencyTreeNode>,
     val ruleViolationResolutions: List<RuleViolationResolution>,
     val ruleViolations: List<EvaluatedRuleViolation>,
-    val declaredLicenseStats: SortedMap<String, Int>,
-    val detectedLicenseStats: SortedMap<String, Int>,
     val statistics: Statistics,
     // TODO: Ideally this would be an instance of RepositoryConfiguration, but for now it has to be a string to not be
     //       converted to JSON when using it as input for the web app reporter.

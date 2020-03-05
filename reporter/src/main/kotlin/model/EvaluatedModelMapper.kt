@@ -50,8 +50,6 @@ class EvaluatedModelMapper(private val input: ReporterInput) {
     private val copyrights = mutableListOf<CopyrightStatement>()
     private val licenses = mutableListOf<LicenseId>()
     private val scopes = mutableListOf<ScopeName>()
-    private val declaredLicenseStats = mutableMapOf<String, MutableSet<Identifier>>()
-    private val detectedLicenseStats = mutableMapOf<String, MutableSet<Identifier>>()
     private val issues = mutableListOf<EvaluatedOrtIssue>()
     private val issueResolutions = mutableListOf<IssueResolution>()
     private val pathExcludes = mutableListOf<PathExclude>()
@@ -122,8 +120,6 @@ class EvaluatedModelMapper(private val input: ReporterInput) {
             dependencyTrees = dependencyTrees,
             ruleViolationResolutions = ruleViolationResolutions,
             ruleViolations = ruleViolations,
-            declaredLicenseStats = declaredLicenseStats.mapValuesTo(sortedMapOf()) { it.value.size },
-            detectedLicenseStats = detectedLicenseStats.mapValuesTo(sortedMapOf()) { it.value.size },
             statistics = StatisticsCalculator().getStatistics(input.ortResult, input.resolutionProvider),
             repositoryConfiguration = yamlMapper.writeValueAsString(input.ortResult.repository.config),
             customData = input.ortResult.data
@@ -218,11 +214,6 @@ class EvaluatedModelMapper(private val input: ReporterInput) {
 
         packages[evaluatedPackage.id] = evaluatedPackage
 
-        project.declaredLicensesProcessed.allLicenses.forEach { license ->
-            val actualLicense = licenses.addIfRequired(LicenseId(license))
-            declaredLicenseStats.add(actualLicense.id, evaluatedPackage.id)
-        }
-
         issues += addAnalyzerIssues(project.id, evaluatedPackage)
 
         input.ortResult.getScanResultsForId(project.id).mapTo(scanResults) { result ->
@@ -273,11 +264,6 @@ class EvaluatedModelMapper(private val input: ReporterInput) {
         )
 
         packages[evaluatedPackage.id] = evaluatedPackage
-
-        pkg.declaredLicensesProcessed.allLicenses.forEach { license ->
-            val actualLicense = licenses.addIfRequired(LicenseId(license))
-            declaredLicenseStats.add(actualLicense.id, evaluatedPackage.id)
-        }
 
         issues += addAnalyzerIssues(pkg.id, evaluatedPackage)
 
@@ -341,7 +327,7 @@ class EvaluatedModelMapper(private val input: ReporterInput) {
             null
         )
 
-        addLicensesAndCopyrights(result.summary, actualScanResult, pkg, findings)
+        addLicensesAndCopyrights(result.summary, actualScanResult, findings)
 
         return actualScanResult
     }
@@ -489,7 +475,6 @@ class EvaluatedModelMapper(private val input: ReporterInput) {
     private fun addLicensesAndCopyrights(
         summary: ScanSummary,
         scanResult: EvaluatedScanResult,
-        pkg: EvaluatedPackage,
         findings: MutableList<EvaluatedFinding>
     ) {
         val matchedFindings = findingsMatcher.match(
@@ -515,7 +500,6 @@ class EvaluatedModelMapper(private val input: ReporterInput) {
             }
 
             val actualLicense = licenses.addIfRequired(LicenseId(licenseFindings.license))
-            detectedLicenseStats.add(actualLicense.id, pkg.id)
 
             licenseFindings.locations.forEach { location ->
                 findings += EvaluatedFinding(
@@ -571,9 +555,5 @@ class EvaluatedModelMapper(private val input: ReporterInput) {
         }
 
         return result.distinct()
-    }
-
-    private fun MutableMap<String, MutableSet<Identifier>>.add(key: String, value: Identifier) {
-        this.getOrPut(key) { mutableSetOf() } += value
     }
 }

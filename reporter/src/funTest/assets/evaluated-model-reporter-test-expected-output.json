@@ -676,17 +676,6 @@
     "how_to_fix" : "* *Step 1*\n* __Step 2__\n* ***Step 3***\n```\nSome long text verify that overflow:scroll is working as expected.\n```",
     "resolutions" : [ ]
   } ],
-  "declared_license_stats" : {
-    "Apache-2.0" : 2,
-    "BSD-3-Clause" : 1,
-    "EPL-1.0" : 1
-  },
-  "detected_license_stats" : {
-    "Apache-2.0" : 1,
-    "Apache-2.0 (multi-line)" : 1,
-    "Apache-2.0 (single-line)" : 1,
-    "MIT" : 1
-  },
   "statistics" : {
     "open_issues" : {
       "errors" : 1,
@@ -707,6 +696,19 @@
       "included_tree_depth" : 2,
       "included_scopes" : [ "compile", "testCompile" ],
       "excluded_scopes" : [ ]
+    },
+    "licenses" : {
+      "declared" : {
+        "Apache-2.0" : 2,
+        "BSD-3-Clause" : 1,
+        "EPL-1.0" : 1
+      },
+      "detected" : {
+        "Apache-2.0" : 1,
+        "Apache-2.0 (multi-line)" : 1,
+        "Apache-2.0 (single-line)" : 1,
+        "MIT" : 1
+      }
     }
   },
   "repository_configuration" : "---\nexcludes:\n  paths:\n  - pattern: \"sub/module/project/build.gradle\"\n    reason: \"EXAMPLE_OF\"\n    comment: \"The project is an example.\"\n  - pattern: \"**.java\"\n    reason: \"EXAMPLE_OF\"\n    comment: \"These are example files.\"\nresolutions:\n  rule_violations:\n  - message: \"Apache-2.0 hint\"\n    reason: \"CANT_FIX_EXCEPTION\"\n    comment: \"Apache-2 is not an issue.\"\n",

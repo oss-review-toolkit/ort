@@ -23,10 +23,11 @@ import com.here.ort.model.OrtResult
 import com.here.ort.model.Severity
 import com.here.ort.model.config.IssueResolution
 import com.here.ort.model.config.RuleViolationResolution
+import com.here.ort.reporter.ResolutionProvider
 import com.here.ort.reporter.model.DependencyTreeStatistics
 import com.here.ort.reporter.model.IssueStatistics
 import com.here.ort.reporter.model.Statistics
-import com.here.ort.reporter.ResolutionProvider
+import com.here.ort.reporter.model.LicenseStatistics
 
 /**
  * This class calculates [Statistics] for a given [OrtResult] and applicable [IssueResolution]s and applicable
@@ -48,7 +49,8 @@ internal class StatisticsCalculator {
             includedTreeDepth = getTreeDepth(ortResult = ortResult, ignoreExcluded = true),
             includedScopes = getIncludedScopes(ortResult).toSortedSet(),
             excludedScopes = getExcludedScopes(ortResult).toSortedSet()
-        )
+        ),
+        licenses = getLicenseStatistics(ortResult)
     )
 
     private fun getOpenRuleViolations(ortResult: OrtResult, resolutionProvider: ResolutionProvider): IssueStatistics {
@@ -105,4 +107,35 @@ internal class StatisticsCalculator {
             .let { allScopes ->
                 allScopes - getIncludedScopes(ortResult)
             }
+
+    private fun getLicenseStatistics(ortResult: OrtResult): LicenseStatistics {
+        val declaredLicenses = sortedMapOf<String, Int>()
+
+        ortResult.analyzer?.result?.let { analyzerResult ->
+            analyzerResult.projects.forEach { project ->
+                project.declaredLicensesProcessed.allLicenses.forEach { license ->
+                    declaredLicenses[license] = declaredLicenses.getOrDefault(license, 0) + 1
+                }
+            }
+
+            analyzerResult.packages.forEach { pkg ->
+                pkg.pkg.declaredLicensesProcessed.allLicenses.forEach { license ->
+                    declaredLicenses[license] = declaredLicenses.getOrDefault(license, 0) + 1
+                }
+            }
+        }
+
+        val detectedLicenses = sortedMapOf<String, Int>()
+
+        ortResult.scanner?.results?.scanResults?.forEach { scanResultContainer ->
+            scanResultContainer.results.flatMapTo(mutableSetOf()) { it.summary.licenses }.forEach { license ->
+                detectedLicenses[license] = detectedLicenses.getOrDefault(license, 0) + 1
+            }
+        }
+
+        return LicenseStatistics(
+            declared = declaredLicenses,
+            detected = detectedLicenses
+        )
+    }
 }
