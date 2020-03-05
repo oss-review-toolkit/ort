@@ -19,6 +19,7 @@
 
 package com.here.ort.analyzer.managers.utils
 
+import com.here.ort.utils.ORT_NAME
 import com.here.ort.utils.safeDeleteRecursively
 import com.here.ort.utils.safeMkdirs
 
@@ -219,7 +220,7 @@ class NodeSupportTest : WordSpec() {
 
     override fun beforeTest(testCase: TestCase) {
         super.beforeTest(testCase)
-        tempDir = createTempDir()
+        tempDir = createTempDir(ORT_NAME, javaClass.simpleName)
         definitionFiles.clear()
     }
 

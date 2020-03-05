@@ -19,6 +19,8 @@
 
 package com.here.ort.spdx
 
+import com.here.ort.utils.ORT_NAME
+
 import io.kotlintest.TestCase
 import io.kotlintest.TestResult
 import io.kotlintest.shouldBe
@@ -36,7 +38,7 @@ class SpdxUtilsTest : WordSpec() {
 
     private fun setupTempFile(filename: String, content: String): File {
         if (tempDir == null) {
-            tempDir = createTempDir(SpdxUtilsTest::class.simpleName!!)
+            tempDir = createTempDir(ORT_NAME, javaClass.simpleName)
         }
 
         return File(tempDir, filename).apply { writeText(content) }

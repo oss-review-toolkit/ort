@@ -20,6 +20,7 @@
 package com.here.ort.downloader.vcs
 
 import com.here.ort.model.VcsType
+import com.here.ort.utils.ORT_NAME
 import com.here.ort.utils.getUserOrtDirectory
 import com.here.ort.utils.safeDeleteRecursively
 import com.here.ort.utils.unpack
@@ -38,7 +39,7 @@ class SubversionWorkingTreeTest : StringSpec() {
     override fun beforeSpec(spec: Spec) {
         val zipFile = File("src/funTest/assets/docutils-2018-01-03-svn-trunk.zip")
 
-        zipContentDir = createTempDir()
+        zipContentDir = createTempDir(ORT_NAME, javaClass.simpleName)
 
         print("Extracting '$zipFile' to '$zipContentDir'... ")
         zipFile.unpack(zipContentDir)

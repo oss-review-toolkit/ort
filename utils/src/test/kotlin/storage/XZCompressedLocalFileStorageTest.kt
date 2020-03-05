@@ -19,6 +19,7 @@
 
 package com.here.ort.utils.storage
 
+import com.here.ort.utils.ORT_NAME
 import com.here.ort.utils.safeDeleteRecursively
 
 import io.kotlintest.shouldBe
@@ -29,7 +30,7 @@ import java.io.File
 
 class XZCompressedLocalFileStorageTest : StringSpec() {
     private fun storage(block: (XZCompressedLocalFileStorage, File) -> Unit) {
-        val directory = createTempDir(javaClass.simpleName)
+        val directory = createTempDir(ORT_NAME, javaClass.simpleName)
         val storage = XZCompressedLocalFileStorage(directory)
         block(storage, directory)
         directory.safeDeleteRecursively()

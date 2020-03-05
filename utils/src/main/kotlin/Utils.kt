@@ -28,6 +28,7 @@ import java.security.Permission
 
 import kotlin.reflect.full.memberProperties
 
+const val ORT_NAME = "ort"
 const val ORT_FULL_NAME = "OSS Review Toolkit"
 
 /**

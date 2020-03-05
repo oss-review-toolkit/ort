@@ -44,7 +44,7 @@ private class DirectoryStash(directories: Set<File>) : Closeable {
             // directories.
             if (originalDir.isDirectory) {
                 // Create a temporary directory to move directories as-is into.
-                val stashDir = createTempDir("ort", "stash", originalDir.parentFile)
+                val stashDir = createTempDir(ORT_NAME, "stash", originalDir.parentFile)
 
                 // Use a non-existing directory as the target to ensure the directory can be moved atomically.
                 val tempDir = File(stashDir, originalDir.name)

@@ -22,6 +22,7 @@ package com.here.ort.scanner.scanners
 import com.here.ort.model.config.ScannerConfiguration
 import com.here.ort.model.yamlMapper
 import com.here.ort.scanner.ScanResultsStorage
+import com.here.ort.utils.ORT_NAME
 import com.here.ort.utils.safeDeleteRecursively
 import com.here.ort.utils.test.patchActualResult
 import com.here.ort.utils.test.patchExpectedResult
@@ -39,7 +40,7 @@ class FileCounterScannerTest : StringSpec() {
 
     init {
         "Gradle project scan results for a given analyzer result are correct".config(invocations = 3) {
-            outputRootDir = createTempDir()
+            outputRootDir = createTempDir(ORT_NAME, javaClass.simpleName)
             outputDir = File(outputRootDir, "output")
 
             val analyzerResultFile = File(assetsDir, "analyzer-result.yml")

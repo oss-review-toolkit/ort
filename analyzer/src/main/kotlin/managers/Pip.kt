@@ -40,6 +40,7 @@ import com.here.ort.model.config.AnalyzerConfiguration
 import com.here.ort.model.config.RepositoryConfiguration
 import com.here.ort.model.jsonMapper
 import com.here.ort.utils.CommandLineTool
+import com.here.ort.utils.ORT_NAME
 import com.here.ort.utils.Os
 import com.here.ort.utils.OkHttpClientHelper
 import com.here.ort.utils.ProcessCapture
@@ -531,7 +532,7 @@ class Pip(
     }
 
     private fun createVirtualEnv(workingDir: File, pythonVersion: Int): File {
-        val virtualEnvDir = createTempDir("ort", "${workingDir.name}-virtualenv")
+        val virtualEnvDir = createTempDir(ORT_NAME, "${workingDir.name}-virtualenv")
 
         val pythonInterpreter = PythonVersion.getPythonInterpreter(pythonVersion)
         ProcessCapture(workingDir, "virtualenv", virtualEnvDir.path, "-p", pythonInterpreter).requireSuccess()

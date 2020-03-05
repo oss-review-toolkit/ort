@@ -42,6 +42,7 @@ import com.here.ort.spdx.SpdxLicense
 import com.here.ort.spdx.calculatePackageVerificationCode
 import com.here.ort.utils.CommandLineTool
 import com.here.ort.utils.ORT_CONFIG_FILENAME
+import com.here.ort.utils.ORT_NAME
 import com.here.ort.utils.Os
 import com.here.ort.utils.OkHttpClientHelper
 import com.here.ort.utils.ProcessCapture
@@ -285,7 +286,7 @@ class ScanCode(
             val scannerArchive = createTempFile("ort", "$scannerName-${url.substringAfterLast("/")}")
             scannerArchive.sink().buffer().use { it.writeAll(body.source()) }
 
-            val unpackDir = createTempDir("ort", "$scannerName-$scannerVersion").apply { deleteOnExit() }
+            val unpackDir = createTempDir(ORT_NAME, "$scannerName-$scannerVersion").apply { deleteOnExit() }
 
             log.info { "Unpacking '$scannerArchive' to '$unpackDir'... " }
             scannerArchive.unpack(unpackDir)

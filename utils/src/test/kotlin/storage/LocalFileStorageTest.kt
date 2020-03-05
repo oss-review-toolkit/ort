@@ -19,6 +19,7 @@
 
 package com.here.ort.utils.storage
 
+import com.here.ort.utils.ORT_NAME
 import com.here.ort.utils.safeDeleteRecursively
 import com.here.ort.utils.safeMkdirs
 
@@ -33,7 +34,7 @@ import java.io.FileNotFoundException
 
 class LocalFileStorageTest : WordSpec() {
     private fun storage(block: (LocalFileStorage, File) -> Unit) {
-        val directory = createTempDir(javaClass.simpleName)
+        val directory = createTempDir(ORT_NAME, javaClass.simpleName)
         val storage = LocalFileStorage(directory)
         block(storage, directory)
         directory.safeDeleteRecursively()
@@ -43,12 +44,12 @@ class LocalFileStorageTest : WordSpec() {
         "Creating the storage" should {
             "succeed if the directory exists" {
                 shouldNotThrowAny {
-                    LocalFileStorage(createTempDir(javaClass.simpleName))
+                    LocalFileStorage(createTempDir(ORT_NAME, javaClass.simpleName))
                 }
             }
 
             "succeed if the directory does not exist and must be created" {
-                val directory = createTempDir(javaClass.simpleName)
+                val directory = createTempDir(ORT_NAME, javaClass.simpleName)
                 val storageDirectory = directory.resolve("create/storage")
 
                 LocalFileStorage(storageDirectory)

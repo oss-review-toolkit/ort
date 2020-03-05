@@ -26,6 +26,7 @@ import com.here.ort.model.Project
 import com.here.ort.model.RemoteArtifact
 import com.here.ort.model.VcsInfo
 import com.here.ort.model.VcsType
+import com.here.ort.utils.ORT_NAME
 import com.here.ort.utils.OkHttpClientHelper
 import com.here.ort.utils.collectMessagesAsString
 import com.here.ort.utils.log
@@ -325,7 +326,7 @@ class Downloader {
         try {
             if (sourceArchive.extension == "gem") {
                 // Unpack the nested data archive for Ruby Gems.
-                val gemDirectory = createTempDir("ort", "gem")
+                val gemDirectory = createTempDir(ORT_NAME, "gem")
                 val dataFile = File(gemDirectory, "data.tar.gz")
 
                 try {

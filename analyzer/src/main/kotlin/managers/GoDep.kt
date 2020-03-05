@@ -36,6 +36,7 @@ import com.here.ort.model.config.AnalyzerConfiguration
 import com.here.ort.model.config.RepositoryConfiguration
 import com.here.ort.model.createAndLogIssue
 import com.here.ort.utils.CommandLineTool
+import com.here.ort.utils.ORT_NAME
 import com.here.ort.utils.ProcessCapture
 import com.here.ort.utils.collectMessagesAsString
 import com.here.ort.utils.log
@@ -87,7 +88,7 @@ class GoDep(
     override fun resolveDependencies(definitionFile: File): ProjectAnalyzerResult? {
         val projectDir = resolveProjectRoot(definitionFile)
         val projectVcs = processProjectVcs(projectDir)
-        val gopath = createTempDir("ort", "${projectDir.name}-gopath")
+        val gopath = createTempDir(ORT_NAME, "${projectDir.name}-gopath")
         val workingDir = setUpWorkspace(projectDir, projectVcs, gopath)
 
         GO_LEGACY_MANIFESTS[definitionFile.name]?.let { lockfileName ->

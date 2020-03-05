@@ -46,7 +46,7 @@ class ExtensionsTest : WordSpec({
     }
 
     "File.isSymbolicLink" should {
-        val tempDir = createTempDir()
+        val tempDir = createTempDir(ORT_NAME, javaClass.simpleName)
         val file = tempDir.resolve("file").apply { createNewFile() }
         val directory = tempDir.resolve("directory").apply { safeMkdirs() }
 
@@ -117,7 +117,7 @@ class ExtensionsTest : WordSpec({
 
     "File.safeMkDirs" should {
         "succeed if directory already exists" {
-            val directory = createTempDir().apply { deleteOnExit() }
+            val directory = createTempDir(ORT_NAME, javaClass.simpleName).apply { deleteOnExit() }
 
             directory.isDirectory shouldBe true
             directory.safeMkdirs() // should not throw exception
@@ -125,7 +125,7 @@ class ExtensionsTest : WordSpec({
         }
 
         "succeed if directory could be created" {
-            val parent = createTempDir().apply { deleteOnExit() }
+            val parent = createTempDir(ORT_NAME, javaClass.simpleName).apply { deleteOnExit() }
             val child = File(parent, "child").apply { deleteOnExit() }
 
             parent.isDirectory shouldBe true
@@ -137,7 +137,7 @@ class ExtensionsTest : WordSpec({
             // Test case for an unexpected behaviour of File.mkdirs() which returns false for
             // File(File("parent1/parent2"), "/").mkdirs() if both "parent" directories do not exist, even when the
             // directory was successfully created.
-            val parent = createTempDir().apply { deleteOnExit() }
+            val parent = createTempDir(ORT_NAME, javaClass.simpleName).apply { deleteOnExit() }
             val nonExistingParent = File(parent, "parent1/parent2").apply { deleteOnExit() }
             val child = File(nonExistingParent, "/").apply { deleteOnExit() }
 
@@ -231,7 +231,7 @@ class ExtensionsTest : WordSpec({
         }
 
         "create a valid file name" {
-            val tempDir = createTempDir()
+            val tempDir = createTempDir(ORT_NAME, javaClass.simpleName)
             val fileFromStr = File(tempDir, str.fileSystemEncode()).apply { writeText("dummy") }
 
             fileFromStr.isFile shouldBe true

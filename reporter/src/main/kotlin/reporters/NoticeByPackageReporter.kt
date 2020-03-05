@@ -28,6 +28,7 @@ import com.here.ort.reporter.ReporterInput
 import com.here.ort.utils.CopyrightStatementsProcessor
 import com.here.ort.utils.FileMatcher
 import com.here.ort.utils.LICENSE_FILENAMES
+import com.here.ort.utils.ORT_NAME
 import com.here.ort.utils.getUserOrtDirectory
 import com.here.ort.utils.log
 import com.here.ort.utils.storage.FileArchiver
@@ -133,7 +134,7 @@ class NoticeByPackageProcessor(input: ReporterInput) : AbstractNoticeReporter.No
             add { "${id.name}:${id.version}\n\n" }
 
             val scanResult = input.ortResult.getScanResultsForId(id).firstOrNull()
-            val archiveDir = createTempDir(prefix = "notice").also { it.deleteOnExit() }
+            val archiveDir = createTempDir(ORT_NAME, "notice").also { it.deleteOnExit() }
 
             val licenseFileFindings = if (scanResult != null) {
                 val path = "${id.toPath()}/${scanResult.provenance.hash()}"
