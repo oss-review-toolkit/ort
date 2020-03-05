@@ -39,7 +39,7 @@ abstract class AbstractScannerTest : StringSpec() {
     }
 
     override fun afterSpec(spec: Spec) {
-        outputDir.safeDeleteRecursively(force = true)
+        outputDir.safeDeleteRecursively()
         super.afterSpec(spec)
     }
 }
