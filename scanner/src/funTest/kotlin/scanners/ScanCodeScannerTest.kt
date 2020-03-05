@@ -22,19 +22,8 @@ package com.here.ort.scanner.scanners
 import com.here.ort.utils.test.ExpensiveTag
 import com.here.ort.utils.test.ScanCodeTag
 
-import io.kotlintest.shouldBe
-
 class ScanCodeScannerTest : AbstractScannerTest() {
-    init {
-        "ScanCode recognizes our own LICENSE".config(tags = setOf(ExpensiveTag, ScanCodeTag)) {
-            val scanner = ScanCode("ScanCode", config)
-            val resultsFile = outputDir.resolve("${scanner.scannerName}.${scanner.resultFileExt}")
-
-            val result = scanner.scanPath(licenseFilePath, resultsFile)
-
-            resultsFile.isFile shouldBe true
-            result.summary.fileCount shouldBe 1
-            result.summary.licenses shouldBe sortedSetOf("Apache-2.0")
-        }
-    }
+    override val scanner = ScanCode("ScanCode", config)
+    override val expectedFileLicenses = sortedSetOf("Apache-2.0")
+    override val testTags = setOf(ExpensiveTag, ScanCodeTag)
 }

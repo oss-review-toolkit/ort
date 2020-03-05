@@ -20,18 +20,26 @@
 package com.here.ort.scanner.scanners
 
 import com.here.ort.model.config.ScannerConfiguration
+import com.here.ort.scanner.LocalScanner
 import com.here.ort.utils.ORT_NAME
 import com.here.ort.utils.safeDeleteRecursively
 
 import io.kotlintest.Spec
+import io.kotlintest.Tag
+import io.kotlintest.shouldBe
 import io.kotlintest.specs.StringSpec
 
 import java.io.File
+import java.util.TreeSet
 
 abstract class AbstractScannerTest : StringSpec() {
     protected val config = ScannerConfiguration()
-    protected val licenseFilePath = File("../LICENSE")
-    protected lateinit var outputDir: File
+    private val licenseFilePath = File("../LICENSE")
+    private lateinit var outputDir: File
+
+    abstract val scanner: LocalScanner
+    abstract val expectedFileLicenses: TreeSet<String>
+    abstract val testTags: Set<Tag>
 
     override fun beforeSpec(spec: Spec) {
         super.beforeSpec(spec)
@@ -41,5 +49,20 @@ abstract class AbstractScannerTest : StringSpec() {
     override fun afterSpec(spec: Spec) {
         outputDir.safeDeleteRecursively()
         super.afterSpec(spec)
+    }
+
+    init {
+        "Scanning a single file succeeds".config(tags = testTags) {
+            val resultsFile = outputDir.resolve("${scanner.scannerName}.${scanner.resultFileExt}")
+
+            val result = scanner.scanPath(licenseFilePath, resultsFile)
+
+            resultsFile.isFile shouldBe true
+            result.summary.fileCount shouldBe 1
+            result.summary.licenses shouldBe expectedFileLicenses
+            result.summary.licenseFindings.all {
+                it.location.path == licenseFilePath.invariantSeparatorsPath
+            } shouldBe true
+        }
     }
 }
