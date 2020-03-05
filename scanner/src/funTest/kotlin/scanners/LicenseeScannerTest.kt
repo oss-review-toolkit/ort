@@ -24,5 +24,6 @@ import com.here.ort.utils.test.ExpensiveTag
 class LicenseeScannerTest : AbstractScannerTest() {
     override val scanner = Licensee("Licensee", config)
     override val expectedFileLicenses = sortedSetOf("Apache-2.0")
+    override val expectedDirectoryLicenses = sortedSetOf("Apache-2.0")
     override val testTags = setOf(ExpensiveTag)
 }

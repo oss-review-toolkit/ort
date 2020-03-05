@@ -24,5 +24,6 @@ import io.kotlintest.Tag
 class BoyterLcScannerTest : AbstractScannerTest() {
     override val scanner = BoyterLc("BoyterLc", config)
     override val expectedFileLicenses = sortedSetOf("Apache-2.0", "ECL-2.0")
+    override val expectedDirectoryLicenses = sortedSetOf("Apache-2.0", "ECL-2.0")
     override val testTags = emptySet<Tag>()
 }
