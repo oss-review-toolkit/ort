@@ -29,7 +29,7 @@ import com.here.ort.model.ScannerDetails
 import com.here.ort.model.config.FileBasedStorageConfiguration
 import com.here.ort.model.config.PostgresStorageConfiguration
 import com.here.ort.scanner.storages.*
-import com.here.ort.utils.ORT_NAME
+import com.here.ort.utils.ORT_FULL_NAME
 import com.here.ort.utils.log
 import com.here.ort.utils.storage.HttpFileStorage
 import com.here.ort.utils.storage.LocalFileStorage
@@ -101,7 +101,7 @@ abstract class ScanResultsStorage {
             val properties = Properties()
             properties["user"] = config.username
             properties["password"] = config.password
-            properties["ApplicationName"] = "$ORT_NAME - $TOOL_NAME"
+            properties["ApplicationName"] = "$ORT_FULL_NAME - $TOOL_NAME"
 
             // Configure SSL, see: https://jdbc.postgresql.org/documentation/head/connect.html
             // Note that the "ssl" property is only a fallback in case "sslmode" is not used. Since we always set
