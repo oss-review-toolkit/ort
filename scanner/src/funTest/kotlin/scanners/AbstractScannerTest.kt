@@ -20,6 +20,7 @@
 package com.here.ort.scanner.scanners
 
 import com.here.ort.model.config.ScannerConfiguration
+import com.here.ort.utils.ORT_NAME
 import com.here.ort.utils.safeDeleteRecursively
 
 import io.kotlintest.Spec
@@ -34,7 +35,7 @@ abstract class AbstractScannerTest : StringSpec() {
 
     override fun beforeSpec(spec: Spec) {
         super.beforeSpec(spec)
-        outputDir = createTempDir()
+        outputDir = createTempDir(ORT_NAME, javaClass.simpleName)
     }
 
     override fun afterSpec(spec: Spec) {

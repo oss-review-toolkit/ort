@@ -25,6 +25,7 @@ import com.here.ort.downloader.Downloader
 import com.here.ort.downloader.VersionControlSystem
 import com.here.ort.model.Identifier
 import com.here.ort.model.Package
+import com.here.ort.utils.ORT_NAME
 import com.here.ort.utils.safeDeleteRecursively
 import com.here.ort.utils.test.DEFAULT_ANALYZER_CONFIGURATION
 import com.here.ort.utils.test.DEFAULT_REPOSITORY_CONFIGURATION
@@ -75,7 +76,7 @@ abstract class AbstractIntegrationSpec : StringSpec() {
     protected lateinit var downloadResult: Downloader.DownloadResult
 
     override fun beforeSpec(spec: Spec) {
-        outputDir = createTempDir()
+        outputDir = createTempDir(ORT_NAME, javaClass.simpleName)
         downloadResult = Downloader().download(pkg, outputDir)
     }
 

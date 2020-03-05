@@ -25,6 +25,7 @@ import com.here.ort.model.Package
 import com.here.ort.model.RemoteArtifact
 import com.here.ort.model.VcsInfo
 import com.here.ort.model.VcsType
+import com.here.ort.utils.ORT_NAME
 import com.here.ort.utils.normalizeVcsUrl
 import com.here.ort.utils.safeDeleteRecursively
 
@@ -40,7 +41,7 @@ class BabelTest : StringSpec() {
     private lateinit var outputDir: File
 
     override fun beforeTest(testCase: TestCase) {
-        outputDir = createTempDir()
+        outputDir = createTempDir(ORT_NAME, javaClass.simpleName)
     }
 
     override fun afterTest(testCase: TestCase, result: TestResult) {

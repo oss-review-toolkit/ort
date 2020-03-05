@@ -35,6 +35,7 @@ import com.here.ort.scanner.LocalScanner
 import com.here.ort.scanner.ScanException
 import com.here.ort.spdx.calculatePackageVerificationCode
 import com.here.ort.utils.CommandLineTool
+import com.here.ort.utils.ORT_NAME
 import com.here.ort.utils.Os
 import com.here.ort.utils.OkHttpClientHelper
 import com.here.ort.utils.ProcessCapture
@@ -101,7 +102,7 @@ class Askalono(name: String, config: ScannerConfiguration) : LocalScanner(name, 
                 log.info { "Retrieved $scannerName from local cache." }
             }
 
-            val scannerDir = createTempDir("ort", "$scannerName-$scannerVersion").apply { deleteOnExit() }
+            val scannerDir = createTempDir(ORT_NAME, "$scannerName-$scannerVersion").apply { deleteOnExit() }
 
             val scannerFile = File(scannerDir, scannerExe)
             scannerFile.sink().buffer().use { it.writeAll(body.source()) }

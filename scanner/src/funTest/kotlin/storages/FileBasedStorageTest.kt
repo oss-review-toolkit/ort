@@ -19,8 +19,10 @@
 
 package com.here.ort.scanner.storages
 
+import com.here.ort.utils.ORT_NAME
 import com.here.ort.utils.storage.LocalFileStorage
 
 class FileBasedStorageTest : AbstractStorageTest() {
-    override fun createStorage() = FileBasedStorage(LocalFileStorage(createTempDir().apply { deleteOnExit() }))
+    override fun createStorage() =
+        FileBasedStorage(LocalFileStorage(createTempDir(ORT_NAME, javaClass.simpleName).apply { deleteOnExit() }))
 }

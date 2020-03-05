@@ -35,6 +35,7 @@ import com.here.ort.scanner.LocalScanner
 import com.here.ort.scanner.ScanException
 import com.here.ort.spdx.calculatePackageVerificationCode
 import com.here.ort.utils.CommandLineTool
+import com.here.ort.utils.ORT_NAME
 import com.here.ort.utils.Os
 import com.here.ort.utils.OkHttpClientHelper
 import com.here.ort.utils.ProcessCapture
@@ -104,7 +105,7 @@ class BoyterLc(name: String, config: ScannerConfiguration) : LocalScanner(name, 
                 log.info { "Retrieved $scannerName from local cache." }
             }
 
-            val unpackDir = createTempDir("ort", "$scannerName-$scannerVersion").apply { deleteOnExit() }
+            val unpackDir = createTempDir(ORT_NAME, "$scannerName-$scannerVersion").apply { deleteOnExit() }
 
             log.info { "Unpacking '$archive' to '$unpackDir'... " }
             body.byteStream().unpack(archive, unpackDir)

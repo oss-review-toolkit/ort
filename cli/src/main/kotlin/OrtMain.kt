@@ -36,6 +36,7 @@ import com.github.ajalt.clikt.parameters.types.file
 import com.here.ort.commands.*
 import com.here.ort.model.Environment
 import com.here.ort.model.config.OrtConfiguration
+import com.here.ort.utils.ORT_NAME
 import com.here.ort.utils.getUserOrtDirectory
 import com.here.ort.utils.expandTilde
 import com.here.ort.utils.printStackTrace
@@ -49,8 +50,6 @@ import java.io.File
 import org.apache.logging.log4j.Level
 import org.apache.logging.log4j.core.config.Configurator
 import kotlin.system.exitProcess
-
-const val ORT_NAME = "ort"
 
 /**
  * The name of the environment variable to customize the ORT user home.

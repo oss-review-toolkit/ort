@@ -19,6 +19,7 @@
 
 package com.here.ort.utils.storage
 
+import com.here.ort.utils.ORT_NAME
 import com.here.ort.utils.safeDeleteRecursively
 import com.here.ort.utils.safeMkdirs
 import com.here.ort.utils.unpack
@@ -37,9 +38,9 @@ class FileArchiverTest : StringSpec() {
     private lateinit var storage: LocalFileStorage
 
     override fun beforeTest(testCase: TestCase) {
-        workingDir = createTempDir("ort")
-        storageDir = createTempDir("ort")
-        targetDir = createTempDir("ort")
+        workingDir = createTempDir(ORT_NAME, "${javaClass.simpleName}-workingDir")
+        storageDir = createTempDir(ORT_NAME, "${javaClass.simpleName}-storageDir")
+        targetDir = createTempDir(ORT_NAME, "${javaClass.simpleName}-targetDir")
         storage = LocalFileStorage(storageDir)
     }
 

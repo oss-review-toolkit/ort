@@ -38,7 +38,7 @@ class DirectoryStashTest : StringSpec() {
     private lateinit var b1: File
 
     override fun beforeTest(testCase: TestCase) {
-        sandboxDir = createTempDir()
+        sandboxDir = createTempDir(ORT_NAME, javaClass.simpleName)
         a = File(sandboxDir, "a")
         a1 = File(a, "a1")
         b = File(sandboxDir, "b")

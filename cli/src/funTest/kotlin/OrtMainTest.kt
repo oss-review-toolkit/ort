@@ -22,6 +22,7 @@ package com.here.ort
 import com.github.ajalt.clikt.core.MutuallyExclusiveGroupException
 
 import com.here.ort.downloader.VersionControlSystem
+import com.here.ort.utils.ORT_NAME
 import com.here.ort.utils.normalizeVcsUrl
 import com.here.ort.utils.redirectStdout
 import com.here.ort.utils.safeDeleteRecursively
@@ -48,7 +49,7 @@ class OrtMainTest : StringSpec() {
     private lateinit var outputDir: File
 
     override fun beforeTest(testCase: TestCase) {
-        outputDir = createTempDir()
+        outputDir = createTempDir(ORT_NAME, javaClass.simpleName)
     }
 
     override fun afterTest(testCase: TestCase, result: TestResult) {

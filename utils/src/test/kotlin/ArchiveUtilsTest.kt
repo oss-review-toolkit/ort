@@ -30,7 +30,7 @@ class ArchiveUtilsTest : StringSpec() {
     private lateinit var outputDir: File
 
     override fun beforeTest(testCase: TestCase) {
-        outputDir = createTempDir()
+        outputDir = createTempDir(ORT_NAME, javaClass.simpleName)
     }
 
     override fun afterTest(testCase: TestCase, result: TestResult) {
