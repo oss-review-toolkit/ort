@@ -23,6 +23,7 @@ import com.fasterxml.jackson.annotation.JsonIdentityReference
 import com.fasterxml.jackson.annotation.JsonInclude
 
 import com.here.ort.model.Identifier
+import com.here.ort.model.Package
 import com.here.ort.model.PackageCurationResult
 import com.here.ort.model.RemoteArtifact
 import com.here.ort.model.VcsInfo
@@ -32,6 +33,9 @@ import com.here.ort.spdx.SpdxExpression
 
 import java.util.SortedSet
 
+/**
+ * The evaluated form of a [Package] used by the [EvaluatedModel].
+ */
 data class EvaluatedPackage(
     val id: Identifier,
     val isProject: Boolean,
