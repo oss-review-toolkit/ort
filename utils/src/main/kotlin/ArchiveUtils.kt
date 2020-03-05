@@ -38,11 +38,13 @@ import org.apache.commons.compress.archivers.zip.ZipArchiveInputStream
 import org.apache.commons.compress.archivers.zip.ZipArchiveOutputStream
 import org.apache.commons.compress.compressors.bzip2.BZip2CompressorInputStream
 import org.apache.commons.compress.compressors.gzip.GzipCompressorInputStream
+import org.apache.commons.compress.compressors.xz.XZCompressorInputStream
 
 enum class ArchiveType(vararg val extensions: String) {
     TAR(".gem", ".tar"),
     TAR_BZIP2(".tar.bz2", ".tbz2"),
     TAR_GZIP(".crate", ".tar.gz", ".tgz"),
+    TAR_XZ(".tar.xz", ".txz"),
     ZIP(".aar", ".egg", ".jar", ".war", ".whl", ".zip"),
     SEVENZIP(".7z"),
     POM(".pom"), // Special case of a "fake archive".
@@ -76,6 +78,7 @@ fun InputStream.unpack(filename: String, targetDirectory: File) {
         ArchiveType.TAR -> unpackTar(targetDirectory)
         ArchiveType.TAR_BZIP2 -> BZip2CompressorInputStream(this).unpackTar(targetDirectory)
         ArchiveType.TAR_GZIP -> GzipCompressorInputStream(this).unpackTar(targetDirectory)
+        ArchiveType.TAR_XZ -> XZCompressorInputStream(this).unpackTar(targetDirectory)
         ArchiveType.ZIP -> unpackZip(targetDirectory)
         ArchiveType.SEVENZIP -> {
             throw IOException("Cannot unpack a 7-Zip archive from an InputStream, use a File instead.")
