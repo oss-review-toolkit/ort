@@ -89,21 +89,7 @@ internal class EvaluatedModelMapper(private val input: ReporterInput) {
         }
 
         input.ortResult.analyzer?.result?.projects?.forEach { project ->
-            project.scopes.forEach { scope ->
-                scope.getShortestPaths().forEach { (id, path) ->
-                    val pkg = packages.getValue(id)
-
-                    val packagePath = EvaluatedPackagePath(
-                        pkg = pkg,
-                        project = packages.getValue(project.id),
-                        scope = scopes.addIfRequired(ScopeName(scope.name)),
-                        path = path.map { parentId -> packages.getValue(parentId) }
-                    )
-
-                    paths += packagePath
-                    pkg.paths += packagePath
-                }
-            }
+            addShortestPaths(project)
         }
 
         return EvaluatedModel(
@@ -511,6 +497,24 @@ internal class EvaluatedModelMapper(private val input: ReporterInput) {
                     endLine = location.endLine,
                     scanResult = scanResult
                 )
+            }
+        }
+    }
+
+    private fun addShortestPaths(project: Project) {
+        project.scopes.forEach { scope ->
+            scope.getShortestPaths().forEach { (id, path) ->
+                val pkg = packages.getValue(id)
+
+                val packagePath = EvaluatedPackagePath(
+                    pkg = pkg,
+                    project = packages.getValue(project.id),
+                    scope = scopes.addIfRequired(ScopeName(scope.name)),
+                    path = path.map { parentId -> packages.getValue(parentId) }
+                )
+
+                paths += packagePath
+                pkg.paths += packagePath
             }
         }
     }
