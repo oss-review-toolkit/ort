@@ -53,35 +53,9 @@ before_install:
   - sudo ln -s /etc/ssl/certs/java/cacerts $JAVA_HOME/lib/security/cacerts
 
 install:
-  - eval "$(gimme)"
-  - curl https://raw.githubusercontent.com/golang/dep/v$GO_DEP_VERSION/install.sh | sh
   - npm install -g bower@$BOWER_VERSION npm@$NPM_VERSION yarn@$YARN_VERSION
-  - phpenv global $PHP_VERSION
-  - curl -Ls https://git.io/sbt > ~/bin/sbt
-  - chmod a+x ~/bin/sbt
-  - curl -sSL https://github.com/commercialhaskell/stack/raw/v$STACK_VERSION/etc/scripts/get-stack.sh | sh
-  - curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --default-toolchain $RUST_VERSION
-  - export PATH=$PATH:$HOME/.cargo/bin
   - curl https://storage.googleapis.com/git-repo-downloads/repo-1 > ~/bin/repo
   - chmod a+x ~/bin/repo
-  - curl -Os https://dl.google.com/android/repository/sdk-tools-linux-$ANDROID_SDK_VERSION.zip
-  - unzip -q sdk-tools-linux-$ANDROID_SDK_VERSION.zip -d $ANDROID_HOME
-  - rm sdk-tools-linux-$ANDROID_SDK_VERSION.zip
-  - export SDKMANAGER_OPTS="--add-modules java.xml.bind"
-  - yes | $ANDROID_HOME/tools/bin/sdkmanager --verbose "platform-tools"
-  - curl -Os https://storage.googleapis.com/flutter_infra/releases/stable/linux/flutter_linux_$FLUTTER_VERSION.tar.xz
-  - tar xf flutter_linux_$FLUTTER_VERSION.tar.xz -C $(dirname $FLUTTER_HOME)
-  - rm flutter_linux_$FLUTTER_VERSION.tar.xz
-  - export PATH="$PATH:$FLUTTER_HOME/bin:$FLUTTER_HOME/bin/cache/dart-sdk/bin"
-  - flutter config --no-analytics
-  - flutter doctor
-  - pip install --user conan==$CONAN_VERSION pipenv==$PYTHON_PIPENV_VERSION
-  - conan user # Create the conan data directory. Automatic detection of your arch, compiler, etc.
-  - pyenv global system 3.6
-  - pip3 install --user reuse
-
-before_script:
-  - reuse lint
 
 script:
   - set -o pipefail
@@ -89,7 +63,7 @@ script:
   - if [ "$TRAVIS_EVENT_TYPE" = "cron" ]; then
       ./gradlew --stacktrace -Dkotlintest.tags.exclude=ScanCodeTag test funTest jacocoReport | tee log.txt;
     else
-      ./gradlew --scan --stacktrace -Dkotlintest.tags.exclude=ExpensiveTag test funTest jacocoReport | tee log.txt;
+      ./gradlew --scan --stacktrace :analyzer:funTest --tests com.here.ort.analyzer.GitRepoTest | tee log.txt;
     fi
   - if grep -A1 ".+Test.+STARTED$" log.txt | grep -q "^:"; then
       echo "Some tests seemingly have been aborted.";
