@@ -145,14 +145,14 @@ internal class EvaluatedModelMapper(private val input: ReporterInput) {
                 val scopeDependencies = scope.collectDependencies()
                 if (scopeExcludes.isNotEmpty()) {
                     scopeDependencies.forEach { id ->
-                        val info = packageExcludeInfo.getValue(id)
+                        val info = packageExcludeInfo.getOrPut(id) { PackageExcludeInfo(id, true) }
                         if (info.isExcluded) {
                             info.scopeExcludes += scopeExcludes
                         }
                     }
                 } else if (pathExcludes.isEmpty()) {
                     scopeDependencies.forEach { id ->
-                        val info = packageExcludeInfo.getValue(id)
+                        val info = packageExcludeInfo.getOrPut(id) { PackageExcludeInfo(id, true) }
                         info.isExcluded = false
                         info.pathExcludes.clear()
                         info.scopeExcludes.clear()
