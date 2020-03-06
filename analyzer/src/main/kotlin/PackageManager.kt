@@ -33,6 +33,7 @@ import com.here.ort.utils.normalizeVcsUrl
 import com.here.ort.utils.showStackTrace
 
 import java.io.File
+import java.io.FileFilter
 import java.nio.file.FileSystems
 import java.nio.file.FileVisitResult
 import java.nio.file.Files
@@ -110,7 +111,7 @@ abstract class PackageManager(
                     }
 
                     val dirAsFile = dir.toFile()
-                    val filesInDir = dirAsFile.listFiles()
+                    val filesInDir = dirAsFile.listFiles(FileFilter { it.isFile })
 
                     packageManagers.forEach { manager ->
                         // Create a list of lists of matching files per glob.
