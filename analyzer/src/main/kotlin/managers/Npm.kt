@@ -62,6 +62,7 @@ import com.here.ort.utils.textValueOrEmpty
 import com.vdurmont.semver4j.Requirement
 
 import java.io.File
+import java.io.FileFilter
 import java.net.HttpURLConnection
 import java.net.URL
 import java.net.URLEncoder
@@ -383,13 +384,13 @@ open class Npm(
         val nodeModulesDir = moduleDir.resolve("node_modules")
         if (!nodeModulesDir.isDirectory) return emptyList()
 
-        val searchDirs = nodeModulesDir.listFiles().filter { file ->
-            file.isDirectory && file.name.startsWith("@")
-        } + nodeModulesDir
+        val searchDirs = nodeModulesDir.listFiles(FileFilter {
+            it.isDirectory && it.name.startsWith("@")
+        }) + nodeModulesDir
 
-        return searchDirs.map { dir ->
-            dir.listFiles().filter { file -> file.isSymbolicLink() && file.isDirectory }
-        }.flatten()
+        return searchDirs.flatMap { dir ->
+            dir.listFiles(FileFilter { it.isSymbolicLink() && it.isDirectory }).toList()
+        }
     }
 
     private fun getModuleDependencies(moduleDir: File, scopes: Set<String>): SortedSet<PackageReference> {
