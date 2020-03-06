@@ -434,16 +434,14 @@ abstract class LocalScanner(name: String, config: ScannerConfiguration) : Scanne
      * [scanned path][scanPath].
      */
     protected fun relativizePath(scanPath: File, scannedFilename: File): String {
-        val relativePathToScannedFile = if (scanPath.isFile) {
-            if (scanPath.isAbsolute) {
-                // Scanners are called with the current working directory unchanged. To avoid absolute paths, make a
-                // path to a file relative to the current working directory in the absence of a scan root directory.
-                scanPath.relativeTo(File(".").absoluteFile)
+        val relativePathToScannedFile = if (scannedFilename.isAbsolute) {
+            if (scanPath.isFile) {
+                scannedFilename.relativeTo(scanPath.parentFile)
             } else {
-                scanPath
+                scannedFilename.relativeTo(scanPath)
             }
         } else {
-            scannedFilename.relativeTo(scanPath.absoluteFile)
+            scannedFilename
         }
 
         return relativePathToScannedFile.invariantSeparatorsPath
