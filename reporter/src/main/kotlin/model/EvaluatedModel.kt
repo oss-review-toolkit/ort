@@ -21,6 +21,8 @@ package com.here.ort.reporter.model
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo
 import com.fasterxml.jackson.annotation.JsonIdentityReference
+import com.fasterxml.jackson.core.JsonFactory
+import com.fasterxml.jackson.core.JsonGenerator
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.SerializationFeature
@@ -138,7 +140,11 @@ data class EvaluatedModel(
             propertyNamingStrategy = PROPERTY_NAMING_STRATEGY
         }
 
-        private val JSON_MAPPER by lazy { JsonMapper().apply(MAPPER_CONFIG) }
+        private val JSON_MAPPER by lazy {
+            val factory = JsonFactory().disable(JsonGenerator.Feature.AUTO_CLOSE_TARGET)
+            JsonMapper(factory).apply(MAPPER_CONFIG)
+        }
+
         private val YAML_MAPPER by lazy { YAMLMapper().apply(MAPPER_CONFIG) }
 
         fun create(input: ReporterInput): EvaluatedModel = EvaluatedModelMapper(input).build()
