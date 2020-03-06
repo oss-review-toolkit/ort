@@ -419,6 +419,7 @@ class ScanCode(
                 LicenseFinding(
                     license = getLicenseId(it),
                     location = TextLocation(
+                        // The path is already relative as we run ScanCode with "--strip-root".
                         path = file["path"].textValue(),
                         startLine = it["start_line"].intValue(),
                         endLine = it["end_line"].intValue()
@@ -452,6 +453,7 @@ class ScanCode(
                     CopyrightFinding(
                         statement = statement.textValue(),
                         location = TextLocation(
+                            // The path is already relative as we run ScanCode with "--strip-root".
                             path = path,
                             startLine = startLine,
                             endLine = endLine
