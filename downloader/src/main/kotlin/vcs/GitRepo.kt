@@ -19,13 +19,17 @@
 
 package com.here.ort.downloader.vcs
 
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty
+
 import com.here.ort.downloader.WorkingTree
 import com.here.ort.model.VcsInfo
 import com.here.ort.model.VcsType
+import com.here.ort.model.xmlMapper
 import com.here.ort.utils.Os
 import com.here.ort.utils.ProcessCapture
 import com.here.ort.utils.collectMessagesAsString
 import com.here.ort.utils.getPathFromEnvironment
+import com.here.ort.utils.isSymbolicLink
 import com.here.ort.utils.log
 import com.here.ort.utils.realFile
 import com.here.ort.utils.searchUpwardsForSubdirectory
@@ -38,6 +42,23 @@ import java.io.IOException
  * The branch of git-repo to use. This allows to override git-repo's default of using the "stable" branch.
  */
 private const val GIT_REPO_BRANCH = "stable"
+
+/**
+ * The minimal manifest structure as used by the wrapping "manifest.xml" file as of repo version 2.4. For the full
+ * structure see https://gerrit.googlesource.com/git-repo/+/refs/heads/master/docs/manifest-format.md.
+ */
+private data class Manifest(
+    val include: Include
+)
+
+/**
+ * The include tag of a wrapping "manifest.xml" file, see
+ * https://gerrit.googlesource.com/git-repo/+/refs/heads/master/docs/manifest-format.md#Element-include.
+ */
+private data class Include(
+    @JacksonXmlProperty(isAttribute = true)
+    val name: String
+)
 
 class GitRepo : GitBase() {
     override val type = VcsType.GIT_REPO
@@ -58,8 +79,17 @@ class GitRepo : GitBase() {
                 // Return the path to the manifest as part of the VCS information, as that is required to recreate the
                 // working tree.
                 override fun getInfo(): VcsInfo {
-                    val manifestLink = File(getRootPath(), ".repo/manifest.xml")
-                    val manifestFile = manifestLink.realFile()
+                    val manifestWrapper = File(getRootPath(), ".repo/manifest.xml")
+
+                    val manifestFile = if (manifestWrapper.isSymbolicLink()) {
+                        manifestWrapper.realFile()
+                    } else {
+                        // As of repo 2.4, the active manifest is a real file with an include directive instead of a
+                        // symbolic link, see https://gerrit-review.googlesource.com/c/git-repo/+/256313.
+                        val manifest = xmlMapper.readValue(manifestWrapper, Manifest::class.java)
+                        workingDir.resolve(manifest.include.name)
+                    }
+
                     return super.getInfo().copy(path = manifestFile.relativeTo(workingDir).invariantSeparatorsPath)
                 }
 
