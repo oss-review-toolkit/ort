@@ -30,6 +30,7 @@ import org.gradle.api.tasks.testing.logging.TestLogEvent
 import org.jetbrains.dokka.gradle.DokkaTask
 import org.jetbrains.gradle.ext.JUnit
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+import org.jetbrains.kotlin.gradle.plugin.KotlinCompilation
 import org.jetbrains.kotlin.gradle.plugin.KotlinSourceSet
 
 import java.io.ByteArrayOutputStream
@@ -153,6 +154,16 @@ subprojects {
         withConvention(KotlinSourceSet::class) {
             kotlin.srcDirs("src/funTest/kotlin")
         }
+    }
+
+    // Associate the "funTest" compilation with the "main" compilation to be able to access "internal" objects from
+    // functional tests.
+    // TODO: The feature to access "internal" objects from functional tests is not actually used yet because the IDE
+    //       would still highlight such access as an error. Still keep this code around until that bug in the IDE (see
+    //       https://youtrack.jetbrains.com/issue/KT-34102) is fixed as the correct syntax for this code was not easy to
+    //       determine.
+    kotlin.target.compilations.run {
+        getByName("funTest").associateWith(getByName(KotlinCompilation.MAIN_COMPILATION_NAME))
     }
 
     plugins.withType<JavaLibraryPlugin> {
