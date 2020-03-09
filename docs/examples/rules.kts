@@ -130,7 +130,7 @@ val ruleSet = ruleSet(ortResult) {
             }
 
             val message = if (licenseSource == LicenseSource.DETECTED) {
-                "The ScanCode copyleft catagorized license $license was ${licenseSource.name.toLowerCase()} " +
+                "The ScanCode copyleft categorized license $license was ${licenseSource.name.toLowerCase()} " +
                         "in package ${pkg.id.toCoordinates()}."
             } else {
                 "The package ${pkg.id.toCoordinates()} has the ${licenseSource.name.toLowerCase()} " +
@@ -148,7 +148,7 @@ val ruleSet = ruleSet(ortResult) {
 
             val message = if (licenseSource == LicenseSource.DETECTED) {
                 if (pkg.id.type == "Unmanaged") {
-                    "The ScanCode copyleft-limited catagorized license $license was ${licenseSource.name.toLowerCase()} " +
+                    "The ScanCode copyleft-limited categorized license $license was ${licenseSource.name.toLowerCase()} " +
                             "in package ${pkg.id.toCoordinates()}."
 
                 } else {
@@ -175,7 +175,7 @@ val ruleSet = ruleSet(ortResult) {
             issue(
                 Severity.ERROR,
                 "The project ${project.id.toCoordinates()} has a dependency licensed under the ScanCode " +
-                        "copyleft catagorized license $license.",
+                        "copyleft categorized license $license.",
                 howToFixDefault()
             )
         }
@@ -196,7 +196,7 @@ val ruleSet = ruleSet(ortResult) {
             issue(
                 Severity.WARNING,
                 "The project ${project.id.toCoordinates()} has a statically linked direct dependency licensed " +
-                        "under the ScanCode copyleft-left catagorized license $license.",
+                        "under the ScanCode copyleft-left categorized license $license.",
                 howToFixDefault()
             )
         }
