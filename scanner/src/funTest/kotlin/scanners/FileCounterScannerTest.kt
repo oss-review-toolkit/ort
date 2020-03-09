@@ -52,7 +52,7 @@ class FileCounterScannerTest : StringSpec() {
 
             patchActualResult(result, patchDownloadTime = true, patchStartAndEndTime = true) shouldBe expectedResult
 
-            outputDir.safeDeleteRecursively(force = true)
+            outputDir.safeDeleteRecursively()
             ScanResultsStorage.storage.stats.reset()
         }
     }
