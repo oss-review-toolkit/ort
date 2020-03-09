@@ -121,7 +121,7 @@ class BoyterLc(name: String, config: ScannerConfiguration) : LocalScanner(name, 
 
     override fun getConfiguration() = CONFIGURATION_OPTIONS.joinToString(" ")
 
-    override fun scanPath(path: File, resultsFile: File): ScanResult {
+    override fun scanPathInternal(path: File, resultsFile: File): ScanResult {
         val startTime = Instant.now()
 
         val process = ProcessCapture(

@@ -321,7 +321,7 @@ abstract class LocalScanner(name: String, config: ScannerConfiguration) : Scanne
 
         archiveFiles(downloadResult.downloadDirectory, pkg.id, provenance)
 
-        val scanResult = scanPath(downloadResult.downloadDirectory, resultsFile).copy(provenance = provenance)
+        val scanResult = scanPathInternal(downloadResult.downloadDirectory, resultsFile).copy(provenance = provenance)
 
         val addResult = ScanResultsStorage.storage.add(pkg.id, scanResult)
 
@@ -348,6 +348,16 @@ abstract class LocalScanner(name: String, config: ScannerConfiguration) : Scanne
     }
 
     /**
+     * Scan the provided [path] for license information and write the results to [resultsFile] using the scanner's
+     * native file format.
+     *
+     * No scan results storage is used by this function.
+     *
+     * The return value is a [ScanResult]. If the path could not be scanned, a [ScanException] is thrown.
+     */
+    protected abstract fun scanPathInternal(path: File, resultsFile: File): ScanResult
+
+    /**
      * Scan the provided [inputPath] for license information and write the results to [outputDirectory] using the
      * scanner's native file format. The results file name is derived from [inputPath] and [getDetails].
      *
@@ -355,7 +365,7 @@ abstract class LocalScanner(name: String, config: ScannerConfiguration) : Scanne
      *
      * The return value is an [OrtResult]. If the path could not be scanned, a [ScanException] is thrown.
      */
-    fun scanInputPath(inputPath: File, outputDirectory: File): OrtResult {
+    fun scanPath(inputPath: File, outputDirectory: File): OrtResult {
         val startTime = Instant.now()
 
         val absoluteInputPath = inputPath.absoluteFile
@@ -372,7 +382,7 @@ abstract class LocalScanner(name: String, config: ScannerConfiguration) : Scanne
                 outputDirectory.apply { safeMkdirs() },
                 "${inputPath.nameWithoutExtension}_${scannerDetails.name}.$resultFileExt"
             )
-            scanPath(inputPath, resultsFile).also {
+            scanPathInternal(inputPath, resultsFile).also {
                 log.info {
                     "Detected licenses for path '$absoluteInputPath': ${it.summary.licenses.joinToString()}"
                 }
@@ -413,16 +423,6 @@ abstract class LocalScanner(name: String, config: ScannerConfiguration) : Scanne
         val repository = Repository(VersionControlSystem.getCloneInfo(inputPath))
         return OrtResult(repository, scanner = scannerRun)
     }
-
-    /**
-     * Scan the provided [path] for license information and write the results to [resultsFile] using the scanner's
-     * native file format.
-     *
-     * No scan results storage is used by this function.
-     *
-     * The return value is a [ScanResult]. If the path could not be scanned, a [ScanException] is thrown.
-     */
-    abstract fun scanPath(path: File, resultsFile: File): ScanResult
 
     /**
      * Return the scanner's raw result in a JSON representation.

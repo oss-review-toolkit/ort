@@ -182,7 +182,7 @@ class ScannerCommand : CliktCommand(name = "scan", help = "Run existing copyrigh
 
             val inputPath = input.expandTilde()
             val absoluteInputPath = inputPath.normalize()
-            scanner.scanInputPath(absoluteInputPath, absoluteNativeOutputDir)
+            scanner.scanPath(absoluteInputPath, absoluteNativeOutputDir)
         }
 
         outputFiles.forEach { file ->

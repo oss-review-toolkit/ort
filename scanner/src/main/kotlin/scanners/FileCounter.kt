@@ -55,7 +55,7 @@ class FileCounter(name: String, config: ScannerConfiguration) : LocalScanner(nam
 
     override fun getConfiguration() = ""
 
-    override fun scanPath(path: File, resultsFile: File): ScanResult {
+    override fun scanPathInternal(path: File, resultsFile: File): ScanResult {
         val startTime = Instant.now()
 
         val fileCountResult = FileCountResult(path.walk().count())
