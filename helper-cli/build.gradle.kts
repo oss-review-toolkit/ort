@@ -60,6 +60,7 @@ dependencies {
     implementation(project(":analyzer"))
     implementation(project(":downloader"))
     implementation(project(":reporter"))
+    implementation(project(":scanner"))
     implementation(project(":utils"))
 
     implementation("com.beust:jcommander:$jcommanderVersion")
