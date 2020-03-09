@@ -62,7 +62,7 @@ install:
   - curl -sSL https://github.com/commercialhaskell/stack/raw/v$STACK_VERSION/etc/scripts/get-stack.sh | sh
   - curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --default-toolchain $RUST_VERSION
   - export PATH=$PATH:$HOME/.cargo/bin
-  - curl https://storage.googleapis.com/git-repo-downloads/repo-1 > ~/bin/repo
+  - curl https://storage.googleapis.com/git-repo-downloads/repo > ~/bin/repo
   - chmod a+x ~/bin/repo
   - curl -Os https://dl.google.com/android/repository/sdk-tools-linux-$ANDROID_SDK_VERSION.zip
   - unzip -q sdk-tools-linux-$ANDROID_SDK_VERSION.zip -d $ANDROID_HOME
