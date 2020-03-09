@@ -28,11 +28,14 @@ import com.here.ort.model.ScanResultContainer
 import com.here.ort.model.ScannerDetails
 import com.here.ort.model.config.FileBasedStorageConfiguration
 import com.here.ort.model.config.PostgresStorageConfiguration
+import com.here.ort.model.config.ScannerConfiguration
 import com.here.ort.scanner.storages.*
 import com.here.ort.utils.ORT_FULL_NAME
+import com.here.ort.utils.getUserOrtDirectory
 import com.here.ort.utils.log
 import com.here.ort.utils.storage.HttpFileStorage
 import com.here.ort.utils.storage.LocalFileStorage
+import com.here.ort.utils.storage.XZCompressedLocalFileStorage
 
 import java.lang.IllegalArgumentException
 import java.sql.DriverManager
@@ -52,20 +55,41 @@ abstract class ScanResultsStorage {
         var storage: ScanResultsStorage = NoStorage()
 
         /**
-         * Given a [config] for a known storage backend, configure it as the current one.
+         * Configure the [ScanResultsStorage]. If [config] does not contain a storage configuration by default a
+         * [FileBasedStorage] using a [XZCompressedLocalFileStorage] as backend is configured.
          */
-        fun configure(config: Any) {
-            when (config) {
-                is FileBasedStorageConfiguration -> configure(config)
-                is PostgresStorageConfiguration -> configure(config)
-                else -> throw IllegalArgumentException("Unsupported configuration type '$config'.")
+        fun configure(config: ScannerConfiguration) {
+            val configuredStorages = listOfNotNull(
+                config.fileBasedStorage,
+                config.postgresStorage
+            )
+
+            require(configuredStorages.size <= 1) {
+                "Only one scan results storage may be configured."
             }
+
+            val storageConfig = configuredStorages.singleOrNull()
+
+            when (storageConfig) {
+                null -> configureDefaultStorage()
+                is FileBasedStorageConfiguration -> configure(storageConfig)
+                is PostgresStorageConfiguration -> configure(storageConfig)
+                else -> throw IllegalArgumentException(
+                    "Unsupported configuration type '${storageConfig.javaClass.name}'."
+                )
+            }
+        }
+
+        private fun configureDefaultStorage() {
+            val localFileStorage = XZCompressedLocalFileStorage(getUserOrtDirectory().resolve("$TOOL_NAME/results"))
+            val fileBasedStorage = FileBasedStorage(localFileStorage)
+            storage = fileBasedStorage
         }
 
         /**
          * Configure a [FileBasedStorage] as the current storage backend.
          */
-        fun configure(config: FileBasedStorageConfiguration) {
+        private fun configure(config: FileBasedStorageConfiguration) {
             val backend = config.backend.createFileStorage()
 
             when (backend) {
@@ -81,7 +105,7 @@ abstract class ScanResultsStorage {
         /**
          * Configure a [PostgresStorage] as the current storage backend.
          */
-        fun configure(config: PostgresStorageConfiguration) {
+        private fun configure(config: PostgresStorageConfiguration) {
             require(config.url.isNotBlank()) {
                 "URL for PostgreSQL storage is missing."
             }
