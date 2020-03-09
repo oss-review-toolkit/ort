@@ -45,7 +45,7 @@ class FileBasedStorage(
     /**
      * The [FileStorage] to use for storing scan results.
      */
-    private val backend: FileStorage
+    val backend: FileStorage
 ) : ScanResultsStorage() {
     override val name = "${javaClass.simpleName} with ${backend.javaClass.simpleName} backend"
 
