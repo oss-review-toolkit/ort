@@ -30,6 +30,7 @@ import io.kotlintest.TestCase
 import io.kotlintest.TestResult
 import io.kotlintest.matchers.file.shouldNotStartWithPath
 import io.kotlintest.shouldBe
+import io.kotlintest.shouldNotBe
 import io.kotlintest.specs.StringSpec
 
 import java.io.File
@@ -76,27 +77,25 @@ abstract class AbstractScannerTest : StringSpec() {
 
     init {
         "Scanning a single file succeeds".config(tags = testTags) {
-            val resultsFile = outputDir.resolve("${scanner.scannerName}.${scanner.resultFileExt}")
+            val result = scanner.scanInputPath(inputDir.resolve("LICENSE"), outputDir)
+            val summary = result.scanner?.results?.scanResults?.singleOrNull()?.results?.singleOrNull()?.summary
 
-            val result = scanner.scanPath(inputDir.resolve("LICENSE"), resultsFile)
-
-            resultsFile.isFile shouldBe true
-            result.summary.fileCount shouldBe 1
-            result.summary.licenses shouldBe expectedFileLicenses
-            result.summary.licenseFindings.forEach {
+            summary shouldNotBe null
+            summary!!.fileCount shouldBe 1
+            summary.licenses shouldBe expectedFileLicenses
+            summary.licenseFindings.forEach {
                 File(it.location.path) shouldNotStartWithPath inputDir
             }
         }
 
         "Scanning a directory succeeds".config(tags = testTags) {
-            val resultsFile = outputDir.resolve("${scanner.scannerName}.${scanner.resultFileExt}")
+            val result = scanner.scanInputPath(inputDir, outputDir)
+            val summary = result.scanner?.results?.scanResults?.singleOrNull()?.results?.singleOrNull()?.summary
 
-            val result = scanner.scanPath(inputDir, resultsFile)
-
-            resultsFile.isFile shouldBe true
-            result.summary.fileCount shouldBe commonlyDetectedFiles.size
-            result.summary.licenses shouldBe expectedDirectoryLicenses
-            result.summary.licenseFindings.forEach {
+            summary shouldNotBe null
+            summary!!.fileCount shouldBe commonlyDetectedFiles.size
+            summary.licenses shouldBe expectedDirectoryLicenses
+            summary.licenseFindings.forEach {
                 File(it.location.path) shouldNotStartWithPath inputDir
             }
         }
