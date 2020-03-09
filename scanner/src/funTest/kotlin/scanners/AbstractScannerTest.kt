@@ -77,7 +77,7 @@ abstract class AbstractScannerTest : StringSpec() {
 
     init {
         "Scanning a single file succeeds".config(tags = testTags) {
-            val result = scanner.scanInputPath(inputDir.resolve("LICENSE"), outputDir)
+            val result = scanner.scanPath(inputDir.resolve("LICENSE"), outputDir)
             val summary = result.scanner?.results?.scanResults?.singleOrNull()?.results?.singleOrNull()?.summary
 
             summary shouldNotBe null
@@ -89,7 +89,7 @@ abstract class AbstractScannerTest : StringSpec() {
         }
 
         "Scanning a directory succeeds".config(tags = testTags) {
-            val result = scanner.scanInputPath(inputDir, outputDir)
+            val result = scanner.scanPath(inputDir, outputDir)
             val summary = result.scanner?.results?.scanResults?.singleOrNull()?.results?.singleOrNull()?.summary
 
             summary shouldNotBe null
