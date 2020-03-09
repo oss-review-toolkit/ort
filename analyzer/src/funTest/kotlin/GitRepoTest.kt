@@ -57,7 +57,7 @@ class GitRepoTest : StringSpec() {
     }
 
     override fun afterSpec(spec: Spec) {
-        outputDir.safeDeleteRecursively(force = true)
+        outputDir.safeDeleteRecursively()
     }
 
     init {

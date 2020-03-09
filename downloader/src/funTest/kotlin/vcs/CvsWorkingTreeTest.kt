@@ -46,7 +46,7 @@ class CvsWorkingTreeTest : StringSpec() {
     }
 
     override fun afterSpec(spec: Spec) {
-        zipContentDir.safeDeleteRecursively(force = true)
+        zipContentDir.safeDeleteRecursively()
     }
 
     init {

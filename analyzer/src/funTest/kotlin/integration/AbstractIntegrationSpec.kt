@@ -81,7 +81,7 @@ abstract class AbstractIntegrationSpec : StringSpec() {
     }
 
     override fun afterSpec(spec: Spec) {
-        outputDir.safeDeleteRecursively(force = true)
+        outputDir.safeDeleteRecursively()
     }
 
     init {

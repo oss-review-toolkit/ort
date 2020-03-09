@@ -48,7 +48,7 @@ class SubversionWorkingTreeTest : StringSpec() {
 
     override fun afterSpec(spec: Spec) {
         print("Deleting '$zipContentDir'... ")
-        zipContentDir.safeDeleteRecursively(force = true)
+        zipContentDir.safeDeleteRecursively()
         println("done.")
     }
 

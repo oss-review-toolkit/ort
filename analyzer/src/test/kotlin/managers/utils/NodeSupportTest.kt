@@ -225,7 +225,7 @@ class NodeSupportTest : WordSpec() {
     }
 
     override fun afterTest(testCase: TestCase, result: TestResult) {
-        tempDir.safeDeleteRecursively(force = true)
+        tempDir.safeDeleteRecursively()
         definitionFiles.clear()
         super.afterTest(testCase, result)
     }

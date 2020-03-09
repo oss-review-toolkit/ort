@@ -53,7 +53,7 @@ class OrtMainTest : StringSpec() {
     }
 
     override fun afterTest(testCase: TestCase, result: TestResult) {
-        outputDir.safeDeleteRecursively(force = true)
+        outputDir.safeDeleteRecursively()
     }
 
     init {

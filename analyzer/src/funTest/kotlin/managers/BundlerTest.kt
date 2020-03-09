@@ -58,7 +58,7 @@ class BundlerTest : WordSpec() {
 
                     yamlMapper.writeValueAsString(actualResult) shouldBe expectedResult
                 } finally {
-                    File(definitionFile.parentFile, ".bundle").safeDeleteRecursively(force = true)
+                    File(definitionFile.parentFile, ".bundle").safeDeleteRecursively()
                 }
             }
 
@@ -92,7 +92,7 @@ class BundlerTest : WordSpec() {
 
                     yamlMapper.writeValueAsString(actualResult) shouldBe expectedResult
                 } finally {
-                    File(definitionFile.parentFile, ".bundle").safeDeleteRecursively(force = true)
+                    File(definitionFile.parentFile, ".bundle").safeDeleteRecursively)
                 }
             }
         }
