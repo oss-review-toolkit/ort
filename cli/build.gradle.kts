@@ -69,7 +69,6 @@ dependencies {
     implementation(project(":utils"))
 
     implementation("com.github.ajalt:clikt:$cliktVersion")
-    implementation("io.github.config4k:config4k:$config4kVersion")
     implementation("org.apache.logging.log4j:log4j-core:$log4jCoreVersion")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
     implementation("org.jetbrains.kotlin:kotlin-reflect")

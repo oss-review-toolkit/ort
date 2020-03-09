@@ -38,12 +38,7 @@ import com.here.ort.model.Environment
 import com.here.ort.model.config.OrtConfiguration
 import com.here.ort.utils.ORT_NAME
 import com.here.ort.utils.getUserOrtDirectory
-import com.here.ort.utils.expandTilde
 import com.here.ort.utils.printStackTrace
-
-import com.typesafe.config.ConfigFactory
-
-import io.github.config4k.extract
 
 import java.io.File
 
@@ -125,7 +120,7 @@ class OrtMain : CliktCommand(name = ORT_NAME, epilog = "* denotes required optio
         printStackTrace = stacktrace
 
         // Make the OrtConfiguration available to subcommands.
-        currentContext.findOrSetObject { loadConfig() }
+        currentContext.findOrSetObject { OrtConfiguration.load(configArguments.toMap(), configFile) }
 
         println(getVersionHeader(env.ortVersion))
     }
@@ -157,22 +152,6 @@ class OrtMain : CliktCommand(name = ORT_NAME, epilog = "* denotes required optio
         }
 
         return header.joinToString("\n", postfix = "\n")
-    }
-
-    private fun loadConfig(): OrtConfiguration {
-        val argsConfig = ConfigFactory.parseMap(configArguments.toMap(), "Command line").withOnlyPath("ort")
-        val fileConfig = configFile?.expandTilde()?.let {
-            ConfigFactory.parseFile(it).withOnlyPath("ort")
-        }
-        val defaultConfig = ConfigFactory.parseResources("default.conf")
-
-        var combinedConfig = argsConfig
-        if (fileConfig != null) {
-            combinedConfig = combinedConfig.withFallback(fileConfig)
-        }
-        combinedConfig = combinedConfig.withFallback(defaultConfig).resolve()
-
-        return combinedConfig.extract("ort")
     }
 }
 
