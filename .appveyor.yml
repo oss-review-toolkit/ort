@@ -59,7 +59,7 @@ install:
   - set PATH=%PATH%;C:\msys64\usr\bin # For CVS.
   - set PATH=C:\Ruby25\bin;%PATH% # For licensee.
   # Install git-repo.
-  - ps: Start-FileDownload 'https://storage.googleapis.com/git-repo-downloads/repo-1' -FileName "$env:PROGRAMFILES\Git\usr\bin\repo"
+  - ps: Start-FileDownload 'https://storage.googleapis.com/git-repo-downloads/repo' -FileName "$env:PROGRAMFILES\Git\usr\bin\repo"
   # Install the Android SDK.
   - ps: Start-FileDownload "https://dl.google.com/android/repository/sdk-tools-windows-$env:ANDROID_SDK_VERSION.zip"
   - 7z x sdk-tools-windows-%ANDROID_SDK_VERSION%.zip -o%ANDROID_HOME% > nul
