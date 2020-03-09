@@ -19,6 +19,8 @@
 
 package com.here.ort.model.config
 
+import com.here.ort.utils.ORT_NAME
+
 import com.typesafe.config.ConfigFactory
 
 import io.github.config4k.extract
@@ -84,6 +86,35 @@ class OrtConfigurationTest : WordSpec({
 
                 scanner.options shouldNotBe null
             }
+        }
+
+        "correctly prioritize the sources" {
+            val configFile = createTempFile(ORT_NAME, javaClass.simpleName)
+            configFile.deleteOnExit()
+            configFile.writeText(
+                """
+                ort {
+                  scanner {
+                    postgresStorage {
+                      url = "postgresql://your-postgresql-server:5444/your-database"
+                      schema = schema
+                      username = username
+                      password = password
+                    }
+                  }
+                }
+                """.trimIndent()
+            )
+
+            val config = OrtConfiguration.load(
+                args = mapOf("ort.scanner.postgresStorage.schema" to "argsSchema"),
+                configFile = configFile
+            )
+
+            config.scanner shouldNotBe null
+            config.scanner!!.postgresStorage shouldNotBe null
+            config.scanner!!.postgresStorage!!.username shouldBe "username"
+            config.scanner!!.postgresStorage!!.schema shouldBe "argsSchema"
         }
     }
 })
