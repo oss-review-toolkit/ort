@@ -8,7 +8,7 @@ to the root of the source code repository.
 * [license finding curations](#curations): Overwrite scan results to correct identified licenses.
 * [resolutions](#resolutions) - Resolve any issues or policy rule violations.
 
-The sections below explain each in futher detail. Prefer to learn by example? See the [.ort.yml](../.ort.yml)
+The sections below explain each in further detail. Prefer to learn by example? See the [.ort.yml](../.ort.yml)
 for OSS Review Toolkit itself.
 
 ## Excludes
