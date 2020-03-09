@@ -42,9 +42,10 @@ import com.here.ort.utils.printStackTrace
 
 import java.io.File
 
+import kotlin.system.exitProcess
+
 import org.apache.logging.log4j.Level
 import org.apache.logging.log4j.core.config.Configurator
-import kotlin.system.exitProcess
 
 /**
  * The name of the environment variable to customize the ORT user home.
