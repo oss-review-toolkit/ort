@@ -44,10 +44,8 @@ dependencies {
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin:$jacksonVersion")
 
     implementation("com.vdurmont:semver4j:$semverVersion")
-
+    implementation("io.github.config4k:config4k:$config4kVersion")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
-
-    testImplementation("io.github.config4k:config4k:$config4kVersion")
 }
 
 val generateVersionResource by tasks.registering {
