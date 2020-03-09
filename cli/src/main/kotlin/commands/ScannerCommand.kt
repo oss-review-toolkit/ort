@@ -42,14 +42,11 @@ import com.here.ort.model.mapper
 import com.here.ort.scanner.LocalScanner
 import com.here.ort.scanner.ScanResultsStorage
 import com.here.ort.scanner.Scanner
-import com.here.ort.scanner.TOOL_NAME
 import com.here.ort.scanner.scanners.ScanCode
 import com.here.ort.scanner.storages.FileBasedStorage
 import com.here.ort.scanner.storages.SCAN_RESULTS_FILE_NAME
 import com.here.ort.utils.expandTilde
-import com.here.ort.utils.getUserOrtDirectory
-import com.here.ort.utils.log
-import com.here.ort.utils.storage.XZCompressedLocalFileStorage
+import com.here.ort.utils.storage.LocalFileStorage
 
 import java.io.File
 
@@ -101,43 +98,22 @@ class ScannerCommand : CliktCommand(name = "scan", help = "Run existing copyrigh
     private fun configureScanner(scannerConfiguration: ScannerConfiguration?): Scanner {
         val config = scannerConfiguration ?: ScannerConfiguration()
 
-        // By default use a file based scan results storage.
-        val localFileStorage = XZCompressedLocalFileStorage(getUserOrtDirectory().resolve("$TOOL_NAME/results"))
-        val fileBasedStorage = FileBasedStorage(localFileStorage)
-        ScanResultsStorage.storage = fileBasedStorage
-
-        // Allow to override the default scan results storage.
-        val configuredStorages = listOfNotNull(
-            config.fileBasedStorage,
-            config.postgresStorage
-        )
-
-        require(configuredStorages.size <= 1) {
-            "Only one scan results storage may be configured."
-        }
-
-        configuredStorages.forEach { ScanResultsStorage.configure(it) }
+        ScanResultsStorage.configure(config)
 
         val scanner = scannerFactory.create(config)
 
         println("Using scanner '${scanner.scannerName}' with storage '${ScanResultsStorage.storage.name}'.")
 
-        val localFileStorageLogFunction: ((String) -> Unit)? = when {
-            // If the local file storage is in use, log about it already at info level.
-            log.delegate.isInfoEnabled && ScanResultsStorage.storage == fileBasedStorage -> log::info
+        val storage = ScanResultsStorage.storage
+        if (storage is FileBasedStorage) {
+            val backend = storage.backend
+            if (backend is LocalFileStorage) {
+                val fileCount = backend.directory.walk().filter {
+                    it.isFile && it.name == SCAN_RESULTS_FILE_NAME
+                }.count()
 
-            // Otherwise log about the local file storage only at debug level.
-            log.delegate.isDebugEnabled -> log::debug
-
-            else -> null
-        }
-
-        if (localFileStorageLogFunction != null) {
-            val fileCount = localFileStorage.directory.walk().filter {
-                it.isFile && it.name == SCAN_RESULTS_FILE_NAME
-            }.count()
-
-            localFileStorageLogFunction("Local file storage has $fileCount scan results files.")
+                println("Local file storage has $fileCount scan results files.")
+            }
         }
 
         return scanner
