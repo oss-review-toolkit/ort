@@ -22,20 +22,23 @@ package com.here.ort.scanner.storages
 
 import com.here.ort.model.Identifier
 import com.here.ort.model.Package
+import com.here.ort.model.Result
 import com.here.ort.model.ScanResult
 import com.here.ort.model.ScanResultContainer
 import com.here.ort.model.ScannerDetails
+import com.here.ort.model.Success
 import com.here.ort.scanner.ScanResultsStorage
 
 /**
  * A dummy storage that does not store scan results at all. Can be used to disable storing of scan results to always
- * trigger new scans.
+ * trigger new scans. All functions in this implementation always return a successful [Result] to not trigger any
+ * errors.
  */
 class NoStorage : ScanResultsStorage() {
-    override fun readFromStorage(id: Identifier) = ScanResultContainer(id, emptyList())
+    override fun readFromStorage(id: Identifier) = Success(ScanResultContainer(id, emptyList()))
 
     override fun readFromStorage(pkg: Package, scannerDetails: ScannerDetails) =
-        ScanResultContainer(pkg.id, emptyList())
+        Success(ScanResultContainer(pkg.id, emptyList()))
 
-    override fun addToStorage(id: Identifier, scanResult: ScanResult) = AddResult(true)
+    override fun addToStorage(id: Identifier, scanResult: ScanResult) = Success(Unit)
 }
