@@ -26,6 +26,7 @@ import com.here.ort.downloader.Downloader
 import com.here.ort.downloader.VersionControlSystem
 import com.here.ort.model.EMPTY_JSON_NODE
 import com.here.ort.model.Environment
+import com.here.ort.model.Failure
 import com.here.ort.model.Identifier
 import com.here.ort.model.OrtIssue
 import com.here.ort.model.OrtResult
@@ -39,6 +40,7 @@ import com.here.ort.model.ScanSummary
 import com.here.ort.model.ScannerDetails
 import com.here.ort.model.ScannerRun
 import com.here.ort.model.Severity
+import com.here.ort.model.Success
 import com.here.ort.model.config.ScannerConfiguration
 import com.here.ort.model.createAndLogIssue
 import com.here.ort.model.mapper
@@ -257,16 +259,20 @@ abstract class LocalScanner(name: String, config: ScannerConfiguration) : Scanne
      */
     private fun readFromStorage(scannerDetails: ScannerDetails, pkg: Package, outputDirectory: File): List<ScanResult> {
         val resultsFile = getResultsFile(scannerDetails, pkg, outputDirectory)
-        val storedResults = ScanResultsStorage.storage.read(pkg, scannerDetails)
 
-        if (storedResults.results.isNotEmpty()) {
+        val scanResults = when (val storageResult = ScanResultsStorage.storage.read(pkg, scannerDetails)) {
+            is Success -> storageResult.result.results
+            is Failure -> emptyList()
+        }
+
+        if (scanResults.isNotEmpty()) {
             // Some external tools rely on the raw results filer to be written to the scan results directory, so write
             // the first stored result to resultsFile. This feature will be removed when the reporter tool becomes
             // available.
-            resultsFile.mapper().writeValue(resultsFile, storedResults.results.first().rawResult)
+            resultsFile.mapper().writeValue(resultsFile, scanResults.first().rawResult)
         }
 
-        return storedResults.results
+        return scanResults
     }
 
     /**
@@ -323,19 +329,18 @@ abstract class LocalScanner(name: String, config: ScannerConfiguration) : Scanne
 
         val scanResult = scanPathInternal(downloadResult.downloadDirectory, resultsFile).copy(provenance = provenance)
 
-        val addResult = ScanResultsStorage.storage.add(pkg.id, scanResult)
-
-        return if (addResult.success) {
-            scanResult
-        } else {
-            val issue = OrtIssue(
-                source = ScanResultsStorage.storage.name,
-                message = addResult.message ?: "Could not add result to scan results storage for unknown reason.",
-                severity = Severity.WARNING
-            )
-            val issues = scanResult.summary.issues + issue
-            val summary = scanResult.summary.copy(issues = issues)
-            scanResult.copy(summary = summary)
+        return when (val storageResult = ScanResultsStorage.storage.add(pkg.id, scanResult)) {
+            is Success -> scanResult
+            is Failure -> {
+                val issue = OrtIssue(
+                    source = ScanResultsStorage.storage.name,
+                    message = storageResult.error,
+                    severity = Severity.WARNING
+                )
+                val issues = scanResult.summary.issues + issue
+                val summary = scanResult.summary.copy(issues = issues)
+                scanResult.copy(summary = summary)
+            }
         }
     }
 

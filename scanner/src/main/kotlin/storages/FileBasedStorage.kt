@@ -22,11 +22,14 @@ package com.here.ort.scanner.storages
 
 import com.fasterxml.jackson.module.kotlin.readValue
 
+import com.here.ort.model.Failure
 import com.here.ort.model.Identifier
 import com.here.ort.model.Package
+import com.here.ort.model.Result
 import com.here.ort.model.ScanResult
 import com.here.ort.model.ScanResultContainer
 import com.here.ort.model.ScannerDetails
+import com.here.ort.model.Success
 import com.here.ort.model.yamlMapper
 import com.here.ort.scanner.ScanResultsStorage
 import com.here.ort.utils.collectMessagesAsString
@@ -34,6 +37,7 @@ import com.here.ort.utils.log
 import com.here.ort.utils.storage.FileStorage
 
 import java.io.ByteArrayInputStream
+import java.io.FileNotFoundException
 import java.io.IOException
 
 const val SCAN_RESULTS_FILE_NAME = "scan-results.yml"
@@ -49,33 +53,38 @@ class FileBasedStorage(
 ) : ScanResultsStorage() {
     override val name = "${javaClass.simpleName} with ${backend.javaClass.simpleName} backend"
 
-    override fun readFromStorage(id: Identifier): ScanResultContainer {
+    override fun readFromStorage(id: Identifier): Result<ScanResultContainer> {
         val path = storagePath(id)
 
         @Suppress("TooGenericExceptionCaught")
         return try {
             backend.read(path).use { input ->
-                yamlMapper.readValue(input)
+                Success(yamlMapper.readValue(input))
             }
         } catch (e: Exception) {
             when (e) {
-                is java.lang.IllegalArgumentException, is IOException -> {
-                    log.info {
-                        "Could not read scan results for '${id.toCoordinates()}' from path '$path': " +
-                                e.collectMessagesAsString()
-                    }
-
-                    ScanResultContainer(id, emptyList())
+                is FileNotFoundException -> {
+                    // If the file cannot be found it means no scan results have been stored, yet.
+                    Success(ScanResultContainer(id, emptyList()))
                 }
-                else -> throw e
+                else -> {
+                    val message = "Could not read scan results for '${id.toCoordinates()}' from path '$path': " +
+                            e.collectMessagesAsString()
+
+                    log.info { message }
+                    Failure(message)
+                }
             }
         }
     }
 
-    override fun readFromStorage(pkg: Package, scannerDetails: ScannerDetails): ScanResultContainer {
-        val scanResults = readFromStorage(pkg.id).results.toMutableList()
+    override fun readFromStorage(pkg: Package, scannerDetails: ScannerDetails): Result<ScanResultContainer> {
+        val scanResults = when (val readResult = readFromStorage(pkg.id)) {
+            is Success -> readResult.result.results.toMutableList()
+            is Failure -> return readResult
+        }
 
-        if (scanResults.isEmpty()) return ScanResultContainer(pkg.id, scanResults)
+        if (scanResults.isEmpty()) return Success(ScanResultContainer(pkg.id, scanResults))
 
         // Only keep scan results whose provenance information matches the package information.
         scanResults.retainAll { it.provenance.matches(pkg) }
@@ -84,7 +93,7 @@ class FileBasedStorage(
                 "No stored scan results found for $pkg. The following entries with non-matching provenance have " +
                         "been ignored: ${scanResults.map { it.provenance }}"
             }
-            return ScanResultContainer(pkg.id, scanResults)
+            return Success(ScanResultContainer(pkg.id, scanResults))
         }
 
         // Only keep scan results from compatible scanners.
@@ -94,7 +103,7 @@ class FileBasedStorage(
                 "No stored scan results found for $scannerDetails. The following entries with incompatible scanners " +
                         "have been ignored: ${scanResults.map { it.scanner }}"
             }
-            return ScanResultContainer(pkg.id, scanResults)
+            return Success(ScanResultContainer(pkg.id, scanResults))
         }
 
         log.info {
@@ -102,11 +111,16 @@ class FileBasedStorage(
                     "$scannerDetails."
         }
 
-        return ScanResultContainer(pkg.id, scanResults)
+        return Success(ScanResultContainer(pkg.id, scanResults))
     }
 
-    override fun addToStorage(id: Identifier, scanResult: ScanResult): AddResult {
-        val scanResults = ScanResultContainer(id, read(id).results + scanResult)
+    override fun addToStorage(id: Identifier, scanResult: ScanResult): Result<Unit> {
+        val existingScanResults = when (val readResult = read(id)) {
+            is Success -> readResult.result.results
+            is Failure -> emptyList()
+        }
+
+        val scanResults = ScanResultContainer(id, existingScanResults + scanResult)
 
         val path = storagePath(id)
         val yamlBytes = yamlMapper.writeValueAsBytes(scanResults)
@@ -116,7 +130,7 @@ class FileBasedStorage(
         return try {
             backend.write(path, input)
             log.info { "Stored scan result for '${id.toCoordinates()}' at path '$path'." }
-            AddResult(true)
+            Success(Unit)
         } catch (e: Exception) {
             when (e) {
                 is IllegalArgumentException, is IOException -> {
@@ -126,7 +140,7 @@ class FileBasedStorage(
                             e.collectMessagesAsString()
                     log.info { message }
 
-                    AddResult(false, message)
+                    Failure(message)
                 }
                 else -> throw e
             }

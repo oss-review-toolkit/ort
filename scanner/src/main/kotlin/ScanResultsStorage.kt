@@ -21,11 +21,14 @@
 package com.here.ort.scanner
 
 import com.here.ort.model.AccessStatistics
+import com.here.ort.model.Failure
 import com.here.ort.model.Identifier
 import com.here.ort.model.Package
+import com.here.ort.model.Result
 import com.here.ort.model.ScanResult
 import com.here.ort.model.ScanResultContainer
 import com.here.ort.model.ScannerDetails
+import com.here.ort.model.Success
 import com.here.ort.model.config.FileBasedStorageConfiguration
 import com.here.ort.model.config.PostgresStorageConfiguration
 import com.here.ort.model.config.ScannerConfiguration
@@ -142,21 +145,6 @@ abstract class ScanResultsStorage {
     }
 
     /**
-     * The result of the [add] operation.
-     */
-    data class AddResult(
-        /**
-         * True, if the data was successfully added to the storage.
-         */
-        val success: Boolean,
-
-        /**
-         * Contains the error message if [success] is false.
-         */
-        val message: String? = null
-    )
-
-    /**
      * The name to refer to this storage implementation.
      */
     open val name: String = javaClass.simpleName
@@ -173,10 +161,10 @@ abstract class ScanResultsStorage {
      *
      * @return The [ScanResultContainer] for this [id].
      */
-    fun read(id: Identifier) =
+    fun read(id: Identifier): Result<ScanResultContainer> =
         readFromStorage(id).also {
             stats.numReads.incrementAndGet()
-            if (it.results.isNotEmpty()) {
+            if (it is Success && it.result.results.isNotEmpty()) {
                 stats.numHits.incrementAndGet()
             }
         }
@@ -193,10 +181,10 @@ abstract class ScanResultsStorage {
      *
      * @return The [ScanResultContainer] matching the [id][Package.id] of [pkg] and the [scannerDetails].
      */
-    fun read(pkg: Package, scannerDetails: ScannerDetails) =
+    fun read(pkg: Package, scannerDetails: ScannerDetails): Result<ScanResultContainer> =
         readFromStorage(pkg, scannerDetails).also {
             stats.numReads.incrementAndGet()
-            if (it.results.isNotEmpty()) {
+            if (it is Success && it.result.results.isNotEmpty()) {
                 stats.numHits.incrementAndGet()
             }
         }
@@ -207,16 +195,16 @@ abstract class ScanResultsStorage {
      * @param id The [Identifier] of the scanned [Package].
      * @param scanResult The [ScanResult]. The [ScanResult.rawResult] must not be null.
      *
-     * @return An [AddResult] describing if the operation was successful.
+     * @return A [Result] describing if the operation was successful.
      */
-    fun add(id: Identifier, scanResult: ScanResult): AddResult {
+    fun add(id: Identifier, scanResult: ScanResult): Result<Unit> {
         // Do not store empty scan results. It is likely that something went wrong when they were created, and if not,
         // it is cheap to re-create them.
         if (scanResult.summary.fileCount == 0) {
             val message = "Not storing scan result for '${id.toCoordinates()}' because no files were scanned."
             log.info { message }
 
-            return AddResult(false, message)
+            return Failure(message)
         }
 
         // Do not store scan results without raw result. The raw result can be set to null for other usages, but in the
@@ -225,7 +213,7 @@ abstract class ScanResultsStorage {
             val message = "Not storing scan result for '${id.toCoordinates()}' because the raw result is null."
             log.info { message }
 
-            return AddResult(false, message)
+            return Failure(message)
         }
 
         // Do not store scan results without provenance information, because they cannot be assigned to the revision of
@@ -235,15 +223,15 @@ abstract class ScanResultsStorage {
                 "Not storing scan result for '${id.toCoordinates()}' because no provenance information is available."
             log.info { message }
 
-            return AddResult(false, message)
+            return Failure(message)
         }
 
         return addToStorage(id, scanResult)
     }
 
-    protected abstract fun readFromStorage(id: Identifier): ScanResultContainer
+    protected abstract fun readFromStorage(id: Identifier): Result<ScanResultContainer>
 
-    protected abstract fun readFromStorage(pkg: Package, scannerDetails: ScannerDetails): ScanResultContainer
+    protected abstract fun readFromStorage(pkg: Package, scannerDetails: ScannerDetails): Result<ScanResultContainer>
 
-    protected abstract fun addToStorage(id: Identifier, scanResult: ScanResult): AddResult
+    protected abstract fun addToStorage(id: Identifier, scanResult: ScanResult): Result<Unit>
 }

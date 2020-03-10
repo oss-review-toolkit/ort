@@ -26,7 +26,9 @@ import com.beust.jcommander.Parameters
 
 import com.here.ort.helper.CommandWithHelp
 import com.here.ort.helper.common.IdentifierConverter
+import com.here.ort.model.Failure
 import com.here.ort.model.Identifier
+import com.here.ort.model.Success
 import com.here.ort.model.config.OrtConfiguration
 import com.here.ort.model.config.ScannerConfiguration
 import com.here.ort.model.yamlMapper
@@ -70,7 +72,13 @@ internal class ListStoredScanResultsCommand : CommandWithHelp() {
 
         println("Searching for scan results of '${packageId.toCoordinates()}' in ${ScanResultsStorage.storage.name}.")
 
-        val scanResults = ScanResultsStorage.storage.read(packageId)
+        val scanResults = when (val readResult = ScanResultsStorage.storage.read(packageId)) {
+            is Success -> readResult.result
+            is Failure -> {
+                println("Could not read scan results: ${readResult.error}")
+                return 2
+            }
+        }
 
         println("Found ${scanResults.results.size} scan results:")
 
