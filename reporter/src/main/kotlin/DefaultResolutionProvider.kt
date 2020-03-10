@@ -24,6 +24,9 @@ import com.here.ort.model.OrtResult
 import com.here.ort.model.RuleViolation
 import com.here.ort.model.config.Resolutions
 
+/**
+ *
+ */
 class DefaultResolutionProvider : ResolutionProvider {
     private var resolutions = Resolutions()
 
