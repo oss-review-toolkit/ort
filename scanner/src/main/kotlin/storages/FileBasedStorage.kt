@@ -73,7 +73,7 @@ class FileBasedStorage(
     }
 
     override fun readFromStorage(pkg: Package, scannerDetails: ScannerDetails): ScanResultContainer {
-        val scanResults = read(pkg.id).results.toMutableList()
+        val scanResults = readFromStorage(pkg.id).results.toMutableList()
 
         if (scanResults.isEmpty()) return ScanResultContainer(pkg.id, scanResults)
 
