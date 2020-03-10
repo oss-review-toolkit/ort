@@ -208,7 +208,7 @@ Currently, the following package managers are supported:
 
 [![Downloader](./logos/downloader.png)](./downloader/src/main/kotlin)
 
-Taking an ORT result file with an _analyzer_ result as the input (`-a`), the _downloader_ retrieves the source code of
+Taking an ORT result file with an _analyzer_ result as the input (`-i`), the _downloader_ retrieves the source code of
 all contained packages to the specified output directory (`-o`). The _downloader_ takes care of things like normalizing
 URLs and using the [appropriate VCS tool](./downloader/src/main/kotlin/vcs) to checkout source code from version
 control.
@@ -226,7 +226,7 @@ Currently, the following Version Control Systems are supported:
 [![Scanner](./logos/scanner.png)](./scanner/src/main/kotlin)
 
 This tool wraps underlying license / copyright scanners with a common API so all supported scanners can be used in the
-same way to easily run them and compare their results. If passed an ORT result file with an analyzer result (`-a`), the
+same way to easily run them and compare their results. If passed an ORT result file with an analyzer result (`-i`), the
 _scanner_ will automatically download the sources of the dependencies via the _downloader_ and scan them afterwards.
 
 Currently, the following license scanners are supported:
