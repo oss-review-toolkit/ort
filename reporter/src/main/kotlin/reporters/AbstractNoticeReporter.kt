@@ -24,6 +24,7 @@ import com.here.ort.model.LicenseFindingsMap
 import com.here.ort.model.OrtResult
 import com.here.ort.model.config.CopyrightGarbage
 import com.here.ort.model.licenses.LicenseConfiguration
+import com.here.ort.model.utils.collectLicenseFindings
 import com.here.ort.reporter.Reporter
 import com.here.ort.reporter.ReporterInput
 import com.here.ort.utils.ScriptRunner
@@ -57,6 +58,7 @@ abstract class AbstractNoticeReporter : Reporter {
             import com.here.ort.model.*
             import com.here.ort.model.config.*
             import com.here.ort.model.licenses.*
+            import com.here.ort.model.utils.*
             import com.here.ort.spdx.*
             import com.here.ort.utils.*
             import com.here.ort.reporter.reporters.AbstractNoticeReporter.NoticeReportModel

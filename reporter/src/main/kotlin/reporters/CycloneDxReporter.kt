@@ -19,6 +19,7 @@
 
 package com.here.ort.reporter.reporters
 
+import com.here.ort.model.utils.getDetectedLicensesForId
 import com.here.ort.reporter.Reporter
 import com.here.ort.reporter.ReporterInput
 import com.here.ort.spdx.SpdxLicense

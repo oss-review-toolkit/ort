@@ -24,12 +24,9 @@ import com.fasterxml.jackson.annotation.JsonInclude
 
 import com.here.ort.model.config.Excludes
 import com.here.ort.model.config.LicenseFindingCuration
-import com.here.ort.model.config.PathExclude
 import com.here.ort.model.config.RepositoryConfiguration
 import com.here.ort.model.config.Resolutions
 import com.here.ort.model.config.orEmpty
-import com.here.ort.model.utils.FindingCurationMatcher
-import com.here.ort.model.utils.FindingsMatcher
 import com.here.ort.spdx.SpdxExpression
 import com.here.ort.utils.log
 import com.here.ort.utils.zipWithDefault
@@ -171,65 +168,6 @@ data class OrtResult(
         return analyzerIssues.zipWithDefault(scannerIssues, emptySet()) { left, right -> left + right }
     }
 
-    private fun collectLicenseFindings(
-        id: Identifier
-    ): Map<LicenseFindings, List<PathExclude>> {
-        val result = mutableMapOf<LicenseFindings, List<PathExclude>>()
-        val excludes = getExcludes()
-        val project = getProject(id)
-
-        getScanResultsForId(id).flatMap {
-            FindingCurationMatcher()
-                .applyAll(it.summary.licenseFindings, getLicenseFindingsCurations(id))
-                .let { findings -> FindingsMatcher().match(findings, it.summary.copyrightFindings).toSortedSet() }
-        }.map { finding ->
-            if (project != null) {
-                val copyrights = finding.copyrights.mapNotNullTo(sortedSetOf()) { copyrightFindings ->
-                    val locations = copyrightFindings.locations.filterTo(sortedSetOf()) {
-                        val path = getFilePathRelativeToAnalyzerRoot(project, it.path)
-                        excludes.paths.none { exclude -> exclude.matches(path) }
-                    }
-                    if (locations.isNotEmpty()) copyrightFindings.copy(locations = locations)
-                    else null
-                }
-                finding.copy(copyrights = copyrights)
-            } else {
-                finding
-            }
-        }.forEach { finding ->
-            val matchingExcludes = mutableSetOf<PathExclude>()
-
-            // Only license findings of projects can be excluded by path excludes.
-            val isExcluded = project != null && finding.locations.all { location ->
-                val path = getFilePathRelativeToAnalyzerRoot(project, location.path)
-                excludes.paths.any { exclude ->
-                    exclude.matches(path)
-                        .also { matches -> if (matches) matchingExcludes += exclude }
-                }
-            }
-
-            // Only add matching excludes if all license locations are excluded.
-            result[finding] = if (isExcluded) matchingExcludes.toList() else emptyList()
-        }
-
-        return result
-    }
-
-    /**
-     * Return a map of license findings for each project or package [Identifier]. The license findings for projects are
-     * mapped to a list of [PathExclude]s matching the locations where a license was found. This list is only populated
-     * if all file locations are excluded. The list is empty for all dependency packages, as path excludes are only
-     * applied to the projects.
-     *
-     * If [omitExcluded] is set to true, excluded projects / packages are omitted from the result.
-     */
-    fun collectLicenseFindings(
-        omitExcluded: Boolean = false
-    ): Map<Identifier, Map<LicenseFindings, List<PathExclude>>> =
-        getProjectAndPackageIds()
-            .filter { id -> !omitExcluded || !isPackageExcluded(id) }
-            .associateWith { id -> collectLicenseFindings(id).toMutableMap() }
-
     /**
      * Return the set of all project or package identifiers in the result, optionally [including those of sub-projects]
      * [includeSubProjects].
@@ -268,27 +206,6 @@ data class OrtResult(
         getProject(id)?.declaredLicensesProcessed?.allLicenses?.toSortedSet()
             ?: getPackage(id)?.pkg?.declaredLicensesProcessed?.allLicenses?.toSortedSet()
             ?: sortedSetOf()
-
-    /**
-     * Return all detected licenses for the given package [id]. As projects are implicitly converted to packages before
-     * scanning, the [id] may either refer to a project or to a package. If [id] is not found an empty set is returned.
-     */
-    @Suppress("UNUSED") // This is intended to be mostly used via scripting.
-    fun getDetectedLicensesForId(id: Identifier): SortedSet<String> =
-        collectLicenseFindings(id).keys.mapTo(sortedSetOf()) { it.license }
-
-    /**
-     * Return all detected licenses for the given package[id] along with the copyrights.
-     */
-    @Suppress("UNUSED") // This is intended to be mostly used via scripting.
-    fun getDetectedLicensesWithCopyrights(id: Identifier, omitExcluded: Boolean = true): Map<String, Set<String>> =
-        collectLicenseFindings(id)
-            .filter { (_, excludes) -> !omitExcluded || excludes.isEmpty() }
-            .map { (findings, _) -> findings }
-            .associateBy(
-                { it.license },
-                { it.copyrights.mapTo(mutableSetOf()) { it.statement } }
-            )
 
     /**
      * Return all projects and packages that are likely to belong to one of the organizations of the given [names]. If

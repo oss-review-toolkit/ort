@@ -26,6 +26,7 @@ import com.beust.jcommander.Parameters
 import com.here.ort.helper.CommandWithHelp
 import com.here.ort.model.OrtResult
 import com.here.ort.model.readValue
+import com.here.ort.model.utils.getDetectedLicensesForId
 import com.here.ort.utils.PARAMETER_ORDER_MANDATORY
 
 import java.io.File

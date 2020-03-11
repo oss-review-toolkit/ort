@@ -27,6 +27,7 @@ import com.here.ort.model.PackageReference
 import com.here.ort.model.Project
 import com.here.ort.model.RuleViolation
 import com.here.ort.model.Scope
+import com.here.ort.model.utils.collectLicenseFindings
 import com.here.ort.utils.log
 
 /**
