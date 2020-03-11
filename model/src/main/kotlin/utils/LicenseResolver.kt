@@ -47,10 +47,10 @@ internal class LicenseResolver(private val ortResult: OrtResult) {
         val excludes = ortResult.getExcludes()
         val project = ortResult.getProject(id)
 
-        ortResult.getScanResultsForId(id).flatMap {
+        ortResult.getScanResultsForId(id).flatMap { scanResult ->
             curationMatcher
-                .applyAll(it.summary.licenseFindings, ortResult.getLicenseFindingsCurations(id))
-                .let { findings -> findingsMatcher.match(findings, it.summary.copyrightFindings).toSortedSet() }
+                .applyAll(scanResult.summary.licenseFindings, ortResult.getLicenseFindingsCurations(id))
+                .let { findings -> findingsMatcher.match(findings, scanResult.summary.copyrightFindings).toSortedSet() }
         }.map { finding ->
             if (project != null) {
                 val copyrights = finding.copyrights.mapNotNullTo(sortedSetOf()) { copyrightFindings ->
