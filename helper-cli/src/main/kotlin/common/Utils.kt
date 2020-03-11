@@ -47,6 +47,7 @@ import com.here.ort.model.config.Resolutions
 import com.here.ort.model.config.RuleViolationResolution
 import com.here.ort.model.config.ScopeExclude
 import com.here.ort.model.utils.FindingCurationMatcher
+import com.here.ort.model.utils.collectLicenseFindings
 import com.here.ort.model.yamlMapper
 import com.here.ort.utils.CopyrightStatementsProcessor
 import com.here.ort.utils.safeMkdirs

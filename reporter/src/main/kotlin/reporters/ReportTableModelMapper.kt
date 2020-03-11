@@ -28,6 +28,7 @@ import com.here.ort.model.RuleViolation
 import com.here.ort.model.VcsInfo
 import com.here.ort.model.config.Excludes
 import com.here.ort.model.config.ScopeExclude
+import com.here.ort.model.utils.collectLicenseFindings
 import com.here.ort.reporter.ResolutionProvider
 import com.here.ort.reporter.reporters.ReportTableModel.DependencyRow
 import com.here.ort.reporter.reporters.ReportTableModel.IssueRow
