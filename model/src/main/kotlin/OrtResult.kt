@@ -178,7 +178,7 @@ data class OrtResult(
         val excludes = getExcludes()
         val project = getProject(id)
 
-        scanResultsById[id].orEmpty().flatMap {
+        getScanResultsForId(id).flatMap {
             FindingCurationMatcher()
                 .applyAll(it.summary.licenseFindings, getLicenseFindingsCurations(id))
                 .let { findings -> FindingsMatcher().match(findings, it.summary.copyrightFindings).toSortedSet() }
