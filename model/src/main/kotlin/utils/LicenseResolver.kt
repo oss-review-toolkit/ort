@@ -47,11 +47,16 @@ internal class LicenseResolver(private val ortResult: OrtResult) {
         val excludes = ortResult.getExcludes()
         val project = ortResult.getProject(id)
 
-        ortResult.getScanResultsForId(id).flatMap { scanResult ->
-            curationMatcher
-                .applyAll(scanResult.summary.licenseFindings, ortResult.getLicenseFindingsCurations(id))
-                .let { findings -> findingsMatcher.match(findings, scanResult.summary.copyrightFindings).toSortedSet() }
-        }.map { finding ->
+        val matchedFindings = ortResult.getScanResultsForId(id).flatMap { scanResult ->
+            val rawLicenseFindings = scanResult.summary.licenseFindings
+            val copyrightFindings = scanResult.summary.copyrightFindings
+            val curations = ortResult.getLicenseFindingsCurations(id)
+
+            val curatedLicenseFindings = curationMatcher.applyAll(rawLicenseFindings, curations)
+            findingsMatcher.match(curatedLicenseFindings, copyrightFindings).toSortedSet()
+        }
+
+        val matchedFindingsWithoutExcludedCopyrights = matchedFindings.map { finding ->
             if (project != null) {
                 val copyrights = finding.copyrights.mapNotNullTo(sortedSetOf()) { copyrightFindings ->
                     val locations = copyrightFindings.locations.filterTo(sortedSetOf()) {
@@ -65,7 +70,9 @@ internal class LicenseResolver(private val ortResult: OrtResult) {
             } else {
                 finding
             }
-        }.forEach { finding ->
+        }
+
+        matchedFindingsWithoutExcludedCopyrights.forEach { finding ->
             val matchingExcludes = mutableSetOf<PathExclude>()
 
             // Only license findings of projects can be excluded by path excludes.
