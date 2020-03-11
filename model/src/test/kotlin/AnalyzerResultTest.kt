@@ -118,7 +118,7 @@ class AnalyzerResultTest : WordSpec() {
 
                 issues.getValue(project1.id).let { projectIssues ->
                     projectIssues should haveSize(1)
-                    projectIssues.first().severity shouldBe Severity.ERROR
+                    projectIssues.first().severity shouldBe Severity.WARNING
                     projectIssues.first().source shouldBe project1.id.toCoordinates()
                     projectIssues.first().message shouldBe "The declared license 'invalid project license' could not " +
                             "be mapped to a valid license or parsed as an SPDX expression."
@@ -126,7 +126,7 @@ class AnalyzerResultTest : WordSpec() {
 
                 issues.getValue(package1.id).let { packageIssues ->
                     packageIssues should haveSize(1)
-                    packageIssues.first().severity shouldBe Severity.ERROR
+                    packageIssues.first().severity shouldBe Severity.WARNING
                     packageIssues.first().source shouldBe package1.id.toCoordinates()
                     packageIssues.first().message shouldBe "The declared license 'invalid package license' could not " +
                             "be mapped to a valid license or parsed as an SPDX expression."
