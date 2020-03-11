@@ -153,7 +153,7 @@ data class Package(
     fun collectIssues() =
         declaredLicensesProcessed.unmapped.map { unmappedLicense ->
             OrtIssue(
-                severity = Severity.ERROR,
+                severity = Severity.WARNING,
                 source = id.toCoordinates(),
                 message = "The declared license '$unmappedLicense' could not be mapped to a valid license or " +
                         "parsed as an SPDX expression."
