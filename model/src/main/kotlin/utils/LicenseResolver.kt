@@ -27,6 +27,9 @@ import com.here.ort.model.config.PathExclude
 import java.util.SortedSet
 
 internal class LicenseResolver(private val ortResult: OrtResult) {
+    private val curationMatcher = FindingCurationMatcher()
+    private val findingsMatcher = FindingsMatcher()
+
     fun collectLicenseFindings(
         omitExcluded: Boolean = false
     ): Map<Identifier, Map<LicenseFindings, List<PathExclude>>> =
@@ -45,9 +48,9 @@ internal class LicenseResolver(private val ortResult: OrtResult) {
         val project = ortResult.getProject(id)
 
         ortResult.getScanResultsForId(id).flatMap {
-            FindingCurationMatcher()
+            curationMatcher
                 .applyAll(it.summary.licenseFindings, ortResult.getLicenseFindingsCurations(id))
-                .let { findings -> FindingsMatcher().match(findings, it.summary.copyrightFindings).toSortedSet() }
+                .let { findings -> findingsMatcher.match(findings, it.summary.copyrightFindings).toSortedSet() }
         }.map { finding ->
             if (project != null) {
                 val copyrights = finding.copyrights.mapNotNullTo(sortedSetOf()) { copyrightFindings ->
