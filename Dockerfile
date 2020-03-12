@@ -29,6 +29,7 @@ RUN apk add --no-cache \
     scripts/import_proxy_certs.sh
 
 RUN scripts/set_gradle_proxy.sh && \
+    sed -i -r 's,(^distributionUrl=)(.+)-all\.zip$,\1\2-bin.zip,' gradle/wrapper/gradle-wrapper.properties && \
     ./gradlew --no-daemon --stacktrace :cli:distTar
 
 FROM openjdk:11-jre-slim-sid
