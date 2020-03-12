@@ -23,6 +23,7 @@ import com.here.ort.model.Identifier
 import com.here.ort.model.LicenseSource
 import com.here.ort.model.OrtResult
 import com.here.ort.model.Severity
+import com.here.ort.model.utils.SimplePackageConfigurationProvider
 
 import io.kotlintest.matchers.beEmpty
 import io.kotlintest.matchers.haveSize
@@ -31,7 +32,7 @@ import io.kotlintest.shouldBe
 import io.kotlintest.specs.WordSpec
 
 class EvaluatorTest : WordSpec() {
-    private fun createEvaluator() = Evaluator(OrtResult.EMPTY)
+    private fun createEvaluator() = Evaluator(OrtResult.EMPTY, SimplePackageConfigurationProvider())
 
     init {
         "checkSyntax" should {
@@ -49,6 +50,7 @@ class EvaluatorTest : WordSpec() {
                     broken script
                     """.trimIndent()
                 )
+                println()
 
                 result shouldBe false
             }

@@ -46,6 +46,7 @@ import com.here.ort.model.licenses.LicenseConfiguration
 import com.here.ort.model.licenses.orEmpty
 import com.here.ort.model.mapper
 import com.here.ort.model.readValue
+import com.here.ort.model.utils.SimplePackageConfigurationProvider
 import com.here.ort.utils.expandTilde
 import com.here.ort.utils.log
 import com.here.ort.utils.safeMkdirs
@@ -58,6 +59,11 @@ class EvaluatorCommand : CliktCommand(name = "evaluate", help = "Evaluate rules 
         help = "The ORT result file to read as input."
     ).file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
         .required()
+
+    private val packageConfigurationDir by option(
+        "--package-configuration-dir",
+        help = "The directory containing the package configuration files to read as input. It is searched recursively."
+    ).file(mustExist = true, canBeFile = false, canBeDir = true, mustBeWritable = false, mustBeReadable = true)
 
     private val rules by mutuallyExclusiveOptions<GroupTypes>(
         option(
@@ -126,6 +132,10 @@ class EvaluatorCommand : CliktCommand(name = "evaluate", help = "Evaluate rules 
             ortResultInput = ortResultInput.replaceConfig(it.readValue())
         }
 
+        val packageConfigurationProvider =
+            packageConfigurationDir?.let { SimplePackageConfigurationProvider.forDirectory(it) }
+                ?: SimplePackageConfigurationProvider()
+
         val licenseConfiguration = licenseConfigurationFile?.expandTilde()?.readValue<LicenseConfiguration>().orEmpty()
 
         packageCurationsFile?.expandTilde()?.let {
@@ -141,7 +151,7 @@ class EvaluatorCommand : CliktCommand(name = "evaluate", help = "Evaluate rules 
             }
         }
 
-        val evaluator = Evaluator(ortResultInput, licenseConfiguration)
+        val evaluator = Evaluator(ortResultInput, packageConfigurationProvider, licenseConfiguration)
 
         if (syntaxCheck) {
             if (evaluator.checkSyntax(script)) return else throw UsageError("Syntax check failed.", statusCode = 2)
