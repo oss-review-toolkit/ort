@@ -53,34 +53,35 @@ internal class LicenseResolver(private val ortResult: OrtResult) {
         id: Identifier
     ): Map<LicenseFindings, List<PathExclude>> {
         val result = mutableMapOf<LicenseFindings, List<PathExclude>>()
-        val pathExcludes = getPathExcludes(id)
 
-        val matchedFindings = ortResult.getScanResultsForId(id).flatMap { scanResult ->
+        ortResult.getScanResultsForId(id).forEach { scanResult ->
+            val curations = ortResult.getLicenseFindingsCurations(id)
+            val pathExcludes = getPathExcludes(id)
+
             val rawLicenseFindings = scanResult.summary.licenseFindings
             val copyrightFindings = scanResult.summary.copyrightFindings.filter { copyright ->
                 pathExcludes.none { it.matches(copyright.location.getRelativePathToRoot(id)) }
             }
-            val curations = ortResult.getLicenseFindingsCurations(id)
 
             val curatedLicenseFindings = curationMatcher.applyAll(rawLicenseFindings, curations)
-            findingsMatcher.match(curatedLicenseFindings, copyrightFindings).toSortedSet()
-        }
+            val matchedFindings = findingsMatcher.match(curatedLicenseFindings, copyrightFindings).toSortedSet()
 
-        matchedFindings.forEach { findings ->
-            val matchingExcludes = mutableSetOf<PathExclude>()
+            matchedFindings.forEach { findings ->
+                val matchingExcludes = mutableSetOf<PathExclude>()
 
-            // Only license findings of projects can be excluded by path excludes.
-            val isExcluded = findings.locations.all { location ->
-                val path = location.getRelativePathToRoot(id)
-                pathExcludes.any { exclude ->
-                    exclude.matches(path).also { matches ->
-                        if (matches) matchingExcludes += exclude
+                // Only license findings of projects can be excluded by path excludes.
+                val isExcluded = findings.locations.all { location ->
+                    val path = location.getRelativePathToRoot(id)
+                    pathExcludes.any { exclude ->
+                        exclude.matches(path).also { matches ->
+                            if (matches) matchingExcludes += exclude
+                        }
                     }
                 }
-            }
 
-            // Only add matching excludes if all license locations are excluded.
-            result[findings] = if (isExcluded) matchingExcludes.toList() else emptyList()
+                // Only add matching excludes if all license locations are excluded.
+                result[findings] = if (isExcluded) matchingExcludes.toList() else emptyList()
+            }
         }
 
         return result
