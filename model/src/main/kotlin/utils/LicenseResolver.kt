@@ -22,6 +22,7 @@ package com.here.ort.model.utils
 import com.here.ort.model.Identifier
 import com.here.ort.model.LicenseFindings
 import com.here.ort.model.OrtResult
+import com.here.ort.model.TextLocation
 import com.here.ort.model.config.PathExclude
 
 import java.util.SortedSet
@@ -47,6 +48,9 @@ internal class LicenseResolver(private val ortResult: OrtResult) {
         val pathExcludes = ortResult.getExcludes().paths
         val project = ortResult.getProject(id)
 
+        fun TextLocation.getRelativePathToRoot(): String =
+            if (project != null) ortResult.getFilePathRelativeToAnalyzerRoot(project, path) else path
+
         val matchedFindings = ortResult.getScanResultsForId(id).flatMap { scanResult ->
             val rawLicenseFindings = scanResult.summary.licenseFindings
             val copyrightFindings = scanResult.summary.copyrightFindings
@@ -60,8 +64,7 @@ internal class LicenseResolver(private val ortResult: OrtResult) {
             if (project != null) {
                 val copyrights = finding.copyrights.mapNotNullTo(sortedSetOf()) { copyrightFindings ->
                     val locations = copyrightFindings.locations.filterTo(sortedSetOf()) {
-                        val path = ortResult.getFilePathRelativeToAnalyzerRoot(project, it.path)
-                        pathExcludes.none { exclude -> exclude.matches(path) }
+                        pathExcludes.none { exclude -> exclude.matches(it.getRelativePathToRoot()) }
                     }
                     if (locations.isNotEmpty()) copyrightFindings.copy(locations = locations)
                     else null
@@ -77,10 +80,11 @@ internal class LicenseResolver(private val ortResult: OrtResult) {
 
             // Only license findings of projects can be excluded by path excludes.
             val isExcluded = project != null && finding.locations.all { location ->
-                val path = ortResult.getFilePathRelativeToAnalyzerRoot(project, location.path)
+                val path = location.getRelativePathToRoot()
                 pathExcludes.any { exclude ->
-                    exclude.matches(path)
-                        .also { matches -> if (matches) matchingExcludes += exclude }
+                    exclude.matches(path).also { matches ->
+                        if (matches) matchingExcludes += exclude
+                    }
                 }
             }
 
