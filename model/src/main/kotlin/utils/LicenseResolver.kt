@@ -45,8 +45,10 @@ internal class LicenseResolver(private val ortResult: OrtResult) {
         id: Identifier
     ): Map<LicenseFindings, List<PathExclude>> {
         val result = mutableMapOf<LicenseFindings, List<PathExclude>>()
-        val pathExcludes = ortResult.getExcludes().paths
         val project = ortResult.getProject(id)
+        // Only license findings of projects can be excluded by path excludes.
+        // TODO: Implement path excludes for packages.
+        val pathExcludes = ortResult.getExcludes().paths.takeIf { project != null }.orEmpty()
 
         fun TextLocation.getRelativePathToRoot(): String =
             if (project != null) ortResult.getFilePathRelativeToAnalyzerRoot(project, path) else path
@@ -61,25 +63,21 @@ internal class LicenseResolver(private val ortResult: OrtResult) {
         }
 
         val matchedFindingsWithoutExcludedCopyrights = matchedFindings.map { finding ->
-            if (project != null) {
-                val copyrights = finding.copyrights.mapNotNullTo(sortedSetOf()) { copyrightFindings ->
-                    val locations = copyrightFindings.locations.filterTo(sortedSetOf()) {
-                        pathExcludes.none { exclude -> exclude.matches(it.getRelativePathToRoot()) }
-                    }
-                    if (locations.isNotEmpty()) copyrightFindings.copy(locations = locations)
-                    else null
+            val copyrights = finding.copyrights.mapNotNullTo(sortedSetOf()) { copyrightFindings ->
+                val locations = copyrightFindings.locations.filterTo(sortedSetOf()) {
+                    pathExcludes.none { exclude -> exclude.matches(it.getRelativePathToRoot()) }
                 }
-                finding.copy(copyrights = copyrights)
-            } else {
-                finding
+                if (locations.isNotEmpty()) copyrightFindings.copy(locations = locations)
+                else null
             }
+            finding.copy(copyrights = copyrights)
         }
 
         matchedFindingsWithoutExcludedCopyrights.forEach { finding ->
             val matchingExcludes = mutableSetOf<PathExclude>()
 
             // Only license findings of projects can be excluded by path excludes.
-            val isExcluded = project != null && finding.locations.all { location ->
+            val isExcluded = finding.locations.all { location ->
                 val path = location.getRelativePathToRoot()
                 pathExcludes.any { exclude ->
                     exclude.matches(path).also { matches ->
