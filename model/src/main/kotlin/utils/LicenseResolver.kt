@@ -41,14 +41,17 @@ internal class LicenseResolver(private val ortResult: OrtResult) {
     fun getDetectedLicensesForId(id: Identifier): SortedSet<String> =
         collectLicenseFindings(id).keys.mapTo(sortedSetOf()) { it.license }
 
+    private fun getPathExcludes(id: Identifier): List<PathExclude> =
+        // Only license findings of projects can be excluded by path excludes.
+        // TODO: Implement path excludes for packages.
+        if (ortResult.isProject(id)) ortResult.getExcludes().paths else emptyList()
+
     private fun collectLicenseFindings(
         id: Identifier
     ): Map<LicenseFindings, List<PathExclude>> {
         val result = mutableMapOf<LicenseFindings, List<PathExclude>>()
         val project = ortResult.getProject(id)
-        // Only license findings of projects can be excluded by path excludes.
-        // TODO: Implement path excludes for packages.
-        val pathExcludes = ortResult.getExcludes().paths.takeIf { project != null }.orEmpty()
+        val pathExcludes = getPathExcludes(id)
 
         fun TextLocation.getRelativePathToRoot(): String =
             if (project != null) ortResult.getFilePathRelativeToAnalyzerRoot(project, path) else path
