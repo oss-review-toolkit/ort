@@ -27,13 +27,18 @@ import com.here.ort.model.PackageReference
 import com.here.ort.model.Project
 import com.here.ort.model.RuleViolation
 import com.here.ort.model.Scope
+import com.here.ort.model.utils.PackageConfigurationProvider
+import com.here.ort.model.utils.SimplePackageConfigurationProvider
 import com.here.ort.model.utils.collectLicenseFindings
 import com.here.ort.utils.log
 
 /**
  * A set of evaluator [Rule]s, using an [ortResult] as input.
  */
-class RuleSet(val ortResult: OrtResult) {
+class RuleSet(
+    val ortResult: OrtResult,
+    packageConfigurationProvider: PackageConfigurationProvider = SimplePackageConfigurationProvider()
+) {
     /**
      * The list of all issues created by the rules of this [RuleSet].
      */
@@ -42,7 +47,7 @@ class RuleSet(val ortResult: OrtResult) {
     /**
      * The map of all [LicenseFindings] and associated path excludes by [Identifier].
      */
-    val licenseFindings = ortResult.collectLicenseFindings()
+    val licenseFindings = ortResult.collectLicenseFindings(packageConfigurationProvider)
 
     /**
      * A DSL function to configure a [PackageRule]. The rule is applied to each [Package] and [Project] contained in
@@ -128,4 +133,8 @@ class RuleSet(val ortResult: OrtResult) {
 /**
  * A DSL function to configure a [RuleSet].
  */
-fun ruleSet(ortResult: OrtResult, configure: RuleSet.() -> Unit) = RuleSet(ortResult).apply(configure)
+fun ruleSet(
+    ortResult: OrtResult,
+    packageConfigurationProvider: PackageConfigurationProvider,
+    configure: RuleSet.() -> Unit
+) = RuleSet(ortResult, packageConfigurationProvider).apply(configure)

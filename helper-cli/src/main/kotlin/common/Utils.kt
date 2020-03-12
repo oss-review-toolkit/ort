@@ -238,7 +238,7 @@ internal fun OrtResult.processAllCopyrightStatements(
     val result = mutableListOf<ProcessedCopyrightStatement>()
     val processor = CopyrightStatementsProcessor()
 
-    collectLicenseFindings(omitExcluded).forEach { (id, findings) ->
+    collectLicenseFindings(omitExcluded = omitExcluded).forEach { (id, findings) ->
         findings.forEach innerForEach@{ (licenseFindings, pathExcludes) ->
             if (omitExcluded && pathExcludes.isNotEmpty()) return@innerForEach
 

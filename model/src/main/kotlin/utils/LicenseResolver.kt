@@ -22,12 +22,16 @@ package com.here.ort.model.utils
 import com.here.ort.model.Identifier
 import com.here.ort.model.LicenseFindings
 import com.here.ort.model.OrtResult
+import com.here.ort.model.Provenance
 import com.here.ort.model.TextLocation
 import com.here.ort.model.config.PathExclude
 
 import java.util.SortedSet
 
-internal class LicenseResolver(private val ortResult: OrtResult) {
+internal class LicenseResolver(
+    private val ortResult: OrtResult,
+    private val packageConfigurationProvider: PackageConfigurationProvider
+) {
     private val curationMatcher = FindingCurationMatcher()
     private val findingsMatcher = FindingsMatcher()
 
@@ -41,10 +45,12 @@ internal class LicenseResolver(private val ortResult: OrtResult) {
     fun getDetectedLicensesForId(id: Identifier): SortedSet<String> =
         collectLicenseFindings(id).keys.mapTo(sortedSetOf()) { it.license }
 
-    private fun getPathExcludes(id: Identifier): List<PathExclude> =
-        // Only license findings of projects can be excluded by path excludes.
-        // TODO: Implement path excludes for packages.
-        if (ortResult.isProject(id)) ortResult.getExcludes().paths else emptyList()
+    private fun getPathExcludes(id: Identifier, provenance: Provenance): List<PathExclude> =
+        if (ortResult.isProject(id)) {
+            ortResult.getExcludes().paths
+        } else {
+            packageConfigurationProvider.getPackageConfiguration(id, provenance)?.pathExcludes.orEmpty()
+        }
 
     private fun TextLocation.getRelativePathToRoot(id: Identifier): String =
         ortResult.getProject(id)?.let { ortResult.getFilePathRelativeToAnalyzerRoot(it, path) } ?: path
@@ -56,7 +62,7 @@ internal class LicenseResolver(private val ortResult: OrtResult) {
 
         ortResult.getScanResultsForId(id).forEach { scanResult ->
             val curations = ortResult.getLicenseFindingsCurations(id)
-            val pathExcludes = getPathExcludes(id)
+            val pathExcludes = getPathExcludes(id, scanResult.provenance)
 
             val rawLicenseFindings = scanResult.summary.licenseFindings
             val copyrightFindings = scanResult.summary.copyrightFindings.filter { copyright ->

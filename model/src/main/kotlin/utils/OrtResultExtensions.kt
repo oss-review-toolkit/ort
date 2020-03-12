@@ -35,9 +35,10 @@ import java.util.SortedSet
  * If [omitExcluded] is set to true, excluded projects / packages are omitted from the result.
  */
 fun OrtResult.collectLicenseFindings(
+    packageConfigurationProvider: PackageConfigurationProvider = SimplePackageConfigurationProvider(),
     omitExcluded: Boolean = false
 ): Map<Identifier, Map<LicenseFindings, List<PathExclude>>> = LicenseResolver(
-    this
+    this, packageConfigurationProvider
 ).collectLicenseFindings(omitExcluded)
 
 /**
@@ -45,8 +46,10 @@ fun OrtResult.collectLicenseFindings(
  * scanning, the [id] may either refer to a project or to a package. If [id] is not found an empty set is returned.
  */
 @Suppress("UNUSED") // This is intended to be mostly used via scripting.
-fun OrtResult.getDetectedLicensesForId(id: Identifier): SortedSet<String> =
-    LicenseResolver(this).getDetectedLicensesForId(id)
+fun OrtResult.getDetectedLicensesForId(
+    id: Identifier,
+    packageConfigurationProvider: PackageConfigurationProvider = SimplePackageConfigurationProvider()
+): SortedSet<String> = LicenseResolver(this, packageConfigurationProvider).getDetectedLicensesForId(id)
 
 /**
  * Return all detected licenses for the given package[id] along with the copyrights.
@@ -54,5 +57,7 @@ fun OrtResult.getDetectedLicensesForId(id: Identifier): SortedSet<String> =
 @Suppress("UNUSED") // This is intended to be mostly used via scripting.
 fun OrtResult.getDetectedLicensesWithCopyrights(
     id: Identifier,
+    packageConfigurationProvider: PackageConfigurationProvider = SimplePackageConfigurationProvider(),
     omitExcluded: Boolean = true
-): Map<String, Set<String>> = LicenseResolver(this).getDetectedLicensesWithCopyrights(id, omitExcluded)
+): Map<String, Set<String>> =
+    LicenseResolver(this, packageConfigurationProvider).getDetectedLicensesWithCopyrights(id, omitExcluded)
