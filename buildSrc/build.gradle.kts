@@ -41,7 +41,10 @@ repositories {
         }
 
         filter {
-            includeGroupByRegex(".*gradle\\.plugin.*")
+            // The regex has to match at least these group strings:
+            // "org.gradle.kotlin.kotlin-dsl"
+            // "gradle.plugin.org.jetbrains.gradle.plugin.idea-ext"
+            includeGroupByRegex(".*\\bgradle\\.(plugin|kotlin)\\b.*")
         }
     }
 }
