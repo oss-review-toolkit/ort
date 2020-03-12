@@ -46,20 +46,19 @@ internal class LicenseResolver(private val ortResult: OrtResult) {
         // TODO: Implement path excludes for packages.
         if (ortResult.isProject(id)) ortResult.getExcludes().paths else emptyList()
 
+    private fun TextLocation.getRelativePathToRoot(id: Identifier): String =
+        ortResult.getProject(id)?.let { ortResult.getFilePathRelativeToAnalyzerRoot(it, path) } ?: path
+
     private fun collectLicenseFindings(
         id: Identifier
     ): Map<LicenseFindings, List<PathExclude>> {
         val result = mutableMapOf<LicenseFindings, List<PathExclude>>()
-        val project = ortResult.getProject(id)
         val pathExcludes = getPathExcludes(id)
-
-        fun TextLocation.getRelativePathToRoot(): String =
-            if (project != null) ortResult.getFilePathRelativeToAnalyzerRoot(project, path) else path
 
         val matchedFindings = ortResult.getScanResultsForId(id).flatMap { scanResult ->
             val rawLicenseFindings = scanResult.summary.licenseFindings
             val copyrightFindings = scanResult.summary.copyrightFindings.filter { copyright ->
-                pathExcludes.none { it.matches(copyright.location.getRelativePathToRoot()) }
+                pathExcludes.none { it.matches(copyright.location.getRelativePathToRoot(id)) }
             }
             val curations = ortResult.getLicenseFindingsCurations(id)
 
@@ -72,7 +71,7 @@ internal class LicenseResolver(private val ortResult: OrtResult) {
 
             // Only license findings of projects can be excluded by path excludes.
             val isExcluded = findings.locations.all { location ->
-                val path = location.getRelativePathToRoot()
+                val path = location.getRelativePathToRoot(id)
                 pathExcludes.any { exclude ->
                     exclude.matches(path).also { matches ->
                         if (matches) matchingExcludes += exclude
