@@ -82,7 +82,11 @@ class ExcelReporter : Reporter {
     override val defaultFilename = "scan-report.xlsx"
 
     override fun generateReport(outputStream: OutputStream, input: ReporterInput) {
-        val tabularScanRecord = ReportTableModelMapper(input.resolutionProvider).mapToReportTableModel(input.ortResult)
+        val tabularScanRecord =
+            ReportTableModelMapper(input.resolutionProvider, input.packageConfigurationProvider).mapToReportTableModel(
+                input.ortResult
+            )
+
         val workbook = XSSFWorkbook()
 
         defaultStyle = workbook.createCellStyle().apply {

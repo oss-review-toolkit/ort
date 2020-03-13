@@ -54,7 +54,10 @@ class StaticHtmlReporter : Reporter {
     override val defaultFilename = "scan-report.html"
 
     override fun generateReport(outputStream: OutputStream, input: ReporterInput) {
-        val tabularScanRecord = ReportTableModelMapper(input.resolutionProvider).mapToReportTableModel(input.ortResult)
+        val tabularScanRecord =
+            ReportTableModelMapper(input.resolutionProvider, input.packageConfigurationProvider).mapToReportTableModel(
+                input.ortResult
+            )
         val html = renderHtml(tabularScanRecord)
 
         outputStream.bufferedWriter().use {
