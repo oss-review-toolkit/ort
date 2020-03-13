@@ -29,7 +29,7 @@ In future we will provide binaries of the ORT tools, but currently you have to b
 download the source code (including Git submodules) from GitHub:
 
 ```bash
-git clone --recurse-submodules https://github.com/heremaps/oss-review-toolkit.git
+git clone --recurse-submodules https://github.com/oss-review-toolkit/ort.git
 ```
 
 To build the command line interface run:

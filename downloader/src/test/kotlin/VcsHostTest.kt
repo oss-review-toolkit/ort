@@ -61,11 +61,11 @@ class VcsHostTest : WordSpec({
     "GitHub" should {
         "be able to extract VCS information from a project URL" {
             GITHUB.toVcsInfo(
-                "https://github.com/heremaps/oss-review-toolkit/tree/da7e3a814fc0e6301bf3ed394eba1a661e4d88d7/README.md"
+                "https://github.com/oss-review-toolkit/ort/tree/da7e3a814fc0e6301bf3ed394eba1a661e4d88d7/README.md"
             ) shouldBe
                     VcsInfo(
                         type = VcsType.GIT,
-                        url = "https://github.com/heremaps/oss-review-toolkit.git",
+                        url = "https://github.com/oss-review-toolkit/ort.git",
                         revision = "da7e3a814fc0e6301bf3ed394eba1a661e4d88d7",
                         path = "README.md"
                     )
@@ -74,28 +74,28 @@ class VcsHostTest : WordSpec({
         "be able to create permalinks from VCS information" {
             val vcsInfo = VcsInfo(
                 type = VcsType.GIT,
-                url = "git@github.com:heremaps/oss-review-toolkit.git",
+                url = "git@github.com:oss-review-toolkit/ort.git",
                 revision = "4a836c3a6a42d358362fa07b014b7d83572a13ed",
                 path = "docs/examples/gradle.ort.yml"
             )
 
-            GITHUB.toPermalink(vcsInfo, 3) shouldBe "https://github.com/heremaps/oss-review-toolkit/" +
+            GITHUB.toPermalink(vcsInfo, 3) shouldBe "https://github.com/oss-review-toolkit/ort/" +
                     "tree/4a836c3a6a42d358362fa07b014b7d83572a13ed/docs/examples/gradle.ort.yml#L3"
-            GITHUB.toPermalink(vcsInfo, 3, 5) shouldBe "https://github.com/heremaps/oss-review-toolkit/" +
+            GITHUB.toPermalink(vcsInfo, 3, 5) shouldBe "https://github.com/oss-review-toolkit/ort/" +
                     "tree/4a836c3a6a42d358362fa07b014b7d83572a13ed/docs/examples/gradle.ort.yml#L3-L5"
         }
 
         "be able to create permalinks to Markdown files" {
             val vcsInfo = VcsInfo(
                 type = VcsType.GIT,
-                url = "https://github.com/heremaps/oss-review-toolkit.git",
+                url = "https://github.com/oss-review-toolkit/ort.git",
                 revision = "da7e3a814fc0e6301bf3ed394eba1a661e4d88d7",
                 path = "README.md"
             )
 
-            GITHUB.toPermalink(vcsInfo, 27) shouldBe "https://github.com/heremaps/oss-review-toolkit/" +
+            GITHUB.toPermalink(vcsInfo, 27) shouldBe "https://github.com/oss-review-toolkit/ort/" +
                     "blame/da7e3a814fc0e6301bf3ed394eba1a661e4d88d7/README.md#L27"
-            GITHUB.toPermalink(vcsInfo, 27, 28) shouldBe "https://github.com/heremaps/oss-review-toolkit/" +
+            GITHUB.toPermalink(vcsInfo, 27, 28) shouldBe "https://github.com/oss-review-toolkit/ort/" +
                     "blame/da7e3a814fc0e6301bf3ed394eba1a661e4d88d7/README.md#L27-L28"
         }
     }

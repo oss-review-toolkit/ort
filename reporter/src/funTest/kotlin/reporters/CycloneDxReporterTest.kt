@@ -57,8 +57,8 @@ class CycloneDxReporterTest : WordSpec({
             val ortResult = yamlMapper.readValue(
                 patchExpectedResult(
                     ortResultFile,
-                    url = "https://github.com/heremaps/oss-review-toolkit.git",
-                    urlProcessed = "https://github.com/heremaps/oss-review-toolkit.git",
+                    url = "https://github.com/oss-review-toolkit/ort.git",
+                    urlProcessed = "https://github.com/oss-review-toolkit/ort.git",
                     revision = "9fded2ad79d07ab5cda44f2549301669ea10442a"
                 ),
                 OrtResult::class.java

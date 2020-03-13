@@ -4,7 +4,7 @@
   "description": "NPM test project with package-lock.json.",
   "repository": {
     "type": "git",
-    "url": "https://github.com/heremaps/oss-review-toolkit.git"
+    "url": "https://github.com/oss-review-toolkit/ort.git"
   },
   "license": "Apache-2.0",
   "private": true,

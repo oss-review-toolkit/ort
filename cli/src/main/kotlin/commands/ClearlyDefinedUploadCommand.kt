@@ -73,8 +73,8 @@ class ClearlyDefinedUploadCommand : CliktCommand(
             type = ContributionType.OTHER,
             summary = "Curation for component ${id.toClearlyDefinedCoordinates()}.",
             details = "Imported from curation data of the " +
-                    "[OSS Review Toolkit](https://github.com/heremaps/oss-review-toolkit) via the " +
-                    "[clearly-defined](https://github.com/heremaps/oss-review-toolkit/tree/master/clearly-defined) " +
+                    "[OSS Review Toolkit](https://github.com/oss-review-toolkit/ort) via the " +
+                    "[clearly-defined](https://github.com/oss-review-toolkit/ort/tree/master/clearly-defined) " +
                     "module.",
             resolution = data.comment ?: "Unknown, original data contains no comment.",
             removedDefinitions = false

@@ -9,7 +9,7 @@
     "keyword-test"
   ],
   "license": "Apache-2.0",
-  "homepage": "https://github.com/heremaps/oss-review-toolkit",
+  "homepage": "https://github.com/oss-review-toolkit/ort",
   "private": true,
   "ignore": [
     "**/.*",

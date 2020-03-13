@@ -317,21 +317,21 @@ class ExtensionsTest : WordSpec({
 
     "String.isValidUri" should {
         "return true for a valid URI" {
-            "https://github.com/heremaps/oss-review-toolkit".isValidUri() shouldBe true
+            "https://github.com/oss-review-toolkit/ort".isValidUri() shouldBe true
         }
 
         "return false for an invalid URI" {
-            "https://github.com/heremaps/oss-review-toolkit, ".isValidUri() shouldBe false
+            "https://github.com/oss-review-toolkit/ort, ".isValidUri() shouldBe false
         }
     }
 
     "String.isValidUrl" should {
         "return true for a valid URL" {
-            "https://github.com/heremaps/oss-review-toolkit".isValidUrl() shouldBe true
+            "https://github.com/oss-review-toolkit/ort".isValidUrl() shouldBe true
         }
 
         "return false for an invalid URL" {
-            "illegal://github.com/heremaps/oss-review-toolkit".isValidUrl() shouldBe false
+            "illegal://github.com/oss-review-toolkit/ort".isValidUrl() shouldBe false
         }
     }
 })

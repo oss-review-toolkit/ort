@@ -1,4 +1,4 @@
-module github.com/heremaps/oss-review-toolkit/gomod-synthetic-test-project
+module github.com/oss-review-toolkit/ort/gomod-synthetic-test-project
 
 go 1.13
 

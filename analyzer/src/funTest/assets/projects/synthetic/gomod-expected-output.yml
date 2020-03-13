@@ -1,6 +1,6 @@
 ---
 project:
-  id: "GoMod::github.com/heremaps/oss-review-toolkit/gomod-synthetic-test-project:<REPLACE_REVISION>"
+  id: "GoMod::github.com/oss-review-toolkit/ort/gomod-synthetic-test-project:<REPLACE_REVISION>"
   definition_file_path: "<REPLACE_DEFINITION_FILE_PATH>"
   declared_licenses: []
   declared_licenses_processed: {}

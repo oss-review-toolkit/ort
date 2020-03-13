@@ -261,8 +261,8 @@ class UtilsTest : WordSpec({
             val packages = mapOf(
                 "git+ssh://git@github.com/logicalparadox/idris.git"
                         to "ssh://git@github.com/logicalparadox/idris.git",
-                "git@github.com:heremaps/oss-review-toolkit.git"
-                        to "ssh://git@github.com/heremaps/oss-review-toolkit.git",
+                "git@github.com:oss-review-toolkit/ort.git"
+                        to "ssh://git@github.com/oss-review-toolkit/ort.git",
                 "ssh://user@gerrit.server.com:29418/parent/project"
                         to "ssh://user@gerrit.server.com:29418/parent/project"
             )
