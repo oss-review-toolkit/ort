@@ -41,8 +41,6 @@ tasks.named<CreateStartScripts>("startScripts") {
 }
 
 repositories {
-    jcenter()
-
     // Need to repeat the analyzer's custom repository definition here, see
     // https://github.com/gradle/gradle/issues/4106.
     exclusiveContent {
