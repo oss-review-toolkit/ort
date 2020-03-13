@@ -116,7 +116,7 @@ const AboutModal = (props) => {
                 }
                 <TabPane tab="About" key="ort-tabs-about">
                     <a
-                        href="https://github.com/heremaps/oss-review-toolkit"
+                        href="https://github.com/oss-review-toolkit/ort"
                         rel="noopener noreferrer"
                         target="_blank"
                     >
@@ -126,7 +126,7 @@ const AboutModal = (props) => {
                         For documentation on how to create this report please see
                         {' '}
                         <a
-                            href="https://github.com/heremaps/oss-review-toolkit"
+                            href="https://github.com/oss-review-toolkit/ort"
                             rel="noopener noreferrer"
                             target="_blank"
                         >

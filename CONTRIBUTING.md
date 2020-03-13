@@ -1,8 +1,8 @@
 # Introduction
 
-The team behind the [OSS Review Toolkit](https://github.com/heremaps/oss-review-toolkit) gratefully accepts contributions via
+The team behind the [OSS Review Toolkit](https://github.com/oss-review-toolkit/ort) gratefully accepts contributions via
 [pull requests](https://help.github.com/articles/about-pull-requests/) filed against the
-[GitHub project](https://github.com/heremaps/oss-review-toolkit/pulls).
+[GitHub project](https://github.com/oss-review-toolkit/ort/pulls).
 
 # Signing each Commit
 

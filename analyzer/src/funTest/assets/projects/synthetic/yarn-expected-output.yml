@@ -8,7 +8,7 @@ project:
     spdx_expression: "Apache-2.0"
   vcs:
     type: "Git"
-    url: "https://github.com/heremaps/oss-review-toolkit.git"
+    url: "https://github.com/oss-review-toolkit/ort.git"
     revision: ""
     path: ""
   vcs_processed:

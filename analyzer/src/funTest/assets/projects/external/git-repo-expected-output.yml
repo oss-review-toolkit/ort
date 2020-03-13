@@ -2,12 +2,12 @@
 repository:
   vcs:
     type: "GitRepo"
-    url: "https://github.com/heremaps/oss-review-toolkit-test-data-git-repo"
+    url: "https://github.com/oss-review-toolkit/ort-test-data-git-repo"
     revision: "<REPLACE_REVISION>"
     path: "manifest.xml"
   vcs_processed:
     type: "GitRepo"
-    url: "https://github.com/heremaps/oss-review-toolkit-test-data-git-repo.git"
+    url: "https://github.com/oss-review-toolkit/ort-test-data-git-repo.git"
     revision: "<REPLACE_REVISION>"
     path: "manifest.xml"
   nested_repositories:
@@ -18,8 +18,8 @@ repository:
       path: ""
     submodules:
       type: "Git"
-      url: "https://github.com/heremaps/oss-review-toolkit-test-data-git-submodules"
-      revision: "8c021e9a28cf528b56affa5e8adc5ca1dda59fad"
+      url: "https://github.com/oss-review-toolkit/ort-test-data-git-submodules"
+      revision: "808928188b4cc3d5ca91cf54e3ccf0396eee7107"
       path: ""
     submodules/commons-text:
       type: "Git"
@@ -28,8 +28,8 @@ repository:
       path: ""
     submodules/test-data-npm:
       type: "Git"
-      url: "https://github.com/heremaps/oss-review-toolkit-test-data-npm.git"
-      revision: "33f00661f970d0d41c61cc602a860f27cdb5ba60"
+      url: "https://github.com/oss-review-toolkit/ort-test-data-npm.git"
+      revision: "94bee72ecd6ae192dd398424df1a0e3de3a9c131"
       path: ""
     submodules/test-data-npm/entities:
       type: "Git"
@@ -803,13 +803,13 @@ analyzer:
         spdx_expression: "Apache-2.0"
       vcs:
         type: "Git"
-        url: "https://github.com/heremaps/oss-review-toolkit-test-data-npm.git"
+        url: "https://github.com/oss-review-toolkit/ort-test-data-npm.git"
         revision: ""
         path: ""
       vcs_processed:
         type: "Git"
-        url: "https://github.com/heremaps/oss-review-toolkit-test-data-npm.git"
-        revision: "33f00661f970d0d41c61cc602a860f27cdb5ba60"
+        url: "https://github.com/oss-review-toolkit/ort-test-data-npm.git"
+        revision: "94bee72ecd6ae192dd398424df1a0e3de3a9c131"
         path: ""
       homepage_url: ""
       scopes:
@@ -925,7 +925,7 @@ analyzer:
         path: ""
       vcs_processed:
         type: "GitRepo"
-        url: "https://github.com/heremaps/oss-review-toolkit-test-data-git-repo"
+        url: "https://github.com/oss-review-toolkit/ort-test-data-git-repo"
         revision: "<REPLACE_REVISION>"
         path: "manifest.xml"
       homepage_url: ""

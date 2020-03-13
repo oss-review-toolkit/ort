@@ -349,10 +349,10 @@ subprojects {
                     }
 
                     scm {
-                        connection.set("scm:git:https://github.com/heremaps/oss-review-toolkit.git")
-                        developerConnection.set("scm:git:git@github.com:heremaps/oss-review-toolkit.git")
+                        connection.set("scm:git:https://github.com/oss-review-toolkit/ort.git")
+                        developerConnection.set("scm:git:git@github.com:oss-review-toolkit/ort.git")
                         tag.set(version.toString())
-                        url.set("https://github.com/heremaps/oss-review-toolkit")
+                        url.set("https://github.com/oss-review-toolkit/ort")
                     }
                 }
             }

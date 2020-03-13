@@ -213,7 +213,7 @@
     },
     "vcs_processed" : {
       "type" : "Git",
-      "url" : "https://github.com/heremaps/oss-review-toolkit.git",
+      "url" : "https://github.com/oss-review-toolkit/ort.git",
       "revision" : "master",
       "path" : "analyzer/src/funTest/assets/projects/synthetic/gradle/lib"
     },

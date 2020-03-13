@@ -11,16 +11,16 @@
 | :----------------------- | :----------------------------- |
 | [![REUSE status][9]][10] | [![ort-talk][11]][12]          |
 
-[1]: https://travis-ci.com/heremaps/oss-review-toolkit.svg?branch=master
-[2]: https://travis-ci.com/heremaps/oss-review-toolkit
+[1]: https://travis-ci.com/oss-review-toolkit/ort.svg?branch=master
+[2]: https://travis-ci.com/oss-review-toolkit/ort
 [3]: https://ci.appveyor.com/api/projects/status/hbc1mn5hpo9a4hcq/branch/master?svg=true
-[4]: https://ci.appveyor.com/project/heremaps/oss-review-toolkit/branch/master
-[5]: https://jitpack.io/v/heremaps/oss-review-toolkit.svg
-[6]: https://jitpack.io/#heremaps/oss-review-toolkit
-[7]: https://codecov.io/gh/heremaps/oss-review-toolkit/branch/master/graph/badge.svg
-[8]: https://codecov.io/gh/heremaps/oss-review-toolkit/
-[9]: https://api.reuse.software/badge/github.com/heremaps/oss-review-toolkit
-[10]: https://api.reuse.software/info/github.com/heremaps/oss-review-toolkit
+[4]: https://ci.appveyor.com/project/oss-review-toolkit/ort/branch/master
+[5]: https://jitpack.io/v/oss-review-toolkit/ort.svg
+[6]: https://jitpack.io/#oss-review-toolkit/ort
+[7]: https://codecov.io/gh/oss-review-toolkit/ort/branch/master/graph/badge.svg
+[8]: https://codecov.io/gh/oss-review-toolkit/ort/
+[9]: https://api.reuse.software/badge/github.com/oss-review-toolkit/ort
+[10]: https://api.reuse.software/info/github.com/oss-review-toolkit/ort
 [11]: https://img.shields.io/badge/slack-ort--talk-blue.svg?longCache=true&logo=slack
 [12]: https://join.slack.com/t/ort-talk/shared_invite/enQtMzk3MDU5Njk0Njc1LThiNmJmMjc5YWUxZTU4OGI5NmY3YTFlZWM5YTliZmY5ODc0MGMyOWIwYmRiZWFmNGMzOWY2NzVhYTI0NTJkNmY
 
@@ -46,7 +46,7 @@ The toolkit consists of the following tools:
 * [_Reporter_](#reporter) - presents results in various formats such as visual reports, open source notices or
   Bill-Of-Materials (BOMs) to easily identify dependencies, licenses, copyrights or policy rule violations.
 
-The following tools are [planned](https://github.com/heremaps/oss-review-toolkit/projects/1) but not yet available:
+The following tools are [planned](https://github.com/oss-review-toolkit/ort/projects/1) but not yet available:
 
 * _Advisor_ - retrieves security advisories based on the Analyzer result.
 * _Documenter_ - generates the final outcome of the review process incl. legal conclusions, e.g. annotated
@@ -57,7 +57,7 @@ The following tools are [planned](https://github.com/heremaps/oss-review-toolkit
 ## From binaries
 
 Preliminary binary artifacts for ORT are currently available via
-[JitPack](https://jitpack.io/#heremaps/oss-review-toolkit). Please note that due to limitations with the JitPack build
+[JitPack](https://jitpack.io/#oss-review-toolkit/ort). Please note that due to limitations with the JitPack build
 environment, the reporter is not able to create the Web App report.
 
 ## From sources
@@ -172,7 +172,7 @@ The _analyzer_ is a Software Composition Analysis (SCA) tool that determines the
 inside the specified input directory (`-i`). It does so by querying the detected package managers; **no modifications**
 to your existing project source code, like applying build system plugins, are necessary for that to work. The tree of
 transitive dependencies per project is written out as part of an
-[OrtResult](https://github.com/heremaps/oss-review-toolkit/blob/master/model/src/main/kotlin/OrtResult.kt) in YAML (or
+[OrtResult](https://github.com/oss-review-toolkit/ort/blob/master/model/src/main/kotlin/OrtResult.kt) in YAML (or
 JSON, see `-f`) format to a file named `analyzer-result.yml` in the specified output directory (`-o`). The output file
 exactly documents the status quo of all package-related meta-data. It can be further processed or manually edited before
 passing it to one of the other tools.
@@ -186,7 +186,7 @@ Currently, the following package managers are supported:
   code, see [issue #2037](../../issues/2037))
 * [dep](https://golang.github.io/dep/) (Go)
 * [DotNet](https://docs.microsoft.com/en-us/dotnet/core/tools/) (.NET, with currently some
-  [limitations](https://github.com/heremaps/oss-review-toolkit/pull/1303#issue-253860146))
+  [limitations](https://github.com/oss-review-toolkit/ort/pull/1303#issue-253860146))
 * [Glide](https://glide.sh/) (Go)
 * [Godep](https://github.com/tools/godep) (Go)
 * [GoMod](https://github.com/golang/go/wiki/Modules) (Go, *experimental* as only proxy-based source artifacts but no VCS
@@ -195,7 +195,7 @@ Currently, the following package managers are supported:
 * [Maven](http://maven.apache.org/) (Java)
 * [NPM](https://www.npmjs.com/) (Node.js)
 * [NuGet](https://www.nuget.org/) (.NET, with currently some
-  [limitations](https://github.com/heremaps/oss-review-toolkit/pull/1303#issue-253860146))
+  [limitations](https://github.com/oss-review-toolkit/ort/pull/1303#issue-253860146))
 * [Composer](https://getcomposer.org/) (PHP)
 * [PIP](https://pip.pypa.io/) (Python)
 * [Pipenv](https://pipenv.readthedocs.io/) (Python)

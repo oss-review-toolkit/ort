@@ -34,7 +34,7 @@ import io.kotlintest.specs.StringSpec
 import java.io.File
 import java.io.FileFilter
 
-private const val REPO_URL = "https://github.com/heremaps/oss-review-toolkit-test-data-git-repo"
+private const val REPO_URL = "https://github.com/oss-review-toolkit/ort-test-data-git-repo"
 private const val REPO_REV = "f00ec4cbb670b49a156fd95d29e8fd148d931ba9"
 private const val REPO_MANIFEST = "manifest.xml"
 

@@ -125,7 +125,7 @@ class ReporterApp extends Component {
                 >
                     <Col span={6}>
                         <a
-                            href="https://github.com/heremaps/oss-review-toolkit"
+                            href="https://github.com/oss-review-toolkit/ort"
                             rel="noopener noreferrer"
                             target="_blank"
                         >
@@ -164,7 +164,7 @@ class ReporterApp extends Component {
                                         If you believe you found a bug please fill a
                                         {' '}
                                         <a
-                                            href="https://github.com/heremaps/oss-review-toolkit/issues"
+                                            href="https://github.com/oss-review-toolkit/ort/issues"
                                             rel="noopener noreferrer"
                                             target="_blank"
                                         >
@@ -201,7 +201,7 @@ class ReporterApp extends Component {
                                         If you believe you found a bug please fill a
                                         {' '}
                                         <a
-                                            href="https://github.com/heremaps/oss-review-toolkit/issues"
+                                            href="https://github.com/oss-review-toolkit/ort/issues"
                                             rel="noopener noreferrer"
                                             target="_blank"
                                         >

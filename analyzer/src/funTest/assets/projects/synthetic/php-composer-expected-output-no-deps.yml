@@ -17,6 +17,6 @@ project:
     url: "<REPLACE_URL>"
     revision: "<REPLACE_REVISION>"
     path: "<REPLACE_PATH>"
-  homepage_url: "https://github.com/heremaps/oss-review-toolkit"
+  homepage_url: "https://github.com/oss-review-toolkit/ort"
   scopes: []
 packages: []

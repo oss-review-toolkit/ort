@@ -5,7 +5,7 @@
   "license": "Apache-2.0",
   "repository": {
     "type": "git",
-    "url": "https://github.com/heremaps/oss-review-toolkit.git"
+    "url": "https://github.com/oss-review-toolkit/ort.git"
   },
   "dependencies": {
     "babel-cli": "6.26.0"

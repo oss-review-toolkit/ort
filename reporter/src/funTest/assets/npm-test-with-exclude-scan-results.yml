@@ -2,12 +2,12 @@
 repository:
   vcs:
     type: "Git"
-    url: "https://github.com/heremaps/oss-review-toolkit.git"
+    url: "https://github.com/oss-review-toolkit/ort.git"
     revision: "70236a25e11bdc59815842aa228a581b2971845a"
     path: "analyzer/src/funTest/assets/projects/synthetic/project-with-excludes/npm"
   vcs_processed:
     type: "Git"
-    url: "https://github.com/heremaps/oss-review-toolkit.git"
+    url: "https://github.com/oss-review-toolkit/ort.git"
     revision: "70236a25e11bdc59815842aa228a581b2971845a"
     path: "analyzer/src/funTest/assets/projects/synthetic/project-with-excludes/npm"
   config:
@@ -38,12 +38,12 @@ analyzer:
         spdx_expression: "Apache-2.0"
       vcs:
         type: "Git"
-        url: "https://github.com/heremaps/oss-review-toolkit.git"
+        url: "https://github.com/oss-review-toolkit/ort.git"
         revision: ""
         path: ""
       vcs_processed:
         type: "Git"
-        url: "https://github.com/heremaps/oss-review-toolkit.git"
+        url: "https://github.com/oss-review-toolkit/ort.git"
         revision: "70236a25e11bdc59815842aa228a581b2971845a"
         path: "analyzer/src/funTest/assets/projects/synthetic/project-with-excludes/npm"
       homepage_url: ""
@@ -677,7 +677,7 @@ scanner:
             severity: "ERROR"
           - timestamp: "2018-08-21T16:20:45.663Z"
             source: "ScanCode"
-            message: "DownloadException: Git failed to download from URL 'https://github.com/heremaps/oss-review-toolkit.git'."
+            message: "DownloadException: Git failed to download from URL 'https://github.com/oss-review-toolkit/ort.git'."
             severity: "ERROR"
           - timestamp: "2018-08-21T16:20:45.663Z"
             source: "ScanCode"

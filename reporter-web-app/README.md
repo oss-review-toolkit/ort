@@ -8,7 +8,7 @@ In the `reporter-web-app` directory, you can run:
 ### `yarn build`
 
 Builds the `index.html` (used for debugging of the Web App) and `scan-report-template.html` in the `/build` directory.
-The [Kotlin report code](https://github.com/heremaps/oss-review-toolkit/blob/master/reporter/src/main/kotlin/reporters/WebAppReporter.kt) 
+The [Kotlin report code](https://github.com/oss-review-toolkit/ort/blob/master/reporter/src/main/kotlin/reporters/WebAppReporter.kt) 
 uses `scan-report-template.html` as a template and
 injects scan results into it to create the final ORT Web App scan report. 
 
