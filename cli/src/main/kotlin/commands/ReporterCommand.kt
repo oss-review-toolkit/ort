@@ -37,6 +37,7 @@ import com.here.ort.model.config.orEmpty
 import com.here.ort.model.licenses.LicenseConfiguration
 import com.here.ort.model.licenses.orEmpty
 import com.here.ort.model.readValue
+import com.here.ort.model.utils.SimplePackageConfigurationProvider
 import com.here.ort.reporter.DefaultLicenseTextProvider
 import com.here.ort.reporter.DefaultResolutionProvider
 import com.here.ort.reporter.Reporter
@@ -57,6 +58,11 @@ class ReporterCommand : CliktCommand(
         help = "The ORT result file to use."
     ).file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
         .required()
+
+    private val packageConfigurationDir by option(
+        "--package-configuration-dir",
+        help = "The directory containing the package configuration files to read as input. It is searched recursively."
+    ).file(mustExist = true, canBeFile = false, canBeDir = true, mustBeWritable = false, mustBeReadable = true)
 
     private val outputDir by option(
         "--output-dir", "-o",
@@ -132,6 +138,10 @@ class ReporterCommand : CliktCommand(
 
         val copyrightGarbage = copyrightGarbageFile?.expandTilde()?.readValue<CopyrightGarbage>().orEmpty()
 
+        val packageConfigurationProvider =
+            packageConfigurationDir?.let { SimplePackageConfigurationProvider.forDirectory(it) }
+                ?: SimplePackageConfigurationProvider()
+
         val licenseConfiguration = licenseConfigurationFile?.expandTilde()?.readValue<LicenseConfiguration>().orEmpty()
 
         absoluteOutputDir.safeMkdirs()
@@ -139,6 +149,7 @@ class ReporterCommand : CliktCommand(
         val input = ReporterInput(
             ortResult,
             config,
+            packageConfigurationProvider,
             resolutionProvider,
             DefaultLicenseTextProvider(customLicenseTextsDir),
             copyrightGarbage,

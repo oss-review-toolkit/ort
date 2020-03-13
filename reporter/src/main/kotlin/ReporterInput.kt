@@ -25,6 +25,8 @@ import com.here.ort.model.RuleViolation
 import com.here.ort.model.config.CopyrightGarbage
 import com.here.ort.model.config.OrtConfiguration
 import com.here.ort.model.licenses.LicenseConfiguration
+import com.here.ort.model.utils.PackageConfigurationProvider
+import com.here.ort.model.utils.SimplePackageConfigurationProvider
 import com.here.ort.reporter.reporters.AbstractNoticeReporter
 
 /**
@@ -40,6 +42,11 @@ data class ReporterInput(
      * The [OrtConfiguration], can be used by the reporter to adapt the output based on how ORT is configured.
      */
     val ortConfig: OrtConfiguration = OrtConfiguration(),
+
+    /**
+     * A [PackageConfigurationProvider], can be used to obtain [PackageConfiguration]s for packages.
+     */
+    val packageConfigurationProvider: PackageConfigurationProvider = SimplePackageConfigurationProvider(),
 
     /**
      * A [ResolutionProvider], can be used to check which [OrtIssue]s and [RuleViolation]s are resolved.

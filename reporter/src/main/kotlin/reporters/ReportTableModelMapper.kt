@@ -28,6 +28,7 @@ import com.here.ort.model.RuleViolation
 import com.here.ort.model.VcsInfo
 import com.here.ort.model.config.Excludes
 import com.here.ort.model.config.ScopeExclude
+import com.here.ort.model.utils.PackageConfigurationProvider
 import com.here.ort.model.utils.collectLicenseFindings
 import com.here.ort.reporter.ResolutionProvider
 import com.here.ort.reporter.reporters.ReportTableModel.DependencyRow
@@ -56,7 +57,10 @@ private fun Project.getScopesForDependencies(excludes: Excludes): Map<Identifier
 /**
  * A mapper which converts an [OrtIssue] to a [ReportTableModel] view model.
  */
-class ReportTableModelMapper(private val resolutionProvider: ResolutionProvider) {
+class ReportTableModelMapper(
+    private val resolutionProvider: ResolutionProvider,
+    private val packageConfigurationProvider: PackageConfigurationProvider
+) {
     private fun OrtIssue.toResolvableIssue(): ResolvableIssue {
         val resolutions = resolutionProvider.getIssueResolutionsFor(this)
         return ResolvableIssue(
@@ -103,7 +107,7 @@ class ReportTableModelMapper(private val resolutionProvider: ResolutionProvider)
         val excludes = ortResult.getExcludes()
 
         val scanRecord = ortResult.scanner?.results
-        val licenseFindings = ortResult.collectLicenseFindings()
+        val licenseFindings = ortResult.collectLicenseFindings(packageConfigurationProvider)
 
         val projectTables = analyzerResult.projects.associateWith { project ->
             val scopesForDependencies = project.getScopesForDependencies(excludes)
