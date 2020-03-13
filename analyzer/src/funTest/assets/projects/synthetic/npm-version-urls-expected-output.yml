@@ -35,7 +35,7 @@ project:
           dependencies:
           - id: "NPM::ansi-wrap:0.1.0"
         - id: "NPM::success-symbol:0.1.0"
-      - id: "NPM::minimist:1.2.4"
+      - id: "NPM::minimist:1.2.5"
       - id: "NPM::pretty-remarkable:0.4.1"
         dependencies:
         - id: "NPM::expand-reflinks:0.2.1"
@@ -3409,8 +3409,8 @@ packages:
       path: ""
   curations: []
 - package:
-    id: "NPM::minimist:1.2.4"
-    purl: "pkg:npm/minimist@1.2.4"
+    id: "NPM::minimist:1.2.5"
+    purl: "pkg:npm/minimist@1.2.5"
     declared_licenses:
     - "MIT"
     declared_licenses_processed:
@@ -3423,19 +3423,19 @@ packages:
         value: ""
         algorithm: ""
     source_artifact:
-      url: "https://registry.npmjs.org/minimist/-/minimist-1.2.4.tgz"
+      url: "https://registry.npmjs.org/minimist/-/minimist-1.2.5.tgz"
       hash:
-        value: "40357ef9582f8cd42ba8eaa274ddcf27f0c979b7"
+        value: "67d66014b66a6a8aaa0c083c5fd58df4e4e97602"
         algorithm: "SHA-1"
     vcs:
       type: "Git"
       url: "git://github.com/substack/minimist.git"
-      revision: "278677b171d956b46613a158c6c486c3ef979b20"
+      revision: "aeb3e27dae0412de5c0494e9563a5f10c82cc7a9"
       path: ""
     vcs_processed:
       type: "Git"
       url: "https://github.com/substack/minimist.git"
-      revision: "278677b171d956b46613a158c6c486c3ef979b20"
+      revision: "aeb3e27dae0412de5c0494e9563a5f10c82cc7a9"
       path: ""
   curations: []
 - package:
