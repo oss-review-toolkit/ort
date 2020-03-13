@@ -31,18 +31,20 @@ import io.kotlintest.shouldBe
 import io.kotlintest.specs.WordSpec
 
 class EvaluatorTest : WordSpec() {
+    private fun createEvaluator() = Evaluator(OrtResult.EMPTY)
+
     init {
         "checkSyntax" should {
             "succeed if the script can be compiled" {
                 val script = javaClass.getResource("/rules/no_gpl_declared.kts").readText()
 
-                val result = Evaluator(OrtResult.EMPTY).checkSyntax(script)
+                val result = createEvaluator().checkSyntax(script)
 
                 result shouldBe true
             }
 
             "fail if the script can not be compiled" {
-                val result = Evaluator(OrtResult.EMPTY).checkSyntax(
+                val result = createEvaluator().checkSyntax(
                     """
                     broken script
                     """.trimIndent()
@@ -54,13 +56,13 @@ class EvaluatorTest : WordSpec() {
 
         "evaluate" should {
             "return no rule violations for an empty script" {
-                val result = Evaluator(OrtResult.EMPTY).run("")
+                val result = createEvaluator().run("")
 
                 result.violations should beEmpty()
             }
 
             "be able to access the ORT result" {
-                val result = Evaluator(OrtResult.EMPTY).run(
+                val result = createEvaluator().run(
                     """
                     require(ortResult == OrtResult.EMPTY) { "Could not verify the ORT result to be empty." }
                     """.trimIndent())
@@ -69,7 +71,7 @@ class EvaluatorTest : WordSpec() {
             }
 
             "contain rule violations in the result" {
-                val result = Evaluator(OrtResult.EMPTY).run(
+                val result = createEvaluator().run(
                     """
                     ruleViolations += RuleViolation(
                         rule = "rule 1",
