@@ -138,8 +138,8 @@ data class EvaluatedModel(
             propertyNamingStrategy = PROPERTY_NAMING_STRATEGY
         }
 
-        private val JSON_MAPPER = JsonMapper().apply(MAPPER_CONFIG)
-        private val YAML_MAPPER = YAMLMapper().apply(MAPPER_CONFIG)
+        private val JSON_MAPPER by lazy { JsonMapper().apply(MAPPER_CONFIG) }
+        private val YAML_MAPPER by lazy { YAMLMapper().apply(MAPPER_CONFIG) }
 
         fun create(input: ReporterInput): EvaluatedModel = EvaluatedModelMapper(input).build()
     }
