@@ -38,6 +38,6 @@ object Os {
         it != null
     }?.let { proxy ->
         // Note that even HTTPS proxies use "http://" as the protocol!
-        proxy.takeUnless { !it.startsWith("http") } ?: "http://$proxy"
+        proxy.takeIf { it.startsWith("http") } ?: "http://$proxy"
     }
 }
