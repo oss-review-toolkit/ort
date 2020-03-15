@@ -71,9 +71,7 @@ abstract class ScanResultsStorage {
                 "Only one scan results storage may be configured."
             }
 
-            val storageConfig = configuredStorages.singleOrNull()
-
-            when (storageConfig) {
+            when (val storageConfig = configuredStorages.singleOrNull()) {
                 null -> configureDefaultStorage()
                 is FileBasedStorageConfiguration -> configure(storageConfig)
                 is PostgresStorageConfiguration -> configure(storageConfig)
