@@ -307,7 +307,9 @@ class PhpComposer(
         }.toSet()
 
     private fun parseDeclaredLicenses(packageInfo: JsonNode) =
-        packageInfo["license"]?.mapNotNullTo(sortedSetOf()) { it?.textValue() } ?: sortedSetOf<String>()
+        sortedSetOf<String>().also { set ->
+            packageInfo["license"]?.mapNotNullTo(set) { it.textValue() }
+        }
 
     private fun parseVcsInfo(packageInfo: JsonNode) =
         packageInfo["source"]?.let {
