@@ -183,7 +183,7 @@ Currently, the following package managers are supported:
 * [Bundler](http://bundler.io/) (Ruby)
 * [Cargo](https://doc.rust-lang.org/cargo/) (Rust)
 * [Conan](https://conan.io/) (C / C++, *experimental* as the VCS locations often times do not contain the actual source
-  code, see #2037)
+  code, see [issue #2037](../../issues/2037))
 * [dep](https://golang.github.io/dep/) (Go)
 * [DotNet](https://docs.microsoft.com/en-us/dotnet/core/tools/) (.NET, with currently some
   [limitations](https://github.com/heremaps/oss-review-toolkit/pull/1303#issue-253860146))
