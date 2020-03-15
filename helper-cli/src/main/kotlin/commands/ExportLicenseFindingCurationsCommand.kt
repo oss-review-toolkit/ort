@@ -71,7 +71,7 @@ internal class ExportLicenseFindingCurationsCommand : CommandWithHelp() {
         required = false,
         order = PARAMETER_ORDER_OPTIONAL,
         description = "If enabled, only entries are imported for which an entry already exists which differs " +
-            "only in terms of its concluded license, comment or reason."
+                "only in terms of its concluded license, comment or reason."
     )
     private var updateOnlyExisting = false
 

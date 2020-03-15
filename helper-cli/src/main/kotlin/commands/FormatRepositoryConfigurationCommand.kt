@@ -35,7 +35,7 @@ import java.io.File
 @Parameters(
     commandNames = ["format-repository-configuration"],
     commandDescription = "Applies the formatting used by all ort-helper commands and strips all YAML comments." +
-        "The output is written to the given repository configuration file."
+            "The output is written to the given repository configuration file."
 )
 internal class FormatRepositoryConfigurationCommand : CommandWithHelp() {
     @Parameter(

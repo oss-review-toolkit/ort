@@ -41,7 +41,7 @@ import java.io.File
 @Parameters(
     commandNames = ["generate-scope-excludes"],
     commandDescription = "Generate scope excludes based on common default for the package managers. " +
-        "The output is written to the given repository configuration file."
+            "The output is written to the given repository configuration file."
 )
 internal class GenerateScopeExcludesCommand : CommandWithHelp() {
     @Parameter(
