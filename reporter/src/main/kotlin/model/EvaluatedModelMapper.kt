@@ -531,33 +531,12 @@ internal class EvaluatedModelMapper(private val input: ReporterInput) {
      * contained in the list. This is important to make sure that there is only one instance of equal items used in the
      * model, because when Jackson generates IDs each instance gets a new ID, no matter if they are equal or not.
      */
-    private fun <T> MutableList<T>.addIfRequired(value: T): T {
-        val existingValue = find { it == value }
-
-        return if (existingValue != null) {
-            existingValue
-        } else {
-            add(value)
-            value
-        }
-    }
+    private fun <T> MutableList<T>.addIfRequired(value: T): T =
+        find { it == value } ?: value.also { add(it) }
 
     /**
      * Similar to [addIfRequired], but for multiple input values.
      */
-    private fun <T> MutableList<T>.addIfRequired(values: Collection<T>): List<T> {
-        val result = mutableListOf<T>()
-
-        values.forEach { value ->
-            val existingValue = find { it == value }
-            if (existingValue != null) {
-                result += existingValue
-            } else {
-                add(value)
-                result += value
-            }
-        }
-
-        return result.distinct()
-    }
+    private fun <T> MutableList<T>.addIfRequired(values: Collection<T>): List<T> =
+        values.map { addIfRequired(it) }.distinct()
 }
