@@ -39,7 +39,7 @@ import java.io.File
 @Parameters(
     commandNames = ["export-path-excludes"],
     commandDescription = "Export the path excludes to a path excludes file which maps repository URLs to the path " +
-        "excludes for the respective repository."
+            "excludes for the respective repository."
 )
 internal class ExportPathExcludesCommand : CommandWithHelp() {
     @Parameter(

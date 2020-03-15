@@ -39,7 +39,7 @@ import java.io.File
 @Parameters(
     commandNames = ["generate-project-excludes"],
     commandDescription = "Generates path excludes for all definition files which are not yet excluded." +
-        "The output is written to the given repository configuration file."
+            "The output is written to the given repository configuration file."
 )
 internal class GenerateProjectExcludesCommand : CommandWithHelp() {
     @Parameter(

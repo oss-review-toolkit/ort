@@ -170,8 +170,10 @@ class ReporterCommand : CliktCommand(
                 // before any content was written.
                 if (file.length() == 0L) file.delete()
 
-                throw UsageError("Could not create '${reporter.reporterName}' report: ${e.collectMessagesAsString()}",
-                    statusCode = 1)
+                throw UsageError(
+                    "Could not create '${reporter.reporterName}' report: ${e.collectMessagesAsString()}",
+                    statusCode = 1
+                )
             }
         }
     }
