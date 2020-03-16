@@ -24,7 +24,6 @@ import com.fasterxml.jackson.module.kotlin.readValue
 import com.here.ort.analyzer.AbstractPackageManagerFactory
 import com.here.ort.analyzer.HTTP_CACHE_PATH
 import com.here.ort.analyzer.PackageManager
-import com.here.ort.downloader.VcsHost
 import com.here.ort.downloader.VersionControlSystem
 import com.here.ort.model.Hash
 import com.here.ort.model.Identifier
@@ -305,7 +304,7 @@ data class GemSpec(
                 yaml["licenses"]?.asIterable()?.mapTo(sortedSetOf()) { it.textValue() } ?: sortedSetOf(),
                 yaml["description"].textValueOrEmpty(),
                 runtimeDependencies.orEmpty(),
-                VcsHost.toVcsInfo(homepage) ?: VcsInfo.EMPTY,
+                VersionControlSystem.splitUrl(homepage),
                 RemoteArtifact.EMPTY
             )
         }
