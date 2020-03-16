@@ -213,6 +213,25 @@ class UtilsTest : WordSpec({
         }
     }
 
+    "getCommonFileParent" should {
+        "return null for an empty list" {
+            getCommonFileParent(emptyList()) shouldBe null
+        }
+
+        "return null for files that have no directory in common".config(enabled = Os.isWindows) {
+            // On non-Windows, all files have the root directory in common.
+            getCommonFileParent(listOf(File("C:/foo"), File("D:/bar"))) shouldBe null
+        }
+
+        "return the absolute common directory for relative files" {
+            getCommonFileParent(listOf(File("foo"), File("bar"))) shouldBe File(".").absoluteFile.normalize()
+        }
+
+        "return the absolute parent directory for a single file" {
+            getCommonFileParent(listOf(File("/foo/bar"))) shouldBe File("/foo").absoluteFile
+        }
+    }
+
     "getPathFromEnvironment" should {
         "find system executables on Windows".config(enabled = Os.isWindows) {
             val winverPath = File(Os.env["SYSTEMROOT"], "system32/winver.exe")
