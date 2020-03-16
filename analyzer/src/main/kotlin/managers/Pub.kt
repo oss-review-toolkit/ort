@@ -59,7 +59,7 @@ private const val GRADLE_VERSION = "5.6.4"
 private const val PUB_LOCK_FILE = "pubspec.lock"
 
 /**
- * The [Pub](https://https://pub.dev/) package manager for Dart / Flutter.
+ * The [Pub](https://pub.dev/) package manager for Dart / Flutter.
  */
 class Pub(
     name: String,
