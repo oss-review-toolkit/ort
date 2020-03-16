@@ -1,6 +1,6 @@
 Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
 Upstream-Name: OSS Review Toolkit
-Source: https://github.com/heremaps/oss-review-toolkit
+Source: https://github.com/oss-review-toolkit/ort
 
 # If multiple globs match the same files, the last match wins.
 
