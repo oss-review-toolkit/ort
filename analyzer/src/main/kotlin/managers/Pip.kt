@@ -231,7 +231,7 @@ class Pip(
         // Install pydep after running any other command but before looking at the dependencies because it
         // downgrades pip to version 7.1.2. Use it to get meta-information from about the project from setup.py. As
         // pydep is not on PyPI, install it from Git instead.
-        val pydepUrl = "git+https://github.com/heremaps/pydep@$PYDEP_REVISION"
+        val pydepUrl = "git+https://github.com/oss-review-toolkit/pydep@$PYDEP_REVISION"
         val pip = if (Os.isWindows) {
             // On Windows, in-place pip up- / downgrades require pip to be wrapped by "python -m", see
             // https://github.com/pypa/pip/issues/1299.
