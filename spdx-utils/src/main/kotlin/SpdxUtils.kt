@@ -56,12 +56,12 @@ private fun ByteArray.toHexString(): String = joinToString("") { String.format("
  * [1]: https://spdx.org/spdx_specification_2_0_html#h.2p2csry
  */
 @JvmName("calculatePackageVerificationCodeForStrings")
-fun calculatePackageVerificationCode(sha1sums: List<String>, excludes: List<String> = emptyList()): String {
+fun calculatePackageVerificationCode(sha1sums: Sequence<String>, excludes: Sequence<String> = emptySequence()): String {
     val sha1sum = sha1sums.sorted().fold(MessageDigest.getInstance("SHA-1")) { digest, sha1sum ->
         digest.apply { update(sha1sum.toByteArray()) }
     }.digest().toHexString()
 
-    return if (excludes.isEmpty()) {
+    return if (excludes.none()) {
         sha1sum
     } else {
         "$sha1sum (excludes: ${excludes.joinToString()})"
@@ -74,7 +74,7 @@ fun calculatePackageVerificationCode(sha1sums: List<String>, excludes: List<Stri
  * [1]: https://spdx.org/spdx_specification_2_0_html#h.2p2csry
  */
 @JvmName("calculatePackageVerificationCodeForFiles")
-fun calculatePackageVerificationCode(files: List<File>, excludes: List<String> = emptyList()): String =
+fun calculatePackageVerificationCode(files: Sequence<File>, excludes: Sequence<String> = emptySequence()): String =
     calculatePackageVerificationCode(files.map { sha1sum(it) }, excludes)
 
 /**
@@ -106,17 +106,20 @@ private fun sha1sum(file: File): String =
  */
 @JvmName("calculatePackageVerificationCodeForDirectory")
 fun calculatePackageVerificationCode(directory: File): String {
-    val (excludes, files) = directory.walkTopDown()
-        .filter { it.isFile }
-        .partition { it.extension == "spdx" }
+    val allFiles = directory.walkTopDown().filter { it.isFile }
+    val spdxFiles = allFiles.filter { it.extension == "spdx" }
+    val files = allFiles.filter { it.extension != "spdx" }
+
     // Sort the list of files to show the files in a directory before the files in its subdirectories. This can be
     // omitted once breadth-first search is available in Kotlin: https://github.com/JetBrains/kotlin/pull/2232
     val filteredFiles = files.filter {
         val relativePath = it.relativeTo(directory).invariantSeparatorsPath
         VCS_DIRECTORIES.none { vcs -> relativePath.startsWith("$vcs/") }
     }
-    val sortedExcludes = excludes.map { "./${it.relativeTo(directory).invariantSeparatorsPath}" }
+
+    val sortedExcludes = spdxFiles.map { "./${it.relativeTo(directory).invariantSeparatorsPath}" }
         .sortedWith(compareBy({ it.count { char -> char == '/' } }, { it }))
+
     return calculatePackageVerificationCode(filteredFiles, sortedExcludes)
 }
 

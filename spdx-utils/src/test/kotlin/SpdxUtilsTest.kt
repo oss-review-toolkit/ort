@@ -52,7 +52,7 @@ class SpdxUtilsTest : WordSpec() {
     init {
         "calculatePackageVerificationCode" should {
             "work for given SHA1s and excludes" {
-                val sha1sums = listOf(
+                val sha1sums = sequenceOf(
                     "0811bcab4e7a186f4d0d08d44cc5f06d721e7f6d",
                     "f7a535db519cf832c1119fecdf1ea0514f583886",
                     "0db752599b67b64dd1bdeff77ed9f5aa5437d027",
@@ -83,7 +83,7 @@ class SpdxUtilsTest : WordSpec() {
                     "310fc965173381a02fbe83a889f7c858c4499862"
                 )
 
-                val excludes = listOf("./package.spdx")
+                val excludes = sequenceOf("./package.spdx")
 
                 calculatePackageVerificationCode(sha1sums) shouldBe "1a74d8321c452522ec516a46893e6a42f36b5953"
                 calculatePackageVerificationCode(sha1sums, excludes) shouldBe
@@ -91,12 +91,12 @@ class SpdxUtilsTest : WordSpec() {
             }
 
             "work for given files and excludes" {
-                val files = listOf(
+                val files = sequenceOf(
                     setupTempFile("fileA", "Hello"),
                     setupTempFile("fileB", "World")
                 )
 
-                val excludes = listOf("./package.spdx")
+                val excludes = sequenceOf("./package.spdx")
 
                 calculatePackageVerificationCode(files) shouldBe "378d5a37b5b10b90535e32a190014d2a8d25354a"
                 calculatePackageVerificationCode(files, excludes) shouldBe
