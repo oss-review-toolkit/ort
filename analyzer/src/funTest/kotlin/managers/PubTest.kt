@@ -48,7 +48,7 @@ class PubTest : WordSpec() {
             "resolve dart http dependencies correctly" {
                 val workingDir = File(projectsDirExternal, "dart-http")
                 val lockFile = File(workingDir, "pubspec.lock")
-                File(projectsDirExternal, "dart-http-pubspec.lock").copyTo(lockFile)
+                File(projectsDirExternal, "dart-http-pubspec.lock").copyTo(lockFile, overwrite = true)
 
                 try {
                     val packageFile = File(workingDir, "pubspec.yaml")
