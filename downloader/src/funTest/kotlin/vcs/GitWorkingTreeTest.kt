@@ -70,7 +70,7 @@ class GitWorkingTreeTest : StringSpec() {
         }
 
         "Git does not prompt for credentials for non-existing repositories" {
-            git.isApplicableUrl("https://github.com/heremaps/foobar.git") shouldBe false
+            git.isApplicableUrl("https://github.com/oss-review-toolkit/foobar.git") shouldBe false
         }
 
         "Detected Git working tree information is correct" {
