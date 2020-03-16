@@ -100,16 +100,12 @@ class Sbt(
     }
 
     override fun mapDefinitionFiles(definitionFiles: List<File>): List<File> {
-        val workingDir = if (definitionFiles.size > 1) {
-            // Some SBT projects do not have a build file in their root, but they still require "sbt" to be run from the
-            // project's root directory. In order to determine the root directory, use the common prefix of all
-            // definition file paths.
-            getCommonFileParent(definitionFiles).also {
-                log.info { "Determined '$it' as the $managerName project root directory." }
-            }
-        } else {
-            definitionFiles.first().parentFile
-        }
+        // Some SBT projects do not have a build file in their root, but they still require "sbt" to be run from the
+        // project's root directory. In order to determine the root directory, use the common prefix of all
+        // definition file paths.
+        val workingDir = getCommonFileParent(definitionFiles) ?: analysisRoot
+
+        log.info { "Determined '$workingDir' as the $managerName project root directory." }
 
         fun runSBT(vararg command: String) =
             suppressInput {
@@ -140,16 +136,12 @@ class Sbt(
     }
 
     override fun beforeResolution(definitionFiles: List<File>) {
-        val workingDir = if (definitionFiles.size > 1) {
-            // Some SBT projects do not have a build file in their root, but they still require "sbt" to be run from the
-            // project's root directory. In order to determine the root directory, use the common prefix of all
-            // definition file paths.
-            getCommonFileParent(definitionFiles).also {
-                log.info { "Determined '$it' as the $managerName project root directory." }
-            }
-        } else {
-            definitionFiles.first().parentFile
-        }
+        // Some SBT projects do not have a build file in their root, but they still require "sbt" to be run from the
+        // project's root directory. In order to determine the root directory, use the common prefix of all
+        // definition file paths.
+        val workingDir = getCommonFileParent(definitionFiles) ?: analysisRoot
+
+        log.info { "Determined '$workingDir' as the $managerName project root directory." }
 
         // Determine the SBT version(s) being used.
         val rootPropertiesFile = workingDir.resolve("project").resolve("build.properties")
