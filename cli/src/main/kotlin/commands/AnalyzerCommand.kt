@@ -59,12 +59,14 @@ class AnalyzerCommand : CliktCommand(name = "analyze", help = "Determine depende
         "--input-dir", "-i",
         help = "The project directory to analyze."
     ).file(mustExist = true, canBeFile = false, canBeDir = true, mustBeWritable = false, mustBeReadable = true)
+        .convert { it.expandTilde() }
         .required()
 
     private val outputDir by option(
         "--output-dir", "-o",
         help = "The directory to write the analyzer result as ORT result file(s) to, in the specified output format(s)."
     ).file(mustExist = false, canBeFile = false, canBeDir = true, mustBeWritable = false, mustBeReadable = false)
+        .convert { it.expandTilde() }
         .required()
 
     private val outputFormats by option(
@@ -87,6 +89,7 @@ class AnalyzerCommand : CliktCommand(name = "analyze", help = "Determine depende
         "--package-curations-file",
         help = "A file containing package curation data."
     ).file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
+        .convert { it.expandTilde() }
 
     private val useClearlyDefinedCurations by option(
         "--clearly-defined-curations",
@@ -98,9 +101,10 @@ class AnalyzerCommand : CliktCommand(name = "analyze", help = "Determine depende
         help = "A file containing the repository configuration. If set the .ort.yml file from the repository will be " +
                 "ignored."
     ).file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
+        .convert { it.expandTilde() }
 
     override fun run() {
-        val absoluteOutputDir = outputDir.expandTilde().normalize()
+        val absoluteOutputDir = outputDir.normalize()
 
         val outputFiles = outputFormats.distinct().map { format ->
             File(absoluteOutputDir, "analyzer-result.${format.fileExtension}")
@@ -111,15 +115,12 @@ class AnalyzerCommand : CliktCommand(name = "analyze", help = "Determine depende
             throw UsageError("None of the output files $existingOutputFiles must exist yet.", statusCode = 2)
         }
 
-        val absolutePackageCurationsFile = packageCurationsFile?.expandTilde()
-        val absoluteRepositoryConfigurationFile = repositoryConfigurationFile?.expandTilde()
-
         val packageManagers = packageManagersOption.distinct()
 
         println("The following package managers are activated:")
         println("\t" + packageManagers.joinToString(", "))
 
-        val absoluteInputDir = inputDir.expandTilde().normalize()
+        val absoluteInputDir = inputDir.normalize()
         println("Analyzing project path:\n\t$absoluteInputDir")
 
         val analyzerConfig = AnalyzerConfiguration(ignoreToolVersions, allowDynamicVersions)
@@ -127,13 +128,13 @@ class AnalyzerCommand : CliktCommand(name = "analyze", help = "Determine depende
 
         val curationProvider = FallbackPackageCurationProvider(
             listOfNotNull(
-                absolutePackageCurationsFile?.let { FilePackageCurationProvider(it) },
+                packageCurationsFile?.let { FilePackageCurationProvider(it) },
                 ClearlyDefinedPackageCurationProvider().takeIf { useClearlyDefinedCurations }
             )
         )
 
         val ortResult = analyzer.analyze(
-            absoluteInputDir, packageManagers, curationProvider, absoluteRepositoryConfigurationFile
+            absoluteInputDir, packageManagers, curationProvider, repositoryConfigurationFile
         )
 
         println("Found ${ortResult.getProjects().size} project(s) in total.")

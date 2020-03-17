@@ -21,6 +21,7 @@ package com.here.ort.commands
 
 import com.github.ajalt.clikt.core.CliktCommand
 import com.github.ajalt.clikt.core.UsageError
+import com.github.ajalt.clikt.parameters.options.convert
 import com.github.ajalt.clikt.parameters.options.default
 import com.github.ajalt.clikt.parameters.options.option
 import com.github.ajalt.clikt.parameters.options.required
@@ -59,6 +60,7 @@ class ClearlyDefinedUploadCommand : CliktCommand(
         "--input-file", "-i",
         help = "The file with package curations to upload."
     ).file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
+        .convert { it.expandTilde() }
         .required()
 
     private val server by option(
@@ -101,7 +103,7 @@ class ClearlyDefinedUploadCommand : CliktCommand(
     }
 
     override fun run() {
-        val absoluteInputFile = inputFile.expandTilde().normalize()
+        val absoluteInputFile = inputFile.normalize()
         val curations = absoluteInputFile.readValue<List<PackageCuration>>()
         val service = ClearlyDefinedService.create(server, OkHttpClientHelper.buildClient(HTTP_CACHE_PATH))
 
