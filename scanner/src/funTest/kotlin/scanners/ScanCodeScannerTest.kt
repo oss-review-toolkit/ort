@@ -22,9 +22,8 @@ package com.here.ort.scanner.scanners
 import com.here.ort.utils.test.ExpensiveTag
 import com.here.ort.utils.test.ScanCodeTag
 
-class ScanCodeScannerTest : AbstractScannerTest() {
+class ScanCodeScannerTest : AbstractScannerTest(setOf(ExpensiveTag, ScanCodeTag)) {
     override val scanner = ScanCode("ScanCode", config)
     override val expectedFileLicenses = sortedSetOf("Apache-2.0")
     override val expectedDirectoryLicenses = sortedSetOf("Apache-2.0")
-    override val testTags = setOf(ExpensiveTag, ScanCodeTag)
 }
