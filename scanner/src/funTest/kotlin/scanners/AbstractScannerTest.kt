@@ -36,7 +36,7 @@ import io.kotlintest.specs.StringSpec
 import java.io.File
 import java.util.TreeSet
 
-abstract class AbstractScannerTest : StringSpec() {
+abstract class AbstractScannerTest(testTags: Set<Tag> = emptySet()) : StringSpec() {
     protected val config = ScannerConfiguration()
 
     // This is loosely based on the patterns from
@@ -49,7 +49,6 @@ abstract class AbstractScannerTest : StringSpec() {
     abstract val scanner: LocalScanner
     abstract val expectedFileLicenses: TreeSet<String>
     abstract val expectedDirectoryLicenses: TreeSet<String>
-    abstract val testTags: Set<Tag>
 
     override fun beforeSpec(spec: Spec) {
         super.beforeSpec(spec)
