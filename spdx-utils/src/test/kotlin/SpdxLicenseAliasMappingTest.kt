@@ -50,11 +50,10 @@ class SpdxLicenseAliasMappingTest : WordSpec({
         }
 
         "be case-insensitive" {
-            val map = SpdxLicenseAliasMapping.customLicenseIds
-            map.forEach { (key, license) ->
-                map[key.toLowerCase()] shouldBe license
-                map[key.toUpperCase()] shouldBe license
-                map[key.toLowerCase().capitalize()] shouldBe license
+            SpdxLicenseAliasMapping.customLicenseIds.forEach { (key, license) ->
+                SpdxLicenseAliasMapping.map(key.toLowerCase(), mapDeprecated = false) shouldBe license
+                SpdxLicenseAliasMapping.map(key.toUpperCase(), mapDeprecated = false) shouldBe license
+                SpdxLicenseAliasMapping.map(key.toLowerCase().capitalize(), mapDeprecated = false) shouldBe license
             }
         }
     }
