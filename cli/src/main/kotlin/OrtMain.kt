@@ -24,6 +24,7 @@ import com.github.ajalt.clikt.core.context
 import com.github.ajalt.clikt.core.subcommands
 import com.github.ajalt.clikt.output.CliktHelpFormatter
 import com.github.ajalt.clikt.output.HelpFormatter
+import com.github.ajalt.clikt.parameters.options.convert
 import com.github.ajalt.clikt.parameters.options.default
 import com.github.ajalt.clikt.parameters.options.flag
 import com.github.ajalt.clikt.parameters.options.multiple
@@ -37,6 +38,7 @@ import com.here.ort.commands.*
 import com.here.ort.model.Environment
 import com.here.ort.model.config.OrtConfiguration
 import com.here.ort.utils.ORT_NAME
+import com.here.ort.utils.expandTilde
 import com.here.ort.utils.getUserOrtDirectory
 import com.here.ort.utils.printStackTrace
 
@@ -63,6 +65,7 @@ sealed class GroupTypes {
 class OrtMain : CliktCommand(name = ORT_NAME, epilog = "* denotes required options.") {
     private val configFile by option("--config", "-c", help = "The path to a configuration file.")
         .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
+        .convert { it.expandTilde() }
 
     private val logLevel by option(help = "Set the verbosity level of log output.").switch(
         "--info" to Level.INFO,

@@ -57,19 +57,21 @@ class EvaluatorCommand : CliktCommand(name = "evaluate", help = "Evaluate rules 
         "--ort-file", "-i",
         help = "The ORT result file to read as input."
     ).file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
+        .convert { it.expandTilde() }
         .required()
 
     private val packageConfigurationDir by option(
         "--package-configuration-dir",
         help = "The directory containing the package configuration files to read as input. It is searched recursively."
     ).file(mustExist = true, canBeFile = false, canBeDir = true, mustBeWritable = false, mustBeReadable = true)
+        .convert { it.expandTilde() }
 
     private val rules by mutuallyExclusiveOptions<GroupTypes>(
         option(
             "--rules-file", "-r",
             help = "The name of a script file containing rules."
         ).file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
-            .convert { FileType(it) },
+            .convert { FileType(it.expandTilde()) },
         option(
             "--rules-resource",
             help = "The name of a script resource on the classpath that contains rules."
@@ -82,6 +84,7 @@ class EvaluatorCommand : CliktCommand(name = "evaluate", help = "Evaluate rules 
                 "format(s). If no output directory is specified, no output formats are written and only the exit " +
                 "code signals a success or failure."
     ).file(mustExist = false, canBeFile = false, canBeDir = true, mustBeWritable = false, mustBeReadable = false)
+        .convert { it.expandTilde() }
 
     private val outputFormats by option(
         "--output-formats", "-f",
@@ -98,21 +101,24 @@ class EvaluatorCommand : CliktCommand(name = "evaluate", help = "Evaluate rules 
         help = "A file containing the repository configuration. If set the .ort.yml overrides the repository " +
                 "configuration contained in the ort result from the input file."
     ).file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
+        .convert { it.expandTilde() }
 
     private val packageCurationsFile by option(
         "--package-curations-file",
         help = "A file containing package curation data. This replaces all package curations contained in the given " +
                 "ORT result file with the ones present in the given file."
     ).file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
+        .convert { it.expandTilde() }
 
     private val licenseConfigurationFile by option(
         "--license-configuration-file",
         help = "A file containing the license configuration. That license configuration is passed as parameter to " +
                 "the rules script."
     ).file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
+        .convert { it.expandTilde() }
 
     override fun run() {
-        val absoluteOutputDir = outputDir?.expandTilde()?.normalize()
+        val absoluteOutputDir = outputDir?.normalize()
         val outputFiles = mutableListOf<File>()
 
         if (absoluteOutputDir != null) {
@@ -126,8 +132,8 @@ class EvaluatorCommand : CliktCommand(name = "evaluate", help = "Evaluate rules 
             }
         }
 
-        var ortResultInput = ortFile.expandTilde().readValue<OrtResult>()
-        repositoryConfigurationFile?.expandTilde()?.let {
+        var ortResultInput = ortFile.readValue<OrtResult>()
+        repositoryConfigurationFile?.let {
             ortResultInput = ortResultInput.replaceConfig(it.readValue())
         }
 
@@ -135,14 +141,14 @@ class EvaluatorCommand : CliktCommand(name = "evaluate", help = "Evaluate rules 
             packageConfigurationDir?.let { SimplePackageConfigurationProvider.forDirectory(it) }
                 ?: SimplePackageConfigurationProvider()
 
-        val licenseConfiguration = licenseConfigurationFile?.expandTilde()?.readValue<LicenseConfiguration>().orEmpty()
+        val licenseConfiguration = licenseConfigurationFile?.readValue<LicenseConfiguration>().orEmpty()
 
-        packageCurationsFile?.expandTilde()?.let {
+        packageCurationsFile?.let {
             ortResultInput = ortResultInput.replacePackageCurations(it.readValue())
         }
 
         val script = when (rules) {
-            is FileType -> (rules as FileType).file.expandTilde().readText()
+            is FileType -> (rules as FileType).file.readText()
             is StringType -> {
                 val rulesResource = (rules as StringType).string
                 javaClass.classLoader.getResource(rulesResource)?.readText()

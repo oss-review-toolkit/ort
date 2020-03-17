@@ -57,17 +57,20 @@ class ReporterCommand : CliktCommand(
         "--ort-file", "-i",
         help = "The ORT result file to use."
     ).file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
+        .convert { it.expandTilde() }
         .required()
 
     private val packageConfigurationDir by option(
         "--package-configuration-dir",
         help = "The directory containing the package configuration files to read as input. It is searched recursively."
     ).file(mustExist = true, canBeFile = false, canBeDir = true, mustBeWritable = false, mustBeReadable = true)
+        .convert { it.expandTilde() }
 
     private val outputDir by option(
         "--output-dir", "-o",
         help = "The output directory to store the generated reports in."
     ).file(mustExist = false, canBeFile = false, canBeDir = true, mustBeWritable = false, mustBeReadable = false)
+        .convert { it.expandTilde() }
         .required()
 
     private val reporters by option(
@@ -84,22 +87,26 @@ class ReporterCommand : CliktCommand(
         "--resolutions-file",
         help = "A file containing error resolutions."
     ).file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
+        .convert { it.expandTilde() }
 
     private val preProcessingScript by option(
         "--pre-processing-script",
         help = "The path to a Kotlin script to pre-process the notice report before writing it to disk."
     ).file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
+        .convert { it.expandTilde() }
 
     private val copyrightGarbageFile by option(
         "--copyright-garbage-file",
         help = "A file containing garbage copyright statements entries which are to be ignored."
     ).file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
+        .convert { it.expandTilde() }
 
     private val repositoryConfigurationFile by option(
         "--repository-configuration-file",
         help = "A file containing the repository configuration. If set the .ort.yml overrides the repository " +
                 "configuration contained in the ort result from the input file."
     ).file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
+        .convert { it.expandTilde() }
 
     private val customLicenseTextsDir by option(
         "--custom-license-texts-dir",
@@ -107,16 +114,18 @@ class ReporterCommand : CliktCommand(
                 "license with the license ID as the filename. A custom license text is used only if its ID has a " +
                 "'LicenseRef-' prefix and if the respective license text is not known by ORT."
     ).file(mustExist = false, canBeFile = false, canBeDir = true, mustBeWritable = false, mustBeReadable = false)
+        .convert { it.expandTilde() }
 
     private val licenseConfigurationFile by option(
         "--license-configuration-file",
         help = "A file containing the license configuration."
     ).file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
+        .convert { it.expandTilde() }
 
     private val config by requireObject<OrtConfiguration>()
 
     override fun run() {
-        val absoluteOutputDir = outputDir.expandTilde().normalize()
+        val absoluteOutputDir = outputDir.normalize()
 
         val reports = reporters.associateWith { reporter ->
             File(absoluteOutputDir, reporter.defaultFilename)
@@ -127,22 +136,22 @@ class ReporterCommand : CliktCommand(
             throw UsageError("None of the report files $existingReportFiles must exist yet.", statusCode = 2)
         }
 
-        var ortResult = ortFile.expandTilde().readValue<OrtResult>()
-        repositoryConfigurationFile?.expandTilde()?.let {
+        var ortResult = ortFile.readValue<OrtResult>()
+        repositoryConfigurationFile?.let {
             ortResult = ortResult.replaceConfig(it.readValue())
         }
 
         val resolutionProvider = DefaultResolutionProvider()
         resolutionProvider.add(ortResult.getResolutions())
-        resolutionsFile?.expandTilde()?.readValue<Resolutions>()?.let { resolutionProvider.add(it) }
+        resolutionsFile?.readValue<Resolutions>()?.let { resolutionProvider.add(it) }
 
-        val copyrightGarbage = copyrightGarbageFile?.expandTilde()?.readValue<CopyrightGarbage>().orEmpty()
+        val copyrightGarbage = copyrightGarbageFile?.readValue<CopyrightGarbage>().orEmpty()
 
         val packageConfigurationProvider =
             packageConfigurationDir?.let { SimplePackageConfigurationProvider.forDirectory(it) }
                 ?: SimplePackageConfigurationProvider()
 
-        val licenseConfiguration = licenseConfigurationFile?.expandTilde()?.readValue<LicenseConfiguration>().orEmpty()
+        val licenseConfiguration = licenseConfigurationFile?.readValue<LicenseConfiguration>().orEmpty()
 
         absoluteOutputDir.safeMkdirs()
 
@@ -154,7 +163,7 @@ class ReporterCommand : CliktCommand(
             DefaultLicenseTextProvider(customLicenseTextsDir),
             copyrightGarbage,
             licenseConfiguration,
-            preProcessingScript?.expandTilde()?.readText()
+            preProcessingScript?.readText()
         )
 
         reports.forEach { (reporter, file) ->

@@ -63,7 +63,7 @@ class DownloaderCommand : CliktCommand(name = "download", help = "Fetch source c
             "--ort-file", "-i",
             help = "An ORT result file with an analyzer result to use. Must not be used together with '--project-url'."
         ).file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
-            .convert { FileType(it) },
+            .convert { FileType(it.expandTilde()) },
         option(
             "--project-url",
             help = "A VCS or archive URL of a project to download. Must not be used together with '--ort-file'."
@@ -95,6 +95,7 @@ class DownloaderCommand : CliktCommand(name = "download", help = "Fetch source c
         "--output-dir", "-o",
         help = "The output directory to download the source code to."
     ).file(mustExist = false, canBeFile = false, canBeDir = true, mustBeWritable = false, mustBeReadable = false)
+        .convert { it.expandTilde() }
         .required()
 
     private val archive by option(
@@ -119,7 +120,7 @@ class DownloaderCommand : CliktCommand(name = "download", help = "Fetch source c
 
         val packages = when (input) {
             is FileType -> {
-                val absoluteOrtFile = (input as FileType).file.expandTilde().normalize()
+                val absoluteOrtFile = (input as FileType).file.normalize()
                 val analyzerResult = absoluteOrtFile.readValue<OrtResult>().analyzer?.result
 
                 requireNotNull(analyzerResult) {
@@ -172,12 +173,11 @@ class DownloaderCommand : CliktCommand(name = "download", help = "Fetch source c
         val errorMessages = mutableListOf<String>()
         packages.forEach { pkg ->
             try {
-                val absoluteOutputDir = outputDir.expandTilde()
-                val result = Downloader().download(pkg, absoluteOutputDir, allowMovingRevisions)
+                val result = Downloader().download(pkg, outputDir, allowMovingRevisions)
 
                 if (archive) {
                     val zipFile = File(
-                        absoluteOutputDir,
+                        outputDir,
                         "${pkg.id.type.encodeOrUnknown()}-${pkg.id.namespace.encodeOrUnknown()}-" +
                                 "${pkg.id.name.encodeOrUnknown()}-${pkg.id.version.encodeOrUnknown()}.zip"
                     )
@@ -197,9 +197,8 @@ class DownloaderCommand : CliktCommand(name = "download", help = "Fetch source c
 
                         log.error { "Could not archive '${pkg.id.toCoordinates()}': ${e.collectMessagesAsString()}" }
                     } finally {
-                        val relativePath =
-                            absoluteOutputDir.toPath().relativize(result.downloadDirectory.toPath()).first()
-                        File(absoluteOutputDir, relativePath.toString()).safeDeleteRecursively()
+                        val relativePath = outputDir.toPath().relativize(result.downloadDirectory.toPath()).first()
+                        File(outputDir, relativePath.toString()).safeDeleteRecursively()
                     }
                 }
             } catch (e: DownloadException) {
