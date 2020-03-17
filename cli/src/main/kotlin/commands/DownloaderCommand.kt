@@ -30,7 +30,6 @@ import com.github.ajalt.clikt.parameters.options.flag
 import com.github.ajalt.clikt.parameters.options.option
 import com.github.ajalt.clikt.parameters.options.required
 import com.github.ajalt.clikt.parameters.options.split
-import com.github.ajalt.clikt.parameters.options.wrapValue
 import com.github.ajalt.clikt.parameters.types.enum
 import com.github.ajalt.clikt.parameters.types.file
 
@@ -64,7 +63,7 @@ class DownloaderCommand : CliktCommand(name = "download", help = "Fetch source c
             "--ort-file", "-i",
             help = "An ORT result file with an analyzer result to use. Must not be used together with '--project-url'."
         ).file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
-            .wrapValue(::FileType),
+            .convert { FileType(it) },
         option(
             "--project-url",
             help = "A VCS or archive URL of a project to download. Must not be used together with '--ort-file'."
