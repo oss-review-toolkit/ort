@@ -54,6 +54,9 @@ class SpdxLicenseAliasMappingTest : WordSpec({
                 SpdxLicenseAliasMapping.map(key.toLowerCase(), mapDeprecated = false) shouldBe license
                 SpdxLicenseAliasMapping.map(key.toUpperCase(), mapDeprecated = false) shouldBe license
                 SpdxLicenseAliasMapping.map(key.toLowerCase().capitalize(), mapDeprecated = false) shouldBe license
+                SpdxLicenseAliasMapping.map(key.toLowerCase(), mapDeprecated = true) shouldBe license
+                SpdxLicenseAliasMapping.map(key.toUpperCase(), mapDeprecated = true) shouldBe license
+                SpdxLicenseAliasMapping.map(key.toLowerCase().capitalize(), mapDeprecated = true) shouldBe license
             }
         }
     }

@@ -176,7 +176,8 @@ object SpdxLicenseAliasMapping {
     /**
      * The map of varied SPDX license ids associated with their corresponding SPDX expression.
      */
-    val mapping = customLicenseIds + deprecatedLicenseIds + deprecatedExceptionIds
+    val mapping =
+        (customLicenseIds + deprecatedLicenseIds + deprecatedExceptionIds).toSortedMap(String.CASE_INSENSITIVE_ORDER)
 
     /**
      * Return the [SpdxExpression] the [license] id maps to, or null if there is no corresponding expression. If

@@ -190,7 +190,7 @@ class SpdxExpressionTest : WordSpec() {
             }
 
             "normalize the case of SPDX licenses" {
-                SpdxLicense.values().forEach {
+                SpdxLicense.values().filterNot { it.deprecated }.forEach {
                     SpdxExpression.parse(it.id.toLowerCase()).normalize() shouldBe it.toExpression()
                 }
             }
