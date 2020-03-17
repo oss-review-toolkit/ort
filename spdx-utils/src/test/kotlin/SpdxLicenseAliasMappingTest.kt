@@ -49,7 +49,7 @@ class SpdxLicenseAliasMappingTest : WordSpec({
             }
         }
 
-        "be case-insensitve" {
+        "be case-insensitive" {
             val map = SpdxLicenseAliasMapping.customLicenseIds
             map.forEach { (key, license) ->
                 map[key.toLowerCase()] shouldBe license
