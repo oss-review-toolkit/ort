@@ -379,3 +379,5 @@ the created run configuration to your needs, e.g. by adding an argument and opti
 Copyright (C) 2017-2020 HERE Europe B.V.
 
 See the [LICENSE](./LICENSE) file in the root of this project for license details.
+
+OSS Review Toolkit (ORT) is a [Linux Foundation project](https://www.linuxfoundation.org).
