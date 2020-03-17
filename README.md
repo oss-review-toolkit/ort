@@ -376,6 +376,6 @@ the created run configuration to your needs, e.g. by adding an argument and opti
 
 # License
 
-Copyright (C) 2017-2019 HERE Europe B.V.
+Copyright (C) 2017-2020 HERE Europe B.V.
 
 See the [LICENSE](./LICENSE) file in the root of this project for license details.
