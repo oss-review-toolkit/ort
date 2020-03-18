@@ -36,7 +36,7 @@ import io.kotlintest.specs.StringSpec
 
 import java.io.File
 
-private const val REPO_URL = ":pserver:anonymous@xmlenc.cvs.sourceforge.net:/cvsroot/xmlenc"
+private const val REPO_URL = ":pserver:anonymous@a.cvs.sourceforge.net:/cvsroot/xmlenc"
 private const val REPO_REV = "RELEASE_0_52"
 private const val REPO_PATH = "xmlenc/src/history"
 private const val REPO_VERSION = "0.52"
