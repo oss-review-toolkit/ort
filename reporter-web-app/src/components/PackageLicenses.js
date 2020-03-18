@@ -73,7 +73,7 @@ const PackageLicenses = (props) => {
                         label="Declared (non-SPDX)"
                         key="ort-package-declared-non-spdx-licenses"
                     >
-                        {webAppPackage.webAppPackage.declaredLicensesUnmapped}
+                        {webAppPackage.declaredLicensesUnmapped}
                     </Item>
                 )
             }
