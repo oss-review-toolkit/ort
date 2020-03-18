@@ -95,124 +95,41 @@ class StaticHtmlReporter : Reporter {
                     }
                 }
 
-                fun getTitleExt(mData: Map<String, String>): String {
-                    return if (mData.isNotEmpty()) arrayOf(mData["SW_NAME"],
-                        mData["SW_VERSION"]).joinToString(separator = " ") else ""
-                }
-
                 div {
                     id = "report-container"
 
-                    val titleExtStr = getTitleExt(reportTableModel.metadata)
+                    val titleExtension = if (reportTableModel.metadata.isNotEmpty()) {
+                        arrayOf(
+                            reportTableModel.metadata["SW_NAME"],
+                            reportTableModel.metadata["SW_VERSION"]
+                        ).joinToString(separator = " ")
+                    } else {
+                        ""
+                    }
 
                     div("ort-report-label") {
                         +"Scan Report"
-                        +(if (titleExtStr != "") " for " else "")
+                        +(if (titleExtension.isNotEmpty()) " for " else "")
                         i {
-                            +titleExtStr
+                            +titleExtension
                         }
                     }
 
-                    h2 {
-                        +"Highlights"
-                    }
-
-                    details {
-                        val issueErrorCount: Int = reportTableModel.issueSummary.errorCount
-                        val issueWarningCount: Int = reportTableModel.issueSummary.warningCount
-
-                        reportTableModel.evaluatorIssues?.let { ruleViolations ->
-                            val issues = ruleViolations.filterNot { it.isResolved }.groupBy { it.violation.severity }
-                            val evaluatorErrorCount = issues[Severity.ERROR].orEmpty().size
-                            val evaluatorWarningCount = issues[Severity.WARNING].orEmpty().size
-
-                            val errors = issueErrorCount + evaluatorErrorCount
-                            val warnings = issueWarningCount + evaluatorWarningCount
-
-                            val resultStr =
-                                when {
-                                    (errors == 0 && warnings == 0) ->
-                                        "All OK: 0 errors, 0 warnings"
-                                     else ->
-                                         "$errors error${if (errors == 1) "" else "s"} to fix, " +
-                                        "$warnings warning${if (warnings == 1) "" else "s"}"
-                                }
-
-                            unsafe { +"<summary>$resultStr</summary>" }
-                        }
-
-                        p { +"" }
-                        ul {
-                            reportTableModel.evaluatorIssues?.let { ruleViolations ->
-                                val issues =
-                                    ruleViolations.filterNot { it.isResolved }.groupBy { it.violation.severity }
-                                val errorCount = issues[Severity.ERROR].orEmpty().size
-                                val warningCount = issues[Severity.WARNING].orEmpty().size
-                                val hintCount = issues[Severity.HINT].orEmpty().size
-
-                                li {
-                                    a("#rule-violation-summary") {
-                                        +("Policy Violations (errors: $errorCount, warnings: $warningCount, " +
-                                                "hints: $hintCount)")
-                                    }
-                                }
-                            }
-
-                            if (reportTableModel.issueSummary.rows.isNotEmpty()) {
-                                li {
-                                    a("#issue-summary") {
-                                        with(reportTableModel.issueSummary) {
-                                            +"Technical Issues (errors: $errorCount, warnings: $warningCount, "
-                                                    +"hints: $hintCount)"
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
+                    highlights(reportTableModel)
 
                     index(reportTableModel)
 
-                    reportTableModel.evaluatorIssues?.let {
-                        evaluatorTable(it)
-                    }
-
+                    // Technical Issues
                     if (reportTableModel.issueSummary.rows.isNotEmpty()) {
                         issueTable(reportTableModel.issueSummary)
                     }
 
-                    h2 {
-                        id = "project-dependencies"
-                        +"Projects and Dependencies"
+                    // Policy Violations
+                    reportTableModel.evaluatorIssues?.let {
+                        evaluatorTable(it)
                     }
 
-                    details {
-                        unsafe {
-                            +"<summary>Project and Dependency Index</summary>"
-                        }
-                        ul {
-                            reportTableModel.projectDependencies.forEach { (project, projectTable) ->
-                                li {
-                                    a("#${project.id.toCoordinates()}") {
-                                        +project.id.toCoordinates()
-
-                                        if (projectTable.isExcluded()) {
-                                            projectTable.pathExcludes.forEach { exclude ->
-                                                +" "
-                                                div("ort-reason") {
-                                                    +"Excluded: ${exclude.reason} - ${exclude.comment}"
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-
-                    reportTableModel.projectDependencies.forEach { (project, table) ->
-                        projectTable(project, table)
-                    }
+                    projectsAndDependencies(reportTableModel)
 
                     if (reportTableModel.metadata.isNotEmpty()) {
                         metadataTable(reportTableModel.metadata)
@@ -220,17 +137,7 @@ class StaticHtmlReporter : Reporter {
 
                     repositoryConfiguration(reportTableModel.config)
 
-                    div {
-                        +"Created by "
-                        strong {
-                            a {
-                                href = "http://oss-review-toolkit.org/"
-                                +"ORT"
-                            }
-                        }
-                        +" version ${Environment().ortVersion} at ${SimpleDateFormat("HH:mm:ss MMM dd, yyyy").
-                        format(Date())}"
-                    }
+                    createdBy()
                 }
             }
         }
@@ -255,21 +162,77 @@ class StaticHtmlReporter : Reporter {
         }
     }
 
+    private fun DIV.highlights(reportTableModel: ReportTableModel) {
+        h2 {
+            +"Highlights"
+        }
+
+        val issueErrorCount = reportTableModel.issueSummary.errorCount
+        val issueWarningCount = reportTableModel.issueSummary.warningCount
+
+        reportTableModel.evaluatorIssues?.let { ruleViolations ->
+            val issues = ruleViolations.filterNot { it.isResolved }.groupBy { it.violation.severity }
+            val evaluatorErrorCount = issues[Severity.ERROR].orEmpty().size
+            val evaluatorWarningCount = issues[Severity.WARNING].orEmpty().size
+
+            val errors = issueErrorCount + evaluatorErrorCount
+            val warnings = issueWarningCount + evaluatorWarningCount
+
+            val resultStr =
+                when {
+                    (errors == 0 && warnings == 0) ->
+                        "All OK: 0 errors, 0 warnings"
+                    else ->
+                        "$errors error${if (errors == 1) "" else "s"} to fix, " +
+                                "$warnings warning${if (warnings == 1) "" else "s"}"
+                }
+
+            unsafe { +"<summary>$resultStr</summary>" }
+        }
+
+        p { +"" }
+        ul {
+            if (reportTableModel.issueSummary.rows.isNotEmpty()) {
+                li {
+                    a("#issue-summary") {
+                        with(reportTableModel.issueSummary) {
+                            +"Technical Issues (errors: $errorCount, warnings: $warningCount, "
+                            +"hints: $hintCount)"
+                        }
+                    }
+                }
+            }
+
+            reportTableModel.evaluatorIssues?.let { ruleViolations ->
+                val issues = ruleViolations.filterNot { it.isResolved }.groupBy { it.violation.severity }
+                val errorCount = issues[Severity.ERROR].orEmpty().size
+                val warningCount = issues[Severity.WARNING].orEmpty().size
+                val hintCount = issues[Severity.HINT].orEmpty().size
+
+                li {
+                    a("#rule-violation-summary") {
+                        +("Policy Violations (errors: $errorCount, warnings: $warningCount, " +
+                                "hints: $hintCount)")
+                    }
+                }
+            }
+        }
+    }
     private fun DIV.index(reportTableModel: ReportTableModel) {
         h2 { +"Index" }
 
         ul {
-            li {
-                a("#rule-violation-summary") {
-                    +"Policy Violations"
-                }
-            }
-
             if (reportTableModel.issueSummary.rows.isNotEmpty()) {
                 li {
                     a("#issue-summary") {
                         +"Technical Issues"
                     }
+                }
+            }
+
+            li {
+                a("#rule-violation-summary") {
+                    +"Policy Violations"
                 }
             }
 
@@ -461,6 +424,41 @@ class StaticHtmlReporter : Reporter {
                     }
                 }
             }
+        }
+    }
+
+    private fun DIV.projectsAndDependencies(reportTableModel: ReportTableModel) {
+        h2 {
+            id = "project-dependencies"
+            +"Projects and Dependencies"
+        }
+
+        details {
+            unsafe {
+                +"<summary>Project and Dependency Index</summary>"
+            }
+            ul {
+                reportTableModel.projectDependencies.forEach { (project, projectTable) ->
+                    li {
+                        a("#${project.id.toCoordinates()}") {
+                            +project.id.toCoordinates()
+
+                            if (projectTable.isExcluded()) {
+                                projectTable.pathExcludes.forEach { exclude ->
+                                    +" "
+                                    div("ort-reason") {
+                                        +"Excluded: ${exclude.reason} - ${exclude.comment}"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        reportTableModel.projectDependencies.forEach { (project, table) ->
+            projectTable(project, table)
         }
     }
 
@@ -704,6 +702,20 @@ class StaticHtmlReporter : Reporter {
                 +"\n"
                 +yamlMapper.writerWithDefaultPrettyPrinter().writeValueAsString(config)
             }
+        }
+    }
+
+    private fun DIV.createdBy() {
+        div {
+            +"Created by "
+            strong {
+                a {
+                    href = "http://oss-review-toolkit.org/"
+                    +"ORT"
+                }
+            }
+            +" version ${Environment().ortVersion} at ${SimpleDateFormat("HH:mm:ss MMM dd, yyyy").
+            format(Date())}"
         }
     }
 

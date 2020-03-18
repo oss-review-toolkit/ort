@@ -426,25 +426,23 @@ Prism.languages.yaml={scalar:{pattern:/([\-:]\s*(?:![^\s]+)?[ \t]*[|>])[ \t]*(?:
       <div class="ort-report-label">Scan Report<i></i>
       </div>
       <h2>Highlights</h2>
-      <details>
-        <summary>2 errors to fix, 1 warning</summary>
-        <p></p>
-        <ul>
-          <li>
-            <a href="#rule-violation-summary">Policy Violations (errors: 1, warnings: 1, hints: 0)</a>
-          </li>
-          <li>
-            <a href="#issue-summary">Technical Issues (errors: 1, warnings: 0, hints: 0)</a>
-          </li>
-        </ul>
-      </details>
+      <summary>2 errors to fix, 1 warning</summary>
+      <p></p>
+      <ul>
+        <li>
+          <a href="#issue-summary">Technical Issues (errors: 1, warnings: 0, hints: 0)</a>
+        </li>
+        <li>
+          <a href="#rule-violation-summary">Policy Violations (errors: 1, warnings: 1, hints: 0)</a>
+        </li>
+      </ul>
       <h2>Index</h2>
       <ul>
         <li>
-          <a href="#rule-violation-summary">Policy Violations</a>
+          <a href="#issue-summary">Technical Issues</a>
         </li>
         <li>
-          <a href="#issue-summary">Technical Issues</a>
+          <a href="#rule-violation-summary">Policy Violations</a>
         </li>
         <li>
           <a href="#project-dependencies">Projects and Dependencies</a>
@@ -453,6 +451,28 @@ Prism.languages.yaml={scalar:{pattern:/([\-:]\s*(?:![^\s]+)?[ \t]*[|>])[ \t]*(?:
           <a href="#repository-configuration">Repository Configuration</a>
         </li>
       </ul>
+      <h2 id="issue-summary">Technical Issues (errors: 1, warnings: 0, hints: 0)</h2>
+      <p>Issues from excluded components are not shown in this summary.</p>
+      <h3>Packages</h3>
+      <table class="ort-report-table">
+        <thead>
+          <tr>
+            <th>#</th><th>Package</th><th>Analyzer Issues</th><th>Scanner Issues</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="ort-error" id="issue-1">
+            <td><a href="#issue-1">1</a></td><td>Gradle:com.here.ort.gradle.example:lib:1.0.0</td><td></td><td><a href="#Gradle:com.here.ort.gradle.example:lib:1.0.0">Gradle:com.here.ort.gradle.example:lib:1.0.0</a>
+              <ul>
+                <li>
+                  <p>Unknown time [ERROR]: FileCounter - DownloadException: No source artifact URL provided for 'Gradle:com.here.ort.gradle.example:lib:1.0.0'.<br>Caused by: DownloadException: No VCS URL provided for 'Gradle:com.here.ort.gradle.example:lib:1.0.0'. Please make sure the release POM file includes the SCM connection, see: https://docs.gradle.org/current/userguide/publishing_maven.html#example_customizing_the_pom_file</p>
+                  <p></p>
+                </li>
+              </ul>
+            </td>
+          </tr>
+        </tbody>
+      </table>
       <h2 id="rule-violation-summary">Policy Violations (errors: 1, warnings: 1, hints: 0)</h2>
       <table class="ort-report-table ort-violations">
         <thead>
@@ -528,28 +548,6 @@ Resolved by: CANT_FIX_EXCEPTION - Apache-2 is not an issue.</p>
           </tr>
         </tbody>
       </table>
-      <h2 id="issue-summary">Technical Issues (errors: 1, warnings: 0, hints: 0)</h2>
-      <p>Issues from excluded components are not shown in this summary.</p>
-      <h3>Packages</h3>
-      <table class="ort-report-table">
-        <thead>
-          <tr>
-            <th>#</th><th>Package</th><th>Analyzer Issues</th><th>Scanner Issues</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr class="ort-error" id="issue-1">
-            <td><a href="#issue-1">1</a></td><td>Gradle:com.here.ort.gradle.example:lib:1.0.0</td><td></td><td><a href="#Gradle:com.here.ort.gradle.example:lib:1.0.0">Gradle:com.here.ort.gradle.example:lib:1.0.0</a>
-              <ul>
-                <li>
-                  <p>Unknown time [ERROR]: FileCounter - DownloadException: No source artifact URL provided for 'Gradle:com.here.ort.gradle.example:lib:1.0.0'.<br>Caused by: DownloadException: No VCS URL provided for 'Gradle:com.here.ort.gradle.example:lib:1.0.0'. Please make sure the release POM file includes the SCM connection, see: https://docs.gradle.org/current/userguide/publishing_maven.html#example_customizing_the_pom_file</p>
-                  <p></p>
-                </li>
-              </ul>
-            </td>
-          </tr>
-        </tbody>
-      </table>
       <h2 id="project-dependencies">Projects and Dependencies</h2>
       <details>
         <summary>Project and Dependency Index</summary>
@@ -574,7 +572,7 @@ Resolved by: CANT_FIX_EXCEPTION - Apache-2 is not an issue.</p>
               <td>Type</td><td>Git</td>
             </tr>
             <tr>
-              <td>URL</td><td>https://github.com/heremaps/oss-review-toolkit.git</td>
+              <td>URL</td><td>https://github.com/oss-review-toolkit/ort.git</td>
             </tr>
             <tr>
               <td>Path</td><td>analyzer/src/funTest/assets/projects/synthetic/gradle/lib</td>
@@ -597,8 +595,8 @@ Resolved by: CANT_FIX_EXCEPTION - Apache-2 is not an issue.</p>
             <td><a href="#Gradle:com.here.ort.gradle.example:lib:1.0.0-pkg-1">1</a></td><td>Gradle:com.here.ort.gradle.example:lib:1.0.0</td><td></td><td><em>Detected Licenses:</em>
               <dl>
                 <dd>
-                  <div>Apache-2.0 (multi-line) (<a href="https://github.com/heremaps/oss-review-toolkit/tree/master/analyzer/src/funTest/assets/projects/synthetic/gradle/lib/build.gradle#L19-L20">link to finding 1/1</a>)</div>
-                  <div>Apache-2.0 (single-line) (<a href="https://github.com/heremaps/oss-review-toolkit/tree/master/analyzer/src/funTest/assets/projects/synthetic/gradle/lib/build.gradle#L19">link to finding 1/2</a>)</div>
+                  <div>Apache-2.0 (multi-line) (<a href="https://github.com/oss-review-toolkit/ort/tree/master/analyzer/src/funTest/assets/projects/synthetic/gradle/lib/build.gradle#L19-L20">link to finding 1/1</a>)</div>
+                  <div>Apache-2.0 (single-line) (<a href="https://github.com/oss-review-toolkit/ort/tree/master/analyzer/src/funTest/assets/projects/synthetic/gradle/lib/build.gradle#L19">link to finding 1/2</a>)</div>
                 </dd>
               </dl>
             </td><td>

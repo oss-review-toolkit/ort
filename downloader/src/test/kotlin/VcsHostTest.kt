@@ -30,7 +30,7 @@ import io.kotlintest.shouldBe
 import io.kotlintest.specs.WordSpec
 
 class VcsHostTest : WordSpec({
-    "Bitbucket" should {
+    "The Bitbucket implementation" should {
         "be able to extract VCS information from a project URL" {
             BITBUCKET.toVcsInfo(
                 "https://bitbucket.org/facebook/lz4revlog/src/4c259957d2904604115a02543dc73f5be95761d7/COPYING"
@@ -58,7 +58,7 @@ class VcsHostTest : WordSpec({
         }
     }
 
-    "GitHub" should {
+    "The GitHub implementation" should {
         "be able to extract VCS information from a project URL" {
             GITHUB.toVcsInfo(
                 "https://github.com/oss-review-toolkit/ort/tree/da7e3a814fc0e6301bf3ed394eba1a661e4d88d7/README.md"
@@ -100,7 +100,7 @@ class VcsHostTest : WordSpec({
         }
     }
 
-    "GitLab" should {
+    "The GitLab implementation" should {
         "be able to extract VCS information from a project URL" {
             GITLAB.toVcsInfo(
                 "https://gitlab.com/mbunkus/mkvtoolnix/tree/ec80478f87f1941fe52f15c5f4fa7ee6a70d7006/NEWS.md"
@@ -142,7 +142,7 @@ class VcsHostTest : WordSpec({
         }
     }
 
-    "SourceHut" should {
+    "The SourceHut implementation" should {
         "be able to extract VCS information from a Git project URL" {
             SOURCEHUT.toVcsInfo(
                 "https://git.sr.ht/~ben/web/tree/2c3d173d/pkgs.nix"
@@ -192,6 +192,112 @@ class VcsHostTest : WordSpec({
             SOURCEHUT.toPermalink(vcsInfo, 9) shouldBe
                     "https://hg.sr.ht/~duangle/paniq_legacy/browse/f04521a92844/masagin/README.txt#L9"
             // SourceHut does not support an end line in permalinks to Mercural repos.
+        }
+    }
+
+    "The generic implementation" should {
+        "split paths from a URL to a Git repository" {
+            val actual = VcsHost.toVcsInfo(
+                "https://git-wip-us.apache.org/repos/asf/zeppelin.git"
+            )
+            val expected = VcsInfo(
+                type = VcsType.GIT,
+                url = "https://git-wip-us.apache.org/repos/asf/zeppelin.git",
+                revision = "",
+                path = ""
+            )
+            actual shouldBe expected
+        }
+
+        "split paths from a URL to a Git repository with path" {
+            val actual = VcsHost.toVcsInfo(
+                "https://git-wip-us.apache.org/repos/asf/zeppelin.git/zeppelin-interpreter"
+            )
+            val expected = VcsInfo(
+                type = VcsType.GIT,
+                url = "https://git-wip-us.apache.org/repos/asf/zeppelin.git",
+                revision = "",
+                path = "zeppelin-interpreter"
+            )
+            actual shouldBe expected
+        }
+
+        "split the revision from an NPM URL to a Git repository" {
+            val actual = VcsHost.toVcsInfo(
+                "git+ssh://sub.domain.com:42/foo-bar#b3b5b3c60dcdc39347b23cf94ab8f577239b7df3"
+            )
+            val expected = VcsInfo(
+                type = VcsType.GIT,
+                url = "ssh://sub.domain.com:42/foo-bar",
+                revision = "b3b5b3c60dcdc39347b23cf94ab8f577239b7df3",
+                path = ""
+            )
+            actual shouldBe expected
+        }
+
+        "split the revision from a NPM URL to a GitHub repository" {
+            val actual = VcsHost.toVcsInfo(
+                "https://github.com/mochajs/mocha.git#5bd33a0ba201d227159759e8ced86756595b0c54"
+            )
+            val expected = VcsInfo(
+                type = VcsType.GIT,
+                url = "https://github.com/mochajs/mocha.git",
+                revision = "5bd33a0ba201d227159759e8ced86756595b0c54",
+                path = ""
+            )
+            actual shouldBe expected
+        }
+
+        "separate an SVN branch into the revision" {
+            val actual = VcsHost.toVcsInfo(
+                "http://svn.osdn.net/svnroot/tortoisesvn/branches/1.13.x"
+            )
+            val expected = VcsInfo(
+                type = VcsType.SUBVERSION,
+                url = "http://svn.osdn.net/svnroot/tortoisesvn",
+                revision = "branches/1.13.x",
+                path = ""
+            )
+            actual shouldBe expected
+        }
+
+        "separate branch and path from an SVN URL" {
+            val actual = VcsHost.toVcsInfo(
+                "http://svn.osdn.net/svnroot/tortoisesvn/branches/1.13.x/src/gpl.txt"
+            )
+            val expected = VcsInfo(
+                type = VcsType.SUBVERSION,
+                url = "http://svn.osdn.net/svnroot/tortoisesvn",
+                revision = "branches/1.13.x",
+                path = "src/gpl.txt"
+            )
+            actual shouldBe expected
+        }
+
+        "separate an SVN tag into the revision" {
+            val actual = VcsHost.toVcsInfo(
+                "http://svn.terracotta.org/svn/ehcache/tags/ehcache-parent-2.21"
+            )
+            val expected = VcsInfo(
+                type = VcsType.SUBVERSION,
+                url = "http://svn.terracotta.org/svn/ehcache",
+                revision = "tags/ehcache-parent-2.21",
+                path = ""
+            )
+            actual shouldBe expected
+        }
+
+        "separate tag and path from an SVN URL" {
+            val actual = VcsHost.toVcsInfo(
+                "http://svn.terracotta.org/svn/ehcache/tags/ehcache-parent-2.21/pom.xml"
+            )
+            val expected = VcsInfo(
+                type = VcsType.SUBVERSION,
+                url = "http://svn.terracotta.org/svn/ehcache",
+                revision = "tags/ehcache-parent-2.21",
+                path = "pom.xml"
+            )
+            actual shouldBe expected
         }
     }
 })

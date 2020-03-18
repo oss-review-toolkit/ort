@@ -20,6 +20,7 @@
 package com.here.ort.analyzer
 
 import com.here.ort.downloader.VersionControlSystem
+import com.here.ort.downloader.VcsHost
 import com.here.ort.model.Identifier
 import com.here.ort.model.Project
 import com.here.ort.model.ProjectAnalyzerResult
@@ -155,7 +156,7 @@ abstract class PackageManager(
                 VersionControlSystem.forUrl(it) != null
             }.orEmpty()
 
-            val vcsFromUrl = VersionControlSystem.splitUrl(normalizedUrl)
+            val vcsFromUrl = VcsHost.toVcsInfo(normalizedUrl)
             return vcsFromUrl.merge(normalizedVcsFromPackage)
         }
 
