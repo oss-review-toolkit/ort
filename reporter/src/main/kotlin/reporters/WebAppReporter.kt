@@ -36,14 +36,14 @@ class WebAppReporter : Reporter {
         val template = javaClass.classLoader.getResource("scan-report-template.html").readText()
         val evaluatedModel = EvaluatedModel.create(input)
 
-        val prefix = template.substringBefore("id=\"ort-report-data\"><")
-        val suffix = template.substringAfter("id=\"ort-report-data\"><")
+        val placeholder = "ORT_REPORT_DATA_PLACEHOLDER"
+        val index = template.indexOf(placeholder)
+        val prefix = template.substring(0, index)
+        val suffix = template.substring(index + placeholder.length, template.length)
 
         outputStream.bufferedWriter().use {
             it.write(prefix)
-            it.write("id=\"ort-report-data\">")
             evaluatedModel.toJson(it)
-            it.write("<")
             it.write(suffix)
         }
     }
