@@ -107,13 +107,13 @@ class Sbt(
 
         log.info { "Determined '$workingDir' as the $managerName project root directory." }
 
-        fun runSBT(vararg command: String) =
+        fun runSbt(vararg command: String) =
             suppressInput {
                 run(workingDir, BATCH_MODE, LOG_NO_FORMAT, *command)
             }
 
         // Get the list of project names.
-        val internalProjectNames = runSBT("projects").stdout.lines().mapNotNull {
+        val internalProjectNames = runSbt("projects").stdout.lines().mapNotNull {
             PROJECT_REGEX.matchEntire(it)?.groupValues?.getOrNull(1)
         }
 
@@ -124,7 +124,7 @@ class Sbt(
         // Generate the POM files. Note that a single run of makePom might create multiple POM files in case of
         // aggregate projects.
         val makePomCommand = internalProjectNames.joinToString("") { ";$it/makePom" }
-        val pomFiles = runSBT(makePomCommand).stdout.lines().mapNotNull { line ->
+        val pomFiles = runSbt(makePomCommand).stdout.lines().mapNotNull { line ->
             POM_REGEX.matchEntire(line)?.groupValues?.getOrNull(1)?.let { File(it) }
         }
 
