@@ -67,6 +67,16 @@ interface CommandLineTool {
     fun command(workingDir: File? = null): String
 
     /**
+     * Get the arguments to pass to the command in order to gets its version.
+     */
+    fun getVersionArguments() = "--version"
+
+    /**
+     * Transform the command's version output to a string that only contains the version.
+     */
+    fun transformVersion(output: String) = output
+
+    /**
      * Return the requirement for the version of the command. Defaults to any version.
      */
     fun getVersionRequirement() = ANY_VERSION
@@ -92,15 +102,12 @@ interface CommandLineTool {
     /**
      * Get the version of the command by parsing its output.
      */
-    fun getVersion(
-        versionArguments: String = "--version", workingDir: File? = null,
-        transform: (String) -> String = { it }
-    ): String {
-        val version = run(workingDir, *versionArguments.split(' ').toTypedArray())
+    fun getVersion(workingDir: File? = null): String {
+        val version = run(workingDir, *getVersionArguments().split(' ').toTypedArray())
 
         // Some tools actually report the version to stderr, so try that as a fallback.
         val versionString = sequenceOf(version.stdout, version.stderr).map {
-            transform(it.trim())
+            transformVersion(it.trim())
         }.find {
             it.isNotBlank()
         }
@@ -111,13 +118,8 @@ interface CommandLineTool {
     /**
      * Run a [command] to check its version against the [required version][getVersionRequirement].
      */
-    fun checkVersion(
-        versionArguments: String = "--version",
-        ignoreActualVersion: Boolean = false,
-        workingDir: File? = null,
-        transform: (String) -> String = { it }
-    ) {
-        val actualVersion = getVersion(versionArguments, workingDir, transform)
+    fun checkVersion(ignoreActualVersion: Boolean = false, workingDir: File? = null) {
+        val actualVersion = getVersion(workingDir)
         val requiredVersion = getVersionRequirement()
 
         if (!requiredVersion.isSatisfiedBy(actualVersion)) {

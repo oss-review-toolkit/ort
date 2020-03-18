@@ -34,7 +34,6 @@ import com.here.ort.scanner.LocalScanner
 import com.here.ort.scanner.ScanException
 import com.here.ort.spdx.calculatePackageVerificationCode
 import com.here.ort.utils.Ci
-import com.here.ort.utils.CommandLineTool
 import com.here.ort.utils.Os
 import com.here.ort.utils.ProcessCapture
 import com.here.ort.utils.getPathFromEnvironment
@@ -56,17 +55,10 @@ class Licensee(name: String, config: ScannerConfiguration) : LocalScanner(name, 
     override val scannerVersion = "9.13.0"
     override val resultFileExt = "json"
 
-    override fun command(workingDir: File?) = if (Os.isWindows) "licensee.bat" else "licensee"
+    override fun command(workingDir: File?) =
+        listOfNotNull(workingDir, if (Os.isWindows) "licensee.bat" else "licensee").joinToString(File.separator)
 
-    override fun getVersion(dir: File): String {
-        // Create a temporary tool to get its version from the installation in a specific directory.
-        val cmd = command()
-        val tool = object : CommandLineTool {
-            override fun command(workingDir: File?) = dir.resolve(cmd).absolutePath
-        }
-
-        return tool.getVersion("version")
-    }
+    override fun getVersionArguments() = "version"
 
     override fun bootstrap(): File {
         val gem = if (Os.isWindows) "gem.cmd" else "gem"

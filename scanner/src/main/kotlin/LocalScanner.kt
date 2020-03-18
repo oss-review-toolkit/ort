@@ -137,7 +137,7 @@ abstract class LocalScanner(name: String, config: ScannerConfiguration) : Scanne
     /**
      * Return the actual version of the scanner, or an empty string in case of failure.
      */
-    abstract fun getVersion(dir: File = scannerDir): String
+    open fun getVersion() = super.getVersion(scannerDir)
 
     /**
      * Bootstrap the scanner to be ready for use, like downloading and / or configuring it.

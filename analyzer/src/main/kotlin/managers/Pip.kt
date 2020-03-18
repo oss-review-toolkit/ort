@@ -212,7 +212,7 @@ class Pip(
     }
 
     override fun beforeResolution(definitionFiles: List<File>) =
-        VirtualEnv.checkVersion(ignoreActualVersion = analyzerConfig.ignoreToolVersions)
+        VirtualEnv.checkVersion(analyzerConfig.ignoreToolVersions)
 
     @Suppress("LongMethod")
     override fun resolveDependencies(definitionFile: File): ProjectAnalyzerResult? {

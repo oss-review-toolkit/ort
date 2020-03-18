@@ -40,7 +40,6 @@ import com.here.ort.scanner.ScanResultsStorage
 import com.here.ort.spdx.NON_LICENSE_FILENAMES
 import com.here.ort.spdx.SpdxLicense
 import com.here.ort.spdx.calculatePackageVerificationCode
-import com.here.ort.utils.CommandLineTool
 import com.here.ort.utils.ORT_CONFIG_FILENAME
 import com.here.ort.utils.ORT_NAME
 import com.here.ort.utils.Os
@@ -240,21 +239,13 @@ class ScanCode(
         }.toList()
     }
 
-    override fun command(workingDir: File?) = if (Os.isWindows) "scancode.bat" else "scancode"
+    override fun command(workingDir: File?) =
+        listOfNotNull(workingDir, if (Os.isWindows) "scancode.bat" else "scancode").joinToString(File.separator)
 
-    override fun getVersion(dir: File): String {
-        // Create a temporary tool to get its version from the installation in a specific directory.
-        val cmd = command()
-        val tool = object : CommandLineTool {
-            override fun command(workingDir: File?) = dir.resolve(cmd).absolutePath
-        }
-
-        return tool.getVersion(transform = {
-            // "scancode --version" returns a string like "ScanCode version 2.0.1.post1.fb67a181", so simply remove
-            // the prefix.
-            it.substringAfter("ScanCode version ")
-        })
-    }
+    override fun transformVersion(output: String) =
+        // "scancode --version" returns a string like "ScanCode version 2.0.1.post1.fb67a181", so simply remove
+        // the prefix.
+        output.substringAfter("ScanCode version ")
 
     override fun bootstrap(): File {
         val archive = when {

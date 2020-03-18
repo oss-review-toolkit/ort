@@ -51,7 +51,7 @@ class FileCounter(name: String, config: ScannerConfiguration) : LocalScanner(nam
 
     override fun command(workingDir: File?) = ""
 
-    override fun getVersion(dir: File) = scannerVersion
+    override fun getVersion() = scannerVersion
 
     override fun getConfiguration() = ""
 
