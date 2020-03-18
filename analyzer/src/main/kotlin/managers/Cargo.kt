@@ -70,6 +70,8 @@ class Cargo(
 
     override fun command(workingDir: File?) = "cargo"
 
+    override fun transformVersion(output: String) = output.removePrefix("cargo ")
+
     private fun runMetadata(workingDir: File): String = run(workingDir, "metadata", "--format-version=1").stdout
 
     private fun extractCargoId(node: JsonNode) = node["id"].textValueOrEmpty()
