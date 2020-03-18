@@ -92,6 +92,8 @@ object PythonVersion : CommandLineTool {
     // https://docs.python.org/3/installing/#work-with-multiple-versions-of-python-installed-in-parallel.
     override fun command(workingDir: File?) = if (Os.isWindows) "py" else "python3"
 
+    override fun transformVersion(output: String) = output.substringAfter("Python ")
+
     /**
      * Check all Python files in [workingDir] and return which version of Python they are compatible with. If all files
      * are compatible with Python 3, "3" is returned. If at least one file is incompatible with Python 3, "2" is
@@ -186,6 +188,8 @@ class Pip(
     }
 
     override fun command(workingDir: File?) = "pip"
+
+    override fun transformVersion(output: String) = output.removePrefix("pip ").substringBefore(" ")
 
     private fun runPipInVirtualEnv(virtualEnvDir: File, workingDir: File, vararg commandArgs: String) =
         runInVirtualEnv(virtualEnvDir, workingDir, command(workingDir), *TRUSTED_HOSTS, *commandArgs)
