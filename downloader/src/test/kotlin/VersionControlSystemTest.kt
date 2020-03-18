@@ -19,9 +19,6 @@
 
 package com.here.ort.downloader
 
-import com.here.ort.model.VcsInfo
-import com.here.ort.model.VcsType
-
 import io.kotlintest.shouldBe
 import io.kotlintest.specs.WordSpec
 
@@ -61,112 +58,6 @@ class VersionControlSystemTest : WordSpec({
             relVcsDir.getPathToRoot(relProjDir) shouldBe "downloader/src/test"
             relVcsDir.getPathToRoot(File("..")) shouldBe ""
             relVcsDir.getPathToRoot(File("src/test/kotlin")) shouldBe "downloader/src/test/kotlin"
-        }
-    }
-
-    "splitUrl" should {
-        "split paths from a URL to a Git repository" {
-            val actual = VersionControlSystem.splitUrl(
-                "https://git-wip-us.apache.org/repos/asf/zeppelin.git"
-            )
-            val expected = VcsInfo(
-                type = VcsType.GIT,
-                url = "https://git-wip-us.apache.org/repos/asf/zeppelin.git",
-                revision = "",
-                path = ""
-            )
-            actual shouldBe expected
-        }
-
-        "split paths from a URL to a Git repository with path" {
-            val actual = VersionControlSystem.splitUrl(
-                "https://git-wip-us.apache.org/repos/asf/zeppelin.git/zeppelin-interpreter"
-            )
-            val expected = VcsInfo(
-                type = VcsType.GIT,
-                url = "https://git-wip-us.apache.org/repos/asf/zeppelin.git",
-                revision = "",
-                path = "zeppelin-interpreter"
-            )
-            actual shouldBe expected
-        }
-
-        "split the revision from an NPM URL to a Git repository" {
-            val actual = VersionControlSystem.splitUrl(
-                "git+ssh://sub.domain.com:42/foo-bar#b3b5b3c60dcdc39347b23cf94ab8f577239b7df3"
-            )
-            val expected = VcsInfo(
-                type = VcsType.GIT,
-                url = "ssh://sub.domain.com:42/foo-bar",
-                revision = "b3b5b3c60dcdc39347b23cf94ab8f577239b7df3",
-                path = ""
-            )
-            actual shouldBe expected
-        }
-
-        "split the revision from a NPM URL to a GitHub repository" {
-            val actual = VersionControlSystem.splitUrl(
-                "https://github.com/mochajs/mocha.git#5bd33a0ba201d227159759e8ced86756595b0c54"
-            )
-            val expected = VcsInfo(
-                type = VcsType.GIT,
-                url = "https://github.com/mochajs/mocha.git",
-                revision = "5bd33a0ba201d227159759e8ced86756595b0c54",
-                path = ""
-            )
-            actual shouldBe expected
-        }
-
-        "separate an SVN branch into the revision" {
-            val actual = VersionControlSystem.splitUrl(
-                "http://svn.osdn.net/svnroot/tortoisesvn/branches/1.13.x"
-            )
-            val expected = VcsInfo(
-                type = VcsType.SUBVERSION,
-                url = "http://svn.osdn.net/svnroot/tortoisesvn",
-                revision = "branches/1.13.x",
-                path = ""
-            )
-            actual shouldBe expected
-        }
-
-        "separate branch and path from an SVN URL" {
-            val actual = VersionControlSystem.splitUrl(
-                "http://svn.osdn.net/svnroot/tortoisesvn/branches/1.13.x/src/gpl.txt"
-            )
-            val expected = VcsInfo(
-                type = VcsType.SUBVERSION,
-                url = "http://svn.osdn.net/svnroot/tortoisesvn",
-                revision = "branches/1.13.x",
-                path = "src/gpl.txt"
-            )
-            actual shouldBe expected
-        }
-
-        "separate an SVN tag into the revision" {
-            val actual = VersionControlSystem.splitUrl(
-                "http://svn.terracotta.org/svn/ehcache/tags/ehcache-parent-2.21"
-            )
-            val expected = VcsInfo(
-                type = VcsType.SUBVERSION,
-                url = "http://svn.terracotta.org/svn/ehcache",
-                revision = "tags/ehcache-parent-2.21",
-                path = ""
-            )
-            actual shouldBe expected
-        }
-
-        "separate tag and path from an SVN URL" {
-            val actual = VersionControlSystem.splitUrl(
-                "http://svn.terracotta.org/svn/ehcache/tags/ehcache-parent-2.21/pom.xml"
-            )
-            val expected = VcsInfo(
-                type = VcsType.SUBVERSION,
-                url = "http://svn.terracotta.org/svn/ehcache",
-                revision = "tags/ehcache-parent-2.21",
-                path = "pom.xml"
-            )
-            actual shouldBe expected
         }
     }
 })

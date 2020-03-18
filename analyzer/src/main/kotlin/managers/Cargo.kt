@@ -24,6 +24,7 @@ import com.fasterxml.jackson.databind.JsonNode
 import com.here.ort.analyzer.AbstractPackageManagerFactory
 import com.here.ort.analyzer.PackageManager
 import com.here.ort.downloader.VersionControlSystem
+import com.here.ort.downloader.VcsHost
 import com.here.ort.model.Identifier
 import com.here.ort.model.Package
 import com.here.ort.model.PackageLinkage
@@ -84,7 +85,7 @@ class Cargo(
     private fun extractRepositoryUrl(node: JsonNode) = node["repository"].textValueOrEmpty()
 
     private fun extractVcsInfo(node: JsonNode) =
-        VersionControlSystem.splitUrl(extractRepositoryUrl(node))
+        VcsHost.toVcsInfo(extractRepositoryUrl(node))
 
     private fun extractDeclaredLicenses(node: JsonNode) =
         node["license"].textValueOrEmpty().split("/")
