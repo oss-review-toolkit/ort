@@ -280,18 +280,20 @@ class SpdxExpressionTest : WordSpec() {
 
             "split-up compound expressions with AND or OR operator but not ones with WITH operator" {
                 "GPL-2.0-or-later WITH Classpath-exception-2.0 AND MIT"
-                    .decompose() shouldContainExactlyInAnyOrder listOf(
-                        "GPL-2.0-or-later WITH Classpath-exception-2.0",
-                        "MIT"
-                    )
+                    .decompose() shouldContainExactlyInAnyOrder
+                        listOf(
+                            "GPL-2.0-or-later WITH Classpath-exception-2.0",
+                            "MIT"
+                        )
             }
 
             "work with LicenseRef-* identifiers" {
                 "LicenseRef-gpl-2.0-custom WITH Classpath-exception-2.0 AND LicenseRef-scancode-commercial-license"
-                    .decompose() shouldContainExactlyInAnyOrder listOf(
-                        "LicenseRef-gpl-2.0-custom WITH Classpath-exception-2.0",
-                        "LicenseRef-scancode-commercial-license"
-                    )
+                    .decompose() shouldContainExactlyInAnyOrder
+                        listOf(
+                            "LicenseRef-gpl-2.0-custom WITH Classpath-exception-2.0",
+                            "LicenseRef-scancode-commercial-license"
+                        )
             }
 
             "return distinct strings" {
