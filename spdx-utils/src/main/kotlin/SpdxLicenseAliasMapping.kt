@@ -23,8 +23,10 @@ import org.ossreviewtoolkit.spdx.SpdxLicense.*
 import org.ossreviewtoolkit.spdx.SpdxLicenseException.*
 
 /**
- * A mapping from varied SPDX license ids to valid SPDX expressions. When mapping an id without any indication of a
- * version to an SPDX expression with a version, the most commonly used version at the time of writing is used.
+ * A mapping from varied license names to valid SPDX license IDs. This mapping only contains license strings which *can*
+ * be parsed by [SpdxExpression.parse] but have a corresponding valid SPDX license ID that should be used instead. When
+ * mapping a name without any indication of a version to an ID with a version, the most commonly used version at the
+ * time of writing is used. See [SpdxDeclaredLicenseMapping] for a mapping of unparseable license strings.
  */
 object SpdxLicenseAliasMapping {
     /**
