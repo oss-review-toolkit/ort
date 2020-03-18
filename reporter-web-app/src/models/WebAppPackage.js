@@ -40,7 +40,11 @@ class WebAppPackage {
 
     #declaredLicensesMapped = new Set();
 
+    #declaredLicensesMappedIndexes = new Set();
+
     #declaredLicensesUnmapped = new Set();
+
+    #declaredLicensesUnmappedIndexes = new Set();
 
     #definitionFilePath;
 
@@ -136,7 +140,7 @@ class WebAppPackage {
                     const mappedLicenses = declaredLicensesProcessed.mapped_licenses
                         || declaredLicensesProcessed.mappedLicenses;
                     if (mappedLicenses && mappedLicenses.length > 0) {
-                        this.#declaredLicensesMapped = new Set(mappedLicenses);
+                        this.#declaredLicensesMappedIndexes = new Set(mappedLicenses);
                     }
                 }
 
@@ -152,7 +156,7 @@ class WebAppPackage {
                     const unmappedLicenses = declaredLicensesProcessed.unmapped_licenses
                         || declaredLicensesProcessed.unmappedLicenses;
                     if (unmappedLicenses && unmappedLicenses.length > 0) {
-                        this.#declaredLicensesUnmapped = new Set(unmappedLicenses);
+                        this.#declaredLicensesUnmappedIndexes = new Set(unmappedLicenses);
                     }
                 }
             }
@@ -260,6 +264,26 @@ class WebAppPackage {
                         if (webAppLicense) {
                             const { id } = webAppLicense;
                             this.#detectedLicenses.add(id);
+                        }
+                    });
+                }
+
+                if (this.#declaredLicensesMappedIndexes.size !== 0) {
+                    this.#declaredLicensesMappedIndexes.forEach((index) => {
+                        const webAppLicense = webAppOrtResult.getLicenseByIndex(index);
+                        if (webAppLicense) {
+                            const { id } = webAppLicense;
+                            this.#declaredLicensesMapped.add(id);
+                        }
+                    });
+                }
+
+                if (this.#declaredLicensesUnmappedIndexes.size !== 0) {
+                    this.#declaredLicensesUnmappedIndexes.forEach((index) => {
+                        const webAppLicense = webAppOrtResult.getLicenseByIndex(index);
+                        if (webAppLicense) {
+                            const { id } = webAppLicense;
+                            this.#declaredLicensesUnmapped.add(id);
                         }
                     });
                 }
