@@ -25,6 +25,7 @@ import com.here.ort.analyzer.AbstractPackageManagerFactory
 import com.here.ort.analyzer.HTTP_CACHE_PATH
 import com.here.ort.analyzer.PackageManager
 import com.here.ort.downloader.VersionControlSystem
+import com.here.ort.downloader.VcsHost
 import com.here.ort.model.Hash
 import com.here.ort.model.Identifier
 import com.here.ort.model.OrtIssue
@@ -304,7 +305,7 @@ data class GemSpec(
                 yaml["licenses"]?.asIterable()?.mapTo(sortedSetOf()) { it.textValue() } ?: sortedSetOf(),
                 yaml["description"].textValueOrEmpty(),
                 runtimeDependencies.orEmpty(),
-                VersionControlSystem.splitUrl(homepage),
+                VcsHost.toVcsInfo(homepage),
                 RemoteArtifact.EMPTY
             )
         }
@@ -317,7 +318,7 @@ data class GemSpec(
             }?.toSet()
 
             val vcs = if (json.hasNonNull("source_code_uri")) {
-                VersionControlSystem.splitUrl(json["source_code_uri"].textValue())
+                VcsHost.toVcsInfo(json["source_code_uri"].textValue())
             } else {
                 VcsInfo.EMPTY
             }

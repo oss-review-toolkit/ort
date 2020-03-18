@@ -25,7 +25,6 @@ import com.here.ort.model.VcsType
 import com.here.ort.utils.CommandLineTool
 import com.here.ort.utils.collectMessagesAsString
 import com.here.ort.utils.log
-import com.here.ort.utils.normalizeVcsUrl
 import com.here.ort.utils.showStackTrace
 
 import com.vdurmont.semver4j.Semver
@@ -129,43 +128,6 @@ abstract class VersionControlSystem {
                 workingTree.getInfo().copy(path = workingTree.getPathToRoot(path))
             } ?: VcsInfo.EMPTY
         }
-
-        /**
-         * Decompose a string representing a [VCS URL][vcsUrl] into any contained [VCS information][VcsInfo].
-         */
-        fun splitUrl(vcsUrl: String) =
-            VcsHost.toVcsInfo(vcsUrl)
-                ?: when {
-                    vcsUrl.endsWith(".git") -> {
-                        VcsInfo(VcsType.GIT, normalizeVcsUrl(vcsUrl), "", null, "")
-                    }
-
-                    vcsUrl.contains(".git/") -> {
-                        val url = normalizeVcsUrl(vcsUrl.substringBefore(".git/"))
-                        val path = vcsUrl.substringAfter(".git/")
-                        VcsInfo(VcsType.GIT, "$url.git", "", null, path)
-                    }
-
-                    vcsUrl.contains(".git#") || Regex("git.+#[a-fA-F0-9]{7,}").matches(vcsUrl) -> {
-                        val url = normalizeVcsUrl(vcsUrl.substringBeforeLast('#'))
-                        val revision = vcsUrl.substringAfterLast('#')
-                        VcsInfo(VcsType.GIT, url, revision, null, "")
-                    }
-
-                    vcsUrl.contains("svn") -> {
-                        val branchOrTagPattern = Regex("(.+)/(branches|tags)/([^/]+)/?(.*)")
-                        branchOrTagPattern.matchEntire(vcsUrl)?.let { match ->
-                            VcsInfo(
-                                type = VcsType.SUBVERSION,
-                                url = match.groupValues[1],
-                                revision = "${match.groupValues[2]}/${match.groupValues[3]}",
-                                path = match.groupValues[4]
-                            )
-                        } ?: VcsInfo(VcsType.NONE, vcsUrl, "")
-                    }
-
-                    else -> VcsInfo(VcsType.NONE, vcsUrl, "")
-                }
     }
 
     /**

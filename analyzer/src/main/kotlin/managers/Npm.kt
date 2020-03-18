@@ -32,6 +32,7 @@ import com.here.ort.analyzer.managers.utils.hasNpmLockFile
 import com.here.ort.analyzer.managers.utils.mapDefinitionFilesForNpm
 import com.here.ort.analyzer.managers.utils.readProxySettingFromNpmRc
 import com.here.ort.downloader.VersionControlSystem
+import com.here.ort.downloader.VcsHost
 import com.here.ort.model.Hash
 import com.here.ort.model.Identifier
 import com.here.ort.model.Package
@@ -286,7 +287,7 @@ open class Npm(
                 }
             }
 
-            val vcsFromDownloadUrl = VersionControlSystem.splitUrl(expandNpmShortcutURL(downloadUrl))
+            val vcsFromDownloadUrl = VcsHost.toVcsInfo(expandNpmShortcutURL(downloadUrl))
             if (vcsFromDownloadUrl.url != downloadUrl) {
                 vcsFromPackage = vcsFromPackage.merge(vcsFromDownloadUrl)
             }

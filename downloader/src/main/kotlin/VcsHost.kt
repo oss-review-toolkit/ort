@@ -23,6 +23,7 @@ package com.here.ort.downloader
 import com.here.ort.model.VcsInfo
 import com.here.ort.model.VcsType
 import com.here.ort.utils.hasRevisionFragment
+import com.here.ort.utils.normalizeVcsUrl
 
 import java.net.URI
 import java.net.URISyntaxException
@@ -192,14 +193,47 @@ enum class VcsHost(
         /**
          * Return all [VcsInfo] that can be extracted from [projectUrl] by the applicable host.
          */
-        fun toVcsInfo(projectUrl: String): VcsInfo? =
-            try {
+        fun toVcsInfo(projectUrl: String): VcsInfo {
+            val vcs = try {
                 URI(projectUrl).let {
                     values().find { host -> host.isApplicable(it) }?.toVcsInfo(it)
                 }
             } catch (e: URISyntaxException) {
                 null
             }
+
+            return vcs ?: when {
+                projectUrl.endsWith(".git") -> {
+                    VcsInfo(VcsType.GIT, normalizeVcsUrl(projectUrl), "", null, "")
+                }
+
+                projectUrl.contains(".git/") -> {
+                    val url = normalizeVcsUrl(projectUrl.substringBefore(".git/"))
+                    val path = projectUrl.substringAfter(".git/")
+                    VcsInfo(VcsType.GIT, "$url.git", "", null, path)
+                }
+
+                projectUrl.contains(".git#") || Regex("git.+#[a-fA-F0-9]{7,}").matches(projectUrl) -> {
+                    val url = normalizeVcsUrl(projectUrl.substringBeforeLast('#'))
+                    val revision = projectUrl.substringAfterLast('#')
+                    VcsInfo(VcsType.GIT, url, revision, null, "")
+                }
+
+                projectUrl.contains("svn") -> {
+                    val branchOrTagPattern = Regex("(.+)/(branches|tags)/([^/]+)/?(.*)")
+                    branchOrTagPattern.matchEntire(projectUrl)?.let { match ->
+                        VcsInfo(
+                            type = VcsType.SUBVERSION,
+                            url = match.groupValues[1],
+                            revision = "${match.groupValues[2]}/${match.groupValues[3]}",
+                            path = match.groupValues[4]
+                        )
+                    } ?: VcsInfo(VcsType.NONE, projectUrl, "")
+                }
+
+                else -> VcsInfo(VcsType.NONE, projectUrl, "")
+            }
+        }
 
         /**
          * Return the host-specific permanent link to browse the code location described by [vcsInfo] with optional

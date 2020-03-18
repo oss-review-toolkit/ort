@@ -23,7 +23,7 @@ import com.fasterxml.jackson.module.kotlin.readValue
 
 import com.here.ort.analyzer.PackageManager
 import com.here.ort.analyzer.TOOL_NAME
-import com.here.ort.downloader.VersionControlSystem
+import com.here.ort.downloader.VcsHost
 import com.here.ort.model.Hash
 import com.here.ort.model.Identifier
 import com.here.ort.model.Package
@@ -184,7 +184,7 @@ class MavenSupport(workspaceReader: WorkspaceReader) {
 
                             // Try to detect the Maven SCM provider from the URL only, e.g. by looking at the host or
                             // special URL paths.
-                            VersionControlSystem.splitUrl(fixedUrl).copy(revision = tag).also {
+                            VcsHost.toVcsInfo(fixedUrl).copy(revision = tag).also {
                                 log.info { "Fixed up invalid SCM connection '$connection' without a provider to $it." }
                             }
                         }
