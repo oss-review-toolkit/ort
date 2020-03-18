@@ -31,7 +31,10 @@ import com.here.ort.scanner.Scanner
 import com.here.ort.utils.CommandLineTool
 import com.here.ort.utils.log
 
+import com.vdurmont.semver4j.SemverException
+
 import java.io.File
+import java.io.IOException
 import java.lang.reflect.Modifier
 
 import org.reflections.Reflections
@@ -100,28 +103,67 @@ class RequirementsCommand : CliktCommand(name = "requirements", help = "List the
             }
         }
 
+        // Toggle bits in here to denote the kind of error. Skip the first bit as status code 1 is already used above.
+        var statusCode = 0
+
         allTools.forEach { (category, tools) ->
             println("${category}s:")
-            tools.forEach { tool ->
-                // TODO: State which version was found, and whether it could be bootstrapped, but that requires
-                //       refactoring of CommandLineTool.
-                val message = buildString {
-                    if (tool.isInPath()) append("\t* ") else append("\t- ")
 
-                    append("${tool.javaClass.simpleName}: Requires '${tool.command()}' in ")
-                    if (tool.getVersionRequirement().toString() == CommandLineTool.ANY_VERSION.toString()) {
-                        append("no specific version.")
+            tools.forEach { tool ->
+                // TODO: State whether a tool can be bootstrapped, but that requires refactoring of CommandLineTool.
+                val message = buildString {
+                    val (prefix, suffix) = if (tool.isInPath()) {
+                        try {
+                            val actualVersion = tool.getVersion()
+                            try {
+                                if (tool.getVersionRequirement().isSatisfiedBy(actualVersion)) {
+                                    Pair("\t* ", "Found version $actualVersion.")
+                                } else {
+                                    statusCode = statusCode or 2
+                                    Pair("\t+ ", "Found version $actualVersion.")
+                                }
+                            } catch (e: SemverException) {
+                                statusCode = statusCode or 2
+                                Pair("\t+ ", "Found version '$actualVersion'.")
+                            }
+                        } catch (e: IOException) {
+                            statusCode = statusCode or 2
+                            Pair("\t+ ", "Could not determine the version.")
+                        }
                     } else {
-                        append("version ${tool.getVersionRequirement()}.")
+                        // Tolerate scanners to be missing as they can be bootstrapped.
+                        if (category != "Scanner") {
+                            statusCode = statusCode or 4
+                        }
+
+                        Pair("\t- ", "Tool not found.")
                     }
+
+                    append(prefix)
+                    append("${tool.javaClass.simpleName}: Requires '${tool.command()}' in ")
+
+                    if (tool.getVersionRequirement().toString() == CommandLineTool.ANY_VERSION.toString()) {
+                        append("no specific version. ")
+                    } else {
+                        append("version ${tool.getVersionRequirement()}. ")
+                    }
+
+                    append(suffix)
                 }
 
                 println(message)
             }
+
+            println()
         }
 
-        println("Legend:")
-        println("\tA '-' prefix means that the tool was _not_ found in the PATH environment.")
-        println("\tA '*' prefix means that _some_ version of the tool was found in the PATH environment.")
+        println("Prefix legend:")
+        println("\t- The tool was not found in the PATH environment.")
+        println("\t+ The tool was found in the PATH environment, but not in the required version.")
+        println("\t* The tool was found in the PATH environment in the required version.")
+
+        if (statusCode != 0) {
+            throw UsageError("Not all tools were found in their required versions.", statusCode = statusCode)
+        }
     }
 }

@@ -20,9 +20,12 @@
 package com.here.ort
 
 import com.github.ajalt.clikt.core.MutuallyExclusiveGroupException
+import com.github.ajalt.clikt.core.UsageError
 
+import com.here.ort.commands.RequirementsCommand
 import com.here.ort.downloader.VersionControlSystem
 import com.here.ort.utils.ORT_NAME
+import com.here.ort.utils.log
 import com.here.ort.utils.normalizeVcsUrl
 import com.here.ort.utils.redirectStdout
 import com.here.ort.utils.safeDeleteRecursively
@@ -168,5 +171,18 @@ class OrtMainTest : StringSpec() {
         }
     }
 
-    private fun runMain(vararg args: String) = redirectStdout { OrtMain().parse(args.asList()) }.lineSequence()
+    private fun runMain(vararg args: String) =
+        redirectStdout {
+            try {
+                OrtMain().parse(args.asList())
+            } catch (e: UsageError) {
+                // TODO: Improve this once clikt has a way to distinguish a non-zero status code caused by a real user
+                //       error from cases where the usage was correct but the tool ran into an error.
+                if (e.context?.command is RequirementsCommand) {
+                    log.debug { "Status code was ${e.statusCode}." }
+                } else {
+                    throw e
+                }
+            }
+        }.lineSequence()
 }
