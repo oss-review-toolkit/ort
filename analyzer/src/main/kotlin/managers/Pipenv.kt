@@ -51,16 +51,13 @@ class Pipenv(
 
     override fun command(workingDir: File?) = "pipenv"
 
+    override fun transformVersion(output: String) =
+        // "pipenv --version" returns a string like "pipenv, version 2018.11.26", so simply remove the prefix.
+        output.substringAfter("pipenv, version ")
+
     override fun getVersionRequirement(): Requirement = Requirement.buildIvy("[2018.10.9,)")
 
-    override fun getVersion(versionArguments: String, workingDir: File?, transform: (String) -> String) =
-        super.getVersion(versionArguments, workingDir) {
-            // "pipenv --version" returns a string like "pipenv, version 2018.11.26", so simply remove the prefix.
-            it.substringAfter("pipenv, version ")
-        }
-
-    override fun beforeResolution(definitionFiles: List<File>) =
-        checkVersion(ignoreActualVersion = analyzerConfig.ignoreToolVersions)
+    override fun beforeResolution(definitionFiles: List<File>) = checkVersion(analyzerConfig.ignoreToolVersions)
 
     override fun resolveDependencies(definitionFile: File): ProjectAnalyzerResult? {
         // For an overview, dependency resolution involves the following steps:

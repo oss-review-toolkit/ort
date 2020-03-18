@@ -47,14 +47,14 @@ class Mercurial : VersionControlSystem(), CommandLineTool {
 
     override fun command(workingDir: File?) = "hg"
 
-    override fun getVersion() =
-        getVersion { output ->
-            versionRegex.matcher(output.lineSequence().first()).let {
-                if (it.matches()) {
-                    it.group("version")
-                } else {
-                    ""
-                }
+    override fun getVersion() = super.getVersion(null)
+
+    override fun transformVersion(output: String) =
+        versionRegex.matcher(output.lineSequence().first()).let {
+            if (it.matches()) {
+                it.group("version")
+            } else {
+                ""
             }
         }
 

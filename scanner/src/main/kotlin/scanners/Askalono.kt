@@ -34,7 +34,6 @@ import com.here.ort.scanner.HTTP_CACHE_PATH
 import com.here.ort.scanner.LocalScanner
 import com.here.ort.scanner.ScanException
 import com.here.ort.spdx.calculatePackageVerificationCode
-import com.here.ort.utils.CommandLineTool
 import com.here.ort.utils.ORT_NAME
 import com.here.ort.utils.Os
 import com.here.ort.utils.OkHttpClientHelper
@@ -67,21 +66,12 @@ class Askalono(name: String, config: ScannerConfiguration) : LocalScanner(name, 
             else -> throw IllegalArgumentException("Unsupported operating system.")
         }
 
-        return "askalono.$extension"
+        return listOfNotNull(workingDir, "askalono.$extension").joinToString(File.separator)
     }
 
-    override fun getVersion(dir: File): String {
-        // Create a temporary tool to get its version from the installation in a specific directory.
-        val cmd = command()
-        val tool = object : CommandLineTool {
-            override fun command(workingDir: File?) = dir.resolve(cmd).absolutePath
-        }
-
-        return tool.getVersion(transform = {
-            // "askalono --version" returns a string like "askalono 0.2.0-beta.1", so simply remove the prefix.
-            it.substringAfter("askalono ")
-        })
-    }
+    override fun transformVersion(output: String) =
+        // "askalono --version" returns a string like "askalono 0.2.0-beta.1", so simply remove the prefix.
+        output.substringAfter("askalono ")
 
     override fun bootstrap(): File {
         val scannerExe = command()

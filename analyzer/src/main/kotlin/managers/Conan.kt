@@ -56,6 +56,7 @@ import java.util.Stack
  *
  * TODO: Add support for `python_requires`.
  */
+@Suppress("TooManyFunctions")
 class Conan(
     name: String,
     analysisRoot: File,
@@ -84,15 +85,14 @@ class Conan(
     // TODO: Add support for Conan lock files.
     // protected open fun hasLockFile(projectDir: File) = null
 
-    override fun getVersionRequirement(): Requirement = Requirement.buildStrict(REQUIRED_CONAN_VERSION)
-
-    override fun beforeResolution(definitionFiles: List<File>) =
+    override fun transformVersion(output: String) =
         // Conan could report version strings like:
         // Conan version 1.18.0
-        checkVersion(
-            ignoreActualVersion = analyzerConfig.ignoreToolVersions,
-            transform = { it.removePrefix("Conan version ") }
-        )
+        output.removePrefix("Conan version ")
+
+    override fun getVersionRequirement(): Requirement = Requirement.buildStrict(REQUIRED_CONAN_VERSION)
+
+    override fun beforeResolution(definitionFiles: List<File>) = checkVersion(analyzerConfig.ignoreToolVersions)
 
     /**
      * Primary method for resolving dependencies from [definitionFile].

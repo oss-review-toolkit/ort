@@ -34,7 +34,6 @@ import com.here.ort.scanner.HTTP_CACHE_PATH
 import com.here.ort.scanner.LocalScanner
 import com.here.ort.scanner.ScanException
 import com.here.ort.spdx.calculatePackageVerificationCode
-import com.here.ort.utils.CommandLineTool
 import com.here.ort.utils.ORT_NAME
 import com.here.ort.utils.Os
 import com.here.ort.utils.OkHttpClientHelper
@@ -64,20 +63,12 @@ class BoyterLc(name: String, config: ScannerConfiguration) : LocalScanner(name, 
     override val scannerVersion = "1.3.1"
     override val resultFileExt = "json"
 
-    override fun command(workingDir: File?) = if (Os.isWindows) "lc.exe" else "lc"
+    override fun command(workingDir: File?) =
+        listOfNotNull(workingDir, if (Os.isWindows) "lc.exe" else "lc").joinToString(File.separator)
 
-    override fun getVersion(dir: File): String {
-        // Create a temporary tool to get its version from the installation in a specific directory.
-        val cmd = command()
-        val tool = object : CommandLineTool {
-            override fun command(workingDir: File?) = dir.resolve(cmd).absolutePath
-        }
-
-        return tool.getVersion(transform = {
-            // "lc --version" returns a string like "licensechecker version 1.1.1", so simply remove the prefix.
-            it.substringAfter("licensechecker version ")
-        })
-    }
+    override fun transformVersion(output: String) =
+        // "lc --version" returns a string like "licensechecker version 1.1.1", so simply remove the prefix.
+        output.substringAfter("licensechecker version ")
 
     override fun bootstrap(): File {
         val platform = when {

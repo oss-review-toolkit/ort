@@ -76,19 +76,21 @@ class Sbt(
 
     override fun command(workingDir: File?) = if (Os.isWindows) "sbt.bat" else "sbt"
 
-    override fun getVersionRequirement(): Requirement =
-        // We need at least sbt version 0.13.0 to be able to use "makePom" instead of the deprecated hyphenated
-        // form "make-pom" and to support declaring Maven-style repositories, see
-        // http://www.scala-sbt.org/0.13/docs/Publishing.html#Modifying+the+generated+POM.
-        Requirement.buildIvy("[0.13.0,)")
+    override fun getVersionArguments() = "$BATCH_MODE $LOG_NO_FORMAT sbtVersion"
 
-    private fun extractLowestSbtVersion(stdout: String): String {
-        val versions = stdout.lines().mapNotNull { line ->
+    override fun transformVersion(output: String): String {
+        val versions = output.lines().mapNotNull { line ->
             VERSION_REGEX.matchEntire(line)?.groupValues?.getOrNull(1)?.let { Semver(it) }
         }
 
         return checkForSameSbtVersion(versions)
     }
+
+    override fun getVersionRequirement(): Requirement =
+        // We need at least sbt version 0.13.0 to be able to use "makePom" instead of the deprecated hyphenated
+        // form "make-pom" and to support declaring Maven-style repositories, see
+        // http://www.scala-sbt.org/0.13/docs/Publishing.html#Modifying+the+generated+POM.
+        Requirement.buildIvy("[0.13.0,)")
 
     private fun checkForSameSbtVersion(versions: List<Semver>): String {
         val uniqueVersions = versions.toSortedSet()
@@ -150,12 +152,7 @@ class Sbt(
         if (!propertiesFiles.contains(rootPropertiesFile)) {
             // Note that "sbt sbtVersion" behaves differently when executed inside or outside an SBT project, see
             // https://stackoverflow.com/a/20337575/1127485.
-            checkVersion(
-                versionArguments = "$BATCH_MODE $LOG_NO_FORMAT sbtVersion",
-                workingDir = workingDir,
-                ignoreActualVersion = analyzerConfig.ignoreToolVersions,
-                transform = this::extractLowestSbtVersion
-            )
+            checkVersion(analyzerConfig.ignoreToolVersions, workingDir)
         } else {
             val versions = mutableListOf<Semver>()
 

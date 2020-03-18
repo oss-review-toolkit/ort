@@ -107,7 +107,7 @@ open class Npm(
     override fun beforeResolution(definitionFiles: List<File>) =
         // We do not actually depend on any features specific to an NPM version, but we still want to stick to a
         // fixed minor version to be sure to get consistent results.
-        checkVersion(ignoreActualVersion = analyzerConfig.ignoreToolVersions)
+        checkVersion(analyzerConfig.ignoreToolVersions)
 
     override fun resolveDependencies(definitionFile: File): ProjectAnalyzerResult? {
         val workingDir = definitionFile.parentFile
