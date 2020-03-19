@@ -953,8 +953,8 @@ analyzer:
           revision: ""
           path: ""
         vcs_processed:
-          type: ""
-          url: ""
+          type: "Git"
+          url: "https://github.com/sbt/test-interface.git"
           revision: ""
           path: ""
       curations: []

@@ -563,11 +563,12 @@ class MavenSupport(workspaceReader: WorkspaceReader) {
             }
         }
 
-        val homepageUrl = mavenProject.url.orEmpty()
+        val homepageUrl = mavenProject.url
+        val vcsFallbackUrls = listOfNotNull(mavenProject.scm?.url, homepageUrl)
 
         val vcsProcessed = localDirectory?.let {
-            PackageManager.processProjectVcs(it, vcsFromPackage, listOf(homepageUrl))
-        } ?: PackageManager.processPackageVcs(vcsFromPackage, listOf(homepageUrl))
+            PackageManager.processProjectVcs(it, vcsFromPackage, vcsFallbackUrls)
+        } ?: PackageManager.processPackageVcs(vcsFromPackage, vcsFallbackUrls)
 
         return Package(
             id = Identifier(
@@ -578,7 +579,7 @@ class MavenSupport(workspaceReader: WorkspaceReader) {
             ),
             declaredLicenses = parseLicenses(mavenProject),
             description = mavenProject.description.orEmpty(),
-            homepageUrl = homepageUrl,
+            homepageUrl = homepageUrl.orEmpty(),
             binaryArtifact = binaryRemoteArtifact,
             sourceArtifact = sourceRemoteArtifact,
             vcs = vcsFromPackage,
