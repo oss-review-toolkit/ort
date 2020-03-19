@@ -566,8 +566,8 @@ class MavenSupport(workspaceReader: WorkspaceReader) {
         val homepageUrl = mavenProject.url.orEmpty()
 
         val vcsProcessed = localDirectory?.let {
-            PackageManager.processProjectVcs(it, vcsFromPackage, homepageUrl)
-        } ?: PackageManager.processPackageVcs(vcsFromPackage, homepageUrl)
+            PackageManager.processProjectVcs(it, vcsFromPackage, listOf(homepageUrl))
+        } ?: PackageManager.processPackageVcs(vcsFromPackage, listOf(homepageUrl))
 
         return Package(
             id = Identifier(

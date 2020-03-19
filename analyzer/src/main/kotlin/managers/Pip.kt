@@ -400,7 +400,7 @@ class Pip(
                                 pkg.sourceArtifact
                             },
                             vcs = pkg.vcs,
-                            vcsProcessed = processPackageVcs(pkg.vcs, pkgHomepage)
+                            vcsProcessed = processPackageVcs(pkg.vcs, listOf(pkgHomepage))
                         )
                     } ?: run {
                         log.warn {
@@ -433,7 +433,7 @@ class Pip(
             definitionFilePath = VersionControlSystem.getPathInfo(definitionFile).path,
             declaredLicenses = declaredLicenses,
             vcs = VcsInfo.EMPTY,
-            vcsProcessed = processProjectVcs(workingDir, homepageUrl = setupHomepage),
+            vcsProcessed = processProjectVcs(workingDir, fallbackUrls = listOf(setupHomepage)),
             homepageUrl = setupHomepage,
             scopes = scopes
         )
