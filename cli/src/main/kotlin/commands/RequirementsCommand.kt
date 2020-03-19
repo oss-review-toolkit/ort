@@ -50,7 +50,7 @@ class RequirementsCommand : CliktCommand(name = "requirements", help = "List the
             try {
                 val kotlinObject = it.kotlin.objectInstance
 
-                var key = "Other tool"
+                var category = "Other tool"
                 val instance = when {
                     kotlinObject != null -> {
                         log.debug { "$it is a Kotlin object." }
@@ -58,8 +58,8 @@ class RequirementsCommand : CliktCommand(name = "requirements", help = "List the
                     }
 
                     PackageManager::class.java.isAssignableFrom(it) -> {
-                        key = "PackageManager"
-                        log.debug { "$it is a $key." }
+                        category = "PackageManager"
+                        log.debug { "$it is a $category." }
                         it.getDeclaredConstructor(
                             String::class.java,
                             File::class.java,
@@ -74,15 +74,15 @@ class RequirementsCommand : CliktCommand(name = "requirements", help = "List the
                     }
 
                     Scanner::class.java.isAssignableFrom(it) -> {
-                        key = "Scanner"
-                        log.debug { "$it is a $key." }
+                        category = "Scanner"
+                        log.debug { "$it is a $category." }
                         it.getDeclaredConstructor(String::class.java, ScannerConfiguration::class.java)
                             .newInstance("", ScannerConfiguration())
                     }
 
                     VersionControlSystem::class.java.isAssignableFrom(it) -> {
-                        key = "VersionControlSystem"
-                        log.debug { "$it is a $key." }
+                        category = "VersionControlSystem"
+                        log.debug { "$it is a $category." }
                         it.getDeclaredConstructor().newInstance()
                     }
 
@@ -93,7 +93,7 @@ class RequirementsCommand : CliktCommand(name = "requirements", help = "List the
                 }
 
                 if (instance.command().isNotEmpty()) {
-                    allTools.getOrPut(key) { mutableListOf() } += instance
+                    allTools.getOrPut(category) { mutableListOf() } += instance
                 }
             } catch (e: Exception) {
                 throw UsageError("There was an error instantiating $it: $e.", statusCode = 1)
