@@ -92,7 +92,7 @@ object PythonVersion : CommandLineTool {
     // https://docs.python.org/3/installing/#work-with-multiple-versions-of-python-installed-in-parallel.
     override fun command(workingDir: File?) = if (Os.isWindows) "py" else "python3"
 
-    override fun transformVersion(output: String) = output.substringAfter("Python ")
+    override fun transformVersion(output: String) = output.removePrefix("Python ")
 
     /**
      * Check all Python files in [workingDir] and return which version of Python they are compatible with. If all files

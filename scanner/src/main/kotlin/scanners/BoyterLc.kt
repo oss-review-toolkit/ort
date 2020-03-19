@@ -68,7 +68,7 @@ class BoyterLc(name: String, config: ScannerConfiguration) : LocalScanner(name, 
 
     override fun transformVersion(output: String) =
         // "lc --version" returns a string like "licensechecker version 1.1.1", so simply remove the prefix.
-        output.substringAfter("licensechecker version ")
+        output.removePrefix("licensechecker version ")
 
     override fun bootstrap(): File {
         val platform = when {
