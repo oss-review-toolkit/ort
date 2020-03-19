@@ -152,6 +152,8 @@ class Maven(
             workingDir
         }
 
+        val vcsFallbackUrls = listOfNotNull(mavenProject.scm?.url, mavenProject.url)
+
         val project = Project(
             id = Identifier(
                 type = managerName,
@@ -162,7 +164,7 @@ class Maven(
             definitionFilePath = VersionControlSystem.getPathInfo(definitionFile).path,
             declaredLicenses = MavenSupport.parseLicenses(mavenProject),
             vcs = vcsFromPackage,
-            vcsProcessed = processProjectVcs(projectDir, vcsFromPackage, listOf(mavenProject.url.orEmpty())),
+            vcsProcessed = processProjectVcs(projectDir, vcsFromPackage, vcsFallbackUrls),
             homepageUrl = mavenProject.url.orEmpty(),
             scopes = scopes.values.toSortedSet()
         )
