@@ -166,6 +166,8 @@ class Pub(
     private val processedPackages = mutableListOf<String>()
     private val reader = PubCacheReader()
 
+    override fun transformVersion(output: String) = output.removePrefix("Pub ")
+
     override fun getVersionRequirement(): Requirement = Requirement.buildIvy("[2.2,)")
 
     override fun resolveDependencies(definitionFile: File): ProjectAnalyzerResult? {
