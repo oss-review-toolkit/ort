@@ -162,7 +162,7 @@ class Maven(
             definitionFilePath = VersionControlSystem.getPathInfo(definitionFile).path,
             declaredLicenses = MavenSupport.parseLicenses(mavenProject),
             vcs = vcsFromPackage,
-            vcsProcessed = processProjectVcs(projectDir, vcsFromPackage, mavenProject.url.orEmpty()),
+            vcsProcessed = processProjectVcs(projectDir, vcsFromPackage, listOf(mavenProject.url.orEmpty())),
             homepageUrl = mavenProject.url.orEmpty(),
             scopes = scopes.values.toSortedSet()
         )
