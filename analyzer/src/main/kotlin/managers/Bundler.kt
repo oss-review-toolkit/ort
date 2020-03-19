@@ -83,7 +83,7 @@ class Bundler(
 
     override fun command(workingDir: File?) = if (Os.isWindows) "bundle.bat" else "bundle"
 
-    override fun transformVersion(output: String) = output.substringAfter("Bundler version ")
+    override fun transformVersion(output: String) = output.removePrefix("Bundler version ")
 
     override fun getVersionRequirement(): Requirement = Requirement.buildIvy("[1.16,2.2[")
 

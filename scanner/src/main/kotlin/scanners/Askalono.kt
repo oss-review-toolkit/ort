@@ -71,7 +71,7 @@ class Askalono(name: String, config: ScannerConfiguration) : LocalScanner(name, 
 
     override fun transformVersion(output: String) =
         // "askalono --version" returns a string like "askalono 0.2.0-beta.1", so simply remove the prefix.
-        output.substringAfter("askalono ")
+        output.removePrefix("askalono ")
 
     override fun bootstrap(): File {
         val scannerExe = command()
