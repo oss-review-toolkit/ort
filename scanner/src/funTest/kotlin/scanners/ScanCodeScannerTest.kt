@@ -17,10 +17,10 @@
  * License-Filename: LICENSE
  */
 
-package com.here.ort.scanner.scanners
+package org.ossreviewtoolkit.scanner.scanners
 
-import com.here.ort.utils.test.ExpensiveTag
-import com.here.ort.utils.test.ScanCodeTag
+import org.ossreviewtoolkit.utils.test.ExpensiveTag
+import org.ossreviewtoolkit.utils.test.ScanCodeTag
 
 class ScanCodeScannerTest : AbstractScannerTest(setOf(ExpensiveTag, ScanCodeTag)) {
     override val scanner = ScanCode("ScanCode", config)

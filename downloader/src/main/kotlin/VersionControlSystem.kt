@@ -17,15 +17,15 @@
  * License-Filename: LICENSE
  */
 
-package com.here.ort.downloader
+package org.ossreviewtoolkit.downloader
 
-import com.here.ort.model.Package
-import com.here.ort.model.VcsInfo
-import com.here.ort.model.VcsType
-import com.here.ort.utils.CommandLineTool
-import com.here.ort.utils.collectMessagesAsString
-import com.here.ort.utils.log
-import com.here.ort.utils.showStackTrace
+import org.ossreviewtoolkit.model.Package
+import org.ossreviewtoolkit.model.VcsInfo
+import org.ossreviewtoolkit.model.VcsType
+import org.ossreviewtoolkit.utils.CommandLineTool
+import org.ossreviewtoolkit.utils.collectMessagesAsString
+import org.ossreviewtoolkit.utils.log
+import org.ossreviewtoolkit.utils.showStackTrace
 
 import com.vdurmont.semver4j.Semver
 

@@ -17,29 +17,29 @@
  * License-Filename: LICENSE
  */
 
-package com.here.ort.scanner.scanners
+package org.ossreviewtoolkit.scanner.scanners
 
 import com.fasterxml.jackson.databind.JsonNode
 
-import com.here.ort.model.EMPTY_JSON_NODE
-import com.here.ort.model.LicenseFinding
-import com.here.ort.model.Provenance
-import com.here.ort.model.ScanResult
-import com.here.ort.model.ScanSummary
-import com.here.ort.model.TextLocation
-import com.here.ort.model.config.ScannerConfiguration
-import com.here.ort.model.jsonMapper
-import com.here.ort.scanner.AbstractScannerFactory
-import com.here.ort.scanner.HTTP_CACHE_PATH
-import com.here.ort.scanner.LocalScanner
-import com.here.ort.scanner.ScanException
-import com.here.ort.spdx.calculatePackageVerificationCode
-import com.here.ort.utils.ORT_NAME
-import com.here.ort.utils.Os
-import com.here.ort.utils.OkHttpClientHelper
-import com.here.ort.utils.ProcessCapture
-import com.here.ort.utils.log
-import com.here.ort.utils.unpack
+import org.ossreviewtoolkit.model.EMPTY_JSON_NODE
+import org.ossreviewtoolkit.model.LicenseFinding
+import org.ossreviewtoolkit.model.Provenance
+import org.ossreviewtoolkit.model.ScanResult
+import org.ossreviewtoolkit.model.ScanSummary
+import org.ossreviewtoolkit.model.TextLocation
+import org.ossreviewtoolkit.model.config.ScannerConfiguration
+import org.ossreviewtoolkit.model.jsonMapper
+import org.ossreviewtoolkit.scanner.AbstractScannerFactory
+import org.ossreviewtoolkit.scanner.HTTP_CACHE_PATH
+import org.ossreviewtoolkit.scanner.LocalScanner
+import org.ossreviewtoolkit.scanner.ScanException
+import org.ossreviewtoolkit.spdx.calculatePackageVerificationCode
+import org.ossreviewtoolkit.utils.ORT_NAME
+import org.ossreviewtoolkit.utils.Os
+import org.ossreviewtoolkit.utils.OkHttpClientHelper
+import org.ossreviewtoolkit.utils.ProcessCapture
+import org.ossreviewtoolkit.utils.log
+import org.ossreviewtoolkit.utils.unpack
 
 import java.io.File
 import java.io.IOException

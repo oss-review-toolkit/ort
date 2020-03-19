@@ -17,14 +17,14 @@
  * License-Filename: LICENSE
  */
 
-package com.here.ort.analyzer.managers
+package org.ossreviewtoolkit.analyzer.managers
 
-import com.here.ort.analyzer.Analyzer
-import com.here.ort.downloader.vcs.Git
-import com.here.ort.model.yamlMapper
-import com.here.ort.utils.test.DEFAULT_ANALYZER_CONFIGURATION
-import com.here.ort.utils.test.patchActualResult
-import com.here.ort.utils.test.patchExpectedResult
+import org.ossreviewtoolkit.analyzer.Analyzer
+import org.ossreviewtoolkit.downloader.vcs.Git
+import org.ossreviewtoolkit.model.yamlMapper
+import org.ossreviewtoolkit.utils.test.DEFAULT_ANALYZER_CONFIGURATION
+import org.ossreviewtoolkit.utils.test.patchActualResult
+import org.ossreviewtoolkit.utils.test.patchExpectedResult
 
 import io.kotlintest.shouldBe
 import io.kotlintest.specs.StringSpec

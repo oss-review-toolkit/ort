@@ -17,9 +17,9 @@
  * License-Filename: LICENSE
  */
 
-package com.here.ort.model.config
+package org.ossreviewtoolkit.model.config
 
-import com.here.ort.model.OrtIssue
+import org.ossreviewtoolkit.model.OrtIssue
 
 /**
  * Possible reasons for resolving an [OrtIssue] using a [IssueResolution].

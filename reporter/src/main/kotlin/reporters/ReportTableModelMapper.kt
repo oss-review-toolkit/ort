@@ -17,27 +17,27 @@
  * License-Filename: LICENSE
  */
 
-package com.here.ort.reporter.reporters
+package org.ossreviewtoolkit.reporter.reporters
 
-import com.here.ort.model.Identifier
-import com.here.ort.model.OrtIssue
-import com.here.ort.model.OrtResult
-import com.here.ort.model.Project
-import com.here.ort.model.RemoteArtifact
-import com.here.ort.model.RuleViolation
-import com.here.ort.model.VcsInfo
-import com.here.ort.model.config.Excludes
-import com.here.ort.model.config.ScopeExclude
-import com.here.ort.model.utils.PackageConfigurationProvider
-import com.here.ort.model.utils.collectLicenseFindings
-import com.here.ort.reporter.ResolutionProvider
-import com.here.ort.reporter.reporters.ReportTableModel.DependencyRow
-import com.here.ort.reporter.reporters.ReportTableModel.IssueRow
-import com.here.ort.reporter.reporters.ReportTableModel.IssueTable
-import com.here.ort.reporter.reporters.ReportTableModel.ProjectTable
-import com.here.ort.reporter.reporters.ReportTableModel.ResolvableIssue
-import com.here.ort.reporter.reporters.ReportTableModel.SummaryRow
-import com.here.ort.reporter.reporters.ReportTableModel.SummaryTable
+import org.ossreviewtoolkit.model.Identifier
+import org.ossreviewtoolkit.model.OrtIssue
+import org.ossreviewtoolkit.model.OrtResult
+import org.ossreviewtoolkit.model.Project
+import org.ossreviewtoolkit.model.RemoteArtifact
+import org.ossreviewtoolkit.model.RuleViolation
+import org.ossreviewtoolkit.model.VcsInfo
+import org.ossreviewtoolkit.model.config.Excludes
+import org.ossreviewtoolkit.model.config.ScopeExclude
+import org.ossreviewtoolkit.model.utils.PackageConfigurationProvider
+import org.ossreviewtoolkit.model.utils.collectLicenseFindings
+import org.ossreviewtoolkit.reporter.ResolutionProvider
+import org.ossreviewtoolkit.reporter.reporters.ReportTableModel.DependencyRow
+import org.ossreviewtoolkit.reporter.reporters.ReportTableModel.IssueRow
+import org.ossreviewtoolkit.reporter.reporters.ReportTableModel.IssueTable
+import org.ossreviewtoolkit.reporter.reporters.ReportTableModel.ProjectTable
+import org.ossreviewtoolkit.reporter.reporters.ReportTableModel.ResolvableIssue
+import org.ossreviewtoolkit.reporter.reporters.ReportTableModel.SummaryRow
+import org.ossreviewtoolkit.reporter.reporters.ReportTableModel.SummaryTable
 
 private fun Collection<ResolvableIssue>.filterUnresolved() = filter { !it.isResolved }
 

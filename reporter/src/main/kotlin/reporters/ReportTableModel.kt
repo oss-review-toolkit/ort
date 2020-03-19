@@ -17,22 +17,22 @@
  * License-Filename: LICENSE
  */
 
-package com.here.ort.reporter.reporters
+package org.ossreviewtoolkit.reporter.reporters
 
-import com.here.ort.model.Identifier
-import com.here.ort.model.LicenseFindings
-import com.here.ort.model.OrtResult
-import com.here.ort.model.Project
-import com.here.ort.model.RemoteArtifact
-import com.here.ort.model.RuleViolation
-import com.here.ort.model.ScanResult
-import com.here.ort.model.Severity
-import com.here.ort.model.VcsInfo
-import com.here.ort.model.config.PathExclude
-import com.here.ort.model.config.RepositoryConfiguration
-import com.here.ort.model.config.ScopeExclude
-import com.here.ort.spdx.SpdxExpression
-import com.here.ort.utils.zipWithDefault
+import org.ossreviewtoolkit.model.Identifier
+import org.ossreviewtoolkit.model.LicenseFindings
+import org.ossreviewtoolkit.model.OrtResult
+import org.ossreviewtoolkit.model.Project
+import org.ossreviewtoolkit.model.RemoteArtifact
+import org.ossreviewtoolkit.model.RuleViolation
+import org.ossreviewtoolkit.model.ScanResult
+import org.ossreviewtoolkit.model.Severity
+import org.ossreviewtoolkit.model.VcsInfo
+import org.ossreviewtoolkit.model.config.PathExclude
+import org.ossreviewtoolkit.model.config.RepositoryConfiguration
+import org.ossreviewtoolkit.model.config.ScopeExclude
+import org.ossreviewtoolkit.spdx.SpdxExpression
+import org.ossreviewtoolkit.utils.zipWithDefault
 
 import java.util.SortedMap
 import java.util.SortedSet

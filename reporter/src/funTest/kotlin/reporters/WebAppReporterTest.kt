@@ -17,10 +17,10 @@
  * License-Filename: LICENSE
  */
 
-package com.here.ort.reporter.reporters
+package org.ossreviewtoolkit.reporter.reporters
 
-import com.here.ort.reporter.ReporterInput
-import com.here.ort.utils.test.readOrtResult
+import org.ossreviewtoolkit.reporter.ReporterInput
+import org.ossreviewtoolkit.utils.test.readOrtResult
 
 import io.kotlintest.shouldNotBe
 import io.kotlintest.specs.WordSpec

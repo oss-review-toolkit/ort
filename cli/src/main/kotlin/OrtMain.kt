@@ -17,7 +17,7 @@
  * License-Filename: LICENSE
  */
 
-package com.here.ort
+package org.ossreviewtoolkit
 
 import com.github.ajalt.clikt.core.CliktCommand
 import com.github.ajalt.clikt.core.context
@@ -34,13 +34,13 @@ import com.github.ajalt.clikt.parameters.options.switch
 import com.github.ajalt.clikt.parameters.options.versionOption
 import com.github.ajalt.clikt.parameters.types.file
 
-import com.here.ort.commands.*
-import com.here.ort.model.Environment
-import com.here.ort.model.config.OrtConfiguration
-import com.here.ort.utils.ORT_NAME
-import com.here.ort.utils.expandTilde
-import com.here.ort.utils.getUserOrtDirectory
-import com.here.ort.utils.printStackTrace
+import org.ossreviewtoolkit.commands.*
+import org.ossreviewtoolkit.model.Environment
+import org.ossreviewtoolkit.model.config.OrtConfiguration
+import org.ossreviewtoolkit.utils.ORT_NAME
+import org.ossreviewtoolkit.utils.expandTilde
+import org.ossreviewtoolkit.utils.getUserOrtDirectory
+import org.ossreviewtoolkit.utils.printStackTrace
 
 import java.io.File
 

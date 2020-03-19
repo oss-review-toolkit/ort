@@ -17,7 +17,7 @@
  * License-Filename: LICENSE
  */
 
-package com.here.ort.reporter.model
+package org.ossreviewtoolkit.reporter.model
 
 /**
  * Wrapper class for license identifiers. Allows Jackson to generate IDs for them when storing them in a separate list

@@ -17,9 +17,9 @@
  * License-Filename: LICENSE
  */
 
-package com.here.ort.scanner
+package org.ossreviewtoolkit.scanner
 
-import com.here.ort.model.config.ScannerConfiguration
+import org.ossreviewtoolkit.model.config.ScannerConfiguration
 
 import java.util.ServiceLoader
 

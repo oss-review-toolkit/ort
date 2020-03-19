@@ -17,12 +17,12 @@
  * License-Filename: LICENSE
  */
 
-package com.here.ort.model.utils
+package org.ossreviewtoolkit.model.utils
 
-import com.here.ort.model.Identifier
-import com.here.ort.model.Provenance
-import com.here.ort.model.config.PackageConfiguration
-import com.here.ort.model.readValue
+import org.ossreviewtoolkit.model.Identifier
+import org.ossreviewtoolkit.model.Provenance
+import org.ossreviewtoolkit.model.config.PackageConfiguration
+import org.ossreviewtoolkit.model.readValue
 
 import java.io.File
 

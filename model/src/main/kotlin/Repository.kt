@@ -17,11 +17,11 @@
  * License-Filename: LICENSE
  */
 
-package com.here.ort.model
+package org.ossreviewtoolkit.model
 
 import com.fasterxml.jackson.annotation.JsonInclude
 
-import com.here.ort.model.config.RepositoryConfiguration
+import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 
 /**
  * A description of the source code repository that was used as input for ORT.

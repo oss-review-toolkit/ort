@@ -17,7 +17,7 @@
  * License-Filename: LICENSE
  */
 
-package com.here.ort.commands
+package org.ossreviewtoolkit.commands
 
 import com.github.ajalt.clikt.core.BadParameterValue
 import com.github.ajalt.clikt.core.CliktCommand
@@ -35,18 +35,18 @@ import com.github.ajalt.clikt.parameters.options.split
 import com.github.ajalt.clikt.parameters.types.enum
 import com.github.ajalt.clikt.parameters.types.file
 
-import com.here.ort.model.OutputFormat
-import com.here.ort.model.config.OrtConfiguration
-import com.here.ort.model.config.ScannerConfiguration
-import com.here.ort.model.mapper
-import com.here.ort.scanner.LocalScanner
-import com.here.ort.scanner.ScanResultsStorage
-import com.here.ort.scanner.Scanner
-import com.here.ort.scanner.scanners.ScanCode
-import com.here.ort.scanner.storages.FileBasedStorage
-import com.here.ort.scanner.storages.SCAN_RESULTS_FILE_NAME
-import com.here.ort.utils.expandTilde
-import com.here.ort.utils.storage.LocalFileStorage
+import org.ossreviewtoolkit.model.OutputFormat
+import org.ossreviewtoolkit.model.config.OrtConfiguration
+import org.ossreviewtoolkit.model.config.ScannerConfiguration
+import org.ossreviewtoolkit.model.mapper
+import org.ossreviewtoolkit.scanner.LocalScanner
+import org.ossreviewtoolkit.scanner.ScanResultsStorage
+import org.ossreviewtoolkit.scanner.Scanner
+import org.ossreviewtoolkit.scanner.scanners.ScanCode
+import org.ossreviewtoolkit.scanner.storages.FileBasedStorage
+import org.ossreviewtoolkit.scanner.storages.SCAN_RESULTS_FILE_NAME
+import org.ossreviewtoolkit.utils.expandTilde
+import org.ossreviewtoolkit.utils.storage.LocalFileStorage
 
 import java.io.File
 

@@ -17,7 +17,7 @@
  * License-Filename: LICENSE
  */
 
-package com.here.ort.utils.storage
+package org.ossreviewtoolkit.utils.storage
 
 import java.io.InputStream
 

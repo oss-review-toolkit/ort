@@ -17,7 +17,7 @@
  * License-Filename: LICENSE
  */
 
-package com.here.ort.reporter.model
+package org.ossreviewtoolkit.reporter.model
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo
 import com.fasterxml.jackson.annotation.JsonIdentityReference
@@ -34,21 +34,21 @@ import com.fasterxml.jackson.databind.node.ObjectNode
 import com.fasterxml.jackson.dataformat.yaml.YAMLMapper
 import com.fasterxml.jackson.module.kotlin.registerKotlinModule
 
-import com.here.ort.model.CustomData
-import com.here.ort.model.OrtIssue
-import com.here.ort.model.OrtResult
-import com.here.ort.model.PROPERTY_NAMING_STRATEGY
-import com.here.ort.model.RuleViolation
-import com.here.ort.model.config.IssueResolution
-import com.here.ort.model.config.LicenseFindingCuration
-import com.here.ort.model.config.PathExclude
-import com.here.ort.model.config.RepositoryConfiguration
-import com.here.ort.model.config.RuleViolationResolution
-import com.here.ort.model.config.ScopeExclude
-import com.here.ort.reporter.Reporter
-import com.here.ort.reporter.ReporterInput
-import com.here.ort.reporter.reporters.WebAppReporter
-import com.here.ort.reporter.utils.IntIdModule
+import org.ossreviewtoolkit.model.CustomData
+import org.ossreviewtoolkit.model.OrtIssue
+import org.ossreviewtoolkit.model.OrtResult
+import org.ossreviewtoolkit.model.PROPERTY_NAMING_STRATEGY
+import org.ossreviewtoolkit.model.RuleViolation
+import org.ossreviewtoolkit.model.config.IssueResolution
+import org.ossreviewtoolkit.model.config.LicenseFindingCuration
+import org.ossreviewtoolkit.model.config.PathExclude
+import org.ossreviewtoolkit.model.config.RepositoryConfiguration
+import org.ossreviewtoolkit.model.config.RuleViolationResolution
+import org.ossreviewtoolkit.model.config.ScopeExclude
+import org.ossreviewtoolkit.reporter.Reporter
+import org.ossreviewtoolkit.reporter.ReporterInput
+import org.ossreviewtoolkit.reporter.reporters.WebAppReporter
+import org.ossreviewtoolkit.reporter.utils.IntIdModule
 
 import java.io.Writer
 

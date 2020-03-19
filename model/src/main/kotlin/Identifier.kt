@@ -17,13 +17,13 @@
  * License-Filename: LICENSE
  */
 
-package com.here.ort.model
+package org.ossreviewtoolkit.model
 
 import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonValue
 
-import com.here.ort.utils.encodeOrUnknown
-import com.here.ort.utils.percentEncode
+import org.ossreviewtoolkit.utils.encodeOrUnknown
+import org.ossreviewtoolkit.utils.percentEncode
 
 /**
  * A unique identifier for a software package.

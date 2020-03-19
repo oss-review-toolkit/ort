@@ -17,14 +17,14 @@
  * License-Filename: LICENSE
  */
 
-package com.here.ort.model.config
+package org.ossreviewtoolkit.model.config
 
 import com.fasterxml.jackson.annotation.JsonInclude
 
-import com.here.ort.model.Identifier
-import com.here.ort.model.Provenance
-import com.here.ort.model.VcsInfo
-import com.here.ort.model.VcsType
+import org.ossreviewtoolkit.model.Identifier
+import org.ossreviewtoolkit.model.Provenance
+import org.ossreviewtoolkit.model.VcsInfo
+import org.ossreviewtoolkit.model.VcsType
 
 /**
  * A configuration for a specific package and provenance. It allows to setup [PathExclude]s and (in the future, TODO)

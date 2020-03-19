@@ -17,7 +17,7 @@
  * License-Filename: LICENSE
  */
 
-package com.here.ort.helper.commands
+package org.ossreviewtoolkit.helper.commands
 
 import com.beust.jcommander.JCommander
 import com.beust.jcommander.Parameter
@@ -26,12 +26,12 @@ import com.beust.jcommander.Parameters
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.dataformat.yaml.YAMLGenerator
 
-import com.here.ort.helper.CommandWithHelp
-import com.here.ort.model.config.CopyrightGarbage
-import com.here.ort.model.readValue
-import com.here.ort.model.yamlMapper
-import com.here.ort.utils.PARAMETER_ORDER_MANDATORY
-import com.here.ort.utils.expandTilde
+import org.ossreviewtoolkit.helper.CommandWithHelp
+import org.ossreviewtoolkit.model.config.CopyrightGarbage
+import org.ossreviewtoolkit.model.readValue
+import org.ossreviewtoolkit.model.yamlMapper
+import org.ossreviewtoolkit.utils.PARAMETER_ORDER_MANDATORY
+import org.ossreviewtoolkit.utils.expandTilde
 
 import java.io.File
 import java.text.Collator

@@ -17,14 +17,14 @@
  * License-Filename: LICENSE
  */
 
-package com.here.ort.model
+package org.ossreviewtoolkit.model
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 
-import com.here.ort.spdx.SpdxExpression
-import com.here.ort.spdx.SpdxOperator
-import com.here.ort.utils.DeclaredLicenseProcessor
-import com.here.ort.utils.ProcessedDeclaredLicense
+import org.ossreviewtoolkit.spdx.SpdxExpression
+import org.ossreviewtoolkit.spdx.SpdxOperator
+import org.ossreviewtoolkit.utils.DeclaredLicenseProcessor
+import org.ossreviewtoolkit.utils.ProcessedDeclaredLicense
 
 import java.util.SortedSet
 

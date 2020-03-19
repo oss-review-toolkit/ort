@@ -17,19 +17,19 @@
  * License-Filename: LICENSE
  */
 
-package com.here.ort.scanner.scanners
+package org.ossreviewtoolkit.scanner.scanners
 
 import com.fasterxml.jackson.databind.JsonNode
 
-import com.here.ort.model.EMPTY_JSON_NODE
-import com.here.ort.model.Provenance
-import com.here.ort.model.ScanResult
-import com.here.ort.model.ScanSummary
-import com.here.ort.model.config.ScannerConfiguration
-import com.here.ort.model.jsonMapper
-import com.here.ort.scanner.AbstractScannerFactory
-import com.here.ort.scanner.LocalScanner
-import com.here.ort.spdx.calculatePackageVerificationCode
+import org.ossreviewtoolkit.model.EMPTY_JSON_NODE
+import org.ossreviewtoolkit.model.Provenance
+import org.ossreviewtoolkit.model.ScanResult
+import org.ossreviewtoolkit.model.ScanSummary
+import org.ossreviewtoolkit.model.config.ScannerConfiguration
+import org.ossreviewtoolkit.model.jsonMapper
+import org.ossreviewtoolkit.scanner.AbstractScannerFactory
+import org.ossreviewtoolkit.scanner.LocalScanner
+import org.ossreviewtoolkit.spdx.calculatePackageVerificationCode
 
 import java.io.File
 import java.time.Instant

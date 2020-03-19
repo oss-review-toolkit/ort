@@ -17,14 +17,14 @@
  * License-Filename: LICENSE
  */
 
-package com.here.ort.utils
+package org.ossreviewtoolkit.utils
 
-import com.here.ort.spdx.enumSetOf
-import com.here.ort.spdx.SpdxExpression
-import com.here.ort.spdx.SpdxDeclaredLicenseMapping
-import com.here.ort.spdx.SpdxLicense
-import com.here.ort.spdx.SpdxLicenseAliasMapping
-import com.here.ort.spdx.SpdxLicenseIdExpression
+import org.ossreviewtoolkit.spdx.enumSetOf
+import org.ossreviewtoolkit.spdx.SpdxExpression
+import org.ossreviewtoolkit.spdx.SpdxDeclaredLicenseMapping
+import org.ossreviewtoolkit.spdx.SpdxLicense
+import org.ossreviewtoolkit.spdx.SpdxLicenseAliasMapping
+import org.ossreviewtoolkit.spdx.SpdxLicenseIdExpression
 
 import io.kotlintest.shouldBe
 import io.kotlintest.shouldNotBe

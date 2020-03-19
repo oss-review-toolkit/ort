@@ -17,25 +17,25 @@
  * License-Filename: LICENSE
  */
 
-package com.here.ort.analyzer.curation
+package org.ossreviewtoolkit.analyzer.curation
 
-import com.here.ort.analyzer.HTTP_CACHE_PATH
-import com.here.ort.analyzer.PackageCurationProvider
-import com.here.ort.clearlydefined.ClearlyDefinedService
-import com.here.ort.clearlydefined.ClearlyDefinedService.ComponentType
-import com.here.ort.clearlydefined.ClearlyDefinedService.Coordinates
-import com.here.ort.clearlydefined.ClearlyDefinedService.Provider
-import com.here.ort.clearlydefined.ClearlyDefinedService.Server
-import com.here.ort.clearlydefined.ClearlyDefinedService.SourceLocation
-import com.here.ort.downloader.VcsHost
-import com.here.ort.model.Identifier
-import com.here.ort.model.Hash
-import com.here.ort.model.PackageCuration
-import com.here.ort.model.PackageCurationData
-import com.here.ort.model.RemoteArtifact
-import com.here.ort.model.VcsInfoCurationData
-import com.here.ort.model.VcsType
-import com.here.ort.utils.OkHttpClientHelper
+import org.ossreviewtoolkit.analyzer.HTTP_CACHE_PATH
+import org.ossreviewtoolkit.analyzer.PackageCurationProvider
+import org.ossreviewtoolkit.clearlydefined.ClearlyDefinedService
+import org.ossreviewtoolkit.clearlydefined.ClearlyDefinedService.ComponentType
+import org.ossreviewtoolkit.clearlydefined.ClearlyDefinedService.Coordinates
+import org.ossreviewtoolkit.clearlydefined.ClearlyDefinedService.Provider
+import org.ossreviewtoolkit.clearlydefined.ClearlyDefinedService.Server
+import org.ossreviewtoolkit.clearlydefined.ClearlyDefinedService.SourceLocation
+import org.ossreviewtoolkit.downloader.VcsHost
+import org.ossreviewtoolkit.model.Identifier
+import org.ossreviewtoolkit.model.Hash
+import org.ossreviewtoolkit.model.PackageCuration
+import org.ossreviewtoolkit.model.PackageCurationData
+import org.ossreviewtoolkit.model.RemoteArtifact
+import org.ossreviewtoolkit.model.VcsInfoCurationData
+import org.ossreviewtoolkit.model.VcsType
+import org.ossreviewtoolkit.utils.OkHttpClientHelper
 
 /**
  * Map an [Identifier] to a ClearlyDefined [ComponentType] and [Provider]. Note that an Identifier's type in ORT

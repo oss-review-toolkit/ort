@@ -17,33 +17,33 @@
  * License-Filename: LICENSE
  */
 
-package com.here.ort.analyzer.managers
+package org.ossreviewtoolkit.analyzer.managers
 
-import com.here.ort.analyzer.AbstractPackageManagerFactory
-import com.here.ort.analyzer.PackageManager
-import com.here.ort.downloader.VersionControlSystem
-import com.here.ort.model.Identifier
-import com.here.ort.model.OrtIssue
-import com.here.ort.model.Package
-import com.here.ort.model.PackageLinkage
-import com.here.ort.model.PackageReference
-import com.here.ort.model.Project
-import com.here.ort.model.ProjectAnalyzerResult
-import com.here.ort.model.RemoteArtifact
-import com.here.ort.model.Scope
-import com.here.ort.model.VcsInfo
-import com.here.ort.model.config.AnalyzerConfiguration
-import com.here.ort.model.config.RepositoryConfiguration
-import com.here.ort.model.createAndLogIssue
-import com.here.ort.utils.CommandLineTool
-import com.here.ort.utils.ORT_NAME
-import com.here.ort.utils.ProcessCapture
-import com.here.ort.utils.collectMessagesAsString
-import com.here.ort.utils.log
-import com.here.ort.utils.realFile
-import com.here.ort.utils.safeCopyRecursively
-import com.here.ort.utils.safeDeleteRecursively
-import com.here.ort.utils.showStackTrace
+import org.ossreviewtoolkit.analyzer.AbstractPackageManagerFactory
+import org.ossreviewtoolkit.analyzer.PackageManager
+import org.ossreviewtoolkit.downloader.VersionControlSystem
+import org.ossreviewtoolkit.model.Identifier
+import org.ossreviewtoolkit.model.OrtIssue
+import org.ossreviewtoolkit.model.Package
+import org.ossreviewtoolkit.model.PackageLinkage
+import org.ossreviewtoolkit.model.PackageReference
+import org.ossreviewtoolkit.model.Project
+import org.ossreviewtoolkit.model.ProjectAnalyzerResult
+import org.ossreviewtoolkit.model.RemoteArtifact
+import org.ossreviewtoolkit.model.Scope
+import org.ossreviewtoolkit.model.VcsInfo
+import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
+import org.ossreviewtoolkit.model.config.RepositoryConfiguration
+import org.ossreviewtoolkit.model.createAndLogIssue
+import org.ossreviewtoolkit.utils.CommandLineTool
+import org.ossreviewtoolkit.utils.ORT_NAME
+import org.ossreviewtoolkit.utils.ProcessCapture
+import org.ossreviewtoolkit.utils.collectMessagesAsString
+import org.ossreviewtoolkit.utils.log
+import org.ossreviewtoolkit.utils.realFile
+import org.ossreviewtoolkit.utils.safeCopyRecursively
+import org.ossreviewtoolkit.utils.safeDeleteRecursively
+import org.ossreviewtoolkit.utils.showStackTrace
 
 import com.moandjiezana.toml.Toml
 

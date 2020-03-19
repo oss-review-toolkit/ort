@@ -38,8 +38,8 @@ issues:
   timestamp: "1970-01-01T00:00:00Z"
   type: "SCANNER"
   source: "FileCounter"
-  message: "DownloadException: No source artifact URL provided for 'Gradle:com.here.ort.gradle.example:lib:1.0.0'.\n\
-    Caused by: DownloadException: No VCS URL provided for 'Gradle:com.here.ort.gradle.example:lib:1.0.0'.\
+  message: "DownloadException: No source artifact URL provided for 'Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0'.\n\
+    Caused by: DownloadException: No VCS URL provided for 'Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0'.\
     \ Please make sure the release POM file includes the SCM connection, see: https://docs.gradle.org/current/userguide/publishing_maven.html#example_customizing_the_pom_file"
   severity: "ERROR"
   resolutions: []
@@ -141,10 +141,10 @@ scan_results:
   issues: []
 packages:
 - _id: 0
-  id: "Gradle:com.here.ort.gradle.example:lib:1.0.0"
+  id: "Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0"
   is_project: true
   definition_file_path: "analyzer/src/funTest/assets/projects/synthetic/gradle/lib/build.gradle"
-  purl: "pkg:gradle/com.here.ort.gradle.example/lib@1.0.0"
+  purl: "pkg:gradle/org.ossreviewtoolkit.gradle.example/lib@1.0.0"
   declared_licenses: []
   declared_licenses_processed:
     spdx_expression: null
@@ -206,10 +206,10 @@ packages:
   scope_excludes: []
   issues: []
 - _id: 1
-  id: "Gradle:com.here:nested-fake-project:1.0.0"
+  id: "Gradle:org.ossreviewtoolkit:nested-fake-project:1.0.0"
   is_project: true
   definition_file_path: "project/build.gradle"
-  purl: "pkg:gradle/com.here/nested-fake-project@1.0.0"
+  purl: "pkg:gradle/org.ossreviewtoolkit/nested-fake-project@1.0.0"
   declared_licenses: []
   declared_licenses_processed:
     spdx_expression: null
@@ -531,7 +531,7 @@ paths:
   - 2
 dependency_trees:
 - key: 0
-  title: "Gradle:com.here.ort.gradle.example:lib:1.0.0"
+  title: "Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0"
   pkg: 0
   children:
   - key: 1
@@ -571,7 +571,7 @@ dependency_trees:
         pkg: 3
         children: []
 - key: 9
-  title: "Gradle:com.here:nested-fake-project:1.0.0"
+  title: "Gradle:org.ossreviewtoolkit:nested-fake-project:1.0.0"
   pkg: 1
   path_excludes:
   - 0

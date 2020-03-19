@@ -17,10 +17,10 @@
  * License-Filename: LICENSE
  */
 
-package com.here.ort.evaluator
+package org.ossreviewtoolkit.evaluator
 
-import com.here.ort.model.LicenseSource
-import com.here.ort.model.Package
+import org.ossreviewtoolkit.model.LicenseSource
+import org.ossreviewtoolkit.model.Package
 
 /**
  * A [LicenseView] provides a custom view on the licenses that belong to a [Package]. It can be used to filter the

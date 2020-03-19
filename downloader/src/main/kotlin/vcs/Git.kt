@@ -17,17 +17,17 @@
  * License-Filename: LICENSE
  */
 
-package com.here.ort.downloader.vcs
+package org.ossreviewtoolkit.downloader.vcs
 
-import com.here.ort.downloader.WorkingTree
-import com.here.ort.model.VcsInfo
-import com.here.ort.model.VcsType
-import com.here.ort.utils.FileMatcher
-import com.here.ort.utils.Os
-import com.here.ort.utils.collectMessagesAsString
-import com.here.ort.utils.log
-import com.here.ort.utils.safeMkdirs
-import com.here.ort.utils.showStackTrace
+import org.ossreviewtoolkit.downloader.WorkingTree
+import org.ossreviewtoolkit.model.VcsInfo
+import org.ossreviewtoolkit.model.VcsType
+import org.ossreviewtoolkit.utils.FileMatcher
+import org.ossreviewtoolkit.utils.Os
+import org.ossreviewtoolkit.utils.collectMessagesAsString
+import org.ossreviewtoolkit.utils.log
+import org.ossreviewtoolkit.utils.safeMkdirs
+import org.ossreviewtoolkit.utils.showStackTrace
 
 import com.jcraft.jsch.JSch
 import com.jcraft.jsch.Session

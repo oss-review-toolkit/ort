@@ -17,7 +17,7 @@
  * License-Filename: LICENSE
  */
 
-package com.here.ort.detekt
+package org.ossreviewtoolkit.detekt
 
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Debt
@@ -31,7 +31,7 @@ import java.io.File
 
 import org.jetbrains.kotlin.psi.KtPackageDirective
 
-private const val ORT_PACKAGE_NAMESPACE = "com.here.ort"
+private const val ORT_PACKAGE_NAMESPACE = "org.ossreviewtoolkit"
 
 class OrtPackageNaming : Rule() {
     override val issue = Issue(

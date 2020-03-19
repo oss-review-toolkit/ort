@@ -17,15 +17,15 @@
  * License-Filename: LICENSE
  */
 
-package com.here.ort.reporter.model
+package org.ossreviewtoolkit.reporter.model
 
-import com.here.ort.model.OrtIssue
-import com.here.ort.model.OrtResult
-import com.here.ort.model.Package
-import com.here.ort.model.Project
-import com.here.ort.model.RuleViolation
-import com.here.ort.model.Scope
-import com.here.ort.model.Severity
+import org.ossreviewtoolkit.model.OrtIssue
+import org.ossreviewtoolkit.model.OrtResult
+import org.ossreviewtoolkit.model.Package
+import org.ossreviewtoolkit.model.Project
+import org.ossreviewtoolkit.model.RuleViolation
+import org.ossreviewtoolkit.model.Scope
+import org.ossreviewtoolkit.model.Severity
 
 import java.util.SortedMap
 import java.util.SortedSet

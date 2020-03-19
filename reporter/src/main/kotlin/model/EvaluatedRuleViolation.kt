@@ -17,14 +17,14 @@
  * License-Filename: LICENSE
  */
 
-package com.here.ort.reporter.model
+package org.ossreviewtoolkit.reporter.model
 
 import com.fasterxml.jackson.annotation.JsonInclude
 
-import com.here.ort.model.LicenseSource
-import com.here.ort.model.RuleViolation
-import com.here.ort.model.Severity
-import com.here.ort.model.config.RuleViolationResolution
+import org.ossreviewtoolkit.model.LicenseSource
+import org.ossreviewtoolkit.model.RuleViolation
+import org.ossreviewtoolkit.model.Severity
+import org.ossreviewtoolkit.model.config.RuleViolationResolution
 
 /**
  * The evaluated form of a [RuleViolation] used by the [EvaluatedModel].

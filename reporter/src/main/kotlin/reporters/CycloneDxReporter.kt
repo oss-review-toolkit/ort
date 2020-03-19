@@ -17,12 +17,12 @@
  * License-Filename: LICENSE
  */
 
-package com.here.ort.reporter.reporters
+package org.ossreviewtoolkit.reporter.reporters
 
-import com.here.ort.model.utils.getDetectedLicensesForId
-import com.here.ort.reporter.Reporter
-import com.here.ort.reporter.ReporterInput
-import com.here.ort.spdx.SpdxLicense
+import org.ossreviewtoolkit.model.utils.getDetectedLicensesForId
+import org.ossreviewtoolkit.reporter.Reporter
+import org.ossreviewtoolkit.reporter.ReporterInput
+import org.ossreviewtoolkit.spdx.SpdxLicense
 
 import java.io.OutputStream
 import java.util.UUID
@@ -51,7 +51,7 @@ class CycloneDxReporter : Reporter {
         })
     }
 
-    private fun mapHash(hash: com.here.ort.model.Hash): Hash? =
+    private fun mapHash(hash: org.ossreviewtoolkit.model.Hash): Hash? =
         enumValues<Hash.Algorithm>().find { it.spec == hash.algorithm.toString() }?.let { Hash(it, hash.value) }
 
     override fun generateReport(outputStream: OutputStream, input: ReporterInput) {

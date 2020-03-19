@@ -17,14 +17,14 @@
  * License-Filename: LICENSE
  */
 
-package com.here.ort.reporter.model
+package org.ossreviewtoolkit.reporter.model
 
 import com.fasterxml.jackson.annotation.JsonIdentityReference
 import com.fasterxml.jackson.annotation.JsonInclude
 
-import com.here.ort.model.OrtIssue
-import com.here.ort.model.Severity
-import com.here.ort.model.config.IssueResolution
+import org.ossreviewtoolkit.model.OrtIssue
+import org.ossreviewtoolkit.model.Severity
+import org.ossreviewtoolkit.model.config.IssueResolution
 
 import java.time.Instant
 

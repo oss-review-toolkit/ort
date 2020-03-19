@@ -17,7 +17,7 @@
  * License-Filename: LICENSE
  */
 
-package com.here.ort.downloader
+package org.ossreviewtoolkit.downloader
 
 import io.kotlintest.shouldBe
 import io.kotlintest.specs.WordSpec

@@ -17,10 +17,10 @@
  * License-Filename: LICENSE
  */
 
-package com.here.ort.utils.storage
+package org.ossreviewtoolkit.utils.storage
 
-import com.here.ort.utils.log
-import com.here.ort.utils.safeMkdirs
+import org.ossreviewtoolkit.utils.log
+import org.ossreviewtoolkit.utils.safeMkdirs
 
 import java.io.File
 import java.io.InputStream

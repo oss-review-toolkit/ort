@@ -17,7 +17,7 @@
  * License-Filename: LICENSE
  */
 
-package com.here.ort.utils
+package org.ossreviewtoolkit.utils
 
 /**
  * Operating-System-specific utility functions.

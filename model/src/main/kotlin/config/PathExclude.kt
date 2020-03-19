@@ -17,7 +17,7 @@
  * License-Filename: LICENSE
  */
 
-package com.here.ort.model.config
+package org.ossreviewtoolkit.model.config
 
 import java.nio.file.FileSystems
 import java.nio.file.Paths

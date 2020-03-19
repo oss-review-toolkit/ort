@@ -17,14 +17,14 @@
  * License-Filename: LICENSE
  */
 
-package com.here.ort.model.utils
+package org.ossreviewtoolkit.model.utils
 
-import com.here.ort.model.CopyrightFinding
-import com.here.ort.model.CopyrightFindings
-import com.here.ort.model.LicenseFinding
-import com.here.ort.model.LicenseFindings
-import com.here.ort.model.TextLocation
-import com.here.ort.utils.FileMatcher
+import org.ossreviewtoolkit.model.CopyrightFinding
+import org.ossreviewtoolkit.model.CopyrightFindings
+import org.ossreviewtoolkit.model.LicenseFinding
+import org.ossreviewtoolkit.model.LicenseFindings
+import org.ossreviewtoolkit.model.TextLocation
+import org.ossreviewtoolkit.utils.FileMatcher
 
 import java.util.PriorityQueue
 

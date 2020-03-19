@@ -17,7 +17,7 @@
  * License-Filename: LICENSE
  */
 
-package com.here.ort.commands
+package org.ossreviewtoolkit.commands
 
 import com.github.ajalt.clikt.core.CliktCommand
 import com.github.ajalt.clikt.core.UsageError
@@ -33,22 +33,22 @@ import com.github.ajalt.clikt.parameters.options.split
 import com.github.ajalt.clikt.parameters.types.enum
 import com.github.ajalt.clikt.parameters.types.file
 
-import com.here.ort.GroupTypes
-import com.here.ort.GroupTypes.FileType
-import com.here.ort.GroupTypes.StringType
-import com.here.ort.evaluator.Evaluator
-import com.here.ort.model.OrtResult
-import com.here.ort.model.OutputFormat
-import com.here.ort.model.RuleViolation
-import com.here.ort.model.Severity
-import com.here.ort.model.licenses.LicenseConfiguration
-import com.here.ort.model.licenses.orEmpty
-import com.here.ort.model.mapper
-import com.here.ort.model.readValue
-import com.here.ort.model.utils.SimplePackageConfigurationProvider
-import com.here.ort.utils.expandTilde
-import com.here.ort.utils.log
-import com.here.ort.utils.safeMkdirs
+import org.ossreviewtoolkit.GroupTypes
+import org.ossreviewtoolkit.GroupTypes.FileType
+import org.ossreviewtoolkit.GroupTypes.StringType
+import org.ossreviewtoolkit.evaluator.Evaluator
+import org.ossreviewtoolkit.model.OrtResult
+import org.ossreviewtoolkit.model.OutputFormat
+import org.ossreviewtoolkit.model.RuleViolation
+import org.ossreviewtoolkit.model.Severity
+import org.ossreviewtoolkit.model.licenses.LicenseConfiguration
+import org.ossreviewtoolkit.model.licenses.orEmpty
+import org.ossreviewtoolkit.model.mapper
+import org.ossreviewtoolkit.model.readValue
+import org.ossreviewtoolkit.model.utils.SimplePackageConfigurationProvider
+import org.ossreviewtoolkit.utils.expandTilde
+import org.ossreviewtoolkit.utils.log
+import org.ossreviewtoolkit.utils.safeMkdirs
 
 import java.io.File
 

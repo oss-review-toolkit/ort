@@ -10,7 +10,7 @@ buildscript {
 }
 
 allprojects {
-    group 'com.here.ort.gradle.example'
+    group 'org.ossreviewtoolkit.gradle.example'
     version '1.0.0'
 
     repositories {

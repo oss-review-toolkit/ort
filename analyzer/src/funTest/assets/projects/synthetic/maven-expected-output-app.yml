@@ -1,6 +1,6 @@
 ---
 project:
-  id: "Maven:com.here.ort.maven:maven-app:1.0-SNAPSHOT"
+  id: "Maven:org.ossreviewtoolkit.maven:maven-app:1.0-SNAPSHOT"
   definition_file_path: "analyzer/src/funTest/assets/projects/synthetic/maven/app/pom.xml"
   declared_licenses:
   - "Apache License, Version 2.0"
@@ -20,7 +20,7 @@ project:
   scopes:
   - name: "compile"
     dependencies:
-    - id: "Maven:com.here.ort.maven:maven-lib:1.0-SNAPSHOT"
+    - id: "Maven:org.ossreviewtoolkit.maven:maven-lib:1.0-SNAPSHOT"
       linkage: "PROJECT_DYNAMIC"
       dependencies:
       - id: "Maven:org.apache.beam:beam-parent:2.3.0"

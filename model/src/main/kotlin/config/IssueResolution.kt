@@ -17,11 +17,11 @@
  * License-Filename: LICENSE
  */
 
-package com.here.ort.model.config
+package org.ossreviewtoolkit.model.config
 
 import com.fasterxml.jackson.annotation.JsonIgnore
 
-import com.here.ort.model.OrtIssue
+import org.ossreviewtoolkit.model.OrtIssue
 
 /**
  * Defines the resolution of an [OrtIssue]. This can be used to silence false positives, or issues that have been

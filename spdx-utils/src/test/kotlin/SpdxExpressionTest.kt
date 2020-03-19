@@ -17,14 +17,14 @@
  * License-Filename: LICENSE
  */
 
-package com.here.ort.spdx
+package org.ossreviewtoolkit.spdx
 
 import com.fasterxml.jackson.dataformat.yaml.YAMLMapper
 import com.fasterxml.jackson.module.kotlin.readValue
 
-import com.here.ort.spdx.SpdxExpression.Strictness
-import com.here.ort.spdx.SpdxLicense.*
-import com.here.ort.spdx.SpdxLicenseException.*
+import org.ossreviewtoolkit.spdx.SpdxExpression.Strictness
+import org.ossreviewtoolkit.spdx.SpdxLicense.*
+import org.ossreviewtoolkit.spdx.SpdxLicenseException.*
 
 import io.kotlintest.assertSoftly
 import io.kotlintest.matchers.collections.shouldContainExactlyInAnyOrder

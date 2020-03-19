@@ -17,9 +17,9 @@
  * License-Filename: LICENSE
  */
 
-package com.here.ort.analyzer.managers.utils
+package org.ossreviewtoolkit.analyzer.managers.utils
 
-import com.here.ort.utils.log
+import org.ossreviewtoolkit.utils.log
 
 import org.apache.logging.log4j.Level
 

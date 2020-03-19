@@ -22,7 +22,7 @@ dev_dependencies:
 
 flutter:
   plugin:
-    androidPackage: com.here.flutter.smaple
+    androidPackage: org.ossreviewtoolkit.flutter.sample
     pluginClass: HERESamplePlugin
 
 environment:

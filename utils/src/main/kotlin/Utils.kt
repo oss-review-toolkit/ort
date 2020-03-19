@@ -19,7 +19,7 @@
 
 @file:Suppress("TooManyFunctions")
 
-package com.here.ort.utils
+package org.ossreviewtoolkit.utils
 
 import java.io.File
 import java.net.URI

@@ -17,10 +17,10 @@
  * License-Filename: LICENSE
  */
 
-package com.here.ort.evaluator
+package org.ossreviewtoolkit.evaluator
 
-import com.here.ort.model.Package
-import com.here.ort.model.PackageReference
+import org.ossreviewtoolkit.model.Package
+import org.ossreviewtoolkit.model.PackageReference
 import io.kotlintest.shouldBe
 import io.kotlintest.specs.WordSpec
 
@@ -61,7 +61,7 @@ class DependencyRuleTest : WordSpec() {
         "isProjectFromOrg()" should {
             "return true if the project is from org" {
                 val rule = createRule(packageWithoutLicense, packageWithoutLicense.toReference())
-                val matcher = rule.isProjectFromOrg("here")
+                val matcher = rule.isProjectFromOrg("ossreviewtoolkit")
 
                 matcher.matches() shouldBe true
             }

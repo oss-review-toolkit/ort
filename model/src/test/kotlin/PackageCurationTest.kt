@@ -17,9 +17,9 @@
  * License-Filename: LICENSE
  */
 
-package com.here.ort.model
+package org.ossreviewtoolkit.model
 
-import com.here.ort.spdx.SpdxExpression
+import org.ossreviewtoolkit.spdx.SpdxExpression
 
 import io.kotlintest.shouldBe
 import io.kotlintest.shouldThrow

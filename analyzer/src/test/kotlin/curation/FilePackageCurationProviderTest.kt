@@ -17,9 +17,9 @@
  * License-Filename: LICENSE
  */
 
-package com.here.ort.analyzer.curation
+package org.ossreviewtoolkit.analyzer.curation
 
-import com.here.ort.model.Identifier
+import org.ossreviewtoolkit.model.Identifier
 
 import io.kotlintest.matchers.beEmpty
 import io.kotlintest.matchers.haveSize

@@ -17,18 +17,18 @@
  * License-Filename: LICENSE
  */
 
-package com.here.ort.clearlydefined
+package org.ossreviewtoolkit.clearlydefined
 
-import com.here.ort.clearlydefined.ClearlyDefinedService.ComponentType
-import com.here.ort.clearlydefined.ClearlyDefinedService.ContributionInfo
-import com.here.ort.clearlydefined.ClearlyDefinedService.ContributionPatch
-import com.here.ort.clearlydefined.ClearlyDefinedService.ContributionType
-import com.here.ort.clearlydefined.ClearlyDefinedService.Coordinates
-import com.here.ort.clearlydefined.ClearlyDefinedService.Curation
-import com.here.ort.clearlydefined.ClearlyDefinedService.Licensed
-import com.here.ort.clearlydefined.ClearlyDefinedService.Patch
-import com.here.ort.clearlydefined.ClearlyDefinedService.Provider
-import com.here.ort.clearlydefined.ClearlyDefinedService.Server
+import org.ossreviewtoolkit.clearlydefined.ClearlyDefinedService.ComponentType
+import org.ossreviewtoolkit.clearlydefined.ClearlyDefinedService.ContributionInfo
+import org.ossreviewtoolkit.clearlydefined.ClearlyDefinedService.ContributionPatch
+import org.ossreviewtoolkit.clearlydefined.ClearlyDefinedService.ContributionType
+import org.ossreviewtoolkit.clearlydefined.ClearlyDefinedService.Coordinates
+import org.ossreviewtoolkit.clearlydefined.ClearlyDefinedService.Curation
+import org.ossreviewtoolkit.clearlydefined.ClearlyDefinedService.Licensed
+import org.ossreviewtoolkit.clearlydefined.ClearlyDefinedService.Patch
+import org.ossreviewtoolkit.clearlydefined.ClearlyDefinedService.Provider
+import org.ossreviewtoolkit.clearlydefined.ClearlyDefinedService.Server
 
 import io.kotlintest.matchers.numerics.shouldBeGreaterThan
 import io.kotlintest.matchers.string.beEmpty

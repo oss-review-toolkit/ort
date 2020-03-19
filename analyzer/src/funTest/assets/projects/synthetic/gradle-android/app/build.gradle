@@ -4,7 +4,7 @@ android {
     compileSdkVersion 27
 
     defaultConfig {
-        applicationId "com.here.ort.example.android"
+        applicationId "org.ossreviewtoolkit.example.android"
         minSdkVersion 19
         targetSdkVersion 27
         versionCode 1

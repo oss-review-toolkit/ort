@@ -17,14 +17,14 @@
  * License-Filename: LICENSE
  */
 
-package com.here.ort.utils.storage
+package org.ossreviewtoolkit.utils.storage
 
-import com.here.ort.utils.FileMatcher
-import com.here.ort.utils.collectMessagesAsString
-import com.here.ort.utils.log
-import com.here.ort.utils.packZip
-import com.here.ort.utils.showStackTrace
-import com.here.ort.utils.unpackZip
+import org.ossreviewtoolkit.utils.FileMatcher
+import org.ossreviewtoolkit.utils.collectMessagesAsString
+import org.ossreviewtoolkit.utils.log
+import org.ossreviewtoolkit.utils.packZip
+import org.ossreviewtoolkit.utils.showStackTrace
+import org.ossreviewtoolkit.utils.unpackZip
 
 import java.io.File
 import java.io.IOException

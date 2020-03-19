@@ -17,7 +17,7 @@
  * License-Filename: LICENSE
  */
 
-package com.here.ort.scanner.storages
+package org.ossreviewtoolkit.scanner.storages
 
 import com.opentable.db.postgres.embedded.EmbeddedPostgres
 

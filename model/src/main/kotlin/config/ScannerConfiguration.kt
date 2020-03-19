@@ -17,13 +17,13 @@
  * License-Filename: LICENSE
  */
 
-package com.here.ort.model.config
+package org.ossreviewtoolkit.model.config
 
 import com.fasterxml.jackson.annotation.JsonAlias
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 
-import com.here.ort.utils.storage.FileArchiver
-import com.here.ort.utils.storage.FileStorage
+import org.ossreviewtoolkit.utils.storage.FileArchiver
+import org.ossreviewtoolkit.utils.storage.FileStorage
 
 /**
  * The configuration model of the scanner.

@@ -17,22 +17,22 @@
  * License-Filename: LICENSE
  */
 
-package com.here.ort.reporter.reporters
+package org.ossreviewtoolkit.reporter.reporters
 
-import com.here.ort.model.Identifier
-import com.here.ort.model.LicenseFindingsMap
-import com.here.ort.model.ScanResult
-import com.here.ort.model.clean
-import com.here.ort.model.merge
-import com.here.ort.reporter.ReporterInput
-import com.here.ort.utils.CopyrightStatementsProcessor
-import com.here.ort.utils.FileMatcher
-import com.here.ort.utils.LICENSE_FILENAMES
-import com.here.ort.utils.ORT_NAME
-import com.here.ort.utils.getUserOrtDirectory
-import com.here.ort.utils.log
-import com.here.ort.utils.storage.FileArchiver
-import com.here.ort.utils.storage.LocalFileStorage
+import org.ossreviewtoolkit.model.Identifier
+import org.ossreviewtoolkit.model.LicenseFindingsMap
+import org.ossreviewtoolkit.model.ScanResult
+import org.ossreviewtoolkit.model.clean
+import org.ossreviewtoolkit.model.merge
+import org.ossreviewtoolkit.reporter.ReporterInput
+import org.ossreviewtoolkit.utils.CopyrightStatementsProcessor
+import org.ossreviewtoolkit.utils.FileMatcher
+import org.ossreviewtoolkit.utils.LICENSE_FILENAMES
+import org.ossreviewtoolkit.utils.ORT_NAME
+import org.ossreviewtoolkit.utils.getUserOrtDirectory
+import org.ossreviewtoolkit.utils.log
+import org.ossreviewtoolkit.utils.storage.FileArchiver
+import org.ossreviewtoolkit.utils.storage.LocalFileStorage
 
 import java.io.File
 import java.nio.file.Path

@@ -17,7 +17,7 @@
  * License-Filename: LICENSE
  */
 
-package com.here.ort.model
+package org.ossreviewtoolkit.model
 
 import com.fasterxml.jackson.module.kotlin.readValue
 
@@ -147,14 +147,16 @@ class IdentifierTest : WordSpec({
     "Checking the organization" should {
         "work as expected" {
             assertSoftly {
-                Identifier("Maven:com.here:name:version").isFromOrg("here", "traffic") shouldBe true
-                Identifier("Maven:com.here.project:name:version").isFromOrg("here") shouldBe true
+                Identifier("Maven:org.ossreviewtoolkit:name:version")
+                    .isFromOrg("ossreviewtoolkit", "foobar") shouldBe true
+                Identifier("Maven:org.ossreviewtoolkit.project:name:version")
+                    .isFromOrg("ossreviewtoolkit") shouldBe true
                 Identifier("Maven:org.apache:name:version").isFromOrg("apache") shouldBe true
                 Identifier("NPM:@scope:name:version").isFromOrg("scope") shouldBe true
 
-                Identifier("").isFromOrg("here") shouldBe false
-                Identifier("type:namespace:name:version").isFromOrg("here") shouldBe false
-                Identifier("Maven:project.com.here:name:version").isFromOrg("here") shouldBe false
+                Identifier("").isFromOrg("ossreviewtoolkit") shouldBe false
+                Identifier("type:namespace:name:version").isFromOrg("ossreviewtoolkit") shouldBe false
+                Identifier("Maven:project.com.here:name:version").isFromOrg("ossreviewtoolkit") shouldBe false
             }
         }
     }

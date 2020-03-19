@@ -19,17 +19,17 @@
 
 @file:Suppress("TooManyFunctions")
 
-package com.here.ort.analyzer.managers.utils
+package org.ossreviewtoolkit.analyzer.managers.utils
 
 import com.fasterxml.jackson.core.JsonProcessingException
 import com.fasterxml.jackson.databind.node.ArrayNode
 import com.fasterxml.jackson.databind.node.ObjectNode
 
-import com.here.ort.model.readValue
-import com.here.ort.utils.collectMessagesAsString
-import com.here.ort.utils.hasRevisionFragment
-import com.here.ort.utils.log
-import com.here.ort.utils.showStackTrace
+import org.ossreviewtoolkit.model.readValue
+import org.ossreviewtoolkit.utils.collectMessagesAsString
+import org.ossreviewtoolkit.utils.hasRevisionFragment
+import org.ossreviewtoolkit.utils.log
+import org.ossreviewtoolkit.utils.showStackTrace
 
 import java.io.File
 import java.net.URI

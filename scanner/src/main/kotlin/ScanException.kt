@@ -17,7 +17,7 @@
  * License-Filename: LICENSE
  */
 
-package com.here.ort.scanner
+package org.ossreviewtoolkit.scanner
 
 class ScanException : Exception {
     constructor(message: String?, cause: Throwable?) : super(message, cause)

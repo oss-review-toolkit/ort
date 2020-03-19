@@ -17,9 +17,9 @@
  * License-Filename: LICENSE
  */
 
-package com.here.ort.model
+package org.ossreviewtoolkit.model
 
-import com.here.ort.model.config.AnalyzerConfiguration
+import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import io.kotlintest.matchers.collections.shouldContainExactly
 import io.kotlintest.matchers.collections.shouldContainExactlyInAnyOrder
 
@@ -64,7 +64,7 @@ class OrtResultTest : WordSpec({
 
             ids should haveSize(9)
             idsWithoutSubProjects should haveSize(8)
-            actualIds shouldContainExactly listOf(Identifier("Gradle:com.here.ort.gradle.example:lib:1.0.0"))
+            actualIds shouldContainExactly listOf(Identifier("Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0"))
         }
     }
 
@@ -74,19 +74,19 @@ class OrtResultTest : WordSpec({
             val nestedVcs1 = VcsInfo(type = VcsType.GIT, url = "https://example.com/git1", revision = "")
             val nestedVcs2 = VcsInfo(type = VcsType.GIT, url = "https://example.com/git2", revision = "")
             val project1 = Project.EMPTY.copy(
-                id = Identifier("Gradle:com.here:project1:1.0"),
+                id = Identifier("Gradle:org.ossreviewtoolkit:project1:1.0"),
                 definitionFilePath = "project1/build.gradle",
                 vcs = vcs,
                 vcsProcessed = vcs.normalize()
             )
             val project2 = Project.EMPTY.copy(
-                id = Identifier("Gradle:com.here:project1:1.0"),
+                id = Identifier("Gradle:org.ossreviewtoolkit:project1:1.0"),
                 definitionFilePath = "project2/build.gradle",
                 vcs = nestedVcs1,
                 vcsProcessed = nestedVcs1.normalize()
             )
             val project3 = Project.EMPTY.copy(
-                id = Identifier("Gradle:com.here:project1:1.0"),
+                id = Identifier("Gradle:org.ossreviewtoolkit:project1:1.0"),
                 definitionFilePath = "project3/build.gradle",
                 vcs = nestedVcs2,
                 vcsProcessed = nestedVcs2.normalize()
@@ -116,7 +116,7 @@ class OrtResultTest : WordSpec({
             val nestedVcs1 = VcsInfo(type = VcsType.GIT, url = "https://example.com/git1", revision = "")
             val nestedVcs2 = VcsInfo(type = VcsType.GIT, url = "https://example.com/git2", revision = "")
             val project = Project.EMPTY.copy(
-                id = Identifier("Gradle:com.here:project1:1.0"),
+                id = Identifier("Gradle:org.ossreviewtoolkit:project1:1.0"),
                 definitionFilePath = "build.gradle",
                 vcs = nestedVcs2,
                 vcsProcessed = nestedVcs2.normalize()

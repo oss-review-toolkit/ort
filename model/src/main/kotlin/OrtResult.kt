@@ -17,19 +17,19 @@
  * License-Filename: LICENSE
  */
 
-package com.here.ort.model
+package org.ossreviewtoolkit.model
 
 import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonInclude
 
-import com.here.ort.model.config.Excludes
-import com.here.ort.model.config.LicenseFindingCuration
-import com.here.ort.model.config.RepositoryConfiguration
-import com.here.ort.model.config.Resolutions
-import com.here.ort.model.config.orEmpty
-import com.here.ort.spdx.SpdxExpression
-import com.here.ort.utils.log
-import com.here.ort.utils.zipWithDefault
+import org.ossreviewtoolkit.model.config.Excludes
+import org.ossreviewtoolkit.model.config.LicenseFindingCuration
+import org.ossreviewtoolkit.model.config.RepositoryConfiguration
+import org.ossreviewtoolkit.model.config.Resolutions
+import org.ossreviewtoolkit.model.config.orEmpty
+import org.ossreviewtoolkit.spdx.SpdxExpression
+import org.ossreviewtoolkit.utils.log
+import org.ossreviewtoolkit.utils.zipWithDefault
 
 import java.util.SortedSet
 
