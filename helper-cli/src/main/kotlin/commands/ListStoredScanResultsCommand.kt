@@ -17,24 +17,24 @@
  * License-Filename: LICENSE
  */
 
-package com.here.ort.helper.commands
+package org.ossreviewtoolkit.helper.commands
 
 import com.beust.jcommander.DynamicParameter
 import com.beust.jcommander.JCommander
 import com.beust.jcommander.Parameter
 import com.beust.jcommander.Parameters
 
-import com.here.ort.helper.CommandWithHelp
-import com.here.ort.helper.common.IdentifierConverter
-import com.here.ort.model.Failure
-import com.here.ort.model.Identifier
-import com.here.ort.model.Success
-import com.here.ort.model.config.OrtConfiguration
-import com.here.ort.model.config.ScannerConfiguration
-import com.here.ort.model.yamlMapper
-import com.here.ort.scanner.ScanResultsStorage
-import com.here.ort.utils.PARAMETER_ORDER_MANDATORY
-import com.here.ort.utils.PARAMETER_ORDER_OPTIONAL
+import org.ossreviewtoolkit.helper.CommandWithHelp
+import org.ossreviewtoolkit.helper.common.IdentifierConverter
+import org.ossreviewtoolkit.model.Failure
+import org.ossreviewtoolkit.model.Identifier
+import org.ossreviewtoolkit.model.Success
+import org.ossreviewtoolkit.model.config.OrtConfiguration
+import org.ossreviewtoolkit.model.config.ScannerConfiguration
+import org.ossreviewtoolkit.model.yamlMapper
+import org.ossreviewtoolkit.scanner.ScanResultsStorage
+import org.ossreviewtoolkit.utils.PARAMETER_ORDER_MANDATORY
+import org.ossreviewtoolkit.utils.PARAMETER_ORDER_OPTIONAL
 
 import java.io.File
 

@@ -17,17 +17,17 @@
  * License-Filename: LICENSE
  */
 
-package com.here.ort.reporter.utils
+package org.ossreviewtoolkit.reporter.utils
 
-import com.here.ort.model.OrtResult
-import com.here.ort.model.Severity
-import com.here.ort.model.config.IssueResolution
-import com.here.ort.model.config.RuleViolationResolution
-import com.here.ort.reporter.ResolutionProvider
-import com.here.ort.reporter.model.DependencyTreeStatistics
-import com.here.ort.reporter.model.IssueStatistics
-import com.here.ort.reporter.model.Statistics
-import com.here.ort.reporter.model.LicenseStatistics
+import org.ossreviewtoolkit.model.OrtResult
+import org.ossreviewtoolkit.model.Severity
+import org.ossreviewtoolkit.model.config.IssueResolution
+import org.ossreviewtoolkit.model.config.RuleViolationResolution
+import org.ossreviewtoolkit.reporter.ResolutionProvider
+import org.ossreviewtoolkit.reporter.model.DependencyTreeStatistics
+import org.ossreviewtoolkit.reporter.model.IssueStatistics
+import org.ossreviewtoolkit.reporter.model.Statistics
+import org.ossreviewtoolkit.reporter.model.LicenseStatistics
 
 /**
  * This class calculates [Statistics] for a given [OrtResult] and applicable [IssueResolution]s and applicable

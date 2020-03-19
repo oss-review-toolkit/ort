@@ -17,7 +17,7 @@
  * License-Filename: LICENSE
  */
 
-package com.here.ort.model.config
+package org.ossreviewtoolkit.model.config
 
 /**
  * Possible reasons for excluding a scope.
@@ -31,7 +31,7 @@ enum class ScopeExcludeReason {
         message = "Use SPDX-2.2-style enum value instead.",
         replaceWith = ReplaceWith(
             expression = "ScopeExcludeReason.BUILD_DEPENDENCY_OF",
-            imports = ["com.here.ort.model.config.ScopeExcludeReason"]
+            imports = ["org.ossreviewtoolkit.model.config.ScopeExcludeReason"]
         )
     )
     BUILD_TOOL_OF,
@@ -53,7 +53,7 @@ enum class ScopeExcludeReason {
         message = "Use SPDX-2.2-style enum value instead.",
         replaceWith = ReplaceWith(
             expression = "ScopeExcludeReason.PROVIDED_DEPENDENCY_OF",
-            imports = ["com.here.ort.model.config.ScopeExcludeReason"]
+            imports = ["org.ossreviewtoolkit.model.config.ScopeExcludeReason"]
         )
     )
     PROVIDED_BY,
@@ -71,7 +71,7 @@ enum class ScopeExcludeReason {
         message = "Use SPDX-2.2-style enum value instead.",
         replaceWith = ReplaceWith(
             expression = "ScopeExcludeReason.TEST_DEPENDENCY_OF",
-            imports = ["com.here.ort.model.config.ScopeExcludeReason"]
+            imports = ["org.ossreviewtoolkit.model.config.ScopeExcludeReason"]
         )
     )
     TEST_TOOL_OF,

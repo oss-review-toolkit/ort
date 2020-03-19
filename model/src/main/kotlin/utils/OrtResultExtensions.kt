@@ -17,12 +17,12 @@
  * License-Filename: LICENSE
  */
 
-package com.here.ort.model.utils
+package org.ossreviewtoolkit.model.utils
 
-import com.here.ort.model.Identifier
-import com.here.ort.model.LicenseFindings
-import com.here.ort.model.OrtResult
-import com.here.ort.model.config.PathExclude
+import org.ossreviewtoolkit.model.Identifier
+import org.ossreviewtoolkit.model.LicenseFindings
+import org.ossreviewtoolkit.model.OrtResult
+import org.ossreviewtoolkit.model.config.PathExclude
 
 import java.util.SortedSet
 

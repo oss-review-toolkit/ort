@@ -17,24 +17,24 @@
  * License-Filename: LICENSE
  */
 
-package com.here.ort.scanner.storages
+package org.ossreviewtoolkit.scanner.storages
 
 import com.fasterxml.jackson.core.JsonProcessingException
 import com.fasterxml.jackson.module.kotlin.readValue
 
-import com.here.ort.model.Failure
-import com.here.ort.model.Identifier
-import com.here.ort.model.Package
-import com.here.ort.model.Result
-import com.here.ort.model.ScanResult
-import com.here.ort.model.ScanResultContainer
-import com.here.ort.model.ScannerDetails
-import com.here.ort.model.Success
-import com.here.ort.model.jsonMapper
-import com.here.ort.scanner.ScanResultsStorage
-import com.here.ort.utils.collectMessagesAsString
-import com.here.ort.utils.log
-import com.here.ort.utils.showStackTrace
+import org.ossreviewtoolkit.model.Failure
+import org.ossreviewtoolkit.model.Identifier
+import org.ossreviewtoolkit.model.Package
+import org.ossreviewtoolkit.model.Result
+import org.ossreviewtoolkit.model.ScanResult
+import org.ossreviewtoolkit.model.ScanResultContainer
+import org.ossreviewtoolkit.model.ScannerDetails
+import org.ossreviewtoolkit.model.Success
+import org.ossreviewtoolkit.model.jsonMapper
+import org.ossreviewtoolkit.scanner.ScanResultsStorage
+import org.ossreviewtoolkit.utils.collectMessagesAsString
+import org.ossreviewtoolkit.utils.log
+import org.ossreviewtoolkit.utils.showStackTrace
 
 import com.vdurmont.semver4j.Semver
 

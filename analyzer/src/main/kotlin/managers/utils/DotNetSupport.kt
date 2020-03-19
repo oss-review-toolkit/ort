@@ -18,32 +18,32 @@
  * License-Filename: LICENSE
  */
 
-package com.here.ort.analyzer.managers.utils
+package org.ossreviewtoolkit.analyzer.managers.utils
 
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.dataformat.xml.XmlMapper
 import com.fasterxml.jackson.module.kotlin.registerKotlinModule
 
-import com.here.ort.analyzer.HTTP_CACHE_PATH
-import com.here.ort.analyzer.PackageManager
-import com.here.ort.downloader.VersionControlSystem
-import com.here.ort.model.EMPTY_JSON_NODE
-import com.here.ort.model.Hash
-import com.here.ort.model.Identifier
-import com.here.ort.model.OrtIssue
-import com.here.ort.model.Package
-import com.here.ort.model.PackageReference
-import com.here.ort.model.Project
-import com.here.ort.model.ProjectAnalyzerResult
-import com.here.ort.model.RemoteArtifact
-import com.here.ort.model.Scope
-import com.here.ort.model.VcsInfo
-import com.here.ort.model.VcsType
-import com.here.ort.model.createAndLogIssue
-import com.here.ort.model.jsonMapper
-import com.here.ort.model.xmlMapper
-import com.here.ort.utils.OkHttpClientHelper
-import com.here.ort.utils.textValueOrEmpty
+import org.ossreviewtoolkit.analyzer.HTTP_CACHE_PATH
+import org.ossreviewtoolkit.analyzer.PackageManager
+import org.ossreviewtoolkit.downloader.VersionControlSystem
+import org.ossreviewtoolkit.model.EMPTY_JSON_NODE
+import org.ossreviewtoolkit.model.Hash
+import org.ossreviewtoolkit.model.Identifier
+import org.ossreviewtoolkit.model.OrtIssue
+import org.ossreviewtoolkit.model.Package
+import org.ossreviewtoolkit.model.PackageReference
+import org.ossreviewtoolkit.model.Project
+import org.ossreviewtoolkit.model.ProjectAnalyzerResult
+import org.ossreviewtoolkit.model.RemoteArtifact
+import org.ossreviewtoolkit.model.Scope
+import org.ossreviewtoolkit.model.VcsInfo
+import org.ossreviewtoolkit.model.VcsType
+import org.ossreviewtoolkit.model.createAndLogIssue
+import org.ossreviewtoolkit.model.jsonMapper
+import org.ossreviewtoolkit.model.xmlMapper
+import org.ossreviewtoolkit.utils.OkHttpClientHelper
+import org.ossreviewtoolkit.utils.textValueOrEmpty
 
 import okhttp3.Request
 

@@ -19,7 +19,7 @@
 
 @file:Suppress("TooManyFunctions")
 
-package com.here.ort.spdx
+package org.ossreviewtoolkit.spdx
 
 import java.io.File
 import java.net.URL

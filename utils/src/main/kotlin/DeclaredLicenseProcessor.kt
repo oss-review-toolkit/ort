@@ -17,14 +17,14 @@
  * License-Filename: LICENSE
  */
 
-package com.here.ort.utils
+package org.ossreviewtoolkit.utils
 
 import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonInclude
 
-import com.here.ort.spdx.SpdxDeclaredLicenseMapping
-import com.here.ort.spdx.SpdxException
-import com.here.ort.spdx.SpdxExpression
+import org.ossreviewtoolkit.spdx.SpdxDeclaredLicenseMapping
+import org.ossreviewtoolkit.spdx.SpdxException
+import org.ossreviewtoolkit.spdx.SpdxExpression
 
 object DeclaredLicenseProcessor {
     private val urlPrefixesToRemove = listOf(

@@ -17,11 +17,11 @@
  * License-Filename: LICENSE
  */
 
-package com.here.ort.downloader
+package org.ossreviewtoolkit.downloader
 
-import com.here.ort.model.VcsInfo
-import com.here.ort.model.VcsType
-import com.here.ort.utils.filterVersionNames
+import org.ossreviewtoolkit.model.VcsInfo
+import org.ossreviewtoolkit.model.VcsType
+import org.ossreviewtoolkit.utils.filterVersionNames
 
 import java.io.File
 import java.io.IOException

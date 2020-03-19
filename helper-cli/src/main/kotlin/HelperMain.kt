@@ -17,17 +17,17 @@
  * License-Filename: LICENSE
  */
 
-package com.here.ort.helper
+package org.ossreviewtoolkit.helper
 
 import kotlin.system.exitProcess
 
 import com.beust.jcommander.JCommander
 import com.beust.jcommander.Parameter
 
-import com.here.ort.helper.commands.*
-import com.here.ort.helper.common.ORTH_NAME
-import com.here.ort.utils.PARAMETER_ORDER_LOGGING
-import com.here.ort.utils.printStackTrace
+import org.ossreviewtoolkit.helper.commands.*
+import org.ossreviewtoolkit.helper.common.ORTH_NAME
+import org.ossreviewtoolkit.utils.PARAMETER_ORDER_LOGGING
+import org.ossreviewtoolkit.utils.printStackTrace
 
 import org.apache.logging.log4j.Level
 import org.apache.logging.log4j.core.config.Configurator

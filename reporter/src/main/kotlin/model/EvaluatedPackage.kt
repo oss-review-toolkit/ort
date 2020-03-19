@@ -17,19 +17,19 @@
  * License-Filename: LICENSE
  */
 
-package com.here.ort.reporter.model
+package org.ossreviewtoolkit.reporter.model
 
 import com.fasterxml.jackson.annotation.JsonIdentityReference
 import com.fasterxml.jackson.annotation.JsonInclude
 
-import com.here.ort.model.Identifier
-import com.here.ort.model.Package
-import com.here.ort.model.PackageCurationResult
-import com.here.ort.model.RemoteArtifact
-import com.here.ort.model.VcsInfo
-import com.here.ort.model.config.PathExclude
-import com.here.ort.model.config.ScopeExclude
-import com.here.ort.spdx.SpdxExpression
+import org.ossreviewtoolkit.model.Identifier
+import org.ossreviewtoolkit.model.Package
+import org.ossreviewtoolkit.model.PackageCurationResult
+import org.ossreviewtoolkit.model.RemoteArtifact
+import org.ossreviewtoolkit.model.VcsInfo
+import org.ossreviewtoolkit.model.config.PathExclude
+import org.ossreviewtoolkit.model.config.ScopeExclude
+import org.ossreviewtoolkit.spdx.SpdxExpression
 
 import java.util.SortedSet
 

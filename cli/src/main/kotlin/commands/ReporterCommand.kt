@@ -17,7 +17,7 @@
  * License-Filename: LICENSE
  */
 
-package com.here.ort.commands
+package org.ossreviewtoolkit.commands
 
 import com.github.ajalt.clikt.core.BadParameterValue
 import com.github.ajalt.clikt.core.CliktCommand
@@ -29,23 +29,23 @@ import com.github.ajalt.clikt.parameters.options.required
 import com.github.ajalt.clikt.parameters.options.split
 import com.github.ajalt.clikt.parameters.types.file
 
-import com.here.ort.model.OrtResult
-import com.here.ort.model.config.CopyrightGarbage
-import com.here.ort.model.config.OrtConfiguration
-import com.here.ort.model.config.Resolutions
-import com.here.ort.model.config.orEmpty
-import com.here.ort.model.licenses.LicenseConfiguration
-import com.here.ort.model.licenses.orEmpty
-import com.here.ort.model.readValue
-import com.here.ort.model.utils.SimplePackageConfigurationProvider
-import com.here.ort.reporter.DefaultLicenseTextProvider
-import com.here.ort.reporter.DefaultResolutionProvider
-import com.here.ort.reporter.Reporter
-import com.here.ort.reporter.ReporterInput
-import com.here.ort.utils.collectMessagesAsString
-import com.here.ort.utils.expandTilde
-import com.here.ort.utils.safeMkdirs
-import com.here.ort.utils.showStackTrace
+import org.ossreviewtoolkit.model.OrtResult
+import org.ossreviewtoolkit.model.config.CopyrightGarbage
+import org.ossreviewtoolkit.model.config.OrtConfiguration
+import org.ossreviewtoolkit.model.config.Resolutions
+import org.ossreviewtoolkit.model.config.orEmpty
+import org.ossreviewtoolkit.model.licenses.LicenseConfiguration
+import org.ossreviewtoolkit.model.licenses.orEmpty
+import org.ossreviewtoolkit.model.readValue
+import org.ossreviewtoolkit.model.utils.SimplePackageConfigurationProvider
+import org.ossreviewtoolkit.reporter.DefaultLicenseTextProvider
+import org.ossreviewtoolkit.reporter.DefaultResolutionProvider
+import org.ossreviewtoolkit.reporter.Reporter
+import org.ossreviewtoolkit.reporter.ReporterInput
+import org.ossreviewtoolkit.utils.collectMessagesAsString
+import org.ossreviewtoolkit.utils.expandTilde
+import org.ossreviewtoolkit.utils.safeMkdirs
+import org.ossreviewtoolkit.utils.showStackTrace
 
 import java.io.File
 

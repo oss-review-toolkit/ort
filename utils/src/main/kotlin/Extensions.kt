@@ -19,7 +19,7 @@
 
 @file:Suppress("TooManyFunctions")
 
-package com.here.ort.utils
+package org.ossreviewtoolkit.utils
 
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.type.CollectionType

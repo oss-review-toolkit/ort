@@ -17,20 +17,20 @@
  * License-Filename: LICENSE
  */
 
-package com.here.ort.evaluator
+package org.ossreviewtoolkit.evaluator
 
-import com.here.ort.model.Identifier
-import com.here.ort.model.LicenseFindings
-import com.here.ort.model.OrtResult
-import com.here.ort.model.Package
-import com.here.ort.model.PackageReference
-import com.here.ort.model.Project
-import com.here.ort.model.RuleViolation
-import com.here.ort.model.Scope
-import com.here.ort.model.utils.PackageConfigurationProvider
-import com.here.ort.model.utils.SimplePackageConfigurationProvider
-import com.here.ort.model.utils.collectLicenseFindings
-import com.here.ort.utils.log
+import org.ossreviewtoolkit.model.Identifier
+import org.ossreviewtoolkit.model.LicenseFindings
+import org.ossreviewtoolkit.model.OrtResult
+import org.ossreviewtoolkit.model.Package
+import org.ossreviewtoolkit.model.PackageReference
+import org.ossreviewtoolkit.model.Project
+import org.ossreviewtoolkit.model.RuleViolation
+import org.ossreviewtoolkit.model.Scope
+import org.ossreviewtoolkit.model.utils.PackageConfigurationProvider
+import org.ossreviewtoolkit.model.utils.SimplePackageConfigurationProvider
+import org.ossreviewtoolkit.model.utils.collectLicenseFindings
+import org.ossreviewtoolkit.utils.log
 
 /**
  * A set of evaluator [Rule]s, using an [ortResult] as input.

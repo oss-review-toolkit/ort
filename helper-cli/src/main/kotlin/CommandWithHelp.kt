@@ -17,12 +17,12 @@
  * License-Filename: LICENSE
  */
 
-package com.here.ort.helper
+package org.ossreviewtoolkit.helper
 
 import com.beust.jcommander.JCommander
 import com.beust.jcommander.Parameter
 
-import com.here.ort.utils.PARAMETER_ORDER_HELP
+import org.ossreviewtoolkit.utils.PARAMETER_ORDER_HELP
 
 /**
  * A JCommander command that offers command line help.

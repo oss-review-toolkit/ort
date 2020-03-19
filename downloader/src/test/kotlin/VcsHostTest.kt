@@ -17,14 +17,14 @@
  * License-Filename: LICENSE
  */
 
-package com.here.ort.downloader
+package org.ossreviewtoolkit.downloader
 
-import com.here.ort.downloader.VcsHost.BITBUCKET
-import com.here.ort.downloader.VcsHost.GITHUB
-import com.here.ort.downloader.VcsHost.GITLAB
-import com.here.ort.downloader.VcsHost.SOURCEHUT
-import com.here.ort.model.VcsInfo
-import com.here.ort.model.VcsType
+import org.ossreviewtoolkit.downloader.VcsHost.BITBUCKET
+import org.ossreviewtoolkit.downloader.VcsHost.GITHUB
+import org.ossreviewtoolkit.downloader.VcsHost.GITLAB
+import org.ossreviewtoolkit.downloader.VcsHost.SOURCEHUT
+import org.ossreviewtoolkit.model.VcsInfo
+import org.ossreviewtoolkit.model.VcsType
 
 import io.kotlintest.shouldBe
 import io.kotlintest.specs.WordSpec

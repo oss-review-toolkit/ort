@@ -18,27 +18,27 @@
  * License-Filename: LICENSE
  */
 
-package com.here.ort.scanner.storages
+package org.ossreviewtoolkit.scanner.storages
 
-import com.here.ort.model.EMPTY_JSON_NODE
-import com.here.ort.model.Failure
-import com.here.ort.model.Hash
-import com.here.ort.model.Identifier
-import com.here.ort.model.LicenseFinding
-import com.here.ort.model.OrtIssue
-import com.here.ort.model.Package
-import com.here.ort.model.Provenance
-import com.here.ort.model.RemoteArtifact
-import com.here.ort.model.ScanResult
-import com.here.ort.model.ScanResultContainer
-import com.here.ort.model.ScanSummary
-import com.here.ort.model.ScannerDetails
-import com.here.ort.model.Success
-import com.here.ort.model.TextLocation
-import com.here.ort.model.VcsInfo
-import com.here.ort.model.VcsType
-import com.here.ort.model.jsonMapper
-import com.here.ort.scanner.ScanResultsStorage
+import org.ossreviewtoolkit.model.EMPTY_JSON_NODE
+import org.ossreviewtoolkit.model.Failure
+import org.ossreviewtoolkit.model.Hash
+import org.ossreviewtoolkit.model.Identifier
+import org.ossreviewtoolkit.model.LicenseFinding
+import org.ossreviewtoolkit.model.OrtIssue
+import org.ossreviewtoolkit.model.Package
+import org.ossreviewtoolkit.model.Provenance
+import org.ossreviewtoolkit.model.RemoteArtifact
+import org.ossreviewtoolkit.model.ScanResult
+import org.ossreviewtoolkit.model.ScanResultContainer
+import org.ossreviewtoolkit.model.ScanSummary
+import org.ossreviewtoolkit.model.ScannerDetails
+import org.ossreviewtoolkit.model.Success
+import org.ossreviewtoolkit.model.TextLocation
+import org.ossreviewtoolkit.model.VcsInfo
+import org.ossreviewtoolkit.model.VcsType
+import org.ossreviewtoolkit.model.jsonMapper
+import org.ossreviewtoolkit.scanner.ScanResultsStorage
 
 import io.kotlintest.matchers.beEmpty
 import io.kotlintest.matchers.beOfType

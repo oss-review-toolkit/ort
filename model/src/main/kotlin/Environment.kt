@@ -17,9 +17,9 @@
  * License-Filename: LICENSE
  */
 
-package com.here.ort.model
+package org.ossreviewtoolkit.model
 
-import com.here.ort.utils.Os
+import org.ossreviewtoolkit.utils.Os
 
 /**
  * A description of the environment that ORT was executed in.

@@ -17,17 +17,17 @@
  * License-Filename: LICENSE
  */
 
-package com.here.ort.downloader
+package org.ossreviewtoolkit.downloader
 
-import com.here.ort.model.Hash
-import com.here.ort.model.Identifier
-import com.here.ort.model.Package
-import com.here.ort.model.RemoteArtifact
-import com.here.ort.model.VcsInfo
-import com.here.ort.model.VcsType
-import com.here.ort.utils.ORT_NAME
-import com.here.ort.utils.normalizeVcsUrl
-import com.here.ort.utils.safeDeleteRecursively
+import org.ossreviewtoolkit.model.Hash
+import org.ossreviewtoolkit.model.Identifier
+import org.ossreviewtoolkit.model.Package
+import org.ossreviewtoolkit.model.RemoteArtifact
+import org.ossreviewtoolkit.model.VcsInfo
+import org.ossreviewtoolkit.model.VcsType
+import org.ossreviewtoolkit.utils.ORT_NAME
+import org.ossreviewtoolkit.utils.normalizeVcsUrl
+import org.ossreviewtoolkit.utils.safeDeleteRecursively
 
 import io.kotlintest.TestCase
 import io.kotlintest.TestResult

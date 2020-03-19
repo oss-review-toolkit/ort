@@ -17,24 +17,24 @@
  * License-Filename: LICENSE
  */
 
-package com.here.ort.analyzer
+package org.ossreviewtoolkit.analyzer
 
-import com.here.ort.analyzer.managers.Unmanaged
-import com.here.ort.downloader.VersionControlSystem
-import com.here.ort.model.AnalyzerResult
-import com.here.ort.model.AnalyzerResultBuilder
-import com.here.ort.model.AnalyzerRun
-import com.here.ort.model.Environment
-import com.here.ort.model.OrtResult
-import com.here.ort.model.ProjectAnalyzerResult
-import com.here.ort.model.Repository
-import com.here.ort.model.VcsInfo
-import com.here.ort.model.config.AnalyzerConfiguration
-import com.here.ort.model.config.RepositoryConfiguration
-import com.here.ort.model.readValue
-import com.here.ort.utils.NamedThreadFactory
-import com.here.ort.utils.ORT_CONFIG_FILENAME
-import com.here.ort.utils.log
+import org.ossreviewtoolkit.analyzer.managers.Unmanaged
+import org.ossreviewtoolkit.downloader.VersionControlSystem
+import org.ossreviewtoolkit.model.AnalyzerResult
+import org.ossreviewtoolkit.model.AnalyzerResultBuilder
+import org.ossreviewtoolkit.model.AnalyzerRun
+import org.ossreviewtoolkit.model.Environment
+import org.ossreviewtoolkit.model.OrtResult
+import org.ossreviewtoolkit.model.ProjectAnalyzerResult
+import org.ossreviewtoolkit.model.Repository
+import org.ossreviewtoolkit.model.VcsInfo
+import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
+import org.ossreviewtoolkit.model.config.RepositoryConfiguration
+import org.ossreviewtoolkit.model.readValue
+import org.ossreviewtoolkit.utils.NamedThreadFactory
+import org.ossreviewtoolkit.utils.ORT_CONFIG_FILENAME
+import org.ossreviewtoolkit.utils.log
 
 import java.io.File
 import java.time.Instant

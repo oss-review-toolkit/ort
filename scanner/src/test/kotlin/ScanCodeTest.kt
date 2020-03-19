@@ -17,13 +17,13 @@
  * License-Filename: LICENSE
  */
 
-package com.here.ort.scanner
+package org.ossreviewtoolkit.scanner
 
-import com.here.ort.model.CopyrightFinding
-import com.here.ort.model.LicenseFinding
-import com.here.ort.model.TextLocation
-import com.here.ort.model.config.ScannerConfiguration
-import com.here.ort.scanner.scanners.ScanCode
+import org.ossreviewtoolkit.model.CopyrightFinding
+import org.ossreviewtoolkit.model.LicenseFinding
+import org.ossreviewtoolkit.model.TextLocation
+import org.ossreviewtoolkit.model.config.ScannerConfiguration
+import org.ossreviewtoolkit.scanner.scanners.ScanCode
 
 import io.kotlintest.matchers.collections.shouldContainExactlyInAnyOrder
 import io.kotlintest.matchers.haveSize

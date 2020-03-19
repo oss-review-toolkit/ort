@@ -17,13 +17,13 @@
  * License-Filename: LICENSE
  */
 
-package com.here.ort.downloader.vcs
+package org.ossreviewtoolkit.downloader.vcs
 
-import com.here.ort.model.VcsType
-import com.here.ort.utils.ORT_NAME
-import com.here.ort.utils.getUserOrtDirectory
-import com.here.ort.utils.safeDeleteRecursively
-import com.here.ort.utils.unpack
+import org.ossreviewtoolkit.model.VcsType
+import org.ossreviewtoolkit.utils.ORT_NAME
+import org.ossreviewtoolkit.utils.getUserOrtDirectory
+import org.ossreviewtoolkit.utils.safeDeleteRecursively
+import org.ossreviewtoolkit.utils.unpack
 
 import io.kotlintest.Spec
 import io.kotlintest.shouldBe

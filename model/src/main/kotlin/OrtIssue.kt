@@ -17,7 +17,7 @@
  * License-Filename: LICENSE
  */
 
-package com.here.ort.model
+package org.ossreviewtoolkit.model
 
 import com.fasterxml.jackson.core.JsonGenerator
 import com.fasterxml.jackson.core.JsonParser
@@ -29,8 +29,8 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer
 import com.fasterxml.jackson.databind.ser.std.StdSerializer
 
-import com.here.ort.utils.log
-import com.here.ort.utils.normalizeLineBreaks
+import org.ossreviewtoolkit.utils.log
+import org.ossreviewtoolkit.utils.normalizeLineBreaks
 
 import java.time.Instant
 

@@ -17,15 +17,15 @@
  * License-Filename: LICENSE
  */
 
-package com.here.ort.reporter.model
+package org.ossreviewtoolkit.reporter.model
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo
 import com.fasterxml.jackson.annotation.JsonInclude
 
-import com.here.ort.model.PackageLinkage
-import com.here.ort.model.config.PathExclude
-import com.here.ort.model.config.ScopeExclude
-import com.here.ort.reporter.utils.ZeroBasedIntSequenceGenerator
+import org.ossreviewtoolkit.model.PackageLinkage
+import org.ossreviewtoolkit.model.config.PathExclude
+import org.ossreviewtoolkit.model.config.ScopeExclude
+import org.ossreviewtoolkit.reporter.utils.ZeroBasedIntSequenceGenerator
 
 /**
  * A node for the dependency trees of the [EvaluatedModel].

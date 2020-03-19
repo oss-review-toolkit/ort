@@ -17,10 +17,10 @@
  * License-Filename: LICENSE
  */
 
-package com.here.ort.model
+package org.ossreviewtoolkit.model
 
-import com.here.ort.model.config.CopyrightGarbage
-import com.here.ort.utils.CopyrightStatementsProcessor
+import org.ossreviewtoolkit.model.config.CopyrightGarbage
+import org.ossreviewtoolkit.utils.CopyrightStatementsProcessor
 
 import java.util.SortedMap
 import java.util.SortedSet

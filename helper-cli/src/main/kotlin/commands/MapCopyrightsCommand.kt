@@ -17,18 +17,18 @@
  * License-Filename: LICENSE
  */
 
-package com.here.ort.helper.commands
+package org.ossreviewtoolkit.helper.commands
 
 import com.beust.jcommander.JCommander
 import com.beust.jcommander.Parameter
 import com.beust.jcommander.Parameters
 
-import com.here.ort.helper.CommandWithHelp
-import com.here.ort.helper.common.processAllCopyrightStatements
-import com.here.ort.model.OrtResult
-import com.here.ort.model.readValue
-import com.here.ort.utils.PARAMETER_ORDER_MANDATORY
-import com.here.ort.utils.expandTilde
+import org.ossreviewtoolkit.helper.CommandWithHelp
+import org.ossreviewtoolkit.helper.common.processAllCopyrightStatements
+import org.ossreviewtoolkit.model.OrtResult
+import org.ossreviewtoolkit.model.readValue
+import org.ossreviewtoolkit.utils.PARAMETER_ORDER_MANDATORY
+import org.ossreviewtoolkit.utils.expandTilde
 
 import java.io.File
 

@@ -17,12 +17,12 @@
  * License-Filename: LICENSE
  */
 
-package com.here.ort.model
+package org.ossreviewtoolkit.model
 
 import com.fasterxml.jackson.annotation.JsonAlias
 import com.fasterxml.jackson.annotation.JsonInclude
 
-import com.here.ort.utils.toHexString
+import org.ossreviewtoolkit.utils.toHexString
 
 import java.security.MessageDigest
 import java.time.Instant

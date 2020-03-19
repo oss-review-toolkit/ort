@@ -17,12 +17,12 @@
  * License-Filename: LICENSE
  */
 
-package com.here.ort.reporter.reporters
+package org.ossreviewtoolkit.reporter.reporters
 
-import com.here.ort.reporter.Reporter
-import com.here.ort.reporter.ReporterInput
-import com.here.ort.reporter.model.EvaluatedModel
-import com.here.ort.utils.log
+import org.ossreviewtoolkit.reporter.Reporter
+import org.ossreviewtoolkit.reporter.ReporterInput
+import org.ossreviewtoolkit.reporter.model.EvaluatedModel
+import org.ossreviewtoolkit.utils.log
 
 import java.io.OutputStream
 import java.io.Writer

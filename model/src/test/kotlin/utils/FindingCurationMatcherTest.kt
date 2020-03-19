@@ -17,12 +17,12 @@
  * License-Filename: LICENSE
  */
 
-package com.here.ort.model.utils
+package org.ossreviewtoolkit.model.utils
 
-import com.here.ort.model.LicenseFinding
-import com.here.ort.model.TextLocation
-import com.here.ort.model.config.LicenseFindingCuration
-import com.here.ort.model.config.LicenseFindingCurationReason.INCORRECT
+import org.ossreviewtoolkit.model.LicenseFinding
+import org.ossreviewtoolkit.model.TextLocation
+import org.ossreviewtoolkit.model.config.LicenseFindingCuration
+import org.ossreviewtoolkit.model.config.LicenseFindingCurationReason.INCORRECT
 
 import io.kotlintest.IsolationMode
 import io.kotlintest.matchers.collections.shouldContainExactlyInAnyOrder

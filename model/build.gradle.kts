@@ -18,7 +18,7 @@
  * License-Filename: LICENSE
  */
 
-import com.here.ort.gradle.*
+import org.ossreviewtoolkit.gradle.*
 
 import org.jetbrains.kotlin.gradle.dsl.KotlinCompile
 

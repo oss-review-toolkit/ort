@@ -17,10 +17,10 @@
  * License-Filename: LICENSE
  */
 
-package com.here.ort.helper.common
+package org.ossreviewtoolkit.helper.common
 
 import com.beust.jcommander.IStringConverter
-import com.here.ort.model.Severity
+import org.ossreviewtoolkit.model.Severity
 
 internal class SeverityConverter : IStringConverter<Severity?> {
     override fun convert(value: String?): Severity? {

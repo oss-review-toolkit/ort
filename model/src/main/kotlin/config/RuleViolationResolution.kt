@@ -17,11 +17,11 @@
  * License-Filename: LICENSE
  */
 
-package com.here.ort.model.config
+package org.ossreviewtoolkit.model.config
 
 import com.fasterxml.jackson.annotation.JsonIgnore
 
-import com.here.ort.model.RuleViolation
+import org.ossreviewtoolkit.model.RuleViolation
 
 /**
  * Defines the resolution of a rule violation. This can be used to silence rule violations that have been identified

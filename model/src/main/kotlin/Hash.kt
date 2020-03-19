@@ -17,7 +17,7 @@
  * License-Filename: LICENSE
  */
 
-package com.here.ort.model
+package org.ossreviewtoolkit.model
 
 import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.core.JsonParser
@@ -26,8 +26,8 @@ import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer
 
-import com.here.ort.utils.hash
-import com.here.ort.utils.toHexString
+import org.ossreviewtoolkit.utils.hash
+import org.ossreviewtoolkit.utils.toHexString
 
 import java.io.File
 import java.util.Base64

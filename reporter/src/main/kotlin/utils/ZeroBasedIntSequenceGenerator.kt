@@ -17,7 +17,7 @@
  * License-Filename: LICENSE
  */
 
-package com.here.ort.reporter.utils
+package org.ossreviewtoolkit.reporter.utils
 
 import com.fasterxml.jackson.annotation.ObjectIdGenerator
 import com.fasterxml.jackson.annotation.ObjectIdGenerators

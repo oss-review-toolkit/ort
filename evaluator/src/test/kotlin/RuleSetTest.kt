@@ -17,9 +17,9 @@
  * License-Filename: LICENSE
  */
 
-package com.here.ort.evaluator
+package org.ossreviewtoolkit.evaluator
 
-import com.here.ort.model.utils.SimplePackageConfigurationProvider
+import org.ossreviewtoolkit.model.utils.SimplePackageConfigurationProvider
 import io.kotlintest.matchers.haveSize
 import io.kotlintest.should
 import io.kotlintest.specs.WordSpec

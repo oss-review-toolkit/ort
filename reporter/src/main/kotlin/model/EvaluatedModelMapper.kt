@@ -17,27 +17,27 @@
  * License-Filename: LICENSE
  */
 
-package com.here.ort.reporter.model
+package org.ossreviewtoolkit.reporter.model
 
-import com.here.ort.model.CuratedPackage
-import com.here.ort.model.Identifier
-import com.here.ort.model.OrtIssue
-import com.here.ort.model.PackageReference
-import com.here.ort.model.Project
-import com.here.ort.model.RemoteArtifact
-import com.here.ort.model.RuleViolation
-import com.here.ort.model.ScanResult
-import com.here.ort.model.ScanSummary
-import com.here.ort.model.VcsInfo
-import com.here.ort.model.config.IssueResolution
-import com.here.ort.model.config.PathExclude
-import com.here.ort.model.config.RuleViolationResolution
-import com.here.ort.model.config.ScopeExclude
-import com.here.ort.model.utils.FindingsMatcher
-import com.here.ort.model.yamlMapper
-import com.here.ort.reporter.ReporterInput
-import com.here.ort.reporter.utils.StatisticsCalculator
-import com.here.ort.utils.ProcessedDeclaredLicense
+import org.ossreviewtoolkit.model.CuratedPackage
+import org.ossreviewtoolkit.model.Identifier
+import org.ossreviewtoolkit.model.OrtIssue
+import org.ossreviewtoolkit.model.PackageReference
+import org.ossreviewtoolkit.model.Project
+import org.ossreviewtoolkit.model.RemoteArtifact
+import org.ossreviewtoolkit.model.RuleViolation
+import org.ossreviewtoolkit.model.ScanResult
+import org.ossreviewtoolkit.model.ScanSummary
+import org.ossreviewtoolkit.model.VcsInfo
+import org.ossreviewtoolkit.model.config.IssueResolution
+import org.ossreviewtoolkit.model.config.PathExclude
+import org.ossreviewtoolkit.model.config.RuleViolationResolution
+import org.ossreviewtoolkit.model.config.ScopeExclude
+import org.ossreviewtoolkit.model.utils.FindingsMatcher
+import org.ossreviewtoolkit.model.yamlMapper
+import org.ossreviewtoolkit.reporter.ReporterInput
+import org.ossreviewtoolkit.reporter.utils.StatisticsCalculator
+import org.ossreviewtoolkit.utils.ProcessedDeclaredLicense
 
 /**
  * Maps the [reporter input][input] to an [EvaluatedModel].

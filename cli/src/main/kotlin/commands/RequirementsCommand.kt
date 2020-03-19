@@ -17,19 +17,19 @@
  * License-Filename: LICENSE
  */
 
-package com.here.ort.commands
+package org.ossreviewtoolkit.commands
 
 import com.github.ajalt.clikt.core.CliktCommand
 import com.github.ajalt.clikt.core.UsageError
 
-import com.here.ort.analyzer.PackageManager
-import com.here.ort.downloader.VersionControlSystem
-import com.here.ort.model.config.AnalyzerConfiguration
-import com.here.ort.model.config.RepositoryConfiguration
-import com.here.ort.model.config.ScannerConfiguration
-import com.here.ort.scanner.Scanner
-import com.here.ort.utils.CommandLineTool
-import com.here.ort.utils.log
+import org.ossreviewtoolkit.analyzer.PackageManager
+import org.ossreviewtoolkit.downloader.VersionControlSystem
+import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
+import org.ossreviewtoolkit.model.config.RepositoryConfiguration
+import org.ossreviewtoolkit.model.config.ScannerConfiguration
+import org.ossreviewtoolkit.scanner.Scanner
+import org.ossreviewtoolkit.utils.CommandLineTool
+import org.ossreviewtoolkit.utils.log
 
 import com.vdurmont.semver4j.SemverException
 
@@ -41,7 +41,7 @@ import org.reflections.Reflections
 
 class RequirementsCommand : CliktCommand(name = "requirements", help = "List the required command line tools.") {
     override fun run() {
-        val reflections = Reflections("com.here.ort")
+        val reflections = Reflections("org.ossreviewtoolkit")
         val classes = reflections.getSubTypesOf(CommandLineTool::class.java)
 
         val allTools = mutableMapOf<String, MutableList<CommandLineTool>>()

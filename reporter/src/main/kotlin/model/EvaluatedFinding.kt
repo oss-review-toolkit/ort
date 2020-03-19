@@ -17,11 +17,11 @@
  * License-Filename: LICENSE
  */
 
-package com.here.ort.reporter.model
+package org.ossreviewtoolkit.reporter.model
 
 import com.fasterxml.jackson.annotation.JsonInclude
 
-import com.here.ort.model.LicenseFinding
+import org.ossreviewtoolkit.model.LicenseFinding
 
 /**
  * The evaluated form of a [LicenseFinding] used by the [EvaluatedModel].

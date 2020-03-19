@@ -19,7 +19,7 @@
 
 @file:Suppress("MatchingDeclarationName")
 
-package com.here.ort.utils
+package org.ossreviewtoolkit.utils
 
 import java.io.File
 import java.io.InputStream

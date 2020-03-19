@@ -17,10 +17,10 @@
  * License-Filename: LICENSE
  */
 
-package com.here.ort.helper.common
+package org.ossreviewtoolkit.helper.common
 
 import com.beust.jcommander.IStringConverter
-import com.here.ort.model.Identifier
+import org.ossreviewtoolkit.model.Identifier
 
 internal class IdentifierConverter : IStringConverter<Identifier> {
     override fun convert(value: String?): Identifier {

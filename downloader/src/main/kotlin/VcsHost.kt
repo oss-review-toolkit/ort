@@ -18,12 +18,12 @@
  * License-Filename: LICENSE
  */
 
-package com.here.ort.downloader
+package org.ossreviewtoolkit.downloader
 
-import com.here.ort.model.VcsInfo
-import com.here.ort.model.VcsType
-import com.here.ort.utils.hasRevisionFragment
-import com.here.ort.utils.normalizeVcsUrl
+import org.ossreviewtoolkit.model.VcsInfo
+import org.ossreviewtoolkit.model.VcsType
+import org.ossreviewtoolkit.utils.hasRevisionFragment
+import org.ossreviewtoolkit.utils.normalizeVcsUrl
 
 import java.net.URI
 import java.net.URISyntaxException

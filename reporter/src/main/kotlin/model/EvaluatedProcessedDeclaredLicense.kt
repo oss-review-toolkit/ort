@@ -17,10 +17,10 @@
  * License-Filename: LICENSE
  */
 
-package com.here.ort.reporter.model
+package org.ossreviewtoolkit.reporter.model
 
-import com.here.ort.spdx.SpdxExpression
-import com.here.ort.utils.ProcessedDeclaredLicense
+import org.ossreviewtoolkit.spdx.SpdxExpression
+import org.ossreviewtoolkit.utils.ProcessedDeclaredLicense
 
 /**
  * The evaluated form of a [ProcessedDeclaredLicense] used by the [EvaluatedModel].

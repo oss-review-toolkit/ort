@@ -17,24 +17,24 @@
  * License-Filename: LICENSE
  */
 
-package com.here.ort.reporter.reporters
+package org.ossreviewtoolkit.reporter.reporters
 
-import com.here.ort.downloader.VcsHost
-import com.here.ort.model.Environment
-import com.here.ort.model.Project
-import com.here.ort.model.RemoteArtifact
-import com.here.ort.model.Severity
-import com.here.ort.model.VcsInfo
-import com.here.ort.model.config.RepositoryConfiguration
-import com.here.ort.model.yamlMapper
-import com.here.ort.reporter.Reporter
-import com.here.ort.reporter.ReporterInput
-import com.here.ort.reporter.reporters.ReportTableModel.IssueTable
-import com.here.ort.reporter.reporters.ReportTableModel.ProjectTable
-import com.here.ort.reporter.reporters.ReportTableModel.ResolvableIssue
-import com.here.ort.utils.ORT_FULL_NAME
-import com.here.ort.utils.isValidUrl
-import com.here.ort.utils.normalizeLineBreaks
+import org.ossreviewtoolkit.downloader.VcsHost
+import org.ossreviewtoolkit.model.Environment
+import org.ossreviewtoolkit.model.Project
+import org.ossreviewtoolkit.model.RemoteArtifact
+import org.ossreviewtoolkit.model.Severity
+import org.ossreviewtoolkit.model.VcsInfo
+import org.ossreviewtoolkit.model.config.RepositoryConfiguration
+import org.ossreviewtoolkit.model.yamlMapper
+import org.ossreviewtoolkit.reporter.Reporter
+import org.ossreviewtoolkit.reporter.ReporterInput
+import org.ossreviewtoolkit.reporter.reporters.ReportTableModel.IssueTable
+import org.ossreviewtoolkit.reporter.reporters.ReportTableModel.ProjectTable
+import org.ossreviewtoolkit.reporter.reporters.ReportTableModel.ResolvableIssue
+import org.ossreviewtoolkit.utils.ORT_FULL_NAME
+import org.ossreviewtoolkit.utils.isValidUrl
+import org.ossreviewtoolkit.utils.normalizeLineBreaks
 import com.vladsch.flexmark.html.HtmlRenderer
 import com.vladsch.flexmark.parser.Parser
 

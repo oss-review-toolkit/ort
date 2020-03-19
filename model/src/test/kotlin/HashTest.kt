@@ -17,7 +17,7 @@
  * License-Filename: LICENSE
  */
 
-package com.here.ort.model
+package org.ossreviewtoolkit.model
 
 import io.kotlintest.shouldBe
 import io.kotlintest.shouldThrow

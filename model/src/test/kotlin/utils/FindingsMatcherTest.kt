@@ -17,15 +17,15 @@
  * License-Filename: LICENSE
  */
 
-package com.here.ort.model.utils
+package org.ossreviewtoolkit.model.utils
 
-import com.here.ort.model.CopyrightFinding
-import com.here.ort.model.LicenseFinding
-import com.here.ort.model.LicenseFindings
-import com.here.ort.model.TextLocation
-import com.here.ort.model.utils.FindingsMatcher.Companion.DEFAULT_EXPAND_TOLERANCE_LINES
-import com.here.ort.model.utils.FindingsMatcher.Companion.DEFAULT_TOLERANCE_LINES
-import com.here.ort.utils.FileMatcher
+import org.ossreviewtoolkit.model.CopyrightFinding
+import org.ossreviewtoolkit.model.LicenseFinding
+import org.ossreviewtoolkit.model.LicenseFindings
+import org.ossreviewtoolkit.model.TextLocation
+import org.ossreviewtoolkit.model.utils.FindingsMatcher.Companion.DEFAULT_EXPAND_TOLERANCE_LINES
+import org.ossreviewtoolkit.model.utils.FindingsMatcher.Companion.DEFAULT_TOLERANCE_LINES
+import org.ossreviewtoolkit.utils.FileMatcher
 
 import io.kotlintest.IsolationMode
 import io.kotlintest.matchers.beEmpty

@@ -18,12 +18,12 @@
  * License-Filename: LICENSE
  */
 
-package com.here.ort.analyzer.managers.utils
+package org.ossreviewtoolkit.analyzer.managers.utils
 
-import com.here.ort.model.Identifier
-import com.here.ort.model.OrtIssue
-import com.here.ort.model.PackageReference
-import com.here.ort.model.Scope
+import org.ossreviewtoolkit.model.Identifier
+import org.ossreviewtoolkit.model.OrtIssue
+import org.ossreviewtoolkit.model.PackageReference
+import org.ossreviewtoolkit.model.Scope
 
 import io.kotlintest.shouldBe
 import io.kotlintest.specs.StringSpec

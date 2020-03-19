@@ -17,7 +17,7 @@
  * License-Filename: LICENSE
  */
 
-package com.here.ort.reporter.model
+package org.ossreviewtoolkit.reporter.model
 
 /**
  * The path to a [dependency][pkg] used by the [EvaluatedModel]. It is defined by the [project] and [scope] that contain

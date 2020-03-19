@@ -17,7 +17,7 @@
  * License-Filename: LICENSE
  */
 
-package com.here.ort.commands
+package org.ossreviewtoolkit.commands
 
 import com.github.ajalt.clikt.core.CliktCommand
 import com.github.ajalt.clikt.core.UsageError
@@ -28,26 +28,26 @@ import com.github.ajalt.clikt.parameters.options.required
 import com.github.ajalt.clikt.parameters.types.enum
 import com.github.ajalt.clikt.parameters.types.file
 
-import com.here.ort.analyzer.HTTP_CACHE_PATH
-import com.here.ort.analyzer.curation.toClearlyDefinedCoordinates
-import com.here.ort.analyzer.curation.toClearlyDefinedSourceLocation
-import com.here.ort.clearlydefined.ClearlyDefinedService
-import com.here.ort.clearlydefined.ClearlyDefinedService.ContributionInfo
-import com.here.ort.clearlydefined.ClearlyDefinedService.ContributionPatch
-import com.here.ort.clearlydefined.ClearlyDefinedService.ContributionType
-import com.here.ort.clearlydefined.ClearlyDefinedService.Curation
-import com.here.ort.clearlydefined.ClearlyDefinedService.Described
-import com.here.ort.clearlydefined.ClearlyDefinedService.ErrorResponse
-import com.here.ort.clearlydefined.ClearlyDefinedService.Licensed
-import com.here.ort.clearlydefined.ClearlyDefinedService.Patch
-import com.here.ort.clearlydefined.ClearlyDefinedService.Server
-import com.here.ort.model.PackageCuration
-import com.here.ort.model.jsonMapper
-import com.here.ort.model.readValue
-import com.here.ort.utils.OkHttpClientHelper
-import com.here.ort.utils.expandTilde
-import com.here.ort.utils.hasNonNullProperty
-import com.here.ort.utils.log
+import org.ossreviewtoolkit.analyzer.HTTP_CACHE_PATH
+import org.ossreviewtoolkit.analyzer.curation.toClearlyDefinedCoordinates
+import org.ossreviewtoolkit.analyzer.curation.toClearlyDefinedSourceLocation
+import org.ossreviewtoolkit.clearlydefined.ClearlyDefinedService
+import org.ossreviewtoolkit.clearlydefined.ClearlyDefinedService.ContributionInfo
+import org.ossreviewtoolkit.clearlydefined.ClearlyDefinedService.ContributionPatch
+import org.ossreviewtoolkit.clearlydefined.ClearlyDefinedService.ContributionType
+import org.ossreviewtoolkit.clearlydefined.ClearlyDefinedService.Curation
+import org.ossreviewtoolkit.clearlydefined.ClearlyDefinedService.Described
+import org.ossreviewtoolkit.clearlydefined.ClearlyDefinedService.ErrorResponse
+import org.ossreviewtoolkit.clearlydefined.ClearlyDefinedService.Licensed
+import org.ossreviewtoolkit.clearlydefined.ClearlyDefinedService.Patch
+import org.ossreviewtoolkit.clearlydefined.ClearlyDefinedService.Server
+import org.ossreviewtoolkit.model.PackageCuration
+import org.ossreviewtoolkit.model.jsonMapper
+import org.ossreviewtoolkit.model.readValue
+import org.ossreviewtoolkit.utils.OkHttpClientHelper
+import org.ossreviewtoolkit.utils.expandTilde
+import org.ossreviewtoolkit.utils.hasNonNullProperty
+import org.ossreviewtoolkit.utils.log
 
 import java.net.HttpURLConnection
 import java.net.URL

@@ -17,12 +17,12 @@
  * License-Filename: LICENSE
  */
 
-package com.here.ort.reporter.reporters
+package org.ossreviewtoolkit.reporter.reporters
 
-import com.here.ort.model.clean
-import com.here.ort.model.merge
-import com.here.ort.reporter.ReporterInput
-import com.here.ort.utils.log
+import org.ossreviewtoolkit.model.clean
+import org.ossreviewtoolkit.model.merge
+import org.ossreviewtoolkit.reporter.ReporterInput
+import org.ossreviewtoolkit.utils.log
 
 /**
  * Creates a summary notice file containing all licenses for all non-excluded projects and packages. Each license

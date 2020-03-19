@@ -17,7 +17,7 @@
  * License-Filename: LICENSE
  */
 
-package com.here.ort.downloader
+package org.ossreviewtoolkit.downloader
 
 class DownloadException : Exception {
     constructor(message: String?, cause: Throwable?) : super(message, cause)

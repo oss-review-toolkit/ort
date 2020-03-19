@@ -18,16 +18,16 @@
  * License-Filename: LICENSE
  */
 
-package com.here.ort.scanner.storages
+package org.ossreviewtoolkit.scanner.storages
 
-import com.here.ort.model.Identifier
-import com.here.ort.model.Package
-import com.here.ort.model.Result
-import com.here.ort.model.ScanResult
-import com.here.ort.model.ScanResultContainer
-import com.here.ort.model.ScannerDetails
-import com.here.ort.model.Success
-import com.here.ort.scanner.ScanResultsStorage
+import org.ossreviewtoolkit.model.Identifier
+import org.ossreviewtoolkit.model.Package
+import org.ossreviewtoolkit.model.Result
+import org.ossreviewtoolkit.model.ScanResult
+import org.ossreviewtoolkit.model.ScanResultContainer
+import org.ossreviewtoolkit.model.ScannerDetails
+import org.ossreviewtoolkit.model.Success
+import org.ossreviewtoolkit.scanner.ScanResultsStorage
 
 /**
  * A dummy storage that does not store scan results at all. Can be used to disable storing of scan results to always

@@ -17,7 +17,7 @@
  * License-Filename: LICENSE
  */
 
-package com.here.ort.model.config
+package org.ossreviewtoolkit.model.config
 
 import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize
@@ -58,7 +58,7 @@ data class LicenseFindingCuration(
     val detectedLicense: String?,
 
     /**
-     * The concluded license as SPDX expression or [com.here.ort.spdx.SpdxLicense.NONE] for no license,
+     * The concluded license as SPDX expression or [org.ossreviewtoolkit.spdx.SpdxLicense.NONE] for no license,
      * see https://spdx.org/spdx-specification-21-web-version#h.jxpfx0ykyb60.
      */
     val concludedLicense: String,

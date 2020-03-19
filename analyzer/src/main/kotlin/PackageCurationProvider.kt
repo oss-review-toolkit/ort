@@ -17,10 +17,10 @@
  * License-Filename: LICENSE
  */
 
-package com.here.ort.analyzer
+package org.ossreviewtoolkit.analyzer
 
-import com.here.ort.model.Identifier
-import com.here.ort.model.PackageCuration
+import org.ossreviewtoolkit.model.Identifier
+import org.ossreviewtoolkit.model.PackageCuration
 
 /**
  * A provider for [PackageCuration]s.

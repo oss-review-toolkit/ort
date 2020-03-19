@@ -17,9 +17,9 @@
  * License-Filename: LICENSE
  */
 
-package com.here.ort.spdx
+package org.ossreviewtoolkit.spdx
 
-import com.here.ort.utils.ORT_NAME
+import org.ossreviewtoolkit.utils.ORT_NAME
 
 import io.kotlintest.TestCase
 import io.kotlintest.TestResult

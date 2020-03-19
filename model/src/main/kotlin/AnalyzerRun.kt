@@ -17,9 +17,9 @@
  * License-Filename: LICENSE
  */
 
-package com.here.ort.model
+package org.ossreviewtoolkit.model
 
-import com.here.ort.model.config.AnalyzerConfiguration
+import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 
 import java.time.Instant
 

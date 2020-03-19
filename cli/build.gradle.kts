@@ -31,7 +31,7 @@ plugins {
 
 application {
     applicationName = "ort"
-    mainClassName = "com.here.ort.OrtMainKt"
+    mainClassName = "org.ossreviewtoolkit.OrtMainKt"
 }
 
 tasks.named<CreateStartScripts>("startScripts") {

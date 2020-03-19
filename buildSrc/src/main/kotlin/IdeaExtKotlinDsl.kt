@@ -18,7 +18,7 @@
  * License-Filename: LICENSE
  */
 
-package com.here.ort.gradle
+package org.ossreviewtoolkit.gradle
 
 import org.gradle.api.Project
 import org.gradle.api.plugins.ExtensionAware

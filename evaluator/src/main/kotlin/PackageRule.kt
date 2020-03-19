@@ -17,19 +17,19 @@
  * License-Filename: LICENSE
  */
 
-package com.here.ort.evaluator
+package org.ossreviewtoolkit.evaluator
 
-import com.here.ort.model.CuratedPackage
-import com.here.ort.model.Identifier
-import com.here.ort.model.LicenseFindings
-import com.here.ort.model.LicenseSource
-import com.here.ort.model.Package
-import com.here.ort.model.PackageCurationResult
-import com.here.ort.model.Project
-import com.here.ort.model.Severity
-import com.here.ort.model.config.Excludes
-import com.here.ort.model.config.PathExclude
-import com.here.ort.spdx.SpdxLicense
+import org.ossreviewtoolkit.model.CuratedPackage
+import org.ossreviewtoolkit.model.Identifier
+import org.ossreviewtoolkit.model.LicenseFindings
+import org.ossreviewtoolkit.model.LicenseSource
+import org.ossreviewtoolkit.model.Package
+import org.ossreviewtoolkit.model.PackageCurationResult
+import org.ossreviewtoolkit.model.Project
+import org.ossreviewtoolkit.model.Severity
+import org.ossreviewtoolkit.model.config.Excludes
+import org.ossreviewtoolkit.model.config.PathExclude
+import org.ossreviewtoolkit.spdx.SpdxLicense
 
 /**
  * A [Rule] to check a single [Package].

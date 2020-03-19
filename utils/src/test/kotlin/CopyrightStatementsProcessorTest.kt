@@ -17,12 +17,12 @@
  * License-Filename: LICENSE
  */
 
-package com.here.ort.utils
+package org.ossreviewtoolkit.utils
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect
 import com.fasterxml.jackson.annotation.PropertyAccessor
 
-import com.here.ort.model.yamlMapper
+import org.ossreviewtoolkit.model.yamlMapper
 
 import io.kotlintest.shouldBe
 import io.kotlintest.specs.WordSpec

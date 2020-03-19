@@ -17,10 +17,10 @@
  * License-Filename: LICENSE
  */
 
-package com.here.ort.model
+package org.ossreviewtoolkit.model
 
-import com.here.ort.utils.SortedSetComparator
-import com.here.ort.utils.constructTreeSetType
+import org.ossreviewtoolkit.utils.SortedSetComparator
+import org.ossreviewtoolkit.utils.constructTreeSetType
 
 /**
  * A [TextLocation] references text located in a file.

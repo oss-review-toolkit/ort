@@ -17,7 +17,7 @@
  * License-Filename: LICENSE
  */
 
-package com.here.ort.reporter.reporters
+package org.ossreviewtoolkit.reporter.reporters
 
 import io.kotlintest.shouldBe
 import io.kotlintest.shouldNotBe

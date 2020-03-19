@@ -17,7 +17,7 @@
  * License-Filename: LICENSE
  */
 
-package com.here.ort.reporter
+package org.ossreviewtoolkit.reporter
 
 /**
  * A provider for license texts.

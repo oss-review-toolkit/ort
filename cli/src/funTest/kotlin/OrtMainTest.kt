@@ -17,20 +17,20 @@
  * License-Filename: LICENSE
  */
 
-package com.here.ort
+package org.ossreviewtoolkit
 
 import com.github.ajalt.clikt.core.MutuallyExclusiveGroupException
 import com.github.ajalt.clikt.core.UsageError
 
-import com.here.ort.commands.RequirementsCommand
-import com.here.ort.downloader.VersionControlSystem
-import com.here.ort.utils.ORT_NAME
-import com.here.ort.utils.log
-import com.here.ort.utils.normalizeVcsUrl
-import com.here.ort.utils.redirectStdout
-import com.here.ort.utils.safeDeleteRecursively
-import com.here.ort.utils.test.patchActualResult
-import com.here.ort.utils.test.patchExpectedResult
+import org.ossreviewtoolkit.commands.RequirementsCommand
+import org.ossreviewtoolkit.downloader.VersionControlSystem
+import org.ossreviewtoolkit.utils.ORT_NAME
+import org.ossreviewtoolkit.utils.log
+import org.ossreviewtoolkit.utils.normalizeVcsUrl
+import org.ossreviewtoolkit.utils.redirectStdout
+import org.ossreviewtoolkit.utils.safeDeleteRecursively
+import org.ossreviewtoolkit.utils.test.patchActualResult
+import org.ossreviewtoolkit.utils.test.patchExpectedResult
 
 import io.kotlintest.TestCase
 import io.kotlintest.TestResult

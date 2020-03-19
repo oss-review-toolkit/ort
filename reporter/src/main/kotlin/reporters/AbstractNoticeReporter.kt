@@ -17,17 +17,17 @@
  * License-Filename: LICENSE
  */
 
-package com.here.ort.reporter.reporters
+package org.ossreviewtoolkit.reporter.reporters
 
-import com.here.ort.model.Identifier
-import com.here.ort.model.LicenseFindingsMap
-import com.here.ort.model.OrtResult
-import com.here.ort.model.config.CopyrightGarbage
-import com.here.ort.model.licenses.LicenseConfiguration
-import com.here.ort.model.utils.collectLicenseFindings
-import com.here.ort.reporter.Reporter
-import com.here.ort.reporter.ReporterInput
-import com.here.ort.utils.ScriptRunner
+import org.ossreviewtoolkit.model.Identifier
+import org.ossreviewtoolkit.model.LicenseFindingsMap
+import org.ossreviewtoolkit.model.OrtResult
+import org.ossreviewtoolkit.model.config.CopyrightGarbage
+import org.ossreviewtoolkit.model.licenses.LicenseConfiguration
+import org.ossreviewtoolkit.model.utils.collectLicenseFindings
+import org.ossreviewtoolkit.reporter.Reporter
+import org.ossreviewtoolkit.reporter.ReporterInput
+import org.ossreviewtoolkit.utils.ScriptRunner
 
 import java.io.OutputStream
 
@@ -55,13 +55,13 @@ abstract class AbstractNoticeReporter : Reporter {
         licenseConfiguration: LicenseConfiguration
     ) : ScriptRunner() {
         override val preface = """
-            import com.here.ort.model.*
-            import com.here.ort.model.config.*
-            import com.here.ort.model.licenses.*
-            import com.here.ort.model.utils.*
-            import com.here.ort.spdx.*
-            import com.here.ort.utils.*
-            import com.here.ort.reporter.reporters.AbstractNoticeReporter.NoticeReportModel
+            import org.ossreviewtoolkit.model.*
+            import org.ossreviewtoolkit.model.config.*
+            import org.ossreviewtoolkit.model.licenses.*
+            import org.ossreviewtoolkit.model.utils.*
+            import org.ossreviewtoolkit.spdx.*
+            import org.ossreviewtoolkit.utils.*
+            import org.ossreviewtoolkit.reporter.reporters.AbstractNoticeReporter.NoticeReportModel
 
             import java.util.*
 

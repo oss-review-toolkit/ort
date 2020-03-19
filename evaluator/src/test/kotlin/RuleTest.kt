@@ -17,11 +17,11 @@
  * License-Filename: LICENSE
  */
 
-package com.here.ort.evaluator
+package org.ossreviewtoolkit.evaluator
 
-import com.here.ort.model.Identifier
-import com.here.ort.model.LicenseSource
-import com.here.ort.model.Severity
+import org.ossreviewtoolkit.model.Identifier
+import org.ossreviewtoolkit.model.LicenseSource
+import org.ossreviewtoolkit.model.Severity
 
 import io.kotlintest.matchers.haveSize
 import io.kotlintest.should

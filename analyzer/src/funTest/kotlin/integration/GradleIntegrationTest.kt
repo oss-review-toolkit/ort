@@ -17,16 +17,16 @@
  * License-Filename: LICENSE
  */
 
-package com.here.ort.analyzer.integration
+package org.ossreviewtoolkit.analyzer.integration
 
-import com.here.ort.analyzer.PackageManagerFactory
-import com.here.ort.analyzer.managers.Gradle
-import com.here.ort.analyzer.managers.Maven
-import com.here.ort.model.Identifier
-import com.here.ort.model.Package
-import com.here.ort.model.RemoteArtifact
-import com.here.ort.model.VcsInfo
-import com.here.ort.model.VcsType
+import org.ossreviewtoolkit.analyzer.PackageManagerFactory
+import org.ossreviewtoolkit.analyzer.managers.Gradle
+import org.ossreviewtoolkit.analyzer.managers.Maven
+import org.ossreviewtoolkit.model.Identifier
+import org.ossreviewtoolkit.model.Package
+import org.ossreviewtoolkit.model.RemoteArtifact
+import org.ossreviewtoolkit.model.VcsInfo
+import org.ossreviewtoolkit.model.VcsType
 
 import java.io.File
 

@@ -17,11 +17,11 @@
  * License-Filename: LICENSE
  */
 
-package com.here.ort.model
+package org.ossreviewtoolkit.model
 
 import com.fasterxml.jackson.module.kotlin.readValue
 
-import com.here.ort.utils.DeclaredLicenseProcessor
+import org.ossreviewtoolkit.utils.DeclaredLicenseProcessor
 
 import io.kotlintest.matchers.haveSize
 import io.kotlintest.should

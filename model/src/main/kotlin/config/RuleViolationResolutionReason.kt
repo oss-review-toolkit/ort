@@ -1,4 +1,4 @@
-package com.here.ort.model.config
+package org.ossreviewtoolkit.model.config
 
 /*
  * Copyright (C) 2017-2019 HERE Europe B.V.
