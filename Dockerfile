@@ -131,4 +131,6 @@ RUN /opt/ort/bin/import_proxy_certs.sh && \
         chmod -R o=u /usr/local/scancode-toolkit-$SCANCODE_VERSION && \
         ln -s /usr/local/scancode-toolkit-$SCANCODE_VERSION/scancode /usr/local/bin/scancode
 
+RUN /opt/ort/bin/ort requirements
+
 ENTRYPOINT ["/opt/ort/bin/ort"]
