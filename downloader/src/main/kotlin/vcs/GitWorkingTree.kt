@@ -95,7 +95,7 @@ open class GitWorkingTree(workingDir: File, private val gitBase: GitBase) : Work
             val remoteForCurrentBranch = BranchConfig(repo.config, repo.branch).remote
 
             val remote = if (remotes.size <= 1 || remoteForCurrentBranch == null) {
-                remotes.firstOrNull()
+                remotes.find { it.name == "origin" } ?: remotes.firstOrNull()
             } else {
                 remotes.find { remote ->
                     remote.name == remoteForCurrentBranch
