@@ -22,10 +22,13 @@ COPY . /usr/local/src/ort
 WORKDIR /usr/local/src/ort
 
 RUN apk add --no-cache \
-    # Required for Node.js to build the reporter-web-app.
-    libstdc++ \
-    # Required to allow to download via a proxy with a self-signed certificate.
-    ca-certificates coreutils openssl && \
+        # Required for Node.js to build the reporter-web-app.
+        libstdc++ \
+        # Required to allow to download via a proxy with a self-signed certificate.
+        ca-certificates \
+        coreutils \
+        openssl \
+    && \
     scripts/import_proxy_certs.sh
 
 RUN scripts/set_gradle_proxy.sh && \
