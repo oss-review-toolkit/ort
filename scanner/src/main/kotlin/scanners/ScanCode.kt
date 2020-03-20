@@ -245,7 +245,7 @@ class ScanCode(
     override fun transformVersion(output: String) =
         // "scancode --version" returns a string like "ScanCode version 2.0.1.post1.fb67a181", so simply remove
         // the prefix.
-        output.removePrefix("ScanCode version ")
+        output.substringAfter("ScanCode version ")
 
     override fun bootstrap(): File {
         val archive = when {
