@@ -245,7 +245,7 @@ class ScanCode(
     override fun transformVersion(output: String): String {
         // "scancode --version" returns a string like "ScanCode version 2.0.1.post1.fb67a181" which might be preceded
         // by a line saying "Configuring ScanCode for first use...".
-        val prefix = "Scancode version "
+        val prefix = "ScanCode version "
         return output.lineSequence().first { it.startsWith(prefix) }.substring(prefix.length)
     }
 
