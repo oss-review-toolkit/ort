@@ -33,7 +33,6 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import org.jetbrains.kotlin.gradle.plugin.KotlinCompilation
 import org.jetbrains.kotlin.gradle.plugin.KotlinSourceSet
 
-import java.io.ByteArrayOutputStream
 import java.net.URL
 
 val detektPluginVersion: String by project
@@ -356,23 +355,6 @@ subprojects {
                     }
                 }
             }
-        }
-    }
-}
-
-tasks.register<Exec>("checkCopyright") {
-    description = "Checks for Copyright headers in Kotlin files."
-    group = "Verification"
-
-    commandLine = listOf("git", "grep", "-EL", "Copyright \\(C\\) .+", "*.kt", "*.kts",
-        ":!analyzer/src/funTest/assets/projects/external")
-    isIgnoreExitValue = true
-    standardOutput = ByteArrayOutputStream()
-
-    doLast {
-        val output = standardOutput.toString().trim()
-        if (output.isNotEmpty()) {
-            throw GradleException("Please add copyright statements to the following Kotlin files:\n$output")
         }
     }
 }

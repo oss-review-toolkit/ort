@@ -85,7 +85,7 @@ before_script:
 
 script:
   - set -o pipefail
-  - ./gradlew --stacktrace checkCopyright detekt
+  - ./gradlew --stacktrace detekt
   - if [ "$TRAVIS_EVENT_TYPE" = "cron" ]; then
       ./gradlew --stacktrace -Dkotlintest.tags.exclude=ScanCodeTag test funTest jacocoReport | tee log.txt;
     else
