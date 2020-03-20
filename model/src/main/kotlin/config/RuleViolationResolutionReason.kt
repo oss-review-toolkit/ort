@@ -1,5 +1,3 @@
-package org.ossreviewtoolkit.model.config
-
 /*
  * Copyright (C) 2017-2019 HERE Europe B.V.
  *
@@ -18,6 +16,8 @@ package org.ossreviewtoolkit.model.config
  * SPDX-License-Identifier: Apache-2.0
  * License-Filename: LICENSE
  */
+
+package org.ossreviewtoolkit.model.config
 
 enum class RuleViolationResolutionReason {
     /**
