@@ -88,7 +88,7 @@ class GoDep(
     override fun getVersionArguments() = "version"
 
     override fun transformVersion(output: String) =
-        output.lineSequence().first { it.contains("version") }.substringAfter(":").trim()
+        output.lineSequence().first { it.contains("version") }.substringAfter(":").trim().removePrefix("v")
 
     override fun resolveDependencies(definitionFile: File): ProjectAnalyzerResult? {
         val projectDir = resolveProjectRoot(definitionFile)
