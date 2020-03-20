@@ -242,10 +242,12 @@ class ScanCode(
     override fun command(workingDir: File?) =
         listOfNotNull(workingDir, if (Os.isWindows) "scancode.bat" else "scancode").joinToString(File.separator)
 
-    override fun transformVersion(output: String) =
-        // "scancode --version" returns a string like "ScanCode version 2.0.1.post1.fb67a181", so simply remove
-        // the prefix.
-        output.substringAfter("ScanCode version ")
+    override fun transformVersion(output: String): String {
+        // "scancode --version" returns a string like "ScanCode version 2.0.1.post1.fb67a181" which might be preceded
+        // by a line saying "Configuring ScanCode for first use...".
+        val prefix = "Scancode version "
+        return output.lineSequence().first { it.startsWith(prefix) }.substring(prefix.length)
+    }
 
     override fun bootstrap(): File {
         val archive = when {
