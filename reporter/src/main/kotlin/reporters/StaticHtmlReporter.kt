@@ -32,7 +32,6 @@ import org.ossreviewtoolkit.reporter.ReporterInput
 import org.ossreviewtoolkit.reporter.reporters.ReportTableModel.IssueTable
 import org.ossreviewtoolkit.reporter.reporters.ReportTableModel.ProjectTable
 import org.ossreviewtoolkit.reporter.reporters.ReportTableModel.ResolvableIssue
-import org.ossreviewtoolkit.utils.ORT_FULL_NAME
 import org.ossreviewtoolkit.utils.isValidUrl
 import org.ossreviewtoolkit.utils.normalizeLineBreaks
 import com.vladsch.flexmark.html.HtmlRenderer
