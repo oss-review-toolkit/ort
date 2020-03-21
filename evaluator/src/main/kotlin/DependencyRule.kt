@@ -17,17 +17,17 @@
  * License-Filename: LICENSE
  */
 
-package com.here.ort.evaluator
+package org.ossreviewtoolkit.evaluator
 
-import com.here.ort.model.Identifier
-import com.here.ort.model.LicenseFindings
-import com.here.ort.model.Package
-import com.here.ort.model.PackageCurationResult
-import com.here.ort.model.PackageLinkage
-import com.here.ort.model.PackageReference
-import com.here.ort.model.Project
-import com.here.ort.model.Scope
-import com.here.ort.spdx.enumSetOf
+import org.ossreviewtoolkit.model.Identifier
+import org.ossreviewtoolkit.model.LicenseFindings
+import org.ossreviewtoolkit.model.Package
+import org.ossreviewtoolkit.model.PackageCurationResult
+import org.ossreviewtoolkit.model.PackageLinkage
+import org.ossreviewtoolkit.model.PackageReference
+import org.ossreviewtoolkit.model.Project
+import org.ossreviewtoolkit.model.Scope
+import org.ossreviewtoolkit.spdx.enumSetOf
 
 /**
  * A [Rule] to check a single [dependency][PackageReference].

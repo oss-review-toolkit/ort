@@ -17,13 +17,13 @@
  * License-Filename: LICENSE
  */
 
-package com.here.ort.model
+package org.ossreviewtoolkit.model
 
 import com.fasterxml.jackson.annotation.JsonAlias
 import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.databind.JsonNode
 
-import com.here.ort.utils.FileMatcher
+import org.ossreviewtoolkit.utils.FileMatcher
 
 /**
  * The result of a single scan of a single package.

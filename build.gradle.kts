@@ -20,7 +20,7 @@
 
 import com.github.benmanes.gradle.versions.updates.DependencyUpdatesTask
 
-import com.here.ort.gradle.*
+import org.ossreviewtoolkit.gradle.*
 
 import io.gitlab.arturbosch.detekt.Detekt
 
@@ -334,7 +334,7 @@ subprojects {
     configure<PublishingExtension> {
         publications {
             create<MavenPublication>(name) {
-                groupId = "com.here.ort"
+                groupId = "org.ossreviewtoolkit"
 
                 from(components["java"])
                 artifact(sourcesJar.get())

@@ -17,7 +17,7 @@
  * License-Filename: LICENSE
  */
 
-package com.here.ort.spdx
+package org.ossreviewtoolkit.spdx
 
 import io.kotlintest.matchers.beEmpty
 import io.kotlintest.should

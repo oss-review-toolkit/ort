@@ -28,7 +28,7 @@ plugins {
 
 application {
     applicationName = "orth"
-    mainClassName = "com.here.ort.helper.HelperMain"
+    mainClassName = "org.ossreviewtoolkit.helper.HelperMain"
 }
 
 tasks.named<CreateStartScripts>("startScripts") {

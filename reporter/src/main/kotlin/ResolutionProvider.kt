@@ -17,14 +17,14 @@
  * License-Filename: LICENSE
  */
 
-package com.here.ort.reporter
+package org.ossreviewtoolkit.reporter
 
-import com.here.ort.model.OrtIssue
-import com.here.ort.model.OrtResult
-import com.here.ort.model.RuleViolation
-import com.here.ort.model.config.IssueResolution
-import com.here.ort.model.config.Resolutions
-import com.here.ort.model.config.RuleViolationResolution
+import org.ossreviewtoolkit.model.OrtIssue
+import org.ossreviewtoolkit.model.OrtResult
+import org.ossreviewtoolkit.model.RuleViolation
+import org.ossreviewtoolkit.model.config.IssueResolution
+import org.ossreviewtoolkit.model.config.Resolutions
+import org.ossreviewtoolkit.model.config.RuleViolationResolution
 
 /**
  * A provider for resolutions of [OrtIssue]s.

@@ -17,13 +17,13 @@
  * License-Filename: LICENSE
  */
 
-package com.here.ort.analyzer.curation
+package org.ossreviewtoolkit.analyzer.curation
 
-import com.here.ort.analyzer.PackageCurationProvider
-import com.here.ort.model.Identifier
-import com.here.ort.model.PackageCuration
-import com.here.ort.model.OutputFormat
-import com.here.ort.model.readValue
+import org.ossreviewtoolkit.analyzer.PackageCurationProvider
+import org.ossreviewtoolkit.model.Identifier
+import org.ossreviewtoolkit.model.PackageCuration
+import org.ossreviewtoolkit.model.OutputFormat
+import org.ossreviewtoolkit.model.readValue
 
 import java.io.File
 

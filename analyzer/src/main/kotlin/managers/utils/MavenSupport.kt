@@ -17,27 +17,27 @@
  * License-Filename: LICENSE
  */
 
-package com.here.ort.analyzer.managers.utils
+package org.ossreviewtoolkit.analyzer.managers.utils
 
 import com.fasterxml.jackson.module.kotlin.readValue
 
-import com.here.ort.analyzer.PackageManager
-import com.here.ort.analyzer.TOOL_NAME
-import com.here.ort.downloader.VcsHost
-import com.here.ort.model.Hash
-import com.here.ort.model.Identifier
-import com.here.ort.model.Package
-import com.here.ort.model.RemoteArtifact
-import com.here.ort.model.VcsInfo
-import com.here.ort.model.VcsType
-import com.here.ort.model.yamlMapper
-import com.here.ort.utils.DiskCache
-import com.here.ort.utils.Os
-import com.here.ort.utils.collectMessagesAsString
-import com.here.ort.utils.getUserOrtDirectory
-import com.here.ort.utils.log
-import com.here.ort.utils.searchUpwardsForSubdirectory
-import com.here.ort.utils.showStackTrace
+import org.ossreviewtoolkit.analyzer.PackageManager
+import org.ossreviewtoolkit.analyzer.TOOL_NAME
+import org.ossreviewtoolkit.downloader.VcsHost
+import org.ossreviewtoolkit.model.Hash
+import org.ossreviewtoolkit.model.Identifier
+import org.ossreviewtoolkit.model.Package
+import org.ossreviewtoolkit.model.RemoteArtifact
+import org.ossreviewtoolkit.model.VcsInfo
+import org.ossreviewtoolkit.model.VcsType
+import org.ossreviewtoolkit.model.yamlMapper
+import org.ossreviewtoolkit.utils.DiskCache
+import org.ossreviewtoolkit.utils.Os
+import org.ossreviewtoolkit.utils.collectMessagesAsString
+import org.ossreviewtoolkit.utils.getUserOrtDirectory
+import org.ossreviewtoolkit.utils.log
+import org.ossreviewtoolkit.utils.searchUpwardsForSubdirectory
+import org.ossreviewtoolkit.utils.showStackTrace
 
 import java.io.File
 import java.net.URL
@@ -563,11 +563,12 @@ class MavenSupport(workspaceReader: WorkspaceReader) {
             }
         }
 
-        val homepageUrl = mavenProject.url.orEmpty()
+        val homepageUrl = mavenProject.url
+        val vcsFallbackUrls = listOfNotNull(mavenProject.scm?.url, homepageUrl)
 
         val vcsProcessed = localDirectory?.let {
-            PackageManager.processProjectVcs(it, vcsFromPackage, homepageUrl)
-        } ?: PackageManager.processPackageVcs(vcsFromPackage, homepageUrl)
+            PackageManager.processProjectVcs(it, vcsFromPackage, vcsFallbackUrls)
+        } ?: PackageManager.processPackageVcs(vcsFromPackage, vcsFallbackUrls)
 
         return Package(
             id = Identifier(
@@ -578,7 +579,7 @@ class MavenSupport(workspaceReader: WorkspaceReader) {
             ),
             declaredLicenses = parseLicenses(mavenProject),
             description = mavenProject.description.orEmpty(),
-            homepageUrl = homepageUrl,
+            homepageUrl = homepageUrl.orEmpty(),
             binaryArtifact = binaryRemoteArtifact,
             sourceArtifact = sourceRemoteArtifact,
             vcs = vcsFromPackage,

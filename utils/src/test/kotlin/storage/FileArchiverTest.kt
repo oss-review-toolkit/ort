@@ -17,12 +17,12 @@
  * License-Filename: LICENSE
  */
 
-package com.here.ort.utils.storage
+package org.ossreviewtoolkit.utils.storage
 
-import com.here.ort.utils.ORT_NAME
-import com.here.ort.utils.safeDeleteRecursively
-import com.here.ort.utils.safeMkdirs
-import com.here.ort.utils.unpack
+import org.ossreviewtoolkit.utils.ORT_NAME
+import org.ossreviewtoolkit.utils.safeDeleteRecursively
+import org.ossreviewtoolkit.utils.safeMkdirs
+import org.ossreviewtoolkit.utils.unpack
 
 import io.kotlintest.TestCase
 import io.kotlintest.TestResult

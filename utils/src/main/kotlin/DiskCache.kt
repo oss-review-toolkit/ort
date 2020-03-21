@@ -17,7 +17,7 @@
  * License-Filename: LICENSE
  */
 
-package com.here.ort.utils
+package org.ossreviewtoolkit.utils
 
 import com.jakewharton.disklrucache.DiskLruCache
 

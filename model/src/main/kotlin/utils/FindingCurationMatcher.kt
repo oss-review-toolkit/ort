@@ -17,11 +17,11 @@
  * License-Filename: LICENSE
  */
 
-package com.here.ort.model.utils
+package org.ossreviewtoolkit.model.utils
 
-import com.here.ort.model.LicenseFinding
-import com.here.ort.model.config.LicenseFindingCuration
-import com.here.ort.spdx.SpdxLicense
+import org.ossreviewtoolkit.model.LicenseFinding
+import org.ossreviewtoolkit.model.config.LicenseFindingCuration
+import org.ossreviewtoolkit.spdx.SpdxLicense
 
 import java.nio.file.FileSystems
 import java.nio.file.Paths

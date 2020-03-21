@@ -17,20 +17,20 @@
  * License-Filename: LICENSE
  */
 
-package com.here.ort.scanner
+package org.ossreviewtoolkit.scanner
 
-import com.here.ort.downloader.Downloader
-import com.here.ort.model.Environment
-import com.here.ort.model.OrtResult
-import com.here.ort.model.Package
-import com.here.ort.model.Project
-import com.here.ort.model.ScanRecord
-import com.here.ort.model.ScanResult
-import com.here.ort.model.ScanResultContainer
-import com.here.ort.model.ScannerRun
-import com.here.ort.model.config.ScannerConfiguration
-import com.here.ort.model.readValue
-import com.here.ort.spdx.SpdxLicense
+import org.ossreviewtoolkit.downloader.Downloader
+import org.ossreviewtoolkit.model.Environment
+import org.ossreviewtoolkit.model.OrtResult
+import org.ossreviewtoolkit.model.Package
+import org.ossreviewtoolkit.model.Project
+import org.ossreviewtoolkit.model.ScanRecord
+import org.ossreviewtoolkit.model.ScanResult
+import org.ossreviewtoolkit.model.ScanResultContainer
+import org.ossreviewtoolkit.model.ScannerRun
+import org.ossreviewtoolkit.model.config.ScannerConfiguration
+import org.ossreviewtoolkit.model.readValue
+import org.ossreviewtoolkit.spdx.SpdxLicense
 
 import java.io.File
 import java.lang.IllegalArgumentException

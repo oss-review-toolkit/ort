@@ -17,14 +17,14 @@
  * License-Filename: LICENSE
  */
 
-package com.here.ort.evaluator
+package org.ossreviewtoolkit.evaluator
 
-import com.here.ort.model.EvaluatorRun
-import com.here.ort.model.OrtResult
-import com.here.ort.model.RuleViolation
-import com.here.ort.model.licenses.LicenseConfiguration
-import com.here.ort.model.utils.PackageConfigurationProvider
-import com.here.ort.utils.ScriptRunner
+import org.ossreviewtoolkit.model.EvaluatorRun
+import org.ossreviewtoolkit.model.OrtResult
+import org.ossreviewtoolkit.model.RuleViolation
+import org.ossreviewtoolkit.model.licenses.LicenseConfiguration
+import org.ossreviewtoolkit.model.utils.PackageConfigurationProvider
+import org.ossreviewtoolkit.utils.ScriptRunner
 
 import java.time.Instant
 
@@ -34,13 +34,13 @@ class Evaluator(
     licenseConfiguration: LicenseConfiguration = LicenseConfiguration()
 ) : ScriptRunner() {
     override val preface = """
-            import com.here.ort.evaluator.*
-            import com.here.ort.model.*
-            import com.here.ort.model.config.*
-            import com.here.ort.model.licenses.*
-            import com.here.ort.model.utils.*
-            import com.here.ort.spdx.*
-            import com.here.ort.utils.*
+            import org.ossreviewtoolkit.evaluator.*
+            import org.ossreviewtoolkit.model.*
+            import org.ossreviewtoolkit.model.config.*
+            import org.ossreviewtoolkit.model.licenses.*
+            import org.ossreviewtoolkit.model.utils.*
+            import org.ossreviewtoolkit.spdx.*
+            import org.ossreviewtoolkit.utils.*
 
             import java.util.*
 

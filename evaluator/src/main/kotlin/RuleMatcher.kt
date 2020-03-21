@@ -17,7 +17,7 @@
  * License-Filename: LICENSE
  */
 
-package com.here.ort.evaluator
+package org.ossreviewtoolkit.evaluator
 
 /**
  * A rule matcher, used to determine if a [Rule] applies.

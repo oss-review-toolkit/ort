@@ -24,7 +24,7 @@
 grammar SpdxExpression;
 
 @header {
-package com.here.ort.spdx;
+package org.ossreviewtoolkit.spdx;
 }
 
 /*

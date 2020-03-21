@@ -17,7 +17,7 @@
  * License-Filename: LICENSE
  */
 
-package com.here.ort.commands
+package org.ossreviewtoolkit.commands
 
 import com.github.ajalt.clikt.core.BadParameterValue
 import com.github.ajalt.clikt.core.CliktCommand
@@ -31,16 +31,16 @@ import com.github.ajalt.clikt.parameters.options.split
 import com.github.ajalt.clikt.parameters.types.enum
 import com.github.ajalt.clikt.parameters.types.file
 
-import com.here.ort.analyzer.Analyzer
-import com.here.ort.analyzer.PackageManager
-import com.here.ort.analyzer.curation.ClearlyDefinedPackageCurationProvider
-import com.here.ort.analyzer.curation.FallbackPackageCurationProvider
-import com.here.ort.analyzer.curation.FilePackageCurationProvider
-import com.here.ort.model.OutputFormat
-import com.here.ort.model.config.AnalyzerConfiguration
-import com.here.ort.model.mapper
-import com.here.ort.utils.expandTilde
-import com.here.ort.utils.safeMkdirs
+import org.ossreviewtoolkit.analyzer.Analyzer
+import org.ossreviewtoolkit.analyzer.PackageManager
+import org.ossreviewtoolkit.analyzer.curation.ClearlyDefinedPackageCurationProvider
+import org.ossreviewtoolkit.analyzer.curation.FallbackPackageCurationProvider
+import org.ossreviewtoolkit.analyzer.curation.FilePackageCurationProvider
+import org.ossreviewtoolkit.model.OutputFormat
+import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
+import org.ossreviewtoolkit.model.mapper
+import org.ossreviewtoolkit.utils.expandTilde
+import org.ossreviewtoolkit.utils.safeMkdirs
 
 import java.io.File
 

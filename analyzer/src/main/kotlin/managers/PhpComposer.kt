@@ -17,37 +17,37 @@
  * License-Filename: LICENSE
  */
 
-package com.here.ort.analyzer.managers
+package org.ossreviewtoolkit.analyzer.managers
 
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.node.ObjectNode
 
-import com.here.ort.analyzer.AbstractPackageManagerFactory
-import com.here.ort.analyzer.PackageManager
-import com.here.ort.downloader.VersionControlSystem
-import com.here.ort.model.Hash
-import com.here.ort.model.Identifier
-import com.here.ort.model.Package
-import com.here.ort.model.PackageReference
-import com.here.ort.model.Project
-import com.here.ort.model.ProjectAnalyzerResult
-import com.here.ort.model.RemoteArtifact
-import com.here.ort.model.Scope
-import com.here.ort.model.VcsInfo
-import com.here.ort.model.VcsType
-import com.here.ort.model.config.AnalyzerConfiguration
-import com.here.ort.model.config.RepositoryConfiguration
-import com.here.ort.model.createAndLogIssue
-import com.here.ort.model.jsonMapper
-import com.here.ort.utils.CommandLineTool
-import com.here.ort.utils.Os
-import com.here.ort.utils.ProcessCapture
-import com.here.ort.utils.collectMessagesAsString
-import com.here.ort.utils.fieldNamesOrEmpty
-import com.here.ort.utils.log
-import com.here.ort.utils.showStackTrace
-import com.here.ort.utils.stashDirectories
-import com.here.ort.utils.textValueOrEmpty
+import org.ossreviewtoolkit.analyzer.AbstractPackageManagerFactory
+import org.ossreviewtoolkit.analyzer.PackageManager
+import org.ossreviewtoolkit.downloader.VersionControlSystem
+import org.ossreviewtoolkit.model.Hash
+import org.ossreviewtoolkit.model.Identifier
+import org.ossreviewtoolkit.model.Package
+import org.ossreviewtoolkit.model.PackageReference
+import org.ossreviewtoolkit.model.Project
+import org.ossreviewtoolkit.model.ProjectAnalyzerResult
+import org.ossreviewtoolkit.model.RemoteArtifact
+import org.ossreviewtoolkit.model.Scope
+import org.ossreviewtoolkit.model.VcsInfo
+import org.ossreviewtoolkit.model.VcsType
+import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
+import org.ossreviewtoolkit.model.config.RepositoryConfiguration
+import org.ossreviewtoolkit.model.createAndLogIssue
+import org.ossreviewtoolkit.model.jsonMapper
+import org.ossreviewtoolkit.utils.CommandLineTool
+import org.ossreviewtoolkit.utils.Os
+import org.ossreviewtoolkit.utils.ProcessCapture
+import org.ossreviewtoolkit.utils.collectMessagesAsString
+import org.ossreviewtoolkit.utils.fieldNamesOrEmpty
+import org.ossreviewtoolkit.utils.log
+import org.ossreviewtoolkit.utils.showStackTrace
+import org.ossreviewtoolkit.utils.stashDirectories
+import org.ossreviewtoolkit.utils.textValueOrEmpty
 
 import com.vdurmont.semver4j.Requirement
 
@@ -96,6 +96,14 @@ class PhpComposer(
     override fun run(workingDir: File?, vararg args: String) =
         ProcessCapture(workingDir, *command(workingDir).split(" ").toTypedArray(), *args).requireSuccess()
 
+    override fun getVersionArguments() = "--no-ansi --version"
+
+    override fun transformVersion(output: String) =
+        // The version string can be something like:
+        // Composer version 1.5.1 2017-08-09 16:07:22
+        // Composer version @package_branch_alias_version@ (1.0.0-beta2) 2016-03-27 16:00:34
+        output.split(" ").dropLast(2).last().removeSurrounding("(", ")")
+
     override fun getVersionRequirement(): Requirement = Requirement.buildIvy("[1.5,)")
 
     override fun beforeResolution(definitionFiles: List<File>) {
@@ -106,14 +114,8 @@ class PhpComposer(
         }
 
         // We do not actually depend on any features specific to a version of Composer, but we still want to stick to
-        // fixed versions to be sure to get consistent results. The version string can be something like:
-        // Composer version 1.5.1 2017-08-09 16:07:22
-        // Composer version @package_branch_alias_version@ (1.0.0-beta2) 2016-03-27 16:00:34
-        checkVersion(
-            "--no-ansi --version",
-            ignoreActualVersion = analyzerConfig.ignoreToolVersions,
-            transform = { it.split(" ").dropLast(2).last().removeSurrounding("(", ")") }
-        )
+        // fixed versions to be sure to get consistent results.
+        checkVersion(analyzerConfig.ignoreToolVersions)
     }
 
     override fun resolveDependencies(definitionFile: File): ProjectAnalyzerResult? {
@@ -232,7 +234,7 @@ class PhpComposer(
             definitionFilePath = VersionControlSystem.getPathInfo(definitionFile).path,
             declaredLicenses = parseDeclaredLicenses(json),
             vcs = vcs,
-            vcsProcessed = processProjectVcs(definitionFile.parentFile, vcs, homepageUrl),
+            vcsProcessed = processProjectVcs(definitionFile.parentFile, vcs, listOf(homepageUrl)),
             homepageUrl = homepageUrl,
             scopes = scopes
         )
@@ -267,7 +269,7 @@ class PhpComposer(
                     binaryArtifact = RemoteArtifact.EMPTY,
                     sourceArtifact = parseArtifact(pkgInfo),
                     vcs = vcsFromPackage,
-                    vcsProcessed = processPackageVcs(vcsFromPackage, homepageUrl)
+                    vcsProcessed = processPackageVcs(vcsFromPackage, listOf(homepageUrl))
                 )
             }
         }

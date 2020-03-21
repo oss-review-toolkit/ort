@@ -17,20 +17,20 @@
  * License-Filename: LICENSE
  */
 
-package com.here.ort.analyzer.integration
+package org.ossreviewtoolkit.analyzer.integration
 
-import com.here.ort.analyzer.ManagedProjectFiles
-import com.here.ort.analyzer.PackageManager
-import com.here.ort.downloader.Downloader
-import com.here.ort.downloader.VersionControlSystem
-import com.here.ort.model.Identifier
-import com.here.ort.model.Package
-import com.here.ort.utils.ORT_NAME
-import com.here.ort.utils.safeDeleteRecursively
-import com.here.ort.utils.test.DEFAULT_ANALYZER_CONFIGURATION
-import com.here.ort.utils.test.DEFAULT_REPOSITORY_CONFIGURATION
-import com.here.ort.utils.test.ExpensiveTag
-import com.here.ort.utils.test.USER_DIR
+import org.ossreviewtoolkit.analyzer.ManagedProjectFiles
+import org.ossreviewtoolkit.analyzer.PackageManager
+import org.ossreviewtoolkit.downloader.Downloader
+import org.ossreviewtoolkit.downloader.VersionControlSystem
+import org.ossreviewtoolkit.model.Identifier
+import org.ossreviewtoolkit.model.Package
+import org.ossreviewtoolkit.utils.ORT_NAME
+import org.ossreviewtoolkit.utils.safeDeleteRecursively
+import org.ossreviewtoolkit.utils.test.DEFAULT_ANALYZER_CONFIGURATION
+import org.ossreviewtoolkit.utils.test.DEFAULT_REPOSITORY_CONFIGURATION
+import org.ossreviewtoolkit.utils.test.ExpensiveTag
+import org.ossreviewtoolkit.utils.test.USER_DIR
 
 import io.kotlintest.Spec
 import io.kotlintest.matchers.beEmpty

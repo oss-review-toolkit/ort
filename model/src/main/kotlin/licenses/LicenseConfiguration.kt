@@ -17,7 +17,7 @@
  * License-Filename: LICENSE
  */
 
-package com.here.ort.model.licenses
+package org.ossreviewtoolkit.model.licenses
 
 import com.fasterxml.jackson.annotation.JsonInclude
 

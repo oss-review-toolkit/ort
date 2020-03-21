@@ -17,10 +17,10 @@
  * License-Filename: LICENSE
  */
 
-package com.here.ort.analyzer
+package org.ossreviewtoolkit.analyzer
 
-import com.here.ort.model.config.AnalyzerConfiguration
-import com.here.ort.model.config.RepositoryConfiguration
+import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
+import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 
 import java.io.File
 import java.nio.file.FileSystems

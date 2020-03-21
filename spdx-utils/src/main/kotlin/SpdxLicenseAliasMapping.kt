@@ -17,10 +17,10 @@
  * License-Filename: LICENSE
  */
 
-package com.here.ort.spdx
+package org.ossreviewtoolkit.spdx
 
-import com.here.ort.spdx.SpdxLicense.*
-import com.here.ort.spdx.SpdxLicenseException.*
+import org.ossreviewtoolkit.spdx.SpdxLicense.*
+import org.ossreviewtoolkit.spdx.SpdxLicenseException.*
 
 /**
  * A mapping from varied SPDX license ids to valid SPDX expressions. When mapping an id without any indication of a

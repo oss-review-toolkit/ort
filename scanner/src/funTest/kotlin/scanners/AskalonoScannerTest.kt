@@ -17,7 +17,7 @@
  * License-Filename: LICENSE
  */
 
-package com.here.ort.scanner.scanners
+package org.ossreviewtoolkit.scanner.scanners
 
 class AskalonoScannerTest : AbstractScannerTest() {
     override val scanner = Askalono("Askalono", config)

@@ -17,9 +17,9 @@
  * License-Filename: LICENSE
  */
 
-package com.here.ort.scanner.scanners
+package org.ossreviewtoolkit.scanner.scanners
 
-import com.here.ort.utils.test.ExpensiveTag
+import org.ossreviewtoolkit.utils.test.ExpensiveTag
 
 class LicenseeScannerTest : AbstractScannerTest(setOf(ExpensiveTag)) {
     override val scanner = Licensee("Licensee", config)

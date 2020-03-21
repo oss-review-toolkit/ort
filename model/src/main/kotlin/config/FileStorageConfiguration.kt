@@ -17,13 +17,13 @@
  * License-Filename: LICENSE
  */
 
-package com.here.ort.model.config
+package org.ossreviewtoolkit.model.config
 
-import com.here.ort.utils.expandTilde
-import com.here.ort.utils.storage.FileStorage
-import com.here.ort.utils.storage.HttpFileStorage
-import com.here.ort.utils.storage.LocalFileStorage
-import com.here.ort.utils.storage.XZCompressedLocalFileStorage
+import org.ossreviewtoolkit.utils.expandTilde
+import org.ossreviewtoolkit.utils.storage.FileStorage
+import org.ossreviewtoolkit.utils.storage.HttpFileStorage
+import org.ossreviewtoolkit.utils.storage.LocalFileStorage
+import org.ossreviewtoolkit.utils.storage.XZCompressedLocalFileStorage
 
 /**
  * The configuration model for a [FileStorage]. Only one of the storage options can be configured.

@@ -25,7 +25,7 @@ analyzer:
     allow_dynamic_versions: false
   result:
     projects:
-    - id: "Gradle:com.here.ort.gradle.example:lib:1.0.0"
+    - id: "Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0"
       definition_file_path: "analyzer/src/funTest/assets/projects/synthetic/gradle/lib/build.gradle"
       declared_licenses: []
       declared_licenses_processed: {}
@@ -198,7 +198,7 @@ scanner:
     options: null
   results:
     scan_results:
-    - id: "Gradle:com.here.ort.gradle.example:lib:1.0.0"
+    - id: "Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0"
       results:
       - provenance:
           download_time: "1970-01-01T00:00:00Z"
@@ -216,13 +216,13 @@ scanner:
           issues:
           - timestamp: "1970-01-01T00:00:00Z"
             source: "FileCounter"
-            message: "Could not download 'Gradle:com.here.ort.gradle.example:lib:1.0.0':\
-              \ DownloadException: Download failed for 'Gradle:com.here.ort.gradle.example:lib:1.0.0'.\n\
-              Suppressed: DownloadException: No VCS URL provided for 'Gradle:com.here.ort.gradle.example:lib:1.0.0'.\
+            message: "Could not download 'Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0':\
+              \ DownloadException: Download failed for 'Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0'.\n\
+              Suppressed: DownloadException: No VCS URL provided for 'Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0'.\
               \ Please make sure the release POM file includes the SCM connection,\
               \ see: https://docs.gradle.org/current/userguide/publishing_maven.html#example_customizing_the_pom_file,\
               \ \nSuppressed: DownloadException: No source artifact URL provided for\
-              \ 'Gradle:com.here.ort.gradle.example:lib:1.0.0'."
+              \ 'Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0'."
             severity: "ERROR"
     - id: "Maven:junit:junit:4.12"
       results:

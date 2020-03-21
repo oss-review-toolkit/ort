@@ -17,19 +17,19 @@
  * License-Filename: LICENSE
  */
 
-package com.here.ort.model.config
+package org.ossreviewtoolkit.model.config
 
-import com.here.ort.model.AnalyzerResult
-import com.here.ort.model.AnalyzerRun
-import com.here.ort.model.CuratedPackage
-import com.here.ort.model.Environment
-import com.here.ort.model.Identifier
-import com.here.ort.model.OrtResult
-import com.here.ort.model.Package
-import com.here.ort.model.PackageReference
-import com.here.ort.model.Project
-import com.here.ort.model.Repository
-import com.here.ort.model.Scope
+import org.ossreviewtoolkit.model.AnalyzerResult
+import org.ossreviewtoolkit.model.AnalyzerRun
+import org.ossreviewtoolkit.model.CuratedPackage
+import org.ossreviewtoolkit.model.Environment
+import org.ossreviewtoolkit.model.Identifier
+import org.ossreviewtoolkit.model.OrtResult
+import org.ossreviewtoolkit.model.Package
+import org.ossreviewtoolkit.model.PackageReference
+import org.ossreviewtoolkit.model.Project
+import org.ossreviewtoolkit.model.Repository
+import org.ossreviewtoolkit.model.Scope
 
 import io.kotlintest.TestCase
 

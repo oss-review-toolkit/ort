@@ -17,32 +17,32 @@
  * License-Filename: LICENSE
  */
 
-package com.here.ort.evaluator
+package org.ossreviewtoolkit.evaluator
 
-import com.here.ort.model.AccessStatistics
-import com.here.ort.model.AnalyzerResult
-import com.here.ort.model.AnalyzerRun
-import com.here.ort.model.CuratedPackage
-import com.here.ort.model.Environment
-import com.here.ort.model.Identifier
-import com.here.ort.model.LicenseFindings
-import com.here.ort.model.OrtResult
-import com.here.ort.model.Package
-import com.here.ort.model.PackageLinkage
-import com.here.ort.model.Project
-import com.here.ort.model.Repository
-import com.here.ort.model.ScanRecord
-import com.here.ort.model.ScannerRun
-import com.here.ort.model.Scope
-import com.here.ort.model.VcsInfo
-import com.here.ort.model.config.AnalyzerConfiguration
-import com.here.ort.model.config.Excludes
-import com.here.ort.model.config.PathExclude
-import com.here.ort.model.config.PathExcludeReason
-import com.here.ort.model.config.RepositoryConfiguration
-import com.here.ort.model.config.ScannerConfiguration
-import com.here.ort.spdx.SpdxExpression
-import com.here.ort.utils.DeclaredLicenseProcessor
+import org.ossreviewtoolkit.model.AccessStatistics
+import org.ossreviewtoolkit.model.AnalyzerResult
+import org.ossreviewtoolkit.model.AnalyzerRun
+import org.ossreviewtoolkit.model.CuratedPackage
+import org.ossreviewtoolkit.model.Environment
+import org.ossreviewtoolkit.model.Identifier
+import org.ossreviewtoolkit.model.LicenseFindings
+import org.ossreviewtoolkit.model.OrtResult
+import org.ossreviewtoolkit.model.Package
+import org.ossreviewtoolkit.model.PackageLinkage
+import org.ossreviewtoolkit.model.Project
+import org.ossreviewtoolkit.model.Repository
+import org.ossreviewtoolkit.model.ScanRecord
+import org.ossreviewtoolkit.model.ScannerRun
+import org.ossreviewtoolkit.model.Scope
+import org.ossreviewtoolkit.model.VcsInfo
+import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
+import org.ossreviewtoolkit.model.config.Excludes
+import org.ossreviewtoolkit.model.config.PathExclude
+import org.ossreviewtoolkit.model.config.PathExcludeReason
+import org.ossreviewtoolkit.model.config.RepositoryConfiguration
+import org.ossreviewtoolkit.model.config.ScannerConfiguration
+import org.ossreviewtoolkit.spdx.SpdxExpression
+import org.ossreviewtoolkit.utils.DeclaredLicenseProcessor
 
 val concludedLicense = SpdxExpression.parse("LicenseRef-a AND LicenseRef-b")
 val declaredLicenses = sortedSetOf("license-a", "license-b")
@@ -58,41 +58,41 @@ val licenseFindings = listOf(
 )
 
 val packageExcluded = Package.EMPTY.copy(
-    id = Identifier("Maven:com.here:package-excluded:1.0")
+    id = Identifier("Maven:org.ossreviewtoolkit:package-excluded:1.0")
 )
 
 val packageDynamicallyLinked = Package.EMPTY.copy(
-    id = Identifier("Maven:com.here:package-dynamically-linked:1.0")
+    id = Identifier("Maven:org.ossreviewtoolkit:package-dynamically-linked:1.0")
 )
 
 val packageStaticallyLinked = Package.EMPTY.copy(
-    id = Identifier("Maven:com.here:package-statically-linked:1.0")
+    id = Identifier("Maven:org.ossreviewtoolkit:package-statically-linked:1.0")
 )
 
 val packageWithoutLicense = Package.EMPTY.copy(
-    id = Identifier("Maven:com.here:package-without-license:1.0")
+    id = Identifier("Maven:org.ossreviewtoolkit:package-without-license:1.0")
 )
 
 val packageWithOnlyConcludedLicense = Package.EMPTY.copy(
-    id = Identifier("Maven:com.here:package-with-only-concluded-license:1.0"),
+    id = Identifier("Maven:org.ossreviewtoolkit:package-with-only-concluded-license:1.0"),
     concludedLicense = concludedLicense
 )
 
 val packageWithOnlyDeclaredLicense = Package.EMPTY.copy(
-    id = Identifier("Maven:com.here:package-with-only-declared-license:1.0"),
+    id = Identifier("Maven:org.ossreviewtoolkit:package-with-only-declared-license:1.0"),
     declaredLicenses = declaredLicenses,
     declaredLicensesProcessed = declaredLicensesProcessed
 )
 
 val packageWithConcludedAndDeclaredLicense = Package.EMPTY.copy(
-    id = Identifier("Maven:com.here:package-with-concluded-and-declared-license:1.0"),
+    id = Identifier("Maven:org.ossreviewtoolkit:package-with-concluded-and-declared-license:1.0"),
     concludedLicense = concludedLicense,
     declaredLicenses = declaredLicenses,
     declaredLicensesProcessed = declaredLicensesProcessed
 )
 
 val packageWithSpdxLicense = Package.EMPTY.copy(
-    id = Identifier("Maven:com.here:package-with-spdx-licenses:1.0"),
+    id = Identifier("Maven:org.ossreviewtoolkit:package-with-spdx-licenses:1.0"),
     declaredLicenses = declaredSpdxLicenses,
     declaredLicensesProcessed = declaredSpdxLicensesProcessed
 )
@@ -116,7 +116,7 @@ val scopeExcluded = Scope(
 )
 
 val projectExcluded = Project.EMPTY.copy(
-    id = Identifier("Maven:com.here:project-excluded:1.0"),
+    id = Identifier("Maven:org.ossreviewtoolkit:project-excluded:1.0"),
     definitionFilePath = "excluded/pom.xml",
     scopes = sortedSetOf(scopeExcluded)
 )
@@ -138,7 +138,7 @@ val scopeIncluded = Scope(
 )
 
 val projectIncluded = Project.EMPTY.copy(
-    id = Identifier("Maven:com.here:project-included:1.0"),
+    id = Identifier("Maven:org.ossreviewtoolkit:project-included:1.0"),
     definitionFilePath = "included/pom.xml",
     scopes = sortedSetOf(scopeIncluded)
 )

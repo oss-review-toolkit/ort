@@ -17,11 +17,11 @@
  * License-Filename: LICENSE
  */
 
-package com.here.ort.reporter
+package org.ossreviewtoolkit.reporter
 
-import com.here.ort.spdx.getLicenseText
-import com.here.ort.spdx.getLicenseTextReader
-import com.here.ort.spdx.hasLicenseText
+import org.ossreviewtoolkit.spdx.getLicenseText
+import org.ossreviewtoolkit.spdx.getLicenseTextReader
+import org.ossreviewtoolkit.spdx.hasLicenseText
 
 import java.io.File
 

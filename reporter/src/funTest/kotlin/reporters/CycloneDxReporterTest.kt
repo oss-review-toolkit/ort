@@ -17,13 +17,13 @@
  * License-Filename: LICENSE
  */
 
-package com.here.ort.reporter.reporters
+package org.ossreviewtoolkit.reporter.reporters
 
-import com.here.ort.model.OrtResult
-import com.here.ort.model.yamlMapper
-import com.here.ort.reporter.ReporterInput
-import com.here.ort.utils.test.patchExpectedResult
-import com.here.ort.utils.test.readOrtResult
+import org.ossreviewtoolkit.model.OrtResult
+import org.ossreviewtoolkit.model.yamlMapper
+import org.ossreviewtoolkit.reporter.ReporterInput
+import org.ossreviewtoolkit.utils.test.patchExpectedResult
+import org.ossreviewtoolkit.utils.test.readOrtResult
 
 import io.kotlintest.matchers.beEmpty
 import io.kotlintest.should

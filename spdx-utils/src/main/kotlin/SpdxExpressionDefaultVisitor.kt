@@ -17,15 +17,15 @@
  * License-Filename: LICENSE
  */
 
-package com.here.ort.spdx
+package org.ossreviewtoolkit.spdx
 
-import com.here.ort.spdx.SpdxExpression.Strictness
-import com.here.ort.spdx.SpdxExpressionParser.CompoundExpressionContext
-import com.here.ort.spdx.SpdxExpressionParser.LicenseExceptionExpressionContext
-import com.here.ort.spdx.SpdxExpressionParser.LicenseExpressionContext
-import com.here.ort.spdx.SpdxExpressionParser.LicenseIdExpressionContext
-import com.here.ort.spdx.SpdxExpressionParser.LicenseReferenceExpressionContext
-import com.here.ort.spdx.SpdxExpressionParser.SimpleExpressionContext
+import org.ossreviewtoolkit.spdx.SpdxExpression.Strictness
+import org.ossreviewtoolkit.spdx.SpdxExpressionParser.CompoundExpressionContext
+import org.ossreviewtoolkit.spdx.SpdxExpressionParser.LicenseExceptionExpressionContext
+import org.ossreviewtoolkit.spdx.SpdxExpressionParser.LicenseExpressionContext
+import org.ossreviewtoolkit.spdx.SpdxExpressionParser.LicenseIdExpressionContext
+import org.ossreviewtoolkit.spdx.SpdxExpressionParser.LicenseReferenceExpressionContext
+import org.ossreviewtoolkit.spdx.SpdxExpressionParser.SimpleExpressionContext
 
 class SpdxExpressionDefaultVisitor(private val strictness: Strictness) :
     SpdxExpressionBaseVisitor<SpdxExpression>() {

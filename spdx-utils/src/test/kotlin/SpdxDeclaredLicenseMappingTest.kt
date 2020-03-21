@@ -17,9 +17,9 @@
  * License-Filename: LICENSE
  */
 
-package com.here.ort.spdx
+package org.ossreviewtoolkit.spdx
 
-import com.here.ort.spdx.SpdxExpression.Strictness
+import org.ossreviewtoolkit.spdx.SpdxExpression.Strictness
 
 import io.kotlintest.assertSoftly
 import io.kotlintest.shouldBe

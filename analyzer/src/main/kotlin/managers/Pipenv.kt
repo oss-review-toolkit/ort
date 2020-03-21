@@ -17,16 +17,16 @@
  * License-Filename: LICENSE
  */
 
-package com.here.ort.analyzer.managers
+package org.ossreviewtoolkit.analyzer.managers
 
-import com.here.ort.analyzer.AbstractPackageManagerFactory
-import com.here.ort.analyzer.PackageManager
-import com.here.ort.model.ProjectAnalyzerResult
-import com.here.ort.model.config.AnalyzerConfiguration
-import com.here.ort.model.config.RepositoryConfiguration
-import com.here.ort.utils.CommandLineTool
-import com.here.ort.utils.ProcessCapture
-import com.here.ort.utils.log
+import org.ossreviewtoolkit.analyzer.AbstractPackageManagerFactory
+import org.ossreviewtoolkit.analyzer.PackageManager
+import org.ossreviewtoolkit.model.ProjectAnalyzerResult
+import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
+import org.ossreviewtoolkit.model.config.RepositoryConfiguration
+import org.ossreviewtoolkit.utils.CommandLineTool
+import org.ossreviewtoolkit.utils.ProcessCapture
+import org.ossreviewtoolkit.utils.log
 
 import com.vdurmont.semver4j.Requirement
 
@@ -51,16 +51,13 @@ class Pipenv(
 
     override fun command(workingDir: File?) = "pipenv"
 
+    override fun transformVersion(output: String) =
+        // "pipenv --version" returns a string like "pipenv, version 2018.11.26", so simply remove the prefix.
+        output.removePrefix("pipenv, version ")
+
     override fun getVersionRequirement(): Requirement = Requirement.buildIvy("[2018.10.9,)")
 
-    override fun getVersion(versionArguments: String, workingDir: File?, transform: (String) -> String) =
-        super.getVersion(versionArguments, workingDir) {
-            // "pipenv --version" returns a string like "pipenv, version 2018.11.26", so simply remove the prefix.
-            it.substringAfter("pipenv, version ")
-        }
-
-    override fun beforeResolution(definitionFiles: List<File>) =
-        checkVersion(ignoreActualVersion = analyzerConfig.ignoreToolVersions)
+    override fun beforeResolution(definitionFiles: List<File>) = checkVersion(analyzerConfig.ignoreToolVersions)
 
     override fun resolveDependencies(definitionFile: File): ProjectAnalyzerResult? {
         // For an overview, dependency resolution involves the following steps:

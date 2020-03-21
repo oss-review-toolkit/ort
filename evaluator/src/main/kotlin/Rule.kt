@@ -17,14 +17,14 @@
  * License-Filename: LICENSE
  */
 
-package com.here.ort.evaluator
+package org.ossreviewtoolkit.evaluator
 
-import com.here.ort.model.Identifier
-import com.here.ort.model.LicenseSource
-import com.here.ort.model.OrtIssue
-import com.here.ort.model.RuleViolation
-import com.here.ort.model.Severity
-import com.here.ort.utils.log
+import org.ossreviewtoolkit.model.Identifier
+import org.ossreviewtoolkit.model.LicenseSource
+import org.ossreviewtoolkit.model.OrtIssue
+import org.ossreviewtoolkit.model.RuleViolation
+import org.ossreviewtoolkit.model.Severity
+import org.ossreviewtoolkit.utils.log
 
 /**
  * The base class for an evaluator rule. Rules use a set of matchers to determine if they apply, and create a list of

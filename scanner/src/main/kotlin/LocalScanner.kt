@@ -17,46 +17,46 @@
  * License-Filename: LICENSE
  */
 
-package com.here.ort.scanner
+package org.ossreviewtoolkit.scanner
 
 import com.fasterxml.jackson.databind.JsonNode
 
-import com.here.ort.downloader.DownloadException
-import com.here.ort.downloader.Downloader
-import com.here.ort.downloader.VersionControlSystem
-import com.here.ort.model.EMPTY_JSON_NODE
-import com.here.ort.model.Environment
-import com.here.ort.model.Failure
-import com.here.ort.model.Identifier
-import com.here.ort.model.OrtIssue
-import com.here.ort.model.OrtResult
-import com.here.ort.model.Package
-import com.here.ort.model.Provenance
-import com.here.ort.model.Repository
-import com.here.ort.model.ScanRecord
-import com.here.ort.model.ScanResult
-import com.here.ort.model.ScanResultContainer
-import com.here.ort.model.ScanSummary
-import com.here.ort.model.ScannerDetails
-import com.here.ort.model.ScannerRun
-import com.here.ort.model.Severity
-import com.here.ort.model.Success
-import com.here.ort.model.config.ScannerConfiguration
-import com.here.ort.model.createAndLogIssue
-import com.here.ort.model.mapper
-import com.here.ort.utils.CommandLineTool
-import com.here.ort.utils.LICENSE_FILENAMES
-import com.here.ort.utils.NamedThreadFactory
-import com.here.ort.utils.Os
-import com.here.ort.utils.collectMessagesAsString
-import com.here.ort.utils.fileSystemEncode
-import com.here.ort.utils.getPathFromEnvironment
-import com.here.ort.utils.getUserOrtDirectory
-import com.here.ort.utils.log
-import com.here.ort.utils.safeMkdirs
-import com.here.ort.utils.showStackTrace
-import com.here.ort.utils.storage.FileArchiver
-import com.here.ort.utils.storage.LocalFileStorage
+import org.ossreviewtoolkit.downloader.DownloadException
+import org.ossreviewtoolkit.downloader.Downloader
+import org.ossreviewtoolkit.downloader.VersionControlSystem
+import org.ossreviewtoolkit.model.EMPTY_JSON_NODE
+import org.ossreviewtoolkit.model.Environment
+import org.ossreviewtoolkit.model.Failure
+import org.ossreviewtoolkit.model.Identifier
+import org.ossreviewtoolkit.model.OrtIssue
+import org.ossreviewtoolkit.model.OrtResult
+import org.ossreviewtoolkit.model.Package
+import org.ossreviewtoolkit.model.Provenance
+import org.ossreviewtoolkit.model.Repository
+import org.ossreviewtoolkit.model.ScanRecord
+import org.ossreviewtoolkit.model.ScanResult
+import org.ossreviewtoolkit.model.ScanResultContainer
+import org.ossreviewtoolkit.model.ScanSummary
+import org.ossreviewtoolkit.model.ScannerDetails
+import org.ossreviewtoolkit.model.ScannerRun
+import org.ossreviewtoolkit.model.Severity
+import org.ossreviewtoolkit.model.Success
+import org.ossreviewtoolkit.model.config.ScannerConfiguration
+import org.ossreviewtoolkit.model.createAndLogIssue
+import org.ossreviewtoolkit.model.mapper
+import org.ossreviewtoolkit.utils.CommandLineTool
+import org.ossreviewtoolkit.utils.LICENSE_FILENAMES
+import org.ossreviewtoolkit.utils.NamedThreadFactory
+import org.ossreviewtoolkit.utils.Os
+import org.ossreviewtoolkit.utils.collectMessagesAsString
+import org.ossreviewtoolkit.utils.fileSystemEncode
+import org.ossreviewtoolkit.utils.getPathFromEnvironment
+import org.ossreviewtoolkit.utils.getUserOrtDirectory
+import org.ossreviewtoolkit.utils.log
+import org.ossreviewtoolkit.utils.safeMkdirs
+import org.ossreviewtoolkit.utils.showStackTrace
+import org.ossreviewtoolkit.utils.storage.FileArchiver
+import org.ossreviewtoolkit.utils.storage.LocalFileStorage
 
 import com.vdurmont.semver4j.Requirement
 
@@ -137,7 +137,7 @@ abstract class LocalScanner(name: String, config: ScannerConfiguration) : Scanne
     /**
      * Return the actual version of the scanner, or an empty string in case of failure.
      */
-    abstract fun getVersion(dir: File = scannerDir): String
+    open fun getVersion() = super.getVersion(scannerDir)
 
     /**
      * Bootstrap the scanner to be ready for use, like downloading and / or configuring it.

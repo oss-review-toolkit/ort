@@ -18,9 +18,9 @@
  * License-Filename: LICENSE
  */
 
-package com.here.ort.utils.storage
+package org.ossreviewtoolkit.utils.storage
 
-import com.here.ort.utils.log
+import org.ossreviewtoolkit.utils.log
 
 import com.sun.net.httpserver.HttpExchange
 import com.sun.net.httpserver.HttpHandler

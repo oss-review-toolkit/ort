@@ -17,23 +17,23 @@
  * License-Filename: LICENSE
  */
 
-package com.here.ort.downloader
+package org.ossreviewtoolkit.downloader
 
-import com.here.ort.downloader.vcs.GitRepo
-import com.here.ort.model.Identifier
-import com.here.ort.model.Package
-import com.here.ort.model.Project
-import com.here.ort.model.RemoteArtifact
-import com.here.ort.model.VcsInfo
-import com.here.ort.model.VcsType
-import com.here.ort.utils.ORT_NAME
-import com.here.ort.utils.OkHttpClientHelper
-import com.here.ort.utils.collectMessagesAsString
-import com.here.ort.utils.log
-import com.here.ort.utils.safeDeleteRecursively
-import com.here.ort.utils.safeMkdirs
-import com.here.ort.utils.stripCredentialsFromUrl
-import com.here.ort.utils.unpack
+import org.ossreviewtoolkit.downloader.vcs.GitRepo
+import org.ossreviewtoolkit.model.Identifier
+import org.ossreviewtoolkit.model.Package
+import org.ossreviewtoolkit.model.Project
+import org.ossreviewtoolkit.model.RemoteArtifact
+import org.ossreviewtoolkit.model.VcsInfo
+import org.ossreviewtoolkit.model.VcsType
+import org.ossreviewtoolkit.utils.ORT_NAME
+import org.ossreviewtoolkit.utils.OkHttpClientHelper
+import org.ossreviewtoolkit.utils.collectMessagesAsString
+import org.ossreviewtoolkit.utils.log
+import org.ossreviewtoolkit.utils.safeDeleteRecursively
+import org.ossreviewtoolkit.utils.safeMkdirs
+import org.ossreviewtoolkit.utils.stripCredentialsFromUrl
+import org.ossreviewtoolkit.utils.unpack
 
 import java.io.File
 import java.io.IOException

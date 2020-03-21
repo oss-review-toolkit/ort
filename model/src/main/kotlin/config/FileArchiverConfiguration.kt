@@ -17,10 +17,10 @@
  * License-Filename: LICENSE
  */
 
-package com.here.ort.model.config
+package org.ossreviewtoolkit.model.config
 
-import com.here.ort.utils.storage.FileArchiver
-import com.here.ort.utils.storage.FileStorage
+import org.ossreviewtoolkit.utils.storage.FileArchiver
+import org.ossreviewtoolkit.utils.storage.FileStorage
 
 /**
  * The configuration model for a [FileArchiver].

@@ -17,9 +17,9 @@
  * License-Filename: LICENSE
  */
 
-package com.here.ort.model.config
+package org.ossreviewtoolkit.model.config
 
-import com.here.ort.utils.storage.FileStorage
+import org.ossreviewtoolkit.utils.storage.FileStorage
 
 /**
  * The configuration model of a file based storage.

@@ -17,9 +17,9 @@
  * License-Filename: LICENSE
  */
 
-package com.here.ort.model.config
+package org.ossreviewtoolkit.model.config
 
-import com.here.ort.utils.expandTilde
+import org.ossreviewtoolkit.utils.expandTilde
 
 import com.typesafe.config.ConfigFactory
 

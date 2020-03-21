@@ -17,37 +17,37 @@
  * License-Filename: LICENSE
  */
 
-package com.here.ort.analyzer.managers
+package org.ossreviewtoolkit.analyzer.managers
 
 import com.fasterxml.jackson.databind.JsonNode
 
-import com.here.ort.analyzer.AbstractPackageManagerFactory
-import com.here.ort.analyzer.PackageManager
-import com.here.ort.downloader.VersionControlSystem
-import com.here.ort.model.Identifier
-import com.here.ort.model.Package
-import com.here.ort.model.PackageReference
-import com.here.ort.model.Project
-import com.here.ort.model.ProjectAnalyzerResult
-import com.here.ort.model.RemoteArtifact
-import com.here.ort.model.Scope
-import com.here.ort.model.yamlMapper
-import com.here.ort.model.VcsInfo
-import com.here.ort.model.config.AnalyzerConfiguration
-import com.here.ort.model.config.RepositoryConfiguration
-import com.here.ort.model.OrtIssue
-import com.here.ort.model.Severity
-import com.here.ort.model.VcsType
-import com.here.ort.model.createAndLogIssue
-import com.here.ort.utils.CommandLineTool
-import com.here.ort.utils.Os
-import com.here.ort.utils.ProcessCapture
-import com.here.ort.utils.log
-import com.here.ort.utils.showStackTrace
-import com.here.ort.utils.textValueOrEmpty
-import com.here.ort.utils.collectMessagesAsString
-import com.here.ort.utils.getPathFromEnvironment
-import com.here.ort.utils.getUserHomeDirectory
+import org.ossreviewtoolkit.analyzer.AbstractPackageManagerFactory
+import org.ossreviewtoolkit.analyzer.PackageManager
+import org.ossreviewtoolkit.downloader.VersionControlSystem
+import org.ossreviewtoolkit.model.Identifier
+import org.ossreviewtoolkit.model.Package
+import org.ossreviewtoolkit.model.PackageReference
+import org.ossreviewtoolkit.model.Project
+import org.ossreviewtoolkit.model.ProjectAnalyzerResult
+import org.ossreviewtoolkit.model.RemoteArtifact
+import org.ossreviewtoolkit.model.Scope
+import org.ossreviewtoolkit.model.yamlMapper
+import org.ossreviewtoolkit.model.VcsInfo
+import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
+import org.ossreviewtoolkit.model.config.RepositoryConfiguration
+import org.ossreviewtoolkit.model.OrtIssue
+import org.ossreviewtoolkit.model.Severity
+import org.ossreviewtoolkit.model.VcsType
+import org.ossreviewtoolkit.model.createAndLogIssue
+import org.ossreviewtoolkit.utils.CommandLineTool
+import org.ossreviewtoolkit.utils.Os
+import org.ossreviewtoolkit.utils.ProcessCapture
+import org.ossreviewtoolkit.utils.log
+import org.ossreviewtoolkit.utils.showStackTrace
+import org.ossreviewtoolkit.utils.textValueOrEmpty
+import org.ossreviewtoolkit.utils.collectMessagesAsString
+import org.ossreviewtoolkit.utils.getPathFromEnvironment
+import org.ossreviewtoolkit.utils.getUserHomeDirectory
 
 import com.vdurmont.semver4j.Requirement
 
@@ -165,6 +165,8 @@ class Pub(
 
     private val processedPackages = mutableListOf<String>()
     private val reader = PubCacheReader()
+
+    override fun transformVersion(output: String) = output.removePrefix("Pub ")
 
     override fun getVersionRequirement(): Requirement = Requirement.buildIvy("[2.2,)")
 
@@ -380,7 +382,7 @@ class Pub(
             // Pub does not declare any licenses in the pubspec files, therefore we keep this empty.
             declaredLicenses = sortedSetOf(),
             vcs = vcs,
-            vcsProcessed = processProjectVcs(definitionFile.parentFile, vcs, homepageUrl),
+            vcsProcessed = processProjectVcs(definitionFile.parentFile, vcs, listOf(homepageUrl)),
             homepageUrl = homepageUrl,
             scopes = scopes
         )
@@ -452,7 +454,7 @@ class Pub(
                     // Pub does not create source artifacts, therefore use any empty artifact.
                     sourceArtifact = RemoteArtifact.EMPTY,
                     vcs = vcsFromPackage,
-                    vcsProcessed = processPackageVcs(vcsFromPackage, homepageUrl)
+                    vcsProcessed = processPackageVcs(vcsFromPackage, listOf(homepageUrl))
                 )
             }
         }

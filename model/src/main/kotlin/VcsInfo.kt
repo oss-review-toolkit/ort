@@ -17,7 +17,7 @@
  * License-Filename: LICENSE
  */
 
-package com.here.ort.model
+package org.ossreviewtoolkit.model
 
 import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.core.JsonParser
@@ -27,9 +27,9 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer
 import com.fasterxml.jackson.databind.exc.UnrecognizedPropertyException
 
-import com.here.ort.utils.fieldNamesOrEmpty
-import com.here.ort.utils.normalizeVcsUrl
-import com.here.ort.utils.textValueOrEmpty
+import org.ossreviewtoolkit.utils.fieldNamesOrEmpty
+import org.ossreviewtoolkit.utils.normalizeVcsUrl
+import org.ossreviewtoolkit.utils.textValueOrEmpty
 
 import kotlin.reflect.full.memberProperties
 

@@ -19,46 +19,46 @@
 
 @file:Suppress("TooManyFunctions")
 
-package com.here.ort.analyzer.managers
+package org.ossreviewtoolkit.analyzer.managers
 
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.node.ObjectNode
 
-import com.here.ort.analyzer.AbstractPackageManagerFactory
-import com.here.ort.analyzer.HTTP_CACHE_PATH
-import com.here.ort.analyzer.PackageManager
-import com.here.ort.analyzer.managers.utils.expandNpmShortcutURL
-import com.here.ort.analyzer.managers.utils.hasNpmLockFile
-import com.here.ort.analyzer.managers.utils.mapDefinitionFilesForNpm
-import com.here.ort.analyzer.managers.utils.readProxySettingFromNpmRc
-import com.here.ort.downloader.VersionControlSystem
-import com.here.ort.downloader.VcsHost
-import com.here.ort.model.Hash
-import com.here.ort.model.Identifier
-import com.here.ort.model.Package
-import com.here.ort.model.PackageReference
-import com.here.ort.model.Project
-import com.here.ort.model.ProjectAnalyzerResult
-import com.here.ort.model.RemoteArtifact
-import com.here.ort.model.Scope
-import com.here.ort.model.VcsInfo
-import com.here.ort.model.VcsType
-import com.here.ort.model.config.AnalyzerConfiguration
-import com.here.ort.model.config.RepositoryConfiguration
-import com.here.ort.model.createAndLogIssue
-import com.here.ort.model.jsonMapper
-import com.here.ort.model.readValue
-import com.here.ort.spdx.SpdxLicense
-import com.here.ort.utils.CommandLineTool
-import com.here.ort.utils.Os
-import com.here.ort.utils.OkHttpClientHelper
-import com.here.ort.utils.OkHttpClientHelper.applyProxySettingsFromUrl
-import com.here.ort.utils.getUserHomeDirectory
-import com.here.ort.utils.isSymbolicLink
-import com.here.ort.utils.log
-import com.here.ort.utils.realFile
-import com.here.ort.utils.stashDirectories
-import com.here.ort.utils.textValueOrEmpty
+import org.ossreviewtoolkit.analyzer.AbstractPackageManagerFactory
+import org.ossreviewtoolkit.analyzer.HTTP_CACHE_PATH
+import org.ossreviewtoolkit.analyzer.PackageManager
+import org.ossreviewtoolkit.analyzer.managers.utils.expandNpmShortcutURL
+import org.ossreviewtoolkit.analyzer.managers.utils.hasNpmLockFile
+import org.ossreviewtoolkit.analyzer.managers.utils.mapDefinitionFilesForNpm
+import org.ossreviewtoolkit.analyzer.managers.utils.readProxySettingFromNpmRc
+import org.ossreviewtoolkit.downloader.VersionControlSystem
+import org.ossreviewtoolkit.downloader.VcsHost
+import org.ossreviewtoolkit.model.Hash
+import org.ossreviewtoolkit.model.Identifier
+import org.ossreviewtoolkit.model.Package
+import org.ossreviewtoolkit.model.PackageReference
+import org.ossreviewtoolkit.model.Project
+import org.ossreviewtoolkit.model.ProjectAnalyzerResult
+import org.ossreviewtoolkit.model.RemoteArtifact
+import org.ossreviewtoolkit.model.Scope
+import org.ossreviewtoolkit.model.VcsInfo
+import org.ossreviewtoolkit.model.VcsType
+import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
+import org.ossreviewtoolkit.model.config.RepositoryConfiguration
+import org.ossreviewtoolkit.model.createAndLogIssue
+import org.ossreviewtoolkit.model.jsonMapper
+import org.ossreviewtoolkit.model.readValue
+import org.ossreviewtoolkit.spdx.SpdxLicense
+import org.ossreviewtoolkit.utils.CommandLineTool
+import org.ossreviewtoolkit.utils.Os
+import org.ossreviewtoolkit.utils.OkHttpClientHelper
+import org.ossreviewtoolkit.utils.OkHttpClientHelper.applyProxySettingsFromUrl
+import org.ossreviewtoolkit.utils.getUserHomeDirectory
+import org.ossreviewtoolkit.utils.isSymbolicLink
+import org.ossreviewtoolkit.utils.log
+import org.ossreviewtoolkit.utils.realFile
+import org.ossreviewtoolkit.utils.stashDirectories
+import org.ossreviewtoolkit.utils.textValueOrEmpty
 
 import com.vdurmont.semver4j.Requirement
 
@@ -107,7 +107,7 @@ open class Npm(
     override fun beforeResolution(definitionFiles: List<File>) =
         // We do not actually depend on any features specific to an NPM version, but we still want to stick to a
         // fixed minor version to be sure to get consistent results.
-        checkVersion(ignoreActualVersion = analyzerConfig.ignoreToolVersions)
+        checkVersion(analyzerConfig.ignoreToolVersions)
 
     override fun resolveDependencies(definitionFile: File): ProjectAnalyzerResult? {
         val workingDir = definitionFile.parentFile
@@ -308,7 +308,7 @@ open class Npm(
                     hash = hash
                 ),
                 vcs = vcsFromPackage,
-                vcsProcessed = processPackageVcs(vcsFromPackage, homepageUrl)
+                vcsProcessed = processPackageVcs(vcsFromPackage, listOf(homepageUrl))
             )
 
             require(module.id.name.isNotEmpty()) {
@@ -519,7 +519,7 @@ open class Npm(
             definitionFilePath = VersionControlSystem.getPathInfo(packageJson).path,
             declaredLicenses = declaredLicenses,
             vcs = vcsFromPackage,
-            vcsProcessed = processProjectVcs(projectDir, vcsFromPackage, homepageUrl),
+            vcsProcessed = processProjectVcs(projectDir, vcsFromPackage, listOf(homepageUrl)),
             homepageUrl = homepageUrl,
             scopes = scopes
         )

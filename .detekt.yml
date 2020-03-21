@@ -51,16 +51,16 @@ style:
   WildcardImport:
     excludes: ''
     excludeImports: '
-      com.here.ort.analyzer.managers.*,
-      com.here.ort.commands.*,
-      com.here.ort.downloader.vcs.*,
-      com.here.ort.gradle.*,
-      com.here.ort.helper.commands.*,
-      com.here.ort.reporter.reporters.*,
-      com.here.ort.scanner.scanners.*,
-      com.here.ort.scanner.storages.*,
-      com.here.ort.spdx.SpdxLicense.*,
-      com.here.ort.spdx.SpdxLicenseException.*,
+      org.ossreviewtoolkit.analyzer.managers.*,
+      org.ossreviewtoolkit.commands.*,
+      org.ossreviewtoolkit.downloader.vcs.*,
+      org.ossreviewtoolkit.gradle.*,
+      org.ossreviewtoolkit.helper.commands.*,
+      org.ossreviewtoolkit.reporter.reporters.*,
+      org.ossreviewtoolkit.scanner.scanners.*,
+      org.ossreviewtoolkit.scanner.storages.*,
+      org.ossreviewtoolkit.spdx.SpdxLicense.*,
+      org.ossreviewtoolkit.spdx.SpdxLicenseException.*,
       kotlinx.html.*,
       kotlinx.html.dom.*
       '

@@ -17,23 +17,23 @@
  * License-Filename: LICENSE
  */
 
-package com.here.ort.downloader.vcs
+package org.ossreviewtoolkit.downloader.vcs
 
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty
 
-import com.here.ort.downloader.WorkingTree
-import com.here.ort.model.VcsInfo
-import com.here.ort.model.VcsType
-import com.here.ort.model.xmlMapper
-import com.here.ort.utils.Os
-import com.here.ort.utils.ProcessCapture
-import com.here.ort.utils.collectMessagesAsString
-import com.here.ort.utils.getPathFromEnvironment
-import com.here.ort.utils.isSymbolicLink
-import com.here.ort.utils.log
-import com.here.ort.utils.realFile
-import com.here.ort.utils.searchUpwardsForSubdirectory
-import com.here.ort.utils.showStackTrace
+import org.ossreviewtoolkit.downloader.WorkingTree
+import org.ossreviewtoolkit.model.VcsInfo
+import org.ossreviewtoolkit.model.VcsType
+import org.ossreviewtoolkit.model.xmlMapper
+import org.ossreviewtoolkit.utils.Os
+import org.ossreviewtoolkit.utils.ProcessCapture
+import org.ossreviewtoolkit.utils.collectMessagesAsString
+import org.ossreviewtoolkit.utils.getPathFromEnvironment
+import org.ossreviewtoolkit.utils.isSymbolicLink
+import org.ossreviewtoolkit.utils.log
+import org.ossreviewtoolkit.utils.realFile
+import org.ossreviewtoolkit.utils.searchUpwardsForSubdirectory
+import org.ossreviewtoolkit.utils.showStackTrace
 
 import java.io.File
 import java.io.IOException

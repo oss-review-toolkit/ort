@@ -17,38 +17,38 @@
  * License-Filename: LICENSE
  */
 
-package com.here.ort.analyzer.managers
+package org.ossreviewtoolkit.analyzer.managers
 
 import com.fasterxml.jackson.module.kotlin.readValue
 
-import com.here.ort.analyzer.AbstractPackageManagerFactory
-import com.here.ort.analyzer.HTTP_CACHE_PATH
-import com.here.ort.analyzer.PackageManager
-import com.here.ort.downloader.VersionControlSystem
-import com.here.ort.downloader.VcsHost
-import com.here.ort.model.Hash
-import com.here.ort.model.Identifier
-import com.here.ort.model.OrtIssue
-import com.here.ort.model.Package
-import com.here.ort.model.PackageReference
-import com.here.ort.model.Project
-import com.here.ort.model.ProjectAnalyzerResult
-import com.here.ort.model.RemoteArtifact
-import com.here.ort.model.Scope
-import com.here.ort.model.VcsInfo
-import com.here.ort.model.config.AnalyzerConfiguration
-import com.here.ort.model.config.RepositoryConfiguration
-import com.here.ort.model.createAndLogIssue
-import com.here.ort.model.jsonMapper
-import com.here.ort.model.yamlMapper
-import com.here.ort.utils.CommandLineTool
-import com.here.ort.utils.Os
-import com.here.ort.utils.OkHttpClientHelper
-import com.here.ort.utils.collectMessagesAsString
-import com.here.ort.utils.log
-import com.here.ort.utils.showStackTrace
-import com.here.ort.utils.stashDirectories
-import com.here.ort.utils.textValueOrEmpty
+import org.ossreviewtoolkit.analyzer.AbstractPackageManagerFactory
+import org.ossreviewtoolkit.analyzer.HTTP_CACHE_PATH
+import org.ossreviewtoolkit.analyzer.PackageManager
+import org.ossreviewtoolkit.downloader.VersionControlSystem
+import org.ossreviewtoolkit.downloader.VcsHost
+import org.ossreviewtoolkit.model.Hash
+import org.ossreviewtoolkit.model.Identifier
+import org.ossreviewtoolkit.model.OrtIssue
+import org.ossreviewtoolkit.model.Package
+import org.ossreviewtoolkit.model.PackageReference
+import org.ossreviewtoolkit.model.Project
+import org.ossreviewtoolkit.model.ProjectAnalyzerResult
+import org.ossreviewtoolkit.model.RemoteArtifact
+import org.ossreviewtoolkit.model.Scope
+import org.ossreviewtoolkit.model.VcsInfo
+import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
+import org.ossreviewtoolkit.model.config.RepositoryConfiguration
+import org.ossreviewtoolkit.model.createAndLogIssue
+import org.ossreviewtoolkit.model.jsonMapper
+import org.ossreviewtoolkit.model.yamlMapper
+import org.ossreviewtoolkit.utils.CommandLineTool
+import org.ossreviewtoolkit.utils.Os
+import org.ossreviewtoolkit.utils.OkHttpClientHelper
+import org.ossreviewtoolkit.utils.collectMessagesAsString
+import org.ossreviewtoolkit.utils.log
+import org.ossreviewtoolkit.utils.showStackTrace
+import org.ossreviewtoolkit.utils.stashDirectories
+import org.ossreviewtoolkit.utils.textValueOrEmpty
 
 import com.vdurmont.semver4j.Requirement
 
@@ -83,15 +83,14 @@ class Bundler(
 
     override fun command(workingDir: File?) = if (Os.isWindows) "bundle.bat" else "bundle"
 
+    override fun transformVersion(output: String) = output.removePrefix("Bundler version ")
+
     override fun getVersionRequirement(): Requirement = Requirement.buildIvy("[1.16,2.2[")
 
     override fun beforeResolution(definitionFiles: List<File>) =
         // We do not actually depend on any features specific to a version of Bundler, but we still want to stick to
         // fixed versions to be sure to get consistent results.
-        checkVersion(
-            ignoreActualVersion = analyzerConfig.ignoreToolVersions,
-            transform = { it.substringAfter("Bundler version ") }
-        )
+        checkVersion(analyzerConfig.ignoreToolVersions)
 
     override fun resolveDependencies(definitionFile: File): ProjectAnalyzerResult? {
         val workingDir = definitionFile.parentFile
@@ -116,7 +115,7 @@ class Bundler(
                 definitionFilePath = VersionControlSystem.getPathInfo(definitionFile).path,
                 declaredLicenses = declaredLicenses.toSortedSet(),
                 vcs = VcsInfo.EMPTY,
-                vcsProcessed = processProjectVcs(workingDir, homepageUrl = homepageUrl),
+                vcsProcessed = processProjectVcs(workingDir, fallbackUrls = listOf(homepageUrl)),
                 homepageUrl = homepageUrl,
                 scopes = scopes.toSortedSet()
             )
@@ -170,7 +169,7 @@ class Bundler(
                     binaryArtifact = RemoteArtifact.EMPTY,
                     sourceArtifact = gemSpec.artifact,
                     vcs = gemSpec.vcs,
-                    vcsProcessed = processPackageVcs(gemSpec.vcs, gemSpec.homepageUrl)
+                    vcsProcessed = processPackageVcs(gemSpec.vcs, listOf(gemSpec.homepageUrl))
                 )
 
                 val transitiveDependencies = mutableSetOf<PackageReference>()

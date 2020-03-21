@@ -17,17 +17,17 @@
  * License-Filename: LICENSE
  */
 
-package com.here.ort.reporter
+package org.ossreviewtoolkit.reporter
 
-import com.here.ort.model.OrtIssue
-import com.here.ort.model.OrtResult
-import com.here.ort.model.RuleViolation
-import com.here.ort.model.config.CopyrightGarbage
-import com.here.ort.model.config.OrtConfiguration
-import com.here.ort.model.licenses.LicenseConfiguration
-import com.here.ort.model.utils.PackageConfigurationProvider
-import com.here.ort.model.utils.SimplePackageConfigurationProvider
-import com.here.ort.reporter.reporters.AbstractNoticeReporter
+import org.ossreviewtoolkit.model.OrtIssue
+import org.ossreviewtoolkit.model.OrtResult
+import org.ossreviewtoolkit.model.RuleViolation
+import org.ossreviewtoolkit.model.config.CopyrightGarbage
+import org.ossreviewtoolkit.model.config.OrtConfiguration
+import org.ossreviewtoolkit.model.licenses.LicenseConfiguration
+import org.ossreviewtoolkit.model.utils.PackageConfigurationProvider
+import org.ossreviewtoolkit.model.utils.SimplePackageConfigurationProvider
+import org.ossreviewtoolkit.reporter.reporters.AbstractNoticeReporter
 
 /**
  * A bundle of input to be used by [Reporter] implementations.

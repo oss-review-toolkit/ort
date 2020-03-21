@@ -17,9 +17,9 @@
  * License-Filename: LICENSE
  */
 
-package com.here.ort.evaluator
+package org.ossreviewtoolkit.evaluator
 
-import com.here.ort.model.LicenseSource
+import org.ossreviewtoolkit.model.LicenseSource
 
 import io.kotlintest.shouldBe
 import io.kotlintest.specs.WordSpec
@@ -77,7 +77,7 @@ class PackageRuleTest : WordSpec() {
         "isFromOrg()" should {
             "return true if the package is from org" {
                 val rule = PackageRule(ruleSet, "test", packageWithoutLicense, emptyList(), emptyList())
-                val matcher = rule.isFromOrg("here")
+                val matcher = rule.isFromOrg("ossreviewtoolkit")
 
                 matcher.matches() shouldBe true
             }

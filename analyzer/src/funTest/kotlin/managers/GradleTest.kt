@@ -17,20 +17,20 @@
  * License-Filename: LICENSE
  */
 
-package com.here.ort.analyzer.managers
+package org.ossreviewtoolkit.analyzer.managers
 
-import com.here.ort.downloader.VersionControlSystem
-import com.here.ort.downloader.vcs.Git
-import com.here.ort.model.yamlMapper
-import com.here.ort.utils.Os
-import com.here.ort.utils.ProcessCapture
-import com.here.ort.utils.normalizeVcsUrl
-import com.here.ort.utils.test.DEFAULT_ANALYZER_CONFIGURATION
-import com.here.ort.utils.test.DEFAULT_REPOSITORY_CONFIGURATION
-import com.here.ort.utils.test.ExpensiveTag
-import com.here.ort.utils.test.USER_DIR
-import com.here.ort.utils.test.patchActualResult
-import com.here.ort.utils.test.patchExpectedResult
+import org.ossreviewtoolkit.downloader.VersionControlSystem
+import org.ossreviewtoolkit.downloader.vcs.Git
+import org.ossreviewtoolkit.model.yamlMapper
+import org.ossreviewtoolkit.utils.Os
+import org.ossreviewtoolkit.utils.ProcessCapture
+import org.ossreviewtoolkit.utils.normalizeVcsUrl
+import org.ossreviewtoolkit.utils.test.DEFAULT_ANALYZER_CONFIGURATION
+import org.ossreviewtoolkit.utils.test.DEFAULT_REPOSITORY_CONFIGURATION
+import org.ossreviewtoolkit.utils.test.ExpensiveTag
+import org.ossreviewtoolkit.utils.test.USER_DIR
+import org.ossreviewtoolkit.utils.test.patchActualResult
+import org.ossreviewtoolkit.utils.test.patchExpectedResult
 
 import io.kotlintest.Spec
 import io.kotlintest.shouldBe

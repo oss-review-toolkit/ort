@@ -17,39 +17,39 @@
  * License-Filename: LICENSE
  */
 
-package com.here.ort.analyzer.managers
+package org.ossreviewtoolkit.analyzer.managers
 
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.node.ArrayNode
 
-import com.here.ort.analyzer.AbstractPackageManagerFactory
-import com.here.ort.analyzer.HTTP_CACHE_PATH
-import com.here.ort.analyzer.PackageManager
-import com.here.ort.downloader.VersionControlSystem
-import com.here.ort.model.EMPTY_JSON_NODE
-import com.here.ort.model.Hash
-import com.here.ort.model.Identifier
-import com.here.ort.model.Package
-import com.here.ort.model.PackageReference
-import com.here.ort.model.Project
-import com.here.ort.model.ProjectAnalyzerResult
-import com.here.ort.model.RemoteArtifact
-import com.here.ort.model.Scope
-import com.here.ort.model.VcsInfo
-import com.here.ort.model.config.AnalyzerConfiguration
-import com.here.ort.model.config.RepositoryConfiguration
-import com.here.ort.model.jsonMapper
-import com.here.ort.utils.CommandLineTool
-import com.here.ort.utils.ORT_NAME
-import com.here.ort.utils.Os
-import com.here.ort.utils.OkHttpClientHelper
-import com.here.ort.utils.ProcessCapture
-import com.here.ort.utils.collectMessagesAsString
-import com.here.ort.utils.getPathFromEnvironment
-import com.here.ort.utils.log
-import com.here.ort.utils.safeDeleteRecursively
-import com.here.ort.utils.showStackTrace
-import com.here.ort.utils.textValueOrEmpty
+import org.ossreviewtoolkit.analyzer.AbstractPackageManagerFactory
+import org.ossreviewtoolkit.analyzer.HTTP_CACHE_PATH
+import org.ossreviewtoolkit.analyzer.PackageManager
+import org.ossreviewtoolkit.downloader.VersionControlSystem
+import org.ossreviewtoolkit.model.EMPTY_JSON_NODE
+import org.ossreviewtoolkit.model.Hash
+import org.ossreviewtoolkit.model.Identifier
+import org.ossreviewtoolkit.model.Package
+import org.ossreviewtoolkit.model.PackageReference
+import org.ossreviewtoolkit.model.Project
+import org.ossreviewtoolkit.model.ProjectAnalyzerResult
+import org.ossreviewtoolkit.model.RemoteArtifact
+import org.ossreviewtoolkit.model.Scope
+import org.ossreviewtoolkit.model.VcsInfo
+import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
+import org.ossreviewtoolkit.model.config.RepositoryConfiguration
+import org.ossreviewtoolkit.model.jsonMapper
+import org.ossreviewtoolkit.utils.CommandLineTool
+import org.ossreviewtoolkit.utils.ORT_NAME
+import org.ossreviewtoolkit.utils.Os
+import org.ossreviewtoolkit.utils.OkHttpClientHelper
+import org.ossreviewtoolkit.utils.ProcessCapture
+import org.ossreviewtoolkit.utils.collectMessagesAsString
+import org.ossreviewtoolkit.utils.getPathFromEnvironment
+import org.ossreviewtoolkit.utils.log
+import org.ossreviewtoolkit.utils.safeDeleteRecursively
+import org.ossreviewtoolkit.utils.showStackTrace
+import org.ossreviewtoolkit.utils.textValueOrEmpty
 
 import com.vdurmont.semver4j.Requirement
 
@@ -91,6 +91,8 @@ object PythonVersion : CommandLineTool {
     // To use a specific version of Python on Windows we can use the "py" command with argument "-2" or "-3", see
     // https://docs.python.org/3/installing/#work-with-multiple-versions-of-python-installed-in-parallel.
     override fun command(workingDir: File?) = if (Os.isWindows) "py" else "python3"
+
+    override fun transformVersion(output: String) = output.removePrefix("Python ")
 
     /**
      * Check all Python files in [workingDir] and return which version of Python they are compatible with. If all files
@@ -187,6 +189,8 @@ class Pip(
 
     override fun command(workingDir: File?) = "pip"
 
+    override fun transformVersion(output: String) = output.removePrefix("pip ").substringBefore(" ")
+
     private fun runPipInVirtualEnv(virtualEnvDir: File, workingDir: File, vararg commandArgs: String) =
         runInVirtualEnv(virtualEnvDir, workingDir, command(workingDir), *TRUSTED_HOSTS, *commandArgs)
 
@@ -212,7 +216,7 @@ class Pip(
     }
 
     override fun beforeResolution(definitionFiles: List<File>) =
-        VirtualEnv.checkVersion(ignoreActualVersion = analyzerConfig.ignoreToolVersions)
+        VirtualEnv.checkVersion(analyzerConfig.ignoreToolVersions)
 
     @Suppress("LongMethod")
     override fun resolveDependencies(definitionFile: File): ProjectAnalyzerResult? {
@@ -396,7 +400,7 @@ class Pip(
                                 pkg.sourceArtifact
                             },
                             vcs = pkg.vcs,
-                            vcsProcessed = processPackageVcs(pkg.vcs, pkgHomepage)
+                            vcsProcessed = processPackageVcs(pkg.vcs, listOf(pkgHomepage))
                         )
                     } ?: run {
                         log.warn {
@@ -429,7 +433,7 @@ class Pip(
             definitionFilePath = VersionControlSystem.getPathInfo(definitionFile).path,
             declaredLicenses = declaredLicenses,
             vcs = VcsInfo.EMPTY,
-            vcsProcessed = processProjectVcs(workingDir, homepageUrl = setupHomepage),
+            vcsProcessed = processProjectVcs(workingDir, fallbackUrls = listOf(setupHomepage)),
             homepageUrl = setupHomepage,
             scopes = scopes
         )

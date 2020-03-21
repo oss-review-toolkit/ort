@@ -17,21 +17,21 @@
  * License-Filename: LICENSE
  */
 
-package com.here.ort.analyzer
+package org.ossreviewtoolkit.analyzer
 
-import com.here.ort.downloader.VersionControlSystem
-import com.here.ort.downloader.VcsHost
-import com.here.ort.model.Identifier
-import com.here.ort.model.Project
-import com.here.ort.model.ProjectAnalyzerResult
-import com.here.ort.model.VcsInfo
-import com.here.ort.model.config.AnalyzerConfiguration
-import com.here.ort.model.config.RepositoryConfiguration
-import com.here.ort.model.createAndLogIssue
-import com.here.ort.utils.collectMessagesAsString
-import com.here.ort.utils.log
-import com.here.ort.utils.normalizeVcsUrl
-import com.here.ort.utils.showStackTrace
+import org.ossreviewtoolkit.downloader.VersionControlSystem
+import org.ossreviewtoolkit.downloader.VcsHost
+import org.ossreviewtoolkit.model.Identifier
+import org.ossreviewtoolkit.model.Project
+import org.ossreviewtoolkit.model.ProjectAnalyzerResult
+import org.ossreviewtoolkit.model.VcsInfo
+import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
+import org.ossreviewtoolkit.model.config.RepositoryConfiguration
+import org.ossreviewtoolkit.model.createAndLogIssue
+import org.ossreviewtoolkit.utils.collectMessagesAsString
+import org.ossreviewtoolkit.utils.log
+import org.ossreviewtoolkit.utils.normalizeVcsUrl
+import org.ossreviewtoolkit.utils.showStackTrace
 
 import java.io.File
 import java.io.FileFilter
@@ -141,20 +141,23 @@ abstract class PackageManager(
         }
 
         /**
-         * Enrich a package's VCS information with information deduced from the package's VCS URL or an optional
-         * homepage URL.
+         * Enrich a package's VCS information with information deduced from the package's VCS URL or a list of fallback
+         * URLs.
          *
          * @param vcsFromPackage The [VcsInfo] of a [Package].
-         * @param homepageUrl The URL to the homepage of a [Package], if any.
+         * @param fallbackUrls The list of alternative URLs to to use as fallback for determining the [VcsInfo]. The
+         *                     first element of the list that is recognized as a VCS URL is used.
          */
-        fun processPackageVcs(vcsFromPackage: VcsInfo, homepageUrl: String = ""): VcsInfo {
+        fun processPackageVcs(vcsFromPackage: VcsInfo, fallbackUrls: List<String> = emptyList()): VcsInfo {
             val normalizedVcsFromPackage = vcsFromPackage.normalize()
 
-            val normalizedUrl = normalizedVcsFromPackage.url.takeIf {
-                it.isNotEmpty()
-            } ?: normalizeVcsUrl(homepageUrl).takeIf {
-                VersionControlSystem.forUrl(it) != null
-            }.orEmpty()
+            val normalizedUrl = normalizedVcsFromPackage.url.takeIf { it.isNotEmpty() }
+                ?: fallbackUrls
+                    .asSequence()
+                    .map { normalizeVcsUrl(it) }
+                    .filterNot { VersionControlSystem.forUrl(it) == null }
+                    .firstOrNull()
+                    .orEmpty()
 
             val vcsFromUrl = VcsHost.toVcsInfo(normalizedUrl)
             return vcsFromUrl.merge(normalizedVcsFromPackage)
@@ -165,18 +168,20 @@ abstract class PackageManager(
          * directory.
          *
          * Get a project's VCS information from the working tree and optionally enrich it with VCS information from
-         * another source (like meta-data) or a homepage URL.
+         * another source (like meta-data) or a list of fallback URLs.
          *
          * @param projectDir The working tree directory of the [Project].
          * @param vcsFromProject The project's [VcsInfo], if any.
-         * @param homepageUrl The URL to the homepage of the [Project], if any.
+         * @param fallbackUrls The list of alternative URLs to to use as fallback for determining the [VcsInfo]. The
+         *                     first element of the list that is recognized as a VCS URL is used.
          */
         fun processProjectVcs(
-            projectDir: File, vcsFromProject: VcsInfo = VcsInfo.EMPTY,
-            homepageUrl: String = ""
+            projectDir: File,
+            vcsFromProject: VcsInfo = VcsInfo.EMPTY,
+            fallbackUrls: List<String> = emptyList()
         ): VcsInfo {
             val vcsFromWorkingTree = VersionControlSystem.getPathInfo(projectDir).normalize()
-            return vcsFromWorkingTree.merge(processPackageVcs(vcsFromProject, homepageUrl))
+            return vcsFromWorkingTree.merge(processPackageVcs(vcsFromProject, fallbackUrls))
         }
     }
 

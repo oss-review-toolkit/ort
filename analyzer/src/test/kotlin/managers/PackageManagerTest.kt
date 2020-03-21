@@ -17,9 +17,9 @@
  * License-Filename: LICENSE
  */
 
-package com.here.ort.analyzer.managers
+package org.ossreviewtoolkit.analyzer.managers
 
-import com.here.ort.analyzer.PackageManager
+import org.ossreviewtoolkit.analyzer.PackageManager
 
 import io.kotlintest.shouldBe
 import io.kotlintest.shouldThrow

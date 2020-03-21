@@ -17,7 +17,7 @@
  * License-Filename: LICENSE
  */
 
-package com.here.ort.commands
+package org.ossreviewtoolkit.commands
 
 import com.github.ajalt.clikt.core.CliktCommand
 import com.github.ajalt.clikt.core.UsageError
@@ -33,27 +33,27 @@ import com.github.ajalt.clikt.parameters.options.split
 import com.github.ajalt.clikt.parameters.types.enum
 import com.github.ajalt.clikt.parameters.types.file
 
-import com.here.ort.GroupTypes
-import com.here.ort.GroupTypes.FileType
-import com.here.ort.GroupTypes.StringType
-import com.here.ort.downloader.DownloadException
-import com.here.ort.downloader.Downloader
-import com.here.ort.downloader.VersionControlSystem
-import com.here.ort.model.Identifier
-import com.here.ort.model.OrtResult
-import com.here.ort.model.Package
-import com.here.ort.model.RemoteArtifact
-import com.here.ort.model.VcsInfo
-import com.here.ort.model.VcsType
-import com.here.ort.model.readValue
-import com.here.ort.utils.ArchiveType
-import com.here.ort.utils.collectMessagesAsString
-import com.here.ort.utils.encodeOrUnknown
-import com.here.ort.utils.expandTilde
-import com.here.ort.utils.log
-import com.here.ort.utils.packZip
-import com.here.ort.utils.safeDeleteRecursively
-import com.here.ort.utils.showStackTrace
+import org.ossreviewtoolkit.GroupTypes
+import org.ossreviewtoolkit.GroupTypes.FileType
+import org.ossreviewtoolkit.GroupTypes.StringType
+import org.ossreviewtoolkit.downloader.DownloadException
+import org.ossreviewtoolkit.downloader.Downloader
+import org.ossreviewtoolkit.downloader.VersionControlSystem
+import org.ossreviewtoolkit.model.Identifier
+import org.ossreviewtoolkit.model.OrtResult
+import org.ossreviewtoolkit.model.Package
+import org.ossreviewtoolkit.model.RemoteArtifact
+import org.ossreviewtoolkit.model.VcsInfo
+import org.ossreviewtoolkit.model.VcsType
+import org.ossreviewtoolkit.model.readValue
+import org.ossreviewtoolkit.utils.ArchiveType
+import org.ossreviewtoolkit.utils.collectMessagesAsString
+import org.ossreviewtoolkit.utils.encodeOrUnknown
+import org.ossreviewtoolkit.utils.expandTilde
+import org.ossreviewtoolkit.utils.log
+import org.ossreviewtoolkit.utils.packZip
+import org.ossreviewtoolkit.utils.safeDeleteRecursively
+import org.ossreviewtoolkit.utils.showStackTrace
 
 import java.io.File
 

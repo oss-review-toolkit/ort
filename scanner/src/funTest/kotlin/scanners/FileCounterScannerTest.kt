@@ -17,15 +17,15 @@
  * License-Filename: LICENSE
  */
 
-package com.here.ort.scanner.scanners
+package org.ossreviewtoolkit.scanner.scanners
 
-import com.here.ort.model.config.ScannerConfiguration
-import com.here.ort.model.yamlMapper
-import com.here.ort.scanner.ScanResultsStorage
-import com.here.ort.utils.ORT_NAME
-import com.here.ort.utils.safeDeleteRecursively
-import com.here.ort.utils.test.patchActualResult
-import com.here.ort.utils.test.patchExpectedResult
+import org.ossreviewtoolkit.model.config.ScannerConfiguration
+import org.ossreviewtoolkit.model.yamlMapper
+import org.ossreviewtoolkit.scanner.ScanResultsStorage
+import org.ossreviewtoolkit.utils.ORT_NAME
+import org.ossreviewtoolkit.utils.safeDeleteRecursively
+import org.ossreviewtoolkit.utils.test.patchActualResult
+import org.ossreviewtoolkit.utils.test.patchExpectedResult
 
 import io.kotlintest.shouldBe
 import io.kotlintest.specs.StringSpec

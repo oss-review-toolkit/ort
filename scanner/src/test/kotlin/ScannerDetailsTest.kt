@@ -17,9 +17,9 @@
  * License-Filename: LICENSE
  */
 
-package com.here.ort.scanner
+package org.ossreviewtoolkit.scanner
 
-import com.here.ort.model.ScannerDetails
+import org.ossreviewtoolkit.model.ScannerDetails
 
 import io.kotlintest.shouldBe
 import io.kotlintest.specs.WordSpec

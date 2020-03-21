@@ -17,13 +17,13 @@
  * License-Filename: LICENSE
  */
 
-package com.here.ort.model.config
+package org.ossreviewtoolkit.model.config
 
 import com.fasterxml.jackson.annotation.JsonInclude
 
-import com.here.ort.model.OrtResult
-import com.here.ort.model.Project
-import com.here.ort.model.Scope
+import org.ossreviewtoolkit.model.OrtResult
+import org.ossreviewtoolkit.model.Project
+import org.ossreviewtoolkit.model.Scope
 
 /**
  * Defines which parts of a repository should be excluded.

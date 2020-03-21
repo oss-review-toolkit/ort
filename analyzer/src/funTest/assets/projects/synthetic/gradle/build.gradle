@@ -1,6 +1,6 @@
 subprojects {
     it.apply plugin: 'java'
 
-    group 'com.here.ort.gradle.example'
+    group 'org.ossreviewtoolkit.gradle.example'
     version '1.0.0'
 }

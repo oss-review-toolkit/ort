@@ -17,16 +17,16 @@
  * License-Filename: LICENSE
  */
 
-package com.here.ort.reporter.reporters
+package org.ossreviewtoolkit.reporter.reporters
 
-import com.here.ort.model.AnalyzerResult
-import com.here.ort.model.OrtResult
-import com.here.ort.model.VcsInfo
-import com.here.ort.reporter.Reporter
-import com.here.ort.reporter.ReporterInput
-import com.here.ort.reporter.reporters.ReportTableModel.ProjectTable
-import com.here.ort.reporter.reporters.ReportTableModel.SummaryTable
-import com.here.ort.utils.isValidUri
+import org.ossreviewtoolkit.model.AnalyzerResult
+import org.ossreviewtoolkit.model.OrtResult
+import org.ossreviewtoolkit.model.VcsInfo
+import org.ossreviewtoolkit.reporter.Reporter
+import org.ossreviewtoolkit.reporter.ReporterInput
+import org.ossreviewtoolkit.reporter.reporters.ReportTableModel.ProjectTable
+import org.ossreviewtoolkit.reporter.reporters.ReportTableModel.SummaryTable
+import org.ossreviewtoolkit.utils.isValidUri
 
 import java.awt.Color
 import java.io.OutputStream
