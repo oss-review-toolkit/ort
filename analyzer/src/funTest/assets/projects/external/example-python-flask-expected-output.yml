@@ -33,6 +33,7 @@ packages:
     purl: "pkg:pypi/Flask@0.12"
     declared_licenses:
     - "BSD"
+    - "BSD License"
     declared_licenses_processed:
       spdx_expression: "BSD-3-Clause"
     description: "A microframework based on Werkzeug, Jinja2 and good intentions"
@@ -63,6 +64,7 @@ packages:
     purl: "pkg:pypi/Jinja2@2.8.1"
     declared_licenses:
     - "BSD"
+    - "BSD License"
     declared_licenses_processed:
       spdx_expression: "BSD-3-Clause"
     description: "A small but fast and easy to use stand-alone template engine written\
@@ -93,7 +95,7 @@ packages:
     id: "PyPI::MarkupSafe:1.1.1"
     purl: "pkg:pypi/MarkupSafe@1.1.1"
     declared_licenses:
-    - "BSD"
+    - "BSD License"
     - "BSD-3-Clause"
     declared_licenses_processed:
       spdx_expression: "BSD-3-Clause"
@@ -124,7 +126,7 @@ packages:
     id: "PyPI::Werkzeug:1.0.0"
     purl: "pkg:pypi/Werkzeug@1.0.0"
     declared_licenses:
-    - "BSD"
+    - "BSD License"
     - "BSD-3-Clause"
     declared_licenses_processed:
       spdx_expression: "BSD-3-Clause"
@@ -155,7 +157,7 @@ packages:
     id: "PyPI::click:7.1.1"
     purl: "pkg:pypi/click@7.1.1"
     declared_licenses:
-    - "BSD"
+    - "BSD License"
     - "BSD-3-Clause"
     declared_licenses_processed:
       spdx_expression: "BSD-3-Clause"
@@ -187,6 +189,7 @@ packages:
     purl: "pkg:pypi/gunicorn@19.6.0"
     declared_licenses:
     - "MIT"
+    - "MIT License"
     declared_licenses_processed:
       spdx_expression: "MIT"
     description: "WSGI HTTP Server for UNIX"
@@ -217,6 +220,7 @@ packages:
     purl: "pkg:pypi/itsdangerous@1.1.0"
     declared_licenses:
     - "BSD"
+    - "BSD License"
     declared_licenses_processed:
       spdx_expression: "BSD-3-Clause"
     description: "Various helpers to pass data to untrusted environments and back."

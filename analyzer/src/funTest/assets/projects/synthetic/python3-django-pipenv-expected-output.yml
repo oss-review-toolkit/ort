@@ -27,6 +27,7 @@ packages:
     purl: "pkg:pypi/Django@2.1.11"
     declared_licenses:
     - "BSD"
+    - "BSD License"
     declared_licenses_processed:
       spdx_expression: "BSD-3-Clause"
     description: "A high-level Python Web framework that encourages rapid development\
@@ -58,6 +59,7 @@ packages:
     purl: "pkg:pypi/pytz@2019.3"
     declared_licenses:
     - "MIT"
+    - "MIT License"
     declared_licenses_processed:
       spdx_expression: "MIT"
     description: "World timezone definitions, modern and historical"

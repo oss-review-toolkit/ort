@@ -3,7 +3,7 @@ project:
   id: "PIP::Example-App-requirements:2.4.0"
   definition_file_path: "analyzer/src/funTest/assets/projects/synthetic/pip/requirements.txt"
   declared_licenses:
-  - "MIT"
+  - "MIT License"
   declared_licenses_processed:
     spdx_expression: "MIT"
   vcs:
@@ -34,6 +34,7 @@ packages:
     purl: "pkg:pypi/Flask@1.0"
     declared_licenses:
     - "BSD"
+    - "BSD License"
     declared_licenses_processed:
       spdx_expression: "BSD-3-Clause"
     description: "A simple framework for building complex web applications."
@@ -64,6 +65,7 @@ packages:
     purl: "pkg:pypi/Jinja2@2.10.1"
     declared_licenses:
     - "BSD"
+    - "BSD License"
     declared_licenses_processed:
       spdx_expression: "BSD-3-Clause"
     description: "A small but fast and easy to use stand-alone template engine written\
@@ -95,6 +97,7 @@ packages:
     purl: "pkg:pypi/MarkupSafe@1.0"
     declared_licenses:
     - "BSD"
+    - "BSD License"
     declared_licenses_processed:
       spdx_expression: "BSD-3-Clause"
     description: "Implements a XML/HTML/XHTML Markup safe string for Python"
@@ -124,7 +127,7 @@ packages:
     id: "PyPI::Werkzeug:0.15.3"
     purl: "pkg:pypi/Werkzeug@0.15.3"
     declared_licenses:
-    - "BSD"
+    - "BSD License"
     - "BSD-3-Clause"
     declared_licenses_processed:
       spdx_expression: "BSD-3-Clause"
@@ -155,7 +158,7 @@ packages:
     id: "PyPI::click:6.7"
     purl: "pkg:pypi/click@6.7"
     declared_licenses:
-    - "BSD"
+    - "BSD License"
     declared_licenses_processed:
       spdx_expression: "BSD-3-Clause"
     description: "A simple wrapper around optparse for powerful command line utilities."
@@ -185,7 +188,7 @@ packages:
     id: "PyPI::itsdangerous:0.24"
     purl: "pkg:pypi/itsdangerous@0.24"
     declared_licenses:
-    - "BSD"
+    - "BSD License"
     declared_licenses_processed:
       spdx_expression: "BSD-3-Clause"
     description: "Various helpers to pass trusted data to untrusted environments and\
