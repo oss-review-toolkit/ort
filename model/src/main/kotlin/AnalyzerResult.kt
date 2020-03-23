@@ -89,11 +89,7 @@ data class AnalyzerResult(
      * True if there were any issues during the analysis, false otherwise.
      */
     @Suppress("UNUSED") // Not used in code, but shall be serialized.
-    val hasIssues by lazy {
-        issues.any { it.value.isNotEmpty() } || projects.any { project ->
-            project.scopes.any { scope -> scope.dependencies.any { pkg -> pkg.hasIssues() } }
-        }
-    }
+    val hasIssues by lazy { collectIssues().isNotEmpty() }
 }
 
 class AnalyzerResultBuilder {
