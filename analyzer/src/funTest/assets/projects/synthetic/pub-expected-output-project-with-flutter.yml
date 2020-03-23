@@ -12635,7 +12635,7 @@ packages:
     declared_licenses:
     - "BSD License"
     declared_licenses_processed:
-      spdx_expression: "BSD-2-Clause"
+      spdx_expression: "BSD-3-Clause"
     description: "Bolts is a collection of low-level libraries designed to make developing\
       \ mobile apps easier."
     homepage_url: "https://github.com/BoltsFramework/Bolts-Android"
@@ -12666,7 +12666,7 @@ packages:
     declared_licenses:
     - "BSD License"
     declared_licenses_processed:
-      spdx_expression: "BSD-2-Clause"
+      spdx_expression: "BSD-3-Clause"
     description: "Bolts is a collection of low-level libraries designed to make developing\
       \ mobile apps easier."
     homepage_url: "https://github.com/BoltsFramework/Bolts-Android"

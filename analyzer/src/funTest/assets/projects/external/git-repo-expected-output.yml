@@ -937,7 +937,7 @@ analyzer:
         declared_licenses:
         - "BSD License"
         declared_licenses_processed:
-          spdx_expression: "BSD-2-Clause"
+          spdx_expression: "BSD-3-Clause"
         description: "A framework for constructing recognizers, compilers,\n    and\
           \ translators from grammatical descriptions containing\n    Java, C#, C++,\
           \ or Python actions."
@@ -1183,7 +1183,7 @@ analyzer:
         declared_licenses:
         - "BSD License"
         declared_licenses_processed:
-          spdx_expression: "BSD-2-Clause"
+          spdx_expression: "BSD-3-Clause"
         description: "Implementation of various mathematical curves that define themselves\
           \ over a set of control points. The API is written in Java. The curves supported\
           \ are: Bezier, B-Spline, Cardinal Spline, Catmull-Rom Spline, Lagrange,\
@@ -1531,7 +1531,7 @@ analyzer:
         declared_licenses:
         - "BSD licence"
         declared_licenses_processed:
-          spdx_expression: "BSD-2-Clause"
+          spdx_expression: "BSD-3-Clause"
         description: "StringTemplate is a java template engine for generating source\
           \ code,\nweb pages, emails, or any other formatted text output.\n\nStringTemplate\
           \ is particularly good at multi-targeted code generators,\nmultiple site\
@@ -1629,7 +1629,7 @@ analyzer:
         declared_licenses:
         - "BSD licence"
         declared_licenses_processed:
-          spdx_expression: "BSD-2-Clause"
+          spdx_expression: "BSD-3-Clause"
         description: "StringTemplate is a java template engine for generating source\
           \ code,\nweb pages, emails, or any other formatted text output.\n\nStringTemplate\
           \ is particularly good at multi-targeted code generators,\nmultiple site\
