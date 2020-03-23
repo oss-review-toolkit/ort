@@ -458,7 +458,8 @@ class MavenSupport(workspaceReader: WorkspaceReader) {
                 }
 
                 val downloadUrl = "${repository.url.trimEnd('/')}/$remoteLocation"
-                return RemoteArtifact(downloadUrl, Hash.create(actualChecksum, checksum.algorithm)).also {
+                val hash = if (actualChecksum.isBlank()) Hash.NONE else Hash.create(actualChecksum, checksum.algorithm)
+                return RemoteArtifact(downloadUrl, hash).also {
                     log.debug { "Writing remote artifact for '$artifact' to disk cache." }
                     remoteArtifactCache.write(artifact.toString(), yamlMapper.writeValueAsString(it))
                 }
