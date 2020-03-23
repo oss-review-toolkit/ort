@@ -484,14 +484,14 @@ class Pip(
 
         // Use the top-level license field as well as the license classifiers as the declared licenses.
         setOf(pkgInfo["license"]).mapNotNullTo(declaredLicenses) { license ->
-            license?.textValue()?.removeSuffix(" License")?.takeUnless { it.isBlank() || it == "UNKNOWN" }
+            license?.textValue()?.takeUnless { it.isBlank() || it == "UNKNOWN" }
         }
 
         // Example license classifier:
         // "License :: OSI Approved :: GNU Library or Lesser General Public License (LGPL)"
         pkgInfo["classifiers"]?.mapNotNullTo(declaredLicenses) {
             val classifier = it.textValue().split(" :: ")
-            classifier.takeIf { it.first() == "License" }?.last()?.removeSuffix(" License")
+            classifier.takeIf { it.first() == "License" }?.last()
         }
 
         return declaredLicenses
