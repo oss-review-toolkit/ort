@@ -38,7 +38,7 @@ class ProjectTest : WordSpec({
         "get all dependencies by default" {
             val project = readAnalyzerResult("gradle-expected-output-lib.yml")
 
-            val dependencies = project.collectDependencies().map { it.toCoordinates() }
+            val dependencies = project.collectDependencies().map { it.id.toCoordinates() }
 
             dependencies shouldContainExactlyInAnyOrder listOf(
                 "Maven:junit:junit:4.12",
@@ -60,7 +60,7 @@ class ProjectTest : WordSpec({
         "get only direct dependencies for a depth of 1" {
             val project = readAnalyzerResult("gradle-expected-output-lib.yml")
 
-            val dependencies = project.collectDependencies(maxDepth = 1).map { it.toCoordinates() }
+            val dependencies = project.collectDependencies(maxDepth = 1).map { it.id.toCoordinates() }
 
             dependencies shouldContainExactlyInAnyOrder listOf(
                 "Maven:junit:junit:4.12",

@@ -123,7 +123,7 @@ internal class EvaluatedModelMapper(private val input: ReporterInput) {
 
         input.ortResult.analyzer?.result?.projects?.forEach { project ->
             val pathExcludes = input.ortResult.getExcludes().findPathExcludes(project, input.ortResult)
-            val dependencies = project.collectDependencies()
+            val dependencies = project.collectDependencies().map { it.id }
             if (pathExcludes.isEmpty()) {
                 val info = packageExcludeInfo.getValue(project.id)
                 if (info.isExcluded) {
@@ -142,7 +142,7 @@ internal class EvaluatedModelMapper(private val input: ReporterInput) {
             }
             project.scopes.forEach { scope ->
                 val scopeExcludes = input.ortResult.getExcludes().findScopeExcludes(scope)
-                val scopeDependencies = scope.collectDependencies()
+                val scopeDependencies = scope.collectDependencies().map { it.id }
                 if (scopeExcludes.isNotEmpty()) {
                     scopeDependencies.forEach { id ->
                         val info = packageExcludeInfo.getOrPut(id) { PackageExcludeInfo(id, true) }

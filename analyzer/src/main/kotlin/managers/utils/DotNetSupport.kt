@@ -164,8 +164,8 @@ class DotNetSupport(packageReferencesMap: Map<String, String>) {
             scopeDependency?.let { scope.dependencies += it }
         }
 
-        scope.collectDependencies().forEach { id ->
-            val pkg = getPackageForId(id)
+        scope.collectDependencies().forEach { packageReference ->
+            val pkg = getPackageForId(packageReference.id)
 
             if (pkg != Package.EMPTY) {
                 packages += pkg

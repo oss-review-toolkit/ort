@@ -44,7 +44,7 @@ class OrtResultTest : WordSpec({
             val ortResult = readOrtResult("external/sbt-multi-project-example-expected-output.yml")
 
             val id = Identifier("Maven:com.typesafe.akka:akka-stream_2.12:2.5.6")
-            val dependencies = ortResult.collectDependencies(id, 1).map { it.toCoordinates() }
+            val dependencies = ortResult.collectDependencies(id, 1).map { it.id.toCoordinates() }
 
             dependencies shouldContainExactlyInAnyOrder listOf(
                 "Maven:com.typesafe.akka:akka-actor_2.12:2.5.6",

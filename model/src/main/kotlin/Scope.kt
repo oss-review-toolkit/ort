@@ -55,11 +55,11 @@ data class Scope(
     fun collectDependencies(
         maxDepth: Int = -1,
         filterPredicate: (PackageReference) -> Boolean = { true }
-    ): Set<Identifier> =
+    ): Set<PackageReference> =
         dependencies.fold(mutableSetOf()) { refs, ref ->
             refs.also {
                 if (maxDepth != 0) {
-                    if (filterPredicate(ref)) it += ref.id
+                    if (filterPredicate(ref)) it += ref
                     it += ref.collectDependencies(maxDepth - 1, filterPredicate)
                 }
             }
@@ -104,7 +104,7 @@ data class Scope(
             val parents: List<Identifier>
         )
 
-        val remainingIds = collectDependencies().toMutableSet()
+        val remainingIds = collectDependencies().map { it.id }.toMutableSet()
         val queue = LinkedList<QueueItem>()
         val result = sortedMapOf<Identifier, List<Identifier>>()
 

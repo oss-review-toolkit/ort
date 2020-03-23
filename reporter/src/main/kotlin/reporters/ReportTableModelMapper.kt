@@ -46,7 +46,7 @@ private fun Project.getScopesForDependencies(excludes: Excludes): Map<Identifier
 
     scopes.forEach { scope ->
         scope.collectDependencies().forEach { dependency ->
-            result.getOrPut(dependency, { mutableMapOf() })
+            result.getOrPut(dependency.id, { mutableMapOf() })
                 .getOrPut(scope.name, { excludes.findScopeExcludes(scope.name) })
         }
     }
@@ -114,7 +114,7 @@ class ReportTableModelMapper(
             val pathExcludes = excludes.findPathExcludes(project, ortResult)
 
             val allIds = sortedSetOf(project.id)
-            allIds += project.collectDependencies()
+            project.collectDependencies().mapTo(allIds) { it.id }
 
             val projectIssues = project.collectIssues()
             val tableRows = allIds.map { id ->

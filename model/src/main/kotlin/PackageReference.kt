@@ -74,8 +74,8 @@ data class PackageReference(
     fun collectDependencies(
         maxDepth: Int = -1,
         filterPredicate: (PackageReference) -> Boolean = { true }
-    ): Set<Identifier> {
-        val result = mutableSetOf<Identifier>()
+    ): Set<PackageReference> {
+        val result = mutableSetOf<PackageReference>()
 
         val queue: Deque<Pair<PackageReference, Int>> = LinkedList()
         fun enqueue(packages: Collection<PackageReference>, level: Int) {
@@ -88,7 +88,7 @@ data class PackageReference(
         while (queue.isNotEmpty()) {
             val (pkg, level) = queue.removeFirst()
 
-            if (filterPredicate(pkg)) result += pkg.id
+            if (filterPredicate(pkg)) result += pkg
 
             enqueue(pkg.dependencies, level + 1)
         }
