@@ -13,7 +13,7 @@
 
 [1]: https://travis-ci.com/oss-review-toolkit/ort.svg?branch=master
 [2]: https://travis-ci.com/oss-review-toolkit/ort
-[3]: https://ci.appveyor.com/api/projects/status/hbc1mn5hpo9a4hcq/branch/master?svg=true
+[3]: https://ci.appveyor.com/api/projects/status/8oh5ld40c8h19jr5/branch/master?svg=true
 [4]: https://ci.appveyor.com/project/oss-review-toolkit/ort/branch/master
 [5]: https://jitpack.io/v/oss-review-toolkit/ort.svg
 [6]: https://jitpack.io/#oss-review-toolkit/ort
