@@ -56,6 +56,18 @@ pipeline {
             description: 'Use package curation data from the ClearlyDefined service'
         )
 
+        booleanParam(
+            name: 'RUN_SCANNER',
+            defaultValue: true,
+            description: 'Run the scanner tool'
+        )
+
+        booleanParam(
+            name: 'RUN_REPORTER',
+            defaultValue: true,
+            description: 'Run the reporter tool'
+        )
+
         choice(
             name: 'LOG_LEVEL',
             description: 'Log message level',
@@ -131,6 +143,14 @@ pipeline {
         }
 
         stage('Run the ORT scanner') {
+            when {
+                beforeAgent true
+
+                expression {
+                    params.RUN_SCANNER
+                }
+            }
+
             agent {
                 dockerfile {
                     additionalBuildArgs DOCKER_BUILD_ARGS
@@ -160,6 +180,14 @@ pipeline {
         }
 
         stage('Run the ORT reporter') {
+            when {
+                beforeAgent true
+
+                expression {
+                    params.RUN_REPORTER
+                }
+            }
+
             agent {
                 dockerfile {
                     additionalBuildArgs DOCKER_BUILD_ARGS
