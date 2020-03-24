@@ -30,9 +30,9 @@ import org.ossreviewtoolkit.spdx.SpdxLicenseException.*
  */
 object SpdxLicenseAliasMapping {
     /**
-     * The map of custom license ids associated with their corresponding SPDX expression.
+     * The list of pairs which associates custom license IDs with their corresponding SPDX license ID.
      */
-    internal val customLicenseIds: Map<String, SpdxExpression> = listOf(
+    internal val customLicenseIdsList = listOf(
         "afl" to AFL_3_0,
         "afl-2" to AFL_2_0,
         "afl2" to AFL_2_0,
@@ -113,26 +113,13 @@ object SpdxLicenseAliasMapping {
         "w3cl" to W3C,
         "wtf" to WTFPL,
         "zope" to ZPL_2_1
-    ).also {
-        val keys = it.unzip().first.toMutableList()
-        val uniqueKeys = keys.distinct()
-        if (keys.size > uniqueKeys.size) {
-            uniqueKeys.forEach { uniqueKey -> keys.remove(uniqueKey) }
-            require(keys.isEmpty()) {
-                val quotedKeys = keys.map { "\"$it\"" }
-                "The following ${keys.size} keys are present in the same capitalization: $quotedKeys"
-            }
-        }
-    }.toMap().mapValues { (_, v) -> v.toExpression() }.let { caseSensitiveMap ->
-        caseSensitiveMap.toSortedMap(String.CASE_INSENSITIVE_ORDER).also { caseInsensitiveMap ->
-            if (caseSensitiveMap.size > caseInsensitiveMap.size) {
-                val difference = caseSensitiveMap.keys.subtract(caseInsensitiveMap.keys).map { "\"$it\"" }
-                require(difference.isEmpty()) {
-                    "The following ${difference.size} keys are present in different capitalizations: $difference"
-                }
-            }
-        }
-    }
+    )
+
+    /**
+     * The map of custom license ids associated with their corresponding SPDX expression.
+     */
+    internal val customLicenseIds = customLicenseIdsList.toMap().mapValues { (_, v) -> v.toExpression() }
+        .toSortedMap(String.CASE_INSENSITIVE_ORDER)
 
     /**
      * The map of deprecated SPDX license ids associated with their current SPDX expression.

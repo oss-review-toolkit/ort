@@ -20,10 +20,24 @@
 package org.ossreviewtoolkit.spdx
 
 import io.kotlintest.assertSoftly
+import io.kotlintest.matchers.beEmpty
+import io.kotlintest.should
 import io.kotlintest.shouldBe
 import io.kotlintest.specs.WordSpec
 
 class SpdxLicenseAliasMappingTest : WordSpec({
+    "The list" should {
+        "not contain any duplicate keys with respect to capitalization" {
+            val keys = SpdxLicenseAliasMapping.customLicenseIdsList.unzip().first.toMutableList()
+            val uniqueKeys = SpdxLicenseAliasMapping.customLicenseIds.keys
+
+            // Remove keys one by one as calling "-" would remove all occurrences of a key.
+            uniqueKeys.forEach { uniqueKey -> keys.remove(uniqueKey) }
+
+            keys should beEmpty()
+        }
+    }
+
     "The mapping" should {
         "contain only parsable keys" {
             val unparsableLicenses = SpdxLicenseAliasMapping.mapping.filterNot { (declaredLicense, _) ->
