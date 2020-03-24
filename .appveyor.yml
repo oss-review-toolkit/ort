@@ -52,18 +52,18 @@ install:
   - echo extension_dir=ext>>php.ini
   - echo extension=php_mbstring.dll>>php.ini
   - echo extension=php_openssl.dll>>php.ini
-  - cd %APPVEYOR_BUILD_FOLDER%
+  - cd "%APPVEYOR_BUILD_FOLDER%"
   - cinst dep --version %GO_DEP_VERSION% -y
   - refreshenv
   - C:\msys64\usr\bin\bash -lc "pacman --noconfirm -Sy cvs"
-  - set PATH=%PATH%;C:\msys64\usr\bin # For CVS.
-  - set PATH=C:\Ruby25\bin;%PATH% # For licensee.
+  - set "PATH=%PATH%;C:\msys64\usr\bin" # For CVS.
+  - set "PATH=C:\Ruby25\bin;%PATH%" # For licensee.
   # Install git-repo.
   - ps: Start-FileDownload 'https://storage.googleapis.com/git-repo-downloads/repo' -FileName "$env:PROGRAMFILES\Git\usr\bin\repo"
   # Install the Android SDK.
   - ps: Start-FileDownload "https://dl.google.com/android/repository/sdk-tools-windows-$env:ANDROID_SDK_VERSION.zip"
-  - 7z x sdk-tools-windows-%ANDROID_SDK_VERSION%.zip -o%ANDROID_HOME% > nul
-  - yes | %ANDROID_HOME%\tools\bin\sdkmanager.bat platform-tools
+  - 7z x sdk-tools-windows-%ANDROID_SDK_VERSION%.zip -o"%ANDROID_HOME%" > nul
+  - yes | "%ANDROID_HOME%\tools\bin\sdkmanager.bat" platform-tools
   # Install Flutter.
   - ps: Start-FileDownload "https://storage.googleapis.com/flutter_infra/releases/stable/windows/flutter_windows_$env:FLUTTER_VERSION.zip"
   - 7z x flutter_windows_%FLUTTER_VERSION%.zip -oC:\ > nul
@@ -78,8 +78,8 @@ install:
 
 # Do something useful here to override the default MSBuild (which would fail otherwise).
 build_script:
-  - if not exist %HOME%\.gradle mkdir %HOME%\.gradle
-  - echo org.gradle.java.home=C:/Program Files/Java/jdk9>>%HOME%\.gradle\gradle.properties
+  - if not exist "%HOME%\.gradle" mkdir "%HOME%\.gradle"
+  - echo org.gradle.java.home=C:/Program Files/Java/jdk9>>"%HOME%\.gradle\gradle.properties"
   - gradlew --stacktrace detekt
 
 test_script:
