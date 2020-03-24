@@ -8,7 +8,8 @@ complexity:
   LongMethod:
     threshold: 158
   LongParameterList:
-    threshold: 8
+    constructorThreshold: 11
+    functionThreshold: 8
   NestedBlockDepth:
     threshold: 10
   TooManyFunctions:
