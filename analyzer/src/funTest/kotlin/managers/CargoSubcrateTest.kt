@@ -19,21 +19,22 @@
 
 package org.ossreviewtoolkit.analyzer.managers
 
+import io.kotest.core.spec.style.StringSpec
+import io.kotest.matchers.collections.beEmpty
+import io.kotest.matchers.should
+import io.kotest.matchers.shouldBe
+import io.kotest.matchers.shouldNotBe
+
+import java.io.File
+
 import org.ossreviewtoolkit.downloader.VersionControlSystem
 import org.ossreviewtoolkit.model.yamlMapper
+import org.ossreviewtoolkit.utils.Ci
 import org.ossreviewtoolkit.utils.normalizeVcsUrl
 import org.ossreviewtoolkit.utils.test.DEFAULT_ANALYZER_CONFIGURATION
 import org.ossreviewtoolkit.utils.test.DEFAULT_REPOSITORY_CONFIGURATION
 import org.ossreviewtoolkit.utils.test.USER_DIR
 import org.ossreviewtoolkit.utils.test.patchExpectedResult
-
-import io.kotest.matchers.collections.beEmpty
-import io.kotest.matchers.should
-import io.kotest.matchers.shouldBe
-import io.kotest.matchers.shouldNotBe
-import io.kotest.core.spec.style.StringSpec
-
-import java.io.File
 
 class CargoSubcrateTest : StringSpec() {
     private val projectDir = File("src/funTest/assets/projects/synthetic/cargo-subcrate").absoluteFile
@@ -42,7 +43,8 @@ class CargoSubcrateTest : StringSpec() {
     private val vcsRevision = vcsDir.getRevision()
 
     init {
-        "Lib project dependencies are detected correctly" {
+        // Disabled on Azure Windows build because it fails with the pre-installed Rust version 1.42.0.
+        "Lib project dependencies are detected correctly".config(enabled = !Ci.isAzureWindows) {
             val packageFile = File(projectDir, "Cargo.toml")
             val vcsPath = vcsDir.getPathToRoot(projectDir)
             val expectedResult = patchExpectedResult(

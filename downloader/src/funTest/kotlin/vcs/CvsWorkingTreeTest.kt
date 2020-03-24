@@ -19,18 +19,19 @@
 
 package org.ossreviewtoolkit.downloader.vcs
 
+import io.kotest.core.spec.Spec
+import io.kotest.core.spec.style.StringSpec
+import io.kotest.matchers.shouldBe
+import io.kotest.matchers.shouldNotBe
+
+import java.io.File
+
 import org.ossreviewtoolkit.model.VcsType
+import org.ossreviewtoolkit.utils.Ci
 import org.ossreviewtoolkit.utils.ORT_NAME
 import org.ossreviewtoolkit.utils.getOrtDataDirectory
 import org.ossreviewtoolkit.utils.safeDeleteRecursively
 import org.ossreviewtoolkit.utils.unpack
-
-import io.kotest.core.spec.Spec
-import io.kotest.matchers.shouldBe
-import io.kotest.matchers.shouldNotBe
-import io.kotest.core.spec.style.StringSpec
-
-import java.io.File
 
 class CvsWorkingTreeTest : StringSpec() {
     private val cvs = Cvs()
@@ -50,13 +51,15 @@ class CvsWorkingTreeTest : StringSpec() {
     }
 
     init {
-        "Detected CVS version is not empty" {
+        // Disabled on Azure Windows build because CVS is not installed there.
+        "Detected CVS version is not empty".config(enabled = !Ci.isAzureWindows) {
             val version = cvs.getVersion()
             println("CVS version $version detected.")
             version shouldNotBe ""
         }
 
-        "CVS detects non-working-trees" {
+        // Disabled on Azure Windows build because CVS is not installed there.
+        "CVS detects non-working-trees".config(enabled = !Ci.isAzureWindows) {
             cvs.getWorkingTree(getOrtDataDirectory()).isValid() shouldBe false
         }
 
