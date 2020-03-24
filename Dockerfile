@@ -82,6 +82,10 @@ RUN \
         lib32stdc++6 \
         libffi-dev \
         libgmp-dev \
+        libxext6 \
+        libxrender1 \
+        libxi6 \
+        libxtst6 \
         make \
         netbase \
         openssh-client \
