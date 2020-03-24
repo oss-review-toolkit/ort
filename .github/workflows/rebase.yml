@@ -12,6 +12,8 @@ jobs:
     steps:
     - name: Checkout Action
       uses: actions/checkout@master
+      with:
+        fetch-depth: 0
     - name: Rebase Action
       uses: docker://cirrusactions/rebase:latest
       env:
