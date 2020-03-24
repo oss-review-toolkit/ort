@@ -24,5 +24,8 @@ package org.ossreviewtoolkit.utils
  */
 object Ci {
     val isAppVeyor = listOf("APPVEYOR", "CI").all { Os.env[it]?.toBoolean() == true }
+    val isAzure = Os.env["TF_BUILD"]?.toBoolean() == true
+    val isAzureLinux = isAzure && Os.env["AGENT_OS"] == "Linux"
+    val isAzureWindows = isAzure && Os.env["AGENT_OS"] == "Windows_NT"
     val isTravis = listOf("TRAVIS", "CI").all { Os.env[it]?.toBoolean() == true }
 }
