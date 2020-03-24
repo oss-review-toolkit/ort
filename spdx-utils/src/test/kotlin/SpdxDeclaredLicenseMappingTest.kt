@@ -22,10 +22,24 @@ package org.ossreviewtoolkit.spdx
 import org.ossreviewtoolkit.spdx.SpdxExpression.Strictness
 
 import io.kotlintest.assertSoftly
+import io.kotlintest.matchers.beEmpty
+import io.kotlintest.should
 import io.kotlintest.shouldBe
 import io.kotlintest.specs.WordSpec
 
 class SpdxDeclaredLicenseMappingTest : WordSpec({
+    "The list" should {
+        "not contain any duplicate keys with respect to capitalization" {
+            val keys = SpdxDeclaredLicenseMapping.mappingList.unzip().first.toMutableList()
+            val uniqueKeys = SpdxDeclaredLicenseMapping.mapping.keys
+
+            // Remove keys one by one as calling "-" would remove all occurrences of a key.
+            uniqueKeys.forEach { uniqueKey -> keys.remove(uniqueKey) }
+
+            keys should beEmpty()
+        }
+    }
+
     "The mapping" should {
         "contain only unparsable keys" {
             val parsableLicenses = SpdxDeclaredLicenseMapping.mapping.filter { (declaredLicense, _) ->
