@@ -2,8 +2,6 @@ skip_branch_with_pr: true
 
 environment:
   HOME: $(HOMEDRIVE)$(HOMEPATH)
-  ANDROID_HOME: C:\android-sdk
-  ANDROID_SDK_VERSION: 3859397
   BOWER_VERSION: 1.8.8
   COMPOSER_VERSION: 4.8.0
   CONAN_VERSION: 1.18.0
@@ -60,10 +58,6 @@ install:
   - set "PATH=C:\Ruby25\bin;%PATH%" # For licensee.
   # Install git-repo.
   - ps: Start-FileDownload 'https://storage.googleapis.com/git-repo-downloads/repo' -FileName "$env:PROGRAMFILES\Git\usr\bin\repo"
-  # Install the Android SDK.
-  - ps: Start-FileDownload "https://dl.google.com/android/repository/sdk-tools-windows-$env:ANDROID_SDK_VERSION.zip"
-  - 7z x sdk-tools-windows-%ANDROID_SDK_VERSION%.zip -o"%ANDROID_HOME%" > nul
-  - yes | "%ANDROID_HOME%\tools\bin\sdkmanager.bat" platform-tools
   # Install Flutter.
   - ps: Start-FileDownload "https://storage.googleapis.com/flutter_infra/releases/stable/windows/flutter_windows_$env:FLUTTER_VERSION.zip"
   - 7z x flutter_windows_%FLUTTER_VERSION%.zip -oC:\ > nul
