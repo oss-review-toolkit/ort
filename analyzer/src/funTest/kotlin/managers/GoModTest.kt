@@ -19,14 +19,6 @@
 
 package org.ossreviewtoolkit.analyzer.managers
 
-import org.ossreviewtoolkit.downloader.VersionControlSystem
-import org.ossreviewtoolkit.model.yamlMapper
-import org.ossreviewtoolkit.utils.normalizeVcsUrl
-import org.ossreviewtoolkit.utils.test.DEFAULT_ANALYZER_CONFIGURATION
-import org.ossreviewtoolkit.utils.test.DEFAULT_REPOSITORY_CONFIGURATION
-import org.ossreviewtoolkit.utils.test.USER_DIR
-import org.ossreviewtoolkit.utils.test.patchExpectedResult
-
 import io.kotlintest.matchers.beEmpty
 import io.kotlintest.should
 import io.kotlintest.shouldBe
@@ -35,6 +27,15 @@ import io.kotlintest.specs.StringSpec
 
 import java.io.File
 
+import org.ossreviewtoolkit.downloader.VersionControlSystem
+import org.ossreviewtoolkit.model.yamlMapper
+import org.ossreviewtoolkit.utils.Os
+import org.ossreviewtoolkit.utils.normalizeVcsUrl
+import org.ossreviewtoolkit.utils.test.DEFAULT_ANALYZER_CONFIGURATION
+import org.ossreviewtoolkit.utils.test.DEFAULT_REPOSITORY_CONFIGURATION
+import org.ossreviewtoolkit.utils.test.USER_DIR
+import org.ossreviewtoolkit.utils.test.patchExpectedResult
+
 class GoModTest : StringSpec() {
     private val projectDir = File("src/funTest/assets/projects/synthetic/gomod").absoluteFile
     private val vcsDir = VersionControlSystem.forDirectory(projectDir)!!
@@ -42,7 +43,7 @@ class GoModTest : StringSpec() {
     private val vcsRevision = vcsDir.getRevision()
 
     init {
-        "Project dependencies are detected correctly" {
+        "Project dependencies are detected correctly".config(enabled = !Os.isWindows) {
             val definitionFile = File(projectDir, "go.mod")
             val vcsPath = vcsDir.getPathToRoot(projectDir)
             val expectedResult = patchExpectedResult(
