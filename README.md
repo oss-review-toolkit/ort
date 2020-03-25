@@ -2,7 +2,7 @@
 
 &nbsp;
 
-| Linux (OpenJDK 10)             | Windows (Oracle JDK 11)         | JitPack (OpenJDK 8)             |
+| Linux (OpenJDK 11)             | Windows (Oracle JDK 11)         | JitPack (OpenJDK 8)             |
 | :----------------------------- | :------------------------------ | :------------------------------ |
 | [![Linux build status][1]][2]  | [![Windows build status][3]][4] | [![JitPack build status][5]][6] |
 | [![Linux code coverage][7]][8] |                                 |                                 |

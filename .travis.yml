@@ -4,9 +4,6 @@ sudo: required
 
 language: java
 
-jdk:
-  - openjdk10
-
 before_cache:
   - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
   - rm -fr $HOME/.gradle/caches/*/plugin-resolution/
@@ -25,7 +22,7 @@ cache:
 env:
   global:
     - ANDROID_HOME="/opt/android"
-    - ANDROID_SDK_VERSION="4333796"
+    - ANDROID_SDK_VERSION="6200805"
     - BOWER_VERSION="1.8.8"
     - CONAN_VERSION="1.18.0"
     - FLUTTER_HOME="/opt/flutter"
@@ -64,11 +61,10 @@ install:
   - export PATH=$PATH:$HOME/.cargo/bin
   - curl https://storage.googleapis.com/git-repo-downloads/repo > ~/bin/repo
   - chmod a+x ~/bin/repo
-  - curl -Os https://dl.google.com/android/repository/sdk-tools-linux-$ANDROID_SDK_VERSION.zip
-  - unzip -q sdk-tools-linux-$ANDROID_SDK_VERSION.zip -d $ANDROID_HOME
-  - rm sdk-tools-linux-$ANDROID_SDK_VERSION.zip
-  - export SDKMANAGER_OPTS="--add-modules java.xml.bind"
-  - yes | $ANDROID_HOME/tools/bin/sdkmanager --verbose "platform-tools"
+  - curl -Os https://dl.google.com/android/repository/commandlinetools-linux-${ANDROID_SDK_VERSION}_latest.zip
+  - unzip -q commandlinetools-linux-${ANDROID_SDK_VERSION}_latest.zip -d $ANDROID_HOME
+  - rm commandlinetools-linux-${ANDROID_SDK_VERSION}_latest.zip
+  - yes | $ANDROID_HOME/tools/bin/sdkmanager --sdk_root=$ANDROID_HOME "platform-tools"
   - curl -Os https://storage.googleapis.com/flutter_infra/releases/stable/linux/flutter_linux_$FLUTTER_VERSION.tar.xz
   - tar xf flutter_linux_$FLUTTER_VERSION.tar.xz -C $(dirname $FLUTTER_HOME)
   - rm flutter_linux_$FLUTTER_VERSION.tar.xz
