@@ -19,22 +19,24 @@
 
 package org.ossreviewtoolkit.analyzer.managers
 
-import org.ossreviewtoolkit.analyzer.AbstractPackageManagerFactory
-import org.ossreviewtoolkit.analyzer.PackageManager
-import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
-import org.ossreviewtoolkit.model.config.RepositoryConfiguration
-import org.ossreviewtoolkit.utils.CommandLineTool
-import org.ossreviewtoolkit.utils.Os
-import org.ossreviewtoolkit.utils.getCommonFileParent
-import org.ossreviewtoolkit.utils.log
-import org.ossreviewtoolkit.utils.suppressInput
-
 import com.vdurmont.semver4j.Requirement
 import com.vdurmont.semver4j.Semver
 
 import java.io.File
 import java.io.IOException
 import java.util.Properties
+
+import org.ossreviewtoolkit.analyzer.AbstractPackageManagerFactory
+import org.ossreviewtoolkit.analyzer.PackageManager
+import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
+import org.ossreviewtoolkit.model.config.RepositoryConfiguration
+import org.ossreviewtoolkit.utils.CommandLineTool
+import org.ossreviewtoolkit.utils.ORT_NAME
+import org.ossreviewtoolkit.utils.Os
+import org.ossreviewtoolkit.utils.getCommonFileParent
+import org.ossreviewtoolkit.utils.log
+import org.ossreviewtoolkit.utils.safeDeleteRecursively
+import org.ossreviewtoolkit.utils.suppressInput
 
 /**
  * The [SBT](https://www.scala-sbt.org/) package manager for Scala.
@@ -75,6 +77,15 @@ class Sbt(
     }
 
     override fun command(workingDir: File?) = if (Os.isWindows) "sbt.bat" else "sbt"
+
+    override fun getVersion(workingDir: File?): String {
+        if (workingDir != null) return super.getVersion(workingDir)
+
+        // Avoid newer Sbt versions to warn about "Neither build.sbt nor a 'project' directory in the current directory"
+        // and prompt the user to continue or quit on Windows where the "-batch" option is not supported.
+        val dummyProjectDir = createTempDir(ORT_NAME, managerName).also { it.resolve("build.sbt").createNewFile() }
+        return super.getVersion(dummyProjectDir).also { dummyProjectDir.safeDeleteRecursively() }
+    }
 
     override fun getVersionArguments() = "$BATCH_MODE $LOG_NO_FORMAT sbtVersion"
 
