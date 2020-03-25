@@ -57,9 +57,9 @@ class Sbt(
         // https://github.com/sbt/sbt-launcher-package/blob/25c1b96/src/universal/bin/sbt#L449.
         private val BATCH_MODE = "-batch".takeUnless { Os.isWindows }.orEmpty()
 
-        // Disable the JLine terminal. Without this the JLine terminal can occasionally send a signal that causes the
-        // parent process to suspend, for example IntelliJ can be suspended while running the SbtTest.
-        private val DISABLE_JLINE = "-Djline.terminal=none".let {
+        // Enable the CI mode which disables console colors and supershell, see
+        // https://www.scala-sbt.org/1.x/docs/Command-Line-Reference.html#Command+Line+Options.
+        private val CI_MODE = "-Dsbt.ci=true".let {
             if (Os.isWindows) {
                 "\"$it\""
             } else {
@@ -67,8 +67,9 @@ class Sbt(
             }
         }
 
-        // See https://github.com/sbt/sbt/issues/2695.
-        private val LOG_NO_FORMAT = "-Dsbt.log.noformat=true".let {
+        // Disable the JLine terminal. Without this the JLine terminal can occasionally send a signal that causes the
+        // parent process to suspend, for example IntelliJ can be suspended while running the SbtTest.
+        private val DISABLE_JLINE = "-Djline.terminal=none".let {
             if (Os.isWindows) {
                 "\"$it\""
             } else {
@@ -98,7 +99,7 @@ class Sbt(
         return super.getVersion(dummyProjectDir).also { dummyProjectDir.safeDeleteRecursively() }
     }
 
-    override fun getVersionArguments() = "$BATCH_MODE $DISABLE_JLINE $LOG_NO_FORMAT sbtVersion"
+    override fun getVersionArguments() = "$BATCH_MODE $CI_MODE $DISABLE_JLINE sbtVersion"
 
     override fun transformVersion(output: String): String {
         val versions = output.lines().mapNotNull { line ->
@@ -133,7 +134,7 @@ class Sbt(
 
         fun runSbt(vararg command: String) =
             suppressInput {
-                run(workingDir, BATCH_MODE, DISABLE_JLINE, LOG_NO_FORMAT, *command)
+                run(workingDir, BATCH_MODE, CI_MODE, DISABLE_JLINE, *command)
             }
 
         // Get the list of project names.
