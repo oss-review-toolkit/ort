@@ -59,23 +59,13 @@ class Sbt(
 
         // Enable the CI mode which disables console colors and supershell, see
         // https://www.scala-sbt.org/1.x/docs/Command-Line-Reference.html#Command+Line+Options.
-        private val CI_MODE = "-Dsbt.ci=true".let {
-            if (Os.isWindows) {
-                "\"$it\""
-            } else {
-                it
-            }
-        }
+        private val CI_MODE = "-Dsbt.ci=true".addQuotesOnWindows()
 
         // Disable the JLine terminal. Without this the JLine terminal can occasionally send a signal that causes the
         // parent process to suspend, for example IntelliJ can be suspended while running the SbtTest.
-        private val DISABLE_JLINE = "-Djline.terminal=none".let {
-            if (Os.isWindows) {
-                "\"$it\""
-            } else {
-                it
-            }
-        }
+        private val DISABLE_JLINE = "-Djline.terminal=none".addQuotesOnWindows()
+
+        private fun String.addQuotesOnWindows() = if (Os.isWindows) "\"$this\"" else this
     }
 
     class Factory : AbstractPackageManagerFactory<Sbt>("SBT") {
