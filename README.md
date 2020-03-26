@@ -381,4 +381,4 @@ Copyright (C) 2017-2020 HERE Europe B.V.
 
 See the [LICENSE](./LICENSE) file in the root of this project for license details.
 
-OSS Review Toolkit (ORT) is a [Linux Foundation project](https://www.linuxfoundation.org).
+OSS Review Toolkit (ORT) is a [Linux Foundation project](https://www.linuxfoundation.org) and part of [ACT](https://automatecompliance.org/).
