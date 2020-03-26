@@ -83,8 +83,14 @@ const val PYDEP_REVISION = "license-and-classifiers"
 object VirtualEnv : CommandLineTool {
     override fun command(workingDir: File?) = "virtualenv"
 
+    override fun transformVersion(output: String) =
+        // virtualenv could report versions like:
+        // 16.6.1
+        // virtualenv 20.0.14 from /usr/local/lib/python2.7/dist-packages/virtualenv/__init__.pyc
+        output.removePrefix("virtualenv ").substringBefore(' ')
+
     // Allow to use versions that are known to work. Note that virtualenv bundles a version of pip.
-    override fun getVersionRequirement(): Requirement = Requirement.buildIvy("[15.1,17.0[")
+    override fun getVersionRequirement(): Requirement = Requirement.buildIvy("[15.1,20.1[")
 }
 
 object PythonVersion : CommandLineTool {
