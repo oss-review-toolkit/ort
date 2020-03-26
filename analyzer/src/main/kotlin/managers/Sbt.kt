@@ -52,8 +52,9 @@ class Sbt(
         private val PROJECT_REGEX = Regex("\\[info] \t [ *] (.+)")
         private val POM_REGEX = Regex("\\[info] Wrote (.+\\.pom)")
 
-        // Batch mode (which suppresses interactive prompts) is only supported on non-Windows, see
-        // https://github.com/sbt/sbt-launcher-package/blob/d251388/src/universal/bin/sbt#L86.
+        // Batch mode (which suppresses interactive prompts) is not supported on Windows, compare
+        // https://github.com/sbt/sbt-launcher-package/blob/25c1b96/src/universal/bin/sbt.bat#L861 with
+        // https://github.com/sbt/sbt-launcher-package/blob/25c1b96/src/universal/bin/sbt#L449.
         private val BATCH_MODE = "-batch".takeUnless { Os.isWindows }.orEmpty()
 
         // See https://github.com/sbt/sbt/issues/2695.
