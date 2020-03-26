@@ -22,10 +22,10 @@ cache:
   - $(HOME)\.gradle\wrapper\dists -> gradle\wrapper\gradle-wrapper.properties
   - $(HOME)\.ivy2
   - $(HOME)\.m2\repository
-  - $(HOME)\.ort\analyzer\cache\http
-  - $(HOME)\.ort\analyzer\cache\remote_artifacts
-  - $(HOME)\.ort\downloader\cache\http
-  - $(HOME)\.ort\scanner\cache\http
+  - $(HOME)\.ort\analyzer\cache
+  - $(HOME)\.ort\downloader\cache
+  - $(HOME)\.ort\scanner\cache
+  - $(HOME)\.ort\utils\cache
 
 clone_depth: 50
 
