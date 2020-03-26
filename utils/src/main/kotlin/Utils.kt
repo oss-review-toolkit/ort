@@ -281,7 +281,7 @@ fun normalizeVcsUrl(vcsUrl: String): String {
                     "ssh://$host$path"
                 } else {
                     // Remove any user name and "www" prefix.
-                    val host = uri.authority.substringAfter("@").removePrefix("www.")
+                    val host = uri.authority.substringAfter('@').removePrefix("www.")
                     "https://$host$path"
                 }
             }

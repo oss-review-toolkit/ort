@@ -251,8 +251,8 @@ class Pub(
                 if (pkgInfoFromLockFile != null && pkgInfoFromLockFile["source"].textValueOrEmpty() != "sdk") {
                     val id = Identifier(
                         type = managerName,
-                        namespace = packageName.substringBefore("/"),
-                        name = packageName.substringAfter("/"),
+                        namespace = packageName.substringBefore('/'),
+                        name = packageName.substringAfter('/'),
                         version = pkgInfoFromLockFile["version"].textValueOrEmpty()
                     )
 
@@ -374,8 +374,8 @@ class Pub(
         return Project(
             id = Identifier(
                 type = managerName,
-                namespace = rawName.substringBefore("/"),
-                name = rawName.substringAfter("/"),
+                namespace = rawName.substringBefore('/'),
+                name = rawName.substringAfter('/'),
                 version = data["version"].textValueOrEmpty()
             ),
             definitionFilePath = VersionControlSystem.getPathInfo(definitionFile).path,
@@ -438,8 +438,8 @@ class Pub(
 
                 val id = Identifier(
                     type = managerName,
-                    namespace = rawName.substringBefore("/"),
-                    name = rawName.substringAfter("/"),
+                    namespace = rawName.substringBefore('/'),
+                    name = rawName.substringAfter('/'),
                     version = version
                 )
 

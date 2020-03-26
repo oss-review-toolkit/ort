@@ -78,7 +78,7 @@ class GoMod(
 
     override fun getVersionArguments() = "version"
 
-    override fun transformVersion(output: String) = output.removePrefix("go version go").substringBefore(" ")
+    override fun transformVersion(output: String) = output.removePrefix("go version go").substringBefore(' ')
 
     override fun mapDefinitionFiles(definitionFiles: List<File>): List<File> =
         definitionFiles.filterNot { definitionFile ->

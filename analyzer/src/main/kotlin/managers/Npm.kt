@@ -224,7 +224,7 @@ open class Npm(
             // Download package info from registry.npmjs.org.
             // TODO: check if unpkg.com can be used as a fallback in case npmjs.org is down.
             val encodedName = if (rawName.startsWith("@")) {
-                "@${URLEncoder.encode(rawName.substringAfter("@"), "UTF-8")}"
+                "@${URLEncoder.encode(rawName.substringAfter('@'), "UTF-8")}"
             } else {
                 rawName
             }

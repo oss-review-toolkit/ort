@@ -443,7 +443,7 @@ class MavenSupport(workspaceReader: WorkspaceReader) {
 
                     // Sometimes the checksum file contains a path after the actual checksum, so strip everything after
                     // the first space.
-                    tempFile.useLines { it.first().substringBefore(" ") }
+                    tempFile.useLines { it.first().substringBefore(' ') }
                 } catch (e: Exception) {
                     e.showStackTrace()
 

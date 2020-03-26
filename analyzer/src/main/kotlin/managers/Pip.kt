@@ -195,7 +195,7 @@ class Pip(
 
     override fun command(workingDir: File?) = "pip"
 
-    override fun transformVersion(output: String) = output.removePrefix("pip ").substringBefore(" ")
+    override fun transformVersion(output: String) = output.removePrefix("pip ").substringBefore(' ')
 
     private fun runPipInVirtualEnv(virtualEnvDir: File, workingDir: File, vararg commandArgs: String) =
         runInVirtualEnv(virtualEnvDir, workingDir, command(workingDir), *TRUSTED_HOSTS, *commandArgs)

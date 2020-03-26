@@ -208,7 +208,7 @@ class Bundler(
         val gemspecFile = getGemspecFile(workingDir)
         return if (gemspecFile != null) {
             // Project is a gem.
-            getGemspec(gemspecFile.name.substringBefore("."), workingDir)
+            getGemspec(gemspecFile.name.substringBefore('.'), workingDir)
         } else {
             GemSpec(workingDir.name, "", "", sortedSetOf(), "", emptySet(), VcsInfo.EMPTY, RemoteArtifact.EMPTY)
         }
