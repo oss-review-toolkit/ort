@@ -464,7 +464,7 @@ packages:
     declared_licenses_processed:
       spdx_expression: "Apache-2.0"
     description: "Signet is an OAuth 1.0 / OAuth 2.0 implementation.\n"
-    homepage_url: "https://github.com/google/signet/"
+    homepage_url: "https://github.com/googleapis/signet"
     binary_artifact:
       url: ""
       hash:
