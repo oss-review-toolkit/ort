@@ -78,6 +78,7 @@ install:
 
 before_script:
   - reuse lint
+  - sed -i -r 's,(^distributionUrl=)(.+)-all\.zip$,\1\2-bin.zip,' gradle/wrapper/gradle-wrapper.properties
 
 script:
   - set -o pipefail
