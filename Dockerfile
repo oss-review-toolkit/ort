@@ -83,8 +83,8 @@ RUN \
         libffi-dev \
         libgmp-dev \
         libxext6 \
-        libxrender1 \
         libxi6 \
+        libxrender1 \
         libxtst6 \
         make \
         netbase \
