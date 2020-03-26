@@ -163,13 +163,13 @@ class WebAppOrtResult {
                         ...declaredLicenses,
                         ...webAppPackage.declaredLicenses
                     ]);
-                    this.#declaredLicenses = Array.from(declaredLicenses);
+                    this.#declaredLicenses = Array.from(declaredLicenses).sort();
 
                     detectedLicenses = new Set([
                         ...this.#detectedLicenses,
                         ...webAppPackage.detectedLicenses
                     ]);
-                    this.#detectedLicenses = Array.from(detectedLicenses);
+                    this.#detectedLicenses = Array.from(detectedLicenses).sort();
                 }
             }
 
