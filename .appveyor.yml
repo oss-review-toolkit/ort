@@ -18,12 +18,7 @@ environment:
   YARN_VERSION: 1.21.1
 
 cache:
-  - $(HOME)\.gradle\caches\build-cache-1
-  - $(HOME)\.gradle\caches\jars-1
-  - $(HOME)\.gradle\caches\jars-2
-  - $(HOME)\.gradle\caches\jars-3
-  - $(HOME)\.gradle\caches\modules-2
-  - $(HOME)\.gradle\caches\transforms-1
+  - $(HOME)\.gradle\caches
   - $(HOME)\.gradle\wrapper\dists -> gradle\wrapper\gradle-wrapper.properties
   - $(HOME)\.ivy2
   - $(HOME)\.m2\repository
@@ -87,6 +82,9 @@ test_script:
     ) else (
       gradlew --stacktrace -Dkotlintest.tags.exclude=ExpensiveTag test funTest
     )
+
+after_test:
+  - gradlew --stop
 
 on_finish:
   - ps: |
