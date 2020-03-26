@@ -51,7 +51,7 @@ const PackageLicenses = (props) => {
                         label="Declared"
                         key="ort-package-declared-licenses"
                     >
-                        {Array.from(webAppPackage.declaredLicenses).join(', ')}
+                        {Array.from(webAppPackage.declaredLicenses).sort().join(', ')}
                     </Item>
                 )
             }
@@ -84,7 +84,7 @@ const PackageLicenses = (props) => {
                         label="Detected"
                         key="ort-package-detected-licenses"
                     >
-                        {Array.from(webAppPackage.detectedLicenses).join(', ')}
+                        {Array.from(webAppPackage.detectedLicenses).sort().join(', ')}
                     </Item>
                 )
             }
