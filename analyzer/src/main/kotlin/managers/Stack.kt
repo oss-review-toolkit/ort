@@ -134,7 +134,7 @@ class Stack(
         fun mapNamesToVersions(scope: String): Map<String, String> {
             val dependencies = runStack("ls", "dependencies", "--global-hints", "--$scope").stdout
             return dependencies.lines().associate {
-                Pair(it.substringBefore(" "), it.substringAfter(" "))
+                Pair(it.substringBefore(' '), it.substringAfter(' '))
             }.also {
                 log.debug { "Parsed ${it.size} dependency versions from list." }
             }

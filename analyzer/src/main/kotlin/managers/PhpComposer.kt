@@ -227,8 +227,8 @@ class PhpComposer(
         return Project(
             id = Identifier(
                 type = managerName,
-                namespace = rawName.substringBefore("/"),
-                name = rawName.substringAfter("/"),
+                namespace = rawName.substringBefore('/'),
+                name = rawName.substringAfter('/'),
                 version = json["version"].textValueOrEmpty()
             ),
             definitionFilePath = VersionControlSystem.getPathInfo(definitionFile).path,
@@ -259,8 +259,8 @@ class PhpComposer(
                 packages[rawName] = Package(
                     id = Identifier(
                         type = managerName,
-                        namespace = rawName.substringBefore("/"),
-                        name = rawName.substringAfter("/"),
+                        namespace = rawName.substringBefore('/'),
+                        name = rawName.substringAfter('/'),
                         version = version
                     ),
                     declaredLicenses = parseDeclaredLicenses(pkgInfo),
