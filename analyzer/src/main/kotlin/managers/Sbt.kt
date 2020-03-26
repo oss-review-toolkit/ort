@@ -65,6 +65,8 @@ class Sbt(
         // parent process to suspend, for example IntelliJ can be suspended while running the SbtTest.
         private val DISABLE_JLINE = "-Djline.terminal=none".addQuotesOnWindows()
 
+        private val SBT_OPTIONS = arrayOf(BATCH_MODE, CI_MODE, DISABLE_JLINE)
+
         private fun String.addQuotesOnWindows() = if (Os.isWindows) "\"$this\"" else this
     }
 
@@ -89,7 +91,7 @@ class Sbt(
         return super.getVersion(dummyProjectDir).also { dummyProjectDir.safeDeleteRecursively() }
     }
 
-    override fun getVersionArguments() = "$BATCH_MODE $CI_MODE $DISABLE_JLINE sbtVersion"
+    override fun getVersionArguments() = "${SBT_OPTIONS.joinToString(" ")} sbtVersion"
 
     override fun transformVersion(output: String): String {
         val versions = output.lines().mapNotNull { line ->
@@ -124,7 +126,7 @@ class Sbt(
 
         fun runSbt(vararg command: String) =
             suppressInput {
-                run(workingDir, BATCH_MODE, CI_MODE, DISABLE_JLINE, *command)
+                run(workingDir, *SBT_OPTIONS, *command)
             }
 
         // Get the list of project names.
