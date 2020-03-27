@@ -353,17 +353,19 @@ class Pub(
     }
 
     private fun parseProject(definitionFile: File, scopes: SortedSet<Scope>): Project {
-        val data = yamlMapper.readTree(definitionFile)
-        val homepageUrl = data["homepage"].textValueOrEmpty()
-        val vcs = parseVcsInfo(data)
-        val rawName = data["description"]["name"]?.textValue() ?: definitionFile.parentFile.name
+        // See https://dart.dev/tools/pub/pubspec for supported fields.
+        val pubspec = yamlMapper.readTree(definitionFile)
+
+        val homepageUrl = pubspec["homepage"].textValueOrEmpty()
+        val vcs = parseVcsInfo(pubspec)
+        val rawName = pubspec["description"]["name"]?.textValue() ?: definitionFile.parentFile.name
 
         return Project(
             id = Identifier(
                 type = managerName,
                 namespace = rawName.substringBefore('/'),
                 name = rawName.substringAfter('/'),
-                version = data["version"].textValueOrEmpty()
+                version = pubspec["version"].textValueOrEmpty()
             ),
             definitionFilePath = VersionControlSystem.getPathInfo(definitionFile).path,
             // Pub does not declare any licenses in the pubspec files, therefore we keep this empty.
