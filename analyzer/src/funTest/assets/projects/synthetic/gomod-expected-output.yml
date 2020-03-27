@@ -60,8 +60,6 @@ project:
     dependencies:
     - id: "GoMod::github.com/fatih/color:v1.7.0"
       linkage: "PROJECT_STATIC"
-    - id: "GoMod::github.com/hashicorp/go-multierror:v1.0.0"
-      linkage: "PROJECT_STATIC"
     - id: "GoMod::github.com/mattn/go-colorable:v0.1.4"
       linkage: "PROJECT_STATIC"
     - id: "GoMod::github.com/mattn/go-isatty:v0.0.10"
@@ -69,8 +67,6 @@ project:
       dependencies:
       - id: "GoMod::golang.org/x/sys:v0.0.0-20191008105621-543471e840be"
         linkage: "PROJECT_STATIC"
-    - id: "GoMod::golang.org/x/oauth2:v0.0.0-20190226205417-e64efc72b421"
-      linkage: "PROJECT_STATIC"
 packages:
 - package:
     id: "GoMod::cloud.google.com/go:v0.34.0"
