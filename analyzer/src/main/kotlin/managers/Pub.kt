@@ -399,7 +399,7 @@ class Pub(
                     pkgInfoFromLockFile["source"].textValueOrEmpty() != "sdk" -> {
                         val pkgInfoYamlFile = readPackageInfoFromCache(pkgInfoFromLockFile)
                         vcsFromPackage = parseVcsInfo(pkgInfoYamlFile)
-                        description = parseDescriptionInfo(pkgInfoYamlFile)
+                        description = pkgInfoYamlFile["description"].textValueOrEmpty()
                         rawName = pkgInfoFromLockFile["description"]["name"].textValueOrEmpty()
                         homepageUrl = pkgInfoFromLockFile["description"]["url"].textValueOrEmpty()
                     }
@@ -479,10 +479,6 @@ class Pub(
     private fun readPackageInfoFromCache(packageInfo: JsonNode): JsonNode {
         val definitionFile = reader.findFile(packageInfo, "pubspec.yaml")
         return yamlMapper.readTree(definitionFile)
-    }
-
-    private fun parseDescriptionInfo(packageInfo: JsonNode): String {
-        return packageInfo["description"].textValueOrEmpty()
     }
 
     private fun parseVcsInfo(packageInfo: JsonNode): VcsInfo {
