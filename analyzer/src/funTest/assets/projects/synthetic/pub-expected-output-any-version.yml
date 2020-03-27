@@ -100,7 +100,7 @@ packages:
     declared_licenses: []
     declared_licenses_processed: {}
     description: "Static analyzer for Dart."
-    homepage_url: "https://pub.dartlang.org"
+    homepage_url: "https://github.com/dart-lang/sdk/tree/master/pkg/analyzer"
     binary_artifact:
       url: ""
       hash:
@@ -129,7 +129,7 @@ packages:
     declared_licenses_processed: {}
     description: "Library for defining parsers for parsing raw command-line arguments\
       \ into a set of options and values using GNU and POSIX style options."
-    homepage_url: "https://pub.dartlang.org"
+    homepage_url: "https://github.com/dart-lang/args"
     binary_artifact:
       url: ""
       hash:
@@ -157,7 +157,7 @@ packages:
     declared_licenses: []
     declared_licenses_processed: {}
     description: "Utility functions and classes related to the 'dart:async' library."
-    homepage_url: "https://pub.dartlang.org"
+    homepage_url: "https://www.github.com/dart-lang/async"
     binary_artifact:
       url: ""
       hash:
@@ -186,7 +186,7 @@ packages:
     declared_licenses_processed: {}
     description: "A flexible syntax for boolean expressions, based on a simplified\
       \ version of Dart's expression syntax."
-    homepage_url: "https://pub.dartlang.org"
+    homepage_url: "https://github.com/dart-lang/boolean_selector"
     binary_artifact:
       url: ""
       hash:
@@ -217,7 +217,7 @@ packages:
       \ with characters in Dart, there is no simple way to represent the code point\
       \ of a character. This library declares readable symbolic names for character\
       \ codes."
-    homepage_url: "https://pub.dartlang.org"
+    homepage_url: "https://github.com/dart-lang/charcode"
     binary_artifact:
       url: ""
       hash:
@@ -245,7 +245,7 @@ packages:
     declared_licenses: []
     declared_licenses_processed: {}
     description: "Collections and utilities functions and classes related to collections."
-    homepage_url: "https://pub.dartlang.org"
+    homepage_url: "https://www.github.com/dart-lang/collection"
     binary_artifact:
       url: ""
       hash:
@@ -273,7 +273,7 @@ packages:
     declared_licenses: []
     declared_licenses_processed: {}
     description: "Utilities for converting between data representations."
-    homepage_url: "https://pub.dartlang.org"
+    homepage_url: "https://github.com/dart-lang/convert"
     binary_artifact:
       url: ""
       hash:
@@ -301,7 +301,7 @@ packages:
     declared_licenses: []
     declared_licenses_processed: {}
     description: "Library of cryptographic functions."
-    homepage_url: "https://pub.dartlang.org"
+    homepage_url: "https://www.github.com/dart-lang/crypto"
     binary_artifact:
       url: ""
       hash:
@@ -329,7 +329,7 @@ packages:
     declared_licenses: []
     declared_licenses_processed: {}
     description: "A library for parsing CSS."
-    homepage_url: "https://pub.dartlang.org"
+    homepage_url: "https://github.com/dart-lang/csslib"
     binary_artifact:
       url: ""
       hash:
@@ -357,7 +357,7 @@ packages:
     declared_licenses: []
     declared_licenses_processed: {}
     description: "Library for 32- and 64-bit signed fixed-width integers."
-    homepage_url: "https://pub.dartlang.org"
+    homepage_url: "https://github.com/dart-lang/fixnum"
     binary_artifact:
       url: ""
       hash:
@@ -385,7 +385,7 @@ packages:
     declared_licenses: []
     declared_licenses_processed: {}
     description: "Front end for compilation of Dart code."
-    homepage_url: "https://pub.dartlang.org"
+    homepage_url: "https://github.com/dart-lang/sdk/tree/master/pkg/front_end"
     binary_artifact:
       url: ""
       hash:
@@ -413,7 +413,7 @@ packages:
     declared_licenses: []
     declared_licenses_processed: {}
     description: "Bash-style filename globbing."
-    homepage_url: "https://pub.dartlang.org"
+    homepage_url: "https://github.com/dart-lang/glob"
     binary_artifact:
       url: ""
       hash:
@@ -441,7 +441,7 @@ packages:
     declared_licenses: []
     declared_licenses_processed: {}
     description: "APIs for parsing and manipulating HTML content outside the browser."
-    homepage_url: "https://pub.dartlang.org"
+    homepage_url: "https://github.com/dart-lang/html"
     binary_artifact:
       url: ""
       hash:
@@ -469,7 +469,7 @@ packages:
     declared_licenses: []
     declared_licenses_processed: {}
     description: "A composable, cross-platform, Future-based API for making HTTP requests."
-    homepage_url: "https://pub.dartlang.org"
+    homepage_url: "https://github.com/dart-lang/http"
     binary_artifact:
       url: ""
       hash:
@@ -498,7 +498,7 @@ packages:
     declared_licenses_processed: {}
     description: "A dart:io HttpServer wrapper that handles requests from multiple\
       \ servers."
-    homepage_url: "https://pub.dartlang.org"
+    homepage_url: "https://github.com/dart-lang/http_multi_server"
     binary_artifact:
       url: ""
       hash:
@@ -527,7 +527,7 @@ packages:
     declared_licenses_processed: {}
     description: "A platform-independent package for parsing and serializing HTTP\
       \ formats.\n"
-    homepage_url: "https://pub.dartlang.org"
+    homepage_url: "https://github.com/dart-lang/http_parser"
     binary_artifact:
       url: ""
       hash:
@@ -555,7 +555,7 @@ packages:
     declared_licenses: []
     declared_licenses_processed: {}
     description: "Utilities for the Dart VM Runtime.\n"
-    homepage_url: "https://pub.dartlang.org"
+    homepage_url: "https://github.com/dart-lang/io"
     binary_artifact:
       url: ""
       hash:
@@ -583,7 +583,7 @@ packages:
     declared_licenses: []
     declared_licenses_processed: {}
     description: "Access JavaScript from Dart."
-    homepage_url: "https://pub.dartlang.org"
+    homepage_url: "https://github.com/dart-lang/sdk/tree/master/pkg/js"
     binary_artifact:
       url: ""
       hash:
@@ -611,7 +611,7 @@ packages:
     declared_licenses: []
     declared_licenses_processed: {}
     description: "Utilities to write a client or server using the JSON-RPC 2.0 spec."
-    homepage_url: "https://pub.dartlang.org"
+    homepage_url: "https://github.com/dart-lang/json_rpc_2"
     binary_artifact:
       url: ""
       hash:
@@ -639,7 +639,7 @@ packages:
     declared_licenses: []
     declared_licenses_processed: {}
     description: "Dart IR (Intermediate Representation)"
-    homepage_url: "https://pub.dartlang.org"
+    homepage_url: "https://github.com/dart-lang/sdk/tree/master/pkg/kernel"
     binary_artifact:
       url: ""
       hash:
@@ -669,7 +669,7 @@ packages:
     description: "Support for specifying test expectations via an extensible Matcher\
       \ class. Also includes a number of built-in Matcher implementations for common\
       \ cases."
-    homepage_url: "https://pub.dartlang.org"
+    homepage_url: "https://github.com/dart-lang/matcher"
     binary_artifact:
       url: ""
       hash:
@@ -699,7 +699,7 @@ packages:
     description: "This library contains the definitions of annotations that provide\
       \ additional semantic information about the program being annotated. These annotations\
       \ are intended to be used by tools to provide a better user experience.\n"
-    homepage_url: "https://pub.dartlang.org"
+    homepage_url: "https://github.com/dart-lang/sdk/tree/master/pkg/meta"
     binary_artifact:
       url: ""
       hash:
@@ -728,7 +728,7 @@ packages:
     declared_licenses_processed: {}
     description: "Utilities for handling media (MIME) types, including determining\
       \ a type from a file extension and file contents."
-    homepage_url: "https://pub.dartlang.org"
+    homepage_url: "https://www.github.com/dart-lang/mime"
     binary_artifact:
       url: ""
       hash:
@@ -756,7 +756,7 @@ packages:
     declared_licenses: []
     declared_licenses_processed: {}
     description: "A dart:io ServerSocket wrapper that listens on multiple ports."
-    homepage_url: "https://pub.dartlang.org"
+    homepage_url: "http://github.com/dart-lang/multi_server_socket"
     binary_artifact:
       url: ""
       hash:
@@ -784,7 +784,7 @@ packages:
     declared_licenses: []
     declared_licenses_processed: {}
     description: "Better node.js preamble for dart2js, use it in your build system."
-    homepage_url: "https://pub.dartlang.org"
+    homepage_url: "https://github.com/mbullington/node_preamble.dart"
     binary_artifact:
       url: ""
       hash:
@@ -812,7 +812,7 @@ packages:
     declared_licenses: []
     declared_licenses_processed: {}
     description: "Support for working with Package Resolution config files."
-    homepage_url: "https://pub.dartlang.org"
+    homepage_url: "https://github.com/dart-lang/package_config"
     binary_artifact:
       url: ""
       hash:
@@ -840,7 +840,7 @@ packages:
     declared_licenses: []
     declared_licenses_processed: {}
     description: "First-class package resolution strategy classes."
-    homepage_url: "https://pub.dartlang.org"
+    homepage_url: "https://github.com/dart-lang/package_resolver"
     binary_artifact:
       url: ""
       hash:
@@ -870,7 +870,7 @@ packages:
     description: "A string-based path manipulation library. All of the path operations\
       \ you know and love, with solid support on both Windows and POSIX (Linux and\
       \ Mac OS X) machines.\n"
-    homepage_url: "https://pub.dartlang.org"
+    homepage_url: "http://github.com/dart-lang/path"
     binary_artifact:
       url: ""
       hash:
@@ -898,7 +898,7 @@ packages:
     declared_licenses: []
     declared_licenses_processed: {}
     description: "How to get the most value from Dart static analysis."
-    homepage_url: "https://pub.dartlang.org"
+    homepage_url: "https://github.com/dart-lang/pedantic"
     binary_artifact:
       url: ""
       hash:
@@ -927,7 +927,7 @@ packages:
     declared_licenses_processed: {}
     description: "Manage a finite pool of resources. Useful for controlling concurrent\
       \ file system or network requests."
-    homepage_url: "https://pub.dartlang.org"
+    homepage_url: "https://github.com/dart-lang/pool"
     binary_artifact:
       url: ""
       hash:
@@ -956,7 +956,7 @@ packages:
     declared_licenses_processed: {}
     description: "Runtime library for protocol buffers support. Use https://pub.dartlang.org/packages/protoc_plugin\
       \ to generate dart code for your '.proto' files.\n"
-    homepage_url: "https://pub.dartlang.org"
+    homepage_url: "https://github.com/dart-lang/protobuf"
     binary_artifact:
       url: ""
       hash:
@@ -985,7 +985,7 @@ packages:
     declared_licenses_processed: {}
     description: "Versions and version constraints implementing pub's versioning policy.\
       \ This is very similar to vanilla semver, with a few corner cases.\n"
-    homepage_url: "https://pub.dartlang.org"
+    homepage_url: "http://github.com/dart-lang/pub_semver"
     binary_artifact:
       url: ""
       hash:
@@ -1014,7 +1014,7 @@ packages:
     declared_licenses_processed: {}
     description: "A model for web server middleware that encourages composition and\
       \ easy reuse"
-    homepage_url: "https://pub.dartlang.org"
+    homepage_url: "https://github.com/dart-lang/shelf"
     binary_artifact:
       url: ""
       hash:
@@ -1042,7 +1042,7 @@ packages:
     declared_licenses: []
     declared_licenses_processed: {}
     description: "A shelf handler for serving a `packages/` directory."
-    homepage_url: "https://pub.dartlang.org"
+    homepage_url: "https://github.com/dart-lang/shelf_packages_handler"
     binary_artifact:
       url: ""
       hash:
@@ -1070,7 +1070,7 @@ packages:
     declared_licenses: []
     declared_licenses_processed: {}
     description: "Static file server support for Shelf"
-    homepage_url: "https://pub.dartlang.org"
+    homepage_url: "https://github.com/dart-lang/shelf_static"
     binary_artifact:
       url: ""
       hash:
@@ -1098,7 +1098,7 @@ packages:
     declared_licenses: []
     declared_licenses_processed: {}
     description: "A shelf handler that wires up a listener for every connection."
-    homepage_url: "https://pub.dartlang.org"
+    homepage_url: "https://github.com/dart-lang/shelf_web_socket"
     binary_artifact:
       url: ""
       hash:
@@ -1126,7 +1126,7 @@ packages:
     declared_licenses: []
     declared_licenses_processed: {}
     description: "A package for applying source maps to stack traces."
-    homepage_url: "https://pub.dartlang.org"
+    homepage_url: "https://github.com/dart-lang/source_map_stack_trace"
     binary_artifact:
       url: ""
       hash:
@@ -1154,7 +1154,7 @@ packages:
     declared_licenses: []
     declared_licenses_processed: {}
     description: "Library to programmatically manipulate source map files."
-    homepage_url: "https://pub.dartlang.org"
+    homepage_url: "http://github.com/dart-lang/source_maps"
     binary_artifact:
       url: ""
       hash:
@@ -1182,7 +1182,7 @@ packages:
     declared_licenses: []
     declared_licenses_processed: {}
     description: "A library for identifying source spans and locations."
-    homepage_url: "https://pub.dartlang.org"
+    homepage_url: "https://github.com/dart-lang/source_span"
     binary_artifact:
       url: ""
       hash:
@@ -1210,7 +1210,7 @@ packages:
     declared_licenses: []
     declared_licenses_processed: {}
     description: "A package for manipulating stack traces and printing them readably."
-    homepage_url: "https://pub.dartlang.org"
+    homepage_url: "https://github.com/dart-lang/stack_trace"
     binary_artifact:
       url: ""
       hash:
@@ -1238,7 +1238,7 @@ packages:
     declared_licenses: []
     declared_licenses_processed: {}
     description: "An abstraction for two-way communication channels."
-    homepage_url: "https://pub.dartlang.org"
+    homepage_url: "https://github.com/dart-lang/stream_channel"
     binary_artifact:
       url: ""
       hash:
@@ -1266,7 +1266,7 @@ packages:
     declared_licenses: []
     declared_licenses_processed: {}
     description: "A class for parsing strings using a sequence of patterns."
-    homepage_url: "https://pub.dartlang.org"
+    homepage_url: "https://github.com/dart-lang/string_scanner"
     binary_artifact:
       url: ""
       hash:
@@ -1294,7 +1294,7 @@ packages:
     declared_licenses: []
     declared_licenses_processed: {}
     description: "Useful Unicode glyphs and ASCII substitutes."
-    homepage_url: "https://pub.dartlang.org"
+    homepage_url: "https://github.com/dart-lang/term_glyph"
     binary_artifact:
       url: ""
       hash:
@@ -1322,7 +1322,7 @@ packages:
     declared_licenses: []
     declared_licenses_processed: {}
     description: "A full featured library for writing and running Dart tests."
-    homepage_url: "https://pub.dartlang.org"
+    homepage_url: "https://github.com/dart-lang/test/blob/master/pkgs/test"
     binary_artifact:
       url: ""
       hash:
@@ -1350,7 +1350,7 @@ packages:
     declared_licenses: []
     declared_licenses_processed: {}
     description: "A library for writing Dart tests."
-    homepage_url: "https://pub.dartlang.org"
+    homepage_url: "https://github.com/dart-lang/test/blob/master/pkgs/test_api"
     binary_artifact:
       url: ""
       hash:
@@ -1378,7 +1378,7 @@ packages:
     declared_licenses: []
     declared_licenses_processed: {}
     description: "A basic library for writing tests and running them on the VM."
-    homepage_url: "https://pub.dartlang.org"
+    homepage_url: "https://github.com/dart-lang/test/blob/master/pkgs/test_core"
     binary_artifact:
       url: ""
       hash:
@@ -1406,7 +1406,7 @@ packages:
     declared_licenses: []
     declared_licenses_processed: {}
     description: "Utility functions and classes related to the 'dart:typed_data' library."
-    homepage_url: "https://pub.dartlang.org"
+    homepage_url: "https://github.com/dart-lang/typed_data"
     binary_artifact:
       url: ""
       hash:
@@ -1434,7 +1434,7 @@ packages:
     declared_licenses: []
     declared_licenses_processed: {}
     description: "A client for the Dart VM service."
-    homepage_url: "https://pub.dartlang.org"
+    homepage_url: "https://github.com/dart-lang/vm_service_client"
     binary_artifact:
       url: ""
       hash:
@@ -1463,7 +1463,7 @@ packages:
     declared_licenses_processed: {}
     description: "A file system watcher. It monitors changes to contents of directories\
       \ and sends notifications when files have been added, removed, or modified.\n"
-    homepage_url: "https://pub.dartlang.org"
+    homepage_url: "https://github.com/dart-lang/watcher"
     binary_artifact:
       url: ""
       hash:
@@ -1493,7 +1493,7 @@ packages:
     description: "StreamChannel wrappers for WebSockets. Provides a cross-platform\
       \ WebSocketChannel API, a cross-platform implementation of that API that communicates\
       \ over an underlying StreamChannel."
-    homepage_url: "https://pub.dartlang.org"
+    homepage_url: "https://github.com/dart-lang/web_socket_channel"
     binary_artifact:
       url: ""
       hash:
@@ -1521,7 +1521,7 @@ packages:
     declared_licenses: []
     declared_licenses_processed: {}
     description: "A parser for YAML, a human-friendly data serialization standard"
-    homepage_url: "https://pub.dartlang.org"
+    homepage_url: "https://github.com/dart-lang/yaml"
     binary_artifact:
       url: ""
       hash:
