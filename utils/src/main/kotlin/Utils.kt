@@ -272,8 +272,10 @@ fun normalizeVcsUrl(vcsUrl: String): String {
     if (uri.host != null) {
         when {
             uri.host.endsWith("github.com") || uri.host.endsWith("gitlab.com") -> {
-                // Ensure the path ends in ".git".
-                val path = uri.path.takeIf { Regex("\\.git(/|$)") in it } ?: "${uri.path}.git"
+                // Ensure the path to a repository ends with ".git".
+                val path = uri.path.takeIf { path ->
+                    path.endsWith(".git") || path.count { it == '/' } != 2
+                } ?: "${uri.path}.git"
 
                 return if (uri.scheme == "ssh") {
                     // Ensure the generic "git" user name is specified.
