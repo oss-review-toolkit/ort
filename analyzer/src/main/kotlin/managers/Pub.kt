@@ -401,7 +401,7 @@ class Pub(
                         vcsFromPackage = parseVcsInfo(pkgInfoFromYamlFile)
                         description = pkgInfoFromYamlFile["description"].textValueOrEmpty()
                         rawName = pkgInfoFromLockFile["description"]["name"].textValueOrEmpty()
-                        homepageUrl = pkgInfoFromLockFile["description"]["url"].textValueOrEmpty()
+                        homepageUrl = pkgInfoFromYamlFile["homepage"].textValueOrEmpty()
                     }
 
                     pkgInfoFromLockFile["description"].textValueOrEmpty() == "flutter" -> {
