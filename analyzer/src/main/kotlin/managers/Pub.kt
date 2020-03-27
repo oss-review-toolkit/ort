@@ -400,7 +400,7 @@ class Pub(
                         val pkgInfoFromYamlFile = readPackageInfoFromCache(pkgInfoFromLockFile)
                         vcsFromPackage = parseVcsInfo(pkgInfoFromYamlFile)
                         description = pkgInfoFromYamlFile["description"].textValueOrEmpty()
-                        rawName = pkgInfoFromLockFile["description"]["name"].textValueOrEmpty()
+                        rawName = pkgInfoFromYamlFile["name"].textValueOrEmpty()
                         homepageUrl = pkgInfoFromYamlFile["homepage"].textValueOrEmpty()
                     }
 
