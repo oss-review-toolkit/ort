@@ -397,9 +397,9 @@ class Pub(
                 // For now, we ignore SDKs like the Dart SDK and the Flutter SDK in the analyzer.
                 when {
                     pkgInfoFromLockFile["source"].textValueOrEmpty() != "sdk" -> {
-                        val pkgInfoYamlFile = readPackageInfoFromCache(pkgInfoFromLockFile)
-                        vcsFromPackage = parseVcsInfo(pkgInfoYamlFile)
-                        description = pkgInfoYamlFile["description"].textValueOrEmpty()
+                        val pkgInfoFromYamlFile = readPackageInfoFromCache(pkgInfoFromLockFile)
+                        vcsFromPackage = parseVcsInfo(pkgInfoFromYamlFile)
+                        description = pkgInfoFromYamlFile["description"].textValueOrEmpty()
                         rawName = pkgInfoFromLockFile["description"]["name"].textValueOrEmpty()
                         homepageUrl = pkgInfoFromLockFile["description"]["url"].textValueOrEmpty()
                     }
