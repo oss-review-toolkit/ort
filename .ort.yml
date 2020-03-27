@@ -75,10 +75,10 @@ excludes:
   scopes:
   - name   : "devDependencies"
     reason : "DEV_DEPENDENCY_OF"
-    comment: "Scope with dependencies only used for development. Not included in released artifacts in the context of this project."
+    comment: "Packages for development only. Not part of released artifacts"
   - name   : "(test.*|funTest.*)"
     reason : "TEST_DEPENDENCY_OF"
-    comment: "Scope with dependencies only used for testing. Not included in released artifacts in the context of this project."
+    comment: "Packages for testing only. Not part of released artifacts."
 resolutions:
   errors:
   - message: "ERROR: Timeout after 300 seconds while scanning file 'reporter-web-app/public/index.html'."
