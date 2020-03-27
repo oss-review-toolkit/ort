@@ -29,7 +29,6 @@ import java.io.File
 
 import org.ossreviewtoolkit.downloader.VersionControlSystem
 import org.ossreviewtoolkit.model.yamlMapper
-import org.ossreviewtoolkit.utils.Os
 import org.ossreviewtoolkit.utils.normalizeVcsUrl
 import org.ossreviewtoolkit.utils.test.DEFAULT_ANALYZER_CONFIGURATION
 import org.ossreviewtoolkit.utils.test.DEFAULT_REPOSITORY_CONFIGURATION
@@ -43,7 +42,7 @@ class GoModTest : StringSpec() {
     private val vcsRevision = vcsDir.getRevision()
 
     init {
-        "Project dependencies are detected correctly".config(enabled = !Os.isWindows) {
+        "Project dependencies are detected correctly" {
             val definitionFile = File(projectDir, "go.mod")
             val vcsPath = vcsDir.getPathToRoot(projectDir)
             val expectedResult = patchExpectedResult(
