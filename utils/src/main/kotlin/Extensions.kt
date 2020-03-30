@@ -51,7 +51,8 @@ import java.util.TreeSet
 fun ByteArray.toHexString(): String = joinToString("") { String.format("%02x", it) }
 
 /**
- * Return the absolute file with a leading "~" in a Unix path expanded to the current user's home directory.
+ * If the SHELL environment variable is set, return the absolute file with a leading "~" expanded to the current user's
+ * home directory, otherwise return just the absolute file.
  */
 fun File.expandTilde(): File =
     if (System.getenv("SHELL") != null) {

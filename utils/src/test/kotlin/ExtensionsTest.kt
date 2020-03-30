@@ -36,12 +36,12 @@ class ExtensionsTest : WordSpec({
     }
 
     "File.expandTilde" should {
-        "only make the path absolute on Windows".config(enabled = Os.isWindows) {
-            File("~/Desktop").expandTilde() shouldBe File("~/Desktop").absoluteFile
+        "expand the path if the SHELL environment variable is set".config(enabled = Os.env["SHELL"] != null) {
+            File("~/Desktop").expandTilde() shouldBe getUserHomeDirectory().resolve("Desktop")
         }
 
-        "expand the path on Unix".config(enabled = !Os.isWindows) {
-            File("~/Desktop").expandTilde() shouldBe getUserHomeDirectory().resolve("Desktop")
+        "make the path absolute if the SHELL environment variable is unset".config(enabled = Os.env["SHELL"] == null) {
+            File("~/Desktop").expandTilde() shouldBe File("~/Desktop").absoluteFile
         }
     }
 
