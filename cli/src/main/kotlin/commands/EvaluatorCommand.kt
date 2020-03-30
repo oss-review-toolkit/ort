@@ -56,22 +56,23 @@ class EvaluatorCommand : CliktCommand(name = "evaluate", help = "Evaluate rules 
     private val ortFile by option(
         "--ort-file", "-i",
         help = "The ORT result file to read as input."
-    ).file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
-        .convert { it.expandTilde() }
+    ).convert { it.expandTilde() }
+        .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
         .required()
 
     private val packageConfigurationDir by option(
         "--package-configuration-dir",
         help = "The directory containing the package configuration files to read as input. It is searched recursively."
-    ).file(mustExist = true, canBeFile = false, canBeDir = true, mustBeWritable = false, mustBeReadable = true)
-        .convert { it.expandTilde() }
+    ).convert { it.expandTilde() }
+        .file(mustExist = true, canBeFile = false, canBeDir = true, mustBeWritable = false, mustBeReadable = true)
 
     private val rules by mutuallyExclusiveOptions<GroupTypes>(
         option(
             "--rules-file", "-r",
             help = "The name of a script file containing rules."
-        ).file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
-            .convert { FileType(it.expandTilde()) },
+        ).convert { it.expandTilde() }
+            .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
+            .convert { FileType(it) },
         option(
             "--rules-resource",
             help = "The name of a script resource on the classpath that contains rules."
@@ -83,8 +84,8 @@ class EvaluatorCommand : CliktCommand(name = "evaluate", help = "Evaluate rules 
         help = "The directory to write the evaluation results as ORT result file(s) to, in the specified output " +
                 "format(s). If no output directory is specified, no output formats are written and only the exit " +
                 "code signals a success or failure."
-    ).file(mustExist = false, canBeFile = false, canBeDir = true, mustBeWritable = false, mustBeReadable = false)
-        .convert { it.expandTilde() }
+    ).convert { it.expandTilde() }
+        .file(mustExist = false, canBeFile = false, canBeDir = true, mustBeWritable = false, mustBeReadable = false)
 
     private val outputFormats by option(
         "--output-formats", "-f",
@@ -100,22 +101,22 @@ class EvaluatorCommand : CliktCommand(name = "evaluate", help = "Evaluate rules 
         "--repository-configuration-file",
         help = "A file containing the repository configuration. If set the .ort.yml overrides the repository " +
                 "configuration contained in the ort result from the input file."
-    ).file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
-        .convert { it.expandTilde() }
+    ).convert { it.expandTilde() }
+        .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
 
     private val packageCurationsFile by option(
         "--package-curations-file",
         help = "A file containing package curation data. This replaces all package curations contained in the given " +
                 "ORT result file with the ones present in the given file."
-    ).file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
-        .convert { it.expandTilde() }
+    ).convert { it.expandTilde() }
+        .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
 
     private val licenseConfigurationFile by option(
         "--license-configuration-file",
         help = "A file containing the license configuration. That license configuration is passed as parameter to " +
                 "the rules script."
-    ).file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
-        .convert { it.expandTilde() }
+    ).convert { it.expandTilde() }
+        .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
 
     override fun run() {
         val absoluteOutputDir = outputDir?.normalize()

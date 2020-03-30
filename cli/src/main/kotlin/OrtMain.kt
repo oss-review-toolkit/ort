@@ -65,8 +65,8 @@ sealed class GroupTypes {
 
 class OrtMain : CliktCommand(name = ORT_NAME, epilog = "* denotes required options.") {
     private val configFile by option("--config", "-c", help = "The path to a configuration file.")
-        .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
         .convert { it.expandTilde() }
+        .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
 
     private val logLevel by option(help = "Set the verbosity level of log output.").switch(
         "--info" to Level.INFO,
