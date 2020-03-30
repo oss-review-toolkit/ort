@@ -54,12 +54,7 @@ fun ByteArray.toHexString(): String = joinToString("") { String.format("%02x", i
  * If the SHELL environment variable is set, return the absolute file with a leading "~" expanded to the current user's
  * home directory, otherwise return just the absolute file.
  */
-fun File.expandTilde(): File =
-    if (Os.env["SHELL"] != null) {
-        File(path.replace(Regex("^~"), Regex.escapeReplacement(System.getProperty("user.home"))))
-    } else {
-        this
-    }.absoluteFile
+fun File.expandTilde(): File = File(path.expandTilde()).absoluteFile
 
 /**
  * Return the hexadecimal digest of the given hash [algorithm] for this [File].
@@ -230,6 +225,17 @@ inline fun <K, V, W> Map<K, V>.zipWithDefault(other: Map<K, V>, default: V, oper
  * Return the string encoded for safe use as a file name or "unknown", if the string is empty.
  */
 fun String.encodeOrUnknown() = fileSystemEncode().takeUnless { it.isEmpty() } ?: "unknown"
+
+/**
+ * If the SHELL environment variable is set, return the string with a leading "~" expanded to the current user's home
+ * directory, otherwise return the string unchanged.
+ */
+fun String.expandTilde(): String =
+    if (Os.env["SHELL"] != null) {
+        replace(Regex("^~"), Regex.escapeReplacement(System.getProperty("user.home")))
+    } else {
+        this
+    }
 
 /**
  * Return the string encoded for safe use as a file name. Also limit the length to 255 characters which is the maximum
