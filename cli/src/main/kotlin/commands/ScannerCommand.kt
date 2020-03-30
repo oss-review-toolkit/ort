@@ -56,13 +56,13 @@ class ScannerCommand : CliktCommand(name = "scan", help = "Run existing copyrigh
             "--ort-file", "-i",
             help = "An ORT result file with an analyzer result to use. Source code will be downloaded automatically " +
                     "if needed. This parameter and '--input-path' are mutually exclusive."
-        ).file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
-            .convert { it.expandTilde() },
+        ).convert { it.expandTilde() }
+            .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true),
         option(
             "--input-path", "-p",
             help = "An input directory or file to scan. This parameter and '--ort-file' are mutually exclusive."
-        ).file(mustExist = true, canBeFile = true, canBeDir = true, mustBeWritable = false, mustBeReadable = true)
-            .convert { it.expandTilde() }
+        ).convert { it.expandTilde() }
+            .file(mustExist = true, canBeFile = true, canBeDir = true, mustBeWritable = false, mustBeReadable = true)
     ).single().required()
 
     private val skipExcluded by option(
@@ -73,15 +73,15 @@ class ScannerCommand : CliktCommand(name = "scan", help = "Run existing copyrigh
     private val outputDir by option(
         "--output-dir", "-o",
         help = "The directory to write the scan results as ORT result file(s) to, in the specified output format(s)."
-    ).file(mustExist = false, canBeFile = false, canBeDir = true, mustBeWritable = false, mustBeReadable = false)
-        .convert { it.expandTilde() }
+    ).convert { it.expandTilde() }
+        .file(mustExist = false, canBeFile = false, canBeDir = true, mustBeWritable = false, mustBeReadable = false)
         .required()
 
     private val downloadDir by option(
         "--download-dir",
         help = "The output directory for downloaded source code. (default: <output-dir>/downloads)"
-    ).file(mustExist = false, canBeFile = false, canBeDir = true, mustBeWritable = false, mustBeReadable = false)
-        .convert { it.expandTilde() }
+    ).convert { it.expandTilde() }
+        .file(mustExist = false, canBeFile = false, canBeDir = true, mustBeWritable = false, mustBeReadable = false)
 
     private val scannerFactory by option(
         "--scanner", "-s",

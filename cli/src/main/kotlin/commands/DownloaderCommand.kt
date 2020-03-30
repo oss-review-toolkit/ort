@@ -62,8 +62,9 @@ class DownloaderCommand : CliktCommand(name = "download", help = "Fetch source c
         option(
             "--ort-file", "-i",
             help = "An ORT result file with an analyzer result to use. Must not be used together with '--project-url'."
-        ).file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
-            .convert { FileType(it.expandTilde()) },
+        ).convert { it.expandTilde() }
+            .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
+            .convert { FileType(it) },
         option(
             "--project-url",
             help = "A VCS or archive URL of a project to download. Must not be used together with '--ort-file'."
@@ -94,8 +95,8 @@ class DownloaderCommand : CliktCommand(name = "download", help = "Fetch source c
     private val outputDir by option(
         "--output-dir", "-o",
         help = "The output directory to download the source code to."
-    ).file(mustExist = false, canBeFile = false, canBeDir = true, mustBeWritable = false, mustBeReadable = false)
-        .convert { it.expandTilde() }
+    ).convert { it.expandTilde() }
+        .file(mustExist = false, canBeFile = false, canBeDir = true, mustBeWritable = false, mustBeReadable = false)
         .required()
 
     private val archive by option(

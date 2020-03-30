@@ -58,15 +58,15 @@ class AnalyzerCommand : CliktCommand(name = "analyze", help = "Determine depende
     private val inputDir by option(
         "--input-dir", "-i",
         help = "The project directory to analyze."
-    ).file(mustExist = true, canBeFile = false, canBeDir = true, mustBeWritable = false, mustBeReadable = true)
-        .convert { it.expandTilde() }
+    ).convert { it.expandTilde() }
+        .file(mustExist = true, canBeFile = false, canBeDir = true, mustBeWritable = false, mustBeReadable = true)
         .required()
 
     private val outputDir by option(
         "--output-dir", "-o",
         help = "The directory to write the analyzer result as ORT result file(s) to, in the specified output format(s)."
-    ).file(mustExist = false, canBeFile = false, canBeDir = true, mustBeWritable = false, mustBeReadable = false)
-        .convert { it.expandTilde() }
+    ).convert { it.expandTilde() }
+        .file(mustExist = false, canBeFile = false, canBeDir = true, mustBeWritable = false, mustBeReadable = false)
         .required()
 
     private val outputFormats by option(
@@ -88,8 +88,8 @@ class AnalyzerCommand : CliktCommand(name = "analyze", help = "Determine depende
     private val packageCurationsFile by option(
         "--package-curations-file",
         help = "A file containing package curation data."
-    ).file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
-        .convert { it.expandTilde() }
+    ).convert { it.expandTilde() }
+        .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
 
     private val useClearlyDefinedCurations by option(
         "--clearly-defined-curations",
@@ -100,8 +100,8 @@ class AnalyzerCommand : CliktCommand(name = "analyze", help = "Determine depende
         "--repository-configuration-file",
         help = "A file containing the repository configuration. If set the .ort.yml file from the repository will be " +
                 "ignored."
-    ).file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
-        .convert { it.expandTilde() }
+    ).convert { it.expandTilde() }
+        .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
 
     override fun run() {
         val absoluteOutputDir = outputDir.normalize()
