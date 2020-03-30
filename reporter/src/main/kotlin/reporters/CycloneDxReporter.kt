@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2019 Bosch Software Innovations GmbH
+ * Copyright (C) 2020 Bosch.IO GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,11 +20,6 @@
 
 package org.ossreviewtoolkit.reporter.reporters
 
-import org.ossreviewtoolkit.model.utils.getDetectedLicensesForId
-import org.ossreviewtoolkit.reporter.Reporter
-import org.ossreviewtoolkit.reporter.ReporterInput
-import org.ossreviewtoolkit.spdx.SpdxLicense
-
 import java.io.OutputStream
 import java.util.UUID
 
@@ -31,11 +27,17 @@ import org.cyclonedx.BomGeneratorFactory
 import org.cyclonedx.CycloneDxSchema
 import org.cyclonedx.model.Bom
 import org.cyclonedx.model.Component
+import org.cyclonedx.model.ExtensibleType
 import org.cyclonedx.model.ExternalReference
 import org.cyclonedx.model.Hash
 import org.cyclonedx.model.License
 import org.cyclonedx.model.LicenseChoice
 import org.cyclonedx.model.LicenseText
+
+import org.ossreviewtoolkit.model.utils.getDetectedLicensesForId
+import org.ossreviewtoolkit.reporter.Reporter
+import org.ossreviewtoolkit.reporter.ReporterInput
+import org.ossreviewtoolkit.spdx.SpdxLicense
 
 class CycloneDxReporter : Reporter {
     override val reporterName = "CycloneDx"
@@ -53,6 +55,23 @@ class CycloneDxReporter : Reporter {
 
     private fun mapHash(hash: org.ossreviewtoolkit.model.Hash): Hash? =
         enumValues<Hash.Algorithm>().find { it.spec == hash.algorithm.toString() }?.let { Hash(it, hash.value) }
+
+    private fun mapLicenseNamesToObjects(licenseNames: Collection<String>, origin: String, input: ReporterInput) =
+            licenseNames.map { licenseName ->
+                val spdxId = SpdxLicense.forId(licenseName)?.id
+
+                // Prefer to set the id in case of an SPDX "core" license and only use the name as a fallback, also
+                // see https://github.com/CycloneDX/cyclonedx-core-java/issues/8.
+                License().apply {
+                    id = spdxId
+                    name = licenseName.takeIf { spdxId == null }
+                    licenseText = LicenseText().apply {
+                        contentType = "plain/text"
+                        text = input.licenseTextProvider.getLicenseText(licenseName)
+                    }
+                    extensibleTypes = listOf(ExtensibleType("ort", "origin", origin))
+                }
+            }
 
     override fun generateReport(outputStream: OutputStream, input: ReporterInput) {
         val ortResult = input.ortResult
@@ -114,23 +133,11 @@ class CycloneDxReporter : Reporter {
         ortResult.getPackages().forEach { (pkg, _) ->
             // TODO: We should actually use the concluded license expression here, but we first need a workflow to
             //       ensure it is being set.
-            val licenseNames = pkg.declaredLicensesProcessed.allLicenses +
-                    ortResult.getDetectedLicensesForId(pkg.id, input.packageConfigurationProvider)
+            val declaredLicenseNames = pkg.declaredLicensesProcessed.allLicenses
+            val detectedLicenseNames = ortResult.getDetectedLicensesForId(pkg.id, input.packageConfigurationProvider)
 
-            val licenseObjects = licenseNames.map { licenseName ->
-                val spdxId = SpdxLicense.forId(licenseName)?.id
-
-                // Prefer to set the id in case of an SPDX "core" license and only use the name as a fallback, also
-                // see https://github.com/CycloneDX/cyclonedx-core-java/issues/8.
-                License().apply {
-                    id = spdxId
-                    name = licenseName.takeIf { spdxId == null }
-                    licenseText = LicenseText().apply {
-                        contentType = "plain/text"
-                        text = input.licenseTextProvider.getLicenseText(licenseName)
-                    }
-                }
-            }
+            val licenseObjects = mapLicenseNamesToObjects(declaredLicenseNames, "declared license", input) +
+                    mapLicenseNamesToObjects(detectedLicenseNames, "detected license", input)
 
             val binaryHash = mapHash(pkg.binaryArtifact.hash)
             val sourceHash = mapHash(pkg.sourceArtifact.hash)
