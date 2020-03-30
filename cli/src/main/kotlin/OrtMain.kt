@@ -38,6 +38,7 @@ import org.ossreviewtoolkit.commands.*
 import org.ossreviewtoolkit.model.Environment
 import org.ossreviewtoolkit.model.config.OrtConfiguration
 import org.ossreviewtoolkit.utils.ORT_NAME
+import org.ossreviewtoolkit.utils.Os
 import org.ossreviewtoolkit.utils.expandTilde
 import org.ossreviewtoolkit.utils.getUserOrtDirectory
 import org.ossreviewtoolkit.utils.printStackTrace
@@ -169,9 +170,9 @@ fun fixupUserHomeProperty() {
     val userHome = System.getProperty("user.home")
     val checkedUserHome = sequenceOf(
         userHome,
-        System.getenv(ORT_USER_HOME_ENV),
-        System.getenv("HOME"),
-        System.getenv("USERPROFILE")
+        Os.env[ORT_USER_HOME_ENV],
+        Os.env["HOME"],
+        Os.env["USERPROFILE"]
     ).first {
         !it.isNullOrBlank() && it != "?"
     }

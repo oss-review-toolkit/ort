@@ -86,8 +86,7 @@ class Pub(
         private val pubCacheRoot by lazy {
             // TODO: Add support for the PUB_CACHE environment variable.
             if (Os.isWindows) {
-                val appData = System.getenv("APPDATA")
-                File(appData, "Pub/Cache")
+                File(Os.env["APPDATA"], "Pub/Cache")
             } else {
                 getUserHomeDirectory().resolve(".pub-cache/")
             }
