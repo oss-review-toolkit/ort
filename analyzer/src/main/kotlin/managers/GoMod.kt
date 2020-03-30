@@ -41,6 +41,7 @@ import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.jsonMapper
 import org.ossreviewtoolkit.utils.CommandLineTool
+import org.ossreviewtoolkit.utils.Os
 import org.ossreviewtoolkit.utils.stashDirectories
 
 import java.io.File
@@ -211,7 +212,7 @@ class GoMod(
     }
 
     private fun getGoProxy(): String {
-        val firstProxy = System.getenv("GOPROXY").orEmpty()
+        val firstProxy = Os.env["GOPROXY"].orEmpty()
             .split(",")
             .filterNot { it == "direct" || it == "off" }
             .firstOrNull()

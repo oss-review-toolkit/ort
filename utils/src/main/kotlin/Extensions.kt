@@ -55,7 +55,7 @@ fun ByteArray.toHexString(): String = joinToString("") { String.format("%02x", i
  * home directory, otherwise return just the absolute file.
  */
 fun File.expandTilde(): File =
-    if (System.getenv("SHELL") != null) {
+    if (Os.env["SHELL"] != null) {
         File(path.replace(Regex("^~"), Regex.escapeReplacement(System.getProperty("user.home"))))
     } else {
         this
