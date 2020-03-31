@@ -150,8 +150,14 @@ data class EvaluatedModel(
         fun create(input: ReporterInput): EvaluatedModel = EvaluatedModelMapper(input).build()
     }
 
+    /**
+     * Serialize this [EvaluatedModel] to JSON and write the output to the [writer].
+     */
     fun toJson(writer: Writer): Unit = JSON_MAPPER.writerWithDefaultPrettyPrinter().writeValue(writer, toSortedTree())
 
+    /**
+     * Serialize this [EvaluatedModel] to YAML and write the output to the [writer].
+     */
     fun toYaml(writer: Writer): Unit = YAML_MAPPER.writeValue(writer, toSortedTree())
 
     /**
