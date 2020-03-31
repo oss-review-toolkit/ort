@@ -32,7 +32,7 @@ data class LocalFileStorageConfiguration(
     val directory: File,
 
     /**
-     * Whether to use compression for storing files or not.
+     * Whether to use compression for storing files or not. Defaults to true.
      */
-    val compression: Boolean
+    val compression: Boolean = true
 )
