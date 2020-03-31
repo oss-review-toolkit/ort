@@ -19,10 +19,6 @@
 
 package org.ossreviewtoolkit.downloader.vcs
 
-import org.ossreviewtoolkit.downloader.WorkingTree
-import org.ossreviewtoolkit.model.VcsInfo
-import org.ossreviewtoolkit.utils.log
-
 import java.io.File
 import java.io.IOException
 
@@ -32,6 +28,11 @@ import org.eclipse.jgit.lib.Constants
 import org.eclipse.jgit.lib.Repository
 import org.eclipse.jgit.storage.file.FileRepositoryBuilder
 import org.eclipse.jgit.submodule.SubmoduleWalk
+
+import org.ossreviewtoolkit.downloader.WorkingTree
+import org.ossreviewtoolkit.model.VcsInfo
+import org.ossreviewtoolkit.model.VcsType
+import org.ossreviewtoolkit.utils.log
 
 private fun findGitOrSubmoduleDir(workingDir: File): Repository {
     // First try to open an existing working tree exactly at the given directory. This also works for submodules which
@@ -53,7 +54,7 @@ private fun findGitOrSubmoduleDir(workingDir: File): Repository {
     return FileRepositoryBuilder().setWorkTree(workingDir).build()
 }
 
-open class GitWorkingTree(workingDir: File, private val gitBase: GitBase) : WorkingTree(workingDir, gitBase.type) {
+open class GitWorkingTree(workingDir: File, vcsType: VcsType) : WorkingTree(workingDir, vcsType) {
     private val repo = findGitOrSubmoduleDir(workingDir.absoluteFile)
 
     override fun isValid(): Boolean = repo.objectDatabase?.exists() == true
@@ -87,7 +88,7 @@ open class GitWorkingTree(workingDir: File, private val gitBase: GitBase) : Work
     }
 
     override fun getNested(): Map<String, VcsInfo> =
-        listSubmodulePaths(repo).associateWith { GitWorkingTree(repo.workTree.resolve(it), gitBase).getInfo() }
+        listSubmodulePaths(repo).associateWith { GitWorkingTree(repo.workTree.resolve(it), vcsType).getInfo() }
 
     override fun getRemoteUrl(): String =
         runCatching {
