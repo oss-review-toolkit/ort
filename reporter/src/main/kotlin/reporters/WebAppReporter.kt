@@ -43,7 +43,7 @@ class WebAppReporter : Reporter {
 
         outputStream.bufferedWriter().use {
             it.write(prefix)
-            evaluatedModel.toJson(it)
+            evaluatedModel.toJson(it, prettyPrint = false)
             it.write(suffix)
         }
     }
