@@ -195,8 +195,6 @@ abstract class VersionControlSystem {
         allowMovingRevisions: Boolean = false,
         recursive: Boolean = true
     ): WorkingTree {
-        log.info { "Using $type version ${getVersion()}." }
-
         val workingTree = try {
             initWorkingTree(targetDir, pkg.vcsProcessed)
         } catch (e: IOException) {
