@@ -21,10 +21,15 @@ package org.ossreviewtoolkit.downloader.vcs
 
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty
 
+import java.io.File
+import java.io.IOException
+
+import org.ossreviewtoolkit.downloader.VersionControlSystem
 import org.ossreviewtoolkit.downloader.WorkingTree
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.xmlMapper
+import org.ossreviewtoolkit.utils.CommandLineTool
 import org.ossreviewtoolkit.utils.Os
 import org.ossreviewtoolkit.utils.ProcessCapture
 import org.ossreviewtoolkit.utils.collectMessagesAsString
@@ -34,9 +39,6 @@ import org.ossreviewtoolkit.utils.log
 import org.ossreviewtoolkit.utils.realFile
 import org.ossreviewtoolkit.utils.searchUpwardsForSubdirectory
 import org.ossreviewtoolkit.utils.showStackTrace
-
-import java.io.File
-import java.io.IOException
 
 /**
  * The branch of git-repo to use. This allows to override git-repo's default of using the "stable" branch.
@@ -60,22 +62,29 @@ private data class Include(
     val name: String
 )
 
-class GitRepo : GitBase() {
+class GitRepo : VersionControlSystem(), CommandLineTool {
     override val type = VcsType.GIT_REPO
     override val priority = 50
+    override val defaultBranchName = "master"
+    override val latestRevisionNames = listOf("HEAD", "@")
+
+    override fun command(workingDir: File?) = "repo"
+
+    override fun getVersion() =
+        throw IOException("The 'repo' version can only be determined from an initialized working tree.")
 
     override fun getWorkingTree(vcsDirectory: File): WorkingTree {
         val repoRoot = vcsDirectory.searchUpwardsForSubdirectory(".repo")
 
         return if (repoRoot == null) {
-            object : GitWorkingTree(vcsDirectory, this) {
+            object : GitWorkingTree(vcsDirectory, type) {
                 override fun isValid() = false
             }
         } else {
             // GitRepo is special in that the workingDir points to the Git working tree of the manifest files, yet
             // the root path is the directory containing the ".repo" directory. This way Git operations work on a valid
             // Git repository, but path operations work relative to the path GitRepo was initialized in.
-            object : GitWorkingTree(File(repoRoot, ".repo/manifests"), this) {
+            object : GitWorkingTree(File(repoRoot, ".repo/manifests"), type) {
                 // Return the path to the manifest as part of the VCS information, as that is required to recreate the
                 // working tree.
                 override fun getInfo(): VcsInfo {

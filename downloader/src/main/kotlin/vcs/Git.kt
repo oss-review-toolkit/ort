@@ -19,16 +19,6 @@
 
 package org.ossreviewtoolkit.downloader.vcs
 
-import org.ossreviewtoolkit.downloader.WorkingTree
-import org.ossreviewtoolkit.model.VcsInfo
-import org.ossreviewtoolkit.model.VcsType
-import org.ossreviewtoolkit.utils.FileMatcher
-import org.ossreviewtoolkit.utils.Os
-import org.ossreviewtoolkit.utils.collectMessagesAsString
-import org.ossreviewtoolkit.utils.log
-import org.ossreviewtoolkit.utils.safeMkdirs
-import org.ossreviewtoolkit.utils.showStackTrace
-
 import com.jcraft.jsch.JSch
 import com.jcraft.jsch.Session
 import com.jcraft.jsch.agentproxy.AgentProxyException
@@ -40,6 +30,7 @@ import com.vdurmont.semver4j.Semver
 
 import java.io.File
 import java.io.IOException
+import java.util.regex.Pattern
 
 import org.eclipse.jgit.api.Git
 import org.eclipse.jgit.api.LsRemoteCommand
@@ -50,10 +41,22 @@ import org.eclipse.jgit.transport.SshSessionFactory
 import org.eclipse.jgit.transport.URIish
 import org.eclipse.jgit.util.FS
 
+import org.ossreviewtoolkit.downloader.VersionControlSystem
+import org.ossreviewtoolkit.downloader.WorkingTree
+import org.ossreviewtoolkit.model.VcsInfo
+import org.ossreviewtoolkit.model.VcsType
+import org.ossreviewtoolkit.utils.CommandLineTool
+import org.ossreviewtoolkit.utils.FileMatcher
+import org.ossreviewtoolkit.utils.Os
+import org.ossreviewtoolkit.utils.collectMessagesAsString
+import org.ossreviewtoolkit.utils.log
+import org.ossreviewtoolkit.utils.safeMkdirs
+import org.ossreviewtoolkit.utils.showStackTrace
+
 // TODO: Make this configurable.
 const val GIT_HISTORY_DEPTH = 50
 
-class Git : GitBase() {
+class Git : VersionControlSystem(), CommandLineTool {
     companion object {
         init {
             // Configure JGit to connect to the SSH-Agent if it is available.
@@ -87,8 +90,27 @@ class Git : GitBase() {
         }
     }
 
+    private val versionRegex = Pattern.compile("[Gg]it [Vv]ersion (?<version>[\\d.a-z-]+)(\\s.+)?")
+
     override val type = VcsType.GIT
     override val priority = 100
+    override val defaultBranchName = "master"
+    override val latestRevisionNames = listOf("HEAD", "@")
+
+    override fun command(workingDir: File?) = "git"
+
+    override fun getVersion() = super.getVersion(null)
+
+    override fun transformVersion(output: String) =
+        versionRegex.matcher(output.lineSequence().first()).let {
+            if (it.matches()) {
+                it.group("version")
+            } else {
+                ""
+            }
+        }
+
+    override fun getWorkingTree(vcsDirectory: File): WorkingTree = GitWorkingTree(vcsDirectory, type)
 
     override fun isApplicableUrlInternal(vcsUrl: String): Boolean =
         runCatching {
