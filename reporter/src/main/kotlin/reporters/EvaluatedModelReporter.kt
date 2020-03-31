@@ -27,6 +27,8 @@ import org.ossreviewtoolkit.utils.log
 import java.io.OutputStream
 import java.io.Writer
 
+private fun EvaluatedModel.toJson(writer: Writer) = toJson(writer, prettyPrint = true)
+
 /**
  * Creates a JSON file containing the evaluated model.
  */
