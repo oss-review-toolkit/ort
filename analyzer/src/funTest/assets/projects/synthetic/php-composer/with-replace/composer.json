@@ -34,7 +34,7 @@
                 },
                 "replace": {
                     "ort/child3": "*",
-                    "ort/child4": "1.0.0"
+                    "ort/child4": "2.0.0"
                 }
             }
         },
