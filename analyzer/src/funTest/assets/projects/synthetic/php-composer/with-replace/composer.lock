@@ -1,34 +1,21 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "3858adcb13d4c506efa214dcc9af8898",
+    "content-hash": "389fc887d671f54ce7b177c403b993d9",
     "packages": [
         {
             "name": "ort/child2",
             "version": "1.0.0",
             "dist": {
                 "type": "file",
-                "url": "composer.phar",
-                "reference": null,
-                "shasum": null
+                "url": "composer.phar"
             },
             "replace": {
                 "ort/child3": "*",
-                "ort/child4": "1.0.0"
-            },
-            "type": "library"
-        },
-        {
-            "name": "ort/child4",
-            "version": "2.0.0",
-            "dist": {
-                "type": "file",
-                "url": "composer.phar",
-                "reference": null,
-                "shasum": null
+                "ort/child4": "2.0.0"
             },
             "type": "library"
         }
@@ -40,5 +27,6 @@
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": [],
-    "platform-dev": []
+    "platform-dev": [],
+    "plugin-api-version": "1.1.0"
 }

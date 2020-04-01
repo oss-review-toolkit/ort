@@ -22,41 +22,12 @@ project:
   - name: "require"
     dependencies:
     - id: "PhpComposer:ort:child2:1.0.0"
-    - id: "PhpComposer:ort:child4:2.0.0"
   - name: "require-dev"
     dependencies: []
 packages:
 - package:
     id: "PhpComposer:ort:child2:1.0.0"
     purl: "pkg:phpcomposer/ort/child2@1.0.0"
-    declared_licenses: []
-    declared_licenses_processed: {}
-    description: ""
-    homepage_url: ""
-    binary_artifact:
-      url: ""
-      hash:
-        value: ""
-        algorithm: ""
-    source_artifact:
-      url: "composer.phar"
-      hash:
-        value: ""
-        algorithm: ""
-    vcs:
-      type: ""
-      url: ""
-      revision: ""
-      path: ""
-    vcs_processed:
-      type: ""
-      url: ""
-      revision: ""
-      path: ""
-  curations: []
-- package:
-    id: "PhpComposer:ort:child4:2.0.0"
-    purl: "pkg:phpcomposer/ort/child4@2.0.0"
     declared_licenses: []
     declared_licenses_processed: {}
     description: ""

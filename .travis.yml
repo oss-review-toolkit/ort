@@ -30,7 +30,7 @@ env:
     - GIMME_GO_VERSION="1.13" # Used internally by Travis.
     - GO_DEP_VERSION="0.5.4"
     - NPM_VERSION="6.14.1"
-    - PHP_VERSION="7.1"
+    - PHP_VERSION="7.2"
     - PYTHON_PIPENV_VERSION="2018.11.26"
     - RUST_VERSION="1.35.0"
     - STACK_VERSION="2.1.3"
