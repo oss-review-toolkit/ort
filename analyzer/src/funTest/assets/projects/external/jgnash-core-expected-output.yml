@@ -343,8 +343,8 @@ packages:
       path: ""
     vcs_processed:
       type: "Subversion"
-      url: "http://svn.apache.org/repos/asf/commons/proper/codec/trunk"
-      revision: ""
+      url: "http://svn.apache.org/repos/asf/commons/proper/codec"
+      revision: "trunk"
       path: ""
   curations: []
 - package:
@@ -657,8 +657,8 @@ packages:
       path: ""
     vcs_processed:
       type: "Subversion"
-      url: "http://svn.apache.org/repos/asf/commons/proper/lang/trunk"
-      revision: ""
+      url: "http://svn.apache.org/repos/asf/commons/proper/lang"
+      revision: "trunk"
       path: ""
   curations: []
 - package:

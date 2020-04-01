@@ -1300,8 +1300,8 @@ analyzer:
           path: ""
         vcs_processed:
           type: "Subversion"
-          url: "http://svn.apache.org/repos/asf/commons/proper/cli/trunk"
-          revision: ""
+          url: "http://svn.apache.org/repos/asf/commons/proper/cli"
+          revision: "trunk"
           path: ""
       curations: []
     - package:
@@ -1333,8 +1333,8 @@ analyzer:
           path: ""
         vcs_processed:
           type: "Subversion"
-          url: "http://svn.apache.org/repos/asf/commons/proper/codec/trunk"
-          revision: ""
+          url: "http://svn.apache.org/repos/asf/commons/proper/codec"
+          revision: "trunk"
           path: ""
       curations: []
     - package:
@@ -1426,8 +1426,8 @@ analyzer:
           path: ""
         vcs_processed:
           type: "Subversion"
-          url: "https://opencsv.svn.sourceforge.net/svnroot/opencsv/trunk"
-          revision: ""
+          url: "https://opencsv.svn.sourceforge.net/svnroot/opencsv"
+          revision: "trunk"
           path: ""
       curations: []
     - package:
@@ -1690,8 +1690,8 @@ analyzer:
           path: ""
         vcs_processed:
           type: "Subversion"
-          url: "http://svn.apache.org/repos/asf/commons/proper/collections/trunk"
-          revision: ""
+          url: "http://svn.apache.org/repos/asf/commons/proper/collections"
+          revision: "trunk"
           path: ""
       curations: []
     - package:
@@ -1786,8 +1786,8 @@ analyzer:
           path: ""
         vcs_processed:
           type: "Subversion"
-          url: "http://svn.apache.org/repos/asf/commons/proper/lang/trunk"
-          revision: ""
+          url: "http://svn.apache.org/repos/asf/commons/proper/lang"
+          revision: "trunk"
           path: ""
       curations: []
     - package:

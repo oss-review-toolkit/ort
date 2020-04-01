@@ -202,7 +202,31 @@ enum class VcsHost(
                 null
             }
 
+            val svnBranchOrTagPattern = Regex("(.*svn.*)/(branches|tags)/([^/]+)/?(.*)")
+            val svnBranchOrTagMatch = svnBranchOrTagPattern.matchEntire(projectUrl)
+
+            val svnTrunkPattern = Regex("(.*svn.*)/(trunk)/?(.*)")
+            val svnTrunkMatch = svnTrunkPattern.matchEntire(projectUrl)
+
             return vcs ?: when {
+                svnBranchOrTagMatch != null -> {
+                    VcsInfo(
+                        type = VcsType.SUBVERSION,
+                        url = svnBranchOrTagMatch.groupValues[1],
+                        revision = "${svnBranchOrTagMatch.groupValues[2]}/${svnBranchOrTagMatch.groupValues[3]}",
+                        path = svnBranchOrTagMatch.groupValues[4]
+                    )
+                }
+
+                svnTrunkMatch != null -> {
+                    VcsInfo(
+                        type = VcsType.SUBVERSION,
+                        url = svnTrunkMatch.groupValues[1],
+                        revision = svnTrunkMatch.groupValues[2],
+                        path = svnTrunkMatch.groupValues[3]
+                    )
+                }
+
                 projectUrl.endsWith(".git") -> {
                     VcsInfo(VcsType.GIT, normalizeVcsUrl(projectUrl), "", null, "")
                 }
@@ -217,18 +241,6 @@ enum class VcsHost(
                     val url = normalizeVcsUrl(projectUrl.substringBeforeLast('#'))
                     val revision = projectUrl.substringAfterLast('#')
                     VcsInfo(VcsType.GIT, url, revision, null, "")
-                }
-
-                projectUrl.contains("svn") -> {
-                    val branchOrTagPattern = Regex("(.+)/(branches|tags)/([^/]+)/?(.*)")
-                    branchOrTagPattern.matchEntire(projectUrl)?.let { match ->
-                        VcsInfo(
-                            type = VcsType.SUBVERSION,
-                            url = match.groupValues[1],
-                            revision = "${match.groupValues[2]}/${match.groupValues[3]}",
-                            path = match.groupValues[4]
-                        )
-                    } ?: VcsInfo(VcsType.NONE, projectUrl, "")
                 }
 
                 else -> VcsInfo(VcsType.NONE, projectUrl, "")
