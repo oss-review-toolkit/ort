@@ -17,15 +17,15 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.analyzer.managers
-
-import org.ossreviewtoolkit.analyzer.PackageManager
+package org.ossreviewtoolkit.analyzer
 
 import io.kotlintest.shouldBe
 import io.kotlintest.shouldThrow
 import io.kotlintest.specs.WordSpec
 
 import java.io.File
+
+import org.ossreviewtoolkit.analyzer.managers.*
 
 class PackageManagerTest : WordSpec({
     val projectDir = File("src/funTest/assets/projects/synthetic/all-managers").absoluteFile
