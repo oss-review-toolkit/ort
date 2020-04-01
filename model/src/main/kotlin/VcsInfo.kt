@@ -90,32 +90,13 @@ data class VcsInfo(
             return other
         }
 
-        var type = this.type
-        if (type == VcsType.NONE && other.type != VcsType.NONE) {
-            type = other.type
-        }
-
-        var url = this.url
-        if (url.isBlank() && other.url.isNotBlank()) {
-            url = other.url
-        }
-
-        var revision = this.revision
-        if (revision.isBlank() && other.revision.isNotBlank()) {
-            revision = other.revision
-        }
-
-        var resolvedRevision = this.resolvedRevision
-        if (resolvedRevision == null && other.resolvedRevision != null) {
-            resolvedRevision = other.resolvedRevision
-        }
-
-        var path = this.path
-        if (path.isBlank() && other.path.isNotBlank()) {
-            path = other.path
-        }
-
-        return VcsInfo(type, url, revision, resolvedRevision, path)
+        return VcsInfo(
+            type.takeUnless { it == EMPTY.type } ?: other.type,
+            url.takeUnless { it == EMPTY.url } ?: other.url,
+            revision.takeUnless { it == EMPTY.revision } ?: other.revision,
+            resolvedRevision.takeUnless { it == EMPTY.resolvedRevision } ?: other.resolvedRevision,
+            path.takeUnless { it == EMPTY.path } ?: other.path
+        )
     }
 
     /**
