@@ -569,8 +569,9 @@ class MavenSupport(workspaceReader: WorkspaceReader) {
             }
         }
 
+        val browsableScmUrl = MavenSupport.getOriginalScm(mavenProject)?.url
         val homepageUrl = mavenProject.url
-        val vcsFallbackUrls = listOfNotNull(mavenProject.scm?.url, homepageUrl)
+        val vcsFallbackUrls = listOfNotNull(browsableScmUrl, homepageUrl)
 
         val vcsProcessed = localDirectory?.let {
             PackageManager.processProjectVcs(it, vcsFromPackage, vcsFallbackUrls)

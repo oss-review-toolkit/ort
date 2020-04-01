@@ -152,7 +152,9 @@ class Maven(
             workingDir
         }
 
-        val vcsFallbackUrls = listOfNotNull(mavenProject.scm?.url, mavenProject.url)
+        val browsableScmUrl = MavenSupport.getOriginalScm(mavenProject)?.url
+        val homepageUrl = mavenProject.url
+        val vcsFallbackUrls = listOfNotNull(browsableScmUrl, homepageUrl)
 
         val project = Project(
             id = Identifier(
@@ -165,7 +167,7 @@ class Maven(
             declaredLicenses = MavenSupport.parseLicenses(mavenProject),
             vcs = vcsFromPackage,
             vcsProcessed = processProjectVcs(projectDir, vcsFromPackage, vcsFallbackUrls),
-            homepageUrl = mavenProject.url.orEmpty(),
+            homepageUrl = homepageUrl.orEmpty(),
             scopes = scopes.values.toSortedSet()
         )
 
