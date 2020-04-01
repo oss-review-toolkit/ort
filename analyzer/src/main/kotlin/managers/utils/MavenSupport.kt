@@ -232,10 +232,10 @@ class MavenSupport(workspaceReader: WorkspaceReader) {
             var parent = mavenProject.parent
 
             while (parent != null) {
-                parent.scm?.let {
-                    it.connection?.let { connection ->
-                        if (connection.isNotBlank() && scm.connection.startsWith(connection)) {
-                            scm = parent.scm
+                parent.scm?.let { parentScm ->
+                    parentScm.connection?.let { parentConnection ->
+                        if (parentConnection.isNotBlank() && scm.connection.startsWith(parentConnection)) {
+                            scm = parentScm
                         }
                     }
                 }
