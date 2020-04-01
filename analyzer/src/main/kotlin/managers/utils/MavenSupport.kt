@@ -216,15 +216,18 @@ class MavenSupport(workspaceReader: WorkspaceReader) {
             }
         }
 
+        /**
+         * When asking Maven for the SCM URL of a POM that does not itself define an SCM URL, Maven returns the SCM
+         * URL of the first parent POM (if any) that defines one and appends the artifactIds of all child POMs to it,
+         * separated by slashes.
+         * This behavior is fundamentally broken because it invalidates the SCM URL for all VCS that cannot limit
+         * cloning to a specific path within a repository, or use a different syntax for that. Also, the assumption
+         * that the source code for a child artifact is stored in a top-level directory named like the artifactId
+         * inside the parent artifact's repository is often not correct.
+         * To address this, determine the SCM URL of the parent (if any) that is closest to the root POM and whose
+         * SCM URL still is a prefix of the child POM's SCM URL.
+         */
         fun parseVcsInfo(mavenProject: MavenProject): VcsInfo {
-            // When asking Maven for the SCM URL of a POM that does not itself define an SCM URL, Maven returns the SCM
-            // URL of the parent POM (if any) and appends the child POM's artifactId to it. This behavior is
-            // fundamentally broken because it invalidates the URL for many SCMs that cannot clone / checkout a specific
-            // path from a repository. Also, the assumption that the source code for a child artifact is stored in a
-            // top-level directory named like the artifactId inside the parent artifact's repository is often not
-            // correct.
-            // To fix this, determine the SCM URL of the root parent (if there are parents) and use that as the child's
-            // SCM URL.
             var scm = mavenProject.scm
             var parent = mavenProject.parent
 
