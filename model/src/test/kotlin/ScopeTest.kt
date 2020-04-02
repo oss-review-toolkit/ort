@@ -19,10 +19,9 @@
 
 package org.ossreviewtoolkit.model
 
-import io.kotlintest.matchers.containExactly
-import io.kotlintest.should
-import io.kotlintest.shouldBe
-import io.kotlintest.specs.WordSpec
+import io.kotest.core.spec.style.WordSpec
+import io.kotest.matchers.maps.shouldContainExactly
+import io.kotest.matchers.shouldBe
 
 class ScopeTest : WordSpec({
     "getDependencyTreeDepth()" should {
@@ -108,19 +107,18 @@ class ScopeTest : WordSpec({
                 )
             )
 
-            scope.getShortestPaths() should containExactly(
-                mapOf(
-                    Identifier("A") to emptyList(),
-                    Identifier("B") to emptyList(),
-                    Identifier("C") to emptyList(),
-                    Identifier("D") to listOf(Identifier("C")),
-                    Identifier("E") to listOf(Identifier("F")),
-                    Identifier("F") to emptyList(),
-                    Identifier("G") to emptyList(),
-                    Identifier("H") to listOf(Identifier("C"), Identifier("B"), Identifier("A")),
-                    Identifier("I") to listOf(Identifier("F"), Identifier("E"))
-                )
-            )
+            scope.getShortestPaths() shouldContainExactly
+                    mapOf(
+                        Identifier("A") to emptyList(),
+                        Identifier("B") to emptyList(),
+                        Identifier("C") to emptyList(),
+                        Identifier("D") to listOf(Identifier("C")),
+                        Identifier("E") to listOf(Identifier("F")),
+                        Identifier("F") to emptyList(),
+                        Identifier("G") to emptyList(),
+                        Identifier("H") to listOf(Identifier("C"), Identifier("B"), Identifier("A")),
+                        Identifier("I") to listOf(Identifier("F"), Identifier("E"))
+                    )
         }
     }
 })

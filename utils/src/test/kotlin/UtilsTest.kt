@@ -19,9 +19,9 @@
 
 package org.ossreviewtoolkit.utils
 
-import io.kotlintest.shouldBe
-import io.kotlintest.shouldNotBe
-import io.kotlintest.specs.WordSpec
+import io.kotest.matchers.shouldBe
+import io.kotest.matchers.shouldNotBe
+import io.kotest.core.spec.style.WordSpec
 
 import java.io.File
 import java.nio.file.Paths

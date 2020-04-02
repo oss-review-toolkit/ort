@@ -25,8 +25,8 @@ import org.ossreviewtoolkit.model.OrtIssue
 import org.ossreviewtoolkit.model.PackageReference
 import org.ossreviewtoolkit.model.Scope
 
-import io.kotlintest.shouldBe
-import io.kotlintest.specs.StringSpec
+import io.kotest.matchers.shouldBe
+import io.kotest.core.spec.style.StringSpec
 
 import java.time.Instant
 

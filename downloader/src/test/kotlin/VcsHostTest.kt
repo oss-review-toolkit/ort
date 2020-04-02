@@ -26,8 +26,8 @@ import org.ossreviewtoolkit.downloader.VcsHost.SOURCEHUT
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 
-import io.kotlintest.shouldBe
-import io.kotlintest.specs.WordSpec
+import io.kotest.matchers.shouldBe
+import io.kotest.core.spec.style.WordSpec
 
 class VcsHostTest : WordSpec({
     "The Bitbucket implementation" should {

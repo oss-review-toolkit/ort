@@ -22,8 +22,8 @@ package org.ossreviewtoolkit.reporter.reporters
 import org.ossreviewtoolkit.reporter.ReporterInput
 import org.ossreviewtoolkit.utils.test.readOrtResult
 
-import io.kotlintest.shouldNotBe
-import io.kotlintest.specs.WordSpec
+import io.kotest.matchers.shouldNotBe
+import io.kotest.core.spec.style.WordSpec
 
 import java.io.ByteArrayOutputStream
 

@@ -21,8 +21,8 @@ package org.ossreviewtoolkit.evaluator
 
 import org.ossreviewtoolkit.model.LicenseSource
 
-import io.kotlintest.shouldBe
-import io.kotlintest.specs.WordSpec
+import io.kotest.matchers.shouldBe
+import io.kotest.core.spec.style.WordSpec
 
 class PackageRuleTest : WordSpec() {
     private val ruleSet = RuleSet(ortResult)

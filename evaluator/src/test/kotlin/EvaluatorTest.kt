@@ -25,11 +25,11 @@ import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.model.utils.SimplePackageConfigurationProvider
 
-import io.kotlintest.matchers.beEmpty
-import io.kotlintest.matchers.haveSize
-import io.kotlintest.should
-import io.kotlintest.shouldBe
-import io.kotlintest.specs.WordSpec
+import io.kotest.matchers.collections.beEmpty
+import io.kotest.matchers.collections.haveSize
+import io.kotest.matchers.should
+import io.kotest.matchers.shouldBe
+import io.kotest.core.spec.style.WordSpec
 
 class EvaluatorTest : WordSpec() {
     private fun createEvaluator() = Evaluator(OrtResult.EMPTY, SimplePackageConfigurationProvider())

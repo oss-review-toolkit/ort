@@ -19,7 +19,7 @@
 
 package org.ossreviewtoolkit.utils.test
 
-import io.kotlintest.Tag
+import io.kotest.core.Tag
 
 object AndroidTag : Tag()
 

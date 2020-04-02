@@ -23,9 +23,9 @@ import com.fasterxml.jackson.module.kotlin.readValue
 
 import org.ossreviewtoolkit.utils.test.patchActualResult
 
-import io.kotlintest.matchers.collections.shouldContainExactly
-import io.kotlintest.shouldBe
-import io.kotlintest.specs.WordSpec
+import io.kotest.matchers.collections.shouldContainExactly
+import io.kotest.matchers.shouldBe
+import io.kotest.core.spec.style.WordSpec
 
 import java.io.File
 import java.time.Duration

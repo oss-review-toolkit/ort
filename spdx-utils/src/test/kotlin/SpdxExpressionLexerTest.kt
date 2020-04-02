@@ -19,9 +19,9 @@
 
 package org.ossreviewtoolkit.spdx
 
-import io.kotlintest.shouldBe
-import io.kotlintest.shouldThrow
-import io.kotlintest.specs.WordSpec
+import io.kotest.assertions.throwables.shouldThrow
+import io.kotest.core.spec.style.WordSpec
+import io.kotest.matchers.shouldBe
 
 import org.antlr.v4.runtime.CharStreams
 

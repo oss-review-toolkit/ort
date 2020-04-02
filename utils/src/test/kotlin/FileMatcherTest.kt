@@ -19,8 +19,8 @@
 
 package org.ossreviewtoolkit.utils
 
-import io.kotlintest.shouldBe
-import io.kotlintest.specs.WordSpec
+import io.kotest.matchers.shouldBe
+import io.kotest.core.spec.style.WordSpec
 
 class FileMatcherTest : WordSpec({
     val defaultMatcher = FileMatcher.LICENSE_FILE_MATCHER

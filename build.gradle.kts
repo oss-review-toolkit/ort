@@ -39,7 +39,7 @@ val detektPluginVersion: String by project
 val kotlinPluginVersion: String by project
 
 val jacksonVersion: String by project
-val kotlintestVersion: String by project
+val kotestVersion: String by project
 val log4jCoreVersion: String by project
 val okhttpVersion: String by project
 
@@ -66,7 +66,7 @@ idea {
                 defaults<JUnit> {
                     // Disable "condensed" multi-line diffs when running tests from the IDE to more easily accept actual
                     // results as expected results.
-                    vmParameters = "-Dkotlintest.assertions.multi-line-diff=simple"
+                    vmParameters = "-Dkotest.assertions.multi-line-diff=simple"
                 }
             }
         }
@@ -169,9 +169,8 @@ subprojects {
         dependencies {
             "api"("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
 
-            "testImplementation"("io.kotlintest:kotlintest-core:$kotlintestVersion")
-            "testImplementation"("io.kotlintest:kotlintest-assertions:$kotlintestVersion")
-            "testImplementation"("io.kotlintest:kotlintest-runner-junit5:$kotlintestVersion")
+            "testImplementation"("io.kotest:kotest-runner-junit5-jvm:$kotestVersion")
+            "testImplementation"("io.kotest:kotest-assertions-core-jvm:$kotestVersion")
             "testImplementation"(project(":test-utils"))
 
             "funTestImplementation"(sourceSets["main"].output)
@@ -251,7 +250,7 @@ subprojects {
                 isEnabled = enabled
             }
 
-            systemProperties = listOf("kotlintest.tags.include", "kotlintest.tags.exclude").associateWith {
+            systemProperties = listOf("kotest.tags.include", "kotest.tags.exclude").associateWith {
                 System.getProperty(it)
             }
 

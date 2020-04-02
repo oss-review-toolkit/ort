@@ -21,8 +21,8 @@ package org.ossreviewtoolkit.model.config
 
 import org.ossreviewtoolkit.model.yamlMapper
 
-import io.kotlintest.shouldBe
-import io.kotlintest.specs.StringSpec
+import io.kotest.matchers.shouldBe
+import io.kotest.core.spec.style.StringSpec
 
 class HttpFileStorageConfigurationTest : StringSpec({
     "Header values should be masked in serialization" {

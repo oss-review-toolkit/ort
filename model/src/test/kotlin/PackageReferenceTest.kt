@@ -19,12 +19,12 @@
 
 package org.ossreviewtoolkit.model
 
-import io.kotlintest.matchers.beEmpty
-import io.kotlintest.matchers.endWith
-import io.kotlintest.matchers.haveSize
-import io.kotlintest.should
-import io.kotlintest.shouldBe
-import io.kotlintest.specs.WordSpec
+import io.kotest.matchers.collections.beEmpty
+import io.kotest.matchers.string.endWith
+import io.kotest.matchers.collections.haveSize
+import io.kotest.matchers.should
+import io.kotest.matchers.shouldBe
+import io.kotest.core.spec.style.WordSpec
 
 class PackageReferenceTest : WordSpec() {
     companion object {

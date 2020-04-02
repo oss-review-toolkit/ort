@@ -19,13 +19,13 @@
 
 package org.ossreviewtoolkit.spdx
 
-import io.kotlintest.matchers.endWith
-import io.kotlintest.matchers.startWith
-import io.kotlintest.matchers.string.include
-import io.kotlintest.should
-import io.kotlintest.shouldBe
-import io.kotlintest.shouldNotBe
-import io.kotlintest.specs.WordSpec
+import io.kotest.core.spec.style.WordSpec
+import io.kotest.matchers.should
+import io.kotest.matchers.shouldBe
+import io.kotest.matchers.shouldNotBe
+import io.kotest.matchers.string.endWith
+import io.kotest.matchers.string.include
+import io.kotest.matchers.string.startWith
 
 class SpdxLicenseTest : WordSpec({
     "The license lookup" should {

@@ -25,9 +25,9 @@ import com.typesafe.config.ConfigFactory
 
 import io.github.config4k.extract
 
-import io.kotlintest.shouldBe
-import io.kotlintest.shouldNotBe
-import io.kotlintest.specs.WordSpec
+import io.kotest.matchers.shouldBe
+import io.kotest.matchers.shouldNotBe
+import io.kotest.core.spec.style.WordSpec
 
 import java.io.File
 

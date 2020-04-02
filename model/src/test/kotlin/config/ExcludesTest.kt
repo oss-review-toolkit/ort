@@ -19,6 +19,15 @@
 
 package org.ossreviewtoolkit.model.config
 
+import io.kotest.core.spec.style.WordSpec
+import io.kotest.core.test.TestCase
+import io.kotest.matchers.collections.beEmpty
+import io.kotest.matchers.collections.contain
+import io.kotest.matchers.collections.containExactly
+import io.kotest.matchers.collections.haveSize
+import io.kotest.matchers.should
+import io.kotest.matchers.shouldBe
+
 import org.ossreviewtoolkit.model.AnalyzerResult
 import org.ossreviewtoolkit.model.AnalyzerRun
 import org.ossreviewtoolkit.model.CuratedPackage
@@ -30,16 +39,6 @@ import org.ossreviewtoolkit.model.PackageReference
 import org.ossreviewtoolkit.model.Project
 import org.ossreviewtoolkit.model.Repository
 import org.ossreviewtoolkit.model.Scope
-
-import io.kotlintest.TestCase
-
-import io.kotlintest.matchers.beEmpty
-import io.kotlintest.matchers.collections.contain
-import io.kotlintest.matchers.collections.containExactly
-import io.kotlintest.matchers.haveSize
-import io.kotlintest.should
-import io.kotlintest.shouldBe
-import io.kotlintest.specs.WordSpec
 
 class ExcludesTest : WordSpec() {
     private val id = Identifier("type", "namespace", "name", "version")

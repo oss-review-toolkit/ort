@@ -16,7 +16,7 @@ Jenkinsfile
 
 # Ignore intermediate build artifacts.
 **/.gradle/
-**/.kotlintest/
+**/.kotest/
 **/build/
 !docker/build
 **/out/
