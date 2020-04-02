@@ -19,8 +19,8 @@
 
 package org.ossreviewtoolkit.utils
 
-import io.kotlintest.matchers.types.shouldBeSameInstanceAs
-import io.kotlintest.specs.StringSpec
+import io.kotest.matchers.types.shouldBeSameInstanceAs
+import io.kotest.core.spec.style.StringSpec
 
 class LoggerTest : StringSpec({
     "Only one logger is created per class" {

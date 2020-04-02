@@ -24,10 +24,10 @@ import org.ossreviewtoolkit.model.TextLocation
 import org.ossreviewtoolkit.model.config.LicenseFindingCuration
 import org.ossreviewtoolkit.model.config.LicenseFindingCurationReason.INCORRECT
 
-import io.kotlintest.IsolationMode
-import io.kotlintest.matchers.collections.shouldContainExactlyInAnyOrder
-import io.kotlintest.shouldBe
-import io.kotlintest.specs.WordSpec
+import io.kotest.core.spec.IsolationMode
+import io.kotest.matchers.collections.shouldContainExactlyInAnyOrder
+import io.kotest.matchers.shouldBe
+import io.kotest.core.spec.style.WordSpec
 
 import kotlin.random.Random
 

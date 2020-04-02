@@ -24,14 +24,14 @@ import org.ossreviewtoolkit.scanner.LocalScanner
 import org.ossreviewtoolkit.utils.ORT_NAME
 import org.ossreviewtoolkit.utils.safeDeleteRecursively
 
-import io.kotlintest.Spec
-import io.kotlintest.Tag
-import io.kotlintest.TestCase
-import io.kotlintest.TestResult
-import io.kotlintest.matchers.file.shouldNotStartWithPath
-import io.kotlintest.shouldBe
-import io.kotlintest.shouldNotBe
-import io.kotlintest.specs.StringSpec
+import io.kotest.core.spec.Spec
+import io.kotest.core.Tag
+import io.kotest.core.test.TestCase
+import io.kotest.core.test.TestResult
+import io.kotest.matchers.file.shouldNotStartWithPath
+import io.kotest.matchers.shouldBe
+import io.kotest.matchers.shouldNotBe
+import io.kotest.core.spec.style.StringSpec
 
 import java.io.File
 import java.util.TreeSet

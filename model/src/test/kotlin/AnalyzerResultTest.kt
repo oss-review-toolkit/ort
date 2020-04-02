@@ -23,10 +23,10 @@ import com.fasterxml.jackson.module.kotlin.readValue
 
 import org.ossreviewtoolkit.utils.DeclaredLicenseProcessor
 
-import io.kotlintest.matchers.haveSize
-import io.kotlintest.should
-import io.kotlintest.shouldBe
-import io.kotlintest.specs.WordSpec
+import io.kotest.matchers.collections.haveSize
+import io.kotest.matchers.should
+import io.kotest.matchers.shouldBe
+import io.kotest.core.spec.style.WordSpec
 
 class AnalyzerResultTest : WordSpec() {
     private val issue1 = OrtIssue(source = "source-1", message = "message-1")

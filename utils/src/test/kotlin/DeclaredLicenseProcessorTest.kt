@@ -26,9 +26,9 @@ import org.ossreviewtoolkit.spdx.SpdxLicense
 import org.ossreviewtoolkit.spdx.SpdxLicenseAliasMapping
 import org.ossreviewtoolkit.spdx.SpdxLicenseIdExpression
 
-import io.kotlintest.shouldBe
-import io.kotlintest.shouldNotBe
-import io.kotlintest.specs.StringSpec
+import io.kotest.matchers.shouldBe
+import io.kotest.matchers.shouldNotBe
+import io.kotest.core.spec.style.StringSpec
 
 class DeclaredLicenseProcessorTest : StringSpec() {
     /**

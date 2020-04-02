@@ -24,7 +24,7 @@ import bad.robot.excel.matchers.WorkbookMatcher.sameWorkbook
 import org.ossreviewtoolkit.reporter.ReporterInput
 import org.ossreviewtoolkit.utils.test.readOrtResult
 
-import io.kotlintest.specs.WordSpec
+import io.kotest.core.spec.style.WordSpec
 
 import java.io.ByteArrayOutputStream
 import java.io.File

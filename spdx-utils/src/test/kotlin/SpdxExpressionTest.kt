@@ -26,11 +26,11 @@ import org.ossreviewtoolkit.spdx.SpdxExpression.Strictness
 import org.ossreviewtoolkit.spdx.SpdxLicense.*
 import org.ossreviewtoolkit.spdx.SpdxLicenseException.*
 
-import io.kotlintest.assertSoftly
-import io.kotlintest.matchers.collections.shouldContainExactlyInAnyOrder
-import io.kotlintest.shouldBe
-import io.kotlintest.shouldThrow
-import io.kotlintest.specs.WordSpec
+import io.kotest.assertions.assertSoftly
+import io.kotest.matchers.collections.shouldContainExactlyInAnyOrder
+import io.kotest.matchers.shouldBe
+import io.kotest.assertions.throwables.shouldThrow
+import io.kotest.core.spec.style.WordSpec
 
 class SpdxExpressionTest : WordSpec() {
     private val yamlMapper = YAMLMapper()

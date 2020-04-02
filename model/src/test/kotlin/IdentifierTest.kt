@@ -21,12 +21,12 @@ package org.ossreviewtoolkit.model
 
 import com.fasterxml.jackson.module.kotlin.readValue
 
-import io.kotlintest.assertSoftly
-import io.kotlintest.matchers.string.shouldNotContain
-import io.kotlintest.matchers.string.shouldNotStartWith
-import io.kotlintest.matchers.string.shouldStartWith
-import io.kotlintest.shouldBe
-import io.kotlintest.specs.WordSpec
+import io.kotest.assertions.assertSoftly
+import io.kotest.matchers.string.shouldNotContain
+import io.kotest.matchers.string.shouldNotStartWith
+import io.kotest.matchers.string.shouldStartWith
+import io.kotest.matchers.shouldBe
+import io.kotest.core.spec.style.WordSpec
 
 class IdentifierTest : WordSpec({
     "String representations" should {

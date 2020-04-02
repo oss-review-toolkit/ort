@@ -21,9 +21,9 @@ package org.ossreviewtoolkit.model
 
 import org.ossreviewtoolkit.spdx.SpdxExpression
 
-import io.kotlintest.shouldBe
-import io.kotlintest.shouldThrow
-import io.kotlintest.specs.WordSpec
+import io.kotest.matchers.shouldBe
+import io.kotest.assertions.throwables.shouldThrow
+import io.kotest.core.spec.style.WordSpec
 
 class PackageCurationTest : WordSpec({
     "Applying a single curation" should {

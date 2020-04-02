@@ -29,10 +29,11 @@ import org.ossreviewtoolkit.utils.test.USER_DIR
 import org.ossreviewtoolkit.utils.test.patchActualResult
 import org.ossreviewtoolkit.utils.test.patchExpectedResult
 
-import io.kotlintest.matchers.haveSubstring
-import io.kotlintest.shouldBe
-import io.kotlintest.shouldNotBe
-import io.kotlintest.specs.WordSpec
+import io.kotest.matchers.string.haveSubstring
+import io.kotest.matchers.should
+import io.kotest.matchers.shouldBe
+import io.kotest.matchers.shouldNotBe
+import io.kotest.core.spec.style.WordSpec
 
 import java.io.File
 

@@ -25,8 +25,8 @@ import org.ossreviewtoolkit.reporter.ReporterInput
 import org.ossreviewtoolkit.utils.normalizeLineBreaks
 import org.ossreviewtoolkit.utils.test.readOrtResult
 
-import io.kotlintest.shouldBe
-import io.kotlintest.specs.WordSpec
+import io.kotest.matchers.shouldBe
+import io.kotest.core.spec.style.WordSpec
 
 import java.io.ByteArrayOutputStream
 import java.io.File

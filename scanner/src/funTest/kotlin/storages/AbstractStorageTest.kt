@@ -40,13 +40,13 @@ import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.jsonMapper
 import org.ossreviewtoolkit.scanner.ScanResultsStorage
 
-import io.kotlintest.matchers.beEmpty
-import io.kotlintest.matchers.beOfType
-import io.kotlintest.matchers.collections.containExactly
-import io.kotlintest.matchers.collections.containExactlyInAnyOrder
-import io.kotlintest.should
-import io.kotlintest.shouldBe
-import io.kotlintest.specs.StringSpec
+import io.kotest.matchers.collections.beEmpty
+import io.kotest.matchers.beOfType
+import io.kotest.matchers.collections.containExactly
+import io.kotest.matchers.collections.containExactlyInAnyOrder
+import io.kotest.matchers.should
+import io.kotest.matchers.shouldBe
+import io.kotest.core.spec.style.StringSpec
 
 import java.time.Duration
 import java.time.Instant

@@ -24,11 +24,11 @@ import org.ossreviewtoolkit.model.config.CopyrightGarbage
 import org.ossreviewtoolkit.reporter.ReporterInput
 import org.ossreviewtoolkit.utils.test.readOrtResult
 
-import io.kotlintest.matchers.string.contain
-import io.kotlintest.should
-import io.kotlintest.shouldBe
-import io.kotlintest.shouldNot
-import io.kotlintest.specs.WordSpec
+import io.kotest.matchers.string.contain
+import io.kotest.matchers.should
+import io.kotest.matchers.shouldBe
+import io.kotest.matchers.shouldNot
+import io.kotest.core.spec.style.WordSpec
 
 import java.io.ByteArrayOutputStream
 import java.io.File

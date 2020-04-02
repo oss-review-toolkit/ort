@@ -19,11 +19,11 @@
 
 package org.ossreviewtoolkit.spdx
 
-import io.kotlintest.assertSoftly
-import io.kotlintest.matchers.beEmpty
-import io.kotlintest.should
-import io.kotlintest.shouldBe
-import io.kotlintest.specs.WordSpec
+import io.kotest.assertions.assertSoftly
+import io.kotest.matchers.collections.beEmpty
+import io.kotest.matchers.should
+import io.kotest.matchers.shouldBe
+import io.kotest.core.spec.style.WordSpec
 
 class SpdxLicenseAliasMappingTest : WordSpec({
     "The list" should {

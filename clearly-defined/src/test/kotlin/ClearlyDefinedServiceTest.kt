@@ -30,14 +30,14 @@ import org.ossreviewtoolkit.clearlydefined.ClearlyDefinedService.Patch
 import org.ossreviewtoolkit.clearlydefined.ClearlyDefinedService.Provider
 import org.ossreviewtoolkit.clearlydefined.ClearlyDefinedService.Server
 
-import io.kotlintest.matchers.numerics.shouldBeGreaterThan
-import io.kotlintest.matchers.string.beEmpty
-import io.kotlintest.matchers.string.shouldNotContain
-import io.kotlintest.matchers.string.shouldStartWith
-import io.kotlintest.shouldBe
-import io.kotlintest.shouldNot
-import io.kotlintest.shouldNotBe
-import io.kotlintest.specs.WordSpec
+import io.kotest.core.spec.style.WordSpec
+import io.kotest.matchers.comparables.shouldBeGreaterThan
+import io.kotest.matchers.string.beEmpty
+import io.kotest.matchers.string.shouldNotContain
+import io.kotest.matchers.string.shouldStartWith
+import io.kotest.matchers.shouldBe
+import io.kotest.matchers.shouldNot
+import io.kotest.matchers.shouldNotBe
 
 import java.net.HttpURLConnection
 

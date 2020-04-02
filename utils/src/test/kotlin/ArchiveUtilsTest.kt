@@ -19,10 +19,10 @@
 
 package org.ossreviewtoolkit.utils
 
-import io.kotlintest.TestCase
-import io.kotlintest.TestResult
-import io.kotlintest.shouldBe
-import io.kotlintest.specs.StringSpec
+import io.kotest.core.test.TestCase
+import io.kotest.core.test.TestResult
+import io.kotest.matchers.shouldBe
+import io.kotest.core.spec.style.StringSpec
 
 import java.io.File
 

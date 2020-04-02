@@ -19,13 +19,13 @@
 
 package org.ossreviewtoolkit.spdx
 
-import org.ossreviewtoolkit.spdx.SpdxExpression.Strictness
+import io.kotest.assertions.assertSoftly
+import io.kotest.matchers.collections.beEmpty
+import io.kotest.matchers.should
+import io.kotest.matchers.shouldBe
+import io.kotest.core.spec.style.WordSpec
 
-import io.kotlintest.assertSoftly
-import io.kotlintest.matchers.beEmpty
-import io.kotlintest.should
-import io.kotlintest.shouldBe
-import io.kotlintest.specs.WordSpec
+import org.ossreviewtoolkit.spdx.SpdxExpression.Strictness
 
 class SpdxDeclaredLicenseMappingTest : WordSpec({
     "The list" should {

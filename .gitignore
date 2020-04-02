@@ -5,8 +5,8 @@ out/
 /local.properties
 /*.iml
 
-# Kotlintest temporary directory
-.kotlintest/
+# Kotest temporary directory
+.kotest/
 
 # Mac
 .DS_Store

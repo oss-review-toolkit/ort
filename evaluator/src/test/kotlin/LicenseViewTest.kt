@@ -21,9 +21,9 @@ package org.ossreviewtoolkit.evaluator
 
 import org.ossreviewtoolkit.model.LicenseSource
 
-import io.kotlintest.matchers.collections.shouldContainExactlyInAnyOrder
-import io.kotlintest.shouldBe
-import io.kotlintest.specs.WordSpec
+import io.kotest.matchers.collections.shouldContainExactlyInAnyOrder
+import io.kotest.matchers.shouldBe
+import io.kotest.core.spec.style.WordSpec
 
 class LicenseViewTest : WordSpec({
     "All" should {

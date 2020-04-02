@@ -21,9 +21,9 @@ package org.ossreviewtoolkit.scanner.storages
 
 import com.opentable.db.postgres.embedded.EmbeddedPostgres
 
-import io.kotlintest.IsolationMode
-import io.kotlintest.Spec
-import io.kotlintest.shouldBe
+import io.kotest.core.spec.IsolationMode
+import io.kotest.core.spec.Spec
+import io.kotest.matchers.shouldBe
 
 class PostgresStorageTest : AbstractStorageTest() {
     private lateinit var postgres: EmbeddedPostgres

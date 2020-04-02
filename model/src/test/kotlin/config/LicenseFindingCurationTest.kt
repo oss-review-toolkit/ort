@@ -22,8 +22,8 @@ package org.ossreviewtoolkit.model.config
 import com.fasterxml.jackson.module.kotlin.readValue
 import org.ossreviewtoolkit.model.yamlMapper
 
-import io.kotlintest.shouldBe
-import io.kotlintest.specs.WordSpec
+import io.kotest.matchers.shouldBe
+import io.kotest.core.spec.style.WordSpec
 
 class LicenseFindingCurationTest : WordSpec({
     "A License finding curation" should {

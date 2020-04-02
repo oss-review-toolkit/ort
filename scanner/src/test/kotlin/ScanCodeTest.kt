@@ -25,12 +25,12 @@ import org.ossreviewtoolkit.model.TextLocation
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
 import org.ossreviewtoolkit.scanner.scanners.ScanCode
 
-import io.kotlintest.matchers.collections.shouldContainExactlyInAnyOrder
-import io.kotlintest.matchers.haveSize
-import io.kotlintest.matchers.match
-import io.kotlintest.should
-import io.kotlintest.shouldBe
-import io.kotlintest.specs.WordSpec
+import io.kotest.core.spec.style.WordSpec
+import io.kotest.matchers.collections.shouldContainExactlyInAnyOrder
+import io.kotest.matchers.collections.haveSize
+import io.kotest.matchers.should
+import io.kotest.matchers.shouldBe
+import io.kotest.matchers.string.shouldMatch
 
 import java.io.File
 import java.time.Instant
@@ -833,12 +833,10 @@ class ScanCodeTest : WordSpec({
 
     "commandLineOptions" should {
         "contain the default values if the scanner configuration is empty" {
-            scanner.commandLineOptions.joinToString(" ") should
-                    match(
-                        "--copyright --license --ignore \\*.ort.yml --info --strip-root --timeout 300 " +
-                                "--ignore HERE_NOTICE --ignore META-INF/DEPENDENCIES --processes \\d+ --license-diag " +
-                                "--verbose"
-                    )
+            scanner.commandLineOptions.joinToString(" ") shouldMatch
+                    "--copyright --license --ignore \\*.ort.yml --info --strip-root --timeout 300 " +
+                            "--ignore HERE_NOTICE --ignore META-INF/DEPENDENCIES --processes \\d+ --license-diag " +
+                            "--verbose"
         }
 
         "contain the values from the scanner configuration" {

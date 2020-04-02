@@ -20,15 +20,15 @@
 package org.ossreviewtoolkit.model
 
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
-import io.kotlintest.matchers.collections.shouldContainExactly
-import io.kotlintest.matchers.collections.shouldContainExactlyInAnyOrder
+import io.kotest.matchers.collections.shouldContainExactly
+import io.kotest.matchers.collections.shouldContainExactlyInAnyOrder
 
-import io.kotlintest.matchers.haveSize
-import io.kotlintest.matchers.match
-import io.kotlintest.should
-import io.kotlintest.shouldBe
-import io.kotlintest.shouldThrow
-import io.kotlintest.specs.WordSpec
+import io.kotest.matchers.collections.haveSize
+import io.kotest.matchers.should
+import io.kotest.matchers.shouldBe
+import io.kotest.assertions.throwables.shouldThrow
+import io.kotest.core.spec.style.WordSpec
+import io.kotest.matchers.string.shouldMatch
 
 import java.io.File
 import java.lang.IllegalArgumentException
@@ -139,7 +139,7 @@ class OrtResultTest : WordSpec({
                 ortResult.getDefinitionFilePathRelativeToAnalyzerRoot(project) shouldBe "project1/build.gradle"
             }
 
-            e.message should match("The .* of project .* cannot be found in .*")
+            e.message shouldMatch "The .* of project .* cannot be found in .*"
         }
     }
 })

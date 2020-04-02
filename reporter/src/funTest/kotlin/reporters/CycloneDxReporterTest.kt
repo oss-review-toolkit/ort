@@ -25,10 +25,10 @@ import org.ossreviewtoolkit.reporter.ReporterInput
 import org.ossreviewtoolkit.utils.test.patchExpectedResult
 import org.ossreviewtoolkit.utils.test.readOrtResult
 
-import io.kotlintest.matchers.beEmpty
-import io.kotlintest.should
-import io.kotlintest.shouldBe
-import io.kotlintest.specs.WordSpec
+import io.kotest.matchers.collections.beEmpty
+import io.kotest.matchers.should
+import io.kotest.matchers.shouldBe
+import io.kotest.core.spec.style.WordSpec
 
 import java.io.ByteArrayOutputStream
 import java.io.File

@@ -20,7 +20,7 @@
 
 val cliktVersion: String by project
 val config4kVersion: String by project
-val kotlintestVersion: String by project
+val kotestVersion: String by project
 val log4jCoreVersion: String by project
 val reflectionsVersion: String by project
 
@@ -74,9 +74,8 @@ dependencies {
 
     testImplementation(project(":test-utils"))
 
-    testImplementation("io.kotlintest:kotlintest-core:$kotlintestVersion")
-    testImplementation("io.kotlintest:kotlintest-assertions:$kotlintestVersion")
-    testImplementation("io.kotlintest:kotlintest-runner-junit5:$kotlintestVersion")
+    testImplementation("io.kotest:kotest-runner-junit5-jvm:$kotestVersion")
+    testImplementation("io.kotest:kotest-assertions-core-jvm:$kotestVersion")
 
     funTestImplementation(sourceSets["main"].output)
     funTestImplementation(sourceSets["test"].output)

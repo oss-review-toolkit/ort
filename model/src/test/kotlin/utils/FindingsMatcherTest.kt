@@ -27,12 +27,12 @@ import org.ossreviewtoolkit.model.utils.FindingsMatcher.Companion.DEFAULT_EXPAND
 import org.ossreviewtoolkit.model.utils.FindingsMatcher.Companion.DEFAULT_TOLERANCE_LINES
 import org.ossreviewtoolkit.utils.FileMatcher
 
-import io.kotlintest.IsolationMode
-import io.kotlintest.matchers.beEmpty
-import io.kotlintest.matchers.collections.shouldContainExactlyInAnyOrder
-import io.kotlintest.should
-import io.kotlintest.shouldBe
-import io.kotlintest.specs.WordSpec
+import io.kotest.core.spec.IsolationMode
+import io.kotest.matchers.collections.beEmpty
+import io.kotest.matchers.collections.shouldContainExactlyInAnyOrder
+import io.kotest.matchers.should
+import io.kotest.matchers.shouldBe
+import io.kotest.core.spec.style.WordSpec
 
 import kotlin.random.Random
 

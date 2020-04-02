@@ -19,11 +19,11 @@
 
 package org.ossreviewtoolkit.utils
 
-import io.kotlintest.assertSoftly
-import io.kotlintest.shouldBe
-import io.kotlintest.shouldNotBe
-import io.kotlintest.shouldThrow
-import io.kotlintest.specs.WordSpec
+import io.kotest.assertions.assertSoftly
+import io.kotest.matchers.shouldBe
+import io.kotest.matchers.shouldNotBe
+import io.kotest.assertions.throwables.shouldThrow
+import io.kotest.core.spec.style.WordSpec
 
 import java.io.File
 import java.io.IOException

@@ -20,18 +20,16 @@
 
 package org.ossreviewtoolkit.utils.storage
 
-import org.ossreviewtoolkit.utils.log
-
 import com.sun.net.httpserver.HttpExchange
 import com.sun.net.httpserver.HttpHandler
 import com.sun.net.httpserver.HttpServer
 
-import io.kotlintest.Spec
-import io.kotlintest.TestCase
-import io.kotlintest.TestResult
-import io.kotlintest.shouldBe
-import io.kotlintest.shouldThrow
-import io.kotlintest.specs.WordSpec
+import io.kotest.assertions.throwables.shouldThrow
+import io.kotest.core.spec.Spec
+import io.kotest.core.spec.style.WordSpec
+import io.kotest.core.test.TestCase
+import io.kotest.core.test.TestResult
+import io.kotest.matchers.shouldBe
 
 import java.io.IOException
 import java.net.HttpURLConnection
@@ -39,6 +37,8 @@ import java.net.InetAddress
 import java.net.InetSocketAddress
 
 import kotlin.random.Random
+
+import org.ossreviewtoolkit.utils.log
 
 class HttpFileStorageTest : WordSpec() {
     private val loopback = InetAddress.getLoopbackAddress()

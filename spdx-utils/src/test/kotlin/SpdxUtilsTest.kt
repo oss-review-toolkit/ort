@@ -21,15 +21,16 @@ package org.ossreviewtoolkit.spdx
 
 import org.ossreviewtoolkit.utils.ORT_NAME
 
-import io.kotlintest.TestCase
-import io.kotlintest.TestResult
-import io.kotlintest.shouldBe
-import io.kotlintest.shouldNot
-import io.kotlintest.shouldNotBe
-import io.kotlintest.matchers.endWith
-import io.kotlintest.matchers.startWith
-import io.kotlintest.matchers.string.beBlank
-import io.kotlintest.specs.WordSpec
+import io.kotest.core.test.TestCase
+import io.kotest.core.test.TestResult
+import io.kotest.matchers.should
+import io.kotest.matchers.shouldBe
+import io.kotest.matchers.shouldNot
+import io.kotest.matchers.shouldNotBe
+import io.kotest.matchers.string.endWith
+import io.kotest.matchers.string.startWith
+import io.kotest.matchers.string.beBlank
+import io.kotest.core.spec.style.WordSpec
 
 import java.io.File
 

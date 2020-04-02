@@ -28,8 +28,8 @@ import org.ossreviewtoolkit.utils.test.DEFAULT_REPOSITORY_CONFIGURATION
 import org.ossreviewtoolkit.utils.test.USER_DIR
 import org.ossreviewtoolkit.utils.test.patchExpectedResult
 
-import io.kotlintest.shouldBe
-import io.kotlintest.specs.WordSpec
+import io.kotest.matchers.shouldBe
+import io.kotest.core.spec.style.WordSpec
 
 import java.io.File
 
