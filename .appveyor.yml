@@ -3,13 +3,13 @@ skip_branch_with_pr: true
 environment:
   HOME: $(HOMEDRIVE)$(HOMEPATH)
   BOWER_VERSION: 1.8.8
-  COMPOSER_VERSION: 4.8.0
+  COMPOSER_VERSION: 5.1.0
   CONAN_VERSION: 1.18.0
   FLUTTER_HOME: C:\flutter
   FLUTTER_VERSION: v1.7.8+hotfix.3-stable
   GO_DEP_VERSION: 0.5.0
   NPM_VERSION: 6.14.1
-  PHP_VERSION: 7.2.0
+  PHP_VERSION: 7.4.3
   PYTHON_PIPENV_VERSION: 2018.11.26
   RUST_VERSION: 1.35.0
   SBT_VERSION: 1.0.2
@@ -41,12 +41,6 @@ install:
   - cinst sbt --version %SBT_VERSION% -y
   - cinst php --version %PHP_VERSION% -y
   - cinst composer --version %COMPOSER_VERSION% -y # The version refers to the installer, not to Composer.
-  - cd c:\tools\php72 # For some reason pushd / popd does not work.
-  - copy php.ini-production php.ini
-  - echo extension_dir=ext>>php.ini
-  - echo extension=php_mbstring.dll>>php.ini
-  - echo extension=php_openssl.dll>>php.ini
-  - cd "%APPVEYOR_BUILD_FOLDER%"
   - cinst dep --version %GO_DEP_VERSION% -y
   - refreshenv
   - C:\msys64\usr\bin\bash -lc "pacman --noconfirm -Sy cvs"
