@@ -36,7 +36,7 @@ class GradleIntegrationTest : AbstractIntegrationSpec() {
             type = "Maven",
             namespace = "org.gradle",
             name = "Gradle",
-            version = "4.4.0"
+            version = "6.3.0"
         ),
         declaredLicenses = sortedSetOf(),
         description = "",
@@ -46,7 +46,7 @@ class GradleIntegrationTest : AbstractIntegrationSpec() {
         vcs = VcsInfo(
             type = VcsType.GIT,
             url = "https://github.com/gradle/gradle.git",
-            revision = "v4.4.0"
+            revision = "v6.3.0"
         )
     )
 
