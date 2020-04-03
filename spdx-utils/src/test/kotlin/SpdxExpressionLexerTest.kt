@@ -25,6 +25,16 @@ import io.kotest.matchers.shouldBe
 
 import org.antlr.v4.runtime.CharStreams
 
+fun getTokensByTypeForExpression(expression: String): List<Pair<Int, String>> {
+    val charStream = CharStreams.fromString(expression)
+    val lexer = SpdxExpressionLexer(charStream)
+
+    lexer.removeErrorListeners()
+    lexer.addErrorListener(SpdxErrorListener())
+
+    return lexer.allTokens.map { it.type to it.text }
+}
+
 class SpdxExpressionLexerTest : WordSpec() {
     init {
         "SpdxExpressionLexer" should {
@@ -64,15 +74,5 @@ class SpdxExpressionLexerTest : WordSpec() {
                 exception.message shouldBe "token recognition error at: '/'"
             }
         }
-    }
-
-    private fun getTokensByTypeForExpression(expression: String): List<Pair<Int, String>> {
-        val charStream = CharStreams.fromString(expression)
-        val lexer = SpdxExpressionLexer(charStream)
-
-        lexer.removeErrorListeners()
-        lexer.addErrorListener(SpdxErrorListener())
-
-        return lexer.allTokens.map { it.type to it.text }
     }
 }

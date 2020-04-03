@@ -20,10 +20,13 @@
 package org.ossreviewtoolkit.spdx
 
 import io.kotest.assertions.assertSoftly
+import io.kotest.core.spec.style.WordSpec
+import io.kotest.inspectors.forAll
 import io.kotest.matchers.collections.beEmpty
+import io.kotest.matchers.collections.shouldHaveAtLeastSize
+import io.kotest.matchers.collections.shouldHaveAtMostSize
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
-import io.kotest.core.spec.style.WordSpec
 
 class SpdxLicenseAliasMappingTest : WordSpec({
     "The list" should {
@@ -39,19 +42,17 @@ class SpdxLicenseAliasMappingTest : WordSpec({
     }
 
     "The mapping" should {
-        "contain only parsable keys" {
-            val unparsableLicenses = SpdxLicenseAliasMapping.mapping.filterNot { (declaredLicense, _) ->
-                try {
-                    // Be as lenient as possible when parsing declared licenses as we really only want to check for
-                    // general parsability here.
-                    SpdxExpression.parse(declaredLicense)
-                    true
-                } catch (e: SpdxException) {
-                    false
-                }
-            }
+        "contain only single ID strings" {
+            SpdxLicenseAliasMapping.mapping.keys.forAll { declaredLicense ->
+                val tokens = getTokensByTypeForExpression(declaredLicense)
+                val types = tokens.map { (type, _) -> type }
 
-            unparsableLicenses shouldBe emptyMap()
+                tokens shouldHaveAtLeastSize 1
+                tokens shouldHaveAtMostSize 2
+                tokens.joinToString("") { (_, text) -> text } shouldBe declaredLicense
+                types.first() shouldBe SpdxExpressionLexer.IDSTRING
+                types.getOrElse(1) { SpdxExpressionLexer.PLUS } shouldBe SpdxExpressionLexer.PLUS
+            }
         }
 
         "not contain plain SPDX license ids" {
