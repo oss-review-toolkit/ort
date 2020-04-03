@@ -19,7 +19,6 @@
 
 package org.ossreviewtoolkit.spdx
 
-import io.kotest.assertions.assertSoftly
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.inspectors.forAll
 import io.kotest.matchers.collections.beEmpty
@@ -56,16 +55,13 @@ class SpdxLicenseAliasMappingTest : WordSpec({
         }
 
         "not contain plain SPDX license ids" {
-            assertSoftly {
-                SpdxLicenseAliasMapping.customLicenseIds.forEach { (declaredLicense, _) ->
-                    "\"$declaredLicense\" maps to ${SpdxLicense.forId(declaredLicense)}" shouldBe
-                            "\"$declaredLicense\" maps to null"
-                }
+            SpdxLicenseAliasMapping.customLicenseIds.keys.forAll { declaredLicense ->
+                SpdxLicense.forId(declaredLicense) shouldBe null
             }
         }
 
         "be case-insensitive" {
-            SpdxLicenseAliasMapping.customLicenseIds.forEach { (key, license) ->
+            SpdxLicenseAliasMapping.customLicenseIds.asSequence().forAll { (key, license) ->
                 SpdxLicenseAliasMapping.map(key.toLowerCase(), mapDeprecated = false) shouldBe license
                 SpdxLicenseAliasMapping.map(key.toUpperCase(), mapDeprecated = false) shouldBe license
                 SpdxLicenseAliasMapping.map(key.toLowerCase().capitalize(), mapDeprecated = false) shouldBe license
