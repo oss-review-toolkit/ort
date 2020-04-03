@@ -41,6 +41,7 @@ object SpdxLicenseAliasMapping {
         "AFLv2.1" to AFL_2_1,
         "agpl" to AGPL_3_0_ONLY,
         "ALv2" to APACHE_2_0,
+        "APACHEv2" to APACHE_2_0,
         "Apache" to APACHE_2_0,
         "Apache-2" to APACHE_2_0,
         "apache-license" to APACHE_2_0,
