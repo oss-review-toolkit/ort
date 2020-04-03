@@ -86,7 +86,6 @@ object SpdxDeclaredLicenseMapping {
         """Apache-2.0 */ &#39; &quot; &#x3D;end --
 
  """.trimIndent() to APACHE_2_0.toExpression(),
-        "Apache-style" to APACHE_2_0.toExpression(),
         "Apple Public Source License" to APSL_1_0.toExpression(),
         "Artistic License" to ARTISTIC_2_0.toExpression(),
         "Artistic 2.0" to ARTISTIC_2_0.toExpression(),
@@ -154,7 +153,6 @@ object SpdxDeclaredLicenseMapping {
         "CDDL/GPLv2+CE" to (CDDL_1_0 or (GPL_2_0_ONLY with CLASSPATH_EXCEPTION_2_0)),
         "cddl v1.0" to CDDL_1_0.toExpression(),
         "cddl v1.1" to CDDL_1_1.toExpression(),
-        "CeCILL" to CECILL_1_1.toExpression(),
         "CECILL v2" to CECILL_2_0.toExpression(),
         "CeCILL 2.0" to CECILL_2_0.toExpression(),
         "CeCILL 2.1" to CECILL_2_1.toExpression(),
@@ -210,7 +208,6 @@ object SpdxDeclaredLicenseMapping {
         "cc by-sa 2.5" to CC_BY_SA_2_5.toExpression(),
         "cc by-sa 3.0" to CC_BY_SA_3_0.toExpression(),
         "cc by-sa 4.0" to CC_BY_SA_4_0.toExpression(),
-        "cpal" to CPAL_1_0.toExpression(),
         "cpal 1.0" to CPAL_1_0.toExpression(),
         "cpal v1.0" to CPAL_1_0.toExpression(),
         "Dual License: CDDL 1.0 and GPL V2 with Classpath Exception" to (CDDL_1_0 and GPL_2_0_ONLY),
@@ -450,7 +447,6 @@ object SpdxDeclaredLicenseMapping {
         "Two-clause BSD-style license" to BSD_2_CLAUSE.toExpression(),
         "Unicode/ICU License" to ICU.toExpression(),
         "Universal Permissive License (UPL)" to UPL_1_0.toExpression(),
-        "Vovida" to VSL_1_0.toExpression(),
         "Vovida License 1.0" to VSL_1_0.toExpression(),
         "Vovida Software License" to VSL_1_0.toExpression(),
         "Vovida Software License 1.0" to VSL_1_0.toExpression(),
