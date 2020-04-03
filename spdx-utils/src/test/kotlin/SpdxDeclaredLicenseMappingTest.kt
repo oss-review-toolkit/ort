@@ -20,12 +20,13 @@
 package org.ossreviewtoolkit.spdx
 
 import io.kotest.assertions.assertSoftly
+import io.kotest.core.spec.style.WordSpec
+import io.kotest.inspectors.forAll
 import io.kotest.matchers.collections.beEmpty
+import io.kotest.matchers.ints.shouldBeGreaterThanOrEqual
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
-import io.kotest.core.spec.style.WordSpec
-
-import org.ossreviewtoolkit.spdx.SpdxExpression.Strictness
+import io.kotest.matchers.string.shouldContain
 
 class SpdxDeclaredLicenseMappingTest : WordSpec({
     "The list" should {
@@ -41,19 +42,25 @@ class SpdxDeclaredLicenseMappingTest : WordSpec({
     }
 
     "The mapping" should {
-        "contain only unparsable keys" {
-            val parsableLicenses = SpdxDeclaredLicenseMapping.mapping.filter { (declaredLicense, _) ->
-                try {
-                    // Restrict parsing to SPDX license identifier strings as otherwise almost anything could be parsed,
-                    // but we do want to have mappings e.g. for something like "CDDL or GPLv2 with exceptions".
-                    SpdxExpression.parse(declaredLicense, Strictness.ALLOW_DEPRECATED)
-                    true
-                } catch (e: SpdxException) {
-                    false
-                }
+        "not contain single ID strings" {
+            val licenseIdMapping = SpdxDeclaredLicenseMapping.mapping.filter { (_, expression) ->
+                expression is SpdxLicenseIdExpression
             }
 
-            parsableLicenses shouldBe emptyMap()
+            licenseIdMapping.keys.forAll { declaredLicense ->
+                try {
+                    val tokens = getTokensByTypeForExpression(declaredLicense)
+
+                    tokens.size shouldBeGreaterThanOrEqual 2
+
+                    if (tokens.size == 2) {
+                        // Rule out that the 2 tokens are caused by IDSTRING and PLUS.
+                        declaredLicense shouldContain " "
+                    }
+                } catch (e: SpdxException) {
+                    // For untokenizable strings no further checks are needed.
+                }
+            }
         }
 
         "not contain plain SPDX license ids" {
