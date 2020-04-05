@@ -53,17 +53,16 @@ class GradleIntegrationTest : AbstractIntegrationSpec() {
     override val expectedManagedFiles by lazy {
         // The Gradle project contains far too many definition files to list them all here. Use this tests to double
         // check that all of them are found, and that they are assigned to the correct package manager.
-        val gradleBuildFilenames = listOf("build.gradle", "build.gradle.kts")
-        val gradleSettingsFilenames = listOf("settings.gradle", "settings.gradle.kts")
-        val gradleFilenames = gradleBuildFilenames + gradleSettingsFilenames
+        val gradleFilenames = listOf("build.gradle", "build.gradle.kts", "settings.gradle", "settings.gradle.kts")
 
         val gradleFiles = downloadResult.downloadDirectory.walkTopDown().filter {
             it.name in gradleFilenames
         }.toMutableList()
 
-        // "settings" files should only be considered if there is no "build" file in the same directory.
+        // In each directory only the first file contained in gradleFiles is used.
         gradleFiles.removeAll { file ->
-            file.name in gradleSettingsFilenames && gradleBuildFilenames.any { file.resolveSibling(it) in gradleFiles }
+            val preferentialGradleFilenames = gradleFilenames.subList(0, gradleFilenames.indexOf(file.name))
+            preferentialGradleFilenames.any { file.resolveSibling(it) in gradleFiles }
         }
 
         val pomFiles = downloadResult.downloadDirectory.walkTopDown().filter { it.name == "pom.xml" }.toList()
