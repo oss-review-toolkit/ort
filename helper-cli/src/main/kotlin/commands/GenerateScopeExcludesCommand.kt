@@ -156,6 +156,11 @@ private fun getScopeExcludesForPackageManager(packageManagerName: String): List<
                 comment = "Packages for Kotlin compiler only."
             ),
             ScopeExclude(
+                pattern = "ktlint",
+                reason = ScopeExcludeReason.TEST_DEPENDENCY_OF,
+                comment = "Packages for code linting (testing) only."
+            ),
+            ScopeExclude(
                 pattern = "lintClassPath",
                 reason = ScopeExcludeReason.TEST_DEPENDENCY_OF,
                 comment = "Packages for code linting (testing) only."
