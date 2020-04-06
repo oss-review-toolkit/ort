@@ -45,7 +45,8 @@ class YarnTest : WordSpec() {
             definitionFilePath = "$vcsPath/package.json",
             url = normalizeVcsUrl(vcsUrl),
             revision = vcsRevision,
-            path = vcsPath
+            path = vcsPath,
+            custom = "<REPLACE_RAW_URL>" to vcsUrl
         )
     }
 
