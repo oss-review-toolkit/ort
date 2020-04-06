@@ -49,7 +49,7 @@ ENV \
     CARGO_VERSION=0.40.0-3ubuntu1~18.04.1 \
     COMPOSER_VERSION=1.6.3-1 \
     CONAN_VERSION=1.18.0 \
-    FLUTTER_VERSION=v1.7.8+hotfix.3-stable \
+    FLUTTER_VERSION=v1.12.13+hotfix.9-stable \
     GO_DEP_VERSION=0.5.4 \
     GO_VERSION=1.13.4 \
     HASKELL_STACK_VERSION=2.1.3 \

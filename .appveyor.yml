@@ -6,7 +6,7 @@ environment:
   COMPOSER_VERSION: 5.1.0
   CONAN_VERSION: 1.18.0
   FLUTTER_HOME: C:\flutter
-  FLUTTER_VERSION: v1.7.8+hotfix.3-stable
+  FLUTTER_VERSION: v1.12.13+hotfix.9-stable
   GO_DEP_VERSION: 0.5.0
   NPM_VERSION: 6.14.1
   PHP_VERSION: 7.4.3
