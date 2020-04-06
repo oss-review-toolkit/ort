@@ -261,10 +261,17 @@ internal class EvaluatedModelMapper(private val input: ReporterInput) {
     }
 
     private fun addAnalyzerIssues(id: Identifier, pkg: EvaluatedPackage): List<EvaluatedOrtIssue> {
+        val result = mutableListOf<EvaluatedOrtIssue>()
+
         input.ortResult.analyzer?.result?.issues?.get(id)?.let { analyzerIssues ->
-            return addIssues(analyzerIssues, EvaluatedOrtIssueType.ANALYZER, pkg, null, null)
+            result += addIssues(analyzerIssues, EvaluatedOrtIssueType.ANALYZER, pkg, null, null)
         }
-        return emptyList()
+
+        input.ortResult.getPackage(id)?.let {
+            result += addIssues(it.pkg.collectIssues(), EvaluatedOrtIssueType.ANALYZER, pkg, null, null)
+        }
+
+        return result
     }
 
     private fun addRuleViolation(ruleViolation: RuleViolation) {
