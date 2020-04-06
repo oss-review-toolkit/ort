@@ -26,7 +26,7 @@ env:
     - BOWER_VERSION="1.8.8"
     - CONAN_VERSION="1.18.0"
     - FLUTTER_HOME="/opt/flutter"
-    - FLUTTER_VERSION="v1.7.8+hotfix.3-stable"
+    - FLUTTER_VERSION="v1.12.13+hotfix.9-stable"
     - GIMME_GO_VERSION="1.13" # Used internally by Travis.
     - GO_DEP_VERSION="0.5.4"
     - NPM_VERSION="6.14.1"
