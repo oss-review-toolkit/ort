@@ -108,6 +108,7 @@ class ReportTableModelMapper(
 
         val scanRecord = ortResult.scanner?.results
         val licenseFindings = ortResult.collectLicenseFindings(packageConfigurationProvider)
+        val analyzerIssuesForPackages = ortResult.getPackages().associateBy({ it.pkg.id }, { it.pkg.collectIssues() })
 
         val projectTables = analyzerResult.projects.associateWith { project ->
             val scopesForDependencies = project.getScopesForDependencies(excludes)
@@ -124,7 +125,8 @@ class ReportTableModelMapper(
                 val declaredLicenses = ortResult.getDeclaredLicensesForId(id)
                 val detectedLicenses = licenseFindings[id]?.toSortedMap(compareBy { it.license }) ?: sortedMapOf()
 
-                val analyzerIssues = projectIssues[id].orEmpty() + analyzerResult.issues[id].orEmpty()
+                val analyzerIssues = projectIssues[id].orEmpty() + analyzerResult.issues[id].orEmpty() +
+                        analyzerIssuesForPackages[id].orEmpty()
 
                 val scanIssues = scanResult?.results?.flatMap {
                     it.summary.issues
