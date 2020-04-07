@@ -49,7 +49,7 @@ internal class EvaluatedModelMapper(private val input: ReporterInput) {
     private val scanResults = mutableListOf<EvaluatedScanResult>()
     private val copyrights = mutableListOf<CopyrightStatement>()
     private val licenses = mutableListOf<LicenseId>()
-    private val scopes = mutableListOf<ScopeName>()
+    private val scopes = mutableListOf<EvaluatedScope>()
     private val issues = mutableListOf<EvaluatedOrtIssue>()
     private val issueResolutions = mutableListOf<IssueResolution>()
     private val pathExcludes = mutableListOf<PathExclude>()
@@ -326,7 +326,10 @@ internal class EvaluatedModelMapper(private val input: ReporterInput) {
     }
 
     private fun addDependencyTree(project: Project, pkg: EvaluatedPackage) {
-        fun PackageReference.toEvaluatedTreeNode(scope: ScopeName, path: List<EvaluatedPackage>): DependencyTreeNode {
+        fun PackageReference.toEvaluatedTreeNode(
+            scope: EvaluatedScope,
+            path: List<EvaluatedPackage>
+        ): DependencyTreeNode {
             val dependency = packages.getOrPut(id) { createEmptyPackage(id) }
             val issues = mutableListOf<EvaluatedOrtIssue>()
             val packagePath = EvaluatedPackagePath(
@@ -357,7 +360,7 @@ internal class EvaluatedModelMapper(private val input: ReporterInput) {
 
         val scopeTrees = project.scopes.map { scope ->
             val subTrees = scope.dependencies.map {
-                it.toEvaluatedTreeNode(scopes.addIfRequired(ScopeName(scope.name)), mutableListOf())
+                it.toEvaluatedTreeNode(scopes.addIfRequired(EvaluatedScope(scope.name)), mutableListOf())
             }
 
             val applicableScopeExcludes = input.ortResult.getExcludes().findScopeExcludes(scope)
@@ -516,7 +519,7 @@ internal class EvaluatedModelMapper(private val input: ReporterInput) {
                 val packagePath = EvaluatedPackagePath(
                     pkg = pkg,
                     project = packages.getValue(project.id),
-                    scope = scopes.addIfRequired(ScopeName(scope.name)),
+                    scope = scopes.addIfRequired(EvaluatedScope(scope.name)),
                     path = path.map { parentId -> packages.getValue(parentId) }
                 )
 

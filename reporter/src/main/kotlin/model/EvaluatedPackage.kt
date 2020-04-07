@@ -56,7 +56,7 @@ data class EvaluatedPackage(
     @JsonIdentityReference(alwaysAsId = true)
     val paths: MutableList<EvaluatedPackagePath>,
     val levels: SortedSet<Int>,
-    val scopes: MutableSet<ScopeName>,
+    val scopes: MutableSet<EvaluatedScope>,
     val scanResults: List<EvaluatedScanResult>,
     val findings: List<EvaluatedFinding>,
     val isExcluded: Boolean,

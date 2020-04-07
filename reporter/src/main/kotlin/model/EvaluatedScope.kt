@@ -23,6 +23,6 @@ package org.ossreviewtoolkit.reporter.model
  * Wrapper class for scope names. Allows Jackson to generate IDs for them when storing them in a separate list for
  * de-duplication.
  */
-data class ScopeName(
+data class EvaluatedScope(
     val name: String
 )

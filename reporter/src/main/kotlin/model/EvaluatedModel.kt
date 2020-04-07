@@ -98,7 +98,7 @@ data class EvaluatedModel(
     val scopeExcludes: List<ScopeExclude>,
     val copyrights: List<CopyrightStatement>,
     val licenses: List<LicenseId>,
-    val scopes: List<ScopeName>,
+    val scopes: List<EvaluatedScope>,
     val issueResolutions: List<IssueResolution>,
     val issues: List<EvaluatedOrtIssue>,
     val scanResults: List<EvaluatedScanResult>,
@@ -121,11 +121,11 @@ data class EvaluatedModel(
             EvaluatedPackagePath::class.java,
             EvaluatedRuleViolation::class.java,
             EvaluatedScanResult::class.java,
+            EvaluatedScope::class.java,
             IssueResolution::class.java,
             LicenseId::class.java,
             PathExclude::class.java,
             RuleViolationResolution::class.java,
-            ScopeName::class.java,
             ScopeExclude::class.java
         )
 
