@@ -342,6 +342,7 @@ object SpdxDeclaredLicenseMapping {
         "ISC/BSD License" to (ISC or BSD_2_CLAUSE),
         "Jabber Open Source License" to licenseRef("josl-1.0", "scancode"),
         "Jython Software License" to PYTHON_2_0.toExpression(),
+        "jQuery license" to MIT.toExpression(),
         "Kirkk.com BSD License" to BSD_3_CLAUSE.toExpression(),
         "LGPL 2.1" to LGPL_2_1_ONLY.toExpression(),
         "LGPL 3" to LGPL_3_0_ONLY.toExpression(),
