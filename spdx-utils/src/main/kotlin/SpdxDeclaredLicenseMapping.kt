@@ -232,6 +232,7 @@ object SpdxDeclaredLicenseMapping {
         "eclipse license" to EPL_1_0.toExpression(),
         "eclipse 1.0" to EPL_1_0.toExpression(),
         "eclipse 2.0" to EPL_2_0.toExpression(),
+        "EDL 1.0" to licenseRef("edl-1.0", "scancode"),
         "Eiffel Forum License" to EFL_2_0.toExpression(),
         "Eiffel Forum License (EFL)" to EFL_2_0.toExpression(),
         "Eiffel Forum License (EFL-2.0)" to EFL_2_0.toExpression(),
