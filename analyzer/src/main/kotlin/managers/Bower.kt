@@ -241,7 +241,7 @@ class Bower(
                 definitionFilePath = VersionControlSystem.getPathInfo(definitionFile).path,
                 declaredLicenses = projectPackage.declaredLicenses,
                 vcs = projectPackage.vcs,
-                vcsProcessed = processProjectVcs(workingDir, projectPackage.vcs, listOf(projectPackage.homepageUrl)),
+                vcsProcessed = processProjectVcs(workingDir, projectPackage.vcs, projectPackage.homepageUrl),
                 homepageUrl = projectPackage.homepageUrl,
                 scopes = sortedSetOf(dependenciesScope, devDependenciesScope)
             )

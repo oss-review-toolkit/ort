@@ -26,6 +26,8 @@ import io.kotest.core.spec.style.WordSpec
 import java.io.File
 
 import org.ossreviewtoolkit.analyzer.managers.*
+import org.ossreviewtoolkit.model.VcsInfo
+import org.ossreviewtoolkit.model.VcsType
 
 class PackageManagerTest : WordSpec({
     val projectDir = File("src/funTest/assets/projects/synthetic/all-managers").absoluteFile
@@ -93,6 +95,53 @@ class PackageManagerTest : WordSpec({
             shouldThrow<IllegalArgumentException> {
                 PackageManager.findManagedFiles(File(projectDir, "pom.xml"))
             }
+        }
+    }
+
+    "processPackageVcs" should {
+        "split a GitHub browsing URL into its components" {
+            val vcsFromPackage = VcsInfo(
+                type = VcsType.GIT,
+                url = "https://github.com/hamcrest/JavaHamcrest/hamcrest-core",
+                revision = "",
+                path = ""
+            )
+
+            PackageManager.processPackageVcs(vcsFromPackage) shouldBe VcsInfo(
+                type = VcsType.GIT,
+                url = "https://github.com/hamcrest/JavaHamcrest.git",
+                revision = "",
+                path = "hamcrest-core"
+            )
+        }
+
+        "maintain a known VCS type" {
+            val vcsFromPackage = VcsInfo(
+                type = VcsType.SUBVERSION,
+                url = "http://svn.apache.org/repos/asf/commons/proper/codec/trunk",
+                revision = ""
+            )
+            val homepageUrl = "http://commons.apache.org/proper/commons-codec/"
+
+            PackageManager.processPackageVcs(vcsFromPackage, homepageUrl) shouldBe VcsInfo(
+                type = VcsType.SUBVERSION,
+                url = "http://svn.apache.org/repos/asf/commons/proper/codec",
+                revision = "trunk"
+            )
+        }
+
+        "maintain an unknown VCS type" {
+            val vcsFromPackage = VcsInfo(
+                type = VcsType(listOf("darcs")),
+                url = "http://hub.darcs.net/ross/transformers",
+                revision = ""
+            )
+
+            PackageManager.processPackageVcs(vcsFromPackage) shouldBe VcsInfo(
+                type = VcsType(listOf("darcs")),
+                url = "http://hub.darcs.net/ross/transformers",
+                revision = ""
+            )
         }
     }
 })

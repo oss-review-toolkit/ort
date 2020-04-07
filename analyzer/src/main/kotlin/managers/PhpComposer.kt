@@ -234,7 +234,7 @@ class PhpComposer(
             definitionFilePath = VersionControlSystem.getPathInfo(definitionFile).path,
             declaredLicenses = parseDeclaredLicenses(json),
             vcs = vcs,
-            vcsProcessed = processProjectVcs(definitionFile.parentFile, vcs, listOf(homepageUrl)),
+            vcsProcessed = processProjectVcs(definitionFile.parentFile, vcs, homepageUrl),
             homepageUrl = homepageUrl,
             scopes = scopes
         )
@@ -269,7 +269,7 @@ class PhpComposer(
                     binaryArtifact = RemoteArtifact.EMPTY,
                     sourceArtifact = parseArtifact(pkgInfo),
                     vcs = vcsFromPackage,
-                    vcsProcessed = processPackageVcs(vcsFromPackage, listOf(homepageUrl))
+                    vcsProcessed = processPackageVcs(vcsFromPackage, homepageUrl)
                 )
             }
         }

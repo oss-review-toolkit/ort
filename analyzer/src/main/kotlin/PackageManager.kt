@@ -25,6 +25,7 @@ import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Project
 import org.ossreviewtoolkit.model.ProjectAnalyzerResult
 import org.ossreviewtoolkit.model.VcsInfo
+import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.createAndLogIssue
@@ -145,22 +146,20 @@ abstract class PackageManager(
          * URLs.
          *
          * @param vcsFromPackage The [VcsInfo] of a [Package].
-         * @param fallbackUrls The list of alternative URLs to to use as fallback for determining the [VcsInfo]. The
-         *                     first element of the list that is recognized as a VCS URL is used.
+         * @param fallbackUrls The alternative URLs to to use as fallback for determining the [VcsInfo]. The first
+         *                     element that is recognized as a VCS URL is used.
          */
-        fun processPackageVcs(vcsFromPackage: VcsInfo, fallbackUrls: List<String> = emptyList()): VcsInfo {
-            val normalizedVcsFromPackage = vcsFromPackage.normalize()
+        fun processPackageVcs(vcsFromPackage: VcsInfo, vararg fallbackUrls: String): VcsInfo {
+            // Merge the VCS information from the package with information derived from its normalized URL only.
+            val normalizedVcsFromPackage = vcsFromPackage.normalize().let { VcsHost.toVcsInfo(it.url).merge(it) }
 
-            val normalizedUrl = normalizedVcsFromPackage.url.takeIf { it.isNotEmpty() }
-                ?: fallbackUrls
-                    .asSequence()
-                    .map { normalizeVcsUrl(it) }
-                    .filterNot { VersionControlSystem.forUrl(it) == null }
-                    .firstOrNull()
-                    .orEmpty()
+            // Add the VCS information derived from the normalized fallback URLs to the list.
+            val availableVcsInfo = fallbackUrls.mapTo(mutableListOf(normalizedVcsFromPackage)) {
+                VcsHost.toVcsInfo(normalizeVcsUrl(it))
+            }
 
-            val vcsFromUrl = VcsHost.toVcsInfo(normalizedUrl)
-            return vcsFromUrl.merge(normalizedVcsFromPackage)
+            // Use the first VCS information with a valid type, or the normalized VCS information from the package.
+            return availableVcsInfo.find { it.type != VcsType.NONE } ?: normalizedVcsFromPackage
         }
 
         /**
@@ -172,16 +171,16 @@ abstract class PackageManager(
          *
          * @param projectDir The working tree directory of the [Project].
          * @param vcsFromProject The project's [VcsInfo], if any.
-         * @param fallbackUrls The list of alternative URLs to to use as fallback for determining the [VcsInfo]. The
-         *                     first element of the list that is recognized as a VCS URL is used.
+         * @param fallbackUrls The alternative URLs to to use as fallback for determining the [VcsInfo]. The first
+         *                     element that is recognized as a VCS URL is used.
          */
         fun processProjectVcs(
             projectDir: File,
             vcsFromProject: VcsInfo = VcsInfo.EMPTY,
-            fallbackUrls: List<String> = emptyList()
+            vararg fallbackUrls: String
         ): VcsInfo {
             val vcsFromWorkingTree = VersionControlSystem.getPathInfo(projectDir).normalize()
-            return vcsFromWorkingTree.merge(processPackageVcs(vcsFromProject, fallbackUrls))
+            return vcsFromWorkingTree.merge(processPackageVcs(vcsFromProject, *fallbackUrls))
         }
     }
 

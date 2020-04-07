@@ -1528,10 +1528,10 @@ packages:
       revision: ""
       path: ""
     vcs_processed:
-      type: ""
-      url: ""
-      revision: ""
-      path: ""
+      type: "Git"
+      url: "https://github.com/fpco/unliftio.git"
+      revision: "master"
+      path: "unliftio-core"
   curations: []
 - package:
     id: "Hackage:Control:unliftio:0.2.10"
@@ -1558,10 +1558,10 @@ packages:
       revision: ""
       path: ""
     vcs_processed:
-      type: ""
-      url: ""
-      revision: ""
-      path: ""
+      type: "Git"
+      url: "https://github.com/fpco/unliftio.git"
+      revision: "master"
+      path: "unliftio"
   curations: []
 - package:
     id: "Hackage:Data Structures, Graphs:fgl:5.7.0.1"
