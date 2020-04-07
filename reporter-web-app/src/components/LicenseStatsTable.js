@@ -45,18 +45,7 @@ const LicenseStatsTable = (props) => {
             )(),
             filteredValue: filteredInfo.name || null,
             onFilter: (license, row) => row.name === license,
-            sorter: (a, b) => {
-                const nameA = a.name.toUpperCase();
-                const nameB = b.name.toUpperCase();
-                if (nameA < nameB) {
-                    return -1;
-                }
-                if (nameA > nameB) {
-                    return 1;
-                }
-
-                return 0;
-            },
+            sorter: (a, b) => a.name.localeCompare(b.name),
             sortOrder: sortedInfo.columnKey === 'name' && sortedInfo.order,
             key: 'name',
             render: (text, row) => (

@@ -27,15 +27,7 @@ import memoizeOne from 'memoize-one';
 const hasOrtResultChanged = (newArgs, oldArgs) => newArgs.length !== oldArgs.length
     || newArgs[0].data.reportLastUpdate !== oldArgs[0].data.reportLastUpdate;
 
-const sortTableColumnFilterSelectors = (a, b) => {
-    if (a.text < b.text) {
-        return -1;
-    }
-    if (a.text > b.text) {
-        return 1;
-    }
-    return 0;
-};
+const sortTableColumnFilterSelectors = (a, b) => a.text.localeCompare(b.text);
 
 // ---- App selectors ----
 
