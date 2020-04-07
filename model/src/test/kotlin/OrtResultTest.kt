@@ -102,7 +102,7 @@ class OrtResultTest : WordSpec({
                 AnalyzerRun(
                     environment = Environment(),
                     config = AnalyzerConfiguration(ignoreToolVersions = true, allowDynamicVersions = true),
-                    result = AnalyzerResult.EMPTY
+                    result = AnalyzerResult.EMPTY.copy(projects = sortedSetOf(project1, project2, project3))
                 )
             )
 
@@ -131,7 +131,7 @@ class OrtResultTest : WordSpec({
                 AnalyzerRun(
                     environment = Environment(),
                     config = AnalyzerConfiguration(ignoreToolVersions = true, allowDynamicVersions = true),
-                    result = AnalyzerResult.EMPTY
+                    result = AnalyzerResult.EMPTY.copy(projects = sortedSetOf(project))
                 )
             )
 
