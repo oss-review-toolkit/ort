@@ -279,16 +279,6 @@ class Pub(
                         )
                     }
                     // TODO: Enable support for iOS / Cocoapods once the package manager is implemented.
-                    /*
-                    val resultIos = scanIosPackages(pkgInfoFromLockFile)
-                    if (resultIos != null) {
-                        packageReferences += packageInfo.toReference(
-                            dependencies = resultIos.project.scopes
-                                .find { it.name == "release" }
-                                ?.collectDependencies(-1, false)
-                        )
-                    }
-                    */
                 }
 
                 packageReferences += packageInfo.toReference(dependencies = transitiveDependencies)
