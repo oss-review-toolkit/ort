@@ -19,10 +19,16 @@
 
 package org.ossreviewtoolkit.reporter.model
 
+import com.fasterxml.jackson.annotation.JsonInclude
+
+import org.ossreviewtoolkit.model.Scope
+import org.ossreviewtoolkit.model.config.ScopeExclude
+
 /**
- * Wrapper class for scope names. Allows Jackson to generate IDs for them when storing them in a separate list for
- * de-duplication.
+ * The evaluated form of a [Scope] used by the [EvaluatedModel].
  */
 data class EvaluatedScope(
-    val name: String
+    val name: String,
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    val excludes: List<ScopeExclude>
 )

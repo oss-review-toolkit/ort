@@ -4,7 +4,11 @@ path_excludes:
   pattern: "sub/module/project/build.gradle"
   reason: "EXAMPLE_OF"
   comment: "The project is an example."
-scope_excludes: []
+scope_excludes:
+- _id: 0
+  pattern: "testCompile"
+  reason: "TEST_DEPENDENCY_OF"
+  comment: "The scope only contains test dependencies."
 copyrights:
 - _id: 0
   statement: "Copyright (c) example authors."
@@ -32,6 +36,8 @@ scopes:
   name: "compile"
 - _id: 1
   name: "testCompile"
+  excludes:
+  - 0
 issue_resolutions: []
 issues:
 - _id: 0
@@ -335,9 +341,10 @@ packages:
   scan_results:
   - 2
   findings: []
-  is_excluded: false
+  is_excluded: true
   path_excludes: []
-  scope_excludes: []
+  scope_excludes:
+  - 0
   issues: []
 - _id: 3
   id: "Maven:org.apache.commons:commons-lang3:3.5"
@@ -491,9 +498,10 @@ packages:
   scan_results:
   - 5
   findings: []
-  is_excluded: false
+  is_excluded: true
   path_excludes: []
-  scope_excludes: []
+  scope_excludes:
+  - 0
   issues: []
 paths:
 - _id: 0
@@ -549,6 +557,8 @@ dependency_trees:
         children: []
   - key: 4
     title: "testCompile"
+    scope_excludes:
+    - 0
     children:
     - key: 5
       title: "Ant:junit:junit:4.12"
@@ -625,14 +635,14 @@ statistics:
   dependency_tree:
     included_projects: 1
     excluded_projects: 1
-    included_packages: 4
-    excludes_packages: 0
+    included_packages: 2
+    excludes_packages: 2
     total_tree_depth: 2
     included_tree_depth: 2
     included_scopes:
     - "compile"
+    excluded_scopes:
     - "testCompile"
-    excluded_scopes: []
   licenses:
     declared:
       Apache-2.0: 2
@@ -646,6 +656,8 @@ statistics:
 repository_configuration: "---\nexcludes:\n  paths:\n  - pattern: \"sub/module/project/build.gradle\"\
   \n    reason: \"EXAMPLE_OF\"\n    comment: \"The project is an example.\"\n  - pattern:\
   \ \"**.java\"\n    reason: \"EXAMPLE_OF\"\n    comment: \"These are example files.\"\
-  \nresolutions:\n  rule_violations:\n  - message: \"Apache-2.0 hint\"\n    reason:\
-  \ \"CANT_FIX_EXCEPTION\"\n    comment: \"Apache-2 is not an issue.\"\n"
+  \n  scopes:\n  - pattern: \"testCompile\"\n    reason: \"TEST_DEPENDENCY_OF\"\n\
+  \    comment: \"The scope only contains test dependencies.\"\nresolutions:\n  rule_violations:\n\
+  \  - message: \"Apache-2.0 hint\"\n    reason: \"CANT_FIX_EXCEPTION\"\n    comment:\
+  \ \"Apache-2 is not an issue.\"\n"
 custom_data: {}
