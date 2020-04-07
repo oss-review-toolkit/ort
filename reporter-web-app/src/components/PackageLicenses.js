@@ -73,7 +73,7 @@ const PackageLicenses = (props) => {
                         label="Declared (non-SPDX)"
                         key="ort-package-declared-non-spdx-licenses"
                     >
-                        {webAppPackage.declaredLicensesUnmapped}
+                        {Array.from(webAppPackage.declaredLicensesUnmapped).sort().join(', ')}
                     </Item>
                 )
             }
