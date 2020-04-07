@@ -369,6 +369,7 @@ object SpdxDeclaredLicenseMapping {
         "MIT/Expat" to MIT.toExpression(),
         "MIT/X11" to (MIT or X11),
         "MirOS License (MirOS)" to MIROS.toExpression(),
+        "Modified BSD" to BSD_3_CLAUSE.toExpression(),
         "MPL 1.1" to MPL_1_1.toExpression(),
         "MPL 2.0" to MPL_2_0.toExpression(),
         "MPL 2.0 or EPL 1.0" to (MPL_2_0 or EPL_1_0),
