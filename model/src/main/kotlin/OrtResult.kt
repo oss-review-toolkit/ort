@@ -244,13 +244,17 @@ data class OrtResult(
     fun getDefinitionFilePathRelativeToAnalyzerRoot(project: Project) =
         getFilePathRelativeToAnalyzerRoot(project, project.definitionFilePath)
 
+    private val relativeProjectVcsPath: Map<Identifier, String?> by lazy {
+        getProjects().associateBy({ it.id }, { repository.getRelativePath(it.vcsProcessed) })
+    }
+
     /**
      * Return the path of a file contained in [project], relative to the analyzer root. If the project was checked out
      * from a VCS the analyzer root is the root of the working tree, if the project was not checked out from a VCS the
      * analyzer root is the input directory of the analyzer.
      */
     fun getFilePathRelativeToAnalyzerRoot(project: Project, path: String): String {
-        val vcsPath = repository.getRelativePath(project.vcsProcessed)
+        val vcsPath = relativeProjectVcsPath.getValue(project.id)
 
         requireNotNull(vcsPath) {
             "The ${project.vcsProcessed} of project '${project.id.toCoordinates()}' cannot be found in $repository."
