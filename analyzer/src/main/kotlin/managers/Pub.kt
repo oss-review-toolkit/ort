@@ -242,68 +242,68 @@ class Pub(
             // We need to resolve the dependency tree for every package just once. This check ensures we do not run into
             // infinite loops. When we add this check, and two packages list the same package as dependency, only the
             // first might be listed.
-            if (packageName !in processedPackages) {
-                val pkgInfoFromLockFile = lockFile["packages"][packageName]
+            if (packageName in processedPackages) return@forEach
 
-                // If the package is marked as SDK (e.g. flutter, flutter_test, dart) we cannot resolve it correctly as
-                // it is not stored in .pub-cache. For now we just ignore those SDK packages.
-                if (pkgInfoFromLockFile != null && pkgInfoFromLockFile["source"].textValueOrEmpty() != "sdk") {
-                    val id = Identifier(
-                        type = managerName,
-                        namespace = packageName.substringBefore('/'),
-                        name = packageName.substringAfter('/'),
-                        version = pkgInfoFromLockFile["version"].textValueOrEmpty()
-                    )
+            val pkgInfoFromLockFile = lockFile["packages"][packageName]
 
-                    val packageInfo = packages[id] ?: throw IOException("Could not find package info for $packageName")
+            // If the package is marked as SDK (e.g. flutter, flutter_test, dart) we cannot resolve it correctly as
+            // it is not stored in .pub-cache. For now we just ignore those SDK packages.
+            if (pkgInfoFromLockFile != null && pkgInfoFromLockFile["source"].textValueOrEmpty() != "sdk") {
+                val id = Identifier(
+                    type = managerName,
+                    namespace = packageName.substringBefore('/'),
+                    name = packageName.substringAfter('/'),
+                    version = pkgInfoFromLockFile["version"].textValueOrEmpty()
+                )
 
-                    try {
-                        val dependencyYamlFile = readPackageInfoFromCache(pkgInfoFromLockFile)
-                        val requiredPackages =
-                            dependencyYamlFile["dependencies"]?.fieldNames()?.asSequence()?.toList().orEmpty()
+                val packageInfo = packages[id] ?: throw IOException("Could not find package info for $packageName")
 
-                        val transitiveDependencies =
-                            buildDependencyTree(requiredPackages, dependencyYamlFile, lockFile, packages)
+                try {
+                    val dependencyYamlFile = readPackageInfoFromCache(pkgInfoFromLockFile)
+                    val requiredPackages =
+                        dependencyYamlFile["dependencies"]?.fieldNames()?.asSequence()?.toList().orEmpty()
 
-                        // If the project contains Flutter, we need to trigger the analyzer for Gradle and CocoaPod
-                        // dependencies for each pub dependency manually, as the analyzer will only scan the
-                        // projectRoot, but not the packages in the .pub-cache folder.
-                        if (containsFlutter) {
-                            val resultAndroid = scanAndroidPackages(pkgInfoFromLockFile)
-                            if (resultAndroid != null) {
-                                packageReferences += packageInfo.toReference(
-                                    dependencies = resultAndroid.project.scopes
-                                        .find { it.name == "releaseCompileClasspath" }
-                                        ?.dependencies
-                                )
-                            }
-                            // TODO: Enable support for iOS / Cocoapods once the package manager is implemented.
-                            /*
-                            val resultIos = scanIosPackages(pkgInfoFromLockFile)
-                            if (resultIos != null) {
-                                packageReferences += packageInfo.toReference(
-                                    dependencies = resultIos.project.scopes
-                                        .find { it.name == "release" }
-                                        ?.collectDependencies(-1, false)
-                                )
-                            }
-                            */
+                    val transitiveDependencies =
+                        buildDependencyTree(requiredPackages, dependencyYamlFile, lockFile, packages)
+
+                    // If the project contains Flutter, we need to trigger the analyzer for Gradle and CocoaPod
+                    // dependencies for each pub dependency manually, as the analyzer will only scan the
+                    // projectRoot, but not the packages in the .pub-cache folder.
+                    if (containsFlutter) {
+                        val resultAndroid = scanAndroidPackages(pkgInfoFromLockFile)
+                        if (resultAndroid != null) {
+                            packageReferences += packageInfo.toReference(
+                                dependencies = resultAndroid.project.scopes
+                                    .find { it.name == "releaseCompileClasspath" }
+                                    ?.dependencies
+                            )
                         }
+                        // TODO: Enable support for iOS / Cocoapods once the package manager is implemented.
+                        /*
+                        val resultIos = scanIosPackages(pkgInfoFromLockFile)
+                        if (resultIos != null) {
+                            packageReferences += packageInfo.toReference(
+                                dependencies = resultIos.project.scopes
+                                    .find { it.name == "release" }
+                                    ?.collectDependencies(-1, false)
+                            )
+                        }
+                        */
+                    }
 
-                        packageReferences += packageInfo.toReference(dependencies = transitiveDependencies)
-                    } catch (e: IOException) {
-                        e.showStackTrace()
+                    packageReferences += packageInfo.toReference(dependencies = transitiveDependencies)
+                } catch (e: IOException) {
+                    e.showStackTrace()
 
-                        packageInfo.toReference(
-                            issues = listOf(
-                                createAndLogIssue(
-                                    source = managerName,
-                                    message = "Could not resolve dependencies of '$packageName': " +
-                                            e.collectMessagesAsString()
-                                )
+                    packageInfo.toReference(
+                        issues = listOf(
+                            createAndLogIssue(
+                                source = managerName,
+                                message = "Could not resolve dependencies of '$packageName': " +
+                                        e.collectMessagesAsString()
                             )
                         )
-                    }
+                    )
                 }
             }
         }
