@@ -80,13 +80,13 @@ class OrtResultTest : WordSpec({
                 vcsProcessed = vcs.normalize()
             )
             val project2 = Project.EMPTY.copy(
-                id = Identifier("Gradle:org.ossreviewtoolkit:project1:1.0"),
+                id = Identifier("Gradle:org.ossreviewtoolkit:project2:1.0"),
                 definitionFilePath = "project2/build.gradle",
                 vcs = nestedVcs1,
                 vcsProcessed = nestedVcs1.normalize()
             )
             val project3 = Project.EMPTY.copy(
-                id = Identifier("Gradle:org.ossreviewtoolkit:project1:1.0"),
+                id = Identifier("Gradle:org.ossreviewtoolkit:project3:1.0"),
                 definitionFilePath = "project3/build.gradle",
                 vcs = nestedVcs2,
                 vcsProcessed = nestedVcs2.normalize()
