@@ -37,6 +37,8 @@ data class DependencyTreeNode(
     val linkage: PackageLinkage?,
     @JsonInclude(JsonInclude.Include.NON_NULL)
     val pkg: EvaluatedPackage?,
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    val scope: EvaluatedScope?,
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     val pathExcludes: List<PathExclude> = emptyList(),
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
