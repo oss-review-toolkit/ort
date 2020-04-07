@@ -108,6 +108,7 @@ internal class EvaluatedModelMapper(private val input: ReporterInput) {
             ruleViolationResolutions = ruleViolationResolutions,
             ruleViolations = ruleViolations,
             statistics = StatisticsCalculator().getStatistics(input.ortResult, input.resolutionProvider),
+            repository = input.ortResult.repository,
             repositoryConfiguration = yamlMapper.writeValueAsString(input.ortResult.repository.config),
             customData = input.ortResult.data
         )

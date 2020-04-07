@@ -653,6 +653,36 @@ statistics:
       Apache-2.0 (multi-line): 1
       Apache-2.0 (single-line): 1
       MIT: 1
+repository:
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/oss-review-toolkit/ort.git"
+    revision: "master"
+    path: "analyzer/src/funTest/assets/projects/synthetic/gradle/lib"
+  nested_repositories:
+    sub/module:
+      type: "Git"
+      url: "https://example.com/git"
+      revision: ""
+      path: ""
+  config:
+    excludes:
+      paths:
+      - 0
+      - _id: 1
+        pattern: "**.java"
+        reason: "EXAMPLE_OF"
+        comment: "These are example files."
+      scopes:
+      - 0
+    resolutions:
+      rule_violations:
+      - 0
 repository_configuration: "---\nexcludes:\n  paths:\n  - pattern: \"sub/module/project/build.gradle\"\
   \n    reason: \"EXAMPLE_OF\"\n    comment: \"The project is an example.\"\n  - pattern:\
   \ \"**.java\"\n    reason: \"EXAMPLE_OF\"\n    comment: \"These are example files.\"\
