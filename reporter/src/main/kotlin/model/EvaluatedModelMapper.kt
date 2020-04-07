@@ -49,7 +49,7 @@ internal class EvaluatedModelMapper(private val input: ReporterInput) {
     private val scanResults = mutableListOf<EvaluatedScanResult>()
     private val copyrights = mutableListOf<CopyrightStatement>()
     private val licenses = mutableListOf<LicenseId>()
-    private val scopes = mutableListOf<EvaluatedScope>()
+    private val scopes = mutableMapOf<String, EvaluatedScope>()
     private val issues = mutableListOf<EvaluatedOrtIssue>()
     private val issueResolutions = mutableListOf<IssueResolution>()
     private val pathExcludes = mutableListOf<PathExclude>()
@@ -70,6 +70,7 @@ internal class EvaluatedModelMapper(private val input: ReporterInput) {
 
     fun build(): EvaluatedModel {
         createExcludeInfo()
+        createScopes()
 
         input.ortResult.analyzer?.result?.projects?.forEach { project ->
             addProject(project)
@@ -99,7 +100,7 @@ internal class EvaluatedModelMapper(private val input: ReporterInput) {
             issues = issues,
             copyrights = copyrights,
             licenses = licenses,
-            scopes = scopes,
+            scopes = scopes.values.toList(),
             scanResults = scanResults,
             packages = packages.values.toList(),
             paths = paths,
@@ -159,6 +160,17 @@ internal class EvaluatedModelMapper(private val input: ReporterInput) {
                     }
                 }
             }
+        }
+    }
+
+    private fun createScopes() {
+        input.ortResult.getProjects().flatMap { project ->
+            project.scopes.map { it.name }
+        }.forEach { scope ->
+            scopes[scope] = EvaluatedScope(
+                name = scope,
+                excludes = scopeExcludes.addIfRequired(input.ortResult.getExcludes().findScopeExcludes(scope))
+            )
         }
     }
 
@@ -340,7 +352,7 @@ internal class EvaluatedModelMapper(private val input: ReporterInput) {
             )
 
             dependency.levels += path.size
-            dependency.scopes += scopes.addIfRequired(scope)
+            dependency.scopes += scope
 
             if (this.issues.isNotEmpty()) {
                 paths += packagePath
@@ -360,7 +372,7 @@ internal class EvaluatedModelMapper(private val input: ReporterInput) {
 
         val scopeTrees = project.scopes.map { scope ->
             val subTrees = scope.dependencies.map {
-                it.toEvaluatedTreeNode(scopes.addIfRequired(EvaluatedScope(scope.name)), mutableListOf())
+                it.toEvaluatedTreeNode(scopes.getValue(scope.name), mutableListOf())
             }
 
             val applicableScopeExcludes = input.ortResult.getExcludes().findScopeExcludes(scope)
@@ -519,7 +531,7 @@ internal class EvaluatedModelMapper(private val input: ReporterInput) {
                 val packagePath = EvaluatedPackagePath(
                     pkg = pkg,
                     project = packages.getValue(project.id),
-                    scope = scopes.addIfRequired(EvaluatedScope(scope.name)),
+                    scope = scopes.getValue(scope.name),
                     path = path.map { parentId -> packages.getValue(parentId) }
                 )
 
