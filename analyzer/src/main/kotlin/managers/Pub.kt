@@ -270,8 +270,7 @@ class Pub(
                 // dependencies for each pub dependency manually, as the analyzer will only scan the
                 // projectRoot, but not the packages in the .pub-cache folder.
                 if (containsFlutter) {
-                    val resultAndroid = scanAndroidPackages(pkgInfoFromLockFile)
-                    if (resultAndroid != null) {
+                    scanAndroidPackages(pkgInfoFromLockFile)?.let { resultAndroid ->
                         packageReferences += packageInfo.toReference(
                             dependencies = resultAndroid.project.scopes
                                 .find { it.name == "releaseCompileClasspath" }
