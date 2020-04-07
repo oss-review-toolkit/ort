@@ -225,6 +225,7 @@ object SpdxDeclaredLicenseMapping {
         "Eclipse Public License - v 1.0" to EPL_1_0.toExpression(),
         "Eclipse Public License 1.0 (EPL-1.0)" to EPL_1_0.toExpression(),
         "Eclipse Public License 2.0 (EPL-2.0)" to EPL_2_0.toExpression(),
+        "Eclipse Public License v. 2.0" to EPL_2_0.toExpression(),
         "Eclipse Public License v1.0" to EPL_1_0.toExpression(),
         "Eclipse Public License v2.0" to EPL_2_0.toExpression(),
         "Eclipse Public License, Version 1.0" to EPL_1_0.toExpression(),
