@@ -119,7 +119,7 @@ class TableView extends React.Component {
                         <span className="ort-excludes">
                             <Tooltip
                                 placement="right"
-                                title={Array.from(webAppPackage.pathExcludeReasons).join(', ')}
+                                title={Array.from(webAppPackage.excludeReasons).join(', ')}
                             >
                                 <FileExcelOutlined className="ort-excluded" />
                             </Tooltip>

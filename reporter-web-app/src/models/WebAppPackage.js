@@ -345,6 +345,12 @@ class WebAppPackage {
         return this.#detectedLicensesIndexes;
     }
 
+    get excludeReasons() {
+        const { pathExcludeReasons, scopeExcludeReasons } = this;
+
+        return new Set([...pathExcludeReasons, ...scopeExcludeReasons]);
+    }
+
     get findings() {
         return this.#findings;
     }
