@@ -26,6 +26,6 @@ package org.ossreviewtoolkit.reporter.model
 data class EvaluatedPackagePath(
     val pkg: EvaluatedPackage,
     val project: EvaluatedPackage,
-    val scope: ScopeName,
+    val scope: EvaluatedScope,
     val path: List<EvaluatedPackage>
 )
