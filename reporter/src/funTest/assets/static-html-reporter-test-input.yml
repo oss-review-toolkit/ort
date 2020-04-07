@@ -25,6 +25,10 @@ repository:
       - pattern: "**.java"
         reason: "EXAMPLE_OF"
         comment: "These are example files."
+      scopes:
+      - pattern: "testCompile"
+        reason: "TEST_DEPENDENCY_OF"
+        comment: "The scope only contains test dependencies."
     resolutions:
       rule_violations:
       - message: "Apache-2.0 hint"
