@@ -570,11 +570,11 @@ class MavenSupport(workspaceReader: WorkspaceReader) {
 
         val browsableScmUrl = MavenSupport.getOriginalScm(mavenProject)?.url
         val homepageUrl = mavenProject.url
-        val vcsFallbackUrls = listOfNotNull(browsableScmUrl, homepageUrl)
+        val vcsFallbackUrls = listOfNotNull(browsableScmUrl, homepageUrl).toTypedArray()
 
         val vcsProcessed = localDirectory?.let {
-            PackageManager.processProjectVcs(it, vcsFromPackage, vcsFallbackUrls)
-        } ?: PackageManager.processPackageVcs(vcsFromPackage, vcsFallbackUrls)
+            PackageManager.processProjectVcs(it, vcsFromPackage, *vcsFallbackUrls)
+        } ?: PackageManager.processPackageVcs(vcsFromPackage, *vcsFallbackUrls)
 
         return Package(
             id = Identifier(

@@ -132,7 +132,7 @@ class Conan(
                     vcsProcessed = processProjectVcs(
                         workingDir,
                         projectPackage.vcs,
-                        listOf(projectPackage.homepageUrl)
+                        projectPackage.homepageUrl
                     ),
                     homepageUrl = projectPackage.homepageUrl,
                     scopes = sortedSetOf(dependenciesScope, devDependenciesScope)

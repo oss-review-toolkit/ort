@@ -308,7 +308,7 @@ open class Npm(
                     hash = hash
                 ),
                 vcs = vcsFromPackage,
-                vcsProcessed = processPackageVcs(vcsFromPackage, listOf(homepageUrl))
+                vcsProcessed = processPackageVcs(vcsFromPackage, homepageUrl)
             )
 
             require(module.id.name.isNotEmpty()) {
@@ -519,7 +519,7 @@ open class Npm(
             definitionFilePath = VersionControlSystem.getPathInfo(packageJson).path,
             declaredLicenses = declaredLicenses,
             vcs = vcsFromPackage,
-            vcsProcessed = processProjectVcs(projectDir, vcsFromPackage, listOf(homepageUrl)),
+            vcsProcessed = processProjectVcs(projectDir, vcsFromPackage, homepageUrl),
             homepageUrl = homepageUrl,
             scopes = scopes
         )

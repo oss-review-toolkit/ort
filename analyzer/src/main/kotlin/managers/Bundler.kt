@@ -115,7 +115,7 @@ class Bundler(
                 definitionFilePath = VersionControlSystem.getPathInfo(definitionFile).path,
                 declaredLicenses = declaredLicenses.toSortedSet(),
                 vcs = VcsInfo.EMPTY,
-                vcsProcessed = processProjectVcs(workingDir, fallbackUrls = listOf(homepageUrl)),
+                vcsProcessed = processProjectVcs(workingDir, VcsInfo.EMPTY, homepageUrl),
                 homepageUrl = homepageUrl,
                 scopes = scopes.toSortedSet()
             )
@@ -169,7 +169,7 @@ class Bundler(
                     binaryArtifact = RemoteArtifact.EMPTY,
                     sourceArtifact = gemSpec.artifact,
                     vcs = gemSpec.vcs,
-                    vcsProcessed = processPackageVcs(gemSpec.vcs, listOf(gemSpec.homepageUrl))
+                    vcsProcessed = processPackageVcs(gemSpec.vcs, gemSpec.homepageUrl)
                 )
 
                 val transitiveDependencies = mutableSetOf<PackageReference>()

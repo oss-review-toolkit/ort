@@ -369,7 +369,7 @@ class Pub(
             // Pub does not declare any licenses in the pubspec files, therefore we keep this empty.
             declaredLicenses = sortedSetOf(),
             vcs = vcs,
-            vcsProcessed = processProjectVcs(definitionFile.parentFile, vcs, listOf(homepageUrl)),
+            vcsProcessed = processProjectVcs(definitionFile.parentFile, vcs, homepageUrl),
             homepageUrl = homepageUrl,
             scopes = scopes
         )
@@ -441,7 +441,7 @@ class Pub(
                     // Pub does not create source artifacts, therefore use any empty artifact.
                     sourceArtifact = RemoteArtifact.EMPTY,
                     vcs = vcsFromPackage,
-                    vcsProcessed = processPackageVcs(vcsFromPackage, listOf(homepageUrl))
+                    vcsProcessed = processPackageVcs(vcsFromPackage, homepageUrl)
                 )
             }
         }
