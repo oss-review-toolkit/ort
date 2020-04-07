@@ -38,6 +38,7 @@ import org.ossreviewtoolkit.model.CustomData
 import org.ossreviewtoolkit.model.OrtIssue
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.PROPERTY_NAMING_STRATEGY
+import org.ossreviewtoolkit.model.Repository
 import org.ossreviewtoolkit.model.RuleViolation
 import org.ossreviewtoolkit.model.config.IssueResolution
 import org.ossreviewtoolkit.model.config.LicenseFindingCuration
@@ -108,9 +109,14 @@ data class EvaluatedModel(
     val ruleViolationResolutions: List<RuleViolationResolution>,
     val ruleViolations: List<EvaluatedRuleViolation>,
     val statistics: Statistics,
-    // TODO: Ideally this would be an instance of RepositoryConfiguration, but for now it has to be a string to not be
-    //       converted to JSON when using it as input for the web app reporter.
+    val repository: Repository,
+
+    /**
+     * The repository configuration as YAML string. Required to be able to easily show the repository configuration in
+     * the web app reporter without any of the serialization optimizations.
+     */
     val repositoryConfiguration: String,
+
     val customData: CustomData
 ) {
     companion object {

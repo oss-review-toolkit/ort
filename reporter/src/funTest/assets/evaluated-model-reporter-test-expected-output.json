@@ -718,6 +718,42 @@
       }
     }
   },
+  "repository" : {
+    "vcs" : {
+      "type" : "",
+      "url" : "",
+      "revision" : "",
+      "path" : ""
+    },
+    "vcs_processed" : {
+      "type" : "Git",
+      "url" : "https://github.com/oss-review-toolkit/ort.git",
+      "revision" : "master",
+      "path" : "analyzer/src/funTest/assets/projects/synthetic/gradle/lib"
+    },
+    "nested_repositories" : {
+      "sub/module" : {
+        "type" : "Git",
+        "url" : "https://example.com/git",
+        "revision" : "",
+        "path" : ""
+      }
+    },
+    "config" : {
+      "excludes" : {
+        "paths" : [ 0, {
+          "_id" : 1,
+          "pattern" : "**.java",
+          "reason" : "EXAMPLE_OF",
+          "comment" : "These are example files."
+        } ],
+        "scopes" : [ 0 ]
+      },
+      "resolutions" : {
+        "rule_violations" : [ 0 ]
+      }
+    }
+  },
   "repository_configuration" : "---\nexcludes:\n  paths:\n  - pattern: \"sub/module/project/build.gradle\"\n    reason: \"EXAMPLE_OF\"\n    comment: \"The project is an example.\"\n  - pattern: \"**.java\"\n    reason: \"EXAMPLE_OF\"\n    comment: \"These are example files.\"\n  scopes:\n  - pattern: \"testCompile\"\n    reason: \"TEST_DEPENDENCY_OF\"\n    comment: \"The scope only contains test dependencies.\"\nresolutions:\n  rule_violations:\n  - message: \"Apache-2.0 hint\"\n    reason: \"CANT_FIX_EXCEPTION\"\n    comment: \"Apache-2 is not an issue.\"\n",
   "custom_data" : { }
 }
