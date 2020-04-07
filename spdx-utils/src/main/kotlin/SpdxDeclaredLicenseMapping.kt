@@ -332,6 +332,7 @@ object SpdxDeclaredLicenseMapping {
         "gpl (≥ 3)" to GPL_3_0_OR_LATER.toExpression(),
         "gnu gpl" to GPL_2_0_ONLY.toExpression(),
         "gnu gpl v3" to GPL_3_0_ONLY.toExpression(),
+        "HERE Proprietary License" to licenseRef("here-proprietary", "scancode"),
         "HSQLDB License" to BSD_3_CLAUSE.toExpression(),
         "HSQLDB License, a BSD open source license" to BSD_3_CLAUSE.toExpression(),
         "Historical Permission Notice and Disclaimer (HPND)" to HPND.toExpression(),
