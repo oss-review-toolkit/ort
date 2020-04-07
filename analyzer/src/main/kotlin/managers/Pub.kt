@@ -285,7 +285,7 @@ class Pub(
             } catch (e: IOException) {
                 e.showStackTrace()
 
-                packageInfo.toReference(
+                packageReferences += packageInfo.toReference(
                     issues = listOf(
                         createAndLogIssue(
                             source = managerName,
