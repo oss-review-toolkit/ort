@@ -139,18 +139,7 @@ class TableView extends React.Component {
             filters: tableProjectFilterSelections,
             filteredValue: filteredInfo.id || null,
             onFilter: (value, webAppPackage) => webAppPackage.projectIndexes.has(value),
-            sorter: (a, b) => {
-                const idA = a.id.toUpperCase();
-                const idB = b.id.toUpperCase();
-                if (idA < idB) {
-                    return -1;
-                }
-                if (idA > idB) {
-                    return 1;
-                }
-
-                return 0;
-            },
+            sorter: (a, b) => a.id.localeCompare(b.id),
             sortOrder: sortedInfo.field === 'id' && sortedInfo.order,
             title: 'Package'
         });

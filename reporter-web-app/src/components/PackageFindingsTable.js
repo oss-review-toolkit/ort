@@ -84,18 +84,7 @@ class PackageFindingsTable extends React.Component {
                 filters: (
                     () => Array.from(webAppPackage.detectedLicenses)
                         .map((license) => ({ text: license, value: license }))
-                        .sort(
-                            (a, b) => {
-                                if (a.text.localeCompare(b.text) < 0) {
-                                    return -1;
-                                }
-                                if (a.text.localeCompare(b.text) > 0) {
-                                    return 1;
-                                }
-
-                                return 0;
-                            }
-                        )
+                        .sort((a, b) => a.text.localeCompare(b.text))
                 )(),
                 onFilter: (value, row) => value === row.value,
                 key: 'value',
@@ -110,18 +99,7 @@ class PackageFindingsTable extends React.Component {
                 dataIndex: 'path',
                 defaultSortOrder: 'ascend',
                 key: 'path',
-                sorter: (a, b) => {
-                    const idA = a.path.length;
-                    const idB = b.path.length;
-                    if (idA < idB) {
-                        return -1;
-                    }
-                    if (idA > idB) {
-                        return 1;
-                    }
-
-                    return 0;
-                },
+                sorter: (a, b) => a.path.length - b.path.length,
                 render: (path) => (
                     <div className="ort-word-break-wrap">
                         {path}
