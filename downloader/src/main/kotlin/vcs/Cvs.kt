@@ -44,7 +44,7 @@ class Cvs : VersionControlSystem(), CommandLineTool {
 
     override fun command(workingDir: File?) = "cvs"
 
-    override fun getVersion() = super.getVersion(null)
+    override fun getVersion() = getVersion(null)
 
     override fun transformVersion(output: String) =
         versionRegex.matcher(output.lineSequence().first()).let {
