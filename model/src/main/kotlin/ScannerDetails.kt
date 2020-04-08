@@ -43,6 +43,16 @@ data class ScannerDetails(
     val configuration: String
 ) {
     companion object {
+        /**
+         * A constant for a [ScannerDetails] where all properties are empty strings.
+         */
+        @JvmField
+        val EMPTY = ScannerDetails(
+            name = "",
+            version = "",
+            configuration = ""
+        )
+
         private val MAJOR_MINOR = EnumSet.of(Semver.VersionDiff.MAJOR, Semver.VersionDiff.MINOR)
     }
 
