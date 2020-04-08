@@ -99,7 +99,7 @@ class Git : VersionControlSystem(), CommandLineTool {
 
     override fun command(workingDir: File?) = "git"
 
-    override fun getVersion() = super.getVersion(null)
+    override fun getVersion() = getVersion(null)
 
     override fun transformVersion(output: String) =
         versionRegex.matcher(output.lineSequence().first()).let {
