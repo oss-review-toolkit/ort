@@ -70,8 +70,16 @@ class GitRepo : VersionControlSystem(), CommandLineTool {
 
     override fun command(workingDir: File?) = "repo"
 
-    override fun getVersion() =
-        throw IOException("The 'repo' version can only be determined from an initialized working tree.")
+    override fun getVersion() = getVersion(null)
+
+    override fun transformVersion(output: String): String {
+        val launcherVersion = output.lineSequence().mapNotNull { line ->
+            line.removePrefix("repo launcher version ").takeIf { it != line }
+        }.singleOrNull()
+            ?: throw IOException("The 'repo' version can only be determined from an initialized working tree.")
+
+        return "$launcherVersion (launcher)"
+    }
 
     override fun getWorkingTree(vcsDirectory: File): WorkingTree {
         val repoRoot = vcsDirectory.searchUpwardsForSubdirectory(".repo")
