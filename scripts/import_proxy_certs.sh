@@ -52,6 +52,7 @@ fi
 echo "Splitting proxy certificates to separate files..."
 csplit -f $FILE_PREFIX -b "%02d.crt" -z $FILE "$REGEX_BEGIN" "{*}"
 
+# Import the proxy certificates into the JVM keystore.
 KEYTOOL=$(realpath $(command -v keytool))
 
 for KEYSTORE_CANDIDATE in "$(realpath -m $(dirname $KEYTOOL)/../lib/security/cacerts)" "$(realpath -m $(dirname $KEYTOOL)/../jre/lib/security/cacerts)"; do
@@ -61,18 +62,17 @@ for KEYSTORE_CANDIDATE in "$(realpath -m $(dirname $KEYTOOL)/../lib/security/cac
     fi
 done
 
-if [ -z "$KEYSTORE" ]; then
-    echo "No cacert keystore found, quitting."
-    exit
+if [ -n "$KEYSTORE" ]; then
+    for CRT_FILE in $FILE_PREFIX*; do
+        echo "Adding the following proxy certificate from '$CRT_FILE' to the JRE's certificate store at '$KEYSTORE':"
+        cat $CRT_FILE
+
+        ALIAS=$(basename $CRT_FILE .crt)
+        $KEYTOOL -importcert -noprompt -trustcacerts -alias $ALIAS -file $CRT_FILE -keystore $KEYSTORE -storepass changeit
+    done
+else
+    echo "No JVM keystore found, skipping the import."
 fi
-
-for CRT_FILE in $FILE_PREFIX*; do
-    echo "Adding the following proxy certificate from '$CRT_FILE' to the JRE's certificate store at '$KEYSTORE':"
-    cat $CRT_FILE
-
-    ALIAS=$(basename $CRT_FILE .crt)
-    $KEYTOOL -importcert -noprompt -trustcacerts -alias $ALIAS -file $CRT_FILE -keystore $KEYSTORE -storepass changeit
-done
 
 # Also add the proxy certificates to the system certificates, e.g. for curl to work.
 echo "Adding proxy certificates to the system certificates..."
