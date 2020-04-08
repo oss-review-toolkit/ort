@@ -956,13 +956,13 @@ packages:
     vcs:
       type: "Subversion"
       url: "http://svn.code.sf.net/p/hsqldb/svn/base/"
-      revision: ""
-      path: "tags/2.4.0"
+      revision: "tags/2.4.0"
+      path: ""
     vcs_processed:
       type: "Subversion"
       url: "http://svn.code.sf.net/p/hsqldb/svn/base"
-      revision: ""
-      path: "tags/2.4.0"
+      revision: "tags/2.4.0"
+      path: ""
   curations: []
 - package:
     id: "Maven:org.javassist:javassist:3.20.0-GA"
