@@ -142,7 +142,7 @@ class RequirementsCommand : CliktCommand(name = "requirements", help = "List the
                     append(prefix)
                     append("${tool.javaClass.simpleName}: Requires '${tool.command()}' in ")
 
-                    if (tool.getVersionRequirement().toString() == CommandLineTool.ANY_VERSION.toString()) {
+                    if (tool.getVersionRequirement() == CommandLineTool.ANY_VERSION) {
                         append("no specific version. ")
                     } else {
                         append("version ${tool.getVersionRequirement()}. ")
