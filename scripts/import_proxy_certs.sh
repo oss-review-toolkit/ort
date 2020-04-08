@@ -24,7 +24,8 @@ fi
 
 CONNECT_SERVER="jcenter.bintray.com:443"
 
-FILE="proxy.crt"
+TEMP_DIR="$(mktemp -d)"
+FILE="$TEMP_DIR/proxy.crt"
 FILE_PREFIX="proxy-"
 
 REGEX_BEGIN="/^-----BEGIN CERTIFICATE-----$/"
@@ -72,3 +73,5 @@ done
 echo "Adding proxy certificates to the system certificates..."
 cp $FILE_PREFIX* /usr/local/share/ca-certificates/
 update-ca-certificates
+
+rm -fr $TEMP_DIR
