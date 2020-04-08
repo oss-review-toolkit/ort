@@ -31,14 +31,14 @@ FILE_PREFIX="proxy-"
 REGEX_BEGIN="/^-----BEGIN CERTIFICATE-----$/"
 REGEX_END="/^-----END CERTIFICATE-----$"
 
-# Pick a server to connect to that is used during the Gradle build, and which reports the proxy's certificate instead of
-# its own.
-echo "Getting the proxy's certificates..."
-
 # Strip the protocol.
 PROXY=${https_proxy#*//}
 # Strip authentication info.
 PROXY=${PROXY#*@}
+
+# Pick a server to connect to that is used during the Gradle build, and which reports the proxy's certificate instead of
+# its own.
+echo "Getting the certificates for proxy $PROXY..."
 
 openssl s_client -showcerts -proxy $PROXY -connect $CONNECT_SERVER | \
     sed -n "$REGEX_BEGIN,$REGEX_END/p" > $FILE
