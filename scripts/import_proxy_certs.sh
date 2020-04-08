@@ -43,6 +43,11 @@ echo "Getting the certificates for proxy $PROXY..."
 openssl s_client -showcerts -proxy $PROXY -connect $CONNECT_SERVER | \
     sed -n "$REGEX_BEGIN,$REGEX_END/p" > $FILE
 
+if [ ! -f "$FILE" ]; then
+    echo "Failed getting the certificates, no output file was created."
+    exit
+fi
+
 # Split the potentially multiple certificates into multiple files to avoid only the first certificate being imported.
 echo "Splitting proxy certificates to separate files..."
 csplit -f $FILE_PREFIX -b "%02d.crt" -z $FILE "$REGEX_BEGIN" "{*}"
