@@ -31,8 +31,11 @@ FILE_PREFIX="proxy-"
 REGEX_BEGIN="/^-----BEGIN CERTIFICATE-----$/"
 REGEX_END="/^-----END CERTIFICATE-----$"
 
-# Strip the protocol.
+# Strip a leading protocol as "openssl s_client" expects none.
 PROXY=${https_proxy#*//}
+# Strip a trailing slash as "openssl s_client" expects none.
+PROXY=${PROXY%%/}
+
 # Strip authentication info.
 PROXY=${PROXY#*@}
 
