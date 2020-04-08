@@ -116,7 +116,11 @@ class RequirementsCommand : CliktCommand(name = "requirements", help = "List the
                         try {
                             val actualVersion = tool.getVersion()
                             try {
-                                if (tool.getVersionRequirement().isSatisfiedBy(actualVersion)) {
+                                val isRequiredVersion = tool.getVersionRequirement().let {
+                                    it == CommandLineTool.ANY_VERSION || it.isSatisfiedBy(actualVersion)
+                                }
+
+                                if (isRequiredVersion) {
                                     Pair("\t* ", "Found version $actualVersion.")
                                 } else {
                                     statusCode = statusCode or 2
