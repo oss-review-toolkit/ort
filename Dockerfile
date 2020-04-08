@@ -46,7 +46,7 @@ ENV \
     # Package manager versions.
     BOWER_VERSION=1.8.8 \
     BUNDLER_VERSION=1.16.1-1 \
-    CARGO_VERSION=0.40.0-3ubuntu1~18.04.1 \
+    CARGO_VERSION=0.42.0-0ubuntu1~18.04.1 \
     COMPOSER_VERSION=1.6.3-1 \
     CONAN_VERSION=1.18.0 \
     FLUTTER_VERSION=v1.12.13+hotfix.9-stable \
