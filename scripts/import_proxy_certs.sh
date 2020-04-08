@@ -36,14 +36,19 @@ PROXY=${https_proxy#*//}
 # Strip a trailing slash as "openssl s_client" expects none.
 PROXY=${PROXY%%/}
 
-# Strip authentication info.
-PROXY=${PROXY#*@}
+# Strip authentication info as "openssl s_client" cannot handle any.
+PROXY_NO_AUTH=${PROXY#*@}
+
+if [ "$PROXY_NO_AUTH" != "$PROXY" ]; then
+    echo "This script cannot handle proxies that require authentication."
+    exit
+fi
 
 # Pick a server to connect to that is used during the Gradle build, and which reports the proxy's certificate instead of
 # its own.
-echo "Getting the certificates for proxy $PROXY..."
+echo "Getting the certificates for proxy $PROXY_NO_AUTH..."
 
-openssl s_client -showcerts -proxy $PROXY -connect $CONNECT_SERVER | \
+openssl s_client -showcerts -proxy $PROXY_NO_AUTH -connect $CONNECT_SERVER | \
     sed -n "$REGEX_BEGIN,$REGEX_END/p" > $FILE
 
 if [ ! -f "$FILE" ]; then
