@@ -23,9 +23,10 @@ import com.fasterxml.jackson.module.kotlin.readValue
 
 import org.ossreviewtoolkit.utils.test.patchActualResult
 
-import io.kotest.matchers.collections.shouldContainExactly
 import io.kotest.matchers.shouldBe
 import io.kotest.core.spec.style.WordSpec
+import io.kotest.matchers.collections.containExactly
+import io.kotest.matchers.should
 
 import java.io.File
 import java.time.Duration
@@ -141,7 +142,7 @@ class ScanResultContainerTest : WordSpec() {
                 val deprecatedScanResult = File("src/test/assets/deprecated-license-findings-scan-result.yml")
                     .readValue<ScanResultContainer>()
 
-                deprecatedScanResult.results[0].summary.copyrightFindings shouldContainExactly listOf(
+                deprecatedScanResult.results[0].summary.copyrightFindings should containExactly(
                     CopyrightFinding(
                         statement = "copyright 1",
                         location = TextLocation(path = "copyright path 1.1", startLine = 1, endLine = 1)
@@ -152,7 +153,7 @@ class ScanResultContainerTest : WordSpec() {
                     )
                 )
 
-                deprecatedScanResult.results[0].summary.licenseFindings shouldContainExactly listOf(
+                deprecatedScanResult.results[0].summary.licenseFindings should containExactly(
                     LicenseFinding(
                         license = "license 1.1",
                         location = TextLocation(path = "path 1.1", startLine = 1, endLine = 1)

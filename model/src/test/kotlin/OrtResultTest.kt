@@ -20,13 +20,13 @@
 package org.ossreviewtoolkit.model
 
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
-import io.kotest.matchers.collections.shouldContainExactly
 
 import io.kotest.matchers.collections.haveSize
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.WordSpec
+import io.kotest.matchers.collections.containExactly
 import io.kotest.matchers.collections.containExactlyInAnyOrder
 import io.kotest.matchers.string.shouldMatch
 
@@ -64,7 +64,7 @@ class OrtResultTest : WordSpec({
 
             ids should haveSize(9)
             idsWithoutSubProjects should haveSize(8)
-            actualIds shouldContainExactly listOf(Identifier("Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0"))
+            actualIds should containExactly(Identifier("Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0"))
         }
     }
 
