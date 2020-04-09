@@ -21,13 +21,13 @@ package org.ossreviewtoolkit.model
 
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import io.kotest.matchers.collections.shouldContainExactly
-import io.kotest.matchers.collections.shouldContainExactlyInAnyOrder
 
 import io.kotest.matchers.collections.haveSize
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.WordSpec
+import io.kotest.matchers.collections.containExactlyInAnyOrder
 import io.kotest.matchers.string.shouldMatch
 
 import java.io.File
@@ -46,7 +46,7 @@ class OrtResultTest : WordSpec({
             val id = Identifier("Maven:com.typesafe.akka:akka-stream_2.12:2.5.6")
             val dependencies = ortResult.collectDependencies(id, 1).map { it.toCoordinates() }
 
-            dependencies shouldContainExactlyInAnyOrder listOf(
+            dependencies should containExactlyInAnyOrder(
                 "Maven:com.typesafe.akka:akka-actor_2.12:2.5.6",
                 "Maven:com.typesafe:ssl-config-core_2.12:0.2.2",
                 "Maven:org.reactivestreams:reactive-streams:1.0.1"

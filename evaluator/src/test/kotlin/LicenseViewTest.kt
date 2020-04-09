@@ -21,9 +21,10 @@ package org.ossreviewtoolkit.evaluator
 
 import org.ossreviewtoolkit.model.LicenseSource
 
-import io.kotest.matchers.collections.shouldContainExactlyInAnyOrder
 import io.kotest.matchers.shouldBe
 import io.kotest.core.spec.style.WordSpec
+import io.kotest.matchers.collections.containExactlyInAnyOrder
+import io.kotest.matchers.should
 
 class LicenseViewTest : WordSpec({
     "All" should {
@@ -32,36 +33,36 @@ class LicenseViewTest : WordSpec({
 
             view.licenses(packageWithoutLicense, emptyList()) shouldBe emptyList()
 
-            view.licenses(packageWithoutLicense, detectedLicenses) shouldContainExactlyInAnyOrder listOf(
+            view.licenses(packageWithoutLicense, detectedLicenses) should containExactlyInAnyOrder(
                 Pair("LicenseRef-a", LicenseSource.DETECTED),
                 Pair("LicenseRef-b", LicenseSource.DETECTED)
             )
 
-            view.licenses(packageWithOnlyConcludedLicense, emptyList()) shouldContainExactlyInAnyOrder listOf(
+            view.licenses(packageWithOnlyConcludedLicense, emptyList()) should containExactlyInAnyOrder(
                 Pair("LicenseRef-a", LicenseSource.CONCLUDED),
                 Pair("LicenseRef-b", LicenseSource.CONCLUDED)
             )
 
-            view.licenses(packageWithOnlyConcludedLicense, detectedLicenses) shouldContainExactlyInAnyOrder listOf(
+            view.licenses(packageWithOnlyConcludedLicense, detectedLicenses) should containExactlyInAnyOrder(
                 Pair("LicenseRef-a", LicenseSource.CONCLUDED),
                 Pair("LicenseRef-b", LicenseSource.CONCLUDED),
                 Pair("LicenseRef-a", LicenseSource.DETECTED),
                 Pair("LicenseRef-b", LicenseSource.DETECTED)
             )
 
-            view.licenses(packageWithOnlyDeclaredLicense, emptyList()) shouldContainExactlyInAnyOrder listOf(
+            view.licenses(packageWithOnlyDeclaredLicense, emptyList()) should containExactlyInAnyOrder(
                 Pair("license-a", LicenseSource.DECLARED),
                 Pair("license-b", LicenseSource.DECLARED)
             )
 
-            view.licenses(packageWithOnlyDeclaredLicense, detectedLicenses) shouldContainExactlyInAnyOrder listOf(
+            view.licenses(packageWithOnlyDeclaredLicense, detectedLicenses) should containExactlyInAnyOrder(
                 Pair("license-a", LicenseSource.DECLARED),
                 Pair("license-b", LicenseSource.DECLARED),
                 Pair("LicenseRef-a", LicenseSource.DETECTED),
                 Pair("LicenseRef-b", LicenseSource.DETECTED)
             )
 
-            view.licenses(packageWithConcludedAndDeclaredLicense, emptyList()) shouldContainExactlyInAnyOrder listOf(
+            view.licenses(packageWithConcludedAndDeclaredLicense, emptyList()) should containExactlyInAnyOrder(
                 Pair("LicenseRef-a", LicenseSource.CONCLUDED),
                 Pair("LicenseRef-b", LicenseSource.CONCLUDED),
                 Pair("license-a", LicenseSource.DECLARED),
@@ -71,7 +72,7 @@ class LicenseViewTest : WordSpec({
             view.licenses(
                 packageWithConcludedAndDeclaredLicense,
                 detectedLicenses
-            ) shouldContainExactlyInAnyOrder listOf(
+            ) should containExactlyInAnyOrder(
                 Pair("LicenseRef-a", LicenseSource.CONCLUDED),
                 Pair("LicenseRef-b", LicenseSource.CONCLUDED),
                 Pair("license-a", LicenseSource.DECLARED),
@@ -94,7 +95,7 @@ class LicenseViewTest : WordSpec({
             view.licenses(
                 packageWithoutLicense,
                 detectedLicenses
-            ) shouldContainExactlyInAnyOrder listOf(
+            ) should containExactlyInAnyOrder(
                 Pair("LicenseRef-a", LicenseSource.DETECTED),
                 Pair("LicenseRef-b", LicenseSource.DETECTED)
             )
@@ -102,7 +103,7 @@ class LicenseViewTest : WordSpec({
             view.licenses(
                 packageWithOnlyConcludedLicense,
                 emptyList()
-            ) shouldContainExactlyInAnyOrder listOf(
+            ) should containExactlyInAnyOrder(
                 Pair("LicenseRef-a", LicenseSource.CONCLUDED),
                 Pair("LicenseRef-b", LicenseSource.CONCLUDED)
             )
@@ -110,7 +111,7 @@ class LicenseViewTest : WordSpec({
             view.licenses(
                 packageWithOnlyConcludedLicense,
                 detectedLicenses
-            ) shouldContainExactlyInAnyOrder listOf(
+            ) should containExactlyInAnyOrder(
                 Pair("LicenseRef-a", LicenseSource.CONCLUDED),
                 Pair("LicenseRef-b", LicenseSource.CONCLUDED)
             )
@@ -118,7 +119,7 @@ class LicenseViewTest : WordSpec({
             view.licenses(
                 packageWithOnlyDeclaredLicense,
                 emptyList()
-            ) shouldContainExactlyInAnyOrder listOf(
+            ) should containExactlyInAnyOrder(
                 Pair("license-a", LicenseSource.DECLARED),
                 Pair("license-b", LicenseSource.DECLARED)
             )
@@ -126,7 +127,7 @@ class LicenseViewTest : WordSpec({
             view.licenses(
                 packageWithOnlyDeclaredLicense,
                 detectedLicenses
-            ) shouldContainExactlyInAnyOrder listOf(
+            ) should containExactlyInAnyOrder(
                 Pair("license-a", LicenseSource.DECLARED),
                 Pair("license-b", LicenseSource.DECLARED),
                 Pair("LicenseRef-a", LicenseSource.DETECTED),
@@ -136,7 +137,7 @@ class LicenseViewTest : WordSpec({
             view.licenses(
                 packageWithConcludedAndDeclaredLicense,
                 emptyList()
-            ) shouldContainExactlyInAnyOrder listOf(
+            ) should containExactlyInAnyOrder(
                 Pair("LicenseRef-a", LicenseSource.CONCLUDED),
                 Pair("LicenseRef-b", LicenseSource.CONCLUDED)
             )
@@ -144,7 +145,7 @@ class LicenseViewTest : WordSpec({
             view.licenses(
                 packageWithConcludedAndDeclaredLicense,
                 detectedLicenses
-            ) shouldContainExactlyInAnyOrder listOf(
+            ) should containExactlyInAnyOrder(
                 Pair("LicenseRef-a", LicenseSource.CONCLUDED),
                 Pair("LicenseRef-b", LicenseSource.CONCLUDED)
             )
@@ -163,7 +164,7 @@ class LicenseViewTest : WordSpec({
             view.licenses(
                 packageWithoutLicense,
                 detectedLicenses
-            ) shouldContainExactlyInAnyOrder listOf(
+            ) should containExactlyInAnyOrder(
                 Pair("LicenseRef-a", LicenseSource.DETECTED),
                 Pair("LicenseRef-b", LicenseSource.DETECTED)
             )
@@ -171,7 +172,7 @@ class LicenseViewTest : WordSpec({
             view.licenses(
                 packageWithOnlyConcludedLicense,
                 emptyList()
-            ) shouldContainExactlyInAnyOrder listOf(
+            ) should containExactlyInAnyOrder(
                 Pair("LicenseRef-a", LicenseSource.CONCLUDED),
                 Pair("LicenseRef-b", LicenseSource.CONCLUDED)
             )
@@ -179,7 +180,7 @@ class LicenseViewTest : WordSpec({
             view.licenses(
                 packageWithOnlyConcludedLicense,
                 detectedLicenses
-            ) shouldContainExactlyInAnyOrder listOf(
+            ) should containExactlyInAnyOrder(
                 Pair("LicenseRef-a", LicenseSource.CONCLUDED),
                 Pair("LicenseRef-b", LicenseSource.CONCLUDED)
             )
@@ -187,7 +188,7 @@ class LicenseViewTest : WordSpec({
             view.licenses(
                 packageWithOnlyDeclaredLicense,
                 emptyList()
-            ) shouldContainExactlyInAnyOrder listOf(
+            ) should containExactlyInAnyOrder(
                 Pair("license-a", LicenseSource.DECLARED),
                 Pair("license-b", LicenseSource.DECLARED)
             )
@@ -195,7 +196,7 @@ class LicenseViewTest : WordSpec({
             view.licenses(
                 packageWithOnlyDeclaredLicense,
                 detectedLicenses
-            ) shouldContainExactlyInAnyOrder listOf(
+            ) should containExactlyInAnyOrder(
                 Pair("license-a", LicenseSource.DECLARED),
                 Pair("license-b", LicenseSource.DECLARED)
             )
@@ -203,7 +204,7 @@ class LicenseViewTest : WordSpec({
             view.licenses(
                 packageWithConcludedAndDeclaredLicense,
                 emptyList()
-            ) shouldContainExactlyInAnyOrder listOf(
+            ) should containExactlyInAnyOrder(
                 Pair("LicenseRef-a", LicenseSource.CONCLUDED),
                 Pair("LicenseRef-b", LicenseSource.CONCLUDED)
             )
@@ -211,7 +212,7 @@ class LicenseViewTest : WordSpec({
             view.licenses(
                 packageWithConcludedAndDeclaredLicense,
                 detectedLicenses
-            ) shouldContainExactlyInAnyOrder listOf(
+            ) should containExactlyInAnyOrder(
                 Pair("LicenseRef-a", LicenseSource.CONCLUDED),
                 Pair("LicenseRef-b", LicenseSource.CONCLUDED)
             )
@@ -229,7 +230,7 @@ class LicenseViewTest : WordSpec({
             view.licenses(
                 packageWithoutLicense,
                 detectedLicenses
-            ) shouldContainExactlyInAnyOrder listOf(
+            ) should containExactlyInAnyOrder(
                 Pair("LicenseRef-a", LicenseSource.DETECTED),
                 Pair("LicenseRef-b", LicenseSource.DETECTED)
             )
@@ -237,7 +238,7 @@ class LicenseViewTest : WordSpec({
             view.licenses(
                 packageWithOnlyConcludedLicense,
                 emptyList()
-            ) shouldContainExactlyInAnyOrder listOf(
+            ) should containExactlyInAnyOrder(
                 Pair("LicenseRef-a", LicenseSource.CONCLUDED),
                 Pair("LicenseRef-b", LicenseSource.CONCLUDED)
             )
@@ -245,7 +246,7 @@ class LicenseViewTest : WordSpec({
             view.licenses(
                 packageWithOnlyConcludedLicense,
                 detectedLicenses
-            ) shouldContainExactlyInAnyOrder listOf(
+            ) should containExactlyInAnyOrder(
                 Pair("LicenseRef-a", LicenseSource.CONCLUDED),
                 Pair("LicenseRef-b", LicenseSource.CONCLUDED)
             )
@@ -258,7 +259,7 @@ class LicenseViewTest : WordSpec({
             view.licenses(
                 packageWithOnlyDeclaredLicense,
                 detectedLicenses
-            ) shouldContainExactlyInAnyOrder listOf(
+            ) should containExactlyInAnyOrder(
                 Pair("LicenseRef-a", LicenseSource.DETECTED),
                 Pair("LicenseRef-b", LicenseSource.DETECTED)
             )
@@ -266,7 +267,7 @@ class LicenseViewTest : WordSpec({
             view.licenses(
                 packageWithConcludedAndDeclaredLicense,
                 emptyList()
-            ) shouldContainExactlyInAnyOrder listOf(
+            ) should containExactlyInAnyOrder(
                 Pair("LicenseRef-a", LicenseSource.CONCLUDED),
                 Pair("LicenseRef-b", LicenseSource.CONCLUDED)
             )
@@ -274,7 +275,7 @@ class LicenseViewTest : WordSpec({
             view.licenses(
                 packageWithConcludedAndDeclaredLicense,
                 detectedLicenses
-            ) shouldContainExactlyInAnyOrder listOf(
+            ) should containExactlyInAnyOrder(
                 Pair("LicenseRef-a", LicenseSource.CONCLUDED),
                 Pair("LicenseRef-b", LicenseSource.CONCLUDED)
             )
@@ -297,7 +298,7 @@ class LicenseViewTest : WordSpec({
             view.licenses(
                 packageWithOnlyConcludedLicense,
                 emptyList()
-            ) shouldContainExactlyInAnyOrder listOf(
+            ) should containExactlyInAnyOrder(
                 Pair("LicenseRef-a", LicenseSource.CONCLUDED),
                 Pair("LicenseRef-b", LicenseSource.CONCLUDED)
             )
@@ -305,7 +306,7 @@ class LicenseViewTest : WordSpec({
             view.licenses(
                 packageWithOnlyConcludedLicense,
                 detectedLicenses
-            ) shouldContainExactlyInAnyOrder listOf(
+            ) should containExactlyInAnyOrder(
                 Pair("LicenseRef-a", LicenseSource.CONCLUDED),
                 Pair("LicenseRef-b", LicenseSource.CONCLUDED)
             )
@@ -323,7 +324,7 @@ class LicenseViewTest : WordSpec({
             view.licenses(
                 packageWithConcludedAndDeclaredLicense,
                 emptyList()
-            ) shouldContainExactlyInAnyOrder listOf(
+            ) should containExactlyInAnyOrder(
                 Pair("LicenseRef-a", LicenseSource.CONCLUDED),
                 Pair("LicenseRef-b", LicenseSource.CONCLUDED)
             )
@@ -331,7 +332,7 @@ class LicenseViewTest : WordSpec({
             view.licenses(
                 packageWithConcludedAndDeclaredLicense,
                 detectedLicenses
-            ) shouldContainExactlyInAnyOrder listOf(
+            ) should containExactlyInAnyOrder(
                 Pair("LicenseRef-a", LicenseSource.CONCLUDED),
                 Pair("LicenseRef-b", LicenseSource.CONCLUDED)
             )
@@ -365,7 +366,7 @@ class LicenseViewTest : WordSpec({
             view.licenses(
                 packageWithOnlyDeclaredLicense,
                 emptyList()
-            ) shouldContainExactlyInAnyOrder listOf(
+            ) should containExactlyInAnyOrder(
                 Pair("license-a", LicenseSource.DECLARED),
                 Pair("license-b", LicenseSource.DECLARED)
             )
@@ -373,7 +374,7 @@ class LicenseViewTest : WordSpec({
             view.licenses(
                 packageWithOnlyDeclaredLicense,
                 detectedLicenses
-            ) shouldContainExactlyInAnyOrder listOf(
+            ) should containExactlyInAnyOrder(
                 Pair("license-a", LicenseSource.DECLARED),
                 Pair("license-b", LicenseSource.DECLARED)
             )
@@ -381,7 +382,7 @@ class LicenseViewTest : WordSpec({
             view.licenses(
                 packageWithConcludedAndDeclaredLicense,
                 emptyList()
-            ) shouldContainExactlyInAnyOrder listOf(
+            ) should containExactlyInAnyOrder(
                 Pair("license-a", LicenseSource.DECLARED),
                 Pair("license-b", LicenseSource.DECLARED)
             )
@@ -389,7 +390,7 @@ class LicenseViewTest : WordSpec({
             view.licenses(
                 packageWithConcludedAndDeclaredLicense,
                 detectedLicenses
-            ) shouldContainExactlyInAnyOrder listOf(
+            ) should containExactlyInAnyOrder(
                 Pair("license-a", LicenseSource.DECLARED),
                 Pair("license-b", LicenseSource.DECLARED)
             )
@@ -408,7 +409,7 @@ class LicenseViewTest : WordSpec({
             view.licenses(
                 packageWithoutLicense,
                 detectedLicenses
-            ) shouldContainExactlyInAnyOrder listOf(
+            ) should containExactlyInAnyOrder(
                 Pair("LicenseRef-a", LicenseSource.DETECTED),
                 Pair("LicenseRef-b", LicenseSource.DETECTED)
             )
@@ -421,7 +422,7 @@ class LicenseViewTest : WordSpec({
             view.licenses(
                 packageWithOnlyConcludedLicense,
                 detectedLicenses
-            ) shouldContainExactlyInAnyOrder listOf(
+            ) should containExactlyInAnyOrder(
                 Pair("LicenseRef-a", LicenseSource.DETECTED),
                 Pair("LicenseRef-b", LicenseSource.DETECTED)
             )
@@ -434,7 +435,7 @@ class LicenseViewTest : WordSpec({
             view.licenses(
                 packageWithOnlyDeclaredLicense,
                 detectedLicenses
-            ) shouldContainExactlyInAnyOrder listOf(
+            ) should containExactlyInAnyOrder(
                 Pair("LicenseRef-a", LicenseSource.DETECTED),
                 Pair("LicenseRef-b", LicenseSource.DETECTED)
             )
@@ -447,7 +448,7 @@ class LicenseViewTest : WordSpec({
             view.licenses(
                 packageWithConcludedAndDeclaredLicense,
                 detectedLicenses
-            ) shouldContainExactlyInAnyOrder listOf(
+            ) should containExactlyInAnyOrder(
                 Pair("LicenseRef-a", LicenseSource.DETECTED),
                 Pair("LicenseRef-b", LicenseSource.DETECTED)
             )

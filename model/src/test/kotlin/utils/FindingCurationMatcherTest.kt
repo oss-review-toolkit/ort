@@ -25,9 +25,10 @@ import org.ossreviewtoolkit.model.config.LicenseFindingCuration
 import org.ossreviewtoolkit.model.config.LicenseFindingCurationReason.INCORRECT
 
 import io.kotest.core.spec.IsolationMode
-import io.kotest.matchers.collections.shouldContainExactlyInAnyOrder
 import io.kotest.matchers.shouldBe
 import io.kotest.core.spec.style.WordSpec
+import io.kotest.matchers.collections.containExactlyInAnyOrder
+import io.kotest.matchers.should
 
 import kotlin.random.Random
 
@@ -245,7 +246,7 @@ class FindingCurationMatcherTest : WordSpec() {
 
                 val result = matcher.applyAll(findings, curations)
 
-                result shouldContainExactlyInAnyOrder listOf(
+                result should containExactlyInAnyOrder(
                     LicenseFinding(
                         license = "Apache-2.0",
                         location = TextLocation(path = "some/path", startLine = 1, endLine = 1)
@@ -287,7 +288,7 @@ class FindingCurationMatcherTest : WordSpec() {
 
                 val result = matcher.applyAll(findings, curations)
 
-                result shouldContainExactlyInAnyOrder listOf(
+                result should containExactlyInAnyOrder(
                     LicenseFinding(
                         license = "MIT-old-style",
                         location = TextLocation(path = "some/path", startLine = 1, endLine = 1)

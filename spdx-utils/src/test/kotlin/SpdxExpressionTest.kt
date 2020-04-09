@@ -27,10 +27,11 @@ import org.ossreviewtoolkit.spdx.SpdxLicense.*
 import org.ossreviewtoolkit.spdx.SpdxLicenseException.*
 
 import io.kotest.assertions.assertSoftly
-import io.kotest.matchers.collections.shouldContainExactlyInAnyOrder
 import io.kotest.matchers.shouldBe
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.WordSpec
+import io.kotest.matchers.collections.containExactlyInAnyOrder
+import io.kotest.matchers.should
 
 class SpdxExpressionTest : WordSpec() {
     private val yamlMapper = YAMLMapper()
@@ -273,27 +274,24 @@ class SpdxExpressionTest : WordSpec() {
             fun String.decompose() = SpdxExpression.parse(this).decompose().map { it.toString() }
 
             "not split-up compound expressions with a WITH operator" {
-                "GPL-2.0-or-later WITH Classpath-exception-2.0".decompose() shouldContainExactlyInAnyOrder listOf(
+                "GPL-2.0-or-later WITH Classpath-exception-2.0".decompose() should containExactlyInAnyOrder(
                     "GPL-2.0-or-later WITH Classpath-exception-2.0"
                 )
             }
 
             "split-up compound expressions with AND or OR operator but not ones with WITH operator" {
-                "GPL-2.0-or-later WITH Classpath-exception-2.0 AND MIT"
-                    .decompose() shouldContainExactlyInAnyOrder
-                        listOf(
-                            "GPL-2.0-or-later WITH Classpath-exception-2.0",
-                            "MIT"
-                        )
+                "GPL-2.0-or-later WITH Classpath-exception-2.0 AND MIT".decompose() should containExactlyInAnyOrder(
+                    "GPL-2.0-or-later WITH Classpath-exception-2.0",
+                    "MIT"
+                )
             }
 
             "work with LicenseRef-* identifiers" {
                 "LicenseRef-gpl-2.0-custom WITH Classpath-exception-2.0 AND LicenseRef-scancode-commercial-license"
-                    .decompose() shouldContainExactlyInAnyOrder
-                        listOf(
-                            "LicenseRef-gpl-2.0-custom WITH Classpath-exception-2.0",
-                            "LicenseRef-scancode-commercial-license"
-                        )
+                    .decompose() should containExactlyInAnyOrder(
+                        "LicenseRef-gpl-2.0-custom WITH Classpath-exception-2.0",
+                        "LicenseRef-scancode-commercial-license"
+                    )
             }
 
             "return distinct strings" {
@@ -303,10 +301,10 @@ class SpdxExpressionTest : WordSpec() {
 
             "not merge license-exception pairs with single matching licenses" {
                 "GPL-2.0-or-later WITH Classpath-exception-2.0 AND GPL-2.0-or-later"
-                    .decompose() shouldContainExactlyInAnyOrder listOf(
-                    "GPL-2.0-or-later WITH Classpath-exception-2.0",
-                    "GPL-2.0-or-later"
-                )
+                    .decompose() should containExactlyInAnyOrder(
+                        "GPL-2.0-or-later WITH Classpath-exception-2.0",
+                        "GPL-2.0-or-later"
+                    )
             }
         }
     }

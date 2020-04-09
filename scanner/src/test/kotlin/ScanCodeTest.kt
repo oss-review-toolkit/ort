@@ -26,7 +26,7 @@ import org.ossreviewtoolkit.model.config.ScannerConfiguration
 import org.ossreviewtoolkit.scanner.scanners.ScanCode
 
 import io.kotest.core.spec.style.WordSpec
-import io.kotest.matchers.collections.shouldContainExactlyInAnyOrder
+import io.kotest.matchers.collections.containExactlyInAnyOrder
 import io.kotest.matchers.collections.haveSize
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
@@ -184,7 +184,7 @@ class ScanCodeTest : WordSpec({
             // verification code on an arbitrary file.
             val summary = scanner.generateSummary(Instant.now(), Instant.now(), resultFile, result)
 
-            summary.licenseFindings shouldContainExactlyInAnyOrder listOf(
+            summary.licenseFindings should containExactlyInAnyOrder(
                 LicenseFinding(
                     license = "BSD-2-Clause",
                     location = TextLocation(path = "LICENSE.BSD", startLine = 3, endLine = 21)
@@ -566,7 +566,7 @@ class ScanCodeTest : WordSpec({
             // verification code on an arbitrary file.
             val summary = scanner.generateSummary(Instant.now(), Instant.now(), resultFile, result)
 
-            summary.copyrightFindings shouldContainExactlyInAnyOrder listOf(
+            summary.copyrightFindings should containExactlyInAnyOrder(
                 CopyrightFinding(
                     statement = "(c) 2007-2008 Steven Levithan",
                     location = TextLocation(path = "test/3rdparty/mootools-1.4.5.js", startLine = 1881, endLine = 1883)
@@ -757,7 +757,7 @@ class ScanCodeTest : WordSpec({
 
             actualFindings.distinctBy { it.license } should haveSize(1)
             actualFindings should haveSize(517)
-            actualFindings.toList().subList(0, 10).map { it.location } shouldContainExactlyInAnyOrder listOf(
+            actualFindings.toList().subList(0, 10).map { it.location } should containExactlyInAnyOrder(
                 TextLocation("com/amazonaws/AbortedException.java", 4, 13),
                 TextLocation("com/amazonaws/AmazonClientException.java", 4, 13),
                 TextLocation("com/amazonaws/AmazonServiceException.java", 4, 13),
@@ -782,7 +782,7 @@ class ScanCodeTest : WordSpec({
                 .generateSummary(Instant.now(), Instant.now(), resultFile, result)
                 .copyrightFindings
 
-            actualFindings.map { it.statement }.distinct() shouldContainExactlyInAnyOrder listOf(
+            actualFindings.map { it.statement }.distinct() should containExactlyInAnyOrder(
                 "Copyright (c) 2016 Amazon.com, Inc.",
                 "Copyright (c) 2016. Amazon.com, Inc.",
                 "Copyright 2010-2017 Amazon.com, Inc.",
