@@ -174,8 +174,8 @@ class ScanCodeTest : WordSpec({
     }
 
     "generateSummary()" should {
-        // TODO: minimize this test case.
         "properly summarize the license findings for ScanCode 2.2.1" {
+            // TODO: minimize this test case.
             val resultFile = File("src/test/assets/esprima-2.7.3_scancode-2.2.1.json")
             val result = scanner.getRawResult(resultFile)
 
