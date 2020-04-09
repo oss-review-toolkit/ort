@@ -20,10 +20,10 @@
 package org.ossreviewtoolkit.model
 
 import io.kotest.matchers.collections.beEmpty
-import io.kotest.matchers.collections.shouldContainExactlyInAnyOrder
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 import io.kotest.core.spec.style.WordSpec
+import io.kotest.matchers.collections.containExactlyInAnyOrder
 
 import java.io.File
 import java.time.Instant
@@ -40,7 +40,7 @@ class ProjectTest : WordSpec({
 
             val dependencies = project.collectDependencies().map { it.toCoordinates() }
 
-            dependencies shouldContainExactlyInAnyOrder listOf(
+            dependencies should containExactlyInAnyOrder(
                 "Maven:junit:junit:4.12",
                 "Maven:org.apache.commons:commons-lang3:3.5",
                 "Maven:org.apache.commons:commons-text:1.1",
@@ -62,7 +62,7 @@ class ProjectTest : WordSpec({
 
             val dependencies = project.collectDependencies(maxDepth = 1).map { it.toCoordinates() }
 
-            dependencies shouldContainExactlyInAnyOrder listOf(
+            dependencies should containExactlyInAnyOrder(
                 "Maven:junit:junit:4.12",
                 "Maven:org.apache.commons:commons-text:1.1",
                 "Maven:org.apache.struts:struts2-assembly:2.5.14.1"

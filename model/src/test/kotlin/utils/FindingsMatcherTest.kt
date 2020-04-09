@@ -29,10 +29,10 @@ import org.ossreviewtoolkit.utils.FileMatcher
 
 import io.kotest.core.spec.IsolationMode
 import io.kotest.matchers.collections.beEmpty
-import io.kotest.matchers.collections.shouldContainExactlyInAnyOrder
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 import io.kotest.core.spec.style.WordSpec
+import io.kotest.matchers.collections.containExactlyInAnyOrder
 
 import kotlin.random.Random
 
@@ -86,8 +86,8 @@ class FindingsMatcherTest : WordSpec() {
 
                 result.size shouldBe 1
                 val findings = result.getFindings("some id")
-                findings.locations.map { it.path } shouldContainExactlyInAnyOrder listOf(NESTED_LICENSE_FILE_A)
-                findings.copyrights.map { it.statement } shouldContainExactlyInAnyOrder listOf("some stmt")
+                findings.locations.map { it.path } should containExactlyInAnyOrder(NESTED_LICENSE_FILE_A)
+                findings.copyrights.map { it.statement } should containExactlyInAnyOrder("some stmt")
             }
         }
 
@@ -136,16 +136,15 @@ class FindingsMatcherTest : WordSpec() {
 
                 result.size shouldBe 2
                 result.flatMap { it.copyrights.filter { it.statement == "stmt 1" } } should beEmpty()
-                result.getFindings("license nearby").copyrights.map { it.statement } shouldContainExactlyInAnyOrder
-                        listOf(
-                            "stmt 8",
-                            "stmt 10",
-                            "stmt 11",
-                            "stmt 12",
-                            "stmt 13",
-                            "stmt 14",
-                            "stmt 15"
-                        )
+                result.getFindings("license nearby").copyrights.map { it.statement } should containExactlyInAnyOrder(
+                    "stmt 8",
+                    "stmt 10",
+                    "stmt 11",
+                    "stmt 12",
+                    "stmt 13",
+                    "stmt 14",
+                    "stmt 15"
+                )
             }
         }
 
@@ -199,11 +198,10 @@ class FindingsMatcherTest : WordSpec() {
 
                 val result = matcher.match(licenseFindings, copyrightFindings)
 
-                result.getFindings("license nearby")
-                    .copyrights.map { it.statement } shouldContainExactlyInAnyOrder listOf(
-                        "statement2",
-                        "statement3"
-                    )
+                result.getFindings("license nearby").copyrights.map { it.statement } should containExactlyInAnyOrder(
+                    "statement2",
+                    "statement3"
+                )
                 result.getFindings("license far away").copyrights should beEmpty()
             }
         }

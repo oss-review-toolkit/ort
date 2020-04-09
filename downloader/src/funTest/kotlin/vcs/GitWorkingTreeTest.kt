@@ -27,10 +27,11 @@ import org.ossreviewtoolkit.utils.safeDeleteRecursively
 import org.ossreviewtoolkit.utils.unpack
 
 import io.kotest.core.spec.Spec
-import io.kotest.matchers.collections.shouldContainExactlyInAnyOrder
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNotBe
 import io.kotest.core.spec.style.StringSpec
+import io.kotest.matchers.collections.containExactlyInAnyOrder
+import io.kotest.matchers.should
 
 import java.io.File
 
@@ -88,7 +89,7 @@ class GitWorkingTreeTest : StringSpec() {
         "Git correctly lists remote branches" {
             val workingTree = git.getWorkingTree(zipContentDir)
 
-            workingTree.listRemoteBranches() shouldContainExactlyInAnyOrder listOf(
+            workingTree.listRemoteBranches() should containExactlyInAnyOrder(
                 "debug-test-failures",
                 "drop-py2.6",
                 "fixing-test-setups",
@@ -102,7 +103,7 @@ class GitWorkingTreeTest : StringSpec() {
         "Git correctly lists remote tags" {
             val workingTree = git.getWorkingTree(zipContentDir)
 
-            workingTree.listRemoteTags() shouldContainExactlyInAnyOrder listOf(
+            workingTree.listRemoteTags() should containExactlyInAnyOrder(
                 "0.10.0",
                 "0.10.1",
                 "0.11.0",
