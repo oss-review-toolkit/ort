@@ -176,7 +176,15 @@ class ScanCodeTest : WordSpec({
     "generateSummary()" should {
         // TODO: minimize this test case.
         "properly summarize the license findings for ScanCode 2.2.1" {
-            val expectedLicenseFindings = listOf(
+            val resultFile = File("src/test/assets/esprima-2.7.3_scancode-2.2.1.json")
+            val result = scanner.getRawResult(resultFile)
+
+            // The "scanPath" argument should point to the path that was scanned, but as the scanned files are
+            // not available here anymore, instead pass the "resultFile" to test the calculation of the package
+            // verification code on an arbitrary file.
+            val summary = scanner.generateSummary(Instant.now(), Instant.now(), resultFile, result)
+
+            summary.licenseFindings shouldContainExactlyInAnyOrder listOf(
                 LicenseFinding(
                     license = "BSD-2-Clause",
                     location = TextLocation(path = "LICENSE.BSD", startLine = 3, endLine = 21)
@@ -546,7 +554,10 @@ class ScanCodeTest : WordSpec({
                     location = TextLocation(path = "test/3rdparty/underscore-1.5.2.js", startLine = 4, endLine = 4)
                 )
             )
+        }
 
+        "properly summarize the copyright findings for ScanCode 2.2.1" {
+            // TODO: minimize this test case
             val resultFile = File("src/test/assets/esprima-2.7.3_scancode-2.2.1.json")
             val result = scanner.getRawResult(resultFile)
 
@@ -555,12 +566,7 @@ class ScanCodeTest : WordSpec({
             // verification code on an arbitrary file.
             val summary = scanner.generateSummary(Instant.now(), Instant.now(), resultFile, result)
 
-            summary.licenseFindings shouldContainExactlyInAnyOrder expectedLicenseFindings
-        }
-
-        "properly summarize the copyright findings for ScanCode 2.2.1" {
-            // TODO: minimize this test case
-            val expectedCopyrightFindings = listOf(
+            summary.copyrightFindings shouldContainExactlyInAnyOrder listOf(
                 CopyrightFinding(
                     statement = "(c) 2007-2008 Steven Levithan",
                     location = TextLocation(path = "test/3rdparty/mootools-1.4.5.js", startLine = 1881, endLine = 1883)
@@ -736,16 +742,6 @@ class ScanCodeTest : WordSpec({
                     location = TextLocation(path = "test/3rdparty/benchmark.js", startLine = 2, endLine = 6)
                 )
             )
-
-            val resultFile = File("src/test/assets/esprima-2.7.3_scancode-2.2.1.json")
-            val result = scanner.getRawResult(resultFile)
-
-            // The "scanPath" argument should point to the path that was scanned, but as the scanned files are
-            // not available here anymore, instead pass the "resultFile" to test the calculation of the package
-            // verification code on an arbitrary file.
-            val summary = scanner.generateSummary(Instant.now(), Instant.now(), resultFile, result)
-
-            summary.copyrightFindings shouldContainExactlyInAnyOrder expectedCopyrightFindings
         }
 
         "properly summarize license findings for ScanCode 2.9.7" {

@@ -86,7 +86,9 @@ class GitWorkingTreeTest : StringSpec() {
         }
 
         "Git correctly lists remote branches" {
-            val expectedBranches = listOf(
+            val workingTree = git.getWorkingTree(zipContentDir)
+
+            workingTree.listRemoteBranches() shouldContainExactlyInAnyOrder listOf(
                 "debug-test-failures",
                 "drop-py2.6",
                 "fixing-test-setups",
@@ -95,13 +97,12 @@ class GitWorkingTreeTest : StringSpec() {
                 "reverse-mode",
                 "v2beta"
             )
-
-            val workingTree = git.getWorkingTree(zipContentDir)
-            workingTree.listRemoteBranches() shouldContainExactlyInAnyOrder expectedBranches
         }
 
         "Git correctly lists remote tags" {
-            val expectedTags = listOf(
+            val workingTree = git.getWorkingTree(zipContentDir)
+
+            workingTree.listRemoteTags() shouldContainExactlyInAnyOrder listOf(
                 "0.10.0",
                 "0.10.1",
                 "0.11.0",
@@ -116,9 +117,6 @@ class GitWorkingTreeTest : StringSpec() {
                 "0.8.0",
                 "0.9.0"
             )
-
-            val workingTree = git.getWorkingTree(zipContentDir)
-            workingTree.listRemoteTags() shouldContainExactlyInAnyOrder expectedTags
         }
 
         "Git correctly lists submodules" {
