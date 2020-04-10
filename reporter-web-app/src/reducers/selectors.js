@@ -205,6 +205,7 @@ export const getTableViewProjectFilterSelections = memoizeOne(
         const webAppOrtResult = getOrtResult(state);
         const { projects } = webAppOrtResult;
         return projects
+            .sort((a, b) => a.id.localeCompare(b.id))
             .map(
                 (webAppPackage) => {
                     if (webAppOrtResult.hasPathExcludes()) {
@@ -247,8 +248,7 @@ export const getTableViewProjectFilterSelections = memoizeOne(
                         value: webAppPackage.packageIndex
                     };
                 }
-            )
-            .sort(sortTableColumnFilterSelectors);
+            );
     },
     hasOrtResultChanged
 );
