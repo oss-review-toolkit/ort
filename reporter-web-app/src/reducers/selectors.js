@@ -208,6 +208,9 @@ export const getTableViewProjectFilterSelections = memoizeOne(
             .sort((a, b) => a.id.localeCompare(b.id))
             .map(
                 (webAppPackage) => {
+                    const text = webAppPackage.definitionFilePath
+                        ? webAppPackage.definitionFilePath : webAppPackage.id;
+
                     if (webAppOrtResult.hasPathExcludes()) {
                         if (webAppPackage.isExcluded) {
                             return {
@@ -217,10 +220,7 @@ export const getTableViewProjectFilterSelections = memoizeOne(
                                             className="ort-excluded"
                                         />
                                         {' '}
-                                        {
-                                            webAppPackage.definitionFilePath
-                                                ? webAppPackage.definitionFilePath : webAppPackage.id
-                                        }
+                                        {text}
                                     </span>
                                 ),
                                 value: webAppPackage.packageIndex
@@ -232,10 +232,7 @@ export const getTableViewProjectFilterSelections = memoizeOne(
                                 <span>
                                     <FileAddOutlined />
                                     {' '}
-                                    {
-                                        webAppPackage.definitionFilePath
-                                            ? webAppPackage.definitionFilePath : webAppPackage.id
-                                    }
+                                    {text}
                                 </span>
                             ),
                             value: webAppPackage.packageIndex
@@ -243,8 +240,7 @@ export const getTableViewProjectFilterSelections = memoizeOne(
                     }
 
                     return {
-                        text: webAppPackage.definitionFilePath
-                            ? webAppPackage.definitionFilePath : webAppPackage.id,
+                        text,
                         value: webAppPackage.packageIndex
                     };
                 }
@@ -257,10 +253,47 @@ export const getTableViewScopeFilterSelections = memoizeOne(
         const webAppOrtResult = getOrtResult(state);
         const { scopes } = webAppOrtResult;
         return scopes
+            .sort((a, b) => a.name.localeCompare(b.name))
             .map(
-                (scope) => ({ text: scope.name, value: scope.id })
-            )
-            .sort(sortTableColumnFilterSelectors);
+                (webAppScope) => {
+                    if (webAppOrtResult.hasScopeExcludes()) {
+                        if (webAppScope.isExcluded) {
+                            return {
+                                text: (
+                                    <span>
+                                        <FileExcelOutlined
+                                            className="ort-excluded"
+                                        />
+                                        {' '}
+                                        {
+                                            webAppScope.name
+                                        }
+                                    </span>
+                                ),
+                                value: webAppScope.id
+                            };
+                        }
+
+                        return {
+                            text: (
+                                <span>
+                                    <FileAddOutlined />
+                                    {' '}
+                                    {
+                                        webAppScope.name
+                                    }
+                                </span>
+                            ),
+                            value: webAppScope.id
+                        };
+                    }
+
+                    return {
+                        text: webAppScope.name,
+                        value: webAppScope.id
+                    };
+                }
+            );
     },
     hasOrtResultChanged
 );

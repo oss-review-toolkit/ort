@@ -20,9 +20,17 @@
 class WebAppScope {
     #_id;
 
+    #excludeIndexes;
+
+    #excludes;
+
+    #isExcluded = false;
+
     #name;
 
-    constructor(obj) {
+    #webAppOrtResult;
+
+    constructor(obj, webAppOrtResult) {
         if (obj) {
             if (Number.isInteger(obj._id)) {
                 this.#_id = obj._id;
@@ -31,6 +39,15 @@ class WebAppScope {
             if (obj.name) {
                 this.#name = obj.name;
             }
+
+            if (obj.excludes) {
+                this.#excludeIndexes = new Set(obj.excludes);
+                this.#isExcluded = true;
+            }
+
+            if (webAppOrtResult) {
+                this.#webAppOrtResult = webAppOrtResult;
+            }
         }
     }
 
@@ -38,8 +55,30 @@ class WebAppScope {
         return this.#_id;
     }
 
+    get excludes() {
+        if (!this.#excludes && this.#webAppOrtResult) {
+            this.#excludes = [];
+            this.#excludeIndexes.forEach((index) => {
+                const webAppScopeExclude = this.#webAppOrtResult.getScopeExcludeByIndex(index) || null;
+                if (webAppScopeExclude) {
+                    this.#excludes.push(webAppScopeExclude);
+                }
+            });
+        }
+
+        return this.#excludes;
+    }
+
+    get excludeIndexes() {
+        return this.#excludeIndexes;
+    }
+
     get id() {
         return this.#_id;
+    }
+
+    get isExcluded() {
+        return this.#isExcluded;
     }
 
     get name() {
