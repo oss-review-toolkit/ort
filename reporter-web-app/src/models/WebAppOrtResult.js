@@ -199,7 +199,7 @@ class WebAppOrtResult {
             if (obj.scopes) {
                 const { scopes } = obj;
                 for (let i = 0, len = scopes.length; i < len; i++) {
-                    const webAppScope = new WebAppScope(scopes[i]);
+                    const webAppScope = new WebAppScope(scopes[i], this);
                     this.#scopes.push(webAppScope);
                     this.#scopesByNameMap.set(webAppScope.name, webAppScope);
                 }
