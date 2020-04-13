@@ -2,7 +2,8 @@ name: project_with_flutter
 description: A sample Flutter plugin to test resolution of native flutter dependencies
 version: 0.1.0
 author: Marlon Hille <marlon.hille@here.com>
-homepage: https://github.com/heremaps/
+homepage: http://oss-review-toolkit.org/
+repository: https://github.com/oss-review-toolkit/ort.git
 
 dependencies:
   # flutter sdk, should be ignored by the scan

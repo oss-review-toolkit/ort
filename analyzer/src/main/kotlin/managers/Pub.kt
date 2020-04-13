@@ -23,6 +23,7 @@ import com.fasterxml.jackson.databind.JsonNode
 
 import org.ossreviewtoolkit.analyzer.AbstractPackageManagerFactory
 import org.ossreviewtoolkit.analyzer.PackageManager
+import org.ossreviewtoolkit.downloader.VcsHost
 import org.ossreviewtoolkit.downloader.VersionControlSystem
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Package
@@ -37,7 +38,6 @@ import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.OrtIssue
 import org.ossreviewtoolkit.model.Severity
-import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.createAndLogIssue
 import org.ossreviewtoolkit.utils.CommandLineTool
 import org.ossreviewtoolkit.utils.Os
@@ -356,9 +356,11 @@ class Pub(
         // See https://dart.dev/tools/pub/pubspec for supported fields.
         val pubspec = yamlMapper.readTree(definitionFile)
 
-        val homepageUrl = pubspec["homepage"].textValueOrEmpty()
-        val vcs = parseVcsInfo(pubspec)
         val rawName = pubspec["description"]["name"]?.textValue() ?: definitionFile.parentFile.name
+        val homepageUrl = pubspec["homepage"].textValueOrEmpty()
+        val repositoryUrl = pubspec["repository"].textValueOrEmpty()
+
+        val vcs = VcsHost.toVcsInfo(repositoryUrl)
 
         return Project(
             id = Identifier(
@@ -392,16 +394,19 @@ class Pub(
                 var description = ""
                 var rawName = ""
                 var homepageUrl = ""
-                var vcsFromPackage = VcsInfo.EMPTY
+                var vcs = VcsInfo.EMPTY
 
                 // For now, we ignore SDKs like the Dart SDK and the Flutter SDK in the analyzer.
                 when {
                     pkgInfoFromLockFile["source"].textValueOrEmpty() != "sdk" -> {
                         val pkgInfoFromYamlFile = readPackageInfoFromCache(pkgInfoFromLockFile)
-                        vcsFromPackage = parseVcsInfo(pkgInfoFromYamlFile)
-                        description = pkgInfoFromYamlFile["description"].textValueOrEmpty()
+
                         rawName = pkgInfoFromYamlFile["name"].textValueOrEmpty()
+                        description = pkgInfoFromYamlFile["description"].textValueOrEmpty()
                         homepageUrl = pkgInfoFromYamlFile["homepage"].textValueOrEmpty()
+
+                        val repositoryUrl = pkgInfoFromYamlFile["repository"].textValueOrEmpty()
+                        vcs = VcsHost.toVcsInfo(repositoryUrl)
                     }
 
                     pkgInfoFromLockFile["description"].textValueOrEmpty() == "flutter" -> {
@@ -442,8 +447,8 @@ class Pub(
                     binaryArtifact = RemoteArtifact.EMPTY,
                     // Pub does not create source artifacts, therefore use any empty artifact.
                     sourceArtifact = RemoteArtifact.EMPTY,
-                    vcs = vcsFromPackage,
-                    vcsProcessed = processPackageVcs(vcsFromPackage, homepageUrl)
+                    vcs = vcs,
+                    vcsProcessed = processPackageVcs(vcs, homepageUrl)
                 )
             }
         }
@@ -479,17 +484,6 @@ class Pub(
     private fun readPackageInfoFromCache(packageInfo: JsonNode): JsonNode {
         val definitionFile = reader.findFile(packageInfo, "pubspec.yaml")
         return yamlMapper.readTree(definitionFile)
-    }
-
-    private fun parseVcsInfo(packageInfo: JsonNode): VcsInfo {
-        return packageInfo["homepage"]?.let {
-            // Currently, we only support Github repositories.
-            if (it.textValueOrEmpty().contains("github")) {
-                VcsInfo(VcsType.GIT, it.textValueOrEmpty() + ".git", "")
-            } else {
-                VcsInfo.EMPTY
-            }
-        } ?: VcsInfo.EMPTY
     }
 
     override fun command(workingDir: File?) = if (Os.isWindows) "pub.bat" else "pub"

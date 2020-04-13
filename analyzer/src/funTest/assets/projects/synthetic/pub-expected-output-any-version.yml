@@ -6,7 +6,7 @@ project:
   declared_licenses_processed: {}
   vcs:
     type: "Git"
-    url: "https://github.com/heremaps/.git"
+    url: "https://github.com/oss-review-toolkit/ort.git"
     revision: ""
     path: ""
   vcs_processed:
@@ -14,7 +14,7 @@ project:
     url: "<REPLACE_URL>"
     revision: "<REPLACE_REVISION>"
     path: "<REPLACE_PATH>"
-  homepage_url: "https://github.com/heremaps/"
+  homepage_url: "http://oss-review-toolkit.org/"
   scopes:
   - name: "dependencies"
     dependencies:
@@ -112,8 +112,8 @@ packages:
         value: ""
         algorithm: ""
     vcs:
-      type: "Git"
-      url: "https://github.com/dart-lang/sdk/tree/master/pkg/analyzer.git"
+      type: ""
+      url: ""
       revision: ""
       path: ""
     vcs_processed:
@@ -141,8 +141,8 @@ packages:
         value: ""
         algorithm: ""
     vcs:
-      type: "Git"
-      url: "https://github.com/dart-lang/args.git"
+      type: ""
+      url: ""
       revision: ""
       path: ""
     vcs_processed:
@@ -169,8 +169,8 @@ packages:
         value: ""
         algorithm: ""
     vcs:
-      type: "Git"
-      url: "https://www.github.com/dart-lang/async.git"
+      type: ""
+      url: ""
       revision: ""
       path: ""
     vcs_processed:
@@ -198,8 +198,8 @@ packages:
         value: ""
         algorithm: ""
     vcs:
-      type: "Git"
-      url: "https://github.com/dart-lang/boolean_selector.git"
+      type: ""
+      url: ""
       revision: ""
       path: ""
     vcs_processed:
@@ -229,8 +229,8 @@ packages:
         value: ""
         algorithm: ""
     vcs:
-      type: "Git"
-      url: "https://github.com/dart-lang/charcode.git"
+      type: ""
+      url: ""
       revision: ""
       path: ""
     vcs_processed:
@@ -257,8 +257,8 @@ packages:
         value: ""
         algorithm: ""
     vcs:
-      type: "Git"
-      url: "https://www.github.com/dart-lang/collection.git"
+      type: ""
+      url: ""
       revision: ""
       path: ""
     vcs_processed:
@@ -285,8 +285,8 @@ packages:
         value: ""
         algorithm: ""
     vcs:
-      type: "Git"
-      url: "https://github.com/dart-lang/convert.git"
+      type: ""
+      url: ""
       revision: ""
       path: ""
     vcs_processed:
@@ -313,8 +313,8 @@ packages:
         value: ""
         algorithm: ""
     vcs:
-      type: "Git"
-      url: "https://www.github.com/dart-lang/crypto.git"
+      type: ""
+      url: ""
       revision: ""
       path: ""
     vcs_processed:
@@ -341,8 +341,8 @@ packages:
         value: ""
         algorithm: ""
     vcs:
-      type: "Git"
-      url: "https://github.com/dart-lang/csslib.git"
+      type: ""
+      url: ""
       revision: ""
       path: ""
     vcs_processed:
@@ -369,8 +369,8 @@ packages:
         value: ""
         algorithm: ""
     vcs:
-      type: "Git"
-      url: "https://github.com/dart-lang/fixnum.git"
+      type: ""
+      url: ""
       revision: ""
       path: ""
     vcs_processed:
@@ -397,8 +397,8 @@ packages:
         value: ""
         algorithm: ""
     vcs:
-      type: "Git"
-      url: "https://github.com/dart-lang/sdk/tree/master/pkg/front_end.git"
+      type: ""
+      url: ""
       revision: ""
       path: ""
     vcs_processed:
@@ -425,8 +425,8 @@ packages:
         value: ""
         algorithm: ""
     vcs:
-      type: "Git"
-      url: "https://github.com/dart-lang/glob.git"
+      type: ""
+      url: ""
       revision: ""
       path: ""
     vcs_processed:
@@ -453,8 +453,8 @@ packages:
         value: ""
         algorithm: ""
     vcs:
-      type: "Git"
-      url: "https://github.com/dart-lang/html.git"
+      type: ""
+      url: ""
       revision: ""
       path: ""
     vcs_processed:
@@ -481,8 +481,8 @@ packages:
         value: ""
         algorithm: ""
     vcs:
-      type: "Git"
-      url: "https://github.com/dart-lang/http.git"
+      type: ""
+      url: ""
       revision: ""
       path: ""
     vcs_processed:
@@ -510,8 +510,8 @@ packages:
         value: ""
         algorithm: ""
     vcs:
-      type: "Git"
-      url: "https://github.com/dart-lang/http_multi_server.git"
+      type: ""
+      url: ""
       revision: ""
       path: ""
     vcs_processed:
@@ -539,8 +539,8 @@ packages:
         value: ""
         algorithm: ""
     vcs:
-      type: "Git"
-      url: "https://github.com/dart-lang/http_parser.git"
+      type: ""
+      url: ""
       revision: ""
       path: ""
     vcs_processed:
@@ -567,8 +567,8 @@ packages:
         value: ""
         algorithm: ""
     vcs:
-      type: "Git"
-      url: "https://github.com/dart-lang/io.git"
+      type: ""
+      url: ""
       revision: ""
       path: ""
     vcs_processed:
@@ -595,8 +595,8 @@ packages:
         value: ""
         algorithm: ""
     vcs:
-      type: "Git"
-      url: "https://github.com/dart-lang/sdk/tree/master/pkg/js.git"
+      type: ""
+      url: ""
       revision: ""
       path: ""
     vcs_processed:
@@ -623,8 +623,8 @@ packages:
         value: ""
         algorithm: ""
     vcs:
-      type: "Git"
-      url: "https://github.com/dart-lang/json_rpc_2.git"
+      type: ""
+      url: ""
       revision: ""
       path: ""
     vcs_processed:
@@ -651,8 +651,8 @@ packages:
         value: ""
         algorithm: ""
     vcs:
-      type: "Git"
-      url: "https://github.com/dart-lang/sdk/tree/master/pkg/kernel.git"
+      type: ""
+      url: ""
       revision: ""
       path: ""
     vcs_processed:
@@ -681,8 +681,8 @@ packages:
         value: ""
         algorithm: ""
     vcs:
-      type: "Git"
-      url: "https://github.com/dart-lang/matcher.git"
+      type: ""
+      url: ""
       revision: ""
       path: ""
     vcs_processed:
@@ -711,8 +711,8 @@ packages:
         value: ""
         algorithm: ""
     vcs:
-      type: "Git"
-      url: "https://github.com/dart-lang/sdk/tree/master/pkg/meta.git"
+      type: ""
+      url: ""
       revision: ""
       path: ""
     vcs_processed:
@@ -740,8 +740,8 @@ packages:
         value: ""
         algorithm: ""
     vcs:
-      type: "Git"
-      url: "https://www.github.com/dart-lang/mime.git"
+      type: ""
+      url: ""
       revision: ""
       path: ""
     vcs_processed:
@@ -768,8 +768,8 @@ packages:
         value: ""
         algorithm: ""
     vcs:
-      type: "Git"
-      url: "http://github.com/dart-lang/multi_server_socket.git"
+      type: ""
+      url: ""
       revision: ""
       path: ""
     vcs_processed:
@@ -796,8 +796,8 @@ packages:
         value: ""
         algorithm: ""
     vcs:
-      type: "Git"
-      url: "https://github.com/mbullington/node_preamble.dart.git"
+      type: ""
+      url: ""
       revision: ""
       path: ""
     vcs_processed:
@@ -824,8 +824,8 @@ packages:
         value: ""
         algorithm: ""
     vcs:
-      type: "Git"
-      url: "https://github.com/dart-lang/package_config.git"
+      type: ""
+      url: ""
       revision: ""
       path: ""
     vcs_processed:
@@ -852,8 +852,8 @@ packages:
         value: ""
         algorithm: ""
     vcs:
-      type: "Git"
-      url: "https://github.com/dart-lang/package_resolver.git"
+      type: ""
+      url: ""
       revision: ""
       path: ""
     vcs_processed:
@@ -882,8 +882,8 @@ packages:
         value: ""
         algorithm: ""
     vcs:
-      type: "Git"
-      url: "http://github.com/dart-lang/path.git"
+      type: ""
+      url: ""
       revision: ""
       path: ""
     vcs_processed:
@@ -910,8 +910,8 @@ packages:
         value: ""
         algorithm: ""
     vcs:
-      type: "Git"
-      url: "https://github.com/dart-lang/pedantic.git"
+      type: ""
+      url: ""
       revision: ""
       path: ""
     vcs_processed:
@@ -939,8 +939,8 @@ packages:
         value: ""
         algorithm: ""
     vcs:
-      type: "Git"
-      url: "https://github.com/dart-lang/pool.git"
+      type: ""
+      url: ""
       revision: ""
       path: ""
     vcs_processed:
@@ -968,8 +968,8 @@ packages:
         value: ""
         algorithm: ""
     vcs:
-      type: "Git"
-      url: "https://github.com/dart-lang/protobuf.git"
+      type: ""
+      url: ""
       revision: ""
       path: ""
     vcs_processed:
@@ -997,8 +997,8 @@ packages:
         value: ""
         algorithm: ""
     vcs:
-      type: "Git"
-      url: "http://github.com/dart-lang/pub_semver.git"
+      type: ""
+      url: ""
       revision: ""
       path: ""
     vcs_processed:
@@ -1026,8 +1026,8 @@ packages:
         value: ""
         algorithm: ""
     vcs:
-      type: "Git"
-      url: "https://github.com/dart-lang/shelf.git"
+      type: ""
+      url: ""
       revision: ""
       path: ""
     vcs_processed:
@@ -1054,8 +1054,8 @@ packages:
         value: ""
         algorithm: ""
     vcs:
-      type: "Git"
-      url: "https://github.com/dart-lang/shelf_packages_handler.git"
+      type: ""
+      url: ""
       revision: ""
       path: ""
     vcs_processed:
@@ -1082,8 +1082,8 @@ packages:
         value: ""
         algorithm: ""
     vcs:
-      type: "Git"
-      url: "https://github.com/dart-lang/shelf_static.git"
+      type: ""
+      url: ""
       revision: ""
       path: ""
     vcs_processed:
@@ -1110,8 +1110,8 @@ packages:
         value: ""
         algorithm: ""
     vcs:
-      type: "Git"
-      url: "https://github.com/dart-lang/shelf_web_socket.git"
+      type: ""
+      url: ""
       revision: ""
       path: ""
     vcs_processed:
@@ -1138,8 +1138,8 @@ packages:
         value: ""
         algorithm: ""
     vcs:
-      type: "Git"
-      url: "https://github.com/dart-lang/source_map_stack_trace.git"
+      type: ""
+      url: ""
       revision: ""
       path: ""
     vcs_processed:
@@ -1166,8 +1166,8 @@ packages:
         value: ""
         algorithm: ""
     vcs:
-      type: "Git"
-      url: "http://github.com/dart-lang/source_maps.git"
+      type: ""
+      url: ""
       revision: ""
       path: ""
     vcs_processed:
@@ -1194,8 +1194,8 @@ packages:
         value: ""
         algorithm: ""
     vcs:
-      type: "Git"
-      url: "https://github.com/dart-lang/source_span.git"
+      type: ""
+      url: ""
       revision: ""
       path: ""
     vcs_processed:
@@ -1222,8 +1222,8 @@ packages:
         value: ""
         algorithm: ""
     vcs:
-      type: "Git"
-      url: "https://github.com/dart-lang/stack_trace.git"
+      type: ""
+      url: ""
       revision: ""
       path: ""
     vcs_processed:
@@ -1250,8 +1250,8 @@ packages:
         value: ""
         algorithm: ""
     vcs:
-      type: "Git"
-      url: "https://github.com/dart-lang/stream_channel.git"
+      type: ""
+      url: ""
       revision: ""
       path: ""
     vcs_processed:
@@ -1278,8 +1278,8 @@ packages:
         value: ""
         algorithm: ""
     vcs:
-      type: "Git"
-      url: "https://github.com/dart-lang/string_scanner.git"
+      type: ""
+      url: ""
       revision: ""
       path: ""
     vcs_processed:
@@ -1306,8 +1306,8 @@ packages:
         value: ""
         algorithm: ""
     vcs:
-      type: "Git"
-      url: "https://github.com/dart-lang/term_glyph.git"
+      type: ""
+      url: ""
       revision: ""
       path: ""
     vcs_processed:
@@ -1334,8 +1334,8 @@ packages:
         value: ""
         algorithm: ""
     vcs:
-      type: "Git"
-      url: "https://github.com/dart-lang/test/blob/master/pkgs/test.git"
+      type: ""
+      url: ""
       revision: ""
       path: ""
     vcs_processed:
@@ -1362,8 +1362,8 @@ packages:
         value: ""
         algorithm: ""
     vcs:
-      type: "Git"
-      url: "https://github.com/dart-lang/test/blob/master/pkgs/test_api.git"
+      type: ""
+      url: ""
       revision: ""
       path: ""
     vcs_processed:
@@ -1390,8 +1390,8 @@ packages:
         value: ""
         algorithm: ""
     vcs:
-      type: "Git"
-      url: "https://github.com/dart-lang/test/blob/master/pkgs/test_core.git"
+      type: ""
+      url: ""
       revision: ""
       path: ""
     vcs_processed:
@@ -1418,8 +1418,8 @@ packages:
         value: ""
         algorithm: ""
     vcs:
-      type: "Git"
-      url: "https://github.com/dart-lang/typed_data.git"
+      type: ""
+      url: ""
       revision: ""
       path: ""
     vcs_processed:
@@ -1446,8 +1446,8 @@ packages:
         value: ""
         algorithm: ""
     vcs:
-      type: "Git"
-      url: "https://github.com/dart-lang/vm_service_client.git"
+      type: ""
+      url: ""
       revision: ""
       path: ""
     vcs_processed:
@@ -1475,8 +1475,8 @@ packages:
         value: ""
         algorithm: ""
     vcs:
-      type: "Git"
-      url: "https://github.com/dart-lang/watcher.git"
+      type: ""
+      url: ""
       revision: ""
       path: ""
     vcs_processed:
@@ -1505,8 +1505,8 @@ packages:
         value: ""
         algorithm: ""
     vcs:
-      type: "Git"
-      url: "https://github.com/dart-lang/web_socket_channel.git"
+      type: ""
+      url: ""
       revision: ""
       path: ""
     vcs_processed:
@@ -1533,8 +1533,8 @@ packages:
         value: ""
         algorithm: ""
     vcs:
-      type: "Git"
-      url: "https://github.com/dart-lang/yaml.git"
+      type: ""
+      url: ""
       revision: ""
       path: ""
     vcs_processed:

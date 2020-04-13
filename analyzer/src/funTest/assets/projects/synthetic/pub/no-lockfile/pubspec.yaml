@@ -2,7 +2,8 @@ name: no_lockfile
 description: A syntetic dart project without a lockfile
 version: 0.1.0
 author: Marlon Hille <marlon.hille@here.com>
-homepage: https://github.com/heremaps/
+homepage: http://oss-review-toolkit.org/
+repository: https://github.com/oss-review-toolkit/ort.git
 
 dependencies:
   http: "0.12.0"
