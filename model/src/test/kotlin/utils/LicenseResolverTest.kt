@@ -21,6 +21,7 @@ package org.ossreviewtoolkit.model.utils
 
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.core.test.TestCase
+import io.kotest.matchers.collections.beEmpty
 import io.kotest.matchers.collections.containExactlyInAnyOrder
 import io.kotest.matchers.should
 
@@ -264,6 +265,33 @@ class LicenseResolverTest : WordSpec() {
                 val result = createResolver().getDetectedLicensesForId(id)
 
                 result should containExactlyInAnyOrder("BSD-2-Clause", "BSD-3-Clause", "Apache-2.0", "MIT")
+            }
+        }
+
+        "Given a package without scan result and another package with scan result, getDetectedLicensesForId()" should {
+            "return no detected license for the former" {
+                val id = setupPackage().id
+                setupScanResult(
+                    id, ProvenanceType.VCS, listOf(
+                        LicenseFinding(
+                            license = "BSD-2-Clause",
+                            location = TextLocation("some/path", startLine = 1, endLine = 1)
+                        )
+                    )
+                )
+                setupScanResult(
+                    id, ProvenanceType.SOURCE_ARTIFACT, listOf(
+                        LicenseFinding(
+                            license = "BSD-3-Clause",
+                            location = TextLocation("some/path", startLine = 1, endLine = 1)
+                        )
+                    )
+                )
+                val idForPackageWithoutScanResult = setupPackage().id
+
+                val result = createResolver().getDetectedLicensesForId(idForPackageWithoutScanResult)
+
+                result should beEmpty()
             }
         }
     }
