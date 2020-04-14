@@ -75,7 +75,6 @@ internal class LicenseResolver(
             matchedFindings.forEach { findings ->
                 val matchingExcludes = mutableSetOf<PathExclude>()
 
-                // Only license findings of projects can be excluded by path excludes.
                 val isExcluded = findings.locations.all { location ->
                     val path = location.getRelativePathToRoot(id)
                     pathExcludes.any { exclude ->
