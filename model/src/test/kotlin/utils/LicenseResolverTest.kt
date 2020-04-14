@@ -47,6 +47,7 @@ import org.ossreviewtoolkit.model.ScannerDetails
 import org.ossreviewtoolkit.model.ScannerRun
 import org.ossreviewtoolkit.model.TextLocation
 import org.ossreviewtoolkit.model.VcsInfo
+import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.PackageConfiguration
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
@@ -153,10 +154,12 @@ class LicenseResolverTest : WordSpec() {
 
     private fun setupPackage(): Package {
         val id = nextId.getAndIncrement().toString()
+        val vcsInfo = VcsInfo(type = VcsType.GIT, url = "ssh://some-host/$id.git", revision = id, path = "")
         val pkg = Package.EMPTY.copy(
             id = Identifier(id),
             sourceArtifact = RemoteArtifact("http://some-host/$id", Hash.NONE),
-            vcsProcessed = VcsInfo.EMPTY.copy(url = id, revision = id, path = id)
+            vcs = vcsInfo,
+            vcsProcessed = vcsInfo
         )
 
         ortResult = ortResult.addPackage(pkg)
