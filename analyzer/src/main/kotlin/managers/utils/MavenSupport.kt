@@ -568,7 +568,7 @@ class MavenSupport(workspaceReader: WorkspaceReader) {
             }
         }
 
-        val browsableScmUrl = MavenSupport.getOriginalScm(mavenProject)?.url
+        val browsableScmUrl = getOriginalScm(mavenProject)?.url
         val homepageUrl = mavenProject.url
         val vcsFallbackUrls = listOfNotNull(browsableScmUrl, homepageUrl).toTypedArray()
 
