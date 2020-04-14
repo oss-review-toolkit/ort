@@ -98,8 +98,8 @@ class MavenSupport(workspaceReader: WorkspaceReader) {
         private const val MAX_DISK_CACHE_ENTRY_AGE_SECONDS = 6 * 60 * 60
 
         // See http://maven.apache.org/pom.html#SCM.
-        val SCM_REGEX = Pattern.compile("scm:(?<type>[^:@]+):(?<url>.+)")!!
-        val USER_HOST_REGEX = Pattern.compile("scm:(?<user>[^:@]+)@(?<host>[^:]+):(?<url>.+)")!!
+        private val SCM_REGEX = Pattern.compile("scm:(?<type>[^:@]+):(?<url>.+)")!!
+        private val USER_HOST_REGEX = Pattern.compile("scm:(?<user>[^:@]+)@(?<host>[^:]+):(?<url>.+)")!!
 
         private val remoteArtifactCache =
             DiskCache(
@@ -171,7 +171,7 @@ class MavenSupport(workspaceReader: WorkspaceReader) {
             return scm
         }
 
-        fun parseScm(scm: Scm?): VcsInfo {
+        private fun parseScm(scm: Scm?): VcsInfo {
             val connection = scm?.connection.orEmpty()
             val tag = scm?.tag?.takeIf { it != "HEAD" }.orEmpty()
 
