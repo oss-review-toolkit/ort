@@ -177,10 +177,10 @@ class MavenSupport(workspaceReader: WorkspaceReader) {
 
             if (connection.isEmpty()) return VcsInfo.EMPTY
 
-            return SCM_REGEX.matcher(connection).let {
-                if (it.matches()) {
-                    val type = it.group("type")
-                    val url = it.group("url")
+            return SCM_REGEX.matcher(connection).let { matcher ->
+                if (matcher.matches()) {
+                    val type = matcher.group("type")
+                    val url = matcher.group("url")
 
                     when {
                         // CVS URLs usually start with ":pserver:" or ":ext:", but as ":" is also the delimiter used by
