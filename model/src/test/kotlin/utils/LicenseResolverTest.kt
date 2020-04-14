@@ -35,6 +35,7 @@ import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.LicenseFinding
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.Package
+import org.ossreviewtoolkit.model.Project
 import org.ossreviewtoolkit.model.Provenance
 import org.ossreviewtoolkit.model.RemoteArtifact
 import org.ossreviewtoolkit.model.Repository
@@ -57,6 +58,15 @@ private fun OrtResult.addPackage(pkg: Package): OrtResult =
         analyzer = analyzer!!.copy(
             result = analyzer!!.result.copy(
                 packages = (analyzer!!.result.packages + pkg.toCuratedPackage()).toSortedSet()
+            )
+        )
+    )
+
+private fun OrtResult.addProject(project: Project): OrtResult =
+    copy(
+        analyzer = analyzer!!.copy(
+            result = analyzer!!.result.copy(
+                projects = (analyzer!!.result.projects + project).toSortedSet()
             )
         )
     )
@@ -148,6 +158,18 @@ class LicenseResolverTest : WordSpec() {
         ortResult = ortResult.addPackage(pkg)
 
         return pkg
+    }
+
+    private fun setupProject(): Project {
+        val id = nextId.getAndIncrement().toString()
+        val project = Project.EMPTY.copy(
+            id = Identifier(id),
+            vcsProcessed = ortResult.repository.vcsProcessed
+        )
+
+        ortResult = ortResult.addProject(project)
+
+        return project
     }
 
     override fun beforeTest(testCase: TestCase) {
@@ -290,6 +312,51 @@ class LicenseResolverTest : WordSpec() {
                 val idForPackageWithoutScanResult = setupPackage().id
 
                 val result = createResolver().getDetectedLicensesForId(idForPackageWithoutScanResult)
+
+                result should beEmpty()
+            }
+        }
+
+        "Given a project with multiple scan results, getDetectedLicensesForId()" should {
+            "return all detected licenses" {
+                val id = setupPackage().id
+                setupScanResult(
+                    id, ProvenanceType.VCS, listOf(
+                        LicenseFinding(
+                            license = "BSD-2-Clause",
+                            location = TextLocation("some/path", startLine = 1, endLine = 1)
+                        )
+                    )
+                )
+                setupScanResult(
+                    id, ProvenanceType.VCS, listOf(
+                        LicenseFinding(
+                            license = "BSD-3-Clause",
+                            location = TextLocation("some/path", startLine = 1, endLine = 1)
+                        )
+                    )
+                )
+
+                val result = createResolver().getDetectedLicensesForId(id)
+
+                result should containExactlyInAnyOrder("BSD-2-Clause", "BSD-3-Clause")
+            }
+        }
+
+        "Given a project without scan result and another project with scan result, getDetectedLicensesForId()" should {
+            "return no detected license for the former" {
+                val id = setupProject().id
+                setupScanResult(
+                    id, ProvenanceType.VCS, listOf(
+                        LicenseFinding(
+                            license = "BSD-2-Clause",
+                            location = TextLocation("some/path", startLine = 1, endLine = 1)
+                        )
+                    )
+                )
+                val idForProjectWithoutScanResult = setupProject().id
+
+                val result = createResolver().getDetectedLicensesForId(idForProjectWithoutScanResult)
 
                 result should beEmpty()
             }
