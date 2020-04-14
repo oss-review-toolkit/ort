@@ -178,8 +178,8 @@ class LicenseResolverTest : WordSpec() {
     }
 
     init {
-        "Given a package with a scan result for VCS, getDetectedLicensesForId()" should {
-            "return all detected licenses" {
+        "getDetectedLicensesForId()" should {
+            "return all detected licenses for a package with a VCS scan result" {
                 val id = setupPackage().id
                 setupScanResult(
                     id, ProvenanceType.VCS, listOf(
@@ -198,10 +198,8 @@ class LicenseResolverTest : WordSpec() {
 
                 result should containExactlyInAnyOrder("Apache-2.0", "MIT")
             }
-        }
 
-        "Given a package with a scan result for source artifact, getDetectedLicensesForId()" should {
-            "return all detected licenses" {
+            "return all detected licenses for a package with a source artifact scan result" {
                 val id = setupPackage().id
                 setupScanResult(
                     id, ProvenanceType.SOURCE_ARTIFACT, listOf(
@@ -220,10 +218,8 @@ class LicenseResolverTest : WordSpec() {
 
                 result should containExactlyInAnyOrder("Apache-2.0", "MIT")
             }
-        }
 
-        "Given a package with a scan result for VCS and source artifact, getDetectedLicensesForId()" should {
-            "return all detected licenses" {
+            "return all detected licenses for a package with a VCS and a source artifact scan result" {
                 val id = setupPackage().id
                 setupScanResult(
                     id, ProvenanceType.VCS, listOf(
@@ -246,10 +242,8 @@ class LicenseResolverTest : WordSpec() {
 
                 result should containExactlyInAnyOrder("Apache-2.0", "MIT")
             }
-        }
 
-        "Given a package with multiple scan results for VCS and source artifact, getDetectedLicensesForId()" should {
-            "return all detected licenses" {
+            "return all detected licenses for a package with multiple VCS and source artifact scan results" {
                 val id = setupPackage().id
                 setupScanResult(
                     id, ProvenanceType.VCS, listOf(
@@ -288,10 +282,8 @@ class LicenseResolverTest : WordSpec() {
 
                 result should containExactlyInAnyOrder("BSD-2-Clause", "BSD-3-Clause", "Apache-2.0", "MIT")
             }
-        }
 
-        "Given a package without scan result and another package with scan result, getDetectedLicensesForId()" should {
-            "return no detected license for the former" {
+            "return no detected license for a package without scan result and unrelated other scan results" {
                 val id = setupPackage().id
                 setupScanResult(
                     id, ProvenanceType.VCS, listOf(
@@ -315,10 +307,8 @@ class LicenseResolverTest : WordSpec() {
 
                 result should beEmpty()
             }
-        }
 
-        "Given a project with multiple scan results, getDetectedLicensesForId()" should {
-            "return all detected licenses" {
+            "return all detected licenses for a project with multiple scan results" {
                 val id = setupPackage().id
                 setupScanResult(
                     id, ProvenanceType.VCS, listOf(
@@ -341,10 +331,8 @@ class LicenseResolverTest : WordSpec() {
 
                 result should containExactlyInAnyOrder("BSD-2-Clause", "BSD-3-Clause")
             }
-        }
 
-        "Given a project without scan result and another project with scan result, getDetectedLicensesForId()" should {
-            "return no detected license for the former" {
+            "return no detected license for a project without scan result and unrelated other scan results" {
                 val id = setupProject().id
                 setupScanResult(
                     id, ProvenanceType.VCS, listOf(
