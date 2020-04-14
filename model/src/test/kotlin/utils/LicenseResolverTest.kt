@@ -67,6 +67,18 @@ private fun OrtResult.addPackage(pkg: Package): OrtResult =
         )
     )
 
+private fun OrtResult.addPathExclude(pathExclude: PathExclude): OrtResult {
+    val repositoryConfig = repository.config.run {
+        copy(
+            excludes = excludes.copy(
+                paths = excludes.paths + pathExclude
+            )
+        )
+    }
+
+    return replaceConfig(repositoryConfig)
+}
+
 private fun OrtResult.addProject(project: Project): OrtResult =
     copy(
         analyzer = analyzer!!.copy(
@@ -202,6 +214,12 @@ class LicenseResolverTest : WordSpec() {
         ortResult = ortResult.addProject(project)
 
         return project
+    }
+
+    private fun setupRepositoryPathExclude(pattern: String) {
+        val pathExclude = PathExclude(pattern, PathExcludeReason.OTHER, "")
+
+        ortResult = ortResult.addPathExclude(pathExclude)
     }
 
     override fun beforeTest(testCase: TestCase) {
@@ -449,6 +467,27 @@ class LicenseResolverTest : WordSpec() {
                 val result = createResolver().getDetectedLicensesWithCopyrights(id).keys
 
                 result should containExactlyInAnyOrder("BSD-2-Clause", "BSD-3-Clause")
+            }
+
+            "omit excluded license findings for a project" {
+                val id = setupProject().id
+                setupScanResult(
+                    id, ProvenanceType.VCS, listOf(
+                        LicenseFinding(
+                            license = "BSD-2-Clause",
+                            location = TextLocation("some/path", startLine = 1, endLine = 1)
+                        ),
+                        LicenseFinding(
+                            license = "GPL-2.0-only",
+                            location = TextLocation("some/excluded/path", startLine = 1, endLine = 1)
+                        )
+                    )
+                )
+                setupRepositoryPathExclude("some/excluded/path")
+
+                val result = createResolver().getDetectedLicensesWithCopyrights(id).keys
+
+                result should containExactlyInAnyOrder("BSD-2-Clause")
             }
         }
     }
