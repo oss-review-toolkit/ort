@@ -103,7 +103,7 @@ const AboutModal = (props) => {
                                     ))
                                 }
                             </Descriptions>
-                            {/* FIXME: Replace with Ant Descriptions once uniqe key bug is fixed */}
+                            {/* FIXME: Replace with Ant Descriptions once unique key bug is fixed */}
                             <div className="ant-descriptions ant-descriptions-small ant-descriptions-bordered">
                                 <div className="ant-descriptions-view">
                                     <table>
