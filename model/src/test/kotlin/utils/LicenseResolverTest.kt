@@ -50,7 +50,10 @@ import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.PackageConfiguration
+import org.ossreviewtoolkit.model.config.PathExclude
+import org.ossreviewtoolkit.model.config.PathExcludeReason
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
+import org.ossreviewtoolkit.model.config.VcsMatcher
 
 import java.time.Instant
 import java.util.concurrent.atomic.AtomicInteger
@@ -109,6 +112,17 @@ private fun OrtResult.getProvenance(id: Identifier, type: ProvenanceType): Prove
         else -> getVcsProvenance(id)
     }
 
+private fun Package.createPackageConfig(type: ProvenanceType) =
+    PackageConfiguration(
+        id = id,
+        sourceArtifactUrl = sourceArtifact.url.takeIf { type == ProvenanceType.SOURCE_ARTIFACT },
+        vcs = VcsMatcher(
+            type = vcs.type,
+            url = vcs.url,
+            revision = vcs.revision
+        ).takeIf { type == ProvenanceType.VCS }
+    )
+
 private fun createEmptyOrtResult() =
     OrtResult(
         Repository.EMPTY,
@@ -165,6 +179,17 @@ class LicenseResolverTest : WordSpec() {
         ortResult = ortResult.addPackage(pkg)
 
         return pkg
+    }
+
+    private fun setupPackagePathExclude(id: Identifier, type: ProvenanceType, pattern: String) {
+        val provenance = ortResult.getProvenance(id, type)!!
+        val config = packageConfigurations.find { it.matches(id, provenance) }?.let {
+            packageConfigurations.remove(it)
+            it
+        } ?: ortResult.getPackage(id)!!.pkg.createPackageConfig(type)
+
+        val pathExclude = PathExclude(pattern, PathExcludeReason.OTHER, "")
+        packageConfigurations.add(config.copy(pathExcludes = config.pathExcludes + pathExclude))
     }
 
     private fun setupProject(): Project {
@@ -354,6 +379,76 @@ class LicenseResolverTest : WordSpec() {
                 val result = createResolver().getDetectedLicensesForId(idForProjectWithoutScanResult)
 
                 result should beEmpty()
+            }
+        }
+
+        "getDetectedLicensesWithCopyrights()" should {
+            "omit excluded license findings for a package with VCS scan result" {
+                val id = setupPackage().id
+                setupScanResult(
+                    id, ProvenanceType.VCS, listOf(
+                        LicenseFinding(
+                            license = "BSD-2-Clause",
+                            location = TextLocation("some/path", startLine = 1, endLine = 1)
+                        ),
+                        LicenseFinding(
+                            license = "GPL-2.0-only",
+                            location = TextLocation("some/excluded/path", startLine = 1, endLine = 1)
+                        )
+                    )
+                )
+                setupPackagePathExclude(id, ProvenanceType.VCS, "some/excluded/path")
+
+                val result = createResolver().getDetectedLicensesWithCopyrights(id).keys
+
+                result should containExactlyInAnyOrder("BSD-2-Clause")
+            }
+
+            "omit excluded license findings for a package with source artifact scan result" {
+                val id = setupPackage().id
+                setupScanResult(
+                    id, ProvenanceType.SOURCE_ARTIFACT, listOf(
+                        LicenseFinding(
+                            license = "BSD-2-Clause",
+                            location = TextLocation("some/path", startLine = 1, endLine = 1)
+                        ),
+                        LicenseFinding(
+                            license = "GPL-2.0-only",
+                            location = TextLocation("some/excluded/path", startLine = 1, endLine = 1)
+                        )
+                    )
+                )
+                setupPackagePathExclude(id, ProvenanceType.SOURCE_ARTIFACT, "some/excluded/path")
+
+                val result = createResolver().getDetectedLicensesWithCopyrights(id).keys
+
+                result should containExactlyInAnyOrder("BSD-2-Clause")
+            }
+
+            "not apply excludes for VCS to source artifact scan result and vice versa" {
+                val id = setupPackage().id
+                setupScanResult(
+                    id, ProvenanceType.VCS, listOf(
+                        LicenseFinding(
+                            license = "BSD-2-Clause",
+                            location = TextLocation("some/path/in/vcs", startLine = 1, endLine = 1)
+                        )
+                    )
+                )
+                setupScanResult(
+                    id, ProvenanceType.SOURCE_ARTIFACT, listOf(
+                        LicenseFinding(
+                            license = "BSD-3-Clause",
+                            location = TextLocation("some/path/in/source/artifact", startLine = 1, endLine = 1)
+                        )
+                    )
+                )
+                setupPackagePathExclude(id, ProvenanceType.VCS, "some/path/in/source/artifact")
+                setupPackagePathExclude(id, ProvenanceType.SOURCE_ARTIFACT, "some/path/in/vcs")
+
+                val result = createResolver().getDetectedLicensesWithCopyrights(id).keys
+
+                result should containExactlyInAnyOrder("BSD-2-Clause", "BSD-3-Clause")
             }
         }
     }
