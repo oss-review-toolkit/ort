@@ -48,6 +48,7 @@ import org.ossreviewtoolkit.model.ScannerRun
 import org.ossreviewtoolkit.model.TextLocation
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
+import org.ossreviewtoolkit.model.config.PackageConfiguration
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
 
 import java.time.Instant
@@ -117,9 +118,9 @@ private fun createEmptyOrtResult() =
 class LicenseResolverTest : WordSpec() {
     private val nextId = AtomicInteger(1)
     private lateinit var ortResult: OrtResult
-    private lateinit var packageConfigurationProvider: PackageConfigurationProvider
+    private val packageConfigurations = mutableListOf<PackageConfiguration>()
 
-    private fun createResolver() = LicenseResolver(ortResult, packageConfigurationProvider)
+    private fun createResolver() = LicenseResolver(ortResult, SimplePackageConfigurationProvider(packageConfigurations))
 
     private enum class ProvenanceType {
         VCS,
@@ -174,7 +175,7 @@ class LicenseResolverTest : WordSpec() {
 
     override fun beforeTest(testCase: TestCase) {
         ortResult = createEmptyOrtResult()
-        packageConfigurationProvider = SimplePackageConfigurationProvider()
+        packageConfigurations.clear()
     }
 
     init {
