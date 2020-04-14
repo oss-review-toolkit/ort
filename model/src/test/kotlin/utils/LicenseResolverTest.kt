@@ -97,6 +97,17 @@ private fun OrtResult.getVcsProvenance(id: Identifier): Provenance? =
 private fun OrtResult.getSourceArtifactProvenance(id: Identifier): Provenance? =
     getPackage(id)?.let { Provenance(sourceArtifact = it.pkg.sourceArtifact) }
 
+private enum class ProvenanceType {
+    VCS,
+    SOURCE_ARTIFACT
+}
+
+private fun OrtResult.getProvenance(id: Identifier, type: ProvenanceType): Provenance? =
+    when (type) {
+        ProvenanceType.SOURCE_ARTIFACT -> getSourceArtifactProvenance(id)
+        else -> getVcsProvenance(id)
+    }
+
 private fun createEmptyOrtResult() =
     OrtResult(
         Repository.EMPTY,
@@ -122,17 +133,9 @@ class LicenseResolverTest : WordSpec() {
 
     private fun createResolver() = LicenseResolver(ortResult, SimplePackageConfigurationProvider(packageConfigurations))
 
-    private enum class ProvenanceType {
-        VCS,
-        SOURCE_ARTIFACT
-    }
-
     private fun setupScanResult(id: Identifier, type: ProvenanceType, licenseFindings: Collection<LicenseFinding>) {
         val scanResult = ScanResult(
-            provenance = when (type) {
-                ProvenanceType.SOURCE_ARTIFACT -> ortResult.getSourceArtifactProvenance(id)
-                else -> ortResult.getVcsProvenance(id)
-            }!!,
+            provenance = ortResult.getProvenance(id, type)!!,
             scanner = ScannerDetails.EMPTY,
             summary = ScanSummary(
                 startTime = Instant.MIN,
