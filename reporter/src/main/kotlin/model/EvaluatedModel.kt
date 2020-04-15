@@ -181,8 +181,7 @@ data class EvaluatedModel(
         tree.forEach { node ->
             if (node is ArrayNode) {
                 if (!node.isEmpty && node[0].has("_id")) {
-                    val sortedChildren =
-                        node.elements().asSequence().toList().sortedBy { it["_id"].intValue() }.toList()
+                    val sortedChildren = node.elements().asSequence().sortedBy { it["_id"].intValue() }.toList()
                     node.removeAll()
                     node.addAll(sortedChildren)
                 }
