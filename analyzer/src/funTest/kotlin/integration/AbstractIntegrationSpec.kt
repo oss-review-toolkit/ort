@@ -76,7 +76,9 @@ abstract class AbstractIntegrationSpec : StringSpec() {
     protected lateinit var downloadResult: Downloader.DownloadResult
 
     override fun beforeSpec(spec: Spec) {
-        outputDir = createTempDir(ORT_NAME, javaClass.simpleName)
+        // Do not use the usual simple class name as the suffix here to shorten the path which otherwise gets too long
+        // on Windows for SimpleFormIntegrationTest.
+        outputDir = createTempDir(ORT_NAME)
         downloadResult = Downloader().download(pkg, outputDir)
     }
 
