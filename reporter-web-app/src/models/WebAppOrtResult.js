@@ -98,44 +98,6 @@ class WebAppOrtResult {
                 this.#customData = obj.custom_data || obj.customData;
             }
 
-            if (obj.dependency_trees || obj.dependencyTrees) {
-                const dependencyTrees = obj.dependency_trees || obj.dependencyTrees;
-                const treeNodesByPackageIndexMap = new Map();
-                const treeNodesByKeyMap = new Map();
-                const callback = (webAppTreeNode) => {
-                    const { packageIndex, key } = webAppTreeNode;
-                    const parentKey = webAppTreeNode.parent ? webAppTreeNode.parent.key : webAppTreeNode.packageIndex;
-
-                    treeNodesByKeyMap.set(key, webAppTreeNode);
-
-                    if (!treeNodesByPackageIndexMap.has(packageIndex)) {
-                        treeNodesByPackageIndexMap.set(
-                            packageIndex,
-                            {
-                                keys: new Set([key]),
-                                parentKeys: new Set([parentKey])
-                            }
-                        );
-                    } else {
-                        treeNodesByPackageIndexMap.get(packageIndex).keys.add(key);
-                        treeNodesByPackageIndexMap.get(packageIndex).parentKeys.add(parentKey);
-                    }
-                };
-
-                for (let i = 0, len = dependencyTrees.length; i < len; i++) {
-                    this.#dependencyTrees.push(
-                        new WebAppTreeNode(
-                            dependencyTrees[i],
-                            this,
-                            callback
-                        )
-                    );
-                }
-
-                this.#treeNodesByPackageIndexMap = treeNodesByPackageIndexMap;
-                this.#treeNodesByKeyMap = treeNodesByKeyMap;
-            }
-
             if (obj.licenses) {
                 const { licenses } = obj;
                 this.#licensesIndexesByNameMap.clear();
@@ -196,6 +158,13 @@ class WebAppOrtResult {
                 }
             }
 
+            if (obj.scope_excludes || obj.scopeExcludes) {
+                const scopeExcludes = obj.scope_excludes || obj.scopeExcludes;
+                for (let i = 0, len = scopeExcludes.length; i < len; i++) {
+                    this.#scopeExcludes.push(new WebAppScopeExclude(scopeExcludes[i]));
+                }
+            }
+
             if (obj.scopes) {
                 const { scopes } = obj;
                 for (let i = 0, len = scopes.length; i < len; i++) {
@@ -214,13 +183,6 @@ class WebAppOrtResult {
                     for (let i = 0, len = totalTreeDepth; i < len; i++) {
                         this.#levels.push(i);
                     }
-                }
-            }
-
-            if (obj.scope_excludes || obj.scopeExcludes) {
-                const scopeExcludes = obj.scope_excludes || obj.scopeExcludes;
-                for (let i = 0, len = scopeExcludes.length; i < len; i++) {
-                    this.#scopeExcludes.push(new WebAppScopeExclude(scopeExcludes[i]));
                 }
             }
 
@@ -279,6 +241,44 @@ class WebAppOrtResult {
                 for (let i = 0, len = ruleViolationResolutions.length; i < len; i++) {
                     this.#ruleViolationResolutions.push(new WebAppResolution(ruleViolationResolutions[i]));
                 }
+            }
+
+            if (obj.dependency_trees || obj.dependencyTrees) {
+                const dependencyTrees = obj.dependency_trees || obj.dependencyTrees;
+                const treeNodesByPackageIndexMap = new Map();
+                const treeNodesByKeyMap = new Map();
+                const callback = (webAppTreeNode) => {
+                    const { packageIndex, key } = webAppTreeNode;
+                    const parentKey = webAppTreeNode.parent ? webAppTreeNode.parent.key : webAppTreeNode.packageIndex;
+
+                    treeNodesByKeyMap.set(key, webAppTreeNode);
+
+                    if (!treeNodesByPackageIndexMap.has(packageIndex)) {
+                        treeNodesByPackageIndexMap.set(
+                            packageIndex,
+                            {
+                                keys: new Set([key]),
+                                parentKeys: new Set([parentKey])
+                            }
+                        );
+                    } else {
+                        treeNodesByPackageIndexMap.get(packageIndex).keys.add(key);
+                        treeNodesByPackageIndexMap.get(packageIndex).parentKeys.add(parentKey);
+                    }
+                };
+
+                for (let i = 0, len = dependencyTrees.length; i < len; i++) {
+                    this.#dependencyTrees.push(
+                        new WebAppTreeNode(
+                            dependencyTrees[i],
+                            this,
+                            callback
+                        )
+                    );
+                }
+
+                this.#treeNodesByPackageIndexMap = treeNodesByPackageIndexMap;
+                this.#treeNodesByKeyMap = treeNodesByKeyMap;
             }
         }
     }

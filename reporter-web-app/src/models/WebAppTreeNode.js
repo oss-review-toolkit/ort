@@ -36,7 +36,13 @@ class WebAppTreeNode {
 
     #pathExcludes = new Set([]);
 
+    #scope;
+
+    #scopeIndex;
+
     #scopeExcludes = new Set([]);
+
+    #title;
 
     #webAppOrtResult;
 
@@ -52,10 +58,6 @@ class WebAppTreeNode {
                 className.add(`ort-tree-node-${obj.key}`);
             }
 
-            if (Number.isInteger(obj.pkg)) {
-                this.#packageIndex = obj.pkg;
-            }
-
             if (obj.path_excludes || obj.pathExcludes) {
                 const pathExcludes = obj.path_excludes || obj.pathExcludes;
                 this.#pathExcludes = new Set(pathExcludes);
@@ -64,10 +66,6 @@ class WebAppTreeNode {
             if (obj.scope_excludes || obj.scopeExcludes) {
                 const scopeExcludes = obj.scope_excludes || obj.scopeExcludes;
                 this.#scopeExcludes = new Set(scopeExcludes);
-            }
-
-            if (obj.title) {
-                this.title = obj.title;
             }
 
             if (parent) {
@@ -91,6 +89,16 @@ class WebAppTreeNode {
 
             if (webAppOrtResult) {
                 this.#webAppOrtResult = webAppOrtResult;
+
+                if (Number.isInteger(obj.pkg)) {
+                    this.#packageIndex = obj.pkg;
+                    this.#package = webAppOrtResult.packages[obj.pkg];
+                    this.title = this.#package.id;
+                } else if (Number.isInteger(obj.scope)) {
+                    this.#scopeIndex = obj.pkg;
+                    this.#scope = webAppOrtResult.scopes[obj.scope];
+                    this.title = this.#scope.name;
+                }
             }
 
             if (obj.children) {
@@ -134,7 +142,7 @@ class WebAppTreeNode {
     }
 
     get isScope() {
-        return !Number.isInteger(this.#packageIndex);
+        return !!this.#scope;
     }
 
     get packageIndex() {
@@ -142,10 +150,6 @@ class WebAppTreeNode {
     }
 
     get package() {
-        if (!this.#package && this.#webAppOrtResult) {
-            this.#package = this.#webAppOrtResult.getPackageByIndex(this.#packageIndex);
-        }
-
         return this.#package;
     }
 
@@ -161,8 +165,16 @@ class WebAppTreeNode {
         return this.#pathExcludes;
     }
 
+    get scope() {
+        return this.#scope;
+    }
+
     get scopeExcludes() {
         return this.#scopeExcludes;
+    }
+
+    get scopeIndex() {
+        return this.#scopeIndex;
     }
 
     get webAppPath() {
