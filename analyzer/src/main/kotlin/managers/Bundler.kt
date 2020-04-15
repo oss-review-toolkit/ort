@@ -195,7 +195,11 @@ class Bundler(
         scriptFile.writeBytes(javaClass.getResource("/scripts/bundler_dependencies.rb").readBytes())
 
         try {
-            val scriptCmd = run(workingDir, "exec", "ruby", scriptFile.path)
+            val scriptCmd = run(
+                "exec", "ruby", scriptFile.path,
+                workingDir = workingDir,
+                environment = mapOf("BUNDLE_PATH" to "vendor/bundle")
+            )
             return jsonMapper.readValue(scriptCmd.stdout)
         } finally {
             if (!scriptFile.delete()) {
@@ -211,7 +215,11 @@ class Bundler(
         } ?: GemSpec(workingDir.name, "", "", sortedSetOf(), "", emptySet(), VcsInfo.EMPTY, RemoteArtifact.EMPTY)
 
     private fun getGemspec(gemName: String, workingDir: File): GemSpec {
-        val spec = run(workingDir, "exec", "gem", "specification", gemName).stdout
+        val spec = run(
+            "exec", "gem", "specification", gemName,
+            workingDir = workingDir,
+            environment = mapOf("BUNDLE_PATH" to "vendor/bundle")
+        ).stdout
 
         return GemSpec.createFromYaml(spec)
     }
@@ -222,7 +230,9 @@ class Bundler(
     private fun installDependencies(workingDir: File) {
         requireLockfile(workingDir) { File(workingDir, "Gemfile.lock").isFile }
 
-        run(workingDir, "install", "--path", "vendor/bundle")
+        // Work around "--path" being deprecated since Bundler 2.1 and avoid tampering with the ".bundle/config" file at
+        // all by using the "BUNDLER_PATH" environment variable to specify where to install the Gems to.
+        run("install", workingDir = workingDir, environment = mapOf("BUNDLE_PATH" to "vendor/bundle"))
     }
 
     private fun queryRubygems(name: String, version: String, retryCount: Int = 3): GemSpec? {
