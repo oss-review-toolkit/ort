@@ -23,6 +23,8 @@ import com.github.ajalt.clikt.core.BadParameterValue
 import com.github.ajalt.clikt.core.CliktCommand
 import com.github.ajalt.clikt.core.UsageError
 import com.github.ajalt.clikt.core.requireObject
+import com.github.ajalt.clikt.parameters.groups.mutuallyExclusiveOptions
+import com.github.ajalt.clikt.parameters.groups.single
 import com.github.ajalt.clikt.parameters.options.convert
 import com.github.ajalt.clikt.parameters.options.option
 import com.github.ajalt.clikt.parameters.options.required
@@ -37,12 +39,13 @@ import org.ossreviewtoolkit.model.config.orEmpty
 import org.ossreviewtoolkit.model.licenses.LicenseConfiguration
 import org.ossreviewtoolkit.model.licenses.orEmpty
 import org.ossreviewtoolkit.model.readValue
-import org.ossreviewtoolkit.model.utils.SimplePackageConfigurationProvider
 import org.ossreviewtoolkit.reporter.DefaultLicenseTextProvider
 import org.ossreviewtoolkit.reporter.DefaultResolutionProvider
 import org.ossreviewtoolkit.reporter.Reporter
 import org.ossreviewtoolkit.reporter.ReporterInput
+import org.ossreviewtoolkit.utils.PackageConfigurationOption
 import org.ossreviewtoolkit.utils.collectMessagesAsString
+import org.ossreviewtoolkit.utils.createProvider
 import org.ossreviewtoolkit.utils.expandTilde
 import org.ossreviewtoolkit.utils.safeMkdirs
 import org.ossreviewtoolkit.utils.showStackTrace
@@ -60,11 +63,21 @@ class ReporterCommand : CliktCommand(
         .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
         .required()
 
-    private val packageConfigurationDir by option(
-        "--package-configuration-dir",
-        help = "The directory containing the package configuration files to read as input. It is searched recursively."
-    ).convert { it.expandTilde() }
-        .file(mustExist = true, canBeFile = false, canBeDir = true, mustBeWritable = false, mustBeReadable = true)
+    private val packageConfigurationOption by mutuallyExclusiveOptions<PackageConfigurationOption>(
+        option(
+            "--package-configuration-dir",
+            help = "The directory containing the package configuration files to read as input. It is searched " +
+                    "recursively."
+        ).convert { it.expandTilde() }
+            .file(mustExist = true, canBeFile = false, canBeDir = true, mustBeWritable = false, mustBeReadable = true)
+            .convert { PackageConfigurationOption.Dir(it) },
+        option(
+            "--package-configuration-file",
+            help = "The file containing the package configurations to read as input."
+        ).convert { it.expandTilde() }
+            .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
+            .convert { PackageConfigurationOption.File(it) }
+    ).single()
 
     private val outputDir by option(
         "--output-dir", "-o",
@@ -147,9 +160,7 @@ class ReporterCommand : CliktCommand(
 
         val copyrightGarbage = copyrightGarbageFile?.readValue<CopyrightGarbage>().orEmpty()
 
-        val packageConfigurationProvider =
-            packageConfigurationDir?.let { SimplePackageConfigurationProvider.forDirectory(it) }
-                ?: SimplePackageConfigurationProvider()
+        val packageConfigurationProvider = packageConfigurationOption.createProvider()
 
         val licenseConfiguration = licenseConfigurationFile?.readValue<LicenseConfiguration>().orEmpty()
 

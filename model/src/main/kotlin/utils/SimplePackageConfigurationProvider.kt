@@ -47,6 +47,16 @@ class SimplePackageConfigurationProvider(
 
             return SimplePackageConfigurationProvider(entries)
         }
+
+        /**
+         * Return a [SimplePackageConfigurationProvider] which provides all [PackageConfiguration]s found in the given
+         * file. Throws if there is more than one configuration per [Identifier] and [Provenance].
+         */
+        fun forFile(file: File): SimplePackageConfigurationProvider {
+            val entries = file.readValue<List<PackageConfiguration>>()
+
+            return SimplePackageConfigurationProvider(entries)
+        }
     }
 
     private val configurationsById: Map<Identifier, List<PackageConfiguration>>

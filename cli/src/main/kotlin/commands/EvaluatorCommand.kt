@@ -45,7 +45,8 @@ import org.ossreviewtoolkit.model.licenses.LicenseConfiguration
 import org.ossreviewtoolkit.model.licenses.orEmpty
 import org.ossreviewtoolkit.model.mapper
 import org.ossreviewtoolkit.model.readValue
-import org.ossreviewtoolkit.model.utils.SimplePackageConfigurationProvider
+import org.ossreviewtoolkit.utils.PackageConfigurationOption
+import org.ossreviewtoolkit.utils.createProvider
 import org.ossreviewtoolkit.utils.expandTilde
 import org.ossreviewtoolkit.utils.log
 import org.ossreviewtoolkit.utils.safeMkdirs
@@ -60,11 +61,21 @@ class EvaluatorCommand : CliktCommand(name = "evaluate", help = "Evaluate rules 
         .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
         .required()
 
-    private val packageConfigurationDir by option(
-        "--package-configuration-dir",
-        help = "The directory containing the package configuration files to read as input. It is searched recursively."
-    ).convert { it.expandTilde() }
-        .file(mustExist = true, canBeFile = false, canBeDir = true, mustBeWritable = false, mustBeReadable = true)
+    private val packageConfigurationOption by mutuallyExclusiveOptions<PackageConfigurationOption>(
+        option(
+            "--package-configuration-dir",
+            help = "The directory containing the package configuration files to read as input. It is searched " +
+                    "recursively."
+        ).convert { it.expandTilde() }
+            .file(mustExist = true, canBeFile = false, canBeDir = true, mustBeWritable = false, mustBeReadable = true)
+            .convert { PackageConfigurationOption.Dir(it) },
+        option(
+            "--package-configuration-file",
+            help = "The file containing the package configurations to read as input."
+        ).convert { it.expandTilde() }
+            .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
+            .convert { PackageConfigurationOption.File(it) }
+    ).single()
 
     private val rules by mutuallyExclusiveOptions<GroupTypes>(
         option(
@@ -138,9 +149,7 @@ class EvaluatorCommand : CliktCommand(name = "evaluate", help = "Evaluate rules 
             ortResultInput = ortResultInput.replaceConfig(it.readValue())
         }
 
-        val packageConfigurationProvider =
-            packageConfigurationDir?.let { SimplePackageConfigurationProvider.forDirectory(it) }
-                ?: SimplePackageConfigurationProvider()
+        val packageConfigurationProvider = packageConfigurationOption.createProvider()
 
         val licenseConfiguration = licenseConfigurationFile?.readValue<LicenseConfiguration>().orEmpty()
 
