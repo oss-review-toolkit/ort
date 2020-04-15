@@ -160,12 +160,11 @@ data class EvaluatedModel(
      * Serialize this [EvaluatedModel] to JSON and write the output to the [writer], optionally
      * [pretty printed][prettyPrint].
      */
-    fun toJson(writer: Writer, prettyPrint: Boolean = true) {
+    fun toJson(writer: Writer, prettyPrint: Boolean = true) =
         when {
             prettyPrint -> JSON_MAPPER.writerWithDefaultPrettyPrinter()
             else -> JSON_MAPPER.writer()
         }.writeValue(writer, toSortedTree())
-    }
 
     /**
      * Serialize this [EvaluatedModel] to YAML and write the output to the [writer].
