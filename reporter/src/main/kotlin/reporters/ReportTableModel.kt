@@ -211,13 +211,20 @@ data class ReportTableModel(
     data class IssueTable(
         val rows: List<IssueRow>
     ) {
-        val unresolvedIssues = rows.flatMap {
-            it.analyzerIssues.flatMap { (_, issues) -> issues } + it.scanIssues.flatMap { (_, issues) -> issues }
-        }.filterNot { it.isResolved }.groupBy { it.severity }
+        val errorCount: Int
+        val warningCount: Int
+        val hintCount: Int
 
-        val errorCount = unresolvedIssues[Severity.ERROR].orEmpty().size
-        val warningCount = unresolvedIssues[Severity.WARNING].orEmpty().size
-        val hintCount = unresolvedIssues[Severity.HINT].orEmpty().size
+        init {
+            val unresolvedIssues = rows.flatMap {
+                it.analyzerIssues.flatMap { (_, issues) -> issues } +
+                        it.scanIssues.flatMap { (_, issues) -> issues }
+            }.filterNot { it.isResolved }.groupBy { it.severity }
+
+            errorCount = unresolvedIssues[Severity.ERROR].orEmpty().size
+            warningCount = unresolvedIssues[Severity.WARNING].orEmpty().size
+            hintCount = unresolvedIssues[Severity.HINT].orEmpty().size
+        }
     }
 
     data class IssueRow(
