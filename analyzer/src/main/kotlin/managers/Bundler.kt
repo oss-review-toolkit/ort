@@ -204,15 +204,11 @@ class Bundler(
         }
     }
 
-    private fun parseProject(workingDir: File): GemSpec {
-        val gemspecFile = getGemspecFile(workingDir)
-        return if (gemspecFile != null) {
-            // Project is a gem.
-            getGemspec(gemspecFile.name.substringBefore('.'), workingDir)
-        } else {
-            GemSpec(workingDir.name, "", "", sortedSetOf(), "", emptySet(), VcsInfo.EMPTY, RemoteArtifact.EMPTY)
-        }
-    }
+    private fun parseProject(workingDir: File) =
+        getGemspecFile(workingDir)?.let { gemspecFile ->
+            // Project is a Gem, i.e. a library.
+            getGemspec(gemspecFile.nameWithoutExtension, workingDir)
+        } ?: GemSpec(workingDir.name, "", "", sortedSetOf(), "", emptySet(), VcsInfo.EMPTY, RemoteArtifact.EMPTY)
 
     private fun getGemspec(gemName: String, workingDir: File): GemSpec {
         val spec = run(workingDir, "exec", "gem", "specification", gemName).stdout
@@ -221,7 +217,7 @@ class Bundler(
     }
 
     private fun getGemspecFile(workingDir: File) =
-        workingDir.listFiles { _, name -> name.endsWith(".gemspec") }.firstOrNull()
+        workingDir.listFiles { file -> file.extension == "gemspec" }.firstOrNull()
 
     private fun installDependencies(workingDir: File) {
         requireLockfile(workingDir) { File(workingDir, "Gemfile.lock").isFile }
