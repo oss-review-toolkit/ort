@@ -72,7 +72,7 @@ class RuleSetTest : WordSpec() {
                     }
                 }
 
-                ruleSet.violations should haveSize(1)
+                ruleSet.violations should haveSize(4)
             }
         }
 
@@ -118,7 +118,7 @@ class RuleSetTest : WordSpec() {
                     }
                 }
 
-                ruleSet.violations should haveSize(1)
+                ruleSet.violations should haveSize(4)
             }
         }
     }
