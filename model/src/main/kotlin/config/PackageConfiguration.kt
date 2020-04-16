@@ -38,11 +38,13 @@ data class PackageConfiguration(
     /**
      * The source artifact this configuration applies to.
      */
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     val sourceArtifactUrl: String? = null,
 
     /**
      * The vcs and revision this configuration applies to.
      */
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     val vcs: VcsMatcher? = null,
 
     /**
