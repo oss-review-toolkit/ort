@@ -45,12 +45,9 @@ import org.ossreviewtoolkit.spdx.SpdxExpression
 import org.ossreviewtoolkit.utils.DeclaredLicenseProcessor
 
 val concludedLicense = SpdxExpression.parse("LicenseRef-a AND LicenseRef-b")
-val declaredLicenses = sortedSetOf("license-a", "license-b")
+val declaredLicenses = sortedSetOf("Apache-2.0", "MIT")
 val declaredLicensesProcessed = DeclaredLicenseProcessor.process(declaredLicenses)
 val detectedLicenses = listOf("LicenseRef-a", "LicenseRef-b")
-
-val declaredSpdxLicenses = sortedSetOf("Apache-2.0")
-val declaredSpdxLicensesProcessed = DeclaredLicenseProcessor.process(declaredSpdxLicenses)
 
 val licenseFindings = listOf(
     LicenseFindings("LicenseRef-a", sortedSetOf(), sortedSetOf()),
@@ -91,12 +88,6 @@ val packageWithConcludedAndDeclaredLicense = Package.EMPTY.copy(
     declaredLicensesProcessed = declaredLicensesProcessed
 )
 
-val packageWithSpdxLicense = Package.EMPTY.copy(
-    id = Identifier("Maven:org.ossreviewtoolkit:package-with-spdx-licenses:1.0"),
-    declaredLicenses = declaredSpdxLicenses,
-    declaredLicensesProcessed = declaredSpdxLicensesProcessed
-)
-
 val allPackages = listOf(
     packageExcluded,
     packageDynamicallyLinked,
@@ -104,8 +95,7 @@ val allPackages = listOf(
     packageWithoutLicense,
     packageWithOnlyConcludedLicense,
     packageWithOnlyDeclaredLicense,
-    packageWithConcludedAndDeclaredLicense,
-    packageWithSpdxLicense
+    packageWithConcludedAndDeclaredLicense
 )
 
 val scopeExcluded = Scope(
@@ -132,8 +122,7 @@ val scopeIncluded = Scope(
         packageWithOnlyDeclaredLicense.toReference(),
         packageWithConcludedAndDeclaredLicense.toReference(),
         packageRefDynamicallyLinked,
-        packageRefStaticallyLinked,
-        packageWithSpdxLicense.toReference()
+        packageRefStaticallyLinked
     )
 )
 

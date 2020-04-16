@@ -19,16 +19,18 @@
 
 package org.ossreviewtoolkit.utils
 
-import org.ossreviewtoolkit.spdx.enumSetOf
-import org.ossreviewtoolkit.spdx.SpdxExpression
+import io.kotest.core.spec.style.StringSpec
+import io.kotest.matchers.collections.containExactly
+import io.kotest.matchers.should
+import io.kotest.matchers.shouldBe
+import io.kotest.matchers.shouldNotBe
+
 import org.ossreviewtoolkit.spdx.SpdxDeclaredLicenseMapping
+import org.ossreviewtoolkit.spdx.SpdxExpression
 import org.ossreviewtoolkit.spdx.SpdxLicense
 import org.ossreviewtoolkit.spdx.SpdxLicenseAliasMapping
 import org.ossreviewtoolkit.spdx.SpdxLicenseIdExpression
-
-import io.kotest.matchers.shouldBe
-import io.kotest.matchers.shouldNotBe
-import io.kotest.core.spec.style.StringSpec
+import org.ossreviewtoolkit.spdx.enumSetOf
 
 class DeclaredLicenseProcessorTest : StringSpec() {
     /**
@@ -43,7 +45,7 @@ class DeclaredLicenseProcessorTest : StringSpec() {
 
                 // Include the declared license in the comparison to see where a failure comes from.
                 "$processedLicense from $declaredLicense" shouldNotBe "null from $declaredLicense"
-                processedLicense!!.validate(SpdxExpression.Strictness.ALLOW_DEPRECATED)
+                processedLicense!!.validate(SpdxExpression.Strictness.ALLOW_CURRENT)
             }
         }
 
@@ -84,6 +86,15 @@ class DeclaredLicenseProcessorTest : StringSpec() {
             }
 
             processableLicenses shouldBe emptyList()
+        }
+
+        "SPDX expression only contains valid licenses" {
+            val declaredLicenses = listOf("Apache-2.0", "invalid")
+
+            val processedLicenses = DeclaredLicenseProcessor.process(declaredLicenses)
+
+            processedLicenses.spdxExpression shouldBe SpdxLicenseIdExpression("Apache-2.0")
+            processedLicenses.unmapped should containExactly("invalid")
         }
     }
 }

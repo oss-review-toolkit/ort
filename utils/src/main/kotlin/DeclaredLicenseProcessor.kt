@@ -63,7 +63,7 @@ object DeclaredLicenseProcessor {
     fun process(declaredLicense: String): SpdxExpression? {
         val licenseWithoutPrefixOrSuffix = preprocess(declaredLicense)
         val mappedLicense = SpdxDeclaredLicenseMapping.map(licenseWithoutPrefixOrSuffix)
-        return (mappedLicense ?: parseLicense(licenseWithoutPrefixOrSuffix))?.normalize()
+        return (mappedLicense ?: parseLicense(licenseWithoutPrefixOrSuffix))?.normalize()?.takeIf { it.isValid() }
     }
 
     fun process(declaredLicenses: Collection<String>): ProcessedDeclaredLicense {
