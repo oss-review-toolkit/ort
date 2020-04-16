@@ -122,6 +122,12 @@ sealed class SpdxExpression {
     abstract fun validate(strictness: Strictness)
 
     /**
+     * Return if this expression is valid according to the [strictness]. Also see [validate].
+     */
+    fun isValid(strictness: Strictness = Strictness.ALLOW_CURRENT): Boolean =
+        runCatching { validate(strictness) }.isSuccess
+
+    /**
      * Concatenate [this][SpdxExpression] and [other] using [SpdxOperator.AND].
      */
     infix fun and(other: SpdxExpression) = SpdxCompoundExpression(this, SpdxOperator.AND, other)
