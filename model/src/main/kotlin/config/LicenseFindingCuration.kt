@@ -55,7 +55,7 @@ data class LicenseFindingCuration(
      * [detectedLicense] or if [detectedLicense] is null.
      */
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    val detectedLicense: String?,
+    val detectedLicense: String? = null,
 
     /**
      * The concluded license as SPDX expression or [org.ossreviewtoolkit.spdx.SpdxLicense.NONE] for no license,
