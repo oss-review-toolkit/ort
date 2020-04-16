@@ -38,12 +38,12 @@ data class PackageConfiguration(
     /**
      * The source artifact this configuration applies to.
      */
-    val sourceArtifactUrl: String?,
+    val sourceArtifactUrl: String? = null,
 
     /**
      * The vcs and revision this configuration applies to.
      */
-    val vcs: VcsMatcher?,
+    val vcs: VcsMatcher? = null,
 
     /**
      * Path excludes.
