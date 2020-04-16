@@ -49,6 +49,8 @@ import org.ossreviewtoolkit.model.TextLocation
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
+import org.ossreviewtoolkit.model.config.LicenseFindingCuration
+import org.ossreviewtoolkit.model.config.LicenseFindingCurationReason
 import org.ossreviewtoolkit.model.config.PackageConfiguration
 import org.ossreviewtoolkit.model.config.PathExclude
 import org.ossreviewtoolkit.model.config.PathExcludeReason
@@ -57,6 +59,18 @@ import org.ossreviewtoolkit.model.config.VcsMatcher
 
 import java.time.Instant
 import java.util.concurrent.atomic.AtomicInteger
+
+private fun OrtResult.addLicenseFindingCuration(licenseFindingCuration: LicenseFindingCuration): OrtResult {
+    val repositoryConfig = repository.config.run {
+        copy(
+            curations = curations.copy(
+                licenseFindings = curations.licenseFindings + licenseFindingCuration
+            )
+        )
+    }
+
+    return replaceConfig(repositoryConfig)
+}
 
 private fun OrtResult.addPackage(pkg: Package): OrtResult =
     copy(
@@ -214,6 +228,16 @@ class LicenseResolverTest : WordSpec() {
         ortResult = ortResult.addProject(project)
 
         return project
+    }
+
+    private fun setupRepositoryLicenseFindingCuration(path: String, concludedLicense: String) {
+        val licenseFindingCuration = LicenseFindingCuration(
+            path = path,
+            concludedLicense = concludedLicense,
+            reason = LicenseFindingCurationReason.INCORRECT
+        )
+
+        ortResult = ortResult.addLicenseFindingCuration(licenseFindingCuration)
     }
 
     private fun setupRepositoryPathExclude(pattern: String) {
@@ -397,6 +421,27 @@ class LicenseResolverTest : WordSpec() {
                 val result = createResolver().getDetectedLicensesForId(idForProjectWithoutScanResult)
 
                 result should beEmpty()
+            }
+
+            "return the curated detected license for a project with license finding curations" {
+                val id = setupProject().id
+                setupScanResult(
+                    id, ProvenanceType.VCS, listOf(
+                        LicenseFinding(
+                            license = "BSD-2-Clause",
+                            location = TextLocation("some/path", startLine = 1, endLine = 1)
+                        ),
+                        LicenseFinding(
+                            license = "BSD-3-Clause",
+                            location = TextLocation("some/other/path", startLine = 1, endLine = 1)
+                        )
+                    )
+                )
+                setupRepositoryLicenseFindingCuration("some/path", "MIT")
+
+                val result = createResolver().getDetectedLicensesForId(id)
+
+                result should containExactlyInAnyOrder("BSD-3-Clause", "MIT")
             }
         }
 
