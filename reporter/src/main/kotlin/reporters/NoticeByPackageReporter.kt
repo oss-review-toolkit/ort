@@ -240,7 +240,7 @@ class NoticeByPackageProcessor(input: ReporterInput) : AbstractNoticeReporter.No
         return licenseFiles
     }
 
-    fun getFindingsForLicenseFile(
+    private fun getFindingsForLicenseFile(
         scanResult: ScanResult,
         path: Path,
         licenseFindingsMap: LicenseFindingsMap

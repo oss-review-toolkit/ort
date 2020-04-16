@@ -70,7 +70,7 @@ object HelperMain : CommandWithHelp() {
     /**
      * Run the ORT HELPER CLI with the provided [args] and return the exit code of [CommandWithHelp.run].
      */
-    fun run(args: Array<String>): Int {
+    private fun run(args: Array<String>): Int {
         val jc = JCommander(this).apply {
             programName = ORTH_NAME
 
