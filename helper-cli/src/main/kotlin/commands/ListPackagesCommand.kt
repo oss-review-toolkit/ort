@@ -19,40 +19,36 @@
 
 package org.ossreviewtoolkit.helper.commands
 
-import com.beust.jcommander.JCommander
-import com.beust.jcommander.Parameter
-import com.beust.jcommander.Parameters
+import com.github.ajalt.clikt.core.CliktCommand
+import com.github.ajalt.clikt.parameters.options.convert
+import com.github.ajalt.clikt.parameters.options.default
+import com.github.ajalt.clikt.parameters.options.option
+import com.github.ajalt.clikt.parameters.options.required
+import com.github.ajalt.clikt.parameters.types.file
 
-import org.ossreviewtoolkit.helper.CommandWithHelp
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.readValue
 import org.ossreviewtoolkit.model.utils.getDetectedLicensesForId
-import org.ossreviewtoolkit.utils.PARAMETER_ORDER_MANDATORY
+import org.ossreviewtoolkit.utils.expandTilde
 
-import java.io.File
+class ListPackagesCommand : CliktCommand(
+    name = "list-packages",
+    help = "Lists the packages and projects contained in the given ORT result file."
+) {
+    private val ortResultFile by option(
+        "--ort-result-file",
+        help = "The ORT result file to read as input."
+    ).convert { it.expandTilde() }
+        .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
+        .required()
 
-@Parameters(
-    commandNames = ["list-packages"],
-    commandDescription = "Lists the packages and projects contained in the given ORT result file."
-)
-class ListPackagesCommand : CommandWithHelp() {
-    @Parameter(
-        names = ["--ort-result-file"],
-        required = true,
-        order = PARAMETER_ORDER_MANDATORY,
-        description = "The ORT result file to read as input."
-    )
-    private lateinit var ortResultFile: File
+    private val matchDetectedLicenses by option(
+        "--match-detected-licenses",
+        help = "Omit all packages not matching any of the licenses given by this comma separated list."
+    ).convert { it.split(",").toList() }
+        .default(emptyList())
 
-    @Parameter(
-        names = ["--match-detected-licenses"],
-        required = false,
-        order = PARAMETER_ORDER_MANDATORY,
-        description = "Omit all packages not matching any of the licenses given by this comma separated list."
-    )
-    private var matchDetectedLicenses: List<String> = emptyList()
-
-    override fun runCommand(jc: JCommander): Int {
+    override fun run() {
         val ortResult = ortResultFile.readValue<OrtResult>()
 
         val packages = ortResult
@@ -69,7 +65,5 @@ class ListPackagesCommand : CommandWithHelp() {
             }
         }
         println(result)
-
-        return 0
     }
 }

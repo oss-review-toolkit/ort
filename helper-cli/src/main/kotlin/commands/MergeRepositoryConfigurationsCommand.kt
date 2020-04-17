@@ -19,43 +19,39 @@
 
 package org.ossreviewtoolkit.helper.commands
 
-import com.beust.jcommander.JCommander
-import com.beust.jcommander.Parameter
-import com.beust.jcommander.Parameters
+import com.github.ajalt.clikt.core.CliktCommand
+import com.github.ajalt.clikt.parameters.options.convert
+import com.github.ajalt.clikt.parameters.options.option
+import com.github.ajalt.clikt.parameters.options.required
+import com.github.ajalt.clikt.parameters.types.file
 
-import org.ossreviewtoolkit.helper.CommandWithHelp
 import org.ossreviewtoolkit.helper.common.merge
 import org.ossreviewtoolkit.helper.common.writeAsYaml
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.readValue
-import org.ossreviewtoolkit.utils.PARAMETER_ORDER_MANDATORY
 import org.ossreviewtoolkit.utils.expandTilde
 
 import java.io.File
 
-@Parameters(
-    commandNames = ["merge-repository-configurations"],
-    commandDescription = "Merges the given list of input repository configuration files and writes the result to " +
-            "the given output repository configuration file."
-)
-internal class MergeRepositoryConfigurationsCommand : CommandWithHelp() {
-    @Parameter(
-        names = ["--input-repository-configuration-files", "-i"],
-        required = true,
-        order = PARAMETER_ORDER_MANDATORY,
-        description = "A comma separated list of the repository configuration files to be merged."
-    )
-    private lateinit var inputRepositoryConfigurationFiles: List<File>
+internal class MergeRepositoryConfigurationsCommand : CliktCommand(
+    name = "merge-repository-configurations",
+    help = "Merges the given list of input repository configuration files and writes the result to the given output " +
+            "repository configuration file."
+) {
+    private val inputRepositoryConfigurationFiles by option(
+        "--input-repository-configuration-files", "-i",
+        help = "A comma separated list of the repository configuration files to be merged."
+    ).convert { it.split(",").toList().map { File(it.expandTilde()) } }
+        .required()
 
-    @Parameter(
-        names = ["--output-repository-configuration-file", "-o"],
-        required = true,
-        order = PARAMETER_ORDER_MANDATORY,
-        description = "The output repository configuration file."
-    )
-    private lateinit var outputRepositoryConfigurationFile: File
+    private val outputRepositoryConfigurationFile by option(
+        "--output-repository-configuration-file", "-o",
+        help = "The output repository configuration file."
+    ).convert { it.expandTilde() }
+        .file(mustExist = false, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = false)
+        .required()
 
-    override fun runCommand(jc: JCommander): Int {
+    override fun run() {
         var result = RepositoryConfiguration()
 
         inputRepositoryConfigurationFiles.forEach { file ->
@@ -64,7 +60,5 @@ internal class MergeRepositoryConfigurationsCommand : CommandWithHelp() {
         }
 
         result.writeAsYaml(outputRepositoryConfigurationFile)
-
-        return 0
     }
 }

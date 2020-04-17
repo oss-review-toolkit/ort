@@ -19,12 +19,13 @@
 
 package org.ossreviewtoolkit.helper.commands
 
-import com.beust.jcommander.JCommander
-import com.beust.jcommander.Parameter
-import com.beust.jcommander.Parameters
+import com.github.ajalt.clikt.core.CliktCommand
+import com.github.ajalt.clikt.parameters.options.convert
+import com.github.ajalt.clikt.parameters.options.option
+import com.github.ajalt.clikt.parameters.options.required
+import com.github.ajalt.clikt.parameters.types.enum
+import com.github.ajalt.clikt.parameters.types.file
 
-import org.ossreviewtoolkit.helper.CommandWithHelp
-import org.ossreviewtoolkit.helper.common.SeverityConverter
 import org.ossreviewtoolkit.helper.common.getUnresolvedRuleViolations
 import org.ossreviewtoolkit.helper.common.replaceRuleViolationResolutions
 import org.ossreviewtoolkit.helper.common.writeAsYaml
@@ -34,42 +35,32 @@ import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.config.RuleViolationResolution
 import org.ossreviewtoolkit.model.config.RuleViolationResolutionReason
 import org.ossreviewtoolkit.model.readValue
-import org.ossreviewtoolkit.utils.PARAMETER_ORDER_MANDATORY
-import org.ossreviewtoolkit.utils.PARAMETER_ORDER_OPTIONAL
+import org.ossreviewtoolkit.utils.expandTilde
 
-import java.io.File
+internal class GenerateRuleViolationResolutionsCommand : CliktCommand(
+    name = "generate-rule-violation-resolutions",
+    help = "Generates resolutions for all unresolved rule violations."
+) {
+    private val ortResultFile by option(
+        "--ort-result-file",
+        help = "The input ORT file from which the rule violations are read."
+    ).convert { it.expandTilde() }
+        .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = false)
+        .required()
 
-@Parameters(
-    commandNames = ["generate-rule-violation-resolutions"],
-    commandDescription = "Generates resolutions for all unresolved rule violations."
-)
-internal class GenerateRuleViolationResolutionsCommand : CommandWithHelp() {
-    @Parameter(
-        names = ["--ort-result-file"],
-        required = true,
-        order = PARAMETER_ORDER_MANDATORY,
-        description = "The input ORT file from which the rule violations are read."
-    )
-    private lateinit var ortResultFile: File
+    private val repositoryConfigurationFile by option(
+        "--repository-configuration-file",
+        help = "Override the repository configuration contained in the given input ORT file."
+    ).convert { it.expandTilde() }
+        .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = false)
+        .required()
 
-    @Parameter(
-        names = ["--repository-configuration-file"],
-        required = true,
-        order = PARAMETER_ORDER_MANDATORY,
-        description = "Override the repository configuration contained in the given input ORT file."
-    )
-    private lateinit var repositoryConfigurationFile: File
+    private val severity by option(
+        "--severity",
+        help = "Only consider violations of the given severity. Allowed values: ERROR|WARNING|HINT."
+    ).enum<Severity>()
 
-    @Parameter(
-        names = ["--severity"],
-        required = false,
-        order = PARAMETER_ORDER_OPTIONAL,
-        converter = SeverityConverter::class,
-        description = "Only consider violations of the given severity. Allowed values: ERROR|WARNING|HINT."
-    )
-    private var severity: Severity? = null
-
-    override fun runCommand(jc: JCommander): Int {
+    override fun run() {
         val repositoryConfiguration = repositoryConfigurationFile.readValue<RepositoryConfiguration>()
         val ortResult = ortResultFile.readValue<OrtResult>().replaceConfig(repositoryConfiguration)
 
@@ -89,7 +80,5 @@ internal class GenerateRuleViolationResolutionsCommand : CommandWithHelp() {
         repositoryConfiguration
             .replaceRuleViolationResolutions(resolutions)
             .writeAsYaml(repositoryConfigurationFile)
-
-        return 0
     }
 }

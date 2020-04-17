@@ -19,36 +19,32 @@
 
 package org.ossreviewtoolkit.helper.commands
 
-import com.beust.jcommander.JCommander
-import com.beust.jcommander.Parameter
-import com.beust.jcommander.Parameters
-import com.beust.jcommander.converters.FileConverter
+import com.github.ajalt.clikt.core.CliktCommand
+import com.github.ajalt.clikt.core.UsageError
+import com.github.ajalt.clikt.parameters.arguments.argument
+import com.github.ajalt.clikt.parameters.arguments.convert
+import com.github.ajalt.clikt.parameters.types.file
 
-import org.ossreviewtoolkit.helper.CommandWithHelp
 import org.ossreviewtoolkit.helper.common.download
 import org.ossreviewtoolkit.model.PackageCuration
 import org.ossreviewtoolkit.model.readValue
-import org.ossreviewtoolkit.utils.PARAMETER_ORDER_MANDATORY
 import org.ossreviewtoolkit.utils.collectMessagesAsString
+import org.ossreviewtoolkit.utils.expandTilde
 import org.ossreviewtoolkit.utils.hash
 
-import java.io.File
 import java.io.IOException
 
-@Parameters(
-    commandNames = ["verify-source-artifact-curations"],
-    commandDescription = "Verifies that all curated source artifacts can be downloaded and that the hashes are correct."
-)
-internal class VerifySourceArtifactCurationsCommand : CommandWithHelp() {
-    @Parameter(
-        description = "A file containing package curation data.",
-        required = true,
-        order = PARAMETER_ORDER_MANDATORY,
-        converter = FileConverter::class
-    )
-    private lateinit var packageCurationsFile: File
+internal class VerifySourceArtifactCurationsCommand : CliktCommand(
+    name = "verify-source-artifact-curations",
+    help = "Verifies that all curated source artifacts can be downloaded and that the hashes are correct."
+) {
+    private val packageCurationsFile by argument(
+        "package-curations-file",
+        help = "A file containing package curation data."
+    ).convert { it.expandTilde() }
+        .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
 
-    override fun runCommand(jc: JCommander): Int {
+    override fun run() {
         val curations = packageCurationsFile.readValue<List<PackageCuration>>()
 
         val failed = curations.filterNot { curation ->
@@ -80,15 +76,16 @@ internal class VerifySourceArtifactCurationsCommand : CommandWithHelp() {
         }
 
         println("\n-----")
-        return if (failed.isEmpty()) {
-            println("Successfully verified all source artifact curations.")
-            0
-        } else {
-            println(
-                "Source artifact curations for the following packages could NOT be verified, check the log for details:"
-            )
-            println(failed.joinToString(separator = "\n") { it.id.toCoordinates() })
-            1
+        if (failed.isNotEmpty()) {
+            val message = buildString {
+                append("Source artifact curations for the following packages could NOT be verified, ")
+                appendln("check the log for details:")
+                appendln(failed.joinToString(separator = "\n") { it.id.toCoordinates() })
+            }
+
+            throw UsageError(message)
         }
+
+        println("Successfully verified all source artifact curations.")
     }
 }

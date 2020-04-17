@@ -19,13 +19,14 @@
 
 package org.ossreviewtoolkit.helper.commands
 
-import com.beust.jcommander.DynamicParameter
-import com.beust.jcommander.JCommander
-import com.beust.jcommander.Parameter
-import com.beust.jcommander.Parameters
+import com.github.ajalt.clikt.core.CliktCommand
+import com.github.ajalt.clikt.core.UsageError
+import com.github.ajalt.clikt.parameters.options.convert
+import com.github.ajalt.clikt.parameters.options.default
+import com.github.ajalt.clikt.parameters.options.option
+import com.github.ajalt.clikt.parameters.options.required
+import com.github.ajalt.clikt.parameters.types.file
 
-import org.ossreviewtoolkit.helper.CommandWithHelp
-import org.ossreviewtoolkit.helper.common.IdentifierConverter
 import org.ossreviewtoolkit.model.Failure
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Success
@@ -33,41 +34,38 @@ import org.ossreviewtoolkit.model.config.OrtConfiguration
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
 import org.ossreviewtoolkit.model.yamlMapper
 import org.ossreviewtoolkit.scanner.ScanResultsStorage
-import org.ossreviewtoolkit.utils.PARAMETER_ORDER_MANDATORY
-import org.ossreviewtoolkit.utils.PARAMETER_ORDER_OPTIONAL
+import org.ossreviewtoolkit.utils.expandTilde
 
-import java.io.File
+internal class ListStoredScanResultsCommand : CliktCommand(
+    name = "list-stored-scan-results",
+    help = "Lists the provenance of all stored scan results for a given package identifier."
+) {
+    private val configFile by option(
+        "--config",
+        help = "The path to the ORT configuration file that configures the scan results storage."
+    ).convert { it.expandTilde() }
+        .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
 
-@Parameters(
-    commandNames = ["list-stored-scan-results"],
-    commandDescription = "Lists the provenance of all stored scan results for a given package identifier."
-)
-internal class ListStoredScanResultsCommand : CommandWithHelp() {
-    @Parameter(
-        description = "The path to the ORT configuration file that configures the scan results storage.",
-        names = ["--config"],
-        order = PARAMETER_ORDER_OPTIONAL
-    )
-    private var configFile: File? = null
+    private val packageId by option(
+        "--package-id",
+        help = "The target package for which the scan results shall be listed."
+    ).convert { Identifier(it) }
+        .required()
 
-    @Parameter(
-        names = ["--package-id"],
-        required = true,
-        order = PARAMETER_ORDER_MANDATORY,
-        converter = IdentifierConverter::class,
-        description = "The target package for which the scan results shall be listed."
-    )
-    private lateinit var packageId: Identifier
+    private val configArguments by option(
+        "-P",
+        help = "The comma separated list of key-value pairs to override in the configuration file. For example: " +
+                "-P scanner.postgresStorage.schema=testSchema"
+    ).convert { csv ->
+        csv.split(",").map { keyValuePair ->
+            keyValuePair.split("=").let { (k, v) ->
+                Pair(k, v)
+            }
+        }
+    }.default(emptyList())
 
-    @DynamicParameter(
-        description = "Allows to override values in the configuration file. This option can be used multiple times " +
-                "to override multiple values. For example: -Pscanner.postgresStorage.schema=testSchema",
-        names = ["-P"]
-    )
-    private var configArguments = mutableMapOf<String, String>()
-
-    override fun runCommand(jc: JCommander): Int {
-        val config = OrtConfiguration.load(configArguments, configFile)
+    override fun run() {
+        val config = OrtConfiguration.load(mapOf(*configArguments.toTypedArray()), configFile)
         ScanResultsStorage.configure(config.scanner ?: ScannerConfiguration())
 
         println("Searching for scan results of '${packageId.toCoordinates()}' in ${ScanResultsStorage.storage.name}.")
@@ -75,8 +73,7 @@ internal class ListStoredScanResultsCommand : CommandWithHelp() {
         val scanResults = when (val readResult = ScanResultsStorage.storage.read(packageId)) {
             is Success -> readResult.result
             is Failure -> {
-                println("Could not read scan results: ${readResult.error}")
-                return 2
+                throw UsageError("Could not read scan results: ${readResult.error}")
             }
         }
 
@@ -85,7 +82,5 @@ internal class ListStoredScanResultsCommand : CommandWithHelp() {
         scanResults.results.forEach { result ->
             println("\n${yamlMapper.writeValueAsString(result.provenance)}")
         }
-
-        return 0
     }
 }

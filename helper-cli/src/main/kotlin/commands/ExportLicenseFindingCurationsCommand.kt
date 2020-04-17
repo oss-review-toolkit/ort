@@ -19,63 +19,57 @@
 
 package org.ossreviewtoolkit.helper.commands
 
-import com.beust.jcommander.JCommander
-import com.beust.jcommander.Parameter
-import com.beust.jcommander.Parameters
+import com.github.ajalt.clikt.core.CliktCommand
+import com.github.ajalt.clikt.parameters.options.convert
+import com.github.ajalt.clikt.parameters.options.flag
+import com.github.ajalt.clikt.parameters.options.option
+import com.github.ajalt.clikt.parameters.options.required
+import com.github.ajalt.clikt.parameters.types.file
 
-import org.ossreviewtoolkit.helper.CommandWithHelp
 import org.ossreviewtoolkit.helper.common.RepositoryLicenseFindingCurations
 import org.ossreviewtoolkit.helper.common.getRepositoryLicenseFindingCurations
 import org.ossreviewtoolkit.helper.common.mergeLicenseFindingCurations
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.readValue
 import org.ossreviewtoolkit.model.yamlMapper
-import org.ossreviewtoolkit.utils.PARAMETER_ORDER_MANDATORY
-import org.ossreviewtoolkit.utils.PARAMETER_ORDER_OPTIONAL
+import org.ossreviewtoolkit.utils.expandTilde
 import org.ossreviewtoolkit.utils.safeMkdirs
 
 import java.io.File
 
-@Parameters(
-    commandNames = ["export-license-finding-curations"],
-    commandDescription = "Export the license finding curations to a file which maps repository URLs to the license " +
-            "finding curations for the respective repository."
-)
-internal class ExportLicenseFindingCurationsCommand : CommandWithHelp() {
-    @Parameter(
-        names = ["--license-finding-curations-file"],
-        required = true,
-        order = PARAMETER_ORDER_MANDATORY,
-        description = "The output license finding curations file."
-    )
-    private lateinit var licenseFindingCurationsFile: File
+internal class ExportLicenseFindingCurationsCommand : CliktCommand(
+    name = "export-license-finding-curations",
+    help = "Export the license finding curations to a file which maps repository URLs to the license finding " +
+            "curations for the respective repository."
+) {
+    private val licenseFindingCurationsFile by option(
+        "--license-finding-curations-file",
+        help = "The output license finding curations file."
+    ).convert { it.expandTilde() }
+        .file(mustExist = false, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = false)
+        .required()
 
-    @Parameter(
-        names = ["--ort-result-file"],
-        required = true,
-        order = PARAMETER_ORDER_MANDATORY,
-        description = "The input ORT file from which the license finding curations are to be read."
-    )
-    private lateinit var ortResultFile: File
+    private val ortResultFile by option(
+        "--ort-result-file",
+        help = "The input ORT file from which the license finding curations are to be read."
+    ).convert { it.expandTilde() }
+        .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
+        .required()
 
-    @Parameter(
-        names = ["--repository-configuration-file"],
-        required = false,
-        order = PARAMETER_ORDER_OPTIONAL,
-        description = "Override the repository configuration contained in the given input ORT file."
-    )
-    private lateinit var repositoryConfigurationFile: File
+    private val repositoryConfigurationFile by option(
+        "--repository-configuration-file",
+        help = "Override the repository configuration contained in the given input ORT file."
+    ).convert { it.expandTilde() }
+        .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
+        .required()
 
-    @Parameter(
-        names = ["--update-only-existing"],
-        required = false,
-        order = PARAMETER_ORDER_OPTIONAL,
-        description = "If enabled, only entries are imported for which an entry already exists which differs " +
-                "only in terms of its concluded license, comment or reason."
-    )
-    private var updateOnlyExisting = false
+    private val updateOnlyExisting by option(
+        "--update-only-existing",
+        help = "If enabled, only entries are imported for which an entry already exists which differs only in terms " +
+                "of its concluded license, comment or reason."
+    ).flag()
 
-    override fun runCommand(jc: JCommander): Int {
+    override fun run() {
         val localLicenseFindingCurations = ortResultFile
             .readValue<OrtResult>()
             .replaceConfig(repositoryConfigurationFile.readValue())
@@ -90,8 +84,6 @@ internal class ExportLicenseFindingCurationsCommand : CommandWithHelp() {
         globalLicenseFindingCurations
             .mergeLicenseFindingCurations(localLicenseFindingCurations, updateOnlyExisting = updateOnlyExisting)
             .writeAsYaml(licenseFindingCurationsFile)
-
-        return 0
     }
 }
 

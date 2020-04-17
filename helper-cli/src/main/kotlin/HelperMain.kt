@@ -19,102 +19,88 @@
 
 package org.ossreviewtoolkit.helper
 
-import kotlin.system.exitProcess
-
-import com.beust.jcommander.JCommander
-import com.beust.jcommander.Parameter
-
-import org.ossreviewtoolkit.helper.commands.*
-import org.ossreviewtoolkit.helper.common.ORTH_NAME
-import org.ossreviewtoolkit.utils.PARAMETER_ORDER_LOGGING
-import org.ossreviewtoolkit.utils.printStackTrace
+import com.github.ajalt.clikt.core.CliktCommand
+import com.github.ajalt.clikt.core.context
+import com.github.ajalt.clikt.core.subcommands
+import com.github.ajalt.clikt.parameters.options.default
+import com.github.ajalt.clikt.parameters.options.flag
+import com.github.ajalt.clikt.parameters.options.option
+import com.github.ajalt.clikt.parameters.options.switch
 
 import org.apache.logging.log4j.Level
 import org.apache.logging.log4j.core.config.Configurator
 
+import org.ossreviewtoolkit.helper.commands.ExportLicenseFindingCurationsCommand
+import org.ossreviewtoolkit.helper.commands.ExportPathExcludesCommand
+import org.ossreviewtoolkit.helper.commands.ExtractRepositoryConfigurationCommand
+import org.ossreviewtoolkit.helper.commands.FormatRepositoryConfigurationCommand
+import org.ossreviewtoolkit.helper.commands.GenerateProjectExcludesCommand
+import org.ossreviewtoolkit.helper.commands.GenerateRuleViolationResolutionsCommand
+import org.ossreviewtoolkit.helper.commands.GenerateScopeExcludesCommand
+import org.ossreviewtoolkit.helper.commands.GenerateTimeoutErrorResolutionsCommand
+import org.ossreviewtoolkit.helper.commands.ImportCopyrightGarbageCommand
+import org.ossreviewtoolkit.helper.commands.ImportLicenseFindingCurationsCommand
+import org.ossreviewtoolkit.helper.commands.ImportPathExcludesCommand
+import org.ossreviewtoolkit.helper.commands.ListCopyrightsCommand
+import org.ossreviewtoolkit.helper.commands.ListLicensesCommand
+import org.ossreviewtoolkit.helper.commands.ListPackagesCommand
+import org.ossreviewtoolkit.helper.commands.ListStoredScanResultsCommand
+import org.ossreviewtoolkit.helper.commands.MapCopyrightsCommand
+import org.ossreviewtoolkit.helper.commands.MergeRepositoryConfigurationsCommand
+import org.ossreviewtoolkit.helper.commands.RemoveConfigurationEntriesCommand
+import org.ossreviewtoolkit.helper.commands.SortRepositoryConfigurationCommand
+import org.ossreviewtoolkit.helper.commands.VerifySourceArtifactCurationsCommand
+import org.ossreviewtoolkit.helper.common.ORTH_NAME
+import org.ossreviewtoolkit.utils.printStackTrace
+
 /**
- * The main entry point of the application.
+ * The entry point for the application with [args] being the list of arguments.
  */
-object HelperMain : CommandWithHelp() {
-    @Parameter(
-        description = "Enable info logging.",
-        names = ["--info"],
-        order = PARAMETER_ORDER_LOGGING
-    )
-    private var info = false
+fun main(args: Array<String>) {
+    return HelperMain().main(args)
+}
 
-    @Parameter(
-        description = "Enable debug logging and keep any temporary files.",
-        names = ["--debug"],
-        order = PARAMETER_ORDER_LOGGING
-    )
-    private var debug = false
+class HelperMain : CliktCommand(name = ORTH_NAME, epilog = "* denotes required options.") {
+    private val logLevel by option(help = "Set the verbosity level of log output.").switch(
+        "--info" to Level.INFO,
+        "--debug" to Level.DEBUG
+    ).default(Level.WARN)
 
-    @Parameter(
-        description = "Print out the stacktrace for all exceptions.",
-        names = ["--stacktrace"],
-        order = PARAMETER_ORDER_LOGGING
-    )
-    private var stacktrace = false
+    private val stacktrace by option(help = "Print out the stacktrace for all exceptions.").flag()
 
-    /**
-     * The entry point for the application.
-     *
-     * @param args The list of application arguments.
-     */
-    @JvmStatic
-    fun main(args: Array<String>) {
-        exitProcess(run(args))
-    }
-
-    /**
-     * Run the ORT HELPER CLI with the provided [args] and return the exit code of [CommandWithHelp.run].
-     */
-    private fun run(args: Array<String>): Int {
-        val jc = JCommander(this).apply {
-            programName = ORTH_NAME
-
-            addCommand(ExportLicenseFindingCurationsCommand())
-            addCommand(ExportPathExcludesCommand())
-            addCommand(ExtractRepositoryConfigurationCommand())
-            addCommand(FormatRepositoryConfigurationCommand())
-            addCommand(GenerateProjectExcludesCommand())
-            addCommand(GenerateScopeExcludesCommand())
-            addCommand(GenerateRuleViolationResolutionsCommand())
-            addCommand(GenerateTimeoutErrorResolutionsCommand())
-            addCommand(ImportCopyrightGarbageCommand())
-            addCommand(ImportLicenseFindingCurationsCommand())
-            addCommand(ImportPathExcludesCommand())
-            addCommand(ListCopyrightsCommand())
-            addCommand(ListLicensesCommand())
-            addCommand(ListPackagesCommand())
-            addCommand(ListStoredScanResultsCommand())
-            addCommand(MapCopyrightsCommand())
-            addCommand(MergeRepositoryConfigurationsCommand())
-            addCommand(RemoveConfigurationEntriesCommand())
-            addCommand(SortRepositoryConfigurationCommand())
-            addCommand(VerifySourceArtifactCurationsCommand())
-
-            parse(*args)
+    init {
+        context {
+            expandArgumentFiles = false
         }
 
-        return run(jc)
+        subcommands(
+            ExportLicenseFindingCurationsCommand(),
+            ExportPathExcludesCommand(),
+            ExtractRepositoryConfigurationCommand(),
+            FormatRepositoryConfigurationCommand(),
+            GenerateProjectExcludesCommand(),
+            GenerateRuleViolationResolutionsCommand(),
+            GenerateScopeExcludesCommand(),
+            GenerateTimeoutErrorResolutionsCommand(),
+            ImportCopyrightGarbageCommand(),
+            ImportLicenseFindingCurationsCommand(),
+            ImportPathExcludesCommand(),
+            ListCopyrightsCommand(),
+            ListLicensesCommand(),
+            ListPackagesCommand(),
+            ListStoredScanResultsCommand(),
+            MapCopyrightsCommand(),
+            MergeRepositoryConfigurationsCommand(),
+            RemoveConfigurationEntriesCommand(),
+            SortRepositoryConfigurationCommand(),
+            VerifySourceArtifactCurationsCommand()
+        )
     }
 
-    override fun runCommand(jc: JCommander): Int {
-        when {
-            debug -> Configurator.setRootLevel(Level.DEBUG)
-            info -> Configurator.setRootLevel(Level.INFO)
-        }
+    override fun run() {
+        Configurator.setRootLevel(logLevel)
 
         // Make the parameter globally available.
         printStackTrace = stacktrace
-
-        // JCommander already validates the command names.
-        val command = jc.commands[jc.parsedCommand]!!
-        val commandObject = command.objects.first() as CommandWithHelp
-
-        // Delegate running actions to the specified command.
-        return commandObject.run(jc)
     }
 }

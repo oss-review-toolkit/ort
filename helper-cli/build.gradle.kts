@@ -18,7 +18,7 @@
  * License-Filename: LICENSE
  */
 
-val jcommanderVersion: String by project
+val cliktVersion: String by project
 val log4jCoreVersion: String by project
 
 plugins {
@@ -28,7 +28,7 @@ plugins {
 
 application {
     applicationName = "orth"
-    mainClassName = "org.ossreviewtoolkit.helper.HelperMain"
+    mainClassName = "org.ossreviewtoolkit.helper.HelperMainKt"
 }
 
 tasks.named<CreateStartScripts>("startScripts") {
@@ -61,6 +61,6 @@ dependencies {
     implementation(project(":scanner"))
     implementation(project(":utils"))
 
-    implementation("com.beust:jcommander:$jcommanderVersion")
+    implementation("com.github.ajalt:clikt:$cliktVersion")
     implementation("org.apache.logging.log4j:log4j-core:$log4jCoreVersion")
 }

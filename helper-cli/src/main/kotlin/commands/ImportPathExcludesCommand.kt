@@ -19,11 +19,13 @@
 
 package org.ossreviewtoolkit.helper.commands
 
-import com.beust.jcommander.JCommander
-import com.beust.jcommander.Parameter
-import com.beust.jcommander.Parameters
+import com.github.ajalt.clikt.core.CliktCommand
+import com.github.ajalt.clikt.parameters.options.convert
+import com.github.ajalt.clikt.parameters.options.flag
+import com.github.ajalt.clikt.parameters.options.option
+import com.github.ajalt.clikt.parameters.options.required
+import com.github.ajalt.clikt.parameters.types.file
 
-import org.ossreviewtoolkit.helper.CommandWithHelp
 import org.ossreviewtoolkit.helper.common.RepositoryPathExcludes
 import org.ossreviewtoolkit.helper.common.findFilesRecursive
 import org.ossreviewtoolkit.helper.common.findRepositoryPaths
@@ -34,50 +36,40 @@ import org.ossreviewtoolkit.helper.common.writeAsYaml
 import org.ossreviewtoolkit.model.config.PathExclude
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.readValue
-import org.ossreviewtoolkit.utils.PARAMETER_ORDER_MANDATORY
-import org.ossreviewtoolkit.utils.PARAMETER_ORDER_OPTIONAL
+import org.ossreviewtoolkit.utils.expandTilde
 
-import java.io.File
+internal class ImportPathExcludesCommand : CliktCommand(
+    name = "import-path-excludes",
+    help = "Import path excludes by repository from a file into the given repository configuration."
+) {
+    private val pathExcludesFile by option(
+        "--path-excludes-file",
+        help = "The input path excludes file."
+    ).convert { it.expandTilde() }
+        .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
+        .required()
 
-@Parameters(
-    commandNames = ["import-path-excludes"],
-    commandDescription = "Import path excludes by repository from a file into the given repository configuration."
-)
-internal class ImportPathExcludesCommand : CommandWithHelp() {
-    @Parameter(
-        names = ["--path-excludes-file"],
-        required = true,
-        order = PARAMETER_ORDER_MANDATORY,
-        description = "The input path excludes file."
-    )
-    private lateinit var pathExcludesFile: File
-
-    @Parameter(
-        names = ["--source-code-dir"],
-        required = true,
-        order = PARAMETER_ORDER_MANDATORY,
-        description = "A directory containing the sources of the project(s) for which the imported path excludes are " +
+    private val sourceCodeDir by option(
+        "--source-code-dir",
+        help = "A directory containing the sources of the project(s) for which the imported path excludes are " +
                 "supposed to be used."
-    )
-    private lateinit var sourceCodeDir: File
+    ).convert { it.expandTilde() }
+        .file(mustExist = true, canBeFile = false, canBeDir = true, mustBeWritable = false, mustBeReadable = true)
+        .required()
 
-    @Parameter(
-        names = ["--repository-configuration-file"],
-        required = true,
-        order = PARAMETER_ORDER_MANDATORY,
-        description = "The repository configuration file where the imported path excludes are to be merged into."
-    )
-    private lateinit var repositoryConfigurationFile: File
+    private val repositoryConfigurationFile by option(
+        "--repository-configuration-file",
+        help = "The repository configuration file where the imported path excludes are to be merged into."
+    ).convert { it.expandTilde() }
+        .file(mustExist = false, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = false)
+        .required()
 
-    @Parameter(
-        names = ["--update-only-existing"],
-        required = false,
-        order = PARAMETER_ORDER_OPTIONAL,
-        description = "If enabled, only entries are imported for which an entry with the same pattern already exists."
-    )
-    private var updateOnlyExisting = false
+    private val updateOnlyExisting by option(
+        "--update-only-existing",
+        help = "If enabled, only entries are imported for which an entry with the same pattern already exists."
+    ).flag()
 
-    override fun runCommand(jc: JCommander): Int {
+    override fun run() {
         val allFiles = findFilesRecursive(sourceCodeDir)
 
         val repositoryConfiguration = if (repositoryConfigurationFile.isFile) {
@@ -97,8 +89,6 @@ internal class ImportPathExcludesCommand : CommandWithHelp() {
             .replacePathExcludes(pathExcludes)
             .sortPathExcludes()
             .writeAsYaml(repositoryConfigurationFile)
-
-        return 0
     }
 
     private fun importPathExcludes(): List<PathExclude> {

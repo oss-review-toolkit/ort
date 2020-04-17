@@ -19,50 +19,44 @@
 
 package org.ossreviewtoolkit.helper.commands
 
-import com.beust.jcommander.JCommander
-import com.beust.jcommander.Parameter
-import com.beust.jcommander.Parameters
+import com.github.ajalt.clikt.core.CliktCommand
+import com.github.ajalt.clikt.parameters.options.convert
+import com.github.ajalt.clikt.parameters.options.option
+import com.github.ajalt.clikt.parameters.options.required
+import com.github.ajalt.clikt.parameters.types.file
 
-import org.ossreviewtoolkit.helper.CommandWithHelp
 import org.ossreviewtoolkit.helper.common.processAllCopyrightStatements
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.readValue
-import org.ossreviewtoolkit.utils.PARAMETER_ORDER_MANDATORY
 import org.ossreviewtoolkit.utils.expandTilde
 
-import java.io.File
+internal class MapCopyrightsCommand : CliktCommand(
+    name = "map-copyrights",
+    help = "Reads processed copyright statements from the input file, maps them to unprocessed copyright statements " +
+            "using the given ORT file, and writes those mapped statements to the given output file."
+) {
+    private val inputCopyrightGarbageFile by option(
+        "--input-copyrights-file", "-i",
+        help = "The input copyrights text file containing one processed copyright statement per line."
+    ).convert { it.expandTilde() }
+        .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
+        .required()
 
-@Parameters(
-    commandNames = ["map-copyrights"],
-    commandDescription = "Reads processed copyright statements from the input file, maps them to unprocessed "
-            + "copyright statements using the given ORT file, and writes those mapped statements to the given "
-            + "output file."
-)
-internal class MapCopyrightsCommand : CommandWithHelp() {
-    @Parameter(
-        names = ["--input-copyrights-file", "-i"],
-        required = true,
-        order = PARAMETER_ORDER_MANDATORY,
-        description = "The input copyrights text file containing one processed copyright statement per line."
-    )
-    private lateinit var inputCopyrightGarbageFile: File
+    private val outputCopyrightsFile by option(
+        "--output-copyrights-file", "-o",
+        help = "The output copyrights text file."
+    ).convert { it.expandTilde() }
+        .file(mustExist = false, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = false)
+        .required()
 
-    @Parameter(
-        names = ["--output-copyrights-file", "-o"],
-        required = true,
-        order = PARAMETER_ORDER_MANDATORY,
-        description = "The output copyrights text file."
-    )
-    private lateinit var outputCopyrightsFile: File
+    private val ortResultFile by option(
+        "--ort-result-file",
+        help = "The ORT file utilized for mapping the processed to unprocessed statements."
+    ).convert { it.expandTilde() }
+        .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
+        .required()
 
-    @Parameter(
-        names = ["--ort-result-file"],
-        order = PARAMETER_ORDER_MANDATORY,
-        description = "The ORT file utilized for mapping the processed to unprocessed statements."
-    )
-    private lateinit var ortResultFile: File
-
-    override fun runCommand(jc: JCommander): Int {
+    override fun run() {
         val processedCopyrightStatements = inputCopyrightGarbageFile
             .expandTilde()
             .readText()
@@ -75,7 +69,6 @@ internal class MapCopyrightsCommand : CommandWithHelp() {
             .getUnprocessedCopyrightStatements(processedCopyrightStatements)
 
         outputCopyrightsFile.writeText(unprocessedCopyrightStatements.joinToString(separator = "\n"))
-        return 0
     }
 }
 
