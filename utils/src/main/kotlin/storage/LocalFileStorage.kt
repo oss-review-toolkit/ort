@@ -64,6 +64,9 @@ open class LocalFileStorage(
         return file.inputStream()
     }
 
+    /**
+     * Return the output stream to be used when writing to the provided [path].
+     */
     protected open fun getOutputStream(path: String): OutputStream {
         val file = directory.resolve(path)
 
