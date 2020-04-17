@@ -207,12 +207,19 @@ class LicenseResolverTest : WordSpec() {
         return pkg
     }
 
-    private fun setupPackagePathExclude(id: Identifier, type: ProvenanceType, pattern: String) {
+    private fun getAndRemoveOrCreatePackageConfiguration(
+        id: Identifier,
+        type: ProvenanceType
+    ): PackageConfiguration {
         val provenance = ortResult.getProvenance(id, type)!!
-        val config = packageConfigurations.find { it.matches(id, provenance) }?.let {
+        return packageConfigurations.find { it.matches(id, provenance) }?.let {
             packageConfigurations.remove(it)
             it
         } ?: ortResult.getPackage(id)!!.pkg.createPackageConfig(type)
+    }
+
+    private fun setupPackagePathExclude(id: Identifier, type: ProvenanceType, pattern: String) {
+        val config = getAndRemoveOrCreatePackageConfiguration(id, type)
 
         val pathExclude = PathExclude(pattern, PathExcludeReason.OTHER, "")
         packageConfigurations.add(config.copy(pathExcludes = config.pathExcludes + pathExclude))
