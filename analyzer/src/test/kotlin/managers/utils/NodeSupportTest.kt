@@ -192,20 +192,20 @@ class NodeSupportTest : WordSpec() {
 
         "readProxySettingFromNpmRc" should {
             "properly read proxy configuration" {
-                readProxySettingFromNpmRc("proxy=http://user:passsword@host.domain.com:8080/") shouldBe
-                        "http://user:passsword@host.domain.com:8080/"
-                readProxySettingFromNpmRc("https-proxy=http://user:passsword@host.domain.com:8080/") shouldBe
-                        "http://user:passsword@host.domain.com:8080/"
+                readProxySettingFromNpmRc("proxy=http://user:password@host.domain.com:8080/") shouldBe
+                        "http://user:password@host.domain.com:8080/"
+                readProxySettingFromNpmRc("https-proxy=http://user:password@host.domain.com:8080/") shouldBe
+                        "http://user:password@host.domain.com:8080/"
 
-                readProxySettingFromNpmRc("proxy=http://user:passsword@host.domain.com") shouldBe
-                        "http://user:passsword@host.domain.com"
-                readProxySettingFromNpmRc("https-proxy=http://user:passsword@host.domain.com") shouldBe
-                        "http://user:passsword@host.domain.com"
+                readProxySettingFromNpmRc("proxy=http://user:password@host.domain.com") shouldBe
+                        "http://user:password@host.domain.com"
+                readProxySettingFromNpmRc("https-proxy=http://user:password@host.domain.com") shouldBe
+                        "http://user:password@host.domain.com"
 
-                readProxySettingFromNpmRc("proxy=user:passsword@host.domain.com") shouldBe
-                        "http://user:passsword@host.domain.com"
-                readProxySettingFromNpmRc("https-proxy=user:passsword@host.domain.com") shouldBe
-                        "http://user:passsword@host.domain.com"
+                readProxySettingFromNpmRc("proxy=user:password@host.domain.com") shouldBe
+                        "http://user:password@host.domain.com"
+                readProxySettingFromNpmRc("https-proxy=user:password@host.domain.com") shouldBe
+                        "http://user:password@host.domain.com"
             }
 
             "ignore non-proxy URLs" {
