@@ -139,7 +139,7 @@ class NoticeByPackageProcessor(input: ReporterInput) : AbstractNoticeReporter.No
             val licenseFileFindings = if (scanResult != null) {
                 val path = "${id.toPath()}/${scanResult.provenance.hash()}"
                 if (archiver.unarchive(archiveDir, path)) {
-                    getFindingsForLicenseFiles(scanResult, archiveDir, licenseFindingsMap)
+                    getFindingsForLicenseFiles(scanResult, archiveDir, archiver.patterns, licenseFindingsMap)
                 } else {
                     emptyMap()
                 }
@@ -224,9 +224,10 @@ class NoticeByPackageProcessor(input: ReporterInput) : AbstractNoticeReporter.No
     private fun getFindingsForLicenseFiles(
         scanResult: ScanResult,
         archiveDir: File,
+        licenseFilePatterns: List<String>,
         licenseFindingsMap: LicenseFindingsMap
     ): MutableMap<String, LicenseFindingsMap> {
-        val matcher = FileMatcher(LICENSE_FILENAMES)
+        val matcher = FileMatcher(licenseFilePatterns)
         val licenseFiles = mutableMapOf<String, LicenseFindingsMap>()
 
         archiveDir.walkTopDown().forEach { file ->
