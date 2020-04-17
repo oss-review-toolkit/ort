@@ -16,7 +16,7 @@
  * SPDX-License-Identifier: Apache-2.0
  * License-Filename: LICENSE
  */
- 
+
 /*******************************************************
  * Example OSS Review Toolkit (ORT) rules.kts file     *
  *                                                     *
@@ -28,7 +28,7 @@
 /**
  * Import license configuration from licenses.yml.
  */
- 
+
 fun getLicenseSet(setId: String) = licenseConfiguration.getLicensesForSet(setId).map { it.id }.toSet()
 
 val permissiveLicenses = getLicenseSet("permissive")
@@ -46,8 +46,8 @@ val handledLicenses = listOf(
     copyleftLicenses,
     copyleftLimitedLicenses
 ).flatten().let {
-    it.groupBy { it }.filter { it.value.size > 1}.let {
-        require (it.isEmpty()) {
+    it.groupBy { it }.filter { it.value.size > 1 }.let {
+        require(it.isEmpty()) {
             "The classifications for the following licenses overlap: ${it.keys.joinToString()}"
         }
     }
@@ -150,11 +150,9 @@ val ruleSet = ruleSet(ortResult, packageConfigurationProvider) {
                 if (pkg.id.type == "Unmanaged") {
                     "The ScanCode copyleft-limited categorized license $license was ${licenseSource.name.toLowerCase()} " +
                             "in package ${pkg.id.toCoordinates()}."
-
                 } else {
                     "The ScanCode copyleft-limited categorized license $license was ${licenseSource.name.toLowerCase()} " +
                             "in package ${pkg.id.toCoordinates()}."
-
                 }
             } else {
                 "The package ${pkg.id.toCoordinates()} has the ${licenseSource.name.toLowerCase()} " +
@@ -202,7 +200,6 @@ val ruleSet = ruleSet(ortResult, packageConfigurationProvider) {
         }
     }
 }
-
 
 // Populate the list of policy rule violations to return.
 ruleViolations += ruleSet.violations

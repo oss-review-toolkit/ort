@@ -80,8 +80,8 @@ if (requiresSourceCodeOffer) {
  * Appends timestamp when notices were generated.
  */
 val currentLocalDateTime = java.time.LocalDateTime.now()
-val formatter = java.time.format.DateTimeFormatter.ofPattern("LLL d, yyyy");
-val timestamp = currentLocalDateTime.format(formatter);
+val formatter = java.time.format.DateTimeFormatter.ofPattern("LLL d, yyyy")
+val timestamp = currentLocalDateTime.format(formatter)
 
 footers += """
     Notices generated with OSS Review Toolkit on $timestamp.
