@@ -51,7 +51,13 @@ data class PackageConfiguration(
      * Path excludes.
      */
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    val pathExcludes: List<PathExclude> = emptyList()
+    val pathExcludes: List<PathExclude> = emptyList(),
+
+    /**
+     * License finding curations.
+     */
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    val licenseFindingCurations: List<LicenseFindingCuration> = emptyList()
 ) {
     init {
         require((sourceArtifactUrl == null) xor (vcs == null)) {
