@@ -47,6 +47,12 @@ open class LocalFileStorage(
         }
     }
 
+    /**
+     * Return the internally used path, which might differ from the provided [path] e.g. in case a suffix is added to
+     * denote a compression scheme.
+     */
+    open fun transformPath(path: String): String = path
+
     @Synchronized
     override fun read(path: String): InputStream {
         val file = directory.resolve(path)
