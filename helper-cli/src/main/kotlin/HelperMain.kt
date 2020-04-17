@@ -60,7 +60,7 @@ fun main(args: Array<String>) {
     return HelperMain().main(args)
 }
 
-class HelperMain : CliktCommand(name = ORTH_NAME, epilog = "* denotes required options.") {
+internal class HelperMain : CliktCommand(name = ORTH_NAME, epilog = "* denotes required options.") {
     private val logLevel by option(help = "Set the verbosity level of log output.").switch(
         "--info" to Level.INFO,
         "--debug" to Level.DEBUG
