@@ -39,7 +39,7 @@ const val ORT_CONFIG_FILENAME = ".ort.yml"
 private fun List<String>.generateCapitalizationVariants() = flatMap { listOf(it, it.toUpperCase(), it.capitalize()) }
 
 /**
- * A list globs that match default license file names.
+ * A list of globs that match default license file names.
  */
 val LICENSE_FILENAMES = listOf(
     "license*",
