@@ -55,7 +55,7 @@ internal class ListStoredScanResultsCommand : CommandWithHelp() {
         required = true,
         order = PARAMETER_ORDER_MANDATORY,
         converter = IdentifierConverter::class,
-        description = "The target package for which the licenses shall be listed."
+        description = "The target package for which the scan results shall be listed."
     )
     private lateinit var packageId: Identifier
 
