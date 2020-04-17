@@ -218,6 +218,23 @@ class LicenseResolverTest : WordSpec() {
         } ?: ortResult.getPackage(id)!!.pkg.createPackageConfig(type)
     }
 
+    private fun setupPackageLicenseFindingCuration(
+        id: Identifier,
+        type: ProvenanceType,
+        path: String,
+        concludedLicense: String
+    ) {
+        val config = getAndRemoveOrCreatePackageConfiguration(id, type)
+
+        val licenseFindingCurations = config.licenseFindingCurations + LicenseFindingCuration(
+            path = path,
+            concludedLicense = concludedLicense,
+            reason = LicenseFindingCurationReason.INCORRECT
+        )
+
+        packageConfigurations.add(config.copy(licenseFindingCurations = licenseFindingCurations))
+    }
+
     private fun setupPackagePathExclude(id: Identifier, type: ProvenanceType, pattern: String) {
         val config = getAndRemoveOrCreatePackageConfiguration(id, type)
 
@@ -430,7 +447,7 @@ class LicenseResolverTest : WordSpec() {
                 result should beEmpty()
             }
 
-            "return the curated detected license for a project with license finding curations" {
+            "return the curated detected licenses for a project with a curation" {
                 val id = setupProject().id
                 setupScanResult(
                     id, ProvenanceType.VCS, listOf(
@@ -449,6 +466,75 @@ class LicenseResolverTest : WordSpec() {
                 val result = createResolver().getDetectedLicensesForId(id)
 
                 result should containExactlyInAnyOrder("BSD-3-Clause", "MIT")
+            }
+
+            "return the curated detected licenses for a package with a VCS scan result and a curation" {
+                val id = setupPackage().id
+                setupScanResult(
+                    id, ProvenanceType.VCS, listOf(
+                        LicenseFinding(
+                            license = "BSD-2-Clause",
+                            location = TextLocation("some/path", startLine = 1, endLine = 1)
+                        ),
+                        LicenseFinding(
+                            license = "BSD-3-Clause",
+                            location = TextLocation("some/other/path", startLine = 1, endLine = 1)
+                        )
+                    )
+                )
+                setupPackageLicenseFindingCuration(id, ProvenanceType.VCS, "some/path", "MIT")
+
+                val result = createResolver().getDetectedLicensesForId(id)
+
+                result should containExactlyInAnyOrder("BSD-3-Clause", "MIT")
+            }
+
+            "return the curated detected licenses for a package with a source artifact scan result and a curation" {
+                val id = setupPackage().id
+                setupScanResult(
+                    id, ProvenanceType.SOURCE_ARTIFACT, listOf(
+                        LicenseFinding(
+                            license = "BSD-2-Clause",
+                            location = TextLocation("some/path", startLine = 1, endLine = 1)
+                        ),
+                        LicenseFinding(
+                            license = "BSD-3-Clause",
+                            location = TextLocation("some/other/path", startLine = 1, endLine = 1)
+                        )
+                    )
+                )
+                setupPackageLicenseFindingCuration(id, ProvenanceType.SOURCE_ARTIFACT, "some/path", "MIT")
+
+                val result = createResolver().getDetectedLicensesForId(id)
+
+                result should containExactlyInAnyOrder("BSD-3-Clause", "MIT")
+            }
+
+            "for a package not apply curations for the VCS scan to source artifact scan and vice versa" {
+                val id = setupPackage().id
+                setupScanResult(
+                    id, ProvenanceType.VCS, listOf(
+                        LicenseFinding(
+                            license = "BSD-2-Clause",
+                            location = TextLocation("some/path", startLine = 1, endLine = 1)
+                        )
+                    )
+                )
+                setupScanResult(
+                    id, ProvenanceType.SOURCE_ARTIFACT, listOf(
+                        LicenseFinding(
+                            license = "BSD-3-Clause",
+                            location = TextLocation("some/other/path", startLine = 1, endLine = 1)
+                        )
+                    )
+                )
+
+                setupPackageLicenseFindingCuration(id, ProvenanceType.VCS, "some/other/path", "MIT")
+                setupPackageLicenseFindingCuration(id, ProvenanceType.SOURCE_ARTIFACT, "some/other", "Apache")
+
+                val result = createResolver().getDetectedLicensesForId(id)
+
+                result should containExactlyInAnyOrder("BSD-2-Clause", "BSD-3-Clause")
             }
         }
 

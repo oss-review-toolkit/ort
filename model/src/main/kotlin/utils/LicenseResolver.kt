@@ -24,6 +24,7 @@ import org.ossreviewtoolkit.model.LicenseFindings
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.Provenance
 import org.ossreviewtoolkit.model.TextLocation
+import org.ossreviewtoolkit.model.config.LicenseFindingCuration
 import org.ossreviewtoolkit.model.config.PathExclude
 
 import java.util.SortedSet
@@ -52,6 +53,13 @@ internal class LicenseResolver(
             packageConfigurationProvider.getPackageConfiguration(id, provenance)?.pathExcludes.orEmpty()
         }
 
+    private fun getLicenseFindingCurations(id: Identifier, provenance: Provenance): List<LicenseFindingCuration> =
+        if (ortResult.isProject(id)) {
+            ortResult.getLicenseFindingsCurations(id)
+        } else {
+            packageConfigurationProvider.getPackageConfiguration(id, provenance)?.licenseFindingCurations.orEmpty()
+        }
+
     private fun TextLocation.getRelativePathToRoot(id: Identifier): String =
         ortResult.getProject(id)?.let { ortResult.getFilePathRelativeToAnalyzerRoot(it, path) } ?: path
 
@@ -61,7 +69,7 @@ internal class LicenseResolver(
         val result = mutableMapOf<LicenseFindings, List<PathExclude>>()
 
         ortResult.getScanResultsForId(id).forEach { scanResult ->
-            val curations = ortResult.getLicenseFindingsCurations(id)
+            val curations = getLicenseFindingCurations(id, scanResult.provenance)
             val pathExcludes = getPathExcludes(id, scanResult.provenance)
 
             val rawLicenseFindings = scanResult.summary.licenseFindings
