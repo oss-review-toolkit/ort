@@ -68,24 +68,6 @@ inline fun <reified T : Any> T.hasNonNullProperty() =
     T::class.memberProperties.asSequence().map { it.get(this) }.any { it != null }
 
 /**
- * Return the set of elements which are contained in at least two of the given collections, or an empty set if all
- * collections are disjoint.
- */
-fun <T> disjoint(c1: Collection<T>, c2: Collection<T>, vararg cN: Collection<T>): Set<T> {
-    val c = listOf(c1, c2, *cN)
-
-    val commonElements = mutableSetOf<T>()
-
-    for (a in c.indices) {
-        for (b in a + 1 until c.size) {
-            commonElements += c[a].intersect(c[b])
-        }
-    }
-
-    return commonElements
-}
-
-/**
  * Filter a list of [names] to include only those that likely belong to the given [version] of an optional [project].
  */
 fun filterVersionNames(version: String, names: List<String>, project: String? = null): List<String> {
