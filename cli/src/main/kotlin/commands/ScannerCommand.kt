@@ -112,8 +112,9 @@ class ScannerCommand : CliktCommand(name = "scan", help = "Run existing copyrigh
         if (storage is FileBasedStorage) {
             val backend = storage.backend
             if (backend is LocalFileStorage) {
+                val transformedScanResultsFileName = backend.transformPath(SCAN_RESULTS_FILE_NAME)
                 val fileCount = backend.directory.walk().filter {
-                    it.isFile && it.name == SCAN_RESULTS_FILE_NAME
+                    it.isFile && it.name == transformedScanResultsFileName
                 }.count()
 
                 println("Local file storage has $fileCount scan results files.")
