@@ -19,11 +19,12 @@
 
 package org.ossreviewtoolkit.helper.commands
 
-import com.beust.jcommander.JCommander
-import com.beust.jcommander.Parameter
-import com.beust.jcommander.Parameters
+import com.github.ajalt.clikt.core.CliktCommand
+import com.github.ajalt.clikt.parameters.options.convert
+import com.github.ajalt.clikt.parameters.options.option
+import com.github.ajalt.clikt.parameters.options.required
+import com.github.ajalt.clikt.parameters.types.file
 
-import org.ossreviewtoolkit.helper.CommandWithHelp
 import org.ossreviewtoolkit.helper.common.findFilesRecursive
 import org.ossreviewtoolkit.helper.common.minimize
 import org.ossreviewtoolkit.helper.common.replacePathExcludes
@@ -36,53 +37,44 @@ import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.config.Resolutions
 import org.ossreviewtoolkit.model.readValue
 import org.ossreviewtoolkit.reporter.DefaultResolutionProvider
-import org.ossreviewtoolkit.utils.PARAMETER_ORDER_MANDATORY
-import org.ossreviewtoolkit.utils.PARAMETER_ORDER_OPTIONAL
 import org.ossreviewtoolkit.utils.expandTilde
 
-import java.io.File
+internal class RemoveConfigurationEntriesCommand : CliktCommand(
+    name = "remove-configuration-entries",
+    help = "Removes all non-matching path and scope excludes as well as rule violation resolutions. The output is " +
+            "written to the given repository configuration file."
+) {
+    private val ortResultFile by option(
+        "--ort-result-file",
+        help = "The ORT result file to read as input which should contain an evaluator result."
+    ).convert { it.expandTilde() }
+        .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
+        .required()
 
-@Parameters(
-    commandNames = ["remove-configuration-entries"],
-    commandDescription = "Removes all non-matching path and scope excludes as well as rule violation resolutions." +
-            "The output is written to the given repository configuration file."
-)
-internal class RemoveConfigurationEntriesCommand : CommandWithHelp() {
-    @Parameter(
-        names = ["--ort-result-file"],
-        required = true,
-        order = PARAMETER_ORDER_MANDATORY,
-        description = "The ORT result file to read as input which should contain an evaluator result."
-    )
-    private lateinit var ortResultFile: File
+    private val repositoryConfigurationFile by option(
+        "--repository-configuration-file",
+        help = "The repository configuration to remove all non-matching entries from. Its initial content overrides " +
+                "the repository configuration contained in the given ORT result file."
+    ).convert { it.expandTilde() }
+        .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = true, mustBeReadable = true)
+        .required()
 
-    @Parameter(
-        names = ["--repository-configuration-file"],
-        required = true,
-        order = PARAMETER_ORDER_MANDATORY,
-        description = "The repository configuration to remove all non-matching entries from. Its initial content " +
-                "overrides the repository configuration contained in the given ORT result file."
-    )
-    private lateinit var repositoryConfigurationFile: File
+    private val sourceCodeDir by option(
+        "--source-code-dir",
+        help = "A directory containing the sources of the project(s) for which the configuration entries are to be " +
+                "removed. The provenance of these sources must match with the scan results contained in the given " +
+                "ORT result file."
+    ).convert { it.expandTilde() }
+        .file(mustExist = true, canBeFile = false, canBeDir = true, mustBeWritable = false, mustBeReadable = true)
+        .required()
 
-    @Parameter(
-        names = ["--source-code-dir"],
-        required = true,
-        order = PARAMETER_ORDER_MANDATORY,
-        description = "A directory containing the sources of the project(s) for which the configuration entries are " +
-                "to be removed. The provenance of these sources must match with the scan results contained in the " +
-                "given ORT result file."
-    )
-    private lateinit var sourceCodeDir: File
+    private val resolutionsFile by option(
+        "--resolutions-file",
+        help = "A file containing issue resolutions."
+    ).convert { it.expandTilde() }
+        .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
 
-    @Parameter(
-        description = "A file containing issue resolutions.",
-        names = ["--resolutions-file"],
-        order = PARAMETER_ORDER_OPTIONAL
-    )
-    private var resolutionsFile: File? = null
-
-    override fun runCommand(jc: JCommander): Int {
+    override fun run() {
         val repositoryConfiguration = repositoryConfigurationFile.readValue<RepositoryConfiguration>()
         val ortResult = ortResultFile.readValue<OrtResult>().replaceConfig(repositoryConfiguration)
 
@@ -136,7 +128,5 @@ internal class RemoveConfigurationEntriesCommand : CommandWithHelp() {
             appendln("  issue resolutions         : $removedIssueResolutions")
             appendln("  rule violation resolutions: $removedRuleViolationResolutions")
         }.let { println(it) }
-
-        return 0
     }
 }

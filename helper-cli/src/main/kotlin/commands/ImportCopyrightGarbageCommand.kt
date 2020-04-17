@@ -19,47 +19,43 @@
 
 package org.ossreviewtoolkit.helper.commands
 
-import com.beust.jcommander.JCommander
-import com.beust.jcommander.Parameter
-import com.beust.jcommander.Parameters
-
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.dataformat.yaml.YAMLGenerator
 
-import org.ossreviewtoolkit.helper.CommandWithHelp
+import com.github.ajalt.clikt.core.CliktCommand
+import com.github.ajalt.clikt.parameters.options.convert
+import com.github.ajalt.clikt.parameters.options.option
+import com.github.ajalt.clikt.parameters.options.required
+import com.github.ajalt.clikt.parameters.types.file
+
 import org.ossreviewtoolkit.model.config.CopyrightGarbage
 import org.ossreviewtoolkit.model.readValue
 import org.ossreviewtoolkit.model.yamlMapper
-import org.ossreviewtoolkit.utils.PARAMETER_ORDER_MANDATORY
 import org.ossreviewtoolkit.utils.expandTilde
 
-import java.io.File
 import java.text.Collator
 import java.util.Locale
 
-@Parameters(
-    commandNames = ["import-copyright-garbage"],
-    commandDescription = "Import copyright garbage from a plain text file containing one copyright statement per " +
-            "line into the given copyright garbage file."
-)
-internal class ImportCopyrightGarbageCommand : CommandWithHelp() {
-    @Parameter(
-        names = ["--input-copyright-garbage-file", "-i"],
-        required = true,
-        order = PARAMETER_ORDER_MANDATORY,
-        description = "The input copyright garbage text file."
-    )
-    private lateinit var inputCopyrightGarbageFile: File
+internal class ImportCopyrightGarbageCommand : CliktCommand(
+    name = "import-copyright-garbage",
+    help = "Import copyright garbage from a plain text file containing one copyright statement per line into the " +
+            "given copyright garbage file."
+) {
+    private val inputCopyrightGarbageFile by option(
+        "--input-copyright-garbage-file", "-i",
+        help = "The input copyright garbage text file."
+    ).convert { it.expandTilde() }
+        .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
+        .required()
 
-    @Parameter(
-        names = ["--output-copyright-garbage-file", "-o"],
-        required = true,
-        order = PARAMETER_ORDER_MANDATORY,
-        description = "The output copyright garbage YAML file where the input entries are merged into."
-    )
-    private lateinit var outputCopyrightGarbageFile: File
+    private val outputCopyrightGarbageFile by option(
+        "--output-copyright-garbage-file", "-o",
+        help = "The output copyright garbage YAML file where the input entries are merged into."
+    ).convert { it.expandTilde() }
+        .file(mustExist = false, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = false)
+        .required()
 
-    override fun runCommand(jc: JCommander): Int {
+    override fun run() {
         val entriesToImport = inputCopyrightGarbageFile
             .expandTilde()
             .readText()
@@ -76,8 +72,6 @@ internal class ImportCopyrightGarbageCommand : CommandWithHelp() {
         CopyrightGarbage((entriesToImport + existingCopyrightGarbage).toSortedSet(collator)).let {
             createYamlMapper().writeValue(outputCopyrightGarbageFile, it)
         }
-
-        return 0
     }
 }
 

@@ -19,11 +19,13 @@
 
 package org.ossreviewtoolkit.helper.commands
 
-import com.beust.jcommander.JCommander
-import com.beust.jcommander.Parameter
-import com.beust.jcommander.Parameters
+import com.github.ajalt.clikt.core.CliktCommand
+import com.github.ajalt.clikt.parameters.options.convert
+import com.github.ajalt.clikt.parameters.options.flag
+import com.github.ajalt.clikt.parameters.options.option
+import com.github.ajalt.clikt.parameters.options.required
+import com.github.ajalt.clikt.parameters.types.file
 
-import org.ossreviewtoolkit.helper.CommandWithHelp
 import org.ossreviewtoolkit.helper.common.getScanIssues
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.config.IssueResolution
@@ -32,51 +34,37 @@ import org.ossreviewtoolkit.model.config.Resolutions
 import org.ossreviewtoolkit.model.readValue
 import org.ossreviewtoolkit.model.yamlMapper
 import org.ossreviewtoolkit.reporter.DefaultResolutionProvider
-import org.ossreviewtoolkit.utils.PARAMETER_ORDER_MANDATORY
-import org.ossreviewtoolkit.utils.PARAMETER_ORDER_OPTIONAL
+import org.ossreviewtoolkit.utils.expandTilde
 
-import java.io.File
+internal class GenerateTimeoutErrorResolutionsCommand : CliktCommand(
+    name = "generate-timeout-error-resolutions",
+    help = "Generates resolutions for scanner timeout errors. The result is written to the standard output."
+) {
+    private val ortResultFile by option(
+        "--ort-result-file",
+        help = "The input ORT file containing the scan timeout errors."
+    ).convert { it.expandTilde() }
+        .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
+        .required()
 
-@Parameters(
-    commandNames = ["generate-timeout-error-resolutions"],
-    commandDescription = "Generates resolutions for scanner timeout errors. The result is written to the standard " +
-            "output."
-)
-internal class GenerateTimeoutErrorResolutionsCommand : CommandWithHelp() {
-    @Parameter(
-        names = ["--ort-result-file"],
-        required = true,
-        order = PARAMETER_ORDER_MANDATORY,
-        description = "The input ORT file containing the scan timeout errors."
-    )
-    private lateinit var ortResultFile: File
+    private val repositoryConfigurationFile by option(
+        "--repository-configuration-file",
+        help = "Override the repository configuration contained in the given input ORT file."
+    ).convert { it.expandTilde() }
+        .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
 
-    @Parameter(
-        names = ["--repository-configuration-file"],
-        required = false,
-        order = PARAMETER_ORDER_OPTIONAL,
-        description = "Override the repository configuration contained in the given input ORT file."
-    )
-    private var repositoryConfigurationFile: File? = null
+    private val resolutionsFile by option(
+        "--resolutions-file",
+        help = "A file containing issue resolutions to be used in addition to the ones contained in the given ORT file."
+    ).convert { it.expandTilde() }
+        .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
 
-    @Parameter(
-        names = ["--resolutions-file"],
-        required = false,
-        order = PARAMETER_ORDER_OPTIONAL,
-        description = "A file containing issue resolutions to be used in addition to the ones contained in the given " +
-                "ORT file."
-    )
-    private var resolutionsFile: File? = null
+    private val omitExcluded by option(
+        "--omit-excluded",
+        help = "Only generate issue resolutions for non-excluded projects or packages."
+    ).flag()
 
-    @Parameter(
-        names = ["--omit-excluded"],
-        required = false,
-        order = PARAMETER_ORDER_OPTIONAL,
-        description = "Only generate issue resolutions for non-excluded projects or packages."
-    )
-    private var omitExcluded: Boolean = false
-
-    override fun runCommand(jc: JCommander): Int {
+    override fun run() {
         var ortResult = ortResultFile.readValue<OrtResult>()
         repositoryConfigurationFile?.let {
             ortResult = ortResult.replaceConfig(it.readValue())
@@ -110,6 +98,5 @@ internal class GenerateTimeoutErrorResolutionsCommand : CommandWithHelp() {
         }.distinct().sortedBy { it.message }
 
         println(yamlMapper.writeValueAsString(generatedResolutions))
-        return 0
     }
 }

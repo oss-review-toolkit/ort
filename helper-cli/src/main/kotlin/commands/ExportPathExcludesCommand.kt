@@ -19,62 +19,56 @@
 
 package org.ossreviewtoolkit.helper.commands
 
-import com.beust.jcommander.JCommander
-import com.beust.jcommander.Parameter
-import com.beust.jcommander.Parameters
+import com.github.ajalt.clikt.core.CliktCommand
+import com.github.ajalt.clikt.parameters.options.convert
+import com.github.ajalt.clikt.parameters.options.flag
+import com.github.ajalt.clikt.parameters.options.option
+import com.github.ajalt.clikt.parameters.options.required
+import com.github.ajalt.clikt.parameters.types.file
 
-import org.ossreviewtoolkit.helper.CommandWithHelp
 import org.ossreviewtoolkit.helper.common.RepositoryPathExcludes
 import org.ossreviewtoolkit.helper.common.getRepositoryPathExcludes
 import org.ossreviewtoolkit.helper.common.mergePathExcludes
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.readValue
 import org.ossreviewtoolkit.model.yamlMapper
-import org.ossreviewtoolkit.utils.PARAMETER_ORDER_MANDATORY
-import org.ossreviewtoolkit.utils.PARAMETER_ORDER_OPTIONAL
+import org.ossreviewtoolkit.utils.expandTilde
 import org.ossreviewtoolkit.utils.safeMkdirs
 
 import java.io.File
 
-@Parameters(
-    commandNames = ["export-path-excludes"],
-    commandDescription = "Export the path excludes to a path excludes file which maps repository URLs to the path " +
-            "excludes for the respective repository."
-)
-internal class ExportPathExcludesCommand : CommandWithHelp() {
-    @Parameter(
-        names = ["--path-excludes-file"],
-        required = true,
-        order = PARAMETER_ORDER_MANDATORY,
-        description = "The output path excludes file."
-    )
-    private lateinit var pathExcludesFile: File
+internal class ExportPathExcludesCommand : CliktCommand(
+    name = "export-path-excludes",
+    help = "Export the path excludes to a path excludes file which maps repository URLs to the path excludes for the " +
+            "respective repository."
+) {
+    private val pathExcludesFile by option(
+        "--path-excludes-file",
+        help = "The output path excludes file."
+    ).convert { it.expandTilde() }
+        .file(mustExist = false, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = false)
+        .required()
 
-    @Parameter(
-        names = ["--ort-result-file"],
-        required = true,
-        order = PARAMETER_ORDER_MANDATORY,
-        description = "The input ORT file from which the path excludes are to be read."
-    )
-    private lateinit var ortResultFile: File
+    private val ortResultFile by option(
+        "--ort-result-file",
+        help = "The input ORT file from which the path excludes are to be read."
+    ).convert { it.expandTilde() }
+        .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
+        .required()
 
-    @Parameter(
-        names = ["--repository-configuration-file"],
-        required = true,
-        order = PARAMETER_ORDER_MANDATORY,
-        description = "Override the repository configuration contained in the given input ORT file."
-    )
-    private lateinit var repositoryConfigurationFile: File
+    private val repositoryConfigurationFile by option(
+        "--repository-configuration-file",
+        help = "Override the repository configuration contained in the given input ORT file."
+    ).convert { it.expandTilde() }
+        .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
+        .required()
 
-    @Parameter(
-        names = ["--update-only-existing"],
-        required = false,
-        order = PARAMETER_ORDER_OPTIONAL,
-        description = "If enabled, only entries are exported for which an entry with the same pattern already exists."
-    )
-    private var updateOnlyExisting = false
+    private val updateOnlyExisting by option(
+        "--update-only-existing",
+        help = "If enabled, only entries are exported for which an entry with the same pattern already exists."
+    ).flag()
 
-    override fun runCommand(jc: JCommander): Int {
+    override fun run() {
         val localPathExcludes = ortResultFile
             .readValue<OrtResult>()
             .replaceConfig(repositoryConfigurationFile.readValue())
@@ -89,8 +83,6 @@ internal class ExportPathExcludesCommand : CommandWithHelp() {
         globalPathExcludes
             .mergePathExcludes(localPathExcludes, updateOnlyExisting = updateOnlyExisting)
             .writeAsYaml(pathExcludesFile)
-
-        return 0
     }
 }
 

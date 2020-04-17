@@ -19,67 +19,54 @@
 
 package org.ossreviewtoolkit.helper.commands
 
-import com.beust.jcommander.JCommander
-import com.beust.jcommander.Parameter
-import com.beust.jcommander.Parameters
+import com.github.ajalt.clikt.core.CliktCommand
+import com.github.ajalt.clikt.parameters.options.convert
+import com.github.ajalt.clikt.parameters.options.flag
+import com.github.ajalt.clikt.parameters.options.option
+import com.github.ajalt.clikt.parameters.options.required
+import com.github.ajalt.clikt.parameters.types.file
 
-import org.ossreviewtoolkit.helper.CommandWithHelp
-import org.ossreviewtoolkit.helper.common.IdentifierConverter
 import org.ossreviewtoolkit.helper.common.processAllCopyrightStatements
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.config.CopyrightGarbage
 import org.ossreviewtoolkit.model.config.orEmpty
 import org.ossreviewtoolkit.model.readValue
-import org.ossreviewtoolkit.utils.PARAMETER_ORDER_MANDATORY
-import org.ossreviewtoolkit.utils.PARAMETER_ORDER_OPTIONAL
 import org.ossreviewtoolkit.utils.expandTilde
 
-import java.io.File
+internal class ListCopyrightsCommand : CliktCommand(
+    name = "list-copyrights",
+    help = "Lists the copyright findings."
+) {
+    private val ortResultFile by option(
+        "--ort-result-file",
+        help = "The ORT result file to read as input."
+    ).convert { it.expandTilde() }
+        .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
+        .required()
 
-@Parameters(
-    commandNames = ["list-copyrights"],
-    commandDescription = "Lists the copyright findings."
-)
-internal class ListCopyrightsCommand : CommandWithHelp() {
-    @Parameter(
-        names = ["--ort-result-file"],
-        required = true,
-        order = PARAMETER_ORDER_MANDATORY,
-        description = "The ORT result file to read as input."
+    private val copyrightGarbageFile by option(
+        "--copyright-garbage-file",
+        help = "A file containing garbage copyright statements entries which are to be ignored."
+    ).convert { it.expandTilde() }
+        .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
+
+    private val packageId by option(
+        "--package-id",
+        help = "The target package for which the copyrights shall be listed."
+    ).convert { Identifier(it) }
+
+    private val licenseId by option(
+        "--license-id",
+        help = "The license for which the copyrights shall be listed."
     )
-    private lateinit var ortResultFile: File
 
-    @Parameter(
-        description = "A file containing garbage copyright statements entries which are to be ignored.",
-        names = ["--copyright-garbage-file"],
-        order = PARAMETER_ORDER_OPTIONAL
-    )
-    private var copyrightGarbageFile: File? = null
+    private val showRawStatements by option(
+        "--show-raw-statements",
+        help = "Show the raw statements corresponding to each processed statement if these are any different."
+    ).flag()
 
-    @Parameter(
-        names = ["--package-id"],
-        order = PARAMETER_ORDER_OPTIONAL,
-        converter = IdentifierConverter::class,
-        description = "The target package for which the copyrights shall be listed."
-    )
-    private var packageId: Identifier? = null
-
-    @Parameter(
-        names = ["--license-id"],
-        order = PARAMETER_ORDER_OPTIONAL,
-        description = "The license for which the copyrights shall be listed."
-    )
-    private var licenseId: String? = null
-
-    @Parameter(
-        names = ["--show-raw-statements"],
-        order = PARAMETER_ORDER_OPTIONAL,
-        description = "Show the raw statements corresponding to each processed statement if these are any different."
-    )
-    private var showRawStatements: Boolean = false
-
-    override fun runCommand(jc: JCommander): Int {
+    override fun run() {
         val ortResult = ortResultFile.expandTilde().readValue<OrtResult>()
         val copyrightGarbage = copyrightGarbageFile?.expandTilde()?.readValue<CopyrightGarbage>().orEmpty()
 
@@ -102,6 +89,5 @@ internal class ListCopyrightsCommand : CommandWithHelp() {
         }
 
         println(result)
-        return 0
     }
 }

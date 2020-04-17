@@ -19,40 +19,32 @@
 
 package org.ossreviewtoolkit.helper.commands
 
-import com.beust.jcommander.JCommander
-import com.beust.jcommander.Parameter
-import com.beust.jcommander.Parameters
-import com.beust.jcommander.converters.FileConverter
+import com.github.ajalt.clikt.core.CliktCommand
+import com.github.ajalt.clikt.parameters.arguments.argument
+import com.github.ajalt.clikt.parameters.arguments.convert
+import com.github.ajalt.clikt.parameters.types.file
 
-import org.ossreviewtoolkit.helper.CommandWithHelp
 import org.ossreviewtoolkit.helper.common.sortEntries
 import org.ossreviewtoolkit.helper.common.writeAsYaml
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.readValue
-import org.ossreviewtoolkit.utils.PARAMETER_ORDER_MANDATORY
+import org.ossreviewtoolkit.utils.expandTilde
 
-import java.io.File
+internal class SortRepositoryConfigurationCommand : CliktCommand(
+    name = "sort-repository-configuration",
+    help = "Sorts all exclude and curation entries of the given repository configuration alphabetically. The output " +
+            "is written to the given repository configuration file."
+) {
+    private val repositoryConfigurationFile by argument(
+        "repository-configuration-file",
+        help = "The repository configuration file to be sorted."
+    ).convert { it.expandTilde() }
+        .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = false)
 
-@Parameters(
-    commandNames = ["sort-repository-configuration"],
-    commandDescription = "Sorts all exclude and curation entries of the given repository configuration " +
-            "alphabetically. The output is written to the given repository configuration file."
-)
-internal class SortRepositoryConfigurationCommand : CommandWithHelp() {
-    @Parameter(
-        required = true,
-        order = PARAMETER_ORDER_MANDATORY,
-        converter = FileConverter::class,
-        description = "The repository configuration file to be sorted."
-    )
-    private lateinit var repositoryConfigurationFile: File
-
-    override fun runCommand(jc: JCommander): Int {
+    override fun run() {
         repositoryConfigurationFile
             .readValue<RepositoryConfiguration>()
             .sortEntries()
             .writeAsYaml(repositoryConfigurationFile)
-
-        return 0
     }
 }

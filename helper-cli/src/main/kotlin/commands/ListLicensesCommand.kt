@@ -19,12 +19,15 @@
 
 package org.ossreviewtoolkit.helper.commands
 
-import com.beust.jcommander.JCommander
-import com.beust.jcommander.Parameter
-import com.beust.jcommander.Parameters
+import com.github.ajalt.clikt.core.CliktCommand
+import com.github.ajalt.clikt.core.UsageError
+import com.github.ajalt.clikt.parameters.options.convert
+import com.github.ajalt.clikt.parameters.options.default
+import com.github.ajalt.clikt.parameters.options.flag
+import com.github.ajalt.clikt.parameters.options.option
+import com.github.ajalt.clikt.parameters.options.required
+import com.github.ajalt.clikt.parameters.types.file
 
-import org.ossreviewtoolkit.helper.CommandWithHelp
-import org.ossreviewtoolkit.helper.common.IdentifierConverter
 import org.ossreviewtoolkit.helper.common.fetchScannedSources
 import org.ossreviewtoolkit.helper.common.getLicenseFindingsById
 import org.ossreviewtoolkit.helper.common.getPackageOrProject
@@ -34,96 +37,71 @@ import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.model.TextLocation
 import org.ossreviewtoolkit.model.readValue
-import org.ossreviewtoolkit.utils.PARAMETER_ORDER_MANDATORY
-import org.ossreviewtoolkit.utils.PARAMETER_ORDER_OPTIONAL
+import org.ossreviewtoolkit.utils.expandTilde
 
 import java.io.File
 
-@Parameters(
-    commandNames = ["list-licenses"],
-    commandDescription = "Lists the license findings for a given package as distinct text locations."
-)
-internal class ListLicensesCommand : CommandWithHelp() {
-    @Parameter(
-        names = ["--ort-result-file"],
-        required = true,
-        order = PARAMETER_ORDER_MANDATORY,
-        description = "The ORT result file to read as input."
-    )
-    private lateinit var ortResultFile: File
+internal class ListLicensesCommand : CliktCommand(
+    name = "list-licenses",
+    help = "Lists the license findings for a given package as distinct text locations."
+) {
+    private val ortResultFile by option(
+        "--ort-result-file",
+        help = "The ORT result file to read as input."
+    ).convert { it.expandTilde() }
+        .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
+        .required()
 
-    @Parameter(
-        names = ["--package-id"],
-        required = true,
-        order = PARAMETER_ORDER_MANDATORY,
-        converter = IdentifierConverter::class,
-        description = "The target package for which the licenses shall be listed."
-    )
-    private lateinit var packageId: Identifier
+    private val packageId by option(
+        "--package-id",
+        help = "The target package for which the licenses shall be listed."
+    ).convert { Identifier(it) }
+        .required()
 
-    @Parameter(
-        names = ["--source-code-dir"],
-        required = false,
-        order = PARAMETER_ORDER_OPTIONAL,
-        description = "A directory containing the sources for the target package. These sources should match " +
-                "the provenance of the respective scan result in the ORT result. If not specified those sources " +
-                "are downloaded if needed."
-    )
-    private var sourceCodeDir: File? = null
+    private val sourceCodeDir by option(
+        "--source-code-dir",
+        help = "A directory containing the sources for the target package. These sources should match the provenance " +
+                "of the respective scan result in the ORT result. If not specified those sources are downloaded if " +
+                "needed."
+    ).convert { it.expandTilde() }
+        .file(mustExist = true, canBeFile = false, canBeDir = true, mustBeWritable = false, mustBeReadable = true)
 
-    @Parameter(
-        names = ["--only-offending"],
-        required = false,
-        order = PARAMETER_ORDER_OPTIONAL,
-        description = "Only list licenses causing a rule violation of error severity in the given ORT result."
-    )
-    private var onlyOffending: Boolean = false
+    private val onlyOffending by option(
+        "--only-offending",
+        help = "Only list licenses causing a rule violation of error severity in the given ORT result."
+    ).flag()
 
-    @Parameter(
-        names = ["--omit-excluded"],
-        required = false,
-        order = PARAMETER_ORDER_OPTIONAL,
-        description = "Only list license findings for non-excluded file locations."
-    )
-    private var omitExcluded: Boolean = false
+    private val omitExcluded by option(
+        "--omit-excluded",
+        help = "Only list license findings for non-excluded file locations."
+    ).flag()
 
-    @Parameter(
-        names = ["--ignore-excluded-rule-ids"],
-        required = false,
-        order = PARAMETER_ORDER_OPTIONAL,
-        description = "A comma separated list of rule names for which --omit-excluded should not have any effect."
-    )
-    private var ignoreExcludedRuleIds: List<String> = emptyList()
+    private val ignoreExcludedRuleIds by option(
+        "--ignore-excluded-rule-ids",
+        help = "A comma separated list of rule names for which --omit-excluded should not have any effect."
+    ).convert { it.split(",").toList() }
+        .default(emptyList())
 
-    @Parameter(
-        names = ["--no-license-texts"],
-        required = false,
-        order = PARAMETER_ORDER_OPTIONAL,
-        description = "Do not output the actual file content of file locations of license findings."
-    )
-    private var noLicenseTexts: Boolean = false
+    private val noLicenseTexts by option(
+        "--no-license-texts",
+        help = "Do not output the actual file content of file locations of license findings."
+    ).flag()
 
-    @Parameter(
-        names = ["--apply-license-finding-curations"],
-        required = false,
-        order = PARAMETER_ORDER_OPTIONAL,
-        description = "Apply the license finding curations contained in the ORT result."
-    )
-    private var applyLicenseFindingCurations: Boolean = false
+    private val applyLicenseFindingCurations by option(
+        "--apply-license-finding-curations",
+        help = "Apply the license finding curations contained in the ORT result."
+    ).flag()
 
-    @Parameter(
-        names = ["--repository-configuration-file"],
-        required = false,
-        order = PARAMETER_ORDER_OPTIONAL,
-        description = "Override the repository configuration contained in the ORT result."
-    )
-    private var repositoryConfigurationFile: File? = null
+    private val repositoryConfigurationFile by option(
+        "--repository-configuration-file",
+        help = "Override the repository configuration contained in the ORT result."
+    ).convert { it.expandTilde() }
+        .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
 
-    override fun runCommand(jc: JCommander): Int {
+    override fun run() {
         var ortResult = ortResultFile.readValue<OrtResult>()
         if (ortResult.getPackageOrProject(packageId) == null) {
-            println("Could not find a package for the given id `$packageId`.")
-            return 2
+            throw UsageError("Could not find a package for the given id `$packageId`.")
         }
 
         repositoryConfigurationFile?.let {
@@ -155,8 +133,6 @@ internal class ListLicensesCommand : CommandWithHelp() {
                 includeLicenseTexts = !noLicenseTexts
             )
             .let { println(it) }
-
-        return 0
     }
 }
 
