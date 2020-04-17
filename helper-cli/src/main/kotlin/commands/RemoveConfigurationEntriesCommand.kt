@@ -70,8 +70,8 @@ internal class RemoveConfigurationEntriesCommand : CommandWithHelp() {
         required = true,
         order = PARAMETER_ORDER_MANDATORY,
         description = "A directory containing the sources of the project(s) for which the configuration entries are " +
-                "are to be removed. The provenance of these sources must match with the scan results contained in " +
-                "the given ORT result file."
+                "to be removed. The provenance of these sources must match with the scan results contained in the " +
+                "given ORT result file."
     )
     private lateinit var sourceCodeDir: File
 
