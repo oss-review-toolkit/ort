@@ -38,7 +38,7 @@ class SimplePackageConfigurationProvider(
         /**
          * Return a [SimplePackageConfigurationProvider] which provides all [PackageConfiguration]s found recursively
          * in the given [directory]. All non-hidden files within the given [directory] must be package curation files.
-         * Throws if there is more than one configuration per [Identifier] and [Provenance].
+         * Throws an exception if there is more than one configuration per [Identifier] and [Provenance].
          */
         fun forDirectory(directory: File): SimplePackageConfigurationProvider {
             val entries = directory.walkBottomUp()
@@ -50,7 +50,7 @@ class SimplePackageConfigurationProvider(
 
         /**
          * Return a [SimplePackageConfigurationProvider] which provides all [PackageConfiguration]s found in the given
-         * file. Throws if there is more than one configuration per [Identifier] and [Provenance].
+         * file. Throws an exception if there is more than one configuration per [Identifier] and [Provenance].
          */
         fun forFile(file: File): SimplePackageConfigurationProvider {
             val entries = file.readValue<List<PackageConfiguration>>()
