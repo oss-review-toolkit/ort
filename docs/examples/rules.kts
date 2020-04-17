@@ -140,7 +140,7 @@ val ruleSet = ruleSet(ortResult, packageConfigurationProvider) {
             error(message, howToFixDefault())
         }
 
-        licenseRule("COPYLEFT_LIMITED_IN_HERE_SOURCE", LicenseView.CONCLUDED_OR_DECLARED_OR_DETECTED) {
+        licenseRule("COPYLEFT_LIMITED_IN_SOURCE", LicenseView.CONCLUDED_OR_DECLARED_OR_DETECTED) {
             require {
                 -isExcluded()
                 +isCopyleftLimited()
