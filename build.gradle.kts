@@ -86,7 +86,7 @@ tasks.named<DependencyUpdatesTask>("dependencyUpdates") {
             "alpha", "b", "beta", "cr", "ea", "eap", "m", "milestone", "pr", "preview", "rc"
         ).joinToString("|", "(", ")")
 
-        val nonFinalQualifiersRegex = Regex("(?i).*[.-]$nonFinalQualifiers[.\\d-+]*")
+        val nonFinalQualifiersRegex = Regex(".*[.-]$nonFinalQualifiers[.\\d-+]*", RegexOption.IGNORE_CASE)
 
         return version.matches(nonFinalQualifiersRegex)
     }
