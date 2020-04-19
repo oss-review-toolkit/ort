@@ -22,12 +22,13 @@ project:
   - name: "install"
     dependencies:
     - id: "PyPI::ply:3.11"
-    - id: "PyPI::rdflib:4.2.2"
+    - id: "PyPI::rdflib:5.0.0"
       dependencies:
       - id: "PyPI::isodate:0.6.0"
         dependencies:
         - id: "PyPI::six:1.14.0"
       - id: "PyPI::pyparsing:2.4.7"
+      - id: "PyPI::six:1.14.0"
     - id: "PyPI::six:1.14.0"
 packages:
 - package:
@@ -122,25 +123,25 @@ packages:
       path: ""
   curations: []
 - package:
-    id: "PyPI::rdflib:4.2.2"
-    purl: "pkg:pypi/rdflib@4.2.2"
+    id: "PyPI::rdflib:5.0.0"
+    purl: "pkg:pypi/rdflib@5.0.0"
     declared_licenses:
     - "BSD License"
-    - "https://raw.github.com/RDFLib/rdflib/master/LICENSE"
+    - "BSD-3-Clause"
     declared_licenses_processed:
       spdx_expression: "BSD-3-Clause"
     description: "RDFLib is a Python library for working with RDF, a simple yet powerful\
       \ language for representing information."
     homepage_url: "https://github.com/RDFLib/rdflib"
     binary_artifact:
-      url: "https://files.pythonhosted.org/packages/3c/fe/630bacb652680f6d481b9febbb3e2c3869194a1a5fc3401a4a41195a2f8f/rdflib-4.2.2-py3-none-any.whl"
+      url: "https://files.pythonhosted.org/packages/d0/6b/6454aa1db753c0f8bc265a5bd5c10b5721a4bb24160fb4faf758cf6be8a1/rdflib-5.0.0-py3-none-any.whl"
       hash:
-        value: "380422af59a6f0e5cc62879f68de3397"
+        value: "8ad1eb4d67ade138370fb45ce1cb3412"
         algorithm: "MD5"
     source_artifact:
-      url: "https://files.pythonhosted.org/packages/c5/77/1fa0f4cffd5faad496b1344ab665902bb2609f56e0fb19bcf80cff485da0/rdflib-4.2.2.tar.gz"
+      url: "https://files.pythonhosted.org/packages/2f/ae/a50934a7ed4f9d80bbc0e0cf725c7fd2208f2e433efbf881ed0c0317a7f1/rdflib-5.0.0.tar.gz"
       hash:
-        value: "534fe35b13c5857d53fa1ac5a41eca67"
+        value: "80d7c6adc2e4040cdd8dade2e0e61403"
         algorithm: "MD5"
     vcs:
       type: ""
