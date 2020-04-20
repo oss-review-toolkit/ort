@@ -29,6 +29,7 @@ import com.github.ajalt.clikt.parameters.types.file
 import org.ossreviewtoolkit.helper.common.RepositoryLicenseFindingCurations
 import org.ossreviewtoolkit.helper.common.getRepositoryLicenseFindingCurations
 import org.ossreviewtoolkit.helper.common.mergeLicenseFindingCurations
+import org.ossreviewtoolkit.helper.common.replaceConfig
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.readValue
 import org.ossreviewtoolkit.model.yamlMapper
@@ -61,7 +62,6 @@ internal class ExportLicenseFindingCurationsCommand : CliktCommand(
         help = "Override the repository configuration contained in the given input ORT file."
     ).convert { it.expandTilde() }
         .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
-        .required()
 
     private val updateOnlyExisting by option(
         "--update-only-existing",
@@ -72,7 +72,7 @@ internal class ExportLicenseFindingCurationsCommand : CliktCommand(
     override fun run() {
         val localLicenseFindingCurations = ortResultFile
             .readValue<OrtResult>()
-            .replaceConfig(repositoryConfigurationFile.readValue())
+            .replaceConfig(repositoryConfigurationFile)
             .getRepositoryLicenseFindingCurations()
 
         val globalLicenseFindingCurations = if (licenseFindingCurationsFile.isFile) {
