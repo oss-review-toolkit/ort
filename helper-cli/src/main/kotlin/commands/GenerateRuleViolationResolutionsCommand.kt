@@ -39,7 +39,8 @@ import org.ossreviewtoolkit.utils.expandTilde
 
 internal class GenerateRuleViolationResolutionsCommand : CliktCommand(
     name = "generate-rule-violation-resolutions",
-    help = "Generates resolutions for all unresolved rule violations."
+    help = "Generates resolutions for all unresolved rule violations. The output is written to the given repository " +
+            "configuration file."
 ) {
     private val ortResultFile by option(
         "--ort-result-file",
