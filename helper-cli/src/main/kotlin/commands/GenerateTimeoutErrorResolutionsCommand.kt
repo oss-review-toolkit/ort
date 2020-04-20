@@ -27,6 +27,7 @@ import com.github.ajalt.clikt.parameters.options.required
 import com.github.ajalt.clikt.parameters.types.file
 
 import org.ossreviewtoolkit.helper.common.getScanIssues
+import org.ossreviewtoolkit.helper.common.replaceConfig
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.config.IssueResolution
 import org.ossreviewtoolkit.model.config.IssueResolutionReason
@@ -65,10 +66,7 @@ internal class GenerateTimeoutErrorResolutionsCommand : CliktCommand(
     ).flag()
 
     override fun run() {
-        var ortResult = ortResultFile.readValue<OrtResult>()
-        repositoryConfigurationFile?.let {
-            ortResult = ortResult.replaceConfig(it.readValue())
-        }
+        val ortResult = ortResultFile.readValue<OrtResult>().replaceConfig(repositoryConfigurationFile)
 
         val resolutionProvider = DefaultResolutionProvider().apply {
             var resolutions = Resolutions()

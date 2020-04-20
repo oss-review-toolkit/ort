@@ -31,7 +31,9 @@ import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.Project
 import org.ossreviewtoolkit.model.Provenance
+import org.ossreviewtoolkit.model.readValue
 import org.ossreviewtoolkit.model.RemoteArtifact
+import org.ossreviewtoolkit.model.Repository
 import org.ossreviewtoolkit.model.RuleViolation
 import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.model.TextLocation
@@ -414,6 +416,15 @@ internal fun OrtResult.getUnresolvedRuleViolations(): List<RuleViolation> {
         !resolutions.any { it.matches(violation) }
     }
 }
+
+/**
+ * Return a copy of this [OrtResult] with the [Repository.config] with the content of the given
+ * [respositoryConfigurationFile].
+ */
+fun OrtResult.replaceConfig(respositoryConfigurationFile: File?): OrtResult =
+    respositoryConfigurationFile?.let {
+        replaceConfig(it.readValue())
+    } ?: this
 
 /**
  * Return a copy with the [IssueResolution]s replaced by the given [issueResolutions].
