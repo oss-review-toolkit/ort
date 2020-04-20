@@ -1,5 +1,5 @@
 name: no_lockfile
-description: A syntetic dart project without a lockfile
+description: A synthetic dart project without a lockfile
 version: 0.1.0
 author: Marlon Hille <marlon.hille@here.com>
 homepage: http://oss-review-toolkit.org/
