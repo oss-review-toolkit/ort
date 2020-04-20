@@ -195,6 +195,11 @@ abstract class PackageManager(
     protected open fun beforeResolution(definitionFiles: List<File>) {}
 
     /**
+     * Optional step to run after dependency resolution, like cleaning up temporary files.
+     */
+    protected open fun afterResolution(definitionFiles: List<File>) {}
+
+    /**
      * Return a tree of resolved dependencies (not necessarily declared dependencies, in case conflicts were resolved)
      * for all [definitionFiles] which were found by searching the [analysisRoot] directory. By convention, the
      * [definitionFiles] must be absolute.
@@ -252,11 +257,6 @@ abstract class PackageManager(
 
         return result
     }
-
-    /**
-     * Optional step to run after dependency resolution, like cleaning up temporary files.
-     */
-    protected open fun afterResolution(definitionFiles: List<File>) {}
 
     /**
      * Resolve dependencies for a single absolute [definitionFile] and return a [ProjectAnalyzerResult].
