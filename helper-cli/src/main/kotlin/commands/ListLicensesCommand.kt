@@ -32,6 +32,7 @@ import org.ossreviewtoolkit.helper.common.fetchScannedSources
 import org.ossreviewtoolkit.helper.common.getLicenseFindingsById
 import org.ossreviewtoolkit.helper.common.getPackageOrProject
 import org.ossreviewtoolkit.helper.common.getViolatedRulesByLicense
+import org.ossreviewtoolkit.helper.common.replaceConfig
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.Severity
@@ -99,13 +100,10 @@ internal class ListLicensesCommand : CliktCommand(
         .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
 
     override fun run() {
-        var ortResult = ortResultFile.readValue<OrtResult>()
+        val ortResult = ortResultFile.readValue<OrtResult>().replaceConfig(repositoryConfigurationFile)
+
         if (ortResult.getPackageOrProject(packageId) == null) {
             throw UsageError("Could not find a package for the given id `$packageId`.")
-        }
-
-        repositoryConfigurationFile?.let {
-            ortResult = ortResult.replaceConfig(it.readValue())
         }
 
         val sourcesDir = if (sourceCodeDir == null) {
