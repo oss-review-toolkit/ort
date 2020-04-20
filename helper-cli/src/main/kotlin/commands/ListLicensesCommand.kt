@@ -35,12 +35,14 @@ import org.ossreviewtoolkit.helper.common.getViolatedRulesByLicense
 import org.ossreviewtoolkit.helper.common.replaceConfig
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.OrtResult
+import org.ossreviewtoolkit.model.Provenance
 import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.model.TextLocation
 import org.ossreviewtoolkit.model.readValue
 import org.ossreviewtoolkit.utils.expandTilde
 
 import java.io.File
+import java.lang.IllegalArgumentException
 
 internal class ListLicensesCommand : CliktCommand(
     name = "list-licenses",
@@ -116,21 +118,35 @@ internal class ListLicensesCommand : CliktCommand(
 
         fun isPathExcluded(path: String) = ortResult.repository.config.excludes.findPathExcludes(path).isNotEmpty()
 
-        ortResult
+        val findingsByProvenance = ortResult
             .getLicenseFindingsById(packageId, applyLicenseFindingCurations)
-            .filter { (license, _) -> !onlyOffending || violatedRulesByLicense.contains(license) }
-            .mapValues { (license, locations) ->
-                locations.filter {
-                    !omitExcluded || !isPathExcluded(it.path) ||
-                            ignoreExcludedRuleIds.intersect(violatedRulesByLicense[license].orEmpty()).isNotEmpty()
+            .mapValues { (_, locationsByLicense) ->
+                locationsByLicense.filter { (license, _) ->
+                    !onlyOffending || violatedRulesByLicense.contains(license)
+                }.mapValues { (license, locations) ->
+                    locations.filter {
+                        !omitExcluded || !isPathExcluded(it.path) ||
+                                ignoreExcludedRuleIds.intersect(violatedRulesByLicense[license].orEmpty()).isNotEmpty()
+                    }
+                }.mapValues { (_, locations) ->
+                    locations.groupByText(sourcesDir)
                 }
             }
-            .mapValues { it.value.groupByText(sourcesDir) }
-            .writeValueAsString(
+
+        buildString {
+            appendln("  scan results:")
+            findingsByProvenance.keys.forEachIndexed { i, provenance ->
+                appendln("    [$i] ${provenance.writeValueAsString()}")
+            }
+        }.also { println(it) }
+
+        findingsByProvenance.keys.forEachIndexed { i, provenance ->
+            findingsByProvenance.getValue(provenance).writeValueAsString(
                 isPathExcluded = { path -> isPathExcluded(path) },
+                provenanceIndex = i,
                 includeLicenseTexts = !noLicenseTexts
-            )
-            .let { println(it) }
+            ).also { println(it) }
+        }
     }
 }
 
@@ -153,6 +169,7 @@ private fun Collection<TextLocationGroup>.assignReferenceNameAndSort(): List<Pai
 
 private fun Map<String, List<TextLocationGroup>>.writeValueAsString(
     isPathExcluded: (String) -> Boolean,
+    provenanceIndex: Int,
     includeLicenseTexts: Boolean = true
 ): String {
     return buildString {
@@ -162,7 +179,7 @@ private fun Map<String, List<TextLocationGroup>>.writeValueAsString(
         }
 
         this@writeValueAsString.forEach { (license, textLocationGroups) ->
-            appendlnIndent("$license:", 2)
+            appendlnIndent("$license [$provenanceIndex]:", 2)
 
             val sortedGroups = textLocationGroups.assignReferenceNameAndSort()
             sortedGroups.forEach { (group, name) ->
@@ -213,3 +230,14 @@ private fun TextLocation.resolve(baseDir: File): String? {
 
     return lines.subList(startLine - 1, endLine).joinToString(separator = "\n")
 }
+
+/**
+ * Return a representation dedicated for this [ListLicensesCommand] command which is more compact than the
+ * representation returned by [Provenance.toString()], does not have any nesting and omits some irrelevant fields.
+ */
+private fun Provenance.writeValueAsString(): String =
+    sourceArtifact?.let {
+        "url=${it.url}, hash=${it.hash.value}"
+    } ?: vcsInfo?.let {
+        "type=${it.type}, url=${it.url}, path=${it.path}, revision=${it.revision}"
+    } ?: throw IllegalArgumentException("Provenance must have either a non-null source artifact or VCS info.")
