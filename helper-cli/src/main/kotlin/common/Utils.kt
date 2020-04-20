@@ -282,22 +282,29 @@ internal fun OrtResult.processAllCopyrightStatements(
 internal fun OrtResult.getLicenseFindingsById(
     id: Identifier,
     applyCurations: Boolean = true
-): Map<String, Set<TextLocation>> =
-    scanner?.results?.scanResults
-        ?.filter { it.id == id }
-        .orEmpty()
-        .flatMapTo(mutableSetOf()) { container ->
-            container.results.flatMap { it.summary.licenseFindings }
-        }
-        .let { licenseFindings ->
-            if (applyCurations) {
-                FindingCurationMatcher().applyAll(licenseFindings, getLicenseFindingsCurations(id))
-            } else {
-                licenseFindings
+): Map<Provenance, Map<String, Set<TextLocation>>> {
+    val result = mutableMapOf<Provenance, MutableMap<String, MutableSet<TextLocation>>>()
+
+    scanner?.results?.scanResults.orEmpty().filter { it.id == id }.forEach { scanResultContainer ->
+        scanResultContainer.results.forEach { scanResult ->
+            val findingsForProvenance = result.getOrPut(scanResult.provenance) { mutableMapOf() }
+
+            val licenseFindings = scanResult.summary.licenseFindings.let {
+                if (applyCurations) {
+                    FindingCurationMatcher().applyAll(it, getLicenseFindingsCurations(id))
+                } else {
+                    it
+                }
+            }
+
+            licenseFindings.forEach {
+                findingsForProvenance.getOrPut(it.license) { mutableSetOf() }.add(it.location)
             }
         }
-        .groupBy({ it.license }, { it.location })
-        .mapValues { (_, locations) -> locations.toSet() }
+    }
+
+    return result
+}
 
 /**
  * Return all license finding curations from this [OrtResult] represented as [RepositoryPathExcludes].
