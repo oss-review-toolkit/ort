@@ -44,7 +44,7 @@ class ListPackagesCommand : CliktCommand(
 
     private val matchDetectedLicenses by option(
         "--match-detected-licenses",
-        help = "Omit all packages not matching any of the licenses given by this comma separated list."
+        help = "Omit all packages not matching all licenses given by this comma separated list of license identifiers."
     ).convert { it.split(",").toList() }
         .default(emptyList())
 
