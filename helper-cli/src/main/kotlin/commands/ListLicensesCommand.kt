@@ -21,12 +21,16 @@ package org.ossreviewtoolkit.helper.commands
 
 import com.github.ajalt.clikt.core.CliktCommand
 import com.github.ajalt.clikt.core.UsageError
+import com.github.ajalt.clikt.parameters.groups.mutuallyExclusiveOptions
+import com.github.ajalt.clikt.parameters.groups.single
 import com.github.ajalt.clikt.parameters.options.convert
 import com.github.ajalt.clikt.parameters.options.default
 import com.github.ajalt.clikt.parameters.options.flag
 import com.github.ajalt.clikt.parameters.options.option
 import com.github.ajalt.clikt.parameters.options.required
 import com.github.ajalt.clikt.parameters.types.file
+import org.ossreviewtoolkit.helper.common.PackageConfigurationOption
+import org.ossreviewtoolkit.helper.common.createProvider
 
 import org.ossreviewtoolkit.helper.common.fetchScannedSources
 import org.ossreviewtoolkit.helper.common.getLicenseFindingsById
@@ -101,6 +105,22 @@ internal class ListLicensesCommand : CliktCommand(
     ).convert { it.expandTilde() }
         .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
 
+    private val packageConfigurationOption by mutuallyExclusiveOptions<PackageConfigurationOption>(
+        option(
+            "--package-configuration-dir",
+            help = "The directory containing the package configuration files to read as input. It is searched " +
+                    "recursively."
+        ).convert { it.expandTilde() }
+            .file(mustExist = true, canBeFile = false, canBeDir = true, mustBeWritable = false, mustBeReadable = true)
+            .convert { PackageConfigurationOption.Dir(it) },
+        option(
+            "--package-configuration-file",
+            help = "The file containing the package configurations to read as input."
+        ).convert { it.expandTilde() }
+            .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
+            .convert { PackageConfigurationOption.File(it) }
+    ).single()
+
     override fun run() {
         val ortResult = ortResultFile.readValue<OrtResult>().replaceConfig(repositoryConfigurationFile)
 
@@ -114,18 +134,26 @@ internal class ListLicensesCommand : CliktCommand(
         } else {
             sourceCodeDir!!
         }
-        val violatedRulesByLicense = ortResult.getViolatedRulesByLicense(packageId, Severity.ERROR)
 
-        fun isPathExcluded(path: String) = ortResult.repository.config.excludes.findPathExcludes(path).isNotEmpty()
+        val packageConfigurationProvider = packageConfigurationOption.createProvider()
+
+        fun isPathExcluded(provenance: Provenance, path: String): Boolean =
+            if (ortResult.isProject(packageId)) {
+                ortResult.getExcludes().paths
+            } else {
+                packageConfigurationProvider.getPackageConfiguration(packageId, provenance)?.pathExcludes.orEmpty()
+            }.any { it.matches(path) }
+
+        val violatedRulesByLicense = ortResult.getViolatedRulesByLicense(packageId, Severity.ERROR)
 
         val findingsByProvenance = ortResult
             .getLicenseFindingsById(packageId, applyLicenseFindingCurations)
-            .mapValues { (_, locationsByLicense) ->
+            .mapValues { (provenance, locationsByLicense) ->
                 locationsByLicense.filter { (license, _) ->
                     !onlyOffending || violatedRulesByLicense.contains(license)
                 }.mapValues { (license, locations) ->
                     locations.filter {
-                        !omitExcluded || !isPathExcluded(it.path) ||
+                        !omitExcluded || !isPathExcluded(provenance, it.path) ||
                                 ignoreExcludedRuleIds.intersect(violatedRulesByLicense[license].orEmpty()).isNotEmpty()
                     }
                 }.mapValues { (_, locations) ->
@@ -142,7 +170,7 @@ internal class ListLicensesCommand : CliktCommand(
 
         findingsByProvenance.keys.forEachIndexed { i, provenance ->
             findingsByProvenance.getValue(provenance).writeValueAsString(
-                isPathExcluded = { path -> isPathExcluded(path) },
+                isPathExcluded = { path -> isPathExcluded(provenance, path) },
                 provenanceIndex = i,
                 includeLicenseTexts = !noLicenseTexts
             ).also { println(it) }
