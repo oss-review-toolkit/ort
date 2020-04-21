@@ -147,7 +147,7 @@ internal class ListLicensesCommand : CliktCommand(
         val violatedRulesByLicense = ortResult.getViolatedRulesByLicense(packageId, Severity.ERROR)
 
         val findingsByProvenance = ortResult
-            .getLicenseFindingsById(packageId, applyLicenseFindingCurations)
+            .getLicenseFindingsById(packageId, packageConfigurationProvider, applyLicenseFindingCurations)
             .mapValues { (provenance, locationsByLicense) ->
                 locationsByLicense.filter { (license, _) ->
                     !onlyOffending || violatedRulesByLicense.contains(license)
