@@ -158,7 +158,7 @@ internal class ListLicensesCommand : CliktCommand(
                     }
                 }.mapValues { (_, locations) ->
                     locations.groupByText(sourcesDir)
-                }
+                }.filter { (_, locations) -> locations.isNotEmpty() }
             }
 
         buildString {
