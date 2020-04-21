@@ -50,6 +50,7 @@ import org.ossreviewtoolkit.model.config.RuleViolationResolution
 import org.ossreviewtoolkit.model.config.ScopeExclude
 import org.ossreviewtoolkit.model.utils.FindingCurationMatcher
 import org.ossreviewtoolkit.model.utils.collectLicenseFindings
+import org.ossreviewtoolkit.model.utils.PackageConfigurationProvider
 import org.ossreviewtoolkit.model.yamlMapper
 import org.ossreviewtoolkit.utils.CopyrightStatementsProcessor
 import org.ossreviewtoolkit.utils.safeMkdirs
@@ -281,9 +282,17 @@ internal fun OrtResult.processAllCopyrightStatements(
  */
 internal fun OrtResult.getLicenseFindingsById(
     id: Identifier,
+    packageConfigurationProvider: PackageConfigurationProvider,
     applyCurations: Boolean = true
 ): Map<Provenance, Map<String, Set<TextLocation>>> {
     val result = mutableMapOf<Provenance, MutableMap<String, MutableSet<TextLocation>>>()
+
+    fun getLicenseFindingsCurations(provenance: Provenance): List<LicenseFindingCuration> =
+        if (isProject(id)) {
+            getLicenseFindingsCurations(id)
+        } else {
+            packageConfigurationProvider.getPackageConfiguration(id, provenance)?.licenseFindingCurations.orEmpty()
+        }
 
     scanner?.results?.scanResults.orEmpty().filter { it.id == id }.forEach { scanResultContainer ->
         scanResultContainer.results.forEach { scanResult ->
@@ -291,7 +300,7 @@ internal fun OrtResult.getLicenseFindingsById(
 
             val licenseFindings = scanResult.summary.licenseFindings.let {
                 if (applyCurations) {
-                    FindingCurationMatcher().applyAll(it, getLicenseFindingsCurations(id))
+                    FindingCurationMatcher().applyAll(it, getLicenseFindingsCurations(scanResult.provenance))
                 } else {
                     it
                 }
