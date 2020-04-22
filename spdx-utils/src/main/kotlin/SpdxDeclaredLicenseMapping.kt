@@ -411,6 +411,7 @@ object SpdxDeclaredLicenseMapping {
         "Python License (CNRI Python License)" to CNRI_PYTHON.toExpression(),
         "Python Software Foundation" to PYTHON_2_0.toExpression(),
         "Python Software Foundation License" to PYTHON_2_0.toExpression(),
+        "Revised BSD" to BSD_3_CLAUSE.toExpression(),
         "Revised BSD License" to BSD_3_CLAUSE.toExpression(),
         "Ruby's" to RUBY.toExpression(),
         "Qt Public License" to QPL_1_0.toExpression(),
