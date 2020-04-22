@@ -19,6 +19,8 @@
 
 package org.ossreviewtoolkit.analyzer.curation
 
+import java.io.IOException
+
 import org.ossreviewtoolkit.analyzer.HTTP_CACHE_PATH
 import org.ossreviewtoolkit.analyzer.PackageCurationProvider
 import org.ossreviewtoolkit.clearlydefined.ClearlyDefinedService
@@ -36,6 +38,9 @@ import org.ossreviewtoolkit.model.RemoteArtifact
 import org.ossreviewtoolkit.model.VcsInfoCurationData
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.utils.OkHttpClientHelper
+import org.ossreviewtoolkit.utils.collectMessagesAsString
+import org.ossreviewtoolkit.utils.log
+import org.ossreviewtoolkit.utils.showStackTrace
 
 /**
  * Map an [Identifier] to a ClearlyDefined [ComponentType] and [Provider]. Note that an Identifier's type in ORT
@@ -158,7 +163,17 @@ class ClearlyDefinedPackageCurationProvider(server: Server = Server.PRODUCTION) 
         val (type, provider) = pkgId.toClearlyDefinedTypeAndProvider()
         val curationCall = service.getCuration(type, provider, namespace, pkgId.name, pkgId.version)
 
-        val curation = curationCall.execute().body() ?: return emptyList()
+        val response = try {
+            curationCall.execute()
+        } catch (e: IOException) {
+            e.showStackTrace()
+
+            log.warn { "Getting curations for '${pkgId.toCoordinates()}' failed with: ${e.collectMessagesAsString()}" }
+
+            null
+        }
+
+        val curation = response?.body() ?: return emptyList()
 
         val sourceLocation = curation.described?.sourceLocation.toArtifactOrVcs()
         val pkgCuration = PackageCuration(
