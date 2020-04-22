@@ -24,6 +24,7 @@ import org.ossreviewtoolkit.model.LicenseFindingsMap
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.config.CopyrightGarbage
 import org.ossreviewtoolkit.model.licenses.LicenseConfiguration
+import org.ossreviewtoolkit.model.utils.PackageConfigurationProvider
 import org.ossreviewtoolkit.model.utils.collectLicenseFindings
 import org.ossreviewtoolkit.reporter.Reporter
 import org.ossreviewtoolkit.reporter.ReporterInput
@@ -52,7 +53,8 @@ abstract class AbstractNoticeReporter : Reporter {
         ortResult: OrtResult,
         model: NoticeReportModel,
         copyrightGarbage: CopyrightGarbage,
-        licenseConfiguration: LicenseConfiguration
+        licenseConfiguration: LicenseConfiguration,
+        packageConfigurationProvider: PackageConfigurationProvider
     ) : ScriptRunner() {
         override val preface = """
             import org.ossreviewtoolkit.model.*
@@ -84,6 +86,7 @@ abstract class AbstractNoticeReporter : Reporter {
             engine.put("model", model)
             engine.put("copyrightGarbage", copyrightGarbage)
             engine.put("licenseConfiguration", licenseConfiguration)
+            engine.put("packageConfigurationProvider", packageConfigurationProvider)
         }
 
         override fun run(script: String): NoticeReportModel = super.run(script) as NoticeReportModel
@@ -101,7 +104,8 @@ abstract class AbstractNoticeReporter : Reporter {
             "The provided ORT result file does not contain a scan result."
         }
 
-        val licenseFindings: Map<Identifier, LicenseFindingsMap> = getLicenseFindings(input.ortResult)
+        val licenseFindings: Map<Identifier, LicenseFindingsMap> =
+            getLicenseFindings(input.ortResult, input.packageConfigurationProvider)
 
         val model = NoticeReportModel(
             emptyList(),
@@ -112,8 +116,13 @@ abstract class AbstractNoticeReporter : Reporter {
         )
 
         val preProcessedModel = input.preProcessingScript?.let { preProcessingScript ->
-            PreProcessor(input.ortResult, model, input.copyrightGarbage, input.licenseConfiguration)
-                .run(preProcessingScript)
+            PreProcessor(
+                input.ortResult,
+                model,
+                input.copyrightGarbage,
+                input.licenseConfiguration,
+                input.packageConfigurationProvider
+            ).run(preProcessingScript)
         } ?: model
 
         val processor = createProcessor(input)
@@ -127,8 +136,11 @@ abstract class AbstractNoticeReporter : Reporter {
         }
     }
 
-    private fun getLicenseFindings(ortResult: OrtResult): Map<Identifier, LicenseFindingsMap> =
-        ortResult.collectLicenseFindings(omitExcluded = true).mapValues { (_, findings) ->
+    private fun getLicenseFindings(
+        ortResult: OrtResult,
+        packageConfigurationProvider: PackageConfigurationProvider
+    ): Map<Identifier, LicenseFindingsMap> =
+        ortResult.collectLicenseFindings(packageConfigurationProvider, omitExcluded = true).mapValues { (_, findings) ->
             findings.filter { it.value.isEmpty() }.keys.associate { licenseFindings ->
                 Pair(licenseFindings.license, licenseFindings.copyrights.map { it.statement }.toMutableSet())
             }.toSortedMap()
