@@ -26,6 +26,10 @@ pipeline {
     agent none
 
     parameters {
+        /*
+         * Parameters about the project to run ORT on.
+         */
+
         string(
             name: 'VCS_URL',
             description: 'VCS clone URL of the project',
@@ -44,6 +48,20 @@ pipeline {
             defaultValue: ''
         )
 
+        /*
+         * General ORT parameters.
+         */
+
+        choice(
+            name: 'LOG_LEVEL',
+            description: 'Log message level',
+            choices: ['--info', '--debug', '']
+        )
+
+        /*
+         * ORT analyzer tool parameters.
+         */
+
         booleanParam(
             name: 'ALLOW_DYNAMIC_VERSIONS',
             defaultValue: false,
@@ -56,11 +74,19 @@ pipeline {
             description: 'Use package curation data from the ClearlyDefined service'
         )
 
+        /*
+         * ORT scanner tool parameters.
+         */
+
         booleanParam(
             name: 'RUN_SCANNER',
             defaultValue: true,
             description: 'Run the scanner tool'
         )
+
+        /*
+         * ORT reporter tool parameters.
+         */
 
         booleanParam(
             name: 'RUN_REPORTER',
@@ -68,11 +94,9 @@ pipeline {
             description: 'Run the reporter tool'
         )
 
-        choice(
-            name: 'LOG_LEVEL',
-            description: 'Log message level',
-            choices: ['--info', '--debug', '']
-        )
+        /*
+         * Parameters for Jenkins job orchestration.
+         */
 
         string(
             name: 'DOWNSTREAM_JOB',
