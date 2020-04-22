@@ -40,6 +40,9 @@ enum class Severity {
      */
     HINT;
 
+    /**
+     * Map the [Severity] to a Log4j [Level].
+     */
     fun toLog4jLevel(): Level =
         when (this) {
             ERROR -> Level.ERROR
