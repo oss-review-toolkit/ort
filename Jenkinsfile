@@ -52,6 +52,24 @@ pipeline {
          * General ORT parameters.
          */
 
+        string(
+            name: 'ORT_CONFIG_VCS_URL',
+            description: 'Optional VCS clone URL of the ORT configuration',
+            defaultValue: ''
+        )
+
+        string(
+            name: 'ORT_CONFIG_VCS_REVISION',
+            description: 'Optional VCS revision of the ORT configuration (prefix tags with "refs/tags/")',
+            defaultValue: 'master'
+        )
+
+        credentials(
+            name: 'ORT_CONFIG_VCS_CREDENTIALS',
+            description: 'Optional Jenkins credentials id to use for VCS checkout',
+            defaultValue: ''
+        )
+
         choice(
             name: 'LOG_LEVEL',
             description: 'Log message level',
@@ -122,6 +140,32 @@ pipeline {
                     userRemoteConfigs: [[url: params.PROJECT_VCS_URL, credentialsId: params.PROJECT_VCS_CREDENTIALS]],
                     branches: [[name: "${params.PROJECT_VCS_REVISION}"]],
                     extensions: [[$class: 'RelativeTargetDirectory', relativeTargetDir: "${env.PROJECT_DIR}/source"]]
+                ])
+            }
+        }
+
+        stage('Clone ORT configuration') {
+            agent any
+
+            when {
+                beforeAgent true
+
+                expression {
+                    !params.ORT_CONFIG_VCS_URL.allWhitespace
+                }
+            }
+
+            environment {
+                HOME = "${env.WORKSPACE}@tmp"
+                ORT_DATA_DIR = "${env.HOME}/.ort"
+            }
+
+            steps {
+                // See https://jenkins.io/doc/pipeline/steps/git/.
+                checkout([$class: 'GitSCM',
+                    userRemoteConfigs: [[url: params.ORT_CONFIG_VCS_URL, credentialsId: params.ORT_CONFIG_VCS_CREDENTIALS]],
+                    branches: [[name: "${params.ORT_CONFIG_VCS_REVISION}"]],
+                    extensions: [[$class: 'RelativeTargetDirectory', relativeTargetDir: "${env.ORT_DATA_DIR}/config"]]
                 ])
             }
         }
