@@ -73,8 +73,9 @@ class CycloneDxReporter : Reporter {
                 rootProject.homepageUrl
             )
 
-            val licenseNames = ortResult.getDetectedLicensesForId(rootProject.id) +
-                    rootProject.declaredLicensesProcessed.allLicenses
+            val licenseNames = rootProject.declaredLicensesProcessed.allLicenses +
+                    ortResult.getDetectedLicensesForId(rootProject.id, input.packageConfigurationProvider)
+
             bom.addExternalReference(
                 ExternalReference.Type.LICENSE,
                 licenseNames.joinToString(", ")
@@ -113,7 +114,8 @@ class CycloneDxReporter : Reporter {
         ortResult.getPackages().forEach { (pkg, _) ->
             // TODO: We should actually use the concluded license expression here, but we first need a workflow to
             //       ensure it is being set.
-            val licenseNames = ortResult.getDetectedLicensesForId(pkg.id) + pkg.declaredLicensesProcessed.allLicenses
+            val licenseNames = pkg.declaredLicensesProcessed.allLicenses +
+                    ortResult.getDetectedLicensesForId(pkg.id, input.packageConfigurationProvider)
 
             val licenseObjects = licenseNames.map { licenseName ->
                 val spdxId = SpdxLicense.forId(licenseName)?.id

@@ -116,7 +116,8 @@ class AmazonOssAttributionBuilderReporter : Reporter {
                 // URL passed into the Amazon Oss Attribution Builder needs to be reachable!
                 val pkgUrl = pkg.homepageUrl.takeUnless { it.isEmpty() } ?: "https://github.com/404"
 
-                val licensesWithCopyrights = input.ortResult.getDetectedLicensesWithCopyrights(pkg.id)
+                val licensesWithCopyrights =
+                    input.ortResult.getDetectedLicensesWithCopyrights(pkg.id, input.packageConfigurationProvider)
 
                 val allCopyrights = if (licensesWithCopyrights.isNotEmpty()) {
                     licensesWithCopyrights.values.reduce { acc, set -> acc + set }
