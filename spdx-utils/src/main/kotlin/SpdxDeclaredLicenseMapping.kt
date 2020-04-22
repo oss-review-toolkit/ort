@@ -323,6 +323,7 @@ object SpdxDeclaredLicenseMapping {
         "GPL (with dual licensing option)" to GPL_2_0_ONLY.toExpression(),
         "GPL 2" to GPL_2_0_ONLY.toExpression(),
         "GPL 3" to GPL_3_0_ONLY.toExpression(),
+        "GPL v2" to GPL_2_0_ONLY.toExpression(),
         "GPL v2 with ClassPath Exception" to (GPL_2_0_ONLY with CLASSPATH_EXCEPTION_2_0),
         "GPL version 2" to GPL_2_0_ONLY.toExpression(),
         "GPL2 w/ CPE" to (GPL_2_0_ONLY with CLASSPATH_EXCEPTION_2_0),
