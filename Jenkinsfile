@@ -31,19 +31,19 @@ pipeline {
          */
 
         string(
-            name: 'VCS_URL',
+            name: 'PROJECT_VCS_URL',
             description: 'VCS clone URL of the project',
             defaultValue: 'https://github.com/vdurmont/semver4j.git'
         )
 
         string(
-            name: 'VCS_REVISION',
+            name: 'PROJECT_VCS_REVISION',
             description: 'VCS revision of the project (prefix tags with "refs/tags/")',
             defaultValue: 'master'
         )
 
         credentials(
-            name: 'VCS_CREDENTIALS',
+            name: 'PROJECT_VCS_CREDENTIALS',
             description: 'Optional Jenkins credentials id to use for VCS checkout',
             defaultValue: ''
         )
@@ -119,8 +119,8 @@ pipeline {
 
                 // See https://jenkins.io/doc/pipeline/steps/git/.
                 checkout([$class: 'GitSCM',
-                    userRemoteConfigs: [[url: params.VCS_URL, credentialsId: params.VCS_CREDENTIALS]],
-                    branches: [[name: "${params.VCS_REVISION}"]],
+                    userRemoteConfigs: [[url: params.PROJECT_VCS_URL, credentialsId: params.PROJECT_VCS_CREDENTIALS]],
+                    branches: [[name: "${params.PROJECT_VCS_REVISION}"]],
                     extensions: [[$class: 'RelativeTargetDirectory', relativeTargetDir: "${env.PROJECT_DIR}/source"]]
                 ])
             }
