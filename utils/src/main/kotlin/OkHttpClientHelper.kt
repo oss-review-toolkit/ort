@@ -19,7 +19,6 @@
 
 package org.ossreviewtoolkit.utils
 
-import java.io.File
 import java.net.InetSocketAddress
 import java.net.MalformedURLException
 import java.net.Proxy
@@ -93,7 +92,7 @@ object OkHttpClientHelper {
      */
     fun buildClient(cachePath: String, block: OkHttpClient.Builder.() -> Unit = {}): OkHttpClient =
         clients.getOrPut(cachePath) {
-            val cacheDirectory = File(getOrtDataDirectory(), cachePath)
+            val cacheDirectory = getOrtDataDirectory().resolve(cachePath)
             val maxCacheSizeInBytes = 1024L * 1024L * 1024L
             val cache = Cache(cacheDirectory, maxCacheSizeInBytes)
             val specs = listOf(ConnectionSpec.MODERN_TLS, ConnectionSpec.COMPATIBLE_TLS, ConnectionSpec.CLEARTEXT)
