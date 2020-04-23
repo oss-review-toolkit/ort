@@ -171,11 +171,11 @@ fun fixupUserHomeProperty() {
         userHome,
         Os.env["HOME"],
         Os.env["USERPROFILE"]
-    ).first {
+    ).find {
         !it.isNullOrBlank() && it != "?"
     }
 
-    if (checkedUserHome != userHome) System.setProperty("user.home", checkedUserHome)
+    if (checkedUserHome != null && checkedUserHome != userHome) System.setProperty("user.home", checkedUserHome)
 }
 
 /**
