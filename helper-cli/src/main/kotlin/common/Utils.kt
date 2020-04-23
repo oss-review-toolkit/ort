@@ -51,6 +51,7 @@ import org.ossreviewtoolkit.model.config.ScopeExclude
 import org.ossreviewtoolkit.model.utils.FindingCurationMatcher
 import org.ossreviewtoolkit.model.utils.collectLicenseFindings
 import org.ossreviewtoolkit.model.utils.PackageConfigurationProvider
+import org.ossreviewtoolkit.model.utils.SimplePackageConfigurationProvider
 import org.ossreviewtoolkit.model.yamlMapper
 import org.ossreviewtoolkit.utils.CopyrightStatementsProcessor
 import org.ossreviewtoolkit.utils.safeMkdirs
@@ -236,12 +237,14 @@ internal data class ProcessedCopyrightStatement(
  */
 internal fun OrtResult.processAllCopyrightStatements(
     omitExcluded: Boolean = true,
-    copyrightGarbage: Set<String> = emptySet()
+    copyrightGarbage: Set<String> = emptySet(),
+    packageConfigurationProvider: PackageConfigurationProvider = SimplePackageConfigurationProvider()
 ): List<ProcessedCopyrightStatement> {
     val result = mutableListOf<ProcessedCopyrightStatement>()
+
     val processor = CopyrightStatementsProcessor()
 
-    collectLicenseFindings(omitExcluded = omitExcluded).forEach { (id, findings) ->
+    collectLicenseFindings(packageConfigurationProvider, omitExcluded = omitExcluded).forEach { (id, findings) ->
         findings.forEach innerForEach@{ (licenseFindings, pathExcludes) ->
             if (omitExcluded && pathExcludes.isNotEmpty()) return@innerForEach
 
