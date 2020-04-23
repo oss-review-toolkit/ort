@@ -38,8 +38,8 @@ import org.ossreviewtoolkit.commands.*
 import org.ossreviewtoolkit.model.Environment
 import org.ossreviewtoolkit.model.config.OrtConfiguration
 import org.ossreviewtoolkit.utils.ORT_NAME
-import org.ossreviewtoolkit.utils.Os
 import org.ossreviewtoolkit.utils.expandTilde
+import org.ossreviewtoolkit.utils.fixupUserHomeProperty
 import org.ossreviewtoolkit.utils.getUserOrtDirectory
 import org.ossreviewtoolkit.utils.printStackTrace
 
@@ -158,24 +158,6 @@ class OrtMain : CliktCommand(name = ORT_NAME, epilog = "* denotes required optio
 
         return header.joinToString("\n", postfix = "\n")
     }
-}
-
-/**
- * Check if the "user.home" property is set to a sane value and otherwise set it to the value of an (OS-specific)
- * environment variable for the user home directory. This works around the issue that esp. in certain Docker scenarios
- * "user.home" is set to "?", see https://bugs.openjdk.java.net/browse/JDK-8193433 for some background information.
- */
-fun fixupUserHomeProperty() {
-    val userHome = System.getProperty("user.home")
-    val checkedUserHome = sequenceOf(
-        userHome,
-        Os.env["HOME"],
-        Os.env["USERPROFILE"]
-    ).find {
-        !it.isNullOrBlank() && it != "?"
-    }
-
-    if (checkedUserHome != null && checkedUserHome != userHome) System.setProperty("user.home", checkedUserHome)
 }
 
 /**
