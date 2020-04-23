@@ -247,9 +247,11 @@ subprojects {
                 isEnabled = enabled
             }
 
-            systemProperties = listOf("kotest.tags.include", "kotest.tags.exclude").associateWith {
-                System.getProperty(it)
-            }
+            systemProperties = listOf(
+                "kotest.assertions.multi-line-diff",
+                "kotest.tags.include",
+                "kotest.tags.exclude"
+            ).associateWith { System.getProperty(it) }
 
             testLogging {
                 events = setOf(TestLogEvent.STARTED, TestLogEvent.PASSED, TestLogEvent.SKIPPED, TestLogEvent.FAILED)
