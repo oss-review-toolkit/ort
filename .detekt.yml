@@ -25,6 +25,8 @@ formatting:
     active: false
   MaximumLineLength:
     active: false
+  NoUnusedImports:
+    active: false
   NoWildcardImports:
     active: false
   ParameterListWrapping:
