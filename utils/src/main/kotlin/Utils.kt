@@ -32,6 +32,11 @@ const val ORT_NAME = "ort"
 const val ORT_FULL_NAME = "OSS Review Toolkit"
 
 /**
+ * The name of the environment variable to customize the ORT user home.
+ */
+const val ORT_USER_HOME_ENV = "ORT_USER_HOME"
+
+/**
  * The name of the ORT configuration file.
  */
 const val ORT_CONFIG_FILENAME = ".ort.yml"
@@ -212,7 +217,12 @@ fun getUserHomeDirectory() = File(System.getProperty("user.home"))
 /**
  * Return the directory to store user-specific ORT data in.
  */
-fun getUserOrtDirectory() = getUserHomeDirectory().resolve(".ort")
+fun getUserOrtDirectory() =
+    Os.env[ORT_USER_HOME_ENV]?.takeUnless {
+        it.isEmpty()
+    }?.let {
+        File(it)
+    } ?: getUserHomeDirectory().resolve(".ort")
 
 /**
  * Normalize a string representing a [VCS URL][vcsUrl] to a common string form.

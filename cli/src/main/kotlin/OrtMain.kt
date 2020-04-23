@@ -38,6 +38,7 @@ import org.ossreviewtoolkit.commands.*
 import org.ossreviewtoolkit.model.Environment
 import org.ossreviewtoolkit.model.config.OrtConfiguration
 import org.ossreviewtoolkit.utils.ORT_NAME
+import org.ossreviewtoolkit.utils.ORT_USER_HOME_ENV
 import org.ossreviewtoolkit.utils.expandTilde
 import org.ossreviewtoolkit.utils.fixupUserHomeProperty
 import org.ossreviewtoolkit.utils.getUserOrtDirectory
@@ -49,11 +50,6 @@ import kotlin.system.exitProcess
 
 import org.apache.logging.log4j.Level
 import org.apache.logging.log4j.core.config.Configurator
-
-/**
- * The name of the environment variable to customize the ORT user home.
- */
-const val ORT_USER_HOME_ENV = "ORT_USER_HOME"
 
 /**
  * Helper class for mutually exclusive command line options of different types.
