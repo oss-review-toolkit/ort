@@ -103,7 +103,7 @@ class MavenSupport(workspaceReader: WorkspaceReader) {
 
         private val remoteArtifactCache =
             DiskCache(
-                File(getOrtDataDirectory(), "$TOOL_NAME/cache/remote_artifacts"),
+                getOrtDataDirectory().resolve("$TOOL_NAME/cache/remote_artifacts"),
                 MAX_DISK_CACHE_SIZE_IN_BYTES, MAX_DISK_CACHE_ENTRY_AGE_SECONDS
             )
 
