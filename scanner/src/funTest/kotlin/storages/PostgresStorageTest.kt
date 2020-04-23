@@ -25,11 +25,17 @@ import io.kotest.core.spec.IsolationMode
 import io.kotest.core.spec.Spec
 import io.kotest.matchers.shouldBe
 
+import java.time.Duration
+
 class PostgresStorageTest : AbstractStorageTest() {
+    companion object {
+        private val PG_STARTUP_WAIT = Duration.ofSeconds(20)
+    }
+
     private lateinit var postgres: EmbeddedPostgres
 
     override fun beforeSpec(spec: Spec) {
-        postgres = EmbeddedPostgres.start()
+        postgres = EmbeddedPostgres.builder().setPGStartupWait(PG_STARTUP_WAIT).start()
     }
 
     override fun afterSpec(spec: Spec) {
@@ -43,7 +49,7 @@ class PostgresStorageTest : AbstractStorageTest() {
 
     init {
         "Embedded postgres works" {
-            EmbeddedPostgres.start().use { postgres ->
+            EmbeddedPostgres.builder().setPGStartupWait(PG_STARTUP_WAIT).start().use { postgres ->
                 val connection = postgres.postgresDatabase.connection
 
                 val statement = connection.createStatement()
