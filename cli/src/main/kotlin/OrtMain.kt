@@ -38,10 +38,10 @@ import org.ossreviewtoolkit.commands.*
 import org.ossreviewtoolkit.model.Environment
 import org.ossreviewtoolkit.model.config.OrtConfiguration
 import org.ossreviewtoolkit.utils.ORT_NAME
-import org.ossreviewtoolkit.utils.ORT_USER_HOME_ENV
+import org.ossreviewtoolkit.utils.ORT_DATA_DIR_ENV_NAME
 import org.ossreviewtoolkit.utils.expandTilde
 import org.ossreviewtoolkit.utils.fixupUserHomeProperty
-import org.ossreviewtoolkit.utils.getUserOrtDirectory
+import org.ossreviewtoolkit.utils.getOrtDataDirectory
 import org.ossreviewtoolkit.utils.printStackTrace
 
 import java.io.File
@@ -127,7 +127,7 @@ class OrtMain : CliktCommand(name = ORT_NAME, epilog = "* denotes required optio
     }
 
     private fun getVersionHeader(version: String): String {
-        val variables = mutableListOf("$ORT_USER_HOME_ENV = ${getUserOrtDirectory()}")
+        val variables = mutableListOf("$ORT_DATA_DIR_ENV_NAME = ${getOrtDataDirectory()}")
         env.variables.entries.mapTo(variables) { (key, value) -> "$key = $value" }
 
         val commandName = currentContext.invokedSubcommand?.commandName

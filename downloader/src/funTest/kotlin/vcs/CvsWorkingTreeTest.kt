@@ -21,7 +21,7 @@ package org.ossreviewtoolkit.downloader.vcs
 
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.utils.ORT_NAME
-import org.ossreviewtoolkit.utils.getUserOrtDirectory
+import org.ossreviewtoolkit.utils.getOrtDataDirectory
 import org.ossreviewtoolkit.utils.safeDeleteRecursively
 import org.ossreviewtoolkit.utils.unpack
 
@@ -57,7 +57,7 @@ class CvsWorkingTreeTest : StringSpec() {
         }
 
         "CVS detects non-working-trees" {
-            cvs.getWorkingTree(getUserOrtDirectory()).isValid() shouldBe false
+            cvs.getWorkingTree(getOrtDataDirectory()).isValid() shouldBe false
         }
 
         "CVS correctly detects URLs to remote repositories" {

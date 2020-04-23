@@ -34,7 +34,7 @@ import org.ossreviewtoolkit.model.yamlMapper
 import org.ossreviewtoolkit.utils.DiskCache
 import org.ossreviewtoolkit.utils.Os
 import org.ossreviewtoolkit.utils.collectMessagesAsString
-import org.ossreviewtoolkit.utils.getUserOrtDirectory
+import org.ossreviewtoolkit.utils.getOrtDataDirectory
 import org.ossreviewtoolkit.utils.log
 import org.ossreviewtoolkit.utils.searchUpwardsForSubdirectory
 import org.ossreviewtoolkit.utils.showStackTrace
@@ -103,7 +103,7 @@ class MavenSupport(workspaceReader: WorkspaceReader) {
 
         private val remoteArtifactCache =
             DiskCache(
-                File(getUserOrtDirectory(), "$TOOL_NAME/cache/remote_artifacts"),
+                File(getOrtDataDirectory(), "$TOOL_NAME/cache/remote_artifacts"),
                 MAX_DISK_CACHE_SIZE_IN_BYTES, MAX_DISK_CACHE_ENTRY_AGE_SECONDS
             )
 

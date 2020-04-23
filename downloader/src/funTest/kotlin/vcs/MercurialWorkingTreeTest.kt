@@ -21,7 +21,7 @@ package org.ossreviewtoolkit.downloader.vcs
 
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.utils.ORT_NAME
-import org.ossreviewtoolkit.utils.getUserOrtDirectory
+import org.ossreviewtoolkit.utils.getOrtDataDirectory
 import org.ossreviewtoolkit.utils.safeDeleteRecursively
 import org.ossreviewtoolkit.utils.unpack
 
@@ -57,7 +57,7 @@ class MercurialWorkingTreeTest : StringSpec() {
         }
 
         "Mercurial detects non-working-trees" {
-            hg.getWorkingTree(getUserOrtDirectory()).isValid() shouldBe false
+            hg.getWorkingTree(getOrtDataDirectory()).isValid() shouldBe false
         }
 
         "Mercurial correctly detects URLs to remote repositories" {
