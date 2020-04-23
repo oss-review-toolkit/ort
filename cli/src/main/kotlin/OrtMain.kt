@@ -161,16 +161,14 @@ class OrtMain : CliktCommand(name = ORT_NAME, epilog = "* denotes required optio
 }
 
 /**
- * Check if the "user.home" property is set to a sane value and otherwise set it to the value of the ORT_USER_HOME
- * environment variable, if set, or to the value of an (OS-specific) environment variable for the user home
- * directory. This works around the issue that esp. in certain Docker scenarios "user.home" is set to "?", see
- * https://bugs.openjdk.java.net/browse/JDK-8193433 for some background information.
+ * Check if the "user.home" property is set to a sane value and otherwise set it to the value of an (OS-specific)
+ * environment variable for the user home directory. This works around the issue that esp. in certain Docker scenarios
+ * "user.home" is set to "?", see https://bugs.openjdk.java.net/browse/JDK-8193433 for some background information.
  */
 fun fixupUserHomeProperty() {
     val userHome = System.getProperty("user.home")
     val checkedUserHome = sequenceOf(
         userHome,
-        Os.env[ORT_USER_HOME_ENV],
         Os.env["HOME"],
         Os.env["USERPROFILE"]
     ).first {
