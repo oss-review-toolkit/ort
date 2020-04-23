@@ -32,9 +32,9 @@ const val ORT_NAME = "ort"
 const val ORT_FULL_NAME = "OSS Review Toolkit"
 
 /**
- * The name of the environment variable to customize the ORT user home.
+ * The name of the environment variable to customize the ORT data directory.
  */
-const val ORT_USER_HOME_ENV = "ORT_USER_HOME"
+const val ORT_DATA_DIR_ENV_NAME = "ORT_DATA_DIR"
 
 /**
  * The name of the ORT configuration file.
@@ -215,10 +215,10 @@ fun fixupUserHomeProperty() {
 fun getUserHomeDirectory() = File(System.getProperty("user.home"))
 
 /**
- * Return the directory to store user-specific ORT data in.
+ * Return the directory to store ORT data in, like the configuration, caches and archives.
  */
-fun getUserOrtDirectory() =
-    Os.env[ORT_USER_HOME_ENV]?.takeUnless {
+fun getOrtDataDirectory() =
+    Os.env[ORT_DATA_DIR_ENV_NAME]?.takeUnless {
         it.isEmpty()
     }?.let {
         File(it)

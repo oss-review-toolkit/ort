@@ -21,7 +21,7 @@ package org.ossreviewtoolkit.downloader.vcs
 
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.utils.ORT_NAME
-import org.ossreviewtoolkit.utils.getUserOrtDirectory
+import org.ossreviewtoolkit.utils.getOrtDataDirectory
 import org.ossreviewtoolkit.utils.safeDeleteRecursively
 import org.ossreviewtoolkit.utils.unpack
 
@@ -60,7 +60,7 @@ class SubversionWorkingTreeTest : StringSpec() {
         }
 
         "Subversion detects non-working-trees" {
-            svn.getWorkingTree(getUserOrtDirectory()).isValid() shouldBe false
+            svn.getWorkingTree(getOrtDataDirectory()).isValid() shouldBe false
         }
 
         "Subversion correctly detects URLs to remote repositories" {

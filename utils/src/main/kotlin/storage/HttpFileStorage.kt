@@ -20,7 +20,7 @@
 package org.ossreviewtoolkit.utils.storage
 
 import org.ossreviewtoolkit.utils.OkHttpClientHelper
-import org.ossreviewtoolkit.utils.getUserOrtDirectory
+import org.ossreviewtoolkit.utils.getOrtDataDirectory
 import org.ossreviewtoolkit.utils.log
 
 import java.io.IOException
@@ -48,7 +48,7 @@ class HttpFileStorage(
     private val headers: Map<String, String> = emptyMap(),
 
     /**
-     * A path inside the [ORT user directory][getUserOrtDirectory] used for caching HTTP responses. Defaults to
+     * A path inside the [ORT user directory][getOrtDataDirectory] used for caching HTTP responses. Defaults to
      * "cache/http".
      */
     private val cachePath: String = "cache/http",

@@ -93,7 +93,7 @@ object OkHttpClientHelper {
      */
     fun buildClient(cachePath: String, block: OkHttpClient.Builder.() -> Unit = {}): OkHttpClient =
         clients.getOrPut(cachePath) {
-            val cacheDirectory = File(getUserOrtDirectory(), cachePath)
+            val cacheDirectory = File(getOrtDataDirectory(), cachePath)
             val maxCacheSizeInBytes = 1024L * 1024L * 1024L
             val cache = Cache(cacheDirectory, maxCacheSizeInBytes)
             val specs = listOf(ConnectionSpec.MODERN_TLS, ConnectionSpec.COMPATIBLE_TLS, ConnectionSpec.CLEARTEXT)
