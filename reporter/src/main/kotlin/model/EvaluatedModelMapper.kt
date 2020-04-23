@@ -30,9 +30,11 @@ import org.ossreviewtoolkit.model.ScanResult
 import org.ossreviewtoolkit.model.ScanSummary
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.config.IssueResolution
+import org.ossreviewtoolkit.model.config.LicenseFindingCuration
 import org.ossreviewtoolkit.model.config.PathExclude
 import org.ossreviewtoolkit.model.config.RuleViolationResolution
 import org.ossreviewtoolkit.model.config.ScopeExclude
+import org.ossreviewtoolkit.model.utils.FindingCurationMatcher
 import org.ossreviewtoolkit.model.utils.FindingsMatcher
 import org.ossreviewtoolkit.model.yamlMapper
 import org.ossreviewtoolkit.reporter.ReporterInput
@@ -57,6 +59,7 @@ internal class EvaluatedModelMapper(private val input: ReporterInput) {
     private val ruleViolations = mutableListOf<EvaluatedRuleViolation>()
     private val ruleViolationResolutions = mutableListOf<RuleViolationResolution>()
 
+    private val curationsMatcher = FindingCurationMatcher()
     private val findingsMatcher = FindingsMatcher()
 
     private data class PackageExcludeInfo(
@@ -216,7 +219,8 @@ internal class EvaluatedModelMapper(private val input: ReporterInput) {
         issues += addAnalyzerIssues(project.id, evaluatedPackage)
 
         input.ortResult.getScanResultsForId(project.id).mapTo(scanResults) { result ->
-            convertScanResult(result, findings, evaluatedPackage)
+            val licenseFindingCurations = input.ortResult.repository.config.curations.licenseFindings
+            convertScanResult(result, findings, evaluatedPackage, licenseFindingCurations)
         }
 
         findings.filter { it.type == EvaluatedFindingType.LICENSE }.mapNotNullTo(detectedLicenses) { it.license }
@@ -267,7 +271,11 @@ internal class EvaluatedModelMapper(private val input: ReporterInput) {
         issues += addAnalyzerIssues(pkg.id, evaluatedPackage)
 
         input.ortResult.getScanResultsForId(pkg.id).mapTo(scanResults) { result ->
-            convertScanResult(result, findings, evaluatedPackage)
+            val licenseFindingCurations =
+                input.packageConfigurationProvider.getPackageConfiguration(pkg.id, result.provenance)
+                    ?.licenseFindingCurations.orEmpty()
+
+            convertScanResult(result, findings, evaluatedPackage, licenseFindingCurations)
         }
 
         findings.filter { it.type == EvaluatedFindingType.LICENSE }.mapNotNullTo(detectedLicenses) { it.license }
@@ -309,7 +317,8 @@ internal class EvaluatedModelMapper(private val input: ReporterInput) {
     private fun convertScanResult(
         result: ScanResult,
         findings: MutableList<EvaluatedFinding>,
-        pkg: EvaluatedPackage
+        pkg: EvaluatedPackage,
+        licenseFindingCurations: Collection<LicenseFindingCuration>
     ): EvaluatedScanResult {
         val issues = mutableListOf<EvaluatedOrtIssue>()
 
@@ -333,7 +342,7 @@ internal class EvaluatedModelMapper(private val input: ReporterInput) {
             null
         )
 
-        addLicensesAndCopyrights(result.summary, actualScanResult, findings)
+        addLicensesAndCopyrights(result.summary, actualScanResult, findings, licenseFindingCurations)
 
         return actualScanResult
     }
@@ -487,12 +496,11 @@ internal class EvaluatedModelMapper(private val input: ReporterInput) {
     private fun addLicensesAndCopyrights(
         summary: ScanSummary,
         scanResult: EvaluatedScanResult,
-        findings: MutableList<EvaluatedFinding>
+        findings: MutableList<EvaluatedFinding>,
+        licenseFindingCurations: Collection<LicenseFindingCuration>
     ) {
-        val matchedFindings = findingsMatcher.match(
-            summary.licenseFindings,
-            summary.copyrightFindings
-        )
+        val curatedFindings = curationsMatcher.applyAll(summary.licenseFindings, licenseFindingCurations)
+        val matchedFindings = findingsMatcher.match(curatedFindings, summary.copyrightFindings)
 
         matchedFindings.forEach { licenseFindings ->
             licenseFindings.copyrights.forEach { copyrightFinding ->
