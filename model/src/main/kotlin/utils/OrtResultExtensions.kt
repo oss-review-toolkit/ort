@@ -37,9 +37,8 @@ import java.util.SortedSet
 fun OrtResult.collectLicenseFindings(
     packageConfigurationProvider: PackageConfigurationProvider = SimplePackageConfigurationProvider(),
     omitExcluded: Boolean = false
-): Map<Identifier, Map<LicenseFindings, List<PathExclude>>> = LicenseResolver(
-    this, packageConfigurationProvider
-).collectLicenseFindings(omitExcluded)
+): Map<Identifier, Map<LicenseFindings, List<PathExclude>>> =
+    LicenseResolver(this, packageConfigurationProvider).collectLicenseFindings(omitExcluded)
 
 /**
  * Return all detected licenses for the given package [id]. As projects are implicitly converted to packages before
