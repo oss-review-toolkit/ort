@@ -355,6 +355,8 @@ ORT provides a variety of mechanisms to fix a variety of issues, for details see
 
 * [The .ort.yml file](config-file-ort-yml.md) - project-specific license finding curations, exclusions
   and resolutions to address issues found within a project's code repository.
+* [The package configuration file](config-file-package-configuration.yml.md) - package (dependency) and provenance specific license
+  finding curations and exclusions to address issues found within a scan result for a package.
 * [The curations.yml file](config-file-curations-yml.md) - curations correct invalid or missing package metadata
   and set the concluded license for packages.
 * [The resolutions.yml file](config-file-resolutions-yml.md) - resolutions allow *resolving* any issues
