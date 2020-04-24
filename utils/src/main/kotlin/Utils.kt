@@ -198,15 +198,12 @@ fun getPathFromEnvironment(executable: String): File? {
  */
 fun fixupUserHomeProperty() {
     val userHome = System.getProperty("user.home")
-    val checkedUserHome = sequenceOf(
-        userHome,
-        Os.env["HOME"],
-        Os.env["USERPROFILE"]
-    ).find {
-        !it.isNullOrBlank() && it != "?"
+    if (userHome.isNullOrBlank() || userHome == "?") {
+        listOfNotNull(
+            Os.env["HOME"],
+            Os.env["USERPROFILE"]
+        ).firstOrNull { it.isNotBlank() }?.let { System.setProperty("user.home", it) }
     }
-
-    if (checkedUserHome != null && checkedUserHome != userHome) System.setProperty("user.home", checkedUserHome)
 }
 
 /**
