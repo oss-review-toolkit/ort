@@ -129,7 +129,7 @@ Note that you must verify that the scopes defined in the examples below match th
 
 Project-specific curations should be used when you want to correct the licenses detected in the source code of the
 project. If you need to correct the license findings for a third-party dependency then add a curation to
-[curations.yml](config-file-curations-yml.md).
+[curations.yml](config-file-curations-yml.md) or [package configuration](config-file-package-configuration-yml.md).
 
 ### Curating License Findings
 
