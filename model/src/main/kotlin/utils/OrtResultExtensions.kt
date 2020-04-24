@@ -27,6 +27,18 @@ import org.ossreviewtoolkit.model.config.PathExclude
 import java.util.SortedSet
 
 /**
+ * Return a map of concluded licenses for each package [Identifier] that has a concluded license. Note that this
+ * function only returns license identifiers, license exceptions associated to licenses using the SPDX `WITH` operator
+ * are currently ignored.
+ */
+fun OrtResult.collectConcludedLicenses(omitExcluded: Boolean = false): Map<Identifier, List<String>> =
+    getPackages(omitExcluded)
+        .filter { it.pkg.concludedLicense != null }
+        .associate {
+            Pair(it.pkg.id, it.pkg.concludedLicense?.licenses().orEmpty())
+        }
+
+/**
  * Return a map of declared licenses for each project or package [Identifier]. Only licenses contained in the SPDX
  * expression of the processed declared license are included. Note that this function only returns license identifiers,
  * license exceptions associated to licenses using the SPDX `WITH` operator are currently ignored.
