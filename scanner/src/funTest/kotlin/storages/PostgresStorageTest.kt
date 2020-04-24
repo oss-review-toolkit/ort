@@ -23,7 +23,6 @@ import com.opentable.db.postgres.embedded.EmbeddedPostgres
 
 import io.kotest.core.spec.IsolationMode
 import io.kotest.core.spec.Spec
-import io.kotest.matchers.shouldBe
 
 import java.time.Duration
 
@@ -46,19 +45,4 @@ class PostgresStorageTest : AbstractStorageTest() {
 
     override fun createStorage() = PostgresStorage(postgres.postgresDatabase.connection, "public")
         .also { it.setupDatabase() }
-
-    init {
-        "Embedded postgres works" {
-            EmbeddedPostgres.builder().setPGStartupWait(PG_STARTUP_WAIT).start().use { postgres ->
-                val connection = postgres.postgresDatabase.connection
-
-                val statement = connection.createStatement()
-                val resultSet = statement.executeQuery("SELECT 1")
-
-                resultSet.next() shouldBe true
-                resultSet.getInt(1) shouldBe 1
-                resultSet.next() shouldBe false
-            }
-        }
-    }
 }
