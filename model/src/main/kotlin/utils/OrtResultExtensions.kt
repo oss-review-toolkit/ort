@@ -27,6 +27,18 @@ import org.ossreviewtoolkit.model.config.PathExclude
 import java.util.SortedSet
 
 /**
+ * Return a map of declared licenses for each project or package [Identifier]. Only licenses contained in the SPDX
+ * expression of the processed declared license are included. Note that this function only returns license identifiers,
+ * license exceptions associated to licenses using the SPDX `WITH` operator are currently ignored.
+ */
+fun OrtResult.collectDeclaredLicenses(omitExcluded: Boolean = false): Map<Identifier, List<String>> =
+    getProjects(omitExcluded).associate {
+        Pair(it.id, it.declaredLicensesProcessed.spdxExpression?.licenses().orEmpty())
+    } + getPackages(omitExcluded).associate {
+        Pair(it.pkg.id, it.pkg.declaredLicensesProcessed.spdxExpression?.licenses().orEmpty())
+    }
+
+/**
  * Return a map of license findings for each project or package [Identifier]. The license findings for projects are
  * mapped to a list of [PathExclude]s matching the locations where a license was found. This list is only populated
  * if all file locations are excluded. The list is empty for all dependency packages, as path excludes are only
