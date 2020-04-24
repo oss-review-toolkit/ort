@@ -1,17 +1,28 @@
-# The package configuration file (Experimental)
+# The Package Configuration File (Experimental)
 
-A package configuration sets up path excludes and license finding curations specific to a package (dependency) and 
-provenance. It is thus a similar concept to the `.ort.yml` file which allows to do similar configuration for projects as
-opposed to packages.
+A package configuration file allows you to define path excludes and license finding curations for a specific package (dependency) and 
+provenance. Conceptually, the file is similar to [.ort.yml](https://github.com/oss-review-toolkit/ort/blob/master/docs/config-file-ort-yml.md), but it is used only for packages included via a package manager as project dependencies, and not for the project's own source code respository to be scanned.
 
-## Specifying the target package and provenance
+### When To Use
+Use a package configuration file to:
 
-Each package configuration applies exactly to one package-Id and provenance which must be specified. The provenance
-can either specify a *source artifact* or a *VCS location and revision*. Thus in case one scans the *source artifact*
-and the *VCS* for each package, then two package configurations would be required in order to address issues with both
-scans. For example configurations for `ansi-styles 4.2.1` would specify the following... 
-  
-* to configure the VCS scan:
+-  mark files and directories as not included in released artifacts -- use it to make clear that license findings in documentation or tests in a package sources do not apply to the release (binary) artifact which is a dependency in your project.
+-  overwrite scanner findings to correct identified licenses in a dependency for a specific file(s).
+
+# Package Configuration File Basics
+
+Each package configuration applies exactly to one *package id* and *provenance* which must be specified. The *provenance*
+can be specified as either a *source artifact* or a *VCS location and revision*. 
+
+Here is an example of a package configuration for `ansi-styles 4.2.1`, when the source artifact is (to be) scanned:
+
+```yaml
+  id: "NPM::ansi-styles:4.2.1"
+  source_artifact_url: "https://registry.npmjs.org/ansi-styles/-/ansi-styles-4.2.1.tgz"
+```
+
+If the source repository is (to be) scanned, then use the package configuration below:
+
 ```yaml
   id: "NPM::ansi-styles:4.2.1"
   vcs:
@@ -19,20 +30,14 @@ scans. For example configurations for `ansi-styles 4.2.1` would specify the foll
     url: "https://github.com/chalk/ansi-styles.git"
     revision: "74d421cf32342ac6ec7b507bd903a9e1105f74d7"
 ```
-* to configure the source artifact scan:
-```yaml
-  id: "Maven:org.ossreviewtoolkit.ort:1.2.3"
-  source_artifact_url: "https://registry.npmjs.org/ansi-styles/-/ansi-styles-3.2.1.tgz"
-```
 
-## Specifying path excludes and license finding curations
+## Defining Path Excludes and License Finding Curations
 
-Path excludes are used to tell ORT that license findings in certain files can be ignored, for example because they
-belong to the documentation of the package. License finding curations are used to fix wrong scan results, for example
-if a wrong license was detected, or if a finding is a false positive. The entries for path excludes and license finding
-curations have the same syntax and semantic as the analog entries for the `ort.yml`, see
-[Excluding paths](config-file-ort-yml.md#excluding-paths) and
-[Curating license findings](config-file-ort-yml.md#curating-license-findings).
+Path excludes define which code is not part of the distributed release artifact(s) for a package, for example code found in the source repository but only used for building, documenting or testing the code. License finding curations are used to fix incorrect scan results, for example if a wrong license was detected, or if a finding is a false positive.
+
+The entries for path excludes and license finding curations have the same syntax and semantics as in the `ort.yml` file, see
+[excluding paths](config-file-ort-yml.md#excluding-paths) and
+[curating license findings](config-file-ort-yml.md#curating-license-findings) for details.
 
 ```yaml
   id: "Pip::example-package:0.0.1"
@@ -51,24 +56,69 @@ curations have the same syntax and semantic as the analog entries for the `ort.y
     concluded_license: "Apache-2.0"
 ```
 
-## Organizing package configurations
+## Command Line
 
-ORT currently provides two alternatives for organizing package configurations to choose from. It is required for both
-options that there is at most one package configuration provided for any (package, provenance) combination.
+ORT offers two different ways to use package configurations:
 
-### Configuration directory
+- A single configuration `.yml` containing an array with each entry defining the configuration for one package.
+- A directory with configuration files with one file for each configured package/provenance combination.
 
-A directory containing one `.yml` file for each configured (package, provenance) combination.
-Each `.yml` file contains exactly one package configuration as shown in the parent sections.
-This directory can be specified via the `--package-configuration-dir` option to the *evaluator* and the *reporter*
-command respectively.  
+Note that in both of the above options only one package configuration can exist for a package/provenance combination.
+
+### Using a Package Configuration Directory
+
+To use a directory with configuration files for each *package id*, pass it to the `--package-configuration-dir` option of the _evaluator_:
+
+```bash
+cli/build/install/ort/bin/ort evaluate
+  -i [scanner-output-path]/scan-result.yml
+  -o [evaluator-output-path]/evaluator-result.yml
+  --output-formats YAML
+  --license-configuration-file [ort-configuration-path]/licenses.yml
+  --package-curations-file [ort-configuration-path]/curations.yml
+  --package-configuration-dir [ort-configuration-path]/packages
+  --rules-file [ort-configuration-path]/rules.kts
+```
+
+or to the _reporter_:
+
+```bash
+cli/build/install/ort/bin/ort report
+  -i [evaluator-output-path]/evaluation-result.yml
+  -o [reporter-output-path]
+  --report-formats NoticeByPackage,WebApp
+  --license-configuration-file [ort-configuration-path]/licenses.yml
+  --package-configuration-dir [ort-configuration-path]/packages
+```
  
-### Configuration file
+### Using a Single Package Configuration File
 
-A single `.yml` containing one large array with each entry being one package configuration as shown in the parent
-section. This file can be specified via the `--package-configuration-file` option to the *evaluator* and the *reporter*
-command respectively. For example such single file would look as follows:
- 
+To use a single package configuration `.yml` file, pass it to the `--package-configuration-file` option of the _evaluator_:
+
+```bash
+cli/build/install/ort/bin/ort evaluate
+  -i [scanner-output-path]/scan-result.yml
+  -o [evaluator-output-path]/evaluator-result.yml
+  --output-formats YAML
+  --license-configuration-file [ort-configuration-path]/licenses.yml
+  --package-curations-file [ort-configuration-path]/curations.yml
+  --package-configuration-file [ort-configuration-path]/packages.yml
+  --rules-file [ort-configuration-path]/rules.kts
+```
+
+or to the _reporter_:
+
+```bash
+cli/build/install/ort/bin/ort report
+  -i [evaluator-output-path]/evaluation-result.yml
+  -o [reporter-output-path]
+  --report-formats NoticeByPackage,WebApp
+  --license-configuration-file [ort-configuration-path]/licenses.yml
+  --package-configuration-file [ort-configuration-path]/packages.yml
+```
+
+The code below shows an example for `packages.yml`:
+
 ```yaml
 - id: "Pip::example-package:0.0.1"
   source_artifact_url: "https://some-host/some-file-path.tgz"
@@ -98,4 +148,4 @@ command respectively. For example such single file would look as follows:
     reason: "CODE"
     comment: "The scanner matches a variable named `gpl`."
     concluded_license: "Apache-2.0"
-```yaml
+```

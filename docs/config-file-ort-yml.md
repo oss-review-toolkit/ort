@@ -3,8 +3,8 @@
 The items below can be configured by adding an `.ort.yml` file
 to the root of the source code repository.
 
-* [excludes](#excludes) - Mark [files, directories](#excluding-paths).
-  or [package manager scopes](#excluding-scopes) as not included in released artifacts
+* [excludes](#excludes) - Mark [files, directories](#excluding-paths)
+  or [package manager scopes](#excluding-scopes) as not included in released artifacts.
 * [license finding curations](#curations): Overwrite scan results to correct identified licenses.
 * [resolutions](#resolutions) - Resolve any issues or policy rule violations.
 
