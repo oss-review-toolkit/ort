@@ -145,10 +145,6 @@ subprojects {
     apply(plugin = "org.jetbrains.kotlin.jvm")
     apply(plugin = "org.jetbrains.dokka")
 
-    // Note: Kotlin DSL cannot directly access sourceSets that are created by applying a plugin in the very same
-    // project, thus get the source set programmatically.
-    val sourceSets = the<SourceSetContainer>()
-
     sourceSets.create("funTest") {
         withConvention(KotlinSourceSet::class) {
             kotlin.srcDirs("src/funTest/kotlin")
