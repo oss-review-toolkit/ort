@@ -79,20 +79,16 @@ extensions.findByName("buildScan")?.withGroovyBuilder {
 }
 
 tasks.named<DependencyUpdatesTask>("dependencyUpdates") {
+    val nonFinalQualifiers = listOf(
+        "alpha", "b", "beta", "cr", "ea", "eap", "m", "milestone", "pr", "preview", "rc"
+    ).joinToString("|", "(", ")")
+
+    val nonFinalQualifiersRegex = Regex(".*[.-]$nonFinalQualifiers[.\\d-+]*", RegexOption.IGNORE_CASE)
+
     gradleReleaseChannel = "current"
 
-    fun isNonFinalVersion(version: String): Boolean {
-        val nonFinalQualifiers = listOf(
-            "alpha", "b", "beta", "cr", "ea", "eap", "m", "milestone", "pr", "preview", "rc"
-        ).joinToString("|", "(", ")")
-
-        val nonFinalQualifiersRegex = Regex(".*[.-]$nonFinalQualifiers[.\\d-+]*", RegexOption.IGNORE_CASE)
-
-        return version.matches(nonFinalQualifiersRegex)
-    }
-
     rejectVersionIf {
-        isNonFinalVersion(candidate.version)
+        candidate.version.matches(nonFinalQualifiersRegex)
     }
 }
 
