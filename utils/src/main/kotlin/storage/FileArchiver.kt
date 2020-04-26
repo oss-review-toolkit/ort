@@ -20,6 +20,7 @@
 package org.ossreviewtoolkit.utils.storage
 
 import org.ossreviewtoolkit.utils.FileMatcher
+import org.ossreviewtoolkit.utils.ORT_NAME
 import org.ossreviewtoolkit.utils.collectMessagesAsString
 import org.ossreviewtoolkit.utils.log
 import org.ossreviewtoolkit.utils.packZip
@@ -55,7 +56,7 @@ class FileArchiver(
      * are zipped in the file '[storagePath]/[ARCHIVE_FILE_NAME]'.
      */
     fun archive(directory: File, storagePath: String) {
-        val zipFile = createTempFile(prefix = "ort", suffix = ".zip")
+        val zipFile = createTempFile(ORT_NAME, ".zip")
         zipFile.deleteOnExit()
 
         directory.packZip(zipFile, overwrite = true) { path ->

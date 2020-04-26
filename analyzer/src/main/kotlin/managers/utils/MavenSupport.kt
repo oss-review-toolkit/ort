@@ -32,6 +32,7 @@ import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.yamlMapper
 import org.ossreviewtoolkit.utils.DiskCache
+import org.ossreviewtoolkit.utils.ORT_NAME
 import org.ossreviewtoolkit.utils.Os
 import org.ossreviewtoolkit.utils.collectMessagesAsString
 import org.ossreviewtoolkit.utils.getOrtDataDirectory
@@ -437,7 +438,7 @@ class MavenSupport(workspaceReader: WorkspaceReader) {
                 log.debug { "Checksums: $checksums" }
 
                 val checksum = checksums.first()
-                val tempFile = File.createTempFile("ort", "checksum-${checksum.algorithm}")
+                val tempFile = File.createTempFile(ORT_NAME, "checksum-${checksum.algorithm}")
 
                 val transporter = transporterProvider.newTransporter(repositorySystemSession, repository)
 
