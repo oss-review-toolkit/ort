@@ -1,7 +1,9 @@
 jobs:
-- job: 'LinuxTest'
+- job: 'LinuxAnalyzerTest'
   pool:
     vmImage: 'ubuntu-18.04'
+  variables:
+    FLUTTER_HOME: '/opt/flutter'
   steps:
   - task: UsePythonVersion@0
     displayName: Enable Python 3.6
@@ -18,15 +20,47 @@ jobs:
       # Uninstall mono-devel because it contains the "lc" command which conflicts with BoyterLc.
       sudo apt-get -qq remove mono-devel
 
-      # Install git-repo.
+      # Install NPM packages.
+      sudo npm install -g bower@$BOWER_VERSION
+
+      # Install Python packages.
       export PATH=$PATH:~/.local/bin
+      pip install --user \
+        conan==$CONAN_VERSION \
+        pipenv==$PYTHON_PIPENV_VERSION \
+        reuse \
+        virtualenv==$VIRTUALENV_VERSION
+      conan user # Create the conan data directory. Automatic detection of your arch, compiler, etc.
+
+      # Install Ruby packages.
+      sudo gem install bundler -v $BUNDLER_VERSION
+
+      # Downgrade Rust, because the CargoSubcrateTest fails with the pre-installed version.
+      rustup default $RUST_VERSION
+
+      # Install Flutter.
+      curl -Os https://storage.googleapis.com/flutter_infra/releases/stable/linux/flutter_linux_$FLUTTER_VERSION.tar.xz
+      tar xf flutter_linux_$FLUTTER_VERSION.tar.xz -C $(dirname $FLUTTER_HOME)
+      rm flutter_linux_$FLUTTER_VERSION.tar.xz
+      export PATH="$PATH:$FLUTTER_HOME/bin:$FLUTTER_HOME/bin/cache/dart-sdk/bin"
+      flutter config --no-analytics
+      flutter doctor
+
+      # Install git-repo.
       curl https://storage.googleapis.com/git-repo-downloads/repo > ~/.local/bin/repo
       chmod a+x ~/.local/bin/repo
+
+      # Install Go Dep.
+      mkdir -p ~/go/bin
+      export PATH=$PATH:~/go/bin
+      curl https://raw.githubusercontent.com/golang/dep/v$GO_DEP_VERSION/install.sh | sh
 
       # Update PATH for next steps, see:
       # https://docs.microsoft.com/en-us/azure/devops/pipelines/scripts/logging-commands?view=azure-devops&tabs=bash#prependpath-prepend-a-path-to-the--path-environment-variable
       echo "##vso[task.setvariable variable=path;]$PATH"
     displayName: Install Required Tools
+
+  # TODO: Add a step to run "reuse lint" (or maybe a separate job).
 
   # Clone repository.
   - checkout: self
@@ -36,9 +70,9 @@ jobs:
   # Gradle build cache, see: https://docs.microsoft.com/en-us/azure/devops/pipelines/release/caching?view=azure-devops
   - task: Cache@2
     inputs:
-      key: '"$(Agent.OS)" | test | gradle-caches | gradle.properties, settings.gradle, **/build.gradle.kts'
+      key: '"$(Agent.OS)" | analyzer-test | gradle-caches | gradle.properties, settings.gradle, **/build.gradle.kts'
       restoreKeys: |
-        "$(Agent.OS)" | test | gradle-caches
+        "$(Agent.OS)" | analyzer-test | gradle-caches
       path: $(GRADLE_USER_HOME)/caches
     displayName: Cache Gradle Caches
 
@@ -54,7 +88,7 @@ jobs:
   # Enable this task to check installed requirements, e.g. after upgrading the required version of a system
   # dependency.
   - task: Gradle@2
-    displayName: Check Requirements
+    displayName: Check requirements
     continueOnError: true
     enabled: false # TODO: Make this a Pipeline parameter to be able to activate it in the UI.
     inputs:
@@ -71,8 +105,8 @@ jobs:
     inputs:
       gradleWrapperFile: gradlew
       # TODO: Only exclude ExpensiveTag on PR builds.
-      options: --console=plain --no-daemon --stacktrace -Dkotest.tags.exclude=ExpensiveTag -Dkotest.assertions.multi-line-diff=simple -x analyzer:test -x analyzer:funTest
-      tasks: 'test funTest jacocoReport'
+      options: --console=plain --no-daemon --stacktrace -Dkotest.tags.exclude=ExpensiveTag -Dkotest.assertions.multi-line-diff=simple
+      tasks: 'analyzer:test analyzer:funTest jacocoReport'
       publishJUnitResults: true
       testResultsFiles: '**/TEST-*.xml'
       testRunTitle: $(Agent.JobName)

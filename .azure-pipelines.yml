@@ -32,4 +32,6 @@ stages:
   - template: ci/docker.yml
   - template: ci/detekt.yml
   - template: ci/linux-test.yml
+  - template: ci/linux-analyzer-test.yml
   - template: ci/windows-test.yml
+  - template: ci/windows-analyzer-test.yml
