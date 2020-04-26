@@ -42,9 +42,8 @@ stages:
         tags: |
           ort
 
-  # TODO: Add a separate job to run detekt to prevent running the matrix build if there are detekt errors?
-  #       Downside is that this requires separate cloning. Alternative is to run detekt only on one OS, or to run detekt
-  #       in a separate parallel job for early feedback, and disable detekt in the other jobs.
+  - template: ci/detekt.yml
+
   - job: 'Gradle'
     strategy:
       matrix:
