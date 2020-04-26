@@ -54,9 +54,10 @@ import org.ossreviewtoolkit.model.utils.PackageConfigurationProvider
 import org.ossreviewtoolkit.model.utils.SimplePackageConfigurationProvider
 import org.ossreviewtoolkit.model.yamlMapper
 import org.ossreviewtoolkit.utils.CopyrightStatementsProcessor
-import org.ossreviewtoolkit.utils.safeMkdirs
+import org.ossreviewtoolkit.utils.ORT_NAME
 import org.ossreviewtoolkit.utils.OkHttpClientHelper
 import org.ossreviewtoolkit.utils.expandTilde
+import org.ossreviewtoolkit.utils.safeMkdirs
 import org.ossreviewtoolkit.utils.stripCredentialsFromUrl
 
 import java.io.File
@@ -99,7 +100,7 @@ internal fun download(url: String): File {
 
         // Use the filename from the request for the last redirect.
         val tempFileName = response.request.url.pathSegments.last()
-        return createTempFile("ort", tempFileName).also { tempFile ->
+        return createTempFile(ORT_NAME, tempFileName).also { tempFile ->
             tempFile.sink().buffer().use { it.writeAll(body.source()) }
             tempFile.deleteOnExit()
         }

@@ -276,7 +276,7 @@ class ScanCode(
                 log.info { "Retrieved $scannerName from local cache." }
             }
 
-            val scannerArchive = createTempFile("ort", "$scannerName-${url.substringAfterLast("/")}")
+            val scannerArchive = createTempFile(ORT_NAME, "$scannerName-${url.substringAfterLast("/")}")
             scannerArchive.sink().buffer().use { it.writeAll(body.source()) }
 
             val unpackDir = createTempDir(ORT_NAME, "$scannerName-$scannerVersion").apply { deleteOnExit() }

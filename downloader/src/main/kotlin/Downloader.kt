@@ -302,7 +302,7 @@ class Downloader {
 
                     // Use the filename from the request for the last redirect.
                     val tempFileName = response.request.url.pathSegments.last()
-                    createTempFile("ort", tempFileName).also { tempFile ->
+                    createTempFile(ORT_NAME, tempFileName).also { tempFile ->
                         tempFile.sink().buffer().use { it.writeAll(body.source()) }
                         tempFile.deleteOnExit()
                     }

@@ -24,7 +24,7 @@ import java.io.FileOutputStream
 import java.io.PrintStream
 
 private fun redirectOutput(originalOutput: PrintStream, setOutput: (PrintStream) -> Unit, block: () -> Unit): String {
-    val tempFile = createTempFile("ort", "redirect").apply { deleteOnExit() }
+    val tempFile = createTempFile(ORT_NAME, "redirect").apply { deleteOnExit() }
     val fileStream = FileOutputStream(tempFile)
 
     try {
