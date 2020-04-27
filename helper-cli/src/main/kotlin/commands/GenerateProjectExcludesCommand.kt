@@ -50,7 +50,7 @@ internal class GenerateProjectExcludesCommand : CliktCommand(
     private val repositoryConfigurationFile by option(
         "--repository-configuration-file",
         help = "The repository configuration file to write the result to. If the file does already exist it " +
-            "overrides the repository configuration contained in the given input ORT file."
+                "overrides the repository configuration contained in the given input ORT file."
     ).convert { it.expandTilde() }
         .file(mustExist = false, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = false)
         .required()
