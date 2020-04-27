@@ -56,7 +56,6 @@ import org.ossreviewtoolkit.model.yamlMapper
 import org.ossreviewtoolkit.utils.CopyrightStatementsProcessor
 import org.ossreviewtoolkit.utils.ORT_NAME
 import org.ossreviewtoolkit.utils.OkHttpClientHelper
-import org.ossreviewtoolkit.utils.expandTilde
 import org.ossreviewtoolkit.utils.safeMkdirs
 import org.ossreviewtoolkit.utils.stripCredentialsFromUrl
 
@@ -524,8 +523,7 @@ internal fun RepositoryConfiguration.sortScopeExcludes(): RepositoryConfiguratio
  * Serialize a [RepositoryConfiguration] as YAML to the given target [File].
  */
 internal fun RepositoryConfiguration.writeAsYaml(targetFile: File) {
-    targetFile.expandTilde().parentFile.safeMkdirs()
-
+    targetFile.parentFile.safeMkdirs()
     yamlMapper.writeValue(targetFile, this)
 }
 
