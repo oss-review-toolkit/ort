@@ -35,7 +35,7 @@ internal class FormatRepositoryConfigurationCommand : CliktCommand(
             "written to the given repository configuration file."
 ) {
     private val repositoryConfigurationFile by argument(
-        "--repository-configuration-file",
+        "repository-configuration-file",
         help = "The repository configuration file to be formatted."
     ).convert { it.expandTilde() }
         .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = false)
