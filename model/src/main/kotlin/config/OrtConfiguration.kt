@@ -19,8 +19,6 @@
 
 package org.ossreviewtoolkit.model.config
 
-import org.ossreviewtoolkit.utils.expandTilde
-
 import com.typesafe.config.ConfigFactory
 
 import io.github.config4k.extract
@@ -46,7 +44,7 @@ data class OrtConfiguration(
          */
         fun load(args: Map<String, String> = emptyMap(), configFile: File? = null): OrtConfiguration {
             val argsConfig = ConfigFactory.parseMap(args, "Command line").withOnlyPath("ort")
-            val fileConfig = configFile?.expandTilde()?.let {
+            val fileConfig = configFile?.let {
                 ConfigFactory.parseFile(it).withOnlyPath("ort")
             }
             val defaultConfig = ConfigFactory.parseResources("default.conf")
