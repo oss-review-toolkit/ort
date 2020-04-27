@@ -24,7 +24,6 @@ import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.dataformat.xml.XmlMapper
 import com.fasterxml.jackson.module.kotlin.registerKotlinModule
 
-import org.ossreviewtoolkit.analyzer.HTTP_CACHE_PATH
 import org.ossreviewtoolkit.analyzer.PackageManager
 import org.ossreviewtoolkit.downloader.VersionControlSystem
 import org.ossreviewtoolkit.model.EMPTY_JSON_NODE
@@ -350,7 +349,7 @@ class DotNetSupport(packageReferencesMap: Map<String, String>) {
             .url(this)
             .build()
 
-        OkHttpClientHelper.execute(HTTP_CACHE_PATH, pkgRequest).use { response ->
+        OkHttpClientHelper.execute(pkgRequest).use { response ->
             val body = response.body?.string()?.trim()
 
             if (response.code != HttpURLConnection.HTTP_OK || body.isNullOrEmpty()) {

@@ -46,7 +46,6 @@ import okio.buffer
 import okio.sink
 
 const val TOOL_NAME = "downloader"
-const val HTTP_CACHE_PATH = "$TOOL_NAME/cache/http"
 
 /**
  * The class to download source code. The signatures of public functions in this class define the library API.
@@ -294,7 +293,7 @@ class Downloader {
                 .build()
 
             try {
-                OkHttpClientHelper.execute(HTTP_CACHE_PATH, request).use { response ->
+                OkHttpClientHelper.execute(request).use { response ->
                     val body = response.body
                     if (!response.isSuccessful || body == null) {
                         throw DownloadException("Failed to download source artifact: $response")
