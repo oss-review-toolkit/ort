@@ -24,6 +24,7 @@ package org.ossreviewtoolkit.utils
 import java.io.File
 import java.net.URI
 import java.net.URISyntaxException
+import java.nio.file.Files
 import java.security.Permission
 
 import kotlin.reflect.full.memberProperties
@@ -220,6 +221,29 @@ fun getOrtDataDirectory() =
     }?.let {
         File(it)
     } ?: getUserHomeDirectory().resolve(".ort")
+
+/**
+ * Migrate locl scan results from previously used directories to the current `~/.ort/results` directory.
+ */
+fun Any.migrateLocalFileScanStorage() {
+    fun hardlinkOldToNew(oldRoot: File, newRoot: File) {
+        oldRoot.walkBottomUp().filter { it.isFile }.forEach { oldFile ->
+            val newFile = newRoot.resolve(oldFile.relativeTo(oldRoot))
+            if (!newFile.exists()) {
+                runCatching {
+                    newFile.parentFile.safeMkdirs()
+                    Files.createLink(oldFile.toPath(), newFile.toPath())
+                }.onSuccess {
+                    log.debug { "Hard-linked '$oldFile' to '$newFile'." }
+                }
+            }
+        }
+    }
+
+    val newRoot = getOrtDataDirectory().resolve("results")
+    hardlinkOldToNew(getOrtDataDirectory().resolve("scanner/results"), newRoot)
+    hardlinkOldToNew(getOrtDataDirectory().resolve("scanner/scan-results"), newRoot)
+}
 
 /**
  * Normalize a string representing a [VCS URL][vcsUrl] to a common string form.

@@ -42,6 +42,7 @@ import org.ossreviewtoolkit.utils.ORT_DATA_DIR_ENV_NAME
 import org.ossreviewtoolkit.utils.expandTilde
 import org.ossreviewtoolkit.utils.fixupUserHomeProperty
 import org.ossreviewtoolkit.utils.getOrtDataDirectory
+import org.ossreviewtoolkit.utils.migrateLocalFileScanStorage
 import org.ossreviewtoolkit.utils.printStackTrace
 
 import java.io.File
@@ -112,6 +113,8 @@ class OrtMain : CliktCommand(name = ORT_NAME, epilog = "* denotes required optio
             help = "Show version information and exit.",
             message = ::getVersionHeader
         )
+
+        migrateLocalFileScanStorage()
     }
 
     override fun run() {
