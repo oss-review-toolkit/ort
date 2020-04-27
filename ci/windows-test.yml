@@ -21,7 +21,7 @@ jobs:
   # Clone repository.
   - checkout: self
     fetchDepth: 1
-    submodules: recursive
+    submodules: false
 
   # Gradle build cache, see: https://docs.microsoft.com/en-us/azure/devops/pipelines/release/caching?view=azure-devops
   - task: Cache@2
