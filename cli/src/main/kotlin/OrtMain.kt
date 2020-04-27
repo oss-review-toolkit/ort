@@ -121,7 +121,12 @@ class OrtMain : CliktCommand(name = ORT_NAME, epilog = "* denotes required optio
         printStackTrace = stacktrace
 
         // Make the OrtConfiguration available to subcommands.
-        currentContext.findOrSetObject { OrtConfiguration.load(configArguments.toMap(), configFile) }
+        currentContext.findOrSetObject {
+            OrtConfiguration.load(
+                configArguments.toMap(),
+                configFile ?: getOrtDataDirectory().resolve("config/ort.conf")
+            )
+        }
 
         println(getVersionHeader(env.ortVersion))
     }
