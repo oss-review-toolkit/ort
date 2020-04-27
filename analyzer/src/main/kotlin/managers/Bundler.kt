@@ -22,7 +22,6 @@ package org.ossreviewtoolkit.analyzer.managers
 import com.fasterxml.jackson.module.kotlin.readValue
 
 import org.ossreviewtoolkit.analyzer.AbstractPackageManagerFactory
-import org.ossreviewtoolkit.analyzer.HTTP_CACHE_PATH
 import org.ossreviewtoolkit.analyzer.PackageManager
 import org.ossreviewtoolkit.downloader.VersionControlSystem
 import org.ossreviewtoolkit.downloader.VcsHost
@@ -242,7 +241,7 @@ class Bundler(
             .url("https://rubygems.org/api/v2/rubygems/$name/versions/$version.json")
             .build()
 
-        OkHttpClientHelper.execute(HTTP_CACHE_PATH, request).use { response ->
+        OkHttpClientHelper.execute(request).use { response ->
             when (response.code) {
                 HttpURLConnection.HTTP_OK -> {
                     val body = response.body?.string()?.trim()

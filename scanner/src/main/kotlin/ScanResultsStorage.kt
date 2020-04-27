@@ -82,7 +82,7 @@ abstract class ScanResultsStorage {
         }
 
         private fun configureDefaultStorage() {
-            val localFileStorage = XZCompressedLocalFileStorage(getOrtDataDirectory().resolve("$TOOL_NAME/results"))
+            val localFileStorage = XZCompressedLocalFileStorage(getOrtDataDirectory().resolve("results"))
             val fileBasedStorage = FileBasedStorage(localFileStorage)
             storage = fileBasedStorage
         }

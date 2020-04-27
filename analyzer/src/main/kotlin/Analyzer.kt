@@ -47,7 +47,6 @@ import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
 
 const val TOOL_NAME = "analyzer"
-const val HTTP_CACHE_PATH = "$TOOL_NAME/cache/http"
 
 /**
  * The class to run the analysis. The signatures of public functions in this class define the library API.

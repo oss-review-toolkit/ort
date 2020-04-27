@@ -30,7 +30,6 @@ import org.ossreviewtoolkit.model.TextLocation
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
 import org.ossreviewtoolkit.model.jsonMapper
 import org.ossreviewtoolkit.scanner.AbstractScannerFactory
-import org.ossreviewtoolkit.scanner.HTTP_CACHE_PATH
 import org.ossreviewtoolkit.scanner.LocalScanner
 import org.ossreviewtoolkit.scanner.ScanException
 import org.ossreviewtoolkit.spdx.calculatePackageVerificationCode
@@ -85,7 +84,7 @@ class BoyterLc(name: String, config: ScannerConfiguration) : LocalScanner(name, 
 
         val request = Request.Builder().get().url(url).build()
 
-        return OkHttpClientHelper.execute(HTTP_CACHE_PATH, request).use { response ->
+        return OkHttpClientHelper.execute(request).use { response ->
             val body = response.body
 
             if (response.code != HttpURLConnection.HTTP_OK || body == null) {

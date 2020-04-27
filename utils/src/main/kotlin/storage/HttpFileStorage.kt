@@ -48,12 +48,6 @@ class HttpFileStorage(
     private val headers: Map<String, String> = emptyMap(),
 
     /**
-     * A path inside the [ORT data directory][getOrtDataDirectory] used for caching HTTP responses. Defaults to
-     * "cache/http".
-     */
-    private val cachePath: String = "cache/http",
-
-    /**
      * The max age of an HTTP cache entry in seconds. Defaults to 0 which always validates the cached response with the
      * remote server.
      */
@@ -69,7 +63,7 @@ class HttpFileStorage(
 
         log.debug { "Reading file from storage: ${request.url}" }
 
-        val response = OkHttpClientHelper.execute(cachePath, request)
+        val response = OkHttpClientHelper.execute(request)
         if (response.code == HttpURLConnection.HTTP_OK) {
             response.body?.let { body ->
                 return body.byteStream()
@@ -93,7 +87,7 @@ class HttpFileStorage(
 
             log.debug { "Writing file to storage: ${request.url}" }
 
-            return OkHttpClientHelper.execute(cachePath, request).use { response ->
+            return OkHttpClientHelper.execute(request).use { response ->
                 if (response.code != HttpURLConnection.HTTP_CREATED && response.code != HttpURLConnection.HTTP_OK) {
                     throw IOException(
                         "Could not store file at '${request.url}': ${response.code} - ${response.message}"

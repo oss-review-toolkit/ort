@@ -76,7 +76,7 @@ import kotlinx.coroutines.withContext
  */
 abstract class LocalScanner(name: String, config: ScannerConfiguration) : Scanner(name, config), CommandLineTool {
     companion object {
-        val DEFAULT_ARCHIVE_DIR by lazy { getOrtDataDirectory().resolve("scanner/archive") }
+        val DEFAULT_ARCHIVE_DIR by lazy { getOrtDataDirectory().resolve("archive") }
     }
 
     val archiver by lazy {

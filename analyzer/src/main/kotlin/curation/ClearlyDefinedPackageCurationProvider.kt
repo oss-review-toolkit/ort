@@ -21,7 +21,6 @@ package org.ossreviewtoolkit.analyzer.curation
 
 import java.io.IOException
 
-import org.ossreviewtoolkit.analyzer.HTTP_CACHE_PATH
 import org.ossreviewtoolkit.analyzer.PackageCurationProvider
 import org.ossreviewtoolkit.clearlydefined.ClearlyDefinedService
 import org.ossreviewtoolkit.clearlydefined.ClearlyDefinedService.ComponentType
@@ -156,7 +155,7 @@ fun SourceLocation?.toArtifactOrVcs(): Any? =
  * A provider for curated package meta-data from the [ClearlyDefined](https://clearlydefined.io/) service.
  */
 class ClearlyDefinedPackageCurationProvider(server: Server = Server.PRODUCTION) : PackageCurationProvider {
-    private val service = ClearlyDefinedService.create(server, OkHttpClientHelper.buildClient(HTTP_CACHE_PATH))
+    private val service = ClearlyDefinedService.create(server, OkHttpClientHelper.buildClient())
 
     override fun getCurationsFor(pkgId: Identifier): List<PackageCuration> {
         val namespace = pkgId.namespace.takeUnless { it.isEmpty() } ?: "-"

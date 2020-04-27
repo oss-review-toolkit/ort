@@ -54,7 +54,7 @@ class NoticeByPackageReporter : AbstractNoticeReporter() {
 
 class NoticeByPackageProcessor(input: ReporterInput) : AbstractNoticeReporter.NoticeProcessor(input) {
     companion object {
-        private val DEFAULT_ARCHIVE_DIR by lazy { getOrtDataDirectory().resolve("scanner/archive") }
+        private val DEFAULT_ARCHIVE_DIR by lazy { getOrtDataDirectory().resolve("archive") }
         private const val LICENSE_SEPARATOR = "\n  --\n\n"
     }
 

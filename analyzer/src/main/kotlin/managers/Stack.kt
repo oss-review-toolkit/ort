@@ -20,7 +20,6 @@
 package org.ossreviewtoolkit.analyzer.managers
 
 import org.ossreviewtoolkit.analyzer.AbstractPackageManagerFactory
-import org.ossreviewtoolkit.analyzer.HTTP_CACHE_PATH
 import org.ossreviewtoolkit.analyzer.PackageManager
 import org.ossreviewtoolkit.downloader.VersionControlSystem
 import org.ossreviewtoolkit.model.Identifier
@@ -221,7 +220,7 @@ class Stack(
             .url("${getPackageUrl(pkgId.name, pkgId.version)}/src/${pkgId.name}.cabal")
             .build()
 
-        return OkHttpClientHelper.execute(HTTP_CACHE_PATH, pkgRequest).use { response ->
+        return OkHttpClientHelper.execute(pkgRequest).use { response ->
             val body = response.body?.string()?.trim()
 
             if (response.code != HttpURLConnection.HTTP_OK || body.isNullOrEmpty()) {

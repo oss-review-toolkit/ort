@@ -40,7 +40,6 @@ import java.util.ServiceLoader
 import kotlinx.coroutines.runBlocking
 
 const val TOOL_NAME = "scanner"
-const val HTTP_CACHE_PATH = "$TOOL_NAME/cache/http"
 
 /**
  * The class to run license / copyright scanners. The signatures of public functions in this class define the library
