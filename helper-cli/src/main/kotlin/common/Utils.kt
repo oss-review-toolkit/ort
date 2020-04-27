@@ -22,7 +22,6 @@
 package org.ossreviewtoolkit.helper.common
 
 import org.ossreviewtoolkit.analyzer.Analyzer
-import org.ossreviewtoolkit.analyzer.HTTP_CACHE_PATH
 import org.ossreviewtoolkit.analyzer.PackageManager
 import org.ossreviewtoolkit.downloader.Downloader
 import org.ossreviewtoolkit.model.Identifier
@@ -91,7 +90,7 @@ internal fun download(url: String): File {
         .url(url)
         .build()
 
-    OkHttpClientHelper.execute(HTTP_CACHE_PATH, request).use { response ->
+    OkHttpClientHelper.execute(request).use { response ->
         val body = response.body
         if (!response.isSuccessful || body == null) {
             throw IOException(response.message)

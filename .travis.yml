@@ -14,9 +14,7 @@ cache:
     - $HOME/.gradle/wrapper/dists/
     - $HOME/.ivy2/
     - $HOME/.m2/repository/
-    - $HOME/.ort/analyzer/cache/
-    - $HOME/.ort/downloader/cache/
-    - $HOME/.ort/scanner/cache/
+    - $HOME/.ort/cache/
 
 env:
   global:

@@ -28,7 +28,6 @@ import com.github.ajalt.clikt.parameters.options.required
 import com.github.ajalt.clikt.parameters.types.enum
 import com.github.ajalt.clikt.parameters.types.file
 
-import org.ossreviewtoolkit.analyzer.HTTP_CACHE_PATH
 import org.ossreviewtoolkit.analyzer.curation.toClearlyDefinedCoordinates
 import org.ossreviewtoolkit.analyzer.curation.toClearlyDefinedSourceLocation
 import org.ossreviewtoolkit.clearlydefined.ClearlyDefinedService
@@ -105,7 +104,7 @@ class ClearlyDefinedUploadCommand : CliktCommand(
     override fun run() {
         val absoluteInputFile = inputFile.normalize()
         val curations = absoluteInputFile.readValue<List<PackageCuration>>()
-        val service = ClearlyDefinedService.create(server, OkHttpClientHelper.buildClient(HTTP_CACHE_PATH))
+        val service = ClearlyDefinedService.create(server, OkHttpClientHelper.buildClient())
 
         var error = false
 

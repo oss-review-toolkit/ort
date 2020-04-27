@@ -33,11 +33,15 @@ import okhttp3.Request
 import okhttp3.Response
 import okhttp3.Route
 
+private typealias BuilderConfiguration = OkHttpClient.Builder.() -> Unit
+
 /**
  * A helper class to manage OkHttp instances backed by distinct cache directories.
  */
 object OkHttpClientHelper {
-    private val clients = mutableMapOf<String, OkHttpClient>()
+    private val clients = mutableMapOf<BuilderConfiguration, OkHttpClient>()
+
+    private const val MAX_CACHE_SIZE_IN_BYTES = 1024L * 1024L * 1024L
 
     /**
      * A constant for the "too many requests" HTTP code as HttpURLConnection has none.
@@ -87,14 +91,13 @@ object OkHttpClientHelper {
     }
 
     /**
-     * Build a client that uses the specified [cache directory][cachePath]. Proxy environment variables are by default
-     * regarded, but the client can further be configured via the [block].
+     * Build a preconfigured client that uses a cache directory inside the [ORT data directory][getOrtDataDirectory].
+     * Proxy environment variables are by default respected, but the client can further be configured via the [block].
      */
-    fun buildClient(cachePath: String, block: OkHttpClient.Builder.() -> Unit = {}): OkHttpClient =
-        clients.getOrPut(cachePath) {
-            val cacheDirectory = getOrtDataDirectory().resolve(cachePath)
-            val maxCacheSizeInBytes = 1024L * 1024L * 1024L
-            val cache = Cache(cacheDirectory, maxCacheSizeInBytes)
+    fun buildClient(block: OkHttpClient.Builder.() -> Unit = {}): OkHttpClient =
+        clients.getOrPut(block) {
+            val cacheDirectory = getOrtDataDirectory().resolve("cache/http")
+            val cache = Cache(cacheDirectory, MAX_CACHE_SIZE_IN_BYTES)
             val specs = listOf(ConnectionSpec.MODERN_TLS, ConnectionSpec.COMPATIBLE_TLS, ConnectionSpec.CLEARTEXT)
             OkHttpClient.Builder()
                 .cache(cache)
@@ -105,9 +108,8 @@ object OkHttpClientHelper {
         }
 
     /**
-     * Execute a [request] using the client for the specified [cache directory][cachePath]. The client can optionally
-     * be further configured via the [block].
+     * Execute a [request] using the client for the specified [builder configuration][block].
      */
-    fun execute(cachePath: String, request: Request, block: OkHttpClient.Builder.() -> Unit = {}): Response =
-        buildClient(cachePath, block).newCall(request).execute()
+    fun execute(request: Request, block: OkHttpClient.Builder.() -> Unit = {}): Response =
+        buildClient(block).newCall(request).execute()
 }

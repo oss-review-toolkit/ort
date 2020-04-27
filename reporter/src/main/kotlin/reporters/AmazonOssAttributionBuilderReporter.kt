@@ -28,7 +28,6 @@ import okhttp3.Credentials
 
 import org.ossreviewtoolkit.model.jsonMapper
 import org.ossreviewtoolkit.model.utils.getDetectedLicensesWithCopyrights
-import org.ossreviewtoolkit.reporter.HTTP_CACHE_PATH
 import org.ossreviewtoolkit.reporter.Reporter
 import org.ossreviewtoolkit.reporter.ReporterInput
 import org.ossreviewtoolkit.reporter.utils.AmazonOssAttributionBuilderService
@@ -64,7 +63,7 @@ class AmazonOssAttributionBuilderReporter : Reporter {
 
     private val service = AmazonOssAttributionBuilderService.create(
         AmazonOssAttributionBuilderService.Server.DEFAULT,
-        OkHttpClientHelper.buildClient(HTTP_CACHE_PATH)
+        OkHttpClientHelper.buildClient()
     )
 
     override fun generateReport(outputStream: OutputStream, input: ReporterInput) {
