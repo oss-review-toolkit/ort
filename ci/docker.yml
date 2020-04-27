@@ -5,6 +5,10 @@ jobs:
     vmImage: 'ubuntu-18.04'
   # TODO: Add caching.
   steps:
+  - checkout: self
+    fetchDepth: 1
+    submodules: false
+
   - task: Docker@2
     inputs:
       command: 'build'

@@ -5,6 +5,7 @@ jobs:
   steps:
   - checkout: self
     fetchDepth: 1
+    submodules: false
 
   - task: Cache@2
     inputs:
