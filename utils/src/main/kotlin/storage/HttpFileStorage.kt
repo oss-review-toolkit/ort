@@ -48,7 +48,7 @@ class HttpFileStorage(
     private val headers: Map<String, String> = emptyMap(),
 
     /**
-     * A path inside the [ORT user directory][getOrtDataDirectory] used for caching HTTP responses. Defaults to
+     * A path inside the [ORT data directory][getOrtDataDirectory] used for caching HTTP responses. Defaults to
      * "cache/http".
      */
     private val cachePath: String = "cache/http",
