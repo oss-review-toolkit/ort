@@ -228,8 +228,7 @@ internal class EvaluatedModelMapper(private val input: ReporterInput) {
         issues += addAnalyzerIssues(project.id, evaluatedPackage)
 
         input.ortResult.getScanResultsForId(project.id).mapTo(scanResults) { result ->
-            val licenseFindingCurations = getLicenseFindingCurations(project.id, result.provenance)
-            convertScanResult(result, findings, evaluatedPackage, licenseFindingCurations)
+            convertScanResult(result, findings, evaluatedPackage)
         }
 
         findings.filter { it.type == EvaluatedFindingType.LICENSE }.mapNotNullTo(detectedLicenses) { it.license }
@@ -280,8 +279,7 @@ internal class EvaluatedModelMapper(private val input: ReporterInput) {
         issues += addAnalyzerIssues(pkg.id, evaluatedPackage)
 
         input.ortResult.getScanResultsForId(pkg.id).mapTo(scanResults) { result ->
-            val licenseFindingCurations = getLicenseFindingCurations(pkg.id, result.provenance)
-            convertScanResult(result, findings, evaluatedPackage, licenseFindingCurations)
+            convertScanResult(result, findings, evaluatedPackage)
         }
 
         findings.filter { it.type == EvaluatedFindingType.LICENSE }.mapNotNullTo(detectedLicenses) { it.license }
@@ -323,8 +321,7 @@ internal class EvaluatedModelMapper(private val input: ReporterInput) {
     private fun convertScanResult(
         result: ScanResult,
         findings: MutableList<EvaluatedFinding>,
-        pkg: EvaluatedPackage,
-        licenseFindingCurations: Collection<LicenseFindingCuration>
+        pkg: EvaluatedPackage
     ): EvaluatedScanResult {
         val issues = mutableListOf<EvaluatedOrtIssue>()
 
@@ -348,7 +345,7 @@ internal class EvaluatedModelMapper(private val input: ReporterInput) {
             null
         )
 
-        addLicensesAndCopyrights(result, actualScanResult, findings, licenseFindingCurations)
+        addLicensesAndCopyrights(pkg.id, result, actualScanResult, findings)
 
         return actualScanResult
     }
@@ -500,11 +497,12 @@ internal class EvaluatedModelMapper(private val input: ReporterInput) {
     }
 
     private fun addLicensesAndCopyrights(
+        id: Identifier,
         scanResult: ScanResult,
         evaluatedScanResult: EvaluatedScanResult,
-        findings: MutableList<EvaluatedFinding>,
-        licenseFindingCurations: Collection<LicenseFindingCuration>
+        findings: MutableList<EvaluatedFinding>
     ) {
+        val licenseFindingCurations = getLicenseFindingCurations(id, scanResult.provenance)
         val curatedFindings = curationsMatcher.applyAll(scanResult.summary.licenseFindings, licenseFindingCurations)
         val matchedFindings = findingsMatcher.match(curatedFindings, scanResult.summary.copyrightFindings)
 
