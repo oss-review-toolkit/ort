@@ -4,6 +4,10 @@ path_excludes:
   pattern: "sub/module/project/build.gradle"
   reason: "EXAMPLE_OF"
   comment: "The project is an example."
+- _id: 1
+  pattern: "**.java"
+  reason: "EXAMPLE_OF"
+  comment: "These are example files."
 scope_excludes:
 - _id: 0
   pattern: "testCompile"
@@ -260,12 +264,16 @@ packages:
     start_line: 1
     end_line: 1
     scan_result: 1
+    path_excludes:
+    - 1
   - type: "LICENSE"
     license: 2
     path: "file.java"
     start_line: 1
     end_line: 2
     scan_result: 1
+    path_excludes:
+    - 1
   - type: "LICENSE"
     license: 2
     path: "file.kt"
@@ -278,18 +286,24 @@ packages:
     start_line: 1
     end_line: 1
     scan_result: 1
+    path_excludes:
+    - 1
   - type: "LICENSE"
     license: 3
     path: "file1.java"
     start_line: 1
     end_line: 2
     scan_result: 1
+    path_excludes:
+    - 1
   - type: "LICENSE"
     license: 3
     path: "file2.java"
     start_line: 1
     end_line: 2
     scan_result: 1
+    path_excludes:
+    - 1
   is_excluded: true
   path_excludes:
   - 0
@@ -676,10 +690,7 @@ repository:
     excludes:
       paths:
       - 0
-      - _id: 1
-        pattern: "**.java"
-        reason: "EXAMPLE_OF"
-        comment: "These are example files."
+      - 1
       scopes:
       - 0
     resolutions:

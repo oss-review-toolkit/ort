@@ -28,6 +28,7 @@ import org.ossreviewtoolkit.model.Provenance
 import org.ossreviewtoolkit.model.RemoteArtifact
 import org.ossreviewtoolkit.model.RuleViolation
 import org.ossreviewtoolkit.model.ScanResult
+import org.ossreviewtoolkit.model.TextLocation
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.config.IssueResolution
 import org.ossreviewtoolkit.model.config.LicenseFindingCuration
@@ -179,12 +180,22 @@ internal class EvaluatedModelMapper(private val input: ReporterInput) {
         }
     }
 
+    private fun TextLocation.getRelativePathToRoot(id: Identifier): String =
+        input.ortResult.getProject(id)?.let { input.ortResult.getFilePathRelativeToAnalyzerRoot(it, path) } ?: path
+
     private fun getLicenseFindingCurations(id: Identifier, provenance: Provenance): List<LicenseFindingCuration> =
         if (input.ortResult.isProject(id)) {
             input.ortResult.repository.config.curations.licenseFindings
         } else {
             input.packageConfigurationProvider.getPackageConfiguration(id, provenance)
                 ?.licenseFindingCurations.orEmpty()
+        }
+
+    private fun getPathExcludes(id: Identifier, provenance: Provenance): List<PathExclude> =
+        if (input.ortResult.isProject(id)) {
+            input.ortResult.getExcludes().paths
+        } else {
+            input.packageConfigurationProvider.getPackageConfiguration(id, provenance)?.pathExcludes.orEmpty()
         }
 
     private fun addProject(project: Project) {
@@ -502,6 +513,7 @@ internal class EvaluatedModelMapper(private val input: ReporterInput) {
         evaluatedScanResult: EvaluatedScanResult,
         findings: MutableList<EvaluatedFinding>
     ) {
+        val pathExcludes = getPathExcludes(id, scanResult.provenance)
         val licenseFindingCurations = getLicenseFindingCurations(id, scanResult.provenance)
         val curatedFindings = curationsMatcher.applyAll(scanResult.summary.licenseFindings, licenseFindingCurations)
         val matchedFindings = findingsMatcher.match(curatedFindings, scanResult.summary.copyrightFindings)
@@ -511,6 +523,9 @@ internal class EvaluatedModelMapper(private val input: ReporterInput) {
                 val actualCopyright = copyrights.addIfRequired(CopyrightStatement(copyrightFinding.statement))
 
                 copyrightFinding.locations.forEach { location ->
+                    val evaluatedPathExcludes = pathExcludes.filter { it.matches(location.getRelativePathToRoot(id)) }
+                        .let { this@EvaluatedModelMapper.pathExcludes.addIfRequired(it) }
+
                     findings += EvaluatedFinding(
                         type = EvaluatedFindingType.COPYRIGHT,
                         license = null,
@@ -518,7 +533,8 @@ internal class EvaluatedModelMapper(private val input: ReporterInput) {
                         path = location.path,
                         startLine = location.startLine,
                         endLine = location.endLine,
-                        scanResult = evaluatedScanResult
+                        scanResult = evaluatedScanResult,
+                        pathExcludes = evaluatedPathExcludes
                     )
                 }
             }
@@ -526,6 +542,10 @@ internal class EvaluatedModelMapper(private val input: ReporterInput) {
             val actualLicense = licenses.addIfRequired(LicenseId(licenseFindings.license))
 
             licenseFindings.locations.forEach { location ->
+                val evaluatedPathExcludes = pathExcludes.filter { it.matches(location.getRelativePathToRoot(id)) }
+                    .let { this@EvaluatedModelMapper.pathExcludes.addIfRequired(it)
+                }
+
                 findings += EvaluatedFinding(
                     type = EvaluatedFindingType.LICENSE,
                     license = actualLicense,
@@ -533,7 +553,8 @@ internal class EvaluatedModelMapper(private val input: ReporterInput) {
                     path = location.path,
                     startLine = location.startLine,
                     endLine = location.endLine,
-                    scanResult = evaluatedScanResult
+                    scanResult = evaluatedScanResult,
+                    pathExcludes = evaluatedPathExcludes
                 )
             }
         }
