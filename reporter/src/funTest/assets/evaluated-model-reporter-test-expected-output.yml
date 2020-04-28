@@ -228,6 +228,8 @@ packages:
   detected_licenses:
   - 2
   - 3
+  detected_excluded_licenses:
+  - 3
   description: ""
   homepage_url: ""
   binary_artifact:

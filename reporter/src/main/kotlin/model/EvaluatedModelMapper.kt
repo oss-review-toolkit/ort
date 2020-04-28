@@ -201,6 +201,7 @@ internal class EvaluatedModelMapper(private val input: ReporterInput) {
     private fun addProject(project: Project) {
         val scanResults = mutableListOf<EvaluatedScanResult>()
         val detectedLicenses = mutableSetOf<LicenseId>()
+        val detectedExcludedLicenses = mutableSetOf<LicenseId>()
         val findings = mutableListOf<EvaluatedFinding>()
         val issues = mutableListOf<EvaluatedOrtIssue>()
 
@@ -215,6 +216,7 @@ internal class EvaluatedModelMapper(private val input: ReporterInput) {
             declaredLicenses = project.declaredLicenses.map { licenses.addIfRequired(LicenseId(it)) },
             declaredLicensesProcessed = project.declaredLicensesProcessed.evaluate(),
             detectedLicenses = detectedLicenses,
+            detectedExcludedLicenses = detectedExcludedLicenses,
             concludedLicense = null,
             description = "",
             homepageUrl = project.homepageUrl,
@@ -243,6 +245,12 @@ internal class EvaluatedModelMapper(private val input: ReporterInput) {
         }
 
         findings.filter { it.type == EvaluatedFindingType.LICENSE }.mapNotNullTo(detectedLicenses) { it.license }
+
+        val includedDetectedLicenses = findings.filter {
+            it.type == EvaluatedFindingType.LICENSE && it.pathExcludes.isEmpty()
+        }.mapNotNullTo(mutableSetOf()) { it.license }
+
+        detectedExcludedLicenses.addAll(detectedLicenses - includedDetectedLicenses)
     }
 
     private fun addPackage(curatedPkg: CuratedPackage) {
@@ -250,6 +258,7 @@ internal class EvaluatedModelMapper(private val input: ReporterInput) {
 
         val scanResults = mutableListOf<EvaluatedScanResult>()
         val detectedLicenses = mutableSetOf<LicenseId>()
+        val detectedExcludedLicenses = mutableSetOf<LicenseId>()
         val findings = mutableListOf<EvaluatedFinding>()
         val issues = mutableListOf<EvaluatedOrtIssue>()
 
@@ -266,6 +275,7 @@ internal class EvaluatedModelMapper(private val input: ReporterInput) {
             declaredLicenses = pkg.declaredLicenses.map { licenses.addIfRequired(LicenseId(it)) },
             declaredLicensesProcessed = pkg.declaredLicensesProcessed.evaluate(),
             detectedLicenses = detectedLicenses,
+            detectedExcludedLicenses = detectedExcludedLicenses,
             concludedLicense = pkg.concludedLicense,
             description = pkg.description,
             homepageUrl = pkg.homepageUrl,
@@ -294,6 +304,12 @@ internal class EvaluatedModelMapper(private val input: ReporterInput) {
         }
 
         findings.filter { it.type == EvaluatedFindingType.LICENSE }.mapNotNullTo(detectedLicenses) { it.license }
+
+        val includedDetectedLicenses = findings.filter {
+            it.type == EvaluatedFindingType.LICENSE && it.pathExcludes.isEmpty()
+        }.mapNotNullTo(mutableSetOf()) { it.license }
+
+        detectedExcludedLicenses.addAll(detectedLicenses - includedDetectedLicenses)
     }
 
     private fun addAnalyzerIssues(id: Identifier, pkg: EvaluatedPackage): List<EvaluatedOrtIssue> {
@@ -443,6 +459,7 @@ internal class EvaluatedModelMapper(private val input: ReporterInput) {
             declaredLicenses = emptyList(),
             declaredLicensesProcessed = EvaluatedProcessedDeclaredLicense(null, emptyList(), emptyList()),
             detectedLicenses = emptySet(),
+            detectedExcludedLicenses = emptySet(),
             concludedLicense = null,
             description = "",
             homepageUrl = "",
