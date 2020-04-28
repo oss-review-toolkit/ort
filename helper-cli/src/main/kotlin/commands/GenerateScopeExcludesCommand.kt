@@ -140,7 +140,7 @@ private fun getScopeExcludesForPackageManager(packageManagerName: String): List<
             ),
             ScopeExclude(
                 pattern = "kapt.*",
-                reason = ScopeExcludeReason.PROVIDED_DEPENDENCY_OF,
+                reason = ScopeExcludeReason.BUILD_DEPENDENCY_OF,
                 comment = "Packages to process code annotations only."
             ),
             ScopeExclude(
