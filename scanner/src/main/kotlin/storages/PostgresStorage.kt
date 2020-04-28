@@ -74,8 +74,10 @@ class PostgresStorage(
     private fun tableExists(): Boolean {
         val statement = connection.createStatement()
         val resultSet = statement.executeQuery("SELECT to_regclass('$schema.$table')")
-        resultSet.next()
-        return resultSet.getString(1) == table
+        return resultSet.next() && resultSet.getString(1).let { result ->
+            // At least PostgreSQL 9.6 reports the result including the schema prefix.
+            result == table || result == "$schema.$table"
+        }
     }
 
     private fun createTable(): Boolean {
