@@ -79,9 +79,12 @@ class PostgresStorage(
     }
 
     private fun createTable(): Boolean {
-        val query = """
-            CREATE SEQUENCE $schema.${table}_id_seq;
+        val statement = connection.createStatement()
 
+        statement.execute("CREATE SEQUENCE $schema.${table}_id_seq")
+
+        statement.execute(
+            """
             CREATE TABLE $schema.$table
             (
                 id integer NOT NULL DEFAULT nextval('${table}_id_seq'::regclass),
@@ -92,13 +95,21 @@ class PostgresStorage(
             WITH (
                 OIDS = FALSE
             )
-            TABLESPACE pg_default;
+            TABLESPACE pg_default
+            """.trimIndent()
+        )
 
+        statement.execute(
+            """
             CREATE INDEX identifier
                 ON $schema.$table USING btree
                 (identifier COLLATE pg_catalog."default")
-                TABLESPACE pg_default;
+                TABLESPACE pg_default
+            """.trimIndent()
+        )
 
+        statement.execute(
+            """
             CREATE INDEX identifier_and_scanner_version
                 ON $schema.$table USING btree
                 (
@@ -107,11 +118,9 @@ class PostgresStorage(
                     substring(scan_result->'scanner'->>'version' from '([0-9]+\.[0-9]+)\.?.*'),
                     (scan_result->'scanner'->>'configuration')
                 )
-                TABLESPACE pg_default;
-        """.trimIndent()
-
-        val statement = connection.createStatement()
-        statement.execute(query)
+                TABLESPACE pg_default
+            """.trimIndent()
+        )
 
         return tableExists()
     }
