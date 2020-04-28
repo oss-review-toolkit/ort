@@ -238,9 +238,11 @@ class Downloader {
             //       non-strict mode.
             val vcsUrlNoCredentials = target.vcsProcessed.url.stripCredentialsFromUrl()
             if (vcsUrlNoCredentials != target.vcsProcessed.url) {
-                // Try once more with any user name / password stripped from the URL.
+                // SSH always requires authentication, so it does not make sense to try without. Instead try HTTPS.
+                vcsUrlNoCredentials.replaceFirst("ssh://", "https://")
+
                 log.info {
-                    "Falling back to trying to download from $vcsUrlNoCredentials which has credentials removed."
+                    "Falling back to trying to download via anonymous HTTPS from $vcsUrlNoCredentials."
                 }
 
                 // Clean up any files left from the failed VCS download (i.e. a ".git" directory).
