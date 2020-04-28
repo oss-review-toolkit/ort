@@ -74,7 +74,7 @@ class OrtConfigurationTest : WordSpec({
 
                 scanner.postgresStorage.let { postgres ->
                     postgres shouldNotBe null
-                    postgres!!.url shouldBe "postgresql://your-postgresql-server:5444/your-database"
+                    postgres!!.url shouldBe "jdbc:postgresql://your-postgresql-server:5444/your-database"
                     postgres.schema shouldBe "schema"
                     postgres.username shouldBe "username"
                     postgres.password shouldBe "password"
