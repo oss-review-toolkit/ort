@@ -24,7 +24,7 @@ project:
         dependencies:
         - id: "PyPI::MarkupSafe:1.1.1"
       - id: "PyPI::Werkzeug:1.0.1"
-      - id: "PyPI::click:7.1.1"
+      - id: "PyPI::click:7.1.2"
       - id: "PyPI::itsdangerous:1.1.0"
     - id: "PyPI::gunicorn:19.6.0"
 packages:
@@ -154,8 +154,8 @@ packages:
       path: ""
   curations: []
 - package:
-    id: "PyPI::click:7.1.1"
-    purl: "pkg:pypi/click@7.1.1"
+    id: "PyPI::click:7.1.2"
+    purl: "pkg:pypi/click@7.1.2"
     declared_licenses:
     - "BSD License"
     - "BSD-3-Clause"
@@ -164,14 +164,14 @@ packages:
     description: "Composable command line interface toolkit"
     homepage_url: "https://palletsprojects.com/p/click/"
     binary_artifact:
-      url: "https://files.pythonhosted.org/packages/dd/c0/4d8f43a9b16e289f36478422031b8a63b54b6ac3b1ba605d602f10dd54d6/click-7.1.1-py2.py3-none-any.whl"
+      url: "https://files.pythonhosted.org/packages/d2/3d/fa76db83bf75c4f8d338c2fd15c8d33fdd7ad23a9b5e57eb6c5de26b430e/click-7.1.2-py2.py3-none-any.whl"
       hash:
-        value: "228bcfc4e59d279e4bdadc2c619a4769"
+        value: "b4233221cacc473acd422a1d54ff4c41"
         algorithm: "MD5"
     source_artifact:
-      url: "https://files.pythonhosted.org/packages/4e/ab/5d6bc3b697154018ef196f5b17d958fac3854e2efbc39ea07a284d4a6a9b/click-7.1.1.tar.gz"
+      url: "https://files.pythonhosted.org/packages/27/6f/be940c8b1f1d69daceeb0032fee6c34d7bd70e3e649ccac0951500b4720e/click-7.1.2.tar.gz"
       hash:
-        value: "6d5c7077d8d3ce44de6e3d661b751585"
+        value: "53692f62cb99a1a10c59248f1776d9c0"
         algorithm: "MD5"
     vcs:
       type: ""
