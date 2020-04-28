@@ -22,6 +22,7 @@ package org.ossreviewtoolkit.reporter.model
 import com.fasterxml.jackson.annotation.JsonInclude
 
 import org.ossreviewtoolkit.model.LicenseFinding
+import org.ossreviewtoolkit.model.config.PathExclude
 
 /**
  * The evaluated form of a [LicenseFinding] used by the [EvaluatedModel].
@@ -35,5 +36,7 @@ data class EvaluatedFinding(
     val path: String,
     val startLine: Int,
     val endLine: Int,
-    val scanResult: EvaluatedScanResult
+    val scanResult: EvaluatedScanResult,
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    val pathExcludes: List<PathExclude>
 )
