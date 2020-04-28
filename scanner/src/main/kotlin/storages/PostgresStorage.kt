@@ -87,7 +87,7 @@ class PostgresStorage(
             """
             CREATE TABLE $schema.$table
             (
-                id integer NOT NULL DEFAULT nextval('${table}_id_seq'::regclass),
+                id integer NOT NULL DEFAULT nextval('$schema.${table}_id_seq'::regclass),
                 identifier text COLLATE pg_catalog."default" NOT NULL,
                 scan_result jsonb NOT NULL,
                 CONSTRAINT ${table}_pkey PRIMARY KEY (id)
