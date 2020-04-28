@@ -44,6 +44,8 @@ data class EvaluatedPackage(
     val declaredLicenses: List<LicenseId>,
     val declaredLicensesProcessed: EvaluatedProcessedDeclaredLicense,
     val detectedLicenses: Set<LicenseId>,
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    val detectedExcludedLicenses: Set<LicenseId>,
     @JsonInclude(JsonInclude.Include.NON_NULL)
     val concludedLicense: SpdxExpression? = null,
     val description: String,
