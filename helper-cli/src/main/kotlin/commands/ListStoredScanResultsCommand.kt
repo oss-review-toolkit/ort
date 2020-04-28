@@ -22,9 +22,10 @@ package org.ossreviewtoolkit.helper.commands
 import com.github.ajalt.clikt.core.CliktCommand
 import com.github.ajalt.clikt.core.UsageError
 import com.github.ajalt.clikt.parameters.options.convert
-import com.github.ajalt.clikt.parameters.options.default
+import com.github.ajalt.clikt.parameters.options.multiple
 import com.github.ajalt.clikt.parameters.options.option
 import com.github.ajalt.clikt.parameters.options.required
+import com.github.ajalt.clikt.parameters.options.unique
 import com.github.ajalt.clikt.parameters.types.file
 
 import org.ossreviewtoolkit.model.Failure
@@ -54,18 +55,14 @@ internal class ListStoredScanResultsCommand : CliktCommand(
 
     private val configArguments by option(
         "-P",
-        help = "The comma separated list of key-value pairs to override in the configuration file. For example: " +
+        help = "Override a key-value pair in the configuration file. For example: " +
                 "-P scanner.postgresStorage.schema=testSchema"
-    ).convert { csv ->
-        csv.split(",").map { keyValuePair ->
-            keyValuePair.split("=").let { (k, v) ->
-                Pair(k, v)
-            }
-        }
-    }.default(emptyList())
+    ).convert { Pair(it.substringBefore("="), it.substringAfter("=", "")) }
+        .multiple()
+        .unique()
 
     override fun run() {
-        val config = OrtConfiguration.load(mapOf(*configArguments.toTypedArray()), configFile)
+        val config = OrtConfiguration.load(configArguments.toMap(), configFile)
         ScanResultsStorage.configure(config.scanner ?: ScannerConfiguration())
 
         println("Searching for scan results of '${packageId.toCoordinates()}' in ${ScanResultsStorage.storage.name}.")

@@ -29,8 +29,8 @@ import com.github.ajalt.clikt.parameters.options.default
 import com.github.ajalt.clikt.parameters.options.flag
 import com.github.ajalt.clikt.parameters.options.multiple
 import com.github.ajalt.clikt.parameters.options.option
-import com.github.ajalt.clikt.parameters.options.pair
 import com.github.ajalt.clikt.parameters.options.switch
+import com.github.ajalt.clikt.parameters.options.unique
 import com.github.ajalt.clikt.parameters.options.versionOption
 import com.github.ajalt.clikt.parameters.types.file
 
@@ -71,7 +71,10 @@ class OrtMain : CliktCommand(name = ORT_NAME, epilog = "* denotes required optio
 
     private val stacktrace by option(help = "Print out the stacktrace for all exceptions.").flag()
 
-    private val configArguments by option("-P", help = "Allows to override configuration parameters.").pair().multiple()
+    private val configArguments by option("-P", help = "Allows to override configuration parameters.")
+        .convert { Pair(it.substringBefore("="), it.substringAfter("=", "")) }
+        .multiple()
+        .unique()
 
     private val env = Environment()
 
