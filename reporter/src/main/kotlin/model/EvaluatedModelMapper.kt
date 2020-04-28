@@ -24,6 +24,7 @@ import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.OrtIssue
 import org.ossreviewtoolkit.model.PackageReference
 import org.ossreviewtoolkit.model.Project
+import org.ossreviewtoolkit.model.Provenance
 import org.ossreviewtoolkit.model.RemoteArtifact
 import org.ossreviewtoolkit.model.RuleViolation
 import org.ossreviewtoolkit.model.ScanResult
@@ -43,6 +44,7 @@ import org.ossreviewtoolkit.utils.ProcessedDeclaredLicense
 /**
  * Maps the [reporter input][input] to an [EvaluatedModel].
  */
+@Suppress("TooManyFunctions")
 internal class EvaluatedModelMapper(private val input: ReporterInput) {
     private val packages = mutableMapOf<Identifier, EvaluatedPackage>()
     private val paths = mutableListOf<EvaluatedPackagePath>()
@@ -177,6 +179,14 @@ internal class EvaluatedModelMapper(private val input: ReporterInput) {
         }
     }
 
+    private fun getLicenseFindingCurations(id: Identifier, provenance: Provenance): List<LicenseFindingCuration> =
+        if (input.ortResult.isProject(id)) {
+            input.ortResult.repository.config.curations.licenseFindings
+        } else {
+            input.packageConfigurationProvider.getPackageConfiguration(id, provenance)
+                ?.licenseFindingCurations.orEmpty()
+        }
+
     private fun addProject(project: Project) {
         val scanResults = mutableListOf<EvaluatedScanResult>()
         val detectedLicenses = mutableSetOf<LicenseId>()
@@ -218,7 +228,7 @@ internal class EvaluatedModelMapper(private val input: ReporterInput) {
         issues += addAnalyzerIssues(project.id, evaluatedPackage)
 
         input.ortResult.getScanResultsForId(project.id).mapTo(scanResults) { result ->
-            val licenseFindingCurations = input.ortResult.repository.config.curations.licenseFindings
+            val licenseFindingCurations = getLicenseFindingCurations(project.id, result.provenance)
             convertScanResult(result, findings, evaluatedPackage, licenseFindingCurations)
         }
 
@@ -270,10 +280,7 @@ internal class EvaluatedModelMapper(private val input: ReporterInput) {
         issues += addAnalyzerIssues(pkg.id, evaluatedPackage)
 
         input.ortResult.getScanResultsForId(pkg.id).mapTo(scanResults) { result ->
-            val licenseFindingCurations =
-                input.packageConfigurationProvider.getPackageConfiguration(pkg.id, result.provenance)
-                    ?.licenseFindingCurations.orEmpty()
-
+            val licenseFindingCurations = getLicenseFindingCurations(pkg.id, result.provenance)
             convertScanResult(result, findings, evaluatedPackage, licenseFindingCurations)
         }
 
