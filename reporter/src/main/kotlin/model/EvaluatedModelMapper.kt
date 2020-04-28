@@ -27,7 +27,6 @@ import org.ossreviewtoolkit.model.Project
 import org.ossreviewtoolkit.model.RemoteArtifact
 import org.ossreviewtoolkit.model.RuleViolation
 import org.ossreviewtoolkit.model.ScanResult
-import org.ossreviewtoolkit.model.ScanSummary
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.config.IssueResolution
 import org.ossreviewtoolkit.model.config.LicenseFindingCuration
@@ -342,7 +341,7 @@ internal class EvaluatedModelMapper(private val input: ReporterInput) {
             null
         )
 
-        addLicensesAndCopyrights(result.summary, actualScanResult, findings, licenseFindingCurations)
+        addLicensesAndCopyrights(result, actualScanResult, findings, licenseFindingCurations)
 
         return actualScanResult
     }
@@ -494,13 +493,13 @@ internal class EvaluatedModelMapper(private val input: ReporterInput) {
     }
 
     private fun addLicensesAndCopyrights(
-        summary: ScanSummary,
-        scanResult: EvaluatedScanResult,
+        scanResult: ScanResult,
+        evaluatedScanResult: EvaluatedScanResult,
         findings: MutableList<EvaluatedFinding>,
         licenseFindingCurations: Collection<LicenseFindingCuration>
     ) {
-        val curatedFindings = curationsMatcher.applyAll(summary.licenseFindings, licenseFindingCurations)
-        val matchedFindings = findingsMatcher.match(curatedFindings, summary.copyrightFindings)
+        val curatedFindings = curationsMatcher.applyAll(scanResult.summary.licenseFindings, licenseFindingCurations)
+        val matchedFindings = findingsMatcher.match(curatedFindings, scanResult.summary.copyrightFindings)
 
         matchedFindings.forEach { licenseFindings ->
             licenseFindings.copyrights.forEach { copyrightFinding ->
@@ -514,7 +513,7 @@ internal class EvaluatedModelMapper(private val input: ReporterInput) {
                         path = location.path,
                         startLine = location.startLine,
                         endLine = location.endLine,
-                        scanResult = scanResult
+                        scanResult = evaluatedScanResult
                     )
                 }
             }
@@ -529,7 +528,7 @@ internal class EvaluatedModelMapper(private val input: ReporterInput) {
                     path = location.path,
                     startLine = location.startLine,
                     endLine = location.endLine,
-                    scanResult = scanResult
+                    scanResult = evaluatedScanResult
                 )
             }
         }
