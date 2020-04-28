@@ -57,21 +57,21 @@ class CycloneDxReporter : Reporter {
         enumValues<Hash.Algorithm>().find { it.spec == hash.algorithm.toString() }?.let { Hash(it, hash.value) }
 
     private fun mapLicenseNamesToObjects(licenseNames: Collection<String>, origin: String, input: ReporterInput) =
-            licenseNames.map { licenseName ->
-                val spdxId = SpdxLicense.forId(licenseName)?.id
+        licenseNames.map { licenseName ->
+            val spdxId = SpdxLicense.forId(licenseName)?.id
 
-                // Prefer to set the id in case of an SPDX "core" license and only use the name as a fallback, also
-                // see https://github.com/CycloneDX/cyclonedx-core-java/issues/8.
-                License().apply {
-                    id = spdxId
-                    name = licenseName.takeIf { spdxId == null }
-                    licenseText = LicenseText().apply {
-                        contentType = "plain/text"
-                        text = input.licenseTextProvider.getLicenseText(licenseName)
-                    }
-                    extensibleTypes = listOf(ExtensibleType("ort", "origin", origin))
+            // Prefer to set the id in case of an SPDX "core" license and only use the name as a fallback, also
+            // see https://github.com/CycloneDX/cyclonedx-core-java/issues/8.
+            License().apply {
+                id = spdxId
+                name = licenseName.takeIf { spdxId == null }
+                licenseText = LicenseText().apply {
+                    contentType = "plain/text"
+                    text = input.licenseTextProvider.getLicenseText(licenseName)
                 }
+                extensibleTypes = listOf(ExtensibleType("ort", "origin", origin))
             }
+        }
 
     override fun generateReport(outputStream: OutputStream, input: ReporterInput) {
         val ortResult = input.ortResult
