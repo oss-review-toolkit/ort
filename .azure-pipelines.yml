@@ -29,9 +29,9 @@ stages:
 - stage: build_test
   displayName: Build and Test
   jobs:
-  - template: ci/docker.yml
-  - template: ci/detekt.yml
-  - template: ci/linux-test.yml
-  - template: ci/linux-analyzer-test.yml
-  - template: ci/windows-test.yml
-  - template: ci/windows-analyzer-test.yml
+  - template: .azure-pipelines/docker.yml
+  - template: .azure-pipelines/detekt.yml
+  - template: .azure-pipelines/linux-test.yml
+  - template: .azure-pipelines/linux-analyzer-test.yml
+  - template: .azure-pipelines/windows-test.yml
+  - template: .azure-pipelines/windows-analyzer-test.yml
