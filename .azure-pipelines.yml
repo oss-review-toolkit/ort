@@ -26,8 +26,8 @@ variables:
   VIRTUALENV_VERSION: '20.0.14'
 
 stages:
-- stage: build_test
-  displayName: Build and Test
+- stage: run
+  displayName: Run
   jobs:
   - template: .azure-pipelines/docker.yml
   - template: .azure-pipelines/detekt.yml
