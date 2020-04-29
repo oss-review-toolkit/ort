@@ -13,6 +13,7 @@ schedules:
 
 variables:
   GRADLE_USER_HOME: $(Pipeline.Workspace)/.gradle
+  ORT_DATA_DIR: $(Pipeline.Workspace)/.ort
   # Tool versions.
   BOWER_VERSION: '1.8.8'
   BUNDLER_VERSION: '2.1.4'
