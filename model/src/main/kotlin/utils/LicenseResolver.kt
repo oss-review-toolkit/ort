@@ -26,6 +26,7 @@ import org.ossreviewtoolkit.model.Provenance
 import org.ossreviewtoolkit.model.TextLocation
 import org.ossreviewtoolkit.model.config.LicenseFindingCuration
 import org.ossreviewtoolkit.model.config.PathExclude
+import org.ossreviewtoolkit.spdx.SpdxExpression
 
 import java.util.SortedSet
 
@@ -78,7 +79,10 @@ internal class LicenseResolver(
             }
 
             val curatedLicenseFindings = curationMatcher.applyAll(rawLicenseFindings, curations)
-            val matchedFindings = findingsMatcher.match(curatedLicenseFindings, copyrightFindings).toSortedSet()
+            val decomposedFindings = curatedLicenseFindings.flatMap { finding ->
+                SpdxExpression.parse(finding.license).decompose().map { finding.copy(license = it.toString()) }
+            }
+            val matchedFindings = findingsMatcher.match(decomposedFindings, copyrightFindings).toSortedSet()
 
             matchedFindings.forEach { findings ->
                 val matchingExcludes = mutableSetOf<PathExclude>()
