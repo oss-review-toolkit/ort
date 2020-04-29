@@ -107,6 +107,12 @@ internal class ListLicensesCommand : CliktCommand(
         help = "Apply the license finding curations contained in the ORT result."
     ).flag()
 
+    private val decomposeLicenseExpressions by option(
+        "--decompose-license-expressions",
+        help = "Decompose SPDX license expressions into its single licenses components and list the findings for " +
+                "each single license separately."
+    ).flag()
+
     private val repositoryConfigurationFile by option(
         "--repository-configuration-file",
         help = "Override the repository configuration contained in the ORT result."
@@ -155,7 +161,12 @@ internal class ListLicensesCommand : CliktCommand(
         val violatedRulesByLicense = ortResult.getViolatedRulesByLicense(packageId, offendingSeverity)
 
         val findingsByProvenance = ortResult
-            .getLicenseFindingsById(packageId, packageConfigurationProvider, applyLicenseFindingCurations)
+            .getLicenseFindingsById(
+                packageId,
+                packageConfigurationProvider,
+                applyLicenseFindingCurations,
+                decomposeLicenseExpressions
+            )
             .mapValues { (provenance, locationsByLicense) ->
                 locationsByLicense.filter { (license, _) ->
                     !offendingOnly || violatedRulesByLicense.contains(license)
