@@ -19,6 +19,8 @@
 
 package org.ossreviewtoolkit.reporter.model
 
+import com.fasterxml.jackson.annotation.JsonInclude
+
 import org.ossreviewtoolkit.model.Provenance
 import org.ossreviewtoolkit.model.ScannerDetails
 import org.ossreviewtoolkit.model.ScanSummary
@@ -35,6 +37,8 @@ data class EvaluatedScanResult(
     val startTime: Instant,
     val endTime: Instant,
     val fileCount: Int,
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
     val packageVerificationCode: String,
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
     val issues: List<EvaluatedOrtIssue>
 )

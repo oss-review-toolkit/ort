@@ -34,9 +34,12 @@ import java.time.Instant
 data class EvaluatedOrtIssue(
     val timestamp: Instant,
     val type: EvaluatedOrtIssueType,
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
     val source: String,
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
     val message: String,
     val severity: Severity = Severity.ERROR,
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
     val resolutions: List<IssueResolution>,
     @JsonIdentityReference(alwaysAsId = true)
     @JsonInclude(JsonInclude.Include.NON_NULL)
