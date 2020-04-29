@@ -29,7 +29,7 @@ stages:
 - stage: run
   displayName: Run
   jobs:
-  - template: .azure-pipelines/Docker.yml
+  - template: .azure-pipelines/DockerBuild.yml
   - template: .azure-pipelines/StaticAnalysis.yml
   - template: .azure-pipelines/LinuxTest.yml
   - template: .azure-pipelines/LinuxAnalyzerTest.yml
