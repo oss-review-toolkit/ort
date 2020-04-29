@@ -66,7 +66,7 @@ sealed class SpdxExpression {
          */
         @JsonCreator
         @JvmStatic
-        fun parse(expression: String) = parse(expression, Strictness.ALLOW_ANY)
+        fun parse(expression: String): SpdxExpression = parse(expression, Strictness.ALLOW_ANY)
 
         /**
          * Parse a string into an [SpdxExpression]. [strictness] defines whether only the syntax is checked
