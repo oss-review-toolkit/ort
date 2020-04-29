@@ -30,6 +30,7 @@ import org.ossreviewtoolkit.model.config.RuleViolationResolution
  * The evaluated form of a [RuleViolation] used by the [EvaluatedModel].
  */
 data class EvaluatedRuleViolation(
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
     val rule: String,
     val pkg: EvaluatedPackage,
     @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -37,7 +38,10 @@ data class EvaluatedRuleViolation(
     @JsonInclude(JsonInclude.Include.NON_NULL)
     val licenseSource: LicenseSource?,
     val severity: Severity,
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
     val message: String,
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
     val howToFix: String,
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
     val resolutions: List<RuleViolationResolution>
 )
