@@ -77,6 +77,25 @@ jobs:
       path: $(GRADLE_USER_HOME)/wrapper/dists
     displayName: Cache Gradle Wrapper
 
+  - bash: |
+      # Create the ORT_DATA_DIR, in case it is not created because the test task is skipped because of the Gradle cache.
+      mkdir $ORT_DATA_DIR
+
+      # Export a DAY_OF_YEAR variable to be able to use it as a cache key.
+      export DAY_OF_YEAR=$(date '+%j')
+      echo "##vso[task.setvariable variable=DAY_OF_YEAR;]$DAY_OF_YEAR"
+    displayName: Prepare Caching ORT Data Dir
+
+  # Cache the ORT data directory. There is no file that could be used as a meaningful cache key, so use the day of year
+  # instead to make sure the cache is updated once a day.
+  - task: Cache@2
+    inputs:
+      key: '"$(Agent.OS)" | analyzer-test | ort-data | "$(DAY_OF_YEAR)"'
+      restoreKeys: |
+        "$(Agent.OS)" | analyzer-test | ort-data
+      path: $(ORT_DATA_DIR)
+    displayName: Cache ORT Data Dir
+
   # Check requirements.
   # Enable this task to check installed requirements, e.g. after upgrading the required version of a system
   # dependency.
