@@ -28,7 +28,6 @@ jobs:
       pip install --user \
         conan==$CONAN_VERSION \
         pipenv==$PYTHON_PIPENV_VERSION \
-        reuse \
         virtualenv==$VIRTUALENV_VERSION
       conan user # Create the conan data directory. Automatic detection of your arch, compiler, etc.
 
