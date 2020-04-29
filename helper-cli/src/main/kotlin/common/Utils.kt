@@ -302,7 +302,7 @@ internal fun OrtResult.getLicenseFindingsById(
         scanResultContainer.results.forEach { scanResult ->
             val findingsForProvenance = result.getOrPut(scanResult.provenance) { mutableMapOf() }
 
-            val licenseFindings = scanResult.summary.licenseFindings.let {
+            scanResult.summary.licenseFindings.let {
                 if (applyCurations) {
                     FindingCurationMatcher().applyAll(it, getLicenseFindingsCurations(scanResult.provenance))
                 } else {
@@ -316,9 +316,7 @@ internal fun OrtResult.getLicenseFindingsById(
                 } else {
                     findings
                 }
-            }
-
-            licenseFindings.forEach {
+            }.forEach {
                 findingsForProvenance.getOrPut(it.license) { mutableSetOf() }.add(it.location)
             }
         }
