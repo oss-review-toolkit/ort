@@ -627,6 +627,26 @@ class LicenseResolverTest : WordSpec() {
 
                 result should containExactlyInAnyOrder("BSD-2-Clause")
             }
+
+            "decompose SPDX expressions into single licenses" {
+                val id = setupProject().id
+                setupScanResult(
+                    id, ProvenanceType.VCS, listOf(
+                        LicenseFinding(
+                            license = "GPL-2.0-only WITH Classpath-exception-2.0 AND BSD-3-Clause OR MIT",
+                            location = TextLocation("some/path", startLine = 1, endLine = 1)
+                        )
+                    )
+                )
+
+                val result = createResolver().getDetectedLicensesWithCopyrights(id).keys
+
+                result should containExactlyInAnyOrder(
+                    "GPL-2.0-only WITH Classpath-exception-2.0",
+                    "BSD-3-Clause",
+                    "MIT"
+                )
+            }
         }
     }
 }
