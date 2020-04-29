@@ -1,14 +1,14 @@
 jobs:
-- job: 'WindowsTest'
+- job: WindowsTest
   pool:
-    vmImage: 'windows-2019'
+    vmImage: windows-2019
   steps:
   - task: UsePythonVersion@0
     displayName: Enable Python 3.6
     inputs:
-      versionSpec: '3.6'
+      versionSpec: 3.6
       addToPath: true
-      architecture: 'x64'
+      architecture: x64
 
   # Install required tools.
   - pwsh: |
@@ -70,9 +70,9 @@ jobs:
       gradleWrapperFile: gradlew.bat
       options: --no-daemon -x reporter-web-app:yarnBuild
       tasks: 'cli:run --args="requirements"'
-      javaHomeOption: 'JDKVersion'
-      jdkVersionOption: '1.11'
-      gradleOptions: '-Xmx4096m'
+      javaHomeOption: JDKVersion
+      jdkVersionOption: 1.11
+      gradleOptions: -Xmx4096m
 
   # Build and test.
   - task: Gradle@2
@@ -81,13 +81,13 @@ jobs:
       gradleWrapperFile: gradlew.bat
       # TODO: Only exclude ExpensiveTag on PR builds.
       options: --no-daemon --stacktrace -Dkotest.tags.exclude=ExpensiveTag -Dkotest.assertions.multi-line-diff=simple -x analyzer:test -x analyzer:funTest
-      tasks: 'test funTest'
+      tasks: test funTest
       publishJUnitResults: true
       testResultsFiles: '**/TEST-*.xml'
       testRunTitle: $(Agent.JobName)
-      javaHomeOption: 'JDKVersion'
-      jdkVersionOption: '1.11'
-      gradleOptions: '-Xmx8192m'
+      javaHomeOption: JDKVersion
+      jdkVersionOption: 1.11
+      gradleOptions: -Xmx8192m
 
   # Ensure that any running Gradle daemon is stopped before caching starts.
   - bash: ./gradlew --stop

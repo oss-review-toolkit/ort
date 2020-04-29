@@ -1,16 +1,16 @@
 jobs:
-- job: 'WindowsAnalyzerTest'
+- job: WindowsAnalyzerTest
   pool:
-    vmImage: 'windows-2019'
+    vmImage: windows-2019
   variables:
-    FLUTTER_HOME: 'C:\flutter'
+    FLUTTER_HOME: C:\flutter
   steps:
   - task: UsePythonVersion@0
     displayName: Enable Python 3.6
     inputs:
-      versionSpec: '3.6'
+      versionSpec: 3.6
       addToPath: true
-      architecture: 'x64'
+      architecture: x64
 
   # Install required tools.
   - pwsh: |
@@ -107,9 +107,9 @@ jobs:
       gradleWrapperFile: gradlew.bat
       options: --no-daemon -x reporter-web-app:yarnBuild
       tasks: 'cli:run --args="requirements"'
-      javaHomeOption: 'JDKVersion'
-      jdkVersionOption: '1.11'
-      gradleOptions: '-Xmx4096m'
+      javaHomeOption: JDKVersion
+      jdkVersionOption: 1.11
+      gradleOptions: -Xmx4096m
 
   # Build and test.
   - task: Gradle@2
@@ -118,13 +118,13 @@ jobs:
       gradleWrapperFile: gradlew.bat
       # TODO: Only exclude ExpensiveTag on PR builds.
       options: --no-daemon --stacktrace -Dkotest.tags.exclude=ExpensiveTag -Dkotest.assertions.multi-line-diff=simple
-      tasks: 'analyzer:test analyzer:funTest'
+      tasks: analyzer:test analyzer:funTest
       publishJUnitResults: true
       testResultsFiles: '**/TEST-*.xml'
       testRunTitle:  $(Agent.JobName)
-      javaHomeOption: 'JDKVersion'
-      jdkVersionOption: '1.11'
-      gradleOptions: '-Xmx8192m'
+      javaHomeOption: JDKVersion
+      jdkVersionOption: 1.11
+      gradleOptions: -Xmx8192m
 
   # Clean disk space before caching starts, otherwise the disk might run full.
   - bash: ./gradlew --no-daemon clean

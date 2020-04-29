@@ -1,8 +1,8 @@
 jobs:
 # TODO: Consider running the Docker job only if the Dockerfile was changed.
-- job: 'DockerBuild'
+- job: DockerBuild
   pool:
-    vmImage: 'ubuntu-18.04'
+    vmImage: ubuntu-18.04
   # TODO: Add caching.
   steps:
   - checkout: self
@@ -11,7 +11,7 @@ jobs:
 
   - task: Docker@2
     inputs:
-      command: 'build'
-      Dockerfile: 'Dockerfile'
+      command: build
+      Dockerfile: Dockerfile
       tags: |
         ort
