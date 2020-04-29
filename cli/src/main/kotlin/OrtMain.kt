@@ -71,8 +71,11 @@ class OrtMain : CliktCommand(name = ORT_NAME, epilog = "* denotes required optio
 
     private val stacktrace by option(help = "Print out the stacktrace for all exceptions.").flag()
 
-    private val configArguments by option("-P", help = "Allows to override configuration parameters.")
-        .convert { Pair(it.substringBefore("="), it.substringAfter("=", "")) }
+    private val configArguments by option(
+        "-P",
+        help = "Override a key-value pair in the configuration file. For example: " +
+                "-P scanner.postgresStorage.schema=testSchema"
+    ).convert { Pair(it.substringBefore("="), it.substringAfter("=", "")) }
         .multiple()
         .unique()
 
