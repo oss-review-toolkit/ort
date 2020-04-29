@@ -17,6 +17,13 @@
  * License-Filename: LICENSE
  */
 
+/**
+ * Required Jenkins plugins:
+ * - https://plugins.jenkins.io/pipeline-utility-steps/
+ */
+
+import java.io.IOException
+
 final DOCKER_BUILD_ARGS = '--build-arg http_proxy=$http_proxy --build-arg https_proxy=$https_proxy'
 
 // Disable the entry point to work around https://issues.jenkins-ci.org/browse/JENKINS-51307.
@@ -198,6 +205,18 @@ pipeline {
                     rm -fr analyzer/out/results
                     /opt/ort/bin/ort $LOG_LEVEL analyze $ALLOW_DYNAMIC_VERSIONS_PARAM $USE_CLEARLY_DEFINED_CURATIONS_PARAM -f JSON,YAML -i $PROJECT_DIR/source -o analyzer/out/results
                 '''
+
+                script {
+                    try {
+                        def result = readYaml file: 'analyzer/out/results/analyzer-result.yml'
+                        def rootProjectId = result.analyzer?.result?.projects?.getAt(0)?.id
+                        if (rootProjectId) {
+                            currentBuild.displayName += ": $rootProjectId"
+                        }
+                    } catch (IOException e) {
+                        // Ignore and just skip setting a custom display name.
+                    }
+                }
             }
 
             post {
