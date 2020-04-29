@@ -28,7 +28,7 @@ jobs:
       npm install -g bower@$env:BOWER_VERSION
 
       # Install Python packages.
-      pip install --user conan==$env:CONAN_VERSION pipenv==$env:PYTHON_PIPENV_VERSION reuse virtualenv==$env:VIRTUALENV_VERSION
+      pip install --user conan==$env:CONAN_VERSION pipenv==$env:PYTHON_PIPENV_VERSION virtualenv==$env:VIRTUALENV_VERSION
       conan user # Create the conan data directory. Automatic detection of your arch, compiler, etc.
 
       # Install Ruby packages.
