@@ -1,7 +1,7 @@
 jobs:
 - job: StaticAnalysis
   pool:
-    vmImage: 'ubuntu-18.04'
+    vmImage: ubuntu-18.04
   steps:
   - checkout: self
     fetchDepth: 1
@@ -28,17 +28,17 @@ jobs:
     inputs:
       gradleWrapperFile: gradlew
       options: --no-daemon --stacktrace
-      tasks: 'detekt'
-      javaHomeOption: 'JDKVersion'
-      jdkVersionOption: '1.11'
-      gradleOptions: '-Xmx8192m'
+      tasks: detekt
+      javaHomeOption: JDKVersion
+      jdkVersionOption: 1.11
+      gradleOptions: -Xmx8192m
 
   - task: UsePythonVersion@0
     displayName: Enable Python 3.6
     inputs:
-      versionSpec: '3.6'
+      versionSpec: 3.6
       addToPath: true
-      architecture: 'x64'
+      architecture: x64
 
   - bash: |
       pip install --user reuse
