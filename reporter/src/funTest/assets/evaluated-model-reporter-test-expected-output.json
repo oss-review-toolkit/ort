@@ -22,10 +22,10 @@
   } ],
   "licenses" : [ {
     "_id" : 0,
-    "id" : "Apache-2.0 (multi-line)"
+    "id" : "LicenseRef-test-Apache-2.0-multi-line"
   }, {
     "_id" : 1,
-    "id" : "Apache-2.0 (single-line)"
+    "id" : "LicenseRef-test-Apache-2.0-single-line"
   }, {
     "_id" : 2,
     "id" : "Apache-2.0"
@@ -648,8 +648,8 @@
       },
       "detected" : {
         "Apache-2.0" : 1,
-        "Apache-2.0 (multi-line)" : 1,
-        "Apache-2.0 (single-line)" : 1,
+        "LicenseRef-test-Apache-2.0-multi-line" : 1,
+        "LicenseRef-test-Apache-2.0-single-line" : 1,
         "MIT" : 1
       }
     }
