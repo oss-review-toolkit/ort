@@ -1,5 +1,5 @@
 jobs:
-- job: Detekt
+- job: StaticAnalysis
   pool:
     vmImage: 'ubuntu-18.04'
   steps:
