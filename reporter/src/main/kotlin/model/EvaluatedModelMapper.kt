@@ -400,7 +400,6 @@ internal class EvaluatedModelMapper(private val input: ReporterInput) {
             }
 
             return DependencyTreeNode(
-                title = id.toCoordinates(),
                 linkage = linkage,
                 pkg = dependency,
                 scope = null,
@@ -420,7 +419,6 @@ internal class EvaluatedModelMapper(private val input: ReporterInput) {
             val evaluatedScopeExcludes = scopeExcludes.addIfRequired(applicableScopeExcludes)
 
             DependencyTreeNode(
-                title = scope.name,
                 linkage = null,
                 pkg = null,
                 scope = scopes.getValue(scope.name),
@@ -432,7 +430,6 @@ internal class EvaluatedModelMapper(private val input: ReporterInput) {
         }
 
         val tree = DependencyTreeNode(
-            title = project.id.toCoordinates(),
             linkage = null,
             pkg = pkg,
             scope = null,
