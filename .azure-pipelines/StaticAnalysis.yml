@@ -33,6 +33,18 @@ jobs:
       jdkVersionOption: '1.11'
       gradleOptions: '-Xmx8192m'
 
+  - task: UsePythonVersion@0
+    displayName: Enable Python 3.6
+    inputs:
+      versionSpec: '3.6'
+      addToPath: true
+      architecture: 'x64'
+
+  - bash: |
+      pip install --user reuse
+      ~/.local/bin/reuse lint
+    displayName: Check REUSE Compliance
+
   # Ensure that any running Gradle daemon is stopped before caching starts.
   - bash: ./gradlew --stop
     displayName: Stop Gradle Daemon
