@@ -40,6 +40,7 @@ import org.ossreviewtoolkit.model.utils.FindingsMatcher
 import org.ossreviewtoolkit.model.yamlMapper
 import org.ossreviewtoolkit.reporter.ReporterInput
 import org.ossreviewtoolkit.reporter.utils.StatisticsCalculator
+import org.ossreviewtoolkit.spdx.SpdxExpression
 import org.ossreviewtoolkit.utils.ProcessedDeclaredLicense
 
 /**
@@ -530,7 +531,10 @@ internal class EvaluatedModelMapper(private val input: ReporterInput) {
         val pathExcludes = getPathExcludes(id, scanResult.provenance)
         val licenseFindingCurations = getLicenseFindingCurations(id, scanResult.provenance)
         val curatedFindings = curationsMatcher.applyAll(scanResult.summary.licenseFindings, licenseFindingCurations)
-        val matchedFindings = findingsMatcher.match(curatedFindings, scanResult.summary.copyrightFindings)
+        val decomposedFindings = curatedFindings.flatMap { finding ->
+            SpdxExpression.parse(finding.license).decompose().map { finding.copy(license = it.toString()) }
+        }
+        val matchedFindings = findingsMatcher.match(decomposedFindings, scanResult.summary.copyrightFindings)
 
         matchedFindings.forEach { licenseFindings ->
             licenseFindings.copyrights.forEach { copyrightFinding ->

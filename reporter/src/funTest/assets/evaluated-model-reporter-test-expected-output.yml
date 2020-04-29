@@ -18,25 +18,25 @@ copyrights:
   statement: "Copyright (c) example authors."
 licenses:
 - _id: 0
-  id: "GPL-2.0-only WITH Classpath-exception-2.0 AND BSD-3-Clause OR MIT"
+  id: "GPL-2.0-only WITH Classpath-exception-2.0"
 - _id: 1
-  id: "LicenseRef-test-Apache-2.0-multi-line"
-- _id: 2
-  id: "LicenseRef-test-Apache-2.0-single-line"
-- _id: 3
-  id: "Apache-2.0"
-- _id: 4
-  id: "MIT"
-- _id: 5
-  id: "Eclipse Public License 1.0"
-- _id: 6
-  id: "EPL-1.0"
-- _id: 7
-  id: "Apache License, Version 2.0"
-- _id: 8
-  id: "New BSD License"
-- _id: 9
   id: "BSD-3-Clause"
+- _id: 2
+  id: "MIT"
+- _id: 3
+  id: "LicenseRef-test-Apache-2.0-multi-line"
+- _id: 4
+  id: "LicenseRef-test-Apache-2.0-single-line"
+- _id: 5
+  id: "Apache-2.0"
+- _id: 6
+  id: "Eclipse Public License 1.0"
+- _id: 7
+  id: "EPL-1.0"
+- _id: 8
+  id: "Apache License, Version 2.0"
+- _id: 9
+  id: "New BSD License"
 scopes:
 - _id: 0
   name: "compile"
@@ -150,6 +150,8 @@ packages:
   - 0
   - 1
   - 2
+  - 3
+  - 4
   binary_artifact:
     url: ""
     hash:
@@ -184,18 +186,30 @@ packages:
     scan_result: 0
   - type: "LICENSE"
     license: 1
+    path: "src/code.cpp"
+    start_line: 1
+    end_line: 1
+    scan_result: 0
+  - type: "LICENSE"
+    license: 2
+    path: "src/code.cpp"
+    start_line: 1
+    end_line: 1
+    scan_result: 0
+  - type: "LICENSE"
+    license: 3
     path: "build.gradle"
     start_line: 19
     end_line: 20
     scan_result: 0
   - type: "LICENSE"
-    license: 2
+    license: 4
     path: "build.gradle"
     start_line: 19
     end_line: 19
     scan_result: 0
   - type: "LICENSE"
-    license: 2
+    license: 4
     path: "build.gradle"
     start_line: 20
     end_line: 20
@@ -208,10 +222,10 @@ packages:
   purl: "pkg:gradle/org.ossreviewtoolkit/nested-fake-project@1.0.0"
   declared_licenses_processed: {}
   detected_licenses:
-  - 3
-  - 4
+  - 5
+  - 2
   detected_excluded_licenses:
-  - 4
+  - 2
   binary_artifact:
     url: ""
     hash:
@@ -247,7 +261,7 @@ packages:
     path_excludes:
     - 1
   - type: "LICENSE"
-    license: 3
+    license: 5
     path: "file.java"
     start_line: 1
     end_line: 2
@@ -255,7 +269,7 @@ packages:
     path_excludes:
     - 1
   - type: "LICENSE"
-    license: 3
+    license: 5
     path: "file.kt"
     start_line: 1
     end_line: 2
@@ -269,7 +283,7 @@ packages:
     path_excludes:
     - 1
   - type: "LICENSE"
-    license: 4
+    license: 2
     path: "file1.java"
     start_line: 1
     end_line: 2
@@ -277,7 +291,7 @@ packages:
     path_excludes:
     - 1
   - type: "LICENSE"
-    license: 4
+    license: 2
     path: "file2.java"
     start_line: 1
     end_line: 2
@@ -293,11 +307,11 @@ packages:
   definition_file_path: ""
   purl: "pkg:ant/junit/junit@4.12"
   declared_licenses:
-  - 5
+  - 6
   declared_licenses_processed:
     spdx_expression: "EPL-1.0"
     mapped_licenses:
-    - 6
+    - 7
   description: "JUnit is a unit testing framework for Java, created by Erich Gamma\
     \ and Kent Beck."
   homepage_url: "http://junit.org"
@@ -338,11 +352,11 @@ packages:
   definition_file_path: ""
   purl: "pkg:maven/org.apache.commons/commons-lang3@3.5"
   declared_licenses:
-  - 7
+  - 8
   declared_licenses_processed:
     spdx_expression: "Apache-2.0"
     mapped_licenses:
-    - 3
+    - 5
   description: "Apache Commons Lang, a package of Java utility classes for the\n \
     \ classes that are in java.lang's hierarchy, or are considered to be so\n  standard\
     \ as to justify existence in java.lang."
@@ -384,11 +398,11 @@ packages:
   definition_file_path: ""
   purl: "pkg:maven/org.apache.commons/commons-text@1.1"
   declared_licenses:
-  - 7
+  - 8
   declared_licenses_processed:
     spdx_expression: "Apache-2.0"
     mapped_licenses:
-    - 3
+    - 5
   description: "Apache Commons Text is a library focused on algorithms working on\
     \ strings."
   homepage_url: "http://commons.apache.org/proper/commons-text/"
@@ -429,11 +443,11 @@ packages:
   definition_file_path: ""
   purl: "pkg:maven/org.hamcrest/hamcrest-core@1.3"
   declared_licenses:
-  - 8
+  - 9
   declared_licenses_processed:
     spdx_expression: "BSD-3-Clause"
     mapped_licenses:
-    - 9
+    - 1
   description: "This is the core API of hamcrest matcher framework to be used by third-party\
     \ framework providers. This includes the a foundation set of matcher implementations\
     \ for common operations."
@@ -549,7 +563,7 @@ rule_violations:
 - _id: 0
   rule: "rule 1"
   pkg: 2
-  license: 6
+  license: 7
   license_source: "DETECTED"
   severity: "ERROR"
   message: "EPL-1.0 error"
@@ -558,7 +572,7 @@ rule_violations:
 - _id: 1
   rule: "rule 2"
   pkg: 4
-  license: 3
+  license: 5
   license_source: "DECLARED"
   severity: "HINT"
   message: "Apache-2.0 hint"
@@ -569,7 +583,7 @@ rule_violations:
 - _id: 2
   rule: "rule 3"
   pkg: 5
-  license: 9
+  license: 1
   license_source: "CONCLUDED"
   severity: "WARNING"
   message: "BSD-3-Clause warning"
