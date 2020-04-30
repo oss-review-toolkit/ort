@@ -218,7 +218,7 @@ class SummaryView extends React.Component {
                             </Item>
                             <Item
                                 dot={
-                                    (hasUnresolvedIssues || hasUnresolvedRuleViolations > 0)
+                                    (hasUnresolvedIssues || hasUnresolvedRuleViolations)
                                         ? (<ExclamationCircleOutlined style={{ fontSize: 16 }} />)
                                         : (<CheckCircleOutlined style={{ fontSize: 16 }} />)
                                 }
