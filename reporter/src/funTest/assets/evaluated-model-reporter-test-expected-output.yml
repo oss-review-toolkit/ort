@@ -18,22 +18,24 @@ copyrights:
   statement: "Copyright (c) example authors."
 licenses:
 - _id: 0
-  id: "LicenseRef-test-Apache-2.0-multi-line"
+  id: "GPL-2.0-only WITH Classpath-exception-2.0 AND BSD-3-Clause OR MIT"
 - _id: 1
-  id: "LicenseRef-test-Apache-2.0-single-line"
+  id: "LicenseRef-test-Apache-2.0-multi-line"
 - _id: 2
-  id: "Apache-2.0"
+  id: "LicenseRef-test-Apache-2.0-single-line"
 - _id: 3
-  id: "MIT"
+  id: "Apache-2.0"
 - _id: 4
-  id: "Eclipse Public License 1.0"
+  id: "MIT"
 - _id: 5
-  id: "EPL-1.0"
+  id: "Eclipse Public License 1.0"
 - _id: 6
-  id: "Apache License, Version 2.0"
+  id: "EPL-1.0"
 - _id: 7
-  id: "New BSD License"
+  id: "Apache License, Version 2.0"
 - _id: 8
+  id: "New BSD License"
+- _id: 9
   id: "BSD-3-Clause"
 scopes:
 - _id: 0
@@ -163,6 +165,7 @@ packages:
   detected_licenses:
   - 0
   - 1
+  - 2
   description: ""
   homepage_url: ""
   binary_artifact:
@@ -195,18 +198,24 @@ packages:
   findings:
   - type: "LICENSE"
     license: 0
+    path: "src/code.cpp"
+    start_line: 1
+    end_line: 1
+    scan_result: 0
+  - type: "LICENSE"
+    license: 1
     path: "build.gradle"
     start_line: 19
     end_line: 20
     scan_result: 0
   - type: "LICENSE"
-    license: 1
+    license: 2
     path: "build.gradle"
     start_line: 19
     end_line: 19
     scan_result: 0
   - type: "LICENSE"
-    license: 1
+    license: 2
     path: "build.gradle"
     start_line: 20
     end_line: 20
@@ -226,10 +235,10 @@ packages:
     mapped_licenses: []
     unmapped_licenses: []
   detected_licenses:
-  - 2
   - 3
+  - 4
   detected_excluded_licenses:
-  - 3
+  - 4
   description: ""
   homepage_url: ""
   binary_artifact:
@@ -269,7 +278,7 @@ packages:
     path_excludes:
     - 1
   - type: "LICENSE"
-    license: 2
+    license: 3
     path: "file.java"
     start_line: 1
     end_line: 2
@@ -277,7 +286,7 @@ packages:
     path_excludes:
     - 1
   - type: "LICENSE"
-    license: 2
+    license: 3
     path: "file.kt"
     start_line: 1
     end_line: 2
@@ -291,7 +300,7 @@ packages:
     path_excludes:
     - 1
   - type: "LICENSE"
-    license: 3
+    license: 4
     path: "file1.java"
     start_line: 1
     end_line: 2
@@ -299,7 +308,7 @@ packages:
     path_excludes:
     - 1
   - type: "LICENSE"
-    license: 3
+    license: 4
     path: "file2.java"
     start_line: 1
     end_line: 2
@@ -317,11 +326,11 @@ packages:
   definition_file_path: ""
   purl: "pkg:ant/junit/junit@4.12"
   declared_licenses:
-  - 4
+  - 5
   declared_licenses_processed:
     spdx_expression: "EPL-1.0"
     mapped_licenses:
-    - 5
+    - 6
     unmapped_licenses: []
   detected_licenses: []
   description: "JUnit is a unit testing framework for Java, created by Erich Gamma\
@@ -368,11 +377,11 @@ packages:
   definition_file_path: ""
   purl: "pkg:maven/org.apache.commons/commons-lang3@3.5"
   declared_licenses:
-  - 6
+  - 7
   declared_licenses_processed:
     spdx_expression: "Apache-2.0"
     mapped_licenses:
-    - 2
+    - 3
     unmapped_licenses: []
   detected_licenses: []
   description: "Apache Commons Lang, a package of Java utility classes for the\n \
@@ -421,11 +430,11 @@ packages:
   definition_file_path: ""
   purl: "pkg:maven/org.apache.commons/commons-text@1.1"
   declared_licenses:
-  - 6
+  - 7
   declared_licenses_processed:
     spdx_expression: "Apache-2.0"
     mapped_licenses:
-    - 2
+    - 3
     unmapped_licenses: []
   detected_licenses: []
   description: "Apache Commons Text is a library focused on algorithms working on\
@@ -473,11 +482,11 @@ packages:
   definition_file_path: ""
   purl: "pkg:maven/org.hamcrest/hamcrest-core@1.3"
   declared_licenses:
-  - 7
+  - 8
   declared_licenses_processed:
     spdx_expression: "BSD-3-Clause"
     mapped_licenses:
-    - 8
+    - 9
     unmapped_licenses: []
   detected_licenses: []
   description: "This is the core API of hamcrest matcher framework to be used by third-party\
@@ -603,7 +612,7 @@ rule_violations:
 - _id: 0
   rule: "rule 1"
   pkg: 2
-  license: 5
+  license: 6
   license_source: "DETECTED"
   severity: "ERROR"
   message: "EPL-1.0 error"
@@ -613,7 +622,7 @@ rule_violations:
 - _id: 1
   rule: "rule 2"
   pkg: 4
-  license: 2
+  license: 3
   license_source: "DECLARED"
   severity: "HINT"
   message: "Apache-2.0 hint"
@@ -624,7 +633,7 @@ rule_violations:
 - _id: 2
   rule: "rule 3"
   pkg: 5
-  license: 8
+  license: 9
   license_source: "CONCLUDED"
   severity: "WARNING"
   message: "BSD-3-Clause warning"
@@ -658,6 +667,7 @@ statistics:
       EPL-1.0: 1
     detected:
       Apache-2.0: 1
+      GPL-2.0-only WITH Classpath-exception-2.0 AND BSD-3-Clause OR MIT: 1
       LicenseRef-test-Apache-2.0-multi-line: 1
       LicenseRef-test-Apache-2.0-single-line: 1
       MIT: 1
