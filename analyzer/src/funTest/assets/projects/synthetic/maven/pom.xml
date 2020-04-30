@@ -15,7 +15,7 @@
         </license>
     </licenses>
     <properties>
-        <jenkins-ci.url>http://repo.jenkins-ci.org/releases</jenkins-ci.url>
+        <jenkins-ci.url>https://repo.jenkins-ci.org/releases</jenkins-ci.url>
         <commons-text.version>1.1</commons-text.version>
         <junit.version>3.8.1</junit.version>
         <version-number.version>1.4</version-number.version>
