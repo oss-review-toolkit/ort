@@ -31,4 +31,5 @@ dependencies {
 
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin:$jacksonVersion")
     implementation("com.squareup.retrofit2:converter-jackson:$retrofitVersion")
+    implementation("com.squareup.retrofit2:converter-scalars:$retrofitVersion")
 }
