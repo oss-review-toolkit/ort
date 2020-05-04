@@ -46,8 +46,6 @@ import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
 
-const val TOOL_NAME = "analyzer"
-
 /**
  * The class to run the analysis. The signatures of public functions in this class define the library API.
  */
@@ -131,7 +129,8 @@ class Analyzer(private val config: AnalyzerConfiguration) {
         managedFiles: Map<PackageManager, List<File>>,
         curationProvider: PackageCurationProvider?
     ): AnalyzerResult {
-        val analysisDispatcher = Executors.newFixedThreadPool(5, NamedThreadFactory(TOOL_NAME)).asCoroutineDispatcher()
+        val threadFactory = NamedThreadFactory(javaClass.simpleName)
+        val analysisDispatcher = Executors.newFixedThreadPool(5, threadFactory).asCoroutineDispatcher()
         val analyzerResultBuilder = AnalyzerResultBuilder()
 
         analysisDispatcher.use { dispatcher ->
