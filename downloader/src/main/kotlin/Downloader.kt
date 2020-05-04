@@ -45,8 +45,6 @@ import okhttp3.Request
 import okio.buffer
 import okio.sink
 
-const val TOOL_NAME = "downloader"
-
 /**
  * The class to download source code. The signatures of public functions in this class define the library API.
  */
