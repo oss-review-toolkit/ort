@@ -522,7 +522,7 @@ internal fun RepositoryConfiguration.sortScopeExcludes(): RepositoryConfiguratio
  * Serialize a [RepositoryConfiguration] as YAML to the given target [File].
  */
 internal fun RepositoryConfiguration.writeAsYaml(targetFile: File) {
-    targetFile.parentFile.safeMkdirs()
+    targetFile.absoluteFile.parentFile.safeMkdirs()
     yamlMapper.writeValue(targetFile, this)
 }
 
