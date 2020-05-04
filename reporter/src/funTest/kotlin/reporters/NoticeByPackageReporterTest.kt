@@ -19,6 +19,13 @@
 
 package org.ossreviewtoolkit.reporter.reporters
 
+import io.kotest.core.spec.style.WordSpec
+import io.kotest.matchers.shouldBe
+
+import java.io.ByteArrayOutputStream
+import java.io.File
+import java.time.Instant
+
 import org.ossreviewtoolkit.model.AccessStatistics
 import org.ossreviewtoolkit.model.AnalyzerResult
 import org.ossreviewtoolkit.model.AnalyzerRun
@@ -52,15 +59,9 @@ import org.ossreviewtoolkit.model.config.LocalFileStorageConfiguration
 import org.ossreviewtoolkit.model.config.OrtConfiguration
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
 import org.ossreviewtoolkit.reporter.ReporterInput
+import org.ossreviewtoolkit.spdx.SpdxExpression
 import org.ossreviewtoolkit.utils.LICENSE_FILENAMES
 import org.ossreviewtoolkit.utils.test.DEFAULT_ANALYZER_CONFIGURATION
-
-import io.kotest.matchers.shouldBe
-import io.kotest.core.spec.style.WordSpec
-
-import java.io.ByteArrayOutputStream
-import java.io.File
-import java.time.Instant
 
 private fun generateReport(
     ortResult: OrtResult,
@@ -107,6 +108,12 @@ class NoticeByPackageReporterTest : WordSpec({
                                     ),
                                     PackageReference(
                                         id = Identifier("NPM:@ort:license-file-and-additional-licenses:1.0")
+                                    ),
+                                    PackageReference(
+                                        id = Identifier("NPM:@ort:concluded-license:1.0")
+                                    ),
+                                    PackageReference(
+                                        id = Identifier("NPM:@ort:declared-license:1.0")
                                     )
                                 )
                             )
@@ -163,6 +170,37 @@ class NoticeByPackageReporterTest : WordSpec({
                             binaryArtifact = RemoteArtifact.EMPTY,
                             sourceArtifact = RemoteArtifact(
                                 url = "https://example.com/license-file-and-additional-licenses-1.0.tgz",
+                                hash = Hash(value = "", algorithm = HashAlgorithm.SHA1)
+                            ),
+                            vcs = VcsInfo.EMPTY
+                        ),
+                        curations = emptyList()
+                    ),
+                    CuratedPackage(
+                        pkg = Package(
+                            id = Identifier("NPM:@ort:concluded-license:1.0"),
+                            declaredLicenses = sortedSetOf("BSD-3-Clause"),
+                            concludedLicense = SpdxExpression.parse("MIT"),
+                            description = "",
+                            homepageUrl = "",
+                            binaryArtifact = RemoteArtifact.EMPTY,
+                            sourceArtifact = RemoteArtifact(
+                                url = "https://example.com/concluded-license-1.0.tgz",
+                                hash = Hash(value = "", algorithm = HashAlgorithm.SHA1)
+                            ),
+                            vcs = VcsInfo.EMPTY
+                        ),
+                        curations = emptyList()
+                    ),
+                    CuratedPackage(
+                        pkg = Package(
+                            id = Identifier("NPM:@ort:declared-license:1.0"),
+                            declaredLicenses = sortedSetOf("MIT"),
+                            description = "",
+                            homepageUrl = "",
+                            binaryArtifact = RemoteArtifact.EMPTY,
+                            sourceArtifact = RemoteArtifact(
+                                url = "https://example.com/declared-license-1.0.tgz",
                                 hash = Hash(value = "", algorithm = HashAlgorithm.SHA1)
                             ),
                             vcs = VcsInfo.EMPTY
@@ -357,6 +395,78 @@ class NoticeByPackageReporterTest : WordSpec({
                                         CopyrightFinding(
                                             statement = "Copyright 3",
                                             location = TextLocation("file", 50, 50)
+                                        )
+                                    )
+                                )
+                            )
+                        )
+                    ),
+                    ScanResultContainer(
+                        id = Identifier("NPM:@ort:concluded-license:1.0"),
+                        results = listOf(
+                            ScanResult(
+                                provenance = Provenance(
+                                    sourceArtifact = RemoteArtifact(
+                                        url = "https://example.com/concluded-license-1.0.tgz",
+                                        hash = Hash(value = "", algorithm = HashAlgorithm.SHA1)
+                                    )
+                                ),
+                                scanner = ScannerDetails(name = "scanner", version = "1.0", configuration = ""),
+                                summary = ScanSummary(
+                                    startTime = Instant.EPOCH,
+                                    endTime = Instant.EPOCH,
+                                    fileCount = 0,
+                                    packageVerificationCode = "",
+                                    licenseFindings = sortedSetOf(
+                                        LicenseFinding(
+                                            license = "MIT",
+                                            location = TextLocation("file1", 1, 1)
+                                        ),
+                                        LicenseFinding(
+                                            license = "BSD-2-Clause",
+                                            location = TextLocation("file2", 1, 1)
+                                        )
+                                    ),
+                                    copyrightFindings = sortedSetOf(
+                                        CopyrightFinding(
+                                            statement = "Copyright 1",
+                                            location = TextLocation("file1", 1, 1)
+                                        ),
+                                        CopyrightFinding(
+                                            statement = "Copyright 2",
+                                            location = TextLocation("file2", 1, 1)
+                                        )
+                                    )
+                                )
+                            )
+                        )
+                    ),
+                    ScanResultContainer(
+                        id = Identifier("NPM:@ort:declared-license:1.0"),
+                        results = listOf(
+                            ScanResult(
+                                provenance = Provenance(
+                                    sourceArtifact = RemoteArtifact(
+                                        url = "https://example.com/declared-license-1.0.tgz",
+                                        hash = Hash(value = "", algorithm = HashAlgorithm.SHA1)
+                                    )
+                                ),
+                                scanner = ScannerDetails(name = "scanner", version = "1.0", configuration = ""),
+                                summary = ScanSummary(
+                                    startTime = Instant.EPOCH,
+                                    endTime = Instant.EPOCH,
+                                    fileCount = 0,
+                                    packageVerificationCode = "",
+                                    licenseFindings = sortedSetOf(
+                                        LicenseFinding(
+                                            license = "BSD-3-Clause",
+                                            location = TextLocation("LICENSE", 1, 1)
+                                        )
+                                    ),
+                                    copyrightFindings = sortedSetOf(
+                                        CopyrightFinding(
+                                            statement = "Copyright 1",
+                                            location = TextLocation("LICENSE", 1, 1)
                                         )
                                     )
                                 )
