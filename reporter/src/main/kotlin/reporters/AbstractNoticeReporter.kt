@@ -19,18 +19,20 @@
 
 package org.ossreviewtoolkit.reporter.reporters
 
+import java.io.OutputStream
+
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.LicenseFindingsMap
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.config.CopyrightGarbage
 import org.ossreviewtoolkit.model.licenses.LicenseConfiguration
 import org.ossreviewtoolkit.model.utils.PackageConfigurationProvider
+import org.ossreviewtoolkit.model.utils.collectConcludedLicenses
+import org.ossreviewtoolkit.model.utils.collectDeclaredLicenses
 import org.ossreviewtoolkit.model.utils.collectLicenseFindings
 import org.ossreviewtoolkit.reporter.Reporter
 import org.ossreviewtoolkit.reporter.ReporterInput
 import org.ossreviewtoolkit.utils.ScriptRunner
-
-import java.io.OutputStream
 
 abstract class AbstractNoticeReporter : Reporter {
     companion object {
@@ -139,12 +141,31 @@ abstract class AbstractNoticeReporter : Reporter {
     private fun getLicenseFindings(
         ortResult: OrtResult,
         packageConfigurationProvider: PackageConfigurationProvider
-    ): Map<Identifier, LicenseFindingsMap> =
-        ortResult.collectLicenseFindings(packageConfigurationProvider, omitExcluded = true).mapValues { (_, findings) ->
-            findings.filter { it.value.isEmpty() }.keys.associate { licenseFindings ->
-                Pair(licenseFindings.license, licenseFindings.copyrights.map { it.statement }.toMutableSet())
-            }.toSortedMap()
+    ): Map<Identifier, LicenseFindingsMap> {
+        val concludedLicenses = ortResult.collectConcludedLicenses(omitExcluded = true)
+        val declaredLicenses = ortResult.collectDeclaredLicenses(omitExcluded = true)
+
+        val detectedLicenses = ortResult.collectLicenseFindings(packageConfigurationProvider, omitExcluded = true)
+            .mapValues { (_, findings) ->
+                findings.filter { it.value.isEmpty() }.keys.associate { licenseFindings ->
+                    Pair(licenseFindings.license, licenseFindings.copyrights.map { it.statement }.toMutableSet())
+                }.toSortedMap()
+            }.toMutableMap()
+
+        return (concludedLicenses.keys + declaredLicenses.keys + detectedLicenses.keys).associateWith { id ->
+            val licenseFindingsMap = sortedMapOf<String, MutableSet<String>>()
+            if (concludedLicenses.containsKey(id)) {
+                concludedLicenses.getValue(id).forEach { license ->
+                    licenseFindingsMap[license] = detectedLicenses[id]?.get(license) ?: mutableSetOf()
+                }
+            } else {
+                declaredLicenses.getValue(id).forEach { licenseFindingsMap[it] = mutableSetOf() }
+                detectedLicenses.getValue(id).forEach { licenseFindingsMap[it.key] = it.value }
+            }
+
+            licenseFindingsMap
         }
+    }
 
     abstract fun createProcessor(input: ReporterInput): NoticeProcessor
 }
