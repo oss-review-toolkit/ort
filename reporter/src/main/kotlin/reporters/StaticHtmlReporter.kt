@@ -32,6 +32,7 @@ import org.ossreviewtoolkit.reporter.ReporterInput
 import org.ossreviewtoolkit.reporter.reporters.ReportTableModel.IssueTable
 import org.ossreviewtoolkit.reporter.reporters.ReportTableModel.ProjectTable
 import org.ossreviewtoolkit.reporter.reporters.ReportTableModel.ResolvableIssue
+import org.ossreviewtoolkit.reporter.utils.SCOPE_EXCLUDE_LIST_COMPARATOR
 import org.ossreviewtoolkit.utils.ORT_FULL_NAME
 import org.ossreviewtoolkit.utils.isValidUrl
 import org.ossreviewtoolkit.utils.normalizeLineBreaks
@@ -467,7 +468,7 @@ class StaticHtmlReporter : Reporter {
             td {
                 if (row.scopes.isNotEmpty()) {
                     ul {
-                        row.scopes.entries.sortedWith(compareBy({ it.value.isNotEmpty() }, { it.key })).forEach {
+                        row.scopes.entries.sortedWith(SCOPE_EXCLUDE_LIST_COMPARATOR).forEach {
                             val excludedClass = if (it.value.isNotEmpty()) "ort-excluded" else ""
                             li(excludedClass) {
                                 +it.key

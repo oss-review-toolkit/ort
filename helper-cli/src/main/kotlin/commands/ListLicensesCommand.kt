@@ -181,11 +181,15 @@ internal class ListLicensesCommand : CliktCommand(
 private data class TextLocationGroup(
     val locations: Set<TextLocation>,
     val text: String? = null
-)
+) {
+    companion object {
+        val COMPARATOR = compareBy<TextLocationGroup>({ it.text == null }, { -it.locations.size })
+    }
+}
 
 private fun Collection<TextLocationGroup>.assignReferenceNameAndSort(): List<Pair<TextLocationGroup, String>> {
     var i = 0
-    return sortedWith(compareBy({ it.text == null }, { -it.locations.size }))
+    return sortedWith(TextLocationGroup.COMPARATOR)
         .map {
             if (it.text != null) {
                 Pair(it, "${i++}")

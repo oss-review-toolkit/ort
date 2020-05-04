@@ -46,6 +46,11 @@ internal val VCS_DIRECTORIES = listOf(
 )
 
 /**
+ * A comparator that sorts parent paths before child paths.
+ */
+internal val PATH_STRING_COMPARATOR = compareBy<String>({ path -> path.count { it == '/' } }, { it })
+
+/**
  * Return a string of hexadecimal digits representing the bytes in the array.
  */
 private fun ByteArray.toHexString(): String = joinToString("") { String.format("%02x", it) }
@@ -118,7 +123,7 @@ fun calculatePackageVerificationCode(directory: File): String {
     }
 
     val sortedExcludes = spdxFiles.map { "./${it.relativeTo(directory).invariantSeparatorsPath}" }
-        .sortedWith(compareBy({ it.count { char -> char == '/' } }, { it }))
+            .sortedWith(PATH_STRING_COMPARATOR)
 
     return calculatePackageVerificationCode(filteredFiles, sortedExcludes)
 }
