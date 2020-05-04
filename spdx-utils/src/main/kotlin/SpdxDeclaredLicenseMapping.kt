@@ -403,6 +403,7 @@ object SpdxDeclaredLicenseMapping {
         "ODbL 1.0" to ODBL_1_0.toExpression(),
         "ODbL v1.0" to ODBL_1_0.toExpression(),
         "Open Software License 3.0 (OSL-3.0)" to OSL_3_0.toExpression(),
+        "Oracle Free Use Terms and Conditions (FUTC)" to licenseRef("oracle-futc", "ort"),
         "Other/Proprietary License" to licenseRef("proprietary-license", "scancode"),
         "Perl Artistic v2" to ARTISTIC_1_0_PERL.toExpression(),
         "Public Domain" to licenseRef("public-domain-disclaimer", "scancode"),
