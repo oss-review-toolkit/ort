@@ -23,6 +23,7 @@ import io.kotest.matchers.collections.beEmpty
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 import io.kotest.core.spec.style.WordSpec
+import io.kotest.matchers.collections.containExactly
 import io.kotest.matchers.collections.containExactlyInAnyOrder
 
 import java.io.File
@@ -34,6 +35,35 @@ private fun readAnalyzerResult(analyzerResultFilename: String): Project =
         .readValue<ProjectAnalyzerResult>().project
 
 class ProjectTest : WordSpec({
+    "Projects" should {
+        "be sorted by type" {
+            val npmProject = Project.EMPTY.copy(id = Identifier.EMPTY.copy(type = "NPM"))
+            val mavenProject = Project.EMPTY.copy(id = Identifier.EMPTY.copy(type = "Maven"))
+
+            val sortedProjects = listOf(npmProject, mavenProject).sorted()
+
+            sortedProjects should containExactly(mavenProject, npmProject)
+        }
+    }
+
+    "Projects of the same type" should {
+        "be sorted by definition file depth" {
+            val nestedProject = Project.EMPTY.copy(
+                id = Identifier("Maven", "GroupA", "Artifact", "1.0.0"),
+                definitionFilePath = "nested/pom.xml"
+            )
+
+            val rootProject = Project.EMPTY.copy(
+                id = Identifier("Maven", "GroupB", "Artifact", "1.0.0"),
+                definitionFilePath = "pom.xml"
+            )
+
+            val sortedProjects = listOf(nestedProject, rootProject).sorted()
+
+            sortedProjects should containExactly(rootProject, nestedProject)
+        }
+    }
+
     "collectDependencies" should {
         "get all dependencies by default" {
             val project = readAnalyzerResult("gradle-expected-output-lib.yml")

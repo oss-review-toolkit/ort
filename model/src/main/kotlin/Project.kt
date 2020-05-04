@@ -94,6 +94,11 @@ data class Project(
             homepageUrl = "",
             scopes = sortedSetOf()
         )
+
+        private val PATH_STRING_COMPARATOR = compareBy<String>({ path -> path.count { it == '/' } }, { it })
+        private val COMPARARTOR = compareBy<Project> { it.id.type }
+            .thenBy(PATH_STRING_COMPARATOR) { it.definitionFilePath }
+            .thenBy { it.id }
     }
 
     /**
@@ -153,9 +158,10 @@ data class Project(
         }
 
     /**
-     * A comparison function to sort projects by their identifier.
+     * A comparison function to sort projects by their type, then by definition file depth / path, and finally by their
+     * full id.
      */
-    override fun compareTo(other: Project) = id.compareTo(other.id)
+    override fun compareTo(other: Project) = COMPARARTOR.compare(this, other)
 
     /**
      * Return whether the package identified by [id] is contained as a (transitive) dependency in this project.

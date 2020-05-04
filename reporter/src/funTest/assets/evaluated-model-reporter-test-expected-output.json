@@ -22,16 +22,16 @@
   } ],
   "licenses" : [ {
     "_id" : 0,
-    "id" : "Apache-2.0 (multi-line)"
-  }, {
-    "_id" : 1,
-    "id" : "Apache-2.0 (single-line)"
-  }, {
-    "_id" : 2,
     "id" : "Apache-2.0"
   }, {
-    "_id" : 3,
+    "_id" : 1,
     "id" : "MIT"
+  }, {
+    "_id" : 2,
+    "id" : "Apache-2.0 (multi-line)"
+  }, {
+    "_id" : 3,
+    "id" : "Apache-2.0 (single-line)"
   }, {
     "_id" : 4,
     "id" : "Eclipse Public License 1.0"
@@ -82,24 +82,9 @@
     "end_time" : "1970-01-01T00:00:00Z",
     "file_count" : 0,
     "package_verification_code" : "",
-    "issues" : [ 0 ]
-  }, {
-    "_id" : 1,
-    "provenance" : {
-      "download_time" : "1970-01-01T00:00:00Z"
-    },
-    "scanner" : {
-      "name" : "FakeScanner",
-      "version" : "1.0",
-      "configuration" : ""
-    },
-    "start_time" : "1970-01-01T00:00:00Z",
-    "end_time" : "1970-01-01T00:00:00Z",
-    "file_count" : 0,
-    "package_verification_code" : "",
     "issues" : [ ]
   }, {
-    "_id" : 2,
+    "_id" : 1,
     "provenance" : {
       "download_time" : "1970-01-01T00:00:00Z",
       "source_artifact" : {
@@ -121,7 +106,7 @@
     "package_verification_code" : "",
     "issues" : [ ]
   }, {
-    "_id" : 3,
+    "_id" : 2,
     "provenance" : {
       "download_time" : "1970-01-01T00:00:00Z",
       "source_artifact" : {
@@ -143,7 +128,7 @@
     "package_verification_code" : "",
     "issues" : [ ]
   }, {
-    "_id" : 4,
+    "_id" : 3,
     "provenance" : {
       "download_time" : "1970-01-01T00:00:00Z",
       "source_artifact" : {
@@ -165,7 +150,7 @@
     "package_verification_code" : "",
     "issues" : [ ]
   }, {
-    "_id" : 5,
+    "_id" : 4,
     "provenance" : {
       "download_time" : "1970-01-01T00:00:00Z",
       "source_artifact" : {
@@ -199,7 +184,7 @@
       "mapped_licenses" : [ ],
       "unmapped_licenses" : [ ]
     },
-    "detected_licenses" : [ 0, 1 ],
+    "detected_licenses" : [ 2, 3 ],
     "description" : "",
     "homepage_url" : "",
     "binary_artifact" : {
@@ -235,21 +220,21 @@
     "scan_results" : [ 0 ],
     "findings" : [ {
       "type" : "LICENSE",
-      "license" : 0,
+      "license" : 2,
       "path" : "build.gradle",
       "start_line" : 19,
       "end_line" : 20,
       "scan_result" : 0
     }, {
       "type" : "LICENSE",
-      "license" : 1,
+      "license" : 3,
       "path" : "build.gradle",
       "start_line" : 19,
       "end_line" : 19,
       "scan_result" : 0
     }, {
       "type" : "LICENSE",
-      "license" : 1,
+      "license" : 3,
       "path" : "build.gradle",
       "start_line" : 20,
       "end_line" : 20,
@@ -271,8 +256,8 @@
       "mapped_licenses" : [ ],
       "unmapped_licenses" : [ ]
     },
-    "detected_licenses" : [ 2, 3 ],
-    "detected_excluded_licenses" : [ 3 ],
+    "detected_licenses" : [ 0, 1 ],
+    "detected_excluded_licenses" : [ 1 ],
     "description" : "",
     "homepage_url" : "",
     "binary_artifact" : {
@@ -305,53 +290,53 @@
     "paths" : [ ],
     "levels" : [ 0 ],
     "scopes" : [ ],
-    "scan_results" : [ 1 ],
+    "scan_results" : [ 0 ],
     "findings" : [ {
       "type" : "COPYRIGHT",
       "copyright" : 0,
       "path" : "file.java",
       "start_line" : 1,
       "end_line" : 1,
-      "scan_result" : 1,
+      "scan_result" : 0,
       "path_excludes" : [ 1 ]
     }, {
       "type" : "LICENSE",
-      "license" : 2,
+      "license" : 0,
       "path" : "file.java",
       "start_line" : 1,
       "end_line" : 2,
-      "scan_result" : 1,
+      "scan_result" : 0,
       "path_excludes" : [ 1 ]
     }, {
       "type" : "LICENSE",
-      "license" : 2,
+      "license" : 0,
       "path" : "file.kt",
       "start_line" : 1,
       "end_line" : 2,
-      "scan_result" : 1
+      "scan_result" : 0
     }, {
       "type" : "COPYRIGHT",
       "copyright" : 0,
       "path" : "file1.java",
       "start_line" : 1,
       "end_line" : 1,
-      "scan_result" : 1,
+      "scan_result" : 0,
       "path_excludes" : [ 1 ]
     }, {
       "type" : "LICENSE",
-      "license" : 3,
+      "license" : 1,
       "path" : "file1.java",
       "start_line" : 1,
       "end_line" : 2,
-      "scan_result" : 1,
+      "scan_result" : 0,
       "path_excludes" : [ 1 ]
     }, {
       "type" : "LICENSE",
-      "license" : 3,
+      "license" : 1,
       "path" : "file2.java",
       "start_line" : 1,
       "end_line" : 2,
-      "scan_result" : 1,
+      "scan_result" : 0,
       "path_excludes" : [ 1 ]
     } ],
     "is_excluded" : true,
@@ -403,7 +388,7 @@
     "paths" : [ 0 ],
     "levels" : [ 0 ],
     "scopes" : [ 1 ],
-    "scan_results" : [ 2 ],
+    "scan_results" : [ 1 ],
     "findings" : [ ],
     "is_excluded" : true,
     "path_excludes" : [ ],
@@ -418,7 +403,7 @@
     "declared_licenses" : [ 6 ],
     "declared_licenses_processed" : {
       "spdx_expression" : "Apache-2.0",
-      "mapped_licenses" : [ 2 ],
+      "mapped_licenses" : [ 0 ],
       "unmapped_licenses" : [ ]
     },
     "detected_licenses" : [ ],
@@ -454,7 +439,7 @@
     "paths" : [ 1, 2 ],
     "levels" : [ 1 ],
     "scopes" : [ 0, 1 ],
-    "scan_results" : [ 3 ],
+    "scan_results" : [ 2 ],
     "findings" : [ ],
     "is_excluded" : false,
     "path_excludes" : [ ],
@@ -469,7 +454,7 @@
     "declared_licenses" : [ 6 ],
     "declared_licenses_processed" : {
       "spdx_expression" : "Apache-2.0",
-      "mapped_licenses" : [ 2 ],
+      "mapped_licenses" : [ 0 ],
       "unmapped_licenses" : [ ]
     },
     "detected_licenses" : [ ],
@@ -505,7 +490,7 @@
     "paths" : [ 3, 4 ],
     "levels" : [ 0 ],
     "scopes" : [ 0, 1 ],
-    "scan_results" : [ 4 ],
+    "scan_results" : [ 3 ],
     "findings" : [ ],
     "is_excluded" : false,
     "path_excludes" : [ ],
@@ -556,7 +541,7 @@
     "paths" : [ 5 ],
     "levels" : [ 1 ],
     "scopes" : [ 1 ],
-    "scan_results" : [ 5 ],
+    "scan_results" : [ 4 ],
     "findings" : [ ],
     "is_excluded" : true,
     "path_excludes" : [ ],
@@ -602,52 +587,52 @@
   } ],
   "dependency_trees" : [ {
     "key" : 0,
+    "pkg" : 1,
+    "path_excludes" : [ 0 ],
+    "children" : [ ]
+  }, {
+    "key" : 1,
     "pkg" : 0,
     "children" : [ {
-      "key" : 1,
+      "key" : 2,
       "scope" : 0,
       "children" : [ {
-        "key" : 2,
+        "key" : 3,
         "linkage" : "DYNAMIC",
         "pkg" : 4,
         "children" : [ {
-          "key" : 3,
+          "key" : 4,
           "linkage" : "DYNAMIC",
           "pkg" : 3,
           "children" : [ ]
         } ]
       } ]
     }, {
-      "key" : 4,
+      "key" : 5,
       "scope" : 1,
       "scope_excludes" : [ 0 ],
       "children" : [ {
-        "key" : 5,
+        "key" : 6,
         "linkage" : "DYNAMIC",
         "pkg" : 2,
         "children" : [ {
-          "key" : 6,
+          "key" : 7,
           "linkage" : "DYNAMIC",
           "pkg" : 5,
           "children" : [ ]
         } ]
       }, {
-        "key" : 7,
+        "key" : 8,
         "linkage" : "DYNAMIC",
         "pkg" : 4,
         "children" : [ {
-          "key" : 8,
+          "key" : 9,
           "linkage" : "DYNAMIC",
           "pkg" : 3,
           "children" : [ ]
         } ]
       } ]
     } ]
-  }, {
-    "key" : 9,
-    "pkg" : 1,
-    "path_excludes" : [ 0 ],
-    "children" : [ ]
   } ],
   "rule_violation_resolutions" : [ {
     "_id" : 0,
@@ -669,7 +654,7 @@
     "_id" : 1,
     "rule" : "rule 2",
     "pkg" : 4,
-    "license" : 2,
+    "license" : 0,
     "license_source" : "DECLARED",
     "severity" : "HINT",
     "message" : "Apache-2.0 hint",
