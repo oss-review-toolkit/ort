@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2019 HERE Europe B.V.
+ * Copyright (C) 2020 Bosch.IO GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,25 +17,17 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.model
+package org.ossreviewtoolkit.reporter.utils
 
-/**
- * A class representing a single copyright finding.
- */
-data class CopyrightFinding(
-    /**
-     * The copyright statement.
-     */
-    val statement: String,
+import java.util.SortedMap
 
-    /**
-     * The text location where the copyright statement was found.
-     */
-    val location: TextLocation
-) : Comparable<CopyrightFinding> {
-    companion object {
-        private val COMPARATOR = compareBy(CopyrightFinding::statement).thenBy(CopyrightFinding::location)
-    }
+import org.ossreviewtoolkit.model.Identifier
+import org.ossreviewtoolkit.model.config.ScopeExclude
 
-    override fun compareTo(other: CopyrightFinding) = COMPARATOR.compare(this, other)
-}
+internal val SCOPE_EXCLUDE_LIST_COMPARATOR = compareBy<Map.Entry<String, List<ScopeExclude>>>(
+    { it.value.isNotEmpty() }, { it.key }
+)
+
+internal val SCOPE_EXCLUDE_MAP_COMPARATOR = compareBy<Map.Entry<Identifier, SortedMap<String, List<ScopeExclude>>>>(
+    { it.value.values.isNotEmpty() }, { it.key }
+)

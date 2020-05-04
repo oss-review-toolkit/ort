@@ -38,13 +38,9 @@ data class CopyrightFindings(
 ) : Comparable<CopyrightFindings> {
     companion object {
         val SORTED_SET_COMPARATOR = SortedSetComparator<CopyrightFindings>()
+        private val COMPARATOR = compareBy(CopyrightFindings::statement)
+                .thenBy(TextLocation.SORTED_SET_COMPARATOR, CopyrightFindings::locations)
     }
 
-    override fun compareTo(other: CopyrightFindings) =
-        compareValuesBy(
-            this,
-            other,
-            compareBy(CopyrightFindings::statement)
-                .thenBy(TextLocation.SORTED_SET_COMPARATOR, CopyrightFindings::locations)
-        ) { it }
+    override fun compareTo(other: CopyrightFindings) = COMPARATOR.compare(this, other)
 }

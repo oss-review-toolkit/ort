@@ -64,6 +64,7 @@ private fun Collection<Parts>.groupByPrefixAndOwner(): List<Parts> {
 class CopyrightStatementsProcessor {
     companion object {
         private const val YEAR_PLACEHOLDER = "<ORT_YEAR_PLACEHOLDER_TRO>"
+
         private val KNOWN_PREFIX_REGEX = listOf(
             "^(\\(c\\))",
             "^(\\(c\\) [C|c]opyright)",
@@ -80,6 +81,12 @@ class CopyrightStatementsProcessor {
             "^([P|p]ortions \\(c\\))",
             "^([P|p]ortions [C|c]opyright \\(c\\))"
         ).map { it.toRegex() }
+
+        private val PARTS_COMPARATOR = compareBy<Parts>(
+            { it.owner },
+            { prettyPrintYears(it.years) },
+            { it.prefix }
+        )
 
         private fun prettyPrintYears(years: Collection<Int>) =
             getYearRanges(years).joinToString(separator = ", ") { (fromYear, toYear) ->
@@ -124,13 +131,7 @@ class CopyrightStatementsProcessor {
             }
         }
 
-        val mergedParts = processableStatements.groupByPrefixAndOwner().sortedWith(
-            compareBy(
-                { it.owner },
-                { prettyPrintYears(it.years) },
-                { it.prefix }
-            )
-        )
+        val mergedParts = processableStatements.groupByPrefixAndOwner().sortedWith(PARTS_COMPARATOR)
 
         val processedStatements = linkedMapOf<String, List<String>>()
         mergedParts.forEach {

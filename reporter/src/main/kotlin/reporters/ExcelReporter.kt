@@ -19,6 +19,9 @@
 
 package org.ossreviewtoolkit.reporter.reporters
 
+import java.awt.Color
+import java.io.OutputStream
+
 import org.ossreviewtoolkit.model.AnalyzerResult
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.VcsInfo
@@ -26,10 +29,9 @@ import org.ossreviewtoolkit.reporter.Reporter
 import org.ossreviewtoolkit.reporter.ReporterInput
 import org.ossreviewtoolkit.reporter.reporters.ReportTableModel.ProjectTable
 import org.ossreviewtoolkit.reporter.reporters.ReportTableModel.SummaryTable
+import org.ossreviewtoolkit.reporter.utils.SCOPE_EXCLUDE_LIST_COMPARATOR
+import org.ossreviewtoolkit.reporter.utils.SCOPE_EXCLUDE_MAP_COMPARATOR
 import org.ossreviewtoolkit.utils.isValidUri
-
-import java.awt.Color
-import java.io.OutputStream
 
 import org.apache.poi.common.usermodel.HyperlinkType
 import org.apache.poi.ss.usermodel.BorderStyle
@@ -214,12 +216,10 @@ class ExcelReporter : Reporter {
 
             val scopesText = XSSFRichTextString()
 
-            row.scopes.entries.sortedWith(compareBy({
-                it.value.values.isNotEmpty()
-            }, { it.key })).forEach { (id, scopes) ->
+            row.scopes.entries.sortedWith(SCOPE_EXCLUDE_MAP_COMPARATOR).forEach { (id, scopes) ->
                 scopesText.append("${id.toCoordinates()}\n", font)
 
-                scopes.entries.sortedWith(compareBy({ it.value.isNotEmpty() }, { it.key }))
+                scopes.entries.sortedWith(SCOPE_EXCLUDE_LIST_COMPARATOR)
                     .forEach { (scope, excludes) ->
                         scopesText.append(
                             "  $scope\n",
@@ -308,7 +308,7 @@ class ExcelReporter : Reporter {
 
             val scopesText = XSSFRichTextString()
 
-            row.scopes.entries.sortedWith(compareBy({ it.value.isNotEmpty() }, { it.key }))
+            row.scopes.entries.sortedWith(SCOPE_EXCLUDE_LIST_COMPARATOR)
                 .forEach { (scope, excludes) ->
                     scopesText.append("$scope\n", if (excludes.isNotEmpty()) excludedFont else font)
 

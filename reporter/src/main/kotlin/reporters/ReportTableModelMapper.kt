@@ -61,6 +61,18 @@ class ReportTableModelMapper(
     private val resolutionProvider: ResolutionProvider,
     private val packageConfigurationProvider: PackageConfigurationProvider
 ) {
+    companion object {
+        private val VIOLATION_COMPARATOR = compareBy<ReportTableModel.ResolvableViolation>(
+            { it.isResolved },
+            { it.violation.severity },
+            { it.violation.rule },
+            { it.violation.pkg },
+            { it.violation.license },
+            { it.violation.message },
+            { it.resolutionDescription }
+        )
+    }
+
     private fun OrtIssue.toResolvableIssue(): ResolvableIssue {
         val resolutions = resolutionProvider.getIssueResolutionsFor(this)
         return ResolvableIssue(
@@ -224,15 +236,7 @@ class ReportTableModelMapper(
 
         val ruleViolations = ortResult.evaluator?.let {
             it.violations.map { it.toResolvableEvaluatorIssue() }
-        }?.sortedWith(compareBy(
-            { it.isResolved },
-            { it.violation.severity },
-            { it.violation.rule },
-            { it.violation.pkg },
-            { it.violation.license },
-            { it.violation.message },
-            { it.resolutionDescription }
-        )).orEmpty()
+        }?.sortedWith(VIOLATION_COMPARATOR).orEmpty()
 
         return ReportTableModel(
             ortResult.repository.vcsProcessed,
