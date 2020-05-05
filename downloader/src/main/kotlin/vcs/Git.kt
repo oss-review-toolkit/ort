@@ -39,7 +39,6 @@ import org.eclipse.jgit.transport.JschConfigSessionFactory
 import org.eclipse.jgit.transport.OpenSshConfig
 import org.eclipse.jgit.transport.SshSessionFactory
 import org.eclipse.jgit.transport.URIish
-import org.eclipse.jgit.util.FS
 
 import org.ossreviewtoolkit.downloader.VersionControlSystem
 import org.ossreviewtoolkit.downloader.WorkingTree
@@ -59,30 +58,32 @@ const val GIT_HISTORY_DEPTH = 50
 class Git : VersionControlSystem(), CommandLineTool {
     companion object {
         init {
-            // Configure JGit to connect to the SSH-Agent if it is available.
             val sessionFactory = object : JschConfigSessionFactory() {
-                override fun configure(hc: OpenSshConfig.Host, session: Session) {
-                    session.setConfig("StrictHostKeyChecking", "no")
-                }
+                @Suppress("EmptyFunctionBlock")
+                override fun configure(hc: OpenSshConfig.Host, session: Session) {}
 
-                override fun createDefaultJSch(fs: FS): JSch {
-                    val jSch = super.createDefaultJSch(fs)
+                override fun configureJSch(jsch: JSch) {
+                    // Accept unknown hosts.
+                    JSch.setConfig("StrictHostKeyChecking", "no")
+
+                    // Limit to "publickey" to avoid "keyboard-interactive" prompts.
+                    JSch.setConfig("PreferredAuthentications", "publickey")
 
                     try {
+                        // By default, JGit configures JSch to use identity files (named "identity", "id_rsa" or
+                        // "id_dsa") from the current user's ".ssh" directory only, also see
+                        // https://www.codeaffine.com/2014/12/09/jgit-authentication/. Additionally configure JSch to
+                        // connect to an SSH-Agent if available.
                         if (SSHAgentConnector.isConnectorAvailable()) {
                             val socketFactory = JNAUSocketFactory()
                             val connector = SSHAgentConnector(socketFactory)
-                            JSch.setConfig("PreferredAuthentications", "publickey")
-                            val identityRepository = RemoteIdentityRepository(connector)
-                            jSch.identityRepository = identityRepository
+                            jsch.identityRepository = RemoteIdentityRepository(connector)
                         }
                     } catch (e: AgentProxyException) {
                         e.showStackTrace()
 
                         log.error { "Could not create SSH Agent connector: ${e.collectMessagesAsString()}" }
                     }
-
-                    return jSch
                 }
             }
 
