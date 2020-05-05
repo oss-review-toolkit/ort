@@ -7,9 +7,9 @@
 | [![Linux build status][1]][2]  | [![Windows build status][3]][4] | [![JitPack build status][5]][6] |
 | [![Linux code coverage][7]][8] |                                 |                                 |
 
-| REUSE status             | Interact with us!              |
-| :----------------------- | :----------------------------- |
-| [![REUSE status][9]][10] | [![ort-talk][11]][12]          |
+| REUSE status             | TODOs              | Interact with us!              |
+| :----------------------- | :----------------- | :----------------------------- |
+| [![REUSE status][9]][10] | [![TODOs][11]][12] | [![ort-talk][13]][14]          |
 
 [1]: https://travis-ci.com/oss-review-toolkit/ort.svg?branch=master
 [2]: https://travis-ci.com/oss-review-toolkit/ort
@@ -21,8 +21,10 @@
 [8]: https://codecov.io/gh/oss-review-toolkit/ort/
 [9]: https://api.reuse.software/badge/github.com/oss-review-toolkit/ort
 [10]: https://api.reuse.software/info/github.com/oss-review-toolkit/ort
-[11]: https://img.shields.io/badge/slack-ort--talk-blue.svg?longCache=true&logo=slack
-[12]: https://join.slack.com/t/ort-talk/shared_invite/enQtMzk3MDU5Njk0Njc1LThiNmJmMjc5YWUxZTU4OGI5NmY3YTFlZWM5YTliZmY5ODc0MGMyOWIwYmRiZWFmNGMzOWY2NzVhYTI0NTJkNmY
+[11]: https://badgen.net/https/api.tickgit.com/badgen/github.com/oss-review-toolkit/ort
+[12]: https://www.tickgit.com/browse?repo=github.com/oss-review-toolkit/ort
+[13]: https://img.shields.io/badge/slack-ort--talk-blue.svg?longCache=true&logo=slack
+[14]: https://join.slack.com/t/ort-talk/shared_invite/enQtMzk3MDU5Njk0Njc1LThiNmJmMjc5YWUxZTU4OGI5NmY3YTFlZWM5YTliZmY5ODc0MGMyOWIwYmRiZWFmNGMzOWY2NzVhYTI0NTJkNmY
 
 # Introduction
 
