@@ -20,6 +20,7 @@
 package org.ossreviewtoolkit.model.config
 
 import com.fasterxml.jackson.annotation.JsonAlias
+import com.fasterxml.jackson.annotation.JsonInclude
 
 /**
  * Defines a scope that should be excluded.
@@ -39,7 +40,8 @@ data class ScopeExclude(
     /**
      * A comment to further explain why the [reason] is applicable here.
      */
-    val comment: String
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    val comment: String = ""
 ) {
     private val regex by lazy { Regex(pattern) }
 
