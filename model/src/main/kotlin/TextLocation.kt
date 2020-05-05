@@ -42,10 +42,12 @@ data class TextLocation(
     val endLine: Int
 ) : Comparable<TextLocation> {
     companion object {
-        private val COMPARATOR = compareBy<TextLocation>({ it.path }, { it.startLine }, { it.endLine })
-        val SORTED_SET_COMPARATOR = SortedSetComparator<TextLocation>()
-        val TREE_SET_TYPE by lazy { jsonMapper.typeFactory.constructTreeSetType(TextLocation::class.java) }
         const val UNKNOWN_LINE = -1
+
+        val TREE_SET_TYPE by lazy { jsonMapper.typeFactory.constructTreeSetType(TextLocation::class.java) }
+
+        val SORTED_SET_COMPARATOR = SortedSetComparator<TextLocation>()
+        private val COMPARATOR = compareBy<TextLocation>({ it.path }, { it.startLine }, { it.endLine })
     }
 
     init {
