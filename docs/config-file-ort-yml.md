@@ -42,7 +42,7 @@ To be able to show why a part is excluded, each exclude must include an explanat
 The explanation consists of:
 
 * `reason` -- must be selected from a predefined list of options.
-* `comment` -- free text that provides an additional explanation.
+* `comment` -- free text that provides an optional explanation.
 
 ### Excluding Paths
 

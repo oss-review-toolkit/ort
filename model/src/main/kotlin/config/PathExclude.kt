@@ -19,6 +19,8 @@
 
 package org.ossreviewtoolkit.model.config
 
+import com.fasterxml.jackson.annotation.JsonInclude
+
 import java.nio.file.FileSystems
 import java.nio.file.Paths
 
@@ -41,7 +43,8 @@ data class PathExclude(
     /**
      * A comment to further explain why the [reason] is applicable here.
      */
-    val comment: String
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    val comment: String = ""
 ) {
     private val glob by lazy { FileSystems.getDefault().getPathMatcher("glob:$pattern") }
 
