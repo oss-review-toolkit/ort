@@ -21,8 +21,10 @@ package org.ossreviewtoolkit.helper.commands
 
 import com.github.ajalt.clikt.core.CliktCommand
 import com.github.ajalt.clikt.parameters.options.convert
+import com.github.ajalt.clikt.parameters.options.default
 import com.github.ajalt.clikt.parameters.options.option
 import com.github.ajalt.clikt.parameters.options.required
+import com.github.ajalt.clikt.parameters.options.split
 import com.github.ajalt.clikt.parameters.types.enum
 import com.github.ajalt.clikt.parameters.types.file
 
@@ -58,8 +60,9 @@ internal class GenerateRuleViolationResolutionsCommand : CliktCommand(
 
     private val severity by option(
         "--severity",
-        help = "Only consider violations of the given severity. Allowed values: ERROR|WARNING|HINT."
-    ).enum<Severity>()
+        help = "Only consider violations of the given severities, specified as comma-separated values. Allowed " +
+                "values: ERROR,WARNING,HINT."
+    ).enum<Severity>().split(",").default(enumValues<Severity>().asList())
 
     override fun run() {
         val repositoryConfiguration = repositoryConfigurationFile.readValue<RepositoryConfiguration>()
@@ -67,7 +70,7 @@ internal class GenerateRuleViolationResolutionsCommand : CliktCommand(
 
         val generatedResolutions = ortResult
             .getUnresolvedRuleViolations()
-            .filter { (severity == null || it.severity == severity) }
+            .filter { it.severity in severity }
             .map {
                 RuleViolationResolution(
                     message = it.message,
