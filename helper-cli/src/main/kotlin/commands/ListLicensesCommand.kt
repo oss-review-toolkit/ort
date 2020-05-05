@@ -28,6 +28,8 @@ import com.github.ajalt.clikt.parameters.options.default
 import com.github.ajalt.clikt.parameters.options.flag
 import com.github.ajalt.clikt.parameters.options.option
 import com.github.ajalt.clikt.parameters.options.required
+import com.github.ajalt.clikt.parameters.options.split
+import com.github.ajalt.clikt.parameters.types.enum
 import com.github.ajalt.clikt.parameters.types.file
 import org.ossreviewtoolkit.helper.common.PackageConfigurationOption
 import org.ossreviewtoolkit.helper.common.createProvider
@@ -75,8 +77,14 @@ internal class ListLicensesCommand : CliktCommand(
 
     private val onlyOffending by option(
         "--only-offending",
-        help = "Only list licenses causing a rule violation of error severity in the given ORT result."
+        help = "Only list licenses causing a rule violation of severity specified severity, see --severity."
     ).flag()
+
+    private val severity by option(
+        "--severity",
+        help = "Set the severities to use filtering enabled by --only-offending, specified as comma-separated " +
+                "values. Allowed values: ERROR,WARNING,HINT."
+    ).enum<Severity>().split(",").default(enumValues<Severity>().asList())
 
     private val omitExcluded by option(
         "--omit-excluded",
@@ -144,7 +152,7 @@ internal class ListLicensesCommand : CliktCommand(
                 packageConfigurationProvider.getPackageConfiguration(packageId, provenance)?.pathExcludes.orEmpty()
             }.any { it.matches(path) }
 
-        val violatedRulesByLicense = ortResult.getViolatedRulesByLicense(packageId, Severity.ERROR)
+        val violatedRulesByLicense = ortResult.getViolatedRulesByLicense(packageId, severity)
 
         val findingsByProvenance = ortResult
             .getLicenseFindingsById(packageId, packageConfigurationProvider, applyLicenseFindingCurations)

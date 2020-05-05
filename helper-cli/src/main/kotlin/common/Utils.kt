@@ -341,15 +341,15 @@ internal fun OrtResult.getRepositoryLicenseFindingCurations(): RepositoryLicense
 }
 
 /**
- * Return all license [Identifiers]s which triggered at least one [RuleViolation] with a [severity]
- * greater or equal to the given [minSeverity] associated with the rule names of all corresponding violated rules.
+ * Return all license [Identifiers]s which triggered at least one [RuleViolation] with a [severity] contained in the
+ * given [severity] collection, associated with the rule names of all corresponding violated rules.
  */
 internal fun OrtResult.getViolatedRulesByLicense(
     id: Identifier,
-    minSeverity: Severity
+    severity: Collection<Severity> = enumValues<Severity>().asList()
 ): Map<String, List<String>> =
     getRuleViolations()
-        .filter { it.pkg == id && it.severity.ordinal <= minSeverity.ordinal && it.license != null }
+        .filter { it.pkg == id && it.severity in severity && it.license != null }
         .groupBy { it.license!! }
         .mapValues { (_, ruleViolations) -> ruleViolations.map { it.rule } }
 
