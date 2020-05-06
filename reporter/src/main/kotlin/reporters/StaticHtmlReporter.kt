@@ -37,6 +37,7 @@ import org.ossreviewtoolkit.reporter.reporters.ReportTableModel.ResolvableIssue
 import org.ossreviewtoolkit.reporter.utils.SCOPE_EXCLUDE_LIST_COMPARATOR
 import org.ossreviewtoolkit.utils.ORT_FULL_NAME
 import org.ossreviewtoolkit.utils.isValidUrl
+import org.ossreviewtoolkit.utils.joinNonBlank
 import org.ossreviewtoolkit.utils.normalizeLineBreaks
 
 import com.vladsch.flexmark.html.HtmlRenderer
@@ -208,21 +209,9 @@ class StaticHtmlReporter : Reporter {
         }
     }
 
-    private val PathExclude.description: String get() =
-        buildString {
-            append(reason)
-            if (comment.isNotBlank()) {
-                append(" - ").append(comment)
-            }
-        }
+    private val PathExclude.description: String get() = joinNonBlank(reason.toString(), comment)
 
-    private val ScopeExclude.description: String get() =
-        buildString {
-            append(reason)
-            if (comment.isNotBlank()) {
-                append(" - ").append(comment)
-            }
-        }
+    private val ScopeExclude.description: String get() = joinNonBlank(reason.toString(), comment)
 
     private fun DIV.evaluatorTable(ruleViolations: List<ReportTableModel.ResolvableViolation>) {
         val issues = ruleViolations.filterNot { it.isResolved }.groupBy { it.violation.severity }

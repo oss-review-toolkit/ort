@@ -222,6 +222,12 @@ fun getOrtDataDirectory() =
     } ?: getUserHomeDirectory().resolve(".ort")
 
 /**
+ * Return the concatenated [strings] separated by [separator] whereas blank strings are omitted.
+ */
+fun joinNonBlank(vararg strings: String, separator: String = " - ") =
+    strings.filter { it.isNotBlank() }.joinToString(separator)
+
+/**
  * Normalize a string representing a [VCS URL][vcsUrl] to a common string form.
  */
 fun normalizeVcsUrl(vcsUrl: String): String {
