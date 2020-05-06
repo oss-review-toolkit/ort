@@ -22,6 +22,9 @@ package org.ossreviewtoolkit.reporter
 import org.ossreviewtoolkit.model.AnalyzerResult
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.ScanRecord
+import org.ossreviewtoolkit.model.config.PathExclude
+import org.ossreviewtoolkit.model.config.ScopeExclude
+import org.ossreviewtoolkit.utils.joinNonBlank
 
 import java.io.OutputStream
 import java.util.ServiceLoader
@@ -56,3 +59,7 @@ interface Reporter {
      */
     fun generateReport(outputStream: OutputStream, input: ReporterInput)
 }
+
+internal val PathExclude.description: String get() = joinNonBlank(reason.toString(), comment)
+
+internal val ScopeExclude.description: String get() = joinNonBlank(reason.toString(), comment)

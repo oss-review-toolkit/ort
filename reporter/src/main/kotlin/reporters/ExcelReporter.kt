@@ -25,15 +25,14 @@ import java.io.OutputStream
 import org.ossreviewtoolkit.model.AnalyzerResult
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.VcsInfo
-import org.ossreviewtoolkit.model.config.ScopeExclude
 import org.ossreviewtoolkit.reporter.Reporter
 import org.ossreviewtoolkit.reporter.ReporterInput
+import org.ossreviewtoolkit.reporter.description
 import org.ossreviewtoolkit.reporter.reporters.ReportTableModel.ProjectTable
 import org.ossreviewtoolkit.reporter.reporters.ReportTableModel.SummaryTable
 import org.ossreviewtoolkit.reporter.utils.SCOPE_EXCLUDE_LIST_COMPARATOR
 import org.ossreviewtoolkit.reporter.utils.SCOPE_EXCLUDE_MAP_COMPARATOR
 import org.ossreviewtoolkit.utils.isValidUri
-import org.ossreviewtoolkit.utils.joinNonBlank
 
 import org.apache.poi.common.usermodel.HyperlinkType
 import org.apache.poi.ss.usermodel.BorderStyle
@@ -471,5 +470,3 @@ private fun RichTextString.limit(maxLength: Int = MAX_EXCEL_CELL_CONTENT_LENGTH)
 
 private fun String.limit(maxLength: Int = MAX_EXCEL_CELL_CONTENT_LENGTH) =
     takeIf { it.length <= maxLength } ?: "${take(maxLength - ELLIPSIS.length)}$ELLIPSIS"
-
-private val ScopeExclude.description: String get() = joinNonBlank(reason.toString(), comment)
