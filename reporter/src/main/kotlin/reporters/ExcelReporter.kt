@@ -25,6 +25,7 @@ import java.io.OutputStream
 import org.ossreviewtoolkit.model.AnalyzerResult
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.VcsInfo
+import org.ossreviewtoolkit.model.config.ScopeExclude
 import org.ossreviewtoolkit.reporter.Reporter
 import org.ossreviewtoolkit.reporter.ReporterInput
 import org.ossreviewtoolkit.reporter.reporters.ReportTableModel.ProjectTable
@@ -228,7 +229,7 @@ class ExcelReporter : Reporter {
 
                         excludes.forEach { exclude ->
                             scopesText.append(
-                                "    Excluded: ${exclude.reason} - ${exclude.comment}\n",
+                                "    Excluded: ${exclude.description}\n",
                                 excludedFont
                             )
                         }
@@ -313,7 +314,7 @@ class ExcelReporter : Reporter {
                     scopesText.append("$scope\n", if (excludes.isNotEmpty()) excludedFont else font)
 
                     excludes.forEach { exclude ->
-                        scopesText.append("  Excluded: ${exclude.reason} - ${exclude.comment}\n", excludedFont)
+                        scopesText.append("  Excluded: ${exclude.description}\n", excludedFont)
                     }
                 }
 
@@ -469,3 +470,11 @@ private fun RichTextString.limit(maxLength: Int = MAX_EXCEL_CELL_CONTENT_LENGTH)
 
 private fun String.limit(maxLength: Int = MAX_EXCEL_CELL_CONTENT_LENGTH) =
     takeIf { it.length <= maxLength } ?: "${take(maxLength - ELLIPSIS.length)}$ELLIPSIS"
+
+private val ScopeExclude.description: String get() =
+    buildString {
+        append(reason)
+        if (comment.isNotBlank()) {
+            append(" - ").append(comment)
+        }
+    }
