@@ -26,6 +26,7 @@ import org.ossreviewtoolkit.model.config.VcsMatcher
 import org.ossreviewtoolkit.model.readValue
 
 import java.io.File
+import java.io.IOException
 
 /**
  * A provider for [PackageConfiguration]s providing exactly the packages of the given list.
@@ -43,7 +44,13 @@ class SimplePackageConfigurationProvider(
         fun forDirectory(directory: File): SimplePackageConfigurationProvider {
             val entries = directory.walkBottomUp()
                 .filterTo(mutableListOf()) { !it.isHidden && it.isFile }
-                .map { it.readValue<PackageConfiguration>() }
+                .map { file ->
+                    try {
+                        file.readValue<PackageConfiguration>()
+                    } catch (e: IOException) {
+                        throw IOException("Error reading package configuration from '${file.absoluteFile}'.", e)
+                    }
+                }
 
             return SimplePackageConfigurationProvider(entries)
         }
