@@ -25,6 +25,8 @@ import org.ossreviewtoolkit.model.Project
 import org.ossreviewtoolkit.model.RemoteArtifact
 import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.model.VcsInfo
+import org.ossreviewtoolkit.model.config.PathExclude
+import org.ossreviewtoolkit.model.config.ScopeExclude
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.yamlMapper
 import org.ossreviewtoolkit.reporter.Reporter
@@ -190,7 +192,7 @@ class StaticHtmlReporter : Reporter {
                         if (projectTable.isExcluded()) {
                             projectTable.pathExcludes.forEach { exclude ->
                                 +" "
-                                div("ort-reason") { +"Excluded: ${exclude.reason} - ${exclude.comment}" }
+                                div("ort-reason") { +"Excluded: ${exclude.description}" }
                             }
                         }
                     }
@@ -204,6 +206,22 @@ class StaticHtmlReporter : Reporter {
             }
         }
     }
+
+    private val PathExclude.description: String get() =
+        buildString {
+            append(reason)
+            if (comment.isNotBlank()) {
+                append(" - ").append(comment)
+            }
+        }
+
+    private val ScopeExclude.description: String get() =
+        buildString {
+            append(reason)
+            if (comment.isNotBlank()) {
+                append(" - ").append(comment)
+            }
+        }
 
     private fun DIV.evaluatorTable(ruleViolations: List<ReportTableModel.ResolvableViolation>) {
         val issues = ruleViolations.filterNot { it.isResolved }.groupBy { it.violation.severity }
@@ -389,7 +407,7 @@ class StaticHtmlReporter : Reporter {
 
         table.pathExcludes.forEach { exclude ->
             p {
-                div("ort-reason") { +"${exclude.reason} - ${exclude.comment}" }
+                div("ort-reason") { +exclude.description }
             }
         }
 
@@ -476,7 +494,7 @@ class StaticHtmlReporter : Reporter {
                                     +" "
                                     div("ort-reason") {
                                         +"Excluded: "
-                                        +it.value.joinToString { "${it.reason} - ${it.comment}" }
+                                        +it.value.joinToString { "${it.description}" }
                                     }
                                 }
                             }
@@ -570,7 +588,7 @@ class StaticHtmlReporter : Reporter {
                                 } else {
                                     div("ort-excluded") {
                                         +"${finding.license} (Excluded: "
-                                        +excludes.joinToString { "${it.reason} - ${it.comment}" }
+                                        +excludes.joinToString { it.description }
                                         +")"
                                     }
                                 }
