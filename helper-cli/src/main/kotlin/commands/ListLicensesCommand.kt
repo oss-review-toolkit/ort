@@ -75,14 +75,14 @@ internal class ListLicensesCommand : CliktCommand(
     ).convert { it.expandTilde() }
         .file(mustExist = true, canBeFile = false, canBeDir = true, mustBeWritable = false, mustBeReadable = true)
 
-    private val onlyOffending by option(
-        "--only-offending",
+    private val offendingOnly by option(
+        "--offending-only",
         help = "Only list licenses causing a rule violation of severity specified severity, see --severity."
     ).flag()
 
-    private val severity by option(
-        "--severity",
-        help = "Set the severities to use filtering enabled by --only-offending, specified as comma-separated " +
+    private val offendingSeverity by option(
+        "--offending-severity",
+        help = "Set the severities to use filtering enabled by --offending-only, specified as comma-separated " +
                 "values. Allowed values: ERROR,WARNING,HINT."
     ).enum<Severity>().split(",").default(enumValues<Severity>().asList())
 
@@ -152,13 +152,13 @@ internal class ListLicensesCommand : CliktCommand(
                 packageConfigurationProvider.getPackageConfiguration(packageId, provenance)?.pathExcludes.orEmpty()
             }.any { it.matches(path) }
 
-        val violatedRulesByLicense = ortResult.getViolatedRulesByLicense(packageId, severity)
+        val violatedRulesByLicense = ortResult.getViolatedRulesByLicense(packageId, offendingSeverity)
 
         val findingsByProvenance = ortResult
             .getLicenseFindingsById(packageId, packageConfigurationProvider, applyLicenseFindingCurations)
             .mapValues { (provenance, locationsByLicense) ->
                 locationsByLicense.filter { (license, _) ->
-                    !onlyOffending || violatedRulesByLicense.contains(license)
+                    !offendingOnly || violatedRulesByLicense.contains(license)
                 }.mapValues { (license, locations) ->
                     locations.filter {
                         !omitExcluded || !isPathExcluded(provenance, it.path) ||
