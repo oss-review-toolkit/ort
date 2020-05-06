@@ -209,8 +209,15 @@ pipeline {
                 script {
                     try {
                         def result = readYaml file: 'analyzer/out/results/analyzer-result.yml'
-                        def rootProjectId = result.analyzer?.result?.projects?.getAt(0)?.id
-                        if (rootProjectId) {
+                        def projects = result.analyzer?.result?.projects
+
+                        if (projects) {
+                            // Determine the / a root project simply by sorting by path depth.
+                            def sortedProjects = projects.toSorted { it.definition_file_path.count("/") }
+
+                            // There is always at least one (unmanaged) project.
+                            def rootProjectId = sortedProjects.first().id
+
                             currentBuild.displayName += ": $rootProjectId"
                         }
                     } catch (IOException e) {
