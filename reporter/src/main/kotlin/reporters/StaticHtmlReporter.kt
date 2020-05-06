@@ -25,19 +25,17 @@ import org.ossreviewtoolkit.model.Project
 import org.ossreviewtoolkit.model.RemoteArtifact
 import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.model.VcsInfo
-import org.ossreviewtoolkit.model.config.PathExclude
-import org.ossreviewtoolkit.model.config.ScopeExclude
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.yamlMapper
 import org.ossreviewtoolkit.reporter.Reporter
 import org.ossreviewtoolkit.reporter.ReporterInput
+import org.ossreviewtoolkit.reporter.description
 import org.ossreviewtoolkit.reporter.reporters.ReportTableModel.IssueTable
 import org.ossreviewtoolkit.reporter.reporters.ReportTableModel.ProjectTable
 import org.ossreviewtoolkit.reporter.reporters.ReportTableModel.ResolvableIssue
 import org.ossreviewtoolkit.reporter.utils.SCOPE_EXCLUDE_LIST_COMPARATOR
 import org.ossreviewtoolkit.utils.ORT_FULL_NAME
 import org.ossreviewtoolkit.utils.isValidUrl
-import org.ossreviewtoolkit.utils.joinNonBlank
 import org.ossreviewtoolkit.utils.normalizeLineBreaks
 
 import com.vladsch.flexmark.html.HtmlRenderer
@@ -208,10 +206,6 @@ class StaticHtmlReporter : Reporter {
             }
         }
     }
-
-    private val PathExclude.description: String get() = joinNonBlank(reason.toString(), comment)
-
-    private val ScopeExclude.description: String get() = joinNonBlank(reason.toString(), comment)
 
     private fun DIV.evaluatorTable(ruleViolations: List<ReportTableModel.ResolvableViolation>) {
         val issues = ruleViolations.filterNot { it.isResolved }.groupBy { it.violation.severity }
