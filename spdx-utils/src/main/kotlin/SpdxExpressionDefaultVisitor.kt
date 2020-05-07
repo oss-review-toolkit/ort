@@ -43,17 +43,24 @@ class SpdxExpressionDefaultVisitor(private val strictness: Strictness) :
                     visit(ctx.getChild(1))
                 } else {
                     val left = visit(ctx.getChild(0))
-
-                    val operatorName = ctx.getChild(1).text
-                    val operator = try {
-                        SpdxOperator.valueOf(operatorName.toUpperCase())
-                    } catch (e: IllegalArgumentException) {
-                        throw SpdxException("Illegal operator '$operatorName' in expression '${ctx.text}'.")
-                    }
-
+                    val operator = ctx.getChild(1).text
                     val right = visit(ctx.getChild(2))
 
-                    SpdxCompoundExpression(left, operator, right)
+                    when (val uppercaseOperator = operator.toUpperCase()) {
+                        SpdxExpression.WITH -> SpdxLicenseWithExceptionExpression(
+                            left as SpdxSimpleExpression,
+                            right as SpdxLicenseExceptionExpression
+                        )
+                        else -> {
+                            val spdxOperator = try {
+                                SpdxOperator.valueOf(uppercaseOperator)
+                            } catch (e: IllegalArgumentException) {
+                                throw SpdxException("Illegal operator '$operator' in expression '${ctx.text}'.")
+                            }
+
+                            SpdxCompoundExpression(left, spdxOperator, right)
+                        }
+                    }
                 }
             }
             else -> throw SpdxException("SpdxCompoundExpression has invalid amount of children: '${ctx.childCount}'")

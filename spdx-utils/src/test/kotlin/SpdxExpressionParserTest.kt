@@ -69,18 +69,16 @@ class SpdxExpressionParserTest : WordSpec() {
                     SpdxLicenseIdExpression("license1", orLaterVersion = true),
                     SpdxOperator.AND,
                     SpdxCompoundExpression(
-                        SpdxCompoundExpression(
+                        SpdxLicenseWithExceptionExpression(
                             SpdxLicenseIdExpression("license2"),
-                            SpdxOperator.WITH,
                             SpdxLicenseExceptionExpression("exception1")
                         ),
                         SpdxOperator.OR,
                         SpdxCompoundExpression(
                             SpdxLicenseIdExpression("license3", orLaterVersion = true),
                             SpdxOperator.AND,
-                            SpdxCompoundExpression(
+                            SpdxLicenseWithExceptionExpression(
                                 SpdxLicenseIdExpression("license4"),
-                                SpdxOperator.WITH,
                                 SpdxLicenseExceptionExpression("exception2")
                             )
                         )
@@ -92,9 +90,8 @@ class SpdxExpressionParserTest : WordSpec() {
 
             "bind + stronger than WITH" {
                 val actualExpression = SpdxExpression.parse("license+ WITH exception")
-                val expectedExpression = SpdxCompoundExpression(
+                val expectedExpression = SpdxLicenseWithExceptionExpression(
                     SpdxLicenseIdExpression("license", orLaterVersion = true),
-                    SpdxOperator.WITH,
                     SpdxLicenseExceptionExpression("exception")
                 )
 
@@ -106,9 +103,8 @@ class SpdxExpressionParserTest : WordSpec() {
                 val expectedExpression = SpdxCompoundExpression(
                     SpdxLicenseIdExpression("license1"),
                     SpdxOperator.AND,
-                    SpdxCompoundExpression(
+                    SpdxLicenseWithExceptionExpression(
                         SpdxLicenseIdExpression("license2"),
-                        SpdxOperator.WITH,
                         SpdxLicenseExceptionExpression("exception")
                     )
                 )
