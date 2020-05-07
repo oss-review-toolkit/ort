@@ -72,7 +72,7 @@ To use a directory with configuration files for each *package id*, pass it to th
 ```bash
 cli/build/install/ort/bin/ort evaluate
   -i [scanner-output-path]/scan-result.yml
-  -o [evaluator-output-path]/evaluator-result.yml
+  -o [evaluator-output-path]
   --output-formats YAML
   --license-configuration-file [ort-configuration-path]/licenses.yml
   --package-curations-file [ort-configuration-path]/curations.yml
@@ -98,7 +98,7 @@ To use a single package configuration `.yml` file, pass it to the `--package-con
 ```bash
 cli/build/install/ort/bin/ort evaluate
   -i [scanner-output-path]/scan-result.yml
-  -o [evaluator-output-path]/evaluator-result.yml
+  -o [evaluator-output-path]
   --output-formats YAML
   --license-configuration-file [ort-configuration-path]/licenses.yml
   --package-curations-file [ort-configuration-path]/curations.yml
