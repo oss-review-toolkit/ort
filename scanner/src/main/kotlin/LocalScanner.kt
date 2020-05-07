@@ -171,32 +171,35 @@ abstract class LocalScanner(name: String, config: ScannerConfiguration) : Scanne
 
                     async {
                         val result = try {
-                            log.info { "Queueing scan of '${pkg.id.toCoordinates()}' $packageIndex." }
-
                             val storedResults = withContext(storageDispatcher) {
                                 log.info {
-                                    "Trying to read stored scan results for ${pkg.id.toCoordinates()} in thread " +
-                                            "'${Thread.currentThread().name}' $packageIndex."
+                                    "Looking for stored scan results for ${pkg.id.toCoordinates()} and " +
+                                            "$scannerDetails $packageIndex."
                                 }
 
                                 readFromStorage(scannerDetails, pkg, outputDirectory)
                             }
 
                             if (storedResults.isNotEmpty()) {
-                                log.info { "Using stored scan result(s) for ${pkg.id.toCoordinates()} $packageIndex." }
+                                log.info {
+                                    "Found ${storedResults.size} stored scan result(s) for ${pkg.id.toCoordinates()} " +
+                                            "and $scannerDetails, not scanning the package again $packageIndex."
+                                }
 
                                 storedResults
                             } else {
                                 withContext(scanDispatcher) {
                                     log.info {
-                                        "No stored results found, scanning package ${pkg.id.toCoordinates()} in " +
-                                                "thread '${Thread.currentThread().name}' $packageIndex."
+                                        "No stored result found for ${pkg.id.toCoordinates()} and $scannerDetails, " +
+                                                "scanning package in thread '${Thread.currentThread().name}' " +
+                                                "$packageIndex."
                                     }
 
                                     listOf(
                                         scanPackage(scannerDetails, pkg, outputDirectory, downloadDirectory).also {
                                             log.info {
-                                                "Finished scanning ${pkg.id.toCoordinates()} $packageIndex."
+                                                "Finished scanning ${pkg.id.toCoordinates()} in thread " +
+                                                        "'${Thread.currentThread().name}' $packageIndex."
                                             }
                                         }
                                     )
