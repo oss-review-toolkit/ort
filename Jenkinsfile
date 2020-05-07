@@ -209,13 +209,14 @@ pipeline {
                         USE_CLEARLY_DEFINED_CURATIONS_PARAM="--clearly-defined-curations"
                     fi
 
-                    rm -fr analyzer/out/results
-                    /opt/ort/bin/ort $LOG_LEVEL analyze $ALLOW_DYNAMIC_VERSIONS_PARAM $USE_CLEARLY_DEFINED_CURATIONS_PARAM -f JSON,YAML -i $PROJECT_DIR/source -o analyzer/out/results
+                    rm -fr out/results
+                    /opt/ort/bin/ort $LOG_LEVEL analyze $ALLOW_DYNAMIC_VERSIONS_PARAM $USE_CLEARLY_DEFINED_CURATIONS_PARAM -f JSON,YAML -i $PROJECT_DIR/source -o out/results/analyzer
+                    ln -frs out/results/analyzer/analyzer-result.yml out/results/current-result.yml
                 '''
 
                 script {
                     try {
-                        def result = readYaml file: 'analyzer/out/results/analyzer-result.yml'
+                        def result = readYaml file: 'out/results/analyzer/analyzer-result.yml'
                         def projects = result.analyzer?.result?.projects
 
                         if (projects) {
@@ -236,7 +237,7 @@ pipeline {
             post {
                 always {
                     archiveArtifacts(
-                        artifacts: 'analyzer/out/results/*',
+                        artifacts: 'out/results/analyzer/*',
                         fingerprint: true
                     )
                 }
@@ -265,15 +266,15 @@ pipeline {
 
             steps {
                 sh '''
-                    rm -fr scanner/out/results
-                    /opt/ort/bin/ort $LOG_LEVEL scan -f JSON,YAML -i analyzer/out/results/analyzer-result.yml -o scanner/out/results
+                    /opt/ort/bin/ort $LOG_LEVEL scan -f JSON,YAML -i out/results/current-result.yml -o out/results/scanner
+                    ln -frs out/results/scanner/scan-result.yml out/results/current-result.yml
                 '''
             }
 
             post {
                 always {
                     archiveArtifacts(
-                        artifacts: 'scanner/out/results/*',
+                        artifacts: 'out/results/scanner/*',
                         fingerprint: true
                     )
                 }
@@ -302,15 +303,14 @@ pipeline {
 
             steps {
                 sh '''
-                    rm -fr reporter/out/results
-                    /opt/ort/bin/ort $LOG_LEVEL report -f CycloneDX,NoticeByPackage,NoticeSummary,StaticHTML,WebApp -i scanner/out/results/scan-result.yml -o reporter/out/results
+                    /opt/ort/bin/ort $LOG_LEVEL report -f CycloneDX,NoticeByPackage,NoticeSummary,StaticHTML,WebApp -i out/results/current-result.yml -o out/results/reporter
                 '''
             }
 
             post {
                 always {
                     archiveArtifacts(
-                        artifacts: 'reporter/out/results/*',
+                        artifacts: 'out/results/reporter/*',
                         fingerprint: true
                     )
                 }
