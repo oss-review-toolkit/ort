@@ -89,7 +89,7 @@ class FileBasedStorage(
         // Only keep scan results whose provenance information matches the package information.
         scanResults.retainAll { it.provenance.matches(pkg) }
         if (scanResults.isEmpty()) {
-            log.info {
+            log.debug {
                 "No stored scan results found for $pkg. The following entries with non-matching provenance have " +
                         "been ignored: ${scanResults.map { it.provenance }}"
             }
@@ -99,16 +99,11 @@ class FileBasedStorage(
         // Only keep scan results from compatible scanners.
         scanResults.retainAll { scannerDetails.isCompatible(it.scanner) }
         if (scanResults.isEmpty()) {
-            log.info {
+            log.debug {
                 "No stored scan results found for $scannerDetails. The following entries with incompatible scanners " +
                         "have been ignored: ${scanResults.map { it.scanner }}"
             }
             return Success(ScanResultContainer(pkg.id, scanResults))
-        }
-
-        log.info {
-            "Found ${scanResults.size} stored scan result(s) for ${pkg.id.toCoordinates()} that are compatible with " +
-                    "$scannerDetails."
         }
 
         return Success(ScanResultContainer(pkg.id, scanResults))
@@ -129,7 +124,7 @@ class FileBasedStorage(
         @Suppress("TooGenericExceptionCaught")
         return try {
             backend.write(path, input)
-            log.info { "Stored scan result for '${id.toCoordinates()}' at path '$path'." }
+            log.debug { "Stored scan result for '${id.toCoordinates()}' at path '$path'." }
             Success(Unit)
         } catch (e: Exception) {
             when (e) {
@@ -138,7 +133,7 @@ class FileBasedStorage(
 
                     val message = "Could not store scan result for '${id.toCoordinates()}' at path '$path': " +
                             e.collectMessagesAsString()
-                    log.info { message }
+                    log.warn { message }
 
                     Failure(message)
                 }

@@ -63,9 +63,9 @@ class PostgresStorage(
      */
     fun setupDatabase() {
         if (!tableExists()) {
-            log.info { "Creating table '$table'." }
+            log.info { "Trying to create table '$table'." }
             if (!createTable()) {
-                throw IOException("Could not create table.")
+                throw IOException("Failed to create table '$table'.")
             }
             log.info { "Successfully created table '$table'." }
         }
@@ -128,8 +128,6 @@ class PostgresStorage(
     }
 
     override fun readFromStorage(id: Identifier): Result<ScanResultContainer> {
-        log.info { "Reading scan results for ${id.toCoordinates()} from storage." }
-
         val query = "SELECT scan_result FROM $schema.$table WHERE identifier = ?"
 
         @Suppress("TooGenericExceptionCaught")
@@ -145,8 +143,6 @@ class PostgresStorage(
                 val scanResult = jsonMapper.readValue<ScanResult>(resultSet.getString(1).unescapeNull())
                 scanResults.add(scanResult)
             }
-
-            log.info { "Found ${scanResults.size} scan results for ${id.toCoordinates()}." }
 
             Success(ScanResultContainer(id, scanResults))
         } catch (e: Exception) {
@@ -166,8 +162,6 @@ class PostgresStorage(
     }
 
     override fun readFromStorage(pkg: Package, scannerDetails: ScannerDetails): Result<ScanResultContainer> {
-        log.info { "Reading scan results for ${pkg.id.toCoordinates()} and scanner $scannerDetails from storage." }
-
         val version = Semver(scannerDetails.version)
 
         val query = """
@@ -201,11 +195,6 @@ class PostgresStorage(
             scanResults.retainAll { it.provenance.matches(pkg) }
             // The scanner compatibility is already checked in the query, but filter here again to be on the safe side.
             scanResults.retainAll { scannerDetails.isCompatible(it.scanner) }
-
-            log.info {
-                "Found ${scanResults.size} matching scan results for ${pkg.id.toCoordinates()} and scanner " +
-                        "$scannerDetails."
-            }
 
             Success(ScanResultContainer(pkg.id, scanResults))
         } catch (e: Exception) {
@@ -241,7 +230,7 @@ class PostgresStorage(
             e.showStackTrace()
 
             val message = "Could not store scan result for '${id.toCoordinates()}': ${e.collectMessagesAsString()}"
-            log.info { message }
+            log.warn { message }
 
             return Failure(message)
         }
