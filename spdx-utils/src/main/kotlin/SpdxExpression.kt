@@ -214,6 +214,14 @@ data class SpdxLicenseExceptionExpression(
 }
 
 /**
+ * A simple SPDX expression as defined by version 2.1 of the [SPDX specification, appendix IV][1]. A simple expression
+ * can be either a [SpdxLicenseIdExpression] or a [SpdxLicenseReferenceExpression].
+ *
+ * [1]: https://spdx.org/spdx-specification-21-web-version#h.jxpfx0ykyb60
+ */
+sealed class SpdxSimpleExpression : SpdxExpression()
+
+/**
  * An SPDX expression for a license [id] as defined by version 2.1 of the [SPDX specification, appendix I][1].
  * [orLaterVersion] indicates whether the license id also describes later versions of the license.
  *
@@ -222,7 +230,7 @@ data class SpdxLicenseExceptionExpression(
 data class SpdxLicenseIdExpression(
     val id: String,
     val orLaterVersion: Boolean = false
-) : SpdxExpression() {
+) : SpdxSimpleExpression() {
     override fun decompose(): Set<SpdxExpression> = setOf(this)
 
     private val spdxLicense = SpdxLicense.forId(toString())
@@ -262,7 +270,7 @@ data class SpdxLicenseIdExpression(
  */
 data class SpdxLicenseReferenceExpression(
     val id: String
-) : SpdxExpression() {
+) : SpdxSimpleExpression() {
     override fun decompose(): Set<SpdxExpression> = setOf(this)
 
     override fun licenses() = listOf(id)
