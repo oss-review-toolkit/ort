@@ -49,10 +49,10 @@ infix fun SpdxLicense.or(other: SpdxExpression) =
     SpdxCompoundExpression(toExpression(), SpdxOperator.OR, other)
 
 /**
- * Create an [SpdxExpression] by concatenating [this][SpdxLicense] and [exception] using [SpdxOperator.WITH].
+ * Create an [SpdxExpression] by concatenating [this][SpdxLicense] and [exception] using [SpdxExpression.WITH].
  */
 infix fun SpdxLicense.with(exception: SpdxLicenseException) =
-    SpdxCompoundExpression(toExpression(), SpdxOperator.WITH, exception.toExpression())
+    SpdxLicenseWithExceptionExpression(toExpression(), exception.toExpression())
 
 /**
  * Create an [SpdxLicenseIdExpression] from this [SpdxLicense].

@@ -55,6 +55,11 @@ sealed class SpdxExpression {
 
     companion object {
         /**
+         * The "WITH" keyword, used to concatenate a license with an exception.
+         */
+        const val WITH = "WITH"
+
+        /**
          * Parse a string into an [SpdxExpression]. Parsing only checks the syntax and the individual license
          * expressions may be invalid SPDX identifiers, which is useful to parse expressions with non-SPDX declared
          * licenses. Throws an [SpdxException] if the string cannot be parsed.
@@ -88,8 +93,7 @@ sealed class SpdxExpression {
 
     /**
      * Return all single licenses contained in the expression tree whereas a single license is one of:
-     * [SpdxLicenseIdExpression], [SpdxLicenseReferenceExpression] or [SpdxCompoundExpression] using [SpdxOperator.WITH]
-     * as operator.
+     * [SpdxLicenseIdExpression], [SpdxLicenseReferenceExpression] or [SpdxLicenseWithExceptionExpression].
      */
     abstract fun decompose(): Set<SpdxExpression>
 
@@ -141,11 +145,7 @@ data class SpdxCompoundExpression(
     val operator: SpdxOperator,
     val right: SpdxExpression
 ) : SpdxExpression() {
-    override fun decompose(): Set<SpdxExpression> =
-        when (operator) {
-            SpdxOperator.WITH -> setOf(this)
-            else -> left.decompose() + right.decompose()
-        }
+    override fun decompose(): Set<SpdxExpression> = left.decompose() + right.decompose()
 
     override fun licenses() = left.licenses() + right.licenses()
 
@@ -155,16 +155,7 @@ data class SpdxCompoundExpression(
     override fun validate(strictness: Strictness) {
         left.validate(strictness)
 
-        if (operator == SpdxOperator.WITH && !(left is SpdxLicenseIdExpression
-                    || left is SpdxLicenseReferenceExpression)) {
-            throw SpdxException("Argument '$left' for WITH is not a license identifier.")
-        }
-
-        if (operator == SpdxOperator.WITH && right !is SpdxLicenseExceptionExpression) {
-            throw SpdxException("Argument '$right' for WITH is not an SPDX license exception id.")
-        }
-
-        if (operator != SpdxOperator.WITH && right is SpdxLicenseExceptionExpression) {
+        if (right is SpdxLicenseExceptionExpression) {
             throw SpdxException("Argument '$right' for $operator must not be an SPDX license exception id.")
         }
 
@@ -214,12 +205,62 @@ data class SpdxLicenseExceptionExpression(
 }
 
 /**
+ * An SPDX expression that contains only a single license with an optional exception. Can be
+ * [SpdxLicenseWithExceptionExpression] or any subtype of [SpdxSimpleExpression].
+ */
+sealed class SpdxSingleLicenseExpression : SpdxExpression()
+
+/**
+ * An SPDX expression that contains a [license] with an [exception].
+ */
+data class SpdxLicenseWithExceptionExpression(
+    val license: SpdxSimpleExpression,
+    val exception: SpdxLicenseExceptionExpression
+) : SpdxSingleLicenseExpression() {
+    override fun decompose() = setOf(this)
+
+    override fun licenses() = license.licenses()
+
+    override fun normalize(mapDeprecated: Boolean): SpdxExpression {
+        // Manually cast to SpdxLicenseException, because the type resolver does not recognize that in all subclasses of
+        // SpdxSimpleExpression normalize() returns an SpdxSingleLicenseExpression.
+        val normalizedLicense = license.normalize(mapDeprecated) as SpdxSingleLicenseExpression
+        val normalizedException = exception.normalize(mapDeprecated)
+
+        return when (normalizedLicense) {
+            is SpdxSimpleExpression -> SpdxLicenseWithExceptionExpression(normalizedLicense, normalizedException)
+
+            // This case happens if a deprecated license identifier that contains an exception is used together with
+            // another exception, for example "GPL-2.0-with-classpath-exception WITH Classpath-exception-2.0". If the
+            // exceptions are equal ignore this issue, otherwise throw an exception.
+            is SpdxLicenseWithExceptionExpression -> {
+                if (normalizedLicense.exception == normalizedException) {
+                    normalizedLicense
+                } else {
+                    throw SpdxException(
+                        "'$this' cannot be normalized, because the license '$license' contains the exception " +
+                                "'${normalizedLicense.exception}' which is different from '$exception'."
+                    )
+                }
+            }
+        }
+    }
+
+    override fun validate(strictness: Strictness) {
+        license.validate(strictness)
+        exception.validate(strictness)
+    }
+
+    override fun toString(): String = "$license $WITH $exception"
+}
+
+/**
  * A simple SPDX expression as defined by version 2.1 of the [SPDX specification, appendix IV][1]. A simple expression
  * can be either a [SpdxLicenseIdExpression] or a [SpdxLicenseReferenceExpression].
  *
  * [1]: https://spdx.org/spdx-specification-21-web-version#h.jxpfx0ykyb60
  */
-sealed class SpdxSimpleExpression : SpdxExpression()
+sealed class SpdxSimpleExpression : SpdxSingleLicenseExpression()
 
 /**
  * An SPDX expression for a license [id] as defined by version 2.1 of the [SPDX specification, appendix I][1].
@@ -249,9 +290,9 @@ data class SpdxLicenseIdExpression(
     }
 
     /**
-     * Concatenate [this][SpdxLicenseIdExpression] and [other] using [SpdxOperator.WITH].
+     * Concatenate [this][SpdxLicenseIdExpression] and [other] using [SpdxExpression.WITH].
      */
-    infix fun with(other: SpdxLicenseExceptionExpression) = SpdxCompoundExpression(this, SpdxOperator.WITH, other)
+    infix fun with(other: SpdxLicenseExceptionExpression) = SpdxLicenseWithExceptionExpression(this, other)
 
     override fun toString() =
         buildString {
@@ -311,12 +352,5 @@ enum class SpdxOperator(
      * The disjunctive binary "OR" operator to construct a new license expression if presented with a choice between
      * two or more licenses, where both the left and right operands are valid [SpdxExpressions][SpdxExpression].
      */
-    OR(0),
-
-    /**
-     * Use the binary "WITH" operator to construct a new license expression if a set of license terms apply except under
-     * special circumstances. The left operand is a [SpdxLicenseIdExpression] value and the right operand is a
-     * [SpdxLicenseExceptionExpression] that represents the special exception terms.
-     */
-    WITH(2)
+    OR(0)
 }
