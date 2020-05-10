@@ -49,6 +49,26 @@ import okio.Buffer
 private fun RequestBody.string() = Buffer().also { writeTo(it) }.readUtf8()
 
 class ClearlyDefinedServiceTest : WordSpec({
+    "Downloading a contribution patch" should {
+        "return curation data" {
+            val service = ClearlyDefinedService.create(Server.PRODUCTION)
+
+            val getCall = service.getCuration(
+                ComponentType.MAVEN,
+                Provider.MAVEN_CENTRAL,
+                "javax.servlet",
+                "javax.servlet-api",
+                "3.1.0"
+            )
+            val response = getCall.execute()
+            val responseCode = response.code()
+            val curation = response.body()
+
+            responseCode shouldBe HttpURLConnection.HTTP_OK
+            curation?.licensed?.declared shouldBe "CDDL-1.0 OR GPL-2.0-only WITH Classpath-exception-2.0"
+        }
+    }
+
     "Uploading a contribution patch" should {
         val info = ContributionInfo(
             type = ContributionType.OTHER,
