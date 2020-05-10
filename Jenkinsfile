@@ -22,12 +22,19 @@
  * - https://plugins.jenkins.io/pipeline-utility-steps/
  */
 
+import com.cloudbees.groovy.cps.NonCPS
+
 import java.io.IOException
 
 final DOCKER_BUILD_ARGS = '--build-arg http_proxy=$http_proxy --build-arg https_proxy=$https_proxy'
 
 // Disable the entry point to work around https://issues.jenkins-ci.org/browse/JENKINS-51307.
 final DOCKER_RUN_ARGS = '-e http_proxy -e https_proxy --entrypoint=""'
+
+@NonCPS
+static sortProjectsByPathDepth(projects) {
+    return projects.toSorted { it.definition_file_path.count("/") }
+}
 
 pipeline {
     agent none
@@ -213,7 +220,7 @@ pipeline {
 
                         if (projects) {
                             // Determine the / a root project simply by sorting by path depth.
-                            def sortedProjects = projects.toSorted { it.definition_file_path.count("/") }
+                            def sortedProjects = sortProjectsByPathDepth(projects)
 
                             // There is always at least one (unmanaged) project.
                             def rootProjectId = sortedProjects.first().id
