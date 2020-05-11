@@ -77,41 +77,85 @@ interface ClearlyDefinedService {
     }
 
     /**
-     * See https://github.com/clearlydefined/service/blob/b339cb7/schemas/curation-1.0.json#L7-L16.
+     * See https://github.com/clearlydefined/service/blob/4917725/schemas/curation-1.0.json#L7-L17.
      */
     @JsonInclude(JsonInclude.Include.NON_NULL)
     data class Curation(
         val described: Described? = null,
-        val files: List<FileEntry>? = null,
-        val licensed: Licensed? = null
+        val licensed: Licensed? = null,
+        val files: List<FileEntry>? = null
     )
 
     /**
-     * See https://github.com/clearlydefined/service/blob/b339cb7/schemas/curation-1.0.json#L66-L115.
+     * See https://github.com/clearlydefined/service/blob/4917725/schemas/definition-1.0.json#L145-L179.
      */
     @JsonInclude(JsonInclude.Include.NON_NULL)
     data class Described(
+        val score: DescribedScore? = null,
+        val toolScore: DescribedScore? = null,
         val facets: Facets? = null,
-        val issueTracker: URL? = null,
+        val sourceLocation: SourceLocation? = null,
+        val urls: URLs? = null,
         val projectWebsite: URL? = null,
+        val issueTracker: URL? = null,
         val releaseDate: String? = null,
-        val sourceLocation: SourceLocation? = null
+        val hashes: Hashes? = null,
+        val files: Int? = null,
+        val tools: List<String>? = null
     )
 
     /**
-     * See https://github.com/clearlydefined/service/blob/b339cb7/schemas/curation-1.0.json#L70-L86.
+     * See https://github.com/clearlydefined/service/blob/4917725/schemas/definition-1.0.json#L180-L190.
+     */
+    data class DescribedScore(
+        val total: Int,
+        val date: Int,
+        val source: Int
+    )
+
+    /**
+     * See https://github.com/clearlydefined/service/blob/4917725/schemas/definition-1.0.json#L264-L275.
      */
     @JsonInclude(JsonInclude.Include.NON_NULL)
     data class Facets(
-        val data: List<String>? = null,
-        val dev: List<String>? = null,
-        val doc: List<String>? = null,
-        val examples: List<String>? = null,
-        val tests: List<String>? = null
+        val core: Facet? = null,
+        val data: Facet? = null,
+        val dev: Facet? = null,
+        val doc: Facet? = null,
+        val examples: Facet? = null,
+        val tests: Facet? = null
     )
 
     /**
-     * See https://github.com/clearlydefined/service/blob/b339cb7/schemas/curation-1.0.json#L137-L177.
+     * See https://github.com/clearlydefined/service/blob/4917725/schemas/definition-1.0.json#L276-L286.
+     */
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    data class Facet(
+        val files: Int? = null,
+        val attribution: Attribution? = null,
+        val discovered: Discovered? = null
+    )
+
+    /**
+     * See https://github.com/clearlydefined/service/blob/4917725/schemas/definition-1.0.json#L287-L301.
+     */
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    data class Attribution(
+        val parties: List<String>? = null,
+        val unknown: Int? = null
+    )
+
+    /**
+     * See https://github.com/clearlydefined/service/blob/4917725/schemas/definition-1.0.json#L305-L319.
+     */
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    data class Discovered(
+        val expressions: List<String>? = null,
+        val unknown: Int? = null
+    )
+
+    /**
+     * See https://github.com/clearlydefined/service/blob/4917725/schemas/definition-1.0.json#L211-L235.
      */
     @JsonInclude(JsonInclude.Include.NON_NULL)
     data class SourceLocation(
@@ -127,19 +171,40 @@ interface ClearlyDefinedService {
     )
 
     /**
-     * See https://github.com/clearlydefined/service/blob/b339cb7/schemas/curation-1.0.json#L46-L57.
+     * See https://github.com/clearlydefined/service/blob/4917725/schemas/definition-1.0.json#L236-L253.
+     */
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    data class URLs(
+        val registry: URL? = null,
+        val version: URL? = null,
+        val download: URL? = null
+    )
+
+    /**
+     * See https://github.com/clearlydefined/service/blob/4917725/schemas/definition-1.0.json#L135-L144.
+     */
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    data class Hashes(
+        val md5: String? = null,
+        val sha1: String? = null,
+        val sha256: String? = null,
+        val gitSha: String? = null
+    )
+
+    /**
+     * See https://github.com/clearlydefined/service/blob/4917725/schemas/definition-1.0.json#L34-L47.
      */
     enum class Provider(val value: String) {
+        NPM_JS("npmjs"),
         COCOAPODS("cocoapods"),
         CRATES_IO("cratesio"),
-        DEBIAN("debian"),
         GITHUB("github"),
-        MAVEN_CENTRAL("mavencentral"),
-        NPM_JS("npmjs"),
-        NUGET("nuget"),
         PACKAGIST("packagist"),
+        MAVEN_CENTRAL("mavencentral"),
+        NUGET("nuget"),
+        RUBYGEMS("rubygems"),
         PYPI("pypi"),
-        RUBYGEMS("rubygems");
+        DEBIAN("debian");
 
         companion object {
             @JsonCreator
@@ -152,21 +217,21 @@ interface ClearlyDefinedService {
     }
 
     /**
-     * See https://github.com/clearlydefined/service/blob/b339cb7/schemas/curation-1.0.json#L25-L38.
+     * See https://github.com/clearlydefined/service/blob/4917725/schemas/definition-1.0.json#L18-L33.
      */
     enum class ComponentType(val value: String) {
-        COMPOSER("composer"),
+        NPM("npm"),
         CRATE("crate"),
-        DEBIAN("deb"),
-        DEBIAN_SOURCES("debsrc"),
-        GEM("gem"),
         GIT("git"),
         MAVEN("maven"),
-        NPM("npm"),
+        COMPOSER("composer"),
         NUGET("nuget"),
+        GEM("gem"),
         POD("pod"),
         PYPI("pypi"),
-        SOURCE_ARCHIVE("sourcearchive");
+        SOURCE_ARCHIVE("sourcearchive"),
+        DEBIAN("deb"),
+        DEBIAN_SOURCES("debsrc");
 
         companion object {
             @JsonCreator
@@ -180,21 +245,57 @@ interface ClearlyDefinedService {
     }
 
     /**
-     * See https://github.com/clearlydefined/service/blob/b339cb7/schemas/curation-1.0.json#L190-L218.
+     * See https://github.com/clearlydefined/service/blob/4917725/schemas/definition-1.0.json#L90-L134.
      */
     @JsonInclude(JsonInclude.Include.NON_NULL)
     data class FileEntry(
-        val attributions: List<String>? = null,
+        val path: File,
         val license: String? = null,
-        val path: File
+        val attributions: List<String>? = null,
+        val facets: Facets? = null,
+        val hashes: Hashes? = null,
+        val token: String? = null,
+        val natures: Set<Nature>? = null
     )
 
     /**
-     * See https://github.com/clearlydefined/service/blob/b339cb7/schemas/curation-1.0.json#L232-L236.
+     * See https://github.com/clearlydefined/service/blob/4917725/schemas/definition-1.0.json#L128.
+     */
+    enum class Nature {
+        LICENSE,
+        NOTICE;
+
+        companion object {
+            @JsonCreator
+            @JvmStatic
+            fun fromString(value: String) = enumValues<Nature>().single { value.equals(it.name, ignoreCase = true) }
+        }
+
+        @JsonValue
+        override fun toString() = name.toLowerCase()
+    }
+
+    /**
+     * See https://github.com/clearlydefined/service/blob/4917725/schemas/definition-1.0.json#L254-L263.
      */
     @JsonInclude(JsonInclude.Include.NON_NULL)
     data class Licensed(
-        val declared: String? = null
+        val score: LicensedScore? = null,
+        val toolScore: LicensedScore? = null,
+        val declared: String? = null,
+        val facets: Facets? = null
+    )
+
+    /**
+     * See https://github.com/clearlydefined/service/blob/4917725/schemas/definition-1.0.json#L191-L204.
+     */
+    data class LicensedScore(
+        val total: Int,
+        val declared: Int,
+        val discovered: Int,
+        val consistency: Int,
+        val spdx: Int,
+        val texts: Int
     )
 
     /**
