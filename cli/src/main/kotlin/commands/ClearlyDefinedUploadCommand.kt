@@ -44,6 +44,7 @@ import org.ossreviewtoolkit.clearlydefined.ClearlyDefinedService.ContributionTyp
 import org.ossreviewtoolkit.clearlydefined.ClearlyDefinedService.Curation
 import org.ossreviewtoolkit.clearlydefined.ClearlyDefinedService.Described
 import org.ossreviewtoolkit.clearlydefined.ClearlyDefinedService.ErrorResponse
+import org.ossreviewtoolkit.clearlydefined.ClearlyDefinedService.HarvestStatus
 import org.ossreviewtoolkit.clearlydefined.ClearlyDefinedService.Licensed
 import org.ossreviewtoolkit.clearlydefined.ClearlyDefinedService.Patch
 import org.ossreviewtoolkit.clearlydefined.ClearlyDefinedService.Server
@@ -72,6 +73,30 @@ class ClearlyDefinedUploadCommand : CliktCommand(
         help = "The ClearlyDefined server to upload to."
     ).enum<Server>().default(Server.DEVELOPMENT)
 
+    private val service by lazy { ClearlyDefinedService.create(server, OkHttpClientHelper.buildClient()) }
+
+    private fun getDefinitions(coordinates: Collection<String>): Map<String, ClearlyDefinedService.Defined> {
+        val call = service.getDefinitions(coordinates)
+
+        log.debug {
+            val request = call.request()
+            "Going to execute API call at ${request.url} with body:\n${request.body?.string()}"
+        }
+
+        val response = call.execute()
+        val responseCode = response.code()
+
+        if (responseCode == HttpURLConnection.HTTP_OK) {
+            response.body()?.let { definitions ->
+                return definitions
+            } ?: log.warn { "The REST API call succeeded but no response body was returned." }
+        } else {
+            response.errorBody()?.let { logInnerError(it) }
+        }
+
+        return emptyMap()
+    }
+
     private fun logInnerError(errorBody: ResponseBody) {
         val errorResponse = jsonMapper.readValue<ErrorResponse>(errorBody.string())
         log.error { "The REST API call failed with: ${errorResponse.error.innererror.message}" }
@@ -81,11 +106,35 @@ class ClearlyDefinedUploadCommand : CliktCommand(
     override fun run() {
         val absoluteInputFile = inputFile.normalize()
         val curations = absoluteInputFile.readValue<List<PackageCuration>>()
-        val service = ClearlyDefinedService.create(server, OkHttpClientHelper.buildClient())
 
         var error = false
 
-        curations.forEachIndexed { index, curation ->
+        val curationsToCoordinates = curations.associateWith { it.id.toClearlyDefinedCoordinates().toString() }
+        val definitions = getDefinitions(curationsToCoordinates.values)
+
+        val uploadableCurations = curations.filter { curation ->
+            val harvestStatus = definitions[curationsToCoordinates[curation]]?.getHarvestStatus()
+
+            print("Package '${curation.id.toCoordinates()}' ")
+            when (harvestStatus) {
+                HarvestStatus.HARVESTED -> {
+                    println("has been harvested, will try to upload curations.")
+                    true
+                }
+
+                HarvestStatus.NOT_HARVESTED, HarvestStatus.PARTIALLY_HARVESTED -> {
+                    println("has not been harvested yet, cannot upload curations.")
+                    false
+                }
+
+                null -> {
+                    println("has an unknown harvest status, cannot upload curations.")
+                    false
+                }
+            }
+        }
+
+        uploadableCurations.forEachIndexed { index, curation ->
             val call = service.putCuration(curation.toContributionPatch())
 
             log.debug {
@@ -96,7 +145,7 @@ class ClearlyDefinedUploadCommand : CliktCommand(
             val response = call.execute()
             val responseCode = response.code()
 
-            print("Curation ${index + 1} of ${curations.size} for package '${curation.id.toCoordinates()}' ")
+            print("Curation ${index + 1} of ${uploadableCurations.size} for package '${curation.id.toCoordinates()}' ")
             if (responseCode == HttpURLConnection.HTTP_OK) {
                 response.body()?.let { summary ->
                     println("was successfully uploaded:\n${summary.url}")

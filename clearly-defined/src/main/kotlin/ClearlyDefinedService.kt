@@ -20,6 +20,7 @@
 package org.ossreviewtoolkit.clearlydefined
 
 import com.fasterxml.jackson.annotation.JsonCreator
+import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.fasterxml.jackson.annotation.JsonValue
@@ -79,6 +80,15 @@ interface ClearlyDefinedService {
     }
 
     /**
+     * The status of meta-data harvesting of the various tools.
+     */
+    enum class HarvestStatus {
+        NOT_HARVESTED,
+        PARTIALLY_HARVESTED,
+        HARVESTED
+    }
+
+    /**
      * The return type for https://api.clearlydefined.io/api-docs/#/definitions/post_definitions.
      */
     @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -94,7 +104,19 @@ interface ClearlyDefinedService {
 
         @JsonProperty("_meta")
         val meta: Meta
-    )
+    ) {
+        /**
+         * Return the harvest status of a described component, also see
+         * https://github.com/clearlydefined/website/blob/de42d2c/src/components/Navigation/Ui/HarvestIndicator.js#L8.
+         */
+        @JsonIgnore
+        fun getHarvestStatus() =
+            when {
+                described.tools == null -> HarvestStatus.NOT_HARVESTED
+                described.tools.size > 2 -> HarvestStatus.HARVESTED
+                else -> HarvestStatus.PARTIALLY_HARVESTED
+            }
+    }
 
     /**
      * See https://github.com/clearlydefined/service/blob/b339cb7/schemas/definition-1.0.json#L80-L89.
