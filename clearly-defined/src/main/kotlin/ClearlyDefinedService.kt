@@ -21,6 +21,7 @@ package org.ossreviewtoolkit.clearlydefined
 
 import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonInclude
+import com.fasterxml.jackson.annotation.JsonProperty
 import com.fasterxml.jackson.annotation.JsonValue
 import com.fasterxml.jackson.databind.json.JsonMapper
 import com.fasterxml.jackson.module.kotlin.registerKotlinModule
@@ -36,6 +37,7 @@ import retrofit2.converter.jackson.JacksonConverterFactory
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.PATCH
+import retrofit2.http.POST
 import retrofit2.http.Path
 
 /**
@@ -75,6 +77,40 @@ interface ClearlyDefinedService {
 
         LOCALHOST("http://localhost:4000")
     }
+
+    /**
+     * The return type for https://api.clearlydefined.io/api-docs/#/definitions/post_definitions.
+     */
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    data class Defined(
+        val coordinates: Coordinates,
+        val described: Described,
+        val licensed: Licensed,
+        val files: List<FileEntry>? = null,
+        val scores: FinalScore,
+
+        @JsonProperty("_id")
+        val id: String? = null,
+
+        @JsonProperty("_meta")
+        val meta: Meta
+    )
+
+    /**
+     * See https://github.com/clearlydefined/service/blob/b339cb7/schemas/definition-1.0.json#L80-L89.
+     */
+    data class FinalScore(
+        val effective: Int,
+        val tool: Int
+    )
+
+    /**
+     * See https://github.com/clearlydefined/service/blob/b339cb7/schemas/definition-1.0.json#L48-L61.
+     */
+    data class Meta(
+        val schemaVersion: String,
+        val updated: String
+    )
 
     /**
      * See https://github.com/clearlydefined/service/blob/4917725/schemas/curation-1.0.json#L7-L17.
@@ -441,6 +477,9 @@ interface ClearlyDefinedService {
         val message: String,
         val stack: String
     )
+
+    @POST("definitions")
+    fun getDefinitions(@Body coordinates: Collection<String>): Call<Map<String, Defined>>
 
     /**
      * Get a curation for a component revision, see
