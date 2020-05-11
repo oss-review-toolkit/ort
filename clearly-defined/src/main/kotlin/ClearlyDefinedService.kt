@@ -397,6 +397,21 @@ interface ClearlyDefinedService {
          */
         val revision: String? = null
     ) {
+        companion object {
+            @JsonCreator
+            @JvmStatic
+            fun fromString(value: String): Coordinates {
+                val parts = value.split('/', limit = 5)
+                return Coordinates(
+                    type = ComponentType.fromString(parts[0]),
+                    provider = Provider.fromString(parts[1]),
+                    namespace = parts[2].takeUnless { it == "-" },
+                    name = parts[3],
+                    revision = parts.getOrNull(4)
+                )
+            }
+        }
+
         override fun toString() = listOfNotNull(type, provider, namespace ?: "-", name, revision).joinToString("/")
     }
 
