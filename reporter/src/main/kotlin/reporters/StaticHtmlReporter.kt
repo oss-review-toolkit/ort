@@ -320,7 +320,7 @@ class StaticHtmlReporter : Reporter {
 
         val issues = (row.analyzerIssues + row.scanIssues).flatMap { it.value }
 
-        val worstSeverity = issues.map { it.severity }.min() ?: Severity.ERROR
+        val worstSeverity = issues.filter { it.isResolved }.map { it.severity }.min() ?: Severity.ERROR
 
         val areAllResolved = issues.isNotEmpty() && issues.all { it.isResolved }
 
