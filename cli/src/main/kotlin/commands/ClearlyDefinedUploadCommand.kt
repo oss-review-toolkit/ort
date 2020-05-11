@@ -67,40 +67,6 @@ class ClearlyDefinedUploadCommand : CliktCommand(
         help = "The ClearlyDefined server to upload to."
     ).enum<Server>().default(Server.DEVELOPMENT)
 
-    private fun PackageCuration.toContributionPatch(): ContributionPatch {
-        val info = ContributionInfo(
-            // The exact values to use here are unclear; use what is mostly used at
-            // https://github.com/clearlydefined/curated-data/pulls.
-            type = ContributionType.OTHER,
-            summary = "Curation for component ${id.toClearlyDefinedCoordinates()}.",
-            details = "Imported from curation data of the " +
-                    "[OSS Review Toolkit](https://github.com/oss-review-toolkit/ort) via the " +
-                    "[clearly-defined](https://github.com/oss-review-toolkit/ort/tree/master/clearly-defined) " +
-                    "module.",
-            resolution = data.comment ?: "Unknown, original data contains no comment.",
-            removedDefinitions = false
-        )
-
-        val licenseExpression = data.concludedLicense?.toString() ?: data.declaredLicenses?.joinToString(" AND ")
-
-        val described = Described(
-            projectWebsite = data.homepageUrl?.let { URL(it) },
-            sourceLocation = toClearlyDefinedSourceLocation(id, data.vcs, data.sourceArtifact)
-        )
-
-        val curation = Curation(
-            described = described.takeIf { it.hasNonNullProperty() },
-            licensed = licenseExpression?.let { Licensed(it) }
-        )
-
-        val patch = Patch(
-            coordinates = id.toClearlyDefinedCoordinates(),
-            revisions = mapOf(id.version to curation)
-        )
-
-        return ContributionPatch(info, listOf(patch))
-    }
-
     override fun run() {
         val absoluteInputFile = inputFile.normalize()
         val curations = absoluteInputFile.readValue<List<PackageCuration>>()
@@ -133,4 +99,38 @@ class ClearlyDefinedUploadCommand : CliktCommand(
 
         if (error) throw UsageError("An error occurred.", statusCode = 2)
     }
+}
+
+private fun PackageCuration.toContributionPatch(): ContributionPatch {
+    val info = ContributionInfo(
+        // The exact values to use here are unclear; use what is mostly used at
+        // https://github.com/clearlydefined/curated-data/pulls.
+        type = ContributionType.OTHER,
+        summary = "Curation for component ${id.toClearlyDefinedCoordinates()}.",
+        details = "Imported from curation data of the " +
+                "[OSS Review Toolkit](https://github.com/oss-review-toolkit/ort) via the " +
+                "[clearly-defined](https://github.com/oss-review-toolkit/ort/tree/master/clearly-defined) " +
+                "module.",
+        resolution = data.comment ?: "Unknown, original data contains no comment.",
+        removedDefinitions = false
+    )
+
+    val licenseExpression = data.concludedLicense?.toString() ?: data.declaredLicenses?.joinToString(" AND ")
+
+    val described = Described(
+        projectWebsite = data.homepageUrl?.let { URL(it) },
+        sourceLocation = toClearlyDefinedSourceLocation(id, data.vcs, data.sourceArtifact)
+    )
+
+    val curation = Curation(
+        described = described.takeIf { it.hasNonNullProperty() },
+        licensed = licenseExpression?.let { Licensed(it) }
+    )
+
+    val patch = Patch(
+        coordinates = id.toClearlyDefinedCoordinates(),
+        revisions = mapOf(id.version to curation)
+    )
+
+    return ContributionPatch(info, listOf(patch))
 }
