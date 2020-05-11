@@ -50,9 +50,15 @@ class WebAppPackage {
 
     #description;
 
+    #detectedExcludedLicenses = new Set();
+
+    #detectedExcludedLicensesIndexes = new Set();
+
     #detectedLicenses = new Set();
 
     #detectedLicensesIndexes = new Set();
+
+    #detectedLicensesProcessed = new Set();
 
     #findings = [];
 
@@ -170,6 +176,12 @@ class WebAppPackage {
                 this.#description = obj.description;
             }
 
+            if (obj.detected_excluded_licenses || obj.detectedExcludedLicenses) {
+                const detectedExcludedLicensesIndexes = obj.detected_excluded_licenses
+                    || obj.detectedExcludedLicenses;
+                this.#detectedExcludedLicensesIndexes = new Set(detectedExcludedLicensesIndexes);
+            }
+
             if (obj.detected_licenses || obj.detectedLicenses) {
                 const detectedLicensesIndexes = obj.detected_licenses
                     || obj.detectedLicenses;
@@ -247,49 +259,49 @@ class WebAppPackage {
 
             if (webAppOrtResult) {
                 this.#webAppOrtResult = webAppOrtResult;
+                const getLicenseNames = (indexes) => {
+                    const licenses = [];
+                    indexes.forEach((index) => {
+                        const webAppLicense = webAppOrtResult.getLicenseByIndex(index);
+                        if (webAppLicense) {
+                            const { id } = webAppLicense;
+                            licenses.push(id);
+                        }
+                    });
+
+                    return new Set(licenses.sort());
+                };
 
                 if (this.#declaredLicensesIndexes.size !== 0) {
-                    this.#declaredLicensesIndexes.forEach((index) => {
-                        const webAppLicense = webAppOrtResult.getLicenseByIndex(index);
-                        if (webAppLicense) {
-                            const { id } = webAppLicense;
-                            this.#declaredLicenses.add(id);
-                        }
-                    });
-                }
-
-                if (this.#detectedLicensesIndexes.size !== 0) {
-                    this.#detectedLicensesIndexes.forEach((index) => {
-                        const webAppLicense = webAppOrtResult.getLicenseByIndex(index);
-                        if (webAppLicense) {
-                            const { id } = webAppLicense;
-                            this.#detectedLicenses.add(id);
-                        }
-                    });
+                    this.#declaredLicenses = getLicenseNames(this.#declaredLicensesIndexes);
                 }
 
                 if (this.#declaredLicensesMappedIndexes.size !== 0) {
-                    this.#declaredLicensesMappedIndexes.forEach((index) => {
-                        const webAppLicense = webAppOrtResult.getLicenseByIndex(index);
-                        if (webAppLicense) {
-                            const { id } = webAppLicense;
-                            this.#declaredLicensesMapped.add(id);
-                        }
-                    });
+                    this.#declaredLicensesMapped = getLicenseNames(this.#declaredLicensesMappedIndexes);
                 }
 
                 if (this.#declaredLicensesUnmappedIndexes.size !== 0) {
-                    this.#declaredLicensesUnmappedIndexes.forEach((index) => {
-                        const webAppLicense = webAppOrtResult.getLicenseByIndex(index);
-                        if (webAppLicense) {
-                            const { id } = webAppLicense;
-                            this.#declaredLicensesUnmapped.add(id);
-                        }
-                    });
+                    this.#declaredLicensesUnmapped = getLicenseNames(this.#declaredLicensesUnmappedIndexes);
                 }
 
-                this.key = randomStringGenerator(20);
+                if (this.#detectedLicensesIndexes.size !== 0) {
+                    this.#detectedLicenses = getLicenseNames(this.#detectedLicensesIndexes);
+                }
+
+                if (this.#detectedExcludedLicensesIndexes.size !== 0) {
+                    this.#detectedExcludedLicenses = getLicenseNames(this.#detectedExcludedLicensesIndexes);
+
+                    this.#detectedLicensesProcessed = getLicenseNames(new Set(
+                        [...this.#detectedLicensesIndexes].filter(
+                            (license) => !this.#detectedExcludedLicensesIndexes.has(license)
+                        )
+                    ));
+                } else {
+                    this.#detectedLicensesProcessed = this.#detectedLicenses;
+                }
             }
+
+            this.key = randomStringGenerator(20);
         }
     }
 
@@ -337,12 +349,24 @@ class WebAppPackage {
         return this.#description;
     }
 
+    get detectedExcludedLicenses() {
+        return this.#detectedExcludedLicenses;
+    }
+
+    get detectedExcludedLicensesIndexes() {
+        return this.#detectedExcludedLicensesIndexes;
+    }
+
     get detectedLicenses() {
         return this.#detectedLicenses;
     }
 
     get detectedLicensesIndexes() {
         return this.#detectedLicensesIndexes;
+    }
+
+    get detectedLicensesProcessed() {
+        return this.#detectedLicensesProcessed;
     }
 
     get excludeReasons() {
@@ -583,6 +607,10 @@ class WebAppPackage {
 
     hasDetectedLicenses() {
         return this.#detectedLicenses.size !== 0;
+    }
+
+    hasDetectedExcludedLicenses() {
+        return this.#detectedExcludedLicenses.size !== 0;
     }
 
     hasFindings() {
