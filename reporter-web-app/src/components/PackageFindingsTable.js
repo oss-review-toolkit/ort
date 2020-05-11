@@ -153,7 +153,6 @@ const PackageFindingsTable = (props) => {
             width: '1em'
         },
         {
-            title: 'Value',
             dataIndex: 'value',
             filters: (
                 () => Array.from(webAppPackage.detectedLicenses)
@@ -198,27 +197,30 @@ const PackageFindingsTable = (props) => {
             )(),
             onFilter: (value, row) => value === row.value,
             key: 'value',
-            textWrap: 'word-break'
+            textWrap: 'word-break',
+            title: 'Value'
         },
         {
-            title: 'Path',
             dataIndex: 'path',
             defaultSortOrder: 'ascend',
             key: 'path',
             sorter: (a, b) => a.path.length - b.path.length,
-            textWrap: 'word-break'
+            textWrap: 'word-break',
+            title: 'Path'
         },
         {
-            title: 'Start',
+            align: 'center',
             dataIndex: 'startLine',
             key: 'startLine',
-            align: 'center'
+            responsive: ['md'],
+            title: 'Start'
         },
         {
-            title: 'End',
+            align: 'center',
             dataIndex: 'endLine',
             key: 'endLine',
-            align: 'center'
+            responsive: ['md'],
+            title: 'End'
         }
     );
 
