@@ -318,11 +318,11 @@ class StaticHtmlReporter : Reporter {
     private fun TBODY.issueRow(rowIndex: Int, row: ReportTableModel.IssueRow) {
         val rowId = "issue-$rowIndex"
 
-        val worstSeverity = row.analyzerIssues.flatMap { it.value }.map { it.severity }.min() ?: Severity.ERROR
+        val issues = (row.analyzerIssues + row.scanIssues).flatMap { it.value }
 
-        val areAllResolved = row.analyzerIssues.isNotEmpty() && row.analyzerIssues.all { (_, issues) ->
-            issues.all { it.isResolved }
-        }
+        val worstSeverity = issues.map { it.severity }.min() ?: Severity.ERROR
+
+        val areAllResolved = issues.isNotEmpty() && issues.all { it.isResolved }
 
         val cssClass = if (areAllResolved) {
             "ort-resolved"
