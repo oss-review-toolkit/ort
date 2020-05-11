@@ -92,10 +92,9 @@ sealed class SpdxExpression {
     }
 
     /**
-     * Return all single licenses contained in the expression tree whereas a single license is one of:
-     * [SpdxLicenseIdExpression], [SpdxLicenseReferenceExpression] or [SpdxLicenseWithExceptionExpression].
+     * Return all single licenses contained in this expression as list of [SpdxSingleLicenseExpression]s.
      */
-    abstract fun decompose(): Set<SpdxExpression>
+    abstract fun decompose(): Set<SpdxSingleLicenseExpression>
 
     /**
      * Return all license IDs contained in this expression. Non-SPDX licenses and SPDX license references are included.
@@ -186,7 +185,7 @@ data class SpdxCompoundExpression(
 data class SpdxLicenseExceptionExpression(
     val id: String
 ) : SpdxExpression() {
-    override fun decompose() = emptySet<SpdxExpression>()
+    override fun decompose() = emptySet<SpdxSingleLicenseExpression>()
 
     override fun licenses() = emptyList<String>()
 
