@@ -145,7 +145,7 @@ data class SpdxCompoundExpression(
     val operator: SpdxOperator,
     val right: SpdxExpression
 ) : SpdxExpression() {
-    override fun decompose(): Set<SpdxExpression> = left.decompose() + right.decompose()
+    override fun decompose() = left.decompose() + right.decompose()
 
     override fun licenses() = left.licenses() + right.licenses()
 
@@ -186,7 +186,7 @@ data class SpdxCompoundExpression(
 data class SpdxLicenseExceptionExpression(
     val id: String
 ) : SpdxExpression() {
-    override fun decompose(): Set<SpdxExpression> = emptySet()
+    override fun decompose() = emptySet<SpdxExpression>()
 
     override fun licenses() = emptyList<String>()
 
@@ -272,7 +272,7 @@ data class SpdxLicenseIdExpression(
     val id: String,
     val orLaterVersion: Boolean = false
 ) : SpdxSimpleExpression() {
-    override fun decompose(): Set<SpdxExpression> = setOf(this)
+    override fun decompose() = setOf(this)
 
     private val spdxLicense = SpdxLicense.forId(toString())
 
@@ -312,7 +312,7 @@ data class SpdxLicenseIdExpression(
 data class SpdxLicenseReferenceExpression(
     val id: String
 ) : SpdxSimpleExpression() {
-    override fun decompose(): Set<SpdxExpression> = setOf(this)
+    override fun decompose() = setOf(this)
 
     override fun licenses() = listOf(id)
 
