@@ -200,15 +200,15 @@ class TableView extends React.Component {
         if (webAppOrtResult.hasDetectedLicenses()) {
             columns.push({
                 align: 'left',
-                dataIndex: 'detectedLicenses',
+                dataIndex: 'detectedLicensesProcessed',
                 filters: tableDetectedLicensesSelections,
                 filteredValue: filteredInfo.detectedLicenses || null,
                 onFilter: (license, webAppPackage) => webAppPackage.detectedLicenses.has(license),
                 textWrap: 'word-break',
                 title: 'Detected Licenses',
-                render: (detectedLicenses) => (
+                render: (detectedLicensesProcessed) => (
                     <span>
-                        {Array.from(detectedLicenses).join(', ')}
+                        {Array.from(detectedLicensesProcessed).join(', ')}
                     </span>
                 ),
                 width: '18%'

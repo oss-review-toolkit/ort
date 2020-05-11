@@ -19,14 +19,104 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Table } from 'antd';
-import { CopyrightOutlined, FileTextOutlined } from '@ant-design/icons';
+import { Table, Tooltip } from 'antd';
+import {
+    CopyrightOutlined,
+    FileAddOutlined,
+    FileExcelOutlined,
+    FileTextOutlined,
+    MinusSquareOutlined,
+    PlusSquareOutlined
+} from '@ant-design/icons';
+import PathExcludesTable from './PathExcludesTable';
 
 // Generates the HTML to display scanFindings as a Table
 const PackageFindingsTable = (props) => {
     const { webAppPackage } = props;
     const { findings } = webAppPackage;
-    const columns = [
+    const columns = [];
+    let expandable = null;
+
+    if (webAppPackage.hasDetectedExcludedLicenses()) {
+        columns.push({
+            align: 'right',
+            filters: (() => [
+                {
+                    text: (
+                        <span>
+                            <FileExcelOutlined className="ort-excluded" />
+                            {' '}
+                            Excluded
+                        </span>
+                    ),
+                    value: 'excluded'
+                },
+                {
+                    text: (
+                        <span>
+                            <FileAddOutlined />
+                            {' '}
+                            Included
+                        </span>
+                    ),
+                    value: 'included'
+                }
+            ])(),
+            key: 'excludes',
+            onFilter: (value, webAppFinding) => {
+                if (value === 'excluded') {
+                    return webAppFinding.isExcluded;
+                }
+
+                if (value === 'included') {
+                    return !webAppFinding.isExcluded;
+                }
+
+                return false;
+            },
+            render: (webAppFinding) => (
+                webAppFinding.isExcluded ? (
+                    <span className="ort-excludes">
+                        <Tooltip
+                            placement="right"
+                            title={Array.from(webAppFinding.pathExcludeReasons).join(', ')}
+                        >
+                            <FileExcelOutlined className="ort-excluded" />
+                        </Tooltip>
+                    </span>
+                ) : (
+                    <FileAddOutlined />
+                )
+            ),
+            width: '2em'
+        });
+
+        expandable = {
+            expandedRowRender: (webAppFinding) => (
+                <PathExcludesTable
+                    excludes={webAppFinding.pathExcludes}
+                />
+            ),
+            expandIcon: (obj) => {
+                const { expanded, onExpand, record } = obj;
+
+                if (record.isExcluded === false) {
+                    return null;
+                }
+
+                return (
+                    expanded ? (
+                        <MinusSquareOutlined onClick={(e) => onExpand(record, e)} />
+                    ) : (
+                        <PlusSquareOutlined onClick={(e) => onExpand(record, e)} />
+                    )
+                );
+            },
+            indentSize: 0
+        };
+    }
+
+    columns.push(
         {
             align: 'right',
             dataIndex: 'type',
@@ -67,16 +157,48 @@ const PackageFindingsTable = (props) => {
             dataIndex: 'value',
             filters: (
                 () => Array.from(webAppPackage.detectedLicenses)
-                    .map((license) => ({ text: license, value: license }))
-                    .sort((a, b) => a.text.localeCompare(b.text))
+                    .map(
+                        (license) => {
+                            if (webAppPackage.hasDetectedExcludedLicenses()) {
+                                const { detectedExcludedLicenses } = webAppPackage;
+
+                                if (detectedExcludedLicenses.has(license)) {
+                                    return {
+                                        text: (
+                                            <span>
+                                                <FileExcelOutlined
+                                                    className="ort-excluded"
+                                                />
+                                                {' '}
+                                                {license}
+                                            </span>
+                                        ),
+                                        value: license
+                                    };
+                                }
+
+                                return {
+                                    text: (
+                                        <span>
+                                            <FileAddOutlined />
+                                            {' '}
+                                            {license}
+                                        </span>
+                                    ),
+                                    value: license
+                                };
+                            }
+
+                            return {
+                                text: license,
+                                value: license
+                            };
+                        }
+                    )
             )(),
             onFilter: (value, row) => value === row.value,
             key: 'value',
-            render: (value) => (
-                <span className="ort-word-break-wrap">
-                    {value}
-                </span>
-            )
+            textWrap: 'word-break'
         },
         {
             title: 'Path',
@@ -84,12 +206,7 @@ const PackageFindingsTable = (props) => {
             defaultSortOrder: 'ascend',
             key: 'path',
             sorter: (a, b) => a.path.length - b.path.length,
-            render: (path) => (
-                <div className="ort-word-break-wrap">
-                    {path}
-                </div>
-            ),
-            style: { minWidth: '50%' }
+            textWrap: 'word-break'
         },
         {
             title: 'Start',
@@ -103,15 +220,13 @@ const PackageFindingsTable = (props) => {
             key: 'endLine',
             align: 'center'
         }
-    ];
+    );
 
     return (
         <Table
             columns={columns}
             dataSource={findings}
-            locale={{
-                emptyText: 'No scan results'
-            }}
+            expandable={expandable}
             pagination={
                 {
                     defaultPageSize: 250,
