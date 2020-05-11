@@ -41,13 +41,6 @@ import io.kotest.matchers.shouldNotBe
 
 import java.net.HttpURLConnection
 
-import okhttp3.RequestBody
-
-import okio.Buffer
-
-// See https://github.com/square/okhttp/issues/1891.
-private fun RequestBody.string() = Buffer().also { writeTo(it) }.readUtf8()
-
 class ClearlyDefinedServiceTest : WordSpec({
     "Downloading a contribution patch" should {
         "return curation data" {
