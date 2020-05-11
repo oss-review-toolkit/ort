@@ -89,5 +89,6 @@ data class VcsMatcher(
         require(url.isNotBlank() && revision.isNotBlank())
     }
 
-    fun matches(vcsInfo: VcsInfo): Boolean = type == vcsInfo.type && url == vcsInfo.url && revision == vcsInfo.revision
+    fun matches(vcsInfo: VcsInfo): Boolean =
+        type == vcsInfo.type && url == vcsInfo.url && revision == vcsInfo.resolvedRevision
 }
