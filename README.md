@@ -160,7 +160,7 @@ Please see the documentation below for details about the ORT configuration.
 
 * [The .ort.yml file](docs/config-file-ort-yml.md) - project-specific license finding curations, exclusions
   and resolutions to address issues found within a project's code repository.
-* [The package configuration file](docs/config-file-package-configuration.yml.md) - package (dependency) and provenance
+* [The package configuration file](docs/config-file-package-configuration-yml.md) - package (dependency) and provenance
   specific license finding curations and exclusions to address issues found within a scan result for a package.
 * [The curations.yml file](docs/config-file-curations-yml.md) - curations correct invalid or missing package metadata
   and set the concluded license for packages.
