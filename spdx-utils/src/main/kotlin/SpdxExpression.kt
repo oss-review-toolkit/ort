@@ -260,7 +260,12 @@ data class SpdxLicenseWithExceptionExpression(
  *
  * [1]: https://spdx.org/spdx-specification-21-web-version#h.jxpfx0ykyb60
  */
-sealed class SpdxSimpleExpression : SpdxSingleLicenseExpression()
+sealed class SpdxSimpleExpression : SpdxSingleLicenseExpression() {
+    /**
+     * Concatenate [this][SpdxSimpleExpression] and [other] using [SpdxExpression.WITH].
+     */
+    infix fun with(other: SpdxLicenseExceptionExpression) = SpdxLicenseWithExceptionExpression(this, other)
+}
 
 /**
  * An SPDX expression for a license [id] as defined by version 2.1 of the [SPDX specification, appendix I][1].
@@ -288,11 +293,6 @@ data class SpdxLicenseIdExpression(
             Strictness.ALLOW_CURRENT -> spdxLicense?.takeUnless { spdxLicense.deprecated }
         } ?: throw SpdxException("'$this' is not a valid SPDX license id.")
     }
-
-    /**
-     * Concatenate [this][SpdxLicenseIdExpression] and [other] using [SpdxExpression.WITH].
-     */
-    infix fun with(other: SpdxLicenseExceptionExpression) = SpdxLicenseWithExceptionExpression(this, other)
 
     override fun toString() =
         buildString {
