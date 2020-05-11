@@ -156,7 +156,8 @@ class TableView extends React.Component {
                     <span>
                         {Array.from(webAppPackage.scopeNames).join(',')}
                     </span>
-                )
+                ),
+                responsive: ['md']
             });
         }
 
@@ -174,6 +175,7 @@ class TableView extends React.Component {
                         {Array.from(levels).join(', ')}
                     </span>
                 ),
+                responsive: ['md'],
                 width: 80
             });
         }
@@ -193,6 +195,7 @@ class TableView extends React.Component {
                         {Array.from(declaredLicenses).join(', ')}
                     </span>
                 ),
+                responsive: ['md'],
                 width: '18%'
             });
         }

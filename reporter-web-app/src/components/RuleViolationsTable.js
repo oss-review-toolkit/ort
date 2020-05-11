@@ -216,22 +216,25 @@ const RuleViolationsTable = (props) => {
                     <FileAddOutlined />
                 );
             },
+            responsive: ['md'],
             width: '2em'
         });
     }
 
     columns.push(
         {
-            ellipsis: true,
             dataIndex: 'packageName',
+            ellipsis: true,
             key: 'packageName',
             title: 'Package',
+            responsive: ['md'],
             width: '25%'
         },
         {
             dataIndex: 'rule',
             key: 'rule',
             title: 'Rule',
+            responsive: ['md'],
             width: '25%'
         },
         {
