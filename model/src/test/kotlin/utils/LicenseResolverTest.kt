@@ -194,7 +194,7 @@ class LicenseResolverTest : WordSpec() {
 
     private fun setupPackage(): Package {
         val id = nextId.getAndIncrement().toString()
-        val vcsInfo = VcsInfo(type = VcsType.GIT, url = "ssh://some-host/$id.git", revision = id)
+        val vcsInfo = VcsInfo(type = VcsType.GIT, url = "ssh://some-host/$id.git", revision = id, resolvedRevision = id)
         val pkg = Package.EMPTY.copy(
             id = Identifier(id),
             sourceArtifact = RemoteArtifact("http://some-host/$id", Hash.NONE),
