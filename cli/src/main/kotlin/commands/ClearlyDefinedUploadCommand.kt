@@ -137,7 +137,7 @@ private fun PackageCuration.toContributionPatch(): ContributionPatch {
 
     val curation = Curation(
         described = described.takeIf { it.hasNonNullProperty() },
-        licensed = licenseExpression?.let { Licensed(it) }
+        licensed = licenseExpression?.let { Licensed(declared = it) }
     )
 
     val patch = Patch(
