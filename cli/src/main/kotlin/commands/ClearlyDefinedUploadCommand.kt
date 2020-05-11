@@ -28,6 +28,11 @@ import com.github.ajalt.clikt.parameters.options.required
 import com.github.ajalt.clikt.parameters.types.enum
 import com.github.ajalt.clikt.parameters.types.file
 
+import java.net.HttpURLConnection
+import java.net.URL
+
+import okhttp3.ResponseBody
+
 import org.ossreviewtoolkit.analyzer.curation.toClearlyDefinedCoordinates
 import org.ossreviewtoolkit.analyzer.curation.toClearlyDefinedSourceLocation
 import org.ossreviewtoolkit.clearlydefined.ClearlyDefinedService
@@ -40,6 +45,7 @@ import org.ossreviewtoolkit.clearlydefined.ClearlyDefinedService.ErrorResponse
 import org.ossreviewtoolkit.clearlydefined.ClearlyDefinedService.Licensed
 import org.ossreviewtoolkit.clearlydefined.ClearlyDefinedService.Patch
 import org.ossreviewtoolkit.clearlydefined.ClearlyDefinedService.Server
+import org.ossreviewtoolkit.clearlydefined.string
 import org.ossreviewtoolkit.model.PackageCuration
 import org.ossreviewtoolkit.model.jsonMapper
 import org.ossreviewtoolkit.model.readValue
@@ -47,9 +53,6 @@ import org.ossreviewtoolkit.utils.OkHttpClientHelper
 import org.ossreviewtoolkit.utils.expandTilde
 import org.ossreviewtoolkit.utils.hasNonNullProperty
 import org.ossreviewtoolkit.utils.log
-
-import java.net.HttpURLConnection
-import java.net.URL
 
 class ClearlyDefinedUploadCommand : CliktCommand(
     name = "cd-upload",
@@ -67,6 +70,12 @@ class ClearlyDefinedUploadCommand : CliktCommand(
         help = "The ClearlyDefined server to upload to."
     ).enum<Server>().default(Server.DEVELOPMENT)
 
+    private fun logInnerError(errorBody: ResponseBody) {
+        val errorResponse = jsonMapper.readValue(errorBody.string(), ErrorResponse::class.java)
+        log.error { "The REST API call failed with: ${errorResponse.error.innererror.message}" }
+        log.debug { errorResponse.error.innererror.stack }
+    }
+
     override fun run() {
         val absoluteInputFile = inputFile.normalize()
         val curations = absoluteInputFile.readValue<List<PackageCuration>>()
@@ -75,8 +84,14 @@ class ClearlyDefinedUploadCommand : CliktCommand(
         var error = false
 
         curations.forEachIndexed { index, curation ->
-            val patchCall = service.putCuration(curation.toContributionPatch())
-            val response = patchCall.execute()
+            val call = service.putCuration(curation.toContributionPatch())
+
+            log.debug {
+                val request = call.request()
+                "Going to execute API call at ${request.url} with body:\n${request.body?.string()}"
+            }
+
+            val response = call.execute()
             val responseCode = response.code()
 
             print("Curation ${index + 1} of ${curations.size} for package '${curation.id.toCoordinates()}' ")
@@ -87,11 +102,7 @@ class ClearlyDefinedUploadCommand : CliktCommand(
             } else {
                 println("failed to be uploaded (response code $responseCode).")
 
-                response.errorBody()?.let { errorBody ->
-                    val errorResponse = jsonMapper.readValue(errorBody.string(), ErrorResponse::class.java)
-                    log.error { "The REST API call failed with: ${errorResponse.error.innererror.message}" }
-                    log.debug { errorResponse.error.innererror.stack }
-                }
+                response.errorBody()?.let { logInnerError(it) }
 
                 error = true
             }
