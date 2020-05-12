@@ -33,8 +33,6 @@ import java.time.Instant
 import java.util.SortedSet
 import java.util.TreeSet
 
-import kotlin.reflect.KClass
-
 /**
  * A short summary of the scan results.
  */
@@ -94,17 +92,15 @@ class ScanSummaryDeserializer : StdDeserializer<ScanSummary>(OrtIssue::class.jav
             null
         }
 
-    private inline fun <reified T : Any> JsonNode.readValues(property: String, kClass: KClass<T>): List<T> =
-        this[property]?.map {
-            jsonMapper.treeToValue(it, kClass.java)
-        }.orEmpty()
+    private inline fun <reified T : Any> JsonNode.readValues(property: String): List<T> =
+        this[property]?.mapNotNull { jsonMapper.treeToValue<T>(it) }.orEmpty()
 
     override fun deserialize(p: JsonParser, ctxt: DeserializationContext): ScanSummary {
         val node = p.codec.readTree<JsonNode>(p)
 
         val (legacyLicenseFindings, legacyCopyrightFindings) = deserializeLegacyFindings(node)
-        val licenseFindings = node.readValues("licenses", LicenseFinding::class)
-        val copyrightFindings = node.readValues("copyrights", CopyrightFinding::class)
+        val licenseFindings = node.readValues<LicenseFinding>("licenses")
+        val copyrightFindings = node.readValues<CopyrightFinding>("copyrights")
 
         // TODO: Remove the fallback value for packageVerification code once any ORT feature depends on its existence,
         //       as it is only there for backward compatibility.
@@ -117,9 +113,9 @@ class ScanSummaryDeserializer : StdDeserializer<ScanSummary>(OrtIssue::class.jav
             licenseFindings = (licenseFindings + legacyLicenseFindings).toSortedSet(),
             copyrightFindings = (copyrightFindings + legacyCopyrightFindings).toSortedSet(),
             issues = if (node.has("errors")) {
-                node.readValues("errors", OrtIssue::class)
+                node.readValues("errors")
             } else {
-                node.readValues("issues", OrtIssue::class)
+                node.readValues("issues")
             }
         )
     }
