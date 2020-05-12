@@ -19,6 +19,7 @@
 
 package org.ossreviewtoolkit.utils
 
+import io.kotest.assertions.throwables.shouldNotThrow
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.collections.containExactly
 import io.kotest.matchers.should
@@ -26,11 +27,10 @@ import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNotBe
 
 import org.ossreviewtoolkit.spdx.SpdxDeclaredLicenseMapping
+import org.ossreviewtoolkit.spdx.SpdxException
 import org.ossreviewtoolkit.spdx.SpdxExpression
-import org.ossreviewtoolkit.spdx.SpdxLicense
 import org.ossreviewtoolkit.spdx.SpdxLicenseAliasMapping
 import org.ossreviewtoolkit.spdx.SpdxLicenseIdExpression
-import org.ossreviewtoolkit.spdx.enumSetOf
 
 class DeclaredLicenseProcessorTest : StringSpec() {
     /**
@@ -62,11 +62,9 @@ class DeclaredLicenseProcessorTest : StringSpec() {
             declaredLicenses.forEach { declaredLicense ->
                 val processedLicense = DeclaredLicenseProcessor.process(declaredLicense)
 
-                // Include the declared license in the comparison to see where a failure comes from.
-                "$processedLicense from $declaredLicense" shouldNotBe "null from $declaredLicense"
-                processedLicense!!.spdxLicenses().forEach {
-                    // Include the license ID in the comparison to make it easier to find the wrong mapping.
-                    "$it ${it.deprecated}" shouldBe "$it false"
+                processedLicense shouldNotBe null
+                shouldNotThrow<SpdxException> {
+                    processedLicense!!.validate(SpdxExpression.Strictness.ALLOW_CURRENT)
                 }
             }
         }
@@ -76,8 +74,7 @@ class DeclaredLicenseProcessorTest : StringSpec() {
                 "https://choosealicense.com/licenses/apache-2.0.txt"
             )
 
-            processedLicense shouldNotBe null
-            processedLicense!!.spdxLicenses() shouldBe enumSetOf(SpdxLicense.APACHE_2_0)
+            processedLicense shouldBe SpdxLicenseIdExpression("Apache-2.0")
         }
 
         "Preprocessing licenses does not make mapping redundant" {
