@@ -32,11 +32,10 @@ plugins {
 }
 
 dependencies {
-    api("org.apache.logging.log4j:log4j-api-kotlin:$log4jApiKotlinVersion")
-
     api("com.fasterxml.jackson.core:jackson-databind:$jacksonVersion")
     api("com.squareup.okhttp3:okhttp:$okhttpVersion")
     api("com.vdurmont:semver4j:$semverVersion")
+    api("org.apache.logging.log4j:log4j-api-kotlin:$log4jApiKotlinVersion")
 
     implementation(project(":spdx-utils"))
 

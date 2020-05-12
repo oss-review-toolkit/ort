@@ -161,9 +161,10 @@ subprojects {
         dependencies {
             "api"("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
 
+            "testImplementation"(project(":test-utils"))
+
             "testImplementation"("io.kotest:kotest-runner-junit5-jvm:$kotestVersion")
             "testImplementation"("io.kotest:kotest-assertions-core-jvm:$kotestVersion")
-            "testImplementation"(project(":test-utils"))
 
             "funTestImplementation"(sourceSets["main"].output)
         }
