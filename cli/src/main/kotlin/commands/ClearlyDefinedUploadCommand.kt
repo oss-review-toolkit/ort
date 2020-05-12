@@ -19,6 +19,8 @@
 
 package org.ossreviewtoolkit.commands
 
+import com.fasterxml.jackson.module.kotlin.readValue
+
 import com.github.ajalt.clikt.core.CliktCommand
 import com.github.ajalt.clikt.core.UsageError
 import com.github.ajalt.clikt.parameters.options.convert
@@ -71,7 +73,7 @@ class ClearlyDefinedUploadCommand : CliktCommand(
     ).enum<Server>().default(Server.DEVELOPMENT)
 
     private fun logInnerError(errorBody: ResponseBody) {
-        val errorResponse = jsonMapper.readValue(errorBody.string(), ErrorResponse::class.java)
+        val errorResponse = jsonMapper.readValue<ErrorResponse>(errorBody.string())
         log.error { "The REST API call failed with: ${errorResponse.error.innererror.message}" }
         log.debug { errorResponse.error.innererror.stack }
     }
