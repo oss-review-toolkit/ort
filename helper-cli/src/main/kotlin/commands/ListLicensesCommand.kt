@@ -31,9 +31,9 @@ import com.github.ajalt.clikt.parameters.options.required
 import com.github.ajalt.clikt.parameters.options.split
 import com.github.ajalt.clikt.parameters.types.enum
 import com.github.ajalt.clikt.parameters.types.file
+
 import org.ossreviewtoolkit.helper.common.PackageConfigurationOption
 import org.ossreviewtoolkit.helper.common.createProvider
-
 import org.ossreviewtoolkit.helper.common.fetchScannedSources
 import org.ossreviewtoolkit.helper.common.getLicenseFindingsById
 import org.ossreviewtoolkit.helper.common.getPackageOrProject
