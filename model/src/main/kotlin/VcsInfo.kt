@@ -110,7 +110,7 @@ data class VcsInfo(
     fun toCuration() = VcsInfoCurationData(type, url, revision, resolvedRevision, path)
 }
 
-class VcsInfoDeserializer : StdDeserializer<VcsInfo>(VcsInfo::class.java) {
+private class VcsInfoDeserializer : StdDeserializer<VcsInfo>(VcsInfo::class.java) {
     companion object {
         val KNOWN_FIELDS by lazy { VcsInfo::class.memberProperties.map { PROPERTY_NAMING_STRATEGY.translate(it.name) } }
     }

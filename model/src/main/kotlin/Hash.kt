@@ -100,7 +100,7 @@ data class Hash(
     }
 }
 
-class HashDeserializer : StdDeserializer<Hash>(Hash::class.java) {
+private class HashDeserializer : StdDeserializer<Hash>(Hash::class.java) {
     override fun deserialize(p: JsonParser, ctxt: DeserializationContext): Hash {
         val node = p.codec.readTree<JsonNode>(p)
         return if (node.isTextual) {

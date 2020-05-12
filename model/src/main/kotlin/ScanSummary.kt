@@ -84,7 +84,7 @@ data class ScanSummary(
     val licenses: Set<String> = licenseFindings.mapTo(mutableSetOf()) { it.license }
 }
 
-class ScanSummaryDeserializer : StdDeserializer<ScanSummary>(OrtIssue::class.java) {
+private class ScanSummaryDeserializer : StdDeserializer<ScanSummary>(OrtIssue::class.java) {
     private inline fun <reified T> JsonNode.readValue(property: String): T? =
         if (has(property)) {
             jsonMapper.treeToValue(this[property])

@@ -66,7 +66,7 @@ data class OrtIssue(
     }
 }
 
-class OrtIssueDeserializer : StdDeserializer<OrtIssue>(OrtIssue::class.java) {
+private class OrtIssueDeserializer : StdDeserializer<OrtIssue>(OrtIssue::class.java) {
     override fun deserialize(p: JsonParser, ctxt: DeserializationContext): OrtIssue {
         val node = p.codec.readTree<JsonNode>(p)
         return if (node.has("severity")) {
