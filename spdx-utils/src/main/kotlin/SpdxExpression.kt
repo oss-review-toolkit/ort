@@ -23,8 +23,6 @@ import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.databind.annotation.JsonSerialize
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer
 
-import java.util.EnumSet
-
 import org.antlr.v4.runtime.CharStreams
 import org.antlr.v4.runtime.CommonTokenStream
 
@@ -101,12 +99,6 @@ sealed class SpdxExpression {
     abstract fun licenses(): List<String>
 
     /**
-     * Return all [SpdxLicense]s contained in this expression. Non-SPDX licenses and SPDX license references are
-     * ignored.
-     */
-    abstract fun spdxLicenses(): EnumSet<SpdxLicense>
-
-    /**
      * Normalize all license IDs using a mapping containing common misspellings of license IDs. If [mapDeprecated] is
      * `true` also deprecated IDs are mapped to they current counterparts. The result of this function is not guaranteed
      * to contain only valid IDs. Use [validate] to check the returned [SpdxExpression] for validity afterwards.
@@ -156,8 +148,6 @@ data class SpdxCompoundExpression(
         }
 
     override fun licenses() = left.licenses() + right.licenses()
-
-    override fun spdxLicenses() = left.spdxLicenses() + right.spdxLicenses()
 
     override fun normalize(mapDeprecated: Boolean) =
         SpdxCompoundExpression(left.normalize(mapDeprecated), operator, right.normalize(mapDeprecated))
@@ -209,8 +199,6 @@ data class SpdxLicenseExceptionExpression(
 
     override fun licenses() = emptyList<String>()
 
-    override fun spdxLicenses() = enumSetOf<SpdxLicense>()
-
     override fun normalize(mapDeprecated: Boolean) = this
 
     override fun validate(strictness: Strictness) {
@@ -240,8 +228,6 @@ data class SpdxLicenseIdExpression(
     private val spdxLicense = SpdxLicense.forId(toString())
 
     override fun licenses() = listOf(toString())
-
-    override fun spdxLicenses() = spdxLicense?.let { enumSetOf(it) } ?: enumSetOf()
 
     override fun normalize(mapDeprecated: Boolean) =
         SpdxLicenseAliasMapping.map(toString(), mapDeprecated) ?: this
@@ -280,8 +266,6 @@ data class SpdxLicenseReferenceExpression(
     override fun decompose(): Set<SpdxExpression> = setOf(this)
 
     override fun licenses() = listOf(id)
-
-    override fun spdxLicenses() = enumSetOf<SpdxLicense>()
 
     override fun normalize(mapDeprecated: Boolean) = this
 
