@@ -43,7 +43,8 @@ data class AnalyzerConfiguration(
     val allowDynamicVersions: Boolean
 )
 
-class AnalyzerConfigurationDeserializer : StdDeserializer<AnalyzerConfiguration>(AnalyzerConfiguration::class.java) {
+private class AnalyzerConfigurationDeserializer :
+    StdDeserializer<AnalyzerConfiguration>(AnalyzerConfiguration::class.java) {
     override fun deserialize(p: JsonParser, ctxt: DeserializationContext): AnalyzerConfiguration {
         val node = p.codec.readTree<JsonNode>(p)
         return if (node.isBoolean) {
