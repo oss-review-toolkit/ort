@@ -37,17 +37,6 @@ class SpdxExpressionTest : WordSpec() {
     private val yamlMapper = YAMLMapper()
 
     init {
-        "spdxLicenses()" should {
-            "contain all valid SPDX licenses" {
-                val expression = "MIT OR (invalid1 AND Apache-2.0 WITH exp) AND (BSD-3-Clause OR invalid2 WITH exp)"
-                val spdxExpression = SpdxExpression.parse(expression)
-
-                val spdxLicenses = spdxExpression.spdxLicenses()
-
-                spdxLicenses shouldBe enumSetOf(APACHE_2_0, BSD_3_CLAUSE, MIT)
-            }
-        }
-
         "toString()" should {
             "return the textual SPDX expression" {
                 val expression = "license1+ AND (license2 WITH exception1 OR license3+) AND license4 WITH exception2"
