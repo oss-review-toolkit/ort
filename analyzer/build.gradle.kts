@@ -54,7 +54,6 @@ dependencies {
     implementation("com.moandjiezana.toml:toml4j:$toml4jVersion")
     implementation("com.paypal.digraph:digraph-parser:$digraphVersion")
     implementation("com.vdurmont:semver4j:$semverVersion")
-
     implementation("org.apache.maven:maven-core:$mavenVersion")
     implementation("org.apache.maven:maven-compat:$mavenVersion")
 
