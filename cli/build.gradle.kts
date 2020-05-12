@@ -20,6 +20,7 @@
 
 val cliktVersion: String by project
 val config4kVersion: String by project
+val jacksonVersion: String by project
 val kotestVersion: String by project
 val log4jCoreVersion: String by project
 val reflectionsVersion: String by project
@@ -66,6 +67,7 @@ dependencies {
     implementation(project(":scanner"))
     implementation(project(":utils"))
 
+    implementation("com.fasterxml.jackson.module:jackson-module-kotlin:$jacksonVersion")
     implementation("com.github.ajalt:clikt:$cliktVersion")
     implementation("org.apache.logging.log4j:log4j-core:$log4jCoreVersion")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
