@@ -672,10 +672,11 @@
       },
       "detected" : {
         "Apache-2.0" : 1,
-        "GPL-2.0-only WITH Classpath-exception-2.0 AND BSD-3-Clause OR MIT" : 1,
+        "BSD-3-Clause" : 1,
+        "GPL-2.0-only WITH Classpath-exception-2.0" : 1,
         "LicenseRef-test-Apache-2.0-multi-line" : 1,
         "LicenseRef-test-Apache-2.0-single-line" : 1,
-        "MIT" : 1
+        "MIT" : 2
       }
     }
   },

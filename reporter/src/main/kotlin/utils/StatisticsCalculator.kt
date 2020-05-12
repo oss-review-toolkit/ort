@@ -23,6 +23,7 @@ import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.model.config.IssueResolution
 import org.ossreviewtoolkit.model.config.RuleViolationResolution
+import org.ossreviewtoolkit.model.utils.collectLicenseFindings
 import org.ossreviewtoolkit.reporter.ResolutionProvider
 import org.ossreviewtoolkit.reporter.model.DependencyTreeStatistics
 import org.ossreviewtoolkit.reporter.model.IssueStatistics
@@ -125,13 +126,11 @@ internal class StatisticsCalculator {
             }
         }
 
-        val detectedLicenses = sortedMapOf<String, Int>()
-
-        ortResult.scanner?.results?.scanResults?.forEach { scanResultContainer ->
-            scanResultContainer.results.flatMapTo(mutableSetOf()) { it.summary.licenses }.forEach { license ->
-                detectedLicenses[license] = detectedLicenses.getOrDefault(license, 0) + 1
-            }
+        val packageLicenses = ortResult.collectLicenseFindings().mapValues { (_, findingsMap) ->
+            findingsMap.mapTo(mutableSetOf()) { it.key.license }
         }
+
+        val detectedLicenses = packageLicenses.flatMap { it.value }.groupingBy { it }.eachCount().toSortedMap()
 
         return LicenseStatistics(
             declared = declaredLicenses,
