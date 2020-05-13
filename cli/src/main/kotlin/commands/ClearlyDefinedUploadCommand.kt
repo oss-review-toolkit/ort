@@ -40,14 +40,14 @@ import org.ossreviewtoolkit.analyzer.curation.toClearlyDefinedSourceLocation
 import org.ossreviewtoolkit.clearlydefined.ClearlyDefinedService
 import org.ossreviewtoolkit.clearlydefined.ClearlyDefinedService.ContributionInfo
 import org.ossreviewtoolkit.clearlydefined.ClearlyDefinedService.ContributionPatch
-import org.ossreviewtoolkit.clearlydefined.ClearlyDefinedService.ContributionType
 import org.ossreviewtoolkit.clearlydefined.ClearlyDefinedService.Curation
 import org.ossreviewtoolkit.clearlydefined.ClearlyDefinedService.Described
-import org.ossreviewtoolkit.clearlydefined.ClearlyDefinedService.ErrorResponse
-import org.ossreviewtoolkit.clearlydefined.ClearlyDefinedService.HarvestStatus
 import org.ossreviewtoolkit.clearlydefined.ClearlyDefinedService.Licensed
 import org.ossreviewtoolkit.clearlydefined.ClearlyDefinedService.Patch
 import org.ossreviewtoolkit.clearlydefined.ClearlyDefinedService.Server
+import org.ossreviewtoolkit.clearlydefined.ContributionType
+import org.ossreviewtoolkit.clearlydefined.ErrorResponse
+import org.ossreviewtoolkit.clearlydefined.HarvestStatus
 import org.ossreviewtoolkit.clearlydefined.string
 import org.ossreviewtoolkit.model.PackageCuration
 import org.ossreviewtoolkit.model.jsonMapper

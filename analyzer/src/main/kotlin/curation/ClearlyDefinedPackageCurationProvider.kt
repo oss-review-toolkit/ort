@@ -23,11 +23,11 @@ import java.io.IOException
 
 import org.ossreviewtoolkit.analyzer.PackageCurationProvider
 import org.ossreviewtoolkit.clearlydefined.ClearlyDefinedService
-import org.ossreviewtoolkit.clearlydefined.ClearlyDefinedService.ComponentType
 import org.ossreviewtoolkit.clearlydefined.ClearlyDefinedService.Coordinates
-import org.ossreviewtoolkit.clearlydefined.ClearlyDefinedService.Provider
 import org.ossreviewtoolkit.clearlydefined.ClearlyDefinedService.Server
 import org.ossreviewtoolkit.clearlydefined.ClearlyDefinedService.SourceLocation
+import org.ossreviewtoolkit.clearlydefined.ComponentType
+import org.ossreviewtoolkit.clearlydefined.Provider
 import org.ossreviewtoolkit.downloader.VcsHost
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Hash
