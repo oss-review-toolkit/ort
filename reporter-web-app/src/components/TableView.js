@@ -194,6 +194,8 @@ class TableView extends React.Component {
                     </span>
                 ),
                 responsive: ['md'],
+                sorter: (a, b) => a.declaredLicenses.size - b.declaredLicenses.size,
+                sortOrder: sortedInfo.field === 'declaredLicenses' && sortedInfo.order,
                 textWrap: 'word-break',
                 title: 'Declared Licenses',
                 width: '18%'
@@ -212,6 +214,8 @@ class TableView extends React.Component {
                         {Array.from(detectedLicensesProcessed).join(', ')}
                     </span>
                 ),
+                sorter: (a, b) => a.detectedLicensesProcessed.size - b.detectedLicensesProcessed.size,
+                sortOrder: sortedInfo.field === 'detectedLicensesProcessed' && sortedInfo.order,
                 textWrap: 'word-break',
                 title: 'Detected Licenses',
                 width: '18%'
