@@ -121,9 +121,10 @@ class SummaryView extends React.Component {
             levels,
             packages,
             projects,
+            repository: { vcsProcessed },
+            ruleViolations,
             scopes,
-            statistics,
-            ruleViolations
+            statistics
         } = webAppOrtResult;
 
         const {
@@ -134,6 +135,7 @@ class SummaryView extends React.Component {
                 errors: unresolvedRuleViolations
             }
         } = statistics;
+        const { revision, type, url } = vcsProcessed;
 
         const hasUnresolvedIssues = unresolvedIssues > 0;
         const hasUnresolvedRuleViolations = unresolvedRuleViolations > 0;
@@ -143,6 +145,23 @@ class SummaryView extends React.Component {
                 <Row>
                     <Col span={22} offset={1}>
                         <Timeline className="ort-summary-timeline">
+                            <Item>
+                                Scanned revision
+                                {' '}
+                                <b>
+                                    {revision}
+                                </b>
+                                {' '}
+                                of
+                                {' '}
+                                {type}
+                                {' '}
+                                repository
+                                {' '}
+                                <b>
+                                    {url}
+                                </b>
+                            </Item>
                             <Item>
                                 Found
                                 {' '}

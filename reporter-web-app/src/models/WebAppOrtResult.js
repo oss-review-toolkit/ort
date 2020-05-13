@@ -17,6 +17,7 @@
  * License-Filename: LICENSE
  */
 
+import Repository from './Repository';
 import Statistics from './Statistics';
 import WebAppCopyright from './WebAppCopyright';
 import WebAppLicense from './WebAppLicense';
@@ -77,6 +78,8 @@ class WebAppOrtResult {
     #scopesByNameMap = new Map();
 
     #statistics = {};
+
+    #repository;
 
     #repositoryConfiguration;
 
@@ -158,6 +161,15 @@ class WebAppOrtResult {
                 }
             }
 
+            if (obj.repository) {
+                this.#repository = new Repository(obj.repository);
+            }
+
+            if (obj.repository_configuration || obj.repositoryConfiguration) {
+                this.#repositoryConfiguration = obj.repository_configuration
+                    || obj.repositoryConfiguration;
+            }
+
             if (obj.scope_excludes || obj.scopeExcludes) {
                 const scopeExcludes = obj.scope_excludes || obj.scopeExcludes;
                 for (let i = 0, len = scopeExcludes.length; i < len; i++) {
@@ -184,11 +196,6 @@ class WebAppOrtResult {
                         this.#levels.push(i);
                     }
                 }
-            }
-
-            if (obj.repository_configuration || obj.repositoryConfiguration) {
-                this.#repositoryConfiguration = obj.repository_configuration
-                    || obj.repositoryConfiguration;
             }
 
             if (obj.issues) {
@@ -341,6 +348,10 @@ class WebAppOrtResult {
 
     get projects() {
         return this.#projects;
+    }
+
+    get repository() {
+        return this.#repository;
     }
 
     get scanResults() {
