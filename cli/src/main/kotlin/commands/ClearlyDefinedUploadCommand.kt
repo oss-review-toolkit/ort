@@ -30,10 +30,8 @@ import com.github.ajalt.clikt.parameters.options.required
 import com.github.ajalt.clikt.parameters.types.enum
 import com.github.ajalt.clikt.parameters.types.file
 
-import java.net.HttpURLConnection
+import java.io.IOException
 import java.net.URL
-
-import okhttp3.ResponseBody
 
 import org.ossreviewtoolkit.analyzer.curation.toClearlyDefinedCoordinates
 import org.ossreviewtoolkit.analyzer.curation.toClearlyDefinedSourceLocation
@@ -53,9 +51,12 @@ import org.ossreviewtoolkit.model.PackageCuration
 import org.ossreviewtoolkit.model.jsonMapper
 import org.ossreviewtoolkit.model.readValue
 import org.ossreviewtoolkit.utils.OkHttpClientHelper
+import org.ossreviewtoolkit.utils.collectMessagesAsString
 import org.ossreviewtoolkit.utils.expandTilde
 import org.ossreviewtoolkit.utils.hasNonNullProperty
 import org.ossreviewtoolkit.utils.log
+
+import retrofit2.Call
 
 class ClearlyDefinedUploadCommand : CliktCommand(
     name = "cd-upload",
@@ -75,33 +76,46 @@ class ClearlyDefinedUploadCommand : CliktCommand(
 
     private val service by lazy { ClearlyDefinedService.create(server, OkHttpClientHelper.buildClient()) }
 
-    private fun getDefinitions(coordinates: Collection<String>): Map<String, ClearlyDefinedService.Defined> {
-        val call = service.getDefinitions(coordinates)
-
+    private fun <T> executeApiCall(call: Call<T>): Result<T> {
         log.debug {
             val request = call.request()
             "Going to execute API call at ${request.url} with body:\n${request.body?.string()}"
         }
 
         val response = call.execute()
-        val responseCode = response.code()
 
-        if (responseCode == HttpURLConnection.HTTP_OK) {
-            response.body()?.let { definitions ->
-                return definitions
-            } ?: log.warn { "The REST API call succeeded but no response body was returned." }
-        } else {
-            response.errorBody()?.let { logInnerError(it) }
+        return when {
+            response.isSuccessful -> when (val body = response.body()) {
+                null -> Result.failure(IOException("The REST API call succeeded but no response body was returned."))
+                else -> Result.success(body)
+            }
+
+            else -> when (val errorBody = response.errorBody()) {
+                null -> Result.failure(IOException("The REST API call failed with code ${response.code()}."))
+
+                else -> {
+                    val errorResponse = jsonMapper.readValue<ErrorResponse>(errorBody.string())
+                    val innerError = errorResponse.error.innererror
+
+                    log.debug { innerError.stack }
+
+                    Result.failure(IOException("The REST API call failed with: ${innerError.message}"))
+                }
+            }
+        }
+    }
+
+    private fun getDefinitions(coordinates: Collection<String>): Map<String, ClearlyDefinedService.Defined> =
+        executeApiCall(service.getDefinitions(coordinates)).getOrElse {
+            log.error { it.collectMessagesAsString() }
+            emptyMap()
         }
 
-        return emptyMap()
-    }
-
-    private fun logInnerError(errorBody: ResponseBody) {
-        val errorResponse = jsonMapper.readValue<ErrorResponse>(errorBody.string())
-        log.error { "The REST API call failed with: ${errorResponse.error.innererror.message}" }
-        log.debug { errorResponse.error.innererror.stack }
-    }
+    private fun putCuration(curation: PackageCuration): ClearlyDefinedService.ContributionSummary? =
+        executeApiCall(service.putCuration(curation.toContributionPatch())).getOrElse {
+            log.error { it.collectMessagesAsString() }
+            null
+        }
 
     override fun run() {
         val absoluteInputFile = inputFile.normalize()
@@ -135,31 +149,19 @@ class ClearlyDefinedUploadCommand : CliktCommand(
         }
 
         uploadableCurations.forEachIndexed { index, curation ->
-            val call = service.putCuration(curation.toContributionPatch())
-
-            log.debug {
-                val request = call.request()
-                "Going to execute API call at ${request.url} with body:\n${request.body?.string()}"
-            }
-
-            val response = call.execute()
-            val responseCode = response.code()
-
             print("Curation ${index + 1} of ${uploadableCurations.size} for package '${curation.id.toCoordinates()}' ")
-            if (responseCode == HttpURLConnection.HTTP_OK) {
-                response.body()?.let { summary ->
-                    println("was successfully uploaded:\n${summary.url}")
-                } ?: log.warn { "The REST API call succeeded but no response body was returned." }
-            } else {
-                println("failed to be uploaded (response code $responseCode).")
 
-                response.errorBody()?.let { logInnerError(it) }
+            when (val summary = putCuration(curation)) {
+                null -> {
+                    println("failed to be uploaded.")
+                    error = true
+                }
 
-                error = true
+                else -> println("was uploaded successfully:\n${summary.url}")
             }
         }
 
-        if (error) throw UsageError("An error occurred.", statusCode = 2)
+        if (error) throw UsageError("At least one error occurred.", statusCode = 2)
     }
 }
 
