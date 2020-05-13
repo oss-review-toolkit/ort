@@ -19,15 +19,12 @@
 
 package org.ossreviewtoolkit.clearlydefined
 
-import org.ossreviewtoolkit.clearlydefined.ClearlyDefinedService.ComponentType
 import org.ossreviewtoolkit.clearlydefined.ClearlyDefinedService.ContributionInfo
 import org.ossreviewtoolkit.clearlydefined.ClearlyDefinedService.ContributionPatch
-import org.ossreviewtoolkit.clearlydefined.ClearlyDefinedService.ContributionType
 import org.ossreviewtoolkit.clearlydefined.ClearlyDefinedService.Coordinates
 import org.ossreviewtoolkit.clearlydefined.ClearlyDefinedService.Curation
 import org.ossreviewtoolkit.clearlydefined.ClearlyDefinedService.Licensed
 import org.ossreviewtoolkit.clearlydefined.ClearlyDefinedService.Patch
-import org.ossreviewtoolkit.clearlydefined.ClearlyDefinedService.Provider
 import org.ossreviewtoolkit.clearlydefined.ClearlyDefinedService.Server
 
 import io.kotest.core.spec.style.WordSpec

@@ -23,7 +23,6 @@ import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.annotation.JsonProperty
-import com.fasterxml.jackson.annotation.JsonValue
 import com.fasterxml.jackson.databind.json.JsonMapper
 import com.fasterxml.jackson.module.kotlin.registerKotlinModule
 
@@ -77,15 +76,6 @@ interface ClearlyDefinedService {
         DEVELOPMENT("https://dev-api.clearlydefined.io"),
 
         LOCALHOST("http://localhost:4000")
-    }
-
-    /**
-     * The status of meta-data harvesting of the various tools.
-     */
-    enum class HarvestStatus {
-        NOT_HARVESTED,
-        PARTIALLY_HARVESTED,
-        HARVESTED
     }
 
     /**
@@ -250,59 +240,6 @@ interface ClearlyDefinedService {
     )
 
     /**
-     * See https://github.com/clearlydefined/service/blob/4917725/schemas/definition-1.0.json#L34-L47.
-     */
-    enum class Provider(val value: String) {
-        NPM_JS("npmjs"),
-        COCOAPODS("cocoapods"),
-        CRATES_IO("cratesio"),
-        GITHUB("github"),
-        PACKAGIST("packagist"),
-        MAVEN_CENTRAL("mavencentral"),
-        NUGET("nuget"),
-        RUBYGEMS("rubygems"),
-        PYPI("pypi"),
-        DEBIAN("debian");
-
-        companion object {
-            @JsonCreator
-            @JvmStatic
-            fun fromString(value: String) = enumValues<Provider>().single { value.equals(it.value, ignoreCase = true) }
-        }
-
-        @JsonValue
-        override fun toString() = value
-    }
-
-    /**
-     * See https://github.com/clearlydefined/service/blob/4917725/schemas/definition-1.0.json#L18-L33.
-     */
-    enum class ComponentType(val value: String) {
-        NPM("npm"),
-        CRATE("crate"),
-        GIT("git"),
-        MAVEN("maven"),
-        COMPOSER("composer"),
-        NUGET("nuget"),
-        GEM("gem"),
-        POD("pod"),
-        PYPI("pypi"),
-        SOURCE_ARCHIVE("sourcearchive"),
-        DEBIAN("deb"),
-        DEBIAN_SOURCES("debsrc");
-
-        companion object {
-            @JsonCreator
-            @JvmStatic
-            fun fromString(value: String) =
-                enumValues<ComponentType>().single { value.equals(it.value, ignoreCase = true) }
-        }
-
-        @JsonValue
-        override fun toString() = value
-    }
-
-    /**
      * See https://github.com/clearlydefined/service/blob/4917725/schemas/definition-1.0.json#L90-L134.
      */
     @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -315,23 +252,6 @@ interface ClearlyDefinedService {
         val token: String? = null,
         val natures: Set<Nature>? = null
     )
-
-    /**
-     * See https://github.com/clearlydefined/service/blob/4917725/schemas/definition-1.0.json#L128.
-     */
-    enum class Nature {
-        LICENSE,
-        NOTICE;
-
-        companion object {
-            @JsonCreator
-            @JvmStatic
-            fun fromString(value: String) = enumValues<Nature>().single { value.equals(it.name, ignoreCase = true) }
-        }
-
-        @JsonValue
-        override fun toString() = name.toLowerCase()
-    }
 
     /**
      * See https://github.com/clearlydefined/service/blob/4917725/schemas/definition-1.0.json#L254-L263.
@@ -391,27 +311,6 @@ interface ClearlyDefinedService {
          */
         val removedDefinitions: Boolean
     )
-
-    /**
-     * See https://github.com/clearlydefined/website/blob/43ec5e3/src/components/ContributePrompt.js#L78-L82.
-     */
-    enum class ContributionType {
-        MISSING,
-        INCORRECT,
-        INCOMPLETE,
-        AMBIGUOUS,
-        OTHER;
-
-        companion object {
-            @JsonCreator
-            @JvmStatic
-            fun fromString(value: String) =
-                enumValues<ContributionType>().single { value.equals(it.name, ignoreCase = true) }
-        }
-
-        @JsonValue
-        override fun toString() = name.toLowerCase().capitalize()
-    }
 
     /**
      * See https://github.com/clearlydefined/service/blob/b339cb7/schemas/curations-1.0.json#L8-L15.
@@ -479,25 +378,6 @@ interface ClearlyDefinedService {
     data class ContributionSummary(
         val prNumber: Int,
         val url: String
-    )
-
-    /**
-     * See https://github.com/clearlydefined/service/blob/c47a989/app.js#L201-L205.
-     */
-    data class ErrorResponse(
-        val error: Error
-    )
-
-    data class Error(
-        val code: String,
-        val message: String,
-        val innererror: InnerError
-    )
-
-    data class InnerError(
-        val name: String,
-        val message: String,
-        val stack: String
     )
 
     /**
