@@ -32,6 +32,7 @@ import io.kotest.matchers.file.shouldNotStartWithPath
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNotBe
 import io.kotest.core.spec.style.StringSpec
+import io.kotest.inspectors.forAll
 
 import java.io.File
 import java.util.TreeSet
@@ -82,7 +83,7 @@ abstract class AbstractScannerTest(testTags: Set<Tag> = emptySet()) : StringSpec
             summary shouldNotBe null
             summary!!.fileCount shouldBe 1
             summary.licenses shouldBe expectedFileLicenses
-            summary.licenseFindings.forEach {
+            summary.licenseFindings.forAll {
                 File(it.location.path) shouldNotStartWithPath inputDir
             }
         }
@@ -94,7 +95,7 @@ abstract class AbstractScannerTest(testTags: Set<Tag> = emptySet()) : StringSpec
             summary shouldNotBe null
             summary!!.fileCount shouldBe commonlyDetectedFiles.size
             summary.licenses shouldBe expectedDirectoryLicenses
-            summary.licenseFindings.forEach {
+            summary.licenseFindings.forAll {
                 File(it.location.path) shouldNotStartWithPath inputDir
             }
         }

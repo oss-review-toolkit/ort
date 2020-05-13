@@ -27,6 +27,7 @@ import io.kotest.matchers.string.shouldNotStartWith
 import io.kotest.matchers.string.shouldStartWith
 import io.kotest.matchers.shouldBe
 import io.kotest.core.spec.style.WordSpec
+import io.kotest.inspectors.forAll
 
 class IdentifierTest : WordSpec({
     "String representations" should {
@@ -42,7 +43,7 @@ class IdentifierTest : WordSpec({
                         to "manager::name:version"
             )
 
-            mapping.forEach { (identifier, stringRepresentation) ->
+            mapping.entries.forAll { (identifier, stringRepresentation) ->
                 identifier.toCoordinates() shouldBe stringRepresentation
             }
         }
@@ -59,7 +60,7 @@ class IdentifierTest : WordSpec({
                         to Identifier("manager", "", "name", "version")
             )
 
-            mapping.forEach { (stringRepresentation, identifier) ->
+            mapping.entries.forAll { (stringRepresentation, identifier) ->
                 Identifier(stringRepresentation) shouldBe identifier
             }
         }
