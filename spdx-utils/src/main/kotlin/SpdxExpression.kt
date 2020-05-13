@@ -153,11 +153,6 @@ data class SpdxCompoundExpression(
 
     override fun validate(strictness: Strictness) {
         left.validate(strictness)
-
-        if (right is SpdxLicenseExceptionExpression) {
-            throw SpdxException("Argument '$right' for $operator must not be an SPDX license exception id.")
-        }
-
         right.validate(strictness)
     }
 
@@ -178,32 +173,6 @@ data class SpdxCompoundExpression(
 }
 
 /**
- * An SPDX expression for a license exception [id] as defined by version 2.1 of the [SPDX specification, appendix I][1].
- *
- * [1]: https://spdx.org/spdx-specification-21-web-version#h.ruv3yl8g6czd
- */
-data class SpdxLicenseExceptionExpression(
-    val id: String
-) : SpdxExpression() {
-    override fun decompose() = emptySet<SpdxSingleLicenseExpression>()
-
-    override fun licenses() = emptyList<String>()
-
-    override fun normalize(mapDeprecated: Boolean) = this
-
-    override fun validate(strictness: Strictness) {
-        val licenseException = SpdxLicenseException.forId(id)
-        when (strictness) {
-            Strictness.ALLOW_ANY -> id // Return something non-null.
-            Strictness.ALLOW_DEPRECATED -> licenseException
-            Strictness.ALLOW_CURRENT -> licenseException?.takeUnless { licenseException.deprecated }
-        } ?: throw SpdxException("'$id' is not a valid SPDX license exception id.")
-    }
-
-    override fun toString() = id
-}
-
-/**
  * An SPDX expression that contains only a single license with an optional exception. Can be
  * [SpdxLicenseWithExceptionExpression] or any subtype of [SpdxSimpleExpression].
  */
@@ -214,7 +183,7 @@ sealed class SpdxSingleLicenseExpression : SpdxExpression()
  */
 data class SpdxLicenseWithExceptionExpression(
     val license: SpdxSimpleExpression,
-    val exception: SpdxLicenseExceptionExpression
+    val exception: String
 ) : SpdxSingleLicenseExpression() {
     override fun decompose() = setOf(this)
 
@@ -224,16 +193,15 @@ data class SpdxLicenseWithExceptionExpression(
         // Manually cast to SpdxLicenseException, because the type resolver does not recognize that in all subclasses of
         // SpdxSimpleExpression normalize() returns an SpdxSingleLicenseExpression.
         val normalizedLicense = license.normalize(mapDeprecated) as SpdxSingleLicenseExpression
-        val normalizedException = exception.normalize(mapDeprecated)
 
         return when (normalizedLicense) {
-            is SpdxSimpleExpression -> SpdxLicenseWithExceptionExpression(normalizedLicense, normalizedException)
+            is SpdxSimpleExpression -> SpdxLicenseWithExceptionExpression(normalizedLicense, exception)
 
             // This case happens if a deprecated license identifier that contains an exception is used together with
             // another exception, for example "GPL-2.0-with-classpath-exception WITH Classpath-exception-2.0". If the
             // exceptions are equal ignore this issue, otherwise throw an exception.
             is SpdxLicenseWithExceptionExpression -> {
-                if (normalizedLicense.exception == normalizedException) {
+                if (normalizedLicense.exception == exception) {
                     normalizedLicense
                 } else {
                     throw SpdxException(
@@ -247,7 +215,13 @@ data class SpdxLicenseWithExceptionExpression(
 
     override fun validate(strictness: Strictness) {
         license.validate(strictness)
-        exception.validate(strictness)
+
+        val spdxException = SpdxLicenseException.forId(exception)
+        when (strictness) {
+            Strictness.ALLOW_ANY -> exception // Return something non-null.
+            Strictness.ALLOW_DEPRECATED -> spdxException
+            Strictness.ALLOW_CURRENT -> spdxException?.takeUnless { spdxException.deprecated }
+        } ?: throw SpdxException("'$exception' is not a valid SPDX license exception id.")
     }
 
     override fun toString(): String = "$license $WITH $exception"
@@ -263,7 +237,7 @@ sealed class SpdxSimpleExpression : SpdxSingleLicenseExpression() {
     /**
      * Concatenate [this][SpdxSimpleExpression] and [other] using [SpdxExpression.WITH].
      */
-    infix fun with(other: SpdxLicenseExceptionExpression) = SpdxLicenseWithExceptionExpression(this, other)
+    infix fun with(other: String) = SpdxLicenseWithExceptionExpression(this, other)
 }
 
 /**

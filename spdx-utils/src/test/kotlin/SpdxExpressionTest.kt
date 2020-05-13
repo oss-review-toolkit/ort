@@ -80,7 +80,7 @@ class SpdxExpressionTest : WordSpec() {
                         SpdxCompoundExpression(
                             SpdxLicenseWithExceptionExpression(
                                 SpdxLicenseIdExpression("license2"),
-                                SpdxLicenseExceptionExpression("exception1")
+                                "exception1"
                             ),
                             SpdxOperator.OR,
                             SpdxLicenseIdExpression("license3", true)
@@ -89,7 +89,7 @@ class SpdxExpressionTest : WordSpec() {
                     SpdxOperator.AND,
                     SpdxLicenseWithExceptionExpression(
                         SpdxLicenseIdExpression("license4"),
-                        SpdxLicenseExceptionExpression("exception2")
+                        "exception2"
                     )
                 )
             }

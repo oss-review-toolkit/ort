@@ -36,11 +36,6 @@ licenseReferenceExpression
     DOCUMENTREFERENCE | LICENSEREFERENCE
     ;
 
-licenseExceptionExpression
-    :
-    IDSTRING | LICENSEREFERENCE
-    ;
-
 licenseIdExpression
     :
     IDSTRING
@@ -56,7 +51,7 @@ simpleExpression
 compoundExpression
     :
     simpleExpression
-    | simpleExpression WITH licenseExceptionExpression
+    | simpleExpression WITH (IDSTRING | LICENSEREFERENCE)
     | compoundExpression AND compoundExpression
     | compoundExpression OR compoundExpression
     | OPEN compoundExpression CLOSE
