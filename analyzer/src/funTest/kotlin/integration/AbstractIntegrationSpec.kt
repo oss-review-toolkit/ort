@@ -40,6 +40,7 @@ import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNot
 import io.kotest.matchers.shouldNotBe
 import io.kotest.core.spec.style.StringSpec
+import io.kotest.inspectors.forAll
 
 import java.io.File
 
@@ -101,7 +102,7 @@ abstract class AbstractIntegrationSpec : StringSpec() {
             val managedFiles = PackageManager.findManagedFiles(downloadResult.downloadDirectory)
 
             managedFiles.size shouldBe expectedManagedFiles.size
-            managedFiles.forEach { (manager, files) ->
+            managedFiles.entries.forAll { (manager, files) ->
                 println("Verifying definition files for $manager.")
 
                 // The keys in expected and actual maps of definition files are different instances of package manager
@@ -117,13 +118,13 @@ abstract class AbstractIntegrationSpec : StringSpec() {
         }
 
         "Analyzer creates one non-empty result per definition file".config(tags = setOf(ExpensiveTag)) {
-            managedFilesForTest.forEach { (manager, files) ->
+            managedFilesForTest.entries.forAll { (manager, files) ->
                 println("Resolving $manager dependencies in $files.")
                 val results = manager.create(USER_DIR, DEFAULT_ANALYZER_CONFIGURATION, DEFAULT_REPOSITORY_CONFIGURATION)
                     .resolveDependencies(files)
 
                 results.size shouldBe files.size
-                results.values.forEach { result ->
+                results.values.forAll { result ->
                     VersionControlSystem.forType(result.project.vcsProcessed.type) shouldBe
                             VersionControlSystem.forType(pkg.vcs.type)
                     result.project.vcsProcessed.url shouldBe pkg.vcs.url

@@ -22,6 +22,7 @@ package org.ossreviewtoolkit.utils
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNotBe
 import io.kotest.core.spec.style.WordSpec
+import io.kotest.inspectors.forAll
 
 import java.io.File
 import java.nio.file.Paths
@@ -261,7 +262,7 @@ class UtilsTest : WordSpec({
                         to "https://github.com/DefinitelyTyped/DefinitelyTyped.git"
             )
 
-            packages.forEach { (actualUrl, expectedUrl) ->
+            packages.entries.forAll { (actualUrl, expectedUrl) ->
                 normalizeVcsUrl(actualUrl) shouldBe expectedUrl
             }
         }
@@ -276,7 +277,7 @@ class UtilsTest : WordSpec({
                         to "ssh://user@gerrit.server.com:29418/parent/project"
             )
 
-            packages.forEach { (actualUrl, expectedUrl) ->
+            packages.entries.forAll { (actualUrl, expectedUrl) ->
                 normalizeVcsUrl(actualUrl) shouldBe expectedUrl
             }
         }
@@ -287,7 +288,7 @@ class UtilsTest : WordSpec({
                         to "https://github.com/leanovate/play-mockws.git"
             )
 
-            packages.forEach { (actualUrl, expectedUrl) ->
+            packages.entries.forAll { (actualUrl, expectedUrl) ->
                 normalizeVcsUrl(actualUrl) shouldBe expectedUrl
             }
         }
@@ -300,7 +301,7 @@ class UtilsTest : WordSpec({
                         to "https://github.com/isaacs/inherits.git"
             )
 
-            packages.forEach { (actualUrl, expectedUrl) ->
+            packages.entries.forAll { (actualUrl, expectedUrl) ->
                 normalizeVcsUrl(actualUrl) shouldBe expectedUrl
             }
         }
@@ -313,7 +314,7 @@ class UtilsTest : WordSpec({
                         to "ssh://git@github.com/heremaps/here-aaa-java-sdk.git"
             )
 
-            packages.forEach { (actualUrl, expectedUrl) ->
+            packages.entries.forAll { (actualUrl, expectedUrl) ->
                 normalizeVcsUrl(actualUrl) shouldBe expectedUrl
             }
         }
@@ -326,7 +327,7 @@ class UtilsTest : WordSpec({
                         to "https://github.com/isaacs/inherits.git"
             )
 
-            packages.forEach { (actualUrl, expectedUrl) ->
+            packages.entries.forAll { (actualUrl, expectedUrl) ->
                 normalizeVcsUrl(actualUrl) shouldBe expectedUrl
             }
         }
@@ -354,7 +355,7 @@ class UtilsTest : WordSpec({
                         to "file://${userRoot}absolute/path/to/local/dir"
             )
 
-            packages.forEach { (actualUrl, expectedUrl) ->
+            packages.entries.forAll { (actualUrl, expectedUrl) ->
                 normalizeVcsUrl(actualUrl) shouldBe expectedUrl
             }
         }
@@ -367,7 +368,7 @@ class UtilsTest : WordSpec({
                         to "https://github.com/netty/netty.git/netty-buffer"
             )
 
-            packages.forEach { (actualUrl, expectedUrl) ->
+            packages.entries.forAll { (actualUrl, expectedUrl) ->
                 normalizeVcsUrl(actualUrl) shouldBe expectedUrl
             }
         }
@@ -378,7 +379,7 @@ class UtilsTest : WordSpec({
                         to "svn+ssh://svn.code.sf.net/p/stddecimal/code/trunk"
             )
 
-            packages.forEach { (actualUrl, expectedUrl) ->
+            packages.entries.forAll { (actualUrl, expectedUrl) ->
                 normalizeVcsUrl(actualUrl) shouldBe expectedUrl
             }
         }
@@ -391,7 +392,7 @@ class UtilsTest : WordSpec({
                         to "https://github.com/hacksparrow/node-easyimage.git"
             )
 
-            packages.forEach { (actualUrl, expectedUrl) ->
+            packages.entries.forAll { (actualUrl, expectedUrl) ->
                 normalizeVcsUrl(actualUrl) shouldBe expectedUrl
             }
         }

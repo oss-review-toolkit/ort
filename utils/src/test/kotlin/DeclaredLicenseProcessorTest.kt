@@ -21,6 +21,7 @@ package org.ossreviewtoolkit.utils
 
 import io.kotest.assertions.throwables.shouldNotThrow
 import io.kotest.core.spec.style.StringSpec
+import io.kotest.inspectors.forAll
 import io.kotest.matchers.collections.containExactly
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
@@ -40,7 +41,7 @@ class DeclaredLicenseProcessorTest : StringSpec() {
 
     init {
         "Declared licenses can be processed" {
-            declaredLicenses.forEach { declaredLicense ->
+            declaredLicenses.forAll { declaredLicense ->
                 val processedLicense = DeclaredLicenseProcessor.process(declaredLicense)
 
                 // Include the declared license in the comparison to see where a failure comes from.
@@ -59,7 +60,7 @@ class DeclaredLicenseProcessorTest : StringSpec() {
         }
 
         "Licenses are not mapped to deprecated SPDX licenses" {
-            declaredLicenses.forEach { declaredLicense ->
+            declaredLicenses.forAll { declaredLicense ->
                 val processedLicense = DeclaredLicenseProcessor.process(declaredLicense)
 
                 processedLicense shouldNotBe null

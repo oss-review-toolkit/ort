@@ -31,6 +31,7 @@ import io.kotest.matchers.collections.shouldContainExactlyInAnyOrder
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 import io.kotest.core.spec.style.WordSpec
+import io.kotest.inspectors.forAll
 
 import java.io.File
 
@@ -169,7 +170,7 @@ class NodeSupportTest : WordSpec() {
                             to "https://gitlab.com/another/repo.git"
                 )
 
-                packages.forEach { (actualUrl, expectedUrl) ->
+                packages.entries.forAll { (actualUrl, expectedUrl) ->
                     expandNpmShortcutURL(actualUrl) shouldBe expectedUrl
                 }
             }
@@ -184,7 +185,7 @@ class NodeSupportTest : WordSpec() {
                             to "github.com/improbable-eng/grpc-web"
                 )
 
-                packages.forEach { (actualUrl, expectedUrl) ->
+                packages.entries.forAll { (actualUrl, expectedUrl) ->
                     expandNpmShortcutURL(actualUrl) shouldBe expectedUrl
                 }
             }
