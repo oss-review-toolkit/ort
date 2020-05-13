@@ -151,13 +151,13 @@ class TableView extends React.Component {
                 filters: tableScopeFilterSelections,
                 filteredValue: filteredInfo.scopeIndexes || null,
                 onFilter: (value, webAppPackage) => webAppPackage.hasScopeIndex(value),
-                title: 'Scopes',
                 render: (scopeIndexes, webAppPackage) => (
                     <span>
                         {Array.from(webAppPackage.scopeNames).join(',')}
                     </span>
                 ),
-                responsive: ['md']
+                responsive: ['md'],
+                title: 'Scopes'
             });
         }
 
@@ -168,14 +168,14 @@ class TableView extends React.Component {
                 filters: tableLevelFilterSelections,
                 filteredValue: filteredInfo.levels || null,
                 onFilter: (value, webAppPackage) => webAppPackage.hasLevel(value),
-                textWrap: 'word-break',
-                title: 'Levels',
                 render: (levels) => (
                     <span>
                         {Array.from(levels).join(', ')}
                     </span>
                 ),
                 responsive: ['md'],
+                textWrap: 'word-break',
+                title: 'Levels',
                 width: 80
             });
         }
@@ -188,14 +188,14 @@ class TableView extends React.Component {
                 filteredValue: filteredInfo.declaredLicenses || null,
                 key: 'declaredLicenses',
                 onFilter: (value, webAppPackage) => webAppPackage.declaredLicenses.has(value),
-                textWrap: 'word-break',
-                title: 'Declared Licenses',
                 render: (declaredLicenses) => (
                     <span>
                         {Array.from(declaredLicenses).join(', ')}
                     </span>
                 ),
                 responsive: ['md'],
+                textWrap: 'word-break',
+                title: 'Declared Licenses',
                 width: '18%'
             });
         }
@@ -207,13 +207,13 @@ class TableView extends React.Component {
                 filters: tableDetectedLicensesSelections,
                 filteredValue: filteredInfo.detectedLicenses || null,
                 onFilter: (license, webAppPackage) => webAppPackage.detectedLicenses.has(license),
-                textWrap: 'word-break',
-                title: 'Detected Licenses',
                 render: (detectedLicensesProcessed) => (
                     <span>
                         {Array.from(detectedLicensesProcessed).join(', ')}
                     </span>
                 ),
+                textWrap: 'word-break',
+                title: 'Detected Licenses',
                 width: '18%'
             });
         }

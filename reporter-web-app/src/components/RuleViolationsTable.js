@@ -226,15 +226,15 @@ const RuleViolationsTable = (props) => {
             dataIndex: 'packageName',
             ellipsis: true,
             key: 'packageName',
-            title: 'Package',
             responsive: ['md'],
+            title: 'Package',
             width: '25%'
         },
         {
             dataIndex: 'rule',
             key: 'rule',
-            title: 'Rule',
             responsive: ['md'],
+            title: 'Rule',
             width: '25%'
         },
         {
