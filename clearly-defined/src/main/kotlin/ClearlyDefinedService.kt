@@ -500,6 +500,10 @@ interface ClearlyDefinedService {
         val stack: String
     )
 
+    /**
+     * Return a batch of definitions for the components given as [coordinates], see
+     * https://api.clearlydefined.io/api-docs/#/definitions/post_definitions.
+     */
     @POST("definitions")
     fun getDefinitions(@Body coordinates: Collection<String>): Call<Map<String, Defined>>
 
