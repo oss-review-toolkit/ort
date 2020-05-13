@@ -71,7 +71,7 @@ class SpdxExpressionParserTest : WordSpec() {
                     SpdxCompoundExpression(
                         SpdxLicenseWithExceptionExpression(
                             SpdxLicenseIdExpression("license2"),
-                            SpdxLicenseExceptionExpression("exception1")
+                            "exception1"
                         ),
                         SpdxOperator.OR,
                         SpdxCompoundExpression(
@@ -79,7 +79,7 @@ class SpdxExpressionParserTest : WordSpec() {
                             SpdxOperator.AND,
                             SpdxLicenseWithExceptionExpression(
                                 SpdxLicenseIdExpression("license4"),
-                                SpdxLicenseExceptionExpression("exception2")
+                                "exception2"
                             )
                         )
                     )
@@ -92,7 +92,7 @@ class SpdxExpressionParserTest : WordSpec() {
                 val actualExpression = SpdxExpression.parse("license+ WITH exception")
                 val expectedExpression = SpdxLicenseWithExceptionExpression(
                     SpdxLicenseIdExpression("license", orLaterVersion = true),
-                    SpdxLicenseExceptionExpression("exception")
+                    "exception"
                 )
 
                 actualExpression shouldBe expectedExpression
@@ -105,7 +105,7 @@ class SpdxExpressionParserTest : WordSpec() {
                     SpdxOperator.AND,
                     SpdxLicenseWithExceptionExpression(
                         SpdxLicenseIdExpression("license2"),
-                        SpdxLicenseExceptionExpression("exception")
+                        "exception"
                     )
                 )
 
