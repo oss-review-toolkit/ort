@@ -508,7 +508,7 @@ interface ClearlyDefinedService {
     fun getDefinitions(@Body coordinates: Collection<String>): Call<Map<String, Defined>>
 
     /**
-     * Get a curation for a component revision, see
+     * Get the curation for the component described by [type], [provider], [namespace], [name] and [revision], see
      * https://api.clearlydefined.io/api-docs/#/curations/get_curations__type___provider___namespace___name___revision_.
      */
     @GET("curations/{type}/{provider}/{namespace}/{name}/{revision}")
@@ -521,8 +521,7 @@ interface ClearlyDefinedService {
     ): Call<Curation>
 
     /**
-     * Upload curation data, see
-     * https://api.clearlydefined.io/api-docs/#/curations/patch_curations.
+     * Upload curation [patch] data, see https://api.clearlydefined.io/api-docs/#/curations/patch_curations.
      */
     @PATCH("curations")
     fun putCuration(@Body patch: ContributionPatch): Call<ContributionSummary>
