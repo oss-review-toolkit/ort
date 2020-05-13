@@ -45,6 +45,7 @@ import org.ossreviewtoolkit.clearlydefined.ClearlyDefinedService.Patch
 import org.ossreviewtoolkit.clearlydefined.ClearlyDefinedService.Server
 import org.ossreviewtoolkit.clearlydefined.ContributionType
 import org.ossreviewtoolkit.clearlydefined.ErrorResponse
+import org.ossreviewtoolkit.clearlydefined.HARVEST_CREATED
 import org.ossreviewtoolkit.clearlydefined.HarvestStatus
 import org.ossreviewtoolkit.clearlydefined.string
 import org.ossreviewtoolkit.model.PackageCuration
@@ -117,36 +118,54 @@ class ClearlyDefinedUploadCommand : CliktCommand(
             null
         }
 
+    private fun requestHarvest(request: Collection<ClearlyDefinedService.HarvestRequest>): Boolean =
+        executeApiCall(service.harvest(request)).getOrElse {
+            log.error { it.collectMessagesAsString() }
+        } == HARVEST_CREATED
+
     override fun run() {
         val absoluteInputFile = inputFile.normalize()
         val curations = absoluteInputFile.readValue<List<PackageCuration>>()
-
-        var error = false
-
         val curationsToCoordinates = curations.associateWith { it.id.toClearlyDefinedCoordinates().toString() }
         val definitions = getDefinitions(curationsToCoordinates.values)
 
-        val uploadableCurations = curations.filter { curation ->
-            val harvestStatus = definitions[curationsToCoordinates[curation]]?.getHarvestStatus()
-
-            print("Package '${curation.id.toCoordinates()}' ")
-            when (harvestStatus) {
-                HarvestStatus.HARVESTED -> {
-                    println("has been harvested, will try to upload curations.")
-                    true
-                }
-
-                HarvestStatus.NOT_HARVESTED, HarvestStatus.PARTIALLY_HARVESTED -> {
-                    println("has not been harvested yet, cannot upload curations.")
-                    false
-                }
-
-                null -> {
-                    println("has an unknown harvest status, cannot upload curations.")
-                    false
-                }
+        val curationsByHarvestStatus = curations.groupBy { curation ->
+            definitions[curationsToCoordinates[curation]]?.getHarvestStatus() ?: log.warn {
+                "No definition data available for package '${curation.id.toCoordinates()}', cannot request a harvest " +
+                        "or upload curations for it."
             }
         }
+
+        val harvestableCurations = curationsByHarvestStatus[HarvestStatus.NOT_HARVESTED].orEmpty()
+
+        harvestableCurations.forEach { curation ->
+            val webServerUrl = server.url.replaceFirst("dev-api.", "dev.").replaceFirst("api.", "")
+            val definitionUrl = "$webServerUrl/definitions/${curationsToCoordinates[curation]}"
+
+            println(
+                "Package '${curation.id.toCoordinates()}' has not been harvested yet, requesting it to be harvested. " +
+                        "Check $definitionUrl for the harvesting status."
+            )
+        }
+
+        val harvestRequest = harvestableCurations.mapNotNull { curation ->
+            curationsToCoordinates[curation]?.let { coordinates ->
+                ClearlyDefinedService.HarvestRequest(
+                    tool = "package",
+                    coordinates = coordinates
+                )
+            }
+        }
+
+        if (requestHarvest(harvestRequest)) {
+            println("Requesting harvest of packages succeeded.")
+        } else {
+            println("Requesting harvest of packages failed.")
+        }
+
+        var error = false
+        val uploadableCurations = curationsByHarvestStatus[HarvestStatus.HARVESTED].orEmpty() +
+                curationsByHarvestStatus[HarvestStatus.PARTIALLY_HARVESTED].orEmpty()
 
         uploadableCurations.forEachIndexed { index, curation ->
             print("Curation ${index + 1} of ${uploadableCurations.size} for package '${curation.id.toCoordinates()}' ")
