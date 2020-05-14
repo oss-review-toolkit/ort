@@ -7,6 +7,8 @@ project:
   - "Apache-2.0"
   declared_licenses_processed:
     spdx_expression: "Apache-2.0"
+    mapped:
+      Apache Software License: "Apache-2.0"
   vcs:
     type: ""
     url: ""
@@ -39,6 +41,9 @@ packages:
     - "BSD License"
     declared_licenses_processed:
       spdx_expression: "BSD-3-Clause"
+      mapped:
+        BSD: "BSD-3-Clause"
+        BSD License: "BSD-3-Clause"
     description: "An ISO 8601 date/time/duration parser and formatter"
     homepage_url: "https://github.com/gweis/isodate/"
     binary_artifact:
@@ -69,6 +74,8 @@ packages:
     - "BSD"
     declared_licenses_processed:
       spdx_expression: "BSD-3-Clause"
+      mapped:
+        BSD: "BSD-3-Clause"
     description: "Python Lex & Yacc"
     homepage_url: "http://www.dabeaz.com/ply/"
     binary_artifact:
@@ -99,6 +106,8 @@ packages:
     - "MIT License"
     declared_licenses_processed:
       spdx_expression: "MIT"
+      mapped:
+        MIT License: "MIT"
     description: "Python parsing module"
     homepage_url: "https://github.com/pyparsing/pyparsing/"
     binary_artifact:
@@ -130,6 +139,8 @@ packages:
     - "BSD-3-Clause"
     declared_licenses_processed:
       spdx_expression: "BSD-3-Clause"
+      mapped:
+        BSD License: "BSD-3-Clause"
     description: "RDFLib is a Python library for working with RDF, a simple yet powerful\
       \ language for representing information."
     homepage_url: "https://github.com/RDFLib/rdflib"
@@ -162,6 +173,8 @@ packages:
     - "MIT License"
     declared_licenses_processed:
       spdx_expression: "MIT"
+      mapped:
+        MIT License: "MIT"
     description: "Python 2 and 3 compatibility utilities"
     homepage_url: "https://github.com/benjaminp/six"
     binary_artifact:

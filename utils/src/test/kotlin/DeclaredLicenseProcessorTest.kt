@@ -23,6 +23,8 @@ import io.kotest.assertions.throwables.shouldNotThrow
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.inspectors.forAll
 import io.kotest.matchers.collections.containExactly
+import io.kotest.matchers.maps.beEmpty
+import io.kotest.matchers.maps.shouldContainExactly
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNotBe
@@ -30,8 +32,10 @@ import io.kotest.matchers.shouldNotBe
 import org.ossreviewtoolkit.spdx.SpdxDeclaredLicenseMapping
 import org.ossreviewtoolkit.spdx.SpdxException
 import org.ossreviewtoolkit.spdx.SpdxExpression
+import org.ossreviewtoolkit.spdx.SpdxLicense
 import org.ossreviewtoolkit.spdx.SpdxLicenseAliasMapping
 import org.ossreviewtoolkit.spdx.SpdxLicenseIdExpression
+import org.ossreviewtoolkit.spdx.toExpression
 
 class DeclaredLicenseProcessorTest : StringSpec() {
     /**
@@ -56,6 +60,10 @@ class DeclaredLicenseProcessorTest : StringSpec() {
             val processedLicenses = DeclaredLicenseProcessor.process(declaredLicenses)
 
             processedLicenses.spdxExpression shouldBe SpdxLicenseIdExpression("Apache-2.0")
+            processedLicenses.mapped shouldContainExactly (mapOf(
+                "Apache2" to SpdxLicense.APACHE_2_0.toExpression(),
+                "Apache-2" to SpdxLicense.APACHE_2_0.toExpression()
+            ))
             processedLicenses.unmapped shouldBe emptyList()
         }
 
@@ -92,6 +100,7 @@ class DeclaredLicenseProcessorTest : StringSpec() {
             val processedLicenses = DeclaredLicenseProcessor.process(declaredLicenses)
 
             processedLicenses.spdxExpression shouldBe SpdxLicenseIdExpression("Apache-2.0")
+            processedLicenses.mapped should beEmpty()
             processedLicenses.unmapped should containExactly("invalid")
         }
     }

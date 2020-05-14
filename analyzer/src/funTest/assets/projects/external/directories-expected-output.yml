@@ -31,6 +31,8 @@ analyzer:
       - "Mozilla Public License 2.0"
       declared_licenses_processed:
         spdx_expression: "MPL-2.0"
+        mapped:
+          Mozilla Public License 2.0: "MPL-2.0"
       vcs:
         type: "Git"
         url: "git@github.com:soc/directories-jvm.git"
@@ -75,6 +77,8 @@ analyzer:
         - "Two-clause BSD-style license"
         declared_licenses_processed:
           spdx_expression: "BSD-2-Clause"
+          mapped:
+            Two-clause BSD-style license: "BSD-2-Clause"
         description: "An implementation of sbt's test interface for JUnit 4"
         homepage_url: "http://github.com/sbt/junit-interface/"
         binary_artifact:
@@ -105,6 +109,8 @@ analyzer:
         - "Eclipse Public License 1.0"
         declared_licenses_processed:
           spdx_expression: "EPL-1.0"
+          mapped:
+            Eclipse Public License 1.0: "EPL-1.0"
         description: "JUnit is a unit testing framework for Java, created by Erich\
           \ Gamma and Kent Beck."
         homepage_url: "http://junit.org"
@@ -136,6 +142,8 @@ analyzer:
         - "New BSD License"
         declared_licenses_processed:
           spdx_expression: "BSD-3-Clause"
+          mapped:
+            New BSD License: "BSD-3-Clause"
         description: "This is the core API of hamcrest matcher framework to be used\
           \ by third-party framework providers. This includes the a foundation set\
           \ of matcher implementations for common operations."
@@ -168,6 +176,8 @@ analyzer:
         - "BSD"
         declared_licenses_processed:
           spdx_expression: "BSD-3-Clause"
+          mapped:
+            BSD: "BSD-3-Clause"
         description: "Uniform test interface to Scala/Java test frameworks (specs,\
           \ ScalaCheck, ScalaTest, JUnit and other)"
         homepage_url: "http://www.scala-sbt.org"

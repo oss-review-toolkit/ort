@@ -297,6 +297,8 @@ packages:
     - "BSD-like"
     declared_licenses_processed:
       spdx_expression: "BSD-3-Clause"
+      mapped:
+        BSD-like: "BSD-3-Clause"
     description: "a CSS selector compiler/engine"
     homepage_url: "https://github.com/fb55/css-select#readme"
     binary_artifact:

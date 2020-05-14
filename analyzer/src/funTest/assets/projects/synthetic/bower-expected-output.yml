@@ -65,6 +65,8 @@ packages:
     - "http://polymer.github.io/LICENSE.txt"
     declared_licenses_processed:
       spdx_expression: "BSD-3-Clause"
+      mapped:
+        http://polymer.github.io/LICENSE.txt: "BSD-3-Clause"
     description: ""
     homepage_url: "https://github.com/Polymer/polymer"
     binary_artifact:

@@ -84,6 +84,8 @@ analyzer:
       - "Apache License, Version 2.0"
       declared_licenses_processed:
         spdx_expression: "Apache-2.0"
+        mapped:
+          Apache License, Version 2.0: "Apache-2.0"
       vcs:
         type: "Git"
         url: "http://git-wip-us.apache.org/repos/asf/commons-text.git"
@@ -118,6 +120,8 @@ analyzer:
       - "The Apache Software License, Version 2.0"
       declared_licenses_processed:
         spdx_expression: "Apache-2.0"
+        mapped:
+          The Apache Software License, Version 2.0: "Apache-2.0"
       vcs:
         type: "Git"
         url: "ssh://git@github.com:spdx/tools.git"
@@ -938,6 +942,8 @@ analyzer:
         - "BSD License"
         declared_licenses_processed:
           spdx_expression: "BSD-3-Clause"
+          mapped:
+            BSD License: "BSD-3-Clause"
         description: "A framework for constructing recognizers, compilers,\n    and\
           \ translators from grammatical descriptions containing\n    Java, C#, C++,\
           \ or Python actions."
@@ -970,6 +976,8 @@ analyzer:
         - "The Apache Software License, Version 2.0"
         declared_licenses_processed:
           spdx_expression: "Apache-2.0"
+          mapped:
+            The Apache Software License, Version 2.0: "Apache-2.0"
         description: "Core annotations used for value types, used by Jackson data\
           \ binding package."
         homepage_url: "http://github.com/FasterXML/jackson"
@@ -1001,6 +1009,8 @@ analyzer:
         - "The Apache Software License, Version 2.0"
         declared_licenses_processed:
           spdx_expression: "Apache-2.0"
+          mapped:
+            The Apache Software License, Version 2.0: "Apache-2.0"
         description: "Core Jackson processing abstractions (aka Streaming API), implementation\
           \ for JSON"
         homepage_url: "https://github.com/FasterXML/jackson-core"
@@ -1032,6 +1042,8 @@ analyzer:
         - "The Apache Software License, Version 2.0"
         declared_licenses_processed:
           spdx_expression: "Apache-2.0"
+          mapped:
+            The Apache Software License, Version 2.0: "Apache-2.0"
         description: "General data-binding functionality for Jackson: works on core\
           \ streaming API"
         homepage_url: "http://github.com/FasterXML/jackson"
@@ -1063,6 +1075,8 @@ analyzer:
         - "MIT License"
         declared_licenses_processed:
           spdx_expression: "MIT"
+          mapped:
+            MIT License: "MIT"
         description: "Persistent (immutable) collection library"
         homepage_url: "https://github.com/andrewoma/dexx"
         binary_artifact:
@@ -1093,6 +1107,8 @@ analyzer:
         - "The Apache Software License, Version 2.0"
         declared_licenses_processed:
           spdx_expression: "Apache-2.0"
+          mapped:
+            The Apache Software License, Version 2.0: "Apache-2.0"
         description: "Java 7+ toolkit to quickly develop RFC 4627 JSON compatible\
           \ applications."
         homepage_url: "https://cliftonlabs.github.io/json-simple/"
@@ -1124,6 +1140,8 @@ analyzer:
         - "Revised BSD License"
         declared_licenses_processed:
           spdx_expression: "BSD-3-Clause"
+          mapped:
+            Revised BSD License: "BSD-3-Clause"
         description: "Json-LD core implementation"
         homepage_url: "http://github.com/jsonld-java/jsonld-java/jsonld-java/"
         binary_artifact:
@@ -1154,6 +1172,8 @@ analyzer:
         - "Apache License 2.0"
         declared_licenses_processed:
           spdx_expression: "Apache-2.0"
+          mapped:
+            Apache License 2.0: "Apache-2.0"
         description: "Implementation of mustache.js for Java"
         homepage_url: "http://github.com/spullara/mustache.java"
         binary_artifact:
@@ -1184,6 +1204,8 @@ analyzer:
         - "BSD License"
         declared_licenses_processed:
           spdx_expression: "BSD-3-Clause"
+          mapped:
+            BSD License: "BSD-3-Clause"
         description: "Implementation of various mathematical curves that define themselves\
           \ over a set of control points. The API is written in Java. The curves supported\
           \ are: Bezier, B-Spline, Cardinal Spline, Catmull-Rom Spline, Lagrange,\
@@ -1217,6 +1239,8 @@ analyzer:
         - "Apache 2.0"
         declared_licenses_processed:
           spdx_expression: "Apache-2.0"
+          mapped:
+            Apache 2.0: "Apache-2.0"
         description: "Gson JSON library"
         homepage_url: "https://github.com/google/gson/gson"
         binary_artifact:
@@ -1247,6 +1271,8 @@ analyzer:
         - "The Apache Software License, Version 2.0"
         declared_licenses_processed:
           spdx_expression: "Apache-2.0"
+          mapped:
+            The Apache Software License, Version 2.0: "Apache-2.0"
         description: "Guava is a suite of core and expanded libraries that include\n\
           \    utility classes, google's collections, io classes, and much\n    much\
           \ more.\n\n    Guava has only one code dependency - javax.annotation,\n\
@@ -1280,6 +1306,8 @@ analyzer:
         - "Apache License, Version 2.0"
         declared_licenses_processed:
           spdx_expression: "Apache-2.0"
+          mapped:
+            Apache License, Version 2.0: "Apache-2.0"
         description: "Apache Commons CLI provides a simple API for presenting, processing\
           \ and validating a command line interface."
         homepage_url: "http://commons.apache.org/proper/commons-cli/"
@@ -1311,6 +1339,8 @@ analyzer:
         - "Apache License, Version 2.0"
         declared_licenses_processed:
           spdx_expression: "Apache-2.0"
+          mapped:
+            Apache License, Version 2.0: "Apache-2.0"
         description: "The Apache Commons Codec package contains simple encoder and\
           \ decoders for\n     various formats such as Base64 and Hexadecimal.  In\
           \ addition to these\n     widely used encoders and decoders, the codec package\
@@ -1344,6 +1374,8 @@ analyzer:
         - "Apache License, Version 2.0"
         declared_licenses_processed:
           spdx_expression: "Apache-2.0"
+          mapped:
+            Apache License, Version 2.0: "Apache-2.0"
         description: "The Apache Commons IO library contains utility classes, stream\
           \ implementations, file filters,\nfile comparators, endian transformation\
           \ classes, and much more."
@@ -1376,6 +1408,8 @@ analyzer:
         - "Eclipse Public License 1.0"
         declared_licenses_processed:
           spdx_expression: "EPL-1.0"
+          mapped:
+            Eclipse Public License 1.0: "EPL-1.0"
         description: "JUnit is a unit testing framework for Java, created by Erich\
           \ Gamma and Kent Beck."
         homepage_url: "http://junit.org"
@@ -1407,6 +1441,8 @@ analyzer:
         - "Apache 2"
         declared_licenses_processed:
           spdx_expression: "Apache-2.0"
+          mapped:
+            Apache 2: "Apache-2.0"
         description: "A simple library for reading and writing CSV in Java"
         homepage_url: "http://opencsv.sf.net"
         binary_artifact:
@@ -1437,6 +1473,8 @@ analyzer:
         - "Mozilla Public License Version 1.0"
         declared_licenses_processed:
           spdx_expression: "MPL-1.0"
+          mapped:
+            Mozilla Public License Version 1.0: "MPL-1.0"
         description: "Saxon support library for third-party object model DOM"
         homepage_url: "http://saxon.sf.net"
         binary_artifact:
@@ -1467,6 +1505,8 @@ analyzer:
         - "Mozilla Public License Version 1.0"
         declared_licenses_processed:
           spdx_expression: "MPL-1.0"
+          mapped:
+            Mozilla Public License Version 1.0: "MPL-1.0"
         description: "The XSLT and XQuery Processor"
         homepage_url: "http://saxon.sf.net"
         binary_artifact:
@@ -1498,6 +1538,9 @@ analyzer:
         - "The MIT License"
         declared_licenses_processed:
           spdx_expression: "BSD-3-Clause AND MIT"
+          mapped:
+            The (New) BSD License: "BSD-3-Clause"
+            The MIT License: "MIT"
         description: "The Validator.nu HTML Parser is an implementation of the HTML5\
           \ parsing algorithm in Java for applications. The parser is designed to\
           \ work as a drop-in replacement for the XML parser in applications that\
@@ -1532,6 +1575,8 @@ analyzer:
         - "BSD licence"
         declared_licenses_processed:
           spdx_expression: "BSD-3-Clause"
+          mapped:
+            BSD licence: "BSD-3-Clause"
         description: "StringTemplate is a java template engine for generating source\
           \ code,\nweb pages, emails, or any other formatted text output.\n\nStringTemplate\
           \ is particularly good at multi-targeted code generators,\nmultiple site\
@@ -1630,6 +1675,8 @@ analyzer:
         - "BSD licence"
         declared_licenses_processed:
           spdx_expression: "BSD-3-Clause"
+          mapped:
+            BSD licence: "BSD-3-Clause"
         description: "StringTemplate is a java template engine for generating source\
           \ code,\nweb pages, emails, or any other formatted text output.\n\nStringTemplate\
           \ is particularly good at multi-targeted code generators,\nmultiple site\
@@ -1670,6 +1717,8 @@ analyzer:
         - "Apache License, Version 2.0"
         declared_licenses_processed:
           spdx_expression: "Apache-2.0"
+          mapped:
+            Apache License, Version 2.0: "Apache-2.0"
         description: "The Apache Commons Collections package contains types that extend\
           \ and augment the Java Collections Framework."
         homepage_url: "http://commons.apache.org/proper/commons-collections/"
@@ -1701,6 +1750,8 @@ analyzer:
         - "Apache License, Version 2.0"
         declared_licenses_processed:
           spdx_expression: "Apache-2.0"
+          mapped:
+            Apache License, Version 2.0: "Apache-2.0"
         description: "Apache Commons Compress software defines an API for working\
           \ with\ncompression and archive formats.  These include: bzip2, gzip, pack200,\n\
           lzma, xz, Snappy, traditional Unix Compress, DEFLATE, DEFLATE64, LZ4,\n\
@@ -1734,6 +1785,8 @@ analyzer:
         - "Apache License, Version 2.0"
         declared_licenses_processed:
           spdx_expression: "Apache-2.0"
+          mapped:
+            Apache License, Version 2.0: "Apache-2.0"
         description: "The Apache Commons CSV library provides a simple interface for\
           \ reading and writing\nCSV files of various types."
         homepage_url: "http://commons.apache.org/proper/commons-csv/"
@@ -1765,6 +1818,8 @@ analyzer:
         - "The Apache Software License, Version 2.0"
         declared_licenses_processed:
           spdx_expression: "Apache-2.0"
+          mapped:
+            The Apache Software License, Version 2.0: "Apache-2.0"
         description: "Commons Lang, a package of Java utility classes for the\n  classes\
           \ that are in java.lang's hierarchy, or are considered to be so\n  standard\
           \ as to justify existence in java.lang."
@@ -1797,6 +1852,8 @@ analyzer:
         - "Apache License, Version 2.0"
         declared_licenses_processed:
           spdx_expression: "Apache-2.0"
+          mapped:
+            Apache License, Version 2.0: "Apache-2.0"
         description: "Apache Commons Lang, a package of Java utility classes for the\n\
           \  classes that are in java.lang's hierarchy, or are considered to be so\n\
           \  standard as to justify existence in java.lang."
@@ -1829,6 +1886,8 @@ analyzer:
         - "Apache License, Version 2.0"
         declared_licenses_processed:
           spdx_expression: "Apache-2.0"
+          mapped:
+            Apache License, Version 2.0: "Apache-2.0"
         description: "Apache HttpComponents HttpClient - Cache"
         homepage_url: "http://hc.apache.org/httpcomponents-client"
         binary_artifact:
@@ -1859,6 +1918,8 @@ analyzer:
         - "Apache License, Version 2.0"
         declared_licenses_processed:
           spdx_expression: "Apache-2.0"
+          mapped:
+            Apache License, Version 2.0: "Apache-2.0"
         description: "Apache HttpComponents Client"
         homepage_url: "http://hc.apache.org/httpcomponents-client"
         binary_artifact:
@@ -1889,6 +1950,8 @@ analyzer:
         - "Apache License, Version 2.0"
         declared_licenses_processed:
           spdx_expression: "Apache-2.0"
+          mapped:
+            Apache License, Version 2.0: "Apache-2.0"
         description: "Apache HttpComponents Core (blocking I/O)"
         homepage_url: "http://hc.apache.org/httpcomponents-core-ga"
         binary_artifact:
@@ -1919,6 +1982,8 @@ analyzer:
         - "The Apache Software License, Version 2.0"
         declared_licenses_processed:
           spdx_expression: "Apache-2.0"
+          mapped:
+            The Apache Software License, Version 2.0: "Apache-2.0"
         description: "A POM artifact that references all the standard Jena Libraries\
           \ with a single dependency."
         homepage_url: "http://jena.apache.org/apache-jena-libs/"
@@ -1950,6 +2015,8 @@ analyzer:
         - "The Apache Software License, Version 2.0"
         declared_licenses_processed:
           spdx_expression: "Apache-2.0"
+          mapped:
+            The Apache Software License, Version 2.0: "Apache-2.0"
         description: "ARQ is a SPARQL 1.1 query engine for Apache Jena"
         homepage_url: "http://jena.apache.org/jena-arq/"
         binary_artifact:
@@ -1980,6 +2047,8 @@ analyzer:
         - "The Apache Software License, Version 2.0"
         declared_licenses_processed:
           spdx_expression: "Apache-2.0"
+          mapped:
+            The Apache Software License, Version 2.0: "Apache-2.0"
         description: "This module contains non-RDF library code and the common system\
           \ runtime."
         homepage_url: "http://jena.apache.org/jena-base/"
@@ -2011,6 +2080,8 @@ analyzer:
         - "The Apache Software License, Version 2.0"
         declared_licenses_processed:
           spdx_expression: "Apache-2.0"
+          mapped:
+            The Apache Software License, Version 2.0: "Apache-2.0"
         description: "Jena is a Java framework for building Semantic Web applications.\
           \ It provides a programmatic environment for RDF, RDFS and OWL, SPARQL and\
           \ includes a rule-based inference engine."
@@ -2043,6 +2114,8 @@ analyzer:
         - "Apache License 2.0"
         declared_licenses_processed:
           spdx_expression: "Apache-2.0"
+          mapped:
+            Apache License 2.0: "Apache-2.0"
         description: "The Apache Software Foundation provides support for the Apache\
           \ community of open-source software projects.\n    The Apache projects are\
           \ characterized by a collaborative, consensus based development process,\
@@ -2079,6 +2152,8 @@ analyzer:
         - "Apache License 2.0"
         declared_licenses_processed:
           spdx_expression: "Apache-2.0"
+          mapped:
+            Apache License 2.0: "Apache-2.0"
         description: "The Apache Software Foundation provides support for the Apache\
           \ community of open-source software projects.\n    The Apache projects are\
           \ characterized by a collaborative, consensus based development process,\
@@ -2115,6 +2190,8 @@ analyzer:
         - "Apache License 2.0"
         declared_licenses_processed:
           spdx_expression: "Apache-2.0"
+          mapped:
+            Apache License 2.0: "Apache-2.0"
         description: "The Apache Software Foundation provides support for the Apache\
           \ community of open-source software projects.\n    The Apache projects are\
           \ characterized by a collaborative, consensus based development process,\
@@ -2151,6 +2228,8 @@ analyzer:
         - "Apache License 2.0"
         declared_licenses_processed:
           spdx_expression: "Apache-2.0"
+          mapped:
+            Apache License 2.0: "Apache-2.0"
         description: "The Apache Software Foundation provides support for the Apache\
           \ community of open-source software projects.\n    The Apache projects are\
           \ characterized by a collaborative, consensus based development process,\
@@ -2187,6 +2266,8 @@ analyzer:
         - "The Apache Software License, Version 2.0"
         declared_licenses_processed:
           spdx_expression: "Apache-2.0"
+          mapped:
+            The Apache Software License, Version 2.0: "Apache-2.0"
         description: "The IRI module provides an implementation of the IRI and URI\
           \ specifications (RFC 3987 and 3986) which are used across Jena in order\
           \ to comply with relevant W3C specifications for RDF and SPARQL which require\
@@ -2220,6 +2301,8 @@ analyzer:
         - "Apache 2.0 License"
         declared_licenses_processed:
           spdx_expression: "Apache-2.0"
+          mapped:
+            Apache 2.0 License: "Apache-2.0"
         description: "RDF Connection"
         homepage_url: "http://jena.apache.org/jena-rdfconnection/"
         binary_artifact:
@@ -2250,6 +2333,8 @@ analyzer:
         - "The Apache Software License, Version 2.0"
         declared_licenses_processed:
           spdx_expression: "Apache-2.0"
+          mapped:
+            The Apache Software License, Version 2.0: "Apache-2.0"
         description: "This module shades Google's Guava.\n    Direct use can lead\
           \ to versioning problems \n    as some systems are dependent on specific\n\
           \    versions of guava. \n    This module uses the Shade plugin to \n  \
@@ -2283,6 +2368,8 @@ analyzer:
         - "Apache License 2.0"
         declared_licenses_processed:
           spdx_expression: "Apache-2.0"
+          mapped:
+            Apache License 2.0: "Apache-2.0"
         description: "The Apache Software Foundation provides support for the Apache\
           \ community of open-source software projects.\n    The Apache projects are\
           \ characterized by a collaborative, consensus based development process,\
@@ -2319,6 +2406,8 @@ analyzer:
         - "The Apache Software License, Version 2.0"
         declared_licenses_processed:
           spdx_expression: "Apache-2.0"
+          mapped:
+            The Apache Software License, Version 2.0: "Apache-2.0"
         description: "TDB is a storage subsystem for Jena and ARQ, it is a native\
           \ triple store providing persisent disk based storage of triples/quads."
         homepage_url: "http://jena.apache.org/jena-tdb/"
@@ -2350,6 +2439,8 @@ analyzer:
         - "Apache License, Version 2.0"
         declared_licenses_processed:
           spdx_expression: "Apache-2.0"
+          mapped:
+            Apache License, Version 2.0: "Apache-2.0"
         description: "The Apache Log4j API"
         homepage_url: "https://logging.apache.org/log4j/2.x/log4j-api/"
         binary_artifact:
@@ -2380,6 +2471,8 @@ analyzer:
         - "Apache License, Version 2.0"
         declared_licenses_processed:
           spdx_expression: "Apache-2.0"
+          mapped:
+            Apache License, Version 2.0: "Apache-2.0"
         description: "The Apache Log4j Implementation"
         homepage_url: "https://logging.apache.org/log4j/2.x/log4j-core/"
         binary_artifact:
@@ -2410,6 +2503,8 @@ analyzer:
         - "Apache License, Version 2.0"
         declared_licenses_processed:
           spdx_expression: "Apache-2.0"
+          mapped:
+            Apache License, Version 2.0: "Apache-2.0"
         description: "The Apache Log4j SLF4J API binding to Log4j 2 Core"
         homepage_url: "https://logging.apache.org/log4j/2.x/log4j-slf4j-impl/"
         binary_artifact:
@@ -2440,6 +2535,8 @@ analyzer:
         - "The Apache Software License, Version 2.0"
         declared_licenses_processed:
           spdx_expression: "Apache-2.0"
+          mapped:
+            The Apache Software License, Version 2.0: "Apache-2.0"
         description: "Apache POI - Java API To Access Microsoft Format Files"
         homepage_url: "http://poi.apache.org/"
         binary_artifact:
@@ -2470,6 +2567,8 @@ analyzer:
         - "The Apache Software License, Version 2.0"
         declared_licenses_processed:
           spdx_expression: "Apache-2.0"
+          mapped:
+            The Apache Software License, Version 2.0: "Apache-2.0"
         description: "Apache POI - Java API To Access Microsoft Format Files"
         homepage_url: "http://poi.apache.org/"
         binary_artifact:
@@ -2500,6 +2599,8 @@ analyzer:
         - "The Apache Software License, Version 2.0"
         declared_licenses_processed:
           spdx_expression: "Apache-2.0"
+          mapped:
+            The Apache Software License, Version 2.0: "Apache-2.0"
         description: "Apache POI - Java API To Access Microsoft Format Files"
         homepage_url: "http://poi.apache.org/"
         binary_artifact:
@@ -2530,6 +2631,8 @@ analyzer:
         - "The Apache Software License, Version 2.0"
         declared_licenses_processed:
           spdx_expression: "Apache-2.0"
+          mapped:
+            The Apache Software License, Version 2.0: "Apache-2.0"
         description: "Thrift is a software framework for scalable cross-language services\
           \ development."
         homepage_url: "http://thrift.apache.org"
@@ -2561,6 +2664,8 @@ analyzer:
         - "The Apache Software License, Version 2.0"
         declared_licenses_processed:
           spdx_expression: "Apache-2.0"
+          mapped:
+            The Apache Software License, Version 2.0: "Apache-2.0"
         description: "XmlBeans main jar"
         homepage_url: "http://xmlbeans.apache.org"
         binary_artifact:
@@ -2591,6 +2696,8 @@ analyzer:
         - "The Apache License, Version 2.0"
         declared_licenses_processed:
           spdx_expression: "Apache-2.0"
+          mapped:
+            The Apache License, Version 2.0: "Apache-2.0"
         description: "@API Guardian"
         homepage_url: "https://github.com/apiguardian-team/apiguardian"
         binary_artifact:
@@ -2621,6 +2728,8 @@ analyzer:
         - "Apache License, Version 2.0"
         declared_licenses_processed:
           spdx_expression: "Apache-2.0"
+          mapped:
+            Apache License, Version 2.0: "Apache-2.0"
         description: "Rich and fluent assertions for testing for Java"
         homepage_url: "http://assertj.org/assertj-core"
         binary_artifact:
@@ -2651,6 +2760,8 @@ analyzer:
         - "New BSD License"
         declared_licenses_processed:
           spdx_expression: "BSD-3-Clause"
+          mapped:
+            New BSD License: "BSD-3-Clause"
         description: "This is the core API of hamcrest matcher framework to be used\
           \ by third-party framework providers. This includes the a foundation set\
           \ of matcher implementations for common operations."
@@ -2683,6 +2794,8 @@ analyzer:
         - "The MIT License"
         declared_licenses_processed:
           spdx_expression: "MIT"
+          mapped:
+            The MIT License: "MIT"
         description: "jsoup HTML parser"
         homepage_url: "http://jsoup.org/"
         binary_artifact:
@@ -2713,6 +2826,8 @@ analyzer:
         - "Eclipse Public License v2.0"
         declared_licenses_processed:
           spdx_expression: "EPL-2.0"
+          mapped:
+            Eclipse Public License v2.0: "EPL-2.0"
         description: "Module \"junit-jupiter-api\" of JUnit 5."
         homepage_url: "http://junit.org/junit5/"
         binary_artifact:
@@ -2743,6 +2858,8 @@ analyzer:
         - "Eclipse Public License v2.0"
         declared_licenses_processed:
           spdx_expression: "EPL-2.0"
+          mapped:
+            Eclipse Public License v2.0: "EPL-2.0"
         description: "Module \"junit-jupiter-engine\" of JUnit 5."
         homepage_url: "http://junit.org/junit5/"
         binary_artifact:
@@ -2773,6 +2890,8 @@ analyzer:
         - "Eclipse Public License v2.0"
         declared_licenses_processed:
           spdx_expression: "EPL-2.0"
+          mapped:
+            Eclipse Public License v2.0: "EPL-2.0"
         description: "Module \"junit-jupiter-params\" of JUnit 5."
         homepage_url: "http://junit.org/junit5/"
         binary_artifact:
@@ -2803,6 +2922,8 @@ analyzer:
         - "Eclipse Public License v2.0"
         declared_licenses_processed:
           spdx_expression: "EPL-2.0"
+          mapped:
+            Eclipse Public License v2.0: "EPL-2.0"
         description: "Module \"junit-platform-commons\" of JUnit 5."
         homepage_url: "http://junit.org/junit5/"
         binary_artifact:
@@ -2833,6 +2954,8 @@ analyzer:
         - "Eclipse Public License v2.0"
         declared_licenses_processed:
           spdx_expression: "EPL-2.0"
+          mapped:
+            Eclipse Public License v2.0: "EPL-2.0"
         description: "Module \"junit-platform-engine\" of JUnit 5."
         homepage_url: "http://junit.org/junit5/"
         binary_artifact:
@@ -2863,6 +2986,8 @@ analyzer:
         - "Eclipse Public License v2.0"
         declared_licenses_processed:
           spdx_expression: "EPL-2.0"
+          mapped:
+            Eclipse Public License v2.0: "EPL-2.0"
         description: "Module \"junit-platform-launcher\" of JUnit 5."
         homepage_url: "http://junit.org/junit5/"
         binary_artifact:
@@ -2893,6 +3018,8 @@ analyzer:
         - "The Apache License, Version 2.0"
         declared_licenses_processed:
           spdx_expression: "Apache-2.0"
+          mapped:
+            The Apache License, Version 2.0: "Apache-2.0"
         description: "Open Test Alliance for the JVM"
         homepage_url: "https://github.com/ota4j-team/opentest4j"
         binary_artifact:
@@ -2923,6 +3050,8 @@ analyzer:
         - "MIT License"
         declared_licenses_processed:
           spdx_expression: "MIT"
+          mapped:
+            MIT License: "MIT"
         description: "JCL 1.2 implemented over SLF4J"
         homepage_url: "http://www.slf4j.org"
         binary_artifact:
@@ -2953,6 +3082,8 @@ analyzer:
         - "MIT License"
         declared_licenses_processed:
           spdx_expression: "MIT"
+          mapped:
+            MIT License: "MIT"
         description: "The slf4j API"
         homepage_url: "http://www.slf4j.org"
         binary_artifact:
@@ -2983,6 +3114,8 @@ analyzer:
         - "The Apache Software License, Version 2.0"
         declared_licenses_processed:
           spdx_expression: "Apache-2.0"
+          mapped:
+            The Apache Software License, Version 2.0: "Apache-2.0"
         description: "StAX API is the standard java XML processing API defined by\
           \ JSR-173"
         homepage_url: "http://stax.codehaus.org/"
@@ -4045,6 +4178,8 @@ analyzer:
         - "BSD-like"
         declared_licenses_processed:
           spdx_expression: "BSD-3-Clause"
+          mapped:
+            BSD-like: "BSD-3-Clause"
         description: "a CSS selector compiler/engine"
         homepage_url: "https://github.com/fb55/css-select#readme"
         binary_artifact:
@@ -4700,6 +4835,8 @@ analyzer:
         - "BSD-like"
         declared_licenses_processed:
           spdx_expression: "BSD-3-Clause"
+          mapped:
+            BSD-like: "BSD-3-Clause"
         description: "Encode & decode XML/HTML entities with ease"
         homepage_url: "https://github.com/fb55/node-entities"
         binary_artifact:
@@ -4730,6 +4867,8 @@ analyzer:
         - "BSD-like"
         declared_licenses_processed:
           spdx_expression: "BSD-3-Clause"
+          mapped:
+            BSD-like: "BSD-3-Clause"
         description: "Encode & decode XML/HTML entities with ease"
         homepage_url: "https://github.com/fb55/node-entities"
         binary_artifact:
@@ -4972,6 +5111,8 @@ analyzer:
         - "BSD"
         declared_licenses_processed:
           spdx_expression: "BSD-3-Clause"
+          mapped:
+            BSD: "BSD-3-Clause"
         description: "ECMAScript JS AST traversal functions"
         homepage_url: "https://github.com/estools/estraverse"
         binary_artifact:
@@ -5002,6 +5143,8 @@ analyzer:
         - "BSD"
         declared_licenses_processed:
           spdx_expression: "BSD-3-Clause"
+          mapped:
+            BSD: "BSD-3-Clause"
         description: "utility box for ECMAScript language tools"
         homepage_url: "https://github.com/estools/esutils"
         binary_artifact:
@@ -6367,6 +6510,9 @@ analyzer:
         - "BSD"
         declared_licenses_processed:
           spdx_expression: "AFL-2.1 AND BSD-3-Clause"
+          mapped:
+            AFLv2.1: "AFL-2.1"
+            BSD: "BSD-3-Clause"
         description: "JSON Schema validation and specifications"
         homepage_url: "https://github.com/kriszyp/json-schema#readme"
         binary_artifact:
@@ -7090,6 +7236,8 @@ analyzer:
         - "MIT/X11"
         declared_licenses_processed:
           spdx_expression: "MIT OR X11"
+          mapped:
+            MIT/X11: "MIT OR X11"
         description: "Light-weight option parsing with an argv hash. No optstrings\
           \ attached."
         homepage_url: "https://github.com/substack/node-optimist"
@@ -7909,6 +8057,8 @@ analyzer:
         - "BSD*"
         declared_licenses_processed:
           spdx_expression: "BSD-3-Clause"
+          mapped:
+            BSD*: "BSD-3-Clause"
         description: "Portable Unix shell commands for Node.js"
         homepage_url: "http://github.com/arturadib/shelljs"
         binary_artifact:
@@ -7939,6 +8089,8 @@ analyzer:
         - "BSD"
         declared_licenses_processed:
           spdx_expression: "BSD-3-Clause"
+          mapped:
+            BSD: "BSD-3-Clause"
         description: "Generates and consumes source maps"
         homepage_url: "https://github.com/mozilla/source-map"
         binary_artifact:

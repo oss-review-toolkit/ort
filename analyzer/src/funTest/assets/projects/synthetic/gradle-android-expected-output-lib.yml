@@ -178,6 +178,8 @@ packages:
     - "Apache License, Version 2.0"
     declared_licenses_processed:
       spdx_expression: "Apache-2.0"
+      mapped:
+        Apache License, Version 2.0: "Apache-2.0"
     description: "Apache Commons Compress software defines an API for working with\n\
       compression and archive formats.  These include: bzip2, gzip, pack200,\nlzma,\
       \ xz, Snappy, traditional Unix Compress, DEFLATE, DEFLATE64, LZ4,\nBrotli, Zstandard\
@@ -211,6 +213,8 @@ packages:
     - "Apache License, Version 2.0"
     declared_licenses_processed:
       spdx_expression: "Apache-2.0"
+      mapped:
+        Apache License, Version 2.0: "Apache-2.0"
     description: "Apache Commons Lang, a package of Java utility classes for the\n\
       \  classes that are in java.lang's hierarchy, or are considered to be so\n \
       \ standard as to justify existence in java.lang."
@@ -243,6 +247,8 @@ packages:
     - "Apache License, Version 2.0"
     declared_licenses_processed:
       spdx_expression: "Apache-2.0"
+      mapped:
+        Apache License, Version 2.0: "Apache-2.0"
     description: "Apache Commons Text is a library focused on algorithms working on\
       \ strings."
     homepage_url: "http://commons.apache.org/proper/commons-text/"
@@ -274,6 +280,8 @@ packages:
     - "Apache License, Version 2.0"
     declared_licenses_processed:
       spdx_expression: "Apache-2.0"
+      mapped:
+        Apache License, Version 2.0: "Apache-2.0"
     description: "Apache Commons Text is a library focused on algorithms working on\
       \ strings."
     homepage_url: "http://commons.apache.org/proper/commons-text/"
