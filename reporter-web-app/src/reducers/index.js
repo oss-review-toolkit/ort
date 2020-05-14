@@ -28,12 +28,12 @@ const initState = {
     },
     summary: {
         declaredLicensesChart: [],
-        detectedLicensesChart: [],
+        detectedLicensesProcessedChart: [],
         declaredLicensesFilter: {
             filteredInfo: {},
             sortedInfo: {}
         },
-        detectedLicensesFilter: {
+        detectedLicensesProcessedFilter: {
             filteredInfo: {},
             sortedInfo: {}
         },
@@ -243,16 +243,16 @@ export default (state = initState, action) => {
     }
     case 'SUMMARY::CHANGE_DETECTED_LICENSES_TABLE': {
         const {
-            detectedLicensesChart,
-            detectedLicensesFilter
+            detectedLicensesProcessedChart,
+            detectedLicensesProcessedFilter
         } = action.payload;
 
         return {
             ...state,
             summary: {
                 ...state.summary,
-                detectedLicensesChart,
-                detectedLicensesFilter
+                detectedLicensesProcessedChart,
+                detectedLicensesProcessedFilter
             }
         };
     }
