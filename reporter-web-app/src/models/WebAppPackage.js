@@ -570,11 +570,8 @@ class WebAppPackage {
     }
 
     hasConcludedLicense() {
-        if (this.#concludedLicense) {
-            return this.#concludedLicense.length !== 0;
-        }
-
-        return false;
+        return this.#concludedLicense
+            && this.#concludedLicense.length !== 0;
     }
 
     hasDeclaredLicenses() {
@@ -582,27 +579,18 @@ class WebAppPackage {
     }
 
     hasDeclaredLicensesMapped() {
-        if (this.#declaredLicensesMapped) {
-            return this.#declaredLicensesMapped.size !== 0;
-        }
-
-        return false;
+        return this.#declaredLicensesMapped
+            && this.#declaredLicensesMapped.size !== 0;
     }
 
     hasDeclaredLicensesSpdxExpression() {
-        if (this.#declaredLicensesSpdxExpression) {
-            return this.#declaredLicensesSpdxExpression.length !== 0;
-        }
-
-        return false;
+        return this.#declaredLicensesSpdxExpression
+            && this.#declaredLicensesSpdxExpression.length !== 0;
     }
 
     hasDeclaredLicensesUnmapped() {
-        if (this.#declaredLicensesUnmapped) {
-            return this.#declaredLicensesUnmapped.size !== 0;
-        }
-
-        return false;
+        return this.#declaredLicensesUnmapped
+            && this.#declaredLicensesUnmapped.size !== 0;
     }
 
     hasDetectedLicenses() {
@@ -626,28 +614,16 @@ class WebAppPackage {
     }
 
     hasLicenses() {
-        if (this.declaredLicenses.size !== 0
-            || this.detectedLicenses.size !== 0) {
-            return true;
-        }
-
-        return false;
+        return this.declaredLicenses.size !== 0
+            || this.detectedLicenses.size !== 0;
     }
 
     hasPathExcludes() {
-        if (this.pathExcludeIndexes.size !== 0) {
-            return true;
-        }
-
-        return false;
+        return this.pathExcludeIndexes.size !== 0;
     }
 
     hasPaths() {
-        if (this.paths && this.paths.length > 0) {
-            return true;
-        }
-
-        return false;
+        return this.paths && this.paths.length > 0;
     }
 
     hasScopeIndex(val) {
@@ -655,19 +631,11 @@ class WebAppPackage {
     }
 
     hasScopeExcludes() {
-        if (this.scopeExcludeIndexes.size !== 0) {
-            return true;
-        }
-
-        return false;
+        return this.scopeExcludeIndexes.size !== 0;
     }
 
     hasScopes() {
-        if (this.scopes && this.scopes.length > 0) {
-            return true;
-        }
-
-        return false;
+        return this.scopes && this.scopes.length > 0;
     }
 
     hasRuleViolations() {
