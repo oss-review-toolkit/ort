@@ -20,7 +20,7 @@
 package org.ossreviewtoolkit.commands
 
 import com.github.ajalt.clikt.core.CliktCommand
-import com.github.ajalt.clikt.core.UsageError
+import com.github.ajalt.clikt.core.ProgramResult
 
 import org.ossreviewtoolkit.analyzer.PackageManager
 import org.ossreviewtoolkit.downloader.VersionControlSystem
@@ -99,7 +99,8 @@ class RequirementsCommand : CliktCommand(help = "List the required command line 
                     allTools.getOrPut(category) { mutableListOf() } += instance
                 }
             } catch (e: Exception) {
-                throw UsageError("There was an error instantiating $it: $e.", statusCode = 1)
+                log.error { "There was an error instantiating $it: $e." }
+                throw ProgramResult(1)
             }
         }
 
@@ -167,7 +168,8 @@ class RequirementsCommand : CliktCommand(help = "List the required command line 
         println("\t* The tool was found in the PATH environment in the required version.")
 
         if (statusCode != 0) {
-            throw UsageError("Not all tools were found in their required versions.", statusCode = statusCode)
+            println("Not all tools were found in their required versions.")
+            throw ProgramResult(statusCode)
         }
     }
 }

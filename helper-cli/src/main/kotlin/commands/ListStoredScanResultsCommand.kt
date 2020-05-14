@@ -20,7 +20,7 @@
 package org.ossreviewtoolkit.helper.commands
 
 import com.github.ajalt.clikt.core.CliktCommand
-import com.github.ajalt.clikt.core.UsageError
+import com.github.ajalt.clikt.core.ProgramResult
 import com.github.ajalt.clikt.parameters.options.convert
 import com.github.ajalt.clikt.parameters.options.multiple
 import com.github.ajalt.clikt.parameters.options.option
@@ -36,6 +36,7 @@ import org.ossreviewtoolkit.model.config.ScannerConfiguration
 import org.ossreviewtoolkit.model.yamlMapper
 import org.ossreviewtoolkit.scanner.ScanResultsStorage
 import org.ossreviewtoolkit.utils.expandTilde
+import org.ossreviewtoolkit.utils.log
 
 internal class ListStoredScanResultsCommand : CliktCommand(
     help = "Lists the provenance of all stored scan results for a given package identifier."
@@ -69,7 +70,8 @@ internal class ListStoredScanResultsCommand : CliktCommand(
         val scanResults = when (val readResult = ScanResultsStorage.storage.read(packageId)) {
             is Success -> readResult.result
             is Failure -> {
-                throw UsageError("Could not read scan results: ${readResult.error}")
+                log.error { "Could not read scan results: ${readResult.error}" }
+                throw ProgramResult(1)
             }
         }
 

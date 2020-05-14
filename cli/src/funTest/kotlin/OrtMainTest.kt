@@ -20,12 +20,10 @@
 package org.ossreviewtoolkit
 
 import com.github.ajalt.clikt.core.MutuallyExclusiveGroupException
-import com.github.ajalt.clikt.core.UsageError
+import com.github.ajalt.clikt.core.ProgramResult
 
-import org.ossreviewtoolkit.commands.RequirementsCommand
 import org.ossreviewtoolkit.downloader.VersionControlSystem
 import org.ossreviewtoolkit.utils.ORT_NAME
-import org.ossreviewtoolkit.utils.log
 import org.ossreviewtoolkit.utils.normalizeVcsUrl
 import org.ossreviewtoolkit.utils.redirectStdout
 import org.ossreviewtoolkit.utils.safeDeleteRecursively
@@ -165,7 +163,7 @@ class OrtMainTest : StringSpec() {
 
         "Requirements are listed correctly" {
             val stdout = runMain("requirements")
-            val errorLogs = stdout.find { it.contains(" ERROR - ") }
+            val errorLogs = stdout.find { it.contains(" ERROR ") }
 
             errorLogs shouldBe null
         }
@@ -175,14 +173,8 @@ class OrtMainTest : StringSpec() {
         redirectStdout {
             try {
                 OrtMain().parse(args.asList())
-            } catch (e: UsageError) {
-                // TODO: Improve this once clikt has a way to distinguish a non-zero status code caused by a real user
-                //       error from cases where the usage was correct but the tool ran into an error.
-                if (e.context?.command is RequirementsCommand) {
-                    log.debug { "Status code was ${e.statusCode}." }
-                } else {
-                    throw e
-                }
+            } catch (e: ProgramResult) {
+                // Ignore exceptions that just propagate the program result.
             }
         }.lineSequence()
 }

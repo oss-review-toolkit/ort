@@ -22,7 +22,7 @@ package org.ossreviewtoolkit.commands
 import com.fasterxml.jackson.module.kotlin.readValue
 
 import com.github.ajalt.clikt.core.CliktCommand
-import com.github.ajalt.clikt.core.UsageError
+import com.github.ajalt.clikt.core.ProgramResult
 import com.github.ajalt.clikt.parameters.options.convert
 import com.github.ajalt.clikt.parameters.options.default
 import com.github.ajalt.clikt.parameters.options.option
@@ -180,7 +180,10 @@ class ClearlyDefinedUploadCommand : CliktCommand(
             }
         }
 
-        if (error) throw UsageError("At least one error occurred.", statusCode = 2)
+        if (error) {
+            println("At least one error occurred.")
+            throw ProgramResult(2)
+        }
     }
 }
 
