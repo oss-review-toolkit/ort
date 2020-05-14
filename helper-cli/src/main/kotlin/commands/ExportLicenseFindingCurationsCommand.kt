@@ -39,7 +39,6 @@ import org.ossreviewtoolkit.utils.safeMkdirs
 import java.io.File
 
 internal class ExportLicenseFindingCurationsCommand : CliktCommand(
-    name = "export-license-finding-curations",
     help = "Export the license finding curations to a file which maps repository URLs to the license finding " +
             "curations for the respective repository."
 ) {

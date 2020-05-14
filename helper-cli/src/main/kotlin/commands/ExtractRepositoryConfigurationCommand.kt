@@ -31,7 +31,6 @@ import org.ossreviewtoolkit.model.readValue
 import org.ossreviewtoolkit.utils.expandTilde
 
 class ExtractRepositoryConfigurationCommand : CliktCommand(
-    name = "extract-repository-configuration",
     help = "Extract the repository configuration from the given ORT result file."
 ) {
     private val ortResultFile by option(

@@ -39,7 +39,7 @@ import java.lang.reflect.Modifier
 
 import org.reflections.Reflections
 
-class RequirementsCommand : CliktCommand(name = "requirements", help = "List the required command line tools.") {
+class RequirementsCommand : CliktCommand(help = "List the required command line tools.") {
     override fun run() {
         val reflections = Reflections("org.ossreviewtoolkit")
         val classes = reflections.getSubTypesOf(CommandLineTool::class.java)

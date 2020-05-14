@@ -38,7 +38,6 @@ import org.ossreviewtoolkit.scanner.ScanResultsStorage
 import org.ossreviewtoolkit.utils.expandTilde
 
 internal class ListStoredScanResultsCommand : CliktCommand(
-    name = "list-stored-scan-results",
     help = "Lists the provenance of all stored scan results for a given package identifier."
 ) {
     private val configFile by option(

@@ -51,7 +51,6 @@ import java.io.File
 import java.lang.IllegalArgumentException
 
 internal class ListLicensesCommand : CliktCommand(
-    name = "list-licenses",
     help = "Lists the license findings for a given package as distinct text locations."
 ) {
     private val ortResultFile by option(

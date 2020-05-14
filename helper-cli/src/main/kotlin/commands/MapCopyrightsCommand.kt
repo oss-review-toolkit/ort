@@ -31,7 +31,6 @@ import org.ossreviewtoolkit.model.readValue
 import org.ossreviewtoolkit.utils.expandTilde
 
 internal class MapCopyrightsCommand : CliktCommand(
-    name = "map-copyrights",
     help = "Reads processed copyright statements from the input file, maps them to unprocessed copyright statements " +
             "using the given ORT file, and writes those mapped statements to the given output file."
 ) {

@@ -31,7 +31,6 @@ import org.ossreviewtoolkit.model.readValue
 import org.ossreviewtoolkit.utils.expandTilde
 
 internal class SortRepositoryConfigurationCommand : CliktCommand(
-    name = "sort-repository-configuration",
     help = "Sorts all exclude and curation entries of the given repository configuration alphabetically. The output " +
             "is written to the given repository configuration file."
 ) {

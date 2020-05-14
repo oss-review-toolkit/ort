@@ -32,7 +32,6 @@ import org.ossreviewtoolkit.model.utils.getDetectedLicensesForId
 import org.ossreviewtoolkit.utils.expandTilde
 
 class ListPackagesCommand : CliktCommand(
-    name = "list-packages",
     help = "Lists the packages and projects contained in the given ORT result file."
 ) {
     private val ortResultFile by option(

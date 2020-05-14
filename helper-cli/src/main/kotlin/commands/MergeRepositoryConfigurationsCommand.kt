@@ -34,7 +34,6 @@ import org.ossreviewtoolkit.utils.expandTilde
 import java.io.File
 
 internal class MergeRepositoryConfigurationsCommand : CliktCommand(
-    name = "merge-repository-configurations",
     help = "Merges the given list of input repository configuration files and writes the result to the given output " +
             "repository configuration file."
 ) {

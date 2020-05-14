@@ -36,7 +36,6 @@ import org.ossreviewtoolkit.model.readValue
 import org.ossreviewtoolkit.utils.expandTilde
 
 internal class GenerateProjectExcludesCommand : CliktCommand(
-    name = "generate-project-excludes",
     help = "Generates path excludes for all definition files which are not yet excluded. The output is written to " +
             "the given repository configuration file."
 ) {
