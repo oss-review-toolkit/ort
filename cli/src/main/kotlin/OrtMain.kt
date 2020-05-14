@@ -24,13 +24,12 @@ import com.github.ajalt.clikt.core.context
 import com.github.ajalt.clikt.core.subcommands
 import com.github.ajalt.clikt.output.CliktHelpFormatter
 import com.github.ajalt.clikt.output.HelpFormatter
+import com.github.ajalt.clikt.parameters.options.associate
 import com.github.ajalt.clikt.parameters.options.convert
 import com.github.ajalt.clikt.parameters.options.default
 import com.github.ajalt.clikt.parameters.options.flag
-import com.github.ajalt.clikt.parameters.options.multiple
 import com.github.ajalt.clikt.parameters.options.option
 import com.github.ajalt.clikt.parameters.options.switch
-import com.github.ajalt.clikt.parameters.options.unique
 import com.github.ajalt.clikt.parameters.options.versionOption
 import com.github.ajalt.clikt.parameters.types.file
 
@@ -75,9 +74,7 @@ class OrtMain : CliktCommand(name = ORT_NAME, epilog = "* denotes required optio
         "-P",
         help = "Override a key-value pair in the configuration file. For example: " +
                 "-P scanner.postgresStorage.schema=testSchema"
-    ).convert { Pair(it.substringBefore("="), it.substringAfter("=", "")) }
-        .multiple()
-        .unique()
+    ).associate()
 
     private val env = Environment()
 
@@ -129,7 +126,7 @@ class OrtMain : CliktCommand(name = ORT_NAME, epilog = "* denotes required optio
         // Make the OrtConfiguration available to subcommands.
         currentContext.findOrSetObject {
             OrtConfiguration.load(
-                configArguments.toMap(),
+                configArguments,
                 configFile ?: getOrtDataDirectory().resolve("config/ort.conf")
             )
         }
