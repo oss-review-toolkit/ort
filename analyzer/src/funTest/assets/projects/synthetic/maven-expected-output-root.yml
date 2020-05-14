@@ -6,6 +6,8 @@ project:
   - "Apache License, Version 2.0"
   declared_licenses_processed:
     spdx_expression: "Apache-2.0"
+    mapped:
+      Apache License, Version 2.0: "Apache-2.0"
   vcs:
     type: ""
     url: ""

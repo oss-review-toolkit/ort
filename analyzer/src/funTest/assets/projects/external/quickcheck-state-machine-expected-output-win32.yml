@@ -6,6 +6,8 @@ project:
   - "BSD3"
   declared_licenses_processed:
     spdx_expression: "BSD-3-Clause"
+    mapped:
+      BSD3: "BSD-3-Clause"
   vcs:
     type: "Git"
     url: "https://github.com/advancedtelematic/quickcheck-state-machine"
@@ -1061,6 +1063,8 @@ packages:
     - "BSD3"
     declared_licenses_processed:
       spdx_expression: "BSD-3-Clause"
+      mapped:
+        BSD3: "BSD-3-Clause"
     description: "In mathematics, a semigroup is an algebraic structure consisting\
       \ of a set together with an associative binary operation. A semigroup generalizes\
       \ a monoid in that there might not exist an identity element. It also (originally)\
@@ -1176,6 +1180,8 @@ packages:
     - "BSD3"
     declared_licenses_processed:
       spdx_expression: "BSD-3-Clause"
+      mapped:
+        BSD3: "BSD-3-Clause"
     description: "This package includes backported versions of types that were added\n\
       to transformers in transformers 0.3, 0.4, and 0.5 for users who need strict\n\
       transformers 0.2 or 0.3 compatibility to run on old versions of the\nplatform,\
@@ -1211,6 +1217,8 @@ packages:
     - "BSD3"
     declared_licenses_processed:
       spdx_expression: "BSD-3-Clause"
+      mapped:
+        BSD3: "BSD-3-Clause"
     description: "This package provides a higher-level interface over\nthreads, in\
       \ which an @Async a@ is a concurrent\nthread that will eventually deliver a\
       \ value of\ntype @a@.  The package provides ways to create\n@Async@ computations,\
@@ -1249,6 +1257,8 @@ packages:
     - "BSD3"
     declared_licenses_processed:
       spdx_expression: "BSD-3-Clause"
+      mapped:
+        BSD3: "BSD-3-Clause"
     description: "Software Transactional Memory, or STM, is an abstraction for\nconcurrent\
       \ communication. The main benefits of STM are\n/composability/ and /modularity/.\
       \ That is, using STM you can write\nconcurrent abstractions that can be easily\
@@ -1284,6 +1294,8 @@ packages:
     - "BSD3"
     declared_licenses_processed:
       spdx_expression: "BSD-3-Clause"
+      mapped:
+        BSD3: "BSD-3-Clause"
     description: "Contravariant functors."
     homepage_url: "http://github.com/ekmett/contravariant/"
     binary_artifact:
@@ -1314,6 +1326,8 @@ packages:
     - "BSD3"
     declared_licenses_processed:
       spdx_expression: "BSD-3-Clause"
+      mapped:
+        BSD3: "BSD-3-Clause"
     description: "Extensible optionally-pure exceptions."
     homepage_url: "http://github.com/ekmett/exceptions/"
     binary_artifact:
@@ -1344,6 +1358,8 @@ packages:
     - "BSD3"
     declared_licenses_processed:
       spdx_expression: "BSD-3-Clause"
+      mapped:
+        BSD3: "BSD-3-Clause"
     description: "This package provides methods for fully evaluating data structures\n\
       (\\\"deep evaluation\\\"). Deep evaluation is often used for adding\nstrictness\
       \ to a program, e.g. in order to force pending exceptions,\nremove space leaks,\
@@ -1415,6 +1431,8 @@ packages:
     - "BSD3"
     declared_licenses_processed:
       spdx_expression: "BSD-3-Clause"
+      mapped:
+        BSD3: "BSD-3-Clause"
     description: "Monad classes using functional dependencies, with instances\nfor\
       \ various monad transformers, inspired by the paper\n/Functional Programming\
       \ with Overloading and Higher-Order Polymorphism/,\nby Mark P Jones, in /Advanced\
@@ -1448,6 +1466,8 @@ packages:
     - "BSD3"
     declared_licenses_processed:
       spdx_expression: "BSD-3-Clause"
+      mapped:
+        BSD3: "BSD-3-Clause"
     description: "Per Conor McBride, the Newtype typeclass represents the packing\
       \ and unpacking of a newtype,\nand allows you to operate under that newtype\
       \ with functions such as ala.\nGenerics support was added in version 0.4, making\
@@ -1482,6 +1502,8 @@ packages:
     - "BSD3"
     declared_licenses_processed:
       spdx_expression: "BSD-3-Clause"
+      mapped:
+        BSD3: "BSD-3-Clause"
     description: "A portable library of functor and monad transformers, inspired by\n\
       the paper \\\"Functional Programming with Overloading and Higher-Order\nPolymorphism\\\
       \", by Mark P Jones,\nin /Advanced School of Functional Programming/, 1995\n\
@@ -1583,6 +1605,8 @@ packages:
     - "BSD3"
     declared_licenses_processed:
       spdx_expression: "BSD-3-Clause"
+      mapped:
+        BSD3: "BSD-3-Clause"
     description: "An inductive representation of manipulating graph data structures.\n\
       \nOriginal website can be found at <http://web.engr.oregonstate.edu/~erwig/fgl/haskell>."
     homepage_url: ""
@@ -1614,6 +1638,8 @@ packages:
     - "BSD3"
     declared_licenses_processed:
       spdx_expression: "BSD-3-Clause"
+      mapped:
+        BSD3: "BSD-3-Clause"
     description: "In addition to providing the \"Data.Array\" module\n<http://www.haskell.org/onlinereport/haskell2010/haskellch14.html\
       \ as specified in the Haskell 2010 Language Report>,\nthis package also defines\
       \ the classes 'IArray' of\nimmutable arrays and 'MArray' of arrays mutable within\
@@ -1647,6 +1673,8 @@ packages:
     - "BSD3"
     declared_licenses_processed:
       spdx_expression: "BSD-3-Clause"
+      mapped:
+        BSD3: "BSD-3-Clause"
     description: "This package contains efficient general-purpose implementations\n\
       of various immutable container types including sets, maps, sequences,\ntrees,\
       \ and graphs.\n\nFor a walkthrough of what this package provides with examples\
@@ -1682,6 +1710,8 @@ packages:
     - "BSD3"
     declared_licenses_processed:
       spdx_expression: "BSD-3-Clause"
+      mapped:
+        BSD3: "BSD-3-Clause"
     description: "An efficient implementation of Int-indexed arrays (both mutable\n\
       and immutable), with a powerful loop optimisation framework .\n\nIt is structured\
       \ as follows:\n\n[\"Data.Vector\"] Boxed vectors of arbitrary types.\n\n[\"\
@@ -1721,6 +1751,8 @@ packages:
     - "BSD3"
     declared_licenses_processed:
       spdx_expression: "BSD-3-Clause"
+      mapped:
+        BSD3: "BSD-3-Clause"
     description: "Efficient, pure binary serialisation using lazy ByteStrings.\nHaskell\
       \ values may be encoded to and from binary formats,\nwritten to disk as binary,\
       \ or sent over the network.\nThe format used can be automatically generated,\
@@ -1756,6 +1788,8 @@ packages:
     - "BSD3"
     declared_licenses_processed:
       spdx_expression: "BSD-3-Clause"
+      mapped:
+        BSD3: "BSD-3-Clause"
     description: "Haskell 98 phantom types to avoid unsafely passing dummy arguments."
     homepage_url: "http://github.com/ekmett/tagged"
     binary_artifact:
@@ -1786,6 +1820,8 @@ packages:
     - "BSD3"
     declared_licenses_processed:
       spdx_expression: "BSD-3-Clause"
+      mapped:
+        BSD3: "BSD-3-Clause"
     description: "Common diff algorithm works on list structures:\n\n@\ndiff :: Eq\
       \ a => [a] -> [a] -> [Edit a]\n@\n\nThis package works on trees.\n\n@\ntreeDiff\
       \ :: Eq a => Tree a -> Tree a -> Edit (EditTree a)\n@\n\nThis package also provides\
@@ -1825,6 +1861,8 @@ packages:
     - "BSD2"
     declared_licenses_processed:
       spdx_expression: "BSD-2-Clause"
+      mapped:
+        BSD2: "BSD-2-Clause"
     description: "An efficient packed, immutable Unicode text type (both strict and\n\
       lazy), with a powerful loop fusion optimization framework.\n\nThe 'Text' type\
       \ represents Unicode character strings, in a time and\nspace-efficient manner.\
@@ -1870,6 +1908,8 @@ packages:
     - "BSD3"
     declared_licenses_processed:
       spdx_expression: "BSD-3-Clause"
+      mapped:
+        BSD3: "BSD-3-Clause"
     description: "MemoTrie provides a basis for memoized functions over some domains,\n\
       using tries.  It's based on ideas from Ralf Hinze and code from\nSpencer Janssen.\
       \ Generic support thanks to Sam Boosalis.\n\nProject wiki page: <http://haskell.org/haskellwiki/MemoTrie>\n\
@@ -1903,6 +1943,8 @@ packages:
     - "BSD3"
     declared_licenses_processed:
       spdx_expression: "BSD-3-Clause"
+      mapped:
+        BSD3: "BSD-3-Clause"
     description: "This package contains state variables, which are references in the\
       \ IO monad,\nlike IORefs or parts of the OpenGL state."
     homepage_url: "https://github.com/haskell-opengl/StateVar"
@@ -1934,6 +1976,8 @@ packages:
     - "BSD3"
     declared_licenses_processed:
       spdx_expression: "BSD-3-Clause"
+      mapped:
+        BSD3: "BSD-3-Clause"
     description: "An efficient compact, immutable byte string type (both strict and\
       \ lazy)\nsuitable for binary or 8-bit character data.\n\nThe 'ByteString' type\
       \ represents sequences of bytes or 8-bit characters.\nIt is suitable for high\
@@ -1985,6 +2029,8 @@ packages:
     - "BSD3"
     declared_licenses_processed:
       spdx_expression: "BSD-3-Clause"
+      mapped:
+        BSD3: "BSD-3-Clause"
     description: "Fast unicode character sets based on complemented PATRICIA tries"
     homepage_url: "http://github.com/ekmett/charset"
     binary_artifact:
@@ -2015,6 +2061,8 @@ packages:
     - "BSD3"
     declared_licenses_processed:
       spdx_expression: "BSD-3-Clause"
+      mapped:
+        BSD3: "BSD-3-Clause"
     description: "Difference lists are a list-like type supporting O(1) append. This\
       \ is\nparticularly useful for efficient logging and pretty printing (e.g. with\
       \ the\nWriter monad), where list append quickly becomes too expensive."
@@ -2047,6 +2095,8 @@ packages:
     - "BSD3"
     declared_licenses_processed:
       spdx_expression: "BSD-3-Clause"
+      mapped:
+        BSD3: "BSD-3-Clause"
     description: "This package defines a class, 'Hashable', for types that\ncan be\
       \ converted to a hash value.  This class\nexists for the benefit of hashing-based\
       \ data\nstructures.  The package provides instances for\nbasic types and a way\
@@ -2080,6 +2130,8 @@ packages:
     - "BSD3"
     declared_licenses_processed:
       spdx_expression: "BSD-3-Clause"
+      mapped:
+        BSD3: "BSD-3-Clause"
     description: "This package provides various primitive memory-related operations."
     homepage_url: "https://github.com/haskell/primitive"
     binary_artifact:
@@ -2110,6 +2162,8 @@ packages:
     - "BSD3"
     declared_licenses_processed:
       spdx_expression: "BSD-3-Clause"
+      mapped:
+        BSD3: "BSD-3-Clause"
     description: "\"Data.Scientific\" provides the number type 'Scientific'. Scientific\
       \ numbers are\narbitrary precision and space efficient. They are represented\
       \ using\n<http://en.wikipedia.org/wiki/Scientific_notation scientific notation>.\n\
@@ -2158,6 +2212,8 @@ packages:
     - "BSD3"
     declared_licenses_processed:
       spdx_expression: "BSD-3-Clause"
+      mapped:
+        BSD3: "BSD-3-Clause"
     description: "Implementation of n-ary sums and n-ary products.\n\nThe module \"\
       Data.SOP\" is the main module of this library and contains\nmore detailed documentation.\n\
       \nThe main use case of this package is to serve as the core of\n@<https://hackage.haskell.org/package/generics-sop\
@@ -2193,6 +2249,8 @@ packages:
     - "BSD3"
     declared_licenses_processed:
       spdx_expression: "BSD-3-Clause"
+      mapped:
+        BSD3: "BSD-3-Clause"
     description: "Efficient hashing-based container types.  The containers have been\n\
       optimized for performance critical use, both in terms of large data\nquantities\
       \ and high speed.\n\nThe declared cost of each operation is either worst-case\
@@ -2226,6 +2284,8 @@ packages:
     - "BSD3"
     declared_licenses_processed:
       spdx_expression: "BSD-3-Clause"
+      mapped:
+        BSD3: "BSD-3-Clause"
     description: "This library contains type definitions for Universally Unique Identifiers\n\
       and basic conversion functions.\n\nSee <http://en.wikipedia.org/wiki/UUID> for\
       \ the general idea."
@@ -2258,6 +2318,8 @@ packages:
     - "BSD2"
     declared_licenses_processed:
       spdx_expression: "BSD-2-Clause"
+      mapped:
+        BSD2: "BSD-2-Clause"
     description: "Happy is a parser generator for Haskell.  Given a grammar\nspecification\
       \ in BNF, Happy generates Haskell code to parse the\ngrammar.  Happy works in\
       \ a similar way to the @yacc@ tool for C."
@@ -2323,6 +2385,8 @@ packages:
     - "BSD3"
     declared_licenses_processed:
       spdx_expression: "BSD-3-Clause"
+      mapped:
+        BSD3: "BSD-3-Clause"
     description: "The Haskell Common Architecture for Building Applications and\n\
       Libraries: a framework defining a common interface for authors to more\neasily\
       \ build their Haskell applications in a portable way.\n\nThe Haskell Cabal is\
@@ -2388,6 +2452,8 @@ packages:
     - "BSD3"
     declared_licenses_processed:
       spdx_expression: "BSD-3-Clause"
+      mapped:
+        BSD3: "BSD-3-Clause"
     description: "A library to support the definition of generic functions.\nDatatypes\
       \ are viewed in a uniform, structured way:\nthe choice between constructors\
       \ is represented using an n-ary\nsum, and the arguments of each constructor\
@@ -2434,6 +2500,8 @@ packages:
     - "BSD3"
     declared_licenses_processed:
       spdx_expression: "BSD-3-Clause"
+      mapped:
+        BSD3: "BSD-3-Clause"
     description: "This library provides bindings for the Dot language used by the\n\
       Graphviz (<http://graphviz.org/>) suite of programs for visualising\ngraphs,\
       \ as well as functions to call those programs.\n\nMain features of the graphviz\
@@ -2477,6 +2545,8 @@ packages:
     - "BSD3"
     declared_licenses_processed:
       spdx_expression: "BSD-3-Clause"
+      mapped:
+        BSD3: "BSD-3-Clause"
     description: "A fully compliant Haskell 98 lexer."
     homepage_url: "https://github.com/yav/haskell-lexer"
     binary_artifact:
@@ -2507,6 +2577,8 @@ packages:
     - "BSD3"
     declared_licenses_processed:
       spdx_expression: "BSD-3-Clause"
+      mapped:
+        BSD3: "BSD-3-Clause"
     description: "A collection of various methods for splitting\nlists into parts,\
       \ akin to the \\\"split\\\" function\nfound in several mainstream languages.\
       \ Here is\nits tale:\n\nOnce upon a time the standard \"Data.List\" module\n\
@@ -2581,6 +2653,8 @@ packages:
     - "BSD3"
     declared_licenses_processed:
       spdx_expression: "BSD-3-Clause"
+      mapped:
+        BSD3: "BSD-3-Clause"
     description: "Matrix library. Basic operations and some algorithms.\n\nTo get\
       \ the library update your cabal package list (if needed) with @cabal update@\
       \ and\nthen use @cabal install matrix@, assuming that you already have Cabal\
@@ -2616,6 +2690,8 @@ packages:
     - "BSD3"
     declared_licenses_processed:
       spdx_expression: "BSD-3-Clause"
+      mapped:
+        BSD3: "BSD-3-Clause"
     description: "This package provides the low-level implementation of the standard\n\
       'Integer' type based on the\n<http://gmplib.org/ GNU Multiple Precision Arithmetic\
       \ Library (GMP)>.\n\nThis package provides access to the internal representation\
@@ -2680,6 +2756,8 @@ packages:
     - "BSD3"
     declared_licenses_processed:
       spdx_expression: "BSD-3-Clause"
+      mapped:
+        BSD3: "BSD-3-Clause"
     description: "Parsec is designed from scratch as an industrial-strength parser\n\
       library.  It is simple, safe, well documented (on the package\nhomepage), has\
       \ extensive libraries, good error messages,\nand is fast.  It is defined as\
@@ -2749,6 +2827,8 @@ packages:
     - "BSD3"
     declared_licenses_processed:
       spdx_expression: "BSD-3-Clause"
+      mapped:
+        BSD3: "BSD-3-Clause"
     description: "A binding to part of the Win32 library."
     homepage_url: "https://github.com/haskell/win32"
     binary_artifact:
@@ -2779,6 +2859,8 @@ packages:
     - "BSD3"
     declared_licenses_processed:
       spdx_expression: "BSD-3-Clause"
+      mapped:
+        BSD3: "BSD-3-Clause"
     description: "Functions for creating temporary files and directories."
     homepage_url: "https://github.com/feuerbach/temporary"
     binary_artifact:
@@ -2809,6 +2891,8 @@ packages:
     - "BSD3"
     declared_licenses_processed:
       spdx_expression: "BSD-3-Clause"
+      mapped:
+        BSD3: "BSD-3-Clause"
     description: "This library provides a basic set of operations for manipulating\
       \ files and\ndirectories in a portable way."
     homepage_url: ""
@@ -2840,6 +2924,8 @@ packages:
     - "BSD3"
     declared_licenses_processed:
       spdx_expression: "BSD-3-Clause"
+      mapped:
+        BSD3: "BSD-3-Clause"
     description: "This package provides functionality for manipulating @FilePath@\
       \ values, and is shipped with both <https://www.haskell.org/ghc/ GHC> and the\
       \ <https://www.haskell.org/platform/ Haskell Platform>. It provides three modules:\n\
@@ -2878,6 +2964,8 @@ packages:
     - "BSD3"
     declared_licenses_processed:
       spdx_expression: "BSD-3-Clause"
+      mapped:
+        BSD3: "BSD-3-Clause"
     description: "MinTTY is a Windows-specific terminal emulator for the\nwidely used\
       \ Cygwin and MSYS projects, which provide\nUnix-like environments for Windows.\
       \ MinTTY consoles behave\ndifferently from native Windows consoles (such as\n\
@@ -2919,6 +3007,8 @@ packages:
     - "BSD3"
     declared_licenses_processed:
       spdx_expression: "BSD-3-Clause"
+      mapped:
+        BSD3: "BSD-3-Clause"
     description: "This package contains libraries for dealing with system processes.\n\
       \nThe typed-process package is a more recent take on a process API,\nwhich uses\
       \ this package internally. It features better binary\nsupport, easier concurrency,\
@@ -2952,6 +3042,8 @@ packages:
     - "BSD3"
     declared_licenses_processed:
       spdx_expression: "BSD-3-Clause"
+      mapped:
+        BSD3: "BSD-3-Clause"
     description: "This package provides a basic random number generation\nlibrary,\
       \ including the ability to split random number\ngenerators."
     homepage_url: ""
@@ -2983,6 +3075,8 @@ packages:
     - "BSD3"
     declared_licenses_processed:
       spdx_expression: "BSD-3-Clause"
+      mapped:
+        BSD3: "BSD-3-Clause"
     description: "Pure Haskell implementation of SplitMix described in\n\nGuy L. Steele,\
       \ Jr., Doug Lea, and Christine H. Flood. 2014.\nFast splittable pseudorandom\
       \ number generators. In Proceedings\nof the 2014 ACM International Conference\
@@ -3027,6 +3121,8 @@ packages:
     - "BSD3"
     declared_licenses_processed:
       spdx_expression: "BSD-3-Clause"
+      mapped:
+        BSD3: "BSD-3-Clause"
     description: "This package contains wrapped name module for time-format locale\
       \ between old-locale and time-1.5."
     homepage_url: "https://github.com/khibino/haskell-time-locale-compat"
@@ -3058,6 +3154,8 @@ packages:
     - "BSD3"
     declared_licenses_processed:
       spdx_expression: "BSD-3-Clause"
+      mapped:
+        BSD3: "BSD-3-Clause"
     description: "This package provides modules containing facilities for manipulating\n\
       Haskell source code using Template Haskell.\n\nSee <http://www.haskell.org/haskellwiki/Template_Haskell>\
       \ for more\ninformation."
@@ -3090,6 +3188,8 @@ packages:
     - "BSD3"
     declared_licenses_processed:
       spdx_expression: "BSD-3-Clause"
+      mapped:
+        BSD3: "BSD-3-Clause"
     description: "QuickCheck is a library for random testing of program properties.\n\
       The programmer provides a specification of the program, in the form of\nproperties\
       \ which functions should satisfy, and QuickCheck then tests that the\nproperties\
@@ -3135,6 +3235,8 @@ packages:
     - "BSD2"
     declared_licenses_processed:
       spdx_expression: "BSD-2-Clause"
+      mapped:
+        BSD2: "BSD-2-Clause"
     description: "Please see the README on GitHub at <https://github.com/advancedtelematic/markov-chain-usage-model#readme>"
     homepage_url: "https://github.com/advancedtelematic/markov-chain-usage-model#readme"
     binary_artifact:
@@ -3165,6 +3267,8 @@ packages:
     - "BSD3"
     declared_licenses_processed:
       spdx_expression: "BSD-3-Clause"
+      mapped:
+        BSD3: "BSD-3-Clause"
     description: "A fast parser combinator library, aimed particularly at dealing\n\
       efficiently with network protocols and complicated text/binary\nfile formats."
     homepage_url: "https://github.com/bos/attoparsec"
@@ -3196,6 +3300,8 @@ packages:
     - "BSD3"
     declared_licenses_processed:
       spdx_expression: "BSD-3-Clause"
+      mapped:
+        BSD3: "BSD-3-Clause"
     description: "This library provides convenient combinators for working with and\
       \ building parsing combinator libraries.\n\nGiven a few simple instances, e.g.\
       \ for the class 'Text.Parser.Combinators.Parsing' in \"Text.Parser.Combinators.Parsing\"\
@@ -3230,6 +3336,8 @@ packages:
     - "LGPL"
     declared_licenses_processed:
       spdx_expression: "LGPL-2.0-or-later"
+      mapped:
+        LGPL: "LGPL-2.0-or-later"
     description: "This version, 1.12.1 is a Non-Maintainer Upload (NMU). Report issues\
       \ to the Hackage Trustees issue tracker.\n\nA variety of alternative parser\
       \ combinator libraries, including\nthe original HuttonMeijer set.  The Poly\
@@ -3266,6 +3374,8 @@ packages:
     - "BSD3"
     declared_licenses_processed:
       spdx_expression: "BSD-3-Clause"
+      mapped:
+        BSD3: "BSD-3-Clause"
     description: "A JSON parsing and encoding library optimized for ease of use\n\
       and high performance.\n\nTo get started, see the documentation for the @Data.Aeson@\
       \ module\nbelow.\n\n(A note on naming: in Greek mythology, Aeson was the father\
@@ -3334,6 +3444,8 @@ packages:
     - "BSD3"
     declared_licenses_processed:
       spdx_expression: "BSD-3-Clause"
+      mapped:
+        BSD3: "BSD-3-Clause"
     description: "This package contains a pretty-printing library, a set of API's\n\
       that provides a way to easily print out text in a consistent\nformat of your\
       \ choosing. This is useful for compilers and related\ntools.\n\nThis library\
@@ -3398,6 +3510,8 @@ packages:
     - "BSD3"
     declared_licenses_processed:
       spdx_expression: "BSD-3-Clause"
+      mapped:
+        BSD3: "BSD-3-Clause"
     description: "A clone of wl-pprint for use with the text library."
     homepage_url: ""
     binary_artifact:
@@ -3428,6 +3542,8 @@ packages:
     - "BSD3"
     declared_licenses_processed:
       spdx_expression: "BSD-3-Clause"
+      mapped:
+        BSD3: "BSD-3-Clause"
     description: "A time library"
     homepage_url: "https://github.com/haskell/time"
     binary_artifact:
@@ -3458,6 +3574,8 @@ packages:
     - "BSD3"
     declared_licenses_processed:
       spdx_expression: "BSD-3-Clause"
+      mapped:
+        BSD3: "BSD-3-Clause"
     description: "This is a pretty printing library based on Wadler's paper [\"A Prettier\
       \ Printer\"](https://homepages.inf.ed.ac.uk/wadler/papers/prettier/prettier.pdf).\
       \ It has been enhanced with support for ANSI terminal colored output using the\
@@ -3491,6 +3609,8 @@ packages:
     - "BSD3"
     declared_licenses_processed:
       spdx_expression: "BSD-3-Clause"
+      mapped:
+        BSD3: "BSD-3-Clause"
     description: "ANSI terminal support for Haskell: allows cursor movement,\nscreen\
       \ clearing, color output, showing or hiding the\ncursor, and changing the title.\
       \ Works on UNIX and Windows."

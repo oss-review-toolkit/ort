@@ -416,6 +416,8 @@ analyzer:
         - "Eclipse Public License 1.0"
         declared_licenses_processed:
           spdx_expression: "EPL-1.0"
+          mapped:
+            Eclipse Public License 1.0: "EPL-1.0"
         description: "JUnit is a unit testing framework for Java, created by Erich\
           \ Gamma and Kent Beck."
         homepage_url: "http://junit.org"
@@ -447,6 +449,8 @@ analyzer:
         - "Apache License, Version 2.0"
         declared_licenses_processed:
           spdx_expression: "Apache-2.0"
+          mapped:
+            Apache License, Version 2.0: "Apache-2.0"
         description: "Apache Commons Lang, a package of Java utility classes for the\n\
           \  classes that are in java.lang's hierarchy, or are considered to be so\n\
           \  standard as to justify existence in java.lang."
@@ -479,6 +483,8 @@ analyzer:
         - "Apache License, Version 2.0"
         declared_licenses_processed:
           spdx_expression: "Apache-2.0"
+          mapped:
+            Apache License, Version 2.0: "Apache-2.0"
         description: "Apache Commons Text is a library focused on algorithms working\
           \ on strings."
         homepage_url: "http://commons.apache.org/proper/commons-text/"
@@ -510,6 +516,8 @@ analyzer:
         - "The Apache Software License, Version 2.0"
         declared_licenses_processed:
           spdx_expression: "Apache-2.0"
+          mapped:
+            The Apache Software License, Version 2.0: "Apache-2.0"
         description: "Apache Struts 2"
         homepage_url: "http://struts.apache.org/struts2-assembly/"
         binary_artifact:
@@ -540,6 +548,8 @@ analyzer:
         - "New BSD License"
         declared_licenses_processed:
           spdx_expression: "BSD-3-Clause"
+          mapped:
+            New BSD License: "BSD-3-Clause"
         description: "This is the core API of hamcrest matcher framework to be used\
           \ by third-party framework providers. This includes the a foundation set\
           \ of matcher implementations for common operations."

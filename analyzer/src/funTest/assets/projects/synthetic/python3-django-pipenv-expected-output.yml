@@ -30,6 +30,9 @@ packages:
     - "BSD License"
     declared_licenses_processed:
       spdx_expression: "BSD-3-Clause"
+      mapped:
+        BSD: "BSD-3-Clause"
+        BSD License: "BSD-3-Clause"
     description: "A high-level Python Web framework that encourages rapid development\
       \ and clean, pragmatic design."
     homepage_url: "https://www.djangoproject.com/"
@@ -62,6 +65,8 @@ packages:
     - "MIT License"
     declared_licenses_processed:
       spdx_expression: "MIT"
+      mapped:
+        MIT License: "MIT"
     description: "World timezone definitions, modern and historical"
     homepage_url: "http://pythonhosted.org/pytz"
     binary_artifact:

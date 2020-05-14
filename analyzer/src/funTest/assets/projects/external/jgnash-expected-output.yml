@@ -28,6 +28,8 @@ packages:
     - "Eclipse Public License 1.0"
     declared_licenses_processed:
       spdx_expression: "EPL-1.0"
+      mapped:
+        Eclipse Public License 1.0: "EPL-1.0"
     description: "JUnit is a unit testing framework for Java, created by Erich Gamma\
       \ and Kent Beck."
     homepage_url: "http://junit.org"
@@ -59,6 +61,8 @@ packages:
     - "New BSD License"
     declared_licenses_processed:
       spdx_expression: "BSD-3-Clause"
+      mapped:
+        New BSD License: "BSD-3-Clause"
     description: "A self-contained hamcrest jar containing all of the sub-modules\
       \ in a single artifact."
     homepage_url: "https://github.com/hamcrest/JavaHamcrest/hamcrest-all"
