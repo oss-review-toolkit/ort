@@ -20,6 +20,7 @@
 package org.ossreviewtoolkit.commands
 
 import com.github.ajalt.clikt.core.CliktCommand
+import com.github.ajalt.clikt.core.ProgramResult
 import com.github.ajalt.clikt.core.UsageError
 import com.github.ajalt.clikt.parameters.groups.mutuallyExclusiveOptions
 import com.github.ajalt.clikt.parameters.groups.required
@@ -169,7 +170,12 @@ class EvaluatorCommand : CliktCommand(name = "evaluate", help = "Evaluate rules 
         val evaluator = Evaluator(ortResultInput, packageConfigurationProvider, licenseConfiguration)
 
         if (syntaxCheck) {
-            if (evaluator.checkSyntax(script)) return else throw UsageError("Syntax check failed.", statusCode = 2)
+            if (evaluator.checkSyntax(script)) {
+                return
+            } else {
+                println("Syntax check failed.")
+                throw ProgramResult(2)
+            }
         }
 
         val evaluatorRun by lazy { evaluator.run(script) }
@@ -196,7 +202,10 @@ class EvaluatorCommand : CliktCommand(name = "evaluate", help = "Evaluate rules 
             }
         }
 
-        if (evaluatorRun.violations.isNotEmpty()) throw UsageError("Rule violations found.", statusCode = 2)
+        if (evaluatorRun.violations.isNotEmpty()) {
+            println("Rule violations found.")
+            throw ProgramResult(2)
+        }
     }
 
     private fun printSummary(errors: List<RuleViolation>) {

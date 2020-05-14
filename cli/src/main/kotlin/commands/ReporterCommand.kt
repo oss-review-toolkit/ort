@@ -21,6 +21,7 @@ package org.ossreviewtoolkit.commands
 
 import com.github.ajalt.clikt.core.BadParameterValue
 import com.github.ajalt.clikt.core.CliktCommand
+import com.github.ajalt.clikt.core.ProgramResult
 import com.github.ajalt.clikt.core.UsageError
 import com.github.ajalt.clikt.core.requireObject
 import com.github.ajalt.clikt.parameters.groups.mutuallyExclusiveOptions
@@ -47,6 +48,7 @@ import org.ossreviewtoolkit.utils.PackageConfigurationOption
 import org.ossreviewtoolkit.utils.collectMessagesAsString
 import org.ossreviewtoolkit.utils.createProvider
 import org.ossreviewtoolkit.utils.expandTilde
+import org.ossreviewtoolkit.utils.log
 import org.ossreviewtoolkit.utils.safeMkdirs
 import org.ossreviewtoolkit.utils.showStackTrace
 
@@ -190,10 +192,8 @@ class ReporterCommand : CliktCommand(
                 // before any content was written.
                 if (file.length() == 0L) file.delete()
 
-                throw UsageError(
-                    "Could not create '${reporter.reporterName}' report: ${e.collectMessagesAsString()}",
-                    statusCode = 1
-                )
+                log.error { "Could not create '${reporter.reporterName}' report: ${e.collectMessagesAsString()}" }
+                throw ProgramResult(1)
             }
         }
     }

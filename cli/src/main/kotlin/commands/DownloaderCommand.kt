@@ -20,7 +20,7 @@
 package org.ossreviewtoolkit.commands
 
 import com.github.ajalt.clikt.core.CliktCommand
-import com.github.ajalt.clikt.core.UsageError
+import com.github.ajalt.clikt.core.ProgramResult
 import com.github.ajalt.clikt.parameters.groups.mutuallyExclusiveOptions
 import com.github.ajalt.clikt.parameters.groups.required
 import com.github.ajalt.clikt.parameters.groups.single
@@ -214,7 +214,7 @@ class DownloaderCommand : CliktCommand(name = "download", help = "Fetch source c
 
         if (errorMessages.isNotEmpty()) {
             log.error { "Error Summary:\n\n${errorMessages.joinToString("\n\n")}" }
-            throw UsageError("${errorMessages.size} error(s) occurred.", statusCode = 2)
+            throw ProgramResult(2)
         }
     }
 }

@@ -20,7 +20,7 @@
 package org.ossreviewtoolkit.helper.commands
 
 import com.github.ajalt.clikt.core.CliktCommand
-import com.github.ajalt.clikt.core.UsageError
+import com.github.ajalt.clikt.core.ProgramResult
 import com.github.ajalt.clikt.parameters.arguments.argument
 import com.github.ajalt.clikt.parameters.arguments.convert
 import com.github.ajalt.clikt.parameters.types.file
@@ -82,7 +82,8 @@ internal class VerifySourceArtifactCurationsCommand : CliktCommand(
                 appendln(failed.joinToString(separator = "\n") { it.id.toCoordinates() })
             }
 
-            throw UsageError(message)
+            println(message)
+            throw ProgramResult(1)
         }
 
         println("Successfully verified all source artifact curations.")
