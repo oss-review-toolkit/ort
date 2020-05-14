@@ -83,12 +83,21 @@ data class PackageConfiguration(
 data class VcsMatcher(
     val type: VcsType,
     val url: String,
-    val revision: String
+    val revision: String,
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    val path: String? = null
 ) {
     init {
         require(url.isNotBlank() && revision.isNotBlank())
+
+        if (type == VcsType.GIT_REPO) {
+            require(!path.isNullOrBlank()) {
+                "Matching against Git-Repo VCS info requires a non-blank path."
+            }
+        }
     }
 
     fun matches(vcsInfo: VcsInfo): Boolean =
-        type == vcsInfo.type && url == vcsInfo.url && revision == vcsInfo.resolvedRevision
+        type == vcsInfo.type && url == vcsInfo.url && (path == null || path == vcsInfo.path) &&
+                revision == vcsInfo.resolvedRevision
 }
