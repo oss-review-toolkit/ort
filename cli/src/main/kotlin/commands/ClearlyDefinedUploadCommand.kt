@@ -136,31 +136,16 @@ class ClearlyDefinedUploadCommand : CliktCommand(
             }
         }
 
-        val harvestableCurations = curationsByHarvestStatus[HarvestStatus.NOT_HARVESTED].orEmpty()
+        val unharvestedCurations = curationsByHarvestStatus[HarvestStatus.NOT_HARVESTED].orEmpty()
 
-        harvestableCurations.forEach { curation ->
+        unharvestedCurations.forEach { curation ->
             val webServerUrl = server.url.replaceFirst("dev-api.", "dev.").replaceFirst("api.", "")
             val definitionUrl = "$webServerUrl/definitions/${curationsToCoordinates[curation]}"
 
             println(
-                "Package '${curation.id.toCoordinates()}' has not been harvested yet, requesting it to be harvested. " +
+                "Package '${curation.id.toCoordinates()}' was not harvested until now, but harvesting was requested. " +
                         "Check $definitionUrl for the harvesting status."
             )
-        }
-
-        val harvestRequest = harvestableCurations.mapNotNull { curation ->
-            curationsToCoordinates[curation]?.let { coordinates ->
-                ClearlyDefinedService.HarvestRequest(
-                    tool = "package",
-                    coordinates = coordinates
-                )
-            }
-        }
-
-        if (requestHarvest(harvestRequest)) {
-            println("Requesting harvest of packages succeeded.")
-        } else {
-            println("Requesting harvest of packages failed.")
         }
 
         var error = false
