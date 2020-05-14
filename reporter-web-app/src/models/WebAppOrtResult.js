@@ -39,6 +39,8 @@ class WebAppOrtResult {
 
     #declaredLicenses = [];
 
+    #declaredLicensesProcessed = [];
+
     #dependencyTrees = [];
 
     #treeNodesByPackageIndexMap;
@@ -46,6 +48,8 @@ class WebAppOrtResult {
     #treeNodesByKeyMap;
 
     #detectedLicenses = [];
+
+    #detectedLicensesProcessed = [];
 
     #issues = [];
 
@@ -189,7 +193,23 @@ class WebAppOrtResult {
             if (obj.statistics) {
                 const { statistics } = obj;
                 this.#statistics = new Statistics(statistics);
-                const { dependencyTree: { totalTreeDepth } } = this.#statistics;
+                const {
+                    dependencyTree: {
+                        totalTreeDepth
+                    },
+                    licenses: {
+                        declared,
+                        detected
+                    }
+                } = this.#statistics;
+
+                if (declared) {
+                    this.#declaredLicensesProcessed = [...declared.keys()];
+                }
+
+                if (detected) {
+                    this.#detectedLicensesProcessed = [...detected.keys()];
+                }
 
                 if (totalTreeDepth) {
                     for (let i = 0, len = totalTreeDepth; i < len; i++) {
@@ -302,6 +322,10 @@ class WebAppOrtResult {
         return this.#declaredLicenses;
     }
 
+    get declaredLicensesProcessed() {
+        return this.#declaredLicensesProcessed;
+    }
+
     get dependencyTrees() {
         return this.#dependencyTrees;
     }
@@ -316,6 +340,10 @@ class WebAppOrtResult {
 
     get detectedLicenses() {
         return this.#detectedLicenses;
+    }
+
+    get detectedLicensesProcessed() {
+        return this.#detectedLicensesProcessed;
     }
 
     get issues() {
@@ -454,12 +482,20 @@ class WebAppOrtResult {
         return false;
     }
 
+    hasDeclaredLicensesProcessed() {
+        return this.#declaredLicensesProcessed.length > 0;
+    }
+
     hasDetectedLicenses() {
         if (this.#detectedLicenses.length > 0) {
             return true;
         }
 
         return false;
+    }
+
+    hasDetectedLicensesProcessed() {
+        return this.#detectedLicensesProcessed.length > 0;
     }
 
     hasExcludes() {
