@@ -94,6 +94,7 @@ val importLicenseTexts by tasks.registering {
     description = "Imports license texts from all known sources."
     group = "SPDX"
 
+    // TODO: Consider using https://github.com/maxhbr/LDBcollector as the single meta-source for license texts.
     val importTasks = tasks.matching { it.name.matches(Regex("import.+LicenseTexts")) }
     dependsOn(importTasks)
     outputs.files(importTasks.flatMap { it.outputs.files })
