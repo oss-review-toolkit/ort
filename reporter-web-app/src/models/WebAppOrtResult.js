@@ -475,11 +475,7 @@ class WebAppOrtResult {
     }
 
     hasDeclaredLicenses() {
-        if (this.#declaredLicenses.length > 0) {
-            return true;
-        }
-
-        return false;
+        return this.#declaredLicenses.length > 0;
     }
 
     hasDeclaredLicensesProcessed() {
@@ -487,11 +483,7 @@ class WebAppOrtResult {
     }
 
     hasDetectedLicenses() {
-        if (this.#detectedLicenses.length > 0) {
-            return true;
-        }
-
-        return false;
+        return this.#detectedLicenses.length > 0;
     }
 
     hasDetectedLicensesProcessed() {
@@ -524,35 +516,19 @@ class WebAppOrtResult {
     }
 
     hasLevels() {
-        if (this.#levels.length > 0) {
-            return true;
-        }
-
-        return false;
+        return this.#levels.length > 0;
     }
 
     hasPathExcludes() {
-        if (this.#pathExcludes.length > 0) {
-            return true;
-        }
-
-        return false;
+        return this.#pathExcludes.length > 0;
     }
 
     hasScopes() {
-        if (this.#scopes.length > 0) {
-            return true;
-        }
-
-        return false;
+        return this.#scopes.length > 0;
     }
 
     hasScopeExcludes() {
-        if (this.#scopeExcludes.length > 0) {
-            return true;
-        }
-
-        return false;
+        return this.#scopeExcludes.length > 0;
     }
 
     hasRepositoryConfiguration() {
