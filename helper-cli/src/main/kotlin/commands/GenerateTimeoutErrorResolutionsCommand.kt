@@ -38,7 +38,6 @@ import org.ossreviewtoolkit.reporter.DefaultResolutionProvider
 import org.ossreviewtoolkit.utils.expandTilde
 
 internal class GenerateTimeoutErrorResolutionsCommand : CliktCommand(
-    name = "generate-timeout-error-resolutions",
     help = "Generates resolutions for scanner timeout errors. The result is written to the standard output."
 ) {
     private val ortResultFile by option(

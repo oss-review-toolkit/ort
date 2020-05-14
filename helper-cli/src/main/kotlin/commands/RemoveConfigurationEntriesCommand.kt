@@ -40,7 +40,6 @@ import org.ossreviewtoolkit.reporter.DefaultResolutionProvider
 import org.ossreviewtoolkit.utils.expandTilde
 
 internal class RemoveConfigurationEntriesCommand : CliktCommand(
-    name = "remove-configuration-entries",
     help = "Removes all non-matching path and scope excludes as well as rule violation resolutions. The output is " +
             "written to the given repository configuration file."
 ) {

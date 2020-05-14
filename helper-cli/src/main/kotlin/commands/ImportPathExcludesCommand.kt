@@ -39,7 +39,6 @@ import org.ossreviewtoolkit.model.readValue
 import org.ossreviewtoolkit.utils.expandTilde
 
 internal class ImportPathExcludesCommand : CliktCommand(
-    name = "import-path-excludes",
     help = "Import path excludes by repository from a file into the given repository configuration."
 ) {
     private val pathExcludesFile by option(

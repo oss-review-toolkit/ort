@@ -39,7 +39,6 @@ import org.ossreviewtoolkit.model.readValue
 import org.ossreviewtoolkit.utils.expandTilde
 
 internal class ListCopyrightsCommand : CliktCommand(
-    name = "list-copyrights",
     help = "Lists the copyright findings."
 ) {
     private val ortResultFile by option(

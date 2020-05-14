@@ -40,7 +40,6 @@ import org.ossreviewtoolkit.model.utils.FindingCurationMatcher
 import org.ossreviewtoolkit.utils.expandTilde
 
 internal class ImportLicenseFindingCurationsCommand : CliktCommand(
-    name = "import-license-finding-curations",
     help = "Import license finding curations from a license finding curations file and merge them into the given "
             + "repository configuration."
 ) {

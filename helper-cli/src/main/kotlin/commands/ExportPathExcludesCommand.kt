@@ -39,7 +39,6 @@ import org.ossreviewtoolkit.utils.safeMkdirs
 import java.io.File
 
 internal class ExportPathExcludesCommand : CliktCommand(
-    name = "export-path-excludes",
     help = "Export the path excludes to a path excludes file which maps repository URLs to the path excludes for the " +
             "respective repository."
 ) {

@@ -35,7 +35,6 @@ import org.ossreviewtoolkit.utils.hash
 import java.io.IOException
 
 internal class VerifySourceArtifactCurationsCommand : CliktCommand(
-    name = "verify-source-artifact-curations",
     help = "Verifies that all curated source artifacts can be downloaded and that the hashes are correct."
 ) {
     private val packageCurationsFile by argument(

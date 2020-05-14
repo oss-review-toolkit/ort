@@ -37,7 +37,6 @@ import java.text.Collator
 import java.util.Locale
 
 internal class ImportCopyrightGarbageCommand : CliktCommand(
-    name = "import-copyright-garbage",
     help = "Import copyright garbage from a plain text file containing one copyright statement per line into the " +
             "given copyright garbage file."
 ) {
