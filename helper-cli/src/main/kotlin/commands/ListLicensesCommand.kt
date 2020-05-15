@@ -93,8 +93,7 @@ internal class ListLicensesCommand : CliktCommand(
     private val ignoreExcludedRuleIds by option(
         "--ignore-excluded-rule-ids",
         help = "A comma separated list of rule names for which --omit-excluded should not have any effect."
-    ).convert { it.split(",").toList() }
-        .default(emptyList())
+    ).split(",").default(emptyList())
 
     private val noLicenseTexts by option(
         "--no-license-texts",
