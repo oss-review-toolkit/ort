@@ -66,8 +66,8 @@ dependencies {
     antlr("org.antlr:antlr4:$antlrVersion")
 
     implementation("com.fasterxml.jackson.core:jackson-databind:$jacksonVersion")
-
-    testImplementation("com.fasterxml.jackson.module:jackson-module-kotlin:$jacksonVersion")
+    implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:$jacksonVersion")
+    implementation("com.fasterxml.jackson.module:jackson-module-kotlin:$jacksonVersion")
 }
 
 val importScanCodeLicenseTexts by tasks.registering(SvnExport::class) {

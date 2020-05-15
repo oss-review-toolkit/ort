@@ -21,6 +21,9 @@
 
 package org.ossreviewtoolkit.spdx
 
+import com.fasterxml.jackson.dataformat.yaml.YAMLMapper
+import com.fasterxml.jackson.module.kotlin.registerKotlinModule
+
 import java.io.File
 import java.net.URL
 import java.security.MessageDigest
@@ -49,6 +52,11 @@ internal val VCS_DIRECTORIES = listOf(
  * A comparator that sorts parent paths before child paths.
  */
 internal val PATH_STRING_COMPARATOR = compareBy<String>({ path -> path.count { it == '/' } }, { it })
+
+/**
+ * A mapper to read license mapping from YAML resource files.
+ */
+internal val yamlMapper = YAMLMapper().registerKotlinModule()
 
 /**
  * Return a string of hexadecimal digits representing the bytes in the array.
