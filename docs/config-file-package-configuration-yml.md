@@ -1,7 +1,7 @@
 # The Package Configuration File (Experimental)
 
 A package configuration file allows you to define path excludes and license finding curations for a specific package (dependency) and 
-provenance. Conceptually, the file is similar to [.ort.yml](https://github.com/oss-review-toolkit/ort/blob/master/docs/config-file-ort-yml.md), but it is used only for packages included via a package manager as project dependencies, and not for the project's own source code respository to be scanned.
+provenance. Conceptually, the file is similar to [.ort.yml](https://github.com/oss-review-toolkit/ort/blob/master/docs/config-file-ort-yml.md), but it is used only for packages included via a package manager as project dependencies, and not for the project's own source code repository to be scanned.
 
 ### When To Use
 Use a package configuration file to:
