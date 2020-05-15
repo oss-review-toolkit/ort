@@ -45,7 +45,6 @@ import org.ossreviewtoolkit.clearlydefined.ClearlyDefinedService.Patch
 import org.ossreviewtoolkit.clearlydefined.ClearlyDefinedService.Server
 import org.ossreviewtoolkit.clearlydefined.ContributionType
 import org.ossreviewtoolkit.clearlydefined.ErrorResponse
-import org.ossreviewtoolkit.clearlydefined.HARVEST_CREATED
 import org.ossreviewtoolkit.clearlydefined.HarvestStatus
 import org.ossreviewtoolkit.clearlydefined.string
 import org.ossreviewtoolkit.model.PackageCuration
@@ -117,11 +116,6 @@ class ClearlyDefinedUploadCommand : CliktCommand(
             log.error { it.collectMessagesAsString() }
             null
         }
-
-    private fun requestHarvest(request: Collection<ClearlyDefinedService.HarvestRequest>): Boolean =
-        executeApiCall(service.harvest(request)).getOrElse {
-            log.error { it.collectMessagesAsString() }
-        } == HARVEST_CREATED
 
     override fun run() {
         val absoluteInputFile = inputFile.normalize()
