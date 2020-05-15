@@ -276,6 +276,13 @@ class SpdxLicenseWithExceptionExpression(
     val license: SpdxSimpleExpression,
     val exception: String
 ) : SpdxSingleLicenseExpression() {
+    companion object {
+        @JsonCreator
+        @JvmStatic
+        fun parse(expression: String): SpdxLicenseWithExceptionExpression =
+            SpdxExpression.parse(expression) as SpdxLicenseWithExceptionExpression
+    }
+
     override fun decompose() = setOf(this)
 
     override fun licenses() = license.licenses()

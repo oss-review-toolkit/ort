@@ -28,9 +28,9 @@ import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 
 class SpdxSimpleLicenseMappingTest : WordSpec({
-    "The list" should {
+    "The raw map" should {
         "not contain any duplicate keys with respect to capitalization" {
-            val keys = SpdxSimpleLicenseMapping.customLicenseIdsList.unzip().first.toMutableList()
+            val keys = SpdxSimpleLicenseMapping.customLicenseIdsMap.keys.toMutableList()
             val uniqueKeys = SpdxSimpleLicenseMapping.customLicenseIds.keys
 
             // Remove keys one by one as calling "-" would remove all occurrences of a key.
