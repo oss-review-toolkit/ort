@@ -24,6 +24,7 @@ import com.github.ajalt.clikt.parameters.options.convert
 import com.github.ajalt.clikt.parameters.options.default
 import com.github.ajalt.clikt.parameters.options.option
 import com.github.ajalt.clikt.parameters.options.required
+import com.github.ajalt.clikt.parameters.options.split
 import com.github.ajalt.clikt.parameters.types.file
 
 import org.ossreviewtoolkit.model.OrtResult
@@ -44,8 +45,7 @@ class ListPackagesCommand : CliktCommand(
     private val matchDetectedLicenses by option(
         "--match-detected-licenses",
         help = "Omit all packages not matching all licenses given by this comma separated list of license identifiers."
-    ).convert { it.split(",").toList() }
-        .default(emptyList())
+    ).split(",").default(emptyList())
 
     override fun run() {
         val ortResult = ortResultFile.readValue<OrtResult>()

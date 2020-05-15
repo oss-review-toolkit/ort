@@ -23,6 +23,7 @@ import com.github.ajalt.clikt.core.CliktCommand
 import com.github.ajalt.clikt.parameters.options.convert
 import com.github.ajalt.clikt.parameters.options.option
 import com.github.ajalt.clikt.parameters.options.required
+import com.github.ajalt.clikt.parameters.options.split
 import com.github.ajalt.clikt.parameters.types.file
 
 import org.ossreviewtoolkit.helper.common.merge
@@ -40,8 +41,7 @@ internal class MergeRepositoryConfigurationsCommand : CliktCommand(
     private val inputRepositoryConfigurationFiles by option(
         "--input-repository-configuration-files", "-i",
         help = "A comma separated list of the repository configuration files to be merged."
-    ).convert { it.split(",").toList().map { File(it.expandTilde()) } }
-        .required()
+    ).convert { File(it.expandTilde()) }.split(",").required()
 
     private val outputRepositoryConfigurationFile by option(
         "--output-repository-configuration-file", "-o",
