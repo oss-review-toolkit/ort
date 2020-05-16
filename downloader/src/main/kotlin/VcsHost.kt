@@ -257,7 +257,7 @@ enum class VcsHost(
         fun toPermalink(vcsInfo: VcsInfo, startLine: Int = -1, endLine: Int = -1): String? {
             if (!isValidLineRange(startLine, endLine)) return null
             return values().find { host -> host.isApplicable(vcsInfo) }
-                ?.toPermalinkInternal(vcsInfo, startLine, endLine)
+                ?.toPermalinkInternal(vcsInfo.normalize(), startLine, endLine)
         }
     }
 
