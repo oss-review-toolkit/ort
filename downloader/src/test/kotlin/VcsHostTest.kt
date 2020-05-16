@@ -31,10 +31,18 @@ import io.kotest.core.spec.style.WordSpec
 
 class VcsHostTest : WordSpec({
     "The Bitbucket implementation" should {
+        val projectUrl = "https://bitbucket.org/facebook/lz4revlog/src/4c259957d2904604115a02543dc73f5be95761d7/COPYING"
+
+        "correctly get the user or organization name" {
+            BITBUCKET.getUserOrOrganization(projectUrl) shouldBe "facebook"
+        }
+
+        "correctly get the project name" {
+            BITBUCKET.getProject(projectUrl) shouldBe "lz4revlog"
+        }
+
         "be able to extract VCS information from a project URL" {
-            BITBUCKET.toVcsInfo(
-                "https://bitbucket.org/facebook/lz4revlog/src/4c259957d2904604115a02543dc73f5be95761d7/COPYING"
-            ) shouldBe
+            BITBUCKET.toVcsInfo(projectUrl) shouldBe
                     VcsInfo(
                         type = VcsType.MERCURIAL,
                         url = "https://bitbucket.org/facebook/lz4revlog",
@@ -59,10 +67,19 @@ class VcsHostTest : WordSpec({
     }
 
     "The GitHub implementation" should {
+        val projectUrl = "https://github.com/oss-review-toolkit/ort/tree/da7e3a814fc0e6301bf3ed394eba1a661e4d88d7/" +
+                "README.md"
+
+        "correctly get the user or organization name" {
+            GITHUB.getUserOrOrganization(projectUrl) shouldBe "oss-review-toolkit"
+        }
+
+        "correctly get the project name" {
+            GITHUB.getProject(projectUrl) shouldBe "ort"
+        }
+
         "be able to extract VCS information from a project URL" {
-            GITHUB.toVcsInfo(
-                "https://github.com/oss-review-toolkit/ort/tree/da7e3a814fc0e6301bf3ed394eba1a661e4d88d7/README.md"
-            ) shouldBe
+            GITHUB.toVcsInfo(projectUrl) shouldBe
                     VcsInfo(
                         type = VcsType.GIT,
                         url = "https://github.com/oss-review-toolkit/ort.git",
@@ -101,10 +118,18 @@ class VcsHostTest : WordSpec({
     }
 
     "The GitLab implementation" should {
+        val projectUrl = "https://gitlab.com/mbunkus/mkvtoolnix/tree/ec80478f87f1941fe52f15c5f4fa7ee6a70d7006/NEWS.md"
+
+        "correctly get the user or organization name" {
+            GITLAB.getUserOrOrganization(projectUrl) shouldBe "mbunkus"
+        }
+
+        "correctly get the project name" {
+            GITLAB.getProject(projectUrl) shouldBe "mkvtoolnix"
+        }
+
         "be able to extract VCS information from a project URL" {
-            GITLAB.toVcsInfo(
-                "https://gitlab.com/mbunkus/mkvtoolnix/tree/ec80478f87f1941fe52f15c5f4fa7ee6a70d7006/NEWS.md"
-            ) shouldBe
+            GITLAB.toVcsInfo(projectUrl) shouldBe
                     VcsInfo(
                         type = VcsType.GIT,
                         url = "https://gitlab.com/mbunkus/mkvtoolnix.git",
@@ -143,10 +168,18 @@ class VcsHostTest : WordSpec({
     }
 
     "The SourceHut implementation" should {
+        val projectUrl = "https://git.sr.ht/~ben/web/tree/2c3d173d/pkgs.nix"
+
+        "correctly get the user or organization name" {
+            SOURCEHUT.getUserOrOrganization(projectUrl) shouldBe "ben"
+        }
+
+        "correctly get the project name" {
+            SOURCEHUT.getProject(projectUrl) shouldBe "web"
+        }
+
         "be able to extract VCS information from a Git project URL" {
-            SOURCEHUT.toVcsInfo(
-                "https://git.sr.ht/~ben/web/tree/2c3d173d/pkgs.nix"
-            ) shouldBe
+            SOURCEHUT.toVcsInfo(projectUrl) shouldBe
                     VcsInfo(
                         type = VcsType.GIT,
                         url = "https://git.sr.ht/~ben/web",
