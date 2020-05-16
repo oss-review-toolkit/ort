@@ -15,8 +15,8 @@
     },
     "dependencies": {
         "@ant-design/icons": "^4.1.0",
-        "antd": "^4.2.2",
-        "markdown-to-jsx": "^6.11.1",
+        "antd": "^4.2.5",
+        "markdown-to-jsx": "^6.11.4",
         "memoize-one": "^5.1.1",
         "prop-types": "^15.7.2",
         "react": "^16.13.1",
@@ -30,7 +30,7 @@
         "redux-saga": "^1.1.3",
         "resolve": "^1.17.0",
         "scroll-into-view-if-needed": "^2.2.24",
-        "spdx-correct": "^3.1.0",
+        "spdx-correct": "^3.1.1",
         "spdx-license-list": "^6.2.0"
     },
     "scripts": {
@@ -42,36 +42,37 @@
     "devDependencies": {
         "@babel/core": "7.9.6",
         "@svgr/webpack": "5.4.0",
-        "@typescript-eslint/eslint-plugin": "^2.32.0",
-        "@typescript-eslint/parser": "^2.32.0",
+        "@testing-library/jest-dom": "^5.8.0",
+        "@testing-library/react": "^10.0.4",
+        "@testing-library/user-event": "^10.3.5",
+        "@typescript-eslint/eslint-plugin": "^3.0.0",
+        "@typescript-eslint/parser": "^3.0.0",
         "babel-eslint": "10.1.0",
         "babel-jest": "26.0.1",
         "babel-loader": "8.1.0",
         "babel-plugin-named-asset-import": "^0.3.6",
         "babel-preset-react-app": "^9.1.2",
         "case-sensitive-paths-webpack-plugin": "2.3.0",
-        "chalk": "4.0.0",
         "css-loader": "3.5.3",
         "dotenv": "8.2.0",
         "dotenv-expand": "5.1.0",
-        "eslint": "7.0.0",
+        "eslint": "7.1.0",
         "eslint-config-airbnb": "18.1.0",
         "eslint-config-react-app": "^5.2.1",
         "eslint-loader": "4.0.2",
         "eslint-plugin-babel": "5.3.0",
-        "eslint-plugin-flowtype": "4.7.0",
+        "eslint-plugin-flowtype": "5.1.0",
         "eslint-plugin-import": "2.20.2",
         "eslint-plugin-jsx-a11y": "6.2.3",
-        "eslint-plugin-react": "7.19.0",
-        "eslint-plugin-react-hooks": "4.0.0",
+        "eslint-plugin-react": "7.20.0",
+        "eslint-plugin-react-hooks": "4.0.2",
         "file-loader": "6.0.0",
-        "fork-ts-checker-webpack-plugin-alt": "0.4.14",
         "fs-extra": "9.0.0",
         "html-webpack-inline-source-plugin": "1.0.0-beta.2",
         "html-webpack-plugin": "4.3.0",
         "identity-obj-proxy": "3.0.0",
         "jest": "26.0.1",
-        "jest-pnp-resolver": "1.2.1",
+        "jest-environment-jsdom-fourteen": "1.0.1",
         "jest-resolve": "26.0.1",
         "jest-watch-typeahead": "^0.6.0",
         "mini-css-extract-plugin": "0.9.0",
@@ -87,7 +88,7 @@
         "sass-loader": "8.0.2",
         "style-loader": "1.2.1",
         "terser-webpack-plugin": "3.0.1",
-        "typescript": "^3.8.3",
+        "typescript": "^3.9.3",
         "url-loader": "4.1.0",
         "webpack": "4.43.0",
         "webpack-dev-server": "3.11.0",
@@ -99,30 +100,40 @@
             "react-app"
         ]
     },
-    "browserslist": [
-        ">0.2%",
-        "not dead",
-        "not ie <= 11",
-        "not op_mini all"
-    ],
+    "browserslist": {
+        "production": [
+            ">0.2%",
+            "not dead",
+            "not op_mini all"
+        ],
+        "development": [
+            "last 1 chrome version",
+            "last 1 firefox version",
+            "last 1 safari version"
+        ]
+    },
     "eslintConfig": {
         "extends": "react-app"
     },
     "jest": {
+        "roots": [
+            "<rootDir>/src"
+        ],
         "collectCoverageFrom": [
             "src/**/*.{js,jsx,ts,tsx}",
             "!src/**/*.d.ts"
         ],
-        "resolver": "jest-pnp-resolver",
         "setupFiles": [
             "react-app-polyfill/jsdom"
         ],
+        "setupFilesAfterEnv": [
+            "<rootDir>/src/setupTests.js"
+        ],
         "testMatch": [
             "<rootDir>/src/**/__tests__/**/*.{js,jsx,ts,tsx}",
-            "<rootDir>/src/**/?(*.)(spec|test).{js,jsx,ts,tsx}"
+            "<rootDir>/src/**/*.{spec,test}.{js,jsx,ts,tsx}"
         ],
-        "testEnvironment": "jsdom",
-        "testURL": "http://localhost",
+        "testEnvironment": "jest-environment-jsdom-fourteen",
         "transform": {
             "^.+\\.(js|jsx|ts|tsx)$": "<rootDir>/node_modules/babel-jest",
             "^.+\\.css$": "<rootDir>/config/jest/cssTransform.js",
@@ -132,6 +143,7 @@
             "[/\\\\]node_modules[/\\\\].+\\.(js|jsx|ts|tsx)$",
             "^.+\\.module\\.(css|sass|scss)$"
         ],
+        "modulePaths": [],
         "moduleNameMapper": {
             "^react-native$": "react-native-web",
             "^.+\\.module\\.(css|sass|scss)$": "identity-obj-proxy"
@@ -148,9 +160,10 @@
             "jsx",
             "node"
         ],
-        "verbose": true,
-        "watch": false,
-        "watchman": false
+        "watchPlugins": [
+            "jest-watch-typeahead/filename",
+            "jest-watch-typeahead/testname"
+        ]
     },
     "homepage": "."
 }
