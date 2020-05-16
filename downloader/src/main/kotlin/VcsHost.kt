@@ -32,6 +32,7 @@ import java.nio.file.Paths
 /**
  * An enum to handle VCS-host-specific information.
  */
+@Suppress("TooManyFunctions")
 enum class VcsHost(
     /**
      * The hostname of VCS host.
@@ -47,6 +48,10 @@ enum class VcsHost(
      * The enum constant to handle [Bitbucket][https://bitbucket.org/]-specific information.
      */
     BITBUCKET("bitbucket.org", VcsType.GIT, VcsType.MERCURIAL) {
+        override fun getUserOrOrgInternal(projectUrl: URI) = projectUrlToUserOrOrgAndProject(projectUrl)?.first
+
+        override fun getProjectInternal(projectUrl: URI) = projectUrlToUserOrOrgAndProject(projectUrl)?.second
+
         override fun toVcsInfoInternal(projectUrl: URI): VcsInfo {
             var url = projectUrl.scheme + "://" + projectUrl.authority
 
@@ -104,6 +109,11 @@ enum class VcsHost(
      * The enum constant to handle [GitHub][https://github.com/]-specific information.
      */
     GITHUB("github.com", VcsType.GIT) {
+        override fun getUserOrOrgInternal(projectUrl: URI) = projectUrlToUserOrOrgAndProject(projectUrl)?.first
+
+        override fun getProjectInternal(projectUrl: URI) =
+            projectUrlToUserOrOrgAndProject(projectUrl)?.second?.removeSuffix(".git")
+
         override fun toVcsInfoInternal(projectUrl: URI) = gitProjectUrlToVcsInfo(projectUrl)
 
         override fun toPermalinkInternal(vcsInfo: VcsInfo, startLine: Int, endLine: Int) =
@@ -114,6 +124,11 @@ enum class VcsHost(
      * The enum constant to handle [GitLab][https://gitlab.com/]-specific information.
      */
     GITLAB("gitlab.com", VcsType.GIT) {
+        override fun getUserOrOrgInternal(projectUrl: URI) = projectUrlToUserOrOrgAndProject(projectUrl)?.first
+
+        override fun getProjectInternal(projectUrl: URI) =
+            projectUrlToUserOrOrgAndProject(projectUrl)?.second?.removeSuffix(".git")
+
         override fun toVcsInfoInternal(projectUrl: URI) = gitProjectUrlToVcsInfo(projectUrl)
 
         override fun toPermalinkInternal(vcsInfo: VcsInfo, startLine: Int, endLine: Int) =
@@ -121,6 +136,11 @@ enum class VcsHost(
     },
 
     SOURCEHUT("sr.ht", VcsType.GIT, VcsType.MERCURIAL) {
+        override fun getUserOrOrgInternal(projectUrl: URI) =
+            projectUrlToUserOrOrgAndProject(projectUrl)?.first?.removePrefix("~")
+
+        override fun getProjectInternal(projectUrl: URI) = projectUrlToUserOrOrgAndProject(projectUrl)?.second
+
         override fun toVcsInfoInternal(projectUrl: URI): VcsInfo {
             val type = when (projectUrl.host.substringBefore('.')) {
                 "git" -> VcsType.GIT
@@ -284,6 +304,32 @@ enum class VcsHost(
     fun isApplicable(vcsInfo: VcsInfo) = vcsInfo.type in supportedTypes && isApplicable(vcsInfo.url)
 
     /**
+     * Return the user or organization name the project belongs to.
+     */
+    fun getUserOrOrganization(projectUrl: String): String? =
+        try {
+            val url = URI(projectUrl)
+            if (isApplicable(url)) getUserOrOrgInternal(url) else null
+        } catch (e: URISyntaxException) {
+            null
+        }
+
+    protected abstract fun getUserOrOrgInternal(projectUrl: URI): String?
+
+    /**
+     * Return the project's name.
+     */
+    fun getProject(projectUrl: String): String? =
+        try {
+            val url = URI(projectUrl)
+            if (isApplicable(url)) getProjectInternal(url) else null
+        } catch (e: URISyntaxException) {
+            null
+        }
+
+    protected abstract fun getProjectInternal(projectUrl: URI): String?
+
+    /**
      * Return all [VcsInfo] that can be extracted from the host-specific [projectUrl].
      */
     fun toVcsInfo(projectUrl: String): VcsInfo? =
@@ -314,6 +360,21 @@ private fun String.isPathToMarkdownFile() =
 
 private fun isValidLineRange(startLine: Int, endLine: Int): Boolean =
     (startLine == -1 && endLine == -1) || (startLine >= 1 && endLine == -1) || (startLine in 1..endLine)
+
+private fun projectUrlToUserOrOrgAndProject(projectUrl: URI): Pair<String, String>? {
+    val pathIterator = Paths.get(projectUrl.path).iterator()
+
+    if (pathIterator.hasNext()) {
+        val userOrOrg = pathIterator.next()
+
+        if (pathIterator.hasNext()) {
+            val project = pathIterator.next()
+            return Pair(userOrOrg.toString(), project.toString())
+        }
+    }
+
+    return null
+}
 
 private fun gitProjectUrlToVcsInfo(projectUrl: URI): VcsInfo {
     var url = projectUrl.scheme + "://" + projectUrl.authority
