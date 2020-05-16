@@ -86,7 +86,7 @@ fun toClearlyDefinedSourceLocation(
     sourceArtifact: RemoteArtifact?
 ): SourceLocation? {
     val vcsUrl = vcs?.url
-    val vcsRevision = vcs?.revision
+    val vcsRevision = vcs?.resolvedRevision
 
     return when {
         // GitHub is the only VCS provider supported by ClearlyDefined for now.
