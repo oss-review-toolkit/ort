@@ -94,7 +94,7 @@ fun toClearlyDefinedSourceLocation(
         vcsUrl != null && VcsHost.GITHUB.isApplicable(vcsUrl) && vcsRevision != null -> {
             SourceLocation(
                 name = id.name,
-                namespace = id.namespace,
+                namespace = VcsHost.GITHUB.getUserOrOrganization(vcsUrl),
                 path = vcs.path,
                 provider = Provider.GITHUB,
                 revision = vcsRevision,
