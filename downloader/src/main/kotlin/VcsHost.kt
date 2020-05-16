@@ -261,7 +261,7 @@ enum class VcsHost(
         }
     }
 
-    private val supportedTypes = supportedTypes.toSet()
+    private val supportedTypes = supportedTypes.asList()
 
     /**
      * Return whether this host is applicable for the [url] URI.
