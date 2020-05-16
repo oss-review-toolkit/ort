@@ -202,13 +202,16 @@ enum class VcsHost(
                 null
             }
 
+            if (vcs != null) return vcs
+
+            // Fall back to generic URL detection for unknown VCS hosts.
             val svnBranchOrTagPattern = Regex("(.*svn.*)/(branches|tags)/([^/]+)/?(.*)")
             val svnBranchOrTagMatch = svnBranchOrTagPattern.matchEntire(projectUrl)
 
             val svnTrunkPattern = Regex("(.*svn.*)/(trunk)/?(.*)")
             val svnTrunkMatch = svnTrunkPattern.matchEntire(projectUrl)
 
-            return vcs ?: when {
+            return when {
                 svnBranchOrTagMatch != null -> {
                     VcsInfo(
                         type = VcsType.SUBVERSION,
