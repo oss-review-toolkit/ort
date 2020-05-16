@@ -47,7 +47,7 @@ enum class VcsHost(
      * The enum constant to handle [Bitbucket][https://bitbucket.org/]-specific information.
      */
     BITBUCKET("bitbucket.org", VcsType.GIT, VcsType.MERCURIAL) {
-        override fun toVcsInfo(projectUrl: URI): VcsInfo {
+        override fun toVcsInfoInternal(projectUrl: URI): VcsInfo {
             var url = projectUrl.scheme + "://" + projectUrl.authority
 
             // Append the first two path components that denote the user and project to the base URL.
@@ -104,7 +104,7 @@ enum class VcsHost(
      * The enum constant to handle [GitHub][https://github.com/]-specific information.
      */
     GITHUB("github.com", VcsType.GIT) {
-        override fun toVcsInfo(projectUrl: URI) = gitProjectUrlToVcsInfo(projectUrl)
+        override fun toVcsInfoInternal(projectUrl: URI) = gitProjectUrlToVcsInfo(projectUrl)
 
         override fun toPermalinkInternal(vcsInfo: VcsInfo, startLine: Int, endLine: Int) =
             toGitPermalink(URI(vcsInfo.url), vcsInfo.revision, vcsInfo.path, startLine, endLine, "#L", "-L")
@@ -114,14 +114,14 @@ enum class VcsHost(
      * The enum constant to handle [GitLab][https://gitlab.com/]-specific information.
      */
     GITLAB("gitlab.com", VcsType.GIT) {
-        override fun toVcsInfo(projectUrl: URI) = gitProjectUrlToVcsInfo(projectUrl)
+        override fun toVcsInfoInternal(projectUrl: URI) = gitProjectUrlToVcsInfo(projectUrl)
 
         override fun toPermalinkInternal(vcsInfo: VcsInfo, startLine: Int, endLine: Int) =
             toGitPermalink(URI(vcsInfo.url), vcsInfo.revision, vcsInfo.path, startLine, endLine, "#L", "-")
     },
 
     SOURCEHUT("sr.ht", VcsType.GIT, VcsType.MERCURIAL) {
-        override fun toVcsInfo(projectUrl: URI): VcsInfo {
+        override fun toVcsInfoInternal(projectUrl: URI): VcsInfo {
             val type = when (projectUrl.host.substringBefore('.')) {
                 "git" -> VcsType.GIT
                 "hg" -> VcsType.MERCURIAL
@@ -196,7 +196,7 @@ enum class VcsHost(
         fun toVcsInfo(projectUrl: String): VcsInfo {
             val vcs = try {
                 URI(projectUrl).let {
-                    values().find { host -> host.isApplicable(it) }?.toVcsInfo(it)
+                    values().find { host -> host.isApplicable(it) }?.toVcsInfoInternal(it)
                 }
             } catch (e: URISyntaxException) {
                 null
@@ -289,12 +289,12 @@ enum class VcsHost(
     fun toVcsInfo(projectUrl: String): VcsInfo? =
         try {
             val url = URI(projectUrl)
-            if (isApplicable(url)) toVcsInfo(url) else null
+            if (isApplicable(url)) toVcsInfoInternal(url) else null
         } catch (e: URISyntaxException) {
             null
         }
 
-    protected abstract fun toVcsInfo(projectUrl: URI): VcsInfo
+    protected abstract fun toVcsInfoInternal(projectUrl: URI): VcsInfo
 
     /**
      * Return the host-specific permanent link to browse the code location described by [vcsInfo] with optional
