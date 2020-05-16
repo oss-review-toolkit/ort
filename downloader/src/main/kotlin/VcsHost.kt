@@ -259,9 +259,6 @@ enum class VcsHost(
             return values().find { host -> host.isApplicable(vcsInfo) }
                 ?.toPermalinkInternal(vcsInfo, startLine, endLine)
         }
-
-        protected fun isValidLineRange(startLine: Int, endLine: Int): Boolean =
-            (startLine == -1 && endLine == -1) || (startLine >= 1 && endLine == -1) || (startLine in 1..endLine)
     }
 
     private val supportedTypes = supportedTypes.toSet()
@@ -314,6 +311,9 @@ enum class VcsHost(
 
 private fun String.isPathToMarkdownFile() =
     endsWith(".md", ignoreCase = true) || endsWith(".markdown", ignoreCase = true)
+
+private fun isValidLineRange(startLine: Int, endLine: Int): Boolean =
+    (startLine == -1 && endLine == -1) || (startLine >= 1 && endLine == -1) || (startLine in 1..endLine)
 
 private fun gitProjectUrlToVcsInfo(projectUrl: URI): VcsInfo {
     var url = projectUrl.scheme + "://" + projectUrl.authority
