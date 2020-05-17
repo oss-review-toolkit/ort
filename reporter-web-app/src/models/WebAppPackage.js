@@ -480,6 +480,14 @@ class WebAppPackage {
         return this.#purl;
     }
 
+    get ruleViolations() {
+        if (!this.#ruleViolations && this.#webAppOrtResult) {
+            this.#ruleViolations = this.#webAppOrtResult.getRuleViolationsForPackageIndex(this.#_id);
+        }
+
+        return this.#ruleViolations;
+    }
+
     get scanResults() {
         return this.#scanResults;
     }
@@ -551,14 +559,6 @@ class WebAppPackage {
 
     get sourceArtifact() {
         return this.#sourceArtifact;
-    }
-
-    get ruleViolations() {
-        if (!this.#ruleViolations && this.#webAppOrtResult) {
-            this.#ruleViolations = this.#webAppOrtResult.getRuleViolationsForPackageIndex(this.#_id);
-        }
-
-        return this.#ruleViolations;
     }
 
     get vcs() {
