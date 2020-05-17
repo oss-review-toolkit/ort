@@ -20,12 +20,15 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import {
-    Button,
     Collapse,
+    Dropdown,
+    Menu,
     Table,
     Tooltip
 } from 'antd';
 import {
+    EyeOutlined,
+    EyeInvisibleOutlined,
     FileAddOutlined,
     FileExcelOutlined
 } from '@ant-design/icons';
@@ -35,6 +38,7 @@ import {
     getTableView,
     getTableViewShouldComponentUpdate,
     getTableViewDeclaredLicensesSelections,
+    getTableViewDeclaredLicensesProcessedSelections,
     getTableViewDetectedLicensesSelections,
     getTableViewLevelFilterSelections,
     getTableViewProjectFilterSelections,
@@ -56,15 +60,26 @@ class TableView extends React.Component {
         return shouldComponentUpdate;
     }
 
+    onClickToggleColumnsMenu = (e) => {
+        store.dispatch({
+            payload: {
+                columnKey: e.key
+            },
+            type: 'TABLE::COLUMNS_PACKAGES_TABLE_TOGGLE'
+        });
+    }
+
     render() {
         const {
             tableView: {
                 filter: {
                     filteredInfo,
                     sortedInfo
-                }
+                },
+                showColumnKeys
             },
             tableDeclaredLicensesSelections,
+            tableDeclaredLicensesProcessedSelections,
             tableDetectedLicensesSelections,
             tableLevelFilterSelections,
             tableProjectFilterSelections,
@@ -75,6 +90,7 @@ class TableView extends React.Component {
         // Specifies table columns as per
         // https://ant.design/components/table/
         const columns = [];
+        let toggleColumnMenuItems = [];
 
         if (webAppOrtResult.hasExcludes()) {
             columns.push({
@@ -145,94 +161,197 @@ class TableView extends React.Component {
         });
 
         if (webAppOrtResult.hasScopes()) {
-            columns.push({
-                align: 'left',
-                dataIndex: 'scopeIndexes',
-                filters: tableScopeFilterSelections,
-                filteredValue: filteredInfo.scopeIndexes || null,
-                onFilter: (value, webAppPackage) => webAppPackage.hasScopeIndex(value),
-                render: (scopeIndexes, webAppPackage) => (
-                    <span>
-                        {Array.from(webAppPackage.scopeNames).join(',')}
-                    </span>
-                ),
-                responsive: ['md'],
-                title: 'Scopes'
-            });
+            toggleColumnMenuItems.push({ text: 'Scopes', value: 'scopeIndexes' });
+
+            if (showColumnKeys.includes('scopeIndexes')) {
+                columns.push({
+                    align: 'left',
+                    dataIndex: 'scopeIndexes',
+                    filters: tableScopeFilterSelections,
+                    filteredValue: filteredInfo.scopeIndexes || null,
+                    onFilter: (value, webAppPackage) => webAppPackage.hasScopeIndex(value),
+                    render: (scopeIndexes, webAppPackage) => (
+                        <span>
+                            {Array.from(webAppPackage.scopeNames).join(',')}
+                        </span>
+                    ),
+                    responsive: ['md'],
+                    title: 'Scopes'
+                });
+            }
         }
 
         if (webAppOrtResult.hasLevels()) {
-            columns.push({
-                align: 'center',
-                dataIndex: 'levels',
-                filters: tableLevelFilterSelections,
-                filteredValue: filteredInfo.levels || null,
-                onFilter: (value, webAppPackage) => webAppPackage.hasLevel(value),
-                render: (levels) => (
-                    <span>
-                        {Array.from(levels).join(', ')}
-                    </span>
-                ),
-                responsive: ['md'],
-                textWrap: 'word-break',
-                title: 'Levels',
-                width: 80
-            });
+            toggleColumnMenuItems.push({ text: 'Levels', value: 'levels' });
+
+            if (showColumnKeys.includes('levels')) {
+                columns.push({
+                    align: 'center',
+                    dataIndex: 'levels',
+                    filters: tableLevelFilterSelections,
+                    filteredValue: filteredInfo.levels || null,
+                    onFilter: (value, webAppPackage) => webAppPackage.hasLevel(value),
+                    render: (levels) => (
+                        <span>
+                            {Array.from(levels).join(', ')}
+                        </span>
+                    ),
+                    responsive: ['md'],
+                    textWrap: 'word-break',
+                    title: 'Levels',
+                    width: 80
+                });
+            }
+        }
+
+        if (webAppOrtResult.hasConcludedLicenses()) {
+            toggleColumnMenuItems.push({ text: 'Concluded License', value: 'concludedLicense' });
+
+            if (showColumnKeys.includes('concludedLicense')) {
+                columns.push({
+                    align: 'left',
+                    dataIndex: 'concludedLicense',
+                    sorter: (a, b) => {
+                        const lenA = a.concludedLicense ? a.concludedLicense.length : 0;
+                        const lenB = b.concludedLicense ? b.concludedLicense.length : 0;
+
+                        return lenA - lenB;
+                    },
+                    sortOrder: sortedInfo.field === 'concludedLicense' && sortedInfo.order,
+                    textWrap: 'word-break',
+                    title: 'Concluded License',
+                    width: '18%'
+                });
+            }
+        }
+
+        if (webAppOrtResult.hasDeclaredLicensesProcessed()) {
+            toggleColumnMenuItems.push({ text: 'Declared Licenses', value: 'declaredLicensesProcessed' });
+
+            if (showColumnKeys.includes('declaredLicensesProcessed')) {
+                columns.push({
+                    align: 'left',
+                    dataIndex: 'declaredLicensesMapped',
+                    filters: tableDeclaredLicensesProcessedSelections,
+                    filteredValue: filteredInfo.declaredLicensesMapped || null,
+                    key: 'declaredLicensesMapped',
+                    onFilter: (value, webAppPackage) => webAppPackage.declaredLicensesMapped.has(value),
+                    render: (declaredLicensesMapped) => (
+                        <span>
+                            {Array.from(declaredLicensesMapped).join(', ')}
+                        </span>
+                    ),
+                    responsive: ['md'],
+                    sorter: (a, b) => a.declaredLicensesMapped.size - b.declaredLicensesMapped.size,
+                    sortOrder: sortedInfo.field === 'declaredLicensesMapped' && sortedInfo.order,
+                    textWrap: 'word-break',
+                    title: 'Declared Licenses',
+                    width: '18%'
+                });
+            }
         }
 
         if (webAppOrtResult.hasDeclaredLicenses()) {
-            columns.push({
-                align: 'left',
-                dataIndex: 'declaredLicenses',
-                filters: tableDeclaredLicensesSelections,
-                filteredValue: filteredInfo.declaredLicenses || null,
-                key: 'declaredLicenses',
-                onFilter: (value, webAppPackage) => webAppPackage.declaredLicenses.has(value),
-                render: (declaredLicenses) => (
-                    <span>
-                        {Array.from(declaredLicenses).join(', ')}
-                    </span>
-                ),
-                responsive: ['md'],
-                sorter: (a, b) => a.declaredLicenses.size - b.declaredLicenses.size,
-                sortOrder: sortedInfo.field === 'declaredLicenses' && sortedInfo.order,
-                textWrap: 'word-break',
-                title: 'Declared Licenses',
-                width: '18%'
-            });
+            toggleColumnMenuItems.push({ text: 'Unprocessed Declared Licenses', value: 'declaredLicenses' });
+
+            if (showColumnKeys.includes('declaredLicenses')) {
+                columns.push({
+                    align: 'left',
+                    dataIndex: 'declaredLicenses',
+                    filters: tableDeclaredLicensesSelections,
+                    filteredValue: filteredInfo.declaredLicenses || null,
+                    key: 'declaredLicenses',
+                    onFilter: (value, webAppPackage) => webAppPackage.declaredLicenses.has(value),
+                    render: (declaredLicenses) => (
+                        <span>
+                            {Array.from(declaredLicenses).join(', ')}
+                        </span>
+                    ),
+                    responsive: ['md'],
+                    sorter: (a, b) => a.declaredLicenses.size - b.declaredLicenses.size,
+                    sortOrder: sortedInfo.field === 'declaredLicenses' && sortedInfo.order,
+                    textWrap: 'word-break',
+                    title: 'Unprocessed Declared Licenses'
+                });
+            }
         }
 
         if (webAppOrtResult.hasDetectedLicenses()) {
+            toggleColumnMenuItems.push({ text: 'Detected Licenses', value: 'detectedLicensesProcessed' });
+
+            if (showColumnKeys.includes('detectedLicensesProcessed')) {
+                columns.push({
+                    align: 'left',
+                    dataIndex: 'detectedLicensesProcessed',
+                    filters: tableDetectedLicensesSelections,
+                    filteredValue: filteredInfo.detectedLicensesProcessed || null,
+                    onFilter: (license, webAppPackage) => webAppPackage.detectedLicensesProcessed.has(license),
+                    render: (detectedLicensesProcessed) => (
+                        <span>
+                            {Array.from(detectedLicensesProcessed).join(', ')}
+                        </span>
+                    ),
+                    sorter: (a, b) => a.detectedLicensesProcessed.size - b.detectedLicensesProcessed.size,
+                    sortOrder: sortedInfo.field === 'detectedLicensesProcessed' && sortedInfo.order,
+                    textWrap: 'word-break',
+                    title: 'Detected Licenses',
+                    width: '18%'
+                });
+            }
+        }
+
+        toggleColumnMenuItems.push({ text: 'Repository', value: 'vcsProcessed' });
+        if (showColumnKeys.includes('vcsProcessed')) {
             columns.push({
                 align: 'left',
-                dataIndex: 'detectedLicensesProcessed',
-                filters: tableDetectedLicensesSelections,
-                filteredValue: filteredInfo.detectedLicenses || null,
-                onFilter: (license, webAppPackage) => webAppPackage.detectedLicenses.has(license),
-                render: (detectedLicensesProcessed) => (
+                dataIndex: 'vcsProcessed',
+                render: (vcsProcessed) => (
                     <span>
-                        {Array.from(detectedLicensesProcessed).join(', ')}
+                        {vcsProcessed.url}
                     </span>
                 ),
-                sorter: (a, b) => a.detectedLicensesProcessed.size - b.detectedLicensesProcessed.size,
-                sortOrder: sortedInfo.field === 'detectedLicensesProcessed' && sortedInfo.order,
+                responsive: ['md'],
                 textWrap: 'word-break',
-                title: 'Detected Licenses',
-                width: '18%'
+                title: 'Repository'
             });
         }
 
+        toggleColumnMenuItems = toggleColumnMenuItems.sort((a, b) => a.text.localeCompare(b.text));
+
         return (
             <div>
-                <div className="ort-table-operations">
-                    <Button
+                <div className="ort-table-buttons">
+                    <Dropdown.Button
                         onClick={() => {
                             store.dispatch({ type: 'TABLE::CLEAR_FILTERS_TABLE' });
                         }}
+                        overlay={(
+                            <Menu
+                                className="ort-table-toggle-columns"
+                                onClick={this.onClickToggleColumnsMenu}
+                                selectedKeys={showColumnKeys}
+                            >
+                                {
+                                    toggleColumnMenuItems.map(
+                                        (item) => (
+                                            <Menu.Item key={item.value}>
+                                                {
+                                                    showColumnKeys.includes(item.value)
+                                                        ? <EyeOutlined />
+                                                        : <EyeInvisibleOutlined />
+                                                }
+                                                {' '}
+                                                {item.text}
+                                            </Menu.Item>
+                                        )
+                                    )
+                                }
+                            </Menu>
+                        )}
                         size="small"
                     >
                         Clear filters
-                    </Button>
+                    </Dropdown.Button>
                 </div>
                 <Table
                     columns={columns}
@@ -334,6 +453,7 @@ class TableView extends React.Component {
 TableView.propTypes = {
     shouldComponentUpdate: PropTypes.bool.isRequired,
     tableDeclaredLicensesSelections: PropTypes.array.isRequired,
+    tableDeclaredLicensesProcessedSelections: PropTypes.array.isRequired,
     tableDetectedLicensesSelections: PropTypes.array.isRequired,
     tableLevelFilterSelections: PropTypes.array.isRequired,
     tableProjectFilterSelections: PropTypes.array.isRequired,
@@ -345,6 +465,7 @@ TableView.propTypes = {
 const mapStateToProps = (state) => ({
     shouldComponentUpdate: getTableViewShouldComponentUpdate(state),
     tableDeclaredLicensesSelections: getTableViewDeclaredLicensesSelections(state),
+    tableDeclaredLicensesProcessedSelections: getTableViewDeclaredLicensesProcessedSelections(state),
     tableDetectedLicensesSelections: getTableViewDetectedLicensesSelections(state),
     tableLevelFilterSelections: getTableViewLevelFilterSelections(state),
     tableProjectFilterSelections: getTableViewProjectFilterSelections(state),

@@ -106,16 +106,6 @@ const RuleViolationsTable = (props) => {
             ])(),
             filteredValue: filteredInfo.severityIndex || null,
             onFilter: (value, webAppRuleViolation) => webAppRuleViolation.severityIndex === Number(value),
-            sorter: (a, b) => {
-                if (a.severityIndex < b.severityIndex) {
-                    return -1;
-                }
-                if (a.severityIndex > b.severityIndex) {
-                    return 1;
-                }
-
-                return 0;
-            },
             render: (text, webAppRuleViolation) => (
                 webAppRuleViolation.isResolved
                     ? (
@@ -156,6 +146,16 @@ const RuleViolationsTable = (props) => {
                         </span>
                     )
             ),
+            sorter: (a, b) => {
+                if (a.severityIndex < b.severityIndex) {
+                    return -1;
+                }
+                if (a.severityIndex > b.severityIndex) {
+                    return 1;
+                }
+
+                return 0;
+            },
             width: '5em'
         }
     ];

@@ -53,6 +53,13 @@ const initState = {
             sortedInfo: {}
         },
         filterData: [],
+        showColumnKeys: [
+            'declaredLicensesProcessed',
+            'detectedLicensesProcessed',
+            'levels',
+            'scopeIndexes'
+        ],
+        showColumnsDropDown: false,
         shouldComponentUpdate: false
     },
     tree: {
@@ -279,6 +286,33 @@ export default (state = initState, action) => {
             summary: {
                 ...state.summary,
                 ruleViolationsFilter
+            }
+        };
+    }
+    case 'TABLE::COLUMNS_PACKAGES_TABLE_TOGGLE': {
+        const { columnKey } = action.payload;
+        let {
+            table: {
+                showColumnKeys
+            }
+        } = state;
+
+        if (columnKey && showColumnKeys) {
+            const keys = new Set(showColumnKeys);
+            if (keys.has(columnKey)) {
+                keys.delete(columnKey);
+            } else {
+                keys.add(columnKey);
+            }
+
+            showColumnKeys = Array.from(keys);
+        }
+
+        return {
+            ...state,
+            table: {
+                ...state.table,
+                showColumnKeys
             }
         };
     }
