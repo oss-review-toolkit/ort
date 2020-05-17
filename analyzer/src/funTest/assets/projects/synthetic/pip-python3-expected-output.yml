@@ -1,7 +1,7 @@
 ---
 project:
-  id: "PIP::src/funTest/assets/projects/synthetic/python3-django/requirements.txt:<REPLACE_REVISION>"
-  definition_file_path: "analyzer/src/funTest/assets/projects/synthetic/python3-django/requirements.txt"
+  id: "PIP::src/funTest/assets/projects/synthetic/pip-python3/requirements.txt:<REPLACE_REVISION>"
+  definition_file_path: "analyzer/src/funTest/assets/projects/synthetic/pip-python3/requirements.txt"
   declared_licenses: []
   declared_licenses_processed: {}
   vcs:

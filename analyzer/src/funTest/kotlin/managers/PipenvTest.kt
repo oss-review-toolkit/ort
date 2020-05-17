@@ -58,12 +58,12 @@ class PipenvTest : WordSpec() {
         }
 
         "Python 3" should {
-            "resolve dependencies correctly for python-django" {
-                val definitionFile = File(projectsDir, "synthetic/python3-django-pipenv/Pipfile.lock")
+            "resolve dependencies correctly for a Django project" {
+                val definitionFile = File(projectsDir, "synthetic/pipenv-python3/Pipfile.lock")
                 val vcsPath = vcsDir.getPathToRoot(definitionFile.parentFile)
 
                 val result = createPipenv().resolveDependencies(listOf(definitionFile))[definitionFile]
-                val expectedResultFile = File(projectsDir, "synthetic/python3-django-pipenv-expected-output.yml")
+                val expectedResultFile = File(projectsDir, "synthetic/pipenv-python3-expected-output.yml")
                 val expectedResult = patchExpectedResult(
                     expectedResultFile,
                     url = normalizeVcsUrl(vcsUrl),
