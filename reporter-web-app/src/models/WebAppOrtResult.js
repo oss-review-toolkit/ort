@@ -393,6 +393,18 @@ class WebAppOrtResult {
         return this.#repository;
     }
 
+    get repositoryConfiguration() {
+        return this.#repositoryConfiguration;
+    }
+
+    get ruleViolations() {
+        return this.#ruleViolations;
+    }
+
+    get ruleViolationResolutions() {
+        return this.#ruleViolationResolutions;
+    }
+
     get scanResults() {
         return this.#scanResults;
     }
@@ -407,18 +419,6 @@ class WebAppOrtResult {
 
     get statistics() {
         return this.#statistics;
-    }
-
-    get repositoryConfiguration() {
-        return this.#repositoryConfiguration;
-    }
-
-    get ruleViolations() {
-        return this.#ruleViolations;
-    }
-
-    get ruleViolationResolutions() {
-        return this.#ruleViolationResolutions;
     }
 
     getCopyrightByIndex(val) {
@@ -453,6 +453,10 @@ class WebAppOrtResult {
         return this.#pathExcludes[val] || null;
     }
 
+    getRuleViolationResolutionByIndex(val) {
+        return this.#ruleViolationResolutions[val] || null;
+    }
+
     getScanResultByIndex(val) {
         return this.#scanResults[val] || null;
     }
@@ -463,10 +467,6 @@ class WebAppOrtResult {
 
     getScopeByName(val) {
         return this.#scopesByNameMap.get(val) || null;
-    }
-
-    getRuleViolationResolutionByIndex(val) {
-        return this.#ruleViolationResolutions[val] || null;
     }
 
     getScopeExcludeByIndex(val) {
@@ -538,14 +538,6 @@ class WebAppOrtResult {
         return this.#pathExcludes.length > 0;
     }
 
-    hasScopes() {
-        return this.#scopes.length > 0;
-    }
-
-    hasScopeExcludes() {
-        return this.#scopeExcludes.length > 0;
-    }
-
     hasRepositoryConfiguration() {
         if (this.#repositoryConfiguration
             && this.#repositoryConfiguration.replace(/(\r\n|\n|\r)/gm, '') !== '--- {}') {
@@ -569,6 +561,14 @@ class WebAppOrtResult {
 
     hasRuleViolationsForPackageIndex(val) {
         return this.#ruleViolationsByPackageIndexMap.has(val);
+    }
+
+    hasScopes() {
+        return this.#scopes.length > 0;
+    }
+
+    hasScopeExcludes() {
+        return this.#scopeExcludes.length > 0;
     }
 }
 
