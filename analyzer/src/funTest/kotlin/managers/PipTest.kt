@@ -76,12 +76,12 @@ class PipTest : WordSpec() {
         }
 
         "Python 3" should {
-            "resolve dependencies correctly for python-django" {
-                val definitionFile = File(projectsDir, "synthetic/python3-django/requirements.txt")
+            "resolve dependencies correctly for a Django project" {
+                val definitionFile = File(projectsDir, "synthetic/pip-python3/requirements.txt")
                 val vcsPath = vcsDir.getPathToRoot(definitionFile.parentFile)
 
                 val result = createPIP().resolveDependencies(listOf(definitionFile))[definitionFile]
-                val expectedResultFile = File(projectsDir, "synthetic/python3-django-expected-output.yml")
+                val expectedResultFile = File(projectsDir, "synthetic/pip-python3-expected-output.yml")
                 val expectedResult = patchExpectedResult(
                     expectedResultFile,
                     url = normalizeVcsUrl(vcsUrl),
