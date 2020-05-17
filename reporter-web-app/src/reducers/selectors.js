@@ -172,6 +172,23 @@ export const getTableViewDeclaredLicensesSelections = memoizeOne(
     },
     hasOrtResultChanged
 );
+export const getTableViewDeclaredLicensesProcessedSelections = memoizeOne(
+    (state) => {
+        const webAppOrtResult = getOrtResult(state);
+        const { declaredLicensesProcessed } = webAppOrtResult;
+        return declaredLicensesProcessed
+            .map(
+                (license) => (
+                    {
+                        text: license,
+                        value: webAppOrtResult.getLicenseByName(license).id
+                    }
+                )
+            )
+            .sort(sortTableColumnFilterSelectors);
+    },
+    hasOrtResultChanged
+);
 export const getTableViewDetectedLicensesSelections = memoizeOne(
     (state) => {
         const webAppOrtResult = getOrtResult(state);

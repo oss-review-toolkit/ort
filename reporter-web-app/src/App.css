@@ -183,11 +183,15 @@ tr.ant-table-expanded-row, tr.ant-table-expanded-row:hover {
 
 /* === Styling for TableView  === */
 
-/* Styling for 'Clear filters' button in TableView */
-.ort-table-operations button {
+/* Styling for 'Clear filters' and 'Show / Hide Columns' buttons in TableView */
+.ort-table-buttons .ant-btn-group {
     float: right;
-    margin: 16px 0px 16px 0px;
+    margin-bottom: 5px;
     z-index: 999;
+}
+
+.ort-table-toggle-columns .ant-dropdown-menu-item-selected {
+    background-color: transparent;
 }
 
 /* === Styling for TreeView === */

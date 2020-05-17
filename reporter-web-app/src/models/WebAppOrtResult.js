@@ -33,6 +33,8 @@ import WebAppRuleViolation from './WebAppRuleViolation';
 import WebAppResolution from './WebAppResolution';
 
 class WebAppOrtResult {
+    #concludedLicensePackages = [];
+
     #copyrights = [];
 
     #customData = {};
@@ -126,6 +128,11 @@ class WebAppOrtResult {
 
                     if (webAppPackage.isProject) {
                         this.#projects.push(webAppPackage);
+                    }
+
+                    if (webAppPackage.concludedLicense
+                        && webAppPackage.concludedLicense.length > 0) {
+                        this.#concludedLicensePackages.push(webAppPackage);
                     }
 
                     declaredLicenses = new Set([
@@ -310,6 +317,10 @@ class WebAppOrtResult {
         }
     }
 
+    get concludedLicensePackages() {
+        return this.#concludedLicensePackages;
+    }
+
     get copyrights() {
         return this.#copyrights;
     }
@@ -472,6 +483,10 @@ class WebAppOrtResult {
 
     getRuleViolationsForPackageIndex(val) {
         return this.#ruleViolationsByPackageIndexMap.get(val) || [];
+    }
+
+    hasConcludedLicenses() {
+        return this.#concludedLicensePackages.length > 0;
     }
 
     hasDeclaredLicenses() {
