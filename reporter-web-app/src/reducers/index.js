@@ -341,6 +341,19 @@ export default (state = initState, action) => {
             }
         };
     }
+    case 'TABLE::CLEAR_SEARCH_TABLE': {
+        return {
+            ...state,
+            table: {
+                ...state.table,
+                filter: {
+                    filteredInfo: {},
+                    sortedInfo: {}
+                },
+                filterData: []
+            }
+        };
+    }
     case 'TREE::DRAWER_CLOSE':
     case 'TREE::DRAWER_OPEN': {
         return {
