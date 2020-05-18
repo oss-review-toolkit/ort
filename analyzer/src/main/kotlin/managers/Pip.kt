@@ -158,7 +158,7 @@ class Pip(
     repoConfig: RepositoryConfiguration
 ) : PackageManager(name, analysisRoot, analyzerConfig, repoConfig), CommandLineTool {
     class Factory : AbstractPackageManagerFactory<Pip>("PIP") {
-        override val globsForDefinitionFiles = listOf("requirements*.txt", "setup.py")
+        override val globsForDefinitionFiles = listOf("*requirements*.txt", "setup.py")
 
         override fun create(
             analysisRoot: File,
