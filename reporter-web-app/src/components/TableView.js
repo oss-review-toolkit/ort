@@ -20,17 +20,23 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import {
+    Button,
     Collapse,
     Dropdown,
+    Input,
     Menu,
+    Space,
     Table,
     Tooltip
 } from 'antd';
 import {
+    CloudDownloadOutlined,
     EyeOutlined,
     EyeInvisibleOutlined,
     FileAddOutlined,
-    FileExcelOutlined
+    FileExcelOutlined,
+    LaptopOutlined,
+    SearchOutlined
 } from '@ant-design/icons';
 import PropTypes from 'prop-types';
 import {
@@ -68,6 +74,53 @@ class TableView extends React.Component {
             type: 'TABLE::COLUMNS_PACKAGES_TABLE_TOGGLE'
         });
     }
+
+    getColumnSearchProps = (dataIndex, filteredInfo) => ({
+        filterDropdown: ({
+            setSelectedKeys, selectedKeys, confirm, clearFilters
+        }) => (
+            <div style={{ padding: 8 }}>
+                <Input
+                    ref={(node) => {
+                        this.searchInput = node;
+                    }}
+                    placeholder="Search..."
+                    value={selectedKeys[0]}
+                    onChange={(e) => setSelectedKeys(e.target.value ? [e.target.value] : [])}
+                    onPressEnter={() => confirm()}
+                    style={{ width: 188, marginBottom: 8, display: 'block' }}
+                />
+                <Space>
+                    <Button
+                        onClick={() => clearFilters()}
+                        size="small"
+                        style={{ width: 90 }}
+                    >
+                        Reset
+                    </Button>
+                    <Button
+                        icon={<SearchOutlined />}
+                        onClick={() => confirm()}
+                        size="small"
+                        style={{ width: 90 }}
+                        type="primary"
+                    >
+                        Search
+                    </Button>
+                </Space>
+            </div>
+        ),
+        filterIcon: (filtered) => <SearchOutlined style={{ color: filtered ? '#1890ff' : undefined }} />,
+        filteredValue: filteredInfo ? filteredInfo[dataIndex] : '',
+        onFilter: (value, record) => (record[dataIndex]
+            ? record[dataIndex].toString().toLowerCase().includes(value.toLowerCase())
+            : false),
+        onFilterDropdownVisibleChange: (visible) => {
+            if (visible) {
+                setTimeout(() => this.searchInput.select());
+            }
+        }
+    });
 
     render() {
         const {
@@ -152,12 +205,10 @@ class TableView extends React.Component {
             align: 'left',
             dataIndex: 'id',
             ellipsis: true,
-            filters: tableProjectFilterSelections,
-            filteredValue: filteredInfo.id || null,
-            onFilter: (value, webAppPackage) => webAppPackage.projectIndexes.has(value),
             sorter: (a, b) => a.id.localeCompare(b.id),
             sortOrder: sortedInfo.field === 'id' && sortedInfo.order,
-            title: 'Package'
+            title: 'Package',
+            ...this.getColumnSearchProps('id', filteredInfo)
         });
 
         if (webAppOrtResult.hasScopes()) {
@@ -300,19 +351,48 @@ class TableView extends React.Component {
             }
         }
 
-        toggleColumnMenuItems.push({ text: 'Repository', value: 'vcsProcessed' });
-        if (showColumnKeys.includes('vcsProcessed')) {
+        toggleColumnMenuItems.push({ text: 'Repository', value: 'vcsProcessedUrl' });
+        if (showColumnKeys.includes('vcsProcessedUrl')) {
             columns.push({
                 align: 'left',
-                dataIndex: 'vcsProcessed',
-                render: (vcsProcessed) => (
+                dataIndex: 'vcsProcessedUrl',
+                render: (vcsProcessedUrl) => (
                     <span>
-                        {vcsProcessed.url}
+                        {vcsProcessedUrl}
                     </span>
                 ),
                 responsive: ['md'],
+                sorter: (a, b) => a.vcsProcessedUrl.localeCompare(b.vcsProcessedUrl),
+                sortOrder: sortedInfo.field === 'vcsProcessedUrl' && sortedInfo.order,
                 textWrap: 'word-break',
-                title: 'Repository'
+                title: 'Repository',
+                ...this.getColumnSearchProps('vcsProcessedUrl', filteredInfo)
+            });
+        }
+
+        toggleColumnMenuItems.push({ text: 'Project', value: 'projectIndexes' });
+        if (showColumnKeys.includes('projectIndexes')) {
+            columns.push({
+                align: 'left',
+                dataIndex: 'projectIndexes',
+                ellipsis: true,
+                filters: tableProjectFilterSelections,
+                filteredValue: filteredInfo.projectIndexes || null,
+                onFilter: (value, webAppPackage) => webAppPackage.projectIndexes.has(value),
+                render: (text, webAppPackage) => (
+                    webAppPackage.isProject ? (
+                        <Tooltip
+                            placement="right"
+                            title={webAppPackage.definitionFilePath}
+                        >
+                            <LaptopOutlined />
+                        </Tooltip>
+                    ) : (
+                        <CloudDownloadOutlined />
+                    )
+                ),
+                title: 'Project',
+                width: 85
             });
         }
 
