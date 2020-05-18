@@ -510,11 +510,18 @@ class StaticHtmlReporter : Reporter {
                     em { +"Detected Licenses:" }
                     dl {
                         dd {
+                            // TODO: As we do not have access to provenance information here anymore (see issue
+                            //       #2631), use a "META-INF" path prefix as a crude hint whether a Java source
+                            //       artifact was scanned.
+                            val isSourceArtifact = row.detectedLicenses.any { (findings, _) ->
+                                findings.locations.any { it.path.startsWith("META-INF") }
+                            }
+
                             row.detectedLicenses.forEach { (finding, excludes) ->
                                 val firstFinding = finding.locations.first()
 
                                 val permalink = when {
-                                    row.vcsInfo != VcsInfo.EMPTY -> {
+                                    row.vcsInfo != VcsInfo.EMPTY && !isSourceArtifact -> {
                                         val path = listOfNotNull(
                                             row.vcsInfo.path.takeIf { it.isNotEmpty() },
                                             firstFinding.path
