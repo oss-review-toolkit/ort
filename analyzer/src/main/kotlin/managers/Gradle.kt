@@ -132,7 +132,7 @@ class Gradle(
         // load any system properties from a Gradle properties file and set them in the process that uses the Tooling
         // API. A typical use case for this is to apply proxy settings so that the Gradle distribution used by the build
         // can be downloaded behind a proxy, see https://github.com/gradle/gradle/issues/6825#issuecomment-502720562.
-        // For simplictiy, limit the search for system properties to the current user's Gradle properties file for now.
+        // For simplicity, limit the search for system properties to the current user's Gradle properties file for now.
         val gradlePropertiesFile = getUserHomeDirectory().resolve(".gradle/gradle.properties")
         if (gradlePropertiesFile.isFile) {
             gradlePropertiesFile.inputStream().use {
