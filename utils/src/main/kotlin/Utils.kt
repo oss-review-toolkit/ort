@@ -222,6 +222,14 @@ fun getOrtDataDirectory() =
     } ?: getUserHomeDirectory().resolve(".ort")
 
 /**
+ * Install both the [OrtAuthenticator] and the [OrtProxySelector] to handle proxy authentication.
+ */
+fun installAuthenticatorAndProxySelector() {
+    OrtAuthenticator.install()
+    OrtProxySelector.install()
+}
+
+/**
  * Return the concatenated [strings] separated by [separator] whereas blank strings are omitted.
  */
 fun joinNonBlank(vararg strings: String, separator: String = " - ") =

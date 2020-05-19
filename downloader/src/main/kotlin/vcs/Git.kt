@@ -48,6 +48,7 @@ import org.ossreviewtoolkit.utils.CommandLineTool
 import org.ossreviewtoolkit.utils.FileMatcher
 import org.ossreviewtoolkit.utils.Os
 import org.ossreviewtoolkit.utils.collectMessagesAsString
+import org.ossreviewtoolkit.utils.installAuthenticatorAndProxySelector
 import org.ossreviewtoolkit.utils.log
 import org.ossreviewtoolkit.utils.safeMkdirs
 import org.ossreviewtoolkit.utils.showStackTrace
@@ -58,6 +59,8 @@ const val GIT_HISTORY_DEPTH = 50
 class Git : VersionControlSystem(), CommandLineTool {
     companion object {
         init {
+            installAuthenticatorAndProxySelector()
+
             val sessionFactory = object : JschConfigSessionFactory() {
                 @Suppress("EmptyFunctionBlock")
                 override fun configure(hc: OpenSshConfig.Host, session: Session) {}
