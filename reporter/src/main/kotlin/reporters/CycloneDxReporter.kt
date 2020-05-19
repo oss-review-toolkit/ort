@@ -73,7 +73,7 @@ class CycloneDxReporter : Reporter {
             }
         }
 
-    override fun generateReport(outputStream: OutputStream, input: ReporterInput) {
+    override fun generateReport(outputStream: OutputStream, input: ReporterInput, options: Map<String, String>) {
         val ortResult = input.ortResult
         val bom = Bom().apply { serialNumber = "urn:uuid:${UUID.randomUUID()}" }
 

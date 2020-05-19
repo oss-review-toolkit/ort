@@ -66,7 +66,7 @@ class AmazonOssAttributionBuilderReporter : Reporter {
         OkHttpClientHelper.buildClient()
     )
 
-    override fun generateReport(outputStream: OutputStream, input: ReporterInput) {
+    override fun generateReport(outputStream: OutputStream, input: ReporterInput, options: Map<String, String>) {
         // TODO: Allow to configure username and password via the config file; use the defaults for now.
         val credentials = Credentials.basic("admin", "admin")
 

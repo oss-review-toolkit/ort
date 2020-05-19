@@ -31,7 +31,8 @@ class WebAppReporter : Reporter {
 
     override fun generateReport(
         outputStream: OutputStream,
-        input: ReporterInput
+        input: ReporterInput,
+        options: Map<String, String>
     ) {
         val template = javaClass.classLoader.getResource("scan-report-template.html").readText()
         val evaluatedModel = EvaluatedModel.create(input)

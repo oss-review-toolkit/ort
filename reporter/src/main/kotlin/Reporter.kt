@@ -55,9 +55,9 @@ interface Reporter {
 
     /**
      * Generate a report for the provided [input] and write the result to the [outputStream]. If and how the [input]
-     * data is used depends on the specific reporter implementation.
+     * data is used depends on the specific reporter implementation, taking into account any format-specific [options].
      */
-    fun generateReport(outputStream: OutputStream, input: ReporterInput)
+    fun generateReport(outputStream: OutputStream, input: ReporterInput, options: Map<String, String> = emptyMap())
 }
 
 internal val PathExclude.description: String get() = joinNonBlank(reason.toString(), comment)
