@@ -271,7 +271,7 @@ class Pip(
             // What pydep actually returns as "repo_url" is either setup.py's
             // - "url", denoting the "home page for the package", or
             // - "download_url", denoting the "location where the package may be downloaded".
-            // So the best we can do is to map this the project's homepage URL.
+            // So the best we can do is to map it to the project's homepage URL.
             jsonMapper.readTree(pydep.stdout).let {
                 declaredLicenses = getDeclaredLicenses(it)
                 listOf(
