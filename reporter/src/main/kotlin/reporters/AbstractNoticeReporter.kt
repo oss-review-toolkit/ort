@@ -100,7 +100,8 @@ abstract class AbstractNoticeReporter : Reporter {
 
     override fun generateReport(
         outputStream: OutputStream,
-        input: ReporterInput
+        input: ReporterInput,
+        options: Map<String, String>
     ) {
         requireNotNull(input.ortResult.scanner) {
             "The provided ORT result file does not contain a scan result."

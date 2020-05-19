@@ -56,7 +56,7 @@ abstract class EvaluatedModelReporter(
     override val defaultFilename: String,
     private val serialize: EvaluatedModel.(Writer) -> Unit
 ) : Reporter {
-    override fun generateReport(outputStream: OutputStream, input: ReporterInput) {
+    override fun generateReport(outputStream: OutputStream, input: ReporterInput, options: Map<String, String>) {
         val start = System.currentTimeMillis()
         val evaluatedModel = EvaluatedModel.create(input)
         log.debug { "Generating evaluated model took ${System.currentTimeMillis() - start}ms" }

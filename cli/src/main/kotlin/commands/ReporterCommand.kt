@@ -27,9 +27,11 @@ import com.github.ajalt.clikt.core.requireObject
 import com.github.ajalt.clikt.parameters.groups.mutuallyExclusiveOptions
 import com.github.ajalt.clikt.parameters.groups.single
 import com.github.ajalt.clikt.parameters.options.convert
+import com.github.ajalt.clikt.parameters.options.multiple
 import com.github.ajalt.clikt.parameters.options.option
 import com.github.ajalt.clikt.parameters.options.required
 import com.github.ajalt.clikt.parameters.options.split
+import com.github.ajalt.clikt.parameters.options.splitPair
 import com.github.ajalt.clikt.parameters.types.file
 
 import org.ossreviewtoolkit.model.OrtResult
@@ -97,6 +99,20 @@ class ReporterCommand : CliktCommand(
         allReportersByName[name.toUpperCase()]
             ?: throw BadParameterValue("Report formats must be one or more of ${allReportersByName.keys}.")
     }.split(",").required()
+
+    private val reportOptions by option(
+        "--report-option", "-O",
+        help = "Specify a report-format-specific option. The key is the (case-insensitive) name of the report " +
+                "format, and the value is an arbitrary key-value pair."
+    ).splitPair().convert { (format, option) ->
+        val upperCaseFormat = format.toUpperCase()
+
+        require(upperCaseFormat in allReportersByName.keys) {
+            "Report formats must be one or more of ${allReportersByName.keys}."
+        }
+
+        upperCaseFormat to Pair(option.substringBefore("="), option.substringAfter("=", ""))
+    }.multiple()
 
     private val resolutionsFile by option(
         "--resolutions-file",
@@ -179,10 +195,18 @@ class ReporterCommand : CliktCommand(
             preProcessingScript?.readText()
         )
 
+        val reportOptionsMap = mutableMapOf<String, MutableMap<String, String>>()
+
+        reportOptions.forEach { (format, option) ->
+            val reportSpecificOptionsMap = reportOptionsMap.getOrPut(format) { mutableMapOf() }
+            reportSpecificOptionsMap[option.first] = option.second
+        }
+
         reports.forEach { (reporter, file) ->
             @Suppress("TooGenericExceptionCaught")
             try {
-                reporter.generateReport(file.outputStream(), input)
+                val options = reportOptionsMap[reporter.reporterName.toUpperCase()].orEmpty()
+                reporter.generateReport(file.outputStream(), input, options)
 
                 println("Created '${reporter.reporterName}' report:\n\t$file")
             } catch (e: Exception) {
