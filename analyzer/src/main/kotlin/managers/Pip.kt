@@ -490,7 +490,7 @@ class Pip(
         // "License :: OSI Approved :: GNU Library or Lesser General Public License (LGPL)"
         pkgInfo["classifiers"]?.mapNotNullTo(declaredLicenses) {
             val classifier = it.textValue().split(" :: ")
-            classifier.takeIf { it.first() == "License" }?.last()
+            classifier.takeIf { it.first() == "License" }?.last()?.takeUnless { it == "OSI Approved" }
         }
 
         return declaredLicenses
