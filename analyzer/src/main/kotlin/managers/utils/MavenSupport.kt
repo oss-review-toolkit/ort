@@ -21,26 +21,7 @@ package org.ossreviewtoolkit.analyzer.managers.utils
 
 import com.fasterxml.jackson.module.kotlin.readValue
 
-import org.ossreviewtoolkit.analyzer.PackageManager
-import org.ossreviewtoolkit.downloader.VcsHost
-import org.ossreviewtoolkit.model.Hash
-import org.ossreviewtoolkit.model.Identifier
-import org.ossreviewtoolkit.model.Package
-import org.ossreviewtoolkit.model.RemoteArtifact
-import org.ossreviewtoolkit.model.VcsInfo
-import org.ossreviewtoolkit.model.VcsType
-import org.ossreviewtoolkit.model.yamlMapper
-import org.ossreviewtoolkit.utils.DiskCache
-import org.ossreviewtoolkit.utils.ORT_NAME
-import org.ossreviewtoolkit.utils.Os
-import org.ossreviewtoolkit.utils.collectMessagesAsString
-import org.ossreviewtoolkit.utils.getOrtDataDirectory
-import org.ossreviewtoolkit.utils.log
-import org.ossreviewtoolkit.utils.searchUpwardsForSubdirectory
-import org.ossreviewtoolkit.utils.showStackTrace
-
 import java.io.File
-import java.net.URL
 import java.util.regex.Pattern
 
 import org.apache.maven.artifact.repository.LegacyLocalRepositoryManager
@@ -61,7 +42,6 @@ import org.apache.maven.project.ProjectBuildingRequest
 import org.apache.maven.project.ProjectBuildingResult
 import org.apache.maven.properties.internal.EnvironmentUtils
 import org.apache.maven.session.scope.internal.SessionScope
-import org.apache.maven.settings.Proxy
 
 import org.codehaus.plexus.DefaultContainerConfiguration
 import org.codehaus.plexus.DefaultPlexusContainer
@@ -89,6 +69,25 @@ import org.eclipse.aether.transfer.AbstractTransferListener
 import org.eclipse.aether.transfer.NoRepositoryConnectorException
 import org.eclipse.aether.transfer.NoRepositoryLayoutException
 import org.eclipse.aether.transfer.TransferEvent
+import org.eclipse.aether.util.repository.JreProxySelector
+
+import org.ossreviewtoolkit.analyzer.PackageManager
+import org.ossreviewtoolkit.downloader.VcsHost
+import org.ossreviewtoolkit.model.Hash
+import org.ossreviewtoolkit.model.Identifier
+import org.ossreviewtoolkit.model.Package
+import org.ossreviewtoolkit.model.RemoteArtifact
+import org.ossreviewtoolkit.model.VcsInfo
+import org.ossreviewtoolkit.model.VcsType
+import org.ossreviewtoolkit.model.yamlMapper
+import org.ossreviewtoolkit.utils.DiskCache
+import org.ossreviewtoolkit.utils.ORT_NAME
+import org.ossreviewtoolkit.utils.collectMessagesAsString
+import org.ossreviewtoolkit.utils.getOrtDataDirectory
+import org.ossreviewtoolkit.utils.installAuthenticatorAndProxySelector
+import org.ossreviewtoolkit.utils.log
+import org.ossreviewtoolkit.utils.searchUpwardsForSubdirectory
+import org.ossreviewtoolkit.utils.showStackTrace
 
 fun Artifact.identifier() = "$groupId:$artifactId:$version"
 
@@ -118,17 +117,6 @@ class MavenSupport(workspaceReader: WorkspaceReader) {
                 loggerManager = object : BaseLoggerManager() {
                     override fun createLogger(name: String) = MavenLogger(log.delegate.level)
                 }
-            }
-        }
-
-        fun createProxyFromUrl(proxyUrl: String): Proxy {
-            val url = URL(proxyUrl)
-            return Proxy().apply {
-                protocol = url.protocol
-                username = url.userInfo?.substringBefore(':')
-                password = url.userInfo?.substringAfter(':')
-                host = url.host
-                if (url.port != -1) port = url.port
             }
         }
 
@@ -270,12 +258,6 @@ class MavenSupport(workspaceReader: WorkspaceReader) {
         //       system properties "org.apache.maven.global-settings" and "org.apache.maven.user-settings".
         val settings = settingsBuilder.buildSettings()
 
-        Os.proxy?.let { proxyUrl ->
-            // Maven only uses the first active proxy for both HTTP and HTTPS traffic.
-            settings.proxies.add(createProxyFromUrl(proxyUrl))
-            log.debug { "Added $proxyUrl as proxy." }
-        }
-
         populator.populateFromSettings(request, settings)
         populator.populateDefaults(request)
 
@@ -305,7 +287,10 @@ class MavenSupport(workspaceReader: WorkspaceReader) {
             aetherRepositorySystem
         )
 
-        return DefaultRepositorySystemSession(session).setWorkspaceReader(workspaceReader)
+        return DefaultRepositorySystemSession(session).setWorkspaceReader(workspaceReader).apply {
+            installAuthenticatorAndProxySelector()
+            proxySelector = JreProxySelector()
+        }
     }
 
     fun buildMavenProject(pomFile: File): ProjectBuildingResult {
