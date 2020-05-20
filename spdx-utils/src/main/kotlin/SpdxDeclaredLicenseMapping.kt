@@ -408,6 +408,7 @@ object SpdxDeclaredLicenseMapping {
         "Other/Proprietary License" to licenseRef("proprietary-license", "scancode"),
         "Perl Artistic v2" to ARTISTIC_1_0_PERL.toExpression(),
         "Public Domain" to licenseRef("public-domain-disclaimer", "scancode"),
+        "Public Domain <http://unlicense.org>" to licenseRef("public-domain-disclaimer", "scancode"),
         "Public Domain, per Creative Commons CC0" to CC0_1_0.toExpression(),
         "Public domain (CC0-1.0)" to CC0_1_0.toExpression(),
         "PublicDomain" to licenseRef("public-domain-disclaimer", "scancode"),
