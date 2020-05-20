@@ -76,6 +76,7 @@ object SpdxDeclaredLicenseMapping {
         "Apache Software License (Apache-2.0)" to APACHE_2_0.toExpression(),
         "Apache Software License 2.0" to APACHE_2_0.toExpression(),
         "Apache Software License, version 1.1" to APACHE_1_1.toExpression(),
+        "Apache Software License, Version 2" to APACHE_2_0.toExpression(),
         "Apache Software License, version 2.0" to APACHE_2_0.toExpression(),
         "Apache Software Licenses" to APACHE_2_0.toExpression(),
         "Apache v2" to APACHE_2_0.toExpression(),
