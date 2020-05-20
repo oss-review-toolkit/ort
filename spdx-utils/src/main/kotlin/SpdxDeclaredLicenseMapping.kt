@@ -260,6 +260,7 @@ object SpdxDeclaredLicenseMapping {
         "european union public licence 1.0 (eupl 1.0)" to EUPL_1_0.toExpression(),
         "european union public licence 1.1 (eupl 1.1)" to EUPL_1_1.toExpression(),
         "european union public licence 1.2 (eupl 1.2)" to EUPL_1_2.toExpression(),
+        "Expat license" to MIT.toExpression(),
         "GNU Affero General Public License v3" to AGPL_3_0_ONLY.toExpression(),
         "GNU Affero General Public License v3 (AGPL-3.0)" to AGPL_3_0_ONLY.toExpression(),
         "GNU Affero General Public License v3 (AGPLv3)" to AGPL_3_0_ONLY.toExpression(),
