@@ -470,19 +470,20 @@ class StaticHtmlReporter : Reporter {
             td {
                 if (row.scopes.isNotEmpty()) {
                     ul {
-                        row.scopes.entries.sortedWith(SCOPE_EXCLUDE_LIST_COMPARATOR).forEach {
-                            val excludedClass = if (it.value.isNotEmpty()) "ort-excluded" else ""
-                            li(excludedClass) {
-                                +it.key
-                                if (it.value.isNotEmpty()) {
-                                    +" "
-                                    div("ort-reason") {
-                                        +"Excluded: "
-                                        +it.value.joinToString { it.description }
+                        row.scopes.entries.sortedWith(SCOPE_EXCLUDE_LIST_COMPARATOR)
+                            .forEach { (scopeName, scopeExcludes) ->
+                                val excludedClass = if (scopeExcludes.isNotEmpty()) "ort-excluded" else ""
+                                li(excludedClass) {
+                                    +scopeName
+                                    if (scopeExcludes.isNotEmpty()) {
+                                        +" "
+                                        div("ort-reason") {
+                                            +"Excluded: "
+                                            +scopeExcludes.joinToString { it.description }
+                                        }
                                     }
                                 }
                             }
-                        }
                     }
                 }
             }
