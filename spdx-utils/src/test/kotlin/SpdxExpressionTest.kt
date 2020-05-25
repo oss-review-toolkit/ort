@@ -36,11 +36,13 @@ import io.kotest.matchers.should
 class SpdxExpressionTest : WordSpec() {
     private val yamlMapper = YAMLMapper()
 
+    private fun String.parse(strictness: Strictness = Strictness.ALLOW_ANY) = SpdxExpression.parse(this, strictness)
+
     init {
         "toString()" should {
             "return the textual SPDX expression" {
                 val expression = "license1+ AND (license2 WITH exception1 OR license3+) AND license4 WITH exception2"
-                val spdxExpression = SpdxExpression.parse(expression)
+                val spdxExpression = expression.parse()
 
                 val spdxString = spdxExpression.toString()
 
@@ -48,8 +50,8 @@ class SpdxExpressionTest : WordSpec() {
             }
 
             "not include unnecessary parenthesis" {
-                val expression = "(license1 AND (license2 AND license3) AND (license4 OR (license5 WITH exception)))"
-                val spdxExpression = SpdxExpression.parse(expression)
+                val spdxExpression =
+                    "(license1 AND (license2 AND license3) AND (license4 OR (license5 WITH exception)))".parse()
 
                 val spdxString = spdxExpression.toString()
 
@@ -61,7 +63,7 @@ class SpdxExpressionTest : WordSpec() {
             val dummyExpression = "license1+ AND (license2 WITH exception1 OR license3+) AND license4 WITH exception2"
 
             "be serializable to a string representation" {
-                val spdxExpression = SpdxExpression.parse(dummyExpression)
+                val spdxExpression = dummyExpression.parse()
 
                 val serializedExpression = yamlMapper.writeValueAsString(spdxExpression)
 
@@ -95,18 +97,18 @@ class SpdxExpressionTest : WordSpec() {
             }
 
             "be valid in lenient mode" {
-                SpdxExpression.parse(dummyExpression, Strictness.ALLOW_ANY)
+                dummyExpression.parse(Strictness.ALLOW_ANY)
             }
 
             "be invalid in deprecated mode" {
                 shouldThrow<SpdxException> {
-                    SpdxExpression.parse(dummyExpression, Strictness.ALLOW_DEPRECATED)
+                    dummyExpression.parse(Strictness.ALLOW_DEPRECATED)
                 }
             }
 
             "be invalid in strict mode" {
                 shouldThrow<SpdxException> {
-                    SpdxExpression.parse(dummyExpression, Strictness.ALLOW_CURRENT)
+                    dummyExpression.parse(Strictness.ALLOW_CURRENT)
                 }
             }
         }
@@ -117,25 +119,25 @@ class SpdxExpressionTest : WordSpec() {
 
             "be valid in lenient mode" {
                 assertSoftly {
-                    SpdxExpression.parse(deprecatedExpression, Strictness.ALLOW_ANY)
-                    SpdxExpression.parse(deprecatedExpressionWithException, Strictness.ALLOW_ANY)
+                    deprecatedExpression.parse(Strictness.ALLOW_ANY)
+                    deprecatedExpressionWithException.parse(Strictness.ALLOW_ANY)
                 }
             }
 
             "be valid in deprecated mode" {
                 assertSoftly {
-                    SpdxExpression.parse(deprecatedExpression, Strictness.ALLOW_DEPRECATED)
-                    SpdxExpression.parse(deprecatedExpressionWithException, Strictness.ALLOW_DEPRECATED)
+                    deprecatedExpression.parse(Strictness.ALLOW_DEPRECATED)
+                    deprecatedExpressionWithException.parse(Strictness.ALLOW_DEPRECATED)
                 }
             }
 
             "be invalid in strict mode" {
                 assertSoftly {
                     shouldThrow<SpdxException> {
-                        SpdxExpression.parse(deprecatedExpression, Strictness.ALLOW_CURRENT)
+                        deprecatedExpression.parse(Strictness.ALLOW_CURRENT)
                     }
                     shouldThrow<SpdxException> {
-                        SpdxExpression.parse(deprecatedExpressionWithException, Strictness.ALLOW_CURRENT)
+                        deprecatedExpressionWithException.parse(Strictness.ALLOW_CURRENT)
                     }
                 }
             }
@@ -147,22 +149,22 @@ class SpdxExpressionTest : WordSpec() {
 
             "be valid in lenient mode" {
                 assertSoftly {
-                    SpdxExpression.parse(currentExpression, Strictness.ALLOW_ANY)
-                    SpdxExpression.parse(currentExpressionWithException, Strictness.ALLOW_ANY)
+                    currentExpression.parse(Strictness.ALLOW_ANY)
+                    currentExpressionWithException.parse(Strictness.ALLOW_ANY)
                 }
             }
 
             "be valid in deprecated mode" {
                 assertSoftly {
-                    SpdxExpression.parse(currentExpression, Strictness.ALLOW_DEPRECATED)
-                    SpdxExpression.parse(currentExpressionWithException, Strictness.ALLOW_DEPRECATED)
+                    currentExpression.parse(Strictness.ALLOW_DEPRECATED)
+                    currentExpressionWithException.parse(Strictness.ALLOW_DEPRECATED)
                 }
             }
 
             "be valid in strict mode" {
                 assertSoftly {
-                    SpdxExpression.parse(currentExpression, Strictness.ALLOW_CURRENT)
-                    SpdxExpression.parse(currentExpressionWithException, Strictness.ALLOW_CURRENT)
+                    currentExpression.parse(Strictness.ALLOW_CURRENT)
+                    currentExpressionWithException.parse(Strictness.ALLOW_CURRENT)
                 }
             }
         }
@@ -170,95 +172,84 @@ class SpdxExpressionTest : WordSpec() {
         "The expression parser" should {
             "work for deprecated license identifiers" {
                 assertSoftly {
-                    SpdxExpression.parse("eCos-2.0") shouldBe SpdxLicenseIdExpression("eCos-2.0")
-                    SpdxExpression.parse("Nunit") shouldBe SpdxLicenseIdExpression("Nunit")
-                    SpdxExpression.parse("StandardML-NJ") shouldBe SpdxLicenseIdExpression("StandardML-NJ")
-                    SpdxExpression.parse("wxWindows") shouldBe SpdxLicenseIdExpression("wxWindows")
+                    "eCos-2.0".parse() shouldBe SpdxLicenseIdExpression("eCos-2.0")
+                    "Nunit".parse() shouldBe SpdxLicenseIdExpression("Nunit")
+                    "StandardML-NJ".parse() shouldBe SpdxLicenseIdExpression("StandardML-NJ")
+                    "wxWindows".parse() shouldBe SpdxLicenseIdExpression("wxWindows")
                 }
             }
 
             "normalize the case of SPDX licenses" {
                 SpdxLicense.values().filterNot { it.deprecated }.forEach {
-                    SpdxExpression.parse(it.id.toLowerCase()).normalize() shouldBe it.toExpression()
+                    it.id.toLowerCase().parse().normalize() shouldBe it.toExpression()
                 }
             }
 
             "normalize deprecated licenses to non-deprecated ones" {
                 assertSoftly {
-                    SpdxExpression.parse("AGPL-1.0").normalize() shouldBe AGPL_1_0_ONLY.toExpression()
-                    SpdxExpression.parse("AGPL-1.0+").normalize() shouldBe
-                            SpdxLicenseIdExpression("AGPL-1.0-or-later", true)
+                    "AGPL-1.0".parse().normalize() shouldBe AGPL_1_0_ONLY.toExpression()
+                    "AGPL-1.0+".parse().normalize() shouldBe SpdxLicenseIdExpression("AGPL-1.0-or-later", true)
 
-                    SpdxExpression.parse("AGPL-3.0").normalize() shouldBe AGPL_3_0_ONLY.toExpression()
-                    SpdxExpression.parse("AGPL-3.0+").normalize() shouldBe
-                            SpdxLicenseIdExpression("AGPL-3.0-or-later", true)
+                    "AGPL-3.0".parse().normalize() shouldBe AGPL_3_0_ONLY.toExpression()
+                    "AGPL-3.0+".parse().normalize() shouldBe SpdxLicenseIdExpression("AGPL-3.0-or-later", true)
 
-                    SpdxExpression.parse("GFDL-1.1").normalize() shouldBe GFDL_1_1_ONLY.toExpression()
-                    SpdxExpression.parse("GFDL-1.1+").normalize() shouldBe
-                            SpdxLicenseIdExpression("GFDL-1.1-or-later", true)
+                    "GFDL-1.1".parse().normalize() shouldBe GFDL_1_1_ONLY.toExpression()
+                    "GFDL-1.1+".parse().normalize() shouldBe SpdxLicenseIdExpression("GFDL-1.1-or-later", true)
 
-                    SpdxExpression.parse("GFDL-1.2").normalize() shouldBe GFDL_1_2_ONLY.toExpression()
-                    SpdxExpression.parse("GFDL-1.2+").normalize() shouldBe
-                            SpdxLicenseIdExpression("GFDL-1.2-or-later", true)
+                    "GFDL-1.2".parse().normalize() shouldBe GFDL_1_2_ONLY.toExpression()
+                    "GFDL-1.2+".parse().normalize() shouldBe SpdxLicenseIdExpression("GFDL-1.2-or-later", true)
 
-                    SpdxExpression.parse("GFDL-1.3").normalize() shouldBe GFDL_1_3_ONLY.toExpression()
-                    SpdxExpression.parse("GFDL-1.3+").normalize() shouldBe
-                            SpdxLicenseIdExpression("GFDL-1.3-or-later", true)
+                    "GFDL-1.3".parse().normalize() shouldBe GFDL_1_3_ONLY.toExpression()
+                    "GFDL-1.3+".parse().normalize() shouldBe SpdxLicenseIdExpression("GFDL-1.3-or-later", true)
 
-                    SpdxExpression.parse("GPL-1.0").normalize() shouldBe GPL_1_0_ONLY.toExpression()
-                    SpdxExpression.parse("GPL-1.0+").normalize() shouldBe
-                            SpdxLicenseIdExpression("GPL-1.0-or-later", true)
+                    "GPL-1.0".parse().normalize() shouldBe GPL_1_0_ONLY.toExpression()
+                    "GPL-1.0+".parse().normalize() shouldBe SpdxLicenseIdExpression("GPL-1.0-or-later", true)
 
-                    SpdxExpression.parse("GPL-2.0").normalize() shouldBe GPL_2_0_ONLY.toExpression()
-                    SpdxExpression.parse("GPL-2.0+").normalize() shouldBe
-                            SpdxLicenseIdExpression("GPL-2.0-or-later", true)
+                    "GPL-2.0".parse().normalize() shouldBe GPL_2_0_ONLY.toExpression()
+                    "GPL-2.0+".parse().normalize() shouldBe SpdxLicenseIdExpression("GPL-2.0-or-later", true)
 
-                    SpdxExpression.parse("GPL-3.0").normalize() shouldBe GPL_3_0_ONLY.toExpression()
-                    SpdxExpression.parse("GPL-3.0+").normalize() shouldBe
-                            SpdxLicenseIdExpression("GPL-3.0-or-later", true)
+                    "GPL-3.0".parse().normalize() shouldBe GPL_3_0_ONLY.toExpression()
+                    "GPL-3.0+".parse().normalize() shouldBe SpdxLicenseIdExpression("GPL-3.0-or-later", true)
 
-                    SpdxExpression.parse("LGPL-2.0").normalize() shouldBe LGPL_2_0_ONLY.toExpression()
-                    SpdxExpression.parse("LGPL-2.0+").normalize() shouldBe
-                            SpdxLicenseIdExpression("LGPL-2.0-or-later", true)
+                    "LGPL-2.0".parse().normalize() shouldBe LGPL_2_0_ONLY.toExpression()
+                    "LGPL-2.0+".parse().normalize() shouldBe SpdxLicenseIdExpression("LGPL-2.0-or-later", true)
 
-                    SpdxExpression.parse("LGPL-2.1").normalize() shouldBe LGPL_2_1_ONLY.toExpression()
-                    SpdxExpression.parse("LGPL-2.1+").normalize() shouldBe
-                            SpdxLicenseIdExpression("LGPL-2.1-or-later", true)
+                    "LGPL-2.1".parse().normalize() shouldBe LGPL_2_1_ONLY.toExpression()
+                    "LGPL-2.1+".parse().normalize() shouldBe SpdxLicenseIdExpression("LGPL-2.1-or-later", true)
 
-                    SpdxExpression.parse("LGPL-3.0").normalize() shouldBe LGPL_3_0_ONLY.toExpression()
-                    SpdxExpression.parse("LGPL-3.0+").normalize() shouldBe
-                            SpdxLicenseIdExpression("LGPL-3.0-or-later", true)
+                    "LGPL-3.0".parse().normalize() shouldBe LGPL_3_0_ONLY.toExpression()
+                    "LGPL-3.0+".parse().normalize() shouldBe SpdxLicenseIdExpression("LGPL-3.0-or-later", true)
 
                     // These have no known successors, so just keep them.
-                    SpdxExpression.parse("eCos-2.0").normalize() shouldBe ECOS_2_0.toExpression()
-                    SpdxExpression.parse("Nunit").normalize() shouldBe NUNIT.toExpression()
-                    SpdxExpression.parse("StandardML-NJ").normalize() shouldBe STANDARDML_NJ.toExpression()
-                    SpdxExpression.parse("wxWindows").normalize() shouldBe WXWINDOWS.toExpression()
+                    "eCos-2.0".parse().normalize() shouldBe ECOS_2_0.toExpression()
+                    "Nunit".parse().normalize() shouldBe NUNIT.toExpression()
+                    "StandardML-NJ".parse().normalize() shouldBe STANDARDML_NJ.toExpression()
+                    "wxWindows".parse().normalize() shouldBe WXWINDOWS.toExpression()
                 }
             }
 
             "normalize deprecated license exceptions to non-deprecated ones" {
                 assertSoftly {
-                    SpdxExpression.parse("GPL-2.0-with-autoconf-exception").normalize() shouldBe
+                    "GPL-2.0-with-autoconf-exception".parse().normalize() shouldBe
                             (GPL_2_0_ONLY with AUTOCONF_EXCEPTION_2_0)
-                    SpdxExpression.parse("GPL-2.0-with-bison-exception").normalize() shouldBe
+                    "GPL-2.0-with-bison-exception".parse().normalize() shouldBe
                             (GPL_2_0_ONLY with BISON_EXCEPTION_2_2)
-                    SpdxExpression.parse("GPL-2.0-with-classpath-exception").normalize() shouldBe
+                    "GPL-2.0-with-classpath-exception".parse().normalize() shouldBe
                             (GPL_2_0_ONLY with CLASSPATH_EXCEPTION_2_0)
-                    SpdxExpression.parse("GPL-2.0-with-font-exception").normalize() shouldBe
+                    "GPL-2.0-with-font-exception".parse().normalize() shouldBe
                             (GPL_2_0_ONLY with FONT_EXCEPTION_2_0)
-                    SpdxExpression.parse("GPL-2.0-with-GCC-exception").normalize() shouldBe
+                    "GPL-2.0-with-GCC-exception".parse().normalize() shouldBe
                             (GPL_2_0_ONLY with GCC_EXCEPTION_2_0)
-                    SpdxExpression.parse("GPL-3.0-with-autoconf-exception").normalize() shouldBe
+                    "GPL-3.0-with-autoconf-exception".parse().normalize() shouldBe
                             (GPL_3_0_ONLY with AUTOCONF_EXCEPTION_3_0)
-                    SpdxExpression.parse("GPL-3.0-with-GCC-exception").normalize() shouldBe
+                    "GPL-3.0-with-GCC-exception".parse().normalize() shouldBe
                             (GPL_3_0_ONLY with GCC_EXCEPTION_3_1)
                 }
             }
         }
 
         "decompose" should {
-            fun String.decompose() = SpdxExpression.parse(this).decompose().map { it.toString() }
+            fun String.decompose() = parse().decompose().map { it.toString() }
 
             "not split-up compound expressions with a WITH operator" {
                 "GPL-2.0-or-later WITH Classpath-exception-2.0".decompose() should containExactlyInAnyOrder(
@@ -297,37 +288,35 @@ class SpdxExpressionTest : WordSpec() {
 
         "disjunctiveNormalForm()" should {
             "not change an expression already in DNF" {
-                val spdxExpression = SpdxExpression.parse("(a AND b) OR (c AND d)")
+                val spdxExpression = "(a AND b) OR (c AND d)".parse()
 
                 spdxExpression.disjunctiveNormalForm() shouldBe spdxExpression
             }
 
             "correctly convert an OR on the left side of an AND expression" {
-                val spdxExpression = SpdxExpression.parse("(a OR b) AND c")
-                val dnf = SpdxExpression.parse("(a AND c) OR (b AND c)")
+                val spdxExpression = "(a OR b) AND c".parse()
+                val dnf = "(a AND c) OR (b AND c)".parse()
 
                 spdxExpression.disjunctiveNormalForm() shouldBe dnf
             }
 
             "correctly convert an OR on the right side of an AND expression" {
-                val spdxExpression = SpdxExpression.parse("a AND (b OR c)")
-                val dnf = SpdxExpression.parse("(a AND b) OR (a AND c)")
+                val spdxExpression = "a AND (b OR c)".parse()
+                val dnf = "(a AND b) OR (a AND c)".parse()
 
                 spdxExpression.disjunctiveNormalForm() shouldBe dnf
             }
 
             "correctly convert ORs on both sides of an AND expression" {
-                val spdxExpression = SpdxExpression.parse("(a OR b) AND (c OR d)")
-                val dnf = SpdxExpression.parse("((a AND c) OR (a AND d)) OR ((b AND c) OR (b AND d))")
+                val spdxExpression = "(a OR b) AND (c OR d)".parse()
+                val dnf = "((a AND c) OR (a AND d)) OR ((b AND c) OR (b AND d))".parse()
 
                 spdxExpression.disjunctiveNormalForm() shouldBe dnf
             }
 
             "correctly convert a complex expression" {
-                val spdxExpression = SpdxExpression.parse("(a OR b) AND (c AND (d OR e))")
-                val dnf = SpdxExpression.parse(
-                    "((a AND (c AND d)) OR (a AND (c AND e))) OR ((b AND (c AND d)) OR (b AND (c AND e)))"
-                )
+                val spdxExpression = "(a OR b) AND (c AND (d OR e))".parse()
+                val dnf = "((a AND (c AND d)) OR (a AND (c AND e))) OR ((b AND (c AND d)) OR (b AND (c AND e)))".parse()
 
                 spdxExpression.disjunctiveNormalForm() shouldBe dnf
             }
