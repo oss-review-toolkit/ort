@@ -336,5 +336,20 @@ class SpdxExpressionTest : WordSpec() {
                 spdxExpression.validChoices() shouldContainExactlyInAnyOrder choices
             }
         }
+
+        "offersChoice()" should {
+            "return true if the expression contains the OR operator" {
+                "a OR b".parse().offersChoice() shouldBe true
+                "a AND b OR c".parse().offersChoice() shouldBe true
+                "a OR b AND c".parse().offersChoice() shouldBe true
+                "a AND b AND c OR d".parse().offersChoice() shouldBe true
+            }
+
+            "return false if the expression does not contain the OR operator" {
+                "a".parse().offersChoice() shouldBe false
+                "a AND b".parse().offersChoice() shouldBe false
+                "a AND b AND c".parse().offersChoice() shouldBe false
+            }
+        }
     }
 }
