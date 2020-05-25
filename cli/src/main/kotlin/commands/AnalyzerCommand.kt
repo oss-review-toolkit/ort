@@ -46,14 +46,14 @@ import org.ossreviewtoolkit.utils.safeMkdirs
 import java.io.File
 
 class AnalyzerCommand : CliktCommand(name = "analyze", help = "Determine dependencies of a software project.") {
-    private val packageManagersOption by option(
+    private val packageManagers by option(
         "--package-managers", "-m",
         help = "The list of package managers to activate."
-    ).convert { packageManagerName ->
+    ).convert { name ->
         // Map upper-cased package manager names to their instances.
         val packageManagers = PackageManager.ALL.associateBy { it.managerName.toUpperCase() }
-        packageManagers[packageManagerName.toUpperCase()]
-            ?: throw BadParameterValue("Package managers must be contained in ${packageManagers.keys}.")
+        packageManagers[name.toUpperCase()]
+            ?: throw BadParameterValue("Package managers must be one or more of ${packageManagers.keys}.")
     }.split(",").default(PackageManager.ALL)
 
     private val inputDir by option(
@@ -116,10 +116,10 @@ class AnalyzerCommand : CliktCommand(name = "analyze", help = "Determine depende
             throw UsageError("None of the output files $existingOutputFiles must exist yet.", statusCode = 2)
         }
 
-        val packageManagers = packageManagersOption.distinct()
+        val distinctPackageManagers = packageManagers.distinct()
 
         println("The following package managers are activated:")
-        println("\t" + packageManagers.joinToString(", "))
+        println("\t" + distinctPackageManagers.joinToString(", "))
 
         val absoluteInputDir = inputDir.normalize()
         println("Analyzing project path:\n\t$absoluteInputDir")
@@ -137,7 +137,7 @@ class AnalyzerCommand : CliktCommand(name = "analyze", help = "Determine depende
         )
 
         val ortResult = analyzer.analyze(
-            absoluteInputDir, packageManagers, curationProvider, repositoryConfigurationFile
+            absoluteInputDir, distinctPackageManagers, curationProvider, repositoryConfigurationFile
         )
 
         println("Found ${ortResult.getProjects().size} project(s) in total.")

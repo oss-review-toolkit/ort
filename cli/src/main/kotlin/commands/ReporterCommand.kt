@@ -88,14 +88,14 @@ class ReporterCommand : CliktCommand(
         .file(mustExist = false, canBeFile = false, canBeDir = true, mustBeWritable = false, mustBeReadable = false)
         .required()
 
-    private val reporters by option(
+    private val reportFormats by option(
         "--report-formats", "-f",
         help = "The list of report formats that will be generated."
-    ).convert { reporterName ->
+    ).convert { name ->
         // Map upper-cased reporter names to their instances.
         val reporters = Reporter.ALL.associateBy { it.reporterName.toUpperCase() }
-        reporters[reporterName.toUpperCase()]
-            ?: throw BadParameterValue("Reporters must be contained in ${reporters.keys}.")
+        reporters[name.toUpperCase()]
+            ?: throw BadParameterValue("Report formats must be one or more of ${reporters.keys}.")
     }.split(",").required()
 
     private val resolutionsFile by option(
@@ -142,7 +142,7 @@ class ReporterCommand : CliktCommand(
     override fun run() {
         val absoluteOutputDir = outputDir.normalize()
 
-        val reports = reporters.associateWith { reporter ->
+        val reports = reportFormats.associateWith { reporter ->
             File(absoluteOutputDir, reporter.defaultFilename)
         }
 
