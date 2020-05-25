@@ -58,6 +58,8 @@ class ReporterCommand : CliktCommand(
     name = "report",
     help = "Present Analyzer and Scanner results in various formats."
 ) {
+    private val allReportersByName = Reporter.ALL.associateBy { it.reporterName.toUpperCase() }
+
     private val ortFile by option(
         "--ort-file", "-i",
         help = "The ORT result file to use."
@@ -92,10 +94,8 @@ class ReporterCommand : CliktCommand(
         "--report-formats", "-f",
         help = "The list of report formats that will be generated."
     ).convert { name ->
-        // Map upper-cased reporter names to their instances.
-        val reporters = Reporter.ALL.associateBy { it.reporterName.toUpperCase() }
-        reporters[name.toUpperCase()]
-            ?: throw BadParameterValue("Report formats must be one or more of ${reporters.keys}.")
+        allReportersByName[name.toUpperCase()]
+            ?: throw BadParameterValue("Report formats must be one or more of ${allReportersByName.keys}.")
     }.split(",").required()
 
     private val resolutionsFile by option(
