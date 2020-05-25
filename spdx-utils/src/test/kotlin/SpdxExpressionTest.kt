@@ -31,6 +31,7 @@ import io.kotest.matchers.shouldBe
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.collections.containExactlyInAnyOrder
+import io.kotest.matchers.collections.shouldContainExactlyInAnyOrder
 import io.kotest.matchers.should
 
 class SpdxExpressionTest : WordSpec() {
@@ -319,6 +320,20 @@ class SpdxExpressionTest : WordSpec() {
                 val dnf = "((a AND (c AND d)) OR (a AND (c AND e))) OR ((b AND (c AND d)) OR (b AND (c AND e)))".parse()
 
                 spdxExpression.disjunctiveNormalForm() shouldBe dnf
+            }
+        }
+
+        "validChoices()" should {
+            "list the valid choices for a complex expression" {
+                val spdxExpression = "(a OR b) AND (c AND (d OR e))".parse()
+                val choices = listOf(
+                    "a AND (c AND d)",
+                    "a AND (c AND e)",
+                    "b AND (c AND d)",
+                    "b AND (c AND e)"
+                ).map { it.parse() }
+
+                spdxExpression.validChoices() shouldContainExactlyInAnyOrder choices
             }
         }
     }
