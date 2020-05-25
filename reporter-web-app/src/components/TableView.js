@@ -351,6 +351,25 @@ class TableView extends React.Component {
             }
         }
 
+        toggleColumnMenuItems.push({ text: 'Homepage', value: 'homepageUrl' });
+        if (showColumnKeys.includes('homepageUrl')) {
+            columns.push({
+                align: 'left',
+                dataIndex: 'homepageUrl',
+                render: (homepageUrl) => (
+                    <span>
+                        {homepageUrl}
+                    </span>
+                ),
+                responsive: ['md'],
+                sorter: (a, b) => a.homepageUrl.localeCompare(b.homepageUrl),
+                sortOrder: sortedInfo.field === 'homepageUrl' && sortedInfo.order,
+                textWrap: 'word-break',
+                title: 'Homepage',
+                ...this.getColumnSearchProps('Homepage', filteredInfo)
+            });
+        }
+
         toggleColumnMenuItems.push({ text: 'Repository', value: 'vcsProcessedUrl' });
         if (showColumnKeys.includes('vcsProcessedUrl')) {
             columns.push({
