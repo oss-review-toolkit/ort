@@ -141,6 +141,20 @@ sealed class SpdxExpression {
         runCatching { validate(strictness) }.isSuccess
 
     /**
+     * Return true if [choice] is a valid license choice for this SPDX expression. This can only be the case, if
+     * [choice] does not offer a license choice itself and if the [licenses][SpdxSingleLicenseExpression] contained in
+     * [choice] match any of the [valid license choices][validChoices].
+     */
+    fun isValidChoice(choice: SpdxExpression): Boolean {
+        if (choice.offersChoice()) return false
+
+        val chosenLicenses = choice.decompose()
+        return validChoices().any { validChoice ->
+            validChoice.decompose() == chosenLicenses
+        }
+    }
+
+    /**
      * Return true if this expression offers a license choice. This can only be true if this expression contains the
      * [OR operator][SpdxOperator.OR].
      */
