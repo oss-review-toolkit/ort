@@ -49,6 +49,7 @@ object SpdxDeclaredLicenseMapping {
         "Academic Free License (AFL-2.1)" to AFL_2_1.toExpression(),
         "AGPL v3+" to AGPL_3_0_OR_LATER.toExpression(),
         "Aladdin Free Public License (AFPL)" to ALADDIN.toExpression(),
+        "Amazon Software License" to licenseRef("amazon-sl", "scancode"),
         "Apache  Version 2.0, January 2004" to APACHE_2_0.toExpression(),
         "Apache 2" to APACHE_2_0.toExpression(),
         "Apache 2.0" to APACHE_2_0.toExpression(),
