@@ -294,5 +294,43 @@ class SpdxExpressionTest : WordSpec() {
                     )
             }
         }
+
+        "disjunctiveNormalForm()" should {
+            "not change an expression already in DNF" {
+                val spdxExpression = SpdxExpression.parse("(a AND b) OR (c AND d)")
+
+                spdxExpression.disjunctiveNormalForm() shouldBe spdxExpression
+            }
+
+            "correctly convert an OR on the left side of an AND expression" {
+                val spdxExpression = SpdxExpression.parse("(a OR b) AND c")
+                val dnf = SpdxExpression.parse("(a AND c) OR (b AND c)")
+
+                spdxExpression.disjunctiveNormalForm() shouldBe dnf
+            }
+
+            "correctly convert an OR on the right side of an AND expression" {
+                val spdxExpression = SpdxExpression.parse("a AND (b OR c)")
+                val dnf = SpdxExpression.parse("(a AND b) OR (a AND c)")
+
+                spdxExpression.disjunctiveNormalForm() shouldBe dnf
+            }
+
+            "correctly convert ORs on both sides of an AND expression" {
+                val spdxExpression = SpdxExpression.parse("(a OR b) AND (c OR d)")
+                val dnf = SpdxExpression.parse("((a AND c) OR (a AND d)) OR ((b AND c) OR (b AND d))")
+
+                spdxExpression.disjunctiveNormalForm() shouldBe dnf
+            }
+
+            "correctly convert a complex expression" {
+                val spdxExpression = SpdxExpression.parse("(a OR b) AND (c AND (d OR e))")
+                val dnf = SpdxExpression.parse(
+                    "((a AND (c AND d)) OR (a AND (c AND e))) OR ((b AND (c AND d)) OR (b AND (c AND e)))"
+                )
+
+                spdxExpression.disjunctiveNormalForm() shouldBe dnf
+            }
+        }
     }
 }

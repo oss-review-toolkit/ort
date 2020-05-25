@@ -97,6 +97,13 @@ sealed class SpdxExpression {
     abstract fun decompose(): Set<SpdxSingleLicenseExpression>
 
     /**
+     * Return the [disjunctive normal form][1] of this expression.
+     *
+     * [1]: https://en.wikipedia.org/wiki/Disjunctive_normal_form
+     */
+    open fun disjunctiveNormalForm(): SpdxExpression = this
+
+    /**
      * Return all license IDs contained in this expression. Non-SPDX licenses and SPDX license references are included.
      */
     abstract fun licenses(): List<String>
@@ -145,6 +152,30 @@ data class SpdxCompoundExpression(
     val right: SpdxExpression
 ) : SpdxExpression() {
     override fun decompose() = left.decompose() + right.decompose()
+
+    override fun disjunctiveNormalForm(): SpdxExpression {
+        val leftDnf = left.disjunctiveNormalForm()
+        val rightDnf = right.disjunctiveNormalForm()
+
+        return when (operator) {
+            SpdxOperator.OR -> SpdxCompoundExpression(leftDnf, SpdxOperator.OR, rightDnf)
+
+            SpdxOperator.AND -> when {
+                leftDnf is SpdxCompoundExpression && leftDnf.operator == SpdxOperator.OR &&
+                        rightDnf is SpdxCompoundExpression && rightDnf.operator == SpdxOperator.OR ->
+                    ((leftDnf.left and rightDnf.left) or (leftDnf.left and rightDnf.right)) or
+                            ((leftDnf.right and rightDnf.left) or (leftDnf.right and rightDnf.right))
+
+                leftDnf is SpdxCompoundExpression && leftDnf.operator == SpdxOperator.OR ->
+                    (leftDnf.left and rightDnf) or (leftDnf.right and rightDnf)
+
+                rightDnf is SpdxCompoundExpression && rightDnf.operator == SpdxOperator.OR ->
+                    (leftDnf and rightDnf.left) or (leftDnf and rightDnf.right)
+
+                else -> SpdxCompoundExpression(leftDnf, operator, rightDnf)
+            }
+        }
+    }
 
     override fun licenses() = left.licenses() + right.licenses()
 
