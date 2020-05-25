@@ -46,14 +46,14 @@ import org.ossreviewtoolkit.utils.safeMkdirs
 import java.io.File
 
 class AnalyzerCommand : CliktCommand(name = "analyze", help = "Determine dependencies of a software project.") {
+    private val allPackageManagersByName = PackageManager.ALL.associateBy { it.managerName.toUpperCase() }
+
     private val packageManagers by option(
         "--package-managers", "-m",
         help = "The list of package managers to activate."
     ).convert { name ->
-        // Map upper-cased package manager names to their instances.
-        val packageManagers = PackageManager.ALL.associateBy { it.managerName.toUpperCase() }
-        packageManagers[name.toUpperCase()]
-            ?: throw BadParameterValue("Package managers must be one or more of ${packageManagers.keys}.")
+        allPackageManagersByName[name.toUpperCase()]
+            ?: throw BadParameterValue("Package managers must be one or more of ${allPackageManagersByName.keys}.")
     }.split(",").default(PackageManager.ALL)
 
     private val inputDir by option(
