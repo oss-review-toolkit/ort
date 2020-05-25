@@ -351,5 +351,35 @@ class SpdxExpressionTest : WordSpec() {
                 "a AND b AND c".parse().offersChoice() shouldBe false
             }
         }
+
+        "isValidChoice()" should {
+            "return true if a choice is valid" {
+                val spdxExpression = "(a OR b) AND (c AND (d OR e))".parse()
+
+                spdxExpression.isValidChoice("a AND c AND d".parse()) shouldBe true
+                spdxExpression.isValidChoice("a AND d AND c".parse()) shouldBe true
+                spdxExpression.isValidChoice("c AND a AND d".parse()) shouldBe true
+                spdxExpression.isValidChoice("c AND d AND a".parse()) shouldBe true
+                spdxExpression.isValidChoice("d AND a AND c".parse()) shouldBe true
+                spdxExpression.isValidChoice("d AND c AND a".parse()) shouldBe true
+
+                spdxExpression.isValidChoice("a AND c AND e".parse()) shouldBe true
+                spdxExpression.isValidChoice("b AND c AND d".parse()) shouldBe true
+                spdxExpression.isValidChoice("b AND c AND e".parse()) shouldBe true
+            }
+
+            "return false if a choice is invalid" {
+                val spdxExpression = "(a OR b) AND (c AND (d OR e))".parse()
+
+                spdxExpression.isValidChoice("a".parse()) shouldBe false
+                spdxExpression.isValidChoice("a AND b".parse()) shouldBe false
+                spdxExpression.isValidChoice("a AND c".parse()) shouldBe false
+                spdxExpression.isValidChoice("a AND d".parse()) shouldBe false
+                spdxExpression.isValidChoice("a AND e".parse()) shouldBe false
+                spdxExpression.isValidChoice("a AND b AND c".parse()) shouldBe false
+                spdxExpression.isValidChoice("a AND b AND d".parse()) shouldBe false
+                spdxExpression.isValidChoice("a AND b AND c AND d".parse()) shouldBe false
+            }
+        }
     }
 }
