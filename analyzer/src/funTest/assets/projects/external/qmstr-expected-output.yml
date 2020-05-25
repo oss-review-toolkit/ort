@@ -319,7 +319,7 @@ packages:
       path: ""
     vcs_processed:
       type: "Git"
-      url: "https://github.com/google/go-genproto.git"
+      url: "https://github.com/googleapis/go-genproto.git"
       revision: "4eb30f4778eed4c258ba66527a0d4f9ec8a36c45"
       path: ""
   curations: []
