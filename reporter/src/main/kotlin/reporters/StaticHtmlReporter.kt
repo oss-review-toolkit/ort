@@ -478,7 +478,7 @@ class StaticHtmlReporter : Reporter {
                                     +" "
                                     div("ort-reason") {
                                         +"Excluded: "
-                                        +it.value.joinToString { "${it.description}" }
+                                        +it.value.joinToString { it.description }
                                     }
                                 }
                             }
