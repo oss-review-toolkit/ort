@@ -142,6 +142,21 @@ fun filterVersionNames(version: String, names: List<String>, project: String? = 
 }
 
 /**
+ * Check if the "user.home" property is set to a sane value and otherwise set it to the value of an (OS-specific)
+ * environment variable for the user home directory. This works around the issue that esp. in certain Docker scenarios
+ * "user.home" is set to "?", see https://bugs.openjdk.java.net/browse/JDK-8193433 for some background information.
+ */
+fun fixupUserHomeProperty() {
+    val userHome = System.getProperty("user.home")
+    if (userHome.isNullOrBlank() || userHome == "?") {
+        listOfNotNull(
+            Os.env["HOME"],
+            Os.env["USERPROFILE"]
+        ).firstOrNull { it.isNotBlank() }?.let { System.setProperty("user.home", it) }
+    }
+}
+
+/**
  * Return the longest parent directory that is common to all [files], or null if they have no directory in common.
  */
 fun getCommonFileParent(files: Collection<File>): File? =
@@ -189,21 +204,6 @@ fun getPathFromEnvironment(executable: String): File? {
     }
 
     return null
-}
-
-/**
- * Check if the "user.home" property is set to a sane value and otherwise set it to the value of an (OS-specific)
- * environment variable for the user home directory. This works around the issue that esp. in certain Docker scenarios
- * "user.home" is set to "?", see https://bugs.openjdk.java.net/browse/JDK-8193433 for some background information.
- */
-fun fixupUserHomeProperty() {
-    val userHome = System.getProperty("user.home")
-    if (userHome.isNullOrBlank() || userHome == "?") {
-        listOfNotNull(
-            Os.env["HOME"],
-            Os.env["USERPROFILE"]
-        ).firstOrNull { it.isNotBlank() }?.let { System.setProperty("user.home", it) }
-    }
 }
 
 /**
