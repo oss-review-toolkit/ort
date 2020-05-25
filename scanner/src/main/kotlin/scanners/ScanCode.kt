@@ -66,7 +66,7 @@ import org.apache.logging.log4j.Level
 /**
  * A wrapper for [ScanCode](https://github.com/nexB/scancode-toolkit).
  *
- * This scanner can be configured in [ScannerConfiguration.scanner] using the key "ScanCode". It offers the following
+ * This scanner can be configured in [ScannerConfiguration.options] using the key "ScanCode". It offers the following
  * configuration options:
  *
  * * **"commandLine":** Command line options that modify the result. These are added to the [ScannerDetails] when
