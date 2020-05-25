@@ -349,7 +349,7 @@ internal fun OrtResult.getRepositoryLicenseFindingCurations(): RepositoryLicense
 }
 
 /**
- * Return all license [Identifiers]s which triggered at least one [RuleViolation] with a [severity] contained in the
+ * Return all license [Identifier]s which triggered at least one [RuleViolation] with a [severity] contained in the
  * given [severity] collection, associated with the rule names of all corresponding violated rules.
  */
 internal fun OrtResult.getViolatedRulesByLicense(
