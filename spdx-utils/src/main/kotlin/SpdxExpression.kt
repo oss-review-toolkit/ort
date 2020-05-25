@@ -124,6 +124,17 @@ sealed class SpdxExpression {
     abstract fun validate(strictness: Strictness)
 
     /**
+     * Return all valid license choices for this SPDX expression, by converting it to the
+     * [disjunctive normal form][disjunctiveNormalForm] and collecting all disjunct expressions.
+     */
+    fun validChoices(): Set<SpdxExpression> = disjunctiveNormalForm().validChoicesForDnf()
+
+    /**
+     * Internal implementation of [validChoices], assuming that this expression is already in disjunctive normal form.
+     */
+    protected open fun validChoicesForDnf(): Set<SpdxExpression> = setOf(this)
+
+    /**
      * Return if this expression is valid according to the [strictness]. Also see [validate].
      */
     fun isValid(strictness: Strictness = Strictness.ALLOW_CURRENT): Boolean =
@@ -186,6 +197,25 @@ data class SpdxCompoundExpression(
         left.validate(strictness)
         right.validate(strictness)
     }
+
+    override fun validChoicesForDnf(): Set<SpdxExpression> =
+        when (operator) {
+            SpdxOperator.AND -> setOf(this)
+
+            SpdxOperator.OR -> {
+                val validChoicesLeft = when (left) {
+                    is SpdxCompoundExpression -> left.validChoicesForDnf()
+                    else -> left.validChoices()
+                }
+
+                val validChoicesRight = when (right) {
+                    is SpdxCompoundExpression -> right.validChoicesForDnf()
+                    else -> right.validChoices()
+                }
+
+                validChoicesLeft + validChoicesRight
+            }
+        }
 
     override fun toString(): String {
         // If the priority of this operator is higher than the binding of the left or right operator, we need to put the
