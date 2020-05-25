@@ -379,6 +379,10 @@ class WebAppPackage {
         return this.#findings;
     }
 
+    get homepageUrl() {
+        return this.#homepageUrl;
+    }
+
     get id() {
         return this.#id;
     }
