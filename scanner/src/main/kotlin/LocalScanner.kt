@@ -79,7 +79,7 @@ abstract class LocalScanner(name: String, config: ScannerConfiguration) : Scanne
         val DEFAULT_ARCHIVE_DIR by lazy { getOrtDataDirectory().resolve("scanner/archive") }
     }
 
-    val archiver by lazy {
+    private val archiver by lazy {
         config.archive?.createFileArchiver() ?: FileArchiver(
             LICENSE_FILENAMES,
             LocalFileStorage(DEFAULT_ARCHIVE_DIR)
@@ -94,7 +94,7 @@ abstract class LocalScanner(name: String, config: ScannerConfiguration) : Scanne
     /**
      * The directory the scanner was bootstrapped to, if so.
      */
-    protected val scannerDir by lazy {
+    private val scannerDir by lazy {
         val scannerExe = command()
 
         getPathFromEnvironment(scannerExe)?.parentFile?.takeIf {
