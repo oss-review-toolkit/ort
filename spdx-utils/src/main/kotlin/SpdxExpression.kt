@@ -141,6 +141,12 @@ sealed class SpdxExpression {
         runCatching { validate(strictness) }.isSuccess
 
     /**
+     * Return true if this expression offers a license choice. This can only be true if this expression contains the
+     * [OR operator][SpdxOperator.OR].
+     */
+    open fun offersChoice(): Boolean = false
+
+    /**
      * Concatenate [this][SpdxExpression] and [other] using [SpdxOperator.AND].
      */
     infix fun and(other: SpdxExpression) = SpdxCompoundExpression(this, SpdxOperator.AND, other)
@@ -215,6 +221,12 @@ data class SpdxCompoundExpression(
 
                 validChoicesLeft + validChoicesRight
             }
+        }
+
+    override fun offersChoice(): Boolean =
+        when (operator) {
+            SpdxOperator.OR -> true
+            SpdxOperator.AND -> left.offersChoice() || right.offersChoice()
         }
 
     override fun toString(): String {
