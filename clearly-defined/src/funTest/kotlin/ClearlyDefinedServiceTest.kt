@@ -26,6 +26,7 @@ import org.ossreviewtoolkit.clearlydefined.ClearlyDefinedService.Curation
 import org.ossreviewtoolkit.clearlydefined.ClearlyDefinedService.Licensed
 import org.ossreviewtoolkit.clearlydefined.ClearlyDefinedService.Patch
 import org.ossreviewtoolkit.clearlydefined.ClearlyDefinedService.Server
+import org.ossreviewtoolkit.utils.test.ExpensiveTag
 
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.comparables.shouldBeGreaterThan
@@ -40,7 +41,7 @@ import java.net.HttpURLConnection
 
 class ClearlyDefinedServiceTest : WordSpec({
     "Downloading a contribution patch" should {
-        "return curation data" {
+        "return curation data".config(tags = setOf(ExpensiveTag)) {
             val service = ClearlyDefinedService.create(Server.PRODUCTION)
 
             val getCall = service.getCuration(
@@ -83,7 +84,7 @@ class ClearlyDefinedServiceTest : WordSpec({
             revisions
         )
 
-        "only serialize non-null values" {
+        "only serialize non-null values".config(tags = setOf(ExpensiveTag)) {
             val service = ClearlyDefinedService.create(Server.LOCALHOST)
 
             val patchCall = service.putCuration(ContributionPatch(info, listOf(patch)))
@@ -96,7 +97,7 @@ class ClearlyDefinedServiceTest : WordSpec({
 
         // Disable this test by default as it talks to the real development instance of ClearlyDefined and creates
         // pull-requests at https://github.com/clearlydefined/curated-data-dev.
-        "return a summary of the created pull-request".config(enabled = false) {
+        "return a summary of the created pull-request".config(enabled = false, tags = setOf(ExpensiveTag)) {
             val service = ClearlyDefinedService.create(Server.DEVELOPMENT)
 
             val patchCall = service.putCuration(ContributionPatch(info, listOf(patch)))
