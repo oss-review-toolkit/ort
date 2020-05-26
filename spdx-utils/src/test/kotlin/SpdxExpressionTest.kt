@@ -311,14 +311,14 @@ class SpdxExpressionTest : WordSpec() {
 
             "correctly convert ORs on both sides of an AND expression" {
                 val spdxExpression = "(a OR b) AND (c OR d)".parse()
-                val dnf = "((a AND c) OR (a AND d)) OR ((b AND c) OR (b AND d))".parse()
+                val dnf = "(a AND c) OR (a AND d) OR (b AND c) OR (b AND d)".parse()
 
                 spdxExpression.disjunctiveNormalForm() shouldBe dnf
             }
 
             "correctly convert a complex expression" {
-                val spdxExpression = "(a OR b) AND (c AND (d OR e))".parse()
-                val dnf = "((a AND (c AND d)) OR (a AND (c AND e))) OR ((b AND (c AND d)) OR (b AND (c AND e)))".parse()
+                val spdxExpression = "(a OR b) AND c AND (d OR e)".parse()
+                val dnf = "(a AND c AND d) OR (a AND c AND e) OR (b AND c AND d) OR (b AND c AND e)".parse()
 
                 spdxExpression.disjunctiveNormalForm() shouldBe dnf
             }
@@ -326,12 +326,12 @@ class SpdxExpressionTest : WordSpec() {
 
         "validChoices()" should {
             "list the valid choices for a complex expression" {
-                val spdxExpression = "(a OR b) AND (c AND (d OR e))".parse()
+                val spdxExpression = "(a OR b) AND c AND (d OR e)".parse()
                 val choices = listOf(
-                    "a AND (c AND d)",
-                    "a AND (c AND e)",
-                    "b AND (c AND d)",
-                    "b AND (c AND e)"
+                    "a AND c AND d",
+                    "a AND c AND e",
+                    "b AND c AND d",
+                    "b AND c AND e"
                 ).map { it.parse() }
 
                 spdxExpression.validChoices() shouldContainExactlyInAnyOrder choices
@@ -355,7 +355,7 @@ class SpdxExpressionTest : WordSpec() {
 
         "isValidChoice()" should {
             "return true if a choice is valid" {
-                val spdxExpression = "(a OR b) AND (c AND (d OR e))".parse()
+                val spdxExpression = "(a OR b) AND c AND (d OR e)".parse()
 
                 spdxExpression.isValidChoice("a AND c AND d".parse()) shouldBe true
                 spdxExpression.isValidChoice("a AND d AND c".parse()) shouldBe true
@@ -370,7 +370,7 @@ class SpdxExpressionTest : WordSpec() {
             }
 
             "return false if a choice is invalid" {
-                val spdxExpression = "(a OR b) AND (c AND (d OR e))".parse()
+                val spdxExpression = "(a OR b) AND c AND (d OR e)".parse()
 
                 spdxExpression.isValidChoice("a".parse()) shouldBe false
                 spdxExpression.isValidChoice("a AND b".parse()) shouldBe false
