@@ -296,45 +296,32 @@ class SpdxExpressionTest : WordSpec() {
             }
 
             "correctly convert an OR on the left side of an AND expression" {
-                val spdxExpression = "(a OR b) AND c".parse()
-                val dnf = "(a AND c) OR (b AND c)".parse()
-
-                spdxExpression.disjunctiveNormalForm() shouldBe dnf
+                "(a OR b) AND c".parse().disjunctiveNormalForm() shouldBe "(a AND c) OR (b AND c)".parse()
             }
 
             "correctly convert an OR on the right side of an AND expression" {
-                val spdxExpression = "a AND (b OR c)".parse()
-                val dnf = "(a AND b) OR (a AND c)".parse()
-
-                spdxExpression.disjunctiveNormalForm() shouldBe dnf
+                "a AND (b OR c)".parse().disjunctiveNormalForm() shouldBe "(a AND b) OR (a AND c)".parse()
             }
 
             "correctly convert ORs on both sides of an AND expression" {
-                val spdxExpression = "(a OR b) AND (c OR d)".parse()
-                val dnf = "(a AND c) OR (a AND d) OR (b AND c) OR (b AND d)".parse()
-
-                spdxExpression.disjunctiveNormalForm() shouldBe dnf
+                "(a OR b) AND (c OR d)".parse().disjunctiveNormalForm() shouldBe
+                        "(a AND c) OR (a AND d) OR (b AND c) OR (b AND d)".parse()
             }
 
             "correctly convert a complex expression" {
-                val spdxExpression = "(a OR b) AND c AND (d OR e)".parse()
-                val dnf = "(a AND c AND d) OR (a AND c AND e) OR (b AND c AND d) OR (b AND c AND e)".parse()
-
-                spdxExpression.disjunctiveNormalForm() shouldBe dnf
+                "(a OR b) AND c AND (d OR e)".parse().disjunctiveNormalForm() shouldBe
+                        "(a AND c AND d) OR (a AND c AND e) OR (b AND c AND d) OR (b AND c AND e)".parse()
             }
         }
 
         "validChoices()" should {
             "list the valid choices for a complex expression" {
-                val spdxExpression = "(a OR b) AND c AND (d OR e)".parse()
-                val choices = listOf(
+                "(a OR b) AND c AND (d OR e)".parse().validChoices() shouldContainExactlyInAnyOrder listOf(
                     "a AND c AND d",
                     "a AND c AND e",
                     "b AND c AND d",
                     "b AND c AND e"
                 ).map { it.parse() }
-
-                spdxExpression.validChoices() shouldContainExactlyInAnyOrder choices
             }
         }
 
