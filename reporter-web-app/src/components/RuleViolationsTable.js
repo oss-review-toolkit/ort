@@ -146,16 +146,7 @@ const RuleViolationsTable = (props) => {
                         </span>
                     )
             ),
-            sorter: (a, b) => {
-                if (a.severityIndex < b.severityIndex) {
-                    return -1;
-                }
-                if (a.severityIndex > b.severityIndex) {
-                    return 1;
-                }
-
-                return 0;
-            },
+            sorter: (a, b) => a.severityIndex - b.severityIndex,
             width: '5em'
         }
     ];
