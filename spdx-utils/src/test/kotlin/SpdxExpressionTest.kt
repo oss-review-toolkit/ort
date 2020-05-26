@@ -250,7 +250,7 @@ class SpdxExpressionTest : WordSpec() {
             }
         }
 
-        "decompose" should {
+        "decompose()" should {
             fun String.decompose() = parse().decompose().map { it.toString() }
 
             "not split-up compound expressions with a WITH operator" {
