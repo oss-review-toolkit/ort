@@ -213,6 +213,7 @@ object SpdxDeclaredLicenseMapping {
         "cc by-sa 4.0" to CC_BY_SA_4_0.toExpression(),
         "cpal 1.0" to CPAL_1_0.toExpression(),
         "cpal v1.0" to CPAL_1_0.toExpression(),
+        "CUP Parser Generator Copyright Notice, License, and Disclaimer" to HPND.toExpression(),
         "DBAD" to licenseRef("dbad", "ort"),
         "Dual License: CDDL 1.0 and GPL V2 with Classpath Exception" to (CDDL_1_0 and GPL_2_0_ONLY),
         "Dual license consisting of the CDDL v1.1 and GPL v2" to (CDDL_1_1 and GPL_2_0_ONLY),
