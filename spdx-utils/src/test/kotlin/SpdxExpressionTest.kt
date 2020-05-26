@@ -33,6 +33,7 @@ import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.collections.containExactlyInAnyOrder
 import io.kotest.matchers.collections.shouldContainExactlyInAnyOrder
 import io.kotest.matchers.should
+import io.kotest.matchers.shouldNotBe
 
 class SpdxExpressionTest : WordSpec() {
     private val yamlMapper = YAMLMapper()
@@ -379,6 +380,41 @@ class SpdxExpressionTest : WordSpec() {
                 spdxExpression.isValidChoice("a AND b AND c".parse()) shouldBe false
                 spdxExpression.isValidChoice("a AND b AND d".parse()) shouldBe false
                 spdxExpression.isValidChoice("a AND b AND c AND d".parse()) shouldBe false
+            }
+        }
+
+        "equals()" should {
+            "return true for semantically equal expressions" {
+                "a".parse() shouldBe "a".parse()
+                "a".parse() shouldBe "a AND a".parse()
+                "a AND a".parse() shouldBe "a".parse()
+                "a".parse() shouldBe "a OR a".parse()
+                "a OR a".parse() shouldBe "a".parse()
+                "a+".parse() shouldBe "a+".parse()
+                "a WITH b".parse() shouldBe "a WITH b".parse()
+                "a AND b".parse() shouldBe "b AND a".parse()
+                "a AND (b OR c)".parse() shouldBe "(a AND b) OR (a AND c)".parse()
+            }
+
+            "return false for semantically different expressions" {
+                "a".parse() shouldNotBe "b".parse()
+                "a AND b".parse() shouldNotBe "a OR b".parse()
+                "a OR b".parse() shouldNotBe "a AND b".parse()
+                "a".parse() shouldNotBe "a WITH b".parse()
+                "a".parse() shouldNotBe "a OR b".parse()
+                "a".parse() shouldNotBe "a AND b".parse()
+                "a".parse() shouldNotBe "a+".parse()
+            }
+        }
+
+        "hashCode()" should {
+            "return the same hashcode for equal expressions" {
+                "a".parse().hashCode() shouldBe "a".parse().hashCode()
+                "a".parse().hashCode() shouldBe "a AND a".parse().hashCode()
+                "a".parse().hashCode() shouldBe "a AND a AND a".parse().hashCode()
+                "a AND b".parse().hashCode() shouldBe "b AND a".parse().hashCode()
+                "a OR b".parse().hashCode() shouldBe "b OR a".parse().hashCode()
+                "a AND (b OR c)".parse().hashCode() shouldBe "(a AND b) OR (a AND c)".parse().hashCode()
             }
         }
     }

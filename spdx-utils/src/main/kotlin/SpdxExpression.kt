@@ -177,7 +177,7 @@ sealed class SpdxExpression {
  *
  * [1]: https://spdx.org/spdx-specification-21-web-version#h.jxpfx0ykyb60
  */
-data class SpdxCompoundExpression(
+class SpdxCompoundExpression(
     val left: SpdxExpression,
     val operator: SpdxOperator,
     val right: SpdxExpression
@@ -243,6 +243,17 @@ data class SpdxCompoundExpression(
             SpdxOperator.AND -> left.offersChoice() || right.offersChoice()
         }
 
+    override fun equals(other: Any?): Boolean {
+        if (other !is SpdxExpression) return false
+
+        val validChoices = validChoices().map { it.decompose() }
+        val otherValidChoices = other.validChoices().map { it.decompose() }
+
+        return validChoices.size == otherValidChoices.size && validChoices.all { otherValidChoices.contains(it) }
+    }
+
+    override fun hashCode() = decompose().sumBy { it.hashCode() }
+
     override fun toString(): String {
         // If the priority of this operator is higher than the binding of the left or right operator, we need to put the
         // left or right expressions in parenthesis to not change the semantics of the expression.
@@ -268,7 +279,7 @@ sealed class SpdxSingleLicenseExpression : SpdxExpression()
 /**
  * An SPDX expression that contains a [license] with an [exception].
  */
-data class SpdxLicenseWithExceptionExpression(
+class SpdxLicenseWithExceptionExpression(
     val license: SpdxSimpleExpression,
     val exception: String
 ) : SpdxSingleLicenseExpression() {
@@ -311,6 +322,20 @@ data class SpdxLicenseWithExceptionExpression(
         } ?: throw SpdxException("'$exception' is not a valid SPDX license exception id.")
     }
 
+    override fun equals(other: Any?) =
+        when (other) {
+            is SpdxLicenseWithExceptionExpression -> license == other.license && exception == other.exception
+            is SpdxExpression -> {
+                val decomposed = other.decompose()
+                decomposed.size == 1 && decomposed.first().let {
+                    it is SpdxLicenseWithExceptionExpression && it.license == license && it.exception == exception
+                }
+            }
+            else -> false
+        }
+
+    override fun hashCode() = license.hashCode() + 31 * exception.hashCode()
+
     override fun toString(): String = "$license $WITH $exception"
 }
 
@@ -333,7 +358,7 @@ sealed class SpdxSimpleExpression : SpdxSingleLicenseExpression() {
  *
  * [1]: https://spdx.org/spdx-specification-21-web-version#h.luq9dgcle9mo
  */
-data class SpdxLicenseIdExpression(
+class SpdxLicenseIdExpression(
     val id: String,
     val orLaterVersion: Boolean = false
 ) : SpdxSimpleExpression() {
@@ -353,6 +378,20 @@ data class SpdxLicenseIdExpression(
             Strictness.ALLOW_CURRENT -> spdxLicense?.takeUnless { spdxLicense.deprecated }
         } ?: throw SpdxException("'$this' is not a valid SPDX license id.")
     }
+
+    override fun equals(other: Any?) =
+        when (other) {
+            is SpdxLicenseIdExpression -> id == other.id && orLaterVersion == other.orLaterVersion
+            is SpdxExpression -> {
+                val decomposed = other.decompose()
+                decomposed.size == 1 && decomposed.first().let {
+                    it is SpdxLicenseIdExpression && it.id == id && it.orLaterVersion == orLaterVersion
+                }
+            }
+            else -> false
+        }
+
+    override fun hashCode() = id.hashCode() + 31 * orLaterVersion.hashCode()
 
     override fun toString() =
         buildString {
@@ -385,6 +424,18 @@ data class SpdxLicenseReferenceExpression(
             throw SpdxException("'$id' is not an SPDX license reference.")
         }
     }
+
+    override fun equals(other: Any?) =
+        when (other) {
+            is SpdxLicenseReferenceExpression -> id == other.id
+            is SpdxExpression -> {
+                val decomposed = other.decompose()
+                decomposed.size == 1 && decomposed.first().let { it is SpdxLicenseReferenceExpression && it.id == id }
+            }
+            else -> false
+        }
+
+    override fun hashCode() = id.hashCode()
 
     override fun toString() = id
 }
