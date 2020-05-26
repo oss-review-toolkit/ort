@@ -371,6 +371,10 @@ object SpdxDeclaredLicenseMapping {
         "License Agreement For Open Source Computer Vision Library (3-clause BSD License)"
                 to BSD_3_CLAUSE.toExpression(),
         "lgplv2 or later" to LGPL_2_1_OR_LATER.toExpression(),
+        "JSR-000107 JCACHE 2.9 Public Review - Updated Specification License" to licenseRef(
+            "jsr-107-jcache-spec.LICENSE",
+            "scancode"
+        ),
         "MIT / http://rem.mit-license.org" to MIT.toExpression(),
         "MIT Licence" to MIT.toExpression(),
         "MIT License (http://opensource.org/licenses/MIT)" to MIT.toExpression(),
