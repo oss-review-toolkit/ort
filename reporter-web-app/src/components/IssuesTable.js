@@ -105,16 +105,7 @@ const IssuesTable = (props) => {
             ])(),
             filteredValue: filteredInfo.severityIndex || null,
             onFilter: (value, webAppOrtIssue) => webAppOrtIssue.severityIndex === Number(value),
-            sorter: (a, b) => {
-                if (a.severityIndex < b.severityIndex) {
-                    return -1;
-                }
-                if (a.severityIndex > b.severityIndex) {
-                    return 1;
-                }
-
-                return 0;
-            },
+            sorter: (a, b) => a.severityIndex - b.severityIndex,
             render: (text, webAppOrtIssue) => (
                 webAppOrtIssue.isResolved
                     ? (
