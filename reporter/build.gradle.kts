@@ -1,6 +1,7 @@
 /*
  * Copyright (C) 2017-2019 HERE Europe B.V.
  * Copyright (C) 2019 Bosch Software Innovations GmbH
+ * Copyright (C) 2020 Bosch.IO GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,6 +19,7 @@
  * License-Filename: LICENSE
  */
 
+val antennaVersion: String by project
 val apachePoiVersion: String by project
 val apachePoiSchemasVersion: String by project
 val cyclonedxCoreJavaVersion: String by project
@@ -60,6 +62,26 @@ repositories {
             includeGroup("bad.robot")
         }
     }
+
+    exclusiveContent {
+        forRepository {
+            maven("https://download.eclipse.org/antenna/releases/")
+        }
+
+        filter {
+            includeGroup("org.eclipse.sw360.antenna")
+        }
+    }
+
+    exclusiveContent {
+        forRepository {
+            maven("https://jitpack.io")
+        }
+
+        filter {
+            includeGroup("com.github.ralfstuckert.pdfbox-layout")
+        }
+    }
 }
 
 dependencies {
@@ -76,6 +98,8 @@ dependencies {
     implementation("org.apache.poi:ooxml-schemas:$apachePoiSchemasVersion")
     implementation("org.apache.poi:poi-ooxml:$apachePoiVersion")
     implementation("org.cyclonedx:cyclonedx-core-java:$cyclonedxCoreJavaVersion")
+    implementation("org.eclipse.sw360.antenna:attribution-document-core:$antennaVersion")
+    implementation("org.eclipse.sw360.antenna:attribution-document-basic-bundle:$antennaVersion")
     implementation("org.jetbrains.kotlinx:kotlinx-html-jvm:$kotlinxHtmlVersion")
 
     // This is required to not depend on the version of Apache Xalan bundled with the JDK. Otherwise the formatting of
