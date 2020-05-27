@@ -1,0 +1,11 @@
+hash: 1df3d7063b69328daef60499e5f1b4342ae62752bcca0c44b5c909162afc3933
+updated: 2020-05-27T22:21:28.950914434+02:00
+imports:
+- name: github.com/mattn/go-isatty
+  version: 7b513a986450394f7bbf1476909911b3aa3a55ce
+- name: golang.org/x/sys
+  version: 05986578812163b26672dabd9b425240ae2bb0ad
+  subpackages:
+  - internal/unsafeheader
+  - unix
+testImports: []

@@ -1,0 +1,4 @@
+package: github.com/oss-review-toolkit/ort
+import:
+- package: github.com/mattn/go-isatty
+  version: v0.0.12
