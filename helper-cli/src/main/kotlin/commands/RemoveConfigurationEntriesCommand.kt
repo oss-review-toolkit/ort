@@ -27,8 +27,8 @@ import com.github.ajalt.clikt.parameters.types.file
 
 import org.ossreviewtoolkit.helper.common.findFilesRecursive
 import org.ossreviewtoolkit.helper.common.minimize
-import org.ossreviewtoolkit.helper.common.replacePathExcludes
 import org.ossreviewtoolkit.helper.common.replaceIssueResolutions
+import org.ossreviewtoolkit.helper.common.replacePathExcludes
 import org.ossreviewtoolkit.helper.common.replaceRuleViolationResolutions
 import org.ossreviewtoolkit.helper.common.replaceScopeExcludes
 import org.ossreviewtoolkit.helper.common.writeAsYaml
@@ -36,7 +36,7 @@ import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.config.Resolutions
 import org.ossreviewtoolkit.model.readValue
-import org.ossreviewtoolkit.reporter.DefaultResolutionProvider
+import org.ossreviewtoolkit.model.utils.DefaultResolutionProvider
 import org.ossreviewtoolkit.utils.expandTilde
 
 internal class RemoveConfigurationEntriesCommand : CliktCommand(

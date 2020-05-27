@@ -42,8 +42,8 @@ import org.ossreviewtoolkit.model.config.orEmpty
 import org.ossreviewtoolkit.model.licenses.LicenseConfiguration
 import org.ossreviewtoolkit.model.licenses.orEmpty
 import org.ossreviewtoolkit.model.readValue
+import org.ossreviewtoolkit.model.utils.DefaultResolutionProvider
 import org.ossreviewtoolkit.reporter.DefaultLicenseTextProvider
-import org.ossreviewtoolkit.reporter.DefaultResolutionProvider
 import org.ossreviewtoolkit.reporter.Reporter
 import org.ossreviewtoolkit.reporter.ReporterInput
 import org.ossreviewtoolkit.utils.PackageConfigurationOption

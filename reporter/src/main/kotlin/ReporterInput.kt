@@ -25,7 +25,9 @@ import org.ossreviewtoolkit.model.RuleViolation
 import org.ossreviewtoolkit.model.config.CopyrightGarbage
 import org.ossreviewtoolkit.model.config.OrtConfiguration
 import org.ossreviewtoolkit.model.licenses.LicenseConfiguration
+import org.ossreviewtoolkit.model.utils.DefaultResolutionProvider
 import org.ossreviewtoolkit.model.utils.PackageConfigurationProvider
+import org.ossreviewtoolkit.model.utils.ResolutionProvider
 import org.ossreviewtoolkit.model.utils.SimplePackageConfigurationProvider
 import org.ossreviewtoolkit.reporter.reporters.AbstractNoticeReporter
 
