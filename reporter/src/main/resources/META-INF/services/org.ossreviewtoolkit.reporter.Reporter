@@ -1,4 +1,5 @@
 org.ossreviewtoolkit.reporter.reporters.AmazonOssAttributionBuilderReporter
+org.ossreviewtoolkit.reporter.reporters.AntennaAttributionDocumentReporter
 org.ossreviewtoolkit.reporter.reporters.CycloneDxReporter
 org.ossreviewtoolkit.reporter.reporters.EvaluatedModelJsonReporter
 org.ossreviewtoolkit.reporter.reporters.EvaluatedModelYamlReporter

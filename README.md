@@ -336,6 +336,7 @@ designed to support multiple output formats.
 Currently, the following report formats are supported (reporter names are case-insensitive):
 
 * [Amazon OSS Attribution Builder](https://github.com/amzn/oss-attribution-builder) document (*experimental*, `-f AmazonOssAttributionBuilder`)
+* [Antenna Attribution Document (PDF)](https://github.com/eclipse/antenna) (`-f AntennaAttributionDocument`)
 * [CycloneDX](https://cyclonedx.org/) BOM (`-f CycloneDx`)
 * [Excel](https://products.office.com/excel) sheet (`-f Excel`)
 * [NOTICE](http://www.apache.org/dev/licensing-howto.html) file in two variants
