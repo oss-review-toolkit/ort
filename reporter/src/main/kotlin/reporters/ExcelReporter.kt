@@ -22,18 +22,6 @@ package org.ossreviewtoolkit.reporter.reporters
 import java.awt.Color
 import java.io.OutputStream
 
-import org.ossreviewtoolkit.model.AnalyzerResult
-import org.ossreviewtoolkit.model.OrtResult
-import org.ossreviewtoolkit.model.VcsInfo
-import org.ossreviewtoolkit.reporter.Reporter
-import org.ossreviewtoolkit.reporter.ReporterInput
-import org.ossreviewtoolkit.reporter.description
-import org.ossreviewtoolkit.reporter.reporters.ReportTableModel.ProjectTable
-import org.ossreviewtoolkit.reporter.reporters.ReportTableModel.SummaryTable
-import org.ossreviewtoolkit.reporter.utils.SCOPE_EXCLUDE_LIST_COMPARATOR
-import org.ossreviewtoolkit.reporter.utils.SCOPE_EXCLUDE_MAP_COMPARATOR
-import org.ossreviewtoolkit.utils.isValidUri
-
 import org.apache.poi.common.usermodel.HyperlinkType
 import org.apache.poi.ss.usermodel.BorderStyle
 import org.apache.poi.ss.usermodel.Cell
@@ -52,6 +40,20 @@ import org.apache.poi.xssf.usermodel.XSSFFont
 import org.apache.poi.xssf.usermodel.XSSFRichTextString
 import org.apache.poi.xssf.usermodel.XSSFSheet
 import org.apache.poi.xssf.usermodel.XSSFWorkbook
+
+import org.ossreviewtoolkit.model.AnalyzerResult
+import org.ossreviewtoolkit.model.OrtResult
+import org.ossreviewtoolkit.model.VcsInfo
+import org.ossreviewtoolkit.reporter.Reporter
+import org.ossreviewtoolkit.reporter.ReporterInput
+import org.ossreviewtoolkit.reporter.description
+import org.ossreviewtoolkit.reporter.utils.ReportTableModel.ProjectTable
+import org.ossreviewtoolkit.reporter.utils.ReportTableModel.SummaryTable
+import org.ossreviewtoolkit.reporter.utils.ReportTableModelMapper
+import org.ossreviewtoolkit.reporter.utils.SCOPE_EXCLUDE_LIST_COMPARATOR
+import org.ossreviewtoolkit.reporter.utils.SCOPE_EXCLUDE_MAP_COMPARATOR
+import org.ossreviewtoolkit.reporter.utils.containsUnresolved
+import org.ossreviewtoolkit.utils.isValidUri
 
 /**
  * A [Reporter] that creates an Excel sheet report from an [OrtResult] in the Open XML XLSX format. It creates one sheet
