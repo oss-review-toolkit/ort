@@ -25,11 +25,14 @@ import org.ossreviewtoolkit.model.RuleViolation
 import org.ossreviewtoolkit.model.config.Resolutions
 
 /**
- * A default provider of resolutions for [OrtIssue]s.
+ * A provider of previously added resolutions for [OrtIssue]s and [RuleViolation]s.
  */
 class DefaultResolutionProvider : ResolutionProvider {
     private var resolutions = Resolutions()
 
+    /**
+     * Add resolutions that get merged with the existing resolutions.
+     */
     fun add(resolutions: Resolutions) {
         this.resolutions = this.resolutions.merge(resolutions)
     }
