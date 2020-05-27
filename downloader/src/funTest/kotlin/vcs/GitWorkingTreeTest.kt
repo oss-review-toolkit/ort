@@ -129,8 +129,7 @@ class GitWorkingTreeTest : StringSpec() {
                 "analyzer/src/funTest/assets/projects/external/jgnash",
                 "analyzer/src/funTest/assets/projects/external/quickcheck-state-machine",
                 "analyzer/src/funTest/assets/projects/external/sbt-multi-project-example",
-                "analyzer/src/funTest/assets/projects/external/spdx-tools-python",
-                "analyzer/src/funTest/assets/projects/external/sprig"
+                "analyzer/src/funTest/assets/projects/external/spdx-tools-python"
             ).associateWith { VersionControlSystem.getPathInfo(File("../$it")) }
 
             val workingTree = git.getWorkingTree(File(".."))
