@@ -19,6 +19,17 @@
 
 package org.ossreviewtoolkit.reporter.reporters
 
+import com.vladsch.flexmark.html.HtmlRenderer
+import com.vladsch.flexmark.parser.Parser
+
+import java.io.OutputStream
+import java.time.Instant
+
+import javax.xml.parsers.DocumentBuilderFactory
+
+import kotlinx.html.*
+import kotlinx.html.dom.*
+
 import org.ossreviewtoolkit.downloader.VcsHost
 import org.ossreviewtoolkit.model.Environment
 import org.ossreviewtoolkit.model.Project
@@ -30,24 +41,16 @@ import org.ossreviewtoolkit.model.yamlMapper
 import org.ossreviewtoolkit.reporter.Reporter
 import org.ossreviewtoolkit.reporter.ReporterInput
 import org.ossreviewtoolkit.reporter.description
-import org.ossreviewtoolkit.reporter.reporters.ReportTableModel.IssueTable
-import org.ossreviewtoolkit.reporter.reporters.ReportTableModel.ProjectTable
-import org.ossreviewtoolkit.reporter.reporters.ReportTableModel.ResolvableIssue
+import org.ossreviewtoolkit.reporter.utils.ReportTableModel
+import org.ossreviewtoolkit.reporter.utils.ReportTableModel.IssueTable
+import org.ossreviewtoolkit.reporter.utils.ReportTableModel.ProjectTable
+import org.ossreviewtoolkit.reporter.utils.ReportTableModel.ResolvableIssue
+import org.ossreviewtoolkit.reporter.utils.ReportTableModelMapper
 import org.ossreviewtoolkit.reporter.utils.SCOPE_EXCLUDE_LIST_COMPARATOR
+import org.ossreviewtoolkit.reporter.utils.containsUnresolved
 import org.ossreviewtoolkit.utils.ORT_FULL_NAME
 import org.ossreviewtoolkit.utils.isValidUrl
 import org.ossreviewtoolkit.utils.normalizeLineBreaks
-
-import com.vladsch.flexmark.html.HtmlRenderer
-import com.vladsch.flexmark.parser.Parser
-
-import java.io.OutputStream
-import java.time.Instant
-
-import javax.xml.parsers.DocumentBuilderFactory
-
-import kotlinx.html.*
-import kotlinx.html.dom.*
 
 @Suppress("LargeClass")
 class StaticHtmlReporter : Reporter {

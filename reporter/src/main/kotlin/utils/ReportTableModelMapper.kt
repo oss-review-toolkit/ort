@@ -17,7 +17,7 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.reporter.reporters
+package org.ossreviewtoolkit.reporter.utils
 
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.OrtIssue
@@ -31,13 +31,13 @@ import org.ossreviewtoolkit.model.config.ScopeExclude
 import org.ossreviewtoolkit.model.utils.PackageConfigurationProvider
 import org.ossreviewtoolkit.model.utils.collectLicenseFindings
 import org.ossreviewtoolkit.reporter.ResolutionProvider
-import org.ossreviewtoolkit.reporter.reporters.ReportTableModel.DependencyRow
-import org.ossreviewtoolkit.reporter.reporters.ReportTableModel.IssueRow
-import org.ossreviewtoolkit.reporter.reporters.ReportTableModel.IssueTable
-import org.ossreviewtoolkit.reporter.reporters.ReportTableModel.ProjectTable
-import org.ossreviewtoolkit.reporter.reporters.ReportTableModel.ResolvableIssue
-import org.ossreviewtoolkit.reporter.reporters.ReportTableModel.SummaryRow
-import org.ossreviewtoolkit.reporter.reporters.ReportTableModel.SummaryTable
+import org.ossreviewtoolkit.reporter.utils.ReportTableModel.DependencyRow
+import org.ossreviewtoolkit.reporter.utils.ReportTableModel.IssueRow
+import org.ossreviewtoolkit.reporter.utils.ReportTableModel.IssueTable
+import org.ossreviewtoolkit.reporter.utils.ReportTableModel.ProjectTable
+import org.ossreviewtoolkit.reporter.utils.ReportTableModel.ResolvableIssue
+import org.ossreviewtoolkit.reporter.utils.ReportTableModel.SummaryRow
+import org.ossreviewtoolkit.reporter.utils.ReportTableModel.SummaryTable
 
 private fun Collection<ResolvableIssue>.filterUnresolved() = filter { !it.isResolved }
 
