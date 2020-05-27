@@ -96,9 +96,17 @@ class GoDepTest : WordSpec() {
             }
 
             "import dependencies from Glide" {
-                val manifestFile = File(projectsDir, "external/sprig/glide.yaml")
+                val manifestFile = File(projectsDir, "synthetic/godep/glide/glide.yaml")
+                val vcsPath = vcsDir.getPathToRoot(manifestFile.parentFile)
+
                 val result = createGoDep().resolveDependencies(listOf(manifestFile))[manifestFile]
-                val expectedResult = File(projectsDir, "external/sprig-expected-output.yml").readText()
+
+                val expectedResult = patchExpectedResult(
+                    File(projectsDir, "synthetic/glide-expected-output.yml"),
+                    url = normalizeVcsUrl(vcsUrl),
+                    revision = vcsRevision,
+                    path = vcsPath
+                )
 
                 yamlMapper.writeValueAsString(result) shouldBe expectedResult
             }
