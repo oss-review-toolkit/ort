@@ -34,19 +34,32 @@ import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.yamlMapper
 import org.ossreviewtoolkit.utils.Ci
+import org.ossreviewtoolkit.utils.normalizeVcsUrl
 import org.ossreviewtoolkit.utils.test.DEFAULT_ANALYZER_CONFIGURATION
 import org.ossreviewtoolkit.utils.test.DEFAULT_REPOSITORY_CONFIGURATION
 import org.ossreviewtoolkit.utils.test.USER_DIR
+import org.ossreviewtoolkit.utils.test.patchExpectedResult
 
 class GoDepTest : WordSpec() {
     private val projectsDir = File("src/funTest/assets/projects").absoluteFile
+    private val vcsDir = VersionControlSystem.forDirectory(projectsDir)!!
+    private val vcsUrl = vcsDir.getRemoteUrl()
+    private val vcsRevision = vcsDir.getRevision()
 
     init {
         "GoDep" should {
             "resolve dependencies from a lockfile correctly" {
-                val manifestFile = File(projectsDir, "external/qmstr/Gopkg.toml")
+                val manifestFile = File(projectsDir, "synthetic/godep/lockfile/Gopkg.toml")
+                val vcsPath = vcsDir.getPathToRoot(manifestFile.parentFile)
+
                 val result = createGoDep().resolveDependencies(listOf(manifestFile))[manifestFile]
-                val expectedResult = File(projectsDir, "external/qmstr-expected-output.yml").readText()
+
+                val expectedResult = patchExpectedResult(
+                    File(projectsDir, "synthetic/godep-expected-output.yml"),
+                    url = normalizeVcsUrl(vcsUrl),
+                    revision = vcsRevision,
+                    path = vcsPath
+                )
 
                 yamlMapper.writeValueAsString(result) shouldBe expectedResult
             }

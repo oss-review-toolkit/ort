@@ -1,0 +1,3 @@
+[[constraint]]
+  name = "github.com/fatih/color"
+  version = "1.6.0"
