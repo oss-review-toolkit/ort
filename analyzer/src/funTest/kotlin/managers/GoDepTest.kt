@@ -91,7 +91,6 @@ class GoDepTest : WordSpec() {
                 result shouldNotBe null
                 with(result!!) {
                     project shouldNotBe Project.EMPTY
-                    packages.size shouldBe 4
                     issues.size shouldBe 0
                 }
             }

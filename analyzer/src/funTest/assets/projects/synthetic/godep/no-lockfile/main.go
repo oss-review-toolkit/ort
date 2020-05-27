@@ -1,8 +1,7 @@
 package main
 
-import "github.com/fatih/color"
+import "fmt"
 
 func main() {
-	c := color.New(color.FgCyan).Add(color.Underline)
-	c.Println("Prints cyan text with an underline.")
+    fmt.Println("Hello World")
 }
