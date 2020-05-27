@@ -145,14 +145,7 @@ sealed class SpdxExpression {
      * [choice] does not offer a license choice itself and if the [licenses][SpdxSingleLicenseExpression] contained in
      * [choice] match any of the [valid license choices][validChoices].
      */
-    fun isValidChoice(choice: SpdxExpression): Boolean {
-        if (choice.offersChoice()) return false
-
-        val chosenLicenses = choice.decompose()
-        return validChoices().any { validChoice ->
-            validChoice.decompose() == chosenLicenses
-        }
-    }
+    fun isValidChoice(choice: SpdxExpression): Boolean = !choice.offersChoice() && choice in validChoices()
 
     /**
      * Return true if this expression offers a license choice. This can only be true if this expression contains the
