@@ -76,6 +76,8 @@ enum class SpdxLicenseException(
     QT_GPL_EXCEPTION_1_0("Qt-GPL-exception-1.0", "Qt GPL exception 1.0"),
     QT_LGPL_EXCEPTION_1_1("Qt-LGPL-exception-1.1", "Qt LGPL exception 1.1"),
     QWT_EXCEPTION_1_0("Qwt-exception-1.0", "Qwt exception 1.0"),
+    SHL_2_0("SHL-2.0", "Solderpad Hardware License v2.0"),
+    SHL_2_1("SHL-2.1", "Solderpad Hardware License v2.1"),
     SWIFT_EXCEPTION("Swift-exception", "Swift Exception"),
     UNIVERSAL_FOSS_EXCEPTION_1_0("Universal-FOSS-exception-1.0", "Universal FOSS Exception, Version 1.0"),
     U_BOOT_EXCEPTION_2_0("u-boot-exception-2.0", "U-Boot exception 2.0"),
