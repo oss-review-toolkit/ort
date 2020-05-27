@@ -23,8 +23,8 @@ import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.model.config.IssueResolution
 import org.ossreviewtoolkit.model.config.RuleViolationResolution
+import org.ossreviewtoolkit.model.utils.ResolutionProvider
 import org.ossreviewtoolkit.model.utils.collectLicenseFindings
-import org.ossreviewtoolkit.reporter.ResolutionProvider
 import org.ossreviewtoolkit.reporter.model.DependencyTreeStatistics
 import org.ossreviewtoolkit.reporter.model.IssueStatistics
 import org.ossreviewtoolkit.reporter.model.Statistics

@@ -29,8 +29,8 @@ import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.config.Excludes
 import org.ossreviewtoolkit.model.config.ScopeExclude
 import org.ossreviewtoolkit.model.utils.PackageConfigurationProvider
+import org.ossreviewtoolkit.model.utils.ResolutionProvider
 import org.ossreviewtoolkit.model.utils.collectLicenseFindings
-import org.ossreviewtoolkit.reporter.ResolutionProvider
 import org.ossreviewtoolkit.reporter.utils.ReportTableModel.DependencyRow
 import org.ossreviewtoolkit.reporter.utils.ReportTableModel.IssueRow
 import org.ossreviewtoolkit.reporter.utils.ReportTableModel.IssueTable

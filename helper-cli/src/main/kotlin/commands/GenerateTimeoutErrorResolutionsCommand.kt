@@ -33,8 +33,8 @@ import org.ossreviewtoolkit.model.config.IssueResolution
 import org.ossreviewtoolkit.model.config.IssueResolutionReason
 import org.ossreviewtoolkit.model.config.Resolutions
 import org.ossreviewtoolkit.model.readValue
+import org.ossreviewtoolkit.model.utils.DefaultResolutionProvider
 import org.ossreviewtoolkit.model.yamlMapper
-import org.ossreviewtoolkit.reporter.DefaultResolutionProvider
 import org.ossreviewtoolkit.utils.expandTilde
 
 internal class GenerateTimeoutErrorResolutionsCommand : CliktCommand(

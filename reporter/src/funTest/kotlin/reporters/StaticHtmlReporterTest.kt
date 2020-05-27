@@ -21,7 +21,7 @@ package org.ossreviewtoolkit.reporter.reporters
 
 import org.ossreviewtoolkit.model.Environment
 import org.ossreviewtoolkit.model.OrtResult
-import org.ossreviewtoolkit.reporter.DefaultResolutionProvider
+import org.ossreviewtoolkit.model.utils.DefaultResolutionProvider
 import org.ossreviewtoolkit.reporter.ReporterInput
 import org.ossreviewtoolkit.utils.test.patchExpectedResult
 import org.ossreviewtoolkit.utils.test.readOrtResult
