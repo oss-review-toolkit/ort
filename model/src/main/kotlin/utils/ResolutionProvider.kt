@@ -27,7 +27,7 @@ import org.ossreviewtoolkit.model.config.Resolutions
 import org.ossreviewtoolkit.model.config.RuleViolationResolution
 
 /**
- * A provider for resolutions of [OrtIssue]s.
+ * An interface to provide resolutions for [OrtIssue]s.
  */
 interface ResolutionProvider {
     /**

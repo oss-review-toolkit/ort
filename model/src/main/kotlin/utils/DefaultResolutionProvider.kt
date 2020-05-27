@@ -25,7 +25,7 @@ import org.ossreviewtoolkit.model.RuleViolation
 import org.ossreviewtoolkit.model.config.Resolutions
 
 /**
- *
+ * A default provider of resolutions for [OrtIssue]s.
  */
 class DefaultResolutionProvider : ResolutionProvider {
     private var resolutions = Resolutions()
