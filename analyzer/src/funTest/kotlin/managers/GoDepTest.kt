@@ -111,25 +111,23 @@ class GoDepTest : WordSpec() {
 
                 yamlMapper.writeValueAsString(result) shouldBe expectedResult
             }
+        }
 
-            "construct an import path from VCS info" {
-                val gopath = File("/tmp/gopath").absoluteFile
-                val projectDir = File(projectsDir, "external/qmstr")
-                val vcs = VersionControlSystem.forDirectory(projectDir)!!.getInfo()
+        "deduceImportPath()" should {
+            val projectDir = File(projectsDir, "synthetic/godep/lockfile")
+            val gopath = File("/tmp/gopath")
 
-                val expectedPath = File("/tmp/gopath/src/github.com/QMSTR/qmstr.git").absoluteFile
+            "deduce an import path from VCS info" {
+                val vcsInfo = VcsInfo.EMPTY.copy(url = "https://github.com/oss-review-toolkit/ort.git")
 
-                createGoDep().deduceImportPath(projectDir, vcs, gopath) shouldBe expectedPath
+                createGoDep().deduceImportPath(projectDir, vcsInfo, gopath) shouldBe
+                        File(gopath, "src/github.com/oss-review-toolkit/ort.git")
             }
 
-            "construct an import path for directories that are not repositories" {
-                val gopath = File("/tmp/gopath").absoluteFile
-                val projectDir = File(projectsDir, "synthetic/godep/no-lockfile")
-                val vcs = VcsInfo.EMPTY
+            "deduce an import path without VCS info" {
+                val vcsInfo = VcsInfo.EMPTY
 
-                val expectedPath = File("/tmp/gopath/src/no-lockfile").absoluteFile
-
-                createGoDep().deduceImportPath(projectDir, vcs, gopath) shouldBe expectedPath
+                createGoDep().deduceImportPath(projectDir, vcsInfo, gopath) shouldBe File(gopath, "src/lockfile")
             }
         }
     }
