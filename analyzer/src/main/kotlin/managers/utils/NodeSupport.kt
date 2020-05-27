@@ -26,7 +26,10 @@ import com.fasterxml.jackson.databind.node.ArrayNode
 import com.fasterxml.jackson.databind.node.ObjectNode
 
 import org.ossreviewtoolkit.model.readValue
+import org.ossreviewtoolkit.utils.AuthenticatedProxy
+import org.ossreviewtoolkit.utils.ProtocolProxyMap
 import org.ossreviewtoolkit.utils.collectMessagesAsString
+import org.ossreviewtoolkit.utils.determineProxyFromURL
 import org.ossreviewtoolkit.utils.hasRevisionFragment
 import org.ossreviewtoolkit.utils.log
 import org.ossreviewtoolkit.utils.showStackTrace
@@ -108,30 +111,29 @@ fun expandNpmShortcutURL(url: String): String {
 }
 
 /**
- * Extract any proxy URL from [NPM configuration][npmRc], return null if no proxy URL is configured.
+ * Return all proxies defined in the provided [NPM configuration][npmRc].
  */
-fun readProxySettingFromNpmRc(npmRc: String): String? {
-    var proxyUrl: String? = null
+fun readProxySettingsFromNpmRc(npmRc: String): ProtocolProxyMap {
+    val map = mutableMapOf<String, MutableList<AuthenticatedProxy>>()
 
     npmRc.lines().forEach { line ->
         val keyAndValue = line.split('=', limit = 2).map { it.trim() }
         if (keyAndValue.size != 2) return@forEach
 
         val (key, value) = keyAndValue
-        if (key != "proxy" && key != "https-proxy") return@forEach
+        when (key) {
+            "proxy" -> determineProxyFromURL(value)?.let {
+                map.getOrPut("http") { mutableListOf() } += it
+            }
 
-        if (value.matches(HTTP_REGEX)) {
-            proxyUrl = value
-        } else if (value.isNotBlank() && value != "null") {
-            // Note that even HTTPS proxies use "http://" as the protocol!
-            proxyUrl = "http://$value"
+            "https-proxy" -> determineProxyFromURL(value)?.let {
+                map.getOrPut("https") { mutableListOf() } += it
+            }
         }
     }
 
-    return proxyUrl
+    return map
 }
-
-private val HTTP_REGEX = Regex("^https?://.+$")
 
 private val NPM_LOCK_FILES = listOf("npm-shrinkwrap.json", "package-lock.json")
 private val YARN_LOCK_FILES = listOf("yarn.lock")

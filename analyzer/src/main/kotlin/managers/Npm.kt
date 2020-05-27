@@ -24,14 +24,24 @@ package org.ossreviewtoolkit.analyzer.managers
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.node.ObjectNode
 
+import com.vdurmont.semver4j.Requirement
+
+import java.io.File
+import java.io.FileFilter
+import java.net.HttpURLConnection
+import java.net.URLEncoder
+import java.util.SortedSet
+
+import okhttp3.Request
+
 import org.ossreviewtoolkit.analyzer.AbstractPackageManagerFactory
 import org.ossreviewtoolkit.analyzer.PackageManager
 import org.ossreviewtoolkit.analyzer.managers.utils.expandNpmShortcutURL
 import org.ossreviewtoolkit.analyzer.managers.utils.hasNpmLockFile
 import org.ossreviewtoolkit.analyzer.managers.utils.mapDefinitionFilesForNpm
-import org.ossreviewtoolkit.analyzer.managers.utils.readProxySettingFromNpmRc
-import org.ossreviewtoolkit.downloader.VersionControlSystem
+import org.ossreviewtoolkit.analyzer.managers.utils.readProxySettingsFromNpmRc
 import org.ossreviewtoolkit.downloader.VcsHost
+import org.ossreviewtoolkit.downloader.VersionControlSystem
 import org.ossreviewtoolkit.model.Hash
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Package
@@ -49,27 +59,15 @@ import org.ossreviewtoolkit.model.jsonMapper
 import org.ossreviewtoolkit.model.readValue
 import org.ossreviewtoolkit.spdx.SpdxLicense
 import org.ossreviewtoolkit.utils.CommandLineTool
-import org.ossreviewtoolkit.utils.Os
 import org.ossreviewtoolkit.utils.OkHttpClientHelper
-import org.ossreviewtoolkit.utils.OkHttpClientHelper.applyProxySettingsFromUrl
+import org.ossreviewtoolkit.utils.Os
 import org.ossreviewtoolkit.utils.getUserHomeDirectory
+import org.ossreviewtoolkit.utils.installAuthenticatorAndProxySelector
 import org.ossreviewtoolkit.utils.isSymbolicLink
 import org.ossreviewtoolkit.utils.log
 import org.ossreviewtoolkit.utils.realFile
 import org.ossreviewtoolkit.utils.stashDirectories
 import org.ossreviewtoolkit.utils.textValueOrEmpty
-
-import com.vdurmont.semver4j.Requirement
-
-import java.io.File
-import java.io.FileFilter
-import java.net.HttpURLConnection
-import java.net.URL
-import java.net.URLEncoder
-import java.util.SortedSet
-
-import okhttp3.OkHttpClient
-import okhttp3.Request
 
 /**
  * The [Node package manager](https://www.npmjs.com/) for JavaScript.
@@ -90,6 +88,8 @@ open class Npm(
         ) = Npm(managerName, analysisRoot, analyzerConfig, repoConfig)
     }
 
+    private val ortProxySelector = installAuthenticatorAndProxySelector()
+
     /**
      * Array of parameters passed to the install command when installing dependencies.
      */
@@ -103,10 +103,20 @@ open class Npm(
 
     override fun mapDefinitionFiles(definitionFiles: List<File>) = mapDefinitionFilesForNpm(definitionFiles).toList()
 
-    override fun beforeResolution(definitionFiles: List<File>) =
+    override fun beforeResolution(definitionFiles: List<File>) {
         // We do not actually depend on any features specific to an NPM version, but we still want to stick to a
         // fixed minor version to be sure to get consistent results.
         checkVersion(analyzerConfig.ignoreToolVersions)
+
+        val npmRcFile = getUserHomeDirectory().resolve(".npmrc")
+        if (npmRcFile.isFile) {
+            ortProxySelector.addProxies(managerName, readProxySettingsFromNpmRc(npmRcFile.readText()))
+        }
+    }
+
+    override fun afterResolution(definitionFiles: List<File>) {
+        ortProxySelector.removeProxyOrigin(managerName)
+    }
 
     override fun resolveDependencies(definitionFile: File): ProjectAnalyzerResult? {
         val workingDir = definitionFile.parentFile
@@ -134,15 +144,6 @@ open class Npm(
                 definitionFile, sortedSetOf(dependenciesScope, devDependenciesScope),
                 packages.values.toSortedSet()
             )
-        }
-    }
-
-    private val applyProxySettingsFromNpmRc: OkHttpClient.Builder.() -> Unit = {
-        val npmRcFile = getUserHomeDirectory().resolve(".npmrc")
-        if (npmRcFile.isFile) {
-            readProxySettingFromNpmRc(npmRcFile.readText())?.let { proxyUrl ->
-                applyProxySettingsFromUrl(URL(proxyUrl))
-            }
         }
     }
 
@@ -243,7 +244,7 @@ open class Npm(
                     .url("https://registry.npmjs.org/$encodedName")
                     .build()
 
-                OkHttpClientHelper.execute(pkgRequest, applyProxySettingsFromNpmRc).use { response ->
+                OkHttpClientHelper.execute(pkgRequest).use { response ->
                     if (response.code == HttpURLConnection.HTTP_OK) {
                         log.debug {
                             if (response.cacheResponse != null) {

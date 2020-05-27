@@ -19,10 +19,6 @@
 
 package org.ossreviewtoolkit.analyzer.managers.utils
 
-import org.ossreviewtoolkit.utils.ORT_NAME
-import org.ossreviewtoolkit.utils.safeDeleteRecursively
-import org.ossreviewtoolkit.utils.safeMkdirs
-
 import io.kotest.core.test.TestCase
 import io.kotest.core.test.TestResult
 import io.kotest.matchers.collections.beEmpty
@@ -34,6 +30,11 @@ import io.kotest.core.spec.style.WordSpec
 import io.kotest.inspectors.forAll
 
 import java.io.File
+
+import org.ossreviewtoolkit.utils.ORT_NAME
+import org.ossreviewtoolkit.utils.ProtocolProxyMap
+import org.ossreviewtoolkit.utils.safeDeleteRecursively
+import org.ossreviewtoolkit.utils.safeMkdirs
 
 class NodeSupportTest : WordSpec() {
     companion object {
@@ -193,25 +194,45 @@ class NodeSupportTest : WordSpec() {
 
         "readProxySettingFromNpmRc" should {
             "properly read proxy configuration" {
-                readProxySettingFromNpmRc("proxy=http://user:password@host.domain.com:8080/") shouldBe
-                        "http://user:password@host.domain.com:8080/"
-                readProxySettingFromNpmRc("https-proxy=http://user:password@host.domain.com:8080/") shouldBe
-                        "http://user:password@host.domain.com:8080/"
+                fun ProtocolProxyMap.mapSingleValuesToString() =
+                    mapValues { (_, proxies) ->
+                        val (proxy, authentication) = proxies.single()
+                        listOf(proxy.toString(), authentication?.userName, authentication?.password?.let { String(it) })
+                    }
 
-                readProxySettingFromNpmRc("proxy=http://user:password@host.domain.com") shouldBe
-                        "http://user:password@host.domain.com"
-                readProxySettingFromNpmRc("https-proxy=http://user:password@host.domain.com") shouldBe
-                        "http://user:password@host.domain.com"
+                readProxySettingsFromNpmRc("""
+                    proxy=http://user:password@host.tld:3129/
+                    https-proxy=http://user:password@host.tld:3129/
+                    """.trimIndent()
+                ).mapSingleValuesToString() shouldBe mapOf(
+                    "http" to listOf("HTTP @ host.tld:3129", "user", "password"),
+                    "https" to listOf("HTTP @ host.tld:3129", "user", "password")
+                )
 
-                readProxySettingFromNpmRc("proxy=user:password@host.domain.com") shouldBe
-                        "http://user:password@host.domain.com"
-                readProxySettingFromNpmRc("https-proxy=user:password@host.domain.com") shouldBe
-                        "http://user:password@host.domain.com"
+                readProxySettingsFromNpmRc("""
+                    proxy=http://user:password@host.tld
+                    https-proxy=http://user:password@host.tld
+                    """.trimIndent()
+                ).mapSingleValuesToString() shouldBe mapOf(
+                    "http" to listOf("HTTP @ host.tld:8080", "user", "password"),
+                    "https" to listOf("HTTP @ host.tld:8080", "user", "password")
+                )
+
+                readProxySettingsFromNpmRc("""
+                    proxy=user:password@host.tld
+                    https-proxy=user:password@host.tld
+                    """.trimIndent()
+                ).mapSingleValuesToString() shouldBe mapOf(
+                    "http" to listOf("HTTP @ host.tld:8080", "user", "password"),
+                    "https" to listOf("HTTP @ host.tld:8080", "user", "password")
+                )
             }
 
             "ignore non-proxy URLs" {
-                readProxySettingFromNpmRc("registry=http://my.artifactory.com/artifactory/api/npm/npm-virtual") shouldBe
-                        null
+                readProxySettingsFromNpmRc("""
+                    registry=http://my.artifactory.com/artifactory/api/npm/npm-virtual
+                    """.trimIndent()
+                ) shouldBe emptyMap()
             }
         }
     }

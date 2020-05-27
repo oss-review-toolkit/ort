@@ -19,20 +19,14 @@
 
 package org.ossreviewtoolkit.utils
 
-import java.net.InetSocketAddress
-import java.net.MalformedURLException
-import java.net.Proxy
-import java.net.URL
 import java.time.Duration
 
 import okhttp3.Authenticator
 import okhttp3.Cache
 import okhttp3.ConnectionSpec
-import okhttp3.Credentials
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.Response
-import okhttp3.Route
 
 private typealias BuilderConfiguration = OkHttpClient.Builder.() -> Unit
 
@@ -49,46 +43,8 @@ object OkHttpClientHelper {
      */
     const val HTTP_TOO_MANY_REQUESTS = 429
 
-    /**
-     * Apply HTTP proxy settings from a [url], optionally with credentials included.
-     */
-    fun OkHttpClient.Builder.applyProxySettingsFromUrl(url: URL): OkHttpClient.Builder {
-        if (url.host.isEmpty()) return this
-
-        val port = url.port.takeIf { it in IntRange(0, 65535) } ?: 8080
-        proxy(Proxy(Proxy.Type.HTTP, InetSocketAddress(url.host, port)))
-
-        if (url.userInfo == null) return this
-
-        proxyAuthenticator(object : Authenticator {
-            override fun authenticate(route: Route?, response: Response): Request? {
-                val user = url.userInfo.substringBefore(':')
-                val password = url.userInfo.substringAfter(':')
-                val credential = Credentials.basic(user, password)
-                return response.request.newBuilder()
-                    .header("Proxy-Authorization", credential)
-                    .build()
-            }
-        })
-
-        return this
-    }
-
-    /**
-     * Apply HTTP proxy settings from environment variables.
-     */
-    fun OkHttpClient.Builder.applyProxySettingsFromEnv(): OkHttpClient.Builder {
-        Os.proxy?.let { proxyUrl ->
-            try {
-                applyProxySettingsFromUrl(URL(proxyUrl))
-            } catch (e: MalformedURLException) {
-                e.printStackTrace()
-
-                log.warn { "Invalid proxy URL '$proxyUrl' defined in environment." }
-            }
-        }
-
-        return this
+    init {
+        installAuthenticatorAndProxySelector()
     }
 
     /**
@@ -100,11 +56,13 @@ object OkHttpClientHelper {
             val cacheDirectory = getOrtDataDirectory().resolve("cache/http")
             val cache = Cache(cacheDirectory, MAX_CACHE_SIZE_IN_BYTES)
             val specs = listOf(ConnectionSpec.MODERN_TLS, ConnectionSpec.COMPATIBLE_TLS, ConnectionSpec.CLEARTEXT)
+
+            // OkHttp uses the global Java ProxySelector by default, but the authenticator needs to be set explicitly.
             OkHttpClient.Builder()
                 .cache(cache)
                 .connectionSpecs(specs)
                 .readTimeout(Duration.ofSeconds(30))
-                .applyProxySettingsFromEnv()
+                .proxyAuthenticator(Authenticator.JAVA_NET_AUTHENTICATOR)
                 .apply(block)
                 .build()
         }
