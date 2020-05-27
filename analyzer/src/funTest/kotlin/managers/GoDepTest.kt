@@ -112,9 +112,17 @@ class GoDepTest : WordSpec() {
             }
 
             "import dependencies from godeps" {
-                val manifestFile = File(projectsDir, "external/godep/Godeps/Godeps.json")
+                val manifestFile = File(projectsDir, "synthetic/godep/godeps/Godeps/Godeps.json")
+                val vcsPath = vcsDir.getPathToRoot(manifestFile.parentFile.parentFile)
+
                 val result = createGoDep().resolveDependencies(listOf(manifestFile))[manifestFile]
-                val expectedResult = File(projectsDir, "external/godep-expected-output.yml").readText()
+
+                val expectedResult = patchExpectedResult(
+                    File(projectsDir, "synthetic/godeps-expected-output.yml"),
+                    url = normalizeVcsUrl(vcsUrl),
+                    revision = vcsRevision,
+                    path = vcsPath
+                )
 
                 yamlMapper.writeValueAsString(result) shouldBe expectedResult
             }

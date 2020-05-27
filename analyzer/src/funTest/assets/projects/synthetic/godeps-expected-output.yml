@@ -1,0 +1,81 @@
+---
+project:
+  id: "GoDep::github.com/oss-review-toolkit/ort/analyzer/src/funtest/assets/projects/synthetic/godep/godeps/godeps:<REPLACE_REVISION>"
+  definition_file_path: "analyzer/src/funTest/assets/projects/synthetic/godep/godeps/Godeps/Godeps.json"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "<REPLACE_URL>"
+    revision: "<REPLACE_REVISION>"
+    path: "<REPLACE_PATH>"
+  homepage_url: ""
+  scopes:
+  - name: "default"
+    dependencies:
+    - id: "GoDep::github.com/mattn/go-isatty:v0.0.12"
+      linkage: "STATIC"
+    - id: "GoDep::golang.org/x/sys:05986578812163b26672dabd9b425240ae2bb0ad"
+      linkage: "STATIC"
+packages:
+- package:
+    id: "GoDep::github.com/mattn/go-isatty:v0.0.12"
+    purl: "pkg:godep/github.com%2Fmattn%2Fgo-isatty@v0.0.12"
+    declared_licenses: []
+    declared_licenses_processed: {}
+    description: ""
+    homepage_url: ""
+    binary_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    source_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    vcs:
+      type: ""
+      url: ""
+      revision: ""
+      path: ""
+    vcs_processed:
+      type: "Git"
+      url: "https://github.com/mattn/go-isatty.git"
+      revision: "7b513a986450394f7bbf1476909911b3aa3a55ce"
+      path: ""
+  curations: []
+- package:
+    id: "GoDep::golang.org/x/sys:05986578812163b26672dabd9b425240ae2bb0ad"
+    purl: "pkg:godep/golang.org%2Fx%2Fsys@05986578812163b26672dabd9b425240ae2bb0ad"
+    declared_licenses: []
+    declared_licenses_processed: {}
+    description: ""
+    homepage_url: ""
+    binary_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    source_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    vcs:
+      type: ""
+      url: ""
+      revision: ""
+      path: ""
+    vcs_processed:
+      type: "Git"
+      url: "https://go.googlesource.com/sys"
+      revision: "05986578812163b26672dabd9b425240ae2bb0ad"
+      path: ""
+  curations: []
