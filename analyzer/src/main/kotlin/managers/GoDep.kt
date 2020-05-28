@@ -49,8 +49,7 @@ import com.moandjiezana.toml.Toml
 
 import java.io.File
 import java.io.IOException
-import java.net.MalformedURLException
-import java.net.URL
+import java.net.URI
 import java.nio.file.Paths
 
 /**
@@ -143,14 +142,16 @@ class GoDep(
         }
 
         val scope = Scope("default", packageRefs.toSortedSet())
+
+        @Suppress("TooGenericExceptionCaught")
         val projectName = try {
-            val url = URL(projectVcs.url)
+            val uri = URI(projectVcs.url)
             val vcsPath = VersionControlSystem.getPathInfo(definitionFile.parentFile).path
-            listOf(url.host, url.path.removePrefix("/").removeSuffix(".git"), vcsPath)
+            listOf(uri.host, uri.path.removePrefix("/").removeSuffix(".git"), vcsPath)
                 .filterNot { it.isEmpty() }
                 .joinToString(separator = "/")
                 .toLowerCase()
-        } catch (e: MalformedURLException) {
+        } catch (e: Exception) {
             projectDir.name
         }
 
@@ -177,10 +178,11 @@ class GoDep(
     }
 
     fun deduceImportPath(projectDir: File, vcs: VcsInfo, gopath: File): File =
+        @Suppress("TooGenericExceptionCaught")
         try {
-            val url = URL(vcs.url)
-            Paths.get(gopath.path, "src", url.host, url.path)
-        } catch (e: MalformedURLException) {
+            val uri = URI(vcs.url)
+            Paths.get(gopath.path, "src", uri.host, uri.path)
+        } catch (e: Exception) {
             Paths.get(gopath.path, "src", projectDir.name)
         }.toFile()
 
