@@ -1,22 +1,22 @@
 name: project_with_flutter
-description: A sample Flutter plugin to test resolution of native flutter dependencies
+description: A sample Flutter plugin to test the resolution of native Flutter dependencies.
 version: 0.1.0
 author: Marlon Hille <marlon.hille@here.com>
 homepage: http://oss-review-toolkit.org/
 repository: https://github.com/oss-review-toolkit/ort.git
 
 dependencies:
-  # flutter sdk, should be ignored by the scan
+  # The Flutter SDK, will be ignored by the analyzer.
   flutter:
     sdk: flutter
-  # this flutter plugin also contains native iOS and Android dependencies
+  # A Flutter plugin that contains native iOS and Android dependencies.
   flutter_crashlytics: "^1.0.0"
 
 dev_dependencies:
-  # flutter sdk, should be ignored by the scan
+  # The Flutter SDK, will be ignored by the analyzer.
   flutter_test:
     sdk: flutter
-  # dart unit tests
+  # Dart unit tests.
   test: any
 
 flutter:
