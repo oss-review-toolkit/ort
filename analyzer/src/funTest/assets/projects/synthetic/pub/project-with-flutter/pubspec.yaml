@@ -9,8 +9,6 @@ dependencies:
   # flutter sdk, should be ignored by the scan
   flutter:
     sdk: flutter
-  # this is a flutter plugin with iOS and Android dependencies
-  flutter_facebook_login: "^2.0.1"
   # this flutter plugin also contains native iOS and Android dependencies
   flutter_crashlytics: "^1.0.0"
 
