@@ -23,6 +23,7 @@ import java.net.InetSocketAddress
 import java.net.MalformedURLException
 import java.net.Proxy
 import java.net.URL
+import java.time.Duration
 
 import okhttp3.Authenticator
 import okhttp3.Cache
@@ -102,6 +103,7 @@ object OkHttpClientHelper {
             OkHttpClient.Builder()
                 .cache(cache)
                 .connectionSpecs(specs)
+                .readTimeout(Duration.ofSeconds(30))
                 .applyProxySettingsFromEnv()
                 .apply(block)
                 .build()
