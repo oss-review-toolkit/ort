@@ -168,6 +168,7 @@ class RequirementsCommand : CliktCommand(help = "List the required command line 
         println("\t* The tool was found in the PATH environment in the required version.")
 
         if (statusCode != 0) {
+            println()
             println("Not all tools were found in their required versions.")
             throw ProgramResult(statusCode)
         }
