@@ -58,3 +58,11 @@ include("scanner")
 include("spdx-utils")
 include("test-utils")
 include("utils")
+
+val buildCacheRetentionDays: String by settings
+
+buildCache {
+    local {
+        removeUnusedEntriesAfterDays = buildCacheRetentionDays.toInt()
+    }
+}
