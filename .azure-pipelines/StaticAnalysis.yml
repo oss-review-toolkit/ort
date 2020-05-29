@@ -9,7 +9,7 @@ jobs:
 
   - task: Cache@2
     inputs:
-      key: '"$(Agent.OS)" | detekt | gradle-caches | gradle.properties, settings.gradle, **/build.gradle.kts'
+      key: '"$(Agent.OS)" | detekt | gradle-caches | gradle.properties, settings.gradle.kts, **/build.gradle.kts'
       restoreKeys: |
         "$(Agent.OS)" | detekt | gradle-caches
       path: $(GRADLE_USER_HOME)/caches
