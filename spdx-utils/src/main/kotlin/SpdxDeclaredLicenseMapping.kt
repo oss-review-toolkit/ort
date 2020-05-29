@@ -117,6 +117,7 @@ object SpdxDeclaredLicenseMapping {
         "BSD 4 Clause" to BSD_4_CLAUSE.toExpression(),
         "BSD Licence 3" to BSD_3_CLAUSE.toExpression(),
         "BSD License" to BSD_3_CLAUSE.toExpression(),
+        "BSD License 3" to BSD_3_CLAUSE.toExpression(),
         "BSD License for HSQL" to BSD_3_CLAUSE.toExpression(),
         "BSD New" to BSD_3_CLAUSE.toExpression(),
         "BSD New license" to BSD_3_CLAUSE.toExpression(),
