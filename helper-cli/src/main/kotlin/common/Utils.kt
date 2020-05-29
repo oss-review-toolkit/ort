@@ -335,7 +335,7 @@ internal fun OrtResult.getRepositoryLicenseFindingCurations(): RepositoryLicense
     repository.nestedRepositories.forEach { (path, vcs) ->
         val pathExcludesForRepository = result.getOrPut(vcs.url) { mutableListOf() }
         curations.forEach { curation ->
-            if (curation.path.startsWith(path)) {
+            if (curation.path.startsWith("$path/")) {
                 pathExcludesForRepository.add(
                     curation.copy(
                         path = curation.path.substring(path.length).removePrefix("/")
@@ -418,7 +418,7 @@ internal fun OrtResult.getRepositoryPathExcludes(): RepositoryPathExcludes {
     repository.nestedRepositories.forEach { (path, vcs) ->
         val pathExcludesForRepository = result.getOrPut(vcs.url) { mutableListOf() }
         pathExcludes.forEach { pathExclude ->
-            if (pathExclude.pattern.startsWith(path) && !isDefinitionsFile(pathExclude)) {
+            if (pathExclude.pattern.startsWith("$path/") && !isDefinitionsFile(pathExclude)) {
                 pathExcludesForRepository.add(
                     pathExclude.copy(
                         pattern = pathExclude.pattern.substring(path.length).removePrefix("/")
