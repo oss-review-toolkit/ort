@@ -62,6 +62,15 @@ class PostgresStorage(
      * Setup the database.
      */
     fun setupDatabase() {
+        val statement = connection.createStatement()
+        val resultSet = statement.executeQuery("SHOW client_encoding")
+        if (resultSet.next()) {
+            val clientEncoding = resultSet.getString(1)
+            if (clientEncoding != "UTF8") {
+                log.warn { "The database's client_encoding is '$clientEncoding' but should be 'UTF8'." }
+            }
+        }
+
         if (!tableExists()) {
             log.info { "Trying to create table '$table'." }
             if (!createTable()) {
