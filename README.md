@@ -294,8 +294,8 @@ ort {
 
 ### PostgreSQL Storage
 
-To use a database for storing scan results, you need PostgreSQL in at least version 9.4, and a configuration like the
-following:
+To use PostgreSQL for storing scan results you need at least version 9.4, create a database with the `client_encoding`
+set to `UTF8`, and a configuration like the following:
 
 ```hocon
 ort {
