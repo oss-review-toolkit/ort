@@ -33,11 +33,4 @@ object Os {
     val env = System.getenv().let { env ->
         if (isWindows) env.toSortedMap(String.CASE_INSENSITIVE_ORDER) else env.toSortedMap()
     }
-
-    val proxy = listOf(env["https_proxy"], env["http_proxy"]).find {
-        it != null
-    }?.let { proxy ->
-        // Note that even HTTPS proxies use "http://" as the protocol!
-        proxy.takeIf { it.startsWith("http") } ?: "http://$proxy"
-    }
 }
