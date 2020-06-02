@@ -599,7 +599,7 @@ internal class EvaluatedModelMapper(private val input: ReporterInput) {
     private fun ProcessedDeclaredLicense.evaluate(): EvaluatedProcessedDeclaredLicense =
         EvaluatedProcessedDeclaredLicense(
             spdxExpression = spdxExpression,
-            mappedLicenses = spdxExpression?.licenses()?.map { licenses.addIfRequired(LicenseId(it)) }.orEmpty(),
+            mappedLicenses = spdxExpression?.licenses().orEmpty().map { licenses.addIfRequired(LicenseId(it)) },
             unmappedLicenses = unmapped.map { licenses.addIfRequired(LicenseId(it)) }
         )
 
