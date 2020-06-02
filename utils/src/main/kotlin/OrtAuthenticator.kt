@@ -74,15 +74,58 @@ class OrtAuthenticator(private val original: Authenticator? = null) : Authentica
     }
 
     override fun getPasswordAuthentication(): PasswordAuthentication? {
-        if (requestorType == RequestorType.PROXY) {
-            val proxySelector = ProxySelector.getDefault()
-            if (proxySelector is OrtProxySelector) {
-                val type = requestingProtocol.toProxyType() ?: return null
-                val proxy = Proxy(type, InetSocketAddress(requestingHost, requestingPort))
-                return proxySelector.getProxyAuthentication(proxy)
+        when (requestorType) {
+            RequestorType.PROXY -> {
+                val proxySelector = ProxySelector.getDefault()
+                if (proxySelector is OrtProxySelector) {
+                    val type = requestingProtocol.toProxyType() ?: return null
+                    val proxy = Proxy(type, InetSocketAddress(requestingHost, requestingPort))
+                    return proxySelector.getProxyAuthentication(proxy)
+                }
             }
+
+            RequestorType.SERVER -> {
+                val netrcFile = getUserHomeDirectory().resolve(".netrc")
+                if (netrcFile.isFile) {
+                    getNetrcAuthentication(netrcFile.readText(), requestingHost)?.let { return it }
+                }
+
+                // TODO: Add support for .authinfo files (which use the same syntax as .netrc files) once Git.kt does
+                //       not call the Git CLI anymore which only supports .netrc files.
+            }
+
+            null -> log.warn { "No requestor type set for password authentication." }
         }
 
         return super.getPasswordAuthentication()
     }
+}
+
+/**
+ * Parse the [contents] of a [.netrc](https://www.gnu.org/software/inetutils/manual/html_node/The-_002enetrc-file.html)
+ * file for a login / password matching [machine].
+ */
+fun getNetrcAuthentication(contents: String, machine: String): PasswordAuthentication? {
+    val lines = contents.lines().mapNotNull { line ->
+        line.trim().takeUnless { it.startsWith('#') }
+    }
+
+    val iterator = lines.joinToString(" ").split(Regex("\\s")).iterator()
+
+    var machineFound = false
+    var login: String? = null
+    var password: String? = null
+
+    while (iterator.hasNext()) {
+        when (iterator.next()) {
+            "machine" -> machineFound = iterator.hasNext() && iterator.next() == machine
+            "login" -> login = if (machineFound && iterator.hasNext()) iterator.next() else null
+            "password" -> password = if (machineFound && iterator.hasNext()) iterator.next() else null
+            "default" -> machineFound = true
+        }
+
+        if (login != null && password != null) return PasswordAuthentication(login, password.toCharArray())
+    }
+
+    return null
 }
