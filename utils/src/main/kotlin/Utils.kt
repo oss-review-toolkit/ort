@@ -222,11 +222,12 @@ fun getOrtDataDirectory() =
     } ?: getUserHomeDirectory().resolve(".ort")
 
 /**
- * Install both the [OrtAuthenticator] and the [OrtProxySelector] to handle proxy authentication.
+ * Install both the [OrtAuthenticator] and the [OrtProxySelector] to handle proxy authentication. Return the
+ * [OrtProxySelector] instance for further configuration.
  */
-fun installAuthenticatorAndProxySelector() {
+fun installAuthenticatorAndProxySelector(): OrtProxySelector {
     OrtAuthenticator.install()
-    OrtProxySelector.install()
+    return OrtProxySelector.install()
 }
 
 /**
