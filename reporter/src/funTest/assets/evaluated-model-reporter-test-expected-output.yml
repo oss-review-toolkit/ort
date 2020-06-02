@@ -28,14 +28,20 @@ licenses:
 - _id: 4
   id: "LicenseRef-test-Apache-2.0-single-line"
 - _id: 5
-  id: "Apache-2.0"
+  id: "GPL-3.0-only WITH GCC-exception-3.1 AND CC-BY-NC-3.0"
 - _id: 6
-  id: "Eclipse Public License 1.0"
+  id: "GPL-3.0-only"
 - _id: 7
-  id: "EPL-1.0"
+  id: "CC-BY-NC-3.0"
 - _id: 8
-  id: "Apache License, Version 2.0"
+  id: "Apache-2.0"
 - _id: 9
+  id: "Eclipse Public License 1.0"
+- _id: 10
+  id: "EPL-1.0"
+- _id: 11
+  id: "Apache License, Version 2.0"
+- _id: 12
   id: "New BSD License"
 scopes:
 - _id: 0
@@ -220,9 +226,15 @@ packages:
   is_project: true
   definition_file_path: "project/build.gradle"
   purl: "pkg:gradle/org.ossreviewtoolkit/nested-fake-project@1.0.0"
-  declared_licenses_processed: {}
-  detected_licenses:
+  declared_licenses:
   - 5
+  declared_licenses_processed:
+    spdx_expression: "GPL-3.0-only WITH GCC-exception-3.1 AND CC-BY-NC-3.0"
+    mapped_licenses:
+    - 6
+    - 7
+  detected_licenses:
+  - 8
   - 2
   detected_excluded_licenses:
   - 2
@@ -261,7 +273,7 @@ packages:
     path_excludes:
     - 1
   - type: "LICENSE"
-    license: 5
+    license: 8
     path: "file.java"
     start_line: 1
     end_line: 2
@@ -269,7 +281,7 @@ packages:
     path_excludes:
     - 1
   - type: "LICENSE"
-    license: 5
+    license: 8
     path: "file.kt"
     start_line: 1
     end_line: 2
@@ -307,11 +319,11 @@ packages:
   definition_file_path: ""
   purl: "pkg:ant/junit/junit@4.12"
   declared_licenses:
-  - 6
+  - 9
   declared_licenses_processed:
     spdx_expression: "EPL-1.0"
     mapped_licenses:
-    - 7
+    - 10
   description: "JUnit is a unit testing framework for Java, created by Erich Gamma\
     \ and Kent Beck."
   homepage_url: "http://junit.org"
@@ -352,11 +364,11 @@ packages:
   definition_file_path: ""
   purl: "pkg:maven/org.apache.commons/commons-lang3@3.5"
   declared_licenses:
-  - 8
+  - 11
   declared_licenses_processed:
     spdx_expression: "Apache-2.0"
     mapped_licenses:
-    - 5
+    - 8
   description: "Apache Commons Lang, a package of Java utility classes for the\n \
     \ classes that are in java.lang's hierarchy, or are considered to be so\n  standard\
     \ as to justify existence in java.lang."
@@ -398,11 +410,11 @@ packages:
   definition_file_path: ""
   purl: "pkg:maven/org.apache.commons/commons-text@1.1"
   declared_licenses:
-  - 8
+  - 11
   declared_licenses_processed:
     spdx_expression: "Apache-2.0"
     mapped_licenses:
-    - 5
+    - 8
   description: "Apache Commons Text is a library focused on algorithms working on\
     \ strings."
   homepage_url: "http://commons.apache.org/proper/commons-text/"
@@ -443,7 +455,7 @@ packages:
   definition_file_path: ""
   purl: "pkg:maven/org.hamcrest/hamcrest-core@1.3"
   declared_licenses:
-  - 9
+  - 12
   declared_licenses_processed:
     spdx_expression: "BSD-3-Clause"
     mapped_licenses:
@@ -563,7 +575,7 @@ rule_violations:
 - _id: 0
   rule: "rule 1"
   pkg: 2
-  license: 7
+  license: 10
   license_source: "DETECTED"
   severity: "ERROR"
   message: "EPL-1.0 error"
@@ -572,7 +584,7 @@ rule_violations:
 - _id: 1
   rule: "rule 2"
   pkg: 4
-  license: 5
+  license: 8
   license_source: "DECLARED"
   severity: "HINT"
   message: "Apache-2.0 hint"
@@ -613,7 +625,9 @@ statistics:
     declared:
       Apache-2.0: 2
       BSD-3-Clause: 1
+      CC-BY-NC-3.0: 1
       EPL-1.0: 1
+      GPL-3.0-only WITH GCC-exception-3.1: 1
     detected:
       Apache-2.0: 1
       BSD-3-Clause: 1
