@@ -26,11 +26,9 @@ import io.kotest.core.spec.Spec
 
 import java.time.Duration
 
-class PostgresStorageTest : AbstractStorageTest() {
-    companion object {
-        private val PG_STARTUP_WAIT = Duration.ofSeconds(20)
-    }
+private val PG_STARTUP_WAIT = Duration.ofSeconds(20)
 
+class PostgresStorageTest : AbstractStorageTest() {
     private lateinit var postgres: EmbeddedPostgres
 
     override fun beforeSpec(spec: Spec) {
@@ -43,6 +41,6 @@ class PostgresStorageTest : AbstractStorageTest() {
 
     override fun isolationMode() = IsolationMode.InstancePerTest
 
-    override fun createStorage() = PostgresStorage(postgres.postgresDatabase.connection, "public")
-        .also { it.setupDatabase() }
+    override fun createStorage() =
+        PostgresStorage(postgres.postgresDatabase.connection, "public").also { it.setupDatabase() }
 }
