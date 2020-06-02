@@ -28,6 +28,7 @@ import java.net.SocketAddress
 import java.net.URI
 
 typealias AuthenticatedProxy = Pair<Proxy, PasswordAuthentication?>
+typealias ProtocolProxyMap = Map<String, List<AuthenticatedProxy>>
 
 const val DEFAULT_PROXY_PORT = 8080
 
@@ -106,6 +107,16 @@ class OrtProxySelector(private val fallback: ProxySelector? = null) : ProxySelec
         val proxiesForProtocol = proxiesForOrigin.getOrPut(protocol) { mutableListOf() }
         proxiesForProtocol += proxy
     }
+
+    /**
+     * Add multiple [proxies for specific protocols][proxyMap] whose definitions come from [origin].
+     */
+    fun addProxies(origin: String, proxyMap: ProtocolProxyMap) =
+        proxyMap.forEach { (protocol, proxies) ->
+            proxies.forEach { proxy ->
+                addProxy(origin, protocol, proxy)
+            }
+        }
 
     /**
      * Return whether the [proxy] has been defined from some origin.
