@@ -74,22 +74,25 @@ class DownloaderCommand : CliktCommand(name = "download", help = "Fetch source c
     private val projectNameOption by option(
         "--project-name",
         help = "The speaking name of the project to download. For use together with '--project-url'. Will be ignored " +
-                "if '--ort-file' is also specified."
+                "if '--ort-file' is also specified. (default: the last part of the project URL)"
     )
 
     private val vcsTypeOption by option(
         "--vcs-type",
-        help = "The VCS type if '--project-url' points to a VCS. Will be ignored if '--ort-file' is also specified."
+        help = "The VCS type if '--project-url' points to a VCS. Will be ignored if '--ort-file' is also specified. " +
+                "(default: the VCS type detected by querying the project URL)"
     )
 
     private val vcsRevisionOption by option(
         "--vcs-revision",
-        help = "The VCS revision if '--project-url' points to a VCS. Will be ignored if '--ort-file' is also specified."
+        help = "The VCS revision if '--project-url' points to a VCS. Will be ignored if '--ort-file' is also " +
+                "specified. (default: the VCS's default revision)"
     )
 
     private val vcsPath by option(
         "--vcs-path",
-        help = "The VCS path if '--project-url' points to a VCS. Will be ignored if '--ort-file' is also specified."
+        help = "The VCS path if '--project-url' points to a VCS. Will be ignored if '--ort-file' is also specified. " +
+                "(default: the empty root path)"
     ).default("")
 
     private val outputDir by option(
