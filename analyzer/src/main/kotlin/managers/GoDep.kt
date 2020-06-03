@@ -56,10 +56,12 @@ import java.nio.file.Paths
  * A map of legacy package manager file names "dep" can import, and their respective lock file names, if any.
  */
 private val GO_LEGACY_MANIFESTS = mapOf(
-    // https://github.com/Masterminds/glide
+    // The [Glide](https://github.com/Masterminds/glide) package manager uses a dedicated `glide.yaml` rules file for
+    // direct dependencies and scans dependent packages for imports to determine transitive dependencies.
     "glide.yaml" to "glide.lock",
 
-    // https://github.com/tools/godep
+    // The [godep](https://github.com/tools/godep) dependency manager works by inspecting imports but was discontinued
+    // in favor of the [dep](https://github.com/golang/dep) dependency management tool.
     "Godeps.json" to ""
 )
 
