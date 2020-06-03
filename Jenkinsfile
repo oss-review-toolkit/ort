@@ -52,8 +52,8 @@ pipeline {
 
         string(
             name: 'PROJECT_VCS_REVISION',
-            description: 'VCS revision of the project (prefix tags with "refs/tags/")',
-            defaultValue: 'master'
+            description: 'VCS revision of the project (prefix Git tags with "refs/tags/")',
+            defaultValue: ''
         )
 
         credentials(
@@ -74,8 +74,8 @@ pipeline {
 
         string(
             name: 'ORT_CONFIG_VCS_REVISION',
-            description: 'Optional VCS revision of the ORT configuration (prefix tags with "refs/tags/")',
-            defaultValue: 'master'
+            description: 'Optional VCS revision of the ORT configuration (prefix Git tags with "refs/tags/")',
+            defaultValue: ''
         )
 
         credentials(
@@ -139,7 +139,12 @@ pipeline {
 
     stages {
         stage('Clone project') {
-            agent any
+            agent {
+                dockerfile {
+                    additionalBuildArgs DOCKER_BUILD_ARGS
+                    args DOCKER_RUN_ARGS
+                }
+            }
 
             environment {
                 HOME = "${env.WORKSPACE}@tmp"
@@ -147,19 +152,30 @@ pipeline {
             }
 
             steps {
-                sh 'rm -fr $PROJECT_DIR'
+                withCredentials([usernamePassword(credentialsId: params.PROJECT_VCS_CREDENTIALS, usernameVariable: 'LOGIN', passwordVariable: 'PASSWORD')]) {
+                    sh '''
+                        echo "default login $LOGIN password $PASSWORD" > $HOME/.netrc
 
-                // See https://jenkins.io/doc/pipeline/steps/git/.
-                checkout([$class: 'GitSCM',
-                    userRemoteConfigs: [[url: params.PROJECT_VCS_URL, credentialsId: params.PROJECT_VCS_CREDENTIALS]],
-                    branches: [[name: "${params.PROJECT_VCS_REVISION}"]],
-                    extensions: [[$class: 'RelativeTargetDirectory', relativeTargetDir: "${env.PROJECT_DIR}/source"]]
-                ])
+                        if [ -n "$PROJECT_VCS_REVISION" ]; then
+                            VCS_REVISION_OPTION="--vcs-revision $PROJECT_VCS_REVISION"
+                        fi
+
+                        rm -fr $PROJECT_DIR
+                        /opt/ort/bin/ort $LOG_LEVEL download --project-url $PROJECT_VCS_URL $VCS_REVISION_OPTION -o $PROJECT_DIR/source
+
+                        rm -f $HOME/.netrc
+                    '''
+                }
             }
         }
 
         stage('Clone ORT configuration') {
-            agent any
+            agent {
+                dockerfile {
+                    additionalBuildArgs DOCKER_BUILD_ARGS
+                    args DOCKER_RUN_ARGS
+                }
+            }
 
             when {
                 beforeAgent true
@@ -175,12 +191,19 @@ pipeline {
             }
 
             steps {
-                // See https://jenkins.io/doc/pipeline/steps/git/.
-                checkout([$class: 'GitSCM',
-                    userRemoteConfigs: [[url: params.ORT_CONFIG_VCS_URL, credentialsId: params.ORT_CONFIG_VCS_CREDENTIALS]],
-                    branches: [[name: "${params.ORT_CONFIG_VCS_REVISION}"]],
-                    extensions: [[$class: 'RelativeTargetDirectory', relativeTargetDir: "${env.ORT_DATA_DIR}/config"]]
-                ])
+                withCredentials([usernamePassword(credentialsId: params.ORT_CONFIG_VCS_CREDENTIALS, usernameVariable: 'LOGIN', passwordVariable: 'PASSWORD')]) {
+                    sh '''
+                        echo "default login $LOGIN password $PASSWORD" > $HOME/.netrc
+
+                        if [ -n "$ORT_CONFIG_VCS_REVISION" ]; then
+                            VCS_REVISION_OPTION="--vcs-revision $ORT_CONFIG_VCS_REVISION"
+                        fi
+
+                        /opt/ort/bin/ort $LOG_LEVEL download --project-url $ORT_CONFIG_VCS_URL $VCS_REVISION_OPTION -o $ORT_DATA_DIR/config
+
+                        rm -f $HOME/.netrc
+                    '''
+                }
             }
         }
 
