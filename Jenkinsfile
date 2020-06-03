@@ -202,15 +202,15 @@ pipeline {
                     /opt/ort/bin/set_gradle_proxy.sh
 
                     if [ "$ALLOW_DYNAMIC_VERSIONS" = "true" ]; then
-                        ALLOW_DYNAMIC_VERSIONS_PARAM="--allow-dynamic-versions"
+                        ALLOW_DYNAMIC_VERSIONS_OPTION="--allow-dynamic-versions"
                     fi
 
                     if [ "$USE_CLEARLY_DEFINED_CURATIONS" = "true" ]; then
-                        USE_CLEARLY_DEFINED_CURATIONS_PARAM="--clearly-defined-curations"
+                        USE_CLEARLY_DEFINED_CURATIONS_OPTION="--clearly-defined-curations"
                     fi
 
                     rm -fr out/results
-                    /opt/ort/bin/ort $LOG_LEVEL analyze $ALLOW_DYNAMIC_VERSIONS_PARAM $USE_CLEARLY_DEFINED_CURATIONS_PARAM -f JSON,YAML -i $PROJECT_DIR/source -o out/results/analyzer
+                    /opt/ort/bin/ort $LOG_LEVEL analyze $ALLOW_DYNAMIC_VERSIONS_OPTION $USE_CLEARLY_DEFINED_CURATIONS_OPTION -f JSON,YAML -i $PROJECT_DIR/source -o out/results/analyzer
                     ln -frs out/results/analyzer/analyzer-result.yml out/results/current-result.yml
                 '''
 
