@@ -73,6 +73,8 @@ class OrtAuthenticator(private val original: Authenticator? = null) : Authentica
         }
     }
 
+    private val serverAuthentication = mutableMapOf<String, PasswordAuthentication>()
+
     override fun getPasswordAuthentication(): PasswordAuthentication? {
         when (requestorType) {
             RequestorType.PROXY -> {
@@ -85,9 +87,16 @@ class OrtAuthenticator(private val original: Authenticator? = null) : Authentica
             }
 
             RequestorType.SERVER -> {
+                serverAuthentication[requestingHost]?.let { return it }
+
                 val netrcFile = getUserHomeDirectory().resolve(".netrc")
                 if (netrcFile.isFile) {
-                    getNetrcAuthentication(netrcFile.readText(), requestingHost)?.let { return it }
+                    log.debug { "Parsing '$netrcFile' for machine '$requestingHost'." }
+
+                    getNetrcAuthentication(netrcFile.readText(), requestingHost)?.let {
+                        serverAuthentication[requestingHost] = it
+                        return it
+                    }
                 }
 
                 // TODO: Add support for .authinfo files (which use the same syntax as .netrc files) once Git.kt does
