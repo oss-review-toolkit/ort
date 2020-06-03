@@ -55,7 +55,7 @@ import java.nio.file.Paths
 /**
  * A map of legacy package manager file names "dep" can import, and their respective lock file names, if any.
  */
-val GO_LEGACY_MANIFESTS = mapOf(
+private val GO_LEGACY_MANIFESTS = mapOf(
     // https://github.com/Masterminds/glide
     "glide.yaml" to "glide.lock",
 
