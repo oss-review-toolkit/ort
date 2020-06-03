@@ -288,5 +288,5 @@ private fun Provenance.writeValueAsString(): String =
     sourceArtifact?.let {
         "url=${it.url}, hash=${it.hash.value}"
     } ?: vcsInfo?.let {
-        "type=${it.type}, url=${it.url}, path=${it.path}, revision=${it.revision}"
+        "type=${it.type}, url=${it.url}, path=${it.path}, revision=${it.resolvedRevision}"
     } ?: throw IllegalArgumentException("Provenance must have either a non-null source artifact or VCS info.")
