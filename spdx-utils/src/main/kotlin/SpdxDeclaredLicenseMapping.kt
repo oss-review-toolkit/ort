@@ -454,6 +454,7 @@ object SpdxDeclaredLicenseMapping {
         "The Eclipse Public License Version 1.0" to EPL_1_0.toExpression(),
         "The GNU General Public License (GPL), Version 2, With Classpath Exception"
                 to (GPL_2_0_ONLY with CLASSPATH_EXCEPTION_2_0),
+        "The GNU General Public License, v2 with FOSS exception" to (GPL_2_0_ONLY with UNIVERSAL_FOSS_EXCEPTION_1_0),
         "The GNU General Public License, Version 2" to GPL_2_0_ONLY.toExpression(),
         "The GNU Lesser General Public License, Version 2.1" to LGPL_2_1_ONLY.toExpression(),
         "The GNU Lesser General Public License, Version 3.0" to LGPL_3_0_ONLY.toExpression(),
