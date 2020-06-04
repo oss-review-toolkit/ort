@@ -179,33 +179,7 @@ class DownloaderCommand : CliktCommand(name = "download", help = "Fetch source c
         packages.forEach { pkg ->
             try {
                 val result = Downloader.download(pkg, File(outputDir, pkg.id.toPath()), allowMovingRevisions)
-
-                if (archive) {
-                    val zipFile = File(
-                        outputDir,
-                        "${pkg.id.type.encodeOrUnknown()}-${pkg.id.namespace.encodeOrUnknown()}-" +
-                                "${pkg.id.name.encodeOrUnknown()}-${pkg.id.version.encodeOrUnknown()}.zip"
-                    )
-
-                    log.info {
-                        "Archiving directory '${result.downloadDirectory.absolutePath}' to " +
-                                "'${zipFile.absolutePath}'."
-                    }
-
-                    try {
-                        result.downloadDirectory.packZip(
-                            zipFile,
-                            "${pkg.id.name.encodeOrUnknown()}/${pkg.id.version.encodeOrUnknown()}/"
-                        )
-                    } catch (e: IllegalArgumentException) {
-                        e.showStackTrace()
-
-                        log.error { "Could not archive '${pkg.id.toCoordinates()}': ${e.collectMessagesAsString()}" }
-                    } finally {
-                        val relativePath = outputDir.toPath().relativize(result.downloadDirectory.toPath()).first()
-                        File(outputDir, relativePath.toString()).safeDeleteRecursively()
-                    }
-                }
+                if (archive) archive(pkg, result.downloadDirectory, outputDir)
             } catch (e: DownloadException) {
                 e.showStackTrace()
 
@@ -219,6 +193,32 @@ class DownloaderCommand : CliktCommand(name = "download", help = "Fetch source c
         if (errorMessages.isNotEmpty()) {
             log.error { "Error Summary:\n\n${errorMessages.joinToString("\n\n")}" }
             throw ProgramResult(2)
+        }
+    }
+
+    private fun archive(pkg: Package, inputDir: File, outputDir: File) {
+        val zipFile = File(
+            outputDir,
+            "${pkg.id.type.encodeOrUnknown()}-${pkg.id.namespace.encodeOrUnknown()}-" +
+                    "${pkg.id.name.encodeOrUnknown()}-${pkg.id.version.encodeOrUnknown()}.zip"
+        )
+
+        log.info {
+            "Archiving directory '${inputDir.absolutePath}' to '${zipFile.absolutePath}'."
+        }
+
+        try {
+            inputDir.packZip(
+                zipFile,
+                "${pkg.id.name.encodeOrUnknown()}/${pkg.id.version.encodeOrUnknown()}/"
+            )
+        } catch (e: IllegalArgumentException) {
+            e.showStackTrace()
+
+            log.error { "Could not archive '${pkg.id.toCoordinates()}': ${e.collectMessagesAsString()}" }
+        } finally {
+            val relativePath = outputDir.toPath().relativize(inputDir.toPath()).first()
+            File(outputDir, relativePath.toString()).safeDeleteRecursively()
         }
     }
 }
