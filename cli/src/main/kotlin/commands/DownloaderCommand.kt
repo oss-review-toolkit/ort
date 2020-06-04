@@ -133,7 +133,7 @@ class DownloaderCommand : CliktCommand(name = "download", help = "Fetch source c
                 }
 
                 mutableListOf<Package>().apply {
-                    if (Downloader.DataEntity.PROJECT in entities) {
+                    if (Downloader.DataEntity.PROJECTS in entities) {
                         addAll(consolidateProjectPackagesByVcs(analyzerResult.projects).keys)
                     }
 

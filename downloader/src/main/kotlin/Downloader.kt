@@ -54,7 +54,7 @@ class Downloader {
      */
     enum class DataEntity {
         PACKAGES,
-        PROJECT;
+        PROJECTS;
     }
 
     /**
