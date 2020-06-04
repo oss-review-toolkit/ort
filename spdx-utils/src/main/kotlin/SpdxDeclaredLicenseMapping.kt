@@ -293,6 +293,8 @@ object SpdxDeclaredLicenseMapping {
         "GNU General Public License (GPL) v. 3" to GPL_3_0_ONLY.toExpression(),
         "GNU General Public License, Version 2 with the Classpath Exception"
                 to (GPL_2_0_ONLY with CLASSPATH_EXCEPTION_2_0),
+        "GNU General Public License, version 2 with the GNU Classpath Exception"
+                to (GPL_2_0_ONLY with CLASSPATH_EXCEPTION_2_0),
         "GNU General Public License, Version 3" to GPL_3_0_ONLY.toExpression(),
         "GNU General Public License, version 2" to GPL_2_0_ONLY.toExpression(),
         "GNU General Public License, version 2 (GPL2), with the classpath exception"
