@@ -53,19 +53,46 @@ class Downloader {
      * The choice of data entities to download.
      */
     enum class DataEntity {
+        /**
+         * Identifier for package entities.
+         */
         PACKAGES,
+
+        /**
+         * Identifier for project entities.
+         */
         PROJECTS;
     }
 
     /**
-     * This class describes what was downloaded by [download] to the [downloadDirectory] or if any exception occurred.
-     * Either [sourceArtifact] or [vcsInfo] is set to a non-null value. The download was started at [dateTime].
+     * This class describes what was downloaded by any of the download functions.
      */
     data class DownloadResult(
+        /**
+         * The date and time when the download was started.
+         */
         val dateTime: Instant,
+
+        /**
+         * The directory to which files were downloaded.
+         */
         val downloadDirectory: File,
+
+        /**
+         * The source artifact that was downloaded, or null if the download was performed from a [VCS][vcsInfo].
+         */
         val sourceArtifact: RemoteArtifact? = null,
+
+        /**
+         * Information about the VCS from which was downloaded, or null if a [source artifact][sourceArtifact] was
+         * downloaded.
+         */
         val vcsInfo: VcsInfo? = null,
+
+        /**
+         * The original VCS information that was passed to the download function. It can be different to [vcsInfo] if
+         * any automatic detection took place.
+         */
         val originalVcsInfo: VcsInfo? = null
     ) {
         init {
@@ -76,16 +103,11 @@ class Downloader {
     }
 
     /**
-     * Download the source code of the [target] package to a folder inside [outputDirectory]. The folder name is created
-     * from the [name][Identifier.name] and [version][Identifier.version] of the [target] package [id][Package.id].
-     *
-     * @param target The description of the package to download.
-     * @param outputDirectory The parent directory to download the source code to.
-     * @param allowMovingRevisions Indicate whether VCS downloads may use symbolic names to moving revisions.
-     *
-     * @return The [DownloadResult].
-     *
-     * @throws DownloadException In case the download failed.
+     * Download the source code of the [target] package to a sub-directory inside [outputDirectory]. The sub-directory
+     * hierarchy is inferred from the [name][Identifier.name] and [version][Identifier.version] of the package. The
+     * [allowMovingRevisions] parameter indicates whether VCS downloads accept symbolic names, like branches, instead of
+     * only fixed revisions. A [DownloadResult] is returned on success or a [DownloadException] is thrown in case of
+     * failure.
      */
     fun download(target: Package, outputDirectory: File, allowMovingRevisions: Boolean = false): DownloadResult {
         log.info { "Trying to download source code for '${target.id.toCoordinates()}'." }
