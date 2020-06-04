@@ -112,11 +112,11 @@ object Downloader {
     fun download(target: Package, outputDirectory: File, allowMovingRevisions: Boolean = false): DownloadResult {
         log.info { "Trying to download source code for '${target.id.toCoordinates()}'." }
 
-        val targetDir = File(outputDirectory, target.id.toPath()).apply { safeMkdirs() }
-
-        require(!targetDir.exists() || targetDir.list().isEmpty()) {
-            "The output directory '$targetDir' must not contain any files yet."
+        require(!outputDirectory.exists() || outputDirectory.list().isEmpty()) {
+            "The output directory '$outputDirectory' must not contain any files yet."
         }
+
+        outputDirectory.apply { safeMkdirs() }
 
         val exception = DownloadException("Download failed for '${target.id.toCoordinates()}'.")
 
@@ -124,7 +124,7 @@ object Downloader {
         try {
             // Cargo in general builds from source tarballs, so we prefer source artifacts to VCS.
             if (target.id.type != "Cargo" || target.sourceArtifact == RemoteArtifact.EMPTY) {
-                return downloadFromVcs(target, targetDir, allowMovingRevisions)
+                return downloadFromVcs(target, outputDirectory, allowMovingRevisions)
             } else {
                 log.info { "Skipping VCS download for Cargo package '${target.id.toCoordinates()}'." }
             }
@@ -132,23 +132,23 @@ object Downloader {
             log.debug { "VCS download failed for '${target.id.toCoordinates()}': ${e.collectMessagesAsString()}" }
 
             // Clean up any left-over files (force to delete read-only files in ".git" directories on Windows).
-            targetDir.safeDeleteRecursively(force = true)
-            targetDir.safeMkdirs()
+            outputDirectory.safeDeleteRecursively(force = true)
+            outputDirectory.safeMkdirs()
 
             exception.addSuppressed(e)
         }
 
         // Try downloading the source artifact.
         try {
-            return downloadSourceArtifact(target, targetDir)
+            return downloadSourceArtifact(target, outputDirectory)
         } catch (e: DownloadException) {
             log.debug {
                 "Source artifact download failed for '${target.id.toCoordinates()}': ${e.collectMessagesAsString()}"
             }
 
             // Clean up any left-over files.
-            targetDir.safeDeleteRecursively()
-            targetDir.safeMkdirs()
+            outputDirectory.safeDeleteRecursively()
+            outputDirectory.safeMkdirs()
 
             exception.addSuppressed(e)
         }
