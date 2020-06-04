@@ -178,8 +178,9 @@ class DownloaderCommand : CliktCommand(name = "download", help = "Fetch source c
         val errorMessages = mutableListOf<String>()
         packages.forEach { pkg ->
             try {
-                val result = Downloader.download(pkg, File(outputDir, pkg.id.toPath()), allowMovingRevisions)
-                if (archive) archive(pkg, result.downloadDirectory, outputDir)
+                val downloadDir = File(outputDir, pkg.id.toPath())
+                Downloader.download(pkg, downloadDir, allowMovingRevisions)
+                if (archive) archive(pkg, downloadDir, outputDir)
             } catch (e: DownloadException) {
                 e.showStackTrace()
 
