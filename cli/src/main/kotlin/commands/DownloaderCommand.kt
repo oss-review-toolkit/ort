@@ -39,6 +39,7 @@ import org.ossreviewtoolkit.GroupTypes.StringType
 import org.ossreviewtoolkit.downloader.DownloadException
 import org.ossreviewtoolkit.downloader.Downloader
 import org.ossreviewtoolkit.downloader.VersionControlSystem
+import org.ossreviewtoolkit.downloader.consolidateProjectPackagesByVcs
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.Package
@@ -133,7 +134,7 @@ class DownloaderCommand : CliktCommand(name = "download", help = "Fetch source c
 
                 mutableListOf<Package>().apply {
                     if (Downloader.DataEntity.PROJECT in entities) {
-                        addAll(Downloader.consolidateProjectPackagesByVcs(analyzerResult.projects).keys)
+                        addAll(consolidateProjectPackagesByVcs(analyzerResult.projects).keys)
                     }
 
                     if (Downloader.DataEntity.PACKAGES in entities) {
