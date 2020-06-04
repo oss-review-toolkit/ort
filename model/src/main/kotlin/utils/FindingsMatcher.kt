@@ -43,8 +43,6 @@ private fun Collection<CopyrightFinding>.toCopyrightFindings(): List<CopyrightFi
     }
 }
 
-private val CopyrightFinding.line get(): Int = location.startLine
-
 /**
  * A class for matching copyright findings to license findings. Copyright statements may be matched either to license
  * findings located nearby in the same file or to a license found in a license file whereas the given
@@ -118,9 +116,9 @@ class FindingsMatcher(
             "Given copyright statements must all point to the same file."
         }
 
-        val lineRange = getMatchingRange(licenseStartLine, licenseEndLine, copyrights.map { it.line })
+        val lineRange = getMatchingRange(licenseStartLine, licenseEndLine, copyrights.map { it.location.startLine })
 
-        return copyrights.filterTo(mutableSetOf()) { it.line in lineRange }
+        return copyrights.filterTo(mutableSetOf()) { it.location.startLine in lineRange }
     }
 
     /**
