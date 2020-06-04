@@ -116,8 +116,8 @@ class DownloaderCommand : CliktCommand(name = "download", help = "Fetch source c
 
     private val allowMovingRevisionsOption by option(
         "--allow-moving-revisions",
-        help = "Allow the download of moving revisions (like e.g. HEAD or master in Git). By default these revision " +
-                "are forbidden because they are not pointing to a stable revision of the source code."
+        help = "Allow the download of moving revisions (like e.g. HEAD or master in Git). By default these revisions " +
+                "are forbidden because they are not pointing to a fixed revision of the source code."
     ).flag()
 
     override fun run() {
