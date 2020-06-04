@@ -350,6 +350,7 @@ object SpdxDeclaredLicenseMapping {
         "Historical Permission Notice and Disclaimer (HPND)" to HPND.toExpression(),
         "IBM Public License" to IPL_1_0.toExpression(),
         "icu-unicode license" to ICU.toExpression(),
+        "Indiana University Extreme! Lab Software License, vesion 1.1.1" to licenseRef("scancode", "indiana-extreme"),
         "Individual BSD License" to BSD_3_CLAUSE.toExpression(),
         "ISC License (ISCL)" to ISC.toExpression(),
         "ISC/BSD License" to (ISC or BSD_2_CLAUSE),
