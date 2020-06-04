@@ -293,7 +293,7 @@ abstract class LocalScanner(name: String, config: ScannerConfiguration) : Scanne
         val resultsFile = getResultsFile(scannerDetails, pkg, outputDirectory)
 
         val downloadResult = try {
-            Downloader().download(pkg, downloadDirectory)
+            Downloader.download(pkg, downloadDirectory)
         } catch (e: DownloadException) {
             e.showStackTrace()
 

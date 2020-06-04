@@ -66,7 +66,7 @@ class DirectoryTest : StringSpec() {
 
             // No download source specified, we expect exception in this case.
             shouldThrow<DownloadException> {
-                Downloader().download(pkg, outputDir)
+                Downloader.download(pkg, outputDir)
             }
 
             outputDir.list().size shouldBe 1

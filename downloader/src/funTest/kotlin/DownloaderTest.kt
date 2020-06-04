@@ -69,7 +69,7 @@ class DownloaderTest : StringSpec() {
                 vcs = VcsInfo.EMPTY
             )
 
-            val downloadResult = Downloader().download(pkg, outputDir)
+            val downloadResult = Downloader.download(pkg, outputDir)
             downloadResult.vcsInfo shouldBe null
             downloadResult.sourceArtifact shouldNotBe null
             downloadResult.sourceArtifact!!.url shouldBe pkg.sourceArtifact.url
@@ -102,7 +102,7 @@ class DownloaderTest : StringSpec() {
             )
 
             val exception = shouldThrow<DownloadException> {
-                Downloader().download(pkg, outputDir)
+                Downloader.download(pkg, outputDir)
             }
 
             exception.suppressed.size shouldBe 2
@@ -136,7 +136,7 @@ class DownloaderTest : StringSpec() {
                 )
             )
 
-            val downloadResult = Downloader().download(pkg, outputDir)
+            val downloadResult = Downloader.download(pkg, outputDir)
             downloadResult.vcsInfo shouldBe null
             downloadResult.sourceArtifact shouldNotBe null
             downloadResult.sourceArtifact!!.url shouldBe pkg.sourceArtifact.url
@@ -169,7 +169,7 @@ class DownloaderTest : StringSpec() {
                 vcs = VcsInfo.EMPTY
             )
 
-            val downloadResult = Downloader().download(pkg, outputDir)
+            val downloadResult = Downloader.download(pkg, outputDir)
             downloadResult.vcsInfo shouldBe null
             downloadResult.sourceArtifact shouldNotBe null
             downloadResult.sourceArtifact!!.url shouldBe pkg.sourceArtifact.url
