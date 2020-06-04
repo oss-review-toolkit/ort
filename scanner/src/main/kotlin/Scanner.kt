@@ -19,7 +19,7 @@
 
 package org.ossreviewtoolkit.scanner
 
-import org.ossreviewtoolkit.downloader.Downloader
+import org.ossreviewtoolkit.downloader.consolidateProjectPackagesByVcs
 import org.ossreviewtoolkit.model.Environment
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.Package
@@ -98,7 +98,7 @@ abstract class Scanner(val scannerName: String, protected val config: ScannerCon
         }
 
         // Add the projects as packages to scan.
-        val consolidatedProjects = Downloader.consolidateProjectPackagesByVcs(ortResult.getProjects(skipExcluded))
+        val consolidatedProjects = consolidateProjectPackagesByVcs(ortResult.getProjects(skipExcluded))
         val consolidatedReferencePackages = consolidatedProjects.keys.map { it.toCuratedPackage() }
 
         val packagesToScan = (consolidatedReferencePackages + ortResult.getPackages(skipExcluded)).map { it.pkg }
