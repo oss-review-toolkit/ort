@@ -48,7 +48,7 @@ import okio.sink
 /**
  * The class to download source code. The signatures of public functions in this class define the library API.
  */
-class Downloader {
+object Downloader {
     /**
      * The choice of data entities to download.
      */

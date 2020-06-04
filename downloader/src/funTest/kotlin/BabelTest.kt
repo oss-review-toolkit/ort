@@ -77,7 +77,7 @@ class BabelTest : StringSpec() {
                 vcsProcessed = vcsMerged
             )
 
-            val downloadResult = Downloader().download(pkg, outputDir)
+            val downloadResult = Downloader.download(pkg, outputDir)
 
             downloadResult.sourceArtifact shouldBe null
             downloadResult.vcsInfo shouldNotBe null

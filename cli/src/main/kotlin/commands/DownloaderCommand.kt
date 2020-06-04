@@ -178,7 +178,7 @@ class DownloaderCommand : CliktCommand(name = "download", help = "Fetch source c
         val errorMessages = mutableListOf<String>()
         packages.forEach { pkg ->
             try {
-                val result = Downloader().download(pkg, outputDir, allowMovingRevisions)
+                val result = Downloader.download(pkg, outputDir, allowMovingRevisions)
 
                 if (archive) {
                     val zipFile = File(
