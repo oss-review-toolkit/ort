@@ -39,7 +39,7 @@ import io.kotest.core.spec.style.StringSpec
 import java.io.File
 
 private const val REPO_URL = "https://github.com/oss-review-toolkit/ort-test-data-git-repo"
-private const val REPO_REV = "9e0e15c2f18c95be4f59e5522bc1bbaeef1802ca"
+private const val REPO_REV = "31588aa8f8555474e1c3c66a359ec99e4cd4b1fa"
 private const val REPO_MANIFEST = "manifest.xml"
 
 class GitRepoTest : StringSpec() {
@@ -83,7 +83,7 @@ class GitRepoTest : StringSpec() {
                 "submodules",
                 "submodules/commons-text",
                 "submodules/test-data-npm",
-                "submodules/test-data-npm/entities",
+                "submodules/test-data-npm/isarray",
                 "submodules/test-data-npm/long.js"
             ).associateWith { VersionControlSystem.getPathInfo(File(outputDir, it)) }
 
