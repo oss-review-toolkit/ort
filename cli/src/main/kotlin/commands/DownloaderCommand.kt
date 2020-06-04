@@ -105,7 +105,8 @@ class DownloaderCommand : CliktCommand(name = "download", help = "Fetch source c
 
     private val archive by option(
         "--archive",
-        help = "Archive the downloaded source code as ZIP files to the output directory."
+        help = "Archive the downloaded source code as ZIP files to the output directory. Will be ignored if " +
+                "'--project-url' is also specified."
     ).flag()
 
     private val entities by option(
@@ -114,16 +115,16 @@ class DownloaderCommand : CliktCommand(name = "download", help = "Fetch source c
                 "data entities are downloaded."
     ).enum<Downloader.DataEntity>().split(",").default(enumValues<Downloader.DataEntity>().asList())
 
-    private val allowMovingRevisionsOption by option(
+    private val allowMovingRevisions by option(
         "--allow-moving-revisions",
         help = "Allow the download of moving revisions (like e.g. HEAD or master in Git). By default these revisions " +
                 "are forbidden because they are not pointing to a fixed revision of the source code."
     ).flag()
 
     override fun run() {
-        var allowMovingRevisions = allowMovingRevisionsOption
+        val errorMessages = mutableListOf<String>()
 
-        val packages = when (input) {
+        when (input) {
             is FileType -> {
                 val absoluteOrtFile = (input as FileType).file.normalize()
                 val analyzerResult = absoluteOrtFile.readValue<OrtResult>().analyzer?.result
@@ -132,13 +133,29 @@ class DownloaderCommand : CliktCommand(name = "download", help = "Fetch source c
                     "The provided ORT result file '$absoluteOrtFile' does not contain an analyzer result."
                 }
 
-                mutableListOf<Package>().apply {
+                val packages = mutableListOf<Package>().apply {
                     if (Downloader.DataEntity.PROJECTS in entities) {
                         addAll(consolidateProjectPackagesByVcs(analyzerResult.projects).keys)
                     }
 
                     if (Downloader.DataEntity.PACKAGES in entities) {
                         addAll(analyzerResult.packages.map { curatedPackage -> curatedPackage.pkg })
+                    }
+                }
+
+                packages.forEach { pkg ->
+                    try {
+                        val downloadDir = File(outputDir, pkg.id.toPath())
+                        Downloader.download(pkg, downloadDir, allowMovingRevisions)
+                        if (archive) archive(pkg, downloadDir, outputDir)
+                    } catch (e: DownloadException) {
+                        e.showStackTrace()
+
+                        val errorMessage = "Could not download '${pkg.id.toCoordinates()}': " +
+                                e.collectMessagesAsString()
+                        errorMessages += errorMessage
+
+                        log.error { errorMessage }
                     }
                 }
             }
@@ -166,28 +183,20 @@ class DownloaderCommand : CliktCommand(name = "download", help = "Fetch source c
                     Package.EMPTY.copy(id = dummyId, vcs = vcsInfo, vcsProcessed = vcsInfo.normalize())
                 }
 
-                // Always allow moving revisions when directly downloading a single project only. This is for
-                // convenience as often the latest revision (referred to by some VCS-specific symbolic name) of a
-                // project needs to be downloaded.
-                allowMovingRevisions = true
+                try {
+                    // Always allow moving revisions when directly downloading a single project only. This is for
+                    // convenience as often the latest revision (referred to by some VCS-specific symbolic name) of a
+                    // project needs to be downloaded.
+                    Downloader.download(dummyPackage, outputDir, allowMovingRevisions = true)
+                } catch (e: DownloadException) {
+                    e.showStackTrace()
 
-                listOf(dummyPackage)
-            }
-        }
+                    val errorMessage = "Could not download '${dummyPackage.id.toCoordinates()}': " +
+                            e.collectMessagesAsString()
+                    errorMessages += errorMessage
 
-        val errorMessages = mutableListOf<String>()
-        packages.forEach { pkg ->
-            try {
-                val downloadDir = File(outputDir, pkg.id.toPath())
-                Downloader.download(pkg, downloadDir, allowMovingRevisions)
-                if (archive) archive(pkg, downloadDir, outputDir)
-            } catch (e: DownloadException) {
-                e.showStackTrace()
-
-                val errorMessage = "Could not download '${pkg.id.toCoordinates()}': ${e.collectMessagesAsString()}"
-                errorMessages += errorMessage
-
-                log.error { errorMessage }
+                    log.error { errorMessage }
+                }
             }
         }
 
