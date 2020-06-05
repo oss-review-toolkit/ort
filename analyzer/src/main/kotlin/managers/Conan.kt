@@ -98,8 +98,6 @@ class Conan(
      * Primary method for resolving dependencies from [definitionFile].
      */
     override fun resolveDependencies(definitionFile: File): ProjectAnalyzerResult? {
-        log.info { "Resolving dependencies for: '$definitionFile'" }
-
         val conanHome = getUserHomeDirectory().resolve(".conan")
 
         stashDirectories(File(conanHome.resolve("data").path)).use {

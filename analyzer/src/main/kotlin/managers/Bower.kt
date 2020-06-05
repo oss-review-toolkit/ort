@@ -40,7 +40,6 @@ import org.ossreviewtoolkit.utils.CommandLineTool
 import org.ossreviewtoolkit.utils.Os
 import org.ossreviewtoolkit.utils.fieldNamesOrEmpty
 import org.ossreviewtoolkit.utils.fieldsOrEmpty
-import org.ossreviewtoolkit.utils.log
 import org.ossreviewtoolkit.utils.stashDirectories
 import org.ossreviewtoolkit.utils.textValueOrEmpty
 
@@ -217,8 +216,6 @@ class Bower(
     override fun beforeResolution(definitionFiles: List<File>) = checkVersion(analyzerConfig.ignoreToolVersions)
 
     override fun resolveDependencies(definitionFile: File): ProjectAnalyzerResult? {
-        log.info { "Resolving dependencies for: '$definitionFile'" }
-
         val workingDir = definitionFile.parentFile
 
         stashDirectories(File(workingDir, "bower_components")).use {
