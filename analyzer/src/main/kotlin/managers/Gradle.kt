@@ -142,14 +142,14 @@ class Gradle(
                 }
             }
 
-            log.info {
+            log.debug {
                 "Will apply the following system properties defined in file '$gradlePropertiesFile':" +
                         gradleSystemProperties.joinToString(separator = "\n\t", prefix = "\n\t") {
                             "${it.first} = ${it.second}"
                         }
             }
         } else {
-            log.info {
+            log.debug {
                 "Not applying any system properties as no '$gradlePropertiesFile' file was found."
             }
         }
