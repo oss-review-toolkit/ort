@@ -1,0 +1,14 @@
+{
+  "SPDXID" : "SPDXRef-<REPLACE_UUID>",
+  "spdxVersion" : "SPDX-2.2.1",
+  "creationInfo" : {
+    "comment" : "some creation info comment",
+    "created" : "<REPLACE_CREATION_DATE_AND_TIME>",
+    "creators" : [ "Tool: OSS Review Toolkit - <REPLACE_ORT_VERSION>" ],
+    "licenseListVersion" : "<REPLACE_LICENSE_LIST_VERSION>"
+  },
+  "name" : "some document name",
+  "dataLicense" : "CC0-1.0",
+  "comment" : "some document comment",
+  "documentNamespace" : "spdx://<REPLACE_UUID>"
+}
