@@ -29,6 +29,9 @@ import java.net.URL
 import java.security.MessageDigest
 import java.util.EnumSet
 
+import org.ossreviewtoolkit.spdx.model.SpdxConstants
+import org.ossreviewtoolkit.spdx.SpdxExpression.Strictness
+
 /**
  * A list of globs that match file names which are not license files but typically trigger false-positives.
  */
@@ -165,6 +168,19 @@ fun getLicenseTextReader(
         SpdxLicense.forId(id)?.let { { it.text } }
             ?: SpdxLicenseException.forId(id)?.takeIf { handleExceptions }?.let { { it.text } }
     }
+
+/**
+ * Return true if and only if this String can be successfully parsed to a [SpdxExpression].
+ */
+internal fun String.isSpdxExpression(): Boolean =
+    runCatching { SpdxExpression.parse(this, Strictness.ALLOW_DEPRECATED) }.isSuccess
+
+/**
+ * Return true if and only if this String can be successfully parsed to an [SpdxExpression] or if it equals
+ * [org.ossreviewtoolkit.spdx.model.SpdxConstants.NONE] or [org.ossreviewtoolkit.spdx.model.SpdxConstants.NOASSERTION].
+ */
+internal fun String.isSpdxExpressionOrNotPresent(): Boolean =
+    SpdxConstants.isNotPresent(this) || isSpdxExpression()
 
 private fun getLicenseTextResource(id: String): URL? =
     object {}.javaClass.getResource("/licenserefs/$id")
