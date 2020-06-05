@@ -227,8 +227,6 @@ class Cargo(
     }
 
     override fun resolveDependencies(definitionFile: File): ProjectAnalyzerResult? {
-        log.info { "Resolving dependencies for: '$definitionFile'" }
-
         // Get the project name and version. If one of them is missing return null, because this is a workspace
         // definition file that does not contain a project.
         val pkgDefinition = Toml().read(definitionFile)
