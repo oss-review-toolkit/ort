@@ -265,10 +265,16 @@ pipeline {
             }
 
             steps {
-                sh '''
-                    /opt/ort/bin/ort $LOG_LEVEL scan -f JSON,YAML -i out/results/current-result.yml -o out/results/scanner
-                    ln -frs out/results/scanner/scan-result.yml out/results/current-result.yml
-                '''
+                withCredentials([usernamePassword(credentialsId: params.PROJECT_VCS_CREDENTIALS, usernameVariable: 'LOGIN', passwordVariable: 'PASSWORD')]) {
+                    sh '''
+                        echo "default login $LOGIN password $PASSWORD" > $HOME/.netrc
+
+                        /opt/ort/bin/ort $LOG_LEVEL scan -f JSON,YAML -i out/results/current-result.yml -o out/results/scanner
+                        ln -frs out/results/scanner/scan-result.yml out/results/current-result.yml
+
+                        rm -f $HOME/.netrc
+                    '''
+                }
             }
 
             post {
