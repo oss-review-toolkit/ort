@@ -6,5 +6,6 @@ org.ossreviewtoolkit.reporter.reporters.EvaluatedModelYamlReporter
 org.ossreviewtoolkit.reporter.reporters.ExcelReporter
 org.ossreviewtoolkit.reporter.reporters.NoticeByPackageReporter
 org.ossreviewtoolkit.reporter.reporters.NoticeSummaryReporter
+org.ossreviewtoolkit.reporter.reporters.SpdxDocumentReporter
 org.ossreviewtoolkit.reporter.reporters.StaticHtmlReporter
 org.ossreviewtoolkit.reporter.reporters.WebAppReporter
