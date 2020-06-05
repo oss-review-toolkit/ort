@@ -19,12 +19,13 @@
 
 package org.ossreviewtoolkit.model.utils
 
-import org.ossreviewtoolkit.model.LicenseFinding
-import org.ossreviewtoolkit.model.config.LicenseFindingCuration
-import org.ossreviewtoolkit.spdx.SpdxLicense
-
 import java.nio.file.FileSystems
 import java.nio.file.Paths
+
+import org.ossreviewtoolkit.model.LicenseFinding
+import org.ossreviewtoolkit.model.config.LicenseFindingCuration
+import org.ossreviewtoolkit.model.licenses.LicenseFindingCurationResult
+import org.ossreviewtoolkit.spdx.SpdxLicense
 
 /**
  * A class for matching and applying [LicenseFindingCuration]s to [LicenseFinding]s.
@@ -66,23 +67,28 @@ class FindingCurationMatcher {
     /**
      * Applies the given [curations] to the given [findings]. In case multiple curations match any given finding all
      * curations are applied to the original finding, thus in this case there are multiple curated findings for one
-     * finding.
+     * finding. If multiple curations lead to the same result, only one of them is contained in the returned map.
      */
     fun applyAll(
         findings: Collection<LicenseFinding>,
         curations: Collection<LicenseFindingCuration>
-    ): List<LicenseFinding> {
-        val result = mutableListOf<LicenseFinding>()
+    ): List<LicenseFindingCurationResult> {
+        val result = mutableMapOf<LicenseFinding?, MutableList<Pair<LicenseFinding, LicenseFindingCuration>>>()
 
         findings.forEach { finding ->
             val matchingCurations = curations.filter { matches(finding, it) }
             if (matchingCurations.isNotEmpty()) {
-                result.addAll(matchingCurations.mapNotNull { apply(finding, it) })
+                matchingCurations.forEach { curation ->
+                    val curatedFinding = apply(finding, curation)
+                    result.getOrPut(curatedFinding) { mutableListOf() } += Pair(finding, curation)
+                }
             } else {
-                result.add(finding)
+                result.getOrPut(finding) { mutableListOf() }
             }
         }
 
-        return result
+        return result.map { (curatedFinding, originalFindings) ->
+            LicenseFindingCurationResult(curatedFinding, originalFindings)
+        }
     }
 }

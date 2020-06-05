@@ -79,6 +79,7 @@ internal class LicenseResolver(
             }
 
             val curatedLicenseFindings = curationMatcher.applyAll(rawLicenseFindings, curations)
+                .mapNotNullTo(mutableSetOf()) { it.curatedFinding }
             val decomposedFindings = curatedLicenseFindings.flatMap { finding ->
                 SpdxExpression.parse(finding.license).decompose().map { finding.copy(license = it.toString()) }
             }
