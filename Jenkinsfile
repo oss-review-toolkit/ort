@@ -36,6 +36,9 @@ static sortProjectsByPathDepth(projects) {
     return projects.toSorted { it.definition_file_path.count("/") }
 }
 
+def projectVcsCredentials = []
+def ortConfigVcsCredentials = []
+
 pipeline {
     agent none
 
@@ -138,6 +141,22 @@ pipeline {
     }
 
     stages {
+        stage('Configure') {
+            agent any
+
+            steps {
+                script {
+                    if (!params.PROJECT_VCS_CREDENTIALS.allWhitespace) {
+                        projectVcsCredentials += usernamePassword(credentialsId: params.PROJECT_VCS_CREDENTIALS, usernameVariable: 'LOGIN', passwordVariable: 'PASSWORD')
+                    }
+
+                    if (!params.ORT_CONFIG_VCS_CREDENTIALS.allWhitespace) {
+                        ortConfigVcsCredentials += usernamePassword(credentialsId: params.ORT_CONFIG_VCS_CREDENTIALS, usernameVariable: 'LOGIN', passwordVariable: 'PASSWORD')
+                    }
+                }
+            }
+        }
+
         stage('Clone project') {
             agent {
                 dockerfile {
@@ -152,7 +171,7 @@ pipeline {
             }
 
             steps {
-                withCredentials([usernamePassword(credentialsId: params.PROJECT_VCS_CREDENTIALS, usernameVariable: 'LOGIN', passwordVariable: 'PASSWORD')]) {
+                withCredentials(projectVcsCredentials) {
                     sh '''
                         echo "default login $LOGIN password $PASSWORD" > $HOME/.netrc
 
@@ -191,7 +210,7 @@ pipeline {
             }
 
             steps {
-                withCredentials([usernamePassword(credentialsId: params.ORT_CONFIG_VCS_CREDENTIALS, usernameVariable: 'LOGIN', passwordVariable: 'PASSWORD')]) {
+                withCredentials(ortConfigVcsCredentials) {
                     sh '''
                         echo "default login $LOGIN password $PASSWORD" > $HOME/.netrc
 
@@ -288,7 +307,7 @@ pipeline {
             }
 
             steps {
-                withCredentials([usernamePassword(credentialsId: params.PROJECT_VCS_CREDENTIALS, usernameVariable: 'LOGIN', passwordVariable: 'PASSWORD')]) {
+                withCredentials(projectVcsCredentials) {
                     sh '''
                         echo "default login $LOGIN password $PASSWORD" > $HOME/.netrc
 
