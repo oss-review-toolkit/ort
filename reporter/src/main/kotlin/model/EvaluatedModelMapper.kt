@@ -531,6 +531,7 @@ internal class EvaluatedModelMapper(private val input: ReporterInput) {
         val pathExcludes = getPathExcludes(id, scanResult.provenance)
         val licenseFindingCurations = getLicenseFindingCurations(id, scanResult.provenance)
         val curatedFindings = curationsMatcher.applyAll(scanResult.summary.licenseFindings, licenseFindingCurations)
+            .mapNotNullTo(mutableSetOf()) { it.curatedFinding }
         val decomposedFindings = curatedFindings.flatMap { finding ->
             SpdxExpression.parse(finding.license).decompose().map { finding.copy(license = it.toString()) }
         }
