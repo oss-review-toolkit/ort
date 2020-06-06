@@ -18,14 +18,14 @@ project:
   scopes:
   - name: "install"
     dependencies:
-    - id: "PyPI::Django:2.2.10"
+    - id: "PyPI::Django:2.2.13"
       dependencies:
       - id: "PyPI::pytz:2020.1"
       - id: "PyPI::sqlparse:0.3.1"
 packages:
 - package:
-    id: "PyPI::Django:2.2.10"
-    purl: "pkg:pypi/Django@2.2.10"
+    id: "PyPI::Django:2.2.13"
+    purl: "pkg:pypi/Django@2.2.13"
     declared_licenses:
     - "BSD"
     - "BSD License"
@@ -38,14 +38,14 @@ packages:
       \ and clean, pragmatic design."
     homepage_url: "https://www.djangoproject.com/"
     binary_artifact:
-      url: "https://files.pythonhosted.org/packages/2b/b2/eb6230a30a5cc3a71b4df733de95c1a888e098e60b5e233703936f9c4dad/Django-2.2.10-py3-none-any.whl"
+      url: "https://files.pythonhosted.org/packages/fb/e1/c5520a00ae75060b0c03eea0115b272d6dc5dbd2fd3b75d0c0fbc9d262bc/Django-2.2.13-py3-none-any.whl"
       hash:
-        value: "d24676ee3a4e112abc46f5363a608cd6"
+        value: "d4a2170813154df2a6f976fb4ab027f5"
         algorithm: "MD5"
     source_artifact:
-      url: "https://files.pythonhosted.org/packages/b7/69/abb0cfd9ee83209535e7021b34db6b19f4094a43a70a6e6f77da3c0ba606/Django-2.2.10.tar.gz"
+      url: "https://files.pythonhosted.org/packages/da/0c/5ef899626da946b00322b70c2b28ac9d04f95cbedf525187ab4dad5db22d/Django-2.2.13.tar.gz"
       hash:
-        value: "10f192f8565ab137aea2dda4a4cb3d26"
+        value: "30c688af9b63c4800ef9b044e0dd4145"
         algorithm: "MD5"
     vcs:
       type: ""
