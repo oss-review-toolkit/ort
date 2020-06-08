@@ -164,7 +164,7 @@ Please see the documentation below for details about the ORT configuration.
   specific license finding curations and exclusions to address issues found within a scan result for a package.
 * [The curations.yml file](docs/config-file-curations-yml.md) - curations correct invalid or missing package metadata
   and set the concluded license for packages.
-* [The resolutions.yml file](docs/config-file-resolution-yml.md) - resolutions allow *resolving* any issues
+* [The resolutions.yml file](docs/config-file-resolutions-yml.md) - resolutions allow *resolving* any issues
   or policy rule violations by providing a reason why they are acceptable and can be ignored.
 
 # Details on the tools
