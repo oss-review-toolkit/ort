@@ -33,7 +33,7 @@ import org.ossreviewtoolkit.spdx.SpdxDeclaredLicenseMapping
 import org.ossreviewtoolkit.spdx.SpdxException
 import org.ossreviewtoolkit.spdx.SpdxExpression
 import org.ossreviewtoolkit.spdx.SpdxLicense
-import org.ossreviewtoolkit.spdx.SpdxLicenseAliasMapping
+import org.ossreviewtoolkit.spdx.SpdxSimpleLicenseMapping
 import org.ossreviewtoolkit.spdx.SpdxLicenseIdExpression
 import org.ossreviewtoolkit.spdx.toExpression
 
@@ -41,7 +41,7 @@ class DeclaredLicenseProcessorTest : StringSpec() {
     /**
      * A collection of declared license strings found in open source packages.
      */
-    private val declaredLicenses = SpdxLicenseAliasMapping.mapping.keys + SpdxDeclaredLicenseMapping.mapping.keys
+    private val declaredLicenses = SpdxSimpleLicenseMapping.mapping.keys + SpdxDeclaredLicenseMapping.mapping.keys
 
     init {
         "Declared licenses can be processed" {
@@ -88,7 +88,7 @@ class DeclaredLicenseProcessorTest : StringSpec() {
 
         "Preprocessing licenses does not make mapping redundant" {
             val processableLicenses = SpdxDeclaredLicenseMapping.mapping.keys.filter { declaredLicense ->
-                SpdxLicenseAliasMapping.map(DeclaredLicenseProcessor.preprocess(declaredLicense)) != null
+                SpdxSimpleLicenseMapping.map(DeclaredLicenseProcessor.preprocess(declaredLicense)) != null
             }
 
             processableLicenses shouldBe emptyList()

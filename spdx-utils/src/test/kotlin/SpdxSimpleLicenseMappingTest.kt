@@ -27,11 +27,11 @@ import io.kotest.matchers.collections.shouldHaveAtMostSize
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 
-class SpdxLicenseAliasMappingTest : WordSpec({
+class SpdxSimpleLicenseMappingTest : WordSpec({
     "The list" should {
         "not contain any duplicate keys with respect to capitalization" {
-            val keys = SpdxLicenseAliasMapping.customLicenseIdsList.unzip().first.toMutableList()
-            val uniqueKeys = SpdxLicenseAliasMapping.customLicenseIds.keys
+            val keys = SpdxSimpleLicenseMapping.customLicenseIdsList.unzip().first.toMutableList()
+            val uniqueKeys = SpdxSimpleLicenseMapping.customLicenseIds.keys
 
             // Remove keys one by one as calling "-" would remove all occurrences of a key.
             uniqueKeys.forEach { uniqueKey -> keys.remove(uniqueKey) }
@@ -42,7 +42,7 @@ class SpdxLicenseAliasMappingTest : WordSpec({
 
     "The mapping" should {
         "contain only single ID strings" {
-            SpdxLicenseAliasMapping.mapping.keys.forAll { declaredLicense ->
+            SpdxSimpleLicenseMapping.mapping.keys.forAll { declaredLicense ->
                 val tokens = getTokensByTypeForExpression(declaredLicense)
                 val types = tokens.map { (type, _) -> type }
 
@@ -55,19 +55,19 @@ class SpdxLicenseAliasMappingTest : WordSpec({
         }
 
         "not contain plain SPDX license ids" {
-            SpdxLicenseAliasMapping.customLicenseIds.keys.forAll { declaredLicense ->
+            SpdxSimpleLicenseMapping.customLicenseIds.keys.forAll { declaredLicense ->
                 SpdxLicense.forId(declaredLicense) shouldBe null
             }
         }
 
         "be case-insensitive" {
-            SpdxLicenseAliasMapping.customLicenseIds.asSequence().forAll { (key, license) ->
-                SpdxLicenseAliasMapping.map(key.toLowerCase(), mapDeprecated = false) shouldBe license
-                SpdxLicenseAliasMapping.map(key.toUpperCase(), mapDeprecated = false) shouldBe license
-                SpdxLicenseAliasMapping.map(key.toLowerCase().capitalize(), mapDeprecated = false) shouldBe license
-                SpdxLicenseAliasMapping.map(key.toLowerCase(), mapDeprecated = true) shouldBe license
-                SpdxLicenseAliasMapping.map(key.toUpperCase(), mapDeprecated = true) shouldBe license
-                SpdxLicenseAliasMapping.map(key.toLowerCase().capitalize(), mapDeprecated = true) shouldBe license
+            SpdxSimpleLicenseMapping.customLicenseIds.asSequence().forAll { (key, license) ->
+                SpdxSimpleLicenseMapping.map(key.toLowerCase(), mapDeprecated = false) shouldBe license
+                SpdxSimpleLicenseMapping.map(key.toUpperCase(), mapDeprecated = false) shouldBe license
+                SpdxSimpleLicenseMapping.map(key.toLowerCase().capitalize(), mapDeprecated = false) shouldBe license
+                SpdxSimpleLicenseMapping.map(key.toLowerCase(), mapDeprecated = true) shouldBe license
+                SpdxSimpleLicenseMapping.map(key.toUpperCase(), mapDeprecated = true) shouldBe license
+                SpdxSimpleLicenseMapping.map(key.toLowerCase().capitalize(), mapDeprecated = true) shouldBe license
             }
         }
     }
