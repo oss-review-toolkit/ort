@@ -41,16 +41,6 @@ object SpdxDeclaredLicenseMapping {
     val mapping = rawMapping.toSortedMap(String.CASE_INSENSITIVE_ORDER)
 
     /**
-     * Return an SPDX LicenseRef string for the given [id] and optional [namespace].
-     */
-    private fun licenseRef(id: String, namespace: String = "") =
-        if (namespace.isEmpty()) {
-            SpdxLicenseReferenceExpression("LicenseRef-$id")
-        } else {
-            SpdxLicenseReferenceExpression("LicenseRef-$namespace-$id")
-        }
-
-    /**
      * Return the [SpdxExpression] the [license] string maps to, or null if there is no corresponding expression.
      */
     fun map(license: String) = mapping[license] ?: SpdxLicense.forId(license)?.toExpression()
