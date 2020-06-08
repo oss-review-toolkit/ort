@@ -25,7 +25,7 @@ import org.ossreviewtoolkit.spdx.SpdxLicenseException.*
 /**
  * A mapping from license strings collected from the declared licenses of Open Source packages to SPDX expressions. This
  * mapping only contains license strings which can *not* be parsed by [SpdxExpression.parse], for example because the
- * license names contain white spaces. See [SpdxLicenseAliasMapping] for a mapping of varied license names.
+ * license names contain white spaces. See [SpdxSimpleLicenseMapping] for a mapping of varied license names.
  */
 object SpdxDeclaredLicenseMapping {
     /**

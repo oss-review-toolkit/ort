@@ -362,7 +362,7 @@ class SpdxLicenseIdExpression(
     override fun licenses() = listOf(toString())
 
     override fun normalize(mapDeprecated: Boolean) =
-        SpdxLicenseAliasMapping.map(toString(), mapDeprecated) ?: this
+        SpdxSimpleLicenseMapping.map(toString(), mapDeprecated) ?: this
 
     override fun validate(strictness: Strictness) {
         when (strictness) {
