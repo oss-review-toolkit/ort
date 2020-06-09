@@ -183,11 +183,13 @@ subprojects {
     }
 
     tasks.withType<KotlinCompile>().configureEach {
+        val customCompilerArgs = listOf("-Xallow-result-return-type", "-Xopt-in=kotlin.time.ExperimentalTime")
+
         kotlinOptions {
             allWarningsAsErrors = true
             jvmTarget = "1.8"
             apiVersion = "1.3"
-            freeCompilerArgs = freeCompilerArgs + "-Xallow-result-return-type"
+            freeCompilerArgs = freeCompilerArgs + customCompilerArgs
         }
     }
 
