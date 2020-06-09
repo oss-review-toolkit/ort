@@ -80,7 +80,7 @@ excludes:
     reason : "TEST_DEPENDENCY_OF"
     comment: "Packages for testing only. Not part of released artifacts."
 resolutions:
-  errors:
+  issues:
   - message: "ERROR: Timeout after 300 seconds while scanning file 'reporter-web-app/public/index.html'."
     reason : "SCANNER_ISSUE"
     comment: "The error can be ignored because the file does contain relevant license information."
