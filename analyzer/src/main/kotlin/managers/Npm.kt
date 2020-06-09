@@ -193,7 +193,7 @@ open class Npm(
         }.forEach {
             val packageDir = it.parentFile
             val realPackageDir = packageDir.realFile()
-            val isSymbolicPackageDir = packageDir != realPackageDir
+            val isSymbolicPackageDir = packageDir.isSymbolicLink()
 
             log.debug {
                 val prefix = "Found a 'package.json' file in '$packageDir'"
