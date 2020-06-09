@@ -192,17 +192,8 @@ open class Npm(
             it.name == "package.json" && isValidNodeModulesDirectory(nodeModulesDir, nodeModulesDirForPackageJson(it))
         }.forEach {
             val packageDir = it.parentFile
-            val realPackageDir = packageDir.realFile()
-            val isSymbolicPackageDir = packageDir.isSymbolicLink()
 
-            log.debug {
-                val prefix = "Found a 'package.json' file in '$packageDir'"
-                if (isSymbolicPackageDir) {
-                    "$prefix which links to '$realPackageDir'."
-                } else {
-                    "$prefix."
-                }
-            }
+            log.debug { "Found a 'package.json' file in '$packageDir'." }
 
             val json = it.readValue<ObjectNode>()
             val rawName = json["name"].textValue()
@@ -229,10 +220,14 @@ open class Npm(
                 rawName
             }
 
-            if (isSymbolicPackageDir) {
+            if (packageDir.isSymbolicLink()) {
+                val realPackageDir = packageDir.realFile()
+
+                log.debug { "The package directory '$packageDir' links to '$realPackageDir'." }
+
                 // Yarn workspaces refer to project dependencies from the same workspace via symbolic links. Use that
                 // as the trigger to get VcsInfo locally instead of querying the NPM registry.
-                log.debug { "Resolving the package info for '$identifier' locally." }
+                log.debug { "Resolving the package info for '$identifier' locally from '$realPackageDir'." }
 
                 val vcsFromDirectory = VersionControlSystem.forDirectory(realPackageDir)?.getInfo() ?: VcsInfo.EMPTY
                 vcsFromPackage = vcsFromPackage.merge(vcsFromDirectory)
