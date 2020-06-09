@@ -179,7 +179,7 @@ class Gradle(
                     .model(DependencyTreeModel::class.java)
                     .setStandardOutput(stdout)
                     .setStandardError(stderr)
-                    .withArguments("--init-script", initScriptFile.path)
+                    .withArguments("-Duser.home=${getUserHomeDirectory()}", "--init-script", initScriptFile.path)
                     .get()
 
                 if (stdout.size() > 0) {
