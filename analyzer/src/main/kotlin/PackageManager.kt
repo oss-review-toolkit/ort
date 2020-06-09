@@ -44,7 +44,7 @@ import java.nio.file.SimpleFileVisitor
 import java.nio.file.attribute.BasicFileAttributes
 import java.util.ServiceLoader
 
-import kotlin.system.measureTimeMillis
+import kotlin.time.measureTime
 
 typealias ManagedProjectFiles = Map<PackageManagerFactory, List<File>>
 typealias ResolutionResult = MutableMap<File, ProjectAnalyzerResult>
@@ -218,7 +218,7 @@ abstract class PackageManager(
         definitionFiles.forEach { definitionFile ->
             log.info { "Resolving $managerName dependencies for '$definitionFile'..." }
 
-            val elapsed = measureTimeMillis {
+            val duration = measureTime {
                 @Suppress("TooGenericExceptionCaught")
                 try {
                     resolveDependencies(definitionFile)?.let {
@@ -249,7 +249,7 @@ abstract class PackageManager(
             }
 
             log.info {
-                "Resolving $managerName dependencies for '${definitionFile.name}' took ${elapsed / 1000}s."
+                "Resolving $managerName dependencies for '${definitionFile.name}' took ${duration.inSeconds}s."
             }
         }
 
