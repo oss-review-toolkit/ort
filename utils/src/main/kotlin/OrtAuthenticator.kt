@@ -73,6 +73,10 @@ class OrtAuthenticator(private val original: Authenticator? = null) : Authentica
         }
     }
 
+    // TODO: Add support for ".authinfo" files (which use the same syntax as .netrc files) once Git.kt does not call the
+    //       Git CLI anymore which only supports ".netrc" (and "_netrc") files.
+    private val netrcFileNames = listOf(".netrc", "_netrc")
+
     private val serverAuthentication = mutableMapOf<String, PasswordAuthentication>()
 
     override fun getPasswordAuthentication(): PasswordAuthentication? {
@@ -89,18 +93,17 @@ class OrtAuthenticator(private val original: Authenticator? = null) : Authentica
             RequestorType.SERVER -> {
                 serverAuthentication[requestingHost]?.let { return it }
 
-                val netrcFile = getUserHomeDirectory().resolve(".netrc")
-                if (netrcFile.isFile) {
-                    log.debug { "Parsing '$netrcFile' for machine '$requestingHost'." }
+                netrcFileNames.forEach { name ->
+                    val netrcFile = getUserHomeDirectory().resolve(name)
+                    if (netrcFile.isFile) {
+                        log.debug { "Parsing '$netrcFile' for machine '$requestingHost'." }
 
-                    getNetrcAuthentication(netrcFile.readText(), requestingHost)?.let {
-                        serverAuthentication[requestingHost] = it
-                        return it
+                        getNetrcAuthentication(netrcFile.readText(), requestingHost)?.let {
+                            serverAuthentication[requestingHost] = it
+                            return it
+                        }
                     }
                 }
-
-                // TODO: Add support for .authinfo files (which use the same syntax as .netrc files) once Git.kt does
-                //       not call the Git CLI anymore which only supports .netrc files.
             }
 
             null -> log.warn { "No requestor type set for password authentication." }
