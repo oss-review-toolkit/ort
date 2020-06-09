@@ -1,89 +1,103 @@
-curations:
-  license_findings:
-  - path: "analyzer/src/funTest/assets/projects/external/spdx-tools-python/spdx/licenses.json"
-    comment: "This file contains official SPDX.org license ids. SPDX is licensed under CC0-1.0, see \
-      https://github.com/spdx/license-list-XML/blob/master/package.json#L33"
-    reason: "DATA_OF"
-    concluded_license: "CC0-1.0"
-  - path: "analyzer/src/funTest/assets/projects/synthetic/php-composer/{empty-deps,lockfile,no-lockfile,no-deps,with-provide,with-replace}/composer.phar"
-    comment: "These files are part of PHP Composer and include a mapping from human readable strings to SPDX license ids."
-    reason: "DATA_OF"
-    concluded_license: "MIT"
-  - path: "spdx-utils/src/main/kotlin/SpdxLicense.kt"
-    comment: "This file defines official SPDX.org licenses so they can be used in OSS Review Toolkit."
-    reason: "DATA_OF"
-    concluded_license: "Apache-2.0"
-  - path: "spdx-utils/src/main/kotlin/{SpdxDeclaredLicenseMapping.kt,SpdxSimpleLicenseMapping.kt}"
-    comment: "These files map declared licenses to SPDX.org license ids so they can be used in OSS Review Toolkit."
-    reason: "DATA_OF"
-    concluded_license: "Apache-2.0"
-  - path: "spdx-utils/src/main/kotlin/SpdxLicenseException.kt"
-    comment: "This file defines official SPDX.org exceptions so they can be used in OSS Review Toolkit."
-    reason: "DATA_OF"
-    concluded_license: "Apache-2.0"
-  - path: "spdx-utils/src/main/resources/licenses/**"
-    comment: "This directory contains all official SPDX.org license ids which are used to generate open source notices. \
-      SPDX and ScanCode license files are licensed under CC0-1.0, see \
-      https://github.com/spdx/license-list-XML/blob/master/package.json#L33"
-    reason: "DATA_OF"
-    concluded_license: "CC0-1.0"
-  - path: "spdx-utils/src/main/resources/licenserefs/**"
-    comment: "This directory contains all non-official SPDX license ids which are used to generate open source notices. \
-      SPDX and ScanCode license files are licensed under CC0-1.0, see \
-      https://github.com/spdx/license-list-XML/blob/master/package.json#L33 \
-      https://github.com/nexB/scancode-toolkit/blame/develop/README.rst#L168"
-    reason: "DATA_OF"
-    concluded_license: "CC0-1.0"
-  - path: "spdx-utils/src/test/kotlin/SpdxExpressionTest.kt"
-    comment: "This file uses several variables named after licenses."
-    reason: "CODE"
-    concluded_license: "Apache-2.0"
-  - path: "reporter-web-app/src/config.js"
-    comment: "Configuration file for WebApp reporter defining colors to use for each SPDX license."
-    reason: "DATA_OF"
-    concluded_license: "Apache-2.0"
-  - path: "README.md"
-    comment: "Findings reference a file with 'gpl' in its name."
-    reason: "DOCUMENTATION_OF"
-    line_count: 1
-    detected_license: "GPL-1.0-or-later"
-    concluded_license: "NONE"
-  - path: "docs/**.md"
-    comment: "Documentation contains examples mentioning various licenses."
-    reason: "DOCUMENTATION_OF"
-    concluded_license: "Apache-2.0"
+---
 excludes:
   paths:
   - pattern: "*/src/{funTest,test}/**"
-    reason : "TEST_OF"
-    comment: "Licenses contained in this directory are used for testing and do not apply to the OSS Review Toolkit."
+    reason: "TEST_OF"
+    comment: "Licenses contained in this directory are used for testing and do not\
+      \ apply to the OSS Review Toolkit."
   - pattern: "reporter-web-app/src/config.js"
-    reason : "DATA_FILE_OF"
-    comment: "This file contains license data used in the web app report. Contained licenses do not apply to the OSS Review Toolkit."
+    reason: "DATA_FILE_OF"
+    comment: "This file contains license data used in the web app report. Contained\
+      \ licenses do not apply to the OSS Review Toolkit."
   - pattern: "reporter-web-app/src/data/choosealicense/**"
-    reason : "DATA_FILE_OF"
-    comment: "This file contains license data used in the web app report. Contained licenses do not apply to the OSS Review Toolkit."
+    reason: "DATA_FILE_OF"
+    comment: "This file contains license data used in the web app report. Contained\
+      \ licenses do not apply to the OSS Review Toolkit."
   - pattern: "spdx-utils/src/main/resources/{exceptions,licenserefs,licenses}/**"
-    reason : "DATA_FILE_OF"
-    comment: "This license file is used for generating license notes and does not apply to the OSS Review Toolkit."
+    reason: "DATA_FILE_OF"
+    comment: "This license file is used for generating license notes and does not\
+      \ apply to the OSS Review Toolkit."
   - pattern: "spdx-utils/src/main/kotlin/{SpdxDeclaredLicenseMapping,SpdxLicense,SpdxLicenseException,SpdxSimpleLicenseMapping}.kt"
-    reason : "DATA_FILE_OF"
-    comment: "Licenses contained in this class are used for processing licenses and do not apply to the OSS Review Toolkit."
+    reason: "DATA_FILE_OF"
+    comment: "Licenses contained in this class are used for processing licenses and\
+      \ do not apply to the OSS Review Toolkit."
   - pattern: "test-utils/**"
-    reason : "TEST_OF"
-    comment: "Licenses contained in this directory are used for testing and do not apply to the OSS Review Toolkit."
+    reason: "TEST_OF"
+    comment: "Licenses contained in this directory are used for testing and do not\
+      \ apply to the OSS Review Toolkit."
   scopes:
-  - pattern   : "devDependencies"
-    reason : "DEV_DEPENDENCY_OF"
+  - pattern: "devDependencies"
+    reason: "DEV_DEPENDENCY_OF"
     comment: "Packages for development only. Not part of released artifacts"
-  - pattern   : "(test.*|funTest.*)"
-    reason : "TEST_DEPENDENCY_OF"
+  - pattern: "(test.*|funTest.*)"
+    reason: "TEST_DEPENDENCY_OF"
     comment: "Packages for testing only. Not part of released artifacts."
 resolutions:
   issues:
   - message: "ERROR: Timeout after 300 seconds while scanning file 'reporter-web-app/public/index.html'."
-    reason : "SCANNER_ISSUE"
-    comment: "The error can be ignored because the file does contain relevant license information."
+    reason: "SCANNER_ISSUE"
+    comment: "The error can be ignored because the file does contain relevant license\
+      \ information."
   - message: "ERROR: Timeout after 300 seconds while scanning file 'scanner/src/test/assets/aws-java-sdk-core-1.11.160_scancode-2.9.7.json'."
-    reason : "SCANNER_ISSUE"
-    comment: "This file contains test data. Contained licenses do not apply to the OSS Review Toolkit."
+    reason: "SCANNER_ISSUE"
+    comment: "This file contains test data. Contained licenses do not apply to the\
+      \ OSS Review Toolkit."
+curations:
+  license_findings:
+  - path: "analyzer/src/funTest/assets/projects/external/spdx-tools-python/spdx/licenses.json"
+    concluded_license: "CC0-1.0"
+    reason: "DATA_OF"
+    comment: "This file contains official SPDX.org license ids. SPDX is licensed under\
+      \ CC0-1.0, see https://github.com/spdx/license-list-XML/blob/master/package.json#L33"
+  - path: "analyzer/src/funTest/assets/projects/synthetic/php-composer/{empty-deps,lockfile,no-lockfile,no-deps,with-provide,with-replace}/composer.phar"
+    concluded_license: "MIT"
+    reason: "DATA_OF"
+    comment: "These files are part of PHP Composer and include a mapping from human\
+      \ readable strings to SPDX license ids."
+  - path: "spdx-utils/src/main/kotlin/SpdxLicense.kt"
+    concluded_license: "Apache-2.0"
+    reason: "DATA_OF"
+    comment: "This file defines official SPDX.org licenses so they can be used in\
+      \ OSS Review Toolkit."
+  - path: "spdx-utils/src/main/kotlin/{SpdxDeclaredLicenseMapping.kt,SpdxSimpleLicenseMapping.kt}"
+    concluded_license: "Apache-2.0"
+    reason: "DATA_OF"
+    comment: "These files map declared licenses to SPDX.org license ids so they can\
+      \ be used in OSS Review Toolkit."
+  - path: "spdx-utils/src/main/kotlin/SpdxLicenseException.kt"
+    concluded_license: "Apache-2.0"
+    reason: "DATA_OF"
+    comment: "This file defines official SPDX.org exceptions so they can be used in\
+      \ OSS Review Toolkit."
+  - path: "spdx-utils/src/main/resources/licenses/**"
+    concluded_license: "CC0-1.0"
+    reason: "DATA_OF"
+    comment: "This directory contains all official SPDX.org license ids which are\
+      \ used to generate open source notices. SPDX and ScanCode license files are\
+      \ licensed under CC0-1.0, see https://github.com/spdx/license-list-XML/blob/master/package.json#L33"
+  - path: "spdx-utils/src/main/resources/licenserefs/**"
+    concluded_license: "CC0-1.0"
+    reason: "DATA_OF"
+    comment: "This directory contains all non-official SPDX license ids which are\
+      \ used to generate open source notices. SPDX and ScanCode license files are\
+      \ licensed under CC0-1.0, see https://github.com/spdx/license-list-XML/blob/master/package.json#L33\
+      \ https://github.com/nexB/scancode-toolkit/blame/develop/README.rst#L168"
+  - path: "spdx-utils/src/test/kotlin/SpdxExpressionTest.kt"
+    concluded_license: "Apache-2.0"
+    reason: "CODE"
+    comment: "This file uses several variables named after licenses."
+  - path: "reporter-web-app/src/config.js"
+    concluded_license: "Apache-2.0"
+    reason: "DATA_OF"
+    comment: "Configuration file for WebApp reporter defining colors to use for each\
+      \ SPDX license."
+  - path: "README.md"
+    line_count: 1
+    detected_license: "GPL-1.0-or-later"
+    concluded_license: "NONE"
+    reason: "DOCUMENTATION_OF"
+    comment: "Findings reference a file with 'gpl' in its name."
+  - path: "docs/**.md"
+    concluded_license: "Apache-2.0"
+    reason: "DOCUMENTATION_OF"
+    comment: "Documentation contains examples mentioning various licenses."
