@@ -20,7 +20,7 @@ curations:
   - path: "spdx-utils/src/main/kotlin/SpdxLicenseException.kt"
     comment: "This file defines official SPDX.org exceptions so they can be used in OSS Review Toolkit."
     reason: "DATA_OF"
-    concluded_license: "Apache-2.0" 
+    concluded_license: "Apache-2.0"
   - path: "spdx-utils/src/main/resources/licenses/**"
     comment: "This directory contains all official SPDX.org license ids which are used to generate open source notices. \
       SPDX and ScanCode license files are licensed under CC0-1.0, see \
