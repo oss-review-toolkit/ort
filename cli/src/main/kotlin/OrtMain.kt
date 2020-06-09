@@ -120,6 +120,8 @@ class OrtMain : CliktCommand(name = ORT_NAME, epilog = "* denotes required optio
     override fun run() {
         Configurator.setRootLevel(logLevel)
 
+        fixupUserHomeProperty()
+
         // Make the parameter globally available.
         printStackTrace = stacktrace
 
@@ -168,7 +170,6 @@ class OrtMain : CliktCommand(name = ORT_NAME, epilog = "* denotes required optio
  * The entry point for the application with [args] being the list of arguments.
  */
 fun main(args: Array<String>) {
-    fixupUserHomeProperty()
     OrtMain().main(args)
     exitProcess(0)
 }

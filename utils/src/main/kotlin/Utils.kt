@@ -146,13 +146,16 @@ fun filterVersionNames(version: String, names: List<String>, project: String? = 
  * environment variable for the user home directory. This works around the issue that esp. in certain Docker scenarios
  * "user.home" is set to "?", see https://bugs.openjdk.java.net/browse/JDK-8193433 for some background information.
  */
-fun fixupUserHomeProperty() {
+inline fun <reified T : Any> T.fixupUserHomeProperty() {
     val userHome = System.getProperty("user.home")
     if (userHome.isNullOrBlank() || userHome == "?") {
         listOfNotNull(
             Os.env["HOME"],
             Os.env["USERPROFILE"]
-        ).firstOrNull { it.isNotBlank() }?.let { System.setProperty("user.home", it) }
+        ).firstOrNull { it.isNotBlank() }?.let {
+            log.info { "Fixing up the user home directory from '$userHome' to '$it'." }
+            System.setProperty("user.home", it)
+        }
     }
 }
 
