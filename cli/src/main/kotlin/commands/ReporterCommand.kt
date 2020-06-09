@@ -56,6 +56,9 @@ import org.ossreviewtoolkit.utils.showStackTrace
 
 import java.io.File
 
+import kotlin.time.Duration
+import kotlin.time.measureTime
+
 class ReporterCommand : CliktCommand(
     name = "report",
     help = "Present Analyzer and Scanner results in various formats."
@@ -203,14 +206,19 @@ class ReporterCommand : CliktCommand(
         }
 
         var statusCode = 0
+        val reportDurationMap = mutableMapOf<Map.Entry<Reporter, File>, Duration>()
 
-        reports.forEach { (reporter, file) ->
+        reports.forEach { entry ->
+            val (reporter, file) = entry
+            val options = reportOptionsMap[reporter.reporterName.toUpperCase()].orEmpty()
+
+            println("Creating the '${reporter.reporterName}' report at '$file'.")
+
             @Suppress("TooGenericExceptionCaught")
             try {
-                val options = reportOptionsMap[reporter.reporterName.toUpperCase()].orEmpty()
-                reporter.generateReport(file.outputStream(), input, options)
-
-                println("Created '${reporter.reporterName}' report:\n\t$file")
+                reportDurationMap[entry] = measureTime {
+                    reporter.generateReport(file.outputStream(), input, options)
+                }
             } catch (e: Exception) {
                 e.showStackTrace()
 
@@ -221,6 +229,15 @@ class ReporterCommand : CliktCommand(
                 log.error { "Could not create '${reporter.reporterName}' report: ${e.collectMessagesAsString()}" }
 
                 statusCode = 1
+            }
+        }
+
+        reportDurationMap.forEach { (entry, duration) ->
+            val (reporter, file) = entry
+            if (file.isFile) {
+                println(
+                    "Successfully created the '${reporter.reporterName}' report at '$file' in ${duration.inSeconds}s."
+                )
             }
         }
 
