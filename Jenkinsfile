@@ -218,6 +218,7 @@ pipeline {
                             VCS_REVISION_OPTION="--vcs-revision $ORT_CONFIG_VCS_REVISION"
                         fi
 
+                        rm -fr $ORT_DATA_DIR/config
                         /opt/ort/bin/ort $LOG_LEVEL download --project-url $ORT_CONFIG_VCS_URL $VCS_REVISION_OPTION -o $ORT_DATA_DIR/config
 
                         rm -f $HOME/.netrc
