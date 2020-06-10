@@ -202,6 +202,8 @@ class ReporterCommand : CliktCommand(
             reportSpecificOptionsMap[option.first] = option.second
         }
 
+        var statusCode = 0
+
         reports.forEach { (reporter, file) ->
             @Suppress("TooGenericExceptionCaught")
             try {
@@ -217,8 +219,14 @@ class ReporterCommand : CliktCommand(
                 if (file.length() == 0L) file.delete()
 
                 log.error { "Could not create '${reporter.reporterName}' report: ${e.collectMessagesAsString()}" }
-                throw ProgramResult(1)
+
+                statusCode = 1
             }
+        }
+
+        if (statusCode != 0) {
+            println("Not all reports were created successfully.")
+            throw ProgramResult(statusCode)
         }
     }
 }
