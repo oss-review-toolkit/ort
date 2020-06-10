@@ -169,7 +169,7 @@ class Pub(
 
     override fun getVersionRequirement(): Requirement = Requirement.buildIvy("[2.2,)")
 
-    override fun resolveDependencies(definitionFile: File): ProjectAnalyzerResult? {
+    override fun resolveDependencies(definitionFile: File): List<ProjectAnalyzerResult> {
         val workingDir = definitionFile.parentFile
         val manifest = yamlMapper.readTree(definitionFile)
 
@@ -204,7 +204,13 @@ class Pub(
 
         val project = parseProject(definitionFile, scopes)
 
-        return ProjectAnalyzerResult(project, packages.values.mapTo(sortedSetOf()) { it.toCuratedPackage() }, issues)
+        return listOf(
+            ProjectAnalyzerResult(
+                project = project,
+                packages = packages.values.mapTo(sortedSetOf()) { it.toCuratedPackage() },
+                issues = issues
+            )
+        )
     }
 
     private fun parseScope(
@@ -270,7 +276,7 @@ class Pub(
                 // dependencies for each pub dependency manually, as the analyzer will only scan the
                 // projectRoot, but not the packages in the .pub-cache folder.
                 if (containsFlutter) {
-                    scanAndroidPackages(pkgInfoFromLockFile)?.let { resultAndroid ->
+                    scanAndroidPackages(pkgInfoFromLockFile).forEach { resultAndroid ->
                         packageReferences += packageInfo.toReference(
                             dependencies = resultAndroid.project.scopes
                                 .find { it.name == "releaseCompileClasspath" }
@@ -299,32 +305,28 @@ class Pub(
         return packageReferences.toSortedSet()
     }
 
-    private val analyzerResultCacheAndroid = mutableMapOf<String, ProjectAnalyzerResult>()
+    private val analyzerResultCacheAndroid = mutableMapOf<String, List<ProjectAnalyzerResult>>()
 
-    private fun scanAndroidPackages(packageInfo: JsonNode): ProjectAnalyzerResult? {
+    private fun scanAndroidPackages(packageInfo: JsonNode): List<ProjectAnalyzerResult> {
         val packageName = packageInfo["description"]["name"].textValueOrEmpty()
 
         // We cannot find packages without a valid name.
-        if (packageName.isEmpty()) return null
+        if (packageName.isEmpty()) return emptyList()
 
-        val projectRoot = reader.findProjectRoot(packageInfo) ?: return null
+        val projectRoot = reader.findProjectRoot(packageInfo) ?: return emptyList()
         val androidDir = File(projectRoot, "android")
         val packageFile = File(androidDir, "build.gradle")
 
         // Check for build.gradle failed, no Gradle scan required.
-        if (!packageFile.isFile) return null
+        if (!packageFile.isFile) return emptyList()
 
         log.info { "Analyzing Android dependencies for package '$packageName' using Gradle version $GRADLE_VERSION." }
 
-        return if (analyzerResultCacheAndroid.containsKey(packageName)) {
-            analyzerResultCacheAndroid[packageName]
-        } else {
+        return analyzerResultCacheAndroid.getOrPut(packageName) {
             // Use the latest 5.x Gradle version as Flutter / its Android Gradle plugin does not support Gradle 6 yet.
             Gradle("Gradle", androidDir, analyzerConfig, repoConfig, GRADLE_VERSION)
-                .resolveDependencies(listOf(packageFile))[packageFile]
-                ?.also {
-                    analyzerResultCacheAndroid[packageName] = it
-                }
+                .resolveDependencies(listOf(packageFile))
+                .getValue(packageFile)
         }
     }
 
@@ -459,7 +461,7 @@ class Pub(
         if (containsFlutter) {
             lockFile["packages"]?.forEach { pkgInfoFromLockFile ->
                 // As this package contains flutter, trigger Gradle manually for it.
-                scanAndroidPackages(pkgInfoFromLockFile)?.let { result ->
+                scanAndroidPackages(pkgInfoFromLockFile).forEach { result ->
                     result.collectPackagesByScope("releaseCompileClasspath").forEach { item ->
                         packages[item.pkg.id] = item.pkg
                     }

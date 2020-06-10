@@ -84,6 +84,6 @@ class NuGet(
         ) = NuGet(managerName, analysisRoot, analyzerConfig, repoConfig)
     }
 
-    override fun resolveDependencies(definitionFile: File): ProjectAnalyzerResult? =
-        resolveDotNetDependencies(definitionFile, NuGetPackageReferenceMapper())
+    override fun resolveDependencies(definitionFile: File): List<ProjectAnalyzerResult> =
+        listOfNotNull(resolveDotNetDependencies(definitionFile, NuGetPackageReferenceMapper()))
 }

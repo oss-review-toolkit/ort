@@ -97,7 +97,7 @@ class Conan(
     /**
      * Primary method for resolving dependencies from [definitionFile].
      */
-    override fun resolveDependencies(definitionFile: File): ProjectAnalyzerResult? {
+    override fun resolveDependencies(definitionFile: File): List<ProjectAnalyzerResult> {
         val conanHome = getUserHomeDirectory().resolve(".conan")
 
         stashDirectories(File(conanHome.resolve("data").path)).use {
@@ -121,21 +121,23 @@ class Conan(
 
             val projectPackage = extractProjectPackage(rootNode, definitionFile, workingDir)
 
-            return ProjectAnalyzerResult(
-                project = Project(
-                    id = projectPackage.id,
-                    definitionFilePath = VersionControlSystem.getPathInfo(definitionFile).path,
-                    declaredLicenses = projectPackage.declaredLicenses,
-                    vcs = projectPackage.vcs,
-                    vcsProcessed = processProjectVcs(
-                        workingDir,
-                        projectPackage.vcs,
-                        projectPackage.homepageUrl
+            return listOf(
+                ProjectAnalyzerResult(
+                    project = Project(
+                        id = projectPackage.id,
+                        definitionFilePath = VersionControlSystem.getPathInfo(definitionFile).path,
+                        declaredLicenses = projectPackage.declaredLicenses,
+                        vcs = projectPackage.vcs,
+                        vcsProcessed = processProjectVcs(
+                            workingDir,
+                            projectPackage.vcs,
+                            projectPackage.homepageUrl
+                        ),
+                        homepageUrl = projectPackage.homepageUrl,
+                        scopes = sortedSetOf(dependenciesScope, devDependenciesScope)
                     ),
-                    homepageUrl = projectPackage.homepageUrl,
-                    scopes = sortedSetOf(dependenciesScope, devDependenciesScope)
-                ),
-                packages = packages.map { it.value.toCuratedPackage() }.toSortedSet()
+                    packages = packages.map { it.value.toCuratedPackage() }.toSortedSet()
+                )
             )
         }
     }

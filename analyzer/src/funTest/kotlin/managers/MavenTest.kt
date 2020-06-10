@@ -30,6 +30,9 @@ import org.ossreviewtoolkit.utils.test.patchExpectedResult
 
 import io.kotest.matchers.shouldBe
 import io.kotest.core.spec.style.StringSpec
+import io.kotest.matchers.collections.haveSize
+import io.kotest.matchers.should
+import io.kotest.matchers.shouldNotBe
 
 import java.io.File
 
@@ -63,7 +66,9 @@ class MavenTest : StringSpec() {
             // of transitive dependencies would not work.
             val result = createMaven().resolveDependencies(listOf(pomFileCore, pomFileResources))[pomFileCore]
 
-            result.toYaml() shouldBe expectedResult
+            result shouldNotBe null
+            result!! should haveSize(1)
+            result.single().toYaml() shouldBe expectedResult
         }
 
         "Root project dependencies are detected correctly" {
@@ -93,7 +98,9 @@ class MavenTest : StringSpec() {
             // not work.
             val result = createMaven().resolveDependencies(listOf(pomFileApp, pomFileLib))[pomFileApp]
 
-            result.toYaml() shouldBe expectedResult
+            result shouldNotBe null
+            result!! should haveSize(1)
+            result.single().toYaml() shouldBe expectedResult
         }
 
         "External dependencies are detected correctly" {

@@ -118,7 +118,7 @@ class PhpComposer(
         checkVersion(analyzerConfig.ignoreToolVersions)
     }
 
-    override fun resolveDependencies(definitionFile: File): ProjectAnalyzerResult? {
+    override fun resolveDependencies(definitionFile: File): List<ProjectAnalyzerResult> {
         val workingDir = definitionFile.parentFile
 
         stashDirectories(File(workingDir, "vendor")).use {
@@ -156,7 +156,12 @@ class PhpComposer(
 
             val project = parseProject(definitionFile, scopes)
 
-            return ProjectAnalyzerResult(project, packages.values.mapTo(sortedSetOf()) { it.toCuratedPackage() })
+            return listOf(
+                ProjectAnalyzerResult(
+                    project = project,
+                    packages = packages.values.mapTo(sortedSetOf()) { it.toCuratedPackage() }
+                )
+            )
         }
     }
 

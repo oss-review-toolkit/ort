@@ -59,7 +59,7 @@ class Pipenv(
 
     override fun beforeResolution(definitionFiles: List<File>) = checkVersion(analyzerConfig.ignoreToolVersions)
 
-    override fun resolveDependencies(definitionFile: File): ProjectAnalyzerResult? {
+    override fun resolveDependencies(definitionFile: File): List<ProjectAnalyzerResult> {
         // For an overview, dependency resolution involves the following steps:
         // 1. Generate "requirements.txt" file with `pipenv` command
         // 2. Use existing "Pip" PackageManager to do the actual dependency resolution

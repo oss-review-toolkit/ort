@@ -142,35 +142,39 @@ class Analyzer(private val config: AnalyzerConfiguration) {
 
                             // By convention, project ids must be of the type of the respective package manager.
                             results.forEach { (_, result) ->
-                                require(result.project.id.type == manager.managerName) {
-                                    "Project '${result.project.id.toCoordinates()}' must be of type " +
-                                            "'${manager.managerName}'."
+                                val invalidProjects = result.filter { it.project.id.type != manager.managerName }
+                                require(invalidProjects.isEmpty()) {
+                                    val projectString =
+                                        invalidProjects.joinToString { "'${it.project.id.toCoordinates()}'" }
+                                    "Projects $projectString must be of type '${manager.managerName}'."
                                 }
                             }
 
                             curationProvider?.let { provider ->
-                                results.mapValues { entry ->
-                                    ProjectAnalyzerResult(
-                                        project = entry.value.project,
-                                        issues = entry.value.issues,
-                                        packages = entry.value.packages.map { curatedPackage ->
-                                            val curations = provider.getCurationsFor(curatedPackage.pkg.id)
-                                            curations.fold(curatedPackage) { cur, packageCuration ->
-                                                log.debug {
-                                                    "Applying curation '$packageCuration' to package " +
-                                                            "'${curatedPackage.pkg.id.toCoordinates()}'."
+                                results.mapValues { (_, projectAnalyzerResults) ->
+                                    projectAnalyzerResults.map {
+                                        ProjectAnalyzerResult(
+                                            project = it.project,
+                                            issues = it.issues,
+                                            packages = it.packages.map { curatedPackage ->
+                                                val curations = provider.getCurationsFor(curatedPackage.pkg.id)
+                                                curations.fold(curatedPackage) { cur, packageCuration ->
+                                                    log.debug {
+                                                        "Applying curation '$packageCuration' to package " +
+                                                                "'${curatedPackage.pkg.id.toCoordinates()}'."
+                                                    }
+                                                    packageCuration.apply(cur)
                                                 }
-                                                packageCuration.apply(cur)
-                                            }
-                                        }.toSortedSet()
-                                    )
+                                            }.toSortedSet()
+                                        )
+                                    }
                                 }
                             } ?: results
                         }
                     }
-                }.forEach {
-                    it.await().forEach { (_, analyzerResult) ->
-                        analyzerResultBuilder.addResult(analyzerResult)
+                }.forEach { resolutionResult ->
+                    resolutionResult.await().forEach { (_, analyzerResults) ->
+                        analyzerResults.forEach { analyzerResultBuilder.addResult(it) }
                     }
                 }
             }

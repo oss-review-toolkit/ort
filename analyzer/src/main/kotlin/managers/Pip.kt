@@ -224,7 +224,7 @@ class Pip(
         VirtualEnv.checkVersion(analyzerConfig.ignoreToolVersions)
 
     @Suppress("LongMethod")
-    override fun resolveDependencies(definitionFile: File): ProjectAnalyzerResult? {
+    override fun resolveDependencies(definitionFile: File): List<ProjectAnalyzerResult> {
         // For an overview, dependency resolution involves the following steps:
         // 1. Install dependencies via pip (inside a virtualenv, for isolation from globally installed packages).
         // 2. Get meta-data about the local project via pydep (only for setup.py-based projects).
@@ -446,7 +446,12 @@ class Pip(
         // Remove the virtualenv by simply deleting the directory.
         virtualEnvDir.safeDeleteRecursively()
 
-        return ProjectAnalyzerResult(project, packages.mapTo(sortedSetOf()) { it.toCuratedPackage() })
+        return listOf(
+            ProjectAnalyzerResult(
+                project = project,
+                packages = packages.mapTo(sortedSetOf()) { it.toCuratedPackage() }
+            )
+        )
     }
 
     private fun getBinaryArtifact(pkg: Package, releaseNode: ArrayNode): RemoteArtifact {

@@ -215,7 +215,7 @@ class Bower(
 
     override fun beforeResolution(definitionFiles: List<File>) = checkVersion(analyzerConfig.ignoreToolVersions)
 
-    override fun resolveDependencies(definitionFile: File): ProjectAnalyzerResult? {
+    override fun resolveDependencies(definitionFile: File): List<ProjectAnalyzerResult> {
         val workingDir = definitionFile.parentFile
 
         stashDirectories(File(workingDir, "bower_components")).use {
@@ -243,9 +243,11 @@ class Bower(
                 scopes = sortedSetOf(dependenciesScope, devDependenciesScope)
             )
 
-            return ProjectAnalyzerResult(
-                project = project,
-                packages = packages.mapTo(sortedSetOf()) { it.value.toCuratedPackage() }
+            return listOf(
+                ProjectAnalyzerResult(
+                    project = project,
+                    packages = packages.mapTo(sortedSetOf()) { it.value.toCuratedPackage() }
+                )
             )
         }
     }
