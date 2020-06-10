@@ -79,8 +79,8 @@ mit-licensed: MIT
 mpl-2: MPL_2_0
 mpl2.0: MPL_2_0
 mpl2: MPL_2_0
-psf: PYTHON_2_0
-psfl: PYTHON_2_0
+psf: PSF_2_0
+psfl: PSF_2_0
 python: PYTHON_2_0
 w3cl: W3C
 wtf: WTFPL
