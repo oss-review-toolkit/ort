@@ -21,6 +21,8 @@ package org.ossreviewtoolkit.spdx
 
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.WordSpec
+import io.kotest.matchers.collections.containExactly
+import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 
 import org.antlr.v4.runtime.CharStreams
@@ -43,7 +45,7 @@ class SpdxExpressionLexerTest : WordSpec() {
 
                 val tokens = getTokensByTypeForExpression(expression)
 
-                tokens shouldBe listOf(
+                tokens should containExactly(
                     SpdxExpressionLexer.OPEN to "(",
                     SpdxExpressionLexer.IDSTRING to "license-1",
                     SpdxExpressionLexer.AND to "AND",
