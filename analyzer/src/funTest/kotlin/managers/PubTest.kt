@@ -32,7 +32,6 @@ import org.ossreviewtoolkit.utils.test.patchExpectedResult
 import io.kotest.matchers.string.haveSubstring
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
-import io.kotest.matchers.shouldNotBe
 import io.kotest.core.spec.style.WordSpec
 
 import java.io.File
@@ -55,7 +54,7 @@ class PubTest : WordSpec() {
                     val packageFile = File(workingDir, "pubspec.yaml")
                     val expectedResultFile = File(projectsDirExternal, "dart-http-expected-output.yml")
 
-                    val result = createPubForExternal().resolveDependencies(listOf(packageFile))[packageFile]
+                    val result = createPubForExternal().resolveSingleProject(packageFile)
                     val vcsPath = vcsDir.getPathToRoot(workingDir)
                     val expectedResult = patchExpectedResult(
                         expectedResultFile,
@@ -77,7 +76,7 @@ class PubTest : WordSpec() {
                 val packageFile = File(workingDir, "pubspec.yaml")
                 val expectedResultFile = File(projectsDir.parentFile, "pub-expected-output-project-with-flutter.yml")
 
-                val result = createPub().resolveDependencies(listOf(packageFile))[packageFile]
+                val result = createPub().resolveSingleProject(packageFile)
                 val vcsPath = vcsDir.getPathToRoot(workingDir)
                 val expectedResult = patchExpectedResult(
                     expectedResultFile,
@@ -96,7 +95,7 @@ class PubTest : WordSpec() {
                 val packageFile = File(workingDir, "pubspec.yaml")
                 val expectedResultFile = File(projectsDir.parentFile, "pub-expected-output-any-version.yml")
 
-                val result = createPub().resolveDependencies(listOf(packageFile))[packageFile]
+                val result = createPub().resolveSingleProject(packageFile)
                 val vcsPath = vcsDir.getPathToRoot(workingDir)
                 val expectedResult = patchExpectedResult(
                     expectedResultFile,
@@ -114,10 +113,9 @@ class PubTest : WordSpec() {
                 val workingDir = File(projectsDir, "no-lockfile")
                 val packageFile = File(workingDir, "pubspec.yaml")
 
-                val result = createPub().resolveDependencies(listOf(packageFile))[packageFile]
+                val result = createPub().resolveSingleProject(packageFile)
 
-                result shouldNotBe null
-                with(result!!) {
+                with(result) {
                     project.definitionFilePath shouldBe
                             "analyzer/src/funTest/assets/projects/synthetic/pub/no-lockfile/pubspec.yaml"
                     packages.size shouldBe 0

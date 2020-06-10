@@ -29,7 +29,6 @@ import org.ossreviewtoolkit.utils.test.USER_DIR
 import org.ossreviewtoolkit.utils.test.patchExpectedResult
 
 import io.kotest.matchers.shouldBe
-import io.kotest.matchers.shouldNotBe
 import io.kotest.core.spec.style.StringSpec
 
 import java.io.File
@@ -60,9 +59,8 @@ class DotNetTest : StringSpec() {
                 revision = vcsRevision,
                 path = "$vcsPath/subProjectTest"
             )
-            val result = createDotNet().resolveDependencies(listOf(packageFile))[packageFile]
+            val result = createDotNet().resolveSingleProject(packageFile)
 
-            result shouldNotBe null
             yamlMapper.writeValueAsString(result) shouldBe expectedResult
         }
     }

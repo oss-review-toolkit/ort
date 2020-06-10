@@ -20,7 +20,6 @@
 package org.ossreviewtoolkit.analyzer.managers
 
 import io.kotest.matchers.shouldBe
-import io.kotest.matchers.shouldNotBe
 import io.kotest.core.spec.style.StringSpec
 
 import java.io.File
@@ -51,9 +50,8 @@ class GoModTest : StringSpec() {
                 url = normalizeVcsUrl(vcsUrl)
             )
 
-            val result = createGoMod().resolveDependencies(listOf(definitionFile))[definitionFile]
+            val result = createGoMod().resolveSingleProject(definitionFile)
 
-            result shouldNotBe null
             yamlMapper.writeValueAsString(result) shouldBe expectedResult
         }
     }

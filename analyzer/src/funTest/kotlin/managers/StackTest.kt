@@ -37,7 +37,7 @@ class StackTest : StringSpec() {
         "Dependencies should be resolved correctly for quickcheck-state-machine" {
             val definitionFile = File(projectsDir, "external/quickcheck-state-machine/stack.yaml")
 
-            val result = createStack().resolveDependencies(listOf(definitionFile))[definitionFile]
+            val result = createStack().resolveSingleProject(definitionFile)
             val expectedOutput = if (Os.isWindows) {
                 "external/quickcheck-state-machine-expected-output-win32.yml"
             } else {
