@@ -21,8 +21,8 @@ package org.ossreviewtoolkit.evaluator
 
 import org.ossreviewtoolkit.model.LicenseSource
 
-import io.kotest.matchers.shouldBe
 import io.kotest.core.spec.style.WordSpec
+import io.kotest.matchers.collections.beEmpty
 import io.kotest.matchers.collections.containExactlyInAnyOrder
 import io.kotest.matchers.should
 
@@ -31,7 +31,7 @@ class LicenseViewTest : WordSpec({
         "return the correct licenses" {
             val view = LicenseView.ALL
 
-            view.licenses(packageWithoutLicense, emptyList()) shouldBe emptyList()
+            view.licenses(packageWithoutLicense, emptyList()) should beEmpty()
 
             view.licenses(packageWithoutLicense, detectedLicenses) should containExactlyInAnyOrder(
                 Pair("LicenseRef-a", LicenseSource.DETECTED),
@@ -90,7 +90,7 @@ class LicenseViewTest : WordSpec({
             view.licenses(
                 packageWithoutLicense,
                 emptyList()
-            ) shouldBe emptyList()
+            ) should beEmpty()
 
             view.licenses(
                 packageWithoutLicense,
@@ -159,7 +159,7 @@ class LicenseViewTest : WordSpec({
             view.licenses(
                 packageWithoutLicense,
                 emptyList()
-            ) shouldBe emptyList()
+            ) should beEmpty()
 
             view.licenses(
                 packageWithoutLicense,
@@ -225,7 +225,7 @@ class LicenseViewTest : WordSpec({
             view.licenses(
                 packageWithoutLicense,
                 emptyList()
-            ) shouldBe emptyList()
+            ) should beEmpty()
 
             view.licenses(
                 packageWithoutLicense,
@@ -254,7 +254,7 @@ class LicenseViewTest : WordSpec({
             view.licenses(
                 packageWithOnlyDeclaredLicense,
                 emptyList()
-            ) shouldBe emptyList()
+            ) should beEmpty()
 
             view.licenses(
                 packageWithOnlyDeclaredLicense,
@@ -288,12 +288,12 @@ class LicenseViewTest : WordSpec({
             view.licenses(
                 packageWithoutLicense,
                 emptyList()
-            ) shouldBe emptyList()
+            ) should beEmpty()
 
             view.licenses(
                 packageWithoutLicense,
                 detectedLicenses
-            ) shouldBe emptyList()
+            ) should beEmpty()
 
             view.licenses(
                 packageWithOnlyConcludedLicense,
@@ -314,12 +314,12 @@ class LicenseViewTest : WordSpec({
             view.licenses(
                 packageWithOnlyDeclaredLicense,
                 emptyList()
-            ) shouldBe emptyList()
+            ) should beEmpty()
 
             view.licenses(
                 packageWithOnlyDeclaredLicense,
                 detectedLicenses
-            ) shouldBe emptyList()
+            ) should beEmpty()
 
             view.licenses(
                 packageWithConcludedAndDeclaredLicense,
@@ -346,22 +346,22 @@ class LicenseViewTest : WordSpec({
             view.licenses(
                 packageWithoutLicense,
                 emptyList()
-            ) shouldBe emptyList()
+            ) should beEmpty()
 
             view.licenses(
                 packageWithoutLicense,
                 detectedLicenses
-            ) shouldBe emptyList()
+            ) should beEmpty()
 
             view.licenses(
                 packageWithOnlyConcludedLicense,
                 emptyList()
-            ) shouldBe emptyList()
+            ) should beEmpty()
 
             view.licenses(
                 packageWithOnlyConcludedLicense,
                 detectedLicenses
-            ) shouldBe emptyList()
+            ) should beEmpty()
 
             view.licenses(
                 packageWithOnlyDeclaredLicense,
@@ -404,7 +404,7 @@ class LicenseViewTest : WordSpec({
             view.licenses(
                 packageWithoutLicense,
                 emptyList()
-            ) shouldBe emptyList()
+            ) should beEmpty()
 
             view.licenses(
                 packageWithoutLicense,
@@ -417,7 +417,7 @@ class LicenseViewTest : WordSpec({
             view.licenses(
                 packageWithOnlyConcludedLicense,
                 emptyList()
-            ) shouldBe emptyList()
+            ) should beEmpty()
 
             view.licenses(
                 packageWithOnlyConcludedLicense,
@@ -430,7 +430,7 @@ class LicenseViewTest : WordSpec({
             view.licenses(
                 packageWithOnlyDeclaredLicense,
                 emptyList()
-            ) shouldBe emptyList()
+            ) should beEmpty()
 
             view.licenses(
                 packageWithOnlyDeclaredLicense,
@@ -443,7 +443,7 @@ class LicenseViewTest : WordSpec({
             view.licenses(
                 packageWithConcludedAndDeclaredLicense,
                 emptyList()
-            ) shouldBe emptyList()
+            ) should beEmpty()
 
             view.licenses(
                 packageWithConcludedAndDeclaredLicense,

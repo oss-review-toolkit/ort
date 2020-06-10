@@ -24,6 +24,7 @@ import io.kotest.core.test.TestResult
 import io.kotest.matchers.collections.beEmpty
 import io.kotest.matchers.collections.shouldContainExactly
 import io.kotest.matchers.collections.shouldContainExactlyInAnyOrder
+import io.kotest.matchers.maps.beEmpty as beEmptyMap
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 import io.kotest.core.spec.style.WordSpec
@@ -232,7 +233,7 @@ class NodeSupportTest : WordSpec() {
                 readProxySettingsFromNpmRc("""
                     registry=http://my.artifactory.com/artifactory/api/npm/npm-virtual
                     """.trimIndent()
-                ) shouldBe emptyMap()
+                ) should beEmptyMap()
             }
         }
     }
