@@ -22,8 +22,7 @@ package org.ossreviewtoolkit.utils.storage
 import java.io.InputStream
 
 /**
- * A file storage backend, able to [read] and [write] files to a storage backend, like a local directory or a remote
- * server.
+ * A storage for files, like a local directory or a remote server.
  */
 interface FileStorage {
     /**
