@@ -51,7 +51,6 @@ class GradleKotlinScriptTest : StringSpec() {
             val result = createGradle().resolveDependencies(listOf(packageFile))[packageFile]
 
             result shouldNotBe null
-            result!!.issues shouldBe emptyList()
             yamlMapper.writeValueAsString(result) shouldBe expectedResult
         }
 
@@ -66,7 +65,6 @@ class GradleKotlinScriptTest : StringSpec() {
             val result = createGradle().resolveDependencies(listOf(packageFile))[packageFile]
 
             result shouldNotBe null
-            result!!.issues shouldBe emptyList()
             yamlMapper.writeValueAsString(result) shouldBe expectedResult
         }
 
@@ -81,7 +79,6 @@ class GradleKotlinScriptTest : StringSpec() {
             val result = createGradle().resolveDependencies(listOf(packageFile))[packageFile]
 
             result shouldNotBe null
-            result!!.issues shouldBe emptyList()
             yamlMapper.writeValueAsString(result) shouldBe expectedResult
         }
     }
