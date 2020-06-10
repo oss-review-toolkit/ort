@@ -19,6 +19,7 @@
 
 package org.ossreviewtoolkit.utils
 
+import org.apache.logging.log4j.Level
 import org.apache.logging.log4j.kotlin.KotlinLogger
 import org.apache.logging.log4j.kotlin.loggerOf
 
@@ -34,3 +35,16 @@ val loggerOfClass = ConcurrentHashMap<Any, KotlinLogger>()
  */
 val <reified T : Any> T.log: KotlinLogger
     inline get() = loggerOfClass.getOrPut(T::class.java) { loggerOf(T::class.java) }
+
+private val KotlinLogger.statements by lazy { mutableSetOf<Triple<Any, Level, String>>() }
+
+/**
+ * A convenience function to log a specific statement only once with this class instance.
+ */
+fun Any.logOnce(level: Level, supplier: () -> String) {
+    val statement = Triple(this, level, supplier())
+    if (statement !in log.statements) {
+        log.statements += statement
+        log.log(statement.second, statement.third)
+    }
+}
