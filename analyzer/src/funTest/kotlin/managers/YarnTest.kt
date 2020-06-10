@@ -20,7 +20,6 @@
 package org.ossreviewtoolkit.analyzer.managers
 
 import org.ossreviewtoolkit.downloader.VersionControlSystem
-import org.ossreviewtoolkit.model.yamlMapper
 import org.ossreviewtoolkit.utils.normalizeVcsUrl
 import org.ossreviewtoolkit.utils.test.DEFAULT_ANALYZER_CONFIGURATION
 import org.ossreviewtoolkit.utils.test.DEFAULT_REPOSITORY_CONFIGURATION
@@ -53,7 +52,7 @@ class YarnTest : WordSpec() {
     private fun resolveDependencies(projectDir: File): String {
         val packageFile = File(projectDir, "package.json")
         val result = createYarn().resolveSingleProject(packageFile)
-        return yamlMapper.writeValueAsString(result)
+        return result.toYaml()
     }
 
     init {

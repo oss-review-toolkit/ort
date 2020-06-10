@@ -20,7 +20,6 @@
 package org.ossreviewtoolkit.analyzer.managers
 
 import org.ossreviewtoolkit.downloader.VersionControlSystem
-import org.ossreviewtoolkit.model.yamlMapper
 import org.ossreviewtoolkit.utils.getUserHomeDirectory
 import org.ossreviewtoolkit.utils.normalizeVcsUrl
 import org.ossreviewtoolkit.utils.safeDeleteRecursively
@@ -48,7 +47,7 @@ class MavenTest : StringSpec() {
 
             val result = createMaven().resolveSingleProject(pomFile)
 
-            yamlMapper.writeValueAsString(result) shouldBe expectedResult
+            result.toYaml() shouldBe expectedResult
         }
 
         "jgnash-core dependencies are detected correctly" {
@@ -64,7 +63,7 @@ class MavenTest : StringSpec() {
             // of transitive dependencies would not work.
             val result = createMaven().resolveDependencies(listOf(pomFileCore, pomFileResources))[pomFileCore]
 
-            yamlMapper.writeValueAsString(result) shouldBe expectedResult
+            result.toYaml() shouldBe expectedResult
         }
 
         "Root project dependencies are detected correctly" {
@@ -77,7 +76,7 @@ class MavenTest : StringSpec() {
 
             val result = createMaven().resolveSingleProject(pomFile)
 
-            yamlMapper.writeValueAsString(result) shouldBe expectedResult
+            result.toYaml() shouldBe expectedResult
         }
 
         "Project dependencies are detected correctly" {
@@ -94,7 +93,7 @@ class MavenTest : StringSpec() {
             // not work.
             val result = createMaven().resolveDependencies(listOf(pomFileApp, pomFileLib))[pomFileApp]
 
-            yamlMapper.writeValueAsString(result) shouldBe expectedResult
+            result.toYaml() shouldBe expectedResult
         }
 
         "External dependencies are detected correctly" {
@@ -107,7 +106,7 @@ class MavenTest : StringSpec() {
 
             val result = createMaven().resolveSingleProject(pomFile)
 
-            yamlMapper.writeValueAsString(result) shouldBe expectedResult
+            result.toYaml() shouldBe expectedResult
         }
 
         "Parent POM from Maven central can be resolved" {
@@ -126,7 +125,7 @@ class MavenTest : StringSpec() {
 
             val result = createMaven().resolveSingleProject(pomFile)
 
-            yamlMapper.writeValueAsString(result) shouldBe expectedResult
+            result.toYaml() shouldBe expectedResult
         }
     }
 

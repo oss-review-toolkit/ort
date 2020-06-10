@@ -21,7 +21,6 @@ package org.ossreviewtoolkit.analyzer.managers
 
 import org.ossreviewtoolkit.downloader.VersionControlSystem
 import org.ossreviewtoolkit.downloader.vcs.Git
-import org.ossreviewtoolkit.model.yamlMapper
 import org.ossreviewtoolkit.utils.Os
 import org.ossreviewtoolkit.utils.ProcessCapture
 import org.ossreviewtoolkit.utils.normalizeVcsUrl
@@ -66,7 +65,7 @@ class GradleTest : StringSpec() {
 
             val result = createGradle().resolveSingleProject(packageFile)
 
-            yamlMapper.writeValueAsString(result) shouldBe expectedResult
+            result.toYaml() shouldBe expectedResult
         }
 
         "Project dependencies are detected correctly" {
@@ -79,7 +78,7 @@ class GradleTest : StringSpec() {
 
             val result = createGradle().resolveSingleProject(packageFile)
 
-            yamlMapper.writeValueAsString(result) shouldBe expectedResult
+            result.toYaml() shouldBe expectedResult
         }
 
         "External dependencies are detected correctly" {
@@ -92,7 +91,7 @@ class GradleTest : StringSpec() {
 
             val result = createGradle().resolveSingleProject(packageFile)
 
-            yamlMapper.writeValueAsString(result) shouldBe expectedResult
+            result.toYaml() shouldBe expectedResult
         }
 
         "Unresolved dependencies are detected correctly" {
@@ -105,7 +104,7 @@ class GradleTest : StringSpec() {
 
             val result = createGradle().resolveSingleProject(packageFile)
 
-            patchActualResult(yamlMapper.writeValueAsString(result)) shouldBe expectedResult
+            patchActualResult(result.toYaml()) shouldBe expectedResult
         }
 
         // Disabled because despite following the example at [1] Gradle says there is "No service of type
@@ -122,7 +121,7 @@ class GradleTest : StringSpec() {
 
             val result = createGradle().resolveSingleProject(packageFile)
 
-            yamlMapper.writeValueAsString(result) shouldBe expectedResult
+            result.toYaml() shouldBe expectedResult
         }
 
         // Disabled as it causes hangs and memory issues on CI.
@@ -178,7 +177,7 @@ class GradleTest : StringSpec() {
 
                 val result = createGradle().resolveSingleProject(packageFile)
 
-                yamlMapper.writeValueAsString(result) shouldBe expectedResult
+                result.toYaml() shouldBe expectedResult
             }
         }
     }

@@ -20,7 +20,6 @@
 package org.ossreviewtoolkit.analyzer.managers
 
 import org.ossreviewtoolkit.downloader.VersionControlSystem
-import org.ossreviewtoolkit.model.yamlMapper
 import org.ossreviewtoolkit.utils.normalizeVcsUrl
 import org.ossreviewtoolkit.utils.test.DEFAULT_ANALYZER_CONFIGURATION
 import org.ossreviewtoolkit.utils.test.DEFAULT_REPOSITORY_CONFIGURATION
@@ -56,7 +55,7 @@ class NpmTest : WordSpec() {
                     path = vcsPath
                 )
 
-                yamlMapper.writeValueAsString(result) shouldBe expectedResult
+                result.toYaml() shouldBe expectedResult
             }
 
             "resolve package-lock dependencies correctly" {
@@ -74,7 +73,7 @@ class NpmTest : WordSpec() {
                     path = vcsPath
                 )
 
-                yamlMapper.writeValueAsString(result) shouldBe expectedResult
+                result.toYaml() shouldBe expectedResult
             }
 
             "show error if no lockfile is present" {
@@ -92,7 +91,7 @@ class NpmTest : WordSpec() {
                     path = vcsPath
                 )
 
-                patchActualResult(yamlMapper.writeValueAsString(result)) shouldBe expectedResult
+                patchActualResult(result.toYaml()) shouldBe expectedResult
             }
 
             "resolve dependencies even if the node_modules directory already exists" {
@@ -110,7 +109,7 @@ class NpmTest : WordSpec() {
                     path = vcsPath
                 )
 
-                yamlMapper.writeValueAsString(result) shouldBe expectedResult
+                result.toYaml() shouldBe expectedResult
             }
         }
     }

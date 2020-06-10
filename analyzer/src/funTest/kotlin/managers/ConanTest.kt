@@ -21,7 +21,6 @@
 package org.ossreviewtoolkit.analyzer.managers
 
 import org.ossreviewtoolkit.downloader.VersionControlSystem
-import org.ossreviewtoolkit.model.yamlMapper
 import org.ossreviewtoolkit.utils.normalizeVcsUrl
 import org.ossreviewtoolkit.utils.test.USER_DIR
 import org.ossreviewtoolkit.utils.test.DEFAULT_ANALYZER_CONFIGURATION
@@ -59,7 +58,7 @@ class ConanTest : StringSpec() {
 
             val result = createConan().resolveSingleProject(packageFile)
 
-            patchActualResult(yamlMapper.writeValueAsString(result)) shouldBe expectedResult
+            patchActualResult(result.toYaml()) shouldBe expectedResult
         }
 
         "Project dependencies are detected correctly for conanfile.py" {
@@ -75,7 +74,7 @@ class ConanTest : StringSpec() {
 
             val result = createConan().resolveSingleProject(packageFile)
 
-            patchActualResult(yamlMapper.writeValueAsString(result)) shouldBe expectedResult
+            patchActualResult(result.toYaml()) shouldBe expectedResult
         }
     }
 

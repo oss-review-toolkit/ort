@@ -21,7 +21,6 @@
 package org.ossreviewtoolkit.analyzer.managers
 
 import org.ossreviewtoolkit.downloader.VersionControlSystem
-import org.ossreviewtoolkit.model.yamlMapper
 import org.ossreviewtoolkit.utils.normalizeVcsUrl
 import org.ossreviewtoolkit.utils.test.DEFAULT_ANALYZER_CONFIGURATION
 import org.ossreviewtoolkit.utils.test.DEFAULT_REPOSITORY_CONFIGURATION
@@ -61,7 +60,7 @@ class DotNetTest : StringSpec() {
             )
             val result = createDotNet().resolveSingleProject(packageFile)
 
-            yamlMapper.writeValueAsString(result) shouldBe expectedResult
+            result.toYaml() shouldBe expectedResult
         }
     }
 

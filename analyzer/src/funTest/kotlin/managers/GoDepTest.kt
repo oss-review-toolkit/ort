@@ -32,7 +32,6 @@ import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Project
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
-import org.ossreviewtoolkit.model.yamlMapper
 import org.ossreviewtoolkit.utils.Ci
 import org.ossreviewtoolkit.utils.normalizeVcsUrl
 import org.ossreviewtoolkit.utils.test.DEFAULT_ANALYZER_CONFIGURATION
@@ -61,7 +60,7 @@ class GoDepTest : WordSpec() {
                     path = vcsPath
                 )
 
-                yamlMapper.writeValueAsString(result) shouldBe expectedResult
+                result.toYaml() shouldBe expectedResult
             }
 
             "show error if no lockfile is present" {
@@ -106,7 +105,7 @@ class GoDepTest : WordSpec() {
                     path = vcsPath
                 )
 
-                yamlMapper.writeValueAsString(result) shouldBe expectedResult
+                result.toYaml() shouldBe expectedResult
             }
 
             "import dependencies from godeps" {
@@ -122,7 +121,7 @@ class GoDepTest : WordSpec() {
                     path = vcsPath
                 )
 
-                yamlMapper.writeValueAsString(result) shouldBe expectedResult
+                result.toYaml() shouldBe expectedResult
             }
         }
 
