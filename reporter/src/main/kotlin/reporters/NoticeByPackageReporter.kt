@@ -19,6 +19,8 @@
 
 package org.ossreviewtoolkit.reporter.reporters
 
+import org.apache.logging.log4j.Level
+
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.LicenseFindingsMap
 import org.ossreviewtoolkit.model.ScanResult
@@ -31,6 +33,7 @@ import org.ossreviewtoolkit.utils.LICENSE_FILENAMES
 import org.ossreviewtoolkit.utils.ORT_NAME
 import org.ossreviewtoolkit.utils.getOrtDataDirectory
 import org.ossreviewtoolkit.utils.log
+import org.ossreviewtoolkit.utils.logOnce
 import org.ossreviewtoolkit.utils.storage.FileArchiver
 import org.ossreviewtoolkit.utils.storage.LocalFileStorage
 
@@ -101,7 +104,7 @@ class NoticeByPackageProcessor(input: ReporterInput) : AbstractNoticeReporter.No
             .filter { (license, _) ->
                 input.licenseTextProvider.hasLicenseText(license).also {
                     if (!it) {
-                        NoticeByPackageProcessor.log.warn {
+                        NoticeByPackageProcessor.logOnce(Level.WARN) {
                             "No license text found for license '$license', it will be omitted from the report."
                         }
                     }
@@ -152,7 +155,7 @@ class NoticeByPackageProcessor(input: ReporterInput) : AbstractNoticeReporter.No
                 .filter { (license, _) ->
                     input.licenseTextProvider.hasLicenseText(license).also {
                         if (!it) {
-                            NoticeByPackageProcessor.log.warn {
+                            NoticeByPackageProcessor.logOnce(Level.WARN) {
                                 "No license text found for license '$license', it will be omitted from the report."
                             }
                         }
