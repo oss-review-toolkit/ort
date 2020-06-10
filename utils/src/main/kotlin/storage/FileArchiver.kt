@@ -73,6 +73,9 @@ class FileArchiver(
         storage.write(getArchivePath(storagePath), zipFile.inputStream())
     }
 
+    /**
+     * Unarchive the file at '[storagePath]/[ARCHIVE_FILE_NAME]' to [directory].
+     */
     fun unarchive(directory: File, storagePath: String): Boolean =
         try {
             storage.read(getArchivePath(storagePath)).use { input ->
