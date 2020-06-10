@@ -21,7 +21,6 @@ package org.ossreviewtoolkit.analyzer.managers
 
 import org.ossreviewtoolkit.downloader.VersionControlSystem
 import org.ossreviewtoolkit.model.Identifier
-import org.ossreviewtoolkit.model.yamlMapper
 import org.ossreviewtoolkit.utils.normalizeVcsUrl
 import org.ossreviewtoolkit.utils.safeDeleteRecursively
 import org.ossreviewtoolkit.utils.test.DEFAULT_ANALYZER_CONFIGURATION
@@ -56,7 +55,7 @@ class BundlerTest : WordSpec() {
                         path = vcsDir.getPathToRoot(definitionFile.parentFile)
                     )
 
-                    yamlMapper.writeValueAsString(actualResult) shouldBe expectedResult
+                    actualResult.toYaml() shouldBe expectedResult
                 } finally {
                     File(definitionFile.parentFile, ".bundle").safeDeleteRecursively(force = true)
                 }
@@ -89,7 +88,7 @@ class BundlerTest : WordSpec() {
                         path = vcsDir.getPathToRoot(definitionFile.parentFile)
                     )
 
-                    yamlMapper.writeValueAsString(actualResult) shouldBe expectedResult
+                    actualResult.toYaml() shouldBe expectedResult
                 } finally {
                     File(definitionFile.parentFile, ".bundle").safeDeleteRecursively(force = true)
                 }

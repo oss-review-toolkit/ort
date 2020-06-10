@@ -20,7 +20,6 @@
 package org.ossreviewtoolkit.analyzer.managers
 
 import org.ossreviewtoolkit.downloader.VersionControlSystem
-import org.ossreviewtoolkit.model.yamlMapper
 import org.ossreviewtoolkit.utils.normalizeVcsUrl
 import org.ossreviewtoolkit.utils.test.DEFAULT_ANALYZER_CONFIGURATION
 import org.ossreviewtoolkit.utils.test.DEFAULT_REPOSITORY_CONFIGURATION
@@ -46,7 +45,7 @@ class PipTest : WordSpec() {
                 val result = createPIP().resolveSingleProject(definitionFile)
                 val expectedResult = File(projectsDir, "external/spdx-tools-python-expected-output.yml").readText()
 
-                yamlMapper.writeValueAsString(result) shouldBe expectedResult
+                result.toYaml() shouldBe expectedResult
             }
 
             "resolve requirements.txt dependencies correctly for example-python-flask" {
@@ -55,7 +54,7 @@ class PipTest : WordSpec() {
                 val result = createPIP().resolveSingleProject(definitionFile)
                 val expectedResult = File(projectsDir, "external/example-python-flask-expected-output.yml").readText()
 
-                yamlMapper.writeValueAsString(result) shouldBe expectedResult
+                result.toYaml() shouldBe expectedResult
             }
 
             "capture metadata from setup.py even if requirements.txt is present" {
@@ -71,7 +70,7 @@ class PipTest : WordSpec() {
 
                 val result = createPIP().resolveSingleProject(definitionFile)
 
-                yamlMapper.writeValueAsString(result) shouldBe expectedResult
+                result.toYaml() shouldBe expectedResult
             }
         }
 
@@ -89,7 +88,7 @@ class PipTest : WordSpec() {
                     path = vcsPath
                 )
 
-                yamlMapper.writeValueAsString(result) shouldBe expectedResult
+                result.toYaml() shouldBe expectedResult
             }
         }
     }

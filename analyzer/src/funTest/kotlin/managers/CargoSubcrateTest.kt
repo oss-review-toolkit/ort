@@ -25,7 +25,6 @@ import io.kotest.matchers.shouldBe
 import java.io.File
 
 import org.ossreviewtoolkit.downloader.VersionControlSystem
-import org.ossreviewtoolkit.model.yamlMapper
 import org.ossreviewtoolkit.utils.Ci
 import org.ossreviewtoolkit.utils.normalizeVcsUrl
 import org.ossreviewtoolkit.utils.test.DEFAULT_ANALYZER_CONFIGURATION
@@ -54,7 +53,7 @@ class CargoSubcrateTest : StringSpec() {
 
             val result = createCargo().resolveSingleProject(packageFile)
 
-            yamlMapper.writeValueAsString(result) shouldBe expectedResult
+            result.toYaml() shouldBe expectedResult
         }
 
         "Integration sub-project dependencies are detected correctly" {
@@ -71,7 +70,7 @@ class CargoSubcrateTest : StringSpec() {
 
             val result = createCargo().resolveSingleProject(packageFile)
 
-            yamlMapper.writeValueAsString(result) shouldBe expectedResult
+            result.toYaml() shouldBe expectedResult
         }
 
         "Client sub-project dependencies are detected correctly" {
@@ -88,7 +87,7 @@ class CargoSubcrateTest : StringSpec() {
 
             val result = createCargo().resolveSingleProject(packageFile)
 
-            yamlMapper.writeValueAsString(result) shouldBe expectedResult
+            result.toYaml() shouldBe expectedResult
         }
     }
 

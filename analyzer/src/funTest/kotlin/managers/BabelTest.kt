@@ -20,7 +20,6 @@
 package org.ossreviewtoolkit.analyzer.managers
 
 import org.ossreviewtoolkit.downloader.VersionControlSystem
-import org.ossreviewtoolkit.model.yamlMapper
 import org.ossreviewtoolkit.utils.normalizeVcsUrl
 import org.ossreviewtoolkit.utils.test.DEFAULT_ANALYZER_CONFIGURATION
 import org.ossreviewtoolkit.utils.test.DEFAULT_REPOSITORY_CONFIGURATION
@@ -51,7 +50,7 @@ class BabelTest : WordSpec() {
                 )
                 val actualResult = createNPM().resolveSingleProject(packageFile)
 
-                patchActualResult(yamlMapper.writeValueAsString(actualResult)) shouldBe expectedResult
+                patchActualResult(actualResult.toYaml()) shouldBe expectedResult
             }
         }
     }

@@ -26,7 +26,6 @@ import java.io.File
 
 import org.ossreviewtoolkit.analyzer.Analyzer
 import org.ossreviewtoolkit.downloader.vcs.Git
-import org.ossreviewtoolkit.model.yamlMapper
 import org.ossreviewtoolkit.utils.Ci
 import org.ossreviewtoolkit.utils.test.DEFAULT_ANALYZER_CONFIGURATION
 import org.ossreviewtoolkit.utils.test.patchActualResult
@@ -46,7 +45,7 @@ class SbtTest : StringSpec({
 
         val ortResult = Analyzer(DEFAULT_ANALYZER_CONFIGURATION).analyze(projectDir, listOf(Sbt.Factory()))
 
-        val actualResult = yamlMapper.writeValueAsString(ortResult)
+        val actualResult = ortResult.toYaml()
         val expectedResult = patchExpectedResult(expectedOutputFile)
 
         patchActualResult(actualResult, patchStartAndEndTime = true) shouldBe expectedResult
@@ -65,7 +64,7 @@ class SbtTest : StringSpec({
 
         val ortResult = Analyzer(DEFAULT_ANALYZER_CONFIGURATION).analyze(projectDir, listOf(Sbt.Factory()))
 
-        val actualResult = yamlMapper.writeValueAsString(ortResult)
+        val actualResult = ortResult.toYaml()
         val expectedResult = patchExpectedResult(expectedOutputFile)
 
         patchActualResult(actualResult, patchStartAndEndTime = true) shouldBe expectedResult

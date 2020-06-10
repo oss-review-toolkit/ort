@@ -21,7 +21,6 @@ package org.ossreviewtoolkit.analyzer.managers
 
 import org.ossreviewtoolkit.downloader.VersionControlSystem
 import org.ossreviewtoolkit.model.Identifier
-import org.ossreviewtoolkit.model.yamlMapper
 import org.ossreviewtoolkit.utils.normalizeVcsUrl
 import org.ossreviewtoolkit.utils.test.DEFAULT_ANALYZER_CONFIGURATION
 import org.ossreviewtoolkit.utils.test.DEFAULT_REPOSITORY_CONFIGURATION
@@ -53,7 +52,7 @@ class PhpComposerTest : StringSpec() {
                 path = vcsDir.getPathToRoot(definitionFile.parentFile)
             )
 
-            yamlMapper.writeValueAsString(result) shouldBe expectedResults
+            result.toYaml() shouldBe expectedResults
         }
 
         "Error is shown when no lockfile is present" {
@@ -85,7 +84,7 @@ class PhpComposerTest : StringSpec() {
                 path = vcsDir.getPathToRoot(definitionFile.parentFile)
             )
 
-            yamlMapper.writeValueAsString(result) shouldBe expectedResults
+            result.toYaml() shouldBe expectedResults
         }
 
         "No composer.lock is required for projects with empty dependencies" {
@@ -100,7 +99,7 @@ class PhpComposerTest : StringSpec() {
                 path = vcsDir.getPathToRoot(definitionFile.parentFile)
             )
 
-            yamlMapper.writeValueAsString(result) shouldBe expectedResults
+            result.toYaml() shouldBe expectedResults
         }
 
         "Packages defined as provided are not reported as missing" {
@@ -114,7 +113,7 @@ class PhpComposerTest : StringSpec() {
                 path = vcsDir.getPathToRoot(definitionFile.parentFile)
             )
 
-            yamlMapper.writeValueAsString(result) shouldBe expectedResults
+            result.toYaml() shouldBe expectedResults
         }
 
         "Packages defined as replaced are not reported as missing" {
@@ -128,7 +127,7 @@ class PhpComposerTest : StringSpec() {
                 path = vcsDir.getPathToRoot(definitionFile.parentFile)
             )
 
-            yamlMapper.writeValueAsString(result) shouldBe expectedResults
+            result.toYaml() shouldBe expectedResults
         }
     }
 

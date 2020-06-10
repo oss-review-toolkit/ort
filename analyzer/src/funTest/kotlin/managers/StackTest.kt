@@ -19,7 +19,6 @@
 
 package org.ossreviewtoolkit.analyzer.managers
 
-import org.ossreviewtoolkit.model.yamlMapper
 import org.ossreviewtoolkit.utils.Os
 import org.ossreviewtoolkit.utils.test.DEFAULT_ANALYZER_CONFIGURATION
 import org.ossreviewtoolkit.utils.test.DEFAULT_REPOSITORY_CONFIGURATION
@@ -44,7 +43,7 @@ class StackTest : StringSpec() {
                 "external/quickcheck-state-machine-expected-output.yml"
             }
             val expectedResult = File(projectsDir, expectedOutput).readText()
-            val actualResult = yamlMapper.writeValueAsString(result)
+            val actualResult = result.toYaml()
 
             actualResult shouldBe expectedResult
         }

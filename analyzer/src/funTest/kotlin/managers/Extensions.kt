@@ -25,6 +25,9 @@ import java.io.File
 
 import org.ossreviewtoolkit.analyzer.PackageManager
 import org.ossreviewtoolkit.model.ProjectAnalyzerResult
+import org.ossreviewtoolkit.model.yamlMapper
+
+fun Any?.toYaml() = yamlMapper.writeValueAsString(this)!!
 
 fun PackageManager.resolveSingleProject(definitionFile: File): ProjectAnalyzerResult =
     resolveDependencies(listOf(definitionFile))[definitionFile].let { result ->

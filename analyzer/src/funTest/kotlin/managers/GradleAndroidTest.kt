@@ -20,7 +20,6 @@
 package org.ossreviewtoolkit.analyzer.managers
 
 import org.ossreviewtoolkit.downloader.VersionControlSystem
-import org.ossreviewtoolkit.model.yamlMapper
 import org.ossreviewtoolkit.utils.normalizeVcsUrl
 import org.ossreviewtoolkit.utils.test.AndroidTag
 import org.ossreviewtoolkit.utils.test.DEFAULT_ANALYZER_CONFIGURATION
@@ -50,7 +49,7 @@ class GradleAndroidTest : StringSpec() {
 
             val result = createGradle().resolveSingleProject(packageFile)
 
-            yamlMapper.writeValueAsString(result) shouldBe expectedResult
+            result.toYaml() shouldBe expectedResult
         }
 
         "Project dependencies are detected correctly".config(tags = setOf(AndroidTag)) {
@@ -63,7 +62,7 @@ class GradleAndroidTest : StringSpec() {
 
             val result = createGradle().resolveSingleProject(packageFile)
 
-            yamlMapper.writeValueAsString(result) shouldBe expectedResult
+            result.toYaml() shouldBe expectedResult
         }
 
         "External dependencies are detected correctly".config(tags = setOf(AndroidTag)) {
@@ -76,7 +75,7 @@ class GradleAndroidTest : StringSpec() {
 
             val result = createGradle().resolveSingleProject(packageFile)
 
-            yamlMapper.writeValueAsString(result) shouldBe expectedResult
+            result.toYaml() shouldBe expectedResult
         }
     }
 
