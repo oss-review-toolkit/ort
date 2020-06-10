@@ -52,6 +52,18 @@ class HttpFileStorage(
      */
     private val cacheMaxAgeInSeconds: Int = 0
 ) : FileStorage {
+    override fun exists(path: String): Boolean {
+        val request = Request.Builder()
+            .headers(headers.toHeaders())
+            .cacheControl(CacheControl.Builder().maxAge(cacheMaxAgeInSeconds, TimeUnit.SECONDS).build())
+            .head()
+            .url(urlForPath(path))
+            .build()
+
+        val response = OkHttpClientHelper.execute(request)
+        return response.code == HttpURLConnection.HTTP_OK
+    }
+
     override fun read(path: String): InputStream {
         val request = Request.Builder()
             .headers(headers.toHeaders())

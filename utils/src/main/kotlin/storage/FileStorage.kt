@@ -26,6 +26,11 @@ import java.io.InputStream
  */
 interface FileStorage {
     /**
+     * Return whether the given [path] exists or not.
+     */
+    fun exists(path: String): Boolean
+
+    /**
      * Read the file at [path]. It is the caller's responsibility to close the returned [InputStream] after consuming
      * it.
      */
