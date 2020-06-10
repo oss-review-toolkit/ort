@@ -91,7 +91,7 @@ class GoDep(
     override fun transformVersion(output: String) =
         output.lineSequence().first { it.contains("version") }.substringAfter(':').trim().removePrefix("v")
 
-    override fun resolveDependencies(definitionFile: File): ProjectAnalyzerResult? {
+    override fun resolveDependencies(definitionFile: File): List<ProjectAnalyzerResult> {
         val projectDir = resolveProjectRoot(definitionFile)
         val projectVcs = processProjectVcs(projectDir)
         val gopath = createTempDir(ORT_NAME, "${projectDir.name}-gopath")
@@ -160,22 +160,24 @@ class GoDep(
         // TODO Keeping this between scans would speed things up considerably.
         gopath.safeDeleteRecursively(force = true)
 
-        return ProjectAnalyzerResult(
-            project = Project(
-                id = Identifier(
-                    type = managerName,
-                    namespace = "",
-                    name = projectName,
-                    version = projectVcs.revision
+        return listOf(
+            ProjectAnalyzerResult(
+                project = Project(
+                    id = Identifier(
+                        type = managerName,
+                        namespace = "",
+                        name = projectName,
+                        version = projectVcs.revision
+                    ),
+                    definitionFilePath = VersionControlSystem.getPathInfo(definitionFile).path,
+                    declaredLicenses = sortedSetOf(),
+                    vcs = VcsInfo.EMPTY,
+                    vcsProcessed = projectVcs,
+                    homepageUrl = "",
+                    scopes = sortedSetOf(scope)
                 ),
-                definitionFilePath = VersionControlSystem.getPathInfo(definitionFile).path,
-                declaredLicenses = sortedSetOf(),
-                vcs = VcsInfo.EMPTY,
-                vcsProcessed = projectVcs,
-                homepageUrl = "",
-                scopes = sortedSetOf(scope)
-            ),
-            packages = packages.mapTo(sortedSetOf()) { it.toCuratedPackage() }
+                packages = packages.mapTo(sortedSetOf()) { it.toCuratedPackage() }
+            )
         )
     }
 

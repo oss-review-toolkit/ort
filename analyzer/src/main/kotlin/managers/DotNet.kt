@@ -88,6 +88,6 @@ class DotNet(
         ) = DotNet(managerName, analysisRoot, analyzerConfig, repoConfig)
     }
 
-    override fun resolveDependencies(definitionFile: File): ProjectAnalyzerResult? =
-        resolveDotNetDependencies(definitionFile, DotNetPackageReferenceMapper())
+    override fun resolveDependencies(definitionFile: File): List<ProjectAnalyzerResult> =
+        listOfNotNull(resolveDotNetDependencies(definitionFile, DotNetPackageReferenceMapper()))
 }

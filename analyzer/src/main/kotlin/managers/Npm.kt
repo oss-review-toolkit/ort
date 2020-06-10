@@ -118,7 +118,7 @@ open class Npm(
         ortProxySelector.removeProxyOrigin(managerName)
     }
 
-    override fun resolveDependencies(definitionFile: File): ProjectAnalyzerResult? {
+    override fun resolveDependencies(definitionFile: File): List<ProjectAnalyzerResult> {
         val workingDir = definitionFile.parentFile
 
         stashDirectories(File(workingDir, "node_modules")).use {
@@ -140,9 +140,12 @@ open class Npm(
 
             // TODO: add support for peerDependencies and bundledDependencies.
 
-            return parseProject(
-                definitionFile, sortedSetOf(dependenciesScope, devDependenciesScope),
-                packages.values.toSortedSet()
+            return listOf(
+                parseProject(
+                    definitionFile,
+                    sortedSetOf(dependenciesScope, devDependenciesScope),
+                    packages.values.toSortedSet()
+                )
             )
         }
     }

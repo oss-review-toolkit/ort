@@ -124,7 +124,7 @@ class Gradle(
 
     private val maven = MavenSupport(GradleCacheReader())
 
-    override fun resolveDependencies(definitionFile: File): ProjectAnalyzerResult? {
+    override fun resolveDependencies(definitionFile: File): List<ProjectAnalyzerResult> {
         val gradleSystemProperties = mutableListOf<Pair<String, String>>()
 
         // Usually, the Gradle wrapper's Java code handles applying system properties defined in a Gradle properties
@@ -244,10 +244,12 @@ class Gradle(
                     createAndLogIssue(source = managerName, message = it, severity = Severity.WARNING)
                 }
 
-                ProjectAnalyzerResult(
-                    project,
-                    packages.values.mapTo(sortedSetOf()) { it.toCuratedPackage() },
-                    issues
+                listOf(
+                    ProjectAnalyzerResult(
+                        project,
+                        packages.values.mapTo(sortedSetOf()) { it.toCuratedPackage() },
+                        issues
+                    )
                 )
             }
         }

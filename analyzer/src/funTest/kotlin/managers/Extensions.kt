@@ -19,6 +19,8 @@
 
 package org.ossreviewtoolkit.analyzer.managers
 
+import io.kotest.matchers.collections.haveSize
+import io.kotest.matchers.should
 import io.kotest.matchers.shouldNotBe
 
 import java.io.File
@@ -32,5 +34,6 @@ fun Any?.toYaml() = yamlMapper.writeValueAsString(this)!!
 fun PackageManager.resolveSingleProject(definitionFile: File): ProjectAnalyzerResult =
     resolveDependencies(listOf(definitionFile))[definitionFile].let { result ->
         result shouldNotBe null
-        result!!
+        result!! should haveSize(1)
+        result.single()
     }

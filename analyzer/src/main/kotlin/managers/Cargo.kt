@@ -226,12 +226,12 @@ class Cargo(
         return null
     }
 
-    override fun resolveDependencies(definitionFile: File): ProjectAnalyzerResult? {
+    override fun resolveDependencies(definitionFile: File): List<ProjectAnalyzerResult> {
         // Get the project name and version. If one of them is missing return null, because this is a workspace
         // definition file that does not contain a project.
         val pkgDefinition = Toml().read(definitionFile)
-        val projectName = pkgDefinition.getString("package.name") ?: return null
-        val projectVersion = pkgDefinition.getString("package.version") ?: return null
+        val projectName = pkgDefinition.getString("package.name") ?: return emptyList()
+        val projectVersion = pkgDefinition.getString("package.version") ?: return emptyList()
 
         val workingDir = definitionFile.parentFile
         val metadataJson = runMetadata(workingDir)
@@ -290,6 +290,11 @@ class Cargo(
             .map { it.value.toCuratedPackage() }
             .toSortedSet()
 
-        return ProjectAnalyzerResult(project, nonProjectPackages)
+        return listOf(
+            ProjectAnalyzerResult(
+                project = project,
+                packages = nonProjectPackages
+            )
+        )
     }
 }

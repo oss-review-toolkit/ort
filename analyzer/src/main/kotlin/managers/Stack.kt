@@ -83,7 +83,7 @@ class Stack(
 
     override fun beforeResolution(definitionFiles: List<File>) = checkVersion(analyzerConfig.ignoreToolVersions)
 
-    override fun resolveDependencies(definitionFile: File): ProjectAnalyzerResult? {
+    override fun resolveDependencies(definitionFile: File): List<ProjectAnalyzerResult> {
         val workingDir = definitionFile.parentFile
 
         // Parse project information from the *.cabal file.
@@ -173,7 +173,12 @@ class Stack(
             scopes = scopes
         )
 
-        return ProjectAnalyzerResult(project, allPackages.values.mapTo(sortedSetOf()) { it.toCuratedPackage() })
+        return listOf(
+            ProjectAnalyzerResult(
+                project = project,
+                packages = allPackages.values.mapTo(sortedSetOf()) { it.toCuratedPackage() }
+            )
+        )
     }
 
     private fun buildDependencyTree(

@@ -47,7 +47,7 @@ import java.util.ServiceLoader
 import kotlin.time.measureTime
 
 typealias ManagedProjectFiles = Map<PackageManagerFactory, List<File>>
-typealias ResolutionResult = MutableMap<File, ProjectAnalyzerResult>
+typealias ResolutionResult = MutableMap<File, List<ProjectAnalyzerResult>>
 
 /**
  * A class representing a package manager that handles software dependencies.
@@ -211,7 +211,7 @@ abstract class PackageManager(
             }
         }
 
-        val result = mutableMapOf<File, ProjectAnalyzerResult>()
+        val result = mutableMapOf<File, List<ProjectAnalyzerResult>>()
 
         beforeResolution(definitionFiles)
 
@@ -221,9 +221,7 @@ abstract class PackageManager(
             val duration = measureTime {
                 @Suppress("TooGenericExceptionCaught")
                 try {
-                    resolveDependencies(definitionFile)?.let {
-                        result[definitionFile] = it
-                    }
+                    result[definitionFile] = resolveDependencies(definitionFile)
                 } catch (e: Exception) {
                     e.showStackTrace()
 
@@ -244,7 +242,7 @@ abstract class PackageManager(
                         )
                     )
 
-                    result[definitionFile] = ProjectAnalyzerResult(errorProject, sortedSetOf(), errors)
+                    result[definitionFile] = listOf(ProjectAnalyzerResult(errorProject, sortedSetOf(), errors))
                 }
             }
 
@@ -259,9 +257,10 @@ abstract class PackageManager(
     }
 
     /**
-     * Resolve dependencies for a single absolute [definitionFile] and return a [ProjectAnalyzerResult].
+     * Resolve dependencies for a single absolute [definitionFile] and return a list of [ProjectAnalyzerResult]s, with
+     * one result for each project found in the definition file.
      */
-    abstract fun resolveDependencies(definitionFile: File): ProjectAnalyzerResult?
+    abstract fun resolveDependencies(definitionFile: File): List<ProjectAnalyzerResult>
 
     protected fun requireLockfile(workingDir: File, condition: () -> Boolean) {
         require(analyzerConfig.allowDynamicVersions || condition()) {

@@ -91,7 +91,7 @@ class Bundler(
         // fixed versions to be sure to get consistent results.
         checkVersion(analyzerConfig.ignoreToolVersions)
 
-    override fun resolveDependencies(definitionFile: File): ProjectAnalyzerResult? {
+    override fun resolveDependencies(definitionFile: File): List<ProjectAnalyzerResult> {
         val workingDir = definitionFile.parentFile
 
         stashDirectories(File(workingDir, "vendor")).use {
@@ -119,7 +119,13 @@ class Bundler(
                 scopes = scopes.toSortedSet()
             )
 
-            return ProjectAnalyzerResult(project, packages.mapTo(sortedSetOf()) { it.toCuratedPackage() }, issues)
+            return listOf(
+                ProjectAnalyzerResult(
+                    project = project,
+                    packages = packages.mapTo(sortedSetOf()) { it.toCuratedPackage() },
+                    issues = issues
+                )
+            )
         }
     }
 

@@ -126,7 +126,7 @@ class Maven(
         }
     }
 
-    override fun resolveDependencies(definitionFile: File): ProjectAnalyzerResult? {
+    override fun resolveDependencies(definitionFile: File): List<ProjectAnalyzerResult> {
         val workingDir = definitionFile.parentFile
         val projectBuildingResult = mvn.buildMavenProject(definitionFile)
         val mavenProject = projectBuildingResult.project
@@ -171,7 +171,12 @@ class Maven(
             scopes = scopes.values.toSortedSet()
         )
 
-        return ProjectAnalyzerResult(project, packages.values.mapTo(sortedSetOf()) { it.toCuratedPackage() })
+        return listOf(
+            ProjectAnalyzerResult(
+                project = project,
+                packages = packages.values.mapTo(sortedSetOf()) { it.toCuratedPackage() }
+            )
+        )
     }
 
     private fun parseDependency(node: DependencyNode, packages: MutableMap<String, Package>): PackageReference {

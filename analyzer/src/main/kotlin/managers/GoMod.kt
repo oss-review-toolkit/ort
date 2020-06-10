@@ -85,7 +85,7 @@ class GoMod(
                 .contains("vendor")
         }
 
-    override fun resolveDependencies(definitionFile: File): ProjectAnalyzerResult? {
+    override fun resolveDependencies(definitionFile: File): List<ProjectAnalyzerResult> {
         val projectDir = definitionFile.parentFile
 
         stashDirectories(File(projectDir, "vendor")).use {
@@ -114,22 +114,24 @@ class GoMod(
                 )
             )
 
-            return ProjectAnalyzerResult(
-                project = Project(
-                    id = Identifier(
-                        type = managerName,
-                        namespace = "",
-                        name = projectName,
-                        version = projectVcs.revision
+            return listOf(
+                ProjectAnalyzerResult(
+                    project = Project(
+                        id = Identifier(
+                            type = managerName,
+                            namespace = "",
+                            name = projectName,
+                            version = projectVcs.revision
+                        ),
+                        definitionFilePath = VersionControlSystem.getPathInfo(definitionFile).path,
+                        declaredLicenses = sortedSetOf(), // Go mod doesn't support declared licenses.
+                        vcs = projectVcs,
+                        vcsProcessed = projectVcs,
+                        homepageUrl = "",
+                        scopes = scopes
                     ),
-                    definitionFilePath = VersionControlSystem.getPathInfo(definitionFile).path,
-                    declaredLicenses = sortedSetOf(), // Go mod doesn't support declared licenses.
-                    vcs = projectVcs,
-                    vcsProcessed = projectVcs,
-                    homepageUrl = "",
-                    scopes = scopes
-                ),
-                packages = packages.mapTo(sortedSetOf()) { it.toCuratedPackage() }
+                    packages = packages.mapTo(sortedSetOf()) { it.toCuratedPackage() }
+                )
             )
         }
     }

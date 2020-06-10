@@ -58,7 +58,7 @@ class Unmanaged(
      *
      * @param definitionFile The directory containing the unmanaged project.
      */
-    override fun resolveDependencies(definitionFile: File): ProjectAnalyzerResult? {
+    override fun resolveDependencies(definitionFile: File): List<ProjectAnalyzerResult> {
         val vcsInfo = VersionControlSystem.getCloneInfo(definitionFile)
 
         val id = when {
@@ -112,6 +112,11 @@ class Unmanaged(
             scopes = sortedSetOf()
         )
 
-        return ProjectAnalyzerResult(project, sortedSetOf())
+        return listOf(
+            ProjectAnalyzerResult(
+                project = project,
+                packages = sortedSetOf()
+            )
+        )
     }
 }
