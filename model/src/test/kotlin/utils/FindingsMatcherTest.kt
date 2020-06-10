@@ -39,8 +39,6 @@ import kotlin.random.Random
 
 private fun Collection<LicenseFindings>.getFindings(license: String) = single { it.license == license }
 
-private fun Collection<LicenseFindings>.getAllStatements() = flatMap { it.copyrights.map { it.statement } }
-
 private const val NESTED_LICENSE_FILE_A = "a/LICENSE"
 private const val NESTED_LICENSE_FILE_B = "b/LICENSE"
 
