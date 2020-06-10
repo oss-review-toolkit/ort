@@ -20,8 +20,6 @@
 package org.ossreviewtoolkit.analyzer.managers
 
 import io.kotest.core.spec.style.StringSpec
-import io.kotest.matchers.collections.beEmpty
-import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNotBe
 
@@ -58,7 +56,6 @@ class CargoSubcrateTest : StringSpec() {
             val result = createCargo().resolveDependencies(listOf(packageFile))[packageFile]
 
             result shouldNotBe null
-            result!!.issues should beEmpty()
             yamlMapper.writeValueAsString(result) shouldBe expectedResult
         }
 
@@ -77,7 +74,6 @@ class CargoSubcrateTest : StringSpec() {
             val result = createCargo().resolveDependencies(listOf(packageFile))[packageFile]
 
             result shouldNotBe null
-            result!!.issues should beEmpty()
             yamlMapper.writeValueAsString(result) shouldBe expectedResult
         }
 
@@ -96,7 +92,6 @@ class CargoSubcrateTest : StringSpec() {
             val result = createCargo().resolveDependencies(listOf(packageFile))[packageFile]
 
             result shouldNotBe null
-            result!!.issues should beEmpty()
             yamlMapper.writeValueAsString(result) shouldBe expectedResult
         }
     }

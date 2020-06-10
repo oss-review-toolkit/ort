@@ -27,8 +27,6 @@ import org.ossreviewtoolkit.utils.test.DEFAULT_REPOSITORY_CONFIGURATION
 import org.ossreviewtoolkit.utils.test.USER_DIR
 import org.ossreviewtoolkit.utils.test.patchExpectedResult
 
-import io.kotest.matchers.collections.beEmpty
-import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNotBe
 import io.kotest.core.spec.style.StringSpec
@@ -56,7 +54,6 @@ class BowerTest : StringSpec() {
             val result = createBower().resolveDependencies(listOf(packageFile))[packageFile]
 
             result shouldNotBe null
-            result!!.issues should beEmpty()
             yamlMapper.writeValueAsString(result) shouldBe expectedResult
         }
     }

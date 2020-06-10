@@ -29,8 +29,6 @@ import org.ossreviewtoolkit.utils.test.DEFAULT_REPOSITORY_CONFIGURATION
 import org.ossreviewtoolkit.utils.test.patchActualResult
 import org.ossreviewtoolkit.utils.test.patchExpectedResult
 
-import io.kotest.matchers.collections.beEmpty
-import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNotBe
 import io.kotest.core.spec.style.StringSpec
@@ -63,7 +61,6 @@ class ConanTest : StringSpec() {
             val result = createConan().resolveDependencies(listOf(packageFile))[packageFile]
 
             result shouldNotBe null
-            result!!.issues should beEmpty()
             patchActualResult(yamlMapper.writeValueAsString(result)) shouldBe expectedResult
         }
 
@@ -81,7 +78,6 @@ class ConanTest : StringSpec() {
             val result = createConan().resolveDependencies(listOf(packageFile))[packageFile]
 
             result shouldNotBe null
-            result!!.issues should beEmpty()
             patchActualResult(yamlMapper.writeValueAsString(result)) shouldBe expectedResult
         }
     }
