@@ -23,6 +23,8 @@ import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNotBe
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.inspectors.forAll
+import io.kotest.matchers.collections.beEmpty
+import io.kotest.matchers.should
 
 import java.io.File
 import java.nio.file.Paths
@@ -32,24 +34,24 @@ class UtilsTest : WordSpec({
         "return an empty list for a blank version" {
             val names = listOf("dummy")
 
-            filterVersionNames("", names) shouldBe emptyList()
-            filterVersionNames(" ", names) shouldBe emptyList()
+            filterVersionNames("", names) should beEmpty()
+            filterVersionNames(" ", names) should beEmpty()
         }
 
         "return an empty list for empty names" {
             val names = listOf("")
 
-            filterVersionNames("", names) shouldBe emptyList()
-            filterVersionNames(" ", names) shouldBe emptyList()
-            filterVersionNames("1.0", names) shouldBe emptyList()
+            filterVersionNames("", names) should beEmpty()
+            filterVersionNames(" ", names) should beEmpty()
+            filterVersionNames("1.0", names) should beEmpty()
         }
 
         "return an empty list for blank names" {
             val names = listOf(" ")
 
-            filterVersionNames("", names) shouldBe emptyList()
-            filterVersionNames(" ", names) shouldBe emptyList()
-            filterVersionNames("1.0", names) shouldBe emptyList()
+            filterVersionNames("", names) should beEmpty()
+            filterVersionNames(" ", names) should beEmpty()
+            filterVersionNames("1.0", names) should beEmpty()
         }
 
         "find names separated by underscores" {

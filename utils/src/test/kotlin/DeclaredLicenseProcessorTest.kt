@@ -22,8 +22,9 @@ package org.ossreviewtoolkit.utils
 import io.kotest.assertions.throwables.shouldNotThrow
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.inspectors.forAll
+import io.kotest.matchers.collections.beEmpty
 import io.kotest.matchers.collections.containExactly
-import io.kotest.matchers.maps.beEmpty
+import io.kotest.matchers.maps.beEmpty as beEmptyMap
 import io.kotest.matchers.maps.shouldContainExactly
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
@@ -64,7 +65,7 @@ class DeclaredLicenseProcessorTest : StringSpec() {
                 "Apache2" to SpdxLicense.APACHE_2_0.toExpression(),
                 "Apache-2" to SpdxLicense.APACHE_2_0.toExpression()
             ))
-            processedLicenses.unmapped shouldBe emptyList()
+            processedLicenses.unmapped should beEmpty()
         }
 
         "Licenses are not mapped to deprecated SPDX licenses" {
@@ -91,7 +92,7 @@ class DeclaredLicenseProcessorTest : StringSpec() {
                 SpdxSimpleLicenseMapping.map(DeclaredLicenseProcessor.preprocess(declaredLicense)) != null
             }
 
-            processableLicenses shouldBe emptyList()
+            processableLicenses should beEmpty()
         }
 
         "SPDX expression only contains valid licenses" {
@@ -100,7 +101,7 @@ class DeclaredLicenseProcessorTest : StringSpec() {
             val processedLicenses = DeclaredLicenseProcessor.process(declaredLicenses)
 
             processedLicenses.spdxExpression shouldBe SpdxLicenseIdExpression("Apache-2.0")
-            processedLicenses.mapped should beEmpty()
+            processedLicenses.mapped should beEmptyMap()
             processedLicenses.unmapped should containExactly("invalid")
         }
     }

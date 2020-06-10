@@ -31,6 +31,7 @@ import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNotBe
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.collections.containExactlyInAnyOrder
+import io.kotest.matchers.maps.beEmpty
 import io.kotest.matchers.should
 
 import java.io.File
@@ -79,7 +80,7 @@ class GitWorkingTreeTest : StringSpec() {
 
             workingTree.vcsType shouldBe VcsType.GIT
             workingTree.isValid() shouldBe true
-            workingTree.getNested() shouldBe emptyMap()
+            workingTree.getNested() should beEmpty()
             workingTree.getRemoteUrl() shouldBe "https://github.com/naiquevin/pipdeptree.git"
             workingTree.getRevision() shouldBe "6f70dd5508331b6cfcfe3c1b626d57d9836cfd7c"
             workingTree.getRootPath() shouldBe zipContentDir
