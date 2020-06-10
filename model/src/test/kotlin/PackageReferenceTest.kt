@@ -19,12 +19,13 @@
 
 package org.ossreviewtoolkit.model
 
+import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.collections.beEmpty
-import io.kotest.matchers.string.endWith
+import io.kotest.matchers.collections.containExactly
 import io.kotest.matchers.collections.haveSize
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
-import io.kotest.core.spec.style.WordSpec
+import io.kotest.matchers.string.endWith
 
 class PackageReferenceTest : WordSpec() {
     companion object {
@@ -43,8 +44,8 @@ class PackageReferenceTest : WordSpec() {
     init {
         "findReferences" should {
             "find references to an existing id" {
-                root.findReferences(Identifier("::node1_2")) shouldBe listOf(node1_2, node1_2)
-                root.findReferences(Identifier("::node1")) shouldBe listOf(node1)
+                root.findReferences(Identifier("::node1_2")) should containExactly(node1_2, node1_2)
+                root.findReferences(Identifier("::node1")) should containExactly(node1)
             }
 
             "find no references to a non-existing id" {

@@ -28,6 +28,8 @@ import io.github.config4k.extract
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNotBe
 import io.kotest.core.spec.style.WordSpec
+import io.kotest.matchers.collections.containExactly
+import io.kotest.matchers.should
 
 import java.io.File
 
@@ -44,7 +46,7 @@ class OrtConfigurationTest : WordSpec({
 
                 scanner!!.archive shouldNotBe null
                 scanner.archive!!.let { archive ->
-                    archive.patterns shouldBe listOf("LICENSE*", "COPYING*")
+                    archive.patterns should containExactly("LICENSE*", "COPYING*")
                     archive.storage.let { storage ->
                         storage.httpFileStorage shouldBe null
                         storage.localFileStorage shouldNotBe null

@@ -32,6 +32,7 @@ import io.kotest.matchers.collections.beEmpty
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 import io.kotest.core.spec.style.WordSpec
+import io.kotest.matchers.collections.containExactly
 import io.kotest.matchers.collections.containExactlyInAnyOrder
 
 import kotlin.random.Random
@@ -113,9 +114,9 @@ class FindingsMatcherTest : WordSpec() {
                 val result = matcher.match(licenseFindings, copyrightFindings)
 
                 result.size shouldBe 3
-                result.getFindings("license-a1").copyrights.map { it.statement } shouldBe listOf("some stmt")
-                result.getFindings("license-a2").copyrights.map { it.statement } shouldBe listOf("some stmt")
-                result.getFindings("license-b1").copyrights.map { it.statement } shouldBe listOf("some stmt")
+                result.getFindings("license-a1").copyrights.map { it.statement } should containExactly("some stmt")
+                result.getFindings("license-a2").copyrights.map { it.statement } should containExactly("some stmt")
+                result.getFindings("license-b1").copyrights.map { it.statement } should containExactly("some stmt")
             }
         }
 
@@ -179,8 +180,8 @@ class FindingsMatcherTest : WordSpec() {
                 val result = matcher.match(licenseFindings, copyrightFindings)
 
                 result.size shouldBe 2
-                result.getFindings("some id").copyrights.map { it.statement } shouldBe listOf("some stmt")
-                result.getFindings("some other id").copyrights.map { it.statement } shouldBe listOf("some stmt")
+                result.getFindings("some id").copyrights.map { it.statement } should containExactly("some stmt")
+                result.getFindings("some other id").copyrights.map { it.statement } should containExactly("some stmt")
             }
         }
 
@@ -190,8 +191,10 @@ class FindingsMatcherTest : WordSpec() {
                 val licenseStartLine = Random.nextInt(2 * DEFAULT_TOLERANCE_LINES, 20 * DEFAULT_TOLERANCE_LINES)
                 setupLicenseFinding("license nearby", "path", licenseStartLine)
                 setupLicenseFinding("license far away", "path", licenseStartLine + 100 * DEFAULT_TOLERANCE_LINES)
-                setupCopyrightFinding("statement1", "path", licenseStartLine - DEFAULT_TOLERANCE_LINES -
-                        DEFAULT_EXPAND_TOLERANCE_LINES - 1)
+                setupCopyrightFinding(
+                    "statement1", "path", licenseStartLine - DEFAULT_TOLERANCE_LINES -
+                            DEFAULT_EXPAND_TOLERANCE_LINES - 1
+                )
                 setupCopyrightFinding("statement2", "path", licenseStartLine - DEFAULT_TOLERANCE_LINES)
                 setupCopyrightFinding("statement3", "path", licenseStartLine + DEFAULT_TOLERANCE_LINES)
                 setupCopyrightFinding("statement4", "path", licenseStartLine + DEFAULT_TOLERANCE_LINES + 1)
@@ -215,7 +218,8 @@ class FindingsMatcherTest : WordSpec() {
 
                 val result = matcher.match(licenseFindings, copyrightFindings)
 
-                result.getFindings("root license 1").copyrights.map { it.statement } shouldBe listOf("statement 1")
+                result.getFindings("root license 1").copyrights.map { it.statement } should
+                        containExactly("statement 1")
             }
         }
     }

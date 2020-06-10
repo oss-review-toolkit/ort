@@ -19,9 +19,11 @@
 
 package org.ossreviewtoolkit.analyzer
 
-import io.kotest.matchers.shouldBe
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.WordSpec
+import io.kotest.matchers.collections.containExactly
+import io.kotest.matchers.should
+import io.kotest.matchers.shouldBe
 
 import java.io.File
 
@@ -46,24 +48,24 @@ class PackageManagerTest : WordSpec({
                 manager.managerName
             }
 
-            managedFilesByName["Bower"] shouldBe listOf(File(projectDir, "bower.json"))
-            managedFilesByName["Bundler"] shouldBe listOf(File(projectDir, "Gemfile"))
-            managedFilesByName["Cargo"] shouldBe listOf(File(projectDir, "Cargo.toml"))
-            managedFilesByName["Conan"] shouldBe listOf(File(projectDir, "conanfile.py"))
-            managedFilesByName["DotNet"] shouldBe listOf(File(projectDir, "test.csproj"))
-            managedFilesByName["GoDep"] shouldBe listOf(File(projectDir, "Gopkg.toml"))
-            managedFilesByName["GoMod"] shouldBe listOf(File(projectDir, "go.mod"))
-            managedFilesByName["Gradle"] shouldBe listOf(File(projectDir, "build.gradle"))
-            managedFilesByName["Maven"] shouldBe listOf(File(projectDir, "pom.xml"))
-            managedFilesByName["NPM"] shouldBe listOf(File(projectDir, "package.json"))
-            managedFilesByName["NuGet"] shouldBe listOf(File(projectDir, "packages.config"))
-            managedFilesByName["PhpComposer"] shouldBe listOf(File(projectDir, "composer.json"))
-            managedFilesByName["PIP"] shouldBe listOf(File(projectDir, "setup.py"))
-            managedFilesByName["Pipenv"] shouldBe listOf(File(projectDir, "Pipfile.lock"))
-            managedFilesByName["Pub"] shouldBe listOf(File(projectDir, "pubspec.yaml"))
-            managedFilesByName["SBT"] shouldBe listOf(File(projectDir, "build.sbt"))
-            managedFilesByName["Stack"] shouldBe listOf(File(projectDir, "stack.yaml"))
-            managedFilesByName["Yarn"] shouldBe listOf(File(projectDir, "package.json"))
+            managedFilesByName["Bower"] should containExactly(File(projectDir, "bower.json"))
+            managedFilesByName["Bundler"] should containExactly(File(projectDir, "Gemfile"))
+            managedFilesByName["Cargo"] should containExactly(File(projectDir, "Cargo.toml"))
+            managedFilesByName["Conan"] should containExactly(File(projectDir, "conanfile.py"))
+            managedFilesByName["DotNet"] should containExactly(File(projectDir, "test.csproj"))
+            managedFilesByName["GoDep"] should containExactly(File(projectDir, "Gopkg.toml"))
+            managedFilesByName["GoMod"] should containExactly(File(projectDir, "go.mod"))
+            managedFilesByName["Gradle"] should containExactly(File(projectDir, "build.gradle"))
+            managedFilesByName["Maven"] should containExactly(File(projectDir, "pom.xml"))
+            managedFilesByName["NPM"] should containExactly(File(projectDir, "package.json"))
+            managedFilesByName["NuGet"] should containExactly(File(projectDir, "packages.config"))
+            managedFilesByName["PhpComposer"] should containExactly(File(projectDir, "composer.json"))
+            managedFilesByName["PIP"] should containExactly(File(projectDir, "setup.py"))
+            managedFilesByName["Pipenv"] should containExactly(File(projectDir, "Pipfile.lock"))
+            managedFilesByName["Pub"] should containExactly(File(projectDir, "pubspec.yaml"))
+            managedFilesByName["SBT"] should containExactly(File(projectDir, "build.sbt"))
+            managedFilesByName["Stack"] should containExactly(File(projectDir, "stack.yaml"))
+            managedFilesByName["Yarn"] should containExactly(File(projectDir, "package.json"))
         }
 
         "find only files for active package managers" {
@@ -80,9 +82,9 @@ class PackageManagerTest : WordSpec({
                 manager.managerName
             }
 
-            managedFilesByName["Gradle"] shouldBe listOf(File(projectDir, "build.gradle"))
-            managedFilesByName["PIP"] shouldBe listOf(File(projectDir, "setup.py"))
-            managedFilesByName["SBT"] shouldBe listOf(File(projectDir, "build.sbt"))
+            managedFilesByName["Gradle"] should containExactly(File(projectDir, "build.gradle"))
+            managedFilesByName["PIP"] should containExactly(File(projectDir, "setup.py"))
+            managedFilesByName["SBT"] should containExactly(File(projectDir, "build.sbt"))
         }
 
         "find no files if no package managers are active" {
