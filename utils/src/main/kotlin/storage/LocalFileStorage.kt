@@ -53,6 +53,8 @@ open class LocalFileStorage(
      */
     open fun transformPath(path: String): String = path
 
+    override fun exists(path: String) = directory.resolve(path).exists()
+
     @Synchronized
     override fun read(path: String): InputStream {
         val file = directory.resolve(path)
