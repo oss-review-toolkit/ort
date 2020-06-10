@@ -28,7 +28,6 @@ import org.ossreviewtoolkit.utils.test.USER_DIR
 import org.ossreviewtoolkit.utils.test.patchExpectedResult
 
 import io.kotest.matchers.shouldBe
-import io.kotest.matchers.shouldNotBe
 import io.kotest.core.spec.style.StringSpec
 
 import java.io.File
@@ -51,9 +50,8 @@ class CargoTest : StringSpec() {
                 url = normalizeVcsUrl(vcsUrl)
             )
 
-            val result = createCargo().resolveDependencies(listOf(packageFile))[packageFile]
+            val result = createCargo().resolveSingleProject(packageFile)
 
-            result shouldNotBe null
             yamlMapper.writeValueAsString(result) shouldBe expectedResult
         }
     }

@@ -31,7 +31,6 @@ import org.ossreviewtoolkit.utils.test.patchExpectedResult
 import io.kotest.matchers.string.haveSubstring
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
-import io.kotest.matchers.shouldNotBe
 import io.kotest.core.spec.style.StringSpec
 
 import java.io.File
@@ -46,7 +45,7 @@ class PhpComposerTest : StringSpec() {
         "Project dependencies are detected correctly" {
             val definitionFile = File(projectsDir, "lockfile/composer.json")
 
-            val result = createPhpComposer().resolveDependencies(listOf(definitionFile))[definitionFile]
+            val result = createPhpComposer().resolveSingleProject(definitionFile)
             val expectedResults = patchExpectedResult(
                 File(projectsDir.parentFile, "php-composer-expected-output.yml"),
                 url = normalizeVcsUrl(vcsUrl),
@@ -59,10 +58,9 @@ class PhpComposerTest : StringSpec() {
 
         "Error is shown when no lockfile is present" {
             val definitionFile = File(projectsDir, "no-lockfile/composer.json")
-            val result = createPhpComposer().resolveDependencies(listOf(definitionFile))[definitionFile]
+            val result = createPhpComposer().resolveSingleProject(definitionFile)
 
-            result shouldNotBe null
-            with(result!!) {
+            with(result) {
                 project.id shouldBe Identifier(
                     "PhpComposer::src/funTest/assets/projects/synthetic/" +
                             "php-composer/no-lockfile/composer.json:"
@@ -78,7 +76,7 @@ class PhpComposerTest : StringSpec() {
         "No composer.lock is required for projects without dependencies" {
             val definitionFile = File(projectsDir, "no-deps/composer.json")
 
-            val result = createPhpComposer().resolveDependencies(listOf(definitionFile))[definitionFile]
+            val result = createPhpComposer().resolveSingleProject(definitionFile)
             val expectedResults = patchExpectedResult(
                 File(projectsDir.parentFile, "php-composer-expected-output-no-deps.yml"),
                 definitionFilePath = VersionControlSystem.getPathInfo(definitionFile).path,
@@ -93,7 +91,7 @@ class PhpComposerTest : StringSpec() {
         "No composer.lock is required for projects with empty dependencies" {
             val definitionFile = File(projectsDir, "empty-deps/composer.json")
 
-            val result = createPhpComposer().resolveDependencies(listOf(definitionFile))[definitionFile]
+            val result = createPhpComposer().resolveSingleProject(definitionFile)
             val expectedResults = patchExpectedResult(
                 File(projectsDir.parentFile, "php-composer-expected-output-no-deps.yml"),
                 definitionFilePath = VersionControlSystem.getPathInfo(definitionFile).path,
@@ -108,7 +106,7 @@ class PhpComposerTest : StringSpec() {
         "Packages defined as provided are not reported as missing" {
             val definitionFile = File(projectsDir, "with-provide/composer.json")
 
-            val result = createPhpComposer().resolveDependencies(listOf(definitionFile))[definitionFile]
+            val result = createPhpComposer().resolveSingleProject(definitionFile)
             val expectedResults = patchExpectedResult(
                 File(projectsDir.parentFile, "php-composer-expected-output-with-provide.yml"),
                 url = normalizeVcsUrl(vcsUrl),
@@ -122,7 +120,7 @@ class PhpComposerTest : StringSpec() {
         "Packages defined as replaced are not reported as missing" {
             val definitionFile = File(projectsDir, "with-replace/composer.json")
 
-            val result = createPhpComposer().resolveDependencies(listOf(definitionFile))[definitionFile]
+            val result = createPhpComposer().resolveSingleProject(definitionFile)
             val expectedResults = patchExpectedResult(
                 File(projectsDir.parentFile, "php-composer-expected-output-with-replace.yml"),
                 url = normalizeVcsUrl(vcsUrl),

@@ -34,7 +34,6 @@ import org.ossreviewtoolkit.utils.test.patchExpectedResult
 
 import io.kotest.core.spec.Spec
 import io.kotest.matchers.shouldBe
-import io.kotest.matchers.shouldNotBe
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.data.forAll
 import io.kotest.data.headers
@@ -65,9 +64,8 @@ class GradleTest : StringSpec() {
                 revision = vcsRevision
             )
 
-            val result = createGradle().resolveDependencies(listOf(packageFile))[packageFile]
+            val result = createGradle().resolveSingleProject(packageFile)
 
-            result shouldNotBe null
             yamlMapper.writeValueAsString(result) shouldBe expectedResult
         }
 
@@ -79,9 +77,8 @@ class GradleTest : StringSpec() {
                 revision = vcsRevision
             )
 
-            val result = createGradle().resolveDependencies(listOf(packageFile))[packageFile]
+            val result = createGradle().resolveSingleProject(packageFile)
 
-            result shouldNotBe null
             yamlMapper.writeValueAsString(result) shouldBe expectedResult
         }
 
@@ -93,9 +90,8 @@ class GradleTest : StringSpec() {
                 revision = vcsRevision
             )
 
-            val result = createGradle().resolveDependencies(listOf(packageFile))[packageFile]
+            val result = createGradle().resolveSingleProject(packageFile)
 
-            result shouldNotBe null
             yamlMapper.writeValueAsString(result) shouldBe expectedResult
         }
 
@@ -107,9 +103,8 @@ class GradleTest : StringSpec() {
                 revision = vcsRevision
             )
 
-            val result = createGradle().resolveDependencies(listOf(packageFile))[packageFile]
+            val result = createGradle().resolveSingleProject(packageFile)
 
-            result shouldNotBe null
             patchActualResult(yamlMapper.writeValueAsString(result)) shouldBe expectedResult
         }
 
@@ -125,9 +120,8 @@ class GradleTest : StringSpec() {
                 revision = vcsRevision
             )
 
-            val result = createGradle().resolveDependencies(listOf(packageFile))[packageFile]
+            val result = createGradle().resolveSingleProject(packageFile)
 
-            result shouldNotBe null
             yamlMapper.writeValueAsString(result) shouldBe expectedResult
         }
 
@@ -182,9 +176,8 @@ class GradleTest : StringSpec() {
                     revision = vcsRevision
                 )
 
-                val result = createGradle().resolveDependencies(listOf(packageFile))[packageFile]
+                val result = createGradle().resolveSingleProject(packageFile)
 
-                result shouldNotBe null
                 yamlMapper.writeValueAsString(result) shouldBe expectedResult
             }
         }

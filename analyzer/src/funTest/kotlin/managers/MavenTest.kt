@@ -46,7 +46,7 @@ class MavenTest : StringSpec() {
             val pomFile = File(projectDir, "pom.xml")
             val expectedResult = File(projectDir.parentFile, "jgnash-expected-output.yml").readText()
 
-            val result = createMaven().resolveDependencies(listOf(pomFile))[pomFile]
+            val result = createMaven().resolveSingleProject(pomFile)
 
             yamlMapper.writeValueAsString(result) shouldBe expectedResult
         }
@@ -75,7 +75,7 @@ class MavenTest : StringSpec() {
                 revision = vcsRevision
             )
 
-            val result = createMaven().resolveDependencies(listOf(pomFile))[pomFile]
+            val result = createMaven().resolveSingleProject(pomFile)
 
             yamlMapper.writeValueAsString(result) shouldBe expectedResult
         }
@@ -105,7 +105,7 @@ class MavenTest : StringSpec() {
                 revision = vcsRevision
             )
 
-            val result = createMaven().resolveDependencies(listOf(pomFile))[pomFile]
+            val result = createMaven().resolveSingleProject(pomFile)
 
             yamlMapper.writeValueAsString(result) shouldBe expectedResult
         }
@@ -124,7 +124,7 @@ class MavenTest : StringSpec() {
                 revision = vcsRevision
             )
 
-            val result = createMaven().resolveDependencies(listOf(pomFile))[pomFile]
+            val result = createMaven().resolveSingleProject(pomFile)
 
             yamlMapper.writeValueAsString(result) shouldBe expectedResult
         }

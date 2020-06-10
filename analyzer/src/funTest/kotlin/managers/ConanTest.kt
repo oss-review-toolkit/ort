@@ -30,7 +30,6 @@ import org.ossreviewtoolkit.utils.test.patchActualResult
 import org.ossreviewtoolkit.utils.test.patchExpectedResult
 
 import io.kotest.matchers.shouldBe
-import io.kotest.matchers.shouldNotBe
 import io.kotest.core.spec.style.StringSpec
 
 import java.io.File
@@ -58,9 +57,8 @@ class ConanTest : StringSpec() {
                 url = normalizeVcsUrl(vcsUrlTxt)
             )
 
-            val result = createConan().resolveDependencies(listOf(packageFile))[packageFile]
+            val result = createConan().resolveSingleProject(packageFile)
 
-            result shouldNotBe null
             patchActualResult(yamlMapper.writeValueAsString(result)) shouldBe expectedResult
         }
 
@@ -75,9 +73,8 @@ class ConanTest : StringSpec() {
                 url = normalizeVcsUrl(vcsUrlPy)
             )
 
-            val result = createConan().resolveDependencies(listOf(packageFile))[packageFile]
+            val result = createConan().resolveSingleProject(packageFile)
 
-            result shouldNotBe null
             patchActualResult(yamlMapper.writeValueAsString(result)) shouldBe expectedResult
         }
     }

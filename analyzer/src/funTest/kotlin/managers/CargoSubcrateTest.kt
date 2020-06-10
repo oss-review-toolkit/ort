@@ -21,7 +21,6 @@ package org.ossreviewtoolkit.analyzer.managers
 
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.shouldBe
-import io.kotest.matchers.shouldNotBe
 
 import java.io.File
 
@@ -53,9 +52,8 @@ class CargoSubcrateTest : StringSpec() {
                 url = normalizeVcsUrl(vcsUrl)
             )
 
-            val result = createCargo().resolveDependencies(listOf(packageFile))[packageFile]
+            val result = createCargo().resolveSingleProject(packageFile)
 
-            result shouldNotBe null
             yamlMapper.writeValueAsString(result) shouldBe expectedResult
         }
 
@@ -71,9 +69,8 @@ class CargoSubcrateTest : StringSpec() {
                 url = normalizeVcsUrl(vcsUrl)
             )
 
-            val result = createCargo().resolveDependencies(listOf(packageFile))[packageFile]
+            val result = createCargo().resolveSingleProject(packageFile)
 
-            result shouldNotBe null
             yamlMapper.writeValueAsString(result) shouldBe expectedResult
         }
 
@@ -89,9 +86,8 @@ class CargoSubcrateTest : StringSpec() {
                 url = normalizeVcsUrl(vcsUrl)
             )
 
-            val result = createCargo().resolveDependencies(listOf(packageFile))[packageFile]
+            val result = createCargo().resolveSingleProject(packageFile)
 
-            result shouldNotBe null
             yamlMapper.writeValueAsString(result) shouldBe expectedResult
         }
     }

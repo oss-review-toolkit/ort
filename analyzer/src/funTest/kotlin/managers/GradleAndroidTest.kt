@@ -29,7 +29,6 @@ import org.ossreviewtoolkit.utils.test.USER_DIR
 import org.ossreviewtoolkit.utils.test.patchExpectedResult
 
 import io.kotest.matchers.shouldBe
-import io.kotest.matchers.shouldNotBe
 import io.kotest.core.spec.style.StringSpec
 
 import java.io.File
@@ -49,9 +48,8 @@ class GradleAndroidTest : StringSpec() {
                 revision = vcsRevision
             )
 
-            val result = createGradle().resolveDependencies(listOf(packageFile))[packageFile]
+            val result = createGradle().resolveSingleProject(packageFile)
 
-            result shouldNotBe null
             yamlMapper.writeValueAsString(result) shouldBe expectedResult
         }
 
@@ -63,9 +61,8 @@ class GradleAndroidTest : StringSpec() {
                 revision = vcsRevision
             )
 
-            val result = createGradle().resolveDependencies(listOf(packageFile))[packageFile]
+            val result = createGradle().resolveSingleProject(packageFile)
 
-            result shouldNotBe null
             yamlMapper.writeValueAsString(result) shouldBe expectedResult
         }
 
@@ -77,9 +74,8 @@ class GradleAndroidTest : StringSpec() {
                 revision = vcsRevision
             )
 
-            val result = createGradle().resolveDependencies(listOf(packageFile))[packageFile]
+            val result = createGradle().resolveSingleProject(packageFile)
 
-            result shouldNotBe null
             yamlMapper.writeValueAsString(result) shouldBe expectedResult
         }
     }

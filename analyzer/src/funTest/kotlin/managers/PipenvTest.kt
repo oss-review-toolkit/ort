@@ -51,7 +51,7 @@ class PipenvTest : WordSpec() {
                     path = vcsPath
                 )
 
-                val result = createPipenv().resolveDependencies(listOf(definitionFile))[definitionFile]
+                val result = createPipenv().resolveSingleProject(definitionFile)
 
                 yamlMapper.writeValueAsString(result) shouldBe expectedResult
             }
@@ -62,7 +62,7 @@ class PipenvTest : WordSpec() {
                 val definitionFile = File(projectsDir, "synthetic/pipenv-python3/Pipfile.lock")
                 val vcsPath = vcsDir.getPathToRoot(definitionFile.parentFile)
 
-                val result = createPipenv().resolveDependencies(listOf(definitionFile))[definitionFile]
+                val result = createPipenv().resolveSingleProject(definitionFile)
                 val expectedResultFile = File(projectsDir, "synthetic/pipenv-python3-expected-output.yml")
                 val expectedResult = patchExpectedResult(
                     expectedResultFile,
