@@ -19,13 +19,6 @@
 
 package org.ossreviewtoolkit.model.config
 
-import com.fasterxml.jackson.core.JsonParser
-import com.fasterxml.jackson.databind.DeserializationContext
-import com.fasterxml.jackson.databind.JsonNode
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize
-import com.fasterxml.jackson.databind.deser.std.StdDeserializer
-
-@JsonDeserialize(using = AnalyzerConfigurationDeserializer::class)
 data class AnalyzerConfiguration(
     /**
      * If set to true, ignore the versions of used command line tools. Note that this might lead to erroneous
@@ -42,19 +35,3 @@ data class AnalyzerConfiguration(
      */
     val allowDynamicVersions: Boolean
 )
-
-private class AnalyzerConfigurationDeserializer :
-    StdDeserializer<AnalyzerConfiguration>(AnalyzerConfiguration::class.java) {
-    override fun deserialize(p: JsonParser, ctxt: DeserializationContext): AnalyzerConfiguration {
-        val node = p.codec.readTree<JsonNode>(p)
-        return if (node.isBoolean) {
-            // For backward-compatibility if only "allowDynamicVersions" / "allow_dynamic_versions" is specified.
-            AnalyzerConfiguration(false, node.booleanValue())
-        } else {
-            AnalyzerConfiguration(
-                node.get("ignore_tool_versions").booleanValue(),
-                node.get("allow_dynamic_versions").booleanValue()
-            )
-        }
-    }
-}
