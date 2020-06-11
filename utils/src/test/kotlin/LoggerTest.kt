@@ -24,8 +24,8 @@ import io.kotest.core.spec.style.StringSpec
 
 class LoggerTest : StringSpec({
     "Only one logger is created per class" {
-        val a = this.log
-        val b = this.log
+        val a = String().log
+        val b = String().log
 
         a shouldBeSameInstanceAs b
     }
