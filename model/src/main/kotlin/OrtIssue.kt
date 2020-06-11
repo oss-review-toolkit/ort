@@ -20,24 +20,18 @@
 package org.ossreviewtoolkit.model
 
 import com.fasterxml.jackson.core.JsonGenerator
-import com.fasterxml.jackson.core.JsonParser
-import com.fasterxml.jackson.databind.DeserializationContext
-import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.SerializerProvider
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize
 import com.fasterxml.jackson.databind.annotation.JsonSerialize
-import com.fasterxml.jackson.databind.deser.std.StdDeserializer
 import com.fasterxml.jackson.databind.ser.std.StdSerializer
+
+import java.time.Instant
 
 import org.ossreviewtoolkit.utils.log
 import org.ossreviewtoolkit.utils.normalizeLineBreaks
 
-import java.time.Instant
-
 /**
  * An issue that occurred while executing ORT.
  */
-@JsonDeserialize(using = OrtIssueDeserializer::class)
 @JsonSerialize(using = OrtIssueSerializer::class)
 data class OrtIssue(
     /**
@@ -63,26 +57,6 @@ data class OrtIssue(
     override fun toString(): String {
         val time = if (timestamp == Instant.EPOCH) "Unknown time" else timestamp.toString()
         return "$time [$severity]: $source - $message"
-    }
-}
-
-private class OrtIssueDeserializer : StdDeserializer<OrtIssue>(OrtIssue::class.java) {
-    override fun deserialize(p: JsonParser, ctxt: DeserializationContext): OrtIssue {
-        val node = p.codec.readTree<JsonNode>(p)
-        return if (node.has("severity")) {
-            OrtIssue(
-                timestamp = Instant.parse(node.get("timestamp").textValue()),
-                source = node.get("source").textValue(),
-                message = node.get("message").textValue(),
-                severity = Severity.valueOf(node.get("severity").textValue())
-            )
-        } else {
-            OrtIssue(
-                timestamp = Instant.parse(node.get("timestamp").textValue()),
-                source = node.get("source").textValue(),
-                message = node.get("message").textValue()
-            )
-        }
     }
 }
 
