@@ -32,7 +32,6 @@ import org.ossreviewtoolkit.utils.normalizeLineBreaks
 /**
  * An issue that occurred while executing ORT.
  */
-@JsonSerialize(using = OrtIssueSerializer::class)
 data class OrtIssue(
     /**
      * The timestamp of the issue.
@@ -47,6 +46,7 @@ data class OrtIssue(
     /**
      * The issue's message.
      */
+    @JsonSerialize(using = NormalizeLineBreaksSerializer::class)
     val message: String,
 
     /**
@@ -60,14 +60,9 @@ data class OrtIssue(
     }
 }
 
-class OrtIssueSerializer : StdSerializer<OrtIssue>(OrtIssue::class.java) {
-    override fun serialize(value: OrtIssue, gen: JsonGenerator, provider: SerializerProvider) {
-        gen.writeStartObject()
-        gen.writeObjectField("timestamp", value.timestamp)
-        gen.writeStringField("source", value.source)
-        gen.writeStringField("message", value.message.normalizeLineBreaks())
-        gen.writeStringField("severity", value.severity.name)
-        gen.writeEndObject()
+class NormalizeLineBreaksSerializer : StdSerializer<String>(String::class.java) {
+    override fun serialize(value: String, gen: JsonGenerator, provider: SerializerProvider) {
+        gen.writeString(value.normalizeLineBreaks())
     }
 }
 
