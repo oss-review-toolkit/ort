@@ -52,6 +52,11 @@ class FileArchiver(
     private val matcher = FileMatcher(patterns)
 
     /**
+     * Return whether '[storagePath]/[ARCHIVE_FILE_NAME]' exists.
+     */
+    fun hasArchive(storagePath: String) = storage.exists(getArchivePath(storagePath))
+
+    /**
      * Archive all files in [directory] matching any of the configured [patterns] in the [storage]. The archived files
      * are zipped in the file '[storagePath]/[ARCHIVE_FILE_NAME]'.
      */
