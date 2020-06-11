@@ -136,16 +136,12 @@ class NoticeByPackageProcessor(input: ReporterInput) : AbstractNoticeReporter.No
             val scanResult = input.ortResult.getScanResultsForId(id).firstOrNull()
             val archiveDir = createTempDir(ORT_NAME, "notice").also { it.deleteOnExit() }
 
-            val licenseFileFindings = if (scanResult != null) {
+            val licenseFileFindings = scanResult?.let {
                 val path = "${id.toPath()}/${scanResult.provenance.hash()}"
-                if (archiver.unarchive(archiveDir, path)) {
+                archiver.unarchive(archiveDir, path).takeIf { it }?.let {
                     getFindingsForLicenseFiles(scanResult, archiveDir, archiver.patterns, licenseFindingsMap)
-                } else {
-                    emptyMap()
                 }
-            } else {
-                emptyMap<String, LicenseFindingsMap>()
-            }
+            }.orEmpty()
 
             addLicenseFileFindings(licenseFileFindings, archiveDir)
 
