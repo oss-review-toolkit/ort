@@ -19,14 +19,24 @@
 
 package org.ossreviewtoolkit.utils
 
+import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.types.shouldBeSameInstanceAs
-import io.kotest.core.spec.style.StringSpec
+import io.kotest.matchers.types.shouldNotBeSameInstanceAs
 
-class LoggerTest : StringSpec({
-    "Only one logger is created per class" {
-        val a = String().log
-        val b = String().log
+class LoggerTest : WordSpec({
+    "A logger instance" should {
+        "be shared between different instances of the same class" {
+            val a = String().log
+            val b = String().log
 
-        a shouldBeSameInstanceAs b
+            a shouldBeSameInstanceAs b
+        }
+
+        "not be shared between instances of different classes" {
+            val a = String().log
+            val b = this.log
+
+            a shouldNotBeSameInstanceAs b
+        }
     }
 })
