@@ -108,7 +108,7 @@ abstract class PackageManager(
             Files.walkFileTree(directory.toPath(), object : SimpleFileVisitor<Path>() {
                 override fun preVisitDirectory(dir: Path, attributes: BasicFileAttributes): FileVisitResult {
                     if (IGNORED_DIRECTORY_MATCHERS.any { it.matches(dir) }) {
-                        log.info { "Not analyzing directory '$dir' as it is hard-coded to be ignored." }
+                        PackageManager.log.info { "Not analyzing directory '$dir' as it is hard-coded to be ignored." }
                         return FileVisitResult.SKIP_SUBTREE
                     }
 
