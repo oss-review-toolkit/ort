@@ -65,11 +65,11 @@ class ScanResultContainerTest : WordSpec() {
         "packageVerificationCode",
         sortedSetOf(
             LicenseFinding(
-                "license 1.1",
+                "license-1.1",
                 TextLocation("path 1.1", 1, 1)
             ),
             LicenseFinding(
-                "license 1.2",
+                "license-1.2",
                 TextLocation("path 1.2", 1, 2)
             )
         ),
@@ -92,12 +92,12 @@ class ScanResultContainerTest : WordSpec() {
         "packageVerificationCode",
         sortedSetOf(
             LicenseFinding(
-                "license 2.1",
+                "license-2.1",
                 TextLocation("path/to/file", 1, 2)
 
             ),
             LicenseFinding(
-                "license 2.2",
+                "license-2.2",
                 TextLocation("path/to/another/file", 3, 4)
             )
         ),

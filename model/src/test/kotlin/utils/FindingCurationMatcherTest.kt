@@ -33,6 +33,7 @@ import org.ossreviewtoolkit.model.config.LicenseFindingCuration
 import org.ossreviewtoolkit.model.config.LicenseFindingCurationReason.INCORRECT
 import org.ossreviewtoolkit.model.licenses.LicenseFindingCurationResult
 import org.ossreviewtoolkit.spdx.SpdxLicense
+import org.ossreviewtoolkit.spdx.toSpdx
 
 class FindingCurationMatcherTest : WordSpec() {
     private val matcher = FindingCurationMatcher()
@@ -53,15 +54,15 @@ class FindingCurationMatcherTest : WordSpec() {
         path: String,
         startLines: List<Int>,
         lineCount: Int?,
-        concludedLicense: String = "concluded_license_${Random.nextInt()}",
+        concludedLicense: String = "concluded-license-${Random.nextInt()}",
         comment: String = "comment_${Random.nextInt()}"
     ) {
         curation = LicenseFindingCuration(
             path = path,
             startLines = startLines,
             lineCount = lineCount,
-            detectedLicense = license,
-            concludedLicense = concludedLicense,
+            detectedLicense = license?.toSpdx(),
+            concludedLicense = concludedLicense.toSpdx(),
             reason = INCORRECT,
             comment = comment
         )
@@ -180,7 +181,7 @@ class FindingCurationMatcherTest : WordSpec() {
 
                 val curatedFinding = matcher.apply(finding, curation)!!
 
-                curatedFinding.license shouldBe "Apache-2.0"
+                curatedFinding.license shouldBe "Apache-2.0".toSpdx()
                 curatedFinding.location shouldBe finding.location
             }
         }
@@ -204,7 +205,7 @@ class FindingCurationMatcherTest : WordSpec() {
             "return the original finding" {
                 setupFinding(license = "MIT", path = "a/path", startLine = 8, endLine = 13)
                 setupCuration(
-                    license = "Non matching license",
+                    license = "Non-matching-license",
                     path = "**",
                     startLines = emptyList(),
                     lineCount = null,
@@ -238,21 +239,21 @@ class FindingCurationMatcherTest : WordSpec() {
                 val curations = listOf(
                     LicenseFindingCuration(
                         path = "some/path",
-                        detectedLicense = "MIT",
+                        detectedLicense = "MIT".toSpdx(),
                         reason = INCORRECT,
-                        concludedLicense = "Apache-2.0"
+                        concludedLicense = "Apache-2.0".toSpdx()
                     ),
                     LicenseFindingCuration(
                         path = "another/path",
-                        detectedLicense = "MIT",
+                        detectedLicense = "MIT".toSpdx(),
                         reason = INCORRECT,
-                        concludedLicense = "BSD-3-Clause"
+                        concludedLicense = "BSD-3-Clause".toSpdx()
                     ),
                     LicenseFindingCuration(
                         path = "one/more/path",
-                        detectedLicense = "MIT",
+                        detectedLicense = "MIT".toSpdx(),
                         reason = INCORRECT,
-                        concludedLicense = SpdxLicense.NONE
+                        concludedLicense = SpdxLicense.NONE.toSpdx()
                     )
                 )
 
@@ -299,15 +300,15 @@ class FindingCurationMatcherTest : WordSpec() {
                 val curations = listOf(
                     LicenseFindingCuration(
                         path = "some/path",
-                        detectedLicense = "MIT",
+                        detectedLicense = "MIT".toSpdx(),
                         reason = INCORRECT,
-                        concludedLicense = "MIT-old-style"
+                        concludedLicense = "MIT-old-style".toSpdx()
                     ),
                     LicenseFindingCuration(
                         path = "some/path",
-                        detectedLicense = "MIT",
+                        detectedLicense = "MIT".toSpdx(),
                         reason = INCORRECT,
-                        concludedLicense = "Apache-2.0"
+                        concludedLicense = "Apache-2.0".toSpdx()
                     )
                 )
 

@@ -47,7 +47,7 @@ data class LicenseConfiguration(
         }
         licenses.groupBy { it.id }.values.filter { it.size > 1 }.let { groups ->
             require(groups.isEmpty()) {
-                "Found multiple license entries with the same Id: ${groups.joinToString { it.first().id }}."
+                "Found multiple license entries with the same Id: ${groups.joinToString { it.first().id.toString() }}."
             }
         }
     }

@@ -94,7 +94,7 @@ internal class ListCopyrightsCommand : CliktCommand(
             copyrightGarbage = copyrightGarbage.items,
             packageConfigurationProvider = packageConfigurationProvider
         ).filter { packageId == null || it.packageId == packageId }
-            .filter { licenseId == null || it.licenseId == licenseId }
+            .filter { licenseId == null || it.license.toString() == licenseId }
             .groupBy({ it.statement }, { it.rawStatements })
             .mapValues { it.value.flatten().toSortedSet() }
 

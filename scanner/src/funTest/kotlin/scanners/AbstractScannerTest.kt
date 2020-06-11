@@ -19,23 +19,23 @@
 
 package org.ossreviewtoolkit.scanner.scanners
 
-import org.ossreviewtoolkit.model.config.ScannerConfiguration
-import org.ossreviewtoolkit.scanner.LocalScanner
-import org.ossreviewtoolkit.utils.ORT_NAME
-import org.ossreviewtoolkit.utils.safeDeleteRecursively
-
-import io.kotest.core.spec.Spec
 import io.kotest.core.Tag
+import io.kotest.core.spec.Spec
+import io.kotest.core.spec.style.StringSpec
 import io.kotest.core.test.TestCase
 import io.kotest.core.test.TestResult
+import io.kotest.inspectors.forAll
 import io.kotest.matchers.file.shouldNotStartWithPath
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNotBe
-import io.kotest.core.spec.style.StringSpec
-import io.kotest.inspectors.forAll
 
 import java.io.File
-import java.util.TreeSet
+
+import org.ossreviewtoolkit.model.config.ScannerConfiguration
+import org.ossreviewtoolkit.scanner.LocalScanner
+import org.ossreviewtoolkit.spdx.SpdxExpression
+import org.ossreviewtoolkit.utils.ORT_NAME
+import org.ossreviewtoolkit.utils.safeDeleteRecursively
 
 abstract class AbstractScannerTest(testTags: Set<Tag> = emptySet()) : StringSpec() {
     protected val config = ScannerConfiguration()
@@ -48,8 +48,8 @@ abstract class AbstractScannerTest(testTags: Set<Tag> = emptySet()) : StringSpec
     private lateinit var outputDir: File
 
     abstract val scanner: LocalScanner
-    abstract val expectedFileLicenses: TreeSet<String>
-    abstract val expectedDirectoryLicenses: TreeSet<String>
+    abstract val expectedFileLicenses: Set<SpdxExpression>
+    abstract val expectedDirectoryLicenses: Set<SpdxExpression>
 
     override fun beforeSpec(spec: Spec) {
         super.beforeSpec(spec)

@@ -34,14 +34,14 @@ val licensesWithSourceCodeOffer = licenseConfiguration
         .map { it.id }
         .toSet()
 
-val allLicenses = findings.values.flatMap { it.keys }.toSet()
+val allLicenses = findings.values.flatMap { it.keys.map { it.toSpdx() } }.toSet()
 
 findings = findings.mapValues { (_, licenseFindingsMap) ->
-    licenseFindingsMap.filter { (license, _) -> license in licensesIncludedInNotices }.toSortedMap()
+    licenseFindingsMap.filter { (license, _) -> license.toSpdx() in licensesIncludedInNotices }.toSortedMap()
 }
 
-val includedLicenses = findings.values.flatMap { it.keys }.toSet()
-val ignoredLicenses = (allLicenses - includedLicenses).toSortedSet()
+val includedLicenses = findings.values.flatMap { it.keys.map { it.toSpdx() } }.toSet()
+val ignoredLicenses = (allLicenses - includedLicenses).toSortedSet(compareBy { it.toString() })
 
 println("The following licenses are not added to the notice file because they are not configured to be included:\n" +
         "${ignoredLicenses.joinToString("\n")}")

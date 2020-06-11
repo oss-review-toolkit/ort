@@ -19,17 +19,18 @@
 
 package org.ossreviewtoolkit.evaluator
 
+import io.kotest.core.spec.style.WordSpec
+import io.kotest.matchers.collections.beEmpty
+import io.kotest.matchers.collections.haveSize
+import io.kotest.matchers.should
+import io.kotest.matchers.shouldBe
+
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.LicenseSource
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.model.utils.SimplePackageConfigurationProvider
-
-import io.kotest.matchers.collections.beEmpty
-import io.kotest.matchers.collections.haveSize
-import io.kotest.matchers.should
-import io.kotest.matchers.shouldBe
-import io.kotest.core.spec.style.WordSpec
+import org.ossreviewtoolkit.spdx.toSpdx
 
 class EvaluatorTest : WordSpec() {
     private fun createEvaluator() = Evaluator(OrtResult.EMPTY, SimplePackageConfigurationProvider())
@@ -78,7 +79,7 @@ class EvaluatorTest : WordSpec() {
                     ruleViolations += RuleViolation(
                         rule = "rule 1",
                         pkg = Identifier("type:namespace:name:1.0"),
-                        license = "license 1",
+                        license = SpdxLicenseIdExpression("license-1"),
                         licenseSource = LicenseSource.DETECTED,
                         severity = Severity.ERROR,
                         message = "message 1",
@@ -88,7 +89,7 @@ class EvaluatorTest : WordSpec() {
                     ruleViolations += RuleViolation(
                         rule = "rule 2",
                         pkg = Identifier("type:namespace:name:2.0"),
-                        license = "license 2",
+                        license = SpdxLicenseIdExpression("license-2"),
                         licenseSource = LicenseSource.DECLARED,
                         severity = Severity.WARNING,
                         message = "message 2",
@@ -102,7 +103,7 @@ class EvaluatorTest : WordSpec() {
                 with(result.violations[0]) {
                     rule shouldBe "rule 1"
                     pkg shouldBe Identifier("type:namespace:name:1.0")
-                    license shouldBe "license 1"
+                    license shouldBe "license-1".toSpdx()
                     licenseSource shouldBe LicenseSource.DETECTED
                     severity shouldBe Severity.ERROR
                     message shouldBe "message 1"
@@ -112,7 +113,7 @@ class EvaluatorTest : WordSpec() {
                 with(result.violations[1]) {
                     rule shouldBe "rule 2"
                     pkg shouldBe Identifier("type:namespace:name:2.0")
-                    license shouldBe "license 2"
+                    license shouldBe "license-2".toSpdx()
                     licenseSource shouldBe LicenseSource.DECLARED
                     severity shouldBe Severity.WARNING
                     message shouldBe "message 2"

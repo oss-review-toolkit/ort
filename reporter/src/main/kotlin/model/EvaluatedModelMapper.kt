@@ -40,7 +40,6 @@ import org.ossreviewtoolkit.model.utils.FindingsMatcher
 import org.ossreviewtoolkit.model.yamlMapper
 import org.ossreviewtoolkit.reporter.ReporterInput
 import org.ossreviewtoolkit.reporter.utils.StatisticsCalculator
-import org.ossreviewtoolkit.spdx.toSpdx
 import org.ossreviewtoolkit.utils.ProcessedDeclaredLicense
 
 /**
@@ -330,7 +329,7 @@ internal class EvaluatedModelMapper(private val input: ReporterInput) {
     private fun addRuleViolation(ruleViolation: RuleViolation) {
         val resolutions = addResolutions(ruleViolation)
         val pkg = packages.getValue(ruleViolation.pkg)
-        val license = ruleViolation.license?.let { licenses.addIfRequired(LicenseId(it)) }
+        val license = ruleViolation.license?.let { licenses.addIfRequired(LicenseId(it.toString())) }
 
         val evaluatedViolation = EvaluatedRuleViolation(
             rule = ruleViolation.rule,
@@ -533,7 +532,7 @@ internal class EvaluatedModelMapper(private val input: ReporterInput) {
         val curatedFindings = curationsMatcher.applyAll(scanResult.summary.licenseFindings, licenseFindingCurations)
             .mapNotNullTo(mutableSetOf()) { it.curatedFinding }
         val decomposedFindings = curatedFindings.flatMap { finding ->
-            finding.license.toSpdx().decompose().map { finding.copy(license = it.toString()) }
+            finding.license.decompose().map { finding.copy(license = it) }
         }
         val matchedFindings = findingsMatcher.match(decomposedFindings, scanResult.summary.copyrightFindings)
 
@@ -558,7 +557,7 @@ internal class EvaluatedModelMapper(private val input: ReporterInput) {
                 }
             }
 
-            val actualLicense = licenses.addIfRequired(LicenseId(licenseFindings.license))
+            val actualLicense = licenses.addIfRequired(LicenseId(licenseFindings.license.toString()))
 
             licenseFindings.locations.forEach { location ->
                 val evaluatedPathExcludes = pathExcludes.filter { it.matches(location.getRelativePathToRoot(id)) }

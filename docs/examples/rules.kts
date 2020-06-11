@@ -71,7 +71,10 @@ fun PackageRule.LicenseRule.isHandled() =
     object : RuleMatcher {
         override val description = "isHandled($license)"
 
-        override fun matches() = license in handledLicenses && !(license.contains("-exception") && !license.contains(" WITH "))
+        override fun matches() =
+            license in handledLicenses
+                    && !(license.toString().contains("-exception")
+                    && !license.toString().contains(" WITH "))
     }
 
 fun PackageRule.LicenseRule.isCopyleft() =

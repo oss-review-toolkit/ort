@@ -45,6 +45,7 @@ import org.ossreviewtoolkit.model.Provenance
 import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.model.TextLocation
 import org.ossreviewtoolkit.model.readValue
+import org.ossreviewtoolkit.spdx.SpdxSingleLicenseExpression
 import org.ossreviewtoolkit.utils.expandTilde
 
 import java.io.File
@@ -216,7 +217,7 @@ private fun Collection<TextLocationGroup>.assignReferenceNameAndSort(): List<Pai
         }
 }
 
-private fun Map<String, List<TextLocationGroup>>.writeValueAsString(
+private fun Map<SpdxSingleLicenseExpression, List<TextLocationGroup>>.writeValueAsString(
     isPathExcluded: (String) -> Boolean,
     provenanceIndex: Int,
     includeLicenseTexts: Boolean = true

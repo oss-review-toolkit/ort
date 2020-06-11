@@ -67,7 +67,7 @@ class ReportTableModelMapper(
             { it.violation.severity },
             { it.violation.rule },
             { it.violation.pkg },
-            { it.violation.license },
+            { it.violation.license.toString() },
             { it.violation.message },
             { it.resolutionDescription }
         )
@@ -135,7 +135,7 @@ class ReportTableModelMapper(
 
                 val concludedLicense = ortResult.getConcludedLicensesForId(id)
                 val declaredLicenses = ortResult.getDeclaredLicensesForId(id)
-                val detectedLicenses = licenseFindings[id]?.toSortedMap(compareBy { it.license }) ?: sortedMapOf()
+                val detectedLicenses = licenseFindings[id].orEmpty().toSortedMap(compareBy { it.license.toString() })
 
                 val analyzerIssues = projectIssues[id].orEmpty() + analyzerResult.issues[id].orEmpty() +
                         analyzerIssuesForPackages[id].orEmpty()
@@ -168,7 +168,7 @@ class ReportTableModelMapper(
                         scopes = sortedMapOf(project.id to row.scopes),
                         concludedLicenses = row.concludedLicense?.let { setOf(it) }.orEmpty(),
                         declaredLicenses = row.declaredLicenses,
-                        detectedLicenses = row.detectedLicenses.mapTo(sortedSetOf()) { it.key.license },
+                        detectedLicenses = row.detectedLicenses.mapTo(sortedSetOf()) { it.key.license.toString() },
                         analyzerIssues = if (nonExcludedAnalyzerIssues.isNotEmpty()) {
                             sortedMapOf(project.id to nonExcludedAnalyzerIssues)
                         } else {

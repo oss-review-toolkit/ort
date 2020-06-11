@@ -41,17 +41,21 @@ import org.ossreviewtoolkit.model.config.PathExclude
 import org.ossreviewtoolkit.model.config.PathExcludeReason
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
+import org.ossreviewtoolkit.spdx.SpdxLicenseReferenceExpression
 import org.ossreviewtoolkit.spdx.toSpdx
 import org.ossreviewtoolkit.utils.DeclaredLicenseProcessor
 
 val concludedLicense = "LicenseRef-a AND LicenseRef-b".toSpdx()
 val declaredLicenses = sortedSetOf("Apache-2.0", "MIT")
 val declaredLicensesProcessed = DeclaredLicenseProcessor.process(declaredLicenses)
-val detectedLicenses = listOf("LicenseRef-a", "LicenseRef-b")
+val detectedLicenses = listOf(
+    SpdxLicenseReferenceExpression("LicenseRef-a"),
+    SpdxLicenseReferenceExpression("LicenseRef-b")
+)
 
 val licenseFindings = listOf(
-    LicenseFindings("LicenseRef-a", sortedSetOf(), sortedSetOf()),
-    LicenseFindings("LicenseRef-b", sortedSetOf(), sortedSetOf())
+    LicenseFindings(SpdxLicenseReferenceExpression("LicenseRef-a"), sortedSetOf(), sortedSetOf()),
+    LicenseFindings(SpdxLicenseReferenceExpression("LicenseRef-b"), sortedSetOf(), sortedSetOf())
 )
 
 val packageExcluded = Package.EMPTY.copy(

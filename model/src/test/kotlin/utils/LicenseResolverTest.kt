@@ -56,6 +56,7 @@ import org.ossreviewtoolkit.model.config.PathExclude
 import org.ossreviewtoolkit.model.config.PathExcludeReason
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
 import org.ossreviewtoolkit.model.config.VcsMatcher
+import org.ossreviewtoolkit.spdx.toSpdx
 
 import java.time.Instant
 import java.util.concurrent.atomic.AtomicInteger
@@ -228,7 +229,7 @@ class LicenseResolverTest : WordSpec() {
 
         val licenseFindingCurations = config.licenseFindingCurations + LicenseFindingCuration(
             path = path,
-            concludedLicense = concludedLicense,
+            concludedLicense = concludedLicense.toSpdx(),
             reason = LicenseFindingCurationReason.INCORRECT
         )
 
@@ -257,7 +258,7 @@ class LicenseResolverTest : WordSpec() {
     private fun setupRepositoryLicenseFindingCuration(path: String, concludedLicense: String) {
         val licenseFindingCuration = LicenseFindingCuration(
             path = path,
-            concludedLicense = concludedLicense,
+            concludedLicense = concludedLicense.toSpdx(),
             reason = LicenseFindingCurationReason.INCORRECT
         )
 

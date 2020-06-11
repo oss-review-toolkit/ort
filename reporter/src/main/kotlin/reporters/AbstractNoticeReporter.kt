@@ -153,7 +153,10 @@ abstract class AbstractNoticeReporter : Reporter {
         val detectedLicenses = ortResult.collectLicenseFindings(packageConfigurationProvider, omitExcluded = true)
             .mapValues { (_, findings) ->
                 findings.filter { it.value.isEmpty() }.keys.associate { licenseFindings ->
-                    Pair(licenseFindings.license, licenseFindings.copyrights.map { it.statement }.toMutableSet())
+                    Pair(
+                        licenseFindings.license.toString(),
+                        licenseFindings.copyrights.map { it.statement }.toMutableSet()
+                    )
                 }.toSortedMap()
             }.toMutableMap()
 

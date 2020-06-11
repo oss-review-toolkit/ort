@@ -110,8 +110,8 @@ abstract class AbstractStorageTest : StringSpec() {
         1,
         "packageVerificationCode",
         sortedSetOf(
-            LicenseFinding("license 1.1", DUMMY_TEXT_LOCATION),
-            LicenseFinding("license 1.2", DUMMY_TEXT_LOCATION)
+            LicenseFinding("license-1.1", DUMMY_TEXT_LOCATION),
+            LicenseFinding("license-1.2", DUMMY_TEXT_LOCATION)
         ),
         sortedSetOf(),
         mutableListOf(error1, error2)

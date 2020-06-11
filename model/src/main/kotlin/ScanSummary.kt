@@ -26,6 +26,8 @@ import com.fasterxml.jackson.annotation.JsonProperty
 import java.time.Instant
 import java.util.SortedSet
 
+import org.ossreviewtoolkit.spdx.SpdxExpression
+
 /**
  * A short summary of the scan results.
  */
@@ -73,5 +75,5 @@ data class ScanSummary(
     val issues: List<OrtIssue> = emptyList()
 ) {
     @get:JsonIgnore
-    val licenses: Set<String> = licenseFindings.mapTo(mutableSetOf()) { it.license }
+    val licenses: Set<SpdxExpression> = licenseFindings.mapTo(mutableSetOf()) { it.license }
 }

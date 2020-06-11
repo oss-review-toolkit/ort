@@ -19,10 +19,11 @@
 
 package org.ossreviewtoolkit.evaluator
 
-import org.ossreviewtoolkit.model.LicenseSource
-
-import io.kotest.matchers.shouldBe
 import io.kotest.core.spec.style.WordSpec
+import io.kotest.matchers.shouldBe
+
+import org.ossreviewtoolkit.model.LicenseSource
+import org.ossreviewtoolkit.spdx.SpdxLicenseIdExpression
 
 class PackageRuleTest : WordSpec() {
     private val ruleSet = RuleSet(ortResult)
@@ -109,7 +110,9 @@ class PackageRuleTest : WordSpec() {
         "isSpdxLicense()" should {
             "return true if the license is an SPDX license" {
                 PackageRule(ruleSet, "test", packageWithoutLicense, emptyList(), emptyList()).apply {
-                    val licenseRule = LicenseRule("test", "Apache-2.0", LicenseSource.DECLARED, emptyMap())
+                    val licenseRule = LicenseRule(
+                        "test", SpdxLicenseIdExpression("Apache-2.0"), LicenseSource.DECLARED, emptyMap()
+                    )
                     val matcher = licenseRule.isSpdxLicense()
 
                     matcher.matches() shouldBe true
@@ -118,7 +121,9 @@ class PackageRuleTest : WordSpec() {
 
             "return false if the license is not an SPDX license" {
                 PackageRule(ruleSet, "test", packageWithoutLicense, emptyList(), emptyList()).apply {
-                    val licenseRule = LicenseRule("test", "invalid", LicenseSource.DECLARED, emptyMap())
+                    val licenseRule = LicenseRule(
+                        "test", SpdxLicenseIdExpression("invalid"), LicenseSource.DECLARED, emptyMap()
+                    )
                     val matcher = licenseRule.isSpdxLicense()
 
                     matcher.matches() shouldBe false

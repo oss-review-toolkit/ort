@@ -23,17 +23,16 @@ import com.fasterxml.jackson.annotation.JsonInclude
 
 import java.util.SortedSet
 
-import org.ossreviewtoolkit.spdx.toSpdx
+import org.ossreviewtoolkit.spdx.SpdxSingleLicenseExpression
 
 /**
  * A class for configuring meta data for a specific license referred to by a SPDX license identifier.
  */
 data class License(
     /**
-     * The SPDX identifier of this [License]. The value has to be either a compound expression of one license with an
-     * exception or no compound expression at all.
+     * The [SpdxSingleLicenseExpression] of this [License].
      */
-    val id: String,
+    val id: SpdxSingleLicenseExpression,
 
     /**
      * The identifiers of the [LicenseSet]s this license is assigned to.
@@ -50,10 +49,4 @@ data class License(
      * Defines whether a source code offer should be made for this license.
      */
     val includeSourceCodeOfferInNoticeFile: Boolean
-) {
-    init {
-        require(id.toSpdx().licenses().size == 1) {
-            "The id '$id' contains multiple licenses which is not allowed."
-        }
-    }
-}
+)

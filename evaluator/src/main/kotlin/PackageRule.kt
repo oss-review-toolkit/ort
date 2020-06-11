@@ -29,7 +29,11 @@ import org.ossreviewtoolkit.model.Project
 import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.model.config.Excludes
 import org.ossreviewtoolkit.model.config.PathExclude
+import org.ossreviewtoolkit.spdx.SpdxExpression
 import org.ossreviewtoolkit.spdx.SpdxLicense
+import org.ossreviewtoolkit.spdx.SpdxLicenseIdExpression
+import org.ossreviewtoolkit.spdx.SpdxLicenseWithExceptionExpression
+import org.ossreviewtoolkit.spdx.SpdxSingleLicenseExpression
 
 /**
  * A [Rule] to check a single [Package].
@@ -164,7 +168,7 @@ open class PackageRule(
         /**
          * The license to check.
          */
-        val license: String,
+        val license: SpdxSingleLicenseExpression,
 
         /**
          * The source of the license.
@@ -213,7 +217,11 @@ open class PackageRule(
             object : RuleMatcher {
                 override val description = "isSpdxLicense($license)"
 
-                override fun matches() = SpdxLicense.forId(license) != null
+                override fun matches() = when (license) {
+                    is SpdxLicenseIdExpression, is SpdxLicenseWithExceptionExpression ->
+                        license.isValid(SpdxExpression.Strictness.ALLOW_DEPRECATED)
+                    else -> false
+                }
             }
 
         fun issue(severity: Severity, message: String, howToFix: String) =

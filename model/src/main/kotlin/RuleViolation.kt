@@ -19,6 +19,8 @@
 
 package org.ossreviewtoolkit.model
 
+import org.ossreviewtoolkit.spdx.SpdxSingleLicenseExpression
+
 data class RuleViolation(
     /**
      * The identifier of the rule that found this violation.
@@ -33,7 +35,7 @@ data class RuleViolation(
     /**
      * The name of the license that caused this rule violation. Can be null if the rule does not work on licenses.
      */
-    val license: String?,
+    val license: SpdxSingleLicenseExpression?,
 
     /**
      * The [source][LicenseSource] of the [license]. Can be null if the rule does not work on licenses.
