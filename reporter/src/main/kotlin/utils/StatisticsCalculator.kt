@@ -127,7 +127,7 @@ internal class StatisticsCalculator {
         }
 
         val packageLicenses = ortResult.collectLicenseFindings().mapValues { (_, findingsMap) ->
-            findingsMap.mapTo(mutableSetOf()) { it.key.license }
+            findingsMap.mapTo(mutableSetOf()) { it.key.license.toString() }
         }
 
         val detectedLicenses = packageLicenses.flatMap { it.value }.groupingBy { it }.eachCount().toSortedMap()

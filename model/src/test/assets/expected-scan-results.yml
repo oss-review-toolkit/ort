@@ -18,12 +18,12 @@ results:
     file_count: 1
     package_verification_code: "packageVerificationCode"
     licenses:
-    - license: "license 1.1"
+    - license: "license-1.1"
       location:
         path: "path 1.1"
         start_line: 1
         end_line: 1
-    - license: "license 1.2"
+    - license: "license-1.2"
       location:
         path: "path 1.2"
         start_line: 1
@@ -67,12 +67,12 @@ results:
     file_count: 2
     package_verification_code: "packageVerificationCode"
     licenses:
-    - license: "license 2.1"
+    - license: "license-2.1"
       location:
         path: "path/to/file"
         start_line: 1
         end_line: 2
-    - license: "license 2.2"
+    - license: "license-2.2"
       location:
         path: "path/to/another/file"
         start_line: 3

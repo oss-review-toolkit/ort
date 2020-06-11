@@ -182,16 +182,17 @@ class FindingsMatcher(
             Set<LicenseFindings> {
         val result = matchFindings(licenseFindings.toSet(), copyrightFindings.toSet())
 
-        return result.matchedFindings.entries.groupBy { it.key.license }.mapTo(mutableSetOf()) { (license, findings) ->
-            val locations = findings.mapTo(sortedSetOf()) { it.key.location }
+        return result.matchedFindings.entries.groupBy { it.key.license }
+            .flatMapTo(mutableSetOf()) { (license, findings) ->
+                val locations = findings.mapTo(sortedSetOf()) { it.key.location }
 
-            val copyrights = findings.flatMap { it.value }.groupBy { it.statement }
-                .mapTo(sortedSetOf()) { (statement, findings) ->
-                    CopyrightFindings(statement, findings.mapTo(sortedSetOf()) { it.location })
-                }
+                val copyrights = findings.flatMap { it.value }.groupBy { it.statement }
+                    .mapTo(sortedSetOf()) { (statement, findings) ->
+                        CopyrightFindings(statement, findings.mapTo(sortedSetOf()) { it.location })
+                    }
 
-            LicenseFindings(license, locations, copyrights)
-        }
+                license.decompose().map { LicenseFindings(it, locations, copyrights) }
+            }
     }
 }
 

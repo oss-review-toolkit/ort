@@ -275,7 +275,7 @@ class NoticeByPackageProcessor(input: ReporterInput) : AbstractNoticeReporter.No
         return scanResult.summary.licenseFindings.filter {
             it.location.path == relativePath.toString()
         }.mapTo(mutableSetOf()) {
-            it.license
+            it.license.toString()
         }
     }
 }

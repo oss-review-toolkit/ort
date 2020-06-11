@@ -19,12 +19,13 @@
 
 package org.ossreviewtoolkit.evaluator
 
-import org.ossreviewtoolkit.model.LicenseSource
-
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.collections.beEmpty
 import io.kotest.matchers.collections.containExactlyInAnyOrder
 import io.kotest.matchers.should
+
+import org.ossreviewtoolkit.model.LicenseSource
+import org.ossreviewtoolkit.spdx.toSpdx
 
 class LicenseViewTest : WordSpec({
     "All" should {
@@ -34,51 +35,51 @@ class LicenseViewTest : WordSpec({
             view.licenses(packageWithoutLicense, emptyList()) should beEmpty()
 
             view.licenses(packageWithoutLicense, detectedLicenses) should containExactlyInAnyOrder(
-                Pair("LicenseRef-a", LicenseSource.DETECTED),
-                Pair("LicenseRef-b", LicenseSource.DETECTED)
+                Pair("LicenseRef-a".toSpdx(), LicenseSource.DETECTED),
+                Pair("LicenseRef-b".toSpdx(), LicenseSource.DETECTED)
             )
 
             view.licenses(packageWithOnlyConcludedLicense, emptyList()) should containExactlyInAnyOrder(
-                Pair("LicenseRef-a", LicenseSource.CONCLUDED),
-                Pair("LicenseRef-b", LicenseSource.CONCLUDED)
+                Pair("LicenseRef-a".toSpdx(), LicenseSource.CONCLUDED),
+                Pair("LicenseRef-b".toSpdx(), LicenseSource.CONCLUDED)
             )
 
             view.licenses(packageWithOnlyConcludedLicense, detectedLicenses) should containExactlyInAnyOrder(
-                Pair("LicenseRef-a", LicenseSource.CONCLUDED),
-                Pair("LicenseRef-b", LicenseSource.CONCLUDED),
-                Pair("LicenseRef-a", LicenseSource.DETECTED),
-                Pair("LicenseRef-b", LicenseSource.DETECTED)
+                Pair("LicenseRef-a".toSpdx(), LicenseSource.CONCLUDED),
+                Pair("LicenseRef-b".toSpdx(), LicenseSource.CONCLUDED),
+                Pair("LicenseRef-a".toSpdx(), LicenseSource.DETECTED),
+                Pair("LicenseRef-b".toSpdx(), LicenseSource.DETECTED)
             )
 
             view.licenses(packageWithOnlyDeclaredLicense, emptyList()) should containExactlyInAnyOrder(
-                Pair("Apache-2.0", LicenseSource.DECLARED),
-                Pair("MIT", LicenseSource.DECLARED)
+                Pair("Apache-2.0".toSpdx(), LicenseSource.DECLARED),
+                Pair("MIT".toSpdx(), LicenseSource.DECLARED)
             )
 
             view.licenses(packageWithOnlyDeclaredLicense, detectedLicenses) should containExactlyInAnyOrder(
-                Pair("Apache-2.0", LicenseSource.DECLARED),
-                Pair("MIT", LicenseSource.DECLARED),
-                Pair("LicenseRef-a", LicenseSource.DETECTED),
-                Pair("LicenseRef-b", LicenseSource.DETECTED)
+                Pair("Apache-2.0".toSpdx(), LicenseSource.DECLARED),
+                Pair("MIT".toSpdx(), LicenseSource.DECLARED),
+                Pair("LicenseRef-a".toSpdx(), LicenseSource.DETECTED),
+                Pair("LicenseRef-b".toSpdx(), LicenseSource.DETECTED)
             )
 
             view.licenses(packageWithConcludedAndDeclaredLicense, emptyList()) should containExactlyInAnyOrder(
-                Pair("LicenseRef-a", LicenseSource.CONCLUDED),
-                Pair("LicenseRef-b", LicenseSource.CONCLUDED),
-                Pair("Apache-2.0", LicenseSource.DECLARED),
-                Pair("MIT", LicenseSource.DECLARED)
+                Pair("LicenseRef-a".toSpdx(), LicenseSource.CONCLUDED),
+                Pair("LicenseRef-b".toSpdx(), LicenseSource.CONCLUDED),
+                Pair("Apache-2.0".toSpdx(), LicenseSource.DECLARED),
+                Pair("MIT".toSpdx(), LicenseSource.DECLARED)
             )
 
             view.licenses(
                 packageWithConcludedAndDeclaredLicense,
                 detectedLicenses
             ) should containExactlyInAnyOrder(
-                Pair("LicenseRef-a", LicenseSource.CONCLUDED),
-                Pair("LicenseRef-b", LicenseSource.CONCLUDED),
-                Pair("Apache-2.0", LicenseSource.DECLARED),
-                Pair("MIT", LicenseSource.DECLARED),
-                Pair("LicenseRef-a", LicenseSource.DETECTED),
-                Pair("LicenseRef-b", LicenseSource.DETECTED)
+                Pair("LicenseRef-a".toSpdx(), LicenseSource.CONCLUDED),
+                Pair("LicenseRef-b".toSpdx(), LicenseSource.CONCLUDED),
+                Pair("Apache-2.0".toSpdx(), LicenseSource.DECLARED),
+                Pair("MIT".toSpdx(), LicenseSource.DECLARED),
+                Pair("LicenseRef-a".toSpdx(), LicenseSource.DETECTED),
+                Pair("LicenseRef-b".toSpdx(), LicenseSource.DETECTED)
             )
         }
     }
@@ -96,58 +97,58 @@ class LicenseViewTest : WordSpec({
                 packageWithoutLicense,
                 detectedLicenses
             ) should containExactlyInAnyOrder(
-                Pair("LicenseRef-a", LicenseSource.DETECTED),
-                Pair("LicenseRef-b", LicenseSource.DETECTED)
+                Pair("LicenseRef-a".toSpdx(), LicenseSource.DETECTED),
+                Pair("LicenseRef-b".toSpdx(), LicenseSource.DETECTED)
             )
 
             view.licenses(
                 packageWithOnlyConcludedLicense,
                 emptyList()
             ) should containExactlyInAnyOrder(
-                Pair("LicenseRef-a", LicenseSource.CONCLUDED),
-                Pair("LicenseRef-b", LicenseSource.CONCLUDED)
+                Pair("LicenseRef-a".toSpdx(), LicenseSource.CONCLUDED),
+                Pair("LicenseRef-b".toSpdx(), LicenseSource.CONCLUDED)
             )
 
             view.licenses(
                 packageWithOnlyConcludedLicense,
                 detectedLicenses
             ) should containExactlyInAnyOrder(
-                Pair("LicenseRef-a", LicenseSource.CONCLUDED),
-                Pair("LicenseRef-b", LicenseSource.CONCLUDED)
+                Pair("LicenseRef-a".toSpdx(), LicenseSource.CONCLUDED),
+                Pair("LicenseRef-b".toSpdx(), LicenseSource.CONCLUDED)
             )
 
             view.licenses(
                 packageWithOnlyDeclaredLicense,
                 emptyList()
             ) should containExactlyInAnyOrder(
-                Pair("Apache-2.0", LicenseSource.DECLARED),
-                Pair("MIT", LicenseSource.DECLARED)
+                Pair("Apache-2.0".toSpdx(), LicenseSource.DECLARED),
+                Pair("MIT".toSpdx(), LicenseSource.DECLARED)
             )
 
             view.licenses(
                 packageWithOnlyDeclaredLicense,
                 detectedLicenses
             ) should containExactlyInAnyOrder(
-                Pair("Apache-2.0", LicenseSource.DECLARED),
-                Pair("MIT", LicenseSource.DECLARED),
-                Pair("LicenseRef-a", LicenseSource.DETECTED),
-                Pair("LicenseRef-b", LicenseSource.DETECTED)
+                Pair("Apache-2.0".toSpdx(), LicenseSource.DECLARED),
+                Pair("MIT".toSpdx(), LicenseSource.DECLARED),
+                Pair("LicenseRef-a".toSpdx(), LicenseSource.DETECTED),
+                Pair("LicenseRef-b".toSpdx(), LicenseSource.DETECTED)
             )
 
             view.licenses(
                 packageWithConcludedAndDeclaredLicense,
                 emptyList()
             ) should containExactlyInAnyOrder(
-                Pair("LicenseRef-a", LicenseSource.CONCLUDED),
-                Pair("LicenseRef-b", LicenseSource.CONCLUDED)
+                Pair("LicenseRef-a".toSpdx(), LicenseSource.CONCLUDED),
+                Pair("LicenseRef-b".toSpdx(), LicenseSource.CONCLUDED)
             )
 
             view.licenses(
                 packageWithConcludedAndDeclaredLicense,
                 detectedLicenses
             ) should containExactlyInAnyOrder(
-                Pair("LicenseRef-a", LicenseSource.CONCLUDED),
-                Pair("LicenseRef-b", LicenseSource.CONCLUDED)
+                Pair("LicenseRef-a".toSpdx(), LicenseSource.CONCLUDED),
+                Pair("LicenseRef-b".toSpdx(), LicenseSource.CONCLUDED)
             )
         }
     }
@@ -165,56 +166,56 @@ class LicenseViewTest : WordSpec({
                 packageWithoutLicense,
                 detectedLicenses
             ) should containExactlyInAnyOrder(
-                Pair("LicenseRef-a", LicenseSource.DETECTED),
-                Pair("LicenseRef-b", LicenseSource.DETECTED)
+                Pair("LicenseRef-a".toSpdx(), LicenseSource.DETECTED),
+                Pair("LicenseRef-b".toSpdx(), LicenseSource.DETECTED)
             )
 
             view.licenses(
                 packageWithOnlyConcludedLicense,
                 emptyList()
             ) should containExactlyInAnyOrder(
-                Pair("LicenseRef-a", LicenseSource.CONCLUDED),
-                Pair("LicenseRef-b", LicenseSource.CONCLUDED)
+                Pair("LicenseRef-a".toSpdx(), LicenseSource.CONCLUDED),
+                Pair("LicenseRef-b".toSpdx(), LicenseSource.CONCLUDED)
             )
 
             view.licenses(
                 packageWithOnlyConcludedLicense,
                 detectedLicenses
             ) should containExactlyInAnyOrder(
-                Pair("LicenseRef-a", LicenseSource.CONCLUDED),
-                Pair("LicenseRef-b", LicenseSource.CONCLUDED)
+                Pair("LicenseRef-a".toSpdx(), LicenseSource.CONCLUDED),
+                Pair("LicenseRef-b".toSpdx(), LicenseSource.CONCLUDED)
             )
 
             view.licenses(
                 packageWithOnlyDeclaredLicense,
                 emptyList()
             ) should containExactlyInAnyOrder(
-                Pair("Apache-2.0", LicenseSource.DECLARED),
-                Pair("MIT", LicenseSource.DECLARED)
+                Pair("Apache-2.0".toSpdx(), LicenseSource.DECLARED),
+                Pair("MIT".toSpdx(), LicenseSource.DECLARED)
             )
 
             view.licenses(
                 packageWithOnlyDeclaredLicense,
                 detectedLicenses
             ) should containExactlyInAnyOrder(
-                Pair("Apache-2.0", LicenseSource.DECLARED),
-                Pair("MIT", LicenseSource.DECLARED)
+                Pair("Apache-2.0".toSpdx(), LicenseSource.DECLARED),
+                Pair("MIT".toSpdx(), LicenseSource.DECLARED)
             )
 
             view.licenses(
                 packageWithConcludedAndDeclaredLicense,
                 emptyList()
             ) should containExactlyInAnyOrder(
-                Pair("LicenseRef-a", LicenseSource.CONCLUDED),
-                Pair("LicenseRef-b", LicenseSource.CONCLUDED)
+                Pair("LicenseRef-a".toSpdx(), LicenseSource.CONCLUDED),
+                Pair("LicenseRef-b".toSpdx(), LicenseSource.CONCLUDED)
             )
 
             view.licenses(
                 packageWithConcludedAndDeclaredLicense,
                 detectedLicenses
             ) should containExactlyInAnyOrder(
-                Pair("LicenseRef-a", LicenseSource.CONCLUDED),
-                Pair("LicenseRef-b", LicenseSource.CONCLUDED)
+                Pair("LicenseRef-a".toSpdx(), LicenseSource.CONCLUDED),
+                Pair("LicenseRef-b".toSpdx(), LicenseSource.CONCLUDED)
             )
         }
     }
@@ -231,24 +232,24 @@ class LicenseViewTest : WordSpec({
                 packageWithoutLicense,
                 detectedLicenses
             ) should containExactlyInAnyOrder(
-                Pair("LicenseRef-a", LicenseSource.DETECTED),
-                Pair("LicenseRef-b", LicenseSource.DETECTED)
+                Pair("LicenseRef-a".toSpdx(), LicenseSource.DETECTED),
+                Pair("LicenseRef-b".toSpdx(), LicenseSource.DETECTED)
             )
 
             view.licenses(
                 packageWithOnlyConcludedLicense,
                 emptyList()
             ) should containExactlyInAnyOrder(
-                Pair("LicenseRef-a", LicenseSource.CONCLUDED),
-                Pair("LicenseRef-b", LicenseSource.CONCLUDED)
+                Pair("LicenseRef-a".toSpdx(), LicenseSource.CONCLUDED),
+                Pair("LicenseRef-b".toSpdx(), LicenseSource.CONCLUDED)
             )
 
             view.licenses(
                 packageWithOnlyConcludedLicense,
                 detectedLicenses
             ) should containExactlyInAnyOrder(
-                Pair("LicenseRef-a", LicenseSource.CONCLUDED),
-                Pair("LicenseRef-b", LicenseSource.CONCLUDED)
+                Pair("LicenseRef-a".toSpdx(), LicenseSource.CONCLUDED),
+                Pair("LicenseRef-b".toSpdx(), LicenseSource.CONCLUDED)
             )
 
             view.licenses(
@@ -260,24 +261,24 @@ class LicenseViewTest : WordSpec({
                 packageWithOnlyDeclaredLicense,
                 detectedLicenses
             ) should containExactlyInAnyOrder(
-                Pair("LicenseRef-a", LicenseSource.DETECTED),
-                Pair("LicenseRef-b", LicenseSource.DETECTED)
+                Pair("LicenseRef-a".toSpdx(), LicenseSource.DETECTED),
+                Pair("LicenseRef-b".toSpdx(), LicenseSource.DETECTED)
             )
 
             view.licenses(
                 packageWithConcludedAndDeclaredLicense,
                 emptyList()
             ) should containExactlyInAnyOrder(
-                Pair("LicenseRef-a", LicenseSource.CONCLUDED),
-                Pair("LicenseRef-b", LicenseSource.CONCLUDED)
+                Pair("LicenseRef-a".toSpdx(), LicenseSource.CONCLUDED),
+                Pair("LicenseRef-b".toSpdx(), LicenseSource.CONCLUDED)
             )
 
             view.licenses(
                 packageWithConcludedAndDeclaredLicense,
                 detectedLicenses
             ) should containExactlyInAnyOrder(
-                Pair("LicenseRef-a", LicenseSource.CONCLUDED),
-                Pair("LicenseRef-b", LicenseSource.CONCLUDED)
+                Pair("LicenseRef-a".toSpdx(), LicenseSource.CONCLUDED),
+                Pair("LicenseRef-b".toSpdx(), LicenseSource.CONCLUDED)
             )
         }
     }
@@ -299,16 +300,16 @@ class LicenseViewTest : WordSpec({
                 packageWithOnlyConcludedLicense,
                 emptyList()
             ) should containExactlyInAnyOrder(
-                Pair("LicenseRef-a", LicenseSource.CONCLUDED),
-                Pair("LicenseRef-b", LicenseSource.CONCLUDED)
+                Pair("LicenseRef-a".toSpdx(), LicenseSource.CONCLUDED),
+                Pair("LicenseRef-b".toSpdx(), LicenseSource.CONCLUDED)
             )
 
             view.licenses(
                 packageWithOnlyConcludedLicense,
                 detectedLicenses
             ) should containExactlyInAnyOrder(
-                Pair("LicenseRef-a", LicenseSource.CONCLUDED),
-                Pair("LicenseRef-b", LicenseSource.CONCLUDED)
+                Pair("LicenseRef-a".toSpdx(), LicenseSource.CONCLUDED),
+                Pair("LicenseRef-b".toSpdx(), LicenseSource.CONCLUDED)
             )
 
             view.licenses(
@@ -325,16 +326,16 @@ class LicenseViewTest : WordSpec({
                 packageWithConcludedAndDeclaredLicense,
                 emptyList()
             ) should containExactlyInAnyOrder(
-                Pair("LicenseRef-a", LicenseSource.CONCLUDED),
-                Pair("LicenseRef-b", LicenseSource.CONCLUDED)
+                Pair("LicenseRef-a".toSpdx(), LicenseSource.CONCLUDED),
+                Pair("LicenseRef-b".toSpdx(), LicenseSource.CONCLUDED)
             )
 
             view.licenses(
                 packageWithConcludedAndDeclaredLicense,
                 detectedLicenses
             ) should containExactlyInAnyOrder(
-                Pair("LicenseRef-a", LicenseSource.CONCLUDED),
-                Pair("LicenseRef-b", LicenseSource.CONCLUDED)
+                Pair("LicenseRef-a".toSpdx(), LicenseSource.CONCLUDED),
+                Pair("LicenseRef-b".toSpdx(), LicenseSource.CONCLUDED)
             )
         }
     }
@@ -367,32 +368,32 @@ class LicenseViewTest : WordSpec({
                 packageWithOnlyDeclaredLicense,
                 emptyList()
             ) should containExactlyInAnyOrder(
-                Pair("Apache-2.0", LicenseSource.DECLARED),
-                Pair("MIT", LicenseSource.DECLARED)
+                Pair("Apache-2.0".toSpdx(), LicenseSource.DECLARED),
+                Pair("MIT".toSpdx(), LicenseSource.DECLARED)
             )
 
             view.licenses(
                 packageWithOnlyDeclaredLicense,
                 detectedLicenses
             ) should containExactlyInAnyOrder(
-                Pair("Apache-2.0", LicenseSource.DECLARED),
-                Pair("MIT", LicenseSource.DECLARED)
+                Pair("Apache-2.0".toSpdx(), LicenseSource.DECLARED),
+                Pair("MIT".toSpdx(), LicenseSource.DECLARED)
             )
 
             view.licenses(
                 packageWithConcludedAndDeclaredLicense,
                 emptyList()
             ) should containExactlyInAnyOrder(
-                Pair("Apache-2.0", LicenseSource.DECLARED),
-                Pair("MIT", LicenseSource.DECLARED)
+                Pair("Apache-2.0".toSpdx(), LicenseSource.DECLARED),
+                Pair("MIT".toSpdx(), LicenseSource.DECLARED)
             )
 
             view.licenses(
                 packageWithConcludedAndDeclaredLicense,
                 detectedLicenses
             ) should containExactlyInAnyOrder(
-                Pair("Apache-2.0", LicenseSource.DECLARED),
-                Pair("MIT", LicenseSource.DECLARED)
+                Pair("Apache-2.0".toSpdx(), LicenseSource.DECLARED),
+                Pair("MIT".toSpdx(), LicenseSource.DECLARED)
             )
         }
     }
@@ -410,8 +411,8 @@ class LicenseViewTest : WordSpec({
                 packageWithoutLicense,
                 detectedLicenses
             ) should containExactlyInAnyOrder(
-                Pair("LicenseRef-a", LicenseSource.DETECTED),
-                Pair("LicenseRef-b", LicenseSource.DETECTED)
+                Pair("LicenseRef-a".toSpdx(), LicenseSource.DETECTED),
+                Pair("LicenseRef-b".toSpdx(), LicenseSource.DETECTED)
             )
 
             view.licenses(
@@ -423,8 +424,8 @@ class LicenseViewTest : WordSpec({
                 packageWithOnlyConcludedLicense,
                 detectedLicenses
             ) should containExactlyInAnyOrder(
-                Pair("LicenseRef-a", LicenseSource.DETECTED),
-                Pair("LicenseRef-b", LicenseSource.DETECTED)
+                Pair("LicenseRef-a".toSpdx(), LicenseSource.DETECTED),
+                Pair("LicenseRef-b".toSpdx(), LicenseSource.DETECTED)
             )
 
             view.licenses(
@@ -436,8 +437,8 @@ class LicenseViewTest : WordSpec({
                 packageWithOnlyDeclaredLicense,
                 detectedLicenses
             ) should containExactlyInAnyOrder(
-                Pair("LicenseRef-a", LicenseSource.DETECTED),
-                Pair("LicenseRef-b", LicenseSource.DETECTED)
+                Pair("LicenseRef-a".toSpdx(), LicenseSource.DETECTED),
+                Pair("LicenseRef-b".toSpdx(), LicenseSource.DETECTED)
             )
 
             view.licenses(
@@ -449,8 +450,8 @@ class LicenseViewTest : WordSpec({
                 packageWithConcludedAndDeclaredLicense,
                 detectedLicenses
             ) should containExactlyInAnyOrder(
-                Pair("LicenseRef-a", LicenseSource.DETECTED),
-                Pair("LicenseRef-b", LicenseSource.DETECTED)
+                Pair("LicenseRef-a".toSpdx(), LicenseSource.DETECTED),
+                Pair("LicenseRef-b".toSpdx(), LicenseSource.DETECTED)
             )
         }
     }

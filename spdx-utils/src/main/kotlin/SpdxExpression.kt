@@ -267,7 +267,18 @@ class SpdxCompoundExpression(
  * An SPDX expression that contains only a single license with an optional exception. Can be
  * [SpdxLicenseWithExceptionExpression] or any subtype of [SpdxSimpleExpression].
  */
-sealed class SpdxSingleLicenseExpression : SpdxExpression()
+sealed class SpdxSingleLicenseExpression : SpdxExpression() {
+    companion object {
+        /**
+         * Parse a string into an [SpdxSingleLicenseExpression]. Throws an [SpdxException] if the string cannot be
+         * parsed. Throws a [ClassCastException] if the string is an [SpdxCompoundExpression].
+         */
+        @JsonCreator
+        @JvmStatic
+        fun parse(expression: String): SpdxSingleLicenseExpression =
+            SpdxExpression.parse(expression) as SpdxSingleLicenseExpression
+    }
+}
 
 /**
  * An SPDX expression that contains a [license] with an [exception].

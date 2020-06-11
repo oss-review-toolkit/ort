@@ -570,7 +570,7 @@ class StaticHtmlReporter : Reporter {
 
                                 if (excludes.isEmpty()) {
                                     div {
-                                        +finding.license
+                                        +finding.license.toString()
                                         if (permalink != null) {
                                             val count = finding.locations.size
                                             if (count > 1) {

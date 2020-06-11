@@ -61,7 +61,7 @@ class FindingCurationMatcher {
      */
     fun apply(finding: LicenseFinding, curation: LicenseFindingCuration): LicenseFinding? =
         if (!matches(finding, curation)) finding
-        else if (curation.concludedLicense == SpdxLicense.NONE) null
+        else if (curation.concludedLicense.toString() == SpdxLicense.NONE) null
         else finding.copy(license = curation.concludedLicense)
 
     /**

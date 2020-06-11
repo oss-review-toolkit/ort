@@ -128,7 +128,7 @@ class AntennaAttributionDocumentReporter : Reporter {
         licenseFindings: Map<Identifier, Map<LicenseFindings, List<PathExclude>>>
     ) =
         licenseFindings.getOrDefault(id, emptyMap())
-            .filter { licenses.contains(it.key.license) }
+            .filter { licenses.contains(it.key.license.toString()) }
             .flatMap { it.key.copyrights }
             .joinToString("\n") { it.statement }
 

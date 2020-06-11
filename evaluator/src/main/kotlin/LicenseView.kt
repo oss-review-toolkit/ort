@@ -21,6 +21,7 @@ package org.ossreviewtoolkit.evaluator
 
 import org.ossreviewtoolkit.model.LicenseSource
 import org.ossreviewtoolkit.model.Package
+import org.ossreviewtoolkit.spdx.SpdxSingleLicenseExpression
 
 /**
  * A [LicenseView] provides a custom view on the licenses that belong to a [Package]. It can be used to filter the
@@ -78,13 +79,16 @@ class LicenseView(vararg licenseSources: List<LicenseSource>) {
 
     private val licenseSources = licenseSources.toList()
 
-    fun licenses(pkg: Package, detectedLicenses: List<String>): List<Pair<String, LicenseSource>> {
-        val declaredLicenses = pkg.declaredLicensesProcessed.spdxExpression?.decompose().orEmpty().map { it.toString() }
-        val concludedLicenses = pkg.concludedLicense?.decompose().orEmpty().map { it.toString() }
+    fun licenses(
+        pkg: Package,
+        detectedLicenses: List<SpdxSingleLicenseExpression>
+    ): List<Pair<SpdxSingleLicenseExpression, LicenseSource>> {
+        val declaredLicenses = pkg.declaredLicensesProcessed.spdxExpression?.decompose().orEmpty()
+        val concludedLicenses = pkg.concludedLicense?.decompose().orEmpty()
 
         fun getLicenseForSources(
             sources: Collection<LicenseSource>
-        ): List<Pair<String, LicenseSource>> =
+        ): List<Pair<SpdxSingleLicenseExpression, LicenseSource>> =
             sources.flatMap { source ->
                 when (source) {
                     LicenseSource.DECLARED -> declaredLicenses

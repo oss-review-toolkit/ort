@@ -24,6 +24,8 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize
 import com.fasterxml.jackson.databind.annotation.JsonSerialize
 import com.fasterxml.jackson.databind.util.StdConverter
 
+import org.ossreviewtoolkit.spdx.SpdxExpression
+
 /**
  * A curation for license findings.
  */
@@ -55,13 +57,13 @@ data class LicenseFindingCuration(
      * [detectedLicense] or if [detectedLicense] is null.
      */
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    val detectedLicense: String? = null,
+    val detectedLicense: SpdxExpression? = null,
 
     /**
      * The concluded license as SPDX expression or [org.ossreviewtoolkit.spdx.SpdxLicense.NONE] for no license,
      * see https://spdx.org/spdx-specification-21-web-version#h.jxpfx0ykyb60.
      */
-    val concludedLicense: String,
+    val concludedLicense: SpdxExpression,
 
     /**
      * The reason why the curation was made, out of a predefined choice.
@@ -80,12 +82,6 @@ data class LicenseFindingCuration(
         }
         require(lineCount == null || lineCount >= 0) {
             "The value for line count must not be negative."
-        }
-        require(detectedLicense == null || detectedLicense.isNotBlank()) {
-            "The detected license must either be omitted or not be blank."
-        }
-        require(concludedLicense.isNotBlank()) {
-            "The concluded license must not be blank."
         }
     }
 }

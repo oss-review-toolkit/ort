@@ -28,7 +28,6 @@ import org.ossreviewtoolkit.model.Provenance
 import org.ossreviewtoolkit.model.TextLocation
 import org.ossreviewtoolkit.model.config.LicenseFindingCuration
 import org.ossreviewtoolkit.model.config.PathExclude
-import org.ossreviewtoolkit.spdx.toSpdx
 
 internal class LicenseResolver(
     private val ortResult: OrtResult,
@@ -45,7 +44,7 @@ internal class LicenseResolver(
             .associateWith { id -> collectLicenseFindings(id).toMutableMap() }
 
     fun getDetectedLicensesForId(id: Identifier): SortedSet<String> =
-        collectLicenseFindings(id).keys.mapTo(sortedSetOf()) { it.license }
+        collectLicenseFindings(id).keys.mapTo(sortedSetOf()) { it.license.toString() }
 
     private fun getPathExcludes(id: Identifier, provenance: Provenance): List<PathExclude> =
         if (ortResult.isProject(id)) {
@@ -81,7 +80,7 @@ internal class LicenseResolver(
             val curatedLicenseFindings = curationMatcher.applyAll(rawLicenseFindings, curations)
                 .mapNotNullTo(mutableSetOf()) { it.curatedFinding }
             val decomposedFindings = curatedLicenseFindings.flatMap { finding ->
-                finding.license.toSpdx().decompose().map { finding.copy(license = it.toString()) }
+                finding.license.decompose().map { finding.copy(license = it) }
             }
             val matchedFindings = findingsMatcher.match(decomposedFindings, copyrightFindings).toSortedSet()
 
@@ -110,7 +109,7 @@ internal class LicenseResolver(
             .filter { (_, excludes) -> !omitExcluded || excludes.isEmpty() }
             .map { (findings, _) -> findings }
             .associateBy(
-                { it.license },
+                { it.license.toString() },
                 { it.copyrights.mapTo(mutableSetOf()) { it.statement } }
             )
 }

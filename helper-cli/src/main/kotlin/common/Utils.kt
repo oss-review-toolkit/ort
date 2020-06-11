@@ -60,7 +60,8 @@ import org.ossreviewtoolkit.model.utils.PackageConfigurationProvider
 import org.ossreviewtoolkit.model.utils.SimplePackageConfigurationProvider
 import org.ossreviewtoolkit.model.utils.collectLicenseFindings
 import org.ossreviewtoolkit.model.yamlMapper
-import org.ossreviewtoolkit.spdx.toSpdx
+import org.ossreviewtoolkit.spdx.SpdxExpression
+import org.ossreviewtoolkit.spdx.SpdxSingleLicenseExpression
 import org.ossreviewtoolkit.utils.CopyrightStatementsProcessor
 import org.ossreviewtoolkit.utils.ORT_NAME
 import org.ossreviewtoolkit.utils.OkHttpClientHelper
@@ -213,7 +214,7 @@ internal data class ProcessedCopyrightStatement(
     /**
      * The license associated with the copyright statement.
      */
-    val licenseId: String,
+    val license: SpdxExpression,
 
     /**
      * The processed copyright statement.
@@ -256,7 +257,7 @@ internal fun OrtResult.processAllCopyrightStatements(
                 result.add(
                     ProcessedCopyrightStatement(
                         packageId = id,
-                        licenseId = licenseFindings.license,
+                        license = licenseFindings.license,
                         statement = it.key,
                         rawStatements = it.value.toSet()
                     )
@@ -267,7 +268,7 @@ internal fun OrtResult.processAllCopyrightStatements(
                 result.add(
                     ProcessedCopyrightStatement(
                         packageId = id,
-                        licenseId = licenseFindings.license,
+                        license = licenseFindings.license,
                         statement = it,
                         rawStatements = setOf(it)
                     )
@@ -288,8 +289,8 @@ internal fun OrtResult.getLicenseFindingsById(
     packageConfigurationProvider: PackageConfigurationProvider,
     applyCurations: Boolean = true,
     decomposeLicenseExpressions: Boolean = true
-): Map<Provenance, Map<String, Set<TextLocation>>> {
-    val result = mutableMapOf<Provenance, MutableMap<String, MutableSet<TextLocation>>>()
+): Map<Provenance, Map<SpdxSingleLicenseExpression, Set<TextLocation>>> {
+    val result = mutableMapOf<Provenance, MutableMap<SpdxSingleLicenseExpression, MutableSet<TextLocation>>>()
 
     fun getLicenseFindingsCurations(provenance: Provenance): List<LicenseFindingCuration> =
         if (isProject(id)) {
@@ -312,13 +313,15 @@ internal fun OrtResult.getLicenseFindingsById(
             }.let { findings ->
                 if (decomposeLicenseExpressions) {
                     findings.flatMap { finding ->
-                        finding.license.toSpdx().decompose().map { finding.copy(license = it.toString()) }
+                        finding.license.decompose().map { finding.copy(license = it) }
                     }
                 } else {
                     findings
                 }
-            }.forEach {
-                findingsForProvenance.getOrPut(it.license) { mutableSetOf() }.add(it.location)
+            }.forEach { finding ->
+                finding.license.decompose().forEach {
+                    findingsForProvenance.getOrPut(it) { mutableSetOf() }.add(finding.location)
+                }
             }
         }
     }
@@ -356,7 +359,7 @@ internal fun OrtResult.getRepositoryLicenseFindingCurations(): RepositoryLicense
 internal fun OrtResult.getViolatedRulesByLicense(
     id: Identifier,
     severity: Collection<Severity> = enumValues<Severity>().asList()
-): Map<String, List<String>> =
+): Map<SpdxSingleLicenseExpression, List<String>> =
     getRuleViolations()
         .filter { it.pkg == id && it.severity in severity && it.license != null }
         .groupBy { it.license!! }
@@ -660,8 +663,8 @@ private data class LicenseFindingCurationHashKey(
     val path: String,
     val startLines: List<Int> = emptyList(),
     val lineCount: Int? = null,
-    val detectedLicense: String?,
-    val concludedLicense: String
+    val detectedLicense: SpdxExpression?,
+    val concludedLicense: SpdxExpression
 )
 
 private fun LicenseFindingCuration.hashKey() =

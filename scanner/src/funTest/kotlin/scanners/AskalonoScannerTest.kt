@@ -19,8 +19,10 @@
 
 package org.ossreviewtoolkit.scanner.scanners
 
+import org.ossreviewtoolkit.spdx.toSpdx
+
 class AskalonoScannerTest : AbstractScannerTest() {
     override val scanner = Askalono("Askalono", config)
-    override val expectedFileLicenses = sortedSetOf("Apache-2.0")
-    override val expectedDirectoryLicenses = sortedSetOf("Apache-2.0")
+    override val expectedFileLicenses = setOf("Apache-2.0".toSpdx())
+    override val expectedDirectoryLicenses = setOf("Apache-2.0".toSpdx())
 }
