@@ -21,16 +21,14 @@ package org.ossreviewtoolkit.model
 
 import com.fasterxml.jackson.module.kotlin.readValue
 
-import org.ossreviewtoolkit.utils.test.patchActualResult
-
-import io.kotest.matchers.shouldBe
 import io.kotest.core.spec.style.WordSpec
-import io.kotest.matchers.collections.containExactly
-import io.kotest.matchers.should
+import io.kotest.matchers.shouldBe
 
 import java.io.File
 import java.time.Duration
 import java.time.Instant
+
+import org.ossreviewtoolkit.utils.test.patchActualResult
 
 class ScanResultContainerTest : WordSpec() {
     private val id = Identifier("type", "namespace", "name", "version")
@@ -137,33 +135,6 @@ class ScanResultContainerTest : WordSpec() {
 
                 patchActualResult(serializedScanResults) shouldBe expectedScanResults
             }
-
-            "deserialize with the deprecated license_findings field in the scan summary as expected" {
-                val deprecatedScanResult = File("src/test/assets/deprecated-license-findings-scan-result.yml")
-                    .readValue<ScanResultContainer>()
-
-                deprecatedScanResult.results[0].summary.copyrightFindings should containExactly(
-                    CopyrightFinding(
-                        statement = "copyright 1",
-                        location = TextLocation(path = "copyright path 1.1", startLine = 1, endLine = 1)
-                    ),
-                    CopyrightFinding(
-                        statement = "copyright 2",
-                        location = TextLocation(path = "copyright path 1.2", startLine = 1, endLine = 2)
-                    )
-                )
-
-                deprecatedScanResult.results[0].summary.licenseFindings should containExactly(
-                    LicenseFinding(
-                        license = "license 1.1",
-                        location = TextLocation(path = "path 1.1", startLine = 1, endLine = 1)
-                    ),
-                    LicenseFinding(
-                        license = "license 1.2",
-                        location = TextLocation(path = "path 1.2", startLine = 1, endLine = 2)
-                    )
-                )
-             }
         }
     }
 }
