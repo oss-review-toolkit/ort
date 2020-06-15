@@ -21,9 +21,9 @@ package org.ossreviewtoolkit.model.licenses
 
 import com.fasterxml.jackson.annotation.JsonInclude
 
-import org.ossreviewtoolkit.spdx.SpdxExpression
-
 import java.util.SortedSet
+
+import org.ossreviewtoolkit.spdx.toSpdx
 
 /**
  * A class for configuring meta data for a specific license referred to by a SPDX license identifier.
@@ -52,7 +52,7 @@ data class License(
     val includeSourceCodeOfferInNoticeFile: Boolean
 ) {
     init {
-        require(SpdxExpression.parse(id).licenses().size == 1) {
+        require(id.toSpdx().licenses().size == 1) {
             "The id '$id' contains multiple licenses which is not allowed."
         }
     }

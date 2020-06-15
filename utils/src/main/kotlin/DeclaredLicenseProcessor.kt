@@ -25,6 +25,7 @@ import com.fasterxml.jackson.annotation.JsonInclude
 import org.ossreviewtoolkit.spdx.SpdxDeclaredLicenseMapping
 import org.ossreviewtoolkit.spdx.SpdxException
 import org.ossreviewtoolkit.spdx.SpdxExpression
+import org.ossreviewtoolkit.spdx.toSpdx
 
 object DeclaredLicenseProcessor {
     private val urlPrefixesToRemove = listOf(
@@ -87,7 +88,7 @@ object DeclaredLicenseProcessor {
 
     private fun parseLicense(declaredLicense: String) =
         try {
-            SpdxExpression.parse(declaredLicense, SpdxExpression.Strictness.ALLOW_ANY)
+            declaredLicense.toSpdx()
         } catch (e: SpdxException) {
             log.debug { "Could not parse declared license '$declaredLicense': ${e.collectMessagesAsString()}" }
             null

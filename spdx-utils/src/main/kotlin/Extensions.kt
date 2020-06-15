@@ -21,6 +21,8 @@ package org.ossreviewtoolkit.spdx
 
 import java.util.EnumSet
 
+import org.ossreviewtoolkit.spdx.SpdxExpression.Strictness
+
 /**
  * Return an [EnumSet] that contains the elements of [this] and [other].
  */
@@ -71,3 +73,10 @@ fun SpdxLicense.toExpression(): SpdxLicenseIdExpression {
 
     return SpdxLicenseIdExpression(expressionId, orLaterVersion)
 }
+
+/**
+ * Parses the string as an [SpdxExpression] and returns the result.
+ * @throws SpdxException if the string is not a valid representation of an SPDX expression.
+ */
+fun String.toSpdx(strictness: Strictness = Strictness.ALLOW_ANY): SpdxExpression =
+    SpdxExpression.parse(this, strictness)
