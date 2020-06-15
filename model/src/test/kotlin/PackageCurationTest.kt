@@ -19,11 +19,11 @@
 
 package org.ossreviewtoolkit.model
 
-import org.ossreviewtoolkit.spdx.SpdxExpression
-
-import io.kotest.matchers.shouldBe
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.WordSpec
+import io.kotest.matchers.shouldBe
+
+import org.ossreviewtoolkit.spdx.toSpdx
 
 class PackageCurationTest : WordSpec({
     "Applying a single curation" should {
@@ -47,7 +47,7 @@ class PackageCurationTest : WordSpec({
                 id = pkg.id,
                 data = PackageCurationData(
                     declaredLicenses = sortedSetOf("license a", "license b"),
-                    concludedLicense = SpdxExpression.parse("license1 OR license2"),
+                    concludedLicense = "license1 OR license2".toSpdx(),
                     description = "description",
                     homepageUrl = "http://home.page",
                     binaryArtifact = RemoteArtifact(

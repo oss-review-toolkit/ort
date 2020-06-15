@@ -19,6 +19,8 @@
 
 package org.ossreviewtoolkit.model.utils
 
+import java.util.SortedSet
+
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.LicenseFindings
 import org.ossreviewtoolkit.model.OrtResult
@@ -26,9 +28,7 @@ import org.ossreviewtoolkit.model.Provenance
 import org.ossreviewtoolkit.model.TextLocation
 import org.ossreviewtoolkit.model.config.LicenseFindingCuration
 import org.ossreviewtoolkit.model.config.PathExclude
-import org.ossreviewtoolkit.spdx.SpdxExpression
-
-import java.util.SortedSet
+import org.ossreviewtoolkit.spdx.toSpdx
 
 internal class LicenseResolver(
     private val ortResult: OrtResult,
@@ -81,7 +81,7 @@ internal class LicenseResolver(
             val curatedLicenseFindings = curationMatcher.applyAll(rawLicenseFindings, curations)
                 .mapNotNullTo(mutableSetOf()) { it.curatedFinding }
             val decomposedFindings = curatedLicenseFindings.flatMap { finding ->
-                SpdxExpression.parse(finding.license).decompose().map { finding.copy(license = it.toString()) }
+                finding.license.toSpdx().decompose().map { finding.copy(license = it.toString()) }
             }
             val matchedFindings = findingsMatcher.match(decomposedFindings, copyrightFindings).toSortedSet()
 

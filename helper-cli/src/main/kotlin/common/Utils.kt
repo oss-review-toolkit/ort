@@ -21,6 +21,14 @@
 
 package org.ossreviewtoolkit.helper.common
 
+import java.io.File
+import java.io.IOException
+
+import okhttp3.Request
+
+import okio.buffer
+import okio.sink
+
 import org.ossreviewtoolkit.analyzer.Analyzer
 import org.ossreviewtoolkit.analyzer.PackageManager
 import org.ossreviewtoolkit.downloader.Downloader
@@ -30,7 +38,6 @@ import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.Project
 import org.ossreviewtoolkit.model.Provenance
-import org.ossreviewtoolkit.model.readValue
 import org.ossreviewtoolkit.model.RemoteArtifact
 import org.ossreviewtoolkit.model.Repository
 import org.ossreviewtoolkit.model.RuleViolation
@@ -47,25 +54,18 @@ import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.config.Resolutions
 import org.ossreviewtoolkit.model.config.RuleViolationResolution
 import org.ossreviewtoolkit.model.config.ScopeExclude
+import org.ossreviewtoolkit.model.readValue
 import org.ossreviewtoolkit.model.utils.FindingCurationMatcher
-import org.ossreviewtoolkit.model.utils.collectLicenseFindings
 import org.ossreviewtoolkit.model.utils.PackageConfigurationProvider
 import org.ossreviewtoolkit.model.utils.SimplePackageConfigurationProvider
+import org.ossreviewtoolkit.model.utils.collectLicenseFindings
 import org.ossreviewtoolkit.model.yamlMapper
-import org.ossreviewtoolkit.spdx.SpdxExpression
+import org.ossreviewtoolkit.spdx.toSpdx
 import org.ossreviewtoolkit.utils.CopyrightStatementsProcessor
 import org.ossreviewtoolkit.utils.ORT_NAME
 import org.ossreviewtoolkit.utils.OkHttpClientHelper
 import org.ossreviewtoolkit.utils.safeMkdirs
 import org.ossreviewtoolkit.utils.stripCredentialsFromUrl
-
-import java.io.File
-import java.io.IOException
-
-import okhttp3.Request
-
-import okio.buffer
-import okio.sink
 
 const val ORTH_NAME = "orth"
 
@@ -312,7 +312,7 @@ internal fun OrtResult.getLicenseFindingsById(
             }.let { findings ->
                 if (decomposeLicenseExpressions) {
                     findings.flatMap { finding ->
-                        SpdxExpression.parse(finding.license).decompose().map { finding.copy(license = it.toString()) }
+                        finding.license.toSpdx().decompose().map { finding.copy(license = it.toString()) }
                     }
                 } else {
                     findings
