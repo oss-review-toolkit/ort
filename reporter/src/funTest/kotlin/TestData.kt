@@ -148,7 +148,10 @@ val ORT_RESULT = OrtResult(
                         binaryArtifact = RemoteArtifact.EMPTY,
                         sourceArtifact = RemoteArtifact(
                             url = "https://example.com/license-file-1.0.tgz",
-                            hash = Hash(value = "", algorithm = HashAlgorithm.SHA1)
+                            hash = Hash(
+                                value = "0000000000000000000000000000000000000000",
+                                algorithm = HashAlgorithm.SHA1
+                            )
                         ),
                         vcs = VcsInfo.EMPTY
                     ),
@@ -163,7 +166,10 @@ val ORT_RESULT = OrtResult(
                         binaryArtifact = RemoteArtifact.EMPTY,
                         sourceArtifact = RemoteArtifact(
                             url = "https://example.com/license-file-and-additional-licenses-1.0.tgz",
-                            hash = Hash(value = "", algorithm = HashAlgorithm.SHA1)
+                            hash = Hash(
+                                value = "0000000000000000000000000000000000000000",
+                                algorithm = HashAlgorithm.SHA1
+                            )
                         ),
                         vcs = VcsInfo.EMPTY
                     ),
@@ -179,7 +185,10 @@ val ORT_RESULT = OrtResult(
                         binaryArtifact = RemoteArtifact.EMPTY,
                         sourceArtifact = RemoteArtifact(
                             url = "https://example.com/concluded-license-1.0.tgz",
-                            hash = Hash(value = "", algorithm = HashAlgorithm.SHA1)
+                            hash = Hash(
+                                value = "0000000000000000000000000000000000000000",
+                                algorithm = HashAlgorithm.SHA1
+                            )
                         ),
                         vcs = VcsInfo.EMPTY
                     ),
@@ -194,7 +203,10 @@ val ORT_RESULT = OrtResult(
                         binaryArtifact = RemoteArtifact.EMPTY,
                         sourceArtifact = RemoteArtifact(
                             url = "https://example.com/declared-license-1.0.tgz",
-                            hash = Hash(value = "", algorithm = HashAlgorithm.SHA1)
+                            hash = Hash(
+                                value = "0000000000000000000000000000000000000000",
+                                algorithm = HashAlgorithm.SHA1
+                            )
                         ),
                         vcs = VcsInfo.EMPTY
                     ),

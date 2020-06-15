@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2019 Bosch Software Innovations GmbH
+ * Copyright (C) 2020 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,22 +20,22 @@
 
 package org.ossreviewtoolkit.reporter.reporters
 
-import org.ossreviewtoolkit.model.OrtResult
-import org.ossreviewtoolkit.model.yamlMapper
-import org.ossreviewtoolkit.reporter.ReporterInput
-import org.ossreviewtoolkit.utils.test.patchExpectedResult
-import org.ossreviewtoolkit.utils.test.readOrtResult
-
+import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.collections.beEmpty
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
-import io.kotest.core.spec.style.WordSpec
 
 import java.io.ByteArrayOutputStream
 import java.io.File
 
 import org.cyclonedx.BomParser
 import org.cyclonedx.model.ExternalReference
+
+import org.ossreviewtoolkit.model.OrtResult
+import org.ossreviewtoolkit.model.yamlMapper
+import org.ossreviewtoolkit.reporter.ORT_RESULT
+import org.ossreviewtoolkit.reporter.ReporterInput
+import org.ossreviewtoolkit.utils.test.patchExpectedResult
 
 class CycloneDxReporterTest : WordSpec({
     "A generated BOM" should {
@@ -43,7 +44,7 @@ class CycloneDxReporterTest : WordSpec({
             val bomFile = createTempFile().also {
                 CycloneDxReporter().generateReport(
                     it.outputStream(),
-                    ReporterInput(readOrtResult("src/funTest/assets/NPM-is-windows-1.0.2-scan-result.json"))
+                    ReporterInput(ORT_RESULT)
                 )
 
                 it.deleteOnExit()
