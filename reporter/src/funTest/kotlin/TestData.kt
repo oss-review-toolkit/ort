@@ -47,13 +47,29 @@ import org.ossreviewtoolkit.model.ScannerRun
 import org.ossreviewtoolkit.model.Scope
 import org.ossreviewtoolkit.model.TextLocation
 import org.ossreviewtoolkit.model.VcsInfo
+import org.ossreviewtoolkit.model.config.Excludes
+import org.ossreviewtoolkit.model.config.PathExclude
+import org.ossreviewtoolkit.model.config.PathExcludeReason
+import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
 import org.ossreviewtoolkit.spdx.SpdxExpression
 import org.ossreviewtoolkit.utils.test.DEFAULT_ANALYZER_CONFIGURATION
 
 // TODO: Create a way to reduce the code required to prepare an OrtResult for testing.
 val ORT_RESULT = OrtResult(
-    repository = Repository(VcsInfo.EMPTY),
+    repository = Repository(
+        vcs = VcsInfo.EMPTY,
+        config = RepositoryConfiguration(
+            excludes = Excludes(
+                paths = listOf(
+                    PathExclude(
+                        pattern = "excluded-project/**",
+                        reason = PathExcludeReason.OTHER
+                    )
+                )
+            )
+        )
+    ),
     analyzer = AnalyzerRun(
         environment = Environment(),
         config = DEFAULT_ANALYZER_CONFIGURATION,
@@ -100,6 +116,14 @@ val ORT_RESULT = OrtResult(
                             dependencies = sortedSetOf()
                         )
                     )
+                ),
+                Project(
+                    id = Identifier("NPM:@ort:excluded-project:1.0"),
+                    definitionFilePath = "excluded-project/package.json",
+                    declaredLicenses = sortedSetOf("BSD-2-Clause"),
+                    vcs = VcsInfo.EMPTY,
+                    homepageUrl = "",
+                    scopes = sortedSetOf()
                 )
             ),
             packages = sortedSetOf(
