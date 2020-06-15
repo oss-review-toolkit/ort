@@ -238,17 +238,22 @@ object Downloader {
                 throw e
             }
         }
-        val revision = workingTree.getRevision()
 
-        log.info { "Finished downloading source code revision '$revision' to '${outputDirectory.absolutePath}'." }
+        val vcsInfo = workingTree.getInfo().let {
+            it.copy(
+                // Use the original revision as the unresolved revision as the working tree revision is always resolved.
+                revision = pkg.vcsProcessed.revision,
+                resolvedRevision = it.revision,
 
-        val vcsInfo = VcsInfo(
-            type = applicableVcs.type,
-            url = pkg.vcsProcessed.url,
-            revision = pkg.vcsProcessed.revision.takeIf { it.isNotBlank() } ?: revision,
-            resolvedRevision = revision,
-            path = pkg.vcsProcessed.path
-        )
+                // Use the original path as we want the path that was downloaded, not the relative path to the root.
+                path = pkg.vcsProcessed.path
+            )
+        }
+
+        log.info {
+            "Finished downloading source code revision '${vcsInfo.revision}' to '${outputDirectory.absolutePath}'."
+        }
+
         return DownloadResult(startTime, outputDirectory, vcsInfo = vcsInfo,
             originalVcsInfo = pkg.vcsProcessed.takeIf { it != vcsInfo })
     }
