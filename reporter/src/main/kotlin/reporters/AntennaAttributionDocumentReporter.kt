@@ -84,8 +84,14 @@ class AntennaAttributionDocumentReporter : Reporter {
         var templateId = DEFAULT_TEMPLATE_ID
         options[TEMPLATE_ID]?.let { id ->
             options[TEMPLATE_PATH]?.let { path ->
+                val templatePath = File(path)
+
+                require(templatePath.isFile) {
+                    "The template path does not point to a template file."
+                }
+
                 templateId = id
-                addTemplateToClasspath(File(path).toURI().toURL())
+                addTemplateToClasspath(templatePath.toURI().toURL())
             }
         }
 
