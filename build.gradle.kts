@@ -253,7 +253,9 @@ subprojects {
                 "kotest.assertions.multi-line-diff",
                 "kotest.tags.include",
                 "kotest.tags.exclude"
-            ).associateWith { System.getProperty(it) }
+            ).associateWith { System.getProperty(it) } + mapOf(
+                "gradle.build.dir" to project.buildDir
+            )
 
             testLogging {
                 events = setOf(TestLogEvent.STARTED, TestLogEvent.PASSED, TestLogEvent.SKIPPED, TestLogEvent.FAILED)
