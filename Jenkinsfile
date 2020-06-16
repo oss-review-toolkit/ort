@@ -242,7 +242,7 @@ pipeline {
             }
         }
 
-        stage('Run the ORT analyzer') {
+        stage('Run ORT analyzer') {
             agent {
                 dockerfile {
                     additionalBuildArgs DOCKER_BUILD_ARGS
@@ -302,7 +302,7 @@ pipeline {
             }
         }
 
-        stage('Run the ORT scanner') {
+        stage('Run ORT scanner') {
             when {
                 beforeAgent true
 
@@ -345,7 +345,7 @@ pipeline {
             }
         }
 
-        stage('Run the ORT reporter') {
+        stage('Run ORT reporter') {
             when {
                 beforeAgent true
 
