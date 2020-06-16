@@ -51,6 +51,8 @@ class AntennaAttributionDocumentReporter : Reporter {
     override val reporterName = "AntennaAttributionDocument"
     override val defaultFilename = "attribution-document.pdf"
 
+    private val originalClassLoader = Thread.currentThread().contextClassLoader
+
     override fun generateReport(outputStream: OutputStream, input: ReporterInput, options: Map<String, String>) {
         val licenseFindings = input.ortResult.collectLicenseFindings(
             input.packageConfigurationProvider,
@@ -80,6 +82,8 @@ class AntennaAttributionDocumentReporter : Reporter {
             licenseFindings
         )
 
+        val workingDir = createTempDir()
+
         // Use the default template unless a custom template is provided via the options.
         var templateId = DEFAULT_TEMPLATE_ID
         options[TEMPLATE_ID]?.let { id ->
@@ -90,18 +94,22 @@ class AntennaAttributionDocumentReporter : Reporter {
                     "The template path does not point to a template file."
                 }
 
-                templateId = id
-                addTemplateToClasspath(templatePath.toURI().toURL())
+                addTemplateToClassPath(templatePath.toURI().toURL()).also {
+                    templateId = id
+                }
             }
         }
 
-        val workingDir = createTempDir()
-        val documentFile = AttributionDocumentGeneratorImpl(
-            defaultFilename,
-            workingDir,
-            templateId,
-            DocumentValues(rootProject.id.name, rootProject.id.version, projectCopyright)
-        ).generate(artifacts)
+        val documentFile = try {
+            AttributionDocumentGeneratorImpl(
+                defaultFilename,
+                workingDir,
+                templateId,
+                DocumentValues(rootProject.id.name, rootProject.id.version, projectCopyright)
+            ).generate(artifacts)
+        } finally {
+            if (templateId != DEFAULT_TEMPLATE_ID) removeTemplateFromClassPath()
+        }
 
         if (documentFile.isFile) {
             documentFile.inputStream().use {
@@ -122,10 +130,12 @@ class AntennaAttributionDocumentReporter : Reporter {
             .flatMap { it.key.copyrights }
             .joinToString("\n") { it.statement }
 
-    private fun addTemplateToClasspath(url: URL) {
-        val addURL = URLClassLoader::class.java.getDeclaredMethod("addURL", URL::class.java)
-        addURL.isAccessible = true
-        addURL.invoke(ClassLoader.getSystemClassLoader(), url)
+    private fun addTemplateToClassPath(url: URL) {
+        Thread.currentThread().contextClassLoader = URLClassLoader(arrayOf(url), originalClassLoader)
+    }
+
+    private fun removeTemplateFromClassPath() {
+        Thread.currentThread().contextClassLoader = originalClassLoader
     }
 
     private fun collectLicenses(id: Identifier, ortResult: OrtResult): SortedSet<String> {
