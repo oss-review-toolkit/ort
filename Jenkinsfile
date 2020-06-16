@@ -157,6 +157,21 @@ pipeline {
             }
         }
 
+        stage('Build ORT Docker image') {
+            agent {
+                dockerfile {
+                    additionalBuildArgs DOCKER_BUILD_ARGS
+                    args DOCKER_RUN_ARGS
+                }
+            }
+
+            steps {
+                sh '''
+                    /opt/ort/bin/ort $LOG_LEVEL --version
+                '''
+            }
+        }
+
         stage('Clone project') {
             agent {
                 dockerfile {
