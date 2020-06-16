@@ -52,10 +52,13 @@ class AntennaAttributionDocumentReporter : Reporter {
     override val defaultFilename = "attribution-document.pdf"
 
     override fun generateReport(outputStream: OutputStream, input: ReporterInput, options: Map<String, String>) {
-        val ortResult = input.ortResult
-        val licenseFindings = ortResult.collectLicenseFindings(input.packageConfigurationProvider, omitExcluded = true)
-        val artifacts = ortResult.getPackages().map { (pkg, _) ->
-            val licenses = collectLicenses(pkg.id, ortResult)
+        val licenseFindings = input.ortResult.collectLicenseFindings(
+            input.packageConfigurationProvider,
+            omitExcluded = true
+        )
+
+        val artifacts = input.ortResult.getPackages().map { (pkg, _) ->
+            val licenses = collectLicenses(pkg.id, input.ortResult)
             AttributionDocumentPdfModel(
                 purl = pkg.purl,
                 binaryFilename = pkg.binaryArtifact.takeUnless { it.url.isEmpty() }?.let { File(it.url).name },
@@ -73,7 +76,7 @@ class AntennaAttributionDocumentReporter : Reporter {
 
         val projectCopyright = createCopyrightStatement(
             rootProject.id,
-            collectLicenses(rootProject.id, ortResult),
+            collectLicenses(rootProject.id, input.ortResult),
             licenseFindings
         )
 
