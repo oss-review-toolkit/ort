@@ -237,8 +237,13 @@ class ReporterCommand : CliktCommand(
             println("Successfully created the '${reporter.reporterName}' report at '$file' in ${duration.inSeconds}s.")
         }
 
+        if (reportDurationMap.isEmpty()) {
+            println("Failed to create any report.")
+        } else {
+            println("Successfully created ${reportDurationMap.size} of ${reports.size} report(s).")
+        }
+
         if (statusCode != 0) {
-            println("Not all reports were created successfully.")
             throw ProgramResult(statusCode)
         }
     }
