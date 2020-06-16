@@ -106,7 +106,8 @@ class ReporterCommand : CliktCommand(
     private val reportOptions by option(
         "--report-option", "-O",
         help = "Specify a report-format-specific option. The key is the (case-insensitive) name of the report " +
-                "format, and the value is an arbitrary key-value pair."
+                "format, and the value is an arbitrary key-value pair. For example: " +
+                "-O AntennaAttributionDocument=template.id=basic-pdf-template"
     ).splitPair().convert { (format, option) ->
         val upperCaseFormat = format.toUpperCase()
 
