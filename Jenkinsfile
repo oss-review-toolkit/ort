@@ -141,7 +141,7 @@ pipeline {
     }
 
     stages {
-        stage('Configure') {
+        stage('Configure pipeline') {
             agent any
 
             steps {
