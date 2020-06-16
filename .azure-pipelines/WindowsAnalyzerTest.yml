@@ -120,7 +120,7 @@ jobs:
       options: --no-daemon --stacktrace -Dkotest.tags.exclude=ExpensiveTag -Dkotest.assertions.multi-line-diff=simple -PbuildCacheRetentionDays=3
       tasks: analyzer:test analyzer:funTest
       publishJUnitResults: true
-      testResultsFiles: '**/TEST-*.xml'
+      testResultsFiles: '**/flattened/TEST-*.xml'
       testRunTitle:  $(Agent.JobName)
       javaHomeOption: JDKVersion
       jdkVersionOption: 1.11

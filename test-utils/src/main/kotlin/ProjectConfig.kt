@@ -1,6 +1,5 @@
 /*
- * Copyright (C) 2017-2019 HERE Europe B.V.
- * Copyright (C) 2019 Bosch Software Innovations GmbH
+ * Copyright (C) 2020 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,21 +17,21 @@
  * License-Filename: LICENSE
  */
 
-val kotestVersion: String by project
-val log4jCoreVersion: String by project
+package org.ossreviewtoolkit.utils.test
 
-plugins {
-    // Apply core plugins.
-    `java-library`
-}
+import io.kotest.core.config.AbstractProjectConfig
+import io.kotest.core.spec.SpecExecutionOrder
+import io.kotest.extensions.junitxml.JunitXmlReporter
 
-dependencies {
-    api(project(":model"))
+class ProjectConfig : AbstractProjectConfig() {
+    override val specExecutionOrder = SpecExecutionOrder.Annotated
 
-    api("io.kotest:kotest-assertions-core-jvm:$kotestVersion")
-    api("io.kotest:kotest-framework-api:$kotestVersion")
-
-    implementation("io.kotest:kotest-extensions-junitxml:$kotestVersion")
-    implementation("io.kotest:kotest-framework-engine-jvm:$kotestVersion")
-    implementation("org.apache.logging.log4j:log4j-slf4j-impl:$log4jCoreVersion")
+    override fun listeners() =
+        listOf(
+            JunitXmlReporter(
+                includeContainers = false,
+                useTestPathAsName = true,
+                outputDir = "test-results/flattened"
+            )
+        )
 }
