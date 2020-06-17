@@ -60,7 +60,20 @@ fun File.expandTilde(): File = File(path.expandTilde()).absoluteFile
  * Return the hexadecimal digest of the given hash [algorithm] for this [File].
  */
 fun File.hash(algorithm: String = "SHA-1"): String =
-    MessageDigest.getInstance(algorithm).digest(readBytes()).toHexString()
+    inputStream().use { inputStream ->
+        // 4MB has been chosen rather arbitrary hoping that it provides a good enough performance while not consuming
+        // a lot of memory at the same time, also considering that this function could potentially be run on multiple
+        // threads in parallel.
+        val buffer = ByteArray(4 * 1024 * 1024)
+        val digest = MessageDigest.getInstance(algorithm)
+
+        var length: Int
+        while (inputStream.read(buffer).also { length = it } > 0) {
+            digest.update(buffer, 0, length)
+        }
+
+        digest.digest().toHexString()
+    }
 
 /**
  * Return true if and only if this file is a symbolic link.
