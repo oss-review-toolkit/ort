@@ -34,6 +34,12 @@ import com.github.ajalt.clikt.parameters.options.split
 import com.github.ajalt.clikt.parameters.options.splitPair
 import com.github.ajalt.clikt.parameters.types.file
 
+import java.io.ByteArrayOutputStream
+import java.io.File
+
+import kotlin.time.Duration
+import kotlin.time.measureTime
+
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.config.CopyrightGarbage
 import org.ossreviewtoolkit.model.config.OrtConfiguration
@@ -53,11 +59,6 @@ import org.ossreviewtoolkit.utils.expandTilde
 import org.ossreviewtoolkit.utils.log
 import org.ossreviewtoolkit.utils.safeMkdirs
 import org.ossreviewtoolkit.utils.showStackTrace
-
-import java.io.File
-
-import kotlin.time.Duration
-import kotlin.time.measureTime
 
 class ReporterCommand : CliktCommand(
     name = "report",
@@ -208,6 +209,8 @@ class ReporterCommand : CliktCommand(
         var statusCode = 0
         val reportDurationMap = mutableMapOf<Map.Entry<Reporter, File>, Duration>()
 
+        val buffer = ByteArrayOutputStream()
+
         reports.forEach { entry ->
             val (reporter, file) = entry
             val options = reportOptionsMap[reporter.reporterName.toUpperCase()].orEmpty()
@@ -216,15 +219,16 @@ class ReporterCommand : CliktCommand(
 
             @Suppress("TooGenericExceptionCaught")
             try {
+                // Share the same buffer across reports to reduce memory usage.
+                buffer.reset()
+
                 reportDurationMap[entry] = measureTime {
-                    reporter.generateReport(file.outputStream(), input, options)
+                    reporter.generateReport(buffer, input, options)
                 }
+
+                file.outputStream().use { buffer.writeTo(it) }
             } catch (e: Exception) {
                 e.showStackTrace()
-
-                // The "file.outputStream()" above already creates the file, so delete it here if the exception occurred
-                // before any content was written.
-                if (file.length() == 0L) file.delete()
 
                 log.error { "Could not create '${reporter.reporterName}' report: ${e.collectMessagesAsString()}" }
 
