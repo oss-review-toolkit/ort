@@ -22,7 +22,6 @@ package org.ossreviewtoolkit.commands
 import com.github.ajalt.clikt.core.BadParameterValue
 import com.github.ajalt.clikt.core.CliktCommand
 import com.github.ajalt.clikt.core.ProgramResult
-import com.github.ajalt.clikt.core.UsageError
 import com.github.ajalt.clikt.core.requireObject
 import com.github.ajalt.clikt.parameters.groups.mutuallyExclusiveOptions
 import com.github.ajalt.clikt.parameters.groups.single
@@ -33,6 +32,9 @@ import com.github.ajalt.clikt.parameters.options.required
 import com.github.ajalt.clikt.parameters.options.split
 import com.github.ajalt.clikt.parameters.options.splitPair
 import com.github.ajalt.clikt.parameters.types.file
+
+import kotlin.time.Duration
+import kotlin.time.measureTime
 
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.config.CopyrightGarbage
@@ -53,11 +55,6 @@ import org.ossreviewtoolkit.utils.expandTilde
 import org.ossreviewtoolkit.utils.log
 import org.ossreviewtoolkit.utils.safeMkdirs
 import org.ossreviewtoolkit.utils.showStackTrace
-
-import java.io.File
-
-import kotlin.time.Duration
-import kotlin.time.measureTime
 
 class ReporterCommand : CliktCommand(
     name = "report",
@@ -162,15 +159,6 @@ class ReporterCommand : CliktCommand(
     override fun run() {
         val absoluteOutputDir = outputDir.normalize()
 
-        val reports = reportFormats.associateWith { reporter ->
-            File(absoluteOutputDir, reporter.defaultFilename)
-        }
-
-        val existingReportFiles = reports.values.filter { it.exists() }
-        if (existingReportFiles.isNotEmpty()) {
-            throw UsageError("None of the report files $existingReportFiles must exist yet.", statusCode = 2)
-        }
-
         var ortResult = ortFile.readValue<OrtResult>()
         repositoryConfigurationFile?.let {
             ortResult = ortResult.replaceConfig(it.readValue())
@@ -207,17 +195,17 @@ class ReporterCommand : CliktCommand(
         }
 
         var statusCode = 0
-        val reportDurationMap = mutableMapOf<Map.Entry<Reporter, File>, Duration>()
+        val reportDurationMap = mutableMapOf<Reporter, Duration>()
 
-        reports.forEach { entry ->
-            val (reporter, file) = entry
+        reportFormats.forEach { reporter ->
+            val file = absoluteOutputDir.resolve(reporter.defaultFilename)
             val options = reportOptionsMap[reporter.reporterName.toUpperCase()].orEmpty()
 
             println("Creating the '${reporter.reporterName}' report at '$file'.")
 
             @Suppress("TooGenericExceptionCaught")
             try {
-                reportDurationMap[entry] = measureTime {
+                reportDurationMap[reporter] = measureTime {
                     reporter.generateReport(file.outputStream(), input, options)
                 }
             } catch (e: Exception) {
@@ -233,15 +221,15 @@ class ReporterCommand : CliktCommand(
             }
         }
 
-        reportDurationMap.forEach { (entry, duration) ->
-            val (reporter, file) = entry
+        reportDurationMap.forEach { (reporter, duration) ->
+            val file = absoluteOutputDir.resolve(reporter.defaultFilename)
             println("Successfully created the '${reporter.reporterName}' report at '$file' in ${duration.inSeconds}s.")
         }
 
         if (reportDurationMap.isEmpty()) {
             println("Failed to create any report.")
         } else {
-            println("Successfully created ${reportDurationMap.size} of ${reports.size} report(s).")
+            println("Successfully created ${reportDurationMap.size} of ${reportFormats.size} report(s).")
         }
 
         if (statusCode != 0) {
