@@ -91,8 +91,8 @@ class OrtConfigurationTest : WordSpec({
         }
 
         "correctly prioritize the sources" {
-            val configFile = createTempFile(ORT_NAME, javaClass.simpleName)
-            configFile.deleteOnExit()
+            val configFile = createTempFile(ORT_NAME, javaClass.simpleName).apply { deleteOnExit() }
+
             configFile.writeText(
                 """
                 ort {
