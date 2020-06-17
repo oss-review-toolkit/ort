@@ -211,8 +211,7 @@ class DotNetSupport(packageReferencesMap: Map<String, String>) {
             homepageUrl = jsonCatalogNode["projectUrl"].textValueOrEmpty(),
             binaryArtifact = extractRemoteArtifact(jsonCatalogNode, packageContent.first),
             sourceArtifact = RemoteArtifact.EMPTY,
-            vcs = vcsInfo,
-            vcsProcessed = vcsInfo.normalize()
+            vcs = vcsInfo
         )
     }
 
