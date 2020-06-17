@@ -36,24 +36,6 @@ import org.ossreviewtoolkit.reporter.ORT_RESULT
 import org.ossreviewtoolkit.reporter.ReporterInput
 import org.ossreviewtoolkit.utils.LICENSE_FILENAMES
 
-private fun generateReport(
-    ortResult: OrtResult,
-    config: OrtConfiguration = OrtConfiguration(),
-    copyrightGarbage: CopyrightGarbage = CopyrightGarbage(),
-    preProcessingScript: String? = null
-): String =
-    ByteArrayOutputStream().also { outputStream ->
-        NoticeByPackageReporter().generateReport(
-            outputStream,
-            ReporterInput(
-                ortResult,
-                config,
-                copyrightGarbage = copyrightGarbage,
-                preProcessingScript = preProcessingScript
-            )
-        )
-    }.toString("UTF-8")
-
 class NoticeByPackageReporterTest : WordSpec({
     "NoticeByPackageReporter" should {
         "generate the correct license notes" {
@@ -88,3 +70,21 @@ class NoticeByPackageReporterTest : WordSpec({
         }
     }
 })
+
+private fun generateReport(
+    ortResult: OrtResult,
+    config: OrtConfiguration = OrtConfiguration(),
+    copyrightGarbage: CopyrightGarbage = CopyrightGarbage(),
+    preProcessingScript: String? = null
+): String =
+    ByteArrayOutputStream().also { outputStream ->
+        NoticeByPackageReporter().generateReport(
+            outputStream,
+            ReporterInput(
+                ortResult,
+                config,
+                copyrightGarbage = copyrightGarbage,
+                preProcessingScript = preProcessingScript
+            )
+        )
+    }.toString("UTF-8")

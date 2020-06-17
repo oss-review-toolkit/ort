@@ -34,20 +34,6 @@ import java.io.File
 
 import javax.xml.transform.TransformerFactory
 
-private fun generateReport(ortResult: OrtResult) =
-    ByteArrayOutputStream().also { outputStream ->
-        val resolutionProvider = DefaultResolutionProvider()
-        resolutionProvider.add(ortResult.getResolutions())
-
-        StaticHtmlReporter().generateReport(
-            outputStream,
-            ReporterInput(
-                ortResult,
-                resolutionProvider = resolutionProvider
-            )
-        )
-    }.toString("UTF-8")
-
 class StaticHtmlReporterTest : WordSpec({
     "StaticHtmlReporter" should {
         "use the Apache Xalan TransformerFactory" {
@@ -70,3 +56,17 @@ class StaticHtmlReporterTest : WordSpec({
         }
     }
 })
+
+private fun generateReport(ortResult: OrtResult) =
+    ByteArrayOutputStream().also { outputStream ->
+        val resolutionProvider = DefaultResolutionProvider()
+        resolutionProvider.add(ortResult.getResolutions())
+
+        StaticHtmlReporter().generateReport(
+            outputStream,
+            ReporterInput(
+                ortResult,
+                resolutionProvider = resolutionProvider
+            )
+        )
+    }.toString("UTF-8")
