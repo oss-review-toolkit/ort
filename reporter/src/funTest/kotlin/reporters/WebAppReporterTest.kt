@@ -19,22 +19,26 @@
 
 package org.ossreviewtoolkit.reporter.reporters
 
-import org.ossreviewtoolkit.reporter.ReporterInput
-import org.ossreviewtoolkit.utils.test.readOrtResult
-
-import io.kotest.matchers.shouldNotBe
 import io.kotest.core.spec.style.WordSpec
+import io.kotest.matchers.ints.shouldBeGreaterThan
 
 import java.io.ByteArrayOutputStream
+
+import org.ossreviewtoolkit.reporter.ReporterInput
+import org.ossreviewtoolkit.utils.test.readOrtResult
 
 class WebAppReporterTest : WordSpec({
     "WebAppReporter" should {
         "successfully export to a web application" {
             val outputStream = ByteArrayOutputStream()
-            val ortResult =
-                readOrtResult("../scanner/src/funTest/assets/file-counter-expected-output-for-analyzer-result.yml")
+            val ortResult = readOrtResult(
+                "../scanner/src/funTest/assets/file-counter-expected-output-for-analyzer-result.yml"
+            )
+
             WebAppReporter().generateReport(outputStream, ReporterInput(ortResult))
-            outputStream.size() shouldNotBe 0
+
+            // Do not be more specific here as the web-app report changes quite often still.
+            outputStream.size() shouldBeGreaterThan 0
         }
     }
 })
