@@ -90,8 +90,8 @@ class AntennaAttributionDocumentReporter : Reporter {
             options[TEMPLATE_PATH]?.let { path ->
                 val templatePath = File(path)
 
-                require(templatePath.isFile) {
-                    "The template path does not point to a template file."
+                require(templatePath.isFile && templatePath.extension == "jar" && templatePath.length() > 0) {
+                    "The template path does not point to a valid template bundle file."
                 }
 
                 addTemplateToClassPath(templatePath.toURI().toURL()).also {
