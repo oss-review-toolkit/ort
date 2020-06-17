@@ -19,13 +19,15 @@
 
 package org.ossreviewtoolkit.reporter.reporters
 
+import java.io.OutputStream
+import java.io.Writer
+
+import kotlin.time.measureTimedValue
+
 import org.ossreviewtoolkit.reporter.Reporter
 import org.ossreviewtoolkit.reporter.ReporterInput
 import org.ossreviewtoolkit.reporter.model.EvaluatedModel
 import org.ossreviewtoolkit.utils.log
-
-import java.io.OutputStream
-import java.io.Writer
 
 private fun EvaluatedModel.toJson(writer: Writer) = toJson(writer, prettyPrint = true)
 
@@ -57,12 +59,12 @@ abstract class EvaluatedModelReporter(
     private val serialize: EvaluatedModel.(Writer) -> Unit
 ) : Reporter {
     override fun generateReport(outputStream: OutputStream, input: ReporterInput, options: Map<String, String>) {
-        val start = System.currentTimeMillis()
-        val evaluatedModel = EvaluatedModel.create(input)
-        log.debug { "Generating evaluated model took ${System.currentTimeMillis() - start}ms" }
+        val evaluatedModel = measureTimedValue { EvaluatedModel.create(input) }
+
+        log.debug { "Generating evaluated model took ${evaluatedModel.duration.inMilliseconds}ms." }
 
         outputStream.bufferedWriter().use {
-            evaluatedModel.serialize(it)
+            evaluatedModel.value.serialize(it)
         }
     }
 }
