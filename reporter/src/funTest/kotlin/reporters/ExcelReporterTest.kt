@@ -21,26 +21,27 @@ package org.ossreviewtoolkit.reporter.reporters
 
 import bad.robot.excel.matchers.WorkbookMatcher.sameWorkbook
 
-import org.ossreviewtoolkit.reporter.ReporterInput
-import org.ossreviewtoolkit.utils.test.readOrtResult
-
 import io.kotest.core.spec.style.WordSpec
 
-import java.io.ByteArrayOutputStream
 import java.io.File
 
 import org.apache.poi.ss.usermodel.WorkbookFactory
 
 import org.hamcrest.MatcherAssert.assertThat
 
+import org.ossreviewtoolkit.reporter.ReporterInput
+import org.ossreviewtoolkit.utils.ORT_NAME
+import org.ossreviewtoolkit.utils.test.readOrtResult
+
 class ExcelReporterTest : WordSpec({
     "ExcelReporter" should {
         "successfully export to an Excel sheet".config(enabled = false) {
-            val outputStream = ByteArrayOutputStream()
-            val ortResult =
-                readOrtResult("../scanner/src/funTest/assets/file-counter-expected-output-for-analyzer-result.yml")
-            ExcelReporter().generateReport(outputStream, ReporterInput(ortResult))
-            val actualWorkbook = WorkbookFactory.create(outputStream.toByteArray().inputStream())
+            val outputDir = createTempDir(ORT_NAME, javaClass.simpleName).apply { deleteOnExit() }
+            val ortResult = readOrtResult(
+                "../scanner/src/funTest/assets/file-counter-expected-output-for-analyzer-result.yml"
+            )
+            val sheet = ExcelReporter().generateReport(ReporterInput(ortResult), outputDir).single()
+            val actualWorkbook = WorkbookFactory.create(sheet)
 
             val expectedFile = File("src/funTest/assets/file-counter-expected-scan-report.xlsx")
             val expectedWorkbook = WorkbookFactory.create(expectedFile)

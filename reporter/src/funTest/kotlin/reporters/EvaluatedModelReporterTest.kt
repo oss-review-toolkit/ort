@@ -19,17 +19,17 @@
 
 package org.ossreviewtoolkit.reporter.reporters
 
-import org.ossreviewtoolkit.model.OrtResult
-import org.ossreviewtoolkit.model.utils.DefaultResolutionProvider
-import org.ossreviewtoolkit.reporter.ReporterInput
-import org.ossreviewtoolkit.utils.normalizeLineBreaks
-import org.ossreviewtoolkit.utils.test.readOrtResult
-
 import io.kotest.matchers.shouldBe
 import io.kotest.core.spec.style.WordSpec
 
-import java.io.ByteArrayOutputStream
 import java.io.File
+
+import org.ossreviewtoolkit.model.OrtResult
+import org.ossreviewtoolkit.model.utils.DefaultResolutionProvider
+import org.ossreviewtoolkit.reporter.ReporterInput
+import org.ossreviewtoolkit.utils.ORT_NAME
+import org.ossreviewtoolkit.utils.normalizeLineBreaks
+import org.ossreviewtoolkit.utils.test.readOrtResult
 
 class EvaluatedModelReporterTest : WordSpec({
     "EvaluatedModelReporter" should {
@@ -53,15 +53,13 @@ class EvaluatedModelReporterTest : WordSpec({
     }
 })
 
-private fun generateReport(reporter: EvaluatedModelReporter, ortResult: OrtResult) =
-    ByteArrayOutputStream().also { outputStream ->
-        val resolutionProvider = DefaultResolutionProvider()
-        resolutionProvider.add(ortResult.getResolutions())
+private fun generateReport(reporter: EvaluatedModelReporter, ortResult: OrtResult): String {
+    val input = ReporterInput(
+        ortResult = ortResult,
+        resolutionProvider = DefaultResolutionProvider().add(ortResult.getResolutions())
+    )
 
-        val input = ReporterInput(
-            ortResult = ortResult,
-            resolutionProvider = resolutionProvider
-        )
+    val outputDir = createTempDir(ORT_NAME, EvaluatedModelReporterTest::class.simpleName).apply { deleteOnExit() }
 
-        reporter.generateReport(outputStream, input)
-    }.toString("UTF-8")
+    return reporter.generateReport(input, outputDir).single().readText()
+}

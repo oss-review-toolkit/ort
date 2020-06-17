@@ -19,7 +19,7 @@
 
 package org.ossreviewtoolkit.reporter.reporters
 
-import java.io.OutputStream
+import java.io.File
 
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.LicenseFindingsMap
@@ -99,10 +99,10 @@ abstract class AbstractNoticeReporter : Reporter {
     }
 
     override fun generateReport(
-        outputStream: OutputStream,
         input: ReporterInput,
+        outputDir: File,
         options: Map<String, String>
-    ) {
+    ): List<File> {
         requireNotNull(input.ortResult.scanner) {
             "The provided ORT result file does not contain a scan result."
         }
@@ -129,14 +129,16 @@ abstract class AbstractNoticeReporter : Reporter {
         } ?: model
 
         val processor = createProcessor(input)
-
         val notices = processor.process(preProcessedModel)
+        val outputFile = outputDir.resolve(defaultFilename)
 
-        outputStream.bufferedWriter().use { writer ->
+        outputFile.bufferedWriter().use { writer ->
             notices.forEach {
                 writer.write(it())
             }
         }
+
+        return listOf(outputFile)
     }
 
     private fun getLicenseFindings(

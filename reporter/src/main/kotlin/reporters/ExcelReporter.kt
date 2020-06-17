@@ -20,7 +20,7 @@
 package org.ossreviewtoolkit.reporter.reporters
 
 import java.awt.Color
-import java.io.OutputStream
+import java.io.File
 
 import org.apache.poi.common.usermodel.HyperlinkType
 import org.apache.poi.ss.usermodel.BorderStyle
@@ -86,7 +86,11 @@ class ExcelReporter : Reporter {
     override val reporterName = "Excel"
     override val defaultFilename = "scan-report.xlsx"
 
-    override fun generateReport(outputStream: OutputStream, input: ReporterInput, options: Map<String, String>) {
+    override fun generateReport(
+        input: ReporterInput,
+        outputDir: File,
+        options: Map<String, String>
+    ): List<File> {
         val tabularScanRecord =
             ReportTableModelMapper(input.resolutionProvider, input.packageConfigurationProvider).mapToReportTableModel(
                 input.ortResult
@@ -162,7 +166,13 @@ class ExcelReporter : Reporter {
             )
         }
 
-        workbook.write(outputStream)
+        val outputFile = outputDir.resolve(defaultFilename)
+
+        outputFile.outputStream().use {
+            workbook.write(it)
+        }
+
+        return listOf(outputFile)
     }
 
     private fun createMetadataSheet(workbook: XSSFWorkbook, metadata: Map<String, String>) {

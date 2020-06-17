@@ -22,7 +22,7 @@ package org.ossreviewtoolkit.reporter.reporters
 import com.vladsch.flexmark.html.HtmlRenderer
 import com.vladsch.flexmark.parser.Parser
 
-import java.io.OutputStream
+import java.io.File
 import java.time.Instant
 
 import javax.xml.parsers.DocumentBuilderFactory
@@ -59,16 +59,26 @@ class StaticHtmlReporter : Reporter {
     override val reporterName = "StaticHtml"
     override val defaultFilename = "scan-report.html"
 
-    override fun generateReport(outputStream: OutputStream, input: ReporterInput, options: Map<String, String>) {
-        val tabularScanRecord =
-            ReportTableModelMapper(input.resolutionProvider, input.packageConfigurationProvider).mapToReportTableModel(
-                input.ortResult
-            )
-        val html = renderHtml(tabularScanRecord)
+    override fun generateReport(
+        input: ReporterInput,
+        outputDir: File,
+        options: Map<String, String>
+    ): List<File> {
+        val tabularScanRecord = ReportTableModelMapper(
+            input.resolutionProvider,
+            input.packageConfigurationProvider
+        ).mapToReportTableModel(
+            input.ortResult
+        )
 
-        outputStream.bufferedWriter().use {
+        val html = renderHtml(tabularScanRecord)
+        val outputFile = outputDir.resolve(defaultFilename)
+
+        outputFile.bufferedWriter().use {
             it.write(html)
         }
+
+        return listOf(outputFile)
     }
 
     private fun renderHtml(reportTableModel: ReportTableModel): String {

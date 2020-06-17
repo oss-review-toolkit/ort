@@ -19,20 +19,20 @@
 
 package org.ossreviewtoolkit.reporter.reporters
 
+import io.kotest.matchers.shouldBe
+import io.kotest.core.spec.style.WordSpec
+
+import java.io.File
+
+import javax.xml.transform.TransformerFactory
+
 import org.ossreviewtoolkit.model.Environment
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.utils.DefaultResolutionProvider
 import org.ossreviewtoolkit.reporter.ReporterInput
+import org.ossreviewtoolkit.utils.ORT_NAME
 import org.ossreviewtoolkit.utils.test.patchExpectedResult
 import org.ossreviewtoolkit.utils.test.readOrtResult
-
-import io.kotest.matchers.shouldBe
-import io.kotest.core.spec.style.WordSpec
-
-import java.io.ByteArrayOutputStream
-import java.io.File
-
-import javax.xml.transform.TransformerFactory
 
 class StaticHtmlReporterTest : WordSpec({
     "StaticHtmlReporter" should {
@@ -57,16 +57,13 @@ class StaticHtmlReporterTest : WordSpec({
     }
 })
 
-private fun generateReport(ortResult: OrtResult) =
-    ByteArrayOutputStream().also { outputStream ->
-        val resolutionProvider = DefaultResolutionProvider()
-        resolutionProvider.add(ortResult.getResolutions())
+private fun generateReport(ortResult: OrtResult): String {
+    val input = ReporterInput(
+        ortResult,
+        resolutionProvider = DefaultResolutionProvider().add(ortResult.getResolutions())
+    )
 
-        StaticHtmlReporter().generateReport(
-            outputStream,
-            ReporterInput(
-                ortResult,
-                resolutionProvider = resolutionProvider
-            )
-        )
-    }.toString("UTF-8")
+    val outputDir = createTempDir(ORT_NAME, StaticHtmlReporterTest::class.simpleName).apply { deleteOnExit() }
+
+    return StaticHtmlReporter().generateReport(input, outputDir).single().readText()
+}
