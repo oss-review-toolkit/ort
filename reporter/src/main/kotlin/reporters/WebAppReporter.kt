@@ -19,21 +19,21 @@
 
 package org.ossreviewtoolkit.reporter.reporters
 
+import java.io.File
+
 import org.ossreviewtoolkit.reporter.Reporter
 import org.ossreviewtoolkit.reporter.ReporterInput
 import org.ossreviewtoolkit.reporter.model.EvaluatedModel
-
-import java.io.OutputStream
 
 class WebAppReporter : Reporter {
     override val reporterName = "WebApp"
     override val defaultFilename = "scan-report-web-app.html"
 
     override fun generateReport(
-        outputStream: OutputStream,
         input: ReporterInput,
+        outputDir: File,
         options: Map<String, String>
-    ) {
+    ): List<File> {
         val template = javaClass.classLoader.getResource("scan-report-template.html").readText()
         val evaluatedModel = EvaluatedModel.create(input)
 
@@ -42,10 +42,14 @@ class WebAppReporter : Reporter {
         val prefix = template.substring(0, index)
         val suffix = template.substring(index + placeholder.length, template.length)
 
-        outputStream.bufferedWriter().use {
+        val outputFile = outputDir.resolve(defaultFilename)
+
+        outputFile.bufferedWriter().use {
             it.write(prefix)
             evaluatedModel.toJson(it, prettyPrint = false)
             it.write(suffix)
         }
+
+        return listOf(outputFile)
     }
 }

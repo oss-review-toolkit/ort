@@ -19,8 +19,8 @@
 
 package org.ossreviewtoolkit.reporter.reporters
 
+import java.io.File
 import java.io.IOException
-import java.io.OutputStream
 import java.net.ConnectException
 import java.time.Instant
 
@@ -66,7 +66,11 @@ class AmazonOssAttributionBuilderReporter : Reporter {
         OkHttpClientHelper.buildClient()
     )
 
-    override fun generateReport(outputStream: OutputStream, input: ReporterInput, options: Map<String, String>) {
+    override fun generateReport(
+        input: ReporterInput,
+        outputDir: File,
+        options: Map<String, String>
+    ): List<File> {
         // TODO: Allow to configure username and password via the config file; use the defaults for now.
         val credentials = Credentials.basic("admin", "admin")
 
@@ -184,9 +188,13 @@ class AmazonOssAttributionBuilderReporter : Reporter {
                 "Successfully fetched the attribution document with id '${generateAttributionDocBody.documentId}'."
             }
 
-            outputStream.bufferedWriter().use {
+            val outputFile = outputDir.resolve(defaultFilename)
+
+            outputFile.bufferedWriter().use {
                 it.write(fetchAttributionDocBody.content)
             }
+
+            return listOf(outputFile)
         } catch (e: ConnectException) {
             e.showStackTrace()
 

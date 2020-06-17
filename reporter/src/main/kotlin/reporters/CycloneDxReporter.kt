@@ -20,7 +20,7 @@
 
 package org.ossreviewtoolkit.reporter.reporters
 
-import java.io.OutputStream
+import java.io.File
 import java.util.UUID
 
 import org.cyclonedx.BomGeneratorFactory
@@ -73,7 +73,11 @@ class CycloneDxReporter : Reporter {
             }
         }
 
-    override fun generateReport(outputStream: OutputStream, input: ReporterInput, options: Map<String, String>) {
+    override fun generateReport(
+        input: ReporterInput,
+        outputDir: File,
+        options: Map<String, String>
+    ): List<File> {
         val ortResult = input.ortResult
         val bom = Bom().apply { serialNumber = "urn:uuid:${UUID.randomUUID()}" }
 
@@ -171,11 +175,13 @@ class CycloneDxReporter : Reporter {
             bom.addComponent(component)
         }
 
-        val bomGenerator = BomGeneratorFactory.create(CycloneDxSchema.Version.VERSION_11, bom)
-        bomGenerator.generate()
+        val bomGenerator = BomGeneratorFactory.create(CycloneDxSchema.Version.VERSION_11, bom).apply { generate() }
+        val outputFile = outputDir.resolve(defaultFilename)
 
-        outputStream.bufferedWriter().use {
+        outputFile.bufferedWriter().use {
             it.write(bomGenerator.toXmlString())
         }
+
+        return listOf(outputFile)
     }
 }

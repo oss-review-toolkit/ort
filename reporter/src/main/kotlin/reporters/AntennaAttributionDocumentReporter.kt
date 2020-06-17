@@ -20,7 +20,6 @@
 package org.ossreviewtoolkit.reporter.reporters
 
 import java.io.File
-import java.io.OutputStream
 import java.net.URL
 import java.net.URLClassLoader
 import java.util.SortedSet
@@ -53,7 +52,11 @@ class AntennaAttributionDocumentReporter : Reporter {
 
     private val originalClassLoader = Thread.currentThread().contextClassLoader
 
-    override fun generateReport(outputStream: OutputStream, input: ReporterInput, options: Map<String, String>) {
+    override fun generateReport(
+        input: ReporterInput,
+        outputDir: File,
+        options: Map<String, String>
+    ): List<File> {
         val licenseFindings = input.ortResult.collectLicenseFindings(
             input.packageConfigurationProvider,
             omitExcluded = true
@@ -111,13 +114,12 @@ class AntennaAttributionDocumentReporter : Reporter {
             if (templateId != DEFAULT_TEMPLATE_ID) removeTemplateFromClassPath()
         }
 
-        if (documentFile.isFile) {
-            documentFile.inputStream().use {
-                it.copyTo(outputStream)
-            }
-        }
-
+        // Antenna keeps around temporary files in its working directory, so we cannot just use our output directory as
+        // its working directory, but have to copy the file we are interested in.
+        documentFile.copyTo(outputDir.resolve(defaultFilename))
         workingDir.safeDeleteRecursively()
+
+        return listOf(documentFile)
     }
 
     private fun createCopyrightStatement(

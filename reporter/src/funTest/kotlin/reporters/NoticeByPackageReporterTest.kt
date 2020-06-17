@@ -22,7 +22,6 @@ package org.ossreviewtoolkit.reporter.reporters
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.shouldBe
 
-import java.io.ByteArrayOutputStream
 import java.io.File
 
 import org.ossreviewtoolkit.model.OrtResult
@@ -35,6 +34,7 @@ import org.ossreviewtoolkit.model.config.ScannerConfiguration
 import org.ossreviewtoolkit.reporter.ORT_RESULT
 import org.ossreviewtoolkit.reporter.ReporterInput
 import org.ossreviewtoolkit.utils.LICENSE_FILENAMES
+import org.ossreviewtoolkit.utils.ORT_NAME
 
 class NoticeByPackageReporterTest : WordSpec({
     "NoticeByPackageReporter" should {
@@ -76,15 +76,15 @@ private fun generateReport(
     config: OrtConfiguration = OrtConfiguration(),
     copyrightGarbage: CopyrightGarbage = CopyrightGarbage(),
     preProcessingScript: String? = null
-): String =
-    ByteArrayOutputStream().also { outputStream ->
-        NoticeByPackageReporter().generateReport(
-            outputStream,
-            ReporterInput(
-                ortResult,
-                config,
-                copyrightGarbage = copyrightGarbage,
-                preProcessingScript = preProcessingScript
-            )
-        )
-    }.toString("UTF-8")
+): String {
+    val input = ReporterInput(
+        ortResult,
+        config,
+        copyrightGarbage = copyrightGarbage,
+        preProcessingScript = preProcessingScript
+    )
+
+    val outputDir = createTempDir(ORT_NAME, NoticeByPackageReporterTest::class.simpleName).apply { deleteOnExit() }
+
+    return NoticeByPackageReporter().generateReport(input, outputDir).single().readText()
+}

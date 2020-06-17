@@ -19,7 +19,7 @@
 
 package org.ossreviewtoolkit.reporter.reporters
 
-import java.io.OutputStream
+import java.io.File
 import java.io.Writer
 
 import kotlin.time.measureTimedValue
@@ -58,13 +58,21 @@ abstract class EvaluatedModelReporter(
     override val defaultFilename: String,
     private val serialize: EvaluatedModel.(Writer) -> Unit
 ) : Reporter {
-    override fun generateReport(outputStream: OutputStream, input: ReporterInput, options: Map<String, String>) {
+    override fun generateReport(
+        input: ReporterInput,
+        outputDir: File,
+        options: Map<String, String>
+    ): List<File> {
         val evaluatedModel = measureTimedValue { EvaluatedModel.create(input) }
 
         log.debug { "Generating evaluated model took ${evaluatedModel.duration.inMilliseconds}ms." }
 
-        outputStream.bufferedWriter().use {
+        val outputFile = outputDir.resolve(defaultFilename)
+
+        outputFile.bufferedWriter().use {
             evaluatedModel.value.serialize(it)
         }
+
+        return listOf(outputFile)
     }
 }

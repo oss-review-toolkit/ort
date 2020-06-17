@@ -33,8 +33,10 @@ import com.github.ajalt.clikt.parameters.options.split
 import com.github.ajalt.clikt.parameters.options.splitPair
 import com.github.ajalt.clikt.parameters.types.file
 
-import kotlin.time.Duration
-import kotlin.time.measureTime
+import java.io.File
+
+import kotlin.time.TimedValue
+import kotlin.time.measureTimedValue
 
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.config.CopyrightGarbage
@@ -195,25 +197,20 @@ class ReporterCommand : CliktCommand(
         }
 
         var statusCode = 0
-        val reportDurationMap = mutableMapOf<Reporter, Duration>()
+        val reportDurationMap = mutableMapOf<Reporter, TimedValue<List<File>>>()
 
         reportFormats.forEach { reporter ->
-            val file = absoluteOutputDir.resolve(reporter.defaultFilename)
             val options = reportOptionsMap[reporter.reporterName.toUpperCase()].orEmpty()
 
-            println("Creating the '${reporter.reporterName}' report at '$file'.")
+            println("Creating the '${reporter.reporterName}' report...")
 
             @Suppress("TooGenericExceptionCaught")
             try {
-                reportDurationMap[reporter] = measureTime {
-                    reporter.generateReport(file.outputStream(), input, options)
+                reportDurationMap[reporter] = measureTimedValue {
+                    reporter.generateReport(input, absoluteOutputDir, options)
                 }
             } catch (e: Exception) {
                 e.showStackTrace()
-
-                // The "file.outputStream()" above already creates the file, so delete it here if the exception occurred
-                // before any content was written.
-                if (file.length() == 0L) file.delete()
 
                 log.error { "Could not create '${reporter.reporterName}' report: ${e.collectMessagesAsString()}" }
 
@@ -221,9 +218,9 @@ class ReporterCommand : CliktCommand(
             }
         }
 
-        reportDurationMap.forEach { (reporter, duration) ->
-            val file = absoluteOutputDir.resolve(reporter.defaultFilename)
-            println("Successfully created the '${reporter.reporterName}' report at '$file' in ${duration.inSeconds}s.")
+        reportDurationMap.forEach { (reporter, files) ->
+            val name = reporter.reporterName
+            println("Successfully created the '$name' report at ${files.value} in ${files.duration.inSeconds}s.")
         }
 
         if (reportDurationMap.isEmpty()) {

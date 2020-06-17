@@ -25,13 +25,13 @@ import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNot
 import io.kotest.matchers.string.contain
 
-import java.io.ByteArrayOutputStream
 import java.io.File
 
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.config.CopyrightGarbage
 import org.ossreviewtoolkit.reporter.ORT_RESULT
 import org.ossreviewtoolkit.reporter.ReporterInput
+import org.ossreviewtoolkit.utils.ORT_NAME
 
 class NoticeSummaryReporterTest : WordSpec({
     "NoticeReporter" should {
@@ -100,14 +100,14 @@ private fun generateReport(
     ortResult: OrtResult,
     copyrightGarbage: CopyrightGarbage = CopyrightGarbage(),
     preProcessingScript: String? = null
-) =
-    ByteArrayOutputStream().also { outputStream ->
-        NoticeSummaryReporter().generateReport(
-            outputStream,
-            ReporterInput(
-                ortResult,
-                copyrightGarbage = copyrightGarbage,
-                preProcessingScript = preProcessingScript
-            )
-        )
-    }.toString("UTF-8")
+): String {
+    val input = ReporterInput(
+        ortResult,
+        copyrightGarbage = copyrightGarbage,
+        preProcessingScript = preProcessingScript
+    )
+
+    val outputDir = createTempDir(ORT_NAME, NoticeSummaryReporterTest::class.simpleName).apply { deleteOnExit() }
+
+    return NoticeSummaryReporter().generateReport(input, outputDir).single().readText()
+}
