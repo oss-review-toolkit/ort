@@ -235,11 +235,7 @@ class ReporterCommand : CliktCommand(
 
         reportDurationMap.forEach { (entry, duration) ->
             val (reporter, file) = entry
-            if (file.isFile) {
-                println(
-                    "Successfully created the '${reporter.reporterName}' report at '$file' in ${duration.inSeconds}s."
-                )
-            }
+            println("Successfully created the '${reporter.reporterName}' report at '$file' in ${duration.inSeconds}s.")
         }
 
         if (statusCode != 0) {
