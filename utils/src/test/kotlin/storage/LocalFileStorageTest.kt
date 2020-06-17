@@ -58,7 +58,7 @@ class LocalFileStorageTest : WordSpec() {
             }
 
             "fail if the directory is a file" {
-                val storageDirectory = createTempFile()
+                val storageDirectory = createTempFile(ORT_NAME, javaClass.simpleName).apply { deleteOnExit() }
 
                 shouldThrow<IllegalArgumentException> {
                     LocalFileStorage(storageDirectory)

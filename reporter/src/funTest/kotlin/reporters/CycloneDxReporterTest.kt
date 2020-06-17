@@ -35,13 +35,14 @@ import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.yamlMapper
 import org.ossreviewtoolkit.reporter.ORT_RESULT
 import org.ossreviewtoolkit.reporter.ReporterInput
+import org.ossreviewtoolkit.utils.ORT_NAME
 import org.ossreviewtoolkit.utils.test.patchExpectedResult
 
 class CycloneDxReporterTest : WordSpec({
     "A generated BOM" should {
         "be valid" {
             val bomParser = BomParser()
-            val bomFile = createTempFile().also {
+            val bomFile = createTempFile(ORT_NAME, javaClass.simpleName).also {
                 CycloneDxReporter().generateReport(
                     it.outputStream(),
                     ReporterInput(ORT_RESULT)

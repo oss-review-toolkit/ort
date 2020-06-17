@@ -149,7 +149,7 @@ class ExtensionsTest : WordSpec({
         }
 
         "throw exception if file is not a directory" {
-            val file = createTempFile().apply { deleteOnExit() }
+            val file = createTempFile(ORT_NAME, javaClass.simpleName).apply { deleteOnExit() }
 
             file.isFile shouldBe true
             shouldThrow<IOException> { file.safeMkdirs() }
