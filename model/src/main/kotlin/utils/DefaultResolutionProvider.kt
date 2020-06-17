@@ -31,11 +31,9 @@ class DefaultResolutionProvider : ResolutionProvider {
     private var resolutions = Resolutions()
 
     /**
-     * Add resolutions that get merged with the existing resolutions.
+     * Add [other] resolutions that get merged with the existing resolutions.
      */
-    fun add(resolutions: Resolutions) {
-        this.resolutions = this.resolutions.merge(resolutions)
-    }
+    fun add(other: Resolutions) = apply { resolutions = resolutions.merge(other) }
 
     override fun getIssueResolutionsFor(issue: OrtIssue) = resolutions.issues.filter { it.matches(issue) }
 
