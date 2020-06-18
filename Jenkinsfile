@@ -128,16 +128,6 @@ pipeline {
             defaultValue: true,
             description: 'Run the reporter tool'
         )
-
-        /*
-         * Parameters for Jenkins job orchestration.
-         */
-
-        string(
-            name: 'DOWNSTREAM_JOB',
-            description: 'Optional name of a downstream job to trigger',
-            defaultValue: ''
-        )
     }
 
     stages {
@@ -378,22 +368,6 @@ pipeline {
                         fingerprint: true
                     )
                 }
-            }
-        }
-
-        stage('Trigger downstream job') {
-            agent any
-
-            when {
-                beforeAgent true
-
-                expression {
-                    !params.DOWNSTREAM_JOB.allWhitespace
-                }
-            }
-
-            steps {
-                build job: params.DOWNSTREAM_JOB, wait: false
             }
         }
     }
