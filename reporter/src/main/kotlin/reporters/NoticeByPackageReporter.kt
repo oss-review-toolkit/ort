@@ -50,7 +50,7 @@ import java.nio.file.Path
  */
 class NoticeByPackageReporter : AbstractNoticeReporter() {
     override val reporterName = "NoticeByPackage"
-    override val defaultFilename = "NOTICE_BY_PACKAGE"
+    override val noticeFilename = "NOTICE_BY_PACKAGE"
 
     override fun createProcessor(input: ReporterInput): NoticeProcessor = NoticeByPackageProcessor(input)
 }

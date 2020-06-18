@@ -37,29 +37,14 @@ import org.ossreviewtoolkit.utils.showStackTrace
 
 import retrofit2.Response
 
-private fun <T> getBodyOrHandleError(response: Response<T>, errorTitle: String): T {
-    val body = response.body()
-    if (response.isSuccessful && body != null) return body
-
-    val errorMessage = response.errorBody()?.let { errorBody ->
-        val errorResponse = jsonMapper.readValue(
-            errorBody.string(),
-            AmazonOssAttributionBuilderService.ErrorResponse::class.java
-        )
-
-        errorResponse.error
-    } ?: "Error code ${response.code()}"
-
-    throw IOException("$errorTitle: $errorMessage")
-}
-
 /**
  * A [Reporter] that creates an attribution document in .txt format using a running instance of the Amazon Attribution
  * Builder (https://github.com/amzn/oss-attribution-builder).
  */
 class AmazonOssAttributionBuilderReporter : Reporter {
     override val reporterName = "AmazonOssAttributionBuilder"
-    override val defaultFilename = "OssAttribution.txt"
+
+    private val reportFilename = "OssAttribution.txt"
 
     private val service = AmazonOssAttributionBuilderService.create(
         AmazonOssAttributionBuilderService.Server.DEFAULT,
@@ -188,7 +173,7 @@ class AmazonOssAttributionBuilderReporter : Reporter {
                 "Successfully fetched the attribution document with id '${generateAttributionDocBody.documentId}'."
             }
 
-            val outputFile = outputDir.resolve(defaultFilename)
+            val outputFile = outputDir.resolve(reportFilename)
 
             outputFile.bufferedWriter().use {
                 it.write(fetchAttributionDocBody.content)
@@ -204,4 +189,20 @@ class AmazonOssAttributionBuilderReporter : Reporter {
             )
         }
     }
+}
+
+private fun <T> getBodyOrHandleError(response: Response<T>, errorTitle: String): T {
+    val body = response.body()
+    if (response.isSuccessful && body != null) return body
+
+    val errorMessage = response.errorBody()?.let { errorBody ->
+        val errorResponse = jsonMapper.readValue(
+            errorBody.string(),
+            AmazonOssAttributionBuilderService.ErrorResponse::class.java
+        )
+
+        errorResponse.error
+    } ?: "Error code ${response.code()}"
+
+    throw IOException("$errorTitle: $errorMessage")
 }

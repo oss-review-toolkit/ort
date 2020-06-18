@@ -98,6 +98,8 @@ abstract class AbstractNoticeReporter : Reporter {
         abstract fun process(model: NoticeReportModel): List<() -> String>
     }
 
+    protected abstract val noticeFilename: String
+
     override fun generateReport(
         input: ReporterInput,
         outputDir: File,
@@ -130,7 +132,7 @@ abstract class AbstractNoticeReporter : Reporter {
 
         val processor = createProcessor(input)
         val notices = processor.process(preProcessedModel)
-        val outputFile = outputDir.resolve(defaultFilename)
+        val outputFile = outputDir.resolve(noticeFilename)
 
         outputFile.bufferedWriter().use { writer ->
             notices.forEach {

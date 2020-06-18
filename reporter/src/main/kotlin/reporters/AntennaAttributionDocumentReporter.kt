@@ -48,8 +48,8 @@ private const val TEMPLATE_PATH = "template.path"
 
 class AntennaAttributionDocumentReporter : Reporter {
     override val reporterName = "AntennaAttributionDocument"
-    override val defaultFilename = "attribution-document.pdf"
 
+    private val reportFilename = "attribution-document.pdf"
     private val originalClassLoader = Thread.currentThread().contextClassLoader
 
     override fun generateReport(
@@ -105,7 +105,7 @@ class AntennaAttributionDocumentReporter : Reporter {
 
         val documentFile = try {
             AttributionDocumentGeneratorImpl(
-                defaultFilename,
+                reportFilename,
                 workingDir,
                 templateId,
                 DocumentValues(rootProject.id.name, rootProject.id.version, projectCopyright)
@@ -116,7 +116,7 @@ class AntennaAttributionDocumentReporter : Reporter {
 
         // Antenna keeps around temporary files in its working directory, so we cannot just use our output directory as
         // its working directory, but have to copy the file we are interested in.
-        documentFile.copyTo(outputDir.resolve(defaultFilename))
+        documentFile.copyTo(outputDir.resolve(reportFilename))
         workingDir.safeDeleteRecursively()
 
         return listOf(documentFile)

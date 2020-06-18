@@ -54,10 +54,10 @@ import org.ossreviewtoolkit.utils.normalizeLineBreaks
 
 @Suppress("LargeClass")
 class StaticHtmlReporter : Reporter {
-    private val css = javaClass.getResource("/static-html-reporter.css").readText()
-
     override val reporterName = "StaticHtml"
-    override val defaultFilename = "scan-report.html"
+
+    private val reportFilename = "scan-report.html"
+    private val css = javaClass.getResource("/static-html-reporter.css").readText()
 
     override fun generateReport(
         input: ReporterInput,
@@ -72,7 +72,7 @@ class StaticHtmlReporter : Reporter {
         )
 
         val html = renderHtml(tabularScanRecord)
-        val outputFile = outputDir.resolve(defaultFilename)
+        val outputFile = outputDir.resolve(reportFilename)
 
         outputFile.bufferedWriter().use {
             it.write(html)

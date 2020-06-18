@@ -41,7 +41,8 @@ import org.ossreviewtoolkit.spdx.SpdxLicense
 
 class CycloneDxReporter : Reporter {
     override val reporterName = "CycloneDx"
-    override val defaultFilename = "bom.xml"
+
+    private val reportFilename = "bom.xml"
 
     private fun Bom.addExternalReference(type: ExternalReference.Type, url: String, comment: String? = null) {
         if (url.isBlank()) return
@@ -176,7 +177,7 @@ class CycloneDxReporter : Reporter {
         }
 
         val bomGenerator = BomGeneratorFactory.create(CycloneDxSchema.Version.VERSION_11, bom).apply { generate() }
-        val outputFile = outputDir.resolve(defaultFilename)
+        val outputFile = outputDir.resolve(reportFilename)
 
         outputFile.bufferedWriter().use {
             it.write(bomGenerator.toXmlString())

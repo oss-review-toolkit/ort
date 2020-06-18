@@ -27,7 +27,8 @@ import org.ossreviewtoolkit.reporter.model.EvaluatedModel
 
 class WebAppReporter : Reporter {
     override val reporterName = "WebApp"
-    override val defaultFilename = "scan-report-web-app.html"
+
+    private val reportFilename = "scan-report-web-app.html"
 
     override fun generateReport(
         input: ReporterInput,
@@ -42,7 +43,7 @@ class WebAppReporter : Reporter {
         val prefix = template.substring(0, index)
         val suffix = template.substring(index + placeholder.length, template.length)
 
-        val outputFile = outputDir.resolve(defaultFilename)
+        val outputFile = outputDir.resolve(reportFilename)
 
         outputFile.bufferedWriter().use {
             it.write(prefix)
