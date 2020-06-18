@@ -157,7 +157,7 @@ pipeline {
 
             steps {
                 sh '''
-                    /opt/ort/bin/ort $LOG_LEVEL --version
+                    /opt/ort/bin/ort $LOG_LEVEL --stacktrace --version
                 '''
             }
         }
@@ -185,7 +185,7 @@ pipeline {
                         fi
 
                         rm -fr $PROJECT_DIR
-                        /opt/ort/bin/ort $LOG_LEVEL download --project-url $PROJECT_VCS_URL $VCS_REVISION_OPTION -o $PROJECT_DIR/source
+                        /opt/ort/bin/ort $LOG_LEVEL --stacktrace download --project-url $PROJECT_VCS_URL $VCS_REVISION_OPTION -o $PROJECT_DIR/source
 
                         rm -f $HOME/.netrc
                     '''
@@ -224,7 +224,7 @@ pipeline {
                         fi
 
                         rm -fr $ORT_DATA_DIR/config
-                        /opt/ort/bin/ort $LOG_LEVEL download --project-url $ORT_CONFIG_VCS_URL $VCS_REVISION_OPTION -o $ORT_DATA_DIR/config
+                        /opt/ort/bin/ort $LOG_LEVEL --stacktrace download --project-url $ORT_CONFIG_VCS_URL $VCS_REVISION_OPTION -o $ORT_DATA_DIR/config
 
                         rm -f $HOME/.netrc
                     '''
@@ -258,7 +258,7 @@ pipeline {
                     fi
 
                     rm -fr out/results
-                    /opt/ort/bin/ort $LOG_LEVEL analyze $ALLOW_DYNAMIC_VERSIONS_OPTION $USE_CLEARLY_DEFINED_CURATIONS_OPTION -f JSON,YAML -i $PROJECT_DIR/source -o out/results/analyzer
+                    /opt/ort/bin/ort $LOG_LEVEL --stacktrace analyze $ALLOW_DYNAMIC_VERSIONS_OPTION $USE_CLEARLY_DEFINED_CURATIONS_OPTION -f JSON,YAML -i $PROJECT_DIR/source -o out/results/analyzer
                     ln -frs out/results/analyzer/analyzer-result.yml out/results/current-result.yml
                 '''
 
@@ -317,7 +317,7 @@ pipeline {
                     sh '''
                         echo "default login $LOGIN password $PASSWORD" > $HOME/.netrc
 
-                        /opt/ort/bin/ort $LOG_LEVEL scan -f JSON,YAML -i out/results/current-result.yml -o out/results/scanner
+                        /opt/ort/bin/ort $LOG_LEVEL --stacktrace scan -f JSON,YAML -i out/results/current-result.yml -o out/results/scanner
                         ln -frs out/results/scanner/scan-result.yml out/results/current-result.yml
 
                         rm -f $HOME/.netrc
@@ -357,7 +357,7 @@ pipeline {
 
             steps {
                 sh '''
-                    /opt/ort/bin/ort $LOG_LEVEL report -f CycloneDX,NoticeByPackage,NoticeSummary,StaticHTML,WebApp -i out/results/current-result.yml -o out/results/reporter
+                    /opt/ort/bin/ort $LOG_LEVEL --stacktrace report -f CycloneDX,NoticeByPackage,NoticeSummary,StaticHTML,WebApp -i out/results/current-result.yml -o out/results/reporter
                 '''
             }
 
