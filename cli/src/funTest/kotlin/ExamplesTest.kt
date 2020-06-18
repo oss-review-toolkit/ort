@@ -22,7 +22,10 @@ package org.ossreviewtoolkit
 import io.kotest.assertions.throwables.shouldNotThrow
 import io.kotest.assertions.withClue
 import io.kotest.core.spec.style.StringSpec
+import io.kotest.matchers.collections.beEmpty
+import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
+import io.kotest.matchers.shouldNotBe
 
 import java.io.File
 import java.io.IOException
@@ -40,12 +43,20 @@ import org.ossreviewtoolkit.reporter.reporters.AbstractNoticeReporter
 
 class ExamplesTest : StringSpec() {
     private val examplesDir = File("../docs/examples")
+    private lateinit var exampleFiles: MutableList<File>
+
+    private fun takeExampleFile(name: String) = exampleFiles.single { it.name == name }.also { exampleFiles.remove(it) }
 
     init {
+        "Listing examples files succeeded" {
+            examplesDir.listFiles()?.also { exampleFiles = it.toMutableList() } shouldNotBe null
+        }
+
         "ort.yml examples are parsable" {
-            examplesDir.listFiles { file ->
-                file.name.endsWith(".ort.yml")
-            }!!.forEach { file ->
+            val excludesExamples = exampleFiles.filter { it.name.endsWith(".ort.yml") }
+            exampleFiles.removeAll(excludesExamples)
+
+            excludesExamples.forEach { file ->
                 withClue(file.name) {
                     shouldNotThrow<IOException> {
                         file.readValue<RepositoryConfiguration>()
@@ -56,19 +67,19 @@ class ExamplesTest : StringSpec() {
 
         "copyright-garbage.yml can be deserialized" {
             shouldNotThrow<IOException> {
-                examplesDir.resolve("copyright-garbage.yml").readValue<CopyrightGarbage>()
+                takeExampleFile("copyright-garbage.yml").readValue<CopyrightGarbage>()
             }
         }
 
         "curations.yml can be deserialized" {
             shouldNotThrow<IOException> {
-                examplesDir.resolve("curations.yml").readValue<List<PackageCuration>>()
+                takeExampleFile("curations.yml").readValue<List<PackageCuration>>()
             }
         }
 
         "licenses.yml can be deserialized" {
             shouldNotThrow<IOException> {
-                examplesDir.resolve("licenses.yml").readValue<LicenseConfiguration>()
+                takeExampleFile("licenses.yml").readValue<LicenseConfiguration>()
             }
         }
 
@@ -89,7 +100,7 @@ class ExamplesTest : StringSpec() {
                 packageConfigurationProvider = SimplePackageConfigurationProvider()
             )
 
-            val script = examplesDir.resolve("notice-pre-processor.kts").readText()
+            val script = takeExampleFile("notice-pre-processor.kts").readText()
 
             preProcessor.checkSyntax(script) shouldBe true
 
@@ -98,7 +109,7 @@ class ExamplesTest : StringSpec() {
 
         "resolutions.yml can be deserialized" {
             shouldNotThrow<IOException> {
-                examplesDir.resolve("resolutions.yml").readValue<Resolutions>()
+                takeExampleFile("resolutions.yml").readValue<Resolutions>()
             }
         }
 
@@ -109,11 +120,15 @@ class ExamplesTest : StringSpec() {
                 licenseConfiguration = LicenseConfiguration()
             )
 
-            val script = examplesDir.resolve("rules.kts").readText()
+            val script = takeExampleFile("rules.kts").readText()
 
             evaluator.checkSyntax(script) shouldBe true
 
             // TODO: It should also be verified that the script works as expected.
+        }
+
+        "All example files should have been tested" {
+            exampleFiles should beEmpty()
         }
     }
 }
