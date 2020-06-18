@@ -61,6 +61,10 @@ import org.ossreviewtoolkit.utils.isValidUri
  * dependencies.
  */
 class ExcelReporter : Reporter {
+    override val reporterName = "Excel"
+
+    private val reportFilename = "scan-report.xlsx"
+
     private val defaultColumns = 5
 
     private val borderColor = XSSFColor(Color(211, 211, 211))
@@ -82,9 +86,6 @@ class ExcelReporter : Reporter {
     private lateinit var excludedFont: XSSFFont
 
     private lateinit var creationHelper: CreationHelper
-
-    override val reporterName = "Excel"
-    override val defaultFilename = "scan-report.xlsx"
 
     override fun generateReport(
         input: ReporterInput,
@@ -166,7 +167,7 @@ class ExcelReporter : Reporter {
             )
         }
 
-        val outputFile = outputDir.resolve(defaultFilename)
+        val outputFile = outputDir.resolve(reportFilename)
 
         outputFile.outputStream().use {
             workbook.write(it)

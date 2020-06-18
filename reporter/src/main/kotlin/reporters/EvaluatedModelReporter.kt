@@ -36,7 +36,7 @@ private fun EvaluatedModel.toJson(writer: Writer) = toJson(writer, prettyPrint =
  */
 class EvaluatedModelJsonReporter : EvaluatedModelReporter(
     reporterName = "EvaluatedModelJson",
-    defaultFilename = "evaluated-model.json",
+    reportFilename = "evaluated-model.json",
     serialize = EvaluatedModel::toJson
 )
 
@@ -45,7 +45,7 @@ class EvaluatedModelJsonReporter : EvaluatedModelReporter(
  */
 class EvaluatedModelYamlReporter : EvaluatedModelReporter(
     reporterName = "EvaluatedModelYaml",
-    defaultFilename = "evaluated-model.yml",
+    reportFilename = "evaluated-model.yml",
     serialize = EvaluatedModel::toYaml
 )
 
@@ -55,7 +55,7 @@ class EvaluatedModelYamlReporter : EvaluatedModelReporter(
  */
 abstract class EvaluatedModelReporter(
     override val reporterName: String,
-    override val defaultFilename: String,
+    private val reportFilename: String,
     private val serialize: EvaluatedModel.(Writer) -> Unit
 ) : Reporter {
     override fun generateReport(
@@ -67,7 +67,7 @@ abstract class EvaluatedModelReporter(
 
         log.debug { "Generating evaluated model took ${evaluatedModel.duration.inMilliseconds}ms." }
 
-        val outputFile = outputDir.resolve(defaultFilename)
+        val outputFile = outputDir.resolve(reportFilename)
 
         outputFile.bufferedWriter().use {
             evaluatedModel.value.serialize(it)

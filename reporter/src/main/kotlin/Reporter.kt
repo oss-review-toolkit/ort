@@ -49,11 +49,6 @@ interface Reporter {
     val reporterName: String
 
     /**
-     * The default output filename to use with this reporter format.
-     */
-    val defaultFilename: String
-
-    /**
      * Generate a report for the provided [input] and write the generated file(s) to the [outputDir]. If and how the
      * [input] data is used depends on the specific reporter implementation, taking into account any format-specific
      * [options]. The list of generated report files is returned.

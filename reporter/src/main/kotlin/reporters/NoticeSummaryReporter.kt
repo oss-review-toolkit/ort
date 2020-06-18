@@ -30,7 +30,7 @@ import org.ossreviewtoolkit.utils.log
  */
 class NoticeSummaryReporter : AbstractNoticeReporter() {
     override val reporterName = "NoticeSummary"
-    override val defaultFilename = "NOTICE_SUMMARY"
+    override val noticeFilename = "NOTICE_SUMMARY"
 
     override fun createProcessor(input: ReporterInput): NoticeProcessor = NoticeSummaryProcessor(input)
 }
