@@ -277,6 +277,10 @@ class SpdxLicenseWithExceptionExpression(
     val exception: String
 ) : SpdxSingleLicenseExpression() {
     companion object {
+        /**
+         * Parse a string into an [SpdxLicenseWithExceptionExpression]. Throws an [SpdxException] if the string cannot
+         * be parsed. Throws a [ClassCastException] if the string is not an [SpdxLicenseWithExceptionExpression].
+         */
         @JsonCreator
         @JvmStatic
         fun parse(expression: String): SpdxLicenseWithExceptionExpression =
