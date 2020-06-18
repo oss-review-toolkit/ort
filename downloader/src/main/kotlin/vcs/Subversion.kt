@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2017-2019 HERE Europe B.V.
+ * Copyright (C) 2020 Bosch.IO GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,29 +20,37 @@
 
 package org.ossreviewtoolkit.downloader.vcs
 
+import java.io.File
+import java.net.InetSocketAddress
+import java.net.URI
+import java.nio.file.Paths
+
 import org.ossreviewtoolkit.downloader.DownloadException
 import org.ossreviewtoolkit.downloader.VersionControlSystem
 import org.ossreviewtoolkit.downloader.WorkingTree
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.utils.collectMessagesAsString
+import org.ossreviewtoolkit.utils.installAuthenticatorAndProxySelector
 import org.ossreviewtoolkit.utils.log
 import org.ossreviewtoolkit.utils.showStackTrace
 
-import java.io.File
-import java.nio.file.Paths
-
 import org.tmatesoft.svn.core.SVNDepth
+import org.tmatesoft.svn.core.SVNErrorMessage
 import org.tmatesoft.svn.core.SVNException
 import org.tmatesoft.svn.core.SVNNodeKind
 import org.tmatesoft.svn.core.SVNURL
+import org.tmatesoft.svn.core.auth.ISVNProxyManager
+import org.tmatesoft.svn.core.internal.wc.DefaultSVNAuthenticationManager
 import org.tmatesoft.svn.core.io.SVNRepositoryFactory
 import org.tmatesoft.svn.core.wc.SVNClientManager
 import org.tmatesoft.svn.core.wc.SVNRevision
 import org.tmatesoft.svn.util.Version
 
 class Subversion : VersionControlSystem() {
-    private val clientManager = SVNClientManager.newInstance()
+    private val clientManager = SVNClientManager.newInstance().apply {
+        setAuthenticationManager(AuthenticationManager())
+    }
 
     override val type = VcsType.SUBVERSION
     override val priority = 10
@@ -222,4 +231,27 @@ class Subversion : VersionControlSystem() {
 
             false
         }
+}
+
+private class AuthenticationManager : DefaultSVNAuthenticationManager(null, false, null, null, null, charArrayOf()) {
+    private val ortProxySelector = installAuthenticatorAndProxySelector()
+
+    override fun getProxyManager(url: SVNURL): ISVNProxyManager? {
+        val proxy = ortProxySelector.select(URI(url.toDecodedString())).firstOrNull() ?: return null
+        val proxyAddress = (proxy.address() as? InetSocketAddress) ?: return null
+        val authentication = ortProxySelector.getProxyAuthentication(proxy)
+
+        return object : ISVNProxyManager {
+            override fun getProxyUserName() = authentication?.userName
+
+            override fun getProxyPassword() = authentication?.password?.let { String(it) }
+
+            override fun getProxyPort() = proxyAddress.port
+
+            override fun getProxyHost() = proxyAddress.hostName
+
+            @Suppress("EmptyFunctionBlock")
+            override fun acknowledgeProxyContext(accepted: Boolean, errorMessage: SVNErrorMessage?) {}
+        }
+    }
 }
