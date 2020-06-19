@@ -19,6 +19,11 @@
 
 package org.ossreviewtoolkit.spdx
 
+import java.io.File
+import java.nio.file.Files
+import java.nio.file.LinkOption
+import java.nio.file.NoSuchFileException
+import java.nio.file.attribute.BasicFileAttributes
 import java.util.EnumSet
 
 import org.ossreviewtoolkit.spdx.SpdxExpression.Strictness
@@ -27,6 +32,22 @@ import org.ossreviewtoolkit.spdx.SpdxExpression.Strictness
  * Return an [EnumSet] that contains the elements of [this] and [other].
  */
 operator fun <E : Enum<E>> EnumSet<E>.plus(other: EnumSet<E>): EnumSet<E> = EnumSet.copyOf(this).apply { addAll(other) }
+
+/**
+ * Return true if and only if this file is a symbolic link.
+ */
+fun File.isSymbolicLink(): Boolean =
+    try {
+        val isWindows = System.getProperty("os.name")?.contains("Windows", ignoreCase = true) == true
+
+        // Note that we cannot use exists() to check beforehand whether a symbolic link exists to avoid a
+        // NoSuchFileException to be thrown as it returns "false" e.g. for dangling Windows junctions.
+        Files.readAttributes(toPath(), BasicFileAttributes::class.java, LinkOption.NOFOLLOW_LINKS).let {
+            it.isSymbolicLink || (isWindows && it.isOther)
+        }
+    } catch (e: NoSuchFileException) {
+        false
+    }
 
 /**
  * Create an [SpdxExpression] by concatenating [this][SpdxLicense] and [other] using [SpdxOperator.AND].
