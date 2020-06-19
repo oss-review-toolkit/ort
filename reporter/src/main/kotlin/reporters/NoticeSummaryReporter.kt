@@ -72,7 +72,7 @@ class NoticeSummaryProcessor(input: ReporterInput) : AbstractNoticeReporter.Noti
             if (copyrights.isNotEmpty()) add { "\n" }
 
             add(licenseTextReader)
-        } ?: log.warn {
+        } ?: this@NoticeSummaryProcessor.log.warn {
             "No license text found for license '$license', it will be omitted from the report."
         }
     }
