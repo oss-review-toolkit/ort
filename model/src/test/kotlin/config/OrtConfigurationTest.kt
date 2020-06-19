@@ -19,19 +19,19 @@
 
 package org.ossreviewtoolkit.model.config
 
-import org.ossreviewtoolkit.utils.ORT_NAME
-
 import com.typesafe.config.ConfigFactory
 
 import io.github.config4k.extract
-
-import io.kotest.matchers.shouldBe
-import io.kotest.matchers.shouldNotBe
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.collections.containExactly
 import io.kotest.matchers.should
+import io.kotest.matchers.shouldBe
+import io.kotest.matchers.shouldNotBe
 
 import java.io.File
+
+import org.ossreviewtoolkit.utils.ORT_NAME
+import org.ossreviewtoolkit.utils.test.containExactly as containExactlyEntries
 
 class OrtConfigurationTest : WordSpec({
     "OrtConfiguration" should {
@@ -64,7 +64,7 @@ class OrtConfigurationTest : WordSpec({
                         backend.httpFileStorage.let { httpFileStorage ->
                             httpFileStorage shouldNotBe null
                             httpFileStorage!!.url shouldBe "https://your-http-server"
-                            httpFileStorage.headers shouldBe mapOf("key1" to "value1", "key2" to "value2")
+                            httpFileStorage.headers should containExactlyEntries("key1" to "value1", "key2" to "value2")
                         }
 
                         backend.localFileStorage.let { localFileStorage ->

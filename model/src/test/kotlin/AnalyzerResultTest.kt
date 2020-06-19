@@ -21,12 +21,13 @@ package org.ossreviewtoolkit.model
 
 import com.fasterxml.jackson.module.kotlin.readValue
 
-import org.ossreviewtoolkit.utils.DeclaredLicenseProcessor
-
+import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.collections.haveSize
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
-import io.kotest.core.spec.style.WordSpec
+
+import org.ossreviewtoolkit.utils.DeclaredLicenseProcessor
+import org.ossreviewtoolkit.utils.test.containExactly
 
 class AnalyzerResultTest : WordSpec() {
     private val issue1 = OrtIssue(source = "source-1", message = "message-1")
@@ -87,7 +88,7 @@ class AnalyzerResultTest : WordSpec() {
                     .addResult(analyzerResult2)
                     .build()
 
-                analyzerResult.collectIssues() shouldBe mapOf(
+                analyzerResult.collectIssues() should containExactly(
                     package1.id to setOf(issue1),
                     package3.id to setOf(issue2),
                     project1.id to setOf(issue3, issue4),

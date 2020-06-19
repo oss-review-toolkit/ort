@@ -19,14 +19,15 @@
 
 package org.ossreviewtoolkit.model
 
-import io.kotest.matchers.collections.beEmpty
-import io.kotest.matchers.should
-import io.kotest.matchers.shouldBe
 import io.kotest.core.spec.style.WordSpec
+import io.kotest.matchers.collections.beEmpty
 import io.kotest.matchers.collections.containExactlyInAnyOrder
+import io.kotest.matchers.should
 
 import java.io.File
 import java.time.Instant
+
+import org.ossreviewtoolkit.utils.test.containExactly
 
 private fun readAnalyzerResult(analyzerResultFilename: String): Project =
     File("../analyzer/src/funTest/assets/projects/synthetic")
@@ -76,7 +77,7 @@ class ProjectTest : WordSpec({
 
             val issues = project.collectIssues()
 
-            issues shouldBe mapOf(
+            issues should containExactly(
                 Identifier("Unknown:org.apache.commons:commons-text:1.1") to setOf(
                     OrtIssue(
                         Instant.EPOCH,

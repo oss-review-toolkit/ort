@@ -20,13 +20,16 @@
 package org.ossreviewtoolkit.utils
 
 import io.kotest.assertions.assertSoftly
-import io.kotest.matchers.shouldBe
-import io.kotest.matchers.shouldNotBe
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.WordSpec
+import io.kotest.matchers.should
+import io.kotest.matchers.shouldBe
+import io.kotest.matchers.shouldNotBe
 
 import java.io.File
 import java.io.IOException
+
+import org.ossreviewtoolkit.utils.test.containExactly
 
 class ExtensionsTest : WordSpec({
     "ByteArray.toHexString" should {
@@ -279,13 +282,13 @@ class ExtensionsTest : WordSpec({
         "not fail if this map is empty" {
             val other = mapOf("1" to 1)
 
-            emptyMap<String, Int>().zip(other, operation) shouldBe mapOf("1" to 1)
+            emptyMap<String, Int>().zip(other, operation) should containExactly("1" to 1)
         }
 
         "not fail if other map is empty" {
             val map = mapOf("1" to 1)
 
-            map.zip(emptyMap(), operation) shouldBe mapOf("1" to 1)
+            map.zip(emptyMap(), operation) should containExactly("1" to 1)
         }
     }
 
@@ -316,13 +319,13 @@ class ExtensionsTest : WordSpec({
         "not fail if this map is empty" {
             val other = mapOf("1" to 1)
 
-            emptyMap<String, Int>().zipWithDefault(other, 1, operation) shouldBe mapOf("1" to 2)
+            emptyMap<String, Int>().zipWithDefault(other, 1, operation) should containExactly("1" to 2)
         }
 
         "not fail if other map is empty" {
             val map = mapOf("1" to 1)
 
-            map.zipWithDefault(emptyMap(), 1, operation) shouldBe mapOf("1" to 2)
+            map.zipWithDefault(emptyMap(), 1, operation) should containExactly("1" to 2)
         }
     }
 
