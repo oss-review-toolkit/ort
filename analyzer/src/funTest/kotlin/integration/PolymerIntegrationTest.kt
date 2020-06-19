@@ -51,8 +51,8 @@ class PolymerIntegrationTest : AbstractIntegrationSpec() {
         )
     )
 
-    private fun findDownloadedFiles(vararg filenames: String) =
-        downloadResult.downloadDirectory.walkTopDown().filter { it.name in filenames }.toList()
+    private fun findDownloadedFiles(vararg filenames: String): List<File> =
+        downloadResult.downloadDirectory.walk().filterTo(mutableListOf()) { it.name in filenames }
 
     override val expectedManagedFiles by lazy {
         val bowerJsonFiles = findDownloadedFiles("bower.json")

@@ -65,6 +65,7 @@ import org.ossreviewtoolkit.spdx.SpdxSingleLicenseExpression
 import org.ossreviewtoolkit.utils.CopyrightStatementsProcessor
 import org.ossreviewtoolkit.utils.ORT_NAME
 import org.ossreviewtoolkit.utils.OkHttpClientHelper
+import org.ossreviewtoolkit.utils.isSymbolicLink
 import org.ossreviewtoolkit.utils.safeMkdirs
 import org.ossreviewtoolkit.utils.stripCredentialsFromUrl
 
@@ -112,16 +113,10 @@ internal fun download(url: String): File {
  */
 internal fun findFilesRecursive(directory: File): List<String> {
     require(directory.isDirectory)
-
-    val result = mutableListOf<String>()
-
-    directory.walk().forEach { file ->
-        if (!file.isDirectory) {
-            result.add(file.relativeTo(directory).path)
-        }
-    }
-
-    return result
+    return directory.walk()
+        .onEnter { !it.isSymbolicLink() }
+        .filter { !it.isSymbolicLink() && it.isFile }
+        .mapTo(mutableListOf()) { it.relativeTo(directory).path }
 }
 
 /**

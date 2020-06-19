@@ -79,7 +79,7 @@ class DownloaderTest : StringSpec() {
             licenseFile.isFile shouldBe true
             licenseFile.length() shouldBe 11376L
 
-            downloadResult.downloadDirectory.walkTopDown().count() shouldBe 234
+            downloadResult.downloadDirectory.walk().count() shouldBe 234
         }
 
         "Download of JAR source package fails when hash is incorrect".config(tags = setOf(ExpensiveTag)) {
@@ -146,7 +146,7 @@ class DownloaderTest : StringSpec() {
             licenseFile.isFile shouldBe true
             licenseFile.length() shouldBe 11376L
 
-            downloadResult.downloadDirectory.walkTopDown().count() shouldBe 234
+            downloadResult.downloadDirectory.walk().count() shouldBe 234
         }
 
         "Can download source artifact from SourceForce".config(tags = setOf(ExpensiveTag)) {
@@ -178,7 +178,7 @@ class DownloaderTest : StringSpec() {
             val tyrexDir = File(downloadResult.downloadDirectory, "tyrex-1.0.1")
 
             tyrexDir.isDirectory shouldBe true
-            tyrexDir.walkTopDown().count() shouldBe 409
+            tyrexDir.walk().count() shouldBe 409
         }
     }
 }

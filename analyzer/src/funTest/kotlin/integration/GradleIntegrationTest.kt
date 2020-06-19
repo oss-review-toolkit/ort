@@ -55,9 +55,9 @@ class GradleIntegrationTest : AbstractIntegrationSpec() {
         // check that all of them are found, and that they are assigned to the correct package manager.
         val gradleFilenames = listOf("build.gradle", "build.gradle.kts", "settings.gradle", "settings.gradle.kts")
 
-        val gradleFiles = downloadResult.downloadDirectory.walkTopDown().filter {
+        val gradleFiles = downloadResult.downloadDirectory.walk().filterTo(mutableListOf()) {
             it.name in gradleFilenames
-        }.toMutableList()
+        }
 
         // In each directory only the first file contained in gradleFiles is used.
         gradleFiles.removeAll { file ->
@@ -65,7 +65,9 @@ class GradleIntegrationTest : AbstractIntegrationSpec() {
             preferentialGradleFilenames.any { file.resolveSibling(it) in gradleFiles }
         }
 
-        val pomFiles = downloadResult.downloadDirectory.walkTopDown().filter { it.name == "pom.xml" }.toList()
+        val pomFiles = downloadResult.downloadDirectory.walk().filterTo(mutableListOf()) {
+            it.name == "pom.xml"
+        }
 
         mapOf(
             Gradle.Factory() as PackageManagerFactory to gradleFiles,

@@ -101,7 +101,7 @@ class Gradle(
                 "${artifact.groupId}/${artifact.artifactId}/${artifact.version}"
             )
 
-            val artifactFile = artifactRootDir.walkTopDown().find {
+            val artifactFile = artifactRootDir.walk().find {
                 val classifier = if (artifact.classifier.isNullOrBlank()) "" else "${artifact.classifier}-"
                 it.isFile && it.name == "${artifact.artifactId}-$classifier${artifact.version}.${artifact.extension}"
             }

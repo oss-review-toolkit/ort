@@ -30,6 +30,7 @@ import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.createAndLogIssue
 import org.ossreviewtoolkit.utils.collectMessagesAsString
+import org.ossreviewtoolkit.utils.isSymbolicLink
 import org.ossreviewtoolkit.utils.log
 import org.ossreviewtoolkit.utils.normalizeVcsUrl
 import org.ossreviewtoolkit.utils.showStackTrace
@@ -113,6 +114,14 @@ abstract class PackageManager(
                     }
 
                     val dirAsFile = dir.toFile()
+
+                    // Note that although FileVisitOption.FOLLOW_LINKS is not set, this would still follow junctions on
+                    // Windows, so do a better check here.
+                    if (dirAsFile.isSymbolicLink()) {
+                        PackageManager.log.info { "Not following symbolic link to directory '$dir'." }
+                        return FileVisitResult.SKIP_SUBTREE
+                    }
+
                     val filesInDir = dirAsFile.listFiles(FileFilter { it.isFile })
 
                     packageManagers.forEach { manager ->
