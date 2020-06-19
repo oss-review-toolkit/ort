@@ -283,10 +283,7 @@ class NodeSupportTest : WordSpec() {
         if (hasYarnLockFile) projectDir.resolve("yarn.lock").createNewFile()
     }
 
-    private fun absolutePaths(vararg files: String) =
-        files.asList().map { file ->
-            tempDir.resolve(file)
-        }
+    private fun absolutePaths(vararg files: String) = files.map { tempDir.resolve(it) }
 
     private fun hasNpmLockFile(path: String) = hasNpmLockFile(tempDir.resolve(path))
 
