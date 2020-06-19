@@ -36,12 +36,12 @@ val loggerOfClass = ConcurrentHashMap<Any, KotlinLogger>()
 val <reified T : Any> T.log: KotlinLogger
     inline get() = loggerOfClass.getOrPut(T::class.java) { loggerOf(T::class.java) }
 
-private val KotlinLogger.statements by lazy { mutableSetOf<Triple<Any, Level, String>>() }
+val KotlinLogger.statements by lazy { mutableSetOf<Triple<Any, Level, String>>() }
 
 /**
  * A convenience function to log a specific statement only once with this class instance.
  */
-fun Any.logOnce(level: Level, supplier: () -> String) {
+inline fun <reified T : Any> T.logOnce(level: Level, supplier: () -> String) {
     val statement = Triple(this, level, supplier())
     if (statement !in log.statements) {
         log.statements += statement
