@@ -162,7 +162,9 @@ class Sbt(
 
         // Determine the SBT version(s) being used.
         val rootPropertiesFile = workingDir.resolve("project").resolve("build.properties")
-        val propertiesFiles = workingDir.walkBottomUp().filter { it.isFile && it.name == "build.properties" }.toList()
+        val propertiesFiles = workingDir.walkBottomUp().filterTo(mutableListOf()) {
+            it.isFile && it.name == "build.properties"
+        }
 
         if (!propertiesFiles.contains(rootPropertiesFile)) {
             // Note that "sbt sbtVersion" behaves differently when executed inside or outside an SBT project, see

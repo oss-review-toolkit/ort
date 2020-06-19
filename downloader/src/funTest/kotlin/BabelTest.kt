@@ -97,7 +97,7 @@ class BabelTest : StringSpec() {
 
             val babelCliDir = File(downloadResult.downloadDirectory, "packages/babel-cli")
             babelCliDir.isDirectory shouldBe true
-            babelCliDir.walkTopDown().count() shouldBe 242
+            babelCliDir.walk().count() shouldBe 242
         }
     }
 }

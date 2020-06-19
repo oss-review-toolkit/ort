@@ -110,16 +110,11 @@ fun File.safeCopyRecursively(target: File, overwrite: Boolean = false) {
         if (overwrite) add(StandardCopyOption.REPLACE_EXISTING)
     }.toTypedArray()
 
-    // This call to walkFileTree() implicitly uses EnumSet.noneOf(FileVisitOption.class), i.e.
-    // FileVisitOption.FOLLOW_LINKS is not used, so symbolic links are not followed.
     Files.walkFileTree(sourcePath, object : SimpleFileVisitor<Path>() {
         override fun preVisitDirectory(dir: Path, attrs: BasicFileAttributes): FileVisitResult {
-            val isUnixLink = !Os.isWindows && attrs.isSymbolicLink
-            val isWindowsLink = Os.isWindows && attrs.isOther
-            if (isUnixLink || isWindowsLink) {
-                // Do not follow symbolic links or junctions.
-                return FileVisitResult.SKIP_SUBTREE
-            }
+            // Note that although FileVisitOption.FOLLOW_LINKS is not set, this would still follow junctions on Windows,
+            // so do a better check here.
+            if (dir.toFile().isSymbolicLink()) return FileVisitResult.SKIP_SUBTREE
 
             val targetDir = targetPath.resolve(sourcePath.relativize(dir))
             targetDir.toFile().safeMkdirs()

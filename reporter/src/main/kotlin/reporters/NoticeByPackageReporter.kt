@@ -229,10 +229,11 @@ class NoticeByPackageProcessor(input: ReporterInput) : AbstractNoticeReporter.No
         val matcher = FileMatcher(licenseFilePatterns)
         val licenseFiles = mutableMapOf<String, LicenseFindingsMap>()
 
-        archiveDir.walkTopDown().forEach { file ->
+        archiveDir.walk().forEach { file ->
             val relativePath = archiveDir.toPath().relativize(file.toPath())
-            if (matcher.matches(relativePath.toString())) {
-                licenseFiles[relativePath.toString()] =
+            val relativePathString = relativePath.toString()
+            if (matcher.matches(relativePathString)) {
+                licenseFiles[relativePathString] =
                     getFindingsForLicenseFile(scanResult, relativePath, licenseFindingsMap)
             }
         }

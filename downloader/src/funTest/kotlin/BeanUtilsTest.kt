@@ -71,7 +71,7 @@ class BeanUtilsTest : StringSpec() {
 
             val downloadResult = Downloader.download(pkg, outputDir)
 
-            downloadResult.downloadDirectory.walkTopDown().onEnter { it.name != ".svn" }.count() shouldBe 302
+            downloadResult.downloadDirectory.walk().onEnter { it.name != ".svn" }.count() shouldBe 302
             downloadResult.sourceArtifact shouldBe null
 
             downloadResult.vcsInfo shouldNotBe null

@@ -191,7 +191,7 @@ open class Npm(
 
         log.info { "Searching for 'package.json' files in '$nodeModulesDir'..." }
 
-        nodeModulesDir.walkTopDown().filter {
+        nodeModulesDir.walk().filter {
             it.name == "package.json" && isValidNodeModulesDirectory(nodeModulesDir, nodeModulesDirForPackageJson(it))
         }.forEach {
             val packageDir = it.parentFile
