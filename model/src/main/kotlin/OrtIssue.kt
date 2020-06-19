@@ -27,6 +27,7 @@ import com.fasterxml.jackson.databind.ser.std.StdSerializer
 import java.time.Instant
 
 import org.ossreviewtoolkit.utils.log
+import org.ossreviewtoolkit.utils.logOnce
 import org.ossreviewtoolkit.utils.normalizeLineBreaks
 
 /**
@@ -69,7 +70,11 @@ class NormalizeLineBreaksSerializer : StdSerializer<String>(String::class.java) 
 /**
  * Create an [OrtIssue] and [log] the message. The log level is aligned with the [severity].
  */
-fun Any.createAndLogIssue(source: String, message: String, severity: Severity = Severity.ERROR): OrtIssue {
+inline fun <reified T : Any> T.createAndLogIssue(
+    source: String,
+    message: String,
+    severity: Severity = Severity.ERROR
+): OrtIssue {
     log.log(severity.toLog4jLevel(), message)
     return OrtIssue(source = source, message = message, severity = severity)
 }
