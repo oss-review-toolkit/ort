@@ -1,6 +1,5 @@
 /*
- * Copyright (C) 2017-2019 HERE Europe B.V.
- * Copyright (C) 2019 Bosch Software Innovations GmbH
+ * Copyright (C) 2017-2020 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,20 +17,9 @@
  * License-Filename: LICENSE
  */
 
-val kotestVersion: String by project
-val log4jCoreVersion: String by project
+package org.ossreviewtoolkit.utils.test
 
-plugins {
-    // Apply core plugins.
-    `java-library`
-}
+import io.kotest.matchers.Matcher
+import io.kotest.matchers.maps.MapContainsMatcher
 
-dependencies {
-    api(project(":model"))
-
-    api("io.kotest:kotest-core-jvm:$kotestVersion")
-    api("io.kotest:kotest-assertions-core-jvm:$kotestVersion")
-
-    // kotest uses slf4j 1.7, so route these calls to log4j to avoid the slf4j warning about no logger being bound.
-    implementation("org.apache.logging.log4j:log4j-slf4j-impl:$log4jCoreVersion")
-}
+fun <K, V> containExactly(vararg expected: Pair<K, V>): Matcher<Map<K, V>> = MapContainsMatcher(expected.toMap())
