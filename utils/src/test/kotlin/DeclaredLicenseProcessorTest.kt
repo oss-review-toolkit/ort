@@ -25,7 +25,6 @@ import io.kotest.inspectors.forAll
 import io.kotest.matchers.collections.beEmpty
 import io.kotest.matchers.collections.containExactly
 import io.kotest.matchers.maps.beEmpty as beEmptyMap
-import io.kotest.matchers.maps.shouldContainExactly
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNotBe
@@ -37,6 +36,7 @@ import org.ossreviewtoolkit.spdx.SpdxLicense
 import org.ossreviewtoolkit.spdx.SpdxSimpleLicenseMapping
 import org.ossreviewtoolkit.spdx.SpdxLicenseIdExpression
 import org.ossreviewtoolkit.spdx.toExpression
+import org.ossreviewtoolkit.utils.test.containExactly as containExactlyEntries
 
 class DeclaredLicenseProcessorTest : StringSpec() {
     /**
@@ -61,10 +61,10 @@ class DeclaredLicenseProcessorTest : StringSpec() {
             val processedLicenses = DeclaredLicenseProcessor.process(declaredLicenses)
 
             processedLicenses.spdxExpression shouldBe SpdxLicenseIdExpression("Apache-2.0")
-            processedLicenses.mapped shouldContainExactly (mapOf(
-                "Apache2" to SpdxLicense.APACHE_2_0.toExpression(),
-                "Apache-2" to SpdxLicense.APACHE_2_0.toExpression()
-            ))
+            processedLicenses.mapped should containExactlyEntries(
+                "Apache2" to SpdxLicense.APACHE_2_0.toExpression() as SpdxExpression,
+                "Apache-2" to SpdxLicense.APACHE_2_0.toExpression() as SpdxExpression
+            )
             processedLicenses.unmapped should beEmpty()
         }
 

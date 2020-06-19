@@ -20,7 +20,9 @@
 package org.ossreviewtoolkit.model
 
 import io.kotest.core.spec.style.StringSpec
-import io.kotest.matchers.maps.shouldContainExactly
+import io.kotest.matchers.should
+
+import org.ossreviewtoolkit.utils.test.containExactly
 
 class ProjectAnalyzerResultTest : StringSpec({
     "collectIssues should find all issues" {
@@ -83,12 +85,11 @@ class ProjectAnalyzerResultTest : StringSpec({
             issues = listOf(issue7, issue8)
         )
 
-        result.collectIssues() shouldContainExactly
-                mapOf(
+        result.collectIssues() should containExactly(
                     Identifier("type:namespace:name:version") to listOf(issue7, issue8),
                     Identifier("type1:namespace1:name1:version1") to listOf(issue3, issue4),
                     Identifier("type2:namespace2:name2:version2") to listOf(issue1, issue2),
                     Identifier("type3:namespace3:name3:version3") to listOf(issue5, issue6)
-                )
+        )
     }
 })

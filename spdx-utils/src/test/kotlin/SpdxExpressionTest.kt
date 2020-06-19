@@ -22,18 +22,17 @@ package org.ossreviewtoolkit.spdx
 import com.fasterxml.jackson.dataformat.yaml.YAMLMapper
 import com.fasterxml.jackson.module.kotlin.readValue
 
-import org.ossreviewtoolkit.spdx.SpdxExpression.Strictness
-import org.ossreviewtoolkit.spdx.SpdxLicense.*
-import org.ossreviewtoolkit.spdx.SpdxLicenseException.*
-
 import io.kotest.assertions.assertSoftly
 import io.kotest.matchers.shouldBe
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.collections.containExactlyInAnyOrder
-import io.kotest.matchers.collections.shouldContainExactlyInAnyOrder
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldNotBe
+
+import org.ossreviewtoolkit.spdx.SpdxExpression.Strictness
+import org.ossreviewtoolkit.spdx.SpdxLicense.*
+import org.ossreviewtoolkit.spdx.SpdxLicenseException.*
 
 class SpdxExpressionTest : WordSpec() {
     private val yamlMapper = YAMLMapper()
@@ -267,9 +266,9 @@ class SpdxExpressionTest : WordSpec() {
             "work with LicenseRef-* identifiers" {
                 "LicenseRef-gpl-2.0-custom WITH Classpath-exception-2.0 AND LicenseRef-scancode-commercial-license"
                     .decompose() should containExactlyInAnyOrder(
-                        "LicenseRef-gpl-2.0-custom WITH Classpath-exception-2.0",
-                        "LicenseRef-scancode-commercial-license"
-                    )
+                    "LicenseRef-gpl-2.0-custom WITH Classpath-exception-2.0",
+                    "LicenseRef-scancode-commercial-license"
+                )
             }
 
             "return distinct strings" {
@@ -280,9 +279,9 @@ class SpdxExpressionTest : WordSpec() {
             "not merge license-exception pairs with single matching licenses" {
                 "GPL-2.0-or-later WITH Classpath-exception-2.0 AND GPL-2.0-or-later"
                     .decompose() should containExactlyInAnyOrder(
-                        "GPL-2.0-or-later WITH Classpath-exception-2.0",
-                        "GPL-2.0-or-later"
-                    )
+                    "GPL-2.0-or-later WITH Classpath-exception-2.0",
+                    "GPL-2.0-or-later"
+                )
             }
         }
 
@@ -314,12 +313,12 @@ class SpdxExpressionTest : WordSpec() {
 
         "validChoices()" should {
             "list the valid choices for a complex expression" {
-                "(a OR b) AND c AND (d OR e)".toSpdx().validChoices() shouldContainExactlyInAnyOrder listOf(
-                    "a AND c AND d",
-                    "a AND c AND e",
-                    "b AND c AND d",
-                    "b AND c AND e"
-                ).map { it.toSpdx() }
+                "(a OR b) AND c AND (d OR e)".toSpdx().validChoices() should containExactlyInAnyOrder(
+                    "a AND c AND d".toSpdx(),
+                    "a AND c AND e".toSpdx(),
+                    "b AND c AND d".toSpdx(),
+                    "b AND c AND e".toSpdx()
+                )
             }
         }
 

@@ -19,16 +19,16 @@
 
 package org.ossreviewtoolkit.analyzer.managers.utils
 
+import io.kotest.core.spec.style.WordSpec
 import io.kotest.core.test.TestCase
 import io.kotest.core.test.TestResult
+import io.kotest.inspectors.forAll
 import io.kotest.matchers.collections.beEmpty
-import io.kotest.matchers.collections.shouldContainExactly
-import io.kotest.matchers.collections.shouldContainExactlyInAnyOrder
+import io.kotest.matchers.collections.containExactly
+import io.kotest.matchers.collections.containExactlyInAnyOrder
 import io.kotest.matchers.maps.beEmpty as beEmptyMap
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
-import io.kotest.core.spec.style.WordSpec
-import io.kotest.inspectors.forAll
 
 import java.io.File
 
@@ -36,6 +36,7 @@ import org.ossreviewtoolkit.utils.ORT_NAME
 import org.ossreviewtoolkit.utils.ProtocolProxyMap
 import org.ossreviewtoolkit.utils.safeDeleteRecursively
 import org.ossreviewtoolkit.utils.safeMkdirs
+import org.ossreviewtoolkit.utils.test.containExactly as containExactlyEntries
 
 class NodeSupportTest : WordSpec() {
     companion object {
@@ -89,13 +90,13 @@ class NodeSupportTest : WordSpec() {
                 setupProject(path = "a", hasNpmLockFile = true, hasYarnLockFile = true)
 
                 mapDefinitionFilesForNpm(definitionFiles) should beEmpty()
-                mapDefinitionFilesForYarn(definitionFiles) shouldContainExactly absolutePaths("a/package.json")
+                mapDefinitionFilesForYarn(definitionFiles) should containExactly(absolutePaths("a/package.json"))
             }
 
             "happen for NPM only if no lockfile is present" {
                 setupProject(path = "a")
 
-                mapDefinitionFilesForNpm(definitionFiles) shouldContainExactly absolutePaths("a/package.json")
+                mapDefinitionFilesForNpm(definitionFiles) should containExactly(absolutePaths("a/package.json"))
                 mapDefinitionFilesForYarn(definitionFiles) should beEmpty()
             }
         }
@@ -106,8 +107,9 @@ class NodeSupportTest : WordSpec() {
                 setupProject(path = "a/b")
                 setupProject(path = "a/c")
 
-                mapDefinitionFiles(definitionFiles) shouldContainExactlyInAnyOrder
-                        absolutePaths("a/package.json", "a/c/package.json")
+                mapDefinitionFiles(definitionFiles) should containExactlyInAnyOrder(
+                    absolutePaths("a/package.json", "a/c/package.json")
+                )
             }
 
             "not be mapped if * matches the project path" {
@@ -117,8 +119,9 @@ class NodeSupportTest : WordSpec() {
                 setupProject(path = "a/d/e")
                 setupProject(path = "a/d/f")
 
-                mapDefinitionFiles(definitionFiles) shouldContainExactlyInAnyOrder
-                        absolutePaths("a/package.json", "a/d/e/package.json")
+                mapDefinitionFiles(definitionFiles) should containExactlyInAnyOrder(
+                    absolutePaths("a/package.json", "a/d/e/package.json")
+                )
             }
 
             "not be mapped if * matches the project path (non-flattened workspace definition)" {
@@ -128,8 +131,9 @@ class NodeSupportTest : WordSpec() {
                 setupProject(path = "a/d/e")
                 setupProject(path = "a/d/f")
 
-                mapDefinitionFiles(definitionFiles) shouldContainExactlyInAnyOrder
-                        absolutePaths("a/package.json", "a/d/e/package.json")
+                mapDefinitionFiles(definitionFiles) should containExactlyInAnyOrder(
+                    absolutePaths("a/package.json", "a/d/e/package.json")
+                )
             }
 
             "not be mapped if ** matches the project name" {
@@ -137,8 +141,9 @@ class NodeSupportTest : WordSpec() {
                 setupProject(path = "a/b/c/d")
                 setupProject(path = "a/b/c/e")
 
-                mapDefinitionFiles(definitionFiles) shouldContainExactlyInAnyOrder
-                        absolutePaths("a/package.json", "a/b/c/e/package.json")
+                mapDefinitionFiles(definitionFiles) should containExactlyInAnyOrder(
+                    absolutePaths("a/package.json", "a/b/c/e/package.json")
+                )
             }
 
             "not be mapped if ** matches the project name (non-flattened workspace definition)" {
@@ -146,8 +151,9 @@ class NodeSupportTest : WordSpec() {
                 setupProject(path = "a/b/c/d")
                 setupProject(path = "a/b/c/e")
 
-                mapDefinitionFiles(definitionFiles) shouldContainExactlyInAnyOrder
-                        absolutePaths("a/package.json", "a/b/c/e/package.json")
+                mapDefinitionFiles(definitionFiles) should containExactlyInAnyOrder(
+                    absolutePaths("a/package.json", "a/b/c/e/package.json")
+                )
             }
         }
 
@@ -209,7 +215,7 @@ class NodeSupportTest : WordSpec() {
                     proxy=http://user:password@host.tld:3129/
                     https-proxy=http://user:password@host.tld:3129/
                     """.trimIndent()
-                ).mapSingleValuesToString() shouldBe mapOf(
+                ).mapSingleValuesToString() should containExactlyEntries(
                     "http" to listOf("HTTP @ host.tld:3129", "user", "password"),
                     "https" to listOf("HTTP @ host.tld:3129", "user", "password")
                 )
@@ -218,7 +224,7 @@ class NodeSupportTest : WordSpec() {
                     proxy=http://user:password@host.tld
                     https-proxy=http://user:password@host.tld
                     """.trimIndent()
-                ).mapSingleValuesToString() shouldBe mapOf(
+                ).mapSingleValuesToString() should containExactlyEntries(
                     "http" to listOf("HTTP @ host.tld:8080", "user", "password"),
                     "https" to listOf("HTTP @ host.tld:8080", "user", "password")
                 )
@@ -227,7 +233,7 @@ class NodeSupportTest : WordSpec() {
                     proxy=user:password@host.tld
                     https-proxy=user:password@host.tld
                     """.trimIndent()
-                ).mapSingleValuesToString() shouldBe mapOf(
+                ).mapSingleValuesToString() should containExactlyEntries(
                     "http" to listOf("HTTP @ host.tld:8080", "user", "password"),
                     "https" to listOf("HTTP @ host.tld:8080", "user", "password")
                 )
@@ -236,7 +242,7 @@ class NodeSupportTest : WordSpec() {
                     proxy=host.tld
                     https-proxy=host.tld
                     """.trimIndent()
-                ).mapSingleValuesToString() shouldBe mapOf(
+                ).mapSingleValuesToString() should containExactlyEntries(
                     "http" to listOf("HTTP @ host.tld:8080"),
                     "https" to listOf("HTTP @ host.tld:8080")
                 )
@@ -283,7 +289,7 @@ class NodeSupportTest : WordSpec() {
         if (hasYarnLockFile) projectDir.resolve("yarn.lock").createNewFile()
     }
 
-    private fun absolutePaths(vararg files: String) = files.map { tempDir.resolve(it) }
+    private fun absolutePaths(vararg files: String): Collection<File> = files.map { tempDir.resolve(it) }
 
     private fun hasNpmLockFile(path: String) = hasNpmLockFile(tempDir.resolve(path))
 
