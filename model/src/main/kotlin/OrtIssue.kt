@@ -75,6 +75,6 @@ inline fun <reified T : Any> T.createAndLogIssue(
     message: String,
     severity: Severity = Severity.ERROR
 ): OrtIssue {
-    log.log(severity.toLog4jLevel(), message)
+    log.logOnce(severity.toLog4jLevel()) { message }
     return OrtIssue(source = source, message = message, severity = severity)
 }
