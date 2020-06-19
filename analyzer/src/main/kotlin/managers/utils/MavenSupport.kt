@@ -24,6 +24,7 @@ import com.fasterxml.jackson.module.kotlin.readValue
 import java.io.File
 import java.util.regex.Pattern
 
+import org.apache.logging.log4j.Level
 import org.apache.maven.artifact.repository.LegacyLocalRepositoryManager
 import org.apache.maven.bridge.MavenRepositorySystem
 import org.apache.maven.execution.DefaultMavenExecutionRequest
@@ -86,6 +87,7 @@ import org.ossreviewtoolkit.utils.collectMessagesAsString
 import org.ossreviewtoolkit.utils.getOrtDataDirectory
 import org.ossreviewtoolkit.utils.installAuthenticatorAndProxySelector
 import org.ossreviewtoolkit.utils.log
+import org.ossreviewtoolkit.utils.logOnce
 import org.ossreviewtoolkit.utils.searchUpwardsForSubdirectory
 import org.ossreviewtoolkit.utils.showStackTrace
 
@@ -631,7 +633,7 @@ class HttpsMirrorSelector(private val originalMirrorSelector: MirrorSelector?) :
 
         if (repository == null || DISABLED_HTTP_REPOSITORY_URLS.none { repository.url.startsWith(it) }) return null
 
-        log.info {
+        logOnce(Level.INFO) {
             "HTTP access to ${repository.id} (${repository.url}) was disabled. Automatically switching to HTTPS."
         }
 
