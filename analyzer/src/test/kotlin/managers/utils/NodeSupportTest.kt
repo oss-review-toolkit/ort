@@ -227,6 +227,15 @@ class NodeSupportTest : WordSpec() {
                     "http" to listOf("HTTP @ host.tld:8080", "user", "password"),
                     "https" to listOf("HTTP @ host.tld:8080", "user", "password")
                 )
+
+                readProxySettingsFromNpmRc("""
+                    proxy=host.tld
+                    https-proxy=host.tld
+                    """.trimIndent()
+                ).mapSingleValuesToString() shouldBe mapOf(
+                    "http" to listOf("HTTP @ host.tld:8080", null, null),
+                    "https" to listOf("HTTP @ host.tld:8080", null, null)
+                )
             }
 
             "ignore non-proxy URLs" {
