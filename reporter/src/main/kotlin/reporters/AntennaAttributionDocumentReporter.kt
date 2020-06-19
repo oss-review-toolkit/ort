@@ -116,10 +116,11 @@ class AntennaAttributionDocumentReporter : Reporter {
 
         // Antenna keeps around temporary files in its working directory, so we cannot just use our output directory as
         // its working directory, but have to copy the file we are interested in.
-        documentFile.copyTo(outputDir.resolve(reportFilename))
+        val outputFile = outputDir.resolve(reportFilename)
+        documentFile.copyTo(outputFile)
         workingDir.safeDeleteRecursively()
 
-        return listOf(documentFile)
+        return listOf(outputFile)
     }
 
     private fun createCopyrightStatement(
