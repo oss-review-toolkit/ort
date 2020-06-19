@@ -198,7 +198,11 @@ class NodeSupportTest : WordSpec() {
                 fun ProtocolProxyMap.mapSingleValuesToString() =
                     mapValues { (_, proxies) ->
                         val (proxy, authentication) = proxies.single()
-                        listOf(proxy.toString(), authentication?.userName, authentication?.password?.let { String(it) })
+                        listOfNotNull(
+                            proxy.toString(),
+                            authentication?.userName,
+                            authentication?.password?.let { String(it) }
+                        )
                     }
 
                 readProxySettingsFromNpmRc("""
@@ -233,8 +237,8 @@ class NodeSupportTest : WordSpec() {
                     https-proxy=host.tld
                     """.trimIndent()
                 ).mapSingleValuesToString() shouldBe mapOf(
-                    "http" to listOf("HTTP @ host.tld:8080", null, null),
-                    "https" to listOf("HTTP @ host.tld:8080", null, null)
+                    "http" to listOf("HTTP @ host.tld:8080"),
+                    "https" to listOf("HTTP @ host.tld:8080")
                 )
             }
 
