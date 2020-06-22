@@ -66,7 +66,7 @@ class CvsWorkingTreeTest : StringSpec() {
         "CVS correctly detects URLs to remote repositories" {
             cvs.isApplicableUrl(":pserver:anonymous@a.cvs.sourceforge.net:/cvsroot/tyrex") shouldBe true
             cvs.isApplicableUrl(":ext:jrandom@cvs.foobar.com:/usr/local/cvs") shouldBe true
-            cvs.isApplicableUrl("http://svn.code.sf.net/p/grepwin/code/") shouldBe false
+            cvs.isApplicableUrl("https://svn.code.sf.net/p/grepwin/code/") shouldBe false
         }
 
         "Detected CVS working tree information is correct".config(enabled = false /* Failing due to SF issues. */) {

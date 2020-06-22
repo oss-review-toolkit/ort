@@ -64,7 +64,7 @@ class SubversionWorkingTreeTest : StringSpec() {
         }
 
         "Subversion correctly detects URLs to remote repositories" {
-            svn.isApplicableUrl("http://svn.code.sf.net/p/grepwin/code/") shouldBe true
+            svn.isApplicableUrl("https://svn.code.sf.net/p/grepwin/code/") shouldBe true
             svn.isApplicableUrl("https://bitbucket.org/facebook/lz4revlog") shouldBe false
         }
 
