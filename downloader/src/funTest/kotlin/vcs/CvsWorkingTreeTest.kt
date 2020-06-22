@@ -21,11 +21,14 @@ package org.ossreviewtoolkit.downloader.vcs
 
 import io.kotest.core.spec.Spec
 import io.kotest.core.spec.style.StringSpec
+import io.kotest.matchers.maps.beEmpty
+import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNotBe
 
 import java.io.File
 
+import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.utils.Ci
 import org.ossreviewtoolkit.utils.ORT_NAME
@@ -72,10 +75,15 @@ class CvsWorkingTreeTest : StringSpec() {
         "Detected CVS working tree information is correct".config(enabled = false /* Failing due to SF issues. */) {
             val workingTree = cvs.getWorkingTree(zipContentDir)
 
-            workingTree.vcsType shouldBe VcsType.CVS
             workingTree.isValid() shouldBe true
-            workingTree.getRemoteUrl() shouldBe ":pserver:anonymous@a.cvs.sourceforge.net:/cvsroot/jhove"
-            workingTree.getRevision() shouldBe "449addc0d9e0ee7be48bfaa06f99a6f23cd3bae0"
+            workingTree.getInfo() shouldBe VcsInfo(
+                type = VcsType.CVS,
+                url = ":pserver:anonymous@a.cvs.sourceforge.net:/cvsroot/jhove",
+                revision = "449addc0d9e0ee7be48bfaa06f99a6f23cd3bae0",
+                resolvedRevision = null,
+                path = ""
+            )
+            workingTree.getNested() should beEmpty()
             workingTree.getRootPath() shouldBe zipContentDir
             workingTree.getPathToRoot(File(zipContentDir, "lib")) shouldBe "lib"
         }

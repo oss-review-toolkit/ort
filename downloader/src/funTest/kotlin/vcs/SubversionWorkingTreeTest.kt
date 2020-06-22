@@ -19,18 +19,21 @@
 
 package org.ossreviewtoolkit.downloader.vcs
 
+import io.kotest.core.spec.Spec
+import io.kotest.matchers.shouldBe
+import io.kotest.matchers.shouldNotBe
+import io.kotest.core.spec.style.StringSpec
+import io.kotest.matchers.maps.beEmpty
+import io.kotest.matchers.should
+
+import java.io.File
+
+import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.utils.ORT_NAME
 import org.ossreviewtoolkit.utils.getOrtDataDirectory
 import org.ossreviewtoolkit.utils.safeDeleteRecursively
 import org.ossreviewtoolkit.utils.unpack
-
-import io.kotest.core.spec.Spec
-import io.kotest.matchers.shouldBe
-import io.kotest.matchers.shouldNotBe
-import io.kotest.core.spec.style.StringSpec
-
-import java.io.File
 
 class SubversionWorkingTreeTest : StringSpec() {
     private val svn = Subversion()
@@ -71,10 +74,15 @@ class SubversionWorkingTreeTest : StringSpec() {
         "Detected Subversion working tree information is correct" {
             val workingTree = svn.getWorkingTree(zipContentDir)
 
-            workingTree.vcsType shouldBe VcsType.SUBVERSION
             workingTree.isValid() shouldBe true
-            workingTree.getRemoteUrl() shouldBe "https://svn.code.sf.net/p/docutils/code/trunk/docutils"
-            workingTree.getRevision() shouldBe "8207"
+            workingTree.getInfo() shouldBe VcsInfo(
+                type = VcsType.SUBVERSION,
+                url = "https://svn.code.sf.net/p/docutils/code/trunk/docutils",
+                revision = "8207",
+                resolvedRevision = null,
+                path = ""
+            )
+            workingTree.getNested() should beEmpty()
             workingTree.getRootPath() shouldBe zipContentDir
             workingTree.getPathToRoot(File(zipContentDir, "docutils")) shouldBe "docutils"
         }

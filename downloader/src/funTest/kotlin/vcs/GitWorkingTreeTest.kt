@@ -19,13 +19,6 @@
 
 package org.ossreviewtoolkit.downloader.vcs
 
-import org.ossreviewtoolkit.downloader.VersionControlSystem
-import org.ossreviewtoolkit.model.VcsType
-import org.ossreviewtoolkit.utils.ORT_NAME
-import org.ossreviewtoolkit.utils.getOrtDataDirectory
-import org.ossreviewtoolkit.utils.safeDeleteRecursively
-import org.ossreviewtoolkit.utils.unpack
-
 import io.kotest.core.spec.Spec
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNotBe
@@ -35,6 +28,14 @@ import io.kotest.matchers.maps.beEmpty
 import io.kotest.matchers.should
 
 import java.io.File
+
+import org.ossreviewtoolkit.downloader.VersionControlSystem
+import org.ossreviewtoolkit.model.VcsInfo
+import org.ossreviewtoolkit.model.VcsType
+import org.ossreviewtoolkit.utils.ORT_NAME
+import org.ossreviewtoolkit.utils.getOrtDataDirectory
+import org.ossreviewtoolkit.utils.safeDeleteRecursively
+import org.ossreviewtoolkit.utils.unpack
 
 class GitWorkingTreeTest : StringSpec() {
     private val git = Git()
@@ -78,11 +79,15 @@ class GitWorkingTreeTest : StringSpec() {
         "Detected Git working tree information is correct" {
             val workingTree = git.getWorkingTree(zipContentDir)
 
-            workingTree.vcsType shouldBe VcsType.GIT
             workingTree.isValid() shouldBe true
+            workingTree.getInfo() shouldBe VcsInfo(
+                type = VcsType.GIT,
+                url = "https://github.com/naiquevin/pipdeptree.git",
+                revision = "6f70dd5508331b6cfcfe3c1b626d57d9836cfd7c",
+                resolvedRevision = null,
+                path = ""
+            )
             workingTree.getNested() should beEmpty()
-            workingTree.getRemoteUrl() shouldBe "https://github.com/naiquevin/pipdeptree.git"
-            workingTree.getRevision() shouldBe "6f70dd5508331b6cfcfe3c1b626d57d9836cfd7c"
             workingTree.getRootPath() shouldBe zipContentDir
             workingTree.getPathToRoot(File(zipContentDir, "tests")) shouldBe "tests"
         }
