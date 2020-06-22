@@ -20,6 +20,10 @@
 package org.ossreviewtoolkit.reporter.reporters
 
 import java.io.File
+import java.io.FileOutputStream
+import java.util.Base64
+
+import org.apache.commons.compress.compressors.gzip.GzipCompressorOutputStream
 
 import org.ossreviewtoolkit.reporter.Reporter
 import org.ossreviewtoolkit.reporter.ReporterInput
@@ -45,11 +49,17 @@ class WebAppReporter : Reporter {
 
         val outputFile = outputDir.resolve(reportFilename)
 
-        outputFile.bufferedWriter().use {
-            it.write(prefix)
-            evaluatedModel.toJson(it, prettyPrint = false)
-            it.write(suffix)
+        outputFile.writeText(prefix)
+
+        FileOutputStream(outputFile, /* append = */ true).use { outputStream ->
+            val b64OutputStream = Base64.getEncoder().wrap(outputStream)
+
+            GzipCompressorOutputStream(b64OutputStream).bufferedWriter().use { gzipWriter ->
+                evaluatedModel.toJson(gzipWriter, prettyPrint = false)
+            }
         }
+
+        outputFile.appendText(suffix)
 
         return listOf(outputFile)
     }

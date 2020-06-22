@@ -17,6 +17,7 @@
  * License-Filename: LICENSE
  */
 
+import pako from 'pako';
 import { all, put, takeEvery } from 'redux-saga/effects';
 import processOrtResultData from './processOrtResultData';
 
@@ -26,14 +27,39 @@ export function* loadOrtResultData() {
 
     // Parse JSON report data embedded in HTML page
     const ortResultDataNode = document.querySelector('script[id="ort-report-data"]');
-    const ortResultDataTxt = ortResultDataNode ? ortResultDataNode.textContent : undefined;
 
-    if (!ortResultDataTxt || ortResultDataTxt.trim().length === 0) {
-        yield put({ type: 'APP::SHOW_NO_REPORT' });
-    } else {
-        const ortResultData = JSON.parse(ortResultDataTxt);
-        yield put({ type: 'APP::LOADING_ORT_RESULT_DATA_DONE', payload: ortResultData });
-        yield put({ type: 'APP::LOADING_PROCESS_ORT_RESULT_DATA_START' });
+    if (ortResultDataNode) {
+        const { type: dataType } = ortResultDataNode;
+        let ortResultData;
+        const ortReportDataTextContent = ortResultDataNode.textContent;
+
+        if (ortReportDataTextContent
+            && ortReportDataTextContent !== 'ORT_REPORT_DATA_PLACEHOLDER') {
+            if (dataType === 'application/gzip') {
+                // Decode Base64 (convert ASCII to binary).
+                const decodedBase64Data = atob(ortReportDataTextContent);
+
+                // Convert binary string to character-number array.
+                const charData = decodedBase64Data.split('').map((x) => x.charCodeAt(0));
+
+                // Turn number array into byte-array.
+                const binData = new Uint8Array(charData);
+
+                // Decompress byte-array.
+                const data = pako.inflate(binData);
+
+                ortResultData = JSON.parse(new TextDecoder('utf-8').decode(data));
+            } else {
+                ortResultData = JSON.parse(ortReportDataTextContent);
+            }
+        }
+
+        if (!ortResultData) {
+            yield put({ type: 'APP::SHOW_NO_REPORT' });
+        } else {
+            yield put({ type: 'APP::LOADING_ORT_RESULT_DATA_DONE', payload: ortResultData });
+            yield put({ type: 'APP::LOADING_PROCESS_ORT_RESULT_DATA_START' });
+        }
     }
 }
 export function* watchProcessOrtResultData() {
