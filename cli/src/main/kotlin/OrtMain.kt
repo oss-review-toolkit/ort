@@ -62,6 +62,7 @@ class OrtMain : CliktCommand(name = ORT_NAME, epilog = "* denotes required optio
     private val configFile by option("--config", "-c", help = "The path to a configuration file.")
         .convert { it.expandTilde() }
         .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
+        .default(getOrtDataDirectory().resolve("config/ort.conf"))
 
     private val logLevel by option(help = "Set the verbosity level of log output.").switch(
         "--info" to Level.INFO,
@@ -129,7 +130,7 @@ class OrtMain : CliktCommand(name = ORT_NAME, epilog = "* denotes required optio
         currentContext.findOrSetObject {
             OrtConfiguration.load(
                 configArguments,
-                configFile ?: getOrtDataDirectory().resolve("config/ort.conf")
+                configFile
             )
         }
 
