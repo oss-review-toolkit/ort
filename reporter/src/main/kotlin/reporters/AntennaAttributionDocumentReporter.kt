@@ -46,6 +46,15 @@ private const val DEFAULT_TEMPLATE_ID = "basic-pdf-template"
 private const val TEMPLATE_ID = "template.id"
 private const val TEMPLATE_PATH = "template.path"
 
+private const val TEMPLATE_COVER_PDF = "cover.pdf"
+private const val TEMPLATE_COPYRIGHT_PDF = "copyright.pdf"
+private const val TEMPLATE_CONTENT_PDF = "content.pdf"
+private const val TEMPLATE_BACK_PDF = "back.pdf"
+
+private val templateFileNames = listOf(
+    TEMPLATE_COVER_PDF, TEMPLATE_COPYRIGHT_PDF, TEMPLATE_CONTENT_PDF, TEMPLATE_BACK_PDF
+)
+
 class AntennaAttributionDocumentReporter : Reporter {
     override val reporterName = "AntennaAttributionDocument"
 
@@ -89,29 +98,61 @@ class AntennaAttributionDocumentReporter : Reporter {
 
         // Use the default template unless a custom template is provided via the options.
         var templateId = DEFAULT_TEMPLATE_ID
-        options[TEMPLATE_ID]?.let { id ->
-            options[TEMPLATE_PATH]?.let { path ->
-                val templatePath = File(path)
+        var templateFiles = mutableMapOf<String, File>()
 
-                require(templatePath.isFile && templatePath.extension == "jar" && templatePath.length() > 0) {
+        val providedTemplateId = options[TEMPLATE_ID]
+        val providedTemplatePath = options[TEMPLATE_PATH]
+        if (providedTemplatePath != null) {
+            val templatePath = File(providedTemplatePath)
+
+            if (templatePath.isFile) {
+                require(templatePath.extension == "jar" && templatePath.length() > 0) {
                     "The template path does not point to a valid template bundle file."
                 }
 
+                requireNotNull(providedTemplateId) {
+                    "When providing a template bundle file, also a template id has to be specified."
+                }
+
                 addTemplateToClassPath(templatePath.toURI().toURL()).also {
-                    templateId = id
+                    templateId = providedTemplateId
+                }
+            } else if (templatePath.isDirectory) {
+                require(templatePath.listFiles().isNotEmpty()) {
+                    "The template path must point to a directory with template files if no template id is provided."
+                }
+
+                templateFileNames.associateWithTo(templateFiles) {
+                    templatePath.resolve(it).also { file ->
+                        require(file.isFile && file.extension == "pdf" && file.length() > 0) {
+                            "The file '$file' does not point to a valid PDF file."
+                        }
+                    }
                 }
             }
         }
 
-        val documentFile = try {
-            AttributionDocumentGeneratorImpl(
-                reportFilename,
-                workingDir,
-                templateId,
-                DocumentValues(rootProject.id.name, rootProject.id.version, projectCopyright)
-            ).generate(artifacts)
-        } finally {
-            if (templateId != DEFAULT_TEMPLATE_ID) removeTemplateFromClassPath()
+        val generator = AttributionDocumentGeneratorImpl(
+            reportFilename,
+            workingDir,
+            templateId,
+            DocumentValues(rootProject.id.name, rootProject.id.version, projectCopyright)
+        )
+
+        val documentFile = if (templateFiles.size == templateFileNames.size) {
+            generator.generate(
+                    artifacts,
+                    templateFiles[TEMPLATE_COVER_PDF],
+                    templateFiles[TEMPLATE_COPYRIGHT_PDF],
+                    templateFiles[TEMPLATE_CONTENT_PDF],
+                    templateFiles[TEMPLATE_BACK_PDF]
+                )
+        } else {
+            try {
+                generator.generate(artifacts)
+            } finally {
+                if (templateId != DEFAULT_TEMPLATE_ID) removeTemplateFromClassPath()
+            }
         }
 
         // Antenna keeps around temporary files in its working directory, so we cannot just use our output directory as
