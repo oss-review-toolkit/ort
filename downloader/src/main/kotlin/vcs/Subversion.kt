@@ -49,7 +49,7 @@ import org.tmatesoft.svn.util.Version
 
 class Subversion : VersionControlSystem() {
     private val clientManager = SVNClientManager.newInstance().apply {
-        setAuthenticationManager(AuthenticationManager())
+        setAuthenticationManager(OrtSVNAuthenticationManager())
     }
 
     override val type = VcsType.SUBVERSION
@@ -233,7 +233,14 @@ class Subversion : VersionControlSystem() {
         }
 }
 
-private class AuthenticationManager : DefaultSVNAuthenticationManager(null, false, null, null, null, charArrayOf()) {
+private class OrtSVNAuthenticationManager : DefaultSVNAuthenticationManager(
+    /* configDirectory = */ null,
+    /* storeAuth = */ false,
+    /* userName = */ null,
+    /* password = */ null,
+    /* privateKey = */ null,
+    /* passphrase = */ charArrayOf()
+) {
     private val ortProxySelector = installAuthenticatorAndProxySelector()
 
     override fun getProxyManager(url: SVNURL): ISVNProxyManager? {
