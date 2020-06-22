@@ -219,10 +219,12 @@ object Downloader {
 
         val downloadedVcs = try {
             val workingTree = applicableVcs.download(pkg, outputDirectory, allowMovingRevisions)
+            val workingTreeInfo = workingTree.getInfo()
 
             pkg.vcsProcessed.copy(
                 type = applicableVcs.type,
-                resolvedRevision = workingTree.getRevision()
+                revision = workingTree.initialRevision ?: workingTreeInfo.revision,
+                resolvedRevision = workingTreeInfo.revision
             )
         } catch (e: DownloadException) {
             // TODO: We should introduce something like a "strict" mode and only do these kind of fallbacks in
@@ -240,10 +242,12 @@ object Downloader {
 
                 val fallbackPkg = pkg.copy(vcsProcessed = pkg.vcsProcessed.copy(url = vcsUrlNoCredentials))
                 val workingTree = applicableVcs.download(fallbackPkg, outputDirectory, allowMovingRevisions)
+                val workingTreeInfo = workingTree.getInfo()
 
                 fallbackPkg.vcsProcessed.copy(
                     type = applicableVcs.type,
-                    resolvedRevision = workingTree.getRevision()
+                    revision = workingTree.initialRevision ?: workingTreeInfo.revision,
+                    resolvedRevision = workingTreeInfo.revision
                 )
             } else {
                 throw e
