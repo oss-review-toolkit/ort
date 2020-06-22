@@ -78,7 +78,6 @@ class BeanUtilsTest : StringSpec() {
             downloadResult.vcsInfo shouldNotBeNull {
                 type shouldBe VcsType.SUBVERSION
                 url shouldBe vcsFromCuration.url
-                revision shouldBe "928490"
                 resolvedRevision shouldBe "928490"
                 path shouldBe vcsFromCuration.path
             }
