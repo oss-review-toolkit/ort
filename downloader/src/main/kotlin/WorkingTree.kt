@@ -34,7 +34,9 @@ abstract class WorkingTree(val workingDir: File, val vcsType: VcsType) {
 
     /**
      * Conveniently return all VCS information about how this working tree was created, so it could be easily
-     * recreated from that information.
+     * recreated from that information. However, note that the returned path just contains the relative path of
+     * [workingDir] to [getRootPath]. It is not related to the path argument that was used for downloading, and at the
+     * example of Git, it does not reflect the (single) path that was cloned in a sparse checkout.
      */
     open fun getInfo() = VcsInfo(vcsType, getRemoteUrl(), getRevision(), path = getPathToRoot(workingDir))
 
