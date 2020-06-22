@@ -29,6 +29,7 @@ import io.kotest.matchers.shouldBe
 
 import java.lang.IllegalArgumentException
 
+import org.ossreviewtoolkit.model.CopyrightFinding
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.LicenseFinding
 import org.ossreviewtoolkit.model.LicenseSource
@@ -78,14 +79,17 @@ class LicenseInfoResolverTest : WordSpec() {
                                 licenses = mapOf(
                                     "Apache-2.0 WITH LLVM-exception" to listOf(
                                         TextLocation("LICENSE", 1, 1),
-                                        TextLocation("LICENSE", 2, 2)
+                                        TextLocation("LICENSE", 21, 21)
                                     ),
                                     "MIT" to listOf(
-                                        TextLocation("LICENSE", 3, 3),
-                                        TextLocation("LICENSE", 4, 4)
+                                        TextLocation("LICENSE", 31, 31),
+                                        TextLocation("LICENSE", 41, 41)
                                     )
                                 ).toFindingsSet(),
-                                copyrights = emptySet()
+                                copyrights = setOf(
+                                    CopyrightFinding("Copyright Apache-2.0", TextLocation("LICENSE", 1, 1)),
+                                    CopyrightFinding("Copyright MIT", TextLocation("LICENSE", 31, 31))
+                                )
                             )
                         )
                     )
@@ -99,12 +103,49 @@ class LicenseInfoResolverTest : WordSpec() {
                 result should containOnlyLicenseSources(LicenseSource.DETECTED)
                 result should containLicensesExactly("Apache-2.0 WITH LLVM-exception", "MIT")
                 result should containNumberOfLocationsForLicense("Apache-2.0 WITH LLVM-exception", 2)
-                result should containLocationForLicense("Apache-2.0 WITH LLVM-exception", provenance, "LICENSE", 1, 1)
-                result should containLocationForLicense("Apache-2.0 WITH LLVM-exception", provenance, "LICENSE", 2, 2)
+                result should containLocationForLicense(
+                    license = "Apache-2.0 WITH LLVM-exception",
+                    provenance = provenance,
+                    path = "LICENSE",
+                    startLine = 1,
+                    endLine = 1,
+                    copyrights = setOf(
+                        ResolvedCopyrightFinding(
+                            "Copyright Apache-2.0",
+                            emptySet(),
+                            locations = setOf(TextLocation("LICENSE", 1, 1))
+                        )
+                    )
+                )
+                result should containLocationForLicense(
+                    license = "Apache-2.0 WITH LLVM-exception",
+                    provenance = provenance,
+                    path = "LICENSE",
+                    startLine = 21,
+                    endLine = 21
+                )
                 result should containNumberOfLocationsForLicense("MIT", 2)
-                result should containLocationForLicense("MIT", provenance, "LICENSE", 3, 3)
-                result should containLocationForLicense("MIT", provenance, "LICENSE", 4, 4)
-                result should containNoCopyrights()
+                result should containLocationForLicense(
+                    license = "MIT",
+                    provenance = provenance,
+                    path = "LICENSE",
+                    startLine = 31,
+                    endLine = 31,
+                    copyrights = setOf(
+                        ResolvedCopyrightFinding(
+                            "Copyright MIT",
+                            emptySet(),
+                            locations = setOf(TextLocation("LICENSE", 31, 31))
+                        )
+                    )
+                )
+                result should containLocationForLicense(
+                    license = "MIT",
+                    provenance = provenance,
+                    path = "LICENSE",
+                    startLine = 41,
+                    endLine = 41
+                )
             }
 
             "resolve concluded licenses" {
@@ -242,6 +283,7 @@ fun containLocationForLicense(
                 matchingPathExcludes,
                 copyrights
             )
+
         val locations = value[SpdxSingleLicenseExpression.parse(license)]?.locations.orEmpty()
 
         val contained = expectedLocation in locations

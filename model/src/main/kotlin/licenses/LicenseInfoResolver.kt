@@ -89,13 +89,20 @@ class LicenseInfoResolver(val provider: LicenseInfoProvider) {
         val resolvedLocations = mutableMapOf<SpdxSingleLicenseExpression, MutableSet<ResolvedLicenseLocation>>()
 
         detectedLicenseInfo.findings.forEach { findings ->
-            // TODO: Add copyrights.
-            // TODO: Filter copyright garbage.
-            // TODO: Process copyright statements.
             // TODO: Apply license finding curations.
             // TODO: Apply path excludes.
             val matchResult = FindingsMatcher().matchFindings(findings.licenses, findings.copyrights)
-            matchResult.matchedFindings.forEach { (licenseFinding, _) ->
+            matchResult.matchedFindings.forEach { (licenseFinding, copyrightFindings) ->
+                val resolvedCopyrightFindings = copyrightFindings.mapTo(mutableSetOf()) { copyrightFinding->
+                    // TODO: Filter copyright garbage.
+                    // TODO: Process copyright statements (and keep original statements).
+                    ResolvedCopyrightFinding(
+                        statement = copyrightFinding.statement,
+                        originalStatements = emptySet(),
+                        locations = setOf(copyrightFinding.location)
+                    )
+                }
+
                 licenseFinding.license.decompose().forEach { singleLicense ->
                     resolvedLocations.getOrPut(singleLicense) { mutableSetOf() } += ResolvedLicenseLocation(
                         findings.provenance,
@@ -104,7 +111,7 @@ class LicenseInfoResolver(val provider: LicenseInfoProvider) {
                         licenseFinding.location.endLine,
                         appliedCuration = null,
                         matchingPathExcludes = emptyList(),
-                        copyrights = emptySet()
+                        copyrights = resolvedCopyrightFindings
                     )
                 }
             }
