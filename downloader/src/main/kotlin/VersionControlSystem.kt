@@ -265,7 +265,7 @@ abstract class VersionControlSystem {
             "Successfully downloaded revision $workingTreeRevision for package '${pkg.id.toCoordinates()}.'."
         }
 
-        return workingTree
+        return workingTree.apply { initialRevision = workingTreeRevision }
     }
 
     /**

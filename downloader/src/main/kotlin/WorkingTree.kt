@@ -27,11 +27,11 @@ import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.utils.filterVersionNames
 
 /**
- * A class representing a local VCS working tree. The passed [workingDir] does not necessarily need to be the
- * root directory of the tree. The root directory can be determined by calling [getRootPath].
+ * A class representing a local VCS working tree of the given [vcsType]. The passed [workingDir] does not necessarily
+ * need to be the root directory of the tree, which can be determined by calling [getRootPath]. If the initial,
+ * probably symbolic, revision that was used to create the working tree is known, it stored as [initialRevision].
  */
-abstract class WorkingTree(val workingDir: File, val vcsType: VcsType) {
-
+abstract class WorkingTree(val workingDir: File, val vcsType: VcsType, var initialRevision: String? = null) {
     /**
      * Conveniently return all VCS information about how this working tree was created, so it could be easily
      * recreated from that information. However, note that the returned path just contains the relative path of
