@@ -48,8 +48,9 @@ import org.tmatesoft.svn.core.wc.SVNRevision
 import org.tmatesoft.svn.util.Version
 
 class Subversion : VersionControlSystem() {
+    private val ortAuthManager = OrtSVNAuthenticationManager()
     private val clientManager = SVNClientManager.newInstance().apply {
-        setAuthenticationManager(OrtSVNAuthenticationManager())
+        setAuthenticationManager(ortAuthManager)
     }
 
     override val type = VcsType.SUBVERSION
@@ -125,7 +126,9 @@ class Subversion : VersionControlSystem() {
 
     override fun isApplicableUrlInternal(vcsUrl: String) =
         try {
-            SVNRepositoryFactory.create(SVNURL.parseURIEncoded(vcsUrl)).checkPath("", -1) != SVNNodeKind.NONE
+            SVNRepositoryFactory.create(SVNURL.parseURIEncoded(vcsUrl))
+                .apply { authenticationManager = ortAuthManager }
+                .checkPath("", -1) != SVNNodeKind.NONE
         } catch (e: SVNException) {
             e.showStackTrace()
 
