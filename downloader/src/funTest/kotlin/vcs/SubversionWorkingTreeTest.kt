@@ -77,7 +77,7 @@ class SubversionWorkingTreeTest : StringSpec() {
             workingTree.isValid() shouldBe true
             workingTree.getInfo() shouldBe VcsInfo(
                 type = VcsType.SUBVERSION,
-                url = "https://svn.code.sf.net/p/docutils/code/trunk/docutils",
+                url = "https://svn.code.sf.net/p/docutils/code",
                 revision = "8207",
                 resolvedRevision = null,
                 path = ""

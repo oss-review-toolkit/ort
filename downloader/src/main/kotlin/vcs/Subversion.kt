@@ -74,7 +74,7 @@ class Subversion : VersionControlSystem() {
 
             override fun isShallow() = false
 
-            override fun getRemoteUrl() = doSvnInfo()?.url?.toDecodedString().orEmpty()
+            override fun getRemoteUrl() = doSvnInfo()?.repositoryRootURL?.toDecodedString().orEmpty()
 
             override fun getResolvedRevision() = doSvnInfo()?.committedRevision?.number?.toString().orEmpty()
 
