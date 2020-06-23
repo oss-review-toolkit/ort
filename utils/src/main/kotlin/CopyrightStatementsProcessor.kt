@@ -188,7 +188,7 @@ class CopyrightStatementsProcessor {
     }
 
     private fun stripYears(copyrightStatement: String): Pair<String, Set<Int>> =
-        replaceYears(copyrightStatement, YEAR_PLACEHOLDER).let {
+        replaceYears(copyrightStatement).let {
             it.copy(first = it.first.replace(YEAR_PLACEHOLDER, ""))
         }
 
@@ -197,13 +197,13 @@ class CopyrightStatementsProcessor {
      * with a placeholder. While replacement is not necessary for implementing the needed functionality
      * it is helpful for debugging.
      */
-    private fun replaceYears(copyrightStatement: String, placeholder: String): Pair<String, Set<Int>> {
+    private fun replaceYears(copyrightStatement: String): Pair<String, Set<Int>> {
         val resultYears = mutableSetOf<Int>()
 
         // Fix up strings containing e.g.: 'copyright u'2013'
         var currentStatement = copyrightStatement.replace("(.*\\b)u'(\\d{4}\\b)".toRegex(), "$1$2")
 
-        val replaceRangeResult = replaceAllYearRanges(currentStatement, placeholder)
+        val replaceRangeResult = replaceAllYearRanges(currentStatement)
         currentStatement = replaceRangeResult.first
         resultYears += replaceRangeResult.second
 
@@ -213,7 +213,7 @@ class CopyrightStatementsProcessor {
 
         while (matchResult != null) {
             currentStatement = currentStatement.removeRange(matchResult.groups[2]!!.range)
-            currentStatement = currentStatement.replaceRange(matchResult.groups[1]!!.range, "$placeholder ")
+            currentStatement = currentStatement.replaceRange(matchResult.groups[1]!!.range, "$YEAR_PLACEHOLDER ")
             resultYears += matchResult.groups[1]!!.value.toInt()
 
             matchResult = commaSeparatedYearsRegex.find(currentStatement)
@@ -224,22 +224,22 @@ class CopyrightStatementsProcessor {
         matchResult = singleYearsRegex.find(currentStatement)
 
         while (matchResult != null) {
-            currentStatement = currentStatement.replaceRange(matchResult.groups[1]!!.range, placeholder)
+            currentStatement = currentStatement.replaceRange(matchResult.groups[1]!!.range, YEAR_PLACEHOLDER)
             resultYears += matchResult.groups[1]!!.value.toInt()
 
             matchResult = singleYearsRegex.find(currentStatement)
         }
 
-        currentStatement = currentStatement.replace("$placeholder $placeholder", placeholder)
+        currentStatement = currentStatement.replace("$YEAR_PLACEHOLDER $YEAR_PLACEHOLDER", YEAR_PLACEHOLDER)
         return Pair(currentStatement, resultYears)
     }
 
-    private fun replaceAllYearRanges(copyrightStatement: String, placeholder: String): Pair<String, Set<Int>> {
+    private fun replaceAllYearRanges(copyrightStatement: String): Pair<String, Set<Int>> {
         val years = mutableSetOf<Int>()
         var currentStatement = copyrightStatement
 
         while (true) {
-            val replaceResult = replaceYearRange(currentStatement, placeholder)
+            val replaceResult = replaceYearRange(currentStatement)
             if (replaceResult.second.isEmpty()) {
                 return Pair(currentStatement, years)
             }
@@ -248,7 +248,7 @@ class CopyrightStatementsProcessor {
         }
     }
 
-    private fun replaceYearRange(copyrightStatement: String, placeholder: String): Pair<String, Set<Int>> {
+    private fun replaceYearRange(copyrightStatement: String): Pair<String, Set<Int>> {
         val yearRangeRegex = "(?=.*)\\b([\\d]{4})([ ]*[-][ ]*)([\\d]{4}|[\\d]{2}|[\\d])\\b".toRegex()
 
         yearRangeRegex.findAll(copyrightStatement).forEach { matchResult ->
@@ -269,7 +269,7 @@ class CopyrightStatementsProcessor {
                     copyrightStatement
                         .removeRange(toGroup.range)
                         .removeRange(separatorGroup.range)
-                        .replaceRange(fromGroup.range, placeholder),
+                        .replaceRange(fromGroup.range, YEAR_PLACEHOLDER),
                     (fromYear..toYear).toSet()
                 )
             }
