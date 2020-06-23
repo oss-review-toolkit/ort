@@ -55,10 +55,13 @@ private val templateFileNames = listOf(
     TEMPLATE_COVER_PDF, TEMPLATE_COPYRIGHT_PDF, TEMPLATE_CONTENT_PDF, TEMPLATE_BACK_PDF
 )
 
+private const val REPORT_BASE_FILENAME = "attribution-document"
+private const val REPORT_EXTENSION = "pdf"
+
 class AntennaAttributionDocumentReporter : Reporter {
     override val reporterName = "AntennaAttributionDocument"
 
-    private val reportFilename = "attribution-document.pdf"
+    private val reportFilename = "$REPORT_BASE_FILENAME.$REPORT_EXTENSION"
     private val originalClassLoader = Thread.currentThread().contextClassLoader
 
     override fun generateReport(
@@ -70,31 +73,6 @@ class AntennaAttributionDocumentReporter : Reporter {
             input.packageConfigurationProvider,
             omitExcluded = true
         )
-
-        val artifacts = input.ortResult.getPackages().map { (pkg, _) ->
-            val licenses = collectLicenses(pkg.id, input.ortResult)
-            AttributionDocumentPdfModel(
-                purl = pkg.purl,
-                binaryFilename = pkg.binaryArtifact.takeUnless { it.url.isEmpty() }?.let { File(it.url).name },
-                declaredLicenses = licenses.map { createLicenseInfo(it, input.licenseTextProvider) },
-                copyrightStatements = createCopyrightStatement(pkg.id, licenses, licenseFindings)
-            )
-        }.toList()
-
-        val rootProject = input.ortResult.getProjects().singleOrNull()
-
-        // TODO: Add support for multiple projects.
-        requireNotNull(rootProject) {
-            "The $reporterName currently only supports ORT results with a single project."
-        }
-
-        val projectCopyright = createCopyrightStatement(
-            rootProject.id,
-            collectLicenses(rootProject.id, input.ortResult),
-            licenseFindings
-        )
-
-        val workingDir = createTempDir()
 
         // Use the default template unless a custom template is provided via the options.
         var templateId = DEFAULT_TEMPLATE_ID
@@ -132,36 +110,69 @@ class AntennaAttributionDocumentReporter : Reporter {
             }
         }
 
-        val generator = AttributionDocumentGeneratorImpl(
-            reportFilename,
-            workingDir,
-            templateId,
-            DocumentValues(rootProject.id.name, rootProject.id.version, projectCopyright)
-        )
+        val outputFiles = mutableListOf<File>()
+        val projects = input.ortResult.getProjects(omitExcluded = true)
 
-        val documentFile = if (templateFiles.size == templateFileNames.size) {
-            generator.generate(
-                    artifacts,
-                    templateFiles[TEMPLATE_COVER_PDF],
-                    templateFiles[TEMPLATE_COPYRIGHT_PDF],
-                    templateFiles[TEMPLATE_CONTENT_PDF],
-                    templateFiles[TEMPLATE_BACK_PDF]
+        try {
+            projects.forEach { project ->
+                val dependencies = project.collectDependencies()
+
+                val packages = input.ortResult.getPackages().mapNotNull { (pkg, _) ->
+                    pkg.takeIf { it.id in dependencies }
+                }
+
+                val artifacts = packages.map { pkg ->
+                    val licenses = collectLicenses(pkg.id, input.ortResult)
+                    AttributionDocumentPdfModel(
+                        purl = pkg.purl,
+                        binaryFilename = pkg.binaryArtifact.takeUnless { it.url.isEmpty() }?.let { File(it.url).name },
+                        declaredLicenses = licenses.map { createLicenseInfo(it, input.licenseTextProvider) },
+                        copyrightStatements = createCopyrightStatement(pkg.id, licenses, licenseFindings)
+                    )
+                }.toList()
+
+                val projectCopyright = createCopyrightStatement(
+                    project.id,
+                    collectLicenses(project.id, input.ortResult),
+                    licenseFindings
                 )
-        } else {
-            try {
-                generator.generate(artifacts)
-            } finally {
-                if (templateId != DEFAULT_TEMPLATE_ID) removeTemplateFromClassPath()
+
+                val workingDir = createTempDir()
+
+                val generator = AttributionDocumentGeneratorImpl(
+                    reportFilename,
+                    workingDir,
+                    templateId,
+                    DocumentValues(project.id.name, project.id.version, projectCopyright)
+                )
+
+                val documentFile = if (templateFiles.size == templateFileNames.size) {
+                    generator.generate(
+                        artifacts,
+                        templateFiles[TEMPLATE_COVER_PDF],
+                        templateFiles[TEMPLATE_COPYRIGHT_PDF],
+                        templateFiles[TEMPLATE_CONTENT_PDF],
+                        templateFiles[TEMPLATE_BACK_PDF]
+                    )
+                } else {
+                    generator.generate(artifacts)
+                }
+
+                // Antenna keeps around temporary files in its working directory, so we cannot just use our output
+                // directory as its working directory, but have to copy the file we are interested in.
+                val outputFile = outputDir.resolve(
+                    "$REPORT_BASE_FILENAME-${project.id.name}-${project.id.version}.$REPORT_EXTENSION"
+                )
+                documentFile.copyTo(outputFile)
+                workingDir.safeDeleteRecursively()
+
+                outputFiles += outputFile
             }
+        } finally {
+            if (templateId != DEFAULT_TEMPLATE_ID) removeTemplateFromClassPath()
         }
 
-        // Antenna keeps around temporary files in its working directory, so we cannot just use our output directory as
-        // its working directory, but have to copy the file we are interested in.
-        val outputFile = outputDir.resolve(reportFilename)
-        documentFile.copyTo(outputFile)
-        workingDir.safeDeleteRecursively()
-
-        return listOf(outputFile)
+        return outputFiles
     }
 
     private fun createCopyrightStatement(
