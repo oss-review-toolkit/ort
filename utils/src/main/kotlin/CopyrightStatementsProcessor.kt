@@ -19,6 +19,8 @@
 
 package org.ossreviewtoolkit.utils
 
+import java.util.SortedMap
+
 private data class Parts(
     val prefix: String,
     val years: Set<Int>,
@@ -112,7 +114,7 @@ class CopyrightStatementsProcessor {
     }
 
     data class Result(
-        val processedStatements: LinkedHashMap<String, List<String>>,
+        val processedStatements: SortedMap<String, List<String>>,
         val unprocessedStatements: List<String>
     ) {
         fun getAllStatements(): Set<String> = (unprocessedStatements + processedStatements.keys).toSet()
@@ -133,7 +135,7 @@ class CopyrightStatementsProcessor {
 
         val mergedParts = processableStatements.groupByPrefixAndOwner().sortedWith(PARTS_COMPARATOR)
 
-        val processedStatements = linkedMapOf<String, List<String>>()
+        val processedStatements = sortedMapOf<String, List<String>>()
         mergedParts.forEach {
             if (it.owner.isNotEmpty()) {
                 val statement = buildString {
