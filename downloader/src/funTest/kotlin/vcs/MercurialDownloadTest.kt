@@ -74,7 +74,7 @@ class MercurialDownloadTest : StringSpec() {
             val actualFiles = workingTree.workingDir.list().sorted()
 
             workingTree.isValid() shouldBe true
-            workingTree.getRevision() shouldBe REPO_REV
+            workingTree.getResolvedRevision() shouldBe REPO_REV
             actualFiles.joinToString("\n") shouldBe expectedFiles.joinToString("\n")
         }
 
@@ -107,7 +107,7 @@ class MercurialDownloadTest : StringSpec() {
                     .toList()
 
                 workingTree.isValid() shouldBe true
-                workingTree.getRevision() shouldBe REPO_REV
+                workingTree.getResolvedRevision() shouldBe REPO_REV
                 actualFiles.joinToString("\n") shouldBe expectedFiles.joinToString("\n")
             }
 
@@ -122,7 +122,7 @@ class MercurialDownloadTest : StringSpec() {
             val workingTree = hg.download(pkg, outputDir)
 
             workingTree.isValid() shouldBe true
-            workingTree.getRevision() shouldBe REPO_REV_FOR_VERSION
+            workingTree.getResolvedRevision() shouldBe REPO_REV_FOR_VERSION
         }
 
         "Mercurial can download only a single path based on a version"
@@ -158,7 +158,7 @@ class MercurialDownloadTest : StringSpec() {
                     .toList()
 
                 workingTree.isValid() shouldBe true
-                workingTree.getRevision() shouldBe REPO_REV_FOR_VERSION
+                workingTree.getResolvedRevision() shouldBe REPO_REV_FOR_VERSION
                 actualFiles.joinToString("\n") shouldBe expectedFiles.joinToString("\n")
             }
     }

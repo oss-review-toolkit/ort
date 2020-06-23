@@ -108,7 +108,7 @@ open class GitWorkingTree(workingDir: File, vcsType: VcsType) : WorkingTree(work
             throw IOException("Unable to get the remote URL.", it)
         }
 
-    override fun getRevision(): String = repo.exactRef(Constants.HEAD)?.objectId?.name().orEmpty()
+    override fun getResolvedRevision(): String = repo.exactRef(Constants.HEAD)?.objectId?.name().orEmpty()
 
     override fun getRootPath(): File = repo.workTree ?: workingDir
 

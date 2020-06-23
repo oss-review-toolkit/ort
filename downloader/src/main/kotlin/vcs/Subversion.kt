@@ -76,7 +76,7 @@ class Subversion : VersionControlSystem() {
 
             override fun getRemoteUrl() = doSvnInfo()?.url?.toDecodedString().orEmpty()
 
-            override fun getRevision() = doSvnInfo()?.committedRevision?.number?.toString().orEmpty()
+            override fun getResolvedRevision() = doSvnInfo()?.committedRevision?.number?.toString().orEmpty()
 
             override fun getRootPath() = doSvnInfo()?.workingCopyRoot ?: workingDir
 

@@ -36,7 +36,7 @@ class GradleAndroidTest : StringSpec() {
     private val projectDir = File("src/funTest/assets/projects/synthetic/gradle-android").absoluteFile
     private val vcsDir = VersionControlSystem.forDirectory(projectDir)!!
     private val vcsUrl = vcsDir.getRemoteUrl()
-    private val vcsRevision = vcsDir.getRevision()
+    private val vcsRevision = vcsDir.getResolvedRevision()
 
     init {
         "Root project dependencies are detected correctly".config(tags = setOf(AndroidTag)) {

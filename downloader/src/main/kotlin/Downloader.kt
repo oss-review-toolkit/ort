@@ -236,7 +236,7 @@ object Downloader {
                 throw e
             }
         }
-        val revision = workingTree.getRevision()
+        val revision = workingTree.getResolvedRevision()
 
         log.info { "Finished downloading source code revision '$revision' to '${outputDirectory.absolutePath}'." }
 

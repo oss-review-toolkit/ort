@@ -36,7 +36,7 @@ class CargoSubcrateTest : StringSpec() {
     private val projectDir = File("src/funTest/assets/projects/synthetic/cargo-subcrate").absoluteFile
     private val vcsDir = VersionControlSystem.forDirectory(projectDir)!!
     private val vcsUrl = vcsDir.getRemoteUrl()
-    private val vcsRevision = vcsDir.getRevision()
+    private val vcsRevision = vcsDir.getResolvedRevision()
 
     init {
         // Disabled on Azure Windows build because it fails with the pre-installed Rust version 1.42.0.

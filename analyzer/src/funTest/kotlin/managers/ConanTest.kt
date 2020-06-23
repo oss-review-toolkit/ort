@@ -36,12 +36,12 @@ import java.io.File
 class ConanTest : StringSpec() {
     private val projectsDirTxt = File("src/funTest/assets/projects/synthetic/conan-txt").absoluteFile
     private val vcsDirTxt = VersionControlSystem.forDirectory(projectsDirTxt)!!
-    private val vcsRevisionTxt = vcsDirTxt.getRevision()
+    private val vcsRevisionTxt = vcsDirTxt.getResolvedRevision()
     private val vcsUrlTxt = vcsDirTxt.getRemoteUrl()
 
     private val projectsDirPy = File("src/funTest/assets/projects/synthetic/conan-py").absoluteFile
     private val vcsDirPy = VersionControlSystem.forDirectory(projectsDirPy)!!
-    private val vcsRevisionPy = vcsDirPy.getRevision()
+    private val vcsRevisionPy = vcsDirPy.getResolvedRevision()
     private val vcsUrlPy = vcsDirPy.getRemoteUrl()
 
     init {

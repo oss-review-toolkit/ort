@@ -36,7 +36,7 @@ class NpmVersionUrlTest : WordSpec() {
     private val projectDir = File("src/funTest/assets/projects/synthetic/npm-version-urls").absoluteFile
     private val vcsDir = VersionControlSystem.forDirectory(projectDir)!!
     private val vcsUrl = vcsDir.getRemoteUrl()
-    private val vcsRevision = vcsDir.getRevision()
+    private val vcsRevision = vcsDir.getResolvedRevision()
 
     init {
         "NPM" should {

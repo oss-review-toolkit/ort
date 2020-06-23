@@ -37,7 +37,7 @@ import java.io.File
 class PhpComposerTest : StringSpec() {
     private val projectsDir = File("src/funTest/assets/projects/synthetic/php-composer").absoluteFile
     private val vcsDir = VersionControlSystem.forDirectory(projectsDir)!!
-    private val vcsRevision = vcsDir.getRevision()
+    private val vcsRevision = vcsDir.getResolvedRevision()
     private val vcsUrl = vcsDir.getRemoteUrl()
 
     init {

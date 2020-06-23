@@ -70,7 +70,7 @@ class SubversionDownloadTest : StringSpec() {
             val actualFiles = workingTree.workingDir.list().sorted()
 
             workingTree.isValid() shouldBe true
-            workingTree.getRevision() shouldBe REPO_REV
+            workingTree.getResolvedRevision() shouldBe REPO_REV
             actualFiles.joinToString("\n") shouldBe expectedFiles.joinToString("\n")
         }
 
@@ -92,7 +92,7 @@ class SubversionDownloadTest : StringSpec() {
                 .toList()
 
             workingTree.isValid() shouldBe true
-            workingTree.getRevision() shouldBe REPO_REV
+            workingTree.getResolvedRevision() shouldBe REPO_REV
             actualFiles.joinToString("\n") shouldBe expectedFiles.joinToString("\n")
         }
 
@@ -111,7 +111,7 @@ class SubversionDownloadTest : StringSpec() {
             val actualFiles = workingTree.workingDir.list().sorted()
 
             workingTree.isValid() shouldBe true
-            workingTree.getRevision() shouldBe REPO_REV_FOR_TAG
+            workingTree.getResolvedRevision() shouldBe REPO_REV_FOR_TAG
             actualFiles.joinToString("\n") shouldBe expectedFiles.joinToString("\n")
         }
 
@@ -124,7 +124,7 @@ class SubversionDownloadTest : StringSpec() {
             val workingTree = svn.download(pkg, outputDir)
 
             workingTree.isValid() shouldBe true
-            workingTree.getRevision() shouldBe REPO_REV_FOR_VERSION
+            workingTree.getResolvedRevision() shouldBe REPO_REV_FOR_VERSION
         }
 
         "Subversion can download only a single path based on a version".config(tags = setOf(ExpensiveTag)) {
@@ -143,7 +143,7 @@ class SubversionDownloadTest : StringSpec() {
             val actualFiles = File(workingTree.workingDir, REPO_PATH_FOR_VERSION).list().sorted()
 
             workingTree.isValid() shouldBe true
-            workingTree.getRevision() shouldBe REPO_REV_FOR_VERSION
+            workingTree.getResolvedRevision() shouldBe REPO_REV_FOR_VERSION
             actualFiles.joinToString("\n") shouldBe expectedFiles.joinToString("\n")
         }
     }

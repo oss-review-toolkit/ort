@@ -45,7 +45,7 @@ class GradleTest : StringSpec() {
     private val projectDir = File("src/funTest/assets/projects/synthetic/gradle").absoluteFile
     private val vcsDir = VersionControlSystem.forDirectory(projectDir)!!
     private val vcsUrl = vcsDir.getRemoteUrl()
-    private val vcsRevision = vcsDir.getRevision()
+    private val vcsRevision = vcsDir.getResolvedRevision()
 
     private val isJava9OrAbove = System.getProperty("java.version").split('.').first().toInt() >= 9
 

@@ -43,7 +43,7 @@ class GoDepTest : WordSpec() {
     private val projectsDir = File("src/funTest/assets/projects").absoluteFile
     private val vcsDir = VersionControlSystem.forDirectory(projectsDir)!!
     private val vcsUrl = vcsDir.getRemoteUrl()
-    private val vcsRevision = vcsDir.getRevision()
+    private val vcsRevision = vcsDir.getResolvedRevision()
 
     init {
         "GoDep" should {

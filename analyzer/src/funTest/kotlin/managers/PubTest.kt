@@ -40,7 +40,7 @@ class PubTest : WordSpec() {
     private val projectsDirExternal = File("src/funTest/assets/projects/external/").absoluteFile
     private val vcsDir = VersionControlSystem.forDirectory(projectsDir)!!
     private val vcsUrl = vcsDir.getRemoteUrl()
-    private val vcsRevision = vcsDir.getRevision()
+    private val vcsRevision = vcsDir.getResolvedRevision()
 
     init {
         "Pub" should {

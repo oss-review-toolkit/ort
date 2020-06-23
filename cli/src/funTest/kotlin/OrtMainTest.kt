@@ -45,7 +45,7 @@ class OrtMainTest : StringSpec() {
     private val projectDir = File("../analyzer/src/funTest/assets/projects/synthetic")
     private val vcsDir = VersionControlSystem.forDirectory(projectDir)!!
     private val vcsUrl = vcsDir.getRemoteUrl()
-    private val vcsRevision = vcsDir.getRevision()
+    private val vcsRevision = vcsDir.getResolvedRevision()
 
     private lateinit var outputDir: File
 

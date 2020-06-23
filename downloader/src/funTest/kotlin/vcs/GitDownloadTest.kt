@@ -73,7 +73,7 @@ class GitDownloadTest : StringSpec() {
             val actualFiles = workingTree.workingDir.list().sorted()
 
             workingTree.isValid() shouldBe true
-            workingTree.getRevision() shouldBe REPO_REV
+            workingTree.getResolvedRevision() shouldBe REPO_REV
             actualFiles.joinToString("\n") shouldBe expectedFiles.joinToString("\n")
         }
 
@@ -95,7 +95,7 @@ class GitDownloadTest : StringSpec() {
                 .toList()
 
             workingTree.isValid() shouldBe true
-            workingTree.getRevision() shouldBe REPO_REV
+            workingTree.getResolvedRevision() shouldBe REPO_REV
             actualFiles.joinToString("\n") shouldBe expectedFiles.joinToString("\n")
         }
 
@@ -110,7 +110,7 @@ class GitDownloadTest : StringSpec() {
             val workingTree = git.download(pkg, outputDir)
 
             workingTree.isValid() shouldBe true
-            workingTree.getRevision() shouldBe REPO_REV_FOR_VERSION
+            workingTree.getResolvedRevision() shouldBe REPO_REV_FOR_VERSION
         }
 
         "Git can download only a single path based on a version".config(tags = setOf(ExpensiveTag)) {
@@ -135,7 +135,7 @@ class GitDownloadTest : StringSpec() {
                 .toList()
 
             workingTree.isValid() shouldBe true
-            workingTree.getRevision() shouldBe REPO_REV_FOR_VERSION
+            workingTree.getResolvedRevision() shouldBe REPO_REV_FOR_VERSION
             actualFiles.joinToString("\n") shouldBe expectedFiles.joinToString("\n")
         }
     }

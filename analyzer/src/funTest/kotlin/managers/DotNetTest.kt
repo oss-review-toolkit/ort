@@ -38,7 +38,7 @@ class DotNetTest : StringSpec() {
     private val projectDir = File("src/funTest/assets/projects/synthetic/dotnet").absoluteFile
     private val vcsDir = VersionControlSystem.forDirectory(projectDir)!!
     private val vcsUrl = vcsDir.getRemoteUrl()
-    private val vcsRevision = vcsDir.getRevision()
+    private val vcsRevision = vcsDir.getResolvedRevision()
     private val packageFile = File(projectDir, "subProjectTest/test.csproj")
 
     init {

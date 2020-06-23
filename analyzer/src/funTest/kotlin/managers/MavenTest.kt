@@ -40,7 +40,7 @@ class MavenTest : StringSpec() {
     private val projectDir = File("src/funTest/assets/projects/synthetic/maven").absoluteFile
     private val vcsDir = VersionControlSystem.forDirectory(projectDir)!!
     private val vcsUrl = vcsDir.getRemoteUrl()
-    private val vcsRevision = vcsDir.getRevision()
+    private val vcsRevision = vcsDir.getResolvedRevision()
 
     init {
         "jgnash parent dependencies are detected correctly" {
