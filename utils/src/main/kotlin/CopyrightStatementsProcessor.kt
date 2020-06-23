@@ -118,11 +118,11 @@ class CopyrightStatementsProcessor {
         fun getAllStatements(): Set<String> = (unprocessedStatements + processedStatements.keys).toSet()
     }
 
-    fun process(copyrightStatments: Collection<String>): Result {
+    fun process(copyrightStatements: Collection<String>): Result {
         val unprocessedStatements = mutableListOf<String>()
         val processableStatements = mutableListOf<Parts>()
 
-        copyrightStatments.forEach {
+        copyrightStatements.forEach {
             val parts = determineParts(it)
             if (parts != null) {
                 processableStatements += parts
