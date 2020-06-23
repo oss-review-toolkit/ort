@@ -115,7 +115,16 @@ class CopyrightStatementsProcessor {
     }
 
     data class Result(
+        /**
+         * The copyright statements that were processed by the [CopyrightStatementsProcessor], mapped to the original
+         * copyright statements. An original statement can be identical to the processed statement if the processor did
+         * process but not modify it.
+         */
         val processedStatements: SortedMap<String, SortedSet<String>>,
+
+        /**
+         * The copyright statements that were ignored by the [CopyrightStatementsProcessor].
+         */
         val unprocessedStatements: SortedSet<String>
     ) {
         fun getAllStatements(): Set<String> = (unprocessedStatements + processedStatements.keys).toSet()
