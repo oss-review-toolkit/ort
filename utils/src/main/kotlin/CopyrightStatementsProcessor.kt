@@ -20,6 +20,7 @@
 package org.ossreviewtoolkit.utils
 
 import java.util.SortedMap
+import java.util.SortedSet
 
 private data class Parts(
     val prefix: String,
@@ -115,13 +116,13 @@ class CopyrightStatementsProcessor {
 
     data class Result(
         val processedStatements: SortedMap<String, List<String>>,
-        val unprocessedStatements: List<String>
+        val unprocessedStatements: SortedSet<String>
     ) {
         fun getAllStatements(): Set<String> = (unprocessedStatements + processedStatements.keys).toSet()
     }
 
     fun process(copyrightStatements: Collection<String>): Result {
-        val unprocessedStatements = mutableListOf<String>()
+        val unprocessedStatements = sortedSetOf<String>()
         val processableStatements = mutableListOf<Parts>()
 
         copyrightStatements.forEach {
@@ -152,7 +153,7 @@ class CopyrightStatementsProcessor {
         }
 
         return Result(
-            unprocessedStatements = unprocessedStatements.toList().sorted(),
+            unprocessedStatements = unprocessedStatements,
             processedStatements = processedStatements
         )
     }
