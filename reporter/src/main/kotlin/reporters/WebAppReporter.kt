@@ -29,6 +29,8 @@ import org.ossreviewtoolkit.reporter.Reporter
 import org.ossreviewtoolkit.reporter.ReporterInput
 import org.ossreviewtoolkit.reporter.model.EvaluatedModel
 
+private const val PLACEHOLDER = "ORT_REPORT_DATA_PLACEHOLDER"
+
 class WebAppReporter : Reporter {
     override val reporterName = "WebApp"
 
@@ -42,10 +44,9 @@ class WebAppReporter : Reporter {
         val template = javaClass.classLoader.getResource("scan-report-template.html").readText()
         val evaluatedModel = EvaluatedModel.create(input)
 
-        val placeholder = "ORT_REPORT_DATA_PLACEHOLDER"
-        val index = template.indexOf(placeholder)
+        val index = template.indexOf(PLACEHOLDER)
         val prefix = template.substring(0, index)
-        val suffix = template.substring(index + placeholder.length, template.length)
+        val suffix = template.substring(index + PLACEHOLDER.length, template.length)
 
         val outputFile = outputDir.resolve(reportFilename)
 
