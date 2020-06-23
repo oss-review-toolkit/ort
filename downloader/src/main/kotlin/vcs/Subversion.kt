@@ -141,9 +141,8 @@ class Subversion : VersionControlSystem() {
                 )
             } ?: run {
                 // This code path updates the working tree to a symbolic revision.
-                val svnUrl = SVNURL.parseURIEncoded(
-                    "${workingTree.getRemoteUrl()}/$revision"
-                )
+                val fullUrl = (workingTree as SubversionWorkingTree).getFullUrl()
+                val svnUrl = SVNURL.parseURIEncoded("$fullUrl/$revision")
 
                 // First switch the (empty) working tree to the requested branch / tag.
                 clientManager.updateClient.doSwitch(

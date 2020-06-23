@@ -47,7 +47,7 @@ class SubversionWorkingTree(
 
     override fun isShallow() = false
 
-    override fun getRemoteUrl() = doSvnInfo()?.url?.toString().orEmpty()
+    override fun getRemoteUrl() = doSvnInfo()?.repositoryRootURL?.toString().orEmpty()
 
     override fun getRevision() = doSvnInfo()?.committedRevision?.number?.toString().orEmpty()
 
@@ -57,14 +57,17 @@ class SubversionWorkingTree(
 
     override fun listRemoteTags() = listRemoteRefs("tags")
 
+    fun getFullUrl() = doSvnInfo()?.url?.toString().orEmpty()
+
     private fun listRemoteRefs(namespace: String): List<String> {
         val refs = mutableListOf<String>()
         val remoteUrl = getRemoteUrl()
+        val fullUrl = getFullUrl()
 
-        val projectRoot = if (directoryNamespaces.any { "/$it/" in remoteUrl }) {
-            doSvnInfo()?.repositoryRootURL?.toString().orEmpty()
-        } else {
+        val projectRoot = if (directoryNamespaces.any { "/$it/" in fullUrl }) {
             remoteUrl
+        } else {
+            fullUrl
         }
 
         // We assume a single project directory layout.
