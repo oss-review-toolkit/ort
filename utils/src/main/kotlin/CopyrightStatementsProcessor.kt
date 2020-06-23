@@ -115,7 +115,7 @@ class CopyrightStatementsProcessor {
     }
 
     data class Result(
-        val processedStatements: SortedMap<String, List<String>>,
+        val processedStatements: SortedMap<String, SortedSet<String>>,
         val unprocessedStatements: SortedSet<String>
     ) {
         fun getAllStatements(): Set<String> = (unprocessedStatements + processedStatements.keys).toSet()
@@ -136,7 +136,7 @@ class CopyrightStatementsProcessor {
 
         val mergedParts = processableStatements.groupByPrefixAndOwner().sortedWith(PARTS_COMPARATOR)
 
-        val processedStatements = sortedMapOf<String, List<String>>()
+        val processedStatements = sortedMapOf<String, SortedSet<String>>()
         mergedParts.forEach {
             if (it.owner.isNotEmpty()) {
                 val statement = buildString {
@@ -148,7 +148,7 @@ class CopyrightStatementsProcessor {
                     append(" ")
                     append(it.owner)
                 }
-                processedStatements[statement] = it.originalStatements.sorted()
+                processedStatements[statement] = it.originalStatements.toSortedSet()
             }
         }
 
