@@ -323,7 +323,7 @@ options see [PostgresStorageConfiguration.kt](model/src/main/kotlin/config/Postg
 [![Evaluator](./logos/evaluator.png)](./evaluator/src/main/kotlin)
 
 The _evaluator_ is used to perform custom license policy checks on scan results. The rules to check against are
-implemented as scripts (currently Kontlin scripts, with a dedicated DSL, but support for other scripting can be added as
+implemented as scripts (currently Kotlin scripts, with a dedicated DSL, but support for other scripting can be added as
 well. See [rules.kts](./docs/examples/rules.kts) for an example file.
 
 <a name="reporter">&nbsp;</a>
