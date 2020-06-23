@@ -162,8 +162,8 @@ class CopyrightStatementsProcessor {
         }
 
         return Result(
-            unprocessedStatements = unprocessedStatements,
-            processedStatements = processedStatements
+            processedStatements = processedStatements,
+            unprocessedStatements = unprocessedStatements
         )
     }
 
