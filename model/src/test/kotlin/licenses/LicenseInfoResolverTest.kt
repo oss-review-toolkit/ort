@@ -165,6 +165,49 @@ class LicenseInfoResolverTest : WordSpec() {
                 result should containNoLicenseLocations()
                 result should containNoCopyrights()
             }
+
+            "process copyright statements" {
+                val data = listOf(
+                    createLicenseInfo(
+                        id = pkgId,
+                        detectedLicenses = listOf(
+                            Findings(
+                                provenance = provenance,
+                                licenses = mapOf(
+                                    "Apache-2.0" to listOf(
+                                        TextLocation("LICENSE", 1, 1)
+                                    )
+                                ).toFindingsSet(),
+                                copyrights = setOf(
+                                    CopyrightFinding("(c) 2009 Holder 1", TextLocation("LICENSE", 1, 1)),
+                                    CopyrightFinding("(c) 2010 Holder 1", TextLocation("LICENSE", 2, 2)),
+                                    CopyrightFinding("(c) 2010 Holder 2", TextLocation("LICENSE", 3, 3))
+                                )
+                            )
+                        )
+                    )
+                )
+
+                val resolver = LicenseInfoResolver(data.toProvider())
+
+                val result = resolver.resolveLicenseInfo(pkgId)
+
+                result should containCopyrightsExactly(
+                    ResolvedCopyrightFinding(
+                        statement = "(c) 2009-2010 Holder 1",
+                        originalStatements = setOf("(c) 2009 Holder 1", "(c) 2010 Holder 1"),
+                        locations = setOf(
+                            TextLocation("LICENSE", 1, 1),
+                            TextLocation("LICENSE", 2, 2)
+                        )
+                    ),
+                    ResolvedCopyrightFinding(
+                        statement = "(c) 2010 Holder 2",
+                        originalStatements = emptySet(),
+                        locations = setOf(TextLocation("LICENSE", 3, 3))
+                    )
+                )
+            }
         }
     }
 
@@ -222,6 +265,19 @@ fun containNoCopyrights(): Matcher<ResolvedLicenseInfo?> =
             copyrights.isEmpty(),
             "ResolvedLicenseInfo should not contain copyrights, but has ${copyrights.show().value}",
             "ResolvedLicenseInfo should contain copyrights, but has none"
+        )
+    }
+
+fun containCopyrightsExactly(vararg copyrights: ResolvedCopyrightFinding): Matcher<ResolvedLicenseInfo?> =
+    neverNullMatcher { value ->
+        val expected = copyrights.toSet()
+        val actual = value.flatMapTo(mutableSetOf()) { license -> license.locations.flatMap { it.copyrights } }
+
+        MatcherResult(
+            expected == actual,
+            "Resolved license info should contain exactly copyrights ${expected.show().value}, but has " +
+                    actual.show().value,
+            "Resolved license info should not contain exactly copyrights ${copyrights.show().value}"
         )
     }
 
