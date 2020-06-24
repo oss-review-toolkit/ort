@@ -39,7 +39,6 @@ import org.ossreviewtoolkit.model.config.OrtConfiguration
 import org.ossreviewtoolkit.utils.ORT_NAME
 import org.ossreviewtoolkit.utils.ORT_DATA_DIR_ENV_NAME
 import org.ossreviewtoolkit.utils.expandTilde
-import org.ossreviewtoolkit.utils.fixupUserHomeProperty
 import org.ossreviewtoolkit.utils.ortDataDirectory
 import org.ossreviewtoolkit.utils.printStackTrace
 
@@ -120,8 +119,6 @@ class OrtMain : CliktCommand(name = ORT_NAME, epilog = "* denotes required optio
 
     override fun run() {
         Configurator.setRootLevel(logLevel)
-
-        fixupUserHomeProperty()
 
         // Make the parameter globally available.
         printStackTrace = stacktrace
