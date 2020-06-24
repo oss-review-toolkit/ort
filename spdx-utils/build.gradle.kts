@@ -26,7 +26,6 @@ import groovy.json.JsonSlurper
 
 import org.jetbrains.kotlin.gradle.dsl.KotlinCompile
 
-import java.io.FileFilter
 import java.io.FileNotFoundException
 import java.net.URL
 import java.time.Year
@@ -287,7 +286,7 @@ fun generateLicenseTextResources(description: String, ids: Map<String, LicenseMe
     val scanCodeLicensePath = "$buildDir/SvnExport/licenses/scancode-toolkit"
     val spdxIdToScanCodeKey = mutableMapOf<String, String>()
 
-    file(scanCodeLicensePath).listFiles(FileFilter { it.name.endsWith(".yml") }).forEach { file ->
+    file(scanCodeLicensePath).walk().maxDepth(1).filter { it.isFile && it.extension == "yml" }.forEach { file ->
         file.readLines().forEach { line ->
             val keyAndValue = line.split(Regex("^spdx_license_key:"), 2)
             if (keyAndValue.size == 2) {
@@ -357,9 +356,9 @@ val generateLicenseRefTextResources by tasks.registering {
             mkdirs()
         }
 
-        licensesDir.listFiles(FileFilter {
-            it.name.endsWith(".yml") && !it.name.endsWith("-exception.yml")
-        }).forEach { file ->
+        licensesDir.walk().maxDepth(1).filter {
+            it.isFile && it.extension == "yml" && !it.nameWithoutExtension.endsWith("-exception")
+        }.forEach { file ->
             val isSpdxLicense = file.readLines().any { it.startsWith("spdx_license_key: ") }
             if (!isSpdxLicense) {
                 // The base name of a ScanCode license YML file matches the ScanCode-internal license key.

@@ -138,7 +138,7 @@ class Cvs : VersionControlSystem(), CommandLineTool {
                     }.toMap().toSortedMap()
                 } finally {
                     // Clean the temporarily updated working tree again.
-                    workingDir.listFiles().forEach {
+                    workingDir.walk().maxDepth(1).forEach {
                         if (it.isDirectory) {
                             if (it.name != "CVS") it.safeDeleteRecursively()
                         } else {

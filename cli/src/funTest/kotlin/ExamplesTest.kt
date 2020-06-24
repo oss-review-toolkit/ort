@@ -25,7 +25,7 @@ import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.collections.beEmpty
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
-import io.kotest.matchers.shouldNotBe
+import io.kotest.matchers.shouldNot
 
 import java.io.File
 import java.io.IOException
@@ -49,7 +49,8 @@ class ExamplesTest : StringSpec() {
 
     init {
         "Listing examples files succeeded" {
-            examplesDir.listFiles()?.also { exampleFiles = it.toMutableList() } shouldNotBe null
+            exampleFiles = examplesDir.walk().maxDepth(1).filter { it.isFile }.toMutableList()
+            exampleFiles shouldNot beEmpty()
         }
 
         "ort.yml examples are parsable" {

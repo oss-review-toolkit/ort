@@ -36,7 +36,6 @@ import org.ossreviewtoolkit.utils.normalizeVcsUrl
 import org.ossreviewtoolkit.utils.showStackTrace
 
 import java.io.File
-import java.io.FileFilter
 import java.nio.file.FileSystems
 import java.nio.file.FileVisitResult
 import java.nio.file.Files
@@ -122,7 +121,7 @@ abstract class PackageManager(
                         return FileVisitResult.SKIP_SUBTREE
                     }
 
-                    val filesInDir = dirAsFile.listFiles(FileFilter { it.isFile })
+                    val filesInDir = dirAsFile.walk().maxDepth(1).filter { it.isFile }.toList()
 
                     packageManagers.forEach { manager ->
                         // Create a list of lists of matching files per glob.
