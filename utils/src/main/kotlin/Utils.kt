@@ -68,6 +68,29 @@ val ROOT_LICENSE_FILENAMES = listOf(
 ).generateCapitalizationVariants()
 
 /**
+ * Check if the "user.home" property is set to a sane value and otherwise set it to the value of an (OS-specific)
+ * environment variable for the user home directory, and return that value. This works around the issue that esp. in
+ * certain Docker scenarios "user.home" is set to "?", see https://bugs.openjdk.java.net/browse/JDK-8193433 for some
+ * background information.
+ */
+inline fun <reified T : Any> T.fixupUserHomeProperty(): String {
+    val userHome = System.getProperty("user.home")
+    if (!userHome.isNullOrBlank() && userHome != "?") return userHome
+
+    val fallbackUserHome = listOfNotNull(
+        Os.env["HOME"],
+        Os.env["USERPROFILE"]
+    ).firstOrNull {
+        it.isNotBlank()
+    } ?: throw IllegalArgumentException("Unable to determine a user home directory.")
+
+    log.info { "Fixing up the user home directory from '$userHome' to '$fallbackUserHome'." }
+    System.setProperty("user.home", fallbackUserHome)
+
+    return fallbackUserHome
+}
+
+/**
  * Return whether the [receiver] (usually an instance of a data class) has any non-null property.
  */
 inline fun <reified T : Any> T.hasNonNullProperty() =
@@ -140,29 +163,6 @@ fun filterVersionNames(version: String, names: List<String>, project: String? = 
         // Fall back to the original list if filtering by project results in an empty list.
         if (it.isEmpty()) filteredNames else it
     }
-}
-
-/**
- * Check if the "user.home" property is set to a sane value and otherwise set it to the value of an (OS-specific)
- * environment variable for the user home directory, and return that value. This works around the issue that esp. in
- * certain Docker scenarios "user.home" is set to "?", see https://bugs.openjdk.java.net/browse/JDK-8193433 for some
- * background information.
- */
-inline fun <reified T : Any> T.fixupUserHomeProperty(): String {
-    val userHome = System.getProperty("user.home")
-    if (!userHome.isNullOrBlank() && userHome != "?") return userHome
-
-    val fallbackUserHome = listOfNotNull(
-        Os.env["HOME"],
-        Os.env["USERPROFILE"]
-    ).firstOrNull {
-        it.isNotBlank()
-    } ?: throw IllegalArgumentException("Unable to determine a user home directory.")
-
-    log.info { "Fixing up the user home directory from '$userHome' to '$fallbackUserHome'." }
-    System.setProperty("user.home", fallbackUserHome)
-
-    return fallbackUserHome
 }
 
 /**
