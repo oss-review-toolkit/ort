@@ -31,7 +31,7 @@ import java.io.File
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.utils.ORT_NAME
-import org.ossreviewtoolkit.utils.getOrtDataDirectory
+import org.ossreviewtoolkit.utils.ortDataDirectory
 import org.ossreviewtoolkit.utils.safeDeleteRecursively
 import org.ossreviewtoolkit.utils.unpack
 
@@ -63,7 +63,7 @@ class SubversionWorkingTreeTest : StringSpec() {
         }
 
         "Subversion detects non-working-trees" {
-            svn.getWorkingTree(getOrtDataDirectory()).isValid() shouldBe false
+            svn.getWorkingTree(ortDataDirectory).isValid() shouldBe false
         }
 
         "Subversion correctly detects URLs to remote repositories" {

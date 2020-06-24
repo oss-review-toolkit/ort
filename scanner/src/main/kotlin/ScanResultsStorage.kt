@@ -34,8 +34,8 @@ import org.ossreviewtoolkit.model.config.PostgresStorageConfiguration
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
 import org.ossreviewtoolkit.scanner.storages.*
 import org.ossreviewtoolkit.utils.ORT_FULL_NAME
-import org.ossreviewtoolkit.utils.getOrtDataDirectory
 import org.ossreviewtoolkit.utils.log
+import org.ossreviewtoolkit.utils.ortDataDirectory
 import org.ossreviewtoolkit.utils.storage.HttpFileStorage
 import org.ossreviewtoolkit.utils.storage.LocalFileStorage
 import org.ossreviewtoolkit.utils.storage.XZCompressedLocalFileStorage
@@ -82,7 +82,7 @@ abstract class ScanResultsStorage {
         }
 
         private fun configureDefaultStorage() {
-            val localFileStorage = XZCompressedLocalFileStorage(getOrtDataDirectory().resolve("$TOOL_NAME/results"))
+            val localFileStorage = XZCompressedLocalFileStorage(ortDataDirectory.resolve("$TOOL_NAME/results"))
             val fileBasedStorage = FileBasedStorage(localFileStorage)
             storage = fileBasedStorage
         }

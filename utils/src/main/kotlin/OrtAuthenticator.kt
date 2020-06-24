@@ -94,7 +94,7 @@ class OrtAuthenticator(private val original: Authenticator? = null) : Authentica
                 serverAuthentication[requestingHost]?.let { return it }
 
                 netrcFileNames.forEach { name ->
-                    val netrcFile = getUserHomeDirectory().resolve(name)
+                    val netrcFile = userHomeDirectory.resolve(name)
                     if (netrcFile.isFile) {
                         log.debug { "Parsing '$netrcFile' for machine '$requestingHost'." }
 

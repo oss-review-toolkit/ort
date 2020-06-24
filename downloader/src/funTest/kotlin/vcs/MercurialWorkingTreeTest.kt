@@ -31,7 +31,7 @@ import java.io.File
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.utils.ORT_NAME
-import org.ossreviewtoolkit.utils.getOrtDataDirectory
+import org.ossreviewtoolkit.utils.ortDataDirectory
 import org.ossreviewtoolkit.utils.safeDeleteRecursively
 import org.ossreviewtoolkit.utils.unpack
 
@@ -60,7 +60,7 @@ class MercurialWorkingTreeTest : StringSpec() {
         }
 
         "Mercurial detects non-working-trees" {
-            hg.getWorkingTree(getOrtDataDirectory()).isValid() shouldBe false
+            hg.getWorkingTree(ortDataDirectory).isValid() shouldBe false
         }
 
         "Mercurial correctly detects URLs to remote repositories" {

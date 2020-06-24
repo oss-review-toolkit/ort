@@ -50,11 +50,11 @@ import org.ossreviewtoolkit.utils.Os
 import org.ossreviewtoolkit.utils.ProcessCapture
 import org.ossreviewtoolkit.utils.collectMessagesAsString
 import org.ossreviewtoolkit.utils.getPathFromEnvironment
-import org.ossreviewtoolkit.utils.getUserHomeDirectory
 import org.ossreviewtoolkit.utils.isSymbolicLink
 import org.ossreviewtoolkit.utils.log
 import org.ossreviewtoolkit.utils.showStackTrace
 import org.ossreviewtoolkit.utils.textValueOrEmpty
+import org.ossreviewtoolkit.utils.userHomeDirectory
 
 private const val GRADLE_VERSION = "5.6.4"
 private const val PUB_LOCK_FILE = "pubspec.lock"
@@ -89,7 +89,7 @@ class Pub(
             if (Os.isWindows) {
                 File(Os.env["APPDATA"], "Pub/Cache")
             } else {
-                getUserHomeDirectory().resolve(".pub-cache/")
+                userHomeDirectory.resolve(".pub-cache/")
             }
         }
 
