@@ -88,6 +88,8 @@ abstract class WorkingTree(val workingDir: File, val vcsType: VcsType) {
      * @throws IOException If no or multiple matching revisions are found.
      */
     fun guessRevisionName(project: String, version: String): String {
+        if (version.isBlank()) throw IOException("Cannot guess a revision name from a blank version.")
+
         val versionNames = filterVersionNames(version, listRemoteTags(), project)
         return when {
             versionNames.isEmpty() ->
