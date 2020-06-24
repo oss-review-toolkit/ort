@@ -31,9 +31,9 @@ import org.ossreviewtoolkit.utils.CopyrightStatementsProcessor
 import org.ossreviewtoolkit.utils.FileMatcher
 import org.ossreviewtoolkit.utils.LICENSE_FILENAMES
 import org.ossreviewtoolkit.utils.ORT_NAME
-import org.ossreviewtoolkit.utils.getOrtDataDirectory
 import org.ossreviewtoolkit.utils.log
 import org.ossreviewtoolkit.utils.logOnce
+import org.ossreviewtoolkit.utils.ortDataDirectory
 import org.ossreviewtoolkit.utils.storage.FileArchiver
 import org.ossreviewtoolkit.utils.storage.LocalFileStorage
 
@@ -57,7 +57,7 @@ class NoticeByPackageReporter : AbstractNoticeReporter() {
 
 class NoticeByPackageProcessor(input: ReporterInput) : AbstractNoticeReporter.NoticeProcessor(input) {
     companion object {
-        private val DEFAULT_ARCHIVE_DIR by lazy { getOrtDataDirectory().resolve("scanner/archive") }
+        private val DEFAULT_ARCHIVE_DIR by lazy { ortDataDirectory.resolve("scanner/archive") }
         private const val LICENSE_SEPARATOR = "\n  --\n\n"
     }
 

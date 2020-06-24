@@ -68,6 +68,24 @@ val ROOT_LICENSE_FILENAMES = listOf(
 ).generateCapitalizationVariants()
 
 /**
+ * The current user's home directory.
+ */
+val userHomeDirectory by lazy {
+    File(object {}.fixupUserHomeProperty())
+}
+
+/**
+ * The directory to store ORT data in, like the configuration, caches and archives.
+ */
+val ortDataDirectory by lazy {
+    Os.env[ORT_DATA_DIR_ENV_NAME]?.takeUnless {
+        it.isEmpty()
+    }?.let {
+        File(it)
+    } ?: userHomeDirectory.resolve(".ort")
+}
+
+/**
  * Check if the "user.home" property is set to a sane value and otherwise set it to the value of an (OS-specific)
  * environment variable for the user home directory, and return that value. This works around the issue that esp. in
  * certain Docker scenarios "user.home" is set to "?", see https://bugs.openjdk.java.net/browse/JDK-8193433 for some
@@ -214,21 +232,6 @@ fun getPathFromEnvironment(executable: String): File? {
 
     return null
 }
-
-/**
- * Return the current user's home directory.
- */
-fun getUserHomeDirectory() = File(System.getProperty("user.home"))
-
-/**
- * Return the directory to store ORT data in, like the configuration, caches and archives.
- */
-fun getOrtDataDirectory() =
-    Os.env[ORT_DATA_DIR_ENV_NAME]?.takeUnless {
-        it.isEmpty()
-    }?.let {
-        File(it)
-    } ?: getUserHomeDirectory().resolve(".ort")
 
 /**
  * Install both the [OrtAuthenticator] and the [OrtProxySelector] to handle proxy authentication. Return the

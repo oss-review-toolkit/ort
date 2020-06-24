@@ -40,7 +40,7 @@ import org.ossreviewtoolkit.model.OutputFormat
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.mapper
 import org.ossreviewtoolkit.utils.expandTilde
-import org.ossreviewtoolkit.utils.getOrtDataDirectory
+import org.ossreviewtoolkit.utils.ortDataDirectory
 import org.ossreviewtoolkit.utils.safeMkdirs
 
 import java.io.File
@@ -127,7 +127,7 @@ class AnalyzerCommand : CliktCommand(name = "analyze", help = "Determine depende
         val analyzerConfig = AnalyzerConfiguration(ignoreToolVersions, allowDynamicVersions)
         val analyzer = Analyzer(analyzerConfig)
 
-        val globalPackageCurationsFile = getOrtDataDirectory().resolve("config/curations.yml")
+        val globalPackageCurationsFile = ortDataDirectory.resolve("config/curations.yml")
         val curationProvider = FallbackPackageCurationProvider(
             listOfNotNull(
                 packageCurationsFile?.let { FilePackageCurationProvider(it) },

@@ -33,7 +33,7 @@ import org.ossreviewtoolkit.downloader.VersionControlSystem
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.utils.ORT_NAME
-import org.ossreviewtoolkit.utils.getOrtDataDirectory
+import org.ossreviewtoolkit.utils.ortDataDirectory
 import org.ossreviewtoolkit.utils.safeDeleteRecursively
 import org.ossreviewtoolkit.utils.unpack
 
@@ -62,7 +62,7 @@ class GitWorkingTreeTest : StringSpec() {
         }
 
         "Git detects non-working-trees" {
-            git.getWorkingTree(getOrtDataDirectory()).isValid() shouldBe false
+            git.getWorkingTree(ortDataDirectory).isValid() shouldBe false
         }
 
         "Git correctly detects URLs to remote repositories" {

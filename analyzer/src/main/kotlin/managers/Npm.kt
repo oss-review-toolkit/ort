@@ -60,13 +60,13 @@ import org.ossreviewtoolkit.spdx.SpdxLicense
 import org.ossreviewtoolkit.utils.CommandLineTool
 import org.ossreviewtoolkit.utils.OkHttpClientHelper
 import org.ossreviewtoolkit.utils.Os
-import org.ossreviewtoolkit.utils.getUserHomeDirectory
 import org.ossreviewtoolkit.utils.installAuthenticatorAndProxySelector
 import org.ossreviewtoolkit.utils.isSymbolicLink
 import org.ossreviewtoolkit.utils.log
 import org.ossreviewtoolkit.utils.realFile
 import org.ossreviewtoolkit.utils.stashDirectories
 import org.ossreviewtoolkit.utils.textValueOrEmpty
+import org.ossreviewtoolkit.utils.userHomeDirectory
 
 /**
  * The [Node package manager](https://www.npmjs.com/) for JavaScript.
@@ -107,7 +107,7 @@ open class Npm(
         // fixed minor version to be sure to get consistent results.
         checkVersion(analyzerConfig.ignoreToolVersions)
 
-        val npmRcFile = getUserHomeDirectory().resolve(".npmrc")
+        val npmRcFile = userHomeDirectory.resolve(".npmrc")
         if (npmRcFile.isFile) {
             ortProxySelector.addProxies(managerName, readProxySettingsFromNpmRc(npmRcFile.readText()))
         }

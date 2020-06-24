@@ -39,11 +39,11 @@ import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.jsonMapper
 import org.ossreviewtoolkit.utils.CommandLineTool
-import org.ossreviewtoolkit.utils.getUserHomeDirectory
+import org.ossreviewtoolkit.utils.ProcessCapture
 import org.ossreviewtoolkit.utils.log
 import org.ossreviewtoolkit.utils.stashDirectories
 import org.ossreviewtoolkit.utils.textValueOrEmpty
-import org.ossreviewtoolkit.utils.ProcessCapture
+import org.ossreviewtoolkit.utils.userHomeDirectory
 
 import com.vdurmont.semver4j.Requirement
 
@@ -98,7 +98,7 @@ class Conan(
      * Primary method for resolving dependencies from [definitionFile].
      */
     override fun resolveDependencies(definitionFile: File): List<ProjectAnalyzerResult> {
-        val conanHome = getUserHomeDirectory().resolve(".conan")
+        val conanHome = userHomeDirectory.resolve(".conan")
 
         stashDirectories(File(conanHome.resolve("data").path)).use {
             val workingDir = definitionFile.parentFile

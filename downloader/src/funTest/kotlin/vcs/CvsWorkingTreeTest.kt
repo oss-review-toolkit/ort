@@ -32,7 +32,7 @@ import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.utils.Ci
 import org.ossreviewtoolkit.utils.ORT_NAME
-import org.ossreviewtoolkit.utils.getOrtDataDirectory
+import org.ossreviewtoolkit.utils.ortDataDirectory
 import org.ossreviewtoolkit.utils.safeDeleteRecursively
 import org.ossreviewtoolkit.utils.unpack
 
@@ -63,7 +63,7 @@ class CvsWorkingTreeTest : StringSpec() {
 
         // Disabled on Azure Windows build because CVS is not installed there.
         "CVS detects non-working-trees".config(enabled = !Ci.isAzureWindows) {
-            cvs.getWorkingTree(getOrtDataDirectory()).isValid() shouldBe false
+            cvs.getWorkingTree(ortDataDirectory).isValid() shouldBe false
         }
 
         "CVS correctly detects URLs to remote repositories" {
