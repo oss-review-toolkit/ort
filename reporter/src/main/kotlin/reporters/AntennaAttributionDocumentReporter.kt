@@ -98,7 +98,7 @@ class AntennaAttributionDocumentReporter : Reporter {
 
         // Use the default template unless a custom template is provided via the options.
         var templateId = DEFAULT_TEMPLATE_ID
-        var templateFiles = mutableMapOf<String, File>()
+        val templateFiles = mutableMapOf<String, File>()
 
         val providedTemplateId = options[TEMPLATE_ID]
         val providedTemplatePath = options[TEMPLATE_PATH]
