@@ -73,7 +73,7 @@ class LicenseInfoResolver(val provider: LicenseInfoProvider) {
         val allCopyrights = licenseInfo.detectedLicenseInfo.findings.flatMap { finding ->
             finding.copyrights.map { it.statement }
         }
-        val processedCopyrightStatements = CopyrightStatementsProcessor().process(allCopyrights)
+        val processedCopyrightStatements = CopyrightStatementsProcessor().process(allCopyrights).toMap()
         val unmatchedCopyrights = mutableMapOf<Provenance, MutableSet<CopyrightFinding>>()
         val resolvedLocations = resolveLocations(
             licenseInfo.detectedLicenseInfo, processedCopyrightStatements, unmatchedCopyrights
@@ -91,7 +91,7 @@ class LicenseInfoResolver(val provider: LicenseInfoProvider) {
 
     private fun resolveLocations(
         detectedLicenseInfo: DetectedLicenseInfo,
-        processedCopyrightStatements: CopyrightStatementsProcessor.Result,
+        processedCopyrightStatements: Map<String, Set<String>>,
         unmatchedCopyrights: MutableMap<Provenance, MutableSet<CopyrightFinding>>
     ): Map<SpdxSingleLicenseExpression, Set<ResolvedLicenseLocation>> {
         val resolvedLocations = mutableMapOf<SpdxSingleLicenseExpression, MutableSet<ResolvedLicenseLocation>>()
@@ -102,7 +102,7 @@ class LicenseInfoResolver(val provider: LicenseInfoProvider) {
             val matchResult = FindingsMatcher().matchFindings(findings.licenses, findings.copyrights)
             matchResult.matchedFindings.forEach { (licenseFinding, copyrightFindings) ->
                 val resolvedCopyrightFindings =
-                    resolveCopyrightFindings(copyrightFindings, processedCopyrightStatements)
+                    resolveCopyrights(copyrightFindings, processedCopyrightStatements)
 
                 licenseFinding.license.decompose().forEach { singleLicense ->
                     resolvedLocations.getOrPut(singleLicense) { mutableSetOf() } += ResolvedLicenseLocation(
@@ -123,41 +123,20 @@ class LicenseInfoResolver(val provider: LicenseInfoProvider) {
         return resolvedLocations
     }
 
-    private fun resolveCopyrightFindings(
+    private fun resolveCopyrights(
         copyrightFindings: Set<CopyrightFinding>,
-        processedCopyrightStatements: CopyrightStatementsProcessor.Result
-    ): List<ResolvedCopyrightFinding> {
-        val resolvedCopyrightFindings = copyrightFindings.map { copyrightFinding ->
-            // TODO: Filter copyright garbage.
-
-            val (statement, originalStatements) = processedCopyrightStatements.processedStatements.entries
-                .find { (_, originalStatements) -> copyrightFinding.statement in originalStatements }
-                ?.let { (processedStatement, originalStatements) ->
-                    if (processedStatement == copyrightFinding.statement
-                        && originalStatements.singleOrNull() == copyrightFinding.statement
-                    ) {
-                        processedStatement to emptySet<String>()
-                    } else {
-                        processedStatement to originalStatements
-                    }
-                } ?: copyrightFinding.statement to emptySet<String>()
-
-            ResolvedCopyrightFinding(
-                statement = statement,
-                originalStatements = originalStatements,
-                locations = setOf(copyrightFinding.location)
-            )
+        processedCopyrightStatements: Map<String, Set<String>>
+    ): List<ResolvedCopyright> {
+        val resolvedCopyrightFindings = copyrightFindings.map {
+            ResolvedCopyrightFinding(it.statement, it.location, isGarbage = false)
         }
 
-        return resolvedCopyrightFindings.mergeByStatement()
+        return processedCopyrightStatements.mapValues { (_, originalStatements) ->
+            resolvedCopyrightFindings.filter { it.statement in originalStatements }
+        }.filterValues { it.isNotEmpty() }.entries.map { (statement, findings) ->
+            ResolvedCopyright(statement, findings.toSet(), isGarbage = false)
+        }
     }
-
-    private fun List<ResolvedCopyrightFinding>.mergeByStatement(): List<ResolvedCopyrightFinding> =
-        groupBy { it.statement }.entries.map { (statement, findings) ->
-            val originalStatements = findings.flatMapTo(mutableSetOf()) { it.originalStatements }
-            val locations = findings.flatMapTo(mutableSetOf()) { it.locations }
-                ResolvedCopyrightFinding(statement, originalStatements, locations)
-        }
 }
 
 private class ResolvedLicenseBuilder(val license: SpdxSingleLicenseExpression) {
@@ -167,3 +146,6 @@ private class ResolvedLicenseBuilder(val license: SpdxSingleLicenseExpression) {
 
     fun build() = ResolvedLicense(license, sources, originalDeclaredLicenses, locations)
 }
+
+private fun CopyrightStatementsProcessor.Result.toMap(): Map<String, Set<String>> =
+    processedStatements + unprocessedStatements.associateWith { setOf(it) }

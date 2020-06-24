@@ -24,6 +24,7 @@ import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.LicenseSource
 import org.ossreviewtoolkit.model.Provenance
 import org.ossreviewtoolkit.model.TextLocation
+import org.ossreviewtoolkit.model.config.CopyrightGarbage
 import org.ossreviewtoolkit.model.config.LicenseFindingCuration
 import org.ossreviewtoolkit.model.config.PathExclude
 import org.ossreviewtoolkit.spdx.SpdxSingleLicenseExpression
@@ -112,7 +113,28 @@ data class ResolvedLicenseLocation(
     /**
      * All copyright findings associated to this license location.
      */
-    val copyrights: Set<ResolvedCopyrightFinding>
+    val copyrights: Set<ResolvedCopyright>
+)
+
+/**
+ * A resolved copyright.
+ */
+data class ResolvedCopyright(
+    /**
+     * The resolved copyright statement.
+     */
+    val statement: String,
+
+    /**
+     * The resolved findings for this copyright. The statements in the findings can be different to [statement] if they
+     * were processed by the [CopyrightStatementsProcessor].
+     */
+    val findings: Set<ResolvedCopyrightFinding>,
+
+    /**
+     * True, if this [statement] is contained in the [CopyrightGarbage] used during resolution.
+     */
+    val isGarbage: Boolean
 )
 
 /**
@@ -120,17 +142,17 @@ data class ResolvedLicenseLocation(
  */
 data class ResolvedCopyrightFinding(
     /**
-     * The resolved copyright statement.
+     * The copyright statement.
      */
     val statement: String,
 
     /**
-     * The original copyright statements, if this statement was created by the [CopyrightStatementsProcessor].
+     * The location where this copyright was found.
      */
-    val originalStatements: Set<String>,
+    val location: TextLocation,
 
     /**
-     * All text locations where this copyright was found.
+     * True, if this [statement] is contained in the [CopyrightGarbage] used during resolution.
      */
-    val locations: Set<TextLocation>
+    val isGarbage: Boolean
 )

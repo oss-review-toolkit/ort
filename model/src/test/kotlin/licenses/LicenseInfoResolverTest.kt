@@ -110,10 +110,16 @@ class LicenseInfoResolverTest : WordSpec() {
                     startLine = 1,
                     endLine = 1,
                     copyrights = setOf(
-                        ResolvedCopyrightFinding(
-                            "Copyright Apache-2.0",
-                            emptySet(),
-                            locations = setOf(TextLocation("LICENSE", 1, 1))
+                        ResolvedCopyright(
+                            statement = "Copyright Apache-2.0",
+                            findings = setOf(
+                                ResolvedCopyrightFinding(
+                                    statement = "Copyright Apache-2.0",
+                                    location = TextLocation("LICENSE", 1, 1),
+                                    isGarbage = false
+                                )
+                            ),
+                            isGarbage = false
                         )
                     )
                 )
@@ -132,10 +138,16 @@ class LicenseInfoResolverTest : WordSpec() {
                     startLine = 31,
                     endLine = 31,
                     copyrights = setOf(
-                        ResolvedCopyrightFinding(
-                            "Copyright MIT",
-                            emptySet(),
-                            locations = setOf(TextLocation("LICENSE", 31, 31))
+                        ResolvedCopyright(
+                            statement = "Copyright MIT",
+                            findings = setOf(
+                                ResolvedCopyrightFinding(
+                                    statement = "Copyright MIT",
+                                    location = TextLocation("LICENSE", 31, 31),
+                                    isGarbage = false
+                                )
+                            ),
+                            isGarbage = false
                         )
                     )
                 )
@@ -193,18 +205,32 @@ class LicenseInfoResolverTest : WordSpec() {
                 val result = resolver.resolveLicenseInfo(pkgId)
 
                 result should containCopyrightsExactly(
-                    ResolvedCopyrightFinding(
+                    ResolvedCopyright(
                         statement = "(c) 2009-2010 Holder 1",
-                        originalStatements = setOf("(c) 2009 Holder 1", "(c) 2010 Holder 1"),
-                        locations = setOf(
-                            TextLocation("LICENSE", 1, 1),
-                            TextLocation("LICENSE", 2, 2)
-                        )
+                        findings = setOf(
+                            ResolvedCopyrightFinding(
+                                statement = "(c) 2009 Holder 1",
+                                location = TextLocation("LICENSE", 1, 1),
+                                isGarbage = false
+                            ),
+                            ResolvedCopyrightFinding(
+                                statement = "(c) 2010 Holder 1",
+                                location = TextLocation("LICENSE", 2, 2),
+                                isGarbage = false
+                            )
+                        ),
+                        isGarbage = false
                     ),
-                    ResolvedCopyrightFinding(
+                    ResolvedCopyright(
                         statement = "(c) 2010 Holder 2",
-                        originalStatements = emptySet(),
-                        locations = setOf(TextLocation("LICENSE", 3, 3))
+                        findings = setOf(
+                            ResolvedCopyrightFinding(
+                                statement = "(c) 2010 Holder 2",
+                                location = TextLocation("LICENSE", 3, 3),
+                                isGarbage = false
+                            )
+                        ),
+                        isGarbage = false
                     )
                 )
             }
@@ -268,7 +294,7 @@ fun containNoCopyrights(): Matcher<ResolvedLicenseInfo?> =
         )
     }
 
-fun containCopyrightsExactly(vararg copyrights: ResolvedCopyrightFinding): Matcher<ResolvedLicenseInfo?> =
+fun containCopyrightsExactly(vararg copyrights: ResolvedCopyright): Matcher<ResolvedLicenseInfo?> =
     neverNullMatcher { value ->
         val expected = copyrights.toSet()
         val actual = value.flatMapTo(mutableSetOf()) { license -> license.locations.flatMap { it.copyrights } }
@@ -326,7 +352,7 @@ fun containLocationForLicense(
     endLine: Int,
     appliedCuration: LicenseFindingCuration? = null,
     matchingPathExcludes: List<PathExclude> = emptyList(),
-    copyrights: Set<ResolvedCopyrightFinding> = emptySet()
+    copyrights: Set<ResolvedCopyright> = emptySet()
 ): Matcher<ResolvedLicenseInfo?> =
     neverNullMatcher { value ->
         val expectedLocation =
