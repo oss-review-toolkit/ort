@@ -32,7 +32,6 @@ import io.kotest.matchers.shouldBe
 import io.kotest.core.spec.style.StringSpec
 
 import java.io.File
-import java.io.FileFilter
 
 private const val REPO_URL = "https://github.com/oss-review-toolkit/ort-test-data-git-repo"
 private const val REPO_REV = "31588aa8f8555474e1c3c66a359ec99e4cd4b1fa"
@@ -68,7 +67,7 @@ class GitRepoDownloadTest : StringSpec() {
                 "src"
             )
 
-            val actualSpdxFiles = spdxDir.listFiles(FileFilter { it.isDirectory }).map { it.name }.sorted()
+            val actualSpdxFiles = spdxDir.walk().maxDepth(1).filter { it.isDirectory }.map { it.name }.sorted()
 
             val submodulesDir = File(outputDir, "submodules")
             val expectedSubmodulesFiles = listOf(
@@ -77,7 +76,11 @@ class GitRepoDownloadTest : StringSpec() {
                 "test-data-npm"
             )
 
-            val actualSubmodulesFiles = submodulesDir.listFiles(FileFilter { it.isDirectory }).map { it.name }.sorted()
+            val actualSubmodulesFiles = submodulesDir.walk().maxDepth(1).filter {
+                it.isDirectory
+            }.map {
+                it.name
+            }.sorted()
 
             workingTree.isValid() shouldBe true
             workingTree.getInfo() shouldBe vcs

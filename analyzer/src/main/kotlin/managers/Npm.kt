@@ -27,7 +27,6 @@ import com.fasterxml.jackson.databind.node.ObjectNode
 import com.vdurmont.semver4j.Requirement
 
 import java.io.File
-import java.io.FileFilter
 import java.net.HttpURLConnection
 import java.net.URLEncoder
 import java.util.SortedSet
@@ -383,12 +382,12 @@ open class Npm(
         val nodeModulesDir = moduleDir.resolve("node_modules")
         if (!nodeModulesDir.isDirectory) return emptyList()
 
-        val searchDirs = nodeModulesDir.listFiles(FileFilter {
+        val searchDirs = nodeModulesDir.walk().maxDepth(1).filter {
             it.isDirectory && it.name.startsWith("@")
-        }) + nodeModulesDir
+        }.toList() + nodeModulesDir
 
         return searchDirs.flatMap { dir ->
-            dir.listFiles(FileFilter { it.isSymbolicLink() && it.isDirectory }).toList()
+            dir.walk().maxDepth(1).filter { it.isDirectory && it.isSymbolicLink() }.toList()
         }
     }
 

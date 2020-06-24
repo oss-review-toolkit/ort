@@ -44,10 +44,8 @@ import com.paypal.digraph.parser.GraphParser
 import com.vdurmont.semver4j.Requirement
 
 import java.io.File
-import java.io.FileFilter
 import java.io.IOException
 import java.net.HttpURLConnection
-import java.nio.file.FileSystems
 import java.util.SortedSet
 
 import okhttp3.Request
@@ -87,11 +85,9 @@ class Stack(
         val workingDir = definitionFile.parentFile
 
         // Parse project information from the *.cabal file.
-        val cabalMatcher = FileSystems.getDefault().getPathMatcher("glob:**/*.cabal")
-
-        val cabalFiles = workingDir.listFiles(FileFilter {
-            cabalMatcher.matches(it.toPath())
-        })
+        val cabalFiles = workingDir.walk().filter {
+            it.isFile && it.extension == "cabal"
+        }.toList()
 
         val cabalFile = when (cabalFiles.size) {
             0 -> throw IOException("No *.cabal file found in '$workingDir'.")

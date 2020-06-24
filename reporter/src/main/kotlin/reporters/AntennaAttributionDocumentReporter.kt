@@ -118,7 +118,7 @@ class AntennaAttributionDocumentReporter : Reporter {
                     templateId = providedTemplateId
                 }
             } else if (templatePath.isDirectory) {
-                require(templatePath.listFiles().isNotEmpty()) {
+                require(templatePath.walk().maxDepth(1).filter { it.isFile }.any()) {
                     "The template path must point to a directory with template files if no template id is provided."
                 }
 

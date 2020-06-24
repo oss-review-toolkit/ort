@@ -230,7 +230,7 @@ class Bundler(
     }
 
     private fun getGemspecFile(workingDir: File) =
-        workingDir.listFiles { file -> file.extension == "gemspec" }.firstOrNull()
+        workingDir.walk().maxDepth(1).filter { it.isFile && it.extension == "gemspec" }.firstOrNull()
 
     private fun installDependencies(workingDir: File) {
         requireLockfile(workingDir) { File(workingDir, "Gemfile.lock").isFile }
