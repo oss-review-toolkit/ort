@@ -65,8 +65,9 @@ rootProject.idea {
 dependencies {
     antlr("org.antlr:antlr4:$antlrVersion")
 
-    implementation("com.fasterxml.jackson.core:jackson-databind:$jacksonVersion")
-    implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:$jacksonVersion")
+    api("com.fasterxml.jackson.core:jackson-databind:$jacksonVersion")
+    api("com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:$jacksonVersion")
+
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin:$jacksonVersion")
 }
 
