@@ -82,7 +82,7 @@ object Os {
             it.isNotBlank()
         } ?: throw IllegalArgumentException("Unable to determine a user home directory.")
 
-        log.info { "Fixing up the user home directory from '$userHome' to '$fallbackUserHome'." }
+        log.warn { "Fixing up the user home directory from '$userHome' to '$fallbackUserHome'." }
         System.setProperty("user.home", fallbackUserHome)
 
         return fallbackUserHome
