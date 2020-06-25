@@ -161,7 +161,7 @@ class AntennaAttributionDocumentReporter : Reporter {
                 // Antenna keeps around temporary files in its working directory, so we cannot just use our output
                 // directory as its working directory, but have to copy the file we are interested in.
                 val outputFile = outputDir.resolve(
-                    "$REPORT_BASE_FILENAME-${project.id.name}-${project.id.version}.$REPORT_EXTENSION"
+                    "$REPORT_BASE_FILENAME-${project.id.toPath("-")}.$REPORT_EXTENSION"
                 )
                 documentFile.copyTo(outputFile)
                 workingDir.safeDeleteRecursively()
