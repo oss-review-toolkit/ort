@@ -25,13 +25,34 @@ import java.io.File
  * Operating-System-specific utility functions.
  */
 object Os {
+    /**
+     * The operating system name.
+     */
     val name = System.getProperty("os.name").orEmpty()
+
+    /**
+     * The operating system name in lower case, for private use.
+     */
     private val nameLowerCase = name.toLowerCase()
 
+    /**
+     * Whether the operating system is Linux or not.
+     */
     val isLinux = "linux" in nameLowerCase
+
+    /**
+     * Whether the operating system is macOS or not.
+     */
     val isMac = "mac" in nameLowerCase
+
+    /**
+     * Whether the operating system is Windows or not.
+     */
     val isWindows = "windows" in nameLowerCase
 
+    /**
+     * The currently set environment variables. Keys are case-insensitive on Windows.
+     */
     val env = System.getenv().let { env ->
         if (isWindows) env.toSortedMap(String.CASE_INSENSITIVE_ORDER) else env.toSortedMap()
     }
