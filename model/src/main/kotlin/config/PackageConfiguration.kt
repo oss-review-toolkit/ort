@@ -27,9 +27,9 @@ import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 
 /**
- * A configuration for a specific package and provenance. It allows to setup [PathExclude]s and (in the future, TODO)
- * also [LicenseFindingCuration]s, similar to how its done via the [RepositoryConfiguration] for projects.
- **/
+ * A configuration for a specific package and provenance. It allows to setup [PathExclude]s and
+ * [LicenseFindingCuration]s, similar to how its done via the [RepositoryConfiguration] for projects.
+ */
 data class PackageConfiguration(
     /**
      * The identifier of the package this configuration applies to.
