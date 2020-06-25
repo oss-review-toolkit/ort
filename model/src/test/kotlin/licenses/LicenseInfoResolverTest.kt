@@ -37,6 +37,7 @@ import org.ossreviewtoolkit.model.Provenance
 import org.ossreviewtoolkit.model.TextLocation
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
+import org.ossreviewtoolkit.model.config.CopyrightGarbage
 import org.ossreviewtoolkit.model.config.LicenseFindingCuration
 import org.ossreviewtoolkit.model.config.PathExclude
 import org.ossreviewtoolkit.spdx.SpdxExpression
@@ -58,7 +59,7 @@ class LicenseInfoResolverTest : WordSpec() {
                         declaredLicenses = setOf("Apache-2.0 WITH LLVM-exception", "MIT")
                     )
                 )
-                val resolver = LicenseInfoResolver(data.toProvider())
+                val resolver = createResolver(data)
 
                 val result = resolver.resolveLicenseInfo(pkgId)
 
@@ -95,7 +96,7 @@ class LicenseInfoResolverTest : WordSpec() {
                     )
                 )
 
-                val resolver = LicenseInfoResolver(data.toProvider())
+                val resolver = createResolver(data)
 
                 val result = resolver.resolveLicenseInfo(pkgId)
 
@@ -167,7 +168,7 @@ class LicenseInfoResolverTest : WordSpec() {
                         concludedLicense = SpdxExpression.parse("Apache-2.0 WITH LLVM-exception AND MIT")
                     )
                 )
-                val resolver = LicenseInfoResolver(data.toProvider())
+                val resolver = createResolver(data)
 
                 val result = resolver.resolveLicenseInfo(pkgId)
 
@@ -200,7 +201,7 @@ class LicenseInfoResolverTest : WordSpec() {
                     )
                 )
 
-                val resolver = LicenseInfoResolver(data.toProvider())
+                val resolver = createResolver(data)
 
                 val result = resolver.resolveLicenseInfo(pkgId)
 
@@ -234,8 +235,70 @@ class LicenseInfoResolverTest : WordSpec() {
                     )
                 )
             }
+
+            "mark copyright garbage as garbage" {
+                val data = listOf(
+                    createLicenseInfo(
+                        id = pkgId,
+                        detectedLicenses = listOf(
+                            Findings(
+                                provenance = provenance,
+                                licenses = mapOf(
+                                    "Apache-2.0" to listOf(
+                                        TextLocation("LICENSE", 1, 1)
+                                    )
+                                ).toFindingsSet(),
+                                copyrights = setOf(
+                                    CopyrightFinding("(c) 2009 Holder 1", TextLocation("LICENSE", 1, 1)),
+                                    CopyrightFinding("(c) 2010 Holder 1", TextLocation("LICENSE", 2, 2)),
+                                    CopyrightFinding("(c) 2010 Holder 2", TextLocation("LICENSE", 3, 3))
+                                )
+                            )
+                        )
+                    )
+                )
+
+                val resolver = createResolver(data, setOf("(c) 2009-2010 Holder 1", "(c) 2009 Holder 1"))
+
+                val result = resolver.resolveLicenseInfo(pkgId)
+
+                result should containCopyrightsExactly(
+                    ResolvedCopyright(
+                        statement = "(c) 2009-2010 Holder 1",
+                        findings = setOf(
+                            ResolvedCopyrightFinding(
+                                statement = "(c) 2009 Holder 1",
+                                location = TextLocation("LICENSE", 1, 1),
+                                isGarbage = true
+                            ),
+                            ResolvedCopyrightFinding(
+                                statement = "(c) 2010 Holder 1",
+                                location = TextLocation("LICENSE", 2, 2),
+                                isGarbage = false
+                            )
+                        ),
+                        isGarbage = true
+                    ),
+                    ResolvedCopyright(
+                        statement = "(c) 2010 Holder 2",
+                        findings = setOf(
+                            ResolvedCopyrightFinding(
+                                statement = "(c) 2010 Holder 2",
+                                location = TextLocation("LICENSE", 3, 3),
+                                isGarbage = false
+                            )
+                        ),
+                        isGarbage = false
+                    )
+                )
+            }
         }
     }
+
+    private fun createResolver(
+        data: List<LicenseInfo>,
+        copyrightGarbage: Set<String> = emptySet()
+    ) = LicenseInfoResolver(data.toProvider(), CopyrightGarbage(copyrightGarbage.toSortedSet()))
 
     private fun createLicenseInfo(
         id: Identifier,
