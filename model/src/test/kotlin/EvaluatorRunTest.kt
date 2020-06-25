@@ -26,32 +26,30 @@ import io.kotest.core.spec.style.StringSpec
 
 import java.time.Instant
 
-class EvaluatorRunTest : StringSpec() {
-    init {
-        "EvaluatorRun without timestamps can be deserialized" {
-            val yaml = """
-                ---
-                violations: []
-            """.trimIndent()
+class EvaluatorRunTest : StringSpec({
+    "EvaluatorRun without timestamps can be deserialized" {
+        val yaml = """
+            ---
+            violations: []
+        """.trimIndent()
 
-            val evaluatorRun = yamlMapper.readValue<EvaluatorRun>(yaml)
+        val evaluatorRun = yamlMapper.readValue<EvaluatorRun>(yaml)
 
-            evaluatorRun.startTime shouldBe Instant.EPOCH
-            evaluatorRun.endTime shouldBe Instant.EPOCH
-        }
-
-        "EvaluatorRun with timestamps can be deserialized" {
-            val yaml = """
-                ---
-                start_time: "1970-01-01T00:00:10Z"
-                end_time: "1970-01-01T00:00:10Z"
-                violations: []
-            """.trimIndent()
-
-            val evaluatorRun = yamlMapper.readValue<EvaluatorRun>(yaml)
-
-            evaluatorRun.startTime shouldBe Instant.ofEpochSecond(10)
-            evaluatorRun.endTime shouldBe Instant.ofEpochSecond(10)
-        }
+        evaluatorRun.startTime shouldBe Instant.EPOCH
+        evaluatorRun.endTime shouldBe Instant.EPOCH
     }
-}
+
+    "EvaluatorRun with timestamps can be deserialized" {
+        val yaml = """
+            ---
+            start_time: "1970-01-01T00:00:10Z"
+            end_time: "1970-01-01T00:00:10Z"
+            violations: []
+        """.trimIndent()
+
+        val evaluatorRun = yamlMapper.readValue<EvaluatorRun>(yaml)
+
+        evaluatorRun.startTime shouldBe Instant.ofEpochSecond(10)
+        evaluatorRun.endTime shouldBe Instant.ofEpochSecond(10)
+    }
+})

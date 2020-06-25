@@ -29,80 +29,78 @@ import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNotBe
 import io.kotest.core.spec.style.WordSpec
 
-class RepositoryConfigurationTest : WordSpec() {
-    init {
-        "RepositoryConfiguration" should {
-            "deserialize to a path regex working with double star" {
-                val configuration = """
-                    excludes:
-                      paths:
-                      - pattern: "android/**build.gradle"
-                        reason: "BUILD_TOOL_OF"
-                        comment: "project comment"
-                    """.trimIndent()
+class RepositoryConfigurationTest : WordSpec({
+    "RepositoryConfiguration" should {
+        "deserialize to a path regex working with double star" {
+            val configuration = """
+                excludes:
+                  paths:
+                  - pattern: "android/**build.gradle"
+                    reason: "BUILD_TOOL_OF"
+                    comment: "project comment"
+                """.trimIndent()
 
-                val config = yamlMapper.readValue<RepositoryConfiguration>(configuration)
-                config.excludes.paths[0].matches("android/project1/build.gradle") shouldBe true
+            val config = yamlMapper.readValue<RepositoryConfiguration>(configuration)
+            config.excludes.paths[0].matches("android/project1/build.gradle") shouldBe true
+        }
+
+        "be deserializable" {
+            val configuration = """
+                excludes:
+                  paths:
+                  - pattern: "project1/path"
+                    reason: "BUILD_TOOL_OF"
+                    comment: "project comment"
+                  scopes:
+                  - name: "scope"
+                    reason: "TEST_DEPENDENCY_OF"
+                    comment: "scope comment"
+                resolutions:
+                  issues:
+                  - message: "message"
+                    reason: "CANT_FIX_ISSUE"
+                    comment: "issue comment"
+                  rule_violations:
+                  - message: "rule message"
+                    reason: "PATENT_GRANT_EXCEPTION"
+                    comment: "rule comment"
+                """.trimIndent()
+
+            val repositoryConfiguration = yamlMapper.readValue<RepositoryConfiguration>(configuration)
+
+            repositoryConfiguration shouldNotBe null
+
+            val paths = repositoryConfiguration.excludes.paths
+            paths should haveSize(1)
+
+            val path = paths[0]
+            path.pattern shouldBe "project1/path"
+            path.reason shouldBe PathExcludeReason.BUILD_TOOL_OF
+            path.comment shouldBe "project comment"
+
+            val scopes = repositoryConfiguration.excludes.scopes
+            scopes should haveSize(1)
+            with(scopes.first()) {
+                pattern shouldBe "scope"
+                reason shouldBe ScopeExcludeReason.TEST_DEPENDENCY_OF
+                comment shouldBe "scope comment"
             }
 
-            "be deserializable" {
-                val configuration = """
-                    excludes:
-                      paths:
-                      - pattern: "project1/path"
-                        reason: "BUILD_TOOL_OF"
-                        comment: "project comment"
-                      scopes:
-                      - name: "scope"
-                        reason: "TEST_DEPENDENCY_OF"
-                        comment: "scope comment"
-                    resolutions:
-                      issues:
-                      - message: "message"
-                        reason: "CANT_FIX_ISSUE"
-                        comment: "issue comment"
-                      rule_violations:
-                      - message: "rule message"
-                        reason: "PATENT_GRANT_EXCEPTION"
-                        comment: "rule comment"
-                    """.trimIndent()
+            val issues = repositoryConfiguration.resolutions.issues
+            issues should haveSize(1)
+            with(issues.first()) {
+                message shouldBe "message"
+                reason shouldBe IssueResolutionReason.CANT_FIX_ISSUE
+                comment shouldBe "issue comment"
+            }
 
-                val repositoryConfiguration = yamlMapper.readValue<RepositoryConfiguration>(configuration)
-
-                repositoryConfiguration shouldNotBe null
-
-                val paths = repositoryConfiguration.excludes.paths
-                paths should haveSize(1)
-
-                val path = paths[0]
-                path.pattern shouldBe "project1/path"
-                path.reason shouldBe PathExcludeReason.BUILD_TOOL_OF
-                path.comment shouldBe "project comment"
-
-                val scopes = repositoryConfiguration.excludes.scopes
-                scopes should haveSize(1)
-                with(scopes.first()) {
-                    pattern shouldBe "scope"
-                    reason shouldBe ScopeExcludeReason.TEST_DEPENDENCY_OF
-                    comment shouldBe "scope comment"
-                }
-
-                val issues = repositoryConfiguration.resolutions.issues
-                issues should haveSize(1)
-                with(issues.first()) {
-                    message shouldBe "message"
-                    reason shouldBe IssueResolutionReason.CANT_FIX_ISSUE
-                    comment shouldBe "issue comment"
-                }
-
-                val ruleViolations = repositoryConfiguration.resolutions.ruleViolations
-                ruleViolations should haveSize(1)
-                with(ruleViolations.first()) {
-                    message shouldBe "rule message"
-                    reason shouldBe RuleViolationResolutionReason.PATENT_GRANT_EXCEPTION
-                    comment shouldBe "rule comment"
-                }
+            val ruleViolations = repositoryConfiguration.resolutions.ruleViolations
+            ruleViolations should haveSize(1)
+            with(ruleViolations.first()) {
+                message shouldBe "rule message"
+                reason shouldBe RuleViolationResolutionReason.PATENT_GRANT_EXCEPTION
+                comment shouldBe "rule comment"
             }
         }
     }
-}
+})
