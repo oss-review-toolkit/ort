@@ -35,6 +35,7 @@ data class PackageConfiguration(
      * The identifier of the package this configuration applies to.
      */
     val id: Identifier,
+
     /**
      * The source artifact this configuration applies to.
      */
