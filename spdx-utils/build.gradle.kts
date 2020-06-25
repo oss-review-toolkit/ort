@@ -150,6 +150,10 @@ fun generateEnumClass(
 
     val jsonSlurper = JsonSlurper()
     val json = jsonSlurper.parse(URL(jsonUrl), "UTF-8") as Map<String, Any>
+
+    val licenseListVersion = json["licenseListVersion"] as String
+    logger.quiet("Found license list version '$licenseListVersion'.")
+
     val ids = collectIds(json)
     logger.quiet("Found ${ids.size} SPDX $description identifiers.")
 
@@ -201,6 +205,11 @@ fun generateEnumClass(
 
     if (description == "license") {
         enumFile.appendText("""
+    |
+    |        /**
+    |         * The version of the license list.
+    |         */
+    |        const val LICENSE_LIST_VERSION = "$licenseListVersion"
     |
     |        /**
     |         * A constant to indicate that the SPDX creator concludes there is no license available.
