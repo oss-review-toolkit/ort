@@ -33,21 +33,22 @@ import com.github.ajalt.clikt.parameters.options.switch
 import com.github.ajalt.clikt.parameters.options.versionOption
 import com.github.ajalt.clikt.parameters.types.file
 
-import org.ossreviewtoolkit.commands.*
-import org.ossreviewtoolkit.model.Environment
-import org.ossreviewtoolkit.model.config.OrtConfiguration
-import org.ossreviewtoolkit.utils.ORT_NAME
-import org.ossreviewtoolkit.utils.ORT_DATA_DIR_ENV_NAME
-import org.ossreviewtoolkit.utils.expandTilde
-import org.ossreviewtoolkit.utils.ortDataDirectory
-import org.ossreviewtoolkit.utils.printStackTrace
-
 import java.io.File
 
 import kotlin.system.exitProcess
 
 import org.apache.logging.log4j.Level
 import org.apache.logging.log4j.core.config.Configurator
+
+import org.ossreviewtoolkit.commands.*
+import org.ossreviewtoolkit.model.Environment
+import org.ossreviewtoolkit.model.config.OrtConfiguration
+import org.ossreviewtoolkit.utils.ORT_DATA_DIR_ENV_NAME
+import org.ossreviewtoolkit.utils.ORT_NAME
+import org.ossreviewtoolkit.utils.Os
+import org.ossreviewtoolkit.utils.expandTilde
+import org.ossreviewtoolkit.utils.ortDataDirectory
+import org.ossreviewtoolkit.utils.printStackTrace
 
 /**
  * Helper class for mutually exclusive command line options of different types.
@@ -168,6 +169,7 @@ class OrtMain : CliktCommand(name = ORT_NAME, epilog = "* denotes required optio
  * The entry point for the application with [args] being the list of arguments.
  */
 fun main(args: Array<String>) {
+    Os.fixupUserHomeProperty()
     OrtMain().main(args)
     exitProcess(0)
 }
