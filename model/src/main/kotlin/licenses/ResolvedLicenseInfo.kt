@@ -142,6 +142,11 @@ data class ResolvedCopyrightFinding(
     val location: TextLocation,
 
     /**
+     * All [PathExclude]s matching this [location].
+     */
+    val matchingPathExcludes: List<PathExclude>,
+
+    /**
      * True, if this [statement] is contained in the [CopyrightGarbage] used during resolution.
      */
     val isGarbage: Boolean

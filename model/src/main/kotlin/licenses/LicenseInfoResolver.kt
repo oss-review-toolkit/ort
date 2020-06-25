@@ -130,7 +130,12 @@ class LicenseInfoResolver(
         processedCopyrightStatements: Map<String, Set<String>>
     ): List<ResolvedCopyright> {
         val resolvedCopyrightFindings = copyrightFindings.map {
-            ResolvedCopyrightFinding(it.statement, it.location, isGarbage = it.statement in copyrightGarbage.items)
+            ResolvedCopyrightFinding(
+                it.statement,
+                it.location,
+                matchingPathExcludes = emptyList(),
+                isGarbage = it.statement in copyrightGarbage.items
+            )
         }
 
         return processedCopyrightStatements.mapValues { (_, originalStatements) ->
