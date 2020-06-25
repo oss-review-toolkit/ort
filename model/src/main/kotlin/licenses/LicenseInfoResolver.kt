@@ -26,11 +26,15 @@ import org.ossreviewtoolkit.model.CopyrightFinding
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.LicenseSource
 import org.ossreviewtoolkit.model.Provenance
+import org.ossreviewtoolkit.model.config.CopyrightGarbage
 import org.ossreviewtoolkit.model.utils.FindingsMatcher
 import org.ossreviewtoolkit.spdx.SpdxSingleLicenseExpression
 import org.ossreviewtoolkit.utils.CopyrightStatementsProcessor
 
-class LicenseInfoResolver(val provider: LicenseInfoProvider) {
+class LicenseInfoResolver(
+    val provider: LicenseInfoProvider,
+    val copyrightGarbage: CopyrightGarbage
+) {
     private val resolvedLicenseInfo: ConcurrentMap<Identifier, ResolvedLicenseInfo> = ConcurrentHashMap()
 
     /**
@@ -128,13 +132,13 @@ class LicenseInfoResolver(val provider: LicenseInfoProvider) {
         processedCopyrightStatements: Map<String, Set<String>>
     ): List<ResolvedCopyright> {
         val resolvedCopyrightFindings = copyrightFindings.map {
-            ResolvedCopyrightFinding(it.statement, it.location, isGarbage = false)
+            ResolvedCopyrightFinding(it.statement, it.location, isGarbage = it.statement in copyrightGarbage.items)
         }
 
         return processedCopyrightStatements.mapValues { (_, originalStatements) ->
             resolvedCopyrightFindings.filter { it.statement in originalStatements }
         }.filterValues { it.isNotEmpty() }.entries.map { (statement, findings) ->
-            ResolvedCopyright(statement, findings.toSet(), isGarbage = false)
+            ResolvedCopyright(statement, findings.toSet(), isGarbage = statement in copyrightGarbage.items)
         }
     }
 }
