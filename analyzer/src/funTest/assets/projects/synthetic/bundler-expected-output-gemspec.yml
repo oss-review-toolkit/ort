@@ -18,13 +18,13 @@ project:
   scopes:
   - name: "default"
     dependencies:
-    - id: "Bundler::rack:2.0.8"
+    - id: "Bundler::rack:2.2.3"
     - id: "Bundler::signet:0.8.1"
       dependencies:
       - id: "Bundler::addressable:2.7.0"
         dependencies:
-        - id: "Bundler::public_suffix:4.0.1"
-      - id: "Bundler::faraday:0.17.1"
+        - id: "Bundler::public_suffix:4.0.5"
+      - id: "Bundler::faraday:0.17.3"
         dependencies:
         - id: "Bundler::multipart-post:2.1.1"
       - id: "Bundler::jwt:2.2.1"
@@ -118,8 +118,8 @@ packages:
       path: ""
   curations: []
 - package:
-    id: "Bundler::faraday:0.17.1"
-    purl: "pkg:bundler/faraday@0.17.1"
+    id: "Bundler::faraday:0.17.3"
+    purl: "pkg:bundler/faraday@0.17.3"
     declared_licenses:
     - "MIT"
     declared_licenses_processed:
@@ -132,9 +132,9 @@ packages:
         value: ""
         algorithm: ""
     source_artifact:
-      url: "https://rubygems.org/gems/faraday-0.17.1.gem"
+      url: "https://rubygems.org/gems/faraday-0.17.3.gem"
       hash:
-        value: "88a71dc346e55a20dcf2961395f9efabfcb0a956ea722768ecb9cdbdf7f8efbd"
+        value: "c27a8fd7614f1abe9889d8b797246a8e0e5aa6e9d7f1e34ba05a445bf5844f8d"
         algorithm: "SHA-256"
     vcs:
       type: "Git"
@@ -243,8 +243,8 @@ packages:
       path: ""
   curations: []
 - package:
-    id: "Bundler::public_suffix:4.0.1"
-    purl: "pkg:bundler/public_suffix@4.0.1"
+    id: "Bundler::public_suffix:4.0.5"
+    purl: "pkg:bundler/public_suffix@4.0.5"
     declared_licenses:
     - "MIT"
     declared_licenses_processed:
@@ -258,33 +258,32 @@ packages:
         value: ""
         algorithm: ""
     source_artifact:
-      url: "https://rubygems.org/gems/public_suffix-4.0.1.gem"
+      url: "https://rubygems.org/gems/public_suffix-4.0.5.gem"
       hash:
-        value: "6035585fe67676a195ba53fa5860625a70e057cf2226ecc5bbede125a4d8ce76"
+        value: "efbc976b8f8cd7e2f9387b41ad4dc5447bcc7e862cf3afd909f13b0048a3dc6f"
         algorithm: "SHA-256"
     vcs:
       type: "Git"
-      url: "http://github.com/weppos/publicsuffix-ruby.git"
-      revision: ""
+      url: "https://github.com/weppos/publicsuffix-ruby.git"
+      revision: "v4.0.5"
       path: ""
     vcs_processed:
       type: "Git"
       url: "https://github.com/weppos/publicsuffix-ruby.git"
-      revision: ""
+      revision: "v4.0.5"
       path: ""
   curations: []
 - package:
-    id: "Bundler::rack:2.0.8"
-    purl: "pkg:bundler/rack@2.0.8"
+    id: "Bundler::rack:2.2.3"
+    purl: "pkg:bundler/rack@2.2.3"
     declared_licenses:
     - "MIT"
     declared_licenses_processed:
       spdx_expression: "MIT"
     description: "Rack provides a minimal, modular and adaptable interface for developing\n\
-      web applications in Ruby.  By wrapping HTTP requests and responses in\nthe simplest\
+      web applications in Ruby. By wrapping HTTP requests and responses in\nthe simplest\
       \ way possible, it unifies and distills the API for web\nservers, web frameworks,\
-      \ and software in between (the so-called\nmiddleware) into a single method call.\n\
-      \nAlso see https://rack.github.io/.\n"
+      \ and software in between (the so-called\nmiddleware) into a single method call.\n"
     homepage_url: "https://github.com/rack/rack"
     binary_artifact:
       url: ""
@@ -292,13 +291,13 @@ packages:
         value: ""
         algorithm: ""
     source_artifact:
-      url: "https://rubygems.org/gems/rack-2.0.8.gem"
+      url: "https://rubygems.org/gems/rack-2.2.3.gem"
       hash:
-        value: "f98171fb30e104950abe1e9fb97c177d8bb5643dd649bc2ed837864eb596a0c5"
+        value: "2638e7eb6689a5725c7e16f30cc4aa4e31694dc3ca30d790952526781bd0bb44"
         algorithm: "SHA-256"
     vcs:
       type: "Git"
-      url: "http://github.com/rack/rack.git"
+      url: "https://github.com/rack/rack.git"
       revision: ""
       path: ""
     vcs_processed:
