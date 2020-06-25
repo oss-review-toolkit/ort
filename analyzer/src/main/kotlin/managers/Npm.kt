@@ -66,7 +66,6 @@ import org.ossreviewtoolkit.utils.log
 import org.ossreviewtoolkit.utils.realFile
 import org.ossreviewtoolkit.utils.stashDirectories
 import org.ossreviewtoolkit.utils.textValueOrEmpty
-import org.ossreviewtoolkit.utils.userHomeDirectory
 
 /**
  * The [Node package manager](https://www.npmjs.com/) for JavaScript.
@@ -107,7 +106,7 @@ open class Npm(
         // fixed minor version to be sure to get consistent results.
         checkVersion(analyzerConfig.ignoreToolVersions)
 
-        val npmRcFile = userHomeDirectory.resolve(".npmrc")
+        val npmRcFile = Os.userHomeDirectory.resolve(".npmrc")
         if (npmRcFile.isFile) {
             ortProxySelector.addProxies(managerName, readProxySettingsFromNpmRc(npmRcFile.readText()))
         }

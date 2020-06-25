@@ -40,7 +40,7 @@ class ExtensionsTest : WordSpec({
 
     "File.expandTilde" should {
         "expand the path if the SHELL environment variable is set".config(enabled = Os.env["SHELL"] != null) {
-            File("~/Desktop").expandTilde() shouldBe userHomeDirectory.resolve("Desktop")
+            File("~/Desktop").expandTilde() shouldBe Os.userHomeDirectory.resolve("Desktop")
         }
 
         "make the path absolute if the SHELL environment variable is unset".config(enabled = Os.env["SHELL"] == null) {

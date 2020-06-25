@@ -19,6 +19,8 @@
 
 package org.ossreviewtoolkit.utils
 
+import java.io.File
+
 /**
  * Operating-System-specific utility functions.
  */
@@ -32,5 +34,12 @@ object Os {
 
     val env = System.getenv().let { env ->
         if (isWindows) env.toSortedMap(String.CASE_INSENSITIVE_ORDER) else env.toSortedMap()
+    }
+
+    /**
+     * The current user's home directory.
+     */
+    val userHomeDirectory by lazy {
+        File(fixupUserHomeProperty())
     }
 }
