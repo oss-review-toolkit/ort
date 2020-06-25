@@ -205,34 +205,15 @@ class LicenseInfoResolverTest : WordSpec() {
 
                 val result = resolver.resolveLicenseInfo(pkgId)
 
-                result should containCopyrightsExactly(
-                    ResolvedCopyright(
-                        statement = "(c) 2009-2010 Holder 1",
-                        findings = setOf(
-                            ResolvedCopyrightFinding(
-                                statement = "(c) 2009 Holder 1",
-                                location = TextLocation("LICENSE", 1, 1),
-                                isGarbage = false
-                            ),
-                            ResolvedCopyrightFinding(
-                                statement = "(c) 2010 Holder 1",
-                                location = TextLocation("LICENSE", 2, 2),
-                                isGarbage = false
-                            )
-                        ),
-                        isGarbage = false
-                    ),
-                    ResolvedCopyright(
-                        statement = "(c) 2010 Holder 2",
-                        findings = setOf(
-                            ResolvedCopyrightFinding(
-                                statement = "(c) 2010 Holder 2",
-                                location = TextLocation("LICENSE", 3, 3),
-                                isGarbage = false
-                            )
-                        ),
-                        isGarbage = false
-                    )
+                result should containCopyrightsExactly("(c) 2009-2010 Holder 1", "(c) 2010 Holder 2")
+                result should containFindingsForCopyrightExactly(
+                    "(c) 2009-2010 Holder 1",
+                    "(c) 2009 Holder 1" to TextLocation("LICENSE", 1, 1),
+                    "(c) 2010 Holder 1" to TextLocation("LICENSE", 2, 2)
+                )
+                result should containFindingsForCopyrightExactly(
+                    "(c) 2010 Holder 2",
+                    "(c) 2010 Holder 2" to TextLocation("LICENSE", 3, 3)
                 )
             }
 
@@ -262,34 +243,14 @@ class LicenseInfoResolverTest : WordSpec() {
 
                 val result = resolver.resolveLicenseInfo(pkgId)
 
-                result should containCopyrightsExactly(
-                    ResolvedCopyright(
-                        statement = "(c) 2009-2010 Holder 1",
-                        findings = setOf(
-                            ResolvedCopyrightFinding(
-                                statement = "(c) 2009 Holder 1",
-                                location = TextLocation("LICENSE", 1, 1),
-                                isGarbage = true
-                            ),
-                            ResolvedCopyrightFinding(
-                                statement = "(c) 2010 Holder 1",
-                                location = TextLocation("LICENSE", 2, 2),
-                                isGarbage = false
-                            )
-                        ),
-                        isGarbage = true
-                    ),
-                    ResolvedCopyright(
-                        statement = "(c) 2010 Holder 2",
-                        findings = setOf(
-                            ResolvedCopyrightFinding(
-                                statement = "(c) 2010 Holder 2",
-                                location = TextLocation("LICENSE", 3, 3),
-                                isGarbage = false
-                            )
-                        ),
-                        isGarbage = false
-                    )
+                result should containCopyrightsMarkedAsGarbage(
+                    "(c) 2009-2010 Holder 1" to true,
+                    "(c) 2010 Holder 2" to false
+                )
+                result should containCopyrightFindingsMarkedAsGarbage(
+                    "(c) 2009 Holder 1" to true,
+                    "(c) 2010 Holder 1" to false,
+                    "(c) 2010 Holder 2" to false
                 )
             }
         }
@@ -357,16 +318,71 @@ fun containNoCopyrights(): Matcher<ResolvedLicenseInfo?> =
         )
     }
 
-fun containCopyrightsExactly(vararg copyrights: ResolvedCopyright): Matcher<ResolvedLicenseInfo?> =
+fun containCopyrightsExactly(vararg copyrights: String): Matcher<ResolvedLicenseInfo?> =
     neverNullMatcher { value ->
         val expected = copyrights.toSet()
-        val actual = value.flatMapTo(mutableSetOf()) { license -> license.locations.flatMap { it.copyrights } }
+        val actual = value.flatMapTo(mutableSetOf()) { license ->
+            license.locations.flatMap { it.copyrights.map { it.statement } }
+        }
 
         MatcherResult(
             expected == actual,
             "Resolved license info should contain exactly copyrights ${expected.show().value}, but has " +
                     actual.show().value,
             "Resolved license info should not contain exactly copyrights ${copyrights.show().value}"
+        )
+    }
+
+fun containFindingsForCopyrightExactly(
+    copyright: String,
+    vararg findings: Pair<String, TextLocation>
+): Matcher<ResolvedLicenseInfo?> =
+    neverNullMatcher { value ->
+        val expected = findings.toSet()
+        val actual = value.flatMap { license ->
+            license.locations.flatMap { it.copyrights }
+        }.find { it.statement == copyright }?.findings.orEmpty().map { Pair(it.statement, it.location) }.toSet()
+
+        MatcherResult(
+            expected == actual,
+            "Resolved license info should contain exactly findings ${expected.show().value} for copyright " +
+                    "$copyright, but has ${actual.show().value}",
+            "Resolved license info should not contain exactly findings ${expected.show().value} for copyright " +
+                    copyright
+        )
+    }
+
+fun containCopyrightsMarkedAsGarbage(vararg copyrights: Pair<String, Boolean>): Matcher<ResolvedLicenseInfo?> =
+    neverNullMatcher { value ->
+        val expected = copyrights.toSet()
+        val actual = value.flatMap { license ->
+            license.locations.flatMap { location -> location.copyrights.map { Pair(it.statement, it.isGarbage) } }
+        }.toSet()
+
+        MatcherResult(
+            expected == actual,
+            "Resolved license info should contain copyrights marked as garbage ${expected.show().value}, but has " +
+                    actual.show().value,
+            "Resolve license info should not contain copyrights marked as garbage ${expected.show().value}"
+        )
+    }
+
+fun containCopyrightFindingsMarkedAsGarbage(vararg copyrights: Pair<String, Boolean>): Matcher<ResolvedLicenseInfo?> =
+    neverNullMatcher { value ->
+        val expected = copyrights.toSet()
+        val actual = value.flatMap { license ->
+            license.locations.flatMap { location ->
+                location.copyrights.flatMap { copyright ->
+                    copyright.findings.map { Pair(it.statement, it.isGarbage) }
+                }
+            }
+        }.toSet()
+
+        MatcherResult(
+            expected == actual,
+            "Resolved license info should contain copyright findings marked as garbage ${expected.show().value}, but " +
+                    "has ${actual.show().value}",
+            "Resolve license info should not contain copyright findings marked as garbage ${expected.show().value}"
         )
     }
 
