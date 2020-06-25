@@ -467,6 +467,11 @@ enum class SpdxLicense(
 
     companion object {
         /**
+         * The version of the license list.
+         */
+        const val LICENSE_LIST_VERSION = "3.9-4-g1a3102c"
+
+        /**
          * A constant to indicate that the SPDX creator concludes there is no license available.
          */
         const val NONE = "NONE"
