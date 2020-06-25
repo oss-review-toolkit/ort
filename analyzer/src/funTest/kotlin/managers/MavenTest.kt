@@ -20,9 +20,9 @@
 package org.ossreviewtoolkit.analyzer.managers
 
 import org.ossreviewtoolkit.downloader.VersionControlSystem
+import org.ossreviewtoolkit.utils.Os
 import org.ossreviewtoolkit.utils.normalizeVcsUrl
 import org.ossreviewtoolkit.utils.safeDeleteRecursively
-import org.ossreviewtoolkit.utils.userHomeDirectory
 import org.ossreviewtoolkit.utils.test.DEFAULT_ANALYZER_CONFIGURATION
 import org.ossreviewtoolkit.utils.test.DEFAULT_REPOSITORY_CONFIGURATION
 import org.ossreviewtoolkit.utils.test.USER_DIR
@@ -118,7 +118,7 @@ class MavenTest : StringSpec() {
 
         "Parent POM from Maven central can be resolved" {
             // Delete the parent POM from the local repository to make sure it has to be resolved from Maven central.
-            userHomeDirectory
+            Os.userHomeDirectory
                 .resolve(".m2/repository/org/springframework/boot/spring-boot-starter-parent/1.5.3.RELEASE")
                 .safeDeleteRecursively(force = true)
 

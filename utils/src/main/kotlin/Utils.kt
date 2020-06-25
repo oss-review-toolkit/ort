@@ -68,13 +68,6 @@ val ROOT_LICENSE_FILENAMES = listOf(
 ).generateCapitalizationVariants()
 
 /**
- * The current user's home directory.
- */
-val userHomeDirectory by lazy {
-    File(object {}.fixupUserHomeProperty())
-}
-
-/**
  * The directory to store ORT data in, like the configuration, caches and archives.
  */
 val ortDataDirectory by lazy {
@@ -82,7 +75,7 @@ val ortDataDirectory by lazy {
         it.isEmpty()
     }?.let {
         File(it)
-    } ?: userHomeDirectory.resolve(".ort")
+    } ?: Os.userHomeDirectory.resolve(".ort")
 }
 
 /**
