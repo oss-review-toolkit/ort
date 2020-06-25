@@ -27,16 +27,14 @@ import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 import io.kotest.core.spec.style.StringSpec
 
-class ClearlyDefinedPackageCurationProviderTest : StringSpec() {
-    init {
-        "Provider can read curations from development server" {
-            val provider = ClearlyDefinedPackageCurationProvider(Server.DEVELOPMENT)
+class ClearlyDefinedPackageCurationProviderTest : StringSpec({
+    "Provider can read curations from development server" {
+        val provider = ClearlyDefinedPackageCurationProvider(Server.DEVELOPMENT)
 
-            val identifier = Identifier("NPM", "@nestjs", "platform-express", "6.2.3")
-            val curations = provider.getCurationsFor(identifier)
+        val identifier = Identifier("NPM", "@nestjs", "platform-express", "6.2.3")
+        val curations = provider.getCurationsFor(identifier)
 
-            curations should haveSize(1)
-            curations.first().data.declaredLicenses shouldBe sortedSetOf("Apache-1.0")
-        }
+        curations should haveSize(1)
+        curations.first().data.declaredLicenses shouldBe sortedSetOf("Apache-1.0")
     }
-}
+})

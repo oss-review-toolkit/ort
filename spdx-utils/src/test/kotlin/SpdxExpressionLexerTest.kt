@@ -37,44 +37,42 @@ fun getTokensByTypeForExpression(expression: String): List<Pair<Int, String>> {
     return lexer.allTokens.map { it.type to it.text }
 }
 
-class SpdxExpressionLexerTest : WordSpec() {
-    init {
-        "SpdxExpressionLexer" should {
-            "create the correct tokens for a valid expression" {
-                val expression = "(license-1 AND OR license.2 WITH 0LiCeNsE-3+) and (or with license-4 license-.5(("
+class SpdxExpressionLexerTest : WordSpec({
+    "SpdxExpressionLexer" should {
+        "create the correct tokens for a valid expression" {
+            val expression = "(license-1 AND OR license.2 WITH 0LiCeNsE-3+) and (or with license-4 license-.5(("
 
-                val tokens = getTokensByTypeForExpression(expression)
+            val tokens = getTokensByTypeForExpression(expression)
 
-                tokens should containExactly(
-                    SpdxExpressionLexer.OPEN to "(",
-                    SpdxExpressionLexer.IDSTRING to "license-1",
-                    SpdxExpressionLexer.AND to "AND",
-                    SpdxExpressionLexer.OR to "OR",
-                    SpdxExpressionLexer.IDSTRING to "license.2",
-                    SpdxExpressionLexer.WITH to "WITH",
-                    SpdxExpressionLexer.IDSTRING to "0LiCeNsE-3",
-                    SpdxExpressionLexer.PLUS to "+",
-                    SpdxExpressionLexer.CLOSE to ")",
-                    SpdxExpressionLexer.AND to "and",
-                    SpdxExpressionLexer.OPEN to "(",
-                    SpdxExpressionLexer.OR to "or",
-                    SpdxExpressionLexer.WITH to "with",
-                    SpdxExpressionLexer.IDSTRING to "license-4",
-                    SpdxExpressionLexer.IDSTRING to "license-.5",
-                    SpdxExpressionLexer.OPEN to "(",
-                    SpdxExpressionLexer.OPEN to "("
-                )
+            tokens should containExactly(
+                SpdxExpressionLexer.OPEN to "(",
+                SpdxExpressionLexer.IDSTRING to "license-1",
+                SpdxExpressionLexer.AND to "AND",
+                SpdxExpressionLexer.OR to "OR",
+                SpdxExpressionLexer.IDSTRING to "license.2",
+                SpdxExpressionLexer.WITH to "WITH",
+                SpdxExpressionLexer.IDSTRING to "0LiCeNsE-3",
+                SpdxExpressionLexer.PLUS to "+",
+                SpdxExpressionLexer.CLOSE to ")",
+                SpdxExpressionLexer.AND to "and",
+                SpdxExpressionLexer.OPEN to "(",
+                SpdxExpressionLexer.OR to "or",
+                SpdxExpressionLexer.WITH to "with",
+                SpdxExpressionLexer.IDSTRING to "license-4",
+                SpdxExpressionLexer.IDSTRING to "license-.5",
+                SpdxExpressionLexer.OPEN to "(",
+                SpdxExpressionLexer.OPEN to "("
+            )
+        }
+
+        "fail for an invalid expression" {
+            val expression = "/"
+
+            val exception = shouldThrow<SpdxException> {
+                getTokensByTypeForExpression(expression)
             }
 
-            "fail for an invalid expression" {
-                val expression = "/"
-
-                val exception = shouldThrow<SpdxException> {
-                    getTokensByTypeForExpression(expression)
-                }
-
-                exception.message shouldBe "token recognition error at: '/'"
-            }
+            exception.message shouldBe "token recognition error at: '/'"
         }
     }
-}
+})
