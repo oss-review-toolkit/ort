@@ -205,21 +205,37 @@ class AntennaAttributionDocumentReporter : Reporter {
         }
     }
 
-    private fun createLicenseInfo(
-        licenseId: String,
-        licenseTextProvider: LicenseTextProvider
-    ) =
-        LicenseInfo(
-            // Generate a key that is used as the license anchor in the PDF. A valid key consists of numbers and letters
-            // only, any special characters are invalid.
-            licenseId.toByteArray().toHexString(),
-            // Replace tabs with spaces to work around an issue where the chosen font does not provide a (horizontal)
-            // tab character, which otherwise causes something like:
-            //
-            //     IllegalArgumentException: U+0009 ('controlHT') is not available in this font Times-Roman encoding:
-            //     WinAnsiEncoding
-            licenseTextProvider.getLicenseText(licenseId)?.replace("\t", "    ") ?: "No license text found.",
-            licenseId,
-            SpdxLicense.forId(licenseId)?.fullName ?: licenseId
-        )
+    private fun createLicenseInfo(licenseId: String, licenseTextProvider: LicenseTextProvider): LicenseInfo {
+        // Generate a key that is used as the license anchor in the PDF. A valid key consists of numbers and letters
+        // only, any special characters are invalid.
+        val key = licenseId.toByteArray().toHexString()
+
+        // Replace characters that are not available in the Times-Roman font with WinAnsi encoding until we have a
+        // proper fix for https://github.com/oss-review-toolkit/ort/issues/2755.
+        val licenseText = licenseTextProvider.getLicenseText(licenseId)
+            ?.replace("\u0009", "    ")
+            ?.replace("\u0092", "")
+            ?.replace("\u009d", "")
+            ?.replace("\u00a0", " ")
+            ?.replace("\u00ad", "-")
+            ?.replace("\u0159", "r")
+            ?.replace("\u037e", ";")
+            ?.replace("\u200b", "")
+            ?.replace("\u2010", "-")
+            ?.replace("\u2011", "-")
+            ?.replace("\u2028", "\n")
+            ?.replace("\u2212", "-")
+            ?.replace("\u221e", "(infinity)")
+            ?.replace("\u25aa", "[]")
+            ?.replace("\u2661", "(heart)")
+            ?.replace("\udbff", "")
+            ?.replace("\udc00", "")
+            ?.replace("\uf0b7", "")
+            ?.replace("\ufeff", "")
+            ?: "No license text found."
+
+        val shortName = SpdxLicense.forId(licenseId)?.fullName ?: licenseId
+
+        return LicenseInfo(key, licenseText, licenseId, shortName)
+    }
 }
