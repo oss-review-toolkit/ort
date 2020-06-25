@@ -20,6 +20,7 @@
 package org.ossreviewtoolkit.utils
 
 import java.io.File
+import java.lang.IllegalArgumentException
 
 /**
  * Operating-System-specific utility functions.
@@ -62,5 +63,28 @@ object Os {
      */
     val userHomeDirectory by lazy {
         File(fixupUserHomeProperty())
+    }
+
+    /**
+     * Check if the "user.home" property is set to a sane value and otherwise set it to the value of an (OS-specific)
+     * environment variable for the user home directory, and return that value. This works around the issue that esp. in
+     * certain Docker scenarios "user.home" is set to "?", see https://bugs.openjdk.java.net/browse/JDK-8193433 for some
+     * background information.
+     */
+    fun fixupUserHomeProperty(): String {
+        val userHome = System.getProperty("user.home")
+        if (!userHome.isNullOrBlank() && userHome != "?") return userHome
+
+        val fallbackUserHome = listOfNotNull(
+            env["HOME"],
+            env["USERPROFILE"]
+        ).firstOrNull {
+            it.isNotBlank()
+        } ?: throw IllegalArgumentException("Unable to determine a user home directory.")
+
+        log.info { "Fixing up the user home directory from '$userHome' to '$fallbackUserHome'." }
+        System.setProperty("user.home", fallbackUserHome)
+
+        return fallbackUserHome
     }
 }
