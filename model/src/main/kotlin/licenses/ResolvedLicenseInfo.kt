@@ -86,19 +86,9 @@ data class ResolvedLicenseLocation(
     val provenance: Provenance,
 
     /**
-     * The path of the file.
+     * The text location.
      */
-    val path: String,
-
-    /**
-     * The start line of the text location.
-     */
-    val startLine: Int,
-
-    /**
-     * The end line of the text location.
-     */
-    val endLine: Int,
+    val location: TextLocation,
 
     /**
      * The applied [LicenseFindingCuration], or null if none were applied.
@@ -106,7 +96,7 @@ data class ResolvedLicenseLocation(
     val appliedCuration: LicenseFindingCuration?,
 
     /**
-     * All matching [PathExclude]s matching this [path].
+     * All [PathExclude]s matching this [location].
      */
     val matchingPathExcludes: List<PathExclude>,
 

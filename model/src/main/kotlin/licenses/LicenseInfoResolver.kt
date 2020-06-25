@@ -111,9 +111,7 @@ class LicenseInfoResolver(
                 licenseFinding.license.decompose().forEach { singleLicense ->
                     resolvedLocations.getOrPut(singleLicense) { mutableSetOf() } += ResolvedLicenseLocation(
                         findings.provenance,
-                        licenseFinding.location.path,
-                        licenseFinding.location.startLine,
-                        licenseFinding.location.endLine,
+                        licenseFinding.location,
                         appliedCuration = null,
                         matchingPathExcludes = emptyList(),
                         copyrights = resolvedCopyrightFindings.toSet()
