@@ -27,12 +27,15 @@ import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.LicenseSource
 import org.ossreviewtoolkit.model.Provenance
 import org.ossreviewtoolkit.model.config.CopyrightGarbage
+import org.ossreviewtoolkit.model.config.PackageConfiguration
 import org.ossreviewtoolkit.model.utils.FindingsMatcher
+import org.ossreviewtoolkit.model.utils.PackageConfigurationProvider
 import org.ossreviewtoolkit.spdx.SpdxSingleLicenseExpression
 import org.ossreviewtoolkit.utils.CopyrightStatementsProcessor
 
 class LicenseInfoResolver(
     val provider: LicenseInfoProvider,
+    val packageConfigurationProvider: PackageConfigurationProvider,
     val copyrightGarbage: CopyrightGarbage
 ) {
     private val resolvedLicenseInfo: ConcurrentMap<Identifier, ResolvedLicenseInfo> = ConcurrentHashMap()
@@ -80,7 +83,7 @@ class LicenseInfoResolver(
         val processedCopyrightStatements = CopyrightStatementsProcessor().process(allCopyrights).toMap()
         val unmatchedCopyrights = mutableMapOf<Provenance, MutableSet<CopyrightFinding>>()
         val resolvedLocations = resolveLocations(
-            licenseInfo.detectedLicenseInfo, processedCopyrightStatements, unmatchedCopyrights
+            id, licenseInfo.detectedLicenseInfo, processedCopyrightStatements, unmatchedCopyrights
         )
 
         detectedLicenses.forEach { license ->
@@ -94,6 +97,7 @@ class LicenseInfoResolver(
     }
 
     private fun resolveLocations(
+        id: Identifier,
         detectedLicenseInfo: DetectedLicenseInfo,
         processedCopyrightStatements: Map<String, Set<String>>,
         unmatchedCopyrights: MutableMap<Provenance, MutableSet<CopyrightFinding>>
@@ -102,18 +106,20 @@ class LicenseInfoResolver(
 
         detectedLicenseInfo.findings.forEach { findings ->
             // TODO: Apply license finding curations.
-            // TODO: Apply path excludes.
+            val packageConfig = packageConfigurationProvider.getPackageConfiguration(id, findings.provenance)
             val matchResult = FindingsMatcher().matchFindings(findings.licenses, findings.copyrights)
             matchResult.matchedFindings.forEach { (licenseFinding, copyrightFindings) ->
                 val resolvedCopyrightFindings =
-                    resolveCopyrights(copyrightFindings, processedCopyrightStatements)
+                    resolveCopyrights(copyrightFindings, processedCopyrightStatements, packageConfig)
+                val pathExcludes =
+                    packageConfig?.pathExcludes.orEmpty().filter { it.matches(licenseFinding.location.path) }
 
                 licenseFinding.license.decompose().forEach { singleLicense ->
                     resolvedLocations.getOrPut(singleLicense) { mutableSetOf() } += ResolvedLicenseLocation(
                         findings.provenance,
                         licenseFinding.location,
                         appliedCuration = null,
-                        matchingPathExcludes = emptyList(),
+                        matchingPathExcludes = pathExcludes,
                         copyrights = resolvedCopyrightFindings.toSet()
                     )
                 }
@@ -127,14 +133,18 @@ class LicenseInfoResolver(
 
     private fun resolveCopyrights(
         copyrightFindings: Set<CopyrightFinding>,
-        processedCopyrightStatements: Map<String, Set<String>>
+        processedCopyrightStatements: Map<String, Set<String>>,
+        packageConfig: PackageConfiguration?
     ): List<ResolvedCopyright> {
-        val resolvedCopyrightFindings = copyrightFindings.map {
+        val resolvedCopyrightFindings = copyrightFindings.map { finding ->
+            val pathExcludes =
+                packageConfig?.pathExcludes.orEmpty().filter { it.matches(finding.location.path) }
+
             ResolvedCopyrightFinding(
-                it.statement,
-                it.location,
-                matchingPathExcludes = emptyList(),
-                isGarbage = it.statement in copyrightGarbage.items
+                finding.statement,
+                finding.location,
+                matchingPathExcludes = pathExcludes,
+                isGarbage = finding.statement in copyrightGarbage.items
             )
         }
 
