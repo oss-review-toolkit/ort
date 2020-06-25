@@ -116,7 +116,7 @@ data class Identifier(
      * Create a file system path based on the properties of the [Identifier]. All properties are encoded using
      * [encodeOrUnknown].
      */
-    fun toPath() = components.joinToString("/") { it.encodeOrUnknown() }
+    fun toPath(separator: String = "/") = components.joinToString(separator) { it.encodeOrUnknown() }
 
     /**
      * Create the canonical [package URL](https://github.com/package-url/purl-spec) ("purl") based on the properties of
