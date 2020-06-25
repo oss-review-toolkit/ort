@@ -65,16 +65,15 @@ data class PackageConfiguration(
         }
     }
 
-    fun matches(id: Identifier, provenance: Provenance): Boolean {
-        if (id != this.id) return false
-
-        if (vcs != null) {
-            val vcsInfo = provenance.vcsInfo ?: return false
-            return vcs.matches(vcsInfo)
+    fun matches(id: Identifier, provenance: Provenance): Boolean =
+        when {
+            id != this.id -> false
+            vcs != null -> when (provenance.vcsInfo) {
+                null -> false
+                else -> vcs.matches(provenance.vcsInfo)
+            }
+            else -> sourceArtifactUrl == provenance.sourceArtifact?.url
         }
-
-        return sourceArtifactUrl == provenance.sourceArtifact?.url
-    }
 }
 
 /**
