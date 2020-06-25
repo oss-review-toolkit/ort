@@ -21,7 +21,7 @@ project:
     - id: "Bundler::nokogiri:1.10.8"
       dependencies:
       - id: "Bundler::mini_portile2:2.4.0"
-    - id: "Bundler::rack:1.6.12"
+    - id: "Bundler::rack:2.1.4"
   - name: "test"
     dependencies:
     - id: "Bundler::rspec:3.7.0"
@@ -142,8 +142,8 @@ packages:
       path: ""
   curations: []
 - package:
-    id: "Bundler::rack:1.6.12"
-    purl: "pkg:bundler/rack@1.6.12"
+    id: "Bundler::rack:2.1.4"
+    purl: "pkg:bundler/rack@2.1.4"
     declared_licenses:
     - "MIT"
     declared_licenses_processed:
@@ -152,21 +152,21 @@ packages:
       web applications in Ruby.  By wrapping HTTP requests and responses in\nthe simplest\
       \ way possible, it unifies and distills the API for web\nservers, web frameworks,\
       \ and software in between (the so-called\nmiddleware) into a single method call.\n\
-      \nAlso see http://rack.github.io/.\n"
-    homepage_url: "https://github.com/rack/rack"
+      \nAlso see https://rack.github.io/.\n"
+    homepage_url: "https://rack.github.io"
     binary_artifact:
       url: ""
       hash:
         value: ""
         algorithm: ""
     source_artifact:
-      url: "https://rubygems.org/gems/rack-1.6.12.gem"
+      url: "https://rubygems.org/gems/rack-2.1.4.gem"
       hash:
-        value: "928527a0897796d2575e8cacdfa526341dc4c55d05e09b31c39b3704c80738e6"
+        value: "bfae1fd43aab62bb60b268329c860f214d2ffb15c4bca48931135a2dea52e2f4"
         algorithm: "SHA-256"
     vcs:
       type: "Git"
-      url: "http://github.com/rack/rack.git"
+      url: "https://github.com/rack/rack.git"
       revision: ""
       path: ""
     vcs_processed:
