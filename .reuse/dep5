@@ -59,18 +59,18 @@ Copyright: 2013-2020 GitHub, Inc. and contributors <support@github.com>
 License: CC-BY-3.0
 
 Files: spdx-utils/src/main/resources/exceptions/*
-Copyright: 2011-2020 SPDX Workgroup <spdx-legal@lists.spdx.org>
+Copyright: 2010-2020 Linux Foundation and its Contributors
 License: CC0-1.0
 
 Files: spdx-utils/src/main/resources/licenses/*
-Copyright: 2011-2020 SPDX Workgroup <spdx-legal@lists.spdx.org>
+Copyright: 2010-2020 Linux Foundation and its Contributors
 License: CC0-1.0
 
 Files: spdx-utils/src/main/resources/licenserefs/*
-Copyright: 2011-2020 SPDX Workgroup <spdx-legal@lists.spdx.org>
+Copyright: 2010-2020 Linux Foundation and its Contributors
 License: CC0-1.0
 
 Files: spdx-utils/src/test/resources/spdx-spec-examples/*
-Copyright: 2011-2020 SPDX Workgroup <spdx-legal@lists.spdx.org>
+Copyright: 2010-2020 Linux Foundation and its Contributors
 License: CC-BY-3.0
 
