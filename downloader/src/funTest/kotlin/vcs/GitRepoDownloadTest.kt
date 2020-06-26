@@ -67,7 +67,11 @@ class GitRepoDownloadTest : StringSpec() {
                 "src"
             )
 
-            val actualSpdxFiles = spdxDir.walk().maxDepth(1).filter { it.isDirectory }.map { it.name }.sorted()
+            val actualSpdxFiles = spdxDir.walk().maxDepth(1).filter {
+                it.isDirectory && it != spdxDir
+            }.map {
+                it.name
+            }.sorted()
 
             val submodulesDir = File(outputDir, "submodules")
             val expectedSubmodulesFiles = listOf(
@@ -77,7 +81,7 @@ class GitRepoDownloadTest : StringSpec() {
             )
 
             val actualSubmodulesFiles = submodulesDir.walk().maxDepth(1).filter {
-                it.isDirectory
+                it.isDirectory && it != submodulesDir
             }.map {
                 it.name
             }.sorted()
