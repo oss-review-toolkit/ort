@@ -37,7 +37,7 @@ import org.ossreviewtoolkit.scanner.LocalScanner
 import org.ossreviewtoolkit.scanner.ScanException
 import org.ossreviewtoolkit.scanner.ScanResultsStorage
 import org.ossreviewtoolkit.spdx.NON_LICENSE_FILENAMES
-import org.ossreviewtoolkit.spdx.SpdxLicense
+import org.ossreviewtoolkit.spdx.SpdxConstants
 import org.ossreviewtoolkit.spdx.calculatePackageVerificationCode
 import org.ossreviewtoolkit.utils.ORT_CONFIG_FILENAME
 import org.ossreviewtoolkit.utils.ORT_NAME
@@ -376,7 +376,7 @@ class ScanCode(
         if (name.isEmpty()) {
             val key = license["key"].textValue()
             name = if (key in UNKNOWN_LICENSE_KEYS) {
-                SpdxLicense.NOASSERTION
+                SpdxConstants.NOASSERTION
             } else {
                 // Starting with version 2.9.8, ScanCode uses "scancode" as a LicenseRef namespace, but only for SPDX
                 // output formats, see https://github.com/nexB/scancode-toolkit/pull/1307.

@@ -25,7 +25,7 @@ import java.nio.file.Paths
 import org.ossreviewtoolkit.model.LicenseFinding
 import org.ossreviewtoolkit.model.config.LicenseFindingCuration
 import org.ossreviewtoolkit.model.licenses.LicenseFindingCurationResult
-import org.ossreviewtoolkit.spdx.SpdxLicense
+import org.ossreviewtoolkit.spdx.SpdxConstants
 
 /**
  * A class for matching and applying [LicenseFindingCuration]s to [LicenseFinding]s.
@@ -57,11 +57,11 @@ class FindingCurationMatcher {
     /**
      * Return the curated finding if the given [curation] is applicable to the given [finding] or the given [finding]
      * otherwise. Null is returned if and only if the given curation is applicable and its concluded license equals
-     * [SpdxLicense.NONE].
+     * [SpdxConstants.NONE].
      */
     fun apply(finding: LicenseFinding, curation: LicenseFindingCuration): LicenseFinding? =
         if (!matches(finding, curation)) finding
-        else if (curation.concludedLicense.toString() == SpdxLicense.NONE) null
+        else if (curation.concludedLicense.toString() == SpdxConstants.NONE) null
         else finding.copy(license = curation.concludedLicense)
 
     /**

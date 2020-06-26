@@ -32,7 +32,7 @@ import org.ossreviewtoolkit.model.TextLocation
 import org.ossreviewtoolkit.model.config.LicenseFindingCuration
 import org.ossreviewtoolkit.model.config.LicenseFindingCurationReason.INCORRECT
 import org.ossreviewtoolkit.model.licenses.LicenseFindingCurationResult
-import org.ossreviewtoolkit.spdx.SpdxLicense
+import org.ossreviewtoolkit.spdx.SpdxConstants
 import org.ossreviewtoolkit.spdx.toSpdx
 
 class FindingCurationMatcherTest : WordSpec() {
@@ -253,7 +253,7 @@ class FindingCurationMatcherTest : WordSpec() {
                         path = "one/more/path",
                         detectedLicense = "MIT".toSpdx(),
                         reason = INCORRECT,
-                        concludedLicense = SpdxLicense.NONE.toSpdx()
+                        concludedLicense = SpdxConstants.NONE.toSpdx()
                     )
                 )
 
