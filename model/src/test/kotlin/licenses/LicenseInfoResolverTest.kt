@@ -44,6 +44,7 @@ import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.config.CopyrightGarbage
 import org.ossreviewtoolkit.model.config.LicenseFindingCuration
+import org.ossreviewtoolkit.model.config.LicenseFindingCurationReason
 import org.ossreviewtoolkit.model.config.PackageConfiguration
 import org.ossreviewtoolkit.model.config.PathExclude
 import org.ossreviewtoolkit.model.config.PathExcludeReason
@@ -51,6 +52,7 @@ import org.ossreviewtoolkit.model.config.VcsMatcher
 import org.ossreviewtoolkit.model.utils.SimplePackageConfigurationProvider
 import org.ossreviewtoolkit.spdx.SpdxExpression
 import org.ossreviewtoolkit.spdx.SpdxSingleLicenseExpression
+import org.ossreviewtoolkit.spdx.toSpdx
 import org.ossreviewtoolkit.utils.DeclaredLicenseProcessor
 
 class LicenseInfoResolverTest : WordSpec() {
@@ -351,6 +353,68 @@ class LicenseInfoResolverTest : WordSpec() {
                 result.pathExcludesForCopyright(
                     "(c) 2010 Holder", sourceArtifactProvenance, TextLocation("a/b", 1, 1)
                 ) should beEmpty()
+            }
+
+            "apply license finding curations" {
+                val data = listOf(
+                    createLicenseInfo(
+                        id = pkgId,
+                        detectedLicenses = listOf(
+                            Findings(
+                                provenance = provenance,
+                                licenses = mapOf(
+                                    "Apache-2.0" to listOf(
+                                        TextLocation("LICENSE", 1, 1)
+                                    )
+                                ).toFindingsSet(),
+                                copyrights = setOf(
+                                    CopyrightFinding("(c) 2010 Holder 1", TextLocation("LICENSE", 1, 1))
+                                )
+                            )
+                        )
+                    )
+                )
+
+                val curation = LicenseFindingCuration(
+                    path = "LICENSE",
+                    detectedLicense = "Apache-2.0".toSpdx(),
+                    concludedLicense = "MIT".toSpdx(),
+                    reason = LicenseFindingCurationReason.INCORRECT
+                )
+
+                val packageConfigs = listOf(
+                    PackageConfiguration(
+                        id = pkgId,
+                        vcs = VcsMatcher(vcsInfo.type, vcsInfo.url, vcsInfo.revision),
+                        licenseFindingCurations = listOf(curation)
+                    )
+                )
+
+                val resolver = createResolver(data, packageConfigs = packageConfigs)
+
+                val result = resolver.resolveLicenseInfo(pkgId)
+
+                result should containLicensesExactly("MIT")
+                result should containLocationForLicense(
+                    license = "MIT",
+                    provenance = provenance,
+                    location = TextLocation("LICENSE", 1, 1),
+                    appliedCuration = curation,
+                    copyrights = setOf(
+                        ResolvedCopyright(
+                            statement = "(c) 2010 Holder 1",
+                            findings = setOf(
+                                ResolvedCopyrightFinding(
+                                    statement = "(c) 2010 Holder 1",
+                                    location = TextLocation("LICENSE", 1, 1),
+                                    matchingPathExcludes = emptyList(),
+                                    isGarbage = false
+                                )
+                            ),
+                            isGarbage = false
+                        )
+                    )
+                )
             }
         }
     }

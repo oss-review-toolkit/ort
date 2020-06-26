@@ -28,6 +28,7 @@ import org.ossreviewtoolkit.model.LicenseSource
 import org.ossreviewtoolkit.model.Provenance
 import org.ossreviewtoolkit.model.config.CopyrightGarbage
 import org.ossreviewtoolkit.model.config.PackageConfiguration
+import org.ossreviewtoolkit.model.utils.FindingCurationMatcher
 import org.ossreviewtoolkit.model.utils.FindingsMatcher
 import org.ossreviewtoolkit.model.utils.PackageConfigurationProvider
 import org.ossreviewtoolkit.spdx.SpdxSingleLicenseExpression
@@ -51,9 +52,6 @@ class LicenseInfoResolver(
 
         val concludedLicenses = licenseInfo.concludedLicenseInfo.concludedLicense?.decompose().orEmpty()
         val declaredLicenses = licenseInfo.declaredLicenseInfo.processed.spdxExpression?.decompose().orEmpty()
-        val detectedLicenses = licenseInfo.detectedLicenseInfo.findings.flatMapTo(mutableSetOf()) { findings ->
-            findings.licenses.flatMap { it.license.decompose() }
-        }
 
         val resolvedLicenses = mutableMapOf<SpdxSingleLicenseExpression, ResolvedLicenseBuilder>()
 
@@ -86,7 +84,7 @@ class LicenseInfoResolver(
             id, licenseInfo.detectedLicenseInfo, processedCopyrightStatements, unmatchedCopyrights
         )
 
-        detectedLicenses.forEach { license ->
+        resolvedLocations.keys.forEach { license ->
             license.builder().apply {
                 sources += LicenseSource.DETECTED
                 resolvedLocations[license]?.let { locations.addAll(it) }
@@ -103,14 +101,31 @@ class LicenseInfoResolver(
         unmatchedCopyrights: MutableMap<Provenance, MutableSet<CopyrightFinding>>
     ): Map<SpdxSingleLicenseExpression, Set<ResolvedLicenseLocation>> {
         val resolvedLocations = mutableMapOf<SpdxSingleLicenseExpression, MutableSet<ResolvedLicenseLocation>>()
+        val curationMatcher = FindingCurationMatcher()
 
         detectedLicenseInfo.findings.forEach { findings ->
-            // TODO: Apply license finding curations.
             val packageConfig = packageConfigurationProvider.getPackageConfiguration(id, findings.provenance)
-            val matchResult = FindingsMatcher().matchFindings(findings.licenses, findings.copyrights)
+            val licenseCurationResults =
+                curationMatcher.applyAll(findings.licenses, packageConfig?.licenseFindingCurations.orEmpty())
+                    .associateBy { it.curatedFinding }
+
+            // TODO: Currently license findings that are mapped to null are ignored, but they should be included in the
+            //       resolved license for completeness, e.g. to show in a report that a license finding was marked as
+            //       false positive.
+            val curatedLicenseFindings = licenseCurationResults.keys.filterNotNull().toSet()
+            val matchResult = FindingsMatcher().matchFindings(curatedLicenseFindings, findings.copyrights)
+
             matchResult.matchedFindings.forEach { (licenseFinding, copyrightFindings) ->
                 val resolvedCopyrightFindings =
                     resolveCopyrights(copyrightFindings, processedCopyrightStatements, packageConfig)
+
+                // TODO: Currently only the first curation for the license finding is recorded here and the original
+                //       findings are ignored, but for completeness all curations and original findings should be
+                //       included in the resolved license, e.g. to show in a report which original license findings were
+                //       curated.
+                val appliedCuration =
+                    licenseCurationResults.getValue(licenseFinding).originalFindings.firstOrNull()?.second
+
                 val pathExcludes =
                     packageConfig?.pathExcludes.orEmpty().filter { it.matches(licenseFinding.location.path) }
 
@@ -118,7 +133,7 @@ class LicenseInfoResolver(
                     resolvedLocations.getOrPut(singleLicense) { mutableSetOf() } += ResolvedLicenseLocation(
                         findings.provenance,
                         licenseFinding.location,
-                        appliedCuration = null,
+                        appliedCuration = appliedCuration,
                         matchingPathExcludes = pathExcludes,
                         copyrights = resolvedCopyrightFindings.toSet()
                     )
