@@ -21,7 +21,7 @@ package org.ossreviewtoolkit.model.licenses
 
 import org.ossreviewtoolkit.model.LicenseFinding
 import org.ossreviewtoolkit.model.config.LicenseFindingCuration
-import org.ossreviewtoolkit.spdx.SpdxLicense
+import org.ossreviewtoolkit.spdx.SpdxConstants
 
 /**
  * A [curated license finding][curatedFinding] created by applying [LicenseFindingCuration]s.
@@ -29,7 +29,7 @@ import org.ossreviewtoolkit.spdx.SpdxLicense
 data class LicenseFindingCurationResult(
     /**
      * The curated license finding, or null, if the [concluded license][LicenseFindingCuration.concluded] is
-     * [SpdxLicense.NONE].
+     * [SpdxConstants.NONE].
      */
     val curatedFinding: LicenseFinding?,
 

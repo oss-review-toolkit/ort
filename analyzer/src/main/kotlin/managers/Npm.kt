@@ -56,7 +56,7 @@ import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.createAndLogIssue
 import org.ossreviewtoolkit.model.jsonMapper
 import org.ossreviewtoolkit.model.readValue
-import org.ossreviewtoolkit.spdx.SpdxLicense
+import org.ossreviewtoolkit.spdx.SpdxConstants
 import org.ossreviewtoolkit.utils.CommandLineTool
 import org.ossreviewtoolkit.utils.OkHttpClientHelper
 import org.ossreviewtoolkit.utils.Os
@@ -174,7 +174,7 @@ open class Npm(
             when {
                 // NPM does not mean https://unlicense.org/ here, but the wish to not "grant others the right to use a
                 // private or unpublished package under any terms", which corresponds to SPDX's "NONE".
-                declaredLicense == "UNLICENSED" -> SpdxLicense.NONE
+                declaredLicense == "UNLICENSED" -> SpdxConstants.NONE
                 // NPM allows to declare non-SPDX licenses only by referencing a license file. Avoid reporting an
                 // [OrtIssue] by mapping this to a valid license identifier.
                 declaredLicense.startsWith("SEE LICENSE IN ") -> "LicenseRef-ort-unknown-license-reference"
