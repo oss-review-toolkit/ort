@@ -30,7 +30,6 @@ import java.security.MessageDigest
 import java.util.EnumSet
 
 import org.ossreviewtoolkit.spdx.SpdxExpression.Strictness
-import org.ossreviewtoolkit.spdx.model.SpdxConstants
 
 /**
  * A list of globs that match file names which are not license files but typically trigger false-positives.

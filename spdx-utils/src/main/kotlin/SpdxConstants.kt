@@ -17,7 +17,7 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.spdx.model
+package org.ossreviewtoolkit.spdx
 
 object SpdxConstants {
     /**
