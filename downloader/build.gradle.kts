@@ -42,5 +42,6 @@ dependencies {
     }
 
     implementation("org.eclipse.jgit:org.eclipse.jgit:$jgitVersion")
+    implementation("org.eclipse.jgit:org.eclipse.jgit.ssh.jsch:$jgitVersion")
     implementation("org.tmatesoft.svnkit:svnkit:$svnkitVersion")
 }
