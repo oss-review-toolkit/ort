@@ -76,7 +76,7 @@ data class Identifier(
      * three colon separators the missing values are assigned empty strings.
      */
     @JsonCreator
-    constructor(identifier: String) : this(identifier.split(':'))
+    constructor(identifier: String) : this(identifier.split(':', limit = 4))
 
     private val components = listOf(type, namespace, name, version)
 
