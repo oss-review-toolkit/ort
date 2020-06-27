@@ -19,13 +19,14 @@
 
 package org.ossreviewtoolkit.detekt
 
+import io.github.detekt.psi.absolutePath
+
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
-import io.gitlab.arturbosch.detekt.api.internal.absolutePath
 
 import java.io.File
 
@@ -46,7 +47,7 @@ class OrtPackageNaming : Rule() {
 
         if (directive.qualifiedName.isEmpty()) return
 
-        val path = directive.containingKtFile.absolutePath()
+        val path = directive.containingKtFile.absolutePath().toString()
         val pathPattern = Regex("""[/\\]src[/\\][^/\\]+[/\\]kotlin[/\\]""")
         if (!path.contains(pathPattern)) return
 
