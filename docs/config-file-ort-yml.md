@@ -54,7 +54,7 @@ The code below shows the structure of a path exclude in the `.ort.yml` file:
 excludes:
   paths:
   - pattern: "A glob pattern matching files or paths."
-    reason: "One of PathExcludeReason e.g. BUILD_TOOL_OF or DOCUMENTATION_OF."
+    reason: "One of PathExcludeReason e.g. BUILD_TOOL_OF, DOCUMENTATION_OF or TEST_OF."
     comment: "A comment further explaining why the path is excluded."
 ```
 
@@ -74,7 +74,7 @@ The path exclude above has the following effects:
 excludes:
   paths:
   - pattern: "test-data/**"
-    reason: "TEST_DEPENDENCY_OF"
+    reason: "TEST_OF"
     comment: "This directory contains test data which are not distributed."
 ```
 
