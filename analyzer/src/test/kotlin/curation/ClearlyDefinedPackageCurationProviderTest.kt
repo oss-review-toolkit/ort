@@ -19,13 +19,13 @@
 
 package org.ossreviewtoolkit.analyzer.curation
 
-import org.ossreviewtoolkit.clearlydefined.ClearlyDefinedService.Server
-import org.ossreviewtoolkit.model.Identifier
-
 import io.kotest.matchers.collections.haveSize
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 import io.kotest.core.spec.style.StringSpec
+
+import org.ossreviewtoolkit.clearlydefined.ClearlyDefinedService.Server
+import org.ossreviewtoolkit.model.Identifier
 
 class ClearlyDefinedPackageCurationProviderTest : StringSpec({
     "Provider can read curations from development server" {
