@@ -23,7 +23,6 @@ import java.util.SortedMap
 import java.util.SortedSet
 
 import org.ossreviewtoolkit.model.Identifier
-import org.ossreviewtoolkit.model.LicenseFindings
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.Project
 import org.ossreviewtoolkit.model.RemoteArtifact
@@ -34,6 +33,7 @@ import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.config.PathExclude
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.config.ScopeExclude
+import org.ossreviewtoolkit.model.licenses.ResolvedLicense
 import org.ossreviewtoolkit.spdx.SpdxExpression
 import org.ossreviewtoolkit.utils.zipWithDefault
 
@@ -132,12 +132,12 @@ data class ReportTableModel(
         /**
          * The licenses declared by the package.
          */
-        val declaredLicenses: SortedSet<String>,
+        val declaredLicenses: List<ResolvedLicense>,
 
         /**
          * The detected licenses aggregated from all [ScanResult]s for this package.
          */
-        val detectedLicenses: SortedMap<LicenseFindings, List<PathExclude>>,
+        val detectedLicenses: List<ResolvedLicense>,
 
         /**
          * All analyzer issues related to this package.
