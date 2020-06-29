@@ -22,12 +22,12 @@ package org.ossreviewtoolkit.utils
 import com.fasterxml.jackson.annotation.JsonAutoDetect
 import com.fasterxml.jackson.annotation.PropertyAccessor
 
-import org.ossreviewtoolkit.model.yamlMapper
-
-import io.kotest.matchers.shouldBe
 import io.kotest.core.spec.style.WordSpec
+import io.kotest.matchers.shouldBe
 
 import java.io.File
+
+import org.ossreviewtoolkit.model.yamlMapper
 
 class CopyrightStatementsProcessorTest : WordSpec() {
     private val processor = CopyrightStatementsProcessor()

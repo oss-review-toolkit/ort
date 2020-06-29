@@ -33,8 +33,8 @@ import org.ossreviewtoolkit.spdx.SpdxDeclaredLicenseMapping
 import org.ossreviewtoolkit.spdx.SpdxException
 import org.ossreviewtoolkit.spdx.SpdxExpression
 import org.ossreviewtoolkit.spdx.SpdxLicense
-import org.ossreviewtoolkit.spdx.SpdxSimpleLicenseMapping
 import org.ossreviewtoolkit.spdx.SpdxLicenseIdExpression
+import org.ossreviewtoolkit.spdx.SpdxSimpleLicenseMapping
 import org.ossreviewtoolkit.spdx.toExpression
 import org.ossreviewtoolkit.utils.test.containExactly as containExactlyEntries
 

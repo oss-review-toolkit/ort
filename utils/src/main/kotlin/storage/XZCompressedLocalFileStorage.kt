@@ -19,13 +19,13 @@
 
 package org.ossreviewtoolkit.utils.storage
 
-import org.ossreviewtoolkit.utils.showStackTrace
+import java.io.File
+import java.io.FileNotFoundException
 
 import org.apache.commons.compress.compressors.xz.XZCompressorInputStream
 import org.apache.commons.compress.compressors.xz.XZCompressorOutputStream
 
-import java.io.File
-import java.io.FileNotFoundException
+import org.ossreviewtoolkit.utils.showStackTrace
 
 /**
  * A [FileStorage] that stores compressed files in a [directory] of the local file system.

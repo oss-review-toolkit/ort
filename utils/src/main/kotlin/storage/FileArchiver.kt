@@ -19,6 +19,9 @@
 
 package org.ossreviewtoolkit.utils.storage
 
+import java.io.File
+import java.io.IOException
+
 import org.ossreviewtoolkit.utils.FileMatcher
 import org.ossreviewtoolkit.utils.ORT_NAME
 import org.ossreviewtoolkit.utils.collectMessagesAsString
@@ -26,9 +29,6 @@ import org.ossreviewtoolkit.utils.log
 import org.ossreviewtoolkit.utils.packZip
 import org.ossreviewtoolkit.utils.showStackTrace
 import org.ossreviewtoolkit.utils.unpackZip
-
-import java.io.File
-import java.io.IOException
 
 /**
  * A class to archive files matched by provided [patterns] in a ZIP file that is stored in a [FileStorage][storage].

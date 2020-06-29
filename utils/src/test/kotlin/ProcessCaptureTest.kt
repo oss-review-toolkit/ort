@@ -19,8 +19,8 @@
 
 package org.ossreviewtoolkit.utils
 
-import io.kotest.matchers.shouldBe
 import io.kotest.core.spec.style.StringSpec
+import io.kotest.matchers.shouldBe
 
 class ProcessCaptureTest : StringSpec({
     "Environment variables should be passed correctly" {

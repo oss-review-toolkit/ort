@@ -19,17 +19,17 @@
 
 package org.ossreviewtoolkit.utils.storage
 
+import io.kotest.core.spec.style.StringSpec
+import io.kotest.core.test.TestCase
+import io.kotest.core.test.TestResult
+import io.kotest.matchers.shouldBe
+
+import java.io.File
+
 import org.ossreviewtoolkit.utils.ORT_NAME
 import org.ossreviewtoolkit.utils.safeDeleteRecursively
 import org.ossreviewtoolkit.utils.safeMkdirs
 import org.ossreviewtoolkit.utils.unpack
-
-import io.kotest.core.test.TestCase
-import io.kotest.core.test.TestResult
-import io.kotest.matchers.shouldBe
-import io.kotest.core.spec.style.StringSpec
-
-import java.io.File
 
 class FileArchiverTest : StringSpec() {
     private lateinit var workingDir: File
