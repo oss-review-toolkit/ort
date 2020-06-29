@@ -19,20 +19,20 @@
 
 package org.ossreviewtoolkit.spdx
 
-import org.ossreviewtoolkit.utils.ORT_NAME
-
+import io.kotest.core.spec.style.WordSpec
 import io.kotest.core.test.TestCase
 import io.kotest.core.test.TestResult
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNot
 import io.kotest.matchers.shouldNotBe
+import io.kotest.matchers.string.beBlank
 import io.kotest.matchers.string.endWith
 import io.kotest.matchers.string.startWith
-import io.kotest.matchers.string.beBlank
-import io.kotest.core.spec.style.WordSpec
 
 import java.io.File
+
+import org.ossreviewtoolkit.utils.ORT_NAME
 
 class SpdxUtilsTest : WordSpec() {
     private var tempDir: File? = null
