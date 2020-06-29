@@ -95,6 +95,7 @@ class LicenseInfoResolver(
 
         return ResolvedLicenseInfo(
             id,
+            licenseInfo,
             resolvedLicenses.values.map { it.build() },
             copyrightGarbageFindings,
             unmatchedCopyrights

@@ -41,6 +41,11 @@ data class ResolvedLicenseInfo(
     val id: Identifier,
 
     /**
+     * The unresolved license info.
+     */
+    val licenseInfo: LicenseInfo,
+
+    /**
      * The list of [ResolvedLicense]s for this package (or project).
      */
     val licenses: List<ResolvedLicense>,
