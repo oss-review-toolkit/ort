@@ -40,7 +40,7 @@ enum class ComponentType(val value: String) {
     DEBIAN_SOURCES("debsrc");
 
     companion object {
-        @JsonCreator
+        @JsonCreator(mode = JsonCreator.Mode.DELEGATING)
         @JvmStatic
         fun fromString(value: String) =
             enumValues<ComponentType>().single { value.equals(it.value, ignoreCase = true) }
@@ -66,7 +66,7 @@ enum class Provider(val value: String) {
     DEBIAN("debian");
 
     companion object {
-        @JsonCreator
+        @JsonCreator(mode = JsonCreator.Mode.DELEGATING)
         @JvmStatic
         fun fromString(value: String) = enumValues<Provider>().single { value.equals(it.value, ignoreCase = true) }
     }
@@ -83,7 +83,7 @@ enum class Nature {
     NOTICE;
 
     companion object {
-        @JsonCreator
+        @JsonCreator(mode = JsonCreator.Mode.DELEGATING)
         @JvmStatic
         fun fromString(value: String) = enumValues<Nature>().single { value.equals(it.name, ignoreCase = true) }
     }
@@ -103,7 +103,7 @@ enum class ContributionType {
     OTHER;
 
     companion object {
-        @JsonCreator
+        @JsonCreator(mode = JsonCreator.Mode.DELEGATING)
         @JvmStatic
         fun fromString(value: String) =
             enumValues<ContributionType>().single { value.equals(it.name, ignoreCase = true) }

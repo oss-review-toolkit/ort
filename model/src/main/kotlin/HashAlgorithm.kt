@@ -71,7 +71,7 @@ enum class HashAlgorithm(private vararg val aliases: String, val verifiable: Boo
         /**
          * Create a hash algorithm from one of its [alias] names.
          */
-        @JsonCreator
+        @JsonCreator(mode = JsonCreator.Mode.DELEGATING)
         @JvmStatic
         fun fromString(alias: String) =
             enumValues<HashAlgorithm>().find {
