@@ -28,6 +28,20 @@ import org.ossreviewtoolkit.clearlydefined.ClearlyDefinedService.Server
 import org.ossreviewtoolkit.model.Identifier
 
 class ClearlyDefinedPackageCurationProviderTest : WordSpec({
+    "The production server" should {
+        "return a curation for a Maven package" {
+            val provider = ClearlyDefinedPackageCurationProvider()
+
+            val identifier = Identifier("Maven:javax.servlet:javax.servlet-api:3.1.0")
+            val curations = provider.getCurationsFor(identifier)
+
+            curations should haveSize(1)
+            curations.first().data.declaredLicenses shouldBe sortedSetOf(
+                "CDDL-1.0 OR GPL-2.0-only WITH Classpath-exception-2.0"
+            )
+        }
+    }
+
     "The development server" should {
         "return a curation for an NPM package" {
             val provider = ClearlyDefinedPackageCurationProvider(Server.DEVELOPMENT)
