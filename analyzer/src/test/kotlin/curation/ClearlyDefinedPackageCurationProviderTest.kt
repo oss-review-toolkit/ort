@@ -22,19 +22,21 @@ package org.ossreviewtoolkit.analyzer.curation
 import io.kotest.matchers.collections.haveSize
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
-import io.kotest.core.spec.style.StringSpec
+import io.kotest.core.spec.style.WordSpec
 
 import org.ossreviewtoolkit.clearlydefined.ClearlyDefinedService.Server
 import org.ossreviewtoolkit.model.Identifier
 
-class ClearlyDefinedPackageCurationProviderTest : StringSpec({
-    "Provider can read curations from development server" {
-        val provider = ClearlyDefinedPackageCurationProvider(Server.DEVELOPMENT)
+class ClearlyDefinedPackageCurationProviderTest : WordSpec({
+    "The development server" should {
+        "return a curation for an NPM package" {
+            val provider = ClearlyDefinedPackageCurationProvider(Server.DEVELOPMENT)
 
-        val identifier = Identifier("NPM", "@nestjs", "platform-express", "6.2.3")
-        val curations = provider.getCurationsFor(identifier)
+            val identifier = Identifier("NPM", "@nestjs", "platform-express", "6.2.3")
+            val curations = provider.getCurationsFor(identifier)
 
-        curations should haveSize(1)
-        curations.first().data.declaredLicenses shouldBe sortedSetOf("Apache-1.0")
+            curations should haveSize(1)
+            curations.first().data.declaredLicenses shouldBe sortedSetOf("Apache-1.0")
+        }
     }
 })
