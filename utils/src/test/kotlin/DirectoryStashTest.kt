@@ -19,6 +19,7 @@
 
 package org.ossreviewtoolkit.utils
 
+import io.kotest.core.spec.style.StringSpec
 import io.kotest.core.test.TestCase
 import io.kotest.core.test.TestResult
 import io.kotest.matchers.file.containNFiles
@@ -26,7 +27,6 @@ import io.kotest.matchers.file.exist
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNot
-import io.kotest.core.spec.style.StringSpec
 
 import java.io.File
 

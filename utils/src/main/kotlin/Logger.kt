@@ -19,11 +19,11 @@
 
 package org.ossreviewtoolkit.utils
 
+import java.util.concurrent.ConcurrentHashMap
+
 import org.apache.logging.log4j.Level
 import org.apache.logging.log4j.kotlin.KotlinLogger
 import org.apache.logging.log4j.kotlin.loggerOf
-
-import java.util.concurrent.ConcurrentHashMap
 
 /**
  * Global map of loggers for classes so only one logger needs to be instantiated per class.

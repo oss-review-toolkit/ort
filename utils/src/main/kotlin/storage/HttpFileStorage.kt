@@ -19,9 +19,6 @@
 
 package org.ossreviewtoolkit.utils.storage
 
-import org.ossreviewtoolkit.utils.OkHttpClientHelper
-import org.ossreviewtoolkit.utils.log
-
 import java.io.IOException
 import java.io.InputStream
 import java.net.HttpURLConnection
@@ -31,6 +28,9 @@ import okhttp3.CacheControl
 import okhttp3.Headers.Companion.toHeaders
 import okhttp3.Request
 import okhttp3.RequestBody.Companion.toRequestBody
+
+import org.ossreviewtoolkit.utils.OkHttpClientHelper
+import org.ossreviewtoolkit.utils.log
 
 /**
  * A [FileStorage] that stores files on an HTTP server.
