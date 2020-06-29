@@ -217,7 +217,7 @@ subprojects {
             }
 
             externalDocumentationLink {
-                val majorVersion = log4jCoreVersion.split('.').first()
+                val majorVersion = log4jCoreVersion.substringBefore('.')
                 val baseUrl = "https://logging.apache.org/log4j/$majorVersion.x/log4j-api/apidocs"
                 url = URL(baseUrl)
                 packageListUrl = URL("$baseUrl/package-list")
