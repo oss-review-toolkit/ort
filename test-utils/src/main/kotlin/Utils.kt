@@ -19,13 +19,13 @@
 
 package org.ossreviewtoolkit.utils.test
 
+import java.io.File
+import java.time.Instant
+
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.readValue
-
-import java.io.File
-import java.time.Instant
 
 val DEFAULT_ANALYZER_CONFIGURATION = AnalyzerConfiguration(ignoreToolVersions = false, allowDynamicVersions = false)
 val DEFAULT_REPOSITORY_CONFIGURATION = RepositoryConfiguration()
