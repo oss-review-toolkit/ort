@@ -84,7 +84,14 @@ data class ResolvedLicense(
      * All text locations where this license was found.
      */
     val locations: Set<ResolvedLicenseLocation>
-)
+) {
+    /**
+     * True, if this license was [detected][LicenseSource.DETECTED] and all [locations] have matching path excludes.
+     */
+    val isDetectedExcluded by lazy {
+        LicenseSource.DETECTED in sources && locations.all { it.matchingPathExcludes.isNotEmpty() }
+    }
+}
 
 /**
  * A resolved text location.
