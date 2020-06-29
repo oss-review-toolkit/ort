@@ -20,15 +20,15 @@
 
 import at.bxm.gradleplugins.svntools.tasks.SvnExport
 
-import org.ossreviewtoolkit.gradle.*
-
 import groovy.json.JsonSlurper
-
-import org.jetbrains.kotlin.gradle.dsl.KotlinCompile
 
 import java.io.FileNotFoundException
 import java.net.URL
 import java.time.Year
+
+import org.jetbrains.kotlin.gradle.dsl.KotlinCompile
+
+import org.ossreviewtoolkit.gradle.*
 
 val antlrVersion: String by project
 val jacksonVersion: String by project

@@ -19,9 +19,9 @@
 
 package org.ossreviewtoolkit.spdx
 
-import io.kotest.matchers.shouldBe
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.WordSpec
+import io.kotest.matchers.shouldBe
 
 class SpdxExpressionParserTest : WordSpec({
     "SpdxExpressionParser" should {
