@@ -32,7 +32,7 @@ class ClearlyDefinedPackageCurationProviderTest : WordSpec({
         "return a curation for an NPM package" {
             val provider = ClearlyDefinedPackageCurationProvider(Server.DEVELOPMENT)
 
-            val identifier = Identifier("NPM", "@nestjs", "platform-express", "6.2.3")
+            val identifier = Identifier("NPM:@nestjs:platform-express:6.2.3")
             val curations = provider.getCurationsFor(identifier)
 
             curations should haveSize(1)
