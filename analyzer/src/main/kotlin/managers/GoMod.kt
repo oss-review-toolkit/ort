@@ -143,7 +143,7 @@ class GoMod(
             .lineSequence()
             .filter { it.startsWith("# ") }
             .map {
-                val parts = it.removePrefix("# ").split(" ")
+                val parts = it.removePrefix("# ").split(" ", limit = 2)
                 Identifier(managerName, "", parts[0], parts[1])
             }
             .toSet()
