@@ -20,6 +20,7 @@
 package org.ossreviewtoolkit.reporter.utils
 
 import org.ossreviewtoolkit.model.Identifier
+import org.ossreviewtoolkit.model.LicenseSource
 import org.ossreviewtoolkit.model.OrtIssue
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.Project
@@ -28,9 +29,8 @@ import org.ossreviewtoolkit.model.RuleViolation
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.config.Excludes
 import org.ossreviewtoolkit.model.config.ScopeExclude
-import org.ossreviewtoolkit.model.utils.PackageConfigurationProvider
+import org.ossreviewtoolkit.model.licenses.LicenseInfoResolver
 import org.ossreviewtoolkit.model.utils.ResolutionProvider
-import org.ossreviewtoolkit.model.utils.collectLicenseFindings
 import org.ossreviewtoolkit.reporter.utils.ReportTableModel.DependencyRow
 import org.ossreviewtoolkit.reporter.utils.ReportTableModel.IssueRow
 import org.ossreviewtoolkit.reporter.utils.ReportTableModel.IssueTable
@@ -58,8 +58,7 @@ private fun Project.getScopesForDependencies(excludes: Excludes): Map<Identifier
  * A mapper which converts an [OrtIssue] to a [ReportTableModel] view model.
  */
 class ReportTableModelMapper(
-    private val resolutionProvider: ResolutionProvider,
-    private val packageConfigurationProvider: PackageConfigurationProvider
+    private val resolutionProvider: ResolutionProvider
 ) {
     companion object {
         private val VIOLATION_COMPARATOR = compareBy<ReportTableModel.ResolvableViolation>(
@@ -106,7 +105,8 @@ class ReportTableModelMapper(
     }
 
     fun mapToReportTableModel(
-        ortResult: OrtResult
+        ortResult: OrtResult,
+        licenseInfoResolver: LicenseInfoResolver
     ): ReportTableModel {
         val issueSummaryRows = mutableMapOf<Identifier, IssueRow>()
         val summaryRows = mutableMapOf<Identifier, SummaryRow>()
@@ -119,7 +119,6 @@ class ReportTableModelMapper(
         val excludes = ortResult.getExcludes()
 
         val scanRecord = ortResult.scanner?.results
-        val licenseFindings = ortResult.collectLicenseFindings(packageConfigurationProvider)
         val analyzerIssuesForPackages = ortResult.getPackages().associateBy({ it.pkg.id }, { it.pkg.collectIssues() })
 
         val projectTables = analyzerResult.projects.associateWith { project ->
@@ -133,9 +132,13 @@ class ReportTableModelMapper(
             val tableRows = allIds.map { id ->
                 val scanResult = scanRecord?.scanResults?.find { it.id == id }
 
-                val concludedLicense = ortResult.getConcludedLicensesForId(id)
-                val declaredLicenses = ortResult.getDeclaredLicensesForId(id)
-                val detectedLicenses = licenseFindings[id].orEmpty().toSortedMap(compareBy { it.license.toString() })
+                val resolvedLicenseInfo = licenseInfoResolver.resolveLicenseInfo(id)
+
+                val concludedLicense = resolvedLicenseInfo.licenseInfo.concludedLicenseInfo.concludedLicense
+                val declaredLicenses = resolvedLicenseInfo.filter { LicenseSource.DECLARED in it.sources }
+                    .sortedBy { it.license.toString() }
+                val detectedLicenses = resolvedLicenseInfo.filter { LicenseSource.DETECTED in it.sources }
+                    .sortedBy { it.license.toString() }
 
                 val analyzerIssues = projectIssues[id].orEmpty() + analyzerResult.issues[id].orEmpty() +
                         analyzerIssuesForPackages[id].orEmpty()
@@ -167,8 +170,8 @@ class ReportTableModelMapper(
                         id = row.id,
                         scopes = sortedMapOf(project.id to row.scopes),
                         concludedLicenses = row.concludedLicense?.let { setOf(it) }.orEmpty(),
-                        declaredLicenses = row.declaredLicenses,
-                        detectedLicenses = row.detectedLicenses.mapTo(sortedSetOf()) { it.key.license.toString() },
+                        declaredLicenses = row.declaredLicenses.mapTo(sortedSetOf()) { it.license.toString() },
+                        detectedLicenses = row.detectedLicenses.mapTo(sortedSetOf()) { it.license.toString() },
                         analyzerIssues = if (nonExcludedAnalyzerIssues.isNotEmpty()) {
                             sortedMapOf(project.id to nonExcludedAnalyzerIssues)
                         } else {

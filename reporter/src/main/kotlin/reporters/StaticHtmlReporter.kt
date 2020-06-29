@@ -32,11 +32,13 @@ import kotlinx.html.dom.*
 
 import org.ossreviewtoolkit.downloader.VcsHost
 import org.ossreviewtoolkit.model.Environment
+import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Project
 import org.ossreviewtoolkit.model.RemoteArtifact
 import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
+import org.ossreviewtoolkit.model.licenses.ResolvedLicenseLocation
 import org.ossreviewtoolkit.model.yamlMapper
 import org.ossreviewtoolkit.reporter.Reporter
 import org.ossreviewtoolkit.reporter.ReporterInput
@@ -64,12 +66,11 @@ class StaticHtmlReporter : Reporter {
         outputDir: File,
         options: Map<String, String>
     ): List<File> {
-        val tabularScanRecord = ReportTableModelMapper(
-            input.resolutionProvider,
-            input.packageConfigurationProvider
-        ).mapToReportTableModel(
-            input.ortResult
-        )
+        val tabularScanRecord = ReportTableModelMapper(input.resolutionProvider)
+            .mapToReportTableModel(
+                input.ortResult,
+                input.licenseInfoResolver
+            )
 
         val html = renderHtml(tabularScanRecord)
         val outputFile = outputDir.resolve(reportFilename)
@@ -513,7 +514,7 @@ class StaticHtmlReporter : Reporter {
                         dd {
                             row.declaredLicenses.forEach {
                                 div {
-                                    +if (it.contains(",")) "\"$it\"" else it
+                                    +it.license.toString()
                                 }
                             }
                         }
@@ -524,77 +525,31 @@ class StaticHtmlReporter : Reporter {
                     em { +"Detected Licenses:" }
                     dl {
                         dd {
-                            // TODO: As we do not have access to provenance information here anymore (see issue
-                            //       #2631), use a "META-INF" path prefix as a crude hint whether a Java source
-                            //       artifact was scanned.
-                            val isSourceArtifact = row.detectedLicenses.any { (findings, _) ->
-                                findings.locations.any { it.path.startsWith("META-INF") }
-                            }
+                            row.detectedLicenses.forEach { license ->
+                                val firstFinding =
+                                    license.locations.firstOrNull { it.matchingPathExcludes.isEmpty() }
+                                        ?: license.locations.firstOrNull()
 
-                            row.detectedLicenses.forEach { (finding, excludes) ->
-                                val firstFinding = finding.locations.first()
+                                val permalink = firstFinding?.permalink(row.id)
+                                val pathExcludes =
+                                    license.locations.flatMapTo(mutableSetOf()) { it.matchingPathExcludes }
 
-                                val permalink = when {
-                                    row.vcsInfo != VcsInfo.EMPTY && !isSourceArtifact -> {
-                                        val path = listOfNotNull(
-                                            row.vcsInfo.path.takeIf { it.isNotEmpty() },
-                                            firstFinding.path
-                                        ).joinToString("/")
-
-                                        VcsHost.toPermalink(
-                                            row.vcsInfo.copy(path = path),
-                                            firstFinding.startLine, firstFinding.endLine
-                                        )
-                                    }
-
-                                    row.sourceArtifact != RemoteArtifact.EMPTY -> {
-                                        val mavenCentralPattern = Regex("https?://repo[^/]+maven[^/]+org/.*")
-                                        if (row.sourceArtifact.url.matches(mavenCentralPattern)) {
-                                            // At least for source artifacts on Maven Central, use the "proxy" from
-                                            // Sonatype which has the Archive Browser plugin installed to link to the
-                                            // files with findings.
-                                            with(row.id) {
-                                                val group = namespace.replace('.', '/')
-                                                "https://repository.sonatype.org/" +
-                                                        "service/local/repositories/central-proxy/" +
-                                                        "archive/$group/$name/$version/$name-$version-sources.jar/" +
-                                                        "!/${firstFinding.path}"
-                                            }
-                                        } else {
-                                            null
-                                        }
-                                    }
-
-                                    else -> null
-                                }
-
-                                if (excludes.isEmpty()) {
+                                if (!license.isDetectedExcluded) {
                                     div {
-                                        +finding.license.toString()
+                                        +license.license.toString()
                                         if (permalink != null) {
-                                            val count = finding.locations.size
-                                            if (count > 1) {
-                                                +" (exemplary "
-                                                a {
-                                                    href = permalink
-                                                    +"link"
-                                                }
-                                                +" to the first of $count locations)"
-                                            } else {
-                                                +" ("
-                                                a {
-                                                    href = permalink
-                                                    +"link"
-                                                }
-                                                +" to the location)"
-                                            }
+                                            val count = license.locations.count { it.matchingPathExcludes.isEmpty() }
+                                            permalink(permalink, count)
                                         }
                                     }
                                 } else {
                                     div("ort-excluded") {
-                                        +"${finding.license} (Excluded: "
-                                        +excludes.joinToString { it.description }
+                                        +"${license.license} (Excluded: "
+                                        +pathExcludes.joinToString { it.description }
                                         +")"
+                                        if (permalink != null) {
+                                            permalink(permalink, license.locations.size)
+                                        }
                                     }
                                 }
                             }
@@ -653,5 +608,56 @@ class StaticHtmlReporter : Reporter {
         val document = markdownParser.parse(markdown)
         val renderer = HtmlRenderer.builder().build()
         unsafe { +renderer.render(document) }
+    }
+}
+
+private fun DIV.permalink(permalink: String, count: Int) {
+    if (count > 1) {
+        +" (exemplary "
+        a(href = permalink) { +"link" }
+        +" to the first of $count locations)"
+    } else {
+        +" ("
+        a(href = permalink) { +"link" }
+        +" to the location)"
+    }
+}
+
+private fun ResolvedLicenseLocation.permalink(id: Identifier): String? {
+    val sourceArtifact = provenance.sourceArtifact
+    val vcsInfo = provenance.vcsInfo
+
+    return when {
+        sourceArtifact != null && sourceArtifact != RemoteArtifact.EMPTY -> {
+            val mavenCentralPattern = Regex("https?://repo[^/]+maven[^/]+org/.*")
+            when {
+                sourceArtifact.url.matches(mavenCentralPattern) -> {
+                    // At least for source artifacts on Maven Central, use the "proxy" from Sonatype which has the
+                    // Archive Browser plugin installed to link to the files with findings.
+                    with(id) {
+                        val group = namespace.replace('.', '/')
+                        "https://repository.sonatype.org/" +
+                                "service/local/repositories/central-proxy/" +
+                                "archive/$group/$name/$version/$name-$version-sources.jar/" +
+                                "!/${location.path}"
+                    }
+                }
+                else -> null
+            }
+        }
+
+        vcsInfo != null && vcsInfo != VcsInfo.EMPTY -> {
+            val path = listOfNotNull(
+                vcsInfo.path.takeIf { it.isNotEmpty() },
+                location.path
+            ).joinToString("/")
+
+            VcsHost.toPermalink(
+                vcsInfo.copy(path = path),
+                location.startLine, location.endLine
+            )
+        }
+
+        else -> null
     }
 }
