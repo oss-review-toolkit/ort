@@ -14,5 +14,6 @@ org.ossreviewtoolkit.analyzer.managers.Pip$Factory
 org.ossreviewtoolkit.analyzer.managers.Pipenv$Factory
 org.ossreviewtoolkit.analyzer.managers.Pub$Factory
 org.ossreviewtoolkit.analyzer.managers.Sbt$Factory
+org.ossreviewtoolkit.analyzer.managers.SpdxDocumentFile$Factory
 org.ossreviewtoolkit.analyzer.managers.Stack$Factory
 org.ossreviewtoolkit.analyzer.managers.Yarn$Factory

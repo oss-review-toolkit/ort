@@ -64,6 +64,7 @@ class PackageManagerTest : WordSpec({
             managedFilesByName["Pipenv"] should containExactly(File(projectDir, "Pipfile.lock"))
             managedFilesByName["Pub"] should containExactly(File(projectDir, "pubspec.yaml"))
             managedFilesByName["SBT"] should containExactly(File(projectDir, "build.sbt"))
+            managedFilesByName["SpdxDocumentFile"] should containExactly(File(projectDir, "project.spdx.yml"))
             managedFilesByName["Stack"] should containExactly(File(projectDir, "stack.yaml"))
             managedFilesByName["Yarn"] should containExactly(File(projectDir, "package.json"))
         }
