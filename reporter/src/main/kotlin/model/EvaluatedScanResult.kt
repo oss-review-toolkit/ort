@@ -21,11 +21,11 @@ package org.ossreviewtoolkit.reporter.model
 
 import com.fasterxml.jackson.annotation.JsonInclude
 
-import org.ossreviewtoolkit.model.Provenance
-import org.ossreviewtoolkit.model.ScannerDetails
-import org.ossreviewtoolkit.model.ScanSummary
-
 import java.time.Instant
+
+import org.ossreviewtoolkit.model.Provenance
+import org.ossreviewtoolkit.model.ScanSummary
+import org.ossreviewtoolkit.model.ScannerDetails
 
 /**
  * The evaluated form of a [ScanSummary] used by the [EvaluatedModel]. The findings are stored directly in

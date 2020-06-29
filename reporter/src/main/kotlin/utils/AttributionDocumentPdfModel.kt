@@ -19,10 +19,10 @@
 
 package org.ossreviewtoolkit.reporter.utils
 
+import java.util.Optional
+
 import org.eclipse.sw360.antenna.attribution.document.core.model.ArtifactAndLicense
 import org.eclipse.sw360.antenna.attribution.document.core.model.LicenseInfo
-
-import java.util.Optional
 
 data class AttributionDocumentPdfModel(
     val purl: String,

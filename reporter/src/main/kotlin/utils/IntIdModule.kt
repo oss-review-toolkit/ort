@@ -19,11 +19,11 @@
 
 package org.ossreviewtoolkit.reporter.utils
 
+import com.fasterxml.jackson.databind.Module
 import com.fasterxml.jackson.databind.PropertyName
 import com.fasterxml.jackson.databind.introspect.Annotated
 import com.fasterxml.jackson.databind.introspect.JacksonAnnotationIntrospector
 import com.fasterxml.jackson.databind.introspect.ObjectIdInfo
-import com.fasterxml.jackson.databind.Module
 import com.fasterxml.jackson.databind.module.SimpleModule
 
 /**

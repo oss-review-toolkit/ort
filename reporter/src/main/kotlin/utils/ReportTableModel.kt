@@ -19,6 +19,9 @@
 
 package org.ossreviewtoolkit.reporter.utils
 
+import java.util.SortedMap
+import java.util.SortedSet
+
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.LicenseFindings
 import org.ossreviewtoolkit.model.OrtResult
@@ -33,9 +36,6 @@ import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.config.ScopeExclude
 import org.ossreviewtoolkit.spdx.SpdxExpression
 import org.ossreviewtoolkit.utils.zipWithDefault
-
-import java.util.SortedMap
-import java.util.SortedSet
 
 fun Collection<ReportTableModel.ResolvableIssue>.containsUnresolved() = any { !it.isResolved }
 

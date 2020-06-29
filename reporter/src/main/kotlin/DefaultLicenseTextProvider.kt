@@ -19,11 +19,11 @@
 
 package org.ossreviewtoolkit.reporter
 
+import java.io.File
+
 import org.ossreviewtoolkit.spdx.getLicenseText
 import org.ossreviewtoolkit.spdx.getLicenseTextReader
 import org.ossreviewtoolkit.spdx.hasLicenseText
-
-import java.io.File
 
 class DefaultLicenseTextProvider(private val customLicenseTextsDir: File? = null) : LicenseTextProvider {
     override fun getLicenseText(licenseId: String): String? =
