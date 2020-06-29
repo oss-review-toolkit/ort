@@ -19,6 +19,9 @@
 
 package org.ossreviewtoolkit.reporter.reporters
 
+import java.io.File
+import java.nio.file.Path
+
 import org.apache.logging.log4j.Level
 
 import org.ossreviewtoolkit.model.Identifier
@@ -36,9 +39,6 @@ import org.ossreviewtoolkit.utils.logOnce
 import org.ossreviewtoolkit.utils.ortDataDirectory
 import org.ossreviewtoolkit.utils.storage.FileArchiver
 import org.ossreviewtoolkit.utils.storage.LocalFileStorage
-
-import java.io.File
-import java.nio.file.Path
 
 /**
  * Creates a notice file containing the licenses for all non-excluded projects and packages, listed by their identifier.

@@ -19,9 +19,9 @@
 
 package org.ossreviewtoolkit.reporter.reporters
 
+import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNotBe
-import io.kotest.core.spec.style.WordSpec
 
 import org.apache.poi.xssf.usermodel.XSSFWorkbook
 

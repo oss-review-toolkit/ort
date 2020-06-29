@@ -22,11 +22,11 @@ package org.ossreviewtoolkit.reporter.model
 import com.fasterxml.jackson.annotation.JsonIdentityReference
 import com.fasterxml.jackson.annotation.JsonInclude
 
+import java.time.Instant
+
 import org.ossreviewtoolkit.model.OrtIssue
 import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.model.config.IssueResolution
-
-import java.time.Instant
 
 /**
  * The evaluated form of a [OrtIssue] used by the [EvaluatedModel].

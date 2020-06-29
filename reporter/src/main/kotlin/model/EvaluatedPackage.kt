@@ -22,6 +22,8 @@ package org.ossreviewtoolkit.reporter.model
 import com.fasterxml.jackson.annotation.JsonIdentityReference
 import com.fasterxml.jackson.annotation.JsonInclude
 
+import java.util.SortedSet
+
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.PackageCurationResult
@@ -30,8 +32,6 @@ import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.config.PathExclude
 import org.ossreviewtoolkit.model.config.ScopeExclude
 import org.ossreviewtoolkit.spdx.SpdxExpression
-
-import java.util.SortedSet
 
 /**
  * The evaluated form of a [Package] used by the [EvaluatedModel].

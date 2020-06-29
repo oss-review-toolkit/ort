@@ -19,6 +19,9 @@
 
 package org.ossreviewtoolkit.reporter.model
 
+import java.util.SortedMap
+import java.util.SortedSet
+
 import org.ossreviewtoolkit.model.OrtIssue
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.Package
@@ -26,9 +29,6 @@ import org.ossreviewtoolkit.model.Project
 import org.ossreviewtoolkit.model.RuleViolation
 import org.ossreviewtoolkit.model.Scope
 import org.ossreviewtoolkit.model.Severity
-
-import java.util.SortedMap
-import java.util.SortedSet
 
 /**
  * A class containing statistics for an [OrtResult].
