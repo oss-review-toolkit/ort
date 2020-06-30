@@ -486,7 +486,6 @@ packages:
       url: "https://github.com/square/okhttp.git"
       revision: "parent-3.10.0"
       path: ""
-  curations: []
 - package:
     id: "Maven:com.squareup.okio:okio:1.14.0"
     purl: "pkg:maven/com.squareup.okio/okio@1.14.0"
@@ -518,7 +517,6 @@ packages:
       url: "https://github.com/square/okio.git"
       revision: "okio-parent-1.14.0"
       path: ""
-  curations: []
 - package:
     id: "Maven:junit:junit:4.12"
     purl: "pkg:maven/junit/junit@4.12"
@@ -551,7 +549,6 @@ packages:
       url: "https://github.com/junit-team/junit.git"
       revision: "r4.12"
       path: ""
-  curations: []
 - package:
     id: "Maven:org.apache.commons:commons-compress:1.17"
     purl: "pkg:maven/org.apache.commons/commons-compress@1.17"
@@ -586,7 +583,6 @@ packages:
       url: "https://git-wip-us.apache.org/repos/asf/commons-compress.git"
       revision: ""
       path: ""
-  curations: []
 - package:
     id: "Maven:org.apache.commons:commons-lang3:3.7"
     purl: "pkg:maven/org.apache.commons/commons-lang3@3.7"
@@ -620,7 +616,6 @@ packages:
       url: "http://git-wip-us.apache.org/repos/asf/commons-lang.git"
       revision: "LANG_3_6"
       path: ""
-  curations: []
 - package:
     id: "Maven:org.apache.commons:commons-text:1.2"
     purl: "pkg:maven/org.apache.commons/commons-text@1.2"
@@ -653,7 +648,6 @@ packages:
       url: "http://git-wip-us.apache.org/repos/asf/commons-text.git"
       revision: ""
       path: ""
-  curations: []
 - package:
     id: "Maven:org.apache.commons:commons-text:1.3"
     purl: "pkg:maven/org.apache.commons/commons-text@1.3"
@@ -686,7 +680,6 @@ packages:
       url: "http://git-wip-us.apache.org/repos/asf/commons-text.git"
       revision: ""
       path: ""
-  curations: []
 - package:
     id: "Maven:org.hamcrest:hamcrest-core:1.3"
     purl: "pkg:maven/org.hamcrest/hamcrest-core@1.3"
@@ -720,4 +713,3 @@ packages:
       url: "ssh://git@github.com/hamcrest/JavaHamcrest.git"
       revision: ""
       path: ""
-  curations: []

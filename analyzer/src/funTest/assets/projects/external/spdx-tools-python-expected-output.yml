@@ -66,7 +66,6 @@ packages:
       url: "https://github.com/gweis/isodate.git"
       revision: ""
       path: ""
-  curations: []
 - package:
     id: "PyPI::ply:3.11"
     purl: "pkg:pypi/ply@3.11"
@@ -98,7 +97,6 @@ packages:
       url: ""
       revision: ""
       path: ""
-  curations: []
 - package:
     id: "PyPI::pyparsing:2.4.7"
     purl: "pkg:pypi/pyparsing@2.4.7"
@@ -130,7 +128,6 @@ packages:
       url: "https://github.com/pyparsing/pyparsing.git"
       revision: ""
       path: ""
-  curations: []
 - package:
     id: "PyPI::rdflib:5.0.0"
     purl: "pkg:pypi/rdflib@5.0.0"
@@ -164,7 +161,6 @@ packages:
       url: "https://github.com/RDFLib/rdflib.git"
       revision: ""
       path: ""
-  curations: []
 - package:
     id: "PyPI::six:1.15.0"
     purl: "pkg:pypi/six@1.15.0"
@@ -197,4 +193,3 @@ packages:
       url: "https://github.com/benjaminp/six.git"
       revision: ""
       path: ""
-  curations: []

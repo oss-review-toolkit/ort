@@ -57,7 +57,6 @@ packages:
       url: ""
       revision: ""
       path: ""
-  curations: []
 - package:
     id: "PyPI::pytz:2020.1"
     purl: "pkg:pypi/pytz@2020.1"
@@ -90,7 +89,6 @@ packages:
       url: ""
       revision: ""
       path: ""
-  curations: []
 - package:
     id: "PyPI::sqlparse:0.3.1"
     purl: "pkg:pypi/sqlparse@0.3.1"
@@ -124,4 +122,3 @@ packages:
       url: "https://github.com/andialbrecht/sqlparse.git"
       revision: ""
       path: ""
-  curations: []

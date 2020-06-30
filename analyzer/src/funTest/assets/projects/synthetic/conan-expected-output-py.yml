@@ -58,7 +58,6 @@ packages:
       url: "https://github.com/conan-community/conan-openssl.git"
       revision: ""
       path: ""
-  curations: []
 - package:
     id: "Conan::zlib:1.2.11"
     purl: "pkg:conan/zlib@1.2.11"
@@ -89,4 +88,3 @@ packages:
       url: "https://github.com/conan-community/conan-zlib.git"
       revision: ""
       path: ""
-  curations: []

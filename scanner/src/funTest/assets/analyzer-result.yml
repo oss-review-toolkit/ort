@@ -86,7 +86,6 @@ analyzer:
           url: ""
           revision: ""
           path: ""
-      curations: []
     - package:
         id: "Maven:org.apache.commons:commons-lang3:3.5"
         purl: "pkg:maven/org.apache.commons/commons-lang3@3.5"
@@ -120,7 +119,6 @@ analyzer:
           url: ""
           revision: ""
           path: ""
-      curations: []
     - package:
         id: "Maven:org.apache.commons:commons-text:1.1"
         purl: "pkg:maven/org.apache.commons/commons-text@1.1"
@@ -153,7 +151,6 @@ analyzer:
           url: ""
           revision: ""
           path: ""
-      curations: []
     - package:
         id: "Maven:org.hamcrest:hamcrest-core:1.3"
         purl: "pkg:maven/org.hamcrest/hamcrest-core@1.3"
@@ -187,7 +184,6 @@ analyzer:
           url: ""
           revision: ""
           path: ""
-      curations: []
     has_issues: false
 scanner: null
 evaluator: null
