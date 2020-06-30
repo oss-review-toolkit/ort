@@ -58,7 +58,6 @@ packages:
       url: "https://github.com/bitinn/node-fetch.git"
       revision: "95286f52bb866283bc69521a04efe1de37b26a33"
       path: ""
-  curations: []
 - package:
     id: "NPM::pkg2:1.0.0"
     purl: "pkg:npm/pkg2@1.0.0"
@@ -88,7 +87,6 @@ packages:
       url: "<REPLACE_URL>"
       revision: "<REPLACE_REVISION>"
       path: "analyzer/src/funTest/assets/projects/synthetic/yarn-workspaces/packages/pkg2"
-  curations: []
 - package:
     id: "NPM:@here:harp-fetch:0.11.0"
     purl: "pkg:npm/%40here/harp-fetch@0.11.0"
@@ -118,7 +116,6 @@ packages:
       url: "https://github.com/heremaps/harp.gl.git"
       revision: "ce42b2ce221de76b25ef8aea54f50ff007da2664"
       path: "@here/harp-fetch"
-  curations: []
 - package:
     id: "NPM:@here:harp-fetch:0.3.6"
     purl: "pkg:npm/%40here/harp-fetch@0.3.6"
@@ -148,7 +145,6 @@ packages:
       url: "https://github.com/heremaps/harp.gl.git"
       revision: "0c2857f958a34ef7638384afada4fceec427d48d"
       path: "@here/harp-fetch"
-  curations: []
 - package:
     id: "NPM:@scope1:pkg1:1.0.0"
     purl: "pkg:npm/%40scope1/pkg1@1.0.0"
@@ -178,4 +174,3 @@ packages:
       url: "<REPLACE_URL>"
       revision: "<REPLACE_REVISION>"
       path: "analyzer/src/funTest/assets/projects/synthetic/yarn-workspaces/packages/pkg1"
-  curations: []

@@ -53,7 +53,6 @@ packages:
       url: ""
       revision: ""
       path: ""
-  curations: []
 - package:
     id: "PhpComposer:ort:virtual2:1.0.0"
     purl: "pkg:phpcomposer/ort/virtual2@1.0.0"
@@ -81,4 +80,3 @@ packages:
       url: ""
       revision: ""
       path: ""
-  curations: []

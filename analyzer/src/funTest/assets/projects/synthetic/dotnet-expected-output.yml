@@ -53,7 +53,6 @@ packages:
       url: ""
       revision: ""
       path: ""
-  curations: []
 - package:
     id: "nuget::Newtonsoft.Json:5.0.4"
     purl: "pkg:nuget/Newtonsoft.Json@5.0.4"
@@ -84,7 +83,6 @@ packages:
       url: ""
       revision: ""
       path: ""
-  curations: []
 - package:
     id: "nuget::WebGrease:1.5.2"
     purl: "pkg:nuget/WebGrease@1.5.2"
@@ -116,7 +114,6 @@ packages:
       url: ""
       revision: ""
       path: ""
-  curations: []
 - package:
     id: "nuget::jQuery:3.3.1"
     purl: "pkg:nuget/jQuery@3.3.1"
@@ -152,4 +149,3 @@ packages:
       url: ""
       revision: ""
       path: ""
-  curations: []

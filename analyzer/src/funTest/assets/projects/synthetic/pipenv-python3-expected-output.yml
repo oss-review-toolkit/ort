@@ -56,7 +56,6 @@ packages:
       url: ""
       revision: ""
       path: ""
-  curations: []
 - package:
     id: "PyPI::pytz:2019.3"
     purl: "pkg:pypi/pytz@2019.3"
@@ -89,4 +88,3 @@ packages:
       url: ""
       revision: ""
       path: ""
-  curations: []

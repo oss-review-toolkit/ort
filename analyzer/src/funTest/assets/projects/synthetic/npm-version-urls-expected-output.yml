@@ -665,7 +665,6 @@ packages:
       url: "https://github.com/jonschlinkert/ansi-green.git"
       revision: ""
       path: ""
-  curations: []
 - package:
     id: "NPM::ansi-wrap:0.1.0"
     purl: "pkg:npm/ansi-wrap@0.1.0"
@@ -695,7 +694,6 @@ packages:
       url: "https://github.com/jonschlinkert/ansi-wrap.git"
       revision: ""
       path: ""
-  curations: []
 - package:
     id: "NPM::argparse:1.0.10"
     purl: "pkg:npm/argparse@1.0.10"
@@ -726,7 +724,6 @@ packages:
       url: "https://github.com/nodeca/argparse.git"
       revision: "ea45e14bad13b9e4a10af28f11fb7e731079ab72"
       path: ""
-  curations: []
 - package:
     id: "NPM::arr-union:3.1.0"
     purl: "pkg:npm/arr-union@3.1.0"
@@ -757,7 +754,6 @@ packages:
       url: "https://github.com/jonschlinkert/arr-union.git"
       revision: "ede857f5d5082467534e372fd3da45ce5e782e93"
       path: ""
-  curations: []
 - package:
     id: "NPM::array-each:1.0.1"
     purl: "pkg:npm/array-each@1.0.1"
@@ -788,7 +784,6 @@ packages:
       url: "https://github.com/jonschlinkert/array-each.git"
       revision: "a752d70897f25abfd38bfb51bb1b3a06ffcd2aed"
       path: ""
-  curations: []
 - package:
     id: "NPM::array-slice:0.2.3"
     purl: "pkg:npm/array-slice@0.2.3"
@@ -819,7 +814,6 @@ packages:
       url: "https://github.com/jonschlinkert/array-slice.git"
       revision: "15bcb1d3d2d5689a1f519207cecb3ab3a63b8654"
       path: ""
-  curations: []
 - package:
     id: "NPM::assign-symbols:1.0.0"
     purl: "pkg:npm/assign-symbols@1.0.0"
@@ -852,7 +846,6 @@ packages:
       url: "https://github.com/jonschlinkert/assign-symbols.git"
       revision: "2df01f26fce8359fa75688eb89e2a1c65de6f237"
       path: ""
-  curations: []
 - package:
     id: "NPM::atob:2.1.2"
     purl: "pkg:npm/atob@2.1.2"
@@ -882,7 +875,6 @@ packages:
       url: "git://git.coolaj86.com/coolaj86/atob.js.git"
       revision: "755cfea7899074a17e83a248c7cfc3960d956d82"
       path: ""
-  curations: []
 - package:
     id: "NPM::autolinker:0.28.1"
     purl: "pkg:npm/autolinker@0.28.1"
@@ -913,7 +905,6 @@ packages:
       url: "https://github.com/gregjacobs/Autolinker.js.git"
       revision: "e6634b3736d462b60df5ee10d9e8c3c21a45f8e6"
       path: ""
-  curations: []
 - package:
     id: "NPM::balanced-match:1.0.0"
     purl: "pkg:npm/balanced-match@1.0.0"
@@ -943,7 +934,6 @@ packages:
       url: "https://github.com/juliangruber/balanced-match.git"
       revision: "d701a549a7653a874eebce7eca25d3577dc868ac"
       path: ""
-  curations: []
 - package:
     id: "NPM::base:0.11.2"
     purl: "pkg:npm/base@0.11.2"
@@ -975,7 +965,6 @@ packages:
       url: "https://github.com/node-base/base.git"
       revision: "1885b1dc37dff5479d852dd0810d32207e190bab"
       path: ""
-  curations: []
 - package:
     id: "NPM::brace-expansion:1.1.11"
     purl: "pkg:npm/brace-expansion@1.1.11"
@@ -1005,7 +994,6 @@ packages:
       url: "https://github.com/juliangruber/brace-expansion.git"
       revision: "01a21de7441549d26ac0c0a9ff91385d16e5c21c"
       path: ""
-  curations: []
 - package:
     id: "NPM::browser-stdout:1.3.1"
     purl: "pkg:npm/browser-stdout@1.3.1"
@@ -1035,7 +1023,6 @@ packages:
       url: "ssh://git@github.com/kumavis/browser-stdout.git"
       revision: "456b7f33c2d535fc88cf732d1a0e2d48a7600a1b"
       path: ""
-  curations: []
 - package:
     id: "NPM::cache-base:1.0.1"
     purl: "pkg:npm/cache-base@1.0.1"
@@ -1066,7 +1053,6 @@ packages:
       url: "https://github.com/jonschlinkert/cache-base.git"
       revision: "0889aab765c66585ffbe7b41f9a733ef097665cf"
       path: ""
-  curations: []
 - package:
     id: "NPM::class-utils:0.3.6"
     purl: "pkg:npm/class-utils@0.3.6"
@@ -1096,7 +1082,6 @@ packages:
       url: "https://github.com/jonschlinkert/class-utils.git"
       revision: "0ad9e639d6a63d6dc04043ac5931df85fb898e06"
       path: ""
-  curations: []
 - package:
     id: "NPM::clone-buffer:1.0.0"
     purl: "pkg:npm/clone-buffer@1.0.0"
@@ -1126,7 +1111,6 @@ packages:
       url: "https://github.com/gulpjs/clone-buffer.git"
       revision: "7dab09850f080e2d137c62c6a673344fa8458942"
       path: ""
-  curations: []
 - package:
     id: "NPM::clone-stats:1.0.0"
     purl: "pkg:npm/clone-stats@1.0.0"
@@ -1157,7 +1141,6 @@ packages:
       url: "https://github.com/hughsk/clone-stats.git"
       revision: "25810f469944326c761f9f6273268453734a8465"
       path: ""
-  curations: []
 - package:
     id: "NPM::clone:2.1.2"
     purl: "pkg:npm/clone@2.1.2"
@@ -1187,7 +1170,6 @@ packages:
       url: "https://github.com/pvorb/node-clone.git"
       revision: "765941803d27761a6008cb1aa32b199f0c42deb2"
       path: ""
-  curations: []
 - package:
     id: "NPM::cloneable-readable:1.1.3"
     purl: "pkg:npm/cloneable-readable@1.1.3"
@@ -1217,7 +1199,6 @@ packages:
       url: "https://github.com/mcollina/cloneable-readable.git"
       revision: "88e32675c5816bccda34983ff8fd1d9cd1f027fa"
       path: ""
-  curations: []
 - package:
     id: "NPM::collection-visit:1.0.0"
     purl: "pkg:npm/collection-visit@1.0.0"
@@ -1248,7 +1229,6 @@ packages:
       url: "https://github.com/jonschlinkert/collection-visit.git"
       revision: "39c229dceb7e124cb821b59668df5da1d5c81a6c"
       path: ""
-  curations: []
 - package:
     id: "NPM::commander:2.15.1"
     purl: "pkg:npm/commander@2.15.1"
@@ -1278,7 +1258,6 @@ packages:
       url: "https://github.com/tj/commander.js.git"
       revision: "649eaef336ddc7224eb5c73e4a958685e24de25e"
       path: ""
-  curations: []
 - package:
     id: "NPM::component-emitter:1.3.0"
     purl: "pkg:npm/component-emitter@1.3.0"
@@ -1308,7 +1287,6 @@ packages:
       url: "https://github.com/component/emitter.git"
       revision: "6bd7817e8a444cb16e8abdf7dd2d7f04d5ca3dc8"
       path: ""
-  curations: []
 - package:
     id: "NPM::concat-map:0.0.1"
     purl: "pkg:npm/concat-map@0.0.1"
@@ -1338,7 +1316,6 @@ packages:
       url: "https://github.com/substack/node-concat-map.git"
       revision: ""
       path: ""
-  curations: []
 - package:
     id: "NPM::concat-with-sourcemaps:1.1.0"
     purl: "pkg:npm/concat-with-sourcemaps@1.1.0"
@@ -1369,7 +1346,6 @@ packages:
       url: "https://github.com/floridoo/concat-with-sourcemaps.git"
       revision: "fa7922b69c4054a6c5dc8f415f0dfcabaf5b8fe4"
       path: ""
-  curations: []
 - package:
     id: "NPM::copy-descriptor:0.1.1"
     purl: "pkg:npm/copy-descriptor@0.1.1"
@@ -1399,7 +1375,6 @@ packages:
       url: "https://github.com/jonschlinkert/copy-descriptor.git"
       revision: "572c31416d4538b7ba5f52e2bb0765ac237f79e2"
       path: ""
-  curations: []
 - package:
     id: "NPM::core-util-is:1.0.2"
     purl: "pkg:npm/core-util-is@1.0.2"
@@ -1429,7 +1404,6 @@ packages:
       url: "https://github.com/isaacs/core-util-is.git"
       revision: "a177da234df5638b363ddc15fa324619a38577c8"
       path: ""
-  curations: []
 - package:
     id: "NPM::debug:2.6.9"
     purl: "pkg:npm/debug@2.6.9"
@@ -1459,7 +1433,6 @@ packages:
       url: "https://github.com/visionmedia/debug.git"
       revision: "13abeae468fea297d0dccc50bc55590809241083"
       path: ""
-  curations: []
 - package:
     id: "NPM::debug:3.1.0"
     purl: "pkg:npm/debug@3.1.0"
@@ -1489,7 +1462,6 @@ packages:
       url: "https://github.com/visionmedia/debug.git"
       revision: "f073e056f33efdd5b311381eb6bca2bc850745bf"
       path: ""
-  curations: []
 - package:
     id: "NPM::decode-uri-component:0.2.0"
     purl: "pkg:npm/decode-uri-component@0.2.0"
@@ -1519,7 +1491,6 @@ packages:
       url: "https://github.com/samverschueren/decode-uri-component.git"
       revision: "52782a347527a6a05fed02434ffcf8f2ba1b19a3"
       path: ""
-  curations: []
 - package:
     id: "NPM::define-property:0.2.5"
     purl: "pkg:npm/define-property@0.2.5"
@@ -1549,7 +1520,6 @@ packages:
       url: "https://github.com/jonschlinkert/define-property.git"
       revision: "5bf4e5e9d8d1fdf8fba07fff4bdf13a5d6df8ae4"
       path: ""
-  curations: []
 - package:
     id: "NPM::define-property:1.0.0"
     purl: "pkg:npm/define-property@1.0.0"
@@ -1579,7 +1549,6 @@ packages:
       url: "https://github.com/jonschlinkert/define-property.git"
       revision: "4811e7c7999e82ab086265eefeb5d9cbffe10912"
       path: ""
-  curations: []
 - package:
     id: "NPM::define-property:2.0.2"
     purl: "pkg:npm/define-property@2.0.2"
@@ -1610,7 +1579,6 @@ packages:
       url: "https://github.com/jonschlinkert/define-property.git"
       revision: "04717307be822f2ca2544778b92e5d2cbe300c55"
       path: ""
-  curations: []
 - package:
     id: "NPM::diff:3.5.0"
     purl: "pkg:npm/diff@3.5.0"
@@ -1640,7 +1608,6 @@ packages:
       url: "https://github.com/kpdecker/jsdiff.git"
       revision: "e9ab94893a77f1f7d7ea8483b873083e6c6a390a"
       path: ""
-  curations: []
 - package:
     id: "NPM::escape-string-regexp:1.0.5"
     purl: "pkg:npm/escape-string-regexp@1.0.5"
@@ -1670,7 +1637,6 @@ packages:
       url: "https://github.com/sindresorhus/escape-string-regexp.git"
       revision: "db124a3e1aae9d692c4899e42a5c6c3e329eaa20"
       path: ""
-  curations: []
 - package:
     id: "NPM::expand-range:1.8.2"
     purl: "pkg:npm/expand-range@1.8.2"
@@ -1701,7 +1667,6 @@ packages:
       url: "https://github.com/jonschlinkert/expand-range.git"
       revision: "4c873af0870df8382bafc66a93d5c89e3aad3d4d"
       path: ""
-  curations: []
 - package:
     id: "NPM::expand-reflinks:0.2.1"
     purl: "pkg:npm/expand-reflinks@0.2.1"
@@ -1731,7 +1696,6 @@ packages:
       url: "https://github.com/jonschlinkert/expand-reflinks.git"
       revision: "340164e223b46f43a87fcff4644090d0b7133400"
       path: ""
-  curations: []
 - package:
     id: "NPM::extend-shallow:2.0.1"
     purl: "pkg:npm/extend-shallow@2.0.1"
@@ -1762,7 +1726,6 @@ packages:
       url: "https://github.com/jonschlinkert/extend-shallow.git"
       revision: "e9b1f1d2ff9d2990ec4a127afa7c14732d1eec8a"
       path: ""
-  curations: []
 - package:
     id: "NPM::extend-shallow:3.0.2"
     purl: "pkg:npm/extend-shallow@3.0.2"
@@ -1793,7 +1756,6 @@ packages:
       url: "https://github.com/jonschlinkert/extend-shallow.git"
       revision: "33698c3df7804f0d0e3ea98caa64d53f09c37bd4"
       path: ""
-  curations: []
 - package:
     id: "NPM::fill-range:2.2.4"
     purl: "pkg:npm/fill-range@2.2.4"
@@ -1824,7 +1786,6 @@ packages:
       url: "https://github.com/jonschlinkert/fill-range.git"
       revision: "516e5ad9e40486c168b14062158d136aa3163f2b"
       path: ""
-  curations: []
 - package:
     id: "NPM::for-in:1.0.2"
     purl: "pkg:npm/for-in@1.0.2"
@@ -1856,7 +1817,6 @@ packages:
       url: "https://github.com/jonschlinkert/for-in.git"
       revision: "5f97ad4f6556e938d9b71614259ddd8044a081e3"
       path: ""
-  curations: []
 - package:
     id: "NPM::fs-exists-sync:0.1.0"
     purl: "pkg:npm/fs-exists-sync@0.1.0"
@@ -1888,7 +1848,6 @@ packages:
       url: "https://github.com/jonschlinkert/fs-exists-sync.git"
       revision: "3b44654977775bac2d1151520c9b6257249a6374"
       path: ""
-  curations: []
 - package:
     id: "NPM::fs.realpath:1.0.0"
     purl: "pkg:npm/fs.realpath@1.0.0"
@@ -1919,7 +1878,6 @@ packages:
       url: "https://github.com/isaacs/fs.realpath.git"
       revision: "03e7c884431fe185dfebbc9b771aeca339c1807a"
       path: ""
-  curations: []
 - package:
     id: "NPM::get-value:2.0.6"
     purl: "pkg:npm/get-value@2.0.6"
@@ -1949,7 +1907,6 @@ packages:
       url: "https://github.com/jonschlinkert/get-value.git"
       revision: "5dc7466a65eec37e3b9e3d94f274b7aba193ea60"
       path: ""
-  curations: []
 - package:
     id: "NPM::gfm-code-block-regex:1.0.0"
     purl: "pkg:npm/gfm-code-block-regex@1.0.0"
@@ -1979,7 +1936,6 @@ packages:
       url: "https://github.com/regexhq/gfm-code-block-regex.git"
       revision: "91fd47dae730c5da36bd939acac416de221ff5d4"
       path: ""
-  curations: []
 - package:
     id: "NPM::gfm-code-blocks:1.0.0"
     purl: "pkg:npm/gfm-code-blocks@1.0.0"
@@ -2010,7 +1966,6 @@ packages:
       url: "https://github.com/jonschlinkert/gfm-code-blocks.git"
       revision: "1bdaf425f1fdbcedd4966203c5e402d9019421a1"
       path: ""
-  curations: []
 - package:
     id: "NPM::glob:7.1.2"
     purl: "pkg:npm/glob@7.1.2"
@@ -2040,7 +1995,6 @@ packages:
       url: "https://github.com/isaacs/node-glob.git"
       revision: "8fa8d561e08c9eed1d286c6a35be2cd8123b2fb7"
       path: ""
-  curations: []
 - package:
     id: "NPM::growl:1.10.5"
     purl: "pkg:npm/growl@1.10.5"
@@ -2070,7 +2024,6 @@ packages:
       url: "https://github.com/tj/node-growl.git"
       revision: "95393c8da0d8bab06522a5eb36658a639c24a621"
       path: ""
-  curations: []
 - package:
     id: "NPM::gulp-format-md:1.0.0"
     purl: "pkg:npm/gulp-format-md@1.0.0"
@@ -2100,7 +2053,6 @@ packages:
       url: "https://github.com/jonschlinkert/gulp-format-md.git"
       revision: "ebcdcba3d9fb6eb16368921200b0621ec8178535"
       path: ""
-  curations: []
 - package:
     id: "NPM::gulp-header:1.8.12"
     purl: "pkg:npm/gulp-header@1.8.12"
@@ -2130,7 +2082,6 @@ packages:
       url: "https://github.com/tracker1/gulp-header.git"
       revision: "e2db2d463e59dc1ced8895c505b6671ab340dbb5"
       path: ""
-  curations: []
 - package:
     id: "NPM::has-flag:3.0.0"
     purl: "pkg:npm/has-flag@3.0.0"
@@ -2160,7 +2111,6 @@ packages:
       url: "https://github.com/sindresorhus/has-flag.git"
       revision: "8b2ca7e693b2c742b29f2399194077b64b9ff781"
       path: ""
-  curations: []
 - package:
     id: "NPM::has-value:0.3.1"
     purl: "pkg:npm/has-value@0.3.1"
@@ -2191,7 +2141,6 @@ packages:
       url: "https://github.com/jonschlinkert/has-value.git"
       revision: "adecb27b13b7e99688694e228a946e6e635fcc64"
       path: ""
-  curations: []
 - package:
     id: "NPM::has-value:1.0.0"
     purl: "pkg:npm/has-value@1.0.0"
@@ -2222,7 +2171,6 @@ packages:
       url: "https://github.com/jonschlinkert/has-value.git"
       revision: "61b5671a48ac40206eb33b4ea75dc2507168d687"
       path: ""
-  curations: []
 - package:
     id: "NPM::has-values:0.1.4"
     purl: "pkg:npm/has-values@0.1.4"
@@ -2253,7 +2201,6 @@ packages:
       url: "https://github.com/jonschlinkert/has-values.git"
       revision: "199a3eacd663b4ae4b00aef5ef5541aa2c7c8089"
       path: ""
-  curations: []
 - package:
     id: "NPM::has-values:1.0.0"
     purl: "pkg:npm/has-values@1.0.0"
@@ -2284,7 +2231,6 @@ packages:
       url: "https://github.com/jonschlinkert/has-values.git"
       revision: "fead695044aafcfb337c7125af5479c7eaf1c92c"
       path: ""
-  curations: []
 - package:
     id: "NPM::he:1.1.1"
     purl: "pkg:npm/he@1.1.1"
@@ -2314,7 +2260,6 @@ packages:
       url: "https://github.com/mathiasbynens/he.git"
       revision: "670991a4141d01dc015de5194d400d01c863208f"
       path: ""
-  curations: []
 - package:
     id: "NPM::inflight:1.0.6"
     purl: "pkg:npm/inflight@1.0.6"
@@ -2344,7 +2289,6 @@ packages:
       url: "https://github.com/npm/inflight.git"
       revision: "a547881738c8f57b27795e584071d67cf6ac1a57"
       path: ""
-  curations: []
 - package:
     id: "NPM::inherits:2.0.4"
     purl: "pkg:npm/inherits@2.0.4"
@@ -2375,7 +2319,6 @@ packages:
       url: "https://github.com/isaacs/inherits.git"
       revision: "9a2c29400c6d491e0b7beefe0c32efa3b462545d"
       path: ""
-  curations: []
 - package:
     id: "NPM::is-accessor-descriptor:0.1.6"
     purl: "pkg:npm/is-accessor-descriptor@0.1.6"
@@ -2406,7 +2349,6 @@ packages:
       url: "https://github.com/jonschlinkert/is-accessor-descriptor.git"
       revision: "e64ae49c456c9f31dab47934b0183e2a9938b5bd"
       path: ""
-  curations: []
 - package:
     id: "NPM::is-accessor-descriptor:1.0.0"
     purl: "pkg:npm/is-accessor-descriptor@1.0.0"
@@ -2437,7 +2379,6 @@ packages:
       url: "https://github.com/jonschlinkert/is-accessor-descriptor.git"
       revision: "22b0a2617ccbebd131247c29e3700ca860d37d06"
       path: ""
-  curations: []
 - package:
     id: "NPM::is-buffer:1.1.6"
     purl: "pkg:npm/is-buffer@1.1.6"
@@ -2467,7 +2408,6 @@ packages:
       url: "https://github.com/feross/is-buffer.git"
       revision: "1e84e7ee31cf6b660b12500f3111a05501da387f"
       path: ""
-  curations: []
 - package:
     id: "NPM::is-data-descriptor:0.1.4"
     purl: "pkg:npm/is-data-descriptor@0.1.4"
@@ -2498,7 +2438,6 @@ packages:
       url: "https://github.com/jonschlinkert/is-data-descriptor.git"
       revision: "e6317dbcb27a95281a60120bac83f5938dda4e2c"
       path: ""
-  curations: []
 - package:
     id: "NPM::is-data-descriptor:1.0.0"
     purl: "pkg:npm/is-data-descriptor@1.0.0"
@@ -2529,7 +2468,6 @@ packages:
       url: "https://github.com/jonschlinkert/is-data-descriptor.git"
       revision: "42dcba2627fe655daa21aec843ca8de849f26cd6"
       path: ""
-  curations: []
 - package:
     id: "NPM::is-descriptor:0.1.6"
     purl: "pkg:npm/is-descriptor@0.1.6"
@@ -2560,7 +2498,6 @@ packages:
       url: "https://github.com/jonschlinkert/is-descriptor.git"
       revision: "7559403830553097fcdd56ae93fe69d4ef2b21db"
       path: ""
-  curations: []
 - package:
     id: "NPM::is-descriptor:1.0.2"
     purl: "pkg:npm/is-descriptor@1.0.2"
@@ -2591,7 +2528,6 @@ packages:
       url: "https://github.com/jonschlinkert/is-descriptor.git"
       revision: "324635c990dc7f1e6d169deecd19769dea72114c"
       path: ""
-  curations: []
 - package:
     id: "NPM::is-extendable:0.1.1"
     purl: "pkg:npm/is-extendable@0.1.1"
@@ -2623,7 +2559,6 @@ packages:
       url: "https://github.com/jonschlinkert/is-extendable.git"
       revision: "c36a0732e6a76931c6f66c5931d1f3e54fa44380"
       path: ""
-  curations: []
 - package:
     id: "NPM::is-extendable:1.0.1"
     purl: "pkg:npm/is-extendable@1.0.1"
@@ -2653,7 +2588,6 @@ packages:
       url: "https://github.com/jonschlinkert/is-extendable.git"
       revision: "230717f6be5be812c16916ec8a745d6252dfa7a5"
       path: ""
-  curations: []
 - package:
     id: "NPM::is-number:2.1.0"
     purl: "pkg:npm/is-number@2.1.0"
@@ -2683,7 +2617,6 @@ packages:
       url: "https://github.com/jonschlinkert/is-number.git"
       revision: "d06c6e2cc048d3cad016cb8dfb055bb14d86fffa"
       path: ""
-  curations: []
 - package:
     id: "NPM::is-number:3.0.0"
     purl: "pkg:npm/is-number@3.0.0"
@@ -2713,7 +2646,6 @@ packages:
       url: "https://github.com/jonschlinkert/is-number.git"
       revision: "af885e2e890b9ef0875edd2b117305119ee5bdc5"
       path: ""
-  curations: []
 - package:
     id: "NPM::is-number:4.0.0"
     purl: "pkg:npm/is-number@4.0.0"
@@ -2743,7 +2675,6 @@ packages:
       url: "https://github.com/jonschlinkert/is-number.git"
       revision: "0c6b15a88bc10cd47f67a09506399dfc9ddc075d"
       path: ""
-  curations: []
 - package:
     id: "NPM::is-plain-object:2.0.4"
     purl: "pkg:npm/is-plain-object@2.0.4"
@@ -2773,7 +2704,6 @@ packages:
       url: "https://github.com/jonschlinkert/is-plain-object.git"
       revision: "81345df0d1700a5c285f379cbdca0e273388910d"
       path: ""
-  curations: []
 - package:
     id: "NPM::is-win:1.0.8"
     purl: "pkg:npm/is-win@1.0.8"
@@ -2803,7 +2733,6 @@ packages:
       url: "ssh://git@github.com/IonicaBizau/is-win.git"
       revision: "77a92dda6c2a40cc10859b7d77d4d7e23eb27382"
       path: ""
-  curations: []
 - package:
     id: "NPM::is-windows:1.0.2"
     purl: "pkg:npm/is-windows@1.0.2"
@@ -2834,7 +2763,6 @@ packages:
       url: "https://github.com/jonschlinkert/is-windows.git"
       revision: "4dcfff4ed9e36ad761a1a24d3899c832382d7254"
       path: ""
-  curations: []
 - package:
     id: "NPM::isarray:1.0.0"
     purl: "pkg:npm/isarray@1.0.0"
@@ -2864,7 +2792,6 @@ packages:
       url: "https://github.com/juliangruber/isarray.git"
       revision: "2a23a281f369e9ae06394c0fb4d2381355a6ba33"
       path: ""
-  curations: []
 - package:
     id: "NPM::isobject:2.1.0"
     purl: "pkg:npm/isobject@2.1.0"
@@ -2894,7 +2821,6 @@ packages:
       url: "https://github.com/jonschlinkert/isobject.git"
       revision: "d693ec8d31b02b42a19b2d806407a4ecb2f9fb73"
       path: ""
-  curations: []
 - package:
     id: "NPM::isobject:3.0.1"
     purl: "pkg:npm/isobject@3.0.1"
@@ -2924,7 +2850,6 @@ packages:
       url: "https://github.com/jonschlinkert/isobject.git"
       revision: "7ad1fc405d19f144a21e2bfe947fa82801baa7aa"
       path: ""
-  curations: []
 - package:
     id: "NPM::kind-of:3.2.2"
     purl: "pkg:npm/kind-of@3.2.2"
@@ -2954,7 +2879,6 @@ packages:
       url: "https://github.com/jonschlinkert/kind-of.git"
       revision: "0ffe67cf12f5396047c1bacf04232b7deeb24063"
       path: ""
-  curations: []
 - package:
     id: "NPM::kind-of:4.0.0"
     purl: "pkg:npm/kind-of@4.0.0"
@@ -2984,7 +2908,6 @@ packages:
       url: "https://github.com/jonschlinkert/kind-of.git"
       revision: "30bee16e8dffa67417ba35d31bd9bc31517a2d83"
       path: ""
-  curations: []
 - package:
     id: "NPM::kind-of:5.1.0"
     purl: "pkg:npm/kind-of@5.1.0"
@@ -3014,7 +2937,6 @@ packages:
       url: "https://github.com/jonschlinkert/kind-of.git"
       revision: "ed479b6ee194dc1edff852f17095ae1de40bafbc"
       path: ""
-  curations: []
 - package:
     id: "NPM::kind-of:6.0.3"
     purl: "pkg:npm/kind-of@6.0.3"
@@ -3044,7 +2966,6 @@ packages:
       url: "https://github.com/jonschlinkert/kind-of.git"
       revision: "abab085d65f7ee978011da8f135291892fcd97db"
       path: ""
-  curations: []
 - package:
     id: "NPM::lazy-cache:2.0.2"
     purl: "pkg:npm/lazy-cache@2.0.2"
@@ -3074,7 +2995,6 @@ packages:
       url: "https://github.com/jonschlinkert/lazy-cache.git"
       revision: "ca0579a0687f9a7d915d9ecf53a93af7ad72762d"
       path: ""
-  curations: []
 - package:
     id: "NPM::list-item:1.1.1"
     purl: "pkg:npm/list-item@1.1.1"
@@ -3105,7 +3025,6 @@ packages:
       url: "https://github.com/jonschlinkert/list-item.git"
       revision: "26f9ef24523c2374acffd97b7627c217c7fce7c0"
       path: ""
-  curations: []
 - package:
     id: "NPM::lodash._reinterpolate:3.0.0"
     purl: "pkg:npm/lodash._reinterpolate@3.0.0"
@@ -3135,7 +3054,6 @@ packages:
       url: "https://github.com/lodash/lodash.git"
       revision: ""
       path: ""
-  curations: []
 - package:
     id: "NPM::lodash.template:4.5.0"
     purl: "pkg:npm/lodash.template@4.5.0"
@@ -3165,7 +3083,6 @@ packages:
       url: "https://github.com/lodash/lodash.git"
       revision: ""
       path: ""
-  curations: []
 - package:
     id: "NPM::lodash.templatesettings:4.2.0"
     purl: "pkg:npm/lodash.templatesettings@4.2.0"
@@ -3195,7 +3112,6 @@ packages:
       url: "https://github.com/lodash/lodash.git"
       revision: ""
       path: ""
-  curations: []
 - package:
     id: "NPM::log-ok:0.1.1"
     purl: "pkg:npm/log-ok@0.1.1"
@@ -3225,7 +3141,6 @@ packages:
       url: "https://github.com/jonschlinkert/log-ok.git"
       revision: "59edddc6de212f0a339d1903a0e941e46ca36fcc"
       path: ""
-  curations: []
 - package:
     id: "NPM::map-cache:0.2.2"
     purl: "pkg:npm/map-cache@0.2.2"
@@ -3255,7 +3170,6 @@ packages:
       url: "https://github.com/jonschlinkert/map-cache.git"
       revision: "f36c7567cb85b50824db25a2a588c5f7b858823b"
       path: ""
-  curations: []
 - package:
     id: "NPM::map-visit:1.0.0"
     purl: "pkg:npm/map-visit@1.0.0"
@@ -3285,7 +3199,6 @@ packages:
       url: "https://github.com/jonschlinkert/map-visit.git"
       revision: "73bcd8385c9520c595a825486f19623a5e0550f0"
       path: ""
-  curations: []
 - package:
     id: "NPM::markdown-utils:0.7.3"
     purl: "pkg:npm/markdown-utils@0.7.3"
@@ -3315,7 +3228,6 @@ packages:
       url: "https://github.com/jonschlinkert/markdown-utils.git"
       revision: "b574bd7d52f70afb6099d9794cc27326e1bd36d5"
       path: ""
-  curations: []
 - package:
     id: "NPM::math-random:1.0.4"
     purl: "pkg:npm/math-random@1.0.4"
@@ -3347,7 +3259,6 @@ packages:
       url: "https://github.com/michaelrhodes/math-random.git"
       revision: "13ed513bd579eb868b5054b38836411ae6e29f6a"
       path: ""
-  curations: []
 - package:
     id: "NPM::minimatch:3.0.4"
     purl: "pkg:npm/minimatch@3.0.4"
@@ -3377,7 +3288,6 @@ packages:
       url: "https://github.com/isaacs/minimatch.git"
       revision: "e46989a323d5f0aa4781eff5e2e6e7aafa223321"
       path: ""
-  curations: []
 - package:
     id: "NPM::minimist:0.0.8"
     purl: "pkg:npm/minimist@0.0.8"
@@ -3407,7 +3317,6 @@ packages:
       url: "https://github.com/substack/minimist.git"
       revision: ""
       path: ""
-  curations: []
 - package:
     id: "NPM::minimist:1.2.5"
     purl: "pkg:npm/minimist@1.2.5"
@@ -3437,7 +3346,6 @@ packages:
       url: "https://github.com/substack/minimist.git"
       revision: "aeb3e27dae0412de5c0494e9563a5f10c82cc7a9"
       path: ""
-  curations: []
 - package:
     id: "NPM::mixin-deep:1.3.2"
     purl: "pkg:npm/mixin-deep@1.3.2"
@@ -3468,7 +3376,6 @@ packages:
       url: "https://github.com/jonschlinkert/mixin-deep.git"
       revision: "754f0c20e1bc13ea5a21a64fbc7d6ba5f7b359b9"
       path: ""
-  curations: []
 - package:
     id: "NPM::mkdirp:0.5.1"
     purl: "pkg:npm/mkdirp@0.5.1"
@@ -3498,7 +3405,6 @@ packages:
       url: "https://github.com/substack/node-mkdirp.git"
       revision: "d4eff0f06093aed4f387e88e9fc301cb76beedc7"
       path: ""
-  curations: []
 - package:
     id: "NPM::mocha:5.2.0"
     purl: "pkg:npm/mocha@5.2.0"
@@ -3528,7 +3434,6 @@ packages:
       url: "https://github.com/mochajs/mocha.git"
       revision: "5bd33a0ba201d227159759e8ced86756595b0c54"
       path: ""
-  curations: []
 - package:
     id: "NPM::ms:2.0.0"
     purl: "pkg:npm/ms@2.0.0"
@@ -3558,7 +3463,6 @@ packages:
       url: "https://github.com/zeit/ms.git"
       revision: "9b88d1568a52ec9bb67ecc8d2aa224fa38fd41f4"
       path: ""
-  curations: []
 - package:
     id: "NPM::object-copy:0.1.0"
     purl: "pkg:npm/object-copy@0.1.0"
@@ -3589,7 +3493,6 @@ packages:
       url: "https://github.com/jonschlinkert/object-copy.git"
       revision: "15b972a4a7137f6bf47886c68e73a2fffa8eacf2"
       path: ""
-  curations: []
 - package:
     id: "NPM::object-visit:1.0.1"
     purl: "pkg:npm/object-visit@1.0.1"
@@ -3619,7 +3522,6 @@ packages:
       url: "https://github.com/jonschlinkert/object-visit.git"
       revision: "2220cd6ea35008481c9e252488bcbde9ebca0983"
       path: ""
-  curations: []
 - package:
     id: "NPM::once:1.4.0"
     purl: "pkg:npm/once@1.4.0"
@@ -3649,7 +3551,6 @@ packages:
       url: "https://github.com/isaacs/once.git"
       revision: "0e614d9f5a7e6f0305c625f6b581f6d80b33b8a6"
       path: ""
-  curations: []
 - package:
     id: "NPM::pascalcase:0.1.1"
     purl: "pkg:npm/pascalcase@0.1.1"
@@ -3679,7 +3580,6 @@ packages:
       url: "https://github.com/jonschlinkert/pascalcase.git"
       revision: "c2600f8aa648fe093381a064ba364d99b374911c"
       path: ""
-  curations: []
 - package:
     id: "NPM::path-is-absolute:1.0.1"
     purl: "pkg:npm/path-is-absolute@1.0.1"
@@ -3709,7 +3609,6 @@ packages:
       url: "https://github.com/sindresorhus/path-is-absolute.git"
       revision: "edc91d348b21dac2ab65ea2fbec2868e2eff5eb6"
       path: ""
-  curations: []
 - package:
     id: "NPM::pretty-remarkable:0.4.1"
     purl: "pkg:npm/pretty-remarkable@0.4.1"
@@ -3740,7 +3639,6 @@ packages:
       url: "https://github.com/jonschlinkert/pretty-remarkable.git"
       revision: "1ff9466caf5c1e483880c0aef5c496b4609e92d2"
       path: ""
-  curations: []
 - package:
     id: "NPM::process-nextick-args:2.0.1"
     purl: "pkg:npm/process-nextick-args@2.0.1"
@@ -3770,7 +3668,6 @@ packages:
       url: "https://github.com/calvinmetcalf/process-nextick-args.git"
       revision: "b96d59913025441b00c4fd40e6894ddfa8e1c398"
       path: ""
-  curations: []
 - package:
     id: "NPM::randomatic:3.1.1"
     purl: "pkg:npm/randomatic@3.1.1"
@@ -3801,7 +3698,6 @@ packages:
       url: "https://github.com/jonschlinkert/randomatic.git"
       revision: "b7451f4dac44a9920790f76a4d8a1dd081c37a5a"
       path: ""
-  curations: []
 - package:
     id: "NPM::readable-stream:2.3.7"
     purl: "pkg:npm/readable-stream@2.3.7"
@@ -3831,7 +3727,6 @@ packages:
       url: "https://github.com/nodejs/readable-stream.git"
       revision: "2eb8861e029107b7e079e22c826835cad6ae7854"
       path: ""
-  curations: []
 - package:
     id: "NPM::regex-not:1.0.2"
     purl: "pkg:npm/regex-not@1.0.2"
@@ -3862,7 +3757,6 @@ packages:
       url: "https://github.com/jonschlinkert/regex-not.git"
       revision: "7e368998898e1fc7428596636ef5412ede414f3e"
       path: ""
-  curations: []
 - package:
     id: "NPM::remarkable:1.7.4"
     purl: "pkg:npm/remarkable@1.7.4"
@@ -3893,7 +3787,6 @@ packages:
       url: "https://github.com/jonschlinkert/remarkable.git"
       revision: ""
       path: ""
-  curations: []
 - package:
     id: "NPM::remove-trailing-separator:1.1.0"
     purl: "pkg:npm/remove-trailing-separator@1.1.0"
@@ -3923,7 +3816,6 @@ packages:
       url: "https://github.com/darsain/remove-trailing-separator.git"
       revision: "f4e8acca09106efeef5a5164f1ad2192fe97fd69"
       path: ""
-  curations: []
 - package:
     id: "NPM::repeat-element:1.1.3"
     purl: "pkg:npm/repeat-element@1.1.3"
@@ -3953,7 +3845,6 @@ packages:
       url: "https://github.com/jonschlinkert/repeat-element.git"
       revision: "32af174b4218263952a77d881f37d6e545b7cfd0"
       path: ""
-  curations: []
 - package:
     id: "NPM::repeat-string:1.6.1"
     purl: "pkg:npm/repeat-string@1.6.1"
@@ -3984,7 +3875,6 @@ packages:
       url: "https://github.com/jonschlinkert/repeat-string.git"
       revision: "1a95c5d99a02999ccd2cf4663959a18bd2def7b8"
       path: ""
-  curations: []
 - package:
     id: "NPM::replace-ext:1.0.0"
     purl: "pkg:npm/replace-ext@1.0.0"
@@ -4014,7 +3904,6 @@ packages:
       url: "https://github.com/gulpjs/replace-ext.git"
       revision: "adaec75e316f1c375dc7a2cb51c7b762b135cc0e"
       path: ""
-  curations: []
 - package:
     id: "NPM::resolve-url:0.2.1"
     purl: "pkg:npm/resolve-url@0.2.1"
@@ -4044,7 +3933,6 @@ packages:
       url: "https://github.com/lydell/resolve-url.git"
       revision: ""
       path: ""
-  curations: []
 - package:
     id: "NPM::ret:0.1.15"
     purl: "pkg:npm/ret@0.1.15"
@@ -4074,7 +3962,6 @@ packages:
       url: "https://github.com/fent/ret.js.git"
       revision: "7f7c436e2a85fbc068e6d94e2611ce78b3e9ad10"
       path: ""
-  curations: []
 - package:
     id: "NPM::safe-buffer:5.1.2"
     purl: "pkg:npm/safe-buffer@5.1.2"
@@ -4104,7 +3991,6 @@ packages:
       url: "https://github.com/feross/safe-buffer.git"
       revision: "649435cc8e2d1f3ecdc7caf323f1cb1187307a16"
       path: ""
-  curations: []
 - package:
     id: "NPM::safe-regex:1.1.0"
     purl: "pkg:npm/safe-regex@1.1.0"
@@ -4134,7 +4020,6 @@ packages:
       url: "https://github.com/substack/safe-regex.git"
       revision: "d2570f31bd9d779515015917bb8297c753e46572"
       path: ""
-  curations: []
 - package:
     id: "NPM::sections:1.0.0"
     purl: "pkg:npm/sections@1.0.0"
@@ -4165,7 +4050,6 @@ packages:
       url: "https://github.com/jonschlinkert/sections.git"
       revision: "ec3ea81580de43e1b14d160853e1eadbf860006d"
       path: ""
-  curations: []
 - package:
     id: "NPM::set-getter:0.1.0"
     purl: "pkg:npm/set-getter@0.1.0"
@@ -4196,7 +4080,6 @@ packages:
       url: "https://github.com/doowb/set-getter.git"
       revision: "bfdd988ef9aa472ff05d6d6c7501c33bc36dc39e"
       path: ""
-  curations: []
 - package:
     id: "NPM::set-value:2.0.1"
     purl: "pkg:npm/set-value@2.0.1"
@@ -4227,7 +4110,6 @@ packages:
       url: "https://github.com/jonschlinkert/set-value.git"
       revision: "bb0f0382f7d7637f3de1bba52d1b4abdbbbde4d4"
       path: ""
-  curations: []
 - package:
     id: "NPM::snapdragon-node:1.0.6"
     purl: "pkg:npm/snapdragon-node@1.0.6"
@@ -4258,7 +4140,6 @@ packages:
       url: "https://github.com/jonschlinkert/snapdragon-node.git"
       revision: "bea9505d40be74b3c452039e72e857c9ae3c4b5e"
       path: ""
-  curations: []
 - package:
     id: "NPM::snapdragon-util:1.0.6"
     purl: "pkg:npm/snapdragon-util@1.0.6"
@@ -4288,7 +4169,6 @@ packages:
       url: "https://github.com/jonschlinkert/snapdragon-util.git"
       revision: "a8ee4265c9fd7638cadcd5159c023d7b877b83a6"
       path: ""
-  curations: []
 - package:
     id: "NPM::snapdragon-util:2.1.1"
     purl: "pkg:npm/snapdragon-util@2.1.1"
@@ -4318,7 +4198,6 @@ packages:
       url: "https://github.com/jonschlinkert/snapdragon-util.git"
       revision: "0ea032c8ea02010338568e82e8510a4054966203"
       path: ""
-  curations: []
 - package:
     id: "NPM::snapdragon:0.11.5"
     purl: "pkg:npm/snapdragon@0.11.5"
@@ -4349,7 +4228,6 @@ packages:
       url: "https://github.com/here-be/snapdragon.git"
       revision: "3067f0fe16d5d2771aea793c450f09cb2da533ca"
       path: ""
-  curations: []
 - package:
     id: "NPM::snapdragon:0.8.2"
     purl: "pkg:npm/snapdragon@0.8.2"
@@ -4379,7 +4257,6 @@ packages:
       url: "https://github.com/jonschlinkert/snapdragon.git"
       revision: "6c952b12cabe896a86d9a4fe378f934bccbe6436"
       path: ""
-  curations: []
 - package:
     id: "NPM::sort-by-value:0.1.0"
     purl: "pkg:npm/sort-by-value@0.1.0"
@@ -4410,7 +4287,6 @@ packages:
       url: "https://github.com/jonschlinkert/sort-by-value.git"
       revision: "e3ba2adb16e5efd28396f97367e19ed4913f74a6"
       path: ""
-  curations: []
 - package:
     id: "NPM::source-map-resolve:0.5.3"
     purl: "pkg:npm/source-map-resolve@0.5.3"
@@ -4440,7 +4316,6 @@ packages:
       url: "https://github.com/lydell/source-map-resolve.git"
       revision: "b8244f108af0aaf34c32a61e97b66e38db682afc"
       path: ""
-  curations: []
 - package:
     id: "NPM::source-map-url:0.4.0"
     purl: "pkg:npm/source-map-url@0.4.0"
@@ -4470,7 +4345,6 @@ packages:
       url: "https://github.com/lydell/source-map-url.git"
       revision: "f13c43ca675379922f26c87737fdcbbeac07eb09"
       path: ""
-  curations: []
 - package:
     id: "NPM::source-map:0.5.7"
     purl: "pkg:npm/source-map@0.5.7"
@@ -4500,7 +4374,6 @@ packages:
       url: "ssh://git@github.com/mozilla/source-map.git"
       revision: "326dd955a366569759d9537ef5f0f167c89d92d2"
       path: ""
-  curations: []
 - package:
     id: "NPM::source-map:0.6.1"
     purl: "pkg:npm/source-map@0.6.1"
@@ -4530,7 +4403,6 @@ packages:
       url: "ssh://git@github.com/mozilla/source-map.git"
       revision: "ac518d2f21818146f3310557bd51c13d8cff2ba8"
       path: ""
-  curations: []
 - package:
     id: "NPM::split-string:3.1.0"
     purl: "pkg:npm/split-string@3.1.0"
@@ -4560,7 +4432,6 @@ packages:
       url: "https://github.com/jonschlinkert/split-string.git"
       revision: "2f83feb70267a54ca01e795e6a0558a51b89d6c8"
       path: ""
-  curations: []
 - package:
     id: "NPM::sprintf-js:1.0.3"
     purl: "pkg:npm/sprintf-js@1.0.3"
@@ -4590,7 +4461,6 @@ packages:
       url: "https://github.com/alexei/sprintf.js.git"
       revision: "747b806c2dab5b64d5c9958c42884946a187c3b1"
       path: ""
-  curations: []
 - package:
     id: "NPM::static-extend:0.1.2"
     purl: "pkg:npm/static-extend@0.1.2"
@@ -4622,7 +4492,6 @@ packages:
       url: "https://github.com/jonschlinkert/static-extend.git"
       revision: "ce41369391163eb9403848a1b4daf00be981c56b"
       path: ""
-  curations: []
 - package:
     id: "NPM::string_decoder:1.1.1"
     purl: "pkg:npm/string_decoder@1.1.1"
@@ -4652,7 +4521,6 @@ packages:
       url: "https://github.com/nodejs/string_decoder.git"
       revision: "18c7f89c894ced5f610505bb006dfde9a3d1ac5e"
       path: ""
-  curations: []
 - package:
     id: "NPM::success-symbol:0.1.0"
     purl: "pkg:npm/success-symbol@0.1.0"
@@ -4682,7 +4550,6 @@ packages:
       url: "https://github.com/jonschlinkert/success-symbol.git"
       revision: ""
       path: ""
-  curations: []
 - package:
     id: "NPM::supports-color:5.4.0"
     purl: "pkg:npm/supports-color@5.4.0"
@@ -4712,7 +4579,6 @@ packages:
       url: "https://github.com/chalk/supports-color.git"
       revision: "bcd82c998094535f3462a3e37856852938ccbb37"
       path: ""
-  curations: []
 - package:
     id: "NPM::through2:2.0.5"
     purl: "pkg:npm/through2@2.0.5"
@@ -4743,7 +4609,6 @@ packages:
       url: "https://github.com/rvagg/through2.git"
       revision: "72a3cefc0ff1ad5cc178be04eb927f40166226f1"
       path: ""
-  curations: []
 - package:
     id: "NPM::to-gfm-code-block:0.1.1"
     purl: "pkg:npm/to-gfm-code-block@0.1.1"
@@ -4773,7 +4638,6 @@ packages:
       url: "https://github.com/jonschlinkert/to-gfm-code-block.git"
       revision: "52089279cf56ced49b7318684094e01954ac4fc6"
       path: ""
-  curations: []
 - package:
     id: "NPM::to-object-path:0.3.0"
     purl: "pkg:npm/to-object-path@0.3.0"
@@ -4803,7 +4667,6 @@ packages:
       url: "https://github.com/jonschlinkert/to-object-path.git"
       revision: "56f6627285b7f5b7563e6f3ffe3766d966368c17"
       path: ""
-  curations: []
 - package:
     id: "NPM::to-regex:3.0.2"
     purl: "pkg:npm/to-regex@3.0.2"
@@ -4833,7 +4696,6 @@ packages:
       url: "https://github.com/jonschlinkert/to-regex.git"
       revision: "cc5735f98f62c8e9cfb98ae5b309abea1c8a2432"
       path: ""
-  curations: []
 - package:
     id: "NPM::tokenize-comment:1.0.3"
     purl: "pkg:npm/tokenize-comment@1.0.3"
@@ -4865,7 +4727,6 @@ packages:
       url: "https://github.com/jonschlinkert/tokenize-comment.git"
       revision: "9132c85a7ab4ac99ec8aafb7288928c55e2ee613"
       path: ""
-  curations: []
 - package:
     id: "NPM::union-value:1.0.1"
     purl: "pkg:npm/union-value@1.0.1"
@@ -4896,7 +4757,6 @@ packages:
       url: "https://github.com/jonschlinkert/union-value.git"
       revision: "ae70c7747afc57d6d868fd55f80041e623d2df6a"
       path: ""
-  curations: []
 - package:
     id: "NPM::unset-value:1.0.0"
     purl: "pkg:npm/unset-value@1.0.0"
@@ -4926,7 +4786,6 @@ packages:
       url: "https://github.com/jonschlinkert/unset-value.git"
       revision: "36b62353cde18d6be17a1c0dc080fddcc262d2da"
       path: ""
-  curations: []
 - package:
     id: "NPM::urix:0.1.0"
     purl: "pkg:npm/urix@0.1.0"
@@ -4956,7 +4815,6 @@ packages:
       url: "https://github.com/lydell/urix.git"
       revision: ""
       path: ""
-  curations: []
 - package:
     id: "NPM::use:3.1.1"
     purl: "pkg:npm/use@3.1.1"
@@ -4986,7 +4844,6 @@ packages:
       url: "https://github.com/jonschlinkert/use.git"
       revision: "163104d5c5cc8ed35602625eb90a687df1dbc487"
       path: ""
-  curations: []
 - package:
     id: "NPM::util-deprecate:1.0.2"
     purl: "pkg:npm/util-deprecate@1.0.2"
@@ -5016,7 +4873,6 @@ packages:
       url: "https://github.com/TooTallNate/util-deprecate.git"
       revision: "475fb6857cd23fafff20c1be846c1350abf8e6d4"
       path: ""
-  curations: []
 - package:
     id: "NPM::vinyl:2.2.0"
     purl: "pkg:npm/vinyl@2.2.0"
@@ -5046,7 +4902,6 @@ packages:
       url: "https://github.com/gulpjs/vinyl.git"
       revision: "09c5bf424cca072c2ee63a7d3c68d885923f173c"
       path: ""
-  curations: []
 - package:
     id: "NPM::wrappy:1.0.2"
     purl: "pkg:npm/wrappy@1.0.2"
@@ -5076,7 +4931,6 @@ packages:
       url: "https://github.com/npm/wrappy.git"
       revision: "71d91b6dc5bdeac37e218c2cf03f9ab55b60d214"
       path: ""
-  curations: []
 - package:
     id: "NPM::write:0.3.3"
     purl: "pkg:npm/write@0.3.3"
@@ -5107,7 +4961,6 @@ packages:
       url: "https://github.com/jonschlinkert/write.git"
       revision: "d8d4b0ef32860c9e6f406d301c5266242489f3ee"
       path: ""
-  curations: []
 - package:
     id: "NPM::xtend:4.0.2"
     purl: "pkg:npm/xtend@4.0.2"
@@ -5137,4 +4990,3 @@ packages:
       url: "https://github.com/Raynos/xtend.git"
       revision: "37816c0e2e25da2901d584442235946d5cd8c80d"
       path: ""
-  curations: []

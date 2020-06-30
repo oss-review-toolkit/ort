@@ -60,7 +60,6 @@ packages:
       url: ""
       revision: ""
       path: ""
-  curations: []
 - package:
     id: "PyPI::Jinja2:2.10.1"
     purl: "pkg:pypi/Jinja2@2.10.1"
@@ -95,7 +94,6 @@ packages:
       url: ""
       revision: ""
       path: ""
-  curations: []
 - package:
     id: "PyPI::MarkupSafe:1.0"
     purl: "pkg:pypi/MarkupSafe@1.0"
@@ -129,7 +127,6 @@ packages:
       url: "https://github.com/pallets/markupsafe.git"
       revision: ""
       path: ""
-  curations: []
 - package:
     id: "PyPI::Werkzeug:0.15.3"
     purl: "pkg:pypi/Werkzeug@0.15.3"
@@ -162,7 +159,6 @@ packages:
       url: ""
       revision: ""
       path: ""
-  curations: []
 - package:
     id: "PyPI::click:6.7"
     purl: "pkg:pypi/click@6.7"
@@ -194,7 +190,6 @@ packages:
       url: "https://github.com/mitsuhiko/click.git"
       revision: ""
       path: ""
-  curations: []
 - package:
     id: "PyPI::itsdangerous:0.24"
     purl: "pkg:pypi/itsdangerous@0.24"
@@ -227,4 +222,3 @@ packages:
       url: "https://github.com/mitsuhiko/itsdangerous.git"
       revision: ""
       path: ""
-  curations: []
