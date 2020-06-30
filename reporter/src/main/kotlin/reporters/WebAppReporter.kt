@@ -22,8 +22,10 @@ package org.ossreviewtoolkit.reporter.reporters
 import java.io.File
 import java.io.FileOutputStream
 import java.util.Base64
+import java.util.zip.Deflater
 
 import org.apache.commons.compress.compressors.gzip.GzipCompressorOutputStream
+import org.apache.commons.compress.compressors.gzip.GzipParameters
 
 import org.ossreviewtoolkit.reporter.Reporter
 import org.ossreviewtoolkit.reporter.ReporterInput
@@ -55,7 +57,10 @@ class WebAppReporter : Reporter {
         FileOutputStream(outputFile, /* append = */ true).use { outputStream ->
             val b64OutputStream = Base64.getEncoder().wrap(outputStream)
 
-            GzipCompressorOutputStream(b64OutputStream).bufferedWriter().use { gzipWriter ->
+            val gzipParameters = GzipParameters().apply {
+                compressionLevel = Deflater.BEST_COMPRESSION
+            }
+            GzipCompressorOutputStream(b64OutputStream, gzipParameters).bufferedWriter().use { gzipWriter ->
                 evaluatedModel.toJson(gzipWriter, prettyPrint = false)
             }
         }
