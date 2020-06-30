@@ -24,6 +24,7 @@ val config4kVersion: String by project
 val jacksonVersion: String by project
 val kotestVersion: String by project
 val log4jCoreVersion: String by project
+val postgresVersion: String by project
 val reflectionsVersion: String by project
 
 plugins {
@@ -121,6 +122,7 @@ dependencies {
     implementation("org.apache.logging.log4j:log4j-core:$log4jCoreVersion")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
+    implementation("org.postgresql:postgresql:$postgresVersion")
     implementation("org.reflections:reflections:$reflectionsVersion")
 
     testImplementation(project(":test-utils"))
