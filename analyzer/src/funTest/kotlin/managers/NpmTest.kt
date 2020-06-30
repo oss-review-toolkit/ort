@@ -48,7 +48,7 @@ class NpmTest : WordSpec() {
                 val vcsPath = vcsDir.getPathToRoot(workingDir)
                 val expectedResult = patchExpectedResult(
                     File(projectsDir.parentFile, "npm-expected-output.yml"),
-                    custom = Pair("npm-project", "npm-${workingDir.name}"),
+                    custom = mapOf("npm-project" to "npm-${workingDir.name}"),
                     definitionFilePath = "$vcsPath/package.json",
                     url = normalizeVcsUrl(vcsUrl),
                     revision = vcsRevision,
@@ -66,7 +66,7 @@ class NpmTest : WordSpec() {
                 val vcsPath = vcsDir.getPathToRoot(workingDir)
                 val expectedResult = patchExpectedResult(
                     File(projectsDir.parentFile, "npm-expected-output.yml"),
-                    custom = Pair("npm-project", "npm-${workingDir.name}"),
+                    custom = mapOf("npm-project" to "npm-${workingDir.name}"),
                     definitionFilePath = "$vcsPath/package.json",
                     url = normalizeVcsUrl(vcsUrl),
                     revision = vcsRevision,
@@ -84,7 +84,7 @@ class NpmTest : WordSpec() {
                 val vcsPath = vcsDir.getPathToRoot(workingDir)
                 val expectedResult = patchExpectedResult(
                     File(projectsDir.parentFile, "npm-expected-output-no-lockfile.yml"),
-                    custom = Pair("npm-project", "npm-${workingDir.name}"),
+                    custom = mapOf("npm-project" to "npm-${workingDir.name}"),
                     definitionFilePath = "$vcsPath/package.json",
                     url = normalizeVcsUrl(vcsUrl),
                     revision = vcsRevision,
@@ -102,7 +102,7 @@ class NpmTest : WordSpec() {
                 val vcsPath = vcsDir.getPathToRoot(workingDir)
                 val expectedResult = patchExpectedResult(
                     File(projectsDir.parentFile, "npm-expected-output.yml"),
-                    custom = Pair("npm-project", "npm-${workingDir.name}"),
+                    custom = mapOf("npm-project" to "npm-${workingDir.name}"),
                     definitionFilePath = "$vcsPath/package.json",
                     url = normalizeVcsUrl(vcsUrl),
                     revision = vcsRevision,

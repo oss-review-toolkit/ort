@@ -57,7 +57,7 @@ class PubTest : WordSpec() {
                     val vcsPath = vcsDir.getPathToRoot(workingDir)
                     val expectedResult = patchExpectedResult(
                         expectedResultFile,
-                        custom = Pair("pub-project", "pub-${workingDir.name}"),
+                        custom = mapOf("pub-project" to "pub-${workingDir.name}"),
                         definitionFilePath = "$vcsPath/pubspec.yaml",
                         url = normalizeVcsUrl(vcsUrl),
                         revision = vcsRevision,
@@ -79,7 +79,7 @@ class PubTest : WordSpec() {
                 val vcsPath = vcsDir.getPathToRoot(workingDir)
                 val expectedResult = patchExpectedResult(
                     expectedResultFile,
-                    custom = Pair("pub-project", "pub-${workingDir.name}"),
+                    custom = mapOf("pub-project" to "pub-${workingDir.name}"),
                     definitionFilePath = "$vcsPath/pubspec.yaml",
                     url = normalizeVcsUrl(vcsUrl),
                     revision = vcsRevision,
@@ -98,7 +98,7 @@ class PubTest : WordSpec() {
                 val vcsPath = vcsDir.getPathToRoot(workingDir)
                 val expectedResult = patchExpectedResult(
                     expectedResultFile,
-                    custom = Pair("pub-project", "pub-${workingDir.name}"),
+                    custom = mapOf("pub-project" to "pub-${workingDir.name}"),
                     definitionFilePath = "$vcsPath/pubspec.yaml",
                     url = normalizeVcsUrl(vcsUrl),
                     revision = vcsRevision,
