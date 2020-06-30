@@ -83,7 +83,7 @@ class CycloneDxReporter : Reporter {
         val bom = Bom().apply { serialNumber = "urn:uuid:${UUID.randomUUID()}" }
 
         // Add information about projects as external references at the BOM level.
-        val rootProject = ortResult.getProjects().singleOrNull()
+        val rootProject = ortResult.getProjects(omitExcluded = true).singleOrNull()
         if (rootProject != null) {
             // If there is only one project, it is clear that a single BOM should be created for that single project.
             bom.addExternalReference(
