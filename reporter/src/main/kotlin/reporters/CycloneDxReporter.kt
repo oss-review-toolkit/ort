@@ -39,10 +39,11 @@ import org.ossreviewtoolkit.reporter.Reporter
 import org.ossreviewtoolkit.reporter.ReporterInput
 import org.ossreviewtoolkit.spdx.SpdxLicense
 
+private const val REPORT_BASE_FILENAME = "bom"
+private const val REPORT_EXTENSION = "xml"
+
 class CycloneDxReporter : Reporter {
     override val reporterName = "CycloneDx"
-
-    private val reportFilename = "bom.xml"
 
     private fun Bom.addExternalReference(type: ExternalReference.Type, url: String, comment: String? = null) {
         if (url.isBlank()) return
@@ -79,110 +80,93 @@ class CycloneDxReporter : Reporter {
         outputDir: File,
         options: Map<String, String>
     ): List<File> {
-        val ortResult = input.ortResult
-        val bom = Bom().apply { serialNumber = "urn:uuid:${UUID.randomUUID()}" }
+        val outputFiles = mutableListOf<File>()
+        val projects = input.ortResult.getProjects(omitExcluded = true)
 
-        // Add information about projects as external references at the BOM level.
-        val rootProject = ortResult.getProjects(omitExcluded = true).singleOrNull()
-        if (rootProject != null) {
-            // If there is only one project, it is clear that a single BOM should be created for that single project.
+        projects.forEach { project ->
+            // Add information about projects as external references at the BOM level.
+            val bom = Bom().apply { serialNumber = "urn:uuid:${UUID.randomUUID()}" }
+
             bom.addExternalReference(
                 ExternalReference.Type.VCS,
-                rootProject.vcsProcessed.url,
-                "URL to the project's ${rootProject.vcsProcessed.type} repository"
+                project.vcsProcessed.url,
+                "URL to the project's ${project.vcsProcessed.type} repository"
             )
 
-            bom.addExternalReference(
-                ExternalReference.Type.WEBSITE,
-                rootProject.homepageUrl
-            )
+            bom.addExternalReference(ExternalReference.Type.WEBSITE, project.homepageUrl)
 
-            val licenseNames = rootProject.declaredLicensesProcessed.allLicenses +
-                    ortResult.getDetectedLicensesForId(rootProject.id, input.packageConfigurationProvider)
+            val licenseNames = project.declaredLicensesProcessed.allLicenses +
+                    input.ortResult.getDetectedLicensesForId(project.id, input.packageConfigurationProvider)
 
-            bom.addExternalReference(
-                ExternalReference.Type.LICENSE,
-                licenseNames.joinToString(", ")
-            )
+            bom.addExternalReference(ExternalReference.Type.LICENSE, licenseNames.joinToString(", "))
 
-            bom.addExternalReference(
-                ExternalReference.Type.BUILD_SYSTEM,
-                rootProject.id.type
-            )
+            bom.addExternalReference(ExternalReference.Type.BUILD_SYSTEM, project.id.type)
+            bom.addExternalReference(ExternalReference.Type.OTHER, project.id.toPurl(), "Package-URL of the project")
 
-            bom.addExternalReference(
-                ExternalReference.Type.OTHER,
-                rootProject.id.toPurl(),
-                "Package-URL of the project"
-            )
-        } else {
-            // In case of multiple projects it is not always clear how many BOMs to create, and for which project(s):
-            //
-            // - If a multi-module project only produces a single application that gets distributed, then usually only a
-            //   single BOM for that application is generated.
-            // - If a multi-module project produces multiple applications (e.g. if there is one module per independent
-            //   micro-service), then usually for each project a BOM is generated as there are multiple things being
-            //   distributed.
-            //
-            // As this distinction is hard to make programmatically (without additional information about the
-            // distributable), just create a single BOM for all projects in that case for now. As there also is no
-            // single correct project to pick for adding external references in that case, simply only use the global
-            // repository VCS information here.
-            bom.addExternalReference(
-                ExternalReference.Type.VCS,
-                ortResult.repository.vcsProcessed.url,
-                "URL to the ${ortResult.repository.vcsProcessed.type} repository of the projects"
-            )
-        }
-
-        ortResult.getPackages().forEach { (pkg, _) ->
-            // TODO: We should actually use the concluded license expression here, but we first need a workflow to
-            //       ensure it is being set.
-            val declaredLicenseNames = pkg.declaredLicensesProcessed.allLicenses
-            val detectedLicenseNames = ortResult.getDetectedLicensesForId(pkg.id, input.packageConfigurationProvider)
-
-            val licenseObjects = mapLicenseNamesToObjects(declaredLicenseNames, "declared license", input) +
-                    mapLicenseNamesToObjects(detectedLicenseNames, "detected license", input)
-
-            val binaryHash = mapHash(pkg.binaryArtifact.hash)
-            val sourceHash = mapHash(pkg.sourceArtifact.hash)
-
-            val (hash, purlQualifier) = if (binaryHash == null && sourceHash != null) {
-                Pair(sourceHash, "?classifier=sources")
-            } else {
-                Pair(binaryHash, "")
+            val dependencies = project.collectDependencies()
+            val packages = input.ortResult.getPackages().mapNotNull { (pkg, _) ->
+                pkg.takeIf { it.id in dependencies }
             }
 
-            val component = Component().apply {
-                group = pkg.id.namespace
-                name = pkg.id.name
-                version = pkg.id.version
-                description = pkg.description
+            packages.forEach { pkg ->
+                // TODO: We should actually use the concluded license expression here, but we first need a workflow to
+                //       ensure it is being set.
+                val declaredLicenseNames = input.ortResult.getDeclaredLicensesForId(pkg.id)
+                val detectedLicenseNames = input.ortResult.getDetectedLicensesForId(
+                    pkg.id,
+                    input.packageConfigurationProvider
+                )
 
-                // TODO: Map package-manager-specific OPTIONAL scopes.
-                scope = if (ortResult.isPackageExcluded(pkg.id)) Component.Scope.EXCLUDED else Component.Scope.REQUIRED
+                val licenseObjects = mapLicenseNamesToObjects(declaredLicenseNames, "declared license", input) +
+                        mapLicenseNamesToObjects(detectedLicenseNames, "detected license", input)
 
-                hashes = listOfNotNull(hash)
+                val binaryHash = mapHash(pkg.binaryArtifact.hash)
+                val sourceHash = mapHash(pkg.sourceArtifact.hash)
 
-                // TODO: Support license expressions once we have fully converted to them.
-                licenseChoice = LicenseChoice().apply { licenses = licenseObjects }
+                val (hash, purlQualifier) = if (binaryHash == null && sourceHash != null) {
+                    Pair(sourceHash, "?classifier=sources")
+                } else {
+                    Pair(binaryHash, "")
+                }
 
-                purl = pkg.purl + purlQualifier
+                val component = Component().apply {
+                    group = pkg.id.namespace
+                    name = pkg.id.name
+                    version = pkg.id.version
+                    description = pkg.description
 
-                // See https://github.com/CycloneDX/specification/issues/17 for how this differs from FRAMEWORK.
-                type = Component.Type.LIBRARY
+                    // TODO: Map package-manager-specific OPTIONAL scopes.
+                    scope = if (input.ortResult.isPackageExcluded(pkg.id)) {
+                        Component.Scope.EXCLUDED
+                    } else {
+                        Component.Scope.REQUIRED
+                    }
+
+                    hashes = listOfNotNull(hash)
+
+                    // TODO: Support license expressions once we have fully converted to them.
+                    licenseChoice = LicenseChoice().apply { licenses = licenseObjects }
+
+                    purl = pkg.purl + purlQualifier
+
+                    // See https://github.com/CycloneDX/specification/issues/17 for how this differs from FRAMEWORK.
+                    type = Component.Type.LIBRARY
+                }
+
+                bom.addComponent(component)
             }
 
-            bom.addComponent(component)
+            val bomGenerator = BomGeneratorFactory.create(CycloneDxSchema.Version.VERSION_11, bom).apply { generate() }
+            val reportFilename = "$REPORT_BASE_FILENAME-${project.id.toPath("-")}.$REPORT_EXTENSION"
+            val outputFile = outputDir.resolve(reportFilename)
+
+            outputFile.bufferedWriter().use {
+                it.write(bomGenerator.toXmlString())
+            }
+
+            outputFiles += outputFile
         }
 
-        val bomGenerator = BomGeneratorFactory.create(CycloneDxSchema.Version.VERSION_11, bom).apply { generate() }
-        val outputFile = outputDir.resolve(reportFilename)
-
-        outputFile.bufferedWriter().use {
-            it.write(bomGenerator.toXmlString())
-        }
-
-        return listOf(outputFile)
+        return outputFiles
     }
 }
