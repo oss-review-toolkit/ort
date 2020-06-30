@@ -45,7 +45,7 @@ class YarnTest : WordSpec() {
             url = normalizeVcsUrl(vcsUrl),
             revision = vcsRevision,
             path = vcsPath,
-            custom = "<REPLACE_RAW_URL>" to vcsUrl
+            custom = mapOf("<REPLACE_RAW_URL>" to vcsUrl)
         )
     }
 
