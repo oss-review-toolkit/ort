@@ -20,6 +20,8 @@
 
 package org.ossreviewtoolkit.reporter.reporters
 
+import com.fasterxml.jackson.module.kotlin.readValue
+
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.inspectors.forAll
 import io.kotest.matchers.collections.beEmpty
@@ -52,14 +54,13 @@ class CycloneDxReporterTest : WordSpec({
 
         "match the result from the official Gradle plugin" {
             val ortResultFile = File("src/funTest/assets/gradle-all-dependencies-result.yml")
-            val ortResult = yamlMapper.readValue(
+            val ortResult = yamlMapper.readValue<OrtResult>(
                 patchExpectedResult(
                     ortResultFile,
                     url = "https://github.com/oss-review-toolkit/ort.git",
                     urlProcessed = "https://github.com/oss-review-toolkit/ort.git",
                     revision = "9fded2ad79d07ab5cda44f2549301669ea10442a"
-                ),
-                OrtResult::class.java
+                )
             )
 
             val outputDir = createTempDir(ORT_NAME, javaClass.simpleName).apply { deleteOnExit() }
