@@ -37,7 +37,6 @@ object SpdxDocumentModelMapper {
         val documentUuid = UUID.randomUUID()
 
         return SpdxDocument(
-            spdxId = "SPDXRef-$documentUuid",
             creationInfo = SpdxCreationInfo(
                 created = Instant.now(),
                 comment = params.creationInfoComment,

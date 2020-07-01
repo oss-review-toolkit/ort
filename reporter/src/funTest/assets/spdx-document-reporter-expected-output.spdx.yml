@@ -1,5 +1,5 @@
 ---
-SPDXID: "SPDXRef-<REPLACE_UUID>"
+SPDXID: "SPDXRef-DOCUMENT"
 spdxVersion: "SPDX-2.2.1"
 creationInfo:
   comment: "some creation info comment"
@@ -10,4 +10,4 @@ creationInfo:
 name: "some document name"
 dataLicense: "CC0-1.0"
 comment: "some document comment"
-documentNamespace: "spdx://<REPLACE_UUID>"
+documentNamespace: "<REPLACE_DOCUMENT_NAMESPACE>"

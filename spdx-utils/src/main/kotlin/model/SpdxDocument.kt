@@ -22,6 +22,7 @@ package org.ossreviewtoolkit.spdx.model
 import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.annotation.JsonProperty
 
+private const val SPDX_ID = "SPDXRef-DOCUMENT"
 private const val SPDX_VERSION = "SPDX-2.2.1"
 private const val DATA_LICENSE = "CC0-1.0"
 
@@ -37,7 +38,7 @@ data class SpdxDocument(
      * TODO: Introduce a dedicated type.
      */
     @JsonProperty("SPDXID")
-    val spdxId: String,
+    val spdxId: String = SPDX_ID,
 
     /**
      * The SPDX version of this document, must equal [SPDX_VERSION].
