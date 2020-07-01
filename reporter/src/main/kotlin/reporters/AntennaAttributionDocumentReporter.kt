@@ -142,7 +142,7 @@ class AntennaAttributionDocumentReporter : Reporter {
             projects.forEach { project ->
                 val dependencies = project.collectDependencies()
 
-                val packages = input.ortResult.getPackages().mapNotNull { (pkg, _) ->
+                val packages = input.ortResult.getPackages(omitExcluded = true).mapNotNull { (pkg, _) ->
                     pkg.takeIf { it.id in dependencies }
                 }
 
