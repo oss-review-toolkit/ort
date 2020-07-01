@@ -19,7 +19,7 @@
 
 package org.ossreviewtoolkit.reporter.reporters
 
-import io.kotest.core.spec.style.WordSpec
+import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.shouldBe
 
 import org.ossreviewtoolkit.model.OrtResult
@@ -27,17 +27,20 @@ import org.ossreviewtoolkit.reporter.ReporterInput
 import org.ossreviewtoolkit.utils.ORT_NAME
 import org.ossreviewtoolkit.utils.test.readOrtResult
 
-class AntennaAttributionDocumentReporterTest : WordSpec({
-    "AntennaAttributionDocumentReporter" should {
-        "successfully generate the PDF output" {
-            val ortResult = readOrtResult(
-                "../scanner/src/funTest/assets/file-counter-expected-output-for-analyzer-result.yml"
-            )
+class AntennaAttributionDocumentReporterTest : StringSpec({
+    "Replacement of unavailable glyphs works" {
+        val text = "This is a text with \u221e of \u2661 in it."
+        replaceGlyphs(text) shouldBe "This is a text with (infinity) of (heart) in it."
+    }
 
-            val actualReport = generateReport(ortResult)
+    "PDF output is created successfully from an existing result" {
+        val ortResult = readOrtResult(
+            "../scanner/src/funTest/assets/file-counter-expected-output-for-analyzer-result.yml"
+        )
 
-            actualReport.size shouldBe 53797
-        }
+        val actualReport = generateReport(ortResult)
+
+        actualReport.size shouldBe 53797
     }
 })
 
