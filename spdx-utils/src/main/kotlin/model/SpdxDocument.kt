@@ -23,7 +23,7 @@ import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.annotation.JsonProperty
 
 private const val SPDX_ID = "SPDXRef-DOCUMENT"
-private const val SPDX_VERSION = "SPDX-2.2"
+private const val SPDX_VERSION_MAJOR_MINOR = "SPDX-2.2"
 private const val DATA_LICENSE = "CC0-1.0"
 
 /**
@@ -41,9 +41,9 @@ data class SpdxDocument(
     val spdxId: String = SPDX_ID,
 
     /**
-     * The SPDX version of this document, must equal [SPDX_VERSION].
+     * The SPDX version of this document, must equal [SPDX_VERSION_MAJOR_MINOR].
      */
-    val spdxVersion: String = SPDX_VERSION,
+    val spdxVersion: String = SPDX_VERSION_MAJOR_MINOR,
 
     /**
      * Information about the creation of this document.
