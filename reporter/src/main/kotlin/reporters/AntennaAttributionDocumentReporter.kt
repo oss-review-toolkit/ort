@@ -58,6 +58,31 @@ private val templateFileNames = listOf(
 private const val REPORT_BASE_FILENAME = "attribution-document"
 private const val REPORT_EXTENSION = "pdf"
 
+private val GLYPH_REPLACEMENTS = mapOf(
+    "\u0009" to "    ",
+    "\u0092" to "",
+    "\u009d" to "",
+    "\u00a0" to " ",
+    "\u00ad" to "-",
+    "\u0159" to "r",
+    "\u037e" to ";",
+    "\u200b" to "",
+    "\u2010" to "-",
+    "\u2011" to "-",
+    "\u2028" to "\n",
+    "\u2212" to "-",
+    "\u221e" to "(infinity)",
+    "\u25aa" to "[]",
+    "\u2661" to "(heart)",
+    "\udbff\udc00" to "", // See http://www.fileformat.info/info/unicode/char/10fc00/index.htm.
+    "\uf0b7" to "",
+    "\ufeff" to ""
+)
+
+private val REPLACEMENT_REGEX = GLYPH_REPLACEMENTS.keys.joinToString("|", "(", ")").toRegex()
+
+fun replaceGlyphs(text: String) = REPLACEMENT_REGEX.replace(text) { GLYPH_REPLACEMENTS.getValue(it.value) }
+
 class AntennaAttributionDocumentReporter : Reporter {
     override val reporterName = "AntennaAttributionDocument"
 
@@ -212,30 +237,10 @@ class AntennaAttributionDocumentReporter : Reporter {
 
         // Replace characters that are not available in the Times-Roman font with WinAnsi encoding until we have a
         // proper fix for https://github.com/oss-review-toolkit/ort/issues/2755.
-        val licenseText = licenseTextProvider.getLicenseText(licenseId)
-            ?.replace("\u0009", "    ")
-            ?.replace("\u0092", "")
-            ?.replace("\u009d", "")
-            ?.replace("\u00a0", " ")
-            ?.replace("\u00ad", "-")
-            ?.replace("\u0159", "r")
-            ?.replace("\u037e", ";")
-            ?.replace("\u200b", "")
-            ?.replace("\u2010", "-")
-            ?.replace("\u2011", "-")
-            ?.replace("\u2028", "\n")
-            ?.replace("\u2212", "-")
-            ?.replace("\u221e", "(infinity)")
-            ?.replace("\u25aa", "[]")
-            ?.replace("\u2661", "(heart)")
-            ?.replace("\udbff", "")
-            ?.replace("\udc00", "")
-            ?.replace("\uf0b7", "")
-            ?.replace("\ufeff", "")
-            ?: "No license text found."
+        val licenseText = licenseTextProvider.getLicenseText(licenseId) ?: "No license text found."
 
         val shortName = SpdxLicense.forId(licenseId)?.fullName ?: licenseId
 
-        return LicenseInfo(key, licenseText, licenseId, shortName)
+        return LicenseInfo(key, replaceGlyphs(licenseText), licenseId, shortName)
     }
 }
