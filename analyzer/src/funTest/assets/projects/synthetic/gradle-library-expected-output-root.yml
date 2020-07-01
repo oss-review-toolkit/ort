@@ -15,5 +15,4 @@ project:
     revision: "<REPLACE_REVISION>"
     path: "analyzer/src/funTest/assets/projects/synthetic/gradle-library"
   homepage_url: ""
-  scopes: []
 packages: []

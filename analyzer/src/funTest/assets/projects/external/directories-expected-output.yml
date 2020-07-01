@@ -68,7 +68,6 @@ analyzer:
         revision: "d302b1e93963c81ed511e072a52e95251b5d078b"
         path: ""
       homepage_url: ""
-      scopes: []
     packages:
     - package:
         id: "Maven:com.novocode:junit-interface:0.11"

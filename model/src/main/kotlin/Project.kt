@@ -20,6 +20,7 @@
 package org.ossreviewtoolkit.model
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
+import com.fasterxml.jackson.annotation.JsonInclude
 
 import org.ossreviewtoolkit.spdx.SpdxExpression
 import org.ossreviewtoolkit.spdx.SpdxOperator
@@ -77,6 +78,7 @@ data class Project(
     /**
      * The dependency scopes defined by this project.
      */
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
     val scopes: SortedSet<Scope> = sortedSetOf()
 ) : Comparable<Project> {
     companion object {

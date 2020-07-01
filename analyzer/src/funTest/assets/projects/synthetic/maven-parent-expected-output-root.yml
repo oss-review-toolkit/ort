@@ -19,5 +19,4 @@ project:
     revision: "<REPLACE_REVISION>"
     path: "analyzer/src/funTest/assets/projects/synthetic/maven-parent"
   homepage_url: "http://maven.apache.org"
-  scopes: []
 packages: []

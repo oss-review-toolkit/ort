@@ -229,7 +229,6 @@ analyzer:
         revision: "31687c099ea6d645e819ef9d6ac9fc4c757a96bc"
         path: ""
       homepage_url: ""
-      scopes: []
     packages:
     - package:
         id: "Maven:ch.qos.logback:logback-classic:1.2.3"

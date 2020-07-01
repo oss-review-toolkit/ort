@@ -15,7 +15,6 @@ project:
     revision: "<REPLACE_REVISION>"
     path: "<REPLACE_PATH>"
   homepage_url: ""
-  scopes: []
 packages: []
 issues:
 - timestamp: "2019-06-12T09:56:14.808Z"

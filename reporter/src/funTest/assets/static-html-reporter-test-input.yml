@@ -92,7 +92,6 @@ analyzer:
         revision: ""
         path: "project"
       homepage_url: ""
-      scopes: []
     packages:
     - package:
         id: "Ant:junit:junit:4.12"

@@ -15,7 +15,6 @@ project:
     revision: "<REPLACE_REVISION>"
     path: "analyzer/src/funTest/assets/projects/synthetic/gradle-unsupported-version"
   homepage_url: ""
-  scopes: []
 packages: []
 issues:
 - "This project uses the unsupported Gradle version 3.2.1. At least Gradle 3.3 is\
