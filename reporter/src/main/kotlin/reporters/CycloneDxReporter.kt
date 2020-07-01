@@ -39,6 +39,18 @@ import org.ossreviewtoolkit.reporter.Reporter
 import org.ossreviewtoolkit.reporter.ReporterInput
 import org.ossreviewtoolkit.spdx.SpdxLicense
 
+private val XML_ESCAPES = mapOf(
+    "\"" to "&quot;",
+    "'" to "&apos;",
+    "<" to "&lt;",
+    ">" to "&gt;",
+    "&" to "&amp;"
+)
+
+private val ESCAPES_REGEX = XML_ESCAPES.keys.joinToString("|", "(", ")").toRegex()
+
+fun escapeXml(text: String) = ESCAPES_REGEX.replace(text) { XML_ESCAPES.getValue(it.value) }
+
 class CycloneDxReporter : Reporter {
     override val reporterName = "CycloneDx"
 
@@ -157,7 +169,7 @@ class CycloneDxReporter : Reporter {
                 group = pkg.id.namespace
                 name = pkg.id.name
                 version = pkg.id.version
-                description = pkg.description
+                description = escapeXml(pkg.description)
 
                 // TODO: Map package-manager-specific OPTIONAL scopes.
                 scope = if (ortResult.isPackageExcluded(pkg.id)) Component.Scope.EXCLUDED else Component.Scope.REQUIRED
