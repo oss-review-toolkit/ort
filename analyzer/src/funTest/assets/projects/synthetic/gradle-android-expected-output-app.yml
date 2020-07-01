@@ -17,7 +17,6 @@ project:
   homepage_url: ""
   scopes:
   - name: "amazonDemoDebugAndroidTestAnnotationProcessorClasspath"
-    dependencies: []
   - name: "amazonDemoDebugAndroidTestCompileClasspath"
     dependencies:
     - id: "Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0"
@@ -38,7 +37,6 @@ project:
       dependencies:
       - id: "Maven:com.squareup.okio:okio:1.14.0"
   - name: "amazonDemoDebugAnnotationProcessorClasspath"
-    dependencies: []
   - name: "amazonDemoDebugCompileClasspath"
     dependencies:
     - id: "Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0"
@@ -59,7 +57,6 @@ project:
       dependencies:
       - id: "Maven:com.squareup.okio:okio:1.14.0"
   - name: "amazonDemoDebugUnitTestAnnotationProcessorClasspath"
-    dependencies: []
   - name: "amazonDemoDebugUnitTestCompileClasspath"
     dependencies:
     - id: "Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0"
@@ -86,9 +83,7 @@ project:
       dependencies:
       - id: "Maven:org.hamcrest:hamcrest-core:1.3"
   - name: "amazonDemoDebugWearBundling"
-    dependencies: []
   - name: "amazonDemoReleaseAnnotationProcessorClasspath"
-    dependencies: []
   - name: "amazonDemoReleaseCompileClasspath"
     dependencies:
     - id: "Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0"
@@ -109,7 +104,6 @@ project:
       dependencies:
       - id: "Maven:com.squareup.okio:okio:1.14.0"
   - name: "amazonDemoReleaseUnitTestAnnotationProcessorClasspath"
-    dependencies: []
   - name: "amazonDemoReleaseUnitTestCompileClasspath"
     dependencies:
     - id: "Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0"
@@ -136,9 +130,7 @@ project:
       dependencies:
       - id: "Maven:org.hamcrest:hamcrest-core:1.3"
   - name: "amazonDemoReleaseWearBundling"
-    dependencies: []
   - name: "amazonFullDebugAndroidTestAnnotationProcessorClasspath"
-    dependencies: []
   - name: "amazonFullDebugAndroidTestCompileClasspath"
     dependencies:
     - id: "Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0"
@@ -159,7 +151,6 @@ project:
       dependencies:
       - id: "Maven:com.squareup.okio:okio:1.14.0"
   - name: "amazonFullDebugAnnotationProcessorClasspath"
-    dependencies: []
   - name: "amazonFullDebugCompileClasspath"
     dependencies:
     - id: "Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0"
@@ -180,7 +171,6 @@ project:
       dependencies:
       - id: "Maven:com.squareup.okio:okio:1.14.0"
   - name: "amazonFullDebugUnitTestAnnotationProcessorClasspath"
-    dependencies: []
   - name: "amazonFullDebugUnitTestCompileClasspath"
     dependencies:
     - id: "Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0"
@@ -207,9 +197,7 @@ project:
       dependencies:
       - id: "Maven:org.hamcrest:hamcrest-core:1.3"
   - name: "amazonFullDebugWearBundling"
-    dependencies: []
   - name: "amazonFullReleaseAnnotationProcessorClasspath"
-    dependencies: []
   - name: "amazonFullReleaseCompileClasspath"
     dependencies:
     - id: "Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0"
@@ -230,7 +218,6 @@ project:
       dependencies:
       - id: "Maven:com.squareup.okio:okio:1.14.0"
   - name: "amazonFullReleaseUnitTestAnnotationProcessorClasspath"
-    dependencies: []
   - name: "amazonFullReleaseUnitTestCompileClasspath"
     dependencies:
     - id: "Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0"
@@ -257,17 +244,11 @@ project:
       dependencies:
       - id: "Maven:org.hamcrest:hamcrest-core:1.3"
   - name: "amazonFullReleaseWearBundling"
-    dependencies: []
   - name: "androidTestUtil"
-    dependencies: []
   - name: "archives"
-    dependencies: []
   - name: "compile"
-    dependencies: []
   - name: "default"
-    dependencies: []
   - name: "googleDemoDebugAndroidTestAnnotationProcessorClasspath"
-    dependencies: []
   - name: "googleDemoDebugAndroidTestCompileClasspath"
     dependencies:
     - id: "Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0"
@@ -282,7 +263,6 @@ project:
         dependencies:
         - id: "Maven:org.apache.commons:commons-lang3:3.7"
   - name: "googleDemoDebugAnnotationProcessorClasspath"
-    dependencies: []
   - name: "googleDemoDebugCompileClasspath"
     dependencies:
     - id: "Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0"
@@ -297,7 +277,6 @@ project:
         dependencies:
         - id: "Maven:org.apache.commons:commons-lang3:3.7"
   - name: "googleDemoDebugUnitTestAnnotationProcessorClasspath"
-    dependencies: []
   - name: "googleDemoDebugUnitTestCompileClasspath"
     dependencies:
     - id: "Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0"
@@ -318,9 +297,7 @@ project:
       dependencies:
       - id: "Maven:org.hamcrest:hamcrest-core:1.3"
   - name: "googleDemoDebugWearBundling"
-    dependencies: []
   - name: "googleDemoReleaseAnnotationProcessorClasspath"
-    dependencies: []
   - name: "googleDemoReleaseCompileClasspath"
     dependencies:
     - id: "Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0"
@@ -335,7 +312,6 @@ project:
         dependencies:
         - id: "Maven:org.apache.commons:commons-lang3:3.7"
   - name: "googleDemoReleaseUnitTestAnnotationProcessorClasspath"
-    dependencies: []
   - name: "googleDemoReleaseUnitTestCompileClasspath"
     dependencies:
     - id: "Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0"
@@ -356,9 +332,7 @@ project:
       dependencies:
       - id: "Maven:org.hamcrest:hamcrest-core:1.3"
   - name: "googleDemoReleaseWearBundling"
-    dependencies: []
   - name: "googleFullDebugAndroidTestAnnotationProcessorClasspath"
-    dependencies: []
   - name: "googleFullDebugAndroidTestCompileClasspath"
     dependencies:
     - id: "Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0"
@@ -373,7 +347,6 @@ project:
         dependencies:
         - id: "Maven:org.apache.commons:commons-lang3:3.7"
   - name: "googleFullDebugAnnotationProcessorClasspath"
-    dependencies: []
   - name: "googleFullDebugCompileClasspath"
     dependencies:
     - id: "Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0"
@@ -388,7 +361,6 @@ project:
         dependencies:
         - id: "Maven:org.apache.commons:commons-lang3:3.7"
   - name: "googleFullDebugUnitTestAnnotationProcessorClasspath"
-    dependencies: []
   - name: "googleFullDebugUnitTestCompileClasspath"
     dependencies:
     - id: "Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0"
@@ -409,9 +381,7 @@ project:
       dependencies:
       - id: "Maven:org.hamcrest:hamcrest-core:1.3"
   - name: "googleFullDebugWearBundling"
-    dependencies: []
   - name: "googleFullReleaseAnnotationProcessorClasspath"
-    dependencies: []
   - name: "googleFullReleaseCompileClasspath"
     dependencies:
     - id: "Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0"
@@ -426,7 +396,6 @@ project:
         dependencies:
         - id: "Maven:org.apache.commons:commons-lang3:3.7"
   - name: "googleFullReleaseUnitTestAnnotationProcessorClasspath"
-    dependencies: []
   - name: "googleFullReleaseUnitTestCompileClasspath"
     dependencies:
     - id: "Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0"
@@ -447,13 +416,9 @@ project:
       dependencies:
       - id: "Maven:org.hamcrest:hamcrest-core:1.3"
   - name: "googleFullReleaseWearBundling"
-    dependencies: []
   - name: "lintChecks"
-    dependencies: []
   - name: "lintClassPath"
-    dependencies: []
   - name: "testCompile"
-    dependencies: []
 packages:
 - package:
     id: "Maven:com.squareup.okhttp3:okhttp:3.10.0"

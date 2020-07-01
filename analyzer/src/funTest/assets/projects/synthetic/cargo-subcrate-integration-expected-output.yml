@@ -17,13 +17,11 @@ project:
   homepage_url: ""
   scopes:
   - name: "build-dependencies"
-    dependencies: []
   - name: "dependencies"
     dependencies:
     - id: "Cargo::spin:0.4.10"
       linkage: "STATIC"
   - name: "dev-dependencies"
-    dependencies: []
 packages:
 - package:
     id: "Cargo::spin:0.4.10"

@@ -2303,7 +2303,6 @@ project:
         dependencies:
         - id: "NPM::user-home:1.1.1"
   - name: "devDependencies"
-    dependencies: []
 packages:
 - package:
     id: "NPM::abbrev:1.1.1"

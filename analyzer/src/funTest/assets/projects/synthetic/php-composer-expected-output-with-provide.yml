@@ -24,7 +24,6 @@ project:
     - id: "PhpComposer:ort:child:1.0.0"
     - id: "PhpComposer:ort:virtual2:1.0.0"
   - name: "require-dev"
-    dependencies: []
 packages:
 - package:
     id: "PhpComposer:ort:child:1.0.0"

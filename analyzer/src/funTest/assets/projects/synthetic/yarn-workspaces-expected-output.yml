@@ -27,7 +27,6 @@ project:
       dependencies:
       - id: "NPM::node-fetch:2.6.0"
   - name: "devDependencies"
-    dependencies: []
 packages:
 - package:
     id: "NPM::node-fetch:2.6.0"

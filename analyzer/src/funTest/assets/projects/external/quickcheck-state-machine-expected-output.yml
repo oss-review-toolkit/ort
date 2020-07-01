@@ -21,7 +21,6 @@ project:
   homepage_url: "https://github.com/advancedtelematic/quickcheck-state-machine#readme"
   scopes:
   - name: "bench"
-    dependencies: []
   - name: "external"
     dependencies:
     - id: "Hackage:Control, Exceptions, Monad:exceptions:0.10.0"
@@ -1041,7 +1040,6 @@ project:
           dependencies:
           - id: "Hackage:Prelude:base:4.12.0.0"
   - name: "test"
-    dependencies: []
 packages:
 - package:
     id: "Hackage:Algebra, Data, Data Structures, Math:semigroups:0.18.5"

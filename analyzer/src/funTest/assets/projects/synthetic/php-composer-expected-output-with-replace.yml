@@ -23,7 +23,6 @@ project:
     dependencies:
     - id: "PhpComposer:ort:child2:1.0.0"
   - name: "require-dev"
-    dependencies: []
 packages:
 - package:
     id: "PhpComposer:ort:child2:1.0.0"

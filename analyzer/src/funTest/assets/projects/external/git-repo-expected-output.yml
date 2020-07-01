@@ -75,9 +75,7 @@ analyzer:
       homepage_url: ""
       scopes:
       - name: "dependencies"
-        dependencies: []
       - name: "devDependencies"
-        dependencies: []
     - id: "Maven:org.apache.commons:commons-text:1.6"
       definition_file_path: "pom.xml"
       declared_licenses:
@@ -231,7 +229,6 @@ analyzer:
       homepage_url: "https://github.com/juliangruber/isarray"
       scopes:
       - name: "dependencies"
-        dependencies: []
       - name: "devDependencies"
         dependencies:
         - id: "NPM::tape:2.13.4"

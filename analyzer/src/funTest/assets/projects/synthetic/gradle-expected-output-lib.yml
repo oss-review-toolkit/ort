@@ -17,9 +17,7 @@ project:
   homepage_url: ""
   scopes:
   - name: "annotationProcessor"
-    dependencies: []
   - name: "archives"
-    dependencies: []
   - name: "compile"
     dependencies:
     - id: "Maven:org.apache.commons:commons-text:1.1"
@@ -33,7 +31,6 @@ project:
       - id: "Maven:org.apache.commons:commons-lang3:3.5"
     - id: "Maven:org.apache.struts:struts2-assembly:2.5.14.1"
   - name: "compileOnly"
-    dependencies: []
   - name: "default"
     dependencies:
     - id: "Maven:org.apache.commons:commons-text:1.1"
@@ -53,7 +50,6 @@ project:
       - id: "Maven:org.apache.commons:commons-lang3:3.5"
     - id: "Maven:org.apache.struts:struts2-assembly:2.5.14.1"
   - name: "testAnnotationProcessor"
-    dependencies: []
   - name: "testCompile"
     dependencies:
     - id: "Maven:junit:junit:4.12"
@@ -73,7 +69,6 @@ project:
       - id: "Maven:org.apache.commons:commons-lang3:3.5"
     - id: "Maven:org.apache.struts:struts2-assembly:2.5.14.1"
   - name: "testCompileOnly"
-    dependencies: []
   - name: "testRuntime"
     dependencies:
     - id: "Maven:junit:junit:4.12"

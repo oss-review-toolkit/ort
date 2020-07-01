@@ -82,9 +82,7 @@ analyzer:
       homepage_url: ""
       scopes:
       - name: "annotationProcessor"
-        dependencies: []
       - name: "archives"
-        dependencies: []
       - name: "compile"
         dependencies:
         - id: "Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0"
@@ -104,7 +102,6 @@ analyzer:
             - id: "Maven:org.apache.commons:commons-lang3:3.5"
           - id: "Maven:org.apache.struts:struts2-assembly:2.5.14.1"
       - name: "compileOnly"
-        dependencies: []
       - name: "default"
         dependencies:
         - id: "Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0"
@@ -133,7 +130,6 @@ analyzer:
             - id: "Maven:org.apache.commons:commons-lang3:3.5"
           - id: "Maven:org.apache.struts:struts2-assembly:2.5.14.1"
       - name: "testAnnotationProcessor"
-        dependencies: []
       - name: "testCompile"
         dependencies:
         - id: "Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0"
@@ -153,7 +149,6 @@ analyzer:
             - id: "Maven:org.apache.commons:commons-lang3:3.5"
           - id: "Maven:org.apache.struts:struts2-assembly:2.5.14.1"
       - name: "testCompileOnly"
-        dependencies: []
       - name: "testRuntime"
         dependencies:
         - id: "Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0"
@@ -189,9 +184,7 @@ analyzer:
       homepage_url: ""
       scopes:
       - name: "annotationProcessor"
-        dependencies: []
       - name: "archives"
-        dependencies: []
       - name: "compile"
         dependencies:
         - id: "Unknown:org.apache.commons:commons-text:1.1"
@@ -213,7 +206,6 @@ analyzer:
               \ are defined."
             severity: "ERROR"
       - name: "compileOnly"
-        dependencies: []
       - name: "default"
         dependencies:
         - id: "Unknown:org.apache.commons:commons-text:1.1"
@@ -245,7 +237,6 @@ analyzer:
               \ are defined."
             severity: "ERROR"
       - name: "testAnnotationProcessor"
-        dependencies: []
       - name: "testCompile"
         dependencies:
         - id: "Unknown:junit:junit:4.12"
@@ -281,7 +272,6 @@ analyzer:
               \ are defined."
             severity: "ERROR"
       - name: "testCompileOnly"
-        dependencies: []
       - name: "testRuntime"
         dependencies:
         - id: "Unknown:junit:junit:4.12"
@@ -333,9 +323,7 @@ analyzer:
       homepage_url: ""
       scopes:
       - name: "annotationProcessor"
-        dependencies: []
       - name: "archives"
-        dependencies: []
       - name: "compile"
         dependencies:
         - id: "Maven:org.apache.commons:commons-text:1.1"
@@ -349,7 +337,6 @@ analyzer:
           - id: "Maven:org.apache.commons:commons-lang3:3.5"
         - id: "Maven:org.apache.struts:struts2-assembly:2.5.14.1"
       - name: "compileOnly"
-        dependencies: []
       - name: "default"
         dependencies:
         - id: "Maven:org.apache.commons:commons-text:1.1"
@@ -369,7 +356,6 @@ analyzer:
           - id: "Maven:org.apache.commons:commons-lang3:3.5"
         - id: "Maven:org.apache.struts:struts2-assembly:2.5.14.1"
       - name: "testAnnotationProcessor"
-        dependencies: []
       - name: "testCompile"
         dependencies:
         - id: "Maven:junit:junit:4.12"
@@ -389,7 +375,6 @@ analyzer:
           - id: "Maven:org.apache.commons:commons-lang3:3.5"
         - id: "Maven:org.apache.struts:struts2-assembly:2.5.14.1"
       - name: "testCompileOnly"
-        dependencies: []
       - name: "testRuntime"
         dependencies:
         - id: "Maven:junit:junit:4.12"
