@@ -86,6 +86,6 @@ private fun patchExpectedResult(expectedResultFile: String, actualSpdxDocument: 
             "<REPLACE_LICENSE_LIST_VERSION>" to SpdxLicense.LICENSE_LIST_VERSION.substringBefore("-"),
             "<REPLACE_ORT_VERSION>" to Environment().ortVersion,
             "<REPLACE_CREATION_DATE_AND_TIME>" to actualSpdxDocument.creationInfo.created.toString(),
-            "<REPLACE_UUID>" to actualSpdxDocument.spdxId.substringAfter("SPDXRef-")
+            "<REPLACE_DOCUMENT_NAMESPACE>" to actualSpdxDocument.documentNamespace
         )
     )
