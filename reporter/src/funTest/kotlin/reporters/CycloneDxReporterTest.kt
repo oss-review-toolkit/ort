@@ -84,6 +84,8 @@ class CycloneDxReporterTest : WordSpec({
                     // The official Gradle plugin does not seem to be able to get all descriptions that the ORT analyzer
                     // gets, so clear out ORT's one if the plugin has none, but still compare them if both are present.
                     componentFromReporter.description = null
+                } else {
+                    componentFromPlugin.description = escapeXml(componentFromPlugin.description)
                 }
             }
 
