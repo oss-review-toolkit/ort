@@ -77,7 +77,7 @@ data class Project(
     /**
      * The dependency scopes defined by this project.
      */
-    val scopes: SortedSet<Scope>
+    val scopes: SortedSet<Scope> = sortedSetOf()
 ) : Comparable<Project> {
     companion object {
         /**
@@ -91,8 +91,7 @@ data class Project(
             declaredLicensesProcessed = ProcessedDeclaredLicense.EMPTY,
             vcs = VcsInfo.EMPTY,
             vcsProcessed = VcsInfo.EMPTY,
-            homepageUrl = "",
-            scopes = sortedSetOf()
+            homepageUrl = ""
         )
     }
 

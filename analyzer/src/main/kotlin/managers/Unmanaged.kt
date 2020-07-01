@@ -108,8 +108,7 @@ class Unmanaged(
             declaredLicenses = sortedSetOf(),
             vcs = VcsInfo.EMPTY,
             vcsProcessed = vcsInfo,
-            homepageUrl = "",
-            scopes = sortedSetOf()
+            homepageUrl = ""
         )
 
         return listOf(
