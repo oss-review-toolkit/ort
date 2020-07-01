@@ -63,13 +63,13 @@ class LicenseInfoResolverTest : WordSpec() {
 
         "resolveLicenseInfo()" should {
             "resolve declared licenses" {
-                val data = listOf(
+                val licenseInfos = listOf(
                     createLicenseInfo(
                         id = pkgId,
                         declaredLicenses = setOf("Apache-2.0 WITH LLVM-exception", "MIT")
                     )
                 )
-                val resolver = createResolver(data)
+                val resolver = createResolver(licenseInfos)
 
                 val result = resolver.resolveLicenseInfo(pkgId)
 
@@ -81,7 +81,7 @@ class LicenseInfoResolverTest : WordSpec() {
             }
 
             "resolve detected licenses" {
-                val data = listOf(
+                val licenseInfos = listOf(
                     createLicenseInfo(
                         id = pkgId,
                         detectedLicenses = listOf(
@@ -106,7 +106,7 @@ class LicenseInfoResolverTest : WordSpec() {
                     )
                 )
 
-                val resolver = createResolver(data)
+                val resolver = createResolver(licenseInfos)
 
                 val result = resolver.resolveLicenseInfo(pkgId)
 
@@ -166,13 +166,13 @@ class LicenseInfoResolverTest : WordSpec() {
             }
 
             "resolve concluded licenses" {
-                val data = listOf(
+                val licenseInfos = listOf(
                     createLicenseInfo(
                         id = pkgId,
                         concludedLicense = SpdxExpression.parse("Apache-2.0 WITH LLVM-exception AND MIT")
                     )
                 )
-                val resolver = createResolver(data)
+                val resolver = createResolver(licenseInfos)
 
                 val result = resolver.resolveLicenseInfo(pkgId)
 
@@ -184,7 +184,7 @@ class LicenseInfoResolverTest : WordSpec() {
             }
 
             "process copyright statements" {
-                val data = listOf(
+                val licenseInfos = listOf(
                     createLicenseInfo(
                         id = pkgId,
                         detectedLicenses = listOf(
@@ -205,7 +205,7 @@ class LicenseInfoResolverTest : WordSpec() {
                     )
                 )
 
-                val resolver = createResolver(data)
+                val resolver = createResolver(licenseInfos)
 
                 val result = resolver.resolveLicenseInfo(pkgId)
 
@@ -222,7 +222,7 @@ class LicenseInfoResolverTest : WordSpec() {
             }
 
             "mark copyright garbage as garbage" {
-                val data = listOf(
+                val licenseInfos = listOf(
                     createLicenseInfo(
                         id = pkgId,
                         detectedLicenses = listOf(
@@ -243,8 +243,10 @@ class LicenseInfoResolverTest : WordSpec() {
                     )
                 )
 
-                val resolver =
-                    createResolver(data, copyrightGarbage = setOf("(c) 2009-2010 Holder 1", "(c) 2009 Holder 1"))
+                val resolver = createResolver(
+                    licenseInfos,
+                    copyrightGarbage = setOf("(c) 2009-2010 Holder 1", "(c) 2009 Holder 1")
+                )
 
                 val result = resolver.resolveLicenseInfo(pkgId)
 
@@ -268,7 +270,7 @@ class LicenseInfoResolverTest : WordSpec() {
                     sourceArtifact = sourceArtifact
                 )
 
-                val data = listOf(
+                val licenseInfos = listOf(
                     createLicenseInfo(
                         id = pkgId,
                         detectedLicenses = listOf(
@@ -324,7 +326,7 @@ class LicenseInfoResolverTest : WordSpec() {
                     )
                 )
 
-                val resolver = createResolver(data, packageConfigs = packageConfigs)
+                val resolver = createResolver(licenseInfos, packageConfigs = packageConfigs)
 
                 val result = resolver.resolveLicenseInfo(pkgId)
 
@@ -356,7 +358,7 @@ class LicenseInfoResolverTest : WordSpec() {
             }
 
             "apply license finding curations" {
-                val data = listOf(
+                val licenseInfos = listOf(
                     createLicenseInfo(
                         id = pkgId,
                         detectedLicenses = listOf(
@@ -390,7 +392,7 @@ class LicenseInfoResolverTest : WordSpec() {
                     )
                 )
 
-                val resolver = createResolver(data, packageConfigs = packageConfigs)
+                val resolver = createResolver(licenseInfos, packageConfigs = packageConfigs)
 
                 val result = resolver.resolveLicenseInfo(pkgId)
 
