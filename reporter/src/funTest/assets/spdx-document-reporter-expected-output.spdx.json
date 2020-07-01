@@ -1,6 +1,6 @@
 {
   "SPDXID" : "SPDXRef-DOCUMENT",
-  "spdxVersion" : "SPDX-2.2.1",
+  "spdxVersion" : "SPDX-2.2",
   "creationInfo" : {
     "comment" : "some creation info comment",
     "created" : "<REPLACE_CREATION_DATE_AND_TIME>",

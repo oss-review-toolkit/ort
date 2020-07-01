@@ -23,7 +23,7 @@ import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.annotation.JsonProperty
 
 private const val SPDX_ID = "SPDXRef-DOCUMENT"
-private const val SPDX_VERSION = "SPDX-2.2.1"
+private const val SPDX_VERSION = "SPDX-2.2"
 private const val DATA_LICENSE = "CC0-1.0"
 
 /**
