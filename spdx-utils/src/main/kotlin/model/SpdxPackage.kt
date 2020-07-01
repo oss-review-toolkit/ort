@@ -22,6 +22,7 @@ package org.ossreviewtoolkit.spdx.model
 import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.annotation.JsonProperty
 
+import org.ossreviewtoolkit.spdx.SpdxConstants
 import org.ossreviewtoolkit.spdx.isSpdxExpressionOrNotPresent
 
 /**
