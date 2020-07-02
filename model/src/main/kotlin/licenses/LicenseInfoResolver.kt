@@ -75,13 +75,17 @@ class LicenseInfoResolver(
         }
 
         // Handle detected licenses.
-        val allCopyrights = licenseInfo.detectedLicenseInfo.findings.flatMap { finding ->
+        val copyrightGarbageFindings = mutableMapOf<Provenance, Set<CopyrightFinding>>()
+        val filteredDetectedLicenseInfo =
+            licenseInfo.detectedLicenseInfo.filterCopyrightGarbage(copyrightGarbageFindings)
+
+        val allCopyrights = filteredDetectedLicenseInfo.findings.flatMap { finding ->
             finding.copyrights.map { it.statement }
         }
         val processedCopyrightStatements = CopyrightStatementsProcessor().process(allCopyrights).toMap()
         val unmatchedCopyrights = mutableMapOf<Provenance, MutableSet<CopyrightFinding>>()
         val resolvedLocations = resolveLocations(
-            id, licenseInfo.detectedLicenseInfo, processedCopyrightStatements, unmatchedCopyrights
+            id, filteredDetectedLicenseInfo, processedCopyrightStatements, unmatchedCopyrights
         )
 
         resolvedLocations.keys.forEach { license ->
@@ -91,7 +95,27 @@ class LicenseInfoResolver(
             }
         }
 
-        return ResolvedLicenseInfo(id, resolvedLicenses.values.map { it.build() }, unmatchedCopyrights)
+        return ResolvedLicenseInfo(
+            id,
+            resolvedLicenses.values.map { it.build() },
+            copyrightGarbageFindings,
+            unmatchedCopyrights
+        )
+    }
+
+    private fun DetectedLicenseInfo.filterCopyrightGarbage(
+        copyrightGarbageFindings: MutableMap<Provenance, Set<CopyrightFinding>>
+    ): DetectedLicenseInfo {
+        val filteredFindings = findings.map {
+            val partitionedFindings = it.copyrights.partition { it.statement in copyrightGarbage.items }
+            copyrightGarbageFindings[it.provenance] = partitionedFindings.first.toSet()
+            Findings(
+                provenance = it.provenance,
+                licenses = it.licenses,
+                copyrights = partitionedFindings.second.toSet()
+            )
+        }
+        return DetectedLicenseInfo(filteredFindings)
     }
 
     private fun resolveLocations(
@@ -158,15 +182,14 @@ class LicenseInfoResolver(
             ResolvedCopyrightFinding(
                 finding.statement,
                 finding.location,
-                matchingPathExcludes = pathExcludes,
-                isGarbage = finding.statement in copyrightGarbage.items
+                matchingPathExcludes = pathExcludes
             )
         }
 
         return processedCopyrightStatements.mapValues { (_, originalStatements) ->
             resolvedCopyrightFindings.filter { it.statement in originalStatements }
         }.filterValues { it.isNotEmpty() }.entries.map { (statement, findings) ->
-            ResolvedCopyright(statement, findings.toSet(), isGarbage = statement in copyrightGarbage.items)
+            ResolvedCopyright(statement, findings.toSet())
         }
     }
 }

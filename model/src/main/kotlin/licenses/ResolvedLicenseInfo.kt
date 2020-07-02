@@ -45,6 +45,12 @@ data class ResolvedLicenseInfo(
      */
     val licenses: List<ResolvedLicense>,
 
+    /**
+     * All copyright findings with statements that are contained in [CopyrightGarbage], mapped to the [Provenance] where
+     * they were detected.
+     */
+    val copyrightGarbage: Map<Provenance, Set<CopyrightFinding>>,
+
     val unmatchedCopyrights: Map<Provenance, Set<CopyrightFinding>>
 ) : Iterable<ResolvedLicense> by licenses {
     operator fun get(license: SpdxSingleLicenseExpression): ResolvedLicense? = find { it.license == license }
@@ -119,12 +125,7 @@ data class ResolvedCopyright(
      * The resolved findings for this copyright. The statements in the findings can be different to [statement] if they
      * were processed by the [CopyrightStatementsProcessor].
      */
-    val findings: Set<ResolvedCopyrightFinding>,
-
-    /**
-     * True, if this [statement] is contained in the [CopyrightGarbage] used during resolution.
-     */
-    val isGarbage: Boolean
+    val findings: Set<ResolvedCopyrightFinding>
 )
 
 /**
@@ -144,10 +145,5 @@ data class ResolvedCopyrightFinding(
     /**
      * All [PathExclude]s matching this [location].
      */
-    val matchingPathExcludes: List<PathExclude>,
-
-    /**
-     * True, if this [statement] is contained in the [CopyrightGarbage] used during resolution.
-     */
-    val isGarbage: Boolean
+    val matchingPathExcludes: List<PathExclude>
 )
