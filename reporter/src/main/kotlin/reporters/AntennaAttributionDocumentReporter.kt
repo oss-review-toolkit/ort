@@ -51,8 +51,16 @@ private const val TEMPLATE_COPYRIGHT_PDF = "copyright.pdf"
 private const val TEMPLATE_CONTENT_PDF = "content.pdf"
 private const val TEMPLATE_BACK_PDF = "back.pdf"
 
+private const val REGULAR_FONT = "regular.ttf"
+private const val BOLD_FONT = "bold.ttf"
+private const val BOLD_ITALIC_FONT = "bold-italic.ttf"
+private const val ITALIC_FONT = "italic.ttf"
+
 private val templateFileNames = listOf(
     TEMPLATE_COVER_PDF, TEMPLATE_COPYRIGHT_PDF, TEMPLATE_CONTENT_PDF, TEMPLATE_BACK_PDF
+)
+private val fontFileNames = listOf(
+    REGULAR_FONT, BOLD_FONT, BOLD_ITALIC_FONT, ITALIC_FONT
 )
 
 private const val REPORT_BASE_FILENAME = "attribution-document"
@@ -102,6 +110,7 @@ class AntennaAttributionDocumentReporter : Reporter {
         // Use the default template unless a custom template is provided via the options.
         var templateId = DEFAULT_TEMPLATE_ID
         val templateFiles = mutableMapOf<String, File>()
+        val fontFiles = mutableMapOf<String, File>()
 
         val providedTemplateId = options[TEMPLATE_ID]
         val providedTemplatePath = options[TEMPLATE_PATH]
@@ -131,6 +140,17 @@ class AntennaAttributionDocumentReporter : Reporter {
                             "The file '$file' does not point to a valid PDF file."
                         }
                     }
+                }
+
+                fontFileNames.associateWithTo(fontFiles) { templatePath.resolve(it) }
+
+                val invalidFontFiles = fontFiles.values.filterNot { file ->
+                    file.isFile && file.extension == "ttf" && file.length() > 0
+                }
+
+                require(invalidFontFiles.isEmpty() || invalidFontFiles.size == fontFileNames.size) {
+                    val fileList = invalidFontFiles.joinToString(", ") { "'$it'" }
+                    "The file(s) $fileList do(es) not point to a valid font file."
                 }
             }
         }
@@ -172,13 +192,27 @@ class AntennaAttributionDocumentReporter : Reporter {
                 )
 
                 val documentFile = if (templateFiles.size == templateFileNames.size) {
-                    generator.generate(
-                        artifacts,
-                        templateFiles[TEMPLATE_COVER_PDF],
-                        templateFiles[TEMPLATE_COPYRIGHT_PDF],
-                        templateFiles[TEMPLATE_CONTENT_PDF],
-                        templateFiles[TEMPLATE_BACK_PDF]
-                    )
+                    if (fontFiles.size == fontFileNames.size) {
+                        generator.generate(
+                            artifacts,
+                            templateFiles[TEMPLATE_COVER_PDF],
+                            templateFiles[TEMPLATE_COPYRIGHT_PDF],
+                            templateFiles[TEMPLATE_CONTENT_PDF],
+                            templateFiles[TEMPLATE_BACK_PDF],
+                            fontFiles[REGULAR_FONT],
+                            fontFiles[BOLD_FONT],
+                            fontFiles[BOLD_ITALIC_FONT],
+                            fontFiles[ITALIC_FONT]
+                        )
+                    } else {
+                        generator.generate(
+                            artifacts,
+                            templateFiles[TEMPLATE_COVER_PDF],
+                            templateFiles[TEMPLATE_COPYRIGHT_PDF],
+                            templateFiles[TEMPLATE_CONTENT_PDF],
+                            templateFiles[TEMPLATE_BACK_PDF]
+                        )
+                    }
                 } else {
                     generator.generate(artifacts)
                 }
