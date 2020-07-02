@@ -50,6 +50,7 @@ packages:
       url: "https://github.com/mattn/go-isatty.git"
       revision: "7b513a986450394f7bbf1476909911b3aa3a55ce"
       path: ""
+  curations: []
 - package:
     id: "GoDep::golang.org/x/sys:05986578812163b26672dabd9b425240ae2bb0ad"
     purl: "pkg:godep/golang.org%2Fx%2Fsys@05986578812163b26672dabd9b425240ae2bb0ad"
@@ -77,3 +78,4 @@ packages:
       url: "https://go.googlesource.com/sys"
       revision: "05986578812163b26672dabd9b425240ae2bb0ad"
       path: ""
+  curations: []

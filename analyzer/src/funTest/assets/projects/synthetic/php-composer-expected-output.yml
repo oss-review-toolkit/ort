@@ -167,6 +167,7 @@ packages:
       url: "https://github.com/clue/php-stream-filter.git"
       revision: "5a58cc30a8bd6a4eb8f856adf61dd3e013f53f71"
       path: ""
+  curations: []
 - package:
     id: "PhpComposer:doctrine:instantiator:1.3.0"
     purl: "pkg:phpcomposer/doctrine/instantiator@1.3.0"
@@ -197,6 +198,7 @@ packages:
       url: "https://github.com/doctrine/instantiator.git"
       revision: "ae466f726242e637cebdd526a7d991b9433bacf1"
       path: ""
+  curations: []
 - package:
     id: "PhpComposer:guzzlehttp:guzzle:6.3.3"
     purl: "pkg:phpcomposer/guzzlehttp/guzzle@6.3.3"
@@ -226,6 +228,7 @@ packages:
       url: "https://github.com/guzzle/guzzle.git"
       revision: "407b0cb880ace85c9b63c5f9551db498cb2d50ba"
       path: ""
+  curations: []
 - package:
     id: "PhpComposer:guzzlehttp:promises:v1.3.1"
     purl: "pkg:phpcomposer/guzzlehttp/promises@v1.3.1"
@@ -255,6 +258,7 @@ packages:
       url: "https://github.com/guzzle/promises.git"
       revision: "a59da6cf61d80060647ff4d3eb2c03a2bc694646"
       path: ""
+  curations: []
 - package:
     id: "PhpComposer:guzzlehttp:psr7:1.4.0"
     purl: "pkg:phpcomposer/guzzlehttp/psr7@1.4.0"
@@ -284,6 +288,7 @@ packages:
       url: "https://github.com/guzzle/psr7.git"
       revision: "04a6d1a00ea5da0727ee94309a9f0d3dbaecb569"
       path: ""
+  curations: []
 - package:
     id: "PhpComposer:mailgun:mailgun-php:v2.4.0"
     purl: "pkg:phpcomposer/mailgun/mailgun-php@v2.4.0"
@@ -313,6 +318,7 @@ packages:
       url: "https://github.com/mailgun/mailgun-php.git"
       revision: "20783215042b181b0dec92c9e01947b93cb5d085"
       path: ""
+  curations: []
 - package:
     id: "PhpComposer:monolog:monolog:1.0.2"
     purl: "pkg:phpcomposer/monolog/monolog@1.0.2"
@@ -342,6 +348,7 @@ packages:
       url: "https://github.com/Seldaek/monolog.git"
       revision: "b704c49a3051536f67f2d39f13568f74615b9922"
       path: ""
+  curations: []
 - package:
     id: "PhpComposer:php-http:client-common:1.10.0"
     purl: "pkg:phpcomposer/php-http/client-common@1.10.0"
@@ -371,6 +378,7 @@ packages:
       url: "https://github.com/php-http/client-common.git"
       revision: "c0390ae3c8f2ae9d50901feef0127fb9e396f6b4"
       path: ""
+  curations: []
 - package:
     id: "PhpComposer:php-http:discovery:1.7.4"
     purl: "pkg:phpcomposer/php-http/discovery@1.7.4"
@@ -400,6 +408,7 @@ packages:
       url: "https://github.com/php-http/discovery.git"
       revision: "82dbef649ccffd8e4f22e1953c3a5265992b83c0"
       path: ""
+  curations: []
 - package:
     id: "PhpComposer:php-http:guzzle6-adapter:v1.0.0"
     purl: "pkg:phpcomposer/php-http/guzzle6-adapter@v1.0.0"
@@ -429,6 +438,7 @@ packages:
       url: "https://github.com/php-http/guzzle6-adapter.git"
       revision: "e884cf6dae5235fffd2a07f761e0066b9ebef170"
       path: ""
+  curations: []
 - package:
     id: "PhpComposer:php-http:httplug:v1.1.0"
     purl: "pkg:phpcomposer/php-http/httplug@v1.1.0"
@@ -458,6 +468,7 @@ packages:
       url: "https://github.com/php-http/httplug.git"
       revision: "1c6381726c18579c4ca2ef1ec1498fdae8bdf018"
       path: ""
+  curations: []
 - package:
     id: "PhpComposer:php-http:message-factory:v1.0.2"
     purl: "pkg:phpcomposer/php-http/message-factory@v1.0.2"
@@ -487,6 +498,7 @@ packages:
       url: "https://github.com/php-http/message-factory.git"
       revision: "a478cb11f66a6ac48d8954216cfed9aa06a501a1"
       path: ""
+  curations: []
 - package:
     id: "PhpComposer:php-http:message:1.8.0"
     purl: "pkg:phpcomposer/php-http/message@1.8.0"
@@ -516,6 +528,7 @@ packages:
       url: "https://github.com/php-http/message.git"
       revision: "ce8f43ac1e294b54aabf5808515c3554a19c1e1c"
       path: ""
+  curations: []
 - package:
     id: "PhpComposer:php-http:multipart-stream-builder:1.1.0"
     purl: "pkg:phpcomposer/php-http/multipart-stream-builder@1.1.0"
@@ -545,6 +558,7 @@ packages:
       url: "https://github.com/php-http/multipart-stream-builder.git"
       revision: "5d73adad53cf1d674dcc6c5b288a3ff3f76c4849"
       path: ""
+  curations: []
 - package:
     id: "PhpComposer:php-http:promise:v1.0.0"
     purl: "pkg:phpcomposer/php-http/promise@v1.0.0"
@@ -574,6 +588,7 @@ packages:
       url: "https://github.com/php-http/promise.git"
       revision: "dc494cdc9d7160b9a09bd5573272195242ce7980"
       path: ""
+  curations: []
 - package:
     id: "PhpComposer:phpdocumentor:reflection-common:2.0.0"
     purl: "pkg:phpcomposer/phpdocumentor/reflection-common@2.0.0"
@@ -604,6 +619,7 @@ packages:
       url: "https://github.com/phpDocumentor/ReflectionCommon.git"
       revision: "63a995caa1ca9e5590304cd845c15ad6d482a62a"
       path: ""
+  curations: []
 - package:
     id: "PhpComposer:phpdocumentor:reflection-docblock:5.1.0"
     purl: "pkg:phpcomposer/phpdocumentor/reflection-docblock@5.1.0"
@@ -634,6 +650,7 @@ packages:
       url: "https://github.com/phpDocumentor/ReflectionDocBlock.git"
       revision: "cd72d394ca794d3466a3b2fc09d5a6c1dc86b47e"
       path: ""
+  curations: []
 - package:
     id: "PhpComposer:phpdocumentor:type-resolver:1.1.0"
     purl: "pkg:phpcomposer/phpdocumentor/type-resolver@1.1.0"
@@ -664,6 +681,7 @@ packages:
       url: "https://github.com/phpDocumentor/TypeResolver.git"
       revision: "7462d5f123dfc080dfdf26897032a6513644fc95"
       path: ""
+  curations: []
 - package:
     id: "PhpComposer:phpspec:prophecy:v1.10.3"
     purl: "pkg:phpcomposer/phpspec/prophecy@v1.10.3"
@@ -693,6 +711,7 @@ packages:
       url: "https://github.com/phpspec/prophecy.git"
       revision: "451c3cd1418cf640de218914901e51b064abb093"
       path: ""
+  curations: []
 - package:
     id: "PhpComposer:phpunit:php-code-coverage:2.2.4"
     purl: "pkg:phpcomposer/phpunit/php-code-coverage@2.2.4"
@@ -723,6 +742,7 @@ packages:
       url: "https://github.com/sebastianbergmann/php-code-coverage.git"
       revision: "eabf68b476ac7d0f73793aada060f1c1a9bf8979"
       path: ""
+  curations: []
 - package:
     id: "PhpComposer:phpunit:php-file-iterator:1.4.5"
     purl: "pkg:phpcomposer/phpunit/php-file-iterator@1.4.5"
@@ -753,6 +773,7 @@ packages:
       url: "https://github.com/sebastianbergmann/php-file-iterator.git"
       revision: "730b01bc3e867237eaac355e06a36b85dd93a8b4"
       path: ""
+  curations: []
 - package:
     id: "PhpComposer:phpunit:php-text-template:1.2.1"
     purl: "pkg:phpcomposer/phpunit/php-text-template@1.2.1"
@@ -782,6 +803,7 @@ packages:
       url: "https://github.com/sebastianbergmann/php-text-template.git"
       revision: "31f8b717e51d9a2afca6c9f046f5d69fc27c8686"
       path: ""
+  curations: []
 - package:
     id: "PhpComposer:phpunit:php-timer:2.1.2"
     purl: "pkg:phpcomposer/phpunit/php-timer@2.1.2"
@@ -811,6 +833,7 @@ packages:
       url: "https://github.com/sebastianbergmann/php-timer.git"
       revision: "1038454804406b0b5f5f520358e78c1c2f71501e"
       path: ""
+  curations: []
 - package:
     id: "PhpComposer:phpunit:php-token-stream:1.4.12"
     purl: "pkg:phpcomposer/phpunit/php-token-stream@1.4.12"
@@ -840,6 +863,7 @@ packages:
       url: "https://github.com/sebastianbergmann/php-token-stream.git"
       revision: "1ce90ba27c42e4e44e6d8458241466380b51fa16"
       path: ""
+  curations: []
 - package:
     id: "PhpComposer:phpunit:phpunit-mock-objects:2.3.8"
     purl: "pkg:phpcomposer/phpunit/phpunit-mock-objects@2.3.8"
@@ -869,6 +893,7 @@ packages:
       url: "https://github.com/sebastianbergmann/phpunit-mock-objects.git"
       revision: "ac8e7a3db35738d56ee9a76e78a4e03d97628983"
       path: ""
+  curations: []
 - package:
     id: "PhpComposer:phpunit:phpunit:4.8.0"
     purl: "pkg:phpcomposer/phpunit/phpunit@4.8.0"
@@ -898,6 +923,7 @@ packages:
       url: "https://github.com/sebastianbergmann/phpunit.git"
       revision: "283111a903eb9225aedb95e846bef876e006a688"
       path: ""
+  curations: []
 - package:
     id: "PhpComposer:psr:http-factory:1.0.1"
     purl: "pkg:phpcomposer/psr/http-factory@1.0.1"
@@ -927,6 +953,7 @@ packages:
       url: "https://github.com/php-fig/http-factory.git"
       revision: "12ac7fcd07e5b077433f5f2bee95b3a771bf61be"
       path: ""
+  curations: []
 - package:
     id: "PhpComposer:psr:http-message:1.0.1"
     purl: "pkg:phpcomposer/psr/http-message@1.0.1"
@@ -956,6 +983,7 @@ packages:
       url: "https://github.com/php-fig/http-message.git"
       revision: "f6561bf28d520154e4b0ec72be95418abe6d9363"
       path: ""
+  curations: []
 - package:
     id: "PhpComposer:sebastian:comparator:1.2.4"
     purl: "pkg:phpcomposer/sebastian/comparator@1.2.4"
@@ -985,6 +1013,7 @@ packages:
       url: "https://github.com/sebastianbergmann/comparator.git"
       revision: "2b7424b55f5047b47ac6e5ccb20b2aea4011d9be"
       path: ""
+  curations: []
 - package:
     id: "PhpComposer:sebastian:diff:1.4.3"
     purl: "pkg:phpcomposer/sebastian/diff@1.4.3"
@@ -1014,6 +1043,7 @@ packages:
       url: "https://github.com/sebastianbergmann/diff.git"
       revision: "7f066a26a962dbe58ddea9f72a4e82874a3975a4"
       path: ""
+  curations: []
 - package:
     id: "PhpComposer:sebastian:environment:1.3.8"
     purl: "pkg:phpcomposer/sebastian/environment@1.3.8"
@@ -1043,6 +1073,7 @@ packages:
       url: "https://github.com/sebastianbergmann/environment.git"
       revision: "be2c607e43ce4c89ecd60e75c6a85c126e754aea"
       path: ""
+  curations: []
 - package:
     id: "PhpComposer:sebastian:exporter:1.2.2"
     purl: "pkg:phpcomposer/sebastian/exporter@1.2.2"
@@ -1072,6 +1103,7 @@ packages:
       url: "https://github.com/sebastianbergmann/exporter.git"
       revision: "42c4c2eec485ee3e159ec9884f95b431287edde4"
       path: ""
+  curations: []
 - package:
     id: "PhpComposer:sebastian:global-state:1.1.1"
     purl: "pkg:phpcomposer/sebastian/global-state@1.1.1"
@@ -1101,6 +1133,7 @@ packages:
       url: "https://github.com/sebastianbergmann/global-state.git"
       revision: "bc37d50fea7d017d3d340f230811c9f1d7280af4"
       path: ""
+  curations: []
 - package:
     id: "PhpComposer:sebastian:recursion-context:1.0.5"
     purl: "pkg:phpcomposer/sebastian/recursion-context@1.0.5"
@@ -1130,6 +1163,7 @@ packages:
       url: "https://github.com/sebastianbergmann/recursion-context.git"
       revision: "b19cc3298482a335a95f3016d2f8a6950f0fbcd7"
       path: ""
+  curations: []
 - package:
     id: "PhpComposer:sebastian:version:1.0.6"
     purl: "pkg:phpcomposer/sebastian/version@1.0.6"
@@ -1160,6 +1194,7 @@ packages:
       url: "https://github.com/sebastianbergmann/version.git"
       revision: "58b3a85e7999757d6ad81c787a1fbf5ff6c628c6"
       path: ""
+  curations: []
 - package:
     id: "PhpComposer:symfony:options-resolver:v5.0.7"
     purl: "pkg:phpcomposer/symfony/options-resolver@v5.0.7"
@@ -1189,6 +1224,7 @@ packages:
       url: "https://github.com/symfony/options-resolver.git"
       revision: "09dccfffd24b311df7f184aa80ee7b61ad61ed8d"
       path: ""
+  curations: []
 - package:
     id: "PhpComposer:symfony:polyfill-ctype:v1.15.0"
     purl: "pkg:phpcomposer/symfony/polyfill-ctype@v1.15.0"
@@ -1218,6 +1254,7 @@ packages:
       url: "https://github.com/symfony/polyfill-ctype.git"
       revision: "4719fa9c18b0464d399f1a63bf624b42b6fa8d14"
       path: ""
+  curations: []
 - package:
     id: "PhpComposer:symfony:yaml:v3.4.39"
     purl: "pkg:phpcomposer/symfony/yaml@v3.4.39"
@@ -1247,6 +1284,7 @@ packages:
       url: "https://github.com/symfony/yaml.git"
       revision: "e701b47e11749970f63803879c4febb520f07b6c"
       path: ""
+  curations: []
 - package:
     id: "PhpComposer:webmozart:assert:1.7.0"
     purl: "pkg:phpcomposer/webmozart/assert@1.7.0"
@@ -1276,3 +1314,4 @@ packages:
       url: "https://github.com/webmozart/assert.git"
       revision: "aed98a490f9a8f78468232db345ab9cf606cf598"
       path: ""
+  curations: []

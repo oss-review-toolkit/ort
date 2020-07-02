@@ -154,6 +154,7 @@ packages:
       url: "https://github.com/cuviper/autocfg.git"
       revision: ""
       path: ""
+  curations: []
 - package:
     id: "Cargo::bitflags:1.1.0"
     purl: "pkg:cargo/bitflags@1.1.0"
@@ -184,6 +185,7 @@ packages:
       url: "https://github.com/bitflags/bitflags.git"
       revision: ""
       path: ""
+  curations: []
 - package:
     id: "Cargo::cfg-if:0.1.9"
     purl: "pkg:cargo/cfg-if@0.1.9"
@@ -216,6 +218,7 @@ packages:
       url: "https://github.com/alexcrichton/cfg-if.git"
       revision: ""
       path: ""
+  curations: []
 - package:
     id: "Cargo::cloudabi:0.0.3"
     purl: "pkg:cargo/cloudabi@0.0.3"
@@ -246,6 +249,7 @@ packages:
       url: "https://github.com/nuxinl/cloudabi.git"
       revision: ""
       path: ""
+  curations: []
 - package:
     id: "Cargo::fuchsia-cprng:0.1.1"
     purl: "pkg:cargo/fuchsia-cprng@0.1.1"
@@ -274,6 +278,7 @@ packages:
       url: "https://fuchsia.googlesource.com/fuchsia/+/master/garnet/public/rust/fuchsia-cprng"
       revision: ""
       path: ""
+  curations: []
 - package:
     id: "Cargo::libc:0.2.62"
     purl: "pkg:cargo/libc@0.2.62"
@@ -303,6 +308,7 @@ packages:
       url: "https://github.com/rust-lang/libc.git"
       revision: ""
       path: ""
+  curations: []
 - package:
     id: "Cargo::rand:0.6.5"
     purl: "pkg:cargo/rand@0.6.5"
@@ -333,6 +339,7 @@ packages:
       url: "https://github.com/rust-random/rand.git"
       revision: ""
       path: ""
+  curations: []
 - package:
     id: "Cargo::rand_chacha:0.1.1"
     purl: "pkg:cargo/rand_chacha@0.1.1"
@@ -363,6 +370,7 @@ packages:
       url: "https://github.com/rust-random/rand.git"
       revision: ""
       path: ""
+  curations: []
 - package:
     id: "Cargo::rand_core:0.3.1"
     purl: "pkg:cargo/rand_core@0.3.1"
@@ -393,6 +401,7 @@ packages:
       url: "https://github.com/rust-random/rand.git"
       revision: ""
       path: ""
+  curations: []
 - package:
     id: "Cargo::rand_core:0.4.2"
     purl: "pkg:cargo/rand_core@0.4.2"
@@ -423,6 +432,7 @@ packages:
       url: "https://github.com/rust-random/rand.git"
       revision: ""
       path: ""
+  curations: []
 - package:
     id: "Cargo::rand_hc:0.1.0"
     purl: "pkg:cargo/rand_hc@0.1.0"
@@ -453,6 +463,7 @@ packages:
       url: "https://github.com/rust-random/rand.git"
       revision: ""
       path: ""
+  curations: []
 - package:
     id: "Cargo::rand_isaac:0.1.1"
     purl: "pkg:cargo/rand_isaac@0.1.1"
@@ -483,6 +494,7 @@ packages:
       url: "https://github.com/rust-random/rand.git"
       revision: ""
       path: ""
+  curations: []
 - package:
     id: "Cargo::rand_jitter:0.1.4"
     purl: "pkg:cargo/rand_jitter@0.1.4"
@@ -512,6 +524,7 @@ packages:
       url: "https://github.com/rust-random/rand.git"
       revision: ""
       path: ""
+  curations: []
 - package:
     id: "Cargo::rand_os:0.1.3"
     purl: "pkg:cargo/rand_os@0.1.3"
@@ -542,6 +555,7 @@ packages:
       url: "https://github.com/rust-random/rand.git"
       revision: ""
       path: ""
+  curations: []
 - package:
     id: "Cargo::rand_pcg:0.1.2"
     purl: "pkg:cargo/rand_pcg@0.1.2"
@@ -572,6 +586,7 @@ packages:
       url: "https://github.com/rust-random/rand.git"
       revision: ""
       path: ""
+  curations: []
 - package:
     id: "Cargo::rand_xorshift:0.1.1"
     purl: "pkg:cargo/rand_xorshift@0.1.1"
@@ -602,6 +617,7 @@ packages:
       url: "https://github.com/rust-random/rand.git"
       revision: ""
       path: ""
+  curations: []
 - package:
     id: "Cargo::rdrand:0.4.0"
     purl: "pkg:cargo/rdrand@0.4.0"
@@ -632,6 +648,7 @@ packages:
       url: "https://github.com/nagisa/rust_rdrand.git"
       revision: ""
       path: ""
+  curations: []
 - package:
     id: "Cargo::spin:0.5.0"
     purl: "pkg:cargo/spin@0.5.0"
@@ -662,6 +679,7 @@ packages:
       url: "https://github.com/mvdnes/spin-rs.git"
       revision: ""
       path: ""
+  curations: []
 - package:
     id: "Cargo::winapi-i686-pc-windows-gnu:0.4.0"
     purl: "pkg:cargo/winapi-i686-pc-windows-gnu@0.4.0"
@@ -693,6 +711,7 @@ packages:
       url: "https://github.com/retep998/winapi-rs.git"
       revision: ""
       path: ""
+  curations: []
 - package:
     id: "Cargo::winapi-x86_64-pc-windows-gnu:0.4.0"
     purl: "pkg:cargo/winapi-x86_64-pc-windows-gnu@0.4.0"
@@ -724,6 +743,7 @@ packages:
       url: "https://github.com/retep998/winapi-rs.git"
       revision: ""
       path: ""
+  curations: []
 - package:
     id: "Cargo::winapi:0.3.8"
     purl: "pkg:cargo/winapi@0.3.8"
@@ -754,3 +774,4 @@ packages:
       url: "https://github.com/retep998/winapi-rs.git"
       revision: ""
       path: ""
+  curations: []

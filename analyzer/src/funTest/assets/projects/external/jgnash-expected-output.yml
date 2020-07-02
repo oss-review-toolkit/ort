@@ -53,6 +53,7 @@ packages:
       url: "https://github.com/junit-team/junit.git"
       revision: "r4.12"
       path: ""
+  curations: []
 - package:
     id: "Maven:org.hamcrest:hamcrest-all:1.3"
     purl: "pkg:maven/org.hamcrest/hamcrest-all@1.3"
@@ -85,3 +86,4 @@ packages:
       url: "ssh://git@github.com/hamcrest/JavaHamcrest.git"
       revision: ""
       path: ""
+  curations: []

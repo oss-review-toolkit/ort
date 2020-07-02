@@ -101,6 +101,7 @@ analyzer:
           url: "ssh://git@github.com/sbt/junit-interface.git"
           revision: ""
           path: ""
+      curations: []
     - package:
         id: "Maven:junit:junit:4.12"
         purl: "pkg:maven/junit/junit@4.12"
@@ -133,6 +134,7 @@ analyzer:
           url: "https://github.com/junit-team/junit.git"
           revision: "r4.12"
           path: ""
+      curations: []
     - package:
         id: "Maven:org.hamcrest:hamcrest-core:1.3"
         purl: "pkg:maven/org.hamcrest/hamcrest-core@1.3"
@@ -166,6 +168,7 @@ analyzer:
           url: "ssh://git@github.com/hamcrest/JavaHamcrest.git"
           revision: ""
           path: ""
+      curations: []
     - package:
         id: "Maven:org.scala-sbt:test-interface:1.0"
         purl: "pkg:maven/org.scala-sbt/test-interface@1.0"
@@ -198,6 +201,7 @@ analyzer:
           url: "https://github.com/sbt/test-interface.git"
           revision: ""
           path: ""
+      curations: []
     has_issues: false
 scanner: null
 evaluator: null

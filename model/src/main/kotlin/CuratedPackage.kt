@@ -19,7 +19,6 @@
 
 package org.ossreviewtoolkit.model
 
-import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.annotation.JsonProperty
 
 /**
@@ -36,8 +35,7 @@ data class CuratedPackage(
     /**
      * The curations in the order they were applied.
      */
-    @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    val curations: List<PackageCurationResult> = emptyList()
+    val curations: List<PackageCurationResult>
 ) : Comparable<CuratedPackage> {
     /**
      * A comparison function to sort packages by their identifier.
