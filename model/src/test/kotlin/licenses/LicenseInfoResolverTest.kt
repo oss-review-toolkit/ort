@@ -125,11 +125,9 @@ class LicenseInfoResolverTest : WordSpec() {
                                 ResolvedCopyrightFinding(
                                     statement = "Copyright Apache-2.0",
                                     location = TextLocation("LICENSE", 1, 1),
-                                    matchingPathExcludes = emptyList(),
-                                    isGarbage = false
+                                    matchingPathExcludes = emptyList()
                                 )
-                            ),
-                            isGarbage = false
+                            )
                         )
                     )
                 )
@@ -150,11 +148,9 @@ class LicenseInfoResolverTest : WordSpec() {
                                 ResolvedCopyrightFinding(
                                     statement = "Copyright MIT",
                                     location = TextLocation("LICENSE", 31, 31),
-                                    matchingPathExcludes = emptyList(),
-                                    isGarbage = false
+                                    matchingPathExcludes = emptyList()
                                 )
-                            ),
-                            isGarbage = false
+                            )
                         )
                     )
                 )
@@ -236,7 +232,9 @@ class LicenseInfoResolverTest : WordSpec() {
                                 copyrights = setOf(
                                     CopyrightFinding("(c) 2009 Holder 1", TextLocation("LICENSE", 1, 1)),
                                     CopyrightFinding("(c) 2010 Holder 1", TextLocation("LICENSE", 2, 2)),
-                                    CopyrightFinding("(c) 2010 Holder 2", TextLocation("LICENSE", 3, 3))
+                                    CopyrightFinding("(c) 2009 Holder 2", TextLocation("LICENSE", 3, 3)),
+                                    CopyrightFinding("(c) 2010 Holder 2", TextLocation("LICENSE", 4, 4)),
+                                    CopyrightFinding("(c) 2010 Holder 3", TextLocation("LICENSE", 5, 5))
                                 )
                             )
                         )
@@ -245,19 +243,21 @@ class LicenseInfoResolverTest : WordSpec() {
 
                 val resolver = createResolver(
                     licenseInfos,
-                    copyrightGarbage = setOf("(c) 2009-2010 Holder 1", "(c) 2009 Holder 1")
+                    copyrightGarbage = setOf("(c) 2009 Holder 1", "(c) 2010 Holder 1", "(c) 2009 Holder 2")
                 )
 
                 val result = resolver.resolveLicenseInfo(pkgId)
 
-                result should containCopyrightsMarkedAsGarbage(
-                    "(c) 2009-2010 Holder 1" to true,
-                    "(c) 2010 Holder 2" to false
+                result should containCopyrightsExactly("(c) 2010 Holder 2", "(c) 2010 Holder 3")
+                result should containFindingsForCopyrightExactly(
+                    "(c) 2010 Holder 2",
+                    "(c) 2010 Holder 2" to TextLocation("LICENSE", 4, 4)
                 )
-                result should containCopyrightFindingsMarkedAsGarbage(
-                    "(c) 2009 Holder 1" to true,
-                    "(c) 2010 Holder 1" to false,
-                    "(c) 2010 Holder 2" to false
+                result should containCopyrightGarbageForProvenanceExactly(
+                    provenance,
+                    "(c) 2009 Holder 1" to TextLocation("LICENSE", 1, 1),
+                    "(c) 2010 Holder 1" to TextLocation("LICENSE", 2, 2),
+                    "(c) 2009 Holder 2" to TextLocation("LICENSE", 3, 3)
                 )
             }
 
@@ -409,11 +409,9 @@ class LicenseInfoResolverTest : WordSpec() {
                                 ResolvedCopyrightFinding(
                                     statement = "(c) 2010 Holder 1",
                                     location = TextLocation("LICENSE", 1, 1),
-                                    matchingPathExcludes = emptyList(),
-                                    isGarbage = false
+                                    matchingPathExcludes = emptyList()
                                 )
-                            ),
-                            isGarbage = false
+                            )
                         )
                     )
                 )
@@ -522,37 +520,20 @@ fun containFindingsForCopyrightExactly(
         )
     }
 
-fun containCopyrightsMarkedAsGarbage(vararg copyrights: Pair<String, Boolean>): Matcher<ResolvedLicenseInfo?> =
+fun containCopyrightGarbageForProvenanceExactly(
+    provenance: Provenance,
+    vararg findings: Pair<String, TextLocation>
+): Matcher<ResolvedLicenseInfo?> =
     neverNullMatcher { value ->
-        val expected = copyrights.toSet()
-        val actual = value.flatMap { license ->
-            license.locations.flatMap { location -> location.copyrights.map { Pair(it.statement, it.isGarbage) } }
-        }.toSet()
+        val expected = findings.toSet()
+        val actual = value.copyrightGarbage[provenance].orEmpty().map { Pair(it.statement, it.location) }.toSet()
 
         MatcherResult(
             expected == actual,
-            "Resolved license info should contain copyrights marked as garbage ${expected.show().value}, but has " +
-                    actual.show().value,
-            "Resolve license info should not contain copyrights marked as garbage ${expected.show().value}"
-        )
-    }
-
-fun containCopyrightFindingsMarkedAsGarbage(vararg copyrights: Pair<String, Boolean>): Matcher<ResolvedLicenseInfo?> =
-    neverNullMatcher { value ->
-        val expected = copyrights.toSet()
-        val actual = value.flatMap { license ->
-            license.locations.flatMap { location ->
-                location.copyrights.flatMap { copyright ->
-                    copyright.findings.map { Pair(it.statement, it.isGarbage) }
-                }
-            }
-        }.toSet()
-
-        MatcherResult(
-            expected == actual,
-            "Resolved license info should contain copyright findings marked as garbage ${expected.show().value}, but " +
-                    "has ${actual.show().value}",
-            "Resolve license info should not contain copyright findings marked as garbage ${expected.show().value}"
+            "Resolved license info should contain exactly copyright garbage ${expected.show().value} for provenance " +
+                    "${provenance.show().value}, but has ${actual.show().value}",
+            "Resolved license info should not contain exactly copyright garbage ${expected.show().value} for " +
+                    "provenance ${provenance.show().value}"
         )
     }
 
