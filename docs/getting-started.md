@@ -229,6 +229,7 @@ analyzer:
           url: "ssh://git@github.com/isaacs/abbrev-js.git"
           revision: "c386cd9dbb1d8d7581718c54d4ba944cc9298d6f"
           path: ""
+      curations: []
 # ...
 # Finally a list of project related issues that happened during dependency analysis. Fortunately empty in this case.
     issues: {}

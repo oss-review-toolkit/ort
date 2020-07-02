@@ -77,6 +77,7 @@ packages:
       url: "https://github.com/halostatue/diff-lcs.git"
       revision: ""
       path: ""
+  curations: []
 - package:
     id: "Bundler::mini_portile2:2.4.0"
     purl: "pkg:bundler/mini_portile2@2.4.0"
@@ -108,6 +109,7 @@ packages:
       url: "https://github.com/flavorjones/mini_portile.git"
       revision: ""
       path: ""
+  curations: []
 - package:
     id: "Bundler::nokogiri:1.10.8"
     purl: "pkg:bundler/nokogiri@1.10.8"
@@ -138,6 +140,7 @@ packages:
       url: "https://github.com/sparklemotion/nokogiri.git"
       revision: ""
       path: ""
+  curations: []
 - package:
     id: "Bundler::rack:2.1.4"
     purl: "pkg:bundler/rack@2.1.4"
@@ -171,6 +174,7 @@ packages:
       url: "https://github.com/rack/rack.git"
       revision: ""
       path: ""
+  curations: []
 - package:
     id: "Bundler::rspec-core:3.7.1"
     purl: "pkg:bundler/rspec-core@3.7.1"
@@ -200,6 +204,7 @@ packages:
       url: "https://github.com/rspec/rspec-core.git"
       revision: ""
       path: ""
+  curations: []
 - package:
     id: "Bundler::rspec-expectations:3.7.0"
     purl: "pkg:bundler/rspec-expectations@3.7.0"
@@ -230,6 +235,7 @@ packages:
       url: "https://github.com/rspec/rspec-expectations.git"
       revision: ""
       path: ""
+  curations: []
 - package:
     id: "Bundler::rspec-mocks:3.7.0"
     purl: "pkg:bundler/rspec-mocks@3.7.0"
@@ -259,6 +265,7 @@ packages:
       url: "https://github.com/rspec/rspec-mocks.git"
       revision: ""
       path: ""
+  curations: []
 - package:
     id: "Bundler::rspec-support:3.7.1"
     purl: "pkg:bundler/rspec-support@3.7.1"
@@ -288,6 +295,7 @@ packages:
       url: "https://github.com/rspec/rspec-support.git"
       revision: ""
       path: ""
+  curations: []
 - package:
     id: "Bundler::rspec:3.7.0"
     purl: "pkg:bundler/rspec@3.7.0"
@@ -317,3 +325,4 @@ packages:
       url: "https://github.com/rspec/rspec.git"
       revision: ""
       path: ""
+  curations: []

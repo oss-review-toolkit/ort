@@ -137,6 +137,7 @@ packages:
       url: "https://github.com/kriskowal/asap.git"
       revision: "3e3d99381444379bb0483cb9216caa39ac67bebb"
       path: ""
+  curations: []
 - package:
     id: "NPM::boolbase:1.0.0"
     purl: "pkg:npm/boolbase@1.0.0"
@@ -166,6 +167,7 @@ packages:
       url: "https://github.com/fb55/boolbase.git"
       revision: ""
       path: ""
+  curations: []
 - package:
     id: "NPM::cheerio:1.0.0-rc.1"
     purl: "pkg:npm/cheerio@1.0.0-rc.1"
@@ -196,6 +198,7 @@ packages:
       url: "https://github.com/cheeriojs/cheerio.git"
       revision: "f21ffef971826d1ba64ccbdf96adbc44964d30c5"
       path: ""
+  curations: []
 - package:
     id: "NPM::coffee-script:1.12.7"
     purl: "pkg:npm/coffee-script@1.12.7"
@@ -225,6 +228,7 @@ packages:
       url: "https://github.com/jashkenas/coffeescript.git"
       revision: "492111ccfb9b703b49a443c1aa68fb41dc8a2271"
       path: ""
+  curations: []
 - package:
     id: "NPM::cson-parser:1.3.5"
     purl: "pkg:npm/cson-parser@1.3.5"
@@ -254,6 +258,7 @@ packages:
       url: "ssh://git@github.com/groupon/cson-parser.git"
       revision: "fa37e04bc6c516eb76ef01df2d105a413c0253a0"
       path: ""
+  curations: []
 - package:
     id: "NPM::cson:4.1.0"
     purl: "pkg:npm/cson@4.1.0"
@@ -284,6 +289,7 @@ packages:
       url: "https://github.com/bevry/cson.git"
       revision: "0e913a90be66b2f29d2d75433b06ed52e83ba810"
       path: ""
+  curations: []
 - package:
     id: "NPM::css-select:1.2.0"
     purl: "pkg:npm/css-select@1.2.0"
@@ -315,6 +321,7 @@ packages:
       url: "https://github.com/fb55/css-select.git"
       revision: "09c405d8296bd97a660256604d8cdfb23fca47b6"
       path: ""
+  curations: []
 - package:
     id: "NPM::css-what:2.1.3"
     purl: "pkg:npm/css-what@2.1.3"
@@ -344,6 +351,7 @@ packages:
       url: "https://github.com/fb55/css-what.git"
       revision: "2db00ca221922c5b5131d798614aa043f2f6f80e"
       path: ""
+  curations: []
 - package:
     id: "NPM::dom-serializer:0.1.1"
     purl: "pkg:npm/dom-serializer@0.1.1"
@@ -373,6 +381,7 @@ packages:
       url: "https://github.com/cheeriojs/dom-renderer.git"
       revision: "1b9eb87c621a184b97467b03600b50d08e5a5086"
       path: ""
+  curations: []
 - package:
     id: "NPM::domelementtype:1.3.1"
     purl: "pkg:npm/domelementtype@1.3.1"
@@ -402,6 +411,7 @@ packages:
       url: "https://github.com/fb55/domelementtype.git"
       revision: "19b2491101a4de3679b59db8eb7fdd9aa0fbc60b"
       path: ""
+  curations: []
 - package:
     id: "NPM::domhandler:2.4.2"
     purl: "pkg:npm/domhandler@2.4.2"
@@ -431,6 +441,7 @@ packages:
       url: "https://github.com/fb55/DomHandler.git"
       revision: "045bd8d634dca30192fbd23fee0c530adc9c6f52"
       path: ""
+  curations: []
 - package:
     id: "NPM::domutils:1.5.1"
     purl: "pkg:npm/domutils@1.5.1"
@@ -458,6 +469,7 @@ packages:
       url: "https://github.com/FB55/domutils.git"
       revision: "7d4bd16cd36ffce62362ef91616806ea27e30d95"
       path: ""
+  curations: []
 - package:
     id: "NPM::domutils:1.7.0"
     purl: "pkg:npm/domutils@1.7.0"
@@ -487,6 +499,7 @@ packages:
       url: "https://github.com/FB55/domutils.git"
       revision: "34f193ca17d11a98d9310b1965efe5f73d32d79f"
       path: ""
+  curations: []
 - package:
     id: "NPM::eachr:3.2.0"
     purl: "pkg:npm/eachr@3.2.0"
@@ -518,6 +531,7 @@ packages:
       url: "ssh://git@github.com/bevry/eachr.git"
       revision: "57ef794d001c16fd906b2558137e8ea51c1f6330"
       path: ""
+  curations: []
 - package:
     id: "NPM::editions:1.3.4"
     purl: "pkg:npm/editions@1.3.4"
@@ -548,6 +562,7 @@ packages:
       url: "https://github.com/bevry/editions.git"
       revision: "5580800dc3935e988b7aa2cf8d571f3e9fa2d8f9"
       path: ""
+  curations: []
 - package:
     id: "NPM::editions:2.1.3"
     purl: "pkg:npm/editions@2.1.3"
@@ -578,6 +593,7 @@ packages:
       url: "https://github.com/bevry/editions.git"
       revision: "84f536320f7eff6385e867d9f5c1de0dfb92fa88"
       path: ""
+  curations: []
 - package:
     id: "NPM::entities:1.1.2"
     purl: "pkg:npm/entities@1.1.2"
@@ -607,6 +623,7 @@ packages:
       url: "https://github.com/fb55/entities.git"
       revision: "54a5717d85d886c4aafa2ac5ff83d8d3d730337c"
       path: ""
+  curations: []
 - package:
     id: "NPM::errlop:1.1.1"
     purl: "pkg:npm/errlop@1.1.1"
@@ -637,6 +654,7 @@ packages:
       url: "https://github.com/bevry/errlop.git"
       revision: "ca13727bd3a227cd937d104b3217d1cd778cc99b"
       path: ""
+  curations: []
 - package:
     id: "NPM::extract-opts:3.3.1"
     purl: "pkg:npm/extract-opts@3.3.1"
@@ -666,6 +684,7 @@ packages:
       url: "ssh://git@github.com/bevry/extract-opts.git"
       revision: "87e349bbf92a6f95d1ecc8b064a1631def105dc8"
       path: ""
+  curations: []
 - package:
     id: "NPM::graceful-fs:4.2.0"
     purl: "pkg:npm/graceful-fs@4.2.0"
@@ -695,6 +714,7 @@ packages:
       url: "https://github.com/isaacs/node-graceful-fs.git"
       revision: "585df780323740a2b562677caa08a80de1f56c62"
       path: ""
+  curations: []
 - package:
     id: "NPM::htmlparser2:3.10.1"
     purl: "pkg:npm/htmlparser2@3.10.1"
@@ -724,6 +744,7 @@ packages:
       url: "https://github.com/fb55/htmlparser2.git"
       revision: "537bf2aeb56910d84d2c5aedb839dec678188a43"
       path: ""
+  curations: []
 - package:
     id: "NPM::inherits:2.0.4"
     purl: "pkg:npm/inherits@2.0.4"
@@ -754,6 +775,7 @@ packages:
       url: "https://github.com/isaacs/inherits.git"
       revision: "9a2c29400c6d491e0b7beefe0c32efa3b462545d"
       path: ""
+  curations: []
 - package:
     id: "NPM::lodash:4.17.15"
     purl: "pkg:npm/lodash@4.17.15"
@@ -783,6 +805,7 @@ packages:
       url: "https://github.com/lodash/lodash.git"
       revision: ""
       path: ""
+  curations: []
 - package:
     id: "NPM::long:3.2.0"
     purl: "pkg:npm/long@3.2.0"
@@ -813,6 +836,7 @@ packages:
       url: "https://github.com/dcodeIO/long.js.git"
       revision: "8cdc1f74ced4f771aa844f1cbc565b1d4c4451b8"
       path: ""
+  curations: []
 - package:
     id: "NPM::nth-check:1.0.2"
     purl: "pkg:npm/nth-check@1.0.2"
@@ -842,6 +866,7 @@ packages:
       url: "https://github.com/fb55/nth-check.git"
       revision: "03a02587bbd126fafc3d2331ffef6ea5cb2f9b66"
       path: ""
+  curations: []
 - package:
     id: "NPM::parse5:3.0.3"
     purl: "pkg:npm/parse5@3.0.3"
@@ -872,6 +897,7 @@ packages:
       url: "https://github.com/inikulin/parse5.git"
       revision: "723d782abee65aaab9c50f92e73ac2029ae853df"
       path: ""
+  curations: []
 - package:
     id: "NPM::promise:7.3.1"
     purl: "pkg:npm/promise@7.3.1"
@@ -901,6 +927,7 @@ packages:
       url: "https://github.com/then/promise.git"
       revision: "cebfa6049cc08843f428c6fc92dde918f8687e6d"
       path: ""
+  curations: []
 - package:
     id: "NPM::readable-stream:3.4.0"
     purl: "pkg:npm/readable-stream@3.4.0"
@@ -930,6 +957,7 @@ packages:
       url: "https://github.com/nodejs/readable-stream.git"
       revision: "4ba93f84cf8812ca2af793c7304a5c16de72088a"
       path: ""
+  curations: []
 - package:
     id: "NPM::requirefresh:2.2.0"
     purl: "pkg:npm/requirefresh@2.2.0"
@@ -959,6 +987,7 @@ packages:
       url: "https://github.com/bevry/requirefresh.git"
       revision: "f389cbc33b5891468bde8db479bc0f129b0fcc57"
       path: ""
+  curations: []
 - package:
     id: "NPM::safe-buffer:5.1.2"
     purl: "pkg:npm/safe-buffer@5.1.2"
@@ -988,6 +1017,7 @@ packages:
       url: "https://github.com/feross/safe-buffer.git"
       revision: "649435cc8e2d1f3ecdc7caf323f1cb1187307a16"
       path: ""
+  curations: []
 - package:
     id: "NPM::safefs:4.1.0"
     purl: "pkg:npm/safefs@4.1.0"
@@ -1018,6 +1048,7 @@ packages:
       url: "ssh://git@github.com/bevry/safefs.git"
       revision: "51d15eaa03e53aaedd3002dc67814355073e8a55"
       path: ""
+  curations: []
 - package:
     id: "NPM::semver:5.7.0"
     purl: "pkg:npm/semver@5.7.0"
@@ -1047,6 +1078,7 @@ packages:
       url: "https://github.com/npm/node-semver.git"
       revision: "8055dda0aee91372e3bfc47754a62f40e8a63b98"
       path: ""
+  curations: []
 - package:
     id: "NPM::string_decoder:1.2.0"
     purl: "pkg:npm/string_decoder@1.2.0"
@@ -1076,6 +1108,7 @@ packages:
       url: "https://github.com/nodejs/string_decoder.git"
       revision: "6e0a9286ed4497badebd4ec6a9a7a4d37793aae8"
       path: ""
+  curations: []
 - package:
     id: "NPM::typechecker:4.7.0"
     purl: "pkg:npm/typechecker@4.7.0"
@@ -1106,6 +1139,7 @@ packages:
       url: "https://github.com/bevry/typechecker.git"
       revision: "69008d42927749d7e21cfe9816e478dd8d15ab88"
       path: ""
+  curations: []
 - package:
     id: "NPM::util-deprecate:1.0.2"
     purl: "pkg:npm/util-deprecate@1.0.2"
@@ -1135,6 +1169,7 @@ packages:
       url: "https://github.com/TooTallNate/util-deprecate.git"
       revision: "475fb6857cd23fafff20c1be846c1350abf8e6d4"
       path: ""
+  curations: []
 - package:
     id: "NPM:@types:node:12.6.8"
     purl: "pkg:npm/%40types/node@12.6.8"
@@ -1164,3 +1199,4 @@ packages:
       url: "https://github.com/DefinitelyTyped/DefinitelyTyped.git"
       revision: ""
       path: "types/node"
+  curations: []

@@ -1078,6 +1078,7 @@ packages:
       url: "https://github.com/ekmett/semigroups.git"
       revision: ""
       path: ""
+  curations: []
 - package:
     id: "Hackage:Compatibility:base-compat:0.10.5"
     purl: "pkg:hackage/Compatibility/base-compat@0.10.5"
@@ -1122,6 +1123,7 @@ packages:
       url: "https://github.com/haskell-compat/base-compat.git"
       revision: ""
       path: ""
+  curations: []
 - package:
     id: "Hackage:Compatibility:base-orphans:0.8"
     purl: "pkg:hackage/Compatibility/base-orphans@0.8"
@@ -1157,6 +1159,7 @@ packages:
       url: "https://github.com/haskell-compat/base-orphans.git"
       revision: ""
       path: ""
+  curations: []
 - package:
     id: "Hackage:Compatibility:transformers-compat:0.6.2"
     purl: "pkg:hackage/Compatibility/transformers-compat@0.6.2"
@@ -1193,6 +1196,7 @@ packages:
       url: "https://github.com/ekmett/transformers-compat.git"
       revision: ""
       path: ""
+  curations: []
 - package:
     id: "Hackage:Concurrency:async:2.2.1"
     purl: "pkg:hackage/Concurrency/async@2.2.1"
@@ -1232,6 +1236,7 @@ packages:
       url: "https://github.com/simonmar/async.git"
       revision: ""
       path: ""
+  curations: []
 - package:
     id: "Hackage:Concurrency:stm:2.5.0.0"
     purl: "pkg:hackage/Concurrency/stm@2.5.0.0"
@@ -1268,6 +1273,7 @@ packages:
       url: "https://github.com/haskell/stm.git"
       revision: ""
       path: ""
+  curations: []
 - package:
     id: "Hackage:Control, Data:contravariant:1.5"
     purl: "pkg:hackage/Control%2C%20Data/contravariant@1.5"
@@ -1299,6 +1305,7 @@ packages:
       url: "https://github.com/ekmett/contravariant.git"
       revision: ""
       path: ""
+  curations: []
 - package:
     id: "Hackage:Control, Exceptions, Monad:exceptions:0.10.0"
     purl: "pkg:hackage/Control%2C%20Exceptions%2C%20Monad/exceptions@0.10.0"
@@ -1330,6 +1337,7 @@ packages:
       url: "https://github.com/ekmett/exceptions.git"
       revision: ""
       path: ""
+  curations: []
 - package:
     id: "Hackage:Control:deepseq:1.4.4.0"
     purl: "pkg:hackage/Control/deepseq@1.4.4.0"
@@ -1370,6 +1378,7 @@ packages:
       url: "https://github.com/haskell/deepseq.git"
       revision: ""
       path: ""
+  curations: []
 - package:
     id: "Hackage:Control:loop:0.3.0"
     purl: "pkg:hackage/Control/loop@0.3.0"
@@ -1401,6 +1410,7 @@ packages:
       url: "https://github.com/nh2/loop.git"
       revision: ""
       path: ""
+  curations: []
 - package:
     id: "Hackage:Control:mtl:2.2.2"
     purl: "pkg:hackage/Control/mtl@2.2.2"
@@ -1435,6 +1445,7 @@ packages:
       url: "https://github.com/haskell/mtl.git"
       revision: ""
       path: ""
+  curations: []
 - package:
     id: "Hackage:Control:newtype-generics:0.5.3"
     purl: "pkg:hackage/Control/newtype-generics@0.5.3"
@@ -1470,6 +1481,7 @@ packages:
       url: "https://github.com/sjakobi/newtype-generics.git"
       revision: ""
       path: ""
+  curations: []
 - package:
     id: "Hackage:Control:transformers:0.5.5.0"
     purl: "pkg:hackage/Control/transformers@0.5.5.0"
@@ -1512,6 +1524,7 @@ packages:
       url: "http://hub.darcs.net/ross/transformers"
       revision: ""
       path: ""
+  curations: []
 - package:
     id: "Hackage:Control:unliftio-core:0.1.2.0"
     purl: "pkg:hackage/Control/unliftio-core@0.1.2.0"
@@ -1541,6 +1554,7 @@ packages:
       url: "https://github.com/fpco/unliftio.git"
       revision: "master"
       path: "unliftio-core"
+  curations: []
 - package:
     id: "Hackage:Control:unliftio:0.2.10"
     purl: "pkg:hackage/Control/unliftio@0.2.10"
@@ -1570,6 +1584,7 @@ packages:
       url: "https://github.com/fpco/unliftio.git"
       revision: "master"
       path: "unliftio"
+  curations: []
 - package:
     id: "Hackage:Data Structures, Graphs:fgl:5.7.0.1"
     purl: "pkg:hackage/Data%20Structures%2C%20Graphs/fgl@5.7.0.1"
@@ -1602,6 +1617,7 @@ packages:
       url: "https://github.com/haskell/fgl.git"
       revision: ""
       path: ""
+  curations: []
 - package:
     id: "Hackage:Data Structures:array:0.5.3.0"
     purl: "pkg:hackage/Data%20Structures/array@0.5.3.0"
@@ -1636,6 +1652,7 @@ packages:
       url: "http://git.haskell.org/packages/array.git"
       revision: ""
       path: ""
+  curations: []
 - package:
     id: "Hackage:Data Structures:containers:0.6.0.1"
     purl: "pkg:hackage/Data%20Structures/containers@0.6.0.1"
@@ -1672,6 +1689,7 @@ packages:
       url: "https://github.com/haskell/containers.git"
       revision: ""
       path: ""
+  curations: []
 - package:
     id: "Hackage:Data, Data Structures:vector:0.12.0.2"
     purl: "pkg:hackage/Data%2C%20Data%20Structures/vector@0.12.0.2"
@@ -1712,6 +1730,7 @@ packages:
       url: "https://github.com/haskell/vector.git"
       revision: ""
       path: ""
+  curations: []
 - package:
     id: "Hackage:Data, Parsing:binary:0.8.6.0"
     purl: "pkg:hackage/Data%2C%20Parsing/binary@0.8.6.0"
@@ -1748,6 +1767,7 @@ packages:
       url: "https://github.com/kolmodin/binary.git"
       revision: ""
       path: ""
+  curations: []
 - package:
     id: "Hackage:Data, Phantom Types:tagged:0.8.6"
     purl: "pkg:hackage/Data%2C%20Phantom%20Types/tagged@0.8.6"
@@ -1779,6 +1799,7 @@ packages:
       url: "https://github.com/ekmett/tagged.git"
       revision: ""
       path: ""
+  curations: []
 - package:
     id: "Hackage:Data, Testing:tree-diff:0.0.2.1"
     purl: "pkg:hackage/Data%2C%20Testing/tree-diff@0.0.2.1"
@@ -1819,6 +1840,7 @@ packages:
       url: "https://github.com/phadej/tree-diff.git"
       revision: ""
       path: ""
+  curations: []
 - package:
     id: "Hackage:Data, Text:text:1.2.3.1"
     purl: "pkg:hackage/Data%2C%20Text/text@1.2.3.1"
@@ -1865,6 +1887,7 @@ packages:
       url: "https://bitbucket.org/bos/text"
       revision: ""
       path: ""
+  curations: []
 - package:
     id: "Hackage:Data:MemoTrie:0.6.9"
     purl: "pkg:hackage/Data/MemoTrie@0.6.9"
@@ -1899,6 +1922,7 @@ packages:
       url: "https://github.com/conal/MemoTrie.git"
       revision: ""
       path: ""
+  curations: []
 - package:
     id: "Hackage:Data:StateVar:1.1.1.1"
     purl: "pkg:hackage/Data/StateVar@1.1.1.1"
@@ -1931,6 +1955,7 @@ packages:
       url: "https://github.com/haskell-opengl/StateVar.git"
       revision: ""
       path: ""
+  curations: []
 - package:
     id: "Hackage:Data:bytestring:0.10.8.2"
     purl: "pkg:hackage/Data/bytestring@0.10.8.2"
@@ -1983,6 +2008,7 @@ packages:
       url: "https://github.com/haskell/bytestring.git"
       revision: ""
       path: ""
+  curations: []
 - package:
     id: "Hackage:Data:charset:0.3.7.1"
     purl: "pkg:hackage/Data/charset@0.3.7.1"
@@ -2014,6 +2040,7 @@ packages:
       url: "https://github.com/ekmett/charset.git"
       revision: ""
       path: ""
+  curations: []
 - package:
     id: "Hackage:Data:dlist:0.8.0.5"
     purl: "pkg:hackage/Data/dlist@0.8.0.5"
@@ -2047,6 +2074,7 @@ packages:
       url: "https://github.com/spl/dlist.git"
       revision: ""
       path: ""
+  curations: []
 - package:
     id: "Hackage:Data:hashable:1.2.7.0"
     purl: "pkg:hackage/Data/hashable@1.2.7.0"
@@ -2081,6 +2109,7 @@ packages:
       url: "https://github.com/tibbe/hashable.git"
       revision: ""
       path: ""
+  curations: []
 - package:
     id: "Hackage:Data:primitive:0.6.4.0"
     purl: "pkg:hackage/Data/primitive@0.6.4.0"
@@ -2112,6 +2141,7 @@ packages:
       url: "https://github.com/haskell/primitive.git"
       revision: ""
       path: ""
+  curations: []
 - package:
     id: "Hackage:Data:scientific:0.3.6.2"
     purl: "pkg:hackage/Data/scientific@0.3.6.2"
@@ -2161,6 +2191,7 @@ packages:
       url: "https://github.com/basvandijk/scientific.git"
       revision: ""
       path: ""
+  curations: []
 - package:
     id: "Hackage:Data:sop-core:0.4.0.0"
     purl: "pkg:hackage/Data/sop-core@0.4.0.0"
@@ -2197,6 +2228,7 @@ packages:
       url: "https://github.com/well-typed/generics-sop.git"
       revision: ""
       path: ""
+  curations: []
 - package:
     id: "Hackage:Data:unordered-containers:0.2.9.0"
     purl: "pkg:hackage/Data/unordered-containers@0.2.9.0"
@@ -2231,6 +2263,7 @@ packages:
       url: "https://github.com/tibbe/unordered-containers.git"
       revision: ""
       path: ""
+  curations: []
 - package:
     id: "Hackage:Data:uuid-types:1.0.3"
     purl: "pkg:hackage/Data/uuid-types@1.0.3"
@@ -2264,6 +2297,7 @@ packages:
       url: "https://github.com/aslatter/uuid.git"
       revision: ""
       path: ""
+  curations: []
 - package:
     id: "Hackage:Development:happy:1.19.9"
     purl: "pkg:hackage/Development/happy@1.19.9"
@@ -2297,6 +2331,7 @@ packages:
       url: "https://github.com/simonmar/happy.git"
       revision: ""
       path: ""
+  curations: []
 - package:
     id: "Hackage:Development:th-abstraction:0.2.10.0"
     purl: "pkg:hackage/Development/th-abstraction@0.2.10.0"
@@ -2329,6 +2364,7 @@ packages:
       url: "https://github.com/glguy/th-abstraction.git"
       revision: ""
       path: ""
+  curations: []
 - package:
     id: "Hackage:Distribution:Cabal:2.4.1.0"
     purl: "pkg:hackage/Distribution/Cabal@2.4.1.0"
@@ -2364,6 +2400,7 @@ packages:
       url: "https://github.com/haskell/cabal.git"
       revision: ""
       path: ""
+  curations: []
 - package:
     id: "Hackage:GHC:ghc-prim:0.5.3"
     purl: "pkg:hackage/GHC/ghc-prim@0.5.3"
@@ -2394,6 +2431,7 @@ packages:
       url: "http://git.haskell.org/ghc.git"
       revision: ""
       path: ""
+  curations: []
 - package:
     id: "Hackage:Generics:generics-sop:0.4.0.1"
     purl: "pkg:hackage/Generics/generics-sop@0.4.0.1"
@@ -2441,6 +2479,7 @@ packages:
       url: "https://github.com/well-typed/generics-sop.git"
       revision: ""
       path: ""
+  curations: []
 - package:
     id: "Hackage:Graphs, Graphics:graphviz:2999.20.0.3"
     purl: "pkg:hackage/Graphs%2C%20Graphics/graphviz@2999.20.0.3"
@@ -2485,6 +2524,7 @@ packages:
       url: "https://github.com/ivan-m/graphviz.git"
       revision: ""
       path: ""
+  curations: []
 - package:
     id: "Hackage:Language:haskell-lexer:1.0.2"
     purl: "pkg:hackage/Language/haskell-lexer@1.0.2"
@@ -2516,6 +2556,7 @@ packages:
       url: "https://github.com/yav/haskell-lexer.git"
       revision: ""
       path: ""
+  curations: []
 - package:
     id: "Hackage:List:split:0.2.3.3"
     purl: "pkg:hackage/List/split@0.2.3.3"
@@ -2558,6 +2599,7 @@ packages:
       url: "https://github.com/byorgey/split.git"
       revision: ""
       path: ""
+  curations: []
 - package:
     id: "Hackage:Math, Algorithms, Number Theory:integer-logarithms:1.0.2.2"
     purl: "pkg:hackage/Math%2C%20Algorithms%2C%20Number%20Theory/integer-logarithms@1.0.2.2"
@@ -2590,6 +2632,7 @@ packages:
       url: "https://github.com/Bodigrim/integer-logarithms.git"
       revision: ""
       path: ""
+  curations: []
 - package:
     id: "Hackage:Math:matrix:0.3.6.1"
     purl: "pkg:hackage/Math/matrix@0.3.6.1"
@@ -2626,6 +2669,7 @@ packages:
       url: "https://github.com/Daniel-Diaz/matrix.git"
       revision: ""
       path: ""
+  curations: []
 - package:
     id: "Hackage:Numeric, Algebra:integer-gmp:1.0.2.0"
     purl: "pkg:hackage/Numeric%2C%20Algebra/integer-gmp@1.0.2.0"
@@ -2661,6 +2705,7 @@ packages:
       url: ""
       revision: ""
       path: ""
+  curations: []
 - package:
     id: "Hackage:Other:generic-data:0.3.0.0"
     purl: "pkg:hackage/Other/generic-data@0.3.0.0"
@@ -2690,6 +2735,7 @@ packages:
       url: "https://github.com/Lysxia/generic-data.git"
       revision: ""
       path: ""
+  curations: []
 - package:
     id: "Hackage:Parsing:parsec:3.1.13.0"
     purl: "pkg:hackage/Parsing/parsec@3.1.13.0"
@@ -2728,6 +2774,7 @@ packages:
       url: "https://github.com/hvr/parsec.git"
       revision: ""
       path: ""
+  curations: []
 - package:
     id: "Hackage:Prelude:base:4.12.0.0"
     purl: "pkg:hackage/Prelude/base@4.12.0.0"
@@ -2759,6 +2806,7 @@ packages:
       url: "http://git.haskell.org/ghc.git"
       revision: ""
       path: ""
+  curations: []
 - package:
     id: "Hackage:System, Utils:temporary:1.3"
     purl: "pkg:hackage/System%2C%20Utils/temporary@1.3"
@@ -2790,6 +2838,7 @@ packages:
       url: "https://github.com/feuerbach/temporary.git"
       revision: ""
       path: ""
+  curations: []
 - package:
     id: "Hackage:System:directory:1.3.3.0"
     purl: "pkg:hackage/System/directory@1.3.3.0"
@@ -2822,6 +2871,7 @@ packages:
       url: "https://github.com/haskell/directory.git"
       revision: ""
       path: ""
+  curations: []
 - package:
     id: "Hackage:System:filepath:1.4.2.1"
     purl: "pkg:hackage/System/filepath@1.4.2.1"
@@ -2861,6 +2911,7 @@ packages:
       url: "https://github.com/haskell/filepath.git"
       revision: ""
       path: ""
+  curations: []
 - package:
     id: "Hackage:System:process:1.6.3.0"
     purl: "pkg:hackage/System/process@1.6.3.0"
@@ -2895,6 +2946,7 @@ packages:
       url: "https://github.com/haskell/process.git"
       revision: ""
       path: ""
+  curations: []
 - package:
     id: "Hackage:System:random:1.1"
     purl: "pkg:hackage/System/random@1.1"
@@ -2927,6 +2979,7 @@ packages:
       url: "http://git.haskell.org/packages/random.git"
       revision: ""
       path: ""
+  curations: []
 - package:
     id: "Hackage:System:splitmix:0.0.2"
     purl: "pkg:hackage/System/splitmix@0.0.2"
@@ -2972,6 +3025,7 @@ packages:
       url: "https://github.com/phadej/splitmix.git"
       revision: ""
       path: ""
+  curations: []
 - package:
     id: "Hackage:System:time-locale-compat:0.1.1.5"
     purl: "pkg:hackage/System/time-locale-compat@0.1.1.5"
@@ -3004,6 +3058,7 @@ packages:
       url: "https://bitbucket.org/khibino/haskell-time-locale-compat.git"
       revision: ""
       path: ""
+  curations: []
 - package:
     id: "Hackage:System:unix:2.7.2.2"
     purl: "pkg:hackage/System/unix@2.7.2.2"
@@ -3038,6 +3093,7 @@ packages:
       url: "https://github.com/haskell/unix.git"
       revision: ""
       path: ""
+  curations: []
 - package:
     id: "Hackage:Template Haskell:template-haskell:2.14.0.0"
     purl: "pkg:hackage/Template%20Haskell/template-haskell@2.14.0.0"
@@ -3071,6 +3127,7 @@ packages:
       url: "http://git.haskell.org/ghc.git"
       revision: ""
       path: ""
+  curations: []
 - package:
     id: "Hackage:Testing:QuickCheck:2.13.1"
     purl: "pkg:hackage/Testing/QuickCheck@2.13.1"
@@ -3117,6 +3174,7 @@ packages:
       url: "https://github.com/nick8325/quickcheck.git"
       revision: "2.13.1"
       path: ""
+  curations: []
 - package:
     id: "Hackage:Testing:markov-chain-usage-model:0.0.0"
     purl: "pkg:hackage/Testing/markov-chain-usage-model@0.0.0"
@@ -3148,6 +3206,7 @@ packages:
       url: "https://github.com/advancedtelematic/markov-chain-usage-model.git"
       revision: ""
       path: ""
+  curations: []
 - package:
     id: "Hackage:Text, Parsing:attoparsec:0.13.2.2"
     purl: "pkg:hackage/Text%2C%20Parsing/attoparsec@0.13.2.2"
@@ -3180,6 +3239,7 @@ packages:
       url: "https://github.com/bos/attoparsec.git"
       revision: ""
       path: ""
+  curations: []
 - package:
     id: "Hackage:Text, Parsing:parsers:0.12.9"
     purl: "pkg:hackage/Text%2C%20Parsing/parsers@0.12.9"
@@ -3215,6 +3275,7 @@ packages:
       url: "https://github.com/ekmett/parsers.git"
       revision: ""
       path: ""
+  curations: []
 - package:
     id: "Hackage:Text, Parsing:polyparse:1.12.1"
     purl: "pkg:hackage/Text%2C%20Parsing/polyparse@1.12.1"
@@ -3252,6 +3313,7 @@ packages:
       url: "https://github.com/hackage-/malcolm-wallace-universe.git"
       revision: "1.12.1"
       path: ""
+  curations: []
 - package:
     id: "Hackage:Text, Web, JSON:aeson:1.4.2.0"
     purl: "pkg:hackage/Text%2C%20Web%2C%20JSON/aeson@1.4.2.0"
@@ -3286,6 +3348,7 @@ packages:
       url: "https://github.com/bos/aeson.git"
       revision: ""
       path: ""
+  curations: []
 - package:
     id: "Hackage:Text:pretty-show:1.9.5"
     purl: "pkg:hackage/Text/pretty-show@1.9.5"
@@ -3320,6 +3383,7 @@ packages:
       url: "https://github.com/yav/pretty-show.git"
       revision: ""
       path: ""
+  curations: []
 - package:
     id: "Hackage:Text:pretty:1.1.3.6"
     purl: "pkg:hackage/Text/pretty@1.1.3.6"
@@ -3355,6 +3419,7 @@ packages:
       url: "https://github.com/haskell/pretty.git"
       revision: "1.1.3.5"
       path: ""
+  curations: []
 - package:
     id: "Hackage:Text:show-combinators:0.1.0.0"
     purl: "pkg:hackage/Text/show-combinators@0.1.0.0"
@@ -3384,6 +3449,7 @@ packages:
       url: "https://github.com/Lysxia/show-combinators.git"
       revision: ""
       path: ""
+  curations: []
 - package:
     id: "Hackage:Text:wl-pprint-text:1.2.0.0"
     purl: "pkg:hackage/Text/wl-pprint-text@1.2.0.0"
@@ -3415,6 +3481,7 @@ packages:
       url: "https://github.com/ivan-m/wl-pprint-text.git"
       revision: ""
       path: ""
+  curations: []
 - package:
     id: "Hackage:Time:time:1.8.0.2"
     purl: "pkg:hackage/Time/time@1.8.0.2"
@@ -3446,6 +3513,7 @@ packages:
       url: "https://github.com/haskell/time.git"
       revision: ""
       path: ""
+  curations: []
 - package:
     id: "Hackage:User Interfaces, Text:ansi-wl-pprint:0.6.8.2"
     purl: "pkg:hackage/User%20Interfaces%2C%20Text/ansi-wl-pprint@0.6.8.2"
@@ -3480,6 +3548,7 @@ packages:
       url: "https://github.com/ekmett/ansi-wl-pprint.git"
       revision: ""
       path: ""
+  curations: []
 - package:
     id: "Hackage:User Interfaces:ansi-terminal:0.8.2"
     purl: "pkg:hackage/User%20Interfaces/ansi-terminal@0.8.2"
@@ -3513,6 +3582,7 @@ packages:
       url: "https://github.com/feuerbach/ansi-terminal.git"
       revision: ""
       path: ""
+  curations: []
 - package:
     id: "Hackage:data, graphics:colour:2.3.4"
     purl: "pkg:hackage/data%2C%20graphics/colour@2.3.4"
@@ -3544,3 +3614,4 @@ packages:
       url: ""
       revision: ""
       path: ""
+  curations: []

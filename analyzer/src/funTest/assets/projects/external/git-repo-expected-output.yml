@@ -420,6 +420,7 @@ analyzer:
           url: ""
           revision: ""
           path: ""
+      curations: []
     - package:
         id: "Maven:com.fasterxml.jackson.core:jackson-annotations:2.9.0"
         purl: "pkg:maven/com.fasterxml.jackson.core/jackson-annotations@2.9.0"
@@ -452,6 +453,7 @@ analyzer:
           url: "ssh://git@github.com/FasterXML/jackson-annotations.git"
           revision: "jackson-annotations-2.9.0"
           path: ""
+      curations: []
     - package:
         id: "Maven:com.fasterxml.jackson.core:jackson-core:2.9.6"
         purl: "pkg:maven/com.fasterxml.jackson.core/jackson-core@2.9.6"
@@ -484,6 +486,7 @@ analyzer:
           url: "ssh://git@github.com/FasterXML/jackson-core.git"
           revision: "jackson-core-2.9.6"
           path: ""
+      curations: []
     - package:
         id: "Maven:com.fasterxml.jackson.core:jackson-databind:2.9.6"
         purl: "pkg:maven/com.fasterxml.jackson.core/jackson-databind@2.9.6"
@@ -516,6 +519,7 @@ analyzer:
           url: "ssh://git@github.com/FasterXML/jackson-databind.git"
           revision: "jackson-databind-2.9.6"
           path: ""
+      curations: []
     - package:
         id: "Maven:com.github.andrewoma.dexx:collection:0.7"
         purl: "pkg:maven/com.github.andrewoma.dexx/collection@0.7"
@@ -547,6 +551,7 @@ analyzer:
           url: "https://github.com/andrewoma/dexx.git"
           revision: ""
           path: ""
+      curations: []
     - package:
         id: "Maven:com.github.cliftonlabs:json-simple:2.3.1"
         purl: "pkg:maven/com.github.cliftonlabs/json-simple@2.3.1"
@@ -579,6 +584,7 @@ analyzer:
           url: "https://github.com/cliftonlabs/json-simple.git"
           revision: "json-simple-2.3.1"
           path: ""
+      curations: []
     - package:
         id: "Maven:com.github.jsonld-java:jsonld-java:0.12.1"
         purl: "pkg:maven/com.github.jsonld-java/jsonld-java@0.12.1"
@@ -610,6 +616,7 @@ analyzer:
           url: "ssh://git@github.com/jsonld-java/jsonld-java.git"
           revision: ""
           path: ""
+      curations: []
     - package:
         id: "Maven:com.github.spullara.mustache.java:compiler:0.7.9"
         purl: "pkg:maven/com.github.spullara.mustache.java/compiler@0.7.9"
@@ -641,6 +648,7 @@ analyzer:
           url: "https://github.com/spullara/mustache.java.git"
           revision: ""
           path: ""
+      curations: []
     - package:
         id: "Maven:com.github.virtuald:curvesapi:1.04"
         purl: "pkg:maven/com.github.virtuald/curvesapi@1.04"
@@ -675,6 +683,7 @@ analyzer:
           url: "https://github.com/virtuald/curvesapi.git"
           revision: ""
           path: ""
+      curations: []
     - package:
         id: "Maven:com.google.code.gson:gson:2.8.0"
         purl: "pkg:maven/com.google.code.gson/gson@2.8.0"
@@ -706,6 +715,7 @@ analyzer:
           url: "https://github.com/google/gson.git"
           revision: "gson-parent-2.8.0"
           path: ""
+      curations: []
     - package:
         id: "Maven:com.google.guava:guava:16.0.1"
         purl: "pkg:maven/com.google.guava/guava@16.0.1"
@@ -740,6 +750,7 @@ analyzer:
           url: "https://code.google.com/p/guava-libraries"
           revision: ""
           path: ""
+      curations: []
     - package:
         id: "Maven:commons-cli:commons-cli:1.4"
         purl: "pkg:maven/commons-cli/commons-cli@1.4"
@@ -772,6 +783,7 @@ analyzer:
           url: "http://svn.apache.org/repos/asf/commons/proper/cli"
           revision: "trunk"
           path: ""
+      curations: []
     - package:
         id: "Maven:commons-codec:commons-codec:1.10"
         purl: "pkg:maven/commons-codec/commons-codec@1.10"
@@ -806,6 +818,7 @@ analyzer:
           url: "http://svn.apache.org/repos/asf/commons/proper/codec"
           revision: "trunk"
           path: ""
+      curations: []
     - package:
         id: "Maven:commons-io:commons-io:2.6"
         purl: "pkg:maven/commons-io/commons-io@2.6"
@@ -839,6 +852,7 @@ analyzer:
           url: "http://git-wip-us.apache.org/repos/asf/commons-io.git"
           revision: "commons-io-2.6"
           path: ""
+      curations: []
     - package:
         id: "Maven:junit:junit:4.12"
         purl: "pkg:maven/junit/junit@4.12"
@@ -871,6 +885,7 @@ analyzer:
           url: "https://github.com/junit-team/junit.git"
           revision: "r4.12"
           path: ""
+      curations: []
     - package:
         id: "Maven:net.sf.opencsv:opencsv:2.3"
         purl: "pkg:maven/net.sf.opencsv/opencsv@2.3"
@@ -902,6 +917,7 @@ analyzer:
           url: "https://opencsv.svn.sourceforge.net/svnroot/opencsv"
           revision: "trunk"
           path: ""
+      curations: []
     - package:
         id: "Maven:net.sf.saxon:saxon-dom:8.7"
         purl: "pkg:maven/net.sf.saxon/saxon-dom@8.7"
@@ -933,6 +949,7 @@ analyzer:
           url: ""
           revision: ""
           path: ""
+      curations: []
     - package:
         id: "Maven:net.sf.saxon:saxon:8.7"
         purl: "pkg:maven/net.sf.saxon/saxon@8.7"
@@ -964,6 +981,7 @@ analyzer:
           url: ""
           revision: ""
           path: ""
+      curations: []
     - package:
         id: "Maven:nu.validator.htmlparser:htmlparser:1.4"
         purl: "pkg:maven/nu.validator.htmlparser/htmlparser@1.4"
@@ -1001,6 +1019,7 @@ analyzer:
           url: "http://hg.mozilla.org/projects/htmlparser"
           revision: ""
           path: ""
+      curations: []
     - package:
         id: "Maven:org.antlr:ST4:4.0.4"
         purl: "pkg:maven/org.antlr/ST4@4.0.4"
@@ -1042,6 +1061,7 @@ analyzer:
           url: ""
           revision: ""
           path: ""
+      curations: []
     - package:
         id: "Maven:org.antlr:antlr-runtime:3.4"
         purl: "pkg:maven/org.antlr/antlr-runtime@3.4"
@@ -1070,6 +1090,7 @@ analyzer:
           url: ""
           revision: ""
           path: ""
+      curations: []
     - package:
         id: "Maven:org.antlr:antlr:3.4"
         purl: "pkg:maven/org.antlr/antlr@3.4"
@@ -1098,6 +1119,7 @@ analyzer:
           url: "http://svn.sonatype.org/spice"
           revision: "tags/oss-parent-7"
           path: ""
+      curations: []
     - package:
         id: "Maven:org.antlr:stringtemplate:3.2.1"
         purl: "pkg:maven/org.antlr/stringtemplate@3.2.1"
@@ -1139,6 +1161,7 @@ analyzer:
           url: ""
           revision: ""
           path: ""
+      curations: []
     - package:
         id: "Maven:org.apache.commons:commons-collections4:4.1"
         purl: "pkg:maven/org.apache.commons/commons-collections4@4.1"
@@ -1171,6 +1194,7 @@ analyzer:
           url: "http://svn.apache.org/repos/asf/commons/proper/collections"
           revision: "trunk"
           path: ""
+      curations: []
     - package:
         id: "Maven:org.apache.commons:commons-compress:1.17"
         purl: "pkg:maven/org.apache.commons/commons-compress@1.17"
@@ -1205,6 +1229,7 @@ analyzer:
           url: "https://git-wip-us.apache.org/repos/asf/commons-compress.git"
           revision: ""
           path: ""
+      curations: []
     - package:
         id: "Maven:org.apache.commons:commons-csv:1.5"
         purl: "pkg:maven/org.apache.commons/commons-csv@1.5"
@@ -1237,6 +1262,7 @@ analyzer:
           url: "http://git-wip-us.apache.org/repos/asf/commons-csv.git"
           revision: ""
           path: ""
+      curations: []
     - package:
         id: "Maven:org.apache.commons:commons-lang3:3.1"
         purl: "pkg:maven/org.apache.commons/commons-lang3@3.1"
@@ -1270,6 +1296,7 @@ analyzer:
           url: "http://svn.apache.org/repos/asf/commons/proper/lang"
           revision: "trunk"
           path: ""
+      curations: []
     - package:
         id: "Maven:org.apache.commons:commons-lang3:3.8.1"
         purl: "pkg:maven/org.apache.commons/commons-lang3@3.8.1"
@@ -1303,6 +1330,7 @@ analyzer:
           url: "http://git-wip-us.apache.org/repos/asf/commons-lang.git"
           revision: "LANG_3_8_1"
           path: ""
+      curations: []
     - package:
         id: "Maven:org.apache.httpcomponents:httpclient-cache:4.5.5"
         purl: "pkg:maven/org.apache.httpcomponents/httpclient-cache@4.5.5"
@@ -1334,6 +1362,7 @@ analyzer:
           url: "https://git-wip-us.apache.org/repos/asf/httpcomponents-client.git"
           revision: "4.5.5"
           path: ""
+      curations: []
     - package:
         id: "Maven:org.apache.httpcomponents:httpclient:4.5.5"
         purl: "pkg:maven/org.apache.httpcomponents/httpclient@4.5.5"
@@ -1365,6 +1394,7 @@ analyzer:
           url: "https://git-wip-us.apache.org/repos/asf/httpcomponents-client.git"
           revision: "4.5.5"
           path: ""
+      curations: []
     - package:
         id: "Maven:org.apache.httpcomponents:httpcore:4.4.9"
         purl: "pkg:maven/org.apache.httpcomponents/httpcore@4.4.9"
@@ -1396,6 +1426,7 @@ analyzer:
           url: "https://git-wip-us.apache.org/repos/asf/httpcomponents-core.git"
           revision: "4.4.9"
           path: ""
+      curations: []
     - package:
         id: "Maven:org.apache.jena:apache-jena-libs:3.9.0"
         purl: "pkg:maven/org.apache.jena/apache-jena-libs@3.9.0"
@@ -1428,6 +1459,7 @@ analyzer:
           url: "https://git-wip-us.apache.org/repos/asf/jena.git"
           revision: "jena-3.9.0-rc1"
           path: ""
+      curations: []
     - package:
         id: "Maven:org.apache.jena:jena-arq:3.9.0"
         purl: "pkg:maven/org.apache.jena/jena-arq@3.9.0"
@@ -1459,6 +1491,7 @@ analyzer:
           url: "https://git-wip-us.apache.org/repos/asf/jena.git"
           revision: "jena-3.9.0-rc1"
           path: ""
+      curations: []
     - package:
         id: "Maven:org.apache.jena:jena-base:3.9.0"
         purl: "pkg:maven/org.apache.jena/jena-base@3.9.0"
@@ -1491,6 +1524,7 @@ analyzer:
           url: "https://git-wip-us.apache.org/repos/asf/jena.git"
           revision: "jena-3.9.0-rc1"
           path: ""
+      curations: []
     - package:
         id: "Maven:org.apache.jena:jena-core:3.9.0"
         purl: "pkg:maven/org.apache.jena/jena-core@3.9.0"
@@ -1524,6 +1558,7 @@ analyzer:
           url: "https://git-wip-us.apache.org/repos/asf/jena.git"
           revision: "jena-3.9.0-rc1"
           path: ""
+      curations: []
     - package:
         id: "Maven:org.apache.jena:jena-dboe-base:3.9.0"
         purl: "pkg:maven/org.apache.jena/jena-dboe-base@3.9.0"
@@ -1561,6 +1596,7 @@ analyzer:
           url: "https://git-wip-us.apache.org/repos/asf/jena.git"
           revision: "jena-3.9.0-rc1"
           path: ""
+      curations: []
     - package:
         id: "Maven:org.apache.jena:jena-dboe-index:3.9.0"
         purl: "pkg:maven/org.apache.jena/jena-dboe-index@3.9.0"
@@ -1598,6 +1634,7 @@ analyzer:
           url: "https://git-wip-us.apache.org/repos/asf/jena.git"
           revision: "jena-3.9.0-rc1"
           path: ""
+      curations: []
     - package:
         id: "Maven:org.apache.jena:jena-dboe-trans-data:3.9.0"
         purl: "pkg:maven/org.apache.jena/jena-dboe-trans-data@3.9.0"
@@ -1635,6 +1672,7 @@ analyzer:
           url: "https://git-wip-us.apache.org/repos/asf/jena.git"
           revision: "jena-3.9.0-rc1"
           path: ""
+      curations: []
     - package:
         id: "Maven:org.apache.jena:jena-dboe-transaction:3.9.0"
         purl: "pkg:maven/org.apache.jena/jena-dboe-transaction@3.9.0"
@@ -1672,6 +1710,7 @@ analyzer:
           url: "https://git-wip-us.apache.org/repos/asf/jena.git"
           revision: "jena-3.9.0-rc1"
           path: ""
+      curations: []
     - package:
         id: "Maven:org.apache.jena:jena-iri:3.9.0"
         purl: "pkg:maven/org.apache.jena/jena-iri@3.9.0"
@@ -1706,6 +1745,7 @@ analyzer:
           url: "https://git-wip-us.apache.org/repos/asf/jena.git"
           revision: "jena-3.9.0-rc1"
           path: ""
+      curations: []
     - package:
         id: "Maven:org.apache.jena:jena-rdfconnection:3.9.0"
         purl: "pkg:maven/org.apache.jena/jena-rdfconnection@3.9.0"
@@ -1737,6 +1777,7 @@ analyzer:
           url: "https://git-wip-us.apache.org/repos/asf/jena.git"
           revision: "jena-3.9.0-rc1"
           path: ""
+      curations: []
     - package:
         id: "Maven:org.apache.jena:jena-shaded-guava:3.9.0"
         purl: "pkg:maven/org.apache.jena/jena-shaded-guava@3.9.0"
@@ -1771,6 +1812,7 @@ analyzer:
           url: "https://git-wip-us.apache.org/repos/asf/jena.git"
           revision: "jena-3.9.0-rc1"
           path: ""
+      curations: []
     - package:
         id: "Maven:org.apache.jena:jena-tdb2:3.9.0"
         purl: "pkg:maven/org.apache.jena/jena-tdb2@3.9.0"
@@ -1808,6 +1850,7 @@ analyzer:
           url: "https://git-wip-us.apache.org/repos/asf/jena.git"
           revision: "jena-3.9.0-rc1"
           path: ""
+      curations: []
     - package:
         id: "Maven:org.apache.jena:jena-tdb:3.9.0"
         purl: "pkg:maven/org.apache.jena/jena-tdb@3.9.0"
@@ -1840,6 +1883,7 @@ analyzer:
           url: "https://git-wip-us.apache.org/repos/asf/jena.git"
           revision: "jena-3.9.0-rc1"
           path: ""
+      curations: []
     - package:
         id: "Maven:org.apache.logging.log4j:log4j-api:2.10.0"
         purl: "pkg:maven/org.apache.logging.log4j/log4j-api@2.10.0"
@@ -1871,6 +1915,7 @@ analyzer:
           url: "https://git-wip-us.apache.org/repos/asf/logging-log4j2.git"
           revision: "log4j-2.10-rc1"
           path: ""
+      curations: []
     - package:
         id: "Maven:org.apache.logging.log4j:log4j-core:2.10.0"
         purl: "pkg:maven/org.apache.logging.log4j/log4j-core@2.10.0"
@@ -1902,6 +1947,7 @@ analyzer:
           url: "https://git-wip-us.apache.org/repos/asf/logging-log4j2.git"
           revision: "log4j-2.10-rc1"
           path: ""
+      curations: []
     - package:
         id: "Maven:org.apache.logging.log4j:log4j-slf4j-impl:2.10.0"
         purl: "pkg:maven/org.apache.logging.log4j/log4j-slf4j-impl@2.10.0"
@@ -1933,6 +1979,7 @@ analyzer:
           url: "https://git-wip-us.apache.org/repos/asf/logging-log4j2.git"
           revision: "log4j-2.10-rc1"
           path: ""
+      curations: []
     - package:
         id: "Maven:org.apache.poi:poi-ooxml-schemas:3.15"
         purl: "pkg:maven/org.apache.poi/poi-ooxml-schemas@3.15"
@@ -1964,6 +2011,7 @@ analyzer:
           url: ""
           revision: ""
           path: ""
+      curations: []
     - package:
         id: "Maven:org.apache.poi:poi-ooxml:3.15"
         purl: "pkg:maven/org.apache.poi/poi-ooxml@3.15"
@@ -1995,6 +2043,7 @@ analyzer:
           url: ""
           revision: ""
           path: ""
+      curations: []
     - package:
         id: "Maven:org.apache.poi:poi:3.15"
         purl: "pkg:maven/org.apache.poi/poi@3.15"
@@ -2026,6 +2075,7 @@ analyzer:
           url: ""
           revision: ""
           path: ""
+      curations: []
     - package:
         id: "Maven:org.apache.thrift:libthrift:0.10.0"
         purl: "pkg:maven/org.apache.thrift/libthrift@0.10.0"
@@ -2058,6 +2108,7 @@ analyzer:
           url: "https://git-wip-us.apache.org/repos/asf/thrift.git"
           revision: ""
           path: ""
+      curations: []
     - package:
         id: "Maven:org.apache.xmlbeans:xmlbeans:2.6.0"
         purl: "pkg:maven/org.apache.xmlbeans/xmlbeans@2.6.0"
@@ -2089,6 +2140,7 @@ analyzer:
           url: "https://svn.apache.org/repos/asf/xmlbeans"
           revision: ""
           path: ""
+      curations: []
     - package:
         id: "Maven:org.apiguardian:apiguardian-api:1.0.0"
         purl: "pkg:maven/org.apiguardian/apiguardian-api@1.0.0"
@@ -2120,6 +2172,7 @@ analyzer:
           url: "https://github.com/apiguardian-team/apiguardian.git"
           revision: ""
           path: ""
+      curations: []
     - package:
         id: "Maven:org.assertj:assertj-core:3.11.1"
         purl: "pkg:maven/org.assertj/assertj-core@3.11.1"
@@ -2151,6 +2204,7 @@ analyzer:
           url: "ssh://git@github.com/joel-costigliola/assertj-core.git"
           revision: "assertj-core-3.11.1"
           path: ""
+      curations: []
     - package:
         id: "Maven:org.hamcrest:hamcrest-core:1.3"
         purl: "pkg:maven/org.hamcrest/hamcrest-core@1.3"
@@ -2184,6 +2238,7 @@ analyzer:
           url: "ssh://git@github.com/hamcrest/JavaHamcrest.git"
           revision: ""
           path: ""
+      curations: []
     - package:
         id: "Maven:org.jsoup:jsoup:1.7.2"
         purl: "pkg:maven/org.jsoup/jsoup@1.7.2"
@@ -2215,6 +2270,7 @@ analyzer:
           url: "https://github.com/jhy/jsoup.git"
           revision: ""
           path: ""
+      curations: []
     - package:
         id: "Maven:org.junit.jupiter:junit-jupiter-api:5.3.1"
         purl: "pkg:maven/org.junit.jupiter/junit-jupiter-api@5.3.1"
@@ -2246,6 +2302,7 @@ analyzer:
           url: "https://github.com/junit-team/junit5.git"
           revision: ""
           path: ""
+      curations: []
     - package:
         id: "Maven:org.junit.jupiter:junit-jupiter-engine:5.3.1"
         purl: "pkg:maven/org.junit.jupiter/junit-jupiter-engine@5.3.1"
@@ -2277,6 +2334,7 @@ analyzer:
           url: "https://github.com/junit-team/junit5.git"
           revision: ""
           path: ""
+      curations: []
     - package:
         id: "Maven:org.junit.jupiter:junit-jupiter-params:5.3.1"
         purl: "pkg:maven/org.junit.jupiter/junit-jupiter-params@5.3.1"
@@ -2308,6 +2366,7 @@ analyzer:
           url: "https://github.com/junit-team/junit5.git"
           revision: ""
           path: ""
+      curations: []
     - package:
         id: "Maven:org.junit.platform:junit-platform-commons:1.3.1"
         purl: "pkg:maven/org.junit.platform/junit-platform-commons@1.3.1"
@@ -2339,6 +2398,7 @@ analyzer:
           url: "https://github.com/junit-team/junit5.git"
           revision: ""
           path: ""
+      curations: []
     - package:
         id: "Maven:org.junit.platform:junit-platform-engine:1.3.1"
         purl: "pkg:maven/org.junit.platform/junit-platform-engine@1.3.1"
@@ -2370,6 +2430,7 @@ analyzer:
           url: "https://github.com/junit-team/junit5.git"
           revision: ""
           path: ""
+      curations: []
     - package:
         id: "Maven:org.junit.platform:junit-platform-launcher:1.3.1"
         purl: "pkg:maven/org.junit.platform/junit-platform-launcher@1.3.1"
@@ -2401,6 +2462,7 @@ analyzer:
           url: "https://github.com/junit-team/junit5.git"
           revision: ""
           path: ""
+      curations: []
     - package:
         id: "Maven:org.opentest4j:opentest4j:1.1.1"
         purl: "pkg:maven/org.opentest4j/opentest4j@1.1.1"
@@ -2432,6 +2494,7 @@ analyzer:
           url: "https://github.com/ota4j-team/opentest4j.git"
           revision: ""
           path: ""
+      curations: []
     - package:
         id: "Maven:org.slf4j:jcl-over-slf4j:1.7.25"
         purl: "pkg:maven/org.slf4j/jcl-over-slf4j@1.7.25"
@@ -2463,6 +2526,7 @@ analyzer:
           url: "ssh://git@github.com/qos-ch/slf4j.git"
           revision: ""
           path: ""
+      curations: []
     - package:
         id: "Maven:org.slf4j:slf4j-api:1.7.25"
         purl: "pkg:maven/org.slf4j/slf4j-api@1.7.25"
@@ -2494,6 +2558,7 @@ analyzer:
           url: "ssh://git@github.com/qos-ch/slf4j.git"
           revision: ""
           path: ""
+      curations: []
     - package:
         id: "Maven:stax:stax-api:1.0.1"
         purl: "pkg:maven/stax/stax-api@1.0.1"
@@ -2526,6 +2591,7 @@ analyzer:
           url: ""
           revision: ""
           path: ""
+      curations: []
     - package:
         id: "NPM::boolbase:1.0.0"
         purl: "pkg:npm/boolbase@1.0.0"
@@ -2555,6 +2621,7 @@ analyzer:
           url: "https://github.com/fb55/boolbase.git"
           revision: ""
           path: ""
+      curations: []
     - package:
         id: "NPM::cheerio:1.0.0-rc.1"
         purl: "pkg:npm/cheerio@1.0.0-rc.1"
@@ -2585,6 +2652,7 @@ analyzer:
           url: "https://github.com/cheeriojs/cheerio.git"
           revision: "f21ffef971826d1ba64ccbdf96adbc44964d30c5"
           path: ""
+      curations: []
     - package:
         id: "NPM::coffee-script:1.12.7"
         purl: "pkg:npm/coffee-script@1.12.7"
@@ -2614,6 +2682,7 @@ analyzer:
           url: "https://github.com/jashkenas/coffeescript.git"
           revision: "492111ccfb9b703b49a443c1aa68fb41dc8a2271"
           path: ""
+      curations: []
     - package:
         id: "NPM::cson-parser:1.3.5"
         purl: "pkg:npm/cson-parser@1.3.5"
@@ -2643,6 +2712,7 @@ analyzer:
           url: "ssh://git@github.com/groupon/cson-parser.git"
           revision: "fa37e04bc6c516eb76ef01df2d105a413c0253a0"
           path: ""
+      curations: []
     - package:
         id: "NPM::cson:4.1.0"
         purl: "pkg:npm/cson@4.1.0"
@@ -2673,6 +2743,7 @@ analyzer:
           url: "https://github.com/bevry/cson.git"
           revision: "0e913a90be66b2f29d2d75433b06ed52e83ba810"
           path: ""
+      curations: []
     - package:
         id: "NPM::css-select:1.2.0"
         purl: "pkg:npm/css-select@1.2.0"
@@ -2704,6 +2775,7 @@ analyzer:
           url: "https://github.com/fb55/css-select.git"
           revision: "09c405d8296bd97a660256604d8cdfb23fca47b6"
           path: ""
+      curations: []
     - package:
         id: "NPM::css-what:2.1.3"
         purl: "pkg:npm/css-what@2.1.3"
@@ -2733,6 +2805,7 @@ analyzer:
           url: "https://github.com/fb55/css-what.git"
           revision: "2db00ca221922c5b5131d798614aa043f2f6f80e"
           path: ""
+      curations: []
     - package:
         id: "NPM::deep-equal:0.2.2"
         purl: "pkg:npm/deep-equal@0.2.2"
@@ -2762,6 +2835,7 @@ analyzer:
           url: "https://github.com/substack/node-deep-equal.git"
           revision: "05cd26a25f0d7babf0c2758827b4dafec9d0582e"
           path: ""
+      curations: []
     - package:
         id: "NPM::defined:0.0.0"
         purl: "pkg:npm/defined@0.0.0"
@@ -2791,6 +2865,7 @@ analyzer:
           url: "https://github.com/substack/defined.git"
           revision: ""
           path: ""
+      curations: []
     - package:
         id: "NPM::dom-serializer:0.1.1"
         purl: "pkg:npm/dom-serializer@0.1.1"
@@ -2820,6 +2895,7 @@ analyzer:
           url: "https://github.com/cheeriojs/dom-renderer.git"
           revision: "1b9eb87c621a184b97467b03600b50d08e5a5086"
           path: ""
+      curations: []
     - package:
         id: "NPM::domelementtype:1.3.1"
         purl: "pkg:npm/domelementtype@1.3.1"
@@ -2849,6 +2925,7 @@ analyzer:
           url: "https://github.com/fb55/domelementtype.git"
           revision: "19b2491101a4de3679b59db8eb7fdd9aa0fbc60b"
           path: ""
+      curations: []
     - package:
         id: "NPM::domhandler:2.4.2"
         purl: "pkg:npm/domhandler@2.4.2"
@@ -2878,6 +2955,7 @@ analyzer:
           url: "https://github.com/fb55/DomHandler.git"
           revision: "045bd8d634dca30192fbd23fee0c530adc9c6f52"
           path: ""
+      curations: []
     - package:
         id: "NPM::domutils:1.5.1"
         purl: "pkg:npm/domutils@1.5.1"
@@ -2905,6 +2983,7 @@ analyzer:
           url: "https://github.com/FB55/domutils.git"
           revision: "7d4bd16cd36ffce62362ef91616806ea27e30d95"
           path: ""
+      curations: []
     - package:
         id: "NPM::eachr:3.2.0"
         purl: "pkg:npm/eachr@3.2.0"
@@ -2936,6 +3015,7 @@ analyzer:
           url: "ssh://git@github.com/bevry/eachr.git"
           revision: "57ef794d001c16fd906b2558137e8ea51c1f6330"
           path: ""
+      curations: []
     - package:
         id: "NPM::editions:1.3.4"
         purl: "pkg:npm/editions@1.3.4"
@@ -2966,6 +3046,7 @@ analyzer:
           url: "https://github.com/bevry/editions.git"
           revision: "5580800dc3935e988b7aa2cf8d571f3e9fa2d8f9"
           path: ""
+      curations: []
     - package:
         id: "NPM::editions:2.1.3"
         purl: "pkg:npm/editions@2.1.3"
@@ -2996,6 +3077,7 @@ analyzer:
           url: "https://github.com/bevry/editions.git"
           revision: "84f536320f7eff6385e867d9f5c1de0dfb92fa88"
           path: ""
+      curations: []
     - package:
         id: "NPM::entities:1.1.2"
         purl: "pkg:npm/entities@1.1.2"
@@ -3025,6 +3107,7 @@ analyzer:
           url: "https://github.com/fb55/entities.git"
           revision: "54a5717d85d886c4aafa2ac5ff83d8d3d730337c"
           path: ""
+      curations: []
     - package:
         id: "NPM::errlop:1.1.1"
         purl: "pkg:npm/errlop@1.1.1"
@@ -3055,6 +3138,7 @@ analyzer:
           url: "https://github.com/bevry/errlop.git"
           revision: "ca13727bd3a227cd937d104b3217d1cd778cc99b"
           path: ""
+      curations: []
     - package:
         id: "NPM::extract-opts:3.3.1"
         purl: "pkg:npm/extract-opts@3.3.1"
@@ -3085,6 +3169,7 @@ analyzer:
           url: "ssh://git@github.com/bevry/extract-opts.git"
           revision: "87e349bbf92a6f95d1ecc8b064a1631def105dc8"
           path: ""
+      curations: []
     - package:
         id: "NPM::glob:3.2.11"
         purl: "pkg:npm/glob@3.2.11"
@@ -3116,6 +3201,7 @@ analyzer:
           url: "https://github.com/isaacs/node-glob.git"
           revision: "73f57e99510582b2024b762305970ebcf9b70aa2"
           path: ""
+      curations: []
     - package:
         id: "NPM::graceful-fs:4.1.15"
         purl: "pkg:npm/graceful-fs@4.1.15"
@@ -3145,6 +3231,7 @@ analyzer:
           url: "https://github.com/isaacs/node-graceful-fs.git"
           revision: "26456e3deb4a5e85363e92f9015bcefd3b6b13ba"
           path: ""
+      curations: []
     - package:
         id: "NPM::htmlparser2:3.10.1"
         purl: "pkg:npm/htmlparser2@3.10.1"
@@ -3174,6 +3261,7 @@ analyzer:
           url: "https://github.com/fb55/htmlparser2.git"
           revision: "537bf2aeb56910d84d2c5aedb839dec678188a43"
           path: ""
+      curations: []
     - package:
         id: "NPM::inherits:2.0.3"
         purl: "pkg:npm/inherits@2.0.3"
@@ -3204,6 +3292,7 @@ analyzer:
           url: "https://github.com/isaacs/inherits.git"
           revision: "e05d0fb27c61a3ec687214f0476386b765364d5f"
           path: ""
+      curations: []
     - package:
         id: "NPM::lodash:4.17.11"
         purl: "pkg:npm/lodash@4.17.11"
@@ -3233,6 +3322,7 @@ analyzer:
           url: "https://github.com/lodash/lodash.git"
           revision: ""
           path: ""
+      curations: []
     - package:
         id: "NPM::lru-cache:2.7.3"
         purl: "pkg:npm/lru-cache@2.7.3"
@@ -3262,6 +3352,7 @@ analyzer:
           url: "https://github.com/isaacs/node-lru-cache.git"
           revision: "292048199f6d28b77fbe584279a1898e25e4c714"
           path: ""
+      curations: []
     - package:
         id: "NPM::minimatch:0.3.0"
         purl: "pkg:npm/minimatch@0.3.0"
@@ -3291,6 +3382,7 @@ analyzer:
           url: "https://github.com/isaacs/minimatch.git"
           revision: ""
           path: ""
+      curations: []
     - package:
         id: "NPM::nth-check:1.0.2"
         purl: "pkg:npm/nth-check@1.0.2"
@@ -3320,6 +3412,7 @@ analyzer:
           url: "https://github.com/fb55/nth-check.git"
           revision: "03a02587bbd126fafc3d2331ffef6ea5cb2f9b66"
           path: ""
+      curations: []
     - package:
         id: "NPM::object-inspect:0.4.0"
         purl: "pkg:npm/object-inspect@0.4.0"
@@ -3349,6 +3442,7 @@ analyzer:
           url: "https://github.com/substack/object-inspect.git"
           revision: ""
           path: ""
+      curations: []
     - package:
         id: "NPM::parse5:3.0.3"
         purl: "pkg:npm/parse5@3.0.3"
@@ -3379,6 +3473,7 @@ analyzer:
           url: "https://github.com/inikulin/parse5.git"
           revision: "723d782abee65aaab9c50f92e73ac2029ae853df"
           path: ""
+      curations: []
     - package:
         id: "NPM::readable-stream:3.2.0"
         purl: "pkg:npm/readable-stream@3.2.0"
@@ -3408,6 +3503,7 @@ analyzer:
           url: "https://github.com/nodejs/readable-stream.git"
           revision: "5b90ed2c1141fc41cb1f612eb88846473369298d"
           path: ""
+      curations: []
     - package:
         id: "NPM::requirefresh:2.2.0"
         purl: "pkg:npm/requirefresh@2.2.0"
@@ -3437,6 +3533,7 @@ analyzer:
           url: "https://github.com/bevry/requirefresh.git"
           revision: "f389cbc33b5891468bde8db479bc0f129b0fcc57"
           path: ""
+      curations: []
     - package:
         id: "NPM::resumer:0.0.0"
         purl: "pkg:npm/resumer@0.0.0"
@@ -3467,6 +3564,7 @@ analyzer:
           url: "https://github.com/substack/resumer.git"
           revision: ""
           path: ""
+      curations: []
     - package:
         id: "NPM::safe-buffer:5.1.2"
         purl: "pkg:npm/safe-buffer@5.1.2"
@@ -3496,6 +3594,7 @@ analyzer:
           url: "https://github.com/feross/safe-buffer.git"
           revision: "649435cc8e2d1f3ecdc7caf323f1cb1187307a16"
           path: ""
+      curations: []
     - package:
         id: "NPM::safefs:4.1.0"
         purl: "pkg:npm/safefs@4.1.0"
@@ -3526,6 +3625,7 @@ analyzer:
           url: "ssh://git@github.com/bevry/safefs.git"
           revision: "51d15eaa03e53aaedd3002dc67814355073e8a55"
           path: ""
+      curations: []
     - package:
         id: "NPM::semver:5.6.0"
         purl: "pkg:npm/semver@5.6.0"
@@ -3555,6 +3655,7 @@ analyzer:
           url: "https://github.com/npm/node-semver.git"
           revision: "46727afbe21b8d14641a0d1c4c7ee58bd053f922"
           path: ""
+      curations: []
     - package:
         id: "NPM::sigmund:1.0.1"
         purl: "pkg:npm/sigmund@1.0.1"
@@ -3584,6 +3685,7 @@ analyzer:
           url: "https://github.com/isaacs/sigmund.git"
           revision: "527f97aa5bb253d927348698c0cd3bb267d098c6"
           path: ""
+      curations: []
     - package:
         id: "NPM::string_decoder:1.2.0"
         purl: "pkg:npm/string_decoder@1.2.0"
@@ -3613,6 +3715,7 @@ analyzer:
           url: "https://github.com/nodejs/string_decoder.git"
           revision: "6e0a9286ed4497badebd4ec6a9a7a4d37793aae8"
           path: ""
+      curations: []
     - package:
         id: "NPM::tape:2.13.4"
         purl: "pkg:npm/tape@2.13.4"
@@ -3642,6 +3745,7 @@ analyzer:
           url: "https://github.com/substack/tape.git"
           revision: "17894caf61fbaa908bfc625a1119c16ab316afb6"
           path: ""
+      curations: []
     - package:
         id: "NPM::through:2.3.8"
         purl: "pkg:npm/through@2.3.8"
@@ -3671,6 +3775,7 @@ analyzer:
           url: "https://github.com/dominictarr/through.git"
           revision: "2c5a6f9a0cc54da759b6e10964f2081c358e49dc"
           path: ""
+      curations: []
     - package:
         id: "NPM::typechecker:4.7.0"
         purl: "pkg:npm/typechecker@4.7.0"
@@ -3701,6 +3806,7 @@ analyzer:
           url: "https://github.com/bevry/typechecker.git"
           revision: "69008d42927749d7e21cfe9816e478dd8d15ab88"
           path: ""
+      curations: []
     - package:
         id: "NPM::util-deprecate:1.0.2"
         purl: "pkg:npm/util-deprecate@1.0.2"
@@ -3730,6 +3836,7 @@ analyzer:
           url: "https://github.com/TooTallNate/util-deprecate.git"
           revision: "475fb6857cd23fafff20c1be846c1350abf8e6d4"
           path: ""
+      curations: []
     - package:
         id: "NPM:@types:node:11.9.6"
         purl: "pkg:npm/%40types/node@11.9.6"
@@ -3759,6 +3866,7 @@ analyzer:
           url: "https://github.com/DefinitelyTyped/DefinitelyTyped.git"
           revision: ""
           path: "types/node"
+      curations: []
     issues:
       'NPM::submodules/test-data-npm/long.js/package.json:':
       - timestamp: "1970-01-01T00:00:00Z"

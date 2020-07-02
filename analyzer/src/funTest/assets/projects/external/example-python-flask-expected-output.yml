@@ -61,6 +61,7 @@ packages:
       url: "https://github.com/pallets/flask.git"
       revision: ""
       path: ""
+  curations: []
 - package:
     id: "PyPI::Jinja2:2.8.1"
     purl: "pkg:pypi/Jinja2@2.8.1"
@@ -95,6 +96,7 @@ packages:
       url: ""
       revision: ""
       path: ""
+  curations: []
 - package:
     id: "PyPI::MarkupSafe:1.1.1"
     purl: "pkg:pypi/MarkupSafe@1.1.1"
@@ -127,6 +129,7 @@ packages:
       url: ""
       revision: ""
       path: ""
+  curations: []
 - package:
     id: "PyPI::Werkzeug:1.0.1"
     purl: "pkg:pypi/Werkzeug@1.0.1"
@@ -159,6 +162,7 @@ packages:
       url: ""
       revision: ""
       path: ""
+  curations: []
 - package:
     id: "PyPI::click:7.1.2"
     purl: "pkg:pypi/click@7.1.2"
@@ -191,6 +195,7 @@ packages:
       url: ""
       revision: ""
       path: ""
+  curations: []
 - package:
     id: "PyPI::gunicorn:19.6.0"
     purl: "pkg:pypi/gunicorn@19.6.0"
@@ -223,6 +228,7 @@ packages:
       url: ""
       revision: ""
       path: ""
+  curations: []
 - package:
     id: "PyPI::itsdangerous:1.1.0"
     purl: "pkg:pypi/itsdangerous@1.1.0"
@@ -256,3 +262,4 @@ packages:
       url: ""
       revision: ""
       path: ""
+  curations: []

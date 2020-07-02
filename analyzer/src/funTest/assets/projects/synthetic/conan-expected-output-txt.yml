@@ -53,6 +53,7 @@ packages:
       url: "https://github.com/bincrafters/conan-protobuf.git"
       revision: ""
       path: ""
+  curations: []
 - package:
     id: "Conan::protoc_installer:3.6.1"
     purl: "pkg:conan/protoc_installer@3.6.1"
@@ -82,3 +83,4 @@ packages:
       url: "https://github.com/bincrafters/conan-protobuf.git"
       revision: ""
       path: ""
+  curations: []
