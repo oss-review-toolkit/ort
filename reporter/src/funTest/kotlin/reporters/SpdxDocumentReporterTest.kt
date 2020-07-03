@@ -130,7 +130,7 @@ private fun createOrtResult(): OrtResult {
         path = ""
     )
 
-    return OrtResult.EMPTY.copy(
+    return OrtResult(
         repository = Repository(
             config = RepositoryConfiguration(
                 excludes = Excludes(
