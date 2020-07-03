@@ -33,21 +33,18 @@ import org.ossreviewtoolkit.utils.ORT_FULL_NAME
  * A class for mapping [OrtResult]s to [SpdxDocument]s.
  */
 object SpdxDocumentModelMapper {
-    fun map(@Suppress("UNUSED_PARAMETER") ortResult: OrtResult, params: SpdxDocumentParams): SpdxDocument {
-        val documentUuid = UUID.randomUUID()
-
-        return SpdxDocument(
+    fun map(@Suppress("UNUSED_PARAMETER") ortResult: OrtResult, params: SpdxDocumentParams): SpdxDocument =
+        SpdxDocument(
             creationInfo = SpdxCreationInfo(
                 created = Instant.now(),
                 comment = params.creationInfoComment,
                 creators = listOf("Tool: $ORT_FULL_NAME - ${Environment().ortVersion}"),
                 licenseListVersion = SpdxLicense.LICENSE_LIST_VERSION.substringBefore("-")
             ),
-            documentNamespace = "spdx://$documentUuid",
+            documentNamespace = "spdx://${UUID.randomUUID()}",
             name = params.documentName,
             comment = params.documentComment
         )
-    }
 
     data class SpdxDocumentParams(
         val documentName: String,
