@@ -204,8 +204,7 @@ private fun createOrtResult(): OrtResult {
                                 url = "ssh://git@github.com/path/first-package-repo.git",
                                 path = "project-path"
                             )
-                        ),
-                        curations = emptyList()
+                        )
                     ),
                     CuratedPackage(
                         pkg = Package(
@@ -216,8 +215,7 @@ private fun createOrtResult(): OrtResult {
                             homepageUrl = "",
                             sourceArtifact = RemoteArtifact.EMPTY,
                             vcs = VcsInfo.EMPTY
-                        ),
-                        curations = emptyList()
+                        )
                     ),
                     CuratedPackage(
                         pkg = Package(
@@ -228,8 +226,7 @@ private fun createOrtResult(): OrtResult {
                             homepageUrl = "",
                             sourceArtifact = RemoteArtifact.EMPTY,
                             vcs = VcsInfo.EMPTY
-                        ),
-                        curations = emptyList()
+                        )
                     ),
                     CuratedPackage(
                         pkg = Package(
@@ -240,8 +237,7 @@ private fun createOrtResult(): OrtResult {
                             homepageUrl = "",
                             sourceArtifact = RemoteArtifact.EMPTY,
                             vcs = VcsInfo.EMPTY
-                        ),
-                        curations = emptyList()
+                        )
                     ),
                     CuratedPackage(
                         pkg = Package(
@@ -252,8 +248,7 @@ private fun createOrtResult(): OrtResult {
                             homepageUrl = "",
                             sourceArtifact = RemoteArtifact.EMPTY,
                             vcs = VcsInfo.EMPTY
-                        ),
-                        curations = emptyList()
+                        )
                     )
                 )
             )

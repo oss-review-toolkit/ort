@@ -164,7 +164,7 @@ val ortResult = OrtResult(
                 projectExcluded,
                 projectIncluded
             ),
-            packages = allPackages.mapTo(sortedSetOf()) { CuratedPackage(it, emptyList()) }
+            packages = allPackages.mapTo(sortedSetOf()) { CuratedPackage(it) }
         )
     ),
     scanner = ScannerRun(

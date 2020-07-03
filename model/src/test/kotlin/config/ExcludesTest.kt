@@ -72,7 +72,7 @@ class ExcludesTest : WordSpec() {
                 config = AnalyzerConfiguration(ignoreToolVersions = false, allowDynamicVersions = false),
                 result = AnalyzerResult.EMPTY.copy(
                     packages = sortedSetOf(
-                        CuratedPackage(pkg = Package.EMPTY.copy(id = id), curations = emptyList())
+                        CuratedPackage(pkg = Package.EMPTY.copy(id = id))
                     )
                 )
             )
