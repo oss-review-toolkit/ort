@@ -23,11 +23,24 @@ import java.time.Instant
 import java.util.UUID
 
 import org.ossreviewtoolkit.model.Environment
+import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.OrtResult
+import org.ossreviewtoolkit.model.ScanResult
+import org.ossreviewtoolkit.model.VcsInfo
+import org.ossreviewtoolkit.model.VcsType
+import org.ossreviewtoolkit.model.utils.PackageConfigurationProvider
+import org.ossreviewtoolkit.model.utils.getDetectedLicensesWithCopyrights
+import org.ossreviewtoolkit.spdx.SpdxConstants
+import org.ossreviewtoolkit.spdx.SpdxExpression
 import org.ossreviewtoolkit.spdx.SpdxLicense
 import org.ossreviewtoolkit.spdx.model.SpdxCreationInfo
 import org.ossreviewtoolkit.spdx.model.SpdxDocument
+import org.ossreviewtoolkit.spdx.model.SpdxPackage
+import org.ossreviewtoolkit.spdx.model.SpdxPackageVerificationCode
+import org.ossreviewtoolkit.spdx.model.SpdxRelationship
 import org.ossreviewtoolkit.utils.ORT_FULL_NAME
+import org.ossreviewtoolkit.utils.ProcessedDeclaredLicense
+import org.ossreviewtoolkit.utils.stripCredentialsFromUrl
 
 /**
  * A class for mapping [OrtResult]s to [SpdxDocument]s.
@@ -39,8 +52,103 @@ object SpdxDocumentModelMapper {
         val creationInfoComment: String
     )
 
-    fun map(@Suppress("UNUSED_PARAMETER") ortResult: OrtResult, params: SpdxDocumentParams): SpdxDocument =
-        SpdxDocument(
+    fun map(
+        ortResult: OrtResult,
+        packageConfigurationProvider: PackageConfigurationProvider,
+        params: SpdxDocumentParams
+    ): SpdxDocument {
+        val spdxPackageIdGenerator = SpdxPackageIdGenerator()
+        val packages = mutableListOf<SpdxPackage>()
+        val relationships = mutableListOf<SpdxRelationship>()
+
+        val rootPackage = SpdxPackage(
+            spdxId = spdxPackageIdGenerator.nextId("root-package"),
+            copyrightText = SpdxConstants.NOASSERTION,
+            downloadLocation = SpdxConstants.NOASSERTION,
+            filesAnalyzed = false,
+            homepage = SpdxConstants.NOASSERTION,
+            licenseConcluded = SpdxConstants.NOASSERTION,
+            licenseDeclared = SpdxConstants.NOASSERTION,
+            name = "Root package"
+        )
+        packages.add(rootPackage)
+
+        // TODO: Omit excluded packages.
+        ortResult.getPackages().forEach { curatedPackage ->
+            val pkg = curatedPackage.pkg
+
+            val binaryPackage = SpdxPackage(
+                spdxId = spdxPackageIdGenerator.nextId(pkg.id.name),
+                copyrightText = getSpdxCopyrightText(ortResult, packageConfigurationProvider, pkg.id),
+                downloadLocation = pkg.binaryArtifact.url.nullOrBlankToSpdxNone(),
+                filesAnalyzed = false,
+                homepage = pkg.homepageUrl.nullOrBlankToSpdxNone(),
+                licenseConcluded = pkg.concludedLicense.nullOrBlankToSpdxNoassertionOrNone(),
+                licenseDeclared = pkg.declaredLicensesProcessed.toSpdxDeclaredLicense(),
+                name = pkg.id.toSpdxPackageName(),
+                summary = pkg.description.nullOrBlankToSpdxNone(),
+                versionInfo = pkg.id.version
+            )
+
+            val binaryPackageRelationship = SpdxRelationship(
+                spdxElementId = binaryPackage.spdxId,
+                relatedSpdxElement = rootPackage.spdxId,
+                relationshipType = SpdxRelationship.Type.DEPENDENCY_OF
+            )
+
+            packages.add(binaryPackage)
+            relationships.add(binaryPackageRelationship)
+
+            if (pkg.vcsProcessed.url.isNotBlank()) {
+                val vcsScanResult =
+                    ortResult.getScanResultsForId(curatedPackage.pkg.id).find { it.provenance.vcsInfo != null }
+
+                // TODO: The copyright text contains copyrights from all scan results.
+                val vcsPackage = binaryPackage.copy(
+                    spdxId = spdxPackageIdGenerator.nextId("${pkg.id.name}-vcs"),
+                    filesAnalyzed = vcsScanResult != null,
+                    downloadLocation = pkg.vcsProcessed.toSpdxDownloadLocation(),
+                    licenseConcluded = SpdxConstants.NOASSERTION,
+                    licenseDeclared = SpdxConstants.NOASSERTION,
+                    packageVerificationCode = vcsScanResult?.toSpdxPackageVerificationCode()
+                )
+
+                val vcsPackageRelationShip = SpdxRelationship(
+                    spdxElementId = binaryPackage.spdxId,
+                    relatedSpdxElement = vcsPackage.spdxId,
+                    relationshipType = SpdxRelationship.Type.GENERATED_FROM
+                )
+
+                packages.add(vcsPackage)
+                relationships.add(vcsPackageRelationShip)
+            }
+
+            if (pkg.sourceArtifact.url.isNotBlank()) {
+                val sourceArtifactScanResult =
+                    ortResult.getScanResultsForId(curatedPackage.pkg.id).find { it.provenance.sourceArtifact != null }
+
+                // TODO: The copyright text contains copyrights from all scan results.
+                val sourceArtifactPackage = binaryPackage.copy(
+                    spdxId = spdxPackageIdGenerator.nextId("${curatedPackage.pkg.id.name}-source-artifact"),
+                    filesAnalyzed = sourceArtifactScanResult != null,
+                    downloadLocation = curatedPackage.pkg.sourceArtifact.url.nullOrBlankToSpdxNone(),
+                    licenseConcluded = SpdxConstants.NOASSERTION,
+                    licenseDeclared = SpdxConstants.NOASSERTION,
+                    packageVerificationCode = sourceArtifactScanResult?.toSpdxPackageVerificationCode()
+                )
+
+                val sourceArtifactPackageRelationship = SpdxRelationship(
+                    spdxElementId = binaryPackage.spdxId,
+                    relatedSpdxElement = sourceArtifactPackage.spdxId,
+                    relationshipType = SpdxRelationship.Type.GENERATED_FROM
+                )
+
+                packages.add(sourceArtifactPackage)
+                relationships.add(sourceArtifactPackageRelationship)
+            }
+        }
+
+        return SpdxDocument(
             comment = params.documentComment,
             creationInfo = SpdxCreationInfo(
                 comment = params.creationInfoComment,
@@ -49,6 +157,83 @@ object SpdxDocumentModelMapper {
                 licenseListVersion = SpdxLicense.LICENSE_LIST_VERSION.substringBefore("-")
             ),
             documentNamespace = "spdx://${UUID.randomUUID()}",
-            name = params.documentName
+            documentDescribes = listOf(rootPackage.spdxId),
+            name = params.documentName,
+            packages = packages,
+            relationships = relationships.sortedBy { it.spdxElementId }
         )
+    }
+}
+
+private class SpdxPackageIdGenerator {
+    var nextPackageIndex = 0
+
+    fun nextId(name: String): String = buildString {
+        append("SPDXRef-Package-${nextPackageIndex++}")
+        if (name.isNotBlank()) {
+            append("-$name")
+        }
+    }
+}
+
+private fun getSpdxCopyrightText(
+    ortResult: OrtResult,
+    packageConfigurationProvider: PackageConfigurationProvider,
+    id: Identifier
+): String {
+    val copyrightStatements = ortResult.getDetectedLicensesWithCopyrights(id, packageConfigurationProvider)
+        .flatMap { it.value }
+        .distinct()
+        .sorted()
+
+    return if (copyrightStatements.isNotEmpty()) {
+        copyrightStatements.joinToString("\n")
+    } else {
+        SpdxConstants.NONE
+    }
+}
+
+private fun Identifier.toSpdxPackageName(): String = "$type:$namespace:$name"
+
+private fun ProcessedDeclaredLicense.toSpdxDeclaredLicense(): String =
+    when {
+        unmapped.isEmpty() -> spdxExpression.nullOrBlankToSpdxNoassertionOrNone()
+        spdxExpression == null -> SpdxConstants.NOASSERTION
+        spdxExpression.toString().isBlank() -> SpdxConstants.NOASSERTION
+        spdxExpression.toString() == SpdxConstants.NONE -> SpdxConstants.NOASSERTION
+        else -> spdxExpression.toString()
+    }
+
+private fun String?.nullOrBlankToSpdxNone(): String = if (isNullOrBlank()) SpdxConstants.NONE else this!!
+
+private fun ScanResult.toSpdxPackageVerificationCode(): SpdxPackageVerificationCode =
+    SpdxPackageVerificationCode(
+        packageVerificationCodeExcludedFiles = emptyList(),
+        packageVerificationCodeValue = summary.packageVerificationCode.toLowerCase()
+    )
+
+private fun SpdxExpression?.nullOrBlankToSpdxNoassertionOrNone(): String =
+    when {
+        this == null -> SpdxConstants.NOASSERTION
+        toString().isBlank() -> SpdxConstants.NONE
+        else -> toString()
+    }
+
+private fun VcsInfo.toSpdxDownloadLocation(): String {
+    val vcsTool = when (type) {
+        VcsType.CVS -> "cvs"
+        VcsType.GIT -> "git"
+        VcsType.GIT_REPO -> "repo"
+        VcsType.MERCURIAL -> "hg"
+        VcsType.SUBVERSION -> "svn"
+        else -> type.aliases.first().toLowerCase()
+    }
+
+    return buildString {
+        append(vcsTool)
+        if (vcsTool.isNotEmpty()) append("+")
+        append(url.stripCredentialsFromUrl())
+        if (!resolvedRevision.isNullOrBlank()) append("@$resolvedRevision")
+        if (path.isNotBlank()) append("#$path")
+    }
 }
