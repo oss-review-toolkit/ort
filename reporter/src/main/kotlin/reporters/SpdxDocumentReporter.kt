@@ -27,7 +27,13 @@ import org.ossreviewtoolkit.reporter.utils.SpdxDocumentModelMapper
 import org.ossreviewtoolkit.spdx.SpdxModelSerializer
 
 /**
- * Creates YAML and JSON SPDX documents. The option keys [CREATION_INFO_COMMENT], [DOCUMENT_COMMENT] and [DOCUMENT_NAME]
+ * Creates YAML and JSON SPDX documents mainly targeting the use case of sharing information about the dependencies
+ * used, similar to e.g. a NOTICE file. Information about the project / sub-module structure as well as project VCS
+ * locations are deliberately omitted. The underlying idea is to clearly separate this mentioned use case from a maximum
+ * detailed report which could be preferred for archiving or internal use only. The latter could be implemented either
+ * as a future extension of this [SpdxDocumentReporter] or as a separate [Reporter].
+ *
+ * The option keys [CREATION_INFO_COMMENT], [DOCUMENT_COMMENT] and [DOCUMENT_NAME]
  * can be provided to [generateReport] to inject the corresponding values as meta-data into the produced [SpdxDocument].
  * The option key [OUTPUT_FILE_FORMATS] specifies a comma separated list of [FileFormat]s, whereas [FileFormat.values]
  * is used by default.
