@@ -33,6 +33,12 @@ import org.ossreviewtoolkit.utils.ORT_FULL_NAME
  * A class for mapping [OrtResult]s to [SpdxDocument]s.
  */
 object SpdxDocumentModelMapper {
+    data class SpdxDocumentParams(
+        val documentName: String,
+        val documentComment: String,
+        val creationInfoComment: String
+    )
+
     fun map(@Suppress("UNUSED_PARAMETER") ortResult: OrtResult, params: SpdxDocumentParams): SpdxDocument =
         SpdxDocument(
             creationInfo = SpdxCreationInfo(
@@ -45,10 +51,4 @@ object SpdxDocumentModelMapper {
             name = params.documentName,
             comment = params.documentComment
         )
-
-    data class SpdxDocumentParams(
-        val documentName: String,
-        val documentComment: String,
-        val creationInfoComment: String
-    )
 }
