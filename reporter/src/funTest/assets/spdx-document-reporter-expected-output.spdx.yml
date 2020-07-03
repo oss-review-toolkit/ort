@@ -43,6 +43,10 @@ packages:
     \ copyright holder in source artifact\nCopyright 2020 Some other copyright holder\
     \ in source artifact"
   downloadLocation: "https://some-host/first-package.jar"
+  externalRefs:
+  - referenceCategory: "PACKAGE-MANAGER"
+    referenceLocator: "pkg:maven/first-package-group/first-package@0.0.1"
+    referenceType: "purl"
   filesAnalyzed: false
   homepage: "first package's homepage URL"
   licenseConcluded: "BSD-2-Clause AND BSD-3-Clause AND MIT"
@@ -57,6 +61,10 @@ packages:
     \ copyright holder in source artifact\nCopyright 2020 Some other copyright holder\
     \ in source artifact"
   downloadLocation: "git+ssh://github.com/path/first-package-repo.git@deadbeef#project-path"
+  externalRefs:
+  - referenceCategory: "PACKAGE-MANAGER"
+    referenceLocator: "pkg:maven/first-package-group/first-package@0.0.1"
+    referenceType: "purl"
   filesAnalyzed: true
   homepage: "first package's homepage URL"
   licenseConcluded: "NOASSERTION"
@@ -73,6 +81,10 @@ packages:
     \ copyright holder in source artifact\nCopyright 2020 Some other copyright holder\
     \ in source artifact"
   downloadLocation: "https://some-host/first-package-sources.jar"
+  externalRefs:
+  - referenceCategory: "PACKAGE-MANAGER"
+    referenceLocator: "pkg:maven/first-package-group/first-package@0.0.1"
+    referenceType: "purl"
   filesAnalyzed: true
   homepage: "first package's homepage URL"
   licenseConcluded: "NOASSERTION"
@@ -87,6 +99,10 @@ packages:
 - SPDXID: "SPDXRef-Package-4-fourth-package"
   copyrightText: "NONE"
   downloadLocation: "NONE"
+  externalRefs:
+  - referenceCategory: "PACKAGE-MANAGER"
+    referenceLocator: "pkg:maven/fourth-package-group/fourth-package@0.0.1"
+    referenceType: "purl"
   filesAnalyzed: false
   homepage: "NONE"
   licenseConcluded: "NOASSERTION"
@@ -97,6 +113,10 @@ packages:
 - SPDXID: "SPDXRef-Package-5-second-package"
   copyrightText: "NONE"
   downloadLocation: "NONE"
+  externalRefs:
+  - referenceCategory: "PACKAGE-MANAGER"
+    referenceLocator: "pkg:maven/second-package-group/second-package@0.0.1"
+    referenceType: "purl"
   filesAnalyzed: false
   homepage: "NONE"
   licenseConcluded: "NOASSERTION"
@@ -107,6 +127,10 @@ packages:
 - SPDXID: "SPDXRef-Package-6-sixth-package"
   copyrightText: "NONE"
   downloadLocation: "NONE"
+  externalRefs:
+  - referenceCategory: "PACKAGE-MANAGER"
+    referenceLocator: "pkg:maven/sixth-package-group/sixth-package@0.0.1"
+    referenceType: "purl"
   filesAnalyzed: false
   homepage: "NONE"
   licenseConcluded: "LicenseRef-scancode-srgb"
@@ -117,6 +141,10 @@ packages:
 - SPDXID: "SPDXRef-Package-7-third-package"
   copyrightText: "NONE"
   downloadLocation: "NONE"
+  externalRefs:
+  - referenceCategory: "PACKAGE-MANAGER"
+    referenceLocator: "pkg:maven/third-package-group/third-package@0.0.1"
+    referenceType: "purl"
   filesAnalyzed: false
   homepage: "NONE"
   licenseConcluded: "NOASSERTION"
