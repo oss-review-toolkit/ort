@@ -41,14 +41,14 @@ object SpdxDocumentModelMapper {
 
     fun map(@Suppress("UNUSED_PARAMETER") ortResult: OrtResult, params: SpdxDocumentParams): SpdxDocument =
         SpdxDocument(
+            comment = params.documentComment,
             creationInfo = SpdxCreationInfo(
-                created = Instant.now(),
                 comment = params.creationInfoComment,
+                created = Instant.now(),
                 creators = listOf("Tool: $ORT_FULL_NAME - ${Environment().ortVersion}"),
                 licenseListVersion = SpdxLicense.LICENSE_LIST_VERSION.substringBefore("-")
             ),
             documentNamespace = "spdx://${UUID.randomUUID()}",
-            name = params.documentName,
-            comment = params.documentComment
+            name = params.documentName
         )
 }
