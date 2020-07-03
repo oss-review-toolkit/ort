@@ -36,6 +36,7 @@ import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.LicenseFinding
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.Package
+import org.ossreviewtoolkit.model.PackageReference
 import org.ossreviewtoolkit.model.Project
 import org.ossreviewtoolkit.model.Provenance
 import org.ossreviewtoolkit.model.RemoteArtifact
@@ -46,6 +47,7 @@ import org.ossreviewtoolkit.model.ScanResultContainer
 import org.ossreviewtoolkit.model.ScanSummary
 import org.ossreviewtoolkit.model.ScannerDetails
 import org.ossreviewtoolkit.model.ScannerRun
+import org.ossreviewtoolkit.model.Scope
 import org.ossreviewtoolkit.model.TextLocation
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
@@ -139,7 +141,25 @@ private fun createOrtResult(): OrtResult {
                         declaredLicenses = sortedSetOf("MIT"),
                         definitionFilePath = "",
                         homepageUrl = "first project's homepage",
-                        scopes = sortedSetOf(),
+                        scopes = sortedSetOf(
+                            Scope(
+                                name = "compile",
+                                dependencies = sortedSetOf(
+                                    PackageReference(
+                                        id = Identifier("Maven:first-package-group:first-package:0.0.1")
+                                    ),
+                                    PackageReference(
+                                        id = Identifier("Maven:second-package-group:second-package:0.0.1")
+                                    ),
+                                    PackageReference(
+                                        id = Identifier("Maven:third-package-group:third-package:0.0.1")
+                                    ),
+                                    PackageReference(
+                                        id = Identifier("Maven:fourth-package-group:fourth-package:0.0.1")
+                                    )
+                                )
+                            )
+                        ),
                         vcs = analyzedVcs
                     )
                 ),
