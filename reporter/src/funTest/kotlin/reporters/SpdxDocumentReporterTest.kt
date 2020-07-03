@@ -23,9 +23,34 @@ import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.shouldBe
 
 import java.io.File
+import java.time.Instant
 
+import org.ossreviewtoolkit.model.AccessStatistics
+import org.ossreviewtoolkit.model.AnalyzerResult
+import org.ossreviewtoolkit.model.AnalyzerRun
+import org.ossreviewtoolkit.model.CopyrightFinding
+import org.ossreviewtoolkit.model.CuratedPackage
 import org.ossreviewtoolkit.model.Environment
+import org.ossreviewtoolkit.model.Hash
+import org.ossreviewtoolkit.model.Identifier
+import org.ossreviewtoolkit.model.LicenseFinding
 import org.ossreviewtoolkit.model.OrtResult
+import org.ossreviewtoolkit.model.Package
+import org.ossreviewtoolkit.model.Project
+import org.ossreviewtoolkit.model.Provenance
+import org.ossreviewtoolkit.model.RemoteArtifact
+import org.ossreviewtoolkit.model.Repository
+import org.ossreviewtoolkit.model.ScanRecord
+import org.ossreviewtoolkit.model.ScanResult
+import org.ossreviewtoolkit.model.ScanResultContainer
+import org.ossreviewtoolkit.model.ScanSummary
+import org.ossreviewtoolkit.model.ScannerDetails
+import org.ossreviewtoolkit.model.ScannerRun
+import org.ossreviewtoolkit.model.TextLocation
+import org.ossreviewtoolkit.model.VcsInfo
+import org.ossreviewtoolkit.model.VcsType
+import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
+import org.ossreviewtoolkit.model.config.ScannerConfiguration
 import org.ossreviewtoolkit.reporter.ReporterInput
 import org.ossreviewtoolkit.reporter.reporters.SpdxDocumentReporter.FileFormat
 import org.ossreviewtoolkit.spdx.SpdxLicense
@@ -89,4 +114,169 @@ private fun patchExpectedResult(expectedResultFile: String, actualSpdxDocument: 
         )
     )
 
-private fun createOrtResult(): OrtResult = OrtResult.EMPTY
+@Suppress("LongMethod")
+private fun createOrtResult(): OrtResult {
+    val analyzedVcs = VcsInfo(
+        type = VcsType.GIT,
+        revision = "master",
+        resolvedRevision = "10203040",
+        url = "https://github.com/path/first-project.git",
+        path = ""
+    )
+
+    return OrtResult.EMPTY.copy(
+        repository = Repository(
+            vcs = analyzedVcs,
+            vcsProcessed = analyzedVcs
+        ),
+        analyzer = AnalyzerRun(
+            environment = Environment(),
+            config = AnalyzerConfiguration(ignoreToolVersions = true, allowDynamicVersions = true),
+            result = AnalyzerResult(
+                projects = sortedSetOf(
+                    Project(
+                        id = Identifier("Maven:first-project-group:first-project-name:0.0.1"),
+                        declaredLicenses = sortedSetOf("MIT"),
+                        definitionFilePath = "",
+                        homepageUrl = "first project's homepage",
+                        scopes = sortedSetOf(),
+                        vcs = analyzedVcs
+                    )
+                ),
+                packages = sortedSetOf(
+                    CuratedPackage(
+                        pkg = Package(
+                            id = Identifier("Maven:first-package-group:first-package:0.0.1"),
+                            binaryArtifact = RemoteArtifact("https://some-host/first-package.jar", Hash.NONE),
+                            declaredLicenses = sortedSetOf("BSD-3-Clause", "MIT OR GPL-2.0-only"),
+                            description = "A package with all supported attributes set, with a VCS URL containing a " +
+                                    "user name, and with a scan result containing two copyright finding matched to a " +
+                                    "license finding.",
+                            homepageUrl = "first package's homepage URL",
+                            sourceArtifact = RemoteArtifact("https://some-host/first-package-sources.jar", Hash.NONE),
+                            vcs = VcsInfo(
+                                type = VcsType.GIT,
+                                revision = "master",
+                                resolvedRevision = "deadbeef",
+                                url = "ssh://git@github.com/path/first-package-repo.git",
+                                path = "project-path"
+                            )
+                        ),
+                        curations = emptyList()
+                    ),
+                    CuratedPackage(
+                        pkg = Package(
+                            id = Identifier("Maven:second-package-group:second-package:0.0.1"),
+                            binaryArtifact = RemoteArtifact.EMPTY,
+                            declaredLicenses = sortedSetOf(),
+                            description = "A package with minimal attributes set.",
+                            homepageUrl = "",
+                            sourceArtifact = RemoteArtifact.EMPTY,
+                            vcs = VcsInfo.EMPTY
+                        ),
+                        curations = emptyList()
+                    ),
+                    CuratedPackage(
+                        pkg = Package(
+                            id = Identifier("Maven:third-package-group:third-package:0.0.1"),
+                            binaryArtifact = RemoteArtifact.EMPTY,
+                            declaredLicenses = sortedSetOf("unmappable license"),
+                            description = "A package with only unmapped declared license.",
+                            homepageUrl = "",
+                            sourceArtifact = RemoteArtifact.EMPTY,
+                            vcs = VcsInfo.EMPTY
+                        ),
+                        curations = emptyList()
+                    ),
+                    CuratedPackage(
+                        pkg = Package(
+                            id = Identifier("Maven:fourth-package-group:fourth-package:0.0.1"),
+                            binaryArtifact = RemoteArtifact.EMPTY,
+                            declaredLicenses = sortedSetOf("unmappable license", "MIT"),
+                            description = "A package with partially mapped declared license.",
+                            homepageUrl = "",
+                            sourceArtifact = RemoteArtifact.EMPTY,
+                            vcs = VcsInfo.EMPTY
+                        ),
+                        curations = emptyList()
+                    )
+                )
+            )
+        ),
+        scanner = ScannerRun(
+            environment = Environment(),
+            config = ScannerConfiguration(),
+            results = ScanRecord(
+                scanResults = sortedSetOf(
+                    ScanResultContainer(
+                        id = Identifier("Maven:first-package-group:first-package:0.0.1"),
+                        results = listOf(
+                            ScanResult(
+                                provenance = Provenance(
+                                    sourceArtifact = RemoteArtifact(
+                                        url = "https://some-host/first-package-sources.jar",
+                                        hash = Hash.NONE
+                                    )
+                                ),
+                                scanner = ScannerDetails.EMPTY,
+                                summary = ScanSummary(
+                                    startTime = Instant.MIN,
+                                    endTime = Instant.MIN,
+                                    fileCount = 10,
+                                    packageVerificationCode = "1111222233334444555566667777888899990000",
+                                    licenseFindings = sortedSetOf(
+                                        LicenseFinding(
+                                            license = "Apache-2.0",
+                                            location = TextLocation(path = "LICENSE", startLine = 1, endLine = 1)
+                                        )
+                                    ),
+                                    copyrightFindings = sortedSetOf(
+                                        CopyrightFinding(
+                                            statement = "Copyright 2020 Some copyright holder in source artifact",
+                                            location = TextLocation(path = "some/file", startLine = 1, endLine = 1)
+                                        ),
+                                        CopyrightFinding(
+                                            statement = "Copyright 2020 Some other copyright holder in source artifact",
+                                            location = TextLocation(path = "some/file", startLine = 7, endLine = 7)
+                                        )
+                                    )
+                                )
+                            ),
+                            ScanResult(
+                                provenance = Provenance(
+                                    vcsInfo = VcsInfo(
+                                        type = VcsType.GIT,
+                                        revision = "master",
+                                        resolvedRevision = "deadbeef",
+                                        url = "ssh://git@github.com/path/first-package-repo.git",
+                                        path = "project-path"
+                                    )
+                                ),
+                                scanner = ScannerDetails.EMPTY,
+                                summary = ScanSummary(
+                                    startTime = Instant.MIN,
+                                    endTime = Instant.MIN,
+                                    fileCount = 10,
+                                    packageVerificationCode = "0000000000000000000011111111111111111111",
+                                    licenseFindings = sortedSetOf(
+                                        LicenseFinding(
+                                            license = "BSD-2-Clause",
+                                            location = TextLocation(path = "LICENSE", startLine = 1, endLine = 1)
+                                        )
+                                    ),
+                                    copyrightFindings = sortedSetOf(
+                                        CopyrightFinding(
+                                            statement = "Copyright 2020 Some copyright holder in VCS",
+                                            location = TextLocation(path = "some/file", startLine = 1, endLine = 1)
+                                        )
+                                    )
+                                )
+                            )
+                        )
+                    )
+                ),
+                storageStats = AccessStatistics()
+            )
+        )
+    )
+}

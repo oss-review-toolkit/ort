@@ -66,7 +66,7 @@ class SpdxDocumentReporter : Reporter {
             creationInfoComment = options.getOrDefault(CREATION_INFO_COMMENT, "")
         )
 
-        val spdxDocument = SpdxDocumentModelMapper.map(input.ortResult, params)
+        val spdxDocument = SpdxDocumentModelMapper.map(input.ortResult, input.packageConfigurationProvider, params)
 
         return outputFileFormats.map { fileFormat ->
             val serializedDocument = when (fileFormat) {
