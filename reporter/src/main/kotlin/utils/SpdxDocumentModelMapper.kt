@@ -25,6 +25,7 @@ import java.util.UUID
 import org.ossreviewtoolkit.model.ArtifactProvenance
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.OrtResult
+import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.RepositoryProvenance
 import org.ossreviewtoolkit.model.ScanResult
 import org.ossreviewtoolkit.model.VcsInfo
@@ -38,6 +39,7 @@ import org.ossreviewtoolkit.spdx.SpdxLicense
 import org.ossreviewtoolkit.spdx.SpdxLicenseException
 import org.ossreviewtoolkit.spdx.model.SpdxCreationInfo
 import org.ossreviewtoolkit.spdx.model.SpdxDocument
+import org.ossreviewtoolkit.spdx.model.SpdxExternalReference
 import org.ossreviewtoolkit.spdx.model.SpdxExtractedLicenseInfo
 import org.ossreviewtoolkit.spdx.model.SpdxPackage
 import org.ossreviewtoolkit.spdx.model.SpdxPackageVerificationCode
@@ -87,6 +89,7 @@ object SpdxDocumentModelMapper {
                 spdxId = spdxPackageIdGenerator.nextId(pkg.id.name),
                 copyrightText = getSpdxCopyrightText(licenseInfoResolver, pkg.id),
                 downloadLocation = pkg.binaryArtifact.url.nullOrBlankToSpdxNone(),
+                externalRefs = pkg.toSpdxExternalReferences(),
                 filesAnalyzed = false,
                 homepage = pkg.homepageUrl.nullOrBlankToSpdxNone(),
                 licenseConcluded = pkg.concludedLicense.nullOrBlankToSpdxNoassertionOrNone(),
@@ -197,6 +200,18 @@ private fun getSpdxCopyrightText(
 }
 
 private fun Identifier.toSpdxPackageName(): String = "$type:$namespace:$name"
+
+private fun Package.toSpdxExternalReferences(): List<SpdxExternalReference> {
+    if (purl.isEmpty()) return emptyList()
+
+    val reference = SpdxExternalReference(
+        referenceCategory = SpdxExternalReference.Type.PURL.category,
+        referenceLocator = purl,
+        referenceType = SpdxExternalReference.Type.PURL.typeName
+    )
+
+    return listOf(reference)
+}
 
 private fun ProcessedDeclaredLicense.toSpdxDeclaredLicense(): String =
     when {
