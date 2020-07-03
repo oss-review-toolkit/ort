@@ -136,8 +136,7 @@ val ORT_RESULT = OrtResult(
                         binaryArtifact = RemoteArtifact.EMPTY,
                         sourceArtifact = RemoteArtifact.EMPTY,
                         vcs = VcsInfo.EMPTY
-                    ),
-                    curations = emptyList()
+                    )
                 ),
                 CuratedPackage(
                     pkg = Package(
@@ -154,8 +153,7 @@ val ORT_RESULT = OrtResult(
                             )
                         ),
                         vcs = VcsInfo.EMPTY
-                    ),
-                    curations = emptyList()
+                    )
                 ),
                 CuratedPackage(
                     pkg = Package(
@@ -172,8 +170,7 @@ val ORT_RESULT = OrtResult(
                             )
                         ),
                         vcs = VcsInfo.EMPTY
-                    ),
-                    curations = emptyList()
+                    )
                 ),
                 CuratedPackage(
                     pkg = Package(
@@ -191,8 +188,7 @@ val ORT_RESULT = OrtResult(
                             )
                         ),
                         vcs = VcsInfo.EMPTY
-                    ),
-                    curations = emptyList()
+                    )
                 ),
                 CuratedPackage(
                     pkg = Package(
@@ -209,8 +205,7 @@ val ORT_RESULT = OrtResult(
                             )
                         ),
                         vcs = VcsInfo.EMPTY
-                    ),
-                    curations = emptyList()
+                    )
                 )
             )
         )

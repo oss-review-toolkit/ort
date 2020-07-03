@@ -35,7 +35,7 @@ data class CuratedPackage(
     /**
      * The curations in the order they were applied.
      */
-    val curations: List<PackageCurationResult>
+    val curations: List<PackageCurationResult> = emptyList()
 ) : Comparable<CuratedPackage> {
     /**
      * A comparison function to sort packages by their identifier.
