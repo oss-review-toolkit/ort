@@ -52,7 +52,11 @@ import org.ossreviewtoolkit.model.TextLocation
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
+import org.ossreviewtoolkit.model.config.Excludes
+import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
+import org.ossreviewtoolkit.model.config.ScopeExclude
+import org.ossreviewtoolkit.model.config.ScopeExcludeReason
 import org.ossreviewtoolkit.reporter.ReporterInput
 import org.ossreviewtoolkit.reporter.reporters.SpdxDocumentReporter.FileFormat
 import org.ossreviewtoolkit.spdx.SpdxLicense
@@ -128,6 +132,17 @@ private fun createOrtResult(): OrtResult {
 
     return OrtResult.EMPTY.copy(
         repository = Repository(
+            config = RepositoryConfiguration(
+                excludes = Excludes(
+                    scopes = listOf(
+                        ScopeExclude(
+                            pattern = "test",
+                            reason = ScopeExcludeReason.TEST_DEPENDENCY_OF,
+                            comment = "Packages for testing only."
+                        )
+                    )
+                )
+            ),
             vcs = analyzedVcs,
             vcsProcessed = analyzedVcs
         ),
@@ -156,6 +171,14 @@ private fun createOrtResult(): OrtResult {
                                     ),
                                     PackageReference(
                                         id = Identifier("Maven:fourth-package-group:fourth-package:0.0.1")
+                                    )
+                                )
+                            ),
+                            Scope(
+                                name = "test",
+                                dependencies = sortedSetOf(
+                                    PackageReference(
+                                        id = Identifier("Maven:fifth-package-group:fifth-package:0.0.1")
                                     )
                                 )
                             )
@@ -214,6 +237,18 @@ private fun createOrtResult(): OrtResult {
                             binaryArtifact = RemoteArtifact.EMPTY,
                             declaredLicenses = sortedSetOf("unmappable license", "MIT"),
                             description = "A package with partially mapped declared license.",
+                            homepageUrl = "",
+                            sourceArtifact = RemoteArtifact.EMPTY,
+                            vcs = VcsInfo.EMPTY
+                        ),
+                        curations = emptyList()
+                    ),
+                    CuratedPackage(
+                        pkg = Package(
+                            id = Identifier("Maven:fifth-package-group:fifth-package:0.0.1"),
+                            binaryArtifact = RemoteArtifact.EMPTY,
+                            declaredLicenses = sortedSetOf(),
+                            description = "A package used only from the excluded 'test' scope.",
                             homepageUrl = "",
                             sourceArtifact = RemoteArtifact.EMPTY,
                             vcs = VcsInfo.EMPTY

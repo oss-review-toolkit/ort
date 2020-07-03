@@ -73,8 +73,7 @@ object SpdxDocumentModelMapper {
         )
         packages.add(rootPackage)
 
-        // TODO: Omit excluded packages.
-        ortResult.getPackages().forEach { curatedPackage ->
+        ortResult.getPackages(omitExcluded = true).forEach { curatedPackage ->
             val pkg = curatedPackage.pkg
 
             val binaryPackage = SpdxPackage(
