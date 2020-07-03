@@ -35,12 +35,11 @@ import org.ossreviewtoolkit.spdx.model.SpdxDocument
 import org.ossreviewtoolkit.utils.ORT_NAME
 import org.ossreviewtoolkit.utils.normalizeLineBreaks
 import org.ossreviewtoolkit.utils.test.patchExpectedResult
-import org.ossreviewtoolkit.utils.test.readOrtResult
 
 class SpdxDocumentReporterTest : WordSpec({
     "SpdxDocumentReporter" should {
         "create the expected JSON SPDX document" {
-            val ortResult = readOrtResult("src/funTest/assets/static-html-reporter-test-input.yml")
+            val ortResult = createOrtResult()
 
             val jsonSpdxDocument = generateReport(ortResult, FileFormat.JSON)
 
@@ -51,7 +50,7 @@ class SpdxDocumentReporterTest : WordSpec({
         }
 
         "create the expected YAML SPDX document" {
-            val ortResult = readOrtResult("src/funTest/assets/static-html-reporter-test-input.yml")
+            val ortResult = createOrtResult()
 
             val yamlSpdxDocument = generateReport(ortResult, FileFormat.YAML)
 
@@ -89,3 +88,5 @@ private fun patchExpectedResult(expectedResultFile: String, actualSpdxDocument: 
             "<REPLACE_DOCUMENT_NAMESPACE>" to actualSpdxDocument.documentNamespace
         )
     )
+
+private fun createOrtResult(): OrtResult = OrtResult.EMPTY
