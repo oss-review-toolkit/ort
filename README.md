@@ -342,6 +342,7 @@ Currently, the following report formats are supported (reporter names are case-i
 * [NOTICE](http://www.apache.org/dev/licensing-howto.html) file in two variants
   * List license texts and copyrights by package (`-f NoticeByPackage`)
   * Summarize all license texts and copyrights (`-f NoticeSummary`)
+* [SPDX Document, version 2.2](https://spdx.dev/specifications/) (`-f SpdxDocument`)
 * Static HTML (`-f StaticHtml`)
 * Web App (`-f WebApp`)
 
