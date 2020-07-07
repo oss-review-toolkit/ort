@@ -35,5 +35,8 @@ object SpdxConstants {
      */
     const val NOASSERTION = "NOASSERTION"
 
-    internal fun isNotPresent(value: String) = value in setOf(NONE, NOASSERTION)
+    /**
+     * Return true if and only if the given value equals [NONE] or [NOASSERTION].
+     */
+    fun isNotPresent(value: String) = value in setOf(NONE, NOASSERTION)
 }
