@@ -30,11 +30,14 @@ import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.utils.PackageConfigurationProvider
 import org.ossreviewtoolkit.model.utils.getDetectedLicensesWithCopyrights
+import org.ossreviewtoolkit.reporter.LicenseTextProvider
 import org.ossreviewtoolkit.spdx.SpdxConstants
 import org.ossreviewtoolkit.spdx.SpdxExpression
 import org.ossreviewtoolkit.spdx.SpdxLicense
+import org.ossreviewtoolkit.spdx.SpdxLicenseException
 import org.ossreviewtoolkit.spdx.model.SpdxCreationInfo
 import org.ossreviewtoolkit.spdx.model.SpdxDocument
+import org.ossreviewtoolkit.spdx.model.SpdxExtractedLicenseInfo
 import org.ossreviewtoolkit.spdx.model.SpdxPackage
 import org.ossreviewtoolkit.spdx.model.SpdxPackageVerificationCode
 import org.ossreviewtoolkit.spdx.model.SpdxRelationship
@@ -55,6 +58,7 @@ object SpdxDocumentModelMapper {
     fun map(
         ortResult: OrtResult,
         packageConfigurationProvider: PackageConfigurationProvider,
+        licenseTextProvider: LicenseTextProvider,
         params: SpdxDocumentParams
     ): SpdxDocument {
         val spdxPackageIdGenerator = SpdxPackageIdGenerator()
@@ -160,7 +164,7 @@ object SpdxDocumentModelMapper {
             name = params.documentName,
             packages = packages,
             relationships = relationships.sortedBy { it.spdxElementId }
-        )
+        ).addExtractedLicenseInfo(licenseTextProvider)
     }
 }
 
@@ -210,6 +214,27 @@ private fun ScanResult.toSpdxPackageVerificationCode(): SpdxPackageVerificationC
         packageVerificationCodeExcludedFiles = emptyList(),
         packageVerificationCodeValue = summary.packageVerificationCode.toLowerCase()
     )
+
+private fun SpdxDocument.addExtractedLicenseInfo(licenseTextProvider: LicenseTextProvider): SpdxDocument {
+
+    val nonSpdxLicenses = packages.flatMapTo(mutableSetOf()) {
+        // TODO: Also add detected non-SPDX licenses here.
+        SpdxExpression.parse(it.licenseConcluded).licenses() + SpdxExpression.parse(it.licenseDeclared).licenses()
+    }.filter {
+        SpdxConstants.isPresent(it) && SpdxLicense.forId(it) == null && SpdxLicenseException.forId(it) == null
+    }
+
+    val extractedLicenseInfo = nonSpdxLicenses.sorted().mapNotNull { license ->
+        licenseTextProvider.getLicenseText(license)?.let { text ->
+            SpdxExtractedLicenseInfo(
+                licenseId = license,
+                extractedText = text
+            )
+        }
+    }
+
+    return copy(hasExtractedLicensingInfos = extractedLicenseInfo)
+}
 
 private fun SpdxExpression?.nullOrBlankToSpdxNoassertionOrNone(): String =
     when {
