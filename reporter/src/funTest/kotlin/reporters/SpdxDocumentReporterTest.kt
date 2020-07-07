@@ -57,6 +57,7 @@ import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
 import org.ossreviewtoolkit.model.config.ScopeExclude
 import org.ossreviewtoolkit.model.config.ScopeExcludeReason
+import org.ossreviewtoolkit.reporter.DefaultLicenseTextProvider
 import org.ossreviewtoolkit.reporter.ReporterInput
 import org.ossreviewtoolkit.reporter.reporters.SpdxDocumentReporter.FileFormat
 import org.ossreviewtoolkit.spdx.SpdxLicense
@@ -95,7 +96,10 @@ class SpdxDocumentReporterTest : WordSpec({
 })
 
 private fun generateReport(ortResult: OrtResult, format: FileFormat): String {
-    val input = ReporterInput(ortResult)
+    val input = ReporterInput(
+        ortResult = ortResult,
+        licenseTextProvider = DefaultLicenseTextProvider()
+    )
 
     val outputDir = createTempDir(ORT_NAME, SpdxDocumentReporterTest::class.simpleName).apply { deleteOnExit() }
 
