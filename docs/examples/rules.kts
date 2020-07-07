@@ -121,6 +121,20 @@ val ruleSet = ruleSet(ortResult, packageConfigurationProvider) {
         }
     }
 
+    packageRule("UNMAPPED_DECLARED_LICENSE") {
+        require {
+            -isExcluded()
+        }
+
+        pkg.declaredLicensesProcessed.unmapped.forEach { unmappedLicense ->
+            warning(
+                "The declared license '$unmappedLicense' could not be mapped to a valid license or parsed as an SPDX " +
+                        "expression. The license was found in package ${pkg.id.toCoordinates()}.",
+                howToFixDefault()
+            )
+        }
+    }
+
     packageRule("COPYLEFT_IN_SOURCE") {
         require {
             -isExcluded()
