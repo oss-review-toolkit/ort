@@ -63,6 +63,7 @@ import org.ossreviewtoolkit.spdx.SpdxLicense
 import org.ossreviewtoolkit.spdx.SpdxModelSerializer.fromJson
 import org.ossreviewtoolkit.spdx.SpdxModelSerializer.fromYaml
 import org.ossreviewtoolkit.spdx.model.SpdxDocument
+import org.ossreviewtoolkit.spdx.toSpdx
 import org.ossreviewtoolkit.utils.ORT_NAME
 import org.ossreviewtoolkit.utils.normalizeLineBreaks
 import org.ossreviewtoolkit.utils.test.patchExpectedResult
@@ -191,6 +192,7 @@ private fun createOrtResult(): OrtResult {
                         pkg = Package(
                             id = Identifier("Maven:first-package-group:first-package:0.0.1"),
                             binaryArtifact = RemoteArtifact("https://some-host/first-package.jar", Hash.NONE),
+                            concludedLicense = "BSD-2-Clause AND BSD-3-Clause AND MIT".toSpdx(),
                             declaredLicenses = sortedSetOf("BSD-3-Clause", "MIT OR GPL-2.0-only"),
                             description = "A package with all supported attributes set, with a VCS URL containing a " +
                                     "user name, and with a scan result containing two copyright finding matched to a " +
