@@ -68,7 +68,7 @@ private fun ByteArray.toHexString(): String = joinToString("") { String.format("
 /**
  * Calculate the [SPDX package verification code][1] for a list of [known SHA1s][sha1sums] of files and [excludes].
  *
- * [1]: https://spdx.org/spdx_specification_2_0_html#h.2p2csry
+ * [1]: https://spdx.dev/spdx_specification_2_0_html#h.2p2csry
  */
 @JvmName("calculatePackageVerificationCodeForStrings")
 fun calculatePackageVerificationCode(sha1sums: Sequence<String>, excludes: Sequence<String> = emptySequence()): String {
@@ -86,7 +86,7 @@ fun calculatePackageVerificationCode(sha1sums: Sequence<String>, excludes: Seque
 /**
  * Calculate the [SPDX package verification code][1] for a list of [files] and paths of [excludes].
  *
- * [1]: https://spdx.org/spdx_specification_2_0_html#h.2p2csry
+ * [1]: https://spdx.dev/spdx_specification_2_0_html#h.2p2csry
  */
 @JvmName("calculatePackageVerificationCodeForFiles")
 fun calculatePackageVerificationCode(files: Sequence<File>, excludes: Sequence<String> = emptySequence()): String =
@@ -117,7 +117,7 @@ private fun sha1sum(file: File): String =
  * All files with the extension ".spdx" are automatically excluded from the generated code. Additionally files from
  * [VCS directories][VCS_DIRECTORIES] are excluded.
  *
- * [1]: https://spdx.org/spdx_specification_2_0_html#h.2p2csry
+ * [1]: https://spdx.dev/spdx_specification_2_0_html#h.2p2csry
  */
 @JvmName("calculatePackageVerificationCodeForDirectory")
 fun calculatePackageVerificationCode(directory: File): String {
