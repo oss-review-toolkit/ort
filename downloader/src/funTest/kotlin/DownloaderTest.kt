@@ -149,7 +149,7 @@ class DownloaderTest : StringSpec() {
             downloadResult.downloadDirectory.walk().count() shouldBe 234
         }
 
-        "Can download source artifact from SourceForce".config(tags = setOf(ExpensiveTag)) {
+        "Can download a TGZ source artifact from SourceForce".config(tags = setOf(ExpensiveTag)) {
             val url = "https://master.dl.sourceforge.net/project/tyrex/tyrex/Tyrex%201.0.1/tyrex-1.0.1-src.tgz"
             val pkg = Package(
                 id = Identifier(
@@ -179,6 +179,38 @@ class DownloaderTest : StringSpec() {
 
             tyrexDir.isDirectory shouldBe true
             tyrexDir.walk().count() shouldBe 409
+        }
+
+        "Can download a ZIP source artifact from GitHub".config(tags = setOf(ExpensiveTag)) {
+            val url = "https://github.com/microsoft/tslib/archive/1.10.0.zip"
+            val pkg = Package(
+                id = Identifier(
+                    type = "NPM",
+                    namespace = "",
+                    name = "tslib",
+                    version = "1.10.0"
+                ),
+                declaredLicenses = sortedSetOf(),
+                description = "",
+                homepageUrl = "",
+                binaryArtifact = RemoteArtifact.EMPTY,
+                sourceArtifact = RemoteArtifact(
+                    url = url,
+                    hash = Hash.create("7f7994408f130dd138a59a625eeef3be1ab40f7b")
+                ),
+                vcs = VcsInfo.EMPTY
+            )
+
+            val downloadResult = Downloader.download(pkg, outputDir)
+            downloadResult.vcsInfo shouldBe null
+            downloadResult.sourceArtifact shouldNotBe null
+            downloadResult.sourceArtifact!!.url shouldBe pkg.sourceArtifact.url
+            downloadResult.sourceArtifact!!.hash shouldBe pkg.sourceArtifact.hash
+
+            val tslibDir = File(downloadResult.downloadDirectory, "tslib-1.10.0")
+
+            tslibDir.isDirectory shouldBe true
+            tslibDir.walk().count() shouldBe 16
         }
     }
 }
