@@ -54,7 +54,7 @@ The following tools are [planned](https://github.com/oss-review-toolkit/ort/proj
 
 * _Advisor_ - retrieves security advisories based on the Analyzer result.
 * _Documenter_ - generates the final outcome of the review process incl. legal conclusions, e.g. annotated
-  [SPDX](https://spdx.org/) files that can be included into the distribution.
+  [SPDX](https://spdx.dev/) files that can be included into the distribution.
 
 # Installation
 
