@@ -61,8 +61,8 @@ import org.ossreviewtoolkit.reporter.DefaultLicenseTextProvider
 import org.ossreviewtoolkit.reporter.ReporterInput
 import org.ossreviewtoolkit.reporter.reporters.SpdxDocumentReporter.FileFormat
 import org.ossreviewtoolkit.spdx.SpdxLicense
-import org.ossreviewtoolkit.spdx.SpdxModelSerializer.fromJson
-import org.ossreviewtoolkit.spdx.SpdxModelSerializer.fromYaml
+import org.ossreviewtoolkit.spdx.SpdxModelMapper.fromJson
+import org.ossreviewtoolkit.spdx.SpdxModelMapper.fromYaml
 import org.ossreviewtoolkit.spdx.model.SpdxDocument
 import org.ossreviewtoolkit.spdx.toSpdx
 import org.ossreviewtoolkit.utils.ORT_NAME
