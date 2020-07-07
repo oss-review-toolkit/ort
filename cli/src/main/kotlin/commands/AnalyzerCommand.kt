@@ -36,7 +36,7 @@ import org.ossreviewtoolkit.analyzer.PackageManager
 import org.ossreviewtoolkit.analyzer.curation.ClearlyDefinedPackageCurationProvider
 import org.ossreviewtoolkit.analyzer.curation.FallbackPackageCurationProvider
 import org.ossreviewtoolkit.analyzer.curation.FilePackageCurationProvider
-import org.ossreviewtoolkit.model.OutputFormat
+import org.ossreviewtoolkit.model.FileFormat
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.mapper
 import org.ossreviewtoolkit.utils.expandTilde
@@ -73,7 +73,7 @@ class AnalyzerCommand : CliktCommand(name = "analyze", help = "Determine depende
     private val outputFormats by option(
         "--output-formats", "-f",
         help = "The list of output formats to be used for the ORT result file(s)."
-    ).enum<OutputFormat>().split(",").default(listOf(OutputFormat.YAML))
+    ).enum<FileFormat>().split(",").default(listOf(FileFormat.YAML))
 
     private val ignoreToolVersions by option(
         "--ignore-tool-versions",
