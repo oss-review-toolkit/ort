@@ -44,6 +44,18 @@ enum class FileFormat(val mapper: ObjectMapper, val fileExtension: String, varar
      */
     YAML(yamlMapper, "yml", "yaml");
 
+    companion object {
+        /**
+         * Return the [FileFormat] for the given [file], or `null` if there is none.
+         */
+        fun forFile(file: File): FileFormat =
+            enumValues<FileFormat>().find {
+                file.extension in it.fileExtensions
+            } ?: throw IllegalArgumentException(
+                "Unsupported file format '${file.extension}' of file '${file.absolutePath}'."
+            )
+    }
+
     /**
      * The list of file extensions used by this file format.
      */
@@ -55,10 +67,7 @@ enum class FileFormat(val mapper: ObjectMapper, val fileExtension: String, varar
  *
  * @throws IllegalArgumentException If no matching [FileFormat] for the [File.extension] can be found.
  */
-fun File.mapper() =
-    FileFormat.values().find { extension in it.fileExtensions }?.mapper ?: throw IllegalArgumentException(
-        "No matching ObjectMapper found for file extension '$extension' of file '$absolutePath'."
-    )
+fun File.mapper() = FileFormat.forFile(this).mapper
 
 /**
  * Use the Jackson mapper returned from [File.mapper] to read an object of type [T] from this file.
