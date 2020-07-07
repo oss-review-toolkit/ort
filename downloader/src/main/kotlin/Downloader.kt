@@ -19,22 +19,6 @@
 
 package org.ossreviewtoolkit.downloader
 
-import org.ossreviewtoolkit.downloader.vcs.GitRepo
-import org.ossreviewtoolkit.model.Identifier
-import org.ossreviewtoolkit.model.Package
-import org.ossreviewtoolkit.model.Project
-import org.ossreviewtoolkit.model.RemoteArtifact
-import org.ossreviewtoolkit.model.VcsInfo
-import org.ossreviewtoolkit.model.VcsType
-import org.ossreviewtoolkit.utils.ORT_NAME
-import org.ossreviewtoolkit.utils.OkHttpClientHelper
-import org.ossreviewtoolkit.utils.collectMessagesAsString
-import org.ossreviewtoolkit.utils.log
-import org.ossreviewtoolkit.utils.safeDeleteRecursively
-import org.ossreviewtoolkit.utils.safeMkdirs
-import org.ossreviewtoolkit.utils.stripCredentialsFromUrl
-import org.ossreviewtoolkit.utils.unpack
-
 import java.io.File
 import java.io.IOException
 import java.net.URI
@@ -44,6 +28,23 @@ import okhttp3.Request
 
 import okio.buffer
 import okio.sink
+
+import org.ossreviewtoolkit.downloader.vcs.GitRepo
+import org.ossreviewtoolkit.model.Identifier
+import org.ossreviewtoolkit.model.Package
+import org.ossreviewtoolkit.model.Project
+import org.ossreviewtoolkit.model.RemoteArtifact
+import org.ossreviewtoolkit.model.VcsInfo
+import org.ossreviewtoolkit.model.VcsType
+import org.ossreviewtoolkit.utils.ArchiveType
+import org.ossreviewtoolkit.utils.ORT_NAME
+import org.ossreviewtoolkit.utils.OkHttpClientHelper
+import org.ossreviewtoolkit.utils.collectMessagesAsString
+import org.ossreviewtoolkit.utils.log
+import org.ossreviewtoolkit.utils.safeDeleteRecursively
+import org.ossreviewtoolkit.utils.safeMkdirs
+import org.ossreviewtoolkit.utils.stripCredentialsFromUrl
+import org.ossreviewtoolkit.utils.unpack
 
 /**
  * The class to download source code. The signatures of public functions in this class define the library API.
@@ -283,8 +284,34 @@ object Downloader {
                         throw DownloadException("Failed to download source artifact: $response")
                     }
 
-                    // Use the filename from the request for the last redirect.
-                    val tempFileName = response.request.url.pathSegments.last()
+                    // Depending on the package manager / registry, we may only get a useful source artifact file name
+                    // when looking at the response header or at a redirected URL. For example for Cargo, we want to
+                    // resolve
+                    //     https://crates.io/api/v1/crates/cfg-if/0.1.9/download
+                    // to
+                    //     https://static.crates.io/crates/cfg-if/cfg-if-0.1.9.crate
+                    //
+                    // On the other hand, e.g. for GitHub exactly the opposite is the case, as it turns getting URL
+                    //     https://github.com/microsoft/tslib/archive/1.10.0.zip
+                    // to
+                    //     https://codeload.github.com/microsoft/tslib/zip/1.10.0
+                    //
+                    // So first look for a dedicated header in the response, but then also try both redirected and
+                    // original URLs to find a name which has a recognized archive type extension.
+                    val candidateNamesFromHeaders = response.headers("Content-disposition").mapNotNull { value ->
+                        value.removePrefix("attachment; filename=").takeIf { it != value }
+                    }
+
+                    val candidateNamesFromUrls = listOf(response.request.url, request.url).map {
+                        it.pathSegments.last()
+                    }
+
+                    val candidateNames = candidateNamesFromHeaders + candidateNamesFromUrls
+
+                    val tempFileName = candidateNames.find {
+                        ArchiveType.getType(it) != ArchiveType.NONE
+                    } ?: candidateNames.first()
+
                     createTempFile(ORT_NAME, tempFileName).also { tempFile ->
                         tempFile.sink().buffer().use { it.writeAll(body.source()) }
                         tempFile.deleteOnExit()
