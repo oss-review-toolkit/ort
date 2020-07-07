@@ -26,7 +26,47 @@ import com.fasterxml.jackson.dataformat.yaml.YAMLMapper
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import com.fasterxml.jackson.module.kotlin.registerKotlinModule
 
+import java.io.File
+import java.lang.IllegalArgumentException
+
 object SpdxModelMapper {
+    /**
+     * An enumeration of supported file formats for (de-)serialization, their primary [fileExtension] and optional
+     * aliases (not including the dot).
+     */
+    enum class FileFormat(val mapper: ObjectMapper, val fileExtension: String, vararg aliases: String) {
+        /**
+         * Specifies the [JSON](http://www.json.org/) format.
+         */
+        JSON(jsonMapper, "json"),
+
+        /**
+         * Specifies the [YAML](http://yaml.org/) format.
+         */
+        YAML(yamlMapper, "yml", "yaml");
+
+        companion object {
+            /**
+             * Return the [FileFormat] for the given [file], or `null` if there is none.
+             */
+            fun forFile(file: File): FileFormat =
+                enumValues<FileFormat>().find {
+                    file.extension in it.fileExtensions
+                } ?: throw IllegalArgumentException(
+                    "Unsupported file format '${file.extension}' of file '${file.absolutePath}'."
+                )
+        }
+
+        /**
+         * The list of file extensions used by this file format.
+         */
+        val fileExtensions = listOf(fileExtension, *aliases)
+    }
+
+    fun <T : Any> read(file: File, clazz: Class<T>): T = FileFormat.forFile(file).mapper.readValue(file, clazz)
+
+    fun <T : Any> write(file: File, clazz: Class<T>) = FileFormat.forFile(file).mapper.writeValue(file, clazz)
+
     internal val jsonMapper: ObjectMapper = JsonMapper().apply(mapperConfig)
 
     fun <T : Any> fromJson(json: String, clazz: Class<T>): T = jsonMapper.readValue(json, clazz)
