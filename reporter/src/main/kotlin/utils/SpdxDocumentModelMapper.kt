@@ -171,12 +171,13 @@ object SpdxDocumentModelMapper {
 private class SpdxPackageIdGenerator {
     var nextPackageIndex = 0
 
-    fun nextId(name: String): String = buildString {
-        append("SPDXRef-Package-${nextPackageIndex++}")
-        if (name.isNotBlank()) {
-            append("-$name")
+    fun nextId(name: String): String =
+        buildString {
+            append("SPDXRef-Package-${nextPackageIndex++}")
+            if (name.isNotBlank()) {
+                append("-$name")
+            }
         }
-    }
 }
 
 private fun getSpdxCopyrightText(
