@@ -35,7 +35,7 @@ import com.github.ajalt.clikt.parameters.options.split
 import com.github.ajalt.clikt.parameters.types.enum
 import com.github.ajalt.clikt.parameters.types.file
 
-import org.ossreviewtoolkit.model.OutputFormat
+import org.ossreviewtoolkit.model.FileFormat
 import org.ossreviewtoolkit.model.config.OrtConfiguration
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
 import org.ossreviewtoolkit.model.mapper
@@ -95,7 +95,7 @@ class ScannerCommand : CliktCommand(name = "scan", help = "Run existing copyrigh
     private val outputFormats by option(
         "--output-formats", "-f",
         help = "The list of output formats to be used for the ORT result file(s)."
-    ).enum<OutputFormat>().split(",").default(listOf(OutputFormat.YAML))
+    ).enum<FileFormat>().split(",").default(listOf(FileFormat.YAML))
 
     private val config by requireObject<OrtConfiguration>()
 

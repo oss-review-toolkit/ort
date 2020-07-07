@@ -22,14 +22,14 @@ package org.ossreviewtoolkit.analyzer.curation
 import org.ossreviewtoolkit.analyzer.PackageCurationProvider
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.PackageCuration
-import org.ossreviewtoolkit.model.OutputFormat
+import org.ossreviewtoolkit.model.FileFormat
 import org.ossreviewtoolkit.model.readValue
 
 import java.io.File
 
 /**
  * A [PackageCurationProvider] that loads [PackageCuration]s from a single file. Supports all file formats specified
- * in [OutputFormat].
+ * in [FileFormat].
  */
 class FilePackageCurationProvider(curationFile: File) : PackageCurationProvider {
     internal val packageCurations: List<PackageCuration> by lazy {
