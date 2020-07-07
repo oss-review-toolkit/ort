@@ -130,15 +130,6 @@ data class Project(
             }
         }
 
-        declaredLicensesProcessed.unmapped.forEach { unmappedLicense ->
-            collectedIssues.getOrPut(id) { mutableSetOf() } += OrtIssue(
-                severity = Severity.WARNING,
-                source = id.toCoordinates(),
-                message = "The declared license '$unmappedLicense' could not be mapped to a valid license or " +
-                        "parsed as an SPDX expression."
-            )
-        }
-
         return collectedIssues
     }
 
