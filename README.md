@@ -7,7 +7,7 @@
 | [![Linux build status][1]][2]  | [![Windows build status][3]][4] | [![JitPack build status][5]][6] |
 | [![Linux code coverage][7]][8] |                                 |                                 |
 
-| REUSE status             | Code quality      | TODOs              | Interact with us!              |
+| License status           | Code quality      | TODOs              | Interact with us!              |
 | :----------------------- | :---------------- | :----------------- | :----------------------------- |
 | [![REUSE status][9]][10] | [![LGTM][11]][12] | [![TODOs][13]][14] | [![ort-talk][15]][16]          |
 
