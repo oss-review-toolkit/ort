@@ -172,6 +172,9 @@ private fun createOrtResult(): OrtResult {
                                     ),
                                     PackageReference(
                                         id = Identifier("Maven:fourth-package-group:fourth-package:0.0.1")
+                                    ),
+                                    PackageReference(
+                                        id = Identifier("Maven:sixth-package-group:sixth-package:0.0.1")
                                     )
                                 )
                             ),
@@ -245,8 +248,22 @@ private fun createOrtResult(): OrtResult {
                         pkg = Package(
                             id = Identifier("Maven:fifth-package-group:fifth-package:0.0.1"),
                             binaryArtifact = RemoteArtifact.EMPTY,
-                            declaredLicenses = sortedSetOf(),
-                            description = "A package used only from the excluded 'test' scope.",
+                            declaredLicenses = sortedSetOf("LicenseRef-scancode-philips-proprietary-notice-2000"),
+                            concludedLicense = "LicenseRef-scancode-purdue-bsd".toSpdx(),
+                            description = "A package used only from the excluded 'test' scope, with non-SPDX license " +
+                                    "IDs in the declared and concluded license.",
+                            homepageUrl = "",
+                            sourceArtifact = RemoteArtifact.EMPTY,
+                            vcs = VcsInfo.EMPTY
+                        )
+                    ),
+                    CuratedPackage(
+                        pkg = Package(
+                            id = Identifier("Maven:sixth-package-group:sixth-package:0.0.1"),
+                            binaryArtifact = RemoteArtifact.EMPTY,
+                            declaredLicenses = sortedSetOf("LicenseRef-scancode-asmus"),
+                            concludedLicense = "LicenseRef-scancode-srgb".toSpdx(),
+                            description = "A package with non-SPDX license IDs in the declared and concluded license.",
                             homepageUrl = "",
                             sourceArtifact = RemoteArtifact.EMPTY,
                             vcs = VcsInfo.EMPTY
