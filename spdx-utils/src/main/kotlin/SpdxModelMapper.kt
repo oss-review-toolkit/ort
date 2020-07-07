@@ -26,7 +26,7 @@ import com.fasterxml.jackson.dataformat.yaml.YAMLMapper
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import com.fasterxml.jackson.module.kotlin.registerKotlinModule
 
-object SpdxModelSerializer {
+object SpdxModelMapper {
     internal val jsonMapper: ObjectMapper = JsonMapper().apply(mapperConfig)
 
     fun <T : Any> fromJson(json: String, clazz: Class<T>): T = jsonMapper.readValue(json, clazz)

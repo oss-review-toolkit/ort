@@ -24,7 +24,7 @@ import java.io.File
 import org.ossreviewtoolkit.reporter.Reporter
 import org.ossreviewtoolkit.reporter.ReporterInput
 import org.ossreviewtoolkit.reporter.utils.SpdxDocumentModelMapper
-import org.ossreviewtoolkit.spdx.SpdxModelSerializer
+import org.ossreviewtoolkit.spdx.SpdxModelMapper
 
 /**
  * Creates YAML and JSON SPDX documents mainly targeting the use case of sharing information about the dependencies
@@ -81,8 +81,8 @@ class SpdxDocumentReporter : Reporter {
 
         return outputFileFormats.map { fileFormat ->
             val serializedDocument = when (fileFormat) {
-                FileFormat.JSON -> SpdxModelSerializer.toJson(spdxDocument)
-                FileFormat.YAML -> SpdxModelSerializer.toYaml(spdxDocument)
+                FileFormat.JSON -> SpdxModelMapper.toJson(spdxDocument)
+                FileFormat.YAML -> SpdxModelMapper.toYaml(spdxDocument)
             }
 
             outputDir.resolve(fileFormat.reportFilename).apply {
