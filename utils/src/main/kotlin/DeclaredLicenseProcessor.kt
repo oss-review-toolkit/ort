@@ -34,6 +34,7 @@ object DeclaredLicenseProcessor {
         "gnu.org/licenses/",
         "licenses.nuget.org/",
         "opensource.org/licenses/",
+        "spdx.dev/licenses/",
         "spdx.org/licenses/",
         "tldrlegal.com/license/"
     ).flatMap {

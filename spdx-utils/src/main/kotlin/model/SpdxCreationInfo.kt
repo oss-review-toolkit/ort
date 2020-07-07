@@ -46,7 +46,7 @@ data class SpdxCreationInfo(
     val creators: List<String> = emptyList(),
 
     /**
-     * The version of SPDX license list (https://spdx.org/licenses/) used in the related [SpdxDocument].
+     * The version of SPDX license list (https://spdx.dev/licenses/) used in the related [SpdxDocument].
      * Data Format: "M.N"
      */
     @JsonInclude(JsonInclude.Include.NON_EMPTY)

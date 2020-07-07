@@ -61,7 +61,7 @@ data class LicenseFindingCuration(
 
     /**
      * The concluded license as SPDX expression or [org.ossreviewtoolkit.spdx.SpdxConstants.NONE] for no license,
-     * see https://spdx.org/spdx-specification-21-web-version#h.jxpfx0ykyb60.
+     * see https://spdx.dev/spdx-specification-21-web-version#h.jxpfx0ykyb60.
      */
     val concludedLicense: SpdxExpression,
 
