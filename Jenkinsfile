@@ -258,7 +258,7 @@ pipeline {
                     fi
 
                     rm -fr out/results
-                    /opt/ort/bin/ort $LOG_LEVEL --stacktrace analyze $ALLOW_DYNAMIC_VERSIONS_OPTION $USE_CLEARLY_DEFINED_CURATIONS_OPTION -f JSON,YAML -i $PROJECT_DIR/source -o out/results/analyzer
+                    /opt/ort/bin/ort $LOG_LEVEL --stacktrace analyze $ALLOW_DYNAMIC_VERSIONS_OPTION $USE_CLEARLY_DEFINED_CURATIONS_OPTION -i $PROJECT_DIR/source -o out/results/analyzer
                     ln -frs out/results/analyzer/analyzer-result.yml out/results/current-result.yml
                 '''
 
@@ -317,7 +317,7 @@ pipeline {
                     sh '''
                         echo "default login $LOGIN password $PASSWORD" > $HOME/.netrc
 
-                        /opt/ort/bin/ort $LOG_LEVEL --stacktrace scan -f JSON,YAML -i out/results/current-result.yml -o out/results/scanner
+                        /opt/ort/bin/ort $LOG_LEVEL --stacktrace scan -i out/results/current-result.yml -o out/results/scanner
                         ln -frs out/results/scanner/scan-result.yml out/results/current-result.yml
 
                         rm -f $HOME/.netrc
