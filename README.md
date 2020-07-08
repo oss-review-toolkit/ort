@@ -160,13 +160,13 @@ Please see [Getting Started](./docs/getting-started.md) for an introduction to t
 
 Please see the documentation below for details about the ORT configuration.
 
-* [The .ort.yml file](docs/config-file-ort-yml.md) - project-specific license finding curations, exclusions
+* [The .ort.yml file](./docs/config-file-ort-yml.md) - project-specific license finding curations, exclusions
   and resolutions to address issues found within a project's code repository.
-* [The package configuration file](docs/config-file-package-configuration-yml.md) - package (dependency) and provenance
+* [The package configuration file](./docs/config-file-package-configuration-yml.md) - package (dependency) and provenance
   specific license finding curations and exclusions to address issues found within a scan result for a package.
-* [The curations.yml file](docs/config-file-curations-yml.md) - curations correct invalid or missing package metadata
+* [The curations.yml file](./docs/config-file-curations-yml.md) - curations correct invalid or missing package metadata
   and set the concluded license for packages.
-* [The resolutions.yml file](docs/config-file-resolutions-yml.md) - resolutions allow *resolving* any issues
+* [The resolutions.yml file](./docs/config-file-resolutions-yml.md) - resolutions allow *resolving* any issues
   or policy rule violations by providing a reason why they are acceptable and can be ignored.
 
 # Details on the tools
@@ -318,7 +318,7 @@ store the data in a [jsonb](https://www.postgresql.org/docs/current/datatype-jso
 
 If you do not want to use SSL set the `sslmode` to `disable`, other possible values are explained in the
 [documentation](https://jdbc.postgresql.org/documentation/head/ssl-client.html). For other supported configuration
-options see [PostgresStorageConfiguration.kt](model/src/main/kotlin/config/PostgresStorageConfiguration.kt).
+options see [PostgresStorageConfiguration.kt](./model/src/main/kotlin/config/PostgresStorageConfiguration.kt).
 
 <a name="evaluator">&nbsp;</a>
 
