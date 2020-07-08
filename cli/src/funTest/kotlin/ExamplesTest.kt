@@ -39,7 +39,10 @@ import org.ossreviewtoolkit.model.config.Resolutions
 import org.ossreviewtoolkit.model.licenses.LicenseConfiguration
 import org.ossreviewtoolkit.model.readValue
 import org.ossreviewtoolkit.model.utils.SimplePackageConfigurationProvider
+import org.ossreviewtoolkit.reporter.ReporterInput
 import org.ossreviewtoolkit.reporter.reporters.AbstractNoticeReporter
+import org.ossreviewtoolkit.reporter.reporters.AntennaAttributionDocumentReporter
+import org.ossreviewtoolkit.utils.ORT_NAME
 
 class ExamplesTest : StringSpec() {
     private val examplesDir = File("../docs/examples")
@@ -49,7 +52,7 @@ class ExamplesTest : StringSpec() {
 
     init {
         "Listing examples files succeeded" {
-            exampleFiles = examplesDir.walk().maxDepth(1).filter { it.isFile }.toMutableList()
+            exampleFiles = examplesDir.walk().filter { it.isFile }.toMutableList()
             exampleFiles shouldNot beEmpty()
         }
 
@@ -126,6 +129,25 @@ class ExamplesTest : StringSpec() {
             evaluator.checkSyntax(script) shouldBe true
 
             // TODO: It should also be verified that the script works as expected.
+        }
+
+        "PDF files are valid Antenna templates" {
+            val outputDir = createTempDir(
+                ORT_NAME, ExamplesTest::class.simpleName
+            ).apply { deleteOnExit() }
+
+            takeExampleFile("back.pdf")
+            takeExampleFile("content.pdf")
+            takeExampleFile("copyright.pdf")
+            takeExampleFile("cover.pdf")
+
+            val report = AntennaAttributionDocumentReporter().generateReport(
+                ReporterInput(OrtResult.EMPTY),
+                outputDir,
+                mapOf("template.path" to examplesDir.resolve("AntennaAttributionDocumentReporter").path)
+            )
+
+            report should beEmpty()
         }
 
         "All example files should have been tested" {
