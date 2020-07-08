@@ -137,12 +137,31 @@ class PostgresStorage(
     }
 
     override fun readFromStorage(id: Identifier): Result<ScanResultContainer> {
-        val query = "SELECT scan_result FROM $schema.$table WHERE identifier = ?"
+        val query = """
+            (
+              SELECT r.scan_result
+                FROM $schema.$table r
+                WHERE r.identifier = ?
+                AND r.scan_result->'provenance' ?? 'vcs_info'
+                ORDER BY r.scan_result->'provenance'->'download_time' DESC
+                LIMIT 1
+            )
+            UNION
+            (
+              SELECT r.scan_result
+              FROM $schema.$table r
+              WHERE r.identifier = ?
+              AND r.scan_result->'provenance' ?? 'source_artifact'
+              ORDER BY r.scan_result->'provenance'->'download_time' DESC
+              LIMIT 1
+            )
+        """.trimIndent()
 
         @Suppress("TooGenericExceptionCaught")
         return try {
             val statement = connection.prepareStatement(query).apply {
                 setString(1, id.toCoordinates())
+                setString(2, id.toCoordinates())
             }
 
             val resultSet = statement.executeQuery()
@@ -174,12 +193,29 @@ class PostgresStorage(
         val version = Semver(scannerDetails.version)
 
         val query = """
-            SELECT scan_result
-              FROM $schema.$table
-              WHERE identifier = ?
+            (
+              SELECT r.scan_result
+                FROM $schema.$table r
+                 WHERE r.identifier = ?
+                 AND r.scan_result->'provenance' ?? 'vcs_info'
+                 AND scan_result->'scanner'->>'name' = ?
+                 AND substring(scan_result->'scanner'->>'version' from '([0-9]+\.[0-9]+)\.?.*') = ?
+                 AND scan_result->'scanner'->>'configuration' = ?;
+                 ORDER BY r.scan_result->'provenance'->'download_time' DESC
+                 LIMIT 1
+            )
+            UNION
+            (
+              SELECT r.scan_result
+                FROM $schema.$table r
+                WHERE r.identifier = ?
+                AND r.scan_result->'provenance' ?? 'source_artifact'
                 AND scan_result->'scanner'->>'name' = ?
                 AND substring(scan_result->'scanner'->>'version' from '([0-9]+\.[0-9]+)\.?.*') = ?
                 AND scan_result->'scanner'->>'configuration' = ?;
+                ORDER BY r.scan_result->'provenance'->'download_time' DESC
+                LIMIT 1
+            )
         """.trimIndent()
 
         @Suppress("TooGenericExceptionCaught")
@@ -189,6 +225,11 @@ class PostgresStorage(
                 setString(2, scannerDetails.name)
                 setString(3, "${version.major}.${version.minor}")
                 setString(4, scannerDetails.configuration)
+
+                setString(5, pkg.id.toCoordinates())
+                setString(6, scannerDetails.name)
+                setString(7, "${version.major}.${version.minor}")
+                setString(8, scannerDetails.configuration)
             }
 
             val resultSet = statement.executeQuery()
