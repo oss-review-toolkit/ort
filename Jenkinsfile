@@ -31,6 +31,9 @@ final DOCKER_BUILD_ARGS = '--build-arg http_proxy=$http_proxy --build-arg https_
 // Disable the entry point to work around https://issues.jenkins-ci.org/browse/JENKINS-51307.
 final DOCKER_RUN_ARGS = '-e http_proxy -e https_proxy --entrypoint=""'
 
+// The status code ORT commands return for failures (like rule violations), not errors (like existing output files).
+final ORT_FAILURE_STATUS_CODE = 2
+
 @NonCPS
 static sortProjectsByPathDepth(projects) {
     return projects.toSorted { it.definition_file_path.count("/") }
@@ -117,6 +120,16 @@ pipeline {
             name: 'RUN_SCANNER',
             defaultValue: true,
             description: 'Run the scanner tool'
+        )
+
+        /*
+         * ORT evaluator tool parameters.
+         */
+
+        booleanParam(
+            name: 'RUN_EVALUATOR',
+            defaultValue: true,
+            description: 'Run the evaluator tool'
         )
 
         /*
@@ -329,6 +342,51 @@ pipeline {
                 always {
                     archiveArtifacts(
                         artifacts: 'out/results/scanner/*',
+                        fingerprint: true
+                    )
+                }
+            }
+        }
+
+        stage('Run ORT evaluator') {
+            when {
+                beforeAgent true
+
+                expression {
+                    params.RUN_EVALUATOR
+                }
+            }
+
+            agent {
+                dockerfile {
+                    additionalBuildArgs DOCKER_BUILD_ARGS
+                    args DOCKER_RUN_ARGS
+                }
+            }
+
+            environment {
+                HOME = "${env.WORKSPACE}@tmp"
+            }
+
+            steps {
+                withCredentials(projectVcsCredentials) {
+                    script {
+                        def status = sh returnStatus: true, script: '''
+                            /opt/ort/bin/ort $LOG_LEVEL --stacktrace evaluate -i out/results/current-result.yml -o out/results/evaluator -r docs/examples/rules.kts --license-configuration-file docs/examples/licenses.yml
+                        '''
+
+                        if (status >= ORT_FAILURE_STATUS_CODE) unstable('Rule violations found.')
+                        else if (status != 0) error('Error executing the evaluator.')
+                    }
+
+                    sh 'ln -frs out/results/evaluator/evaluation-result.yml out/results/current-result.yml'
+                }
+            }
+
+            post {
+                always {
+                    archiveArtifacts(
+                        artifacts: 'out/results/evaluator/*',
                         fingerprint: true
                     )
                 }
