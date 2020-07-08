@@ -40,16 +40,16 @@ class AntennaAttributionDocumentReporterTest : StringSpec({
             "../scanner/src/funTest/assets/file-counter-expected-output-for-analyzer-result.yml"
         )
 
-        val actualReport = generateReport(ortResult)
+        val report = generateReport(ortResult)
 
-        actualReport.length() shouldBe 53797L
+        report.single().length() shouldBe 53797L
     }
 })
 
-private fun generateReport(ortResult: OrtResult): File {
+private fun generateReport(ortResult: OrtResult): List<File> {
     val outputDir = createTempDir(
         ORT_NAME, AntennaAttributionDocumentReporterTest::class.simpleName
     ).apply { deleteOnExit() }
 
-    return AntennaAttributionDocumentReporter().generateReport(ReporterInput(ortResult), outputDir).single()
+    return AntennaAttributionDocumentReporter().generateReport(ReporterInput(ortResult), outputDir)
 }
