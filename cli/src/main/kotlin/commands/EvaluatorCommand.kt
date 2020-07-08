@@ -141,7 +141,7 @@ class EvaluatorCommand : CliktCommand(name = "evaluate", help = "Evaluate rules 
 
             val existingOutputFiles = outputFiles.filter { it.exists() }
             if (existingOutputFiles.isNotEmpty()) {
-                throw UsageError("None of the output files $existingOutputFiles must exist yet.", statusCode = 2)
+                throw UsageError("None of the output files $existingOutputFiles must exist yet.")
             }
         }
 
@@ -163,7 +163,7 @@ class EvaluatorCommand : CliktCommand(name = "evaluate", help = "Evaluate rules 
             is StringType -> {
                 val rulesResource = (rules as StringType).string
                 javaClass.classLoader.getResource(rulesResource)?.readText()
-                    ?: throw UsageError("Invalid rules resource '$rulesResource'.", statusCode = 2)
+                    ?: throw UsageError("Invalid rules resource '$rulesResource'.")
             }
         }
 

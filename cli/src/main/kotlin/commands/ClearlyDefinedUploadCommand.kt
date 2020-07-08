@@ -162,7 +162,7 @@ class ClearlyDefinedUploadCommand : CliktCommand(
         println("Successfully uploaded $uploadedCurationsCount of ${uploadableCurations.size} curations.")
 
         if (uploadedCurationsCount != uploadableCurations.size) {
-            println("At least one error occurred.")
+            println("At least one curation failed to be uploaded.")
             throw ProgramResult(2)
         }
     }

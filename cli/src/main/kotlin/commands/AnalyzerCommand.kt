@@ -21,6 +21,7 @@ package org.ossreviewtoolkit.commands
 
 import com.github.ajalt.clikt.core.BadParameterValue
 import com.github.ajalt.clikt.core.CliktCommand
+import com.github.ajalt.clikt.core.ProgramResult
 import com.github.ajalt.clikt.core.UsageError
 import com.github.ajalt.clikt.parameters.options.convert
 import com.github.ajalt.clikt.parameters.options.default
@@ -113,7 +114,7 @@ class AnalyzerCommand : CliktCommand(name = "analyze", help = "Determine depende
 
         val existingOutputFiles = outputFiles.filter { it.exists() }
         if (existingOutputFiles.isNotEmpty()) {
-            throw UsageError("None of the output files $existingOutputFiles must exist yet.", statusCode = 2)
+            throw UsageError("None of the output files $existingOutputFiles must exist yet.")
         }
 
         val distinctPackageManagers = packageManagers.distinct()
@@ -147,6 +148,18 @@ class AnalyzerCommand : CliktCommand(name = "analyze", help = "Determine depende
         outputFiles.forEach { file ->
             println("Writing analyzer result to '$file'.")
             file.mapper().writerWithDefaultPrettyPrinter().writeValue(file, ortResult)
+        }
+
+        val analyzerResult = ortResult.analyzer?.result
+
+        if (analyzerResult == null) {
+            println("There was an error creating the analyzer result.")
+            throw ProgramResult(1)
+        }
+
+        if (analyzerResult.hasIssues) {
+            println("The analyzer result contains issues.")
+            throw ProgramResult(2)
         }
     }
 }
