@@ -149,7 +149,7 @@ class DownloaderTest : StringSpec() {
             downloadResult.downloadDirectory.walk().count() shouldBe 234
         }
 
-        "Can download a TGZ source artifact from SourceForce".config(tags = setOf(ExpensiveTag)) {
+        "Can download a TGZ source artifact from SourceForge".config(tags = setOf(ExpensiveTag)) {
             val url = "https://master.dl.sourceforge.net/project/tyrex/tyrex/Tyrex%201.0.1/tyrex-1.0.1-src.tgz"
             val pkg = Package(
                 id = Identifier(
