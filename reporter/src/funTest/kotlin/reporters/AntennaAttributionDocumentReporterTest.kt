@@ -22,6 +22,8 @@ package org.ossreviewtoolkit.reporter.reporters
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.shouldBe
 
+import java.io.File
+
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.reporter.ReporterInput
 import org.ossreviewtoolkit.utils.ORT_NAME
@@ -40,14 +42,14 @@ class AntennaAttributionDocumentReporterTest : StringSpec({
 
         val actualReport = generateReport(ortResult)
 
-        actualReport.size shouldBe 53797
+        actualReport.length() shouldBe 53797L
     }
 })
 
-private fun generateReport(ortResult: OrtResult): ByteArray {
+private fun generateReport(ortResult: OrtResult): File {
     val outputDir = createTempDir(
         ORT_NAME, AntennaAttributionDocumentReporterTest::class.simpleName
     ).apply { deleteOnExit() }
 
-    return AntennaAttributionDocumentReporter().generateReport(ReporterInput(ortResult), outputDir).single().readBytes()
+    return AntennaAttributionDocumentReporter().generateReport(ReporterInput(ortResult), outputDir).single()
 }
