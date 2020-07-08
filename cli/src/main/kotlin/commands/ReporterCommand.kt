@@ -196,7 +196,7 @@ class ReporterCommand : CliktCommand(
             reportSpecificOptionsMap[option.first] = option.second
         }
 
-        var statusCode = 0
+        var failure = false
         val reportDurationMap = mutableMapOf<Reporter, TimedValue<List<File>>>()
 
         reportFormats.forEach { reporter ->
@@ -214,7 +214,7 @@ class ReporterCommand : CliktCommand(
 
                 log.error { "Could not create '${reporter.reporterName}' report: ${e.collectMessagesAsString()}" }
 
-                statusCode = 1
+                failure = true
             }
         }
 
@@ -223,14 +223,16 @@ class ReporterCommand : CliktCommand(
             println("Successfully created the '$name' report at ${files.value} in ${files.duration.inSeconds}s.")
         }
 
-        if (reportDurationMap.isEmpty()) {
-            println("Failed to create any report.")
-        } else {
-            println("Successfully created ${reportDurationMap.size} of ${reportFormats.size} report(s).")
-        }
+        println("Created ${reportDurationMap.size} of ${reportFormats.size} report(s).")
 
-        if (statusCode != 0) {
-            throw ProgramResult(statusCode)
+        if (failure) {
+            if (reportDurationMap.isEmpty()) {
+                println("Failed to create any report.")
+            } else {
+                println("At least one report was not created successfully.")
+            }
+
+            throw ProgramResult(2)
         }
     }
 }

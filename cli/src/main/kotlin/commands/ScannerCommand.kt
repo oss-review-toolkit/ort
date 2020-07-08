@@ -21,6 +21,7 @@ package org.ossreviewtoolkit.commands
 
 import com.github.ajalt.clikt.core.BadParameterValue
 import com.github.ajalt.clikt.core.CliktCommand
+import com.github.ajalt.clikt.core.ProgramResult
 import com.github.ajalt.clikt.core.UsageError
 import com.github.ajalt.clikt.core.requireObject
 import com.github.ajalt.clikt.parameters.groups.mutuallyExclusiveOptions
@@ -134,11 +135,11 @@ class ScannerCommand : CliktCommand(name = "scan", help = "Run existing copyrigh
 
         val existingOutputFiles = outputFiles.filter { it.exists() }
         if (existingOutputFiles.isNotEmpty()) {
-            throw UsageError("None of the output files $existingOutputFiles must exist yet.", statusCode = 2)
+            throw UsageError("None of the output files $existingOutputFiles must exist yet.")
         }
 
         if (absoluteNativeOutputDir.exists() && absoluteNativeOutputDir.list().isNotEmpty()) {
-            throw UsageError("The directory '$absoluteNativeOutputDir' must not contain any files yet.", statusCode = 2)
+            throw UsageError("The directory '$absoluteNativeOutputDir' must not contain any files yet.")
         }
 
         require(downloadDir?.exists() != true) {
@@ -166,6 +167,18 @@ class ScannerCommand : CliktCommand(name = "scan", help = "Run existing copyrigh
         outputFiles.forEach { file ->
             println("Writing scan result to '$file'.")
             file.mapper().writerWithDefaultPrettyPrinter().writeValue(file, ortResult)
+        }
+
+        val scanResults = ortResult.scanner?.results
+
+        if (scanResults == null) {
+            println("There was an error creating the scan results.")
+            throw ProgramResult(1)
+        }
+
+        if (scanResults.hasIssues) {
+            println("The scan result contains issues.")
+            throw ProgramResult(2)
         }
     }
 }

@@ -122,7 +122,7 @@ class DownloaderCommand : CliktCommand(name = "download", help = "Fetch source c
     ).flag()
 
     override fun run() {
-        val errorMessages = mutableListOf<String>()
+        val failureMessages = mutableListOf<String>()
 
         when (input) {
             is FileType -> {
@@ -151,11 +151,11 @@ class DownloaderCommand : CliktCommand(name = "download", help = "Fetch source c
                     } catch (e: DownloadException) {
                         e.showStackTrace()
 
-                        val errorMessage = "Could not download '${pkg.id.toCoordinates()}': " +
+                        val failureMessage = "Could not download '${pkg.id.toCoordinates()}': " +
                                 e.collectMessagesAsString()
-                        errorMessages += errorMessage
+                        failureMessages += failureMessage
 
-                        log.error { errorMessage }
+                        log.error { failureMessage }
                     }
                 }
             }
@@ -191,17 +191,17 @@ class DownloaderCommand : CliktCommand(name = "download", help = "Fetch source c
                 } catch (e: DownloadException) {
                     e.showStackTrace()
 
-                    val errorMessage = "Could not download '${dummyPackage.id.toCoordinates()}': " +
+                    val failureMessage = "Could not download '${dummyPackage.id.toCoordinates()}': " +
                             e.collectMessagesAsString()
-                    errorMessages += errorMessage
+                    failureMessages += failureMessage
 
-                    log.error { errorMessage }
+                    log.error { failureMessage }
                 }
             }
         }
 
-        if (errorMessages.isNotEmpty()) {
-            log.error { "Error Summary:\n\n${errorMessages.joinToString("\n\n")}" }
+        if (failureMessages.isNotEmpty()) {
+            log.error { "Failure summary:\n\n${failureMessages.joinToString("\n\n")}" }
             throw ProgramResult(2)
         }
     }
