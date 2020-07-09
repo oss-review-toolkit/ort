@@ -55,9 +55,12 @@ ENV \
     PYTHON_VIRTUALENV_VERSION=15.1.0 \
     SBT_VERSION=1.3.8 \
     YARN_VERSION=1.21.1 \
+    # SDK versions.
+    ANDROID_SDK_VERSION=6609375 \
     # Scanner versions.
     SCANCODE_VERSION=3.0.2 \
     # Installation directories.
+    ANDROID_HOME=/opt/android-sdk \
     FLUTTER_HOME=/opt/flutter \
     GOPATH=$HOME/go
 
@@ -83,6 +86,7 @@ RUN apt-get update && \
         make \
         netbase \
         openssh-client \
+        unzip \
         xz-utils \
         zlib1g-dev \
         # Install VCS tools (no specific versions required here).
@@ -127,6 +131,11 @@ RUN /opt/ort/bin/import_proxy_certs.sh && \
     mkdir -p $GOPATH/bin && \
     curl -ksS https://raw.githubusercontent.com/golang/dep/v$GO_DEP_VERSION/install.sh | sh && \
     curl -ksS https://raw.githubusercontent.com/commercialhaskell/stack/v$HASKELL_STACK_VERSION/etc/scripts/get-stack.sh | sh && \
+    # Install SDKs required for analysis.
+    curl -Os https://dl.google.com/android/repository/commandlinetools-linux-${ANDROID_SDK_VERSION}_latest.zip && \
+    unzip -q commandlinetools-linux-${ANDROID_SDK_VERSION}_latest.zip -d $ANDROID_HOME && \
+    rm commandlinetools-linux-${ANDROID_SDK_VERSION}_latest.zip && \
+    yes | $ANDROID_HOME/tools/bin/sdkmanager --sdk_root=$ANDROID_HOME "platform-tools" && \
     # Add scanners (in versions known to work).
     curl -ksSL https://github.com/nexB/scancode-toolkit/archive/v$SCANCODE_VERSION.tar.gz | \
         tar -zxC /usr/local && \
