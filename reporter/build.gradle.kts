@@ -88,6 +88,7 @@ dependencies {
     api(project(":model"))
 
     implementation(project(":downloader"))
+    implementation(project(":spdx-utils"))
     implementation(project(":utils"))
 
     implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:$jacksonVersion")
