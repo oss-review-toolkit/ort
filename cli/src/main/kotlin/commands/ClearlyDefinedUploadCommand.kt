@@ -142,7 +142,7 @@ class ClearlyDefinedUploadCommand : CliktCommand(
             )
         }
 
-        var error = false
+        var uploadedCurationsCount = 0
         val uploadableCurations = curationsByHarvestStatus[HarvestStatus.HARVESTED].orEmpty() +
                 curationsByHarvestStatus[HarvestStatus.PARTIALLY_HARVESTED].orEmpty()
 
@@ -150,16 +150,18 @@ class ClearlyDefinedUploadCommand : CliktCommand(
             print("Curation ${index + 1} of ${uploadableCurations.size} for package '${curation.id.toCoordinates()}' ")
 
             when (val summary = putCuration(curation)) {
-                null -> {
-                    println("failed to be uploaded.")
-                    error = true
-                }
+                null -> println("failed to be uploaded.")
+                else -> {
+                    println("was uploaded successfully:\n${summary.url}")
 
-                else -> println("was uploaded successfully:\n${summary.url}")
+                    ++uploadedCurationsCount
+                }
             }
         }
 
-        if (error) {
+        println("Successfully uploaded $uploadedCurationsCount of ${uploadableCurations.size} curations.")
+
+        if (uploadedCurationsCount != uploadableCurations.size) {
             println("At least one error occurred.")
             throw ProgramResult(2)
         }
