@@ -59,7 +59,7 @@ class SpdxDocumentReporter : Reporter {
             ?.split(",")
             ?.map { FileFormat.valueOf(it.toUpperCase()) }
             ?.distinct()
-            ?: enumValues<FileFormat>().asList()
+            ?: listOf(FileFormat.YAML)
 
         val params = SpdxDocumentModelMapper.SpdxDocumentParams(
             documentName = options.getOrDefault(DOCUMENT_NAME, DOCUMENT_NAME_DEFAULT_VALUE),
