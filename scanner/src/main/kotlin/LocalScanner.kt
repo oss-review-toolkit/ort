@@ -472,7 +472,7 @@ abstract class LocalScanner(name: String, config: ScannerConfiguration) : Scanne
  * 1. Minimize the time between the failing look-up and the corresponding store operation mentioned.
  * 2. Make the tuples (identifier, provenance, scanner details) unique (dis-regarding provenance.downloadTime), at
  * least in [PostgresStroage].
-  */
+ */
 private fun ScanResultContainer.deduplicateScanResults(): ScanResultContainer {
     // Use vcsInfo and sourceArtifact instead of provenance in order to ignore the download time and original VCS info.
     data class Key(
