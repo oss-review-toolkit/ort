@@ -19,7 +19,7 @@ cache:
 env:
   global:
     - ANDROID_HOME="/opt/android"
-    - ANDROID_SDK_VERSION="6200805"
+    - ANDROID_SDK_VERSION="6609375"
     - BOWER_VERSION="1.8.8"
     - CONAN_VERSION="1.18.0"
     - FLUTTER_HOME="/opt/flutter"
