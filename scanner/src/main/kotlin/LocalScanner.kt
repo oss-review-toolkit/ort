@@ -32,6 +32,7 @@ import org.ossreviewtoolkit.model.OrtIssue
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.Provenance
+import org.ossreviewtoolkit.model.RemoteArtifact
 import org.ossreviewtoolkit.model.Repository
 import org.ossreviewtoolkit.model.ScanRecord
 import org.ossreviewtoolkit.model.ScanResult
@@ -41,6 +42,7 @@ import org.ossreviewtoolkit.model.ScannerDetails
 import org.ossreviewtoolkit.model.ScannerRun
 import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.model.Success
+import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
 import org.ossreviewtoolkit.model.createAndLogIssue
 import org.ossreviewtoolkit.model.mapper
@@ -264,7 +266,7 @@ abstract class LocalScanner(name: String, config: ScannerConfiguration) : Scanne
         val resultsFile = getResultsFile(scannerDetails, pkg, outputDirectory)
 
         val scanResults = when (val storageResult = ScanResultsStorage.storage.read(pkg, scannerDetails)) {
-            is Success -> storageResult.result.results
+            is Success -> storageResult.result.deduplicateScanResults().results
             is Failure -> emptyList()
         }
 
@@ -454,4 +456,40 @@ abstract class LocalScanner(name: String, config: ScannerConfiguration) : Scanne
 
         return relativePathToScannedFile.invariantSeparatorsPath
     }
+}
+
+/**
+ * Work around to prevent that duplicate [ScanResult]s from the [ScanResultsStorage] do get duplicated in the
+ * [OrtResult] produced by this scanner.
+ *
+ * The time interval between a failing look-up of the cache entry and the resulting scan with the following store
+ * operation can be relatively large. Thus this [LocalScanner] is prone to adding duplicate scan results if scans
+ * are run in parallel. In particular the [PostgresStorage] allows adding duplicate tuples
+ * (identifier, provenance, scanner details) which probably should be made unique.
+ *
+ * TODO:
+ *
+ * 1. Minimize the time between the failing look-up and the corresponding store operation mentioned.
+ * 2. Make the tuples (identifier, provenance, scanner details) unique (dis-regarding provenance.downloadTime), at
+ * least in [PostgresStroage].
+  */
+private fun ScanResultContainer.deduplicateScanResults(): ScanResultContainer {
+    // Use vcsInfo and sourceArtifact instead of provenance in order to ignore the download time and original VCS info.
+    data class Key(
+        val id: Identifier,
+        val vcsInfo: VcsInfo?,
+        val sourceArtifact: RemoteArtifact?,
+        val scannerDetails: ScannerDetails
+    )
+
+    fun ScanResult.key() = Key(id, provenance.vcsInfo, provenance.sourceArtifact, scanner)
+
+    val deduplicatedResults = results.distinctBy { it.key() }
+
+    val duplicates = results.size - deduplicatedResults.size
+    if (duplicates > 0) {
+        log.info { "Removed $duplicates duplicates out of ${results.size} scan results." }
+    }
+
+    return copy(results = deduplicatedResults)
 }
