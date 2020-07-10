@@ -176,7 +176,7 @@ internal fun String.isSpdxExpression(): Boolean =
 
 /**
  * Return true if and only if this String can be successfully parsed to an [SpdxExpression] or if it equals
- * [org.ossreviewtoolkit.spdx.model.SpdxConstants.NONE] or [org.ossreviewtoolkit.spdx.model.SpdxConstants.NOASSERTION].
+ * [SpdxConstants.NONE] or [SpdxConstants.NOASSERTION].
  */
 internal fun String.isSpdxExpressionOrNotPresent(): Boolean =
     SpdxConstants.isNotPresent(this) || isSpdxExpression()
