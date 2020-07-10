@@ -26,7 +26,7 @@ import com.fasterxml.jackson.annotation.JsonValue
  *  References an external source of additional information, metadata, enumerations, asset identifiers, or downloadable
  *  content believed to be relevant to the Package.
  */
-class SpdxExternalReference(
+data class SpdxExternalReference(
     /**
      * Human-readable information about the purpose and target of the reference.
      */
