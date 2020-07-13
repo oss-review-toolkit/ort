@@ -234,9 +234,9 @@ class ReportTableModelMapper(
             extraColumns.map { it.toString() }
         }.orEmpty()
 
-        val ruleViolations = ortResult.evaluator?.let {
-            it.violations.map { it.toResolvableEvaluatorIssue() }
-        }?.sortedWith(VIOLATION_COMPARATOR).orEmpty()
+        val ruleViolations = ortResult.getRuleViolations()
+            .map { it.toResolvableEvaluatorIssue() }
+            .sortedWith(VIOLATION_COMPARATOR).orEmpty()
 
         return ReportTableModel(
             ortResult.repository.vcsProcessed,
