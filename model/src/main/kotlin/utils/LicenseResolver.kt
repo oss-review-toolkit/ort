@@ -109,7 +109,7 @@ internal class LicenseResolver(
             .filter { (_, excludes) -> !omitExcluded || excludes.isEmpty() }
             .map { (findings, _) -> findings }
             .associateBy(
-                { it.license.toString() },
-                { it.copyrights.mapTo(mutableSetOf()) { it.statement } }
+                { findings -> findings.license.toString() },
+                { findings -> findings.copyrights.mapTo(mutableSetOf()) { it.statement } }
             )
 }
