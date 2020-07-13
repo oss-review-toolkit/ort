@@ -20,7 +20,6 @@
 package org.ossreviewtoolkit.model
 
 import org.ossreviewtoolkit.utils.SortedSetComparator
-import org.ossreviewtoolkit.utils.constructTreeSetType
 
 /**
  * A [TextLocation] references text located in a file.
@@ -43,9 +42,6 @@ data class TextLocation(
 ) : Comparable<TextLocation> {
     companion object {
         const val UNKNOWN_LINE = -1
-
-        val TREE_SET_TYPE by lazy { jsonMapper.typeFactory.constructTreeSetType(TextLocation::class.java) }
-
         val SORTED_SET_COMPARATOR = SortedSetComparator<TextLocation>()
         private val COMPARATOR = compareBy<TextLocation>({ it.path }, { it.startLine }, { it.endLine })
     }
