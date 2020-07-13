@@ -110,7 +110,7 @@ data class Identifier(
     // TODO: We probably want to already sanitize the individual properties, also in other classes, but Kotlin does not
     //       seem to offer a generic / elegant way to do so.
     @JsonValue
-    fun toCoordinates() = components.joinToString(":") { it.trim().filterNot { it < ' ' } }
+    fun toCoordinates() = components.joinToString(":") { component -> component.trim().filterNot { it < ' ' } }
 
     /**
      * Create a file system path based on the properties of the [Identifier]. All properties are encoded using
