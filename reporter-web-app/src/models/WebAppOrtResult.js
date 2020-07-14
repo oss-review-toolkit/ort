@@ -119,8 +119,6 @@ class WebAppOrtResult {
 
             if (obj.packages) {
                 const { packages } = obj;
-                let declaredLicenses = new Set();
-                let detectedLicenses = new Set();
 
                 for (let i = 0, len = packages.length; i < len; i++) {
                     const webAppPackage = new WebAppPackage(packages[i], this);
@@ -135,13 +133,13 @@ class WebAppOrtResult {
                         this.#concludedLicensePackages.push(webAppPackage);
                     }
 
-                    declaredLicenses = new Set([
-                        ...declaredLicenses,
+                    const declaredLicenses = new Set([
+                        ...this.#declaredLicenses,
                         ...webAppPackage.declaredLicenses
                     ]);
                     this.#declaredLicenses = Array.from(declaredLicenses).sort();
 
-                    detectedLicenses = new Set([
+                    const detectedLicenses = new Set([
                         ...this.#detectedLicenses,
                         ...webAppPackage.detectedLicenses
                     ]);

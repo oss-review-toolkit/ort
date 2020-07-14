@@ -382,7 +382,7 @@ export default (state = initState, action) => {
                 ...state,
                 tree: {
                     ...state.tree,
-                    selectedWebAppTreeNode: selectedWebAppTreeNode || state.tree.selectedWebAppTreeNode,
+                    selectedWebAppTreeNode,
                     selectedKeys,
                     showDrawer: true
                 }
