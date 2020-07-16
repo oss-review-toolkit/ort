@@ -72,4 +72,8 @@ In order to maintain a high software quality standard, we strongly prefer contri
 
 - Use `println()` only in CLI modules and `log` in library modules.
 
+## Governance
+
+OSS Review Toolkit (ORT) is a [Linux Foundation project](https://www.linuxfoundation.org/) and part of [ACT](https://automatecompliance.org/). To learn more on how the project is governed, including its charter, see the [ort-governance](https://github.com/oss-review-toolkit/ort-governance) repository.
+
 Thank you for reading and happy contributing!
