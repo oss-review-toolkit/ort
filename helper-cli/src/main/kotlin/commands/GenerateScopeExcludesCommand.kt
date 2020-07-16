@@ -76,6 +76,7 @@ private fun OrtResult.generateScopeExcludes(): List<ScopeExclude> {
     }.minimize(projectScopes)
 }
 
+@Suppress("LongMethod")
 private fun getScopeExcludesForPackageManager(packageManagerName: String): List<ScopeExclude> =
     when (packageManagerName) {
         "Bower" -> listOf(
@@ -113,6 +114,11 @@ private fun getScopeExcludesForPackageManager(packageManagerName: String): List<
         )
         "Gradle" -> listOf(
             ScopeExclude(
+                pattern = ".*AnnotationProcessor.*",
+                reason = ScopeExcludeReason.BUILD_DEPENDENCY_OF,
+                comment = "Packages to process code annotations only."
+            ),
+            ScopeExclude(
                 pattern = "checkstyle",
                 reason = ScopeExcludeReason.BUILD_DEPENDENCY_OF,
                 comment = "Packages for code styling checks (testing) only."
@@ -148,12 +154,17 @@ private fun getScopeExcludesForPackageManager(packageManagerName: String): List<
                 comment = "Packages for Kotlin compiler only."
             ),
             ScopeExclude(
+                pattern = "kotlinNativeCompilerPluginClasspath",
+                reason = ScopeExcludeReason.BUILD_DEPENDENCY_OF,
+                comment = "Packages for Kotlin compiler only."
+            ),
+            ScopeExclude(
                 pattern = "ktlint",
                 reason = ScopeExcludeReason.TEST_DEPENDENCY_OF,
                 comment = "Packages for code linting (testing) only."
             ),
             ScopeExclude(
-                pattern = "lintClassPath",
+                pattern = "lint.*",
                 reason = ScopeExcludeReason.TEST_DEPENDENCY_OF,
                 comment = "Packages for code linting (testing) only."
             ),
