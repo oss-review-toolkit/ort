@@ -25,6 +25,7 @@ import java.util.UUID
 
 import org.cyclonedx.BomGeneratorFactory
 import org.cyclonedx.CycloneDxSchema
+import org.cyclonedx.model.AttachmentText
 import org.cyclonedx.model.Bom
 import org.cyclonedx.model.Component
 import org.cyclonedx.model.ExtensibleType
@@ -32,7 +33,6 @@ import org.cyclonedx.model.ExternalReference
 import org.cyclonedx.model.Hash
 import org.cyclonedx.model.License
 import org.cyclonedx.model.LicenseChoice
-import org.cyclonedx.model.LicenseText
 
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.utils.getDetectedLicensesForId
@@ -80,10 +80,12 @@ class CycloneDxReporter : Reporter {
             License().apply {
                 id = spdxId
                 name = licenseName.takeIf { spdxId == null }
-                licenseText = LicenseText().apply {
-                    contentType = "plain/text"
-                    text = input.licenseTextProvider.getLicenseText(licenseName)
-                }
+                setLicenseText(
+                    AttachmentText().apply {
+                        contentType = "plain/text"
+                        text = input.licenseTextProvider.getLicenseText(licenseName)
+                    }
+                )
                 extensibleTypes = listOf(ExtensibleType("ort", "origin", origin))
             }
         }
@@ -222,7 +224,7 @@ class CycloneDxReporter : Reporter {
     }
 
     private fun writeBomToFile(bom: Bom, outputFile: File) {
-        val bomGenerator = BomGeneratorFactory.create(CycloneDxSchema.Version.VERSION_11, bom).apply { generate() }
+        val bomGenerator = BomGeneratorFactory.createXml(CycloneDxSchema.Version.VERSION_11, bom).apply { generate() }
         outputFile.bufferedWriter().use {
             it.write(bomGenerator.toXmlString())
         }

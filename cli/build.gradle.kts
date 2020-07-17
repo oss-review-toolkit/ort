@@ -106,6 +106,16 @@ repositories {
             includeGroup("com.github.ralfstuckert.pdfbox-layout")
         }
     }
+
+    exclusiveContent {
+        forRepository {
+            maven("https://repository.mulesoft.org/nexus/content/repositories/public/")
+        }
+
+        filter {
+            includeGroup("com.github.everit-org.json-schema")
+        }
+    }
 }
 
 dependencies {
