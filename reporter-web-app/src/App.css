@@ -71,8 +71,8 @@ tr.ant-table-expanded-row, tr.ant-table-expanded-row:hover {
     font-weight: 300;
     font-size: 14px;
     padding: 0em 0.5em 0.5em 0.5em;
-    margin: 0.6em;
-    min-height: 600px;
+    margin: 0.5em;
+    min-height: 96vh;
 }
 
 /* Control button in top right of main Tabs menu */
