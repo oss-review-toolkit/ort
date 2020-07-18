@@ -82,30 +82,32 @@ class ReporterApp extends Component {
                     className="ort-app"
                     key="ort-tabs"
                 >
-                    {
-                        showAboutModal && (<AboutModal webAppOrtResult={webAppOrtResult} />)
-                    }
-                    <Tabs
-                        activeKey={showKey}
-                        animated={false}
-                        onChange={this.onChangeTab}
-                        tabBarExtraContent={(
-                            <ControlOutlined
-                                className="ort-control"
-                                onClick={this.onClickAbout}
-                            />
-                        )}
-                    >
-                        <TabPane tab="Summary" key="ort-tabs-summary">
-                            <SummaryView />
-                        </TabPane>
-                        <TabPane tab="Table" key="ort-tabs-table">
-                            <TableView />
-                        </TabPane>
-                        <TabPane tab="Tree" key="ort-tabs-tree">
-                            <TreeView />
-                        </TabPane>
-                    </Tabs>
+                    <Col span={24}>
+                        {
+                            showAboutModal && (<AboutModal webAppOrtResult={webAppOrtResult} />)
+                        }
+                        <Tabs
+                            activeKey={showKey}
+                            animated={false}
+                            onChange={this.onChangeTab}
+                            tabBarExtraContent={(
+                                <ControlOutlined
+                                    className="ort-control"
+                                    onClick={this.onClickAbout}
+                                />
+                            )}
+                        >
+                            <TabPane tab="Summary" key="ort-tabs-summary">
+                                <SummaryView />
+                            </TabPane>
+                            <TabPane tab="Table" key="ort-tabs-table">
+                                <TableView />
+                            </TabPane>
+                            <TabPane tab="Tree" key="ort-tabs-tree">
+                                <TreeView />
+                            </TabPane>
+                        </Tabs>
+                    </Col>
                 </Row>
             );
         }
