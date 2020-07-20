@@ -24,6 +24,7 @@ import io.kotest.inspectors.forAll
 import io.kotest.matchers.collections.beEmpty
 import io.kotest.matchers.collections.shouldHaveAtLeastSize
 import io.kotest.matchers.collections.shouldHaveAtMostSize
+import io.kotest.matchers.nulls.shouldBeNull
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 
@@ -56,7 +57,7 @@ class SpdxSimpleLicenseMappingTest : WordSpec({
 
         "not contain plain SPDX license ids" {
             SpdxSimpleLicenseMapping.customLicenseIds.keys.forAll { declaredLicense ->
-                SpdxLicense.forId(declaredLicense) shouldBe null
+                SpdxLicense.forId(declaredLicense).shouldBeNull()
             }
         }
 

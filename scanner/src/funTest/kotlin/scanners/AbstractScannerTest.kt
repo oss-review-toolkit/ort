@@ -26,8 +26,8 @@ import io.kotest.core.test.TestCase
 import io.kotest.core.test.TestResult
 import io.kotest.inspectors.forAll
 import io.kotest.matchers.file.shouldNotStartWithPath
+import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.shouldBe
-import io.kotest.matchers.shouldNotBe
 
 import java.io.File
 
@@ -80,8 +80,8 @@ abstract class AbstractScannerTest(testTags: Set<Tag> = emptySet()) : StringSpec
             val result = scanner.scanPath(inputDir.resolve("LICENSE"), outputDir)
             val summary = result.scanner?.results?.scanResults?.singleOrNull()?.results?.singleOrNull()?.summary
 
-            summary shouldNotBe null
-            summary!!.fileCount shouldBe 1
+            summary.shouldNotBeNull()
+            summary.fileCount shouldBe 1
             summary.licenses shouldBe expectedFileLicenses
             summary.licenseFindings.forAll {
                 File(it.location.path) shouldNotStartWithPath inputDir
@@ -92,8 +92,8 @@ abstract class AbstractScannerTest(testTags: Set<Tag> = emptySet()) : StringSpec
             val result = scanner.scanPath(inputDir, outputDir)
             val summary = result.scanner?.results?.scanResults?.singleOrNull()?.results?.singleOrNull()?.summary
 
-            summary shouldNotBe null
-            summary!!.fileCount shouldBe commonlyDetectedFiles.size
+            summary.shouldNotBeNull()
+            summary.fileCount shouldBe commonlyDetectedFiles.size
             summary.licenses shouldBe expectedDirectoryLicenses
             summary.licenseFindings.forAll {
                 File(it.location.path) shouldNotStartWithPath inputDir

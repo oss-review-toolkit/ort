@@ -19,6 +19,14 @@
 
 package org.ossreviewtoolkit.analyzer.managers
 
+import io.kotest.core.spec.style.StringSpec
+import io.kotest.matchers.collections.haveSize
+import io.kotest.matchers.nulls.shouldNotBeNull
+import io.kotest.matchers.should
+import io.kotest.matchers.shouldBe
+
+import java.io.File
+
 import org.ossreviewtoolkit.downloader.VersionControlSystem
 import org.ossreviewtoolkit.utils.Os
 import org.ossreviewtoolkit.utils.normalizeVcsUrl
@@ -27,14 +35,6 @@ import org.ossreviewtoolkit.utils.test.DEFAULT_ANALYZER_CONFIGURATION
 import org.ossreviewtoolkit.utils.test.DEFAULT_REPOSITORY_CONFIGURATION
 import org.ossreviewtoolkit.utils.test.USER_DIR
 import org.ossreviewtoolkit.utils.test.patchExpectedResult
-
-import io.kotest.matchers.shouldBe
-import io.kotest.core.spec.style.StringSpec
-import io.kotest.matchers.collections.haveSize
-import io.kotest.matchers.should
-import io.kotest.matchers.shouldNotBe
-
-import java.io.File
 
 class MavenTest : StringSpec() {
     private val projectDir = File("src/funTest/assets/projects/synthetic/maven").absoluteFile
@@ -66,8 +66,8 @@ class MavenTest : StringSpec() {
             // of transitive dependencies would not work.
             val result = createMaven().resolveDependencies(listOf(pomFileCore, pomFileResources))[pomFileCore]
 
-            result shouldNotBe null
-            result!! should haveSize(1)
+            result.shouldNotBeNull()
+            result should haveSize(1)
             result.single().toYaml() shouldBe expectedResult
         }
 
@@ -98,8 +98,8 @@ class MavenTest : StringSpec() {
             // not work.
             val result = createMaven().resolveDependencies(listOf(pomFileApp, pomFileLib))[pomFileApp]
 
-            result shouldNotBe null
-            result!! should haveSize(1)
+            result.shouldNotBeNull()
+            result should haveSize(1)
             result.single().toYaml() shouldBe expectedResult
         }
 

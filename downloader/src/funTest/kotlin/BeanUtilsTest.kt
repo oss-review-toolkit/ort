@@ -32,6 +32,7 @@ import io.kotest.core.test.TestResult
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNotBe
 import io.kotest.core.spec.style.StringSpec
+import io.kotest.matchers.nulls.shouldBeNull
 
 import java.io.File
 
@@ -72,7 +73,7 @@ class BeanUtilsTest : StringSpec() {
             val downloadResult = Downloader.download(pkg, outputDir)
 
             downloadResult.downloadDirectory.walk().onEnter { it.name != ".svn" }.count() shouldBe 302
-            downloadResult.sourceArtifact shouldBe null
+            downloadResult.sourceArtifact.shouldBeNull()
 
             downloadResult.vcsInfo shouldNotBe null
             with(downloadResult.vcsInfo!!) {

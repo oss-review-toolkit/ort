@@ -24,6 +24,7 @@ import io.kotest.core.spec.style.StringSpec
 import io.kotest.inspectors.forAll
 import io.kotest.matchers.collections.beEmpty
 import io.kotest.matchers.collections.containExactly
+import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.maps.beEmpty as beEmptyMap
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
@@ -72,9 +73,9 @@ class DeclaredLicenseProcessorTest : StringSpec() {
             declaredLicenses.forAll { declaredLicense ->
                 val processedLicense = DeclaredLicenseProcessor.process(declaredLicense)
 
-                processedLicense shouldNotBe null
+                processedLicense.shouldNotBeNull()
                 shouldNotThrow<SpdxException> {
-                    processedLicense!!.validate(SpdxExpression.Strictness.ALLOW_CURRENT)
+                    processedLicense.validate(SpdxExpression.Strictness.ALLOW_CURRENT)
                 }
             }
         }

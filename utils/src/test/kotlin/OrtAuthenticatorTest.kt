@@ -20,8 +20,9 @@
 package org.ossreviewtoolkit.utils
 
 import io.kotest.core.spec.style.WordSpec
+import io.kotest.matchers.nulls.shouldBeNull
+import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.shouldBe
-import io.kotest.matchers.shouldNotBe
 
 class OrtAuthenticatorTest : WordSpec({
     "getNetrcAuthentication()" should {
@@ -30,8 +31,8 @@ class OrtAuthenticatorTest : WordSpec({
                 machine github.com login foo password bar
             """.trimIndent(), "github.com")
 
-            authentication shouldNotBe null
-            authentication!!.userName shouldBe "foo"
+            authentication.shouldNotBeNull()
+            authentication.userName shouldBe "foo"
             authentication.password shouldBe "bar".toCharArray()
         }
 
@@ -42,8 +43,8 @@ class OrtAuthenticatorTest : WordSpec({
                 password bar
             """.trimIndent(), "gitlab.com")
 
-            authentication shouldNotBe null
-            authentication!!.userName shouldBe "foo"
+            authentication.shouldNotBeNull()
+            authentication.userName shouldBe "foo"
             authentication.password shouldBe "bar".toCharArray()
         }
 
@@ -55,8 +56,8 @@ class OrtAuthenticatorTest : WordSpec({
                 default login foo password bar
             """.trimIndent(), "gitlab.com")
 
-            authentication shouldNotBe null
-            authentication!!.userName shouldBe "foo"
+            authentication.shouldNotBeNull()
+            authentication.userName shouldBe "foo"
             authentication.password shouldBe "bar".toCharArray()
         }
 
@@ -72,8 +73,8 @@ class OrtAuthenticatorTest : WordSpec({
                 login foo
             """.trimIndent(), "bitbucket.com")
 
-            authentication shouldNotBe null
-            authentication!!.userName shouldBe "foo"
+            authentication.shouldNotBeNull()
+            authentication.userName shouldBe "foo"
             authentication.password shouldBe "bar".toCharArray()
         }
 
@@ -82,7 +83,7 @@ class OrtAuthenticatorTest : WordSpec({
                 machine bitbucket.com login foo password bar
             """.trimIndent(), "github.com")
 
-            authentication shouldBe null
+            authentication.shouldBeNull()
         }
     }
 })

@@ -22,6 +22,7 @@ package org.ossreviewtoolkit.spdx
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.core.test.TestCase
 import io.kotest.core.test.TestResult
+import io.kotest.matchers.nulls.shouldBeNull
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNot
@@ -143,7 +144,7 @@ class SpdxUtilsTest : WordSpec() {
             }
 
             "return null for an invalid SPDX license id" {
-                getLicenseText("FooBar-1.0") shouldBe null
+                getLicenseText("FooBar-1.0").shouldBeNull()
             }
 
             "return the exception text for an SPDX exception id if handling exceptions is enabled" {
@@ -154,7 +155,7 @@ class SpdxUtilsTest : WordSpec() {
             }
 
             "return null for an SPDX exception id if handling exceptions is disabled" {
-                getLicenseText("Autoconf-exception-3.0", false) shouldBe null
+                getLicenseText("Autoconf-exception-3.0", false).shouldBeNull()
             }
 
             "return a non-blank string for all SPDX ids" {
@@ -178,7 +179,7 @@ class SpdxUtilsTest : WordSpec() {
             }
 
             "return null for an unknown SPDX LicenseRef" {
-                getLicenseText("LicenseRef-foo-bar") shouldBe null
+                getLicenseText("LicenseRef-foo-bar").shouldBeNull()
             }
         }
 
@@ -207,7 +208,7 @@ class SpdxUtilsTest : WordSpec() {
             "return null if license text is not known by ort and also not in custom dir" {
                 setupTempFile("LicenseRef-ort-abc", "abc")
 
-                getText("LicenseRef-not-present") shouldBe null
+                getText("LicenseRef-not-present").shouldBeNull()
             }
         }
     }

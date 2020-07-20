@@ -19,6 +19,20 @@
 
 package org.ossreviewtoolkit.analyzer.integration
 
+import io.kotest.core.spec.Spec
+import io.kotest.core.spec.style.StringSpec
+import io.kotest.inspectors.forAll
+import io.kotest.matchers.collections.beEmpty
+import io.kotest.matchers.collections.containExactly
+import io.kotest.matchers.nulls.shouldBeNull
+import io.kotest.matchers.nulls.shouldNotBeNull
+import io.kotest.matchers.should
+import io.kotest.matchers.shouldBe
+import io.kotest.matchers.shouldNot
+import io.kotest.matchers.shouldNotBe
+
+import java.io.File
+
 import org.ossreviewtoolkit.analyzer.ManagedProjectFiles
 import org.ossreviewtoolkit.analyzer.PackageManager
 import org.ossreviewtoolkit.downloader.Downloader
@@ -31,18 +45,6 @@ import org.ossreviewtoolkit.utils.test.DEFAULT_ANALYZER_CONFIGURATION
 import org.ossreviewtoolkit.utils.test.DEFAULT_REPOSITORY_CONFIGURATION
 import org.ossreviewtoolkit.utils.test.ExpensiveTag
 import org.ossreviewtoolkit.utils.test.USER_DIR
-
-import io.kotest.core.spec.Spec
-import io.kotest.matchers.collections.beEmpty
-import io.kotest.matchers.collections.containExactly
-import io.kotest.matchers.should
-import io.kotest.matchers.shouldBe
-import io.kotest.matchers.shouldNot
-import io.kotest.matchers.shouldNotBe
-import io.kotest.core.spec.style.StringSpec
-import io.kotest.inspectors.forAll
-
-import java.io.File
 
 abstract class AbstractIntegrationSpec : StringSpec() {
     /**
@@ -90,10 +92,10 @@ abstract class AbstractIntegrationSpec : StringSpec() {
     init {
         "Source code was downloaded successfully".config(tags = setOf(ExpensiveTag)) {
             val workingTree = VersionControlSystem.forDirectory(downloadResult.downloadDirectory)
-            workingTree shouldNotBe null
-            workingTree!!.isValid() shouldBe true
+            workingTree.shouldNotBeNull()
+            workingTree.isValid() shouldBe true
             workingTree.vcsType shouldBe pkg.vcs.type
-            downloadResult.sourceArtifact shouldBe null
+            downloadResult.sourceArtifact.shouldBeNull()
             downloadResult.vcsInfo shouldNotBe null
             downloadResult.vcsInfo!!.type shouldBe workingTree.vcsType
         }
@@ -112,8 +114,8 @@ abstract class AbstractIntegrationSpec : StringSpec() {
                 }
                 val expectedFiles = expectedManagedFilesByName[manager.managerName]
 
-                expectedFiles shouldNotBe null
-                files.sorted().joinToString("\n") shouldBe expectedFiles!!.sorted().joinToString("\n")
+                expectedFiles.shouldNotBeNull()
+                files.sorted().joinToString("\n") shouldBe expectedFiles.sorted().joinToString("\n")
             }
         }
 

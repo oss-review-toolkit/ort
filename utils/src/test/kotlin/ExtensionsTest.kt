@@ -22,9 +22,9 @@ package org.ossreviewtoolkit.utils
 import io.kotest.assertions.assertSoftly
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.WordSpec
+import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
-import io.kotest.matchers.shouldNotBe
 
 import java.io.File
 import java.io.IOException
@@ -124,7 +124,7 @@ class ExtensionsTest : WordSpec({
         "find the root Git directory" {
             val gitRoot = File(".").searchUpwardsForSubdirectory(".git")
 
-            gitRoot shouldNotBe null
+            gitRoot.shouldNotBeNull()
             gitRoot shouldBe File("..").absoluteFile.normalize()
         }
     }
