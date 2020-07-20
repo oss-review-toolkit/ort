@@ -75,7 +75,7 @@ val fatJar by tasks.registering(Jar::class) {
 }
 
 repositories {
-    // Need to repeat the analyzer's custom repository definition here, see
+    // Need to repeat several custom repository definitions of other submodules here, see
     // https://github.com/gradle/gradle/issues/4106.
     exclusiveContent {
         forRepository {
