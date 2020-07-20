@@ -22,6 +22,7 @@ package org.ossreviewtoolkit.model
 import io.kotest.matchers.shouldBe
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.StringSpec
+import io.kotest.matchers.nulls.shouldBeNull
 
 class PackageTest : StringSpec({
     "diff throws an exception if the identifiers are not equals" {
@@ -67,7 +68,7 @@ class PackageTest : StringSpec({
         val diff = pkg.diff(other)
 
         diff.binaryArtifact shouldBe pkg.binaryArtifact
-        diff.comment shouldBe null
+        diff.comment.shouldBeNull()
         diff.declaredLicenses shouldBe pkg.declaredLicenses
         diff.homepageUrl shouldBe pkg.homepageUrl
         diff.sourceArtifact shouldBe pkg.sourceArtifact
@@ -92,11 +93,11 @@ class PackageTest : StringSpec({
 
         val diff = pkg.diff(pkg)
 
-        diff.binaryArtifact shouldBe null
-        diff.comment shouldBe null
-        diff.declaredLicenses shouldBe null
-        diff.homepageUrl shouldBe null
-        diff.sourceArtifact shouldBe null
-        diff.vcs shouldBe null
+        diff.binaryArtifact.shouldBeNull()
+        diff.comment.shouldBeNull()
+        diff.declaredLicenses.shouldBeNull()
+        diff.homepageUrl.shouldBeNull()
+        diff.sourceArtifact.shouldBeNull()
+        diff.vcs.shouldBeNull()
     }
 })

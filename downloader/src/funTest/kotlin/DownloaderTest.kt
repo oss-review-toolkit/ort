@@ -19,6 +19,16 @@
 
 package org.ossreviewtoolkit.downloader
 
+import io.kotest.assertions.throwables.shouldThrow
+import io.kotest.core.spec.style.StringSpec
+import io.kotest.core.test.TestCase
+import io.kotest.core.test.TestResult
+import io.kotest.matchers.nulls.shouldBeNull
+import io.kotest.matchers.shouldBe
+import io.kotest.matchers.shouldNotBe
+
+import java.io.File
+
 import org.ossreviewtoolkit.model.Hash
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Package
@@ -28,15 +38,6 @@ import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.utils.ORT_NAME
 import org.ossreviewtoolkit.utils.safeDeleteRecursively
 import org.ossreviewtoolkit.utils.test.ExpensiveTag
-
-import io.kotest.core.test.TestCase
-import io.kotest.core.test.TestResult
-import io.kotest.matchers.shouldBe
-import io.kotest.matchers.shouldNotBe
-import io.kotest.assertions.throwables.shouldThrow
-import io.kotest.core.spec.style.StringSpec
-
-import java.io.File
 
 class DownloaderTest : StringSpec() {
     private lateinit var outputDir: File
@@ -70,7 +71,7 @@ class DownloaderTest : StringSpec() {
             )
 
             val downloadResult = Downloader.download(pkg, outputDir)
-            downloadResult.vcsInfo shouldBe null
+            downloadResult.vcsInfo.shouldBeNull()
             downloadResult.sourceArtifact shouldNotBe null
             downloadResult.sourceArtifact!!.url shouldBe pkg.sourceArtifact.url
             downloadResult.sourceArtifact!!.hash shouldBe pkg.sourceArtifact.hash
@@ -137,7 +138,7 @@ class DownloaderTest : StringSpec() {
             )
 
             val downloadResult = Downloader.download(pkg, outputDir)
-            downloadResult.vcsInfo shouldBe null
+            downloadResult.vcsInfo.shouldBeNull()
             downloadResult.sourceArtifact shouldNotBe null
             downloadResult.sourceArtifact!!.url shouldBe pkg.sourceArtifact.url
             downloadResult.sourceArtifact!!.hash shouldBe pkg.sourceArtifact.hash
@@ -170,7 +171,7 @@ class DownloaderTest : StringSpec() {
             )
 
             val downloadResult = Downloader.download(pkg, outputDir)
-            downloadResult.vcsInfo shouldBe null
+            downloadResult.vcsInfo.shouldBeNull()
             downloadResult.sourceArtifact shouldNotBe null
             downloadResult.sourceArtifact!!.url shouldBe pkg.sourceArtifact.url
             downloadResult.sourceArtifact!!.hash shouldBe pkg.sourceArtifact.hash
@@ -202,7 +203,7 @@ class DownloaderTest : StringSpec() {
             )
 
             val downloadResult = Downloader.download(pkg, outputDir)
-            downloadResult.vcsInfo shouldBe null
+            downloadResult.vcsInfo.shouldBeNull()
             downloadResult.sourceArtifact shouldNotBe null
             downloadResult.sourceArtifact!!.url shouldBe pkg.sourceArtifact.url
             downloadResult.sourceArtifact!!.hash shouldBe pkg.sourceArtifact.hash

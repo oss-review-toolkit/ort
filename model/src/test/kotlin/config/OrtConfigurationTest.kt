@@ -24,6 +24,8 @@ import com.typesafe.config.ConfigFactory
 import io.github.config4k.extract
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.collections.containExactly
+import io.kotest.matchers.nulls.shouldBeNull
+import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNotBe
@@ -42,13 +44,13 @@ class OrtConfigurationTest : WordSpec({
             val ortConfig = config.extract<OrtConfiguration>("ort")
 
             ortConfig.scanner.let { scanner ->
-                scanner shouldNotBe null
+                scanner.shouldNotBeNull()
 
-                scanner!!.archive shouldNotBe null
+                scanner.archive shouldNotBe null
                 scanner.archive!!.let { archive ->
                     archive.patterns should containExactly("LICENSE*", "COPYING*")
                     archive.storage.let { storage ->
-                        storage.httpFileStorage shouldBe null
+                        storage.httpFileStorage.shouldBeNull()
                         storage.localFileStorage shouldNotBe null
                         storage.localFileStorage!!.let { localFileStorage ->
                             localFileStorage.directory shouldBe File("~/.ort/scanner/archive")
@@ -57,24 +59,24 @@ class OrtConfigurationTest : WordSpec({
                 }
 
                 scanner.fileBasedStorage.let { fileBased ->
-                    fileBased shouldNotBe null
-                    fileBased!!.backend.let { backend ->
+                    fileBased.shouldNotBeNull()
+                    fileBased.backend.let { backend ->
                         backend.httpFileStorage.let { httpFileStorage ->
-                            httpFileStorage shouldNotBe null
-                            httpFileStorage!!.url shouldBe "https://your-http-server"
+                            httpFileStorage.shouldNotBeNull()
+                            httpFileStorage.url shouldBe "https://your-http-server"
                             httpFileStorage.headers should containExactlyEntries("key1" to "value1", "key2" to "value2")
                         }
 
                         backend.localFileStorage.let { localFileStorage ->
-                            localFileStorage shouldNotBe null
-                            localFileStorage!!.directory shouldBe File("~/.ort/scanner/results")
+                            localFileStorage.shouldNotBeNull()
+                            localFileStorage.directory shouldBe File("~/.ort/scanner/results")
                         }
                     }
                 }
 
                 scanner.postgresStorage.let { postgres ->
-                    postgres shouldNotBe null
-                    postgres!!.url shouldBe "jdbc:postgresql://your-postgresql-server:5444/your-database"
+                    postgres.shouldNotBeNull()
+                    postgres.url shouldBe "jdbc:postgresql://your-postgresql-server:5444/your-database"
                     postgres.schema shouldBe "schema"
                     postgres.username shouldBe "username"
                     postgres.password shouldBe "password"
@@ -84,7 +86,7 @@ class OrtConfigurationTest : WordSpec({
                     postgres.sslrootcert shouldBe "/defaultdir/root.crt"
                 }
 
-                scanner.options shouldNotBe null
+                scanner.options.shouldNotBeNull()
             }
         }
 

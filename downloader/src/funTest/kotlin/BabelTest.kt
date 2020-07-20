@@ -19,6 +19,16 @@
 
 package org.ossreviewtoolkit.downloader
 
+import io.kotest.core.spec.style.StringSpec
+import io.kotest.core.test.TestCase
+import io.kotest.core.test.TestResult
+import io.kotest.matchers.nulls.shouldBeNull
+import io.kotest.matchers.nulls.shouldNotBeNull
+import io.kotest.matchers.shouldBe
+import io.kotest.matchers.shouldNotBe
+
+import java.io.File
+
 import org.ossreviewtoolkit.model.Hash
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Package
@@ -28,14 +38,6 @@ import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.utils.ORT_NAME
 import org.ossreviewtoolkit.utils.normalizeVcsUrl
 import org.ossreviewtoolkit.utils.safeDeleteRecursively
-
-import io.kotest.core.test.TestCase
-import io.kotest.core.test.TestResult
-import io.kotest.matchers.shouldBe
-import io.kotest.matchers.shouldNotBe
-import io.kotest.core.spec.style.StringSpec
-
-import java.io.File
 
 class BabelTest : StringSpec() {
     private lateinit var outputDir: File
@@ -79,7 +81,7 @@ class BabelTest : StringSpec() {
 
             val downloadResult = Downloader.download(pkg, outputDir)
 
-            downloadResult.sourceArtifact shouldBe null
+            downloadResult.sourceArtifact.shouldBeNull()
             downloadResult.vcsInfo shouldNotBe null
             with(downloadResult.vcsInfo!!) {
                 type shouldBe pkg.vcsProcessed.type
@@ -91,8 +93,8 @@ class BabelTest : StringSpec() {
 
             val workingTree = VersionControlSystem.forDirectory(downloadResult.downloadDirectory)
 
-            workingTree shouldNotBe null
-            workingTree!!.isValid() shouldBe true
+            workingTree.shouldNotBeNull()
+            workingTree.isValid() shouldBe true
             workingTree.getRevision() shouldBe "cee4cde53e4f452d89229986b9368ecdb41e00da"
 
             val babelCliDir = File(downloadResult.downloadDirectory, "packages/babel-cli")

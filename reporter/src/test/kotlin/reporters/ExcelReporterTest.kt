@@ -20,8 +20,8 @@
 package org.ossreviewtoolkit.reporter.reporters
 
 import io.kotest.core.spec.style.WordSpec
+import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.shouldBe
-import io.kotest.matchers.shouldNotBe
 
 import org.apache.poi.xssf.usermodel.XSSFWorkbook
 
@@ -33,11 +33,11 @@ class ExcelReporterTest : WordSpec({
 
             val uniqueName1 = createUniqueSheetName(workbook, sheetName)
             uniqueName1 shouldBe "1234567890123456789012345678901"
-            workbook.createSheet(uniqueName1) shouldNotBe null
+            workbook.createSheet(uniqueName1).shouldNotBeNull()
 
             val uniqueName2 = createUniqueSheetName(workbook, sheetName)
             uniqueName2 shouldBe "12345678901234567890123456789-1"
-            workbook.createSheet(uniqueName2) shouldNotBe null
+            workbook.createSheet(uniqueName2).shouldNotBeNull()
         }
 
         "match sheet names case-insensitively" {
@@ -47,11 +47,11 @@ class ExcelReporterTest : WordSpec({
 
             val uniqueName1 = createUniqueSheetName(workbook, sheetName1)
             uniqueName1 shouldBe "CASE-SENSITIVITY"
-            workbook.createSheet(uniqueName1) shouldNotBe null
+            workbook.createSheet(uniqueName1).shouldNotBeNull()
 
             val uniqueName2 = createUniqueSheetName(workbook, sheetName2)
             uniqueName2 shouldBe "case-sensitivity-1"
-            workbook.createSheet(uniqueName2) shouldNotBe null
+            workbook.createSheet(uniqueName2).shouldNotBeNull()
         }
     }
 })

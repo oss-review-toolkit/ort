@@ -22,9 +22,10 @@ package org.ossreviewtoolkit.utils
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.inspectors.forAll
 import io.kotest.matchers.collections.beEmpty
+import io.kotest.matchers.nulls.shouldBeNull
+import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
-import io.kotest.matchers.shouldNotBe
 
 import java.io.File
 import java.nio.file.Paths
@@ -208,12 +209,12 @@ class UtilsTest : WordSpec({
 
     "getCommonFileParent" should {
         "return null for an empty list" {
-            getCommonFileParent(emptyList()) shouldBe null
+            getCommonFileParent(emptyList()).shouldBeNull()
         }
 
         "return null for files that have no directory in common".config(enabled = Os.isWindows) {
             // On non-Windows, all files have the root directory in common.
-            getCommonFileParent(listOf(File("C:/foo"), File("D:/bar"))) shouldBe null
+            getCommonFileParent(listOf(File("C:/foo"), File("D:/bar"))).shouldBeNull()
         }
 
         "return the absolute common directory for relative files" {
@@ -229,23 +230,23 @@ class UtilsTest : WordSpec({
         "find system executables on Windows".config(enabled = Os.isWindows) {
             val winverPath = File(Os.env["SYSTEMROOT"], "system32/winver.exe")
 
-            getPathFromEnvironment("winver") shouldNotBe null
+            getPathFromEnvironment("winver").shouldNotBeNull()
             getPathFromEnvironment("winver") shouldBe winverPath
 
-            getPathFromEnvironment("winver.exe") shouldNotBe null
+            getPathFromEnvironment("winver.exe").shouldNotBeNull()
             getPathFromEnvironment("winver.exe") shouldBe winverPath
 
-            getPathFromEnvironment("") shouldBe null
-            getPathFromEnvironment("*") shouldBe null
-            getPathFromEnvironment("nul") shouldBe null
+            getPathFromEnvironment("").shouldBeNull()
+            getPathFromEnvironment("*").shouldBeNull()
+            getPathFromEnvironment("nul").shouldBeNull()
         }
 
         "find system executables on non-Windows".config(enabled = !Os.isWindows) {
-            getPathFromEnvironment("sh") shouldNotBe null
+            getPathFromEnvironment("sh").shouldNotBeNull()
             getPathFromEnvironment("sh") shouldBe File("/bin/sh")
 
-            getPathFromEnvironment("") shouldBe null
-            getPathFromEnvironment("/") shouldBe null
+            getPathFromEnvironment("").shouldBeNull()
+            getPathFromEnvironment("/").shouldBeNull()
         }
     }
 

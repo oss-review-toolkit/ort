@@ -22,6 +22,15 @@ package org.ossreviewtoolkit
 import com.github.ajalt.clikt.core.MutuallyExclusiveGroupException
 import com.github.ajalt.clikt.core.ProgramResult
 
+import io.kotest.assertions.throwables.shouldThrow
+import io.kotest.core.spec.style.StringSpec
+import io.kotest.core.test.TestCase
+import io.kotest.core.test.TestResult
+import io.kotest.matchers.nulls.shouldBeNull
+import io.kotest.matchers.shouldBe
+
+import java.io.File
+
 import org.ossreviewtoolkit.downloader.VersionControlSystem
 import org.ossreviewtoolkit.utils.ORT_NAME
 import org.ossreviewtoolkit.utils.normalizeVcsUrl
@@ -29,14 +38,6 @@ import org.ossreviewtoolkit.utils.redirectStdout
 import org.ossreviewtoolkit.utils.safeDeleteRecursively
 import org.ossreviewtoolkit.utils.test.patchActualResult
 import org.ossreviewtoolkit.utils.test.patchExpectedResult
-
-import io.kotest.core.test.TestCase
-import io.kotest.core.test.TestResult
-import io.kotest.matchers.shouldBe
-import io.kotest.assertions.throwables.shouldThrow
-import io.kotest.core.spec.style.StringSpec
-
-import java.io.File
 
 /**
  * A test for the main entry point of the application.
@@ -165,7 +166,7 @@ class OrtMainTest : StringSpec() {
             val stdout = runMain("requirements")
             val errorLogs = stdout.find { it.contains(" ERROR ") }
 
-            errorLogs shouldBe null
+            errorLogs.shouldBeNull()
         }
     }
 
