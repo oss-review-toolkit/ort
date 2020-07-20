@@ -25,7 +25,6 @@ import io.kotest.core.test.TestResult
 import io.kotest.matchers.nulls.shouldBeNull
 import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.shouldBe
-import io.kotest.matchers.shouldNotBe
 
 import java.io.File
 
@@ -38,6 +37,7 @@ import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.utils.ORT_NAME
 import org.ossreviewtoolkit.utils.normalizeVcsUrl
 import org.ossreviewtoolkit.utils.safeDeleteRecursively
+import org.ossreviewtoolkit.utils.test.shouldNotBeNull
 
 class BabelTest : StringSpec() {
     private lateinit var outputDir: File
@@ -82,8 +82,7 @@ class BabelTest : StringSpec() {
             val downloadResult = Downloader.download(pkg, outputDir)
 
             downloadResult.sourceArtifact.shouldBeNull()
-            downloadResult.vcsInfo shouldNotBe null
-            with(downloadResult.vcsInfo!!) {
+            downloadResult.vcsInfo shouldNotBeNull {
                 type shouldBe pkg.vcsProcessed.type
                 url shouldBe pkg.vcsProcessed.url
                 revision shouldBe "master"

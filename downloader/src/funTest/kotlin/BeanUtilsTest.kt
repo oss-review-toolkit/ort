@@ -19,6 +19,14 @@
 
 package org.ossreviewtoolkit.downloader
 
+import io.kotest.core.spec.style.StringSpec
+import io.kotest.core.test.TestCase
+import io.kotest.core.test.TestResult
+import io.kotest.matchers.nulls.shouldBeNull
+import io.kotest.matchers.shouldBe
+
+import java.io.File
+
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.RemoteArtifact
@@ -26,15 +34,7 @@ import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.utils.ORT_NAME
 import org.ossreviewtoolkit.utils.safeDeleteRecursively
-
-import io.kotest.core.test.TestCase
-import io.kotest.core.test.TestResult
-import io.kotest.matchers.shouldBe
-import io.kotest.matchers.shouldNotBe
-import io.kotest.core.spec.style.StringSpec
-import io.kotest.matchers.nulls.shouldBeNull
-
-import java.io.File
+import org.ossreviewtoolkit.utils.test.shouldNotBeNull
 
 class BeanUtilsTest : StringSpec() {
     private lateinit var outputDir: File
@@ -75,8 +75,7 @@ class BeanUtilsTest : StringSpec() {
             downloadResult.downloadDirectory.walk().onEnter { it.name != ".svn" }.count() shouldBe 302
             downloadResult.sourceArtifact.shouldBeNull()
 
-            downloadResult.vcsInfo shouldNotBe null
-            with(downloadResult.vcsInfo!!) {
+            downloadResult.vcsInfo shouldNotBeNull {
                 type shouldBe VcsType.SUBVERSION
                 url shouldBe vcsFromCuration.url
                 revision shouldBe "928490"

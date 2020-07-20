@@ -29,7 +29,6 @@ import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNot
-import io.kotest.matchers.shouldNotBe
 
 import java.io.File
 
@@ -45,6 +44,7 @@ import org.ossreviewtoolkit.utils.test.DEFAULT_ANALYZER_CONFIGURATION
 import org.ossreviewtoolkit.utils.test.DEFAULT_REPOSITORY_CONFIGURATION
 import org.ossreviewtoolkit.utils.test.ExpensiveTag
 import org.ossreviewtoolkit.utils.test.USER_DIR
+import org.ossreviewtoolkit.utils.test.shouldNotBeNull
 
 abstract class AbstractIntegrationSpec : StringSpec() {
     /**
@@ -96,8 +96,9 @@ abstract class AbstractIntegrationSpec : StringSpec() {
             workingTree.isValid() shouldBe true
             workingTree.vcsType shouldBe pkg.vcs.type
             downloadResult.sourceArtifact.shouldBeNull()
-            downloadResult.vcsInfo shouldNotBe null
-            downloadResult.vcsInfo!!.type shouldBe workingTree.vcsType
+            downloadResult.vcsInfo shouldNotBeNull {
+                type shouldBe workingTree.vcsType
+            }
         }
 
         "All package manager definition files are found".config(tags = setOf(ExpensiveTag)) {
