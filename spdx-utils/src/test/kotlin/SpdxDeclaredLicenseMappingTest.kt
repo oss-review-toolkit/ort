@@ -69,7 +69,7 @@ class SpdxDeclaredLicenseMappingTest : WordSpec({
             }
         }
 
-        "be case-insensitve" {
+        "be case-insensitive" {
             SpdxDeclaredLicenseMapping.mapping.asSequence().forAll { (key, license) ->
                 SpdxDeclaredLicenseMapping.map(key.toLowerCase()) shouldBe license
                 SpdxDeclaredLicenseMapping.map(key.toUpperCase()) shouldBe license
