@@ -35,6 +35,7 @@ import org.ossreviewtoolkit.model.config.LicenseFindingCurationReason.INCORRECT
 import org.ossreviewtoolkit.model.licenses.LicenseFindingCurationResult
 import org.ossreviewtoolkit.spdx.SpdxConstants
 import org.ossreviewtoolkit.spdx.toSpdx
+import org.ossreviewtoolkit.utils.test.shouldNotBeNull
 
 class FindingCurationMatcherTest : WordSpec() {
     private val matcher = FindingCurationMatcher()
@@ -180,10 +181,12 @@ class FindingCurationMatcherTest : WordSpec() {
                     concludedLicense = "Apache-2.0"
                 )
 
-                val curatedFinding = matcher.apply(finding, curation)!!
+                val curatedFinding = matcher.apply(finding, curation)
 
-                curatedFinding.license shouldBe "Apache-2.0".toSpdx()
-                curatedFinding.location shouldBe finding.location
+                curatedFinding shouldNotBeNull {
+                    license shouldBe "Apache-2.0".toSpdx()
+                    location shouldBe finding.location
+                }
             }
         }
 
