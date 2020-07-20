@@ -25,7 +25,6 @@ import io.kotest.core.test.TestCase
 import io.kotest.core.test.TestResult
 import io.kotest.matchers.nulls.shouldBeNull
 import io.kotest.matchers.shouldBe
-import io.kotest.matchers.shouldNotBe
 
 import java.io.File
 
@@ -38,6 +37,7 @@ import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.utils.ORT_NAME
 import org.ossreviewtoolkit.utils.safeDeleteRecursively
 import org.ossreviewtoolkit.utils.test.ExpensiveTag
+import org.ossreviewtoolkit.utils.test.shouldNotBeNull
 
 class DownloaderTest : StringSpec() {
     private lateinit var outputDir: File
@@ -72,9 +72,10 @@ class DownloaderTest : StringSpec() {
 
             val downloadResult = Downloader.download(pkg, outputDir)
             downloadResult.vcsInfo.shouldBeNull()
-            downloadResult.sourceArtifact shouldNotBe null
-            downloadResult.sourceArtifact!!.url shouldBe pkg.sourceArtifact.url
-            downloadResult.sourceArtifact!!.hash shouldBe pkg.sourceArtifact.hash
+            downloadResult.sourceArtifact shouldNotBeNull {
+                url shouldBe pkg.sourceArtifact.url
+                hash shouldBe pkg.sourceArtifact.hash
+            }
 
             val licenseFile = File(downloadResult.downloadDirectory, "LICENSE-junit.txt")
             licenseFile.isFile shouldBe true
@@ -139,9 +140,10 @@ class DownloaderTest : StringSpec() {
 
             val downloadResult = Downloader.download(pkg, outputDir)
             downloadResult.vcsInfo.shouldBeNull()
-            downloadResult.sourceArtifact shouldNotBe null
-            downloadResult.sourceArtifact!!.url shouldBe pkg.sourceArtifact.url
-            downloadResult.sourceArtifact!!.hash shouldBe pkg.sourceArtifact.hash
+            downloadResult.sourceArtifact shouldNotBeNull {
+                url shouldBe pkg.sourceArtifact.url
+                hash shouldBe pkg.sourceArtifact.hash
+            }
 
             val licenseFile = File(downloadResult.downloadDirectory, "LICENSE-junit.txt")
             licenseFile.isFile shouldBe true
@@ -151,7 +153,7 @@ class DownloaderTest : StringSpec() {
         }
 
         "Can download a TGZ source artifact from SourceForge".config(tags = setOf(ExpensiveTag)) {
-            val url = "https://master.dl.sourceforge.net/project/tyrex/tyrex/Tyrex%201.0.1/tyrex-1.0.1-src.tgz"
+            val artifactUrl = "https://master.dl.sourceforge.net/project/tyrex/tyrex/Tyrex%201.0.1/tyrex-1.0.1-src.tgz"
             val pkg = Package(
                 id = Identifier(
                     type = "Maven",
@@ -164,7 +166,7 @@ class DownloaderTest : StringSpec() {
                 homepageUrl = "",
                 binaryArtifact = RemoteArtifact.EMPTY,
                 sourceArtifact = RemoteArtifact(
-                    url = url,
+                    url = artifactUrl,
                     hash = Hash.create("49fe486f44197c8e5106ed7487526f77b597308f")
                 ),
                 vcs = VcsInfo.EMPTY
@@ -172,9 +174,10 @@ class DownloaderTest : StringSpec() {
 
             val downloadResult = Downloader.download(pkg, outputDir)
             downloadResult.vcsInfo.shouldBeNull()
-            downloadResult.sourceArtifact shouldNotBe null
-            downloadResult.sourceArtifact!!.url shouldBe pkg.sourceArtifact.url
-            downloadResult.sourceArtifact!!.hash shouldBe pkg.sourceArtifact.hash
+            downloadResult.sourceArtifact shouldNotBeNull {
+                url shouldBe pkg.sourceArtifact.url
+                hash shouldBe pkg.sourceArtifact.hash
+            }
 
             val tyrexDir = File(downloadResult.downloadDirectory, "tyrex-1.0.1")
 
@@ -183,7 +186,7 @@ class DownloaderTest : StringSpec() {
         }
 
         "Can download a ZIP source artifact from GitHub".config(tags = setOf(ExpensiveTag)) {
-            val url = "https://github.com/microsoft/tslib/archive/1.10.0.zip"
+            val artifactUrl = "https://github.com/microsoft/tslib/archive/1.10.0.zip"
             val pkg = Package(
                 id = Identifier(
                     type = "NPM",
@@ -196,7 +199,7 @@ class DownloaderTest : StringSpec() {
                 homepageUrl = "",
                 binaryArtifact = RemoteArtifact.EMPTY,
                 sourceArtifact = RemoteArtifact(
-                    url = url,
+                    url = artifactUrl,
                     hash = Hash.create("7f7994408f130dd138a59a625eeef3be1ab40f7b")
                 ),
                 vcs = VcsInfo.EMPTY
@@ -204,9 +207,10 @@ class DownloaderTest : StringSpec() {
 
             val downloadResult = Downloader.download(pkg, outputDir)
             downloadResult.vcsInfo.shouldBeNull()
-            downloadResult.sourceArtifact shouldNotBe null
-            downloadResult.sourceArtifact!!.url shouldBe pkg.sourceArtifact.url
-            downloadResult.sourceArtifact!!.hash shouldBe pkg.sourceArtifact.hash
+            downloadResult.sourceArtifact shouldNotBeNull {
+                url shouldBe pkg.sourceArtifact.url
+                hash shouldBe pkg.sourceArtifact.hash
+            }
 
             val tslibDir = File(downloadResult.downloadDirectory, "tslib-1.10.0")
 
