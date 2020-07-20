@@ -59,8 +59,6 @@ class OrtConfigurationTest : WordSpec({
                 scanner.fileBasedStorage.let { fileBased ->
                     fileBased shouldNotBe null
                     fileBased!!.backend.let { backend ->
-                        backend shouldNotBe null
-
                         backend.httpFileStorage.let { httpFileStorage ->
                             httpFileStorage shouldNotBe null
                             httpFileStorage!!.url shouldBe "https://your-http-server"

@@ -26,7 +26,6 @@ import org.ossreviewtoolkit.model.yamlMapper
 import io.kotest.matchers.collections.haveSize
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
-import io.kotest.matchers.shouldNotBe
 import io.kotest.core.spec.style.WordSpec
 
 class RepositoryConfigurationTest : WordSpec({
@@ -67,8 +66,6 @@ class RepositoryConfigurationTest : WordSpec({
                 """.trimIndent()
 
             val repositoryConfiguration = yamlMapper.readValue<RepositoryConfiguration>(configuration)
-
-            repositoryConfiguration shouldNotBe null
 
             val paths = repositoryConfiguration.excludes.paths
             paths should haveSize(1)
