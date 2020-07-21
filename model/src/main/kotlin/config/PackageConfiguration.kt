@@ -62,7 +62,7 @@ data class PackageConfiguration(
 ) {
     init {
         require((sourceArtifactUrl == null) xor (vcs == null)) {
-            "A package configuration can either apply to a source artifact or to a VCS, not to both."
+            "A package configuration can either apply to a source artifact or to a VCS, not to neither or both."
         }
     }
 
