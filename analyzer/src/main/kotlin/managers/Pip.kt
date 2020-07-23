@@ -381,14 +381,14 @@ class Pip(
         )
     }
 
-    private fun getBinaryArtifact(pkg: Package, releaseNode: ArrayNode): RemoteArtifact {
+    private fun getBinaryArtifact(releaseNode: ArrayNode): RemoteArtifact {
         // Prefer python wheels and fall back to the first entry (probably a sdist).
         val binaryArtifact = releaseNode.asSequence().find {
             it["packagetype"].textValue() == "bdist_wheel"
         } ?: releaseNode[0]
 
-        val url = binaryArtifact["url"]?.textValue() ?: pkg.binaryArtifact.url
-        val hash = binaryArtifact["md5_digest"]?.textValue()?.let { Hash.create(it) } ?: pkg.binaryArtifact.hash
+        val url = binaryArtifact["url"]?.textValue() ?: return RemoteArtifact.EMPTY
+        val hash = binaryArtifact["md5_digest"]?.textValue()?.let { Hash.create(it) } ?: return RemoteArtifact.EMPTY
 
         return RemoteArtifact(url, hash)
     }
@@ -609,7 +609,7 @@ class Pip(
                     description = pkgDescription,
                     homepageUrl = pkgHomepage,
                     binaryArtifact = if (pkgRelease != null) {
-                        getBinaryArtifact(pkg, pkgRelease)
+                        getBinaryArtifact(pkgRelease)
                     } else {
                         pkg.binaryArtifact
                     },
