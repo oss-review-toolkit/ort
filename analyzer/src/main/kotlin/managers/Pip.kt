@@ -343,81 +343,7 @@ class Pip(
             parseDependencies(projectDependencies, packageTemplates, installDependencies)
 
             // Enrich the package templates with additional meta-data from PyPI.
-            packageTemplates.mapTo(packages) { pkg ->
-                // See https://wiki.python.org/moin/PyPIJSON.
-                val pkgRequest = Request.Builder()
-                    .get()
-                    .url("https://pypi.org/pypi/${pkg.id.name}/${pkg.id.version}/json")
-                    .build()
-
-                OkHttpClientHelper.execute(pkgRequest).use { response ->
-                    val body = response.body?.string()?.trim()
-
-                    if (response.code != HttpURLConnection.HTTP_OK || body.isNullOrEmpty()) {
-                        log.warn { "Unable to retrieve PyPI meta-data for package '${pkg.id.toCoordinates()}'." }
-                        if (body != null) {
-                            log.warn { "The response was '$body' (code ${response.code})." }
-                        }
-
-                        // Fall back to returning the original package data.
-                        return@use pkg
-                    }
-
-                    val pkgData = try {
-                        jsonMapper.readTree(body)!!
-                    } catch (e: IOException) {
-                        e.showStackTrace()
-
-                        log.warn {
-                            "Unable to parse PyPI meta-data for package '${pkg.id.toCoordinates()}': " +
-                                    e.collectMessagesAsString()
-                        }
-
-                        // Fall back to returning the original package data.
-                        return@use pkg
-                    }
-
-                    pkgData["info"]?.let { pkgInfo ->
-                        val pkgDescription = pkgInfo["summary"]?.textValue() ?: pkg.description
-                        val pkgHomepage = pkgInfo["home_page"]?.textValue() ?: pkg.homepageUrl
-
-                        val pkgRelease = pkgData["releases"]?.let { pkgReleases ->
-                            val pkgVersion = pkgReleases.fieldNames().asSequence().find {
-                                stripLeadingZerosFromVersion(it) == pkg.id.version
-                            }
-
-                            pkgReleases[pkgVersion]
-                        } as? ArrayNode
-
-                        // Amend package information with more details.
-                        Package(
-                            id = pkg.id,
-                            declaredLicenses = getDeclaredLicenses(pkgInfo),
-                            description = pkgDescription,
-                            homepageUrl = pkgHomepage,
-                            binaryArtifact = if (pkgRelease != null) {
-                                getBinaryArtifact(pkg, pkgRelease)
-                            } else {
-                                pkg.binaryArtifact
-                            },
-                            sourceArtifact = if (pkgRelease != null) {
-                                getSourceArtifact(pkgRelease)
-                            } else {
-                                pkg.sourceArtifact
-                            },
-                            vcs = pkg.vcs,
-                            vcsProcessed = processPackageVcs(pkg.vcs, pkgHomepage)
-                        )
-                    } ?: run {
-                        log.warn {
-                            "PyPI meta-data for package '${pkg.id.toCoordinates()}' does not provide any information."
-                        }
-
-                        // Fall back to returning the original package data.
-                        pkg
-                    }
-                }
-            }
+            packageTemplates.mapTo(packages) { addMetaDataFromPyPi(it) }
         } else {
             log.error {
                 "Unable to determine dependencies for project in directory '$workingDir':\n${pipdeptree.stderr}"
@@ -627,6 +553,82 @@ class Pip(
             installDependencies += packageRef
 
             parseDependencies(dependency["dependencies"], allPackages, packageRef.dependencies)
+        }
+    }
+
+    private fun addMetaDataFromPyPi(pkg: Package): Package {
+        // See https://wiki.python.org/moin/PyPIJSON.
+        val pkgRequest = Request.Builder()
+            .get()
+            .url("https://pypi.org/pypi/${pkg.id.name}/${pkg.id.version}/json")
+            .build()
+
+        return OkHttpClientHelper.execute(pkgRequest).use { response ->
+            val body = response.body?.string()?.trim()
+
+            if (response.code != HttpURLConnection.HTTP_OK || body.isNullOrEmpty()) {
+                log.warn { "Unable to retrieve PyPI meta-data for package '${pkg.id.toCoordinates()}'." }
+                if (body != null) {
+                    log.warn { "The response was '$body' (code ${response.code})." }
+                }
+
+                // Fall back to returning the original package data.
+                return@use pkg
+            }
+
+            val pkgData = try {
+                jsonMapper.readTree(body)!!
+            } catch (e: IOException) {
+                e.showStackTrace()
+
+                log.warn {
+                    "Unable to parse PyPI meta-data for package '${pkg.id.toCoordinates()}': " +
+                            e.collectMessagesAsString()
+                }
+
+                // Fall back to returning the original package data.
+                return@use pkg
+            }
+
+            pkgData["info"]?.let { pkgInfo ->
+                val pkgDescription = pkgInfo["summary"]?.textValue() ?: pkg.description
+                val pkgHomepage = pkgInfo["home_page"]?.textValue() ?: pkg.homepageUrl
+
+                val pkgRelease = pkgData["releases"]?.let { pkgReleases ->
+                    val pkgVersion = pkgReleases.fieldNames().asSequence().find {
+                        stripLeadingZerosFromVersion(it) == pkg.id.version
+                    }
+
+                    pkgReleases[pkgVersion]
+                } as? ArrayNode
+
+                // Amend package information with more details.
+                Package(
+                    id = pkg.id,
+                    declaredLicenses = getDeclaredLicenses(pkgInfo),
+                    description = pkgDescription,
+                    homepageUrl = pkgHomepage,
+                    binaryArtifact = if (pkgRelease != null) {
+                        getBinaryArtifact(pkg, pkgRelease)
+                    } else {
+                        pkg.binaryArtifact
+                    },
+                    sourceArtifact = if (pkgRelease != null) {
+                        getSourceArtifact(pkgRelease)
+                    } else {
+                        pkg.sourceArtifact
+                    },
+                    vcs = pkg.vcs,
+                    vcsProcessed = processPackageVcs(pkg.vcs, pkgHomepage)
+                )
+            } ?: run {
+                log.warn {
+                    "PyPI meta-data for package '${pkg.id.toCoordinates()}' does not provide any information."
+                }
+
+                // Fall back to returning the original package data.
+                pkg
+            }
         }
     }
 }
