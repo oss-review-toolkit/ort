@@ -45,11 +45,8 @@ import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.config.CopyrightGarbage
 import org.ossreviewtoolkit.model.config.LicenseFindingCuration
 import org.ossreviewtoolkit.model.config.LicenseFindingCurationReason
-import org.ossreviewtoolkit.model.config.PackageConfiguration
 import org.ossreviewtoolkit.model.config.PathExclude
 import org.ossreviewtoolkit.model.config.PathExcludeReason
-import org.ossreviewtoolkit.model.config.VcsMatcher
-import org.ossreviewtoolkit.model.utils.SimplePackageConfigurationProvider
 import org.ossreviewtoolkit.spdx.SpdxExpression
 import org.ossreviewtoolkit.spdx.SpdxSingleLicenseExpression
 import org.ossreviewtoolkit.spdx.toSpdx
@@ -100,7 +97,10 @@ class LicenseInfoResolverTest : WordSpec() {
                                 copyrights = setOf(
                                     CopyrightFinding("Copyright Apache-2.0", TextLocation("LICENSE", 1, 1)),
                                     CopyrightFinding("Copyright MIT", TextLocation("LICENSE", 31, 31))
-                                )
+                                ),
+                                licenseFindingCurations = emptyList(),
+                                pathExcludes = emptyList(),
+                                relativeFindingsPath = ""
                             )
                         )
                     )
@@ -195,7 +195,10 @@ class LicenseInfoResolverTest : WordSpec() {
                                     CopyrightFinding("(c) 2009 Holder 1", TextLocation("LICENSE", 1, 1)),
                                     CopyrightFinding("(c) 2010 Holder 1", TextLocation("LICENSE", 2, 2)),
                                     CopyrightFinding("(c) 2010 Holder 2", TextLocation("LICENSE", 3, 3))
-                                )
+                                ),
+                                licenseFindingCurations = emptyList(),
+                                pathExcludes = emptyList(),
+                                relativeFindingsPath = ""
                             )
                         )
                     )
@@ -235,7 +238,10 @@ class LicenseInfoResolverTest : WordSpec() {
                                     CopyrightFinding("(c) 2009 Holder 2", TextLocation("LICENSE", 3, 3)),
                                     CopyrightFinding("(c) 2010 Holder 2", TextLocation("LICENSE", 4, 4)),
                                     CopyrightFinding("(c) 2010 Holder 3", TextLocation("LICENSE", 5, 5))
-                                )
+                                ),
+                                licenseFindingCurations = emptyList(),
+                                pathExcludes = emptyList(),
+                                relativeFindingsPath = ""
                             )
                         )
                     )
@@ -269,6 +275,14 @@ class LicenseInfoResolverTest : WordSpec() {
                 val sourceArtifactProvenance = Provenance(
                     sourceArtifact = sourceArtifact
                 )
+                val sourceArtifactPathExclude = PathExclude(
+                    pattern = "LICENSE",
+                    reason = PathExcludeReason.OTHER
+                )
+                val vcsPathExclude = PathExclude(
+                    pattern = "a/b",
+                    reason = PathExcludeReason.OTHER
+                )
 
                 val licenseInfos = listOf(
                     createLicenseInfo(
@@ -285,7 +299,10 @@ class LicenseInfoResolverTest : WordSpec() {
                                 copyrights = setOf(
                                     CopyrightFinding("(c) 2010 Holder", TextLocation("LICENSE", 1, 1)),
                                     CopyrightFinding("(c) 2010 Holder", TextLocation("a/b", 1, 1))
-                                )
+                                ),
+                                licenseFindingCurations = emptyList(),
+                                pathExcludes = listOf(vcsPathExclude),
+                                relativeFindingsPath = ""
                             ),
                             Findings(
                                 provenance = sourceArtifactProvenance,
@@ -298,35 +315,16 @@ class LicenseInfoResolverTest : WordSpec() {
                                 copyrights = setOf(
                                     CopyrightFinding("(c) 2010 Holder", TextLocation("LICENSE", 1, 1)),
                                     CopyrightFinding("(c) 2010 Holder", TextLocation("a/b", 1, 1))
-                                )
+                                ),
+                                licenseFindingCurations = emptyList(),
+                                pathExcludes = listOf(sourceArtifactPathExclude),
+                                relativeFindingsPath = ""
                             )
                         )
                     )
                 )
 
-                val sourceArtifactPathExclude = PathExclude(
-                    pattern = "LICENSE",
-                    reason = PathExcludeReason.OTHER
-                )
-                val vcsPathExclude = PathExclude(
-                    pattern = "a/b",
-                    reason = PathExcludeReason.OTHER
-                )
-
-                val packageConfigs = listOf(
-                    PackageConfiguration(
-                        id = pkgId,
-                        sourceArtifactUrl = sourceArtifact.url,
-                        pathExcludes = listOf(sourceArtifactPathExclude)
-                    ),
-                    PackageConfiguration(
-                        id = pkgId,
-                        vcs = VcsMatcher(vcsInfo.type, vcsInfo.url, vcsInfo.revision),
-                        pathExcludes = listOf(vcsPathExclude)
-                    )
-                )
-
-                val resolver = createResolver(licenseInfos, packageConfigs = packageConfigs)
+                val resolver = createResolver(licenseInfos)
 
                 val result = resolver.resolveLicenseInfo(pkgId)
 
@@ -358,6 +356,13 @@ class LicenseInfoResolverTest : WordSpec() {
             }
 
             "apply license finding curations" {
+                val curation = LicenseFindingCuration(
+                    path = "LICENSE",
+                    detectedLicense = "Apache-2.0".toSpdx(),
+                    concludedLicense = "MIT".toSpdx(),
+                    reason = LicenseFindingCurationReason.INCORRECT
+                )
+
                 val licenseInfos = listOf(
                     createLicenseInfo(
                         id = pkgId,
@@ -371,28 +376,16 @@ class LicenseInfoResolverTest : WordSpec() {
                                 ).toFindingsSet(),
                                 copyrights = setOf(
                                     CopyrightFinding("(c) 2010 Holder 1", TextLocation("LICENSE", 1, 1))
-                                )
+                                ),
+                                licenseFindingCurations = listOf(curation),
+                                pathExcludes = emptyList(),
+                                relativeFindingsPath = ""
                             )
                         )
                     )
                 )
 
-                val curation = LicenseFindingCuration(
-                    path = "LICENSE",
-                    detectedLicense = "Apache-2.0".toSpdx(),
-                    concludedLicense = "MIT".toSpdx(),
-                    reason = LicenseFindingCurationReason.INCORRECT
-                )
-
-                val packageConfigs = listOf(
-                    PackageConfiguration(
-                        id = pkgId,
-                        vcs = VcsMatcher(vcsInfo.type, vcsInfo.url, vcsInfo.revision),
-                        licenseFindingCurations = listOf(curation)
-                    )
-                )
-
-                val resolver = createResolver(licenseInfos, packageConfigs = packageConfigs)
+                val resolver = createResolver(licenseInfos)
 
                 val result = resolver.resolveLicenseInfo(pkgId)
 
@@ -421,11 +414,9 @@ class LicenseInfoResolverTest : WordSpec() {
 
     private fun createResolver(
         data: List<LicenseInfo>,
-        packageConfigs: List<PackageConfiguration> = emptyList(),
         copyrightGarbage: Set<String> = emptySet()
     ) = LicenseInfoResolver(
         data.toProvider(),
-        SimplePackageConfigurationProvider(packageConfigs),
         CopyrightGarbage(copyrightGarbage.toSortedSet())
     )
 

@@ -24,6 +24,10 @@ import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.LicenseFinding
 import org.ossreviewtoolkit.model.PackageCurationResult
 import org.ossreviewtoolkit.model.Provenance
+import org.ossreviewtoolkit.model.Repository
+import org.ossreviewtoolkit.model.config.LicenseFindingCuration
+import org.ossreviewtoolkit.model.config.PathExclude
+import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.spdx.SpdxExpression
 import org.ossreviewtoolkit.utils.ProcessedDeclaredLicense
 
@@ -115,5 +119,26 @@ data class Findings(
     /**
      * The set of all copyright findings.
      */
-    val copyrights: Set<CopyrightFinding>
+    val copyrights: Set<CopyrightFinding>,
+
+    /**
+     * The list of all license finding curations that apply to this [provenance].
+     */
+    val licenseFindingCurations: List<LicenseFindingCuration>,
+
+    /**
+     * The list of all path excludes that apply to this [provenance].
+     */
+    val pathExcludes: List<PathExclude>,
+
+    /**
+     * The root path of the locations of the [licenses] and [copyrights] relative to the paths used in the
+     * [licenseFindingCurations] and [pathExcludes]. An empty string, if all refer to the same root path.
+     *
+     * The roots can be different in case of projects inside nested repositories (see [Repository.nestedRepositories]),
+     * where the license and copyright finding locations are relative to the nested repository, but the
+     * [licenseFindingCurations] and [pathExcludes] are relative to the root repository, because they are configured in
+     * the [RepositoryConfiguration] of the root repository.
+     */
+    val relativeFindingsPath: String
 )

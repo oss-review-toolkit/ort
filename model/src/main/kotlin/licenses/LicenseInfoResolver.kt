@@ -27,16 +27,15 @@ import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.LicenseSource
 import org.ossreviewtoolkit.model.Provenance
 import org.ossreviewtoolkit.model.config.CopyrightGarbage
-import org.ossreviewtoolkit.model.config.PackageConfiguration
+import org.ossreviewtoolkit.model.config.PathExclude
 import org.ossreviewtoolkit.model.utils.FindingCurationMatcher
 import org.ossreviewtoolkit.model.utils.FindingsMatcher
-import org.ossreviewtoolkit.model.utils.PackageConfigurationProvider
+import org.ossreviewtoolkit.model.utils.prependPath
 import org.ossreviewtoolkit.spdx.SpdxSingleLicenseExpression
 import org.ossreviewtoolkit.utils.CopyrightStatementsProcessor
 
 class LicenseInfoResolver(
     val provider: LicenseInfoProvider,
-    val packageConfigurationProvider: PackageConfigurationProvider,
     val copyrightGarbage: CopyrightGarbage
 ) {
     private val resolvedLicenseInfo: ConcurrentMap<Identifier, ResolvedLicenseInfo> = ConcurrentHashMap()
@@ -84,9 +83,8 @@ class LicenseInfoResolver(
         }
         val processedCopyrightStatements = CopyrightStatementsProcessor().process(allCopyrights).toMap()
         val unmatchedCopyrights = mutableMapOf<Provenance, MutableSet<CopyrightFinding>>()
-        val resolvedLocations = resolveLocations(
-            id, filteredDetectedLicenseInfo, processedCopyrightStatements, unmatchedCopyrights
-        )
+        val resolvedLocations =
+            resolveLocations(filteredDetectedLicenseInfo, processedCopyrightStatements, unmatchedCopyrights)
 
         resolvedLocations.keys.forEach { license ->
             license.builder().apply {
@@ -111,17 +109,12 @@ class LicenseInfoResolver(
                 copyrightFinding.statement in copyrightGarbage.items
             }
             copyrightGarbageFindings[it.provenance] = partitionedFindings.first.toSet()
-            Findings(
-                provenance = it.provenance,
-                licenses = it.licenses,
-                copyrights = partitionedFindings.second.toSet()
-            )
+            it.copy(copyrights = partitionedFindings.second.toSet())
         }
         return DetectedLicenseInfo(filteredFindings)
     }
 
     private fun resolveLocations(
-        id: Identifier,
         detectedLicenseInfo: DetectedLicenseInfo,
         processedCopyrightStatements: Map<String, Set<String>>,
         unmatchedCopyrights: MutableMap<Provenance, MutableSet<CopyrightFinding>>
@@ -130,9 +123,9 @@ class LicenseInfoResolver(
         val curationMatcher = FindingCurationMatcher()
 
         detectedLicenseInfo.findings.forEach { findings ->
-            val packageConfig = packageConfigurationProvider.getPackageConfiguration(id, findings.provenance)
             val licenseCurationResults =
-                curationMatcher.applyAll(findings.licenses, packageConfig?.licenseFindingCurations.orEmpty())
+                curationMatcher
+                    .applyAll(findings.licenses, findings.licenseFindingCurations, findings.relativeFindingsPath)
                     .associateBy { it.curatedFinding }
 
             // TODO: Currently license findings that are mapped to null are ignored, but they should be included in the
@@ -142,8 +135,12 @@ class LicenseInfoResolver(
             val matchResult = FindingsMatcher().matchFindings(curatedLicenseFindings, findings.copyrights)
 
             matchResult.matchedFindings.forEach { (licenseFinding, copyrightFindings) ->
-                val resolvedCopyrightFindings =
-                    resolveCopyrights(copyrightFindings, processedCopyrightStatements, packageConfig)
+                val resolvedCopyrightFindings = resolveCopyrights(
+                    copyrightFindings,
+                    processedCopyrightStatements,
+                    findings.pathExcludes,
+                    findings.relativeFindingsPath
+                )
 
                 // TODO: Currently only the first curation for the license finding is recorded here and the original
                 //       findings are ignored, but for completeness all curations and original findings should be
@@ -152,15 +149,16 @@ class LicenseInfoResolver(
                 val appliedCuration =
                     licenseCurationResults.getValue(licenseFinding).originalFindings.firstOrNull()?.second
 
-                val pathExcludes =
-                    packageConfig?.pathExcludes.orEmpty().filter { it.matches(licenseFinding.location.path) }
+                val matchingPathExcludes = findings.pathExcludes.filter {
+                    it.matches(licenseFinding.location.prependPath(findings.relativeFindingsPath))
+                }
 
                 licenseFinding.license.decompose().forEach { singleLicense ->
                     resolvedLocations.getOrPut(singleLicense) { mutableSetOf() } += ResolvedLicenseLocation(
                         findings.provenance,
                         licenseFinding.location,
                         appliedCuration = appliedCuration,
-                        matchingPathExcludes = pathExcludes,
+                        matchingPathExcludes = matchingPathExcludes,
                         copyrights = resolvedCopyrightFindings.toSet()
                     )
                 }
@@ -175,16 +173,18 @@ class LicenseInfoResolver(
     private fun resolveCopyrights(
         copyrightFindings: Set<CopyrightFinding>,
         processedCopyrightStatements: Map<String, Set<String>>,
-        packageConfig: PackageConfiguration?
+        pathExcludes: List<PathExclude>,
+        relativeFindingsPath: String
     ): List<ResolvedCopyright> {
         val resolvedCopyrightFindings = copyrightFindings.map { finding ->
-            val pathExcludes =
-                packageConfig?.pathExcludes.orEmpty().filter { it.matches(finding.location.path) }
+            val matchingPathExcludes = pathExcludes.filter {
+                it.matches(finding.location.prependPath(relativeFindingsPath))
+            }
 
             ResolvedCopyrightFinding(
                 finding.statement,
                 finding.location,
-                matchingPathExcludes = pathExcludes
+                matchingPathExcludes = matchingPathExcludes
             )
         }
 

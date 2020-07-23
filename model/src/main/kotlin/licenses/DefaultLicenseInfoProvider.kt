@@ -25,11 +25,18 @@ import java.util.concurrent.ConcurrentMap
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.utils.ProcessedDeclaredLicense
+import org.ossreviewtoolkit.model.Provenance
+import org.ossreviewtoolkit.model.config.LicenseFindingCuration
+import org.ossreviewtoolkit.model.config.PathExclude
+import org.ossreviewtoolkit.model.utils.PackageConfigurationProvider
 
 /**
  * The default [LicenseInfoProvider] that collects license information from an [ortResult].
  */
-class DefaultLicenseInfoProvider(val ortResult: OrtResult) : LicenseInfoProvider {
+class DefaultLicenseInfoProvider(
+    val ortResult: OrtResult,
+    val packageConfigurationProvider: PackageConfigurationProvider
+) : LicenseInfoProvider {
     private val licenseInfo: ConcurrentMap<Identifier, LicenseInfo> = ConcurrentHashMap()
 
     override fun get(id: Identifier) = licenseInfo.getOrPut(id) { createLicenseInfo(id) }
@@ -73,13 +80,37 @@ class DefaultLicenseInfoProvider(val ortResult: OrtResult) : LicenseInfoProvider
         val findings = mutableListOf<Findings>()
 
         ortResult.getScanResultsForId(id).forEach { scanResult ->
+            val (licenseFindingCurations, pathExcludes, relativeFindingsPath) =
+                getConfiguration(id, scanResult.provenance)
+
             findings += Findings(
                 provenance = scanResult.provenance,
                 licenses = scanResult.summary.licenseFindings,
-                copyrights = scanResult.summary.copyrightFindings
+                copyrights = scanResult.summary.copyrightFindings,
+                licenseFindingCurations = licenseFindingCurations,
+                pathExcludes = pathExcludes,
+                relativeFindingsPath = relativeFindingsPath
             )
         }
 
         return DetectedLicenseInfo(findings)
     }
+
+    private fun getConfiguration(
+        id: Identifier,
+        provenance: Provenance
+    ): Triple<List<LicenseFindingCuration>, List<PathExclude>, String> =
+        ortResult.getProject(id)?.let { project ->
+            Triple(
+                ortResult.repository.config.curations.licenseFindings,
+                ortResult.repository.config.excludes.paths,
+                ortResult.repository.getRelativePath(project.vcsProcessed).orEmpty()
+            )
+        } ?: packageConfigurationProvider.getPackageConfiguration(id, provenance).let { packageConfiguration ->
+            Triple(
+                packageConfiguration?.licenseFindingCurations.orEmpty(),
+                packageConfiguration?.pathExcludes.orEmpty(),
+                ""
+            )
+        }
 }
