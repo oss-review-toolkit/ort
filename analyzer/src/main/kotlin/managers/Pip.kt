@@ -607,15 +607,12 @@ class Pip(
         allPackages: SortedSet<Package>, installDependencies: SortedSet<PackageReference>
     ) {
         dependencies.forEach { dependency ->
-            val name = dependency["package_name"].textValue()
-            val version = dependency["installed_version"].textValue()
-
             val pkg = Package(
                 id = Identifier(
                     type = "PyPI",
                     namespace = "",
-                    name = name,
-                    version = version
+                    name = dependency["package_name"].textValue(),
+                    version = dependency["installed_version"].textValue()
                 ),
                 declaredLicenses = sortedSetOf(),
                 description = "",
