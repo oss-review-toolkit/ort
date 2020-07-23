@@ -62,9 +62,9 @@ import java.util.SortedSet
 import okhttp3.Request
 
 // The lowest version that supports "--prefer-binary".
-const val PIP_VERSION = "18.0"
+private const val PIP_VERSION = "18.0"
 
-const val PIPDEPTREE_VERSION = "0.13.2"
+private const val PIPDEPTREE_VERSION = "0.13.2"
 private val PHONY_DEPENDENCIES = mapOf(
     "pipdeptree" to "", // A dependency of pipdeptree itself.
     "pkg-resources" to "0.0.0", // Added by a bug with some Ubuntu distributions.
@@ -77,7 +77,7 @@ private fun isPhonyDependency(name: String, version: String): Boolean =
         PHONY_DEPENDENCIES.containsKey(name) && (ignoredVersion.isEmpty() || version == ignoredVersion)
     }
 
-const val PYDEP_REVISION = "license-and-classifiers"
+private const val PYDEP_REVISION = "license-and-classifiers"
 
 object VirtualEnv : CommandLineTool {
     override fun command(workingDir: File?) = "virtualenv"
@@ -182,7 +182,7 @@ class Pip(
         /**
          * Return a version string with leading zeros of components stripped.
          */
-        fun stripLeadingZerosFromVersion(version: String) =
+        private fun stripLeadingZerosFromVersion(version: String) =
             version.split(".").joinToString(".") {
                 try {
                     it.toInt().toString()
