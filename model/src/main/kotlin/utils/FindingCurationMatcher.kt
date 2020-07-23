@@ -31,10 +31,14 @@ import org.ossreviewtoolkit.spdx.SpdxConstants
  * A class for matching and applying [LicenseFindingCuration]s to [LicenseFinding]s.
  */
 class FindingCurationMatcher {
-    private fun isPathMatching(finding: LicenseFinding, curation: LicenseFindingCuration): Boolean =
+    private fun isPathMatching(
+        finding: LicenseFinding,
+        curation: LicenseFindingCuration,
+        relativeFindingPath: String
+    ): Boolean =
         FileSystems.getDefault()
             .getPathMatcher("glob:${curation.path}")
-            .matches(Paths.get(finding.location.path))
+            .matches(Paths.get(finding.location.prependPath(relativeFindingPath)))
 
     private fun isStartLineMatching(finding: LicenseFinding, curation: LicenseFindingCuration): Boolean =
         curation.startLines.isEmpty() || curation.startLines.any { it == finding.location.startLine }
@@ -46,10 +50,11 @@ class FindingCurationMatcher {
         curation.detectedLicense == null || curation.detectedLicense == finding.license
 
     /**
-     * Return true if and only if the given curation is applicable to the given finding.
+     * Return true if and only if the given [curation] is applicable to the given [finding]. The [relativeFindingPath]
+     * path is the path from the directory the [curation] is relative to, to the directory the [finding] is relative to.
      */
-    fun matches(finding: LicenseFinding, curation: LicenseFindingCuration): Boolean =
-        isPathMatching(finding, curation) &&
+    fun matches(finding: LicenseFinding, curation: LicenseFindingCuration, relativeFindingPath: String = ""): Boolean =
+        isPathMatching(finding, curation, relativeFindingPath) &&
                 isStartLineMatching(finding, curation) &&
                 isLineCountMatching(finding, curation) &&
                 isDetectedLicenseMatching(finding, curation)
@@ -57,29 +62,37 @@ class FindingCurationMatcher {
     /**
      * Return the curated finding if the given [curation] is applicable to the given [finding] or the given [finding]
      * otherwise. Null is returned if and only if the given curation is applicable and its concluded license equals
-     * [SpdxConstants.NONE].
+     * [SpdxConstants.NONE]. If the finding is relative to a subdirectory of the path that the curations are relative
+     * to, this needs to be set in the [relativeFindingPath].
      */
-    fun apply(finding: LicenseFinding, curation: LicenseFindingCuration): LicenseFinding? =
-        if (!matches(finding, curation)) finding
+    fun apply(
+        finding: LicenseFinding,
+        curation: LicenseFindingCuration,
+        relativeFindingPath: String = ""
+    ): LicenseFinding? =
+        if (!matches(finding, curation, relativeFindingPath)) finding
         else if (curation.concludedLicense.toString() == SpdxConstants.NONE) null
         else finding.copy(license = curation.concludedLicense)
 
     /**
      * Applies the given [curations] to the given [findings]. In case multiple curations match any given finding all
      * curations are applied to the original finding, thus in this case there are multiple curated findings for one
-     * finding. If multiple curations lead to the same result, only one of them is contained in the returned map.
+     * finding. If multiple curations lead to the same result, only one of them is contained in the returned map. If the
+     * findings are relative to a subdirectory of the path that the curations are relative to, this needs to be set in
+     * the [relativeFindingsPath].
      */
     fun applyAll(
         findings: Collection<LicenseFinding>,
-        curations: Collection<LicenseFindingCuration>
+        curations: Collection<LicenseFindingCuration>,
+        relativeFindingsPath: String = ""
     ): List<LicenseFindingCurationResult> {
         val result = mutableMapOf<LicenseFinding?, MutableList<Pair<LicenseFinding, LicenseFindingCuration>>>()
 
         findings.forEach { finding ->
-            val matchingCurations = curations.filter { matches(finding, it) }
+            val matchingCurations = curations.filter { matches(finding, it, relativeFindingsPath) }
             if (matchingCurations.isNotEmpty()) {
                 matchingCurations.forEach { curation ->
-                    val curatedFinding = apply(finding, curation)
+                    val curatedFinding = apply(finding, curation, relativeFindingsPath)
                     result.getOrPut(curatedFinding) { mutableListOf() } += Pair(finding, curation)
                 }
             } else {

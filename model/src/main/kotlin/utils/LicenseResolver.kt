@@ -77,7 +77,10 @@ internal class LicenseResolver(
                 pathExcludes.none { it.matches(copyright.location.getRelativePathToRoot(id)) }
             }
 
-            val curatedLicenseFindings = curationMatcher.applyAll(rawLicenseFindings, curations)
+            val relativeFindingsPath = ortResult.getProject(id)?.let { project ->
+                ortResult.repository.getRelativePath(project.vcsProcessed)
+            }.orEmpty()
+            val curatedLicenseFindings = curationMatcher.applyAll(rawLicenseFindings, curations, relativeFindingsPath)
                 .mapNotNullTo(mutableSetOf()) { it.curatedFinding }
             val decomposedFindings = curatedLicenseFindings.flatMap { finding ->
                 finding.license.decompose().map { finding.copy(license = it) }
