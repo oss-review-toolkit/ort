@@ -621,9 +621,9 @@ class Pip(
                 sourceArtifact = RemoteArtifact.EMPTY,
                 vcs = VcsInfo.EMPTY
             )
-            allPackages += pkg
-
             val packageRef = pkg.toReference()
+
+            allPackages += pkg
             installDependencies += packageRef
 
             parseDependencies(dependency["dependencies"], allPackages, packageRef.dependencies)
