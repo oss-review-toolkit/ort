@@ -343,7 +343,7 @@ class Pip(
             parseDependencies(projectDependencies, packageTemplates, installDependencies)
 
             // Enrich the package templates with additional meta-data from PyPI.
-            packageTemplates.mapTo(packages) { addMetaDataFromPyPi(it) }
+            packageTemplates.mapTo(packages) { pkg -> pkg.enrichWith(getPackageFromPyPi(pkg.id)) }
         } else {
             log.error {
                 "Unable to determine dependencies for project in directory '$workingDir':\n${pipdeptree.stderr}"
@@ -381,7 +381,9 @@ class Pip(
         )
     }
 
-    private fun getBinaryArtifact(releaseNode: ArrayNode): RemoteArtifact {
+    private fun getBinaryArtifact(releaseNode: ArrayNode?): RemoteArtifact {
+        releaseNode ?: return RemoteArtifact.EMPTY
+
         // Prefer python wheels and fall back to the first entry (probably a sdist).
         val binaryArtifact = releaseNode.asSequence().find {
             it["packagetype"].textValue() == "bdist_wheel"
@@ -393,7 +395,9 @@ class Pip(
         return RemoteArtifact(url, hash)
     }
 
-    private fun getSourceArtifact(releaseNode: ArrayNode): RemoteArtifact {
+    private fun getSourceArtifact(releaseNode: ArrayNode?): RemoteArtifact {
+        releaseNode ?: return RemoteArtifact.EMPTY
+
         val sourceArtifacts = releaseNode.asSequence().filter {
             it["packagetype"].textValue() == "sdist"
         }
@@ -556,24 +560,23 @@ class Pip(
         }
     }
 
-    private fun addMetaDataFromPyPi(pkg: Package): Package {
+    private fun getPackageFromPyPi(id: Identifier): Package {
         // See https://wiki.python.org/moin/PyPIJSON.
         val pkgRequest = Request.Builder()
             .get()
-            .url("https://pypi.org/pypi/${pkg.id.name}/${pkg.id.version}/json")
+            .url("https://pypi.org/pypi/${id.name}/${id.version}/json")
             .build()
 
-        return OkHttpClientHelper.execute(pkgRequest).use { response ->
+        OkHttpClientHelper.execute(pkgRequest).use { response ->
             val body = response.body?.string()?.trim()
 
             if (response.code != HttpURLConnection.HTTP_OK || body.isNullOrEmpty()) {
-                log.warn { "Unable to retrieve PyPI meta-data for package '${pkg.id.toCoordinates()}'." }
+                log.warn { "Unable to retrieve PyPI meta-data for package '${id.toCoordinates()}'." }
                 if (body != null) {
                     log.warn { "The response was '$body' (code ${response.code})." }
                 }
 
-                // Fall back to returning the original package data.
-                return@use pkg
+                return@use
             }
 
             val pkgData = try {
@@ -582,53 +585,50 @@ class Pip(
                 e.showStackTrace()
 
                 log.warn {
-                    "Unable to parse PyPI meta-data for package '${pkg.id.toCoordinates()}': " +
-                            e.collectMessagesAsString()
+                    "Unable to parse PyPI meta-data for package '${id.toCoordinates()}': ${e.collectMessagesAsString()}"
                 }
 
-                // Fall back to returning the original package data.
-                return@use pkg
+                return@use
             }
 
             pkgData["info"]?.let { pkgInfo ->
-                val pkgDescription = pkgInfo["summary"]?.textValue() ?: pkg.description
-                val pkgHomepage = pkgInfo["home_page"]?.textValue() ?: pkg.homepageUrl
-
                 val pkgRelease = pkgData["releases"]?.let { pkgReleases ->
                     val pkgVersion = pkgReleases.fieldNames().asSequence().find {
-                        stripLeadingZerosFromVersion(it) == pkg.id.version
+                        stripLeadingZerosFromVersion(it) == id.version
                     }
 
                     pkgReleases[pkgVersion]
                 } as? ArrayNode
 
-                // Amend package information with more details.
-                Package(
-                    id = pkg.id,
-                    declaredLicenses = getDeclaredLicenses(pkgInfo),
-                    description = pkgDescription,
-                    homepageUrl = pkgHomepage,
-                    binaryArtifact = if (pkgRelease != null) {
-                        getBinaryArtifact(pkgRelease)
-                    } else {
-                        pkg.binaryArtifact
-                    },
-                    sourceArtifact = if (pkgRelease != null) {
-                        getSourceArtifact(pkgRelease)
-                    } else {
-                        pkg.sourceArtifact
-                    },
-                    vcs = pkg.vcs,
-                    vcsProcessed = processPackageVcs(pkg.vcs, pkgHomepage)
-                )
-            } ?: run {
-                log.warn {
-                    "PyPI meta-data for package '${pkg.id.toCoordinates()}' does not provide any information."
-                }
+                val homepageUrl = pkgInfo["home_page"]?.textValue().orEmpty()
 
-                // Fall back to returning the original package data.
-                pkg
+                return Package(
+                    id = id,
+                    homepageUrl = homepageUrl,
+                    description = pkgInfo["summary"]?.textValue().orEmpty(),
+                    declaredLicenses = getDeclaredLicenses(pkgInfo),
+                    binaryArtifact = getBinaryArtifact(pkgRelease),
+                    sourceArtifact = getSourceArtifact(pkgRelease),
+                    vcs = VcsInfo.EMPTY,
+                    vcsProcessed = processPackageVcs(VcsInfo.EMPTY, homepageUrl)
+                )
             }
+
+            log.warn { "PyPI meta-data for package '${id.toCoordinates()}' does not provide any information." }
         }
+
+        return Package.EMPTY.copy(id = id)
     }
 }
+
+private fun Package.enrichWith(other: Package): Package =
+    Package(
+        id = id,
+        homepageUrl = homepageUrl.takeUnless { it.isBlank() } ?: other.homepageUrl,
+        description = description.takeUnless { it.isBlank() } ?: other.description,
+        declaredLicenses = declaredLicenses.takeUnless { it.isEmpty() } ?: other.declaredLicenses,
+        binaryArtifact = binaryArtifact.takeUnless { it == RemoteArtifact.EMPTY } ?: other.binaryArtifact,
+        sourceArtifact = sourceArtifact.takeUnless { it == RemoteArtifact.EMPTY } ?: other.sourceArtifact,
+        vcs = vcs.takeUnless { it == VcsInfo.EMPTY } ?: other.vcs,
+        vcsProcessed = vcsProcessed.takeUnless { it == VcsInfo.EMPTY } ?: other.vcsProcessed
+    )
