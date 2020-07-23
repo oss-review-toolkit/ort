@@ -65,6 +65,7 @@ import okhttp3.Request
 private const val PIP_VERSION = "18.0"
 
 private const val PIPDEPTREE_VERSION = "0.13.2"
+
 private val PHONY_DEPENDENCIES = mapOf(
     "pipdeptree" to "", // A dependency of pipdeptree itself.
     "pkg-resources" to "0.0.0", // Added by a bug with some Ubuntu distributions.
