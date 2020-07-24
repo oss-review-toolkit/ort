@@ -24,6 +24,7 @@ import java.util.concurrent.ConcurrentMap
 
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.OrtResult
+import org.ossreviewtoolkit.utils.ProcessedDeclaredLicense
 
 /**
  * The default [LicenseInfoProvider] that collects license information from an [ortResult].
@@ -33,18 +34,13 @@ class DefaultLicenseInfoProvider(val ortResult: OrtResult) : LicenseInfoProvider
 
     override fun get(id: Identifier) = licenseInfo.getOrPut(id) { createLicenseInfo(id) }
 
-    private fun createLicenseInfo(id: Identifier): LicenseInfo {
-        require(id in ortResult.getProjectAndPackageIds()) {
-            "The ORT result does not contain a project or package with id '${id.toCoordinates()}'."
-        }
-
-        return LicenseInfo(
+    private fun createLicenseInfo(id: Identifier): LicenseInfo =
+        LicenseInfo(
             id = id,
             concludedLicenseInfo = createConcludedLicenseInfo(id),
             declaredLicenseInfo = createDeclaredLicenseInfo(id),
             detectedLicenseInfo = createDetectedLicenseInfo(id)
         )
-    }
 
     private fun createConcludedLicenseInfo(id: Identifier): ConcludedLicenseInfo =
         ortResult.getPackage(id)?.let { curatedPkg ->
@@ -67,8 +63,10 @@ class DefaultLicenseInfoProvider(val ortResult: OrtResult) : LicenseInfoProvider
                 processed = curatedPkg.pkg.declaredLicensesProcessed,
                 appliedCurations = curatedPkg.curations.filter { it.curation.declaredLicenses != null }
             )
-        } ?: throw IllegalArgumentException(
-            "The ORT result does not contain a project or package with id '${id.toCoordinates()}'."
+        } ?: DeclaredLicenseInfo(
+            licenses = emptySet(),
+            processed = ProcessedDeclaredLicense(null),
+            appliedCurations = emptyList()
         )
 
     private fun createDetectedLicenseInfo(id: Identifier): DetectedLicenseInfo {
