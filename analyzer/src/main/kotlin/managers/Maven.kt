@@ -19,6 +19,17 @@
 
 package org.ossreviewtoolkit.analyzer.managers
 
+import java.io.File
+
+import org.apache.maven.project.ProjectBuilder
+import org.apache.maven.project.ProjectBuildingException
+import org.apache.maven.project.ProjectBuildingResult
+
+import org.eclipse.aether.artifact.Artifact
+import org.eclipse.aether.graph.DependencyNode
+import org.eclipse.aether.repository.WorkspaceReader
+import org.eclipse.aether.repository.WorkspaceRepository
+
 import org.ossreviewtoolkit.analyzer.AbstractPackageManagerFactory
 import org.ossreviewtoolkit.analyzer.PackageManager
 import org.ossreviewtoolkit.analyzer.managers.utils.MavenSupport
@@ -38,17 +49,6 @@ import org.ossreviewtoolkit.utils.collectMessagesAsString
 import org.ossreviewtoolkit.utils.log
 import org.ossreviewtoolkit.utils.searchUpwardsForSubdirectory
 import org.ossreviewtoolkit.utils.showStackTrace
-
-import java.io.File
-
-import org.apache.maven.project.ProjectBuilder
-import org.apache.maven.project.ProjectBuildingException
-import org.apache.maven.project.ProjectBuildingResult
-
-import org.eclipse.aether.artifact.Artifact
-import org.eclipse.aether.graph.DependencyNode
-import org.eclipse.aether.repository.WorkspaceReader
-import org.eclipse.aether.repository.WorkspaceRepository
 
 /**
  * The [Maven](https://maven.apache.org/) package manager for Java.

@@ -19,6 +19,9 @@
 
 package org.ossreviewtoolkit.analyzer.managers
 
+import java.io.File
+import java.util.SortedSet
+
 import org.ossreviewtoolkit.analyzer.AbstractPackageManagerFactory
 import org.ossreviewtoolkit.analyzer.PackageManager
 import org.ossreviewtoolkit.downloader.VersionControlSystem
@@ -37,9 +40,6 @@ import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.utils.CommandLineTool
 import org.ossreviewtoolkit.utils.Os
 import org.ossreviewtoolkit.utils.stashDirectories
-
-import java.io.File
-import java.util.SortedSet
 
 /**
  * The [Go Modules](https://github.com/golang/go/wiki/Modules) package manager for Go. The implementation is

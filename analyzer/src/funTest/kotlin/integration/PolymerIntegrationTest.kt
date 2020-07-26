@@ -19,6 +19,8 @@
 
 package org.ossreviewtoolkit.analyzer.integration
 
+import java.io.File
+
 import org.ossreviewtoolkit.analyzer.PackageManagerFactory
 import org.ossreviewtoolkit.analyzer.managers.Bower
 import org.ossreviewtoolkit.analyzer.managers.Npm
@@ -28,8 +30,6 @@ import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.RemoteArtifact
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
-
-import java.io.File
 
 class PolymerIntegrationTest : AbstractIntegrationSpec() {
     override val pkg: Package = Package(

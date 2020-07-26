@@ -19,14 +19,14 @@
 
 package org.ossreviewtoolkit.analyzer.managers.utils
 
-import org.ossreviewtoolkit.model.VcsInfo
-import org.ossreviewtoolkit.model.VcsType
-
-import io.kotest.matchers.shouldBe
 import io.kotest.core.spec.style.WordSpec
+import io.kotest.matchers.shouldBe
 
 import org.apache.maven.model.Scm
 import org.apache.maven.project.MavenProject
+
+import org.ossreviewtoolkit.model.VcsInfo
+import org.ossreviewtoolkit.model.VcsType
 
 class MavenSupportTest : WordSpec({
     "parseVcsInfo()" should {

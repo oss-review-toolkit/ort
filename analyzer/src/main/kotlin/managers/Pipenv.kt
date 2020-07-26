@@ -19,6 +19,10 @@
 
 package org.ossreviewtoolkit.analyzer.managers
 
+import com.vdurmont.semver4j.Requirement
+
+import java.io.File
+
 import org.ossreviewtoolkit.analyzer.AbstractPackageManagerFactory
 import org.ossreviewtoolkit.analyzer.PackageManager
 import org.ossreviewtoolkit.model.ProjectAnalyzerResult
@@ -27,10 +31,6 @@ import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.utils.CommandLineTool
 import org.ossreviewtoolkit.utils.ProcessCapture
 import org.ossreviewtoolkit.utils.log
-
-import com.vdurmont.semver4j.Requirement
-
-import java.io.File
 
 class Pipenv(
     name: String,

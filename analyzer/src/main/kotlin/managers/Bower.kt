@@ -21,6 +21,12 @@ package org.ossreviewtoolkit.analyzer.managers
 
 import com.fasterxml.jackson.databind.JsonNode
 
+import com.vdurmont.semver4j.Requirement
+
+import java.io.File
+import java.util.SortedSet
+import java.util.Stack
+
 import org.ossreviewtoolkit.analyzer.AbstractPackageManagerFactory
 import org.ossreviewtoolkit.analyzer.PackageManager
 import org.ossreviewtoolkit.downloader.VersionControlSystem
@@ -42,12 +48,6 @@ import org.ossreviewtoolkit.utils.fieldNamesOrEmpty
 import org.ossreviewtoolkit.utils.fieldsOrEmpty
 import org.ossreviewtoolkit.utils.stashDirectories
 import org.ossreviewtoolkit.utils.textValueOrEmpty
-
-import com.vdurmont.semver4j.Requirement
-
-import java.io.File
-import java.util.SortedSet
-import java.util.Stack
 
 /**
  * The [Bower](https://bower.io/) package manager for JavaScript.

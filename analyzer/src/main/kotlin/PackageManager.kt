@@ -19,8 +19,19 @@
 
 package org.ossreviewtoolkit.analyzer
 
-import org.ossreviewtoolkit.downloader.VersionControlSystem
+import java.io.File
+import java.nio.file.FileSystems
+import java.nio.file.FileVisitResult
+import java.nio.file.Files
+import java.nio.file.Path
+import java.nio.file.SimpleFileVisitor
+import java.nio.file.attribute.BasicFileAttributes
+import java.util.ServiceLoader
+
+import kotlin.time.measureTime
+
 import org.ossreviewtoolkit.downloader.VcsHost
+import org.ossreviewtoolkit.downloader.VersionControlSystem
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Project
 import org.ossreviewtoolkit.model.ProjectAnalyzerResult
@@ -34,17 +45,6 @@ import org.ossreviewtoolkit.utils.isSymbolicLink
 import org.ossreviewtoolkit.utils.log
 import org.ossreviewtoolkit.utils.normalizeVcsUrl
 import org.ossreviewtoolkit.utils.showStackTrace
-
-import java.io.File
-import java.nio.file.FileSystems
-import java.nio.file.FileVisitResult
-import java.nio.file.Files
-import java.nio.file.Path
-import java.nio.file.SimpleFileVisitor
-import java.nio.file.attribute.BasicFileAttributes
-import java.util.ServiceLoader
-
-import kotlin.time.measureTime
 
 typealias ManagedProjectFiles = Map<PackageManagerFactory, List<File>>
 typealias ResolutionResult = MutableMap<File, List<ProjectAnalyzerResult>>

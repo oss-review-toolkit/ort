@@ -19,13 +19,13 @@
 
 package org.ossreviewtoolkit.analyzer
 
-import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
-import org.ossreviewtoolkit.model.config.RepositoryConfiguration
-
 import java.io.File
 import java.nio.file.FileSystems
 import java.nio.file.PathMatcher
 import java.util.ServiceLoader
+
+import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
+import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 
 /**
  * A common interface for use with [ServiceLoader] that all [AbstractPackageManagerFactory] classes need to implement.
