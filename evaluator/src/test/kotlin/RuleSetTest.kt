@@ -19,10 +19,11 @@
 
 package org.ossreviewtoolkit.evaluator
 
-import org.ossreviewtoolkit.model.utils.SimplePackageConfigurationProvider
+import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.collections.haveSize
 import io.kotest.matchers.should
-import io.kotest.core.spec.style.WordSpec
+
+import org.ossreviewtoolkit.model.utils.SimplePackageConfigurationProvider
 
 class RuleSetTest : WordSpec() {
     private val errorMessage = "error message"
