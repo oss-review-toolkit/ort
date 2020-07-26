@@ -28,13 +28,13 @@ import com.github.ajalt.clikt.parameters.options.option
 import com.github.ajalt.clikt.parameters.options.required
 import com.github.ajalt.clikt.parameters.types.file
 
+import java.text.Collator
+import java.util.Locale
+
 import org.ossreviewtoolkit.model.config.CopyrightGarbage
 import org.ossreviewtoolkit.model.readValue
 import org.ossreviewtoolkit.model.yamlMapper
 import org.ossreviewtoolkit.utils.expandTilde
-
-import java.text.Collator
-import java.util.Locale
 
 internal class ImportCopyrightGarbageCommand : CliktCommand(
     help = "Import copyright garbage from a plain text file containing one copyright statement per line into the " +

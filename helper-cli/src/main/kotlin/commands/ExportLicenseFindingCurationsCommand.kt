@@ -26,6 +26,8 @@ import com.github.ajalt.clikt.parameters.options.option
 import com.github.ajalt.clikt.parameters.options.required
 import com.github.ajalt.clikt.parameters.types.file
 
+import java.io.File
+
 import org.ossreviewtoolkit.helper.common.RepositoryLicenseFindingCurations
 import org.ossreviewtoolkit.helper.common.getRepositoryLicenseFindingCurations
 import org.ossreviewtoolkit.helper.common.mergeLicenseFindingCurations
@@ -35,8 +37,6 @@ import org.ossreviewtoolkit.model.readValue
 import org.ossreviewtoolkit.model.yamlMapper
 import org.ossreviewtoolkit.utils.expandTilde
 import org.ossreviewtoolkit.utils.safeMkdirs
-
-import java.io.File
 
 internal class ExportLicenseFindingCurationsCommand : CliktCommand(
     help = "Export the license finding curations to a file which maps repository URLs to the license finding " +
