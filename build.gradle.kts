@@ -20,20 +20,20 @@
 
 import com.github.benmanes.gradle.versions.updates.DependencyUpdatesTask
 
-import org.ossreviewtoolkit.gradle.*
-
 import io.gitlab.arturbosch.detekt.Detekt
+
+import java.net.URL
 
 import org.gradle.api.tasks.testing.logging.TestExceptionFormat
 import org.gradle.api.tasks.testing.logging.TestLogEvent
 
 import org.jetbrains.dokka.gradle.DokkaTask
 import org.jetbrains.gradle.ext.JUnit
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import org.jetbrains.kotlin.gradle.plugin.KotlinCompilation
 import org.jetbrains.kotlin.gradle.plugin.KotlinSourceSet
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
-import java.net.URL
+import org.ossreviewtoolkit.gradle.*
 
 val detektPluginVersion: String by project
 val kotlinPluginVersion: String by project
