@@ -19,6 +19,8 @@
 
 package org.ossreviewtoolkit.analyzer.integration
 
+import java.io.File
+
 import org.ossreviewtoolkit.analyzer.PackageManagerFactory
 import org.ossreviewtoolkit.analyzer.managers.Npm
 import org.ossreviewtoolkit.analyzer.managers.Yarn
@@ -27,8 +29,6 @@ import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.RemoteArtifact
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
-
-import java.io.File
 
 class VueJsIntegrationTest : AbstractIntegrationSpec() {
     override val pkg: Package = Package(

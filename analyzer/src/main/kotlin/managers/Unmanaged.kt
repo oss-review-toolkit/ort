@@ -19,6 +19,8 @@
 
 package org.ossreviewtoolkit.analyzer.managers
 
+import java.io.File
+
 import org.ossreviewtoolkit.analyzer.AbstractPackageManagerFactory
 import org.ossreviewtoolkit.analyzer.PackageManager
 import org.ossreviewtoolkit.downloader.VersionControlSystem
@@ -30,8 +32,6 @@ import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.utils.log
-
-import java.io.File
 
 /**
  * A fake [PackageManager] for projects that do not use any of the known package managers.

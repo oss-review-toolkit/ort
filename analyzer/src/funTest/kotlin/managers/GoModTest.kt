@@ -19,8 +19,8 @@
 
 package org.ossreviewtoolkit.analyzer.managers
 
-import io.kotest.matchers.shouldBe
 import io.kotest.core.spec.style.StringSpec
+import io.kotest.matchers.shouldBe
 
 import java.io.File
 

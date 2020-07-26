@@ -26,6 +26,8 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty
 import com.fasterxml.jackson.module.kotlin.readValue
 
+import java.io.File
+
 import org.ossreviewtoolkit.analyzer.AbstractPackageManagerFactory
 import org.ossreviewtoolkit.analyzer.PackageManager
 import org.ossreviewtoolkit.analyzer.managers.utils.XmlPackageReferenceMapper
@@ -33,8 +35,6 @@ import org.ossreviewtoolkit.analyzer.managers.utils.resolveDotNetDependencies
 import org.ossreviewtoolkit.model.ProjectAnalyzerResult
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
-
-import java.io.File
 
 class DotNetPackageReferenceMapper : XmlPackageReferenceMapper() {
     // See https://docs.microsoft.com/en-us/nuget/consume-packages/package-references-in-project-files.

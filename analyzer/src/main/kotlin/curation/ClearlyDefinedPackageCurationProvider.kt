@@ -29,8 +29,8 @@ import org.ossreviewtoolkit.clearlydefined.ClearlyDefinedService.SourceLocation
 import org.ossreviewtoolkit.clearlydefined.ComponentType
 import org.ossreviewtoolkit.clearlydefined.Provider
 import org.ossreviewtoolkit.downloader.VcsHost
-import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Hash
+import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.PackageCuration
 import org.ossreviewtoolkit.model.PackageCurationData
 import org.ossreviewtoolkit.model.RemoteArtifact

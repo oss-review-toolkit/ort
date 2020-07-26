@@ -19,13 +19,13 @@
 
 package org.ossreviewtoolkit.analyzer.curation
 
+import java.io.File
+
 import org.ossreviewtoolkit.analyzer.PackageCurationProvider
+import org.ossreviewtoolkit.model.FileFormat
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.PackageCuration
-import org.ossreviewtoolkit.model.FileFormat
 import org.ossreviewtoolkit.model.readValue
-
-import java.io.File
 
 /**
  * A [PackageCurationProvider] that loads [PackageCuration]s from a single file. Supports all file formats specified

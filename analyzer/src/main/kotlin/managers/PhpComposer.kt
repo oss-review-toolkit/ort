@@ -22,6 +22,12 @@ package org.ossreviewtoolkit.analyzer.managers
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.node.ObjectNode
 
+import com.vdurmont.semver4j.Requirement
+
+import java.io.File
+import java.io.IOException
+import java.util.SortedSet
+
 import org.ossreviewtoolkit.analyzer.AbstractPackageManagerFactory
 import org.ossreviewtoolkit.analyzer.PackageManager
 import org.ossreviewtoolkit.downloader.VersionControlSystem
@@ -48,12 +54,6 @@ import org.ossreviewtoolkit.utils.log
 import org.ossreviewtoolkit.utils.showStackTrace
 import org.ossreviewtoolkit.utils.stashDirectories
 import org.ossreviewtoolkit.utils.textValueOrEmpty
-
-import com.vdurmont.semver4j.Requirement
-
-import java.io.File
-import java.io.IOException
-import java.util.SortedSet
 
 const val COMPOSER_PHAR_BINARY = "composer.phar"
 const val COMPOSER_LOCK_FILE = "composer.lock"

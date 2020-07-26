@@ -25,6 +25,12 @@ import com.fasterxml.jackson.core.JsonProcessingException
 import com.fasterxml.jackson.databind.node.ArrayNode
 import com.fasterxml.jackson.databind.node.ObjectNode
 
+import java.io.File
+import java.net.URI
+import java.net.URISyntaxException
+import java.nio.file.FileSystems
+import java.nio.file.PathMatcher
+
 import org.ossreviewtoolkit.model.readValue
 import org.ossreviewtoolkit.utils.AuthenticatedProxy
 import org.ossreviewtoolkit.utils.ProtocolProxyMap
@@ -33,12 +39,6 @@ import org.ossreviewtoolkit.utils.determineProxyFromURL
 import org.ossreviewtoolkit.utils.hasRevisionFragment
 import org.ossreviewtoolkit.utils.log
 import org.ossreviewtoolkit.utils.showStackTrace
-
-import java.io.File
-import java.net.URI
-import java.net.URISyntaxException
-import java.nio.file.FileSystems
-import java.nio.file.PathMatcher
 
 /**
  * Return whether the [directory] contains an NPM lock file.

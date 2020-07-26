@@ -19,6 +19,17 @@
 
 package org.ossreviewtoolkit.analyzer.managers
 
+import com.paypal.digraph.parser.GraphParser
+
+import com.vdurmont.semver4j.Requirement
+
+import java.io.File
+import java.io.IOException
+import java.net.HttpURLConnection
+import java.util.SortedSet
+
+import okhttp3.Request
+
 import org.ossreviewtoolkit.analyzer.AbstractPackageManagerFactory
 import org.ossreviewtoolkit.analyzer.PackageManager
 import org.ossreviewtoolkit.downloader.VersionControlSystem
@@ -38,17 +49,6 @@ import org.ossreviewtoolkit.utils.OkHttpClientHelper
 import org.ossreviewtoolkit.utils.ProcessCapture
 import org.ossreviewtoolkit.utils.log
 import org.ossreviewtoolkit.utils.safeDeleteRecursively
-
-import com.paypal.digraph.parser.GraphParser
-
-import com.vdurmont.semver4j.Requirement
-
-import java.io.File
-import java.io.IOException
-import java.net.HttpURLConnection
-import java.util.SortedSet
-
-import okhttp3.Request
 
 /**
  * The [Stack](https://haskellstack.org/) package manager for Haskell.
