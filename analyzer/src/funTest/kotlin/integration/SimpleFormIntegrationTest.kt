@@ -19,6 +19,8 @@
 
 package org.ossreviewtoolkit.analyzer.integration
 
+import java.io.File
+
 import org.ossreviewtoolkit.analyzer.PackageManagerFactory
 import org.ossreviewtoolkit.analyzer.managers.Bundler
 import org.ossreviewtoolkit.model.Identifier
@@ -26,8 +28,6 @@ import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.RemoteArtifact
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
-
-import java.io.File
 
 class SimpleFormIntegrationTest : AbstractIntegrationSpec() {
     override val pkg: Package = Package(

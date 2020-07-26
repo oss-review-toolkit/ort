@@ -19,6 +19,13 @@
 
 package org.ossreviewtoolkit.analyzer.managers
 
+import com.moandjiezana.toml.Toml
+
+import java.io.File
+import java.io.IOException
+import java.net.URI
+import java.nio.file.Paths
+
 import org.ossreviewtoolkit.analyzer.AbstractPackageManagerFactory
 import org.ossreviewtoolkit.analyzer.PackageManager
 import org.ossreviewtoolkit.downloader.VersionControlSystem
@@ -44,13 +51,6 @@ import org.ossreviewtoolkit.utils.realFile
 import org.ossreviewtoolkit.utils.safeCopyRecursively
 import org.ossreviewtoolkit.utils.safeDeleteRecursively
 import org.ossreviewtoolkit.utils.showStackTrace
-
-import com.moandjiezana.toml.Toml
-
-import java.io.File
-import java.io.IOException
-import java.net.URI
-import java.nio.file.Paths
 
 /**
  * A map of legacy package manager file names "dep" can import, and their respective lock file names, if any.

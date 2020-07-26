@@ -20,15 +20,15 @@
 
 package org.ossreviewtoolkit.analyzer.managers.utils
 
+import io.kotest.core.spec.style.StringSpec
+import io.kotest.matchers.shouldBe
+
+import java.time.Instant
+
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.OrtIssue
 import org.ossreviewtoolkit.model.PackageReference
 import org.ossreviewtoolkit.model.Scope
-
-import io.kotest.matchers.shouldBe
-import io.kotest.core.spec.style.StringSpec
-
-import java.time.Instant
 
 class DotNetSupportTest : StringSpec({
     "non-existing project gets registered as error and is not added to scope" {

@@ -19,6 +19,13 @@
 
 package org.ossreviewtoolkit.analyzer.managers
 
+import io.kotest.core.spec.style.WordSpec
+import io.kotest.matchers.should
+import io.kotest.matchers.shouldBe
+import io.kotest.matchers.string.haveSubstring
+
+import java.io.File
+
 import org.ossreviewtoolkit.downloader.VersionControlSystem
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.utils.normalizeVcsUrl
@@ -27,13 +34,6 @@ import org.ossreviewtoolkit.utils.test.DEFAULT_REPOSITORY_CONFIGURATION
 import org.ossreviewtoolkit.utils.test.USER_DIR
 import org.ossreviewtoolkit.utils.test.patchActualResult
 import org.ossreviewtoolkit.utils.test.patchExpectedResult
-
-import io.kotest.matchers.string.haveSubstring
-import io.kotest.matchers.should
-import io.kotest.matchers.shouldBe
-import io.kotest.core.spec.style.WordSpec
-
-import java.io.File
 
 class PubTest : WordSpec() {
     private val projectsDir = File("src/funTest/assets/projects/synthetic/pub/").absoluteFile

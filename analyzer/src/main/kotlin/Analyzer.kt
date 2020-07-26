@@ -19,6 +19,16 @@
 
 package org.ossreviewtoolkit.analyzer
 
+import java.io.File
+import java.time.Instant
+import java.util.concurrent.Executors
+
+import kotlinx.coroutines.asCoroutineDispatcher
+import kotlinx.coroutines.async
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.withContext
+
 import org.ossreviewtoolkit.analyzer.managers.Unmanaged
 import org.ossreviewtoolkit.downloader.VersionControlSystem
 import org.ossreviewtoolkit.model.AnalyzerResult
@@ -35,16 +45,6 @@ import org.ossreviewtoolkit.model.readValue
 import org.ossreviewtoolkit.utils.NamedThreadFactory
 import org.ossreviewtoolkit.utils.ORT_CONFIG_FILENAME
 import org.ossreviewtoolkit.utils.log
-
-import java.io.File
-import java.time.Instant
-import java.util.concurrent.Executors
-
-import kotlinx.coroutines.asCoroutineDispatcher
-import kotlinx.coroutines.async
-import kotlinx.coroutines.coroutineScope
-import kotlinx.coroutines.runBlocking
-import kotlinx.coroutines.withContext
 
 /**
  * The class to run the analysis. The signatures of public functions in this class define the library API.

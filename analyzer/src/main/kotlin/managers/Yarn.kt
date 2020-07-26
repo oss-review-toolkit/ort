@@ -19,16 +19,16 @@
 
 package org.ossreviewtoolkit.analyzer.managers
 
+import com.vdurmont.semver4j.Requirement
+
+import java.io.File
+
 import org.ossreviewtoolkit.analyzer.AbstractPackageManagerFactory
 import org.ossreviewtoolkit.analyzer.managers.utils.hasYarnLockFile
 import org.ossreviewtoolkit.analyzer.managers.utils.mapDefinitionFilesForYarn
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.utils.Os
-
-import com.vdurmont.semver4j.Requirement
-
-import java.io.File
 
 /**
  * The [Yarn](https://www.yarnpkg.com/) package manager for JavaScript.

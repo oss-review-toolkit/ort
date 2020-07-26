@@ -22,6 +22,22 @@ package org.ossreviewtoolkit.analyzer.managers
 import Dependency
 import DependencyTreeModel
 
+import java.io.ByteArrayOutputStream
+import java.io.File
+import java.util.Properties
+import java.util.concurrent.TimeUnit
+
+import org.apache.maven.project.ProjectBuildingException
+
+import org.eclipse.aether.artifact.Artifact
+import org.eclipse.aether.artifact.DefaultArtifact
+import org.eclipse.aether.repository.RemoteRepository
+import org.eclipse.aether.repository.WorkspaceReader
+import org.eclipse.aether.repository.WorkspaceRepository
+
+import org.gradle.tooling.GradleConnector
+import org.gradle.tooling.internal.consumer.DefaultGradleConnector
+
 import org.ossreviewtoolkit.analyzer.AbstractPackageManagerFactory
 import org.ossreviewtoolkit.analyzer.PackageManager
 import org.ossreviewtoolkit.analyzer.managers.utils.MavenSupport
@@ -45,22 +61,6 @@ import org.ossreviewtoolkit.utils.collectMessagesAsString
 import org.ossreviewtoolkit.utils.log
 import org.ossreviewtoolkit.utils.showStackTrace
 import org.ossreviewtoolkit.utils.temporaryProperties
-
-import java.io.ByteArrayOutputStream
-import java.io.File
-import java.util.Properties
-import java.util.concurrent.TimeUnit
-
-import org.apache.maven.project.ProjectBuildingException
-
-import org.eclipse.aether.artifact.Artifact
-import org.eclipse.aether.artifact.DefaultArtifact
-import org.eclipse.aether.repository.RemoteRepository
-import org.eclipse.aether.repository.WorkspaceReader
-import org.eclipse.aether.repository.WorkspaceRepository
-
-import org.gradle.tooling.GradleConnector
-import org.gradle.tooling.internal.consumer.DefaultGradleConnector
 
 /**
  * The [Gradle](https://gradle.org/) package manager for Java.

@@ -19,15 +19,15 @@
 
 package org.ossreviewtoolkit.analyzer.curation
 
-import org.ossreviewtoolkit.model.Identifier
-
+import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.collections.beEmpty
 import io.kotest.matchers.collections.haveSize
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
-import io.kotest.core.spec.style.StringSpec
 
 import java.io.File
+
+import org.ossreviewtoolkit.model.Identifier
 
 class FilePackageCurationProviderTest : StringSpec() {
     private val curationsFile = File("src/test/assets/package-curations.yml")

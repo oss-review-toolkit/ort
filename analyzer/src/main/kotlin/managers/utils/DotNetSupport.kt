@@ -24,6 +24,12 @@ import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.dataformat.xml.XmlMapper
 import com.fasterxml.jackson.module.kotlin.registerKotlinModule
 
+import java.io.File
+import java.io.IOException
+import java.net.HttpURLConnection
+
+import okhttp3.Request
+
 import org.ossreviewtoolkit.analyzer.PackageManager
 import org.ossreviewtoolkit.downloader.VersionControlSystem
 import org.ossreviewtoolkit.model.EMPTY_JSON_NODE
@@ -43,12 +49,6 @@ import org.ossreviewtoolkit.model.jsonMapper
 import org.ossreviewtoolkit.model.xmlMapper
 import org.ossreviewtoolkit.utils.OkHttpClientHelper
 import org.ossreviewtoolkit.utils.textValueOrEmpty
-
-import okhttp3.Request
-
-import java.io.File
-import java.io.IOException
-import java.net.HttpURLConnection
 
 abstract class XmlPackageReferenceMapper {
     protected val mapper = XmlMapper().registerKotlinModule()

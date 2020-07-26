@@ -19,15 +19,15 @@
 
 package org.ossreviewtoolkit.analyzer.managers
 
+import io.kotest.core.spec.style.StringSpec
+import io.kotest.matchers.shouldBe
+
+import java.io.File
+
 import org.ossreviewtoolkit.utils.Os
 import org.ossreviewtoolkit.utils.test.DEFAULT_ANALYZER_CONFIGURATION
 import org.ossreviewtoolkit.utils.test.DEFAULT_REPOSITORY_CONFIGURATION
 import org.ossreviewtoolkit.utils.test.USER_DIR
-
-import io.kotest.matchers.shouldBe
-import io.kotest.core.spec.style.StringSpec
-
-import java.io.File
 
 class StackTest : StringSpec() {
     private val projectsDir = File("src/funTest/assets/projects").absoluteFile

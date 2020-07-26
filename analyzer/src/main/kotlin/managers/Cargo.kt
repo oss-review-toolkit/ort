@@ -21,10 +21,15 @@ package org.ossreviewtoolkit.analyzer.managers
 
 import com.fasterxml.jackson.databind.JsonNode
 
+import com.moandjiezana.toml.Toml
+
+import java.io.File
+
 import org.ossreviewtoolkit.analyzer.AbstractPackageManagerFactory
 import org.ossreviewtoolkit.analyzer.PackageManager
-import org.ossreviewtoolkit.downloader.VersionControlSystem
 import org.ossreviewtoolkit.downloader.VcsHost
+import org.ossreviewtoolkit.downloader.VersionControlSystem
+import org.ossreviewtoolkit.model.Hash
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.PackageLinkage
@@ -32,7 +37,6 @@ import org.ossreviewtoolkit.model.PackageReference
 import org.ossreviewtoolkit.model.Project
 import org.ossreviewtoolkit.model.ProjectAnalyzerResult
 import org.ossreviewtoolkit.model.RemoteArtifact
-import org.ossreviewtoolkit.model.Hash
 import org.ossreviewtoolkit.model.Scope
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
@@ -40,10 +44,6 @@ import org.ossreviewtoolkit.model.jsonMapper
 import org.ossreviewtoolkit.utils.CommandLineTool
 import org.ossreviewtoolkit.utils.log
 import org.ossreviewtoolkit.utils.textValueOrEmpty
-
-import com.moandjiezana.toml.Toml
-
-import java.io.File
 
 /**
  * The [Cargo](https://doc.rust-lang.org/cargo/) package manager for Rust.
