@@ -20,6 +20,17 @@
 
 package org.ossreviewtoolkit.scanner.storages
 
+import io.kotest.core.spec.style.StringSpec
+import io.kotest.matchers.beOfType
+import io.kotest.matchers.collections.beEmpty
+import io.kotest.matchers.collections.containExactly
+import io.kotest.matchers.collections.containExactlyInAnyOrder
+import io.kotest.matchers.should
+import io.kotest.matchers.shouldBe
+
+import java.time.Duration
+import java.time.Instant
+
 import org.ossreviewtoolkit.model.EMPTY_JSON_NODE
 import org.ossreviewtoolkit.model.Failure
 import org.ossreviewtoolkit.model.Hash
@@ -39,17 +50,6 @@ import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.jsonMapper
 import org.ossreviewtoolkit.scanner.ScanResultsStorage
-
-import io.kotest.matchers.collections.beEmpty
-import io.kotest.matchers.beOfType
-import io.kotest.matchers.collections.containExactly
-import io.kotest.matchers.collections.containExactlyInAnyOrder
-import io.kotest.matchers.should
-import io.kotest.matchers.shouldBe
-import io.kotest.core.spec.style.StringSpec
-
-import java.time.Duration
-import java.time.Instant
 
 abstract class AbstractStorageTest : StringSpec() {
     private companion object {

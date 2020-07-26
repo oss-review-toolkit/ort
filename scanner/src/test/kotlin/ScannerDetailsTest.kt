@@ -19,10 +19,10 @@
 
 package org.ossreviewtoolkit.scanner
 
-import org.ossreviewtoolkit.model.ScannerDetails
-
-import io.kotest.matchers.shouldBe
 import io.kotest.core.spec.style.WordSpec
+import io.kotest.matchers.shouldBe
+
+import org.ossreviewtoolkit.model.ScannerDetails
 
 class ScannerDetailsTest : WordSpec() {
     private val scanCodeDetails = ScannerDetails("ScanCode", "2.9.1", "")

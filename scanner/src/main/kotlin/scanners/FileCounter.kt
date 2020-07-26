@@ -21,6 +21,9 @@ package org.ossreviewtoolkit.scanner.scanners
 
 import com.fasterxml.jackson.databind.JsonNode
 
+import java.io.File
+import java.time.Instant
+
 import org.ossreviewtoolkit.model.EMPTY_JSON_NODE
 import org.ossreviewtoolkit.model.Provenance
 import org.ossreviewtoolkit.model.ScanResult
@@ -30,9 +33,6 @@ import org.ossreviewtoolkit.model.jsonMapper
 import org.ossreviewtoolkit.scanner.AbstractScannerFactory
 import org.ossreviewtoolkit.scanner.LocalScanner
 import org.ossreviewtoolkit.spdx.calculatePackageVerificationCode
-
-import java.io.File
-import java.time.Instant
 
 /**
  * A simple [LocalScanner] that only counts the files in the scan path. Because it is much faster than the other

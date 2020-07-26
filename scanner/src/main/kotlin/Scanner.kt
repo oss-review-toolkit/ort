@@ -19,6 +19,13 @@
 
 package org.ossreviewtoolkit.scanner
 
+import java.io.File
+import java.lang.IllegalArgumentException
+import java.time.Instant
+import java.util.ServiceLoader
+
+import kotlinx.coroutines.runBlocking
+
 import org.ossreviewtoolkit.downloader.consolidateProjectPackagesByVcs
 import org.ossreviewtoolkit.model.Environment
 import org.ossreviewtoolkit.model.OrtResult
@@ -31,13 +38,6 @@ import org.ossreviewtoolkit.model.ScannerRun
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
 import org.ossreviewtoolkit.model.readValue
 import org.ossreviewtoolkit.spdx.SpdxLicense
-
-import java.io.File
-import java.lang.IllegalArgumentException
-import java.time.Instant
-import java.util.ServiceLoader
-
-import kotlinx.coroutines.runBlocking
 
 const val TOOL_NAME = "scanner"
 

@@ -20,6 +20,10 @@
 
 package org.ossreviewtoolkit.scanner
 
+import java.lang.IllegalArgumentException
+import java.sql.DriverManager
+import java.util.Properties
+
 import org.ossreviewtoolkit.model.AccessStatistics
 import org.ossreviewtoolkit.model.Failure
 import org.ossreviewtoolkit.model.Identifier
@@ -39,10 +43,6 @@ import org.ossreviewtoolkit.utils.ortDataDirectory
 import org.ossreviewtoolkit.utils.storage.HttpFileStorage
 import org.ossreviewtoolkit.utils.storage.LocalFileStorage
 import org.ossreviewtoolkit.utils.storage.XZCompressedLocalFileStorage
-
-import java.lang.IllegalArgumentException
-import java.sql.DriverManager
-import java.util.Properties
 
 /**
  * The abstract class that storage backends for scan results need to implement.

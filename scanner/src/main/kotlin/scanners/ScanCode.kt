@@ -21,6 +21,21 @@ package org.ossreviewtoolkit.scanner.scanners
 
 import com.fasterxml.jackson.databind.JsonNode
 
+import java.io.File
+import java.io.IOException
+import java.net.HttpURLConnection
+import java.time.Instant
+import java.util.regex.Pattern
+
+import kotlin.math.max
+
+import okhttp3.Request
+
+import okio.buffer
+import okio.sink
+
+import org.apache.logging.log4j.Level
+
 import org.ossreviewtoolkit.model.CopyrightFinding
 import org.ossreviewtoolkit.model.EMPTY_JSON_NODE
 import org.ossreviewtoolkit.model.LicenseFinding
@@ -41,27 +56,12 @@ import org.ossreviewtoolkit.spdx.SpdxConstants
 import org.ossreviewtoolkit.spdx.calculatePackageVerificationCode
 import org.ossreviewtoolkit.utils.ORT_CONFIG_FILENAME
 import org.ossreviewtoolkit.utils.ORT_NAME
-import org.ossreviewtoolkit.utils.Os
 import org.ossreviewtoolkit.utils.OkHttpClientHelper
+import org.ossreviewtoolkit.utils.Os
 import org.ossreviewtoolkit.utils.ProcessCapture
 import org.ossreviewtoolkit.utils.log
 import org.ossreviewtoolkit.utils.textValueOrEmpty
 import org.ossreviewtoolkit.utils.unpack
-
-import java.io.File
-import java.io.IOException
-import java.net.HttpURLConnection
-import java.time.Instant
-import java.util.regex.Pattern
-
-import kotlin.math.max
-
-import okhttp3.Request
-
-import okio.buffer
-import okio.sink
-
-import org.apache.logging.log4j.Level
 
 /**
  * A wrapper for [ScanCode](https://github.com/nexB/scancode-toolkit).
