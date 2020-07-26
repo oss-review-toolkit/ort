@@ -36,6 +36,8 @@ import com.github.ajalt.clikt.parameters.options.split
 import com.github.ajalt.clikt.parameters.types.enum
 import com.github.ajalt.clikt.parameters.types.file
 
+import java.io.File
+
 import org.ossreviewtoolkit.model.FileFormat
 import org.ossreviewtoolkit.model.config.OrtConfiguration
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
@@ -48,8 +50,6 @@ import org.ossreviewtoolkit.scanner.storages.FileBasedStorage
 import org.ossreviewtoolkit.scanner.storages.SCAN_RESULTS_FILE_NAME
 import org.ossreviewtoolkit.utils.expandTilde
 import org.ossreviewtoolkit.utils.storage.LocalFileStorage
-
-import java.io.File
 
 class ScannerCommand : CliktCommand(name = "scan", help = "Run existing copyright / license scanners.") {
     private val input by mutuallyExclusiveOptions(
