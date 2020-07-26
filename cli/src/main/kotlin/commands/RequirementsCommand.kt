@@ -22,6 +22,12 @@ package org.ossreviewtoolkit.commands
 import com.github.ajalt.clikt.core.CliktCommand
 import com.github.ajalt.clikt.core.ProgramResult
 
+import com.vdurmont.semver4j.SemverException
+
+import java.io.File
+import java.io.IOException
+import java.lang.reflect.Modifier
+
 import org.ossreviewtoolkit.analyzer.PackageManager
 import org.ossreviewtoolkit.downloader.VersionControlSystem
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
@@ -30,12 +36,6 @@ import org.ossreviewtoolkit.model.config.ScannerConfiguration
 import org.ossreviewtoolkit.scanner.Scanner
 import org.ossreviewtoolkit.utils.CommandLineTool
 import org.ossreviewtoolkit.utils.log
-
-import com.vdurmont.semver4j.SemverException
-
-import java.io.File
-import java.io.IOException
-import java.lang.reflect.Modifier
 
 import org.reflections.Reflections
 
