@@ -19,6 +19,10 @@
 
 package org.ossreviewtoolkit.downloader.vcs
 
+import java.io.File
+import java.security.MessageDigest
+import java.util.regex.Pattern
+
 import org.ossreviewtoolkit.downloader.VersionControlSystem
 import org.ossreviewtoolkit.downloader.WorkingTree
 import org.ossreviewtoolkit.model.VcsInfo
@@ -28,10 +32,6 @@ import org.ossreviewtoolkit.utils.ProcessCapture
 import org.ossreviewtoolkit.utils.safeDeleteRecursively
 import org.ossreviewtoolkit.utils.searchUpwardsForSubdirectory
 import org.ossreviewtoolkit.utils.toHexString
-
-import java.io.File
-import java.security.MessageDigest
-import java.util.regex.Pattern
 
 typealias CvsFileRevisions = List<Pair<String, String>>
 
