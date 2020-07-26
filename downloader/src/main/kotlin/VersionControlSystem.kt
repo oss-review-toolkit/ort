@@ -19,6 +19,12 @@
 
 package org.ossreviewtoolkit.downloader
 
+import com.vdurmont.semver4j.Semver
+
+import java.io.File
+import java.io.IOException
+import java.util.ServiceLoader
+
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
@@ -26,12 +32,6 @@ import org.ossreviewtoolkit.utils.CommandLineTool
 import org.ossreviewtoolkit.utils.collectMessagesAsString
 import org.ossreviewtoolkit.utils.log
 import org.ossreviewtoolkit.utils.showStackTrace
-
-import com.vdurmont.semver4j.Semver
-
-import java.io.File
-import java.io.IOException
-import java.util.ServiceLoader
 
 abstract class VersionControlSystem {
     companion object {

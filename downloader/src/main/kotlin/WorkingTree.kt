@@ -19,12 +19,12 @@
 
 package org.ossreviewtoolkit.downloader
 
+import java.io.File
+import java.io.IOException
+
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.utils.filterVersionNames
-
-import java.io.File
-import java.io.IOException
 
 /**
  * A class representing a local VCS working tree. The passed [workingDir] does not necessarily need to be the

@@ -19,6 +19,10 @@
 
 package org.ossreviewtoolkit.downloader.vcs
 
+import java.io.File
+import java.io.IOException
+import java.util.regex.Pattern
+
 import org.ossreviewtoolkit.downloader.VersionControlSystem
 import org.ossreviewtoolkit.downloader.WorkingTree
 import org.ossreviewtoolkit.model.VcsInfo
@@ -29,10 +33,6 @@ import org.ossreviewtoolkit.utils.ProcessCapture
 import org.ossreviewtoolkit.utils.collectMessagesAsString
 import org.ossreviewtoolkit.utils.log
 import org.ossreviewtoolkit.utils.showStackTrace
-
-import java.io.File
-import java.io.IOException
-import java.util.regex.Pattern
 
 const val MERCURIAL_LARGE_FILES_EXTENSION = "largefiles = "
 const val MERCURIAL_SPARSE_EXTENSION = "sparse = "

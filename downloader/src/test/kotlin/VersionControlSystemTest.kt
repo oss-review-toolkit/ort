@@ -19,8 +19,8 @@
 
 package org.ossreviewtoolkit.downloader
 
-import io.kotest.matchers.shouldBe
 import io.kotest.core.spec.style.WordSpec
+import io.kotest.matchers.shouldBe
 
 import java.io.File
 

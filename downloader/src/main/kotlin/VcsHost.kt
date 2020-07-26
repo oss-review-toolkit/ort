@@ -20,14 +20,14 @@
 
 package org.ossreviewtoolkit.downloader
 
+import java.net.URI
+import java.net.URISyntaxException
+import java.nio.file.Paths
+
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.utils.hasRevisionFragment
 import org.ossreviewtoolkit.utils.normalizeVcsUrl
-
-import java.net.URI
-import java.net.URISyntaxException
-import java.nio.file.Paths
 
 /**
  * An enum to handle VCS-host-specific information.

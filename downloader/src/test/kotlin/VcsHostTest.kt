@@ -19,15 +19,15 @@
 
 package org.ossreviewtoolkit.downloader
 
+import io.kotest.core.spec.style.WordSpec
+import io.kotest.matchers.shouldBe
+
 import org.ossreviewtoolkit.downloader.VcsHost.BITBUCKET
 import org.ossreviewtoolkit.downloader.VcsHost.GITHUB
 import org.ossreviewtoolkit.downloader.VcsHost.GITLAB
 import org.ossreviewtoolkit.downloader.VcsHost.SOURCEHUT
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
-
-import io.kotest.matchers.shouldBe
-import io.kotest.core.spec.style.WordSpec
 
 class VcsHostTest : WordSpec({
     "The Bitbucket implementation" should {
