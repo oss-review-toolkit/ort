@@ -19,14 +19,14 @@
 
 package org.ossreviewtoolkit.evaluator
 
+import java.time.Instant
+
 import org.ossreviewtoolkit.model.EvaluatorRun
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.RuleViolation
 import org.ossreviewtoolkit.model.licenses.LicenseConfiguration
 import org.ossreviewtoolkit.model.utils.PackageConfigurationProvider
 import org.ossreviewtoolkit.utils.ScriptRunner
-
-import java.time.Instant
 
 class Evaluator(
     ortResult: OrtResult,
