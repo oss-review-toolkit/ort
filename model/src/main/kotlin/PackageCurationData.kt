@@ -21,9 +21,9 @@ package org.ossreviewtoolkit.model
 
 import com.fasterxml.jackson.annotation.JsonInclude
 
-import org.ossreviewtoolkit.spdx.SpdxExpression
-
 import java.util.SortedSet
+
+import org.ossreviewtoolkit.spdx.SpdxExpression
 
 /**
  * This class contains curation data for a package. It is used to amend the automatically detected meta data for a

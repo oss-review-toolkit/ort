@@ -22,6 +22,8 @@ package org.ossreviewtoolkit.model
 import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonInclude
 
+import java.util.SortedSet
+
 import org.ossreviewtoolkit.model.config.Excludes
 import org.ossreviewtoolkit.model.config.LicenseFindingCuration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
@@ -30,8 +32,6 @@ import org.ossreviewtoolkit.model.config.orEmpty
 import org.ossreviewtoolkit.spdx.SpdxExpression
 import org.ossreviewtoolkit.utils.log
 import org.ossreviewtoolkit.utils.zipWithDefault
-
-import java.util.SortedSet
 
 typealias CustomData = MutableMap<String, Any>
 

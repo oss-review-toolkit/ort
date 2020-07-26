@@ -22,6 +22,7 @@ package org.ossreviewtoolkit.model.config
 import com.typesafe.config.ConfigFactory
 
 import io.github.config4k.extract
+
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.collections.containExactly
 import io.kotest.matchers.nulls.shouldBeNull
@@ -32,8 +33,8 @@ import io.kotest.matchers.shouldBe
 import java.io.File
 
 import org.ossreviewtoolkit.utils.ORT_NAME
-import org.ossreviewtoolkit.utils.test.shouldNotBeNull
 import org.ossreviewtoolkit.utils.test.containExactly as containExactlyEntries
+import org.ossreviewtoolkit.utils.test.shouldNotBeNull
 
 class OrtConfigurationTest : WordSpec({
     "OrtConfiguration" should {

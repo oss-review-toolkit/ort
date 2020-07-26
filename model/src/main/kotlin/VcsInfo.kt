@@ -27,11 +27,11 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer
 import com.fasterxml.jackson.databind.exc.UnrecognizedPropertyException
 
+import kotlin.reflect.full.memberProperties
+
 import org.ossreviewtoolkit.utils.fieldNamesOrEmpty
 import org.ossreviewtoolkit.utils.normalizeVcsUrl
 import org.ossreviewtoolkit.utils.textValueOrEmpty
-
-import kotlin.reflect.full.memberProperties
 
 /**
  * Bundles general Version Control System information.

@@ -19,10 +19,10 @@
 
 package org.ossreviewtoolkit.model
 
-import io.kotest.matchers.shouldBe
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.nulls.shouldBeNull
+import io.kotest.matchers.shouldBe
 
 class PackageTest : StringSpec({
     "diff throws an exception if the identifiers are not equals" {

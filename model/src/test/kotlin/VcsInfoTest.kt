@@ -22,11 +22,11 @@ package org.ossreviewtoolkit.model
 import com.fasterxml.jackson.databind.exc.UnrecognizedPropertyException
 import com.fasterxml.jackson.module.kotlin.readValue
 
+import io.kotest.assertions.throwables.shouldThrow
+import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.collections.containAll
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
-import io.kotest.assertions.throwables.shouldThrow
-import io.kotest.core.spec.style.StringSpec
 
 class VcsInfoTest : StringSpec({
     "Deserializing VcsInfo" should {

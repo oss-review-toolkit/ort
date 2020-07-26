@@ -25,6 +25,9 @@ import io.kotest.matchers.collections.beEmpty
 import io.kotest.matchers.collections.containExactlyInAnyOrder
 import io.kotest.matchers.should
 
+import java.time.Instant
+import java.util.concurrent.atomic.AtomicInteger
+
 import org.ossreviewtoolkit.model.AccessStatistics
 import org.ossreviewtoolkit.model.AnalyzerResult
 import org.ossreviewtoolkit.model.AnalyzerRun
@@ -57,9 +60,6 @@ import org.ossreviewtoolkit.model.config.PathExcludeReason
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
 import org.ossreviewtoolkit.model.config.VcsMatcher
 import org.ossreviewtoolkit.spdx.toSpdx
-
-import java.time.Instant
-import java.util.concurrent.atomic.AtomicInteger
 
 private fun OrtResult.addLicenseFindingCuration(licenseFindingCuration: LicenseFindingCuration): OrtResult {
     val repositoryConfig = repository.config.run {
