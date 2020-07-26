@@ -26,13 +26,13 @@ import com.github.ajalt.clikt.parameters.options.required
 import com.github.ajalt.clikt.parameters.options.split
 import com.github.ajalt.clikt.parameters.types.file
 
+import java.io.File
+
 import org.ossreviewtoolkit.helper.common.merge
 import org.ossreviewtoolkit.helper.common.writeAsYaml
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.readValue
 import org.ossreviewtoolkit.utils.expandTilde
-
-import java.io.File
 
 internal class MergeRepositoryConfigurationsCommand : CliktCommand(
     help = "Merges the given list of input repository configuration files and writes the result to the given output " +

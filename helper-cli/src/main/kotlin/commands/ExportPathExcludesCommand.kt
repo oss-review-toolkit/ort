@@ -26,6 +26,8 @@ import com.github.ajalt.clikt.parameters.options.option
 import com.github.ajalt.clikt.parameters.options.required
 import com.github.ajalt.clikt.parameters.types.file
 
+import java.io.File
+
 import org.ossreviewtoolkit.helper.common.RepositoryPathExcludes
 import org.ossreviewtoolkit.helper.common.getRepositoryPathExcludes
 import org.ossreviewtoolkit.helper.common.mergePathExcludes
@@ -35,8 +37,6 @@ import org.ossreviewtoolkit.model.readValue
 import org.ossreviewtoolkit.model.yamlMapper
 import org.ossreviewtoolkit.utils.expandTilde
 import org.ossreviewtoolkit.utils.safeMkdirs
-
-import java.io.File
 
 internal class ExportPathExcludesCommand : CliktCommand(
     help = "Export the path excludes to a path excludes file which maps repository URLs to the path excludes for the " +

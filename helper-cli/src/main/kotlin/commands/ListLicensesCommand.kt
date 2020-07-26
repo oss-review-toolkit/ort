@@ -32,6 +32,9 @@ import com.github.ajalt.clikt.parameters.options.split
 import com.github.ajalt.clikt.parameters.types.enum
 import com.github.ajalt.clikt.parameters.types.file
 
+import java.io.File
+import java.lang.IllegalArgumentException
+
 import org.ossreviewtoolkit.helper.common.PackageConfigurationOption
 import org.ossreviewtoolkit.helper.common.createProvider
 import org.ossreviewtoolkit.helper.common.fetchScannedSources
@@ -47,9 +50,6 @@ import org.ossreviewtoolkit.model.TextLocation
 import org.ossreviewtoolkit.model.readValue
 import org.ossreviewtoolkit.spdx.SpdxSingleLicenseExpression
 import org.ossreviewtoolkit.utils.expandTilde
-
-import java.io.File
-import java.lang.IllegalArgumentException
 
 internal class ListLicensesCommand : CliktCommand(
     help = "Lists the license findings for a given package as distinct text locations."

@@ -25,14 +25,14 @@ import com.github.ajalt.clikt.parameters.arguments.argument
 import com.github.ajalt.clikt.parameters.arguments.convert
 import com.github.ajalt.clikt.parameters.types.file
 
+import java.io.IOException
+
 import org.ossreviewtoolkit.helper.common.download
 import org.ossreviewtoolkit.model.PackageCuration
 import org.ossreviewtoolkit.model.readValue
 import org.ossreviewtoolkit.utils.collectMessagesAsString
 import org.ossreviewtoolkit.utils.expandTilde
 import org.ossreviewtoolkit.utils.hash
-
-import java.io.IOException
 
 internal class VerifySourceArtifactCurationsCommand : CliktCommand(
     help = "Verifies that all curated source artifacts can be downloaded and that the hashes are correct."
