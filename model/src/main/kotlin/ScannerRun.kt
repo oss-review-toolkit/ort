@@ -19,9 +19,9 @@
 
 package org.ossreviewtoolkit.model
 
-import org.ossreviewtoolkit.model.config.ScannerConfiguration
-
 import java.time.Instant
+
+import org.ossreviewtoolkit.model.config.ScannerConfiguration
 
 /**
  * The summary of a single run of the scanner.

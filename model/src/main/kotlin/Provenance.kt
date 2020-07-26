@@ -22,10 +22,10 @@ package org.ossreviewtoolkit.model
 import com.fasterxml.jackson.annotation.JsonAlias
 import com.fasterxml.jackson.annotation.JsonInclude
 
-import org.ossreviewtoolkit.utils.toHexString
-
 import java.security.MessageDigest
 import java.time.Instant
+
+import org.ossreviewtoolkit.utils.toHexString
 
 /**
  * Provenance information about the scanned source code. Either [sourceArtifact] or [vcsInfo] can be set to a non-null

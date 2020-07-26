@@ -18,9 +18,9 @@
  * License-Filename: LICENSE
  */
 
-import org.ossreviewtoolkit.gradle.*
-
 import org.jetbrains.kotlin.gradle.dsl.KotlinCompile
+
+import org.ossreviewtoolkit.gradle.*
 
 val config4kVersion: String by project
 val jacksonVersion: String by project

@@ -19,12 +19,12 @@
 
 package org.ossreviewtoolkit.model.utils
 
+import java.util.SortedSet
+
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.LicenseFindings
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.config.PathExclude
-
-import java.util.SortedSet
 
 /**
  * Return a map of concluded licenses for each package [Identifier] that has a concluded license. Note that this

@@ -19,9 +19,9 @@
 
 package org.ossreviewtoolkit.model
 
-import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
-
 import java.time.Instant
+
+import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 
 /**
  * To summary of a single run of the analyzer.

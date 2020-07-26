@@ -22,12 +22,12 @@ package org.ossreviewtoolkit.model
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.annotation.JsonInclude
 
+import java.util.SortedSet
+
 import org.ossreviewtoolkit.spdx.SpdxExpression
 import org.ossreviewtoolkit.spdx.SpdxOperator
 import org.ossreviewtoolkit.utils.DeclaredLicenseProcessor
 import org.ossreviewtoolkit.utils.ProcessedDeclaredLicense
-
-import java.util.SortedSet
 
 /**
  * A generic descriptor for a software package. It contains all relevant meta-data about a package like the name,

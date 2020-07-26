@@ -19,19 +19,19 @@
 
 package org.ossreviewtoolkit.model
 
-import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
-
-import io.kotest.matchers.collections.haveSize
-import io.kotest.matchers.should
-import io.kotest.matchers.shouldBe
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.collections.containExactly
 import io.kotest.matchers.collections.containExactlyInAnyOrder
+import io.kotest.matchers.collections.haveSize
+import io.kotest.matchers.should
+import io.kotest.matchers.shouldBe
 import io.kotest.matchers.string.shouldMatch
 
 import java.io.File
 import java.lang.IllegalArgumentException
+
+import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 
 private fun readOrtResult(relativeOrtResultFilePath: String): OrtResult =
     File("../analyzer/src/funTest/assets/projects")

@@ -19,10 +19,10 @@
 
 package org.ossreviewtoolkit.model.config
 
-import org.ossreviewtoolkit.model.yamlMapper
-
-import io.kotest.matchers.shouldBe
 import io.kotest.core.spec.style.StringSpec
+import io.kotest.matchers.shouldBe
+
+import org.ossreviewtoolkit.model.yamlMapper
 
 class HttpFileStorageConfigurationTest : StringSpec({
     "Header values should be masked in serialization" {

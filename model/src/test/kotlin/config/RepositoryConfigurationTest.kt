@@ -21,12 +21,12 @@ package org.ossreviewtoolkit.model.config
 
 import com.fasterxml.jackson.module.kotlin.readValue
 
-import org.ossreviewtoolkit.model.yamlMapper
-
+import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.collections.haveSize
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
-import io.kotest.core.spec.style.WordSpec
+
+import org.ossreviewtoolkit.model.yamlMapper
 
 class RepositoryConfigurationTest : WordSpec({
     "RepositoryConfiguration" should {

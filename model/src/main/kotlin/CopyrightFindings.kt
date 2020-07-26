@@ -19,9 +19,9 @@
 
 package org.ossreviewtoolkit.model
 
-import org.ossreviewtoolkit.utils.SortedSetComparator
-
 import java.util.SortedSet
+
+import org.ossreviewtoolkit.utils.SortedSetComparator
 
 // TODO: This class currently co-exists with the singular form class [CopyrightFinding] which can be confusing.
 // The singular classes [CopyrightFinding] and [LicenseFinding] are the model of the scanner module while the plural

@@ -19,14 +19,14 @@
 
 package org.ossreviewtoolkit.model.utils
 
+import java.io.File
+import java.io.IOException
+
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Provenance
 import org.ossreviewtoolkit.model.config.PackageConfiguration
 import org.ossreviewtoolkit.model.config.VcsMatcher
 import org.ossreviewtoolkit.model.readValue
-
-import java.io.File
-import java.io.IOException
 
 /**
  * A provider for [PackageConfiguration]s providing exactly the packages of the given list.
