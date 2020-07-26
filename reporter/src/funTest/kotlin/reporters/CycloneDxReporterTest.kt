@@ -26,10 +26,10 @@ import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.collections.beEmpty
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
-import org.cyclonedx.CycloneDxSchema
 
 import java.io.File
 
+import org.cyclonedx.CycloneDxSchema
 import org.cyclonedx.model.ExternalReference
 import org.cyclonedx.parsers.XmlParser
 
