@@ -19,12 +19,6 @@
 
 package org.ossreviewtoolkit.scanner
 
-import org.ossreviewtoolkit.model.CopyrightFinding
-import org.ossreviewtoolkit.model.LicenseFinding
-import org.ossreviewtoolkit.model.TextLocation
-import org.ossreviewtoolkit.model.config.ScannerConfiguration
-import org.ossreviewtoolkit.scanner.scanners.ScanCode
-
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.collections.containExactlyInAnyOrder
 import io.kotest.matchers.collections.haveSize
@@ -34,6 +28,12 @@ import io.kotest.matchers.string.shouldMatch
 
 import java.io.File
 import java.time.Instant
+
+import org.ossreviewtoolkit.model.CopyrightFinding
+import org.ossreviewtoolkit.model.LicenseFinding
+import org.ossreviewtoolkit.model.TextLocation
+import org.ossreviewtoolkit.model.config.ScannerConfiguration
+import org.ossreviewtoolkit.scanner.scanners.ScanCode
 
 @Suppress("LargeClass")
 class ScanCodeTest : WordSpec({

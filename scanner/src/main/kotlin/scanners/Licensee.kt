@@ -21,6 +21,10 @@ package org.ossreviewtoolkit.scanner.scanners
 
 import com.fasterxml.jackson.databind.JsonNode
 
+import java.io.File
+import java.io.IOException
+import java.time.Instant
+
 import org.ossreviewtoolkit.model.EMPTY_JSON_NODE
 import org.ossreviewtoolkit.model.LicenseFinding
 import org.ossreviewtoolkit.model.Provenance
@@ -38,10 +42,6 @@ import org.ossreviewtoolkit.utils.Os
 import org.ossreviewtoolkit.utils.ProcessCapture
 import org.ossreviewtoolkit.utils.getPathFromEnvironment
 import org.ossreviewtoolkit.utils.log
-
-import java.io.File
-import java.io.IOException
-import java.time.Instant
 
 class Licensee(name: String, config: ScannerConfiguration) : LocalScanner(name, config) {
     class Factory : AbstractScannerFactory<Licensee>("Licensee") {

@@ -19,9 +19,9 @@
 
 package org.ossreviewtoolkit.scanner
 
-import org.ossreviewtoolkit.model.config.ScannerConfiguration
-
 import java.util.ServiceLoader
+
+import org.ossreviewtoolkit.model.config.ScannerConfiguration
 
 /**
  * A common interface for use with [ServiceLoader] that all [AbstractScannerFactory] classes need to implement.

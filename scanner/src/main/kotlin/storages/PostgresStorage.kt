@@ -22,6 +22,12 @@ package org.ossreviewtoolkit.scanner.storages
 import com.fasterxml.jackson.core.JsonProcessingException
 import com.fasterxml.jackson.module.kotlin.readValue
 
+import com.vdurmont.semver4j.Semver
+
+import java.io.IOException
+import java.sql.Connection
+import java.sql.SQLException
+
 import org.ossreviewtoolkit.model.Failure
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Package
@@ -35,12 +41,6 @@ import org.ossreviewtoolkit.scanner.ScanResultsStorage
 import org.ossreviewtoolkit.utils.collectMessagesAsString
 import org.ossreviewtoolkit.utils.log
 import org.ossreviewtoolkit.utils.showStackTrace
-
-import com.vdurmont.semver4j.Semver
-
-import java.io.IOException
-import java.sql.Connection
-import java.sql.SQLException
 
 /**
  * The Postgres storage back-end.

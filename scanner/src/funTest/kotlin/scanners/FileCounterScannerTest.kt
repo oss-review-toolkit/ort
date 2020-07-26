@@ -19,6 +19,11 @@
 
 package org.ossreviewtoolkit.scanner.scanners
 
+import io.kotest.core.spec.style.StringSpec
+import io.kotest.matchers.shouldBe
+
+import java.io.File
+
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
 import org.ossreviewtoolkit.model.yamlMapper
 import org.ossreviewtoolkit.scanner.ScanResultsStorage
@@ -26,11 +31,6 @@ import org.ossreviewtoolkit.utils.ORT_NAME
 import org.ossreviewtoolkit.utils.safeDeleteRecursively
 import org.ossreviewtoolkit.utils.test.patchActualResult
 import org.ossreviewtoolkit.utils.test.patchExpectedResult
-
-import io.kotest.matchers.shouldBe
-import io.kotest.core.spec.style.StringSpec
-
-import java.io.File
 
 class FileCounterScannerTest : StringSpec() {
     private val assetsDir = File("src/funTest/assets")

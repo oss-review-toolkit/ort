@@ -22,6 +22,10 @@ package org.ossreviewtoolkit.scanner.storages
 
 import com.fasterxml.jackson.module.kotlin.readValue
 
+import java.io.ByteArrayInputStream
+import java.io.FileNotFoundException
+import java.io.IOException
+
 import org.ossreviewtoolkit.model.Failure
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Package
@@ -35,10 +39,6 @@ import org.ossreviewtoolkit.scanner.ScanResultsStorage
 import org.ossreviewtoolkit.utils.collectMessagesAsString
 import org.ossreviewtoolkit.utils.log
 import org.ossreviewtoolkit.utils.storage.FileStorage
-
-import java.io.ByteArrayInputStream
-import java.io.FileNotFoundException
-import java.io.IOException
 
 const val SCAN_RESULTS_FILE_NAME = "scan-results.yml"
 
