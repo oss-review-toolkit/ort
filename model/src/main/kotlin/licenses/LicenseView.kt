@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2019 HERE Europe B.V.
+ * Copyright (C) 2017-2020 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,7 +17,7 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.evaluator
+package org.ossreviewtoolkit.model.licenses
 
 import org.ossreviewtoolkit.model.LicenseSource
 import org.ossreviewtoolkit.model.Package
@@ -94,7 +94,6 @@ class LicenseView(vararg licenseSources: List<LicenseSource>) {
                     LicenseSource.DECLARED -> declaredLicenses
                     LicenseSource.DETECTED -> detectedLicenses
                     LicenseSource.CONCLUDED -> concludedLicenses
-                    else -> throw NotImplementedError()
                 }.map { license -> Pair(license, source) }.distinct()
             }
 
