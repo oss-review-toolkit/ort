@@ -424,13 +424,13 @@ class Pip(
 
         // Example license classifier:
         // "License :: OSI Approved :: GNU Library or Lesser General Public License (LGPL)"
-        pkgInfo["classifiers"]?.mapNotNullTo(declaredLicenses) { classifier ->
-            val components = classifier.textValue().split(" :: ")
-            components.takeIf { it.first() == "License" }?.last()?.takeUnless { it == "OSI Approved" }
-        }
+        pkgInfo["classifiers"]?.mapNotNullTo(declaredLicenses) { getLicenseFromClassifier(it.textValue()) }
 
         return declaredLicenses
     }
+
+    private fun getLicenseFromClassifier(classifier: String): String? =
+        classifier.split(" :: ").takeIf { it.first() == "License" }?.last()?.takeUnless { it == "OSI Approved" }
 
     private fun setupVirtualEnv(workingDir: File, definitionFile: File): File {
         // Create an out-of-tree virtualenv.
