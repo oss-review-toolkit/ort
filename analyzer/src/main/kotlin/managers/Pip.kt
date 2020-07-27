@@ -57,6 +57,7 @@ import org.ossreviewtoolkit.utils.ProcessCapture
 import org.ossreviewtoolkit.utils.collectMessagesAsString
 import org.ossreviewtoolkit.utils.getPathFromEnvironment
 import org.ossreviewtoolkit.utils.log
+import org.ossreviewtoolkit.utils.normalizeLineBreaks
 import org.ossreviewtoolkit.utils.safeDeleteRecursively
 import org.ossreviewtoolkit.utils.showStackTrace
 import org.ossreviewtoolkit.utils.textValueOrEmpty
@@ -238,6 +239,9 @@ class Pip(
         // List all packages installed locally in the virtualenv.
         val pipdeptree = runInVirtualEnv(virtualEnvDir, workingDir, "pipdeptree", "-l", "--json-tree")
 
+        // Get the locally available meta data for all installed packages as a fallback.
+        val installedPackages = getInstalledPackagesWithLocalMetaData(virtualEnvDir, workingDir).associateBy { it.id }
+
         // Install pydep after running any other command but before looking at the dependencies because it
         // downgrades pip to version 7.1.2. Use it to get meta-information from about the project from setup.py. As
         // pydep is not on PyPI, install it from Git instead.
@@ -343,7 +347,10 @@ class Pip(
             parseDependencies(projectDependencies, packageTemplates, installDependencies)
 
             // Enrich the package templates with additional meta-data from PyPI.
-            packageTemplates.mapTo(packages) { pkg -> pkg.enrichWith(getPackageFromPyPi(pkg.id)) }
+            packageTemplates.mapTo(packages) { pkg ->
+                pkg.enrichWith(getPackageFromPyPi(pkg.id))
+                    .enrichWith(installedPackages[pkg.id])
+            }
         } else {
             log.error {
                 "Unable to determine dependencies for project in directory '$workingDir':\n${pipdeptree.stderr}"
@@ -618,6 +625,89 @@ class Pip(
         }
 
         return Package.EMPTY.copy(id = id)
+    }
+
+    private fun getInstalledPackagesWithLocalMetaData(
+        virtualEnvDir: File,
+        workingDir: File
+    ): List<Package> {
+        val allPackages = listAllInstalledPackages(virtualEnvDir, workingDir)
+
+        // Invoking 'pip show' once for each package separately is too slow, thus obtain the output for all packages
+        // and split it at the separator lines: "---".
+        val output = runInVirtualEnv(
+            virtualEnvDir,
+            workingDir,
+            "pip",
+            "show",
+            "--verbose",
+            *allPackages.map { it.name }.toTypedArray()
+        ).requireSuccess().stdout
+
+        return output.normalizeLineBreaks().split("---\n").mapNotNull { parsePipShowOutput(it) }
+    }
+
+    /**
+     * Return the [Identifier]s of all installed packages, determined via the command 'pip list'.
+     */
+    private fun listAllInstalledPackages(virtualEnvDir: File, workingDir: File): Set<Identifier> {
+        val json = runInVirtualEnv(virtualEnvDir, workingDir, "pip", "list", "--format", "json")
+            .requireSuccess()
+            .stdout
+
+        val rootNode = jsonMapper.readTree(json) as ArrayNode
+
+        return rootNode.elements().asSequence().mapTo(mutableSetOf()) {
+            Identifier("PyPI", "", it["name"].textValue(), it["version"].textValue())
+        }
+    }
+
+    /**
+     * Parse the output of 'pip show <package-name> --verbose' to a package.
+     */
+    private fun parsePipShowOutput(output: String): Package? {
+        val map = mutableMapOf<String, MutableList<String>>()
+
+        var previousKey: String? = null
+        output.lines().forEach { line ->
+            if (!line.startsWith(" ")) {
+                val index = line.indexOf(":")
+                if (index < 0) return@forEach
+
+                val key = line.substring(0, index)
+                val value = line.substring(index + 1, line.length).trim()
+
+                if (value.isNotEmpty()) {
+                    map.getOrPut(key, { mutableListOf() }) += value
+                }
+
+                previousKey = key
+                return@forEach
+            }
+
+            previousKey?.let {
+                map.getOrPut(it, { mutableListOf() }) += line.trim()
+            }
+        }
+
+        val declaredLicenses = sortedSetOf<String>()
+        map["License"]?.let { declaredLicenses.add(it.single()) }
+        map["Classifiers"]?.mapNotNullTo(declaredLicenses) { getLicenseFromClassifier(it) }
+
+        return Package(
+            id = Identifier(
+                type = "PyPI",
+                namespace = "",
+                name = map.getValue("Name").single(),
+                version = map.getValue("Version").single()
+            ),
+            description = map["Summary"]?.single().orEmpty(),
+            homepageUrl = map["Home-page"]?.single().orEmpty(),
+            declaredLicenses = declaredLicenses,
+            binaryArtifact = RemoteArtifact.EMPTY,
+            sourceArtifact = RemoteArtifact.EMPTY,
+            vcs = VcsInfo.EMPTY
+        )
     }
 }
 
