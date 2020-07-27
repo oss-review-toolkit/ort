@@ -424,8 +424,8 @@ class Pip(
 
         // Example license classifier:
         // "License :: OSI Approved :: GNU Library or Lesser General Public License (LGPL)"
-        pkgInfo["classifiers"]?.mapNotNullTo(declaredLicenses) {
-            val components = it.textValue().split(" :: ")
+        pkgInfo["classifiers"]?.mapNotNullTo(declaredLicenses) { classifier ->
+            val components = classifier.textValue().split(" :: ")
             components.takeIf { it.first() == "License" }?.last()?.takeUnless { it == "OSI Approved" }
         }
 
