@@ -348,6 +348,7 @@ class Pip(
 
             // Enrich the package templates with additional meta-data from PyPI.
             packageTemplates.mapTo(packages) { pkg ->
+                // TODO: Retrieve meta data of package not hosted on PyPI by querying the respective repository.
                 pkg.enrichWith(getPackageFromPyPi(pkg.id))
                     .enrichWith(installedPackages[pkg.id])
             }
