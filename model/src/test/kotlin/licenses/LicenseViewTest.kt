@@ -29,7 +29,7 @@ import org.ossreviewtoolkit.spdx.toSpdx
 
 class LicenseViewTest : WordSpec() {
     init {
-        "All" should {
+        "ALL" should {
             "return the correct licenses" {
                 val view = LicenseView.ALL
 
@@ -85,7 +85,7 @@ class LicenseViewTest : WordSpec() {
             }
         }
 
-        "ConcludedOrRest" should {
+        "CONCLUDED_OR_REST" should {
             "return the correct licenses" {
                 val view = LicenseView.CONCLUDED_OR_REST
 
@@ -154,7 +154,7 @@ class LicenseViewTest : WordSpec() {
             }
         }
 
-        "ConcludedOrDeclaredOrDetected" should {
+        "CONCLUDED_OR_DECLARED_OR_DETECTED" should {
             "return the correct licenses" {
                 val view = LicenseView.CONCLUDED_OR_DECLARED_OR_DETECTED
 
@@ -221,7 +221,7 @@ class LicenseViewTest : WordSpec() {
             }
         }
 
-        "ConcludedOrDetected" should {
+        "CONCLUDED_OR_DETECTED" should {
             "return the correct licenses" {
                 val view = LicenseView.CONCLUDED_OR_DETECTED
                 view.licenses(
@@ -284,7 +284,7 @@ class LicenseViewTest : WordSpec() {
             }
         }
 
-        "OnlyConcluded" should {
+        "ONLY_CONCLUDED" should {
             "return only the concluded licenses" {
                 val view = LicenseView.ONLY_CONCLUDED
                 view.licenses(
@@ -341,7 +341,7 @@ class LicenseViewTest : WordSpec() {
             }
         }
 
-        "OnlyDeclared" should {
+        "ONLY_DECLARED" should {
             "return only the declared licenses" {
                 val view = LicenseView.ONLY_DECLARED
 
@@ -399,7 +399,7 @@ class LicenseViewTest : WordSpec() {
             }
         }
 
-        "OnlyDetected" should {
+        "ONLY_DETECTED" should {
             "return only the detected licenses" {
                 val view = LicenseView.ONLY_DETECTED
 
