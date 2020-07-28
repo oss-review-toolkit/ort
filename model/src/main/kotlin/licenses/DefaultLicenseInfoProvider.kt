@@ -85,6 +85,7 @@ class DefaultLicenseInfoProvider(
 
             findings += Findings(
                 provenance = scanResult.provenance,
+                scannerDetails = scanResult.scanner,
                 licenses = scanResult.summary.licenseFindings,
                 copyrights = scanResult.summary.copyrightFindings,
                 licenseFindingCurations = licenseFindingCurations,

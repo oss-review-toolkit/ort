@@ -39,6 +39,7 @@ import org.ossreviewtoolkit.model.LicenseFinding
 import org.ossreviewtoolkit.model.LicenseSource
 import org.ossreviewtoolkit.model.Provenance
 import org.ossreviewtoolkit.model.RemoteArtifact
+import org.ossreviewtoolkit.model.ScannerDetails
 import org.ossreviewtoolkit.model.TextLocation
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
@@ -84,6 +85,7 @@ class LicenseInfoResolverTest : WordSpec() {
                         detectedLicenses = listOf(
                             Findings(
                                 provenance = provenance,
+                                scannerDetails = ScannerDetails.EMPTY,
                                 licenses = mapOf(
                                     "Apache-2.0 WITH LLVM-exception" to listOf(
                                         TextLocation("LICENSE", 1, 1),
@@ -186,6 +188,7 @@ class LicenseInfoResolverTest : WordSpec() {
                         detectedLicenses = listOf(
                             Findings(
                                 provenance = provenance,
+                                scannerDetails = ScannerDetails.EMPTY,
                                 licenses = mapOf(
                                     "Apache-2.0" to listOf(
                                         TextLocation("LICENSE", 1, 1)
@@ -227,6 +230,7 @@ class LicenseInfoResolverTest : WordSpec() {
                         detectedLicenses = listOf(
                             Findings(
                                 provenance = provenance,
+                                scannerDetails = ScannerDetails.EMPTY,
                                 licenses = mapOf(
                                     "Apache-2.0" to listOf(
                                         TextLocation("LICENSE", 1, 1)
@@ -290,6 +294,7 @@ class LicenseInfoResolverTest : WordSpec() {
                         detectedLicenses = listOf(
                             Findings(
                                 provenance = provenance,
+                                scannerDetails = ScannerDetails.EMPTY,
                                 licenses = mapOf(
                                     "Apache-2.0" to listOf(
                                         TextLocation("LICENSE", 1, 1),
@@ -306,6 +311,7 @@ class LicenseInfoResolverTest : WordSpec() {
                             ),
                             Findings(
                                 provenance = sourceArtifactProvenance,
+                                scannerDetails = ScannerDetails.EMPTY,
                                 licenses = mapOf(
                                     "Apache-2.0" to listOf(
                                         TextLocation("LICENSE", 1, 1),
@@ -357,6 +363,7 @@ class LicenseInfoResolverTest : WordSpec() {
 
             "apply license finding curations" {
                 val curation = LicenseFindingCuration(
+
                     path = "LICENSE",
                     detectedLicense = "Apache-2.0".toSpdx(),
                     concludedLicense = "MIT".toSpdx(),
@@ -369,6 +376,7 @@ class LicenseInfoResolverTest : WordSpec() {
                         detectedLicenses = listOf(
                             Findings(
                                 provenance = provenance,
+                                scannerDetails = ScannerDetails.EMPTY,
                                 licenses = mapOf(
                                     "Apache-2.0" to listOf(
                                         TextLocation("LICENSE", 1, 1)

@@ -25,6 +25,7 @@ import org.ossreviewtoolkit.model.LicenseFinding
 import org.ossreviewtoolkit.model.PackageCurationResult
 import org.ossreviewtoolkit.model.Provenance
 import org.ossreviewtoolkit.model.Repository
+import org.ossreviewtoolkit.model.ScannerDetails
 import org.ossreviewtoolkit.model.config.LicenseFindingCuration
 import org.ossreviewtoolkit.model.config.PathExclude
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
@@ -110,6 +111,11 @@ data class Findings(
      * The [Provenance] of the scanned source code.
      */
     val provenance: Provenance,
+
+    /**
+     * Details about the used scanner.
+     */
+    val scannerDetails: ScannerDetails,
 
     /**
      * The set of all license findings.
