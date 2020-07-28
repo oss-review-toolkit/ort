@@ -28,6 +28,7 @@ import org.ossreviewtoolkit.model.Provenance
 import org.ossreviewtoolkit.model.RemoteArtifact
 import org.ossreviewtoolkit.model.RuleViolation
 import org.ossreviewtoolkit.model.ScanResult
+import org.ossreviewtoolkit.model.ScannerDetails
 import org.ossreviewtoolkit.model.TextLocation
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.config.IssueResolution
@@ -35,6 +36,9 @@ import org.ossreviewtoolkit.model.config.LicenseFindingCuration
 import org.ossreviewtoolkit.model.config.PathExclude
 import org.ossreviewtoolkit.model.config.RuleViolationResolution
 import org.ossreviewtoolkit.model.config.ScopeExclude
+import org.ossreviewtoolkit.model.licenses.Findings
+import org.ossreviewtoolkit.model.licenses.LicenseInfoResolver
+import org.ossreviewtoolkit.model.licenses.ResolvedLicenseInfo
 import org.ossreviewtoolkit.model.utils.FindingCurationMatcher
 import org.ossreviewtoolkit.model.utils.FindingsMatcher
 import org.ossreviewtoolkit.model.yamlMapper
@@ -240,8 +244,11 @@ internal class EvaluatedModelMapper(private val input: ReporterInput) {
 
         issues += addAnalyzerIssues(project.id, evaluatedPackage)
 
+        val findingsByScanResultKey = input.licenseInfoResolver.getFindingsByScanResultKey(project.id)
+
         input.ortResult.getScanResultsForId(project.id).mapTo(scanResults) { result ->
-            convertScanResult(result, evaluatedFindings, evaluatedPackage)
+            val findings = findingsByScanResultKey.getValue(result.key(project.id))
+            convertScanResult(result, findings, evaluatedFindings, evaluatedPackage)
         }
 
         evaluatedFindings.filter { it.type == EvaluatedFindingType.LICENSE }.mapNotNullTo(detectedLicenses) { it.license }
@@ -299,8 +306,11 @@ internal class EvaluatedModelMapper(private val input: ReporterInput) {
 
         issues += addAnalyzerIssues(pkg.id, evaluatedPackage)
 
+        val findingsByScanResultKey = input.licenseInfoResolver.getFindingsByScanResultKey(pkg.id)
+
         input.ortResult.getScanResultsForId(pkg.id).mapTo(scanResults) { result ->
-            convertScanResult(result, evaluatedFindings, evaluatedPackage)
+            val findings = findingsByScanResultKey.getValue(result.key(pkg.id))
+            convertScanResult(result, findings, evaluatedFindings, evaluatedPackage)
         }
 
         evaluatedFindings.filter { it.type == EvaluatedFindingType.LICENSE }.mapNotNullTo(detectedLicenses) { it.license }
@@ -347,6 +357,7 @@ internal class EvaluatedModelMapper(private val input: ReporterInput) {
 
     private fun convertScanResult(
         result: ScanResult,
+        findings: Findings,
         evaluatedFindings: MutableList<EvaluatedFinding>,
         pkg: EvaluatedPackage
     ): EvaluatedScanResult {
@@ -372,7 +383,7 @@ internal class EvaluatedModelMapper(private val input: ReporterInput) {
             null
         )
 
-        addLicensesAndCopyrights(pkg.id, result, actualScanResult, evaluatedFindings)
+        addLicensesAndCopyrights(pkg.id, findings, actualScanResult, evaluatedFindings)
 
         return actualScanResult
     }
@@ -523,18 +534,18 @@ internal class EvaluatedModelMapper(private val input: ReporterInput) {
 
     private fun addLicensesAndCopyrights(
         id: Identifier,
-        scanResult: ScanResult,
+        findings: Findings,
         evaluatedScanResult: EvaluatedScanResult,
         evaluatedFindings: MutableList<EvaluatedFinding>
     ) {
-        val pathExcludes = getPathExcludes(id, scanResult.provenance)
-        val licenseFindingCurations = getLicenseFindingCurations(id, scanResult.provenance)
-        val curatedFindings = curationsMatcher.applyAll(scanResult.summary.licenseFindings, licenseFindingCurations)
+        val pathExcludes = findings.pathExcludes
+        val licenseFindingCurations = findings.licenseFindingCurations
+        val curatedFindings = curationsMatcher.applyAll(findings.licenses, licenseFindingCurations)
             .mapNotNullTo(mutableSetOf()) { it.curatedFinding }
         val decomposedFindings = curatedFindings.flatMap { finding ->
             finding.license.decompose().map { finding.copy(license = it) }
         }
-        val matchedFindings = findingsMatcher.match(decomposedFindings, scanResult.summary.copyrightFindings)
+        val matchedFindings = findingsMatcher.match(decomposedFindings, findings.copyrights)
 
         matchedFindings.forEach { licenseFindings ->
             licenseFindings.copyrights.forEach { copyrightFinding ->
@@ -619,3 +630,18 @@ internal class EvaluatedModelMapper(private val input: ReporterInput) {
     private fun <T> MutableList<T>.addIfRequired(values: Collection<T>): List<T> =
         values.map { addIfRequired(it) }.distinct()
 }
+
+private data class ScanResultKey(
+    val id: Identifier,
+    val vcsInfo: VcsInfo?,
+    val sourceArtifact: RemoteArtifact?,
+    val scannerDetails: ScannerDetails
+)
+
+private fun ScanResult.key(id: Identifier) = ScanResultKey(id, provenance.vcsInfo, provenance.sourceArtifact, scanner)
+
+private fun Findings.key(id: Identifier) =
+    ScanResultKey(id, provenance.vcsInfo, provenance.sourceArtifact, scannerDetails)
+
+private fun LicenseInfoResolver.getFindingsByScanResultKey(id: Identifier) =
+    resolveLicenseInfo(id).licenseInfo.detectedLicenseInfo.findings.associateBy { it.key(id) }
