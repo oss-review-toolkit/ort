@@ -27,432 +27,434 @@ import io.kotest.matchers.should
 import org.ossreviewtoolkit.model.LicenseSource
 import org.ossreviewtoolkit.spdx.toSpdx
 
-class LicenseViewTest : WordSpec({
-    "All" should {
-        "return the correct licenses" {
-            val view = LicenseView.ALL
+class LicenseViewTest : WordSpec() {
+    init {
+        "All" should {
+            "return the correct licenses" {
+                val view = LicenseView.ALL
 
-            view.licenses(packageWithoutLicense, emptyList()) should beEmpty()
+                view.licenses(packageWithoutLicense, emptyList()) should beEmpty()
 
-            view.licenses(packageWithoutLicense, detectedLicenses) should containExactlyInAnyOrder(
-                Pair("LicenseRef-a".toSpdx(), LicenseSource.DETECTED),
-                Pair("LicenseRef-b".toSpdx(), LicenseSource.DETECTED)
-            )
+                view.licenses(packageWithoutLicense, detectedLicenses) should containExactlyInAnyOrder(
+                    Pair("LicenseRef-a".toSpdx(), LicenseSource.DETECTED),
+                    Pair("LicenseRef-b".toSpdx(), LicenseSource.DETECTED)
+                )
 
-            view.licenses(packageWithOnlyConcludedLicense, emptyList()) should containExactlyInAnyOrder(
-                Pair("LicenseRef-a".toSpdx(), LicenseSource.CONCLUDED),
-                Pair("LicenseRef-b".toSpdx(), LicenseSource.CONCLUDED)
-            )
+                view.licenses(packageWithOnlyConcludedLicense, emptyList()) should containExactlyInAnyOrder(
+                    Pair("LicenseRef-a".toSpdx(), LicenseSource.CONCLUDED),
+                    Pair("LicenseRef-b".toSpdx(), LicenseSource.CONCLUDED)
+                )
 
-            view.licenses(packageWithOnlyConcludedLicense, detectedLicenses) should containExactlyInAnyOrder(
-                Pair("LicenseRef-a".toSpdx(), LicenseSource.CONCLUDED),
-                Pair("LicenseRef-b".toSpdx(), LicenseSource.CONCLUDED),
-                Pair("LicenseRef-a".toSpdx(), LicenseSource.DETECTED),
-                Pair("LicenseRef-b".toSpdx(), LicenseSource.DETECTED)
-            )
+                view.licenses(packageWithOnlyConcludedLicense, detectedLicenses) should containExactlyInAnyOrder(
+                    Pair("LicenseRef-a".toSpdx(), LicenseSource.CONCLUDED),
+                    Pair("LicenseRef-b".toSpdx(), LicenseSource.CONCLUDED),
+                    Pair("LicenseRef-a".toSpdx(), LicenseSource.DETECTED),
+                    Pair("LicenseRef-b".toSpdx(), LicenseSource.DETECTED)
+                )
 
-            view.licenses(packageWithOnlyDeclaredLicense, emptyList()) should containExactlyInAnyOrder(
-                Pair("Apache-2.0".toSpdx(), LicenseSource.DECLARED),
-                Pair("MIT".toSpdx(), LicenseSource.DECLARED)
-            )
+                view.licenses(packageWithOnlyDeclaredLicense, emptyList()) should containExactlyInAnyOrder(
+                    Pair("Apache-2.0".toSpdx(), LicenseSource.DECLARED),
+                    Pair("MIT".toSpdx(), LicenseSource.DECLARED)
+                )
 
-            view.licenses(packageWithOnlyDeclaredLicense, detectedLicenses) should containExactlyInAnyOrder(
-                Pair("Apache-2.0".toSpdx(), LicenseSource.DECLARED),
-                Pair("MIT".toSpdx(), LicenseSource.DECLARED),
-                Pair("LicenseRef-a".toSpdx(), LicenseSource.DETECTED),
-                Pair("LicenseRef-b".toSpdx(), LicenseSource.DETECTED)
-            )
+                view.licenses(packageWithOnlyDeclaredLicense, detectedLicenses) should containExactlyInAnyOrder(
+                    Pair("Apache-2.0".toSpdx(), LicenseSource.DECLARED),
+                    Pair("MIT".toSpdx(), LicenseSource.DECLARED),
+                    Pair("LicenseRef-a".toSpdx(), LicenseSource.DETECTED),
+                    Pair("LicenseRef-b".toSpdx(), LicenseSource.DETECTED)
+                )
 
-            view.licenses(packageWithConcludedAndDeclaredLicense, emptyList()) should containExactlyInAnyOrder(
-                Pair("LicenseRef-a".toSpdx(), LicenseSource.CONCLUDED),
-                Pair("LicenseRef-b".toSpdx(), LicenseSource.CONCLUDED),
-                Pair("Apache-2.0".toSpdx(), LicenseSource.DECLARED),
-                Pair("MIT".toSpdx(), LicenseSource.DECLARED)
-            )
+                view.licenses(packageWithConcludedAndDeclaredLicense, emptyList()) should containExactlyInAnyOrder(
+                    Pair("LicenseRef-a".toSpdx(), LicenseSource.CONCLUDED),
+                    Pair("LicenseRef-b".toSpdx(), LicenseSource.CONCLUDED),
+                    Pair("Apache-2.0".toSpdx(), LicenseSource.DECLARED),
+                    Pair("MIT".toSpdx(), LicenseSource.DECLARED)
+                )
 
-            view.licenses(
-                packageWithConcludedAndDeclaredLicense,
-                detectedLicenses
-            ) should containExactlyInAnyOrder(
-                Pair("LicenseRef-a".toSpdx(), LicenseSource.CONCLUDED),
-                Pair("LicenseRef-b".toSpdx(), LicenseSource.CONCLUDED),
-                Pair("Apache-2.0".toSpdx(), LicenseSource.DECLARED),
-                Pair("MIT".toSpdx(), LicenseSource.DECLARED),
-                Pair("LicenseRef-a".toSpdx(), LicenseSource.DETECTED),
-                Pair("LicenseRef-b".toSpdx(), LicenseSource.DETECTED)
-            )
+                view.licenses(
+                    packageWithConcludedAndDeclaredLicense,
+                    detectedLicenses
+                ) should containExactlyInAnyOrder(
+                    Pair("LicenseRef-a".toSpdx(), LicenseSource.CONCLUDED),
+                    Pair("LicenseRef-b".toSpdx(), LicenseSource.CONCLUDED),
+                    Pair("Apache-2.0".toSpdx(), LicenseSource.DECLARED),
+                    Pair("MIT".toSpdx(), LicenseSource.DECLARED),
+                    Pair("LicenseRef-a".toSpdx(), LicenseSource.DETECTED),
+                    Pair("LicenseRef-b".toSpdx(), LicenseSource.DETECTED)
+                )
+            }
+        }
+
+        "ConcludedOrRest" should {
+            "return the correct licenses" {
+                val view = LicenseView.CONCLUDED_OR_REST
+
+                view.licenses(
+                    packageWithoutLicense,
+                    emptyList()
+                ) should beEmpty()
+
+                view.licenses(
+                    packageWithoutLicense,
+                    detectedLicenses
+                ) should containExactlyInAnyOrder(
+                    Pair("LicenseRef-a".toSpdx(), LicenseSource.DETECTED),
+                    Pair("LicenseRef-b".toSpdx(), LicenseSource.DETECTED)
+                )
+
+                view.licenses(
+                    packageWithOnlyConcludedLicense,
+                    emptyList()
+                ) should containExactlyInAnyOrder(
+                    Pair("LicenseRef-a".toSpdx(), LicenseSource.CONCLUDED),
+                    Pair("LicenseRef-b".toSpdx(), LicenseSource.CONCLUDED)
+                )
+
+                view.licenses(
+                    packageWithOnlyConcludedLicense,
+                    detectedLicenses
+                ) should containExactlyInAnyOrder(
+                    Pair("LicenseRef-a".toSpdx(), LicenseSource.CONCLUDED),
+                    Pair("LicenseRef-b".toSpdx(), LicenseSource.CONCLUDED)
+                )
+
+                view.licenses(
+                    packageWithOnlyDeclaredLicense,
+                    emptyList()
+                ) should containExactlyInAnyOrder(
+                    Pair("Apache-2.0".toSpdx(), LicenseSource.DECLARED),
+                    Pair("MIT".toSpdx(), LicenseSource.DECLARED)
+                )
+
+                view.licenses(
+                    packageWithOnlyDeclaredLicense,
+                    detectedLicenses
+                ) should containExactlyInAnyOrder(
+                    Pair("Apache-2.0".toSpdx(), LicenseSource.DECLARED),
+                    Pair("MIT".toSpdx(), LicenseSource.DECLARED),
+                    Pair("LicenseRef-a".toSpdx(), LicenseSource.DETECTED),
+                    Pair("LicenseRef-b".toSpdx(), LicenseSource.DETECTED)
+                )
+
+                view.licenses(
+                    packageWithConcludedAndDeclaredLicense,
+                    emptyList()
+                ) should containExactlyInAnyOrder(
+                    Pair("LicenseRef-a".toSpdx(), LicenseSource.CONCLUDED),
+                    Pair("LicenseRef-b".toSpdx(), LicenseSource.CONCLUDED)
+                )
+
+                view.licenses(
+                    packageWithConcludedAndDeclaredLicense,
+                    detectedLicenses
+                ) should containExactlyInAnyOrder(
+                    Pair("LicenseRef-a".toSpdx(), LicenseSource.CONCLUDED),
+                    Pair("LicenseRef-b".toSpdx(), LicenseSource.CONCLUDED)
+                )
+            }
+        }
+
+        "ConcludedOrDeclaredOrDetected" should {
+            "return the correct licenses" {
+                val view = LicenseView.CONCLUDED_OR_DECLARED_OR_DETECTED
+
+                view.licenses(
+                    packageWithoutLicense,
+                    emptyList()
+                ) should beEmpty()
+
+                view.licenses(
+                    packageWithoutLicense,
+                    detectedLicenses
+                ) should containExactlyInAnyOrder(
+                    Pair("LicenseRef-a".toSpdx(), LicenseSource.DETECTED),
+                    Pair("LicenseRef-b".toSpdx(), LicenseSource.DETECTED)
+                )
+
+                view.licenses(
+                    packageWithOnlyConcludedLicense,
+                    emptyList()
+                ) should containExactlyInAnyOrder(
+                    Pair("LicenseRef-a".toSpdx(), LicenseSource.CONCLUDED),
+                    Pair("LicenseRef-b".toSpdx(), LicenseSource.CONCLUDED)
+                )
+
+                view.licenses(
+                    packageWithOnlyConcludedLicense,
+                    detectedLicenses
+                ) should containExactlyInAnyOrder(
+                    Pair("LicenseRef-a".toSpdx(), LicenseSource.CONCLUDED),
+                    Pair("LicenseRef-b".toSpdx(), LicenseSource.CONCLUDED)
+                )
+
+                view.licenses(
+                    packageWithOnlyDeclaredLicense,
+                    emptyList()
+                ) should containExactlyInAnyOrder(
+                    Pair("Apache-2.0".toSpdx(), LicenseSource.DECLARED),
+                    Pair("MIT".toSpdx(), LicenseSource.DECLARED)
+                )
+
+                view.licenses(
+                    packageWithOnlyDeclaredLicense,
+                    detectedLicenses
+                ) should containExactlyInAnyOrder(
+                    Pair("Apache-2.0".toSpdx(), LicenseSource.DECLARED),
+                    Pair("MIT".toSpdx(), LicenseSource.DECLARED)
+                )
+
+                view.licenses(
+                    packageWithConcludedAndDeclaredLicense,
+                    emptyList()
+                ) should containExactlyInAnyOrder(
+                    Pair("LicenseRef-a".toSpdx(), LicenseSource.CONCLUDED),
+                    Pair("LicenseRef-b".toSpdx(), LicenseSource.CONCLUDED)
+                )
+
+                view.licenses(
+                    packageWithConcludedAndDeclaredLicense,
+                    detectedLicenses
+                ) should containExactlyInAnyOrder(
+                    Pair("LicenseRef-a".toSpdx(), LicenseSource.CONCLUDED),
+                    Pair("LicenseRef-b".toSpdx(), LicenseSource.CONCLUDED)
+                )
+            }
+        }
+
+        "ConcludedOrDetected" should {
+            "return the correct licenses" {
+                val view = LicenseView.CONCLUDED_OR_DETECTED
+                view.licenses(
+                    packageWithoutLicense,
+                    emptyList()
+                ) should beEmpty()
+
+                view.licenses(
+                    packageWithoutLicense,
+                    detectedLicenses
+                ) should containExactlyInAnyOrder(
+                    Pair("LicenseRef-a".toSpdx(), LicenseSource.DETECTED),
+                    Pair("LicenseRef-b".toSpdx(), LicenseSource.DETECTED)
+                )
+
+                view.licenses(
+                    packageWithOnlyConcludedLicense,
+                    emptyList()
+                ) should containExactlyInAnyOrder(
+                    Pair("LicenseRef-a".toSpdx(), LicenseSource.CONCLUDED),
+                    Pair("LicenseRef-b".toSpdx(), LicenseSource.CONCLUDED)
+                )
+
+                view.licenses(
+                    packageWithOnlyConcludedLicense,
+                    detectedLicenses
+                ) should containExactlyInAnyOrder(
+                    Pair("LicenseRef-a".toSpdx(), LicenseSource.CONCLUDED),
+                    Pair("LicenseRef-b".toSpdx(), LicenseSource.CONCLUDED)
+                )
+
+                view.licenses(
+                    packageWithOnlyDeclaredLicense,
+                    emptyList()
+                ) should beEmpty()
+
+                view.licenses(
+                    packageWithOnlyDeclaredLicense,
+                    detectedLicenses
+                ) should containExactlyInAnyOrder(
+                    Pair("LicenseRef-a".toSpdx(), LicenseSource.DETECTED),
+                    Pair("LicenseRef-b".toSpdx(), LicenseSource.DETECTED)
+                )
+
+                view.licenses(
+                    packageWithConcludedAndDeclaredLicense,
+                    emptyList()
+                ) should containExactlyInAnyOrder(
+                    Pair("LicenseRef-a".toSpdx(), LicenseSource.CONCLUDED),
+                    Pair("LicenseRef-b".toSpdx(), LicenseSource.CONCLUDED)
+                )
+
+                view.licenses(
+                    packageWithConcludedAndDeclaredLicense,
+                    detectedLicenses
+                ) should containExactlyInAnyOrder(
+                    Pair("LicenseRef-a".toSpdx(), LicenseSource.CONCLUDED),
+                    Pair("LicenseRef-b".toSpdx(), LicenseSource.CONCLUDED)
+                )
+            }
+        }
+
+        "OnlyConcluded" should {
+            "return only the concluded licenses" {
+                val view = LicenseView.ONLY_CONCLUDED
+                view.licenses(
+                    packageWithoutLicense,
+                    emptyList()
+                ) should beEmpty()
+
+                view.licenses(
+                    packageWithoutLicense,
+                    detectedLicenses
+                ) should beEmpty()
+
+                view.licenses(
+                    packageWithOnlyConcludedLicense,
+                    emptyList()
+                ) should containExactlyInAnyOrder(
+                    Pair("LicenseRef-a".toSpdx(), LicenseSource.CONCLUDED),
+                    Pair("LicenseRef-b".toSpdx(), LicenseSource.CONCLUDED)
+                )
+
+                view.licenses(
+                    packageWithOnlyConcludedLicense,
+                    detectedLicenses
+                ) should containExactlyInAnyOrder(
+                    Pair("LicenseRef-a".toSpdx(), LicenseSource.CONCLUDED),
+                    Pair("LicenseRef-b".toSpdx(), LicenseSource.CONCLUDED)
+                )
+
+                view.licenses(
+                    packageWithOnlyDeclaredLicense,
+                    emptyList()
+                ) should beEmpty()
+
+                view.licenses(
+                    packageWithOnlyDeclaredLicense,
+                    detectedLicenses
+                ) should beEmpty()
+
+                view.licenses(
+                    packageWithConcludedAndDeclaredLicense,
+                    emptyList()
+                ) should containExactlyInAnyOrder(
+                    Pair("LicenseRef-a".toSpdx(), LicenseSource.CONCLUDED),
+                    Pair("LicenseRef-b".toSpdx(), LicenseSource.CONCLUDED)
+                )
+
+                view.licenses(
+                    packageWithConcludedAndDeclaredLicense,
+                    detectedLicenses
+                ) should containExactlyInAnyOrder(
+                    Pair("LicenseRef-a".toSpdx(), LicenseSource.CONCLUDED),
+                    Pair("LicenseRef-b".toSpdx(), LicenseSource.CONCLUDED)
+                )
+            }
+        }
+
+        "OnlyDeclared" should {
+            "return only the declared licenses" {
+                val view = LicenseView.ONLY_DECLARED
+
+                view.licenses(
+                    packageWithoutLicense,
+                    emptyList()
+                ) should beEmpty()
+
+                view.licenses(
+                    packageWithoutLicense,
+                    detectedLicenses
+                ) should beEmpty()
+
+                view.licenses(
+                    packageWithOnlyConcludedLicense,
+                    emptyList()
+                ) should beEmpty()
+
+                view.licenses(
+                    packageWithOnlyConcludedLicense,
+                    detectedLicenses
+                ) should beEmpty()
+
+                view.licenses(
+                    packageWithOnlyDeclaredLicense,
+                    emptyList()
+                ) should containExactlyInAnyOrder(
+                    Pair("Apache-2.0".toSpdx(), LicenseSource.DECLARED),
+                    Pair("MIT".toSpdx(), LicenseSource.DECLARED)
+                )
+
+                view.licenses(
+                    packageWithOnlyDeclaredLicense,
+                    detectedLicenses
+                ) should containExactlyInAnyOrder(
+                    Pair("Apache-2.0".toSpdx(), LicenseSource.DECLARED),
+                    Pair("MIT".toSpdx(), LicenseSource.DECLARED)
+                )
+
+                view.licenses(
+                    packageWithConcludedAndDeclaredLicense,
+                    emptyList()
+                ) should containExactlyInAnyOrder(
+                    Pair("Apache-2.0".toSpdx(), LicenseSource.DECLARED),
+                    Pair("MIT".toSpdx(), LicenseSource.DECLARED)
+                )
+
+                view.licenses(
+                    packageWithConcludedAndDeclaredLicense,
+                    detectedLicenses
+                ) should containExactlyInAnyOrder(
+                    Pair("Apache-2.0".toSpdx(), LicenseSource.DECLARED),
+                    Pair("MIT".toSpdx(), LicenseSource.DECLARED)
+                )
+            }
+        }
+
+        "OnlyDetected" should {
+            "return only the detected licenses" {
+                val view = LicenseView.ONLY_DETECTED
+
+                view.licenses(
+                    packageWithoutLicense,
+                    emptyList()
+                ) should beEmpty()
+
+                view.licenses(
+                    packageWithoutLicense,
+                    detectedLicenses
+                ) should containExactlyInAnyOrder(
+                    Pair("LicenseRef-a".toSpdx(), LicenseSource.DETECTED),
+                    Pair("LicenseRef-b".toSpdx(), LicenseSource.DETECTED)
+                )
+
+                view.licenses(
+                    packageWithOnlyConcludedLicense,
+                    emptyList()
+                ) should beEmpty()
+
+                view.licenses(
+                    packageWithOnlyConcludedLicense,
+                    detectedLicenses
+                ) should containExactlyInAnyOrder(
+                    Pair("LicenseRef-a".toSpdx(), LicenseSource.DETECTED),
+                    Pair("LicenseRef-b".toSpdx(), LicenseSource.DETECTED)
+                )
+
+                view.licenses(
+                    packageWithOnlyDeclaredLicense,
+                    emptyList()
+                ) should beEmpty()
+
+                view.licenses(
+                    packageWithOnlyDeclaredLicense,
+                    detectedLicenses
+                ) should containExactlyInAnyOrder(
+                    Pair("LicenseRef-a".toSpdx(), LicenseSource.DETECTED),
+                    Pair("LicenseRef-b".toSpdx(), LicenseSource.DETECTED)
+                )
+
+                view.licenses(
+                    packageWithConcludedAndDeclaredLicense,
+                    emptyList()
+                ) should beEmpty()
+
+                view.licenses(
+                    packageWithConcludedAndDeclaredLicense,
+                    detectedLicenses
+                ) should containExactlyInAnyOrder(
+                    Pair("LicenseRef-a".toSpdx(), LicenseSource.DETECTED),
+                    Pair("LicenseRef-b".toSpdx(), LicenseSource.DETECTED)
+                )
+            }
         }
     }
-
-    "ConcludedOrRest" should {
-        "return the correct licenses" {
-            val view = LicenseView.CONCLUDED_OR_REST
-
-            view.licenses(
-                packageWithoutLicense,
-                emptyList()
-            ) should beEmpty()
-
-            view.licenses(
-                packageWithoutLicense,
-                detectedLicenses
-            ) should containExactlyInAnyOrder(
-                Pair("LicenseRef-a".toSpdx(), LicenseSource.DETECTED),
-                Pair("LicenseRef-b".toSpdx(), LicenseSource.DETECTED)
-            )
-
-            view.licenses(
-                packageWithOnlyConcludedLicense,
-                emptyList()
-            ) should containExactlyInAnyOrder(
-                Pair("LicenseRef-a".toSpdx(), LicenseSource.CONCLUDED),
-                Pair("LicenseRef-b".toSpdx(), LicenseSource.CONCLUDED)
-            )
-
-            view.licenses(
-                packageWithOnlyConcludedLicense,
-                detectedLicenses
-            ) should containExactlyInAnyOrder(
-                Pair("LicenseRef-a".toSpdx(), LicenseSource.CONCLUDED),
-                Pair("LicenseRef-b".toSpdx(), LicenseSource.CONCLUDED)
-            )
-
-            view.licenses(
-                packageWithOnlyDeclaredLicense,
-                emptyList()
-            ) should containExactlyInAnyOrder(
-                Pair("Apache-2.0".toSpdx(), LicenseSource.DECLARED),
-                Pair("MIT".toSpdx(), LicenseSource.DECLARED)
-            )
-
-            view.licenses(
-                packageWithOnlyDeclaredLicense,
-                detectedLicenses
-            ) should containExactlyInAnyOrder(
-                Pair("Apache-2.0".toSpdx(), LicenseSource.DECLARED),
-                Pair("MIT".toSpdx(), LicenseSource.DECLARED),
-                Pair("LicenseRef-a".toSpdx(), LicenseSource.DETECTED),
-                Pair("LicenseRef-b".toSpdx(), LicenseSource.DETECTED)
-            )
-
-            view.licenses(
-                packageWithConcludedAndDeclaredLicense,
-                emptyList()
-            ) should containExactlyInAnyOrder(
-                Pair("LicenseRef-a".toSpdx(), LicenseSource.CONCLUDED),
-                Pair("LicenseRef-b".toSpdx(), LicenseSource.CONCLUDED)
-            )
-
-            view.licenses(
-                packageWithConcludedAndDeclaredLicense,
-                detectedLicenses
-            ) should containExactlyInAnyOrder(
-                Pair("LicenseRef-a".toSpdx(), LicenseSource.CONCLUDED),
-                Pair("LicenseRef-b".toSpdx(), LicenseSource.CONCLUDED)
-            )
-        }
-    }
-
-    "ConcludedOrDeclaredOrDetected" should {
-        "return the correct licenses" {
-            val view = LicenseView.CONCLUDED_OR_DECLARED_OR_DETECTED
-
-            view.licenses(
-                packageWithoutLicense,
-                emptyList()
-            ) should beEmpty()
-
-            view.licenses(
-                packageWithoutLicense,
-                detectedLicenses
-            ) should containExactlyInAnyOrder(
-                Pair("LicenseRef-a".toSpdx(), LicenseSource.DETECTED),
-                Pair("LicenseRef-b".toSpdx(), LicenseSource.DETECTED)
-            )
-
-            view.licenses(
-                packageWithOnlyConcludedLicense,
-                emptyList()
-            ) should containExactlyInAnyOrder(
-                Pair("LicenseRef-a".toSpdx(), LicenseSource.CONCLUDED),
-                Pair("LicenseRef-b".toSpdx(), LicenseSource.CONCLUDED)
-            )
-
-            view.licenses(
-                packageWithOnlyConcludedLicense,
-                detectedLicenses
-            ) should containExactlyInAnyOrder(
-                Pair("LicenseRef-a".toSpdx(), LicenseSource.CONCLUDED),
-                Pair("LicenseRef-b".toSpdx(), LicenseSource.CONCLUDED)
-            )
-
-            view.licenses(
-                packageWithOnlyDeclaredLicense,
-                emptyList()
-            ) should containExactlyInAnyOrder(
-                Pair("Apache-2.0".toSpdx(), LicenseSource.DECLARED),
-                Pair("MIT".toSpdx(), LicenseSource.DECLARED)
-            )
-
-            view.licenses(
-                packageWithOnlyDeclaredLicense,
-                detectedLicenses
-            ) should containExactlyInAnyOrder(
-                Pair("Apache-2.0".toSpdx(), LicenseSource.DECLARED),
-                Pair("MIT".toSpdx(), LicenseSource.DECLARED)
-            )
-
-            view.licenses(
-                packageWithConcludedAndDeclaredLicense,
-                emptyList()
-            ) should containExactlyInAnyOrder(
-                Pair("LicenseRef-a".toSpdx(), LicenseSource.CONCLUDED),
-                Pair("LicenseRef-b".toSpdx(), LicenseSource.CONCLUDED)
-            )
-
-            view.licenses(
-                packageWithConcludedAndDeclaredLicense,
-                detectedLicenses
-            ) should containExactlyInAnyOrder(
-                Pair("LicenseRef-a".toSpdx(), LicenseSource.CONCLUDED),
-                Pair("LicenseRef-b".toSpdx(), LicenseSource.CONCLUDED)
-            )
-        }
-    }
-
-    "ConcludedOrDetected" should {
-        "return the correct licenses" {
-            val view = LicenseView.CONCLUDED_OR_DETECTED
-            view.licenses(
-                packageWithoutLicense,
-                emptyList()
-            ) should beEmpty()
-
-            view.licenses(
-                packageWithoutLicense,
-                detectedLicenses
-            ) should containExactlyInAnyOrder(
-                Pair("LicenseRef-a".toSpdx(), LicenseSource.DETECTED),
-                Pair("LicenseRef-b".toSpdx(), LicenseSource.DETECTED)
-            )
-
-            view.licenses(
-                packageWithOnlyConcludedLicense,
-                emptyList()
-            ) should containExactlyInAnyOrder(
-                Pair("LicenseRef-a".toSpdx(), LicenseSource.CONCLUDED),
-                Pair("LicenseRef-b".toSpdx(), LicenseSource.CONCLUDED)
-            )
-
-            view.licenses(
-                packageWithOnlyConcludedLicense,
-                detectedLicenses
-            ) should containExactlyInAnyOrder(
-                Pair("LicenseRef-a".toSpdx(), LicenseSource.CONCLUDED),
-                Pair("LicenseRef-b".toSpdx(), LicenseSource.CONCLUDED)
-            )
-
-            view.licenses(
-                packageWithOnlyDeclaredLicense,
-                emptyList()
-            ) should beEmpty()
-
-            view.licenses(
-                packageWithOnlyDeclaredLicense,
-                detectedLicenses
-            ) should containExactlyInAnyOrder(
-                Pair("LicenseRef-a".toSpdx(), LicenseSource.DETECTED),
-                Pair("LicenseRef-b".toSpdx(), LicenseSource.DETECTED)
-            )
-
-            view.licenses(
-                packageWithConcludedAndDeclaredLicense,
-                emptyList()
-            ) should containExactlyInAnyOrder(
-                Pair("LicenseRef-a".toSpdx(), LicenseSource.CONCLUDED),
-                Pair("LicenseRef-b".toSpdx(), LicenseSource.CONCLUDED)
-            )
-
-            view.licenses(
-                packageWithConcludedAndDeclaredLicense,
-                detectedLicenses
-            ) should containExactlyInAnyOrder(
-                Pair("LicenseRef-a".toSpdx(), LicenseSource.CONCLUDED),
-                Pair("LicenseRef-b".toSpdx(), LicenseSource.CONCLUDED)
-            )
-        }
-    }
-
-    "OnlyConcluded" should {
-        "return only the concluded licenses" {
-            val view = LicenseView.ONLY_CONCLUDED
-            view.licenses(
-                packageWithoutLicense,
-                emptyList()
-            ) should beEmpty()
-
-            view.licenses(
-                packageWithoutLicense,
-                detectedLicenses
-            ) should beEmpty()
-
-            view.licenses(
-                packageWithOnlyConcludedLicense,
-                emptyList()
-            ) should containExactlyInAnyOrder(
-                Pair("LicenseRef-a".toSpdx(), LicenseSource.CONCLUDED),
-                Pair("LicenseRef-b".toSpdx(), LicenseSource.CONCLUDED)
-            )
-
-            view.licenses(
-                packageWithOnlyConcludedLicense,
-                detectedLicenses
-            ) should containExactlyInAnyOrder(
-                Pair("LicenseRef-a".toSpdx(), LicenseSource.CONCLUDED),
-                Pair("LicenseRef-b".toSpdx(), LicenseSource.CONCLUDED)
-            )
-
-            view.licenses(
-                packageWithOnlyDeclaredLicense,
-                emptyList()
-            ) should beEmpty()
-
-            view.licenses(
-                packageWithOnlyDeclaredLicense,
-                detectedLicenses
-            ) should beEmpty()
-
-            view.licenses(
-                packageWithConcludedAndDeclaredLicense,
-                emptyList()
-            ) should containExactlyInAnyOrder(
-                Pair("LicenseRef-a".toSpdx(), LicenseSource.CONCLUDED),
-                Pair("LicenseRef-b".toSpdx(), LicenseSource.CONCLUDED)
-            )
-
-            view.licenses(
-                packageWithConcludedAndDeclaredLicense,
-                detectedLicenses
-            ) should containExactlyInAnyOrder(
-                Pair("LicenseRef-a".toSpdx(), LicenseSource.CONCLUDED),
-                Pair("LicenseRef-b".toSpdx(), LicenseSource.CONCLUDED)
-            )
-        }
-    }
-
-    "OnlyDeclared" should {
-        "return only the declared licenses" {
-            val view = LicenseView.ONLY_DECLARED
-
-            view.licenses(
-                packageWithoutLicense,
-                emptyList()
-            ) should beEmpty()
-
-            view.licenses(
-                packageWithoutLicense,
-                detectedLicenses
-            ) should beEmpty()
-
-            view.licenses(
-                packageWithOnlyConcludedLicense,
-                emptyList()
-            ) should beEmpty()
-
-            view.licenses(
-                packageWithOnlyConcludedLicense,
-                detectedLicenses
-            ) should beEmpty()
-
-            view.licenses(
-                packageWithOnlyDeclaredLicense,
-                emptyList()
-            ) should containExactlyInAnyOrder(
-                Pair("Apache-2.0".toSpdx(), LicenseSource.DECLARED),
-                Pair("MIT".toSpdx(), LicenseSource.DECLARED)
-            )
-
-            view.licenses(
-                packageWithOnlyDeclaredLicense,
-                detectedLicenses
-            ) should containExactlyInAnyOrder(
-                Pair("Apache-2.0".toSpdx(), LicenseSource.DECLARED),
-                Pair("MIT".toSpdx(), LicenseSource.DECLARED)
-            )
-
-            view.licenses(
-                packageWithConcludedAndDeclaredLicense,
-                emptyList()
-            ) should containExactlyInAnyOrder(
-                Pair("Apache-2.0".toSpdx(), LicenseSource.DECLARED),
-                Pair("MIT".toSpdx(), LicenseSource.DECLARED)
-            )
-
-            view.licenses(
-                packageWithConcludedAndDeclaredLicense,
-                detectedLicenses
-            ) should containExactlyInAnyOrder(
-                Pair("Apache-2.0".toSpdx(), LicenseSource.DECLARED),
-                Pair("MIT".toSpdx(), LicenseSource.DECLARED)
-            )
-        }
-    }
-
-    "OnlyDetected" should {
-        "return only the detected licenses" {
-            val view = LicenseView.ONLY_DETECTED
-
-            view.licenses(
-                packageWithoutLicense,
-                emptyList()
-            ) should beEmpty()
-
-            view.licenses(
-                packageWithoutLicense,
-                detectedLicenses
-            ) should containExactlyInAnyOrder(
-                Pair("LicenseRef-a".toSpdx(), LicenseSource.DETECTED),
-                Pair("LicenseRef-b".toSpdx(), LicenseSource.DETECTED)
-            )
-
-            view.licenses(
-                packageWithOnlyConcludedLicense,
-                emptyList()
-            ) should beEmpty()
-
-            view.licenses(
-                packageWithOnlyConcludedLicense,
-                detectedLicenses
-            ) should containExactlyInAnyOrder(
-                Pair("LicenseRef-a".toSpdx(), LicenseSource.DETECTED),
-                Pair("LicenseRef-b".toSpdx(), LicenseSource.DETECTED)
-            )
-
-            view.licenses(
-                packageWithOnlyDeclaredLicense,
-                emptyList()
-            ) should beEmpty()
-
-            view.licenses(
-                packageWithOnlyDeclaredLicense,
-                detectedLicenses
-            ) should containExactlyInAnyOrder(
-                Pair("LicenseRef-a".toSpdx(), LicenseSource.DETECTED),
-                Pair("LicenseRef-b".toSpdx(), LicenseSource.DETECTED)
-            )
-
-            view.licenses(
-                packageWithConcludedAndDeclaredLicense,
-                emptyList()
-            ) should beEmpty()
-
-            view.licenses(
-                packageWithConcludedAndDeclaredLicense,
-                detectedLicenses
-            ) should containExactlyInAnyOrder(
-                Pair("LicenseRef-a".toSpdx(), LicenseSource.DETECTED),
-                Pair("LicenseRef-b".toSpdx(), LicenseSource.DETECTED)
-            )
-        }
-    }
-})
+}
