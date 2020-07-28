@@ -33,12 +33,15 @@ import org.cyclonedx.model.ExternalReference
 import org.cyclonedx.model.Hash
 import org.cyclonedx.model.License
 import org.cyclonedx.model.LicenseChoice
+import org.ossreviewtoolkit.model.LicenseSource
 
 import org.ossreviewtoolkit.model.Package
+import org.ossreviewtoolkit.model.licenses.ResolvedLicenseInfo
 import org.ossreviewtoolkit.model.utils.getDetectedLicensesForId
 import org.ossreviewtoolkit.reporter.Reporter
 import org.ossreviewtoolkit.reporter.ReporterInput
 import org.ossreviewtoolkit.spdx.SpdxLicense
+import java.util.SortedSet
 
 private const val REPORT_BASE_FILENAME = "bom"
 private const val REPORT_EXTENSION = "xml"
@@ -134,8 +137,9 @@ class CycloneDxReporter : Reporter {
 
                 bom.addExternalReference(ExternalReference.Type.WEBSITE, project.homepageUrl)
 
-                val licenseNames = project.declaredLicensesProcessed.allLicenses +
-                        input.ortResult.getDetectedLicensesForId(project.id, input.packageConfigurationProvider)
+                val licenseNames = input.licenseInfoResolver.resolveLicenseInfo(project.id)
+                    .getLicenseNames(LicenseSource.DECLARED)
+
                 bom.addExternalReference(ExternalReference.Type.LICENSE, licenseNames.joinToString(", "))
 
                 bom.addExternalReference(ExternalReference.Type.BUILD_SYSTEM, project.id.type)
@@ -166,11 +170,9 @@ class CycloneDxReporter : Reporter {
     private fun addPackageToBom(input: ReporterInput, pkg: Package, bom: Bom) {
         // TODO: We should actually use the concluded license expression here, but we first need a workflow to
         //       ensure it is being set.
-        val declaredLicenseNames = input.ortResult.getDeclaredLicensesForId(pkg.id)
-        val detectedLicenseNames = input.ortResult.getDetectedLicensesForId(
-            pkg.id,
-            input.packageConfigurationProvider
-        )
+        val resolvedLicenseInfo = input.licenseInfoResolver.resolveLicenseInfo(pkg.id)
+        val declaredLicenseNames = resolvedLicenseInfo.getLicenseNames(LicenseSource.DECLARED)
+        val detectedLicenseNames = resolvedLicenseInfo.getLicenseNames(LicenseSource.DETECTED)
 
         val licenseObjects = mapLicenseNamesToObjects(declaredLicenseNames, "declared license", input) +
                 mapLicenseNamesToObjects(detectedLicenseNames, "detected license", input)
@@ -218,3 +220,6 @@ class CycloneDxReporter : Reporter {
         }
     }
 }
+
+private fun ResolvedLicenseInfo.getLicenseNames(source: LicenseSource): SortedSet<String> =
+    licenses.filter { source in it.sources }.mapTo(sortedSetOf()) { it.license.toString() }
