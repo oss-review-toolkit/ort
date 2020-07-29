@@ -22,18 +22,13 @@ package org.ossreviewtoolkit.reporter.reporters
 import java.io.File
 import java.net.URL
 import java.net.URLClassLoader
-import java.util.SortedSet
 
 import org.eclipse.sw360.antenna.attribution.document.core.AttributionDocumentGeneratorImpl
 import org.eclipse.sw360.antenna.attribution.document.core.DocumentValues
 import org.eclipse.sw360.antenna.attribution.document.core.model.LicenseInfo
 
-import org.ossreviewtoolkit.model.Identifier
-import org.ossreviewtoolkit.model.LicenseFindings
-import org.ossreviewtoolkit.model.OrtResult
-import org.ossreviewtoolkit.model.config.PathExclude
-import org.ossreviewtoolkit.model.utils.collectLicenseFindings
-import org.ossreviewtoolkit.model.utils.getDetectedLicensesForId
+import org.ossreviewtoolkit.model.licenses.LicenseView
+import org.ossreviewtoolkit.model.licenses.ResolvedLicenseInfo
 import org.ossreviewtoolkit.reporter.LicenseTextProvider
 import org.ossreviewtoolkit.reporter.Reporter
 import org.ossreviewtoolkit.reporter.ReporterInput
@@ -102,11 +97,6 @@ class AntennaAttributionDocumentReporter : Reporter {
         outputDir: File,
         options: Map<String, String>
     ): List<File> {
-        val licenseFindings = input.ortResult.collectLicenseFindings(
-            input.packageConfigurationProvider,
-            omitExcluded = true
-        )
-
         // Use the default template unless a custom template is provided via the options.
         var templateId = DEFAULT_TEMPLATE_ID
         val templateFiles = mutableMapOf<String, File>()
@@ -167,19 +157,21 @@ class AntennaAttributionDocumentReporter : Reporter {
                 }
 
                 val artifacts = packages.map { pkg ->
-                    val licenses = collectLicenses(pkg.id, input.ortResult)
+                    val resolvedLicense =
+                        input.licenseInfoResolver.resolveLicenseInfo(pkg.id).filter(LicenseView.CONCLUDED_OR_REST)
+
                     AttributionDocumentPdfModel(
                         purl = pkg.purl,
                         binaryFilename = pkg.binaryArtifact.takeUnless { it.url.isEmpty() }?.let { File(it.url).name },
-                        declaredLicenses = licenses.map { createLicenseInfo(it, input.licenseTextProvider) },
-                        copyrightStatements = createCopyrightStatement(pkg.id, licenses, licenseFindings)
+                        declaredLicenses = resolvedLicense.map {
+                            createLicenseInfo(it.license.simpleLicense(), input.licenseTextProvider)
+                        },
+                        copyrightStatements = createCopyrightStatement(resolvedLicense)
                     )
                 }.toList()
 
                 val projectCopyright = createCopyrightStatement(
-                    project.id,
-                    collectLicenses(project.id, input.ortResult),
-                    licenseFindings
+                    input.licenseInfoResolver.resolveLicenseInfo(project.id).filter(LicenseView.CONCLUDED_OR_REST)
                 )
 
                 val workingDir = createTempDir()
@@ -234,15 +226,12 @@ class AntennaAttributionDocumentReporter : Reporter {
         return outputFiles
     }
 
-    private fun createCopyrightStatement(
-        id: Identifier,
-        licenses: SortedSet<String>,
-        licenseFindings: Map<Identifier, Map<LicenseFindings, List<PathExclude>>>
-    ) =
-        licenseFindings.getOrDefault(id, emptyMap())
-            .filter { licenses.contains(it.key.license.toString()) }
-            .flatMap { it.key.copyrights }
-            .joinToString("\n") { it.statement }
+    private fun createCopyrightStatement(resolvedLicense: ResolvedLicenseInfo) =
+        resolvedLicense.flatMapTo(sortedSetOf()) { license ->
+            license.locations.flatMap { location ->
+                location.copyrights.map { it.statement }
+            }
+        }.joinToString("\n")
 
     private fun addTemplateToClassPath(url: URL) {
         Thread.currentThread().contextClassLoader = URLClassLoader(arrayOf(url), originalClassLoader)
@@ -250,18 +239,6 @@ class AntennaAttributionDocumentReporter : Reporter {
 
     private fun removeTemplateFromClassPath() {
         Thread.currentThread().contextClassLoader = originalClassLoader
-    }
-
-    private fun collectLicenses(id: Identifier, ortResult: OrtResult): SortedSet<String> {
-        val concludedLicense = ortResult.getConcludedLicensesForId(id)?.licenses() ?: emptyList()
-        val declaredLicense = ortResult.getDeclaredLicensesForId(id)
-        val detectedLicense = ortResult.getDetectedLicensesForId(id)
-
-        return if (concludedLicense.isNotEmpty()) {
-            concludedLicense.toSortedSet()
-        } else {
-            (declaredLicense + detectedLicense).toSortedSet()
-        }
     }
 
     private fun createLicenseInfo(licenseId: String, licenseTextProvider: LicenseTextProvider): LicenseInfo {
