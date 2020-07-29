@@ -32,6 +32,10 @@ Files: logos/*
 Copyright: 2017-2020 HERE Europe B.V. <opensource@here.com>
 License: Apache-2.0
 
+Files: scancode-toolkit-3.2.0.tar.bz2
+Copyright: nexB Inc. http://www.nexb.com/ - All rights reserved.
+License: Apache-2.0
+
 Files: */src/main/resources/*
 Copyright: 2017-2020 HERE Europe B.V. <opensource@here.com>
 License: Apache-2.0

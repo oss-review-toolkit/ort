@@ -212,7 +212,7 @@ class ScanCode(
         }
     }
 
-    override val scannerVersion = "3.0.2"
+    override val scannerVersion = "3.2.0"
     override val resultFileExt = "json"
 
     private val scanCodeConfiguration = config.options?.get("ScanCode").orEmpty()
@@ -249,16 +249,10 @@ class ScanCode(
     }
 
     override fun bootstrap(): File {
-        val archive = when {
-            // Use the .zip file despite it being slightly larger than the .tar.gz file here as the latter for some
-            // reason does not complete to unpack on Windows.
-            Os.isWindows -> "v$scannerVersion.zip"
-            else -> "v$scannerVersion.tar.gz"
-        }
-
         // Use the source code archive instead of the release artifact from S3 to enable OkHttp to cache the download
         // locally. For details see https://github.com/square/okhttp/issues/4355#issuecomment-435679393.
-        val url = "https://github.com/nexB/scancode-toolkit/archive/$archive"
+        val url = "https://github.com/oss-review-toolkit/ort/raw/upgrade-scancode-to-version-3.2/" +
+                "scancode-toolkit-3.2.0.tar.bz2"
 
         log.info { "Downloading $scannerName from $url... " }
 
@@ -280,6 +274,7 @@ class ScanCode(
 
             val unpackDir = createTempDir(ORT_NAME, "$scannerName-$scannerVersion").apply { deleteOnExit() }
 
+            log.info { "file size: " + scannerArchive.length() }
             log.info { "Unpacking '$scannerArchive' to '$unpackDir'... " }
             scannerArchive.unpack(unpackDir)
             if (!scannerArchive.delete()) {

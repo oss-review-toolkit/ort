@@ -1,27 +1,22 @@
 # Always use Unix line endings for Unix shell scripts.
 gradlew						text eol=lf
 *.sh						text eol=lf
-
 # Use Unix line endings for expected test results for consistency across platforms.
 */src/*/assets/**/*expected*.yml		text eol=lf
 reporter/src/funTest/assets/*-expected-*	text eol=lf
-
 # Use Unix line endings for Freemarker templates for consistency across platforms.
 reporter/src/main/resources/**/*.ftlh		text eol=lf
-
 # Use Unix line endings for scan results which are misused for also testing the calculation of the SPDX package verification code.
 scanner/src/test/assets/*.json			text eol=lf
-
 # Use Unix line endings for JavaScript source code to avoid problems with eslint.
 reporter-web-app/**/*.js			text eol=lf
-
 # Use Unix line endings for SPDX license texts for consistency across platforms.
 spdx-utils/src/main/resources/exceptions/*	text eol=lf
 spdx-utils/src/main/resources/licenserefs/*	text eol=lf
 spdx-utils/src/main/resources/licenses/*	text eol=lf
-
 # Fix GitHub language statistics, see https://github.com/github/linguist#using-gitattributes.
 reporter-web-app/public/index.html		linguist-generated=true
 spdx-utils/src/main/resources/exceptions/*	linguist-detectable=false
 spdx-utils/src/main/resources/licenserefs/*	linguist-detectable=false
 spdx-utils/src/main/resources/licenses/*	linguist-detectable=false
+/scancode-toolkit-3.2.0.tar.bz2 filter=lfs diff=lfs merge=lfs -text
