@@ -278,6 +278,11 @@ sealed class SpdxSingleLicenseExpression : SpdxExpression() {
         fun parse(expression: String): SpdxSingleLicenseExpression =
             SpdxExpression.parse(expression) as SpdxSingleLicenseExpression
     }
+
+    /**
+     * Return the string identifier of this license without any license exception.
+     */
+    abstract fun simpleLicense(): String
 }
 
 /**
@@ -299,6 +304,8 @@ class SpdxLicenseWithExceptionExpression(
     }
 
     override fun decompose() = setOf(this)
+
+    override fun simpleLicense() = license.toString()
 
     override fun licenses() = license.licenses()
 
@@ -381,6 +388,8 @@ class SpdxLicenseIdExpression(
 
     private val spdxLicense = SpdxLicense.forId(toString())
 
+    override fun simpleLicense() = toString()
+
     override fun licenses() = listOf(toString())
 
     override fun normalize(mapDeprecated: Boolean) =
@@ -427,6 +436,8 @@ data class SpdxLicenseReferenceExpression(
     val id: String
 ) : SpdxSimpleExpression() {
     override fun decompose() = setOf(this)
+
+    override fun simpleLicense() = id
 
     override fun licenses() = listOf(id)
 
