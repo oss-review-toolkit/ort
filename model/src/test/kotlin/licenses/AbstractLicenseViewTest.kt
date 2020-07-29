@@ -29,7 +29,7 @@ import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.spdx.SpdxExpression
 import org.ossreviewtoolkit.spdx.SpdxSingleLicenseExpression
 
-abstract class LicenseViewTest : WordSpec() {
+abstract class AbstractLicenseViewTest : WordSpec() {
     abstract fun LicenseView.getLicensesWithSources(
         pkg: Package
     ): List<Pair<SpdxSingleLicenseExpression, LicenseSource>>

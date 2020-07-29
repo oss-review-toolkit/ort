@@ -33,7 +33,7 @@ import org.ossreviewtoolkit.spdx.SpdxExpression
 import org.ossreviewtoolkit.spdx.SpdxSingleLicenseExpression
 import org.ossreviewtoolkit.spdx.toSpdx
 
-class LicenseViewFilterTest : LicenseViewTest() {
+class LicenseViewFilterTest : AbstractLicenseViewTest() {
     private val licenseInfoResolver = LicenseInfoResolver(
         DefaultLicenseInfoProvider(ortResult, SimplePackageConfigurationProvider()),
         CopyrightGarbage()

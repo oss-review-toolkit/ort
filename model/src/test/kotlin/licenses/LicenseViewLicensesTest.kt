@@ -29,7 +29,7 @@ import org.ossreviewtoolkit.spdx.SpdxExpression
 import org.ossreviewtoolkit.spdx.SpdxSingleLicenseExpression
 import org.ossreviewtoolkit.spdx.toSpdx
 
-class LicenseViewLicensesTest : LicenseViewTest() {
+class LicenseViewLicensesTest : AbstractLicenseViewTest() {
     override fun LicenseView.getLicensesWithSources(
         pkg: Package
     ): List<Pair<SpdxSingleLicenseExpression, LicenseSource>> =
