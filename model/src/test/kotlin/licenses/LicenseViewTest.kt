@@ -32,11 +32,16 @@ import org.ossreviewtoolkit.spdx.SpdxExpression
 import org.ossreviewtoolkit.spdx.SpdxSingleLicenseExpression
 import org.ossreviewtoolkit.spdx.toSpdx
 
-class LicenseViewTest : WordSpec() {
-    init {
-        fun LicenseView.getLicensesWithSources(pkg: Package): List<Pair<SpdxSingleLicenseExpression, LicenseSource>> =
-            licenses(pkg, ortResult.getDetectedLicensesForId(pkg.id).map { SpdxSingleLicenseExpression.parse(it) })
+abstract class LicenseViewTest : WordSpec() {
+    abstract fun LicenseView.getLicensesWithSources(
+        pkg: Package
+    ): List<Pair<SpdxSingleLicenseExpression, LicenseSource>>
 
+    abstract fun containLicensesWithSources(
+        vararg licenses: Pair<String, LicenseSource>
+    ): Matcher<List<Pair<SpdxExpression, LicenseSource>>?>
+
+    init {
         "ALL" should {
             "return the correct licenses" {
                 val view = LicenseView.ALL
@@ -361,7 +366,14 @@ class LicenseViewTest : WordSpec() {
     }
 }
 
-fun containLicensesWithSources(
-    vararg licenses: Pair<String, LicenseSource>
-): Matcher<List<Pair<SpdxExpression, LicenseSource>>?> =
-    containExactlyInAnyOrder(licenses.map { Pair(it.first.toSpdx(), it.second) })
+class LicenseViewLicensesTest : LicenseViewTest() {
+    override fun LicenseView.getLicensesWithSources(
+        pkg: Package
+    ): List<Pair<SpdxSingleLicenseExpression, LicenseSource>> =
+        licenses(pkg, ortResult.getDetectedLicensesForId(pkg.id).map { SpdxSingleLicenseExpression.parse(it) })
+
+    override fun containLicensesWithSources(
+        vararg licenses: Pair<String, LicenseSource>
+    ): Matcher<List<Pair<SpdxExpression, LicenseSource>>?> =
+        containExactlyInAnyOrder(licenses.map { Pair(it.first.toSpdx(), it.second) })
+}
