@@ -49,17 +49,12 @@ import org.ossreviewtoolkit.model.config.PathExclude
 import org.ossreviewtoolkit.model.config.PathExcludeReason
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
-import org.ossreviewtoolkit.spdx.SpdxLicenseReferenceExpression
 import org.ossreviewtoolkit.spdx.toSpdx
 import org.ossreviewtoolkit.utils.DeclaredLicenseProcessor
 
 val concludedLicense = "LicenseRef-a AND LicenseRef-b".toSpdx()
 val declaredLicenses = sortedSetOf("LicenseRef-a", "LicenseRef-b")
 val declaredLicensesProcessed = DeclaredLicenseProcessor.process(declaredLicenses)
-val detectedLicenses = listOf(
-    SpdxLicenseReferenceExpression("LicenseRef-a"),
-    SpdxLicenseReferenceExpression("LicenseRef-b")
-)
 
 val licenseFindings = sortedSetOf(
     LicenseFinding("LicenseRef-a", TextLocation("LICENSE", 1, 1)),

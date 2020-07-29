@@ -26,64 +26,74 @@ import io.kotest.matchers.collections.containExactlyInAnyOrder
 import io.kotest.matchers.should
 
 import org.ossreviewtoolkit.model.LicenseSource
+import org.ossreviewtoolkit.model.Package
+import org.ossreviewtoolkit.model.utils.getDetectedLicensesForId
 import org.ossreviewtoolkit.spdx.SpdxExpression
+import org.ossreviewtoolkit.spdx.SpdxSingleLicenseExpression
 import org.ossreviewtoolkit.spdx.toSpdx
 
 class LicenseViewTest : WordSpec() {
     init {
+        fun LicenseView.getLicensesWithSources(pkg: Package): List<Pair<SpdxSingleLicenseExpression, LicenseSource>> =
+            licenses(pkg, ortResult.getDetectedLicensesForId(pkg.id).map { SpdxSingleLicenseExpression.parse(it) })
+
         "ALL" should {
             "return the correct licenses" {
                 val view = LicenseView.ALL
 
-                view.licenses(packageWithoutLicense, emptyList()) should beEmpty()
+                view.getLicensesWithSources(packageWithoutLicense) should beEmpty()
 
-                view.licenses(packageWithoutLicense, detectedLicenses) should containLicensesWithSources(
-                    "LicenseRef-a" to LicenseSource.DETECTED,
-                    "LicenseRef-b" to LicenseSource.DETECTED
-                )
+                view.getLicensesWithSources(packageWithDetectedLicense) should
+                        containLicensesWithSources(
+                            "LicenseRef-a" to LicenseSource.DETECTED,
+                            "LicenseRef-b" to LicenseSource.DETECTED
+                        )
 
-                view.licenses(packageWithConcludedLicense, emptyList()) should containLicensesWithSources(
-                    "LicenseRef-a" to LicenseSource.CONCLUDED,
-                    "LicenseRef-b" to LicenseSource.CONCLUDED
-                )
+                view.getLicensesWithSources(packageWithConcludedLicense) should
+                        containLicensesWithSources(
+                            "LicenseRef-a" to LicenseSource.CONCLUDED,
+                            "LicenseRef-b" to LicenseSource.CONCLUDED
+                        )
 
-                view.licenses(packageWithConcludedLicense, detectedLicenses) should containLicensesWithSources(
-                    "LicenseRef-a" to LicenseSource.CONCLUDED,
-                    "LicenseRef-b" to LicenseSource.CONCLUDED,
-                    "LicenseRef-a" to LicenseSource.DETECTED,
-                    "LicenseRef-b" to LicenseSource.DETECTED
-                )
+                view.getLicensesWithSources(packageWithConcludedAndDetectedLicense) should
+                        containLicensesWithSources(
+                            "LicenseRef-a" to LicenseSource.CONCLUDED,
+                            "LicenseRef-b" to LicenseSource.CONCLUDED,
+                            "LicenseRef-a" to LicenseSource.DETECTED,
+                            "LicenseRef-b" to LicenseSource.DETECTED
+                        )
 
-                view.licenses(packageWithDeclaredLicense, emptyList()) should containLicensesWithSources(
-                    "LicenseRef-a" to LicenseSource.DECLARED,
-                    "LicenseRef-b" to LicenseSource.DECLARED
-                )
+                view.getLicensesWithSources(packageWithDeclaredLicense) should
+                        containLicensesWithSources(
+                            "LicenseRef-a" to LicenseSource.DECLARED,
+                            "LicenseRef-b" to LicenseSource.DECLARED
+                        )
 
-                view.licenses(packageWithDeclaredLicense, detectedLicenses) should containLicensesWithSources(
-                    "LicenseRef-a" to LicenseSource.DECLARED,
-                    "LicenseRef-b" to LicenseSource.DECLARED,
-                    "LicenseRef-a" to LicenseSource.DETECTED,
-                    "LicenseRef-b" to LicenseSource.DETECTED
-                )
+                view.getLicensesWithSources(packageWithDeclaredAndDetectedLicense) should
+                        containLicensesWithSources(
+                            "LicenseRef-a" to LicenseSource.DECLARED,
+                            "LicenseRef-b" to LicenseSource.DECLARED,
+                            "LicenseRef-a" to LicenseSource.DETECTED,
+                            "LicenseRef-b" to LicenseSource.DETECTED
+                        )
 
-                view.licenses(packageWithConcludedAndDeclaredLicense, emptyList()) should containLicensesWithSources(
-                    "LicenseRef-a" to LicenseSource.CONCLUDED,
-                    "LicenseRef-b" to LicenseSource.CONCLUDED,
-                    "LicenseRef-a" to LicenseSource.DECLARED,
-                    "LicenseRef-b" to LicenseSource.DECLARED
-                )
+                view.getLicensesWithSources(packageWithConcludedAndDeclaredLicense) should
+                        containLicensesWithSources(
+                            "LicenseRef-a" to LicenseSource.CONCLUDED,
+                            "LicenseRef-b" to LicenseSource.CONCLUDED,
+                            "LicenseRef-a" to LicenseSource.DECLARED,
+                            "LicenseRef-b" to LicenseSource.DECLARED
+                        )
 
-                view.licenses(
-                    packageWithConcludedAndDeclaredLicense,
-                    detectedLicenses
-                ) should containLicensesWithSources(
-                    "LicenseRef-a" to LicenseSource.CONCLUDED,
-                    "LicenseRef-b" to LicenseSource.CONCLUDED,
-                    "LicenseRef-a" to LicenseSource.DECLARED,
-                    "LicenseRef-b" to LicenseSource.DECLARED,
-                    "LicenseRef-a" to LicenseSource.DETECTED,
-                    "LicenseRef-b" to LicenseSource.DETECTED
-                )
+                view.getLicensesWithSources(packageWithConcludedAndDeclaredAndDetectedLicense) should
+                        containLicensesWithSources(
+                            "LicenseRef-a" to LicenseSource.CONCLUDED,
+                            "LicenseRef-b" to LicenseSource.CONCLUDED,
+                            "LicenseRef-a" to LicenseSource.DECLARED,
+                            "LicenseRef-b" to LicenseSource.DECLARED,
+                            "LicenseRef-a" to LicenseSource.DETECTED,
+                            "LicenseRef-b" to LicenseSource.DETECTED
+                        )
             }
         }
 
@@ -91,68 +101,51 @@ class LicenseViewTest : WordSpec() {
             "return the correct licenses" {
                 val view = LicenseView.CONCLUDED_OR_REST
 
-                view.licenses(
-                    packageWithoutLicense,
-                    emptyList()
-                ) should beEmpty()
+                view.getLicensesWithSources(packageWithoutLicense) should beEmpty()
 
-                view.licenses(
-                    packageWithoutLicense,
-                    detectedLicenses
-                ) should containLicensesWithSources(
-                    "LicenseRef-a" to LicenseSource.DETECTED,
-                    "LicenseRef-b" to LicenseSource.DETECTED
-                )
+                view.getLicensesWithSources(packageWithDetectedLicense) should
+                        containLicensesWithSources(
+                            "LicenseRef-a" to LicenseSource.DETECTED,
+                            "LicenseRef-b" to LicenseSource.DETECTED
+                        )
 
-                view.licenses(
-                    packageWithConcludedLicense,
-                    emptyList()
-                ) should containLicensesWithSources(
-                    "LicenseRef-a" to LicenseSource.CONCLUDED,
-                    "LicenseRef-b" to LicenseSource.CONCLUDED
-                )
+                view.getLicensesWithSources(packageWithConcludedLicense) should
+                        containLicensesWithSources(
+                            "LicenseRef-a" to LicenseSource.CONCLUDED,
+                            "LicenseRef-b" to LicenseSource.CONCLUDED
+                        )
 
-                view.licenses(
-                    packageWithConcludedLicense,
-                    detectedLicenses
-                ) should containLicensesWithSources(
-                    "LicenseRef-a" to LicenseSource.CONCLUDED,
-                    "LicenseRef-b" to LicenseSource.CONCLUDED
-                )
+                view.getLicensesWithSources(packageWithConcludedAndDetectedLicense) should
+                        containLicensesWithSources(
+                            "LicenseRef-a" to LicenseSource.CONCLUDED,
+                            "LicenseRef-b" to LicenseSource.CONCLUDED
+                        )
 
-                view.licenses(
-                    packageWithDeclaredLicense,
-                    emptyList()
-                ) should containLicensesWithSources(
-                    "LicenseRef-a" to LicenseSource.DECLARED,
-                    "LicenseRef-b" to LicenseSource.DECLARED
-                )
+                view.getLicensesWithSources(packageWithDeclaredLicense) should
+                        containLicensesWithSources(
+                            "LicenseRef-a" to LicenseSource.DECLARED,
+                            "LicenseRef-b" to LicenseSource.DECLARED
+                        )
 
-                view.licenses(
-                    packageWithDeclaredLicense,
-                    detectedLicenses
-                ) should containLicensesWithSources(
-                    "LicenseRef-a" to LicenseSource.DECLARED,
-                    "LicenseRef-b" to LicenseSource.DECLARED,
-                    "LicenseRef-a" to LicenseSource.DETECTED,
-                    "LicenseRef-b" to LicenseSource.DETECTED
-                )
+                view.getLicensesWithSources(packageWithDeclaredAndDetectedLicense) should
+                        containLicensesWithSources(
+                            "LicenseRef-a" to LicenseSource.DECLARED,
+                            "LicenseRef-b" to LicenseSource.DECLARED,
+                            "LicenseRef-a" to LicenseSource.DETECTED,
+                            "LicenseRef-b" to LicenseSource.DETECTED
+                        )
 
-                view.licenses(
-                    packageWithConcludedAndDeclaredLicense,
-                    emptyList()
-                ) should containLicensesWithSources(
-                    "LicenseRef-a" to LicenseSource.CONCLUDED,
-                    "LicenseRef-b" to LicenseSource.CONCLUDED
-                )
+                view.getLicensesWithSources(packageWithConcludedAndDeclaredLicense) should
+                        containLicensesWithSources(
+                            "LicenseRef-a" to LicenseSource.CONCLUDED,
+                            "LicenseRef-b" to LicenseSource.CONCLUDED
+                        )
 
-                view.licenses(
-                    packageWithConcludedAndDeclaredLicense,
-                    detectedLicenses
-                ) should containLicensesWithSources(
-                    "LicenseRef-a" to LicenseSource.CONCLUDED,
-                    "LicenseRef-b" to LicenseSource.CONCLUDED
-                )
+                view.getLicensesWithSources(packageWithConcludedAndDeclaredAndDetectedLicense) should
+                        containLicensesWithSources(
+                            "LicenseRef-a" to LicenseSource.CONCLUDED,
+                            "LicenseRef-b" to LicenseSource.CONCLUDED
+                        )
             }
         }
 
@@ -160,186 +153,133 @@ class LicenseViewTest : WordSpec() {
             "return the correct licenses" {
                 val view = LicenseView.CONCLUDED_OR_DECLARED_OR_DETECTED
 
-                view.licenses(
-                    packageWithoutLicense,
-                    emptyList()
-                ) should beEmpty()
+                view.getLicensesWithSources(packageWithoutLicense) should beEmpty()
 
-                view.licenses(
-                    packageWithoutLicense,
-                    detectedLicenses
-                ) should containLicensesWithSources(
-                    "LicenseRef-a" to LicenseSource.DETECTED,
-                    "LicenseRef-b" to LicenseSource.DETECTED
-                )
+                view.getLicensesWithSources(packageWithDetectedLicense) should
+                        containLicensesWithSources(
+                            "LicenseRef-a" to LicenseSource.DETECTED,
+                            "LicenseRef-b" to LicenseSource.DETECTED
+                        )
 
-                view.licenses(
-                    packageWithConcludedLicense,
-                    emptyList()
-                ) should containLicensesWithSources(
-                    "LicenseRef-a" to LicenseSource.CONCLUDED,
-                    "LicenseRef-b" to LicenseSource.CONCLUDED
-                )
+                view.getLicensesWithSources(packageWithConcludedLicense) should
+                        containLicensesWithSources(
+                            "LicenseRef-a" to LicenseSource.CONCLUDED,
+                            "LicenseRef-b" to LicenseSource.CONCLUDED
+                        )
 
-                view.licenses(
-                    packageWithConcludedLicense,
-                    detectedLicenses
-                ) should containLicensesWithSources(
-                    "LicenseRef-a" to LicenseSource.CONCLUDED,
-                    "LicenseRef-b" to LicenseSource.CONCLUDED
-                )
+                view.getLicensesWithSources(packageWithConcludedAndDetectedLicense) should
+                        containLicensesWithSources(
+                            "LicenseRef-a" to LicenseSource.CONCLUDED,
+                            "LicenseRef-b" to LicenseSource.CONCLUDED
+                        )
 
-                view.licenses(
-                    packageWithDeclaredLicense,
-                    emptyList()
-                ) should containLicensesWithSources(
-                    "LicenseRef-a" to LicenseSource.DECLARED,
-                    "LicenseRef-b" to LicenseSource.DECLARED
-                )
+                view.getLicensesWithSources(packageWithDeclaredLicense) should
+                        containLicensesWithSources(
+                            "LicenseRef-a" to LicenseSource.DECLARED,
+                            "LicenseRef-b" to LicenseSource.DECLARED
+                        )
 
-                view.licenses(
-                    packageWithDeclaredLicense,
-                    detectedLicenses
-                ) should containLicensesWithSources(
-                    "LicenseRef-a" to LicenseSource.DECLARED,
-                    "LicenseRef-b" to LicenseSource.DECLARED
-                )
+                view.getLicensesWithSources(packageWithDeclaredAndDetectedLicense) should
+                        containLicensesWithSources(
+                            "LicenseRef-a" to LicenseSource.DECLARED,
+                            "LicenseRef-b" to LicenseSource.DECLARED
+                        )
 
-                view.licenses(
-                    packageWithConcludedAndDeclaredLicense,
-                    emptyList()
-                ) should containLicensesWithSources(
-                    "LicenseRef-a" to LicenseSource.CONCLUDED,
-                    "LicenseRef-b" to LicenseSource.CONCLUDED
-                )
+                view.getLicensesWithSources(packageWithConcludedAndDeclaredLicense) should
+                        containLicensesWithSources(
+                            "LicenseRef-a" to LicenseSource.CONCLUDED,
+                            "LicenseRef-b" to LicenseSource.CONCLUDED
+                        )
 
-                view.licenses(
-                    packageWithConcludedAndDeclaredLicense,
-                    detectedLicenses
-                ) should containLicensesWithSources(
-                    "LicenseRef-a" to LicenseSource.CONCLUDED,
-                    "LicenseRef-b" to LicenseSource.CONCLUDED
-                )
+                view.getLicensesWithSources(packageWithConcludedAndDeclaredAndDetectedLicense) should
+                        containLicensesWithSources(
+                            "LicenseRef-a" to LicenseSource.CONCLUDED,
+                            "LicenseRef-b" to LicenseSource.CONCLUDED
+                        )
             }
         }
 
         "CONCLUDED_OR_DETECTED" should {
             "return the correct licenses" {
                 val view = LicenseView.CONCLUDED_OR_DETECTED
-                view.licenses(
-                    packageWithoutLicense,
-                    emptyList()
-                ) should beEmpty()
 
-                view.licenses(
-                    packageWithoutLicense,
-                    detectedLicenses
-                ) should containLicensesWithSources(
-                    "LicenseRef-a" to LicenseSource.DETECTED,
-                    "LicenseRef-b" to LicenseSource.DETECTED
-                )
+                view.getLicensesWithSources(packageWithoutLicense) should beEmpty()
 
-                view.licenses(
-                    packageWithConcludedLicense,
-                    emptyList()
-                ) should containLicensesWithSources(
-                    "LicenseRef-a" to LicenseSource.CONCLUDED,
-                    "LicenseRef-b" to LicenseSource.CONCLUDED
-                )
+                view.getLicensesWithSources(packageWithDetectedLicense) should
+                        containLicensesWithSources(
+                            "LicenseRef-a" to LicenseSource.DETECTED,
+                            "LicenseRef-b" to LicenseSource.DETECTED
+                        )
 
-                view.licenses(
-                    packageWithConcludedLicense,
-                    detectedLicenses
-                ) should containLicensesWithSources(
-                    "LicenseRef-a" to LicenseSource.CONCLUDED,
-                    "LicenseRef-b" to LicenseSource.CONCLUDED
-                )
+                view.getLicensesWithSources(packageWithConcludedLicense) should
+                        containLicensesWithSources(
+                            "LicenseRef-a" to LicenseSource.CONCLUDED,
+                            "LicenseRef-b" to LicenseSource.CONCLUDED
+                        )
 
-                view.licenses(
-                    packageWithDeclaredLicense,
-                    emptyList()
-                ) should beEmpty()
+                view.getLicensesWithSources(packageWithConcludedAndDetectedLicense) should
+                        containLicensesWithSources(
+                            "LicenseRef-a" to LicenseSource.CONCLUDED,
+                            "LicenseRef-b" to LicenseSource.CONCLUDED
+                        )
 
-                view.licenses(
-                    packageWithDeclaredLicense,
-                    detectedLicenses
-                ) should containLicensesWithSources(
-                    "LicenseRef-a" to LicenseSource.DETECTED,
-                    "LicenseRef-b" to LicenseSource.DETECTED
-                )
+                view.getLicensesWithSources(packageWithDeclaredLicense) should beEmpty()
 
-                view.licenses(
-                    packageWithConcludedAndDeclaredLicense,
-                    emptyList()
-                ) should containLicensesWithSources(
-                    "LicenseRef-a" to LicenseSource.CONCLUDED,
-                    "LicenseRef-b" to LicenseSource.CONCLUDED
-                )
+                view.getLicensesWithSources(packageWithDeclaredAndDetectedLicense) should
+                        containLicensesWithSources(
+                            "LicenseRef-a" to LicenseSource.DETECTED,
+                            "LicenseRef-b" to LicenseSource.DETECTED
+                        )
 
-                view.licenses(
-                    packageWithConcludedAndDeclaredLicense,
-                    detectedLicenses
-                ) should containLicensesWithSources(
-                    "LicenseRef-a" to LicenseSource.CONCLUDED,
-                    "LicenseRef-b" to LicenseSource.CONCLUDED
-                )
+                view.getLicensesWithSources(packageWithConcludedAndDeclaredLicense) should
+                        containLicensesWithSources(
+                            "LicenseRef-a" to LicenseSource.CONCLUDED,
+                            "LicenseRef-b" to LicenseSource.CONCLUDED
+                        )
+
+                view.getLicensesWithSources(packageWithConcludedAndDeclaredAndDetectedLicense) should
+                        containLicensesWithSources(
+                            "LicenseRef-a" to LicenseSource.CONCLUDED,
+                            "LicenseRef-b" to LicenseSource.CONCLUDED
+                        )
             }
         }
 
         "ONLY_CONCLUDED" should {
             "return only the concluded licenses" {
                 val view = LicenseView.ONLY_CONCLUDED
-                view.licenses(
-                    packageWithoutLicense,
-                    emptyList()
-                ) should beEmpty()
 
-                view.licenses(
-                    packageWithoutLicense,
-                    detectedLicenses
-                ) should beEmpty()
+                view.getLicensesWithSources(packageWithoutLicense) should beEmpty()
 
-                view.licenses(
-                    packageWithConcludedLicense,
-                    emptyList()
-                ) should containLicensesWithSources(
-                    "LicenseRef-a" to LicenseSource.CONCLUDED,
-                    "LicenseRef-b" to LicenseSource.CONCLUDED
-                )
+                view.getLicensesWithSources(packageWithDetectedLicense) should beEmpty()
 
-                view.licenses(
-                    packageWithConcludedLicense,
-                    detectedLicenses
-                ) should containLicensesWithSources(
-                    "LicenseRef-a" to LicenseSource.CONCLUDED,
-                    "LicenseRef-b" to LicenseSource.CONCLUDED
-                )
+                view.getLicensesWithSources(packageWithConcludedLicense) should
+                        containLicensesWithSources(
+                            "LicenseRef-a" to LicenseSource.CONCLUDED,
+                            "LicenseRef-b" to LicenseSource.CONCLUDED
+                        )
 
-                view.licenses(
-                    packageWithDeclaredLicense,
-                    emptyList()
-                ) should beEmpty()
+                view.getLicensesWithSources(packageWithConcludedAndDetectedLicense) should
+                        containLicensesWithSources(
+                            "LicenseRef-a" to LicenseSource.CONCLUDED,
+                            "LicenseRef-b" to LicenseSource.CONCLUDED
+                        )
 
-                view.licenses(
-                    packageWithDeclaredLicense,
-                    detectedLicenses
-                ) should beEmpty()
+                view.getLicensesWithSources(packageWithDeclaredLicense) should beEmpty()
 
-                view.licenses(
-                    packageWithConcludedAndDeclaredLicense,
-                    emptyList()
-                ) should containLicensesWithSources(
-                    "LicenseRef-a" to LicenseSource.CONCLUDED,
-                    "LicenseRef-b" to LicenseSource.CONCLUDED
-                )
+                view.getLicensesWithSources(packageWithDeclaredAndDetectedLicense) should beEmpty()
 
-                view.licenses(
-                    packageWithConcludedAndDeclaredLicense,
-                    detectedLicenses
-                ) should containLicensesWithSources(
-                    "LicenseRef-a" to LicenseSource.CONCLUDED,
-                    "LicenseRef-b" to LicenseSource.CONCLUDED
-                )
+                view.getLicensesWithSources(packageWithConcludedAndDeclaredLicense) should
+                        containLicensesWithSources(
+                            "LicenseRef-a" to LicenseSource.CONCLUDED,
+                            "LicenseRef-b" to LicenseSource.CONCLUDED
+                        )
+
+                view.getLicensesWithSources(packageWithConcludedAndDeclaredAndDetectedLicense) should
+                        containLicensesWithSources(
+                            "LicenseRef-a" to LicenseSource.CONCLUDED,
+                            "LicenseRef-b" to LicenseSource.CONCLUDED
+                        )
             }
         }
 
@@ -347,57 +287,37 @@ class LicenseViewTest : WordSpec() {
             "return only the declared licenses" {
                 val view = LicenseView.ONLY_DECLARED
 
-                view.licenses(
-                    packageWithoutLicense,
-                    emptyList()
-                ) should beEmpty()
+                view.getLicensesWithSources(packageWithoutLicense) should beEmpty()
 
-                view.licenses(
-                    packageWithoutLicense,
-                    detectedLicenses
-                ) should beEmpty()
+                view.getLicensesWithSources(packageWithDetectedLicense) should beEmpty()
 
-                view.licenses(
-                    packageWithConcludedLicense,
-                    emptyList()
-                ) should beEmpty()
+                view.getLicensesWithSources(packageWithConcludedLicense) should beEmpty()
 
-                view.licenses(
-                    packageWithConcludedLicense,
-                    detectedLicenses
-                ) should beEmpty()
+                view.getLicensesWithSources(packageWithConcludedAndDetectedLicense) should beEmpty()
 
-                view.licenses(
-                    packageWithDeclaredLicense,
-                    emptyList()
-                ) should containLicensesWithSources(
-                    "LicenseRef-a" to LicenseSource.DECLARED,
-                    "LicenseRef-b" to LicenseSource.DECLARED
-                )
+                view.getLicensesWithSources(packageWithDeclaredLicense) should
+                        containLicensesWithSources(
+                            "LicenseRef-a" to LicenseSource.DECLARED,
+                            "LicenseRef-b" to LicenseSource.DECLARED
+                        )
 
-                view.licenses(
-                    packageWithDeclaredLicense,
-                    detectedLicenses
-                ) should containLicensesWithSources(
-                    "LicenseRef-a" to LicenseSource.DECLARED,
-                    "LicenseRef-b" to LicenseSource.DECLARED
-                )
+                view.getLicensesWithSources(packageWithDeclaredAndDetectedLicense) should
+                        containLicensesWithSources(
+                            "LicenseRef-a" to LicenseSource.DECLARED,
+                            "LicenseRef-b" to LicenseSource.DECLARED
+                        )
 
-                view.licenses(
-                    packageWithConcludedAndDeclaredLicense,
-                    emptyList()
-                ) should containLicensesWithSources(
-                    "LicenseRef-a" to LicenseSource.DECLARED,
-                    "LicenseRef-b" to LicenseSource.DECLARED
-                )
+                view.getLicensesWithSources(packageWithConcludedAndDeclaredLicense) should
+                        containLicensesWithSources(
+                            "LicenseRef-a" to LicenseSource.DECLARED,
+                            "LicenseRef-b" to LicenseSource.DECLARED
+                        )
 
-                view.licenses(
-                    packageWithConcludedAndDeclaredLicense,
-                    detectedLicenses
-                ) should containLicensesWithSources(
-                    "LicenseRef-a" to LicenseSource.DECLARED,
-                    "LicenseRef-b" to LicenseSource.DECLARED
-                )
+                view.getLicensesWithSources(packageWithConcludedAndDeclaredAndDetectedLicense) should
+                        containLicensesWithSources(
+                            "LicenseRef-a" to LicenseSource.DECLARED,
+                            "LicenseRef-b" to LicenseSource.DECLARED
+                        )
             }
         }
 
@@ -405,57 +325,37 @@ class LicenseViewTest : WordSpec() {
             "return only the detected licenses" {
                 val view = LicenseView.ONLY_DETECTED
 
-                view.licenses(
-                    packageWithoutLicense,
-                    emptyList()
-                ) should beEmpty()
+                view.getLicensesWithSources(packageWithoutLicense) should beEmpty()
 
-                view.licenses(
-                    packageWithoutLicense,
-                    detectedLicenses
-                ) should containLicensesWithSources(
-                    "LicenseRef-a" to LicenseSource.DETECTED,
-                    "LicenseRef-b" to LicenseSource.DETECTED
-                )
+                view.getLicensesWithSources(packageWithDetectedLicense) should
+                        containLicensesWithSources(
+                            "LicenseRef-a" to LicenseSource.DETECTED,
+                            "LicenseRef-b" to LicenseSource.DETECTED
+                        )
 
-                view.licenses(
-                    packageWithConcludedLicense,
-                    emptyList()
-                ) should beEmpty()
+                view.getLicensesWithSources(packageWithConcludedLicense) should beEmpty()
 
-                view.licenses(
-                    packageWithConcludedLicense,
-                    detectedLicenses
-                ) should containLicensesWithSources(
-                    "LicenseRef-a" to LicenseSource.DETECTED,
-                    "LicenseRef-b" to LicenseSource.DETECTED
-                )
+                view.getLicensesWithSources(packageWithConcludedAndDetectedLicense) should
+                        containLicensesWithSources(
+                            "LicenseRef-a" to LicenseSource.DETECTED,
+                            "LicenseRef-b" to LicenseSource.DETECTED
+                        )
 
-                view.licenses(
-                    packageWithDeclaredLicense,
-                    emptyList()
-                ) should beEmpty()
+                view.getLicensesWithSources(packageWithDeclaredLicense) should beEmpty()
 
-                view.licenses(
-                    packageWithDeclaredLicense,
-                    detectedLicenses
-                ) should containLicensesWithSources(
-                    "LicenseRef-a" to LicenseSource.DETECTED,
-                    "LicenseRef-b" to LicenseSource.DETECTED
-                )
+                view.getLicensesWithSources(packageWithDeclaredAndDetectedLicense) should
+                        containLicensesWithSources(
+                            "LicenseRef-a" to LicenseSource.DETECTED,
+                            "LicenseRef-b" to LicenseSource.DETECTED
+                        )
 
-                view.licenses(
-                    packageWithConcludedAndDeclaredLicense,
-                    emptyList()
-                ) should beEmpty()
+                view.getLicensesWithSources(packageWithConcludedAndDeclaredLicense) should beEmpty()
 
-                view.licenses(
-                    packageWithConcludedAndDeclaredLicense,
-                    detectedLicenses
-                ) should containLicensesWithSources(
-                    "LicenseRef-a" to LicenseSource.DETECTED,
-                    "LicenseRef-b" to LicenseSource.DETECTED
-                )
+                view.getLicensesWithSources(packageWithConcludedAndDeclaredAndDetectedLicense) should
+                        containLicensesWithSources(
+                            "LicenseRef-a" to LicenseSource.DETECTED,
+                            "LicenseRef-b" to LicenseSource.DETECTED
+                        )
             }
         }
     }
