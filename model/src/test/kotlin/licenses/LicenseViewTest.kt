@@ -42,24 +42,24 @@ class LicenseViewTest : WordSpec() {
                     "LicenseRef-b" to LicenseSource.DETECTED
                 )
 
-                view.licenses(packageWithOnlyConcludedLicense, emptyList()) should containLicensesWithSources(
+                view.licenses(packageWithConcludedLicense, emptyList()) should containLicensesWithSources(
                     "LicenseRef-a" to LicenseSource.CONCLUDED,
                     "LicenseRef-b" to LicenseSource.CONCLUDED
                 )
 
-                view.licenses(packageWithOnlyConcludedLicense, detectedLicenses) should containLicensesWithSources(
+                view.licenses(packageWithConcludedLicense, detectedLicenses) should containLicensesWithSources(
                     "LicenseRef-a" to LicenseSource.CONCLUDED,
                     "LicenseRef-b" to LicenseSource.CONCLUDED,
                     "LicenseRef-a" to LicenseSource.DETECTED,
                     "LicenseRef-b" to LicenseSource.DETECTED
                 )
 
-                view.licenses(packageWithOnlyDeclaredLicense, emptyList()) should containLicensesWithSources(
+                view.licenses(packageWithDeclaredLicense, emptyList()) should containLicensesWithSources(
                     "LicenseRef-a" to LicenseSource.DECLARED,
                     "LicenseRef-b" to LicenseSource.DECLARED
                 )
 
-                view.licenses(packageWithOnlyDeclaredLicense, detectedLicenses) should containLicensesWithSources(
+                view.licenses(packageWithDeclaredLicense, detectedLicenses) should containLicensesWithSources(
                     "LicenseRef-a" to LicenseSource.DECLARED,
                     "LicenseRef-b" to LicenseSource.DECLARED,
                     "LicenseRef-a" to LicenseSource.DETECTED,
@@ -105,7 +105,7 @@ class LicenseViewTest : WordSpec() {
                 )
 
                 view.licenses(
-                    packageWithOnlyConcludedLicense,
+                    packageWithConcludedLicense,
                     emptyList()
                 ) should containLicensesWithSources(
                     "LicenseRef-a" to LicenseSource.CONCLUDED,
@@ -113,7 +113,7 @@ class LicenseViewTest : WordSpec() {
                 )
 
                 view.licenses(
-                    packageWithOnlyConcludedLicense,
+                    packageWithConcludedLicense,
                     detectedLicenses
                 ) should containLicensesWithSources(
                     "LicenseRef-a" to LicenseSource.CONCLUDED,
@@ -121,7 +121,7 @@ class LicenseViewTest : WordSpec() {
                 )
 
                 view.licenses(
-                    packageWithOnlyDeclaredLicense,
+                    packageWithDeclaredLicense,
                     emptyList()
                 ) should containLicensesWithSources(
                     "LicenseRef-a" to LicenseSource.DECLARED,
@@ -129,7 +129,7 @@ class LicenseViewTest : WordSpec() {
                 )
 
                 view.licenses(
-                    packageWithOnlyDeclaredLicense,
+                    packageWithDeclaredLicense,
                     detectedLicenses
                 ) should containLicensesWithSources(
                     "LicenseRef-a" to LicenseSource.DECLARED,
@@ -174,7 +174,7 @@ class LicenseViewTest : WordSpec() {
                 )
 
                 view.licenses(
-                    packageWithOnlyConcludedLicense,
+                    packageWithConcludedLicense,
                     emptyList()
                 ) should containLicensesWithSources(
                     "LicenseRef-a" to LicenseSource.CONCLUDED,
@@ -182,7 +182,7 @@ class LicenseViewTest : WordSpec() {
                 )
 
                 view.licenses(
-                    packageWithOnlyConcludedLicense,
+                    packageWithConcludedLicense,
                     detectedLicenses
                 ) should containLicensesWithSources(
                     "LicenseRef-a" to LicenseSource.CONCLUDED,
@@ -190,7 +190,7 @@ class LicenseViewTest : WordSpec() {
                 )
 
                 view.licenses(
-                    packageWithOnlyDeclaredLicense,
+                    packageWithDeclaredLicense,
                     emptyList()
                 ) should containLicensesWithSources(
                     "LicenseRef-a" to LicenseSource.DECLARED,
@@ -198,7 +198,7 @@ class LicenseViewTest : WordSpec() {
                 )
 
                 view.licenses(
-                    packageWithOnlyDeclaredLicense,
+                    packageWithDeclaredLicense,
                     detectedLicenses
                 ) should containLicensesWithSources(
                     "LicenseRef-a" to LicenseSource.DECLARED,
@@ -240,7 +240,7 @@ class LicenseViewTest : WordSpec() {
                 )
 
                 view.licenses(
-                    packageWithOnlyConcludedLicense,
+                    packageWithConcludedLicense,
                     emptyList()
                 ) should containLicensesWithSources(
                     "LicenseRef-a" to LicenseSource.CONCLUDED,
@@ -248,7 +248,7 @@ class LicenseViewTest : WordSpec() {
                 )
 
                 view.licenses(
-                    packageWithOnlyConcludedLicense,
+                    packageWithConcludedLicense,
                     detectedLicenses
                 ) should containLicensesWithSources(
                     "LicenseRef-a" to LicenseSource.CONCLUDED,
@@ -256,12 +256,12 @@ class LicenseViewTest : WordSpec() {
                 )
 
                 view.licenses(
-                    packageWithOnlyDeclaredLicense,
+                    packageWithDeclaredLicense,
                     emptyList()
                 ) should beEmpty()
 
                 view.licenses(
-                    packageWithOnlyDeclaredLicense,
+                    packageWithDeclaredLicense,
                     detectedLicenses
                 ) should containLicensesWithSources(
                     "LicenseRef-a" to LicenseSource.DETECTED,
@@ -300,7 +300,7 @@ class LicenseViewTest : WordSpec() {
                 ) should beEmpty()
 
                 view.licenses(
-                    packageWithOnlyConcludedLicense,
+                    packageWithConcludedLicense,
                     emptyList()
                 ) should containLicensesWithSources(
                     "LicenseRef-a" to LicenseSource.CONCLUDED,
@@ -308,7 +308,7 @@ class LicenseViewTest : WordSpec() {
                 )
 
                 view.licenses(
-                    packageWithOnlyConcludedLicense,
+                    packageWithConcludedLicense,
                     detectedLicenses
                 ) should containLicensesWithSources(
                     "LicenseRef-a" to LicenseSource.CONCLUDED,
@@ -316,12 +316,12 @@ class LicenseViewTest : WordSpec() {
                 )
 
                 view.licenses(
-                    packageWithOnlyDeclaredLicense,
+                    packageWithDeclaredLicense,
                     emptyList()
                 ) should beEmpty()
 
                 view.licenses(
-                    packageWithOnlyDeclaredLicense,
+                    packageWithDeclaredLicense,
                     detectedLicenses
                 ) should beEmpty()
 
@@ -358,17 +358,17 @@ class LicenseViewTest : WordSpec() {
                 ) should beEmpty()
 
                 view.licenses(
-                    packageWithOnlyConcludedLicense,
+                    packageWithConcludedLicense,
                     emptyList()
                 ) should beEmpty()
 
                 view.licenses(
-                    packageWithOnlyConcludedLicense,
+                    packageWithConcludedLicense,
                     detectedLicenses
                 ) should beEmpty()
 
                 view.licenses(
-                    packageWithOnlyDeclaredLicense,
+                    packageWithDeclaredLicense,
                     emptyList()
                 ) should containLicensesWithSources(
                     "LicenseRef-a" to LicenseSource.DECLARED,
@@ -376,7 +376,7 @@ class LicenseViewTest : WordSpec() {
                 )
 
                 view.licenses(
-                    packageWithOnlyDeclaredLicense,
+                    packageWithDeclaredLicense,
                     detectedLicenses
                 ) should containLicensesWithSources(
                     "LicenseRef-a" to LicenseSource.DECLARED,
@@ -419,12 +419,12 @@ class LicenseViewTest : WordSpec() {
                 )
 
                 view.licenses(
-                    packageWithOnlyConcludedLicense,
+                    packageWithConcludedLicense,
                     emptyList()
                 ) should beEmpty()
 
                 view.licenses(
-                    packageWithOnlyConcludedLicense,
+                    packageWithConcludedLicense,
                     detectedLicenses
                 ) should containLicensesWithSources(
                     "LicenseRef-a" to LicenseSource.DETECTED,
@@ -432,12 +432,12 @@ class LicenseViewTest : WordSpec() {
                 )
 
                 view.licenses(
-                    packageWithOnlyDeclaredLicense,
+                    packageWithDeclaredLicense,
                     emptyList()
                 ) should beEmpty()
 
                 view.licenses(
-                    packageWithOnlyDeclaredLicense,
+                    packageWithDeclaredLicense,
                     detectedLicenses
                 ) should containLicensesWithSources(
                     "LicenseRef-a" to LicenseSource.DETECTED,
