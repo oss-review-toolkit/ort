@@ -167,13 +167,14 @@ class CycloneDxReporter : Reporter {
     }
 
     private fun addPackageToBom(input: ReporterInput, pkg: Package, bom: Bom) {
-        // TODO: We should actually use the concluded license expression here, but we first need a workflow to
-        //       ensure it is being set.
         val resolvedLicenseInfo = input.licenseInfoResolver.resolveLicenseInfo(pkg.id)
+
+        val concludedLicenseNames = resolvedLicenseInfo.getLicenseNames(LicenseSource.CONCLUDED)
         val declaredLicenseNames = resolvedLicenseInfo.getLicenseNames(LicenseSource.DECLARED)
         val detectedLicenseNames = resolvedLicenseInfo.getLicenseNames(LicenseSource.DETECTED)
 
-        val licenseObjects = mapLicenseNamesToObjects(declaredLicenseNames, "declared license", input) +
+        val licenseObjects = mapLicenseNamesToObjects(concludedLicenseNames, "concluded license", input) +
+                mapLicenseNamesToObjects(declaredLicenseNames, "declared license", input) +
                 mapLicenseNamesToObjects(detectedLicenseNames, "detected license", input)
 
         val binaryHash = mapHash(pkg.binaryArtifact.hash)
