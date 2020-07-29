@@ -19,14 +19,20 @@
 
 package org.ossreviewtoolkit.model.licenses
 
+import io.kotest.assertions.show.show
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.Matcher
+import io.kotest.matchers.MatcherResult
 import io.kotest.matchers.collections.beEmpty
+import io.kotest.matchers.collections.containAll
 import io.kotest.matchers.collections.containExactlyInAnyOrder
+import io.kotest.matchers.neverNullMatcher
 import io.kotest.matchers.should
 
 import org.ossreviewtoolkit.model.LicenseSource
 import org.ossreviewtoolkit.model.Package
+import org.ossreviewtoolkit.model.config.CopyrightGarbage
+import org.ossreviewtoolkit.model.utils.SimplePackageConfigurationProvider
 import org.ossreviewtoolkit.model.utils.getDetectedLicensesForId
 import org.ossreviewtoolkit.spdx.SpdxExpression
 import org.ossreviewtoolkit.spdx.SpdxSingleLicenseExpression
@@ -376,4 +382,37 @@ class LicenseViewLicensesTest : LicenseViewTest() {
         vararg licenses: Pair<String, LicenseSource>
     ): Matcher<List<Pair<SpdxExpression, LicenseSource>>?> =
         containExactlyInAnyOrder(licenses.map { Pair(it.first.toSpdx(), it.second) })
+}
+
+class LicenseViewFilterTest : LicenseViewTest() {
+    private val licenseInfoResolver = LicenseInfoResolver(
+        DefaultLicenseInfoProvider(ortResult, SimplePackageConfigurationProvider()),
+        CopyrightGarbage()
+    )
+
+    override fun LicenseView.getLicensesWithSources(
+        pkg: Package
+    ): List<Pair<SpdxSingleLicenseExpression, LicenseSource>> =
+        filter(licenseInfoResolver.resolveLicenseInfo(pkg.id)).licenses.flatMap { resolvedLicense ->
+            resolvedLicense.sources.map { resolvedLicense.license to it }
+        }
+
+    override fun containLicensesWithSources(
+        vararg licenses: Pair<String, LicenseSource>
+    ): Matcher<List<Pair<SpdxExpression, LicenseSource>>?> =
+        neverNullMatcher { value ->
+            val expectedLicenses = licenses.map { it.first.toSpdx() }.toSet()
+            val actualLicenses = value.map { it.first }.toSet()
+
+            if (expectedLicenses == actualLicenses) {
+                containAll(licenses.map { Pair(it.first.toSpdx(), it.second) }).test(value)
+            } else {
+                MatcherResult(
+                    false,
+                    "List should contain exactly licenses ${expectedLicenses.show().value}, but has " +
+                            actualLicenses.show().value,
+                    "List should not contain exactly licenses ${expectedLicenses.show().value}"
+                )
+            }
+        }
 }
