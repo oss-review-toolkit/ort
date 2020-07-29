@@ -28,7 +28,6 @@ import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.LicenseFindings
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.Package
-import org.ossreviewtoolkit.model.PackageLinkage
 import org.ossreviewtoolkit.model.Project
 import org.ossreviewtoolkit.model.Repository
 import org.ossreviewtoolkit.model.ScanRecord
@@ -58,18 +57,6 @@ val licenseFindings = listOf(
     LicenseFindings(SpdxLicenseReferenceExpression("LicenseRef-b"), sortedSetOf(), sortedSetOf())
 )
 
-val packageExcluded = Package.EMPTY.copy(
-    id = Identifier("Maven:org.ossreviewtoolkit:package-excluded:1.0")
-)
-
-val packageDynamicallyLinked = Package.EMPTY.copy(
-    id = Identifier("Maven:org.ossreviewtoolkit:package-dynamically-linked:1.0")
-)
-
-val packageStaticallyLinked = Package.EMPTY.copy(
-    id = Identifier("Maven:org.ossreviewtoolkit:package-statically-linked:1.0")
-)
-
 val packageWithoutLicense = Package.EMPTY.copy(
     id = Identifier("Maven:org.ossreviewtoolkit:package-without-license:1.0")
 )
@@ -93,52 +80,26 @@ val packageWithConcludedAndDeclaredLicense = Package.EMPTY.copy(
 )
 
 val allPackages = listOf(
-    packageExcluded,
-    packageDynamicallyLinked,
-    packageStaticallyLinked,
     packageWithoutLicense,
     packageWithOnlyConcludedLicense,
     packageWithOnlyDeclaredLicense,
     packageWithConcludedAndDeclaredLicense
 )
 
-val scopeExcluded = Scope(
-    name = "compile",
-    dependencies = sortedSetOf(
-        packageExcluded.toReference()
-    )
-)
-
-val projectExcluded = Project.EMPTY.copy(
-    id = Identifier("Maven:org.ossreviewtoolkit:project-excluded:1.0"),
-    definitionFilePath = "excluded/pom.xml",
-    scopes = sortedSetOf(scopeExcluded)
-)
-
-val packageRefDynamicallyLinked = packageDynamicallyLinked.toReference(PackageLinkage.DYNAMIC)
-val packageRefStaticallyLinked = packageStaticallyLinked.toReference(PackageLinkage.STATIC)
-
-val scopeIncluded = Scope(
+val scope = Scope(
     name = "compile",
     dependencies = sortedSetOf(
         packageWithoutLicense.toReference(),
         packageWithOnlyConcludedLicense.toReference(),
         packageWithOnlyDeclaredLicense.toReference(),
-        packageWithConcludedAndDeclaredLicense.toReference(),
-        packageRefDynamicallyLinked,
-        packageRefStaticallyLinked
+        packageWithConcludedAndDeclaredLicense.toReference()
     )
 )
 
-val projectIncluded = Project.EMPTY.copy(
+val project = Project.EMPTY.copy(
     id = Identifier("Maven:org.ossreviewtoolkit:project-included:1.0"),
     definitionFilePath = "included/pom.xml",
-    scopes = sortedSetOf(scopeIncluded)
-)
-
-val allProjects = listOf(
-    projectExcluded,
-    projectIncluded
+    scopes = sortedSetOf(scope)
 )
 
 val ortResult = OrtResult(
@@ -160,10 +121,7 @@ val ortResult = OrtResult(
         environment = Environment(),
         config = AnalyzerConfiguration(ignoreToolVersions = true, allowDynamicVersions = true),
         result = AnalyzerResult(
-            projects = sortedSetOf(
-                projectExcluded,
-                projectIncluded
-            ),
+            projects = sortedSetOf(project),
             packages = allPackages.mapTo(sortedSetOf()) { CuratedPackage(it) }
         )
     ),
