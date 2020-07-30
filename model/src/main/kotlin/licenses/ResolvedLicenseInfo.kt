@@ -78,6 +78,15 @@ data class ResolvedLicenseInfo(
                 it.provenance == provenance && it.location.path == path
             }
         }
+
+    /**
+     * Filter all excluded licenses and copyrights. Licenses are removed if they are only
+     * [detected][LicenseSource.DETECTED] and all [locations][ResolvedLicense.locations] have
+     * [matching path excludes][ResolvedLicenseLocation.matchingPathExcludes]. Copyrights are removed if all
+     * [findings][ResolvedCopyright.findings] have
+     * [matching path excludes][ResolvedCopyrightFinding.matchingPathExcludes].
+     */
+    fun filterExcluded(): ResolvedLicenseInfo = copy(licenses = licenses.filterExcluded())
 }
 
 /**
@@ -111,6 +120,26 @@ data class ResolvedLicense(
     val isDetectedExcluded by lazy {
         LicenseSource.DETECTED in sources && locations.all { it.matchingPathExcludes.isNotEmpty() }
     }
+
+    fun getCopyrights(omitExcluded: Boolean = false): Set<String> =
+        locations.flatMapTo(sortedSetOf()) { location ->
+            location.copyrights.filter { copyright ->
+                !omitExcluded || copyright.findings.any { it.matchingPathExcludes.isEmpty() }
+            }.map { it.statement }
+        }
+
+    /**
+     * Filter all excluded copyrights. Copyrights are removed if all [findings][ResolvedCopyright.findings] have
+     * [matching path excludes][ResolvedCopyrightFinding.matchingPathExcludes].
+     */
+    fun filterExcludedCopyrights(): ResolvedLicense =
+        // TODO: A possible improvement for this function would be to also remove individual excluded copyright
+        //       findings, and to re-run the copyright statements processor with the filtered findings.
+        copy(locations = locations.mapTo(mutableSetOf()) { location ->
+            location.copy(copyrights = location.copyrights.filterTo(mutableSetOf()) { resolvedCopyright ->
+                resolvedCopyright.findings.any { it.matchingPathExcludes.isEmpty() }
+            })
+        })
 }
 
 /**
@@ -178,3 +207,16 @@ data class ResolvedCopyrightFinding(
      */
     val matchingPathExcludes: List<PathExclude>
 )
+
+/**
+ * Filter all excluded licenses and copyrights. Licenses are removed if they are only
+ * [detected][LicenseSource.DETECTED] and all [locations][ResolvedLicense.locations] have
+ * [matching path excludes][ResolvedLicenseLocation.matchingPathExcludes]. Copyrights are removed if all
+ * [findings][ResolvedCopyright.findings] have
+ * [matching path excludes][ResolvedCopyrightFinding.matchingPathExcludes].
+ */
+fun List<ResolvedLicense>.filterExcluded() =
+    filter { resolvedLicense ->
+        resolvedLicense.sources != setOf(LicenseSource.DETECTED) ||
+                resolvedLicense.locations.any { it.matchingPathExcludes.isEmpty() }
+    }.map { it.filterExcludedCopyrights() }
