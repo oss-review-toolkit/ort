@@ -259,21 +259,27 @@ pipeline {
             }
 
             steps {
-                sh '''
-                    /opt/ort/bin/set_gradle_proxy.sh
+                script {
+                    def status = sh returnStatus: true, script: '''
+                        /opt/ort/bin/set_gradle_proxy.sh
 
-                    if [ "$ALLOW_DYNAMIC_VERSIONS" = "true" ]; then
-                        ALLOW_DYNAMIC_VERSIONS_OPTION="--allow-dynamic-versions"
-                    fi
+                        if [ "$ALLOW_DYNAMIC_VERSIONS" = "true" ]; then
+                            ALLOW_DYNAMIC_VERSIONS_OPTION="--allow-dynamic-versions"
+                        fi
 
-                    if [ "$USE_CLEARLY_DEFINED_CURATIONS" = "true" ]; then
-                        USE_CLEARLY_DEFINED_CURATIONS_OPTION="--clearly-defined-curations"
-                    fi
+                        if [ "$USE_CLEARLY_DEFINED_CURATIONS" = "true" ]; then
+                            USE_CLEARLY_DEFINED_CURATIONS_OPTION="--clearly-defined-curations"
+                        fi
 
-                    rm -fr out/results
-                    /opt/ort/bin/ort $LOG_LEVEL --stacktrace analyze $ALLOW_DYNAMIC_VERSIONS_OPTION $USE_CLEARLY_DEFINED_CURATIONS_OPTION -i $PROJECT_DIR/source -o out/results/analyzer
-                    ln -frs out/results/analyzer/analyzer-result.yml out/results/current-result.yml
-                '''
+                        rm -fr out/results
+                        /opt/ort/bin/ort $LOG_LEVEL --stacktrace analyze $ALLOW_DYNAMIC_VERSIONS_OPTION $USE_CLEARLY_DEFINED_CURATIONS_OPTION -i $PROJECT_DIR/source -o out/results/analyzer
+                    '''
+
+                    if (status >= ORT_FAILURE_STATUS_CODE) unstable('Analyzer issues found.')
+                    else if (status != 0) error('Error executing the analyzer.')
+                }
+
+                sh 'ln -frs out/results/analyzer/analyzer-result.yml out/results/current-result.yml'
 
                 script {
                     try {
@@ -327,14 +333,18 @@ pipeline {
 
             steps {
                 withCredentials(projectVcsCredentials) {
-                    sh '''
-                        echo "default login $LOGIN password $PASSWORD" > $HOME/.netrc
+                    script {
+                        def status = sh returnStatus: true, script: '''
+                            echo "default login $LOGIN password $PASSWORD" > $HOME/.netrc    
+                            /opt/ort/bin/ort $LOG_LEVEL --stacktrace scan -i out/results/current-result.yml -o out/results/scanner
+                            rm -f $HOME/.netrc
+                        '''
 
-                        /opt/ort/bin/ort $LOG_LEVEL --stacktrace scan -i out/results/current-result.yml -o out/results/scanner
-                        ln -frs out/results/scanner/scan-result.yml out/results/current-result.yml
+                        if (status >= ORT_FAILURE_STATUS_CODE) unstable('Scanner issues found.')
+                        else if (status != 0) error('Error executing the scanner.')
+                    }
 
-                        rm -f $HOME/.netrc
-                    '''
+                    sh 'ln -frs out/results/scanner/scan-result.yml out/results/current-result.yml'
                 }
             }
 
