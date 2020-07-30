@@ -1,0 +1,98 @@
+[#--
+Copyright (C) 2020 HERE Europe B.V.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+
+SPDX-License-Identifier: Apache-2.0
+License-Filename: LICENSE
+--]
+[#-- Disable auto-escaping because we write a plain-text file. --]
+[#noautoesc]
+[#-- Add the licenses of the projects. --]
+[#if projects?has_content]
+This software includes external packages and source code.
+The applicable license information is listed below:
+
+----
+[#assign isFirst = true]
+[#--
+Merge the licenses and copyrights of all projects into a single list. The default LicenseView.ALL is used because
+projects cannot have a concluded license (compare with the handling of packages below). Also filter all licenses that
+are configured not to be included in notice files.
+--]
+[#assign mergedLicenses = helper.filterIncludeInNoticeFile(helper.mergeLicenses(projects))]
+[#list mergedLicenses as resolvedLicense]
+[#assign licenseText = licenseTextProvider.getLicenseText(resolvedLicense.license.toString())!""]
+[#if licenseText?has_content]
+[#if isFirst]
+[#assign isFirst = false]
+[#else]
+  --
+[/#if]
+[#assign copyrights = resolvedLicense.getCopyrights(true)]
+[#list copyrights as copyright]
+[#if copyright?is_first]
+
+[/#if]
+${copyright}
+[/#list]
+
+${licenseText}
+[/#if]
+[/#list]
+----
+[/#if]
+
+[#-- Add the licenses of all dependencies. --]
+[#if packages?has_content]
+This project contains or depends on third-party software components pursuant to the following licenses:
+[/#if]
+
+[#list packages as package]
+[#if !package.excluded]
+----
+
+Package: [#if package.id.namespace?has_content]${package.id.namespace}:[/#if]${package.id.name}:${package.id.version}
+[#--
+Filter the licenses of the package using LicenseView.CONCLUDED_OR_REST. This is the default view which ignores declared
+and detected licenses if a license conclusion for the package was made. If copyrights were detected for a concluded
+license those statements are kept. Also filter all licenses that are configured not to be included in notice files.
+--]
+[#assign resolvedLicenses = helper.filterIncludeInNoticeFile(package.license.filter(helper.licenseView("CONCLUDED_OR_REST")).licenses)]
+[#if resolvedLicenses?has_content]
+
+The following copyrights and licenses were found in the source code of this package:
+[/#if]
+[#assign isFirst = true]
+[#list resolvedLicenses as resolvedLicense]
+[#assign licenseText = licenseTextProvider.getLicenseText(resolvedLicense.license.toString())!""]
+[#if licenseText?has_content]
+[#if isFirst]
+[#assign isFirst = false]
+[#else]
+  --
+[/#if]
+[#assign copyrights = resolvedLicense.getCopyrights(true)]
+[#list copyrights as copyright]
+[#if copyright?is_first]
+
+[/#if]
+${copyright}
+[/#list]
+
+${licenseText}
+[/#if]
+[/#list]
+[/#if]
+[/#list]
+[/#noautoesc]

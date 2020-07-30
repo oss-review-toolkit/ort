@@ -25,6 +25,7 @@ val apachePoiSchemasVersion: String by project
 val commonsCompressVersion: String by project
 val cyclonedxCoreJavaVersion: String by project
 val flexmarkVersion: String by project
+val freemarkerVersion: String by project
 val hamcrestCoreVersion: String by project
 val jacksonVersion: String by project
 val kotlinxHtmlVersion: String by project
@@ -113,6 +114,7 @@ dependencies {
     implementation("org.cyclonedx:cyclonedx-core-java:$cyclonedxCoreJavaVersion")
     implementation("org.eclipse.sw360.antenna:attribution-document-core:$antennaVersion")
     implementation("org.eclipse.sw360.antenna:attribution-document-basic-bundle:$antennaVersion")
+    implementation("org.freemarker:freemarker:$freemarkerVersion")
     implementation("org.jetbrains.kotlinx:kotlinx-html-jvm:$kotlinxHtmlVersion")
 
     // This is required to not depend on the version of Apache Xalan bundled with the JDK. Otherwise the formatting of
