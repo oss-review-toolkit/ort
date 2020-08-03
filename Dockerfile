@@ -135,7 +135,12 @@ RUN /opt/ort/bin/import_proxy_certs.sh && \
     curl -Os https://dl.google.com/android/repository/commandlinetools-linux-${ANDROID_SDK_VERSION}_latest.zip && \
     unzip -q commandlinetools-linux-${ANDROID_SDK_VERSION}_latest.zip -d $ANDROID_HOME && \
     rm commandlinetools-linux-${ANDROID_SDK_VERSION}_latest.zip && \
-    yes | $ANDROID_HOME/tools/bin/sdkmanager --sdk_root=$ANDROID_HOME "platform-tools" && \
+    PROXY_HOST_AND_PORT=${https_proxy#*://} && \
+    if [ -n "$PROXY_HOST_AND_PORT" ]; then \
+        # While sdkmanager uses HTTPS by default, the proxy type is still called "http".
+        SDK_MANAGER_PROXY_OPTIONS="--proxy=http --proxy_host=${PROXY_HOST_AND_PORT%:*} --proxy_port=${PROXY_HOST_AND_PORT##*:}"; \
+    fi && \
+    yes | $ANDROID_HOME/tools/bin/sdkmanager $SDK_MANAGER_PROXY_OPTIONS --sdk_root=$ANDROID_HOME "platform-tools" && \
     # Add scanners (in versions known to work).
     curl -ksSL https://github.com/nexB/scancode-toolkit/archive/v$SCANCODE_VERSION.tar.gz | \
         tar -zxC /usr/local && \
