@@ -27,6 +27,7 @@ import com.github.ajalt.clikt.core.requireObject
 import com.github.ajalt.clikt.parameters.groups.mutuallyExclusiveOptions
 import com.github.ajalt.clikt.parameters.groups.required
 import com.github.ajalt.clikt.parameters.groups.single
+import com.github.ajalt.clikt.parameters.options.associate
 import com.github.ajalt.clikt.parameters.options.convert
 import com.github.ajalt.clikt.parameters.options.default
 import com.github.ajalt.clikt.parameters.options.flag
@@ -42,6 +43,7 @@ import org.ossreviewtoolkit.model.FileFormat
 import org.ossreviewtoolkit.model.config.OrtConfiguration
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
 import org.ossreviewtoolkit.model.mapper
+import org.ossreviewtoolkit.model.utils.mergeLabels
 import org.ossreviewtoolkit.scanner.LocalScanner
 import org.ossreviewtoolkit.scanner.ScanResultsStorage
 import org.ossreviewtoolkit.scanner.Scanner
@@ -97,6 +99,13 @@ class ScannerCommand : CliktCommand(name = "scan", help = "Run existing copyrigh
         "--output-formats", "-f",
         help = "The list of output formats to be used for the ORT result file(s)."
     ).enum<FileFormat>().split(",").default(listOf(FileFormat.YAML))
+
+    private val labels by option(
+        "--label", "-l",
+        help = "Add a label to the ORT result. Can be used multiple times. If an ORT result is used as input for the" +
+                "scanner any existing label with the same key will be overwritten. For example: " +
+                "--label distribution=external"
+    ).associate()
 
     private val config by requireObject<OrtConfiguration>()
 
@@ -162,7 +171,7 @@ class ScannerCommand : CliktCommand(name = "scan", help = "Run existing copyrigh
 
             val absoluteInputPath = input.normalize()
             scanner.scanPath(absoluteInputPath, absoluteNativeOutputDir)
-        }
+        }.mergeLabels(labels)
 
         outputFiles.forEach { file ->
             println("Writing scan result to '$file'.")

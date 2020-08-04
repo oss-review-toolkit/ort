@@ -23,6 +23,7 @@ import com.github.ajalt.clikt.core.BadParameterValue
 import com.github.ajalt.clikt.core.CliktCommand
 import com.github.ajalt.clikt.core.ProgramResult
 import com.github.ajalt.clikt.core.UsageError
+import com.github.ajalt.clikt.parameters.options.associate
 import com.github.ajalt.clikt.parameters.options.convert
 import com.github.ajalt.clikt.parameters.options.default
 import com.github.ajalt.clikt.parameters.options.flag
@@ -42,6 +43,7 @@ import org.ossreviewtoolkit.analyzer.curation.FilePackageCurationProvider
 import org.ossreviewtoolkit.model.FileFormat
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.mapper
+import org.ossreviewtoolkit.model.utils.mergeLabels
 import org.ossreviewtoolkit.utils.expandTilde
 import org.ossreviewtoolkit.utils.ortDataDirectory
 import org.ossreviewtoolkit.utils.safeMkdirs
@@ -105,6 +107,11 @@ class AnalyzerCommand : CliktCommand(name = "analyze", help = "Determine depende
     ).convert { it.expandTilde() }
         .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
 
+    private val labels by option(
+        "--label", "-l",
+        help = "Add a label to the ORT result. Can be used multiple times. For example: --label distribution=external"
+    ).associate()
+
     override fun run() {
         val absoluteOutputDir = outputDir.normalize()
 
@@ -139,7 +146,7 @@ class AnalyzerCommand : CliktCommand(name = "analyze", help = "Determine depende
 
         val ortResult = analyzer.analyze(
             absoluteInputDir, distinctPackageManagers, curationProvider, repositoryConfigurationFile
-        )
+        ).mergeLabels(labels)
 
         println("Found ${ortResult.getProjects().size} project(s) in total.")
 
