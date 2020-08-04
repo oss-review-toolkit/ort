@@ -159,12 +159,12 @@ class ExcelReporter : Reporter {
 
         createSummarySheet(
             workbook, "Summary", "all", tabularScanRecord.summary, tabularScanRecord.vcsInfo,
-            tabularScanRecord.extraColumns
+            emptyList()
         )
         tabularScanRecord.projectDependencies.forEach { (project, table) ->
             createProjectSheet(
                 workbook, project.id.toCoordinates(), project.definitionFilePath, table,
-                project.vcsProcessed, tabularScanRecord.extraColumns
+                project.vcsProcessed, emptyList()
             )
         }
 

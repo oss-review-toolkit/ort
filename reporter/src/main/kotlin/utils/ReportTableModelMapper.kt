@@ -233,10 +233,6 @@ class ReportTableModelMapper(
             it.entries.associateTo(metadata) { (key, value) -> key.toString() to value.toString() }
         }
 
-        val extraColumns = (ortResult.data["excel_report_extra_columns"] as? List<*>)?.let { extraColumns ->
-            extraColumns.map { it.toString() }
-        }.orEmpty()
-
         val ruleViolations = ortResult.getRuleViolations()
             .map { it.toResolvableEvaluatorIssue() }
             .sortedWith(VIOLATION_COMPARATOR).orEmpty()
@@ -248,8 +244,7 @@ class ReportTableModelMapper(
             issueSummaryTable,
             summaryTable,
             projectTables,
-            metadata,
-            extraColumns
+            metadata
         )
     }
 }

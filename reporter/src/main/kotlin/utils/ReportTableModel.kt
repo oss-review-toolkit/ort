@@ -76,12 +76,7 @@ data class ReportTableModel(
     /**
      * Additional metadata read from the [OrtResult.data] field.
      */
-    val metadata: Map<String, String>,
-
-    /**
-     * Extra columns that shall be added to the results table by the implementing reporter.
-     */
-    val extraColumns: List<String>
+    val metadata: Map<String, String>
 ) {
     data class ProjectTable(
         /**
