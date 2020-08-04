@@ -41,7 +41,7 @@ class NoticeSummaryReporter : AbstractNoticeReporter() {
 }
 
 class NoticeSummaryProcessor(input: ReporterInput) : AbstractNoticeReporter.NoticeProcessor(input) {
-    override fun process(model: AbstractNoticeReporter.NoticeReportModel): List<() -> String> =
+    override fun process(model: NoticeReportModel): List<() -> String> =
         mutableListOf<() -> String>().apply {
             add { model.headers.joinToString(AbstractNoticeReporter.NOTICE_SEPARATOR) }
 
@@ -82,6 +82,6 @@ class NoticeSummaryProcessor(input: ReporterInput) : AbstractNoticeReporter.Noti
         }
     }
 
-    private fun mergeFindings(model: AbstractNoticeReporter.NoticeReportModel) =
+    private fun mergeFindings(model: NoticeReportModel) =
         model.findings.values.merge().clean(input.copyrightGarbage)
 }

@@ -66,7 +66,7 @@ class NoticeByPackageProcessor(input: ReporterInput) : AbstractNoticeReporter.No
         private const val LICENSE_SEPARATOR = "\n  --\n\n"
     }
 
-    override fun process(model: AbstractNoticeReporter.NoticeReportModel): List<() -> String> =
+    override fun process(model: NoticeReportModel): List<() -> String> =
         mutableListOf<() -> String>().apply {
             add { model.headers.joinToString(AbstractNoticeReporter.NOTICE_SEPARATOR) }
 
