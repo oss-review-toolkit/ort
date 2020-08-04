@@ -55,10 +55,15 @@ import org.ossreviewtoolkit.reporter.utils.SCOPE_EXCLUDE_MAP_COMPARATOR
 import org.ossreviewtoolkit.reporter.utils.containsUnresolved
 import org.ossreviewtoolkit.utils.isValidUri
 
+private const val OPTION_EXTRA_COLUMNS = "extraColumns"
+
 /**
  * A [Reporter] that creates an Excel sheet report from an [OrtResult] in the Open XML XLSX format. It creates one sheet
  * for each project in the [AnalyzerResult] from [OrtResult.analyzer] and an additional sheet that summarizes all
  * dependencies.
+ *
+ * This reporter supports the following options:
+ * - *extraColumns*: A comma separated list of columns that are added to each sheet.
  */
 class ExcelReporter : Reporter {
     override val reporterName = "Excel"
@@ -92,6 +97,11 @@ class ExcelReporter : Reporter {
         outputDir: File,
         options: Map<String, String>
     ): List<File> {
+        val extraColumns = options[OPTION_EXTRA_COLUMNS].orEmpty()
+            .split(",")
+            .map { it.trim() }
+            .filter { it.isNotEmpty() }
+
         val tabularScanRecord = ReportTableModelMapper(input.resolutionProvider)
             .mapToReportTableModel(
                 input.ortResult,
@@ -159,12 +169,12 @@ class ExcelReporter : Reporter {
 
         createSummarySheet(
             workbook, "Summary", "all", tabularScanRecord.summary, tabularScanRecord.vcsInfo,
-            emptyList()
+            extraColumns
         )
         tabularScanRecord.projectDependencies.forEach { (project, table) ->
             createProjectSheet(
                 workbook, project.id.toCoordinates(), project.definitionFilePath, table,
-                project.vcsProcessed, emptyList()
+                project.vcsProcessed, extraColumns
             )
         }
 
