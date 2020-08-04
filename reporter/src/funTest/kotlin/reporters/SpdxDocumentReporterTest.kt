@@ -104,10 +104,10 @@ private fun generateReport(ortResult: OrtResult, format: FileFormat): String {
     val outputDir = createTempDir(ORT_NAME, SpdxDocumentReporterTest::class.simpleName).apply { deleteOnExit() }
 
     val reportOptions = mapOf(
-        SpdxDocumentReporter.CREATION_INFO_COMMENT to "some creation info comment",
-        SpdxDocumentReporter.DOCUMENT_COMMENT to "some document comment",
-        SpdxDocumentReporter.DOCUMENT_NAME to "some document name",
-        SpdxDocumentReporter.OUTPUT_FILE_FORMATS to format.toString()
+        SpdxDocumentReporter.OPTION_CREATION_INFO_COMMENT to "some creation info comment",
+        SpdxDocumentReporter.OPTION_DOCUMENT_COMMENT to "some document comment",
+        SpdxDocumentReporter.OPTION_DOCUMENT_NAME to "some document name",
+        SpdxDocumentReporter.OPTION_OUTPUT_FILE_FORMATS to format.toString()
     )
 
     return SpdxDocumentReporter().generateReport(input, outputDir, reportOptions).single().readText()
