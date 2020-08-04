@@ -62,7 +62,14 @@ data class OrtResult(
      * An [EvaluatorRun] containing details about the evaluation that was run using the result from [scanner] as
      * input. Can be null if no evaluation was run.
      */
-    val evaluator: EvaluatorRun? = null
+    val evaluator: EvaluatorRun? = null,
+
+    /**
+     * User defined labels associated to this result. Labels are not used by ORT itself, but can be used in parts of ORT
+     * which are customizable by the user, for example in evaluator rules or in the notice reporter.
+     */
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    val labels: Map<String, String> = emptyMap()
 ) {
     companion object {
         /**
@@ -73,7 +80,8 @@ data class OrtResult(
             repository = Repository.EMPTY,
             analyzer = null,
             scanner = null,
-            evaluator = null
+            evaluator = null,
+            labels = emptyMap()
         )
     }
 
