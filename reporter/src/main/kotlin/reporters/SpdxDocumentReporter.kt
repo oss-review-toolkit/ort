@@ -42,10 +42,10 @@ import org.ossreviewtoolkit.spdx.model.SpdxDocument
  */
 class SpdxDocumentReporter : Reporter {
     companion object {
-        const val CREATION_INFO_COMMENT = "creationInfo.comment"
-        const val DOCUMENT_COMMENT = "document.comment"
-        const val DOCUMENT_NAME = "document.name"
-        const val OUTPUT_FILE_FORMATS = "output.file.formats"
+        const val OPTION_CREATION_INFO_COMMENT = "creationInfo.comment"
+        const val OPTION_DOCUMENT_COMMENT = "document.comment"
+        const val OPTION_DOCUMENT_NAME = "document.name"
+        const val OPTION_OUTPUT_FILE_FORMATS = "output.file.formats"
 
         private const val DOCUMENT_NAME_DEFAULT_VALUE = "Unnamed document"
     }
@@ -57,16 +57,16 @@ class SpdxDocumentReporter : Reporter {
         outputDir: File,
         options: Map<String, String>
     ): List<File> {
-        val outputFileFormats = options[OUTPUT_FILE_FORMATS]
+        val outputFileFormats = options[OPTION_OUTPUT_FILE_FORMATS]
             ?.split(",")
             ?.map { FileFormat.valueOf(it.toUpperCase()) }
             ?.distinct()
             ?: listOf(FileFormat.YAML)
 
         val params = SpdxDocumentModelMapper.SpdxDocumentParams(
-            documentName = options.getOrDefault(DOCUMENT_NAME, DOCUMENT_NAME_DEFAULT_VALUE),
-            documentComment = options.getOrDefault(DOCUMENT_COMMENT, ""),
-            creationInfoComment = options.getOrDefault(CREATION_INFO_COMMENT, "")
+            documentName = options.getOrDefault(OPTION_DOCUMENT_NAME, DOCUMENT_NAME_DEFAULT_VALUE),
+            documentComment = options.getOrDefault(OPTION_DOCUMENT_COMMENT, ""),
+            creationInfoComment = options.getOrDefault(OPTION_CREATION_INFO_COMMENT, "")
         )
 
         val spdxDocument = SpdxDocumentModelMapper.map(

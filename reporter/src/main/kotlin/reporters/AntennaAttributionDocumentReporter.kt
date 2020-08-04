@@ -38,8 +38,9 @@ import org.ossreviewtoolkit.utils.safeDeleteRecursively
 import org.ossreviewtoolkit.utils.toHexString
 
 private const val DEFAULT_TEMPLATE_ID = "basic-pdf-template"
-private const val TEMPLATE_ID = "template.id"
-private const val TEMPLATE_PATH = "template.path"
+
+private const val OPTION_TEMPLATE_ID = "template.id"
+private const val OPTION_TEMPLATE_PATH = "template.path"
 
 private const val TEMPLATE_COVER_PDF = "cover.pdf"
 private const val TEMPLATE_COPYRIGHT_PDF = "copyright.pdf"
@@ -113,8 +114,8 @@ class AntennaAttributionDocumentReporter : Reporter {
         val templateFiles = mutableMapOf<String, File>()
         val fontFiles = mutableMapOf<String, File>()
 
-        val providedTemplateId = options[TEMPLATE_ID]
-        val providedTemplatePath = options[TEMPLATE_PATH]
+        val providedTemplateId = options[OPTION_TEMPLATE_ID]
+        val providedTemplatePath = options[OPTION_TEMPLATE_PATH]
         if (providedTemplatePath != null) {
             val templatePath = File(providedTemplatePath)
 
