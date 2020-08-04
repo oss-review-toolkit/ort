@@ -25,6 +25,7 @@ import org.ossreviewtoolkit.reporter.Reporter
 import org.ossreviewtoolkit.reporter.ReporterInput
 import org.ossreviewtoolkit.reporter.utils.SpdxDocumentModelMapper
 import org.ossreviewtoolkit.spdx.SpdxModelMapper.FileFormat
+import org.ossreviewtoolkit.spdx.model.SpdxDocument
 
 /**
  * Creates YAML and JSON SPDX documents mainly targeting the use case of sharing information about the dependencies
