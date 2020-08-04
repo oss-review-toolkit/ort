@@ -235,7 +235,7 @@ class ReportTableModelMapper(
 
         val ruleViolations = ortResult.getRuleViolations()
             .map { it.toResolvableEvaluatorIssue() }
-            .sortedWith(VIOLATION_COMPARATOR).orEmpty()
+            .sortedWith(VIOLATION_COMPARATOR)
 
         return ReportTableModel(
             ortResult.repository.vcsProcessed,
