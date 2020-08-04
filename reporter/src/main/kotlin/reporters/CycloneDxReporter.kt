@@ -37,6 +37,7 @@ import org.cyclonedx.model.LicenseChoice
 
 import org.ossreviewtoolkit.model.LicenseSource
 import org.ossreviewtoolkit.model.Package
+import org.ossreviewtoolkit.model.Project
 import org.ossreviewtoolkit.model.licenses.ResolvedLicenseInfo
 import org.ossreviewtoolkit.reporter.Reporter
 import org.ossreviewtoolkit.reporter.ReporterInput
@@ -45,6 +46,12 @@ import org.ossreviewtoolkit.spdx.SpdxLicense
 private const val REPORT_BASE_FILENAME = "bom"
 private const val REPORT_EXTENSION = "xml"
 
+/**
+ * A [Reporter] that creates software bills of materials (SBOM) in the [CycloneDX][1] format. For each [Project]
+ * contained in the ORT result a separate SBOM is created.
+ *
+ * [1]: https://cyclonedx.org
+ */
 class CycloneDxReporter : Reporter {
     override val reporterName = "CycloneDx"
 
