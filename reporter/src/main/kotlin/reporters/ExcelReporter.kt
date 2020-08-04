@@ -168,13 +168,21 @@ class ExcelReporter : Reporter {
         }
 
         createSummarySheet(
-            workbook, "Summary", "all", tabularScanRecord.summary, tabularScanRecord.vcsInfo,
-            extraColumns
+            workbook = workbook,
+            name = "Summary",
+            file = "all",
+            table = tabularScanRecord.summary,
+            vcsInfo = tabularScanRecord.vcsInfo,
+            extraColumns = extraColumns
         )
         tabularScanRecord.projectDependencies.forEach { (project, table) ->
             createProjectSheet(
-                workbook, project.id.toCoordinates(), project.definitionFilePath, table,
-                project.vcsProcessed, extraColumns
+                workbook = workbook,
+                name = project.id.toCoordinates(),
+                file = project.definitionFilePath,
+                table = table,
+                vcsInfo = project.vcsProcessed,
+                extraColumns = extraColumns
             )
         }
 
@@ -215,8 +223,12 @@ class ExcelReporter : Reporter {
     }
 
     private fun createSummarySheet(
-        workbook: XSSFWorkbook, name: String, file: String, table: SummaryTable,
-        vcsInfo: VcsInfo, extraColumns: List<String>
+        workbook: XSSFWorkbook,
+        name: String,
+        file: String,
+        table: SummaryTable,
+        vcsInfo: VcsInfo,
+        extraColumns: List<String>
     ) {
         val sheetName = createUniqueSheetName(workbook, name)
 
@@ -308,8 +320,12 @@ class ExcelReporter : Reporter {
     }
 
     private fun createProjectSheet(
-        workbook: XSSFWorkbook, name: String, file: String, table: ProjectTable,
-        vcsInfo: VcsInfo, extraColumns: List<String>
+        workbook: XSSFWorkbook,
+        name: String,
+        file: String,
+        table: ProjectTable,
+        vcsInfo: VcsInfo,
+        extraColumns: List<String>
     ) {
         val sheetName = createUniqueSheetName(workbook, name)
 
@@ -366,7 +382,10 @@ class ExcelReporter : Reporter {
     }
 
     private fun createHeader(
-        sheet: XSSFSheet, name: String, file: String, vcsInfo: VcsInfo,
+        sheet: XSSFSheet,
+        name: String,
+        file: String,
+        vcsInfo: VcsInfo,
         extraColumns: List<String>
     ): Int {
         val columns = defaultColumns + extraColumns.size
