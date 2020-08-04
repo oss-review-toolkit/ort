@@ -48,14 +48,17 @@ class NoticeSummaryReporterTest : WordSpec({
                 File("src/funTest/assets/notice-summary-reporter-pre-processed-expected-results").readText()
 
             // Filter out all MIT findings so that this license is not contained in the generated notices.
-            val preProcessingScript = """
-                headers = listOf("Header 1\n", "Header 2\n")
-                headerWithLicenses = "Custom header with licenses.\n"
-                findings = model.findings.mapValues { (_, findings) ->
-                    findings.filterKeys { it != "MIT" }.toSortedMap()
-                }.toSortedMap()
-                footers = listOf("Footer 1\n", "Footer 2\n")
-            """.trimIndent()
+            val preProcessingScript = createTempFile(ORT_NAME, javaClass.simpleName).apply {
+                writeText("""
+                    headers = listOf("Header 1\n", "Header 2\n")
+                    headerWithLicenses = "Custom header with licenses.\n"
+                    findings = model.findings.mapValues { (_, findings) ->
+                        findings.filterKeys { it != "MIT" }.toSortedMap()
+                    }.toSortedMap()
+                    footers = listOf("Footer 1\n", "Footer 2\n")
+                    """.trimIndent()
+                )
+            }
 
             val report = generateReport(ORT_RESULT, preProcessingScript = preProcessingScript)
 
@@ -65,7 +68,9 @@ class NoticeSummaryReporterTest : WordSpec({
         "return the input as-is for an empty pre-processing script" {
             val expectedText = File("src/funTest/assets/notice-summary-reporter-expected-results").readText()
 
-            val report = generateReport(ORT_RESULT, preProcessingScript = "")
+            val preProcessingScript = createTempFile(ORT_NAME, javaClass.simpleName)
+
+            val report = generateReport(ORT_RESULT, preProcessingScript = preProcessingScript)
 
             report shouldBe expectedText
         }
@@ -99,15 +104,16 @@ class NoticeSummaryReporterTest : WordSpec({
 private fun generateReport(
     ortResult: OrtResult,
     copyrightGarbage: CopyrightGarbage = CopyrightGarbage(),
-    preProcessingScript: String? = null
+    preProcessingScript: File? = null
 ): String {
     val input = ReporterInput(
         ortResult,
-        copyrightGarbage = copyrightGarbage,
-        preProcessingScript = preProcessingScript
+        copyrightGarbage = copyrightGarbage
     )
 
     val outputDir = createTempDir(ORT_NAME, NoticeSummaryReporterTest::class.simpleName).apply { deleteOnExit() }
 
-    return NoticeSummaryReporter().generateReport(input, outputDir).single().readText()
+    val options = preProcessingScript?.let { mapOf("preProcessingScript" to it.absolutePath) }.orEmpty()
+
+    return NoticeSummaryReporter().generateReport(input, outputDir, options).single().readText()
 }

@@ -22,11 +22,16 @@ package org.ossreviewtoolkit.reporter.reporters
 import org.ossreviewtoolkit.model.clean
 import org.ossreviewtoolkit.model.merge
 import org.ossreviewtoolkit.reporter.ReporterInput
+import org.ossreviewtoolkit.reporter.reporters.AbstractNoticeReporter.NoticeReportModel
 import org.ossreviewtoolkit.utils.log
 
 /**
  * Creates a summary notice file containing all licenses for all non-excluded projects and packages. Each license
  * appears only once and all copyrights associated to this license are listed next to it.
+ *
+ * This reporter supports the following options:
+ * - *preProcessingScript*: The path to a Kotlin script to pre-process the [NoticeReportModel] before generating the
+ *   notice file.
  */
 class NoticeSummaryReporter : AbstractNoticeReporter() {
     override val reporterName = "NoticeSummary"

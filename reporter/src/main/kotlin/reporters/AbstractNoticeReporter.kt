@@ -34,6 +34,13 @@ import org.ossreviewtoolkit.reporter.Reporter
 import org.ossreviewtoolkit.reporter.ReporterInput
 import org.ossreviewtoolkit.utils.ScriptRunner
 
+/**
+ * An abstract [Reporter] that generates a license notice file.
+ *
+ * This reporter supports the following options:
+ * - *preProcessingScript*: The path to a Kotlin script to pre-process the [NoticeReportModel] before generating the
+ *   notice file.
+ */
 abstract class AbstractNoticeReporter : Reporter {
     companion object {
         const val DEFAULT_HEADER_WITH_LICENSES =
@@ -41,6 +48,8 @@ abstract class AbstractNoticeReporter : Reporter {
         const val DEFAULT_HEADER_WITHOUT_LICENSES =
             "This project neither contains or depends on any third-party software components.\n"
         const val NOTICE_SEPARATOR = "\n----\n\n"
+
+        internal const val OPTION_PRE_PROCESSING_SCRIPT = "preProcessingScript"
     }
 
     data class NoticeReportModel(
@@ -120,14 +129,16 @@ abstract class AbstractNoticeReporter : Reporter {
             emptyList()
         )
 
-        val preProcessedModel = input.preProcessingScript?.let { preProcessingScript ->
+        val preProcessingScript = options[OPTION_PRE_PROCESSING_SCRIPT]?.let { File(it).readText() }
+
+        val preProcessedModel = preProcessingScript?.let {
             PreProcessor(
                 input.ortResult,
                 model,
                 input.copyrightGarbage,
                 input.licenseConfiguration,
                 input.packageConfigurationProvider
-            ).run(preProcessingScript)
+            ).run(it)
         } ?: model
 
         val processor = createProcessor(input)

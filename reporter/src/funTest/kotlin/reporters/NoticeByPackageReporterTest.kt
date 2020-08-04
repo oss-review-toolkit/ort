@@ -74,14 +74,12 @@ class NoticeByPackageReporterTest : WordSpec({
 private fun generateReport(
     ortResult: OrtResult,
     config: OrtConfiguration = OrtConfiguration(),
-    copyrightGarbage: CopyrightGarbage = CopyrightGarbage(),
-    preProcessingScript: String? = null
+    copyrightGarbage: CopyrightGarbage = CopyrightGarbage()
 ): String {
     val input = ReporterInput(
         ortResult,
         config,
-        copyrightGarbage = copyrightGarbage,
-        preProcessingScript = preProcessingScript
+        copyrightGarbage = copyrightGarbage
     )
 
     val outputDir = createTempDir(ORT_NAME, NoticeByPackageReporterTest::class.simpleName).apply { deleteOnExit() }

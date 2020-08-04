@@ -30,6 +30,7 @@ import org.ossreviewtoolkit.model.ScanResult
 import org.ossreviewtoolkit.model.clean
 import org.ossreviewtoolkit.model.merge
 import org.ossreviewtoolkit.reporter.ReporterInput
+import org.ossreviewtoolkit.reporter.reporters.AbstractNoticeReporter.NoticeReportModel
 import org.ossreviewtoolkit.utils.CopyrightStatementsProcessor
 import org.ossreviewtoolkit.utils.FileMatcher
 import org.ossreviewtoolkit.utils.LICENSE_FILENAMES
@@ -47,6 +48,10 @@ import org.ossreviewtoolkit.utils.storage.LocalFileStorage
  * If a [FileArchiver] is configured for the scanner the reporter will try to download any archived license files and
  * include them in the notice file. Licenses detected in those license files will not be listed again, instead all
  * copyrights associated to those licenses will be listed below the license file's content.
+ *
+ * This reporter supports the following options:
+ * - *preProcessingScript*: The path to a Kotlin script to pre-process the [NoticeReportModel] before generating the
+ *   notice file.
  */
 class NoticeByPackageReporter : AbstractNoticeReporter() {
     override val reporterName = "NoticeByPackage"

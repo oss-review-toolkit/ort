@@ -31,7 +31,6 @@ import org.ossreviewtoolkit.model.utils.DefaultResolutionProvider
 import org.ossreviewtoolkit.model.utils.PackageConfigurationProvider
 import org.ossreviewtoolkit.model.utils.ResolutionProvider
 import org.ossreviewtoolkit.model.utils.SimplePackageConfigurationProvider
-import org.ossreviewtoolkit.reporter.reporters.AbstractNoticeReporter
 
 /**
  * A bundle of input to be used by [Reporter] implementations.
@@ -79,11 +78,5 @@ data class ReporterInput(
      * A [LicenseConfiguration], can be used to handle licenses based on the user's configuration, for example to
      * determine which licenses to include in a notice file.
      */
-    val licenseConfiguration: LicenseConfiguration = LicenseConfiguration(),
-
-    /**
-     * A [notice pre-processor][AbstractNoticeReporter.PreProcessor], used by implementations of
-     * [AbstractNoticeReporter] to pre-process the default [data][AbstractNoticeReporter.NoticeReportData].
-     */
-    val preProcessingScript: String? = null
+    val licenseConfiguration: LicenseConfiguration = LicenseConfiguration()
 )
