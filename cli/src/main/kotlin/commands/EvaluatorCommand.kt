@@ -25,6 +25,7 @@ import com.github.ajalt.clikt.core.UsageError
 import com.github.ajalt.clikt.parameters.groups.mutuallyExclusiveOptions
 import com.github.ajalt.clikt.parameters.groups.required
 import com.github.ajalt.clikt.parameters.groups.single
+import com.github.ajalt.clikt.parameters.options.associate
 import com.github.ajalt.clikt.parameters.options.convert
 import com.github.ajalt.clikt.parameters.options.default
 import com.github.ajalt.clikt.parameters.options.flag
@@ -48,6 +49,7 @@ import org.ossreviewtoolkit.model.licenses.LicenseConfiguration
 import org.ossreviewtoolkit.model.licenses.orEmpty
 import org.ossreviewtoolkit.model.mapper
 import org.ossreviewtoolkit.model.readValue
+import org.ossreviewtoolkit.model.utils.mergeLabels
 import org.ossreviewtoolkit.utils.PackageConfigurationOption
 import org.ossreviewtoolkit.utils.createProvider
 import org.ossreviewtoolkit.utils.expandTilde
@@ -130,6 +132,12 @@ class EvaluatorCommand : CliktCommand(name = "evaluate", help = "Evaluate rules 
     ).convert { it.expandTilde() }
         .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
 
+    private val labels by option(
+        "--label", "-l",
+        help = "Add a label to the ORT result. Can be used multiple times. Any existing label with the same key in " +
+                "the input ORT result will be overwritten. For example: --label distribution=external"
+    ).associate()
+
     override fun run() {
         val absoluteOutputDir = outputDir?.normalize()
         val outputFiles = mutableListOf<File>()
@@ -192,7 +200,7 @@ class EvaluatorCommand : CliktCommand(name = "evaluate", help = "Evaluate rules 
             // Note: This overwrites any existing EvaluatorRun from the input file.
             val ortResultOutput = ortResultInput.copy(evaluator = evaluatorRun).apply {
                 data += ortResultInput.data
-            }
+            }.mergeLabels(labels)
 
             absoluteOutputDir.safeMkdirs()
 
