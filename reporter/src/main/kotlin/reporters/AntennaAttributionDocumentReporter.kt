@@ -86,6 +86,17 @@ private val REPLACEMENT_REGEX = GLYPH_REPLACEMENTS.keys.joinToString("|", "(", "
 
 fun replaceGlyphs(text: String) = REPLACEMENT_REGEX.replace(text) { GLYPH_REPLACEMENTS.getValue(it.value) }
 
+/**
+ * A [Reporter] that generates an attribution document in PDF format by leveraging the [Eclipse Antenna][1] project.
+ *
+ * This reporter supports the following options:
+ * - *template.path*: The path to a [template bundle JAR file][2] or to a directory containing template PDF files.
+ * - *template.id*: The unique ID of the template inside the template bundle JAR file. Not used if *template.path*
+ *   points to a directory.
+ *
+ * [1]: https://github.com/eclipse/antenna
+ * [2]: https://github.com/eclipse/antenna/blob/master/antenna-documentation/src/site/markdown/template-bundle-development.md
+ */
 class AntennaAttributionDocumentReporter : Reporter {
     override val reporterName = "AntennaAttributionDocument"
 
