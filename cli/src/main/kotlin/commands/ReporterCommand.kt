@@ -125,12 +125,6 @@ class ReporterCommand : CliktCommand(
     ).convert { it.expandTilde() }
         .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
 
-    private val preProcessingScript by option(
-        "--pre-processing-script",
-        help = "The path to a Kotlin script to pre-process the notice report before writing it to disk."
-    ).convert { it.expandTilde() }
-        .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
-
     private val copyrightGarbageFile by option(
         "--copyright-garbage-file",
         help = "A file containing garbage copyright statements entries which are to be ignored."
@@ -193,8 +187,7 @@ class ReporterCommand : CliktCommand(
             DefaultLicenseTextProvider(customLicenseTextsDir),
             copyrightGarbage,
             licenseInfoResolver,
-            licenseConfiguration,
-            preProcessingScript?.readText()
+            licenseConfiguration
         )
 
         val reportOptionsMap = mutableMapOf<String, MutableMap<String, String>>()
