@@ -34,10 +34,11 @@ import org.ossreviewtoolkit.spdx.model.SpdxDocument
  * detailed report which could be preferred for archiving or internal use only. The latter could be implemented either
  * as a future extension of this [SpdxDocumentReporter] or as a separate [Reporter].
  *
- * The option keys [CREATION_INFO_COMMENT], [DOCUMENT_COMMENT] and [DOCUMENT_NAME]
- * can be provided to [generateReport] to inject the corresponding values as meta-data into the produced [SpdxDocument].
- * The option key [OUTPUT_FILE_FORMATS] specifies a comma separated list of [FileFormat]s, whereas [FileFormat.values]
- * is used by default.
+ * This reporter supports the following options:
+ * - *creationInfo.comment*: Add the corresponding value as meta-data to the [SpdxDocument].
+ * - *document.comment*: Add the corresponding value as meta-data to the [SpdxDocument].
+ * - *document.name*: The name of the generated [SpdxDocument], defaults to "Unnamed document".
+ * - *output.file.formats*: The list of [FileFormat]s to generate, defaults to [FileFormat.values].
  */
 class SpdxDocumentReporter : Reporter {
     companion object {
