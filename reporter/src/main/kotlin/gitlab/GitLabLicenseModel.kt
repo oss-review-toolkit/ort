@@ -19,6 +19,8 @@
 
 package org.ossreviewtoolkit.reporter.gitlab
 
+private const val GITLAB_LICENSE_SCANNING_SCHEMA_VERSION_MAJOR_MINOR = "2.1"
+
 /**
  * The GitLab license model according to
  * https://gitlab.com/gitlab-org/security-products/license-management/-/blob/f4ec1f1bf826654ab963d32a2d4a2588ecb91c04/spec/fixtures/schema/v2.1.json,
@@ -26,6 +28,11 @@ package org.ossreviewtoolkit.reporter.gitlab
  * https://gitlab.com/gitlab-org/security-products/license-management/-/tree/f4ec1f1bf826654ab963d32a2d4a2588ecb91c04/spec/fixtures/expected.
  */
 internal data class GitLabLicenseModel(
+    /**
+     * The schema version of this model, must equal [GITLAB_LICENSE_SCANNING_SCHEMA_VERSION_MAJOR_MINOR].
+     */
+    val version: String = GITLAB_LICENSE_SCANNING_SCHEMA_VERSION_MAJOR_MINOR,
+
     /**
      * The complete and distinct list of licenses referred to by [dependencies].
      */
