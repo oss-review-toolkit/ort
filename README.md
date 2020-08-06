@@ -344,6 +344,7 @@ Currently, the following report formats are supported (reporter names are case-i
 * [Antenna Attribution Document (PDF)](./docs/reporters/AntennaAttributionDocumentReporter.md) (`-f AntennaAttributionDocument`)
 * [CycloneDX](https://cyclonedx.org/) BOM (`-f CycloneDx`)
 * [Excel](https://products.office.com/excel) sheet (`-f Excel`)
+* [GitLabLicenseModel](https://docs.gitlab.com/ee/ci/pipelines/job_artifacts.html#artifactsreportslicense_scanning-ultimate) (`-f GitLabLicenseModel`)
 * [NOTICE](http://www.apache.org/dev/licensing-howto.html) file in two variants
   * List license texts and copyrights by package (`-f NoticeByPackage`)
   * Summarize all license texts and copyrights (`-f NoticeSummary`)
