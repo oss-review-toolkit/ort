@@ -1,0 +1,36 @@
+{
+  "licenses" : [ {
+    "id" : "Apache-2.0",
+    "name" : "Apache License 2.0",
+    "url" : ""
+  }, {
+    "id" : "BSD-2-Clause",
+    "name" : "BSD 2-Clause \"Simplified\" License",
+    "url" : ""
+  }, {
+    "id" : "GPL-2.0-or-later",
+    "name" : "GNU General Public License v2.0 or later",
+    "url" : ""
+  }, {
+    "id" : "LicenseRef-scancode-asmus",
+    "name" : "",
+    "url" : ""
+  }, {
+    "id" : "MIT",
+    "name" : "MIT License",
+    "url" : ""
+  } ],
+  "dependencies" : [ {
+    "name" : "first-package",
+    "version" : "0.0.1",
+    "package_manger" : "maven",
+    "path" : "some/path/build.gradle",
+    "licenses" : [ "BSD-2-Clause", "GPL-2.0-or-later WITH Classpath-exception-2.0", "MIT", "LicenseRef-scancode-asmus" ]
+  }, {
+    "name" : "second-package",
+    "version" : "0.0.2",
+    "package_manger" : "pip",
+    "path" : "",
+    "licenses" : [ "BSD-2-Clause", "Apache-2.0" ]
+  } ]
+}

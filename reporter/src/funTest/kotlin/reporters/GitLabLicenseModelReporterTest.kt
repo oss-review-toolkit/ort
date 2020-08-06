@@ -48,20 +48,20 @@ import org.ossreviewtoolkit.utils.normalizeLineBreaks
 
 class GitLabLicenseModelReporterTest : WordSpec({
     "GitLabLicenseModelReporter" should {
-        "create the expected YAML license model containing only non-excluded packages" {
+        "create the expected JSON license model containing only non-excluded packages" {
             val ortResult = createOrtResult()
 
-            val yamlLicenseModel = generateReport(ortResult = ortResult, skipExcluded = true)
+            val jsonLicenseModel = generateReport(ortResult = ortResult, skipExcluded = true) + "\n"
 
-            yamlLicenseModel shouldBe expectedOutput("gitlab-license-model-test-expected-output.yml")
+            jsonLicenseModel shouldBe expectedOutput("gitlab-license-model-test-expected-output.json")
         }
 
-        "create the expected YAML license model containing all packages referenced by any project " {
+        "create the expected JSON license model containing all packages referenced by any project " {
             val ortResult = createOrtResult()
 
-            val yamlLicenseModel = generateReport(ortResult = ortResult, skipExcluded = false)
+            val jsonLicenseModel = generateReport(ortResult = ortResult, skipExcluded = false) + "\n"
 
-            yamlLicenseModel shouldBe expectedOutput("gitlab-license-model-test-skip-excluded-expected-output.yml")
+            jsonLicenseModel shouldBe expectedOutput("gitlab-license-model-test-skip-excluded-expected-output.json")
         }
     }
 })
