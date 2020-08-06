@@ -299,7 +299,7 @@ class ExcelReporter : Reporter {
 
             val scanIssuesLines = row.scanIssues.size + row.scanIssues.flatMap { it.value }.size
 
-            sheet.createRow(currentRow).apply {
+            sheet.createRow(currentRow++).apply {
                 createCell(this, 0, row.id.toCoordinates(), font, cellStyle)
                 createCell(this, 1, scopesText, cellStyle)
                 createCell(this, 2, row.declaredLicenses.joinToString(" \n"), font, cellStyle)
@@ -307,13 +307,13 @@ class ExcelReporter : Reporter {
                 createCell(this, 4, analyzerIssuesText, font, cellStyle)
                 createCell(this, 5, scanIssuesText, font, cellStyle)
 
-                val maxLines = listOf(
-                    scopesLines, row.declaredLicenses.size, row.detectedLicenses.size,
-                    analyzerIssuesLines, scanIssuesLines
-                ).max() ?: 1
+                val maxLines = maxOf(
+                    maxOf(scopesLines, row.declaredLicenses.size, row.detectedLicenses.size),
+                    maxOf(analyzerIssuesLines, scanIssuesLines)
+                )
+
                 heightInPoints = maxLines * getSheet().defaultRowHeightInPoints
             }
-            ++currentRow
         }
 
         sheet.finalize(headerRows, currentRow, defaultColumns + extraColumns.size)
@@ -361,7 +361,7 @@ class ExcelReporter : Reporter {
 
             val scopesLines = row.scopes.size + row.scopes.flatMap { it.value }.size
 
-            sheet.createRow(currentRow).apply {
+            sheet.createRow(currentRow++).apply {
                 createCell(this, 0, row.id.toCoordinates(), font, cellStyle)
                 createCell(this, 1, scopesText, cellStyle)
                 createCell(this, 2, row.declaredLicenses.joinToString(" \n"), font, cellStyle)
@@ -369,13 +369,13 @@ class ExcelReporter : Reporter {
                 createCell(this, 4, row.analyzerIssues.joinToString(" \n") { it.description }, font, cellStyle)
                 createCell(this, 5, row.scanIssues.joinToString(" \n") { it.description }, font, cellStyle)
 
-                val maxLines = listOf(
-                    scopesLines, row.declaredLicenses.size, row.detectedLicenses.size,
-                    row.analyzerIssues.size, row.scanIssues.size
-                ).max() ?: 1
+                val maxLines = maxOf(
+                    maxOf(scopesLines, row.declaredLicenses.size, row.detectedLicenses.size),
+                    maxOf(row.analyzerIssues.size, row.scanIssues.size)
+                )
+
                 heightInPoints = maxLines * getSheet().defaultRowHeightInPoints
             }
-            ++currentRow
         }
 
         sheet.finalize(headerRows, currentRow, defaultColumns + extraColumns.size)
