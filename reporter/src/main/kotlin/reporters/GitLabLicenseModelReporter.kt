@@ -36,12 +36,12 @@ import org.ossreviewtoolkit.reporter.gitlab.GitLabLicenseModelMapper
  * Examples can be found under
  * https://gitlab.com/gitlab-org/security-products/license-management/-/tree/master/spec/fixtures/expected.
  *
- * The option key [SKIP_EXCLUDED] specifies whether to omit excluded packages. Valid values are 'true' and 'false' and
- * the default is 'false'.
+ * The option key [OPTION_SKIP_EXCLUDED] specifies whether to omit excluded packages. Valid values are 'true' and
+ * 'false' and the default is 'false'.
  */
 class GitLabLicenseModelReporter : Reporter {
     companion object {
-        const val SKIP_EXCLUDED = "skip.excluded"
+        const val OPTION_SKIP_EXCLUDED = "skip.excluded"
     }
 
     override val reporterName = "GitLabLicenseModel"
@@ -55,7 +55,7 @@ class GitLabLicenseModelReporter : Reporter {
         outputDir: File,
         options: Map<String, String>
     ): List<File> {
-        val skipExcluded = options[SKIP_EXCLUDED]?.toBoolean() ?: false
+        val skipExcluded = options[OPTION_SKIP_EXCLUDED]?.toBoolean() ?: false
 
         val licenseModel = GitLabLicenseModelMapper.map(input.ortResult, skipExcluded)
         val licenseModelYaml = yamlMapper.writeValueAsString(licenseModel)

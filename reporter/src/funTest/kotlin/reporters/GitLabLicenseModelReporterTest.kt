@@ -72,7 +72,7 @@ private fun generateReport(ortResult: OrtResult, skipExcluded: Boolean): String 
     GitLabLicenseModelReporter().generateReport(
         input = ReporterInput(ortResult = ortResult),
         outputDir = createTempDir(ORT_NAME, GitLabLicenseModelReporterTest::class.simpleName).apply { deleteOnExit() },
-        options = mapOf(GitLabLicenseModelReporter.SKIP_EXCLUDED to skipExcluded.toString())
+        options = mapOf(GitLabLicenseModelReporter.OPTION_SKIP_EXCLUDED to skipExcluded.toString())
     ).single().readText().normalizeLineBreaks()
 
 private fun createOrtResult(): OrtResult {
