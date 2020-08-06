@@ -19,13 +19,9 @@
 
 package org.ossreviewtoolkit.reporter.reporters
 
-import com.fasterxml.jackson.databind.ObjectMapper
-import com.fasterxml.jackson.databind.SerializationFeature
-import com.fasterxml.jackson.dataformat.yaml.YAMLMapper
-import com.fasterxml.jackson.module.kotlin.registerKotlinModule
-
 import java.io.File
 
+import org.ossreviewtoolkit.model.jsonMapper
 import org.ossreviewtoolkit.reporter.Reporter
 import org.ossreviewtoolkit.reporter.ReporterInput
 import org.ossreviewtoolkit.reporter.gitlab.GitLabLicenseModelMapper
@@ -46,11 +42,7 @@ class GitLabLicenseModelReporter : Reporter {
 
     override val reporterName = "GitLabLicenseModel"
 
-    private val reportFilename = "gitlab-license-model.yml"
-
-    private val yamlMapper: ObjectMapper = YAMLMapper()
-        .registerKotlinModule()
-        .enable(SerializationFeature.INDENT_OUTPUT)
+    private val reportFilename = "gl-license-scanning-report.json"
 
     override fun generateReport(
         input: ReporterInput,
@@ -60,10 +52,10 @@ class GitLabLicenseModelReporter : Reporter {
         val skipExcluded = options[OPTION_SKIP_EXCLUDED]?.toBoolean() ?: false
 
         val licenseModel = GitLabLicenseModelMapper.map(input.ortResult, skipExcluded)
-        val licenseModelYaml = yamlMapper.writeValueAsString(licenseModel)
+        val licenseModelJson = jsonMapper.writerWithDefaultPrettyPrinter().writeValueAsString(licenseModel)
 
         val outputFile = outputDir.resolve(reportFilename)
-        outputFile.bufferedWriter().use { it.write(licenseModelYaml) }
+        outputFile.bufferedWriter().use { it.write(licenseModelJson) }
 
         return listOf(outputFile)
     }
