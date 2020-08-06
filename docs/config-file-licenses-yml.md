@@ -2,7 +2,7 @@
 
 The `licenses.yml` file holds a user-defined categorization of licenses.
 
-You can use [examples/licenses.yml](examples/licenses.yml) as the base configuration file for your scans.
+You can use the [licenses.yml example](./examples/licenses.yml) as the base configuration file for your scans.
 
 ### When to Use
 

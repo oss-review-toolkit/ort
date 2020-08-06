@@ -2,7 +2,7 @@
 
 Curations correct invalid or missing package metadata and set the concluded license for packages.
 
-You can use [examples/curations.yml](examples/curations.yml) as the base configuration file for your scans.
+You can use the [curations.yml example](./examples/curations.yml) as the base configuration file for your scans.
 
 ## When to Use Curations
 

@@ -2,7 +2,7 @@
 
 The `copyright-garbage.yml` file allows for removal of incorrect copyright holder detections from the _reporter_ output.
 
-You can use [examples/copyright-garbage.yml](examples/copyright-garbage.yml) as the base file for your scans.
+You can use the [copyright-garbage.yml example](./examples/copyright-garbage.yml) as the base file for your scans.
 
 ### When to Use
 
