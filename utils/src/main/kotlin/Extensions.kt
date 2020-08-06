@@ -258,6 +258,11 @@ fun String.fileSystemEncode() =
         .take(255)
 
 /**
+ * Return true if the string represents a true value, otherwise return false.
+ */
+fun String?.isTrue() = this?.toBoolean() ?: false
+
+/**
  * Return the [percent-encoded](https://en.wikipedia.org/wiki/Percent-encoding) string.
  */
 fun String.percentEncode(): String =
