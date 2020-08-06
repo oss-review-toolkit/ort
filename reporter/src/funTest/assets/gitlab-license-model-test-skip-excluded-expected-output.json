@@ -16,21 +16,11 @@
     "name" : "",
     "url" : ""
   }, {
-    "id" : "LicenseRef-scancode-josl-1.0",
-    "name" : "",
-    "url" : ""
-  }, {
     "id" : "MIT",
     "name" : "MIT License",
     "url" : ""
   } ],
   "dependencies" : [ {
-    "name" : "excluded-package",
-    "version" : "0.0.4",
-    "package_manger" : "maven",
-    "path" : "some/path/build.gradle",
-    "licenses" : [ "LicenseRef-scancode-josl-1.0" ]
-  }, {
     "name" : "first-package",
     "version" : "0.0.1",
     "package_manger" : "maven",
