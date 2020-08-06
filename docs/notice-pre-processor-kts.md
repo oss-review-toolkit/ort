@@ -8,12 +8,13 @@ to create your custom open source notices.
 
 ## Command Line
 
-To use the `notice-pre-processor.kts` file pass it to the `--pre-processing-script` option of the _reporter_:
+To use the `notice-pre-processor.kts` file pass it to the `preProcessingScript` option of the _NoticeByPackage_ and _NoticeSummary_ reporters:
 
 ```bash
 cli/build/install/ort/bin/ort report
   -i [evaluator-output-path]/evaluation-result.yml
   -o [reporter-output-path]
   --report-formats NoticeByPackage,StaticHtml,WebApp
-  --pre-processing-script [ort-configuration-path]/notice-pre-processor.kts
+  -O NoticeByPackage=preProcessingScript=[ort-configuration-path]/notice-pre-processor.kts \
+  -O NoticeSummary=preProcessingScript=[ort-configuration-path]/notice-pre-processor.kts \
 ```
