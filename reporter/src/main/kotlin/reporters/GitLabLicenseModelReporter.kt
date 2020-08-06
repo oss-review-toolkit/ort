@@ -36,8 +36,8 @@ import org.ossreviewtoolkit.reporter.gitlab.GitLabLicenseModelMapper
  * Examples can be found under
  * https://gitlab.com/gitlab-org/security-products/license-management/-/tree/master/spec/fixtures/expected.
  *
- * The option key [OPTION_SKIP_EXCLUDED] specifies whether to omit excluded packages. Valid values are 'true' and
- * 'false' and the default is 'false'.
+ * This reporter supports the following options:
+ * - *skip.excluded*: Set to 'true' to omit excluded packages in the report. Defaults to 'false'.
  */
 class GitLabLicenseModelReporter : Reporter {
     companion object {
