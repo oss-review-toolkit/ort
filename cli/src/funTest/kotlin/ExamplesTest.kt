@@ -45,7 +45,7 @@ import org.ossreviewtoolkit.reporter.reporters.AntennaAttributionDocumentReporte
 import org.ossreviewtoolkit.utils.ORT_NAME
 
 class ExamplesTest : StringSpec() {
-    private val examplesDir = File("../docs/examples")
+    private val examplesDir = File("../examples")
     private lateinit var exampleFiles: MutableList<File>
 
     private fun takeExampleFile(name: String) = exampleFiles.single { it.name == name }.also { exampleFiles.remove(it) }

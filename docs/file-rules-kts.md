@@ -6,8 +6,8 @@ Rules are written in a Kotlin-based DSL.
 For each policy rule violation, you can define 'How to fix' follow-up actions to help users
 resolve policy rules violations by themselves.
 
-You can use [examples/rules.kts](examples/rules.kts) as the base script file for your policy rules. Note that this
-example depends on the licenses categorizations defined in [examples/licenses.yml](examples/licenses.yml), see the
+You can use the [rules.kts example](./examples/rules.kts) as the base script file for your policy rules. Note that this
+example depends on the licenses categorizations defined in the [licenses.yml example](./examples/licenses.yml), see the
 [licenses.yml docs](config-file-licenses-yml.md).
 
 ## Command Line

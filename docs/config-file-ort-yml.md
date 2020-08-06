@@ -108,20 +108,20 @@ Where the list of available options for scopes is defined in
 See the examples below for typical scope excludes for the supported package managers.
 Note that you must verify that the scopes defined in the examples below match the scopes in your project.
 
-* [bower.ort.yml](examples/bower.ort.yml)
-* [bundler.ort.yml](examples/bundler.ort.yml)
-* [cargo.ort.yml](examples/cargo.ort.yml)
-* [go-dep.ort.yml](examples/go-dep.ort.yml)
-* [go-mod.ort.yml](examples/go-mod.ort.yml)
-* [gradle.ort.yml](examples/gradle.ort.yml)
-* [gradle-android.ort.yml](examples/gradle-android.ort.yml)
-* [maven.ort.yml](examples/maven.ort.yml)
-* [npm.ort.yml](examples/npm.ort.yml)
-* [php-composer.ort.yml](examples/php-composer.ort.yml)
-* [pip.ort.yml](examples/pip.ort.yml)
-* [sbt.ort.yml](examples/sbt.ort.yml)
-* [stack.ort.yml](examples/stack.ort.yml)
-* [yarn.ort.yml](examples/yarn.ort.yml)
+* [bower.ort.yml](./examples/bower.ort.yml)
+* [bundler.ort.yml](./examples/bundler.ort.yml)
+* [cargo.ort.yml](./examples/cargo.ort.yml)
+* [go-dep.ort.yml](./examples/go-dep.ort.yml)
+* [go-mod.ort.yml](./examples/go-mod.ort.yml)
+* [gradle.ort.yml](./examples/gradle.ort.yml)
+* [gradle-android.ort.yml](./examples/gradle-android.ort.yml)
+* [maven.ort.yml](./examples/maven.ort.yml)
+* [npm.ort.yml](./examples/npm.ort.yml)
+* [php-composer.ort.yml](./examples/php-composer.ort.yml)
+* [pip.ort.yml](./examples/pip.ort.yml)
+* [sbt.ort.yml](./examples/sbt.ort.yml)
+* [stack.ort.yml](./examples/stack.ort.yml)
+* [yarn.ort.yml](./examples/yarn.ort.yml)
 
 ## Curations
 

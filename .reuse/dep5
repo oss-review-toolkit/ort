@@ -24,6 +24,10 @@ Files: docs/*
 Copyright: 2017-2020 HERE Europe B.V. <opensource@here.com>
 License: Apache-2.0
 
+Files: examples/*
+Copyright: 2017-2020 HERE Europe B.V. <opensource@here.com>
+License: Apache-2.0
+
 Files: logos/*
 Copyright: 2017-2020 HERE Europe B.V. <opensource@here.com>
 License: Apache-2.0
