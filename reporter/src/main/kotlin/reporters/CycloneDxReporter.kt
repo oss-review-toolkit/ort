@@ -42,6 +42,7 @@ import org.ossreviewtoolkit.model.licenses.ResolvedLicenseInfo
 import org.ossreviewtoolkit.reporter.Reporter
 import org.ossreviewtoolkit.reporter.ReporterInput
 import org.ossreviewtoolkit.spdx.SpdxLicense
+import org.ossreviewtoolkit.utils.isTrue
 
 private const val REPORT_BASE_FILENAME = "bom"
 private const val REPORT_EXTENSION = "xml"
@@ -94,7 +95,7 @@ class CycloneDxReporter : Reporter {
     ): List<File> {
         val outputFiles = mutableListOf<File>()
         val projects = input.ortResult.getProjects(omitExcluded = true)
-        val createSingleBom = options["single.bom"]?.toBoolean() == true
+        val createSingleBom = options["single.bom"].isTrue()
 
         if (createSingleBom && projects.size > 1) {
             val reportFilename = "bom.xml"

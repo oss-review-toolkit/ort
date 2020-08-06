@@ -25,6 +25,7 @@ import org.ossreviewtoolkit.model.jsonMapper
 import org.ossreviewtoolkit.reporter.Reporter
 import org.ossreviewtoolkit.reporter.ReporterInput
 import org.ossreviewtoolkit.reporter.gitlab.GitLabLicenseModelMapper
+import org.ossreviewtoolkit.utils.isTrue
 
 /**
  * Creates YAML documents according to the GitLab license model schema version 2.1, see
@@ -49,7 +50,7 @@ class GitLabLicenseModelReporter : Reporter {
         outputDir: File,
         options: Map<String, String>
     ): List<File> {
-        val skipExcluded = options[OPTION_SKIP_EXCLUDED]?.toBoolean() ?: false
+        val skipExcluded = options[OPTION_SKIP_EXCLUDED].isTrue()
 
         val licenseModel = GitLabLicenseModelMapper.map(input.ortResult, skipExcluded)
         val licenseModelJson = jsonMapper.writerWithDefaultPrettyPrinter().writeValueAsString(licenseModel)
