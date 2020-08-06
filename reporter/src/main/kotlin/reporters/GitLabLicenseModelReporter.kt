@@ -46,6 +46,8 @@ class GitLabLicenseModelReporter : Reporter {
 
     override val reporterName = "GitLabLicenseModel"
 
+    private val reportFilename = "gitlab-license-model.yml"
+
     private val yamlMapper: ObjectMapper = YAMLMapper()
         .registerKotlinModule()
         .enable(SerializationFeature.INDENT_OUTPUT)
@@ -60,7 +62,7 @@ class GitLabLicenseModelReporter : Reporter {
         val licenseModel = GitLabLicenseModelMapper.map(input.ortResult, skipExcluded)
         val licenseModelYaml = yamlMapper.writeValueAsString(licenseModel)
 
-        val outputFile = outputDir.resolve("gitlab-license-model.yml")
+        val outputFile = outputDir.resolve(reportFilename)
         outputFile.bufferedWriter().use { it.write(licenseModelYaml) }
 
         return listOf(outputFile)
