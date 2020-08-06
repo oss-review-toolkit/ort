@@ -160,13 +160,13 @@ Please see [Getting Started](./docs/getting-started.md) for an introduction to t
 
 Please see the documentation below for details about the ORT configuration.
 
-* [The .ort.yml file](./docs/config-file-ort-yml.md) - project-specific license finding curations, exclusions
+* The [.ort.yml](./docs/config-file-ort-yml.md) file - project-specific license finding curations, exclusions
   and resolutions to address issues found within a project's code repository.
-* [The package configuration file](./docs/config-file-package-configuration-yml.md) - package (dependency) and provenance
+* The [package configuration](./docs/config-file-package-configuration-yml.md) file - package (dependency) and provenance
   specific license finding curations and exclusions to address issues found within a scan result for a package.
-* [The curations.yml file](./docs/config-file-curations-yml.md) - curations correct invalid or missing package metadata
+* The [curations.yml](./docs/config-file-curations-yml.md) file - curations correct invalid or missing package metadata
   and set the concluded license for packages.
-* [The resolutions.yml file](./docs/config-file-resolutions-yml.md) - resolutions allow *resolving* any issues
+* The [resolutions.yml](./docs/config-file-resolutions-yml.md) file - resolutions allow *resolving* any issues
   or policy rule violations by providing a reason why they are acceptable and can be ignored.
 
 # Details on the tools
