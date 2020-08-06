@@ -1,4 +1,5 @@
 {
+  "version" : "2.1",
   "licenses" : [ {
     "id" : "Apache-2.0",
     "name" : "Apache License 2.0",
