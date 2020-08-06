@@ -160,6 +160,9 @@ Please see [Getting Started](./docs/getting-started.md) for an introduction to t
 
 Please see the documentation below for details about the ORT configuration.
 
+* The [ORT configuration](./model/src/main/resources/reference.conf) file - the main configuration file for the
+  operation of ORT. This configuration is maintained by an administrator who manages the ORT instance. In constrast to
+  the configuration files in the following, this file rarely changes once ORT is operational.
 * The [.ort.yml](./docs/config-file-ort-yml.md) file - project-specific license finding curations, exclusions
   and resolutions to address issues found within a project's code repository.
 * The [package configuration](./docs/config-file-package-configuration-yml.md) file - package (dependency) and provenance
