@@ -251,9 +251,9 @@ class MavenSupport(workspaceReader: WorkspaceReader) {
         EnvironmentUtils.addEnvVars(props)
         request.systemProperties = props
 
-        val populator = container.lookup(MavenExecutionRequestPopulator::class.java, "default")
+        val populator = containerLookup<MavenExecutionRequestPopulator>()
 
-        val settingsBuilder = container.lookup(org.apache.maven.settings.MavenSettingsBuilder::class.java, "default")
+        val settingsBuilder = containerLookup<org.apache.maven.settings.MavenSettingsBuilder>()
         // TODO: Add a way to configure the location of a user settings file and pass it to the method below which will
         //       merge the user settings with the global settings. The default location of the global settings file is
         //       "${user.home}/.m2/settings.xml". The settings file locations can already be overwritten using the
@@ -267,12 +267,9 @@ class MavenSupport(workspaceReader: WorkspaceReader) {
     }
 
     private fun createRepositorySystemSession(workspaceReader: WorkspaceReader): RepositorySystemSession {
-        val mavenRepositorySystem = container.lookup(MavenRepositorySystem::class.java, "default")
-        val aetherRepositorySystem = container.lookup(RepositorySystem::class.java, "default")
-        val repositorySystemSessionFactory = container.lookup(
-            DefaultRepositorySystemSessionFactory::class.java,
-            "default"
-        )
+        val mavenRepositorySystem = containerLookup<MavenRepositorySystem>()
+        val aetherRepositorySystem = containerLookup<RepositorySystem>()
+        val repositorySystemSessionFactory = containerLookup<DefaultRepositorySystemSessionFactory>()
 
         val repositorySystemSession = repositorySystemSessionFactory
             .newRepositorySession(createMavenExecutionRequest())
@@ -295,8 +292,14 @@ class MavenSupport(workspaceReader: WorkspaceReader) {
         }
     }
 
+    /**
+     * Looks up an instance of the class provided from the Maven Plexus container.
+     */
+    inline fun <reified T> containerLookup(hint: String = "default"): T =
+        container.lookup(T::class.java, hint)
+
     fun buildMavenProject(pomFile: File): ProjectBuildingResult {
-        val projectBuilder = container.lookup(ProjectBuilder::class.java, "default")
+        val projectBuilder = containerLookup<ProjectBuilder>()
         val projectBuildingRequest = createProjectBuildingRequest(true)
 
         return try {
@@ -339,11 +342,11 @@ class MavenSupport(workspaceReader: WorkspaceReader) {
             return yamlMapper.readValue(it)
         }
 
-        val repoSystem = container.lookup(RepositorySystem::class.java, "default")
-        val remoteRepositoryManager = container.lookup(RemoteRepositoryManager::class.java, "default")
-        val repositoryLayoutProvider = container.lookup(RepositoryLayoutProvider::class.java, "default")
-        val repositoryConnectorProvider = container.lookup(RepositoryConnectorProvider::class.java, "default")
-        val transporterProvider = container.lookup(TransporterProvider::class.java, "default")
+        val repoSystem = containerLookup<RepositorySystem>()
+        val remoteRepositoryManager = containerLookup<RemoteRepositoryManager>()
+        val repositoryLayoutProvider = containerLookup<RepositoryLayoutProvider>()
+        val repositoryConnectorProvider = containerLookup<RepositoryConnectorProvider>()
+        val transporterProvider = containerLookup<TransporterProvider>()
 
         // Create an artifact descriptor to get the list of repositories from the related POM file.
         val artifactDescriptorRequest = ArtifactDescriptorRequest(artifact, repositories, "project")
@@ -485,8 +488,8 @@ class MavenSupport(workspaceReader: WorkspaceReader) {
         artifact: Artifact, repositories: List<RemoteRepository>,
         localProjects: Map<String, MavenProject> = emptyMap(), sbtMode: Boolean = false
     ): Package {
-        val mavenRepositorySystem = container.lookup(MavenRepositorySystem::class.java, "default")
-        val projectBuilder = container.lookup(ProjectBuilder::class.java, "default")
+        val mavenRepositorySystem = containerLookup<MavenRepositorySystem>()
+        val projectBuilder = containerLookup<ProjectBuilder>()
         val projectBuildingRequest = createProjectBuildingRequest(false)
 
         projectBuildingRequest.remoteRepositories = repositories.map { repo ->
@@ -591,10 +594,10 @@ class MavenSupport(workspaceReader: WorkspaceReader) {
         @Suppress("DEPRECATION")
         val mavenSession = MavenSession(container, repositorySystemSession, request, result)
 
-        val legacySupport = container.lookup(LegacySupport::class.java, "default")
+        val legacySupport = containerLookup<LegacySupport>()
         legacySupport.session = mavenSession
 
-        val sessionScope = container.lookup(SessionScope::class.java, "default")
+        val sessionScope = containerLookup<SessionScope>()
         sessionScope.enter()
 
         try {
