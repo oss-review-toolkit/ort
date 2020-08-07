@@ -96,7 +96,7 @@ class Maven(
     fun enableSbtMode() = also { sbtMode = true }
 
     override fun beforeResolution(definitionFiles: List<File>) {
-        val projectBuilder = mvn.container.lookup(ProjectBuilder::class.java, "default")
+        val projectBuilder = mvn.containerLookup<ProjectBuilder>()
         val projectBuildingRequest = mvn.createProjectBuildingRequest(false)
         val projectBuildingResults = try {
             projectBuilder.build(definitionFiles, false, projectBuildingRequest)
