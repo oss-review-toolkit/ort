@@ -262,6 +262,7 @@ class MavenSupport(workspaceReader: WorkspaceReader) {
 
         populator.populateFromSettings(request, settings)
         populator.populateDefaults(request)
+        repositorySystemSession.injectProxy(request)
 
         return request
     }
@@ -290,6 +291,17 @@ class MavenSupport(workspaceReader: WorkspaceReader) {
             installAuthenticatorAndProxySelector()
             proxySelector = JreProxySelector()
         }
+    }
+
+    /**
+     * Makes sure that the [MavenExecutionRequest] is correctly configured with the current proxy.
+     *
+     * This is necessary in the special case that in the Maven environment no repositories are
+     * defined, and hence Maven Central is used as default. Then, for the Maven Central repository
+     * no proxy is set.
+     */
+    private fun RepositorySystemSession.injectProxy(request: MavenExecutionRequest) {
+        containerLookup<MavenRepositorySystem>().injectProxy(this, request.remoteRepositories)
     }
 
     /**
