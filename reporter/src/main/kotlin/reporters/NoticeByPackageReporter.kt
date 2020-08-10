@@ -20,7 +20,6 @@
 package org.ossreviewtoolkit.reporter.reporters
 
 import java.io.File
-import java.nio.file.Path
 
 import org.apache.logging.log4j.Level
 
@@ -235,10 +234,9 @@ class NoticeByPackageProcessor(input: ReporterInput) : AbstractNoticeReporter.No
         val licenseFiles = mutableMapOf<String, LicenseFindingsMap>()
 
         archiveDir.walk().forEach { file ->
-            val relativePath = archiveDir.toPath().relativize(file.toPath())
-            val relativePathString = relativePath.toString()
-            if (matcher.matches(relativePathString)) {
-                licenseFiles[relativePathString] =
+            val relativePath = file.toRelativeString(archiveDir)
+            if (matcher.matches(relativePath)) {
+                licenseFiles[relativePath] =
                     getFindingsForLicenseFile(scanResult, relativePath, licenseFindingsMap)
             }
         }
@@ -248,7 +246,7 @@ class NoticeByPackageProcessor(input: ReporterInput) : AbstractNoticeReporter.No
 
     private fun getFindingsForLicenseFile(
         scanResult: ScanResult,
-        path: Path,
+        path: String,
         licenseFindingsMap: LicenseFindingsMap
     ): LicenseFindingsMap {
         val licenses = findLicensesForFile(scanResult, path)
@@ -269,17 +267,17 @@ class NoticeByPackageProcessor(input: ReporterInput) : AbstractNoticeReporter.No
         }.toSortedMap()
     }
 
-    private fun findCopyrightsForFile(scanResult: ScanResult, relativePath: Path): Set<String> {
+    private fun findCopyrightsForFile(scanResult: ScanResult, relativePath: String): Set<String> {
         return scanResult.summary.copyrightFindings.filter {
-            it.location.path == relativePath.toString()
+            it.location.path == relativePath
         }.mapTo(mutableSetOf()) {
             it.statement
         }
     }
 
-    private fun findLicensesForFile(scanResult: ScanResult, relativePath: Path): Set<String> {
+    private fun findLicensesForFile(scanResult: ScanResult, relativePath: String): Set<String> {
         return scanResult.summary.licenseFindings.filter {
-            it.location.path == relativePath.toString()
+            it.location.path == relativePath
         }.mapTo(mutableSetOf()) {
             it.license.toString()
         }
