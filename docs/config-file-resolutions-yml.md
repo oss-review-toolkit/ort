@@ -94,4 +94,5 @@ cli/build/install/ort/bin/ort report
   -o [reporter-output-path]
   --report-formats NoticeByPackage,StaticHtml,WebApp
   --license-configuration-file [ort-configuration-path]/licenses.yml
+  --resolutions-file [ort-configuration-path]/resolutions.yml
 ```
