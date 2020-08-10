@@ -32,6 +32,7 @@ import org.ossreviewtoolkit.model.utils.DefaultResolutionProvider
 import org.ossreviewtoolkit.model.utils.PackageConfigurationProvider
 import org.ossreviewtoolkit.model.utils.ResolutionProvider
 import org.ossreviewtoolkit.model.utils.SimplePackageConfigurationProvider
+import org.ossreviewtoolkit.utils.storage.FileArchiver
 
 /**
  * A bundle of input to be used by [Reporter] implementations.
@@ -72,7 +73,8 @@ data class ReporterInput(
      */
     val licenseInfoResolver: LicenseInfoResolver = LicenseInfoResolver(
         provider = DefaultLicenseInfoProvider(ortResult, packageConfigurationProvider),
-        copyrightGarbage = copyrightGarbage
+        copyrightGarbage = copyrightGarbage,
+        archiver = ortConfig.scanner?.archive?.createFileArchiver() ?: FileArchiver.DEFAULT
     ),
 
     /**
