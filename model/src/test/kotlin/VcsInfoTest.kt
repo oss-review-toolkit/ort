@@ -23,12 +23,12 @@ import com.fasterxml.jackson.databind.exc.UnrecognizedPropertyException
 import com.fasterxml.jackson.module.kotlin.readValue
 
 import io.kotest.assertions.throwables.shouldThrow
-import io.kotest.core.spec.style.StringSpec
+import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.collections.containAll
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 
-class VcsInfoTest : StringSpec({
+class VcsInfoTest : WordSpec({
     "Deserializing VcsInfo" should {
         "work when all fields are given" {
             val yaml = """
