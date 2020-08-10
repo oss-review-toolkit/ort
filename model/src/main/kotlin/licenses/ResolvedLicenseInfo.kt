@@ -68,6 +68,16 @@ data class ResolvedLicenseInfo(
      * Call [LicenseView.filter] on this [ResolvedLicenseInfo].
      */
     fun filter(licenseView: LicenseView) = licenseView.filter(this)
+
+    /**
+     * Filter all licenses that have a location matching [provenance] and [path].
+     */
+    fun filter(provenance: Provenance, path: String): List<ResolvedLicense> =
+        filter { resolvedLicense ->
+            resolvedLicense.locations.any {
+                it.provenance == provenance && it.location.path == path
+            }
+        }
 }
 
 /**

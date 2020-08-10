@@ -32,11 +32,13 @@ import org.ossreviewtoolkit.model.utils.SimplePackageConfigurationProvider
 import org.ossreviewtoolkit.spdx.SpdxExpression
 import org.ossreviewtoolkit.spdx.SpdxSingleLicenseExpression
 import org.ossreviewtoolkit.spdx.toSpdx
+import org.ossreviewtoolkit.utils.storage.FileArchiver
 
 class LicenseViewFilterTest : AbstractLicenseViewTest() {
     private val licenseInfoResolver = LicenseInfoResolver(
         DefaultLicenseInfoProvider(ortResult, SimplePackageConfigurationProvider()),
-        CopyrightGarbage()
+        CopyrightGarbage(),
+        FileArchiver.DEFAULT
     )
 
     override fun LicenseView.getLicensesWithSources(

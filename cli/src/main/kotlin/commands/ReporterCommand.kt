@@ -59,6 +59,7 @@ import org.ossreviewtoolkit.utils.expandTilde
 import org.ossreviewtoolkit.utils.log
 import org.ossreviewtoolkit.utils.safeMkdirs
 import org.ossreviewtoolkit.utils.showStackTrace
+import org.ossreviewtoolkit.utils.storage.FileArchiver
 
 class ReporterCommand : CliktCommand(
     name = "report",
@@ -172,7 +173,8 @@ class ReporterCommand : CliktCommand(
 
         val licenseInfoResolver = LicenseInfoResolver(
             provider = DefaultLicenseInfoProvider(ortResult, packageConfigurationProvider),
-            copyrightGarbage = copyrightGarbage
+            copyrightGarbage = copyrightGarbage,
+            archiver = config.scanner?.archive?.createFileArchiver() ?: FileArchiver.DEFAULT
         )
 
         val licenseConfiguration = licenseConfigurationFile?.readValue<LicenseConfiguration>().orEmpty()
