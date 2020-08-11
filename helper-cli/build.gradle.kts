@@ -52,6 +52,16 @@ repositories {
             includeGroup("org.gradle")
         }
     }
+
+    exclusiveContent {
+        forRepository {
+            maven("https://download.eclipse.org/antenna/releases/")
+        }
+
+        filter {
+            includeGroup("org.eclipse.sw360.antenna")
+        }
+    }
 }
 
 dependencies {
