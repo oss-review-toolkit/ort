@@ -32,13 +32,10 @@ import org.ossreviewtoolkit.reporter.ReporterInput
 import org.ossreviewtoolkit.reporter.reporters.AbstractNoticeReporter.NoticeReportModel
 import org.ossreviewtoolkit.utils.CopyrightStatementsProcessor
 import org.ossreviewtoolkit.utils.FileMatcher
-import org.ossreviewtoolkit.utils.LICENSE_FILENAMES
 import org.ossreviewtoolkit.utils.ORT_NAME
 import org.ossreviewtoolkit.utils.log
 import org.ossreviewtoolkit.utils.logOnce
-import org.ossreviewtoolkit.utils.ortDataDirectory
 import org.ossreviewtoolkit.utils.storage.FileArchiver
-import org.ossreviewtoolkit.utils.storage.LocalFileStorage
 
 /**
  * Creates a notice file containing the licenses for all non-excluded projects and packages, listed by their identifier.
@@ -61,7 +58,6 @@ class NoticeByPackageReporter : AbstractNoticeReporter() {
 
 class NoticeByPackageProcessor(input: ReporterInput) : AbstractNoticeReporter.NoticeProcessor(input) {
     companion object {
-        private val DEFAULT_ARCHIVE_DIR by lazy { ortDataDirectory.resolve("scanner/archive") }
         private const val LICENSE_SEPARATOR = "\n  --\n\n"
     }
 
@@ -126,10 +122,7 @@ class NoticeByPackageProcessor(input: ReporterInput) : AbstractNoticeReporter.No
     }
 
     private fun MutableList<() -> String>.addPackageFindings(findings: Map<Identifier, LicenseFindingsMap>) {
-        val archiver = input.ortConfig.scanner?.archive?.createFileArchiver() ?: FileArchiver(
-            LICENSE_FILENAMES,
-            LocalFileStorage(DEFAULT_ARCHIVE_DIR)
-        )
+        val archiver = input.ortConfig.scanner?.archive?.createFileArchiver() ?: FileArchiver.DEFAULT
 
         findings.forEach { (id, licenseFindingsMap) ->
             add { AbstractNoticeReporter.NOTICE_SEPARATOR }

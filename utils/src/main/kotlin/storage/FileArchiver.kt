@@ -23,9 +23,11 @@ import java.io.File
 import java.io.IOException
 
 import org.ossreviewtoolkit.utils.FileMatcher
+import org.ossreviewtoolkit.utils.LICENSE_FILENAMES
 import org.ossreviewtoolkit.utils.ORT_NAME
 import org.ossreviewtoolkit.utils.collectMessagesAsString
 import org.ossreviewtoolkit.utils.log
+import org.ossreviewtoolkit.utils.ortDataDirectory
 import org.ossreviewtoolkit.utils.packZip
 import org.ossreviewtoolkit.utils.showStackTrace
 import org.ossreviewtoolkit.utils.unpackZip
@@ -47,6 +49,12 @@ class FileArchiver(
 ) {
     companion object {
         private const val ARCHIVE_FILE_NAME = "archive.zip"
+        private val DEFAULT_ARCHIVE_DIR by lazy { ortDataDirectory.resolve("scanner/archive") }
+
+        /**
+         * A default [FileArchiver] that archives [license files][LICENSE_FILENAMES] in a local directory.
+         */
+        val DEFAULT by lazy { FileArchiver(LICENSE_FILENAMES, LocalFileStorage(DEFAULT_ARCHIVE_DIR)) }
     }
 
     private val matcher = FileMatcher(patterns)
