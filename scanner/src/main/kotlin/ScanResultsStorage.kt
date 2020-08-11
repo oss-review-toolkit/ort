@@ -113,7 +113,7 @@ abstract class ScanResultsStorage {
                 is FileBasedStorageConfiguration -> createFileBasedStorage(config)
                 is PostgresStorageConfiguration -> createPostgresStorage(config)
                 is ClearlyDefinedStorageConfiguration -> createClearlyDefinedStorage(config)
-                is Sw360StorageConfiguration -> TODO()
+                is Sw360StorageConfiguration -> configureSw360Storage(config)
             }
 
         /**
@@ -188,6 +188,12 @@ abstract class ScanResultsStorage {
         private fun HikariConfig.addDataSourcePropertyIfDefined(key: String, value: String?) {
             value?.let { addDataSourceProperty(key, it) }
         }
+
+        /**
+         * Configure a [Sw360Storage] as the current storage backend.
+         */
+        private fun configureSw360Storage(config: Sw360StorageConfiguration): ScanResultsStorage =
+            Sw360Storage(config)
     }
 
     /**

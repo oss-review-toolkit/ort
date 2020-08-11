@@ -18,6 +18,7 @@
  * License-Filename: LICENSE
  */
 
+val antennaVersion: String by project
 val hikariVersion: String by project
 val jacksonVersion: String by project
 val kotlinxCoroutinesVersion: String by project
@@ -31,6 +32,18 @@ plugins {
     `java-library`
 }
 
+repositories {
+    exclusiveContent {
+        forRepository {
+            maven("https://download.eclipse.org/antenna/releases/")
+        }
+
+        filter {
+            includeGroup("org.eclipse.sw360.antenna")
+        }
+    }
+}
+
 dependencies {
     api(project(":model"))
 
@@ -40,6 +53,7 @@ dependencies {
 
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin:$jacksonVersion")
     implementation("com.zaxxer:HikariCP:$hikariVersion")
+    implementation("org.eclipse.sw360.antenna:sw360-client:$antennaVersion")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlinxCoroutinesVersion")
     implementation("org.postgresql:postgresql:$postgresVersion")
 
