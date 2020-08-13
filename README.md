@@ -30,24 +30,22 @@
 
 # Introduction
 
-The OSS Review Toolkit (ORT) assists with verifying Free and Open Source Software license compliance by checking a
-project's source code and its dependencies.
+The OSS Review Toolkit (ORT) aims to assist with the tasks that commonly need to be performed in the context of license
+compliance checks, especially for (but not limited to) Free and Open Source Software dependencies.
 
-From a bird's eye, it works by analyzing the project's build system for dependencies, downloading the source code of the
-dependencies, scanning all source code for license information, and summarizing the results.
+It does so by orchestrating a _highly customizable_ pipeline of tools that _abstract away_ the underlying services.
+These tools are implemented as libraries (for programmatic use) and exposed via a command line interface (for scripted
+use):
 
-The different tools that make up ORT are designed as libraries (for programmatic use), with a minimal command line
-interface (for scripted use).
-
-The toolkit consists of the following tools:
-
-* [_Analyzer_](#analyzer) - determines dependencies of a project. Supports multiple package managers and sub-projects.
-  No changes to the projects are required.
-* [_Downloader_](#downloader) - fetches the source code referred to by the Analyzer result.
-* [_Scanner_](#scanner) - wraps existing license / copyright scanners to detect findings in local source code
-  directories.
-* [_Evaluator_](#evaluator) - evaluates license findings against customizable policy rules.
-* [_Reporter_](#reporter) - presents results in various formats such as visual reports, open source notices or
+* [_Analyzer_](#analyzer) - determines the dependencies of projects and their meta-data, abstracting which package
+  managers or build systems are actually being used.
+* [_Downloader_](#downloader) - fetches all source code of the projects and their dependencies, abstracting which
+  Version Control System (VCS) or other means are used to retrieve the source code.
+* [_Scanner_](#scanner) - uses configured source code scanners to detect license / copyright findings, abstracting
+  the type of scanner.
+* [_Evaluator_](#evaluator) - evaluates license / copyright findings against customizable policy rules and license
+  classifications.
+* [_Reporter_](#reporter) - presents results in various formats such as visual reports, Open Source notices or
   Bill-Of-Materials (BOMs) to easily identify dependencies, licenses, copyrights or policy rule violations.
 
 The following tools are [planned](https://github.com/oss-review-toolkit/ort/projects/1) but not yet available:
