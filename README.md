@@ -223,7 +223,7 @@ all contained packages to the specified output directory (`-o`). The _downloader
 URLs and using the [appropriate VCS tool](./downloader/src/main/kotlin/vcs) to checkout source code from version
 control.
 
-Currently, the following Version Control Systems are supported:
+Currently, the following Version Control Systems (VCS) are supported:
 
 * [CVS](https://en.wikipedia.org/wiki/Concurrent_Versions_System)
 * [Git](https://git-scm.com/)
