@@ -20,6 +20,7 @@
 package org.ossreviewtoolkit.reporter.reporters
 
 import java.io.File
+import java.util.SortedMap
 
 import org.apache.logging.log4j.Level
 
@@ -88,7 +89,7 @@ class NoticeByPackageProcessor(input: ReporterInput) : AbstractNoticeReporter.No
             } else {
                 add { model.headerWithLicenses }
 
-                addPackageFindings(packageFindings)
+                addPackageFindings(packageFindings.toSortedMap())
             }
 
             model.footers.forEach { footer ->
@@ -121,7 +122,7 @@ class NoticeByPackageProcessor(input: ReporterInput) : AbstractNoticeReporter.No
         addProcessedFindings(processedFindings)
     }
 
-    private fun MutableList<() -> String>.addPackageFindings(findings: Map<Identifier, LicenseFindingsMap>) {
+    private fun MutableList<() -> String>.addPackageFindings(findings: SortedMap<Identifier, LicenseFindingsMap>) {
         val archiver = input.ortConfig.scanner?.archive?.createFileArchiver() ?: FileArchiver.DEFAULT
 
         findings.forEach { (id, licenseFindingsMap) ->
