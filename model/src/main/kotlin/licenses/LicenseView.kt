@@ -121,12 +121,14 @@ class LicenseView(vararg licenseSources: Set<LicenseSource>) {
         // codes can be expensive for resolved licenses with many license and copyright findings.
         val licenses = mutableSetOf<SpdxSingleLicenseExpression>()
 
-        licenseSources.forEach { sources ->
-            resolvedLicense.licenses.filter { license ->
-                license.sources.any { it in sources }
-            }.mapTo(licenses) { it.license }
+        run loop@{
+            licenseSources.forEach { sources ->
+                resolvedLicense.licenses.filter { license ->
+                    license.sources.any { it in sources }
+                }.mapTo(licenses) { it.license }
 
-            if (licenses.isNotEmpty()) return@forEach
+                if (licenses.isNotEmpty()) return@loop
+            }
         }
 
         return resolvedLicense.copy(licenses = resolvedLicense.licenses.filter { it.license in licenses })
