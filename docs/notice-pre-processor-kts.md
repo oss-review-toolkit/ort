@@ -3,7 +3,7 @@
 The `notice-pre-processor.kts` file enables customization of the generated open source notices
 such as headers, footers and the conditional inclusion of a source code offer.
 
-You can use the [notice-pre-processor.kts example](./examples/notice-pre-processor.kts) as the base script file to
+You can use the [notice-pre-processor.kts example](../examples/notice-pre-processor.kts) as the base script file to
 create your custom open source notices.
 
 ## Command Line
