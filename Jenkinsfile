@@ -382,7 +382,7 @@ pipeline {
                 withCredentials(projectVcsCredentials) {
                     script {
                         def status = sh returnStatus: true, script: '''
-                            /opt/ort/bin/ort $LOG_LEVEL --stacktrace evaluate -i out/results/current-result.yml -o out/results/evaluator -r docs/examples/rules.kts --license-configuration-file docs/examples/licenses.yml
+                            /opt/ort/bin/ort $LOG_LEVEL --stacktrace evaluate -i out/results/current-result.yml -o out/results/evaluator -r examples/rules.kts --license-configuration-file examples/licenses.yml
                         '''
 
                         if (status >= ORT_FAILURE_STATUS_CODE) unstable('Rule violations found.')
