@@ -28,19 +28,19 @@ import org.ossreviewtoolkit.spdx.SpdxSingleLicenseExpression
  * licenses relevant to a [Rule] whereas the [licenseSources] is the filter criteria. Only the entry with the lowest
  * index in the given [licenseSources] which yields a non-empty result is used as filter criteria.
  */
-class LicenseView(vararg licenseSources: List<LicenseSource>) {
+class LicenseView(vararg licenseSources: Set<LicenseSource>) {
     companion object {
         /**
          * Return all licenses.
          */
-        val ALL = LicenseView(listOf(LicenseSource.DECLARED, LicenseSource.DETECTED, LicenseSource.CONCLUDED))
+        val ALL = LicenseView(setOf(LicenseSource.DECLARED, LicenseSource.DETECTED, LicenseSource.CONCLUDED))
 
         /**
          * Return only the concluded licenses if they exist, otherwise return declared and detected licenses.
          */
         val CONCLUDED_OR_REST = LicenseView(
-            listOf(LicenseSource.CONCLUDED),
-            listOf(LicenseSource.DECLARED, LicenseSource.DETECTED)
+            setOf(LicenseSource.CONCLUDED),
+            setOf(LicenseSource.DECLARED, LicenseSource.DETECTED)
         )
 
         /**
@@ -48,36 +48,36 @@ class LicenseView(vararg licenseSources: List<LicenseSource>) {
          * return the detected licenses.
          */
         val CONCLUDED_OR_DECLARED_OR_DETECTED = LicenseView(
-            listOf(LicenseSource.CONCLUDED),
-            listOf(LicenseSource.DECLARED),
-            listOf(LicenseSource.DETECTED)
+            setOf(LicenseSource.CONCLUDED),
+            setOf(LicenseSource.DECLARED),
+            setOf(LicenseSource.DETECTED)
         )
 
         /**
          * Return only the concluded licenses if they exist, otherwise return detected licenses.
          */
         val CONCLUDED_OR_DETECTED = LicenseView(
-            listOf(LicenseSource.CONCLUDED),
-            listOf(LicenseSource.DETECTED)
+            setOf(LicenseSource.CONCLUDED),
+            setOf(LicenseSource.DETECTED)
         )
 
         /**
          * Return only the concluded licenses.
          */
-        val ONLY_CONCLUDED = LicenseView(listOf(LicenseSource.CONCLUDED))
+        val ONLY_CONCLUDED = LicenseView(setOf(LicenseSource.CONCLUDED))
 
         /**
          * Return only the declared licenses.
          */
-        val ONLY_DECLARED = LicenseView(listOf(LicenseSource.DECLARED))
+        val ONLY_DECLARED = LicenseView(setOf(LicenseSource.DECLARED))
 
         /**
          * Return only the detected licenses.
          */
-        val ONLY_DETECTED = LicenseView(listOf(LicenseSource.DETECTED))
+        val ONLY_DETECTED = LicenseView(setOf(LicenseSource.DETECTED))
     }
 
-    private val licenseSources = licenseSources.toList()
+    private val licenseSources = licenseSources.toSet()
 
     fun licenses(
         pkg: Package,
