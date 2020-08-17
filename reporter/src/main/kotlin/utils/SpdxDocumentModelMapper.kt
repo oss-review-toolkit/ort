@@ -208,7 +208,7 @@ private fun ProcessedDeclaredLicense.toSpdxDeclaredLicense(): String =
         else -> spdxExpression.toString()
     }
 
-private fun String?.nullOrBlankToSpdxNone(): String = if (isNullOrBlank()) SpdxConstants.NONE else this!!
+private fun String?.nullOrBlankToSpdxNone(): String = if (isNullOrBlank()) SpdxConstants.NONE else this
 
 private fun ScanResult.toSpdxPackageVerificationCode(): SpdxPackageVerificationCode =
     SpdxPackageVerificationCode(

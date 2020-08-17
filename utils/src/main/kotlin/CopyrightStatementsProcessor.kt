@@ -186,7 +186,7 @@ class CopyrightStatementsProcessor {
     private fun stripKnownCopyrightPrefix(copyrightStatement: String): Pair<String, String> {
         val match = KNOWN_PREFIX_REGEX.mapNotNull { regex ->
             regex.find(copyrightStatement)
-        }.maxBy {
+        }.maxByOrNull {
             it.groups[1]!!.value.length
         } ?: return Pair(first = copyrightStatement, second = "")
 

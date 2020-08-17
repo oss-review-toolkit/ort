@@ -100,10 +100,10 @@ internal class ListCopyrightsCommand : CliktCommand(
 
         val result = buildString {
             copyrightStatements.forEach { (processedStatement, unprocessedStatements) ->
-                appendln(processedStatement)
+                appendLine(processedStatement)
                 if (showRawStatements && unprocessedStatements.size > 1) {
                     unprocessedStatements.forEach {
-                        appendln("  $it")
+                        appendLine("  $it")
                     }
                 }
             }

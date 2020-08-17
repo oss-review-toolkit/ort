@@ -88,7 +88,7 @@ internal class StatisticsCalculator {
             .flatMap { project -> project.scopes }
             .filterNot { scope -> ignoreExcluded && ortResult.repository.config.excludes.isScopeExcluded(scope) }
             .map { scope -> scope.getDependencyTreeDepth() }
-            .max() ?: 0
+            .maxOrNull() ?: 0
 
     private fun getIncludedScopes(ortResult: OrtResult): Set<String> =
         ortResult

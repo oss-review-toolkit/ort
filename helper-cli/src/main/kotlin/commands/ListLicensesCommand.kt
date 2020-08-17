@@ -180,9 +180,9 @@ internal class ListLicensesCommand : CliktCommand(
             }
 
         buildString {
-            appendln("  scan results:")
+            appendLine("  scan results:")
             findingsByProvenance.keys.forEachIndexed { i, provenance ->
-                appendln("    [$i] ${provenance.writeValueAsString()}")
+                appendLine("    [$i] ${provenance.writeValueAsString()}")
             }
         }.also { println(it) }
 
@@ -223,19 +223,19 @@ private fun Map<SpdxSingleLicenseExpression, List<TextLocationGroup>>.writeValue
     includeLicenseTexts: Boolean = true
 ): String {
     return buildString {
-        fun appendlnIndent(value: String, indent: Int) {
+        fun appendLineIndent(value: String, indent: Int) {
             require(indent > 0)
-            appendln(value.replaceIndent(" ".repeat(indent)))
+            appendLine(value.replaceIndent(" ".repeat(indent)))
         }
 
         this@writeValueAsString.forEach { (license, textLocationGroups) ->
-            appendlnIndent("$license [$provenanceIndex]:", 2)
+            appendLineIndent("$license [$provenanceIndex]:", 2)
 
             val sortedGroups = textLocationGroups.assignReferenceNameAndSort()
             sortedGroups.forEach { (group, name) ->
                 group.locations.forEach {
                     val excludedIndicator = if (isPathExcluded(it.path)) "(-)" else "(+)"
-                    appendlnIndent(
+                    appendLineIndent(
                         "[$name] $excludedIndicator ${it.path}:${it.startLine}-${it.endLine}",
                         4
                     )
@@ -245,13 +245,13 @@ private fun Map<SpdxSingleLicenseExpression, List<TextLocationGroup>>.writeValue
             if (includeLicenseTexts) {
                 sortedGroups.forEach { (group, name) ->
                     if (group.text != null) {
-                        appendlnIndent("\n\n[$name]", 4)
-                        appendlnIndent("\n\n${group.text}\n", 6)
+                        appendLineIndent("\n\n[$name]", 4)
+                        appendLineIndent("\n\n${group.text}\n", 6)
                     }
                 }
             }
 
-            appendln()
+            appendLine()
         }
     }
 }

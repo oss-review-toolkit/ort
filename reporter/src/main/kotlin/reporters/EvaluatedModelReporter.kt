@@ -29,8 +29,6 @@ import org.ossreviewtoolkit.reporter.ReporterInput
 import org.ossreviewtoolkit.reporter.model.EvaluatedModel
 import org.ossreviewtoolkit.utils.log
 
-private fun EvaluatedModel.toJson(writer: Writer) = toJson(writer, prettyPrint = true)
-
 /**
  * Creates a JSON file containing the evaluated model.
  */

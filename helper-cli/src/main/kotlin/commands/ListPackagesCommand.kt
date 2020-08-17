@@ -60,7 +60,7 @@ class ListPackagesCommand : CliktCommand(
 
         val result = buildString {
             packages.forEach {
-                appendln(it.toCoordinates())
+                appendLine(it.toCoordinates())
             }
         }
         println(result)

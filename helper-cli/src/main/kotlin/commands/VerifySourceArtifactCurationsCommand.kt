@@ -78,8 +78,8 @@ internal class VerifySourceArtifactCurationsCommand : CliktCommand(
         if (failed.isNotEmpty()) {
             val message = buildString {
                 append("Source artifact curations for the following packages could NOT be verified, ")
-                appendln("check the log for details:")
-                appendln(failed.joinToString(separator = "\n") { it.id.toCoordinates() })
+                appendLine("check the log for details:")
+                appendLine(failed.joinToString(separator = "\n") { it.id.toCoordinates() })
             }
 
             println(message)

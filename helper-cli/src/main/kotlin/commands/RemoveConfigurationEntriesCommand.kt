@@ -120,12 +120,12 @@ internal class RemoveConfigurationEntriesCommand : CliktCommand(
             val removedRuleViolationResolutions = repositoryConfiguration.resolutions.ruleViolations.size -
                     ruleViolationResolutions.size
 
-            appendln("Removed entries:")
-            appendln()
-            appendln("  path excludes             : $removedPathExcludes")
-            appendln("  scope excludes            : $removedScopeExcludes")
-            appendln("  issue resolutions         : $removedIssueResolutions")
-            appendln("  rule violation resolutions: $removedRuleViolationResolutions")
+            appendLine("Removed entries:")
+            appendLine()
+            appendLine("  path excludes             : $removedPathExcludes")
+            appendLine("  scope excludes            : $removedScopeExcludes")
+            appendLine("  issue resolutions         : $removedIssueResolutions")
+            appendLine("  rule violation resolutions: $removedRuleViolationResolutions")
         }.let { println(it) }
     }
 }
