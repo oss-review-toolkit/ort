@@ -152,7 +152,7 @@ class NoticeTemplateReporter : Reporter {
         val licenseFiles: ResolvedLicenseFileInfo by lazy { input.licenseInfoResolver.resolveLicenseFiles(id) }
 
         /**
-         * Returns all [ResolvedLicense]s for this package excluding those licenses which are contained in any of the
+         * Return all [ResolvedLicense]s for this package excluding those licenses which are contained in any of the
          * license files. This is useful when the raw texts of the license files are included in the generated notice
          * file and all licenses not contained in those files shall be listed separately.
          */
