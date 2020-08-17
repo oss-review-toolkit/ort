@@ -63,12 +63,32 @@ This project contains or depends on third-party software components pursuant to 
 ----
 
 Package: [#if package.id.namespace?has_content]${package.id.namespace}:[/#if]${package.id.name}:${package.id.version}
+[#-- List the content of archived license files and associated copyrights. --]
+[#list package.licenseFiles.files as licenseFile]
+
+This package contains the file ${licenseFile.path} with the following contents:
+
+${licenseFile.readFile()}
+[#assign copyrights = licenseFile.getCopyrights(true)]
+[#if copyrights?has_content]
+The following copyright holder information relates to the license(s) above:
+
+[#list copyrights as copyright]
+${copyright}
+[/#list]
+[/#if]
+[/#list]
 [#--
 Filter the licenses of the package using LicenseView.CONCLUDED_OR_REST. This is the default view which ignores declared
 and detected licenses if a license conclusion for the package was made. If copyrights were detected for a concluded
-license those statements are kept. Also filter all licenses that are configured not to be included in notice files.
+license those statements are kept. Also filter all licenses that are configured not to be included in notice files, and
+filter all licenses that are contained in the license files already printed above.
 --]
-[#assign resolvedLicenses = helper.filterIncludeInNoticeFile(package.license.filter(helper.licenseView("CONCLUDED_OR_REST")).licenses)]
+[#assign
+resolvedLicenses = helper.filterIncludeInNoticeFile(
+    helper.licenseView("CONCLUDED_OR_REST").filter(package.licensesNotInLicenseFiles())
+)
+]
 [#if resolvedLicenses?has_content]
 
 The following copyrights and licenses were found in the source code of this package:
