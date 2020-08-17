@@ -26,9 +26,14 @@ import java.io.File
 
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.config.CopyrightGarbage
+import org.ossreviewtoolkit.model.config.FileArchiverConfiguration
+import org.ossreviewtoolkit.model.config.FileStorageConfiguration
+import org.ossreviewtoolkit.model.config.LocalFileStorageConfiguration
 import org.ossreviewtoolkit.model.config.OrtConfiguration
+import org.ossreviewtoolkit.model.config.ScannerConfiguration
 import org.ossreviewtoolkit.reporter.ORT_RESULT
 import org.ossreviewtoolkit.reporter.ReporterInput
+import org.ossreviewtoolkit.utils.LICENSE_FILENAMES
 import org.ossreviewtoolkit.utils.ORT_NAME
 
 class NoticeTemplateReporterTest : WordSpec({
@@ -37,6 +42,29 @@ class NoticeTemplateReporterTest : WordSpec({
             val expectedText = File("src/funTest/assets/notice-template-reporter-expected-results").readText()
 
             val report = generateReport(ORT_RESULT)
+
+            report shouldBe expectedText
+        }
+
+        "generate the correct license notes with archived license files" {
+            val expectedText =
+                File("src/funTest/assets/notice-template-reporter-expected-results-with-license-files").readText()
+
+            val archiveDir = File("src/funTest/assets/archive")
+            val config = OrtConfiguration(
+                ScannerConfiguration(
+                    archive = FileArchiverConfiguration(
+                        patterns = LICENSE_FILENAMES,
+                        storage = FileStorageConfiguration(
+                            localFileStorage = LocalFileStorageConfiguration(
+                                directory = archiveDir,
+                                compression = false
+                            )
+                        )
+                    )
+                )
+            )
+            val report = generateReport(ORT_RESULT, config)
 
             report shouldBe expectedText
         }
