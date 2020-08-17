@@ -47,7 +47,6 @@ enum class ArchiveType(vararg val extensions: String) {
     TAR_XZ(".tar.xz", ".txz"),
     ZIP(".aar", ".egg", ".jar", ".war", ".whl", ".zip"),
     SEVENZIP(".7z"),
-    POM(".pom"), // Special case of a "fake archive".
     NONE("");
 
     companion object {
@@ -82,10 +81,6 @@ fun InputStream.unpack(filename: String, targetDirectory: File) {
         ArchiveType.ZIP -> unpackZip(targetDirectory)
         ArchiveType.SEVENZIP -> {
             throw IOException("Cannot unpack a 7-Zip archive from an InputStream, use a File instead.")
-        }
-        ArchiveType.POM -> use {
-            // Special case, copy the POM to the target directory.
-            File(targetDirectory, filename).outputStream().use { copyTo(it) }
         }
         ArchiveType.NONE -> {
             throw IOException("Unable to guess compression scheme from file name '$filename'.")
