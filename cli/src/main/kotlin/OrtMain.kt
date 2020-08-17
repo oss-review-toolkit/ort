@@ -89,7 +89,7 @@ class OrtMain : CliktCommand(name = ORT_NAME, epilog = "* denotes required optio
             buildString {
                 // If help is invoked without a subcommand, the main run() is not invoked and no header is printed, so
                 // we need to do that manually here.
-                if (currentContext.invokedSubcommand == null) appendln(getVersionHeader(env.ortVersion))
+                if (currentContext.invokedSubcommand == null) appendLine(getVersionHeader(env.ortVersion))
                 append(super.formatHelp(prolog, epilog, parameters, programName))
             }
     }

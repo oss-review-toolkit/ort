@@ -159,8 +159,6 @@ subprojects {
 
     plugins.withType<JavaLibraryPlugin> {
         dependencies {
-            "api"("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
-
             "testImplementation"(project(":test-utils"))
 
             "testImplementation"("io.kotest:kotest-runner-junit5-jvm:$kotestVersion")
@@ -173,12 +171,19 @@ subprojects {
     }
 
     configurations.all {
-        resolutionStrategy {
-            // Ensure all OkHttp versions in use match our version >= 4 to avoid Kotlin vs. Java issues with OkHttp 3.
-            force("com.squareup.okhttp3:okhttp:$okhttpVersion")
+        // Do not tamper with configurations related to the detekt plugin, for some background information
+        // https://github.com/detekt/detekt/issues/2501.
+        if (!name.startsWith("detekt")) {
+            resolutionStrategy {
+                // Ensure all OkHttp versions match our version >= 4 to avoid Kotlin vs. Java issues with OkHttp 3.
+                force("com.squareup.okhttp3:okhttp:$okhttpVersion")
 
-            // Ensure all API library versions match our core library version.
-            force("org.apache.logging.log4j:log4j-api:$log4jCoreVersion")
+                // Ensure all API library versions match our core library version.
+                force("org.apache.logging.log4j:log4j-api:$log4jCoreVersion")
+
+                // Ensure that all transitive versions of "kotlin-reflect" match our version of Kotlin.
+                force("org.jetbrains.kotlin:kotlin-reflect:$kotlinPluginVersion")
+            }
         }
     }
 
@@ -188,7 +193,7 @@ subprojects {
         kotlinOptions {
             allWarningsAsErrors = true
             jvmTarget = "1.8"
-            apiVersion = "1.3"
+            apiVersion = "1.4"
             freeCompilerArgs = freeCompilerArgs + customCompilerArgs
         }
     }

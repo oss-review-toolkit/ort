@@ -87,7 +87,7 @@ data class Scope(
     @JsonIgnore
     fun getDependencyTreeDepth(): Int {
         fun getTreeDepthRec(dependencies: Collection<PackageReference>): Int =
-            dependencies.map { dependency -> 1 + getTreeDepthRec(dependency.dependencies) }.max() ?: 0
+            dependencies.map { dependency -> 1 + getTreeDepthRec(dependency.dependencies) }.maxOrNull() ?: 0
 
         return getTreeDepthRec(dependencies)
     }

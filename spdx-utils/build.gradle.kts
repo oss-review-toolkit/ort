@@ -249,9 +249,7 @@ fun generateEnumClass(
     |
     |                val isGpl = listOf("AGPL-", "GPL-", "LGPL-").any { baseId.startsWith(it) }
     |                if (isGpl) {
-    |                    // Note: Do not use appendln() here as that would write out platform-native line endings, but
-    |                    // we want to normalize on Unix-style line endings for consistency.
-    |                    append("\n")
+    |                    appendLine()
     |
     |                    // For GPL the "or later version" text is just an amendment that reads better as a prefix as
     |                    // then no text follows the license's final "That's all there is to it!" sentence.

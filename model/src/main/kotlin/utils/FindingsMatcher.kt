@@ -73,7 +73,7 @@ class FindingsMatcher(
         val range = max(0, licenseStartLine - toleranceLines) until
                 max(licenseStartLine + toleranceLines, licenseEndLine) + 1
 
-        var expandedStartLine = copyrightLines.filter { it in range }.min() ?: return range
+        var expandedStartLine = copyrightLines.filter { it in range }.minOrNull() ?: return range
         val queue = PriorityQueue<Int>(copyrightLines.size, compareByDescending { it })
         queue.addAll(copyrightLines.filter { it in 0 until expandedStartLine })
 
