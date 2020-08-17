@@ -121,6 +121,10 @@ data class ResolvedLicense(
         LicenseSource.DETECTED in sources && locations.all { it.matchingPathExcludes.isNotEmpty() }
     }
 
+    /**
+     * Return all copyright statements associated to this license. Optionally [excludes][omitExcluded] copyright
+     * findings excluded by [PathExclude]s.
+     */
     fun getCopyrights(omitExcluded: Boolean = false): Set<String> =
         locations.flatMapTo(sortedSetOf()) { location ->
             location.copyrights.filter { copyright ->
