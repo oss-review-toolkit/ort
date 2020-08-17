@@ -116,21 +116,32 @@ class LicenseView(vararg licenseSources: Set<LicenseSource>) {
      * can still be required to access the detected locations or copyrights for the licenses. This function only changes
      * [ResolvedLicenseInfo.licenses], all other properties of the class are kept unchanged.
      */
-    fun filter(resolvedLicense: ResolvedLicenseInfo): ResolvedLicenseInfo {
+    fun filter(resolvedLicense: ResolvedLicenseInfo): ResolvedLicenseInfo =
+        resolvedLicense.copy(licenses = filter(resolvedLicense.licenses))
+
+    /**
+     * Use this [LicenseView] to filter a list of [ResolvedLicense]s. This function will filter the licenses based
+     * on the configured [LicenseSource]s, but it will not remove information from other sources. For example, if
+     * [ONLY_CONCLUDED] is used, it will remove all [ResolvedLicense]s that do not have [LicenseSource.CONCLUDED] in
+     * their [sources][ResolvedLicense.sources], but it will not remove any information about declared or detected
+     * licenses from the [ResolvedLicense] object. This is so, because even if only concluded licenses are requested, it
+     * can still be required to access the detected locations or copyrights for the licenses.
+     */
+    fun filter(resolvedLicenses: List<ResolvedLicense>): List<ResolvedLicense> {
         // Collect only the licenses instead of the full ResolvedLicense objects here, because calculating the hash
         // codes can be expensive for resolved licenses with many license and copyright findings.
-        val licenses = mutableSetOf<SpdxSingleLicenseExpression>()
+        val result = mutableSetOf<SpdxSingleLicenseExpression>()
 
         run loop@{
             licenseSources.forEach { sources ->
-                resolvedLicense.licenses.filter { license ->
+                resolvedLicenses.filter { license ->
                     license.sources.any { it in sources }
-                }.mapTo(licenses) { it.license }
+                }.mapTo(result) { it.license }
 
-                if (licenses.isNotEmpty()) return@loop
+                if (result.isNotEmpty()) return@loop
             }
         }
 
-        return resolvedLicense.copy(licenses = resolvedLicense.licenses.filter { it.license in licenses })
+        return resolvedLicenses.filter { it.license in result }
     }
 }
