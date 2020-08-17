@@ -63,4 +63,9 @@ data class ResolvedLicenseFile(
      * The unarchived license file.
      */
     val file: File
-)
+) {
+    /**
+     * Return the content of the [license file][file].
+     */
+    fun readFile(): String = file.readText()
+}
