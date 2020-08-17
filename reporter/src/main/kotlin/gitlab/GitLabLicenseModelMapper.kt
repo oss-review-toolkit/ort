@@ -61,7 +61,7 @@ private fun Collection<Package>.toLicenses(): List<License> {
 private fun Map<Package, List<String>>.toDependencies(): List<Dependency> =
     map { (pkg, definitionFilePaths) ->
         pkg.toDependency(definitionFilePaths)
-    }.sortedBy { "${it.packageManger}${it.name}${it.version}" }
+    }.sortedBy { "${it.packageManager}${it.name}${it.version}" }
 
 private fun OrtResult.getTargetPackagesWithDefinitionFiles(skipExcluded: Boolean): Map<Package, List<String>> {
     val result = mutableMapOf<Identifier, MutableList<String>>()
@@ -86,7 +86,7 @@ private fun Package.toDependency(definitionFilePaths: Collection<String>): Depen
         version = id.version,
         licenses = declaredLicensesProcessed.spdxExpression?.decompose().orEmpty().map { it.toString() },
         path = definitionFilePaths.sorted().joinToString(","),
-        packageManger = id.toPackageManagerName()
+        packageManager = id.toPackageManagerName()
     )
 
 private fun SpdxSingleLicenseExpression.toLicenseName(): String {

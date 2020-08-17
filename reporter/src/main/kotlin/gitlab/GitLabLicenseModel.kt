@@ -77,7 +77,7 @@ internal data class GitLabLicenseModel(
         /**
          * The package manager corresponding to the project which depends on this dependency.
          */
-        val packageManger: String,
+        val packageManager: String,
 
         /**
          * A comma separate list of the definition file paths of all projects depending on this dependency.
