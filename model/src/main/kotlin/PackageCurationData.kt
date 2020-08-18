@@ -73,7 +73,12 @@ data class PackageCurationData(
      * A plain-text comment about this curation. Should contain information about how and why the curation was
      * created.
      */
-    val comment: String? = null
+    val comment: String? = null,
+
+    /**
+     * Whether the package is meta data only.
+     */
+    val isMetaDataOnly: Boolean? = null
 ) {
     /**
      * Apply the curation data to the provided package, by overriding all values of the original package with non-null
@@ -106,7 +111,8 @@ data class PackageCurationData(
                 homepageUrl = homepageUrl ?: pkg.homepageUrl,
                 binaryArtifact = binaryArtifact ?: pkg.binaryArtifact,
                 sourceArtifact = sourceArtifact ?: pkg.sourceArtifact,
-                vcs = curatedVcs
+                vcs = curatedVcs,
+                isMetaDataOnly = isMetaDataOnly ?: pkg.isMetaDataOnly
             )
         }
 
