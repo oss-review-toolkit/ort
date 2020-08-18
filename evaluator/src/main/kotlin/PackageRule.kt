@@ -106,6 +106,16 @@ open class PackageRule(
         }
 
     /**
+     * A [RuleMatcher] that checks whether the [package][pkg] is meta data only.
+     */
+    fun isMetaDataOnly() =
+        object : RuleMatcher {
+            override val description = "isMetaDataOnly()"
+
+            override fun matches() = pkg.isMetaDataOnly
+        }
+
+    /**
      * A [RuleMatcher] that checks if the [package][pkg] was created from a [Project].
      */
     fun isProject() =
