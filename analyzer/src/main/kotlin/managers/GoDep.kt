@@ -190,15 +190,11 @@ class GoDep(
             Paths.get(gopath.path, "src", projectDir.name)
         }.toFile()
 
-    private fun resolveProjectRoot(definitionFile: File): File {
-        val projectDir = when (definitionFile.name) {
+    private fun resolveProjectRoot(definitionFile: File) =
+        when (definitionFile.name) {
             "Godeps.json" -> definitionFile.parentFile.parentFile
             else -> definitionFile.parentFile
         }
-
-        // Normalize the path to avoid using "." as the name of the project when the analyzer is run with "-i .".
-        return projectDir.toPath().normalize().toFile()
-    }
 
     private fun importLegacyManifest(lockfileName: String, workingDir: File, gopath: File) {
         requireLockfile(workingDir) { lockfileName.isEmpty() || File(workingDir, lockfileName).isFile }
