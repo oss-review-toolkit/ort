@@ -591,7 +591,8 @@ class MavenSupport(workspaceReader: WorkspaceReader) {
             binaryArtifact = binaryRemoteArtifact,
             sourceArtifact = sourceRemoteArtifact,
             vcs = vcsFromPackage,
-            vcsProcessed = vcsProcessed
+            vcsProcessed = vcsProcessed,
+            isMetaDataOnly = mavenProject.packaging == "pom"
         )
     }
 
