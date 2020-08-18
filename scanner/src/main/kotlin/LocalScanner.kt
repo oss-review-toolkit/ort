@@ -193,6 +193,12 @@ abstract class LocalScanner(name: String, config: ScannerConfiguration) : Scanne
     ): List<ScanResult> {
         val scannerDetails = getDetails()
 
+        if (pkg.isMetaDataOnly) {
+            log.info { "Skipping '${pkg.id.toCoordinates()}' as it is meta data only." }
+
+            return emptyList()
+        }
+
         return try {
             val storedResults = withContext(storageDispatcher) {
                 log.info {
