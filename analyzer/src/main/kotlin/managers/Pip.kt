@@ -427,7 +427,12 @@ class Pip(
 
         // Use the top-level license field as well as the license classifiers as the declared licenses.
         setOf(pkgInfo["license"]).mapNotNullTo(declaredLicenses) { license ->
-            license?.textValue()?.takeUnless { it.isBlank() || it == "UNKNOWN" }
+            license?.textValue()?.let {
+                // Work-around for projects that declare licenses in classifier-style syntax.
+                getLicenseFromClassifier(it) ?: it
+            }?.takeUnless {
+                it.isBlank() || it == "UNKNOWN"
+            }
         }
 
         // Example license classifier:
