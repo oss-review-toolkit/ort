@@ -56,6 +56,8 @@ class Analyzer(private val config: AnalyzerConfiguration) {
         curationProvider: PackageCurationProvider? = null,
         repositoryConfigurationFile: File? = null
     ): OrtResult {
+        require(absoluteProjectPath.isAbsolute)
+
         val startTime = Instant.now()
 
         val actualRepositoryConfigurationFile = repositoryConfigurationFile
