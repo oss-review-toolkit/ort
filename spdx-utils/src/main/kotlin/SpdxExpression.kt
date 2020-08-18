@@ -283,6 +283,11 @@ sealed class SpdxSingleLicenseExpression : SpdxExpression() {
      * Return the string identifier of this license without any license exception.
      */
     abstract fun simpleLicense(): String
+
+    /**
+     * Return the license exception identifier if this is a [SpdxLicenseWithExceptionExpression] or null otherwise.
+     */
+    abstract fun exception(): String?
 }
 
 /**
@@ -306,6 +311,8 @@ class SpdxLicenseWithExceptionExpression(
     override fun decompose() = setOf(this)
 
     override fun simpleLicense() = license.toString()
+
+    override fun exception() = exception
 
     override fun licenses() = license.licenses()
 
@@ -390,6 +397,8 @@ class SpdxLicenseIdExpression(
 
     override fun simpleLicense() = toString()
 
+    override fun exception(): String? = null
+
     override fun licenses() = listOf(toString())
 
     override fun normalize(mapDeprecated: Boolean) =
@@ -438,6 +447,8 @@ data class SpdxLicenseReferenceExpression(
     override fun decompose() = setOf(this)
 
     override fun simpleLicense() = id
+
+    override fun exception(): String? = null
 
     override fun licenses() = listOf(id)
 
