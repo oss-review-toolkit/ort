@@ -52,6 +52,7 @@ class UploadResultCommand : CliktCommand(
         help = "The ORT result file to read as input."
     ).convert { it.expandTilde() }
         .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
+        .convert { it.absoluteFile.normalize() }
         .required()
 
     private val tableName by option(

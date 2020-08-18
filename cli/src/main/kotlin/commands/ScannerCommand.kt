@@ -60,12 +60,14 @@ class ScannerCommand : CliktCommand(name = "scan", help = "Run existing copyrigh
             help = "An ORT result file with an analyzer result to use. Source code will be downloaded automatically " +
                     "if needed. This parameter and '--input-path' are mutually exclusive."
         ).convert { it.expandTilde() }
-            .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true),
+            .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
+            .convert { it.absoluteFile.normalize() },
         option(
             "--input-path", "-p",
             help = "An input directory or file to scan. This parameter and '--ort-file' are mutually exclusive."
         ).convert { it.expandTilde() }
             .file(mustExist = true, canBeFile = true, canBeDir = true, mustBeWritable = false, mustBeReadable = true)
+            .convert { it.absoluteFile.normalize() }
     ).single().required()
 
     private val skipExcluded by option(
@@ -78,6 +80,7 @@ class ScannerCommand : CliktCommand(name = "scan", help = "Run existing copyrigh
         help = "The directory to write the scan results as ORT result file(s) to, in the specified output format(s)."
     ).convert { it.expandTilde() }
         .file(mustExist = false, canBeFile = false, canBeDir = true, mustBeWritable = false, mustBeReadable = false)
+        .convert { it.absoluteFile.normalize() }
         .required()
 
     private val downloadDir by option(
@@ -85,6 +88,7 @@ class ScannerCommand : CliktCommand(name = "scan", help = "Run existing copyrigh
         help = "The output directory for downloaded source code. (default: <output-dir>/downloads)"
     ).convert { it.expandTilde() }
         .file(mustExist = false, canBeFile = false, canBeDir = true, mustBeWritable = false, mustBeReadable = false)
+        .convert { it.absoluteFile.normalize() }
 
     private val scannerFactory by option(
         "--scanner", "-s",
@@ -135,11 +139,10 @@ class ScannerCommand : CliktCommand(name = "scan", help = "Run existing copyrigh
     }
 
     override fun run() {
-        val absoluteOutputDir = outputDir.normalize()
-        val absoluteNativeOutputDir = absoluteOutputDir.resolve("native-scan-results")
+        val nativeOutputDir = outputDir.resolve("native-scan-results")
 
         val outputFiles = outputFormats.distinct().map { format ->
-            File(absoluteOutputDir, "scan-result.${format.fileExtension}")
+            File(outputDir, "scan-result.${format.fileExtension}")
         }
 
         val existingOutputFiles = outputFiles.filter { it.exists() }
@@ -147,8 +150,8 @@ class ScannerCommand : CliktCommand(name = "scan", help = "Run existing copyrigh
             throw UsageError("None of the output files $existingOutputFiles must exist yet.")
         }
 
-        if (absoluteNativeOutputDir.exists() && absoluteNativeOutputDir.list().isNotEmpty()) {
-            throw UsageError("The directory '$absoluteNativeOutputDir' must not contain any files yet.")
+        if (nativeOutputDir.exists() && nativeOutputDir.list().isNotEmpty()) {
+            throw UsageError("The directory '$nativeOutputDir' must not contain any files yet.")
         }
 
         require(downloadDir?.exists() != true) {
@@ -160,8 +163,8 @@ class ScannerCommand : CliktCommand(name = "scan", help = "Run existing copyrigh
         val ortResult = if (input.isFile) {
             scanner.scanOrtResult(
                 ortResultFile = input,
-                outputDirectory = absoluteNativeOutputDir,
-                downloadDirectory = downloadDir ?: absoluteOutputDir.resolve("downloads"),
+                outputDirectory = nativeOutputDir,
+                downloadDirectory = downloadDir ?: outputDir.resolve("downloads"),
                 skipExcluded = skipExcluded
             )
         } else {
@@ -169,8 +172,10 @@ class ScannerCommand : CliktCommand(name = "scan", help = "Run existing copyrigh
                 "To scan local files the chosen scanner must be a local scanner."
             }
 
-            val absoluteInputPath = input.normalize()
-            scanner.scanPath(absoluteInputPath, absoluteNativeOutputDir)
+            scanner.scanPath(
+                inputPath = input,
+                outputDirectory = nativeOutputDir
+            )
         }.mergeLabels(labels)
 
         outputFiles.forEach { file ->
