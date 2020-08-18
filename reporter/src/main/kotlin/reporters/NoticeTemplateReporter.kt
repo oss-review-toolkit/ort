@@ -37,7 +37,6 @@ import org.ossreviewtoolkit.model.licenses.ResolvedLicenseInfo
 import org.ossreviewtoolkit.model.licenses.filterExcluded
 import org.ossreviewtoolkit.reporter.Reporter
 import org.ossreviewtoolkit.reporter.ReporterInput
-import org.ossreviewtoolkit.spdx.SpdxSingleLicenseExpression
 import org.ossreviewtoolkit.utils.expandTilde
 import org.ossreviewtoolkit.utils.log
 
@@ -203,8 +202,6 @@ class NoticeTemplateReporter : Reporter {
                     val licenses = it.license.filter(licenseView).licenses
                     if (omitExcluded) licenses.filterExcluded() else licenses
                 }
-                // TODO: Currently exceptions are ignored, implement proper exception handling.
-                .map { it.copy(license = SpdxSingleLicenseExpression.parse(it.license.simpleLicense())) }
                 .groupBy { it.license }
                 .map { (_, licenses) -> licenses.merge() }
                 .sortedBy { it.license.toString() }
