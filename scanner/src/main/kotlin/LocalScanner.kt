@@ -28,6 +28,7 @@ import java.io.IOException
 import java.time.Instant
 import java.util.concurrent.Executors
 
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.asCoroutineDispatcher
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
@@ -151,7 +152,6 @@ abstract class LocalScanner(name: String, config: ScannerConfiguration) : Scanne
 
     override suspend fun scanPackages(packages: List<Package>, outputDirectory: File, downloadDirectory: File):
             Map<Package, List<ScanResult>> {
-        val scannerDetails = getDetails()
 
         val storageDispatcher =
             Executors.newFixedThreadPool(5, NamedThreadFactory(ScanResultsStorage.storage.name)).asCoroutineDispatcher()
@@ -163,80 +163,101 @@ abstract class LocalScanner(name: String, config: ScannerConfiguration) : Scanne
                     val packageIndex = "(${index + 1}/${packages.size})"
 
                     async {
-                        val result = try {
-                            val storedResults = withContext(storageDispatcher) {
-                                log.info {
-                                    "Looking for stored scan results for ${pkg.id.toCoordinates()} and " +
-                                            "$scannerDetails $packageIndex."
-                                }
-
-                                readFromStorage(scannerDetails, pkg, outputDirectory)
-                            }
-
-                            if (storedResults.isNotEmpty()) {
-                                log.info {
-                                    "Found ${storedResults.size} stored scan result(s) for ${pkg.id.toCoordinates()} " +
-                                            "and $scannerDetails, not scanning the package again $packageIndex."
-                                }
-
-                                storedResults
-                            } else {
-                                withContext(scanDispatcher) {
-                                    log.info {
-                                        "No stored result found for ${pkg.id.toCoordinates()} and $scannerDetails, " +
-                                                "scanning package in thread '${Thread.currentThread().name}' " +
-                                                "$packageIndex."
-                                    }
-
-                                    listOf(
-                                        scanPackage(scannerDetails, pkg, outputDirectory, downloadDirectory).also {
-                                            log.info {
-                                                "Finished scanning ${pkg.id.toCoordinates()} in thread " +
-                                                        "'${Thread.currentThread().name}' $packageIndex."
-                                            }
-                                        }
-                                    )
-                                }
-                            }.map {
-                                // Remove the now unneeded reference to rawResult here to allow garbage collection to
-                                // clean it up.
-                                it.copy(rawResult = null)
-                            }
-                        } catch (e: ScanException) {
-                            e.showStackTrace()
-
-                            val issue = createAndLogIssue(
-                                source = scannerName,
-                                message = "Could not scan '${pkg.id.toCoordinates()}' $packageIndex: " +
-                                        e.collectMessagesAsString()
-                            )
-
-                            val now = Instant.now()
-                            listOf(
-                                ScanResult(
-                                    provenance = Provenance(),
-                                    scanner = scannerDetails,
-                                    summary = ScanSummary(
-                                        startTime = now,
-                                        endTime = now,
-                                        fileCount = 0,
-                                        packageVerificationCode = "",
-                                        licenseFindings = sortedSetOf(),
-                                        copyrightFindings = sortedSetOf(),
-                                        issues = listOf(issue)
-                                    ),
-                                    rawResult = EMPTY_JSON_NODE
-                                )
-                            )
-                        }
-
-                        Pair(pkg, result)
+                        pkg to scanPackage(
+                            pkg,
+                            packageIndex,
+                            downloadDirectory,
+                            outputDirectory,
+                            storageDispatcher,
+                            scanDispatcher
+                        )
                     }
                 }.associate { it.await() }
             }
         } finally {
             storageDispatcher.close()
             scanDispatcher.close()
+        }
+    }
+
+    /**
+     * Return the [ScanResult]s for a single package.
+     */
+    private suspend fun scanPackage(
+        pkg: Package,
+        packageIndex: String,
+        downloadDirectory: File,
+        outputDirectory: File,
+        storageDispatcher: CoroutineDispatcher,
+        scanDispatcher: CoroutineDispatcher
+    ): List<ScanResult> {
+        val scannerDetails = getDetails()
+
+        return try {
+            val storedResults = withContext(storageDispatcher) {
+                log.info {
+                    "Looking for stored scan results for ${pkg.id.toCoordinates()} and " +
+                            "$scannerDetails $packageIndex."
+                }
+
+                readFromStorage(scannerDetails, pkg, outputDirectory)
+            }
+
+            if (storedResults.isNotEmpty()) {
+                log.info {
+                    "Found ${storedResults.size} stored scan result(s) for ${pkg.id.toCoordinates()} " +
+                            "and $scannerDetails, not scanning the package again $packageIndex."
+                }
+
+                storedResults
+            } else {
+                withContext(scanDispatcher) {
+                    log.info {
+                        "No stored result found for ${pkg.id.toCoordinates()} and $scannerDetails, " +
+                                "scanning package in thread '${Thread.currentThread().name}' " +
+                                "$packageIndex."
+                    }
+
+                    listOf(
+                        scanPackage(scannerDetails, pkg, outputDirectory, downloadDirectory).also {
+                            log.info {
+                                "Finished scanning ${pkg.id.toCoordinates()} in thread " +
+                                        "'${Thread.currentThread().name}' $packageIndex."
+                            }
+                        }
+                    )
+                }
+            }.map {
+                // Remove the now unneeded reference to rawResult here to allow garbage collection to
+                // clean it up.
+                it.copy(rawResult = null)
+            }
+        } catch (e: ScanException) {
+            e.showStackTrace()
+
+            val issue = createAndLogIssue(
+                source = scannerName,
+                message = "Could not scan '${pkg.id.toCoordinates()}' $packageIndex: " +
+                        e.collectMessagesAsString()
+            )
+
+            val now = Instant.now()
+            listOf(
+                ScanResult(
+                    provenance = Provenance(),
+                    scanner = scannerDetails,
+                    summary = ScanSummary(
+                        startTime = now,
+                        endTime = now,
+                        fileCount = 0,
+                        packageVerificationCode = "",
+                        licenseFindings = sortedSetOf(),
+                        copyrightFindings = sortedSetOf(),
+                        issues = listOf(issue)
+                    ),
+                    rawResult = EMPTY_JSON_NODE
+                )
+            )
         }
     }
 
