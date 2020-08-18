@@ -72,6 +72,7 @@ class ReporterCommand : CliktCommand(
         help = "The ORT result file to use."
     ).convert { it.expandTilde() }
         .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
+        .convert { it.absoluteFile.normalize() }
         .required()
 
     private val packageConfigurationOption by mutuallyExclusiveOptions<PackageConfigurationOption>(
@@ -81,13 +82,13 @@ class ReporterCommand : CliktCommand(
                     "recursively."
         ).convert { it.expandTilde() }
             .file(mustExist = true, canBeFile = false, canBeDir = true, mustBeWritable = false, mustBeReadable = true)
-            .convert { PackageConfigurationOption.Dir(it) },
+            .convert { PackageConfigurationOption.Dir(it.absoluteFile.normalize()) },
         option(
             "--package-configuration-file",
             help = "The file containing the package configurations to read as input."
         ).convert { it.expandTilde() }
             .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
-            .convert { PackageConfigurationOption.File(it) }
+            .convert { PackageConfigurationOption.File(it.absoluteFile.normalize()) }
     ).single()
 
     private val outputDir by option(
@@ -95,6 +96,7 @@ class ReporterCommand : CliktCommand(
         help = "The output directory to store the generated reports in."
     ).convert { it.expandTilde() }
         .file(mustExist = false, canBeFile = false, canBeDir = true, mustBeWritable = false, mustBeReadable = false)
+        .convert { it.absoluteFile.normalize() }
         .required()
 
     private val reportFormats by option(
@@ -125,12 +127,14 @@ class ReporterCommand : CliktCommand(
         help = "A file containing error resolutions."
     ).convert { it.expandTilde() }
         .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
+        .convert { it.absoluteFile.normalize() }
 
     private val copyrightGarbageFile by option(
         "--copyright-garbage-file",
         help = "A file containing garbage copyright statements entries which are to be ignored."
     ).convert { it.expandTilde() }
         .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
+        .convert { it.absoluteFile.normalize() }
 
     private val repositoryConfigurationFile by option(
         "--repository-configuration-file",
@@ -138,6 +142,7 @@ class ReporterCommand : CliktCommand(
                 "configuration contained in the ort result from the input file."
     ).convert { it.expandTilde() }
         .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
+        .convert { it.absoluteFile.normalize() }
 
     private val customLicenseTextsDir by option(
         "--custom-license-texts-dir",
@@ -146,18 +151,18 @@ class ReporterCommand : CliktCommand(
                 "'LicenseRef-' prefix and if the respective license text is not known by ORT."
     ).convert { it.expandTilde() }
         .file(mustExist = false, canBeFile = false, canBeDir = true, mustBeWritable = false, mustBeReadable = false)
+        .convert { it.absoluteFile.normalize() }
 
     private val licenseConfigurationFile by option(
         "--license-configuration-file",
         help = "A file containing the license configuration."
     ).convert { it.expandTilde() }
         .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
+        .convert { it.absoluteFile.normalize() }
 
     private val config by requireObject<OrtConfiguration>()
 
     override fun run() {
-        val absoluteOutputDir = outputDir.normalize()
-
         var ortResult = ortFile.readValue<OrtResult>()
         repositoryConfigurationFile?.let {
             ortResult = ortResult.replaceConfig(it.readValue())
@@ -179,7 +184,7 @@ class ReporterCommand : CliktCommand(
 
         val licenseConfiguration = licenseConfigurationFile?.readValue<LicenseConfiguration>().orEmpty()
 
-        absoluteOutputDir.safeMkdirs()
+        outputDir.safeMkdirs()
 
         val input = ReporterInput(
             ortResult,
@@ -210,7 +215,7 @@ class ReporterCommand : CliktCommand(
             @Suppress("TooGenericExceptionCaught")
             try {
                 reportDurationMap[reporter] = measureTimedValue {
-                    reporter.generateReport(input, absoluteOutputDir, options)
+                    reporter.generateReport(input, outputDir, options)
                 }
             } catch (e: Exception) {
                 e.showStackTrace()
