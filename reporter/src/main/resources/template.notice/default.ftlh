@@ -32,7 +32,7 @@ are configured not to be included in notice files.
 --]
 [#assign mergedLicenses = helper.filterIncludeInNoticeFile(helper.mergeLicenses(projects))]
 [#list mergedLicenses as resolvedLicense]
-[#assign licenseText = licenseTextProvider.getLicenseText(resolvedLicense.license.toString())!""]
+[#assign licenseText = licenseTextProvider.getLicenseText(resolvedLicense.license.simpleLicense())!""]
 [#if licenseText?has_content]
 [#if isFirst]
 [#assign isFirst = false]
@@ -48,6 +48,10 @@ ${copyright}
 [/#list]
 
 ${licenseText}
+[#assign exceptionText = licenseTextProvider.getLicenseText(resolvedLicense.license.exception()!"")!""]
+[#if exceptionText?has_content]
+${exceptionText}
+[/#if]
 [/#if]
 [/#list]
 ----
@@ -95,7 +99,7 @@ The following copyrights and licenses were found in the source code of this pack
 [/#if]
 [#assign isFirst = true]
 [#list resolvedLicenses as resolvedLicense]
-[#assign licenseText = licenseTextProvider.getLicenseText(resolvedLicense.license.toString())!""]
+[#assign licenseText = licenseTextProvider.getLicenseText(resolvedLicense.license.simpleLicense())!""]
 [#if licenseText?has_content]
 [#if isFirst]
 [#assign isFirst = false]
@@ -111,6 +115,10 @@ ${copyright}
 [/#list]
 
 ${licenseText}
+[#assign exceptionText = licenseTextProvider.getLicenseText(resolvedLicense.license.exception()!"")!""]
+[#if exceptionText?has_content]
+${exceptionText}
+[/#if]
 [/#if]
 [/#list]
 [/#if]
