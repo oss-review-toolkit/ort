@@ -100,7 +100,14 @@ data class Package(
     /**
      * Processed VCS-related information about the [Package] that has e.g. common mistakes corrected.
      */
-    val vcsProcessed: VcsInfo = vcs.normalize()
+    val vcsProcessed: VcsInfo = vcs.normalize(),
+
+    /**
+     * Indicates whether this [Package] is just meta data, like e.g. Maven BOM artifacts which only define constraints
+     * for dependency versions.
+     */
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+    val isMetaDataOnly: Boolean = false
 ) : Comparable<Package> {
     companion object {
         /**
