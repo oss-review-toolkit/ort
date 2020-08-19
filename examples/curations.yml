@@ -48,3 +48,8 @@
       but it is not part of the distributed .tar.gz package, see the `README.md` which says: \
       Ramda logo artwork © 2014 J. C. Phillipps. Licensed Creative Commons CC BY-NC-SA 3.0"
     concluded_license: "MIT"
+
+- id: "Maven:org.jetbrains.kotlin:kotlin-bom"
+  curations:
+    comment: "The package is a Maven BOM file and thus is metadata only."
+    is_meta_data_only: true
