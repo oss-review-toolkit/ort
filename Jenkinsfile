@@ -96,6 +96,12 @@ pipeline {
             choices: ['--info', '--debug', '']
         )
 
+        booleanParam(
+            name: 'STACKTRACE',
+            defaultValue: false,
+            description: 'Show stacktrace of all exceptions'
+        )
+
         /*
          * ORT analyzer tool parameters.
          */
@@ -170,7 +176,11 @@ pipeline {
 
             steps {
                 sh '''
-                    /opt/ort/bin/ort $LOG_LEVEL --stacktrace --version
+                    if [ "$STACKTRACE" = "true" ]; then
+                        STACKTRACE_OPTION="--stacktrace"
+                    fi
+
+                    /opt/ort/bin/ort $LOG_LEVEL $STACKTRACE_OPTION --version
                 '''
             }
         }
@@ -193,12 +203,16 @@ pipeline {
                     sh '''
                         echo "default login $LOGIN password $PASSWORD" > $HOME/.netrc
 
+                        if [ "$STACKTRACE" = "true" ]; then
+                            STACKTRACE_OPTION="--stacktrace"
+                        fi
+
                         if [ -n "$PROJECT_VCS_REVISION" ]; then
                             VCS_REVISION_OPTION="--vcs-revision $PROJECT_VCS_REVISION"
                         fi
 
                         rm -fr $PROJECT_DIR
-                        /opt/ort/bin/ort $LOG_LEVEL --stacktrace download --project-url $PROJECT_VCS_URL $VCS_REVISION_OPTION -o $PROJECT_DIR/source
+                        /opt/ort/bin/ort $LOG_LEVEL $STACKTRACE_OPTION download --project-url $PROJECT_VCS_URL $VCS_REVISION_OPTION -o $PROJECT_DIR/source
 
                         rm -f $HOME/.netrc
                     '''
@@ -232,12 +246,16 @@ pipeline {
                     sh '''
                         echo "default login $LOGIN password $PASSWORD" > $HOME/.netrc
 
+                        if [ "$STACKTRACE" = "true" ]; then
+                            STACKTRACE_OPTION="--stacktrace"
+                        fi
+
                         if [ -n "$ORT_CONFIG_VCS_REVISION" ]; then
                             VCS_REVISION_OPTION="--vcs-revision $ORT_CONFIG_VCS_REVISION"
                         fi
 
                         rm -fr $ORT_DATA_DIR/config
-                        /opt/ort/bin/ort $LOG_LEVEL --stacktrace download --project-url $ORT_CONFIG_VCS_URL $VCS_REVISION_OPTION -o $ORT_DATA_DIR/config
+                        /opt/ort/bin/ort $LOG_LEVEL $STACKTRACE_OPTION download --project-url $ORT_CONFIG_VCS_URL $VCS_REVISION_OPTION -o $ORT_DATA_DIR/config
 
                         rm -f $HOME/.netrc
                     '''
@@ -263,6 +281,10 @@ pipeline {
                     def status = sh returnStatus: true, script: '''
                         /opt/ort/bin/set_gradle_proxy.sh
 
+                        if [ "$STACKTRACE" = "true" ]; then
+                            STACKTRACE_OPTION="--stacktrace"
+                        fi
+
                         if [ "$ALLOW_DYNAMIC_VERSIONS" = "true" ]; then
                             ALLOW_DYNAMIC_VERSIONS_OPTION="--allow-dynamic-versions"
                         fi
@@ -272,7 +294,7 @@ pipeline {
                         fi
 
                         rm -fr out/results
-                        /opt/ort/bin/ort $LOG_LEVEL --stacktrace analyze $ALLOW_DYNAMIC_VERSIONS_OPTION $USE_CLEARLY_DEFINED_CURATIONS_OPTION -i $PROJECT_DIR/source -o out/results/analyzer
+                        /opt/ort/bin/ort $LOG_LEVEL $STACKTRACE_OPTION analyze $ALLOW_DYNAMIC_VERSIONS_OPTION $USE_CLEARLY_DEFINED_CURATIONS_OPTION -i $PROJECT_DIR/source -o out/results/analyzer
                     '''
 
                     if (status >= ORT_FAILURE_STATUS_CODE) unstable('Analyzer issues found.')
@@ -335,8 +357,12 @@ pipeline {
                 withCredentials(projectVcsCredentials) {
                     script {
                         def status = sh returnStatus: true, script: '''
+                            if [ "$STACKTRACE" = "true" ]; then
+                                STACKTRACE_OPTION="--stacktrace"
+                            fi
+
                             echo "default login $LOGIN password $PASSWORD" > $HOME/.netrc    
-                            /opt/ort/bin/ort $LOG_LEVEL --stacktrace scan -i out/results/current-result.yml -o out/results/scanner
+                            /opt/ort/bin/ort $LOG_LEVEL $STACKTRACE_OPTION scan -i out/results/current-result.yml -o out/results/scanner
                             rm -f $HOME/.netrc
                         '''
 
@@ -382,7 +408,11 @@ pipeline {
                 withCredentials(projectVcsCredentials) {
                     script {
                         def status = sh returnStatus: true, script: '''
-                            /opt/ort/bin/ort $LOG_LEVEL --stacktrace evaluate -i out/results/current-result.yml -o out/results/evaluator -r examples/rules.kts --license-configuration-file examples/licenses.yml
+                            if [ "$STACKTRACE" = "true" ]; then
+                                STACKTRACE_OPTION="--stacktrace"
+                            fi
+
+                            /opt/ort/bin/ort $LOG_LEVEL $STACKTRACE_OPTION evaluate -i out/results/current-result.yml -o out/results/evaluator -r examples/rules.kts --license-configuration-file examples/licenses.yml
                         '''
 
                         if (status >= ORT_FAILURE_STATUS_CODE) unstable('Rule violations found.')
@@ -425,7 +455,11 @@ pipeline {
 
             steps {
                 sh '''
-                    /opt/ort/bin/ort $LOG_LEVEL --stacktrace report -f CycloneDX,NoticeByPackage,NoticeSummary,SpdxDocument,StaticHTML,WebApp -i out/results/current-result.yml -o out/results/reporter
+                    if [ "$STACKTRACE" = "true" ]; then
+                        STACKTRACE_OPTION="--stacktrace"
+                    fi
+
+                    /opt/ort/bin/ort $LOG_LEVEL $STACKTRACE_OPTION report -f CycloneDX,NoticeByPackage,NoticeSummary,SpdxDocument,StaticHTML,WebApp -i out/results/current-result.yml -o out/results/reporter
                 '''
             }
 
