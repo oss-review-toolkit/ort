@@ -22,12 +22,11 @@ package org.ossreviewtoolkit.reporter.reporters
 import java.io.File
 import java.io.Writer
 
-import kotlin.time.measureTimedValue
-
 import org.ossreviewtoolkit.reporter.Reporter
 import org.ossreviewtoolkit.reporter.ReporterInput
 import org.ossreviewtoolkit.reporter.model.EvaluatedModel
 import org.ossreviewtoolkit.utils.log
+import org.ossreviewtoolkit.utils.measureTime
 
 private fun EvaluatedModel.toJson(writer: Writer) = toJson(writer, prettyPrint = true)
 
@@ -63,14 +62,14 @@ abstract class EvaluatedModelReporter(
         outputDir: File,
         options: Map<String, String>
     ): List<File> {
-        val evaluatedModel = measureTimedValue { EvaluatedModel.create(input) }
+        val evaluatedModel = measureTime { EvaluatedModel.create(input) }
 
-        log.debug { "Generating evaluated model took ${evaluatedModel.duration.inMilliseconds}ms." }
+        log.debug { "Generating evaluated model took ${System.currentTimeMillis() - evaluatedModel.second}ms." }
 
         val outputFile = outputDir.resolve(reportFilename)
 
         outputFile.bufferedWriter().use {
-            evaluatedModel.value.serialize(it)
+            evaluatedModel.first.serialize(it)
         }
 
         return listOf(outputFile)
