@@ -47,8 +47,7 @@ object SpdxSimpleLicenseMapping {
      */
     private val deprecatedLicenseIds by lazy {
         val resource = javaClass.getResource("/deprecated-license-mapping.yml")
-        val map = yamlMapper.readValue<Map<String, SpdxLicense>>(resource)
-        map.mapValues { (_, v) -> v.toExpression() }
+        yamlMapper.readValue<Map<String, SpdxSingleLicenseExpression>>(resource)
     }
 
     /**
