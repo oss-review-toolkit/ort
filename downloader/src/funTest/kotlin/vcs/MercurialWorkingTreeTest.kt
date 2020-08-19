@@ -86,7 +86,8 @@ class MercurialWorkingTreeTest : StringSpec() {
             workingTree.getPathToRoot(File(zipContentDir, "tests")) shouldBe "tests"
         }
 
-        "Mercurial correctly lists remote branches" {
+        // TODO: Find an alternative to Bitbucket that hosts public Mercurial repositories.
+        "Mercurial correctly lists remote branches".config(enabled = false) {
             val expectedBranches = listOf(
                 "default"
             )
@@ -95,7 +96,8 @@ class MercurialWorkingTreeTest : StringSpec() {
             workingTree.listRemoteBranches().joinToString("\n") shouldBe expectedBranches.joinToString("\n")
         }
 
-        "Mercurial correctly lists remote tags" {
+        // TODO: Find an alternative to Bitbucket that hosts public Mercurial repositories.
+        "Mercurial correctly lists remote tags".config(enabled = false) {
             val expectedTags = listOf(
                 "1.0",
                 "1.0.1",
