@@ -64,7 +64,7 @@ abstract class EvaluatedModelReporter(
     ): List<File> {
         val evaluatedModel = measureTime { EvaluatedModel.create(input) }
 
-        log.debug { "Generating evaluated model took ${System.currentTimeMillis() - evaluatedModel.second}ms." }
+        log.debug { "Generating evaluated model took ${evaluatedModel.second}ms." }
 
         val outputFile = outputDir.resolve(reportFilename)
 
