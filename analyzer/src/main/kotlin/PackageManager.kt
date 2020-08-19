@@ -28,7 +28,7 @@ import java.nio.file.SimpleFileVisitor
 import java.nio.file.attribute.BasicFileAttributes
 import java.util.ServiceLoader
 
-import kotlin.system.measureTimeMillis
+import kotlin.time.measureTime
 
 import org.ossreviewtoolkit.downloader.VcsHost
 import org.ossreviewtoolkit.downloader.VersionControlSystem
@@ -226,7 +226,7 @@ abstract class PackageManager(
         definitionFiles.forEach { definitionFile ->
             log.info { "Resolving $managerName dependencies for '$definitionFile'..." }
 
-            val duration = measureTimeMillis {
+            val duration = measureTime {
                 @Suppress("TooGenericExceptionCaught")
                 try {
                     result[definitionFile] = resolveDependencies(definitionFile)
@@ -255,7 +255,7 @@ abstract class PackageManager(
             }
 
             log.info {
-                "Resolving $managerName dependencies for '${definitionFile.name}' took ${duration / 1000}s."
+                "Resolving $managerName dependencies for '${definitionFile.name}' took ${duration.inSeconds}s."
             }
         }
 

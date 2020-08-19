@@ -35,6 +35,9 @@ import com.github.ajalt.clikt.parameters.types.file
 
 import java.io.File
 
+import kotlin.time.TimedValue
+import kotlin.time.measureTimedValue
+
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.config.CopyrightGarbage
 import org.ossreviewtoolkit.model.config.OrtConfiguration
@@ -54,7 +57,6 @@ import org.ossreviewtoolkit.utils.collectMessagesAsString
 import org.ossreviewtoolkit.utils.createProvider
 import org.ossreviewtoolkit.utils.expandTilde
 import org.ossreviewtoolkit.utils.log
-import org.ossreviewtoolkit.utils.measureTime
 import org.ossreviewtoolkit.utils.safeMkdirs
 import org.ossreviewtoolkit.utils.showStackTrace
 import org.ossreviewtoolkit.utils.storage.FileArchiver
@@ -203,7 +205,7 @@ class ReporterCommand : CliktCommand(
         }
 
         var failure = false
-        val reportDurationMap = mutableMapOf<Reporter, Pair<List<File>, Long>>()
+        val reportDurationMap = mutableMapOf<Reporter, TimedValue<List<File>>>()
 
         reportFormats.forEach { reporter ->
             val options = reportOptionsMap[reporter.reporterName.toUpperCase()].orEmpty()
@@ -212,7 +214,7 @@ class ReporterCommand : CliktCommand(
 
             @Suppress("TooGenericExceptionCaught")
             try {
-                reportDurationMap[reporter] = measureTime {
+                reportDurationMap[reporter] = measureTimedValue {
                     reporter.generateReport(input, outputDir, options)
                 }
             } catch (e: Exception) {
@@ -226,7 +228,7 @@ class ReporterCommand : CliktCommand(
 
         reportDurationMap.forEach { (reporter, files) ->
             val name = reporter.reporterName
-            println("Successfully created the '$name' report at ${files.first} in ${files.second / 1000}s.")
+            println("Successfully created the '$name' report at ${files.value} in ${files.duration.inSeconds}s.")
         }
 
         println("Created ${reportDurationMap.size} of ${reportFormats.size} report(s).")

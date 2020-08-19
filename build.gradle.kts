@@ -183,7 +183,7 @@ subprojects {
     }
 
     tasks.withType<KotlinCompile>().configureEach {
-        val customCompilerArgs = listOf("-Xallow-result-return-type")
+        val customCompilerArgs = listOf("-Xallow-result-return-type", "-Xopt-in=kotlin.time.ExperimentalTime")
 
         kotlinOptions {
             allWarningsAsErrors = true

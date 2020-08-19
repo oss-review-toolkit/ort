@@ -218,15 +218,6 @@ fun joinNonBlank(vararg strings: String, separator: String = " - ") =
     strings.filter { it.isNotBlank() }.joinToString(separator)
 
 /**
- * Return the result of [block] and the duration it took to execute in milliseconds.
- */
-fun <T> measureTime(block: () -> T): Pair<T, Long> {
-    val start = System.currentTimeMillis()
-    val result = block()
-    return Pair(result, System.currentTimeMillis() - start)
-}
-
-/**
  * Normalize a string representing a [VCS URL][vcsUrl] to a common string form.
  */
 fun normalizeVcsUrl(vcsUrl: String): String {
