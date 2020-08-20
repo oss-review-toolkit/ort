@@ -27,6 +27,8 @@ import java.net.ProxySelector
 import java.net.SocketAddress
 import java.net.URI
 
+import org.apache.logging.log4j.Level
+
 typealias AuthenticatedProxy = Pair<Proxy, PasswordAuthentication?>
 typealias ProtocolProxyMap = Map<String, List<AuthenticatedProxy>>
 
@@ -46,7 +48,7 @@ class OrtProxySelector(private val fallback: ProxySelector? = null) : ProxySelec
         fun install(): OrtProxySelector {
             val current = getDefault()
             return if (current is OrtProxySelector) {
-                log.info { "Proxy selector is already installed." }
+                logOnce(Level.INFO) { "Proxy selector is already installed." }
                 current
             } else {
                 OrtProxySelector(current).also {

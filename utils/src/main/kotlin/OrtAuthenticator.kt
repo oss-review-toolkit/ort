@@ -25,6 +25,8 @@ import java.net.PasswordAuthentication
 import java.net.Proxy
 import java.net.ProxySelector
 
+import org.apache.logging.log4j.Level
+
 /**
  * An authenticator for network connections established by ORT. For proxy authentication, the [OrtProxySelector] is
  * required to also be installed.
@@ -45,7 +47,7 @@ class OrtAuthenticator(private val original: Authenticator? = null) : Authentica
         fun install(): OrtAuthenticator {
             val current = getDefaultAuthenticator()
             return if (current is OrtAuthenticator) {
-                log.info { "Authenticator is already installed." }
+                logOnce(Level.INFO) { "Authenticator is already installed." }
                 current
             } else {
                 OrtAuthenticator(current).also {
