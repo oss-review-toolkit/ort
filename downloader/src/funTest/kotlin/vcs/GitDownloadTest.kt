@@ -19,6 +19,7 @@
 
 package org.ossreviewtoolkit.downloader.vcs
 
+import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.core.test.TestCase
 import io.kotest.core.test.TestResult
@@ -26,6 +27,7 @@ import io.kotest.matchers.shouldBe
 
 import java.io.File
 
+import org.ossreviewtoolkit.downloader.DownloadException
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.VcsInfo
@@ -56,6 +58,16 @@ class GitDownloadTest : StringSpec() {
     }
 
     init {
+        "Git does not prompt for credentials for non-existing repositories" {
+            val url = "https://github.com/oss-review-toolkit/foobar.git"
+            val pkg = Package.EMPTY.copy(vcsProcessed = VcsInfo(VcsType.GIT, url, "master"))
+
+            val exception = shouldThrow<DownloadException> {
+                git.download(pkg, outputDir, allowMovingRevisions = true)
+            }
+            exception.message shouldBe "Git failed to download from URL '$url'."
+        }
+
         "Git can download a given revision".config(tags = setOf(ExpensiveTag)) {
             val pkg = Package.EMPTY.copy(vcsProcessed = VcsInfo(VcsType.GIT, REPO_URL, REPO_REV))
             val expectedFiles = listOf(

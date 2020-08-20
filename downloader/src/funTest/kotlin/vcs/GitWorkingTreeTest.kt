@@ -70,10 +70,6 @@ class GitWorkingTreeTest : StringSpec() {
             git.isApplicableUrl("https://hg.sr.ht/~duangle/paniq_legacy") shouldBe false
         }
 
-        "Git does not prompt for credentials for non-existing repositories" {
-            git.isApplicableUrl("https://github.com/oss-review-toolkit/foobar.git") shouldBe false
-        }
-
         "Detected Git working tree information is correct" {
             val workingTree = git.getWorkingTree(zipContentDir)
 
