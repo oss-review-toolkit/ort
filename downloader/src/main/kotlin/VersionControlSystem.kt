@@ -166,12 +166,15 @@ abstract class VersionControlSystem {
     fun isApplicableType(vcsType: VcsType) = vcsType == type
 
     /**
-     * Return true if this VCS can download from the provided URL. Should only return true when it's almost unambiguous,
-     * for example when the URL ends on ".git" for Git or contains "/svn/" for SVN, but not when it contains the string
-     * "git" as this could also be part of the host or project names.
+     * Return true if this [VersionControlSystem] can be used to download from the provided [vcsUrl]. First, try to find
+     * this out by only parsing the URL, but as a fallback implementations may actually probe the URL and make a network
+     * request.
      */
-    fun isApplicableUrl(vcsUrl: String) =
-        vcsUrl.isNotBlank() && !vcsUrl.endsWith(".html") && isApplicableUrlInternal(vcsUrl)
+    fun isApplicableUrl(vcsUrl: String): Boolean {
+        if (vcsUrl.isBlank() || vcsUrl.endsWith(".html")) return false
+
+        return VcsHost.toVcsInfo(vcsUrl).type == type || isApplicableUrlInternal(vcsUrl)
+    }
 
     /**
      * Return true if this [VersionControlSystem] is available for use.
