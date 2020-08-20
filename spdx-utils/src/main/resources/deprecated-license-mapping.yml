@@ -14,8 +14,15 @@ GFDL-1.3: GFDL-1.3-only
 GPL-1.0+: GPL-1.0-or-later
 GPL-1.0: GPL-1.0-only
 GPL-2.0+: GPL-2.0-or-later
+GPL-2.0-with-GCC-exception: GPL-2.0-only WITH GCC-exception-2.0
+GPL-2.0-with-autoconf-exception: GPL-2.0-only WITH Autoconf-exception-2.0
+GPL-2.0-with-bison-exception: GPL-2.0-only WITH Bison-exception-2.2
+GPL-2.0-with-classpath-exception: GPL-2.0-only WITH Classpath-exception-2.0
+GPL-2.0-with-font-exception: GPL-2.0-only WITH Font-exception-2.0
 GPL-2.0: GPL-2.0-only
 GPL-3.0+: GPL-3.0-or-later
+GPL-3.0-with-GCC-exception: GPL-3.0-only WITH GCC-exception-3.1
+GPL-3.0-with-autoconf-exception: GPL-3.0-only WITH Autoconf-exception-3.0
 GPL-3.0: GPL-3.0-only
 LGPL-2.0+: LGPL-2.0-or-later
 LGPL-2.0: LGPL-2.0-only
