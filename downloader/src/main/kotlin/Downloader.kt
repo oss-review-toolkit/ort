@@ -112,8 +112,6 @@ object Downloader {
      * failure.
      */
     fun download(pkg: Package, outputDirectory: File, allowMovingRevisions: Boolean = false): DownloadResult {
-        log.info { "Trying to download source code for '${pkg.id.toCoordinates()}'." }
-
         require(!outputDirectory.exists() || outputDirectory.list().isEmpty()) {
             "The output directory '$outputDirectory' must not contain any files yet."
         }
