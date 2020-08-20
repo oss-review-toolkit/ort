@@ -287,33 +287,6 @@ val ORT_RESULT = OrtResult(
                     )
                 ),
                 ScanResultContainer(
-                    id = Identifier("NPM:@ort:no-license-file:1.0"),
-                    results = listOf(
-                        ScanResult(
-                            provenance = Provenance(sourceArtifact = RemoteArtifact.EMPTY),
-                            scanner = ScannerDetails(name = "scanner", version = "1.0", configuration = ""),
-                            summary = ScanSummary(
-                                startTime = Instant.EPOCH,
-                                endTime = Instant.EPOCH,
-                                fileCount = 0,
-                                packageVerificationCode = "",
-                                licenseFindings = sortedSetOf(
-                                    LicenseFinding(
-                                        license = "MIT",
-                                        location = TextLocation("file", 1, 1)
-                                    )
-                                ),
-                                copyrightFindings = sortedSetOf(
-                                    CopyrightFinding(
-                                        statement = "Copyright 1",
-                                        location = TextLocation("file", 1, 1)
-                                    )
-                                )
-                            )
-                        )
-                    )
-                ),
-                ScanResultContainer(
                     id = Identifier("NPM:@ort:license-file:1.0"),
                     results = listOf(
                         ScanResult(
