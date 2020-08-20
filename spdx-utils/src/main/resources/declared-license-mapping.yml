@@ -352,6 +352,7 @@
 "Ruby's": Ruby
 "SIL OPEN FONT LICENSE Version 1.1": OFL-1.1
 "SIL Open Font License 1.1 (OFL-1.1)": OFL-1.1
+"Scala License": Apache-2.0 AND BSD-3-Clause AND MIT
 "Sequence Library License (BSD-like)": BSD-3-Clause
 "Simplified BSD License": BSD-2-Clause
 "Simplified BSD Liscence": BSD-2-Clause
@@ -451,6 +452,8 @@
 "http://www.cecill.info/licences/Licence_CeCILL-C_V1-en.txt": CECILL-1.0
 "http://www.cecill.info/licences/Licence_CeCILL_V2.1-en.txt": CECILL-2.1
 "http://www.gnu.org/copyleft/lesser.html": LGPL-3.0-only
+"http://www.scala-lang.org/downloads/license.html": Apache-2.0 AND BSD-3-Clause AND MIT
+"http://www.scala-lang.org/node/146": Apache-2.0 AND BSD-3-Clause AND MIT
 "https://creativecommons.org/licenses/by-nc-nd/1.0": CC-BY-NC-ND-1.0
 "https://creativecommons.org/licenses/by-nc-nd/2.0": CC-BY-NC-ND-2.0
 "https://creativecommons.org/licenses/by-nc-nd/2.5": CC-BY-NC-ND-2.5
@@ -481,6 +484,8 @@
 "https://raw.github.com/RDFLib/rdflib/master/LICENSE": BSD-3-Clause
 "https://www.eclipse.org/legal/epl-v10.html": EPL-1.0
 "https://www.eclipse.org/legal/epl-v20.html": EPL-2.0
+"https://www.scala-lang.org/license.html": Apache-2.0 AND BSD-3-Clause AND MIT
+"https://www.scala-lang.org/license/": Apache-2.0 AND BSD-3-Clause AND MIT
 "icu-unicode license": ICU
 "jQuery license": MIT
 "lgplv2 or later": LGPL-2.1-or-later
