@@ -138,7 +138,13 @@ enum class VcsHost(
                 var path = ""
 
                 if (pathIterator.hasNext()) {
-                    val extra = pathIterator.next().toString()
+                    var extra = pathIterator.next().toString()
+
+                    // Skip the dash that is part of newer URLs.
+                    if (extra == "-" && pathIterator.hasNext()) {
+                        extra = pathIterator.next().toString()
+                    }
+
                     if (extra in listOf("blob", "tree") && pathIterator.hasNext()) {
                         revision = pathIterator.next().toString()
                         path = projectUrl.path.substringAfter(revision).trimStart('/').removeSuffix(".git")
