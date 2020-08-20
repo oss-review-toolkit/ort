@@ -62,4 +62,5 @@ dependencies {
 
     implementation("com.github.ajalt:clikt:$cliktVersion")
     implementation("org.apache.logging.log4j:log4j-core:$log4jCoreVersion")
+    implementation("org.apache.logging.log4j:log4j-slf4j-impl:$log4jCoreVersion")
 }
