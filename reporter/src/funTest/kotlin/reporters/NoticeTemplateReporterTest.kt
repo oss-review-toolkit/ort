@@ -37,7 +37,7 @@ import org.ossreviewtoolkit.utils.LICENSE_FILENAMES
 import org.ossreviewtoolkit.utils.ORT_NAME
 
 class NoticeTemplateReporterTest : WordSpec({
-    "NoticeTemplateReporter" should {
+    "The default template" should {
         "generate the correct license notes" {
             val expectedText = File("src/funTest/assets/notice-template-reporter-expected-results").readText()
 
@@ -64,7 +64,18 @@ class NoticeTemplateReporterTest : WordSpec({
                     )
                 )
             )
+
             val report = generateReport(ORT_RESULT, config)
+
+            report shouldBe expectedText
+        }
+    }
+
+    "The summary template" should {
+        "generate the correct license notes" {
+            val expectedText = File("src/funTest/assets/notice-template-reporter-expected-results-summary").readText()
+
+            val report = generateReport(ORT_RESULT, options = mapOf("template.id" to "summary"))
 
             report shouldBe expectedText
         }
@@ -74,7 +85,8 @@ class NoticeTemplateReporterTest : WordSpec({
 private fun generateReport(
     ortResult: OrtResult,
     config: OrtConfiguration = OrtConfiguration(),
-    copyrightGarbage: CopyrightGarbage = CopyrightGarbage()
+    copyrightGarbage: CopyrightGarbage = CopyrightGarbage(),
+    options: Map<String, String> = emptyMap()
 ): String {
     val input = ReporterInput(
         ortResult,
@@ -84,5 +96,5 @@ private fun generateReport(
 
     val outputDir = createTempDir(ORT_NAME, NoticeTemplateReporterTest::class.simpleName).apply { deleteOnExit() }
 
-    return NoticeTemplateReporter().generateReport(input, outputDir).single().readText()
+    return NoticeTemplateReporter().generateReport(input, outputDir, options).single().readText()
 }
