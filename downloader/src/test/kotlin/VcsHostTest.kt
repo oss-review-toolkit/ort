@@ -119,7 +119,7 @@ class VcsHostTest : WordSpec({
     }
 
     "The GitLab implementation" should {
-        val projectUrl = "https://gitlab.com/mbunkus/mkvtoolnix/tree/ec80478f87f1941fe52f15c5f4fa7ee6a70d7006/NEWS.md"
+        val projectUrl = "https://gitlab.com/mbunkus/mkvtoolnix/-/blob/ec80478f87f1941fe52f15c5f4fa7ee6a70d7006/NEWS.md"
 
         "correctly get the user or organization name" {
             GITLAB.getUserOrOrganization(projectUrl) shouldBe "mbunkus"
