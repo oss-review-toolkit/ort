@@ -68,7 +68,7 @@ class VcsHostTest : WordSpec({
     }
 
     "The GitHub implementation" should {
-        val projectUrl = "https://github.com/oss-review-toolkit/ort/tree/da7e3a814fc0e6301bf3ed394eba1a661e4d88d7/" +
+        val projectUrl = "https://github.com/oss-review-toolkit/ort/blob/da7e3a814fc0e6301bf3ed394eba1a661e4d88d7/" +
                 "README.md"
 
         "correctly get the user or organization name" {
