@@ -22,6 +22,7 @@ package org.ossreviewtoolkit.downloader
 
 import java.net.URI
 import java.net.URISyntaxException
+import java.nio.file.Path
 import java.nio.file.Paths
 
 import org.ossreviewtoolkit.model.VcsInfo
@@ -52,36 +53,20 @@ enum class VcsHost(
 
         override fun getProjectInternal(projectUrl: URI) = projectUrlToUserOrOrgAndProject(projectUrl)?.second
 
-        override fun toVcsInfoInternal(projectUrl: URI): VcsInfo {
-            var url = projectUrl.scheme + "://" + projectUrl.authority
+        override fun toVcsInfoInternal(projectUrl: URI) =
+            gitProjectUrlToVcsInfo(projectUrl) { baseUrl, pathIterator ->
+                var revision = ""
+                var path = ""
 
-            // Append the first two path components that denote the user and project to the base URL.
-            val pathIterator = Paths.get(projectUrl.path).iterator()
-
-            if (pathIterator.hasNext()) {
-                url += "/${pathIterator.next()}"
-            }
-
-            if (pathIterator.hasNext()) {
-                url += "/${pathIterator.next()}"
-
-                if (!url.endsWith(".git")) {
-                    url += ".git"
+                if (pathIterator.hasNext() && pathIterator.next().toString() == "src") {
+                    if (pathIterator.hasNext()) {
+                        revision = pathIterator.next().toString()
+                        path = projectUrl.path.substringAfter(revision).trimStart('/').removeSuffix(".git")
+                    }
                 }
+
+                VcsInfo(VcsType.GIT, baseUrl, revision, path = path)
             }
-
-            var revision = ""
-            var path = ""
-
-            if (pathIterator.hasNext() && pathIterator.next().toString() == "src") {
-                if (pathIterator.hasNext()) {
-                    revision = pathIterator.next().toString()
-                    path = projectUrl.path.substringAfter(revision).trimStart('/').removeSuffix(".git")
-                }
-            }
-
-            return VcsInfo(VcsType.GIT, url, revision, path = path)
-        }
 
         override fun toPermalinkInternal(vcsInfo: VcsInfo, startLine: Int, endLine: Int) =
             buildString {
@@ -113,7 +98,26 @@ enum class VcsHost(
         override fun getProjectInternal(projectUrl: URI) =
             projectUrlToUserOrOrgAndProject(projectUrl)?.second?.removeSuffix(".git")
 
-        override fun toVcsInfoInternal(projectUrl: URI) = gitProjectUrlToVcsInfo(projectUrl)
+        override fun toVcsInfoInternal(projectUrl: URI) =
+            gitProjectUrlToVcsInfo(projectUrl) { baseUrl, pathIterator ->
+                var revision = ""
+                var path = ""
+
+                if (pathIterator.hasNext()) {
+                    val extra = pathIterator.next().toString()
+                    if (extra in listOf("blob", "tree") && pathIterator.hasNext()) {
+                        revision = pathIterator.next().toString()
+                        path = projectUrl.path.substringAfter(revision).trimStart('/').removeSuffix(".git")
+                    } else {
+                        // Just treat all the extra components as a path.
+                        path = (sequenceOf(extra) + pathIterator.asSequence()).joinToString("/")
+                    }
+                } else {
+                    if (projectUrl.hasRevisionFragment()) revision = projectUrl.fragment
+                }
+
+                VcsInfo(VcsType.GIT, baseUrl, revision, path = path)
+            }
 
         override fun toPermalinkInternal(vcsInfo: VcsInfo, startLine: Int, endLine: Int) =
             toGitPermalink(URI(vcsInfo.url), vcsInfo.revision, vcsInfo.path, startLine, endLine, "#L", "-L")
@@ -128,7 +132,26 @@ enum class VcsHost(
         override fun getProjectInternal(projectUrl: URI) =
             projectUrlToUserOrOrgAndProject(projectUrl)?.second?.removeSuffix(".git")
 
-        override fun toVcsInfoInternal(projectUrl: URI) = gitProjectUrlToVcsInfo(projectUrl)
+        override fun toVcsInfoInternal(projectUrl: URI) =
+            gitProjectUrlToVcsInfo(projectUrl) { baseUrl, pathIterator ->
+                var revision = ""
+                var path = ""
+
+                if (pathIterator.hasNext()) {
+                    val extra = pathIterator.next().toString()
+                    if (extra in listOf("blob", "tree") && pathIterator.hasNext()) {
+                        revision = pathIterator.next().toString()
+                        path = projectUrl.path.substringAfter(revision).trimStart('/').removeSuffix(".git")
+                    } else {
+                        // Just treat all the extra components as a path.
+                        path = (sequenceOf(extra) + pathIterator.asSequence()).joinToString("/")
+                    }
+                } else {
+                    if (projectUrl.hasRevisionFragment()) revision = projectUrl.fragment
+                }
+
+                VcsInfo(VcsType.GIT, baseUrl, revision, path = path)
+            }
 
         override fun toPermalinkInternal(vcsInfo: VcsInfo, startLine: Int, endLine: Int) =
             toGitPermalink(URI(vcsInfo.url), vcsInfo.revision, vcsInfo.path, startLine, endLine, "#L", "-")
@@ -375,41 +398,25 @@ private fun projectUrlToUserOrOrgAndProject(projectUrl: URI): Pair<String, Strin
     return null
 }
 
-private fun gitProjectUrlToVcsInfo(projectUrl: URI): VcsInfo {
-    var url = projectUrl.scheme + "://" + projectUrl.authority
+private fun gitProjectUrlToVcsInfo(projectUrl: URI, pathParser: (String, Iterator<Path>) -> VcsInfo): VcsInfo {
+    var baseUrl = projectUrl.scheme + "://" + projectUrl.authority
 
     // Append the first two path components that denote the user and project to the base URL.
     val pathIterator = Paths.get(projectUrl.path).iterator()
 
     if (pathIterator.hasNext()) {
-        url += "/${pathIterator.next()}"
+        baseUrl += "/${pathIterator.next()}"
     }
 
     if (pathIterator.hasNext()) {
-        url += "/${pathIterator.next()}"
+        baseUrl += "/${pathIterator.next()}"
 
-        if (!url.endsWith(".git")) {
-            url += ".git"
+        if (!baseUrl.endsWith(".git")) {
+            baseUrl += ".git"
         }
     }
 
-    var revision = ""
-    var path = ""
-
-    if (pathIterator.hasNext()) {
-        val extra = pathIterator.next().toString()
-        if (extra in listOf("blob", "tree") && pathIterator.hasNext()) {
-            revision = pathIterator.next().toString()
-            path = projectUrl.path.substringAfter(revision).trimStart('/').removeSuffix(".git")
-        } else {
-            // Just treat all the extra components as a path.
-            path = (sequenceOf(extra) + pathIterator.asSequence()).joinToString("/")
-        }
-    } else {
-        if (projectUrl.hasRevisionFragment()) revision = projectUrl.fragment
-    }
-
-    return VcsInfo(VcsType.GIT, url, revision, path = path)
+    return pathParser(baseUrl, pathIterator)
 }
 
 private fun toGitPermalink(
