@@ -55,7 +55,7 @@ class VcsHostTest : WordSpec({
         "be able to create permalinks from VCS information" {
             val vcsInfo = VcsInfo(
                 type = VcsType.GIT,
-                url = "https://bitbucket.org/yevster/spdxtraxample",
+                url = "https://bitbucket.org/yevster/spdxtraxample.git",
                 revision = "287aebca5e7ff4167af1fb648640dcdbdf4ec666",
                 path = "LICENSE.txt"
             )
