@@ -78,9 +78,9 @@ data class VcsType(val aliases: List<String>) {
         )
 
         /**
-         * No VCS type.
+         * An unkown VCS type.
          */
-        val NONE = VcsType(listOf(""))
+        val UNKNOWN = VcsType(listOf(""))
     }
 
     @JsonValue

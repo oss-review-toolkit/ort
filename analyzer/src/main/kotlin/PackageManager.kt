@@ -167,7 +167,7 @@ abstract class PackageManager(
             }
 
             // Use the first VCS information with a valid type, or the normalized VCS information from the package.
-            return availableVcsInfo.find { it.type != VcsType.NONE } ?: normalizedVcsFromPackage
+            return availableVcsInfo.find { it.type != VcsType.UNKNOWN } ?: normalizedVcsFromPackage
         }
 
         /**

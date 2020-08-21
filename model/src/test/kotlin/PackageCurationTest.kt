@@ -172,7 +172,7 @@ class PackageCurationTest : WordSpec({
                 id = pkg.id,
                 data = PackageCurationData(
                     vcs = VcsInfoCurationData(
-                        type = VcsType.NONE,
+                        type = VcsType.UNKNOWN,
                         url = "",
                         revision = "",
                         path = ""
@@ -207,7 +207,7 @@ class PackageCurationTest : WordSpec({
                 data = PackageCurationData(
                     homepageUrl = "http://home.page",
                     vcs = VcsInfoCurationData(
-                        type = VcsType.NONE,
+                        type = VcsType.UNKNOWN,
                         url = "http://url.git",
                         revision = ""
                     )
