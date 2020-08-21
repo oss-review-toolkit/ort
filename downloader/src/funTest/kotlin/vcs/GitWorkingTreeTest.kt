@@ -66,9 +66,7 @@ class GitWorkingTreeTest : StringSpec() {
         }
 
         "Git correctly detects URLs to remote repositories" {
-            // Bitbucket forwards to ".git" URLs for Git repositories, so we can omit the suffix.
-            git.isApplicableUrl("https://bitbucket.org/yevster/spdxtraxample") shouldBe true
-
+            git.isApplicableUrl("https://bitbucket.org/yevster/spdxtraxample.git") shouldBe true
             git.isApplicableUrl("https://bitbucket.org/paniq/masagin") shouldBe false
         }
 
