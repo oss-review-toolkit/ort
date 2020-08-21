@@ -25,6 +25,15 @@ import org.ossreviewtoolkit.model.OrtIssue
  * Provides how-to-fix texts in Markdown format for any given [OrtIssue].
  */
 interface HowToFixTextProvider {
+    companion object {
+        /**
+         * A [HowToFixTextProvider] which returns null for any given [OrtIssue].
+         */
+        val NONE = object : HowToFixTextProvider {
+            override fun getHowToFixText(issue: OrtIssue): String? = null
+        }
+    }
+
     /**
      * Return a Markdown text describing how to fix the given [issue]. Non-null return values override the default
      * how-to-fix texts, while a null value keeps the default.
