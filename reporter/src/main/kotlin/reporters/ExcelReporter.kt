@@ -102,7 +102,7 @@ class ExcelReporter : Reporter {
             .map { it.trim() }
             .filter { it.isNotEmpty() }
 
-        val tabularScanRecord = ReportTableModelMapper(input.resolutionProvider)
+        val tabularScanRecord = ReportTableModelMapper(input.resolutionProvider, input.howToFixTextProvider)
             .mapToReportTableModel(
                 input.ortResult,
                 input.licenseInfoResolver

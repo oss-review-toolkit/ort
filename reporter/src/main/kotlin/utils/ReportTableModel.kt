@@ -255,7 +255,8 @@ data class ReportTableModel(
         val description: String,
         val resolutionDescription: String,
         val isResolved: Boolean,
-        val severity: Severity
+        val severity: Severity,
+        val howToFix: String
     )
 
     data class ResolvableViolation(

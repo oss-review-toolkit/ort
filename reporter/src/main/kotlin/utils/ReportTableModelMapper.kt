@@ -31,6 +31,7 @@ import org.ossreviewtoolkit.model.config.Excludes
 import org.ossreviewtoolkit.model.config.ScopeExclude
 import org.ossreviewtoolkit.model.licenses.LicenseInfoResolver
 import org.ossreviewtoolkit.model.utils.ResolutionProvider
+import org.ossreviewtoolkit.reporter.HowToFixTextProvider
 import org.ossreviewtoolkit.reporter.utils.ReportTableModel.DependencyRow
 import org.ossreviewtoolkit.reporter.utils.ReportTableModel.IssueRow
 import org.ossreviewtoolkit.reporter.utils.ReportTableModel.IssueTable
@@ -58,7 +59,8 @@ private fun Project.getScopesForDependencies(excludes: Excludes): Map<Identifier
  * A mapper which converts an [OrtIssue] to a [ReportTableModel] view model.
  */
 class ReportTableModelMapper(
-    private val resolutionProvider: ResolutionProvider
+    private val resolutionProvider: ResolutionProvider,
+    private val howToFixTextProvider: HowToFixTextProvider
 ) {
     companion object {
         private val VIOLATION_COMPARATOR = compareBy<ReportTableModel.ResolvableViolation>(
@@ -85,7 +87,8 @@ class ReportTableModelMapper(
                 }
             },
             isResolved = resolutions.isNotEmpty(),
-            severity = severity
+            severity = severity,
+            howToFix = howToFixTextProvider.getHowToFixText(this).orEmpty()
         )
     }
 
