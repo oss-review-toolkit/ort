@@ -26,19 +26,24 @@ import io.kotest.matchers.collections.beEmpty
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNot
+import io.kotest.matchers.string.shouldContain
 
 import java.io.File
 import java.io.IOException
+import java.time.Instant
 
 import org.ossreviewtoolkit.evaluator.Evaluator
+import org.ossreviewtoolkit.model.OrtIssue
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.PackageCuration
+import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.model.config.CopyrightGarbage
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.config.Resolutions
 import org.ossreviewtoolkit.model.licenses.LicenseConfiguration
 import org.ossreviewtoolkit.model.readValue
 import org.ossreviewtoolkit.model.utils.SimplePackageConfigurationProvider
+import org.ossreviewtoolkit.reporter.HowToFixTextProvider
 import org.ossreviewtoolkit.reporter.ReporterInput
 import org.ossreviewtoolkit.reporter.reporters.AbstractNoticeReporter
 import org.ossreviewtoolkit.reporter.reporters.AntennaAttributionDocumentReporter
@@ -115,6 +120,21 @@ class ExamplesTest : StringSpec() {
             shouldNotThrow<IOException> {
                 takeExampleFile("resolutions.yml").readValue<Resolutions>()
             }
+        }
+
+        "how-to-fix-text-provider.kts provides the expected how-to-fix text" {
+            val script = takeExampleFile("how-to-fix-text-provider.kts").readText()
+            val howToFixTextProvider = HowToFixTextProvider.fromKotlinScript(script)
+            val issue = OrtIssue(
+                message = "ERROR: Timeout after 360 seconds while scanning file 'src/res/data.json'.",
+                source = "ScanCode",
+                severity = Severity.ERROR,
+                timestamp = Instant.now()
+            )
+
+            val howToFixText = howToFixTextProvider.getHowToFixText(issue)
+
+            howToFixText shouldContain "Manually verify that the file does not contain any license information."
         }
 
         "rules.kts can be compiled" {
