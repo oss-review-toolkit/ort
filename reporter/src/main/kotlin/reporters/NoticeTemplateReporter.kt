@@ -75,6 +75,7 @@ class NoticeTemplateReporter : Reporter {
         val dataModel = mapOf(
             "projects" to projects,
             "packages" to packages,
+            "labels" to input.ortResult.labels,
             "licenseTextProvider" to input.licenseTextProvider,
             "helper" to NoticeHelper(input.licenseConfiguration)
         )
