@@ -50,6 +50,7 @@ import org.ossreviewtoolkit.model.licenses.orEmpty
 import org.ossreviewtoolkit.model.readValue
 import org.ossreviewtoolkit.model.utils.DefaultResolutionProvider
 import org.ossreviewtoolkit.reporter.DefaultLicenseTextProvider
+import org.ossreviewtoolkit.reporter.HowToFixTextProvider
 import org.ossreviewtoolkit.reporter.Reporter
 import org.ossreviewtoolkit.reporter.ReporterInput
 import org.ossreviewtoolkit.utils.PackageConfigurationOption
@@ -160,6 +161,14 @@ class ReporterCommand : CliktCommand(
         .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
         .convert { it.absoluteFile.normalize() }
 
+    private val howToFixTextProviderScript by option(
+        "--how-to-fix-text-provider-script",
+        help = "The path to a Kotlin script which returns an instance of a 'HowToFixTextProvider'. That provider " +
+                "injects how-to-fix texts in Markdown format for ORT issues."
+    ).convert { it.expandTilde() }
+        .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
+        .convert { it.absoluteFile.normalize() }
+
     private val config by requireObject<OrtConfiguration>()
 
     override fun run() {
@@ -184,6 +193,10 @@ class ReporterCommand : CliktCommand(
 
         val licenseConfiguration = licenseConfigurationFile?.readValue<LicenseConfiguration>().orEmpty()
 
+        val howToFixTextProvider =
+            howToFixTextProviderScript?.let { HowToFixTextProvider.fromKotlinScript(it.readText()) }
+                ?: HowToFixTextProvider.NONE
+
         outputDir.safeMkdirs()
 
         val input = ReporterInput(
@@ -194,7 +207,8 @@ class ReporterCommand : CliktCommand(
             DefaultLicenseTextProvider(customLicenseTextsDir),
             copyrightGarbage,
             licenseInfoResolver,
-            licenseConfiguration
+            licenseConfiguration,
+            howToFixTextProvider
         )
 
         val reportOptionsMap = mutableMapOf<String, MutableMap<String, String>>()
