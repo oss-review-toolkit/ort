@@ -148,16 +148,31 @@ abstract class PackageManager(
          * [list of fallback URLs][fallbackUrls] (the first element that is recognized as a VCS URL is used).
          */
         fun processPackageVcs(vcsFromPackage: VcsInfo, vararg fallbackUrls: String): VcsInfo {
-            // Merge the VCS information from the package with information derived from its normalized URL only.
-            val normalizedVcsFromPackage = vcsFromPackage.normalize().let { VcsHost.toVcsInfo(it.url).merge(it) }
+            val normalizedVcsFromPackage = vcsFromPackage.normalize()
 
-            // Add the VCS information derived from the normalized fallback URLs to the list.
-            val availableVcsInfo = fallbackUrls.mapTo(mutableListOf(normalizedVcsFromPackage)) {
+            val fallbackVcs = fallbackUrls.mapTo(mutableListOf(VcsHost.toVcsInfo(normalizedVcsFromPackage.url))) {
                 VcsHost.toVcsInfo(normalizeVcsUrl(it))
+            }.firstOrNull {
+                // Ignore fallback VCS information that changes a known type, or where the VCS type is unknown.
+                if (normalizedVcsFromPackage.type != VcsType.UNKNOWN) {
+                    it.type == normalizedVcsFromPackage.type
+                } else {
+                    it.type != VcsType.UNKNOWN
+                }
             }
 
-            // Use the first VCS information with a valid type, or the normalized VCS information from the package.
-            return availableVcsInfo.find { it.type != VcsType.UNKNOWN } ?: normalizedVcsFromPackage
+            if (fallbackVcs != null) {
+                // Enrich (not overwrite) the normalized VCS information from the package...
+                val mergedVcs = normalizedVcsFromPackage.merge(fallbackVcs)
+                if (mergedVcs != normalizedVcsFromPackage) {
+                    // ... but if indeed meta data was enriched, overwrite the URL with the one from the fallback VCS
+                    // information to ensure we get the correct base URL if additional VCS information (like a revision
+                    // or path) has been split from the original URL.
+                    return mergedVcs.copy(url = fallbackVcs.url)
+                }
+            }
+
+            return normalizedVcsFromPackage
         }
 
         /**
