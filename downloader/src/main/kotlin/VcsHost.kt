@@ -47,7 +47,7 @@ enum class VcsHost(
     /**
      * The enum constant to handle [Bitbucket][https://bitbucket.org/]-specific information.
      */
-    BITBUCKET("bitbucket.org", VcsType.GIT, VcsType.MERCURIAL) {
+    BITBUCKET("bitbucket.org", VcsType.GIT) {
         override fun getUserOrOrgInternal(projectUrl: URI) = projectUrlToUserOrOrgAndProject(projectUrl)?.first
 
         override fun getProjectInternal(projectUrl: URI) = projectUrlToUserOrOrgAndProject(projectUrl)?.second
@@ -64,6 +64,10 @@ enum class VcsHost(
 
             if (pathIterator.hasNext()) {
                 url += "/${pathIterator.next()}"
+
+                if (!url.endsWith(".git")) {
+                    url += ".git"
+                }
             }
 
             var revision = ""
@@ -76,12 +80,7 @@ enum class VcsHost(
                 }
             }
 
-            val type = VersionControlSystem.forUrl(url)?.type ?: VcsType.UNKNOWN
-            if (type == VcsType.GIT) {
-                url += ".git"
-            }
-
-            return VcsInfo(type, url, revision, path = path)
+            return VcsInfo(VcsType.GIT, url, revision, path = path)
         }
 
         override fun toPermalinkInternal(vcsInfo: VcsInfo, startLine: Int, endLine: Int) =
@@ -211,7 +210,7 @@ enum class VcsHost(
 
     companion object {
         /**
-         * Return all [VcsInfo] that can be extracted from [projectUrl] by the applicable host.
+         * Return all [VcsInfo] that can be parsed from [projectUrl] without actually making a network request.
          */
         fun toVcsInfo(projectUrl: String): VcsInfo {
             val vcs = try {
