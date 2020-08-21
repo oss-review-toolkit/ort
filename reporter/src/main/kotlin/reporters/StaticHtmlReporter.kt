@@ -66,7 +66,7 @@ class StaticHtmlReporter : Reporter {
         outputDir: File,
         options: Map<String, String>
     ): List<File> {
-        val tabularScanRecord = ReportTableModelMapper(input.resolutionProvider)
+        val tabularScanRecord = ReportTableModelMapper(input.resolutionProvider, input.howToFixTextProvider)
             .mapToReportTableModel(
                 input.ortResult,
                 input.licenseInfoResolver
