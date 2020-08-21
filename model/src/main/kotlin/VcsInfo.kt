@@ -73,7 +73,7 @@ data class VcsInfo(
          */
         @JvmField
         val EMPTY = VcsInfo(
-            type = VcsType.NONE,
+            type = VcsType.UNKNOWN,
             url = "",
             revision = "",
             resolvedRevision = null,

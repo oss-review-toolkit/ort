@@ -76,7 +76,7 @@ enum class VcsHost(
                 }
             }
 
-            val type = VersionControlSystem.forUrl(url)?.type ?: VcsType.NONE
+            val type = VersionControlSystem.forUrl(url)?.type ?: VcsType.UNKNOWN
             if (type == VcsType.GIT) {
                 url += ".git"
             }
@@ -145,7 +145,7 @@ enum class VcsHost(
             val type = when (projectUrl.host.substringBefore('.')) {
                 "git" -> VcsType.GIT
                 "hg" -> VcsType.MERCURIAL
-                else -> VcsType.NONE
+                else -> VcsType.UNKNOWN
             }
 
             var url = projectUrl.scheme + "://" + projectUrl.authority
@@ -266,7 +266,7 @@ enum class VcsHost(
                     VcsInfo(VcsType.GIT, url, revision, null, "")
                 }
 
-                else -> VcsInfo(VcsType.NONE, projectUrl, "")
+                else -> VcsInfo(VcsType.UNKNOWN, projectUrl, "")
             }
         }
 

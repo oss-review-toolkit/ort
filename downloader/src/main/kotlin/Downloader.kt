@@ -193,7 +193,7 @@ object Downloader {
 
         var applicableVcs: VersionControlSystem? = null
 
-        if (pkg.vcsProcessed.type != VcsType.NONE) {
+        if (pkg.vcsProcessed.type != VcsType.UNKNOWN) {
             applicableVcs = VersionControlSystem.forType(pkg.vcsProcessed.type)
             log.info {
                 applicableVcs?.let {

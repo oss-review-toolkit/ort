@@ -71,7 +71,7 @@ class VcsInfoTest : WordSpec({
 
             val vcsInfo = yamlMapper.readValue<VcsInfo>(yaml)
 
-            vcsInfo.type shouldBe VcsType.NONE
+            vcsInfo.type shouldBe VcsType.UNKNOWN
             vcsInfo.url shouldBe ""
             vcsInfo.revision shouldBe ""
             vcsInfo.path shouldBe "path"
@@ -101,7 +101,7 @@ class VcsInfoTest : WordSpec({
     "Merging VcsInfo" should {
         "ignore empty information" {
             val inputA = VcsInfo(
-                type = VcsType.NONE,
+                type = VcsType.UNKNOWN,
                 url = "",
                 revision = ""
             )
@@ -151,7 +151,7 @@ class VcsInfoTest : WordSpec({
 
         "prefer more complete information for GitLab" {
             val inputA = VcsInfo(
-                type = VcsType.NONE,
+                type = VcsType.UNKNOWN,
                 url = "https://gitlab.com/rich-harris/rollup-plugin-buble.git",
                 revision = ""
             )

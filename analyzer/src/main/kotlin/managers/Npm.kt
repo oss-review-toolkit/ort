@@ -359,7 +359,7 @@ open class Npm(
             val url = repo.textValue() ?: repo["url"].textValueOrEmpty()
             val path = repo["directory"].textValueOrEmpty()
             VcsInfo(VcsType(type), expandNpmShortcutURL(url), head, path = path)
-        } ?: VcsInfo(VcsType.NONE, "", head)
+        } ?: VcsInfo(VcsType.UNKNOWN, "", head)
     }
 
     private fun getPackageReferenceForMissingModule(moduleName: String, rootModuleDir: File): PackageReference {
