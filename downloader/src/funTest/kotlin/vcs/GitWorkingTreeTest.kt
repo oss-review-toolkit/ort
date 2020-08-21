@@ -67,7 +67,7 @@ class GitWorkingTreeTest : StringSpec() {
 
         "Git correctly detects URLs to remote repositories" {
             git.isApplicableUrl("https://bitbucket.org/yevster/spdxtraxample.git") shouldBe true
-            git.isApplicableUrl("https://bitbucket.org/paniq/masagin") shouldBe false
+            git.isApplicableUrl("https://hg.sr.ht/~duangle/paniq_legacy") shouldBe false
         }
 
         "Git does not prompt for credentials for non-existing repositories" {
