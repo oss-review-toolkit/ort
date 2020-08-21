@@ -59,7 +59,7 @@ class StaticHtmlReporterTest : WordSpec({
 
 private fun generateReport(ortResult: OrtResult): String {
     val input = ReporterInput(
-        ortResult,
+        ortResult = ortResult,
         resolutionProvider = DefaultResolutionProvider().add(ortResult.getResolutions())
     )
 
