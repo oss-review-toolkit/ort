@@ -87,7 +87,7 @@ enum class VcsHost(
         override fun toPermalinkInternal(vcsInfo: VcsInfo, startLine: Int, endLine: Int) =
             buildString {
                 val vcsUrl = URI(vcsInfo.url)
-                append("https://${vcsUrl.host}${vcsUrl.path}")
+                append("https://${vcsUrl.host}${vcsUrl.path.removeSuffix(".git")}")
 
                 if (vcsInfo.revision.isNotEmpty()) {
                     append("/src/${vcsInfo.revision}")
