@@ -81,5 +81,10 @@ data class ReporterInput(
      * A [LicenseConfiguration], can be used to handle licenses based on the user's configuration, for example to
      * determine which licenses to include in a notice file.
      */
-    val licenseConfiguration: LicenseConfiguration = LicenseConfiguration()
+    val licenseConfiguration: LicenseConfiguration = LicenseConfiguration(),
+
+    /**
+     * A [HowToFixTextProvider], can be used to integrate how to fix texts for [OrtIssue]s into reports.
+     */
+    val howToFixTextProvider: HowToFixTextProvider = HowToFixTextProvider.NONE
 )
