@@ -368,6 +368,13 @@ class StaticHtmlReporter : Reporter {
                                 issueDescription(issue)
                                 p { +issue.resolutionDescription }
                             }
+
+                            if (!issue.isResolved && issue.howToFix.isNotBlank()) {
+                                details {
+                                    unsafe { +"<summary>How to fix</summary>" }
+                                    markdown(issue.howToFix)
+                                }
+                            }
                         }
                     }
                 }
@@ -382,6 +389,13 @@ class StaticHtmlReporter : Reporter {
                             li {
                                 issueDescription(issue)
                                 p { +issue.resolutionDescription }
+                            }
+
+                            if (!issue.isResolved && issue.howToFix.isNotBlank()) {
+                                details {
+                                    unsafe { +"<summary>How to fix</summary>" }
+                                    markdown(issue.howToFix)
+                                }
                             }
                         }
                     }
