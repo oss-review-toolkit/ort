@@ -29,6 +29,7 @@ import {
     WarningOutlined
 } from '@ant-design/icons';
 
+import Markdown from 'markdown-to-jsx';
 import PackageDetails from './PackageDetails';
 import PackageLicenses from './PackageLicenses';
 import PackagePaths from './PackagePaths';
@@ -246,6 +247,18 @@ const IssuesTable = (props) => {
                             bordered={false}
                             defaultActiveKey={defaultActiveKey}
                         >
+                            {
+                                webAppOrtIssue.hasHowToFix()
+                                && (
+                                    <Panel header="How to fix" key="0">
+                                        <Markdown
+                                            className="ort-how-to-fix"
+                                        >
+                                            {webAppOrtIssue.howToFix}
+                                        </Markdown>
+                                    </Panel>
+                                )
+                            }
                             {
                                 webAppOrtIssue.isResolved
                                 && (
