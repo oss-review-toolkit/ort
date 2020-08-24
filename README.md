@@ -350,6 +350,21 @@ Currently, the following report formats are supported (reporter names are case-i
 * Static HTML (`-f StaticHtml`)
 * Web App (`-f WebApp`)
 
+# System requirements
+
+ORT is being continuously used on Linux, Windows and macOS by the
+[core development team](https://github.com/orgs/oss-review-toolkit/teams/core-devs), so these operating systems are
+considered to be well supported.
+
+To run the ORT binaries (also see [Installation from binaries](#from-binaries))) at least a Java Runtime Environment
+(JRE) version 8 is required, but using version 11 is recommended. Memory and CPU requirements vary depending on the size
+and type of project(s) to analyze / scan, but the general recommendation is to configure the JRE with 8 GiB of memory
+(`-Xmx=8g`) and to use a CPU with at least 4 cores.
+
+If ORT requires external tools in order to analyze a project, these tools are listed by the `ort requirements` command.
+If a package manager is not list listed there, support for it is integrated directly into ORT and does not require any
+external tools to be installed.
+
 # Development
 
 ORT is written in [Kotlin](https://kotlinlang.org/) and uses [Gradle](https://gradle.org/) as the build system, with
