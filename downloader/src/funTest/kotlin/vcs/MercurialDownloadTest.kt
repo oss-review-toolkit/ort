@@ -34,14 +34,14 @@ import org.ossreviewtoolkit.utils.ORT_NAME
 import org.ossreviewtoolkit.utils.safeDeleteRecursively
 import org.ossreviewtoolkit.utils.test.ExpensiveTag
 
-private const val PKG_VERSION = "1.1"
+private const val PKG_VERSION = "v1.0.0"
 
-private const val REPO_URL = "https://bitbucket.org/creaceed/mercurial-xcode-plugin"
-private const val REPO_REV = "02098fc8bdaca4739ec52cbcb8ed51654eacee25"
-private const val REPO_PATH = "Classes"
+private const val REPO_URL = "https://hg.sr.ht/~breakfastquay/bqfft"
+private const val REPO_REV = "e1c392f85e973225ece81cf8d74287b3a4992dea"
+private const val REPO_PATH = "test"
 
-private const val REPO_REV_FOR_VERSION = "562fed42b4f3dceaacf6f1051963c865c0241e28"
-private const val REPO_PATH_FOR_VERSION = "Resources"
+private const val REPO_REV_FOR_VERSION = "a766fe47501b185bc46cffc210735304e28f2189"
+private const val REPO_PATH_FOR_VERSION = "build"
 
 class MercurialDownloadTest : StringSpec() {
     private val hg = Mercurial()
@@ -60,14 +60,16 @@ class MercurialDownloadTest : StringSpec() {
             val pkg = Package.EMPTY.copy(vcsProcessed = VcsInfo(VcsType.MERCURIAL, REPO_URL, REPO_REV))
             val expectedFiles = listOf(
                 ".hg",
-                ".hgsub",
-                ".hgsubstate",
-                "Classes",
-                "LICENCE.md",
-                "MercurialPlugin.xcodeproj",
+                ".hgignore",
+                ".hgtags",
+                ".travis.yml",
+                "COPYING",
+                "Makefile",
                 "README.md",
-                "Resources",
-                "Script"
+                "bqfft",
+                "build",
+                "src",
+                "test"
             )
 
             val workingTree = hg.download(pkg, outputDir)
@@ -84,18 +86,12 @@ class MercurialDownloadTest : StringSpec() {
                     vcsProcessed = VcsInfo(VcsType.MERCURIAL, REPO_URL, REPO_REV, path = REPO_PATH)
                 )
                 val expectedFiles = listOf(
-                    File(".hgsub"), // We always get these configuration files, if present.
-                    File(".hgsubstate"),
-                    File(REPO_PATH, "MercurialPlugin.h"),
-                    File(REPO_PATH, "MercurialPlugin.m"),
-                    File("LICENCE.md"),
-                    File("README.md"),
-                    File("Script", "README"), // As a submodule, "Script" is always included.
-                    File("Script", "git.py"),
-                    File("Script", "gpl-2.0.txt"),
-                    File("Script", "install_bridge.sh"),
-                    File("Script", "sniff.py"),
-                    File("Script", "uninstall_bridge.sh")
+                    ".hgignore",
+                    ".hgtags",
+                    "COPYING",
+                    "README.md",
+                    "$REPO_PATH/TestFFT.cpp",
+                    "$REPO_PATH/timings.cpp"
                 )
 
                 val workingTree = hg.download(pkg, outputDir)
@@ -134,19 +130,14 @@ class MercurialDownloadTest : StringSpec() {
                     vcsProcessed = VcsInfo(VcsType.MERCURIAL, REPO_URL, "dummy", path = REPO_PATH_FOR_VERSION)
                 )
                 val expectedFiles = listOf(
-                    File(".hgsub"), // We always get these configuration files, if present.
-                    File(".hgsubstate"),
-                    File("LICENCE.md"),
-                    File("README.md"),
-                    File(REPO_PATH_FOR_VERSION, "Info.plist"),
-                    File(REPO_PATH_FOR_VERSION, "icon.icns"),
-                    File(REPO_PATH_FOR_VERSION, "icon_blank.icns"),
-                    File("Script", "README"), // As a submodule, "Script" is always included.
-                    File("Script", "git.py"),
-                    File("Script", "gpl-2.0.txt"),
-                    File("Script", "install_bridge.sh"),
-                    File("Script", "sniff.py"),
-                    File("Script", "uninstall_bridge.sh")
+                    ".hgignore",
+                    "COPYING",
+                    "README.md",
+                    "build/Makefile.inc",
+                    "build/Makefile.linux.fftw",
+                    "build/Makefile.linux.ipp",
+                    "build/Makefile.osx",
+                    "build/run-platform-tests.sh"
                 )
 
                 val workingTree = hg.download(pkg, outputDir)
