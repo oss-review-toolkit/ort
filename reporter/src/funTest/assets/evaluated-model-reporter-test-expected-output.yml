@@ -62,6 +62,7 @@ issues:
   severity: "ERROR"
   pkg: 0
   scan_result: 0
+  how_to_fix: "Some how to fix text."
 scan_results:
 - _id: 0
   provenance:
