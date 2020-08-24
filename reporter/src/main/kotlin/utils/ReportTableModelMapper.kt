@@ -41,6 +41,16 @@ import org.ossreviewtoolkit.reporter.utils.ReportTableModel.ResolvableViolation
 import org.ossreviewtoolkit.reporter.utils.ReportTableModel.SummaryRow
 import org.ossreviewtoolkit.reporter.utils.ReportTableModel.SummaryTable
 
+private val VIOLATION_COMPARATOR = compareBy<ResolvableViolation>(
+    { it.isResolved },
+    { it.violation.severity },
+    { it.violation.rule },
+    { it.violation.pkg },
+    { it.violation.license.toString() },
+    { it.violation.message },
+    { it.resolutionDescription }
+)
+
 private fun Collection<ResolvableIssue>.filterUnresolved() = filter { !it.isResolved }
 
 private fun Project.getScopesForDependencies(excludes: Excludes): Map<Identifier, Map<String, List<ScopeExclude>>> {
@@ -63,18 +73,6 @@ class ReportTableModelMapper(
     private val resolutionProvider: ResolutionProvider,
     private val howToFixTextProvider: HowToFixTextProvider
 ) {
-    companion object {
-        private val VIOLATION_COMPARATOR = compareBy<ResolvableViolation>(
-            { it.isResolved },
-            { it.violation.severity },
-            { it.violation.rule },
-            { it.violation.pkg },
-            { it.violation.license.toString() },
-            { it.violation.message },
-            { it.resolutionDescription }
-        )
-    }
-
     private fun OrtIssue.toResolvableIssue(): ResolvableIssue {
         val resolutions = resolutionProvider.getIssueResolutionsFor(this)
         return ResolvableIssue(
