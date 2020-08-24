@@ -92,7 +92,7 @@ class ReportTableModelMapper(
         )
     }
 
-    private fun RuleViolation.toResolvableEvaluatorIssue(): ReportTableModel.ResolvableViolation {
+    private fun RuleViolation.toResolvableViolation(): ReportTableModel.ResolvableViolation {
         val resolutions = resolutionProvider.getRuleViolationResolutionsFor(this)
         return ReportTableModel.ResolvableViolation(
             violation = this,
@@ -237,7 +237,7 @@ class ReportTableModelMapper(
         }
 
         val ruleViolations = ortResult.getRuleViolations()
-            .map { it.toResolvableEvaluatorIssue() }
+            .map { it.toResolvableViolation() }
             .sortedWith(VIOLATION_COMPARATOR)
 
         return ReportTableModel(
