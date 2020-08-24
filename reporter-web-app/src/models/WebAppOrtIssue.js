@@ -22,6 +22,8 @@ import { randomStringGenerator } from '../utils';
 class WebAppOrtIssue {
     #_id;
 
+    #howToFix
+
     #message;
 
     #package;
@@ -54,6 +56,11 @@ class WebAppOrtIssue {
         if (obj) {
             if (Number.isInteger(obj._id)) {
                 this.#_id = obj._id;
+            }
+
+            if (obj.how_to_fix || obj.howToFix) {
+                this.#howToFix = obj.how_to_fix
+                    || obj.howToFix;
             }
 
             if (obj.message) {
@@ -112,6 +119,10 @@ class WebAppOrtIssue {
 
     get _id() {
         return this.#_id;
+    }
+
+    get howToFix() {
+        return this.#howToFix;
     }
 
     get isResolved() {
@@ -212,6 +223,10 @@ class WebAppOrtIssue {
         }
 
         return this.#resolutionReasons;
+    }
+
+    hasHowToFix() {
+        return !!this.#howToFix;
     }
 }
 
