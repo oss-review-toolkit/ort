@@ -24,12 +24,20 @@ import io.kotest.matchers.shouldBe
 
 import java.io.File
 
+import org.ossreviewtoolkit.model.OrtIssue
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.utils.DefaultResolutionProvider
+import org.ossreviewtoolkit.reporter.HowToFixTextProvider
 import org.ossreviewtoolkit.reporter.ReporterInput
 import org.ossreviewtoolkit.utils.ORT_NAME
 import org.ossreviewtoolkit.utils.normalizeLineBreaks
 import org.ossreviewtoolkit.utils.test.readOrtResult
+
+private val HOW_TO_FIX_TEXT_PROVIDER: HowToFixTextProvider = object : HowToFixTextProvider {
+    override fun getHowToFixText(issue: OrtIssue): String? {
+        return "Some how to fix text.".trimIndent()
+    }
+}
 
 class EvaluatedModelReporterTest : WordSpec({
     "EvaluatedModelReporter" should {
@@ -56,7 +64,8 @@ class EvaluatedModelReporterTest : WordSpec({
 private fun generateReport(reporter: EvaluatedModelReporter, ortResult: OrtResult): String {
     val input = ReporterInput(
         ortResult = ortResult,
-        resolutionProvider = DefaultResolutionProvider().add(ortResult.getResolutions())
+        resolutionProvider = DefaultResolutionProvider().add(ortResult.getResolutions()),
+        howToFixTextProvider = HOW_TO_FIX_TEXT_PROVIDER
     )
 
     val outputDir = createTempDir(ORT_NAME, EvaluatedModelReporterTest::class.simpleName).apply { deleteOnExit() }
