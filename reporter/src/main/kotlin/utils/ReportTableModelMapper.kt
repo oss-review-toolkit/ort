@@ -37,6 +37,7 @@ import org.ossreviewtoolkit.reporter.utils.ReportTableModel.IssueRow
 import org.ossreviewtoolkit.reporter.utils.ReportTableModel.IssueTable
 import org.ossreviewtoolkit.reporter.utils.ReportTableModel.ProjectTable
 import org.ossreviewtoolkit.reporter.utils.ReportTableModel.ResolvableIssue
+import org.ossreviewtoolkit.reporter.utils.ReportTableModel.ResolvableViolation
 import org.ossreviewtoolkit.reporter.utils.ReportTableModel.SummaryRow
 import org.ossreviewtoolkit.reporter.utils.ReportTableModel.SummaryTable
 
@@ -63,7 +64,7 @@ class ReportTableModelMapper(
     private val howToFixTextProvider: HowToFixTextProvider
 ) {
     companion object {
-        private val VIOLATION_COMPARATOR = compareBy<ReportTableModel.ResolvableViolation>(
+        private val VIOLATION_COMPARATOR = compareBy<ResolvableViolation>(
             { it.isResolved },
             { it.violation.severity },
             { it.violation.rule },
@@ -92,9 +93,9 @@ class ReportTableModelMapper(
         )
     }
 
-    private fun RuleViolation.toResolvableViolation(): ReportTableModel.ResolvableViolation {
+    private fun RuleViolation.toResolvableViolation(): ResolvableViolation {
         val resolutions = resolutionProvider.getRuleViolationResolutionsFor(this)
-        return ReportTableModel.ResolvableViolation(
+        return ResolvableViolation(
             violation = this,
             resolutionDescription = buildString {
                 if (resolutions.isNotEmpty()) {
