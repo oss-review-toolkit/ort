@@ -500,7 +500,8 @@ internal class EvaluatedModelMapper(private val input: ReporterInput) {
                 resolutions = resolutions,
                 pkg = pkg,
                 scanResult = scanResult,
-                path = path
+                path = path,
+                howToFix = input.howToFixTextProvider.getHowToFixText(issue).orEmpty()
             )
         }
 
