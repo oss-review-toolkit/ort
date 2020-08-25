@@ -49,6 +49,7 @@ import org.ossreviewtoolkit.model.config.Curations
 import org.ossreviewtoolkit.model.config.Excludes
 import org.ossreviewtoolkit.model.config.IssueResolution
 import org.ossreviewtoolkit.model.config.LicenseFindingCuration
+import org.ossreviewtoolkit.model.config.PackageConfiguration
 import org.ossreviewtoolkit.model.config.PathExclude
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.config.Resolutions
@@ -733,3 +734,11 @@ internal fun RepositoryConfiguration.merge(
             ruleViolations = resolutions.ruleViolations.mergeRuleViolationResolutions(other.resolutions.ruleViolations)
         )
     )
+
+/**
+ * Serialize a [PackageConfiguration] as YAML to the given target [File].
+ */
+internal fun PackageConfiguration.writeAsYaml(targetFile: File) {
+    targetFile.absoluteFile.parentFile.safeMkdirs()
+    yamlMapper.writeValue(targetFile, this)
+}
