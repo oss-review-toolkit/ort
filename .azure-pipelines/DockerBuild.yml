@@ -1,5 +1,13 @@
+# Running the Docker job only if the Dockerfile was changed.
+trigger:
+  branches:
+    include:
+    - '*'
+  paths:
+    include:
+    - Dockerfile
+    
 jobs:
-# TODO: Consider running the Docker job only if the Dockerfile was changed.
 - job: DockerBuild
   pool:
     vmImage: ubuntu-18.04
