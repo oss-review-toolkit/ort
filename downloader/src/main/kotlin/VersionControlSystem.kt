@@ -209,7 +209,7 @@ abstract class VersionControlSystem {
 
         try {
             pkg.vcsProcessed.revision.also {
-                if (it.isNotBlank() && (isFixedRevision(workingTree, it) || allowMovingRevisions)) {
+                if (it.isNotBlank() && (allowMovingRevisions || isFixedRevision(workingTree, it))) {
                     if (revisionCandidates.add(it)) {
                         log.info {
                             "Adding $type revision '$it' (taken from package meta-data) as a candidate."
