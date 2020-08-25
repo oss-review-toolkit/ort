@@ -107,9 +107,7 @@ class AmazonOssAttributionBuilderReporter : Reporter {
                 val licensesWithCopyrights =
                     input.ortResult.getDetectedLicensesWithCopyrights(pkg.id, input.packageConfigurationProvider)
 
-                val allCopyrights = if (licensesWithCopyrights.isNotEmpty()) {
-                    licensesWithCopyrights.values.reduce { acc, set -> acc + set }
-                } else {
+                val allCopyrights = licensesWithCopyrights.flatMapTo(mutableSetOf()) { it.value }.ifEmpty {
                     // This cannot be empty.
                     setOf("No Copyright detected.")
                 }
