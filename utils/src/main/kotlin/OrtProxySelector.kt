@@ -79,6 +79,10 @@ class OrtProxySelector(private val fallback: ProxySelector? = null) : ProxySelec
     private val proxyAuthentication = mutableMapOf<Proxy, PasswordAuthentication?>()
     private val proxyOrigins = mutableMapOf<String, MutableMap<String, MutableList<Proxy>>>()
 
+    private val noProxyUrls = Os.env["no_proxy"]?.let { list ->
+        list.split(',').map { it.trim() }
+    }.orEmpty()
+
     init {
         determineProxyFromProperties("http")?.let {
             addProxy("properties", "http", it)
@@ -152,6 +156,8 @@ class OrtProxySelector(private val fallback: ProxySelector? = null) : ProxySelec
 
     override fun select(uri: URI?): List<Proxy> {
         requireNotNull(uri)
+
+        if (noProxyUrls.any { uri.authority.endsWith(it) }) return NO_PROXY_LIST
 
         val proxies = proxyOrigins.flatMap { (_, proxiesForProtocol) ->
             proxiesForProtocol.getOrDefault(uri.scheme, mutableListOf())
