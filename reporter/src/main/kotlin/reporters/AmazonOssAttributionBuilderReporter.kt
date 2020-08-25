@@ -27,7 +27,7 @@ import java.time.Instant
 import okhttp3.Credentials
 
 import org.ossreviewtoolkit.model.jsonMapper
-import org.ossreviewtoolkit.model.utils.getDetectedLicensesWithCopyrights
+import org.ossreviewtoolkit.model.licenses.LicenseView
 import org.ossreviewtoolkit.reporter.Reporter
 import org.ossreviewtoolkit.reporter.ReporterInput
 import org.ossreviewtoolkit.reporter.utils.AmazonOssAttributionBuilderService
@@ -104,15 +104,18 @@ class AmazonOssAttributionBuilderReporter : Reporter {
                 // URL passed into the Amazon Oss Attribution Builder needs to be reachable!
                 val pkgUrl = pkg.homepageUrl.takeUnless { it.isEmpty() } ?: "https://github.com/404"
 
-                val licensesWithCopyrights =
-                    input.ortResult.getDetectedLicensesWithCopyrights(pkg.id, input.packageConfigurationProvider)
+                val licenseInfo = input.licenseInfoResolver.resolveLicenseInfo(pkg.id)
+
+                val licensesWithCopyrights = licenseInfo.filter(LicenseView.ONLY_DETECTED)
+                    .associate { it.license.simpleLicense() to it.getCopyrights(omitExcluded = true) }
 
                 val allCopyrights = licensesWithCopyrights.flatMapTo(mutableSetOf()) { it.value }.ifEmpty {
                     // This cannot be empty.
                     setOf("No Copyright detected.")
                 }
 
-                val license = pkg.declaredLicensesProcessed.allLicenses.firstOrNull()
+                val license = licenseInfo.filter(LicenseView.ONLY_DECLARED).firstOrNull()?.license?.simpleLicense()
+
                 val licenseText = license?.let { input.licenseTextProvider.getLicenseText(it) }
 
                 val attachPackage = AmazonOssAttributionBuilderService.AttachPackage(
