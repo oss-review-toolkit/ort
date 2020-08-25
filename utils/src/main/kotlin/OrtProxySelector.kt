@@ -151,8 +151,10 @@ class OrtProxySelector(private val fallback: ProxySelector? = null) : ProxySelec
     fun getProxyAuthentication(proxy: Proxy) = proxyAuthentication[proxy]
 
     override fun select(uri: URI?): List<Proxy> {
+        requireNotNull(uri)
+
         val proxies = proxyOrigins.flatMap { (_, proxiesForProtocol) ->
-            proxiesForProtocol.getOrDefault(uri?.scheme, mutableListOf())
+            proxiesForProtocol.getOrDefault(uri.scheme, mutableListOf())
         }
 
         // Quote from the upstream documentation for select: When no proxy is available, the list will contain one
