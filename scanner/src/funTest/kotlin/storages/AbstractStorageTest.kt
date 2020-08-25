@@ -21,12 +21,12 @@
 package org.ossreviewtoolkit.scanner.storages
 
 import io.kotest.core.spec.style.StringSpec
-import io.kotest.matchers.beOfType
 import io.kotest.matchers.collections.beEmpty
 import io.kotest.matchers.collections.containExactly
 import io.kotest.matchers.collections.containExactlyInAnyOrder
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
+import io.kotest.matchers.types.beOfType
 
 import java.time.Duration
 import java.time.Instant
@@ -41,7 +41,6 @@ import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.Provenance
 import org.ossreviewtoolkit.model.RemoteArtifact
 import org.ossreviewtoolkit.model.ScanResult
-import org.ossreviewtoolkit.model.ScanResultContainer
 import org.ossreviewtoolkit.model.ScanSummary
 import org.ossreviewtoolkit.model.ScannerDetails
 import org.ossreviewtoolkit.model.Success
@@ -142,8 +141,8 @@ abstract class AbstractStorageTest : StringSpec() {
             val addResult = storage.add(id, scanResult)
             val readResult = storage.read(id)
 
-            addResult should beOfType<Success<Unit>>()
-            readResult should beOfType<Success<ScanResultContainer>>()
+            addResult should beOfType(Success::class)
+            readResult should beOfType(Success::class)
             (readResult as Success).result.let { result ->
                 result.id shouldBe id
                 result.results should containExactly(scanResult)
@@ -157,10 +156,10 @@ abstract class AbstractStorageTest : StringSpec() {
             val addResult = storage.add(id, scanResult)
             val readResult = storage.read(id)
 
-            addResult should beOfType<Failure<Unit>>()
+            addResult should beOfType(Failure::class)
             (addResult as Failure).error shouldBe
                     "Not storing scan result for 'type:namespace:name:version' because no files were scanned."
-            readResult should beOfType<Success<ScanResultContainer>>()
+            readResult should beOfType(Success::class)
             (readResult as Success).result.let { result ->
                 result.id shouldBe id
                 result.results should beEmpty()
@@ -177,10 +176,10 @@ abstract class AbstractStorageTest : StringSpec() {
             val addResult = storage.add(id, scanResult)
             val readResult = storage.read(id)
 
-            addResult should beOfType<Failure<Unit>>()
+            addResult should beOfType(Failure::class)
             (addResult as Failure).error shouldBe
                     "Not storing scan result for 'type:namespace:name:version' because no files were scanned."
-            readResult should beOfType<Success<ScanResultContainer>>()
+            readResult should beOfType(Success::class)
             (readResult as Success).result.let { result ->
                 result.id shouldBe id
                 result.results should beEmpty()
@@ -197,10 +196,10 @@ abstract class AbstractStorageTest : StringSpec() {
             val addResult = storage.add(id, scanResult)
             val readResult = storage.read(id)
 
-            addResult should beOfType<Failure<Unit>>()
+            addResult should beOfType(Failure::class)
             (addResult as Failure).error shouldBe "Not storing scan result for 'type:namespace:name:version' because " +
                     "no provenance information is available."
-            readResult should beOfType<Success<ScanResultContainer>>()
+            readResult should beOfType(Success::class)
             (readResult as Success).result.let { result ->
                 result.id shouldBe id
                 result.results should beEmpty()
@@ -222,9 +221,9 @@ abstract class AbstractStorageTest : StringSpec() {
             val addResult2 = storage.add(id, scanResult2)
             val readResult = storage.read(id)
 
-            addResult1 should beOfType<Success<Unit>>()
-            addResult2 should beOfType<Success<Unit>>()
-            readResult should beOfType<Success<ScanResultContainer>>()
+            addResult1 should beOfType(Success::class)
+            addResult2 should beOfType(Success::class)
+            readResult should beOfType(Success::class)
             (readResult as Success).result.let { result ->
                 result.id shouldBe id
                 result.results should containExactlyInAnyOrder(scanResult1, scanResult2)
@@ -251,10 +250,10 @@ abstract class AbstractStorageTest : StringSpec() {
             val addResult3 = storage.add(id, scanResult3)
             val readResult = storage.read(pkg, scannerDetails1)
 
-            addResult1 should beOfType<Success<Unit>>()
-            addResult2 should beOfType<Success<Unit>>()
-            addResult3 should beOfType<Success<Unit>>()
-            readResult should beOfType<Success<ScanResultContainer>>()
+            addResult1 should beOfType(Success::class)
+            addResult2 should beOfType(Success::class)
+            addResult3 should beOfType(Success::class)
+            readResult should beOfType(Success::class)
             (readResult as Success).result.let { result ->
                 result.id shouldBe id
                 result.results should containExactlyInAnyOrder(scanResult1, scanResult2)
@@ -286,11 +285,11 @@ abstract class AbstractStorageTest : StringSpec() {
             val addResultIncompatible = storage.add(id, scanResultIncompatible)
             val readResult = storage.read(pkg, scannerDetails1)
 
-            addResult should beOfType<Success<Unit>>()
-            addResultCompatible1 should beOfType<Success<Unit>>()
-            addResultCompatible2 should beOfType<Success<Unit>>()
-            addResultIncompatible should beOfType<Success<Unit>>()
-            readResult should beOfType<Success<ScanResultContainer>>()
+            addResult should beOfType(Success::class)
+            addResultCompatible1 should beOfType(Success::class)
+            addResultCompatible2 should beOfType(Success::class)
+            addResultIncompatible should beOfType(Success::class)
+            readResult should beOfType(Success::class)
             (readResult as Success).result.let { result ->
                 result.id shouldBe id
                 result.results should containExactlyInAnyOrder(
@@ -332,11 +331,11 @@ abstract class AbstractStorageTest : StringSpec() {
             val addResult4 = storage.add(id, scanResultVcsInfoNonMatching)
             val readResult = storage.read(pkg, scannerDetails1)
 
-            addResult1 should beOfType<Success<Unit>>()
-            addResult2 should beOfType<Success<Unit>>()
-            addResult3 should beOfType<Success<Unit>>()
-            addResult4 should beOfType<Success<Unit>>()
-            readResult should beOfType<Success<ScanResultContainer>>()
+            addResult1 should beOfType(Success::class)
+            addResult2 should beOfType(Success::class)
+            addResult3 should beOfType(Success::class)
+            addResult4 should beOfType(Success::class)
+            readResult should beOfType(Success::class)
             (readResult as Success).result.let { result ->
                 result.id shouldBe id
                 result.results should containExactlyInAnyOrder(
@@ -356,8 +355,8 @@ abstract class AbstractStorageTest : StringSpec() {
             val addResult = storage.add(id, scanResult)
             val readResult = storage.read(pkgWithoutRevision, scannerDetails1)
 
-            addResult should beOfType<Success<Unit>>()
-            readResult should beOfType<Success<ScanResultContainer>>()
+            addResult should beOfType(Success::class)
+            readResult should beOfType(Success::class)
             (readResult as Success).result.let { result ->
                 result.id shouldBe id
                 result.results should containExactly(scanResult)
