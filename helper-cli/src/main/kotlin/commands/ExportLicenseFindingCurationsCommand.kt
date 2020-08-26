@@ -47,6 +47,7 @@ internal class ExportLicenseFindingCurationsCommand : CliktCommand(
         help = "The output license finding curations file."
     ).convert { it.expandTilde() }
         .file(mustExist = false, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = false)
+        .convert { it.absoluteFile.normalize() }
         .required()
 
     private val ortResultFile by option(
@@ -61,6 +62,7 @@ internal class ExportLicenseFindingCurationsCommand : CliktCommand(
         help = "Override the repository configuration contained in the given input ORT file."
     ).convert { it.expandTilde() }
         .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
+        .convert { it.absoluteFile.normalize() }
 
     private val updateOnlyExisting by option(
         "--update-only-existing",

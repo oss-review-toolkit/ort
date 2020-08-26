@@ -38,6 +38,7 @@ class ExtractRepositoryConfigurationCommand : CliktCommand(
         help = "The input ORT file from which repository configuration shall be extracted."
     ).convert { it.expandTilde() }
         .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = false)
+        .convert { it.absoluteFile.normalize() }
         .required()
 
     private val repositoryConfigurationFile by option(
@@ -45,6 +46,7 @@ class ExtractRepositoryConfigurationCommand : CliktCommand(
         help = "The output repository configuration file."
     ).convert { it.expandTilde() }
         .file(mustExist = false, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = false)
+        .convert { it.absoluteFile.normalize() }
         .required()
 
     override fun run() {

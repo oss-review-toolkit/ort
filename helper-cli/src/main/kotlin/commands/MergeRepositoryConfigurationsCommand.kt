@@ -41,13 +41,14 @@ internal class MergeRepositoryConfigurationsCommand : CliktCommand(
     private val inputRepositoryConfigurationFiles by option(
         "--input-repository-configuration-files", "-i",
         help = "A comma separated list of the repository configuration files to be merged."
-    ).convert { File(it.expandTilde()) }.split(",").required()
+    ).convert { File(it.expandTilde()).absoluteFile.normalize() }.split(",").required()
 
     private val outputRepositoryConfigurationFile by option(
         "--output-repository-configuration-file", "-o",
         help = "The output repository configuration file."
     ).convert { it.expandTilde() }
         .file(mustExist = false, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = false)
+        .convert { it.absoluteFile.normalize() }
         .required()
 
     override fun run() {

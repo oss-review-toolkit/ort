@@ -47,6 +47,7 @@ internal class ExportPathExcludesCommand : CliktCommand(
         help = "The output path excludes file."
     ).convert { it.expandTilde() }
         .file(mustExist = false, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = false)
+        .convert { it.absoluteFile.normalize() }
         .required()
 
     private val ortResultFile by option(
@@ -54,6 +55,7 @@ internal class ExportPathExcludesCommand : CliktCommand(
         help = "The input ORT file from which the path excludes are to be read."
     ).convert { it.expandTilde() }
         .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
+        .convert { it.absoluteFile.normalize() }
         .required()
 
     private val repositoryConfigurationFile by option(
@@ -61,6 +63,7 @@ internal class ExportPathExcludesCommand : CliktCommand(
         help = "Override the repository configuration contained in the given input ORT file."
     ).convert { it.expandTilde() }
         .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
+        .convert { it.absoluteFile.normalize() }
 
     private val updateOnlyExisting by option(
         "--update-only-existing",

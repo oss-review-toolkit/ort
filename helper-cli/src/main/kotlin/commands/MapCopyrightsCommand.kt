@@ -39,6 +39,7 @@ internal class MapCopyrightsCommand : CliktCommand(
         help = "The input copyrights text file containing one processed copyright statement per line."
     ).convert { it.expandTilde() }
         .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
+        .convert { it.absoluteFile.normalize() }
         .required()
 
     private val outputCopyrightsFile by option(
@@ -46,6 +47,7 @@ internal class MapCopyrightsCommand : CliktCommand(
         help = "The output copyrights text file."
     ).convert { it.expandTilde() }
         .file(mustExist = false, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = false)
+        .convert { it.absoluteFile.normalize() }
         .required()
 
     private val ortResultFile by option(
@@ -53,6 +55,7 @@ internal class MapCopyrightsCommand : CliktCommand(
         help = "The ORT file utilized for mapping the processed to unprocessed statements."
     ).convert { it.expandTilde() }
         .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
+        .convert { it.absoluteFile.normalize() }
         .required()
 
     override fun run() {

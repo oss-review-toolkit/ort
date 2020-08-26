@@ -45,6 +45,7 @@ internal class ListStoredScanResultsCommand : CliktCommand(
         help = "The path to the ORT configuration file that configures the scan results storage."
     ).convert { it.expandTilde() }
         .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
+        .convert { it.absoluteFile.normalize() }
 
     private val packageId by option(
         "--package-id",

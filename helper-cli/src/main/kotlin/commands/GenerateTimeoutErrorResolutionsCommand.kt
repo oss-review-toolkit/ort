@@ -45,6 +45,7 @@ internal class GenerateTimeoutErrorResolutionsCommand : CliktCommand(
         help = "The input ORT file containing the scan timeout errors."
     ).convert { it.expandTilde() }
         .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
+        .convert { it.absoluteFile.normalize() }
         .required()
 
     private val repositoryConfigurationFile by option(
@@ -52,12 +53,14 @@ internal class GenerateTimeoutErrorResolutionsCommand : CliktCommand(
         help = "Override the repository configuration contained in the given input ORT file."
     ).convert { it.expandTilde() }
         .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
+        .convert { it.absoluteFile.normalize() }
 
     private val resolutionsFile by option(
         "--resolutions-file",
         help = "A file containing issue resolutions to be used in addition to the ones contained in the given ORT file."
     ).convert { it.expandTilde() }
         .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
+        .convert { it.absoluteFile.normalize() }
 
     private val omitExcluded by option(
         "--omit-excluded",

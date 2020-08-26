@@ -46,6 +46,7 @@ internal class ImportPathExcludesCommand : CliktCommand(
         help = "The input path excludes file."
     ).convert { it.expandTilde() }
         .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
+        .convert { it.absoluteFile.normalize() }
         .required()
 
     private val sourceCodeDir by option(
@@ -54,6 +55,7 @@ internal class ImportPathExcludesCommand : CliktCommand(
                 "supposed to be used."
     ).convert { it.expandTilde() }
         .file(mustExist = true, canBeFile = false, canBeDir = true, mustBeWritable = false, mustBeReadable = true)
+        .convert { it.absoluteFile.normalize() }
         .required()
 
     private val repositoryConfigurationFile by option(
@@ -61,6 +63,7 @@ internal class ImportPathExcludesCommand : CliktCommand(
         help = "The repository configuration file where the imported path excludes are to be merged into."
     ).convert { it.expandTilde() }
         .file(mustExist = false, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = false)
+        .convert { it.absoluteFile.normalize() }
         .required()
 
     private val updateOnlyExisting by option(

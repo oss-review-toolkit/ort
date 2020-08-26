@@ -45,6 +45,7 @@ internal class GenerateScopeExcludesCommand : CliktCommand(
         help = "The input ORT file from which the rule violations are read."
     ).convert { it.expandTilde() }
         .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = false)
+        .convert { it.absoluteFile.normalize() }
         .required()
 
     private val repositoryConfigurationFile by option(
@@ -52,6 +53,7 @@ internal class GenerateScopeExcludesCommand : CliktCommand(
         help = "Override the repository configuration contained in the given input ORT file."
     ).convert { it.expandTilde() }
         .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = false)
+        .convert { it.absoluteFile.normalize() }
         .required()
 
     override fun run() {

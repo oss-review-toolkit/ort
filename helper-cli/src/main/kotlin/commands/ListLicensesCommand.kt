@@ -59,6 +59,7 @@ internal class ListLicensesCommand : CliktCommand(
         help = "The ORT result file to read as input."
     ).convert { it.expandTilde() }
         .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
+        .convert { it.absoluteFile.normalize() }
         .required()
 
     private val packageId by option(
@@ -74,6 +75,7 @@ internal class ListLicensesCommand : CliktCommand(
                 "needed."
     ).convert { it.expandTilde() }
         .file(mustExist = true, canBeFile = false, canBeDir = true, mustBeWritable = false, mustBeReadable = true)
+        .convert { it.absoluteFile.normalize() }
 
     private val offendingOnly by option(
         "--offending-only",
@@ -117,6 +119,7 @@ internal class ListLicensesCommand : CliktCommand(
         help = "Override the repository configuration contained in the ORT result."
     ).convert { it.expandTilde() }
         .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
+        .convert { it.absoluteFile.normalize() }
 
     private val packageConfigurationOption by mutuallyExclusiveOptions<PackageConfigurationOption>(
         option(

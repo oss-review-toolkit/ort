@@ -45,6 +45,7 @@ internal class ImportCopyrightGarbageCommand : CliktCommand(
         help = "The input copyright garbage text file."
     ).convert { it.expandTilde() }
         .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
+        .convert { it.absoluteFile.normalize() }
         .required()
 
     private val outputCopyrightGarbageFile by option(
@@ -52,6 +53,7 @@ internal class ImportCopyrightGarbageCommand : CliktCommand(
         help = "The output copyright garbage YAML file where the input entries are merged into."
     ).convert { it.expandTilde() }
         .file(mustExist = false, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = false)
+        .convert { it.absoluteFile.normalize() }
         .required()
 
     override fun run() {
