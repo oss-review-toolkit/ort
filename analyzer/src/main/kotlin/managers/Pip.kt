@@ -718,15 +718,17 @@ class Pip(
 }
 
 private fun Package.enrichWith(other: Package?): Package =
-    other?.let {
+    if (other != null) {
         Package(
             id = id,
-            homepageUrl = homepageUrl.takeUnless { it.isBlank() } ?: it.homepageUrl,
-            description = description.takeUnless { it.isBlank() } ?: it.description,
+            homepageUrl = homepageUrl.takeUnless { it.isBlank() } ?: other.homepageUrl,
+            description = description.takeUnless { it.isBlank() } ?: other.description,
             declaredLicenses = declaredLicenses.takeUnless { it.isEmpty() } ?: other.declaredLicenses,
-            binaryArtifact = binaryArtifact.takeUnless { it == RemoteArtifact.EMPTY } ?: it.binaryArtifact,
-            sourceArtifact = sourceArtifact.takeUnless { it == RemoteArtifact.EMPTY } ?: it.sourceArtifact,
-            vcs = vcs.takeUnless { it == VcsInfo.EMPTY } ?: it.vcs,
-            vcsProcessed = vcsProcessed.takeUnless { it == VcsInfo.EMPTY } ?: it.vcsProcessed
+            binaryArtifact = binaryArtifact.takeUnless { it == RemoteArtifact.EMPTY } ?: other.binaryArtifact,
+            sourceArtifact = sourceArtifact.takeUnless { it == RemoteArtifact.EMPTY } ?: other.sourceArtifact,
+            vcs = vcs.takeUnless { it == VcsInfo.EMPTY } ?: other.vcs,
+            vcsProcessed = vcsProcessed.takeUnless { it == VcsInfo.EMPTY } ?: other.vcsProcessed
         )
-    } ?: this
+    } else {
+        this
+    }
