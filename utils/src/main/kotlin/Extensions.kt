@@ -232,7 +232,17 @@ inline fun <K, V, W> Map<K, V>.zipWithDefault(other: Map<K, V>, default: V, oper
 /**
  * Return the string encoded for safe use as a file name or "unknown", if the string is empty.
  */
-fun String.encodeOrUnknown() = fileSystemEncode().takeUnless { it.isEmpty() } ?: "unknown"
+fun String.encodeOrUnknown(): String = encodeOr("unknown")
+
+/**
+ * Return the string encoded for safe use as a file name or [emptyValue] encoded for safe use as a file name, if this
+ * string is empty. Throws an exception if [emptyValue] is empty.
+ */
+fun String.encodeOr(emptyValue: String): String {
+    require(emptyValue.isNotEmpty())
+
+    return ifEmpty { emptyValue }.fileSystemEncode()
+}
 
 /**
  * If the SHELL environment variable is set, return the string with a leading "~" expanded to the current user's home
