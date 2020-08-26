@@ -21,9 +21,12 @@ package org.ossreviewtoolkit.helper.commands
 
 import com.github.ajalt.clikt.core.CliktCommand
 import com.github.ajalt.clikt.parameters.options.convert
+import com.github.ajalt.clikt.parameters.options.flag
 import com.github.ajalt.clikt.parameters.options.option
 import com.github.ajalt.clikt.parameters.options.required
 import com.github.ajalt.clikt.parameters.types.file
+
+import java.io.File
 
 import org.ossreviewtoolkit.helper.common.writeAsYaml
 import org.ossreviewtoolkit.model.Identifier
@@ -63,6 +66,11 @@ internal class GeneratePackageConfigurationsCommand : CliktCommand(
         .convert { it.absoluteFile.normalize() }
         .required()
 
+    private val createHierarchicalDirs by option(
+        "--create-hierarchical-dirs",
+        help = "Place the output YAML files in the directory '\$outputdir/\$type/\$namespace/\$name/\$version'."
+    ).flag()
+
     override fun run() {
         outputDir.safeMkdirs()
 
@@ -77,10 +85,20 @@ internal class GeneratePackageConfigurationsCommand : CliktCommand(
 
     private fun Provenance.writePackageConfigurationFile(filename: String) {
         val packageConfiguration = createPackageConfiguration(packageId, this)
-        val outputFile = outputDir.resolve(filename)
+        val outputFile = getOutputFile(filename)
 
         packageConfiguration.writeAsYaml(outputFile)
         println("Wrote a package configuration to '${outputFile.absolutePath}'.")
+    }
+
+    private fun getOutputFile(filename: String): File {
+        val relativeOutputFilePath = if (createHierarchicalDirs) {
+            "${packageId.toPath(emptyValue = "_")}/$filename"
+        } else {
+            filename
+        }
+
+        return outputDir.resolve(relativeOutputFilePath)
     }
 }
 
