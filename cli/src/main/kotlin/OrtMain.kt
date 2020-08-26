@@ -102,12 +102,12 @@ class OrtMain : CliktCommand(name = ORT_NAME, epilog = "* denotes required optio
 
         subcommands(
             AnalyzerCommand(),
-            ClearlyDefinedUploadCommand(),
             DownloaderCommand(),
             EvaluatorCommand(),
             ReporterCommand(),
             RequirementsCommand(),
             ScannerCommand(),
+            UploadCurationsCommand(),
             UploadResultCommand()
         )
 

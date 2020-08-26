@@ -58,8 +58,8 @@ import org.ossreviewtoolkit.utils.log
 
 import retrofit2.Call
 
-class ClearlyDefinedUploadCommand : CliktCommand(
-    name = "cd-upload",
+class UploadCurationsCommand : CliktCommand(
+    name = "upload-curations",
     help = "Upload ORT package curations to ClearlyDefined."
 ) {
     private val inputFile by option(
