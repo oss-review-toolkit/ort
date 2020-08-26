@@ -23,6 +23,7 @@ import com.github.ajalt.clikt.core.CliktCommand
 import com.github.ajalt.clikt.core.ProgramResult
 import com.github.ajalt.clikt.parameters.arguments.argument
 import com.github.ajalt.clikt.parameters.arguments.convert
+import com.github.ajalt.clikt.parameters.options.convert
 import com.github.ajalt.clikt.parameters.types.file
 
 import java.io.IOException
@@ -42,6 +43,7 @@ internal class VerifySourceArtifactCurationsCommand : CliktCommand(
         help = "A file containing package curation data."
     ).convert { it.expandTilde() }
         .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
+        .convert { it.absoluteFile.normalize() }
 
     override fun run() {
         val curations = packageCurationsFile.readValue<List<PackageCuration>>()

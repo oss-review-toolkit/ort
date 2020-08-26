@@ -22,6 +22,7 @@ package org.ossreviewtoolkit.helper.commands
 import com.github.ajalt.clikt.core.CliktCommand
 import com.github.ajalt.clikt.parameters.arguments.argument
 import com.github.ajalt.clikt.parameters.arguments.convert
+import com.github.ajalt.clikt.parameters.options.convert
 import com.github.ajalt.clikt.parameters.types.file
 
 import org.ossreviewtoolkit.helper.common.sortEntries
@@ -39,6 +40,7 @@ internal class SortRepositoryConfigurationCommand : CliktCommand(
         help = "The repository configuration file to be sorted."
     ).convert { it.expandTilde() }
         .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = false)
+        .convert { it.absoluteFile.normalize() }
 
     override fun run() {
         repositoryConfigurationFile

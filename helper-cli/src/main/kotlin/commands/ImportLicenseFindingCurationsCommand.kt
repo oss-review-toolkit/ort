@@ -48,6 +48,7 @@ internal class ImportLicenseFindingCurationsCommand : CliktCommand(
         help = "The input license finding curations file."
     ).convert { it.expandTilde() }
         .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
+        .convert { it.absoluteFile.normalize() }
         .required()
 
     private val ortResultFile by option(
@@ -55,6 +56,7 @@ internal class ImportLicenseFindingCurationsCommand : CliktCommand(
         help = "The ORT file containing the findings the imported curations need to match against."
     ).convert { it.expandTilde() }
         .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
+        .convert { it.absoluteFile.normalize() }
         .required()
 
     private val repositoryConfigurationFile by option(
@@ -62,6 +64,7 @@ internal class ImportLicenseFindingCurationsCommand : CliktCommand(
         help = "The repository configuration file where the imported curations are to be merged into."
     ).convert { it.expandTilde() }
         .file(mustExist = false, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = false)
+        .convert { it.absoluteFile.normalize() }
         .required()
 
     private val updateOnlyExisting by option(

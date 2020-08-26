@@ -46,6 +46,7 @@ internal class ListCopyrightsCommand : CliktCommand(
         help = "The ORT result file to read as input."
     ).convert { it.expandTilde() }
         .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
+        .convert { it.absoluteFile.normalize() }
         .required()
 
     private val copyrightGarbageFile by option(
@@ -53,6 +54,7 @@ internal class ListCopyrightsCommand : CliktCommand(
         help = "A file containing garbage copyright statements entries which are to be ignored."
     ).convert { it.expandTilde() }
         .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
+        .convert { it.absoluteFile.normalize() }
 
     private val packageId by option(
         "--package-id",

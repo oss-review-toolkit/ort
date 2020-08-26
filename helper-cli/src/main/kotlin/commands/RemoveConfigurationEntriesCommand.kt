@@ -48,6 +48,7 @@ internal class RemoveConfigurationEntriesCommand : CliktCommand(
         help = "The ORT result file to read as input which should contain an evaluator result."
     ).convert { it.expandTilde() }
         .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
+        .convert { it.absoluteFile.normalize() }
         .required()
 
     private val repositoryConfigurationFile by option(
@@ -56,6 +57,7 @@ internal class RemoveConfigurationEntriesCommand : CliktCommand(
                 "the repository configuration contained in the given ORT result file."
     ).convert { it.expandTilde() }
         .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = true, mustBeReadable = true)
+        .convert { it.absoluteFile.normalize() }
         .required()
 
     private val sourceCodeDir by option(
@@ -65,6 +67,7 @@ internal class RemoveConfigurationEntriesCommand : CliktCommand(
                 "ORT result file."
     ).convert { it.expandTilde() }
         .file(mustExist = true, canBeFile = false, canBeDir = true, mustBeWritable = false, mustBeReadable = true)
+        .convert { it.absoluteFile.normalize() }
         .required()
 
     private val resolutionsFile by option(
@@ -72,6 +75,7 @@ internal class RemoveConfigurationEntriesCommand : CliktCommand(
         help = "A file containing issue resolutions."
     ).convert { it.expandTilde() }
         .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
+        .convert { it.absoluteFile.normalize() }
 
     override fun run() {
         val repositoryConfiguration = repositoryConfigurationFile.readValue<RepositoryConfiguration>()
