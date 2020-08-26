@@ -24,6 +24,7 @@ import com.fasterxml.jackson.databind.JsonNode
 import com.moandjiezana.toml.Toml
 
 import java.io.File
+import java.util.SortedSet
 
 import org.ossreviewtoolkit.analyzer.AbstractPackageManagerFactory
 import org.ossreviewtoolkit.analyzer.PackageManager
@@ -89,11 +90,13 @@ class Cargo(
     private fun extractVcsInfo(node: JsonNode) =
         VcsHost.toVcsInfo(extractRepositoryUrl(node))
 
-    private fun extractDeclaredLicenses(node: JsonNode) =
-        node["license"].textValueOrEmpty().split("/")
+    private fun extractDeclaredLicenses(node: JsonNode): SortedSet<String> {
+        val licenses = node["license"].textValueOrEmpty().split('/')
             .map { it.trim() }
             .filter { it.isNotEmpty() }
-            .toSortedSet()
+
+        return if (licenses.isEmpty()) sortedSetOf() else sortedSetOf(licenses.joinToString(" OR "))
+    }
 
     private fun extractSourceArtifact(
         node: JsonNode,
