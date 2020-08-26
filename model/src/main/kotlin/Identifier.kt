@@ -22,7 +22,7 @@ package org.ossreviewtoolkit.model
 import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonValue
 
-import org.ossreviewtoolkit.utils.encodeOrUnknown
+import org.ossreviewtoolkit.utils.encodeOr
 import org.ossreviewtoolkit.utils.percentEncode
 
 /**
@@ -114,9 +114,10 @@ data class Identifier(
 
     /**
      * Create a file system path based on the properties of the [Identifier]. All properties are encoded using
-     * [encodeOrUnknown].
+     * [encodeOr] with [emptyValue] as parameter.
      */
-    fun toPath(separator: String = "/") = components.joinToString(separator) { it.encodeOrUnknown() }
+    fun toPath(separator: String = "/", emptyValue: String = "unknown"): String =
+        components.joinToString(separator) { it.encodeOr(emptyValue) }
 
     /**
      * Create the canonical [package URL](https://github.com/package-url/purl-spec) ("purl") based on the properties of
