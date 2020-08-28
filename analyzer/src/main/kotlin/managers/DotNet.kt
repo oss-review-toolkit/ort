@@ -37,8 +37,11 @@ import org.ossreviewtoolkit.model.ProjectAnalyzerResult
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 
+/**
+ * A reader for XML-based .NET project files that embed NuGet package configuration, see
+ * https://docs.microsoft.com/en-us/nuget/consume-packages/package-references-in-project-files.
+ */
 class DotNetPackageFileReader : XmlPackageFileReader() {
-    // See https://docs.microsoft.com/en-us/nuget/consume-packages/package-references-in-project-files.
     @JsonIgnoreProperties(ignoreUnknown = true)
     data class ItemGroup(
         @JsonProperty(value = "PackageReference")
@@ -69,7 +72,8 @@ class DotNetPackageFileReader : XmlPackageFileReader() {
 }
 
 /**
- * The [DotNet](https://docs.microsoft.com/en-us/dotnet/core/tools/) package manager for .NET.
+ * A package manager implementaion for [.NET](https://docs.microsoft.com/en-us/dotnet/core/tools/) project files that
+ * embed NuGet package configuration.
  */
 class DotNet(
     name: String,

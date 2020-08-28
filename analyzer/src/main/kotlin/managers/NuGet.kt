@@ -37,8 +37,11 @@ import org.ossreviewtoolkit.model.ProjectAnalyzerResult
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 
+/**
+ * A reader for XML-based NuGet package configuration files, see
+ * https://docs.microsoft.com/en-us/nuget/reference/packages-config.
+ */
 class NuGetPackageFileReader : XmlPackageFileReader() {
-    // See https://docs.microsoft.com/en-us/nuget/reference/packages-config.
     @JsonIgnoreProperties(ignoreUnknown = true)
     data class PackagesConfig(
         @JsonProperty(value = "package")
