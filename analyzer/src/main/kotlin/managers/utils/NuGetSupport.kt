@@ -56,12 +56,12 @@ abstract class XmlPackageFileReader {
     abstract fun getPackageReferences(definitionFile: File): Set<Identifier>
 }
 
-fun PackageManager.resolveDotNetDependencies(
+fun PackageManager.resolveNuGetDependencies(
     definitionFile: File,
     mapper: XmlPackageFileReader
 ): ProjectAnalyzerResult? {
     val workingDir = definitionFile.parentFile
-    val support = DotNetSupport(mapper.getPackageReferences(definitionFile))
+    val support = NuGetSupport(mapper.getPackageReferences(definitionFile))
 
     val project = Project(
         id = Identifier(
@@ -85,7 +85,7 @@ fun PackageManager.resolveDotNetDependencies(
     )
 }
 
-class DotNetSupport(packageReferences: Set<Identifier>) {
+class NuGetSupport(packageReferences: Set<Identifier>) {
     companion object {
         private const val PROVIDER_NAME = "nuget"
 
