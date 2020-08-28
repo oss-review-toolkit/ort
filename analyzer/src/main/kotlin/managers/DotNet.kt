@@ -57,8 +57,10 @@ class DotNet(
         ) = DotNet(managerName, analysisRoot, analyzerConfig, repoConfig)
     }
 
+    private val reader = DotNetPackageFileReader()
+
     override fun resolveDependencies(definitionFile: File): List<ProjectAnalyzerResult> =
-        listOfNotNull(resolveNuGetDependencies(definitionFile, DotNetPackageFileReader()))
+        listOfNotNull(resolveNuGetDependencies(definitionFile, reader))
 }
 
 /**
