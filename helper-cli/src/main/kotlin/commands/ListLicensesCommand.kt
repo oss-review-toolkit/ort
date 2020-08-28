@@ -141,11 +141,11 @@ internal class ListLicensesCommand : CliktCommand(
         val ortResult = ortResultFile.readValue<OrtResult>().replaceConfig(repositoryConfigurationFile)
 
         if (ortResult.getPackageOrProject(packageId) == null) {
-            throw UsageError("Could not find a package for the given id `$packageId`.")
+            throw UsageError("Could not find the package for the given id '${packageId.toCoordinates()}'.")
         }
 
         val sourcesDir = if (sourceCodeDir == null) {
-            println("Downloading sources for package $packageId...")
+            println("Downloading sources for package '${packageId.toCoordinates()}'...")
             ortResult.fetchScannedSources(packageId)
         } else {
             sourceCodeDir!!
