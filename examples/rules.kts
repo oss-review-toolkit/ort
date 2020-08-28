@@ -40,7 +40,7 @@ val copyleftLimitedLicenses = getLicenseSet("copyleft-limited")
 val publicDomainLicenses = getLicenseSet("public-domain")
 
 // The complete set of licenses covered by policy rules.
-val handledLicenses = listOf(
+val handledLicenses = setOf(
     permissiveLicenses,
     publicDomainLicenses,
     copyleftLicenses,
