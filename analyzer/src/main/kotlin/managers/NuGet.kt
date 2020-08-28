@@ -36,6 +36,7 @@ import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.ProjectAnalyzerResult
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
+import org.ossreviewtoolkit.model.xmlMapper
 
 /**
  * The [NuGet](https://www.nuget.org/) package manager for .NET.
@@ -66,7 +67,7 @@ class NuGet(
  * A reader for XML-based NuGet package configuration files, see
  * https://docs.microsoft.com/en-us/nuget/reference/packages-config.
  */
-class NuGetPackageFileReader : XmlPackageFileReader() {
+class NuGetPackageFileReader : XmlPackageFileReader {
     @JsonIgnoreProperties(ignoreUnknown = true)
     private data class PackagesConfig(
         @JsonProperty(value = "package")
@@ -84,7 +85,7 @@ class NuGetPackageFileReader : XmlPackageFileReader() {
 
     override fun getPackageReferences(definitionFile: File): Set<Identifier> {
         val ids = mutableSetOf<Identifier>()
-        val packagesConfig = mapper.readValue<PackagesConfig>(definitionFile)
+        val packagesConfig = xmlMapper.readValue<PackagesConfig>(definitionFile)
 
         packagesConfig.packages.forEach {
             ids += Identifier.EMPTY.copy(name = it.id, version = it.version)

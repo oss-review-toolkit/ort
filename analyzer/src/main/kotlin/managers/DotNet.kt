@@ -36,6 +36,7 @@ import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.ProjectAnalyzerResult
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
+import org.ossreviewtoolkit.model.xmlMapper
 
 /**
  * A package manager implementaion for [.NET](https://docs.microsoft.com/en-us/dotnet/core/tools/) project files that
@@ -67,7 +68,7 @@ class DotNet(
  * A reader for XML-based .NET project files that embed NuGet package configuration, see
  * https://docs.microsoft.com/en-us/nuget/consume-packages/package-references-in-project-files.
  */
-class DotNetPackageFileReader : XmlPackageFileReader() {
+class DotNetPackageFileReader : XmlPackageFileReader {
     @JsonIgnoreProperties(ignoreUnknown = true)
     private data class ItemGroup(
         @JsonProperty(value = "PackageReference")
@@ -85,7 +86,7 @@ class DotNetPackageFileReader : XmlPackageFileReader() {
 
     override fun getPackageReferences(definitionFile: File): Set<Identifier> {
         val ids = mutableSetOf<Identifier>()
-        val itemGroups = mapper.readValue<List<ItemGroup>>(definitionFile)
+        val itemGroups = xmlMapper.readValue<List<ItemGroup>>(definitionFile)
 
         itemGroups.forEach { itemGroup ->
             itemGroup.packageReference?.forEach {
