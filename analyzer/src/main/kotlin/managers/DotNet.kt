@@ -38,6 +38,30 @@ import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 
 /**
+ * A package manager implementaion for [.NET](https://docs.microsoft.com/en-us/dotnet/core/tools/) project files that
+ * embed NuGet package configuration.
+ */
+class DotNet(
+    name: String,
+    analysisRoot: File,
+    analyzerConfig: AnalyzerConfiguration,
+    repoConfig: RepositoryConfiguration
+) : PackageManager(name, analysisRoot, analyzerConfig, repoConfig) {
+    class Factory : AbstractPackageManagerFactory<DotNet>("DotNet") {
+        override val globsForDefinitionFiles = listOf("*.csproj", "*.fsproj", "*.vcxproj")
+
+        override fun create(
+            analysisRoot: File,
+            analyzerConfig: AnalyzerConfiguration,
+            repoConfig: RepositoryConfiguration
+        ) = DotNet(managerName, analysisRoot, analyzerConfig, repoConfig)
+    }
+
+    override fun resolveDependencies(definitionFile: File): List<ProjectAnalyzerResult> =
+        listOfNotNull(resolveNuGetDependencies(definitionFile, DotNetPackageFileReader()))
+}
+
+/**
  * A reader for XML-based .NET project files that embed NuGet package configuration, see
  * https://docs.microsoft.com/en-us/nuget/consume-packages/package-references-in-project-files.
  */
@@ -69,28 +93,4 @@ class DotNetPackageFileReader : XmlPackageFileReader() {
 
         return ids
     }
-}
-
-/**
- * A package manager implementaion for [.NET](https://docs.microsoft.com/en-us/dotnet/core/tools/) project files that
- * embed NuGet package configuration.
- */
-class DotNet(
-    name: String,
-    analysisRoot: File,
-    analyzerConfig: AnalyzerConfiguration,
-    repoConfig: RepositoryConfiguration
-) : PackageManager(name, analysisRoot, analyzerConfig, repoConfig) {
-    class Factory : AbstractPackageManagerFactory<DotNet>("DotNet") {
-        override val globsForDefinitionFiles = listOf("*.csproj", "*.fsproj", "*.vcxproj")
-
-        override fun create(
-            analysisRoot: File,
-            analyzerConfig: AnalyzerConfiguration,
-            repoConfig: RepositoryConfiguration
-        ) = DotNet(managerName, analysisRoot, analyzerConfig, repoConfig)
-    }
-
-    override fun resolveDependencies(definitionFile: File): List<ProjectAnalyzerResult> =
-        listOfNotNull(resolveNuGetDependencies(definitionFile, DotNetPackageFileReader()))
 }
