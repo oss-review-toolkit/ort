@@ -135,7 +135,9 @@ class FindingsMatcherTest : WordSpec() {
                 val result = matcher.match(licenseFindings, copyrightFindings)
 
                 result.size shouldBe 2
-                result.flatMap { it.copyrights.filter { it.statement == "stmt 1" } } should beEmpty()
+                result.flatMap { licenseFindings ->
+                    licenseFindings.copyrights.filter { it.statement == "stmt 1" }
+                } should beEmpty()
                 result.getFindings("license-nearby").copyrights.map { it.statement } should containExactlyInAnyOrder(
                     "stmt 8",
                     "stmt 10",
