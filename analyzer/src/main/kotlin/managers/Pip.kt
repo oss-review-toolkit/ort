@@ -393,7 +393,7 @@ class Pip(
         releaseNode ?: return RemoteArtifact.EMPTY
 
         // Prefer python wheels and fall back to the first entry (probably a sdist).
-        val binaryArtifact = releaseNode.asSequence().find {
+        val binaryArtifact = releaseNode.find {
             it["packagetype"].textValue() == "bdist_wheel"
         } ?: releaseNode[0]
 
