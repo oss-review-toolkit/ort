@@ -69,7 +69,7 @@ data class OrtResult(
      * which are customizable by the user, for example in evaluator rules or in the notice reporter.
      */
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    val labels: Map<String, String> = emptyMap()
+    val labels: SortedSet<String> = sortedSetOf()
 ) {
     companion object {
         /**
@@ -81,7 +81,7 @@ data class OrtResult(
             analyzer = null,
             scanner = null,
             evaluator = null,
-            labels = emptyMap()
+            labels = sortedSetOf()
         )
     }
 

@@ -25,10 +25,10 @@ import com.github.ajalt.clikt.core.UsageError
 import com.github.ajalt.clikt.parameters.groups.mutuallyExclusiveOptions
 import com.github.ajalt.clikt.parameters.groups.required
 import com.github.ajalt.clikt.parameters.groups.single
-import com.github.ajalt.clikt.parameters.options.associate
 import com.github.ajalt.clikt.parameters.options.convert
 import com.github.ajalt.clikt.parameters.options.default
 import com.github.ajalt.clikt.parameters.options.flag
+import com.github.ajalt.clikt.parameters.options.multiple
 import com.github.ajalt.clikt.parameters.options.option
 import com.github.ajalt.clikt.parameters.options.required
 import com.github.ajalt.clikt.parameters.options.split
@@ -141,7 +141,7 @@ class EvaluatorCommand : CliktCommand(name = "evaluate", help = "Evaluate rules 
         "--label", "-l",
         help = "Add a label to the ORT result. Can be used multiple times. Any existing label with the same key in " +
                 "the input ORT result will be overwritten. For example: --label distribution=external"
-    ).associate()
+    ).multiple()
 
     override fun run() {
         val outputFiles = mutableListOf<File>()
