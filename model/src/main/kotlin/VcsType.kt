@@ -78,7 +78,7 @@ data class VcsType(val aliases: List<String>) {
         )
 
         /**
-         * An unkown VCS type.
+         * An unknown VCS type.
          */
         val UNKNOWN = VcsType(listOf(""))
     }
