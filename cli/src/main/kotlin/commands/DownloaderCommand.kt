@@ -35,7 +35,6 @@ import com.github.ajalt.clikt.parameters.types.file
 
 import java.io.File
 
-import org.ossreviewtoolkit.GroupTypes
 import org.ossreviewtoolkit.GroupTypes.FileType
 import org.ossreviewtoolkit.GroupTypes.StringType
 import org.ossreviewtoolkit.downloader.DownloadException
@@ -59,7 +58,7 @@ import org.ossreviewtoolkit.utils.safeDeleteRecursively
 import org.ossreviewtoolkit.utils.showStackTrace
 
 class DownloaderCommand : CliktCommand(name = "download", help = "Fetch source code from a remote location.") {
-    private val input by mutuallyExclusiveOptions<GroupTypes>(
+    private val input by mutuallyExclusiveOptions(
         option(
             "--ort-file", "-i",
             help = "An ORT result file with an analyzer result to use. Must not be used together with '--project-url'."

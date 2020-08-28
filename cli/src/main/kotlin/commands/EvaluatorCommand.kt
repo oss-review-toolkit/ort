@@ -37,7 +37,6 @@ import com.github.ajalt.clikt.parameters.types.file
 
 import java.io.File
 
-import org.ossreviewtoolkit.GroupTypes
 import org.ossreviewtoolkit.GroupTypes.FileType
 import org.ossreviewtoolkit.GroupTypes.StringType
 import org.ossreviewtoolkit.evaluator.Evaluator
@@ -65,7 +64,7 @@ class EvaluatorCommand : CliktCommand(name = "evaluate", help = "Evaluate rules 
         .convert { it.absoluteFile.normalize() }
         .required()
 
-    private val packageConfigurationOption by mutuallyExclusiveOptions<PackageConfigurationOption>(
+    private val packageConfigurationOption by mutuallyExclusiveOptions(
         option(
             "--package-configuration-dir",
             help = "The directory containing the package configuration files to read as input. It is searched " +
@@ -81,7 +80,7 @@ class EvaluatorCommand : CliktCommand(name = "evaluate", help = "Evaluate rules 
             .convert { PackageConfigurationOption.File(it.absoluteFile.normalize()) }
     ).single()
 
-    private val rules by mutuallyExclusiveOptions<GroupTypes>(
+    private val rules by mutuallyExclusiveOptions(
         option(
             "--rules-file", "-r",
             help = "The name of a script file containing rules."

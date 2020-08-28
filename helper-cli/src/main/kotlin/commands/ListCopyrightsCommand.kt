@@ -71,7 +71,7 @@ internal class ListCopyrightsCommand : CliktCommand(
         help = "Show the raw statements corresponding to each processed statement if these are any different."
     ).flag()
 
-    private val packageConfigurationOption by mutuallyExclusiveOptions<PackageConfigurationOption>(
+    private val packageConfigurationOption by mutuallyExclusiveOptions(
         option(
             "--package-configuration-dir",
             help = "The directory containing the package configuration files to read as input. It is searched " +
