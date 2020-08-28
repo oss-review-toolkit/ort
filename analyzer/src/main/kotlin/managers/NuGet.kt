@@ -38,6 +38,29 @@ import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 
 /**
+ * The [NuGet](https://www.nuget.org/) package manager for .NET.
+ */
+class NuGet(
+    name: String,
+    analysisRoot: File,
+    analyzerConfig: AnalyzerConfiguration,
+    repoConfig: RepositoryConfiguration
+) : PackageManager(name, analysisRoot, analyzerConfig, repoConfig) {
+    class Factory : AbstractPackageManagerFactory<NuGet>("NuGet") {
+        override val globsForDefinitionFiles = listOf("packages.config")
+
+        override fun create(
+            analysisRoot: File,
+            analyzerConfig: AnalyzerConfiguration,
+            repoConfig: RepositoryConfiguration
+        ) = NuGet(managerName, analysisRoot, analyzerConfig, repoConfig)
+    }
+
+    override fun resolveDependencies(definitionFile: File): List<ProjectAnalyzerResult> =
+        listOfNotNull(resolveNuGetDependencies(definitionFile, NuGetPackageFileReader()))
+}
+
+/**
  * A reader for XML-based NuGet package configuration files, see
  * https://docs.microsoft.com/en-us/nuget/reference/packages-config.
  */
@@ -67,27 +90,4 @@ class NuGetPackageFileReader : XmlPackageFileReader() {
 
         return ids
     }
-}
-
-/**
- * The [NuGet](https://www.nuget.org/) package manager for .NET.
- */
-class NuGet(
-    name: String,
-    analysisRoot: File,
-    analyzerConfig: AnalyzerConfiguration,
-    repoConfig: RepositoryConfiguration
-) : PackageManager(name, analysisRoot, analyzerConfig, repoConfig) {
-    class Factory : AbstractPackageManagerFactory<NuGet>("NuGet") {
-        override val globsForDefinitionFiles = listOf("packages.config")
-
-        override fun create(
-            analysisRoot: File,
-            analyzerConfig: AnalyzerConfiguration,
-            repoConfig: RepositoryConfiguration
-        ) = NuGet(managerName, analysisRoot, analyzerConfig, repoConfig)
-    }
-
-    override fun resolveDependencies(definitionFile: File): List<ProjectAnalyzerResult> =
-        listOfNotNull(resolveNuGetDependencies(definitionFile, NuGetPackageFileReader()))
 }

@@ -50,41 +50,6 @@ import org.ossreviewtoolkit.model.xmlMapper
 import org.ossreviewtoolkit.utils.OkHttpClientHelper
 import org.ossreviewtoolkit.utils.textValueOrEmpty
 
-abstract class XmlPackageFileReader {
-    protected val mapper = XmlMapper().registerKotlinModule()
-
-    abstract fun getPackageReferences(definitionFile: File): Set<Identifier>
-}
-
-fun PackageManager.resolveNuGetDependencies(
-    definitionFile: File,
-    reader: XmlPackageFileReader
-): ProjectAnalyzerResult? {
-    val workingDir = definitionFile.parentFile
-    val support = NuGetSupport(reader.getPackageReferences(definitionFile))
-
-    val project = Project(
-        id = Identifier(
-            type = managerName,
-            namespace = "",
-            name = definitionFile.relativeTo(analysisRoot).invariantSeparatorsPath,
-            version = ""
-        ),
-        definitionFilePath = VersionControlSystem.getPathInfo(definitionFile).path,
-        declaredLicenses = sortedSetOf(),
-        vcs = VcsInfo.EMPTY,
-        vcsProcessed = PackageManager.processProjectVcs(workingDir),
-        homepageUrl = "",
-        scopes = sortedSetOf(support.scope)
-    )
-
-    return ProjectAnalyzerResult(
-        project,
-        packages = support.packages.mapTo(sortedSetOf()) { it.toCuratedPackage() },
-        issues = support.issues
-    )
-}
-
 class NuGetSupport(packageReferences: Set<Identifier>) {
     companion object {
         private const val PROVIDER_NAME = "nuget"
@@ -358,4 +323,39 @@ class NuGetSupport(packageReferences: Set<Identifier>) {
             return body
         }
     }
+}
+
+abstract class XmlPackageFileReader {
+    protected val mapper = XmlMapper().registerKotlinModule()
+
+    abstract fun getPackageReferences(definitionFile: File): Set<Identifier>
+}
+
+fun PackageManager.resolveNuGetDependencies(
+    definitionFile: File,
+    reader: XmlPackageFileReader
+): ProjectAnalyzerResult? {
+    val workingDir = definitionFile.parentFile
+    val support = NuGetSupport(reader.getPackageReferences(definitionFile))
+
+    val project = Project(
+        id = Identifier(
+            type = managerName,
+            namespace = "",
+            name = definitionFile.relativeTo(analysisRoot).invariantSeparatorsPath,
+            version = ""
+        ),
+        definitionFilePath = VersionControlSystem.getPathInfo(definitionFile).path,
+        declaredLicenses = sortedSetOf(),
+        vcs = VcsInfo.EMPTY,
+        vcsProcessed = PackageManager.processProjectVcs(workingDir),
+        homepageUrl = "",
+        scopes = sortedSetOf(support.scope)
+    )
+
+    return ProjectAnalyzerResult(
+        project,
+        packages = support.packages.mapTo(sortedSetOf()) { it.toCuratedPackage() },
+        issues = support.issues
+    )
 }
