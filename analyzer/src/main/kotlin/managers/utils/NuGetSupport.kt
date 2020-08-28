@@ -58,10 +58,10 @@ abstract class XmlPackageFileReader {
 
 fun PackageManager.resolveNuGetDependencies(
     definitionFile: File,
-    mapper: XmlPackageFileReader
+    reader: XmlPackageFileReader
 ): ProjectAnalyzerResult? {
     val workingDir = definitionFile.parentFile
-    val support = NuGetSupport(mapper.getPackageReferences(definitionFile))
+    val support = NuGetSupport(reader.getPackageReferences(definitionFile))
 
     val project = Project(
         id = Identifier(

@@ -43,7 +43,7 @@ class DotNetTest : StringSpec() {
     private val packageFile = File(projectDir, "subProjectTest/test.csproj")
 
     init {
-        "Definition file is correctly mapped" {
+        "Definition file is correctly read" {
             val reader = DotNetPackageFileReader()
             val result = reader.getPackageReferences(packageFile)
 
