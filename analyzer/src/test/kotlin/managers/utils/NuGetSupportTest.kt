@@ -30,11 +30,11 @@ import org.ossreviewtoolkit.model.OrtIssue
 import org.ossreviewtoolkit.model.PackageReference
 import org.ossreviewtoolkit.model.Scope
 
-class DotNetSupportTest : StringSpec({
+class NuGetSupportTest : StringSpec({
     "non-existing project gets registered as error and is not added to scope" {
         val testPackage = Identifier.EMPTY.copy(name = "trifj", version = "2.0.0")
         val testPackage2 = Identifier.EMPTY.copy(name = "tffrifj", version = "2.0.0")
-        val dotNetSupport = DotNetSupport(setOf(testPackage, testPackage2))
+        val support = NuGetSupport(setOf(testPackage, testPackage2))
         val resultScope = Scope("dependencies", sortedSetOf())
         val resultErrors = listOf(
             OrtIssue(
@@ -49,13 +49,13 @@ class DotNetSupportTest : StringSpec({
             )
         )
 
-        dotNetSupport.scope shouldBe resultScope
-        dotNetSupport.issues.map { it.copy(timestamp = Instant.EPOCH) } shouldBe resultErrors
+        support.scope shouldBe resultScope
+        support.issues.map { it.copy(timestamp = Instant.EPOCH) } shouldBe resultErrors
     }
 
     "dependencies are detected correctly" {
         val testPackage = Identifier.EMPTY.copy(name = "WebGrease", version = "1.5.2")
-        val dotNetSupport = DotNetSupport(setOf(testPackage))
+        val support = NuGetSupport(setOf(testPackage))
         val resultScope = Scope(
             "dependencies", sortedSetOf(
                 PackageReference(
@@ -87,6 +87,6 @@ class DotNetSupportTest : StringSpec({
             )
         )
 
-        dotNetSupport.scope shouldBe resultScope
+        support.scope shouldBe resultScope
     }
 })

@@ -31,7 +31,7 @@ import java.io.File
 import org.ossreviewtoolkit.analyzer.AbstractPackageManagerFactory
 import org.ossreviewtoolkit.analyzer.PackageManager
 import org.ossreviewtoolkit.analyzer.managers.utils.XmlPackageFileReader
-import org.ossreviewtoolkit.analyzer.managers.utils.resolveDotNetDependencies
+import org.ossreviewtoolkit.analyzer.managers.utils.resolveNuGetDependencies
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.ProjectAnalyzerResult
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
@@ -89,5 +89,5 @@ class NuGet(
     }
 
     override fun resolveDependencies(definitionFile: File): List<ProjectAnalyzerResult> =
-        listOfNotNull(resolveDotNetDependencies(definitionFile, NuGetPackageFileReader()))
+        listOfNotNull(resolveNuGetDependencies(definitionFile, NuGetPackageFileReader()))
 }
