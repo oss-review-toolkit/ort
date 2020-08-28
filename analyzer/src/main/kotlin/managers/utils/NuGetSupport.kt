@@ -21,8 +21,6 @@
 package org.ossreviewtoolkit.analyzer.managers.utils
 
 import com.fasterxml.jackson.databind.JsonNode
-import com.fasterxml.jackson.dataformat.xml.XmlMapper
-import com.fasterxml.jackson.module.kotlin.registerKotlinModule
 
 import java.io.File
 import java.io.IOException
@@ -325,10 +323,8 @@ class NuGetSupport(packageReferences: Set<Identifier>) {
     }
 }
 
-abstract class XmlPackageFileReader {
-    protected val mapper = XmlMapper().registerKotlinModule()
-
-    abstract fun getPackageReferences(definitionFile: File): Set<Identifier>
+interface XmlPackageFileReader {
+    fun getPackageReferences(definitionFile: File): Set<Identifier>
 }
 
 fun PackageManager.resolveNuGetDependencies(
