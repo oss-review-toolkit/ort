@@ -56,8 +56,10 @@ class NuGet(
         ) = NuGet(managerName, analysisRoot, analyzerConfig, repoConfig)
     }
 
+    private val reader = NuGetPackageFileReader()
+
     override fun resolveDependencies(definitionFile: File): List<ProjectAnalyzerResult> =
-        listOfNotNull(resolveNuGetDependencies(definitionFile, NuGetPackageFileReader()))
+        listOfNotNull(resolveNuGetDependencies(definitionFile, reader))
 }
 
 /**
