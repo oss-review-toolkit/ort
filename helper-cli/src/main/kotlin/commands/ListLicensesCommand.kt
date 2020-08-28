@@ -121,7 +121,7 @@ internal class ListLicensesCommand : CliktCommand(
         .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
         .convert { it.absoluteFile.normalize() }
 
-    private val packageConfigurationOption by mutuallyExclusiveOptions<PackageConfigurationOption>(
+    private val packageConfigurationOption by mutuallyExclusiveOptions(
         option(
             "--package-configuration-dir",
             help = "The directory containing the package configuration files to read as input. It is searched " +
