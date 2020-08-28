@@ -550,7 +550,9 @@ fun containCopyrightsExactly(vararg copyrights: String): Matcher<Iterable<Resolv
     neverNullMatcher { value ->
         val expected = copyrights.toSet()
         val actual = value.flatMapTo(mutableSetOf()) { license ->
-            license.locations.flatMap { it.copyrights.map { it.statement } }
+            license.locations.flatMap { location ->
+                location.copyrights.map { it.statement }
+            }
         }
 
         MatcherResult(
