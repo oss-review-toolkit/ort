@@ -43,14 +43,14 @@ import org.ossreviewtoolkit.model.config.RepositoryConfiguration
  */
 class DotNetPackageFileReader : XmlPackageFileReader() {
     @JsonIgnoreProperties(ignoreUnknown = true)
-    data class ItemGroup(
+    private data class ItemGroup(
         @JsonProperty(value = "PackageReference")
         @JacksonXmlElementWrapper(useWrapping = false)
         val packageReference: List<PackageReference>?
     )
 
     @JsonIgnoreProperties(ignoreUnknown = true)
-    data class PackageReference(
+    private data class PackageReference(
         @JacksonXmlProperty(isAttribute = true, localName = "Include")
         val include: String,
         @JacksonXmlProperty(isAttribute = true, localName = "Version")

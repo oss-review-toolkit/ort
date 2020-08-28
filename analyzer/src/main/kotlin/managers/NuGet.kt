@@ -43,14 +43,14 @@ import org.ossreviewtoolkit.model.config.RepositoryConfiguration
  */
 class NuGetPackageFileReader : XmlPackageFileReader() {
     @JsonIgnoreProperties(ignoreUnknown = true)
-    data class PackagesConfig(
+    private data class PackagesConfig(
         @JsonProperty(value = "package")
         @JacksonXmlElementWrapper(useWrapping = false)
         val packages: List<Package>
     )
 
     @JsonIgnoreProperties(ignoreUnknown = true)
-    data class Package(
+    private data class Package(
         @JacksonXmlProperty(isAttribute = true)
         val id: String,
         @JacksonXmlProperty(isAttribute = true)
