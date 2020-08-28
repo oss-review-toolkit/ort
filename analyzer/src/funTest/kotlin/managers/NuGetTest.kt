@@ -43,7 +43,7 @@ class NuGetTest : StringSpec() {
     private val packageFile = File(projectDir, "packages.config")
 
     init {
-        "Definition file is correctly mapped" {
+        "Definition file is correctly read" {
             val reader = NuGetPackageFileReader()
             val result = reader.getPackageReferences(packageFile)
 
