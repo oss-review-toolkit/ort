@@ -85,7 +85,5 @@ private fun OrtResult.getUnprocessedCopyrightStatements(processedStatements: Col
         }
     }
 
-    return processedStatements.flatMapTo(mutableSetOf()) {
-        if (processedToUnprocessed.containsKey(it)) processedToUnprocessed[it]!! else listOf(it)
-    }
+    return processedStatements.flatMapTo(mutableSetOf()) { processedToUnprocessed.getOrDefault(it, listOf(it)) }
 }
