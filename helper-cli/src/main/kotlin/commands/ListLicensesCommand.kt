@@ -137,6 +137,12 @@ internal class ListLicensesCommand : CliktCommand(
             .convert { PackageConfigurationOption.File(it) }
     ).single()
 
+    private val licenseAllowlist by option(
+        "--license-allow-list",
+        help = "Output only license findings which are contained in the given allow list."
+    ).split(",")
+        .default(emptyList())
+
     override fun run() {
         val ortResult = ortResultFile.readValue<OrtResult>().replaceConfig(repositoryConfigurationFile)
 
@@ -179,7 +185,11 @@ internal class ListLicensesCommand : CliktCommand(
                     }
                 }.mapValues { (_, locations) ->
                     locations.groupByText(sourcesDir)
-                }.filter { (_, locations) -> locations.isNotEmpty() }
+                }.filter { (_, locations) ->
+                    locations.isNotEmpty()
+                }.filter { (license, _) ->
+                    licenseAllowlist.isEmpty() || license.simpleLicense() in licenseAllowlist
+                }
             }
 
         buildString {
