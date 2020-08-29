@@ -28,7 +28,7 @@ import org.ossreviewtoolkit.spdx.SpdxConstants
  */
 data class LicenseFindingCurationResult(
     /**
-     * The curated license finding, or null, if the [concluded license][LicenseFindingCuration.concluded] is
+     * The curated license finding, or null, if the [concluded license][LicenseFindingCuration.concludedLicense] is
      * [SpdxConstants.NONE].
      */
     val curatedFinding: LicenseFinding?,
