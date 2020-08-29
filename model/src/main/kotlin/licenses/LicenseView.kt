@@ -25,8 +25,8 @@ import org.ossreviewtoolkit.spdx.SpdxSingleLicenseExpression
 
 /**
  * A [LicenseView] provides a custom view on the licenses that belong to a [Package]. It can be used to filter the
- * licenses relevant to a [Rule] whereas the [licenseSources] is the filter criteria. Only the entry with the lowest
- * index in the given [licenseSources] which yields a non-empty result is used as filter criteria.
+ * licenses relevant to an evaluator rule whereas the [licenseSources] is the filter criteria. Only the entry with the
+ * lowest index in the given [licenseSources] which yields a non-empty result is used as filter criteria.
  */
 class LicenseView(vararg licenseSources: Set<LicenseSource>) {
     companion object {
