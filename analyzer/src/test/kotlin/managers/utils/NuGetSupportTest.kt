@@ -27,7 +27,6 @@ import java.time.Instant
 
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.OrtIssue
-import org.ossreviewtoolkit.model.PackageReference
 import org.ossreviewtoolkit.model.Scope
 
 class NuGetSupportTest : StringSpec({
@@ -51,42 +50,5 @@ class NuGetSupportTest : StringSpec({
 
         support.scope shouldBe resultScope
         support.issues.map { it.copy(timestamp = Instant.EPOCH) } shouldBe resultErrors
-    }
-
-    "dependencies are detected correctly" {
-        val testPackage = Identifier.EMPTY.copy(name = "WebGrease", version = "1.5.2")
-        val support = NuGetSupport(setOf(testPackage))
-        val resultScope = Scope(
-            "dependencies", sortedSetOf(
-                PackageReference(
-                    Identifier(
-                        type = "nuget",
-                        namespace = "",
-                        name = "WebGrease",
-                        version = "1.5.2"
-                    ),
-                    dependencies = sortedSetOf(
-                        PackageReference(
-                            Identifier(
-                                type = "nuget",
-                                namespace = "",
-                                name = "Antlr",
-                                version = "3.4.1.9004"
-                            )
-                        ),
-                        PackageReference(
-                            Identifier(
-                                type = "nuget",
-                                namespace = "",
-                                name = "Newtonsoft.Json",
-                                version = "5.0.4"
-                            )
-                        )
-                    )
-                )
-            )
-        )
-
-        support.scope shouldBe resultScope
     }
 })
