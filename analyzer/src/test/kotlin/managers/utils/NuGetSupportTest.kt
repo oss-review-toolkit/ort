@@ -30,21 +30,15 @@ import org.ossreviewtoolkit.model.OrtIssue
 import org.ossreviewtoolkit.model.Scope
 
 class NuGetSupportTest : StringSpec({
-    "non-existing project gets registered as error and is not added to scope" {
+    "A non-existing package causes an issue and is not added to the scope" {
         val testPackage = Identifier.EMPTY.copy(name = "trifj", version = "2.0.0")
-        val testPackage2 = Identifier.EMPTY.copy(name = "tffrifj", version = "2.0.0")
-        val support = NuGetSupport(setOf(testPackage, testPackage2))
+        val support = NuGetSupport(setOf(testPackage))
         val resultScope = Scope("dependencies", sortedSetOf())
         val resultErrors = listOf(
             OrtIssue(
                 timestamp = Instant.EPOCH,
                 source = "nuget-API",
                 message = "${testPackage.name}:${testPackage.version} can not be found on Nugets RestAPI."
-            ),
-            OrtIssue(
-                timestamp = Instant.EPOCH,
-                source = "nuget-API",
-                message = "${testPackage2.name}:${testPackage2.version} can not be found on Nugets RestAPI."
             )
         )
 
