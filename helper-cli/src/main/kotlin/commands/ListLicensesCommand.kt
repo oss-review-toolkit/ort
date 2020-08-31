@@ -34,6 +34,8 @@ import com.github.ajalt.clikt.parameters.types.file
 
 import java.io.File
 import java.lang.IllegalArgumentException
+import java.nio.file.FileSystems
+import java.nio.file.Paths
 
 import org.ossreviewtoolkit.helper.common.PackageConfigurationOption
 import org.ossreviewtoolkit.helper.common.createProvider
@@ -143,6 +145,13 @@ internal class ListLicensesCommand : CliktCommand(
     ).split(",")
         .default(emptyList())
 
+    private val fileAllowList by option(
+        "--file-allow-list",
+        help = "Output only license findings for files whose paths matches any of the given glob expressions."
+    ).convert { csv ->
+        csv.split(",").map { pattern -> FileSystems.getDefault().getPathMatcher("glob:$pattern") }
+    }.default(emptyList())
+
     override fun run() {
         val ortResult = ortResultFile.readValue<OrtResult>().replaceConfig(repositoryConfigurationFile)
 
@@ -180,8 +189,9 @@ internal class ListLicensesCommand : CliktCommand(
                     !offendingOnly || violatedRulesByLicense.contains(license)
                 }.mapValues { (license, locations) ->
                     locations.filter { location ->
-                        !omitExcluded || !isPathExcluded(provenance, location.path) ||
-                                ignoreExcludedRuleIds.intersect(violatedRulesByLicense[license].orEmpty()).isNotEmpty()
+                        (fileAllowList.isEmpty() || fileAllowList.any { it.matches(Paths.get(location.path)) }) &&
+                                (!omitExcluded || !isPathExcluded(provenance, location.path) ||
+                                ignoreExcludedRuleIds.intersect(violatedRulesByLicense[license].orEmpty()).isNotEmpty())
                     }
                 }.mapValues { (_, locations) ->
                     locations.groupByText(sourcesDir)
