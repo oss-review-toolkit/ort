@@ -20,6 +20,7 @@
 package org.ossreviewtoolkit.reporter
 
 import org.ossreviewtoolkit.model.OrtIssue
+import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.utils.ScriptRunner
 
 /**
@@ -37,8 +38,10 @@ interface HowToFixTextProvider {
         /**
          * Return the [HowToFixTextProvider] which in-turn has to be returned by the given [script].
          */
-        fun fromKotlinScript(script: String): HowToFixTextProvider = HowToFixScriptRunner().run(script)
+        fun fromKotlinScript(script: String, ortResult: OrtResult): HowToFixTextProvider =
+            HowToFixScriptRunner(ortResult).run(script)
     }
+
     /**
      * Return a Markdown text describing how to fix the given [issue]. Non-null return values override the default
      * how-to-fix texts, while a null value keeps the default.
@@ -46,15 +49,19 @@ interface HowToFixTextProvider {
     fun getHowToFixText(issue: OrtIssue): String?
 }
 
-private class HowToFixScriptRunner : ScriptRunner() {
+private class HowToFixScriptRunner(ortResult: OrtResult) : ScriptRunner() {
     override val preface = """
             import org.ossreviewtoolkit.model.*
             import org.ossreviewtoolkit.reporter.HowToFixTextProvider
-                        
+
         """.trimIndent()
 
     override val postface = """
         """.trimIndent()
+
+    init {
+        engine.put("ortResult", ortResult)
+    }
 
     override fun run(script: String): HowToFixTextProvider = super.run(script) as HowToFixTextProvider
 }
