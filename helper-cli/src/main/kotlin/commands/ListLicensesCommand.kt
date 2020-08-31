@@ -179,8 +179,8 @@ internal class ListLicensesCommand : CliktCommand(
                 locationsByLicense.filter { (license, _) ->
                     !offendingOnly || violatedRulesByLicense.contains(license)
                 }.mapValues { (license, locations) ->
-                    locations.filter {
-                        !omitExcluded || !isPathExcluded(provenance, it.path) ||
+                    locations.filter { location ->
+                        !omitExcluded || !isPathExcluded(provenance, location.path) ||
                                 ignoreExcludedRuleIds.intersect(violatedRulesByLicense[license].orEmpty()).isNotEmpty()
                     }
                 }.mapValues { (_, locations) ->
