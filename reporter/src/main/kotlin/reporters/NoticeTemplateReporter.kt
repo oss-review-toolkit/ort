@@ -178,6 +178,18 @@ class NoticeTemplateReporter : Reporter {
             }
 
         /**
+         * Return licenses that are configured to require a
+         * [source code offer in the notice file][License.includeSourceCodeOfferInNoticeFile] in the
+         * [LicenseConfiguration].
+         */
+        @Suppress("UNUSED") // This function is used in the templates.
+        fun filterIncludeSourceCodeOfferInNoticeFile(licenses: Collection<ResolvedLicense>): List<ResolvedLicense> =
+            licenses.filter { resolvedLicense ->
+                licenseConfiguration.licenses.find { it.id == resolvedLicense.license }
+                    ?.includeSourceCodeOfferInNoticeFile ?: false
+            }
+
+        /**
          * Return a [LicenseView] constant by name to make them easily available to the Freemarker templates.
          */
         @Suppress("UNUSED") // This function is used in the templates.
