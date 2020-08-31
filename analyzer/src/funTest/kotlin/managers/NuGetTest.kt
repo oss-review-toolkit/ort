@@ -49,9 +49,9 @@ class NuGetTest : StringSpec() {
             val result = reader.getPackageReferences(packageFile)
 
             result should containExactly(
-                Identifier.EMPTY.copy(name = "jQuery", version = "3.3.1"),
-                Identifier.EMPTY.copy(name = "WebGrease", version = "1.5.2"),
-                Identifier.EMPTY.copy(name = "foobar", version = "1.2.3")
+                Identifier(type = "NuGet", namespace = "", name = "jQuery", version = "3.3.1"),
+                Identifier(type = "NuGet", namespace = "", name = "WebGrease", version = "1.5.2"),
+                Identifier(type = "NuGet", namespace = "", name = "foobar", version = "1.2.3")
             )
         }
 

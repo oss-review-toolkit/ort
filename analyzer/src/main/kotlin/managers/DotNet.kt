@@ -30,13 +30,13 @@ import java.io.File
 
 import org.ossreviewtoolkit.analyzer.AbstractPackageManagerFactory
 import org.ossreviewtoolkit.analyzer.PackageManager
+import org.ossreviewtoolkit.analyzer.managers.utils.NuGetSupport
 import org.ossreviewtoolkit.analyzer.managers.utils.XmlPackageFileReader
 import org.ossreviewtoolkit.analyzer.managers.utils.resolveNuGetDependencies
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.ProjectAnalyzerResult
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
-import org.ossreviewtoolkit.model.xmlMapper
 
 /**
  * A package manager implementation for [.NET](https://docs.microsoft.com/en-us/dotnet/core/tools/) project files that
@@ -59,9 +59,10 @@ class DotNet(
     }
 
     private val reader = DotNetPackageFileReader()
+    private val support = NuGetSupport()
 
     override fun resolveDependencies(definitionFile: File): List<ProjectAnalyzerResult> =
-        listOfNotNull(resolveNuGetDependencies(definitionFile, reader))
+        listOf(resolveNuGetDependencies(definitionFile, reader, support))
 }
 
 /**
@@ -86,11 +87,11 @@ class DotNetPackageFileReader : XmlPackageFileReader {
 
     override fun getPackageReferences(definitionFile: File): Set<Identifier> {
         val ids = mutableSetOf<Identifier>()
-        val itemGroups = xmlMapper.readValue<List<ItemGroup>>(definitionFile)
+        val itemGroups = NuGetSupport.XML_MAPPER.readValue<List<ItemGroup>>(definitionFile)
 
         itemGroups.forEach { itemGroup ->
             itemGroup.packageReference?.forEach {
-                ids += Identifier.EMPTY.copy(name = it.include, version = it.version)
+                ids += Identifier(type = "NuGet", namespace = "", name = it.include, version = it.version)
             }
         }
 
