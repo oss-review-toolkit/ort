@@ -30,13 +30,13 @@ import java.io.File
 
 import org.ossreviewtoolkit.analyzer.AbstractPackageManagerFactory
 import org.ossreviewtoolkit.analyzer.PackageManager
+import org.ossreviewtoolkit.analyzer.managers.utils.NuGetSupport
 import org.ossreviewtoolkit.analyzer.managers.utils.XmlPackageFileReader
 import org.ossreviewtoolkit.analyzer.managers.utils.resolveNuGetDependencies
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.ProjectAnalyzerResult
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
-import org.ossreviewtoolkit.model.xmlMapper
 
 /**
  * The [NuGet](https://www.nuget.org/) package manager for .NET.
@@ -58,9 +58,10 @@ class NuGet(
     }
 
     private val reader = NuGetPackageFileReader()
+    private val support = NuGetSupport()
 
     override fun resolveDependencies(definitionFile: File): List<ProjectAnalyzerResult> =
-        listOfNotNull(resolveNuGetDependencies(definitionFile, reader))
+        listOf(resolveNuGetDependencies(definitionFile, reader, support))
 }
 
 /**
@@ -85,10 +86,10 @@ class NuGetPackageFileReader : XmlPackageFileReader {
 
     override fun getPackageReferences(definitionFile: File): Set<Identifier> {
         val ids = mutableSetOf<Identifier>()
-        val packagesConfig = xmlMapper.readValue<PackagesConfig>(definitionFile)
+        val packagesConfig = NuGetSupport.XML_MAPPER.readValue<PackagesConfig>(definitionFile)
 
         packagesConfig.packages.forEach {
-            ids += Identifier.EMPTY.copy(name = it.id, version = it.version)
+            ids += Identifier(type = "NuGet", namespace = "", name = it.id, version = it.version)
         }
 
         return ids

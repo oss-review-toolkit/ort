@@ -1,6 +1,7 @@
 /*
  * Copyright (C) 2017-2019 HERE Europe B.V.
  * Copyright (C) 2019 Bosch Software Innovations GmbH
+ * Copyright (C) 2020 Bosch.IO GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,17 +21,30 @@
 
 package org.ossreviewtoolkit.analyzer.managers.utils
 
-import com.fasterxml.jackson.databind.JsonNode
+import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.databind.json.JsonMapper
+import com.fasterxml.jackson.dataformat.xml.XmlFactory
+import com.fasterxml.jackson.dataformat.xml.XmlMapper
+import com.fasterxml.jackson.module.kotlin.readValue
+import com.fasterxml.jackson.module.kotlin.registerKotlinModule
 
 import java.io.File
 import java.io.IOException
-import java.net.HttpURLConnection
+import java.util.concurrent.TimeUnit
 
+import kotlinx.coroutines.runBlocking
+
+import okhttp3.CacheControl
 import okhttp3.Request
 
+import org.apache.logging.log4j.Level
+
 import org.ossreviewtoolkit.analyzer.PackageManager
+import org.ossreviewtoolkit.analyzer.managers.utils.NuGetAllPackageData.PackageData
+import org.ossreviewtoolkit.analyzer.managers.utils.NuGetAllPackageData.PackageDetails
+import org.ossreviewtoolkit.analyzer.managers.utils.NuGetAllPackageData.PackageSpec
+import org.ossreviewtoolkit.analyzer.managers.utils.NuGetAllPackageData.ServiceIndex
 import org.ossreviewtoolkit.downloader.VersionControlSystem
-import org.ossreviewtoolkit.model.EMPTY_JSON_NODE
 import org.ossreviewtoolkit.model.Hash
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.OrtIssue
@@ -43,285 +57,173 @@ import org.ossreviewtoolkit.model.Scope
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.createAndLogIssue
-import org.ossreviewtoolkit.model.jsonMapper
-import org.ossreviewtoolkit.model.xmlMapper
 import org.ossreviewtoolkit.utils.OkHttpClientHelper
-import org.ossreviewtoolkit.utils.textValueOrEmpty
+import org.ossreviewtoolkit.utils.await
+import org.ossreviewtoolkit.utils.collectMessagesAsString
+import org.ossreviewtoolkit.utils.log
+import org.ossreviewtoolkit.utils.logOnce
 
-class NuGetSupport(packageReferences: Set<Identifier>) {
+// See https://docs.microsoft.com/en-us/nuget/api/overview.
+private const val SERVICE_INDEX_URL = "https://api.nuget.org/v3/index.json"
+
+private const val REGISTRATIONS_BASE_URL_TYPE = "RegistrationsBaseUrl/3.6.0"
+
+class NuGetSupport {
     companion object {
-        private const val PROVIDER_NAME = "NuGet"
+        val JSON_MAPPER = JsonMapper().registerKotlinModule()
 
-        private fun extractRepositoryType(node: JsonNode) =
-            VcsType(node["repository"]?.get("type").textValueOrEmpty())
+        val XML_MAPPER = XmlMapper(XmlFactory().apply {
+            // Work-around for https://github.com/FasterXML/jackson-module-kotlin/issues/138.
+            xmlTextElementName = "value"
+        }).registerKotlinModule()
+    }
 
-        private fun extractRepositoryUrl(node: JsonNode) =
-            node["repository"]?.get("url")?.textValue()
-                ?: node["projectURL"].textValueOrEmpty()
-
-        private fun extractRepositoryRevision(node: JsonNode): String =
-            node["repository"]?.get("commit").textValueOrEmpty()
-
-        private fun extractRepositoryPath(node: JsonNode): String =
-            node["repository"]?.get("branch").textValueOrEmpty()
-
-        private fun extractVcsInfo(node: JsonNode) =
-            VcsInfo(
-                type = extractRepositoryType(node),
-                url = extractRepositoryUrl(node),
-                revision = extractRepositoryRevision(node),
-                path = extractRepositoryPath(node)
-            )
-
-        private fun extractPackageId(node: JsonNode) =
-            Identifier(
-                type = PROVIDER_NAME,
-                namespace = "",
-                name = node["id"].textValueOrEmpty(),
-                version = node["version"].textValueOrEmpty()
-            )
-
-        private fun extractDeclaredLicenses(node: JsonNode) =
-            sortedSetOf<String>().apply {
-                val license = node["license"]?.textValue() ?: node["licenseUrl"].textValueOrEmpty()
-                // Most nuget packages only provide a "licenseUrl" which counts as a declared license.
-                if (license.isNotEmpty()) {
-                    add(license)
-                }
-            }
-
-        private fun extractRemoteArtifact(node: JsonNode, nupkgUrl: String): RemoteArtifact {
-            val encodedHash = node["packageHash"].textValueOrEmpty()
-            val hashAlgorithm = node["packageHashAlgorithm"].textValueOrEmpty()
-            val sri = hashAlgorithm.replace("-", "") + "-" + encodedHash
-
-            return RemoteArtifact(nupkgUrl, Hash.create(sri))
-        }
-
-        private fun getCatalogURL(registrationNode: JsonNode): String =
-            registrationNode["catalogEntry"].textValueOrEmpty()
-
-        private fun getNuspecURL(registrationNode: JsonNode): String =
-            registrationNode["packageContent"].textValueOrEmpty()
-
-        private fun extractVersion(range: String): String {
-            if (range.isEmpty()) return ""
-            val rangeReplaces = range.replace("[", "")
-                .replace(" ", "")
-                .replace(")", "")
-            return rangeReplaces.split(",").elementAt(0)
+    private val client = OkHttpClientHelper.buildClient {
+        // Cache responses more aggressively than the NuGet registry's default of "max-age=120, must-revalidate"
+        // (for the index URL) or even "no-store" (for the package data). More or less arbitrarily choose 7 days /
+        // 1 week as dependencies of a released package should actually not change at all. But refreshing after a
+        // few days when the typical incremental scanning / curation creating cycle is through should be fine.
+        addNetworkInterceptor { chain ->
+            val response = chain.proceed(chain.request())
+            val cacheControl = CacheControl.Builder()
+                .maxAge(7, TimeUnit.DAYS)
+                .build()
+            response.newBuilder()
+                .header("cache-control", cacheControl.toString())
+                .build()
         }
     }
 
-    val packages = sortedSetOf<Package>()
-    val issues = mutableListOf<OrtIssue>()
-    val scope = Scope("dependencies", sortedSetOf())
+    private val serviceIndex = runBlocking { mapFromUrl<ServiceIndex>(JSON_MAPPER, SERVICE_INDEX_URL) }
 
-    // Maps an (id, version) pair to a (nupkg URL, catalog entry) pair.
-    private val packageReferencesAlreadyFound = mutableMapOf<Pair<String, String>, Pair<String, JsonNode>>()
+    // Note: Remove a trailing slash as one is always added later to separate from the path, and a double-slash would
+    // break the URL!
+    private val registrationsBaseUrl = serviceIndex.resources.single {
+        it.type == REGISTRATIONS_BASE_URL_TYPE
+    }.id.removeSuffix("/")
 
-    init {
-        packageReferences.forEach { id ->
-            val scopeDependency = getPackageReferenceFromRestAPI(id.name, id.version)
-            scopeDependency?.let { scope.dependencies += it }
-        }
+    private val packageMap = mutableMapOf<Identifier, Pair<NuGetAllPackageData, Package>>()
 
-        scope.collectDependencies().forEach { id ->
-            val pkg = getPackageForId(id)
-
-            if (pkg != Package.EMPTY) {
-                packages += pkg
-            }
-        }
-    }
-
-    private fun getPackageForId(packageId: Identifier) =
-        jsonNodeToPackage(getPackageJsonContent(packageId))
-
-    private fun getPackageJsonContent(packageId: Identifier): Pair<String, JsonNode> {
-        val (_, _, pkgName, pkgVersion) = packageId
-
-        packageReferencesAlreadyFound[Pair(pkgName, pkgVersion)]?.let {
-            return it
-        }
-
-        return getInformationURL(pkgName, pkgVersion)?.let { (nuspecUrl, catalogUrl) ->
-            Pair(nuspecUrl, jsonMapper.readTree(catalogUrl.requestFromNugetAPI()))
-        } ?: Pair("", EMPTY_JSON_NODE)
-    }
-
-    private fun jsonNodeToPackage(packageContent: Pair<String, JsonNode>): Package {
-        val (nuspecUrl, jsonCatalogNode) = packageContent
-        val jsonNuspecNode = try {
-            xmlMapper.readTree(
-                nuspecUrl.replace(
-                    "${jsonCatalogNode["version"].textValueOrEmpty()}.nupkg",
-                    "nuspec"
-                ).requestFromNugetAPI()
-            )
-        } catch (e: IOException) {
-            EMPTY_JSON_NODE
-        }
-
-        if (jsonCatalogNode["id"]?.textValue() == null) return Package.EMPTY
-
-        val vcsInfo = extractVcsInfo(jsonNuspecNode["metadata"] ?: EMPTY_JSON_NODE)
-
-        return Package(
-            id = extractPackageId(jsonCatalogNode),
-            declaredLicenses = extractDeclaredLicenses(jsonCatalogNode),
-            description = jsonCatalogNode["description"].textValueOrEmpty(),
-            homepageUrl = jsonCatalogNode["projectUrl"].textValueOrEmpty(),
-            binaryArtifact = extractRemoteArtifact(jsonCatalogNode, packageContent.first),
-            sourceArtifact = RemoteArtifact.EMPTY,
-            vcs = vcsInfo
-        )
-    }
-
-    private fun getPackageReferenceFromRestAPI(packageID: String, version: String): PackageReference? {
-        val packageJsonNode = preparePackageReference(packageID, version)
-
-        if (packageJsonNode == null) {
-            issues += createAndLogIssue(
-                source = "nuget-API",
-                message = "$packageID:$version can not be found on Nugets RestAPI."
-            )
-
-            return null
-        }
-
-        val packageReference = PackageReference(
-            Identifier(
-                type = PROVIDER_NAME,
-                namespace = "",
-                name = if (packageID == packageJsonNode["id"]?.textValue()) {
-                    packageID
-                } else {
-                    packageJsonNode["id"].textValueOrEmpty()
-                },
-                version = packageJsonNode["version"].textValueOrEmpty()
-            )
-        )
-
-        val dependencyGroups = packageJsonNode["dependencyGroups"]?.asSequence()
-
-        dependencyGroups?.mapNotNull {
-            it["dependencies"]?.asSequence()
-        }?.flatten()?.forEach { node ->
-            val nodeAsPair = Pair(
-                node["id"].textValueOrEmpty(),
-                extractVersion(node["range"].textValueOrEmpty())
-            )
-
-            if (!packageReferencesAlreadyFound.containsKey(nodeAsPair)) {
-                val subPackageRef = getPackageReferenceFromRestAPI(
-                    nodeAsPair.first,
-                    nodeAsPair.second
-                )
-
-                subPackageRef?.let { packageReference.dependencies += it }
-            }
-        }
-
-        return packageReference
-    }
-
-    private fun preparePackageReference(packageID: String, version: String): JsonNode? {
-        val (nuspecUrl, catalogUrl) = getInformationURL(packageID, version) ?: return null
-        val packageJsonNode = jsonMapper.readTree(catalogUrl.requestFromNugetAPI()) ?: EMPTY_JSON_NODE
-
-        packageReferencesAlreadyFound[Pair(packageID, version)] = Pair(nuspecUrl, packageJsonNode)
-
-        return packageJsonNode
-    }
-
-    private fun getInformationURL(packageID: String, version: String): Pair<String, String>? {
-        val registrationInfo = try {
-            "https://api.nuget.org/v3/registration3/$packageID/$version.json".requestFromNugetAPI()
-        } catch (e: IOException) {
-            try {
-                getIdUrl(packageID, version).requestFromNugetAPI()
-            } catch (e: IOException) {
-                ""
-            }
-        }
-
-        val node = jsonMapper.readTree(registrationInfo)
-
-        return if (node?.isMissingNode == false) {
-            Pair(getNuspecURL(node), getCatalogURL(node))
-        } else {
-            null
-        }
-    }
-
-    private fun getIdUrl(packageID: String, version: String) =
-        getCreateSearchRestAPIURL(packageID).let { node ->
-            getRightVersionUrl(node["data"]?.elements(), packageID, version)
-                ?: getFirstMatchingIdUrl(node["data"]?.elements(), packageID).orEmpty()
-        }
-
-    private fun getRightVersionUrl(
-        dataIterator: Iterator<JsonNode>?,
-        packageID: String, version: String
-    ): String? {
-        if (dataIterator == null) return null
-
-        while (dataIterator.hasNext()) {
-            val packageNode = dataIterator.next()
-            if (packageNode["id"].textValueOrEmpty() == packageID) {
-                packageNode["versions"].elements().forEach {
-                    if (it["version"].textValueOrEmpty() == version) {
-                        return it["@id"].textValueOrEmpty()
-                    } else if (!dataIterator.hasNext() && version == "latest") {
-                        return it["@id"].textValueOrEmpty()
-                    }
-                }
-            }
-        }
-
-        return null
-    }
-
-    private fun getFirstMatchingIdUrl(dataIterator: Iterator<JsonNode>?, packageID: String): String? {
-        if (dataIterator == null) return null
-
-        while (dataIterator.hasNext()) {
-            val packageNode = dataIterator.next()
-            if (packageNode["id"].textValueOrEmpty() == packageID) {
-                return packageNode["versions"]?.last()?.get("@id").textValueOrEmpty()
-            }
-        }
-
-        return null
-    }
-
-    private fun getCreateSearchRestAPIURL(packageID: String) =
-        jsonMapper.readTree(
-            "https://api-v2v3search-0.nuget.org/query?q=\"$packageID\"&prerelease=false".requestFromNugetAPI()
-        )
-
-    private fun String.requestFromNugetAPI(): String {
-        if (isNullOrEmpty()) {
-            throw IOException("GET with URL '$this' could not be resolved")
-        }
-
-        val pkgRequest = Request.Builder()
+    private suspend inline fun <reified T> mapFromUrl(mapper: ObjectMapper, url: String): T {
+        val request = Request.Builder()
             .get()
-            .url(this)
+            .url(url)
             .build()
 
-        OkHttpClientHelper.execute(pkgRequest).use { response ->
-            val body = response.body?.string()?.trim()
+        val response = client.newCall(request).await()
+        if (response.cacheResponse != null) {
+            log.debug { "Retrieved '$url' response from local cache." }
+        } else {
+            log.debug { "Retrieved '$url' response from remote server." }
+        }
 
-            if (response.code != HttpURLConnection.HTTP_OK || body.isNullOrEmpty()) {
-                throw IOException("GET with URL $this could not be resolved")
+        val body = response.body?.string()?.takeIf { response.isSuccessful }
+            ?: throw IOException("Failed to get a response body from '$url'.")
+
+        return mapper.readValue(body)
+    }
+
+    private fun getAllPackageData(id: Identifier): NuGetAllPackageData {
+        // Note: The package name in the URL is case-sensitive and must be lower-case!
+        val lowerId = id.name.toLowerCase()
+        val dataUrl = "$registrationsBaseUrl/$lowerId/${id.version}.json"
+        val data = runBlocking { mapFromUrl<PackageData>(JSON_MAPPER, dataUrl) }
+
+        val nupkgUrl = data.packageContent
+        val nuspecUrl = nupkgUrl.replace(".${id.version}.nupkg", ".nuspec")
+
+        return runBlocking {
+            val packageDetails = mapFromUrl<PackageDetails>(JSON_MAPPER, data.catalogEntry)
+            val packageSpec = mapFromUrl<PackageSpec>(XML_MAPPER, nuspecUrl)
+            NuGetAllPackageData(data, packageDetails, packageSpec)
+        }
+    }
+
+    private fun getPackage(all: NuGetAllPackageData): Package {
+        val vcs = all.spec.metadata.repository?.let {
+            VcsInfo(
+                type = VcsType(it.type.orEmpty()),
+                url = it.url.orEmpty(),
+                revision = (it.branch ?: it.commit).orEmpty(),
+                resolvedRevision = it.commit,
+                path = ""
+            )
+        } ?: VcsInfo.EMPTY
+
+        val license = with(all.spec.metadata) {
+            // Note: "licenseUrl" has been deprecated in favor of "license", see
+            // https://docs.microsoft.com/en-us/nuget/reference/nuspec#licenseurl
+            val licenseValue = license?.value?.takeUnless { license.type == "file" }
+            licenseValue ?: licenseUrl?.takeUnless { it == "https://aka.ms/deprecateLicenseUrl" }
+        }
+
+        return with(all.details) {
+            Package(
+                id = getIdentifier(id, version),
+                declaredLicenses = setOfNotNull(license).toSortedSet(),
+                description = description.orEmpty(),
+                homepageUrl = projectUrl.orEmpty(),
+                binaryArtifact = RemoteArtifact(
+                    url = all.data.packageContent,
+                    hash = Hash.create("$packageHashAlgorithm-$packageHash")
+                ),
+                sourceArtifact = RemoteArtifact.EMPTY,
+                vcs = vcs
+            )
+        }
+    }
+
+    fun buildDependencyTree(
+        references: Collection<Identifier>,
+        dependencies: MutableCollection<PackageReference>,
+        packages: MutableCollection<Package>,
+        issues: MutableCollection<OrtIssue>
+    ) {
+        references.forEach { id ->
+            try {
+                val (all, pkg) = packageMap.getOrPut(id) {
+                    val all = getAllPackageData(id)
+                    all to getPackage(all)
+                }
+
+                val pkgRef = pkg.toReference()
+                dependencies += pkgRef
+
+                // As NuGet dependencies are very repetitive, truncate the tree at already known branches to avoid it to
+                // grow really huge.
+                if (packages.add(pkg)) {
+                    // TODO: Consider mapping dependency groups to scopes.
+                    val referredDependencies =
+                        all.details.dependencyGroups.flatMapTo(mutableSetOf()) { it.dependencies }
+
+                    buildDependencyTree(
+                        referredDependencies.map {
+                            // Simply take the minimum of the Ivy-style version range.
+                            val version = it.range.removePrefix("[").substringBefore(",").trim()
+
+                            getIdentifier(it.id, version)
+                        },
+                        pkgRef.dependencies,
+                        packages,
+                        issues
+                    )
+                } else {
+                    logOnce(Level.DEBUG) {
+                        "Truncating dependencies for '${id.toCoordinates()}' which were already determined."
+                    }
+                }
+            } catch (e: IOException) {
+                issues += createAndLogIssue(
+                    source = "NuGet",
+                    message = "Failed to get package data for '${id.toCoordinates()}': ${e.collectMessagesAsString()}"
+                )
             }
-
-            return body
         }
     }
 }
+
+private fun getIdentifier(name: String, version: String) =
+    Identifier(type = "NuGet", namespace = "", name = name, version = version)
 
 interface XmlPackageFileReader {
     fun getPackageReferences(definitionFile: File): Set<Identifier>
@@ -329,10 +231,19 @@ interface XmlPackageFileReader {
 
 fun PackageManager.resolveNuGetDependencies(
     definitionFile: File,
-    reader: XmlPackageFileReader
-): ProjectAnalyzerResult? {
+    reader: XmlPackageFileReader,
+    support: NuGetSupport
+): ProjectAnalyzerResult {
     val workingDir = definitionFile.parentFile
-    val support = NuGetSupport(reader.getPackageReferences(definitionFile))
+
+    val dependencies = sortedSetOf<PackageReference>()
+    val scope = Scope("dependencies", dependencies)
+
+    val packages = sortedSetOf<Package>()
+    val issues = mutableListOf<OrtIssue>()
+
+    val references = reader.getPackageReferences(definitionFile)
+    support.buildDependencyTree(references, dependencies, packages, issues)
 
     val project = Project(
         id = Identifier(
@@ -346,8 +257,8 @@ fun PackageManager.resolveNuGetDependencies(
         vcs = VcsInfo.EMPTY,
         vcsProcessed = PackageManager.processProjectVcs(workingDir),
         homepageUrl = "",
-        scopes = sortedSetOf(support.scope)
+        scopes = sortedSetOf(scope)
     )
 
-    return ProjectAnalyzerResult(project, support.packages, support.issues)
+    return ProjectAnalyzerResult(project, packages, issues)
 }
