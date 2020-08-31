@@ -50,7 +50,7 @@ import org.ossreviewtoolkit.utils.textValueOrEmpty
 
 class NuGetSupport(packageReferences: Set<Identifier>) {
     companion object {
-        private const val PROVIDER_NAME = "nuget"
+        private const val PROVIDER_NAME = "NuGet"
 
         private fun extractRepositoryType(node: JsonNode) =
             VcsType(node["repository"]?.get("type").textValueOrEmpty())

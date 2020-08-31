@@ -18,14 +18,14 @@ project:
   scopes:
   - name: "dependencies"
     dependencies:
-    - id: "nuget::WebGrease:1.5.2"
+    - id: "NuGet::WebGrease:1.5.2"
       dependencies:
-      - id: "nuget::Antlr:3.4.1.9004"
-      - id: "nuget::Newtonsoft.Json:5.0.4"
-    - id: "nuget::jQuery:3.3.1"
+      - id: "NuGet::Antlr:3.4.1.9004"
+      - id: "NuGet::Newtonsoft.Json:5.0.4"
+    - id: "NuGet::jQuery:3.3.1"
 packages:
 - package:
-    id: "nuget::Antlr:3.4.1.9004"
+    id: "NuGet::Antlr:3.4.1.9004"
     purl: "pkg:nuget/Antlr@3.4.1.9004"
     declared_licenses: []
     declared_licenses_processed: {}
@@ -55,7 +55,7 @@ packages:
       path: ""
   curations: []
 - package:
-    id: "nuget::Newtonsoft.Json:5.0.4"
+    id: "NuGet::Newtonsoft.Json:5.0.4"
     purl: "pkg:nuget/Newtonsoft.Json@5.0.4"
     declared_licenses:
     - "http://json.codeplex.com/license"
@@ -86,7 +86,7 @@ packages:
       path: ""
   curations: []
 - package:
-    id: "nuget::WebGrease:1.5.2"
+    id: "NuGet::WebGrease:1.5.2"
     purl: "pkg:nuget/WebGrease@1.5.2"
     declared_licenses:
     - "http://www.microsoft.com/web/webpi/eula/msn_webgrease_eula.htm"
@@ -118,7 +118,7 @@ packages:
       path: ""
   curations: []
 - package:
-    id: "nuget::jQuery:3.3.1"
+    id: "NuGet::jQuery:3.3.1"
     purl: "pkg:nuget/jQuery@3.3.1"
     declared_licenses:
     - "http://jquery.org/license"
