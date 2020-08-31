@@ -194,7 +194,7 @@ class ReporterCommand : CliktCommand(
         val licenseConfiguration = licenseConfigurationFile?.readValue<LicenseConfiguration>().orEmpty()
 
         val howToFixTextProvider =
-            howToFixTextProviderScript?.let { HowToFixTextProvider.fromKotlinScript(it.readText()) }
+            howToFixTextProviderScript?.let { HowToFixTextProvider.fromKotlinScript(it.readText(), ortResult) }
                 ?: HowToFixTextProvider.NONE
 
         outputDir.safeMkdirs()

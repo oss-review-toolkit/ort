@@ -124,7 +124,7 @@ class ExamplesTest : StringSpec() {
 
         "how-to-fix-text-provider.kts provides the expected how-to-fix text" {
             val script = takeExampleFile("how-to-fix-text-provider.kts").readText()
-            val howToFixTextProvider = HowToFixTextProvider.fromKotlinScript(script)
+            val howToFixTextProvider = HowToFixTextProvider.fromKotlinScript(script, OrtResult.EMPTY)
             val issue = OrtIssue(
                 message = "ERROR: Timeout after 360 seconds while scanning file 'src/res/data.json'.",
                 source = "ScanCode",
