@@ -51,7 +51,7 @@ fun Identifier.toClearlyDefinedTypeAndProvider(): Pair<ComponentType, Provider> 
         "Bundler" -> ComponentType.GEM to Provider.RUBYGEMS
         "Cargo" -> ComponentType.CRATE to Provider.CRATES_IO
         "CocoaPods" -> ComponentType.POD to Provider.COCOAPODS
-        "DotNet", "nuget" -> ComponentType.NUGET to Provider.NUGET
+        "DotNet", "NuGet" -> ComponentType.NUGET to Provider.NUGET
         "GoDep", "GoMod" -> ComponentType.GIT to Provider.GITHUB
         "Maven" -> ComponentType.MAVEN to Provider.MAVEN_CENTRAL
         "NPM" -> ComponentType.NPM to Provider.NPM_JS
