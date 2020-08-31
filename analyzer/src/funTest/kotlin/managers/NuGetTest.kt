@@ -33,6 +33,7 @@ import org.ossreviewtoolkit.utils.normalizeVcsUrl
 import org.ossreviewtoolkit.utils.test.DEFAULT_ANALYZER_CONFIGURATION
 import org.ossreviewtoolkit.utils.test.DEFAULT_REPOSITORY_CONFIGURATION
 import org.ossreviewtoolkit.utils.test.USER_DIR
+import org.ossreviewtoolkit.utils.test.patchActualResult
 import org.ossreviewtoolkit.utils.test.patchExpectedResult
 
 class NuGetTest : StringSpec() {
@@ -49,7 +50,8 @@ class NuGetTest : StringSpec() {
 
             result should containExactly(
                 Identifier.EMPTY.copy(name = "jQuery", version = "3.3.1"),
-                Identifier.EMPTY.copy(name = "WebGrease", version = "1.5.2")
+                Identifier.EMPTY.copy(name = "WebGrease", version = "1.5.2"),
+                Identifier.EMPTY.copy(name = "foobar", version = "1.2.3")
             )
         }
 
@@ -66,7 +68,7 @@ class NuGetTest : StringSpec() {
             )
             val result = createNuGet().resolveSingleProject(packageFile)
 
-            result.toYaml() shouldBe expectedResult
+            patchActualResult(result.toYaml()) shouldBe expectedResult
         }
     }
 

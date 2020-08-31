@@ -2,6 +2,7 @@
   <ItemGroup>
     <PackageReference Include="jQuery" Version="3.3.1"/>
     <PackageReference Include="WebGrease" Version="1.5.2"/>
+    <PackageReference Include="foobar" Version="1.2.3"/>
   </ItemGroup>
 
   <PropertyGroup>
