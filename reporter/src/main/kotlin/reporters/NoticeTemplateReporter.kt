@@ -107,7 +107,7 @@ class NoticeTemplateReporter : Reporter {
             val outputFile = outputDir.resolve("$NOTICE_FILE_PREFIX$id")
             outputFiles += outputFile
 
-            val template = freemarkerConfig.getTemplate("$id.ftlh")
+            val template = freemarkerConfig.getTemplate("$id.ftl")
             outputFile.writer().use { template.process(dataModel, it) }
         }
 
