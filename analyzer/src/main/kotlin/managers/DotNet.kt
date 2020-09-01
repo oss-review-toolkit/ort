@@ -39,7 +39,7 @@ import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.xmlMapper
 
 /**
- * A package manager implementaion for [.NET](https://docs.microsoft.com/en-us/dotnet/core/tools/) project files that
+ * A package manager implementation for [.NET](https://docs.microsoft.com/en-us/dotnet/core/tools/) project files that
  * embed NuGet package configuration.
  */
 class DotNet(
