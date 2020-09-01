@@ -229,8 +229,8 @@ internal data class ProcessedCopyrightStatement(
 
 /**
  * Return the processed copyright statements of all packages and projects contained in this [OrtResult]. The statements
- * are processed for each package and license separately for consistency with the [NoticeByPackageReporter].
- * Statements contained in the given [copyrightGarbage] are omitted.
+ * are processed for each package and license separately for consistency with the notice reporter. Statements contained
+ * in the given [copyrightGarbage] are omitted.
  */
 internal fun OrtResult.processAllCopyrightStatements(
     omitExcluded: Boolean = true,
