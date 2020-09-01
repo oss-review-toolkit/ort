@@ -25,6 +25,7 @@ import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Provenance
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
+import org.ossreviewtoolkit.utils.stripCredentialsFromUrl
 
 /**
  * A configuration for a specific package and provenance. It allows to setup [PathExclude]s and
@@ -98,6 +99,9 @@ data class VcsMatcher(
     }
 
     fun matches(vcsInfo: VcsInfo): Boolean =
-        type == vcsInfo.type && url == vcsInfo.url && (path == null || path == vcsInfo.path) &&
+        type == vcsInfo.type && matchesWithoutCredentials(url, vcsInfo.url) && (path == null || path == vcsInfo.path) &&
                 revision == vcsInfo.resolvedRevision
 }
+
+private fun matchesWithoutCredentials(lhs: String, rhs: String): Boolean =
+    lhs.stripCredentialsFromUrl() == rhs.stripCredentialsFromUrl()
