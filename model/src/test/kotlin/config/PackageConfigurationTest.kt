@@ -78,6 +78,22 @@ class PackageConfigurationTest : WordSpec({
             ) shouldBe false
         }
 
+        "return true if only the VCS URL credentials differ" {
+            val config = vcsPackageConfig(name = "some-id", revision = "12345678", url = "ssh://git@host/repo.git")
+
+            config.matches(
+                config.id,
+                Provenance(
+                    vcsInfo = VcsInfo(
+                        type = VcsType.GIT,
+                        url = "ssh://host/repo.git",
+                        revision = "",
+                        resolvedRevision = "12345678"
+                    )
+                )
+            ) shouldBe true
+        }
+
         "return false if only resolved revision is not equal to the matcher's revision" {
             val config = vcsPackageConfig(name = "some-name", revision = "12345678", url = "ssh://git@host/repo.git")
 
