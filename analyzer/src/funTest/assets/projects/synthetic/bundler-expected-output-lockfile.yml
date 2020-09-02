@@ -38,291 +38,273 @@ project:
         - id: "Bundler::diff-lcs:1.3"
         - id: "Bundler::rspec-support:3.7.1"
 packages:
-- package:
-    id: "Bundler::diff-lcs:1.3"
-    purl: "pkg:bundler/diff-lcs@1.3"
-    declared_licenses:
-    - "Artistic-2.0"
-    - "GPL-2.0+"
-    - "MIT"
-    declared_licenses_processed:
-      spdx_expression: "Artistic-2.0 AND GPL-2.0-or-later AND MIT"
-      mapped:
-        GPL-2.0+: "GPL-2.0-or-later"
-    description: "Diff::LCS computes the difference between two Enumerable sequences\
-      \ using the\nMcIlroy-Hunt longest common subsequence (LCS) algorithm. It includes\
-      \ utilities\nto create a simple HTML diff output format and a standard diff-like\
-      \ tool.\n\nThis is release 1.3, providing a tentative fix to a long-standing\
-      \ issue related\nto incorrect detection of a patch direction. Also modernizes\
-      \ the gem\ninfrastructure, testing infrastructure, and provides a warning-free\
-      \ experience\nto Ruby 2.4 users."
-    homepage_url: "https://github.com/halostatue/diff-lcs"
-    binary_artifact:
-      url: ""
-      hash:
-        value: ""
-        algorithm: ""
-    source_artifact:
-      url: "https://rubygems.org/gems/diff-lcs-1.3.gem"
-      hash:
-        value: "ea7bf591567e391ef262a7c29edaf87c6205204afb5bb39dfa8f08f2e51282a3"
-        algorithm: "SHA-256"
-    vcs:
-      type: "Git"
-      url: "https://github.com/halostatue/diff-lcs.git"
-      revision: ""
-      path: ""
-    vcs_processed:
-      type: "Git"
-      url: "https://github.com/halostatue/diff-lcs.git"
-      revision: ""
-      path: ""
-  curations: []
-- package:
-    id: "Bundler::mini_portile2:2.4.0"
-    purl: "pkg:bundler/mini_portile2@2.4.0"
-    declared_licenses:
-    - "MIT"
-    declared_licenses_processed:
-      spdx_expression: "MIT"
-    description: "Simplistic port-like solution for developers. It provides a standard\
-      \ and simplified way to compile against dependency libraries without messing\
-      \ up your system."
-    homepage_url: "http://github.com/flavorjones/mini_portile"
-    binary_artifact:
-      url: ""
-      hash:
-        value: ""
-        algorithm: ""
-    source_artifact:
-      url: "https://rubygems.org/gems/mini_portile2-2.4.0.gem"
-      hash:
-        value: "7e178a397ad62bb8a96977986130dc81f1b13201c6dd95a48bd8cec1dda5f797"
-        algorithm: "SHA-256"
-    vcs:
-      type: "Git"
-      url: "http://github.com/flavorjones/mini_portile.git"
-      revision: ""
-      path: ""
-    vcs_processed:
-      type: "Git"
-      url: "https://github.com/flavorjones/mini_portile.git"
-      revision: ""
-      path: ""
-  curations: []
-- package:
-    id: "Bundler::nokogiri:1.10.8"
-    purl: "pkg:bundler/nokogiri@1.10.8"
-    declared_licenses:
-    - "MIT"
-    declared_licenses_processed:
-      spdx_expression: "MIT"
-    description: "Nokogiri (鋸) is an HTML, XML, SAX, and Reader parser.  Among\nNokogiri's\
-      \ many features is the ability to search documents via XPath\nor CSS3 selectors."
-    homepage_url: "https://nokogiri.org"
-    binary_artifact:
-      url: ""
-      hash:
-        value: ""
-        algorithm: ""
-    source_artifact:
-      url: "https://rubygems.org/gems/nokogiri-1.10.8.gem"
-      hash:
-        value: "0806b8b0541850b59c4f588c53cff42ef2da6c7fa2f0b1cbcb83d1cc219228fa"
-        algorithm: "SHA-256"
-    vcs:
-      type: "Git"
-      url: "https://github.com/sparklemotion/nokogiri.git"
-      revision: ""
-      path: ""
-    vcs_processed:
-      type: "Git"
-      url: "https://github.com/sparklemotion/nokogiri.git"
-      revision: ""
-      path: ""
-  curations: []
-- package:
-    id: "Bundler::rack:2.1.4"
-    purl: "pkg:bundler/rack@2.1.4"
-    declared_licenses:
-    - "MIT"
-    declared_licenses_processed:
-      spdx_expression: "MIT"
-    description: "Rack provides a minimal, modular and adaptable interface for developing\n\
-      web applications in Ruby.  By wrapping HTTP requests and responses in\nthe simplest\
-      \ way possible, it unifies and distills the API for web\nservers, web frameworks,\
-      \ and software in between (the so-called\nmiddleware) into a single method call.\n\
-      \nAlso see https://rack.github.io/.\n"
-    homepage_url: "https://rack.github.io"
-    binary_artifact:
-      url: ""
-      hash:
-        value: ""
-        algorithm: ""
-    source_artifact:
-      url: "https://rubygems.org/gems/rack-2.1.4.gem"
-      hash:
-        value: "bfae1fd43aab62bb60b268329c860f214d2ffb15c4bca48931135a2dea52e2f4"
-        algorithm: "SHA-256"
-    vcs:
-      type: "Git"
-      url: "https://github.com/rack/rack.git"
-      revision: ""
-      path: ""
-    vcs_processed:
-      type: "Git"
-      url: "https://github.com/rack/rack.git"
-      revision: ""
-      path: ""
-  curations: []
-- package:
-    id: "Bundler::rspec-core:3.7.1"
-    purl: "pkg:bundler/rspec-core@3.7.1"
-    declared_licenses:
-    - "MIT"
-    declared_licenses_processed:
-      spdx_expression: "MIT"
-    description: "BDD for Ruby. RSpec runner and example groups."
-    homepage_url: "https://github.com/rspec/rspec-core"
-    binary_artifact:
-      url: ""
-      hash:
-        value: ""
-        algorithm: ""
-    source_artifact:
-      url: "https://rubygems.org/gems/rspec-core-3.7.1.gem"
-      hash:
-        value: "526e0b2d22feae638eb99bd746bbb25b18a4869a8f6ce4e8a87dabd1ab5f727f"
-        algorithm: "SHA-256"
-    vcs:
-      type: "Git"
-      url: "http://github.com/rspec/rspec-core.git"
-      revision: ""
-      path: ""
-    vcs_processed:
-      type: "Git"
-      url: "https://github.com/rspec/rspec-core.git"
-      revision: ""
-      path: ""
-  curations: []
-- package:
-    id: "Bundler::rspec-expectations:3.7.0"
-    purl: "pkg:bundler/rspec-expectations@3.7.0"
-    declared_licenses:
-    - "MIT"
-    declared_licenses_processed:
-      spdx_expression: "MIT"
-    description: "rspec-expectations provides a simple, readable API to express expected\
-      \ outcomes of a code example."
-    homepage_url: "https://github.com/rspec/rspec-expectations"
-    binary_artifact:
-      url: ""
-      hash:
-        value: ""
-        algorithm: ""
-    source_artifact:
-      url: "https://rubygems.org/gems/rspec-expectations-3.7.0.gem"
-      hash:
-        value: "7e571848a5cbdb1661187d04e5c1f29287ec80fcb5a395f9994836892a3780bb"
-        algorithm: "SHA-256"
-    vcs:
-      type: "Git"
-      url: "http://github.com/rspec/rspec-expectations.git"
-      revision: ""
-      path: ""
-    vcs_processed:
-      type: "Git"
-      url: "https://github.com/rspec/rspec-expectations.git"
-      revision: ""
-      path: ""
-  curations: []
-- package:
-    id: "Bundler::rspec-mocks:3.7.0"
-    purl: "pkg:bundler/rspec-mocks@3.7.0"
-    declared_licenses:
-    - "MIT"
-    declared_licenses_processed:
-      spdx_expression: "MIT"
-    description: "RSpec's 'test double' framework, with support for stubbing and mocking"
-    homepage_url: "https://github.com/rspec/rspec-mocks"
-    binary_artifact:
-      url: ""
-      hash:
-        value: ""
-        algorithm: ""
-    source_artifact:
-      url: "https://rubygems.org/gems/rspec-mocks-3.7.0.gem"
-      hash:
-        value: "23f7f0039e17f2841edfb51d678ac9e06c056903a7908db967f5618887f2022c"
-        algorithm: "SHA-256"
-    vcs:
-      type: "Git"
-      url: "http://github.com/rspec/rspec-mocks.git"
-      revision: ""
-      path: ""
-    vcs_processed:
-      type: "Git"
-      url: "https://github.com/rspec/rspec-mocks.git"
-      revision: ""
-      path: ""
-  curations: []
-- package:
-    id: "Bundler::rspec-support:3.7.1"
-    purl: "pkg:bundler/rspec-support@3.7.1"
-    declared_licenses:
-    - "MIT"
-    declared_licenses_processed:
-      spdx_expression: "MIT"
-    description: "Support utilities for RSpec gems"
-    homepage_url: "https://github.com/rspec/rspec-support"
-    binary_artifact:
-      url: ""
-      hash:
-        value: ""
-        algorithm: ""
-    source_artifact:
-      url: "https://rubygems.org/gems/rspec-support-3.7.1.gem"
-      hash:
-        value: "4152975a068756076f10c97317e9d2baf10028f3d25c0cb902945569560783da"
-        algorithm: "SHA-256"
-    vcs:
-      type: "Git"
-      url: "https://github.com/rspec/rspec-support.git"
-      revision: ""
-      path: ""
-    vcs_processed:
-      type: "Git"
-      url: "https://github.com/rspec/rspec-support.git"
-      revision: ""
-      path: ""
-  curations: []
-- package:
-    id: "Bundler::rspec:3.7.0"
-    purl: "pkg:bundler/rspec@3.7.0"
-    declared_licenses:
-    - "MIT"
-    declared_licenses_processed:
-      spdx_expression: "MIT"
-    description: "BDD for Ruby"
-    homepage_url: "http://github.com/rspec"
-    binary_artifact:
-      url: ""
-      hash:
-        value: ""
-        algorithm: ""
-    source_artifact:
-      url: "https://rubygems.org/gems/rspec-3.7.0.gem"
-      hash:
-        value: "0174cfbed780e42aa181227af623e2ae37511f20a2fdfec48b54f6cf4d7a6404"
-        algorithm: "SHA-256"
-    vcs:
-      type: "Git"
-      url: "http://github.com/rspec/rspec.git"
-      revision: ""
-      path: ""
-    vcs_processed:
-      type: "Git"
-      url: "https://github.com/rspec/rspec.git"
-      revision: ""
-      path: ""
-  curations: []
+- id: "Bundler::diff-lcs:1.3"
+  purl: "pkg:bundler/diff-lcs@1.3"
+  declared_licenses:
+  - "Artistic-2.0"
+  - "GPL-2.0+"
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "Artistic-2.0 AND GPL-2.0-or-later AND MIT"
+    mapped:
+      GPL-2.0+: "GPL-2.0-or-later"
+  description: "Diff::LCS computes the difference between two Enumerable sequences\
+    \ using the\nMcIlroy-Hunt longest common subsequence (LCS) algorithm. It includes\
+    \ utilities\nto create a simple HTML diff output format and a standard diff-like\
+    \ tool.\n\nThis is release 1.3, providing a tentative fix to a long-standing issue\
+    \ related\nto incorrect detection of a patch direction. Also modernizes the gem\n\
+    infrastructure, testing infrastructure, and provides a warning-free experience\n\
+    to Ruby 2.4 users."
+  homepage_url: "https://github.com/halostatue/diff-lcs"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://rubygems.org/gems/diff-lcs-1.3.gem"
+    hash:
+      value: "ea7bf591567e391ef262a7c29edaf87c6205204afb5bb39dfa8f08f2e51282a3"
+      algorithm: "SHA-256"
+  vcs:
+    type: "Git"
+    url: "https://github.com/halostatue/diff-lcs.git"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/halostatue/diff-lcs.git"
+    revision: ""
+    path: ""
+- id: "Bundler::mini_portile2:2.4.0"
+  purl: "pkg:bundler/mini_portile2@2.4.0"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "Simplistic port-like solution for developers. It provides a standard\
+    \ and simplified way to compile against dependency libraries without messing up\
+    \ your system."
+  homepage_url: "http://github.com/flavorjones/mini_portile"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://rubygems.org/gems/mini_portile2-2.4.0.gem"
+    hash:
+      value: "7e178a397ad62bb8a96977986130dc81f1b13201c6dd95a48bd8cec1dda5f797"
+      algorithm: "SHA-256"
+  vcs:
+    type: "Git"
+    url: "http://github.com/flavorjones/mini_portile.git"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/flavorjones/mini_portile.git"
+    revision: ""
+    path: ""
+- id: "Bundler::nokogiri:1.10.8"
+  purl: "pkg:bundler/nokogiri@1.10.8"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "Nokogiri (鋸) is an HTML, XML, SAX, and Reader parser.  Among\nNokogiri's\
+    \ many features is the ability to search documents via XPath\nor CSS3 selectors."
+  homepage_url: "https://nokogiri.org"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://rubygems.org/gems/nokogiri-1.10.8.gem"
+    hash:
+      value: "0806b8b0541850b59c4f588c53cff42ef2da6c7fa2f0b1cbcb83d1cc219228fa"
+      algorithm: "SHA-256"
+  vcs:
+    type: "Git"
+    url: "https://github.com/sparklemotion/nokogiri.git"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/sparklemotion/nokogiri.git"
+    revision: ""
+    path: ""
+- id: "Bundler::rack:2.1.4"
+  purl: "pkg:bundler/rack@2.1.4"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "Rack provides a minimal, modular and adaptable interface for developing\n\
+    web applications in Ruby.  By wrapping HTTP requests and responses in\nthe simplest\
+    \ way possible, it unifies and distills the API for web\nservers, web frameworks,\
+    \ and software in between (the so-called\nmiddleware) into a single method call.\n\
+    \nAlso see https://rack.github.io/.\n"
+  homepage_url: "https://rack.github.io"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://rubygems.org/gems/rack-2.1.4.gem"
+    hash:
+      value: "bfae1fd43aab62bb60b268329c860f214d2ffb15c4bca48931135a2dea52e2f4"
+      algorithm: "SHA-256"
+  vcs:
+    type: "Git"
+    url: "https://github.com/rack/rack.git"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/rack/rack.git"
+    revision: ""
+    path: ""
+- id: "Bundler::rspec-core:3.7.1"
+  purl: "pkg:bundler/rspec-core@3.7.1"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "BDD for Ruby. RSpec runner and example groups."
+  homepage_url: "https://github.com/rspec/rspec-core"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://rubygems.org/gems/rspec-core-3.7.1.gem"
+    hash:
+      value: "526e0b2d22feae638eb99bd746bbb25b18a4869a8f6ce4e8a87dabd1ab5f727f"
+      algorithm: "SHA-256"
+  vcs:
+    type: "Git"
+    url: "http://github.com/rspec/rspec-core.git"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/rspec/rspec-core.git"
+    revision: ""
+    path: ""
+- id: "Bundler::rspec-expectations:3.7.0"
+  purl: "pkg:bundler/rspec-expectations@3.7.0"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "rspec-expectations provides a simple, readable API to express expected\
+    \ outcomes of a code example."
+  homepage_url: "https://github.com/rspec/rspec-expectations"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://rubygems.org/gems/rspec-expectations-3.7.0.gem"
+    hash:
+      value: "7e571848a5cbdb1661187d04e5c1f29287ec80fcb5a395f9994836892a3780bb"
+      algorithm: "SHA-256"
+  vcs:
+    type: "Git"
+    url: "http://github.com/rspec/rspec-expectations.git"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/rspec/rspec-expectations.git"
+    revision: ""
+    path: ""
+- id: "Bundler::rspec-mocks:3.7.0"
+  purl: "pkg:bundler/rspec-mocks@3.7.0"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "RSpec's 'test double' framework, with support for stubbing and mocking"
+  homepage_url: "https://github.com/rspec/rspec-mocks"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://rubygems.org/gems/rspec-mocks-3.7.0.gem"
+    hash:
+      value: "23f7f0039e17f2841edfb51d678ac9e06c056903a7908db967f5618887f2022c"
+      algorithm: "SHA-256"
+  vcs:
+    type: "Git"
+    url: "http://github.com/rspec/rspec-mocks.git"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/rspec/rspec-mocks.git"
+    revision: ""
+    path: ""
+- id: "Bundler::rspec-support:3.7.1"
+  purl: "pkg:bundler/rspec-support@3.7.1"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "Support utilities for RSpec gems"
+  homepage_url: "https://github.com/rspec/rspec-support"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://rubygems.org/gems/rspec-support-3.7.1.gem"
+    hash:
+      value: "4152975a068756076f10c97317e9d2baf10028f3d25c0cb902945569560783da"
+      algorithm: "SHA-256"
+  vcs:
+    type: "Git"
+    url: "https://github.com/rspec/rspec-support.git"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/rspec/rspec-support.git"
+    revision: ""
+    path: ""
+- id: "Bundler::rspec:3.7.0"
+  purl: "pkg:bundler/rspec@3.7.0"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "BDD for Ruby"
+  homepage_url: "http://github.com/rspec"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://rubygems.org/gems/rspec-3.7.0.gem"
+    hash:
+      value: "0174cfbed780e42aa181227af623e2ae37511f20a2fdfec48b54f6cf4d7a6404"
+      algorithm: "SHA-256"
+  vcs:
+    type: "Git"
+    url: "http://github.com/rspec/rspec.git"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/rspec/rspec.git"
+    revision: ""
+    path: ""

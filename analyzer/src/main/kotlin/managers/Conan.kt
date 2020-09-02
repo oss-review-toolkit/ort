@@ -136,7 +136,7 @@ class Conan(
                         homepageUrl = projectPackage.homepageUrl,
                         scopes = sortedSetOf(dependenciesScope, devDependenciesScope)
                     ),
-                    packages = packages.map { it.value.toCuratedPackage() }.toSortedSet()
+                    packages = packages.values.toSortedSet()
                 )
             )
         }

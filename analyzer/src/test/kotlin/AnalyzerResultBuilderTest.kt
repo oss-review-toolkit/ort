@@ -17,7 +17,7 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.model
+package org.ossreviewtoolkit.analyzer
 
 import com.fasterxml.jackson.module.kotlin.readValue
 
@@ -25,9 +25,17 @@ import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 
+import org.ossreviewtoolkit.model.AnalyzerResult
+import org.ossreviewtoolkit.model.Identifier
+import org.ossreviewtoolkit.model.OrtIssue
+import org.ossreviewtoolkit.model.Package
+import org.ossreviewtoolkit.model.Project
+import org.ossreviewtoolkit.model.ProjectAnalyzerResult
+import org.ossreviewtoolkit.model.Scope
+import org.ossreviewtoolkit.model.yamlMapper
 import org.ossreviewtoolkit.utils.test.containExactly
 
-class AnalyzerResultTest : WordSpec() {
+class AnalyzerResultBuilderTest : WordSpec() {
     private val issue1 = OrtIssue(source = "source-1", message = "message-1")
     private val issue2 = OrtIssue(source = "source-2", message = "message-2")
     private val issue3 = OrtIssue(source = "source-3", message = "message-3")
@@ -55,13 +63,10 @@ class AnalyzerResultTest : WordSpec() {
     )
 
     private val analyzerResult1 = ProjectAnalyzerResult(
-        project1, sortedSetOf(package1.toCuratedPackage()),
-        listOf(issue3, issue4)
+        project1, sortedSetOf(package1), listOf(issue3, issue4)
     )
     private val analyzerResult2 = ProjectAnalyzerResult(
-        project2,
-        sortedSetOf(package1.toCuratedPackage(), package2.toCuratedPackage(), package3.toCuratedPackage()),
-        listOf(issue4)
+        project2, sortedSetOf(package1, package2, package3), listOf(issue4)
     )
 
     init {

@@ -243,12 +243,7 @@ class Bower(
                 scopes = sortedSetOf(dependenciesScope, devDependenciesScope)
             )
 
-            return listOf(
-                ProjectAnalyzerResult(
-                    project = project,
-                    packages = packages.mapTo(sortedSetOf()) { it.value.toCuratedPackage() }
-                )
-            )
+            return listOf(ProjectAnalyzerResult(project, packages.values.toSortedSet()))
         }
     }
 

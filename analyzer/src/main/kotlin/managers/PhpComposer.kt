@@ -156,12 +156,7 @@ class PhpComposer(
 
             val project = parseProject(definitionFile, scopes)
 
-            return listOf(
-                ProjectAnalyzerResult(
-                    project = project,
-                    packages = packages.values.mapTo(sortedSetOf()) { it.toCuratedPackage() }
-                )
-            )
+            return listOf(ProjectAnalyzerResult(project, packages.values.toSortedSet()))
         }
     }
 

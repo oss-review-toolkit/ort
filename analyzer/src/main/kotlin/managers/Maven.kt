@@ -171,12 +171,7 @@ class Maven(
             scopes = scopes.values.toSortedSet()
         )
 
-        return listOf(
-            ProjectAnalyzerResult(
-                project = project,
-                packages = packages.values.mapTo(sortedSetOf()) { it.toCuratedPackage() }
-            )
-        )
+        return listOf(ProjectAnalyzerResult(project, packages.values.toSortedSet()))
     }
 
     private fun parseDependency(node: DependencyNode, packages: MutableMap<String, Package>): PackageReference {

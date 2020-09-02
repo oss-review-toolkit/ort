@@ -204,13 +204,7 @@ class Pub(
 
         val project = parseProject(definitionFile, scopes)
 
-        return listOf(
-            ProjectAnalyzerResult(
-                project = project,
-                packages = packages.values.mapTo(sortedSetOf()) { it.toCuratedPackage() },
-                issues = issues
-            )
-        )
+        return listOf(ProjectAnalyzerResult(project, packages.values.toSortedSet(), issues))
     }
 
     private fun parseScope(
@@ -462,8 +456,8 @@ class Pub(
             lockFile["packages"]?.forEach { pkgInfoFromLockFile ->
                 // As this package contains flutter, trigger Gradle manually for it.
                 scanAndroidPackages(pkgInfoFromLockFile).forEach { result ->
-                    result.collectPackagesByScope("releaseCompileClasspath").forEach { item ->
-                        packages[item.pkg.id] = item.pkg
+                    result.collectPackagesByScope("releaseCompileClasspath").forEach { pkg ->
+                        packages[pkg.id] = pkg
                     }
 
                     issues += result.issues
@@ -471,8 +465,8 @@ class Pub(
 
                 // As this package contains flutter, trigger CocoaPods manually for it.
                 scanIosPackages(pkgInfoFromLockFile)?.let { result ->
-                    result.packages.forEach { item ->
-                        packages[item.pkg.id] = item.pkg
+                    result.packages.forEach { pkg ->
+                        packages[pkg.id] = pkg
                     }
 
                     issues += result.issues

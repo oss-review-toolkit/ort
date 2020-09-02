@@ -28,35 +28,33 @@ project:
   - name: "dev-dependencies"
     dependencies: []
 packages:
-- package:
-    id: "Cargo::cfg-if:0.1.9"
-    purl: "pkg:cargo/cfg-if@0.1.9"
-    declared_licenses:
-    - "MIT OR Apache-2.0"
-    declared_licenses_processed:
-      spdx_expression: "MIT OR Apache-2.0"
-    description: "A macro to ergonomically define an item depending on a large number\
-      \ of #[cfg]\nparameters. Structured like an if-else chain, the first matching\
-      \ branch is the\nitem that gets emitted.\n"
-    homepage_url: ""
-    binary_artifact:
-      url: ""
-      hash:
-        value: ""
-        algorithm: ""
-    source_artifact:
-      url: "https://crates.io/api/v1/crates/cfg-if/0.1.9/download"
-      hash:
-        value: "b486ce3ccf7ffd79fdeb678eac06a9e6c09fc88d33836340becb8fffe87c5e33"
-        algorithm: "SHA-256"
-    vcs:
-      type: "Git"
-      url: "https://github.com/alexcrichton/cfg-if.git"
-      revision: ""
-      path: ""
-    vcs_processed:
-      type: "Git"
-      url: "https://github.com/alexcrichton/cfg-if.git"
-      revision: ""
-      path: ""
-  curations: []
+- id: "Cargo::cfg-if:0.1.9"
+  purl: "pkg:cargo/cfg-if@0.1.9"
+  declared_licenses:
+  - "MIT OR Apache-2.0"
+  declared_licenses_processed:
+    spdx_expression: "MIT OR Apache-2.0"
+  description: "A macro to ergonomically define an item depending on a large number\
+    \ of #[cfg]\nparameters. Structured like an if-else chain, the first matching\
+    \ branch is the\nitem that gets emitted.\n"
+  homepage_url: ""
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://crates.io/api/v1/crates/cfg-if/0.1.9/download"
+    hash:
+      value: "b486ce3ccf7ffd79fdeb678eac06a9e6c09fc88d33836340becb8fffe87c5e33"
+      algorithm: "SHA-256"
+  vcs:
+    type: "Git"
+    url: "https://github.com/alexcrichton/cfg-if.git"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/alexcrichton/cfg-if.git"
+    revision: ""
+    path: ""

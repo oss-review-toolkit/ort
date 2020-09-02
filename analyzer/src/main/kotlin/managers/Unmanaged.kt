@@ -112,11 +112,6 @@ class Unmanaged(
             scopes = sortedSetOf()
         )
 
-        return listOf(
-            ProjectAnalyzerResult(
-                project = project,
-                packages = sortedSetOf()
-            )
-        )
+        return listOf(ProjectAnalyzerResult(project, packages = sortedSetOf()))
     }
 }

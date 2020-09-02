@@ -196,7 +196,7 @@ class SpdxDocumentFile(
                 binaryArtifact = RemoteArtifact.EMPTY, // TODO: Use "downloadLocation" or "externalRefs"?
                 sourceArtifact = RemoteArtifact.EMPTY, // TODO: Use "sourceInfo" or "externalRefs"?
                 vcs = VersionControlSystem.forDirectory(packageDir)?.getInfo() ?: VcsInfo.EMPTY
-            ).toCuratedPackage()
+            )
         }
 
         return listOf(ProjectAnalyzerResult(project, packages))
