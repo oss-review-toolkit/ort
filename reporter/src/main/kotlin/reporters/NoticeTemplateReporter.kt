@@ -184,7 +184,7 @@ class NoticeTemplateReporter : Reporter {
         }
 
         /**
-         * Filter licenses that are configured to be [included in the notice file][License.includeInNoticeFile] in the
+         * Return licenses that are configured to be [included in the notice file][License.includeInNoticeFile] in the
          * [LicenseConfiguration].
          */
         @Suppress("UNUSED") // This function is used in the templates.
