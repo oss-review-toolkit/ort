@@ -188,7 +188,7 @@ class NoticeTemplateReporter : Reporter {
          * [LicenseConfiguration].
          */
         @Suppress("UNUSED") // This function is used in the templates.
-        fun filterIncludeInNoticeFile(licenses: List<ResolvedLicense>): List<ResolvedLicense> =
+        fun filterIncludeInNoticeFile(licenses: Collection<ResolvedLicense>): List<ResolvedLicense> =
             licenses.filter { resolvedLicense ->
                 licenseConfiguration.licenses.find { it.id == resolvedLicense.license }?.includeInNoticeFile ?: true
             }
