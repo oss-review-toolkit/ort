@@ -64,11 +64,15 @@ object DeclaredLicenseProcessor {
 
     /**
      * Return a non-null value if the given [declaredLicense] could be turned into an [SpdxExpression] utilizing
-     * internal mapping data.
+     * internal mapping data as well as the given [declaredLicenseMapping].
      */
-    internal fun process(declaredLicense: String): SpdxExpression? {
+    internal fun process(
+        declaredLicense: String,
+        declaredLicenseMapping: Map<String, SpdxExpression> = emptyMap()
+    ): SpdxExpression? {
         val licenseWithoutPrefixOrSuffix = preprocess(declaredLicense)
-        val mappedLicense = SpdxDeclaredLicenseMapping.map(licenseWithoutPrefixOrSuffix)
+        val mappedLicense = declaredLicenseMapping[licenseWithoutPrefixOrSuffix]
+            ?: SpdxDeclaredLicenseMapping.map(licenseWithoutPrefixOrSuffix)
 
         return (mappedLicense ?: parseLicense(licenseWithoutPrefixOrSuffix))?.normalize()?.takeIf { it.isValid() }
     }
@@ -78,12 +82,15 @@ object DeclaredLicenseProcessor {
      * given declared license to an [SpdxExpression] by first applying a removal step for known URL prefixes (and
      * suffixes), and then applying a hard-coded mapping by utilizing [SpdxDeclaredLicenseMapping].
      */
-    fun process(declaredLicenses: Collection<String>): ProcessedDeclaredLicense {
+    fun process(
+        declaredLicenses: Collection<String>,
+        declaredLicenseMapping: Map<String, SpdxExpression> = emptyMap()
+    ): ProcessedDeclaredLicense {
         val processedLicenses = mutableMapOf<String, SpdxExpression>()
         val unmapped = mutableListOf<String>()
 
         declaredLicenses.distinct().forEach { declaredLicense ->
-            process(declaredLicense)?.let {
+            process(declaredLicense, declaredLicenseMapping)?.let {
                 processedLicenses[declaredLicense] = it
             } ?: run { unmapped += declaredLicense }
         }

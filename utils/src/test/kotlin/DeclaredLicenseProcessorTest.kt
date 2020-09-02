@@ -25,6 +25,7 @@ import io.kotest.inspectors.forAll
 import io.kotest.matchers.collections.beEmpty
 import io.kotest.matchers.collections.containExactly
 import io.kotest.matchers.maps.beEmpty as beEmptyMap
+import io.kotest.matchers.maps.shouldContainExactly
 import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
@@ -37,6 +38,7 @@ import org.ossreviewtoolkit.spdx.SpdxLicense
 import org.ossreviewtoolkit.spdx.SpdxLicenseIdExpression
 import org.ossreviewtoolkit.spdx.SpdxSimpleLicenseMapping
 import org.ossreviewtoolkit.spdx.toExpression
+import org.ossreviewtoolkit.spdx.toSpdx
 import org.ossreviewtoolkit.utils.test.containExactly as containExactlyEntries
 
 class DeclaredLicenseProcessorTest : StringSpec() {
@@ -104,6 +106,17 @@ class DeclaredLicenseProcessorTest : StringSpec() {
             processedLicenses.spdxExpression shouldBe SpdxLicenseIdExpression("Apache-2.0")
             processedLicenses.mapped should beEmptyMap()
             processedLicenses.unmapped should containExactly("invalid")
+        }
+
+        "The declared license mapping is applied" {
+            val declaredLicenses = listOf("Apache-2.0", "https://domain/path/license.html")
+            val declaredLicenseMapping = mapOf("https://domain/path/license.html" to "MIT".toSpdx())
+
+            val processedLicenses = DeclaredLicenseProcessor.process(declaredLicenses, declaredLicenseMapping)
+
+            processedLicenses.spdxExpression shouldBe "Apache-2.0 AND MIT".toSpdx()
+            processedLicenses.mapped shouldContainExactly mapOf("https://domain/path/license.html" to "MIT".toSpdx())
+            processedLicenses.unmapped should beEmpty()
         }
     }
 }
