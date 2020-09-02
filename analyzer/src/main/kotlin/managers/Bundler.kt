@@ -96,7 +96,7 @@ class Bundler(
 
         stashDirectories(File(workingDir, "vendor")).use {
             val scopes = mutableSetOf<Scope>()
-            val packages = mutableSetOf<Package>()
+            val packages = sortedSetOf<Package>()
             val issues = mutableListOf<OrtIssue>()
 
             installDependencies(workingDir)
@@ -119,13 +119,7 @@ class Bundler(
                 scopes = scopes.toSortedSet()
             )
 
-            return listOf(
-                ProjectAnalyzerResult(
-                    project = project,
-                    packages = packages.mapTo(sortedSetOf()) { it.toCuratedPackage() },
-                    issues = issues
-                )
-            )
+            return listOf(ProjectAnalyzerResult(project, packages, issues))
         }
     }
 

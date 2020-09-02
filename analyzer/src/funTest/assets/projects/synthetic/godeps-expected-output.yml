@@ -23,59 +23,55 @@ project:
     - id: "GoDep::golang.org/x/sys:8d3cce7afc34617998104db7c4b58c2de9e77215"
       linkage: "STATIC"
 packages:
-- package:
-    id: "GoDep::github.com/mattn/go-isatty:v0.0.12"
-    purl: "pkg:godep/github.com%2Fmattn%2Fgo-isatty@v0.0.12"
-    declared_licenses: []
-    declared_licenses_processed: {}
-    description: ""
-    homepage_url: ""
-    binary_artifact:
-      url: ""
-      hash:
-        value: ""
-        algorithm: ""
-    source_artifact:
-      url: ""
-      hash:
-        value: ""
-        algorithm: ""
-    vcs:
-      type: ""
-      url: ""
-      revision: ""
-      path: ""
-    vcs_processed:
-      type: "Git"
-      url: "https://github.com/mattn/go-isatty.git"
-      revision: "7b513a986450394f7bbf1476909911b3aa3a55ce"
-      path: ""
-  curations: []
-- package:
-    id: "GoDep::golang.org/x/sys:8d3cce7afc34617998104db7c4b58c2de9e77215"
-    purl: "pkg:godep/golang.org%2Fx%2Fsys@8d3cce7afc34617998104db7c4b58c2de9e77215"
-    declared_licenses: []
-    declared_licenses_processed: {}
-    description: ""
-    homepage_url: ""
-    binary_artifact:
-      url: ""
-      hash:
-        value: ""
-        algorithm: ""
-    source_artifact:
-      url: ""
-      hash:
-        value: ""
-        algorithm: ""
-    vcs:
-      type: ""
-      url: ""
-      revision: ""
-      path: ""
-    vcs_processed:
-      type: "Git"
-      url: "https://go.googlesource.com/sys"
-      revision: "8d3cce7afc34617998104db7c4b58c2de9e77215"
-      path: ""
-  curations: []
+- id: "GoDep::github.com/mattn/go-isatty:v0.0.12"
+  purl: "pkg:godep/github.com%2Fmattn%2Fgo-isatty@v0.0.12"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  description: ""
+  homepage_url: ""
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/mattn/go-isatty.git"
+    revision: "7b513a986450394f7bbf1476909911b3aa3a55ce"
+    path: ""
+- id: "GoDep::golang.org/x/sys:8d3cce7afc34617998104db7c4b58c2de9e77215"
+  purl: "pkg:godep/golang.org%2Fx%2Fsys@8d3cce7afc34617998104db7c4b58c2de9e77215"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  description: ""
+  homepage_url: ""
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://go.googlesource.com/sys"
+    revision: "8d3cce7afc34617998104db7c4b58c2de9e77215"
+    path: ""

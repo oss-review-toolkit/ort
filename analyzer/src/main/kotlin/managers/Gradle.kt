@@ -244,13 +244,7 @@ class Gradle(
                     createAndLogIssue(source = managerName, message = it, severity = Severity.WARNING)
                 }
 
-                listOf(
-                    ProjectAnalyzerResult(
-                        project,
-                        packages.values.mapTo(sortedSetOf()) { it.toCuratedPackage() },
-                        issues
-                    )
-                )
+                listOf(ProjectAnalyzerResult(project, packages.values.toSortedSet(), issues))
             }
         }
     }

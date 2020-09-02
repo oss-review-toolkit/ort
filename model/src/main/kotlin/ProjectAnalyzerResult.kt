@@ -36,7 +36,7 @@ data class ProjectAnalyzerResult(
     /**
      * The set of identified packages used by the project.
      */
-    val packages: SortedSet<CuratedPackage>,
+    val packages: SortedSet<Package>,
 
     /**
      * The list of issues that occurred during dependency resolution. Defaults to an empty list.
@@ -48,7 +48,7 @@ data class ProjectAnalyzerResult(
 ) {
     init {
         // Perform a sanity check to ensure we have no references to non-existing packages.
-        val packageIds = packages.map { it.pkg.id }
+        val packageIds = packages.map { it.id }
         val referencedIds = project.collectDependencies {
             // Exclude project dependencies in multi-projects from the check as these appear as references in the
             // dependency tree but not in the list of packages used.
@@ -90,8 +90,8 @@ data class ProjectAnalyzerResult(
         }
     }
 
-    fun collectPackagesByScope(scopeName: String): List<CuratedPackage> {
+    fun collectPackagesByScope(scopeName: String): List<Package> {
         val scope = project.scopes.find { it.name == scopeName } ?: return emptyList()
-        return packages.filter { it.pkg.id in scope }
+        return packages.filter { it.id in scope }
     }
 }

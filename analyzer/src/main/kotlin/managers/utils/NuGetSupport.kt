@@ -113,7 +113,7 @@ class NuGetSupport(packageReferences: Set<Identifier>) {
         }
     }
 
-    val packages = mutableListOf<Package>()
+    val packages = sortedSetOf<Package>()
     val issues = mutableListOf<OrtIssue>()
     val scope = Scope("dependencies", sortedSetOf())
 
@@ -349,9 +349,5 @@ fun PackageManager.resolveNuGetDependencies(
         scopes = sortedSetOf(support.scope)
     )
 
-    return ProjectAnalyzerResult(
-        project,
-        packages = support.packages.mapTo(sortedSetOf()) { it.toCuratedPackage() },
-        issues = support.issues
-    )
+    return ProjectAnalyzerResult(project, support.packages, support.issues)
 }

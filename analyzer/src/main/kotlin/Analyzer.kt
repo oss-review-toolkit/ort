@@ -32,11 +32,9 @@ import kotlinx.coroutines.withContext
 import org.ossreviewtoolkit.analyzer.managers.Unmanaged
 import org.ossreviewtoolkit.downloader.VersionControlSystem
 import org.ossreviewtoolkit.model.AnalyzerResult
-import org.ossreviewtoolkit.model.AnalyzerResultBuilder
 import org.ossreviewtoolkit.model.AnalyzerRun
 import org.ossreviewtoolkit.model.Environment
 import org.ossreviewtoolkit.model.OrtResult
-import org.ossreviewtoolkit.model.ProjectAnalyzerResult
 import org.ossreviewtoolkit.model.Repository
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
@@ -133,7 +131,7 @@ class Analyzer(private val config: AnalyzerConfiguration) {
     ): AnalyzerResult {
         val threadFactory = NamedThreadFactory(javaClass.simpleName)
         val analysisDispatcher = Executors.newFixedThreadPool(5, threadFactory).asCoroutineDispatcher()
-        val analyzerResultBuilder = AnalyzerResultBuilder()
+        val analyzerResultBuilder = AnalyzerResultBuilder(curationProvider)
 
         analysisDispatcher.use { dispatcher ->
             coroutineScope {
@@ -143,7 +141,7 @@ class Analyzer(private val config: AnalyzerConfiguration) {
                             val results = manager.resolveDependencies(files)
 
                             // By convention, project ids must be of the type of the respective package manager.
-                            results.forEach { (_, result) ->
+                            results.onEach { (_, result) ->
                                 val invalidProjects = result.filter { it.project.id.type != manager.managerName }
                                 require(invalidProjects.isEmpty()) {
                                     val projectString =
@@ -151,27 +149,6 @@ class Analyzer(private val config: AnalyzerConfiguration) {
                                     "Projects $projectString must be of type '${manager.managerName}'."
                                 }
                             }
-
-                            curationProvider?.let { provider ->
-                                results.mapValues { (_, projectAnalyzerResults) ->
-                                    projectAnalyzerResults.map {
-                                        ProjectAnalyzerResult(
-                                            project = it.project,
-                                            issues = it.issues,
-                                            packages = it.packages.map { curatedPackage ->
-                                                val curations = provider.getCurationsFor(curatedPackage.pkg.id)
-                                                curations.fold(curatedPackage) { cur, packageCuration ->
-                                                    log.debug {
-                                                        "Applying curation '$packageCuration' to package " +
-                                                                "'${curatedPackage.pkg.id.toCoordinates()}'."
-                                                    }
-                                                    packageCuration.apply(cur)
-                                                }
-                                            }.toSortedSet()
-                                        )
-                                    }
-                                }
-                            } ?: results
                         }
                     }
                 }.forEach { resolutionResult ->

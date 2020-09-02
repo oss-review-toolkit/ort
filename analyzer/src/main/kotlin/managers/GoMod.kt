@@ -101,7 +101,11 @@ class GoMod(
 
             val projectVcs = processProjectVcs(projectDir)
 
-            val packages = edges.getNodes().filter { it.version.isNotBlank() }.map { createPackage(it) }
+            val packages = edges.getNodes().filter {
+                it.version.isNotBlank()
+            }.mapTo(sortedSetOf()) {
+                createPackage(it)
+            }
 
             val scopes = sortedSetOf(
                 Scope(
@@ -130,7 +134,7 @@ class GoMod(
                         homepageUrl = "",
                         scopes = scopes
                     ),
-                    packages = packages.mapTo(sortedSetOf()) { it.toCuratedPackage() }
+                    packages = packages
                 )
             )
         }
