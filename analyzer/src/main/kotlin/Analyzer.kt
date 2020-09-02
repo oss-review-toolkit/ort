@@ -51,7 +51,7 @@ class Analyzer(private val config: AnalyzerConfiguration) {
     fun analyze(
         absoluteProjectPath: File,
         packageManagers: List<PackageManagerFactory> = PackageManager.ALL,
-        curationProvider: PackageCurationProvider? = null,
+        curationProvider: PackageCurationProvider = PackageCurationProvider.EMPTY,
         repositoryConfigurationFile: File? = null
     ): OrtResult {
         require(absoluteProjectPath.isAbsolute)
@@ -127,7 +127,7 @@ class Analyzer(private val config: AnalyzerConfiguration) {
 
     private suspend fun analyzeInParallel(
         managedFiles: Map<PackageManager, List<File>>,
-        curationProvider: PackageCurationProvider?
+        curationProvider: PackageCurationProvider
     ): AnalyzerResult {
         val threadFactory = NamedThreadFactory(javaClass.simpleName)
         val analysisDispatcher = Executors.newFixedThreadPool(5, threadFactory).asCoroutineDispatcher()

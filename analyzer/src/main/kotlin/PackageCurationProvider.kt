@@ -25,7 +25,14 @@ import org.ossreviewtoolkit.model.PackageCuration
 /**
  * A provider for [PackageCuration]s.
  */
-interface PackageCurationProvider {
+fun interface PackageCurationProvider {
+    companion object {
+        /**
+         * A provider that does not provide any curations.
+         */
+        val EMPTY = PackageCurationProvider { emptyList() }
+    }
+
     /**
      * Get all available [PackageCuration]s for the provided [pkgId].
      */

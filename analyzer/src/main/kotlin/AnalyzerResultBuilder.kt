@@ -29,7 +29,7 @@ import org.ossreviewtoolkit.model.ProjectAnalyzerResult
 import org.ossreviewtoolkit.model.createAndLogIssue
 import org.ossreviewtoolkit.utils.log
 
-class AnalyzerResultBuilder(private val curationProvider: PackageCurationProvider? = null) {
+class AnalyzerResultBuilder(private val curationProvider: PackageCurationProvider = PackageCurationProvider.EMPTY) {
     private val projects = sortedSetOf<Project>()
     private val packages = sortedSetOf<CuratedPackage>()
     private val issues = sortedMapOf<Identifier, List<OrtIssue>>()
@@ -62,19 +62,15 @@ class AnalyzerResultBuilder(private val curationProvider: PackageCurationProvide
         } else {
             projects += projectAnalyzerResult.project
 
-            packages += if (curationProvider != null) {
-                projectAnalyzerResult.packages.map { pkg ->
-                    val curations = curationProvider.getCurationsFor(pkg.id)
-                    curations.fold(pkg.toCuratedPackage()) { cur, packageCuration ->
-                        log.debug {
-                            "Applying curation '$packageCuration' to package '${pkg.id.toCoordinates()}'."
-                        }
-
-                        packageCuration.apply(cur)
+            packages += projectAnalyzerResult.packages.map { pkg ->
+                val curations = curationProvider.getCurationsFor(pkg.id)
+                curations.fold(pkg.toCuratedPackage()) { cur, packageCuration ->
+                    log.debug {
+                        "Applying curation '$packageCuration' to package '${pkg.id.toCoordinates()}'."
                     }
+
+                    packageCuration.apply(cur)
                 }
-            } else {
-                projectAnalyzerResult.packages.map { it.toCuratedPackage() }
             }
 
             if (projectAnalyzerResult.issues.isNotEmpty()) {
