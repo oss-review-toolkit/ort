@@ -54,9 +54,9 @@ data class ReportTableModel(
     val config: RepositoryConfiguration,
 
     /**
-     * A list containing all evaluator issues. `null` if no evaluator result is available.
+     * A list containing all evaluator rule violations. `null` if no evaluator result is available.
      */
-    val evaluatorIssues: List<ResolvableViolation>?,
+    val ruleViolations: List<ResolvableViolation>?,
 
     /**
      * A [IssueTable] containing all dependencies that caused issues.

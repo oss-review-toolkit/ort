@@ -136,7 +136,7 @@ class StaticHtmlReporter : Reporter {
 
                     index(reportTableModel)
 
-                    reportTableModel.evaluatorIssues?.let {
+                    reportTableModel.ruleViolations?.let {
                         evaluatorTable(it)
                     }
 
@@ -174,11 +174,11 @@ class StaticHtmlReporter : Reporter {
         h2 { +"Index" }
 
         ul {
-            reportTableModel.evaluatorIssues?.let { ruleViolations ->
-                val issues = ruleViolations.filterNot { it.isResolved }.groupBy { it.violation.severity }
-                val errorCount = issues[Severity.ERROR].orEmpty().size
-                val warningCount = issues[Severity.WARNING].orEmpty().size
-                val hintCount = issues[Severity.HINT].orEmpty().size
+            reportTableModel.ruleViolations?.let { ruleViolations ->
+                val violations = ruleViolations.filterNot { it.isResolved }.groupBy { it.violation.severity }
+                val errorCount = violations[Severity.ERROR].orEmpty().size
+                val warningCount = violations[Severity.WARNING].orEmpty().size
+                val hintCount = violations[Severity.HINT].orEmpty().size
 
                 li {
                     a("#rule-violation-summary") {
