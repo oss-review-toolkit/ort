@@ -209,6 +209,9 @@ Currently, the following package managers are supported:
 * [Pipenv](https://pipenv.readthedocs.io/) (Python)
 * [Pub](https://pub.dev/) (Dart / Flutter)
 * [SBT](http://www.scala-sbt.org/) (Scala)
+* [SPDX](https://spdx.dev/specifications/) (SPDX documents used to describe
+  [projects](./analyzer/src/funTest/assets/projects/synthetic/spdx/project/project.spdx.yml) or
+  [packages](./analyzer/src/funTest/assets/projects/synthetic/spdx/package/libs/curl/package.spdx.yml))
 * [Stack](http://haskellstack.org/) (Haskell)
 * [Yarn](https://yarnpkg.com/) (Node.js)
 
