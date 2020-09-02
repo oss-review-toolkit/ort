@@ -47,7 +47,8 @@ class PackageTest : StringSpec({
             homepageUrl = "homepageUrl",
             binaryArtifact = RemoteArtifact("url", Hash.create("hash")),
             sourceArtifact = RemoteArtifact("url", Hash.create("hash")),
-            vcs = VcsInfo(VcsType("type"), "url", "revision")
+            vcs = VcsInfo(VcsType("type"), "url", "revision"),
+            isMetaDataOnly = false
         )
 
         val other = Package(
@@ -62,7 +63,8 @@ class PackageTest : StringSpec({
             homepageUrl = "other homepageUrl",
             binaryArtifact = RemoteArtifact("other url", Hash.create("other hash")),
             sourceArtifact = RemoteArtifact("other url", Hash.create("other hash")),
-            vcs = VcsInfo(VcsType("other type"), "other url", "other revision")
+            vcs = VcsInfo(VcsType("other type"), "other url", "other revision"),
+            isMetaDataOnly = true
         )
 
         val diff = pkg.diff(other)
@@ -73,6 +75,7 @@ class PackageTest : StringSpec({
         diff.homepageUrl shouldBe pkg.homepageUrl
         diff.sourceArtifact shouldBe pkg.sourceArtifact
         diff.vcs shouldBe pkg.vcs.toCuration()
+        diff.isMetaDataOnly shouldBe pkg.isMetaDataOnly
     }
 
     "diff result does not contain unchanged values" {
@@ -99,5 +102,6 @@ class PackageTest : StringSpec({
         diff.homepageUrl.shouldBeNull()
         diff.sourceArtifact.shouldBeNull()
         diff.vcs.shouldBeNull()
+        diff.isMetaDataOnly.shouldBeNull()
     }
 })

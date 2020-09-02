@@ -150,7 +150,8 @@ data class Package(
             homepageUrl = homepageUrl.takeIf { it != other.homepageUrl },
             binaryArtifact = binaryArtifact.takeIf { it != other.binaryArtifact },
             sourceArtifact = sourceArtifact.takeIf { it != other.sourceArtifact },
-            vcs = vcs.takeIf { it != other.vcs }?.toCuration()
+            vcs = vcs.takeIf { it != other.vcs }?.toCuration(),
+            isMetaDataOnly = isMetaDataOnly.takeIf { it != other.isMetaDataOnly }
         )
     }
 
