@@ -65,7 +65,8 @@ ${exceptionText}
 
 [#-- Add the licenses of all dependencies. --]
 [#if packages?has_content]
-This project contains or depends on third-party software components pursuant to the following licenses:
+This software depends on external packages and source code.
+The applicable license information is listed below:
 [/#if]
 
 [#list packages as package]
