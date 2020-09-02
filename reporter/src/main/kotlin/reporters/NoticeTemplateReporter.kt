@@ -28,6 +28,7 @@ import java.io.File
 import kotlin.reflect.full.memberProperties
 
 import org.ossreviewtoolkit.model.Identifier
+import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.licenses.License
 import org.ossreviewtoolkit.model.licenses.LicenseConfiguration
 import org.ossreviewtoolkit.model.licenses.LicenseView
@@ -77,7 +78,7 @@ class NoticeTemplateReporter : Reporter {
             "packages" to packages,
             "ortResult" to input.ortResult,
             "licenseTextProvider" to input.licenseTextProvider,
-            "helper" to NoticeHelper(input.licenseConfiguration)
+            "helper" to NoticeHelper(input.ortResult, input.licenseConfiguration)
         )
 
         val freemarkerConfig = Configuration(Configuration.VERSION_2_3_30).apply {
@@ -166,7 +167,21 @@ class NoticeTemplateReporter : Reporter {
     /**
      * A collection of helper functions for the Freemarker templates.
      */
-    class NoticeHelper(private val licenseConfiguration: LicenseConfiguration) {
+    class NoticeHelper(private val ortResult: OrtResult, private val licenseConfiguration: LicenseConfiguration) {
+        /**
+         * Return [packages] that are a dependency of at least one of the provided [projects][projectIds].
+         */
+        @Suppress("UNUSED") // This function is used in the templates.
+        fun filterByProjects(
+            packages: Collection<PackageNoticeModel>,
+            projectIds: Collection<Identifier>
+        ): List<PackageNoticeModel> {
+            val dependencies = projectIds.mapNotNull { ortResult.getProject(it) }
+                .flatMapTo(mutableSetOf()) { it.collectDependencies() }
+
+            return packages.filter { pkg -> pkg.id in dependencies }
+        }
+
         /**
          * Filter licenses that are configured to be [included in the notice file][License.includeInNoticeFile] in the
          * [LicenseConfiguration].
