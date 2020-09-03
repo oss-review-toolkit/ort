@@ -88,34 +88,34 @@ data class PackageCurationData(
      *
      * @return The curated package.
      */
-    fun apply(base: CuratedPackage): CuratedPackage {
-        val pkg = base.pkg
+    fun apply(base: CuratedPackage): CuratedPackage = applyCurationToPackage(base, this)
+}
 
-        val curatedVcs = if (vcs != null) {
-            // Curation data for VCS information is handled specially so we can curate only individual properties.
-            VcsInfo(
-                type = vcs.type ?: pkg.vcs.type,
-                url = vcs.url ?: pkg.vcs.url,
-                revision = vcs.revision ?: pkg.vcs.revision,
-                resolvedRevision = vcs.resolvedRevision ?: pkg.vcs.resolvedRevision,
-                path = vcs.path ?: pkg.vcs.path
-            )
-        } else {
-            pkg.vcs
-        }
+private fun applyCurationToPackage(base: CuratedPackage, curation: PackageCurationData): CuratedPackage {
+    val pkg = base.pkg
 
-        val curated = Package(
-            id = pkg.id,
-            declaredLicenses = declaredLicenses ?: pkg.declaredLicenses,
-            concludedLicense = concludedLicense ?: pkg.concludedLicense,
-            description = description ?: pkg.description,
-            homepageUrl = homepageUrl ?: pkg.homepageUrl,
-            binaryArtifact = binaryArtifact ?: pkg.binaryArtifact,
-            sourceArtifact = sourceArtifact ?: pkg.sourceArtifact,
-            vcs = curatedVcs,
-            isMetaDataOnly = isMetaDataOnly ?: pkg.isMetaDataOnly
+    val vcs = curation.vcs?.let {
+        // Curation data for VCS information is handled specially so we can curate only individual properties.
+        VcsInfo(
+            type = it.type ?: pkg.vcs.type,
+            url = it.url ?: pkg.vcs.url,
+            revision = it.revision ?: pkg.vcs.revision,
+            resolvedRevision = it.resolvedRevision ?: pkg.vcs.resolvedRevision,
+            path = it.path ?: pkg.vcs.path
         )
+    } ?: pkg.vcs
 
-        return CuratedPackage(curated, base.curations + PackageCurationResult(pkg.diff(curated), this))
-    }
+    val curated = Package(
+        id = pkg.id,
+        declaredLicenses = curation.declaredLicenses ?: pkg.declaredLicenses,
+        concludedLicense = curation.concludedLicense ?: pkg.concludedLicense,
+        description = curation.description ?: pkg.description,
+        homepageUrl = curation.homepageUrl ?: pkg.homepageUrl,
+        binaryArtifact = curation.binaryArtifact ?: pkg.binaryArtifact,
+        sourceArtifact = curation.sourceArtifact ?: pkg.sourceArtifact,
+        vcs = vcs,
+        isMetaDataOnly = curation.isMetaDataOnly ?: pkg.isMetaDataOnly
+    )
+
+    return CuratedPackage(curated, base.curations + PackageCurationResult(pkg.diff(curated), curation))
 }
