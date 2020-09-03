@@ -117,5 +117,7 @@ private fun applyCurationToPackage(targetPackage: CuratedPackage, curation: Pack
         isMetaDataOnly = curation.isMetaDataOnly ?: base.isMetaDataOnly
     )
 
-    return CuratedPackage(pkg, targetPackage.curations + PackageCurationResult(base.diff(pkg), curation))
+    val curations = targetPackage.curations + PackageCurationResult(base.diff(pkg), curation)
+
+    return CuratedPackage(pkg, curations)
 }
