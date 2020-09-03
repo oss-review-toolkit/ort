@@ -200,32 +200,32 @@ subprojects {
     tasks.dokkaHtml.configure {
         dokkaSourceSets {
             configureEach {
-                jdkVersion = 8
+                jdkVersion.set(8)
 
                 externalDocumentationLink {
                     val baseUrl = "https://codehaus-plexus.github.io/plexus-containers/plexus-container-default/apidocs"
-                    url = URL(baseUrl)
-                    packageListUrl = URL("$baseUrl/package-list")
+                    url.set(URL(baseUrl))
+                    packageListUrl.set(URL("$baseUrl/package-list"))
                 }
 
                 externalDocumentationLink {
                     val majorMinorVersion = jacksonVersion.split('.').let { "${it[0]}.${it[1]}" }
                     val baseUrl = "https://fasterxml.github.io/jackson-databind/javadoc/$majorMinorVersion"
-                    url = URL(baseUrl)
-                    packageListUrl = URL("$baseUrl/package-list")
+                    url.set(URL(baseUrl))
+                    packageListUrl.set(URL("$baseUrl/package-list"))
                 }
 
                 externalDocumentationLink {
                     val baseUrl = "https://jakewharton.github.io/DiskLruCache"
-                    url = URL(baseUrl)
-                    packageListUrl = URL("$baseUrl/package-list")
+                    url.set(URL(baseUrl))
+                    packageListUrl.set(URL("$baseUrl/package-list"))
                 }
 
                 externalDocumentationLink {
                     val majorVersion = log4jCoreVersion.substringBefore('.')
                     val baseUrl = "https://logging.apache.org/log4j/$majorVersion.x/log4j-api/apidocs"
-                    url = URL(baseUrl)
-                    packageListUrl = URL("$baseUrl/package-list")
+                    url.set(URL(baseUrl))
+                    packageListUrl.set(URL("$baseUrl/package-list"))
                 }
             }
         }
