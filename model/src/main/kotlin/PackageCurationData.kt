@@ -24,6 +24,7 @@ import com.fasterxml.jackson.annotation.JsonInclude
 import java.util.SortedSet
 
 import org.ossreviewtoolkit.spdx.SpdxExpression
+import org.ossreviewtoolkit.utils.DeclaredLicenseProcessor
 
 /**
  * This class contains curation data for a package. It is used to amend the automatically detected meta data for a
@@ -78,7 +79,14 @@ data class PackageCurationData(
     /**
      * Whether the package is meta data only.
      */
-    val isMetaDataOnly: Boolean? = null
+    val isMetaDataOnly: Boolean? = null,
+
+    /**
+     * The declared license mapping entries to be added to the actual declared license mapping, which in turn gets
+     * applied by [DeclaredLicenseProcessor.process].
+     */
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    val declaredLicenseMapping: Map<String, SpdxExpression> = emptyMap()
 ) {
     /**
      * Apply the curation data to the provided package, by overriding all values of the original package with non-null
@@ -105,9 +113,14 @@ private fun applyCurationToPackage(targetPackage: CuratedPackage, curation: Pack
         )
     } ?: base.vcs
 
+    val declaredLicenses = curation.declaredLicenses ?: base.declaredLicenses
+    val declaredLicenseMapping = targetPackage.getDeclaredLicenseMapping() + curation.declaredLicenseMapping
+    val declaredLicensesProcessed = DeclaredLicenseProcessor.process(declaredLicenses, declaredLicenseMapping)
+
     val pkg = Package(
         id = base.id,
-        declaredLicenses = curation.declaredLicenses ?: base.declaredLicenses,
+        declaredLicenses = declaredLicenses,
+        declaredLicensesProcessed = declaredLicensesProcessed,
         concludedLicense = curation.concludedLicense ?: base.concludedLicense,
         description = curation.description ?: base.description,
         homepageUrl = curation.homepageUrl ?: base.homepageUrl,
@@ -117,7 +130,17 @@ private fun applyCurationToPackage(targetPackage: CuratedPackage, curation: Pack
         isMetaDataOnly = curation.isMetaDataOnly ?: base.isMetaDataOnly
     )
 
-    val curations = targetPackage.curations + PackageCurationResult(base.diff(pkg), curation)
+    val declaredLicenseMappingDiff = mutableMapOf<String, SpdxExpression>().apply {
+        val previous = targetPackage.getDeclaredLicenseMapping().toList()
+        val current = declaredLicenseMapping.toList()
+
+        putAll(previous - current)
+    }
+
+    val curations = targetPackage.curations + PackageCurationResult(
+        base = base.diff(pkg).copy(declaredLicenseMapping = declaredLicenseMappingDiff),
+        curation = curation
+    )
 
     return CuratedPackage(pkg, curations)
 }
