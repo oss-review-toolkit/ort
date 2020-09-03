@@ -19,7 +19,11 @@
 
 package org.ossreviewtoolkit.model
 
+import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonProperty
+
+import org.ossreviewtoolkit.spdx.SpdxExpression
+import org.ossreviewtoolkit.utils.DeclaredLicenseProcessor
 
 /**
  * A [Package] including the [PackageCurationResult]s that were applied to it, in order to be able to trace back how the
@@ -48,5 +52,14 @@ data class CuratedPackage(
     fun toUncuratedPackage() =
         curations.reversed().fold(this) { current, curation ->
             curation.base.apply(current)
-        }.pkg
+        }.pkg.copy(
+            // The declared license mapping cannot be reversed as it is additive.
+            declaredLicensesProcessed = DeclaredLicenseProcessor.process(pkg.declaredLicenses)
+        )
+
+    @JsonIgnore
+    fun getDeclaredLicenseMapping(): Map<String, SpdxExpression> =
+        mutableMapOf<String, SpdxExpression>().apply {
+            curations.forEach { putAll(it.curation.declaredLicenseMapping) }
+        }
 }
