@@ -91,31 +91,31 @@ data class PackageCurationData(
     fun apply(base: CuratedPackage): CuratedPackage = applyCurationToPackage(base, this)
 }
 
-private fun applyCurationToPackage(base: CuratedPackage, curation: PackageCurationData): CuratedPackage {
-    val pkg = base.pkg
+private fun applyCurationToPackage(targetPackage: CuratedPackage, curation: PackageCurationData): CuratedPackage {
+    val base = targetPackage.pkg
 
     val vcs = curation.vcs?.let {
         // Curation data for VCS information is handled specially so we can curate only individual properties.
         VcsInfo(
-            type = it.type ?: pkg.vcs.type,
-            url = it.url ?: pkg.vcs.url,
-            revision = it.revision ?: pkg.vcs.revision,
-            resolvedRevision = it.resolvedRevision ?: pkg.vcs.resolvedRevision,
-            path = it.path ?: pkg.vcs.path
+            type = it.type ?: base.vcs.type,
+            url = it.url ?: base.vcs.url,
+            revision = it.revision ?: base.vcs.revision,
+            resolvedRevision = it.resolvedRevision ?: base.vcs.resolvedRevision,
+            path = it.path ?: base.vcs.path
         )
-    } ?: pkg.vcs
+    } ?: base.vcs
 
-    val curated = Package(
-        id = pkg.id,
-        declaredLicenses = curation.declaredLicenses ?: pkg.declaredLicenses,
-        concludedLicense = curation.concludedLicense ?: pkg.concludedLicense,
-        description = curation.description ?: pkg.description,
-        homepageUrl = curation.homepageUrl ?: pkg.homepageUrl,
-        binaryArtifact = curation.binaryArtifact ?: pkg.binaryArtifact,
-        sourceArtifact = curation.sourceArtifact ?: pkg.sourceArtifact,
+    val pkg = Package(
+        id = base.id,
+        declaredLicenses = curation.declaredLicenses ?: base.declaredLicenses,
+        concludedLicense = curation.concludedLicense ?: base.concludedLicense,
+        description = curation.description ?: base.description,
+        homepageUrl = curation.homepageUrl ?: base.homepageUrl,
+        binaryArtifact = curation.binaryArtifact ?: base.binaryArtifact,
+        sourceArtifact = curation.sourceArtifact ?: base.sourceArtifact,
         vcs = vcs,
-        isMetaDataOnly = curation.isMetaDataOnly ?: pkg.isMetaDataOnly
+        isMetaDataOnly = curation.isMetaDataOnly ?: base.isMetaDataOnly
     )
 
-    return CuratedPackage(curated, base.curations + PackageCurationResult(pkg.diff(curated), curation))
+    return CuratedPackage(pkg, targetPackage.curations + PackageCurationResult(base.diff(pkg), curation))
 }
