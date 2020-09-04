@@ -20,6 +20,12 @@ Curations can be used to:
   * metadata-only packages, such as Maven BOM files, do not have any source code. Thus, when the flag is set the
   _downloader_ just skips the download and the _scanner_ skips the scan. Also, any _evaluator rule_ may optionally skip
   its execution.
+* set the _declared_license_mapping_ property:
+  * Packages may have declared license string values which cannot be parsed to SpdxExpressions. In some cases this can
+    be fixed by mapping these strings to a valid license. If multiple curations declare license mapping they get
+    combined into a single mapping. Thus, multiple curations can contribute to the declared license mapping for the
+    package. The effect of its application can be seen in the _declared_license_processed_ property of the respective
+    curated package. 
 
 The sections below explain how to create curations in the `curations.yml` file which,
 if passed to the _analyzer_, is applied to all package metadata found in the analysis.
@@ -64,6 +70,8 @@ The structure of the curations file consist of one or more `id` entries:
       revision: "1234abc"
       path: "subdirectory"
     is_meta_data_only: true
+    declared_license_mapping:
+      "license a": "Apache-2.0"
 ````
 
 ## Command Line
