@@ -19,10 +19,17 @@
 
 package org.ossreviewtoolkit.utils
 
+import java.io.IOException
 import java.time.Duration
+
+import kotlin.coroutines.resume
+import kotlin.coroutines.resumeWithException
+import kotlinx.coroutines.suspendCancellableCoroutine
 
 import okhttp3.Authenticator
 import okhttp3.Cache
+import okhttp3.Call
+import okhttp3.Callback
 import okhttp3.ConnectionSpec
 import okhttp3.OkHttpClient
 import okhttp3.Request
@@ -72,4 +79,31 @@ object OkHttpClientHelper {
      */
     fun execute(request: Request, block: OkHttpClient.Builder.() -> Unit = {}): Response =
         buildClient(block).newCall(request).execute()
+
+    /**
+     * Asynchronously enqueue a [request] using the client for the specified [builder configuration][block] and await
+     * its response.
+     */
+    suspend fun await(request: Request, block: OkHttpClient.Builder.() -> Unit = {}): Response =
+        buildClient(block).newCall(request).await()
 }
+
+/**
+ * Asynchronously enqueue the [Call]'s request and await its [Response].
+ */
+suspend fun Call.await(): Response =
+    suspendCancellableCoroutine { continuation ->
+        continuation.invokeOnCancellation {
+            cancel()
+        }
+
+        enqueue(object : Callback {
+            override fun onResponse(call: Call, response: Response) {
+                continuation.resume(response)
+            }
+
+            override fun onFailure(call: Call, e: IOException) {
+                continuation.resumeWithException(e)
+            }
+        })
+    }
