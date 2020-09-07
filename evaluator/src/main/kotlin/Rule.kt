@@ -22,6 +22,7 @@ package org.ossreviewtoolkit.evaluator
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.LicenseSource
 import org.ossreviewtoolkit.model.OrtIssue
+import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.RuleViolation
 import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.spdx.SpdxSingleLicenseExpression
@@ -100,6 +101,35 @@ abstract class Rule(
     fun require(block: RuleMatcherManager.() -> Unit) {
         ruleMatcherManager.block()
     }
+
+    /**
+     * A [RuleMatcher] that checks whether a [label] exists in the [ORT result][OrtResult.labels]. If [value] is null
+     * the value of the label is ignored.
+     */
+    fun hasLabel(label: String, value: String? = null) =
+        object : RuleMatcher {
+            override val description = "hasLabel(${listOfNotNull(label, value).joinToString()})"
+
+            override fun matches() =
+                if (value == null) {
+                    label in ruleSet.ortResult.labels
+                } else {
+                    ruleSet.ortResult.labels[label] == value
+                }
+        }
+
+    /**
+     * A [RuleMatcher] that checks whether a [label] exists in the [ORT result][OrtResult.labels] and contains a
+     * specific [value]. The value of the label is interpreted as a comma-separated list. The check is successful if
+     * this list contains the [value].
+     */
+    fun labelContains(label: String, value: String) =
+        object : RuleMatcher {
+            override val description = "labelContains($label, $value)"
+
+            override fun matches() =
+                ruleSet.ortResult.labels[label]?.split(",")?.map { it.trim() }?.contains(value) ?: false
+        }
 
     /**
      * Return a string to be used as [source][OrtIssue.source] for issues generated in [hint], [warning], and [error].

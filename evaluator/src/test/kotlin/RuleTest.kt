@@ -119,5 +119,51 @@ class RuleTest : WordSpec() {
                 rule.matchers[1].description shouldBe "!(test)"
             }
         }
+
+        "hasLabel()" should {
+            "return true if the ORT result contains the label" {
+                val matcher = createRule().hasLabel("label")
+
+                matcher.matches() shouldBe true
+            }
+
+            "return true if the ORT result contains the label with the correct value" {
+                val matcher = createRule().hasLabel("label", "value")
+
+                matcher.matches() shouldBe true
+            }
+
+            "return false if the ORT result does not contain the label" {
+                val matcher = createRule().hasLabel("missing")
+
+                matcher.matches() shouldBe false
+            }
+
+            "return false if the ORT result contains the label with the wrong value" {
+                val matcher = createRule().hasLabel("label", "wrong")
+
+                matcher.matches() shouldBe false
+            }
+        }
+
+        "labelContains()" should {
+            "return true if the ORT result contains the label with the value" {
+                val matcher = createRule().labelContains("list", "value2")
+
+                matcher.matches() shouldBe true
+            }
+
+            "return false if the ORT result does not contain the label" {
+                val matcher = createRule().labelContains("missing", "value")
+
+                matcher.matches() shouldBe false
+            }
+
+            "return false if the ORT result does not contain the label with the value" {
+                val matcher = createRule().labelContains("list", "value4")
+
+                matcher.matches() shouldBe false
+            }
+        }
     }
 }
