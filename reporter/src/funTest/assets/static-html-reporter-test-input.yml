@@ -467,6 +467,12 @@ evaluator:
     message: "BSD-3-Clause warning"
     how_to_fix: "* *Step 1*\n* __Step 2__\n* ***Step 3***\n```\nSome long text verify\
       \ that overflow:scroll is working as expected.\n```"
+labels:
+  job_parameters.JOB_PARAM_1: "label job param 1"
+  job_parameters.JOB_PARAM_2: "label job param 2"
+  process_parameters.PROCESS_PARAM_1: "label process param 1"
+  process_parameters.PROCESS_PARAM_2: "label process param 2"
+  OTHER: "label other"
 data:
   job_parameters:
     JOB_PARAM_1: "custom data job param 1"
