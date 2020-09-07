@@ -41,7 +41,8 @@ object SpdxDeclaredLicenseMapping {
     val mapping = rawMapping.toSortedMap(String.CASE_INSENSITIVE_ORDER)
 
     /**
-     * Return the [SpdxExpression] the [license] string maps to, or null if there is no corresponding expression.
+     * Return the [SpdxExpression] the [license] string maps to, [SpdxConstants.NONE] if the [license] should be
+     * discarded, or null if there is no corresponding expression.
      */
     fun map(license: String) = mapping[license] ?: SpdxLicense.forId(license)?.toExpression()
 }
