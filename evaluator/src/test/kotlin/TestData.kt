@@ -174,5 +174,9 @@ val ortResult = OrtResult(
             scanResults = sortedSetOf(),
             storageStats = AccessStatistics()
         )
+    ),
+    labels = mapOf(
+        "label" to "value",
+        "list" to "value1, value2, value3"
     )
 )
