@@ -146,13 +146,15 @@ class ScannerCommand : CliktCommand(name = "scan", help = "Run existing copyrigh
             outputDir.resolve("scan-result.${format.fileExtension}")
         }
 
-        val existingOutputFiles = outputFiles.filter { it.exists() }
-        if (existingOutputFiles.isNotEmpty()) {
-            throw UsageError("None of the output files $existingOutputFiles must exist yet.")
-        }
+        if (!globalOptionsForSubcommands.forceOverwrite) {
+            val existingOutputFiles = outputFiles.filter { it.exists() }
+            if (existingOutputFiles.isNotEmpty()) {
+                throw UsageError("None of the output files $existingOutputFiles must exist yet.", statusCode = 2)
+            }
 
-        if (nativeOutputDir.exists() && nativeOutputDir.list().isNotEmpty()) {
-            throw UsageError("The directory '$nativeOutputDir' must not contain any files yet.")
+            if (nativeOutputDir.exists() && nativeOutputDir.list().isNotEmpty()) {
+                throw UsageError("The directory '$nativeOutputDir' must not contain any files yet.", statusCode = 2)
+            }
         }
 
         require(downloadDir?.exists() != true) {

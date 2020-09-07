@@ -65,7 +65,8 @@ sealed class GroupTypes {
  * Helper class for collecting options that can be passed to subcommands.
  */
 data class GlobalOptions(
-    val config: OrtConfiguration
+    val config: OrtConfiguration,
+    val forceOverwrite: Boolean
 )
 
 class OrtMain : CliktCommand(name = ORT_NAME, epilog = "* denotes required options.") {
@@ -86,6 +87,11 @@ class OrtMain : CliktCommand(name = ORT_NAME, epilog = "* denotes required optio
         help = "Override a key-value pair in the configuration file. For example: " +
                 "-P scanner.postgresStorage.schema=testSchema"
     ).associate()
+
+    private val forceOverwrite by option(
+        "--force-overwrite",
+        help = "Overwrite any output files if they already exist."
+    ).flag()
 
     private val env = Environment()
 
@@ -137,7 +143,10 @@ class OrtMain : CliktCommand(name = ORT_NAME, epilog = "* denotes required optio
 
         // Make options available to subcommands.
         currentContext.findOrSetObject {
-            GlobalOptions(OrtConfiguration.load(configArguments, configFile))
+            GlobalOptions(
+                OrtConfiguration.load(configArguments, configFile),
+                forceOverwrite
+            )
         }
 
         println(getVersionHeader(env.ortVersion))
