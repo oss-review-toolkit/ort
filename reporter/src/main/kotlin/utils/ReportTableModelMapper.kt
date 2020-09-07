@@ -227,13 +227,9 @@ class ReportTableModelMapper(
             summaryRows.values.toList().sortedWith(compareBy({ ortResult.isExcluded(it.id) }, { it.id }))
         )
 
-        val metadata = mutableMapOf<String, String>()
-        (ortResult.data["job_parameters"] as? Map<*, *>)?.let {
-            it.entries.associateTo(metadata) { (key, value) -> key.toString() to value.toString() }
-        }
-        (ortResult.data["process_parameters"] as? Map<*, *>)?.let {
-            it.entries.associateTo(metadata) { (key, value) -> key.toString() to value.toString() }
-        }
+        // TODO: Use the prefixes up until the first '.' (which below get discarded) for some visual grouping in the
+        // report.
+        val metadata = ortResult.labels.mapKeys { it.key.substringAfter(".") }
 
         val ruleViolations = ortResult.getRuleViolations()
             .map { it.toResolvableViolation() }
