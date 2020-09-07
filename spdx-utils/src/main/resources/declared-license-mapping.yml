@@ -1,4 +1,5 @@
 # Sort the entries below via IntelliJ's "Edit" -> "Sort Lines".
+# Map a declared license string to "NONE" in order to discard it.
 ---
 "(MIT-style) netCDF C library license": NetCDF
 "2-clause BSD license": BSD-2-Clause
