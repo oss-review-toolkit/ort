@@ -23,6 +23,7 @@ import com.github.ajalt.clikt.core.BadParameterValue
 import com.github.ajalt.clikt.core.CliktCommand
 import com.github.ajalt.clikt.core.ProgramResult
 import com.github.ajalt.clikt.core.UsageError
+import com.github.ajalt.clikt.core.requireObject
 import com.github.ajalt.clikt.parameters.options.associate
 import com.github.ajalt.clikt.parameters.options.convert
 import com.github.ajalt.clikt.parameters.options.default
@@ -33,6 +34,7 @@ import com.github.ajalt.clikt.parameters.options.split
 import com.github.ajalt.clikt.parameters.types.enum
 import com.github.ajalt.clikt.parameters.types.file
 
+import org.ossreviewtoolkit.GlobalOptions
 import org.ossreviewtoolkit.analyzer.Analyzer
 import org.ossreviewtoolkit.analyzer.PackageManager
 import org.ossreviewtoolkit.analyzer.curation.ClearlyDefinedPackageCurationProvider
@@ -121,14 +123,18 @@ class AnalyzerCommand : CliktCommand(name = "analyze", help = "Determine depende
             ?: throw BadParameterValue("Package managers must be one or more of ${allPackageManagersByName.keys}.")
     }.split(",").default(PackageManager.ALL)
 
+    private val globalOptionsForSubcommands by requireObject<GlobalOptions>()
+
     override fun run() {
         val outputFiles = outputFormats.distinct().map { format ->
             outputDir.resolve("analyzer-result.${format.fileExtension}")
         }
 
-        val existingOutputFiles = outputFiles.filter { it.exists() }
-        if (existingOutputFiles.isNotEmpty()) {
-            throw UsageError("None of the output files $existingOutputFiles must exist yet.")
+        if (!globalOptionsForSubcommands.forceOverwrite) {
+            val existingOutputFiles = outputFiles.filter { it.exists() }
+            if (existingOutputFiles.isNotEmpty()) {
+                throw UsageError("None of the output files $existingOutputFiles must exist yet.", statusCode = 2)
+            }
         }
 
         val distinctPackageManagers = packageManagers.distinct()

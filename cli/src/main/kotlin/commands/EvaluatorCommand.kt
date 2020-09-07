@@ -22,6 +22,7 @@ package org.ossreviewtoolkit.commands
 import com.github.ajalt.clikt.core.CliktCommand
 import com.github.ajalt.clikt.core.ProgramResult
 import com.github.ajalt.clikt.core.UsageError
+import com.github.ajalt.clikt.core.requireObject
 import com.github.ajalt.clikt.parameters.groups.mutuallyExclusiveOptions
 import com.github.ajalt.clikt.parameters.groups.single
 import com.github.ajalt.clikt.parameters.options.associate
@@ -36,6 +37,7 @@ import com.github.ajalt.clikt.parameters.types.file
 
 import java.io.File
 
+import org.ossreviewtoolkit.GlobalOptions
 import org.ossreviewtoolkit.GroupTypes.FileType
 import org.ossreviewtoolkit.GroupTypes.StringType
 import org.ossreviewtoolkit.evaluator.Evaluator
@@ -155,6 +157,8 @@ class EvaluatorCommand : CliktCommand(name = "evaluate", help = "Evaluate rules 
         help = "Do not evaluate the script but only check its syntax. No output is written in this case."
     ).flag()
 
+    private val globalOptionsForSubcommands by requireObject<GlobalOptions>()
+
     override fun run() {
         val outputFiles = mutableListOf<File>()
 
@@ -163,9 +167,11 @@ class EvaluatorCommand : CliktCommand(name = "evaluate", help = "Evaluate rules 
                 absoluteOutputDir.resolve("evaluation-result.${format.fileExtension}")
             }
 
-            val existingOutputFiles = outputFiles.filter { it.exists() }
-            if (existingOutputFiles.isNotEmpty()) {
-                throw UsageError("None of the output files $existingOutputFiles must exist yet.")
+            if (!globalOptionsForSubcommands.forceOverwrite) {
+                val existingOutputFiles = outputFiles.filter { it.exists() }
+                if (existingOutputFiles.isNotEmpty()) {
+                    throw UsageError("None of the output files $existingOutputFiles must exist yet.", statusCode = 2)
+                }
             }
         }
 
