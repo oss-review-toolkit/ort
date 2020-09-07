@@ -487,6 +487,7 @@
 "https://creativecommons.org/publicdomain/zero/1.0/": CC0-1.0
 "https://dotnet.microsoft.com/en/dotnet_library_license.htm": LicenseRef-scancode-ms-net-library-2018-11
 "https://raw.github.com/RDFLib/rdflib/master/LICENSE": BSD-3-Clause
+"https://raw.githubusercontent.com/aspnet/Home/2.0.0/LICENSE.txt": Apache-2.0
 "https://www.eclipse.org/legal/epl-v10.html": EPL-1.0
 "https://www.eclipse.org/legal/epl-v20.html": EPL-2.0
 "https://www.scala-lang.org/license.html": Apache-2.0 AND BSD-3-Clause AND MIT
