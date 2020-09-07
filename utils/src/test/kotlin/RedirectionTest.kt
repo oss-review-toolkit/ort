@@ -24,6 +24,7 @@ import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.shouldBe
 
 import java.util.Scanner
+import kotlin.system.exitProcess
 
 class RedirectionTest : WordSpec({
     "Redirecting output" should {
@@ -81,7 +82,7 @@ class RedirectionTest : WordSpec({
             val stdout = redirectStdout {
                 exitCode = trapSystemExitCall {
                     for (i in 1..numberOfLines) System.out.println("stdout: $i")
-                    System.exit(42)
+                    exitProcess(42)
                 }
             }
 
