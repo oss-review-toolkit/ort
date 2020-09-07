@@ -37,8 +37,8 @@ import com.github.ajalt.clikt.parameters.options.split
 import com.github.ajalt.clikt.parameters.types.enum
 import com.github.ajalt.clikt.parameters.types.file
 
+import org.ossreviewtoolkit.GlobalOptions
 import org.ossreviewtoolkit.model.FileFormat
-import org.ossreviewtoolkit.model.config.OrtConfiguration
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
 import org.ossreviewtoolkit.model.mapper
 import org.ossreviewtoolkit.model.utils.mergeLabels
@@ -112,7 +112,7 @@ class ScannerCommand : CliktCommand(name = "scan", help = "Run existing copyrigh
         help = "Do not scan excluded projects or packages. Works only with the '--ort-file' parameter."
     ).flag()
 
-    private val config by requireObject<OrtConfiguration>()
+    private val globalOptionsForSubcommands by requireObject<GlobalOptions>()
 
     private fun configureScanner(scannerConfiguration: ScannerConfiguration?): Scanner {
         val config = scannerConfiguration ?: ScannerConfiguration()
@@ -159,7 +159,8 @@ class ScannerCommand : CliktCommand(name = "scan", help = "Run existing copyrigh
             "The download directory '$downloadDir' must not exist yet."
         }
 
-        val scanner = configureScanner(config.scanner)
+        val scannerConfiguration = globalOptionsForSubcommands.config
+        val scanner = configureScanner(scannerConfiguration.scanner)
 
         val ortResult = if (input.isFile) {
             scanner.scanOrtResult(

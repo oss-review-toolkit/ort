@@ -61,6 +61,13 @@ sealed class GroupTypes {
     data class StringType(val string: String) : GroupTypes()
 }
 
+/**
+ * Helper class for collecting options that can be passed to subcommands.
+ */
+data class GlobalOptions(
+    val config: OrtConfiguration
+)
+
 class OrtMain : CliktCommand(name = ORT_NAME, epilog = "* denotes required options.") {
     private val configFile by option("--config", "-c", help = "The path to a configuration file.")
         .convert { it.expandTilde() }
@@ -128,12 +135,9 @@ class OrtMain : CliktCommand(name = ORT_NAME, epilog = "* denotes required optio
         // Make the parameter globally available.
         printStackTrace = stacktrace
 
-        // Make the OrtConfiguration available to subcommands.
+        // Make options available to subcommands.
         currentContext.findOrSetObject {
-            OrtConfiguration.load(
-                configArguments,
-                configFile
-            )
+            GlobalOptions(OrtConfiguration.load(configArguments, configFile))
         }
 
         println(getVersionHeader(env.ortVersion))
