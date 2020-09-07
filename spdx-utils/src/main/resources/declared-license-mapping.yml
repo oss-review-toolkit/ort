@@ -489,6 +489,7 @@
 "https://dotnet.microsoft.com/en/dotnet_library_license.htm": LicenseRef-scancode-ms-net-library-2018-11
 "https://github.com/dotnet/core-setup/blob/master/LICENSE.TXT": MIT
 "https://raw.github.com/RDFLib/rdflib/master/LICENSE": BSD-3-Clause
+"https://raw.githubusercontent.com/NuGet/NuGet.Client/dev/LICENSE.txt": Apache-2.0
 "https://raw.githubusercontent.com/aspnet/AspNetCore/2.0.0/LICENSE.txt": Apache-2.0
 "https://raw.githubusercontent.com/aspnet/Home/2.0.0/LICENSE.txt": Apache-2.0
 "https://www.eclipse.org/legal/epl-v10.html": EPL-1.0
