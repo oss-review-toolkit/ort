@@ -91,6 +91,22 @@ class PackageRuleTest : WordSpec() {
             }
         }
 
+        "isProject()" should {
+            "return true for a project" {
+                val rule = PackageRule(ruleSet, "test", projectIncluded.toPackage(), emptyList(), emptyList())
+                val matcher = rule.isProject()
+
+                matcher.matches() shouldBe true
+            }
+
+            "return false for a package" {
+                val rule = PackageRule(ruleSet, "test", packageWithoutLicense, emptyList(), emptyList())
+                val matcher = rule.isProject()
+
+                matcher.matches() shouldBe false
+            }
+        }
+
         "isType()" should {
             "return true if the package has the provided type" {
                 val rule = PackageRule(ruleSet, "test", packageWithoutLicense, emptyList(), emptyList())
