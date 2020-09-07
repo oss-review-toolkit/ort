@@ -66,7 +66,7 @@ fun LicenseFindingsMap.clean(copyrightGarbage: CopyrightGarbage) =
  * Merge all [LicenseFindingsMap]s into a single one.
  */
 fun Collection<LicenseFindingsMap>.merge() =
-    takeIf { it.isNotEmpty() }?.reduce { left, right ->
+    reduceOrNull { left, right ->
         left.apply {
             right.forEach { (license, copyrights) ->
                 getOrPut(license) { mutableSetOf() } += copyrights

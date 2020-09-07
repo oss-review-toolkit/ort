@@ -156,11 +156,9 @@ fun filterVersionNames(version: String, names: List<String>, project: String? = 
  * Return the longest parent directory that is common to all [files], or null if they have no directory in common.
  */
 fun getCommonFileParent(files: Collection<File>): File? =
-    files.takeUnless {
-        it.isEmpty()
-    }?.map {
+    files.map {
         it.normalize().absolutePath
-    }?.reduce { prefix, path ->
+    }.reduceOrNull { prefix, path ->
         prefix.commonPrefixWith(path)
     }?.let {
         val commonPrefix = File(it)

@@ -103,7 +103,7 @@ object DeclaredLicenseProcessor {
 
         val spdxExpression = processedLicenses.values.distinct().filter {
             it.toString() != SpdxConstants.NONE
-        }.takeUnless { it.isEmpty() }?.reduce { left, right -> left and right }
+        }.reduceOrNull { left, right -> left and right }
 
         val mapped = processedLicenses.filterNot { (key, value) ->
             key.removeSurrounding("(", ")") == value.toString()
