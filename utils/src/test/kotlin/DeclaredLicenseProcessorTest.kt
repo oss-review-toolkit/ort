@@ -31,6 +31,7 @@ import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNotBe
 
+import org.ossreviewtoolkit.spdx.SpdxConstants
 import org.ossreviewtoolkit.spdx.SpdxDeclaredLicenseMapping
 import org.ossreviewtoolkit.spdx.SpdxException
 import org.ossreviewtoolkit.spdx.SpdxExpression
@@ -116,6 +117,19 @@ class DeclaredLicenseProcessorTest : StringSpec() {
 
             processedLicenses.spdxExpression shouldBe "Apache-2.0 AND MIT".toSpdx()
             processedLicenses.mapped shouldContainExactly mapOf("https://domain/path/license.html" to "MIT".toSpdx())
+            processedLicenses.unmapped should beEmpty()
+        }
+
+        "The declared license mapping discards licenses which are mapped to 'NONE' when applied " {
+            val declaredLicenses = listOf("Copyright (c) the authors.", "Apache-2.0", "MIT")
+            val declaredLicenseMapping = mapOf("Copyright (c) the authors." to SpdxConstants.NONE.toSpdx())
+
+            val processedLicenses = DeclaredLicenseProcessor.process(declaredLicenses, declaredLicenseMapping)
+
+            processedLicenses.spdxExpression shouldBe "Apache-2.0 AND MIT".toSpdx()
+            processedLicenses.mapped shouldContainExactly mapOf(
+                "Copyright (c) the authors." to SpdxConstants.NONE.toSpdx()
+            )
             processedLicenses.unmapped should beEmpty()
         }
     }
