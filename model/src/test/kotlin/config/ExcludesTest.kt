@@ -22,9 +22,7 @@ package org.ossreviewtoolkit.model.config
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.core.test.TestCase
 import io.kotest.matchers.collections.beEmpty
-import io.kotest.matchers.collections.contain
 import io.kotest.matchers.collections.containExactly
-import io.kotest.matchers.collections.haveSize
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 
@@ -127,8 +125,7 @@ class ExcludesTest : WordSpec() {
 
                 val scopeExcludes = excludes.findScopeExcludes(scope1)
 
-                scopeExcludes should haveSize(1)
-                scopeExcludes should contain(scopeExclude1)
+                scopeExcludes should containExactly(scopeExclude1)
             }
         }
 
