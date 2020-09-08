@@ -66,10 +66,10 @@ data class ResolvedLicenseFile(
     val file: File
 ) {
     /**
-     * Return all copyright statements associated to the licenses found in this license file. Optionally
-     * [excludes][omitExcluded] copyright findings excluded by [PathExclude]s.
+     * Return all copyright statements associated to the licenses found in this license file. Copyright findings that
+     * are excluded by [PathExclude]s are [omitted][omitExcluded] by default.
      */
-    fun getCopyrights(omitExcluded: Boolean = false): Set<String> =
+    fun getCopyrights(omitExcluded: Boolean = true): Set<String> =
         licenses.flatMapTo(mutableSetOf()) { it.getCopyrights(omitExcluded) }
 
     /**
