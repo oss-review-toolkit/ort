@@ -54,7 +54,7 @@
     comment: "The package is a Maven BOM file and thus is metadata only."
     is_meta_data_only: true
 
-- id: "Pip::pyramid_workflow:1.0.0"
+- id: "PyPI::pyramid_workflow:1.0.0"
   curations:
     comment: "The package has an unmappable declared license entry."
     declared_license_mapping:
