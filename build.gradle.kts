@@ -94,6 +94,10 @@ tasks.named<DependencyUpdatesTask>("dependencyUpdates") {
 allprojects {
     buildscript {
         repositories {
+            // Explicitly add Maven Central as some plugins continue to have problems with JCenter, see
+            // https://github.com/detekt/detekt/issues/3062.
+            mavenCentral()
+
             jcenter()
         }
     }
