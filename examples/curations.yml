@@ -59,3 +59,9 @@
     comment: "The package has an unmappable declared license entry."
     declared_license_mapping:
       "BSD-derived (http://www.repoze.org/LICENSE.txt)": "LicenseRef-scancode-repoze"
+
+- id: "PyPI::branca"
+  curations:
+    comment: "A copyright statement was used to declare the license."
+    declared_license_mapping:
+      "Copyright (C) 2013, Martin Journois": "NONE"
