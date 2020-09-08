@@ -141,7 +141,7 @@ class PackageRuleTest : WordSpec() {
 
         "isSpdxLicense()" should {
             "return true if the license is an SPDX license" {
-                PackageRule(ruleSet, "test", packageWithoutLicense, emptyList(), emptyList()).apply {
+                with(PackageRule(ruleSet, "test", packageWithoutLicense, emptyList(), emptyList())) {
                     val licenseRule = LicenseRule(
                         "test", SpdxLicenseIdExpression("Apache-2.0"), LicenseSource.DECLARED, emptyMap()
                     )
@@ -152,7 +152,7 @@ class PackageRuleTest : WordSpec() {
             }
 
             "return false if the license is not an SPDX license" {
-                PackageRule(ruleSet, "test", packageWithoutLicense, emptyList(), emptyList()).apply {
+                with(PackageRule(ruleSet, "test", packageWithoutLicense, emptyList(), emptyList())) {
                     val licenseRule = LicenseRule(
                         "test", SpdxLicenseIdExpression("invalid"), LicenseSource.DECLARED, emptyMap()
                     )
