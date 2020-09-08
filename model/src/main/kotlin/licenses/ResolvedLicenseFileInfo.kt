@@ -24,6 +24,7 @@ import java.io.File
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Provenance
 import org.ossreviewtoolkit.model.config.PathExclude
+import org.ossreviewtoolkit.utils.CopyrightStatementsProcessor
 
 /**
  * Information about license files of a package and the licenses detected in those files.
@@ -67,10 +68,12 @@ data class ResolvedLicenseFile(
 ) {
     /**
      * Return all copyright statements associated to the licenses found in this license file. Copyright findings that
-     * are excluded by [PathExclude]s are [omitted][omitExcluded] by default.
+     * are excluded by [PathExclude]s are [omitted][omitExcluded] by default. The copyright statements are by default
+     * [reprocessed][process] using the [CopyrightStatementsProcessor].
      */
-    fun getCopyrights(omitExcluded: Boolean = true): Set<String> =
-        licenses.flatMapTo(mutableSetOf()) { it.getCopyrights(omitExcluded) }
+    @JvmOverloads
+    fun getCopyrights(process: Boolean = true, omitExcluded: Boolean = true): Set<String> =
+        licenses.flatMapTo(mutableSetOf()) { it.getCopyrights(process, omitExcluded) }
 
     /**
      * Return the content of the [license file][file].
