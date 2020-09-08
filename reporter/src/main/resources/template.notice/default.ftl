@@ -80,7 +80,7 @@ Package: [#if package.id.namespace?has_content]${package.id.namespace}:[/#if]${p
 This package contains the file ${licenseFile.path} with the following contents:
 
 ${licenseFile.readFile()}
-[#assign copyrights = licenseFile.getCopyrights(true)]
+[#assign copyrights = licenseFile.getCopyrights()]
 [#if copyrights?has_content]
 The following copyright holder information relates to the license(s) above:
 
