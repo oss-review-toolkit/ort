@@ -39,34 +39,6 @@ export const getAppViewShowKey = (state) => state.app.showKey;
 
 export const getOrtResult = (state) => state.data.ortResult;
 
-// ---- AboutModal selectors ----
-
-export const getCustomDataAsFlatArray = memoizeOne(
-    (state) => {
-        const webAppOrtResult = getOrtResult(state);
-
-        if (webAppOrtResult.customData) {
-            return Object.entries(webAppOrtResult.customData)
-                .reduce((acc, [key, value]) => {
-                    if (typeof value === 'string') {
-                        acc.push([key, value]);
-                    } else if (Array.isArray(value)) {
-                        acc.push([key, value.join(', ')]);
-                    } else {
-                        Object.entries(value).forEach(([entryKey, entryValue]) => {
-                            acc.push([entryKey, entryValue]);
-                        });
-                    }
-
-                    return acc;
-                }, []);
-        }
-
-        return null;
-    },
-    hasOrtResultChanged
-);
-
 // ---- SummaryView selectors ----
 
 export const getSummaryDeclaredLicensesProcessed = memoizeOne(

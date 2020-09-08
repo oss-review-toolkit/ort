@@ -29,7 +29,6 @@ import { Light as SyntaxHighlighter } from 'react-syntax-highlighter';
 import dark from 'react-syntax-highlighter/dist/esm/styles/hljs/dark';
 import markdown from 'react-syntax-highlighter/dist/esm/languages/hljs/markdown';
 import {
-    getCustomDataAsFlatArray,
     getOrtResult
 } from '../reducers/selectors';
 import store from '../store';
@@ -40,8 +39,9 @@ const { TabPane } = Tabs;
 SyntaxHighlighter.registerLanguage('markdown', markdown);
 
 const AboutModal = (props) => {
-    const { customDataAsFlatArray, webAppOrtResult } = props;
+    const { webAppOrtResult } = props;
     const { repositoryConfiguration } = webAppOrtResult;
+    const { labels } = webAppOrtResult;
 
     return (
         <Modal
@@ -71,20 +71,19 @@ const AboutModal = (props) => {
                     )
                 }
                 {
-                    customDataAsFlatArray
-                    && customDataAsFlatArray.length > 0
+                    webAppOrtResult.hasLabels()
                     && (
-                        <TabPane tab="Parameters" key="ort-tabs-params">
+                        <TabPane tab="Labels" key="ort-tabs-labels">
                             <Descriptions
                                 bordered
                                 column={1}
                                 size="small"
                             >
                                 {
-                                    customDataAsFlatArray.map(([param, value]) => (
+                                    Object.entries(labels).map(([key, value]) => (
                                         <Item
-                                            key={`ort-params-${param}`}
-                                            label={param}
+                                            key={`ort-label-${key}`}
+                                            label={key}
                                         >
                                             {
                                                 value.startsWith('http')
@@ -146,12 +145,10 @@ const AboutModal = (props) => {
 };
 
 AboutModal.propTypes = {
-    customDataAsFlatArray: PropTypes.array.isRequired,
     webAppOrtResult: PropTypes.object.isRequired
 };
 
 const mapStateToProps = (state) => ({
-    customDataAsFlatArray: getCustomDataAsFlatArray(state),
     webAppOrtResult: getOrtResult(state)
 });
 
