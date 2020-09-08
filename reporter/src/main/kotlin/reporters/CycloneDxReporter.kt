@@ -122,8 +122,10 @@ class CycloneDxReporter : Reporter {
                 "URL to the ${vcs.type} repository of the projects"
             )
 
+            val allDirectDependencies = projects.flatMapTo(mutableSetOf()) { it.collectDependencies(1) }
             input.ortResult.getPackages().forEach { (pkg, _) ->
-                addPackageToBom(input, pkg, bom)
+                val dependencyType = if (pkg.id in allDirectDependencies) "direct" else "transitive"
+                addPackageToBom(input, pkg, bom, dependencyType)
             }
 
             writeBomToFile(bom, outputFile)
@@ -162,8 +164,10 @@ class CycloneDxReporter : Reporter {
                     pkg.takeIf { it.id in dependencies }
                 }
 
+                val directDependencies = project.collectDependencies(1)
                 packages.forEach { pkg ->
-                    addPackageToBom(input, pkg, bom)
+                    val dependencyType = if (pkg.id in directDependencies) "direct" else "transitive"
+                    addPackageToBom(input, pkg, bom, dependencyType)
                 }
 
                 writeBomToFile(bom, outputFile)
@@ -174,7 +178,7 @@ class CycloneDxReporter : Reporter {
         return outputFiles
     }
 
-    private fun addPackageToBom(input: ReporterInput, pkg: Package, bom: Bom) {
+    private fun addPackageToBom(input: ReporterInput, pkg: Package, bom: Bom, dependencyType: String) {
         val resolvedLicenseInfo = input.licenseInfoResolver.resolveLicenseInfo(pkg.id)
 
         val concludedLicenseNames = resolvedLicenseInfo.getLicenseNames(LicenseSource.CONCLUDED)
@@ -216,6 +220,8 @@ class CycloneDxReporter : Reporter {
 
             // See https://github.com/CycloneDX/specification/issues/17 for how this differs from FRAMEWORK.
             type = Component.Type.LIBRARY
+
+            extensibleTypes = listOf(ExtensibleType("ort", "dependencyType", dependencyType))
         }
 
         bom.addComponent(component)
