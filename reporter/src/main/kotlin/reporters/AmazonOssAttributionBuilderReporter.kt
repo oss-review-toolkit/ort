@@ -107,7 +107,7 @@ class AmazonOssAttributionBuilderReporter : Reporter {
                 val licenseInfo = input.licenseInfoResolver.resolveLicenseInfo(pkg.id)
 
                 val allCopyrights = licenseInfo.filter(LicenseView.ONLY_DETECTED).flatMapTo(mutableSetOf()) {
-                    it.getCopyrights(omitExcluded = true)
+                    it.getCopyrights()
                 }.ifEmpty {
                     // The copyright set must not be empty as otherwise the Attribution builder rejects the request.
                     setOf("No Copyright detected.")

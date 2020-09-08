@@ -122,10 +122,11 @@ data class ResolvedLicense(
     }
 
     /**
-     * Return all copyright statements associated to this license. Optionally [excludes][omitExcluded] copyright
-     * findings excluded by [PathExclude]s.
+     * Return all copyright statements associated to this license. Copyright findings that are excluded by
+     * [PathExclude]s are [omitted][omitExcluded] by default.
      */
-    fun getCopyrights(omitExcluded: Boolean = false): Set<String> =
+    @JvmOverloads
+    fun getCopyrights(omitExcluded: Boolean = true): Set<String> =
         locations.flatMapTo(sortedSetOf()) { location ->
             location.copyrights.filter { copyright ->
                 !omitExcluded || copyright.findings.any { it.matchingPathExcludes.isEmpty() }

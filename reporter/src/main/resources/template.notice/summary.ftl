@@ -45,7 +45,7 @@ licenses that are configured not to be included in notice files.
 [#else]
 ----
 [/#if]
-[#assign copyrights = resolvedLicense.getCopyrights(true)]
+[#assign copyrights = resolvedLicense.getCopyrights()]
 [#list copyrights as copyright]
 [#if copyright?is_first]
 
