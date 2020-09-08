@@ -152,12 +152,9 @@ data class ResolvedLicense(
      * [matching path excludes][ResolvedCopyrightFinding.matchingPathExcludes].
      */
     fun filterExcludedCopyrights(): ResolvedLicense =
-        // TODO: A possible improvement for this function would be to also remove individual excluded copyright
-        //       findings, and to re-run the copyright statements processor with the filtered findings.
         copy(locations = locations.mapTo(mutableSetOf()) { location ->
-            location.copy(copyrights = location.copyrights.filterTo(mutableSetOf()) { resolvedCopyright ->
-                resolvedCopyright.findings.any { it.matchingPathExcludes.isEmpty() }
-            })
+            val findings = location.copyrights.flatMap { it.findings }.filter { it.matchingPathExcludes.isEmpty() }
+            location.copy(copyrights = processCopyrights(findings))
         })
 }
 
