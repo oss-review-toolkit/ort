@@ -37,8 +37,6 @@ class WebAppOrtResult {
 
     #copyrights = [];
 
-    #customData = {};
-
     #declaredLicenses = [];
 
     #declaredLicensesProcessed = [];
@@ -58,6 +56,8 @@ class WebAppOrtResult {
     #issuesByPackageIndexMap = new Map();
 
     #issueResolutions = [];
+
+    #labels = {};
 
     #levels = [];
 
@@ -103,8 +103,8 @@ class WebAppOrtResult {
                 }
             }
 
-            if (obj.custom_data || obj.customData) {
-                this.#customData = obj.custom_data || obj.customData;
+            if (obj.labels) {
+                this.#labels = obj.labels;
             }
 
             if (obj.licenses) {
@@ -323,10 +323,6 @@ class WebAppOrtResult {
         return this.#copyrights;
     }
 
-    get customData() {
-        return this.#customData;
-    }
-
     get declaredLicenses() {
         return this.#declaredLicenses;
     }
@@ -361,6 +357,10 @@ class WebAppOrtResult {
 
     get issueResolutions() {
         return this.#issueResolutions;
+    }
+
+    get labels() {
+        return this.#labels;
     }
 
     get levels() {
@@ -526,6 +526,10 @@ class WebAppOrtResult {
 
     hasIssuesForPackageIndex(val) {
         return this.#issuesByPackageIndexMap.has(val);
+    }
+
+    hasLabels() {
+        return Object.keys(this.#labels).length > 0;
     }
 
     hasLevels() {
