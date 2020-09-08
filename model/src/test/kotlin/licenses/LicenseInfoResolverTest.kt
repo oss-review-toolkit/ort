@@ -259,8 +259,8 @@ class LicenseInfoResolverTest : WordSpec() {
 
                 val result = resolver.resolveLicenseInfo(pkgId)
 
-                result should containCopyrightStatementsForLicenseExactly("Apache-2.0", "(c) 2009-2012 Holder")
-                result should containCopyrightStatementsForLicenseExactly("MIT", "(c) 2009-2012 Holder")
+                result should containCopyrightStatementsForLicenseExactly("Apache-2.0", "(c) 2009-2010 Holder")
+                result should containCopyrightStatementsForLicenseExactly("MIT", "(c) 2011-2012 Holder")
             }
 
             "mark copyright garbage as garbage" {
