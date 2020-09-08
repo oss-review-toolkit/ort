@@ -77,7 +77,7 @@ class PackageCurationTest : WordSpec({
 
             val curatedPkg = curation.apply(pkg.toCuratedPackage())
 
-            curatedPkg.pkg.apply {
+            with(curatedPkg.pkg) {
                 id.toCoordinates() shouldBe pkg.id.toCoordinates()
                 declaredLicenses shouldBe curation.data.declaredLicenses
                 declaredLicensesProcessed.spdxExpression shouldBe "Apache-2.0".toSpdx()
@@ -131,7 +131,7 @@ class PackageCurationTest : WordSpec({
 
             val curatedPkg = curation.apply(pkg.toCuratedPackage())
 
-            curatedPkg.pkg.apply {
+            with(curatedPkg.pkg) {
                 id.toCoordinates() shouldBe pkg.id.toCoordinates()
                 declaredLicenses shouldBe pkg.declaredLicenses
                 concludedLicense shouldBe pkg.concludedLicense
