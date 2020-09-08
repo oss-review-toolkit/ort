@@ -47,7 +47,6 @@ class LicenseInfoResolver(
 
     /**
      * Get the [ResolvedLicenseInfo] for the project or package identified by [id].
-     * TODO: Add options to filter output, e.g. "filter excluded findings".
      */
     fun resolveLicenseInfo(id: Identifier) = resolvedLicenseInfo.getOrPut(id) { createLicenseInfo(id) }
 
