@@ -92,12 +92,14 @@ class ExcludesTest : WordSpec() {
             "find the correct path excludes for a path" {
                 val excludes = Excludes(paths = listOf(pathExclude1, pathExclude2, pathExclude3, pathExclude4))
 
-                excludes.findPathExcludes("") should beEmpty()
-                excludes.findPathExcludes("path1") should containExactly(pathExclude1)
-                excludes.findPathExcludes("path2") should containExactly(pathExclude2)
-                excludes.findPathExcludes("test.ext") should containExactly(pathExclude3)
-                excludes.findPathExcludes("directory/test.ext") should containExactly(pathExclude3)
-                excludes.findPathExcludes("directory/file.ext") should containExactly(pathExclude3, pathExclude4)
+                with(excludes) {
+                    findPathExcludes("") should beEmpty()
+                    findPathExcludes("path1") should containExactly(pathExclude1)
+                    findPathExcludes("path2") should containExactly(pathExclude2)
+                    findPathExcludes("test.ext") should containExactly(pathExclude3)
+                    findPathExcludes("directory/test.ext") should containExactly(pathExclude3)
+                    findPathExcludes("directory/file.ext") should containExactly(pathExclude3, pathExclude4)
+                }
             }
 
             "find the correct path excludes for a project" {
@@ -105,9 +107,11 @@ class ExcludesTest : WordSpec() {
 
                 setProjects(project1, project2, project3)
 
-                excludes.findPathExcludes(project1, ortResult) should containExactly(pathExclude1)
-                excludes.findPathExcludes(project2, ortResult) should containExactly(pathExclude2)
-                excludes.findPathExcludes(project3, ortResult) should beEmpty()
+                with(excludes) {
+                    findPathExcludes(project1, ortResult) should containExactly(pathExclude1)
+                    findPathExcludes(project2, ortResult) should containExactly(pathExclude2)
+                    findPathExcludes(project3, ortResult) should beEmpty()
+                }
             }
         }
 
@@ -180,16 +184,20 @@ class ExcludesTest : WordSpec() {
             "return true if any path exclude matches a file" {
                 val excludes = Excludes(paths = listOf(pathExclude1, pathExclude2))
 
-                excludes.isPathExcluded("path1") shouldBe true
-                excludes.isPathExcluded("path2") shouldBe true
+                with(excludes) {
+                    isPathExcluded("path1") shouldBe true
+                    isPathExcluded("path2") shouldBe true
+                }
             }
 
             "return false if no path exclude matches a file" {
                 val excludes = Excludes(paths = listOf(pathExclude1, pathExclude2))
 
-                excludes.isPathExcluded("") shouldBe false
-                excludes.isPathExcluded("path1/file") shouldBe false
-                excludes.isPathExcluded("path3") shouldBe false
+                with(excludes) {
+                    isPathExcluded("") shouldBe false
+                    isPathExcluded("path1/file") shouldBe false
+                    isPathExcluded("path3") shouldBe false
+                }
             }
 
             "return false if no path exclude is defined" {
