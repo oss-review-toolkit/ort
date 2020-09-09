@@ -43,10 +43,12 @@ class VcsInfoTest : WordSpec({
 
             val vcsInfo = yamlMapper.readValue<VcsInfo>(yaml)
 
-            vcsInfo.type shouldBe VcsType("type")
-            vcsInfo.url shouldBe "url"
-            vcsInfo.revision shouldBe "revision"
-            vcsInfo.path shouldBe "path"
+            with(vcsInfo) {
+                type shouldBe VcsType("type")
+                url shouldBe "url"
+                revision shouldBe "revision"
+                path shouldBe "path"
+            }
         }
 
         "assign empty strings to missing fields when only type is set" {
@@ -57,10 +59,12 @@ class VcsInfoTest : WordSpec({
 
             val vcsInfo = yamlMapper.readValue<VcsInfo>(yaml)
 
-            vcsInfo.type shouldBe VcsType("type")
-            vcsInfo.url shouldBe ""
-            vcsInfo.revision shouldBe ""
-            vcsInfo.path shouldBe ""
+            with(vcsInfo) {
+                type shouldBe VcsType("type")
+                url shouldBe ""
+                revision shouldBe ""
+                path shouldBe ""
+            }
         }
 
         "assign empty strings to missing fields when only path is set" {
@@ -71,10 +75,12 @@ class VcsInfoTest : WordSpec({
 
             val vcsInfo = yamlMapper.readValue<VcsInfo>(yaml)
 
-            vcsInfo.type shouldBe VcsType.UNKNOWN
-            vcsInfo.url shouldBe ""
-            vcsInfo.revision shouldBe ""
-            vcsInfo.path shouldBe "path"
+            with(vcsInfo) {
+                type shouldBe VcsType.UNKNOWN
+                url shouldBe ""
+                revision shouldBe ""
+                path shouldBe "path"
+            }
         }
 
         "fail if the input contains unknown fields" {
@@ -92,9 +98,10 @@ class VcsInfoTest : WordSpec({
                 yamlMapper.readValue<VcsInfo>(yaml)
             }
 
-            exception.propertyName shouldBe "unknown"
-            exception.knownPropertyIds should
-                    containAll<Any>("type", "url", "revision", "resolved_revision", "path")
+            with(exception) {
+                propertyName shouldBe "unknown"
+                knownPropertyIds should containAll<Any>("type", "url", "revision", "resolved_revision", "path")
+            }
         }
     }
 
