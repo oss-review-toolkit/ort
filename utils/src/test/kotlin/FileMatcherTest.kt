@@ -27,9 +27,11 @@ class FileMatcherTest : WordSpec({
 
     "default license file matcher" should {
         "match commonly used license file paths" {
-            defaultMatcher.matches("LICENSE") shouldBe true
-            defaultMatcher.matches("LICENSE.BSD") shouldBe true
-            // TODO: add more important license file names
+            with(defaultMatcher) {
+                matches("LICENSE") shouldBe true
+                matches("LICENSE.BSD") shouldBe true
+                // TODO: add more important license file names
+            }
         }
     }
 
@@ -37,9 +39,11 @@ class FileMatcherTest : WordSpec({
         "match the given patterns" {
             val matcher = FileMatcher("a/LICENSE", "b/LICENSE")
 
-            matcher.matches("a/LICENSE") shouldBe true
-            matcher.matches("b/LICENSE") shouldBe true
-            matcher.matches("c/LICENSE") shouldBe false
+            with(matcher) {
+                matches("a/LICENSE") shouldBe true
+                matches("b/LICENSE") shouldBe true
+                matches("c/LICENSE") shouldBe false
+            }
         }
     }
 })
