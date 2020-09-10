@@ -24,6 +24,11 @@ const val ORT_NAME = "ort"
 const val ORT_FULL_NAME = "OSS Review Toolkit"
 
 /**
+ * The name of the environment variable to customize the ORT config directory.
+ */
+const val ORT_CONFIG_DIR_ENV_NAME = "ORT_CONFIG_DIR"
+
+/**
  * The name of the environment variable to customize the ORT data directory.
  */
 const val ORT_DATA_DIR_ENV_NAME = "ORT_DATA_DIR"

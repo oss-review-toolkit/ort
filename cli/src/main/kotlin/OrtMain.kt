@@ -43,11 +43,13 @@ import org.apache.logging.log4j.core.config.Configurator
 import org.ossreviewtoolkit.commands.*
 import org.ossreviewtoolkit.model.Environment
 import org.ossreviewtoolkit.model.config.OrtConfiguration
+import org.ossreviewtoolkit.utils.ORT_CONFIG_DIR_ENV_NAME
 import org.ossreviewtoolkit.utils.ORT_CONFIG_FILENAME
 import org.ossreviewtoolkit.utils.ORT_DATA_DIR_ENV_NAME
 import org.ossreviewtoolkit.utils.ORT_NAME
 import org.ossreviewtoolkit.utils.Os
 import org.ossreviewtoolkit.utils.expandTilde
+import org.ossreviewtoolkit.utils.ortConfigDirectory
 import org.ossreviewtoolkit.utils.ortDataDirectory
 import org.ossreviewtoolkit.utils.printStackTrace
 
@@ -63,7 +65,7 @@ class OrtMain : CliktCommand(name = ORT_NAME, epilog = "* denotes required optio
     private val configFile by option("--config", "-c", help = "The path to a configuration file.")
         .convert { it.expandTilde() }
         .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
-        .default(ortDataDirectory.resolve("config/$ORT_CONFIG_FILENAME"))
+        .default(ortConfigDirectory.resolve(ORT_CONFIG_FILENAME))
 
     private val logLevel by option(help = "Set the verbosity level of log output.").switch(
         "--info" to Level.INFO,
@@ -138,7 +140,11 @@ class OrtMain : CliktCommand(name = ORT_NAME, epilog = "* denotes required optio
     }
 
     private fun getVersionHeader(version: String): String {
-        val variables = mutableListOf("$ORT_DATA_DIR_ENV_NAME = $ortDataDirectory")
+        val variables = mutableListOf(
+            "$ORT_CONFIG_DIR_ENV_NAME = $ortConfigDirectory",
+            "$ORT_DATA_DIR_ENV_NAME = $ortDataDirectory"
+        )
+
         env.variables.entries.mapTo(variables) { (key, value) -> "$key = $value" }
 
         val commandName = currentContext.invokedSubcommand?.commandName

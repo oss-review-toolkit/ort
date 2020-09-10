@@ -46,7 +46,7 @@ import org.ossreviewtoolkit.model.mapper
 import org.ossreviewtoolkit.model.utils.mergeLabels
 import org.ossreviewtoolkit.utils.ORT_REPO_CONFIG_FILENAME
 import org.ossreviewtoolkit.utils.expandTilde
-import org.ossreviewtoolkit.utils.ortDataDirectory
+import org.ossreviewtoolkit.utils.ortConfigDirectory
 import org.ossreviewtoolkit.utils.safeMkdirs
 
 class AnalyzerCommand : CliktCommand(name = "analyze", help = "Determine dependencies of a software project.") {
@@ -137,7 +137,7 @@ class AnalyzerCommand : CliktCommand(name = "analyze", help = "Determine depende
         val analyzerConfig = AnalyzerConfiguration(ignoreToolVersions, allowDynamicVersions)
         val analyzer = Analyzer(analyzerConfig)
 
-        val globalPackageCurationsFile = ortDataDirectory.resolve("config/curations.yml")
+        val globalPackageCurationsFile = ortConfigDirectory.resolve("curations.yml")
         val curationProvider = FallbackPackageCurationProvider(
             listOfNotNull(
                 packageCurationsFile?.let { FilePackageCurationProvider(it) },
