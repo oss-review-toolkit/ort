@@ -54,7 +54,18 @@ val ROOT_LICENSE_FILENAMES = listOf(
 ).generateCapitalizationVariants()
 
 /**
- * The directory to store ORT data in, like the configuration, caches and archives.
+ * The directory to store ORT (read-only) configuration in.
+ */
+val ortConfigDirectory by lazy {
+    Os.env[ORT_CONFIG_DIR_ENV_NAME]?.takeUnless {
+        it.isEmpty()
+    }?.let {
+        File(it)
+    } ?: ortDataDirectory.resolve("config")
+}
+
+/**
+ * The directory to store ORT (read-write) data in, like caches and archives.
  */
 val ortDataDirectory by lazy {
     Os.env[ORT_DATA_DIR_ENV_NAME]?.takeUnless {
