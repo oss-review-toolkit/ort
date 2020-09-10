@@ -54,8 +54,8 @@ import org.ossreviewtoolkit.scanner.ScanResultsStorage
 import org.ossreviewtoolkit.spdx.NON_LICENSE_FILENAMES
 import org.ossreviewtoolkit.spdx.SpdxConstants
 import org.ossreviewtoolkit.spdx.calculatePackageVerificationCode
-import org.ossreviewtoolkit.utils.ORT_CONFIG_FILENAME
 import org.ossreviewtoolkit.utils.ORT_NAME
+import org.ossreviewtoolkit.utils.ORT_REPO_CONFIG_FILENAME
 import org.ossreviewtoolkit.utils.OkHttpClientHelper
 import org.ossreviewtoolkit.utils.Os
 import org.ossreviewtoolkit.utils.ProcessCapture
@@ -97,7 +97,7 @@ class ScanCode(
         private val DEFAULT_CONFIGURATION_OPTIONS = listOf(
             "--copyright",
             "--license",
-            "--ignore", "*$ORT_CONFIG_FILENAME",
+            "--ignore", "*$ORT_REPO_CONFIG_FILENAME",
             "--info",
             "--strip-root",
             "--timeout", TIMEOUT.toString()

@@ -41,7 +41,7 @@ import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.readValue
 import org.ossreviewtoolkit.utils.NamedThreadFactory
-import org.ossreviewtoolkit.utils.ORT_CONFIG_FILENAME
+import org.ossreviewtoolkit.utils.ORT_REPO_CONFIG_FILENAME
 import org.ossreviewtoolkit.utils.log
 
 /**
@@ -59,7 +59,7 @@ class Analyzer(private val config: AnalyzerConfiguration) {
         val startTime = Instant.now()
 
         val actualRepositoryConfigurationFile = repositoryConfigurationFile
-            ?: File(absoluteProjectPath, ORT_CONFIG_FILENAME)
+            ?: File(absoluteProjectPath, ORT_REPO_CONFIG_FILENAME)
 
         val repositoryConfiguration = if (actualRepositoryConfigurationFile.isFile) {
             log.info { "Using configuration file '${actualRepositoryConfigurationFile.absolutePath}'." }
