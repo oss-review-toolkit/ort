@@ -21,10 +21,11 @@ package org.ossreviewtoolkit.model.config
 
 import com.fasterxml.jackson.annotation.JsonInclude
 
+import org.ossreviewtoolkit.utils.ORT_REPO_CONFIG_FILENAME
+
 /**
- * A repository specific configuration for ORT. This configuration is parsed from a ".ort.yml" file in the input
- * directory of the analyzer. It will be included in the analyzer result and can be further processed by the other
- * tools.
+ * A project specific configuration for ORT which is usually stored in [ORT_REPO_CONFIG_FILENAME] at the root of a
+ * repository. It will be included in the analyzer result and can be further processed by the other tools.
  */
 data class RepositoryConfiguration(
     /**
