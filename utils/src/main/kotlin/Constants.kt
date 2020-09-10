@@ -29,6 +29,11 @@ const val ORT_FULL_NAME = "OSS Review Toolkit"
 const val ORT_DATA_DIR_ENV_NAME = "ORT_DATA_DIR"
 
 /**
+ * The name of the ORT (main) configuration file.
+ */
+const val ORT_CONFIG_FILENAME = "ort.conf"
+
+/**
  * The name of the ORT repository configuration file.
  */
 const val ORT_REPO_CONFIG_FILENAME = ".ort.yml"
