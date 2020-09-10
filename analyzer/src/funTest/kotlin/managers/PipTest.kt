@@ -40,29 +40,29 @@ class PipTest : WordSpec() {
     init {
         "Python 2" should {
             "resolve setup.py dependencies correctly for spdx-tools-python" {
-                val definitionFile = File(projectsDir, "external/spdx-tools-python/setup.py")
+                val definitionFile = projectsDir.resolve("external/spdx-tools-python/setup.py")
 
                 val result = createPIP().resolveSingleProject(definitionFile)
-                val expectedResult = File(projectsDir, "external/spdx-tools-python-expected-output.yml").readText()
+                val expectedResult = projectsDir.resolve("external/spdx-tools-python-expected-output.yml").readText()
 
                 result.toYaml() shouldBe expectedResult
             }
 
             "resolve requirements.txt dependencies correctly for example-python-flask" {
-                val definitionFile = File(projectsDir, "external/example-python-flask/requirements.txt")
+                val definitionFile = projectsDir.resolve("external/example-python-flask/requirements.txt")
 
                 val result = createPIP().resolveSingleProject(definitionFile)
-                val expectedResult = File(projectsDir, "external/example-python-flask-expected-output.yml").readText()
+                val expectedResult = projectsDir.resolve("external/example-python-flask-expected-output.yml").readText()
 
                 result.toYaml() shouldBe expectedResult
             }
 
             "capture metadata from setup.py even if requirements.txt is present" {
-                val definitionFile = File(projectsDir, "synthetic/pip/requirements.txt")
+                val definitionFile = projectsDir.resolve("synthetic/pip/requirements.txt")
                 val vcsPath = vcsDir.getPathToRoot(definitionFile.parentFile)
 
                 val expectedResult = patchExpectedResult(
-                    File(projectsDir, "synthetic/pip-expected-output.yml"),
+                    projectsDir.resolve("synthetic/pip-expected-output.yml"),
                     url = normalizeVcsUrl(vcsUrl),
                     revision = vcsRevision,
                     path = vcsPath
@@ -76,11 +76,11 @@ class PipTest : WordSpec() {
 
         "Python 3" should {
             "resolve dependencies correctly for a Django project" {
-                val definitionFile = File(projectsDir, "synthetic/pip-python3/requirements.txt")
+                val definitionFile = projectsDir.resolve("synthetic/pip-python3/requirements.txt")
                 val vcsPath = vcsDir.getPathToRoot(definitionFile.parentFile)
 
                 val result = createPIP().resolveSingleProject(definitionFile)
-                val expectedResultFile = File(projectsDir, "synthetic/pip-python3-expected-output.yml")
+                val expectedResultFile = projectsDir.resolve("synthetic/pip-python3-expected-output.yml")
                 val expectedResult = patchExpectedResult(
                     expectedResultFile,
                     url = normalizeVcsUrl(vcsUrl),

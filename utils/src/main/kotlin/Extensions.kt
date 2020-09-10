@@ -175,7 +175,7 @@ fun File.searchUpwardsForSubdirectory(searchDirName: String): File? {
 
     var currentDir: File? = absoluteFile
 
-    while (currentDir != null && !File(currentDir, searchDirName).isDirectory) {
+    while (currentDir != null && !currentDir.resolve(searchDirName).isDirectory) {
         currentDir = currentDir.parentFile
     }
 

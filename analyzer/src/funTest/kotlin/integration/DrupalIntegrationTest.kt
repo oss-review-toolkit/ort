@@ -19,8 +19,6 @@
 
 package org.ossreviewtoolkit.analyzer.integration
 
-import java.io.File
-
 import org.ossreviewtoolkit.analyzer.PackageManagerFactory
 import org.ossreviewtoolkit.analyzer.managers.Npm
 import org.ossreviewtoolkit.analyzer.managers.PhpComposer
@@ -57,39 +55,39 @@ class DrupalIntegrationTest : AbstractIntegrationSpec() {
 
         mapOf(
             PhpComposer.Factory() as PackageManagerFactory to listOf(
-                File(downloadDir, "core/modules/system/tests/fixtures/HtaccessTest/composer.json"),
-                File(downloadDir, "core/lib/Drupal/Component/Uuid/composer.json"),
-                File(downloadDir, "core/lib/Drupal/Component/Utility/composer.json"),
-                File(downloadDir, "core/lib/Drupal/Component/Transliteration/composer.json"),
-                File(downloadDir, "core/lib/Drupal/Component/Serialization/composer.json"),
-                File(downloadDir, "core/lib/Drupal/Component/Render/composer.json"),
-                File(downloadDir, "core/lib/Drupal/Component/ProxyBuilder/composer.json"),
-                File(downloadDir, "core/lib/Drupal/Component/Plugin/composer.json"),
-                File(downloadDir, "core/lib/Drupal/Component/PhpStorage/composer.json"),
-                File(downloadDir, "core/lib/Drupal/Component/HttpFoundation/composer.json"),
-                File(downloadDir, "core/lib/Drupal/Component/Graph/composer.json"),
-                File(downloadDir, "core/lib/Drupal/Component/Gettext/composer.json"),
-                File(downloadDir, "core/lib/Drupal/Component/FileSystem/composer.json"),
-                File(downloadDir, "core/lib/Drupal/Component/FileCache/composer.json"),
-                File(downloadDir, "core/lib/Drupal/Component/EventDispatcher/composer.json"),
-                File(downloadDir, "core/lib/Drupal/Component/Discovery/composer.json"),
-                File(downloadDir, "core/lib/Drupal/Component/Diff/composer.json"),
-                File(downloadDir, "core/lib/Drupal/Component/DependencyInjection/composer.json"),
-                File(downloadDir, "core/lib/Drupal/Component/Datetime/composer.json"),
-                File(downloadDir, "core/lib/Drupal/Component/ClassFinder/composer.json"),
-                File(downloadDir, "core/lib/Drupal/Component/Bridge/composer.json"),
-                File(downloadDir, "core/lib/Drupal/Component/Assertion/composer.json"),
-                File(downloadDir, "core/lib/Drupal/Component/Annotation/composer.json"),
-                File(downloadDir, "core/composer.json"),
-                File(downloadDir, "composer.json")
+                downloadDir.resolve("core/modules/system/tests/fixtures/HtaccessTest/composer.json"),
+                downloadDir.resolve("core/lib/Drupal/Component/Uuid/composer.json"),
+                downloadDir.resolve("core/lib/Drupal/Component/Utility/composer.json"),
+                downloadDir.resolve("core/lib/Drupal/Component/Transliteration/composer.json"),
+                downloadDir.resolve("core/lib/Drupal/Component/Serialization/composer.json"),
+                downloadDir.resolve("core/lib/Drupal/Component/Render/composer.json"),
+                downloadDir.resolve("core/lib/Drupal/Component/ProxyBuilder/composer.json"),
+                downloadDir.resolve("core/lib/Drupal/Component/Plugin/composer.json"),
+                downloadDir.resolve("core/lib/Drupal/Component/PhpStorage/composer.json"),
+                downloadDir.resolve("core/lib/Drupal/Component/HttpFoundation/composer.json"),
+                downloadDir.resolve("core/lib/Drupal/Component/Graph/composer.json"),
+                downloadDir.resolve("core/lib/Drupal/Component/Gettext/composer.json"),
+                downloadDir.resolve("core/lib/Drupal/Component/FileSystem/composer.json"),
+                downloadDir.resolve("core/lib/Drupal/Component/FileCache/composer.json"),
+                downloadDir.resolve("core/lib/Drupal/Component/EventDispatcher/composer.json"),
+                downloadDir.resolve("core/lib/Drupal/Component/Discovery/composer.json"),
+                downloadDir.resolve("core/lib/Drupal/Component/Diff/composer.json"),
+                downloadDir.resolve("core/lib/Drupal/Component/DependencyInjection/composer.json"),
+                downloadDir.resolve("core/lib/Drupal/Component/Datetime/composer.json"),
+                downloadDir.resolve("core/lib/Drupal/Component/ClassFinder/composer.json"),
+                downloadDir.resolve("core/lib/Drupal/Component/Bridge/composer.json"),
+                downloadDir.resolve("core/lib/Drupal/Component/Assertion/composer.json"),
+                downloadDir.resolve("core/lib/Drupal/Component/Annotation/composer.json"),
+                downloadDir.resolve("core/composer.json"),
+                downloadDir.resolve("composer.json")
             ),
             Npm.Factory() as PackageManagerFactory to listOf(
-                File(downloadDir, "core/package.json"),
-                File(downloadDir, "core/assets/vendor/jquery.ui/package.json")
+                downloadDir.resolve("core/package.json"),
+                downloadDir.resolve("core/assets/vendor/jquery.ui/package.json")
             ),
             Yarn.Factory() as PackageManagerFactory to listOf(
-                File(downloadDir, "core/package.json"),
-                File(downloadDir, "core/assets/vendor/jquery.ui/package.json")
+                downloadDir.resolve("core/package.json"),
+                downloadDir.resolve("core/assets/vendor/jquery.ui/package.json")
             )
         )
     }
@@ -98,7 +96,7 @@ class DrupalIntegrationTest : AbstractIntegrationSpec() {
         mapOf(
             PhpComposer.Factory() as PackageManagerFactory to
                     // Limit to definition files that come long with a lock file.
-                    listOf(File(downloadResult.downloadDirectory, "composer.json"))
+                    listOf(downloadResult.downloadDirectory.resolve("composer.json"))
         )
     }
 }

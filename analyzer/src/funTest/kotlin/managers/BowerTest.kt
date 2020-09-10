@@ -39,10 +39,10 @@ class BowerTest : StringSpec() {
 
     init {
         "Project dependencies are detected correctly" {
-            val packageFile = File(projectDir, "bower.json")
+            val packageFile = projectDir.resolve("bower.json")
             val vcsPath = vcsDir.getPathToRoot(projectDir)
             val expectedResult = patchExpectedResult(
-                File(projectDir.parentFile, "bower-expected-output.yml"),
+                projectDir.parentFile.resolve("bower-expected-output.yml"),
                 definitionFilePath = "$vcsPath/bower.json",
                 path = vcsPath,
                 revision = vcsRevision,

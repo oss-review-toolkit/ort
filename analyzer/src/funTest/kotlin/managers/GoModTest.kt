@@ -39,10 +39,10 @@ class GoModTest : StringSpec() {
 
     init {
         "Project dependencies are detected correctly" {
-            val definitionFile = File(projectDir, "go.mod")
+            val definitionFile = projectDir.resolve("go.mod")
             val vcsPath = vcsDir.getPathToRoot(projectDir)
             val expectedResult = patchExpectedResult(
-                File(projectDir.parentFile, "gomod-expected-output.yml"),
+                projectDir.parentFile.resolve("gomod-expected-output.yml"),
                 definitionFilePath = "$vcsPath/go.mod",
                 path = vcsPath,
                 revision = vcsRevision,

@@ -42,11 +42,11 @@ class PhpComposerTest : StringSpec() {
 
     init {
         "Project dependencies are detected correctly" {
-            val definitionFile = File(projectsDir, "lockfile/composer.json")
+            val definitionFile = projectsDir.resolve("lockfile/composer.json")
 
             val result = createPhpComposer().resolveSingleProject(definitionFile)
             val expectedResults = patchExpectedResult(
-                File(projectsDir.parentFile, "php-composer-expected-output.yml"),
+                projectsDir.parentFile.resolve("php-composer-expected-output.yml"),
                 url = normalizeVcsUrl(vcsUrl),
                 revision = vcsRevision,
                 path = vcsDir.getPathToRoot(definitionFile.parentFile)
@@ -56,7 +56,7 @@ class PhpComposerTest : StringSpec() {
         }
 
         "Error is shown when no lockfile is present" {
-            val definitionFile = File(projectsDir, "no-lockfile/composer.json")
+            val definitionFile = projectsDir.resolve("no-lockfile/composer.json")
             val result = createPhpComposer().resolveSingleProject(definitionFile)
 
             with(result) {
@@ -73,11 +73,11 @@ class PhpComposerTest : StringSpec() {
         }
 
         "No composer.lock is required for projects without dependencies" {
-            val definitionFile = File(projectsDir, "no-deps/composer.json")
+            val definitionFile = projectsDir.resolve("no-deps/composer.json")
 
             val result = createPhpComposer().resolveSingleProject(definitionFile)
             val expectedResults = patchExpectedResult(
-                File(projectsDir.parentFile, "php-composer-expected-output-no-deps.yml"),
+                projectsDir.parentFile.resolve("php-composer-expected-output-no-deps.yml"),
                 definitionFilePath = VersionControlSystem.getPathInfo(definitionFile).path,
                 url = normalizeVcsUrl(vcsUrl),
                 revision = vcsRevision,
@@ -88,11 +88,11 @@ class PhpComposerTest : StringSpec() {
         }
 
         "No composer.lock is required for projects with empty dependencies" {
-            val definitionFile = File(projectsDir, "empty-deps/composer.json")
+            val definitionFile = projectsDir.resolve("empty-deps/composer.json")
 
             val result = createPhpComposer().resolveSingleProject(definitionFile)
             val expectedResults = patchExpectedResult(
-                File(projectsDir.parentFile, "php-composer-expected-output-no-deps.yml"),
+                projectsDir.parentFile.resolve("php-composer-expected-output-no-deps.yml"),
                 definitionFilePath = VersionControlSystem.getPathInfo(definitionFile).path,
                 url = normalizeVcsUrl(vcsUrl),
                 revision = vcsRevision,
@@ -103,11 +103,11 @@ class PhpComposerTest : StringSpec() {
         }
 
         "Packages defined as provided are not reported as missing" {
-            val definitionFile = File(projectsDir, "with-provide/composer.json")
+            val definitionFile = projectsDir.resolve("with-provide/composer.json")
 
             val result = createPhpComposer().resolveSingleProject(definitionFile)
             val expectedResults = patchExpectedResult(
-                File(projectsDir.parentFile, "php-composer-expected-output-with-provide.yml"),
+                projectsDir.parentFile.resolve("php-composer-expected-output-with-provide.yml"),
                 url = normalizeVcsUrl(vcsUrl),
                 revision = vcsRevision,
                 path = vcsDir.getPathToRoot(definitionFile.parentFile)
@@ -117,11 +117,11 @@ class PhpComposerTest : StringSpec() {
         }
 
         "Packages defined as replaced are not reported as missing" {
-            val definitionFile = File(projectsDir, "with-replace/composer.json")
+            val definitionFile = projectsDir.resolve("with-replace/composer.json")
 
             val result = createPhpComposer().resolveSingleProject(definitionFile)
             val expectedResults = patchExpectedResult(
-                File(projectsDir.parentFile, "php-composer-expected-output-with-replace.yml"),
+                projectsDir.parentFile.resolve("php-composer-expected-output-with-replace.yml"),
                 url = normalizeVcsUrl(vcsUrl),
                 revision = vcsRevision,
                 path = vcsDir.getPathToRoot(definitionFile.parentFile)

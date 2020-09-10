@@ -56,7 +56,7 @@ class GitRepoDownloadTest : StringSpec() {
             val pkg = Package.EMPTY.copy(vcsProcessed = vcs)
             val workingTree = GitRepo().download(pkg, outputDir)
 
-            val spdxDir = File(outputDir, "spdx-tools")
+            val spdxDir = outputDir.resolve("spdx-tools")
             val expectedSpdxFiles = listOf(
                 ".git",
                 "Examples",
@@ -73,7 +73,7 @@ class GitRepoDownloadTest : StringSpec() {
                 it.name
             }.sorted()
 
-            val submodulesDir = File(outputDir, "submodules")
+            val submodulesDir = outputDir.resolve("submodules")
             val expectedSubmodulesFiles = listOf(
                 ".git",
                 "commons-text",
@@ -89,8 +89,8 @@ class GitRepoDownloadTest : StringSpec() {
             workingTree.isValid() shouldBe true
             workingTree.getInfo() shouldBe vcs
 
-            workingTree.getPathToRoot(File(outputDir, "grpc/README.md")) shouldBe "grpc/README.md"
-            workingTree.getPathToRoot(File(outputDir, "spdx-tools/TODO")) shouldBe "spdx-tools/TODO"
+            workingTree.getPathToRoot(outputDir.resolve("grpc/README.md")) shouldBe "grpc/README.md"
+            workingTree.getPathToRoot(outputDir.resolve("spdx-tools/TODO")) shouldBe "spdx-tools/TODO"
 
             actualSpdxFiles.joinToString("\n") shouldBe expectedSpdxFiles.joinToString("\n")
             actualSubmodulesFiles.joinToString("\n") shouldBe expectedSubmodulesFiles.joinToString("\n")

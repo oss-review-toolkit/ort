@@ -44,12 +44,12 @@ class BundlerTest : WordSpec() {
     init {
         "Bundler" should {
             "resolve dependencies correctly" {
-                val definitionFile = File(projectsDir, "lockfile/Gemfile")
+                val definitionFile = projectsDir.resolve("lockfile/Gemfile")
 
                 try {
                     val actualResult = createBundler().resolveSingleProject(definitionFile)
                     val expectedResult = patchExpectedResult(
-                        File(projectsDir.parentFile, "bundler-expected-output-lockfile.yml"),
+                        projectsDir.parentFile.resolve("bundler-expected-output-lockfile.yml"),
                         url = normalizeVcsUrl(vcsUrl),
                         revision = vcsRevision,
                         path = vcsDir.getPathToRoot(definitionFile.parentFile)
@@ -62,7 +62,7 @@ class BundlerTest : WordSpec() {
             }
 
             "show error if no lockfile is present" {
-                val definitionFile = File(projectsDir, "no-lockfile/Gemfile")
+                val definitionFile = projectsDir.resolve("no-lockfile/Gemfile")
                 val actualResult = createBundler().resolveSingleProject(definitionFile)
 
                 with(actualResult) {
@@ -77,12 +77,12 @@ class BundlerTest : WordSpec() {
             }
 
             "resolve dependencies correctly when the project is a Gem" {
-                val definitionFile = File(projectsDir, "gemspec/Gemfile")
+                val definitionFile = projectsDir.resolve("gemspec/Gemfile")
 
                 try {
                     val actualResult = createBundler().resolveSingleProject(definitionFile)
                     val expectedResult = patchExpectedResult(
-                        File(projectsDir.parentFile, "bundler-expected-output-gemspec.yml"),
+                        projectsDir.parentFile.resolve("bundler-expected-output-gemspec.yml"),
                         url = normalizeVcsUrl(vcsUrl),
                         revision = vcsRevision,
                         path = vcsDir.getPathToRoot(definitionFile.parentFile)

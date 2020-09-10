@@ -148,7 +148,7 @@ class EvaluatorCommand : CliktCommand(name = "evaluate", help = "Evaluate rules 
 
         outputDir?.let { absoluteOutputDir ->
             outputFiles += outputFormats.distinct().map { format ->
-                File(absoluteOutputDir, "evaluation-result.${format.fileExtension}")
+                absoluteOutputDir.resolve("evaluation-result.${format.fileExtension}")
             }
 
             val existingOutputFiles = outputFiles.filter { it.exists() }

@@ -46,10 +46,10 @@ class ConanTest : StringSpec() {
 
     init {
         "Project dependencies are detected correctly for conanfile.txt" {
-            val packageFile = File(projectsDirTxt, "conanfile.txt")
+            val packageFile = projectsDirTxt.resolve("conanfile.txt")
             val vcsPath = vcsDirTxt.getPathToRoot(projectsDirTxt)
             val expectedResult = patchExpectedResult(
-                File(projectsDirTxt.parentFile, "conan-expected-output-txt.yml"),
+                projectsDirTxt.parentFile.resolve("conan-expected-output-txt.yml"),
                 definitionFilePath = "$vcsPath/conanfile.txt",
                 path = vcsPath,
                 revision = vcsRevisionTxt,
@@ -62,10 +62,10 @@ class ConanTest : StringSpec() {
         }
 
         "Project dependencies are detected correctly for conanfile.py" {
-            val packageFile = File(projectsDirPy, "conanfile.py")
+            val packageFile = projectsDirPy.resolve("conanfile.py")
             val vcsPath = vcsDirPy.getPathToRoot(projectsDirPy)
             val expectedResult = patchExpectedResult(
-                File(projectsDirPy.parentFile, "conan-expected-output-py.yml"),
+                projectsDirPy.parentFile.resolve("conan-expected-output-py.yml"),
                 definitionFilePath = "$vcsPath/conanfile.py",
                 path = vcsPath,
                 revision = vcsRevisionPy,

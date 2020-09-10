@@ -39,9 +39,9 @@ class GradleKotlinScriptTest : StringSpec() {
 
     init {
         "root project dependencies are detected correctly" {
-            val packageFile = File(projectDir, "build.gradle.kts")
+            val packageFile = projectDir.resolve("build.gradle.kts")
             val expectedResult = patchExpectedResult(
-                File(projectDir.parentFile, "multi-kotlin-project-expected-output-root.yml"),
+                projectDir.parentFile.resolve("multi-kotlin-project-expected-output-root.yml"),
                 url = normalizeVcsUrl(vcsUrl),
                 revision = vcsRevision
             )
@@ -52,9 +52,9 @@ class GradleKotlinScriptTest : StringSpec() {
         }
 
         "core project dependencies are detected correctly" {
-            val packageFile = File(projectDir, "core/build.gradle.kts")
+            val packageFile = projectDir.resolve("core/build.gradle.kts")
             val expectedResult = patchExpectedResult(
-                File(projectDir.parentFile, "multi-kotlin-project-expected-output-core.yml"),
+                projectDir.parentFile.resolve("multi-kotlin-project-expected-output-core.yml"),
                 url = normalizeVcsUrl(vcsUrl),
                 revision = vcsRevision
             )
@@ -65,9 +65,9 @@ class GradleKotlinScriptTest : StringSpec() {
         }
 
         "cli project dependencies are detected correctly" {
-            val packageFile = File(projectDir, "cli/build.gradle.kts")
+            val packageFile = projectDir.resolve("cli/build.gradle.kts")
             val expectedResult = patchExpectedResult(
-                File(projectDir.parentFile, "multi-kotlin-project-expected-output-cli.yml"),
+                projectDir.parentFile.resolve("multi-kotlin-project-expected-output-cli.yml"),
                 url = normalizeVcsUrl(vcsUrl),
                 revision = vcsRevision
             )

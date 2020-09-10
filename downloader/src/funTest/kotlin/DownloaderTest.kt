@@ -77,7 +77,7 @@ class DownloaderTest : StringSpec() {
                 hash shouldBe pkg.sourceArtifact.hash
             }
 
-            val licenseFile = File(downloadResult.downloadDirectory, "LICENSE-junit.txt")
+            val licenseFile = downloadResult.downloadDirectory.resolve("LICENSE-junit.txt")
             licenseFile.isFile shouldBe true
             licenseFile.length() shouldBe 11376L
 
@@ -145,7 +145,7 @@ class DownloaderTest : StringSpec() {
                 hash shouldBe pkg.sourceArtifact.hash
             }
 
-            val licenseFile = File(downloadResult.downloadDirectory, "LICENSE-junit.txt")
+            val licenseFile = downloadResult.downloadDirectory.resolve("LICENSE-junit.txt")
             licenseFile.isFile shouldBe true
             licenseFile.length() shouldBe 11376L
 
@@ -179,7 +179,7 @@ class DownloaderTest : StringSpec() {
                 hash shouldBe pkg.sourceArtifact.hash
             }
 
-            val tyrexDir = File(downloadResult.downloadDirectory, "tyrex-1.0.1")
+            val tyrexDir = downloadResult.downloadDirectory.resolve("tyrex-1.0.1")
 
             tyrexDir.isDirectory shouldBe true
             tyrexDir.walk().count() shouldBe 409
@@ -212,7 +212,7 @@ class DownloaderTest : StringSpec() {
                 hash shouldBe pkg.sourceArtifact.hash
             }
 
-            val tslibDir = File(downloadResult.downloadDirectory, "tslib-1.10.0")
+            val tslibDir = downloadResult.downloadDirectory.resolve("tslib-1.10.0")
 
             tslibDir.isDirectory shouldBe true
             tslibDir.walk().count() shouldBe 16

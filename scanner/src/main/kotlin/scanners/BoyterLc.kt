@@ -102,7 +102,7 @@ class BoyterLc(name: String, config: ScannerConfiguration) : LocalScanner(name, 
 
             if (!Os.isWindows) {
                 // The Linux version is distributed as a ZIP, but without having the Unix executable mode bits stored.
-                File(unpackDir, command()).setExecutable(true)
+                unpackDir.resolve(command()).setExecutable(true)
             }
 
             unpackDir

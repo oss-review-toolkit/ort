@@ -204,7 +204,7 @@ class Pip(
     private fun runInVirtualEnv(virtualEnvDir: File, workingDir: File, commandName: String, vararg commandArgs: String):
             ProcessCapture {
         val binDir = if (Os.isWindows) "Scripts" else "bin"
-        var command = File(virtualEnvDir, binDir + File.separator + commandName)
+        var command = virtualEnvDir.resolve(binDir + File.separator + commandName)
 
         if (Os.isWindows && command.extension.isEmpty()) {
             // On Windows specifying the extension is optional, so try them in order.
@@ -261,7 +261,7 @@ class Pip(
         var declaredLicenses: SortedSet<String> = sortedSetOf<String>()
 
         // First try to get meta-data from "setup.py" in any case, even for "requirements.txt" projects.
-        val (setupName, setupVersion, setupHomepage) = if (File(workingDir, "setup.py").isFile) {
+        val (setupName, setupVersion, setupHomepage) = if (workingDir.resolve("setup.py").isFile) {
             val pydep = if (Os.isWindows) {
                 // On Windows, the script itself is not executable, so we need to wrap the call by "python".
                 runInVirtualEnv(

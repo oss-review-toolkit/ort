@@ -48,25 +48,25 @@ class PackageManagerTest : WordSpec({
                 manager.managerName
             }
 
-            managedFilesByName["Bower"] should containExactly(File(projectDir, "bower.json"))
-            managedFilesByName["Bundler"] should containExactly(File(projectDir, "Gemfile"))
-            managedFilesByName["Cargo"] should containExactly(File(projectDir, "Cargo.toml"))
-            managedFilesByName["Conan"] should containExactly(File(projectDir, "conanfile.py"))
-            managedFilesByName["DotNet"] should containExactly(File(projectDir, "test.csproj"))
-            managedFilesByName["GoDep"] should containExactly(File(projectDir, "Gopkg.toml"))
-            managedFilesByName["GoMod"] should containExactly(File(projectDir, "go.mod"))
-            managedFilesByName["Gradle"] should containExactly(File(projectDir, "build.gradle"))
-            managedFilesByName["Maven"] should containExactly(File(projectDir, "pom.xml"))
-            managedFilesByName["NPM"] should containExactly(File(projectDir, "package.json"))
-            managedFilesByName["NuGet"] should containExactly(File(projectDir, "packages.config"))
-            managedFilesByName["PhpComposer"] should containExactly(File(projectDir, "composer.json"))
-            managedFilesByName["PIP"] should containExactly(File(projectDir, "setup.py"))
-            managedFilesByName["Pipenv"] should containExactly(File(projectDir, "Pipfile.lock"))
-            managedFilesByName["Pub"] should containExactly(File(projectDir, "pubspec.yaml"))
-            managedFilesByName["SBT"] should containExactly(File(projectDir, "build.sbt"))
-            managedFilesByName["SpdxDocumentFile"] should containExactly(File(projectDir, "project.spdx.yml"))
-            managedFilesByName["Stack"] should containExactly(File(projectDir, "stack.yaml"))
-            managedFilesByName["Yarn"] should containExactly(File(projectDir, "package.json"))
+            managedFilesByName["Bower"] should containExactly(projectDir.resolve("bower.json"))
+            managedFilesByName["Bundler"] should containExactly(projectDir.resolve("Gemfile"))
+            managedFilesByName["Cargo"] should containExactly(projectDir.resolve("Cargo.toml"))
+            managedFilesByName["Conan"] should containExactly(projectDir.resolve("conanfile.py"))
+            managedFilesByName["DotNet"] should containExactly(projectDir.resolve("test.csproj"))
+            managedFilesByName["GoDep"] should containExactly(projectDir.resolve("Gopkg.toml"))
+            managedFilesByName["GoMod"] should containExactly(projectDir.resolve("go.mod"))
+            managedFilesByName["Gradle"] should containExactly(projectDir.resolve("build.gradle"))
+            managedFilesByName["Maven"] should containExactly(projectDir.resolve("pom.xml"))
+            managedFilesByName["NPM"] should containExactly(projectDir.resolve("package.json"))
+            managedFilesByName["NuGet"] should containExactly(projectDir.resolve("packages.config"))
+            managedFilesByName["PhpComposer"] should containExactly(projectDir.resolve("composer.json"))
+            managedFilesByName["PIP"] should containExactly(projectDir.resolve("setup.py"))
+            managedFilesByName["Pipenv"] should containExactly(projectDir.resolve("Pipfile.lock"))
+            managedFilesByName["Pub"] should containExactly(projectDir.resolve("pubspec.yaml"))
+            managedFilesByName["SBT"] should containExactly(projectDir.resolve("build.sbt"))
+            managedFilesByName["SpdxDocumentFile"] should containExactly(projectDir.resolve("project.spdx.yml"))
+            managedFilesByName["Stack"] should containExactly(projectDir.resolve("stack.yaml"))
+            managedFilesByName["Yarn"] should containExactly(projectDir.resolve("package.json"))
         }
 
         "find only files for active package managers" {
@@ -83,9 +83,9 @@ class PackageManagerTest : WordSpec({
                 manager.managerName
             }
 
-            managedFilesByName["Gradle"] should containExactly(File(projectDir, "build.gradle"))
-            managedFilesByName["PIP"] should containExactly(File(projectDir, "setup.py"))
-            managedFilesByName["SBT"] should containExactly(File(projectDir, "build.sbt"))
+            managedFilesByName["Gradle"] should containExactly(projectDir.resolve("build.gradle"))
+            managedFilesByName["PIP"] should containExactly(projectDir.resolve("setup.py"))
+            managedFilesByName["SBT"] should containExactly(projectDir.resolve("build.sbt"))
         }
 
         "find no files if no package managers are active" {
@@ -96,7 +96,7 @@ class PackageManagerTest : WordSpec({
 
         "fail if the provided file is not a directory" {
             shouldThrow<IllegalArgumentException> {
-                PackageManager.findManagedFiles(File(projectDir, "pom.xml"))
+                PackageManager.findManagedFiles(projectDir.resolve("pom.xml"))
             }
         }
     }

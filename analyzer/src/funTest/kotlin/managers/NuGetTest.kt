@@ -41,7 +41,7 @@ class NuGetTest : StringSpec() {
     private val vcsDir = VersionControlSystem.forDirectory(projectDir)!!
     private val vcsUrl = vcsDir.getRemoteUrl()
     private val vcsRevision = vcsDir.getRevision()
-    private val packageFile = File(projectDir, "packages.config")
+    private val packageFile = projectDir.resolve("packages.config")
 
     init {
         "Definition file is correctly read" {
@@ -58,10 +58,7 @@ class NuGetTest : StringSpec() {
         "Project dependencies are detected correctly" {
             val vcsPath = vcsDir.getPathToRoot(projectDir)
             val expectedResult = patchExpectedResult(
-                File(
-                    projectDir.parentFile,
-                    "nuget-expected-output.yml"
-                ),
+                projectDir.parentFile.resolve("nuget-expected-output.yml"),
                 url = normalizeVcsUrl(vcsUrl),
                 revision = vcsRevision,
                 path = vcsPath

@@ -59,7 +59,7 @@ class Analyzer(private val config: AnalyzerConfiguration) {
         val startTime = Instant.now()
 
         val actualRepositoryConfigurationFile = repositoryConfigurationFile
-            ?: File(absoluteProjectPath, ORT_REPO_CONFIG_FILENAME)
+            ?: absoluteProjectPath.resolve(ORT_REPO_CONFIG_FILENAME)
 
         val repositoryConfiguration = if (actualRepositoryConfigurationFile.isFile) {
             log.info { "Using configuration file '${actualRepositoryConfigurationFile.absolutePath}'." }

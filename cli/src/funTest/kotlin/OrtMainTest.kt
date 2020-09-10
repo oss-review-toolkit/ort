@@ -60,13 +60,13 @@ class OrtMainTest : StringSpec() {
 
     init {
         "Activating only Gradle works" {
-            val inputDir = File(projectDir, "gradle")
+            val inputDir = projectDir.resolve("gradle")
 
             val stdout = runMain(
                 "analyze",
                 "-m", "Gradle",
                 "-i", inputDir.path,
-                "-o", File(outputDir, "gradle").path
+                "-o", outputDir.resolve("gradle").path
             )
             val iterator = stdout.iterator()
             while (iterator.hasNext()) {
@@ -78,13 +78,13 @@ class OrtMainTest : StringSpec() {
         }
 
         "Activating only NPM works" {
-            val inputDir = File(projectDir, "npm/package-lock")
+            val inputDir = projectDir.resolve("npm/package-lock")
 
             val stdout = runMain(
                 "analyze",
                 "-m", "NPM",
                 "-i", inputDir.path,
-                "-o", File(outputDir, "package-lock").path
+                "-o", outputDir.resolve("package-lock").path
             )
             val iterator = stdout.iterator()
             while (iterator.hasNext()) {
@@ -96,13 +96,13 @@ class OrtMainTest : StringSpec() {
         }
 
         "Output formats are deduplicated" {
-            val inputDir = File(projectDir, "gradle")
+            val inputDir = projectDir.resolve("gradle")
 
             val stdout = runMain(
                 "analyze",
                 "-m", "Gradle",
                 "-i", inputDir.path,
-                "-o", File(outputDir, "gradle").path,
+                "-o", outputDir.resolve("gradle").path,
                 "-f", "json,yaml,json"
             )
             val lines = stdout.filter { it.startsWith("Writing analyzer result to ") }
@@ -111,9 +111,9 @@ class OrtMainTest : StringSpec() {
         }
 
         "Analyzer creates correct output" {
-            val analyzerOutputDir = File(outputDir, "merged-results")
+            val analyzerOutputDir = outputDir.resolve("merged-results")
             val expectedResult = patchExpectedResult(
-                File(projectDir, "gradle-all-dependencies-expected-result.yml"),
+                projectDir.resolve("gradle-all-dependencies-expected-result.yml"),
                 url = vcsUrl,
                 revision = vcsRevision,
                 urlProcessed = normalizeVcsUrl(vcsUrl)
@@ -122,18 +122,18 @@ class OrtMainTest : StringSpec() {
             runMain(
                 "analyze",
                 "-m", "Gradle",
-                "-i", File(projectDir, "gradle").absolutePath,
+                "-i", projectDir.resolve("gradle").absolutePath,
                 "-o", analyzerOutputDir.path
             )
-            val analyzerResult = File(analyzerOutputDir, "analyzer-result.yml").readText()
+            val analyzerResult = analyzerOutputDir.resolve("analyzer-result.yml").readText()
 
             patchActualResult(analyzerResult, patchStartAndEndTime = true) shouldBe expectedResult
         }
 
         "Package curation data file is applied correctly" {
-            val analyzerOutputDir = File(outputDir, "curations")
+            val analyzerOutputDir = outputDir.resolve("curations")
             val expectedResult = patchExpectedResult(
-                File(projectDir, "gradle-all-dependencies-expected-result-with-curations.yml"),
+                projectDir.resolve("gradle-all-dependencies-expected-result-with-curations.yml"),
                 url = vcsUrl,
                 revision = vcsRevision,
                 urlProcessed = normalizeVcsUrl(vcsUrl)
@@ -142,11 +142,11 @@ class OrtMainTest : StringSpec() {
             runMain(
                 "analyze",
                 "-m", "Gradle",
-                "-i", File(projectDir, "gradle").absolutePath,
+                "-i", projectDir.resolve("gradle").absolutePath,
                 "-o", analyzerOutputDir.path,
-                "--package-curations-file", File(projectDir, "gradle/curations.yml").toString()
+                "--package-curations-file", projectDir.resolve("gradle/curations.yml").toString()
             )
-            val analyzerResult = File(analyzerOutputDir, "analyzer-result.yml").readText()
+            val analyzerResult = analyzerOutputDir.resolve("analyzer-result.yml").readText()
 
             patchActualResult(analyzerResult, patchStartAndEndTime = true) shouldBe expectedResult
         }

@@ -39,10 +39,10 @@ class CargoTest : StringSpec() {
 
     init {
         "Projects dependencies are detected correctly" {
-            val packageFile = File(projectDir, "Cargo.toml")
+            val packageFile = projectDir.resolve("Cargo.toml")
             val vcsPath = vcsDir.getPathToRoot(projectDir)
             val expectedResult = patchExpectedResult(
-                File(projectDir.parentFile, "cargo-expected-output.yml"),
+                projectDir.parentFile.resolve("cargo-expected-output.yml"),
                 definitionFilePath = "$vcsPath/Cargo.toml",
                 path = vcsPath,
                 revision = vcsRevision,

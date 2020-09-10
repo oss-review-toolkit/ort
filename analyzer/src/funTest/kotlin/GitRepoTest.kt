@@ -85,7 +85,7 @@ class GitRepoTest : StringSpec() {
                 "submodules/test-data-npm",
                 "submodules/test-data-npm/isarray",
                 "submodules/test-data-npm/long.js"
-            ).associateWith { VersionControlSystem.getPathInfo(File(outputDir, it)) }
+            ).associateWith { VersionControlSystem.getPathInfo(outputDir.resolve(it)) }
 
             val workingTree = GitRepo().getWorkingTree(outputDir)
             workingTree.getNested() shouldBe expectedSubmodules

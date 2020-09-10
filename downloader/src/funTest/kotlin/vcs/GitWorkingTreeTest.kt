@@ -83,7 +83,7 @@ class GitWorkingTreeTest : StringSpec() {
             )
             workingTree.getNested() should beEmpty()
             workingTree.getRootPath() shouldBe zipContentDir
-            workingTree.getPathToRoot(File(zipContentDir, "tests")) shouldBe "tests"
+            workingTree.getPathToRoot(zipContentDir.resolve("tests")) shouldBe "tests"
         }
 
         "Git correctly lists remote branches" {

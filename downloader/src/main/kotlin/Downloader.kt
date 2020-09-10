@@ -338,7 +338,7 @@ object Downloader {
             if (sourceArchive.extension == "gem") {
                 // Unpack the nested data archive for Ruby Gems.
                 val gemDirectory = createTempDir(ORT_NAME, "gem")
-                val dataFile = File(gemDirectory, "data.tar.gz")
+                val dataFile = gemDirectory.resolve("data.tar.gz")
 
                 try {
                     sourceArchive.unpack(gemDirectory)

@@ -45,8 +45,8 @@ class MavenTest : StringSpec() {
     init {
         "jgnash parent dependencies are detected correctly" {
             val projectDir = File("src/funTest/assets/projects/external/jgnash").absoluteFile
-            val pomFile = File(projectDir, "pom.xml")
-            val expectedResult = File(projectDir.parentFile, "jgnash-expected-output.yml").readText()
+            val pomFile = projectDir.resolve("pom.xml")
+            val expectedResult = projectDir.parentFile.resolve("jgnash-expected-output.yml").readText()
 
             val result = createMaven().resolveSingleProject(pomFile)
 
@@ -56,10 +56,10 @@ class MavenTest : StringSpec() {
         "jgnash-core dependencies are detected correctly" {
             val projectDir = File("src/funTest/assets/projects/external/jgnash").absoluteFile
 
-            val pomFileCore = File(projectDir, "jgnash-core/pom.xml")
-            val pomFileResources = File(projectDir, "jgnash-resources/pom.xml")
+            val pomFileCore = projectDir.resolve("jgnash-core/pom.xml")
+            val pomFileResources = projectDir.resolve("jgnash-resources/pom.xml")
 
-            val expectedResult = File(projectDir.parentFile, "jgnash-core-expected-output.yml").readText()
+            val expectedResult = projectDir.parentFile.resolve("jgnash-core-expected-output.yml").readText()
 
             // jgnash-core depends on jgnash-resources, so we also have to pass the pom.xml of jgnash-resources to
             // resolveDependencies so that it is available in the Maven.projectsByIdentifier cache. Otherwise resolution
@@ -72,9 +72,9 @@ class MavenTest : StringSpec() {
         }
 
         "Root project dependencies are detected correctly" {
-            val pomFile = File(projectDir, "pom.xml")
+            val pomFile = projectDir.resolve("pom.xml")
             val expectedResult = patchExpectedResult(
-                File(projectDir.parentFile, "maven-expected-output-root.yml"),
+                projectDir.parentFile.resolve("maven-expected-output-root.yml"),
                 url = normalizeVcsUrl(vcsUrl),
                 revision = vcsRevision
             )
@@ -85,10 +85,10 @@ class MavenTest : StringSpec() {
         }
 
         "Project dependencies are detected correctly" {
-            val pomFileApp = File(projectDir, "app/pom.xml")
-            val pomFileLib = File(projectDir, "lib/pom.xml")
+            val pomFileApp = projectDir.resolve("app/pom.xml")
+            val pomFileLib = projectDir.resolve("lib/pom.xml")
             val expectedResult = patchExpectedResult(
-                File(projectDir.parentFile, "maven-expected-output-app.yml"),
+                projectDir.parentFile.resolve("maven-expected-output-app.yml"),
                 url = normalizeVcsUrl(vcsUrl),
                 revision = vcsRevision
             )
@@ -104,9 +104,9 @@ class MavenTest : StringSpec() {
         }
 
         "External dependencies are detected correctly" {
-            val pomFile = File(projectDir, "lib/pom.xml")
+            val pomFile = projectDir.resolve("lib/pom.xml")
             val expectedResult = patchExpectedResult(
-                File(projectDir.parentFile, "maven-expected-output-lib.yml"),
+                projectDir.parentFile.resolve("maven-expected-output-lib.yml"),
                 url = normalizeVcsUrl(vcsUrl),
                 revision = vcsRevision
             )
@@ -123,9 +123,9 @@ class MavenTest : StringSpec() {
                 .safeDeleteRecursively(force = true)
 
             val projectDir = File("src/funTest/assets/projects/synthetic/maven-parent").absoluteFile
-            val pomFile = File(projectDir, "pom.xml")
+            val pomFile = projectDir.resolve("pom.xml")
             val expectedResult = patchExpectedResult(
-                File(projectDir.parentFile, "maven-parent-expected-output-root.yml"),
+                projectDir.parentFile.resolve("maven-parent-expected-output-root.yml"),
                 url = normalizeVcsUrl(vcsUrl),
                 revision = vcsRevision
             )

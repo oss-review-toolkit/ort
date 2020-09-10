@@ -246,7 +246,7 @@ class ExtensionsTest : WordSpec({
 
         "create a valid file name" {
             val tempDir = createTempDir(ORT_NAME, javaClass.simpleName)
-            val fileFromStr = File(tempDir, str.fileSystemEncode()).apply { writeText("dummy") }
+            val fileFromStr = tempDir.resolve(str.fileSystemEncode()).apply { writeText("dummy") }
 
             fileFromStr.isFile shouldBe true
 

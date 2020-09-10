@@ -93,7 +93,7 @@ class Askalono(name: String, config: ScannerConfiguration) : LocalScanner(name, 
 
             val scannerDir = createTempDir(ORT_NAME, "$scannerName-$scannerVersion").apply { deleteOnExit() }
 
-            val scannerFile = File(scannerDir, scannerExe)
+            val scannerFile = scannerDir.resolve(scannerExe)
             scannerFile.sink().buffer().use { it.writeAll(body.source()) }
 
             if (!Os.isWindows) {

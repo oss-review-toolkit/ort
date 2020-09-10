@@ -218,7 +218,7 @@ class Bower(
     override fun resolveDependencies(definitionFile: File): List<ProjectAnalyzerResult> {
         val workingDir = definitionFile.parentFile
 
-        stashDirectories(File(workingDir, "bower_components")).use {
+        stashDirectories(workingDir.resolve("bower_components")).use {
             installDependencies(workingDir)
             val dependenciesJson = listDependencies(workingDir)
             val rootNode = jsonMapper.readTree(dependenciesJson)

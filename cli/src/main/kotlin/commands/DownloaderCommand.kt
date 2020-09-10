@@ -145,7 +145,7 @@ class DownloaderCommand : CliktCommand(name = "download", help = "Fetch source c
 
                 packages.forEach { pkg ->
                     try {
-                        val downloadDir = File(outputDir, pkg.id.toPath())
+                        val downloadDir = outputDir.resolve(pkg.id.toPath())
                         Downloader.download(pkg, downloadDir, allowMovingRevisions)
                         if (archive) archive(pkg, downloadDir, outputDir)
                     } catch (e: DownloadException) {
@@ -228,7 +228,7 @@ class DownloaderCommand : CliktCommand(name = "download", help = "Fetch source c
             log.error { "Could not archive '${pkg.id.toCoordinates()}': ${e.collectMessagesAsString()}" }
         } finally {
             val relativePath = outputDir.toPath().relativize(inputDir.toPath()).first()
-            File(outputDir, relativePath.toString()).safeDeleteRecursively()
+            outputDir.resolve(relativePath.toString()).safeDeleteRecursively()
         }
     }
 }
