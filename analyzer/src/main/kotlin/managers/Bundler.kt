@@ -94,7 +94,7 @@ class Bundler(
     override fun resolveDependencies(definitionFile: File): List<ProjectAnalyzerResult> {
         val workingDir = definitionFile.parentFile
 
-        stashDirectories(File(workingDir, "vendor")).use {
+        stashDirectories(workingDir.resolve("vendor")).use {
             val scopes = mutableSetOf<Scope>()
             val packages = sortedSetOf<Package>()
             val issues = mutableListOf<OrtIssue>()
@@ -227,7 +227,7 @@ class Bundler(
         workingDir.walk().maxDepth(1).filter { it.isFile && it.extension == "gemspec" }.firstOrNull()
 
     private fun installDependencies(workingDir: File) {
-        requireLockfile(workingDir) { File(workingDir, "Gemfile.lock").isFile }
+        requireLockfile(workingDir) { workingDir.resolve("Gemfile.lock").isFile }
 
         // Work around "--path" being deprecated since Bundler 2.1 and avoid tampering with the ".bundle/config" file at
         // all by using the "BUNDLER_PATH" environment variable to specify where to install the Gems to.

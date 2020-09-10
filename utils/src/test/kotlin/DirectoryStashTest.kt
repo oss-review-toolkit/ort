@@ -39,10 +39,10 @@ class DirectoryStashTest : StringSpec() {
 
     override fun beforeTest(testCase: TestCase) {
         sandboxDir = createTempDir(ORT_NAME, javaClass.simpleName)
-        a = File(sandboxDir, "a")
-        a1 = File(a, "a1")
-        b = File(sandboxDir, "b")
-        b1 = File(b, "b1")
+        a = sandboxDir.resolve("a")
+        a1 = a.resolve("a1")
+        b = sandboxDir.resolve("b")
+        b1 = b.resolve("b1")
 
         check(a1.mkdirs())
         check(b1.mkdirs())
@@ -130,7 +130,7 @@ class DirectoryStashTest : StringSpec() {
         }
 
         "stashing an initially non-existing directory deletes it when un-stashing" {
-            val nonExistingDir = File(sandboxDir, "initially-non-existing-directory")
+            val nonExistingDir = sandboxDir.resolve("initially-non-existing-directory")
 
             stashDirectories(nonExistingDir).use {
                 nonExistingDir.mkdirs() shouldBe true

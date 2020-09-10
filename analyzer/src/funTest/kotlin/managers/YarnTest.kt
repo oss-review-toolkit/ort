@@ -50,7 +50,7 @@ class YarnTest : WordSpec() {
     }
 
     private fun resolveDependencies(projectDir: File): String {
-        val packageFile = File(projectDir, "package.json")
+        val packageFile = projectDir.resolve("package.json")
         val result = createYarn().resolveSingleProject(packageFile)
         return result.toYaml()
     }

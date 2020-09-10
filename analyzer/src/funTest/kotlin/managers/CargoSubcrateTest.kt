@@ -41,10 +41,10 @@ class CargoSubcrateTest : StringSpec() {
     init {
         // Disabled on Azure Windows build because it fails with the pre-installed Rust version 1.42.0.
         "Lib project dependencies are detected correctly".config(enabled = !Ci.isAzureWindows) {
-            val packageFile = File(projectDir, "Cargo.toml")
+            val packageFile = projectDir.resolve("Cargo.toml")
             val vcsPath = vcsDir.getPathToRoot(projectDir)
             val expectedResult = patchExpectedResult(
-                File(projectDir.parentFile, "cargo-subcrate-lib-expected-output.yml"),
+                projectDir.parentFile.resolve("cargo-subcrate-lib-expected-output.yml"),
                 definitionFilePath = "$vcsPath/Cargo.toml",
                 path = vcsPath,
                 revision = vcsRevision,
@@ -57,11 +57,11 @@ class CargoSubcrateTest : StringSpec() {
         }
 
         "Integration sub-project dependencies are detected correctly" {
-            val integrationProjectDir = File(projectDir, "integration")
-            val packageFile = File(integrationProjectDir, "Cargo.toml")
+            val integrationProjectDir = projectDir.resolve("integration")
+            val packageFile = integrationProjectDir.resolve("Cargo.toml")
             val vcsPath = vcsDir.getPathToRoot(integrationProjectDir)
             val expectedResult = patchExpectedResult(
-                File(projectDir.parentFile, "cargo-subcrate-integration-expected-output.yml"),
+                projectDir.parentFile.resolve("cargo-subcrate-integration-expected-output.yml"),
                 definitionFilePath = "$vcsPath/Cargo.toml",
                 path = vcsPath,
                 revision = vcsRevision,
@@ -74,11 +74,11 @@ class CargoSubcrateTest : StringSpec() {
         }
 
         "Client sub-project dependencies are detected correctly" {
-            val clientProjectDir = File(projectDir, "client")
-            val packageFile = File(clientProjectDir, "Cargo.toml")
+            val clientProjectDir = projectDir.resolve("client")
+            val packageFile = clientProjectDir.resolve("Cargo.toml")
             val vcsPath = vcsDir.getPathToRoot(clientProjectDir)
             val expectedResult = patchExpectedResult(
-                File(projectDir.parentFile, "cargo-subcrate-client-expected-output.yml"),
+                projectDir.parentFile.resolve("cargo-subcrate-client-expected-output.yml"),
                 definitionFilePath = "$vcsPath/Cargo.toml",
                 path = vcsPath,
                 revision = vcsRevision,

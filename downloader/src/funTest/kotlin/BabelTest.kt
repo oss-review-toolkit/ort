@@ -96,7 +96,7 @@ class BabelTest : StringSpec() {
             workingTree.isValid() shouldBe true
             workingTree.getRevision() shouldBe "cee4cde53e4f452d89229986b9368ecdb41e00da"
 
-            val babelCliDir = File(downloadResult.downloadDirectory, "packages/babel-cli")
+            val babelCliDir = downloadResult.downloadDirectory.resolve("packages/babel-cli")
             babelCliDir.isDirectory shouldBe true
             babelCliDir.walk().count() shouldBe 242
         }

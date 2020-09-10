@@ -57,7 +57,7 @@ class Cvs : VersionControlSystem(), CommandLineTool {
 
     override fun getWorkingTree(vcsDirectory: File) =
         object : WorkingTree(vcsDirectory, type) {
-            private val cvsDirectory = File(workingDir, "CVS")
+            private val cvsDirectory = workingDir.resolve("CVS")
 
             override fun isValid(): Boolean {
                 if (!workingDir.isDirectory) {
@@ -69,7 +69,7 @@ class Cvs : VersionControlSystem(), CommandLineTool {
 
             override fun isShallow() = false
 
-            override fun getRemoteUrl() = File(cvsDirectory, "Root").useLines { it.first() }
+            override fun getRemoteUrl() = cvsDirectory.resolve("Root").useLines { it.first() }
 
             override fun getRevision() =
                 // CVS does not have the concept of a global revision, but each file has its own revision. As

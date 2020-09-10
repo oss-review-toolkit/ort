@@ -121,7 +121,7 @@ class PhpComposer(
     override fun resolveDependencies(definitionFile: File): List<ProjectAnalyzerResult> {
         val workingDir = definitionFile.parentFile
 
-        stashDirectories(File(workingDir, "vendor")).use {
+        stashDirectories(workingDir.resolve("vendor")).use {
             val manifest = jsonMapper.readTree(definitionFile)
             val hasDependencies = manifest.fields().asSequence().any { (key, value) ->
                 key.startsWith("require") && value.count() > 0
@@ -131,7 +131,7 @@ class PhpComposer(
                 installDependencies(workingDir)
 
                 log.info { "Reading $COMPOSER_LOCK_FILE file in $workingDir..." }
-                val lockFile = jsonMapper.readTree(File(workingDir, COMPOSER_LOCK_FILE))
+                val lockFile = jsonMapper.readTree(workingDir.resolve(COMPOSER_LOCK_FILE))
                 val packages = parseInstalledPackages(lockFile)
 
                 // Let's also determine the "virtual" (replaced and provided) packages. These can be declared as 
@@ -344,7 +344,7 @@ class PhpComposer(
     }
 
     private fun installDependencies(workingDir: File) {
-        requireLockfile(workingDir) { File(workingDir, COMPOSER_LOCK_FILE).isFile }
+        requireLockfile(workingDir) { workingDir.resolve(COMPOSER_LOCK_FILE).isFile }
 
         // The "install" command creates a "composer.lock" file (if not yet present) except for projects without any
         // dependencies, see https://getcomposer.org/doc/01-basic-usage.md#installing-without-composer-lock.

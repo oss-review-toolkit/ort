@@ -43,8 +43,8 @@ class ArchiveUtilsTest : StringSpec() {
 
             archive.unpack(outputDir)
 
-            val fileA = File(outputDir, "a")
-            val fileB = File(outputDir, "dir/b")
+            val fileA = outputDir.resolve("a")
+            val fileB = outputDir.resolve("dir/b")
 
             fileA.exists() shouldBe true
             fileA.readText() shouldBe "a\n"
@@ -57,8 +57,8 @@ class ArchiveUtilsTest : StringSpec() {
 
             archive.unpack(outputDir)
 
-            val fileA = File(outputDir, "a")
-            val fileB = File(outputDir, "dir/b")
+            val fileA = outputDir.resolve("a")
+            val fileB = outputDir.resolve("dir/b")
 
             fileA.exists() shouldBe true
             fileA.readText() shouldBe "a\n"
@@ -71,8 +71,8 @@ class ArchiveUtilsTest : StringSpec() {
 
             archive.unpack(outputDir)
 
-            val fileA = File(outputDir, "a")
-            val fileB = File(outputDir, "dir/b")
+            val fileA = outputDir.resolve("a")
+            val fileB = outputDir.resolve("dir/b")
 
             fileA.exists() shouldBe true
             fileA.readText() shouldBe "a\n"

@@ -65,7 +65,7 @@ class Pipenv(
         // 2. Use existing "Pip" PackageManager to do the actual dependency resolution
 
         val workingDir = definitionFile.parentFile
-        val requirementsFile = File(workingDir, "requirements-from-pipenv.txt").apply { deleteOnExit() }
+        val requirementsFile = workingDir.resolve("requirements-from-pipenv.txt").apply { deleteOnExit() }
 
         log.info { "Generating '${requirementsFile.name}' file in '$workingDir' directory..." }
 

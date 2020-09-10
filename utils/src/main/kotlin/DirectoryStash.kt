@@ -47,7 +47,7 @@ private class DirectoryStash(directories: Set<File>) : Closeable {
                 val stashDir = createTempDir(ORT_NAME, "stash", originalDir.parentFile)
 
                 // Use a non-existing directory as the target to ensure the directory can be moved atomically.
-                val tempDir = File(stashDir, originalDir.name)
+                val tempDir = stashDir.resolve(originalDir.name)
 
                 log.info {
                     "Temporarily moving directory from '${originalDir.absolutePath}' to '${tempDir.absolutePath}'."

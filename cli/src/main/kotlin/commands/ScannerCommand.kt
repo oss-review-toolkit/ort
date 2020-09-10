@@ -37,8 +37,6 @@ import com.github.ajalt.clikt.parameters.options.split
 import com.github.ajalt.clikt.parameters.types.enum
 import com.github.ajalt.clikt.parameters.types.file
 
-import java.io.File
-
 import org.ossreviewtoolkit.model.FileFormat
 import org.ossreviewtoolkit.model.config.OrtConfiguration
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
@@ -142,7 +140,7 @@ class ScannerCommand : CliktCommand(name = "scan", help = "Run existing copyrigh
         val nativeOutputDir = outputDir.resolve("native-scan-results")
 
         val outputFiles = outputFormats.distinct().map { format ->
-            File(outputDir, "scan-result.${format.fileExtension}")
+            outputDir.resolve("scan-result.${format.fileExtension}")
         }
 
         val existingOutputFiles = outputFiles.filter { it.exists() }

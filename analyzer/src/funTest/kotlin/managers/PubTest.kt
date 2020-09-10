@@ -45,13 +45,13 @@ class PubTest : WordSpec() {
     init {
         "Pub" should {
             "resolve dart http dependencies correctly" {
-                val workingDir = File(projectsDirExternal, "dart-http")
-                val lockFile = File(workingDir, "pubspec.lock")
-                File(projectsDirExternal, "dart-http-pubspec.lock").copyTo(lockFile, overwrite = true)
+                val workingDir = projectsDirExternal.resolve("dart-http")
+                val lockFile = workingDir.resolve("pubspec.lock")
+                projectsDirExternal.resolve("dart-http-pubspec.lock").copyTo(lockFile, overwrite = true)
 
                 try {
-                    val packageFile = File(workingDir, "pubspec.yaml")
-                    val expectedResultFile = File(projectsDirExternal, "dart-http-expected-output.yml")
+                    val packageFile = workingDir.resolve("pubspec.yaml")
+                    val expectedResultFile = projectsDirExternal.resolve("dart-http-expected-output.yml")
 
                     val result = createPubForExternal().resolveSingleProject(packageFile)
                     val vcsPath = vcsDir.getPathToRoot(workingDir)
@@ -71,9 +71,9 @@ class PubTest : WordSpec() {
             }
 
             "Resolve dependencies for a project with flutter correctly" {
-                val workingDir = File(projectsDir, "project-with-flutter")
-                val packageFile = File(workingDir, "pubspec.yaml")
-                val expectedResultFile = File(projectsDir.parentFile, "pub-expected-output-project-with-flutter.yml")
+                val workingDir = projectsDir.resolve("project-with-flutter")
+                val packageFile = workingDir.resolve("pubspec.yaml")
+                val expectedResultFile = projectsDir.parentFile.resolve("pub-expected-output-project-with-flutter.yml")
 
                 val result = createPub().resolveSingleProject(packageFile)
                 val vcsPath = vcsDir.getPathToRoot(workingDir)
@@ -90,9 +90,9 @@ class PubTest : WordSpec() {
             }
 
             "Resolve dependencies for a project with dependencies without a static version" {
-                val workingDir = File(projectsDir, "any-version")
-                val packageFile = File(workingDir, "pubspec.yaml")
-                val expectedResultFile = File(projectsDir.parentFile, "pub-expected-output-any-version.yml")
+                val workingDir = projectsDir.resolve("any-version")
+                val packageFile = workingDir.resolve("pubspec.yaml")
+                val expectedResultFile = projectsDir.parentFile.resolve("pub-expected-output-any-version.yml")
 
                 val result = createPub().resolveSingleProject(packageFile)
                 val vcsPath = vcsDir.getPathToRoot(workingDir)
@@ -109,8 +109,8 @@ class PubTest : WordSpec() {
             }
 
             "Error is shown when no lockfile is present" {
-                val workingDir = File(projectsDir, "no-lockfile")
-                val packageFile = File(workingDir, "pubspec.yaml")
+                val workingDir = projectsDir.resolve("no-lockfile")
+                val packageFile = workingDir.resolve("pubspec.yaml")
 
                 val result = createPub().resolveSingleProject(packageFile)
 

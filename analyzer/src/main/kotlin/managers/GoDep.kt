@@ -197,7 +197,7 @@ class GoDep(
         }
 
     private fun importLegacyManifest(lockfileName: String, workingDir: File, gopath: File) {
-        requireLockfile(workingDir) { lockfileName.isEmpty() || File(workingDir, lockfileName).isFile }
+        requireLockfile(workingDir) { lockfileName.isEmpty() || workingDir.resolve(lockfileName).isFile }
 
         run("init", workingDir = workingDir, environment = mapOf("GOPATH" to gopath.realFile().path))
     }
@@ -220,7 +220,7 @@ class GoDep(
     }
 
     private fun parseProjects(workingDir: File, gopath: File): List<Map<String, String>> {
-        val lockfile = File(workingDir, "Gopkg.lock")
+        val lockfile = workingDir.resolve("Gopkg.lock")
         if (!lockfile.isFile) {
             require(analyzerConfig.allowDynamicVersions) {
                 "No lockfile found in ${workingDir.invariantSeparatorsPath}, dependency versions are unstable."

@@ -92,11 +92,11 @@ class GitRepo : VersionControlSystem(), CommandLineTool {
             // GitRepo is special in that the workingDir points to the Git working tree of the manifest files, yet
             // the root path is the directory containing the ".repo" directory. This way Git operations work on a valid
             // Git repository, but path operations work relative to the path GitRepo was initialized in.
-            object : GitWorkingTree(File(repoRoot, ".repo/manifests"), type) {
+            object : GitWorkingTree(repoRoot.resolve(".repo/manifests"), type) {
                 // Return the path to the manifest as part of the VCS information, as that is required to recreate the
                 // working tree.
                 override fun getInfo(): VcsInfo {
-                    val manifestWrapper = File(getRootPath(), ".repo/manifest.xml")
+                    val manifestWrapper = getRootPath().resolve(".repo/manifest.xml")
 
                     val manifestFile = if (manifestWrapper.isSymbolicLink()) {
                         manifestWrapper.realFile()

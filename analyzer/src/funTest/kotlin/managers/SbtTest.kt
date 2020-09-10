@@ -57,7 +57,7 @@ class SbtTest : StringSpec({
     ) {
         val projectName = "sbt-multi-project-example"
         val projectDir = File("src/funTest/assets/projects/external/$projectName").absoluteFile
-        val expectedOutputFile = File(projectDir.parentFile, "$projectName-expected-output.yml")
+        val expectedOutputFile = projectDir.parentFile.resolve("$projectName-expected-output.yml")
 
         // Clean any previously generated POM files / target directories.
         Git().run(projectDir, "clean", "-fd")

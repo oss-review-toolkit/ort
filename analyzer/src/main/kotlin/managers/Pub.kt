@@ -105,7 +105,7 @@ class Pub(
             val artifactRootDir = findProjectRoot(packageInfo) ?: return null
 
             // Try to locate the file directly.
-            val file = File(artifactRootDir, filename)
+            val file = artifactRootDir.resolve(filename)
             if (file.isFile) return file
 
             // Search the directory tree for the file.
@@ -138,17 +138,15 @@ class Pub(
             }
 
             if (path != null) {
-                File(pubCacheRoot, path).let {
+                pubCacheRoot.resolve(path).let {
                     if (it.isDirectory) {
                         return it
                     }
                 }
 
-                if (flutterPubCacheRoot != null) {
-                    File(flutterPubCacheRoot, path).let {
-                        if (it.isDirectory) {
-                            return it
-                        }
+                flutterPubCacheRoot?.resolve(path)?.let {
+                    if (it.isDirectory) {
+                        return it
                     }
                 }
             }
@@ -186,7 +184,7 @@ class Pub(
 
             log.info { "Reading $PUB_LOCK_FILE file in $workingDir." }
 
-            val lockFile = yamlMapper.readTree(File(workingDir, PUB_LOCK_FILE))
+            val lockFile = yamlMapper.readTree(workingDir.resolve(PUB_LOCK_FILE))
 
             log.info { "Successfully read lockfile." }
 
@@ -308,8 +306,8 @@ class Pub(
         if (packageName.isEmpty()) return emptyList()
 
         val projectRoot = reader.findProjectRoot(packageInfo) ?: return emptyList()
-        val androidDir = File(projectRoot, "android")
-        val packageFile = File(androidDir, "build.gradle")
+        val androidDir = projectRoot.resolve("android")
+        val packageFile = androidDir.resolve("build.gradle")
 
         // Check for build.gradle failed, no Gradle scan required.
         if (!packageFile.isFile) return emptyList()
@@ -332,8 +330,8 @@ class Pub(
         if (packageName.isEmpty()) return null
 
         val projectRoot = reader.findProjectRoot(packageInfo) ?: return null
-        val iosDir = File(projectRoot, "ios")
-        val packageFile = File(iosDir, "$packageName.podspec")
+        val iosDir = projectRoot.resolve("ios")
+        val packageFile = iosDir.resolve("$packageName.podspec")
 
         // Check for build.gradle failed, no Gradle scan required.
         if (!packageFile.isFile) return null
@@ -500,7 +498,7 @@ class Pub(
     }
 
     private fun installDependencies(workingDir: File) {
-        requireLockfile(workingDir) { File(workingDir, PUB_LOCK_FILE).isFile }
+        requireLockfile(workingDir) { workingDir.resolve(PUB_LOCK_FILE).isFile }
 
         // The "get" command creates a "pubspec.lock" file (if not yet present) except for projects without any
         // dependencies, see https://dart.dev/tools/pub/cmd/pub-get.

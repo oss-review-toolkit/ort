@@ -41,7 +41,7 @@ class DotNetTest : StringSpec() {
     private val vcsDir = VersionControlSystem.forDirectory(projectDir)!!
     private val vcsUrl = vcsDir.getRemoteUrl()
     private val vcsRevision = vcsDir.getRevision()
-    private val packageFile = File(projectDir, "subProjectTest/test.csproj")
+    private val packageFile = projectDir.resolve("subProjectTest/test.csproj")
 
     init {
         "Definition file is correctly read" {

@@ -41,10 +41,10 @@ class BabelTest : WordSpec() {
     init {
         "Babel dependencies" should {
             "be correctly analyzed" {
-                val packageFile = File(projectDir, "package.json")
+                val packageFile = projectDir.resolve("package.json")
 
                 val expectedResult = patchExpectedResult(
-                    File(projectDir.parentFile, "${projectDir.name}-expected-output.yml"),
+                    projectDir.parentFile.resolve("${projectDir.name}-expected-output.yml"),
                     url = normalizeVcsUrl(vcsUrl),
                     revision = vcsRevision
                 )

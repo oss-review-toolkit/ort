@@ -19,8 +19,6 @@
 
 package org.ossreviewtoolkit.analyzer.integration
 
-import java.io.File
-
 import org.ossreviewtoolkit.analyzer.PackageManagerFactory
 import org.ossreviewtoolkit.analyzer.managers.Gradle
 import org.ossreviewtoolkit.analyzer.managers.Maven
@@ -78,7 +76,7 @@ class GradleIntegrationTest : AbstractIntegrationSpec() {
     override val managedFilesForTest by lazy {
         mapOf(
             Gradle.Factory() as PackageManagerFactory to
-                    listOf(File(downloadResult.downloadDirectory, "buildSrc/build.gradle"))
+                    listOf(downloadResult.downloadDirectory.resolve("buildSrc/build.gradle"))
         )
     }
 }

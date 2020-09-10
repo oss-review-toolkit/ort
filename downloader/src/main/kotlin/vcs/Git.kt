@@ -142,9 +142,9 @@ class Git : VersionControlSystem(), CommandLineTool {
 
                     git.repository.config.setBoolean("core", null, "sparseCheckout", true)
 
-                    val gitInfoDir = File(targetDir, ".git/info").apply { safeMkdirs() }
+                    val gitInfoDir = targetDir.resolve(".git/info").apply { safeMkdirs() }
                     val path = vcs.path.let { if (it.startsWith("/")) it else "/$it" }
-                    File(gitInfoDir, "sparse-checkout").writeText("$path\n" +
+                    gitInfoDir.resolve("sparse-checkout").writeText("$path\n" +
                             FileMatcher.LICENSE_FILE_MATCHER.patterns.joinToString("\n") { "/$it" })
                 }
 
@@ -226,7 +226,7 @@ class Git : VersionControlSystem(), CommandLineTool {
 
     private fun updateSubmodules(workingTree: WorkingTree) =
         try {
-            !File(workingTree.workingDir, ".gitmodules").isFile
+            !workingTree.workingDir.resolve(".gitmodules").isFile
                     || run(workingTree.workingDir, "submodule", "update", "--init", "--recursive").isSuccess
         } catch (e: IOException) {
             e.showStackTrace()

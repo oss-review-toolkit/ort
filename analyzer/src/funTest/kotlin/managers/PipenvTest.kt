@@ -40,11 +40,11 @@ class PipenvTest : WordSpec() {
     init {
         "Python 2" should {
             "resolve dependencies correctly" {
-                val definitionFile = File(projectsDir, "synthetic/pipenv/Pipfile.lock")
+                val definitionFile = projectsDir.resolve("synthetic/pipenv/Pipfile.lock")
                 val vcsPath = vcsDir.getPathToRoot(definitionFile.parentFile)
 
                 val expectedResult = patchExpectedResult(
-                    File(projectsDir, "synthetic/pipenv-expected-output.yml"),
+                    projectsDir.resolve("synthetic/pipenv-expected-output.yml"),
                     url = normalizeVcsUrl(vcsUrl),
                     revision = vcsRevision,
                     path = vcsPath
@@ -58,11 +58,11 @@ class PipenvTest : WordSpec() {
 
         "Python 3" should {
             "resolve dependencies correctly for a Django project" {
-                val definitionFile = File(projectsDir, "synthetic/pipenv-python3/Pipfile.lock")
+                val definitionFile = projectsDir.resolve("synthetic/pipenv-python3/Pipfile.lock")
                 val vcsPath = vcsDir.getPathToRoot(definitionFile.parentFile)
 
                 val result = createPipenv().resolveSingleProject(definitionFile)
-                val expectedResultFile = File(projectsDir, "synthetic/pipenv-python3-expected-output.yml")
+                val expectedResultFile = projectsDir.resolve("synthetic/pipenv-python3-expected-output.yml")
                 val expectedResult = patchExpectedResult(
                     expectedResultFile,
                     url = normalizeVcsUrl(vcsUrl),

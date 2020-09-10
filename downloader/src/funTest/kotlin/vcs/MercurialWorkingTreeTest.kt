@@ -81,7 +81,7 @@ class MercurialWorkingTreeTest : StringSpec() {
             )
             workingTree.getNested() should beEmpty()
             workingTree.getRootPath() shouldBe zipContentDir
-            workingTree.getPathToRoot(File(zipContentDir, "tests")) shouldBe "tests"
+            workingTree.getPathToRoot(zipContentDir.resolve("tests")) shouldBe "tests"
         }
 
         // TODO: Find an alternative to Bitbucket that hosts public Mercurial repositories.

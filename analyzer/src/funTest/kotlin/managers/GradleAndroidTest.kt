@@ -40,9 +40,9 @@ class GradleAndroidTest : StringSpec() {
 
     init {
         "Root project dependencies are detected correctly".config(tags = setOf(AndroidTag)) {
-            val packageFile = File(projectDir, "build.gradle")
+            val packageFile = projectDir.resolve("build.gradle")
             val expectedResult = patchExpectedResult(
-                File(projectDir.parentFile, "gradle-android-expected-output-root.yml"),
+                projectDir.parentFile.resolve("gradle-android-expected-output-root.yml"),
                 url = normalizeVcsUrl(vcsUrl),
                 revision = vcsRevision
             )
@@ -53,9 +53,9 @@ class GradleAndroidTest : StringSpec() {
         }
 
         "Project dependencies are detected correctly".config(tags = setOf(AndroidTag)) {
-            val packageFile = File(projectDir, "app/build.gradle")
+            val packageFile = projectDir.resolve("app/build.gradle")
             val expectedResult = patchExpectedResult(
-                File(projectDir.parentFile, "gradle-android-expected-output-app.yml"),
+                projectDir.parentFile.resolve("gradle-android-expected-output-app.yml"),
                 url = normalizeVcsUrl(vcsUrl),
                 revision = vcsRevision
             )
@@ -66,9 +66,9 @@ class GradleAndroidTest : StringSpec() {
         }
 
         "External dependencies are detected correctly".config(tags = setOf(AndroidTag)) {
-            val packageFile = File(projectDir, "lib/build.gradle")
+            val packageFile = projectDir.resolve("lib/build.gradle")
             val expectedResult = patchExpectedResult(
-                File(projectDir.parentFile, "gradle-android-expected-output-lib.yml"),
+                projectDir.parentFile.resolve("gradle-android-expected-output-lib.yml"),
                 url = normalizeVcsUrl(vcsUrl),
                 revision = vcsRevision
             )

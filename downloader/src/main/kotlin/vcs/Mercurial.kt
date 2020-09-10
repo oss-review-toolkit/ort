@@ -110,7 +110,7 @@ class Mercurial : VersionControlSystem(), CommandLineTool {
         }
 
         run(targetDir, "init")
-        File(targetDir, ".hg/hgrc").writeText(
+        targetDir.resolve(".hg/hgrc").writeText(
             """
                 [paths]
                 default = ${vcs.url}

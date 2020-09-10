@@ -33,8 +33,6 @@ import com.github.ajalt.clikt.parameters.options.split
 import com.github.ajalt.clikt.parameters.types.enum
 import com.github.ajalt.clikt.parameters.types.file
 
-import java.io.File
-
 import org.ossreviewtoolkit.analyzer.Analyzer
 import org.ossreviewtoolkit.analyzer.PackageManager
 import org.ossreviewtoolkit.analyzer.curation.ClearlyDefinedPackageCurationProvider
@@ -119,7 +117,7 @@ class AnalyzerCommand : CliktCommand(name = "analyze", help = "Determine depende
 
     override fun run() {
         val outputFiles = outputFormats.distinct().map { format ->
-            File(outputDir, "analyzer-result.${format.fileExtension}")
+            outputDir.resolve("analyzer-result.${format.fileExtension}")
         }
 
         val existingOutputFiles = outputFiles.filter { it.exists() }

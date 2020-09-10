@@ -85,7 +85,7 @@ class CvsWorkingTreeTest : StringSpec() {
             )
             workingTree.getNested() should beEmpty()
             workingTree.getRootPath() shouldBe zipContentDir
-            workingTree.getPathToRoot(File(zipContentDir, "lib")) shouldBe "lib"
+            workingTree.getPathToRoot(zipContentDir.resolve("lib")) shouldBe "lib"
         }
 
         "CVS correctly lists remote branches".config(enabled = false /* Failing due to SF issues. */) {

@@ -88,7 +88,7 @@ class GoMod(
     override fun resolveDependencies(definitionFile: File): List<ProjectAnalyzerResult> {
         val projectDir = definitionFile.parentFile
 
-        stashDirectories(File(projectDir, "vendor")).use {
+        stashDirectories(projectDir.resolve("vendor")).use {
             val edges = getDependencyGraph(projectDir)
             val vendorModules = getVendorModules(projectDir)
 

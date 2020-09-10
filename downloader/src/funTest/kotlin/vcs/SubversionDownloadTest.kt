@@ -140,7 +140,7 @@ class SubversionDownloadTest : StringSpec() {
             )
 
             val workingTree = svn.download(pkg, outputDir)
-            val actualFiles = File(workingTree.workingDir, REPO_PATH_FOR_VERSION).list().sorted()
+            val actualFiles = workingTree.workingDir.resolve(REPO_PATH_FOR_VERSION).list().sorted()
 
             workingTree.isValid() shouldBe true
             workingTree.getRevision() shouldBe REPO_REV_FOR_VERSION

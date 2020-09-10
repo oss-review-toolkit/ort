@@ -19,8 +19,6 @@
 
 package org.ossreviewtoolkit.analyzer.integration
 
-import java.io.File
-
 import org.ossreviewtoolkit.analyzer.PackageManagerFactory
 import org.ossreviewtoolkit.analyzer.managers.Bundler
 import org.ossreviewtoolkit.model.Identifier
@@ -54,7 +52,7 @@ class SimpleFormIntegrationTest : AbstractIntegrationSpec() {
         val downloadDir = downloadResult.downloadDirectory
         mapOf(
             Bundler.Factory() as PackageManagerFactory to listOf(
-                File(downloadDir, "Gemfile")
+                downloadDir.resolve("Gemfile")
             )
         )
     }

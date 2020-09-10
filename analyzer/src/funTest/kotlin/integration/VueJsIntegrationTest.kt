@@ -19,8 +19,6 @@
 
 package org.ossreviewtoolkit.analyzer.integration
 
-import java.io.File
-
 import org.ossreviewtoolkit.analyzer.PackageManagerFactory
 import org.ossreviewtoolkit.analyzer.managers.Npm
 import org.ossreviewtoolkit.analyzer.managers.Yarn
@@ -54,18 +52,18 @@ class VueJsIntegrationTest : AbstractIntegrationSpec() {
         val downloadDir = downloadResult.downloadDirectory
         mapOf(
             Npm.Factory() as PackageManagerFactory to listOf(
-                File(downloadDir, "package.json"),
-                File(downloadDir, "packages/vue-server-renderer/package.json"),
-                File(downloadDir, "packages/vue-template-compiler/package.json"),
-                File(downloadDir, "packages/weex-template-compiler/package.json"),
-                File(downloadDir, "packages/weex-vue-framework/package.json")
+                downloadDir.resolve("package.json"),
+                downloadDir.resolve("packages/vue-server-renderer/package.json"),
+                downloadDir.resolve("packages/vue-template-compiler/package.json"),
+                downloadDir.resolve("packages/weex-template-compiler/package.json"),
+                downloadDir.resolve("packages/weex-vue-framework/package.json")
             ),
             Yarn.Factory() as PackageManagerFactory to listOf(
-                File(downloadDir, "package.json"),
-                File(downloadDir, "packages/vue-server-renderer/package.json"),
-                File(downloadDir, "packages/vue-template-compiler/package.json"),
-                File(downloadDir, "packages/weex-template-compiler/package.json"),
-                File(downloadDir, "packages/weex-vue-framework/package.json")
+                downloadDir.resolve("package.json"),
+                downloadDir.resolve("packages/vue-server-renderer/package.json"),
+                downloadDir.resolve("packages/vue-template-compiler/package.json"),
+                downloadDir.resolve("packages/weex-template-compiler/package.json"),
+                downloadDir.resolve("packages/weex-vue-framework/package.json")
             )
         )
     }
@@ -73,7 +71,7 @@ class VueJsIntegrationTest : AbstractIntegrationSpec() {
     override val managedFilesForTest by lazy {
         mapOf(
             Npm.Factory() as PackageManagerFactory to
-                    listOf(File(downloadResult.downloadDirectory, "package.json"))
+                    listOf(downloadResult.downloadDirectory.resolve("package.json"))
         )
     }
 }

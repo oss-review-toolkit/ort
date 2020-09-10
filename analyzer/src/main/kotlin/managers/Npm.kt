@@ -119,7 +119,7 @@ open class Npm(
     override fun resolveDependencies(definitionFile: File): List<ProjectAnalyzerResult> {
         val workingDir = definitionFile.parentFile
 
-        stashDirectories(File(workingDir, "node_modules")).use {
+        stashDirectories(workingDir.resolve("node_modules")).use {
             // Actually installing the dependencies is the easiest way to get the meta-data of all transitive
             // dependencies (i.e. their respective "package.json" files). As NPM uses a global cache, the same
             // dependency is only ever downloaded once.
@@ -185,7 +185,7 @@ open class Npm(
 
     private fun parseInstalledModules(rootDirectory: File): Map<String, Package> {
         val packages = mutableMapOf<String, Package>()
-        val nodeModulesDir = File(rootDirectory, "node_modules")
+        val nodeModulesDir = rootDirectory.resolve("node_modules")
 
         log.info { "Searching for 'package.json' files in '$nodeModulesDir'..." }
 

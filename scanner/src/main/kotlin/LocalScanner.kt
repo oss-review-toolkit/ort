@@ -124,7 +124,7 @@ abstract class LocalScanner(name: String, config: ScannerConfiguration) : Scanne
     /**
      * The full path to the scanner executable.
      */
-    protected val scannerPath by lazy { File(scannerDir, command()) }
+    protected val scannerPath by lazy { scannerDir.resolve(command()) }
 
     override fun getVersionRequirement(): Requirement = Requirement.buildLoose(scannerVersion)
 
@@ -272,8 +272,8 @@ abstract class LocalScanner(name: String, config: ScannerConfiguration) : Scanne
      * [scannerDetails].
      */
     private fun getResultsFile(scannerDetails: ScannerDetails, pkg: Package, outputDirectory: File): File {
-        val scanResultsForPackageDirectory = File(outputDirectory, pkg.id.toPath()).apply { safeMkdirs() }
-        return File(scanResultsForPackageDirectory, "scan-results_${scannerDetails.name}.$resultFileExt")
+        val scanResultsForPackageDirectory = outputDirectory.resolve(pkg.id.toPath()).apply { safeMkdirs() }
+        return scanResultsForPackageDirectory.resolve("scan-results_${scannerDetails.name}.$resultFileExt")
     }
 
     /**
@@ -313,7 +313,7 @@ abstract class LocalScanner(name: String, config: ScannerConfiguration) : Scanne
         val resultsFile = getResultsFile(scannerDetails, pkg, outputDirectory)
 
         val downloadResult = try {
-            Downloader.download(pkg, File(downloadDirectory, pkg.id.toPath()))
+            Downloader.download(pkg, downloadDirectory.resolve(pkg.id.toPath()))
         } catch (e: DownloadException) {
             e.showStackTrace()
 

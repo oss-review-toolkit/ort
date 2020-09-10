@@ -57,8 +57,8 @@ class ProcessCapture(vararg command: String, workingDir: File? = null, environme
     private val tempDir = createTempDir(ORT_NAME, "process").apply { deleteOnExit() }
     private val tempPrefix = command.first().substringAfterLast(File.separatorChar)
 
-    val stdoutFile = File(tempDir, "$tempPrefix.stdout").apply { deleteOnExit() }
-    val stderrFile = File(tempDir, "$tempPrefix.stderr").apply { deleteOnExit() }
+    val stdoutFile = tempDir.resolve("$tempPrefix.stdout").apply { deleteOnExit() }
+    val stderrFile = tempDir.resolve("$tempPrefix.stderr").apply { deleteOnExit() }
 
     /**
      * Get the standard output stream of the terminated process as a string.

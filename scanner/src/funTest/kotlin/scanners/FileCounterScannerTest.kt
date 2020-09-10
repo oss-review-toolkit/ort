@@ -41,9 +41,9 @@ class FileCounterScannerTest : StringSpec() {
         "Gradle project scan results for a given analyzer result are correct".config(invocations = 3) {
             outputDir = createTempDir(ORT_NAME, javaClass.simpleName)
 
-            val analyzerResultFile = File(assetsDir, "analyzer-result.yml")
+            val analyzerResultFile = assetsDir.resolve("analyzer-result.yml")
             val expectedResult = patchExpectedResult(
-                File(assetsDir, "file-counter-expected-output-for-analyzer-result.yml")
+                assetsDir.resolve("file-counter-expected-output-for-analyzer-result.yml")
             )
 
             val scanner = FileCounter("FileCounter", ScannerConfiguration())

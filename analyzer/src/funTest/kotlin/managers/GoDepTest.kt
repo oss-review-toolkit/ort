@@ -48,13 +48,13 @@ class GoDepTest : WordSpec() {
     init {
         "GoDep" should {
             "resolve dependencies from a lockfile correctly" {
-                val manifestFile = File(projectsDir, "synthetic/godep/lockfile/Gopkg.toml")
+                val manifestFile = projectsDir.resolve("synthetic/godep/lockfile/Gopkg.toml")
                 val vcsPath = vcsDir.getPathToRoot(manifestFile.parentFile)
 
                 val result = createGoDep().resolveSingleProject(manifestFile)
 
                 val expectedResult = patchExpectedResult(
-                    File(projectsDir, "synthetic/godep-expected-output.yml"),
+                    projectsDir.resolve("synthetic/godep-expected-output.yml"),
                     url = normalizeVcsUrl(vcsUrl),
                     revision = vcsRevision,
                     path = vcsPath
@@ -64,7 +64,7 @@ class GoDepTest : WordSpec() {
             }
 
             "show error if no lockfile is present" {
-                val manifestFile = File(projectsDir, "synthetic/godep/no-lockfile/Gopkg.toml")
+                val manifestFile = projectsDir.resolve("synthetic/godep/no-lockfile/Gopkg.toml")
                 val result = createGoDep().resolveSingleProject(manifestFile)
 
                 with(result) {
@@ -82,7 +82,7 @@ class GoDepTest : WordSpec() {
             "invoke the dependency solver if no lockfile is present and allowDynamicVersions is set".config(
                 enabled = !Ci.isAzureWindows
             ) {
-                val manifestFile = File(projectsDir, "synthetic/godep/no-lockfile/Gopkg.toml")
+                val manifestFile = projectsDir.resolve("synthetic/godep/no-lockfile/Gopkg.toml")
                 val config = AnalyzerConfiguration(ignoreToolVersions = false, allowDynamicVersions = true)
                 val result = createGoDep(config).resolveSingleProject(manifestFile)
 
@@ -93,13 +93,13 @@ class GoDepTest : WordSpec() {
             }
 
             "import dependencies from Glide" {
-                val manifestFile = File(projectsDir, "synthetic/godep/glide/glide.yaml")
+                val manifestFile = projectsDir.resolve("synthetic/godep/glide/glide.yaml")
                 val vcsPath = vcsDir.getPathToRoot(manifestFile.parentFile)
 
                 val result = createGoDep().resolveSingleProject(manifestFile)
 
                 val expectedResult = patchExpectedResult(
-                    File(projectsDir, "synthetic/glide-expected-output.yml"),
+                    projectsDir.resolve("synthetic/glide-expected-output.yml"),
                     url = normalizeVcsUrl(vcsUrl),
                     revision = vcsRevision,
                     path = vcsPath
@@ -109,13 +109,13 @@ class GoDepTest : WordSpec() {
             }
 
             "import dependencies from godeps" {
-                val manifestFile = File(projectsDir, "synthetic/godep/godeps/Godeps/Godeps.json")
+                val manifestFile = projectsDir.resolve("synthetic/godep/godeps/Godeps/Godeps.json")
                 val vcsPath = vcsDir.getPathToRoot(manifestFile.parentFile.parentFile)
 
                 val result = createGoDep().resolveSingleProject(manifestFile)
 
                 val expectedResult = patchExpectedResult(
-                    File(projectsDir, "synthetic/godeps-expected-output.yml"),
+                    projectsDir.resolve("synthetic/godeps-expected-output.yml"),
                     url = normalizeVcsUrl(vcsUrl),
                     revision = vcsRevision,
                     path = vcsPath
@@ -126,20 +126,20 @@ class GoDepTest : WordSpec() {
         }
 
         "deduceImportPath()" should {
-            val projectDir = File(projectsDir, "synthetic/godep/lockfile")
+            val projectDir = projectsDir.resolve("synthetic/godep/lockfile")
             val gopath = File("/tmp/gopath")
 
             "deduce an import path from VCS info" {
                 val vcsInfo = VcsInfo.EMPTY.copy(url = "https://github.com/oss-review-toolkit/ort.git")
 
                 createGoDep().deduceImportPath(projectDir, vcsInfo, gopath) shouldBe
-                        File(gopath, "src/github.com/oss-review-toolkit/ort.git")
+                        gopath.resolve("src/github.com/oss-review-toolkit/ort.git")
             }
 
             "deduce an import path without VCS info" {
                 val vcsInfo = VcsInfo.EMPTY
 
-                createGoDep().deduceImportPath(projectDir, vcsInfo, gopath) shouldBe File(gopath, "src/lockfile")
+                createGoDep().deduceImportPath(projectDir, vcsInfo, gopath) shouldBe gopath.resolve("src/lockfile")
             }
         }
     }

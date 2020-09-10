@@ -84,7 +84,7 @@ class SubversionWorkingTreeTest : StringSpec() {
             )
             workingTree.getNested() should beEmpty()
             workingTree.getRootPath() shouldBe zipContentDir
-            workingTree.getPathToRoot(File(zipContentDir, "docutils")) shouldBe "docutils"
+            workingTree.getPathToRoot(zipContentDir.resolve("docutils")) shouldBe "docutils"
         }
 
         "Subversion correctly lists remote branches" {
