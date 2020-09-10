@@ -20,7 +20,14 @@
 
 package org.ossreviewtoolkit.utils
 
+/**
+ * The (short) name of the OSS Review Toolkit.
+ */
 const val ORT_NAME = "ort"
+
+/**
+ * The full name of the OSS Review Toolkit.
+ */
 const val ORT_FULL_NAME = "OSS Review Toolkit"
 
 /**
