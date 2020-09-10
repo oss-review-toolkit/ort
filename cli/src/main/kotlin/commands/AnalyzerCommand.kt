@@ -44,6 +44,7 @@ import org.ossreviewtoolkit.model.FileFormat
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.mapper
 import org.ossreviewtoolkit.model.utils.mergeLabels
+import org.ossreviewtoolkit.utils.ORT_REPO_CONFIG_FILENAME
 import org.ossreviewtoolkit.utils.expandTilde
 import org.ossreviewtoolkit.utils.ortDataDirectory
 import org.ossreviewtoolkit.utils.safeMkdirs
@@ -105,8 +106,8 @@ class AnalyzerCommand : CliktCommand(name = "analyze", help = "Determine depende
 
     private val repositoryConfigurationFile by option(
         "--repository-configuration-file",
-        help = "A file containing the repository configuration. If set the .ort.yml file from the repository will be " +
-                "ignored."
+        help = "A file containing the repository configuration. If set the '$ORT_REPO_CONFIG_FILENAME' file from the " +
+                "repository will be ignored."
     ).convert { it.expandTilde() }
         .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
         .convert { it.absoluteFile.normalize() }

@@ -49,6 +49,7 @@ import org.ossreviewtoolkit.model.licenses.orEmpty
 import org.ossreviewtoolkit.model.mapper
 import org.ossreviewtoolkit.model.readValue
 import org.ossreviewtoolkit.model.utils.mergeLabels
+import org.ossreviewtoolkit.utils.ORT_REPO_CONFIG_FILENAME
 import org.ossreviewtoolkit.utils.PackageConfigurationOption
 import org.ossreviewtoolkit.utils.createProvider
 import org.ossreviewtoolkit.utils.expandTilde
@@ -114,8 +115,8 @@ class EvaluatorCommand : CliktCommand(name = "evaluate", help = "Evaluate rules 
 
     private val repositoryConfigurationFile by option(
         "--repository-configuration-file",
-        help = "A file containing the repository configuration. If set the .ort.yml overrides the repository " +
-                "configuration contained in the ort result from the input file."
+        help = "A file containing the repository configuration. If set the '$ORT_REPO_CONFIG_FILENAME' overrides the " +
+                "repository configuration contained in the ort result from the input file."
     ).convert { it.expandTilde() }
         .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
         .convert { it.absoluteFile.normalize() }
