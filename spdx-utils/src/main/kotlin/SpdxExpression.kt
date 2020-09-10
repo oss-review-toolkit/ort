@@ -288,6 +288,12 @@ sealed class SpdxSingleLicenseExpression : SpdxExpression() {
      * Return the license exception identifier if this is a [SpdxLicenseWithExceptionExpression] or null otherwise.
      */
     abstract fun exception(): String?
+
+    /**
+     * Return the URL for the licence if this is [SpdxLicenseIdExpression] or [SpdxLicenseWithExceptionExpression].
+     * Otherwise return null.
+     */
+    abstract fun getLicenseUrl(): String?
 }
 
 /**
@@ -366,6 +372,8 @@ class SpdxLicenseWithExceptionExpression(
     override fun hashCode() = license.hashCode() + 31 * exception.hashCode()
 
     override fun toString(): String = "$license $WITH $exception"
+
+    override fun getLicenseUrl() = license.getLicenseUrl()
 }
 
 /**
@@ -433,6 +441,8 @@ class SpdxLicenseIdExpression(
             // it is a generic "+" operator for deprecated licenses.
             if (orLaterVersion && !id.endsWith("-or-later")) append("+")
         }
+
+    override fun getLicenseUrl() = if (isValid()) SpdxConstants.SPDX_LICENSE_LIST_URL + id else null
 }
 
 /**
@@ -475,6 +485,8 @@ data class SpdxLicenseReferenceExpression(
     override fun hashCode() = id.hashCode()
 
     override fun toString() = id
+
+    override fun getLicenseUrl(): String? = null
 }
 
 /**
