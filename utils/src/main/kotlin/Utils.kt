@@ -28,19 +28,6 @@ import java.security.Permission
 
 import kotlin.reflect.full.memberProperties
 
-const val ORT_NAME = "ort"
-const val ORT_FULL_NAME = "OSS Review Toolkit"
-
-/**
- * The name of the environment variable to customize the ORT data directory.
- */
-const val ORT_DATA_DIR_ENV_NAME = "ORT_DATA_DIR"
-
-/**
- * The name of the ORT configuration file.
- */
-const val ORT_CONFIG_FILENAME = ".ort.yml"
-
 private fun List<String>.generateCapitalizationVariants() = flatMap { listOf(it, it.toUpperCase(), it.capitalize()) }
 
 /**
