@@ -36,7 +36,6 @@ import com.fasterxml.jackson.module.kotlin.registerKotlinModule
 
 import java.io.Writer
 
-import org.ossreviewtoolkit.model.CustomData
 import org.ossreviewtoolkit.model.OrtIssue
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.PROPERTY_NAMING_STRATEGY
@@ -117,7 +116,7 @@ data class EvaluatedModel(
      */
     val repositoryConfiguration: String,
 
-    val customData: CustomData
+    val labels: Map<String, String>
 ) {
     companion object {
         private val INT_ID_TYPES = listOf(
