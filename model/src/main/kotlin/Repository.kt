@@ -22,6 +22,7 @@ package org.ossreviewtoolkit.model
 import com.fasterxml.jackson.annotation.JsonInclude
 
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
+import org.ossreviewtoolkit.utils.ORT_REPO_CONFIG_FILENAME
 
 /**
  * A description of the source code repository that was used as input for ORT.
@@ -46,7 +47,7 @@ data class Repository(
     val nestedRepositories: Map<String, VcsInfo> = emptyMap(),
 
     /**
-     * The configuration of the repository, parsed from the ".ort.yml" file.
+     * The configuration of the repository, parsed from [ORT_REPO_CONFIG_FILENAME].
      */
     val config: RepositoryConfiguration = RepositoryConfiguration()
 ) {

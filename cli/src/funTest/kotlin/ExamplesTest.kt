@@ -48,6 +48,7 @@ import org.ossreviewtoolkit.reporter.ReporterInput
 import org.ossreviewtoolkit.reporter.reporters.AbstractNoticeReporter
 import org.ossreviewtoolkit.reporter.reporters.AntennaAttributionDocumentReporter
 import org.ossreviewtoolkit.utils.ORT_NAME
+import org.ossreviewtoolkit.utils.ORT_REPO_CONFIG_FILENAME
 
 class ExamplesTest : StringSpec() {
     private val examplesDir = File("../examples")
@@ -62,7 +63,7 @@ class ExamplesTest : StringSpec() {
         }
 
         "ort.yml examples are parsable" {
-            val excludesExamples = exampleFiles.filter { it.name.endsWith(".ort.yml") }
+            val excludesExamples = exampleFiles.filter { it.name.endsWith(ORT_REPO_CONFIG_FILENAME) }
             exampleFiles.removeAll(excludesExamples)
 
             excludesExamples.forEach { file ->
