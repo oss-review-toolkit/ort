@@ -3,15 +3,15 @@
   "licenses" : [ {
     "id" : "Apache-2.0",
     "name" : "Apache License 2.0",
-    "url" : ""
+    "url" : "https://spdx.org/licenses/Apache-2.0"
   }, {
     "id" : "BSD-2-Clause",
     "name" : "BSD 2-Clause \"Simplified\" License",
-    "url" : ""
+    "url" : "https://spdx.org/licenses/BSD-2-Clause"
   }, {
     "id" : "GPL-2.0-or-later",
     "name" : "GNU General Public License v2.0 or later",
-    "url" : ""
+    "url" : "https://spdx.org/licenses/GPL-2.0-or-later"
   }, {
     "id" : "LicenseRef-scancode-asmus",
     "name" : "",
@@ -19,7 +19,7 @@
   }, {
     "id" : "MIT",
     "name" : "MIT License",
-    "url" : ""
+    "url" : "https://spdx.org/licenses/MIT"
   } ],
   "dependencies" : [ {
     "name" : "first-package",

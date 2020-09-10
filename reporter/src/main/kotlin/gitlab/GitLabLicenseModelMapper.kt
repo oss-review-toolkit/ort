@@ -53,7 +53,7 @@ private fun Collection<Package>.toLicenses(): List<License> {
         License(
             id = singleLicenseExpression.simpleLicense(),
             name = singleLicenseExpression.toLicenseName(),
-            url = "" // TODO
+            url = singleLicenseExpression.getLicenseUrl().orEmpty()
         )
     }.sortedBy { it.id }
 }

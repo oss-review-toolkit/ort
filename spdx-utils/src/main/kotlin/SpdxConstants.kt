@@ -36,6 +36,11 @@ object SpdxConstants {
     const val NOASSERTION = "NOASSERTION"
 
     /**
+     * The URL that points to list of SPDX licenses.
+     */
+    const val SPDX_LICENSE_LIST_URL = "https://spdx.org/licenses/"
+
+    /**
      * Return true if and only if the given value equals [NONE] or [NOASSERTION].
      */
     fun isNotPresent(value: String) = value in setOf(NONE, NOASSERTION)
