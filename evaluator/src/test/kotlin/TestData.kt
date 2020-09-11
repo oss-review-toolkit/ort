@@ -152,7 +152,7 @@ val ortResult = OrtResult(
                 paths = listOf(
                     PathExclude(
                         pattern = "excluded/**",
-                        reason = PathExcludeReason.TEST_TOOL_OF,
+                        reason = PathExcludeReason.TEST_OF,
                         comment = "excluded"
                     )
                 )
