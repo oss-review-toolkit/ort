@@ -46,6 +46,11 @@ const val ORT_DATA_DIR_ENV_NAME = "ORT_DATA_DIR"
 const val ORT_CONFIG_FILENAME = "ort.conf"
 
 /**
+ * The name of the ORT package configurations directory.
+ */
+const val ORT_PACKAGE_CONFIGURATIONS_DIRNAME = "package-configurations"
+
+/**
  * The name of the ORT repository configuration file.
  */
 const val ORT_REPO_CONFIG_FILENAME = ".ort.yml"
