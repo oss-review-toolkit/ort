@@ -51,7 +51,6 @@ class EvaluatorTest : WordSpec() {
                     broken script
                     """.trimIndent()
                 )
-                println()
 
                 result shouldBe false
             }
