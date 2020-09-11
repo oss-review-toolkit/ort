@@ -74,10 +74,10 @@ cli/build/install/ort/bin/ort evaluate
   -i [scanner-output-dir]/scan-result.yml
   -o [evaluator-output-dir]
   --output-formats YAML
-  --license-configuration-file [ort-configuration-dir]/licenses.yml
-  --package-curations-file [ort-configuration-dir]/curations.yml
-  --package-configuration-dir [ort-configuration-dir]/packages
-  --rules-file [ort-configuration-dir]/rules.kts
+  --license-configuration-file $ORT_CONFIG_DIR/licenses.yml
+  --package-curations-file $ORT_CONFIG_DIR/curations.yml
+  --package-configuration-dir $ORT_CONFIG_DIR/packages
+  --rules-file $ORT_CONFIG_DIR/rules.kts
 ```
 
 or to the _reporter_:
@@ -87,8 +87,8 @@ cli/build/install/ort/bin/ort report
   -i [evaluator-output-dir]/evaluation-result.yml
   -o [reporter-output-dir]
   --report-formats NoticeByPackage,WebApp
-  --license-configuration-file [ort-configuration-dir]/licenses.yml
-  --package-configuration-dir [ort-configuration-dir]/packages
+  --license-configuration-file $ORT_CONFIG_DIR/licenses.yml
+  --package-configuration-dir $ORT_CONFIG_DIR/packages
 ```
  
 ### Using a Single Package Configuration File
@@ -100,10 +100,10 @@ cli/build/install/ort/bin/ort evaluate
   -i [scanner-output-dir]/scan-result.yml
   -o [evaluator-output-dir]
   --output-formats YAML
-  --license-configuration-file [ort-configuration-dir]/licenses.yml
-  --package-curations-file [ort-configuration-dir]/curations.yml
-  --package-configuration-file [ort-configuration-dir]/packages.yml
-  --rules-file [ort-configuration-dir]/rules.kts
+  --license-configuration-file $ORT_CONFIG_DIR/licenses.yml
+  --package-curations-file $ORT_CONFIG_DIR/curations.yml
+  --package-configuration-file $ORT_CONFIG_DIR/packages.yml
+  --rules-file $ORT_CONFIG_DIR/rules.kts
 ```
 
 or to the _reporter_:
@@ -113,8 +113,8 @@ cli/build/install/ort/bin/ort report
   -i [evaluator-output-dir]/evaluation-result.yml
   -o [reporter-output-dir]
   --report-formats NoticeByPackage,WebApp
-  --license-configuration-file [ort-configuration-dir]/licenses.yml
-  --package-configuration-file [ort-configuration-dir]/packages.yml
+  --license-configuration-file $ORT_CONFIG_DIR/licenses.yml
+  --package-configuration-file $ORT_CONFIG_DIR/packages.yml
 ```
 
 The code below shows an example for `packages.yml`:

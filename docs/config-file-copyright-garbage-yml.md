@@ -18,5 +18,5 @@ cli/build/install/ort/bin/ort report
   -i [evaluator-output-dir]/evaluation-result.yml
   -o [reporter-output-dir]
   --report-formats NoticeByPackage,StaticHtml,WebApp
-  --copyright-garbage-file [ort-configuration-dir]/copyright-garbage.yml
+  --copyright-garbage-file $ORT_CONFIG_DIR/copyright-garbage.yml
 ```
