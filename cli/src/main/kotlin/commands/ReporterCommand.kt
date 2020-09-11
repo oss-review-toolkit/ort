@@ -80,14 +80,14 @@ class ReporterCommand : CliktCommand(
     private val packageConfigurationOption by mutuallyExclusiveOptions(
         option(
             "--package-configuration-dir",
-            help = "The directory containing the package configuration files to read as input. It is searched " +
-                    "recursively."
+            help = "A directory that is searched recursively for package configuration files. Each file must only " +
+                    "contain a single package configuration."
         ).convert { it.expandTilde() }
             .file(mustExist = true, canBeFile = false, canBeDir = true, mustBeWritable = false, mustBeReadable = true)
             .convert { PackageConfigurationOption.Dir(it.absoluteFile.normalize()) },
         option(
             "--package-configuration-file",
-            help = "The file containing the package configurations to read as input."
+            help = "A file containing a list of package configurations."
         ).convert { it.expandTilde() }
             .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
             .convert { PackageConfigurationOption.File(it.absoluteFile.normalize()) }
