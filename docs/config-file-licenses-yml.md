@@ -17,10 +17,10 @@ To use the `licenses.yml` file pass it to the `--license-configuration-file` opt
 
 ```bash
 cli/build/install/ort/bin/ort evaluate
-  -i [scanner-output-path]/scan-result.yml
-  -o [evaluator-output-path]
+  -i [scanner-output-dir]/scan-result.yml
+  -o [evaluator-output-dir]
   --output-formats YAML
-  --license-configuration-file [ort-configuration-path]/licenses.yml
-  --package-curations-file [ort-configuration-path]/curations.yml
-  --rules-file [ort-configuration-path]/rules.kts
+  --license-configuration-file [ort-configuration-dir]/licenses.yml
+  --package-curations-file [ort-configuration-dir]/curations.yml
+  --rules-file [ort-configuration-dir]/rules.kts
 ```

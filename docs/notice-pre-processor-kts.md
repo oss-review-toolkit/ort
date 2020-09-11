@@ -12,9 +12,9 @@ To use the `notice-pre-processor.kts` file pass it to the `preProcessingScript` 
 
 ```bash
 cli/build/install/ort/bin/ort report
-  -i [evaluator-output-path]/evaluation-result.yml
-  -o [reporter-output-path]
+  -i [evaluator-output-dir]/evaluation-result.yml
+  -o [reporter-output-dir]
   --report-formats NoticeByPackage,StaticHtml,WebApp
-  -O NoticeByPackage=preProcessingScript=[ort-configuration-path]/notice-pre-processor.kts \
-  -O NoticeSummary=preProcessingScript=[ort-configuration-path]/notice-pre-processor.kts \
+  -O NoticeByPackage=preProcessingScript=[ort-configuration-dir]/notice-pre-processor.kts \
+  -O NoticeSummary=preProcessingScript=[ort-configuration-dir]/notice-pre-processor.kts \
 ```

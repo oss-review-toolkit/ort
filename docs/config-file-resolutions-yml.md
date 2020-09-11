@@ -90,9 +90,9 @@ To use the `resolutions.yml` file pass it to the `--resolutions-file` option of 
 
 ```bash
 cli/build/install/ort/bin/ort report
-  -i [evaluator-output-path]/evaluation-result.yml
-  -o [reporter-output-path]
+  -i [evaluator-output-dir]/evaluation-result.yml
+  -o [reporter-output-dir]
   --report-formats NoticeByPackage,StaticHtml,WebApp
-  --license-configuration-file [ort-configuration-path]/licenses.yml
-  --resolutions-file [ort-configuration-path]/resolutions.yml
+  --license-configuration-file [ort-configuration-dir]/licenses.yml
+  --resolutions-file [ort-configuration-dir]/resolutions.yml
 ```

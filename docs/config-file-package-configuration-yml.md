@@ -71,24 +71,24 @@ To use a directory with configuration files for each *package id*, pass it to th
 
 ```bash
 cli/build/install/ort/bin/ort evaluate
-  -i [scanner-output-path]/scan-result.yml
-  -o [evaluator-output-path]
+  -i [scanner-output-dir]/scan-result.yml
+  -o [evaluator-output-dir]
   --output-formats YAML
-  --license-configuration-file [ort-configuration-path]/licenses.yml
-  --package-curations-file [ort-configuration-path]/curations.yml
-  --package-configuration-dir [ort-configuration-path]/packages
-  --rules-file [ort-configuration-path]/rules.kts
+  --license-configuration-file [ort-configuration-dir]/licenses.yml
+  --package-curations-file [ort-configuration-dir]/curations.yml
+  --package-configuration-dir [ort-configuration-dir]/packages
+  --rules-file [ort-configuration-dir]/rules.kts
 ```
 
 or to the _reporter_:
 
 ```bash
 cli/build/install/ort/bin/ort report
-  -i [evaluator-output-path]/evaluation-result.yml
-  -o [reporter-output-path]
+  -i [evaluator-output-dir]/evaluation-result.yml
+  -o [reporter-output-dir]
   --report-formats NoticeByPackage,WebApp
-  --license-configuration-file [ort-configuration-path]/licenses.yml
-  --package-configuration-dir [ort-configuration-path]/packages
+  --license-configuration-file [ort-configuration-dir]/licenses.yml
+  --package-configuration-dir [ort-configuration-dir]/packages
 ```
  
 ### Using a Single Package Configuration File
@@ -97,24 +97,24 @@ To use a single package configuration `.yml` file, pass it to the `--package-con
 
 ```bash
 cli/build/install/ort/bin/ort evaluate
-  -i [scanner-output-path]/scan-result.yml
-  -o [evaluator-output-path]
+  -i [scanner-output-dir]/scan-result.yml
+  -o [evaluator-output-dir]
   --output-formats YAML
-  --license-configuration-file [ort-configuration-path]/licenses.yml
-  --package-curations-file [ort-configuration-path]/curations.yml
-  --package-configuration-file [ort-configuration-path]/packages.yml
-  --rules-file [ort-configuration-path]/rules.kts
+  --license-configuration-file [ort-configuration-dir]/licenses.yml
+  --package-curations-file [ort-configuration-dir]/curations.yml
+  --package-configuration-file [ort-configuration-dir]/packages.yml
+  --rules-file [ort-configuration-dir]/rules.kts
 ```
 
 or to the _reporter_:
 
 ```bash
 cli/build/install/ort/bin/ort report
-  -i [evaluator-output-path]/evaluation-result.yml
-  -o [reporter-output-path]
+  -i [evaluator-output-dir]/evaluation-result.yml
+  -o [reporter-output-dir]
   --report-formats NoticeByPackage,WebApp
-  --license-configuration-file [ort-configuration-path]/licenses.yml
-  --package-configuration-file [ort-configuration-path]/packages.yml
+  --license-configuration-file [ort-configuration-dir]/licenses.yml
+  --package-configuration-file [ort-configuration-dir]/packages.yml
 ```
 
 The code below shows an example for `packages.yml`:

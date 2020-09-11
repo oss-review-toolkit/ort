@@ -24,11 +24,11 @@ the --report-option (or -O) option to the _report_ command:
 
 ```bash
 cli/build/install/ort/bin/ort report
-  -i [scanner-output-path]/scanner-result.yml
-  -o [reporter-output-path]
+  -i [scanner-output-dir]/scanner-result.yml
+  -o [reporter-output-dir]
   -f AntennaAttributionDocument
   --report-option AntennaAttributionDocument=template.id=[template-id]
-  --report-option AntennaAttributionDocument=template.path=[template-bundle-jar-path]/custom-template.jar
+  --report-option AntennaAttributionDocument=template.path=[template-bundle-jar-dir]/custom-template.jar
 ```
 
 To use the _AntennaAttributionDocument_ report format with template PDF files, pass the directory the PDF files are
@@ -36,10 +36,10 @@ located in as the template.path via the --report-option (or -O) option to the _r
 
 ```bash
 cli/build/install/ort/bin/ort report
-  -i [scanner-output-path]/scanner-result.yml
-  -o [reporter-output-path]
+  -i [scanner-output-dir]/scanner-result.yml
+  -o [reporter-output-dir]
   -f AntennaAttributionDocument
-  --report-option AntennaAttributionDocument=template.path=[directory-with-pdf-files-path]
+  --report-option AntennaAttributionDocument=template.path=[directory-with-pdf-files-dir]
 ```
 
 [1]: https://github.com/eclipse/antenna
