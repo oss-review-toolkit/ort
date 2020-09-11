@@ -36,7 +36,7 @@ import org.ossreviewtoolkit.utils.storage.FileArchiver
 
 class LicenseViewFilterTest : AbstractLicenseViewTest() {
     private val licenseInfoResolver = LicenseInfoResolver(
-        DefaultLicenseInfoProvider(ortResult, SimplePackageConfigurationProvider()),
+        DefaultLicenseInfoProvider(ortResult, SimplePackageConfigurationProvider.EMPTY),
         CopyrightGarbage(),
         FileArchiver.DEFAULT
     )

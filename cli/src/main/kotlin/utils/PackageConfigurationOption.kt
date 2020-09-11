@@ -31,5 +31,5 @@ internal fun PackageConfigurationOption?.createProvider(): PackageConfigurationP
     when (this) {
         is PackageConfigurationOption.Dir -> SimplePackageConfigurationProvider.forDirectory(value)
         is PackageConfigurationOption.File -> SimplePackageConfigurationProvider.forFile(value)
-        null -> SimplePackageConfigurationProvider()
+        null -> SimplePackageConfigurationProvider.EMPTY
     }

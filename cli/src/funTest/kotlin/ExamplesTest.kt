@@ -107,7 +107,7 @@ class ExamplesTest : StringSpec() {
                 model = model,
                 copyrightGarbage = CopyrightGarbage(),
                 licenseConfiguration = LicenseConfiguration(),
-                packageConfigurationProvider = SimplePackageConfigurationProvider()
+                packageConfigurationProvider = SimplePackageConfigurationProvider.EMPTY
             )
 
             val script = takeExampleFile("notice-pre-processor.kts").readText()
@@ -141,7 +141,7 @@ class ExamplesTest : StringSpec() {
         "rules.kts can be compiled" {
             val evaluator = Evaluator(
                 ortResult = OrtResult.EMPTY,
-                packageConfigurationProvider = SimplePackageConfigurationProvider(),
+                packageConfigurationProvider = SimplePackageConfigurationProvider.EMPTY,
                 licenseConfiguration = LicenseConfiguration()
             )
 

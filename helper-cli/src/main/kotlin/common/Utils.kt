@@ -235,7 +235,7 @@ internal data class ProcessedCopyrightStatement(
 internal fun OrtResult.processAllCopyrightStatements(
     omitExcluded: Boolean = true,
     copyrightGarbage: Set<String> = emptySet(),
-    packageConfigurationProvider: PackageConfigurationProvider = SimplePackageConfigurationProvider()
+    packageConfigurationProvider: PackageConfigurationProvider = SimplePackageConfigurationProvider.EMPTY
 ): List<ProcessedCopyrightStatement> {
     val result = mutableListOf<ProcessedCopyrightStatement>()
 

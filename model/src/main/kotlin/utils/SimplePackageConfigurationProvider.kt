@@ -33,9 +33,14 @@ import org.ossreviewtoolkit.model.readValue
  * Throws an exception if there is more than one configuration per [Identifier] and [Provenance].
  */
 class SimplePackageConfigurationProvider(
-    configurations: Collection<PackageConfiguration> = emptyList()
+    configurations: Collection<PackageConfiguration>
 ) : PackageConfigurationProvider {
     companion object {
+        /**
+         * A provider without any package configurations.
+         */
+        val EMPTY = SimplePackageConfigurationProvider(emptyList())
+
         /**
          * Return a [SimplePackageConfigurationProvider] which provides all [PackageConfiguration]s found recursively
          * in the given [directory]. All non-hidden files within the given [directory] must be package curation files,

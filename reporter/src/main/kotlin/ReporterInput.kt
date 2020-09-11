@@ -51,7 +51,7 @@ data class ReporterInput(
     /**
      * A [PackageConfigurationProvider], can be used to obtain [PackageConfiguration]s for packages.
      */
-    val packageConfigurationProvider: PackageConfigurationProvider = SimplePackageConfigurationProvider(),
+    val packageConfigurationProvider: PackageConfigurationProvider = SimplePackageConfigurationProvider.EMPTY,
 
     /**
      * A [ResolutionProvider], can be used to check which [OrtIssue]s and [RuleViolation]s are resolved.
