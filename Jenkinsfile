@@ -459,7 +459,11 @@ pipeline {
                         STACKTRACE_OPTION="--stacktrace"
                     fi
 
-                    /opt/ort/bin/ort $LOG_LEVEL $STACKTRACE_OPTION report -f CycloneDX,NoticeByPackage,NoticeSummary,SpdxDocument,StaticHTML,WebApp -i out/results/current-result.yml -o out/results/reporter
+                    /opt/ort/bin/ort $LOG_LEVEL $STACKTRACE_OPTION report \
+                        -f CycloneDX,NoticeTemplate,SpdxDocument,StaticHTML,WebApp \
+                        -O NoticeTemplate=template.id=default,summary \
+                        -i out/results/current-result.yml \
+                        -o out/results/reporter
                 '''
             }
 
