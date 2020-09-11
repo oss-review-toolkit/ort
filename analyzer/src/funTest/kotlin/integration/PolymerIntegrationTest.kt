@@ -19,8 +19,6 @@
 
 package org.ossreviewtoolkit.analyzer.integration
 
-import java.io.File
-
 import org.ossreviewtoolkit.analyzer.PackageManagerFactory
 import org.ossreviewtoolkit.analyzer.managers.Bower
 import org.ossreviewtoolkit.analyzer.managers.Npm
@@ -51,7 +49,7 @@ class PolymerIntegrationTest : AbstractIntegrationSpec() {
         )
     )
 
-    private fun findDownloadedFiles(vararg filenames: String): List<File> =
+    private fun findDownloadedFiles(vararg filenames: String) =
         downloadResult.downloadDirectory.walk().filterTo(mutableListOf()) { it.name in filenames }
 
     override val expectedManagedFiles by lazy {
