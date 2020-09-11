@@ -26,6 +26,7 @@ import com.github.ajalt.clikt.core.requireObject
 import com.github.ajalt.clikt.parameters.groups.mutuallyExclusiveOptions
 import com.github.ajalt.clikt.parameters.groups.single
 import com.github.ajalt.clikt.parameters.options.convert
+import com.github.ajalt.clikt.parameters.options.default
 import com.github.ajalt.clikt.parameters.options.multiple
 import com.github.ajalt.clikt.parameters.options.option
 import com.github.ajalt.clikt.parameters.options.required
@@ -54,11 +55,13 @@ import org.ossreviewtoolkit.reporter.HowToFixTextProvider
 import org.ossreviewtoolkit.reporter.Reporter
 import org.ossreviewtoolkit.reporter.ReporterInput
 import org.ossreviewtoolkit.utils.ORT_REPO_CONFIG_FILENAME
+import org.ossreviewtoolkit.utils.ORT_RESOLUTIONS_FILENAME
 import org.ossreviewtoolkit.utils.PackageConfigurationOption
 import org.ossreviewtoolkit.utils.collectMessagesAsString
 import org.ossreviewtoolkit.utils.createProvider
 import org.ossreviewtoolkit.utils.expandTilde
 import org.ossreviewtoolkit.utils.log
+import org.ossreviewtoolkit.utils.ortConfigDirectory
 import org.ossreviewtoolkit.utils.safeMkdirs
 import org.ossreviewtoolkit.utils.showStackTrace
 import org.ossreviewtoolkit.utils.storage.FileArchiver
@@ -130,6 +133,7 @@ class ReporterCommand : CliktCommand(
     ).convert { it.expandTilde() }
         .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
         .convert { it.absoluteFile.normalize() }
+        .default(ortConfigDirectory.resolve(ORT_RESOLUTIONS_FILENAME))
 
     private val copyrightGarbageFile by option(
         "--copyright-garbage-file",
@@ -180,7 +184,7 @@ class ReporterCommand : CliktCommand(
 
         val resolutionProvider = DefaultResolutionProvider()
         resolutionProvider.add(ortResult.getResolutions())
-        resolutionsFile?.readValue<Resolutions>()?.let { resolutionProvider.add(it) }
+        resolutionsFile.takeIf { it.isFile }?.readValue<Resolutions>()?.let { resolutionProvider.add(it) }
 
         val copyrightGarbage = copyrightGarbageFile?.readValue<CopyrightGarbage>().orEmpty()
 

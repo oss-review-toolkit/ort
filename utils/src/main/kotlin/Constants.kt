@@ -49,3 +49,8 @@ const val ORT_CONFIG_FILENAME = "ort.conf"
  * The name of the ORT repository configuration file.
  */
 const val ORT_REPO_CONFIG_FILENAME = ".ort.yml"
+
+/**
+ * The name of the ORT resolutions configuration file.
+ */
+const val ORT_RESOLUTIONS_FILENAME = "resolutions.yml"
