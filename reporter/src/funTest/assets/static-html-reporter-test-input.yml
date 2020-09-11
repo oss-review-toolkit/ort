@@ -473,12 +473,3 @@ labels:
   process_parameters.PROCESS_PARAM_1: "label process param 1"
   process_parameters.PROCESS_PARAM_2: "label process param 2"
   OTHER: "label other"
-data:
-  job_parameters:
-    JOB_PARAM_1: "custom data job param 1"
-    JOB_PARAM_2: "custom data job param 2"
-  process_parameters:
-    PROCESS_PARAM_1: "custom data process param 1"
-    PROCESS_PARAM_2: "custom data process param 2"
-  other_parameters:
-    OTHER_PARAM_1: "custom data other param 1"

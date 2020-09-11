@@ -20,6 +20,7 @@
 package org.ossreviewtoolkit.model
 
 import com.fasterxml.jackson.annotation.JsonIgnore
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.annotation.JsonInclude
 
 import java.util.SortedSet
@@ -33,12 +34,11 @@ import org.ossreviewtoolkit.spdx.SpdxExpression
 import org.ossreviewtoolkit.utils.log
 import org.ossreviewtoolkit.utils.zipWithDefault
 
-typealias CustomData = MutableMap<String, Any>
-
 /**
  * The common output format for the analyzer and scanner. It contains information about the scanned repository, and the
  * analyzer and scanner will add their result to it.
  */
+@JsonIgnoreProperties("data")
 @Suppress("TooManyFunctions")
 data class OrtResult(
     /**
@@ -84,12 +84,6 @@ data class OrtResult(
             labels = emptyMap()
         )
     }
-
-    /**
-     * A map that holds arbitrary data. Can be used by third-party tools to add custom data to the model.
-     */
-    @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    val data: CustomData = mutableMapOf()
 
     private data class ProjectEntry(val project: Project, val isExcluded: Boolean)
 
@@ -316,8 +310,7 @@ data class OrtResult(
     /**
      * Return a copy of this [OrtResult] with the [Repository.config] replaced by [config].
      */
-    fun replaceConfig(config: RepositoryConfiguration): OrtResult =
-        copy(repository = repository.copy(config = config)).also { it.data += data }
+    fun replaceConfig(config: RepositoryConfiguration): OrtResult = copy(repository = repository.copy(config = config))
 
     /**
      * Return a copy of this [OrtResult] with the [PackageCuration]s replaced by the given [curations].
@@ -334,7 +327,7 @@ data class OrtResult(
                     }.toSortedSet()
                 )
             )
-        ).also { it.data += data }
+        )
 
     fun getProject(id: Identifier): Project? = projects[id]?.project
 
