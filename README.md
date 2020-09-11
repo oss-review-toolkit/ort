@@ -156,19 +156,54 @@ Please see [Getting Started](./docs/getting-started.md) for an introduction to t
 
 ## Configuration
 
-Please see the documentation below for details about the ORT configuration.
+The following provides an overview of the various configuration files that can be used to customize ORT behavior.
 
-* The [ORT configuration](./model/src/main/resources/reference.conf) file - the main configuration file for the
-  operation of ORT. This configuration is maintained by an administrator who manages the ORT instance. In contrast to
-  the configuration files in the following, this file rarely changes once ORT is operational.
-* The [.ort.yml](./docs/config-file-ort-yml.md) file - project-specific license finding curations, exclusions
-  and resolutions to address issues found within a project's code repository.
-* The [package configuration](./docs/config-file-package-configuration-yml.md) file - package (dependency) and provenance
-  specific license finding curations and exclusions to address issues found within a scan result for a package.
-* The [curations.yml](./docs/config-file-curations-yml.md) file - curations correct invalid or missing package metadata
-  and set the concluded license for packages.
-* The [resolutions.yml](./docs/config-file-resolutions-yml.md) file - resolutions allow *resolving* any issues
-  or policy rule violations by providing a reason why they are acceptable and can be ignored.
+[ORT configuration file](./model/src/main/resources/reference.conf)
+
+The main configuration file for the operation of ORT. This configuration is maintained by an administrator who manages
+the ORT instance. In contrast to the configuration files in the following, this file rarely changes once ORT is
+operational.
+
+| Format | Scope | Default location | Default value |
+| ------ | ----- | ---------------- | ------------- |
+| HOCON | Global | `$ORT_CONFIG_DIR/ort.conf` | Empty ([built-in](./model/src/main/resources/default.conf)) |
+
+[Curations file](./docs/config-file-curations-yml.md)
+
+A file to correct invalid or missing package metadata, and to set the concluded license for packages.
+
+| Format | Scope | Default location | Default value |
+| ------ | ----- | ---------------- | ------------- |
+| YAML / JSON | Global | `$ORT_CONFIG_DIR/curations.yml` | Empty (n/a) |
+
+[Resolution file](./docs/config-file-resolutions-yml.md)
+
+Configurations to resolve any issues or rule violations by providing a mandatory reason, and an optional comment to
+justify the resolution on a global scale.
+
+| Format | Scope | Default location | Default value |
+| ------ | ----- | ---------------- | ------------- |
+| YAML / JSON | Global | `$ORT_CONFIG_DIR/resolutions.yml` | Empty (n/a) |
+
+[Repository configuration file](./docs/config-file-ort-yml.md)
+
+A configuration file, usually stored in the project's repository, for license finding curations, exclusions, and issues
+or rule violations resolutions in the context of the repository.
+
+| Format | Scope | Default location | Default value |
+| ------ | ----- | ---------------- | ------------- |
+| YAML / JSON | Repository (project) | `[analyzer-input-dir]/.ort.yml` | Empty (n/a) |
+
+[Package configuration file / directory](./docs/config-file-package-configuration-yml.md)
+
+A single file or a directory with multiple files containing configurations to set provenance-specific path excludes and
+license finding curations for dependency packages to address issues found within a scan result. The `helper-cli`'s
+[GeneratePackageConfigurationsCommand](./helper-cli/src/main/kotlin/commands/GeneratePackageConfigurationsCommand.kt)
+can be used to populate a directory with template package configuration files.
+
+| Format | Scope | Default location | Default value |
+| ------ | ----- | ---------------- | ------------- |
+| YAML / JSON | Package (dependency) | `$ORT_CONFIG_DIR/package-configurations/` | Empty (n/a) |
 
 # Details on the tools
 
