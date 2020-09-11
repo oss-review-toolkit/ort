@@ -30,7 +30,7 @@ import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 
 class DrupalIntegrationTest : AbstractIntegrationSpec() {
-    override val pkg: Package = Package(
+    override val pkg = Package(
         id = Identifier(
             type = "PhpComposer",
             namespace = "",

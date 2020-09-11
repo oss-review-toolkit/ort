@@ -32,7 +32,7 @@ import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 
 class PolymerIntegrationTest : AbstractIntegrationSpec() {
-    override val pkg: Package = Package(
+    override val pkg = Package(
         id = Identifier(
             type = "Bower",
             namespace = "",
