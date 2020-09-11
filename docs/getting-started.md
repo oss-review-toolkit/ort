@@ -49,11 +49,11 @@ cli/build/install/ort/bin/ort --help
 ## 3. Download the `mime-types` source code
 
 Before scanning `mime-types` its source code has to be downloaded. For reliable results we use version 2.1.18 (replace
-`[mime-types-path]` with the path you want to clone `mime-types` to):
+`[mime-types-dir]` with the directory you want to clone `mime-types` to):
 
 ```bash
-git clone https://github.com/jshttp/mime-types.git [mime-types-path]
-cd [mime-types-path]
+git clone https://github.com/jshttp/mime-types.git [mime-types-dir]
+cd [mime-types-dir]
 git checkout 2.1.18
 ```
 
@@ -66,14 +66,14 @@ The next step is to run the _analyzer_. It will create a JSON or YAML output fil
 # Command line help specific to the analyzer.
 cli/build/install/ort/bin/ort analyze --help
 
-# The easiest way to run the analyzer. Be aware that the [analyzer-output-path] directory must not exist.
-cli/build/install/ort/bin/ort analyze -i [mime-types-path] -o [analyzer-output-path]
+# The easiest way to run the analyzer. Be aware that the [analyzer-output-dir] directory must not exist.
+cli/build/install/ort/bin/ort analyze -i [mime-types-dir] -o [analyzer-output-dir]
 
 # The command above will create the default YAML output. If you prefer JSON run:
-cli/build/install/ort/bin/ort analyze -i [mime-types-path] -o [analyzer-output-path] -f JSON
+cli/build/install/ort/bin/ort analyze -i [mime-types-dir] -o [analyzer-output-dir] -f JSON
 
 # To get the maximum log output run:
-cli/build/install/ort/bin/ort --debug --stacktrace analyze -i [mime-types-path] -o [analyzer-output-path]
+cli/build/install/ort/bin/ort --debug --stacktrace analyze -i [mime-types-dir] -o [analyzer-output-dir]
 ```
 
 The _analyzer_ will search for build files of all supported package managers. In case of `mime-types` it will find the
@@ -84,9 +84,9 @@ first attempt of running the analyzer on the `mime-types` package it will fail w
 The following package managers are activated:
         Bower, Bundler, Cargo, DotNet, GoDep, Gradle, Maven, NPM, NuGet, PhpComposer, PIP, SBT, Stack, Yarn
 Analyzing project path:
-        [mime-types-path]
-ERROR - Resolving dependencies for 'package.json' failed with: No lockfile found in '[mime-types-path]'. This potentially results in unstable versions of dependencies. To allow this, enable support for dynamic versions.
-Writing analyzer result to '[analyzer-output-path]/analyzer-result.yml'.
+        [mime-types-dir]
+ERROR - Resolving dependencies for 'package.json' failed with: No lockfile found in '[mime-types-dir]'. This potentially results in unstable versions of dependencies. To allow this, enable support for dynamic versions.
+Writing analyzer result to '[analyzer-output-dir]/analyzer-result.yml'.
 ```
 
 This happens because `mime-types` does not have `package-lock.json` file. Without this file the versions of (transitive)
@@ -94,12 +94,12 @@ dependencies that are defined with version ranges could change at any time, lead
 analyzer. To override this check use the `--allow-dynamic-versions` option:
 
 ```bash
-$ cli/build/install/ort/bin/ort analyze -i [mime-types-path] -o [analyzer-output-path] --allow-dynamic-versions
+$ cli/build/install/ort/bin/ort analyze -i [mime-types-dir] -o [analyzer-output-dir] --allow-dynamic-versions
 The following package managers are activated:
         Gradle, Maven, SBT, NPM, Yarn, GoDep, PIP, Bundler, PhpComposer, Stack
 Analyzing project path:
-        [mime-types-path]
-Writing analyzer result to '[analyzer-output-path]/analyzer-result.yml'.
+        [mime-types-dir]
+Writing analyzer result to '[analyzer-output-dir]/analyzer-result.yml'.
 ```
 
 The result file will contain information about the `mime-types` package itself, the dependency tree for each scope, and
@@ -112,7 +112,7 @@ but can be configured to get excluded so that they e.g. do not get downloaded an
 To specify which scopes should be excluded, add an `.ort.yml` configuration file to the input directory of the _analyzer_. 
 For more details see [Configuration File](config-file-ort-yml.md).
 
-For this guide, `[mime-types-path]/.ort.yml` can be created with following content:
+For this guide, `[mime-types-dir]/.ort.yml` can be created with following content:
 
 ```yaml
 excludes:
@@ -251,9 +251,9 @@ and pass it to the `--package-curations-file` option of the _analyzer_:
 
 ```
 cli/build/install/ort/bin/ort analyze
-  -i [mime-types-path]
-  -o [analyzer-output-path]
-  --package-curations-file [ort-configuration-path]/curations.yml
+  -i [mime-types-dir]
+  -o [analyzer-output-dir]
+  --package-curations-file [ort-configuration-dir]/curations.yml
 ```
 
 ORT is designed to integrate lots of different scanners and is not limited to license scanners, technically any tool
@@ -279,20 +279,20 @@ As during the _analyzer_ step an `.ort.yml` configuration file was provided to e
 the `--skip-excluded` option can be used to avoid the download and scanning of that scope.
 
 ```bash
-$ cli/build/install/ort/bin/ort scan -i [analyzer-output-path]/analyzer-result.yml -o [scanner-output-path] --skip-excluded
+$ cli/build/install/ort/bin/ort scan -i [analyzer-output-dir]/analyzer-result.yml -o [scanner-output-dir] --skip-excluded
 Using scanner 'ScanCode'.
 Limiting scan to scopes: [dependencies]
 Bootstrapping scanner 'ScanCode' as required version 2.9.2 was not found in PATH.
 Using processed VcsInfo(type=git, url=https://github.com/jshttp/mime-db.git, revision=482cd6a25bbd6177de04a686d0e2a0c2465bf445, resolvedRevision=null, path=).
 Original was VcsInfo(type=git, url=git+https://github.com/jshttp/mime-db.git, revision=482cd6a25bbd6177de04a686d0e2a0c2465bf445, resolvedRevision=null, path=).
-Running ScanCode version 2.9.2 on directory '[scanner-output-path]/downloads/NPM/unknown/mime-db/1.35.0'.
+Running ScanCode version 2.9.2 on directory '[scanner-output-dir]/downloads/NPM/unknown/mime-db/1.35.0'.
 Using processed VcsInfo(type=git, url=https://github.com/jshttp/mime-types.git, revision=7c4ce23d7354fbf64c69d7b7be8413c4ba2add78, resolvedRevision=null, path=).
 Original was VcsInfo(type=, url=https://github.com/jshttp/mime-types.git, revision=, resolvedRevision=null, path=).
-Running ScanCode version 2.9.2 on directory '[scanner-output-path]/downloads/NPM/unknown/mime-types/2.1.18'.
-Writing scan result to '[scanner-output-path]/scan-result.yml'.
+Running ScanCode version 2.9.2 on directory '[scanner-output-dir]/downloads/NPM/unknown/mime-types/2.1.18'.
+Writing scan result to '[scanner-output-dir]/scan-result.yml'.
 ```
 
-The `scanner` writes a new ORT result file to `[scanner-output-path]/scan-result.yml` containing the scan results in
+The `scanner` writes a new ORT result file to `[scanner-output-dir]/scan-result.yml` containing the scan results in
 addition to the analyzer result from the input. This way belonging results are stored in the same place for
 traceability. If the input file already contained scan results they are replaced by the new scan results in the output.
 
@@ -314,8 +314,8 @@ cli/build/install/ort/bin/ort evaluate
   --package-curations-file curations.yml
   --rules-file rules.kts
   --license-configuration-file licenses.yml
-  -i [scanner-output-path]/scan-result.yml
-  -o [evaluator-output-path]/mime-types
+  -i [scanner-output-dir]/scan-result.yml
+  -o [evaluator-output-dir]/mime-types
 ```
 
 See the [curations.yml documentation](config-file-curations-yml.md) to learn more about using curations to correct invalid or missing package metadata
@@ -334,11 +334,11 @@ For example, to generate a static HTML report, WebApp report and an open source 
 ```bash
 cli/build/install/ort/bin/ort report
   -f NoticeByPackage,StaticHtml,WebApp
-  -i [evaluator-output-path]/evaluation-result.yml
-  -o [reporter-output-path]
-Created 'StaticHtml' report: [reporter-output-path]/scan-report.html
-Created 'WebApp' report: [reporter-output-path]/scan-report-web-app.html
-Created 'NoticeByPackage' report: [reporter-output-path]/NOTICE_BY_PACKAGE
+  -i [evaluator-output-dir]/evaluation-result.yml
+  -o [reporter-output-dir]
+Created 'StaticHtml' report: [reporter-output-dir]/scan-report.html
+Created 'WebApp' report: [reporter-output-dir]/scan-report-web-app.html
+Created 'NoticeByPackage' report: [reporter-output-dir]/NOTICE_BY_PACKAGE
 ```
 
 If you do not want to run the _evaluator_ you can pass the _scanner_ result e.g. `[scanner-output-path/scan-result.yml`

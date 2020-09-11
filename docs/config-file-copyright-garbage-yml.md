@@ -15,8 +15,8 @@ To use the `copyright-garbage.yml` file pass it to the `--copyright-garbage-file
 
 ```bash
 cli/build/install/ort/bin/ort report
-  -i [evaluator-output-path]/evaluation-result.yml
-  -o [reporter-output-path]
+  -i [evaluator-output-dir]/evaluation-result.yml
+  -o [reporter-output-dir]
   --report-formats NoticeByPackage,StaticHtml,WebApp
-  --copyright-garbage-file [ort-configuration-path]/copyright-garbage.yml
+  --copyright-garbage-file [ort-configuration-dir]/copyright-garbage.yml
 ```

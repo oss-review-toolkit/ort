@@ -80,9 +80,9 @@ To use the `curations.yml` file pass it to the `--package-curations-file` option
 
 ```
 cli/build/install/ort/bin/ort analyze
-  -i [source-code-of-project-path]
-  -o [analyzer-output-path]
-  --package-curations-file [ort-configuration-path]/curations.yml
+  -i [source-code-of-project-dir]
+  -o [analyzer-output-dir]
+  --package-curations-file [ort-configuration-dir]/curations.yml
 ```
 
 In the future we will integrate [ClearlyDefined](https://clearlydefined.io/) as a source for curated metadata. Until
@@ -93,10 +93,10 @@ _evaluator_:
 
 ```bash
 cli/build/install/ort/bin/ort evaluate
-  -i [scanner-output-path]/scan-result.yml
-  -o [evaluator-output-path]
+  -i [scanner-output-dir]/scan-result.yml
+  -o [evaluator-output-dir]
   --output-formats YAML
-  --license-configuration-file [ort-configuration-path]/licenses.yml
-  --package-curations-file [ort-configuration-path]/curations.yml
-  --rules-file [ort-configuration-path]/rules.kts
+  --license-configuration-file [ort-configuration-dir]/licenses.yml
+  --package-curations-file [ort-configuration-dir]/curations.yml
+  --rules-file [ort-configuration-dir]/rules.kts
 ```

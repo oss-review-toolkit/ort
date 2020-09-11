@@ -13,8 +13,8 @@ _Reporter_:
 
 ```bash
 cli/build/install/ort/bin/ort report
-  -i [evaluator-output-path]/evaluation-result.yml
-  -o [reporter-output-path]
+  -i [evaluator-output-dir]/evaluation-result.yml
+  -o [reporter-output-dir]
   --report-formats StaticHtml,WebApp
-  --how-to-fix-text-provider-script [ort-configuration-path]/how-to-fix-text-provider.kts
+  --how-to-fix-text-provider-script [ort-configuration-dir]/how-to-fix-text-provider.kts
 ```
