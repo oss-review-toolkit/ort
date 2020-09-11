@@ -126,7 +126,7 @@ class ReporterCommand : CliktCommand(
 
     private val resolutionsFile by option(
         "--resolutions-file",
-        help = "A file containing error resolutions."
+        help = "A file containing issue and rule violation resolutions."
     ).convert { it.expandTilde() }
         .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
         .convert { it.absoluteFile.normalize() }
