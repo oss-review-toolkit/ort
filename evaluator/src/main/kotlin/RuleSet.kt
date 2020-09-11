@@ -37,7 +37,7 @@ import org.ossreviewtoolkit.utils.log
  */
 class RuleSet(
     val ortResult: OrtResult,
-    packageConfigurationProvider: PackageConfigurationProvider = SimplePackageConfigurationProvider()
+    packageConfigurationProvider: PackageConfigurationProvider = SimplePackageConfigurationProvider.EMPTY
 ) {
     /**
      * The list of all issues created by the rules of this [RuleSet].

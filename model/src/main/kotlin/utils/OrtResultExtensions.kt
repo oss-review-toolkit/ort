@@ -59,7 +59,7 @@ fun OrtResult.collectDeclaredLicenses(omitExcluded: Boolean = false): Map<Identi
  * If [omitExcluded] is set to true, excluded projects / packages are omitted from the result.
  */
 fun OrtResult.collectLicenseFindings(
-    packageConfigurationProvider: PackageConfigurationProvider = SimplePackageConfigurationProvider(),
+    packageConfigurationProvider: PackageConfigurationProvider = SimplePackageConfigurationProvider.EMPTY,
     omitExcluded: Boolean = false
 ): Map<Identifier, Map<LicenseFindings, List<PathExclude>>> =
     LicenseResolver(this, packageConfigurationProvider).collectLicenseFindings(omitExcluded)
@@ -71,7 +71,7 @@ fun OrtResult.collectLicenseFindings(
 @Suppress("UNUSED") // This is intended to be mostly used via scripting.
 fun OrtResult.getDetectedLicensesForId(
     id: Identifier,
-    packageConfigurationProvider: PackageConfigurationProvider = SimplePackageConfigurationProvider()
+    packageConfigurationProvider: PackageConfigurationProvider = SimplePackageConfigurationProvider.EMPTY
 ): SortedSet<String> = LicenseResolver(this, packageConfigurationProvider).getDetectedLicensesForId(id)
 
 /**
@@ -80,7 +80,7 @@ fun OrtResult.getDetectedLicensesForId(
 @Suppress("UNUSED") // This is intended to be mostly used via scripting.
 fun OrtResult.getDetectedLicensesWithCopyrights(
     id: Identifier,
-    packageConfigurationProvider: PackageConfigurationProvider = SimplePackageConfigurationProvider(),
+    packageConfigurationProvider: PackageConfigurationProvider = SimplePackageConfigurationProvider.EMPTY,
     omitExcluded: Boolean = true
 ): Map<String, Set<String>> =
     LicenseResolver(this, packageConfigurationProvider).getDetectedLicensesWithCopyrights(id, omitExcluded)

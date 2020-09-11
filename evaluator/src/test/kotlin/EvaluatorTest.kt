@@ -33,7 +33,7 @@ import org.ossreviewtoolkit.model.utils.SimplePackageConfigurationProvider
 import org.ossreviewtoolkit.spdx.toSpdx
 
 class EvaluatorTest : WordSpec() {
-    private fun createEvaluator() = Evaluator(OrtResult.EMPTY, SimplePackageConfigurationProvider())
+    private fun createEvaluator() = Evaluator(OrtResult.EMPTY, SimplePackageConfigurationProvider.EMPTY)
 
     init {
         "checkSyntax" should {
