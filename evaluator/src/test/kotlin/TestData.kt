@@ -48,10 +48,6 @@ import org.ossreviewtoolkit.utils.DeclaredLicenseProcessor
 val concludedLicense = "LicenseRef-a AND LicenseRef-b".toSpdx()
 val declaredLicenses = sortedSetOf("Apache-2.0", "MIT")
 val declaredLicensesProcessed = DeclaredLicenseProcessor.process(declaredLicenses)
-val detectedLicenses = listOf(
-    SpdxLicenseReferenceExpression("LicenseRef-a"),
-    SpdxLicenseReferenceExpression("LicenseRef-b")
-)
 
 val licenseFindings = listOf(
     LicenseFindings(SpdxLicenseReferenceExpression("LicenseRef-a"), sortedSetOf(), sortedSetOf()),
