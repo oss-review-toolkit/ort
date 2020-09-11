@@ -49,8 +49,8 @@ class SimplePackageConfigurationProvider(
          */
         fun forDirectory(directory: File): SimplePackageConfigurationProvider {
             val entries = directory.walkBottomUp()
-                .filterTo(mutableListOf()) { !it.isHidden && it.isFile }
-                .map { file ->
+                .filter { !it.isHidden && it.isFile }
+                .mapTo(mutableListOf()) { file ->
                     try {
                         file.readValue<PackageConfiguration>()
                     } catch (e: IOException) {
