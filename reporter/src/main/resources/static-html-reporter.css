@@ -51,13 +51,13 @@ ul {
     width: 110px;
 }
 
-.ort-report-metadata {
+.ort-report-labels {
     font-size: 12px;
     border-spacing: 0;
     table-layout: fixed;
 }
 
-.ort-report-metadata td {
+.ort-report-labels td {
     border-bottom: 1px solid rgba(34, 36, 38, .15);
     overflow: hidden;
     padding: 5px 20px 5px 0px;
@@ -65,7 +65,7 @@ ul {
     word-wrap: break-word;
 }
 
-.ort-report-metadata tr:first-child td {
+.ort-report-labels tr:first-child td {
     border-top: 1px solid rgba(34, 36, 38, .15);
 }
 
