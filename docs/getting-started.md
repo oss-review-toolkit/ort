@@ -343,8 +343,8 @@ Created 'NoticeByPackage' report: [reporter-output-dir]/NOTICE_BY_PACKAGE
 
 If you do not want to run the _evaluator_ you can pass the _scanner_ result e.g. `[scanner-output-path/scan-result.yml`
 to the `reporter` instead. To learn how you can customize generated notices see
-[notice-pre-processor-kts.md](notice-pre-processor-kts.md). To learn how to customize the how-to-fix texts for scanner
-and analyzer issues see [how-to-fix-text-provider-kts.md](how-to-fix-text-provider-kts.md).
+[notice-templates.md](notice-templates.md). To learn how to customize the how-to-fix texts for scanner and analyzer
+issues see [how-to-fix-text-provider-kts.md](how-to-fix-text-provider-kts.md).
 
 ## 8. Curating Package Metadata or License Findings
 
