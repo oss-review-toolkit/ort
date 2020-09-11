@@ -74,9 +74,9 @@ data class ReportTableModel(
     val projectDependencies: SortedMap<Project, ProjectTable>,
 
     /**
-     * Additional metadata read from the [OrtResult.data] field.
+     * The labels from [OrtResult.labels].
      */
-    val metadata: Map<String, String>
+    val labels: Map<String, String>
 ) {
     data class ProjectTable(
         /**

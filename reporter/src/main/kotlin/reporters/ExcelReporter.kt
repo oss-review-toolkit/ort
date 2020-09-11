@@ -163,8 +163,8 @@ class ExcelReporter : Reporter {
 
         creationHelper = workbook.creationHelper
 
-        if (tabularScanRecord.metadata.isNotEmpty()) {
-            createMetadataSheet(workbook, tabularScanRecord.metadata)
+        if (tabularScanRecord.labels.isNotEmpty()) {
+            createLabelsSheet(workbook, tabularScanRecord.labels)
         }
 
         createSummarySheet(
@@ -195,18 +195,18 @@ class ExcelReporter : Reporter {
         return listOf(outputFile)
     }
 
-    private fun createMetadataSheet(workbook: XSSFWorkbook, metadata: Map<String, String>) {
-        val sheetName = createUniqueSheetName(workbook, "Metadata")
+    private fun createLabelsSheet(workbook: XSSFWorkbook, labels: Map<String, String>) {
+        val sheetName = createUniqueSheetName(workbook, "Labels")
 
         val sheet = workbook.createSheet(sheetName)
 
         var currentRow = 0
 
         sheet.createRow(currentRow).apply {
-            CellUtil.createCell(this, 0, "Metadata", headerStyle)
+            CellUtil.createCell(this, 0, "Labels", headerStyle)
         }
 
-        metadata.forEach { (key, value) ->
+        labels.forEach { (key, value) ->
             sheet.createRow(++currentRow).let { row ->
                 CellUtil.createCell(row, 0, "$key:", defaultStyle)
                 CellUtil.createCell(row, 1, value, defaultStyle).apply {
