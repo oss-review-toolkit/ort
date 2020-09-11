@@ -45,7 +45,6 @@ import org.ossreviewtoolkit.model.readValue
 import org.ossreviewtoolkit.model.utils.SimplePackageConfigurationProvider
 import org.ossreviewtoolkit.reporter.HowToFixTextProvider
 import org.ossreviewtoolkit.reporter.ReporterInput
-import org.ossreviewtoolkit.reporter.reporters.AbstractNoticeReporter
 import org.ossreviewtoolkit.reporter.reporters.AntennaAttributionDocumentReporter
 import org.ossreviewtoolkit.utils.ORT_NAME
 import org.ossreviewtoolkit.utils.ORT_REPO_CONFIG_FILENAME
@@ -91,30 +90,6 @@ class ExamplesTest : StringSpec() {
             shouldNotThrow<IOException> {
                 takeExampleFile("licenses.yml").readValue<LicenseConfiguration>()
             }
-        }
-
-        "notice-pre-processor.kts can be compiled" {
-            val model = AbstractNoticeReporter.NoticeReportModel(
-                headers = emptyList(),
-                headerWithoutLicenses = "",
-                headerWithLicenses = "",
-                findings = emptyMap(),
-                footers = emptyList()
-            )
-
-            val preProcessor = AbstractNoticeReporter.PreProcessor(
-                ortResult = OrtResult.EMPTY,
-                model = model,
-                copyrightGarbage = CopyrightGarbage(),
-                licenseConfiguration = LicenseConfiguration(),
-                packageConfigurationProvider = SimplePackageConfigurationProvider.EMPTY
-            )
-
-            val script = takeExampleFile("notice-pre-processor.kts").readText()
-
-            preProcessor.checkSyntax(script) shouldBe true
-
-            // TODO: It should also be verified that the script works as expected.
         }
 
         "resolutions.yml can be deserialized" {
