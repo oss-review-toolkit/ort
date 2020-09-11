@@ -88,5 +88,4 @@ fun OrtResult.getDetectedLicensesWithCopyrights(
 /**
  * Copy this [OrtResult] and add all [labels] to the existing labels, overwriting existing labels on conflict.
  */
-fun OrtResult.mergeLabels(labels: Map<String, String>) =
-    copy(labels = this.labels + labels).apply { data += this@mergeLabels.data }
+fun OrtResult.mergeLabels(labels: Map<String, String>) = copy(labels = this.labels + labels)

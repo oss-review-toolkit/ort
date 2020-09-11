@@ -202,9 +202,7 @@ class EvaluatorCommand : CliktCommand(name = "evaluate", help = "Evaluate rules 
 
         outputDir?.let { absoluteOutputDir ->
             // Note: This overwrites any existing EvaluatorRun from the input file.
-            val ortResultOutput = ortResultInput.copy(evaluator = evaluatorRun).apply {
-                data += ortResultInput.data
-            }.mergeLabels(labels)
+            val ortResultOutput = ortResultInput.copy(evaluator = evaluatorRun).mergeLabels(labels)
 
             absoluteOutputDir.safeMkdirs()
 
