@@ -16,5 +16,5 @@ cli/build/install/ort/bin/ort report
   -i [evaluator-output-dir]/evaluation-result.yml
   -o [reporter-output-dir]
   --report-formats StaticHtml,WebApp
-  --how-to-fix-text-provider-script [ort-configuration-dir]/how-to-fix-text-provider.kts
+  --how-to-fix-text-provider-script $ORT_CONFIG_DIR/how-to-fix-text-provider.kts
 ```

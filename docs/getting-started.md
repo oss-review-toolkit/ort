@@ -253,7 +253,7 @@ and pass it to the `--package-curations-file` option of the _analyzer_:
 cli/build/install/ort/bin/ort analyze
   -i [mime-types-dir]
   -o [analyzer-output-dir]
-  --package-curations-file [ort-configuration-dir]/curations.yml
+  --package-curations-file $ORT_CONFIG_DIR/curations.yml
 ```
 
 ORT is designed to integrate lots of different scanners and is not limited to license scanners, technically any tool

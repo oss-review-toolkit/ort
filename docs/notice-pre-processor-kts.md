@@ -15,6 +15,6 @@ cli/build/install/ort/bin/ort report
   -i [evaluator-output-dir]/evaluation-result.yml
   -o [reporter-output-dir]
   --report-formats NoticeByPackage,StaticHtml,WebApp
-  -O NoticeByPackage=preProcessingScript=[ort-configuration-dir]/notice-pre-processor.kts \
-  -O NoticeSummary=preProcessingScript=[ort-configuration-dir]/notice-pre-processor.kts \
+  -O NoticeByPackage=preProcessingScript=$ORT_CONFIG_DIR/notice-pre-processor.kts \
+  -O NoticeSummary=preProcessingScript=$ORT_CONFIG_DIR/notice-pre-processor.kts \
 ```
