@@ -29,7 +29,7 @@ import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 
 class GradleIntegrationTest : AbstractIntegrationSpec() {
-    override val pkg: Package = Package(
+    override val pkg = Package(
         id = Identifier(
             type = "Maven",
             namespace = "org.gradle",
