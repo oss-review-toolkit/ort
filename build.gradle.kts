@@ -99,6 +99,10 @@ allprojects {
     }
 
     repositories {
+        // Work-around for JCenter not correctly proxying "maven-metadata.xml", see
+        // https://github.com/ben-manes/gradle-versions-plugin/issues/424#issuecomment-691628498.
+        mavenCentral()
+
         jcenter()
     }
 
