@@ -205,6 +205,14 @@ can be used to populate a directory with template package configuration files.
 | ------ | ----- | ---------------- | ------------- |
 | YAML / JSON | Package (dependency) | `$ORT_CONFIG_DIR/package-configurations/` | Empty (n/a) |
 
+[Policy rules file](./docs/file-rules-kts.md)
+
+The file containing any policy rule implementations to be used with the _evaluator_.
+
+| Format | Scope | Default location | Default value |
+| ------ | ----- | ---------------- | ------------- |
+| Kotlin script (DSL) | Evaluator | `$ORT_CONFIG_DIR/rules.kts` | Empty (n/a) |
+
 # Details on the tools
 
 <a name="analyzer"></a>
