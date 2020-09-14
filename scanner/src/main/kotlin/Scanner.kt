@@ -85,7 +85,7 @@ abstract class Scanner(val scannerName: String, protected val config: ScannerCon
         skipExcluded: Boolean = false
     ): OrtResult {
         require(ortResultFile.isFile) {
-            "The provided ORT result file '${ortResultFile.canonicalPath}' does not exit."
+            "The provided ORT result file '${ortResultFile.canonicalPath}' does not exist."
         }
 
         val startTime = Instant.now()
