@@ -113,7 +113,7 @@ The following copyrights and licenses were found in the source code of this pack
 [#else]
   --
 [/#if]
-[#assign copyrights = resolvedLicense.getCopyrights()]
+[#assign copyrights = resolvedLicense.getCopyrights(true)]
 [#list copyrights as copyright]
 [#if copyright?is_first]
 
