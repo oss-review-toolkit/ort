@@ -31,6 +31,7 @@ import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 
 import java.io.File
+import java.net.InetSocketAddress
 
 import org.ossreviewtoolkit.utils.ORT_NAME
 import org.ossreviewtoolkit.utils.ProtocolProxyMap
@@ -204,8 +205,9 @@ class NodeSupportTest : WordSpec() {
                 fun ProtocolProxyMap.mapSingleValuesToString() =
                     mapValues { (_, proxies) ->
                         val (proxy, authentication) = proxies.single()
+                        val address = proxy.address() as InetSocketAddress
                         listOfNotNull(
-                            proxy.toString(),
+                            "${proxy.type()} @ ${address.hostString}:${address.port}",
                             authentication?.userName,
                             authentication?.password?.let { String(it) }
                         )
