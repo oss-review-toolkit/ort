@@ -54,6 +54,7 @@ import org.ossreviewtoolkit.utils.PackageConfigurationOption
 import org.ossreviewtoolkit.utils.createProvider
 import org.ossreviewtoolkit.utils.expandTilde
 import org.ossreviewtoolkit.utils.log
+import org.ossreviewtoolkit.utils.ortConfigDirectory
 import org.ossreviewtoolkit.utils.safeMkdirs
 
 class EvaluatorCommand : CliktCommand(name = "evaluate", help = "Evaluate rules on ORT result files.") {
@@ -92,7 +93,7 @@ class EvaluatorCommand : CliktCommand(name = "evaluate", help = "Evaluate rules 
             "--rules-resource",
             help = "The name of a script resource on the classpath that contains rules."
         ).convert { StringType(it) }
-    ).single().required()
+    ).single()
 
     private val outputDir by option(
         "--output-dir", "-o",
@@ -172,10 +173,21 @@ class EvaluatorCommand : CliktCommand(name = "evaluate", help = "Evaluate rules 
 
         val script = when (rules) {
             is FileType -> (rules as FileType).file.readText()
+
             is StringType -> {
                 val rulesResource = (rules as StringType).string
                 javaClass.classLoader.getResource(rulesResource)?.readText()
                     ?: throw UsageError("Invalid rules resource '$rulesResource'.")
+            }
+
+            null -> {
+                val rulesFile = ortConfigDirectory.resolve("rules.kts")
+
+                if (!rulesFile.isFile) {
+                    throw UsageError("No rule option specified and no default rule found at '$rulesFile'.")
+                }
+
+                rulesFile.readText()
             }
         }
 
