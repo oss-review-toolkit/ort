@@ -19,12 +19,10 @@
 
 package org.ossreviewtoolkit.utils
 
-import java.nio.file.FileSystems
-import java.nio.file.InvalidPathException
-import java.nio.file.Paths
-
 import org.ossreviewtoolkit.utils.LicenseFilenamePatterns.LICENSE_FILENAMES
 import org.ossreviewtoolkit.utils.LicenseFilenamePatterns.ROOT_LICENSE_FILENAMES
+
+import org.springframework.util.AntPathMatcher
 
 /**
  * A class to determine whether a path is matched by any of the given globs.
@@ -46,18 +44,11 @@ class FileMatcher(
 
     constructor(vararg patterns: String) : this(patterns.asList())
 
-    private val matchers = patterns.map {
-        FileSystems.getDefault().getPathMatcher("glob:$it")
-    }
+    private val matcher = AntPathMatcher()
 
     /**
      * Return true if and only if the given [path] is matched by any of the file globs passed to the
-     * constructor.
+     * constructor. The [path] must use '/' as separators, if it contains any.
      */
-    fun matches(path: String): Boolean =
-        try {
-            matchers.any { it.matches(Paths.get(path)) }
-        } catch (e: InvalidPathException) {
-            false
-        }
+    fun matches(path: String): Boolean = patterns.any { pattern -> matcher.match(pattern, path) }
 }
