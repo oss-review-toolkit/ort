@@ -50,6 +50,18 @@ class FileMatcherTest : WordSpec({
                 defaultMatcher.matches(it) shouldBe true
             }
         }
+
+        "match commonly used license file paths in lower-case" {
+            COMMONLY_USED_LICENSE_FILE_NAMES.map { it.toLowerCase() }.forAll {
+                defaultMatcher.matches(it) shouldBe true
+            }
+        }
+
+        "match commonly used license file paths in capital (case)" {
+            COMMONLY_USED_LICENSE_FILE_NAMES.map { it.capitalize() }.forAll {
+                defaultMatcher.matches(it) shouldBe true
+            }
+        }
     }
 
     "matches" should {
