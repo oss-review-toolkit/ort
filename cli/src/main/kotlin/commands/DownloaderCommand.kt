@@ -103,6 +103,12 @@ class DownloaderCommand : CliktCommand(name = "download", help = "Fetch source c
         .convert { it.absoluteFile.normalize() }
         .required()
 
+    private val allowMovingRevisions by option(
+        "--allow-moving-revisions",
+        help = "Allow the download of moving revisions (like e.g. HEAD or master in Git). By default these revisions " +
+                "are forbidden because they are not pointing to a fixed revision of the source code."
+    ).flag()
+
     private val archive by option(
         "--archive",
         help = "Archive the downloaded source code as ZIP files to the output directory. Will be ignored if " +
@@ -114,12 +120,6 @@ class DownloaderCommand : CliktCommand(name = "download", help = "Fetch source c
         help = "The data entities from the ORT file's analyzer result to limit downloads to. If not specified, all " +
                 "data entities are downloaded."
     ).enum<Downloader.DataEntity>().split(",").default(enumValues<Downloader.DataEntity>().asList())
-
-    private val allowMovingRevisions by option(
-        "--allow-moving-revisions",
-        help = "Allow the download of moving revisions (like e.g. HEAD or master in Git). By default these revisions " +
-                "are forbidden because they are not pointing to a fixed revision of the source code."
-    ).flag()
 
     override fun run() {
         val failureMessages = mutableListOf<String>()

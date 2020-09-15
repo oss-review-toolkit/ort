@@ -23,7 +23,6 @@ import com.github.ajalt.clikt.core.CliktCommand
 import com.github.ajalt.clikt.core.ProgramResult
 import com.github.ajalt.clikt.core.UsageError
 import com.github.ajalt.clikt.parameters.groups.mutuallyExclusiveOptions
-import com.github.ajalt.clikt.parameters.groups.required
 import com.github.ajalt.clikt.parameters.groups.single
 import com.github.ajalt.clikt.parameters.options.associate
 import com.github.ajalt.clikt.parameters.options.convert
@@ -66,22 +65,6 @@ class EvaluatorCommand : CliktCommand(name = "evaluate", help = "Evaluate rules 
         .convert { it.absoluteFile.normalize() }
         .required()
 
-    private val packageConfigurationOption by mutuallyExclusiveOptions(
-        option(
-            "--package-configuration-dir",
-            help = "A directory that is searched recursively for package configuration files. Each file must only " +
-                    "contain a single package configuration."
-        ).convert { it.expandTilde() }
-            .file(mustExist = true, canBeFile = false, canBeDir = true, mustBeWritable = false, mustBeReadable = true)
-            .convert { PackageConfigurationOption.Dir(it.absoluteFile.normalize()) },
-        option(
-            "--package-configuration-file",
-            help = "A file containing a list of package configurations."
-        ).convert { it.expandTilde() }
-            .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
-            .convert { PackageConfigurationOption.File(it.absoluteFile.normalize()) }
-    ).single()
-
     private val rules by mutuallyExclusiveOptions(
         option(
             "--rules-file", "-r",
@@ -109,18 +92,29 @@ class EvaluatorCommand : CliktCommand(name = "evaluate", help = "Evaluate rules 
         help = "The list of output formats to be used for the ORT result file(s)."
     ).enum<FileFormat>().split(",").default(listOf(FileFormat.YAML))
 
-    private val syntaxCheck by option(
-        "--syntax-check",
-        help = "Do not evaluate the script but only check its syntax. No output is written in this case."
-    ).flag()
-
-    private val repositoryConfigurationFile by option(
-        "--repository-configuration-file",
-        help = "A file containing the repository configuration. If set the '$ORT_REPO_CONFIG_FILENAME' overrides the " +
-                "repository configuration contained in the ort result from the input file."
+    private val licenseConfigurationFile by option(
+        "--license-configuration-file",
+        help = "A file containing the license configuration. That license configuration is passed as parameter to " +
+                "the rules script."
     ).convert { it.expandTilde() }
         .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
         .convert { it.absoluteFile.normalize() }
+
+    private val packageConfigurationOption by mutuallyExclusiveOptions(
+        option(
+            "--package-configuration-dir",
+            help = "A directory that is searched recursively for package configuration files. Each file must only " +
+                    "contain a single package configuration."
+        ).convert { it.expandTilde() }
+            .file(mustExist = true, canBeFile = false, canBeDir = true, mustBeWritable = false, mustBeReadable = true)
+            .convert { PackageConfigurationOption.Dir(it.absoluteFile.normalize()) },
+        option(
+            "--package-configuration-file",
+            help = "A file containing a list of package configurations."
+        ).convert { it.expandTilde() }
+            .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
+            .convert { PackageConfigurationOption.File(it.absoluteFile.normalize()) }
+    ).single()
 
     private val packageCurationsFile by option(
         "--package-curations-file",
@@ -130,10 +124,10 @@ class EvaluatorCommand : CliktCommand(name = "evaluate", help = "Evaluate rules 
         .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
         .convert { it.absoluteFile.normalize() }
 
-    private val licenseConfigurationFile by option(
-        "--license-configuration-file",
-        help = "A file containing the license configuration. That license configuration is passed as parameter to " +
-                "the rules script."
+    private val repositoryConfigurationFile by option(
+        "--repository-configuration-file",
+        help = "A file containing the repository configuration. If set the '$ORT_REPO_CONFIG_FILENAME' overrides the " +
+                "repository configuration contained in the ort result from the input file."
     ).convert { it.expandTilde() }
         .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
         .convert { it.absoluteFile.normalize() }
@@ -143,6 +137,11 @@ class EvaluatorCommand : CliktCommand(name = "evaluate", help = "Evaluate rules 
         help = "Add a label to the ORT result. Can be used multiple times. Any existing label with the same key in " +
                 "the input ORT result will be overwritten. For example: --label distribution=external"
     ).associate()
+
+    private val syntaxCheck by option(
+        "--syntax-check",
+        help = "Do not evaluate the script but only check its syntax. No output is written in this case."
+    ).flag()
 
     override fun run() {
         val outputFiles = mutableListOf<File>()

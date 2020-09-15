@@ -50,14 +50,6 @@ import org.ossreviewtoolkit.utils.safeMkdirs
 class AnalyzerCommand : CliktCommand(name = "analyze", help = "Determine dependencies of a software project.") {
     private val allPackageManagersByName = PackageManager.ALL.associateBy { it.managerName.toUpperCase() }
 
-    private val packageManagers by option(
-        "--package-managers", "-m",
-        help = "The list of package managers to activate."
-    ).convert { name ->
-        allPackageManagersByName[name.toUpperCase()]
-            ?: throw BadParameterValue("Package managers must be one or more of ${allPackageManagersByName.keys}.")
-    }.split(",").default(PackageManager.ALL)
-
     private val inputDir by option(
         "--input-dir", "-i",
         help = "The project directory to analyze."
@@ -79,28 +71,12 @@ class AnalyzerCommand : CliktCommand(name = "analyze", help = "Determine depende
         help = "The list of output formats to be used for the ORT result file(s)."
     ).enum<FileFormat>().split(",").default(listOf(FileFormat.YAML))
 
-    private val ignoreToolVersions by option(
-        "--ignore-tool-versions",
-        help = "Ignore versions of required tools. NOTE: This may lead to erroneous results."
-    ).flag()
-
-    private val allowDynamicVersions by option(
-        "--allow-dynamic-versions",
-        help = "Allow dynamic versions of dependencies. This can result in unstable results when dependencies use " +
-                "version ranges. This option only affects package managers that support lock files, like NPM."
-    ).flag()
-
     private val packageCurationsFile by option(
         "--package-curations-file",
         help = "A file containing package curation data."
     ).convert { it.expandTilde() }
         .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
         .convert { it.absoluteFile.normalize() }
-
-    private val useClearlyDefinedCurations by option(
-        "--clearly-defined-curations",
-        help = "Whether to fall back to package curation data from the ClearlyDefine service or not."
-    ).flag()
 
     private val repositoryConfigurationFile by option(
         "--repository-configuration-file",
@@ -110,10 +86,34 @@ class AnalyzerCommand : CliktCommand(name = "analyze", help = "Determine depende
         .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
         .convert { it.absoluteFile.normalize() }
 
+    private val allowDynamicVersions by option(
+        "--allow-dynamic-versions",
+        help = "Allow dynamic versions of dependencies. This can result in unstable results when dependencies use " +
+                "version ranges. This option only affects package managers that support lock files, like NPM."
+    ).flag()
+
+    private val useClearlyDefinedCurations by option(
+        "--clearly-defined-curations",
+        help = "Whether to fall back to package curation data from the ClearlyDefine service or not."
+    ).flag()
+
+    private val ignoreToolVersions by option(
+        "--ignore-tool-versions",
+        help = "Ignore versions of required tools. NOTE: This may lead to erroneous results."
+    ).flag()
+
     private val labels by option(
         "--label", "-l",
         help = "Add a label to the ORT result. Can be used multiple times. For example: --label distribution=external"
     ).associate()
+
+    private val packageManagers by option(
+        "--package-managers", "-m",
+        help = "The list of package managers to activate."
+    ).convert { name ->
+        allPackageManagersByName[name.toUpperCase()]
+            ?: throw BadParameterValue("Package managers must be one or more of ${allPackageManagersByName.keys}.")
+    }.split(",").default(PackageManager.ALL)
 
     override fun run() {
         val outputFiles = outputFormats.distinct().map { format ->
