@@ -57,6 +57,7 @@ class AnalyzerCommand : CliktCommand(name = "analyze", help = "Determine depende
         .file(mustExist = true, canBeFile = false, canBeDir = true, mustBeWritable = false, mustBeReadable = true)
         .convert { it.absoluteFile.normalize() }
         .required()
+        .inputGroup()
 
     private val outputDir by option(
         "--output-dir", "-o",
@@ -65,11 +66,12 @@ class AnalyzerCommand : CliktCommand(name = "analyze", help = "Determine depende
         .file(mustExist = false, canBeFile = false, canBeDir = true, mustBeWritable = false, mustBeReadable = false)
         .convert { it.absoluteFile.normalize() }
         .required()
+        .outputGroup()
 
     private val outputFormats by option(
         "--output-formats", "-f",
         help = "The list of output formats to be used for the ORT result file(s)."
-    ).enum<FileFormat>().split(",").default(listOf(FileFormat.YAML))
+    ).enum<FileFormat>().split(",").default(listOf(FileFormat.YAML)).outputGroup()
 
     private val packageCurationsFile by option(
         "--package-curations-file",
@@ -77,6 +79,7 @@ class AnalyzerCommand : CliktCommand(name = "analyze", help = "Determine depende
     ).convert { it.expandTilde() }
         .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
         .convert { it.absoluteFile.normalize() }
+        .configurationGroup()
 
     private val repositoryConfigurationFile by option(
         "--repository-configuration-file",
@@ -85,6 +88,7 @@ class AnalyzerCommand : CliktCommand(name = "analyze", help = "Determine depende
     ).convert { it.expandTilde() }
         .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
         .convert { it.absoluteFile.normalize() }
+        .configurationGroup()
 
     private val allowDynamicVersions by option(
         "--allow-dynamic-versions",

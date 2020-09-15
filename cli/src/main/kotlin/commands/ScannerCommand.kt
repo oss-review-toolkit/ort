@@ -65,7 +65,8 @@ class ScannerCommand : CliktCommand(name = "scan", help = "Run existing copyrigh
             help = "An input directory or file to scan. This parameter and '--ort-file' are mutually exclusive."
         ).convert { it.expandTilde() }
             .file(mustExist = true, canBeFile = true, canBeDir = true, mustBeWritable = false, mustBeReadable = true)
-            .convert { it.absoluteFile.normalize() }
+            .convert { it.absoluteFile.normalize() },
+        name = "Input Options"
     ).single().required()
 
     private val outputDir by option(
@@ -75,11 +76,12 @@ class ScannerCommand : CliktCommand(name = "scan", help = "Run existing copyrigh
         .file(mustExist = false, canBeFile = false, canBeDir = true, mustBeWritable = false, mustBeReadable = false)
         .convert { it.absoluteFile.normalize() }
         .required()
+        .outputGroup()
 
     private val outputFormats by option(
         "--output-formats", "-f",
         help = "The list of output formats to be used for the ORT result file(s)."
-    ).enum<FileFormat>().split(",").default(listOf(FileFormat.YAML))
+    ).enum<FileFormat>().split(",").default(listOf(FileFormat.YAML)).outputGroup()
 
     private val downloadDir by option(
         "--download-dir",
@@ -87,6 +89,7 @@ class ScannerCommand : CliktCommand(name = "scan", help = "Run existing copyrigh
     ).convert { it.expandTilde() }
         .file(mustExist = false, canBeFile = false, canBeDir = true, mustBeWritable = false, mustBeReadable = false)
         .convert { it.absoluteFile.normalize() }
+        .outputGroup()
 
     private val labels by option(
         "--label", "-l",

@@ -64,6 +64,22 @@ class EvaluatorCommand : CliktCommand(name = "evaluate", help = "Evaluate rules 
         .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
         .convert { it.absoluteFile.normalize() }
         .required()
+        .inputGroup()
+
+    private val outputDir by option(
+        "--output-dir", "-o",
+        help = "The directory to write the evaluation results as ORT result file(s) to, in the specified output " +
+                "format(s). If no output directory is specified, no output formats are written and only the exit " +
+                "code signals a success or failure."
+    ).convert { it.expandTilde() }
+        .file(mustExist = false, canBeFile = false, canBeDir = true, mustBeWritable = false, mustBeReadable = false)
+        .convert { it.absoluteFile.normalize() }
+        .outputGroup()
+
+    private val outputFormats by option(
+        "--output-formats", "-f",
+        help = "The list of output formats to be used for the ORT result file(s)."
+    ).enum<FileFormat>().split(",").default(listOf(FileFormat.YAML)).outputGroup()
 
     private val rules by mutuallyExclusiveOptions(
         option(
@@ -75,22 +91,9 @@ class EvaluatorCommand : CliktCommand(name = "evaluate", help = "Evaluate rules 
         option(
             "--rules-resource",
             help = "The name of a script resource on the classpath that contains rules."
-        ).convert { StringType(it) }
+        ).convert { StringType(it) },
+        name = "Rule Options"
     ).single()
-
-    private val outputDir by option(
-        "--output-dir", "-o",
-        help = "The directory to write the evaluation results as ORT result file(s) to, in the specified output " +
-                "format(s). If no output directory is specified, no output formats are written and only the exit " +
-                "code signals a success or failure."
-    ).convert { it.expandTilde() }
-        .file(mustExist = false, canBeFile = false, canBeDir = true, mustBeWritable = false, mustBeReadable = false)
-        .convert { it.absoluteFile.normalize() }
-
-    private val outputFormats by option(
-        "--output-formats", "-f",
-        help = "The list of output formats to be used for the ORT result file(s)."
-    ).enum<FileFormat>().split(",").default(listOf(FileFormat.YAML))
 
     private val licenseConfigurationFile by option(
         "--license-configuration-file",
@@ -99,6 +102,7 @@ class EvaluatorCommand : CliktCommand(name = "evaluate", help = "Evaluate rules 
     ).convert { it.expandTilde() }
         .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
         .convert { it.absoluteFile.normalize() }
+        .configurationGroup()
 
     private val packageConfigurationOption by mutuallyExclusiveOptions(
         option(
@@ -113,7 +117,8 @@ class EvaluatorCommand : CliktCommand(name = "evaluate", help = "Evaluate rules 
             help = "A file containing a list of package configurations."
         ).convert { it.expandTilde() }
             .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
-            .convert { PackageConfigurationOption.File(it.absoluteFile.normalize()) }
+            .convert { PackageConfigurationOption.File(it.absoluteFile.normalize()) },
+        name = "Configuration Options"
     ).single()
 
     private val packageCurationsFile by option(
@@ -123,6 +128,7 @@ class EvaluatorCommand : CliktCommand(name = "evaluate", help = "Evaluate rules 
     ).convert { it.expandTilde() }
         .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
         .convert { it.absoluteFile.normalize() }
+        .configurationGroup()
 
     private val repositoryConfigurationFile by option(
         "--repository-configuration-file",
@@ -131,6 +137,7 @@ class EvaluatorCommand : CliktCommand(name = "evaluate", help = "Evaluate rules 
     ).convert { it.expandTilde() }
         .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
         .convert { it.absoluteFile.normalize() }
+        .configurationGroup()
 
     private val labels by option(
         "--label", "-l",
