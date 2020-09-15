@@ -68,32 +68,33 @@ class DownloaderCommand : CliktCommand(name = "download", help = "Fetch source c
         option(
             "--project-url",
             help = "A VCS or archive URL of a project to download. Must not be used together with '--ort-file'."
-        ).convert { StringType(it) }
+        ).convert { StringType(it) },
+        name = "Input Options"
     ).single().required()
 
     private val projectNameOption by option(
         "--project-name",
         help = "The speaking name of the project to download. For use together with '--project-url'. Will be ignored " +
                 "if '--ort-file' is also specified. (default: the last part of the project URL)"
-    )
+    ).inputGroup()
 
     private val vcsTypeOption by option(
         "--vcs-type",
         help = "The VCS type if '--project-url' points to a VCS. Will be ignored if '--ort-file' is also specified. " +
                 "(default: the VCS type detected by querying the project URL)"
-    )
+    ).inputGroup()
 
     private val vcsRevisionOption by option(
         "--vcs-revision",
         help = "The VCS revision if '--project-url' points to a VCS. Will be ignored if '--ort-file' is also " +
                 "specified. (default: the VCS's default revision)"
-    )
+    ).inputGroup()
 
     private val vcsPath by option(
         "--vcs-path",
         help = "The VCS path if '--project-url' points to a VCS. Will be ignored if '--ort-file' is also specified. " +
                 "(default: the empty root path)"
-    ).default("")
+    ).default("").inputGroup()
 
     private val outputDir by option(
         "--output-dir", "-o",
@@ -102,6 +103,7 @@ class DownloaderCommand : CliktCommand(name = "download", help = "Fetch source c
         .file(mustExist = false, canBeFile = false, canBeDir = true, mustBeWritable = false, mustBeReadable = false)
         .convert { it.absoluteFile.normalize() }
         .required()
+        .outputGroup()
 
     private val allowMovingRevisions by option(
         "--allow-moving-revisions",

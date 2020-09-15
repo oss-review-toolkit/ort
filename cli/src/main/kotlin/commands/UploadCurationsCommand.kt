@@ -69,6 +69,7 @@ class UploadCurationsCommand : CliktCommand(
         .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
         .convert { it.absoluteFile.normalize() }
         .required()
+        .inputGroup()
 
     private val server by option(
         "--server", "-s",

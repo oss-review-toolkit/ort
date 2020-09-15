@@ -54,6 +54,7 @@ class UploadResultCommand : CliktCommand(
         .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
         .convert { it.absoluteFile.normalize() }
         .required()
+        .inputGroup()
 
     private val tableName by option(
         "--table-name",

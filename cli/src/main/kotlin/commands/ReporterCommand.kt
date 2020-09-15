@@ -79,6 +79,7 @@ class ReporterCommand : CliktCommand(
         .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
         .convert { it.absoluteFile.normalize() }
         .required()
+        .inputGroup()
 
     private val outputDir by option(
         "--output-dir", "-o",
@@ -87,6 +88,7 @@ class ReporterCommand : CliktCommand(
         .file(mustExist = false, canBeFile = false, canBeDir = true, mustBeWritable = false, mustBeReadable = false)
         .convert { it.absoluteFile.normalize() }
         .required()
+        .outputGroup()
 
     private val reportFormats by option(
         "--report-formats", "-f",
@@ -94,7 +96,7 @@ class ReporterCommand : CliktCommand(
     ).convert { name ->
         allReportersByName[name.toUpperCase()]
             ?: throw BadParameterValue("Report formats must be one or more of ${allReportersByName.keys}.")
-    }.split(",").required()
+    }.split(",").required().outputGroup()
 
     private val copyrightGarbageFile by option(
         "--copyright-garbage-file",
@@ -102,6 +104,7 @@ class ReporterCommand : CliktCommand(
     ).convert { it.expandTilde() }
         .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
         .convert { it.absoluteFile.normalize() }
+        .configurationGroup()
 
     private val customLicenseTextsDir by option(
         "--custom-license-texts-dir",
@@ -111,6 +114,7 @@ class ReporterCommand : CliktCommand(
     ).convert { it.expandTilde() }
         .file(mustExist = false, canBeFile = false, canBeDir = true, mustBeWritable = false, mustBeReadable = false)
         .convert { it.absoluteFile.normalize() }
+        .configurationGroup()
 
     private val howToFixTextProviderScript by option(
         "--how-to-fix-text-provider-script",
@@ -119,6 +123,7 @@ class ReporterCommand : CliktCommand(
     ).convert { it.expandTilde() }
         .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
         .convert { it.absoluteFile.normalize() }
+        .configurationGroup()
 
     private val licenseConfigurationFile by option(
         "--license-configuration-file",
@@ -126,6 +131,7 @@ class ReporterCommand : CliktCommand(
     ).convert { it.expandTilde() }
         .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
         .convert { it.absoluteFile.normalize() }
+        .configurationGroup()
 
     private val packageConfigurationOption by mutuallyExclusiveOptions(
         option(
@@ -140,7 +146,8 @@ class ReporterCommand : CliktCommand(
             help = "A file containing a list of package configurations."
         ).convert { it.expandTilde() }
             .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
-            .convert { PackageConfigurationOption.File(it.absoluteFile.normalize()) }
+            .convert { PackageConfigurationOption.File(it.absoluteFile.normalize()) },
+        name = "Configuration Options",
     ).single()
 
     private val repositoryConfigurationFile by option(
@@ -150,6 +157,7 @@ class ReporterCommand : CliktCommand(
     ).convert { it.expandTilde() }
         .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
         .convert { it.absoluteFile.normalize() }
+        .configurationGroup()
 
     private val resolutionsFile by option(
         "--resolutions-file",
@@ -158,6 +166,7 @@ class ReporterCommand : CliktCommand(
         .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
         .convert { it.absoluteFile.normalize() }
         .default(ortConfigDirectory.resolve(ORT_RESOLUTIONS_FILENAME))
+        .configurationGroup()
 
     private val reportOptions by option(
         "--report-option", "-O",
