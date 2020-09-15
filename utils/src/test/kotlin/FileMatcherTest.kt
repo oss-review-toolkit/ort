@@ -20,33 +20,34 @@
 package org.ossreviewtoolkit.utils
 
 import io.kotest.core.spec.style.WordSpec
+import io.kotest.inspectors.forAll
 import io.kotest.matchers.shouldBe
+
+private val COMMONLY_USED_LICENSE_FILE_NAMES = listOf(
+    "copying",
+    "copyright",
+    "licence",
+    "licence.extension",
+    "licencesuffix",
+    "license",
+    "license.extension",
+    "licensesuffix",
+    "filename.license",
+    "patents",
+    "readme",
+    "readme.extension",
+    "readmesuffix",
+    "unlicence",
+    "unlicense"
+)
 
 class FileMatcherTest : WordSpec({
     val defaultMatcher = FileMatcher.LICENSE_FILE_MATCHER
 
     "default license file matcher" should {
-        "match commonly used license file paths" {
-            with(defaultMatcher) {
-                matches("LICENSE") shouldBe true
-                matches("LICENSE.BSD") shouldBe true
-                // TODO: add more important license file names
-            }
-        }
-
-        "match relative and absolute paths to LICENSE file also in subdirectories as expected" {
-            with(defaultMatcher) {
-                matches("LICENSE") shouldBe true
-                matches("path/LICENSE") shouldBe false
-                matches("prefixLICENSE") shouldBe false
-
-                matches("/LICENSE") shouldBe false
-                matches("/path/LICENSE") shouldBe false
-                matches("/prefixLICENSE") shouldBe false
-
-                matches("./LICENSE") shouldBe false
-                matches("./path/LICENSE") shouldBe false
-                matches("./prefixLICENSE") shouldBe false
+        "match commonly used license file paths in upper-case" {
+            COMMONLY_USED_LICENSE_FILE_NAMES.map { it.toUpperCase() }.forAll {
+                defaultMatcher.matches(it) shouldBe true
             }
         }
     }
