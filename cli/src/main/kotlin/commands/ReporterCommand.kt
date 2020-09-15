@@ -80,22 +80,6 @@ class ReporterCommand : CliktCommand(
         .convert { it.absoluteFile.normalize() }
         .required()
 
-    private val packageConfigurationOption by mutuallyExclusiveOptions(
-        option(
-            "--package-configuration-dir",
-            help = "A directory that is searched recursively for package configuration files. Each file must only " +
-                    "contain a single package configuration."
-        ).convert { it.expandTilde() }
-            .file(mustExist = true, canBeFile = false, canBeDir = true, mustBeWritable = false, mustBeReadable = true)
-            .convert { PackageConfigurationOption.Dir(it.absoluteFile.normalize()) },
-        option(
-            "--package-configuration-file",
-            help = "A file containing a list of package configurations."
-        ).convert { it.expandTilde() }
-            .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
-            .convert { PackageConfigurationOption.File(it.absoluteFile.normalize()) }
-    ).single()
-
     private val outputDir by option(
         "--output-dir", "-o",
         help = "The output directory to store the generated reports in."
@@ -112,6 +96,69 @@ class ReporterCommand : CliktCommand(
             ?: throw BadParameterValue("Report formats must be one or more of ${allReportersByName.keys}.")
     }.split(",").required()
 
+    private val copyrightGarbageFile by option(
+        "--copyright-garbage-file",
+        help = "A file containing garbage copyright statements entries which are to be ignored."
+    ).convert { it.expandTilde() }
+        .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
+        .convert { it.absoluteFile.normalize() }
+
+    private val customLicenseTextsDir by option(
+        "--custom-license-texts-dir",
+        help = "A directory which maps custom license IDs to license texts. It should contain one text file per " +
+                "license with the license ID as the filename. A custom license text is used only if its ID has a " +
+                "'LicenseRef-' prefix and if the respective license text is not known by ORT."
+    ).convert { it.expandTilde() }
+        .file(mustExist = false, canBeFile = false, canBeDir = true, mustBeWritable = false, mustBeReadable = false)
+        .convert { it.absoluteFile.normalize() }
+
+    private val howToFixTextProviderScript by option(
+        "--how-to-fix-text-provider-script",
+        help = "The path to a Kotlin script which returns an instance of a 'HowToFixTextProvider'. That provider " +
+                "injects how-to-fix texts in Markdown format for ORT issues."
+    ).convert { it.expandTilde() }
+        .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
+        .convert { it.absoluteFile.normalize() }
+
+    private val licenseConfigurationFile by option(
+        "--license-configuration-file",
+        help = "A file containing the license configuration."
+    ).convert { it.expandTilde() }
+        .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
+        .convert { it.absoluteFile.normalize() }
+
+    private val packageConfigurationOption by mutuallyExclusiveOptions(
+        option(
+            "--package-configuration-dir",
+            help = "A directory that is searched recursively for package configuration files. Each file must only " +
+                    "contain a single package configuration."
+        ).convert { it.expandTilde() }
+            .file(mustExist = true, canBeFile = false, canBeDir = true, mustBeWritable = false, mustBeReadable = true)
+            .convert { PackageConfigurationOption.Dir(it.absoluteFile.normalize()) },
+        option(
+            "--package-configuration-file",
+            help = "A file containing a list of package configurations."
+        ).convert { it.expandTilde() }
+            .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
+            .convert { PackageConfigurationOption.File(it.absoluteFile.normalize()) }
+    ).single()
+
+    private val repositoryConfigurationFile by option(
+        "--repository-configuration-file",
+        help = "A file containing the repository configuration. If set the '$ORT_REPO_CONFIG_FILENAME' overrides the " +
+                "repository configuration contained in the ort result from the input file."
+    ).convert { it.expandTilde() }
+        .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
+        .convert { it.absoluteFile.normalize() }
+
+    private val resolutionsFile by option(
+        "--resolutions-file",
+        help = "A file containing issue and rule violation resolutions."
+    ).convert { it.expandTilde() }
+        .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
+        .convert { it.absoluteFile.normalize() }
+        .default(ortConfigDirectory.resolve(ORT_RESOLUTIONS_FILENAME))
+
     private val reportOptions by option(
         "--report-option", "-O",
         help = "Specify a report-format-specific option. The key is the (case-insensitive) name of the report " +
@@ -126,53 +173,6 @@ class ReporterCommand : CliktCommand(
 
         upperCaseFormat to Pair(option.substringBefore("="), option.substringAfter("=", ""))
     }.multiple()
-
-    private val resolutionsFile by option(
-        "--resolutions-file",
-        help = "A file containing issue and rule violation resolutions."
-    ).convert { it.expandTilde() }
-        .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
-        .convert { it.absoluteFile.normalize() }
-        .default(ortConfigDirectory.resolve(ORT_RESOLUTIONS_FILENAME))
-
-    private val copyrightGarbageFile by option(
-        "--copyright-garbage-file",
-        help = "A file containing garbage copyright statements entries which are to be ignored."
-    ).convert { it.expandTilde() }
-        .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
-        .convert { it.absoluteFile.normalize() }
-
-    private val repositoryConfigurationFile by option(
-        "--repository-configuration-file",
-        help = "A file containing the repository configuration. If set the '$ORT_REPO_CONFIG_FILENAME' overrides the " +
-                "repository configuration contained in the ort result from the input file."
-    ).convert { it.expandTilde() }
-        .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
-        .convert { it.absoluteFile.normalize() }
-
-    private val customLicenseTextsDir by option(
-        "--custom-license-texts-dir",
-        help = "A directory which maps custom license IDs to license texts. It should contain one text file per " +
-                "license with the license ID as the filename. A custom license text is used only if its ID has a " +
-                "'LicenseRef-' prefix and if the respective license text is not known by ORT."
-    ).convert { it.expandTilde() }
-        .file(mustExist = false, canBeFile = false, canBeDir = true, mustBeWritable = false, mustBeReadable = false)
-        .convert { it.absoluteFile.normalize() }
-
-    private val licenseConfigurationFile by option(
-        "--license-configuration-file",
-        help = "A file containing the license configuration."
-    ).convert { it.expandTilde() }
-        .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
-        .convert { it.absoluteFile.normalize() }
-
-    private val howToFixTextProviderScript by option(
-        "--how-to-fix-text-provider-script",
-        help = "The path to a Kotlin script which returns an instance of a 'HowToFixTextProvider'. That provider " +
-                "injects how-to-fix texts in Markdown format for ORT issues."
-    ).convert { it.expandTilde() }
-        .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
-        .convert { it.absoluteFile.normalize() }
 
     private val config by requireObject<OrtConfiguration>()
 

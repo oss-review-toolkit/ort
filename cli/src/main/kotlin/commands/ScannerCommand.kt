@@ -68,11 +68,6 @@ class ScannerCommand : CliktCommand(name = "scan", help = "Run existing copyrigh
             .convert { it.absoluteFile.normalize() }
     ).single().required()
 
-    private val skipExcluded by option(
-        "--skip-excluded",
-        help = "Do not scan excluded projects or packages. Works only with the '--ort-file' parameter."
-    ).flag()
-
     private val outputDir by option(
         "--output-dir", "-o",
         help = "The directory to write the scan results as ORT result file(s) to, in the specified output format(s)."
@@ -81,12 +76,24 @@ class ScannerCommand : CliktCommand(name = "scan", help = "Run existing copyrigh
         .convert { it.absoluteFile.normalize() }
         .required()
 
+    private val outputFormats by option(
+        "--output-formats", "-f",
+        help = "The list of output formats to be used for the ORT result file(s)."
+    ).enum<FileFormat>().split(",").default(listOf(FileFormat.YAML))
+
     private val downloadDir by option(
         "--download-dir",
         help = "The output directory for downloaded source code. (default: <output-dir>/downloads)"
     ).convert { it.expandTilde() }
         .file(mustExist = false, canBeFile = false, canBeDir = true, mustBeWritable = false, mustBeReadable = false)
         .convert { it.absoluteFile.normalize() }
+
+    private val labels by option(
+        "--label", "-l",
+        help = "Add a label to the ORT result. Can be used multiple times. If an ORT result is used as input for the" +
+                "scanner any existing label with the same key will be overwritten. For example: " +
+                "--label distribution=external"
+    ).associate()
 
     private val scannerFactory by option(
         "--scanner", "-s",
@@ -97,17 +104,10 @@ class ScannerCommand : CliktCommand(name = "scan", help = "Run existing copyrigh
             ?: throw BadParameterValue("Scanner '$scannerName' is not one of ${Scanner.ALL}.")
     }.default(ScanCode.Factory())
 
-    private val outputFormats by option(
-        "--output-formats", "-f",
-        help = "The list of output formats to be used for the ORT result file(s)."
-    ).enum<FileFormat>().split(",").default(listOf(FileFormat.YAML))
-
-    private val labels by option(
-        "--label", "-l",
-        help = "Add a label to the ORT result. Can be used multiple times. If an ORT result is used as input for the" +
-                "scanner any existing label with the same key will be overwritten. For example: " +
-                "--label distribution=external"
-    ).associate()
+    private val skipExcluded by option(
+        "--skip-excluded",
+        help = "Do not scan excluded projects or packages. Works only with the '--ort-file' parameter."
+    ).flag()
 
     private val config by requireObject<OrtConfiguration>()
 
