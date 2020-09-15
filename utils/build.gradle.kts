@@ -25,6 +25,7 @@ val kotlinxCoroutinesVersion: String by project
 val log4jApiKotlinVersion: String by project
 val okhttpVersion: String by project
 val semverVersion: String by project
+val springCoreVersion: String by project
 val xzVersion: String by project
 
 plugins {
@@ -44,5 +45,6 @@ dependencies {
     implementation("org.apache.commons:commons-compress:$commonsCompressVersion")
     implementation("org.jetbrains.kotlin:kotlin-scripting-jsr223")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlinxCoroutinesVersion")
+    implementation("org.springframework:spring-core:$springCoreVersion")
     implementation("org.tukaani:xz:$xzVersion")
 }
