@@ -54,6 +54,10 @@ import org.ossreviewtoolkit.reporter.DefaultLicenseTextProvider
 import org.ossreviewtoolkit.reporter.HowToFixTextProvider
 import org.ossreviewtoolkit.reporter.Reporter
 import org.ossreviewtoolkit.reporter.ReporterInput
+import org.ossreviewtoolkit.utils.ORT_COPYRIGHT_GARBAGE_FILENAME
+import org.ossreviewtoolkit.utils.ORT_CUSTOM_LICENSE_TEXTS_DIRNAME
+import org.ossreviewtoolkit.utils.ORT_HOW_TO_FIX_TEXT_PROVIDER_FILENAME
+import org.ossreviewtoolkit.utils.ORT_LICENSE_CONFIGURATION_FILENAME
 import org.ossreviewtoolkit.utils.ORT_REPO_CONFIG_FILENAME
 import org.ossreviewtoolkit.utils.ORT_RESOLUTIONS_FILENAME
 import org.ossreviewtoolkit.utils.PackageConfigurationOption
@@ -104,6 +108,7 @@ class ReporterCommand : CliktCommand(
     ).convert { it.expandTilde() }
         .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
         .convert { it.absoluteFile.normalize() }
+        .default(ortConfigDirectory.resolve(ORT_COPYRIGHT_GARBAGE_FILENAME))
         .configurationGroup()
 
     private val customLicenseTextsDir by option(
@@ -114,6 +119,7 @@ class ReporterCommand : CliktCommand(
     ).convert { it.expandTilde() }
         .file(mustExist = false, canBeFile = false, canBeDir = true, mustBeWritable = false, mustBeReadable = false)
         .convert { it.absoluteFile.normalize() }
+        .default(ortConfigDirectory.resolve(ORT_CUSTOM_LICENSE_TEXTS_DIRNAME))
         .configurationGroup()
 
     private val howToFixTextProviderScript by option(
@@ -123,6 +129,7 @@ class ReporterCommand : CliktCommand(
     ).convert { it.expandTilde() }
         .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
         .convert { it.absoluteFile.normalize() }
+        .default(ortConfigDirectory.resolve(ORT_HOW_TO_FIX_TEXT_PROVIDER_FILENAME))
         .configurationGroup()
 
     private val licenseConfigurationFile by option(
@@ -131,6 +138,7 @@ class ReporterCommand : CliktCommand(
     ).convert { it.expandTilde() }
         .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
         .convert { it.absoluteFile.normalize() }
+        .default(ortConfigDirectory.resolve(ORT_LICENSE_CONFIGURATION_FILENAME))
         .configurationGroup()
 
     private val packageConfigurationOption by mutuallyExclusiveOptions(
@@ -197,7 +205,7 @@ class ReporterCommand : CliktCommand(
         resolutionProvider.add(ortResult.getResolutions())
         resolutionsFile.takeIf { it.isFile }?.readValue<Resolutions>()?.let { resolutionProvider.add(it) }
 
-        val copyrightGarbage = copyrightGarbageFile?.readValue<CopyrightGarbage>().orEmpty()
+        val copyrightGarbage = copyrightGarbageFile.takeIf { it.isFile }?.readValue<CopyrightGarbage>().orEmpty()
 
         val packageConfigurationProvider = packageConfigurationOption.createProvider()
 
@@ -207,11 +215,12 @@ class ReporterCommand : CliktCommand(
             archiver = config.scanner?.archive?.createFileArchiver() ?: FileArchiver.DEFAULT
         )
 
-        val licenseConfiguration = licenseConfigurationFile?.readValue<LicenseConfiguration>().orEmpty()
+        val licenseConfiguration =
+            licenseConfigurationFile.takeIf { it.isFile }?.readValue<LicenseConfiguration>().orEmpty()
 
-        val howToFixTextProvider =
-            howToFixTextProviderScript?.let { HowToFixTextProvider.fromKotlinScript(it.readText(), ortResult) }
-                ?: HowToFixTextProvider.NONE
+        val howToFixTextProvider = howToFixTextProviderScript.takeIf { it.isFile }?.let {
+            HowToFixTextProvider.fromKotlinScript(it.readText(), ortResult)
+        } ?: HowToFixTextProvider.NONE
 
         outputDir.safeMkdirs()
 
@@ -220,7 +229,7 @@ class ReporterCommand : CliktCommand(
             config,
             packageConfigurationProvider,
             resolutionProvider,
-            DefaultLicenseTextProvider(customLicenseTextsDir),
+            DefaultLicenseTextProvider(customLicenseTextsDir.takeIf { it.isDirectory }),
             copyrightGarbage,
             licenseInfoResolver,
             licenseConfiguration,

@@ -42,6 +42,7 @@ import org.ossreviewtoolkit.model.FileFormat
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.mapper
 import org.ossreviewtoolkit.model.utils.mergeLabels
+import org.ossreviewtoolkit.utils.ORT_CURATIONS_FILENAME
 import org.ossreviewtoolkit.utils.ORT_REPO_CONFIG_FILENAME
 import org.ossreviewtoolkit.utils.expandTilde
 import org.ossreviewtoolkit.utils.ortConfigDirectory
@@ -79,6 +80,7 @@ class AnalyzerCommand : CliktCommand(name = "analyze", help = "Determine depende
     ).convert { it.expandTilde() }
         .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
         .convert { it.absoluteFile.normalize() }
+        .default(ortConfigDirectory.resolve(ORT_CURATIONS_FILENAME))
         .configurationGroup()
 
     private val repositoryConfigurationFile by option(
@@ -139,11 +141,9 @@ class AnalyzerCommand : CliktCommand(name = "analyze", help = "Determine depende
         val analyzerConfig = AnalyzerConfiguration(ignoreToolVersions, allowDynamicVersions)
         val analyzer = Analyzer(analyzerConfig)
 
-        val globalPackageCurationsFile = ortConfigDirectory.resolve("curations.yml")
         val curationProvider = FallbackPackageCurationProvider(
             listOfNotNull(
-                packageCurationsFile?.let { FilePackageCurationProvider(it) },
-                globalPackageCurationsFile.takeIf { it.isFile }?.let { FilePackageCurationProvider(it) },
+                packageCurationsFile.takeIf { it.isFile }?.let { FilePackageCurationProvider(it) },
                 ClearlyDefinedPackageCurationProvider().takeIf { useClearlyDefinedCurations }
             )
         )
