@@ -46,6 +46,31 @@ const val ORT_DATA_DIR_ENV_NAME = "ORT_DATA_DIR"
 const val ORT_CONFIG_FILENAME = "ort.conf"
 
 /**
+ * The name of the ORT copyright garbage configuration file.
+ */
+const val ORT_COPYRIGHT_GARBAGE_FILENAME = "copyright-garbage.yml"
+
+/**
+ * The name of the ORT custom license texts configuration directory.
+ */
+const val ORT_CUSTOM_LICENSE_TEXTS_DIRNAME = "custom-license-texts"
+
+/**
+ * The name of the ORT curations configuration file.
+ */
+const val ORT_CURATIONS_FILENAME = "curations.yml"
+
+/**
+ * The name of the ORT how to fix text provider script file.
+ */
+const val ORT_HOW_TO_FIX_TEXT_PROVIDER_FILENAME = "how-to-fix-text-provider.kts"
+
+/**
+ * The name of the ORT license configuration file.
+ */
+const val ORT_LICENSE_CONFIGURATION_FILENAME = "licenses.yml"
+
+/**
  * The name of the ORT package configurations directory.
  */
 const val ORT_PACKAGE_CONFIGURATIONS_DIRNAME = "package-configurations"

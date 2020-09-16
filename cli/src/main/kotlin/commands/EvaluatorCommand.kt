@@ -48,6 +48,7 @@ import org.ossreviewtoolkit.model.licenses.orEmpty
 import org.ossreviewtoolkit.model.mapper
 import org.ossreviewtoolkit.model.readValue
 import org.ossreviewtoolkit.model.utils.mergeLabels
+import org.ossreviewtoolkit.utils.ORT_LICENSE_CONFIGURATION_FILENAME
 import org.ossreviewtoolkit.utils.ORT_REPO_CONFIG_FILENAME
 import org.ossreviewtoolkit.utils.PackageConfigurationOption
 import org.ossreviewtoolkit.utils.createProvider
@@ -103,6 +104,7 @@ class EvaluatorCommand : CliktCommand(name = "evaluate", help = "Evaluate rules 
     ).convert { it.expandTilde() }
         .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
         .convert { it.absoluteFile.normalize() }
+        .default(ortConfigDirectory.resolve(ORT_LICENSE_CONFIGURATION_FILENAME))
         .configurationGroup()
 
     private val packageConfigurationOption by mutuallyExclusiveOptions(
@@ -174,7 +176,8 @@ class EvaluatorCommand : CliktCommand(name = "evaluate", help = "Evaluate rules 
 
         val packageConfigurationProvider = packageConfigurationOption.createProvider()
 
-        val licenseConfiguration = licenseConfigurationFile?.readValue<LicenseConfiguration>().orEmpty()
+        val licenseConfiguration =
+            licenseConfigurationFile.takeIf { it.isFile }?.readValue<LicenseConfiguration>().orEmpty()
 
         packageCurationsFile?.let {
             ortResultInput = ortResultInput.replacePackageCurations(it.readValue())
