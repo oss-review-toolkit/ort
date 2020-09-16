@@ -23,12 +23,9 @@ import java.io.IOException
 
 import org.ossreviewtoolkit.analyzer.PackageCurationProvider
 import org.ossreviewtoolkit.clearlydefined.ClearlyDefinedService
-import org.ossreviewtoolkit.clearlydefined.ClearlyDefinedService.Coordinates
 import org.ossreviewtoolkit.clearlydefined.ClearlyDefinedService.Server
 import org.ossreviewtoolkit.clearlydefined.ClearlyDefinedService.SourceLocation
 import org.ossreviewtoolkit.clearlydefined.ComponentType
-import org.ossreviewtoolkit.clearlydefined.Provider
-import org.ossreviewtoolkit.downloader.VcsHost
 import org.ossreviewtoolkit.model.Hash
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.PackageCuration
@@ -36,89 +33,11 @@ import org.ossreviewtoolkit.model.PackageCurationData
 import org.ossreviewtoolkit.model.RemoteArtifact
 import org.ossreviewtoolkit.model.VcsInfoCurationData
 import org.ossreviewtoolkit.model.VcsType
+import org.ossreviewtoolkit.model.utils.toClearlyDefinedTypeAndProvider
 import org.ossreviewtoolkit.utils.OkHttpClientHelper
 import org.ossreviewtoolkit.utils.collectMessagesAsString
 import org.ossreviewtoolkit.utils.log
 import org.ossreviewtoolkit.utils.showStackTrace
-
-/**
- * Map an [Identifier] to a ClearlyDefined [ComponentType] and [Provider]. Note that an Identifier's type in ORT
- * currently implies a default provider.
- */
-fun Identifier.toClearlyDefinedTypeAndProvider(): Pair<ComponentType, Provider> =
-    when (type) {
-        "Bower" -> ComponentType.GIT to Provider.GITHUB
-        "Bundler" -> ComponentType.GEM to Provider.RUBYGEMS
-        "Cargo" -> ComponentType.CRATE to Provider.CRATES_IO
-        "CocoaPods" -> ComponentType.POD to Provider.COCOAPODS
-        "DotNet", "NuGet" -> ComponentType.NUGET to Provider.NUGET
-        "GoDep", "GoMod" -> ComponentType.GIT to Provider.GITHUB
-        "Maven" -> ComponentType.MAVEN to Provider.MAVEN_CENTRAL
-        "NPM" -> ComponentType.NPM to Provider.NPM_JS
-        "PhpComposer" -> ComponentType.COMPOSER to Provider.PACKAGIST
-        "PyPI" -> ComponentType.PYPI to Provider.PYPI
-        "Pub" -> ComponentType.GIT to Provider.GITHUB
-        else -> throw IllegalArgumentException("Unknown mapping of ORT type '$type' to ClearlyDefined.")
-    }
-
-/**
- * Map an ORT [Identifier] to ClearlyDefined [Coordinates].
- */
-fun Identifier.toClearlyDefinedCoordinates(): Coordinates {
-    val (type, provider) = toClearlyDefinedTypeAndProvider()
-
-    return Coordinates(
-        type = type,
-        provider = provider,
-        namespace = namespace.takeUnless { it.isEmpty() },
-        name = name,
-        revision = version.takeUnless { it.isEmpty() }
-    )
-}
-
-/**
- * Create a ClearlyDefined [SourceLocation] from an [Identifier] preferably a [VcsInfoCurationData], but eventually fall
- * back to a [RemoteArtifact], or return null if neither is specified.
- */
-fun toClearlyDefinedSourceLocation(
-    id: Identifier,
-    vcs: VcsInfoCurationData?,
-    sourceArtifact: RemoteArtifact?
-): SourceLocation? {
-    val vcsUrl = vcs?.url
-    val vcsRevision = vcs?.resolvedRevision
-
-    return when {
-        // GitHub is the only VCS provider supported by ClearlyDefined for now.
-        // TODO: Find out how to handle VCS curations without a revision.
-        vcsUrl != null && VcsHost.GITHUB.isApplicable(vcsUrl) && vcsRevision != null -> {
-            SourceLocation(
-                name = id.name,
-                namespace = VcsHost.GITHUB.getUserOrOrganization(vcsUrl),
-                path = vcs.path,
-                provider = Provider.GITHUB,
-                revision = vcsRevision,
-                type = ComponentType.GIT,
-                url = vcsUrl
-            )
-        }
-
-        sourceArtifact != null -> {
-            val (_, provider) = id.toClearlyDefinedTypeAndProvider()
-
-            SourceLocation(
-                name = id.name,
-                namespace = id.namespace.takeUnless { it.isEmpty() },
-                provider = provider,
-                revision = id.version,
-                type = ComponentType.SOURCE_ARCHIVE,
-                url = sourceArtifact.url
-            )
-        }
-
-        else -> null
-    }
-}
 
 /**
  * Map a ClearlyDefined [SourceLocation] to either a [VcsInfoCurationData] or a [RemoteArtifact].
