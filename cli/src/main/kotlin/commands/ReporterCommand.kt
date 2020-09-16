@@ -100,7 +100,7 @@ class ReporterCommand : CliktCommand(
 
     private val copyrightGarbageFile by option(
         "--copyright-garbage-file",
-        help = "A file containing garbage copyright statements entries which are to be ignored."
+        help = "A file containing copyright statements which are marked as garbage."
     ).convert { it.expandTilde() }
         .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
         .convert { it.absoluteFile.normalize() }
