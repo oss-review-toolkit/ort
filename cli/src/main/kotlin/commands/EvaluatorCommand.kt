@@ -132,8 +132,8 @@ class EvaluatorCommand : CliktCommand(name = "evaluate", help = "Evaluate rules 
 
     private val repositoryConfigurationFile by option(
         "--repository-configuration-file",
-        help = "A file containing the repository configuration. If set the '$ORT_REPO_CONFIG_FILENAME' overrides the " +
-                "repository configuration contained in the ort result from the input file."
+        help = "A file containing the repository configuration. If set, the '$ORT_REPO_CONFIG_FILENAME' overrides " +
+                "the repository configuration contained in the ort result from the input file."
     ).convert { it.expandTilde() }
         .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
         .convert { it.absoluteFile.normalize() }
@@ -142,7 +142,7 @@ class EvaluatorCommand : CliktCommand(name = "evaluate", help = "Evaluate rules 
     private val labels by option(
         "--label", "-l",
         help = "Add a label to the ORT result. Can be used multiple times. Any existing label with the same key in " +
-                "the input ORT result will be overwritten. For example: --label distribution=external"
+                "the input ORT result is overwritten. For example: --label distribution=external"
     ).associate()
 
     private val syntaxCheck by option(

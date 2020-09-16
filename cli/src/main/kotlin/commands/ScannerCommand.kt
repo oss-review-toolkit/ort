@@ -55,8 +55,8 @@ class ScannerCommand : CliktCommand(name = "scan", help = "Run existing copyrigh
     private val input by mutuallyExclusiveOptions(
         option(
             "--ort-file", "-i",
-            help = "An ORT result file with an analyzer result to use. Source code will be downloaded automatically " +
-                    "if needed. This parameter and '--input-path' are mutually exclusive."
+            help = "An ORT result file with an analyzer result to use. Source code is downloaded automatically if " +
+                    "needed. This parameter and '--input-path' are mutually exclusive."
         ).convert { it.expandTilde() }
             .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
             .convert { it.absoluteFile.normalize() },
@@ -94,7 +94,7 @@ class ScannerCommand : CliktCommand(name = "scan", help = "Run existing copyrigh
     private val labels by option(
         "--label", "-l",
         help = "Add a label to the ORT result. Can be used multiple times. If an ORT result is used as input for the" +
-                "scanner any existing label with the same key will be overwritten. For example: " +
+                "scanner, any existing label with the same key is overwritten. For example: " +
                 "--label distribution=external"
     ).associate()
 

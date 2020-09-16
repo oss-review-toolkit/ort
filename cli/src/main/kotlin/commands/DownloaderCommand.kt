@@ -74,25 +74,25 @@ class DownloaderCommand : CliktCommand(name = "download", help = "Fetch source c
 
     private val projectNameOption by option(
         "--project-name",
-        help = "The speaking name of the project to download. For use together with '--project-url'. Will be ignored " +
-                "if '--ort-file' is also specified. (default: the last part of the project URL)"
+        help = "The speaking name of the project to download. For use together with '--project-url'. Ignored if " +
+                "'--ort-file' is also specified. (default: the last part of the project URL)"
     ).inputGroup()
 
     private val vcsTypeOption by option(
         "--vcs-type",
-        help = "The VCS type if '--project-url' points to a VCS. Will be ignored if '--ort-file' is also specified. " +
+        help = "The VCS type if '--project-url' points to a VCS. Ignored if '--ort-file' is also specified. " +
                 "(default: the VCS type detected by querying the project URL)"
     ).inputGroup()
 
     private val vcsRevisionOption by option(
         "--vcs-revision",
-        help = "The VCS revision if '--project-url' points to a VCS. Will be ignored if '--ort-file' is also " +
-                "specified. (default: the VCS's default revision)"
+        help = "The VCS revision if '--project-url' points to a VCS. Ignored if '--ort-file' is also specified. " +
+                "(default: the VCS's default revision)"
     ).inputGroup()
 
     private val vcsPath by option(
         "--vcs-path",
-        help = "The VCS path if '--project-url' points to a VCS. Will be ignored if '--ort-file' is also specified. " +
+        help = "The VCS path if '--project-url' points to a VCS. Ignored if '--ort-file' is also specified. " +
                 "(default: the empty root path)"
     ).default("").inputGroup()
 
@@ -113,7 +113,7 @@ class DownloaderCommand : CliktCommand(name = "download", help = "Fetch source c
 
     private val archive by option(
         "--archive",
-        help = "Archive the downloaded source code as ZIP files to the output directory. Will be ignored if " +
+        help = "Archive the downloaded source code as ZIP files to the output directory. Is ignored if " +
                 "'--project-url' is also specified."
     ).flag()
 
