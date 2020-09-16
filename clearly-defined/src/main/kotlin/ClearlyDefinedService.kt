@@ -30,6 +30,7 @@ import java.io.File
 import java.net.URL
 
 import okhttp3.OkHttpClient
+import okhttp3.ResponseBody
 
 import retrofit2.Call
 import retrofit2.Retrofit
@@ -53,10 +54,17 @@ interface ClearlyDefinedService {
          * Create a ClearlyDefined service instance for communicating with the given [server], optionally using a
          * pre-built OkHttp [client].
          */
-        fun create(server: Server, client: OkHttpClient? = null): ClearlyDefinedService {
+        fun create(server: Server, client: OkHttpClient? = null): ClearlyDefinedService =
+            create(server.url, client)
+
+        /**
+         * Create a ClearlyDefined service instance for communicating with a server running at the given [url],
+         * optionally using a pre-built OkHttp [client].
+         */
+        fun create(url: String, client: OkHttpClient? = null): ClearlyDefinedService {
             val retrofit = Retrofit.Builder()
                 .apply { if (client != null) client(client) }
-                .baseUrl(server.url)
+                .baseUrl(url)
                 .addConverterFactory(ScalarsConverterFactory.create())
                 .addConverterFactory(JacksonConverterFactory.create(JsonMapper().registerKotlinModule()))
                 .build()
@@ -426,4 +434,35 @@ interface ClearlyDefinedService {
      */
     @POST("harvest")
     fun harvest(@Body request: Collection<HarvestRequest>): Call<String>
+
+    /**
+     * Get information about the harvest tools that have produced data for the component described by [type],
+     * [provider], [namespace], [name], and [revision], see
+     * https://api.clearlydefined.io/api-docs/#/harvest/get_harvest__type___provider___namespace___name___revision_.
+     * This can be used to quickly find out whether results of a specific tool are already available.
+     */
+    @GET("harvest/{type}/{provider}/{namespace}/{name}/{revision}?form=list")
+    fun harvestTools(
+        @Path("type") type: ComponentType,
+        @Path("provider") provider: Provider,
+        @Path("namespace") namespace: String,
+        @Path("name") name: String,
+        @Path("revision") revision: String
+    ): Call<List<String>>
+
+    /**
+     * Get the harvested data for the component described by [type], [provider], [namespace], [name], and [revision]
+     * that was produced by [tool] with version [toolVersion], see
+     * https://api.clearlydefined.io/api-docs/#/harvest/get_harvest__type___provider___namespace___name___revision___tool___toolVersion_
+     */
+    @GET("harvest/{type}/{provider}/{namespace}/{name}/{revision}/{tool}/{toolVersion}?form=streamed")
+    fun harvestToolData(
+        @Path("type") type: ComponentType,
+        @Path("provider") provider: Provider,
+        @Path("namespace") namespace: String,
+        @Path("name") name: String,
+        @Path("revision") revision: String,
+        @Path("tool") tool: String,
+        @Path("toolVersion") toolVersion: String
+    ): Call<ResponseBody>
 }
