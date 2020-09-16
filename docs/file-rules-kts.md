@@ -1,10 +1,10 @@
 # The `rules.kts` file
 
-The `rules.kts` file  allows you to define custom policy rules that automatically apply to review scan findings.
-Rules are written in a Kotlin-based DSL.
+The `rules.kts` file  allows you to define custom policy rules that automatically apply to review scan findings. Rules
+are written in a Kotlin-based DSL.
 
-For each policy rule violation, you can define 'How to fix' follow-up actions to help users
-resolve policy rules violations by themselves.
+For each policy rule violation, you can define 'How to fix' follow-up actions to help users resolve policy rules
+violations by themselves.
 
 You can use the [rules.kts example](../examples/rules.kts) as the base script file for your policy rules. Note that this
 example depends on the licenses categorizations defined in the [licenses.yml example](../examples/licenses.yml), see the

@@ -1,22 +1,21 @@
 # The `.ort.yml` file
 
-The items below can be configured by adding an `.ort.yml` file
-to the root of the source code repository.
+The items below can be configured by adding an `.ort.yml` file to the root of the source code repository.
 
-* [excludes](#excludes) - Mark [files, directories](#excluding-paths)
-  or [package manager scopes](#excluding-scopes) as not included in released artifacts.
-* [license finding curations](#curations): Overwrite scan results to correct identified licenses.
+* [excludes](#excludes) - Mark [files, directories](#excluding-paths) or [package manager scopes](#excluding-scopes) as
+  not included in released artifacts.
+* [license finding curations](#curations) - Overwrite scan results to correct identified licenses.
 * [resolutions](#resolutions) - Resolve any issues or policy rule violations.
 
-The sections below explain each in further detail. Prefer to learn by example? See the [.ort.yml](../.ort.yml)
-for OSS Review Toolkit itself.
+The sections below explain each in further detail. Prefer to learn by example? See the [.ort.yml](../.ort.yml) for the
+OSS Review Toolkit itself.
 
 ## Excludes
 
 ### When to Use Excludes
 
-Excludes are used to define which OSS is distributed to third parties and which code is only used internally,
-e.g. for building, documenting or testing the code. 
+Excludes are used to define which OSS is distributed to third parties and which code is only used internally, e.g. for
+building, documenting or testing the code. 
 
 Exclusions apply to paths (files/directories) or scopes. Examples of currently supported exclusions:
 
@@ -25,8 +24,8 @@ Exclusions apply to paths (files/directories) or scopes. Examples of currently s
 
 ### Excludes Basics
 
-ORT's philosophy is to analyze and scan everything it can find to build a complete picture of a repository
-and its dependencies.
+ORT's philosophy is to analyze and scan everything it can find to build a complete picture of a repository and its
+dependencies.
 
 However, the users may not be interested in the results for components that are not included in their released
 artifacts, for example build files, documentation, examples or test code. To support such use cases, ORT provides a
@@ -38,8 +37,7 @@ Note that the excluded parts are analyzed and scanned, but are treated different
 * The excluded parts are grayed out.
 * The reason for the exclusion is shown next to the result.
 
-To be able to show why a part is excluded, each exclude must include an explanation.
-The explanation consists of:
+To be able to show why a part is excluded, each exclude must include an explanation. The explanation consists of:
 
 * `reason` -- must be selected from a predefined list of options.
 * `comment` -- free text that provides an optional explanation.
@@ -80,13 +78,12 @@ excludes:
 
 ### Excluding Scopes
 
-Many package managers support grouping of dependencies by their use. Such groups are called `scopes` in ORT.
-For example, Maven provides the scopes `compile`, `provided`, and `test`, while NPM scopes are `dependencies` and
+Many package managers support grouping of dependencies by their use. Such groups are called `scopes` in ORT. For
+example, Maven provides the scopes `compile`, `provided`, and `test`, while NPM scopes are `dependencies` and
 `devDependencies`.
 
-You can use regular expressions for `pattern` to match the scopes to exclude.
-This can be useful, for example, with Gradle, which creates a relatively large number
-of scopes (internally Gradle calls them `configurations`).
+You can use regular expressions for `pattern` to match the scopes to exclude. This can be useful, for example, with
+Gradle, which creates a relatively large number of scopes (internally Gradle calls them `configurations`).
 
 Scopes excludes always apply to all found projects in a scan.
 
@@ -105,8 +102,8 @@ The above example excludes all of the following scopes for all projects: `testAn
 Where the list of available options for scopes is defined in
 [ScopeExcludeReason.kt](../model/src/main/kotlin/config/ScopeExcludeReason.kt).
 
-See the examples below for typical scope excludes for the supported package managers.
-Note that you must verify that the scopes defined in the examples below match the scopes in your project.
+See the examples below for typical scope excludes for the supported package managers. Note that you must verify that the
+scopes defined in the examples below match the scopes in your project.
 
 * [bower.ort.yml](../examples/bower.ort.yml)
 * [bundler.ort.yml](../examples/bundler.ort.yml)
@@ -133,10 +130,9 @@ project. If you need to correct the license findings for a third-party dependenc
 
 ### Curating License Findings
 
-An `ort scan` result represents the detected licenses as a collection of license findings.
-A single `LicenseFinding` is represented as a tuple: `(license id, file path, start line, end line)`.
-Applying a `LicenseFindingCuration` changes the license-Id of any `LicenseFinding`
-or eliminates the `LicenseFinding` in case the license is set to `NONE`.
+An `ort scan` result represents the detected licenses as a collection of license findings. A single `LicenseFinding` is
+represented as a tuple: `(license id, file path, start line, end line)`. Applying a `LicenseFindingCuration` changes the
+license-Id of any `LicenseFinding` or eliminates the `LicenseFinding` in case the license is set to `NONE`.
 
 As an example, the following curation would replace similar findings of `GPL-2.0-only` with `Apache-2.0` in all `.cpp`
 files in the `src` directory:
@@ -162,30 +158,31 @@ The list of available options for `reason` are defined in
 ## Resolutions
 
 ### When to Use Resolutions
+
 Project-specific resolutions should be used if you are unable to solve an issue by other means.
 
-If a resolution is not project-specific than add it to [resolutions.yml](./config-file-resolutions-yml.md)
-so that it is applied to each scan.
+If a resolution is not project-specific than add it to [resolutions.yml](./config-file-resolutions-yml.md) so that it is
+applied to each scan.
 
 ### Resolution Basics
-Resolutions allow you to *resolve* issues or policy rule violations by marking them as acceptable.
-A resolution is applied to specific issues or violations via the regular expression specified
-in the `message` of a resolution.
 
-To be able to show why a resolution is acceptable, each resolution must include an explanation. 
-The explanation consists of:
+Resolutions allow you to *resolve* issues or policy rule violations by marking them as acceptable. A resolution is
+applied to specific issues or violations via the regular expression specified in the `message` of a resolution.
+
+To be able to show why a resolution is acceptable, each resolution must include an explanation. The explanation consists
+of:
 
 * `reason` -- an identifier selected from a predefined list of options. 
 * `comment` -- free text, providing an explanation and optionally a link to further information.
 
 ### Resolving Issues
 
-If the ORT results show issues, the best approach is usually to fix them and run the scan again.
-However, sometimes it is not possible, for example if an issue occurs in the license scan
-of a third-party dependency which cannot be fixed or updated.
+If the ORT results show issues, the best approach is usually to fix them and run the scan again. However, sometimes it
+is not possible, for example if an issue occurs in the license scan of a third-party dependency which cannot be fixed or
+updated.
 
-In such situations, you can *resolve* the issue in any future scan by adding a resolution
-to the `.ort.yml` to mark it as acceptable.
+In such situations, you can *resolve* the issue in any future scan by adding a resolution to the `.ort.yml` to mark it
+as acceptable.
 
 The code below shows the structure of an issue resolution in the `.ort.yml` file:
 
@@ -211,13 +208,12 @@ resolutions:
 
 ### Resolving Policy Rule Violations
 
-Resolutions should not be not used to resolve license policy rule violations as they do not change 
-the generated open source notices. 
-To resolve a license policy rule violation either add a [license finding curation](#curations)
-to the .ort.yml file if the finding is in your code repository or add a curation to the
+Resolutions should not be not used to resolve license policy rule violations as they do not change the generated open
+source notices. To resolve a license policy rule violation either add a [license finding curation](#curations) to the
+.ort.yml file if the finding is in your code repository or add a curation to the
 [curations.yml](config-file-curations-yml.md) if the violation occurs in a third-party dependency.
 
-The code below shows the structure of an policy rule violation resolution in the `.ort.yml` file:
+The code below shows the structure of a policy rule violation resolution in the `.ort.yml` file:
 
 ```yaml
 resolutions:
@@ -239,4 +235,3 @@ resolutions:
     reason: "LICENSE_ACQUIRED_EXCEPTION"
     comment: "Commercial Qt license for the project was purchased, for details see https://jira.example.com/issues/SOURCING-5678"
 ```
-

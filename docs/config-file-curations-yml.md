@@ -36,9 +36,8 @@ a license finding curation in the [.ort.yml](config-file-ort-yml.md#curations) f
 
 In order to discover the source code of the dependencies of a package, ORT relies on the package metadata. Often the
 metadata contains information on how to locate the source code, but not always. In many cases, the metadata of packages
-provides no VCS information, it points to outdated repositories or the repositories are not correctly tagged.
-Because it is not always possible to fix this information in upstream packages, ORT offers a curation mechanism for
-metadata.
+provides no VCS information, it points to outdated repositories or the repositories are not correctly tagged. Because it
+is not always possible to fix this information in upstream packages, ORT offers a curation mechanism for metadata.
 
 These curations can be configured in a YAML file that is passed to the _analyzer_. The data from the curations file
 amends the metadata provided by the packages themselves. This way, it is possible to fix broken VCS URLs or provide the
@@ -86,7 +85,8 @@ cli/build/install/ort/bin/ort analyze
 ```
 
 In the future we will integrate [ClearlyDefined](https://clearlydefined.io/) as a source for curated metadata. Until
-then, and also for curations for organization internal packages which are not publicly available, the curations file can be used.
+then, and also for curations for organization internal packages which are not publicly available, the curations file can
+be used.
 
 To test curations you can also pass the `curations.yml` file to the `--package-curations-file` option of the
 _evaluator_:
