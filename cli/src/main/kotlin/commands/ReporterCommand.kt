@@ -68,7 +68,7 @@ import org.ossreviewtoolkit.utils.storage.FileArchiver
 
 class ReporterCommand : CliktCommand(
     name = "report",
-    help = "Present Analyzer and Scanner results in various formats."
+    help = "Present Analyzer, Scanner and Evaluator results in various formats."
 ) {
     private val allReportersByName = Reporter.ALL.associateBy { it.reporterName.toUpperCase() }
 
