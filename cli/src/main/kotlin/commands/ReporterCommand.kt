@@ -149,7 +149,7 @@ class ReporterCommand : CliktCommand(
         ).convert { it.expandTilde() }
             .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
             .convert { PackageConfigurationOption.File(it.absoluteFile.normalize()) },
-        name = "Configuration Options",
+        name = OPTION_GROUP_CONFIGURATION,
     ).single()
 
     private val repositoryConfigurationFile by option(

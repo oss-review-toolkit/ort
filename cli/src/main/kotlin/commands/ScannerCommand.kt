@@ -66,7 +66,7 @@ class ScannerCommand : CliktCommand(name = "scan", help = "Run existing copyrigh
         ).convert { it.expandTilde() }
             .file(mustExist = true, canBeFile = true, canBeDir = true, mustBeWritable = false, mustBeReadable = true)
             .convert { it.absoluteFile.normalize() },
-        name = "Input Options"
+        name = OPTION_GROUP_INPUT
     ).single().required()
 
     private val outputDir by option(

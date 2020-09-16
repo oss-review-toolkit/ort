@@ -93,7 +93,7 @@ class EvaluatorCommand : CliktCommand(name = "evaluate", help = "Evaluate rules 
             help = "The name of a script resource on the classpath that contains rules. Must not be used together " +
                     "with '--rules-file'."
         ).convert { StringType(it) },
-        name = "Rule Options"
+        name = OPTION_GROUP_RULE
     ).single()
 
     private val licenseConfigurationFile by option(
@@ -121,7 +121,7 @@ class EvaluatorCommand : CliktCommand(name = "evaluate", help = "Evaluate rules 
         ).convert { it.expandTilde() }
             .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
             .convert { PackageConfigurationOption.File(it.absoluteFile.normalize()) },
-        name = "Configuration Options"
+        name = OPTION_GROUP_CONFIGURATION
     ).single()
 
     private val packageCurationsFile by option(

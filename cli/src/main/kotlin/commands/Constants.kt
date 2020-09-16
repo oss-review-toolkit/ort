@@ -19,12 +19,7 @@
 
 package org.ossreviewtoolkit.commands
 
-import com.github.ajalt.clikt.core.GroupableOption
-
-fun <T : GroupableOption> T.group(name: String): T = apply { groupName = name }
-
-fun <T : GroupableOption> T.inputGroup(): T = group(OPTION_GROUP_INPUT)
-
-fun <T : GroupableOption> T.outputGroup(): T = group(OPTION_GROUP_OUTPUT)
-
-fun <T : GroupableOption> T.configurationGroup(): T = group(OPTION_GROUP_CONFIGURATION)
+const val OPTION_GROUP_CONFIGURATION = "Configuration Options"
+const val OPTION_GROUP_INPUT = "Input Options"
+const val OPTION_GROUP_OUTPUT = "Output Options"
+const val OPTION_GROUP_RULE = "Rule Options"
