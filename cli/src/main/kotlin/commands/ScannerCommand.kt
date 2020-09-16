@@ -56,13 +56,13 @@ class ScannerCommand : CliktCommand(name = "scan", help = "Run existing copyrigh
         option(
             "--ort-file", "-i",
             help = "An ORT result file with an analyzer result to use. Source code is downloaded automatically if " +
-                    "needed. This parameter and '--input-path' are mutually exclusive."
+                    "needed. Must not be used together with '--input-path'."
         ).convert { it.expandTilde() }
             .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
             .convert { it.absoluteFile.normalize() },
         option(
             "--input-path", "-p",
-            help = "An input directory or file to scan. This parameter and '--ort-file' are mutually exclusive."
+            help = "An input directory or file to scan. Must not be used together with '--ort-file'."
         ).convert { it.expandTilde() }
             .file(mustExist = true, canBeFile = true, canBeDir = true, mustBeWritable = false, mustBeReadable = true)
             .convert { it.absoluteFile.normalize() },
