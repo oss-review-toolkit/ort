@@ -19,8 +19,6 @@
 
 package org.ossreviewtoolkit.scanner.scanners
 
-import com.fasterxml.jackson.databind.JsonNode
-
 import java.io.File
 import java.io.IOException
 import java.net.HttpURLConnection
@@ -36,31 +34,22 @@ import okio.sink
 
 import org.apache.logging.log4j.Level
 
-import org.ossreviewtoolkit.model.CopyrightFinding
-import org.ossreviewtoolkit.model.EMPTY_JSON_NODE
-import org.ossreviewtoolkit.model.LicenseFinding
 import org.ossreviewtoolkit.model.OrtIssue
 import org.ossreviewtoolkit.model.Provenance
 import org.ossreviewtoolkit.model.ScanResult
-import org.ossreviewtoolkit.model.ScanSummary
 import org.ossreviewtoolkit.model.ScannerDetails
-import org.ossreviewtoolkit.model.TextLocation
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
-import org.ossreviewtoolkit.model.jsonMapper
 import org.ossreviewtoolkit.scanner.AbstractScannerFactory
 import org.ossreviewtoolkit.scanner.LocalScanner
 import org.ossreviewtoolkit.scanner.ScanException
 import org.ossreviewtoolkit.scanner.ScanResultsStorage
 import org.ossreviewtoolkit.spdx.NON_LICENSE_FILENAMES
-import org.ossreviewtoolkit.spdx.SpdxConstants
-import org.ossreviewtoolkit.spdx.calculatePackageVerificationCode
 import org.ossreviewtoolkit.utils.ORT_NAME
 import org.ossreviewtoolkit.utils.ORT_REPO_CONFIG_FILENAME
 import org.ossreviewtoolkit.utils.OkHttpClientHelper
 import org.ossreviewtoolkit.utils.Os
 import org.ossreviewtoolkit.utils.ProcessCapture
 import org.ossreviewtoolkit.utils.log
-import org.ossreviewtoolkit.utils.textValueOrEmpty
 import org.ossreviewtoolkit.utils.unpack
 
 /**
@@ -83,11 +72,13 @@ class ScanCode(
     name: String,
     config: ScannerConfiguration
 ) : LocalScanner(name, config) {
-    class Factory : AbstractScannerFactory<ScanCode>("ScanCode") {
+    class Factory : AbstractScannerFactory<ScanCode>(SCANNER_NAME) {
         override fun create(config: ScannerConfiguration) = ScanCode(scannerName, config)
     }
 
     companion object {
+        const val SCANNER_NAME = "ScanCode"
+
         private const val OUTPUT_FORMAT = "json-pp"
         private const val TIMEOUT = 300
 
@@ -133,12 +124,6 @@ class ScanCode(
             "(ERROR: for scanner: (?<scanner>\\w+):\n)?" +
                     "ERROR: Unknown error:\n.+\n(?<error>\\w+Error)(:|\n)(?<message>.*) \\(File: (?<file>.+)\\)",
             Pattern.DOTALL
-        )
-
-        private val UNKNOWN_LICENSE_KEYS = listOf(
-            "free-unknown",
-            "unknown",
-            "unknown-license-reference"
         )
 
         private val TIMEOUT_ERROR_REGEX = Pattern.compile(
@@ -336,125 +321,5 @@ class ScanCode(
     }
 
     override fun getRawResult(resultsFile: File) =
-        if (resultsFile.isFile && resultsFile.length() > 0L) {
-            jsonMapper.readTree(resultsFile)
-        } else {
-            EMPTY_JSON_NODE
-        }
-
-    private fun getFileCount(result: JsonNode): Int {
-        // ScanCode 2.9.8 and above nest the files count in an extra header.
-        result["headers"]?.forEach { header ->
-            header["extra_data"]?.get("files_count")?.let {
-                return it.intValue()
-            }
-        }
-
-        // ScanCode 2.9.7 and below contain the files count at the top level.
-        return result["files_count"]?.intValue() ?: 0
-    }
-
-    internal fun generateSummary(startTime: Instant, endTime: Instant, scanPath: File, result: JsonNode) =
-        ScanSummary(
-            startTime = startTime,
-            endTime = endTime,
-            fileCount = getFileCount(result),
-            packageVerificationCode = calculatePackageVerificationCode(scanPath),
-            licenseFindings = getLicenseFindings(result).toSortedSet(),
-            copyrightFindings = getCopyrightFindings(result).toSortedSet(),
-            issues = getIssues(result)
-        )
-
-    /**
-     * Get the SPDX license id (or a fallback) for a license finding.
-     */
-    private fun getLicenseId(license: JsonNode): String {
-        // The fact that ScanCode 3.0.2 uses an empty string here for licenses unknown to SPDX seems to have been a bug
-        // in ScanCode, and it should have always been using null instead.
-        var name = license["spdx_license_key"].textValueOrEmpty()
-
-        if (name.isEmpty()) {
-            val key = license["key"].textValue()
-            name = if (key in UNKNOWN_LICENSE_KEYS) {
-                SpdxConstants.NOASSERTION
-            } else {
-                // Starting with version 2.9.8, ScanCode uses "scancode" as a LicenseRef namespace, but only for SPDX
-                // output formats, see https://github.com/nexB/scancode-toolkit/pull/1307.
-                "LicenseRef-${scannerName.toLowerCase()}-$key"
-            }
-        }
-
-        return name
-    }
-
-    private fun getIssues(result: JsonNode): List<OrtIssue> =
-        result["files"]?.flatMap { file ->
-            val path = file["path"].textValue()
-            file["scan_errors"].map {
-                OrtIssue(
-                    source = scannerName,
-                    message = "${it.textValue()} (File: $path)"
-                )
-            }
-        }.orEmpty()
-
-    /**
-     * Get the license findings from the given [result].
-     */
-    private fun getLicenseFindings(result: JsonNode): List<LicenseFinding> {
-        val licenseFindings = mutableListOf<LicenseFinding>()
-
-        val files = result["files"]?.asSequence().orEmpty()
-        files.flatMapTo(licenseFindings) { file ->
-            val licenses = file["licenses"]?.asSequence().orEmpty()
-            licenses.map {
-                LicenseFinding(
-                    license = getLicenseId(it),
-                    location = TextLocation(
-                        // The path is already relative as we run ScanCode with "--strip-root".
-                        path = file["path"].textValue(),
-                        startLine = it["start_line"].intValue(),
-                        endLine = it["end_line"].intValue()
-                    )
-                )
-            }
-        }
-
-        return licenseFindings
-    }
-
-    /**
-     * Get the copyright findings from the given [result].
-     */
-    private fun getCopyrightFindings(result: JsonNode): List<CopyrightFinding> {
-        val copyrightFindings = mutableListOf<CopyrightFinding>()
-
-        val files = result["files"]?.asSequence().orEmpty()
-        files.flatMapTo(copyrightFindings) { file ->
-            val path = file["path"].textValue()
-
-            val copyrights = file["copyrights"]?.asSequence().orEmpty()
-            copyrights.flatMap { copyright ->
-                val startLine = copyright["start_line"].intValue()
-                val endLine = copyright["end_line"].intValue()
-
-                // While ScanCode 2.9.2 was still using "statements", version 2.9.7 is using "value".
-                val statements = (copyright["statements"]?.asSequence() ?: sequenceOf(copyright["value"]))
-
-                statements.map { statement ->
-                    CopyrightFinding(
-                        statement = statement.textValue(),
-                        location = TextLocation(
-                            // The path is already relative as we run ScanCode with "--strip-root".
-                            path = path,
-                            startLine = startLine,
-                            endLine = endLine
-                        )
-                    )
-                }
-            }
-        }
-
-        return copyrightFindings
-    }
+        parseScanCodeResult(resultsFile)
 }
