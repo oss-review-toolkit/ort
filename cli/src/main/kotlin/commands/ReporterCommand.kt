@@ -92,7 +92,7 @@ class ReporterCommand : CliktCommand(
 
     private val reportFormats by option(
         "--report-formats", "-f",
-        help = "The list of report formats that will be generated."
+        help = "The list of report formats that is generated."
     ).convert { name ->
         allReportersByName[name.toUpperCase()]
             ?: throw BadParameterValue("Report formats must be one or more of ${allReportersByName.keys}.")
@@ -152,8 +152,8 @@ class ReporterCommand : CliktCommand(
 
     private val repositoryConfigurationFile by option(
         "--repository-configuration-file",
-        help = "A file containing the repository configuration. If set the '$ORT_REPO_CONFIG_FILENAME' overrides the " +
-                "repository configuration contained in the ort result from the input file."
+        help = "A file containing the repository configuration. If set, the '$ORT_REPO_CONFIG_FILENAME' overrides " +
+                "the repository configuration contained in the ort result from the input file."
     ).convert { it.expandTilde() }
         .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
         .convert { it.absoluteFile.normalize() }
