@@ -85,9 +85,19 @@ cli/build/install/ort/bin/ort analyze
   --package-curations-file $ORT_CONFIG_DIR/curations.yml
 ```
 
-In the future we will integrate [ClearlyDefined](https://clearlydefined.io/) as a source for curated metadata. Until
-then, and also for curations for organization internal packages which are not publicly available, the curations file can
-be used.
+ORT can use [ClearlyDefined](https://clearlydefined.io/) as a source for curated metadata. The preferred workflow is to
+use curations from ClearlyDefined, and to submit curations there. However, this is not always possible, for example in
+case of curations for organization internal packages. To support this workflow, ClearlyDefined can be enabled as the
+single source for curations or in combination with a `curations.yml` with the `--clearly-defined-curations` option of
+the analyzer:  
+
+```
+cli/build/install/ort/bin/ort analyze
+  -i [source-code-of-project-dir]
+  -o [analyzer-output-dir]
+  --package-curations-file $ORT_CONFIG_DIR/curations.yml
+  --clearly-defined-curations
+```
 
 To test curations you can also pass the `curations.yml` file to the `--package-curations-file` option of the
 _evaluator_:
