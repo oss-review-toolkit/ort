@@ -178,6 +178,15 @@ operational.
 | ------ | ----- | ---------------- | ------------- |
 | HOCON | Global | `$ORT_CONFIG_DIR/ort.conf` | Empty ([built-in](./model/src/main/resources/default.conf)) |
 
+[Copyright garbage file](./docs/config-file-copyright-garbage-yml.md)
+
+A list of copyright statements that are considered garbage, for example statements that were incorrectly classified as
+copyrights by the scanner.
+
+| Format | Scope | Default location | Default value |
+| ------ | ----- | ---------------- | ------------- |
+| YAML / JSON | Global | `$ORT_CONFIG_DIR/copyright-garbage.yml` | Empty (n/a) |
+
 [Curations file](./docs/config-file-curations-yml.md)
 
 A file to correct invalid or missing package metadata, and to set the concluded license for packages.
@@ -185,6 +194,22 @@ A file to correct invalid or missing package metadata, and to set the concluded 
 | Format | Scope | Default location | Default value |
 | ------ | ----- | ---------------- | ------------- |
 | YAML / JSON | Global | `$ORT_CONFIG_DIR/curations.yml` | Empty (n/a) |
+
+[How to fix text provider script](./docs/how-to-fix-text-provider-kts.md)
+
+A Kotlin script that enables the injection of how-to-fix texts in markdown format for ORT issues into the reports.
+
+| Format | Scope | Default location | Default value |
+| ------ | ----- | ---------------- | ------------- |
+| Kotlin script | Global | `$ORT_CONFIG_DIR/how-to-fix-text-provider.kts` | Empty (n/a) |
+
+[License configuration file](./docs/config-file-licenses-yml.md)
+
+A file that contains user-defined categorization of licenses.
+
+| Format | Scope | Default location | Default value |
+| ------ | ----- | ---------------- | ------------- |
+| YAML / JSON | Global | `$ORT_CONFIG_DIR/licenses.yml` | Empty (n/a) |
 
 [Resolution file](./docs/config-file-resolutions-yml.md)
 
