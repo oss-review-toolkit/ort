@@ -11,7 +11,8 @@ provides a way to clean up such errors across all scans.
 
 ## Command Line
 
-To use the `copyright-garbage.yml` file pass it to the `--copyright-garbage-file` option of the _reporter_:
+To use the `copyright-garbage.yml` file put it to `$ORT_CONFIG_DIR/copyright-garbage.yml` or pass it to the
+`--copyright-garbage-file` option of the _reporter_:
 
 ```bash
 cli/build/install/ort/bin/ort report

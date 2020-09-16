@@ -13,7 +13,8 @@ Licenses can be assigned to license sets like "permissive" or "public domain" wh
 
 ## Command Line
 
-To use the `licenses.yml` file pass it to the `--license-configuration-file` option of the _evaluator_:
+To use the `licenses.yml` file put it to `$ORT_CONFIG_DIR/licenses.yml` or pass it to the `--license-configuration-file`
+option of the _evaluator_:
 
 ```bash
 cli/build/install/ort/bin/ort evaluate

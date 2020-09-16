@@ -8,8 +8,8 @@ to create your custom how-to-fix messages in the generated reports.
 
 ## Command Line
 
-To use the `how-to-fix-text-provider.kts` file and pass it to the `--how-to-fix-text-provider-script` option of the
-_Reporter_:
+To use the `how-to-fix-text-provider.kts` file put it to `$ORT_CONFIG_DIR/how-to-fix-text-provider.kts` or pass it to
+the `--how-to-fix-text-provider-script` option of the _Reporter_:
 
 ```bash
 cli/build/install/ort/bin/ort report
