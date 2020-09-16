@@ -92,7 +92,7 @@ class ReporterCommand : CliktCommand(
 
     private val reportFormats by option(
         "--report-formats", "-f",
-        help = "The list of report formats that is generated."
+        help = "The list of report formats that is generated, any of ${Reporter.ALL.map { it.reporterName }}."
     ).convert { name ->
         allReportersByName[name.toUpperCase()]
             ?: throw BadParameterValue("Report formats must be one or more of ${allReportersByName.keys}.")
