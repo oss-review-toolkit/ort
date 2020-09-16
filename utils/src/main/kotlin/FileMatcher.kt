@@ -23,6 +23,9 @@ import java.nio.file.FileSystems
 import java.nio.file.InvalidPathException
 import java.nio.file.Paths
 
+import org.ossreviewtoolkit.utils.LicenseFilenamePatterns.LICENSE_FILENAMES
+import org.ossreviewtoolkit.utils.LicenseFilenamePatterns.ROOT_LICENSE_FILENAMES
+
 /**
  * A class to determine whether a path is matched by any of the given globs.
  */
