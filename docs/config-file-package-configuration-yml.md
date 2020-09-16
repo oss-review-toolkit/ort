@@ -1,18 +1,23 @@
 # The Package Configuration File (Experimental)
 
-A package configuration file allows you to define path excludes and license finding curations for a specific package (dependency) and 
-provenance. Conceptually, the file is similar to [.ort.yml](https://github.com/oss-review-toolkit/ort/blob/master/docs/config-file-ort-yml.md), but it is used only for packages included via a package manager as project dependencies, and not for the project's own source code repository to be scanned.
+A package configuration file allows you to define path excludes and license finding curations for a specific package
+(dependency) and provenance. Conceptually, the file is similar to
+[.ort.yml](https://github.com/oss-review-toolkit/ort/blob/master/docs/config-file-ort-yml.md), but it is used only for
+packages included via a package manager as project dependencies, and not for the project's own source code repository to
+be scanned.
 
 ### When To Use
 Use a package configuration file to:
 
--  mark files and directories as not included in released artifacts -- use it to make clear that license findings in documentation or tests in a package sources do not apply to the release (binary) artifact which is a dependency in your project.
--  overwrite scanner findings to correct identified licenses in a dependency for a specific file(s).
+- mark files and directories as not included in released artifacts -- use it to make clear that license findings in
+  documentation or tests in a package sources do not apply to the release (binary) artifact which is a dependency in
+  your project.
+- overwrite scanner findings to correct identified licenses in a dependency for a specific file(s).
 
 # Package Configuration File Basics
 
-Each package configuration applies exactly to one *package id* and *provenance* which must be specified. The *provenance*
-can be specified as either a *source artifact* or a *VCS location and revision*. 
+Each package configuration applies exactly to one *package id* and *provenance* which must be specified. The
+*provenance* can be specified as either a *source artifact* or a *VCS location and revision*. 
 
 Here is an example of a package configuration for `ansi-styles 4.2.1`, when the source artifact is (to be) scanned:
 
@@ -33,10 +38,12 @@ If the source repository is (to be) scanned, then use the package configuration 
 
 ## Defining Path Excludes and License Finding Curations
 
-Path excludes define which code is not part of the distributed release artifact(s) for a package, for example code found in the source repository but only used for building, documenting or testing the code. License finding curations are used to fix incorrect scan results, for example if a wrong license was detected, or if a finding is a false positive.
+Path excludes define which code is not part of the distributed release artifact(s) for a package, for example code found
+in the source repository but only used for building, documenting or testing the code. License finding curations are used
+to fix incorrect scan results, for example if a wrong license was detected, or if a finding is a false positive.
 
-The entries for path excludes and license finding curations have the same syntax and semantics as in the `ort.yml` file, see
-[excluding paths](config-file-ort-yml.md#excluding-paths) and
+The entries for path excludes and license finding curations have the same syntax and semantics as in the `ort.yml` file,
+see [excluding paths](config-file-ort-yml.md#excluding-paths) and
 [curating license findings](config-file-ort-yml.md#curating-license-findings) for details.
 
 ```yaml
@@ -67,7 +74,8 @@ Note that in both of the above options only one package configuration can exist 
 
 ### Using a Package Configuration Directory
 
-To use a directory with configuration files for each *package id*, pass it to the `--package-configuration-dir` option of the _evaluator_:
+To use a directory with configuration files for each *package id*, pass it to the `--package-configuration-dir` option
+of the _evaluator_:
 
 ```bash
 cli/build/install/ort/bin/ort evaluate
@@ -93,7 +101,8 @@ cli/build/install/ort/bin/ort report
  
 ### Using a Single Package Configuration File
 
-To use a single package configuration `.yml` file, pass it to the `--package-configuration-file` option of the _evaluator_:
+To use a single package configuration `.yml` file, pass it to the `--package-configuration-file` option of the
+_evaluator_:
 
 ```bash
 cli/build/install/ort/bin/ort evaluate

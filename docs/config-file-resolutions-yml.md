@@ -1,38 +1,39 @@
 # The `resolutions.yml` file
 
-Resolutions allow you to *resolve* issues or policy rule violations
-by providing a reason why they are acceptable and can be ignored.
+Resolutions allow you to *resolve* issues or policy rule violations by providing a reason why they are acceptable and
+can be ignored.
 
 You can use the [resolutions.yml example](../examples/resolutions.yml) as the base configuration file for your scans.
 
 ### When to Use Resolutions
+
 Resolutions should be used when it is impossible to solve an issue or a fix is planned for a later time.
 
-The sections below explain how to create resolutions in the `resolutions.yml` file
-which, if passed as an argument to the _reporter_, applies to each scan made. If a resolution is project-specific,
-then add it in the [.ort.yml](config-file-ort-yml.md) file for the project.
+The sections below explain how to create resolutions in the `resolutions.yml` file which, if passed as an argument to
+the _reporter_, applies to each scan made. If a resolution is project-specific, then add it in the
+[.ort.yml](config-file-ort-yml.md) file for the project.
 
 Resolutions are only taken into account by the _reporter_, while the _analyzer_ and `scanner` ignore them.
 
 ## Resolution Basics
 
-A resolution is applied to specific issues or violations via the regular expression specified
-in the `message` of a resolution.
+A resolution is applied to specific issues or violations via the regular expression specified in the `message` of a
+resolution.
 
-To be able to show why a resolution is acceptable, each resolution must include an explanation. 
-The explanation consists of:
+To be able to show why a resolution is acceptable, each resolution must include an explanation. The explanation consists
+of:
 
 * `reason` -- an identifier selected from a predefined list of options. 
 * `comment` -- free text, providing an explanation and optionally a link to further information.
 
 ## Resolving Issues
 
-If the ORT results contain issues, the best approach is usually to fix them and run the scan again. 
-However, sometimes it is not possible, for example if an issue occurs in the license scan
-of a third-party dependency which cannot be fixed or updated.
+If the ORT results contain issues, the best approach is usually to fix them and run the scan again. However, sometimes
+it is not possible, for example if an issue occurs in the license scan of a third-party dependency which cannot be fixed
+or updated.
 
-In such situations, you can *resolve* the issue in any future scan by adding a resolution
-to the `resolutions.yml` to mark it as acceptable.
+In such situations, you can *resolve* the issue in any future scan by adding a resolution to the `resolutions.yml` to
+mark it as acceptable.
 
 The code below shows the structure of an issue resolution in the `resolutions.yml` file:
 
@@ -43,7 +44,7 @@ issues:
   comment: "A comment further explaining why the reason above is acceptable."
 ```
 Where the list of available options for `reason` is defined in
-[IssueResolutionReason.kt](../model/src/main/kotlin/config/IssueResolutionReason.kt)
+[IssueResolutionReason.kt](../model/src/main/kotlin/config/IssueResolutionReason.kt).
 
 For example, to ignore an issue related to a build tool problem, your `resolutions.yml` could include:
 
@@ -56,10 +57,9 @@ issues:
 
 ## Resolving Policy Rule Violations
 
-Resolutions should not be used to resolve license policy rule violations as they do not
-the change generated open source notices.
-To resolve a license policy rule violation either add a local `license_findings` curation
-to the [.ort.yml file](./config-file-ort-yml.md) if the finding is in your code repository or add a curation to the
+Resolutions should not be used to resolve license policy rule violations as they do not the change generated open source
+notices. To resolve a license policy rule violation either add a local `license_findings` curation to the
+[.ort.yml file](./config-file-ort-yml.md) if the finding is in your code repository or add a curation to the
 [curations.yml](config-file-curations-yml.md) if the violation occurs in a third-party dependency.
 
 The code below shows the structure of a policy rule violation resolution in the `resolutions.yml`file:

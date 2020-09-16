@@ -109,8 +109,8 @@ information about each dependency. The scope names come from the package manager
 Note that the `analyzer-result.yml` is supposed to capture all known information about a project, which can then be
 "filtered" in later steps. For example, scopes which are not relevant for the distribution will still be listed,
 but can be configured to get excluded so that they e.g. do not get downloaded and scanned by the _scanner_ step.
-To specify which scopes should be excluded, add an `.ort.yml` configuration file to the input directory of the _analyzer_. 
-For more details see [Configuration File](config-file-ort-yml.md).
+To specify which scopes should be excluded, add an `.ort.yml` configuration file to the input directory of the
+_analyzer_. For more details see [Configuration File](config-file-ort-yml.md).
 
 For this guide, `[mime-types-dir]/.ort.yml` can be created with following content:
 
@@ -243,8 +243,8 @@ To scan the source code of `mime-types` and its dependencies the source code of 
 needs to be downloaded. The _downloader_ tool could be used for this, but it is also integrated in the `scanner` tool,
 so the scanner will automatically download the source code if the required VCS metadata could be obtained.
 
-Note that if _downloader_ is unable to download the source code due to say a missing
-source code location in the package metadata then you can use curations as a workaround.
+Note that if _downloader_ is unable to download the source code due to say a missing source code location in the package
+metadata then you can use curations as a workaround.
 
 To use curations, create a [curations.yml](config-file-curations-yml.md)
 and pass it to the `--package-curations-file` option of the _analyzer_:
@@ -305,7 +305,8 @@ on a bigger project you will see that `ScanCode` often finds more licenses than 
 The evaluator can apply a set of rules against the scan result created above.
 ORT provides examples for the policy rules file [(rules.kts)](../examples/rules.kts),
 [user-defined categorization of licenses (licenses.yml)](../examples/licenses.yml) and
-[user-defined package curations (curations.yml)](../examples/curations.yml) that can be used for testing the _evaluator_. 
+[user-defined package curations (curations.yml)](../examples/curations.yml) that can be used for testing the
+_evaluator_. 
 
 To run the example rules use:
 
@@ -318,16 +319,17 @@ cli/build/install/ort/bin/ort evaluate
   -o [evaluator-output-dir]/mime-types
 ```
 
-See the [curations.yml documentation](config-file-curations-yml.md) to learn more about using curations to correct invalid or missing package metadata
-and the [licenses.yml documentation](config-file-licenses-yml.md) on how you can classify licenses to simplify writing the policy rules.
+See the [curations.yml documentation](config-file-curations-yml.md) to learn more about using curations to correct
+invalid or missing package metadata and the [licenses.yml documentation](config-file-licenses-yml.md) on how you can
+classify licenses to simplify writing the policy rules.
 
 It is possible to write your own evaluator rules as a Kotlin script and pass it to the _evaluator_ using `--rules-file`.
 Note that detailed documentation for writing custom rules is not yet available.
 
 ## 7. Generate a report
 
-The `evaluation-result.yml` file can now be used as input for the reporter to generate human-readable reports
-and open source notices. 
+The `evaluation-result.yml` file can now be used as input for the reporter to generate human-readable reports and open
+source notices. 
 
 For example, to generate a static HTML report, WebApp report and an open source notice by package, use:
 
@@ -341,7 +343,7 @@ Created 'WebApp' report: [reporter-output-dir]/scan-report-web-app.html
 Created 'NoticeByPackage' report: [reporter-output-dir]/NOTICE_BY_PACKAGE
 ```
 
-If you do not want to run the _evaluator_ you can pass the _scanner_ result e.g. `[scanner-output-path/scan-result.yml`
+If you do not want to run the _evaluator_ you can pass the _scanner_ result e.g. `[scanner-output-dir]/scan-result.yml`
 to the `reporter` instead. To learn how you can customize generated notices see
 [notice-templates.md](notice-templates.md). To learn how to customize the how-to-fix texts for scanner and analyzer
 issues see [how-to-fix-text-provider-kts.md](how-to-fix-text-provider-kts.md).
@@ -354,11 +356,11 @@ repositories are not correctly tagged.
 
 ORT provides a variety of mechanisms to fix a variety of issues, for details see:
 
-* [The .ort.yml file](config-file-ort-yml.md) - project-specific license finding curations, exclusions
-  and resolutions to address issues found within a project's code repository.
-* [The package configuration file](config-file-package-configuration-yml.md) - package (dependency) and provenance specific license
-  finding curations and exclusions to address issues found within a scan result for a package.
-* [The curations.yml file](config-file-curations-yml.md) - curations correct invalid or missing package metadata
-  and set the concluded license for packages.
-* [The resolutions.yml file](config-file-resolutions-yml.md) - resolutions allow *resolving* any issues
-  or policy rule violations by providing a reason why they are acceptable and can be ignored.
+* [The .ort.yml file](config-file-ort-yml.md) - project-specific license finding curations, exclusions and resolutions
+  to address issues found within a project's code repository.
+* [The package configuration file](config-file-package-configuration-yml.md) - package (dependency) and provenance
+  specific license finding curations and exclusions to address issues found within a scan result for a package.
+* [The curations.yml file](config-file-curations-yml.md) - curations correct invalid or missing package metadata and set
+  the concluded license for packages.
+* [The resolutions.yml file](config-file-resolutions-yml.md) - resolutions allow *resolving* any issues or policy rule
+  violations by providing a reason why they are acceptable and can be ignored.

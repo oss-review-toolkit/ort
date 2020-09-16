@@ -6,8 +6,8 @@ You can use the [copyright-garbage.yml example](../examples/copyright-garbage.ym
 
 ### When to Use
 
-No scanner is perfect and many detect code statements or binary code as copyright holders,
-`copyright-garbage.yml` provides a way to clean up such errors across all scans.
+No scanner is perfect and many detect code statements or binary code as copyright holders, `copyright-garbage.yml`
+provides a way to clean up such errors across all scans.
 
 ## Command Line
 
