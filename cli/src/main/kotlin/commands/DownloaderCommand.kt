@@ -69,7 +69,7 @@ class DownloaderCommand : CliktCommand(name = "download", help = "Fetch source c
             "--project-url",
             help = "A VCS or archive URL of a project to download. Must not be used together with '--ort-file'."
         ).convert { StringType(it) },
-        name = "Input Options"
+        name = OPTION_GROUP_INPUT
     ).single().required()
 
     private val projectNameOption by option(
