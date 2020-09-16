@@ -19,6 +19,8 @@
 
 package org.ossreviewtoolkit.utils
 
+import java.io.File
+
 private fun List<String>.generateCapitalizationVariants() = flatMap { listOf(it, it.toUpperCase(), it.capitalize()) }
 
 object LicenseFilenamePatterns {
@@ -44,4 +46,65 @@ object LicenseFilenamePatterns {
     val ROOT_LICENSE_FILENAMES = listOf(
         "readme*"
     ).generateCapitalizationVariants()
+
+    /**
+     * Return glob patterns which match all files which may contain license information residing recursively within the
+     * given absolute [directory] or in any of its ancestor directories.
+     */
+    fun getLicenseFileGlobsForDirectory(directory: String): List<String> =
+        getFileGlobsForDirectoryAndAncestors(directory, LICENSE_FILENAMES + ROOT_LICENSE_FILENAMES)
+
+    /**
+     * Return recursively all ancestor directories of the given absolute [directory].
+     */
+    private fun getAllAncestorDirectories(directory: String): List<String> {
+        val result = mutableListOf<String>()
+
+        var ancestorDir = File(directory).parentFile
+        while (ancestorDir != null) {
+            result.add(ancestorDir.invariantSeparatorsPath)
+            ancestorDir = ancestorDir.parentFile
+        }
+
+        return result
+    }
+
+    /**
+     * Return a glob pattern which matches files in [directory], in any ancestor directory of [directory] and
+     * [optionally][matchSubDirs] recursively in any sub-directory of directory, if the filename matches the
+     * [filenamePattern].
+     */
+    internal fun getFileGlobForDirectory(
+        directory: String,
+        filenamePattern: String,
+        matchSubDirs: Boolean
+    ): String {
+        val separator = "/".takeIf { !directory.endsWith("/") }.orEmpty()
+        val globStar = "**/".takeIf { matchSubDirs }.orEmpty()
+
+        val glob = "$directory$separator$globStar$filenamePattern"
+
+        return if (glob.startsWith("/**/")) {
+            // Simplify "/**/SUFFIX" to "**/SUFFIX":
+            glob.substring(1)
+        } else {
+            glob
+        }
+    }
+
+    /**
+     * Return glob patterns which match files in [directory], in any ancestor directory of [directory] recursively
+     * and in any sub-directory of directory, if the filename matches any of the [filenamePatterns].
+     */
+    fun getFileGlobsForDirectoryAndAncestors(directory: String, filenamePatterns: List<String>): List<String> {
+        val patternsForDir = filenamePatterns.map {
+            getFileGlobForDirectory(File(directory).invariantSeparatorsPath, it, true)
+        }
+
+        val patternsForAncestorDirs = getAllAncestorDirectories(directory).flatMap { dir ->
+            filenamePatterns.map { getFileGlobForDirectory(dir, it, false) }
+        }
+
+        return (patternsForDir + patternsForAncestorDirs).sorted()
+    }
 }
