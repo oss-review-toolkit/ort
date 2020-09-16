@@ -19,7 +19,96 @@
 
 package org.ossreviewtoolkit.model.utils
 
+import org.ossreviewtoolkit.clearlydefined.ClearlyDefinedService.Coordinates
+import org.ossreviewtoolkit.clearlydefined.ClearlyDefinedService.SourceLocation
+import org.ossreviewtoolkit.clearlydefined.ComponentType
+import org.ossreviewtoolkit.clearlydefined.Provider
+import org.ossreviewtoolkit.model.Identifier
+import org.ossreviewtoolkit.model.RemoteArtifact
 import org.ossreviewtoolkit.model.TextLocation
+import org.ossreviewtoolkit.model.VcsInfoCurationData
 
 internal fun TextLocation.prependPath(prefix: String): String =
     if (prefix.isBlank()) path else "${prefix.removeSuffix("/")}/$path"
+
+/**
+ * Map an [Identifier] to a ClearlyDefined [ComponentType] and [Provider]. Note that an Identifier's type in ORT
+ * currently implies a default provider.
+ */
+fun Identifier.toClearlyDefinedTypeAndProvider(): Pair<ComponentType, Provider> =
+    when (type) {
+        "Bower" -> ComponentType.GIT to Provider.GITHUB
+        "Bundler" -> ComponentType.GEM to Provider.RUBYGEMS
+        "Cargo" -> ComponentType.CRATE to Provider.CRATES_IO
+        "CocoaPods" -> ComponentType.POD to Provider.COCOAPODS
+        "DotNet", "NuGet" -> ComponentType.NUGET to Provider.NUGET
+        "GoDep", "GoMod" -> ComponentType.GIT to Provider.GITHUB
+        "Maven" -> ComponentType.MAVEN to Provider.MAVEN_CENTRAL
+        "NPM" -> ComponentType.NPM to Provider.NPM_JS
+        "PhpComposer" -> ComponentType.COMPOSER to Provider.PACKAGIST
+        "PyPI" -> ComponentType.PYPI to Provider.PYPI
+        "Pub" -> ComponentType.GIT to Provider.GITHUB
+        else -> throw IllegalArgumentException("Unknown mapping of ORT type '$type' to ClearlyDefined.")
+    }
+
+/**
+ * Map an ORT [Identifier] to ClearlyDefined [Coordinates].
+ */
+fun Identifier.toClearlyDefinedCoordinates(): Coordinates {
+    val (type, provider) = toClearlyDefinedTypeAndProvider()
+
+    return Coordinates(
+        type = type,
+        provider = provider,
+        namespace = namespace.takeUnless { it.isEmpty() },
+        name = name,
+        revision = version.takeUnless { it.isEmpty() }
+    )
+}
+
+/** Regular expression to match VCS URLs supported by ClearlyDefined. */
+private val REG_GIT_URL = Regex(".+://github.com/(.+)/(.+).git")
+
+/**
+ * Create a ClearlyDefined [SourceLocation] from an [Identifier] preferably a [VcsInfoCurationData], but eventually fall
+ * back to a [RemoteArtifact], or return null if neither is specified.
+ */
+fun Identifier.toClearlyDefinedSourceLocation(
+    vcs: VcsInfoCurationData?,
+    sourceArtifact: RemoteArtifact?
+): SourceLocation? {
+    val vcsUrl = vcs?.url
+    val vcsRevision = vcs?.resolvedRevision
+    val matchGroups = vcsUrl?.let { REG_GIT_URL.matchEntire(it)?.groupValues }
+
+    return when {
+        // GitHub is the only VCS provider supported by ClearlyDefined for now.
+        // TODO: Find out how to handle VCS curations without a revision.
+        vcsUrl != null && matchGroups != null && vcsRevision != null -> {
+            SourceLocation(
+                name = matchGroups[2],
+                namespace = matchGroups[1],
+                path = vcs.path,
+                provider = Provider.GITHUB,
+                revision = vcsRevision,
+                type = ComponentType.GIT,
+                url = vcsUrl
+            )
+        }
+
+        sourceArtifact != null -> {
+            val (_, provider) = this.toClearlyDefinedTypeAndProvider()
+
+            SourceLocation(
+                name = name,
+                namespace = namespace.takeUnless { it.isEmpty() },
+                provider = provider,
+                revision = version,
+                type = ComponentType.SOURCE_ARCHIVE,
+                url = sourceArtifact.url
+            )
+        }
+
+        else -> null
+    }
+}

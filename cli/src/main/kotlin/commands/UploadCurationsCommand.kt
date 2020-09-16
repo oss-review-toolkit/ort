@@ -33,8 +33,6 @@ import com.github.ajalt.clikt.parameters.types.file
 import java.io.IOException
 import java.net.URL
 
-import org.ossreviewtoolkit.analyzer.curation.toClearlyDefinedCoordinates
-import org.ossreviewtoolkit.analyzer.curation.toClearlyDefinedSourceLocation
 import org.ossreviewtoolkit.clearlydefined.ClearlyDefinedService
 import org.ossreviewtoolkit.clearlydefined.ClearlyDefinedService.ContributionInfo
 import org.ossreviewtoolkit.clearlydefined.ClearlyDefinedService.ContributionPatch
@@ -50,6 +48,8 @@ import org.ossreviewtoolkit.clearlydefined.string
 import org.ossreviewtoolkit.model.PackageCuration
 import org.ossreviewtoolkit.model.jsonMapper
 import org.ossreviewtoolkit.model.readValue
+import org.ossreviewtoolkit.model.utils.toClearlyDefinedCoordinates
+import org.ossreviewtoolkit.model.utils.toClearlyDefinedSourceLocation
 import org.ossreviewtoolkit.utils.OkHttpClientHelper
 import org.ossreviewtoolkit.utils.collectMessagesAsString
 import org.ossreviewtoolkit.utils.expandTilde
@@ -186,7 +186,7 @@ private fun PackageCuration.toContributionPatch(): ContributionPatch {
 
     val described = Described(
         projectWebsite = data.homepageUrl?.let { URL(it) },
-        sourceLocation = toClearlyDefinedSourceLocation(id, data.vcs, data.sourceArtifact)
+        sourceLocation = id.toClearlyDefinedSourceLocation(data.vcs, data.sourceArtifact)
     )
 
     val curation = Curation(
