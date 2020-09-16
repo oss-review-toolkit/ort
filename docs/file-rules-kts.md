@@ -12,7 +12,8 @@ example depends on the licenses categorizations defined in the [licenses.yml exa
 
 ## Command Line
 
-To use the `rules.kts` file pass it to the `--rules-file` option of the _evaluator_:
+To use the `rules.kts` file put it to `$ORT_CONFIG_DIR/rules.kts` or pass it to the `--rules-file` option of the
+_evaluator_:
 
 ```bash
 cli/build/install/ort/bin/ort evaluate \

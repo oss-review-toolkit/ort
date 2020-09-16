@@ -74,8 +74,9 @@ Note that in both of the above options only one package configuration can exist 
 
 ### Using a Package Configuration Directory
 
-To use a directory with configuration files for each *package id*, pass it to the `--package-configuration-dir` option
-of the _evaluator_:
+By default, ORT uses a directory with configuration files for each *package id* located at
+`$ORT_CONFIG_DIR/package-configurations/`. To use a custom location you can pass it to the `--package-configuration-dir`
+option of the _evaluator_:
 
 ```bash
 cli/build/install/ort/bin/ort evaluate

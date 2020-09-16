@@ -75,7 +75,8 @@ The structure of the curations file consist of one or more `id` entries:
 
 ## Command Line
 
-To use the `curations.yml` file pass it to the `--package-curations-file` option of the _analyzer_:
+To use the `curations.yml` file put it to `$ORT_CONFIG_DIR/curations.yml` or pass it to the `--package-curations-file`
+option of the _analyzer_:
 
 ```
 cli/build/install/ort/bin/ort analyze

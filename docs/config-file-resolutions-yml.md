@@ -86,7 +86,8 @@ rule_violations:
 
 ## Command Line
 
-To use the `resolutions.yml` file pass it to the `--resolutions-file` option of the _reporter_:
+To use the `resolutions.yml` file put it to `$ORT_CONFIG_DIR/resolutions.yml` or pass it to the `--resolutions-file`
+option of the _reporter_:
 
 ```bash
 cli/build/install/ort/bin/ort report
