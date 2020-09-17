@@ -62,6 +62,15 @@ class FileMatcherTest : WordSpec({
                 defaultMatcher.matches(it) shouldBe true
             }
         }
+
+        "be case insensitive" {
+            with(defaultMatcher) {
+                matches("LICENSE") shouldBe true
+                matches("License") shouldBe true
+                matches("LiCeNsE") shouldBe true
+                matches("license") shouldBe true
+            }
+        }
     }
 
     "matches" should {
