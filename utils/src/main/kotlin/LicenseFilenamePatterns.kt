@@ -48,11 +48,17 @@ object LicenseFilenamePatterns {
     ).generateCapitalizationVariants()
 
     /**
+     * A list of globs that match all kind of license file names, equaling the union of [LICENSE_FILENAMES] and
+     * [ROOT_LICENSE_FILENAMES].
+     */
+    val ALL_LICENSE_FILENAMES = LICENSE_FILENAMES + ROOT_LICENSE_FILENAMES
+
+    /**
      * Return glob patterns which match all files which may contain license information residing recursively within the
      * given absolute [directory] or in any of its ancestor directories.
      */
     fun getLicenseFileGlobsForDirectory(directory: String): List<String> =
-        getFileGlobsForDirectoryAndAncestors(directory, LICENSE_FILENAMES + ROOT_LICENSE_FILENAMES)
+        getFileGlobsForDirectoryAndAncestors(directory, ALL_LICENSE_FILENAMES)
 
     /**
      * Return recursively all ancestor directories of the given absolute [directory].
