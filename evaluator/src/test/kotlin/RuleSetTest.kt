@@ -24,17 +24,15 @@ import io.kotest.matchers.collections.haveSize
 import io.kotest.matchers.should
 
 import org.ossreviewtoolkit.model.licenses.LicenseView
-import org.ossreviewtoolkit.model.utils.SimplePackageConfigurationProvider
 
 class RuleSetTest : WordSpec() {
     private val errorMessage = "error message"
     private val howToFix = "how to fix"
-    private val packageConfigurationProvider = SimplePackageConfigurationProvider.EMPTY
 
     init {
         "package rule" should {
             "add errors if it has no requirements" {
-                val ruleSet = ruleSet(ortResult, packageConfigurationProvider) {
+                val ruleSet = ruleSet(ortResult) {
                     packageRule("test") {
                         error(errorMessage, howToFix)
                     }
@@ -44,7 +42,7 @@ class RuleSetTest : WordSpec() {
             }
 
             "add errors only if all requirements are met" {
-                val ruleSet = ruleSet(ortResult, packageConfigurationProvider) {
+                val ruleSet = ruleSet(ortResult) {
                     packageRule("test") {
                         require {
                             +isExcluded()
@@ -58,7 +56,7 @@ class RuleSetTest : WordSpec() {
             }
 
             "add license errors only if all requirements are met" {
-                val ruleSet = ruleSet(ortResult, packageConfigurationProvider) {
+                val ruleSet = ruleSet(ortResult) {
                     packageRule("test") {
                         require {
                             -isExcluded()
@@ -80,7 +78,7 @@ class RuleSetTest : WordSpec() {
 
         "dependency rule" should {
             "add errors if it has no requirements" {
-                val ruleSet = ruleSet(ortResult, packageConfigurationProvider) {
+                val ruleSet = ruleSet(ortResult) {
                     dependencyRule("test") {
                         error(errorMessage, howToFix)
                     }
@@ -90,7 +88,7 @@ class RuleSetTest : WordSpec() {
             }
 
             "add errors only if all requirements are met" {
-                val ruleSet = ruleSet(ortResult, packageConfigurationProvider) {
+                val ruleSet = ruleSet(ortResult) {
                     dependencyRule("test") {
                         require {
                             +isStaticallyLinked()
@@ -104,7 +102,7 @@ class RuleSetTest : WordSpec() {
             }
 
             "add license errors only if all requirements are met" {
-                val ruleSet = ruleSet(ortResult, packageConfigurationProvider) {
+                val ruleSet = ruleSet(ortResult) {
                     dependencyRule("test") {
                         require {
                             -isStaticallyLinked()

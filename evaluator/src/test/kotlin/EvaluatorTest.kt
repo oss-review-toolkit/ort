@@ -29,11 +29,11 @@ import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.LicenseSource
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.Severity
-import org.ossreviewtoolkit.model.utils.SimplePackageConfigurationProvider
+import org.ossreviewtoolkit.model.utils.createLicenseInfoResolver
 import org.ossreviewtoolkit.spdx.toSpdx
 
 class EvaluatorTest : WordSpec() {
-    private fun createEvaluator() = Evaluator(OrtResult.EMPTY, SimplePackageConfigurationProvider.EMPTY)
+    private fun createEvaluator() = Evaluator(OrtResult.EMPTY, ortResult.createLicenseInfoResolver())
 
     init {
         "checkSyntax" should {

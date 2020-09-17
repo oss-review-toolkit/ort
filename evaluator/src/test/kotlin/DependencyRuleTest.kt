@@ -34,7 +34,7 @@ class DependencyRuleTest : WordSpec() {
             name = "test",
             pkg = pkg,
             curations = emptyList(),
-            detectedLicenses = emptyList(),
+            resolvedLicenseInfo = ruleSet.licenseInfoResolver.resolveLicenseInfo(pkg.id),
             dependency = dependency,
             ancestors = emptyList(),
             level = 0,

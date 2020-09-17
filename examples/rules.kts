@@ -96,7 +96,7 @@ fun PackageRule.LicenseRule.isCopyleftLimited() =
  */
 
 // Define the set of policy rules.
-val ruleSet = ruleSet(ortResult, packageConfigurationProvider) {
+val ruleSet = ruleSet(ortResult, licenseInfoResolver) {
     // Define a rule that is executed for each package.
     packageRule("UNHANDLED_LICENSE") {
         // Do not trigger this rule on packages that have been excluded in the .ort.yml.
@@ -126,7 +126,7 @@ val ruleSet = ruleSet(ortResult, packageConfigurationProvider) {
             -isExcluded()
         }
 
-        pkg.declaredLicensesProcessed.unmapped.forEach { unmappedLicense ->
+        resolvedLicenseInfo.licenseInfo.declaredLicenseInfo.processed.unmapped.forEach { unmappedLicense ->
             warning(
                 "The declared license '$unmappedLicense' could not be mapped to a valid license or parsed as an SPDX " +
                         "expression. The license was found in package ${pkg.id.toCoordinates()}.",
