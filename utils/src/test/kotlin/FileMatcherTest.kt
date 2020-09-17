@@ -74,5 +74,17 @@ class FileMatcherTest : WordSpec({
                 matches("c/LICENSE") shouldBe false
             }
         }
+
+        "adhere to the case-sensitivity" {
+            FileMatcher("LICENSE", caseSensitive = true).apply {
+                matches("LICENSE") shouldBe true
+                matches("license") shouldBe false
+            }
+
+            FileMatcher("LICENSE", caseSensitive = false).apply {
+                matches("LICENSE") shouldBe true
+                matches("license") shouldBe true
+            }
+        }
     }
 })
