@@ -26,15 +26,15 @@ object LicenseFilenamePatterns {
      * A list of globs that match default license file names.
      */
     val LICENSE_FILENAMES = listOf(
-        "license*",
-        "licence*",
-        "*.license",
-        "*.licence",
-        "unlicense",
-        "unlicence",
         "copying*",
         "copyright",
-        "patents"
+        "licence*",
+        "license*",
+        "*.licence",
+        "*.license",
+        "patents",
+        "unlicence",
+        "unlicense"
     ).generateCapitalizationVariants()
 
     /**
