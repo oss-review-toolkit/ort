@@ -25,9 +25,9 @@ import org.gradle.api.plugins.ExtensionAware
 import org.gradle.plugins.ide.idea.model.IdeaModel
 import org.gradle.plugins.ide.idea.model.IdeaProject
 
-import org.jetbrains.gradle.ext.DefaultRunConfigurationContainer
 import org.jetbrains.gradle.ext.ProjectSettings
 import org.jetbrains.gradle.ext.RunConfiguration
+import org.jetbrains.gradle.ext.RunConfigurationContainer
 import org.jetbrains.gradle.ext.TaskTriggersConfig
 
 // The following extension functions add the missing Kotlin DSL syntactic sugar for nicely configuring the idea-ext
@@ -47,8 +47,8 @@ fun IdeaProject.settings(block: ProjectSettings.() -> Unit) =
 fun ProjectSettings.taskTriggers(block: TaskTriggersConfig.() -> Unit) =
     (this@taskTriggers as ExtensionAware).extensions.configure("taskTriggers", block)
 
-fun ProjectSettings.runConfigurations(block: DefaultRunConfigurationContainer.() -> Unit) =
+fun ProjectSettings.runConfigurations(block: RunConfigurationContainer.() -> Unit) =
     (this@runConfigurations as ExtensionAware).extensions.configure("runConfigurations", block)
 
-inline fun <reified T : RunConfiguration> DefaultRunConfigurationContainer.defaults(noinline block: T.() -> Unit) =
+inline fun <reified T : RunConfiguration> RunConfigurationContainer.defaults(noinline block: T.() -> Unit) =
     defaults(T::class.java, block)
