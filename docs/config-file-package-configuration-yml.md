@@ -95,7 +95,7 @@ or to the _reporter_:
 cli/build/install/ort/bin/ort report
   -i [evaluator-output-dir]/evaluation-result.yml
   -o [reporter-output-dir]
-  --report-formats NoticeByPackage,WebApp
+  --report-formats NoticeTemplate,WebApp
   --license-configuration-file $ORT_CONFIG_DIR/licenses.yml
   --package-configuration-dir $ORT_CONFIG_DIR/packages
 ```
@@ -122,7 +122,7 @@ or to the _reporter_:
 cli/build/install/ort/bin/ort report
   -i [evaluator-output-dir]/evaluation-result.yml
   -o [reporter-output-dir]
-  --report-formats NoticeByPackage,WebApp
+  --report-formats NoticeTemplate,WebApp
   --license-configuration-file $ORT_CONFIG_DIR/licenses.yml
   --package-configuration-file $ORT_CONFIG_DIR/packages.yml
 ```

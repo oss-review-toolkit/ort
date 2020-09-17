@@ -20,7 +20,7 @@ To use one or both of the provided templates pass the `template.id`s to the _Not
 cli/build/install/ort/bin/ort report
   -i [evaluator-output-path]/evaluation-result.yml
   -o [reporter-output-path]
-  --report-formats NoticeByPackage,StaticHtml,WebApp
+  --report-formats NoticeTemplate,StaticHtml,WebApp
   -O NoticeTemplate=template.id=default,summary
 ```
 
@@ -30,7 +30,7 @@ To use one or more custom templates pass the `template.path`s to the _NoticeTemp
 cli/build/install/ort/bin/ort report
   -i [evaluator-output-path]/evaluation-result.yml
   -o [reporter-output-path]
-  --report-formats NoticeByPackage,StaticHtml,WebApp
+  --report-formats NoticeTemplate,StaticHtml,WebApp
   -O NoticeTemplate=template.path=[ort-configuration-path]/custom1.ftl,[ort-configuration-path]/custom2.ftl
 ```
 

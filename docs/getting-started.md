@@ -335,12 +335,12 @@ For example, to generate a static HTML report, WebApp report and an open source 
 
 ```bash
 cli/build/install/ort/bin/ort report
-  -f NoticeByPackage,StaticHtml,WebApp
+  -f NoticeTemplate,StaticHtml,WebApp
   -i [evaluator-output-dir]/evaluation-result.yml
   -o [reporter-output-dir]
 Created 'StaticHtml' report: [reporter-output-dir]/scan-report.html
 Created 'WebApp' report: [reporter-output-dir]/scan-report-web-app.html
-Created 'NoticeByPackage' report: [reporter-output-dir]/NOTICE_BY_PACKAGE
+Created 'NoticeTemplate' report: [reporter-output-dir]/NOTICE_default
 ```
 
 If you do not want to run the _evaluator_ you can pass the _scanner_ result e.g. `[scanner-output-dir]/scan-result.yml`

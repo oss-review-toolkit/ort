@@ -433,8 +433,9 @@ Currently, the following report formats are supported (reporter names are case-i
 * [Excel](https://products.office.com/excel) sheet (`-f Excel`)
 * [GitLabLicenseModel](https://docs.gitlab.com/ee/ci/pipelines/job_artifacts.html#artifactsreportslicense_scanning-ultimate) (`-f GitLabLicenseModel`)
 * [NOTICE](http://www.apache.org/dev/licensing-howto.html) file in two variants
-  * List license texts and copyrights by package (`-f NoticeByPackage`)
-  * Summarize all license texts and copyrights (`-f NoticeSummary`)
+  * List license texts and copyrights by package (`-f NoticeTemplate`)
+  * Summarize all license texts and copyrights (`-f NoticeTemplate -O NoticeTemplate=template.id=summary`)
+  * Customizable with [Apache Freemarker](https://freemarker.apache.org/) templates
 * [SPDX Document](https://spdx.dev/specifications/), version 2.2 (`-f SpdxDocument`)
 * Static HTML (`-f StaticHtml`)
 * Web App (`-f WebApp`)
