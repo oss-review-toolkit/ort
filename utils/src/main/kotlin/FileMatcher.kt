@@ -33,7 +33,12 @@ class FileMatcher(
      *
      * [1]: https://docs.oracle.com/javase/tutorial/essential/io/fileOps.html#glob
      */
-    val patterns: List<String>
+    val patterns: List<String>,
+
+    /**
+     * Toggle the case-sensitivity of the matching.
+     */
+    caseSensitive: Boolean = true
 ) {
     companion object {
         /**
@@ -42,9 +47,11 @@ class FileMatcher(
         val LICENSE_FILE_MATCHER = FileMatcher(LICENSE_FILENAMES + ROOT_LICENSE_FILENAMES)
     }
 
-    constructor(vararg patterns: String) : this(patterns.asList())
+    constructor(vararg patterns: String, caseSensitive: Boolean = true) : this(patterns.asList(), caseSensitive)
 
-    private val matcher = AntPathMatcher()
+    private val matcher = AntPathMatcher().apply {
+        setCaseSensitive(caseSensitive)
+    }
 
     /**
      * Return true if and only if the given [path] is matched by any of the file globs passed to the
