@@ -44,7 +44,10 @@ class FileMatcher(
         /**
          * A matcher which uses the default license file names.
          */
-        val LICENSE_FILE_MATCHER = FileMatcher(LICENSE_FILENAMES + ROOT_LICENSE_FILENAMES)
+        val LICENSE_FILE_MATCHER = FileMatcher(
+            patterns = LICENSE_FILENAMES + ROOT_LICENSE_FILENAMES,
+            caseSensitive = false // This does not have any effect when used with (case-sensitive) sparse checkouts.
+        )
     }
 
     constructor(vararg patterns: String, caseSensitive: Boolean = true) : this(patterns.asList(), caseSensitive)
