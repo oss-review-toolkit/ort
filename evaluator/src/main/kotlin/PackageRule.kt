@@ -21,20 +21,19 @@ package org.ossreviewtoolkit.evaluator
 
 import org.ossreviewtoolkit.model.CuratedPackage
 import org.ossreviewtoolkit.model.Identifier
-import org.ossreviewtoolkit.model.LicenseFindings
 import org.ossreviewtoolkit.model.LicenseSource
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.PackageCurationResult
 import org.ossreviewtoolkit.model.Project
 import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.model.config.Excludes
-import org.ossreviewtoolkit.model.config.PathExclude
 import org.ossreviewtoolkit.model.licenses.LicenseView
+import org.ossreviewtoolkit.model.licenses.ResolvedLicense
+import org.ossreviewtoolkit.model.licenses.ResolvedLicenseInfo
 import org.ossreviewtoolkit.spdx.SpdxExpression
 import org.ossreviewtoolkit.spdx.SpdxLicense
 import org.ossreviewtoolkit.spdx.SpdxLicenseIdExpression
 import org.ossreviewtoolkit.spdx.SpdxLicenseWithExceptionExpression
-import org.ossreviewtoolkit.spdx.SpdxSingleLicenseExpression
 
 /**
  * A [Rule] to check a single [Package].
@@ -54,9 +53,9 @@ open class PackageRule(
     val curations: List<PackageCurationResult>,
 
     /**
-     * The detected licenses for the [Package].
+     * The resolved license info for the [Package].
      */
-    val detectedLicenses: List<LicenseFindings>
+    val resolvedLicenseInfo: ResolvedLicenseInfo
 ) : Rule(ruleSet, name) {
     private val licenseRules = mutableListOf<LicenseRule>()
 
@@ -78,10 +77,7 @@ open class PackageRule(
         object : RuleMatcher {
             override val description = "hasLicense()"
 
-            override fun matches() =
-                pkg.concludedLicense?.licenses()?.isNotEmpty() == true
-                        || pkg.declaredLicenses.isNotEmpty()
-                        || detectedLicenses.isNotEmpty()
+            override fun matches() = resolvedLicenseInfo.licenses.isNotEmpty()
         }
 
     /**
@@ -139,16 +135,10 @@ open class PackageRule(
      * A DSL function to configure a [LicenseRule] and add it to this rule.
      */
     fun licenseRule(name: String, licenseView: LicenseView, block: LicenseRule.() -> Unit) {
-        val licenses = licenseView.licenses(pkg, detectedLicenses.map { it.license })
-
-        licenses.forEach { (license, licenseSource) ->
-            val findings = if (licenseSource == LicenseSource.DETECTED) {
-                ruleSet.licenseFindings[pkg.id].orEmpty()
-            } else {
-                emptyMap()
-            }.filter { (finding, _) -> finding.license == license }
-
-            licenseRules += LicenseRule(name, license, licenseSource, findings).apply(block)
+        resolvedLicenseInfo.filter(licenseView, filterSources = true).forEach { resolvedLicense ->
+            resolvedLicense.sources.forEach { licenseSource ->
+                licenseRules += LicenseRule(name, resolvedLicense, licenseSource).apply(block)
+            }
         }
     }
 
@@ -177,48 +167,40 @@ open class PackageRule(
         name: String,
 
         /**
-         * The license to check.
+         * The [ResolvedLicense].
          */
-        val license: SpdxSingleLicenseExpression,
+        val resolvedLicense: ResolvedLicense,
 
         /**
          * The source of the license.
          */
-        val licenseSource: LicenseSource,
-
-        /**
-         * The associated [LicenseFindings]. Only used if [licenseSource] is [LicenseSource.DETECTED].
-         */
-        val licenseFindings: Map<LicenseFindings, List<PathExclude>> = emptyMap()
+        val licenseSource: LicenseSource
     ) : Rule(ruleSet, name) {
+        /**
+         * A shortcut for the [license][ResolvedLicense.license] in [resolvedLicense].
+         */
+        val license = resolvedLicense.license
+
         /**
          * A helper function to access [PackageRule.pkg] in extension functions for [LicenseRule], required because the
          * properties of the outer class [PackageRule] cannot be accessed from an extension function.
          */
         fun pkg() = pkg
 
-        /**
-         * A helper function to access [PackageRule.detectedLicenses] in extension functions for [LicenseRule], required
-         * because the properties of the outer class [PackageRule] cannot be accessed from an extension function.
-         */
-        fun detectedLicenses() = detectedLicenses
+        override val description = "\tEvaluating license rule '$name' for $licenseSource license " +
+                "'${resolvedLicense.license}'."
 
-        override val description = "\tEvaluating license rule '$name' for $licenseSource license '$license'."
-
-        override fun issueSource() = "$name - ${pkg.id.toCoordinates()} - $license ($licenseSource)"
+        override fun issueSource() = "$name - ${pkg.id.toCoordinates()} - ${resolvedLicense.license} ($licenseSource)"
 
         /**
-         * A [RuleMatcher] that checks if a [detected][LicenseSource.DETECTED] license is excluded. This is the case if
-         * all keys of [licenseFindings] are associated to at least one [PathExclude].
+         * A [RuleMatcher] that checks if a [detected][LicenseSource.DETECTED] license is
+         * [excluded][ResolvedLicense.isDetectedExcluded].
          */
         fun isExcluded() =
             object : RuleMatcher {
-                override val description = "isExcluded($license)"
+                override val description = "isDetectedExcluded($license)"
 
-                override fun matches() =
-                    licenseSource == LicenseSource.DETECTED
-                            && licenseFindings.isNotEmpty()
-                            && licenseFindings.values.all { it.isNotEmpty() }
+                override fun matches() = licenseSource == LicenseSource.DETECTED && resolvedLicense.isDetectedExcluded
             }
 
         /**

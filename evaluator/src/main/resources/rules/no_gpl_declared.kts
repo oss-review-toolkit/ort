@@ -31,7 +31,7 @@ fun PackageRule.LicenseRule.isGpl() =
     }
 
 // Define the rule set.
-val ruleSet = ruleSet(ortResult, packageConfigurationProvider) {
+val ruleSet = ruleSet(ortResult, licenseInfoResolver) {
     // Define a rule that is executed for each package.
     packageRule("NO_GPL") {
         // Define a rule that is executed for each license of the package.

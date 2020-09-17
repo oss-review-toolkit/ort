@@ -23,36 +23,50 @@ import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.shouldBe
 
 import org.ossreviewtoolkit.model.LicenseSource
+import org.ossreviewtoolkit.model.Package
+import org.ossreviewtoolkit.model.licenses.ResolvedLicense
 import org.ossreviewtoolkit.spdx.SpdxLicenseIdExpression
+import org.ossreviewtoolkit.spdx.SpdxSingleLicenseExpression
 
 class PackageRuleTest : WordSpec() {
     private val ruleSet = RuleSet(ortResult)
 
+    private fun createPackageRule(pkg: Package) =
+        PackageRule(ruleSet, "test", pkg, emptyList(), ruleSet.licenseInfoResolver.resolveLicenseInfo(pkg.id))
+
+    private fun PackageRule.createLicenseRule(license: SpdxSingleLicenseExpression, licenseSource: LicenseSource) =
+        LicenseRule(
+            name = "test",
+            resolvedLicense = resolvedLicenseInfo[license]
+                ?: ResolvedLicense(license, emptySet(), emptySet(), emptySet()),
+            licenseSource = licenseSource
+        )
+
     init {
         "hasLicense()" should {
             "return true if the package has concluded licenses" {
-                val rule = PackageRule(ruleSet, "test", packageWithOnlyConcludedLicense, emptyList(), emptyList())
+                val rule = createPackageRule(packageWithOnlyConcludedLicense)
                 val matcher = rule.hasLicense()
 
                 matcher.matches() shouldBe true
             }
 
             "return true if the package has declared licenses" {
-                val rule = PackageRule(ruleSet, "test", packageWithOnlyDeclaredLicense, emptyList(), emptyList())
+                val rule = createPackageRule(packageWithOnlyDeclaredLicense)
                 val matcher = rule.hasLicense()
 
                 matcher.matches() shouldBe true
             }
 
             "return true if the package has detected licenses" {
-                val rule = PackageRule(ruleSet, "test", packageWithoutLicense, emptyList(), licenseFindings)
+                val rule = createPackageRule(packageWithOnlyDetectedLicense)
                 val matcher = rule.hasLicense()
 
                 matcher.matches() shouldBe true
             }
 
             "return false if the package has no license" {
-                val rule = PackageRule(ruleSet, "test", packageWithoutLicense, emptyList(), emptyList())
+                val rule = createPackageRule(packageWithoutLicense)
                 val matcher = rule.hasLicense()
 
                 matcher.matches() shouldBe false
@@ -61,14 +75,14 @@ class PackageRuleTest : WordSpec() {
 
         "isExcluded()" should {
             "return true if the package is excluded" {
-                val rule = PackageRule(ruleSet, "test", packageExcluded, emptyList(), emptyList())
+                val rule = createPackageRule(packageExcluded)
                 val matcher = rule.isExcluded()
 
                 matcher.matches() shouldBe true
             }
 
             "return false if the package is not excluded" {
-                val rule = PackageRule(ruleSet, "test", packageWithoutLicense, emptyList(), emptyList())
+                val rule = createPackageRule(packageWithoutLicense)
                 val matcher = rule.isExcluded()
 
                 matcher.matches() shouldBe false
@@ -77,14 +91,14 @@ class PackageRuleTest : WordSpec() {
 
         "isFromOrg()" should {
             "return true if the package is from org" {
-                val rule = PackageRule(ruleSet, "test", packageWithoutLicense, emptyList(), emptyList())
+                val rule = createPackageRule(packageWithoutLicense)
                 val matcher = rule.isFromOrg("ossreviewtoolkit")
 
                 matcher.matches() shouldBe true
             }
 
             "return false if the package is not from org" {
-                val rule = PackageRule(ruleSet, "test", packageWithoutLicense, emptyList(), emptyList())
+                val rule = createPackageRule(packageWithoutLicense)
                 val matcher = rule.isFromOrg("unknown")
 
                 matcher.matches() shouldBe false
@@ -93,14 +107,14 @@ class PackageRuleTest : WordSpec() {
 
         "isMetaDataOnly()" should {
             "return true for a package that has only meta data" {
-                val rule = PackageRule(ruleSet, "test", packageMetaDataOnly, emptyList(), emptyList())
+                val rule = createPackageRule(packageMetaDataOnly)
                 val matcher = rule.isMetaDataOnly()
 
                 matcher.matches() shouldBe true
             }
 
             "return false for a package that has not only meta data" {
-                val rule = PackageRule(ruleSet, "test", packageWithoutLicense, emptyList(), emptyList())
+                val rule = createPackageRule(packageWithoutLicense)
                 val matcher = rule.isMetaDataOnly()
 
                 matcher.matches() shouldBe false
@@ -109,14 +123,14 @@ class PackageRuleTest : WordSpec() {
 
         "isProject()" should {
             "return true for a project" {
-                val rule = PackageRule(ruleSet, "test", projectIncluded.toPackage(), emptyList(), emptyList())
+                val rule = createPackageRule(projectIncluded.toPackage())
                 val matcher = rule.isProject()
 
                 matcher.matches() shouldBe true
             }
 
             "return false for a package" {
-                val rule = PackageRule(ruleSet, "test", packageWithoutLicense, emptyList(), emptyList())
+                val rule = createPackageRule(packageWithoutLicense)
                 val matcher = rule.isProject()
 
                 matcher.matches() shouldBe false
@@ -125,14 +139,14 @@ class PackageRuleTest : WordSpec() {
 
         "isType()" should {
             "return true if the package has the provided type" {
-                val rule = PackageRule(ruleSet, "test", packageWithoutLicense, emptyList(), emptyList())
+                val rule = createPackageRule(packageWithoutLicense)
                 val matcher = rule.isType("Maven")
 
                 matcher.matches() shouldBe true
             }
 
             "return false if the package has not the provided type" {
-                val rule = PackageRule(ruleSet, "test", packageWithoutLicense, emptyList(), emptyList())
+                val rule = createPackageRule(packageWithoutLicense)
                 val matcher = rule.isType("Gradle")
 
                 matcher.matches() shouldBe false
@@ -141,10 +155,8 @@ class PackageRuleTest : WordSpec() {
 
         "isSpdxLicense()" should {
             "return true if the license is an SPDX license" {
-                PackageRule(ruleSet, "test", packageWithoutLicense, emptyList(), emptyList()).apply {
-                    val licenseRule = LicenseRule(
-                        "test", SpdxLicenseIdExpression("Apache-2.0"), LicenseSource.DECLARED, emptyMap()
-                    )
+                createPackageRule(packageWithoutLicense).apply {
+                    val licenseRule = createLicenseRule(SpdxLicenseIdExpression("Apache-2.0"), LicenseSource.DECLARED)
                     val matcher = licenseRule.isSpdxLicense()
 
                     matcher.matches() shouldBe true
@@ -152,10 +164,8 @@ class PackageRuleTest : WordSpec() {
             }
 
             "return false if the license is not an SPDX license" {
-                PackageRule(ruleSet, "test", packageWithoutLicense, emptyList(), emptyList()).apply {
-                    val licenseRule = LicenseRule(
-                        "test", SpdxLicenseIdExpression("invalid"), LicenseSource.DECLARED, emptyMap()
-                    )
+                createPackageRule(packageWithoutLicense).apply {
+                    val licenseRule = createLicenseRule(SpdxLicenseIdExpression("invalid"), LicenseSource.DECLARED)
                     val matcher = licenseRule.isSpdxLicense()
 
                     matcher.matches() shouldBe false

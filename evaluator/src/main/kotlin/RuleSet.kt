@@ -19,17 +19,14 @@
 
 package org.ossreviewtoolkit.evaluator
 
-import org.ossreviewtoolkit.model.Identifier
-import org.ossreviewtoolkit.model.LicenseFindings
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.PackageReference
 import org.ossreviewtoolkit.model.Project
 import org.ossreviewtoolkit.model.RuleViolation
 import org.ossreviewtoolkit.model.Scope
-import org.ossreviewtoolkit.model.utils.PackageConfigurationProvider
-import org.ossreviewtoolkit.model.utils.SimplePackageConfigurationProvider
-import org.ossreviewtoolkit.model.utils.collectLicenseFindings
+import org.ossreviewtoolkit.model.licenses.LicenseInfoResolver
+import org.ossreviewtoolkit.model.utils.createLicenseInfoResolver
 import org.ossreviewtoolkit.utils.log
 
 /**
@@ -37,17 +34,12 @@ import org.ossreviewtoolkit.utils.log
  */
 class RuleSet(
     val ortResult: OrtResult,
-    packageConfigurationProvider: PackageConfigurationProvider = SimplePackageConfigurationProvider.EMPTY
+    val licenseInfoResolver: LicenseInfoResolver = ortResult.createLicenseInfoResolver()
 ) {
     /**
      * The list of all issues created by the rules of this [RuleSet].
      */
     val violations = mutableSetOf<RuleViolation>()
-
-    /**
-     * The map of all [LicenseFindings] and associated path excludes by [Identifier].
-     */
-    val licenseFindings = ortResult.collectLicenseFindings(packageConfigurationProvider)
 
     /**
      * A DSL function to configure a [PackageRule]. The rule is applied to each [Package] and [Project] contained in
@@ -59,9 +51,8 @@ class RuleSet(
         }.orEmpty()
 
         packages.forEach { curatedPackage ->
-            val detectedLicenses = licenseFindings[curatedPackage.pkg.id].orEmpty().keys.toList()
-
-            PackageRule(this, name, curatedPackage.pkg, curatedPackage.curations, detectedLicenses).apply {
+            val resolvedLicenseInfo = licenseInfoResolver.resolveLicenseInfo(curatedPackage.pkg.id)
+            PackageRule(this, name, curatedPackage.pkg, curatedPackage.curations, resolvedLicenseInfo).apply {
                 configure()
                 evaluate()
             }
@@ -95,14 +86,14 @@ class RuleSet(
             if (curatedPackage == null) {
                 log.warn { "Could not find package for dependency ${pkgRef.id.toCoordinates()}, skipping rule $name." }
             } else {
-                val detectedLicenses = licenseFindings[curatedPackage.pkg.id].orEmpty().keys.toList()
+                val resolvedLicenseInfo = licenseInfoResolver.resolveLicenseInfo(curatedPackage.pkg.id)
 
                 DependencyRule(
                     this,
                     name,
                     curatedPackage.pkg,
                     curatedPackage.curations,
-                    detectedLicenses,
+                    resolvedLicenseInfo,
                     pkgRef,
                     ancestors,
                     level,
@@ -135,6 +126,6 @@ class RuleSet(
  */
 fun ruleSet(
     ortResult: OrtResult,
-    packageConfigurationProvider: PackageConfigurationProvider,
+    licenseInfoResolver: LicenseInfoResolver = ortResult.createLicenseInfoResolver(),
     configure: RuleSet.() -> Unit
-) = RuleSet(ortResult, packageConfigurationProvider).apply(configure)
+) = RuleSet(ortResult, licenseInfoResolver).apply(configure)

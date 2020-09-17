@@ -24,7 +24,11 @@ import java.util.SortedSet
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.LicenseFindings
 import org.ossreviewtoolkit.model.OrtResult
+import org.ossreviewtoolkit.model.config.CopyrightGarbage
 import org.ossreviewtoolkit.model.config.PathExclude
+import org.ossreviewtoolkit.model.licenses.DefaultLicenseInfoProvider
+import org.ossreviewtoolkit.model.licenses.LicenseInfoResolver
+import org.ossreviewtoolkit.utils.storage.FileArchiver
 
 /**
  * Return a map of concluded licenses for each package [Identifier] that has a concluded license. Note that this
@@ -63,6 +67,19 @@ fun OrtResult.collectLicenseFindings(
     omitExcluded: Boolean = false
 ): Map<Identifier, Map<LicenseFindings, List<PathExclude>>> =
     LicenseResolver(this, packageConfigurationProvider).collectLicenseFindings(omitExcluded)
+
+/**
+ * Create a [LicenseInfoResolver] for [this] [OrtResult]. If the resolver is used multiple times it should be stored
+ * instead of calling this function multiple times for better performance.
+ */
+fun OrtResult.createLicenseInfoResolver(
+    packageConfigurationProvider: PackageConfigurationProvider = SimplePackageConfigurationProvider.EMPTY,
+    copyrightGarbage: CopyrightGarbage = CopyrightGarbage(),
+    archiver: FileArchiver? = null
+): LicenseInfoResolver {
+    val licenseInfoProvider = DefaultLicenseInfoProvider(this, packageConfigurationProvider)
+    return LicenseInfoResolver(licenseInfoProvider, copyrightGarbage, archiver)
+}
 
 /**
  * Return all detected licenses for the given package [id]. As projects are implicitly converted to packages before

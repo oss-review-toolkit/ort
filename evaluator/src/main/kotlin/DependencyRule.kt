@@ -20,13 +20,13 @@
 package org.ossreviewtoolkit.evaluator
 
 import org.ossreviewtoolkit.model.Identifier
-import org.ossreviewtoolkit.model.LicenseFindings
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.PackageCurationResult
 import org.ossreviewtoolkit.model.PackageLinkage
 import org.ossreviewtoolkit.model.PackageReference
 import org.ossreviewtoolkit.model.Project
 import org.ossreviewtoolkit.model.Scope
+import org.ossreviewtoolkit.model.licenses.ResolvedLicenseInfo
 import org.ossreviewtoolkit.spdx.enumSetOf
 
 /**
@@ -37,7 +37,7 @@ class DependencyRule(
     name: String,
     pkg: Package,
     curations: List<PackageCurationResult>,
-    detectedLicenses: List<LicenseFindings>,
+    resolvedLicenseInfo: ResolvedLicenseInfo,
 
     /**
      * The [dependency][PackageReference] to check.
@@ -64,7 +64,7 @@ class DependencyRule(
      * The [Project] that contains the [dependency].
      */
     val project: Project
-) : PackageRule(ruleSet, name, pkg, curations, detectedLicenses) {
+) : PackageRule(ruleSet, name, pkg, curations, resolvedLicenseInfo) {
     override val description =
         "Evaluating rule '$name' for dependency '${dependency.id.toCoordinates()}' " +
                 "(project=${project.id.toCoordinates()}, scope=${scope.name}, level=$level)."

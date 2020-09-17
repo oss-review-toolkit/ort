@@ -45,11 +45,16 @@ import org.ossreviewtoolkit.model.FileFormat
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.RuleViolation
 import org.ossreviewtoolkit.model.Severity
+import org.ossreviewtoolkit.model.config.CopyrightGarbage
+import org.ossreviewtoolkit.model.config.orEmpty
+import org.ossreviewtoolkit.model.licenses.DefaultLicenseInfoProvider
 import org.ossreviewtoolkit.model.licenses.LicenseConfiguration
+import org.ossreviewtoolkit.model.licenses.LicenseInfoResolver
 import org.ossreviewtoolkit.model.licenses.orEmpty
 import org.ossreviewtoolkit.model.mapper
 import org.ossreviewtoolkit.model.readValue
 import org.ossreviewtoolkit.model.utils.mergeLabels
+import org.ossreviewtoolkit.utils.ORT_COPYRIGHT_GARBAGE_FILENAME
 import org.ossreviewtoolkit.utils.ORT_LICENSE_CONFIGURATION_FILENAME
 import org.ossreviewtoolkit.utils.ORT_REPO_CONFIG_FILENAME
 import org.ossreviewtoolkit.utils.PackageConfigurationOption
@@ -58,6 +63,7 @@ import org.ossreviewtoolkit.utils.expandTilde
 import org.ossreviewtoolkit.utils.log
 import org.ossreviewtoolkit.utils.ortConfigDirectory
 import org.ossreviewtoolkit.utils.safeMkdirs
+import org.ossreviewtoolkit.utils.storage.FileArchiver
 
 class EvaluatorCommand : CliktCommand(name = "evaluate", help = "Evaluate rules on ORT result files.") {
     private val ortFile by option(
@@ -98,6 +104,15 @@ class EvaluatorCommand : CliktCommand(name = "evaluate", help = "Evaluate rules 
         ).convert { StringType(it) },
         name = OPTION_GROUP_RULE
     ).single()
+
+    private val copyrightGarbageFile by option(
+        "--copyright-garbage-file",
+        help = "A file containing copyright statements which are marked as garbage."
+    ).convert { it.expandTilde() }
+        .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
+        .convert { it.absoluteFile.normalize() }
+        .default(ortConfigDirectory.resolve(ORT_COPYRIGHT_GARBAGE_FILENAME))
+        .configurationGroup()
 
     private val licenseConfigurationFile by option(
         "--license-configuration-file",
@@ -209,7 +224,15 @@ class EvaluatorCommand : CliktCommand(name = "evaluate", help = "Evaluate rules 
             }
         }
 
-        val evaluator = Evaluator(ortResultInput, packageConfigurationProvider, licenseConfiguration)
+        val copyrightGarbage = copyrightGarbageFile.takeIf { it.isFile }?.readValue<CopyrightGarbage>().orEmpty()
+
+        val licenseInfoResolver = LicenseInfoResolver(
+            provider = DefaultLicenseInfoProvider(ortResultInput, packageConfigurationProvider),
+            copyrightGarbage = copyrightGarbage,
+            archiver = globalOptionsForSubcommands.config.scanner?.archive?.createFileArchiver() ?: FileArchiver.DEFAULT
+        )
+
+        val evaluator = Evaluator(ortResultInput, licenseInfoResolver, licenseConfiguration)
 
         if (syntaxCheck) {
             if (evaluator.checkSyntax(script)) {

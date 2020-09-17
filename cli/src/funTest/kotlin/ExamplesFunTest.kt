@@ -42,7 +42,7 @@ import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.config.Resolutions
 import org.ossreviewtoolkit.model.licenses.LicenseConfiguration
 import org.ossreviewtoolkit.model.readValue
-import org.ossreviewtoolkit.model.utils.SimplePackageConfigurationProvider
+import org.ossreviewtoolkit.model.utils.createLicenseInfoResolver
 import org.ossreviewtoolkit.reporter.HowToFixTextProvider
 import org.ossreviewtoolkit.reporter.ReporterInput
 import org.ossreviewtoolkit.reporter.reporters.AntennaAttributionDocumentReporter
@@ -116,7 +116,7 @@ class ExamplesFunTest : StringSpec() {
         "rules.kts can be compiled" {
             val evaluator = Evaluator(
                 ortResult = OrtResult.EMPTY,
-                packageConfigurationProvider = SimplePackageConfigurationProvider.EMPTY,
+                licenseInfoResolver = OrtResult.EMPTY.createLicenseInfoResolver(),
                 licenseConfiguration = LicenseConfiguration()
             )
 
