@@ -104,10 +104,12 @@ class FileArchiverTest : StringSpec() {
             val result = archiver.unarchive(targetDir, storagePath)
 
             result shouldBe true
-            targetDir.assertFileContent("a")
-            targetDir.assertFileContent("b")
-            targetDir.assertFileContent("c/a")
-            targetDir.assertFileContent("c/b")
+            with(targetDir) {
+                assertFileContent("a")
+                assertFileContent("b")
+                assertFileContent("c/a")
+                assertFileContent("c/b")
+            }
         }
     }
 }
