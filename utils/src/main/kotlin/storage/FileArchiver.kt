@@ -24,6 +24,7 @@ import java.io.IOException
 
 import org.ossreviewtoolkit.utils.FileMatcher
 import org.ossreviewtoolkit.utils.LicenseFilenamePatterns.LICENSE_FILENAMES
+import org.ossreviewtoolkit.utils.LicenseFilenamePatterns.PATENT_FILENAMES
 import org.ossreviewtoolkit.utils.ORT_NAME
 import org.ossreviewtoolkit.utils.collectMessagesAsString
 import org.ossreviewtoolkit.utils.log
@@ -56,7 +57,7 @@ class FileArchiver(
          */
         val DEFAULT by lazy {
             FileArchiver(
-                patterns = LICENSE_FILENAMES.map { "**/$it" },
+                patterns = (LICENSE_FILENAMES + PATENT_FILENAMES).map { "**/$it" },
                 storage = LocalFileStorage(DEFAULT_ARCHIVE_DIR)
             )
         }

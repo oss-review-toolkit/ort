@@ -34,9 +34,15 @@ object LicenseFilenamePatterns {
         "license*",
         "*.licence",
         "*.license",
-        "patents",
         "unlicence",
         "unlicense"
+    ).generateCapitalizationVariants()
+
+    /**
+     * A list of globs that match default patent file names.
+     */
+    val PATENT_FILENAMES = listOf(
+        "patents"
     ).generateCapitalizationVariants()
 
     /**
@@ -48,10 +54,10 @@ object LicenseFilenamePatterns {
     ).generateCapitalizationVariants()
 
     /**
-     * A list of globs that match all kind of license file names, equaling the union of [LICENSE_FILENAMES] and
-     * [ROOT_LICENSE_FILENAMES].
+     * A list of globs that match all kind of license file names, equaling the union of [LICENSE_FILENAMES],
+     * [PATENT_FILENAMES] and [ROOT_LICENSE_FILENAMES].
      */
-    val ALL_LICENSE_FILENAMES = LICENSE_FILENAMES + ROOT_LICENSE_FILENAMES
+    val ALL_LICENSE_FILENAMES = LICENSE_FILENAMES + PATENT_FILENAMES + ROOT_LICENSE_FILENAMES
 
     /**
      * Return glob patterns which match all files which may contain license information residing recursively within the
