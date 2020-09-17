@@ -85,12 +85,12 @@ class FileMatcherTest : WordSpec({
         }
 
         "adhere to the case-sensitivity" {
-            FileMatcher("LICENSE", caseSensitive = true).apply {
+            FileMatcher("LICENSE", ignoreCase = false).apply {
                 matches("LICENSE") shouldBe true
                 matches("license") shouldBe false
             }
 
-            FileMatcher("LICENSE", caseSensitive = false).apply {
+            FileMatcher("LICENSE", ignoreCase = true).apply {
                 matches("LICENSE") shouldBe true
                 matches("license") shouldBe true
             }

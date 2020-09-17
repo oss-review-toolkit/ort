@@ -38,7 +38,7 @@ class FileMatcher(
     /**
      * Toggle the case-sensitivity of the matching.
      */
-    caseSensitive: Boolean = true
+    ignoreCase: Boolean = false
 ) {
     companion object {
         /**
@@ -46,14 +46,14 @@ class FileMatcher(
          */
         val LICENSE_FILE_MATCHER = FileMatcher(
             patterns = LICENSE_FILENAMES + ROOT_LICENSE_FILENAMES,
-            caseSensitive = false // This does not have any effect when used with (case-sensitive) sparse checkouts.
+            ignoreCase = true // This does not have any effect when used with (case-sensitive) sparse checkouts.
         )
     }
 
-    constructor(vararg patterns: String, caseSensitive: Boolean = true) : this(patterns.asList(), caseSensitive)
+    constructor(vararg patterns: String, ignoreCase: Boolean = false) : this(patterns.asList(), ignoreCase)
 
     private val matcher = AntPathMatcher().apply {
-        setCaseSensitive(caseSensitive)
+        setCaseSensitive(!ignoreCase)
     }
 
     /**
