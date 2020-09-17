@@ -111,5 +111,18 @@ class FileArchiverTest : StringSpec() {
                 assertFileContent("c/b")
             }
         }
+
+        "LICENSE files are archived by default, independently of the directory" {
+            createFile("LICENSE")
+            createFile("path/LICENSE")
+
+            FileArchiver.DEFAULT.archive(workingDir, "save")
+            FileArchiver.DEFAULT.unarchive(targetDir, "save")
+
+            with(targetDir) {
+                assertFileContent("LICENSE")
+                assertFileContent("path/LICENSE")
+            }
+        }
     }
 }

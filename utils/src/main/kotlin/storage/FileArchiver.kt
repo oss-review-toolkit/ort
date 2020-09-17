@@ -49,12 +49,17 @@ class FileArchiver(
 ) {
     companion object {
         private const val ARCHIVE_FILE_NAME = "archive.zip"
-        private val DEFAULT_ARCHIVE_DIR by lazy { ortDataDirectory.resolve("scanner/archive") }
+        internal val DEFAULT_ARCHIVE_DIR by lazy { ortDataDirectory.resolve("scanner/archive") }
 
         /**
          * A default [FileArchiver] that archives [license files][LICENSE_FILENAMES] in a local directory.
          */
-        val DEFAULT by lazy { FileArchiver(LICENSE_FILENAMES, LocalFileStorage(DEFAULT_ARCHIVE_DIR)) }
+        val DEFAULT by lazy {
+            FileArchiver(
+                patterns = LICENSE_FILENAMES.map { "**/$it" },
+                storage = LocalFileStorage(DEFAULT_ARCHIVE_DIR)
+            )
+        }
     }
 
     private val matcher = FileMatcher(patterns)
