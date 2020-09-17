@@ -195,6 +195,14 @@ A file to correct invalid or missing package metadata, and to set the concluded 
 | ------ | ----- | ---------------- | ------------- |
 | YAML / JSON | Global | `$ORT_CONFIG_DIR/curations.yml` | Empty (n/a) |
 
+[Custom license texts dir](./docs/dir-custom-license-texts.md)
+
+A directory that contains license texts which are not provided by ORT.
+
+| Format | Scope | Default location | Default value |
+| ------ | ----- | ---------------- | ------------- |
+| Text | Global | `$ORT_CONFIG_DIR/custom-license-texts/` | Empty (n/a) |
+
 [How to fix text provider script](./docs/how-to-fix-text-provider-kts.md)
 
 A Kotlin script that enables the injection of how-to-fix texts in markdown format for ORT issues into the reports.
