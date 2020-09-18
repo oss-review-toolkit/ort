@@ -73,8 +73,9 @@ class FileArchiver(
         zipFile.deleteOnExit()
 
         directory.packZip(zipFile, overwrite = true) { path ->
-            val relativePath = directory.toPath().relativize(path)
-            matcher.matches(relativePath.toString()).also { result ->
+            val relativePath = path.toFile().relativeTo(directory).invariantSeparatorsPath
+
+            matcher.matches(relativePath).also { result ->
                 if (result) {
                     log.debug { "Adding '$relativePath' to archive." }
                 } else {
