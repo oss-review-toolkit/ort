@@ -412,7 +412,7 @@ pipeline {
                                 STACKTRACE_OPTION="--stacktrace"
                             fi
 
-                            /opt/ort/bin/ort $LOG_LEVEL $STACKTRACE_OPTION evaluate -i out/results/current-result.yml -o out/results/evaluator -r examples/rules.kts --license-configuration-file examples/licenses.yml
+                            /opt/ort/bin/ort $LOG_LEVEL $STACKTRACE_OPTION evaluate -i out/results/current-result.yml -o out/results/evaluator
                         '''
 
                         if (status >= ORT_FAILURE_STATUS_CODE) unstable('Rule violations found.')
