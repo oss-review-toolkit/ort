@@ -62,7 +62,10 @@ class FileArchiver(
         }
     }
 
-    private val matcher = FileMatcher(patterns)
+    private val matcher = FileMatcher(
+        patterns = patterns,
+        ignoreCase = true
+    )
 
     /**
      * Return whether '[storagePath]/[ARCHIVE_FILE_NAME]' exists.
