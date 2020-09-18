@@ -124,5 +124,22 @@ class FileArchiverTest : StringSpec() {
                 assertFileContent("path/LICENSE")
             }
         }
+
+        "The pattern matching is case-insensitive" {
+            createFile("a/LICENSE")
+            createFile("b/License")
+            createFile("c/license")
+            createFile("d/LiCeNsE")
+
+            FileArchiver.DEFAULT.archive(workingDir, "save")
+            FileArchiver.DEFAULT.unarchive(targetDir, "save")
+
+            with(targetDir) {
+                assertFileContent("a/LICENSE")
+                assertFileContent("b/License")
+                assertFileContent("c/license")
+                assertFileContent("d/LiCeNsE")
+            }
+        }
     }
 }
