@@ -204,7 +204,7 @@ class DownloaderCommand : CliktCommand(name = "download", help = "Fetch source c
 
         if (failureMessages.isNotEmpty()) {
             log.error { "Failure summary:\n\n${failureMessages.joinToString("\n\n")}" }
-            throw ProgramResult(2)
+            throw ProgramResult(1)
         }
     }
 
