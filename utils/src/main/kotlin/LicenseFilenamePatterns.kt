@@ -62,7 +62,7 @@ object LicenseFilenamePatterns {
 
         var ancestorDir = File(directory).parentFile
         while (ancestorDir != null) {
-            result.add(ancestorDir.invariantSeparatorsPath)
+            result += ancestorDir.invariantSeparatorsPath
             ancestorDir = ancestorDir.parentFile
         }
 

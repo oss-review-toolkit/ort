@@ -79,9 +79,7 @@ private fun OrtResult.getUnprocessedCopyrightStatements(processedStatements: Col
 
     processAllCopyrightStatements().forEach {
         it.rawStatements.forEach { unprocessedStatement ->
-            processedToUnprocessed
-                .getOrPut(it.statement, { mutableSetOf() })
-                .add(unprocessedStatement)
+            processedToUnprocessed.getOrPut(it.statement, { mutableSetOf() }) += unprocessedStatement
         }
     }
 

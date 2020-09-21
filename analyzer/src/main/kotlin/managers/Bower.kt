@@ -192,7 +192,7 @@ class Bower(
                     id = extractPackageId(childNode),
                     dependencies = childDependencies
                 )
-                result.add(packageReference)
+                result += packageReference
             }
 
             return result.toSortedSet()

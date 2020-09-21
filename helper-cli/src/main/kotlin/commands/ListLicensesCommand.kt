@@ -284,7 +284,7 @@ private fun Collection<TextLocation>.groupByText(baseDir: File): List<TextLocati
 
     forEach { textLocation ->
         textLocation.resolve(baseDir)?.let {
-            resolvedLocations.getOrPut(it, { mutableSetOf() }).add(textLocation)
+            resolvedLocations.getOrPut(it, { mutableSetOf() }) += textLocation
         }
     }
 

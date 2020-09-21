@@ -110,7 +110,7 @@ internal class ImportLicenseFindingCurationsCommand : CliktCommand(
             licenseFindingCurations[vcsUrl]?.let { curationsForRepository ->
                 curationsForRepository.forEach { curation ->
                     relativePaths.forEach { path ->
-                        result.add(curation.copy(path = path + '/' + curation.path))
+                        result += curation.copy(path = path + '/' + curation.path)
                     }
                 }
             }
@@ -124,7 +124,7 @@ private fun OrtResult.getRepositoryPaths(): Map<String, Set<String>> {
     val result = mutableMapOf<String, MutableSet<String>>()
 
     repository.nestedRepositories.mapValues { (path, vcsInfo) ->
-        result.getOrPut(vcsInfo.url, { mutableSetOf() }).add(path)
+        result.getOrPut(vcsInfo.url, { mutableSetOf() }) += path
     }
 
     return result

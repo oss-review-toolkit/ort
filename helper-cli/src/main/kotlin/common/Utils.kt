@@ -136,9 +136,7 @@ internal fun findRepositoryPaths(directory: File): Map<String, Set<String>> {
     val result = mutableMapOf<String, MutableSet<String>>()
 
     ortResult.repository.nestedRepositories.forEach { (path, vcs) ->
-        result
-            .getOrPut(vcs.url.stripCredentialsFromUrl()) { mutableSetOf() }
-            .add(path)
+        result.getOrPut(vcs.url.stripCredentialsFromUrl()) { mutableSetOf() } += path
     }
 
     return result
@@ -159,7 +157,7 @@ internal fun <K, V> greedySetCover(sets: Map<K, Set<V>>): Set<K> {
         if (uncovered.intersect(maxCover.value).isNotEmpty()) {
             uncovered.removeAll(maxCover.value)
             queue.remove(maxCover)
-            result.add(maxCover.key)
+            result += maxCover.key
         } else {
             break
         }
@@ -250,24 +248,20 @@ internal fun OrtResult.processAllCopyrightStatements(
             )
 
             processResult.processedStatements.filterNot { it.key in copyrightGarbage }.forEach {
-                result.add(
-                    ProcessedCopyrightStatement(
-                        packageId = id,
-                        license = licenseFindings.license,
-                        statement = it.key,
-                        rawStatements = it.value.toSet()
-                    )
+                result += ProcessedCopyrightStatement(
+                    packageId = id,
+                    license = licenseFindings.license,
+                    statement = it.key,
+                    rawStatements = it.value.toSet()
                 )
             }
 
             processResult.unprocessedStatements.filterNot { it in copyrightGarbage }.forEach {
-                result.add(
-                    ProcessedCopyrightStatement(
-                        packageId = id,
-                        license = licenseFindings.license,
-                        statement = it,
-                        rawStatements = setOf(it)
-                    )
+                result += ProcessedCopyrightStatement(
+                    packageId = id,
+                    license = licenseFindings.license,
+                    statement = it,
+                    rawStatements = setOf(it)
                 )
             }
         }
@@ -316,7 +310,7 @@ internal fun OrtResult.getLicenseFindingsById(
                 }
             }.forEach { finding ->
                 finding.license.decompose().forEach {
-                    findingsForProvenance.getOrPut(it) { mutableSetOf() }.add(finding.location)
+                    findingsForProvenance.getOrPut(it) { mutableSetOf() } += finding.location
                 }
             }
         }
@@ -336,10 +330,8 @@ internal fun OrtResult.getRepositoryLicenseFindingCurations(): RepositoryLicense
         val pathExcludesForRepository = result.getOrPut(vcs.url) { mutableListOf() }
         curations.forEach { curation ->
             if (curation.path.startsWith("$path/")) {
-                pathExcludesForRepository.add(
-                    curation.copy(
-                        path = curation.path.substring(path.length).removePrefix("/")
-                    )
+                pathExcludesForRepository += curation.copy(
+                    path = curation.path.substring(path.length).removePrefix("/")
                 )
             }
         }
@@ -419,10 +411,8 @@ internal fun OrtResult.getRepositoryPathExcludes(): RepositoryPathExcludes {
         val pathExcludesForRepository = result.getOrPut(vcs.url) { mutableListOf() }
         pathExcludes.forEach { pathExclude ->
             if (pathExclude.pattern.startsWith("$path/") && !isDefinitionsFile(pathExclude)) {
-                pathExcludesForRepository.add(
-                    pathExclude.copy(
-                        pattern = pathExclude.pattern.substring(path.length).removePrefix("/")
-                    )
+                pathExcludesForRepository += pathExclude.copy(
+                    pattern = pathExclude.pattern.substring(path.length).removePrefix("/")
                 )
             }
         }

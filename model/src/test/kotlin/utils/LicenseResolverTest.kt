@@ -233,14 +233,14 @@ class LicenseResolverTest : WordSpec() {
             reason = LicenseFindingCurationReason.INCORRECT
         )
 
-        packageConfigurations.add(config.copy(licenseFindingCurations = licenseFindingCurations))
+        packageConfigurations += config.copy(licenseFindingCurations = licenseFindingCurations)
     }
 
     private fun setupPackagePathExclude(id: Identifier, type: ProvenanceType, pattern: String) {
         val config = getAndRemoveOrCreatePackageConfiguration(id, type)
 
         val pathExclude = PathExclude(pattern, PathExcludeReason.OTHER, "")
-        packageConfigurations.add(config.copy(pathExcludes = config.pathExcludes + pathExclude))
+        packageConfigurations += config.copy(pathExcludes = config.pathExcludes + pathExclude)
     }
 
     private fun setupProject(): Project {

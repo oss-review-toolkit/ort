@@ -188,7 +188,7 @@ private fun getYarnWorkspaceSubmodules(definitionFiles: Set<File>): Set<File> {
                 //   https://github.com/yarnpkg/yarn/pull/5607
                 val projectDir = other.parentFile.toPath()
                 if (other != definitionFile && matcher.matches(projectDir)) {
-                    result.add(other)
+                    result += other
                     return@inner
                 }
             }
