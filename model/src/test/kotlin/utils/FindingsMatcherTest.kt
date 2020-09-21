@@ -51,27 +51,23 @@ class FindingsMatcherTest : WordSpec() {
     override fun isolationMode() = IsolationMode.InstancePerLeaf
 
     private fun setupLicenseFinding(license: String, path: String, line: Int = 1) {
-        licenseFindings.add(
-            LicenseFinding(
-                license = license,
-                location = TextLocation(
-                    path = path,
-                    startLine = line,
-                    endLine = line
-                )
+        licenseFindings += LicenseFinding(
+            license = license,
+            location = TextLocation(
+                path = path,
+                startLine = line,
+                endLine = line
             )
         )
     }
 
     private fun setupCopyrightFinding(statement: String, path: String, line: Int = 1) {
-        copyrightFindings.add(
-            CopyrightFinding(
-                statement = statement,
-                location = TextLocation(
-                    path = path,
-                    startLine = line,
-                    endLine = line
-                )
+        copyrightFindings += CopyrightFinding(
+            statement = statement,
+            location = TextLocation(
+                path = path,
+                startLine = line,
+                endLine = line
             )
         )
     }

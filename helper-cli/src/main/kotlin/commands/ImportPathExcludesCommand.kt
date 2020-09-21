@@ -108,7 +108,7 @@ internal class ImportPathExcludesCommand : CliktCommand(
             pathExcludes[vcsUrl]?.let { pathExcludesForRepository ->
                 pathExcludesForRepository.forEach { pathExclude ->
                     relativePaths.forEach { path ->
-                        result.add(pathExclude.copy(pattern = path + '/' + pathExclude.pattern))
+                        result += pathExclude.copy(pattern = path + '/' + pathExclude.pattern)
                     }
                 }
             }

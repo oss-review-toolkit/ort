@@ -75,7 +75,8 @@ object SpdxDocumentModelMapper {
             licenseDeclared = SpdxConstants.NOASSERTION,
             name = "Root package"
         )
-        packages.add(rootPackage)
+
+        packages += rootPackage
 
         ortResult.getPackages(omitExcluded = true).forEach { curatedPackage ->
             val pkg = curatedPackage.pkg
@@ -99,8 +100,8 @@ object SpdxDocumentModelMapper {
                 relationshipType = SpdxRelationship.Type.DEPENDENCY_OF
             )
 
-            packages.add(binaryPackage)
-            relationships.add(binaryPackageRelationship)
+            packages += binaryPackage
+            relationships += binaryPackageRelationship
 
             if (pkg.vcsProcessed.url.isNotBlank()) {
                 val vcsScanResult =
@@ -122,8 +123,8 @@ object SpdxDocumentModelMapper {
                     relationshipType = SpdxRelationship.Type.GENERATED_FROM
                 )
 
-                packages.add(vcsPackage)
-                relationships.add(vcsPackageRelationShip)
+                packages += vcsPackage
+                relationships += vcsPackageRelationShip
             }
 
             if (pkg.sourceArtifact.url.isNotBlank()) {
@@ -146,8 +147,8 @@ object SpdxDocumentModelMapper {
                     relationshipType = SpdxRelationship.Type.GENERATED_FROM
                 )
 
-                packages.add(sourceArtifactPackage)
-                relationships.add(sourceArtifactPackageRelationship)
+                packages += sourceArtifactPackage
+                relationships += sourceArtifactPackageRelationship
             }
         }
 

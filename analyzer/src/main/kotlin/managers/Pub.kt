@@ -233,7 +233,7 @@ class Pub(
         log.info { "buildDependencyTree for package $nameOfCurrentPackage " }
 
         // Ensure we process every package only once.
-        processedPackages.add(nameOfCurrentPackage)
+        processedPackages += nameOfCurrentPackage
 
         // Lookup the dependencies listed in pubspec.yaml file and build the dependency tree.
         dependencies.forEach { packageName ->

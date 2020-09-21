@@ -64,7 +64,7 @@ data class LicenseConfiguration(
 
         licenses.forEach { license ->
             license.sets.forEach { setId ->
-                result.getOrPut(setId) { mutableSetOf() }.add(license)
+                result.getOrPut(setId) { mutableSetOf() } += license
             }
         }
 

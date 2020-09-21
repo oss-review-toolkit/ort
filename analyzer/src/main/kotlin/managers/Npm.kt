@@ -439,7 +439,7 @@ open class Npm(
                     ancestorModuleDirs = dependencyModuleDirPath.subList(1, dependencyModuleDirPath.size),
                     ancestorModuleIds = ancestorModuleIds + moduleId,
                     packageType = "NPM"
-                )?.let { dependencies.add(it) }
+                )?.let { dependencies += it }
 
                 return@forEach
             }

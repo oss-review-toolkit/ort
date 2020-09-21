@@ -173,7 +173,7 @@ class GoMod(
             val parent = parsePackageEntry(columns[0])
             val child = parsePackageEntry(columns[1])
 
-            result.add(Edge(parent, child))
+            result += Edge(parent, child)
         }
 
         return result
@@ -244,8 +244,8 @@ private fun Collection<Edge>.toPackageReferenceForest(
         val target = addNode(edge.target)
 
         if (source != null && target != null) {
-            source.outgoingEdges.add(target.id)
-            target.incomingEdges.add(source.id)
+            source.outgoingEdges += target.id
+            target.incomingEdges += source.id
         }
     }
 

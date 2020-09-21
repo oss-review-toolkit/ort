@@ -163,14 +163,14 @@ class Conan(
                         id = extractPackageId(child, workingDir),
                         dependencies = extractDependencyTree(rootNode, workingDir, child, SCOPE_NAME_DEPENDENCIES)
                     )
-                    result.add(packageReference)
+                    result += packageReference
 
                     val packageDevReference = PackageReference(
                         id = extractPackageId(child, workingDir),
                         dependencies = extractDependencyTree(rootNode, workingDir, child, SCOPE_NAME_DEV_DEPENDENCIES)
                     )
 
-                    result.add(packageDevReference)
+                    result += packageDevReference
                 }
             }
         }
@@ -191,7 +191,7 @@ class Conan(
         while (!stack.empty()) {
             val pkg = stack.pop()
             extractDependencyTree(rootNode, workingDir, pkg, scopeName).forEach {
-                dependencies.add(it)
+                dependencies += it
             }
         }
         return dependencies.toSortedSet()

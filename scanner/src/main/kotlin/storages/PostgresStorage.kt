@@ -150,7 +150,7 @@ class PostgresStorage(
 
             while (resultSet.next()) {
                 val scanResult = jsonMapper.readValue<ScanResult>(resultSet.getString(1).unescapeNull())
-                scanResults.add(scanResult)
+                scanResults += scanResult
             }
 
             Success(ScanResultContainer(id, scanResults))
@@ -196,7 +196,7 @@ class PostgresStorage(
 
             while (resultSet.next()) {
                 val scanResult = jsonMapper.readValue<ScanResult>(resultSet.getString(1).unescapeNull())
-                scanResults.add(scanResult)
+                scanResults += scanResult
             }
 
             // TODO: Currently the query only accounts for the scanner details. Ideally also the provenance should be

@@ -285,7 +285,7 @@ class NodeSupportTest : WordSpec() {
 
         val definitionFile = projectDir.resolve("package.json")
         definitionFile.writeText(createPackageJson(matchers, flattenWorkspaceDefinition))
-        definitionFiles.add(definitionFile)
+        definitionFiles += definitionFile
 
         if (hasNpmLockFile) projectDir.resolve("package-lock.json").createNewFile()
         if (hasYarnLockFile) projectDir.resolve("yarn.lock").createNewFile()
