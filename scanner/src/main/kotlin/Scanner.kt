@@ -74,6 +74,11 @@ abstract class Scanner(val scannerName: String, protected val config: ScannerCon
         SpdxLicense.forId(license)?.id ?: "LicenseRef-$scannerName-$license"
 
     /**
+     * Returns the scanner configuration to be included in the scanner results
+     */
+    internal open fun getConfigForResult() = config
+
+    /**
      * Scan the [Project]s and [Package]s specified in [ortResultFile] and store the scan results in [outputDirectory].
      * The [downloadDirectory] is used to download the source code to for scanning. Return scan results as an
      * [OrtResult].
@@ -129,7 +134,7 @@ abstract class Scanner(val scannerName: String, protected val config: ScannerCon
 
         val endTime = Instant.now()
 
-        val scannerRun = ScannerRun(startTime, endTime, Environment(), config, scanRecord)
+        val scannerRun = ScannerRun(startTime, endTime, Environment(), getConfigForResult(), scanRecord)
 
         // Note: This overwrites any existing ScannerRun from the input file.
         return ortResult.copy(scanner = scannerRun)

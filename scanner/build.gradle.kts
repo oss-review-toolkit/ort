@@ -34,6 +34,7 @@ dependencies {
 
     implementation(project(":clearly-defined"))
     implementation(project(":downloader"))
+    implementation(project(":fossid-webapp-client"))
     implementation(project(":utils"))
 
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin:$jacksonVersion")
