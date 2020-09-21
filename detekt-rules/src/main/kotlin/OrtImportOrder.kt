@@ -47,7 +47,8 @@ class OrtImportOrder : Rule() {
 
         // TODO: Also check for blank lines between imports from different top-level domains.
         if (importPaths != sortedImportPaths) {
-            val message = "Invalid import order in file '${importList.containingKtFile.absolutePath()}'"
+            val path = importList.containingKtFile.absolutePath()
+            val message = "Imports in file '$path' are not sorted alphabetically"
             val finding = CodeSmell(
                 issue,
                 // Use the message as the name to also see it in CLI output and not only in the report files.
