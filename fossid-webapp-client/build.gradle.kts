@@ -32,4 +32,7 @@ dependencies {
     api("com.squareup.retrofit2:retrofit:$retrofitVersion")
 
     implementation(project(":utils"))
+
+    implementation("com.squareup.retrofit2:converter-jackson:$retrofitVersion")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlinxCoroutinesVersion")
 }
