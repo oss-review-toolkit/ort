@@ -39,9 +39,9 @@ import java.io.File
 import kotlin.time.TimedValue
 import kotlin.time.measureTimedValue
 
+import org.ossreviewtoolkit.GlobalOptions
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.config.CopyrightGarbage
-import org.ossreviewtoolkit.model.config.OrtConfiguration
 import org.ossreviewtoolkit.model.config.Resolutions
 import org.ossreviewtoolkit.model.config.orEmpty
 import org.ossreviewtoolkit.model.licenses.DefaultLicenseInfoProvider
@@ -193,7 +193,7 @@ class ReporterCommand : CliktCommand(
         upperCaseFormat to Pair(option.substringBefore("="), option.substringAfter("=", ""))
     }.multiple()
 
-    private val config by requireObject<OrtConfiguration>()
+    private val globalOptionsForSubcommands by requireObject<GlobalOptions>()
 
     override fun run() {
         var ortResult = ortFile.readValue<OrtResult>()
@@ -212,7 +212,7 @@ class ReporterCommand : CliktCommand(
         val licenseInfoResolver = LicenseInfoResolver(
             provider = DefaultLicenseInfoProvider(ortResult, packageConfigurationProvider),
             copyrightGarbage = copyrightGarbage,
-            archiver = config.scanner?.archive?.createFileArchiver() ?: FileArchiver.DEFAULT
+            archiver = globalOptionsForSubcommands.config.scanner?.archive?.createFileArchiver() ?: FileArchiver.DEFAULT
         )
 
         val licenseConfiguration =
@@ -226,7 +226,7 @@ class ReporterCommand : CliktCommand(
 
         val input = ReporterInput(
             ortResult,
-            config,
+            globalOptionsForSubcommands.config,
             packageConfigurationProvider,
             resolutionProvider,
             DefaultLicenseTextProvider(customLicenseTextsDir.takeIf { it.isDirectory }),

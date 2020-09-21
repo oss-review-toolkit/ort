@@ -31,8 +31,8 @@ import java.sql.DriverManager
 import java.sql.SQLException
 import java.util.Properties
 
+import org.ossreviewtoolkit.GlobalOptions
 import org.ossreviewtoolkit.model.OrtResult
-import org.ossreviewtoolkit.model.config.OrtConfiguration
 import org.ossreviewtoolkit.model.config.PostgresStorageConfiguration
 import org.ossreviewtoolkit.model.jsonMapper
 import org.ossreviewtoolkit.model.readValue
@@ -66,12 +66,12 @@ class UploadResultCommand : CliktCommand(
         help = "The name of the JSONB column to store the ORT result."
     ).required()
 
-    private val config by requireObject<OrtConfiguration>()
+    private val globalOptionsForSubcommands by requireObject<GlobalOptions>()
 
     override fun run() {
         val ortResult = ortFile.readValue<OrtResult>()
 
-        val postgresConfig = config.scanner?.postgresStorage
+        val postgresConfig = globalOptionsForSubcommands.config.scanner?.postgresStorage
 
         requireNotNull(postgresConfig) {
             "No PostgreSQL storage is configured for the scanner."
