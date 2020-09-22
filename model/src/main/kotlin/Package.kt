@@ -107,7 +107,14 @@ data class Package(
      * for dependency versions.
      */
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
-    val isMetaDataOnly: Boolean = false
+    val isMetaDataOnly: Boolean = false,
+
+    /**
+     * Indicates whether the source code of this [Package] has been modified compared to the original source code,
+     * e.g., in case of a fork of an upstream Open Source project.
+     */
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+    val isModified: Boolean = false
 ) : Comparable<Package> {
     companion object {
         /**
