@@ -45,7 +45,8 @@ class PackageCurationTest : WordSpec({
                 binaryArtifact = RemoteArtifact.EMPTY,
                 sourceArtifact = RemoteArtifact.EMPTY,
                 vcs = VcsInfo.EMPTY,
-                isMetaDataOnly = false
+                isMetaDataOnly = false,
+                isModified = false
             )
 
             val curation = PackageCuration(
@@ -71,7 +72,8 @@ class PackageCurationTest : WordSpec({
                         resolvedRevision = "resolvedRevision",
                         path = "path"
                     ),
-                    isMetaDataOnly = true
+                    isMetaDataOnly = true,
+                    isModified = true
                 )
             )
 
@@ -89,6 +91,7 @@ class PackageCurationTest : WordSpec({
                 sourceArtifact shouldBe curation.data.sourceArtifact
                 vcs.toCuration() shouldBe curation.data.vcs
                 isMetaDataOnly shouldBe true
+                isModified shouldBe true
             }
 
             curatedPkg.curations.size shouldBe 1
@@ -116,7 +119,8 @@ class PackageCurationTest : WordSpec({
                     resolvedRevision = "resolvedRevision",
                     path = "path"
                 ),
-                isMetaDataOnly = false
+                isMetaDataOnly = false,
+                isModified = false
             )
 
             val curation = PackageCuration(
@@ -147,6 +151,7 @@ class PackageCurationTest : WordSpec({
                     path = pkg.vcs.path
                 )
                 isMetaDataOnly shouldBe false
+                isModified shouldBe false
             }
 
             curatedPkg.curations.size shouldBe 1
@@ -253,6 +258,35 @@ class PackageCurationTest : WordSpec({
             val curatedPkg = curation.apply(pkg.toCuratedPackage())
 
             curatedPkg.pkg.isMetaDataOnly shouldBe false
+        }
+
+        "be able to clear isModified" {
+            val pkg = Package(
+                id = Identifier(
+                    type = "Maven",
+                    namespace = "org.hamcrest",
+                    name = "hamcrest-core",
+                    version = "1.3"
+                ),
+                declaredLicenses = sortedSetOf(),
+                description = "",
+                homepageUrl = "",
+                binaryArtifact = RemoteArtifact.EMPTY,
+                sourceArtifact = RemoteArtifact.EMPTY,
+                vcs = VcsInfo.EMPTY,
+                isModified = true
+            )
+
+            val curation = PackageCuration(
+                id = pkg.id,
+                data = PackageCurationData(
+                    isModified = false
+                )
+            )
+
+            val curatedPkg = curation.apply(pkg.toCuratedPackage())
+
+            curatedPkg.pkg.isModified shouldBe false
         }
     }
 
