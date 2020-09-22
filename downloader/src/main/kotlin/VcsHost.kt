@@ -225,7 +225,7 @@ enum class VcsHost(
                             if (startLine > 0) {
                                 permalink += "#L$startLine"
 
-                                // SourceHut does not support an end line in permalinks to Mercural repos.
+                                // SourceHut does not support an end line in permalinks to Mercurial repos.
                             }
                         }
                     }
