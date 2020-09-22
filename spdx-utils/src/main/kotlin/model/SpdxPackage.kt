@@ -110,7 +110,7 @@ data class SpdxPackage(
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     val licenseComments: String = "",
 
-    /*
+    /**
      * The concluded license for the package as SPDX expression. To represent a not present value [SpdxConstants.NONE]
      * or [SpdxConstants.NOASSERTION] must be used.
      */
