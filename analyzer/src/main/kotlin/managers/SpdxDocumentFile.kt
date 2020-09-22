@@ -176,7 +176,7 @@ class SpdxDocumentFile(
         } else {
             // TODO: Add support for "package.spdx.yml" files. How to deal with relationships between SPDX packages if
             //       we do not have a project to attach dependencies to?
-            Project.EMPTY
+            Project.EMPTY.copy(id = Identifier.EMPTY.copy(type = managerName))
         }
 
         val nonProjectPackages = if (projectPackage != null) {
