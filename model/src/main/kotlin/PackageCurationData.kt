@@ -133,7 +133,7 @@ private fun applyCurationToPackage(targetPackage: CuratedPackage, curation: Pack
         sourceArtifact = curation.sourceArtifact ?: base.sourceArtifact,
         vcs = vcs,
         isMetaDataOnly = curation.isMetaDataOnly ?: base.isMetaDataOnly,
-        isModified = curation.isModified ?: base.isMetaDataOnly
+        isModified = curation.isModified ?: base.isModified
     )
 
     val declaredLicenseMappingDiff = mutableMapOf<String, SpdxExpression>().apply {
