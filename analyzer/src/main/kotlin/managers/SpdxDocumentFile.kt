@@ -146,6 +146,8 @@ class SpdxDocumentFile(
         val workingDir = definitionFile.parentFile
         val spdxDocument = SpdxModelMapper.read(definitionFile, SpdxDocument::class.java)
 
+        // Distinguish whether we have a project-style SPDX document that describes a project and its dependencies, or a
+        // package-style SPDX document that describes a single (dependency-)package.
         val projectPackage = spdxDocument.packages.singleOrNull { it.packageFilename.isEmpty() }
 
         val project = if (projectPackage != null) {
