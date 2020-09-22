@@ -238,6 +238,10 @@ enum class VcsHost(
     };
 
     companion object {
+        private val SVN_BRANCH_OR_TAG_PATTERN = Regex("(.*svn.*)/(branches|tags)/([^/]+)/?(.*)")
+        private val SVN_TRUNK_PATTERN = Regex("(.*svn.*)/(trunk)/?(.*)")
+        private val GIT_REVISION_FRAGMENT = Regex("git.+#[a-fA-F0-9]{7,}")
+
         /**
          * Return all [VcsInfo] that can be parsed from [projectUrl] without actually making a network request.
          */
@@ -253,11 +257,8 @@ enum class VcsHost(
             if (vcs != null) return vcs
 
             // Fall back to generic URL detection for unknown VCS hosts.
-            val svnBranchOrTagPattern = Regex("(.*svn.*)/(branches|tags)/([^/]+)/?(.*)")
-            val svnBranchOrTagMatch = svnBranchOrTagPattern.matchEntire(projectUrl)
-
-            val svnTrunkPattern = Regex("(.*svn.*)/(trunk)/?(.*)")
-            val svnTrunkMatch = svnTrunkPattern.matchEntire(projectUrl)
+            val svnBranchOrTagMatch = SVN_BRANCH_OR_TAG_PATTERN.matchEntire(projectUrl)
+            val svnTrunkMatch = SVN_TRUNK_PATTERN.matchEntire(projectUrl)
 
             return when {
                 svnBranchOrTagMatch != null -> {
@@ -288,7 +289,7 @@ enum class VcsHost(
                     VcsInfo(VcsType.GIT, "$url.git", "", null, path)
                 }
 
-                projectUrl.contains(".git#") || Regex("git.+#[a-fA-F0-9]{7,}").matches(projectUrl) -> {
+                projectUrl.contains(".git#") || GIT_REVISION_FRAGMENT.matches(projectUrl) -> {
                     val url = normalizeVcsUrl(projectUrl.substringBeforeLast('#'))
                     val revision = projectUrl.substringAfterLast('#')
                     VcsInfo(VcsType.GIT, url, revision, null, "")
