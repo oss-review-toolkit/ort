@@ -82,6 +82,11 @@ data class PackageCurationData(
     val isMetaDataOnly: Boolean? = null,
 
     /**
+     * Whether the package is modified compared to the original source
+     */
+    val isModified: Boolean? = null,
+
+    /**
      * The declared license mapping entries to be added to the actual declared license mapping, which in turn gets
      * applied by [DeclaredLicenseProcessor.process].
      */
@@ -127,7 +132,8 @@ private fun applyCurationToPackage(targetPackage: CuratedPackage, curation: Pack
         binaryArtifact = curation.binaryArtifact ?: base.binaryArtifact,
         sourceArtifact = curation.sourceArtifact ?: base.sourceArtifact,
         vcs = vcs,
-        isMetaDataOnly = curation.isMetaDataOnly ?: base.isMetaDataOnly
+        isMetaDataOnly = curation.isMetaDataOnly ?: base.isMetaDataOnly,
+        isModified = curation.isModified ?: base.isMetaDataOnly
     )
 
     val declaredLicenseMappingDiff = mutableMapOf<String, SpdxExpression>().apply {
