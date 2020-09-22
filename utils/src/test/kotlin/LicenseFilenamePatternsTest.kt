@@ -59,4 +59,14 @@ class LicenseFilenamePatternsTest : WordSpec({
             )
         }
     }
+
+    "getAllAncestorDirectories" should {
+        "return all ancestor directories ordered along the path to root" {
+            LicenseFilenamePatterns.getAllAncestorDirectories("/a/b/c") should containExactly(
+                "/a/b",
+                "/a",
+                "/"
+            )
+        }
+    }
 })
