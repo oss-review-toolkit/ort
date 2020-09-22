@@ -51,6 +51,9 @@ private const val REPORT_EXTENSION = "xml"
  * A [Reporter] that creates software bills of materials (SBOM) in the [CycloneDX][1] format. For each [Project]
  * contained in the ORT result a separate SBOM is created.
  *
+ * This reporter supports the following options:
+ * - *single.bom*: If set, a single SBOM for all projects is created instead of separate SBOMs for each project.
+ *
  * [1]: https://cyclonedx.org
  */
 class CycloneDxReporter : Reporter {
