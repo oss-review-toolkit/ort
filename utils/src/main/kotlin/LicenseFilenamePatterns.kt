@@ -61,13 +61,13 @@ object LicenseFilenamePatterns {
         getFileGlobsForDirectoryAndAncestors(directory, ALL_LICENSE_FILENAMES)
 
     /**
-     * Return recursively all ancestor directories of the given absolute [directory], ordered along the path from
-     * [directory] to the root.
+     * Return recursively all ancestor directories of the given absolute [file], ordered along the path from
+     * the parent of [file] to the root.
      */
-    internal fun getAllAncestorDirectories(directory: String): List<String> {
+    internal fun getAllAncestorDirectories(file: String): List<String> {
         val result = mutableListOf<String>()
 
-        var ancestorDir = File(directory).parentFile
+        var ancestorDir = File(file).parentFile
         while (ancestorDir != null) {
             result += ancestorDir.invariantSeparatorsPath
             ancestorDir = ancestorDir.parentFile
