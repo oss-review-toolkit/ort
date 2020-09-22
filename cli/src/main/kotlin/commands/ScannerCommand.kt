@@ -161,8 +161,8 @@ class ScannerCommand : CliktCommand(name = "scan", help = "Run existing copyrigh
             "The download directory '$downloadDir' must not exist yet."
         }
 
-        val scannerConfiguration = globalOptionsForSubcommands.config
-        val scanner = configureScanner(scannerConfiguration.scanner)
+        val config = globalOptionsForSubcommands.config
+        val scanner = configureScanner(config.scanner)
 
         val ortResult = if (input.isFile) {
             scanner.scanOrtResult(
