@@ -225,7 +225,7 @@ class VcsHostTest : WordSpec({
 
             SOURCEHUT.toPermalink(vcsInfo, 9) shouldBe
                     "https://hg.sr.ht/~duangle/paniq_legacy/browse/f04521a92844/masagin/README.txt#L9"
-            // SourceHut does not support an end line in permalinks to Mercural repos.
+            // SourceHut does not support an end line in permalinks to Mercurial repos.
         }
     }
 
