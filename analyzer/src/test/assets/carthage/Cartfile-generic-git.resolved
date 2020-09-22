@@ -1,0 +1,2 @@
+# Testfile for Carthage package manager for generic git urls
+git "https://host.tld/path/to/project.git" "1.0.0"
