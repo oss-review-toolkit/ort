@@ -51,6 +51,7 @@ class PackageManagerTest : WordSpec({
             managedFilesByName["Bower"] should containExactly(projectDir.resolve("bower.json"))
             managedFilesByName["Bundler"] should containExactly(projectDir.resolve("Gemfile"))
             managedFilesByName["Cargo"] should containExactly(projectDir.resolve("Cargo.toml"))
+            managedFilesByName["Carthage"] should containExactly(projectDir.resolve("Cartfile.resolved"))
             managedFilesByName["Conan"] should containExactly(projectDir.resolve("conanfile.py"))
             managedFilesByName["DotNet"] should containExactly(projectDir.resolve("test.csproj"))
             managedFilesByName["GoDep"] should containExactly(projectDir.resolve("Gopkg.toml"))

@@ -1,0 +1,2 @@
+# Testfile for Carthage package manager for github dependencies
+github "Alamofire/AlamofireImage" "3.2.0"

@@ -1,0 +1,2 @@
+# Cartfile that declares binary dependencies
+binary "https://host.tld/path/to/binary/spec.json" "1.0.0"

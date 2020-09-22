@@ -1,0 +1,123 @@
+---
+project:
+  id: "Carthage:oss-review-toolkit:ort:"
+  definition_file_path: "<REPLACE_DEFINITION_FILE_PATH>"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "<REPLACE_URL>"
+    revision: "<REPLACE_REVISION>"
+    path: "<REPLACE_PATH>"
+  homepage_url: ""
+  scopes: []
+packages:
+- id: "Carthage::binaryspec:1.0.0"
+  purl: "pkg:carthage/binaryspec@1.0.0"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  description: ""
+  homepage_url: ""
+  binary_artifact:
+    url: "https://path/to/binary/artifact.zip"
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+- id: "Carthage:Alamofire:Alamofire:5.2.2"
+  purl: "pkg:carthage/Alamofire/Alamofire@5.2.2"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  description: ""
+  homepage_url: "https://github.com/Alamofire/Alamofire"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: "Git"
+    url: "https://github.com/Alamofire/Alamofire.git"
+    revision: "5.2.2"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/Alamofire/Alamofire.git"
+    revision: "5.2.2"
+    path: ""
+- id: "Carthage:ReactiveCocoa:ReactiveCocoa:11.0.0"
+  purl: "pkg:carthage/ReactiveCocoa/ReactiveCocoa@11.0.0"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  description: ""
+  homepage_url: "https://github.com/ReactiveCocoa/ReactiveCocoa"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: "Git"
+    url: "https://github.com/ReactiveCocoa/ReactiveCocoa.git"
+    revision: "11.0.0"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/ReactiveCocoa/ReactiveCocoa.git"
+    revision: "11.0.0"
+    path: ""
+- id: "Carthage:realm:realm-cocoa:v5.3.3"
+  purl: "pkg:carthage/realm/realm-cocoa@v5.3.3"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  description: ""
+  homepage_url: "https://github.com/realm/realm-cocoa"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: "Git"
+    url: "https://github.com/realm/realm-cocoa.git"
+    revision: "v5.3.3"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/realm/realm-cocoa.git"
+    revision: "v5.3.3"
+    path: ""

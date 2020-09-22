@@ -276,6 +276,7 @@ Currently, the following package managers are supported:
 * [Bower](http://bower.io/) (JavaScript)
 * [Bundler](http://bundler.io/) (Ruby)
 * [Cargo](https://doc.rust-lang.org/cargo/) (Rust)
+* [Carthage](https://github.com/Carthage/Carthage) (iOS / Cocoa)
 * [Conan](https://conan.io/) (C / C++, *experimental* as the VCS locations often times do not contain the actual source
   code, see [issue #2037](https://github.com/oss-review-toolkit/ort/issues/2037))
 * [dep](https://golang.github.io/dep/) (Go)
