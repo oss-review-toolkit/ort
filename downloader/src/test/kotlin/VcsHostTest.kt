@@ -20,7 +20,10 @@
 package org.ossreviewtoolkit.downloader
 
 import io.kotest.core.spec.style.WordSpec
+import io.kotest.matchers.nulls.shouldBeNull
 import io.kotest.matchers.shouldBe
+
+import java.net.URI
 
 import org.ossreviewtoolkit.downloader.VcsHost.BITBUCKET
 import org.ossreviewtoolkit.downloader.VcsHost.GITHUB
@@ -332,6 +335,32 @@ class VcsHostTest : WordSpec({
                 path = "pom.xml"
             )
             actual shouldBe expected
+        }
+    }
+
+    "The conversion from URI to VcsHost" should {
+        "convert a Github URI" {
+            VcsHost.toVcsHost(URI("https://github.com/oss-review-toolkit/ort")) shouldBe GITHUB
+        }
+
+        "convert a Gitlab URI" {
+            VcsHost.toVcsHost(URI("https://gitlab.com/gitlab-org/gitlab")) shouldBe GITLAB
+        }
+
+        "convert a Bitbucket URI" {
+            VcsHost.toVcsHost(URI("https://bitbucket.org/yevster/spdxtraxample")) shouldBe BITBUCKET
+        }
+
+        "convert a SourceHut git URI" {
+            VcsHost.toVcsHost(URI("https://git.sr.ht/~sircmpwn/sourcehut.org")) shouldBe SOURCEHUT
+        }
+
+        "convert a SourceHut hg URI" {
+            VcsHost.toVcsHost(URI("https://hg.sr.ht/~sircmpwn/invertbucket")) shouldBe SOURCEHUT
+        }
+
+        "handle an unknown URI" {
+            VcsHost.toVcsHost(URI("https://host.tld/path/to/repo")).shouldBeNull()
         }
     }
 })

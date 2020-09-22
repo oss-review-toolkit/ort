@@ -247,9 +247,7 @@ enum class VcsHost(
          */
         fun toVcsInfo(projectUrl: String): VcsInfo {
             val vcs = try {
-                URI(projectUrl).let {
-                    values().find { host -> host.isApplicable(it) }?.toVcsInfoInternal(it)
-                }
+                URI(projectUrl).let { toVcsHost(it)?.toVcsInfoInternal(it) }
             } catch (e: URISyntaxException) {
                 null
             }
@@ -308,6 +306,11 @@ enum class VcsHost(
             return values().find { host -> host.isApplicable(vcsInfo) }
                 ?.toPermalinkInternal(vcsInfo.normalize(), startLine, endLine)
         }
+
+        /**
+         * Return the [VcsHost] for a [vcsUrl].
+         */
+        fun toVcsHost(vcsUrl: URI): VcsHost? = values().find { host -> host.isApplicable(vcsUrl) }
     }
 
     private val supportedTypes = supportedTypes.asList()
