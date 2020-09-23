@@ -20,9 +20,28 @@
 package org.ossreviewtoolkit.model
 
 import io.kotest.core.spec.style.WordSpec
+import io.kotest.inspectors.forAll
 import io.kotest.matchers.shouldBe
 
 import org.ossreviewtoolkit.model.utils.RootLicenseMatcher
+
+private val COMMONLY_USED_LICENSE_FILE_NAMES = listOf(
+    "copying",
+    "copyright",
+    "licence",
+    "licence.extension",
+    "licencesuffix",
+    "license",
+    "license.extension",
+    "licensesuffix",
+    "filename.license",
+    "patents",
+    "readme",
+    "readme.extension",
+    "readmesuffix",
+    "unlicence",
+    "unlicense"
+)
 
 class RootLicenseMatcherTest : WordSpec({
     "getApplicableLicenseFilesForDirectories" should {
@@ -64,6 +83,33 @@ class RootLicenseMatcherTest : WordSpec({
                 ),
                 directories = listOf("")
             ).paths() shouldBe mapOf("" to setOf("PATENTS", "README"))
+        }
+
+        "match commonly used license file paths in upper-case" {
+            COMMONLY_USED_LICENSE_FILE_NAMES.map { it.toUpperCase() }.forAll {
+                RootLicenseMatcher().getApplicableLicenseFilesForDirectories(
+                    licenseFindings = licenseFindings(it),
+                    directories = listOf("")
+                ).paths() shouldBe mapOf("" to setOf(it))
+            }
+        }
+
+        "match commonly used license file paths in lower-case" {
+            COMMONLY_USED_LICENSE_FILE_NAMES.map { it.toLowerCase() }.forAll {
+                RootLicenseMatcher().getApplicableLicenseFilesForDirectories(
+                    licenseFindings = licenseFindings(it),
+                    directories = listOf("")
+                ).paths() shouldBe mapOf("" to setOf(it))
+            }
+        }
+
+        "match commonly used license file paths in capital (case)" {
+            COMMONLY_USED_LICENSE_FILE_NAMES.map { it.capitalize() }.forAll {
+                RootLicenseMatcher().getApplicableLicenseFilesForDirectories(
+                    licenseFindings = licenseFindings(it),
+                    directories = listOf("")
+                ).paths() shouldBe mapOf("" to setOf(it))
+            }
         }
     }
 })

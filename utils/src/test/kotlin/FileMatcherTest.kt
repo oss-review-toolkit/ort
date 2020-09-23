@@ -20,59 +20,9 @@
 package org.ossreviewtoolkit.utils
 
 import io.kotest.core.spec.style.WordSpec
-import io.kotest.inspectors.forAll
 import io.kotest.matchers.shouldBe
 
-private val COMMONLY_USED_LICENSE_FILE_NAMES = listOf(
-    "copying",
-    "copyright",
-    "licence",
-    "licence.extension",
-    "licencesuffix",
-    "license",
-    "license.extension",
-    "licensesuffix",
-    "filename.license",
-    "patents",
-    "readme",
-    "readme.extension",
-    "readmesuffix",
-    "unlicence",
-    "unlicense"
-)
-
 class FileMatcherTest : WordSpec({
-    val defaultMatcher = FileMatcher.LICENSE_FILE_MATCHER
-
-    "default license file matcher" should {
-        "match commonly used license file paths in upper-case" {
-            COMMONLY_USED_LICENSE_FILE_NAMES.map { it.toUpperCase() }.forAll {
-                defaultMatcher.matches(it) shouldBe true
-            }
-        }
-
-        "match commonly used license file paths in lower-case" {
-            COMMONLY_USED_LICENSE_FILE_NAMES.map { it.toLowerCase() }.forAll {
-                defaultMatcher.matches(it) shouldBe true
-            }
-        }
-
-        "match commonly used license file paths in capital (case)" {
-            COMMONLY_USED_LICENSE_FILE_NAMES.map { it.capitalize() }.forAll {
-                defaultMatcher.matches(it) shouldBe true
-            }
-        }
-
-        "be case insensitive" {
-            with(defaultMatcher) {
-                matches("LICENSE") shouldBe true
-                matches("License") shouldBe true
-                matches("LiCeNsE") shouldBe true
-                matches("license") shouldBe true
-            }
-        }
-    }
-
     "matches" should {
         "match the given patterns" {
             val matcher = FileMatcher("a/LICENSE", "b/LICENSE")
