@@ -75,8 +75,8 @@ class Carthage(
                 project = Project(
                     id = Identifier(
                         type = managerName,
-                        namespace = projectInfo.user.orEmpty(),
-                        name = projectInfo.project.orEmpty(),
+                        namespace = projectInfo.namespace.orEmpty(),
+                        name = projectInfo.projectName.orEmpty(),
                         version = projectInfo.revision.orEmpty()
                     ),
                     definitionFilePath = VersionControlSystem.getPathInfo(definitionFile).path,
@@ -101,8 +101,9 @@ class Carthage(
         val vcsHost = VcsHost.toVcsHost(URI(normalizedVcsUrl))
 
         return ProjectInfo(
-            user = vcsHost?.getUserOrOrganization(normalizedVcsUrl),
-            project = vcsHost?.getProject(normalizedVcsUrl),
+            namespace = vcsHost?.getUserOrOrganization(normalizedVcsUrl),
+            projectName = vcsHost?.getProject(normalizedVcsUrl)
+                ?: workingDir.relativeTo(analysisRoot).invariantSeparatorsPath,
             revision = vcsInfo.resolvedRevision
         )
     }
@@ -262,6 +263,6 @@ private enum class DependencyType {
     BINARY
 }
 
-private data class ProjectInfo(val user: String?, val project: String?, val revision: String?)
+private data class ProjectInfo(val namespace: String?, val projectName: String?, val revision: String?)
 
 private fun String.isComment() = trim().startsWith("#")
