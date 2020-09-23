@@ -243,7 +243,23 @@ class Carthage(
 }
 
 private enum class DependencyType {
-    GITHUB, GIT, BINARY
+    /**
+     * Dependencies that originate from GitHub, see
+     * https://github.com/Carthage/Carthage/blob/master/Documentation/Artifacts.md#github-repositories
+     */
+    GITHUB,
+
+    /**
+     * Dependencies that originate from generic Git repositories, see
+     * https://github.com/Carthage/Carthage/blob/master/Documentation/Artifacts.md#git-repositories
+     */
+    GIT,
+
+    /**
+     * Dependencies that are only available as compiled binary frameworks, see
+     * https://github.com/Carthage/Carthage/blob/master/Documentation/Artifacts.md#binary-only-frameworks
+     */
+    BINARY
 }
 
 private data class ProjectInfo(val user: String?, val project: String?, val revision: String?)
