@@ -19,8 +19,6 @@
 
 package org.ossreviewtoolkit.utils
 
-import org.ossreviewtoolkit.utils.LicenseFilenamePatterns.ALL_LICENSE_FILENAMES
-
 import org.springframework.util.AntPathMatcher
 
 /**
@@ -39,16 +37,6 @@ class FileMatcher(
      */
     ignoreCase: Boolean = false
 ) {
-    companion object {
-        /**
-         * A matcher which uses the default license file names.
-         */
-        val LICENSE_FILE_MATCHER = FileMatcher(
-            patterns = ALL_LICENSE_FILENAMES,
-            ignoreCase = true // This does not have any effect when used with (case-sensitive) sparse checkouts.
-        )
-    }
-
     constructor(vararg patterns: String, ignoreCase: Boolean = false) : this(patterns.asList(), ignoreCase)
 
     private val matcher = AntPathMatcher().apply {
