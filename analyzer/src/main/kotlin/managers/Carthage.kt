@@ -104,7 +104,7 @@ class Carthage(
             namespace = vcsHost?.getUserOrOrganization(normalizedVcsUrl),
             projectName = vcsHost?.getProject(normalizedVcsUrl)
                 ?: workingDir.relativeTo(analysisRoot).invariantSeparatorsPath,
-            revision = vcsInfo.resolvedRevision
+            revision = vcsInfo.revision
         )
     }
 
