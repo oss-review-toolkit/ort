@@ -22,6 +22,7 @@ package org.ossreviewtoolkit.utils
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.inspectors.forAll
 import io.kotest.matchers.collections.beEmpty
+import io.kotest.matchers.collections.containExactly
 import io.kotest.matchers.collections.shouldBeIn
 import io.kotest.matchers.nulls.shouldBeNull
 import io.kotest.matchers.nulls.shouldNotBeNull
@@ -399,6 +400,16 @@ class UtilsTest : WordSpec({
             packages.entries.forAll { (actualUrl, expectedUrl) ->
                 normalizeVcsUrl(actualUrl) shouldBe expectedUrl
             }
+        }
+    }
+
+    "getAllAncestorDirectories" should {
+        "return all ancestor directories ordered along the path to root" {
+            getAllAncestorDirectories("/a/b/c") should containExactly(
+                "/a/b",
+                "/a",
+                "/"
+            )
         }
     }
 })
