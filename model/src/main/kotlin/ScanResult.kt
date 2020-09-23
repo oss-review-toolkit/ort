@@ -23,7 +23,7 @@ import com.fasterxml.jackson.annotation.JsonAlias
 import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.databind.JsonNode
 
-import org.ossreviewtoolkit.utils.FileMatcher
+import org.ossreviewtoolkit.model.utils.RootLicenseMatcher
 
 /**
  * The result of a single scan of a single package.
@@ -54,11 +54,15 @@ data class ScanResult(
 ) {
     /**
      * Filter all detected licenses and copyrights from the [summary] which are underneath [path], and set the [path]
-     * for [provenance]. Findings which are matched by [FileMatcher.LICENSE_FILE_MATCHER] are also kept.
+     * for [provenance]. Findings which [RootLicenseMatcher] assigns as root license files for [path] are also kept.
      */
     fun filterPath(path: String): ScanResult {
-        fun TextLocation.matchesPath() =
-            this.path.startsWith("$path/") || FileMatcher.LICENSE_FILE_MATCHER.matches(this.path)
+        val applicableLicenseFiles = RootLicenseMatcher().getApplicableLicenseFilesForDirectories(
+            licenseFindings = summary.licenseFindings,
+            directories = listOf(path)
+        ).values.flatten().mapTo(mutableSetOf()) { it.location.path }
+
+        fun TextLocation.matchesPath() = this.path.startsWith("$path/") || this.path in applicableLicenseFiles
 
         val newProvenance = provenance.copy(
             vcsInfo = provenance.vcsInfo?.copy(path = path),
