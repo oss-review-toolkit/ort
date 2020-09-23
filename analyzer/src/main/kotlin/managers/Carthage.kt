@@ -122,9 +122,11 @@ class Carthage(
 
     private fun parseDependencyLine(line: String, workingDir: String): Package {
         val split = line.split(" ")
+
         require(split.size == 3) {
             "A dependency line must consist of exactly 3 space separated elements."
         }
+
         val type = DependencyType.valueOf(split[0].toUpperCase())
         val id = split[1].removeSurrounding("\"")
         val revision = split[2].removeSurrounding("\"")
@@ -138,6 +140,7 @@ class Carthage(
                 } else {
                     id
                 }
+
                 createPackageFromGenericGitUrl(projectUrl, revision)
             }
 
@@ -164,8 +167,8 @@ class Carthage(
                 } else {
                     URL(id).readText()
                 }
-                val binarySpec = jsonMapper.readValue<Map<String, String>>(binarySpecString)
 
+                val binarySpec = jsonMapper.readValue<Map<String, String>>(binarySpecString)
                 createPackageFromBinarySpec(binarySpec, id, revision)
             }
         }
