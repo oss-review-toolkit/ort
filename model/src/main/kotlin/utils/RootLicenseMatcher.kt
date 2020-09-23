@@ -1,0 +1,103 @@
+/*
+ * Copyright (C) 2020 HERE Europe B.V.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ * License-Filename: LICENSE
+ */
+
+package org.ossreviewtoolkit.model.utils
+
+import java.io.File
+
+import org.ossreviewtoolkit.model.LicenseFinding
+import org.ossreviewtoolkit.utils.FileMatcher
+import org.ossreviewtoolkit.utils.LicenseFilenamePatterns
+import org.ossreviewtoolkit.utils.getAllAncestorDirectories
+
+/**
+ * A heuristic for determining which (root) license files apply to any file or directory.
+ *
+ * For any given directory the heuristic tries to assign license files by utilizing [licenseFilenamePatterns] and
+ * patent files by utilizing [patentFilenamePatterns] independently from one another. The [rootLicenseFilenamePatterns]
+ * serve only as fallback to find license files if there isn't any match for [licenseFilenamePatterns].
+ *
+ * To determine the (root) license files applicable for a specific directory, all filenames in that directory are
+ * matched against [licenseFilenamePatterns]. If there are matches then these are used as result, otherwise that search
+ * is repeated recursively in the parent directory. If there is no parent directory (because the root was already
+ * searched but no result was found) then start from scratch using the fallback pattern [rootLicenseFilenamePatterns].
+ *
+ * Patent files are assigned in an analog way, but without any fallback pattern.
+ */
+class RootLicenseMatcher(
+    licenseFilenamePatterns: List<String> = LicenseFilenamePatterns.LICENSE_FILENAMES,
+    patentFilenamePatterns: List<String> = LicenseFilenamePatterns.PATENT_FILENAMES,
+    rootLicenseFilenamePatterns: List<String> = LicenseFilenamePatterns.ROOT_LICENSE_FILENAMES
+) {
+    private val licenseFileMatcher = createFileMatcher(licenseFilenamePatterns)
+    private val patentFileMatcher = createFileMatcher(patentFilenamePatterns)
+    private val rootLicenseFileMatcher = createFileMatcher(rootLicenseFilenamePatterns)
+
+    /**
+     * Return a mapping from the given relative [directories] to the licenses findings for the (root) license files
+     * applicable to the respective directory. These values of the map entries are subsets of the given
+     * [licenseFindings].
+     */
+    fun getApplicableLicenseFilesForDirectories(
+        licenseFindings: Collection<LicenseFinding>,
+        directories: Collection<String>
+    ): Map<String, Set<LicenseFinding>> {
+        require(directories.none { it.startsWith("/") })
+
+        fun licenseFindingPathsByDir(matcher: FileMatcher): Map<String, Set<LicenseFinding>> =
+            licenseFindings.filter { matcher.matches(it.absolutePath()) }.groupBy {
+                File(it.absolutePath()).parentFile.invariantSeparatorsPath
+            }.mapValues { it.value.toSet() }
+
+        val licenseFiles = licenseFindingPathsByDir(licenseFileMatcher)
+        val patentFiles = licenseFindingPathsByDir(patentFileMatcher)
+        val rootLicenseFiles = licenseFindingPathsByDir(rootLicenseFileMatcher)
+
+        val result = mutableMapOf<String, MutableSet<LicenseFinding>>()
+
+        directories.map { "/$it" }.forEach { directory ->
+            val directoriesOnPathToRoot = listOf(directory) + getAllAncestorDirectories(directory)
+            val licenseFilesForDirectory = result.getOrPut(directory) { mutableSetOf() }
+
+            fun addApplicableLicenseFiles(licenseFilesByDir: Map<String, Collection<LicenseFinding>>) {
+                directoriesOnPathToRoot.forEach { currentDir ->
+                    licenseFilesByDir[currentDir]?.let {
+                        licenseFilesForDirectory += it
+                        return
+                    }
+                }
+            }
+
+            addApplicableLicenseFiles(licenseFiles)
+
+            if (licenseFilesForDirectory.isEmpty()) {
+                addApplicableLicenseFiles(rootLicenseFiles)
+            }
+
+            addApplicableLicenseFiles(patentFiles)
+        }
+
+        return result.mapKeys { it.key.removePrefix("/") }
+    }
+}
+
+private fun createFileMatcher(filenamePatterns: Collection<String>): FileMatcher =
+    FileMatcher(filenamePatterns.map { "/**/$it" }, true)
+
+private fun LicenseFinding.absolutePath(): String = "/${location.path}"
