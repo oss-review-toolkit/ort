@@ -28,15 +28,16 @@ import org.ossreviewtoolkit.model.CopyrightFinding
 import org.ossreviewtoolkit.model.CopyrightFindings
 import org.ossreviewtoolkit.model.LicenseFinding
 import org.ossreviewtoolkit.model.LicenseFindings
+import org.ossreviewtoolkit.model.TextLocation
 import org.ossreviewtoolkit.utils.FileMatcher
 
 /**
  * A class for matching copyright findings to license findings. Copyright statements may be matched either to license
  * findings located nearby in the same file or to a license found in a license file whereas the given
- * [licenseFileMatcher] determines whether a file is a license file.
+ * [rootLicenseMatcher] determines whether a file is a license file.
  */
 class FindingsMatcher(
-    private val licenseFileMatcher: FileMatcher = FileMatcher.LICENSE_FILE_MATCHER,
+    private val rootLicenseMatcher: RootLicenseMatcher = RootLicenseMatcher(),
     private val toleranceLines: Int = DEFAULT_TOLERANCE_LINES,
     private val expandToleranceLines: Int = DEFAULT_EXPAND_TOLERANCE_LINES
 ) {
@@ -53,12 +54,6 @@ class FindingsMatcher(
          */
         const val DEFAULT_EXPAND_TOLERANCE_LINES = 2
     }
-
-    /**
-     * Get the licenses found in all commonly named license files, if any, or an empty list otherwise.
-     */
-    private fun getRootLicenseFindings(licenseFindings: Set<LicenseFinding>): Set<LicenseFinding> =
-        licenseFindings.filterTo(mutableSetOf()) { licenseFileMatcher.matches(it.location.path) }
 
     /**
      * Return the line range in which copyright statements should be matched against the license finding at the
@@ -135,7 +130,7 @@ class FindingsMatcher(
      * Associate the [copyrightFindings] to the [licenseFindings]. Copyright findings are matched to license findings
      * located nearby in the same file. Copyright findings that are not located close to a license finding are
      * associated to the root licenses instead. The root licenses are the licenses found in any of the license files
-     * defined by [licenseFileMatcher].
+     * defined by [rootLicenseMatcher].
      */
     fun matchFindings(
         licenseFindings: Set<LicenseFinding>,
@@ -157,18 +152,36 @@ class FindingsMatcher(
             unmatchedCopyrights += copyrights.toSet() - matchedFileFindings.values.flatten()
         }
 
-        val rootLicenseFindings = getRootLicenseFindings(licenseFindings)
+        val matchedRootLicenseFindings = matchWithRootLicenses(licenseFindings, unmatchedCopyrights)
 
-        return if (rootLicenseFindings.isEmpty()) {
-            FindingsMatcherResult(matchedFindings, unmatchedCopyrights)
-        } else {
-            // Associate all unmatched copyright findings with all root licenses findings.
-            rootLicenseFindings.forEach { licenseFinding ->
-                matchedFindings[licenseFinding] = matchedFindings.getValue(licenseFinding) + unmatchedCopyrights
+        return FindingsMatcherResult(
+            matchedFindings = matchedFindings + matchedRootLicenseFindings,
+            unmatchedCopyrights = unmatchedCopyrights - matchedRootLicenseFindings.values.flatten()
+        )
+    }
+
+    /**
+     * Associate the given [copyrightFindings] to its corresponding applicable root licenses. If no root license is
+     * applicable to a given copyright finding, that copyright finding is not contained in the result.
+     */
+    fun matchWithRootLicenses(
+        licenseFindings: Set<LicenseFinding>,
+        copyrightFindings: Set<CopyrightFinding>
+    ): Map<LicenseFinding, Set<CopyrightFinding>> {
+        val rootLicensesForDirectories = rootLicenseMatcher.getApplicableLicenseFilesForDirectories(
+            licenseFindings = licenseFindings,
+            directories = copyrightFindings.map { it.location.directory() }
+        )
+
+        val result = mutableMapOf<LicenseFinding, MutableSet<CopyrightFinding>>()
+
+        copyrightFindings.forEach { copyrightFinding ->
+            rootLicensesForDirectories[copyrightFinding.location.directory()]?.forEach { rootLicenseFinding ->
+                result.getOrPut(rootLicenseFinding) { mutableSetOf() } += copyrightFinding
             }
-
-            FindingsMatcherResult(matchedFindings, emptySet())
         }
+
+        return result
     }
 
     /**
@@ -210,3 +223,5 @@ data class FindingsMatcherResult(
      */
     val unmatchedCopyrights: Set<CopyrightFinding>
 )
+
+private fun TextLocation.directory(): String = path.substringBeforeLast(delimiter = "/", missingDelimiterValue = "")

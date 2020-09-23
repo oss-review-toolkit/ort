@@ -36,15 +36,11 @@ import org.ossreviewtoolkit.model.TextLocation
 import org.ossreviewtoolkit.model.utils.FindingsMatcher.Companion.DEFAULT_EXPAND_TOLERANCE_LINES
 import org.ossreviewtoolkit.model.utils.FindingsMatcher.Companion.DEFAULT_TOLERANCE_LINES
 import org.ossreviewtoolkit.spdx.toSpdx
-import org.ossreviewtoolkit.utils.FileMatcher
 
 private fun Collection<LicenseFindings>.getFindings(license: String) = single { it.license == license.toSpdx() }
 
-private const val NESTED_LICENSE_FILE_A = "a/LICENSE"
-private const val NESTED_LICENSE_FILE_B = "b/LICENSE"
-
 class FindingsMatcherTest : WordSpec() {
-    private val matcher = FindingsMatcher(FileMatcher(NESTED_LICENSE_FILE_A, NESTED_LICENSE_FILE_B))
+    private val matcher = FindingsMatcher()
     private val licenseFindings = mutableListOf<LicenseFinding>()
     private val copyrightFindings = mutableListOf<CopyrightFinding>()
 
@@ -73,9 +69,9 @@ class FindingsMatcherTest : WordSpec() {
     }
 
     init {
-        "Given a license finding in a license file and a copyright finding in a file without license, match" should {
+        "Given an applicable root license finding and a copyright finding in a file without license, match" should {
             "associate that copyright with the root license" {
-                setupLicenseFinding(license = "some-id", path = NESTED_LICENSE_FILE_A)
+                setupLicenseFinding(license = "some-id", path = "LICENSE")
                 setupCopyrightFinding(statement = "some stmt", path = "some/other/file")
 
                 val result = matcher.match(licenseFindings, copyrightFindings)
@@ -83,7 +79,7 @@ class FindingsMatcherTest : WordSpec() {
                 with(result) {
                     result.size shouldBe 1
                     val findings = result.getFindings("some-id")
-                    findings.locations.map { it.path } should containExactlyInAnyOrder(NESTED_LICENSE_FILE_A)
+                    findings.locations.map { it.path } should containExactlyInAnyOrder("LICENSE")
                     findings.copyrights.map { it.statement } should containExactlyInAnyOrder("some stmt")
                 }
             }
@@ -91,7 +87,7 @@ class FindingsMatcherTest : WordSpec() {
 
         "Given a license finding in a license file and a file with copyright and license findings, match" should {
             "not associate that copyright with the root license" {
-                setupLicenseFinding(license = "some-id", path = NESTED_LICENSE_FILE_A)
+                setupLicenseFinding(license = "some-id", path = "a/LICENSE")
                 setupLicenseFinding(license = "some-other-id", path = "some/other/file")
                 setupCopyrightFinding(statement = "some stmt", path = "some/other/file")
 
@@ -102,10 +98,10 @@ class FindingsMatcherTest : WordSpec() {
         }
 
         "Given license findings in two license files and a copyright finding in a file without license, match" should {
-            "associate that copyright finding with all root licenses" {
-                setupLicenseFinding(license = "license-a1", path = NESTED_LICENSE_FILE_A)
-                setupLicenseFinding(license = "license-a2", path = NESTED_LICENSE_FILE_A)
-                setupLicenseFinding(license = "license-b1", path = NESTED_LICENSE_FILE_B)
+            "associate that copyright finding with all applicable root licenses" {
+                setupLicenseFinding(license = "license-a1", path = "LICENSE")
+                setupLicenseFinding(license = "license-a2", path = "UNLICENSE")
+                setupLicenseFinding(license = "license-b1", path = "b/LICENSE")
                 setupCopyrightFinding(statement = "some stmt", path = "some/file")
 
                 val result = matcher.match(licenseFindings, copyrightFindings)
@@ -114,7 +110,6 @@ class FindingsMatcherTest : WordSpec() {
                     size shouldBe 3
                     getFindings("license-a1").copyrights.map { it.statement } should containExactly("some stmt")
                     getFindings("license-a2").copyrights.map { it.statement } should containExactly("some stmt")
-                    getFindings("license-b1").copyrights.map { it.statement } should containExactly("some stmt")
                 }
             }
         }
@@ -221,7 +216,7 @@ class FindingsMatcherTest : WordSpec() {
                 setupLicenseFinding("license-1", "path", 1)
                 setupLicenseFinding("license-2", "path", 2)
                 setupCopyrightFinding("statement 1", "path", 2 + DEFAULT_TOLERANCE_LINES + 1)
-                setupLicenseFinding("root-license-1", NESTED_LICENSE_FILE_A, 102)
+                setupLicenseFinding("root-license-1", "LICENSE", 102)
 
                 val result = matcher.match(licenseFindings, copyrightFindings)
 
