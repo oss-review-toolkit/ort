@@ -67,22 +67,6 @@ object LicenseFilenamePatterns {
         getFileGlobsForDirectoryAndAncestors(directory, ALL_LICENSE_FILENAMES)
 
     /**
-     * Return recursively all ancestor directories of the given absolute [file], ordered along the path from
-     * the parent of [file] to the root.
-     */
-    internal fun getAllAncestorDirectories(file: String): List<String> {
-        val result = mutableListOf<String>()
-
-        var ancestorDir = File(file).parentFile
-        while (ancestorDir != null) {
-            result += ancestorDir.invariantSeparatorsPath
-            ancestorDir = ancestorDir.parentFile
-        }
-
-        return result
-    }
-
-    /**
      * Return a glob pattern which matches files in [directory], in any ancestor directory of [directory] and
      * [optionally][matchSubDirs] recursively in any sub-directory of directory, if the filename matches the
      * [filenamePattern].

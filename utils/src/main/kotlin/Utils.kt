@@ -320,3 +320,19 @@ fun trapSystemExitCall(block: () -> Unit): Int? {
 
     return exitCode
 }
+
+/**
+ * Return recursively all ancestor directories of the given absolute [file], ordered along the path from
+ * the parent of [file] to the root.
+ */
+fun getAllAncestorDirectories(file: String): List<String> {
+    val result = mutableListOf<String>()
+
+    var ancestorDir = File(file).parentFile
+    while (ancestorDir != null) {
+        result += ancestorDir.invariantSeparatorsPath
+        ancestorDir = ancestorDir.parentFile
+    }
+
+    return result
+}
