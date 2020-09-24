@@ -29,7 +29,6 @@ packages:
   - "curl"
   declared_licenses_processed:
     spdx_expression: "curl"
-  concluded_license: "NOASSERTION"
   description: "A command line tool and library for transferring data with URL syntax,\
     \ supporting HTTP, HTTPS, FTP, FTPS, GOPHER, TFTP, SCP, SFTP, SMB, TELNET, DICT,\
     \ LDAP, LDAPS, MQTT, FILE, IMAP, SMTP, POP3, RTSP and RTMP. libcurl offers a myriad\
@@ -61,7 +60,6 @@ packages:
   - "Apache-2.0"
   declared_licenses_processed:
     spdx_expression: "Apache-2.0"
-  concluded_license: "NOASSERTION"
   description: "OpenSSL is a robust, commercial-grade, full-featured Open Source Toolkit\
     \ for the Transport Layer Security (TLS) protocol formerly known as the Secure\
     \ Sockets Layer (SSL) protocol. The protocol implementation is based on a full-strength\
