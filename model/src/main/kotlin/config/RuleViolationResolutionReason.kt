@@ -41,6 +41,11 @@ enum class RuleViolationResolutionReason {
     LICENSE_ACQUIRED_EXCEPTION,
 
     /**
+     * The rule violation is acceptable given the fact that the code it relates to has not be modified.
+     */
+    NOT_MODIFIED_EXCEPTION,
+
+    /**
      * The implied patent grant is acceptable in this case.
      */
     PATENT_GRANT_EXCEPTION
