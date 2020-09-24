@@ -71,7 +71,15 @@ fun File.unpack(targetDirectory: File) =
     when (ArchiveType.getType(name)) {
         ArchiveType.SEVENZIP -> unpack7Zip(targetDirectory)
         ArchiveType.ZIP -> unpackZip(targetDirectory)
-        else -> inputStream().unpack(name, targetDirectory)
+
+        ArchiveType.TAR -> inputStream().unpackTar(targetDirectory)
+        ArchiveType.TAR_BZIP2 -> BZip2CompressorInputStream(inputStream()).unpackTar(targetDirectory)
+        ArchiveType.TAR_GZIP -> GzipCompressorInputStream(inputStream()).unpackTar(targetDirectory)
+        ArchiveType.TAR_XZ -> XZCompressorInputStream(inputStream()).unpackTar(targetDirectory)
+
+        ArchiveType.NONE -> {
+            throw IOException("Unable to guess compression scheme from file name '$name'.")
+        }
     }
 
 /**
@@ -141,25 +149,6 @@ fun File.packZip(
                 return FileVisitResult.CONTINUE
             }
         })
-    }
-}
-
-/**
- * Unpack the [InputStream] to [targetDirectory]. The compression scheme is guessed from the [filename].
- */
-fun InputStream.unpack(filename: String, targetDirectory: File) {
-    when (ArchiveType.getType(filename)) {
-        ArchiveType.TAR -> unpackTar(targetDirectory)
-        ArchiveType.TAR_BZIP2 -> BZip2CompressorInputStream(this).unpackTar(targetDirectory)
-        ArchiveType.TAR_GZIP -> GzipCompressorInputStream(this).unpackTar(targetDirectory)
-        ArchiveType.TAR_XZ -> XZCompressorInputStream(this).unpackTar(targetDirectory)
-        ArchiveType.ZIP -> unpackZip(targetDirectory)
-        ArchiveType.SEVENZIP -> {
-            throw IOException("Cannot unpack a 7-Zip archive from an InputStream, use a File instead.")
-        }
-        ArchiveType.NONE -> {
-            throw IOException("Unable to guess compression scheme from file name '$filename'.")
-        }
     }
 }
 
