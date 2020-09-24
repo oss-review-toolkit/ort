@@ -28,6 +28,9 @@ import java.time.Instant
 
 import okhttp3.Request
 
+import okio.buffer
+import okio.sink
+
 import org.ossreviewtoolkit.model.EMPTY_JSON_NODE
 import org.ossreviewtoolkit.model.LicenseFinding
 import org.ossreviewtoolkit.model.Provenance
@@ -88,10 +91,16 @@ class Askalono(name: String, config: ScannerConfiguration) : LocalScanner(name, 
                 log.info { "Retrieved $scannerName from local cache." }
             }
 
+            val scannerArchive = createTempFile(ORT_NAME, archive)
+            scannerArchive.sink().buffer().use { it.writeAll(body.source()) }
+
             val unpackDir = createTempDir(ORT_NAME, "$scannerName-$scannerVersion").apply { deleteOnExit() }
 
             log.info { "Unpacking '$archive' to '$unpackDir'... " }
-            body.byteStream().unpack(archive, unpackDir)
+            scannerArchive.unpack(unpackDir)
+            if (!scannerArchive.delete()) {
+                log.warn { "Unable to delete temporary file '$scannerArchive'." }
+            }
 
             unpackDir
         }
