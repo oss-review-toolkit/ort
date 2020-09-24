@@ -491,7 +491,7 @@ enum class SpdxLicense(
         /**
          * The version of the license list.
          */
-        const val LICENSE_LIST_VERSION = "3.10"
+        const val LICENSE_LIST_VERSION = "3.10-9-ge0f7167"
 
         /**
          * Return the enum value for the given [id], or null if it is no SPDX license id.
