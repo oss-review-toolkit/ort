@@ -45,7 +45,7 @@ import org.ossreviewtoolkit.utils.OkHttpClientHelper
 import org.ossreviewtoolkit.utils.Os
 import org.ossreviewtoolkit.utils.ProcessCapture
 import org.ossreviewtoolkit.utils.log
-import org.ossreviewtoolkit.utils.unpack
+import org.ossreviewtoolkit.utils.unpackZip
 
 class BoyterLc(name: String, config: ScannerConfiguration) : LocalScanner(name, config) {
     class Factory : AbstractScannerFactory<BoyterLc>("BoyterLc") {
@@ -98,12 +98,7 @@ class BoyterLc(name: String, config: ScannerConfiguration) : LocalScanner(name, 
             val unpackDir = createTempDir(ORT_NAME, "$scannerName-$scannerVersion").apply { deleteOnExit() }
 
             log.info { "Unpacking '$archive' to '$unpackDir'... " }
-            body.byteStream().unpack(archive, unpackDir)
-
-            if (!Os.isWindows) {
-                // The Linux version is distributed as a ZIP, but without having the Unix executable mode bits stored.
-                unpackDir.resolve(command()).setExecutable(true)
-            }
+            body.bytes().unpackZip(unpackDir)
 
             unpackDir
         }
