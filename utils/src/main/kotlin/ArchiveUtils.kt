@@ -43,6 +43,7 @@ import org.apache.commons.compress.archivers.zip.ZipFile
 import org.apache.commons.compress.compressors.bzip2.BZip2CompressorInputStream
 import org.apache.commons.compress.compressors.gzip.GzipCompressorInputStream
 import org.apache.commons.compress.compressors.xz.XZCompressorInputStream
+import org.apache.commons.compress.utils.SeekableInMemoryByteChannel
 
 enum class ArchiveType(vararg val extensions: String) {
     TAR(".gem", ".tar"),
@@ -101,34 +102,14 @@ fun File.unpack7Zip(targetDirectory: File) {
 }
 
 /**
- * Unpack the [File] assuming it is a Zip archive. In contrast to [InputStream.unpackZip] this properly parses the ZIP's
- * central directory, see https://commons.apache.org/proper/commons-compress/zip.html#ZipArchiveInputStream_vs_ZipFile.
+ * Unpack the [File] assuming it is a Zip archive.
  */
-fun File.unpackZip(targetDirectory: File) {
-    ZipFile(this).use {
-        val entries = it.entries
+fun File.unpackZip(targetDirectory: File) = ZipFile(this).unpack(targetDirectory)
 
-        while (entries.hasMoreElements()) {
-            val entry = entries.nextElement()
-
-            if (entry.isDirectory || entry.isUnixSymlink) {
-                continue
-            }
-
-            val target = targetDirectory.resolve(entry.name)
-
-            // There is no guarantee that directory entries appear before file entries, so always ensure the parent
-            // directory for a file exists.
-            target.parentFile.safeMkdirs()
-
-            target.outputStream().use { output ->
-                it.getInputStream(entry).copyTo(output)
-            }
-
-            copyExecutableModeBit(target, entry.unixMode)
-        }
-    }
-}
+/**
+ * Unpack the [ByteArray] assuming it is a Zip archive.
+ */
+fun ByteArray.unpackZip(targetDirectory: File) = ZipFile(SeekableInMemoryByteChannel(this)).unpack(targetDirectory)
 
 /**
  * Pack the file into a ZIP [targetFile] using [Deflater.BEST_COMPRESSION]. If the file is a directory its content is
@@ -244,5 +225,34 @@ private fun ArchiveInputStream.unpack(
             }
 
             copyExecutableModeBit(target, mode(entry))
+        }
+    }
+
+/**
+ * Unpack the [ZipFile]. In contrast to [InputStream.unpackZip] this properly parses the ZIP's central directory, see
+ * https://commons.apache.org/proper/commons-compress/zip.html#ZipArchiveInputStream_vs_ZipFile.
+ */
+private fun ZipFile.unpack(targetDirectory: File) =
+    use {
+        val entries = it.entries
+
+        while (entries.hasMoreElements()) {
+            val entry = entries.nextElement()
+
+            if (entry.isDirectory || entry.isUnixSymlink) {
+                continue
+            }
+
+            val target = targetDirectory.resolve(entry.name)
+
+            // There is no guarantee that directory entries appear before file entries, so always ensure the parent
+            // directory for a file exists.
+            target.parentFile.safeMkdirs()
+
+            target.outputStream().use { output ->
+                it.getInputStream(entry).copyTo(output)
+            }
+
+            copyExecutableModeBit(target, entry.unixMode)
         }
     }
