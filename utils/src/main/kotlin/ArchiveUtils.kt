@@ -122,14 +122,7 @@ fun File.unpackZip(targetDirectory: File) {
                 it.getInputStream(entry).copyTo(output)
             }
 
-            if (!Os.isWindows) {
-                // Note: In contrast to Java, Kotlin does not support octal literals, see
-                // https://kotlinlang.org/docs/reference/basic-types.html#literal-constants.
-                // The bit-triplets from left to right stand for user, groups, other, respectively.
-                if (entry.unixMode and 0b001_000_001 != 0) {
-                    target.setExecutable(true, (entry.unixMode and 0b000_000_001) == 0)
-                }
-            }
+            copyExecutableModeBit(target, entry.unixMode)
         }
     }
 }
@@ -209,14 +202,7 @@ fun InputStream.unpackTar(targetDirectory: File) {
                 it.copyTo(output)
             }
 
-            if (!Os.isWindows) {
-                // Note: In contrast to Java, Kotlin does not support octal literals, see
-                // https://kotlinlang.org/docs/reference/basic-types.html#literal-constants.
-                // The bit-triplets from left to right stand for user, groups, other, respectively.
-                if (entry.mode and 0b001_000_001 != 0) {
-                    target.setExecutable(true, (entry.mode and 0b000_000_001) == 0)
-                }
-            }
+            copyExecutableModeBit(target, entry.mode)
         }
     }
 }
@@ -244,14 +230,21 @@ fun InputStream.unpackZip(targetDirectory: File) {
                 it.copyTo(output)
             }
 
-            if (!Os.isWindows) {
-                // Note: In contrast to Java, Kotlin does not support octal literals, see
-                // https://kotlinlang.org/docs/reference/basic-types.html#literal-constants.
-                // The bit-triplets from left to right stand for user, groups, other, respectively.
-                if (entry.unixMode and 0b001_000_001 != 0) {
-                    target.setExecutable(true, (entry.unixMode and 0b000_000_001) == 0)
-                }
-            }
+            copyExecutableModeBit(target, entry.unixMode)
         }
+    }
+}
+
+/**
+ * Copy the executable bit contained in [mode] to the [target] file's mode bits.
+ */
+private fun copyExecutableModeBit(target: File, mode: Int) {
+    if (Os.isWindows) return
+
+    // Note: In contrast to Java, Kotlin does not support octal literals, see
+    // https://kotlinlang.org/docs/reference/basic-types.html#literal-constants.
+    // The bit-triplets from left to right stand for user, groups, other, respectively.
+    if (mode and 0b001_000_001 != 0) {
+        target.setExecutable(true, (mode and 0b000_000_001) == 0)
     }
 }
