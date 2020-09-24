@@ -31,7 +31,10 @@ import java.nio.file.SimpleFileVisitor
 import java.nio.file.attribute.BasicFileAttributes
 import java.util.zip.Deflater
 
+import org.apache.commons.compress.archivers.ArchiveEntry
+import org.apache.commons.compress.archivers.ArchiveInputStream
 import org.apache.commons.compress.archivers.sevenz.SevenZFile
+import org.apache.commons.compress.archivers.tar.TarArchiveEntry
 import org.apache.commons.compress.archivers.tar.TarArchiveInputStream
 import org.apache.commons.compress.archivers.zip.ZipArchiveEntry
 import org.apache.commons.compress.archivers.zip.ZipArchiveInputStream
@@ -183,57 +186,23 @@ fun InputStream.unpack(filename: String, targetDirectory: File) {
  * Unpack the [InputStream] to [targetDirectory] assuming that it is a tape archive (TAR). This implementation ignores
  * empty directories and symbolic links.
  */
-fun InputStream.unpackTar(targetDirectory: File) {
-    TarArchiveInputStream(this).use {
-        while (true) {
-            val entry = it.nextTarEntry ?: break
-
-            if (!entry.isFile) {
-                continue
-            }
-
-            val target = targetDirectory.resolve(entry.name)
-
-            // There is no guarantee that directory entries appear before file entries, so always ensure the parent
-            // directory for a file exists.
-            target.parentFile.safeMkdirs()
-
-            target.outputStream().use { output ->
-                it.copyTo(output)
-            }
-
-            copyExecutableModeBit(target, entry.mode)
-        }
-    }
-}
+fun InputStream.unpackTar(targetDirectory: File) =
+    TarArchiveInputStream(this).unpack(
+        targetDirectory,
+        { entry -> !(entry as TarArchiveEntry).isFile },
+        { entry -> (entry as TarArchiveEntry).mode }
+    )
 
 /**
- * Unpack the [InputStream] to [targetDirectory] assuming that it is a ZIP file. This implementation ignores empty
+ * Unpack the [InputStream] to [targetDirectory] assuming that it is a ZIP archive. This implementation ignores empty
  * directories and symbolic links.
  */
-fun InputStream.unpackZip(targetDirectory: File) {
-    ZipArchiveInputStream(this).use {
-        while (true) {
-            val entry = it.nextZipEntry ?: break
-
-            if (entry.isDirectory || entry.isUnixSymlink) {
-                continue
-            }
-
-            val target = targetDirectory.resolve(entry.name)
-
-            // There is no guarantee that directory entries appear before file entries, so always ensure the parent
-            // directory for a file exists.
-            target.parentFile.safeMkdirs()
-
-            target.outputStream().use { output ->
-                it.copyTo(output)
-            }
-
-            copyExecutableModeBit(target, entry.unixMode)
-        }
-    }
-}
+fun InputStream.unpackZip(targetDirectory: File) =
+    ZipArchiveInputStream(this).unpack(
+        targetDirectory,
+        { entry -> (entry as ZipArchiveEntry).let { it.isDirectory || it.isUnixSymlink } },
+        { entry -> (entry as ZipArchiveEntry).unixMode }
+    )
 
 /**
  * Copy the executable bit contained in [mode] to the [target] file's mode bits.
@@ -248,3 +217,32 @@ private fun copyExecutableModeBit(target: File, mode: Int) {
         target.setExecutable(true, (mode and 0b000_000_001) == 0)
     }
 }
+
+/**
+ * Unpack this [ArchiveInputStream] to the [targetDirectory], skipping all entries for which [shouldSkip] returns true,
+ * and using what [mode] returns as the file mode bits.
+ */
+private fun ArchiveInputStream.unpack(
+    targetDirectory: File,
+    shouldSkip: (ArchiveEntry) -> Boolean,
+    mode: (ArchiveEntry) -> Int
+) =
+    use {
+        while (true) {
+            val entry = it.nextEntry ?: break
+
+            if (shouldSkip(entry)) continue
+
+            val target = targetDirectory.resolve(entry.name)
+
+            // There is no guarantee that directory entries appear before file entries, so always ensure the parent
+            // directory for a file exists.
+            target.parentFile.safeMkdirs()
+
+            target.outputStream().use { output ->
+                it.copyTo(output)
+            }
+
+            copyExecutableModeBit(target, mode(entry))
+        }
+    }
