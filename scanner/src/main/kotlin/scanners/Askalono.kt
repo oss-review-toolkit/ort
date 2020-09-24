@@ -28,9 +28,6 @@ import java.time.Instant
 
 import okhttp3.Request
 
-import okio.buffer
-import okio.sink
-
 import org.ossreviewtoolkit.model.EMPTY_JSON_NODE
 import org.ossreviewtoolkit.model.LicenseFinding
 import org.ossreviewtoolkit.model.Provenance
@@ -48,33 +45,33 @@ import org.ossreviewtoolkit.utils.OkHttpClientHelper
 import org.ossreviewtoolkit.utils.Os
 import org.ossreviewtoolkit.utils.ProcessCapture
 import org.ossreviewtoolkit.utils.log
+import org.ossreviewtoolkit.utils.unpack
 
 class Askalono(name: String, config: ScannerConfiguration) : LocalScanner(name, config) {
     class Factory : AbstractScannerFactory<Askalono>("Askalono") {
         override fun create(config: ScannerConfiguration) = Askalono(scannerName, config)
     }
 
-    override val scannerVersion = "0.4.2"
+    override val scannerVersion = "0.4.3"
     override val resultFileExt = "txt"
 
-    override fun command(workingDir: File?): String {
-        val extension = when {
-            Os.isLinux -> "linux"
-            Os.isMac -> "osx"
-            Os.isWindows -> "exe"
-            else -> throw IllegalArgumentException("Unsupported operating system.")
-        }
-
-        return listOfNotNull(workingDir, "askalono.$extension").joinToString(File.separator)
-    }
+    override fun command(workingDir: File?) =
+        listOfNotNull(workingDir, if (Os.isWindows) "askalono.exe" else "askalono").joinToString(File.separator)
 
     override fun transformVersion(output: String) =
         // "askalono --version" returns a string like "askalono 0.2.0-beta.1", so simply remove the prefix.
         output.removePrefix("askalono ")
 
     override fun bootstrap(): File {
-        val scannerExe = command()
-        val url = "https://github.com/amzn/askalono/releases/download/$scannerVersion/$scannerExe"
+        val platform = when {
+            Os.isLinux -> "Linux"
+            Os.isMac -> "macOS"
+            Os.isWindows -> "Windows"
+            else -> throw IllegalArgumentException("Unsupported operating system.")
+        }
+
+        val archive = "askalono-$platform.zip"
+        val url = "https://github.com/amzn/askalono/releases/download/$scannerVersion/$archive"
 
         log.info { "Downloading $scannerName from $url... " }
 
@@ -91,17 +88,12 @@ class Askalono(name: String, config: ScannerConfiguration) : LocalScanner(name, 
                 log.info { "Retrieved $scannerName from local cache." }
             }
 
-            val scannerDir = createTempDir(ORT_NAME, "$scannerName-$scannerVersion").apply { deleteOnExit() }
+            val unpackDir = createTempDir(ORT_NAME, "$scannerName-$scannerVersion").apply { deleteOnExit() }
 
-            val scannerFile = scannerDir.resolve(scannerExe)
-            scannerFile.sink().buffer().use { it.writeAll(body.source()) }
+            log.info { "Unpacking '$archive' to '$unpackDir'... " }
+            body.byteStream().unpack(archive, unpackDir)
 
-            if (!Os.isWindows) {
-                // Ensure the executable Unix mode bit to be set.
-                scannerFile.setExecutable(true)
-            }
-
-            scannerDir
+            unpackDir
         }
     }
 
