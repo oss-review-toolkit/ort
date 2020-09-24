@@ -36,6 +36,7 @@ import org.apache.commons.compress.archivers.tar.TarArchiveInputStream
 import org.apache.commons.compress.archivers.zip.ZipArchiveEntry
 import org.apache.commons.compress.archivers.zip.ZipArchiveInputStream
 import org.apache.commons.compress.archivers.zip.ZipArchiveOutputStream
+import org.apache.commons.compress.archivers.zip.ZipFile
 import org.apache.commons.compress.compressors.bzip2.BZip2CompressorInputStream
 import org.apache.commons.compress.compressors.gzip.GzipCompressorInputStream
 import org.apache.commons.compress.compressors.xz.XZCompressorInputStream
@@ -63,10 +64,10 @@ enum class ArchiveType(vararg val extensions: String) {
  * Unpack the [File] to [targetDirectory].
  */
 fun File.unpack(targetDirectory: File) =
-    if (ArchiveType.getType(name) == ArchiveType.SEVENZIP) {
-        unpack7Zip(targetDirectory)
-    } else {
-        inputStream().unpack(name, targetDirectory)
+    when (ArchiveType.getType(name)) {
+        ArchiveType.SEVENZIP -> unpack7Zip(targetDirectory)
+        ArchiveType.ZIP -> unpackZip(targetDirectory)
+        else -> inputStream().unpack(name, targetDirectory)
     }
 
 /**
@@ -91,6 +92,43 @@ fun File.unpack7Zip(targetDirectory: File) {
                 val buffer = ByteArray(entry.size.toInt())
                 it.read(buffer)
                 output.write(buffer)
+            }
+        }
+    }
+}
+
+/**
+ * Unpack the [File] assuming it is a Zip archive. In contrast to [InputStream.unpackZip] this properly parses the ZIP's
+ * central directory, see https://commons.apache.org/proper/commons-compress/zip.html#ZipArchiveInputStream_vs_ZipFile.
+ */
+fun File.unpackZip(targetDirectory: File) {
+    ZipFile(this).use {
+        val entries = it.entries
+
+        while (entries.hasMoreElements()) {
+            val entry = entries.nextElement()
+
+            if (entry.isDirectory || entry.isUnixSymlink) {
+                continue
+            }
+
+            val target = targetDirectory.resolve(entry.name)
+
+            // There is no guarantee that directory entries appear before file entries, so always ensure the parent
+            // directory for a file exists.
+            target.parentFile.safeMkdirs()
+
+            target.outputStream().use { output ->
+                it.getInputStream(entry).copyTo(output)
+            }
+
+            if (!Os.isWindows) {
+                // Note: In contrast to Java, Kotlin does not support octal literals, see
+                // https://kotlinlang.org/docs/reference/basic-types.html#literal-constants.
+                // The bit-triplets from left to right stand for user, groups, other, respectively.
+                if (entry.unixMode and 0b001_000_001 != 0) {
+                    target.setExecutable(true, (entry.unixMode and 0b000_000_001) == 0)
+                }
             }
         }
     }
