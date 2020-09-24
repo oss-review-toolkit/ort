@@ -25,6 +25,7 @@ import java.util.SortedSet
 import org.ossreviewtoolkit.analyzer.AbstractPackageManagerFactory
 import org.ossreviewtoolkit.analyzer.PackageManager
 import org.ossreviewtoolkit.downloader.VersionControlSystem
+import org.ossreviewtoolkit.model.Hash
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.PackageReference
@@ -199,7 +200,7 @@ class SpdxDocumentFile(
                 description = packageDescription,
                 homepageUrl = pkg.homepage.mapNotPresentToEmpty(),
                 binaryArtifact = RemoteArtifact.EMPTY, // TODO: Use "downloadLocation" or "externalRefs"?
-                sourceArtifact = RemoteArtifact.EMPTY, // TODO: Use "sourceInfo" or "externalRefs"?
+                sourceArtifact = getSourceArtifact(pkg),
                 vcs = VersionControlSystem.forDirectory(packageDir)?.getInfo() ?: VcsInfo.EMPTY
             )
         }
@@ -214,4 +215,16 @@ class SpdxDocumentFile(
     private fun getConcludedLicense(pkg: SpdxPackage): SpdxExpression? =
         pkg.licenseConcluded.takeIf { SpdxConstants.isPresent(it) }?.toSpdx()
 
+    /**
+     * Return a [RemoteArtifact] created with downloadLocation of the given package [SpdxPackage]
+     * if it's a file location or return en Empty RemoteArtifact.
+     * TODO: must be completed for other cases : use "sourceInfo" or "externalRefs"?
+     */
+    private fun getSourceArtifact(pkg: SpdxPackage): RemoteArtifact {
+        return if (pkg.downloadLocation.startsWith("file:/")) {
+            RemoteArtifact(pkg.downloadLocation, Hash.NONE)
+        } else {
+            RemoteArtifact.EMPTY
+        }
+    }
 }
