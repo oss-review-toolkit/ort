@@ -36,6 +36,7 @@ import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.spdx.SpdxConstants
+import org.ossreviewtoolkit.spdx.SpdxExpression
 import org.ossreviewtoolkit.spdx.SpdxModelMapper
 import org.ossreviewtoolkit.spdx.model.SpdxDocument
 import org.ossreviewtoolkit.spdx.model.SpdxPackage
@@ -194,7 +195,7 @@ class SpdxDocumentFile(
             Package(
                 id = pkg.toIdentifier(),
                 declaredLicenses = sortedSetOf(pkg.licenseDeclared),
-                concludedLicense = pkg.licenseConcluded.toSpdx(),
+                concludedLicense = getConcludedLicense(pkg),
                 description = packageDescription,
                 homepageUrl = pkg.homepage.mapNotPresentToEmpty(),
                 binaryArtifact = RemoteArtifact.EMPTY, // TODO: Use "downloadLocation" or "externalRefs"?
@@ -205,4 +206,12 @@ class SpdxDocumentFile(
 
         return listOf(ProjectAnalyzerResult(project, packages))
     }
+
+    /**
+     * Return the concluded license to be used in ORT's data model, which expects a not present value to be null
+     * instead of NONE or NOASSERTION.
+     */
+    private fun getConcludedLicense(pkg: SpdxPackage): SpdxExpression? =
+        pkg.licenseConcluded.takeIf { SpdxConstants.isPresent(it) }?.toSpdx()
+
 }
