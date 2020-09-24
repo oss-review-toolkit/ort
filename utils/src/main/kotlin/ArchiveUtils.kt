@@ -70,6 +70,66 @@ fun File.unpack(targetDirectory: File) =
     }
 
 /**
+ * Unpack the [File] assuming it is a 7-Zip archive. This implementation ignores empty directories and symbolic links.
+ */
+fun File.unpack7Zip(targetDirectory: File) {
+    SevenZFile(this).use {
+        while (true) {
+            val entry = it.nextEntry ?: break
+
+            if (entry.isDirectory || entry.isAntiItem) {
+                continue
+            }
+
+            val target = targetDirectory.resolve(entry.name)
+
+            // There is no guarantee that directory entries appear before file entries, so always ensure the parent
+            // directory for a file exists.
+            target.parentFile.safeMkdirs()
+
+            target.outputStream().use { output ->
+                val buffer = ByteArray(entry.size.toInt())
+                it.read(buffer)
+                output.write(buffer)
+            }
+        }
+    }
+}
+
+/**
+ * Pack the file into a ZIP [targetFile] using [Deflater.BEST_COMPRESSION]. If the file is a directory its content is
+ * recursively added to the archive. Only regular files are added, e.g. symbolic links or directories are skipped. If
+ * a [prefix] is specified, it is added to the file names in the ZIP file.
+ * If not all files shall be added to the archive a [filter] can be provided.
+ */
+fun File.packZip(
+    targetFile: File,
+    prefix: String = "",
+    overwrite: Boolean = false,
+    filter: (Path) -> Boolean = { true }
+) {
+    require(overwrite || !targetFile.exists()) {
+        "The target ZIP file '${targetFile.absolutePath}' must not exist."
+    }
+
+    ZipArchiveOutputStream(targetFile).use { output ->
+        output.setLevel(Deflater.BEST_COMPRESSION)
+        Files.walkFileTree(toPath(), object : SimpleFileVisitor<Path>() {
+            override fun visitFile(file: Path, attrs: BasicFileAttributes): FileVisitResult {
+                if (attrs.isRegularFile && filter(file)) {
+                    val entry = ZipArchiveEntry(file.toFile(), "$prefix${this@packZip.toPath().relativize(file)}")
+                    output.putArchiveEntry(entry)
+                    file.toFile().inputStream().use { input -> input.copyTo(output) }
+                    output.closeArchiveEntry()
+                }
+
+                return FileVisitResult.CONTINUE
+            }
+        })
+    }
+}
+
+/**
  * Unpack the [InputStream] to [targetDirectory]. The compression scheme is guessed from the [filename].
  */
 fun InputStream.unpack(filename: String, targetDirectory: File) {
@@ -155,65 +215,5 @@ fun InputStream.unpackZip(targetDirectory: File) {
                 }
             }
         }
-    }
-}
-
-/**
- * Unpack the [File] assuming it is a 7-Zip archive. This implementation ignores empty directories and symbolic links.
- */
-fun File.unpack7Zip(targetDirectory: File) {
-    SevenZFile(this).use {
-        while (true) {
-            val entry = it.nextEntry ?: break
-
-            if (entry.isDirectory || entry.isAntiItem) {
-                continue
-            }
-
-            val target = targetDirectory.resolve(entry.name)
-
-            // There is no guarantee that directory entries appear before file entries, so always ensure the parent
-            // directory for a file exists.
-            target.parentFile.safeMkdirs()
-
-            target.outputStream().use { output ->
-                val buffer = ByteArray(entry.size.toInt())
-                it.read(buffer)
-                output.write(buffer)
-            }
-        }
-    }
-}
-
-/**
- * Pack the file into a ZIP [targetFile] using [Deflater.BEST_COMPRESSION]. If the file is a directory its content is
- * recursively added to the archive. Only regular files are added, e.g. symbolic links or directories are skipped. If
- * a [prefix] is specified, it is added to the file names in the ZIP file.
- * If not all files shall be added to the archive a [filter] can be provided.
- */
-fun File.packZip(
-    targetFile: File,
-    prefix: String = "",
-    overwrite: Boolean = false,
-    filter: (Path) -> Boolean = { true }
-) {
-    require(overwrite || !targetFile.exists()) {
-        "The target ZIP file '${targetFile.absolutePath}' must not exist."
-    }
-
-    ZipArchiveOutputStream(targetFile).use { output ->
-        output.setLevel(Deflater.BEST_COMPRESSION)
-        Files.walkFileTree(toPath(), object : SimpleFileVisitor<Path>() {
-            override fun visitFile(file: Path, attrs: BasicFileAttributes): FileVisitResult {
-                if (attrs.isRegularFile && filter(file)) {
-                    val entry = ZipArchiveEntry(file.toFile(), "$prefix${this@packZip.toPath().relativize(file)}")
-                    output.putArchiveEntry(entry)
-                    file.toFile().inputStream().use { input -> input.copyTo(output) }
-                    output.closeArchiveEntry()
-                }
-
-                return FileVisitResult.CONTINUE
-            }
-        })
     }
 }
