@@ -28,9 +28,6 @@ import java.time.Instant
 
 import okhttp3.Request
 
-import okio.buffer
-import okio.sink
-
 import org.ossreviewtoolkit.model.EMPTY_JSON_NODE
 import org.ossreviewtoolkit.model.LicenseFinding
 import org.ossreviewtoolkit.model.Provenance
@@ -48,7 +45,7 @@ import org.ossreviewtoolkit.utils.OkHttpClientHelper
 import org.ossreviewtoolkit.utils.Os
 import org.ossreviewtoolkit.utils.ProcessCapture
 import org.ossreviewtoolkit.utils.log
-import org.ossreviewtoolkit.utils.unpack
+import org.ossreviewtoolkit.utils.unpackZip
 
 class Askalono(name: String, config: ScannerConfiguration) : LocalScanner(name, config) {
     class Factory : AbstractScannerFactory<Askalono>("Askalono") {
@@ -91,16 +88,10 @@ class Askalono(name: String, config: ScannerConfiguration) : LocalScanner(name, 
                 log.info { "Retrieved $scannerName from local cache." }
             }
 
-            val scannerArchive = createTempFile(ORT_NAME, archive)
-            scannerArchive.sink().buffer().use { it.writeAll(body.source()) }
-
             val unpackDir = createTempDir(ORT_NAME, "$scannerName-$scannerVersion").apply { deleteOnExit() }
 
             log.info { "Unpacking '$archive' to '$unpackDir'... " }
-            scannerArchive.unpack(unpackDir)
-            if (!scannerArchive.delete()) {
-                log.warn { "Unable to delete temporary file '$scannerArchive'." }
-            }
+            body.bytes().unpackZip(unpackDir)
 
             unpackDir
         }
