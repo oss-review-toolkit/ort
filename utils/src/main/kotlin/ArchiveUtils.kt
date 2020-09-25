@@ -86,9 +86,9 @@ fun File.unpack(targetDirectory: File) =
  * Unpack the [File] assuming it is a 7-Zip archive. This implementation ignores empty directories and symbolic links.
  */
 fun File.unpack7Zip(targetDirectory: File) {
-    SevenZFile(this).use {
+    SevenZFile(this).use { zipFile ->
         while (true) {
-            val entry = it.nextEntry ?: break
+            val entry = zipFile.nextEntry ?: break
 
             if (entry.isDirectory || entry.isAntiItem) {
                 continue
@@ -102,7 +102,7 @@ fun File.unpack7Zip(targetDirectory: File) {
 
             target.outputStream().use { output ->
                 val buffer = ByteArray(entry.size.toInt())
-                it.read(buffer)
+                zipFile.read(buffer)
                 output.write(buffer)
             }
         }
@@ -197,9 +197,9 @@ private fun ArchiveInputStream.unpack(
     shouldSkip: (ArchiveEntry) -> Boolean,
     mode: (ArchiveEntry) -> Int
 ) =
-    use {
+    use { input ->
         while (true) {
-            val entry = it.nextEntry ?: break
+            val entry = input.nextEntry ?: break
 
             if (shouldSkip(entry)) continue
 
@@ -210,7 +210,7 @@ private fun ArchiveInputStream.unpack(
             target.parentFile.safeMkdirs()
 
             target.outputStream().use { output ->
-                it.copyTo(output)
+                input.copyTo(output)
             }
 
             copyExecutableModeBit(target, mode(entry))
@@ -222,8 +222,8 @@ private fun ArchiveInputStream.unpack(
  * https://commons.apache.org/proper/commons-compress/zip.html#ZipArchiveInputStream_vs_ZipFile.
  */
 private fun ZipFile.unpack(targetDirectory: File) =
-    use {
-        val entries = it.entries
+    use { zipFile ->
+        val entries = zipFile.entries
 
         while (entries.hasMoreElements()) {
             val entry = entries.nextElement()
@@ -239,7 +239,7 @@ private fun ZipFile.unpack(targetDirectory: File) =
             target.parentFile.safeMkdirs()
 
             target.outputStream().use { output ->
-                it.getInputStream(entry).copyTo(output)
+                zipFile.getInputStream(entry).copyTo(output)
             }
 
             copyExecutableModeBit(target, entry.unixMode)
