@@ -138,7 +138,20 @@ private fun getLicenseId(license: JsonNode): String {
     // in ScanCode, and it should have always been using null instead.
     var name = license["spdx_license_key"].textValueOrEmpty()
 
-    if (name.isEmpty()) {
+    // There is only one license [1] in the latest ScanCode 3.2.x which has a "LicenseRef-*" identifier set as value for
+    // the 'spdx_license_key'. Use the 'key' property to derive the license identifier for now to avoid renaming the
+    // license from 'LicenseRef-scan-code-here-proprietary' to 'LicenseRef-Proprietary-HERE'.
+    //
+    // ScanCode is planning to do 'LicenseRef-' license ids later on [2][3]. This seems to be a better time to start
+    // using these 'LicenseRef-' IDs defined by ScanCode, if at all.
+    //
+    // See also [4].
+    //
+    // [1] https://github.com/nexB/scancode-toolkit/commit/aec1535d5c3ba8e40d622accbaeea6c430dcafb3
+    // [2] https://github.com/nexB/scancode-toolkit/issues/1217
+    // [3] https://github.com/nexB/scancode-toolkit/issues/1336
+    // [4] https://github.com/nexB/scancode-toolkit/pull/2247
+    if (name.isEmpty() || name.startsWith("LicenseRef-")) {
         val key = license["key"].textValue()
         name = if (key in UNKNOWN_LICENSE_KEYS) {
             SpdxConstants.NOASSERTION
