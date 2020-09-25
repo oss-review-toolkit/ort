@@ -358,7 +358,10 @@ val generateLicenseRefTextResources by tasks.registering {
         licensesDir.walk().maxDepth(1).filter {
             it.isFile && it.extension == "yml" && !it.nameWithoutExtension.endsWith("-exception")
         }.forEach { file ->
-            val isSpdxLicense = file.readLines().any { it.startsWith("spdx_license_key: ") }
+            val isSpdxLicense = file.readLines().any {
+                it.startsWith("spdx_license_key: ") && !it.contains("LicenseRef-")
+            }
+
             if (!isSpdxLicense) {
                 // The base name of a ScanCode license YML file matches the ScanCode-internal license key.
                 val baseName = file.nameWithoutExtension
