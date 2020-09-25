@@ -21,6 +21,7 @@
 
 package org.ossreviewtoolkit.analyzer.managers.utils
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.json.JsonMapper
 import com.fasterxml.jackson.dataformat.xml.XmlFactory
@@ -30,8 +31,13 @@ import com.fasterxml.jackson.module.kotlin.registerKotlinModule
 
 import java.io.File
 import java.io.IOException
+import java.util.SortedMap
 import java.util.concurrent.TimeUnit
 
+import javax.xml.bind.annotation.XmlRootElement
+
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.runBlocking
 
 import okhttp3.CacheControl
@@ -62,13 +68,12 @@ import org.ossreviewtoolkit.utils.await
 import org.ossreviewtoolkit.utils.collectMessagesAsString
 import org.ossreviewtoolkit.utils.log
 import org.ossreviewtoolkit.utils.logOnce
+import org.ossreviewtoolkit.utils.searchUpwardsForFile
 
-// See https://docs.microsoft.com/en-us/nuget/api/overview.
-private const val SERVICE_INDEX_URL = "https://api.nuget.org/v3/index.json"
-
+private const val DEFAULT_SERVICE_INDEX_URL = "https://api.nuget.org/v3/index.json"
 private const val REGISTRATIONS_BASE_URL_TYPE = "RegistrationsBaseUrl/3.6.0"
 
-class NuGetSupport {
+class NuGetSupport(serviceIndexUrls: List<String> = listOf(DEFAULT_SERVICE_INDEX_URL)) {
     companion object {
         val JSON_MAPPER = JsonMapper().registerKotlinModule()
 
@@ -76,6 +81,14 @@ class NuGetSupport {
             // Work-around for https://github.com/FasterXML/jackson-module-kotlin/issues/138.
             xmlTextElementName = "value"
         }).registerKotlinModule()
+
+        fun create(definitionFile: File): NuGetSupport {
+            val configXmlReader = NuGetConfigFileReader()
+            val configFile = definitionFile.parentFile.searchUpwardsForFile("nuget.config", ignoreCase = true)
+            val serviceIndexUrls = configFile?.let { configXmlReader.getRegistrationsBaseUrls(it) }
+
+            return NuGetSupport(serviceIndexUrls.orEmpty())
+        }
     }
 
     private val client = OkHttpClientHelper.buildClient {
@@ -94,13 +107,18 @@ class NuGetSupport {
         }
     }
 
-    private val serviceIndex = runBlocking { mapFromUrl<ServiceIndex>(JSON_MAPPER, SERVICE_INDEX_URL) }
+    private val serviceIndices = runBlocking {
+        serviceIndexUrls.map {
+            async { mapFromUrl<ServiceIndex>(JSON_MAPPER, it) }
+        }.awaitAll()
+    }
 
     // Note: Remove a trailing slash as one is always added later to separate from the path, and a double-slash would
     // break the URL!
-    private val registrationsBaseUrl = serviceIndex.resources.single {
-        it.type == REGISTRATIONS_BASE_URL_TYPE
-    }.id.removeSuffix("/")
+    private val registrationsBaseUrls = serviceIndices
+        .flatMap { it.resources }
+        .filter { it.type == REGISTRATIONS_BASE_URL_TYPE }
+        .map { it.id.removeSuffix("/") }
 
     private val packageMap = mutableMapOf<Identifier, Pair<NuGetAllPackageData, Package>>()
 
@@ -126,8 +144,17 @@ class NuGetSupport {
     private fun getAllPackageData(id: Identifier): NuGetAllPackageData {
         // Note: The package name in the URL is case-sensitive and must be lower-case!
         val lowerId = id.name.toLowerCase()
-        val dataUrl = "$registrationsBaseUrl/$lowerId/${id.version}.json"
-        val data = runBlocking { mapFromUrl<PackageData>(JSON_MAPPER, dataUrl) }
+
+        val data = registrationsBaseUrls.asSequence().mapNotNull { baseUrl ->
+            try {
+                val dataUrl = "$baseUrl/$lowerId/${id.version}.json"
+                runBlocking { mapFromUrl<PackageData>(JSON_MAPPER, dataUrl) }
+            } catch (e: IOException) {
+                log.debug { "Failed to retrieve package from $baseUrl." }
+                null
+            }
+        }.firstOrNull()
+            ?: throw IOException("Failed to retrieve package data for '$lowerId' from any of $registrationsBaseUrls.")
 
         val nupkgUrl = data.packageContent
         val nuspecUrl = nupkgUrl.replace(".${id.version}.nupkg", ".nuspec")
@@ -261,4 +288,31 @@ fun PackageManager.resolveNuGetDependencies(
     )
 
     return ProjectAnalyzerResult(project, packages, issues)
+}
+
+/**
+ * A reader for XML-based NuGet configuration files, see
+ * https://docs.microsoft.com/en-us/nuget/reference/nuget-config-file
+ */
+class NuGetConfigFileReader {
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    @XmlRootElement(name = "configuration")
+    private data class NuGetConfig(
+        val packageSources: List<SortedMap<String, String>>
+    )
+
+    fun getRegistrationsBaseUrls(configFile: File): List<String> {
+        val nuGetConfig = NuGetSupport.XML_MAPPER.readValue<NuGetConfig>(configFile)
+
+        val (remotes, locals) = nuGetConfig.packageSources
+            .mapNotNull { it["value"] }
+            .partition { it.startsWith("http") }
+
+        if (locals.isNotEmpty()) {
+            // TODO: Handle local package sources.
+            log.warn { "Ignoring local NuGet package sources $locals." }
+        }
+
+        return remotes
+    }
 }
