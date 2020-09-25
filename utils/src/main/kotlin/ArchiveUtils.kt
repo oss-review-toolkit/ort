@@ -101,9 +101,7 @@ fun File.unpack7Zip(targetDirectory: File) {
             target.parentFile.safeMkdirs()
 
             target.outputStream().use { output ->
-                val buffer = ByteArray(entry.size.toInt())
-                zipFile.read(buffer)
-                output.write(buffer)
+                zipFile.getInputStream(entry).copyTo(output)
             }
         }
     }
