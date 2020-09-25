@@ -197,7 +197,7 @@ class ScanCode(
         }
     }
 
-    override val scannerVersion = "3.0.2"
+    override val scannerVersion = "3.2.1-rc2"
     override val resultFileExt = "json"
 
     private val scanCodeConfiguration = config.options?.get("ScanCode").orEmpty()
@@ -234,11 +234,13 @@ class ScanCode(
     }
 
     override fun bootstrap(): File {
+        val versionWithoutHypen = scannerVersion.replace("-", "")
+
         val archive = when {
             // Use the .zip file despite it being slightly larger than the .tar.gz file here as the latter for some
             // reason does not complete to unpack on Windows.
-            Os.isWindows -> "v$scannerVersion.zip"
-            else -> "v$scannerVersion.tar.gz"
+            Os.isWindows -> "v$versionWithoutHypen.zip"
+            else -> "v$versionWithoutHypen.tar.gz"
         }
 
         // Use the source code archive instead of the release artifact from S3 to enable OkHttp to cache the download
