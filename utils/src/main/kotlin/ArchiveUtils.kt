@@ -96,7 +96,7 @@ fun File.unpack7Zip(targetDirectory: File) {
 
             val target = targetDirectory.resolve(entry.name)
 
-            // There is no guarantee that directory entries appear before file entries, so always ensure the parent
+            // There is no guarantee that directory entries appear before file entries, so ensure that the parent
             // directory for a file exists.
             target.parentFile.safeMkdirs()
 
@@ -205,7 +205,7 @@ private fun ArchiveInputStream.unpack(
 
             val target = targetDirectory.resolve(entry.name)
 
-            // There is no guarantee that directory entries appear before file entries, so always ensure the parent
+            // There is no guarantee that directory entries appear before file entries, so ensure that the parent
             // directory for a file exists.
             target.parentFile.safeMkdirs()
 
@@ -234,7 +234,7 @@ private fun ZipFile.unpack(targetDirectory: File) =
 
             val target = targetDirectory.resolve(entry.name)
 
-            // There is no guarantee that directory entries appear before file entries, so always ensure the parent
+            // There is no guarantee that directory entries appear before file entries, so ensure that the parent
             // directory for a file exists.
             target.parentFile.safeMkdirs()
 
