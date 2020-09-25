@@ -22,6 +22,7 @@ package org.ossreviewtoolkit.utils
 import io.kotest.assertions.assertSoftly
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.WordSpec
+import io.kotest.matchers.nulls.shouldBeNull
 import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
@@ -126,6 +127,28 @@ class ExtensionsTest : WordSpec({
 
             gitRoot.shouldNotBeNull()
             gitRoot shouldBe File("..").absoluteFile.normalize()
+        }
+    }
+
+    "File.searchUpwardsForFile" should {
+        "find the README.md file case insensitive" {
+            val readmeFile = File(".").searchUpwardsForFile("ReadMe.MD", true)
+
+            readmeFile.shouldNotBeNull()
+            readmeFile shouldBe File("..").absoluteFile.normalize().resolve("README.md")
+        }
+
+        "find the README.md file case sensitive" {
+            val readmeFile = File(".").searchUpwardsForFile("README.md", false)
+
+            readmeFile.shouldNotBeNull()
+            readmeFile shouldBe File("..").absoluteFile.normalize().resolve("README.md")
+        }
+
+        "not find the README.md with wrong cases" {
+            val readmeFile = File(".").searchUpwardsForFile("ReadMe.MD", false)
+
+            readmeFile.shouldBeNull()
         }
     }
 

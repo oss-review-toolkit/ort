@@ -183,6 +183,31 @@ fun File.searchUpwardsForSubdirectory(searchDirName: String): File? {
 }
 
 /**
+ * Search [this] directory upwards towards the root until a file called [searchFileName] is found and return this file,
+ * or return null if no such file is found.
+ */
+fun File.searchUpwardsForFile(searchFileName: String, ignoreCase: Boolean = false): File? {
+    fun resolveFile(dir: File, fileName: String, ignoreCase: Boolean): File? {
+        val files = dir.list() ?: return null
+
+        return files.filter { it.equals(fileName, ignoreCase = ignoreCase) }
+            .map { dir.resolve(it) }
+            .find { it.isFile }
+    }
+
+    if (!isDirectory) return null
+
+    var currentDir: File? = absoluteFile
+    var currentFile = currentDir?.let { resolveFile(it, searchFileName, ignoreCase) }
+    while (currentDir != null && currentFile == null) {
+        currentDir = currentDir.parentFile ?: break
+        currentFile = resolveFile(currentDir, searchFileName, ignoreCase)
+    }
+
+    return currentFile
+}
+
+/**
  * Construct a "file:" URI in a safe way by never using a null authority for wider compatibility.
  */
 fun File.toSafeURI(): URI {
