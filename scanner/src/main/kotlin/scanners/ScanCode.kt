@@ -194,7 +194,7 @@ class ScanCode(
                 log.warn { "Unable to delete temporary file '$scannerArchive'." }
             }
 
-            val scannerDir = unpackDir.resolve("scancode-toolkit-$scannerVersion")
+            val scannerDir = unpackDir.resolve("scancode-toolkit-$versionWithoutHypen")
 
             scannerDir
         }
@@ -242,6 +242,18 @@ class ScanCode(
             }
         }
     }
+
+    override fun getVersion(workingDir: File?): String =
+        // The release candidate version names lack a hyphen in between the minor version and the extension, e.g.
+        // 3.2.1rc2. Insert that hyphen for compatibility with Semver.
+        super.getVersion(workingDir).let {
+            val index = it.indexOf("rc")
+            if (index != -1) {
+                "${it.substring(0, index)}-${it.substring(index)}"
+            } else {
+                it
+            }
+        }
 
     override fun getRawResult(resultsFile: File) =
         parseScanCodeResult(resultsFile)
