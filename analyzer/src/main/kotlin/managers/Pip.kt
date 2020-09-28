@@ -423,9 +423,6 @@ class Pip(
 
         // Use the top-level license field as well as the license classifiers as the declared licenses.
         getLicenseFromLicenseField(pkgInfo["license"]?.textValue())?.let { declaredLicenses += it }
-
-        // Example license classifier:
-        // "License :: OSI Approved :: GNU Library or Lesser General Public License (LGPL)"
         pkgInfo["classifiers"]?.mapNotNullTo(declaredLicenses) { getLicenseFromClassifier(it.textValue()) }
 
         return declaredLicenses
@@ -440,6 +437,8 @@ class Pip(
         }
 
     private fun getLicenseFromClassifier(classifier: String): String? =
+        // Example license classifier:
+        // "License :: OSI Approved :: GNU Library or Lesser General Public License (LGPL)"
         classifier.split(" :: ").takeIf { it.first() == "License" }?.last()?.takeUnless { it == "OSI Approved" }
 
     private fun setupVirtualEnv(workingDir: File, definitionFile: File): File {
