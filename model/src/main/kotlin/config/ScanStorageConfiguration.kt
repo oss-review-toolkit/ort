@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2017-2019 HERE Europe B.V.
+ * Copyright (C) 2020 Bosch.IO GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,6 +21,25 @@
 package org.ossreviewtoolkit.model.config
 
 import com.fasterxml.jackson.annotation.JsonProperty
+import com.fasterxml.jackson.annotation.JsonSubTypes
+import com.fasterxml.jackson.annotation.JsonSubTypes.Type
+import com.fasterxml.jackson.annotation.JsonTypeInfo
+
+import org.ossreviewtoolkit.utils.storage.FileStorage
+
+/**
+ * Root of a class hierarchy for configuration classes for scan storage implementations.
+ *
+ * Based on this hierarchy, it is possible to have multiple different scan storages enabled and to configure them
+ * dynamically.
+ */
+@JsonTypeInfo(use = JsonTypeInfo.Id.MINIMAL_CLASS)
+@JsonSubTypes(
+    Type(PostgresStorageConfiguration::class),
+    Type(FileBasedStorageConfiguration::class),
+    Type(ClearlyDefinedStorageConfiguration::class)
+)
+sealed class ScanStorageConfiguration
 
 /**
  * A class to hold the configuration for using Postgres as a storage.
@@ -74,4 +94,24 @@ data class PostgresStorageConfiguration(
      * TODO: Make additional parameters configurable, see:
      *       https://jdbc.postgresql.org/documentation/head/connect.html
      */
-)
+) : ScanStorageConfiguration()
+
+/**
+ * The configuration model of a file based storage.
+ */
+data class FileBasedStorageConfiguration(
+    /**
+     * The configuration of the [FileStorage] used to store the files.
+     */
+    val backend: FileStorageConfiguration
+) : ScanStorageConfiguration()
+
+/**
+ * The configuration model of a storage based on ClearlyDefined.
+ */
+data class ClearlyDefinedStorageConfiguration(
+    /**
+     * The URL of the ClearlyDefined server.
+     */
+    val serverUrl: String
+) : ScanStorageConfiguration()
