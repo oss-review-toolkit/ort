@@ -18,7 +18,7 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.scanner
+package org.ossreviewtoolkit.scanner.scanners
 
 import com.fasterxml.jackson.databind.node.ArrayNode
 import com.fasterxml.jackson.databind.node.ObjectNode
@@ -36,10 +36,6 @@ import java.time.Instant
 import org.ossreviewtoolkit.model.CopyrightFinding
 import org.ossreviewtoolkit.model.LicenseFinding
 import org.ossreviewtoolkit.model.TextLocation
-import org.ossreviewtoolkit.scanner.scanners.ScanCode
-import org.ossreviewtoolkit.scanner.scanners.generateScannerDetails
-import org.ossreviewtoolkit.scanner.scanners.generateSummary
-import org.ossreviewtoolkit.scanner.scanners.parseScanCodeResult
 
 @Suppress("LargeClass")
 class ScanCodeResultParserTest : WordSpec({
@@ -743,6 +739,110 @@ class ScanCodeResultParserTest : WordSpec({
 
             val details = generateScannerDetails(result)
             details.version shouldBe ""
+        }
+    }
+
+    "mapTimeoutErrors()" should {
+        "return true for scan results with only timeout errors" {
+            val resultFile = File("src/test/assets/esprima-2.7.3_scancode-2.2.1.post277.4d68f9377.json")
+            val result = parseScanCodeResult(resultFile)
+
+            // The "scanPath" argument should point to the path that was scanned, but as the scanned files are
+            // not available here anymore, instead pass the "resultFile" to test the calculation of the package
+            // verification code on an arbitrary file.
+            val summary = generateSummary(Instant.now(), Instant.now(), resultFile, result)
+
+            val issues = summary.issues.toMutableList()
+
+            mapTimeoutErrors(issues) shouldBe true
+            issues.joinToString("\n") { it.message } shouldBe listOf(
+                "ERROR: Timeout after 300 seconds while scanning file " +
+                        "'test/3rdparty/syntax/angular-1.2.5.tokens'.",
+                "ERROR: Timeout after 300 seconds while scanning file " +
+                        "'test/3rdparty/syntax/jquery-1.9.1.tokens'.",
+                "ERROR: Timeout after 300 seconds while scanning file " +
+                        "'test/3rdparty/syntax/jquery.mobile-1.4.2.tokens'.",
+                "ERROR: Timeout after 300 seconds while scanning file " +
+                        "'test/3rdparty/syntax/mootools-1.4.5.tokens'.",
+                "ERROR: Timeout after 300 seconds while scanning file " +
+                        "'test/3rdparty/syntax/underscore-1.5.2.tokens'.",
+                "ERROR: Timeout after 300 seconds while scanning file " +
+                        "'test/3rdparty/syntax/yui-3.12.0.tokens'.",
+
+                "ERROR: Timeout after 300 seconds while scanning file " +
+                        "'test/3rdparty/syntax/angular-1.2.5.json'.",
+                "ERROR: Timeout after 300 seconds while scanning file " +
+                        "'test/3rdparty/syntax/jquery-1.9.1.json'.",
+                "ERROR: Timeout after 300 seconds while scanning file " +
+                        "'test/3rdparty/syntax/jquery.mobile-1.4.2.json'.",
+                "ERROR: Timeout after 300 seconds while scanning file " +
+                        "'test/3rdparty/syntax/mootools-1.4.5.json'.",
+                "ERROR: Timeout after 300 seconds while scanning file " +
+                        "'test/3rdparty/syntax/underscore-1.5.2.json'.",
+                "ERROR: Timeout after 300 seconds while scanning file " +
+                        "'test/3rdparty/syntax/yui-3.12.0.json'."
+            ).joinToString("\n")
+        }
+
+        "return false for scan results without errors" {
+            val resultFile = File("src/test/assets/esprima-2.7.3_scancode-2.2.1.json")
+            val result = parseScanCodeResult(resultFile)
+
+            // The "scanPath" argument should point to the path that was scanned, but as the scanned files are
+            // not available here anymore, instead pass the "resultFile" to test the calculation of the package
+            // verification code on an arbitrary file.
+            val summary = generateSummary(Instant.now(), Instant.now(), resultFile, result)
+
+            mapTimeoutErrors(summary.issues.toMutableList()) shouldBe false
+        }
+    }
+
+    "mapUnknownErrors()" should {
+        "return true for scan results with only memory errors" {
+            val resultFile = File("src/test/assets/very-long-json-lines_scancode-2.2.1.post277.4d68f9377.json")
+            val result = parseScanCodeResult(resultFile)
+
+            // The "scanPath" argument should point to the path that was scanned, but as the scanned files are
+            // not available here anymore, instead pass the "resultFile" to test the calculation of the package
+            // verification code on an arbitrary file.
+            val summary = generateSummary(Instant.now(), Instant.now(), resultFile, result)
+
+            val issues = summary.issues.toMutableList()
+
+            mapUnknownIssues(issues) shouldBe true
+            issues.joinToString("\n") { it.message } shouldBe listOf(
+                "ERROR: MemoryError while scanning file 'data.json'."
+            ).joinToString("\n")
+        }
+
+        "return false for scan results with other unknown errors" {
+            val resultFile = File("src/test/assets/kotlin-annotation-processing-gradle-1.2.21_scancode.json")
+            val result = parseScanCodeResult(resultFile)
+
+            // The "scanPath" argument should point to the path that was scanned, but as the scanned files are
+            // not available here anymore, instead pass the "resultFile" to test the calculation of the package
+            // verification code on an arbitrary file.
+            val summary = generateSummary(Instant.now(), Instant.now(), resultFile, result)
+
+            val issues = summary.issues.toMutableList()
+
+            mapUnknownIssues(issues) shouldBe false
+            issues.joinToString("\n") { it.message } shouldBe listOf(
+                "ERROR: AttributeError while scanning file 'compiler/testData/cli/js-dce/withSourceMap.js.map' " +
+                        "('NoneType' object has no attribute 'splitlines')."
+            ).joinToString("\n")
+        }
+
+        "return false for scan results without errors" {
+            val resultFile = File("src/test/assets/esprima-2.7.3_scancode-2.2.1.json")
+            val result = parseScanCodeResult(resultFile)
+
+            // The "scanPath" argument should point to the path that was scanned, but as the scanned files are
+            // not available here anymore, instead pass the "resultFile" to test the calculation of the package
+            // verification code on an arbitrary file.
+            val summary = generateSummary(Instant.now(), Instant.now(), resultFile, result)
+
+            mapUnknownIssues(summary.issues.toMutableList()) shouldBe false
         }
     }
 })

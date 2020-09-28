@@ -26,6 +26,7 @@ import com.fasterxml.jackson.databind.JsonNode
 
 import java.io.File
 import java.time.Instant
+import java.util.regex.Pattern
 
 import org.ossreviewtoolkit.model.CopyrightFinding
 import org.ossreviewtoolkit.model.EMPTY_JSON_NODE
@@ -38,6 +39,18 @@ import org.ossreviewtoolkit.model.jsonMapper
 import org.ossreviewtoolkit.spdx.SpdxConstants
 import org.ossreviewtoolkit.spdx.calculatePackageVerificationCode
 import org.ossreviewtoolkit.utils.textValueOrEmpty
+
+// Note: The "(File: ...)" part in the patterns below is actually added by our own getRawResult() function.
+private val UNKNOWN_ERROR_REGEX = Pattern.compile(
+    "(ERROR: for scanner: (?<scanner>\\w+):\n)?" +
+            "ERROR: Unknown error:\n.+\n(?<error>\\w+Error)(:|\n)(?<message>.*) \\(File: (?<file>.+)\\)",
+    Pattern.DOTALL
+)
+
+private val TIMEOUT_ERROR_REGEX = Pattern.compile(
+    "(ERROR: for scanner: (?<scanner>\\w+):\n)?" +
+            "ERROR: Processing interrupted: timeout after (?<timeout>\\d+) seconds. \\(File: (?<file>.+)\\)"
+)
 
 private val UNKNOWN_LICENSE_KEYS = listOf(
     "free-unknown",
@@ -246,4 +259,71 @@ private fun generateScannerOptions(options: JsonNode?): String {
         }
         optionList.joinToString(separator = " ")
     }.orEmpty()
+}
+
+/**
+ * Map messages about unknown issues to a more compact form. Return true if solely memory errors occurred,
+ * return false otherwise.
+ */
+internal fun mapUnknownIssues(issues: MutableList<OrtIssue>): Boolean {
+    if (issues.isEmpty()) {
+        return false
+    }
+
+    var onlyMemoryErrors = true
+
+    val mappedIssues = issues.map { fullError ->
+        UNKNOWN_ERROR_REGEX.matcher(fullError.message).let { matcher ->
+            if (matcher.matches()) {
+                val file = matcher.group("file")
+                val error = matcher.group("error")
+                if (error == "MemoryError") {
+                    fullError.copy(message = "ERROR: MemoryError while scanning file '$file'.")
+                } else {
+                    onlyMemoryErrors = false
+                    val message = matcher.group("message").trim()
+                    fullError.copy(message = "ERROR: $error while scanning file '$file' ($message).")
+                }
+            } else {
+                onlyMemoryErrors = false
+                fullError
+            }
+        }
+    }
+
+    issues.clear()
+    issues += mappedIssues.distinctBy { it.message }
+
+    return onlyMemoryErrors
+}
+
+/**
+ * Map messages about timeout errors to a more compact form. Return true if solely timeout errors occurred,
+ * return false otherwise.
+ */
+internal fun mapTimeoutErrors(issues: MutableList<OrtIssue>): Boolean {
+    if (issues.isEmpty()) {
+        return false
+    }
+
+    var onlyTimeoutErrors = true
+
+    val mappedIssues = issues.map { fullError ->
+        TIMEOUT_ERROR_REGEX.matcher(fullError.message).let { matcher ->
+            if (matcher.matches() && matcher.group("timeout") == ScanCode.TIMEOUT.toString()) {
+                val file = matcher.group("file")
+                fullError.copy(
+                    message = "ERROR: Timeout after ${ScanCode.TIMEOUT} seconds while scanning file '$file'."
+                )
+            } else {
+                onlyTimeoutErrors = false
+                fullError
+            }
+        }
+    }
+
+    issues.clear()
+    issues += mappedIssues.distinctBy { it.message }
+
+    return onlyTimeoutErrors
 }
