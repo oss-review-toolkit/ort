@@ -19,10 +19,6 @@
 
 package org.ossreviewtoolkit.model.config
 
-import com.typesafe.config.ConfigFactory
-
-import io.github.config4k.extract
-
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.collections.containExactly
 import io.kotest.matchers.nulls.shouldBeNull
@@ -39,10 +35,8 @@ import org.ossreviewtoolkit.utils.test.shouldNotBeNull
 class OrtConfigurationTest : WordSpec({
     "OrtConfiguration" should {
         "be deserializable from HOCON" {
-            val hocon = javaClass.getResource("/reference.conf").readText()
-
-            val config = ConfigFactory.parseString(hocon)
-            val ortConfig = config.extract<OrtConfiguration>("ort")
+            val refConfig = File("src/test/assets/reference.conf")
+            val ortConfig = OrtConfiguration.load(configFile = refConfig)
 
             ortConfig.scanner shouldNotBeNull {
                 archive shouldNotBeNull {
@@ -80,9 +74,7 @@ class OrtConfigurationTest : WordSpec({
         }
 
         "correctly prioritize the sources" {
-            val configFile = createTempFile(ORT_NAME, javaClass.simpleName).apply { deleteOnExit() }
-
-            configFile.writeText(
+            val configFile = createTestConfig(
                 """
                 ort {
                   scanner {
@@ -98,7 +90,10 @@ class OrtConfigurationTest : WordSpec({
             )
 
             val config = OrtConfiguration.load(
-                args = mapOf("ort.scanner.postgresStorage.schema" to "argsSchema"),
+                args = mapOf(
+                    "ort.scanner.postgresStorage.schema" to "argsSchema",
+                    "other.property" to "someValue"
+                ),
                 configFile = configFile
             )
 
@@ -109,5 +104,23 @@ class OrtConfigurationTest : WordSpec({
                 }
             }
         }
+
+        "ignore a non-existing configuration file" {
+            val args = mapOf("foo" to "bar")
+            val file = File("nonExistingConfig.conf")
+
+            val config = OrtConfiguration.load(configFile = file, args = args)
+
+            config.scanner.shouldBeNull()
+        }
     }
 })
+
+/**
+ * Create a test configuration with the [data] specified.
+ */
+private fun createTestConfig(data: String): File =
+    createTempFile(ORT_NAME, ".conf").apply {
+        writeText(data)
+        deleteOnExit()
+    }

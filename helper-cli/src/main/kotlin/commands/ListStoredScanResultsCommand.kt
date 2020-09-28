@@ -23,6 +23,7 @@ import com.github.ajalt.clikt.core.CliktCommand
 import com.github.ajalt.clikt.core.ProgramResult
 import com.github.ajalt.clikt.parameters.options.associate
 import com.github.ajalt.clikt.parameters.options.convert
+import com.github.ajalt.clikt.parameters.options.default
 import com.github.ajalt.clikt.parameters.options.option
 import com.github.ajalt.clikt.parameters.options.required
 import com.github.ajalt.clikt.parameters.types.file
@@ -34,8 +35,10 @@ import org.ossreviewtoolkit.model.config.OrtConfiguration
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
 import org.ossreviewtoolkit.model.yamlMapper
 import org.ossreviewtoolkit.scanner.ScanResultsStorage
+import org.ossreviewtoolkit.utils.ORT_CONFIG_FILENAME
 import org.ossreviewtoolkit.utils.expandTilde
 import org.ossreviewtoolkit.utils.log
+import org.ossreviewtoolkit.utils.ortConfigDirectory
 
 internal class ListStoredScanResultsCommand : CliktCommand(
     help = "Lists the provenance of all stored scan results for a given package identifier."
@@ -46,6 +49,7 @@ internal class ListStoredScanResultsCommand : CliktCommand(
     ).convert { it.expandTilde() }
         .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
         .convert { it.absoluteFile.normalize() }
+        .default(ortConfigDirectory.resolve(ORT_CONFIG_FILENAME))
 
     private val packageId by option(
         "--package-id",
