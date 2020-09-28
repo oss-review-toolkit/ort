@@ -39,6 +39,11 @@ class ScannerDetailsTest : WordSpec() {
                 detailsLowerCaseName.isCompatible(detailsUpperCaseName) shouldBe true
             }
 
+            "be compatible if only the pre-release / build identifier differs" {
+                scanCodeDetails.isCompatible(ScannerDetails("ScanCode", "2.9.1-rc2", "")) shouldBe true
+                scanCodeDetails.isCompatible(ScannerDetails("ScanCode", "2.9.1+build", "")) shouldBe true
+            }
+
             "be compatible if only the patch level differs" {
                 scanCodeDetails.isCompatible(ScannerDetails("ScanCode", "2.9.1.post7.fd2e483e3", "")) shouldBe true
                 scanCodeDetails.isCompatible(ScannerDetails("ScanCode", "2.9.2", "")) shouldBe true
