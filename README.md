@@ -170,7 +170,7 @@ table below for the supported environment variables and their defaults:
 
 The following provides an overview of the various configuration files that can be used to customize ORT behavior:
 
-[ORT configuration file](./model/src/main/resources/reference.conf)
+[ORT configuration file](./model/src/test/assets/reference.conf)
 
 The main configuration file for the operation of ORT. This configuration is maintained by an administrator who manages
 the ORT instance. In contrast to the configuration files in the following, this file rarely changes once ORT is

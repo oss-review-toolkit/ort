@@ -22,7 +22,7 @@ import org.jetbrains.kotlin.gradle.dsl.KotlinCompile
 
 import org.ossreviewtoolkit.gradle.*
 
-val config4kVersion: String by project
+val hopliteVersion: String by project
 val jacksonVersion: String by project
 val semverVersion: String by project
 
@@ -42,8 +42,9 @@ dependencies {
 
     implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:$jacksonVersion")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin:$jacksonVersion")
+    implementation("com.sksamuel.hoplite:hoplite-core:$hopliteVersion")
+    implementation("com.sksamuel.hoplite:hoplite-hocon:$hopliteVersion")
     implementation("com.vdurmont:semver4j:$semverVersion")
-    implementation("io.github.config4k:config4k:$config4kVersion")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
 }
 
