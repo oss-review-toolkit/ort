@@ -84,7 +84,8 @@ class SpdxDocumentFile(
      */
     private fun getDependencies(pkg: SpdxPackage, doc: SpdxDocument): SortedSet<PackageReference> =
         getDependencies(pkg, doc, SpdxRelationship.Type.DEPENDENCY_OF) { target ->
-            val dependency = doc.packages.single { it.spdxId == target }
+            val dependency = doc.packages.singleOrNull { it.spdxId == target }
+                ?: throw IllegalArgumentException("No single package with target ID '$target' found.")
             PackageReference(
                 id = dependency.toIdentifier(),
                 dependencies = getDependencies(dependency, doc)
@@ -105,7 +106,8 @@ class SpdxDocumentFile(
             when {
                 // Dependencies can either be defined on the target...
                 target == pkg.spdxId && relation == dependencyOfRelation -> {
-                    val dependency = doc.packages.single { it.spdxId == source }
+                    val dependency = doc.packages.singleOrNull { it.spdxId == source }
+                        ?: throw IllegalArgumentException("No single package with source ID '$source' found.")
                     PackageReference(
                         id = dependency.toIdentifier(),
                         dependencies = getDependencies(
