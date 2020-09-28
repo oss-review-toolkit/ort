@@ -153,6 +153,7 @@ object PythonVersion : CommandLineTool {
  * [install_requires vs requirements files](https://packaging.python.org/discussions/install-requires-vs-requirements/)
  * and [setup.py vs. requirements.txt](https://caremad.io/posts/2013/07/setup-vs-requirement/).
  */
+@Suppress("TooManyFunctions")
 class Pip(
     name: String,
     analysisRoot: File,
@@ -421,14 +422,7 @@ class Pip(
         val declaredLicenses = sortedSetOf<String>()
 
         // Use the top-level license field as well as the license classifiers as the declared licenses.
-        setOf(pkgInfo["license"]).mapNotNullTo(declaredLicenses) { license ->
-            license?.textValue()?.let {
-                // Work-around for projects that declare licenses in classifier-style syntax.
-                getLicenseFromClassifier(it) ?: it
-            }?.takeUnless {
-                it.isBlank() || it == "UNKNOWN"
-            }
-        }
+        getLicenseFromLicenseField(pkgInfo["license"]?.textValue())?.let { declaredLicenses += it }
 
         // Example license classifier:
         // "License :: OSI Approved :: GNU Library or Lesser General Public License (LGPL)"
@@ -436,6 +430,14 @@ class Pip(
 
         return declaredLicenses
     }
+
+    private fun getLicenseFromLicenseField(value: String?): String? =
+        value?.let {
+            // Work-around for projects that declare licenses in classifier-style syntax.
+            getLicenseFromClassifier(it) ?: it
+        }?.takeUnless {
+            it.isBlank() || it == "UNKNOWN"
+        }
 
     private fun getLicenseFromClassifier(classifier: String): String? =
         classifier.split(" :: ").takeIf { it.first() == "License" }?.last()?.takeUnless { it == "OSI Approved" }
