@@ -24,50 +24,48 @@ import io.kotest.matchers.shouldBe
 
 import org.ossreviewtoolkit.model.ScannerDetails
 
-class ScannerDetailsTest : WordSpec() {
-    private val scanCodeDetails = ScannerDetails("ScanCode", "2.9.1", "")
+private val scanCodeDetails = ScannerDetails("ScanCode", "2.9.1", "")
 
-    init {
-        "The same scanner" should {
-            "be compatible to itself" {
-                scanCodeDetails.isCompatible(scanCodeDetails) shouldBe true
-            }
-
-            "be compatible if the name differs in case" {
-                val detailsLowerCaseName = scanCodeDetails.copy(name = scanCodeDetails.name.toLowerCase())
-                val detailsUpperCaseName = scanCodeDetails.copy(name = scanCodeDetails.name.toUpperCase())
-                detailsLowerCaseName.isCompatible(detailsUpperCaseName) shouldBe true
-            }
-
-            "be compatible if only the pre-release / build identifier differs" {
-                scanCodeDetails.isCompatible(ScannerDetails("ScanCode", "2.9.1-rc2", "")) shouldBe true
-                scanCodeDetails.isCompatible(ScannerDetails("ScanCode", "2.9.1+build", "")) shouldBe true
-            }
-
-            "be compatible if only the patch level differs" {
-                scanCodeDetails.isCompatible(ScannerDetails("ScanCode", "2.9.1.post7.fd2e483e3", "")) shouldBe true
-                scanCodeDetails.isCompatible(ScannerDetails("ScanCode", "2.9.2", "")) shouldBe true
-            }
-
-            "not be compatible if the minor level differs" {
-                scanCodeDetails.isCompatible(ScannerDetails("ScanCode", "2.8.1", "")) shouldBe false
-                scanCodeDetails.isCompatible(ScannerDetails("ScanCode", "2.10.2", "")) shouldBe false
-            }
-
-            "not be compatible if the major level differs" {
-                scanCodeDetails.isCompatible(ScannerDetails("ScanCode", "1.0", "")) shouldBe false
-                scanCodeDetails.isCompatible(ScannerDetails("ScanCode", "3.0.0", "")) shouldBe false
-            }
-
-            "not be compatible if the configuration differs" {
-                scanCodeDetails.isCompatible(scanCodeDetails.copy(configuration = "--foo-bar-option")) shouldBe false
-            }
+class ScannerDetailsTest : WordSpec({
+    "The same scanner" should {
+        "be compatible to itself" {
+            scanCodeDetails.isCompatible(scanCodeDetails) shouldBe true
         }
 
-        "Different scanners" should {
-            "never be compatible" {
-                scanCodeDetails.isCompatible(scanCodeDetails.copy(name = "Other")) shouldBe false
-            }
+        "be compatible if the name differs in case" {
+            val detailsLowerCaseName = scanCodeDetails.copy(name = scanCodeDetails.name.toLowerCase())
+            val detailsUpperCaseName = scanCodeDetails.copy(name = scanCodeDetails.name.toUpperCase())
+            detailsLowerCaseName.isCompatible(detailsUpperCaseName) shouldBe true
+        }
+
+        "be compatible if only the pre-release / build identifier differs" {
+            scanCodeDetails.isCompatible(ScannerDetails("ScanCode", "2.9.1-rc2", "")) shouldBe true
+            scanCodeDetails.isCompatible(ScannerDetails("ScanCode", "2.9.1+build", "")) shouldBe true
+        }
+
+        "be compatible if only the patch level differs" {
+            scanCodeDetails.isCompatible(ScannerDetails("ScanCode", "2.9.1.post7.fd2e483e3", "")) shouldBe true
+            scanCodeDetails.isCompatible(ScannerDetails("ScanCode", "2.9.2", "")) shouldBe true
+        }
+
+        "not be compatible if the minor level differs" {
+            scanCodeDetails.isCompatible(ScannerDetails("ScanCode", "2.8.1", "")) shouldBe false
+            scanCodeDetails.isCompatible(ScannerDetails("ScanCode", "2.10.2", "")) shouldBe false
+        }
+
+        "not be compatible if the major level differs" {
+            scanCodeDetails.isCompatible(ScannerDetails("ScanCode", "1.0", "")) shouldBe false
+            scanCodeDetails.isCompatible(ScannerDetails("ScanCode", "3.0.0", "")) shouldBe false
+        }
+
+        "not be compatible if the configuration differs" {
+            scanCodeDetails.isCompatible(scanCodeDetails.copy(configuration = "--foo-bar-option")) shouldBe false
         }
     }
-}
+
+    "Different scanners" should {
+        "never be compatible" {
+            scanCodeDetails.isCompatible(scanCodeDetails.copy(name = "Other")) shouldBe false
+        }
+    }
+})
