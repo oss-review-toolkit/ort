@@ -70,8 +70,7 @@ data class Provenance(
 
     init {
         require(sourceArtifact == null || vcsInfo == null) {
-            "Provenance does not allow both 'sourceArtifact' and 'vcsInfo' to be set, otherwise it is ambiguous " +
-                    "which was used."
+            "Not both 'sourceArtifact' and 'vcsInfo' may be set, as otherwise it is ambiguous which one to use."
         }
     }
 

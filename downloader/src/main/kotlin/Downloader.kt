@@ -99,7 +99,7 @@ object Downloader {
     ) {
         init {
             require(sourceArtifact == null || vcsInfo == null) {
-                "Not both sourceArtifact and vcsInfo may be set."
+                "Not both 'sourceArtifact' and 'vcsInfo' may be set, as otherwise it is ambiguous which one to use."
             }
         }
     }
