@@ -693,7 +693,7 @@ class Pip(
         }
 
         val declaredLicenses = sortedSetOf<String>()
-        map["License"]?.let { declaredLicenses += it.single() }
+        getLicenseFromLicenseField(map["License"]?.single())?.let { declaredLicenses += it }
         map["Classifiers"]?.mapNotNullTo(declaredLicenses) { getLicenseFromClassifier(it) }
 
         return Package(
