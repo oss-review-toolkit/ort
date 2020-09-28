@@ -209,16 +209,17 @@ class SpdxDocumentFile(
     }
 
     /**
-     * Return the concluded license to be used in ORT's data model, which expects a not present value to be null
-     * instead of NONE or NOASSERTION.
+     * Return the concluded license to be used in ORT's data model, which expects a not present value to be null instead
+     * of NONE or NOASSERTION.
      */
     private fun getConcludedLicense(pkg: SpdxPackage): SpdxExpression? =
         pkg.licenseConcluded.takeIf { SpdxConstants.isPresent(it) }?.toSpdx()
 
     /**
-     * Return a [RemoteArtifact] created with downloadLocation of the given package [SpdxPackage]
-     * if it's a file location or return en Empty RemoteArtifact.
-     * TODO: must be completed for other cases : use "sourceInfo" or "externalRefs"?
+     * Return a [RemoteArtifact] created from the downloadLocation of the given package [SpdxPackage] if it is a local
+     * file, or return an [RemoteArtifact.EMPTY].
+     *
+     * TODO: Consider also taking "sourceInfo" or "externalRefs" into account.
      */
     private fun getSourceArtifact(pkg: SpdxPackage): RemoteArtifact {
         return if (pkg.downloadLocation.startsWith("file:/")) {
