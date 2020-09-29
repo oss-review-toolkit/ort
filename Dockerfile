@@ -145,7 +145,7 @@ RUN /opt/ort/bin/import_proxy_certs.sh && \
     curl -ksSL https://github.com/nexB/scancode-toolkit/archive/v$SCANCODE_VERSION.tar.gz | \
         tar -zxC /usr/local && \
         # Trigger configuration for end-users.
-        /usr/local/scancode-toolkit-$SCANCODE_VERSION/scancode --version && \
+        PYTHON_EXE=/usr/bin/python3 /usr/local/scancode-toolkit-$SCANCODE_VERSION/scancode --version && \
         chmod -R o=u /usr/local/scancode-toolkit-$SCANCODE_VERSION && \
         ln -s /usr/local/scancode-toolkit-$SCANCODE_VERSION/scancode /usr/local/bin/scancode
 
