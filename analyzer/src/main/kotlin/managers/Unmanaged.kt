@@ -34,7 +34,9 @@ import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.utils.log
 
 /**
- * A fake [PackageManager] for projects that do not use any of the known package managers.
+ * A fake [PackageManager] for projects that do not use any of the known package managers, or no package manager at all.
+ * It is required as in ORT's data model e.g. scan results need to be attached to projects (or packages), so files that
+ * do not belong to any other project need to be attached to somewhere.
  */
 class Unmanaged(
     name: String,
