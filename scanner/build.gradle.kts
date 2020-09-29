@@ -20,6 +20,7 @@
 
 val jacksonVersion: String by project
 val kotlinxCoroutinesVersion: String by project
+val mockkVersion: String by project
 val postgresVersion: String by project
 val postgresEmbeddedVersion: String by project
 val wiremockVersion: String by project
@@ -41,6 +42,7 @@ dependencies {
     implementation("org.postgresql:postgresql:$postgresVersion")
 
     testImplementation("com.github.tomakehurst:wiremock:$wiremockVersion")
+    testImplementation("io.mockk:mockk:$mockkVersion")
 
     funTestImplementation("com.opentable.components:otj-pg-embedded:$postgresEmbeddedVersion")
 }
