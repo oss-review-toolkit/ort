@@ -49,6 +49,7 @@ dependencies {
     api(project(":model"))
 
     implementation(project(":downloader"))
+    implementation(project(":spdx-utils"))
     implementation(project(":utils"))
 
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin:$jacksonVersion")
