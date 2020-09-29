@@ -120,6 +120,8 @@ into the container for ORT to access it, like:
 
     docker run -v /workspace:/project ort --info analyze -f JSON -i /project -o /project/ort/analyzer
 
+You can find further hints for using ORT with Docker in the [documentation](./docs/hints-for-use-with-docker.md).
+
 ## Run natively
 
 First of all, make sure that the locale of your system is set to `en_US.UTF-8` as using other locales might lead to
