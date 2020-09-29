@@ -71,7 +71,7 @@ class Analyzer(private val config: AnalyzerConfiguration) {
 
         log.debug { "Using the following configuration settings:\n$repositoryConfiguration" }
 
-        // Map files by the package manager factory that manages them.
+        // Associate files by the package manager factory that manages them.
         val factoryFiles = if (packageManagers.size == 1 && absoluteProjectPath.isFile) {
             // If only one package manager is activated, treat the given path as definition file for that package
             // manager despite its name.
@@ -80,6 +80,7 @@ class Analyzer(private val config: AnalyzerConfiguration) {
             PackageManager.findManagedFiles(absoluteProjectPath, packageManagers).toMutableMap()
         }
 
+        // Associate mapped files by the package manager that manages them.
         val managedFiles = factoryFiles.mapNotNull { (factory, files) ->
             val manager = factory.create(absoluteProjectPath, config, repositoryConfiguration)
             val mappedFiles = manager.mapDefinitionFiles(files)
