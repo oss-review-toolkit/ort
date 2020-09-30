@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2017-2019 HERE Europe B.V.
+ * Copyright (C) 2020-2021 Bosch.IO GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -42,6 +43,7 @@ import org.ossreviewtoolkit.analyzer.PackageManager
 import org.ossreviewtoolkit.analyzer.curation.ClearlyDefinedPackageCurationProvider
 import org.ossreviewtoolkit.analyzer.curation.FallbackPackageCurationProvider
 import org.ossreviewtoolkit.analyzer.curation.FilePackageCurationProvider
+import org.ossreviewtoolkit.analyzer.curation.Sw360PackageCurationProvider
 import org.ossreviewtoolkit.model.FileFormat
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.mapper
@@ -115,6 +117,11 @@ class AnalyzerCommand : CliktCommand(name = "analyze", help = "Determine depende
         help = "Ignore versions of required tools. NOTE: This may lead to erroneous results."
     ).flag()
 
+    private val useSw360Curations by option(
+        "--sw360-curations",
+        help = "Whether to fall back to package curation data from the SW360 service or not."
+    ).flag()
+
     private val labels by option(
         "--label", "-l",
         help = "Add a label to the ORT result. Can be used multiple times. For example: --label distribution=external"
@@ -153,12 +160,20 @@ class AnalyzerCommand : CliktCommand(name = "analyze", help = "Determine depende
 
         println("Analyzing project path:\n\t$inputDir")
 
-        val analyzerConfig = AnalyzerConfiguration(ignoreToolVersions, allowDynamicVersions)
+        val config = globalOptionsForSubcommands.config
+        val analyzerConfig = AnalyzerConfiguration(
+            ignoreToolVersions,
+            allowDynamicVersions,
+            config.analyzer?.sw360Configuration
+        )
         val analyzer = Analyzer(analyzerConfig)
 
         val curationProvider = FallbackPackageCurationProvider(
             listOfNotNull(
                 packageCurationsFile.takeIf { it.isFile }?.let { FilePackageCurationProvider(it) },
+                config.analyzer?.sw360Configuration?.let {
+                    Sw360PackageCurationProvider(it).takeIf { useSw360Curations }
+                },
                 ClearlyDefinedPackageCurationProvider().takeIf { useClearlyDefinedCurations }
             )
         )

@@ -1,6 +1,7 @@
 /*
  * Copyright (C) 2017-2019 HERE Europe B.V.
  * Copyright (C) 2019 Bosch Software Innovations GmbH
+ * Copyright (C) 2020-2021 Bosch.IO GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,6 +19,7 @@
  * License-Filename: LICENSE
  */
 
+val antennaVersion: String by project
 val digraphVersion: String by project
 val jacksonVersion: String by project
 val kotlinxCoroutinesVersion: String by project
@@ -42,6 +44,16 @@ repositories {
             includeGroup("org.gradle")
         }
     }
+
+    exclusiveContent {
+        forRepository {
+            maven("https://download.eclipse.org/antenna/releases/")
+        }
+
+        filter {
+            includeGroup("org.eclipse.sw360.antenna")
+        }
+    }
 }
 
 dependencies {
@@ -58,6 +70,7 @@ dependencies {
     implementation("com.vdurmont:semver4j:$semverVersion")
     implementation("org.apache.maven:maven-core:$mavenVersion")
     implementation("org.apache.maven:maven-compat:$mavenVersion")
+    implementation("org.eclipse.sw360.antenna:sw360-client:$antennaVersion")
 
     // The classes from the maven-resolver dependencies are not used directly but initialized by the Plexus IoC
     // container automatically. They are required on the classpath for Maven dependency resolution to work.

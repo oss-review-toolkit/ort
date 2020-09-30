@@ -48,6 +48,15 @@ class OrtConfigurationTest : WordSpec({
             ortConfig.analyzer shouldNotBeNull {
                 ignoreToolVersions shouldBe true
                 allowDynamicVersions shouldBe true
+
+                sw360Configuration shouldNotBeNull {
+                    restUrl shouldBe "https://your-sw360-rest-url"
+                    authUrl shouldBe "https://your-authentication-url"
+                    username shouldBe "username"
+                    password shouldBe "password"
+                    clientId shouldBe "clientId"
+                    clientPassword shouldBe "clientPassword"
+                }
             }
 
             ortConfig.scanner shouldNotBeNull {
