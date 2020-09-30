@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2019 HERE Europe B.V.
+ * Copyright (C) 2020-2021 Bosch.IO GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -35,6 +36,11 @@ import org.ossreviewtoolkit.utils.log
  * The configuration model for all ORT components.
  */
 data class OrtConfiguration(
+    /**
+     * The configuration of the analyzer.
+     */
+    val analyzer: AnalyzerConfiguration? = null,
+
     /**
      * The configuration of the scanner.
      */
