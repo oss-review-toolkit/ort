@@ -1,0 +1,10 @@
+{
+  "description": "NPM test project",
+  "license": "Apache-2.0",
+  "name": "unmanaged-and-npm",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/oss-review-toolkit/ort.git"
+  },
+  "version": "1.0.0"
+}

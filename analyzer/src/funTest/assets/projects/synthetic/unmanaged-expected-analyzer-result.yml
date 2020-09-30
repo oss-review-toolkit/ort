@@ -1,0 +1,73 @@
+---
+repository:
+  vcs:
+    type: "Git"
+    url: "https://github.com/oss-review-toolkit/ort.git"
+    revision: "65fc58d91d416a7adeff2c02a9858475f49fc0ea"
+    path: "analyzer/src/funTest/assets/projects/synthetic/unmanaged-and-npm"
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/oss-review-toolkit/ort.git"
+    revision: "65fc58d91d416a7adeff2c02a9858475f49fc0ea"
+    path: "analyzer/src/funTest/assets/projects/synthetic/unmanaged-and-npm"
+  config: {}
+analyzer:
+  start_time: "2020-10-01T12:44:05.534644200Z"
+  end_time: "2020-10-01T12:44:13.010377700Z"
+  environment:
+    ort_version: "0.1.0-SNAPSHOT"
+    java_version: "11.0.8"
+    os: "Windows 10"
+    variables:
+      OS: "Windows_NT"
+      COMSPEC: "C:\\WINDOWS\\system32\\cmd.exe"
+      http_proxy: "http://localhost:3129/"
+      https_proxy: "http://localhost:3129/"
+    tool_versions: {}
+  config:
+    ignore_tool_versions: false
+    allow_dynamic_versions: true
+  result:
+    projects:
+    - id: "NPM::unmanaged-and-npm:1.0.0"
+      definition_file_path: "analyzer/src/funTest/assets/projects/synthetic/unmanaged-and-npm/project/package.json"
+      declared_licenses:
+      - "Apache-2.0"
+      declared_licenses_processed:
+        spdx_expression: "Apache-2.0"
+      vcs:
+        type: "Git"
+        url: "https://github.com/oss-review-toolkit/ort.git"
+        revision: ""
+        path: ""
+      vcs_processed:
+        type: "Git"
+        url: "https://github.com/oss-review-toolkit/ort.git"
+        revision: "65fc58d91d416a7adeff2c02a9858475f49fc0ea"
+        path: "analyzer/src/funTest/assets/projects/synthetic/unmanaged-and-npm/project"
+      homepage_url: ""
+      scopes:
+      - name: "dependencies"
+        dependencies: []
+      - name: "devDependencies"
+        dependencies: []
+    - id: "Unmanaged::ort:65fc58d91d416a7adeff2c02a9858475f49fc0ea"
+      definition_file_path: ""
+      declared_licenses: []
+      declared_licenses_processed: {}
+      vcs:
+        type: ""
+        url: ""
+        revision: ""
+        path: ""
+      vcs_processed:
+        type: "Git"
+        url: "https://github.com/oss-review-toolkit/ort.git"
+        revision: "65fc58d91d416a7adeff2c02a9858475f49fc0ea"
+        path: "analyzer/src/funTest/assets/projects/synthetic/unmanaged-and-npm"
+      homepage_url: ""
+      scopes: []
+    packages: []
+    has_issues: false
+scanner: null
+evaluator: null
