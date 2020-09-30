@@ -401,7 +401,7 @@ class SpdxLicenseIdExpression(
 ) : SpdxSimpleExpression() {
     override fun decompose() = setOf(this)
 
-    private val spdxLicense = SpdxLicense.forId(toString())
+    private val spdxLicense = SpdxLicense.forId(id)
 
     override fun simpleLicense() = toString()
 
