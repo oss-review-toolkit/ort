@@ -57,7 +57,7 @@ class NoticeTemplateReporterFunTest : WordSpec({
 
             val archiveDir = File("src/funTest/assets/archive")
             val config = OrtConfiguration(
-                ScannerConfiguration(
+                scanner = ScannerConfiguration(
                     archive = FileArchiverConfiguration(
                         storage = FileStorageConfiguration(
                             localFileStorage = LocalFileStorageConfiguration(

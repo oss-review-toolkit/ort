@@ -139,7 +139,8 @@ data class Sw360StorageConfiguration(
     /**
      * The password of the SW360 user.
      */
-    val password: String,
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    val password: String = "",
 
     /**
      * The client ID of the SW360 instance for the two step authentication.
@@ -149,5 +150,6 @@ data class Sw360StorageConfiguration(
     /**
      * The password of the client ID.
      */
-    val clientPassword: String
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    val clientPassword: String = ""
 ) : ScanStorageConfiguration()
