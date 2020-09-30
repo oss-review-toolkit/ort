@@ -124,7 +124,7 @@ fun getNetrcAuthentication(contents: String, machine: String): PasswordAuthentic
         line.trim().takeUnless { it.startsWith('#') }
     }
 
-    val iterator = lines.joinToString(" ").split(Regex("\\s")).iterator()
+    val iterator = lines.joinToString(" ").split(Regex("\\s+")).iterator()
 
     var machineFound = false
     var login: String? = null
