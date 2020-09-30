@@ -78,6 +78,17 @@ class OrtAuthenticatorTest : WordSpec({
             authentication.password shouldBe "bar".toCharArray()
         }
 
+        "ignore superfluous whitespace" {
+            val authentication = getNetrcAuthentication(
+                "machine github.com\t login \tfoo password bar \n",
+                "github.com"
+            )
+
+            authentication.shouldNotBeNull()
+            authentication.userName shouldBe "foo"
+            authentication.password shouldBe "bar".toCharArray()
+        }
+
         "ignore irrelavant machines" {
             val authentication = getNetrcAuthentication("""
                 machine bitbucket.com login foo password bar
