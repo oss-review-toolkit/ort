@@ -1,5 +1,9 @@
 skip_branch_with_pr: true
 
+skip_commits:
+  files:
+    - '**/*.md'
+
 environment:
   HOME: $(HOMEDRIVE)$(HOMEPATH)
   BOWER_VERSION: 1.8.8
