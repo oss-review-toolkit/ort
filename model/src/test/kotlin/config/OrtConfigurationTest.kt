@@ -45,6 +45,11 @@ class OrtConfigurationTest : WordSpec({
             val refConfig = File("src/test/assets/reference.conf")
             val ortConfig = OrtConfiguration.load(configFile = refConfig)
 
+            ortConfig.analyzer shouldNotBeNull {
+                ignoreToolVersions shouldBe true
+                allowDynamicVersions shouldBe true
+            }
+
             ortConfig.scanner shouldNotBeNull {
                 archive shouldNotBeNull {
                     storage.httpFileStorage.shouldBeNull()
