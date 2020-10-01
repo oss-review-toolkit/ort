@@ -201,9 +201,10 @@ scanner:
     tool_versions: {}
   config:
     archive: null
-    file_based_storage: null
-    postgres_storage: null
     options: null
+    storages: null
+    storage_readers: null
+    storage_writers: null
   results:
     scan_results:
     - id: "Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0"

@@ -71,7 +71,8 @@ class UploadResultCommand : CliktCommand(
     override fun run() {
         val ortResult = ortFile.readValue<OrtResult>()
 
-        val postgresConfig = globalOptionsForSubcommands.config.scanner?.postgresStorage
+        val postgresConfig = globalOptionsForSubcommands.config.scanner?.storages?.values
+            ?.filterIsInstance<PostgresStorageConfiguration>()?.singleOrNull()
 
         requireNotNull(postgresConfig) {
             "No PostgreSQL storage is configured for the scanner."
