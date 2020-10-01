@@ -122,17 +122,24 @@ data class ResolvedLicense(
     }
 
     /**
+     * Return all resolved copyrights for this license. Copyright findings that are excluded by [PathExclude]s are
+     * [omitted][omitExcluded] by default.
+     */
+    fun getResolvedCopyrights(omitExcluded: Boolean = true): List<ResolvedCopyright> =
+        locations.flatMap { location ->
+            location.copyrights.filter { copyright ->
+                !omitExcluded || copyright.findings.any { it.matchingPathExcludes.isEmpty() }
+            }
+        }
+
+    /**
      * Return all copyright statements associated to this license. Copyright findings that are excluded by
      * [PathExclude]s are [omitted][omitExcluded] by default. The licenses can optionally be [processed][process] using
      * the [CopyrightStatementsProcessor].
      */
     @JvmOverloads
     fun getCopyrights(process: Boolean = false, omitExcluded: Boolean = true): Set<String> {
-        val resolvedCopyrights = locations.flatMap { location ->
-            location.copyrights.filter { copyright ->
-                !omitExcluded || copyright.findings.any { it.matchingPathExcludes.isEmpty() }
-            }
-        }
+        val resolvedCopyrights = getResolvedCopyrights(omitExcluded)
 
         return if (process) {
             val unprocessedStatements = resolvedCopyrights.flatMap { resolvedCopyright ->
