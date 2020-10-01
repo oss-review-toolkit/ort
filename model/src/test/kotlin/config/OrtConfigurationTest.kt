@@ -19,14 +19,19 @@
 
 package org.ossreviewtoolkit.model.config
 
+import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.collections.containExactly
+import io.kotest.matchers.collections.shouldContainExactly
+import io.kotest.matchers.collections.shouldContainExactlyInAnyOrder
 import io.kotest.matchers.nulls.shouldBeNull
 import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
+import io.kotest.matchers.types.shouldBeInstanceOf
 
 import java.io.File
+import java.lang.IllegalArgumentException
 
 import org.ossreviewtoolkit.utils.ORT_NAME
 import org.ossreviewtoolkit.utils.test.containExactly as containExactlyEntries
@@ -47,29 +52,40 @@ class OrtConfigurationTest : WordSpec({
                     }
                 }
 
-                fileBasedStorage shouldNotBeNull {
-                    backend.httpFileStorage shouldNotBeNull {
+                storages shouldNotBeNull {
+                    keys shouldContainExactlyInAnyOrder setOf("local", "http", "clearlyDefined", "postgres")
+                    val httpStorage = this["http"]
+                    httpStorage.shouldBeInstanceOf<FileBasedStorageConfiguration>()
+                    httpStorage.backend.httpFileStorage shouldNotBeNull {
                         url shouldBe "https://your-http-server"
                         headers should containExactlyEntries("key1" to "value1", "key2" to "value2")
                     }
 
-                    backend.localFileStorage shouldNotBeNull {
+                    val localStorage = this["local"]
+                    localStorage.shouldBeInstanceOf<FileBasedStorageConfiguration>()
+                    localStorage.backend.localFileStorage shouldNotBeNull {
                         directory shouldBe File("~/.ort/scanner/results")
                     }
-                }
 
-                postgresStorage shouldNotBeNull {
-                    url shouldBe "jdbc:postgresql://your-postgresql-server:5444/your-database"
-                    schema shouldBe "schema"
-                    username shouldBe "username"
-                    password shouldBe "password"
-                    sslmode shouldBe "required"
-                    sslcert shouldBe "/defaultdir/postgresql.crt"
-                    sslkey shouldBe "/defaultdir/postgresql.pk8"
-                    sslrootcert shouldBe "/defaultdir/root.crt"
+                    val postgresStorage = this["postgres"]
+                    postgresStorage.shouldBeInstanceOf<PostgresStorageConfiguration>()
+                    postgresStorage.url shouldBe "jdbc:postgresql://your-postgresql-server:5444/your-database"
+                    postgresStorage.schema shouldBe "schema"
+                    postgresStorage.username shouldBe "username"
+                    postgresStorage.password shouldBe "password"
+                    postgresStorage.sslmode shouldBe "required"
+                    postgresStorage.sslcert shouldBe "/defaultdir/postgresql.crt"
+                    postgresStorage.sslkey shouldBe "/defaultdir/postgresql.pk8"
+                    postgresStorage.sslrootcert shouldBe "/defaultdir/root.crt"
+
+                    val cdStorage = this["clearlyDefined"]
+                    cdStorage.shouldBeInstanceOf<ClearlyDefinedStorageConfiguration>()
+                    cdStorage.serverUrl shouldBe "https://api.clearlydefined.io"
                 }
 
                 options.shouldNotBeNull()
+                storageReaders shouldContainExactly listOf("local", "postgres", "http", "clearlyDefined")
+                storageWriters shouldContainExactly listOf("postgres")
             }
         }
 
@@ -78,11 +94,13 @@ class OrtConfigurationTest : WordSpec({
                 """
                 ort {
                   scanner {
-                    postgresStorage {
-                      url = "postgresql://your-postgresql-server:5444/your-database"
-                      schema = schema
-                      username = username
-                      password = password
+                    storages {
+                      postgresStorage {
+                        url = "postgresql://your-postgresql-server:5444/your-database"
+                        schema = schema
+                        username = username
+                        password = password
+                      }
                     }
                   }
                 }
@@ -91,17 +109,44 @@ class OrtConfigurationTest : WordSpec({
 
             val config = OrtConfiguration.load(
                 args = mapOf(
-                    "ort.scanner.postgresStorage.schema" to "argsSchema",
+                    "ort.scanner.storages.postgresStorage.schema" to "argsSchema",
                     "other.property" to "someValue"
                 ),
                 configFile = configFile
             )
 
-            config.scanner shouldNotBeNull {
-                postgresStorage shouldNotBeNull {
-                    username shouldBe "username"
-                    schema shouldBe "argsSchema"
+            config.scanner?.storages shouldNotBeNull {
+                val postgresStorage = this["postgresStorage"]
+                postgresStorage.shouldBeInstanceOf<PostgresStorageConfiguration>()
+                postgresStorage.username shouldBe "username"
+                postgresStorage.schema shouldBe "argsSchema"
+            }
+        }
+
+        "fail for an invalid configuration" {
+            val configFile = createTestConfig(
+                """
+                ort {
+                  scanner {
+                    storages {
+                      foo = baz
+                    }
+                  }
                 }
+                """.trimIndent()
+            )
+
+            shouldThrow<IllegalArgumentException> {
+                OrtConfiguration.load(configFile = configFile)
+            }
+        }
+
+        "fail for invalid properties in the map with arguments" {
+            val file = File("anotherNonExistingConfig.conf")
+            val args = mapOf("ort.scanner.storages.new" to "test")
+
+            shouldThrow<IllegalArgumentException> {
+                OrtConfiguration.load(configFile = file, args = args)
             }
         }
 

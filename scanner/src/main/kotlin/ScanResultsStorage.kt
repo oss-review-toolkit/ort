@@ -20,7 +20,6 @@
 
 package org.ossreviewtoolkit.scanner
 
-import java.lang.IllegalArgumentException
 import java.sql.DriverManager
 import java.util.Properties
 
@@ -33,8 +32,10 @@ import org.ossreviewtoolkit.model.ScanResult
 import org.ossreviewtoolkit.model.ScanResultContainer
 import org.ossreviewtoolkit.model.ScannerDetails
 import org.ossreviewtoolkit.model.Success
+import org.ossreviewtoolkit.model.config.ClearlyDefinedStorageConfiguration
 import org.ossreviewtoolkit.model.config.FileBasedStorageConfiguration
 import org.ossreviewtoolkit.model.config.PostgresStorageConfiguration
+import org.ossreviewtoolkit.model.config.ScanStorageConfiguration
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
 import org.ossreviewtoolkit.scanner.storages.*
 import org.ossreviewtoolkit.utils.ORT_FULL_NAME
@@ -62,35 +63,53 @@ abstract class ScanResultsStorage {
          * [FileBasedStorage] using a [XZCompressedLocalFileStorage] as backend is configured.
          */
         fun configure(config: ScannerConfiguration) {
-            val configuredStorages = listOfNotNull(
-                config.fileBasedStorage,
-                config.postgresStorage
-            )
-
-            require(configuredStorages.size <= 1) {
-                "Only one scan results storage may be configured."
+            storage = if (config.storages.isNullOrEmpty()) {
+                createDefaultStorage()
+            } else {
+                createCompositeStorage(config)
             }
-
-            when (val storageConfig = configuredStorages.singleOrNull()) {
-                null -> configureDefaultStorage()
-                is FileBasedStorageConfiguration -> configure(storageConfig)
-                is PostgresStorageConfiguration -> configure(storageConfig)
-                else -> throw IllegalArgumentException(
-                    "Unsupported configuration type '${storageConfig.javaClass.name}'."
-                )
-            }
-        }
-
-        private fun configureDefaultStorage() {
-            val localFileStorage = XZCompressedLocalFileStorage(ortDataDirectory.resolve("$TOOL_NAME/results"))
-            val fileBasedStorage = FileBasedStorage(localFileStorage)
-            storage = fileBasedStorage
+            log.info { "ScanResultStorage has been configured to ${storage.name}." }
         }
 
         /**
-         * Configure a [FileBasedStorage] as the current storage backend.
+         * Create a [CompositeStorage] that manages all storages defined in the given [config].
          */
-        private fun configure(config: FileBasedStorageConfiguration) {
+        private fun createCompositeStorage(config: ScannerConfiguration): ScanResultsStorage {
+            val storages = config.storages.orEmpty().mapValues { createStorage(it.value) }
+
+            fun resolve(name: String): ScanResultsStorage =
+                requireNotNull(storages[name]) {
+                    "Could not resolve storage '$name'."
+                }
+
+            val readers = config.storageReaders.orEmpty().map { resolve(it) }
+            val writers = config.storageWriters.orEmpty().map { resolve(it) }
+
+            return CompositeStorage(readers, writers)
+        }
+
+        /**
+         * Create the concrete [ScanResultsStorage] implementation based on the [config] passed in.
+         */
+        private fun createStorage(config: ScanStorageConfiguration): ScanResultsStorage =
+            when (config) {
+                is FileBasedStorageConfiguration -> createFileBasedStorage(config)
+                is PostgresStorageConfiguration -> createPostgresStorage(config)
+                is ClearlyDefinedStorageConfiguration -> createClearlyDefinedStorage(config)
+            }
+
+        /**
+         * Create a [FileBasedStorage] to be used as default if no other storage has been configured.
+         */
+        private fun createDefaultStorage(): ScanResultsStorage {
+            val localFileStorage = XZCompressedLocalFileStorage(ortDataDirectory.resolve("$TOOL_NAME/results"))
+            return FileBasedStorage(localFileStorage)
+        }
+
+        /**
+         * Create a [FileBasedStorage] based on the [config] passed in.
+         */
+        private fun createFileBasedStorage(config: FileBasedStorageConfiguration): ScanResultsStorage {
             val backend = config.backend.createFileStorage()
 
             when (backend) {
@@ -100,13 +119,13 @@ abstract class ScanResultsStorage {
                 }
             }
 
-            storage = FileBasedStorage(backend)
+            return FileBasedStorage(backend)
         }
 
         /**
-         * Configure a [PostgresStorage] as the current storage backend.
+         * Create a [PostgresStorage] based on the [config] passed in.
          */
-        private fun configure(config: PostgresStorageConfiguration) {
+        private fun createPostgresStorage(config: PostgresStorageConfiguration): ScanResultsStorage {
             require(config.url.isNotBlank()) {
                 "URL for PostgreSQL storage is missing."
             }
@@ -138,8 +157,14 @@ abstract class ScanResultsStorage {
 
             val connection = DriverManager.getConnection(config.url, properties)
 
-            storage = PostgresStorage(connection, config.schema).also { it.setupDatabase() }
+            return PostgresStorage(connection, config.schema).also { it.setupDatabase() }
         }
+
+        /**
+         * Create a [ClearlyDefinedStorage] based on the [config] passed in.
+         */
+        private fun createClearlyDefinedStorage(config: ClearlyDefinedStorageConfiguration): ScanResultsStorage =
+            ClearlyDefinedStorage(config)
     }
 
     /**

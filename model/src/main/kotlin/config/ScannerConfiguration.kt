@@ -36,19 +36,28 @@ data class ScannerConfiguration(
     val archive: FileArchiverConfiguration? = null,
 
     /**
-     * Configuration of a file based storage.
-     */
-    val fileBasedStorage: FileBasedStorageConfiguration? = null,
-
-    /**
-     * Configuration of the PostgreSQL scan results storage.
-     */
-    val postgresStorage: PostgresStorageConfiguration? = null,
-
-    /**
      * Scanner specific configuration options. The key needs to match the name of the scanner class, e.g. "ScanCode"
      * for the ScanCode wrapper. See the documentation of the scanner for available options.
      */
     @JsonAlias("scanner")
-    val options: Map<String, Map<String, String>>? = null
+    val options: Map<String, Map<String, String>>? = null,
+
+    /**
+     * A map with the configurations of the scan result storages available. Based on this information the actual
+     * storages are created. Storages can be configured as readers or writers of scan results. Having this map
+     * makes it possible for storage instances to act in both roles without having to duplicate configuration.
+     */
+    val storages: Map<String, ScanStorageConfiguration>? = null,
+
+    /**
+     * A list with the IDs of scan storages that are queried for existing scan results. The strings in this list
+     * must match keys in the storages map.
+     */
+    val storageReaders: List<String>? = null,
+
+    /**
+     * A list with the IDs of scan storages that are called to persist scan results. The strings in this list
+     * must match keys in the storages map.
+     */
+    val storageWriters: List<String>? = null
 )
