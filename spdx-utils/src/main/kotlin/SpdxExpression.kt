@@ -442,7 +442,7 @@ class SpdxLicenseIdExpression(
             if (orLaterVersion && !id.endsWith("-or-later")) append("+")
         }
 
-    override fun getLicenseUrl() = if (isValid()) SpdxConstants.SPDX_LICENSE_LIST_URL + id else null
+    override fun getLicenseUrl() = if (isValid()) SpdxConstants.LICENSE_LIST_URL + id else null
 }
 
 /**
