@@ -78,7 +78,7 @@ class SpdxDocumentFile(
 
     private fun String.extractOrganization() =
         lineSequence().mapNotNull { line ->
-            line.removePrefix("Organization: ").takeIf { it != line }
+            line.removePrefix(SpdxConstants.ORGANIZATION).takeIf { it != line }
         }.firstOrNull()
 
     private fun String.mapNotPresentToEmpty() = takeUnless { SpdxConstants.isNotPresent(it) }.orEmpty()

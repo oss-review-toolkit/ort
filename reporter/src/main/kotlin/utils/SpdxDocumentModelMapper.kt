@@ -157,7 +157,7 @@ object SpdxDocumentModelMapper {
             creationInfo = SpdxCreationInfo(
                 comment = params.creationInfoComment,
                 created = Instant.now(),
-                creators = listOf("Tool: $ORT_FULL_NAME - ${Environment().ortVersion}"),
+                creators = listOf("${SpdxConstants.TOOL}$ORT_FULL_NAME - ${Environment().ortVersion}"),
                 licenseListVersion = SpdxLicense.LICENSE_LIST_VERSION.substringBefore("-")
             ),
             documentNamespace = "spdx://${UUID.randomUUID()}",
