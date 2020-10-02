@@ -36,6 +36,21 @@ object SpdxConstants {
     const val NOASSERTION = "NOASSERTION"
 
     /**
+     * A prefix used in fields like "originator", "supplier", or "annotator" to describe a person.
+     */
+    const val PERSON = "Person: "
+
+    /**
+     * A prefix used in fields like "originator", "supplier", or "annotator" to describe an organization.
+     */
+    const val ORGANIZATION = "Organization: "
+
+    /**
+     * A prefix used in fields like "annotator" to describe a tool.
+     */
+    const val TOOL = "Tool: "
+
+    /**
      * The URL that points to list of SPDX licenses.
      */
     const val LICENSE_LIST_URL = "https://spdx.org/licenses/"
