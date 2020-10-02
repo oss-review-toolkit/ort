@@ -219,9 +219,18 @@ abstract class ScanResultsStorage {
         return addToStorage(id, scanResult)
     }
 
+    /**
+     * Internal version of [read] that does not update the [access statistics][stats].
+     */
     protected abstract fun readFromStorage(id: Identifier): Result<ScanResultContainer>
 
+    /**
+     * Internal version of [read] that does not update the [access statistics][stats].
+     */
     protected abstract fun readFromStorage(pkg: Package, scannerDetails: ScannerDetails): Result<ScanResultContainer>
 
+    /**
+     * Internal version of [add] that skips common sanity checks.
+     */
     protected abstract fun addToStorage(id: Identifier, scanResult: ScanResult): Result<Unit>
 }
