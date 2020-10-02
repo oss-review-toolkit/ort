@@ -197,6 +197,16 @@ data class SpdxPackage(
 
         require(homepage.isNotBlank()) { "The homepage must not be blank." }
 
+        val validPrefixes = listOf(SpdxConstants.PERSON, SpdxConstants.ORGANIZATION)
+
+        require(originator.isEmpty() || validPrefixes.any { originator.startsWith(it) }) {
+            "A non-empty originator has to start with any of $validPrefixes."
+        }
+
+        require(supplier.isEmpty() || validPrefixes.any { supplier.startsWith(it) }) {
+            "A non-empty supplier has to start with any of $validPrefixes."
+        }
+
         // TODO: The check for [licenseInfoFromFiles] can be made more strict, but the SPDX specification is not exact
         // enough yet to do this safely.
         licenseInfoFromFiles.filterNot { it.isSpdxExpressionOrNotPresent() }.let {
