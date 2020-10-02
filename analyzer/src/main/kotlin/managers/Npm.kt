@@ -461,9 +461,23 @@ open class Npm(
         val packageJsonFile = moduleDir.resolve("package.json")
         val json = jsonMapper.readTree(packageJsonFile)
 
+        val name = json["name"].textValueOrEmpty()
+        if (name.isBlank()) {
+            log.warn {
+                "The '$packageJsonFile' does not set a name, which is only allowed for unpublished packages."
+            }
+        }
+
+        val version = json["version"].textValueOrEmpty()
+        if (version.isBlank()) {
+            log.warn {
+                "The '$packageJsonFile' does not set a version, which is only allowed for unpublished packages."
+            }
+        }
+
         return ModuleInfo(
-            name = json["name"].textValue(),
-            version = json["version"].textValue(),
+            name = name,
+            version = version,
             dependencyNames = scopes.map { scope ->
                 json[scope]?.fieldNames()?.asSequence()?.toSet().orEmpty()
             }.flatten().toSet()
