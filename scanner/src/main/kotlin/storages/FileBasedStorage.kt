@@ -28,11 +28,9 @@ import java.io.IOException
 
 import org.ossreviewtoolkit.model.Failure
 import org.ossreviewtoolkit.model.Identifier
-import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.Result
 import org.ossreviewtoolkit.model.ScanResult
 import org.ossreviewtoolkit.model.ScanResultContainer
-import org.ossreviewtoolkit.model.ScannerDetails
 import org.ossreviewtoolkit.model.Success
 import org.ossreviewtoolkit.model.yamlMapper
 import org.ossreviewtoolkit.scanner.ScanResultsStorage
@@ -76,37 +74,6 @@ class FileBasedStorage(
                 }
             }
         }
-    }
-
-    override fun readFromStorage(pkg: Package, scannerDetails: ScannerDetails): Result<ScanResultContainer> {
-        val scanResults = when (val readResult = readFromStorage(pkg.id)) {
-            is Success -> readResult.result.results.toMutableList()
-            is Failure -> return readResult
-        }
-
-        if (scanResults.isEmpty()) return Success(ScanResultContainer(pkg.id, scanResults))
-
-        // Only keep scan results whose provenance information matches the package information.
-        scanResults.retainAll { it.provenance.matches(pkg) }
-        if (scanResults.isEmpty()) {
-            log.debug {
-                "No stored scan results found for $pkg. The following entries with non-matching provenance have " +
-                        "been ignored: ${scanResults.map { it.provenance }}"
-            }
-            return Success(ScanResultContainer(pkg.id, scanResults))
-        }
-
-        // Only keep scan results from compatible scanners.
-        scanResults.retainAll { scannerDetails.isCompatible(it.scanner) }
-        if (scanResults.isEmpty()) {
-            log.debug {
-                "No stored scan results found for $scannerDetails. The following entries with incompatible scanners " +
-                        "have been ignored: ${scanResults.map { it.scanner }}"
-            }
-            return Success(ScanResultContainer(pkg.id, scanResults))
-        }
-
-        return Success(ScanResultContainer(pkg.id, scanResults))
     }
 
     override fun addToStorage(id: Identifier, scanResult: ScanResult): Result<Unit> {
