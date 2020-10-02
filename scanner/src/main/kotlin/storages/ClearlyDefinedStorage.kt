@@ -112,7 +112,7 @@ class ClearlyDefinedStorage(
         readPackageFromClearlyDefined(pkg.id, pkg.vcs, pkg.sourceArtifact.takeIf { it.url.isNotEmpty() })
 
     override fun addToStorage(id: Identifier, scanResult: ScanResult): Result<Unit> =
-        Failure("Storing results in ClearlyDefined is not supported.")
+        Failure("Adding scan results directly to ClearlyDefined is not supported.")
 
     /**
      * Try to obtain a [ScanResult] produced by ScanCode from ClearlyDefined for the package with the given [id].
