@@ -225,9 +225,39 @@ abstract class ScanResultsStorage {
     protected abstract fun readFromStorage(id: Identifier): Result<ScanResultContainer>
 
     /**
-     * Internal version of [read] that does not update the [access statistics][stats].
+     * Internal version of [read] that does not update the [access statistics][stats]. Implementations may want to
+     * override this function if they can filter for the wanted [scannerDetails] in a more efficient way.
      */
-    protected abstract fun readFromStorage(pkg: Package, scannerDetails: ScannerDetails): Result<ScanResultContainer>
+    protected open fun readFromStorage(pkg: Package, scannerDetails: ScannerDetails): Result<ScanResultContainer> {
+        val scanResults = when (val readResult = readFromStorage(pkg.id)) {
+            is Success -> readResult.result.results.toMutableList()
+            is Failure -> return readResult
+        }
+
+        if (scanResults.isEmpty()) return Success(ScanResultContainer(pkg.id, scanResults))
+
+        // Only keep scan results whose provenance information matches the package information.
+        scanResults.retainAll { it.provenance.matches(pkg) }
+        if (scanResults.isEmpty()) {
+            log.debug {
+                "No stored scan results found for $pkg. The following entries with non-matching provenance have " +
+                        "been ignored: ${scanResults.map { it.provenance }}"
+            }
+            return Success(ScanResultContainer(pkg.id, scanResults))
+        }
+
+        // Only keep scan results from compatible scanners.
+        scanResults.retainAll { scannerDetails.isCompatible(it.scanner) }
+        if (scanResults.isEmpty()) {
+            log.debug {
+                "No stored scan results found for $scannerDetails. The following entries with incompatible scanners " +
+                        "have been ignored: ${scanResults.map { it.scanner }}"
+            }
+            return Success(ScanResultContainer(pkg.id, scanResults))
+        }
+
+        return Success(ScanResultContainer(pkg.id, scanResults))
+    }
 
     /**
      * Internal version of [add] that skips common sanity checks.
