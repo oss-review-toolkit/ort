@@ -21,6 +21,8 @@ package org.ossreviewtoolkit.spdx.model
 
 import java.time.Instant
 
+import org.ossreviewtoolkit.spdx.SpdxConstants
+
 /**
  * An annotation which can relate to [SpdxDocument]s, [SpdxFile]s, or [SpdxPackage]s.
  */
@@ -64,6 +66,10 @@ data class SpdxAnnotation(
     }
 
     init {
-        require(annotator.isNotBlank()) { "The annotator must not be blank." }
+        val validPrefixes = listOf(SpdxConstants.PERSON, SpdxConstants.ORGANIZATION, SpdxConstants.TOOL)
+
+        require(validPrefixes.any { annotator.startsWith(it) }) {
+            "The annotator has to start with any of $validPrefixes."
+        }
     }
 }
