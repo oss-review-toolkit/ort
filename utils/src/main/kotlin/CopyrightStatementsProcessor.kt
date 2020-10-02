@@ -92,7 +92,7 @@ class CopyrightStatementsProcessor {
         )
 
         private fun prettyPrintYears(years: Collection<Int>) =
-            getYearRanges(years).joinToString(separator = ", ") { (fromYear, toYear) ->
+            getYearRanges(years).joinToString { (fromYear, toYear) ->
                 if (fromYear == toYear) fromYear.toString() else "$fromYear-$toYear"
             }
 
