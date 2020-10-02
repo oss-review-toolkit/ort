@@ -77,8 +77,8 @@ class ClearlyDefinedPackageCurationProvider(server: Server = Server.PRODUCTION) 
     private val service = ClearlyDefinedService.create(server, OkHttpClientHelper.buildClient())
 
     override fun getCurationsFor(pkgId: Identifier): List<PackageCuration> {
+        val (type, provider) = pkgId.toClearlyDefinedTypeAndProvider() ?: return emptyList()
         val namespace = pkgId.namespace.takeUnless { it.isEmpty() } ?: "-"
-        val (type, provider) = pkgId.toClearlyDefinedTypeAndProvider()
         val curationCall = service.getCuration(type, provider, namespace, pkgId.name, pkgId.version)
 
         val response = try {
