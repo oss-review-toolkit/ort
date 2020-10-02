@@ -463,7 +463,7 @@ open class Npm(
 
         return ModuleInfo(
             name = json["name"].textValue(),
-            version = json["version"].textValue(),
+            version = json["version"]?.textValue() ?: "0.0.0",
             dependencyNames = scopes.map { scope ->
                 json[scope]?.fieldNames()?.asSequence()?.toSet().orEmpty()
             }.flatten().toSet()
