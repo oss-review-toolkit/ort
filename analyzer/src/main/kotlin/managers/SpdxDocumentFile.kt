@@ -27,6 +27,7 @@ import org.ossreviewtoolkit.analyzer.PackageManager
 import org.ossreviewtoolkit.downloader.VersionControlSystem
 import org.ossreviewtoolkit.model.Hash
 import org.ossreviewtoolkit.model.Identifier
+import org.ossreviewtoolkit.model.OrtIssue
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.PackageReference
 import org.ossreviewtoolkit.model.Project
@@ -36,6 +37,7 @@ import org.ossreviewtoolkit.model.Scope
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
+import org.ossreviewtoolkit.model.createAndLogIssue
 import org.ossreviewtoolkit.spdx.SpdxConstants
 import org.ossreviewtoolkit.spdx.SpdxExpression
 import org.ossreviewtoolkit.spdx.SpdxModelMapper
@@ -105,9 +107,18 @@ class SpdxDocumentFile(
         dependsOnCase: (String) -> PackageReference? = { null }
     ): SortedSet<PackageReference> =
         doc.relationships.mapNotNullTo(sortedSetOf()) { (source, target, relation) ->
+            val issues = mutableListOf<OrtIssue>()
+
             when {
                 // Dependencies can either be defined on the target...
-                target == pkg.spdxId && relation == dependencyOfRelation -> {
+                pkg.spdxId.equals(target, ignoreCase = true) && relation == dependencyOfRelation -> {
+                    if (pkg.spdxId != target) {
+                        issues += createAndLogIssue(
+                            source = managerName,
+                            message = "Source '${pkg.spdxId}' has to match target '$target' case-sensitively."
+                        )
+                    }
+
                     val dependency = doc.packages.singleOrNull { it.spdxId == source }
                         ?: throw IllegalArgumentException("No single package with source ID '$source' found.")
                     PackageReference(
@@ -117,13 +128,22 @@ class SpdxDocumentFile(
                             doc,
                             SpdxRelationship.Type.DEPENDENCY_OF,
                             dependsOnCase
-                        )
+                        ),
+                        issues = issues
                     )
                 }
 
                 // ...or on the source.
-                source == pkg.spdxId && relation == SpdxRelationship.Type.DEPENDS_ON -> {
-                    dependsOnCase(target)
+                pkg.spdxId.equals(source, ignoreCase = true) && relation == SpdxRelationship.Type.DEPENDS_ON -> {
+                    if (pkg.spdxId != source) {
+                        issues += createAndLogIssue(
+                            source = managerName,
+                            message = "Source '$source' has to match target '${pkg.spdxId}' case-sensitively."
+                        )
+                    }
+
+                    val pkgRef = dependsOnCase(target)
+                    pkgRef?.copy(issues = issues + pkgRef.issues)
                 }
 
                 else -> null
