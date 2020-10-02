@@ -1043,6 +1043,7 @@ processed_statements:
   - "Copyright 2017 Google Inc."
   - "Copyright 2017, Google Inc."
   - "Copyright 2018 Google Inc."
+  - "copyright 2016, Google, Inc."
   Copyright 2001 Gareth Rees.:
   - "Copyright 2001 Gareth Rees."
   Copyright 2001-2011 The Apache Software Foundation:
@@ -1290,14 +1291,20 @@ processed_statements:
   - "Copyright Software Freedom Conservancy, Inc."
   Copyright' (c) 1990 ABC:
   - "Copyright' (c) 1990 ABC"
+  - "copyright' (c) 1990 ABC"
   Copyright' 1990 ABC:
   - "Copyright' 1990 ABC"
+  - "copyright' 1990 ABC"
   Copyrighted 1990 Ownership ABC:
   - "Copyrighted Ownership 1990 ABC"
   - "Copyrighted ownership 1990 ABC"
-  Portions (c) 2001-2002 EFG:
+  - "copyrighted Ownership 1990 ABC"
+  - "copyrighted ownership 1990 ABC"
+  Portions (c) 2001-2004 EFG:
   - "Portions (c) 2001 EFG"
   - "Portions (c) 2002 EFG"
+  - "portions (c) 2003 EFG"
+  - "portions (c) 2004 EFG"
   Portions Copyright 2007, 2009, 2011 Google Inc.:
   - "Portions Copyright 2007 Google Inc."
   - "Portions Copyright 2009 Google Inc."
@@ -1341,8 +1348,6 @@ processed_statements:
   - "copyright 2014-2018 Thomas Kemmer"
   copyright 2015 Michael Dowling:
   - "copyright u'2015, Michael Dowling"
-  copyright 2016 Google, Inc.:
-  - "copyright 2016, Google, Inc."
   copyright Arne Blankerts <arne@blankerts.de>:
   - "copyright Arne Blankerts <arne@blankerts.de>"
   copyright Robert Kieffer <http://broofa.com/>:
@@ -1351,16 +1356,6 @@ processed_statements:
   - "copyright ownership. The ASF"
   copyright xmlns https://phar.io/xml/manifest/1.0:
   - "copyright xmlns https://phar.io/xml/manifest/1.0"
-  copyright' (c) 1990 ABC:
-  - "copyright' (c) 1990 ABC"
-  copyright' 1990 ABC:
-  - "copyright' 1990 ABC"
-  copyrighted 1990 Ownership ABC:
-  - "copyrighted Ownership 1990 ABC"
-  - "copyrighted ownership 1990 ABC"
-  portions (c) 2003-2004 EFG:
-  - "portions (c) 2003 EFG"
-  - "portions (c) 2004 EFG"
 unprocessed_statements:
 - "AAaEAOUaaCacCceZzDidEeEoeooouEeuE (c) TMe"
 - "AaSs (c) SZzZCZzcsYzAAAACCEEEEIIIINOOOOOSUUUUUETaaaaacceeeeiiiinooooosuuuuuety"

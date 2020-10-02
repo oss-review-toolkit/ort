@@ -40,7 +40,8 @@ private fun Collection<Parts>.groupByPrefixAndOwner(): List<Parts> {
     val map = mutableMapOf<String, Parts>()
 
     forEach { part ->
-        val key = "${part.prefix}:${part.owner.toNormalizedOwnerKey()}"
+        val capitalizedPrefix = part.prefix.capitalize()
+        val key = "$capitalizedPrefix:${part.owner.toNormalizedOwnerKey()}"
         map.merge(key, part) { existing, other ->
             Parts(
                 prefix = existing.prefix,
