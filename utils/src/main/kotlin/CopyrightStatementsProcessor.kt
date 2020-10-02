@@ -183,16 +183,20 @@ class CopyrightStatementsProcessor {
         )
     }
 
+    /**
+     * Strip the longest [known copyright prefix][KNOWN_PREFIX_REGEX] from [copyrightStatement] and return a pair of the
+     * copyright statement without the prefix and the prefix that was stripped from it.
+     */
     private fun stripKnownCopyrightPrefix(copyrightStatement: String): Pair<String, String> {
-        val match = KNOWN_PREFIX_REGEX.mapNotNull { regex ->
-            regex.find(copyrightStatement)
-        }.maxByOrNull {
-            it.groups[1]!!.value.length
+        val copyrightStatementWithoutPrefix = KNOWN_PREFIX_REGEX.map { regex ->
+            copyrightStatement.replace(regex, "")
+        }.minByOrNull {
+            it.length
         } ?: return Pair(first = copyrightStatement, second = "")
 
         return Pair(
-            first = copyrightStatement.removeRange(match.groups[1]!!.range),
-            second = match.groups[1]!!.value
+            first = copyrightStatementWithoutPrefix,
+            second = copyrightStatement.removeSuffix(copyrightStatementWithoutPrefix)
         )
     }
 
