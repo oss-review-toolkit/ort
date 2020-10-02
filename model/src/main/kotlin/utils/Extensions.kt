@@ -32,10 +32,11 @@ internal fun TextLocation.prependPath(prefix: String): String =
     if (prefix.isBlank()) path else "${prefix.removeSuffix("/")}/$path"
 
 /**
- * Map an [Identifier] to a ClearlyDefined [ComponentType] and [Provider]. Note that an Identifier's type in ORT
- * currently implies a default provider.
+ * Map an [Identifier] to a ClearlyDefined [ComponentType] and [Provider]. Note that an
+ * [identifier's type][Identifier.type] in ORT currently implies a default provider. Return null if a mapping is not
+ * possible.
  */
-fun Identifier.toClearlyDefinedTypeAndProvider(): Pair<ComponentType, Provider> =
+fun Identifier.toClearlyDefinedTypeAndProvider(): Pair<ComponentType, Provider>? =
     when (type) {
         "Bower" -> ComponentType.GIT to Provider.GITHUB
         "Bundler" -> ComponentType.GEM to Provider.RUBYGEMS
@@ -48,30 +49,29 @@ fun Identifier.toClearlyDefinedTypeAndProvider(): Pair<ComponentType, Provider> 
         "PhpComposer" -> ComponentType.COMPOSER to Provider.PACKAGIST
         "PyPI" -> ComponentType.PYPI to Provider.PYPI
         "Pub" -> ComponentType.GIT to Provider.GITHUB
-        else -> throw IllegalArgumentException("Unknown mapping of ORT type '$type' to ClearlyDefined.")
+        else -> null
     }
 
 /**
- * Map an ORT [Identifier] to ClearlyDefined [Coordinates].
+ * Map an ORT [Identifier] to ClearlyDefined [Coordinates], or to null if mapping is not possible.
  */
-fun Identifier.toClearlyDefinedCoordinates(): Coordinates {
-    val (type, provider) = toClearlyDefinedTypeAndProvider()
-
-    return Coordinates(
-        type = type,
-        provider = provider,
-        namespace = namespace.takeUnless { it.isEmpty() },
-        name = name,
-        revision = version.takeUnless { it.isEmpty() }
-    )
-}
+fun Identifier.toClearlyDefinedCoordinates(): Coordinates? =
+    toClearlyDefinedTypeAndProvider()?.let { (type, provider) ->
+        Coordinates(
+            type = type,
+            provider = provider,
+            namespace = namespace.takeUnless { it.isEmpty() },
+            name = name,
+            revision = version.takeUnless { it.isEmpty() }
+        )
+    }
 
 /** Regular expression to match VCS URLs supported by ClearlyDefined. */
 private val REG_GIT_URL = Regex(".+://github.com/(.+)/(.+).git")
 
 /**
- * Create a ClearlyDefined [SourceLocation] from an [Identifier] preferably a [VcsInfoCurationData], but eventually fall
- * back to a [RemoteArtifact], or return null if neither is specified.
+ * Create a ClearlyDefined [SourceLocation] from an [Identifier]. Prefer a [VcsInfoCurationData], but eventually fall
+ * back to a [RemoteArtifact], or return null if not enough information is available.
  */
 fun Identifier.toClearlyDefinedSourceLocation(
     vcs: VcsInfoCurationData?,
@@ -97,16 +97,16 @@ fun Identifier.toClearlyDefinedSourceLocation(
         }
 
         sourceArtifact != null -> {
-            val (_, provider) = this.toClearlyDefinedTypeAndProvider()
-
-            SourceLocation(
-                name = name,
-                namespace = namespace.takeUnless { it.isEmpty() },
-                provider = provider,
-                revision = version,
-                type = ComponentType.SOURCE_ARCHIVE,
-                url = sourceArtifact.url
-            )
+            toClearlyDefinedTypeAndProvider()?.let { (_, provider) ->
+                SourceLocation(
+                    name = name,
+                    namespace = namespace.takeUnless { it.isEmpty() },
+                    provider = provider,
+                    revision = version,
+                    type = ComponentType.SOURCE_ARCHIVE,
+                    url = sourceArtifact.url
+                )
+            }
         }
 
         else -> null

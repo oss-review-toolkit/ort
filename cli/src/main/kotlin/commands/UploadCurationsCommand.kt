@@ -114,9 +114,11 @@ class UploadCurationsCommand : CliktCommand(
         }
 
     private fun putCuration(curation: PackageCuration): ClearlyDefinedService.ContributionSummary? =
-        executeApiCall(service.putCuration(curation.toContributionPatch())).getOrElse {
-            log.error { it.collectMessagesAsString() }
-            null
+        curation.toContributionPatch()?.let { patch ->
+            executeApiCall(service.putCuration(patch)).getOrElse {
+                log.error { it.collectMessagesAsString() }
+                null
+            }
         }
 
     override fun run() {
@@ -169,12 +171,14 @@ class UploadCurationsCommand : CliktCommand(
     }
 }
 
-private fun PackageCuration.toContributionPatch(): ContributionPatch {
+private fun PackageCuration.toContributionPatch(): ContributionPatch? {
+    val coordinates = id.toClearlyDefinedCoordinates() ?: return null
+
     val info = ContributionInfo(
         // The exact values to use here are unclear; use what is mostly used at
         // https://github.com/clearlydefined/curated-data/pulls.
         type = ContributionType.OTHER,
-        summary = "Curation for component ${id.toClearlyDefinedCoordinates()}.",
+        summary = "Curation for component $coordinates.",
         details = "Imported from curation data of the " +
                 "[OSS Review Toolkit](https://github.com/oss-review-toolkit/ort) via the " +
                 "[clearly-defined](https://github.com/oss-review-toolkit/ort/tree/master/clearly-defined) " +
@@ -196,7 +200,7 @@ private fun PackageCuration.toContributionPatch(): ContributionPatch {
     )
 
     val patch = Patch(
-        coordinates = id.toClearlyDefinedCoordinates(),
+        coordinates = coordinates,
         revisions = mapOf(id.version to curation)
     )
 

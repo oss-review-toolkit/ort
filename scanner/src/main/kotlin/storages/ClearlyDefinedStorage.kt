@@ -65,7 +65,7 @@ private fun VcsInfo.toVcsInfoCurationData(): VcsInfoCurationData =
 /**
  * Generate the coordinates for ClearlyDefined based on the [id], the [vcs], and a [sourceArtifact].
  * If information about a Git repository in GitHub is available, this is used. Otherwise, the coordinates
- * are derived from the identifier.
+ * are derived from the identifier. Throws [IllegalArgumentException] if generating coordinates is not possible.
  */
 private fun packageCoordinates(
     id: Identifier,
@@ -74,6 +74,7 @@ private fun packageCoordinates(
 ): ClearlyDefinedService.Coordinates {
     val sourceLocation = id.toClearlyDefinedSourceLocation(vcs?.toVcsInfoCurationData(), sourceArtifact)
     return sourceLocation?.toCoordinates() ?: id.toClearlyDefinedCoordinates()
+        ?: throw IllegalArgumentException("Unable to create ClearlyDefined coordinates for '${id.toCoordinates()}'.")
 }
 
 /**
