@@ -91,7 +91,7 @@ class FindingsMatcher(
         licenseStartLine: Int,
         licenseEndLine: Int
     ): Set<CopyrightFinding> {
-        require(copyrights.map { it.location.path }.toSet().size <= 1) {
+        require(copyrights.mapTo(mutableSetOf()) { it.location.path }.size <= 1) {
             "Given copyright statements must all point to the same file."
         }
 

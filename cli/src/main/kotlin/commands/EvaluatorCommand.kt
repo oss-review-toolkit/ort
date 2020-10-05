@@ -163,7 +163,7 @@ class EvaluatorCommand : CliktCommand(name = "evaluate", help = "Evaluate rules 
         val outputFiles = mutableListOf<File>()
 
         outputDir?.let { absoluteOutputDir ->
-            outputFiles += outputFormats.toSet().map { format ->
+            outputFiles += outputFormats.mapTo(mutableSetOf()) { format ->
                 absoluteOutputDir.resolve("evaluation-result.${format.fileExtension}")
             }
 

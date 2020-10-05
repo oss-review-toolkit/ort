@@ -59,8 +59,7 @@ class SpdxDocumentReporter : Reporter {
     ): List<File> {
         val outputFileFormats = options[OPTION_OUTPUT_FILE_FORMATS]
             ?.split(",")
-            ?.map { FileFormat.valueOf(it.toUpperCase()) }
-            ?.toSet()
+            ?.mapTo(mutableSetOf()) { FileFormat.valueOf(it.toUpperCase()) }
             ?: setOf(FileFormat.YAML)
 
         val params = SpdxDocumentModelMapper.SpdxDocumentParams(

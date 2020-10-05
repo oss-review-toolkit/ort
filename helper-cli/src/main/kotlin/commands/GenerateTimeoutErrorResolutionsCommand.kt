@@ -89,13 +89,13 @@ internal class GenerateTimeoutErrorResolutionsCommand : CliktCommand(
                         && resolutionProvider.getIssueResolutionsFor(it).isEmpty()
             }
 
-        val generatedResolutions = timeoutIssues.map {
+        val generatedResolutions = timeoutIssues.mapTo(mutableSetOf()) {
             IssueResolution(
                 message = it.message,
                 reason = IssueResolutionReason.SCANNER_ISSUE,
                 comment = "TODO"
             )
-        }.toSet().sortedBy { it.message }
+        }.sortedBy { it.message }
 
         println(yamlMapper.writeValueAsString(generatedResolutions))
     }

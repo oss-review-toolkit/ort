@@ -678,7 +678,7 @@ class ScanCodeResultParserTest : WordSpec({
                 generateSummary(Instant.now(), Instant.now(), resultFile, result)
                     .copyrightFindings
 
-            actualFindings.map { it.statement }.toSet() should containExactlyInAnyOrder(
+            actualFindings.mapTo(mutableSetOf()) { it.statement } should containExactlyInAnyOrder(
                 "Copyright (c) 2016 Amazon.com, Inc.",
                 "Copyright (c) 2016. Amazon.com, Inc.",
                 "Copyright 2010-2017 Amazon.com, Inc.",
