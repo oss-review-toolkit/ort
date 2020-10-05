@@ -95,13 +95,13 @@ object DeclaredLicenseProcessor {
         val processedLicenses = mutableMapOf<String, SpdxExpression>()
         val unmapped = mutableListOf<String>()
 
-        declaredLicenses.distinct().forEach { declaredLicense ->
+        declaredLicenses.toSet().forEach { declaredLicense ->
             process(declaredLicense, declaredLicenseMapping)?.let {
                 processedLicenses[declaredLicense] = it
             } ?: run { unmapped += declaredLicense }
         }
 
-        val spdxExpression = processedLicenses.values.distinct().filter {
+        val spdxExpression = processedLicenses.values.toSet().filter {
             it.toString() != SpdxConstants.NONE
         }.reduceOrNull { left, right -> left and right }
 

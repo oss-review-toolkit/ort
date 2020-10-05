@@ -126,7 +126,7 @@ class AnalyzerCommand : CliktCommand(name = "analyze", help = "Determine depende
     private val globalOptionsForSubcommands by requireObject<GlobalOptions>()
 
     override fun run() {
-        val outputFiles = outputFormats.distinct().map { format ->
+        val outputFiles = outputFormats.toSet().map { format ->
             outputDir.resolve("analyzer-result.${format.fileExtension}")
         }
 

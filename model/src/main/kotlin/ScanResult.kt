@@ -72,7 +72,7 @@ data class ScanResult(
         val licenseFindings = summary.licenseFindings.filter { it.location.matchesPath() }.toSortedSet()
         val copyrightFindings = summary.copyrightFindings.filter { it.location.matchesPath() }.toSortedSet()
         val fileCount = (licenseFindings.map { it.location.path } + copyrightFindings.map { it.location.path })
-            .distinct().size
+            .toSet().size
 
         val summary = summary.copy(
             fileCount = fileCount,

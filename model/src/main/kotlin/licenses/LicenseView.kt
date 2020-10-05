@@ -94,7 +94,7 @@ class LicenseView(vararg licenseSources: Set<LicenseSource>) {
                     LicenseSource.DECLARED -> declaredLicenses
                     LicenseSource.DETECTED -> detectedLicenses
                     LicenseSource.CONCLUDED -> concludedLicenses
-                }.map { license -> Pair(license, source) }.distinct()
+                }.map { license -> Pair(license, source) }.toSet()
             }
 
         licenseSources.forEach { sources ->

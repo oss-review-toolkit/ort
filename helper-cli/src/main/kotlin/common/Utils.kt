@@ -296,7 +296,7 @@ internal fun OrtResult.getLicenseFindingsById(
             scanResult.summary.licenseFindings.let { findings ->
                 if (applyCurations) {
                     FindingCurationMatcher().applyAll(findings, getLicenseFindingsCurations(scanResult.provenance))
-                        .mapNotNull { it.curatedFinding }.distinct()
+                        .mapNotNull { it.curatedFinding }.toSet()
                 } else {
                     findings
                 }
