@@ -97,12 +97,14 @@ object LicenseFilenamePatterns {
         directory: String,
         filenamePatterns: Collection<String>
     ): List<String> {
-        val patternsForDir = filenamePatterns.map {
+        val distinctPatterns = filenamePatterns.toSet()
+
+        val patternsForDir = distinctPatterns.map {
             getFileGlobForDirectory(File(directory).invariantSeparatorsPath, it, true)
         }
 
         val patternsForAncestorDirs = getAllAncestorDirectories(directory).flatMap { dir ->
-            filenamePatterns.map { getFileGlobForDirectory(dir, it, false) }
+            distinctPatterns.map { getFileGlobForDirectory(dir, it, false) }
         }
 
         return (patternsForDir + patternsForAncestorDirs).sorted()
