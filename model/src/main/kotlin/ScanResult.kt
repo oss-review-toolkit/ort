@@ -71,8 +71,10 @@ data class ScanResult(
 
         val licenseFindings = summary.licenseFindings.filter { it.location.matchesPath() }.toSortedSet()
         val copyrightFindings = summary.copyrightFindings.filter { it.location.matchesPath() }.toSortedSet()
-        val fileCount = (licenseFindings.map { it.location.path } + copyrightFindings.map { it.location.path })
-            .toSet().size
+        val fileCount = mutableSetOf<String>().also { set ->
+            licenseFindings.mapTo(set) { it.location.path }
+            copyrightFindings.mapTo(set) { it.location.path }
+        }.size
 
         val summary = summary.copy(
             fileCount = fileCount,

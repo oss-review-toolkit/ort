@@ -92,10 +92,13 @@ class GoMod(
             val edges = getDependencyGraph(projectDir)
             val vendorModules = getVendorModules(projectDir)
 
-            val projectName = edges.getNodes().filter { it.version.isBlank() }.toSet().let { idsWithoutVersion ->
+            val projectName = edges.getNodes().filterTo(mutableSetOf()) {
+                it.version.isBlank()
+            }.let { idsWithoutVersion ->
                 require(idsWithoutVersion.size == 1) {
                     "Expected exactly one unique package without version but got ${idsWithoutVersion.joinToString()}."
                 }
+
                 idsWithoutVersion.first()
             }.name
 
