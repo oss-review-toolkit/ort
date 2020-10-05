@@ -147,7 +147,7 @@ class ReportTableModelMapper(
 
                 val scanIssues = scanResult?.results?.flatMap {
                     it.summary.issues
-                }?.distinct().orEmpty()
+                }?.toSet().orEmpty()
 
                 val packageForId = ortResult.getPackage(id)?.pkg ?: ortResult.getProject(id)?.toPackage()
 

@@ -288,7 +288,7 @@ private fun Collection<TextLocation>.groupByText(baseDir: File): List<TextLocati
         }
     }
 
-    val unresolvedLocations = (this - resolvedLocations.values.flatten()).distinct()
+    val unresolvedLocations = (this - resolvedLocations.values.flatten()).toSet()
 
     return resolvedLocations.map { (text, locations) -> TextLocationGroup(locations = locations, text = text) } +
             unresolvedLocations.map { TextLocationGroup(locations = setOf(it)) }

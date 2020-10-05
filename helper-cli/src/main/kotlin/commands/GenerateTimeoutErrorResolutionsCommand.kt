@@ -95,7 +95,7 @@ internal class GenerateTimeoutErrorResolutionsCommand : CliktCommand(
                 reason = IssueResolutionReason.SCANNER_ISSUE,
                 comment = "TODO"
             )
-        }.distinct().sortedBy { it.message }
+        }.toSet().sortedBy { it.message }
 
         println(yamlMapper.writeValueAsString(generatedResolutions))
     }

@@ -142,7 +142,7 @@ class ScannerCommand : CliktCommand(name = "scan", help = "Run existing copyrigh
     override fun run() {
         val nativeOutputDir = outputDir.resolve("native-scan-results")
 
-        val outputFiles = outputFormats.distinct().map { format ->
+        val outputFiles = outputFormats.toSet().map { format ->
             outputDir.resolve("scan-result.${format.fileExtension}")
         }
 

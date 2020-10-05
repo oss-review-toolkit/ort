@@ -188,7 +188,7 @@ private fun getSpdxCopyrightText(
 ): String {
     val copyrightStatements = ortResult.getDetectedLicensesWithCopyrights(id, packageConfigurationProvider)
         .flatMap { it.value }
-        .distinct()
+        .toSet()
         .sorted()
 
     return if (copyrightStatements.isNotEmpty()) {
