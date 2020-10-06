@@ -59,6 +59,7 @@ class OrtPackageNaming : Rule() {
             "clearly-defined" -> ".clearlydefined"
             "cli" -> ""
             "detekt-rules" -> ".detekt"
+            "fossid-webapp-client" -> ".fossid"
             "helper-cli" -> ".helper"
             "spdx-utils" -> ".spdx"
             "test-utils" -> ".utils.test"
