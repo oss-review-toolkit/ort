@@ -307,7 +307,9 @@ abstract class LocalScanner(name: String, config: ScannerConfiguration) : Scanne
      * Return the [ScanResult], if the package could not be scanned a [ScanException] is thrown.
      */
     private fun scanPackage(
-        scannerDetails: ScannerDetails, pkg: Package, outputDirectory: File,
+        scannerDetails: ScannerDetails,
+        pkg: Package,
+        outputDirectory: File,
         downloadDirectory: File
     ): ScanResult {
         val resultsFile = getResultsFile(scannerDetails, pkg, outputDirectory)
