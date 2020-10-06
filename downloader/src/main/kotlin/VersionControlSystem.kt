@@ -196,10 +196,11 @@ abstract class VersionControlSystem {
         pkg: Package,
         targetDir: File,
         allowMovingRevisions: Boolean = false,
-        recursive: Boolean = true
+        recursive: Boolean = true,
+        licenseFilenamePatterns: Collection<String> = emptyList()
     ): WorkingTree {
         val workingTree = try {
-            initWorkingTree(targetDir, pkg.vcsProcessed)
+            initWorkingTree(targetDir, pkg.vcsProcessed, licenseFilenamePatterns)
         } catch (e: IOException) {
             throw DownloadException("Failed to initialize $type working tree at '$targetDir'.", e)
         }
@@ -269,11 +270,17 @@ abstract class VersionControlSystem {
     }
 
     /**
-     * Initialize the working tree without checking out any files yet.
+     * Initialize the working tree without checking out any files yet. If the VCS path is not empty, all files which
+     * reside in any ancestor directory of the VCS path and match any of [licenseFilenamePatterns] will also be checked
+     * out.
      *
      * @throws IOException in case the initialization failed.
      */
-    abstract fun initWorkingTree(targetDir: File, vcs: VcsInfo): WorkingTree
+    abstract fun initWorkingTree(
+        targetDir: File,
+        vcs: VcsInfo,
+        licenseFilenamePatterns: Collection<String>
+    ): WorkingTree
 
     /**
      * Update the [working tree][workingTree] by checking out the given [revision], optionally limited to the given

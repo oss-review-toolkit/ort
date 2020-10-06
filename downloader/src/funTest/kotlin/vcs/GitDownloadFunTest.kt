@@ -32,6 +32,7 @@ import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
+import org.ossreviewtoolkit.utils.LicenseFilenamePatterns
 import org.ossreviewtoolkit.utils.ORT_NAME
 import org.ossreviewtoolkit.utils.safeDeleteRecursively
 import org.ossreviewtoolkit.utils.test.ExpensiveTag
@@ -98,7 +99,11 @@ class GitDownloadFunTest : StringSpec() {
                 File(REPO_PATH, "index.d.ts")
             )
 
-            val workingTree = git.download(pkg, outputDir)
+            val workingTree = git.download(
+                pkg = pkg,
+                targetDir = outputDir,
+                licenseFilenamePatterns = LicenseFilenamePatterns.ALL_LICENSE_FILENAMES
+            )
             val actualFiles = workingTree.workingDir.walkBottomUp()
                 .onEnter { it.name != ".git" }
                 .filter { it.isFile }
@@ -138,7 +143,11 @@ class GitDownloadFunTest : StringSpec() {
                 File(REPO_PATH_FOR_VERSION, "dep_graph_spec.js")
             )
 
-            val workingTree = git.download(pkg, outputDir)
+            val workingTree = git.download(
+                pkg = pkg,
+                targetDir = outputDir,
+                licenseFilenamePatterns = LicenseFilenamePatterns.ALL_LICENSE_FILENAMES
+            )
             val actualFiles = workingTree.workingDir.walkBottomUp()
                 .onEnter { it.name != ".git" }
                 .filter { it.isFile }

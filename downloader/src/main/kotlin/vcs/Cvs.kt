@@ -172,7 +172,11 @@ class Cvs : VersionControlSystem(), CommandLineTool {
 
     override fun isApplicableUrlInternal(vcsUrl: String) = vcsUrl.matches(":(ext|pserver):[^@]+@.+".toRegex())
 
-    override fun initWorkingTree(targetDir: File, vcs: VcsInfo): WorkingTree {
+    override fun initWorkingTree(
+        targetDir: File,
+        vcs: VcsInfo,
+        licenseFilenamePatterns: Collection<String>
+    ): WorkingTree {
         // Create a "fake" checkout as described at https://stackoverflow.com/a/3448891/1127485.
         run(targetDir, "-z3", "-d", vcs.url, "checkout", "-l", ".")
 

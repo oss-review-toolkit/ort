@@ -42,6 +42,7 @@ import org.ossreviewtoolkit.scanner.LocalScanner
 import org.ossreviewtoolkit.scanner.ScanException
 import org.ossreviewtoolkit.scanner.ScanResultsStorage
 import org.ossreviewtoolkit.spdx.NON_LICENSE_FILENAMES
+import org.ossreviewtoolkit.utils.LicenseFilenamePatterns
 import org.ossreviewtoolkit.utils.ORT_NAME
 import org.ossreviewtoolkit.utils.ORT_REPO_CONFIG_FILENAME
 import org.ossreviewtoolkit.utils.OkHttpClientHelper
@@ -68,10 +69,12 @@ import org.ossreviewtoolkit.utils.unpack
  */
 class ScanCode(
     name: String,
-    config: ScannerConfiguration
-) : LocalScanner(name, config) {
+    config: ScannerConfiguration,
+    licenseFilenamePatterns: Collection<String> = LicenseFilenamePatterns.ALL_LICENSE_FILENAMES
+) : LocalScanner(name, config, licenseFilenamePatterns) {
     class Factory : AbstractScannerFactory<ScanCode>(SCANNER_NAME) {
-        override fun create(config: ScannerConfiguration) = ScanCode(scannerName, config)
+        override fun create(config: ScannerConfiguration, licenseFilenamePatterns: Collection<String>) =
+            ScanCode(scannerName, config, licenseFilenamePatterns)
     }
 
     companion object {

@@ -48,6 +48,7 @@ import org.ossreviewtoolkit.scanner.Scanner
 import org.ossreviewtoolkit.scanner.scanners.ScanCode
 import org.ossreviewtoolkit.scanner.storages.FileBasedStorage
 import org.ossreviewtoolkit.scanner.storages.SCAN_RESULTS_FILE_NAME
+import org.ossreviewtoolkit.utils.LicenseFilenamePatterns
 import org.ossreviewtoolkit.utils.expandTilde
 import org.ossreviewtoolkit.utils.storage.LocalFileStorage
 
@@ -119,7 +120,7 @@ class ScannerCommand : CliktCommand(name = "scan", help = "Run existing copyrigh
 
         ScanResultsStorage.configure(config)
 
-        val scanner = scannerFactory.create(config)
+        val scanner = scannerFactory.create(config, LicenseFilenamePatterns.ALL_LICENSE_FILENAMES)
 
         println("Using scanner '${scanner.scannerName}' with storage '${ScanResultsStorage.storage.name}'.")
 

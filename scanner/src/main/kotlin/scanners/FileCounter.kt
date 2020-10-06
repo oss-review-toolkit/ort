@@ -33,15 +33,22 @@ import org.ossreviewtoolkit.model.jsonMapper
 import org.ossreviewtoolkit.scanner.AbstractScannerFactory
 import org.ossreviewtoolkit.scanner.LocalScanner
 import org.ossreviewtoolkit.spdx.calculatePackageVerificationCode
+import org.ossreviewtoolkit.utils.LicenseFilenamePatterns
 
 /**
  * A simple [LocalScanner] that only counts the files in the scan path. Because it is much faster than the other
  * scanners it is useful for testing the scanner tool, for example during development or when integrating it with other
  * tools.
  */
-class FileCounter(name: String, config: ScannerConfiguration) : LocalScanner(name, config) {
+class FileCounter(
+    name: String,
+    config: ScannerConfiguration,
+    licenseFilenamePatterns: Collection<String> = LicenseFilenamePatterns.ALL_LICENSE_FILENAMES
+) :
+    LocalScanner(name, config, licenseFilenamePatterns) {
     class Factory : AbstractScannerFactory<FileCounter>("FileCounter") {
-        override fun create(config: ScannerConfiguration) = FileCounter(scannerName, config)
+        override fun create(config: ScannerConfiguration, licenseFilenamePatterns: Collection<String>) =
+            FileCounter(scannerName, config, licenseFilenamePatterns)
     }
 
     data class FileCountResult(val fileCount: Int)

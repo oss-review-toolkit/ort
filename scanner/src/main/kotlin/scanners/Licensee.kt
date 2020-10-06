@@ -38,14 +38,20 @@ import org.ossreviewtoolkit.scanner.LocalScanner
 import org.ossreviewtoolkit.scanner.ScanException
 import org.ossreviewtoolkit.spdx.calculatePackageVerificationCode
 import org.ossreviewtoolkit.utils.Ci
+import org.ossreviewtoolkit.utils.LicenseFilenamePatterns
 import org.ossreviewtoolkit.utils.Os
 import org.ossreviewtoolkit.utils.ProcessCapture
 import org.ossreviewtoolkit.utils.getPathFromEnvironment
 import org.ossreviewtoolkit.utils.log
 
-class Licensee(name: String, config: ScannerConfiguration) : LocalScanner(name, config) {
+class Licensee(
+    name: String,
+    config: ScannerConfiguration,
+    licenseFilenamePatterns: Collection<String> = LicenseFilenamePatterns.ALL_LICENSE_FILENAMES
+) : LocalScanner(name, config, licenseFilenamePatterns) {
     class Factory : AbstractScannerFactory<Licensee>("Licensee") {
-        override fun create(config: ScannerConfiguration) = Licensee(scannerName, config)
+        override fun create(config: ScannerConfiguration, licenseFilenamePatterns: Collection<String>) =
+            Licensee(scannerName, config, licenseFilenamePatterns)
     }
 
     companion object {

@@ -25,6 +25,7 @@ import io.kotest.matchers.string.shouldMatch
 
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
 import org.ossreviewtoolkit.scanner.scanners.ScanCode
+import org.ossreviewtoolkit.utils.LicenseFilenamePatterns
 import org.ossreviewtoolkit.utils.ORT_REPO_CONFIG_FILENAME
 
 class ScanCodeTest : WordSpec({

@@ -136,7 +136,11 @@ class GitRepo : VersionControlSystem(), CommandLineTool {
 
     override fun isApplicableUrlInternal(vcsUrl: String) = false
 
-    override fun initWorkingTree(targetDir: File, vcs: VcsInfo): WorkingTree {
+    override fun initWorkingTree(
+        targetDir: File,
+        vcs: VcsInfo,
+        licenseFilenamePatterns: Collection<String>
+    ): WorkingTree {
         val manifestRevision = vcs.revision.takeUnless { it.isBlank() } ?: "master"
         val manifestPath = vcs.path.takeUnless { it.isBlank() } ?: "default.xml"
 

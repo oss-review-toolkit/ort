@@ -37,6 +37,7 @@ import org.ossreviewtoolkit.model.RemoteArtifact
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.utils.ArchiveType
+import org.ossreviewtoolkit.utils.LicenseFilenamePatterns
 import org.ossreviewtoolkit.utils.ORT_NAME
 import org.ossreviewtoolkit.utils.OkHttpClientHelper
 import org.ossreviewtoolkit.utils.collectMessagesAsString
@@ -111,7 +112,12 @@ object Downloader {
      * only fixed revisions. A [DownloadResult] is returned on success or a [DownloadException] is thrown in case of
      * failure.
      */
-    fun download(pkg: Package, outputDirectory: File, allowMovingRevisions: Boolean = false): DownloadResult {
+    fun download(
+        pkg: Package,
+        outputDirectory: File,
+        licenseFilenamePatterns: Collection<String> = LicenseFilenamePatterns.ALL_LICENSE_FILENAMES,
+        allowMovingRevisions: Boolean = false
+    ): DownloadResult {
         require(!outputDirectory.exists() || outputDirectory.list().isEmpty()) {
             "The output directory '$outputDirectory' must not contain any files yet."
         }
@@ -126,7 +132,7 @@ object Downloader {
         try {
             // Cargo in general builds from source tarballs, so we prefer source artifacts to VCS.
             if (pkg.id.type != "Cargo" || pkg.sourceArtifact == RemoteArtifact.EMPTY) {
-                return downloadFromVcs(pkg, outputDirectory, allowMovingRevisions)
+                return downloadFromVcs(pkg, outputDirectory, licenseFilenamePatterns, allowMovingRevisions)
             } else {
                 log.info { "Skipping VCS download for Cargo package '${pkg.id.toCoordinates()}'." }
             }
@@ -158,7 +164,12 @@ object Downloader {
         throw exception
     }
 
-    private fun downloadFromVcs(pkg: Package, outputDirectory: File, allowMovingRevisions: Boolean): DownloadResult {
+    private fun downloadFromVcs(
+        pkg: Package,
+        outputDirectory: File,
+        licenseFilenamePatterns: Collection<String>,
+        allowMovingRevisions: Boolean
+    ): DownloadResult {
         log.info {
             "Trying to download '${pkg.id.toCoordinates()}' sources to '${outputDirectory.absolutePath}' from VCS..."
         }
@@ -217,7 +228,12 @@ object Downloader {
 
         val startTime = Instant.now()
         val workingTree = try {
-            applicableVcs.download(pkg, outputDirectory, allowMovingRevisions)
+            applicableVcs.download(
+                pkg = pkg,
+                targetDir = outputDirectory,
+                allowMovingRevisions = allowMovingRevisions,
+                licenseFilenamePatterns = licenseFilenamePatterns
+            )
         } catch (e: DownloadException) {
             // TODO: We should introduce something like a "strict" mode and only do these kind of fallbacks in
             //       non-strict mode.
@@ -233,7 +249,12 @@ object Downloader {
                 outputDirectory.safeMkdirs()
 
                 val fallbackPkg = pkg.copy(vcsProcessed = pkg.vcsProcessed.copy(url = vcsUrlNoCredentials))
-                applicableVcs.download(fallbackPkg, outputDirectory, allowMovingRevisions)
+                applicableVcs.download(
+                    pkg = fallbackPkg,
+                    targetDir = outputDirectory,
+                    allowMovingRevisions = allowMovingRevisions,
+                    licenseFilenamePatterns = LicenseFilenamePatterns.ALL_LICENSE_FILENAMES
+                )
             } else {
                 throw e
             }

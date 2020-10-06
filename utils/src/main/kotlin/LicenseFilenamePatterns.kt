@@ -93,7 +93,7 @@ object LicenseFilenamePatterns {
      * Return glob patterns which match files in [directory], in any ancestor directory of [directory] recursively
      * and in any sub-directory of directory, if the filename matches any of the [filenamePatterns].
      */
-    internal fun getFileGlobsForDirectoryAndAncestors(
+    fun getFileGlobsForDirectoryAndAncestors(
         directory: String,
         filenamePatterns: Collection<String>
     ): List<String> {

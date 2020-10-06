@@ -49,6 +49,7 @@ import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.readValue
 import org.ossreviewtoolkit.utils.ArchiveType
+import org.ossreviewtoolkit.utils.LicenseFilenamePatterns
 import org.ossreviewtoolkit.utils.collectMessagesAsString
 import org.ossreviewtoolkit.utils.encodeOrUnknown
 import org.ossreviewtoolkit.utils.expandTilde
@@ -126,6 +127,8 @@ class DownloaderCommand : CliktCommand(name = "download", help = "Fetch source c
     override fun run() {
         val failureMessages = mutableListOf<String>()
 
+        val licenseFilenamePatterns = LicenseFilenamePatterns.ALL_LICENSE_FILENAMES
+
         when (input) {
             is FileType -> {
                 val ortFile = (input as FileType).file
@@ -148,7 +151,11 @@ class DownloaderCommand : CliktCommand(name = "download", help = "Fetch source c
                 packages.forEach { pkg ->
                     try {
                         val downloadDir = outputDir.resolve(pkg.id.toPath())
-                        Downloader.download(pkg, downloadDir, allowMovingRevisions)
+                        Downloader.download(
+                            pkg = pkg,
+                            outputDirectory = downloadDir,
+                            licenseFilenamePatterns = licenseFilenamePatterns
+                        )
                         if (archive) archive(pkg, downloadDir, outputDir)
                     } catch (e: DownloadException) {
                         e.showStackTrace()
@@ -189,7 +196,7 @@ class DownloaderCommand : CliktCommand(name = "download", help = "Fetch source c
                     // Always allow moving revisions when directly downloading a single project only. This is for
                     // convenience as often the latest revision (referred to by some VCS-specific symbolic name) of a
                     // project needs to be downloaded.
-                    Downloader.download(dummyPackage, outputDir, allowMovingRevisions = true)
+                    Downloader.download(dummyPackage, outputDir, licenseFilenamePatterns, allowMovingRevisions = true)
                 } catch (e: DownloadException) {
                     e.showStackTrace()
 

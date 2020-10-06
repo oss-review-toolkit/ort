@@ -64,6 +64,7 @@ import org.ossreviewtoolkit.model.yamlMapper
 import org.ossreviewtoolkit.spdx.SpdxExpression
 import org.ossreviewtoolkit.spdx.SpdxSingleLicenseExpression
 import org.ossreviewtoolkit.utils.CopyrightStatementsProcessor
+import org.ossreviewtoolkit.utils.LicenseFilenamePatterns
 import org.ossreviewtoolkit.utils.ORT_NAME
 import org.ossreviewtoolkit.utils.OkHttpClientHelper
 import org.ossreviewtoolkit.utils.isSymbolicLink
@@ -182,7 +183,7 @@ internal fun List<ScopeExclude>.minimize(projectScopes: List<String>): List<Scop
  * Fetches the sources from either the VCS or source artifact for the package denoted by
  * the given [id] depending on whether a scan result is present with matching [Provenance].
  */
-internal fun OrtResult.fetchScannedSources(id: Identifier): File {
+internal fun OrtResult.fetchScannedSources(id: Identifier,): File {
     val tempDir = createTempDir(ORTH_NAME, directory = File("."))
 
     val pkg = getPackageOrProject(id)!!.let {
@@ -193,7 +194,12 @@ internal fun OrtResult.fetchScannedSources(id: Identifier): File {
         }
     }
 
-    return Downloader.download(pkg, tempDir).downloadDirectory
+    // TODO: Use the license filename patterns which had been configured when this OrtResult was created.
+    return Downloader.download(
+        pkg = pkg,
+        outputDirectory = tempDir,
+        licenseFilenamePatterns = LicenseFilenamePatterns.ALL_LICENSE_FILENAMES
+    ).downloadDirectory
 }
 
 /**

@@ -61,6 +61,7 @@ import org.ossreviewtoolkit.model.createAndLogIssue
 import org.ossreviewtoolkit.model.mapper
 import org.ossreviewtoolkit.scanner.storages.PostgresStorage
 import org.ossreviewtoolkit.utils.CommandLineTool
+import org.ossreviewtoolkit.utils.LicenseFilenamePatterns
 import org.ossreviewtoolkit.utils.NamedThreadFactory
 import org.ossreviewtoolkit.utils.Os
 import org.ossreviewtoolkit.utils.collectMessagesAsString
@@ -75,7 +76,11 @@ import org.ossreviewtoolkit.utils.storage.FileArchiver
  * Implementation of [Scanner] for scanners that operate locally. Packages passed to [scanPackages] are processed in
  * serial order. Scan results can be stored in a [ScanResultsStorage].
  */
-abstract class LocalScanner(name: String, config: ScannerConfiguration) : Scanner(name, config), CommandLineTool {
+abstract class LocalScanner(
+    name: String, config: ScannerConfiguration,
+    private val licenseFilenamePatterns: Collection<String>
+) :
+    Scanner(name, config), CommandLineTool {
     private val archiver by lazy {
         config.archive?.createFileArchiver() ?: FileArchiver.DEFAULT
     }
@@ -315,7 +320,7 @@ abstract class LocalScanner(name: String, config: ScannerConfiguration) : Scanne
         val resultsFile = getResultsFile(scannerDetails, pkg, outputDirectory)
 
         val downloadResult = try {
-            Downloader.download(pkg, downloadDirectory.resolve(pkg.id.toPath()))
+            Downloader.download(pkg, downloadDirectory.resolve(pkg.id.toPath()), licenseFilenamePatterns)
         } catch (e: DownloadException) {
             e.showStackTrace()
 

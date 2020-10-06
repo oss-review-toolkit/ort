@@ -99,7 +99,11 @@ class Mercurial : VersionControlSystem(), CommandLineTool {
     override fun isApplicableUrlInternal(vcsUrl: String) =
         ProcessCapture("hg", "identify", vcsUrl).isSuccess
 
-    override fun initWorkingTree(targetDir: File, vcs: VcsInfo): WorkingTree {
+    override fun initWorkingTree(
+        targetDir: File,
+        vcs: VcsInfo,
+        licenseFilenamePatterns: Collection<String>
+    ): WorkingTree {
         // We cannot detect beforehand if the Large Files extension would be required, so enable it by default.
         val extensionsList = mutableListOf(MERCURIAL_LARGE_FILES_EXTENSION)
 

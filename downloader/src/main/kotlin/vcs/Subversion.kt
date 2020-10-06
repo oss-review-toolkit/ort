@@ -139,7 +139,11 @@ class Subversion : VersionControlSystem() {
             false
         }
 
-    override fun initWorkingTree(targetDir: File, vcs: VcsInfo): WorkingTree {
+    override fun initWorkingTree(
+        targetDir: File,
+        vcs: VcsInfo,
+        licenseFilenamePatterns: Collection<String>
+    ): WorkingTree {
         try {
             clientManager.updateClient.doCheckout(
                 SVNURL.parseURIEncoded(vcs.url),

@@ -45,7 +45,7 @@ import org.ossreviewtoolkit.downloader.WorkingTree
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.utils.CommandLineTool
-import org.ossreviewtoolkit.utils.LicenseFilenamePatterns
+import org.ossreviewtoolkit.utils.LicenseFilenamePatterns.getFileGlobsForDirectoryAndAncestors
 import org.ossreviewtoolkit.utils.Os
 import org.ossreviewtoolkit.utils.collectMessagesAsString
 import org.ossreviewtoolkit.utils.installAuthenticatorAndProxySelector
@@ -121,7 +121,11 @@ class Git : VersionControlSystem(), CommandLineTool {
             LsRemoteCommand(null).setRemote(vcsUrl).call().isNotEmpty()
         }.isSuccess
 
-    override fun initWorkingTree(targetDir: File, vcs: VcsInfo): WorkingTree {
+    override fun initWorkingTree(
+        targetDir: File,
+        vcs: VcsInfo,
+        licenseFilenamePatterns: Collection<String>
+    ): WorkingTree {
         try {
             Git.init().setDirectory(targetDir).call().use { git ->
                 git.remoteAdd().setName("origin").setUri(URIish(vcs.url)).call()
@@ -144,7 +148,7 @@ class Git : VersionControlSystem(), CommandLineTool {
 
                     val gitInfoDir = targetDir.resolve(".git/info").apply { safeMkdirs() }
                     val path = vcs.path.let { if (it.startsWith("/")) it else "/$it" }
-                    val licenseFileGlobs = LicenseFilenamePatterns.getLicenseFileGlobsForDirectory(path)
+                    val licenseFileGlobs = getFileGlobsForDirectoryAndAncestors(path, licenseFilenamePatterns)
                     val sparseCheckoutPatterns = "$path\n" + licenseFileGlobs.joinToString("\n")
 
                     gitInfoDir.resolve("sparse-checkout").writeText(sparseCheckoutPatterns)

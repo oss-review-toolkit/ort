@@ -40,6 +40,7 @@ import org.ossreviewtoolkit.scanner.AbstractScannerFactory
 import org.ossreviewtoolkit.scanner.LocalScanner
 import org.ossreviewtoolkit.scanner.ScanException
 import org.ossreviewtoolkit.spdx.calculatePackageVerificationCode
+import org.ossreviewtoolkit.utils.LicenseFilenamePatterns
 import org.ossreviewtoolkit.utils.ORT_NAME
 import org.ossreviewtoolkit.utils.OkHttpClientHelper
 import org.ossreviewtoolkit.utils.Os
@@ -47,9 +48,15 @@ import org.ossreviewtoolkit.utils.ProcessCapture
 import org.ossreviewtoolkit.utils.log
 import org.ossreviewtoolkit.utils.unpackZip
 
-class Askalono(name: String, config: ScannerConfiguration) : LocalScanner(name, config) {
+class Askalono(
+    name: String,
+    config: ScannerConfiguration,
+    licenseFilenamePatterns: Collection<String> = LicenseFilenamePatterns.ALL_LICENSE_FILENAMES
+) :
+    LocalScanner(name, config, licenseFilenamePatterns) {
     class Factory : AbstractScannerFactory<Askalono>("Askalono") {
-        override fun create(config: ScannerConfiguration) = Askalono(scannerName, config)
+        override fun create(config: ScannerConfiguration, licenseFilenamePatterns: Collection<String>) =
+            Askalono(scannerName, config, licenseFilenamePatterns)
     }
 
     override val scannerVersion = "0.4.3"
