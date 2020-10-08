@@ -67,7 +67,8 @@ data class ResolvedLicenseInfo(
     /**
      * Call [LicenseView.filter] on this [ResolvedLicenseInfo].
      */
-    fun filter(licenseView: LicenseView) = licenseView.filter(this)
+    @JvmOverloads
+    fun filter(licenseView: LicenseView, filterSources: Boolean = false) = licenseView.filter(this, filterSources)
 
     /**
      * Filter all licenses that have a location matching [provenance] and [path].
