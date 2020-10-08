@@ -370,9 +370,12 @@ val generateLicenseRefTextResources by tasks.registering {
                     val lines = licenseFile.readLines().map { it.trimEnd() }.asReversed().dropWhile { it.isEmpty() }
                         .asReversed().dropWhile { it.isEmpty() }
 
+                    // Underscores are not allowed in SPDX 'LicenseRef-*' identifiers, so turn them into dashes.
+                    val normalizedBaseName = baseName.replace('_', '-')
+
                     // Use a "namespaced" LicenseRef ID string as the file name, similar to ScanCode itself does for
                     // SPDX output formats, see https://github.com/nexB/scancode-toolkit/pull/1307.
-                    val resourceFile = resourcesDir.resolve("LicenseRef-scancode-$baseName")
+                    val resourceFile = resourcesDir.resolve("LicenseRef-scancode-$normalizedBaseName")
                     resourceFile.writeText(lines.joinToString("\n", postfix = "\n"))
                 } else {
                     logger.warn("No license text found for license '$baseName'.")

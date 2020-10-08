@@ -165,7 +165,7 @@ private fun getLicenseId(license: JsonNode): String {
     // [3] https://github.com/nexB/scancode-toolkit/issues/1336
     // [4] https://github.com/nexB/scancode-toolkit/pull/2247
     if (name.isEmpty() || name.startsWith("LicenseRef-")) {
-        val key = license["key"].textValue()
+        val key = license["key"].textValue().replace('_', '-')
         name = if (key in UNKNOWN_LICENSE_KEYS) {
             SpdxConstants.NOASSERTION
         } else {
