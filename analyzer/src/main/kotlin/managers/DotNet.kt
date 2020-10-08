@@ -59,10 +59,9 @@ class DotNet(
     }
 
     private val reader = DotNetPackageFileReader()
-    private val support = NuGetSupport()
 
     override fun resolveDependencies(definitionFile: File): List<ProjectAnalyzerResult> =
-        listOf(resolveNuGetDependencies(definitionFile, reader, support))
+        listOf(resolveNuGetDependencies(definitionFile, reader, NuGetSupport.create(definitionFile)))
 }
 
 /**
