@@ -115,9 +115,13 @@ class LicenseView(vararg licenseSources: Set<LicenseSource>) {
      * licenses from the [ResolvedLicense] object. This is so, because even if only concluded licenses are requested, it
      * can still be required to access the detected locations or copyrights for the licenses. This function only changes
      * [ResolvedLicenseInfo.licenses], all other properties of the class are kept unchanged.
+     *
+     * If [filterSources] is true, only the license sources are kept that caused the [ResolvedLicense] to be part of the
+     * result. Otherwise all original license sources are kept.
      */
-    fun filter(resolvedLicense: ResolvedLicenseInfo): ResolvedLicenseInfo =
-        resolvedLicense.copy(licenses = filter(resolvedLicense.licenses))
+    @JvmOverloads
+    fun filter(resolvedLicense: ResolvedLicenseInfo, filterSources: Boolean = false): ResolvedLicenseInfo =
+        resolvedLicense.copy(licenses = filter(resolvedLicense.licenses, filterSources))
 
     /**
      * Use this [LicenseView] to filter a list of [ResolvedLicense]s. This function will filter the licenses based
@@ -126,22 +130,38 @@ class LicenseView(vararg licenseSources: Set<LicenseSource>) {
      * their [sources][ResolvedLicense.sources], but it will not remove any information about declared or detected
      * licenses from the [ResolvedLicense] object. This is so, because even if only concluded licenses are requested, it
      * can still be required to access the detected locations or copyrights for the licenses.
+     *
+     * If [filterSources] is true, only the license sources are kept that caused the [ResolvedLicense] to be part of the
+     * result. Otherwise all original license sources are kept.
      */
-    fun filter(resolvedLicenses: List<ResolvedLicense>): List<ResolvedLicense> {
+    @JvmOverloads
+    fun filter(resolvedLicenses: List<ResolvedLicense>, filterSources: Boolean = false): List<ResolvedLicense> {
         // Collect only the licenses instead of the full ResolvedLicense objects here, because calculating the hash
         // codes can be expensive for resolved licenses with many license and copyright findings.
-        val result = mutableSetOf<SpdxSingleLicenseExpression>()
+        val remainingLicenses = mutableSetOf<SpdxSingleLicenseExpression>()
+        val remainingSources = mutableMapOf<SpdxSingleLicenseExpression, Set<LicenseSource>>()
 
         run loop@{
             licenseSources.forEach { sources ->
-                resolvedLicenses.filter { license ->
+                val matchingLicenses = resolvedLicenses.filter { license ->
                     license.sources.any { it in sources }
-                }.mapTo(result) { it.license }
+                }
 
-                if (result.isNotEmpty()) return@loop
+                matchingLicenses.mapTo(remainingLicenses) { it.license }
+                matchingLicenses.associateTo(remainingSources) {
+                    Pair(it.license, it.sources.intersect(sources))
+                }
+
+                if (remainingLicenses.isNotEmpty()) return@loop
             }
         }
 
-        return resolvedLicenses.filter { it.license in result }
+        return resolvedLicenses.filter { it.license in remainingLicenses }.let { result ->
+            if (filterSources) {
+                result.map { it.copy(sources = remainingSources.getValue(it.license)) }
+            } else {
+                result
+            }
+        }
     }
 }
