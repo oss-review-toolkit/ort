@@ -329,12 +329,15 @@ This tool wraps underlying license / copyright scanners with a common API so all
 same way to easily run them and compare their results. If passed an ORT result file with an analyzer result (`-i`), the
 _scanner_ will automatically download the sources of the dependencies via the _downloader_ and scan them afterwards.
 
-Currently, the following license scanners are supported:
+We recommend to use ORT with one of the following scanners as their integration has been thoroughly tested:
+
+* [ScanCode](https://github.com/nexB/scancode-toolkit)
+
+Additionally, the following reference implementations exist:
 
 * [Askalono](https://github.com/amzn/askalono)
 * [lc](https://github.com/boyter/lc)
 * [Licensee](https://github.com/benbalter/licensee)
-* [ScanCode](https://github.com/nexB/scancode-toolkit)
 
 For a comparison of some of these, see this
 [Bachelor Thesis](https://osr.cs.fau.de/2019/08/07/final-thesis-a-comparison-study-of-open-source-license-crawler/).
