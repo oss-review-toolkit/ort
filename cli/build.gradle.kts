@@ -137,8 +137,8 @@ dependencies {
 
     testImplementation(project(":test-utils"))
 
-    testImplementation("io.kotest:kotest-runner-junit5-jvm:$kotestVersion")
-    testImplementation("io.kotest:kotest-assertions-core-jvm:$kotestVersion")
+    testImplementation("io.kotest:kotest-runner-junit5:$kotestVersion")
+    testImplementation("io.kotest:kotest-assertions-core:$kotestVersion")
 
     funTestImplementation(sourceSets["main"].output)
     funTestImplementation(sourceSets["test"].output)
