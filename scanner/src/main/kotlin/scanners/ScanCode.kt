@@ -111,6 +111,14 @@ class ScanCode(
          */
         private val DEFAULT_DEBUG_NON_CONFIGURATION_OPTIONS = listOf("--verbose")
 
+        /**
+         * Environment variables to be defined when running ScanCode.
+         */
+        private val ENVIRONMENT = mapOf(
+            // Work around a Unicode issue: https://github.com/nexB/scancode-toolkit/issues/688#issuecomment-317000904.
+            "PYTHONIOENCODING" to "UTF-8"
+        )
+
         private val OUTPUT_FORMAT_OPTION = if (OUTPUT_FORMAT.startsWith("json")) {
             "--$OUTPUT_FORMAT"
         } else {
@@ -217,7 +225,8 @@ class ScanCode(
             *commandLineOptions.toTypedArray(),
             path.absolutePath,
             OUTPUT_FORMAT_OPTION,
-            resultsFile.absolutePath
+            resultsFile.absolutePath,
+            environment = ENVIRONMENT
         )
 
         val endTime = Instant.now()
