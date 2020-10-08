@@ -1,0 +1,7 @@
+{
+    "ignorePatterns": [
+        {
+            "pattern": "^https://source.android.com/setup/develop/repo$"
+        }
+    ]
+}
