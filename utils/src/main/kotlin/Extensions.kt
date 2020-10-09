@@ -167,22 +167,6 @@ fun File.safeMkdirs() {
 }
 
 /**
- * Search [this] directory upwards towards the root until a contained sub-directory called [searchDirName] is found and
- * return the parent of [searchDirName], or return null if no such directory is found.
- */
-fun File.searchUpwardsForSubdirectory(searchDirName: String): File? {
-    if (!isDirectory) return null
-
-    var currentDir: File? = absoluteFile
-
-    while (currentDir != null && !currentDir.resolve(searchDirName).isDirectory) {
-        currentDir = currentDir.parentFile
-    }
-
-    return currentDir
-}
-
-/**
  * Search [this] directory upwards towards the root until a file called [searchFileName] is found and return this file,
  * or return null if no such file is found.
  */
@@ -205,6 +189,22 @@ fun File.searchUpwardsForFile(searchFileName: String, ignoreCase: Boolean = fals
     }
 
     return currentFile
+}
+
+/**
+ * Search [this] directory upwards towards the root until a contained sub-directory called [searchDirName] is found and
+ * return the parent of [searchDirName], or return null if no such directory is found.
+ */
+fun File.searchUpwardsForSubdirectory(searchDirName: String): File? {
+    if (!isDirectory) return null
+
+    var currentDir: File? = absoluteFile
+
+    while (currentDir != null && !currentDir.resolve(searchDirName).isDirectory) {
+        currentDir = currentDir.parentFile
+    }
+
+    return currentDir
 }
 
 /**
