@@ -20,6 +20,7 @@
 package org.ossreviewtoolkit.utils
 
 import io.kotest.assertions.assertSoftly
+import io.kotest.assertions.throwables.shouldNotThrow
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.nulls.shouldBeNull
@@ -157,7 +158,7 @@ class ExtensionsTest : WordSpec({
             val directory = createTempDir(ORT_NAME, javaClass.simpleName).apply { deleteOnExit() }
 
             directory.isDirectory shouldBe true
-            directory.safeMkdirs() // should not throw exception
+            shouldNotThrow<IOException> { directory.safeMkdirs() }
             directory.isDirectory shouldBe true // should still be a directory afterwards
         }
 
@@ -166,7 +167,7 @@ class ExtensionsTest : WordSpec({
             val child = File(parent, "child").apply { deleteOnExit() }
 
             parent.isDirectory shouldBe true
-            child.safeMkdirs() // should not throw exception
+            shouldNotThrow<IOException> { child.safeMkdirs() }
             child.isDirectory shouldBe true
         }
 
@@ -181,7 +182,7 @@ class ExtensionsTest : WordSpec({
             parent.isDirectory shouldBe true
             nonExistingParent.exists() shouldBe false
             child.exists() shouldBe false
-            child.safeMkdirs() // should not throw exception
+            shouldNotThrow<IOException> { child.safeMkdirs() }
             child.isDirectory shouldBe true
         }
 
@@ -272,9 +273,7 @@ class ExtensionsTest : WordSpec({
             val fileFromStr = tempDir.resolve(str.fileSystemEncode()).apply { writeText("dummy") }
 
             fileFromStr.isFile shouldBe true
-
-            // This should not throw an IOException.
-            tempDir.safeDeleteRecursively(force = true)
+            shouldNotThrow<IOException> { tempDir.safeDeleteRecursively(force = true) }
         }
     }
 
