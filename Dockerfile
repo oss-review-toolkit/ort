@@ -108,7 +108,7 @@ RUN apt-get update && \
     && \
     rm -rf /var/lib/apt/lists/*
 
-COPY --from=build /usr/local/src/ort/scripts/import_proxy_certs.sh /usr/local/src/ort/scripts/set_gradle_proxy.sh /opt/ort/bin/
+COPY --from=build /usr/local/src/ort/scripts/*.sh /opt/ort/bin/
 
 # Custom install commands.
 RUN /opt/ort/bin/import_proxy_certs.sh && \
