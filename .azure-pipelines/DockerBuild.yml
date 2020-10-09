@@ -3,6 +3,8 @@ jobs:
 - job: DockerBuild
   pool:
     vmImage: ubuntu-18.04
+  variables:
+    DOCKER_BUILDKIT: 1
   # TODO: Add caching.
   steps:
   - checkout: self
