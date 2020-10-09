@@ -70,6 +70,7 @@ import org.ossreviewtoolkit.utils.log
 import org.ossreviewtoolkit.utils.logOnce
 import org.ossreviewtoolkit.utils.searchUpwardsForFile
 
+// See https://docs.microsoft.com/en-us/nuget/api/overview.
 private const val DEFAULT_SERVICE_INDEX_URL = "https://api.nuget.org/v3/index.json"
 private const val REGISTRATIONS_BASE_URL_TYPE = "RegistrationsBaseUrl/3.6.0"
 
