@@ -122,15 +122,6 @@ class ExtensionsTest : WordSpec({
         tempDir.safeDeleteRecursively()
     }
 
-    "File.searchUpwardsForSubdirectory" should {
-        "find the root Git directory" {
-            val gitRoot = File(".").searchUpwardsForSubdirectory(".git")
-
-            gitRoot.shouldNotBeNull()
-            gitRoot shouldBe File("..").absoluteFile.normalize()
-        }
-    }
-
     "File.searchUpwardsForFile" should {
         "find the README.md file case insensitive" {
             val readmeFile = File(".").searchUpwardsForFile("ReadMe.MD", true)
@@ -150,6 +141,15 @@ class ExtensionsTest : WordSpec({
             val readmeFile = File(".").searchUpwardsForFile("ReadMe.MD", false)
 
             readmeFile.shouldBeNull()
+        }
+    }
+
+    "File.searchUpwardsForSubdirectory" should {
+        "find the root Git directory" {
+            val gitRoot = File(".").searchUpwardsForSubdirectory(".git")
+
+            gitRoot.shouldNotBeNull()
+            gitRoot shouldBe File("..").absoluteFile.normalize()
         }
     }
 
