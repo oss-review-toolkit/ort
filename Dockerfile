@@ -1,3 +1,5 @@
+# syntax = docker/dockerfile:experimental
+
 # Copyright (C) 2020 Bosch Software Innovations GmbH
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -31,7 +33,8 @@ COPY . /usr/local/src/ort
 WORKDIR /usr/local/src/ort
 
 # Gradle build.
-RUN scripts/import_proxy_certs.sh && \
+RUN --mount=type=cache,target=/root/.gradle/ \
+    scripts/import_proxy_certs.sh && \
     scripts/set_gradle_proxy.sh && \
     sed -i -r 's,(^distributionUrl=)(.+)-all\.zip$,\1\2-bin.zip,' gradle/wrapper/gradle-wrapper.properties && \
     ./gradlew --no-daemon --stacktrace :cli:distTar
@@ -68,7 +71,8 @@ ENV DEBIAN_FRONTEND=noninteractive \
     PATH="$PATH:$HOME/.local/bin:$FLUTTER_HOME/bin:$FLUTTER_HOME/bin/cache/dart-sdk/bin:$GOPATH/bin:/opt/go/bin"
 
 # Apt install commands.
-RUN apt-get update && \
+RUN --mount=type=cache,target=/var/cache/apt --mount=type=cache,target=/var/lib/apt \
+    apt-get update && \
     apt-get install -y --no-install-recommends gnupg && \
     echo 'Acquire::https::dl.bintray.com::Verify-Peer "false";' | tee -a /etc/apt/apt.conf.d/00sbt && \
     echo "deb https://dl.bintray.com/sbt/debian /" | tee -a /etc/apt/sources.list.d/sbt.list && \
