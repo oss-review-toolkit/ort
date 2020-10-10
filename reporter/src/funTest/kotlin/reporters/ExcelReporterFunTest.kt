@@ -19,15 +19,14 @@
 
 package org.ossreviewtoolkit.reporter.reporters
 
-import bad.robot.excel.matchers.WorkbookMatcher.sameWorkbook
-
 import io.kotest.core.spec.style.WordSpec
+import io.kotest.inspectors.forAll
+import io.kotest.matchers.collections.shouldContainExactly
+import io.kotest.matchers.shouldBe
 
 import java.io.File
 
 import org.apache.poi.ss.usermodel.WorkbookFactory
-
-import org.hamcrest.MatcherAssert.assertThat
 
 import org.ossreviewtoolkit.reporter.ReporterInput
 import org.ossreviewtoolkit.utils.ORT_NAME
@@ -40,13 +39,43 @@ class ExcelReporterFunTest : WordSpec({
             val ortResult = readOrtResult(
                 "../scanner/src/funTest/assets/file-counter-expected-output-for-analyzer-result.yml"
             )
-            val sheet = ExcelReporter().generateReport(ReporterInput(ortResult), outputDir).single()
-            val actualWorkbook = WorkbookFactory.create(sheet)
 
-            val expectedFile = File("src/funTest/assets/file-counter-expected-scan-report.xlsx")
-            val expectedWorkbook = WorkbookFactory.create(expectedFile)
+            val report = ExcelReporter().generateReport(ReporterInput(ortResult), outputDir).single()
+            val actualWorkbook = WorkbookFactory.create(report)
+            val actualSheetNames = actualWorkbook.sheetIterator().asSequence().map { it.sheetName }.toList()
 
-            assertThat(actualWorkbook, sameWorkbook(expectedWorkbook))
+            val asset = File("src/funTest/assets/file-counter-expected-scan-report.xlsx")
+            val expectedWorkbook = WorkbookFactory.create(asset)
+            val expectedSheetNames = expectedWorkbook.sheetIterator().asSequence().map { it.sheetName }.toList()
+
+            actualSheetNames shouldContainExactly expectedSheetNames
+            actualSheetNames.map { "Sheet" to it }.forAll { (_, sheetName) ->
+                val actualSheet = actualWorkbook.getSheet(sheetName)
+                val actualRowNums = actualSheet.rowIterator().asSequence().map { it.rowNum }.toList()
+
+                val expectedSheet = expectedWorkbook.getSheet(sheetName)
+                val expectedRowNums = expectedSheet.rowIterator().asSequence().map { it.rowNum }.toList()
+
+                actualRowNums shouldContainExactly expectedRowNums
+                actualRowNums.map { "Row" to it }.forAll { (_, rowNum) ->
+                    val actualRow = actualSheet.getRow(rowNum)
+                    val actualColumnIndices = actualRow.cellIterator().asSequence().map { it.columnIndex }.toList()
+
+                    val expectedRow = expectedSheet.getRow(rowNum)
+                    val expectedColumnIndices = expectedRow.cellIterator().asSequence().map { it.columnIndex }.toList()
+
+                    actualColumnIndices shouldContainExactly expectedColumnIndices
+                    actualColumnIndices.map { Triple(sheetName, rowNum, it) }.forAll { (_, _, columnIndex) ->
+                        val actualCell = actualRow.getCell(columnIndex)
+                        val expectedCell = expectedRow.getCell(columnIndex)
+
+                        actualCell.cellTypeEnum shouldBe expectedCell.cellTypeEnum
+                        actualCell.stringCellValue shouldBe expectedCell.stringCellValue
+                        actualCell.cellStyle.fontIndex shouldBe expectedCell.cellStyle.fontIndex
+                        actualCell.cellStyle.fillBackgroundColor shouldBe expectedCell.cellStyle.fillBackgroundColor
+                    }
+                }
+            }
         }
     }
 })
