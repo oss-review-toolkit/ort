@@ -57,16 +57,6 @@ sourceSets.named("main") {
 repositories {
     exclusiveContent {
         forRepository {
-            maven("http://www.robotooling.com/maven/")
-        }
-
-        filter {
-            includeGroup("bad.robot")
-        }
-    }
-
-    exclusiveContent {
-        forRepository {
             maven("https://download.eclipse.org/antenna/releases/")
         }
 
@@ -120,7 +110,4 @@ dependencies {
     // This is required to not depend on the version of Apache Xalan bundled with the JDK. Otherwise the formatting of
     // the HTML generated in StaticHtmlReporter is slightly different with different Java versions.
     implementation("xalan:xalan:$xalanVersion")
-
-    funTestImplementation("bad.robot:simple-excel:$simpleExcelVersion")
-    funTestImplementation("org.hamcrest:hamcrest-core:$hamcrestCoreVersion")
 }
