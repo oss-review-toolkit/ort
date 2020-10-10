@@ -35,7 +35,7 @@ import org.ossreviewtoolkit.utils.test.readOrtResult
 
 class ExcelReporterFunTest : WordSpec({
     "ExcelReporter" should {
-        "successfully export to an Excel sheet".config(enabled = false) {
+        "successfully export to an Excel sheet" {
             val outputDir = createTempDir(ORT_NAME, javaClass.simpleName).apply { deleteOnExit() }
             val ortResult = readOrtResult(
                 "../scanner/src/funTest/assets/file-counter-expected-output-for-analyzer-result.yml"
