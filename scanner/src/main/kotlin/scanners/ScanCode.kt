@@ -118,7 +118,7 @@ class ScanCode(
         }
     }
 
-    override val scannerVersion = "3.2.1-rc2"
+    override val expectedVersion = "3.2.1-rc2"
     override val resultFileExt = "json"
 
     private val scanCodeConfiguration = config.options?.get("ScanCode").orEmpty()
@@ -155,7 +155,7 @@ class ScanCode(
     }
 
     override fun bootstrap(): File {
-        val versionWithoutHypen = scannerVersion.replace("-", "")
+        val versionWithoutHypen = expectedVersion.replace("-", "")
 
         val archive = when {
             // Use the .zip file despite it being slightly larger than the .tar.gz file here as the latter for some
@@ -186,7 +186,7 @@ class ScanCode(
             val scannerArchive = createTempFile(ORT_NAME, "$scannerName-${url.substringAfterLast("/")}")
             scannerArchive.sink().buffer().use { it.writeAll(body.source()) }
 
-            val unpackDir = createTempDir(ORT_NAME, "$scannerName-$scannerVersion").apply { deleteOnExit() }
+            val unpackDir = createTempDir(ORT_NAME, "$scannerName-$expectedVersion").apply { deleteOnExit() }
 
             log.info { "Unpacking '$scannerArchive' to '$unpackDir'... " }
             scannerArchive.unpack(unpackDir)

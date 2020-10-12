@@ -52,7 +52,7 @@ class Askalono(name: String, config: ScannerConfiguration) : LocalScanner(name, 
         override fun create(config: ScannerConfiguration) = Askalono(scannerName, config)
     }
 
-    override val scannerVersion = "0.4.3"
+    override val expectedVersion = "0.4.3"
     override val resultFileExt = "txt"
 
     override fun command(workingDir: File?) =
@@ -71,7 +71,7 @@ class Askalono(name: String, config: ScannerConfiguration) : LocalScanner(name, 
         }
 
         val archive = "askalono-$platform.zip"
-        val url = "https://github.com/amzn/askalono/releases/download/$scannerVersion/$archive"
+        val url = "https://github.com/amzn/askalono/releases/download/$expectedVersion/$archive"
 
         log.info { "Downloading $scannerName from $url... " }
 
@@ -88,7 +88,7 @@ class Askalono(name: String, config: ScannerConfiguration) : LocalScanner(name, 
                 log.info { "Retrieved $scannerName from local cache." }
             }
 
-            val unpackDir = createTempDir(ORT_NAME, "$scannerName-$scannerVersion").apply { deleteOnExit() }
+            val unpackDir = createTempDir(ORT_NAME, "$scannerName-$expectedVersion").apply { deleteOnExit() }
 
             log.info { "Unpacking '$archive' to '$unpackDir'... " }
             body.bytes().unpackZip(unpackDir)

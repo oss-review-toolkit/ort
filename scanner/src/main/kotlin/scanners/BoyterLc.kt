@@ -59,7 +59,7 @@ class BoyterLc(name: String, config: ScannerConfiguration) : LocalScanner(name, 
         )
     }
 
-    override val scannerVersion = "1.3.1"
+    override val expectedVersion = "1.3.1"
     override val resultFileExt = "json"
 
     override fun command(workingDir: File?) =
@@ -77,8 +77,8 @@ class BoyterLc(name: String, config: ScannerConfiguration) : LocalScanner(name, 
             else -> throw IllegalArgumentException("Unsupported operating system.")
         }
 
-        val archive = "lc-$scannerVersion-$platform.zip"
-        val url = "https://github.com/boyter/lc/releases/download/v$scannerVersion/$archive"
+        val archive = "lc-$expectedVersion-$platform.zip"
+        val url = "https://github.com/boyter/lc/releases/download/v$expectedVersion/$archive"
 
         log.info { "Downloading $scannerName from $url... " }
 
@@ -95,7 +95,7 @@ class BoyterLc(name: String, config: ScannerConfiguration) : LocalScanner(name, 
                 log.info { "Retrieved $scannerName from local cache." }
             }
 
-            val unpackDir = createTempDir(ORT_NAME, "$scannerName-$scannerVersion").apply { deleteOnExit() }
+            val unpackDir = createTempDir(ORT_NAME, "$scannerName-$expectedVersion").apply { deleteOnExit() }
 
             log.info { "Unpacking '$archive' to '$unpackDir'... " }
             body.bytes().unpackZip(unpackDir)
