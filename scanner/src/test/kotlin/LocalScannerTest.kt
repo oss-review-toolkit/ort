@@ -101,7 +101,7 @@ private fun createScanner(config: ScannerConfiguration): LocalScanner =
         override val resultFileExt: String
             get() = "xml"
 
-        override val scannerVersion: String
+        override val expectedVersion: String
             get() = SCANNER_VERSION
 
         override fun getConfiguration(): String = "someConfig"
