@@ -450,7 +450,7 @@ Currently, the following report formats are supported (reporter names are case-i
 # System requirements
 
 ORT is being continuously used on Linux, Windows and macOS by the
-[core development team](https://github.com/orgs/oss-review-toolkit/teams/core-devs), so these operating systems are
+[core development team](https://github.com/orgs/oss-review-toolkit/people), so these operating systems are
 considered to be well supported.
 
 To run the ORT binaries (also see [Installation from binaries](#from-binaries)) at least a Java Runtime Environment
