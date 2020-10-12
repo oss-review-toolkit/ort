@@ -35,11 +35,31 @@ import org.ossreviewtoolkit.utils.storage.FileStorage
  */
 @JsonTypeInfo(use = JsonTypeInfo.Id.MINIMAL_CLASS)
 @JsonSubTypes(
-    Type(PostgresStorageConfiguration::class),
+    Type(ClearlyDefinedStorageConfiguration::class),
     Type(FileBasedStorageConfiguration::class),
-    Type(ClearlyDefinedStorageConfiguration::class)
+    Type(PostgresStorageConfiguration::class)
 )
 sealed class ScanStorageConfiguration
+
+/**
+ * The configuration model of a storage based on ClearlyDefined.
+ */
+data class ClearlyDefinedStorageConfiguration(
+    /**
+     * The URL of the ClearlyDefined server.
+     */
+    val serverUrl: String
+) : ScanStorageConfiguration()
+
+/**
+ * The configuration model of a file based storage.
+ */
+data class FileBasedStorageConfiguration(
+    /**
+     * The configuration of the [FileStorage] used to store the files.
+     */
+    val backend: FileStorageConfiguration
+) : ScanStorageConfiguration()
 
 /**
  * A class to hold the configuration for using Postgres as a storage.
@@ -94,24 +114,4 @@ data class PostgresStorageConfiguration(
      * TODO: Make additional parameters configurable, see:
      *       https://jdbc.postgresql.org/documentation/head/connect.html
      */
-) : ScanStorageConfiguration()
-
-/**
- * The configuration model of a file based storage.
- */
-data class FileBasedStorageConfiguration(
-    /**
-     * The configuration of the [FileStorage] used to store the files.
-     */
-    val backend: FileStorageConfiguration
-) : ScanStorageConfiguration()
-
-/**
- * The configuration model of a storage based on ClearlyDefined.
- */
-data class ClearlyDefinedStorageConfiguration(
-    /**
-     * The URL of the ClearlyDefined server.
-     */
-    val serverUrl: String
 ) : ScanStorageConfiguration()
