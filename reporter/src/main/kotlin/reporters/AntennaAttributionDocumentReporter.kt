@@ -34,6 +34,7 @@ import org.ossreviewtoolkit.reporter.Reporter
 import org.ossreviewtoolkit.reporter.ReporterInput
 import org.ossreviewtoolkit.reporter.utils.AttributionDocumentPdfModel
 import org.ossreviewtoolkit.spdx.SpdxLicense
+import org.ossreviewtoolkit.utils.CopyrightStatementsProcessor
 import org.ossreviewtoolkit.utils.safeDeleteRecursively
 import org.ossreviewtoolkit.utils.toHexString
 
@@ -238,12 +239,12 @@ class AntennaAttributionDocumentReporter : Reporter {
         return outputFiles
     }
 
-    private fun createCopyrightStatement(resolvedLicense: ResolvedLicenseInfo) =
-        resolvedLicense.flatMapTo(sortedSetOf()) { license ->
-            license.locations.flatMap { location ->
-                location.copyrights.map { it.statement }
-            }
-        }.joinToString("\n")
+    private fun createCopyrightStatement(resolvedLicense: ResolvedLicenseInfo): String {
+        val copyrights = resolvedLicense.flatMapTo(sortedSetOf()) { it.getCopyrights() }
+        val processedCopyrights = CopyrightStatementsProcessor().process(copyrights)
+
+        return processedCopyrights.processedStatements.keys.joinToString("\n")
+    }
 
     private fun addTemplateToClassPath(url: URL) {
         Thread.currentThread().contextClassLoader = URLClassLoader(arrayOf(url), originalClassLoader)
