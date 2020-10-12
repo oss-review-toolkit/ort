@@ -69,9 +69,9 @@ class ExcelReporterFunTest : WordSpec({
                         val actualCell = actualRow.getCell(columnIndex)
                         val expectedCell = expectedRow.getCell(columnIndex)
 
-                        actualCell.cellTypeEnum shouldBe expectedCell.cellTypeEnum
+                        actualCell.cellType shouldBe expectedCell.cellType
                         actualCell.stringCellValue shouldBe expectedCell.stringCellValue
-                        actualCell.cellStyle.fontIndex shouldBe expectedCell.cellStyle.fontIndex
+                        actualCell.cellStyle.fontIndexAsInt shouldBe expectedCell.cellStyle.fontIndexAsInt
                         actualCell.cellStyle.fillBackgroundColor shouldBe expectedCell.cellStyle.fillBackgroundColor
                     }
                 }
