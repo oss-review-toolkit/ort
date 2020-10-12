@@ -475,7 +475,7 @@ store the data in a [jsonb](https://www.postgresql.org/docs/current/datatype-jso
 
 If you do not want to use SSL set the `sslmode` to `disable`, other possible values are explained in the
 [documentation](https://jdbc.postgresql.org/documentation/head/ssl-client.html). For other supported configuration
-options see [PostgresStorageConfiguration.kt](./model/src/main/kotlin/config/PostgresStorageConfiguration.kt).
+options see [ScanStorageConfiguration.kt](./model/src/main/kotlin/config/ScanStorageConfiguration.kt).
 
 ### ClearlyDefined Storage
 
