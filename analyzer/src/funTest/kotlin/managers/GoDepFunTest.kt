@@ -57,7 +57,8 @@ class GoDepFunTest : WordSpec() {
                     projectsDir.resolve("synthetic/godep-expected-output.yml"),
                     url = normalizeVcsUrl(vcsUrl),
                     revision = vcsRevision,
-                    path = vcsPath
+                    path = vcsPath,
+                    custom = mapOf("<REPLACE_GITHUB_PROJECT>" to "github.com/oss-review-toolkit/ort")
                 )
 
                 result.toYaml() shouldBe expectedResult
@@ -102,7 +103,8 @@ class GoDepFunTest : WordSpec() {
                     projectsDir.resolve("synthetic/glide-expected-output.yml"),
                     url = normalizeVcsUrl(vcsUrl),
                     revision = vcsRevision,
-                    path = vcsPath
+                    path = vcsPath,
+                    custom = mapOf("<REPLACE_GITHUB_PROJECT>" to "github.com/oss-review-toolkit/ort")
                 )
 
                 result.toYaml() shouldBe expectedResult
@@ -118,7 +120,8 @@ class GoDepFunTest : WordSpec() {
                     projectsDir.resolve("synthetic/godeps-expected-output.yml"),
                     url = normalizeVcsUrl(vcsUrl),
                     revision = vcsRevision,
-                    path = vcsPath
+                    path = vcsPath,
+                    custom = mapOf("<REPLACE_GITHUB_PROJECT>" to "github.com/oss-review-toolkit/ort")
                 )
 
                 result.toYaml() shouldBe expectedResult
