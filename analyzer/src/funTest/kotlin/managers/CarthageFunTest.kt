@@ -46,7 +46,8 @@ class CarthageFunTest : StringSpec() {
                 definitionFilePath = "$vcsPath/Cartfile.resolved",
                 path = vcsPath,
                 revision = vcsRevision,
-                url = normalizeVcsUrl(vcsUrl)
+                url = normalizeVcsUrl(vcsUrl),
+                custom = mapOf("<REPLACE_GITHUB_PROJECT>" to "oss-review-toolkit:ort")
             )
 
             val result = createCarthage().resolveSingleProject(cartfileResolved)
