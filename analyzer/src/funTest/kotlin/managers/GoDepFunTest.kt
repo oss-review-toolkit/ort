@@ -45,6 +45,9 @@ class GoDepFunTest : WordSpec() {
     private val vcsUrl = vcsDir.getRemoteUrl()
     private val vcsRevision = vcsDir.getRevision()
 
+    private val normalizedVcsUrl = normalizeVcsUrl(vcsUrl)
+    private val gitHubProject = normalizedVcsUrl.substringAfter("://").substringBefore(".git")
+
     init {
         "GoDep" should {
             "resolve dependencies from a lockfile correctly" {
@@ -55,10 +58,10 @@ class GoDepFunTest : WordSpec() {
 
                 val expectedResult = patchExpectedResult(
                     projectsDir.resolve("synthetic/godep-expected-output.yml"),
-                    url = normalizeVcsUrl(vcsUrl),
+                    url = normalizedVcsUrl,
                     revision = vcsRevision,
                     path = vcsPath,
-                    custom = mapOf("<REPLACE_GITHUB_PROJECT>" to "github.com/oss-review-toolkit/ort")
+                    custom = mapOf("<REPLACE_GITHUB_PROJECT>" to gitHubProject)
                 )
 
                 result.toYaml() shouldBe expectedResult
@@ -101,10 +104,10 @@ class GoDepFunTest : WordSpec() {
 
                 val expectedResult = patchExpectedResult(
                     projectsDir.resolve("synthetic/glide-expected-output.yml"),
-                    url = normalizeVcsUrl(vcsUrl),
+                    url = normalizedVcsUrl,
                     revision = vcsRevision,
                     path = vcsPath,
-                    custom = mapOf("<REPLACE_GITHUB_PROJECT>" to "github.com/oss-review-toolkit/ort")
+                    custom = mapOf("<REPLACE_GITHUB_PROJECT>" to gitHubProject)
                 )
 
                 result.toYaml() shouldBe expectedResult
@@ -118,10 +121,10 @@ class GoDepFunTest : WordSpec() {
 
                 val expectedResult = patchExpectedResult(
                     projectsDir.resolve("synthetic/godeps-expected-output.yml"),
-                    url = normalizeVcsUrl(vcsUrl),
+                    url = normalizedVcsUrl,
                     revision = vcsRevision,
                     path = vcsPath,
-                    custom = mapOf("<REPLACE_GITHUB_PROJECT>" to "github.com/oss-review-toolkit/ort")
+                    custom = mapOf("<REPLACE_GITHUB_PROJECT>" to gitHubProject)
                 )
 
                 result.toYaml() shouldBe expectedResult

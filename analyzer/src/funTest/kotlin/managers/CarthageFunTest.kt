@@ -37,6 +37,9 @@ class CarthageFunTest : StringSpec() {
     private val vcsUrl = vcsDir.getRemoteUrl()
     private val vcsRevision = vcsDir.getRevision()
 
+    private val normalizedVcsUrl = normalizeVcsUrl(vcsUrl)
+    private val gitHubProject = normalizedVcsUrl.split('/', '.').dropLast(1).takeLast(2).joinToString(":")
+
     init {
         "Project dependencies are detected correctly" {
             val cartfileResolved = projectDir.resolve("Cartfile.resolved")
@@ -46,8 +49,8 @@ class CarthageFunTest : StringSpec() {
                 definitionFilePath = "$vcsPath/Cartfile.resolved",
                 path = vcsPath,
                 revision = vcsRevision,
-                url = normalizeVcsUrl(vcsUrl),
-                custom = mapOf("<REPLACE_GITHUB_PROJECT>" to "oss-review-toolkit:ort")
+                url = normalizedVcsUrl,
+                custom = mapOf("<REPLACE_GITHUB_PROJECT>" to gitHubProject)
             )
 
             val result = createCarthage().resolveSingleProject(cartfileResolved)
