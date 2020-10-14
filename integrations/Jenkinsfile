@@ -178,6 +178,10 @@ pipeline {
                 }
             }
 
+            environment {
+                HOME = "${env.WORKSPACE}@tmp"
+            }
+
             steps {
                 sh '''
                     if [ "$STACKTRACE" = "true" ]; then
