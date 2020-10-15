@@ -28,6 +28,9 @@ import java.nio.file.Files
 import java.nio.file.Paths
 import java.nio.file.StandardOpenOption
 
+import org.apache.poi.ss.usermodel.Cell
+import org.apache.poi.ss.usermodel.Row
+import org.apache.poi.ss.usermodel.Sheet
 import org.apache.poi.ss.usermodel.WorkbookFactory
 import org.apache.poi.ss.util.CellReference
 
@@ -55,41 +58,35 @@ class ExcelReporterFunTest : WordSpec({
             val expectedSheetNames = expectedWorkbook.sheetIterator().asSequence().map { it.sheetName }.toList()
 
             actualSheetNames shouldContainExactly expectedSheetNames
+
             actualSheetNames.map { Address(it) }.forAll { sheetAddress ->
                 val actualSheet = actualWorkbook.getSheet(sheetAddress.sheet)
-                val actualRowNums = actualSheet.rowIterator().asSequence().map {
-                    sheetAddress.copy(row = it.rowNum)
-                }.toList()
+                val actualAddresses = mutableSetOf<Address>()
+                actualSheet.rowIterator().asSequence().forEach { row ->
+                    actualSheet.uniqueCells(row).mapTo(actualAddresses) { cell ->
+                        sheetAddress.copy(row = cell.rowIndex, column = cell.columnIndex)
+                    }
+                }
 
                 val expectedSheet = expectedWorkbook.getSheet(sheetAddress.sheet)
-                val expectedRowNums = expectedSheet.rowIterator().asSequence().map {
-                    sheetAddress.copy(row = it.rowNum)
-                }.toList()
-
-                actualRowNums shouldContainExactly expectedRowNums
-                actualRowNums.forAll { rowAddress ->
-                    // The non-null assertion is fine as we pass a row in the outer loop.
-                    val actualRow = actualSheet.getRow(rowAddress.row!!)
-                    val actualColumnIndices = actualRow.cellIterator().asSequence().map {
-                        rowAddress.copy(column = it.columnIndex)
-                    }.toList()
-
-                    val expectedRow = expectedSheet.getRow(rowAddress.row)
-                    val expectedColumnIndices = expectedRow.cellIterator().asSequence().map {
-                        rowAddress.copy(column = it.columnIndex)
-                    }.toList()
-
-                    actualColumnIndices shouldContainExactly expectedColumnIndices
-                    actualColumnIndices.forAll { columnAddress ->
-                        // The non-null assertion is fine as we pass a column in the outer loop.
-                        val actualCell = actualRow.getCell(columnAddress.column!!)
-                        val expectedCell = expectedRow.getCell(columnAddress.column)
-
-                        actualCell.cellType shouldBe expectedCell.cellType
-                        actualCell.stringCellValue shouldBe expectedCell.stringCellValue
-                        actualCell.cellStyle.fontIndexAsInt shouldBe expectedCell.cellStyle.fontIndexAsInt
-                        actualCell.cellStyle.fillBackgroundColor shouldBe expectedCell.cellStyle.fillBackgroundColor
+                val expectedAddresses = mutableSetOf<Address>()
+                expectedSheet.rowIterator().asSequence().forEach { row ->
+                    expectedSheet.uniqueCells(row).mapTo(expectedAddresses) { cell ->
+                        sheetAddress.copy(row = cell.rowIndex, column = cell.columnIndex)
                     }
+                }
+
+                actualAddresses shouldContainExactly expectedAddresses
+
+                actualAddresses.forAll { address ->
+                    // The non-null assertions are fine as we pass a row / column in the outer loop.
+                    val actualCell = actualSheet.getRow(address.row!!).getCell(address.column!!)
+                    val expectedCell = expectedSheet.getRow(address.row).getCell(address.column)
+
+                    actualCell.cellType shouldBe expectedCell.cellType
+                    actualCell.stringCellValue shouldBe expectedCell.stringCellValue
+                    actualCell.cellStyle.fontIndexAsInt shouldBe expectedCell.cellStyle.fontIndexAsInt
+                    actualCell.cellStyle.fillBackgroundColor shouldBe expectedCell.cellStyle.fillBackgroundColor
                 }
             }
         }
@@ -104,3 +101,10 @@ private data class Address(val sheet: String, val row: Int? = null, val column: 
             column?.let { "column=${CellReference.convertNumToColString(column)}" }
         ).joinToString(prefix = "${javaClass.simpleName}(", postfix = ")")
 }
+
+private fun Sheet.uniqueCells(row: Row): Sequence<Cell> =
+    row.cellIterator().asSequence().distinctBy { cell ->
+        mergedRegions.find { range ->
+            range.isInRange(cell)
+        }?.first() ?: cell
+    }
