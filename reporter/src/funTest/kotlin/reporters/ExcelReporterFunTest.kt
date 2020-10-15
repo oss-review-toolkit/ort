@@ -24,7 +24,9 @@ import io.kotest.inspectors.forAll
 import io.kotest.matchers.collections.shouldContainExactly
 import io.kotest.matchers.shouldBe
 
-import java.io.File
+import java.nio.file.Files
+import java.nio.file.Paths
+import java.nio.file.StandardOpenOption
 
 import org.apache.poi.ss.usermodel.WorkbookFactory
 
@@ -44,8 +46,11 @@ class ExcelReporterFunTest : WordSpec({
             val actualWorkbook = WorkbookFactory.create(report)
             val actualSheetNames = actualWorkbook.sheetIterator().asSequence().map { it.sheetName }.toList()
 
-            val asset = File("src/funTest/assets/file-counter-expected-scan-report.xlsx")
-            val expectedWorkbook = WorkbookFactory.create(asset)
+            // Open the sheet in shared read mode so Excel can have the file opened in the background.
+            val path = Paths.get("src/funTest/assets/file-counter-expected-scan-report.xlsx")
+            val expectedWorkbook = Files.newInputStream(path, StandardOpenOption.READ).use {
+                WorkbookFactory.create(it)
+            }
             val expectedSheetNames = expectedWorkbook.sheetIterator().asSequence().map { it.sheetName }.toList()
 
             actualSheetNames shouldContainExactly expectedSheetNames
