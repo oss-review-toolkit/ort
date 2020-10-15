@@ -29,6 +29,7 @@ import java.nio.file.Paths
 import java.nio.file.StandardOpenOption
 
 import org.apache.poi.ss.usermodel.WorkbookFactory
+import org.apache.poi.ss.util.CellReference
 
 import org.ossreviewtoolkit.reporter.ReporterInput
 import org.ossreviewtoolkit.utils.ORT_NAME
@@ -54,25 +55,35 @@ class ExcelReporterFunTest : WordSpec({
             val expectedSheetNames = expectedWorkbook.sheetIterator().asSequence().map { it.sheetName }.toList()
 
             actualSheetNames shouldContainExactly expectedSheetNames
-            actualSheetNames.map { "Sheet" to it }.forAll { (_, sheetName) ->
-                val actualSheet = actualWorkbook.getSheet(sheetName)
-                val actualRowNums = actualSheet.rowIterator().asSequence().map { it.rowNum }.toList()
+            actualSheetNames.map { Address(it) }.forAll { sheetAddress ->
+                val actualSheet = actualWorkbook.getSheet(sheetAddress.sheet)
+                val actualRowNums = actualSheet.rowIterator().asSequence().map {
+                    sheetAddress.copy(row = it.rowNum)
+                }.toList()
 
-                val expectedSheet = expectedWorkbook.getSheet(sheetName)
-                val expectedRowNums = expectedSheet.rowIterator().asSequence().map { it.rowNum }.toList()
+                val expectedSheet = expectedWorkbook.getSheet(sheetAddress.sheet)
+                val expectedRowNums = expectedSheet.rowIterator().asSequence().map {
+                    sheetAddress.copy(row = it.rowNum)
+                }.toList()
 
                 actualRowNums shouldContainExactly expectedRowNums
-                actualRowNums.map { "Row" to it }.forAll { (_, rowNum) ->
-                    val actualRow = actualSheet.getRow(rowNum)
-                    val actualColumnIndices = actualRow.cellIterator().asSequence().map { it.columnIndex }.toList()
+                actualRowNums.forAll { rowAddress ->
+                    // The non-null assertion is fine as we pass a row in the outer loop.
+                    val actualRow = actualSheet.getRow(rowAddress.row!!)
+                    val actualColumnIndices = actualRow.cellIterator().asSequence().map {
+                        rowAddress.copy(column = it.columnIndex)
+                    }.toList()
 
-                    val expectedRow = expectedSheet.getRow(rowNum)
-                    val expectedColumnIndices = expectedRow.cellIterator().asSequence().map { it.columnIndex }.toList()
+                    val expectedRow = expectedSheet.getRow(rowAddress.row)
+                    val expectedColumnIndices = expectedRow.cellIterator().asSequence().map {
+                        rowAddress.copy(column = it.columnIndex)
+                    }.toList()
 
                     actualColumnIndices shouldContainExactly expectedColumnIndices
-                    actualColumnIndices.map { Triple(sheetName, rowNum, it) }.forAll { (_, _, columnIndex) ->
-                        val actualCell = actualRow.getCell(columnIndex)
-                        val expectedCell = expectedRow.getCell(columnIndex)
+                    actualColumnIndices.forAll { columnAddress ->
+                        // The non-null assertion is fine as we pass a column in the outer loop.
+                        val actualCell = actualRow.getCell(columnAddress.column!!)
+                        val expectedCell = expectedRow.getCell(columnAddress.column)
 
                         actualCell.cellType shouldBe expectedCell.cellType
                         actualCell.stringCellValue shouldBe expectedCell.stringCellValue
@@ -84,3 +95,12 @@ class ExcelReporterFunTest : WordSpec({
         }
     }
 })
+
+private data class Address(val sheet: String, val row: Int? = null, val column: Int? = null) {
+    override fun toString() =
+        listOfNotNull(
+            "sheet=$sheet",
+            row?.let { "row=${row + 1}" },
+            column?.let { "column=${CellReference.convertNumToColString(column)}" }
+        ).joinToString(prefix = "${javaClass.simpleName}(", postfix = ")")
+}
