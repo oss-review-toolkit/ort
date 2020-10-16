@@ -362,11 +362,11 @@ queried. Only if all of these steps fail, the scanner has to actually process th
 When storing a newly generated scan result the scanner invokes all the storages declared as writers. The storage
 operation is considered successful if all writer storages could successfully persist the scan result.
 
-The configuration of storage backends is located in the ORT configuration file. (For the general structure of this file
-and the set of options available refer to the [reference configuration](./model/src/test/assets/reference.conf).)
-The file has a section named _storages_ that lists all the storage backends and assigns them a name. Each storage 
-backend is of a specific type and needs to be configured with type-specific properties. The different types of storage
-backends supported by ORT are described below.
+The configuration of storage backends is located in the [ORT configuration file](#ort-configuration-file). (For the
+general structure of this file and the set of options available refer to the
+[reference configuration](./model/src/test/assets/reference.conf).) The file has a section named _storages_ that lists
+all the storage backends and assigns them a name. Each storage backend is of a specific type and needs to be configured
+with type-specific properties. The different types of storage backends supported by ORT are described below.
 
 After the declaration of the storage backends, the configuration file has to specify which ones of them the
 scanner should use for looking up existing scan results or to store new results. This is done in two list properties
