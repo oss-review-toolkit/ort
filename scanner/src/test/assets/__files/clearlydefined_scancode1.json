@@ -14,7 +14,7 @@
       }
     },
     "schemaVersion": "3.2.2",
-    "toolVersion": "3.0.2",
+    "toolVersion": "3.2.2",
     "contentType": "application/json",
     "releaseDate": "2016-03-24T18:20:52.000Z",
     "processedAt": "2020-09-17T10:36:13.196Z"
@@ -23,7 +23,7 @@
     "headers": [
       {
         "tool_name": "scancode-toolkit",
-        "tool_version": "3.0.2",
+        "tool_version": "3.2.2",
         "options": {
           "input": "/tmp/cd-7K9dSt/commons-configuration",
           "--classify": true,
@@ -132,10 +132,6 @@
           "count": 1
         },
         {
-          "value": "Oliver Heger",
-          "count": 1
-        },
-        {
           "value": "Ralph Goers",
           "count": 1
         }
@@ -185,127 +181,7 @@
           "primary_language": "Java",
           "description": "Apache Commons Configuration\nTools to assist in the reading of configuration/preferences files in\n        various formats",
           "release_date": null,
-          "parties": [
-            {
-              "type": "person",
-              "role": "developper",
-              "name": "Daniel Rall",
-              "email": "dlr@finemaltcoding.com",
-              "url": null
-            },
-            {
-              "type": "person",
-              "role": "developper",
-              "name": "Jason van Zyl",
-              "email": "jason@zenplex.com",
-              "url": null
-            },
-            {
-              "type": "person",
-              "role": "developper",
-              "name": "Martin Poeschl",
-              "email": "mpoeschl@marmot.at",
-              "url": null
-            },
-            {
-              "type": "person",
-              "role": "developper",
-              "name": "dIon Gillard",
-              "email": "dion@multitask.com.au",
-              "url": null
-            },
-            {
-              "type": "person",
-              "role": "developper",
-              "name": "Henning P. Schmiedehausen",
-              "email": "hps@intermeta.de",
-              "url": null
-            },
-            {
-              "type": "person",
-              "role": "developper",
-              "name": "Eric Pugh",
-              "email": "epugh@upstate.com",
-              "url": null
-            },
-            {
-              "type": "person",
-              "role": "developper",
-              "name": "Brian E. Dunbar",
-              "email": "bdunbar@dunbarconsulting.org",
-              "url": null
-            },
-            {
-              "type": "person",
-              "role": "developper",
-              "name": "Emmanuel Bourg",
-              "email": "ebourg@apache.org",
-              "url": null
-            },
-            {
-              "type": "person",
-              "role": "developper",
-              "name": "Oliver Heger",
-              "email": "oheger@apache.org",
-              "url": null
-            },
-            {
-              "type": "person",
-              "role": "developper",
-              "name": "Jörg Schaible",
-              "email": "joerg.schaible@gmx.de",
-              "url": null
-            },
-            {
-              "type": "person",
-              "role": "developper",
-              "name": "Ralph Goers",
-              "email": "rgoers@apache.org",
-              "url": null
-            },
-            {
-              "type": "person",
-              "role": "contributor",
-              "name": "Konstantin Shaposhnikov",
-              "email": "ksh@scand.com",
-              "url": null
-            },
-            {
-              "type": "person",
-              "role": "contributor",
-              "name": "Jamie M. Guillemette",
-              "email": "JMGuillemette@gmail.com",
-              "url": null
-            },
-            {
-              "type": "person",
-              "role": "contributor",
-              "name": "Jorge Ferrer",
-              "email": "jorge.ferrer@gmail.com",
-              "url": null
-            },
-            {
-              "type": "person",
-              "role": "contributor",
-              "name": "Gabriele Garuglieri",
-              "email": "gabriele.garuglieri@infoblu.it",
-              "url": null
-            },
-            {
-              "type": "person",
-              "role": "contributor",
-              "name": "Nicolas De Loof",
-              "email": "nicolas.deloof@gmail.com",
-              "url": null
-            },
-            {
-              "type": "person",
-              "role": "contributor",
-              "name": "Oliver Kopp",
-              "email": "koppdev@gmail.com",
-              "url": null
-            }
-          ],
+          "parties": [],
           "keywords": [],
           "homepage_url": "http://commons.apache.org/proper/commons-configuration/",
           "download_url": null,
@@ -604,179 +480,6 @@
         "date": "2020-09-17",
         "sha1": "ff00caeeb49bd2258fb8e116d165a1631e2b1a4b",
         "md5": "b9b391e3d68542290c9d4c32b824afd6",
-        "mime_type": "text/plain",
-        "file_type": "ASCII text",
-        "programming_language": "Java",
-        "is_binary": false,
-        "is_text": true,
-        "is_archive": false,
-        "is_media": false,
-        "is_source": true,
-        "is_script": false,
-        "licenses": [
-          {
-            "key": "apache-2.0",
-            "score": 100,
-            "name": "Apache License 2.0",
-            "short_name": "Apache 2.0",
-            "category": "Permissive",
-            "is_exception": false,
-            "owner": "Apache Software Foundation",
-            "homepage_url": "http://www.apache.org/licenses/",
-            "text_url": "http://www.apache.org/licenses/LICENSE-2.0",
-            "reference_url": "https://enterprise.dejacode.com/urn/urn:dje:license:apache-2.0",
-            "spdx_license_key": "Apache-2.0",
-            "spdx_url": "https://spdx.org/licenses/Apache-2.0",
-            "start_line": 2,
-            "end_line": 15,
-            "matched_rule": {
-              "identifier": "apache-2.0_12.RULE",
-              "license_expression": "apache-2.0",
-              "licenses": [
-                "apache-2.0"
-              ],
-              "is_license_text": false,
-              "is_license_notice": true,
-              "is_license_reference": false,
-              "is_license_tag": false,
-              "matcher": "2-aho",
-              "rule_length": 120,
-              "matched_length": 120,
-              "match_coverage": 100,
-              "rule_relevance": 100
-            },
-            "matched_text": "Licensed to the Apache Software Foundation (ASF) under one or more\n * contributor license agreements.  See the NOTICE file distributed with\n * this work for additional information regarding copyright ownership.\n * The ASF licenses this file to You under the Apache License, Version 2.0\n * (the \"License\"); you may not use this file except in compliance with\n * the License.  You may obtain a copy of the License at\n *\n *     http://www.apache.org/licenses/LICENSE-2.0\n *\n * Unless required by applicable law or agreed to in writing, software\n * distributed under the License is distributed on an \"AS IS\" BASIS,\n * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\n * See the License for the specific language governing permissions and\n * limitations under the License."
-          }
-        ],
-        "license_expressions": [
-          "apache-2.0"
-        ],
-        "holders": [],
-        "copyrights": [],
-        "authors": [],
-        "packages": [],
-        "emails": [],
-        "urls": [
-          {
-            "url": "http://www.apache.org/licenses/LICENSE-2.0",
-            "start_line": 9,
-            "end_line": 9
-          }
-        ],
-        "is_legal": false,
-        "is_manifest": false,
-        "is_readme": false,
-        "is_top_level": false,
-        "is_key_file": false,
-        "is_generated": false,
-        "is_license_text": false,
-        "files_count": 0,
-        "dirs_count": 0,
-        "size_count": 0,
-        "scan_errors": []
-      },
-      {
-        "path": "src/main/java/org/apache/commons/configuration2/tree/DefaultExpressionEngine.java",
-        "type": "file",
-        "name": "DefaultExpressionEngine.java",
-        "base_name": "DefaultExpressionEngine",
-        "extension": ".java",
-        "size": 19005,
-        "date": "2020-09-17",
-        "sha1": "2181b60f29852d5cedea6b4f09508c3f91cf17d8",
-        "md5": "90093976376c9ef7389ed83fa9c57881",
-        "mime_type": "text/plain",
-        "file_type": "ASCII text",
-        "programming_language": "Java",
-        "is_binary": false,
-        "is_text": true,
-        "is_archive": false,
-        "is_media": false,
-        "is_source": true,
-        "is_script": false,
-        "licenses": [
-          {
-            "key": "apache-2.0",
-            "score": 100,
-            "name": "Apache License 2.0",
-            "short_name": "Apache 2.0",
-            "category": "Permissive",
-            "is_exception": false,
-            "owner": "Apache Software Foundation",
-            "homepage_url": "http://www.apache.org/licenses/",
-            "text_url": "http://www.apache.org/licenses/LICENSE-2.0",
-            "reference_url": "https://enterprise.dejacode.com/urn/urn:dje:license:apache-2.0",
-            "spdx_license_key": "Apache-2.0",
-            "spdx_url": "https://spdx.org/licenses/Apache-2.0",
-            "start_line": 2,
-            "end_line": 15,
-            "matched_rule": {
-              "identifier": "apache-2.0_12.RULE",
-              "license_expression": "apache-2.0",
-              "licenses": [
-                "apache-2.0"
-              ],
-              "is_license_text": false,
-              "is_license_notice": true,
-              "is_license_reference": false,
-              "is_license_tag": false,
-              "matcher": "2-aho",
-              "rule_length": 120,
-              "matched_length": 120,
-              "match_coverage": 100,
-              "rule_relevance": 100
-            },
-            "matched_text": "Licensed to the Apache Software Foundation (ASF) under one or more\n * contributor license agreements.  See the NOTICE file distributed with\n * this work for additional information regarding copyright ownership.\n * The ASF licenses this file to You under the Apache License, Version 2.0\n * (the \"License\"); you may not use this file except in compliance with\n * the License.  You may obtain a copy of the License at\n *\n *     http://www.apache.org/licenses/LICENSE-2.0\n *\n * Unless required by applicable law or agreed to in writing, software\n * distributed under the License is distributed on an \"AS IS\" BASIS,\n * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\n * See the License for the specific language governing permissions and\n * limitations under the License."
-          }
-        ],
-        "license_expressions": [
-          "apache-2.0"
-        ],
-        "holders": [],
-        "copyrights": [],
-        "authors": [
-          {
-            "value": "<a href http://commons.apache.org/configuration/team-list.html'> Commons Configuration team",
-            "start_line": 111,
-            "end_line": 113
-          }
-        ],
-        "packages": [],
-        "emails": [],
-        "urls": [
-          {
-            "url": "http://www.apache.org/licenses/LICENSE-2.0",
-            "start_line": 9,
-            "end_line": 9
-          },
-          {
-            "url": "http://commons.apache.org/configuration/team-list.html",
-            "start_line": 112,
-            "end_line": 112
-          }
-        ],
-        "is_legal": false,
-        "is_manifest": false,
-        "is_readme": false,
-        "is_top_level": false,
-        "is_key_file": false,
-        "is_generated": false,
-        "is_license_text": false,
-        "files_count": 0,
-        "dirs_count": 0,
-        "size_count": 0,
-        "scan_errors": []
-      },
-      {
-        "path": "src/main/java/org/apache/commons/configuration2/tree/ExpressionEngine.java",
-        "type": "file",
-        "name": "ExpressionEngine.java",
-        "base_name": "ExpressionEngine",
-        "extension": ".java",
-        "size": 6019,
-        "date": "2020-09-17",
-        "sha1": "bd446378b520095592dcf34c7bd20756e0855b23",
-        "md5": "8c6959180464af368e17f6adae276a34",
         "mime_type": "text/plain",
         "file_type": "ASCII text",
         "programming_language": "Java",

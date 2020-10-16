@@ -64,5 +64,12 @@ data class ScannerDetails(
      */
     fun isCompatible(other: ScannerDetails) =
         name.equals(other.name, ignoreCase = true) && configuration == other.configuration &&
-                Semver(version, Semver.SemverType.LOOSE).diff(other.version) !in MAJOR_MINOR
+                isCompatibleVersion(other.version)
+
+    /**
+     * Check whether the specified [otherVersion] is compatible with the version of this scanner details. For the
+     * comparison the [loose][Semver.SemverType.LOOSE] Semver type is used for maximum compatibility.
+     */
+    fun isCompatibleVersion(otherVersion: String) =
+        Semver(version, Semver.SemverType.LOOSE).diff(otherVersion) !in MAJOR_MINOR
 }
