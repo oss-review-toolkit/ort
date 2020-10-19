@@ -37,6 +37,7 @@ import io.kotest.matchers.ints.shouldBeLessThan
 import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.string.shouldContain
+import io.kotest.matchers.types.shouldBeInstanceOf
 
 import java.net.ServerSocket
 import java.time.Duration
@@ -340,18 +341,6 @@ class ClearlyDefinedStorageTest : WordSpec({
             assertValidResult(storage.read(pkg, details), TEST_PATH_SRC)
         }
 
-        "load existing scan results for an identifier from ClearlyDefined" {
-            stubHarvestTools(
-                wiremock, PACKAGE_URL,
-                listOf(toolUrl(PACKAGE_URL, "scancode", SCANCODE_VERSION))
-            )
-            stubHarvestToolResponse(wiremock, PACKAGE_URL, RESULT_FILE_SRC)
-
-            val storage = ClearlyDefinedStorage(storageConfiguration(wiremock))
-
-            assertValidResult(storage.read(TEST_IDENTIFIER), TEST_PATH_SRC)
-        }
-
         "set correct metadata in the package scan result" {
             val pkg = createTestPackage(withVcsInfo = true)
             stubHarvestTools(
@@ -460,8 +449,9 @@ class ClearlyDefinedStorageTest : WordSpec({
             )
 
             val storage = ClearlyDefinedStorage(storageConfiguration(wiremock))
+            val result = storage.read(pkg, SCANNER_DETAILS)
 
-            assertValidResult(storage.read(pkg, SCANNER_DETAILS))
+            result.shouldBeInstanceOf<Failure<ScanResultContainer>>()
         }
 
         "handle a failure to connect to the server" {
@@ -477,12 +467,81 @@ class ClearlyDefinedStorageTest : WordSpec({
             }
         }
 
-        "deal with identifiers not supported by ClearlyDefined" {
-            val id = TEST_IDENTIFIER.copy(type = "unknown")
+        "load existing scan results for an identifier from ClearlyDefined" {
+            val pattern = "${TEST_IDENTIFIER.namespace} ${TEST_IDENTIFIER.name} ${TEST_IDENTIFIER.version}"
+            val urls = listOf(PACKAGE_URL, SRC_URL, VCS_URL)
+            val body = urls.joinToString(prefix = "[", postfix = "]") { "\"$it\"" }
+            wiremock.stubFor(
+                get(urlPathEqualTo("/definitions"))
+                    .withQueryParam("pattern", equalTo(pattern))
+                    .willReturn(
+                        aResponse().withStatus(200)
+                            .withBody(body)
+                    )
+            )
+            stubHarvestTools(wiremock, PACKAGE_URL, listOf("foo/bar"))
+            stubHarvestTools(wiremock, SRC_URL, listOf(toolUrl(SRC_URL, "scancode", SCANCODE_VERSION)))
+            stubHarvestTools(
+                wiremock, VCS_URL, listOf(
+                    toolUrl(VCS_URL, "scancode", SCANCODE_VERSION),
+                    "some/other/tool"
+                )
+            )
+            stubHarvestToolResponse(wiremock, SRC_URL, RESULT_FILE_SRC)
+            stubHarvestToolResponse(wiremock, VCS_URL, RESULT_FILE_VCS)
 
             val storage = ClearlyDefinedStorage(storageConfiguration(wiremock))
 
-            assertValidResult(storage.read(id), expId = id)
+            assertValidResult(storage.read(TEST_IDENTIFIER), TEST_PATH_SRC, TEST_PATH_VCS)
+        }
+
+        "generate a correct pattern for an identifier without a namespace" {
+            val id = TEST_IDENTIFIER.copy(namespace = "-")
+            val pattern = "${TEST_IDENTIFIER.name} ${TEST_IDENTIFIER.version}"
+            val body = "[\"$SRC_URL\"]"
+            wiremock.stubFor(
+                get(urlPathEqualTo("/definitions"))
+                    .withQueryParam("pattern", equalTo(pattern))
+                    .willReturn(
+                        aResponse().withStatus(200)
+                            .withBody(body)
+                    )
+            )
+            stubHarvestTools(wiremock, SRC_URL, listOf(toolUrl(SRC_URL, "scancode", SCANCODE_VERSION)))
+            stubHarvestToolResponse(wiremock, SRC_URL, RESULT_FILE_SRC)
+
+            val storage = ClearlyDefinedStorage(storageConfiguration(wiremock))
+
+            assertValidResult(storage.read(id), TEST_PATH_SRC, expId = id)
+        }
+
+        "handle an unexpected URL in the search definitions response" {
+            wiremock.stubFor(
+                get(anyUrl())
+                    .willReturn(
+                        aResponse().withStatus(200)
+                            .withBody("[\"not a ClearlyDefined URI\"]")
+                    )
+            )
+
+            val storage = ClearlyDefinedStorage(storageConfiguration(wiremock))
+
+            assertValidResult(storage.read(TEST_IDENTIFIER))
+        }
+
+        "handle an unexpected result from the search definitions endpoint" {
+            wiremock.stubFor(
+                get(anyUrl())
+                    .willReturn(
+                        aResponse().withStatus(200)
+                            .withBody("{ \"unexpected\": true }")
+                    )
+            )
+
+            val storage = ClearlyDefinedStorage(storageConfiguration(wiremock))
+            val result = storage.read(TEST_IDENTIFIER)
+
+            result.shouldBeInstanceOf<Failure<ScanResultContainer>>()
         }
     }
 })
