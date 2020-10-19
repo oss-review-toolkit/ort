@@ -1,9 +1,5 @@
 skip_branch_with_pr: true
 
-skip_commits:
-  files:
-    - '**/*.md'
-
 environment:
   HOME: $(HOMEDRIVE)$(HOMEPATH)
   BOWER_VERSION: 1.8.8
@@ -31,6 +27,12 @@ cache:
 clone_depth: 50
 
 install:
+  - ps: |
+      $range = "$env:APPVEYOR_REPO_BRANCH..$env:APPVEYOR_PULL_REQUEST_HEAD_COMMIT"
+      if (-not (git diff --name-only --diff-filter=d $range | Where-Object { $_ -NotMatch "\.md$" })) {
+        Write-Host "Only Markdown files were modified, skipping CI run."
+        Exit-AppVeyorBuild
+      }
   - git submodule update --init --recursive
   - npm install -g npm@%NPM_VERSION%
   - npm install -g bower@%BOWER_VERSION% yarn@%YARN_VERSION%
