@@ -29,6 +29,8 @@ import com.sksamuel.hoplite.parsers.toNode
 
 import java.io.File
 
+import org.ossreviewtoolkit.utils.log
+
 /**
  * The configuration model for all ORT components.
  */
@@ -50,6 +52,10 @@ data class OrtConfiguration(
          * contain a valid configuration, an [IllegalArgumentException] is thrown.
          */
         fun load(args: Map<String, String> = emptyMap(), configFile: File): OrtConfiguration {
+            if (configFile.isFile) {
+                log.debug { "Using ORT configuration file at '$configFile'." }
+            }
+
             val result = ConfigLoader.Builder()
                 .addSource(argumentsSource(args))
                 .addSource(PropertySource.file(configFile, optional = true))
