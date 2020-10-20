@@ -140,7 +140,7 @@ class FindingsMatcher(
         val copyrightFindingsByPath = copyrightFindings.groupBy { it.location.path }
         val paths = (licenseFindingsByPath.keys + copyrightFindingsByPath.keys).toSet()
 
-        val matchedFindings = mutableMapOf<LicenseFinding, Set<CopyrightFinding>>()
+        val matchedFindings = mutableMapOf<LicenseFinding, MutableSet<CopyrightFinding>>()
         val unmatchedCopyrights = mutableSetOf<CopyrightFinding>()
 
         paths.forEach { path ->
@@ -148,16 +148,16 @@ class FindingsMatcher(
             val copyrights = copyrightFindingsByPath[path].orEmpty()
             val matchedFileFindings = matchFileFindings(licenses, copyrights)
 
-            matchedFindings += matchedFileFindings
+            matchedFindings.merge(matchedFileFindings)
             unmatchedCopyrights += copyrights.toSet() - matchedFileFindings.values.flatten()
         }
 
         val matchedRootLicenseFindings = matchWithRootLicenses(licenseFindings, unmatchedCopyrights)
 
-        return FindingsMatcherResult(
-            matchedFindings = matchedFindings + matchedRootLicenseFindings,
-            unmatchedCopyrights = unmatchedCopyrights - matchedRootLicenseFindings.values.flatten()
-        )
+        matchedFindings.merge(matchedRootLicenseFindings)
+        unmatchedCopyrights -= matchedRootLicenseFindings.values.flatten()
+
+        return FindingsMatcherResult(matchedFindings, unmatchedCopyrights)
     }
 
     /**
@@ -225,3 +225,11 @@ data class FindingsMatcherResult(
 )
 
 private fun TextLocation.directory(): String = path.substringBeforeLast(delimiter = "/", missingDelimiterValue = "")
+
+private fun MutableMap<LicenseFinding, MutableSet<CopyrightFinding>>.merge(
+    other: Map<LicenseFinding, Collection<CopyrightFinding>>
+) {
+    other.forEach { (licenseFinding, copyrightFindings) ->
+        getOrPut(licenseFinding) { mutableSetOf() } += copyrightFindings
+    }
+}
