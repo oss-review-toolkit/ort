@@ -157,7 +157,7 @@ class OrtProxySelector(private val fallback: ProxySelector? = null) : ProxySelec
     override fun select(uri: URI?): List<Proxy> {
         requireNotNull(uri)
 
-        if (noProxyUrls.any { uri.authority.endsWith(it) }) return NO_PROXY_LIST
+        if (noProxyUrls.any { uri.authority.endsWith(it) || uri.host.endsWith(it) }) return NO_PROXY_LIST
 
         val proxies = proxyOrigins.flatMap { (_, proxiesForProtocol) ->
             proxiesForProtocol.getOrDefault(uri.scheme, mutableListOf())
