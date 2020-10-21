@@ -192,14 +192,10 @@ class EvaluatorCommand : CliktCommand(name = "evaluate", help = "Evaluate rules 
         }
 
         var ortResultInput = ortFile.readValue<OrtResult>()
+
         repositoryConfigurationFile?.let {
             ortResultInput = ortResultInput.replaceConfig(it.readValue())
         }
-
-        val packageConfigurationProvider = packageConfigurationOption.createProvider()
-
-        val licenseConfiguration =
-            licenseConfigurationFile.takeIf { it.isFile }?.readValue<LicenseConfiguration>().orEmpty()
 
         packageCurationsFile?.let {
             ortResultInput = ortResultInput.replacePackageCurations(it.readValue())
@@ -225,6 +221,7 @@ class EvaluatorCommand : CliktCommand(name = "evaluate", help = "Evaluate rules 
             }
         }
 
+        val packageConfigurationProvider = packageConfigurationOption.createProvider()
         val copyrightGarbage = copyrightGarbageFile.takeIf { it.isFile }?.readValue<CopyrightGarbage>().orEmpty()
 
         val licenseInfoResolver = LicenseInfoResolver(
@@ -233,6 +230,8 @@ class EvaluatorCommand : CliktCommand(name = "evaluate", help = "Evaluate rules 
             archiver = globalOptionsForSubcommands.config.scanner?.archive?.createFileArchiver() ?: FileArchiver.DEFAULT
         )
 
+        val licenseConfiguration =
+            licenseConfigurationFile.takeIf { it.isFile }?.readValue<LicenseConfiguration>().orEmpty()
         val evaluator = Evaluator(ortResultInput, licenseInfoResolver, licenseConfiguration)
 
         if (syntaxCheck) {
