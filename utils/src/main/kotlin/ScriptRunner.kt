@@ -27,7 +27,7 @@ import javax.script.ScriptException
 /**
  * A class providing the framework to run Kotlin scripts.
  */
-abstract class ScriptRunner {
+open class ScriptRunner {
     /**
      * The engine to run Kotlin scripts.
      */
@@ -36,12 +36,12 @@ abstract class ScriptRunner {
     /**
      * The text that should get prepended to the main script.
      */
-    abstract val preface: String
+    open val preface: String = ""
 
     /**
      * The text that should get appended to the main script.
      */
-    abstract val postface: String
+    open val postface: String = ""
 
     private fun completeScript(script: String) = preface + script + postface
 
