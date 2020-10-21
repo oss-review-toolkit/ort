@@ -175,10 +175,11 @@ class EvaluatorCommand : CliktCommand(name = "evaluate", help = "Evaluate rules 
     private val globalOptionsForSubcommands by requireObject<GlobalOptions>()
 
     override fun run() {
-        val outputFiles = mutableListOf<File>()
+        // Fail early if output files exist and must not be overwritten.
+        val outputFiles = mutableSetOf<File>()
 
         outputDir?.let { absoluteOutputDir ->
-            outputFiles += outputFormats.mapTo(mutableSetOf()) { format ->
+            outputFormats.mapTo(outputFiles) { format ->
                 absoluteOutputDir.resolve("evaluation-result.${format.fileExtension}")
             }
 
