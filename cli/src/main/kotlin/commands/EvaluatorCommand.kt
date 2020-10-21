@@ -165,8 +165,8 @@ class EvaluatorCommand : CliktCommand(name = "evaluate", help = "Evaluate rules 
                 "the input ORT result is overwritten. For example: --label distribution=external"
     ).associate()
 
-    private val syntaxCheck by option(
-        "--syntax-check",
+    private val checkSyntax by option(
+        "--check-syntax",
         help = "Do not evaluate the script but only check its syntax. No output is written in this case."
     ).flag()
 
@@ -209,7 +209,7 @@ class EvaluatorCommand : CliktCommand(name = "evaluate", help = "Evaluate rules 
             }
         }
 
-        if (syntaxCheck) {
+        if (checkSyntax) {
             if (Evaluator().checkSyntax(script)) {
                 return
             } else {
@@ -229,7 +229,7 @@ class EvaluatorCommand : CliktCommand(name = "evaluate", help = "Evaluate rules 
         }
 
         val finalOrtResult = requireNotNull(ortResultInput) {
-            "The '--ort-file' option is required unless the '--syntax-check' option is used."
+            "The '--ort-file' option is required unless the '--check-syntax' option is used."
         }
 
         val packageConfigurationProvider = packageConfigurationOption.createProvider()
