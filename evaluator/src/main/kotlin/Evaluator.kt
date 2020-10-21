@@ -26,11 +26,12 @@ import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.RuleViolation
 import org.ossreviewtoolkit.model.licenses.LicenseConfiguration
 import org.ossreviewtoolkit.model.licenses.LicenseInfoResolver
+import org.ossreviewtoolkit.model.utils.createLicenseInfoResolver
 import org.ossreviewtoolkit.utils.ScriptRunner
 
 class Evaluator(
-    ortResult: OrtResult,
-    licenseInfoResolver: LicenseInfoResolver,
+    ortResult: OrtResult = OrtResult.EMPTY,
+    licenseInfoResolver: LicenseInfoResolver = OrtResult.EMPTY.createLicenseInfoResolver(),
     licenseConfiguration: LicenseConfiguration = LicenseConfiguration()
 ) : ScriptRunner() {
     override val preface = """

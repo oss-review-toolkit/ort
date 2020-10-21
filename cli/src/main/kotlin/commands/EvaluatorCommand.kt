@@ -30,7 +30,6 @@ import com.github.ajalt.clikt.parameters.options.convert
 import com.github.ajalt.clikt.parameters.options.default
 import com.github.ajalt.clikt.parameters.options.flag
 import com.github.ajalt.clikt.parameters.options.option
-import com.github.ajalt.clikt.parameters.options.required
 import com.github.ajalt.clikt.parameters.options.split
 import com.github.ajalt.clikt.parameters.types.enum
 import com.github.ajalt.clikt.parameters.types.file
@@ -72,7 +71,6 @@ class EvaluatorCommand : CliktCommand(name = "evaluate", help = "Evaluate rules 
     ).convert { it.expandTilde() }
         .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
         .convert { it.absoluteFile.normalize() }
-        .required()
         .inputGroup()
 
     private val outputDir by option(
@@ -191,16 +189,6 @@ class EvaluatorCommand : CliktCommand(name = "evaluate", help = "Evaluate rules 
             }
         }
 
-        var ortResultInput = ortFile.readValue<OrtResult>()
-
-        repositoryConfigurationFile?.let {
-            ortResultInput = ortResultInput.replaceConfig(it.readValue())
-        }
-
-        packageCurationsFile?.let {
-            ortResultInput = ortResultInput.replacePackageCurations(it.readValue())
-        }
-
         val script = when (rules) {
             is FileType -> (rules as FileType).file.readText()
 
@@ -221,27 +209,41 @@ class EvaluatorCommand : CliktCommand(name = "evaluate", help = "Evaluate rules 
             }
         }
 
-        val packageConfigurationProvider = packageConfigurationOption.createProvider()
-        val copyrightGarbage = copyrightGarbageFile.takeIf { it.isFile }?.readValue<CopyrightGarbage>().orEmpty()
-
-        val licenseInfoResolver = LicenseInfoResolver(
-            provider = DefaultLicenseInfoProvider(ortResultInput, packageConfigurationProvider),
-            copyrightGarbage = copyrightGarbage,
-            archiver = globalOptionsForSubcommands.config.scanner?.archive?.createFileArchiver() ?: FileArchiver.DEFAULT
-        )
-
-        val licenseConfiguration =
-            licenseConfigurationFile.takeIf { it.isFile }?.readValue<LicenseConfiguration>().orEmpty()
-        val evaluator = Evaluator(ortResultInput, licenseInfoResolver, licenseConfiguration)
-
         if (syntaxCheck) {
-            if (evaluator.checkSyntax(script)) {
+            if (Evaluator().checkSyntax(script)) {
                 return
             } else {
                 println("Syntax check failed.")
                 throw ProgramResult(2)
             }
         }
+
+        var ortResultInput = ortFile?.readValue<OrtResult>()
+
+        repositoryConfigurationFile?.let {
+            ortResultInput = ortResultInput?.replaceConfig(it.readValue())
+        }
+
+        packageCurationsFile?.let {
+            ortResultInput = ortResultInput?.replacePackageCurations(it.readValue())
+        }
+
+        val finalOrtResult = requireNotNull(ortResultInput) {
+            "The '--ort-file' option is required unless the '--syntax-check' option is used."
+        }
+
+        val packageConfigurationProvider = packageConfigurationOption.createProvider()
+        val copyrightGarbage = copyrightGarbageFile.takeIf { it.isFile }?.readValue<CopyrightGarbage>().orEmpty()
+
+        val licenseInfoResolver = LicenseInfoResolver(
+            provider = DefaultLicenseInfoProvider(finalOrtResult, packageConfigurationProvider),
+            copyrightGarbage = copyrightGarbage,
+            archiver = globalOptionsForSubcommands.config.scanner?.archive?.createFileArchiver() ?: FileArchiver.DEFAULT
+        )
+
+        val licenseConfiguration =
+            licenseConfigurationFile.takeIf { it.isFile }?.readValue<LicenseConfiguration>().orEmpty()
+        val evaluator = Evaluator(finalOrtResult, licenseInfoResolver, licenseConfiguration)
 
         val evaluatorRun by lazy { evaluator.run(script) }
 
@@ -255,7 +257,7 @@ class EvaluatorCommand : CliktCommand(name = "evaluate", help = "Evaluate rules 
 
         outputDir?.let { absoluteOutputDir ->
             // Note: This overwrites any existing EvaluatorRun from the input file.
-            val ortResultOutput = ortResultInput.copy(evaluator = evaluatorRun).mergeLabels(labels)
+            val ortResultOutput = finalOrtResult.copy(evaluator = evaluatorRun).mergeLabels(labels)
 
             absoluteOutputDir.safeMkdirs()
 
