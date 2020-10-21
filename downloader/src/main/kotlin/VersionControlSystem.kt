@@ -291,7 +291,9 @@ abstract class VersionControlSystem {
      * Check whether the given [revision] is likely to name a fixed revision that does not move.
      */
     fun isFixedRevision(workingTree: WorkingTree, revision: String) =
-        revision.isNotBlank() && revision !in latestRevisionNames && revision !in workingTree.listRemoteBranches()
+        revision.isNotBlank()
+                && revision !in latestRevisionNames
+                && (revision !in workingTree.listRemoteBranches() || revision in workingTree.listRemoteTags())
 
     /**
      * Check whether the VCS tool is at least of the specified [expectedVersion], e.g. to check for features.
