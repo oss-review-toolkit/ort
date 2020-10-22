@@ -49,6 +49,8 @@ analyzer:
     ort_version: "HEAD"
     java_version: "<REPLACE_JAVA>"
     os: "<REPLACE_OS>"
+    processors: "<REPLACE_PROCESSORS>"
+    max_memory: "<REPLACE_MAX_MEMORY>"
     variables: {}
     tool_versions: {}
   config:

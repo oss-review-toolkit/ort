@@ -28,20 +28,17 @@ import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.string.shouldMatch
 
-import java.io.File
 import java.lang.IllegalArgumentException
 
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
-
-private fun readOrtResult(relativeOrtResultFilePath: String): OrtResult =
-    File("../analyzer/src/funTest/assets/projects")
-        .resolve(relativeOrtResultFilePath)
-        .readValue()
+import org.ossreviewtoolkit.utils.test.readOrtResult
 
 class OrtResultTest : WordSpec({
     "collectDependencies" should {
         "be able to get all direct dependencies of a package" {
-            val ortResult = readOrtResult("external/sbt-multi-project-example-expected-output.yml")
+            val ortResult = readOrtResult(
+                "../analyzer/src/funTest/assets/projects/external/sbt-multi-project-example-expected-output.yml"
+            )
 
             val id = Identifier("Maven:com.typesafe.akka:akka-stream_2.12:2.5.6")
             val dependencies = ortResult.collectDependencies(id, 1).map { it.toCoordinates() }
@@ -56,7 +53,9 @@ class OrtResultTest : WordSpec({
 
     "collectProjectsAndPackages" should {
         "be able to get all ids except for ones for sub-projects" {
-            val ortResult = readOrtResult("synthetic/gradle-all-dependencies-expected-result.yml")
+            val ortResult = readOrtResult(
+                "../analyzer/src/funTest/assets/projects/synthetic/gradle-all-dependencies-expected-result.yml"
+            )
 
             val ids = ortResult.collectProjectsAndPackages()
             val idsWithoutSubProjects = ortResult.collectProjectsAndPackages(false)

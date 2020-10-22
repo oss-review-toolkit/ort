@@ -34,7 +34,6 @@ import com.github.ajalt.clikt.parameters.options.versionOption
 import com.github.ajalt.clikt.parameters.types.file
 
 import java.io.File
-import java.lang.Runtime
 
 import kotlin.system.exitProcess
 
@@ -165,15 +164,14 @@ class OrtMain : CliktCommand(name = ORT_NAME, epilog = "* denotes required optio
         val command = commandName?.let { " '$commandName'" }.orEmpty()
 
         val header = mutableListOf<String>()
-        val numCpus = Runtime.getRuntime().availableProcessors()
-        val maxMemInMib = Runtime.getRuntime().maxMemory() / (1024L * 1024L)
+        val maxMemInMib = env.maxMemory / (1024L * 1024L)
 
         """
             ________ _____________________
             \_____  \\______   \__    ___/ the OSS Review Toolkit, version $version.
              /   |   \|       _/ |    |
             /    |    \    |   \ |    |    Running$command under Java ${env.javaVersion} on ${env.os} with
-            \_______  /____|_  / |____|    $numCpus CPUs and a maximum of $maxMemInMib MiB of memory.
+            \_______  /____|_  / |____|    ${env.processors} CPUs and a maximum of $maxMemInMib MiB of memory.
                     \/       \/
         """.trimIndent().lines().mapTo(header) { it.trimEnd() }
 
