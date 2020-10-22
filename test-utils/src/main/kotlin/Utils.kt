@@ -43,8 +43,12 @@ private val START_AND_END_TIME_REGEX = Regex("((start|end)_time): \".*\"")
 private val TIMESTAMP_REGEX = Regex("(timestamp): \".*\"")
 
 fun patchExpectedResult(
-    result: File, custom: Map<String, String> = emptyMap(), definitionFilePath: String? = null,
-    url: String? = null, revision: String? = null, path: String? = null,
+    result: File,
+    custom: Map<String, String> = emptyMap(),
+    definitionFilePath: String? = null,
+    url: String? = null,
+    revision: String? = null,
+    path: String? = null,
     urlProcessed: String? = null
 ): String {
     fun String.replaceIfNotNull(oldValue: String, newValue: String?) =
@@ -60,8 +64,11 @@ fun patchExpectedResult(
         .replaceIfNotNull("<REPLACE_URL_PROCESSED>", urlProcessed)
 }
 
-fun patchActualResult(result: String, patchDownloadTime: Boolean = false, patchStartAndEndTime: Boolean = false):
-        String {
+fun patchActualResult(
+    result: String,
+    patchDownloadTime: Boolean = false,
+    patchStartAndEndTime: Boolean = false
+): String {
     fun String.replaceIf(condition: Boolean, regex: Regex, transform: (MatchResult) -> CharSequence) =
         if (condition) replace(regex, transform) else this
 
