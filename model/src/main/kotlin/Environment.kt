@@ -19,6 +19,8 @@
 
 package org.ossreviewtoolkit.model
 
+import java.lang.Runtime
+
 import org.ossreviewtoolkit.utils.Os
 
 /**
@@ -39,6 +41,16 @@ data class Environment(
      * Name of the operating system, defaults to [Os.name].
      */
     val os: String = Os.name,
+
+    /**
+     * The number of logical processors available.
+     */
+    val processors: Int = Runtime.getRuntime().availableProcessors(),
+
+    /**
+     * The maximum amount of memory available.
+     */
+    val maxMemory: Long = Runtime.getRuntime().maxMemory(),
 
     /**
      * Map of selected environment variables that might be relevant for debugging.

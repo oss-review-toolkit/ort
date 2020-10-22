@@ -18,6 +18,7 @@
  * License-Filename: LICENSE
  */
 
+val jacksonVersion: String by project
 val kotestVersion: String by project
 val log4jCoreVersion: String by project
 
@@ -32,6 +33,7 @@ dependencies {
     api("io.kotest:kotest-assertions-core:$kotestVersion")
     api("io.kotest:kotest-framework-api:$kotestVersion")
 
+    implementation("com.fasterxml.jackson.module:jackson-module-kotlin:$jacksonVersion")
     implementation("io.kotest:kotest-extensions-junitxml:$kotestVersion")
     implementation("io.kotest:kotest-framework-engine:$kotestVersion")
     implementation("org.apache.logging.log4j:log4j-slf4j-impl:$log4jCoreVersion")

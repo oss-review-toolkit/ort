@@ -19,13 +19,15 @@
 
 package org.ossreviewtoolkit.utils.test
 
+import com.fasterxml.jackson.module.kotlin.readValue
+
 import java.io.File
 import java.time.Instant
 
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
-import org.ossreviewtoolkit.model.readValue
+import org.ossreviewtoolkit.model.mapper
 
 val DEFAULT_ANALYZER_CONFIGURATION = AnalyzerConfiguration(ignoreToolVersions = false, allowDynamicVersions = false)
 val DEFAULT_REPOSITORY_CONFIGURATION = RepositoryConfiguration()
@@ -57,6 +59,8 @@ fun patchExpectedResult(
     return custom.entries.fold(result.readText()) { text, entry -> text.replaceIfNotNull(entry.key, entry.value) }
         .replaceIfNotNull("<REPLACE_JAVA>", System.getProperty("java.version"))
         .replaceIfNotNull("<REPLACE_OS>", System.getProperty("os.name"))
+        .replaceIfNotNull("\"<REPLACE_PROCESSORS>\"", Runtime.getRuntime().availableProcessors().toString())
+        .replaceIfNotNull("\"<REPLACE_MAX_MEMORY>\"", Runtime.getRuntime().maxMemory().toString())
         .replaceIfNotNull("<REPLACE_DEFINITION_FILE_PATH>", definitionFilePath)
         .replaceIfNotNull("<REPLACE_URL>", url)
         .replaceIfNotNull("<REPLACE_REVISION>", revision)
@@ -81,4 +85,4 @@ fun patchActualResult(
         .replaceIf(patchStartAndEndTime, START_AND_END_TIME_REGEX) { "${it.groupValues[1]}: \"${Instant.EPOCH}\"" }
 }
 
-fun readOrtResult(file: String) = File(file).readValue<OrtResult>()
+fun readOrtResult(file: String) = File(file).let { it.mapper().readValue<OrtResult>(patchExpectedResult(it)) }
