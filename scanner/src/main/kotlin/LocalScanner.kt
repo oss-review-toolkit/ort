@@ -160,7 +160,7 @@ abstract class LocalScanner(name: String, config: ScannerConfiguration) : Scanne
         return try {
             coroutineScope {
                 packages.withIndex().map { (index, pkg) ->
-                    val packageIndex = "(${index + 1}/${packages.size})"
+                    val packageIndex = "(${index + 1} of ${packages.size})"
 
                     async {
                         pkg to scanPackage(
