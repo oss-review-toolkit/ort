@@ -53,7 +53,6 @@ ENV \
     GO_VERSION=1.13.4 \
     HASKELL_STACK_VERSION=2.1.3 \
     NPM_VERSION=6.14.2 \
-    PYTHON_PIP_VERSION=9.0.1-2.3~ubuntu1.18.04.3 \
     PYTHON_PIPENV_VERSION=2018.11.26 \
     PYTHON_VIRTUALENV_VERSION=15.1.0 \
     SBT_VERSION=1.3.8 \
@@ -104,9 +103,9 @@ RUN --mount=type=cache,target=/var/cache/apt --mount=type=cache,target=/var/lib/
         cargo=$CARGO_VERSION \
         composer=$COMPOSER_VERSION \
         nodejs \
-        python-pip=$PYTHON_PIP_VERSION \
+        python-pip \
         python-setuptools \
-        python3-pip=$PYTHON_PIP_VERSION \
+        python3-pip \
         python3-setuptools \
         sbt=$SBT_VERSION \
     && \
