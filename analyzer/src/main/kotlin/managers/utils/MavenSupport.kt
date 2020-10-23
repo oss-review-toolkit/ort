@@ -376,7 +376,7 @@ class MavenSupport(workspaceReader: WorkspaceReader) {
             val localRepositories = allRepositories - remoteRepositories
             if (localRepositories.isNotEmpty()) {
                 // No need to use curly-braces-syntax for logging here as the log level check is already done above.
-                log.debug("Ignoring local repositories $localRepositories.")
+                log.debug { "Ignoring local repositories $localRepositories." }
             }
         }
 
