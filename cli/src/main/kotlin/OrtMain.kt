@@ -48,6 +48,7 @@ import org.ossreviewtoolkit.utils.ORT_CONFIG_FILENAME
 import org.ossreviewtoolkit.utils.ORT_DATA_DIR_ENV_NAME
 import org.ossreviewtoolkit.utils.ORT_NAME
 import org.ossreviewtoolkit.utils.Os
+import org.ossreviewtoolkit.utils.PERFORMANCE
 import org.ossreviewtoolkit.utils.expandTilde
 import org.ossreviewtoolkit.utils.ortConfigDirectory
 import org.ossreviewtoolkit.utils.ortDataDirectory
@@ -77,6 +78,7 @@ class OrtMain : CliktCommand(name = ORT_NAME, epilog = "* denotes required optio
 
     private val logLevel by option(help = "Set the verbosity level of log output.").switch(
         "--info" to Level.INFO,
+        "--performance" to PERFORMANCE,
         "--debug" to Level.DEBUG
     ).default(Level.WARN)
 
