@@ -93,7 +93,7 @@ pipeline {
         choice(
             name: 'LOG_LEVEL',
             description: 'Log message level',
-            choices: ['--info', '--debug', '']
+            choices: ['--info', '--performance', '--debug', '']
         )
 
         booleanParam(

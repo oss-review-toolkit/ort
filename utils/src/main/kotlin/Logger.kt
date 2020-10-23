@@ -17,13 +17,18 @@
  * License-Filename: LICENSE
  */
 
+@file:Suppress("TooManyFunctions")
+
 package org.ossreviewtoolkit.utils
 
 import java.util.concurrent.ConcurrentHashMap
 
 import org.apache.logging.log4j.Level
+import org.apache.logging.log4j.Marker
 import org.apache.logging.log4j.kotlin.KotlinLogger
+import org.apache.logging.log4j.kotlin.asLog4jSupplier
 import org.apache.logging.log4j.kotlin.loggerOf
+import org.apache.logging.log4j.message.Message
 
 /**
  * Global map of loggers for classes so only one logger needs to be instantiated per class.
@@ -47,4 +52,74 @@ inline fun <reified T : Any> T.logOnce(level: Level, supplier: () -> String) {
         log.statements += statement
         log.log(statement.second, statement.third)
     }
+}
+
+/**
+ * A log [Level] for logging performance information. The int value of the level is between [Level.INFO] and
+ * [Level.DEBUG].
+ */
+val PERFORMANCE = Level.forName("PERFORMANCE", 450)
+
+fun KotlinLogger.perf(marker: Marker, msg: Message) {
+    delegate.logIfEnabled(KotlinLogger.FQCN, PERFORMANCE, marker, msg, null)
+}
+
+fun KotlinLogger.perf(marker: Marker, msg: Message, t: Throwable?) {
+    delegate.logIfEnabled(KotlinLogger.FQCN, PERFORMANCE, marker, msg, t)
+}
+
+fun KotlinLogger.perf(marker: Marker, msg: CharSequence) {
+    delegate.logIfEnabled(KotlinLogger.FQCN, PERFORMANCE, marker, msg, null)
+}
+
+fun KotlinLogger.perf(marker: Marker, msg: CharSequence, t: Throwable?) {
+    delegate.logIfEnabled(KotlinLogger.FQCN, PERFORMANCE, marker, msg, t)
+}
+
+fun KotlinLogger.perf(marker: Marker, msg: Any) {
+    delegate.logIfEnabled(KotlinLogger.FQCN, PERFORMANCE, marker, msg, null)
+}
+
+fun KotlinLogger.perf(marker: Marker, msg: Any, t: Throwable?) {
+    delegate.logIfEnabled(KotlinLogger.FQCN, PERFORMANCE, marker, msg, t)
+}
+
+fun KotlinLogger.perf(msg: Message) {
+    delegate.logIfEnabled(KotlinLogger.FQCN, PERFORMANCE, null, msg, null)
+}
+
+fun KotlinLogger.perf(msg: Message, t: Throwable?) {
+    delegate.logIfEnabled(KotlinLogger.FQCN, PERFORMANCE, null, msg, t)
+}
+
+fun KotlinLogger.perf(msg: CharSequence) {
+    delegate.logIfEnabled(KotlinLogger.FQCN, PERFORMANCE, null, msg, null)
+}
+
+fun KotlinLogger.perf(msg: CharSequence, t: Throwable?) {
+    delegate.logIfEnabled(KotlinLogger.FQCN, PERFORMANCE, null, msg, t)
+}
+
+fun KotlinLogger.perf(msg: Any) {
+    delegate.logIfEnabled(KotlinLogger.FQCN, PERFORMANCE, null, msg, null)
+}
+
+fun KotlinLogger.perf(msg: Any, t: Throwable?) {
+    delegate.logIfEnabled(KotlinLogger.FQCN, PERFORMANCE, null, msg, t)
+}
+
+fun KotlinLogger.perf(supplier: () -> Any?) {
+    delegate.logIfEnabled(KotlinLogger.FQCN, PERFORMANCE, null, supplier.asLog4jSupplier(), null)
+}
+
+fun KotlinLogger.perf(t: Throwable, supplier: () -> Any?) {
+    delegate.logIfEnabled(KotlinLogger.FQCN, PERFORMANCE, null, supplier.asLog4jSupplier(), t)
+}
+
+fun KotlinLogger.perf(marker: Marker, supplier: () -> Any?) {
+    delegate.logIfEnabled(KotlinLogger.FQCN, PERFORMANCE, marker, supplier.asLog4jSupplier(), null)
+}
+
+fun KotlinLogger.perf(marker: Marker, t: Throwable?, supplier: () -> Any?) {
+    delegate.logIfEnabled(KotlinLogger.FQCN, PERFORMANCE, marker, supplier.asLog4jSupplier(), t)
 }
