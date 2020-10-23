@@ -24,6 +24,8 @@ import java.lang.IllegalArgumentException
 import java.time.Instant
 import java.util.ServiceLoader
 
+import kotlin.time.measureTimedValue
+
 import kotlinx.coroutines.runBlocking
 
 import org.ossreviewtoolkit.downloader.consolidateProjectPackagesByVcs
@@ -38,6 +40,9 @@ import org.ossreviewtoolkit.model.ScannerRun
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
 import org.ossreviewtoolkit.model.readValue
 import org.ossreviewtoolkit.spdx.SpdxLicense
+import org.ossreviewtoolkit.utils.formatSizeInMib
+import org.ossreviewtoolkit.utils.log
+import org.ossreviewtoolkit.utils.perf
 
 const val TOOL_NAME = "scanner"
 
@@ -90,7 +95,12 @@ abstract class Scanner(val scannerName: String, protected val config: ScannerCon
 
         val startTime = Instant.now()
 
-        val ortResult = ortResultFile.readValue<OrtResult>()
+        val (ortResult, duration) = measureTimedValue { ortResultFile.readValue<OrtResult>() }
+
+        log.perf {
+            "Read ORT result from '${ortResultFile.name}' (${ortResultFile.formatSizeInMib}) in " +
+                    "${duration.inMilliseconds}ms."
+        }
 
         requireNotNull(ortResult.analyzer) {
             "The provided ORT result file '${ortResultFile.invariantSeparatorsPath}' does not contain an analyzer " +

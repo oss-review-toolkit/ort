@@ -35,6 +35,8 @@ import com.github.ajalt.clikt.parameters.types.file
 
 import java.io.File
 
+import kotlin.time.measureTimedValue
+
 import org.ossreviewtoolkit.GroupTypes.FileType
 import org.ossreviewtoolkit.GroupTypes.StringType
 import org.ossreviewtoolkit.downloader.DownloadException
@@ -52,8 +54,10 @@ import org.ossreviewtoolkit.utils.ArchiveType
 import org.ossreviewtoolkit.utils.collectMessagesAsString
 import org.ossreviewtoolkit.utils.encodeOrUnknown
 import org.ossreviewtoolkit.utils.expandTilde
+import org.ossreviewtoolkit.utils.formatSizeInMib
 import org.ossreviewtoolkit.utils.log
 import org.ossreviewtoolkit.utils.packZip
+import org.ossreviewtoolkit.utils.perf
 import org.ossreviewtoolkit.utils.safeDeleteRecursively
 import org.ossreviewtoolkit.utils.showStackTrace
 
@@ -129,7 +133,12 @@ class DownloaderCommand : CliktCommand(name = "download", help = "Fetch source c
         when (input) {
             is FileType -> {
                 val ortFile = (input as FileType).file
-                val analyzerResult = ortFile.readValue<OrtResult>().analyzer?.result
+                val (analyzerResult, duration) = measureTimedValue { ortFile.readValue<OrtResult>().analyzer?.result }
+
+                log.perf {
+                    "Read ORT result from '${ortFile.name}' (${ortFile.formatSizeInMib}) in " +
+                            "${duration.inMilliseconds}ms."
+                }
 
                 requireNotNull(analyzerResult) {
                     "The provided ORT result file '$ortFile' does not contain an analyzer result."

@@ -34,6 +34,8 @@ import com.github.ajalt.clikt.parameters.options.split
 import com.github.ajalt.clikt.parameters.types.enum
 import com.github.ajalt.clikt.parameters.types.file
 
+import kotlin.time.measureTime
+
 import org.ossreviewtoolkit.GlobalOptions
 import org.ossreviewtoolkit.analyzer.Analyzer
 import org.ossreviewtoolkit.analyzer.PackageManager
@@ -47,7 +49,10 @@ import org.ossreviewtoolkit.model.utils.mergeLabels
 import org.ossreviewtoolkit.utils.ORT_CURATIONS_FILENAME
 import org.ossreviewtoolkit.utils.ORT_REPO_CONFIG_FILENAME
 import org.ossreviewtoolkit.utils.expandTilde
+import org.ossreviewtoolkit.utils.formatSizeInMib
+import org.ossreviewtoolkit.utils.log
 import org.ossreviewtoolkit.utils.ortConfigDirectory
+import org.ossreviewtoolkit.utils.perf
 import org.ossreviewtoolkit.utils.safeMkdirs
 
 class AnalyzerCommand : CliktCommand(name = "analyze", help = "Determine dependencies of a software project.") {
@@ -164,7 +169,11 @@ class AnalyzerCommand : CliktCommand(name = "analyze", help = "Determine depende
 
         outputFiles.forEach { file ->
             println("Writing analyzer result to '$file'.")
-            file.mapper().writerWithDefaultPrettyPrinter().writeValue(file, ortResult)
+            val duration = measureTime { file.mapper().writerWithDefaultPrettyPrinter().writeValue(file, ortResult) }
+
+            log.perf {
+                "Wrote ORT result to '${file.name}' (${file.formatSizeInMib}) in ${duration.inMilliseconds}ms."
+            }
         }
 
         val analyzerResult = ortResult.analyzer?.result

@@ -48,6 +48,11 @@ import java.security.MessageDigest
 fun ByteArray.toHexString(): String = joinToString("") { String.format("%02x", it) }
 
 /**
+ * Format this [Double] as a string with the provided number of [decimalPlaces].
+ */
+fun Double.format(decimalPlaces: Int = 2) = "%.${decimalPlaces}f".format(this)
+
+/**
  * If the SHELL environment variable is set, return the absolute file with a leading "~" expanded to the current user's
  * home directory, otherwise return just the absolute file.
  */
@@ -208,6 +213,11 @@ fun File.searchUpwardsForSubdirectory(searchDirName: String): File? {
 }
 
 /**
+ * Get the size of this [File] in mebibytes (MiB) with two decimal places as [String].
+ */
+val File.formatSizeInMib: String get() = "${length().bytesToMiB().format()} MiB"
+
+/**
  * Construct a "file:" URI in a safe way by never using a null authority for wider compatibility.
  */
 fun File.toSafeURI(): URI {
@@ -232,6 +242,11 @@ fun JsonNode?.fieldsOrEmpty(): Iterator<Map.Entry<String, JsonNode>> = this?.fie
  * or the text value is null.
  */
 fun JsonNode?.textValueOrEmpty(): String = this?.textValue().orEmpty()
+
+/**
+ * Converts this [Long] from bytes to mebibytes (MiB).
+ */
+fun Long.bytesToMiB(): Double = this / (1024.0 * 1024.0)
 
 /**
  * Merge two maps by iterating over the combined key set of both maps and applying [operation] to the entries for the

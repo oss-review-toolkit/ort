@@ -36,6 +36,9 @@ import com.github.ajalt.clikt.parameters.types.file
 
 import java.io.File
 
+import kotlin.time.measureTime
+import kotlin.time.measureTimedValue
+
 import org.ossreviewtoolkit.GlobalOptions
 import org.ossreviewtoolkit.GroupTypes.FileType
 import org.ossreviewtoolkit.GroupTypes.StringType
@@ -59,8 +62,10 @@ import org.ossreviewtoolkit.utils.ORT_REPO_CONFIG_FILENAME
 import org.ossreviewtoolkit.utils.PackageConfigurationOption
 import org.ossreviewtoolkit.utils.createProvider
 import org.ossreviewtoolkit.utils.expandTilde
+import org.ossreviewtoolkit.utils.formatSizeInMib
 import org.ossreviewtoolkit.utils.log
 import org.ossreviewtoolkit.utils.ortConfigDirectory
+import org.ossreviewtoolkit.utils.perf
 import org.ossreviewtoolkit.utils.safeMkdirs
 import org.ossreviewtoolkit.utils.storage.FileArchiver
 
@@ -218,7 +223,13 @@ class EvaluatorCommand : CliktCommand(name = "evaluate", help = "Evaluate rules 
             }
         }
 
-        var ortResultInput = ortFile?.readValue<OrtResult>()
+        var (ortResultInput, readDuration) = measureTimedValue { ortFile?.readValue<OrtResult>() }
+
+        ortFile?.let { file ->
+            log.perf {
+                "Read ORT result from '${file.name}' (${file.formatSizeInMib}) in ${readDuration.inMilliseconds}ms."
+            }
+        }
 
         repositoryConfigurationFile?.let {
             ortResultInput = ortResultInput?.replaceConfig(it.readValue())
@@ -263,7 +274,13 @@ class EvaluatorCommand : CliktCommand(name = "evaluate", help = "Evaluate rules 
 
             outputFiles.forEach { file ->
                 println("Writing evaluation result to '$file'.")
-                file.mapper().writerWithDefaultPrettyPrinter().writeValue(file, ortResultOutput)
+                val writeDuration = measureTime {
+                    file.mapper().writerWithDefaultPrettyPrinter().writeValue(file, ortResultOutput)
+                }
+
+                log.perf {
+                    "Wrote ORT result to '${file.name}' (${file.formatSizeInMib}) in ${writeDuration.inMilliseconds}ms."
+                }
             }
         }
 
