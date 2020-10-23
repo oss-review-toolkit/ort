@@ -43,7 +43,9 @@ import org.ossreviewtoolkit.model.utils.toClearlyDefinedSourceLocation
 import org.ossreviewtoolkit.scanner.ScanResultsStorage
 import org.ossreviewtoolkit.scanner.scanners.generateScannerDetails
 import org.ossreviewtoolkit.scanner.scanners.generateSummary
+import org.ossreviewtoolkit.utils.collectMessagesAsString
 import org.ossreviewtoolkit.utils.log
+import org.ossreviewtoolkit.utils.showStackTrace
 
 import retrofit2.Call
 
@@ -127,7 +129,10 @@ class ClearlyDefinedStorage(
         try {
             readFromClearlyDefined(id, packageCoordinates(id, vcs, sourceArtifact))
         } catch (e: IllegalArgumentException) {
-            log.warn("Could not obtain ClearlyDefined coordinates for package '${id.toCoordinates()}'.", e)
+            e.showStackTrace()
+
+            log.warn { "Could not obtain ClearlyDefined coordinates for package '${id.toCoordinates()}'." }
+
             emptyResult(id)
         }
 
@@ -141,7 +146,7 @@ class ClearlyDefinedStorage(
         coordinates: ClearlyDefinedService.Coordinates
     ): Result<ScanResultContainer> {
         val startTime = Instant.now()
-        log.info("Looking up results for '${id.toCoordinates()}'.")
+        log.info { "Looking up results for '${id.toCoordinates()}'." }
 
         return try {
             val tools = execute(
@@ -158,8 +163,11 @@ class ClearlyDefinedStorage(
                 loadScanCodeResults(id, coordinates, version, startTime)
             } ?: emptyResult(id)
         } catch (e: IOException) {
-            log.error("Error when reading results for package '${id.toCoordinates()}' from ClearlyDefined.", e)
-            Failure("${e.javaClass}: ${e.message}")
+            e.showStackTrace()
+
+            log.error { "Error when reading results for package '${id.toCoordinates()}' from ClearlyDefined." }
+
+            Failure(e.collectMessagesAsString())
         }
     }
 
@@ -194,17 +202,19 @@ class ClearlyDefinedStorage(
      * well, the marshalled body of the request is returned; otherwise, the function throws an exception.
      */
     private fun <T> execute(call: Call<T>): T {
-        val req = "${call.request().method} ${call.request().url}"
-        log.debug("Executing $req")
-        val response = call.execute()
-        log.debug("${response.code()} ${response.message()}")
+        val request = "${call.request().method} on ${call.request().url}"
+        log.debug { "Executing HTTP $request." }
 
-        if (response.isSuccessful) {
-            return response.body()!!
+        val response = call.execute()
+        log.debug { "HTTP response is (status ${response.code()}): ${response.message()}" }
+
+        val body = response.body()
+        if (!response.isSuccessful || body == null) {
+            throw IOException(
+                "Failed HTTP $request with status ${response.code()} and error: ${response.errorBody()?.string()}."
+            )
         }
 
-        log.error("$req failed.")
-        log.error("${response.code()} ${response.message()}: ${response.errorBody()?.string()}")
-        throw IOException("Failed HTTP call: $req with status ${response.code()}")
+        return body
     }
 }
