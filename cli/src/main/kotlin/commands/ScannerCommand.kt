@@ -37,6 +37,8 @@ import com.github.ajalt.clikt.parameters.options.split
 import com.github.ajalt.clikt.parameters.types.enum
 import com.github.ajalt.clikt.parameters.types.file
 
+import kotlin.time.measureTime
+
 import org.ossreviewtoolkit.GlobalOptions
 import org.ossreviewtoolkit.model.FileFormat
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
@@ -49,6 +51,9 @@ import org.ossreviewtoolkit.scanner.scanners.ScanCode
 import org.ossreviewtoolkit.scanner.storages.FileBasedStorage
 import org.ossreviewtoolkit.scanner.storages.SCAN_RESULTS_FILE_NAME
 import org.ossreviewtoolkit.utils.expandTilde
+import org.ossreviewtoolkit.utils.formatSizeInMib
+import org.ossreviewtoolkit.utils.log
+import org.ossreviewtoolkit.utils.perf
 import org.ossreviewtoolkit.utils.storage.LocalFileStorage
 
 class ScannerCommand : CliktCommand(name = "scan", help = "Run existing copyright / license scanners.") {
@@ -184,7 +189,11 @@ class ScannerCommand : CliktCommand(name = "scan", help = "Run existing copyrigh
 
         outputFiles.forEach { file ->
             println("Writing scan result to '$file'.")
-            file.mapper().writerWithDefaultPrettyPrinter().writeValue(file, ortResult)
+            val duration = measureTime { file.mapper().writerWithDefaultPrettyPrinter().writeValue(file, ortResult) }
+
+            log.perf {
+                "Wrote ORT result to '${file.name}' (${file.formatSizeInMib}) in ${duration.inMilliseconds}ms."
+            }
         }
 
         val scanResults = ortResult.scanner?.results

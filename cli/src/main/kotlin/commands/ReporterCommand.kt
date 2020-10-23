@@ -64,8 +64,10 @@ import org.ossreviewtoolkit.utils.PackageConfigurationOption
 import org.ossreviewtoolkit.utils.collectMessagesAsString
 import org.ossreviewtoolkit.utils.createProvider
 import org.ossreviewtoolkit.utils.expandTilde
+import org.ossreviewtoolkit.utils.formatSizeInMib
 import org.ossreviewtoolkit.utils.log
 import org.ossreviewtoolkit.utils.ortConfigDirectory
+import org.ossreviewtoolkit.utils.perf
 import org.ossreviewtoolkit.utils.safeMkdirs
 import org.ossreviewtoolkit.utils.showStackTrace
 import org.ossreviewtoolkit.utils.storage.FileArchiver
@@ -196,7 +198,12 @@ class ReporterCommand : CliktCommand(
     private val globalOptionsForSubcommands by requireObject<GlobalOptions>()
 
     override fun run() {
-        var ortResult = ortFile.readValue<OrtResult>()
+        var (ortResult, readDuration) = measureTimedValue { ortFile.readValue<OrtResult>() }
+
+        log.perf {
+            "Read ORT result from '${ortFile.name}' (${ortFile.formatSizeInMib}) in ${readDuration.inMilliseconds}ms."
+        }
+
         repositoryConfigurationFile?.let {
             ortResult = ortResult.replaceConfig(it.readValue())
         }
