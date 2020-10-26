@@ -41,6 +41,7 @@ import retrofit2.http.GET
 import retrofit2.http.PATCH
 import retrofit2.http.POST
 import retrofit2.http.Path
+import retrofit2.http.Query
 
 const val HARVEST_CREATED = "Created"
 
@@ -408,6 +409,19 @@ interface ClearlyDefinedService {
      */
     @POST("definitions")
     fun getDefinitions(@Body coordinates: Collection<String>): Call<Map<String, Defined>>
+
+    /**
+     * Search for existing definitions based on the [pattern] string provided. The pattern string should contain
+     * the parts of the coordinates (typically namespace, name, and version) relevant for the search. Result is a
+     * list with the ClearlyDefined URIs to all the definitions that are matched by the pattern.
+     *
+     * Note that the _/definitions_ GET endpoint behaves differently depending on the parameters passed in. If only
+     * a pattern string is provided, result is a list of URIs - this use case is covered by this function. It is
+     * also possible to provide other parameters like type, provider, namespace, name, etc. Then the endpoint
+     * returns partly filled definition documents.
+     */
+    @GET("definitions")
+    fun searchDefinitions(@Query("pattern") pattern: String): Call<List<String>>
 
     /**
      * Get the curation for the component described by [type], [provider], [namespace], [name] and [revision], see
