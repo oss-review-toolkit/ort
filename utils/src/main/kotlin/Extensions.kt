@@ -244,11 +244,6 @@ fun JsonNode?.fieldsOrEmpty(): Iterator<Map.Entry<String, JsonNode>> = this?.fie
 fun JsonNode?.textValueOrEmpty(): String = this?.textValue().orEmpty()
 
 /**
- * Converts this [Long] from bytes to mebibytes (MiB).
- */
-fun Long.bytesToMiB(): Double = this / (1024.0 * 1024.0)
-
-/**
  * Merge two maps by iterating over the combined key set of both maps and applying [operation] to the entries for the
  * same key. Parameters passed to [operation] can be null if there is no entry for a key in one of the maps.
  */
@@ -265,6 +260,11 @@ inline fun <K, V, W> Map<K, V>.zipWithDefault(other: Map<K, V>, default: V, oper
     (this.keys + other.keys).associateWith { key ->
         operation(this[key] ?: default, other[key] ?: default)
     }
+
+/**
+ * Converts this [Number] from bytes to mebibytes (MiB).
+ */
+fun Number.bytesToMiB(): Double = toDouble() / (1024 * 1024)
 
 /**
  * Return the string encoded for safe use as a file name or "unknown", if the string is empty.
