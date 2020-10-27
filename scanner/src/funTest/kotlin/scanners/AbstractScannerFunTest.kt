@@ -76,7 +76,7 @@ abstract class AbstractScannerFunTest(testTags: Set<Tag> = emptySet()) : StringS
     }
 
     init {
-        "Scanning a single file succeeds".config(tags = testTags) {
+        "Scanning a single file succeeds".config(enabledIf = { scanner.isInPath() }, tags = testTags) {
             val result = scanner.scanPath(inputDir.resolve("LICENSE"), outputDir)
             val summary = result.scanner?.results?.scanResults?.singleOrNull()?.results?.singleOrNull()?.summary
 
@@ -88,7 +88,7 @@ abstract class AbstractScannerFunTest(testTags: Set<Tag> = emptySet()) : StringS
             }
         }
 
-        "Scanning a directory succeeds".config(tags = testTags) {
+        "Scanning a directory succeeds".config(enabledIf = { scanner.isInPath() }, tags = testTags) {
             val result = scanner.scanPath(inputDir, outputDir)
             val summary = result.scanner?.results?.scanResults?.singleOrNull()?.results?.singleOrNull()?.summary
 
