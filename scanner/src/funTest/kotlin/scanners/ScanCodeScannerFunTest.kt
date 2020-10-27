@@ -20,10 +20,9 @@
 package org.ossreviewtoolkit.scanner.scanners
 
 import org.ossreviewtoolkit.spdx.toSpdx
-import org.ossreviewtoolkit.utils.test.ExpensiveTag
 import org.ossreviewtoolkit.utils.test.ScanCodeTag
 
-class ScanCodeScannerFunTest : AbstractScannerFunTest(setOf(ExpensiveTag, ScanCodeTag)) {
+class ScanCodeScannerFunTest : AbstractScannerFunTest(setOf(ScanCodeTag)) {
     override val scanner = ScanCode("ScanCode", config)
     override val expectedFileLicenses = setOf("Apache-2.0".toSpdx())
     override val expectedDirectoryLicenses = setOf("Apache-2.0".toSpdx())

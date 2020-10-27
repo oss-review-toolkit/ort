@@ -20,9 +20,8 @@
 package org.ossreviewtoolkit.scanner.scanners
 
 import org.ossreviewtoolkit.spdx.toSpdx
-import org.ossreviewtoolkit.utils.test.ExpensiveTag
 
-class LicenseeScannerFunTest : AbstractScannerFunTest(setOf(ExpensiveTag)) {
+class LicenseeScannerFunTest : AbstractScannerFunTest() {
     override val scanner = Licensee("Licensee", config)
     override val expectedFileLicenses = setOf("Apache-2.0".toSpdx())
     override val expectedDirectoryLicenses = setOf("Apache-2.0".toSpdx())
