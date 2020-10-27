@@ -44,9 +44,10 @@
 
 - id: "NPM::ramda:[0.21.0,0.25.0]" # Ivy-style version matchers are supported.
   curations:
-    comment: "The package is licensed under MIT per `LICENSE` and `dist/ramda.js`. The project logo is CC-BY-NC-SA-3.0 \
-      but it is not part of the distributed .tar.gz package, see the `README.md` which says: \
-      Ramda logo artwork © 2014 J. C. Phillipps. Licensed Creative Commons CC BY-NC-SA 3.0"
+    comment: >-
+      The package is licensed under MIT per `LICENSE` and `dist/ramda.js`. The project logo is CC-BY-NC-SA-3.0 but it is
+      not part of the distributed .tar.gz package, see the `README.md` which says:
+      "Ramda logo artwork © 2014 J. C. Phillipps. Licensed Creative Commons CC BY-NC-SA 3.0."
     concluded_license: "MIT"
 
 - id: "Maven:org.jetbrains.kotlin:kotlin-bom"
