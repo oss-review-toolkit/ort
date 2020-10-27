@@ -215,7 +215,7 @@ fun File.searchUpwardsForSubdirectory(searchDirName: String): File? {
 /**
  * Get the size of this [File] in mebibytes (MiB) with two decimal places as [String].
  */
-val File.formatSizeInMib: String get() = "${length().bytesToMiB().format()} MiB"
+val File.formatSizeInMib: String get() = "${length().bytesToMib().format()} MiB"
 
 /**
  * Construct a "file:" URI in a safe way by never using a null authority for wider compatibility.
@@ -264,7 +264,7 @@ inline fun <K, V, W> Map<K, V>.zipWithDefault(other: Map<K, V>, default: V, oper
 /**
  * Converts this [Number] from bytes to mebibytes (MiB).
  */
-fun Number.bytesToMiB(): Double = toDouble() / (1024 * 1024)
+fun Number.bytesToMib(): Double = toDouble() / (1024 * 1024)
 
 /**
  * Return the string encoded for safe use as a file name or "unknown", if the string is empty.
