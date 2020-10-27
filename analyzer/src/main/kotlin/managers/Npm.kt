@@ -252,26 +252,31 @@ open class Npm(
 
                         response.body?.let { body ->
                             val packageInfo = jsonMapper.readTree(body.string())
+                            if (packageInfo["versions"] != null) {
+                                packageInfo["versions"][version]?.let { versionInfo ->
+                                    description = versionInfo["description"].textValueOrEmpty()
+                                    homepageUrl = versionInfo["homepage"].textValueOrEmpty()
 
-                            packageInfo["versions"][version]?.let { versionInfo ->
-                                description = versionInfo["description"].textValueOrEmpty()
-                                homepageUrl = versionInfo["homepage"].textValueOrEmpty()
-
-                                versionInfo["dist"]?.let { dist ->
-                                    downloadUrl = dist["tarball"].textValueOrEmpty().let { tarballUrl ->
-                                        if (tarballUrl.startsWith("http://registry.npmjs.org/")) {
-                                            // Work around the issue described at
-                                            // https://npm.community/t/some-packages-have-dist-tarball-as-http-and-not-https/285/19.
-                                            "https://" + tarballUrl.removePrefix("http://")
-                                        } else {
-                                            tarballUrl
+                                    versionInfo["dist"]?.let { dist ->
+                                        downloadUrl = dist["tarball"].textValueOrEmpty().let { tarballUrl ->
+                                            if (tarballUrl.startsWith("http://registry.npmjs.org/")) {
+                                                // Work around the issue described at
+                                                // https://npm.community/t/some-packages-have-dist-tarball-as-http-and-not-https/285/19.
+                                                "https://" + tarballUrl.removePrefix("http://")
+                                            } else {
+                                                tarballUrl
+                                            }
                                         }
+
+                                        hash = Hash.create(dist["shasum"].textValueOrEmpty())
                                     }
 
-                                    hash = Hash.create(dist["shasum"].textValueOrEmpty())
+                                    vcsFromPackage = parseVcsInfo(versionInfo)
                                 }
-
-                                vcsFromPackage = parseVcsInfo(versionInfo)
+                            } else {
+                                log.info {
+                                    "Package information for '$encodedName' is missing or incomplete."
+                                }
                             }
                         }
                     } else {
