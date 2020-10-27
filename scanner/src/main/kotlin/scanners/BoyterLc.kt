@@ -22,11 +22,7 @@ package org.ossreviewtoolkit.scanner.scanners
 import com.fasterxml.jackson.databind.JsonNode
 
 import java.io.File
-import java.io.IOException
-import java.net.HttpURLConnection
 import java.time.Instant
-
-import okhttp3.Request
 
 import org.ossreviewtoolkit.model.EMPTY_JSON_NODE
 import org.ossreviewtoolkit.model.LicenseFinding
@@ -40,12 +36,9 @@ import org.ossreviewtoolkit.scanner.AbstractScannerFactory
 import org.ossreviewtoolkit.scanner.LocalScanner
 import org.ossreviewtoolkit.scanner.ScanException
 import org.ossreviewtoolkit.spdx.calculatePackageVerificationCode
-import org.ossreviewtoolkit.utils.ORT_NAME
-import org.ossreviewtoolkit.utils.OkHttpClientHelper
 import org.ossreviewtoolkit.utils.Os
 import org.ossreviewtoolkit.utils.ProcessCapture
 import org.ossreviewtoolkit.utils.log
-import org.ossreviewtoolkit.utils.unpackZip
 
 class BoyterLc(name: String, config: ScannerConfiguration) : LocalScanner(name, config) {
     class Factory : AbstractScannerFactory<BoyterLc>("BoyterLc") {
@@ -68,41 +61,6 @@ class BoyterLc(name: String, config: ScannerConfiguration) : LocalScanner(name, 
     override fun transformVersion(output: String) =
         // "lc --version" returns a string like "licensechecker version 1.1.1", so simply remove the prefix.
         output.removePrefix("licensechecker version ")
-
-    override fun bootstrap(): File {
-        val platform = when {
-            Os.isLinux -> "x86_64-unknown-linux"
-            Os.isMac -> "x86_64-apple-darwin"
-            Os.isWindows -> "x86_64-pc-windows"
-            else -> throw IllegalArgumentException("Unsupported operating system.")
-        }
-
-        val archive = "lc-$scannerVersion-$platform.zip"
-        val url = "https://github.com/boyter/lc/releases/download/v$scannerVersion/$archive"
-
-        log.info { "Downloading $scannerName from $url... " }
-
-        val request = Request.Builder().get().url(url).build()
-
-        return OkHttpClientHelper.execute(request).use { response ->
-            val body = response.body
-
-            if (response.code != HttpURLConnection.HTTP_OK || body == null) {
-                throw IOException("Failed to download $scannerName from $url.")
-            }
-
-            if (response.cacheResponse != null) {
-                log.info { "Retrieved $scannerName from local cache." }
-            }
-
-            val unpackDir = createTempDir(ORT_NAME, "$scannerName-$scannerVersion").apply { deleteOnExit() }
-
-            log.info { "Unpacking '$archive' to '$unpackDir'... " }
-            body.bytes().unpackZip(unpackDir)
-
-            unpackDir
-        }
-    }
 
     override fun getConfiguration() = CONFIGURATION_OPTIONS.joinToString(" ")
 

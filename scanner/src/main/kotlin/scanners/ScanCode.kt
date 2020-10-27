@@ -20,16 +20,9 @@
 package org.ossreviewtoolkit.scanner.scanners
 
 import java.io.File
-import java.io.IOException
-import java.net.HttpURLConnection
 import java.time.Instant
 
 import kotlin.math.max
-
-import okhttp3.Request
-
-import okio.buffer
-import okio.sink
 
 import org.apache.logging.log4j.Level
 
@@ -42,13 +35,10 @@ import org.ossreviewtoolkit.scanner.LocalScanner
 import org.ossreviewtoolkit.scanner.ScanException
 import org.ossreviewtoolkit.scanner.ScanResultsStorage
 import org.ossreviewtoolkit.spdx.NON_LICENSE_FILENAMES
-import org.ossreviewtoolkit.utils.ORT_NAME
 import org.ossreviewtoolkit.utils.ORT_REPO_CONFIG_FILENAME
-import org.ossreviewtoolkit.utils.OkHttpClientHelper
 import org.ossreviewtoolkit.utils.Os
 import org.ossreviewtoolkit.utils.ProcessCapture
 import org.ossreviewtoolkit.utils.log
-import org.ossreviewtoolkit.utils.unpack
 
 /**
  * A wrapper for [ScanCode](https://github.com/nexB/scancode-toolkit).
@@ -152,52 +142,6 @@ class ScanCode(
         // by a line saying "Configuring ScanCode for first use...".
         val prefix = "ScanCode version "
         return output.lineSequence().first { it.startsWith(prefix) }.substring(prefix.length)
-    }
-
-    override fun bootstrap(): File {
-        val versionWithoutHypen = scannerVersion.replace("-", "")
-
-        val archive = when {
-            // Use the .zip file despite it being slightly larger than the .tar.gz file here as the latter for some
-            // reason does not complete to unpack on Windows.
-            Os.isWindows -> "v$versionWithoutHypen.zip"
-            else -> "v$versionWithoutHypen.tar.gz"
-        }
-
-        // Use the source code archive instead of the release artifact from S3 to enable OkHttp to cache the download
-        // locally. For details see https://github.com/square/okhttp/issues/4355#issuecomment-435679393.
-        val url = "https://github.com/nexB/scancode-toolkit/archive/$archive"
-
-        log.info { "Downloading $scannerName from $url... " }
-
-        val request = Request.Builder().get().url(url).build()
-
-        return OkHttpClientHelper.execute(request).use { response ->
-            val body = response.body
-
-            if (response.code != HttpURLConnection.HTTP_OK || body == null) {
-                throw IOException("Failed to download $scannerName from $url.")
-            }
-
-            if (response.cacheResponse != null) {
-                log.info { "Retrieved $scannerName from local cache." }
-            }
-
-            val scannerArchive = createTempFile(ORT_NAME, "$scannerName-${url.substringAfterLast("/")}")
-            scannerArchive.sink().buffer().use { it.writeAll(body.source()) }
-
-            val unpackDir = createTempDir(ORT_NAME, "$scannerName-$scannerVersion").apply { deleteOnExit() }
-
-            log.info { "Unpacking '$scannerArchive' to '$unpackDir'... " }
-            scannerArchive.unpack(unpackDir)
-            if (!scannerArchive.delete()) {
-                log.warn { "Unable to delete temporary file '$scannerArchive'." }
-            }
-
-            val scannerDir = unpackDir.resolve("scancode-toolkit-$versionWithoutHypen")
-
-            scannerDir
-        }
     }
 
     override fun getConfiguration() =

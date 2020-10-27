@@ -111,7 +111,6 @@ class RequirementsCommand : CliktCommand(help = "List the required command line 
             println("${category}s:")
 
             tools.forEach { tool ->
-                // TODO: State whether a tool can be bootstrapped, but that requires refactoring of CommandLineTool.
                 val message = buildString {
                     val (prefix, suffix) = if (tool.isInPath()) {
                         try {
@@ -136,7 +135,7 @@ class RequirementsCommand : CliktCommand(help = "List the required command line 
                             Pair("\t+ ", "Could not determine the version.")
                         }
                     } else {
-                        // Tolerate scanners to be missing as they can be bootstrapped.
+                        // Tolerate scanners to be missing as we only need a single one basically.
                         if (category != "Scanner") {
                             statusCode = statusCode or 4
                         }

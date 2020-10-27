@@ -24,7 +24,6 @@ import com.fasterxml.jackson.databind.JsonNode
 import com.vdurmont.semver4j.Requirement
 
 import java.io.File
-import java.io.IOException
 import java.time.Instant
 import java.util.concurrent.Executors
 
@@ -86,38 +85,16 @@ abstract class LocalScanner(name: String, config: ScannerConfiguration) : Scanne
     abstract val resultFileExt: String
 
     /**
-     * The directory the scanner was bootstrapped to, if so.
+     * The directory the scanner is installed to.
      */
     private val scannerDir by lazy {
-        val scannerExe = command()
-
-        getPathFromEnvironment(scannerExe)?.parentFile?.takeIf {
+        getPathFromEnvironment(command())?.parentFile?.takeIf {
             getVersion(it) == scannerVersion
-        } ?: run {
-            if (scannerExe.isNotEmpty()) {
-                log.info {
-                    "Bootstrapping scanner '$scannerName' as required version $scannerVersion was not found in PATH."
-                }
-
-                bootstrap().also {
-                    val actualScannerVersion = getVersion(it)
-                    if (actualScannerVersion != scannerVersion) {
-                        throw IOException(
-                            "Bootstrapped scanner version $actualScannerVersion " +
-                                    "does not match expected version $scannerVersion."
-                        )
-                    }
-                }
-            } else {
-                log.info { "Skipping to bootstrap scanner '$scannerName' as it has no executable." }
-
-                File("")
-            }
-        }
+        } ?: File("")
     }
 
     /**
-     * The required version of the scanner. This is also the version that would get bootstrapped.
+     * The required version of the scanner.
      */
     protected abstract val scannerVersion: String
 
@@ -132,13 +109,6 @@ abstract class LocalScanner(name: String, config: ScannerConfiguration) : Scanne
      * Return the actual version of the scanner, or an empty string in case of failure.
      */
     open fun getVersion() = getVersion(scannerDir)
-
-    /**
-     * Bootstrap the scanner to be ready for use, like downloading and / or configuring it.
-     *
-     * @return The directory the scanner is installed in.
-     */
-    protected open fun bootstrap(): File = throw NotImplementedError()
 
     /**
      * Return the configuration of this [LocalScanner].

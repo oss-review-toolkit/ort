@@ -22,11 +22,7 @@ package org.ossreviewtoolkit.scanner.scanners
 import com.fasterxml.jackson.databind.JsonNode
 
 import java.io.File
-import java.io.IOException
-import java.net.HttpURLConnection
 import java.time.Instant
-
-import okhttp3.Request
 
 import org.ossreviewtoolkit.model.EMPTY_JSON_NODE
 import org.ossreviewtoolkit.model.LicenseFinding
@@ -40,12 +36,9 @@ import org.ossreviewtoolkit.scanner.AbstractScannerFactory
 import org.ossreviewtoolkit.scanner.LocalScanner
 import org.ossreviewtoolkit.scanner.ScanException
 import org.ossreviewtoolkit.spdx.calculatePackageVerificationCode
-import org.ossreviewtoolkit.utils.ORT_NAME
-import org.ossreviewtoolkit.utils.OkHttpClientHelper
 import org.ossreviewtoolkit.utils.Os
 import org.ossreviewtoolkit.utils.ProcessCapture
 import org.ossreviewtoolkit.utils.log
-import org.ossreviewtoolkit.utils.unpackZip
 
 class Askalono(name: String, config: ScannerConfiguration) : LocalScanner(name, config) {
     class Factory : AbstractScannerFactory<Askalono>("Askalono") {
@@ -61,41 +54,6 @@ class Askalono(name: String, config: ScannerConfiguration) : LocalScanner(name, 
     override fun transformVersion(output: String) =
         // "askalono --version" returns a string like "askalono 0.2.0-beta.1", so simply remove the prefix.
         output.removePrefix("askalono ")
-
-    override fun bootstrap(): File {
-        val platform = when {
-            Os.isLinux -> "Linux"
-            Os.isMac -> "macOS"
-            Os.isWindows -> "Windows"
-            else -> throw IllegalArgumentException("Unsupported operating system.")
-        }
-
-        val archive = "askalono-$platform.zip"
-        val url = "https://github.com/amzn/askalono/releases/download/$scannerVersion/$archive"
-
-        log.info { "Downloading $scannerName from $url... " }
-
-        val request = Request.Builder().get().url(url).build()
-
-        return OkHttpClientHelper.execute(request).use { response ->
-            val body = response.body
-
-            if (response.code != HttpURLConnection.HTTP_OK || body == null) {
-                throw IOException("Failed to download $scannerName from $url.")
-            }
-
-            if (response.cacheResponse != null) {
-                log.info { "Retrieved $scannerName from local cache." }
-            }
-
-            val unpackDir = createTempDir(ORT_NAME, "$scannerName-$scannerVersion").apply { deleteOnExit() }
-
-            log.info { "Unpacking '$archive' to '$unpackDir'... " }
-            body.bytes().unpackZip(unpackDir)
-
-            unpackDir
-        }
-    }
 
     override fun getConfiguration() = ""
 
