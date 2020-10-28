@@ -95,6 +95,7 @@ class OrtAuthenticator(private val original: Authenticator? = null) : Authentica
             RequestorType.SERVER -> {
                 serverAuthentication[requestingHost]?.let { return it }
 
+                // First look for (potentially machine-specific) credentials in a netrc-style file.
                 netrcFileNames.forEach { name ->
                     val netrcFile = Os.userHomeDirectory.resolve(name)
                     if (netrcFile.isFile) {
@@ -105,6 +106,13 @@ class OrtAuthenticator(private val original: Authenticator? = null) : Authentica
                             return it
                         }
                     }
+                }
+
+                // Then look for generic credentials passed as environment variables.
+                val usernameFromEnv = Os.env["ORT_HTTP_USERNAME"]
+                val passwordFromEnv = Os.env["ORT_HTTP_PASSWORD"]
+                if (usernameFromEnv != null && passwordFromEnv != null) {
+                    return PasswordAuthentication(usernameFromEnv, passwordFromEnv.toCharArray())
                 }
             }
 
