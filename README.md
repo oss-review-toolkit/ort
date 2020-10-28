@@ -157,15 +157,24 @@ Please see [Getting Started](./docs/getting-started.md) for an introduction to t
 
 ## Configuration
 
-ORT looks for its configuration files in the directory pointed to by the `ORT_CONFIG_DIR` environment variable. If this
-variable is not set, it defaults to the `config` directory below the directory pointed to by the `ORT_DATA_DIR`
-environment variable, which in turn defaults to the `.ort` directory below the current user's home directory. See the
-table below for the supported environment variables and their defaults:
+### Environment variables
+
+ORT supports several environment variables that influence its behavior:
 
 | Name | Default value | Purpose |
 | ---- | ------------- | ------- |
 | ORT_DATA_DIR | `~/.ort` | All data, like caches, archives, storages (read & write) |
 | ORT_CONFIG_DIR | `$ORT_DATA_DIR/config` | Configuration files, see below (read only) |
+| ORT_HTTP_USERNAME | Empty (n/a) | Generic username to use for HTTP(S) downloads |
+| ORT_HTTP_PASSWORD | Empty (n/a) | Generic password to use for HTTP(S) downloads |
+| http_proxy | Empty (n/a) | Proxy to use for HTTP downloads |
+| https_proxy | Empty (n/a) | Proxy to use for HTTPS downloads |
+
+### Configuration files
+
+ORT looks for its configuration files in the directory pointed to by the `ORT_CONFIG_DIR` environment variable. If this
+variable is not set, it defaults to the `config` directory below the directory pointed to by the `ORT_DATA_DIR`
+environment variable, which in turn defaults to the `.ort` directory below the current user's home directory.
 
 The following provides an overview of the various configuration files that can be used to customize ORT behavior:
 
