@@ -60,6 +60,7 @@ class OrtPackageNaming : Rule() {
             "cli" -> ""
             "detekt-rules" -> ".detekt"
             "helper-cli" -> ".helper"
+            "nexus-iq" -> ".nexusiq"
             "spdx-utils" -> ".spdx"
             "test-utils" -> ".utils.test"
             else -> ".$projectDir"
