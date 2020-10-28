@@ -77,7 +77,7 @@ abstract class AbstractPackageManagerFactory<out T : PackageManager>(
     ): T
 
     /**
-     * Return the package manager's name here to allow JCommander to display something meaningful when listing the
+     * Return the package manager's name here to allow Clikt to display something meaningful when listing the
      * package managers which are enabled by default via their factories.
      */
     override fun toString() = managerName
