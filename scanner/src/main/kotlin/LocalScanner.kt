@@ -215,7 +215,12 @@ abstract class LocalScanner(name: String, config: ScannerConfiguration) : Scanne
                             "and $scannerDetails, not scanning the package again $packageIndex."
                 }
 
-                storedResults
+                // Due to a temporary bug that has been fixed by now the scan results for packages were not properly
+                // filtered. Filter them again to fix the problem also scan storage entries which exhibit that problem.
+                // TODO: This filtering can be removed after a while.
+                storedResults.map { scanResult ->
+                    scanResult.provenance.vcsInfo?.let { scanResult.filterPath(it.path) } ?: scanResult
+                }
             } else {
                 withContext(scanDispatcher) {
                     log.info {
