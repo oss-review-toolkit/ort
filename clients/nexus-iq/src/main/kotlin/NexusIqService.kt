@@ -1,0 +1,111 @@
+/*
+ * Copyright (C) 2020 Bosch.IO GmbH
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ * License-Filename: LICENSE
+ */
+
+package org.ossreviewtoolkit.nexusiq
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties
+import com.fasterxml.jackson.databind.json.JsonMapper
+import com.fasterxml.jackson.module.kotlin.registerKotlinModule
+
+import java.net.URL
+import okhttp3.Credentials
+
+import okhttp3.OkHttpClient
+
+import retrofit2.Call
+import retrofit2.Retrofit
+import retrofit2.converter.jackson.JacksonConverterFactory
+import retrofit2.http.Body
+import retrofit2.http.POST
+
+/**
+ * Interface for the NexusIQ REST API, based on the documentation from
+ * https://help.sonatype.com/iqserver/automating/rest-apis.
+ */
+interface NexusIqService {
+    companion object {
+        /**
+         * Create a NexusIQ service instance for communicating with a server running at the given [url],
+         * optionally using a pre-built OkHttp [client].
+         */
+        fun create(
+            url: String,
+            user: String? = null,
+            password: String? = null,
+            client: OkHttpClient? = null
+        ): NexusIqService {
+            val authenticatedClient = (client ?: OkHttpClient()).newBuilder().apply {
+                if (user != null && password != null) {
+                    addInterceptor { chain ->
+                        val request = chain.request()
+                        val authenticatedRequest = request.newBuilder()
+                            .header("Authorization", Credentials.basic(user, password))
+                            .build()
+                        chain.proceed(authenticatedRequest)
+                    }
+                }
+            }.build()
+
+            val retrofit = Retrofit.Builder()
+                .client(authenticatedClient)
+                .baseUrl(url)
+                .addConverterFactory(JacksonConverterFactory.create(JsonMapper().registerKotlinModule()))
+                .build()
+
+            return retrofit.create(NexusIqService::class.java)
+        }
+    }
+
+    data class ComponentDetailsWrapper(
+        val componentDetails: List<ComponentDetails>
+    )
+
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    data class ComponentDetails(
+        val component: Component,
+        val securityData: SecurityData
+    )
+
+    data class SecurityData(
+        val securityIssues: List<SecurityIssue>
+    )
+
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    data class SecurityIssue(
+        val reference: String,
+        val severity: Float,
+        val url: URL
+    )
+
+    data class ComponentsWrapper(
+        val components: List<Component>
+    )
+
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    data class Component(
+        val packageUrl: String
+    )
+
+    /**
+     * Retrieve the details for multiple [components].
+     * See https://help.sonatype.com/iqserver/automating/rest-apis/component-details-rest-api---v2.
+     */
+    @POST("api/v2/components/details")
+    fun getComponentDetails(@Body components: ComponentsWrapper): Call<ComponentDetailsWrapper>
+}
