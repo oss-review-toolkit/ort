@@ -47,7 +47,7 @@ abstract class AbstractScannerFactory<out T : Scanner>(
     abstract override fun create(config: ScannerConfiguration): T
 
     /**
-     * Return the scanner's name here to allow JCommander to display something meaningful when listing the scanners
+     * Return the scanner's name here to allow Clikt to display something meaningful when listing the scanners
      * which are enabled by default via their factories.
      */
     override fun toString() = scannerName
