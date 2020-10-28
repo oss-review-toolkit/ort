@@ -166,7 +166,7 @@ class OrtMain : CliktCommand(name = ORT_NAME, epilog = "* denotes required optio
         val command = commandName?.let { " '$commandName'" }.orEmpty()
 
         val header = mutableListOf<String>()
-        val maxMemInMib = env.maxMemory / (1024L * 1024L)
+        val maxMemInMib = env.maxMemory / (1024 * 1024)
 
         """
             ________ _____________________
