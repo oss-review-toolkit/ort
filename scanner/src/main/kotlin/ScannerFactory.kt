@@ -28,7 +28,7 @@ import org.ossreviewtoolkit.model.config.ScannerConfiguration
  */
 interface ScannerFactory {
     /**
-     * The name to use to refer to the package manager.
+     * The name to use to refer to the scanner.
      */
     val scannerName: String
 
