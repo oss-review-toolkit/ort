@@ -28,6 +28,9 @@ import org.gradle.api.internal.artifacts.repositories.DefaultMavenArtifactReposi
 import org.gradle.tooling.provider.model.ToolingModelBuilder
 import org.gradle.tooling.provider.model.ToolingModelBuilderRegistry
 
+def maxMemInMib = Runtime.getRuntime().maxMemory() / (1024 * 1024)
+logger.quiet("Gradle may use a maximum of $maxMemInMib MiB of memory.")
+
 String.metaClass.isAtLeastVersion = { Integer major, Integer minor ->
     def digits = delegate.split('\\.')
     digits[0].toInteger() > major || (digits[0].toInteger() == major && digits[1].toInteger() >= minor)
