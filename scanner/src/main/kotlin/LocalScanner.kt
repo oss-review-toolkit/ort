@@ -22,6 +22,7 @@ package org.ossreviewtoolkit.scanner
 import com.fasterxml.jackson.databind.JsonNode
 
 import com.vdurmont.semver4j.Requirement
+import com.vdurmont.semver4j.Semver
 
 import java.io.File
 import java.io.IOException
@@ -81,6 +82,14 @@ import org.ossreviewtoolkit.utils.storage.FileArchiver
  * serial order. Scan results can be stored in a [ScanResultsStorage].
  */
 abstract class LocalScanner(name: String, config: ScannerConfiguration) : Scanner(name, config), CommandLineTool {
+    companion object {
+        const val PROP_CRITERIA_NAME = "regScannerName"
+
+        const val PROP_CRITERIA_MIN_VERSION = "minVersion"
+
+        const val PROP_CRITERIA_MAX_VERSION = "maxVersion"
+    }
+
     private val archiver by lazy {
         config.archive?.createFileArchiver() ?: FileArchiver.DEFAULT
     }
@@ -157,6 +166,23 @@ abstract class LocalScanner(name: String, config: ScannerConfiguration) : Scanne
      * Return the configuration of this [LocalScanner].
      */
     abstract fun getConfiguration(): String
+
+    /**
+     * Return a [ScannerCriteria] object to be used when looking up existing scan results from a [ScanResultsStorage].
+     * Per default, the properties of this object are initialized to match this scanner implementation. It is,
+     * however, possible to override these defaults from the configuration, in the [ScannerConfiguration.options]
+     * property: Use properties of the form _scannerName.criteria.property_, where _scannerName_ is the name of
+     * the scanner the configuration applies to, and _property_ is the name of a property of the [ScannerCriteria]
+     * class. For instance, to specify that a specific minimum version of ScanCode is allowed, set this property:
+     * `options.ScanCode.criteria.minScannerVersion=3.0.2`.
+     */
+    open fun getScannerCriteria(): ScannerCriteria {
+        val options = config.options?.get(scannerName).orEmpty()
+        val minVersion = parseVersion(options[PROP_CRITERIA_MIN_VERSION]) ?: Semver(normalizeVersion(scannerVersion))
+        val maxVersion = parseVersion(options[PROP_CRITERIA_MAX_VERSION]) ?: minVersion.nextMinor()
+        val name = options[PROP_CRITERIA_NAME] ?: scannerName
+        return ScannerCriteria(name, minVersion, maxVersion, ScannerCriteria.exactConfigMatcher(getConfiguration()))
+    }
 
     /**
      * Return the [ScannerDetails] of this [LocalScanner].
@@ -546,3 +572,18 @@ private fun ScanResult.filterByVcsPath(): ScanResult {
 
     return filterPath(path)
 }
+
+/**
+ * Parse the given [versionStr] to a [Semver] object, trying to be failure tolerant.
+ */
+private fun parseVersion(versionStr: String?): Semver? =
+    versionStr?.let { Semver(normalizeVersion(it)) }
+
+/**
+ * Normalize the given [versionStr] to make sure that it can be parsed to a [Semver]. The [Semver] class
+ * requires that all components of a semantic version number are present. This function enables a more lenient
+ * style when declaring a version. So for instance, the user can just write "2", and this gets expanded to
+ * "2.0.0".
+ */
+private fun normalizeVersion(versionStr: String): String =
+    versionStr.takeIf { v -> v.count { it == '.' } >= 2 } ?: normalizeVersion("$versionStr.0")
