@@ -55,7 +55,9 @@ dependencies {
     implementation(project(":utils"))
 
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin:$jacksonVersion")
+    implementation("com.scanoss:scanner:1.1.1")
     implementation("com.squareup.retrofit2:converter-jackson:$retrofitVersion")
+
     implementation("com.zaxxer:HikariCP:$hikariVersion")
     implementation("org.eclipse.sw360:client:$sw360ClientVersion")
     implementation("org.jetbrains.exposed:exposed-core:$exposedVersion")
