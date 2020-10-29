@@ -327,12 +327,12 @@ class MavenSupport(workspaceReader: WorkspaceReader) {
 
             if (resultForPomFile != null) {
                 log.warn {
-                    "There was an error building '${pomFile.invariantSeparatorsPath}', continuing with the " +
+                    "There was an error building '${e.pomFile.invariantSeparatorsPath}', continuing with the " +
                             "incompletely built project: ${e.collectMessagesAsString()}"
                 }
                 resultForPomFile
             } else {
-                log.error { "Failed to build '${pomFile.invariantSeparatorsPath}': ${e.collectMessagesAsString()}" }
+                log.error { "Failed to build '${e.pomFile.invariantSeparatorsPath}': ${e.collectMessagesAsString()}" }
                 throw e
             }
         }
