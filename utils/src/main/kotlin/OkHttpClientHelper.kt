@@ -64,7 +64,11 @@ object OkHttpClientHelper {
             val cache = Cache(cacheDirectory, MAX_CACHE_SIZE_IN_BYTES)
             val specs = listOf(ConnectionSpec.MODERN_TLS, ConnectionSpec.COMPATIBLE_TLS, ConnectionSpec.CLEARTEXT)
 
-            // OkHttp uses the global Java ProxySelector by default, but the authenticator needs to be set explicitly.
+            // OkHttp uses Java's global ProxySelector by default, but the Authenticator for a proxy needs to be set
+            // explicitly. Also note that no (non-proxy) authenticator is set here as it is primarily intended for
+            // "reactive" authentication, but most often "preemptive" authentication via headers is required. For proxy
+            // authentication, OkHttp emulates preemptive authentication by sending a fake "OkHttp-Preemptive" response
+            // to the reactive proxy authenticator.
             OkHttpClient.Builder()
                 .cache(cache)
                 .connectionSpecs(specs)
