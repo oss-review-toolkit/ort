@@ -34,6 +34,8 @@ import org.ossreviewtoolkit.model.RemoteArtifact
 import org.ossreviewtoolkit.model.VcsInfoCurationData
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.utils.toClearlyDefinedTypeAndProvider
+import org.ossreviewtoolkit.spdx.SpdxExpression
+import org.ossreviewtoolkit.spdx.toSpdx
 import org.ossreviewtoolkit.utils.OkHttpClientHelper
 import org.ossreviewtoolkit.utils.collectMessagesAsString
 import org.ossreviewtoolkit.utils.log
@@ -93,11 +95,18 @@ class ClearlyDefinedPackageCurationProvider(server: Server = Server.PRODUCTION) 
 
         val curation = response?.body() ?: return emptyList()
 
+        val declaredLicenseParsed = curation.licensed?.declared?.let { declaredLicense ->
+            // Only take curations of good quality (i.e. those not using deprecated identifiers) and in particular none
+            // that contain "OTHER" as a license, also see https://github.com/clearlydefined/curated-data/issues/7836.
+            runCatching { declaredLicense.toSpdx(SpdxExpression.Strictness.ALLOW_CURRENT) }.getOrNull()?.toString()
+        }
+
         val sourceLocation = curation.described?.sourceLocation.toArtifactOrVcs()
+
         val pkgCuration = PackageCuration(
             id = pkgId,
             data = PackageCurationData(
-                declaredLicenses = curation.licensed?.declared?.let { sortedSetOf(it) },
+                declaredLicenses = declaredLicenseParsed?.let { sortedSetOf(it) },
                 homepageUrl = curation.described?.projectWebsite?.toString(),
                 sourceArtifact = sourceLocation as? RemoteArtifact,
                 vcs = sourceLocation as? VcsInfoCurationData,
