@@ -274,6 +274,39 @@ abstract class AbstractStorageFunTest : StringSpec() {
             }
         }
 
+        "Can retrieve all scan results for scanners with names matching a pattern" {
+            val storage = createStorage()
+            val detailsCompatibleOtherScanner = scannerDetails1.copy(name = "name 2")
+            val detailsIncompatibleOtherScanner = scannerDetails1.copy(name = "other Scanner name")
+            val scanResult1 = ScanResult(
+                provenanceWithSourceArtifact, scannerDetails1, scanSummaryWithFiles,
+                rawResultWithContent
+            )
+            val scanResult2 = ScanResult(
+                provenanceWithSourceArtifact, detailsCompatibleOtherScanner, scanSummaryWithFiles,
+                rawResultWithContent
+            )
+            val scanResult3 = ScanResult(
+                provenanceWithSourceArtifact, detailsIncompatibleOtherScanner, scanSummaryWithFiles,
+                rawResultWithContent
+            )
+            val criteria = criteriaForDetails(scannerDetails1).copy(regScannerName = "name.+")
+
+            val addResult1 = storage.add(id, scanResult1)
+            val addResult2 = storage.add(id, scanResult2)
+            val addResult3 = storage.add(id, scanResult3)
+            val readResult = storage.read(pkg, criteria)
+
+            addResult1 should beOfType(Success::class)
+            addResult2 should beOfType(Success::class)
+            addResult3 should beOfType(Success::class)
+            readResult should beOfType(Success::class)
+            (readResult as Success).result.let { result ->
+                result.id shouldBe id
+                result.results should containExactlyInAnyOrder(scanResult1, scanResult2)
+            }
+        }
+
         "Can retrieve all scan results for compatible scanners from storage" {
             val storage = createStorage()
             val scanResult = ScanResult(
@@ -310,6 +343,48 @@ abstract class AbstractStorageFunTest : StringSpec() {
                     scanResult,
                     scanResultCompatible1,
                     scanResultCompatible2
+                )
+            }
+        }
+
+        "Can retrieve all scan results for a scanner in a version range" {
+            val storage = createStorage()
+            val scanResult = ScanResult(
+                provenanceWithSourceArtifact, scannerDetails1, scanSummaryWithFiles,
+                rawResultWithContent
+            )
+            val scanResultCompatible1 = ScanResult(
+                provenanceWithSourceArtifact, scannerDetailsCompatibleVersion1,
+                scanSummaryWithFiles, rawResultWithContent
+            )
+            val scanResultCompatible2 = ScanResult(
+                provenanceWithSourceArtifact, scannerDetailsCompatibleVersion2,
+                scanSummaryWithFiles, rawResultWithContent
+            )
+            val scanResultIncompatible = ScanResult(
+                provenanceWithSourceArtifact, scannerDetailsIncompatibleVersion,
+                scanSummaryWithFiles, rawResultWithContent
+            )
+            val criteria = criteriaForDetails(scannerDetails1).copy(maxVersion = Semver("1.5.0"))
+
+            val addResult = storage.add(id, scanResult)
+            val addResultCompatible1 = storage.add(id, scanResultCompatible1)
+            val addResultCompatible2 = storage.add(id, scanResultCompatible2)
+            val addResultIncompatible = storage.add(id, scanResultIncompatible)
+            val readResult = storage.read(pkg, criteria)
+
+            addResult should beOfType(Success::class)
+            addResultCompatible1 should beOfType(Success::class)
+            addResultCompatible2 should beOfType(Success::class)
+            addResultIncompatible should beOfType(Success::class)
+            readResult should beOfType(Success::class)
+            (readResult as Success).result.let { result ->
+                result.id shouldBe id
+                result.results should containExactlyInAnyOrder(
+                    scanResult,
+                    scanResultCompatible1,
+                    scanResultCompatible2,
+                    scanResultIncompatible
                 )
             }
         }
