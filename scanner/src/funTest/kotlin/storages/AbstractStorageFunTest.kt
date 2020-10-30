@@ -20,6 +20,8 @@
 
 package org.ossreviewtoolkit.scanner.storages
 
+import com.vdurmont.semver4j.Semver
+
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.collections.beEmpty
 import io.kotest.matchers.collections.containExactly
@@ -49,6 +51,7 @@ import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.jsonMapper
 import org.ossreviewtoolkit.scanner.ScanResultsStorage
+import org.ossreviewtoolkit.scanner.ScannerCriteria
 
 abstract class AbstractStorageFunTest : StringSpec() {
     private companion object {
@@ -92,7 +95,7 @@ abstract class AbstractStorageFunTest : StringSpec() {
     private val scannerDetails1 = ScannerDetails("name 1", "1.0.0", "config 1")
     private val scannerDetails2 = ScannerDetails("name 2", "2.0.0", "config 2")
     private val scannerDetailsCompatibleVersion1 = ScannerDetails("name 1", "1.0.1", "config 1")
-    private val scannerDetailsCompatibleVersion2 = ScannerDetails("name 1", "1.0.0-alpha.1", "config 1")
+    private val scannerDetailsCompatibleVersion2 = ScannerDetails("name 1", "1.0.1-alpha.1", "config 1")
     private val scannerDetailsIncompatibleVersion = ScannerDetails("name 1", "1.1.0", "config 1")
 
     private val scannerStartTime1 = downloadTime1 + Duration.ofMinutes(1)
@@ -129,6 +132,17 @@ abstract class AbstractStorageFunTest : StringSpec() {
     private val rawResultEmpty = EMPTY_JSON_NODE
 
     abstract fun createStorage(): ScanResultsStorage
+
+    /**
+     * Generate a [ScannerCriteria] object that is compatible with the given [details].
+     */
+    private fun criteriaForDetails(details: ScannerDetails): ScannerCriteria =
+        ScannerCriteria(
+            regScannerName = details.name,
+            minVersion = Semver(details.version),
+            maxVersion = Semver(details.version).nextMinor(),
+            configMatcher = ScannerCriteria.exactConfigMatcher(details.configuration)
+        )
 
     init {
         "Scan result can be added to the storage" {
@@ -248,7 +262,7 @@ abstract class AbstractStorageFunTest : StringSpec() {
             val addResult1 = storage.add(id, scanResult1)
             val addResult2 = storage.add(id, scanResult2)
             val addResult3 = storage.add(id, scanResult3)
-            val readResult = storage.read(pkg, scannerDetails1)
+            val readResult = storage.read(pkg, criteriaForDetails(scannerDetails1))
 
             addResult1 should beOfType(Success::class)
             addResult2 should beOfType(Success::class)
@@ -283,7 +297,7 @@ abstract class AbstractStorageFunTest : StringSpec() {
             val addResultCompatible1 = storage.add(id, scanResultCompatible1)
             val addResultCompatible2 = storage.add(id, scanResultCompatible2)
             val addResultIncompatible = storage.add(id, scanResultIncompatible)
-            val readResult = storage.read(pkg, scannerDetails1)
+            val readResult = storage.read(pkg, criteriaForDetails(scannerDetails1))
 
             addResult should beOfType(Success::class)
             addResultCompatible1 should beOfType(Success::class)
@@ -329,7 +343,7 @@ abstract class AbstractStorageFunTest : StringSpec() {
             val addResult2 = storage.add(id, scanResultVcsMatching)
             val addResult3 = storage.add(id, scanResultSourceArtifactNonMatching)
             val addResult4 = storage.add(id, scanResultVcsInfoNonMatching)
-            val readResult = storage.read(pkg, scannerDetails1)
+            val readResult = storage.read(pkg, criteriaForDetails(scannerDetails1))
 
             addResult1 should beOfType(Success::class)
             addResult2 should beOfType(Success::class)
@@ -353,7 +367,7 @@ abstract class AbstractStorageFunTest : StringSpec() {
             )
 
             val addResult = storage.add(id, scanResult)
-            val readResult = storage.read(pkgWithoutRevision, scannerDetails1)
+            val readResult = storage.read(pkgWithoutRevision, criteriaForDetails(scannerDetails1))
 
             addResult should beOfType(Success::class)
             readResult should beOfType(Success::class)

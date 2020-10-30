@@ -25,9 +25,9 @@ import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.Result
 import org.ossreviewtoolkit.model.ScanResult
 import org.ossreviewtoolkit.model.ScanResultContainer
-import org.ossreviewtoolkit.model.ScannerDetails
 import org.ossreviewtoolkit.model.Success
 import org.ossreviewtoolkit.scanner.ScanResultsStorage
+import org.ossreviewtoolkit.scanner.ScannerCriteria
 
 /**
  * A [ScanResultsStorage] implementation that manages multiple concrete storages for reading and writing scan results.
@@ -61,11 +61,11 @@ class CompositeStorage(
         fetchReadResult(id) { read(id) }
 
     /**
-     * Try to find scan results for the provided [pkg] and [scannerDetails]. This implementation iterates over all
+     * Try to find scan results for the provided [pkg] and [scannerCriteria]. This implementation iterates over all
      * the reader storages provided until it receives a non-empty success result.
      */
-    override fun readFromStorage(pkg: Package, scannerDetails: ScannerDetails): Result<ScanResultContainer> =
-        fetchReadResult(pkg.id) { read(pkg, scannerDetails) }
+    override fun readFromStorage(pkg: Package, scannerCriteria: ScannerCriteria): Result<ScanResultContainer> =
+        fetchReadResult(pkg.id) { read(pkg, scannerCriteria) }
 
     /**
      * Trigger all configured writer storages to add the [scanResult] for the given [id]. Return a success result

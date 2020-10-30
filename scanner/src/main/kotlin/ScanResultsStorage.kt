@@ -32,7 +32,6 @@ import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.Result
 import org.ossreviewtoolkit.model.ScanResult
 import org.ossreviewtoolkit.model.ScanResultContainer
-import org.ossreviewtoolkit.model.ScannerDetails
 import org.ossreviewtoolkit.model.Success
 import org.ossreviewtoolkit.model.config.ClearlyDefinedStorageConfiguration
 import org.ossreviewtoolkit.model.config.FileBasedStorageConfiguration
@@ -205,15 +204,15 @@ abstract class ScanResultsStorage {
 
     /**
      * Read those [ScanResult]s for the given [package][pkg] from the storage that are
-     * [compatible][ScannerDetails.isCompatible] with the provided [scannerDetails]. Also, [Package.sourceArtifact],
+     * [compatible][ScannerCriteria.matches] with the provided [scannerCriteria]. Also, [Package.sourceArtifact],
      * [Package.vcs], and [Package.vcsProcessed] are used to check if the scan result matches the expected source code
      * location. That check is important to find the correct results when different revisions of a package using the
      * same version name are used (e.g. multiple scans of a "1.0-SNAPSHOT" version during development). Return a
      * [ScanResultContainer] wrapped in a [Result], which is a [Failure] if no [ScanResult] was found and a [Success]
      * otherwise.
      */
-    fun read(pkg: Package, scannerDetails: ScannerDetails): Result<ScanResultContainer> {
-        val (result, duration) = measureTimedValue { readFromStorage(pkg, scannerDetails) }
+    fun read(pkg: Package, scannerCriteria: ScannerCriteria): Result<ScanResultContainer> {
+        val (result, duration) = measureTimedValue { readFromStorage(pkg, scannerCriteria) }
 
         stats.numReads.incrementAndGet()
 
@@ -282,9 +281,9 @@ abstract class ScanResultsStorage {
 
     /**
      * Internal version of [read] that does not update the [access statistics][stats]. Implementations may want to
-     * override this function if they can filter for the wanted [scannerDetails] in a more efficient way.
+     * override this function if they can filter for the wanted [scannerCriteria] in a more efficient way.
      */
-    protected open fun readFromStorage(pkg: Package, scannerDetails: ScannerDetails): Result<ScanResultContainer> {
+    protected open fun readFromStorage(pkg: Package, scannerCriteria: ScannerCriteria): Result<ScanResultContainer> {
         val scanResults = when (val readResult = readFromStorage(pkg.id)) {
             is Success -> readResult.result.results.toMutableList()
             is Failure -> return readResult
@@ -303,10 +302,10 @@ abstract class ScanResultsStorage {
         }
 
         // Only keep scan results from compatible scanners.
-        scanResults.retainAll { scannerDetails.isCompatible(it.scanner) }
+        scanResults.retainAll { scannerCriteria.matches(it.scanner) }
         if (scanResults.isEmpty()) {
             log.debug {
-                "No stored scan results found for $scannerDetails. The following entries with incompatible scanners " +
+                "No stored scan results found for $scannerCriteria. The following entries with incompatible scanners " +
                         "have been ignored: ${scanResults.map { it.scanner }}"
             }
             return Success(ScanResultContainer(pkg.id, scanResults))

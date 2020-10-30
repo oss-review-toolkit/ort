@@ -28,6 +28,7 @@ import com.github.tomakehurst.wiremock.client.WireMock.get
 import com.github.tomakehurst.wiremock.client.WireMock.stubFor
 import com.github.tomakehurst.wiremock.client.WireMock.urlPathEqualTo
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration
+import com.vdurmont.semver4j.Semver
 
 import io.kotest.assertions.fail
 import io.kotest.core.spec.style.WordSpec
@@ -52,11 +53,11 @@ import org.ossreviewtoolkit.model.RemoteArtifact
 import org.ossreviewtoolkit.model.Result
 import org.ossreviewtoolkit.model.ScanResult
 import org.ossreviewtoolkit.model.ScanResultContainer
-import org.ossreviewtoolkit.model.ScannerDetails
 import org.ossreviewtoolkit.model.Success
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.config.ClearlyDefinedStorageConfiguration
+import org.ossreviewtoolkit.scanner.ScannerCriteria
 
 private const val PACKAGE_TYPE = "Maven"
 private const val NAMESPACE = "someNamespace"
@@ -98,8 +99,11 @@ private val TEST_PACKAGE =
     )
 
 /** The scanner details used by tests. */
-private val SCANNER_DETAILS =
-    ScannerDetails("aScanner", "aVersion", "aConfig")
+private val SCANNER_CRITERIA =
+    ScannerCriteria(
+        "aScanner", Semver("1.0.0"), Semver("2.0.0"),
+        ScannerCriteria.exactConfigMatcher("aConfig")
+    )
 
 /**
  * Return a storage configuration that points to the mock [server].
@@ -221,7 +225,7 @@ class ClearlyDefinedStorageTest : WordSpec({
 
             val storage = ClearlyDefinedStorage(storageConfiguration(wiremock))
 
-            assertValidResult(storage.read(TEST_PACKAGE, SCANNER_DETAILS))
+            assertValidResult(storage.read(TEST_PACKAGE, SCANNER_CRITERIA))
         }
 
         "load existing scan results for an identifier from ClearlyDefined" {
@@ -247,7 +251,7 @@ class ClearlyDefinedStorageTest : WordSpec({
 
             val storage = ClearlyDefinedStorage(storageConfiguration(wiremock))
 
-            assertValidResult(storage.read(TEST_PACKAGE, SCANNER_DETAILS))
+            assertValidResult(storage.read(TEST_PACKAGE, SCANNER_CRITERIA))
         }
 
         "set correct metadata in the package scan result" {
@@ -299,7 +303,7 @@ class ClearlyDefinedStorageTest : WordSpec({
 
             val storage = ClearlyDefinedStorage(storageConfiguration(wiremock))
 
-            assertEmptyResult(storage.read(TEST_PACKAGE, SCANNER_DETAILS))
+            assertEmptyResult(storage.read(TEST_PACKAGE, SCANNER_CRITERIA))
         }
 
         "use GitHub VCS info if available" {
@@ -317,7 +321,7 @@ class ClearlyDefinedStorageTest : WordSpec({
 
             val storage = ClearlyDefinedStorage(storageConfiguration(wiremock))
 
-            assertValidResult(storage.read(pkg, SCANNER_DETAILS))
+            assertValidResult(storage.read(pkg, SCANNER_CRITERIA))
         }
 
         "only use VCS info pointing to GitHub" {
@@ -329,7 +333,7 @@ class ClearlyDefinedStorageTest : WordSpec({
 
             val storage = ClearlyDefinedStorage(storageConfiguration(wiremock))
 
-            assertValidResult(storage.read(pkg, SCANNER_DETAILS))
+            assertValidResult(storage.read(pkg, SCANNER_CRITERIA))
         }
 
         "use information from a source artifact if available" {
@@ -342,7 +346,7 @@ class ClearlyDefinedStorageTest : WordSpec({
 
             val storage = ClearlyDefinedStorage(storageConfiguration(wiremock))
 
-            assertValidResult(storage.read(pkg, SCANNER_DETAILS))
+            assertValidResult(storage.read(pkg, SCANNER_CRITERIA))
         }
 
         "deal with package coordinates not supported by ClearlyDefined" {
