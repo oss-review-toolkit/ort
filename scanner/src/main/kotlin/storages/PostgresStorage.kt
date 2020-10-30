@@ -22,7 +22,10 @@ package org.ossreviewtoolkit.scanner.storages
 import com.fasterxml.jackson.core.JsonProcessingException
 import com.fasterxml.jackson.module.kotlin.readValue
 
+import com.vdurmont.semver4j.Semver
+
 import java.io.IOException
+import java.sql.Array
 import java.sql.Connection
 import java.sql.SQLException
 
@@ -58,6 +61,28 @@ class PostgresStorage(
      */
     private val schema: String
 ) : ScanResultsStorage() {
+    companion object {
+        /** Expression to reference the scanner version as an array. */
+        private const val VERSION_ARRAY =
+            "string_to_array(regexp_replace(scan_result->'scanner'->>'version', '[^0-9.]', '', 'g'), '.')"
+
+        /** Expression to convert the scanner version to a numeric array for comparisons. */
+        private const val VERSION_EXPRESSION = "$VERSION_ARRAY::int[]"
+
+        /**
+         * The null character "\u0000" can appear in raw scan results, for example in ScanCode if the matched text for a
+         * license or copyright contains this character. Since it is not allowed in PostgreSQL JSONB columns we need to
+         * escape it before writing a string to the database.
+         * See: [https://www.postgresql.org/docs/11/datatype-json.html]
+         */
+        private fun String.escapeNull() = replace("\\u0000", "\\\\u0000")
+
+        /**
+         * Unescape the null character "\u0000". For details see [escapeNull].
+         */
+        private fun String.unescapeNull() = replace("\\\\u0000", "\\u0000")
+    }
+
     private val table = "scan_results" // TODO: make configurable
 
     /**
@@ -128,8 +153,7 @@ class PostgresStorage(
                 (
                     identifier,
                     (scan_result->'scanner'->>'name'),
-                    substring(scan_result->'scanner'->>'version' from '([0-9]+\.[0-9]+)\.?.*'),
-                    (scan_result->'scanner'->>'configuration')
+                    $VERSION_ARRAY
                 )
                 TABLESPACE pg_default
             """.trimIndent()
@@ -186,15 +210,13 @@ class PostgresStorage(
     }
 
     override fun readFromStorage(pkg: Package, scannerCriteria: ScannerCriteria): Result<ScanResultContainer> {
-        // TODO: Evaluate the version range
-        val version = scannerCriteria.minVersion
-
         val query = """
             SELECT scan_result
               FROM $schema.$table
               WHERE identifier = ?
-                AND scan_result->'scanner'->>'name' = ?
-                AND substring(scan_result->'scanner'->>'version' from '([0-9]+\.[0-9]+)\.?.*') = ?;
+                AND scan_result->'scanner'->>'name' ~ ?
+                AND $VERSION_EXPRESSION >= ?
+                AND $VERSION_EXPRESSION < ?;
         """.trimIndent()
 
         @Suppress("TooGenericExceptionCaught")
@@ -202,7 +224,8 @@ class PostgresStorage(
             val statement = connection.prepareStatement(query).apply {
                 setString(1, pkg.id.toCoordinates())
                 setString(2, scannerCriteria.regScannerName)
-                setString(3, "${version.major}.${version.minor}")
+                setArray(3, scannerCriteria.minVersion.toSqlArray())
+                setArray(4, scannerCriteria.maxVersion.toSqlArray())
             }
 
             val (resultSet, queryDuration) = measureTimedValue { statement.executeQuery() }
@@ -287,15 +310,10 @@ class PostgresStorage(
     }
 
     /**
-     * The null character "\u0000" can appear in raw scan results, for example in ScanCode if the matched text for a
-     * license or copyright contains this character. Since it is not allowed in PostgreSQL JSONB columns we need to
-     * escape it before writing a string to the database.
-     * See: [https://www.postgresql.org/docs/11/datatype-json.html]
+     * Generate an SQL array parameter for the version numbers contained in this [Semver].
      */
-    private fun String.escapeNull() = replace("\\u0000", "\\\\u0000")
-
-    /**
-     * Unescape the null character "\u0000". For details see [escapeNull].
-     */
-    private fun String.unescapeNull() = replace("\\\\u0000", "\\u0000")
+    private fun Semver.toSqlArray(): Array {
+        val versionArray = intArrayOf(major, minor, patch)
+        return connection.createArrayOf("int4", versionArray.toTypedArray())
+    }
 }
