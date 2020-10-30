@@ -25,9 +25,9 @@ import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.Result
 import org.ossreviewtoolkit.model.ScanResult
 import org.ossreviewtoolkit.model.ScanResultContainer
-import org.ossreviewtoolkit.model.ScannerDetails
 import org.ossreviewtoolkit.model.Success
 import org.ossreviewtoolkit.scanner.ScanResultsStorage
+import org.ossreviewtoolkit.scanner.ScannerCriteria
 
 /**
  * A dummy storage that does not store scan results at all. Can be used to disable storing of scan results to always
@@ -37,7 +37,7 @@ import org.ossreviewtoolkit.scanner.ScanResultsStorage
 class NoStorage : ScanResultsStorage() {
     override fun readFromStorage(id: Identifier) = Success(ScanResultContainer(id, emptyList()))
 
-    override fun readFromStorage(pkg: Package, scannerDetails: ScannerDetails) =
+    override fun readFromStorage(pkg: Package, scannerCriteria: ScannerCriteria) =
         Success(ScanResultContainer(pkg.id, emptyList()))
 
     override fun addToStorage(id: Identifier, scanResult: ScanResult) = Success(Unit)

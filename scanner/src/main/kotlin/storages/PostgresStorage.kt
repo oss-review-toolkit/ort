@@ -22,8 +22,6 @@ package org.ossreviewtoolkit.scanner.storages
 import com.fasterxml.jackson.core.JsonProcessingException
 import com.fasterxml.jackson.module.kotlin.readValue
 
-import com.vdurmont.semver4j.Semver
-
 import java.io.IOException
 import java.sql.Connection
 import java.sql.SQLException
@@ -37,10 +35,10 @@ import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.Result
 import org.ossreviewtoolkit.model.ScanResult
 import org.ossreviewtoolkit.model.ScanResultContainer
-import org.ossreviewtoolkit.model.ScannerDetails
 import org.ossreviewtoolkit.model.Success
 import org.ossreviewtoolkit.model.jsonMapper
 import org.ossreviewtoolkit.scanner.ScanResultsStorage
+import org.ossreviewtoolkit.scanner.ScannerCriteria
 import org.ossreviewtoolkit.utils.collectMessagesAsString
 import org.ossreviewtoolkit.utils.log
 import org.ossreviewtoolkit.utils.perf
@@ -187,25 +185,24 @@ class PostgresStorage(
         }
     }
 
-    override fun readFromStorage(pkg: Package, scannerDetails: ScannerDetails): Result<ScanResultContainer> {
-        val version = Semver(scannerDetails.version)
+    override fun readFromStorage(pkg: Package, scannerCriteria: ScannerCriteria): Result<ScanResultContainer> {
+        // TODO: Evaluate the version range
+        val version = scannerCriteria.minVersion
 
         val query = """
             SELECT scan_result
               FROM $schema.$table
               WHERE identifier = ?
                 AND scan_result->'scanner'->>'name' = ?
-                AND substring(scan_result->'scanner'->>'version' from '([0-9]+\.[0-9]+)\.?.*') = ?
-                AND scan_result->'scanner'->>'configuration' = ?;
+                AND substring(scan_result->'scanner'->>'version' from '([0-9]+\.[0-9]+)\.?.*') = ?;
         """.trimIndent()
 
         @Suppress("TooGenericExceptionCaught")
         return try {
             val statement = connection.prepareStatement(query).apply {
                 setString(1, pkg.id.toCoordinates())
-                setString(2, scannerDetails.name)
+                setString(2, scannerCriteria.regScannerName)
                 setString(3, "${version.major}.${version.minor}")
-                setString(4, scannerDetails.configuration)
             }
 
             val (resultSet, queryDuration) = measureTimedValue { statement.executeQuery() }
@@ -229,11 +226,11 @@ class PostgresStorage(
                         "${deserializationDuration.inMilliseconds}ms."
             }
 
-            // TODO: Currently the query only accounts for the scanner details. Ideally also the provenance should be
+            // TODO: Currently the query only accounts for the scanner criteria. Ideally also the provenance should be
             //       checked in the query to reduce the downloaded data.
             scanResults.retainAll { it.provenance.matches(pkg) }
             // The scanner compatibility is already checked in the query, but filter here again to be on the safe side.
-            scanResults.retainAll { scannerDetails.isCompatible(it.scanner) }
+            scanResults.retainAll { scannerCriteria.matches(it.scanner) }
 
             Success(ScanResultContainer(pkg.id, scanResults))
         } catch (e: Exception) {
@@ -242,7 +239,7 @@ class PostgresStorage(
                     e.showStackTrace()
 
                     val message = "Could not read scan results for ${pkg.id.toCoordinates()} with " +
-                            "$scannerDetails from database: ${e.collectMessagesAsString()}"
+                            "$scannerCriteria from database: ${e.collectMessagesAsString()}"
 
                     log.info { message }
                     Failure(message)

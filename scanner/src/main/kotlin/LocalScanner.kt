@@ -231,6 +231,7 @@ abstract class LocalScanner(name: String, config: ScannerConfiguration) : Scanne
         scanDispatcher: CoroutineDispatcher
     ): List<ScanResult> {
         val scannerDetails = getDetails()
+        val scannerCriteria = getScannerCriteria()
 
         if (pkg.isMetaDataOnly) {
             log.info { "Skipping '${pkg.id.toCoordinates()}' as it is meta data only." }
@@ -242,16 +243,16 @@ abstract class LocalScanner(name: String, config: ScannerConfiguration) : Scanne
             val storedResults = withContext(storageDispatcher) {
                 log.info {
                     "Looking for stored scan results for ${pkg.id.toCoordinates()} and " +
-                            "$scannerDetails $packageIndex."
+                            "$scannerCriteria $packageIndex."
                 }
 
-                readFromStorage(scannerDetails, pkg, outputDirectory)
+                readFromStorage(scannerDetails, scannerCriteria, pkg, outputDirectory)
             }
 
             if (storedResults.isNotEmpty()) {
                 log.info {
                     "Found ${storedResults.size} stored scan result(s) for ${pkg.id.toCoordinates()} " +
-                            "and $scannerDetails, not scanning the package again $packageIndex."
+                            "and $scannerCriteria, not scanning the package again $packageIndex."
                 }
 
                 // Due to a temporary bug that has been fixed by now the scan results for packages were not properly
@@ -261,7 +262,7 @@ abstract class LocalScanner(name: String, config: ScannerConfiguration) : Scanne
             } else {
                 withContext(scanDispatcher) {
                     log.info {
-                        "No stored result found for ${pkg.id.toCoordinates()} and $scannerDetails, " +
+                        "No stored result found for ${pkg.id.toCoordinates()} and $scannerCriteria, " +
                                 "scanning package in thread '${Thread.currentThread().name}' " +
                                 "$packageIndex."
                     }
@@ -322,10 +323,15 @@ abstract class LocalScanner(name: String, config: ScannerConfiguration) : Scanne
      * Return matching [ScanResult]s for this [Package][pkg] from the [ScanResultsStorage]. If no results are found an
      * empty list is returned.
      */
-    private fun readFromStorage(scannerDetails: ScannerDetails, pkg: Package, outputDirectory: File): List<ScanResult> {
+    private fun readFromStorage(
+        scannerDetails: ScannerDetails,
+        scannerCriteria: ScannerCriteria,
+        pkg: Package,
+        outputDirectory: File
+    ): List<ScanResult> {
         val resultsFile = getResultsFile(scannerDetails, pkg, outputDirectory)
 
-        val scanResults = when (val storageResult = ScanResultsStorage.storage.read(pkg, scannerDetails)) {
+        val scanResults = when (val storageResult = ScanResultsStorage.storage.read(pkg, scannerCriteria)) {
             is Success -> storageResult.result.deduplicateScanResults().results
             is Failure -> emptyList()
         }
