@@ -45,13 +45,31 @@ val okhttpVersion: String by project
 plugins {
     kotlin("jvm")
 
+    id("com.github.ben-manes.versions")
     id("io.gitlab.arturbosch.detekt")
     id("org.jetbrains.dokka")
-
-    id("com.github.ben-manes.versions")
-    id("org.ajoberstar.reckon")
     id("org.jetbrains.gradle.plugin.idea-ext")
 }
+
+buildscript {
+    dependencies {
+        // For some reason "jgitVersion" needs to be declared here instead of globally.
+        val jgitVersion: String by project
+        classpath("org.eclipse.jgit:org.eclipse.jgit:$jgitVersion")
+    }
+}
+
+if (version == Project.DEFAULT_VERSION) {
+    version = org.eclipse.jgit.api.Git.open(rootDir).use { git ->
+        // Make the output to exactly match "git describe --abbrev=7 --always --tags --dirty".
+        val description = git.describe().setAlways(true).setTags(true).call()
+        val isDirty = git.status().call().hasUncommittedChanges()
+
+        if (isDirty) "$description-dirty" else description
+    }
+}
+
+logger.quiet("Building ORT version '$version'.")
 
 // TODO: Replace this with Gradle's toolchain mechanism [1] once the Kotlin plugin supports it [2].
 // [1] https://blog.gradle.org/java-toolchains
@@ -59,11 +77,6 @@ plugins {
 val javaVersion = JavaVersion.current()
 if (!javaVersion.isCompatibleWith(JavaVersion.VERSION_11)) {
     throw GradleException("At least Java 11 is required, but Java $javaVersion is being used.")
-}
-
-reckon {
-    scopeFromProp()
-    snapshotFromProp()
 }
 
 idea {
