@@ -19,6 +19,8 @@
 
 FROM adoptopenjdk/openjdk11:jdk-11.0.9_11.1-alpine-slim AS build
 
+ARG ORT_VERSION="DOCKER-SNAPSHOT"
+
 # Apk install commands.
 RUN apk add --no-cache \
         # Required for Node.js to build the reporter-web-app.
@@ -37,7 +39,7 @@ RUN --mount=type=cache,target=/root/.gradle/ \
     scripts/import_proxy_certs.sh && \
     scripts/set_gradle_proxy.sh && \
     sed -i -r 's,(^distributionUrl=)(.+)-all\.zip$,\1\2-bin.zip,' gradle/wrapper/gradle-wrapper.properties && \
-    ./gradlew --no-daemon --stacktrace :cli:distTar
+    ./gradlew --no-daemon --stacktrace -Pversion=$ORT_VERSION :cli:distTar
 
 FROM adoptopenjdk:11-jre-hotspot-bionic
 

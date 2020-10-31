@@ -11,9 +11,6 @@ jobs:
     fetchDepth: 1
     submodules: false
 
-  - task: Docker@2
+  - task: ShellScript@2
     inputs:
-      command: build
-      Dockerfile: Dockerfile
-      tags: |
-        ort
+      scriptPath: scripts/docker_build.sh
