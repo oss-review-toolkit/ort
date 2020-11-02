@@ -123,6 +123,12 @@ class IdentifierTest : WordSpec({
             purl shouldNotContain "%"
         }
 
+        "ignore case in type" {
+            val purl = Identifier("MaVeN", "namespace", "name", "version").toPurl()
+
+            purl shouldBe purl.toLowerCase()
+        }
+
         "not use '/' for empty namespaces" {
             val purl = Identifier("type", "", "name", "version").toPurl()
 
