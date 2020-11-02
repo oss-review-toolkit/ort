@@ -21,6 +21,7 @@ package org.ossreviewtoolkit.model.config
 
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.WordSpec
+import io.kotest.extensions.system.withEnvironment
 import io.kotest.matchers.collections.containExactly
 import io.kotest.matchers.collections.shouldContainExactly
 import io.kotest.matchers.collections.shouldContainExactlyInAnyOrder
@@ -157,6 +158,39 @@ class OrtConfigurationTest : WordSpec({
             val config = OrtConfiguration.load(configFile = file, args = args)
 
             config.scanner.shouldBeNull()
+        }
+
+        "support references to environment variables" {
+            val configFile = createTestConfig(
+                """
+                ort {
+                  scanner {
+                    storages {
+                      postgresStorage {
+                        url = "postgresql://your-postgresql-server:5444/your-database"
+                        schema = schema
+                        username = ${'$'}{POSTGRES_USERNAME}
+                        password = ${'$'}{POSTGRES_PASSWORD}
+                      }
+                    }
+                  }
+                }
+                """.trimIndent()
+            )
+            val user = "scott"
+            val password = "tiger"
+            val env = mapOf("POSTGRES_USERNAME" to user, "POSTGRES_PASSWORD" to password)
+
+            withEnvironment(env) {
+                val config = OrtConfiguration.load(configFile = configFile)
+
+                config.scanner?.storages shouldNotBeNull {
+                    val postgresStorage = this["postgresStorage"]
+                    postgresStorage.shouldBeInstanceOf<PostgresStorageConfiguration>()
+                    postgresStorage.username shouldBe user
+                    postgresStorage.password shouldBe password
+                }
+            }
         }
     }
 })
