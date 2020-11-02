@@ -108,19 +108,25 @@ class OrtConfigurationTest : WordSpec({
                 """.trimIndent()
             )
 
-            val config = OrtConfiguration.load(
-                args = mapOf(
-                    "ort.scanner.storages.postgresStorage.schema" to "argsSchema",
-                    "other.property" to "someValue"
-                ),
-                configFile = configFile
-            )
+            val env = mapOf("ort.scanner.storages.postgresStorage.password" to "envPassword")
 
-            config.scanner?.storages shouldNotBeNull {
-                val postgresStorage = this["postgresStorage"]
-                postgresStorage.shouldBeInstanceOf<PostgresStorageConfiguration>()
-                postgresStorage.username shouldBe "username"
-                postgresStorage.schema shouldBe "argsSchema"
+            withEnvironment(env) {
+                val config = OrtConfiguration.load(
+                    args = mapOf(
+                        "ort.scanner.storages.postgresStorage.schema" to "argsSchema",
+                        "ort.scanner.storages.postgresStorage.password" to "argsPassword",
+                        "other.property" to "someValue"
+                    ),
+                    configFile = configFile
+                )
+
+                config.scanner?.storages shouldNotBeNull {
+                    val postgresStorage = this["postgresStorage"]
+                    postgresStorage.shouldBeInstanceOf<PostgresStorageConfiguration>()
+                    postgresStorage.username shouldBe "username"
+                    postgresStorage.schema shouldBe "argsSchema"
+                    postgresStorage.password shouldBe "envPassword"
+                }
             }
         }
 
@@ -189,6 +195,32 @@ class OrtConfigurationTest : WordSpec({
                     postgresStorage.shouldBeInstanceOf<PostgresStorageConfiguration>()
                     postgresStorage.username shouldBe user
                     postgresStorage.password shouldBe password
+                }
+            }
+        }
+
+        "support environmental variables" {
+            val user = "user"
+            val password = "password"
+            val url = "url"
+            val schema = "schema"
+            val env = mapOf(
+                "ort.scanner.storages.postgresStorage.username" to user,
+                "ort.scanner.storages.postgresStorage.url" to url,
+                "ort__scanner__storages__postgresStorage__schema" to schema,
+                "ort__scanner__storages__postgresStorage__password" to password
+            )
+
+            withEnvironment(env) {
+                val config = OrtConfiguration.load(configFile = File("dummyPath"))
+
+                config.scanner?.storages shouldNotBeNull {
+                    val postgresStorage = this["postgresStorage"]
+                    postgresStorage.shouldBeInstanceOf<PostgresStorageConfiguration>()
+                    postgresStorage.username shouldBe user
+                    postgresStorage.password shouldBe password
+                    postgresStorage.url shouldBe url
+                    postgresStorage.schema shouldBe schema
                 }
             }
         }
