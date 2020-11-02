@@ -184,6 +184,30 @@ The main configuration file for the operation of ORT. This configuration is main
 the ORT instance. In contrast to the configuration files in the following, this file rarely changes once ORT is
 operational.
 
+The [reference configuration file](./model/src/test/assets/reference.conf) gives a good impression about the content
+of the main ORT configuration file. It consists of sections related to different sub components of ORT. The meaning
+of these sections and the properties they can contain is described together with the corresponding sub components.
+
+While the file is rather static, there are means to override configuration options for a specific run of ORT or to
+customize the configuration to a specific environment. The following options are supported:
+
+* You can override the values of properties on the command line using the `-P` option. The option expects a
+  key-value pair. The key must define the full path to the property to be overridden, e.g.
+  `-P ort.scanner.storages.postgresStorage.schema=test_schema`. The `-P` option can be repeated on the command
+  line to override multiple properties.
+* Properties in the configuration file can reference environment variables using the syntax `${VAR}`.
+  This is especially useful to reference dynamic or sensitive data. As an example, the credentials for the
+  Postgres database used as scan results storage could be defined in the `POSTGRES_USERNAME` and `POSTGRES_PASSWORD`
+  environment variables. The configuration file can then reference these values as follows:
+  
+  ```
+      postgres {
+        url = "jdbc:postgresql://your-postgresql-server:5444/your-database"
+        username = ${POSTGRES_USERNAME}
+        password = ${POSTGRES_PASSWORD}
+      }
+  ```
+
 | Format | Scope | Default location | Default value |
 | ------ | ----- | ---------------- | ------------- |
 | HOCON | Global | `$ORT_CONFIG_DIR/ort.conf` | Empty ([built-in](./model/src/main/resources/default.conf)) |
