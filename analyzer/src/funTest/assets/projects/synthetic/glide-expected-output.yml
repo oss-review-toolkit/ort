@@ -24,7 +24,7 @@ project:
       linkage: "STATIC"
 packages:
 - id: "GoDep::github.com/mattn/go-isatty:v0.0.12"
-  purl: "pkg:godep/github.com%2Fmattn%2Fgo-isatty@v0.0.12"
+  purl: "pkg:golang/github.com%2Fmattn%2Fgo-isatty@v0.0.12"
   declared_licenses: []
   declared_licenses_processed: {}
   description: ""
@@ -50,7 +50,7 @@ packages:
     revision: "7b513a986450394f7bbf1476909911b3aa3a55ce"
     path: ""
 - id: "GoDep::golang.org/x/sys:05986578812163b26672dabd9b425240ae2bb0ad"
-  purl: "pkg:godep/golang.org%2Fx%2Fsys@05986578812163b26672dabd9b425240ae2bb0ad"
+  purl: "pkg:golang/golang.org%2Fx%2Fsys@05986578812163b26672dabd9b425240ae2bb0ad"
   declared_licenses: []
   declared_licenses_processed: {}
   description: ""

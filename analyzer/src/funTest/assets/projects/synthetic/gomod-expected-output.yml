@@ -69,7 +69,7 @@ project:
         linkage: "PROJECT_STATIC"
 packages:
 - id: "GoMod::cloud.google.com/go:v0.34.0"
-  purl: "pkg:gomod/cloud.google.com%2Fgo@v0.34.0"
+  purl: "pkg:golang/cloud.google.com%2Fgo@v0.34.0"
   declared_licenses: []
   declared_licenses_processed: {}
   description: ""
@@ -95,7 +95,7 @@ packages:
     revision: ""
     path: ""
 - id: "GoMod::github.com/fatih/color:v1.7.0"
-  purl: "pkg:gomod/github.com%2Ffatih%2Fcolor@v1.7.0"
+  purl: "pkg:golang/github.com%2Ffatih%2Fcolor@v1.7.0"
   declared_licenses: []
   declared_licenses_processed: {}
   description: ""
@@ -121,7 +121,7 @@ packages:
     revision: ""
     path: ""
 - id: "GoMod::github.com/golang/protobuf:v1.2.0"
-  purl: "pkg:gomod/github.com%2Fgolang%2Fprotobuf@v1.2.0"
+  purl: "pkg:golang/github.com%2Fgolang%2Fprotobuf@v1.2.0"
   declared_licenses: []
   declared_licenses_processed: {}
   description: ""
@@ -147,7 +147,7 @@ packages:
     revision: ""
     path: ""
 - id: "GoMod::github.com/hashicorp/errwrap:v1.0.0"
-  purl: "pkg:gomod/github.com%2Fhashicorp%2Ferrwrap@v1.0.0"
+  purl: "pkg:golang/github.com%2Fhashicorp%2Ferrwrap@v1.0.0"
   declared_licenses: []
   declared_licenses_processed: {}
   description: ""
@@ -173,7 +173,7 @@ packages:
     revision: ""
     path: ""
 - id: "GoMod::github.com/hashicorp/go-multierror:v1.0.0"
-  purl: "pkg:gomod/github.com%2Fhashicorp%2Fgo-multierror@v1.0.0"
+  purl: "pkg:golang/github.com%2Fhashicorp%2Fgo-multierror@v1.0.0"
   declared_licenses: []
   declared_licenses_processed: {}
   description: ""
@@ -199,7 +199,7 @@ packages:
     revision: ""
     path: ""
 - id: "GoMod::github.com/mattn/go-colorable:v0.1.4"
-  purl: "pkg:gomod/github.com%2Fmattn%2Fgo-colorable@v0.1.4"
+  purl: "pkg:golang/github.com%2Fmattn%2Fgo-colorable@v0.1.4"
   declared_licenses: []
   declared_licenses_processed: {}
   description: ""
@@ -225,7 +225,7 @@ packages:
     revision: ""
     path: ""
 - id: "GoMod::github.com/mattn/go-isatty:v0.0.10"
-  purl: "pkg:gomod/github.com%2Fmattn%2Fgo-isatty@v0.0.10"
+  purl: "pkg:golang/github.com%2Fmattn%2Fgo-isatty@v0.0.10"
   declared_licenses: []
   declared_licenses_processed: {}
   description: ""
@@ -251,7 +251,7 @@ packages:
     revision: ""
     path: ""
 - id: "GoMod::github.com/mattn/go-isatty:v0.0.8"
-  purl: "pkg:gomod/github.com%2Fmattn%2Fgo-isatty@v0.0.8"
+  purl: "pkg:golang/github.com%2Fmattn%2Fgo-isatty@v0.0.8"
   declared_licenses: []
   declared_licenses_processed: {}
   description: ""
@@ -277,7 +277,7 @@ packages:
     revision: ""
     path: ""
 - id: "GoMod::golang.org/x/net:v0.0.0-20180724234803-3673e40ba225"
-  purl: "pkg:gomod/golang.org%2Fx%2Fnet@v0.0.0-20180724234803-3673e40ba225"
+  purl: "pkg:golang/golang.org%2Fx%2Fnet@v0.0.0-20180724234803-3673e40ba225"
   declared_licenses: []
   declared_licenses_processed: {}
   description: ""
@@ -303,7 +303,7 @@ packages:
     revision: ""
     path: ""
 - id: "GoMod::golang.org/x/net:v0.0.0-20190108225652-1e06a53dbb7e"
-  purl: "pkg:gomod/golang.org%2Fx%2Fnet@v0.0.0-20190108225652-1e06a53dbb7e"
+  purl: "pkg:golang/golang.org%2Fx%2Fnet@v0.0.0-20190108225652-1e06a53dbb7e"
   declared_licenses: []
   declared_licenses_processed: {}
   description: ""
@@ -329,7 +329,7 @@ packages:
     revision: ""
     path: ""
 - id: "GoMod::golang.org/x/oauth2:v0.0.0-20190226205417-e64efc72b421"
-  purl: "pkg:gomod/golang.org%2Fx%2Foauth2@v0.0.0-20190226205417-e64efc72b421"
+  purl: "pkg:golang/golang.org%2Fx%2Foauth2@v0.0.0-20190226205417-e64efc72b421"
   declared_licenses: []
   declared_licenses_processed: {}
   description: ""
@@ -355,7 +355,7 @@ packages:
     revision: ""
     path: ""
 - id: "GoMod::golang.org/x/sync:v0.0.0-20181221193216-37e7f081c4d4"
-  purl: "pkg:gomod/golang.org%2Fx%2Fsync@v0.0.0-20181221193216-37e7f081c4d4"
+  purl: "pkg:golang/golang.org%2Fx%2Fsync@v0.0.0-20181221193216-37e7f081c4d4"
   declared_licenses: []
   declared_licenses_processed: {}
   description: ""
@@ -381,7 +381,7 @@ packages:
     revision: ""
     path: ""
 - id: "GoMod::golang.org/x/sys:v0.0.0-20190222072716-a9d3bda3a223"
-  purl: "pkg:gomod/golang.org%2Fx%2Fsys@v0.0.0-20190222072716-a9d3bda3a223"
+  purl: "pkg:golang/golang.org%2Fx%2Fsys@v0.0.0-20190222072716-a9d3bda3a223"
   declared_licenses: []
   declared_licenses_processed: {}
   description: ""
@@ -407,7 +407,7 @@ packages:
     revision: ""
     path: ""
 - id: "GoMod::golang.org/x/sys:v0.0.0-20191008105621-543471e840be"
-  purl: "pkg:gomod/golang.org%2Fx%2Fsys@v0.0.0-20191008105621-543471e840be"
+  purl: "pkg:golang/golang.org%2Fx%2Fsys@v0.0.0-20191008105621-543471e840be"
   declared_licenses: []
   declared_licenses_processed: {}
   description: ""
@@ -433,7 +433,7 @@ packages:
     revision: ""
     path: ""
 - id: "GoMod::golang.org/x/text:v0.3.0"
-  purl: "pkg:gomod/golang.org%2Fx%2Ftext@v0.3.0"
+  purl: "pkg:golang/golang.org%2Fx%2Ftext@v0.3.0"
   declared_licenses: []
   declared_licenses_processed: {}
   description: ""
@@ -459,7 +459,7 @@ packages:
     revision: ""
     path: ""
 - id: "GoMod::google.golang.org/appengine:v1.4.0"
-  purl: "pkg:gomod/google.golang.org%2Fappengine@v1.4.0"
+  purl: "pkg:golang/google.golang.org%2Fappengine@v1.4.0"
   declared_licenses: []
   declared_licenses_processed: {}
   description: ""
