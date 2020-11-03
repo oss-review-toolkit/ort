@@ -1233,4 +1233,5 @@ analyzer:
       curations: []
     has_issues: false
 scanner: null
+advisor: null
 evaluator: null

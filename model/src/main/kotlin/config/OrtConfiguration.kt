@@ -38,7 +38,12 @@ data class OrtConfiguration(
     /**
      * The configuration of the scanner.
      */
-    val scanner: ScannerConfiguration? = null
+    val scanner: ScannerConfiguration? = null,
+
+    /**
+     * The configuration of the advisors, using the advisor's name as the key.
+     */
+    val advisor: Map<String, AdvisorConfiguration>? = null
 ) {
     companion object {
         /**
