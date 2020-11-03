@@ -25,6 +25,7 @@ plugins {
 }
 
 dependencies {
+    api(project(":clients:nexus-iq"))
     api(project(":model"))
 
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlinxCoroutinesVersion")
