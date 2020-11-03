@@ -44,20 +44,20 @@ pluginManagement {
 
 rootProject.name = "oss-review-toolkit"
 
-include("analyzer")
-include("clearly-defined")
-include("cli")
-include("detekt-rules")
-include("downloader")
-include("evaluator")
-include("helper-cli")
-include("model")
-include("reporter")
-include("reporter-web-app")
-include("scanner")
-include("spdx-utils")
-include("test-utils")
-include("utils")
+include(":analyzer")
+include(":cli")
+include(":clients:clearly-defined")
+include(":detekt-rules")
+include(":downloader")
+include(":evaluator")
+include(":helper-cli")
+include(":model")
+include(":reporter")
+include(":reporter-web-app")
+include(":scanner")
+include(":spdx-utils")
+include(":test-utils")
+include(":utils")
 
 val buildCacheRetentionDays: String by settings
 
