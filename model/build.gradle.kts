@@ -32,7 +32,7 @@ plugins {
 }
 
 dependencies {
-    api(project(":clearly-defined"))
+    api(project(":clients:clearly-defined"))
     api(project(":spdx-utils"))
     api(project(":utils"))
 
