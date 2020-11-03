@@ -98,6 +98,10 @@ class Sbt(
             VERSION_REGEX.matchEntire(line)?.groupValues?.getOrNull(1)?.let { Semver(it) }
         }
 
+        if (versions.isEmpty()) {
+            log.warn { "No version match found in output:\n$output" }
+        }
+
         return checkForSameSbtVersion(versions)
     }
 
