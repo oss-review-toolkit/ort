@@ -189,10 +189,16 @@ of the main ORT configuration file. It consists of sections related to different
 of these sections and the properties they can contain is described together with the corresponding sub components.
 
 While the file is rather static, there are means to override configuration options for a specific run of ORT or to
-customize the configuration to a specific environment. The following options are supported:
+customize the configuration to a specific environment. The following options are supported, in order of precedence:
 
-* You can override the values of properties on the command line using the `-P` option. The option expects a
-  key-value pair. The key must define the full path to the property to be overridden, e.g.
+* Properties can be defined via environment variables by using the full property path as the variable name.
+  For instance, one can override the Postgres schema by setting 
+  `ort.scanner.storages.postgresStorage.schema=test_schema`. The variable's name is case sensitive.
+  Some programs like Bash do not support dots in variable names. For this case, the dots can be
+  replaced by double underscores, i.e., the above example is turned into 
+  `ort__scanner__storages__postgresStorage__schema=test_schema`.
+* In addition to that, one can override the values of properties on the command line using the `-P` option. The option expects a
+  key-value pair. Again, the key must define the full path to the property to be overridden, e.g.
   `-P ort.scanner.storages.postgresStorage.schema=test_schema`. The `-P` option can be repeated on the command
   line to override multiple properties.
 * Properties in the configuration file can reference environment variables using the syntax `${VAR}`.
