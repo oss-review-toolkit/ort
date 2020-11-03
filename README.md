@@ -43,14 +43,12 @@ use):
   Version Control System (VCS) or other means are used to retrieve the source code.
 * [_Scanner_](#scanner) - uses configured source code scanners to detect license / copyright findings, abstracting
   the type of scanner.
+* [_Advisor_](#advisor) - retrieves security advisories for used dependencies from configured vulnerability data 
+  services.
 * [_Evaluator_](#evaluator) - evaluates license / copyright findings against customizable policy rules and license
   classifications.
 * [_Reporter_](#reporter) - presents results in various formats such as visual reports, Open Source notices or
   Bill-Of-Materials (BOMs) to easily identify dependencies, licenses, copyrights or policy rule violations.
-
-The following tools are [planned](https://github.com/oss-review-toolkit/ort/projects/1) but not yet available:
-
-* _Advisor_ - retrieves security advisories based on the Analyzer result.
 
 # Installation
 
@@ -539,6 +537,31 @@ ort {
   }
 }
 ```
+
+<a name="advisor">&nbsp;</a>
+
+[![Advisor](./logos/advisor.png)](./advisor/src/main/kotlin)
+
+The _advisor_ retrieves security advisories from configured services. It requires the analyzer result as an input.
+
+### Configuration
+
+The advisor needs to be configured in the ORT configuration file:
+
+```hocon
+ort {
+  advisor {
+    nexusiq {
+      serverUrl = "https://nexusiq.ossreviewtoolkit.org"
+      username = myUser
+      password = myPassword
+    }
+  }
+}
+```
+
+Currently [Nexus IQ Server](https://help.sonatype.com/iqserver) (`-a NexusIQ`) is the only supported security data
+provider.
 
 <a name="evaluator">&nbsp;</a>
 
