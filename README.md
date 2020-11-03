@@ -199,7 +199,7 @@ customize the configuration to a specific environment. The following options are
   This is especially useful to reference dynamic or sensitive data. As an example, the credentials for the
   Postgres database used as scan results storage could be defined in the `POSTGRES_USERNAME` and `POSTGRES_PASSWORD`
   environment variables. The configuration file can then reference these values as follows:
-  
+
   ```
       postgres {
         url = "jdbc:postgresql://your-postgresql-server:5444/your-database"
@@ -403,11 +403,11 @@ After the declaration of the storage backends, the configuration file has to spe
 scanner should use for looking up existing scan results or to store new results. This is done in two list properties
 named _storageReaders_ and _storageWriters_. The lists reference the names of the storage backends declared in the
 _storages_ section. The scanner invokes the storage backends in the order they appear in the lists; so for readers,
-this defines a priority for look-up operations. Each storage backend can act as a reader; however, some types do not 
-support updates and thus cannot serve as writers. If a storage backend is referenced both as reader and writer, the 
+this defines a priority for look-up operations. Each storage backend can act as a reader; however, some types do not
+support updates and thus cannot serve as writers. If a storage backend is referenced both as reader and writer, the
 scanner creates only a single instance of this storage class.
 
-The following subsections describe the different storage backend implementations supported by ORT. 
+The following subsections describe the different storage backend implementations supported by ORT.
 
 ### Local File Storage
 
