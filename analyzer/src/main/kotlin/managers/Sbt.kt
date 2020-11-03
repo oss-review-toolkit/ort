@@ -113,7 +113,7 @@ class Sbt(
             log.warn { "Different sbt versions used in the same project: $uniqueVersions" }
         }
 
-        return uniqueVersions.first().toString()
+        return uniqueVersions.firstOrNull()?.toString().orEmpty()
     }
 
     override fun mapDefinitionFiles(definitionFiles: List<File>): List<File> {
