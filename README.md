@@ -200,7 +200,7 @@ customize the configuration to a specific environment. The following options are
   Postgres database used as scan results storage could be defined in the `POSTGRES_USERNAME` and `POSTGRES_PASSWORD`
   environment variables. The configuration file can then reference these values as follows:
 
-  ```
+  ```hocon
   postgres {
     url = "jdbc:postgresql://your-postgresql-server:5444/your-database"
     username = ${POSTGRES_USERNAME}
