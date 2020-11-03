@@ -201,11 +201,11 @@ customize the configuration to a specific environment. The following options are
   environment variables. The configuration file can then reference these values as follows:
 
   ```
-      postgres {
-        url = "jdbc:postgresql://your-postgresql-server:5444/your-database"
-        username = ${POSTGRES_USERNAME}
-        password = ${POSTGRES_PASSWORD}
-      }
+  postgres {
+    url = "jdbc:postgresql://your-postgresql-server:5444/your-database"
+    username = ${POSTGRES_USERNAME}
+    password = ${POSTGRES_PASSWORD}
+  }
   ```
 
 | Format | Scope | Default location | Default value |
