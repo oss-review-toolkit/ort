@@ -320,4 +320,5 @@ scanner:
       num_reads: 5
       num_hits: 0
     has_issues: true
+advisor: null
 evaluator: null

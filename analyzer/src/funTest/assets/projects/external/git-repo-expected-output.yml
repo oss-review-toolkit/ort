@@ -3882,4 +3882,5 @@ analyzer:
         severity: "ERROR"
     has_issues: true
 scanner: null
+advisor: null
 evaluator: null
