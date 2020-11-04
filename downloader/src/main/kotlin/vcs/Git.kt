@@ -119,6 +119,8 @@ class Git : VersionControlSystem(), CommandLineTool {
     override fun isApplicableUrlInternal(vcsUrl: String): Boolean =
         runCatching {
             LsRemoteCommand(null).setRemote(vcsUrl).call().isNotEmpty()
+        }.onFailure {
+            log.debug { "Failed to check whether $type is applicable for $vcsUrl: ${it.collectMessagesAsString()}" }
         }.isSuccess
 
     override fun initWorkingTree(targetDir: File, vcs: VcsInfo): WorkingTree {
