@@ -126,6 +126,7 @@ class Gradle(
 
     override fun resolveDependencies(definitionFile: File): List<ProjectAnalyzerResult> {
         val gradleSystemProperties = mutableListOf<Pair<String, String>>()
+        val gradleProperties = mutableListOf<Pair<String, String>>()
 
         // Usually, the Gradle wrapper's Java code handles applying system properties defined in a Gradle properties
         // file. But as we use the Gradle Tooling API instead of the wrapper to start the build, we need to manually
@@ -136,9 +137,15 @@ class Gradle(
         val gradlePropertiesFile = Os.userHomeDirectory.resolve(".gradle/gradle.properties")
         if (gradlePropertiesFile.isFile) {
             gradlePropertiesFile.inputStream().use {
-                Properties().apply { load(it) }.mapNotNullTo(gradleSystemProperties) { (key, value) ->
+                val properties = Properties().apply { load(it) }
+
+                properties.mapNotNullTo(gradleSystemProperties) { (key, value) ->
                     val systemPropKey = (key as String).removePrefix("systemProp.")
                     (systemPropKey to (value as String)).takeIf { systemPropKey != key }
+                }
+
+                properties.mapNotNullTo(gradleProperties) { (key, value) ->
+                    ((key as String) to (value as String)).takeUnless { key.startsWith("systemProp.") }
                 }
             }
 
@@ -164,6 +171,17 @@ class Gradle(
             gradleConnector.daemonMaxIdleTime(10, TimeUnit.SECONDS)
         }
 
+        // Gradle's default maximum heap is 512 MiB which is too low for bigger projects,
+        // see https://docs.gradle.org/current/userguide/build_environment.html#sec:configuring_jvm_memory.
+        // Set the value to empirically determined 8 GiB if no value is set in "~/.gradle/gradle.properties".
+        val jvmArgs = gradleProperties.find { (key, _) ->
+            key == "org.gradle.jvmargs"
+        }?.second?.split(" ").orEmpty().toMutableList()
+
+        if (jvmArgs.none { it.contains("-xmx", ignoreCase = true) }) {
+            jvmArgs += "-Xmx8g"
+        }
+
         val projectDir = definitionFile.parentFile
         val gradleConnection = gradleConnector.forProjectDirectory(projectDir).connect()
 
@@ -177,6 +195,7 @@ class Gradle(
 
                 val dependencyTreeModel = connection
                     .model(DependencyTreeModel::class.java)
+                    .addJvmArguments(jvmArgs)
                     .setStandardOutput(stdout)
                     .setStandardError(stderr)
                     .withArguments("-Duser.home=${Os.userHomeDirectory}", "--init-script", initScriptFile.path)
