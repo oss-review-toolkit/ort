@@ -86,7 +86,7 @@ class OrtAuthenticator(private val original: Authenticator? = null) : Authentica
             RequestorType.PROXY -> {
                 val proxySelector = ProxySelector.getDefault()
                 if (proxySelector is OrtProxySelector) {
-                    val type = requestingProtocol.toProxyType() ?: return null
+                    val type = requestingProtocol.toProxyType() ?: return super.getPasswordAuthentication()
                     val proxy = Proxy(type, InetSocketAddress(requestingHost, requestingPort))
                     return proxySelector.getProxyAuthentication(proxy)
                 }
