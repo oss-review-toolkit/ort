@@ -82,6 +82,10 @@ data class SpdxSnippet(
     val snippetFromFile: String
 ) {
     init {
+        require(spdxId.startsWith(SpdxConstants.REF_PREFIX)) {
+            "The SPDX ID '$spdxId' has to start with '${SpdxConstants.REF_PREFIX}'."
+        }
+
         require(copyrightText.isNotBlank()) {
             "The copyright text must not be blank."
         }
