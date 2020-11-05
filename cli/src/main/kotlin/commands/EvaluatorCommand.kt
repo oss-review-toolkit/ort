@@ -256,7 +256,7 @@ class EvaluatorCommand : CliktCommand(name = "evaluate", help = "Evaluate rules 
             licenseConfigurationFile.takeIf { it.isFile }?.readValue<LicenseConfiguration>().orEmpty()
         val evaluator = Evaluator(finalOrtResult, licenseInfoResolver, licenseConfiguration)
 
-        val evaluatorRun by lazy { evaluator.run(script) }
+        val evaluatorRun = evaluator.run(script)
 
         if (log.delegate.isErrorEnabled) {
             evaluatorRun.violations.forEach { violation ->
