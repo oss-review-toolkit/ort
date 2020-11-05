@@ -51,7 +51,7 @@ val ortDataDirectory by lazy {
 }
 
 /**
- * Return whether the [receiver] (usually an instance of a data class) has any non-null property.
+ * Return whether [T] (usually an instance of a data class) has any non-null property.
  */
 inline fun <reified T : Any> T.hasNonNullProperty() =
     T::class.memberProperties.asSequence().map { it.get(this) }.any { it != null }
