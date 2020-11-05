@@ -48,19 +48,19 @@ data class RepositoryConfiguration(
     val curations: Curations = Curations()
 )
 
-@Suppress("EqualsWithHashCodeExist") // The class is not supposed to be used with hashing.
+@Suppress("EqualsOrHashCode", "EqualsWithHashCodeExist") // The class is not supposed to be used with hashing.
 private class ExcludesFilter {
     override fun equals(other: Any?): Boolean =
         if (other is Excludes) other.paths.isEmpty() && other.scopes.isEmpty() else false
 }
 
-@Suppress("EqualsWithHashCodeExist") // The class is not supposed to be used with hashing.
+@Suppress("EqualsOrHashCode", "EqualsWithHashCodeExist") // The class is not supposed to be used with hashing.
 private class ResolutionsFilter {
     override fun equals(other: Any?): Boolean =
         if (other is Resolutions) other.issues.isEmpty() && other.ruleViolations.isEmpty() else false
 }
 
-@Suppress("EqualsWithHashCodeExist") // The class is not supposed to be used with hashing.
+@Suppress("EqualsOrHashCode", "EqualsWithHashCodeExist") // The class is not supposed to be used with hashing.
 private class CurationsFilter {
     override fun equals(other: Any?): Boolean =
         if (other is Curations) other.licenseFindings.isEmpty() else false
