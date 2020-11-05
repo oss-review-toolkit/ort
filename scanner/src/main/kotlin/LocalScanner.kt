@@ -357,9 +357,9 @@ abstract class LocalScanner(name: String, config: ScannerConfiguration) : Scanne
 
         archiveFiles(downloadResult.downloadDirectory, pkg.id, provenance)
 
-        val scanResult = scanPathInternal(downloadResult.downloadDirectory, resultsFile).let { scanResult ->
-            provenance.vcsInfo?.let { scanResult.filterPath(it.path) } ?: scanResult
-        }.copy(provenance = provenance)
+        val scanResult = scanPathInternal(downloadResult.downloadDirectory, resultsFile)
+            .copy(provenance = provenance)
+            .let { scanResult -> provenance.vcsInfo?.let { scanResult.filterPath(it.path) } ?: scanResult }
 
         return when (val storageResult = ScanResultsStorage.storage.add(pkg.id, scanResult)) {
             is Success -> scanResult
