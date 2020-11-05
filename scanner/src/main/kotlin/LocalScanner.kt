@@ -218,9 +218,7 @@ abstract class LocalScanner(name: String, config: ScannerConfiguration) : Scanne
                 // Due to a temporary bug that has been fixed by now the scan results for packages were not properly
                 // filtered. Filter them again to fix the problem also scan storage entries which exhibit that problem.
                 // TODO: This filtering can be removed after a while.
-                storedResults.map { scanResult ->
-                    scanResult.provenance.vcsInfo?.let { scanResult.filterPath(it.path) } ?: scanResult
-                }
+                storedResults.map { it.filterByVcsPath() }
             } else {
                 withContext(scanDispatcher) {
                     log.info {
@@ -359,7 +357,7 @@ abstract class LocalScanner(name: String, config: ScannerConfiguration) : Scanne
 
         val scanResult = scanPathInternal(downloadResult.downloadDirectory, resultsFile)
             .copy(provenance = provenance)
-            .let { scanResult -> provenance.vcsInfo?.let { scanResult.filterPath(it.path) } ?: scanResult }
+            .filterByVcsPath()
 
         return when (val storageResult = ScanResultsStorage.storage.add(pkg.id, scanResult)) {
             is Success -> scanResult
@@ -519,4 +517,10 @@ private fun ScanResultContainer.deduplicateScanResults(): ScanResultContainer {
     }
 
     return copy(results = deduplicatedResults)
+}
+
+private fun ScanResult.filterByVcsPath(): ScanResult {
+    val path = provenance.vcsInfo?.path.orEmpty()
+
+    return filterPath(path)
 }
