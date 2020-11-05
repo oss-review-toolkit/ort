@@ -56,6 +56,7 @@ import org.ossreviewtoolkit.model.ScannerRun
 import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.model.Success
 import org.ossreviewtoolkit.model.VcsInfo
+import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
 import org.ossreviewtoolkit.model.createAndLogIssue
 import org.ossreviewtoolkit.model.mapper
@@ -520,7 +521,7 @@ private fun ScanResultContainer.deduplicateScanResults(): ScanResultContainer {
 }
 
 private fun ScanResult.filterByVcsPath(): ScanResult {
-    val path = provenance.vcsInfo?.path.orEmpty()
+    val path = provenance.vcsInfo?.takeIf { it.type != VcsType.GIT_REPO }?.path.orEmpty()
 
     return filterPath(path)
 }
