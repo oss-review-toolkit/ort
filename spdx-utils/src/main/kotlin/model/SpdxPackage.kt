@@ -187,7 +187,9 @@ data class SpdxPackage(
     val versionInfo: String = ""
 ) {
     init {
-        require(spdxId.isNotBlank()) { "The SPDX-Id must not be blank." }
+        require(spdxId.startsWith(SpdxConstants.REF_PREFIX)) {
+            "The SPDX ID '$spdxId' has to start with '${SpdxConstants.REF_PREFIX}'."
+        }
 
         require(copyrightText.isNotBlank()) { "The copyright text must not be blank." }
 

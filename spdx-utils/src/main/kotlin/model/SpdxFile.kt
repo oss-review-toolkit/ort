@@ -24,6 +24,7 @@ import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.annotation.JsonProperty
 
 import org.ossreviewtoolkit.spdx.SpdxConstants
+import org.ossreviewtoolkit.spdx.SpdxConstants.REF_PREFIX
 import org.ossreviewtoolkit.spdx.isSpdxExpressionOrNotPresent
 
 /**
@@ -167,6 +168,10 @@ data class SpdxFile(
     }
 
     init {
+        require(spdxId.startsWith(REF_PREFIX)) {
+            "The SPDX ID '$spdxId' has to start with '$REF_PREFIX'."
+        }
+
         require(checksums.any { it.algorithm == SpdxChecksum.Algorithm.SHA1 }) {
             "At least one SHA1 checksum must be provided."
         }
