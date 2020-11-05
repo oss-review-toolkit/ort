@@ -51,6 +51,11 @@ object SpdxConstants {
     const val TOOL = "Tool: "
 
     /**
+     * The prefix to be used for SPDX document IDs or references.
+     */
+    const val REF_PREFIX = "SPDXRef-"
+
+    /**
      * The URL that points to list of SPDX licenses.
      */
     const val LICENSE_LIST_URL = "https://spdx.org/licenses/"
