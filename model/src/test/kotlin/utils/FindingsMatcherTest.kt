@@ -75,13 +75,11 @@ class FindingsMatcherTest : WordSpec() {
                 setupCopyrightFinding(statement = "some stmt", path = "some/other/file")
 
                 val result = matcher.match(licenseFindings, copyrightFindings)
+                val findings = result.getFindings("some-id")
 
-                with(result) {
-                    result.size shouldBe 1
-                    val findings = result.getFindings("some-id")
-                    findings.locations.map { it.path } should containExactlyInAnyOrder("LICENSE")
-                    findings.copyrights.map { it.statement } should containExactlyInAnyOrder("some stmt")
-                }
+                result.size shouldBe 1
+                findings.locations.map { it.path } should containExactlyInAnyOrder("LICENSE")
+                findings.copyrights.map { it.statement } should containExactlyInAnyOrder("some stmt")
             }
         }
 
