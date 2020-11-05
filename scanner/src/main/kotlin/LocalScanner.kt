@@ -28,6 +28,8 @@ import java.io.IOException
 import java.time.Instant
 import java.util.concurrent.Executors
 
+import kotlin.time.measureTimedValue
+
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.asCoroutineDispatcher
 import kotlinx.coroutines.async
@@ -68,6 +70,7 @@ import org.ossreviewtoolkit.utils.collectMessagesAsString
 import org.ossreviewtoolkit.utils.fileSystemEncode
 import org.ossreviewtoolkit.utils.getPathFromEnvironment
 import org.ossreviewtoolkit.utils.log
+import org.ossreviewtoolkit.utils.perf
 import org.ossreviewtoolkit.utils.safeMkdirs
 import org.ossreviewtoolkit.utils.showStackTrace
 import org.ossreviewtoolkit.utils.storage.FileArchiver
@@ -100,15 +103,23 @@ abstract class LocalScanner(name: String, config: ScannerConfiguration) : Scanne
                     "Bootstrapping scanner '$scannerName' as required version $scannerVersion was not found in PATH."
                 }
 
-                bootstrap().also {
-                    val actualScannerVersion = getVersion(it)
-                    if (actualScannerVersion != scannerVersion) {
-                        throw IOException(
-                            "Bootstrapped scanner version $actualScannerVersion " +
-                                    "does not match expected version $scannerVersion."
-                        )
+                val (bootstrapDirectory, duration) = measureTimedValue {
+                    bootstrap().also {
+                        val actualScannerVersion = getVersion(it)
+                        if (actualScannerVersion != scannerVersion) {
+                            throw IOException(
+                                "Bootstrapped scanner version $actualScannerVersion " +
+                                        "does not match expected version $scannerVersion."
+                            )
+                        }
                     }
                 }
+
+                log.perf {
+                    "Bootstrapped scanner '$scannerName' version $scannerVersion in ${duration.inMilliseconds}ms."
+                }
+
+                bootstrapDirectory
             } else {
                 log.info { "Skipping to bootstrap scanner '$scannerName' as it has no executable." }
 
