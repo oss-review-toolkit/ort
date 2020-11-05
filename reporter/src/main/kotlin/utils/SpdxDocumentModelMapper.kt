@@ -32,6 +32,7 @@ import org.ossreviewtoolkit.model.utils.PackageConfigurationProvider
 import org.ossreviewtoolkit.model.utils.getDetectedLicensesWithCopyrights
 import org.ossreviewtoolkit.reporter.LicenseTextProvider
 import org.ossreviewtoolkit.spdx.SpdxConstants
+import org.ossreviewtoolkit.spdx.SpdxConstants.REF_PREFIX
 import org.ossreviewtoolkit.spdx.SpdxExpression
 import org.ossreviewtoolkit.spdx.SpdxLicense
 import org.ossreviewtoolkit.spdx.SpdxLicenseException
@@ -174,7 +175,7 @@ private class SpdxPackageIdGenerator {
 
     fun nextId(name: String): String =
         buildString {
-            append("SPDXRef-Package-${nextPackageIndex++}")
+            append("${REF_PREFIX}Package-${nextPackageIndex++}")
             if (name.isNotBlank()) {
                 append("-$name")
             }

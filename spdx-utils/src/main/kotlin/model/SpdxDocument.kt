@@ -22,7 +22,9 @@ package org.ossreviewtoolkit.spdx.model
 import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.annotation.JsonProperty
 
-private const val SPDX_ID = "SPDXRef-DOCUMENT"
+import org.ossreviewtoolkit.spdx.SpdxConstants.REF_PREFIX
+
+private const val SPDX_ID = "${REF_PREFIX}DOCUMENT"
 private const val SPDX_VERSION_MAJOR_MINOR = "SPDX-2.2"
 private const val DATA_LICENSE = "CC0-1.0"
 
