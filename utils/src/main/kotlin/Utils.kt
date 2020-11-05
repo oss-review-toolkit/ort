@@ -192,7 +192,7 @@ fun joinNonBlank(vararg strings: String, separator: String = " - ") =
  * Normalize a string representing a [VCS URL][vcsUrl] to a common string form.
  */
 fun normalizeVcsUrl(vcsUrl: String): String {
-    var url = vcsUrl.trimEnd('/')
+    var url = vcsUrl.trim().trimEnd('/')
 
     if (url.startsWith(":pserver:") || url.startsWith(":ext:")) {
         // Do not touch CVS URLs for now.
