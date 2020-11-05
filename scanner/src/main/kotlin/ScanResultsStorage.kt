@@ -23,6 +23,8 @@ package org.ossreviewtoolkit.scanner
 import java.sql.DriverManager
 import java.util.Properties
 
+import kotlin.time.measureTimedValue
+
 import org.ossreviewtoolkit.model.AccessStatistics
 import org.ossreviewtoolkit.model.Failure
 import org.ossreviewtoolkit.model.Identifier
@@ -41,6 +43,7 @@ import org.ossreviewtoolkit.scanner.storages.*
 import org.ossreviewtoolkit.utils.ORT_FULL_NAME
 import org.ossreviewtoolkit.utils.log
 import org.ossreviewtoolkit.utils.ortDataDirectory
+import org.ossreviewtoolkit.utils.perf
 import org.ossreviewtoolkit.utils.storage.HttpFileStorage
 import org.ossreviewtoolkit.utils.storage.LocalFileStorage
 import org.ossreviewtoolkit.utils.storage.XZCompressedLocalFileStorage
@@ -181,13 +184,24 @@ abstract class ScanResultsStorage {
      * Read all [ScanResult]s for a package with [id] from the storage. Return a [ScanResultContainer] wrapped in a
      * [Result], which is a [Failure] if no [ScanResult] was found and a [Success] otherwise.
      */
-    fun read(id: Identifier): Result<ScanResultContainer> =
-        readFromStorage(id).also {
-            stats.numReads.incrementAndGet()
-            if (it is Success && it.result.results.isNotEmpty()) {
+    fun read(id: Identifier): Result<ScanResultContainer> {
+        val (result, duration) = measureTimedValue { readFromStorage(id) }
+
+        stats.numReads.incrementAndGet()
+
+        if (result is Success) {
+            if (result.result.results.isNotEmpty()) {
                 stats.numHits.incrementAndGet()
             }
+
+            log.perf {
+                "Read ${result.result.results.size} scan results for '${id.toCoordinates()}' from " +
+                        "${javaClass.simpleName} in ${duration.inMilliseconds}ms."
+            }
         }
+
+        return result
+    }
 
     /**
      * Read those [ScanResult]s for the given [package][pkg] from the storage that are
@@ -198,13 +212,24 @@ abstract class ScanResultsStorage {
      * [ScanResultContainer] wrapped in a [Result], which is a [Failure] if no [ScanResult] was found and a [Success]
      * otherwise.
      */
-    fun read(pkg: Package, scannerDetails: ScannerDetails): Result<ScanResultContainer> =
-        readFromStorage(pkg, scannerDetails).also {
-            stats.numReads.incrementAndGet()
-            if (it is Success && it.result.results.isNotEmpty()) {
+    fun read(pkg: Package, scannerDetails: ScannerDetails): Result<ScanResultContainer> {
+        val (result, duration) = measureTimedValue { readFromStorage(pkg, scannerDetails) }
+
+        stats.numReads.incrementAndGet()
+
+        if (result is Success) {
+            if (result.result.results.isNotEmpty()) {
                 stats.numHits.incrementAndGet()
             }
+
+            log.perf {
+                "Read ${result.result.results.size} scan results for '${pkg.id.toCoordinates()}' from " +
+                        "${javaClass.simpleName} in ${duration.inMilliseconds}ms."
+            }
         }
+
+        return result
+    }
 
     /**
      * Add the given [scanResult], which must include a [ScanResult.rawResult], to the [ScanResultContainer] for the
@@ -241,7 +266,13 @@ abstract class ScanResultsStorage {
             return Failure(message)
         }
 
-        return addToStorage(id, scanResult)
+        val (result, duration) = measureTimedValue { addToStorage(id, scanResult) }
+
+        log.perf {
+            "Added scan result for '${id.toCoordinates()}' to ${javaClass.simpleName} in ${duration.inMilliseconds}ms."
+        }
+
+        return result
     }
 
     /**
