@@ -28,7 +28,7 @@ import java.util.SortedSet
 
 // A custom value filter for [PackageLinkage] to work around
 // https://github.com/FasterXML/jackson-module-kotlin/issues/193.
-@Suppress("EqualsWithHashCodeExist")
+@Suppress("EqualsOrHashCode", "EqualsWithHashCodeExist")
 class PackageLinkageValueFilter {
     override fun equals(other: Any?) = other == PackageLinkage.DYNAMIC
 }
