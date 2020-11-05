@@ -157,7 +157,6 @@ abstract class Scanner(val scannerName: String, protected val config: ScannerCon
         if (parentPath != null) {
             filteredResults = resultContainer.results.map { result ->
                 if (result.provenance.sourceArtifact != null) {
-                    // Do not filter the result if a source artifact was scanned.
                     result
                 } else {
                     result.filterPath(parentPath)
