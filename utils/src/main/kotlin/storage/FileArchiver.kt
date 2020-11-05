@@ -22,6 +22,9 @@ package org.ossreviewtoolkit.utils.storage
 import java.io.File
 import java.io.IOException
 
+import kotlin.time.measureTime
+import kotlin.time.measureTimedValue
+
 import org.ossreviewtoolkit.utils.FileMatcher
 import org.ossreviewtoolkit.utils.LicenseFilenamePatterns.LICENSE_FILENAMES
 import org.ossreviewtoolkit.utils.LicenseFilenamePatterns.PATENT_FILENAMES
@@ -30,6 +33,7 @@ import org.ossreviewtoolkit.utils.collectMessagesAsString
 import org.ossreviewtoolkit.utils.log
 import org.ossreviewtoolkit.utils.ortDataDirectory
 import org.ossreviewtoolkit.utils.packZip
+import org.ossreviewtoolkit.utils.perf
 import org.ossreviewtoolkit.utils.showStackTrace
 import org.ossreviewtoolkit.utils.unpackZip
 
@@ -81,19 +85,28 @@ class FileArchiver(
         val zipFile = createTempFile(ORT_NAME, ".zip")
         zipFile.deleteOnExit()
 
-        directory.packZip(zipFile, overwrite = true) { path ->
-            val relativePath = path.toFile().relativeTo(directory).invariantSeparatorsPath
+        val zipDuration = measureTime {
+            directory.packZip(zipFile, overwrite = true) { path ->
+                val relativePath = path.toFile().relativeTo(directory).invariantSeparatorsPath
 
-            matcher.matches(relativePath).also { result ->
-                if (result) {
-                    log.debug { "Adding '$relativePath' to archive." }
-                } else {
-                    log.debug { "Not adding '$relativePath' to archive." }
+                matcher.matches(relativePath).also { result ->
+                    if (result) {
+                        log.debug { "Adding '$relativePath' to archive." }
+                    } else {
+                        log.debug { "Not adding '$relativePath' to archive." }
+                    }
                 }
             }
         }
 
-        storage.write(getArchivePath(storagePath), zipFile.inputStream())
+        log.perf { "Archived directory '${directory.invariantSeparatorsPath}' in ${zipDuration.inMilliseconds}ms." }
+
+        val writeDuration = measureTime { storage.write(getArchivePath(storagePath), zipFile.inputStream()) }
+
+        log.perf {
+            "Wrote archive of directory '${directory.invariantSeparatorsPath}' to storage in " +
+                    "${writeDuration.inMilliseconds}ms."
+        }
     }
 
     /**
@@ -101,9 +114,19 @@ class FileArchiver(
      */
     fun unarchive(directory: File, storagePath: String): Boolean =
         try {
-            storage.read(getArchivePath(storagePath)).use { input ->
-                input.unpackZip(directory)
+            val (input, readDuration) = measureTimedValue { storage.read(getArchivePath(storagePath)) }
+
+            log.perf {
+                "Read archive of directory '${directory.invariantSeparatorsPath}' from storage in " +
+                        "${readDuration.inMilliseconds}ms."
             }
+
+            val unzipDuration = measureTime { input.use { it.unpackZip(directory) } }
+
+            log.perf {
+                "Unarchived directory '${directory.invariantSeparatorsPath}' in ${unzipDuration.inMilliseconds}ms."
+            }
+
             true
         } catch (e: IOException) {
             e.showStackTrace()
