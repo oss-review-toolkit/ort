@@ -24,6 +24,8 @@ import java.io.IOException
 import java.net.URI
 import java.time.Instant
 
+import kotlin.time.TimeSource
+
 import okhttp3.Request
 
 import okio.buffer
@@ -41,6 +43,7 @@ import org.ossreviewtoolkit.utils.ORT_NAME
 import org.ossreviewtoolkit.utils.OkHttpClientHelper
 import org.ossreviewtoolkit.utils.collectMessagesAsString
 import org.ossreviewtoolkit.utils.log
+import org.ossreviewtoolkit.utils.perf
 import org.ossreviewtoolkit.utils.safeDeleteRecursively
 import org.ossreviewtoolkit.utils.safeMkdirs
 import org.ossreviewtoolkit.utils.stripCredentialsFromUrl
@@ -123,15 +126,29 @@ object Downloader {
         val exception = DownloadException("Download failed for '${pkg.id.toCoordinates()}'.")
 
         // Try downloading from VCS.
+        val vcsMark = TimeSource.Monotonic.markNow()
+
         try {
             // Cargo in general builds from source tarballs, so we prefer source artifacts to VCS.
             if (pkg.id.type != "Cargo" || pkg.sourceArtifact == RemoteArtifact.EMPTY) {
-                return downloadFromVcs(pkg, outputDirectory, allowMovingRevisions)
+                val result = downloadFromVcs(pkg, outputDirectory, allowMovingRevisions)
+
+                log.perf {
+                    "Downloaded source code for '${pkg.id.toCoordinates()}' from ${result.vcsInfo} in " +
+                            "${vcsMark.elapsedNow().inMilliseconds}ms."
+                }
+
+                return result
             } else {
                 log.info { "Skipping VCS download for Cargo package '${pkg.id.toCoordinates()}'." }
             }
         } catch (e: DownloadException) {
             log.debug { "VCS download failed for '${pkg.id.toCoordinates()}': ${e.collectMessagesAsString()}" }
+
+            log.perf {
+                "Failed attempt to download source code for '${pkg.id.toCoordinates()}' from ${pkg.vcsProcessed} " +
+                        "took ${vcsMark.elapsedNow().inMilliseconds}ms."
+            }
 
             // Clean up any left-over files (force to delete read-only files in ".git" directories on Windows).
             outputDirectory.safeDeleteRecursively(force = true)
@@ -141,11 +158,25 @@ object Downloader {
         }
 
         // Try downloading the source artifact.
+        val sourceArtifactMark = TimeSource.Monotonic.markNow()
+
         try {
-            return downloadSourceArtifact(pkg, outputDirectory)
+            val result = downloadSourceArtifact(pkg, outputDirectory)
+
+            log.perf {
+                "Downloaded source code for '${pkg.id.toCoordinates()}' from ${pkg.sourceArtifact} in " +
+                        "${sourceArtifactMark.elapsedNow().inMilliseconds}ms."
+            }
+
+            return result
         } catch (e: DownloadException) {
             log.debug {
                 "Source artifact download failed for '${pkg.id.toCoordinates()}': ${e.collectMessagesAsString()}"
+            }
+
+            log.perf {
+                "Failed attempt to download source code for '${pkg.id.toCoordinates()}' from ${pkg.sourceArtifact} " +
+                        "took ${sourceArtifactMark.elapsedNow().inMilliseconds}ms."
             }
 
             // Clean up any left-over files.
