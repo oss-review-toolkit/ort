@@ -21,8 +21,10 @@
 package org.ossreviewtoolkit.downloader.vcs
 
 import java.io.File
+import java.net.Authenticator
 import java.net.InetSocketAddress
 import java.net.URI
+import java.net.URL
 import java.nio.file.Paths
 
 import org.ossreviewtoolkit.downloader.DownloadException
@@ -30,6 +32,7 @@ import org.ossreviewtoolkit.downloader.VersionControlSystem
 import org.ossreviewtoolkit.downloader.WorkingTree
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
+import org.ossreviewtoolkit.utils.OrtAuthenticator
 import org.ossreviewtoolkit.utils.collectMessagesAsString
 import org.ossreviewtoolkit.utils.installAuthenticatorAndProxySelector
 import org.ossreviewtoolkit.utils.log
@@ -40,7 +43,10 @@ import org.tmatesoft.svn.core.SVNErrorMessage
 import org.tmatesoft.svn.core.SVNException
 import org.tmatesoft.svn.core.SVNNodeKind
 import org.tmatesoft.svn.core.SVNURL
+import org.tmatesoft.svn.core.auth.ISVNAuthenticationProvider
 import org.tmatesoft.svn.core.auth.ISVNProxyManager
+import org.tmatesoft.svn.core.auth.SVNAuthentication
+import org.tmatesoft.svn.core.auth.SVNPasswordAuthentication
 import org.tmatesoft.svn.core.internal.wc.DefaultSVNAuthenticationManager
 import org.tmatesoft.svn.core.io.SVNRepositoryFactory
 import org.tmatesoft.svn.core.wc.SVNClientManager
@@ -245,6 +251,37 @@ private class OrtSVNAuthenticationManager : DefaultSVNAuthenticationManager(
     /* passphrase = */ charArrayOf()
 ) {
     private val ortProxySelector = installAuthenticatorAndProxySelector()
+    private val ortAuthenticator = OrtAuthenticator.getDefaultAuthenticator()
+
+    init {
+        authenticationProvider = object : ISVNAuthenticationProvider {
+            override fun requestClientAuthentication(
+                kind: String,
+                svnurl: SVNURL,
+                realm: String,
+                errorMessage: SVNErrorMessage?,
+                previousAuth: SVNAuthentication?,
+                authMayBeStored: Boolean
+            ): SVNAuthentication? {
+                val url = URL(svnurl.toDecodedString())
+
+                val auth = ortAuthenticator?.requestPasswordAuthenticationInstance(
+                    svnurl.host, null, svnurl.port, svnurl.protocol, null, null, url, Authenticator.RequestorType.SERVER
+                ) ?: return null
+
+                return SVNPasswordAuthentication.newInstance(
+                    auth.userName, auth.password, authMayBeStored, svnurl, /* isPartial = */ false
+                )
+            }
+
+            override fun acceptServerAuthentication(
+                url: SVNURL,
+                realm: String,
+                certificate: Any,
+                resultMayBeStored: Boolean
+            ) = ISVNAuthenticationProvider.ACCEPTED
+        }
+    }
 
     override fun getProxyManager(url: SVNURL): ISVNProxyManager? {
         val proxy = ortProxySelector.select(URI(url.toDecodedString())).firstOrNull() ?: return null

@@ -33,7 +33,7 @@ import org.apache.logging.log4j.Level
  */
 class OrtAuthenticator(private val original: Authenticator? = null) : Authenticator() {
     companion object {
-        private fun getDefaultAuthenticator(): Authenticator? {
+        fun getDefaultAuthenticator(): Authenticator? {
             // The getDefault() method is only available as of Java 9, see
             // https://docs.oracle.com/javase/9/docs/api/java/net/Authenticator.html#getDefault--
             val method = runCatching { Authenticator::class.java.getMethod("getDefault") }.getOrNull()
